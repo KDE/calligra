@@ -49,8 +49,9 @@ public:
     /**
      * Construct a new note to be inserted in the text using KoTextEditor::insertInlineObject() for example.
      * @param type the type of note, which specifies how the application will use the text from the new note.
+     * @param document pointer to the the document we are being inserted into
      */
-    explicit KoInlineNote(Type type);
+    explicit KoInlineNote(Type type, const QTextDocument *document);
     // destructor
     virtual ~KoInlineNote();
 

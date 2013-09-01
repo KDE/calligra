@@ -165,36 +165,6 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
         m_varColl->variableSetting()->setDisplayFieldCode(false);
 #endif
 
-    // Load all styles before the corresponding paragraphs try to use them!
-#if 0 //1.6:
-    if (m_frameStyleColl->loadOasisStyles(context) == 0) {
-        // no styles loaded -> load default styles
-        loadDefaultFrameStyleTemplates();
-    }
-    if (m_tableStyleColl->loadOasisStyles(context, *m_styleColl, *m_frameStyleColl) == 0) {
-        // no styles loaded -> load default styles
-        loadDefaultTableStyleTemplates();
-    }
-    static_cast<KWVariableSettings *>(m_varColl->variableSetting())->loadNoteConfiguration(styles.officeStyle());
-    loadDefaultTableTemplates();
-//#else
-    /*
-    // We always needs at least one valid default paragraph style
-    KoParagraphStyle *defaultParagraphStyle = m_document->styleManager()->defaultParagraphStyle();
-    //const KoXmlElement *defaultParagraphStyle = context.stylesReader().defaultStyle("paragraph");
-    //if(! defaultParagraphStyle) {
-    KoParagraphStyle *parastyle = new KoParagraphStyle();
-    parastyle->setName("Standard");
-    m_document->styleManager()->add(parastyle);
-    context.styleStack().setTypeProperties("paragraph"); // load all style attributes from "style:paragraph-properties"
-    parastyle->loadOasis(context.styleStack()); // load the KoParagraphStyle from the stylestack
-    KoCharacterStyle *charstyle = parastyle->characterStyle();
-    context.styleStack().setTypeProperties("text"); // load all style attributes from "style:text-properties"
-    charstyle->loadOasis(context.styleStack()); // load the KoCharacterStyle from the stylestack
-    //}
-    */
-#endif
-
     // load text:page-sequence
     KoXmlElement pageSequence = KoXml::namedItemNS(body, KoXmlNS::text, "page-sequence");
     if (! pageSequence.isNull()) {

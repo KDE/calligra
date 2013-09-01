@@ -39,7 +39,7 @@ InsertNoteCommand::InsertNoteCommand(KoInlineNote::Type type, QTextDocument *doc
     } else if (type == KoInlineNote::Endnote) {
         setText(i18nc("(qtundo-format)", "Insert Endnote"));
     }
-    m_inlineNote = new KoInlineNote(type);
+    m_inlineNote = new KoInlineNote(type, document);
 }
 
 InsertNoteCommand::~InsertNoteCommand()

@@ -30,6 +30,7 @@
 #include <KoInlineTextObjectManager.h>
 #include <KoGenStyles.h>
 #include <KoStyleManager.h>
+#include <KoCharacterStyle.h>
 #include <KoElementReference.h>
 #include <kdebug.h>
 #include <writeodf/writeodftext.h>
@@ -51,14 +52,16 @@ using namespace writeodf;
 class KoInlineNote::Private
 {
 public:
-    Private(KoInlineNote::Type t)
-        : textFrame(0)
+    Private(KoInlineNote::Type t, const QTextDocument *d)
+        : document(d)
+        , textFrame(0)
         , autoNumbering(false)
         , type(t)
+        , notesConfig(0)
     {
     }
 
-    QTextDocument *document;
+    const QTextDocument *document;
     QTextFrame *textFrame;
     QString label;
     QString author;
@@ -66,12 +69,18 @@ public:
     bool autoNumbering;
     KoInlineNote::Type type;
     int posInDocument;
+    KoOdfNotesConfiguration *notesConfig;
 };
 
-KoInlineNote::KoInlineNote(Type type)
+KoInlineNote::KoInlineNote(Type type, const QTextDocument *document)
     : KoInlineObject(true)
-    , d(new Private(type))
+    , d(new Private(type, document))
 {
+    if (d->type == KoInlineNote::Footnote) {
+        d->notesConfig = KoTextDocument(d->document).styleManager()->notesConfiguration(KoOdfNotesConfiguration::Footnote);
+    } else if (d->type == KoInlineNote::Endnote) {
+        d->notesConfig = KoTextDocument(d->document).styleManager()->notesConfiguration(KoOdfNotesConfiguration::Endnote);
+    }
 }
 
 KoInlineNote::~KoInlineNote()
@@ -86,8 +95,8 @@ void KoInlineNote::setMotherFrame(QTextFrame *motherFrame)
     QTextCursor cursor(motherFrame->lastCursorPosition());
     QTextFrameFormat format;
     format.setProperty(KoText::SubFrameType, KoText::NoteFrameType);
+    KoCharacterStyle *citationBodyTextStyle = KoTextDocument(d->document).styleManager()->characterStyle(d->notesConfig->citationBodyTextStyle());
     d->textFrame = cursor.insertFrame(format);
-    d->document = motherFrame->document();
 }
 
 void KoInlineNote::setLabel(const QString &text)
@@ -98,13 +107,7 @@ void KoInlineNote::setLabel(const QString &text)
 void KoInlineNote::setAutoNumber(int autoNumber)
 {
     if (d->autoNumbering) {
-        KoOdfNotesConfiguration *notesConfig = 0;
-        if (d->type == KoInlineNote::Footnote) {
-            notesConfig = KoTextDocument(d->document).styleManager()->notesConfiguration(KoOdfNotesConfiguration::Footnote);
-        } else if (d->type == KoInlineNote::Endnote) {
-            notesConfig = KoTextDocument(d->document).styleManager()->notesConfiguration(KoOdfNotesConfiguration::Endnote);
-        }
-        d->label = notesConfig->numberFormat().formattedNumber(autoNumber + notesConfig->startValue());
+        d->label = d->notesConfig->numberFormat().formattedNumber(autoNumber + d->notesConfig->startValue());
     }
 }
 
@@ -181,6 +184,11 @@ void KoInlineNote::paint(QPainter &painter, QPaintDevice *pd, const QTextDocumen
     range.start = 0;
     range.length = d->label.length();
     range.format = format;
+    KoCharacterStyle *citationTextStyle = KoTextDocument(d->document).styleManager()->characterStyle(d->notesConfig->citationTextStyle());
+    qDebug() << "painting footnote" << d->notesConfig->citationTextStyle();
+    if (citationTextStyle) {
+        citationTextStyle->applyStyle(range.format, false);
+    }
     range.format.setVerticalAlignment(QTextCharFormat::AlignSuperScript);
     layouts.append(range);
     layout.setAdditionalFormats(layouts);

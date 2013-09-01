@@ -321,31 +321,11 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
         d->openingSections.clear();
     }
 
-    KoOdfNotesConfiguration *notesConfiguration =
-            new KoOdfNotesConfiguration(d->context.odfLoadingContext()
-                                        .stylesReader()
-                                        .globalNotesConfiguration(KoOdfNotesConfiguration::Endnote));
-    //KoTextDocument(document).setNotesConfiguration(notesConfiguration);
-    KoTextDocument(document).styleManager()->setNotesConfiguration(notesConfiguration);
-
-    notesConfiguration =
-            new KoOdfNotesConfiguration(d->context.odfLoadingContext()
-                                        .stylesReader()
-                                        .globalNotesConfiguration(KoOdfNotesConfiguration::Footnote));
-    //KoTextDocument(document).setNotesConfiguration(notesConfiguration);
-    KoTextDocument(document).styleManager()->setNotesConfiguration(notesConfiguration);
-
     KoOdfLineNumberingConfiguration *lineNumberingConfiguration =
             new KoOdfLineNumberingConfiguration(d->context.odfLoadingContext()
                                                 .stylesReader()
                                                 .lineNumberingConfiguration());
     KoTextDocument(document).setLineNumberingConfiguration(lineNumberingConfiguration);
-
-    KoOdfBibliographyConfiguration *bibConfiguration =
-            new KoOdfBibliographyConfiguration(d->context.odfLoadingContext()
-                                               .stylesReader()
-                                               .globalBibliographyConfiguration());
-    KoTextDocument(document).styleManager()->setBibliographyConfiguration(bibConfiguration);
 
     d->styleManager = KoTextDocument(document).styleManager();
 
@@ -847,10 +827,10 @@ void KoTextLoader::loadNote(const KoXmlElement &noteElem, QTextCursor &cursor)
         KoInlineNote *note = 0;
         int position = cursor.position(); // need to store this as the following might move is
         if (className == "footnote") {
-            note = new KoInlineNote(KoInlineNote::Footnote);
+            note = new KoInlineNote(KoInlineNote::Footnote, cursor.block().document());
             note->setMotherFrame(KoTextDocument(cursor.block().document()).auxillaryFrame());
         } else {
-            note = new KoInlineNote(KoInlineNote::Endnote);
+            note = new KoInlineNote(KoInlineNote::Endnote, cursor.block().document());
             note->setMotherFrame(KoTextDocument(cursor.block().document()).auxillaryFrame());
         }
         if (note->loadOdf(noteElem, d->context)) {

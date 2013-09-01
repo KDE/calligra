@@ -197,6 +197,19 @@ void KoTextSharedLoadingData::loadOdfStyles(KoShapeLoadingContext &shapeContext,
 
     kDebug(32500) << "content.xml: paragraph styles" << d->paragraphContentDotXmlStyles.count() << "character styles" << d->characterContentDotXmlStyles.count();
     kDebug(32500) << "styles.xml:  paragraph styles" << d->paragraphStylesDotXmlStyles.count() << "character styles" << d->characterStylesDotXmlStyles.count();
+
+    KoOdfNotesConfiguration *notesConfiguration = new KoOdfNotesConfiguration(context.stylesReader()
+                                        .globalNotesConfiguration(KoOdfNotesConfiguration::Endnote));
+    styleManager->setNotesConfiguration(notesConfiguration);
+
+    notesConfiguration = new KoOdfNotesConfiguration(context.stylesReader()
+                                        .globalNotesConfiguration(KoOdfNotesConfiguration::Footnote));
+    styleManager->setNotesConfiguration(notesConfiguration);
+
+    KoOdfBibliographyConfiguration *bibConfiguration = new KoOdfBibliographyConfiguration(context
+                                    .stylesReader().globalBibliographyConfiguration());
+    styleManager->setBibliographyConfiguration(bibConfiguration);
+
 }
 
 void KoTextSharedLoadingData::addParagraphStyles(KoShapeLoadingContext &context, QList<KoXmlElement*> styleElements,
