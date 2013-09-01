@@ -38,7 +38,7 @@ class KoImageData;
 /**
  * Properties per list level.
  */
-class KOTEXT_EXPORT KoListLevelProperties : public QObject
+class KOODF_EXPORT KoListLevelProperties : public QObject
 {
     Q_OBJECT
 public:

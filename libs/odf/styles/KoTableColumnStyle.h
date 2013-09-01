@@ -24,7 +24,7 @@
 #define KOTABLECOLUMNSTYLE_H
 
 #include "KoText.h"
-#include "kotext_export.h"
+#include "koodf_export.h"
 
 #include <QObject>
 #include <QVector>
@@ -51,7 +51,7 @@ class KoOdfLoadingContext;
  * *
  * @see KoStyleManager, KoTableRowAndColumnStyleManager
  */
-class KOTEXT_EXPORT KoTableColumnStyle
+class KOODF_EXPORT KoTableColumnStyle
 {
 public:
     enum Property {

@@ -33,7 +33,7 @@
 #include <QString>
 #include <QChar>
 #include <QTextCharFormat>
-#include "kotext_export.h"
+#include "koodf_export.h"
 
 
 class StylePrivate;
@@ -54,7 +54,7 @@ class KoGenStyle;
  * equals styleId() of that style.
  * @see KoStyleManager
  */
-class KOTEXT_EXPORT KoCharacterStyle : public QObject
+class KOODF_EXPORT KoCharacterStyle : public QObject
 {
     Q_OBJECT
 public:

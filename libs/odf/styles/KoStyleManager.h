@@ -24,7 +24,7 @@
 #ifndef KOSTYLEMANAGER_H
 #define KOSTYLEMANAGER_H
 
-#include "kotext_export.h"
+#include "koodf_export.h"
 #include "KoOdfNotesConfiguration.h"
 #include "KoOdfBibliographyConfiguration.h"
 
@@ -53,7 +53,7 @@ class KoTextTableTemplate;
  * Manages all character, paragraph, table and table cell styles for any number
  * of documents.
  */
-class KOTEXT_EXPORT KoStyleManager : public QObject
+class KOODF_EXPORT KoStyleManager : public QObject
 {
     Q_OBJECT
 public:

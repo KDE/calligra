@@ -23,7 +23,7 @@
 #define KOTABLECELLSTYLE_H
 
 #include "KoText.h"
-#include "kotext_export.h"
+#include "koodf_export.h"
 
 #include <KoBorder.h>
 #include <KoShadowStyle.h>
@@ -54,7 +54,7 @@ class KoTableCellStylePrivate;
  * a specific KoTableCellStyle.
  * @see KoStyleManager
  */
-class KOTEXT_EXPORT KoTableCellStyle : public QObject
+class KOODF_EXPORT KoTableCellStyle : public QObject
 {
     Q_OBJECT
 public:

@@ -25,7 +25,7 @@
 
 #include "KoCharacterStyle.h"
 #include "KoText.h"
-#include "kotext_export.h"
+#include "koodf_export.h"
 
 #include <KoXmlReaderForward.h>
 #include <KoBorder.h>
@@ -57,7 +57,7 @@ class KoList;
  * a specific KoParagraphStyle.
  * @see KoStyleManager
  */
-class KOTEXT_EXPORT KoParagraphStyle : public KoCharacterStyle
+class KOODF_EXPORT KoParagraphStyle : public KoCharacterStyle
 {
     Q_OBJECT
 public:

@@ -24,7 +24,7 @@
 
 #include "KoColumns.h"
 #include "KoText.h"
-#include "kotext_export.h"
+#include "koodf_export.h"
 
 #include <QObject>
 #include <QVector>
@@ -48,7 +48,7 @@ class KoXmlElement;
  * a specific KoSectionStyle.
  * @see KoStyleManager
  */
-class KOTEXT_EXPORT KoSectionStyle : public QObject
+class KOODF_EXPORT KoSectionStyle : public QObject
 {
     Q_OBJECT
 public:

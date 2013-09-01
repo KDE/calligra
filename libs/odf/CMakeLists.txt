@@ -1,4 +1,5 @@
 add_subdirectory( tests )
+add_subdirectory( styles/tests )
 add_subdirectory( writeodf )
 
 include_directories( ${KOODF_INCLUDES} )
@@ -51,6 +52,18 @@ set(koodf_LIB_SRCS
     KoOdfNumberDefinition.cpp
     KoOdfLineNumberingConfiguration.cpp
     KoElementReference.cpp
+    styles/Styles_p.cpp
+    styles/KoCharacterStyle.cpp
+    styles/KoParagraphStyle.cpp
+    styles/KoStyleManager.cpp
+    styles/KoListStyle.cpp
+    styles/KoListLevelProperties.cpp
+    styles/ChangeFollower.cpp
+    styles/KoTableStyle.cpp
+    styles/KoTableColumnStyle.cpp
+    styles/KoTableRowStyle.cpp
+    styles/KoTableCellStyle.cpp
+    styles/KoSectionStyle.cpp
     writeodf/helpers.cpp
 )
 
@@ -110,3 +123,20 @@ install( FILES
     KoElementReference.h
     KoTableTemplate.h
 DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel)
+
+
+install(
+    FILES
+    styles/KoCharacterStyle.h
+    styles/KoListLevelProperties.h
+    styles/KoListStyle.h
+    styles/KoParagraphStyle.h
+    styles/KoTableColumnStyle.h
+    styles/KoTableRowStyle.h
+    styles/KoTableCellStyle.h
+    styles/KoSectionStyle.h
+    styles/KoStyleManager.h
+    styles/KoTableStyle.h
+    DESTINATION
+    ${INCLUDE_INSTALL_DIR}/calligra/styles COMPONENT Devel
+)

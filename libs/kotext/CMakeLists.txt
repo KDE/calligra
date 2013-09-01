@@ -3,7 +3,6 @@ include_directories(${KOTEXT_INCLUDES}
                     ${FREETYPE_INCLUDE_DIRS})
 
 add_subdirectory( tests )
-add_subdirectory( styles/tests )
 
 ########### next target ###############
 set(kotext_LIB_SRCS
@@ -69,18 +68,6 @@ set(kotext_LIB_SRCS
     KoBibliographyInfo.cpp
     BibliographyGenerator.cpp
 
-    styles/Styles_p.cpp
-    styles/KoCharacterStyle.cpp
-    styles/KoParagraphStyle.cpp
-    styles/KoStyleManager.cpp
-    styles/KoListStyle.cpp
-    styles/KoListLevelProperties.cpp
-    styles/ChangeFollower.cpp
-    styles/KoTableStyle.cpp
-    styles/KoTableColumnStyle.cpp
-    styles/KoTableRowStyle.cpp
-    styles/KoTableCellStyle.cpp
-    styles/KoSectionStyle.cpp
     opendocument/KoTextSharedLoadingData.cpp
     opendocument/KoTextSharedSavingData.cpp
     opendocument/KoTextLoader.cpp
@@ -188,22 +175,6 @@ install(
 
     DESTINATION
     ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel
-)
-
-install(
-    FILES
-    styles/KoCharacterStyle.h
-    styles/KoListLevelProperties.h
-    styles/KoListStyle.h
-    styles/KoParagraphStyle.h
-    styles/KoTableColumnStyle.h
-    styles/KoTableRowStyle.h
-    styles/KoTableCellStyle.h
-    styles/KoSectionStyle.h
-    styles/KoStyleManager.h
-    styles/KoTableStyle.h
-    DESTINATION
-    ${INCLUDE_INSTALL_DIR}/calligra/styles COMPONENT Devel
 )
 
 install(

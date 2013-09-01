@@ -24,7 +24,7 @@
 #define KOTABLESTYLE_H
 
 #include "KoText.h"
-#include "kotext_export.h"
+#include "koodf_export.h"
 
 #include <QObject>
 #include <QVector>
@@ -49,7 +49,7 @@ class KoOdfLoadingContext;
  * a specific KoTableStyle.
  * @see KoStyleManager
  */
-class KOTEXT_EXPORT KoTableStyle : public QObject
+class KOODF_EXPORT KoTableStyle : public QObject
 {
     Q_OBJECT
 public:
