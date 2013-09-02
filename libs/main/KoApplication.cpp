@@ -204,7 +204,6 @@ bool KoApplication::start()
 
     KoDocumentEntry entry;
     Q_FOREACH (QPluginLoader *loader, KoJsonTrader::self()->query("Calligra/Part", d->nativeMimeType)) {
-        qDebug() << "part offer"<< loader->fileName();
         if (loader->fileName().contains(qApp->applicationName()+QString("part"))) {
             entry = KoDocumentEntry(loader);
             break;
