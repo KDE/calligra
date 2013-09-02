@@ -267,11 +267,20 @@ public:
 
     QStringList findAllResources( const char *type, const QString& filter = QString(), SearchOptions options = NoSearchOptions ) const
     {
-        return findDirs(type);
+        QStringList r;
+        Q_FOREACH(QStandardPaths::StandardLocation l, locations(type)) {
+            Q_FOREACH(const QString &dir, QStandardPaths::standardLocations(l)) {
+                QFileInfo fi(dir, filter);
+                if (fi.exists())
+                    r.append(fi.absoluteFilePath());
+            }
+        }
+        qDebug() << Q_FUNC_INFO << "type=" << type << "filter=" << filter << "result=" << r;
+        return r;
     }
 
     QStringList findAllResources( const char *type, const QString& filter, int options ) const {
-        return findDirs(type);
+        return findAllResources(type, filter);
     }
 
     QStringList findAllResources( const char *type, const QString& filter, SearchOptions options, QStringList &relPaths) const
@@ -546,7 +555,8 @@ public:
         if (QString(type) == QString("data")) {
             return QCoreApplication::applicationDirPath()+QString("/../share/")+filename;
   //      } else if (type == "apps"|| type == "xdgdata-apps") {
-  //      } else if (type == "config") {
+        } else if (type == QString("config")) {
+            return QCoreApplication::applicationDirPath()+QString("/../share/")+cData.componentName()+QString("/")+filename;
   //      } else if (type == "pixmap" || type == "xdgdata-pixmap" || type == "xdgdata-icon") {
         }
         //Q_ASSERT(false);

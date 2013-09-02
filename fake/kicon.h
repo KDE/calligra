@@ -6,7 +6,7 @@
 class KOFAKE_EXPORT KIcon : public QIcon
 {
 public:
-    KIcon(const QString &name = QString()) : QIcon() {}
+    KIcon(const QString &name = QString()) : QIcon(QIcon::fromTheme(name)) {}
     KIcon(const QIcon &icon) : QIcon(icon) {}
 };
 
