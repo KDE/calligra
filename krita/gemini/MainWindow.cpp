@@ -244,11 +244,6 @@ void MainWindow::switchToSketch()
     d->syncObject = new ViewModeSynchronisationObject;
     KisView2* view = 0;
 
-    if(d->sketchKisView) {
-        QPoint center = d->sketchKisView->rect().center();
-        d->sketchKisView->canvasControllerWidget()->zoomRelativeToPoint(center, 0.9);
-    }
-
     KisConfig cfg;
     if(d->desktopView && centralWidget() == d->desktopView) {
         d->desktopCursorStyle = cfg.cursorStyle();
@@ -324,10 +319,6 @@ void MainWindow::switchToDesktop(bool justLoaded)
     qApp->processEvents();
 
     if(view && !justLoaded) {
-        QPoint center = view->rect().center();
-        view->canvasController()->zoomIn(center);
-        view->canvasController()->zoomOut(center);
-
         qApp->processEvents();
 
         if(d->desktopInitialized)

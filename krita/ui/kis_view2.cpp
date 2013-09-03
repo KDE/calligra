@@ -560,7 +560,6 @@ bool KisView2::event( QEvent* event )
     switch(static_cast<int>(event->type()))
     {
         case ViewModeSwitchEvent::AboutToSwitchViewModeEvent: {
-            qDebug() << "About to switch!";
             ViewModeSynchronisationObject* syncObject = static_cast<ViewModeSwitchEvent*>(event)->synchronisationObject();
 
             KisCanvasResourceProvider* provider = resourceProvider();
@@ -585,7 +584,6 @@ bool KisView2::event( QEvent* event )
             return true;
         }
         case ViewModeSwitchEvent::SwitchedToDesktopModeEvent: {
-            qDebug() << "Switched to desktop";
             ViewModeSynchronisationObject* syncObject = static_cast<ViewModeSwitchEvent*>(event)->synchronisationObject();
 
             if(syncObject->initialized) {
@@ -610,7 +608,8 @@ bool KisView2::event( QEvent* event )
                 QPoint newOffset = syncObject->documentOffset + pos();
                 qApp->processEvents();
                 canvasControllerWidget()->setScrollBarValue(newOffset);
-                qDebug() << "New offset" << canvasControllerWidget()->documentOffset();
+                
+                zoomController()->setZoom(KoZoomMode::ZOOM_PAGE, 1.0);
             }
 
             return true;

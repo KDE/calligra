@@ -372,7 +372,6 @@ bool KisSketchView::event( QEvent* event )
 {
     switch(static_cast<int>(event->type())) {
         case ViewModeSwitchEvent::AboutToSwitchViewModeEvent: {
-            qDebug() << "About to switch!";
             ViewModeSynchronisationObject* syncObject = static_cast<ViewModeSwitchEvent*>(event)->synchronisationObject();
 
             if(d->view) {
@@ -399,7 +398,6 @@ bool KisSketchView::event( QEvent* event )
             return true;
         }
         case ViewModeSwitchEvent::SwitchedToSketchModeEvent: {
-            qDebug() << "Switched to sketch";
             ViewModeSynchronisationObject* syncObject = static_cast<ViewModeSwitchEvent*>(event)->synchronisationObject();
 
             if(d->view && syncObject->initialized) {
@@ -423,6 +421,8 @@ bool KisSketchView::event( QEvent* event )
                 qApp->processEvents();
                 QPoint newOffset = syncObject->documentOffset;
                 d->view->canvasControllerWidget()->setScrollBarValue(newOffset);
+                
+                d->view->zoomController()->setZoom(KoZoomMode::ZOOM_PAGE, 1.0);
             }
 
             return true;
@@ -493,8 +493,8 @@ void KisSketchView::geometryChanged(const QRectF& newGeometry, const QRectF& /*o
         // This is a touch on the hackish side - i'm sure there's a better way of doing it
         // but it's taking a long time to work it out. Problem: When switching orientation,
         // the canvas is rendered wrong, in what looks like an off-by-one ish kind of fashion.
-        zoomOut();
-        QTimer::singleShot(100, this, SLOT(zoomIn()));
+//         zoomOut();
+//         QTimer::singleShot(100, this, SLOT(zoomIn()));
         //d->timer->start(100);
     }
 }
