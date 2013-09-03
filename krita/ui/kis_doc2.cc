@@ -202,9 +202,8 @@ QDomDocument KisDoc2::saveXML()
     root.setAttribute("syntaxVersion", "2");
 
     Q_ASSERT(m_d->kraSaver == 0);
-
-    m_d->image->barrierLock();
     m_d->kraSaver = new KisKraSaver(this);
+
     root.appendChild(m_d->kraSaver->saveXML(doc, m_d->image));
 
     return doc;
@@ -282,7 +281,6 @@ bool KisDoc2::completeSaving(KoStore *store)
 
     delete m_d->kraSaver;
     m_d->kraSaver = 0;
-    m_d->image->unlock();
 
     return true;
 }
