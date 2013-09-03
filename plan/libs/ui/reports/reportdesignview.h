@@ -18,8 +18,8 @@
 * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 
-#ifndef KEXIREPORTDESIGNVIEW_H
-#define KEXIREPORTDESIGNVIEW_H
+#ifndef PLAN_REPORTDESIGNVIEW_H
+#define PLAN_REPORTDESIGNVIEW_H
 
 #include <core/View.h>
 #include <QDomDocument>

@@ -29,7 +29,7 @@
 #include <QVector>
 #include <QSharedData>
 
-#include "koodf_export.h"
+#include "koodf2_export.h"
 
 
 class QByteArray;
@@ -78,7 +78,7 @@ class KoXmlStreamAttributes;
  * the document to become what you expect.  The functions
  * namespaceUri() and name() are not affected, only the prefixes.
  */
-class KOODF_EXPORT KoXmlStreamReader : public QXmlStreamReader
+class KOODF2_EXPORT KoXmlStreamReader : public QXmlStreamReader
 {
     friend class KoXmlStreamAttribute;
     friend class KoXmlStreamAttributes;
@@ -129,7 +129,7 @@ private:
  *
  * @see KoXmlStreamReader
  */
-class KOODF_EXPORT KoXmlStreamAttribute
+class KOODF2_EXPORT KoXmlStreamAttribute
 {
     friend class QVector<KoXmlStreamAttribute>;       // For the default constructor
     friend class KoXmlStreamAttributes;               // For the normal constructor
@@ -173,7 +173,7 @@ class KOODF_EXPORT KoXmlStreamAttribute
  *
  * @see KoXmlStreamReader
  */
-class KOODF_EXPORT KoXmlStreamAttributes
+class KOODF2_EXPORT KoXmlStreamAttributes
 {
     friend class KoXmlStreamReader;
 
@@ -216,7 +216,7 @@ class KOODF_EXPORT KoXmlStreamAttributes
 };
 
 
-void KOODF_EXPORT prepareForOdf(KoXmlStreamReader &reader);
+void KOODF2_EXPORT prepareForOdf(KoXmlStreamReader &reader);
 
 
 #endif /* KOGENCHANGES_H */

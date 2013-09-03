@@ -24,4 +24,4 @@ install(TARGETS calligra_filter_odt2mobi  DESTINATION ${PLUGIN_INSTALL_DIR})
 
  ########### install files ###############
 
-install( FILES  words_Mobi_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  calligra_filter_odt2mobi.desktop  DESTINATION ${SERVICES_INSTALL_DIR})

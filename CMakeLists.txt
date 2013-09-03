@@ -593,12 +593,6 @@ if(QT_QTWEBKIT_FOUND)
 endif(QT_QTWEBKIT_FOUND)
 
 ##
-## QImageBlitz (for Kexi)
-##
-#macro_optional_find_package(QImageBlitz)
-#macro_log_feature(QIMAGEBLITZ_FOUND "QImageBlitz" "Fast, smooth scaling of QImages" "sourceforge.net/projects/qimageblitz/" FALSE "" "Required for Kexi")
-
-##
 ## Test for KDeclarative
 ##
 macro_optional_find_package(KDeclarative)
@@ -815,6 +809,11 @@ set(WRITERPERFECT_INCLUDES
 # libodf2
 set(KOODF2_INCLUDES
     ${CMAKE_SOURCE_DIR}/filters/libodf2
+)
+
+# libodfreader
+set(KOODFREADER_INCLUDES
+    ${CMAKE_SOURCE_DIR}/filters/libodfreader
 )
 
  #########################################

@@ -51,9 +51,6 @@
 #include <kactionmenu.h>
 #include <klocale.h>
 #include <kmenu.h>
-#include <kparts/componentfactory.h>
-#include <kparts/event.h>
-#include <kparts/plugin.h>
 #include <kservice.h>
 #include <kservicetypetrader.h>
 #include <kstandardaction.h>
@@ -969,8 +966,8 @@ void KisView2::loadPlugins()
         dbgUI << "Load plugin " << service->name();
         QString error;
 
-        KParts::Plugin* plugin =
-                dynamic_cast<KParts::Plugin*>(service->createInstance<QObject>(this, QVariantList(), &error));
+        KXMLGUIClient* plugin =
+                dynamic_cast<KXMLGUIClient*>(service->createInstance<QObject>(this, QVariantList(), &error));
         if (plugin) {
             insertChildClient(plugin);
         } else {
@@ -1157,6 +1154,7 @@ void KisView2::slotSaveIncrementalBackup()
         int intVersion = version.toInt(0);
         ++intVersion;
         QString baseNewVersion = QString::number(intVersion);
+        QString backupFileName = m_d->doc->localFilePath();
         while (baseNewVersion.length() < version.length()) {
             baseNewVersion.prepend("0");
         }
@@ -1167,8 +1165,8 @@ void KisView2::slotSaveIncrementalBackup()
             newVersion.prepend("~");
             if (!letter.isNull()) newVersion.append(letter);
             newVersion.append(".");
-            fileName.replace(regex, newVersion);
-            fileAlreadyExists = KIO::NetAccess::exists(fileName, KIO::NetAccess::DestinationSide, this);
+            backupFileName.replace(regex, newVersion);
+            fileAlreadyExists = KIO::NetAccess::exists(backupFileName, KIO::NetAccess::DestinationSide, this);
             if (fileAlreadyExists) {
                 if (!letter.isNull()) {
                     char letterCh = letter.at(0).toLatin1();
@@ -1184,6 +1182,7 @@ void KisView2::slotSaveIncrementalBackup()
             KMessageBox::error(this, "Alternative names exhausted, try manually saving with a higher number", "Couldn't save incremental backup");
             return;
         }
+        QFile::copy(fileName, backupFileName);
         m_d->doc->documentPart()->saveAs(fileName);
 
         shell()->updateCaption();
@@ -1221,7 +1220,8 @@ void KisView2::slotSaveIncrementalBackup()
 
         // Save both as backup and on current file for interapplication workflow
         m_d->doc->setSaveInBatchMode(true);
-        m_d->doc->documentPart()->saveAs(backupFileName);
+        QFile::copy(fileName, backupFileName);
+        m_d->doc->documentPart()->saveAs(fileName);
         m_d->doc->setSaveInBatchMode(false);
 
         shell()->updateCaption();

@@ -48,16 +48,23 @@
 #include "KPrPresentationDrawStrategy.h"
 #include "KPrPresentationBlackStrategy.h"
 #include "ui/KPrPresentationToolWidget.h"
+
+#ifndef QT_NO_DBUS
 #include "KPrPresentationToolAdaptor.h"
+#endif
 
 
 KPrPresentationTool::KPrPresentationTool( KPrViewModePresentation &viewMode )
 : KoToolBase( viewMode.canvas() )
 , m_viewMode( viewMode )
 , m_strategy( new KPrPresentationStrategy( this ) )
+#ifndef QT_NO_DBUS
 , m_bus ( new KPrPresentationToolAdaptor( this ) )
-{
+#endif
+{   
+#ifndef QT_NO_DBUS
     QDBusConnection::sessionBus().registerObject("/kpresenter/PresentationTools", this);
+#endif
 
     // tool box
     m_frame = new QFrame( m_viewMode.canvas()->canvasWidget() );

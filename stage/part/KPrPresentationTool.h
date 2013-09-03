@@ -33,7 +33,10 @@ class KoEventAction;
 class KPrViewModePresentation;
 class KPrPresentationToolWidget;
 class KPrPresentationStrategyBase;
+
+#ifndef QT_NO_DBUS
 class KPrPresentationToolAdaptor;
+#endif
 
 /// The tool used for presentations
 class KPrPresentationTool : public KoToolBase
@@ -91,7 +94,11 @@ private:
     KPrPresentationToolWidget * m_presentationToolWidget;
     QFrame * m_frame;
     KPrPresentationStrategyBase * m_strategy;
+
+#ifndef QT_NO_DBUS
     KPrPresentationToolAdaptor *m_bus;
+#endif
+
     friend class KPrPresentationStrategyBase;
 };
 
