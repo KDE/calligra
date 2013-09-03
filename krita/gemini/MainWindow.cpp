@@ -146,7 +146,7 @@ public:
 
         KAction* toDesktop = new KAction(q);
         toDesktop->setText(tr("Switch to Desktop"));
-        connect(toDesktop, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), q, SLOT(switchDesktopForced()));
+        //connect(toDesktop, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), q, SLOT(switchDesktopForced()));
         connect(toDesktop, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), q, SLOT(switchToDesktop()));
         sketchView->engine()->rootContext()->setContextProperty("switchToDesktopAction", toDesktop);
     }
@@ -169,14 +169,14 @@ public:
         toSketch->setText(tr("Switch to Sketch"));
         toSketch->setIcon(QIcon::fromTheme("system-reboot"));
         toSketch->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_S);
-        connect(toSketch, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), q, SLOT(switchSketchForced()));
+        //connect(toSketch, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), q, SLOT(switchSketchForced()));
         connect(toSketch, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), q, SLOT(switchToSketch()));
         desktopView->actionCollection()->addAction("SwitchToSketchView", toSketch);
         QToolButton* switcher = new QToolButton();
         switcher->setText(tr("Switch to Sketch"));
         switcher->setIcon(QIcon::fromTheme("system-reboot"));
         switcher->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-        connect(switcher, SIGNAL(clicked(bool)), q, SLOT(switchDesktopForced()));
+        //connect(switcher, SIGNAL(clicked(bool)), q, SLOT(switchDesktopForced()));
         connect(switcher, SIGNAL(clicked(bool)), q, SLOT(switchToSketch()));
         desktopView->menuBar()->setCornerWidget(switcher);
 
