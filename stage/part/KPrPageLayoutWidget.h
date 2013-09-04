@@ -17,10 +17,10 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KPRPAGELAYOUTDOCKER_H
-#define KPRPAGELAYOUTDOCKER_H
+#ifndef KPRPAGELAYOUTWIDGET_H
+#define KPRPAGELAYOUTWIDGET_H
 
-#include <QDockWidget>
+#include <QWidget>
 #include <QMap>
 
 class QListWidget;
@@ -28,11 +28,11 @@ class QListWidgetItem;
 class KPrPageLayout;
 class KPrView;
 
-class KPrPageLayoutDocker : public QDockWidget
+class KPrPageLayoutWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit KPrPageLayoutDocker( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
+    explicit KPrPageLayoutWidget( QWidget* parent = 0);
 
     void setView( KPrView* view );
 
@@ -52,4 +52,4 @@ private:
     QListWidgetItem * m_previousItem;
 };
 
-#endif /* KPRPAGELAYOUTDOCKER_H */
+#endif /* KPRPAGELAYOUTWIDGET_H */
