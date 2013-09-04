@@ -74,6 +74,7 @@ public Q_SLOTS:
 
     void documentAboutToBeDeleted();
     void documentChanged();
+    void centerDoc();
 
     void activate();
 

@@ -415,14 +415,15 @@ bool KisSketchView::event( QEvent* event )
                 provider->setOpacity(syncObject->opacity);
                 provider->setGlobalAlphaLock(syncObject->globalAlphaLock);
 
+                zoomIn();
+                qApp->processEvents();
+
                 d->view->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, syncObject->zoomLevel);
                 d->view->canvasControllerWidget()->rotateCanvas(syncObject->rotationAngle - d->view->canvasBase()->rotationAngle());
 
                 qApp->processEvents();
                 QPoint newOffset = syncObject->documentOffset;
                 d->view->canvasControllerWidget()->setScrollBarValue(newOffset);
-                
-                d->view->zoomController()->setZoom(KoZoomMode::ZOOM_PAGE, 1.0);
             }
 
             return true;
@@ -482,7 +483,7 @@ bool KisSketchView::sceneEvent(QEvent* event)
     return QDeclarativeItem::sceneEvent(event);
 }
 
-void KisSketchView::geometryChanged(const QRectF& newGeometry, const QRectF& /*oldGeometry*/)
+void KisSketchView::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry)
 {
     if (d->canvasWidget && !newGeometry.isEmpty()) {
         d->view->resize(newGeometry.toRect().size());
@@ -493,10 +494,26 @@ void KisSketchView::geometryChanged(const QRectF& newGeometry, const QRectF& /*o
         // This is a touch on the hackish side - i'm sure there's a better way of doing it
         // but it's taking a long time to work it out. Problem: When switching orientation,
         // the canvas is rendered wrong, in what looks like an off-by-one ish kind of fashion.
-//         zoomOut();
-//         QTimer::singleShot(100, this, SLOT(zoomIn()));
-        //d->timer->start(100);
+        if(oldGeometry.height() == oldGeometry.width() && oldGeometry.height() == newGeometry.width()) {
+            // in this case, we've just rotated the display... do something useful!
+            // Turns out we get /two/ resize events per rotation, one one per setting each height and width.
+            // So we can't just check it normally. Annoying, but there you go.
+            QTimer::singleShot(100, this, SLOT(centerDoc()));
+            QTimer::singleShot(150, this, SLOT(zoomOut()));
+        }
+        if(oldGeometry.height() == oldGeometry.width() && oldGeometry.width() == newGeometry.height()) {
+            // in this case, we've just rotated the display... do something useful!
+            // Turns out we get /two/ resize events per rotation, one one per setting each height and width.
+            // So we can't just check it normally. Annoying, but there you go.
+            QTimer::singleShot(100, this, SLOT(centerDoc()));
+            QTimer::singleShot(150, this, SLOT(zoomOut()));
+        }
     }
+}
+
+void KisSketchView::centerDoc()
+{
+    d->view->zoomController()->setZoom(KoZoomMode::ZOOM_PAGE, 1.0);
 }
 
 void KisSketchView::Private::imageUpdated(const QRect &updated)
