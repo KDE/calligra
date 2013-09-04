@@ -22,7 +22,6 @@
 #ifndef KOTABLECELLSTYLE_H
 #define KOTABLECELLSTYLE_H
 
-#include "KoText.h"
 #include "koodf_export.h"
 
 #include <KoBorder.h>

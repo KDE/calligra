@@ -23,7 +23,6 @@
 #define KOSECTIONSTYLE_H
 
 #include "KoColumns.h"
-#include "KoText.h"
 #include "koodf_export.h"
 
 #include <QObject>

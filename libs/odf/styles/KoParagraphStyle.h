@@ -24,7 +24,6 @@
 #define KOPARAGRAPHSTYLE_H
 
 #include "KoCharacterStyle.h"
-#include "KoText.h"
 #include "koodf_export.h"
 
 #include <KoXmlReaderForward.h>

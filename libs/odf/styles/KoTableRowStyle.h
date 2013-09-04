@@ -23,7 +23,6 @@
 #ifndef KOTABLEROWSTYLE_H
 #define KOTABLEROWSTYLE_H
 
-#include "KoText.h"
 #include "koodf_export.h"
 
 #include <QObject>
