@@ -137,7 +137,7 @@ set( calligrastageprivate_LIB_SRCS
      tools/KPrPlaceholderToolFactory.cpp
    )
 
-if(NOT QT_NO_DBUS)
+if(QT_QTDBUS_FOUND)
 set( calligrastageprivate_LIB_SRCS
      ${calligrastageprivate_LIB_SRCS}
      KPrViewAdaptor.cpp
