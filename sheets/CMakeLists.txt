@@ -119,7 +119,7 @@ SET (functions_DIR_SRCS
     functions/helper.cpp
     )
 
-if(NOT QT_NO_DBUS)
+if(QT_QTDBUS_FOUND)
 SET (interfaces_DIR_SRCS
     interfaces/MapAdaptor.cpp
     interfaces/SheetAdaptor.cpp
