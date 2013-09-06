@@ -115,6 +115,7 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas, KisCoordinatesConverter *
     setAcceptDrops(true);
     setFocusPolicy(Qt::StrongFocus);
     setAttribute(Qt::WA_NoSystemBackground);
+    setAttribute(Qt::WA_AcceptTouchEvents);
     setAutoFillBackground(false);
 
     setAttribute(Qt::WA_InputMethodEnabled, true);

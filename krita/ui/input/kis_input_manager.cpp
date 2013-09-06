@@ -522,7 +522,6 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         retval = d->matcher.touchBeginEvent(static_cast<QTouchEvent*>(event));
         event->accept();
         d->resetSavedTabletEvent(event->type());
-        d->saveTouchEvent(static_cast<QTouchEvent*>(event));
         break;
     case QEvent::TouchUpdate:
         KisAbstractInputAction::setInputManager(this);
