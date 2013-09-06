@@ -133,14 +133,23 @@ void SketchDeclarativeView::resizeEvent(QResizeEvent *event)
 
 bool SketchDeclarativeView::event( QEvent* event )
 {
-    if(static_cast<int>(event->type()) == ViewModeSwitchEvent::AboutToSwitchViewModeEvent || static_cast<int>(event->type()) == ViewModeSwitchEvent::SwitchedToSketchModeEvent) {
-        //QGraphicsScene is silly and will not forward unknown events to its items, so emulate that
-        //functionality.
+    switch(static_cast<int>(event->type())) {
+        case ViewModeSwitchEvent::AboutToSwitchViewModeEvent:
+        case ViewModeSwitchEvent::SwitchedToSketchModeEvent:
+        case QEvent::TabletPress:
+        case QEvent::TabletMove:
+        case QEvent::TabletRelease: {
+            //QGraphicsScene is silly and will not forward unknown events to its items, so emulate that
+            //functionality.
 
-        QList<QGraphicsItem*> items = scene()->items();
-        Q_FOREACH(QGraphicsItem* item, items) {
-            scene()->sendEvent(item, event);
+            QList<QGraphicsItem*> items = scene()->items();
+            Q_FOREACH(QGraphicsItem* item, items) {
+                scene()->sendEvent(item, event);
+            }
+            break;
         }
+        default:
+            break;
     }
     return QGraphicsView::event( event );
 }
