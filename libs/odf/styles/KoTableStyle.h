@@ -119,10 +119,10 @@ public:
     int pageNumber() const;
     void setPageNumber (int page);
 
-    void setBreakBefore(KoText::KoTextBreakProperty state);
-    KoText::KoTextBreakProperty breakBefore();
-    void setBreakAfter(KoText::KoTextBreakProperty state);
-    KoText::KoTextBreakProperty breakAfter();
+    void setBreakBefore(KoOdf::KoTextBreakProperty state);
+    KoOdf::KoTextBreakProperty breakBefore();
+    void setBreakAfter(KoOdf::KoTextBreakProperty state);
+    KoOdf::KoTextBreakProperty breakAfter();
 
     void setVisible(bool on);
     bool visible();
@@ -130,8 +130,8 @@ public:
     void setCollapsingBorderModel(bool on);
     bool collapsingBorderModel();
     
-    KoText::Direction textDirection() const;
-    void setTextDirection(KoText::Direction direction);
+    KoOdf::TextDirection textDirection() const;
+    void setTextDirection(KoOdf::TextDirection direction);
 
     // ************ properties from QTextTableFormat
     /// duplicated property from QTextBlockFormat

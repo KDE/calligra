@@ -21,12 +21,12 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#include "OdfDefines.h"
 #include "KoTableStyle.h"
 #include "KoStyleManager.h"
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
 #include "Styles_p.h"
-#include "KoTextDocument.h"
 
 #include <kdebug.h>
 
@@ -244,24 +244,24 @@ QBrush KoTableStyle::background() const
     return qvariant_cast<QBrush>(variant);
 }
 
-void KoTableStyle::setBreakBefore(KoText::KoTextBreakProperty state)
+void KoTableStyle::setBreakBefore(KoOdf::KoTextBreakProperty state)
 {
     setProperty(BreakBefore, state);
 }
 
-KoText::KoTextBreakProperty KoTableStyle::breakBefore()
+KoOdf::KoTextBreakProperty KoTableStyle::breakBefore()
 {
-    return (KoText::KoTextBreakProperty) propertyInt(BreakBefore);
+    return (KoOdf::KoTextBreakProperty) propertyInt(BreakBefore);
 }
 
-void KoTableStyle::setBreakAfter(KoText::KoTextBreakProperty state)
+void KoTableStyle::setBreakAfter(KoOdf::KoTextBreakProperty state)
 {
     setProperty(BreakAfter, state);
 }
 
-KoText::KoTextBreakProperty KoTableStyle::breakAfter()
+KoOdf::KoTextBreakProperty KoTableStyle::breakAfter()
 {
-    return (KoText::KoTextBreakProperty) propertyInt(BreakAfter);
+    return (KoOdf::KoTextBreakProperty) propertyInt(BreakAfter);
 }
 
 void KoTableStyle::setCollapsingBorderModel(bool on)
@@ -438,12 +438,12 @@ void KoTableStyle::setVisible(bool on)
     setProperty(Visible, on);
 }
 
-KoText::Direction KoTableStyle::textDirection() const
+KoOdf::TextDirection KoTableStyle::textDirection() const
 {
-    return (KoText::Direction) propertyInt(TextProgressionDirection);
+    return (KoOdf::TextDirection) propertyInt(TextProgressionDirection);
 }
 
-void KoTableStyle::setTextDirection(KoText::Direction direction)
+void KoTableStyle::setTextDirection(KoOdf::TextDirection direction)
 {
     setProperty(TextProgressionDirection, direction);
 }
@@ -472,7 +472,7 @@ void KoTableStyle::loadOdf(const KoXmlElement *element, KoOdfLoadingContext &con
 void KoTableStyle::loadOdfProperties(KoStyleStack &styleStack)
 {
     if (styleStack.hasProperty(KoXmlNS::style, "writing-mode")) {     // http://www.w3.org/TR/2004/WD-xsl11-20041216/#writing-mode
-        setTextDirection(KoText::directionFromString(styleStack.property(KoXmlNS::style, "writing-mode")));
+        setTextDirection(KoOdf::textDirectionFromString(styleStack.property(KoXmlNS::style, "writing-mode")));
     }
 
     if (styleStack.hasProperty(KoXmlNS::table, "display")) {
@@ -496,15 +496,15 @@ void KoTableStyle::loadOdfProperties(KoStyleStack &styleStack)
     bool hasMarginLeft = styleStack.hasProperty(KoXmlNS::fo, "margin-left");
     bool hasMarginRight = styleStack.hasProperty(KoXmlNS::fo, "margin-right");
     if (hasMarginLeft)
-        setLeftMargin(KoText::parseLength(styleStack.property(KoXmlNS::fo, "margin-left")));
+        setLeftMargin(KoOdf::parseLength(styleStack.property(KoXmlNS::fo, "margin-left")));
     if (hasMarginRight)
-        setRightMargin(KoText::parseLength(styleStack.property(KoXmlNS::fo, "margin-right")));
+        setRightMargin(KoOdf::parseLength(styleStack.property(KoXmlNS::fo, "margin-right")));
     if (styleStack.hasProperty(KoXmlNS::fo, "margin-top"))
-        setTopMargin(KoText::parseLength(styleStack.property(KoXmlNS::fo, "margin-top")));
+        setTopMargin(KoOdf::parseLength(styleStack.property(KoXmlNS::fo, "margin-top")));
     if (styleStack.hasProperty(KoXmlNS::fo, "margin-bottom"))
-        setBottomMargin(KoText::parseLength(styleStack.property(KoXmlNS::fo, "margin-bottom")));
+        setBottomMargin(KoOdf::parseLength(styleStack.property(KoXmlNS::fo, "margin-bottom")));
     if (styleStack.hasProperty(KoXmlNS::fo, "margin")) {
-        setMargin(KoText::parseLength(styleStack.property(KoXmlNS::fo, "margin")));
+        setMargin(KoOdf::parseLength(styleStack.property(KoXmlNS::fo, "margin")));
         hasMarginLeft = true;
         hasMarginRight = true;
     }
@@ -518,10 +518,10 @@ void KoTableStyle::loadOdfProperties(KoStyleStack &styleStack)
 
     // The fo:break-before and fo:break-after attributes insert a page or column break before or after a table.
     if (styleStack.hasProperty(KoXmlNS::fo, "break-before")) {
-        setBreakBefore(KoText::textBreakFromString(styleStack.property(KoXmlNS::fo, "break-before")));
+        setBreakBefore(KoOdf::textBreakFromString(styleStack.property(KoXmlNS::fo, "break-before")));
     }
     if (styleStack.hasProperty(KoXmlNS::fo, "break-after")) {
-        setBreakAfter(KoText::textBreakFromString(styleStack.property(KoXmlNS::fo, "break-after")));
+        setBreakAfter(KoOdf::textBreakFromString(styleStack.property(KoXmlNS::fo, "break-after")));
     }
 
     if (styleStack.hasProperty(KoXmlNS::style, "may-break-between-rows")) {
@@ -622,9 +622,9 @@ void KoTableStyle::saveOdf(KoGenStyle &style)
                     style.addProperty("table:align", alignment, KoGenStyle::TableType);
             }
         } else if (key == KoTableStyle::BreakBefore) {
-            style.addProperty("fo:break-before", KoText::textBreakToString(breakBefore()), KoGenStyle::TableType);
+            style.addProperty("fo:break-before", KoOdf::textBreakToString(breakBefore()), KoGenStyle::TableType);
         } else if (key == KoTableStyle::BreakAfter) {
-            style.addProperty("fo:break-after", KoText::textBreakToString(breakAfter()), KoGenStyle::TableType);
+            style.addProperty("fo:break-after", KoOdf::textBreakToString(breakAfter()), KoGenStyle::TableType);
         } else if (key == KoTableStyle::MayBreakBetweenRows) {
             style.addProperty("style:may-break-between-rows", mayBreakBetweenRows(), KoGenStyle::TableType);
         } else if (key == QTextFormat::BackgroundBrush) {
@@ -659,7 +659,7 @@ void KoTableStyle::saveOdf(KoGenStyle &style)
             else
                 style.addProperty("style:page-number", "auto", KoGenStyle::TableType);
         } else if (key == TextProgressionDirection) {
-            style.addProperty("style:writing-mode", KoText::directionToString(textDirection()), KoGenStyle::TableType);
+            style.addProperty("style:writing-mode", KoOdf::textDirectionToString(textDirection()), KoGenStyle::TableType);
         } else if (key == KoTableStyle::Shadow) {
             style.addProperty("style:shadow", shadow().saveOdf());
         }
