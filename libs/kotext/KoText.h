@@ -41,10 +41,6 @@ namespace KoText
 {
 KOTEXT_EXPORT QStringList underlineTypeList();
 KOTEXT_EXPORT QStringList underlineStyleList();
-KOTEXT_EXPORT Qt::Alignment alignmentFromString(const QString &align);
-KOTEXT_EXPORT QString alignmentToString(Qt::Alignment align);
-KOTEXT_EXPORT Qt::Alignment valignmentFromString(const QString &align);
-KOTEXT_EXPORT QString valignmentToString(Qt::Alignment align);
 
 /// This enum contains values to be used as keys in KoCanvasResourceManager
 enum CanvasResource {
@@ -54,22 +50,6 @@ enum CanvasResource {
     SelectedTextPosition = 21314576,   ///<  used by the text plugin whenever the alternative selection is changed
     ///  used by the text plugin whenever the alternative selection anchor-position is changed
     SelectedTextAnchor = 3344189
-};
-
-/// For paragraphs each tab definition is represented by this struct.
-struct KOTEXT_EXPORT Tab {
-    Tab();
-    qreal position;    ///< distance in ps-points from the edge of the text-shape
-    QTextOption::TabType type;       ///< Determine which type is used.
-    QChar delimiter;    ///< If type is DelimitorTab; tab until this char was found in the text.
-    KoCharacterStyle::LineType leaderType; // none/single/double
-    KoCharacterStyle::LineStyle leaderStyle; // solid/dotted/dash/...
-    KoCharacterStyle::LineWeight leaderWeight; // auto/bold/thin/length/percentage/...
-    qreal leaderWidth; // the width value if length/percentage
-    QColor leaderColor; ///< if color is valid, then use this instead of the (current) text color
-    QString leaderText;   ///< character to print as the leader (filler of the tabbed space)
-
-    bool operator==(const Tab &tab) const;
 };
 
 /**
@@ -107,25 +87,6 @@ enum Direction {
     InheritDirection    ///< Direction is unspecified and should come from the container
 };
 
-/// convert the string version of directions (as specified in XSL and ODF) to the Direction enum
-KOTEXT_EXPORT Direction directionFromString(const QString &direction);
-/// convert the Direction enum to the string version of directions (as specified in XSL and ODF)
-KOTEXT_EXPORT QString directionToString(Direction direction);
-
-/// There are several possible text breaks
-enum KoTextBreakProperty {
-    NoBreak = 0,         ///< No text break
-    ColumnBreak,     ///< Column break
-    PageBreak        ///< Page break
-};
-
-/// convert the string version of text break (as specified in ODF) to the KoTextBreakProperty enum
-KOTEXT_EXPORT KoTextBreakProperty textBreakFromString(const QString &textBreak);
-/// convert the KoTextBreakProperty enum to the string version of text break (as specified in ODF)
-KOTEXT_EXPORT QString textBreakToString (KoTextBreakProperty textBreak);
-
-///@TODO: move to KoUnit ?
-KOTEXT_EXPORT QTextLength parseLength (const QString &length);
 }
 
 Q_DECLARE_METATYPE(KoText::Tab)

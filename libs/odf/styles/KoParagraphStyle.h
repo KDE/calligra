@@ -26,15 +26,18 @@
 #include "KoCharacterStyle.h"
 #include "koodf_export.h"
 
-#include <KoXmlReaderForward.h>
-#include <KoBorder.h>
-#include <KoShadowStyle.h>
-
+// Qt
 #include <QObject>
 #include <QVector>
 #include <QString>
 #include <QVariant>
 #include <QTextFormat>
+
+// ODF library
+#include <OdfDefines.h>
+#include <KoXmlReaderForward.h>
+#include <KoBorder.h>
+#include <KoShadowStyle.h>
 
 extern QVariant val;
 struct Property;
@@ -420,10 +423,10 @@ public:
     VerticalAlign verticalAlignment() const;
     void setVerticalAlignment(VerticalAlign value);
 
-    void setBreakBefore(KoText::KoTextBreakProperty value);
-    KoText::KoTextBreakProperty breakBefore() const;
-    void setBreakAfter(KoText::KoTextBreakProperty value);
-    KoText::KoTextBreakProperty breakAfter() const;
+    void setBreakBefore(KoOdf::KoTextBreakProperty value);
+    KoOdf::KoTextBreakProperty breakBefore() const;
+    void setBreakAfter(KoOdf::KoTextBreakProperty value);
+    KoOdf::KoTextBreakProperty breakAfter() const;
     void setLeftPadding(qreal padding);
     qreal leftPadding() const;
     void setTopPadding(qreal padding);
@@ -478,8 +481,8 @@ public:
     bool joinBorder() const;
     void setJoinBorder(bool value);
 
-    KoText::Direction textProgressionDirection() const;
-    void setTextProgressionDirection(KoText::Direction dir);
+    KoOdf::TextDirection textProgressionDirection() const;
+    void setTextProgressionDirection(KoOdf::TextDirection dir);
 
     // ************ properties from QTextBlockFormat
     /// duplicated property from QTextBlockFormat
@@ -569,9 +572,9 @@ public:
     /// return the tab stop distance for this paragraph style
     qreal tabStopDistance() const;
     /// Set the tab data for this paragraph style.
-    void setTabPositions(const QList<KoText::Tab> &tabs);
+    void setTabPositions(const QList<KoOdf::Tab> &tabs);
     /// return the tabs data for this paragraph style
-    QList<KoText::Tab> tabPositions() const;
+    QList<KoOdf::Tab> tabPositions() const;
 
     /// If this style is a list, then this sets the nested-ness (aka level) of this paragraph.  A H2 has level 2.
     void setListLevel(int value);
@@ -684,7 +687,7 @@ public:
      * @param element the element containing the style
      * @param loadParents true = use the stylestack, false = use just the element
      */
-    void loadOdf(const KoXmlElement *element, KoShapeLoadingContext &context,
+    void loadOdf(const KoXmlElement *element, KoOdfLoadingContext &oContext,
                 bool loadParents = false);
 
     void saveOdf(KoGenStyle &style, KoShapeSavingContext &context) const;
@@ -735,7 +738,7 @@ private:
      * Load the style from the \a KoStyleStack style stack using the
      * OpenDocument format.
      */
-    void loadOdfProperties(KoShapeLoadingContext &scontext);
+    void loadOdfProperties(KoOdfLoadingContext &scontext);
     qreal propertyDouble(int key) const;
     QTextLength propertyLength(int key) const;
     int propertyInt(int key) const;

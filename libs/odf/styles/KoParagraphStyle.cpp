@@ -25,16 +25,15 @@
 #include "KoParagraphStyle.h"
 #include "KoCharacterStyle.h"
 #include "KoListStyle.h"
-#include "KoTextBlockData.h"
+//#include "KoTextBlockData.h"
 #include "KoStyleManager.h"
 #include "KoListLevelProperties.h"
-#include "KoTextSharedLoadingData.h"
-#include <KoShapeLoadingContext.h>
-#include <KoShapeSavingContext.h>
+//#include "KoTextSharedLoadingData.h"
+//#include <KoShapeSavingContext.h>
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
 #include "Styles_p.h"
-#include "KoTextDocument.h"
+//#include "KoTextDocument.h"
 
 #include <kdebug.h>
 
@@ -53,7 +52,7 @@
 
 //already defined in KoRulerController.cpp
 #ifndef KDE_USE_FINAL
-static int compareTabs(KoText::Tab &tab1, KoText::Tab &tab2)
+static int compareTabs(KoOdf::Tab &tab1, KoOdf::Tab &tab2)
 {
     return tab1.position < tab2.position;
 }
@@ -95,7 +94,7 @@ public:
 };
 
 KoParagraphStyle::KoParagraphStyle(QObject *parent)
-        : KoCharacterStyle(parent), d(new Private())
+    : KoCharacterStyle(parent), d(new Private())
 {
 }
 
@@ -106,6 +105,13 @@ KoParagraphStyle::KoParagraphStyle(const QTextBlockFormat &blockFormat, const QT
     d->stylesPrivate = blockFormat.properties();
 }
 
+KoParagraphStyle::~KoParagraphStyle()
+{
+    delete d;
+}
+
+
+#if 0 // Move
 KoParagraphStyle *KoParagraphStyle::fromBlock(const QTextBlock &block, QObject *parent)
 {
     QTextBlockFormat blockFormat = block.blockFormat();
@@ -124,11 +130,8 @@ KoParagraphStyle *KoParagraphStyle::fromBlock(const QTextBlock &block, QObject *
     }
     return answer;
 }
+#endif
 
-KoParagraphStyle::~KoParagraphStyle()
-{
-    delete d;
-}
 
 KoCharacterStyle::Type KoParagraphStyle::styleType() const
 {
@@ -280,6 +283,7 @@ bool KoParagraphStyle::isApplied() const
     return d->m_inUse;
 }
 
+#if 0  // Move
 void KoParagraphStyle::applyParagraphListStyle(QTextBlock &block, const QTextBlockFormat &blockFormat) const
 {
     //gopalakbhat: We need to differentiate between normal styles and styles with outline(part of heading)
@@ -319,7 +323,9 @@ void KoParagraphStyle::applyParagraphListStyle(QTextBlock &block, const QTextBlo
         }
     }
 }
+#endif
 
+#if 0  // Move
 void KoParagraphStyle::unapplyStyle(QTextBlock &block) const
 {
     if (d->parentStyle)
@@ -357,6 +363,7 @@ void KoParagraphStyle::unapplyStyle(QTextBlock &block) const
         KoList::remove(block);
     }
 }
+#endif
 
 void KoParagraphStyle::setLineHeightPercent(qreal lineHeight)
 {
@@ -529,24 +536,24 @@ bool KoParagraphStyle::followDocBaseline() const
     return propertyBoolean(FollowDocBaseline);
 }
 
-void KoParagraphStyle::setBreakBefore(KoText::KoTextBreakProperty value)
+void KoParagraphStyle::setBreakBefore(KoOdf::KoTextBreakProperty value)
 {
     setProperty(BreakBefore, value);
 }
 
-KoText::KoTextBreakProperty KoParagraphStyle::breakBefore() const
+KoOdf::KoTextBreakProperty KoParagraphStyle::breakBefore() const
 {
-    return static_cast<KoText::KoTextBreakProperty>(propertyInt(BreakBefore));
+    return static_cast<KoOdf::KoTextBreakProperty>(propertyInt(BreakBefore));
 }
 
-void KoParagraphStyle::setBreakAfter(KoText::KoTextBreakProperty value)
+void KoParagraphStyle::setBreakAfter(KoOdf::KoTextBreakProperty value)
 {
     setProperty(BreakAfter, value);
 }
 
-KoText::KoTextBreakProperty KoParagraphStyle::breakAfter() const
+KoOdf::KoTextBreakProperty KoParagraphStyle::breakAfter() const
 {
-    return static_cast<KoText::KoTextBreakProperty>(propertyInt(BreakAfter));
+    return static_cast<KoOdf::KoTextBreakProperty>(propertyInt(BreakAfter));
 }
 
 void KoParagraphStyle::setLeftPadding(qreal padding)
@@ -1084,12 +1091,12 @@ void KoParagraphStyle::setListStyle(KoListStyle *style)
     }
 }
 
-KoText::Direction KoParagraphStyle::textProgressionDirection() const
+KoOdf::TextDirection KoParagraphStyle::textProgressionDirection() const
 {
-    return static_cast<KoText::Direction>(propertyInt(TextProgressionDirection));
+    return static_cast<KoOdf::TextDirection>(propertyInt(TextProgressionDirection));
 }
 
-void KoParagraphStyle::setTextProgressionDirection(KoText::Direction dir)
+void KoParagraphStyle::setTextProgressionDirection(KoOdf::TextDirection dir)
 {
     setProperty(TextProgressionDirection, dir);
 }
@@ -1221,10 +1228,9 @@ KoShadowStyle KoParagraphStyle::shadow() const
     return KoShadowStyle();
 }
 
-void KoParagraphStyle::loadOdf(const KoXmlElement *element, KoShapeLoadingContext &scontext,
-    bool loadParents)
+void KoParagraphStyle::loadOdf(const KoXmlElement *element, KoOdfLoadingContext &oContext,
+                               bool loadParents)
 {
-    KoOdfLoadingContext &context = scontext.odfLoadingContext();
     const QString name(element->attributeNS(KoXmlNS::style, "display-name", QString()));
     if (!name.isEmpty()) {
         setName(name);
@@ -1235,14 +1241,14 @@ void KoParagraphStyle::loadOdf(const KoXmlElement *element, KoShapeLoadingContex
 
     QString family = element->attributeNS(KoXmlNS::style, "family", "paragraph");
 
-    context.styleStack().save();
+    oContext.styleStack().save();
     if (loadParents) {
-        context.addStyles(element, family.toLocal8Bit().constData());   // Load all parent
+        oContext.addStyles(element, family.toLocal8Bit().constData());   // Load all parent
     } else {
-        context.styleStack().push(*element);
+        oContext.styleStack().push(*element);
     }
-    context.styleStack().setTypeProperties("text");  // load the style:text-properties
-    KoCharacterStyle::loadOdfProperties(scontext);
+    oContext.styleStack().setTypeProperties("text");  // load the style:text-properties
+    KoCharacterStyle::loadOdfProperties(oContext);
 
     QString masterPage = element->attributeNS(KoXmlNS::style, "master-page-name", QString());
     if (! masterPage.isEmpty()) {
@@ -1256,11 +1262,11 @@ void KoParagraphStyle::loadOdf(const KoXmlElement *element, KoShapeLoadingContex
             setDefaultOutlineLevel(level);
     }
 
-    context.styleStack().setTypeProperties("paragraph");   // load all style attributes from "style:paragraph-properties"
+    oContext.styleStack().setTypeProperties("paragraph");   // load all style attributes from "style:paragraph-properties"
 
-    loadOdfProperties(scontext);   // load the KoParagraphStyle from the stylestack
+    loadOdfProperties(oContext);   // load the KoParagraphStyle from the stylestack
 
-    context.styleStack().restore();
+    oContext.styleStack().restore();
 }
 
 struct ParagraphBorderData {
@@ -1339,20 +1345,20 @@ static ParagraphBorderData parseParagraphBorderData(const QString &dataString, c
     return borderData;
 }
 
-void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
+void KoParagraphStyle::loadOdfProperties(KoOdfLoadingContext &oContext)
 {
-    KoStyleStack &styleStack = scontext.odfLoadingContext().styleStack();
+    KoStyleStack &styleStack = oContext.styleStack();
 
     // in 1.6 this was defined at KoParagLayout::loadOasisParagLayout(KoParagLayout&, KoOasisContext&)
     const QString writingMode(styleStack.property(KoXmlNS::style, "writing-mode"));
     if (!writingMode.isEmpty()) {
-        setTextProgressionDirection(KoText::directionFromString(writingMode));
+        setTextProgressionDirection(KoOdf::textDirectionFromString(writingMode));
     }
 
     // Alignment
     const QString textAlign(styleStack.property(KoXmlNS::fo, "text-align"));
     if (!textAlign.isEmpty()) {
-        setAlignment(KoText::alignmentFromString(textAlign));
+        setAlignment(KoOdf::alignmentFromString(textAlign));
     }
 
     // Spacing (padding)
@@ -1380,23 +1386,23 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
     // Indentation (margin)
     const QString margin(styleStack.property(KoXmlNS::fo, "margin"));
     if (!margin.isEmpty()) {
-        setMargin(KoText::parseLength(margin));
+        setMargin(KoOdf::parseLength(margin));
     }
     const QString marginLeft(styleStack.property(KoXmlNS::fo, "margin-left" ));
     if (!marginLeft.isEmpty()) {
-        setLeftMargin(KoText::parseLength(marginLeft));
+        setLeftMargin(KoOdf::parseLength(marginLeft));
     }
     const QString marginRight(styleStack.property(KoXmlNS::fo, "margin-right" ));
     if (!marginRight.isEmpty()) {
-        setRightMargin(KoText::parseLength(marginRight));
+        setRightMargin(KoOdf::parseLength(marginRight));
     }
     const QString marginTop(styleStack.property(KoXmlNS::fo, "margin-top"));
     if (!marginTop.isEmpty()) {
-        setTopMargin(KoText::parseLength(marginTop));
+        setTopMargin(KoOdf::parseLength(marginTop));
     }
     const QString marginBottom(styleStack.property(KoXmlNS::fo, "margin-bottom"));
     if (!marginBottom.isEmpty()) {
-        setBottomMargin(KoText::parseLength(marginBottom));
+        setBottomMargin(KoOdf::parseLength(marginBottom));
     }
 
     // Automatic Text indent
@@ -1412,7 +1418,7 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
     if (autoTextIndent != "true" || autoTextIndent.isEmpty()) {
         const QString textIndent(styleStack.property(KoXmlNS::fo, "text-indent"));
         if (!textIndent.isEmpty()) {
-            setTextIndent(KoText::parseLength(textIndent));
+            setTextIndent(KoOdf::parseLength(textIndent));
         }
     }
 
@@ -1461,7 +1467,7 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
 
     const QString lineHeightAtLeast(styleStack.property(KoXmlNS::style, "line-height-at-least"));
     if (!lineHeightAtLeast.isEmpty() && !propertyBoolean(NormalLineHeight) && lineHeightAbsolute() == 0) {    // 3.11.2
-        setMinimumLineHeight(KoText::parseLength(lineHeightAtLeast));
+        setMinimumLineHeight(KoOdf::parseLength(lineHeightAtLeast));
     }  // Line-height-at-least is mutually exclusive with absolute line-height
     const QString fontIndependentLineSpacing(styleStack.property(KoXmlNS::style, "font-independent-line-spacing"));
     if (!fontIndependentLineSpacing.isEmpty() && !propertyBoolean(NormalLineHeight) && lineHeightAbsolute() == 0) {
@@ -1477,14 +1483,14 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
     }
     KoXmlElement tabStops(styleStack.childNode(KoXmlNS::style, "tab-stops"));
     if (!tabStops.isNull()) {     // 3.11.10
-        QList<KoText::Tab> tabList;
+        QList<KoOdf::Tab> tabList;
         KoXmlElement tabStop;
         forEachElement(tabStop, tabStops) {
             if(tabStop.localName() != "tab-stop")
                 continue;
 
             // Tab position
-            KoText::Tab tab;
+            KoOdf::Tab tab;
             tab.position = KoUnit::parseValue(tabStop.attributeNS(KoXmlNS::style, "position", QString()));
             //kDebug(32500) << "tab position " << tab.position;
 
@@ -1515,43 +1521,43 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
 
             QString leaderType = tabStop.attributeNS(KoXmlNS::style, "leader-type", QString());
             if (leaderType.isEmpty() || leaderType == "none") {
-                tab.leaderType = KoCharacterStyle::NoLineType;
+                tab.leaderType = KoOdf::NoLineType;
             } else {
                 if (leaderType == "single")
-                    tab.leaderType = KoCharacterStyle::SingleLine;
+                    tab.leaderType = KoOdf::SingleLine;
                 else if (leaderType == "double")
-                    tab.leaderType = KoCharacterStyle::DoubleLine;
+                    tab.leaderType = KoOdf::DoubleLine;
                 // change default leaderStyle
-                tab.leaderStyle = KoCharacterStyle::SolidLine;
+                tab.leaderStyle = KoOdf::SolidLine;
             }
 
             QString leaderStyle = tabStop.attributeNS(KoXmlNS::style, "leader-style", QString());
             if (leaderStyle == "none")
-                tab.leaderStyle = KoCharacterStyle::NoLineStyle;
+                tab.leaderStyle = KoOdf::NoLineStyle;
             else if (leaderStyle == "solid")
-                tab.leaderStyle = KoCharacterStyle::SolidLine;
+                tab.leaderStyle = KoOdf::SolidLine;
             else if (leaderStyle == "dotted")
-                tab.leaderStyle = KoCharacterStyle::DottedLine;
+                tab.leaderStyle = KoOdf::DottedLine;
             else if (leaderStyle == "dash")
-                tab.leaderStyle = KoCharacterStyle::DashLine;
+                tab.leaderStyle = KoOdf::DashLine;
             else if (leaderStyle == "long-dash")
-                tab.leaderStyle = KoCharacterStyle::LongDashLine;
+                tab.leaderStyle = KoOdf::LongDashLine;
             else if (leaderStyle == "dot-dash")
-                tab.leaderStyle = KoCharacterStyle::DotDashLine;
+                tab.leaderStyle = KoOdf::DotDashLine;
             else if (leaderStyle == "dot-dot-dash")
-                tab.leaderStyle = KoCharacterStyle::DotDotDashLine;
+                tab.leaderStyle = KoOdf::DotDotDashLine;
             else if (leaderStyle == "wave")
-                tab.leaderStyle = KoCharacterStyle::WaveLine;
+                tab.leaderStyle = KoOdf::WaveLine;
 
-            if (tab.leaderType == KoCharacterStyle::NoLineType && tab.leaderStyle != KoCharacterStyle::NoLineStyle) {
+            if (tab.leaderType == KoOdf::NoLineType && tab.leaderStyle != KoOdf::NoLineStyle) {
                 if (leaderType == "none")
                     // if leaderType was explicitly specified as none, but style was not none,
                     // make leaderType override (ODF1.1 §15.5.11)
-                    tab.leaderStyle = KoCharacterStyle::NoLineStyle;
+                    tab.leaderStyle = KoOdf::NoLineStyle;
                 else
                     // if leaderType was implicitly assumed none, but style was not none,
                     // make leaderStyle override
-                    tab.leaderType = KoCharacterStyle::SingleLine;
+                    tab.leaderType = KoOdf::SingleLine;
             }
 
             QString leaderColor = tabStop.attributeNS(KoXmlNS::style, "leader-color", QString());
@@ -1560,27 +1566,27 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
 
             QString width = tabStop.attributeNS(KoXmlNS::style, "leader-width", QString());
             if (width.isEmpty() || width == "auto")
-                tab.leaderWeight = KoCharacterStyle::AutoLineWeight;
+                tab.leaderWeight = KoOdf::AutoLineWeight;
             else if (width == "normal")
-                tab.leaderWeight = KoCharacterStyle::NormalLineWeight;
+                tab.leaderWeight = KoOdf::NormalLineWeight;
             else if (width == "bold")
-                tab.leaderWeight = KoCharacterStyle::BoldLineWeight;
+                tab.leaderWeight = KoOdf::BoldLineWeight;
             else if (width == "thin")
-                tab.leaderWeight = KoCharacterStyle::ThinLineWeight;
+                tab.leaderWeight = KoOdf::ThinLineWeight;
             else if (width == "dash")
-                tab.leaderWeight = KoCharacterStyle::DashLineWeight;
+                tab.leaderWeight = KoOdf::DashLineWeight;
             else if (width == "medium")
-                tab.leaderWeight = KoCharacterStyle::MediumLineWeight;
+                tab.leaderWeight = KoOdf::MediumLineWeight;
             else if (width == "thick")
-                tab.leaderWeight = KoCharacterStyle::ThickLineWeight;
+                tab.leaderWeight = KoOdf::ThickLineWeight;
             else if (width.endsWith('%')) {
-                tab.leaderWeight = KoCharacterStyle::PercentLineWeight;
+                tab.leaderWeight = KoOdf::PercentLineWeight;
                 tab.leaderWidth = width.mid(0, width.length() - 1).toDouble();
             } else if (width[width.length()-1].isNumber()) {
-                tab.leaderWeight = KoCharacterStyle::PercentLineWeight;
+                tab.leaderWeight = KoOdf::PercentLineWeight;
                 tab.leaderWidth = 100 * width.toDouble();
             } else {
-                tab.leaderWeight = KoCharacterStyle::LengthLineWeight;
+                tab.leaderWeight = KoOdf::LengthLineWeight;
                 tab.leaderWidth = KoUnit::parseValue(width);
             }
 
@@ -1735,11 +1741,11 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
     // The fo:break-before and fo:break-after attributes insert a page or column break before or after a paragraph.
     const QString breakBefore(styleStack.property(KoXmlNS::fo, "break-before"));
     if (!breakBefore.isEmpty()) {
-        setBreakBefore(KoText::textBreakFromString(breakBefore));
+        setBreakBefore(KoOdf::textBreakFromString(breakBefore));
     }
     const QString breakAfter(styleStack.property(KoXmlNS::fo, "break-after"));
     if (!breakAfter.isEmpty()) {
-        setBreakAfter(KoText::textBreakFromString(breakAfter));
+        setBreakAfter(KoOdf::textBreakFromString(breakAfter));
     }
     const QString keepTogether(styleStack.property(KoXmlNS::fo, "keep-together"));
     if (!keepTogether.isEmpty()) {
@@ -1829,7 +1835,7 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
     }
 
     if (styleStack.hasProperty(KoXmlNS::fo, "text-align-last")) {
-        setAlignLastLine(KoText::alignmentFromString(styleStack.property(KoXmlNS::fo, "text-align-last")));
+        setAlignLastLine(KoOdf::alignmentFromString(styleStack.property(KoXmlNS::fo, "text-align-last")));
     }
 
     if (styleStack.hasProperty(KoXmlNS::fo, "keep-with-next")) {
@@ -1891,12 +1897,12 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
 
 }
 
-void KoParagraphStyle::setTabPositions(const QList<KoText::Tab> &tabs)
+void KoParagraphStyle::setTabPositions(const QList<KoOdf::Tab> &tabs)
 {
-    QList<KoText::Tab> newTabs = tabs;
+    QList<KoOdf::Tab> newTabs = tabs;
     qSort(newTabs.begin(), newTabs.end(), compareTabs);
     QList<QVariant> list;
-    foreach(const KoText::Tab &tab, tabs) {
+    foreach(const KoOdf::Tab &tab, tabs) {
         QVariant v;
         v.setValue(tab);
         list.append(v);
@@ -1904,14 +1910,14 @@ void KoParagraphStyle::setTabPositions(const QList<KoText::Tab> &tabs)
     setProperty(TabPositions, list);
 }
 
-QList<KoText::Tab> KoParagraphStyle::tabPositions() const
+QList<KoOdf::Tab> KoParagraphStyle::tabPositions() const
 {
     QVariant variant = value(TabPositions);
     if (variant.isNull())
-        return QList<KoText::Tab>();
-    QList<KoText::Tab> answer;
+        return QList<KoOdf::Tab>();
+    QList<KoOdf::Tab> answer;
     foreach(const QVariant &tab, qvariant_cast<QList<QVariant> >(variant)) {
-        answer.append(tab.value<KoText::Tab>());
+        answer.append(tab.value<KoOdf::Tab>());
     }
     return answer;
 }
@@ -2061,16 +2067,16 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoShapeSavingContext &context)
             alignValue = d->stylesPrivate.value(key).toInt(&ok);
             if (ok) {
                 Qt::Alignment alignment = (Qt::Alignment) alignValue;
-                QString align = KoText::alignmentToString(alignment);
+                QString align = KoOdf::alignmentToString(alignment);
                 if (!align.isEmpty())
                     style.addProperty("fo:text-align", align, KoGenStyle::ParagraphType);
             }
         } else if (key == KoParagraphStyle::AlignLastLine) {
-            QString align = KoText::alignmentToString(alignLastLine());
+            QString align = KoOdf::alignmentToString(alignLastLine());
             if (!align.isEmpty())
                 style.addProperty("fo:text-align-last", align, KoGenStyle::ParagraphType);
         } else if (key == KoParagraphStyle::TextProgressionDirection) {
-            style.addProperty("style:writing-mode", KoText::directionToString(textProgressionDirection()), KoGenStyle::ParagraphType);
+            style.addProperty("style:writing-mode", KoOdf::textDirectionToString(textProgressionDirection()), KoGenStyle::ParagraphType);
         } else if (key == LineNumbering) {
             style.addProperty("text:number-lines", lineNumbering());
         } else if (key == PageNumber) {
@@ -2081,9 +2087,9 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoShapeSavingContext &context)
         } else if (key == LineNumberStartValue) {
             style.addProperty("text:line-number", lineNumberStartValue());
         } else if (key == BreakAfter) {
-            style.addProperty("fo:break-after", KoText::textBreakToString(breakAfter()), KoGenStyle::ParagraphType);
+            style.addProperty("fo:break-after", KoOdf::textBreakToString(breakAfter()), KoGenStyle::ParagraphType);
         } else if (key == BreakBefore) {
-            style.addProperty("fo:break-before", KoText::textBreakToString(breakBefore()), KoGenStyle::ParagraphType);
+            style.addProperty("fo:break-before", KoOdf::textBreakToString(breakBefore()), KoGenStyle::ParagraphType);
         } else if (key == QTextFormat::BlockNonBreakableLines) {
             if (nonBreakableLines()) {
                 style.addProperty("fo:keep-together", "always", KoGenStyle::ParagraphType);
@@ -2294,30 +2300,30 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoShapeSavingContext &context)
         tabTypeMap[QTextOption::RightTab] = "right";
         tabTypeMap[QTextOption::CenterTab] = "center";
         tabTypeMap[QTextOption::DelimiterTab] = "char";
-        leaderTypeMap[KoCharacterStyle::NoLineType] = "none";
-        leaderTypeMap[KoCharacterStyle::SingleLine] = "single";
-        leaderTypeMap[KoCharacterStyle::DoubleLine] = "double";
-        leaderStyleMap[KoCharacterStyle::NoLineStyle] = "none";
-        leaderStyleMap[KoCharacterStyle::SolidLine] = "solid";
-        leaderStyleMap[KoCharacterStyle::DottedLine] = "dotted";
-        leaderStyleMap[KoCharacterStyle::DashLine] = "dash";
-        leaderStyleMap[KoCharacterStyle::LongDashLine] = "long-dash";
-        leaderStyleMap[KoCharacterStyle::DotDashLine] = "dot-dash";
-        leaderStyleMap[KoCharacterStyle::DotDotDashLine] = "dot-dot-dash";
-        leaderStyleMap[KoCharacterStyle::WaveLine] = "wave";
-        leaderWeightMap[KoCharacterStyle::AutoLineWeight] = "auto";
-        leaderWeightMap[KoCharacterStyle::NormalLineWeight] = "normal";
-        leaderWeightMap[KoCharacterStyle::BoldLineWeight] = "bold";
-        leaderWeightMap[KoCharacterStyle::ThinLineWeight] = "thin";
-        leaderWeightMap[KoCharacterStyle::DashLineWeight] = "dash";
-        leaderWeightMap[KoCharacterStyle::MediumLineWeight] = "medium";
-        leaderWeightMap[KoCharacterStyle::ThickLineWeight] = "thick";
+        leaderTypeMap[KoOdf::NoLineType] = "none";
+        leaderTypeMap[KoOdf::SingleLine] = "single";
+        leaderTypeMap[KoOdf::DoubleLine] = "double";
+        leaderStyleMap[KoOdf::NoLineStyle] = "none";
+        leaderStyleMap[KoOdf::SolidLine] = "solid";
+        leaderStyleMap[KoOdf::DottedLine] = "dotted";
+        leaderStyleMap[KoOdf::DashLine] = "dash";
+        leaderStyleMap[KoOdf::LongDashLine] = "long-dash";
+        leaderStyleMap[KoOdf::DotDashLine] = "dot-dash";
+        leaderStyleMap[KoOdf::DotDotDashLine] = "dot-dot-dash";
+        leaderStyleMap[KoOdf::WaveLine] = "wave";
+        leaderWeightMap[KoOdf::AutoLineWeight] = "auto";
+        leaderWeightMap[KoOdf::NormalLineWeight] = "normal";
+        leaderWeightMap[KoOdf::BoldLineWeight] = "bold";
+        leaderWeightMap[KoOdf::ThinLineWeight] = "thin";
+        leaderWeightMap[KoOdf::DashLineWeight] = "dash";
+        leaderWeightMap[KoOdf::MediumLineWeight] = "medium";
+        leaderWeightMap[KoOdf::ThickLineWeight] = "thick";
 
         QBuffer buf;
         buf.open(QIODevice::WriteOnly);
         KoXmlWriter elementWriter(&buf, indentation);
         elementWriter.startElement("style:tab-stops");
-        foreach(const KoText::Tab &tab, tabPositions()) {
+        foreach(const KoOdf::Tab &tab, tabPositions()) {
             elementWriter.startElement("style:tab-stop");
             elementWriter.addAttributePt("style:position", tab.position);
             if (!tabTypeMap[tab.type].isEmpty())
@@ -2330,9 +2336,9 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoShapeSavingContext &context)
                 elementWriter.addAttribute("style:leader-style", leaderStyleMap[tab.leaderStyle]);
             if (!leaderWeightMap[tab.leaderWeight].isEmpty())
                 elementWriter.addAttribute("style:leader-width", leaderWeightMap[tab.leaderWeight]);
-            else if (tab.leaderWeight == KoCharacterStyle::PercentLineWeight)
+            else if (tab.leaderWeight == KoOdf::PercentLineWeight)
                 elementWriter.addAttribute("style:leader-width", QString("%1%").arg(QString::number(tab.leaderWidth)));
-            else if (tab.leaderWeight == KoCharacterStyle::LengthLineWeight)
+            else if (tab.leaderWeight == KoOdf::LengthLineWeight)
                 elementWriter.addAttributePt("style:leader-width", tab.leaderWidth);
             if (tab.leaderColor.isValid())
                 elementWriter.addAttribute("style:leader-color", tab.leaderColor.name());

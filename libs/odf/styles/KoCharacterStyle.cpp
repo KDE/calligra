@@ -20,6 +20,7 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+
 #include "KoCharacterStyle.h"
 
 #include "KoTableCellStyle.h"
@@ -641,41 +642,42 @@ void KoCharacterStyle::unapplyStyle(QTextBlock &block) const
 
 
 // OASIS 14.2.29
-static void parseOdfLineWidth(const QString &width, KoCharacterStyle::LineWeight &lineWeight, qreal &lineWidth)
+static void parseOdfLineWidth(const QString &width, KoOdf::LineWeight &lineWeight, qreal &lineWidth)
 {
     lineWidth = 0;
-    lineWeight = KoCharacterStyle::AutoLineWeight;
+    lineWeight = KoOdf::AutoLineWeight;
     if (width.isEmpty() || width == "auto")
-        lineWeight = KoCharacterStyle::AutoLineWeight;
+        lineWeight = KoOdf::AutoLineWeight;
     else if (width == "normal")
-        lineWeight = KoCharacterStyle::NormalLineWeight;
+        lineWeight = KoOdf::NormalLineWeight;
     else if (width == "bold")
-        lineWeight = KoCharacterStyle::BoldLineWeight;
+        lineWeight = KoOdf::BoldLineWeight;
     else if (width == "thin")
-        lineWeight = KoCharacterStyle::ThinLineWeight;
+        lineWeight = KoOdf::ThinLineWeight;
     else if (width == "dash")
-        lineWeight = KoCharacterStyle::DashLineWeight;
+        lineWeight = KoOdf::DashLineWeight;
     else if (width == "medium")
-        lineWeight = KoCharacterStyle::MediumLineWeight;
+        lineWeight = KoOdf::MediumLineWeight;
     else if (width == "thick")
-        lineWeight = KoCharacterStyle::ThickLineWeight;
+        lineWeight = KoOdf::ThickLineWeight;
     else if (width.endsWith('%')) {
-        lineWeight = KoCharacterStyle::PercentLineWeight;
+        lineWeight = KoOdf::PercentLineWeight;
         lineWidth = width.mid(0, width.length() - 1).toDouble();
     } else if (width[width.length()-1].isNumber()) {
-        lineWeight = KoCharacterStyle::LengthLineWeight;
+        lineWeight = KoOdf::LengthLineWeight;
         lineWidth = width.toDouble();
     } else {
-        lineWeight = KoCharacterStyle::LengthLineWeight;
+        lineWeight = KoOdf::LengthLineWeight;
         lineWidth = KoUnit::parseValue(width);
     }
 }
 
 // OASIS 14.2.29
-static void importOdfLine(const QString &type, const QString &style, KoCharacterStyle::LineStyle &lineStyle, KoCharacterStyle::LineType &lineType)
+static void importOdfLine(const QString &type, const QString &style,
+                          KoOdf::LineStyle &lineStyle, KoOdf::LineType &lineType)
 {
-    lineStyle = KoCharacterStyle::NoLineStyle;
-    lineType = KoCharacterStyle::NoLineType;
+    lineStyle = KoOdf::NoLineStyle;
+    lineType = KoOdf::NoLineType;
 
     QString fixedType = type;
     QString fixedStyle = style;
@@ -689,58 +691,58 @@ static void importOdfLine(const QString &type, const QString &style, KoCharacter
     }
 
     if (fixedType == "single")
-        lineType = KoCharacterStyle::SingleLine;
+        lineType = KoOdf::SingleLine;
     else if (fixedType == "double")
-        lineType = KoCharacterStyle::DoubleLine;
+        lineType = KoOdf::DoubleLine;
 
     if (fixedStyle == "solid")
-        lineStyle = KoCharacterStyle::SolidLine;
+        lineStyle = KoOdf::SolidLine;
     else if (fixedStyle == "dotted")
-        lineStyle = KoCharacterStyle::DottedLine;
+        lineStyle = KoOdf::DottedLine;
     else if (fixedStyle == "dash")
-        lineStyle = KoCharacterStyle::DashLine;
+        lineStyle = KoOdf::DashLine;
     else if (fixedStyle == "long-dash")
-        lineStyle = KoCharacterStyle::LongDashLine;
+        lineStyle = KoOdf::LongDashLine;
     else if (fixedStyle == "dot-dash")
-        lineStyle = KoCharacterStyle::DotDashLine;
+        lineStyle = KoOdf::DotDashLine;
     else if (fixedStyle == "dot-dot-dash")
-        lineStyle = KoCharacterStyle::DotDotDashLine;
+        lineStyle = KoOdf::DotDotDashLine;
     else if (fixedStyle == "wave")
-        lineStyle = KoCharacterStyle::WaveLine;
+        lineStyle = KoOdf::WaveLine;
 }
 
-static QString exportOdfLineType(KoCharacterStyle::LineType lineType)
+static QString exportOdfLineType(KoOdf::LineType lineType)
 {
     switch (lineType) {
-    case KoCharacterStyle::NoLineType:
+    case KoOdf::NoLineType:
         return "none";
-    case KoCharacterStyle::SingleLine:
+    case KoOdf::SingleLine:
         return "single";
-    case KoCharacterStyle::DoubleLine:
+    case KoOdf::DoubleLine:
         return "double";
     default:
         return "";
     }
 }
 
-static QString exportOdfLineStyle(KoCharacterStyle::LineStyle lineStyle)
+static QString exportOdfLineStyle(KoOdf::LineStyle lineStyle)
 {
     switch (lineStyle) {
-    case KoCharacterStyle::NoLineStyle:
+    case KoOdf::NoLineStyle:
         return "none";
-    case KoCharacterStyle::SolidLine:
+    case KoOdf::SolidLine:
         return "solid";
-    case KoCharacterStyle::DottedLine:
+    case KoOdf::DottedLine:
         return "dotted";
-    case KoCharacterStyle::DashLine:
+    case KoOdf::DashLine:
         return "dash";
-    case KoCharacterStyle::LongDashLine:
+    case KoOdf::LongDashLine:
         return "long-dash";
-    case KoCharacterStyle::DotDashLine:
+    case KoOdf::DotDashLine:
         return "dot-dash";
-    case KoCharacterStyle::DotDotDashLine:
+    case KoOdf::DotDotDashLine:
         return "dot-dot-dash";
-    case KoCharacterStyle::WaveLine:
+    case KoOdf::WaveLine:
         return "wave";
     default:
         return "";
@@ -758,26 +760,26 @@ static QString exportOdfLineMode(KoCharacterStyle::LineMode lineMode)
     }
 }
 
-static QString exportOdfLineWidth(KoCharacterStyle::LineWeight lineWeight, qreal lineWidth)
+static QString exportOdfLineWidth(KoOdf::LineWeight lineWeight, qreal lineWidth)
 {
     switch (lineWeight) {
-    case KoCharacterStyle::AutoLineWeight:
+    case KoOdf::AutoLineWeight:
         return "auto";
-    case KoCharacterStyle::NormalLineWeight:
+    case KoOdf::NormalLineWeight:
         return "normal";
-    case KoCharacterStyle::BoldLineWeight:
+    case KoOdf::BoldLineWeight:
         return "bold";
-    case KoCharacterStyle::ThinLineWeight:
+    case KoOdf::ThinLineWeight:
         return "thin";
-    case KoCharacterStyle::DashLineWeight:
+    case KoOdf::DashLineWeight:
         return "dash";
-    case KoCharacterStyle::MediumLineWeight:
+    case KoOdf::MediumLineWeight:
         return "medium";
-    case KoCharacterStyle::ThickLineWeight:
+    case KoOdf::ThickLineWeight:
         return "thick";
-    case KoCharacterStyle::PercentLineWeight:
+    case KoOdf::PercentLineWeight:
         return QString("%1%").arg(lineWidth);
-    case KoCharacterStyle::LengthLineWeight:
+    case KoOdf::LengthLineWeight:
         return QString("%1pt").arg(lineWidth);
     default:
         return QString();
@@ -970,24 +972,24 @@ int KoCharacterStyle::hyphenationRemainCharCount() const
     return 0;
 }
 
-void KoCharacterStyle::setStrikeOutStyle(KoCharacterStyle::LineStyle strikeOut)
+void KoCharacterStyle::setStrikeOutStyle(KoOdf::LineStyle strikeOut)
 {
     d->setProperty(StrikeOutStyle, strikeOut);
 }
 
-KoCharacterStyle::LineStyle KoCharacterStyle::strikeOutStyle() const
+KoOdf::LineStyle KoCharacterStyle::strikeOutStyle() const
 {
-    return (KoCharacterStyle::LineStyle) d->propertyInt(StrikeOutStyle);
+    return (KoOdf::LineStyle) d->propertyInt(StrikeOutStyle);
 }
 
-void KoCharacterStyle::setStrikeOutType(LineType lineType)
+void KoCharacterStyle::setStrikeOutType(KoOdf::LineType lineType)
 {
     d->setProperty(StrikeOutType, lineType);
 }
 
-KoCharacterStyle::LineType KoCharacterStyle::strikeOutType() const
+KoOdf::LineType KoCharacterStyle::strikeOutType() const
 {
-    return (KoCharacterStyle::LineType) d->propertyInt(StrikeOutType);
+    return (KoOdf::LineType) d->propertyInt(StrikeOutType);
 }
 
 void KoCharacterStyle::setStrikeOutColor(const QColor &color)
@@ -1000,15 +1002,15 @@ QColor KoCharacterStyle::strikeOutColor() const
     return d->propertyColor(StrikeOutColor);
 }
 
-void KoCharacterStyle::setStrikeOutWidth(LineWeight weight, qreal width)
+void KoCharacterStyle::setStrikeOutWidth(KoOdf::LineWeight weight, qreal width)
 {
     d->setProperty(KoCharacterStyle::StrikeOutWeight, weight);
     d->setProperty(KoCharacterStyle::StrikeOutWidth, width);
 }
 
-void KoCharacterStyle::strikeOutWidth(LineWeight &weight, qreal &width) const
+void KoCharacterStyle::strikeOutWidth(KoOdf::LineWeight &weight, qreal &width) const
 {
-    weight = (KoCharacterStyle::LineWeight) d->propertyInt(KoCharacterStyle::StrikeOutWeight);
+    weight = (KoOdf::LineWeight) d->propertyInt(KoCharacterStyle::StrikeOutWeight);
     width = d->propertyDouble(KoCharacterStyle::StrikeOutWidth);
 }
 void KoCharacterStyle::setStrikeOutMode(LineMode lineMode)
@@ -1029,24 +1031,24 @@ KoCharacterStyle::LineMode KoCharacterStyle::strikeOutMode() const
     return (KoCharacterStyle::LineMode) d->propertyInt(StrikeOutMode);
 }
 
-void KoCharacterStyle::setOverlineStyle(KoCharacterStyle::LineStyle overline)
+void KoCharacterStyle::setOverlineStyle(KoOdf::LineStyle overline)
 {
     d->setProperty(OverlineStyle, overline);
 }
 
-KoCharacterStyle::LineStyle KoCharacterStyle::overlineStyle() const
+KoOdf::LineStyle KoCharacterStyle::overlineStyle() const
 {
-    return (KoCharacterStyle::LineStyle) d->propertyInt(OverlineStyle);
+    return (KoOdf::LineStyle) d->propertyInt(OverlineStyle);
 }
 
-void KoCharacterStyle::setOverlineType(LineType lineType)
+void KoCharacterStyle::setOverlineType(KoOdf::LineType lineType)
 {
     d->setProperty(OverlineType, lineType);
 }
 
-KoCharacterStyle::LineType KoCharacterStyle::overlineType() const
+KoOdf::LineType KoCharacterStyle::overlineType() const
 {
-    return (KoCharacterStyle::LineType) d->propertyInt(OverlineType);
+    return (KoOdf::LineType) d->propertyInt(OverlineType);
 }
 
 void KoCharacterStyle::setOverlineColor(const QColor &color)
@@ -1059,15 +1061,15 @@ QColor KoCharacterStyle::overlineColor() const
     return d->propertyColor(KoCharacterStyle::OverlineColor);
 }
 
-void KoCharacterStyle::setOverlineWidth(LineWeight weight, qreal width)
+void KoCharacterStyle::setOverlineWidth(KoOdf::LineWeight weight, qreal width)
 {
     d->setProperty(KoCharacterStyle::OverlineWeight, weight);
     d->setProperty(KoCharacterStyle::OverlineWidth, width);
 }
 
-void KoCharacterStyle::overlineWidth(LineWeight &weight, qreal &width) const
+void KoCharacterStyle::overlineWidth(KoOdf::LineWeight &weight, qreal &width) const
 {
-    weight = (KoCharacterStyle::LineWeight) d->propertyInt(KoCharacterStyle::OverlineWeight);
+    weight = (KoOdf::LineWeight) d->propertyInt(KoCharacterStyle::OverlineWeight);
     width = d->propertyDouble(KoCharacterStyle::OverlineWidth);
 }
 
@@ -1081,24 +1083,24 @@ KoCharacterStyle::LineMode KoCharacterStyle::overlineMode() const
     return static_cast<KoCharacterStyle::LineMode>(d->propertyInt(KoCharacterStyle::OverlineMode));
 }
 
-void KoCharacterStyle::setUnderlineStyle(KoCharacterStyle::LineStyle underline)
+void KoCharacterStyle::setUnderlineStyle(KoOdf::LineStyle underline)
 {
     d->setProperty(UnderlineStyle, underline);
 }
 
-KoCharacterStyle::LineStyle KoCharacterStyle::underlineStyle() const
+KoOdf::LineStyle KoCharacterStyle::underlineStyle() const
 {
-    return (KoCharacterStyle::LineStyle) d->propertyInt(UnderlineStyle);
+    return (KoOdf::LineStyle) d->propertyInt(UnderlineStyle);
 }
 
-void KoCharacterStyle::setUnderlineType(LineType lineType)
+void KoCharacterStyle::setUnderlineType(KoOdf::LineType lineType)
 {
     d->setProperty(UnderlineType, lineType);
 }
 
-KoCharacterStyle::LineType KoCharacterStyle::underlineType() const
+KoOdf::LineType KoCharacterStyle::underlineType() const
 {
-    return (KoCharacterStyle::LineType) d->propertyInt(UnderlineType);
+    return (KoOdf::LineType) d->propertyInt(UnderlineType);
 }
 
 void KoCharacterStyle::setUnderlineColor(const QColor &color)
@@ -1111,15 +1113,15 @@ QColor KoCharacterStyle::underlineColor() const
     return d->propertyColor(QTextFormat::TextUnderlineColor);
 }
 
-void KoCharacterStyle::setUnderlineWidth(LineWeight weight, qreal width)
+void KoCharacterStyle::setUnderlineWidth(KoOdf::LineWeight weight, qreal width)
 {
     d->setProperty(KoCharacterStyle::UnderlineWeight, weight);
     d->setProperty(KoCharacterStyle::UnderlineWidth, width);
 }
 
-void KoCharacterStyle::underlineWidth(LineWeight &weight, qreal &width) const
+void KoCharacterStyle::underlineWidth(KoOdf::LineWeight &weight, qreal &width) const
 {
-    weight = (KoCharacterStyle::LineWeight) d->propertyInt(KoCharacterStyle::UnderlineWeight);
+    weight = (KoOdf::LineWeight) d->propertyInt(KoCharacterStyle::UnderlineWeight);
     width = d->propertyDouble(KoCharacterStyle::UnderlineWidth);
 }
 
@@ -1581,8 +1583,8 @@ void KoCharacterStyle::loadOdfProperties(KoOdfLoadingContext &oContext)
     const QString textOverlineType(styleStack.property(KoXmlNS::style, "text-overline-type"));
     const QString textOverlineStyle(styleStack.property(KoXmlNS::style, "text-overline-style"));
     if (!textOverlineType.isEmpty() || !textOverlineStyle.isEmpty()) {    // OASIS 14.4.28
-        LineStyle overlineStyle;
-        LineType overlineType;
+        KoOdf::LineStyle overlineStyle;
+        KoOdf::LineType overlineType;
 
         importOdfLine(textOverlineType, textOverlineStyle,
                       overlineStyle, overlineType);
@@ -1593,7 +1595,7 @@ void KoCharacterStyle::loadOdfProperties(KoOdfLoadingContext &oContext)
     const QString textOverlineWidth(styleStack.property(KoXmlNS::style, "text-overline-width"));
     if (!textOverlineWidth.isEmpty()) {
         qreal overlineWidth;
-        LineWeight overlineWeight;
+        KoOdf::LineWeight overlineWeight;
         parseOdfLineWidth(textOverlineWidth, overlineWeight, overlineWidth);
         setOverlineWidth(overlineWeight, overlineWidth);
     }
@@ -1620,8 +1622,8 @@ void KoCharacterStyle::loadOdfProperties(KoOdfLoadingContext &oContext)
     const QString textUnderlineType(styleStack.property(KoXmlNS::style, "text-underline-type"));
     const QString textUnderlineStyle(styleStack.property(KoXmlNS::style, "text-underline-style"));
     if (!textUnderlineType.isEmpty() || !textUnderlineStyle.isEmpty()) {    // OASIS 14.4.28
-        LineStyle underlineStyle;
-        LineType underlineType;
+        KoOdf::LineStyle underlineStyle;
+        KoOdf::LineType underlineType;
 
         importOdfLine(textUnderlineType, textUnderlineStyle,
                       underlineStyle, underlineType);
@@ -1632,7 +1634,7 @@ void KoCharacterStyle::loadOdfProperties(KoOdfLoadingContext &oContext)
     const QString textUnderlineWidth(styleStack.property(KoXmlNS::style, "text-underline-width"));
     if (!textUnderlineWidth.isEmpty()) {
         qreal underlineWidth;
-        LineWeight underlineWeight;
+        KoOdf::LineWeight underlineWeight;
         parseOdfLineWidth(textUnderlineWidth, underlineWeight, underlineWidth);
         setUnderlineWidth(underlineWeight, underlineWidth);
     }
@@ -1649,10 +1651,10 @@ void KoCharacterStyle::loadOdfProperties(KoOdfLoadingContext &oContext)
     const QString textLineThroughType(styleStack.property(KoXmlNS::style, "text-line-through-type"));
     const QString textLineThroughStyle(styleStack.property(KoXmlNS::style, "text-line-through-style"));
     if (!textLineThroughType.isEmpty() || !textLineThroughStyle.isEmpty()) { // OASIS 14.4.7
-        KoCharacterStyle::LineStyle throughStyle;
-        LineType throughType;
+        KoOdf::LineStyle throughStyle;
+        KoOdf::LineType throughType;
 
-        importOdfLine(textLineThroughType,textLineThroughStyle,
+        importOdfLine(textLineThroughType, textLineThroughStyle,
                       throughStyle, throughType);
 
         setStrikeOutStyle(throughStyle);
@@ -1666,7 +1668,7 @@ void KoCharacterStyle::loadOdfProperties(KoOdfLoadingContext &oContext)
     const QString textLineThroughWidth(styleStack.property(KoXmlNS::style, "text-line-through-width"));
     if (!textLineThroughWidth.isEmpty()) {
         qreal throughWidth;
-        LineWeight throughWeight;
+        KoOdf::LineWeight throughWeight;
         parseOdfLineWidth(textLineThroughWidth, throughWeight, throughWidth);
         setStrikeOutWidth(throughWeight, throughWidth);
     }
@@ -2045,13 +2047,13 @@ void KoCharacterStyle::saveOdf(KoGenStyle &style) const
             bool ok = false;
             int styleId = d->stylesPrivate.value(key).toInt(&ok);
             if (ok) {
-                style.addProperty("style:text-overline-style", exportOdfLineStyle((KoCharacterStyle::LineStyle) styleId), KoGenStyle::TextType);
+                style.addProperty("style:text-overline-style", exportOdfLineStyle((KoOdf::LineStyle) styleId), KoGenStyle::TextType);
         }
         } else if (key == OverlineType) {
             bool ok = false;
             int type = d->stylesPrivate.value(key).toInt(&ok);
             if (ok) {
-                style.addProperty("style:text-overline-type", exportOdfLineType((KoCharacterStyle::LineType) type), KoGenStyle::TextType);
+                style.addProperty("style:text-overline-type", exportOdfLineType((KoOdf::LineType) type), KoGenStyle::TextType);
         }
         } else if (key == OverlineColor) {
             QColor color = d->stylesPrivate.value(key).value<QColor>();
@@ -2066,7 +2068,7 @@ void KoCharacterStyle::saveOdf(KoGenStyle &style) const
                 style.addProperty("style:text-overline-mode", exportOdfLineMode((KoCharacterStyle::LineMode) mode), KoGenStyle::TextType);
         }
         } else if (key == OverlineWidth) {
-            KoCharacterStyle::LineWeight weight;
+            KoOdf::LineWeight weight;
             qreal width;
             overlineWidth(weight, width);
             style.addProperty("style:text-overline-width", exportOdfLineWidth(weight, width), KoGenStyle::TextType);
@@ -2074,12 +2076,12 @@ void KoCharacterStyle::saveOdf(KoGenStyle &style) const
             bool ok = false;
             int styleId = d->stylesPrivate.value(key).toInt(&ok);
             if (ok)
-                style.addProperty("style:text-underline-style", exportOdfLineStyle((KoCharacterStyle::LineStyle) styleId), KoGenStyle::TextType);
+                style.addProperty("style:text-underline-style", exportOdfLineStyle((KoOdf::LineStyle) styleId), KoGenStyle::TextType);
         } else if (key == UnderlineType) {
             bool ok = false;
             int type = d->stylesPrivate.value(key).toInt(&ok);
             if (ok)
-                style.addProperty("style:text-underline-type", exportOdfLineType((KoCharacterStyle::LineType) type), KoGenStyle::TextType);
+                style.addProperty("style:text-underline-type", exportOdfLineType((KoOdf::LineType) type), KoGenStyle::TextType);
         } else if (key == QTextFormat::TextUnderlineColor) {
             QColor color = d->stylesPrivate.value(key).value<QColor>();
             if (color.isValid())
@@ -2092,7 +2094,7 @@ void KoCharacterStyle::saveOdf(KoGenStyle &style) const
             if (ok)
                 style.addProperty("style:text-underline-mode", exportOdfLineMode((KoCharacterStyle::LineMode) mode), KoGenStyle::TextType);
         } else if (key == UnderlineWidth) {
-            KoCharacterStyle::LineWeight weight;
+            KoOdf::LineWeight weight;
             qreal width;
             underlineWidth(weight, width);
             style.addProperty("style:text-underline-width", exportOdfLineWidth(weight, width), KoGenStyle::TextType);
@@ -2100,12 +2102,12 @@ void KoCharacterStyle::saveOdf(KoGenStyle &style) const
             bool ok = false;
             int styleId = d->stylesPrivate.value(key).toInt(&ok);
             if (ok)
-                style.addProperty("style:text-line-through-style", exportOdfLineStyle((KoCharacterStyle::LineStyle) styleId), KoGenStyle::TextType);
+                style.addProperty("style:text-line-through-style", exportOdfLineStyle((KoOdf::LineStyle) styleId), KoGenStyle::TextType);
         } else if (key == StrikeOutType) {
             bool ok = false;
             int type = d->stylesPrivate.value(key).toInt(&ok);
             if (ok)
-                style.addProperty("style:text-line-through-type", exportOdfLineType((KoCharacterStyle::LineType) type), KoGenStyle::TextType);
+                style.addProperty("style:text-line-through-type", exportOdfLineType((KoOdf::LineType) type), KoGenStyle::TextType);
         } else if (key == StrikeOutText) {
             style.addProperty("style:text-line-through-text", d->stylesPrivate.value(key).toString(), KoGenStyle::TextType);
         } else if (key == StrikeOutColor) {
@@ -2118,7 +2120,7 @@ void KoCharacterStyle::saveOdf(KoGenStyle &style) const
             if (ok)
                 style.addProperty("style:text-line-through-mode", exportOdfLineMode((KoCharacterStyle::LineMode) mode), KoGenStyle::TextType);
         } else if (key == StrikeOutWidth) {
-            KoCharacterStyle::LineWeight weight;
+            KoOdf::LineWeight weight;
             qreal width;
             strikeOutWidth(weight, width);
             style.addProperty("style:text-line-through-width", exportOdfLineWidth(weight, width), KoGenStyle::TextType);

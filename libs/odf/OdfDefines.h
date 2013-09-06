@@ -21,6 +21,12 @@
 #ifndef ODFDEFINES_H
 #define ODFDEFINES_H
 
+#include <QChar>
+#include <QColor>
+#include <QTextCharFormat>
+#include <QString>
+
+
 #include "koodf_export.h"
 
 /**
@@ -28,6 +34,42 @@
  */
 namespace KoOdf
 {
+
+// ----------------------------------------------------------------
+//                         Text properties
+
+
+/// list of possible line type : no line, single line, double line
+enum LineType {
+    NoLineType,
+    SingleLine,
+    DoubleLine
+};
+
+/// list of possible line style.
+enum LineStyle {
+    NoLineStyle = Qt::NoPen,
+    SolidLine = Qt::SolidLine,
+    DottedLine = Qt::DotLine,
+    DashLine = Qt::DashLine,
+    DotDashLine = Qt::DashDotLine,
+    DotDotDashLine = Qt::DashDotDotLine,
+    LongDashLine,
+    WaveLine
+};
+
+enum LineWeight {
+    AutoLineWeight,
+    NormalLineWeight,
+    BoldLineWeight,
+    ThinLineWeight,
+    DashLineWeight, // ## ??what the heck does this mean??
+    MediumLineWeight,
+    ThickLineWeight,
+    PercentLineWeight,
+    LengthLineWeight
+};
+
 
 /// Text in the objects will be positioned according to the direction.
 enum TextDirection {
@@ -38,6 +80,58 @@ enum TextDirection {
     TopBottomLeftRight,  ///< Vertical text layout. ?
     InheritDirection    ///< Direction is unspecified and should come from the container
 };
+/// convert the string version of directions (as specified in XSL and ODF) to the Direction enum
+KOODF_EXPORT TextDirection textDirectionFromString(const QString &direction);
+/// convert the TextDirection enum to the string version of directions (as specified in XSL and ODF)
+KOODF_EXPORT QString textDirectionToString(TextDirection direction);
+
+
+// ----------------------------------------------------------------
+//                     Paragraph properties
+
+
+/// There are several possible text breaks
+enum KoTextBreakProperty {
+    NoBreak = 0,     ///< No text break
+    ColumnBreak,     ///< Column break
+    PageBreak        ///< Page break
+};
+/// convert the string version of text break (as specified in ODF) to the KoTextBreakProperty enum
+KOODF_EXPORT KoTextBreakProperty textBreakFromString(const QString &textBreak);
+/// convert the KoTextBreakProperty enum to the string version of text break (as specified in ODF)
+KOODF_EXPORT QString textBreakToString(KoTextBreakProperty textBreak);
+
+
+
+/// For paragraphs each tab definition is represented by this struct.
+//
+// FIXME: Should be called TabData?
+struct KOODF_EXPORT Tab
+{
+    Tab();
+
+    bool operator==(const Tab &tab) const;
+
+    qreal position;    ///< distance in ps-points from the edge of the text-shape
+    QTextOption::TabType type;       ///< Determine which type is used.
+    QChar delimiter;    ///< If type is DelimitorTab; tab until this char was found in the text.
+    LineType leaderType; // none/single/double
+    LineStyle leaderStyle; // solid/dotted/dash/...
+    LineWeight leaderWeight; // auto/bold/thin/length/percentage/...
+    qreal leaderWidth; // the width value if length/percentage
+    QColor leaderColor; ///< if color is valid, then use this instead of the (current) text color
+    QString leaderText;   ///< character to print as the leader (filler of the tabbed space)
+};
+
+
+
+KOODF_EXPORT Qt::Alignment alignmentFromString(const QString &align);
+KOODF_EXPORT QString alignmentToString(Qt::Alignment align);
+KOODF_EXPORT Qt::Alignment valignmentFromString(const QString &align);
+KOODF_EXPORT QString valignmentToString(Qt::Alignment align);
+
+///@TODO: move to KoUnit ?
+KOODF_EXPORT QTextLength parseLength (const QString &length);
 
 }
 

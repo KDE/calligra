@@ -33,8 +33,9 @@
 #include <QString>
 #include <QChar>
 #include <QTextCharFormat>
-#include "koodf_export.h"
 
+#include "koodf_export.h"
+#include "OdfDefines.h"
 
 class StylePrivate;
 class QTextBlock;
@@ -120,13 +121,6 @@ public:
         TextCombineLines
     };
 
-    /// list of possible line type : no line, single line, double line
-    enum LineType {
-        NoLineType,
-        SingleLine,
-        DoubleLine
-    };
-
     /// List of possible font relief : none, embossed, engraved
     enum ReliefType {
         NoRelief,
@@ -147,30 +141,6 @@ public:
         EmphasisBelow
     };
 
-
-    /// list of possible line style.
-    enum LineStyle {
-        NoLineStyle = Qt::NoPen,
-        SolidLine = Qt::SolidLine,
-        DottedLine = Qt::DotLine,
-        DashLine = Qt::DashLine,
-        DotDashLine = Qt::DashDotLine,
-        DotDotDashLine = Qt::DashDotDotLine,
-        LongDashLine,
-        WaveLine
-    };
-
-    enum LineWeight {
-        AutoLineWeight,
-        NormalLineWeight,
-        BoldLineWeight,
-        ThinLineWeight,
-        DashLineWeight, // ## ??what the heck does this mean??
-        MediumLineWeight,
-        ThickLineWeight,
-        PercentLineWeight,
-        LengthLineWeight
-    };
 
     /// list of possible line modes.
     enum LineMode {
@@ -295,21 +265,21 @@ public:
     void setFontAutoColor(bool use);
 
     /// Apply a font strike out style to this KoCharacterStyle
-    void setStrikeOutStyle(LineStyle style);
+    void setStrikeOutStyle(KoOdf::LineStyle style);
     /// Get the current font strike out style of this KoCharacterStyle
-    LineStyle strikeOutStyle() const;
+    KoOdf::LineStyle strikeOutStyle() const;
     /// Apply a font strike out width to this KoCharacterStyle
-    void setStrikeOutWidth(LineWeight weight, qreal width);
+    void setStrikeOutWidth(KoOdf::LineWeight weight, qreal width);
     /// Get the current font strike out width of this KoCharacterStyle
-    void strikeOutWidth(LineWeight &weight, qreal &width) const;
+    void strikeOutWidth(KoOdf::LineWeight &weight, qreal &width) const;
     /// Apply a font strike out color to this KoCharacterStyle
     void setStrikeOutColor(const QColor &color);
     /// Get the current font strike out color of this KoCharacterStyle
     QColor strikeOutColor() const;
     /// Apply a font strike out color to this KoCharacterStyle
-    void setStrikeOutType(LineType lineType);
+    void setStrikeOutType(KoOdf::LineType lineType);
     /// Get the current font strike out color of this KoCharacterStyle
-    LineType strikeOutType() const;
+    KoOdf::LineType strikeOutType() const;
     /// Apply a strike out mode of this KoCharacterStyle
     void setStrikeOutMode(LineMode lineMode);
     /// Get the current strike out mode of this KoCharacterStyle
@@ -320,42 +290,42 @@ public:
     QString strikeOutText() const;
 
     /// Apply a font overline style to this KoCharacterStyle
-    void setOverlineStyle(LineStyle style);
+    void setOverlineStyle(KoOdf::LineStyle style);
     /// Get the current font overline style of this KoCharacterStyle
-    LineStyle overlineStyle() const;
+    KoOdf::LineStyle overlineStyle() const;
     /// Apply a font overline width to this KoCharacterStyle
-    void setOverlineWidth(LineWeight weight, qreal width);
+    void setOverlineWidth(KoOdf::LineWeight weight, qreal width);
     /// Get the current font overline width of this KoCharacterStyle
-    void overlineWidth(LineWeight &weight, qreal &width) const;
+    void overlineWidth(KoOdf::LineWeight &weight, qreal &width) const;
     /// Apply a font overline color to this KoCharacterStyle
     void setOverlineColor(const QColor &color);
     /// Get the current font overline color of this KoCharacterStyle
     QColor overlineColor() const;
     /// Apply a font overline color to this KoCharacterStyle
-    void setOverlineType(LineType lineType);
+    void setOverlineType(KoOdf::LineType lineType);
     /// Get the current font overline color of this KoCharacterStyle
-    LineType overlineType() const;
+    KoOdf::LineType overlineType() const;
     /// Apply a overline mode to this KoCharacterStyle
     void setOverlineMode(LineMode mode);
     /// Get the current overline mode of this KoCharacterStyle
     LineMode overlineMode() const;
 
     /// Apply a font underline style to this KoCharacterStyle
-    void setUnderlineStyle(LineStyle style);
+    void setUnderlineStyle(KoOdf::LineStyle style);
     /// Get the current font underline style of this KoCharacterStyle
-    LineStyle underlineStyle() const;
+    KoOdf::LineStyle underlineStyle() const;
     /// Apply a font underline width to this KoCharacterStyle
-    void setUnderlineWidth(LineWeight weight, qreal width);
+    void setUnderlineWidth(KoOdf::LineWeight weight, qreal width);
     /// Get the current font underline width of this KoCharacterStyle
-    void underlineWidth(LineWeight &weight, qreal &width) const;
+    void underlineWidth(KoOdf::LineWeight &weight, qreal &width) const;
     /// Apply a font underline color to this KoCharacterStyle
     void setUnderlineColor(const QColor &color);
     /// Get the current font underline color of this KoCharacterStyle
     QColor underlineColor() const;
     /// Apply a font underline color to this KoCharacterStyle
-    void setUnderlineType(LineType lineType);
+    void setUnderlineType(KoOdf::LineType lineType);
     /// Get the current font underline color of this KoCharacterStyle
-    LineType underlineType() const;
+    KoOdf::LineType underlineType() const;
     /// Apply a underline mode to this KoCharacterStyle
     void setUnderlineMode(LineMode mode);
     /// Get the current underline mode of this KoCharacterStyle
