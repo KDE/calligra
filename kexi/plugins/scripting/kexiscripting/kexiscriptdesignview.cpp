@@ -25,7 +25,6 @@
 
 #include <kross/core/manager.h>
 #include <kross/core/action.h>
-#include <kross/core/action.h>
 #include <kross/core/interpreter.h>
 
 #include <KoIcon.h>

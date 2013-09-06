@@ -1,10 +1,16 @@
 [Desktop Entry]
 Name=Plan Scripting Plugin
 Name[cs]=Skriptovací modul pro Plan
+Name[de]=Plan-Skripting-Modul
+Name[es]=Complemento de programación de guiones de Plan
 Name[hu]=Plan szkriptelés bővítmény
+Name[it]=Estensione di scripting di Plan
+Name[kk]=Plan cкрипт плагині
+Name[nl]=Scriptplug-in van Plan
 Name[pt]='Plugin' de Programação do Plan
 Name[pt_BR]=Plugin de criação de scripts do Plan
 Name[sk]=Plugin skriptovania Plan
+Name[sv]=Skript-insticksprogram för Plan
 Name[uk]=Додаток роботи зі скриптами для Plan
 Name[x-test]=xxPlan Scripting Pluginxx
 X-KDE-ServiceTypes=Plan/ViewPlugin

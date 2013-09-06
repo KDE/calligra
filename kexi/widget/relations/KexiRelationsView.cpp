@@ -43,7 +43,6 @@
 #include <kexiproject.h>
 #include <KexiMainWindowIface.h>
 #include "KexiRelationsScrollArea.h"
-#include "KexiRelationsView.h"
 #include "KexiRelationsConnection.h"
 
 //! @internal

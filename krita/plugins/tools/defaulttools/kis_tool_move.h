@@ -86,6 +86,7 @@ private:
     KisStrokeId m_strokeId;
 
     MoveToolMode m_moveToolMode;
+    KisNodeSP m_currentlyProcessingNode;
 };
 
 

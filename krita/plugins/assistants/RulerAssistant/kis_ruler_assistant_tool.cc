@@ -421,6 +421,7 @@ void KisRulerAssistantTool::paint(QPainter& _gc, const KoViewConverter &_convert
     QPixmap iconMove = koIcon("transform-move").pixmap(32, 32);
     foreach(KisPaintingAssistant* assistant, m_canvas->view()->paintingAssistantManager()->assistants()) {
         if(assistant->id()=="perspective") {
+            assistant->findHandleLocation();
             QPointF topMiddle, bottomMiddle, rightMiddle, leftMiddle;
             topMiddle = (_converter.documentToView(*assistant->topLeft()) + _converter.documentToView(*assistant->topRight()))*0.5;
             bottomMiddle = (_converter.documentToView(*assistant->bottomLeft()) + _converter.documentToView(*assistant->bottomRight()))*0.5;
