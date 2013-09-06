@@ -53,7 +53,6 @@
 #include <kio/netaccess.h>
 #include <klocale.h>
 #include <ksavefile.h>
-#include <kxmlguifactory.h>
 #include <kdebug.h>
 #include <kstandarddirs.h>
 #include <kdesktopfile.h>

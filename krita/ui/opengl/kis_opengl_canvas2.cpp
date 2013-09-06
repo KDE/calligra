@@ -32,8 +32,6 @@
 #include <QPoint>
 #include <QTransform>
 
-#include <kxmlguifactory.h>
-
 #include "KoToolProxy.h"
 #include "KoToolManager.h"
 #include "KoColorSpace.h"

@@ -83,7 +83,6 @@
 #include <kmimetype.h>
 #include <ksharedptr.h>
 #include <kwordwrap.h>
-#include <kxmlguifactory.h>
 
 // Calligra
 #include <KoCanvasController.h>

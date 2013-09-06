@@ -62,7 +62,6 @@
 #include <kstandarddirs.h>
 #include <ktemporaryfile.h>
 #include <ktoolinvocation.h>
-#include <kxmlguifactory.h>
 
 #include "debugarea.h"
 

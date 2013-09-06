@@ -67,7 +67,6 @@
 #include <kprocess.h>
 #include <kaction.h>
 #include <kactioncollection.h>
-#include <kxmlguifactory.h>
 
 #include <KoGlobal.h>
 #include <KoMainWindow.h>

@@ -123,7 +123,6 @@
 #include <kmessagebox.h>
 #include <kcomponentdata.h>
 #include <kactioncollection.h>
-#include <kxmlguifactory.h>
 #include <kstatusbar.h>
 #include <kfiledialog.h>
 #include <kstandardaction.h>
