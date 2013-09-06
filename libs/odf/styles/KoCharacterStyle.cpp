@@ -42,10 +42,8 @@
 #include <KoStoreDevice.h>
 #include <KoGenStyle.h>
 #include <KoShadowStyle.h>
-#include <KoShapeLoadingContext.h>
-#include "KoTextSharedLoadingData.h"
-#include "KoInlineTextObjectManager.h"
-#include "KoTextDocument.h"
+#include <KoOdfLoadingContext.h>
+//#include "KoTextDocument.h"
 
 #ifdef SHOULD_BUILD_FONT_CONVERSION
 #include <string.h>
@@ -63,7 +61,6 @@
 #endif
 
 #include <kdebug.h>
-#include "KoTextDebug.h"
 
 #ifdef SHOULD_BUILD_FONT_CONVERSION
     QMap<QString,qreal> textScaleMap;
@@ -536,6 +533,7 @@ struct FragmentData
     int length;
 };
 
+#if 0  // Move
 void KoCharacterStyle::applyStyle(QTextBlock &block) const
 {
     QTextCursor cursor(block);
@@ -580,7 +578,7 @@ void KoCharacterStyle::applyStyle(QTextBlock &block) const
         cursor.setCharFormat(fragment.format);
     }
 }
-
+#endif
 void KoCharacterStyle::applyStyle(QTextCursor *selection) const
 {
 // FIXME below should be done for each frament in the selection
@@ -640,6 +638,7 @@ void KoCharacterStyle::unapplyStyle(QTextBlock &block) const
         cursor.setCharFormat(cf);
     } while (iter != block.begin());
 }
+
 
 // OASIS 14.2.29
 static void parseOdfLineWidth(const QString &width, KoCharacterStyle::LineWeight &lineWeight, qreal &lineWidth)
@@ -1380,10 +1379,9 @@ qreal KoCharacterStyle::additionalFontSize() const
     return d->propertyDouble(KoCharacterStyle::AdditionalFontSize);
 }
 
-void KoCharacterStyle::loadOdf(const KoXmlElement *element, KoShapeLoadingContext &scontext,
-    bool loadParents)
+void KoCharacterStyle::loadOdf(const KoXmlElement *element, KoOdfLoadingContext &oContext,
+                               bool loadParents)
 {
-    KoOdfLoadingContext &context = scontext.odfLoadingContext();
     const QString name(element->attributeNS(KoXmlNS::style, "display-name", QString()));
     if (!name.isEmpty()) {
         d->name = name;
@@ -1394,20 +1392,20 @@ void KoCharacterStyle::loadOdf(const KoXmlElement *element, KoShapeLoadingContex
 
     QString family = element->attributeNS(KoXmlNS::style, "family", "text");
 
-    context.styleStack().save();
+    oContext.styleStack().save();
     if (loadParents) {
-        context.addStyles(element, family.toLocal8Bit().constData());   // Load all parent
+        oContext.addStyles(element, family.toLocal8Bit().constData());   // Load all parent
     } else {
-        context.styleStack().push(*element);
+        oContext.styleStack().push(*element);
     }
-    context.styleStack().setTypeProperties("text");  // load the style:text-properties
-    loadOdfProperties(scontext);
-    context.styleStack().restore();
+    oContext.styleStack().setTypeProperties("text");  // load the style:text-properties
+    loadOdfProperties(oContext);
+    oContext.styleStack().restore();
 }
 
-void KoCharacterStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
+void KoCharacterStyle::loadOdfProperties(KoOdfLoadingContext &oContext)
 {
-    KoStyleStack &styleStack = scontext.odfLoadingContext().styleStack();
+    KoStyleStack &styleStack = oContext.styleStack();
 
     // The fo:color attribute specifies the foreground color of text.
     const QString color(styleStack.property(KoXmlNS::fo, "color"));
@@ -1458,7 +1456,7 @@ void KoCharacterStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
 
     if (styleStack.hasProperty(KoXmlNS::style, "font-name")) {
         // This font name is a reference to a font face declaration.
-        KoOdfStylesReader &stylesReader = scontext.odfLoadingContext().stylesReader();
+        KoOdfStylesReader &stylesReader = oContext.stylesReader();
         const KoXmlElement *fontFace = stylesReader.findStyle(styleStack.property(KoXmlNS::style, "font-name"));
         if (fontFace != 0) {
             fontName = fontFace->attributeNS(KoXmlNS::svg, "font-family", "");
@@ -1470,7 +1468,7 @@ void KoCharacterStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
                     forEachElement(fontUriElem, fontFaceElem) {
                         if (fontUriElem.tagName() == "font-face-uri") {
                             QString filename = fontUriElem.attributeNS(KoXmlNS::xlink, "href");
-                            KoStore *store = scontext.odfLoadingContext().store();
+                            KoStore *store = oContext.store();
                             if (store->open(filename)) {
                                 KoStoreDevice device(store);
                                 QByteArray data = device.readAll();

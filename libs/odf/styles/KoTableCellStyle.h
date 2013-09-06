@@ -24,14 +24,18 @@
 
 #include "koodf_export.h"
 
-#include <KoBorder.h>
-#include <KoShadowStyle.h>
-#include <QColor>
-
+// Qt
 #include <QObject>
 #include <QVector>
 #include <QString>
 #include <QVariant>
+#include <QColor>
+
+// ODF library
+#include <KoBorder.h>
+#include <KoShadowStyle.h>
+// styles
+#include <OdfDefines.h>
 
 struct Property;
 class QTextTableCell;
@@ -178,8 +182,8 @@ public:
     void setAlignment(Qt::Alignment alignment);
     Qt::Alignment alignment() const;
 
-    KoText::Direction textDirection() const;
-    void setTextDirection (KoText::Direction value);
+    KoOdf::TextDirection textDirection() const;
+    void setTextDirection (KoOdf::TextDirection value);
 
     void setWrap(bool state);
     bool wrap() const;

@@ -39,7 +39,7 @@
 class StylePrivate;
 class QTextBlock;
 class KoStyleStack;
-class KoShapeLoadingContext;
+class KoOdfLoadingContext;
 class KoShadowStyle;
 class KoGenStyle;
 
@@ -477,8 +477,8 @@ public:
      * @param element the element containing the
      * @param loadParents true = use the stylestack, false = use just the element
      */
-    void loadOdf(const KoXmlElement *element, KoShapeLoadingContext &context,
-                bool loadParents = false);
+    void loadOdf(const KoXmlElement *element, KoOdfLoadingContext &oContext,
+                 bool loadParents = false);
 
     /// return true if this style has a non-default value set for the Property
     bool hasProperty(int key) const;
@@ -546,7 +546,7 @@ protected:
     * Load the text properties from the \a KoStyleStack style stack using the
     * OpenDocument format.
     */
-    void loadOdfProperties(KoShapeLoadingContext &context);
+    void loadOdfProperties(KoOdfLoadingContext &oContext);
 
 private:
     class Private;
