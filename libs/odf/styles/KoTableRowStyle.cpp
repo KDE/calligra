@@ -26,7 +26,6 @@
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
 #include "Styles_p.h"
-#include "KoTextDocument.h"
 
 #include <kdebug.h>
 
@@ -179,24 +178,24 @@ QBrush KoTableRowStyle::background() const
     return qvariant_cast<QBrush>(variant);
 }
 
-void KoTableRowStyle::setBreakBefore(KoText::KoTextBreakProperty state)
+void KoTableRowStyle::setBreakBefore(KoOdf::KoTextBreakProperty state)
 {
     setProperty(BreakBefore, state);
 }
 
-KoText::KoTextBreakProperty KoTableRowStyle::breakBefore() const
+KoOdf::KoTextBreakProperty KoTableRowStyle::breakBefore() const
 {
-    return (KoText::KoTextBreakProperty) propertyInt(BreakBefore);
+    return (KoOdf::KoTextBreakProperty) propertyInt(BreakBefore);
 }
 
-void KoTableRowStyle::setBreakAfter(KoText::KoTextBreakProperty state)
+void KoTableRowStyle::setBreakAfter(KoOdf::KoTextBreakProperty state)
 {
     setProperty(BreakAfter, state);
 }
 
-KoText::KoTextBreakProperty KoTableRowStyle::breakAfter() const
+KoOdf::KoTextBreakProperty KoTableRowStyle::breakAfter() const
 {
-    return (KoText::KoTextBreakProperty) propertyInt(BreakAfter);
+    return (KoOdf::KoTextBreakProperty) propertyInt(BreakAfter);
 }
 
 void KoTableRowStyle::setUseOptimalHeight(bool on)
@@ -340,10 +339,10 @@ void KoTableRowStyle::loadOdfProperties(KoStyleStack &styleStack)
 
     // The fo:break-before and fo:break-after attributes insert a page or column break before or after a column.
     if (styleStack.hasProperty(KoXmlNS::fo, "break-before")) {
-        setBreakBefore(KoText::textBreakFromString(styleStack.property(KoXmlNS::fo, "break-before")));
+        setBreakBefore(KoOdf::textBreakFromString(styleStack.property(KoXmlNS::fo, "break-before")));
     }
     if (styleStack.hasProperty(KoXmlNS::fo, "break-after")) {
-        setBreakAfter(KoText::textBreakFromString(styleStack.property(KoXmlNS::fo, "break-after")));
+        setBreakAfter(KoOdf::textBreakFromString(styleStack.property(KoXmlNS::fo, "break-after")));
     }
 }
 
@@ -379,9 +378,9 @@ void KoTableRowStyle::saveOdf(KoGenStyle &style) const
         } else if (key == UseOptimalHeight) {
             style.addProperty("style:use-optimal-row-height", useOptimalHeight(), KoGenStyle::TableRowType);
         } else if (key == BreakBefore) {
-            style.addProperty("fo:break-before", KoText::textBreakToString(breakBefore()), KoGenStyle::TableRowType);
+            style.addProperty("fo:break-before", KoOdf::textBreakToString(breakBefore()), KoGenStyle::TableRowType);
         } else if (key == BreakAfter) {
-            style.addProperty("fo:break-after", KoText::textBreakToString(breakAfter()), KoGenStyle::TableRowType);
+            style.addProperty("fo:break-after", KoOdf::textBreakToString(breakAfter()), KoGenStyle::TableRowType);
         } else if (key == KeepTogether) {
             if (keepTogether())
                 style.addProperty("fo:keep-together", "always", KoGenStyle::TableRowType);

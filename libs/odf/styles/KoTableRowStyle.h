@@ -23,12 +23,15 @@
 #ifndef KOTABLEROWSTYLE_H
 #define KOTABLEROWSTYLE_H
 
-#include "koodf_export.h"
-
+// Qt
 #include <QObject>
 #include <QVector>
 #include <QString>
 #include <QVariant>
+
+// ODF library
+#include "koodf_export.h"
+#include "OdfDefines.h"
 
 struct Property;
 class QTextTable;
@@ -82,10 +85,10 @@ public:
     /// See similar named method on QTextBlockFormat
     void clearBackground();
 
-    void setBreakBefore(KoText::KoTextBreakProperty state);
-    KoText::KoTextBreakProperty breakBefore() const;
-    void setBreakAfter(KoText::KoTextBreakProperty state);
-    KoText::KoTextBreakProperty breakAfter() const;
+    void setBreakBefore(KoOdf::KoTextBreakProperty state);
+    KoOdf::KoTextBreakProperty breakBefore() const;
+    void setBreakAfter(KoOdf::KoTextBreakProperty state);
+    KoOdf::KoTextBreakProperty breakAfter() const;
     
     void setUseOptimalHeight(bool on);
     bool useOptimalHeight() const;
