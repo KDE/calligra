@@ -27,7 +27,7 @@ KSharedConfigPtr KGlobal::config()
 {
     static KSharedConfigPtr globalConfig;
     if (!globalConfig)
-        globalConfig = KSharedConfig::openConfig(qApp->applicationName());
+        globalConfig = KSharedConfig::openConfig(qApp->applicationName() + QLatin1String("rc"));
     return globalConfig;
 }
 
