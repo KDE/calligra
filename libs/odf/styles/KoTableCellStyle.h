@@ -45,7 +45,7 @@ class KoGenStyle;
 class KoGenStyles;
 class KoParagraphStyle;
 #include "KoXmlReaderForward.h"
-class KoShapeLoadingContext;
+class KoOdfLoadingContext;
 class KoShapeSavingContext;
 class KoTableCellStylePrivate;
 
@@ -268,7 +268,7 @@ public:
      * @param context the odf loading context
      * @param element the element containing the
      */
-    void loadOdf(const KoXmlElement *element, KoShapeLoadingContext &context);
+    void loadOdf(const KoXmlElement *element, KoOdfLoadingContext &oContext);
 
     void saveOdf(KoGenStyle &style, KoShapeSavingContext &context);
 
@@ -354,7 +354,7 @@ private:
      * Load the style from the \a KoStyleStack style stack using the
      * OpenDocument format.
      */
-    void loadOdfProperties(KoShapeLoadingContext &context, KoStyleStack &styleStack);
+    void loadOdfProperties(KoOdfLoadingContext &oContext, KoStyleStack &styleStack);
     qreal propertyDouble(int key) const;
     QPen propertyPen(int key) const;
     int propertyInt(int key) const;

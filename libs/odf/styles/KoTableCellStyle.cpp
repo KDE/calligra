@@ -26,14 +26,12 @@
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
 #include "Styles_p.h"
-#include "KoTextDocument.h"
 #include "KoTableCellStyle_p.h"
-#include <KoShapeLoadingContext.h>
+#include <KoOdfLoadingContext.h>
 #include <KoOdfGraphicStyles.h>
 #include "KoParagraphStyle.h"
 
 #include <kdebug.h>
-#include <KoTextDebug.h>
 
 #include <QTextTable>
 #include <QTextTableFormat>
@@ -473,14 +471,14 @@ KoTableCellStyle::CellProtectionFlag KoTableCellStyle::cellProtection() const
     return (CellProtectionFlag) propertyInt(CellProtection);
 }
 
-void KoTableCellStyle::setTextDirection(KoText::Direction value)
+void KoTableCellStyle::setTextDirection(KoOdf::TextDirection value)
 {
     setProperty(TextWritingMode, value);
 }
 
-KoText::Direction KoTableCellStyle::textDirection() const
+KoOdf::TextDirection KoTableCellStyle::textDirection() const
 {
-    return (KoText::Direction) propertyInt(TextWritingMode);
+    return (KoOdf::TextDirection) propertyInt(TextWritingMode);
 }
 
 bool KoTableCellStyle::printContent() const
@@ -592,9 +590,8 @@ KoTableCellStyle::CellTextDirection KoTableCellStyle::direction() const
     return KoTableCellStyle::Default;
 }
 
-void KoTableCellStyle::loadOdf(const KoXmlElement *element, KoShapeLoadingContext &scontext)
+void KoTableCellStyle::loadOdf(const KoXmlElement *element, KoOdfLoadingContext &oContext)
 {
-    KoOdfLoadingContext &context = scontext.odfLoadingContext();
     Q_D(KoTableCellStyle);
     if (element->hasAttributeNS(KoXmlNS::style, "display-name"))
         d->name = element->attributeNS(KoXmlNS::style, "display-name", QString());
@@ -607,27 +604,27 @@ void KoTableCellStyle::loadOdf(const KoXmlElement *element, KoShapeLoadingContex
         setMasterPageName(masterPage);
     }
 
-    paragraphStyle()->loadOdf(element, scontext, true); // load the par and char properties
+    paragraphStyle()->loadOdf(element, oContext, true); // load the par and char properties
 
     // Borders - we don't handle inheritance unfortunately - hope it's not a big problem
     KoBorder borders = this->borders();
     borders.loadOdf(element->namedItemNS(KoXmlNS::style, "table-cell-properties").toElement());
     setBorders(borders);
 
-    context.styleStack().save();
+    oContext.styleStack().save();
     QString family = element->attributeNS(KoXmlNS::style, "family", "table-cell");
-    context.addStyles(element, family.toLocal8Bit().constData());   // Load all parents - only because we don't support inheritance.
+    oContext.addStyles(element, family.toLocal8Bit().constData());   // Load all parents - only because we don't support inheritance.
 
-    context.styleStack().setTypeProperties("table-cell");
-    loadOdfProperties(scontext, context.styleStack());
+    oContext.styleStack().setTypeProperties("table-cell");
+    loadOdfProperties(oContext, oContext.styleStack());
 
-    context.styleStack().setTypeProperties("graphic");
-    loadOdfProperties(scontext, context.styleStack());
+    oContext.styleStack().setTypeProperties("graphic");
+    loadOdfProperties(oContext, oContext.styleStack());
 
-    context.styleStack().restore();
+    oContext.styleStack().restore();
 }
 
-void KoTableCellStyle::loadOdfProperties(KoShapeLoadingContext &context, KoStyleStack &styleStack)
+void KoTableCellStyle::loadOdfProperties(KoOdfLoadingContext &oContext, KoStyleStack &styleStack)
 {
     // Padding
     if (styleStack.hasProperty(KoXmlNS::fo, "padding-left"))
@@ -665,7 +662,7 @@ void KoTableCellStyle::loadOdfProperties(KoShapeLoadingContext &context, KoStyle
     QString fillStyle = styleStack.property(KoXmlNS::draw, "fill");
     if (fillStyle == "solid" || fillStyle == "hatch") {
         styleStack.save();
-        QBrush brush = KoOdfGraphicStyles::loadOdfFillStyle(styleStack, fillStyle, context.odfLoadingContext().stylesReader());
+        QBrush brush = KoOdfGraphicStyles::loadOdfFillStyle(styleStack, fillStyle, oContext.stylesReader());
         setBackground(brush);
         styleStack.restore();
     }
@@ -740,11 +737,11 @@ void KoTableCellStyle::loadOdfProperties(KoShapeLoadingContext &context, KoStyle
         if (verticalAlign == "automatic")
             setAlignment((Qt::AlignmentFlag) 0);
         else
-            setAlignment(KoText::valignmentFromString(verticalAlign));
+            setAlignment(KoOdf::valignmentFromString(verticalAlign));
     }
     
     if (styleStack.hasProperty(KoXmlNS::style, "writing-mode"))
-        setTextDirection(KoText::directionFromString(styleStack.property(KoXmlNS::style, "writing-mode")));
+        setTextDirection(KoOdf::textDirectionFromString(styleStack.property(KoXmlNS::style, "writing-mode")));
 }
 
 void KoTableCellStyle::copyProperties(const KoTableCellStyle *style)
@@ -806,7 +803,7 @@ void KoTableCellStyle::saveOdf(KoGenStyle &style, KoShapeSavingContext &context)
             if (propertyInt(VerticalAlignment) == 0)
                 style.addProperty("style:vertical-align", "automatic", KoGenStyle::TableCellType);
             else
-                style.addProperty("style:vertical-align", KoText::valignmentToString(alignment()), KoGenStyle::TableCellType);
+                style.addProperty("style:vertical-align", KoOdf::valignmentToString(alignment()), KoGenStyle::TableCellType);
         } else if ((key == QTextFormat::TableCellLeftPadding) && (!donePadding)) {
             style.addPropertyPt("fo:padding-left", leftPadding(), KoGenStyle::TableCellType);
         } else if ((key == QTextFormat::TableCellRightPadding) && (!donePadding)) {
@@ -854,7 +851,7 @@ void KoTableCellStyle::saveOdf(KoGenStyle &style, KoShapeSavingContext &context)
         } else if (key == RotationAlign) {
             style.addProperty("style:rotation-align", rotationAlignmentToString(rotationAlignment()), KoGenStyle::TableCellType);
         } else if (key == TextWritingMode) {
-            style.addProperty("style:writing-mode", KoText::directionToString(textDirection()), KoGenStyle::TableCellType);
+            style.addProperty("style:writing-mode", KoOdf::textDirectionToString(textDirection()), KoGenStyle::TableCellType);
         } else if (key == VerticalGlyphOrientation) {
             if (verticalGlyphOrientation())
                 style.addProperty("style:glyph-orientation-vertical", "auto", KoGenStyle::TableCellType);
