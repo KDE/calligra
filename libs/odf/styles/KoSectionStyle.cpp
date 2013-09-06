@@ -26,7 +26,6 @@
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
 #include "Styles_p.h"
-#include "KoTextDocument.h"
 
 #include <kdebug.h>
 
@@ -309,12 +308,12 @@ void KoSectionStyle::setStyleId(int id)
 }
 
 
-KoText::Direction KoSectionStyle::textProgressionDirection() const
+KoOdf::TextDirection KoSectionStyle::textProgressionDirection() const
 {
-    return static_cast<KoText::Direction>(d->propertyInt(TextProgressionDirection));
+    return static_cast<KoOdf::TextDirection>(d->propertyInt(TextProgressionDirection));
 }
 
-void KoSectionStyle::setTextProgressionDirection(KoText::Direction dir)
+void KoSectionStyle::setTextProgressionDirection(KoOdf::TextDirection dir)
 {
     setProperty(TextProgressionDirection, dir);
 }
@@ -361,7 +360,7 @@ void KoSectionStyle::loadOdf(const KoXmlElement *element, KoOdfLoadingContext &c
 
     if (styleStack.hasProperty(KoXmlNS::style, "writing-mode")) {     // http://www.w3.org/TR/2004/WD-xsl11-20041216/#writing-mode
         QString writingMode = styleStack.property(KoXmlNS::style, "writing-mode");
-        setTextProgressionDirection(KoText::directionFromString(writingMode));
+        setTextProgressionDirection(KoOdf::textDirectionFromString(writingMode));
     }
 
     // Indentation (margin)
@@ -488,13 +487,13 @@ void KoSectionStyle::saveOdf(KoGenStyle &style)
             directionValue = d->stylesPrivate.value(key).toInt(&ok);
             if (ok) {
                 QString direction;
-                if (directionValue == KoText::LeftRightTopBottom)
+                if (directionValue == KoOdf::LeftRightTopBottom)
                     direction = "lr-tb";
-                else if (directionValue == KoText::RightLeftTopBottom)
+                else if (directionValue == KoOdf::RightLeftTopBottom)
                     direction = "rl-tb";
-                else if (directionValue == KoText::TopBottomRightLeft)
+                else if (directionValue == KoOdf::TopBottomRightLeft)
                     direction = "tb-lr";
-                else if (directionValue == KoText::InheritDirection)
+                else if (directionValue == KoOdf::InheritDirection)
                     direction = "page";
                 if (!direction.isEmpty())
                     style.addProperty("style:writing-mode", direction, KoGenStyle::DefaultType);

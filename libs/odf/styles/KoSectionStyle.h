@@ -31,6 +31,8 @@
 #include <QVariant>
 #include <QTextFormat>
 
+#include <OdfDefines.h>
+
 struct Property;
 class QTextFrame;
 class KoStyleStack;
@@ -84,9 +86,9 @@ public:
     /// duplicated property from QTextBlockFormat
     qreal rightMargin() const;
 
-    KoText::Direction textProgressionDirection() const;
+    KoOdf::TextDirection textProgressionDirection() const;
     
-    void setTextProgressionDirection(KoText::Direction dir);
+    void setTextProgressionDirection(KoOdf::TextDirection dir);
     
     /// See similar named method on QTextBlockFormat
     void setBackground(const QBrush &brush);
