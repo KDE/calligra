@@ -147,7 +147,7 @@ QVariant CompositeOpModel::data(const QModelIndex& index, int role) const
                 data = d->model->data(otherIndex, Qt::DisplayRole);
                 break;
             case IsCategoryRole:
-                data = d->model->data(otherIndex, IsHeaderRole);
+                data = d->model->data(otherIndex, __CategorizedListModelBase::IsHeaderRole);
                 break;
             default:
                 break;
@@ -168,8 +168,7 @@ void CompositeOpModel::activateItem(int index)
     if(index > -1 && index < d->model->rowCount(QModelIndex()))
     {
         KoID compositeOp;
-
-        if(d->model->entryAt(compositeOp, index))
+        if(d->model->entryAt(compositeOp, d->model->index(index)))
             d->updateCompositeOp(compositeOp.id());
     }
 }

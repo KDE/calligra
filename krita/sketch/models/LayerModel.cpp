@@ -788,7 +788,7 @@ void LayerModel::setActiveCompositeOp(int newOp)
     if(d->activeNode.isNull())
         return;
     KoID entry;
-    if(KisCompositeOpListModel::sharedInstance()->entryAt(entry, newOp))
+    if(KisCompositeOpListModel::sharedInstance()->entryAt(entry, KisCompositeOpListModel::sharedInstance()->index(newOp)))
     {
         d->activeNode->setCompositeOp(entry.id());
         d->activeNode->setDirty();
