@@ -335,12 +335,17 @@ QPoint CellEditor::globalCursorPosition() const
 QAbstractItemModel *CellEditor::getModel()
 {
   ValueConverter *conv;
-  QList<QString> words;
+  QList<QString> words,wordlist;
   const Cell cell(d->selection->activeSheet(), d->selection->marker());
   int col=cell.column();
 
   words=d->wordcollection.values(col);
-  return new QStringListModel(words,c);  
+  for(int i=0;i<3 && (!words.isEmpty());i++)
+  {
+    wordlist.push_back(words.front());
+    words.pop_front();
+  }
+    return new QStringListModel(wordlist,c);  
 }
 
 void CellEditor::setCompleter(QCompleter *completer)
