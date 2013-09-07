@@ -70,7 +70,7 @@ public:
     FormulaEditorHighlighter* highlighter;
     FunctionCompletion*       functionCompletion;
     QTimer*                   functionCompletionTimer;
-
+    QHash<int,QString>        wordcollection;
     QPoint globalCursorPos;
 
     bool captureAllKeyEvents : 1;
@@ -280,6 +280,8 @@ CellEditor::CellEditor(CellToolBase *cellTool, QWidget* parent)
     setCompletionObject(&selection()->view()->doc()->map()->stringCompletion(), true);
 #endif
     
+    populateWordCollection();
+    
     //AutoCompletion Code
     c = new QCompleter(this);
     c->setModel(getModel());
@@ -290,6 +292,24 @@ CellEditor::CellEditor(CellToolBase *cellTool, QWidget* parent)
     
     connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(slotCursorPositionChanged()));
     connect(this, SIGNAL(textChanged()), this, SLOT(slotTextChanged()));
+}
+
+void CellEditor::populateWordCollection()
+{
+  ValueConverter *conv;
+ 
+  const Cell cell(d->selection->activeSheet(), d->selection->marker());
+  int lastrow=d->selection->activeSheet()->cellStorage()->rows();
+  int lastcolumn=d->selection->activeSheet()->cellStorage()->columns();
+  for(int j=1;j<=lastcolumn;j++)
+  {
+    for(int i=1;i<=lastrow;i++)
+    {
+      QString value=conv->toString(Value(Cell(d->selection->activeSheet(),j,i).value()));
+      if(!d->wordcollection.values(j).contains(value))
+      d->wordcollection.insertMulti(j,value);
+    }
+  }
 }
 
 CellEditor::~CellEditor()
@@ -316,22 +336,10 @@ QAbstractItemModel *CellEditor::getModel()
 {
   ValueConverter *conv;
   QList<QString> words;
-  //RectStorage<QString> *rs=new RectStorage<QString>(d->selection->activeSheet()->map());
-  //QRect rect=rs->usedArea();
-  
-  //qDebug()<<"rect"<<rect;
   const Cell cell(d->selection->activeSheet(), d->selection->marker());
   int col=cell.column();
-  
-  int lastrow=d->selection->activeSheet()->cellStorage()->rows();
-  qDebug()<<"rows"<<lastrow;
-  for(int i=0;i<lastrow;i++)
-  {
-    QString val=conv->toString(Value(Cell(d->selection->activeSheet(),col,i).value()));
-    if(val!="" && !words.contains(val))
-      words.append(val);
-  }
-  //words<<"Test"<<"Testing"<<"Test Again";
+
+  words=d->wordcollection.values(col);
   return new QStringListModel(words,c);  
 }
 
@@ -617,6 +625,8 @@ void CellEditor::selectionChanged()
 
 void CellEditor::keyPressEvent(QKeyEvent *event)
  { 
+    const Cell cell_temp(d->selection->activeSheet(), d->selection->marker()); 
+   
     switch (event->key()) {
     case Qt::Key_Left:
     case Qt::Key_Right:
@@ -637,15 +647,23 @@ void CellEditor::keyPressEvent(QKeyEvent *event)
         // Always forward tab/backtab to parent, so that pressing them leaves
         // editing mode. To insert literal tabs you can always use the external
         // editor.
-        event->ignore();
-        return;
+        
+	if(textUnderCursor()!="")
+	d->wordcollection.insertMulti(cell_temp.column(),textUnderCursor());
+	
+	event->ignore();
+	return;
     case Qt::Key_Return:
     case Qt::Key_Enter:
         // Shift + Return: manual line wrap
         if (event->modifiers() & Qt::ShiftModifier) {
             break; // pass to TextEdit
         }
-        event->ignore(); // pass to parent
+	//const Cell cell2(d->selection->activeSheet(), d->selection->marker());
+	if(textUnderCursor()!="")
+	d->wordcollection.insertMulti(cell_temp.column(),textUnderCursor());
+	
+	event->ignore(); // pass to parent
         return;
     }
     

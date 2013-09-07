@@ -31,6 +31,7 @@
 
 #include <QCompleter>
 #include <QAbstractItemModel>
+#include <QThread>
 class KoViewConverter;
 
 namespace Calligra
@@ -61,6 +62,7 @@ public:
 
     int cursorPosition() const;
     void setCursorPosition(int pos);
+    void populateWordCollection();
 
     QPoint globalCursorPosition() const;
     QAbstractItemModel *getModel();
