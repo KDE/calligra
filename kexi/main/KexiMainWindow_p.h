@@ -561,7 +561,6 @@ public:
 
 #include <ktabbar.h>
 #include <QTabBar>
-#include <QPainter>
 
 class KexiTabbedToolBarStyle;
 
