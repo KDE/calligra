@@ -95,6 +95,7 @@ public:
                              << "application/x-krita-flipbook";
     }
 
+    bool saveNativeFormat(const QString &file);
     virtual QDomDocument saveXML();
     virtual bool loadXML(const KoXmlDocument& doc, KoStore* store);
 
