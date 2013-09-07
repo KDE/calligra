@@ -22,9 +22,9 @@
 
 #include "KoListStyle.h"
 #include "KoListLevelProperties.h"
-#include "KoTextBlockData.h"
+//#include "KoTextBlockData.h"
 #include "KoParagraphStyle.h"
-#include "KoList.h"
+//#include "KoList.h"
 
 #include <KoStyleStack.h>
 #include <KoOdfStylesReader.h>
@@ -168,12 +168,12 @@ void KoListStyle::removeLevelProperties(int level)
 {
     d->levels.remove(level);
 }
-
+#if 0 // Move
 void KoListStyle::applyStyle(const QTextBlock &block, int level)
 {
     KoList::applyStyle(block, this, level);
 }
-
+#endif
 void KoListStyle::loadOdf(KoShapeLoadingContext& scontext, const KoXmlElement& style)
 {
     d->name = style.attributeNS(KoXmlNS::style, "display-name", QString());

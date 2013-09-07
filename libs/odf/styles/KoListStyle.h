@@ -226,11 +226,12 @@ public:
     /// set a user-visible name on the style.
     void setName(const QString &name);
 
+#if 0  // Move
     /**
      * Apply this style to a block by adding the block to the proper list.
      */
     void applyStyle(const QTextBlock &block, int level = 0);
-
+#endif
     bool operator==(const KoListStyle &other) const;
     bool operator!=(const KoListStyle &other) const;
 
