@@ -77,8 +77,8 @@ CSVDialog::CSVDialog(QWidget* parent, Selection* selection, Mode mode)
     } else if (m_mode == File) {
         //setWindowTitle(i18n("Inserting Text File"));
         KoFileDialog dialog;
-        m_filename = dialog.getOpenFileName(parent, i18n("Import CSV Data File"),
-                                                        "", i18n("CSV data files (*.csv)"));
+        m_filename = dialog.getImportFileName(parent, i18n("Import CSV Data File"),
+                                                        "", QStringList(i18n("CSV data files (*.csv)")));
         //cancel action !
         if (m_filename.isEmpty()) {
             enableButton(Ok, false);
