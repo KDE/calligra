@@ -22,6 +22,8 @@
 // Local
 #include "DatabaseDialog.h"
 
+#ifndef QT_NO_SQL
+
 #include "Cell.h"
 #include "ui/Selection.h"
 #include "Sheet.h"
@@ -59,8 +61,6 @@
 #include <QTreeWidget>
 
 using namespace Calligra::Sheets;
-
-#ifndef QT_NO_SQL
 
 /********************************************************
  *                 Database Assistant                   *
@@ -753,42 +753,42 @@ QString DatabaseDialog::getWhereCondition(QString const & column,
 
     switch (op) {
     case 0:
-        wherePart += column;
-        wherePart += " = ";
+        wherePart += column +
+                     " = ";
         break;
     case 1:
-        wherePart += "NOT ";
-        wherePart += column;
-        wherePart += " = ";
+        wherePart += "NOT " +
+                     column +
+                     " = ";
         break;
     case 2:
-        wherePart += column;
-        wherePart += " IN ";
+        wherePart += column +
+                     " IN ";
         break;
     case 3:
-        wherePart += "NOT ";
-        wherePart += column;
-        wherePart += " IN ";
+        wherePart += "NOT " +
+                     column +
+                     " IN ";
         break;
     case 4:
-        wherePart += column;
-        wherePart += " LIKE ";
+        wherePart += column +
+                     " LIKE ";
         break;
     case 5:
-        wherePart += column;
-        wherePart += " > ";
+        wherePart += column +
+                     " > ";
         break;
     case 6:
-        wherePart += column;
-        wherePart += " < ";
+        wherePart += column +
+                     " < ";
         break;
     case 7:
-        wherePart += column;
-        wherePart += " >= ";
+        wherePart += column +
+                     " >= ";
         break;
     case 8:
-        wherePart += column;
-        wherePart += " <= ";
+        wherePart += column +
+                     " <= ";
         break;
     }
 
@@ -827,13 +827,13 @@ QString DatabaseDialog::exchangeWildcards(QString const & value)
     QString str(value);
     int p = str.indexOf('*');
     while (p > -1) {
-        str = str.replace(p, 1, '%');
+        str.replace(p, 1, '%');
         p = str.indexOf('*');
     }
 
     p = str.indexOf('?');
     while (p > -1) {
-        str = str.replace(p, 1, '_');
+        str.replace(p, 1, '_');
         p = str.indexOf('?');
     }
     return str;
@@ -885,12 +885,12 @@ bool DatabaseDialog::optionsDoNext()
     int i;
     int l = m_columns_1->count() - 1;
     for (i = 0; i < l; ++i) {
-        query += m_columns_1->itemText(i);
-        query += ", ";
+        query += m_columns_1->itemText(i) +
+                 ", ";
     }
-    query += m_columns_1->itemText(l);
+    query += m_columns_1->itemText(l) +
 
-    query += "\nFROM ";
+             "\nFROM ";
 
     bool b = false;
     for (int i = 0; i < m_tableView->count(); ++i) {

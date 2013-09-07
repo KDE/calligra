@@ -36,6 +36,8 @@
 
 // Filter libraries
 #include "OdtReader.h"
+#include "OdtReaderBackend.h"
+#include "OdfTextReader.h"
 
 // This filter
 #include "OdtReaderAsciiBackend.h"
@@ -85,10 +87,19 @@ KoFilter::ConversionStatus AsciiExport::convert(const QByteArray& from, const QB
     }
 
     // The actual conversion
-    OdfReaderAsciiContext  asciiBackendContext(odfStore, outfile);
-    OdtReaderAsciiBackend  asciiBackend(&asciiBackendContext);
+    OdfReaderAsciiContext  asciiContext(odfStore, outfile);
+
+    OdtReaderBackend       odtBackend;        // Use generic backend for document level
+    OdtReaderAsciiBackend  asciiTextBackend;  // Special backend for this filter for text level
+
+    // Create all necessary readers
     OdtReader              odtReader;
-    odtReader.readContent(&asciiBackend, &asciiBackendContext);
+    OdfTextReader          odfTextReader;
+    odfTextReader.setBackend(&asciiTextBackend);
+    odtReader.setTextReader(&odfTextReader);
+
+    odtReader.readContent(&odtBackend, &asciiContext);
+
     outfile.close();
 
     return KoFilter::OK;

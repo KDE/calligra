@@ -569,9 +569,9 @@ int Conversion::ditheringToGray(const quint16 ipat, bool* ok)
 void Conversion::setColorAttributes(QDomElement& element, int ico, const QString& prefix, bool defaultWhite)
 {
     QColor color = Conversion::color(ico, -1, defaultWhite);
-    element.setAttribute(prefix.isNull() ? "red" : prefix + "Red", color.red());
-    element.setAttribute(prefix.isNull() ? "blue" : prefix + "Blue", color.blue());
-    element.setAttribute(prefix.isNull() ? "green" : prefix + "Green", color.green());
+    element.setAttribute(prefix.isNull() ? QString::fromLatin1("red") : prefix + "Red", color.red());
+    element.setAttribute(prefix.isNull() ? QString::fromLatin1("blue") : prefix + "Blue", color.blue());
+    element.setAttribute(prefix.isNull() ? QString::fromLatin1("green") : prefix + "Green", color.green());
 }
 
 //get a correct fo:border-line-width value "innerwidth space outerwidth"

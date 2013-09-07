@@ -25,6 +25,7 @@
 #include <QWidget>
 #include <QToolButton>
 #include <QLabel>
+#include <QHBoxLayout>
 
 #include <kglobal.h>
 

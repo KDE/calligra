@@ -44,7 +44,6 @@
 
 #include "KarbonView.h"
 #include "KarbonDocument.h"
-#include "KarbonDocument.h"
 #include "KarbonFactory.h"
 #include "KarbonCanvas.h"
 

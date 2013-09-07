@@ -519,7 +519,7 @@ QString KWDocument::renameFrameSet(const QString &prefix, const QString &base)
 
     int count = 0;
     while (true) {
-        QString name = (before + (count == 0 ? "" : QString::number(count)) + after).trimmed();
+        QString name = QString(before + (count == 0 ? QString() : QString::number(count)) + after).trimmed();
         if (! frameSetByName(name))
             return name;
         count++;

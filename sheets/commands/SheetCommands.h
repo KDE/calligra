@@ -154,7 +154,7 @@ public:
     void setLayoutDirection(Qt::LayoutDirection direction);
     void setAutoCalculationEnabled(bool b);
     void setShowGrid(bool b);
-    void setShowPageBorders(bool b);
+    void setShowPageOutline(bool b);
     void setShowFormula(bool b);
     void setHideZero(bool b);
     void setShowFormulaIndicator(bool b);
@@ -172,7 +172,7 @@ protected:
     Qt::LayoutDirection oldDirection, newDirection;
     bool oldAutoCalc, newAutoCalc;
     bool oldShowGrid, newShowGrid;
-    bool oldShowPageBorders, newShowPageBorders;
+    bool oldShowPageOutline, newShowPageOutline;
     bool oldShowFormula, newShowFormula;
     bool oldHideZero, newHideZero;
     bool oldShowFormulaIndicator, newShowFormulaIndicator;

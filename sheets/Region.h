@@ -425,7 +425,7 @@ private:
  * vtable: 4 bytes
  * sum: 8 bytes
  */
-class Region::Element
+class CALLIGRA_SHEETS_ODF_EXPORT Region::Element
 {
 public:
     enum Type { Undefined, Point, Range };

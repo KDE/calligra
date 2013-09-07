@@ -27,6 +27,7 @@
 #ifndef CALLIGRA_SHEETS_SHEET_ADAPTOR
 #define CALLIGRA_SHEETS_SHEET_ADAPTOR
 
+#ifndef QT_NO_DBUS
 #include <QtDBus>
 #include "calligra_sheets_export.h"
 #include <QString>
@@ -119,7 +120,7 @@ public Q_SLOTS: // METHODS
     //virtual bool showColumnNumber() const;
     //virtual bool hideZero() const;
     //virtual bool firstLetterUpper() const;
-    //virtual void setShowPageBorders( bool b );
+    //virtual void setShowPageOutline( bool b );
 
     /** Return the height the paper of the printer has. */
     virtual float paperHeight() const;
@@ -189,5 +190,6 @@ private:
 
 } // namespace Sheets
 } // namespace Calligra
+#endif
 
 #endif // CALLIGRA_SHEETS_SHEET_ADAPTOR

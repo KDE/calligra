@@ -15,18 +15,18 @@ kde4_add_ui_files( webshape_LIB_SRCS
     WebShapeConfigWidget.ui
 )
 
-kde4_add_plugin(webshape ${webshape_LIB_SRCS})
+kde4_add_plugin(braindump_shape_web ${webshape_LIB_SRCS})
 
 target_link_libraries(
-    webshape
+    braindump_shape_web
     flake
     ${QT_QTCORE_LIBRARY}
     ${QT_QTWEBKIT_LIBRARY}
     )
-install(TARGETS webshape DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS braindump_shape_web DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES webshape.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES braindump_shape_web.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 kde4_install_icons( ${DATA_INSTALL_DIR}/calligra/icons )
 

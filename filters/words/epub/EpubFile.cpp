@@ -227,6 +227,7 @@ KoFilter::ConversionStatus EpubFile::writeOpf(KoStore *epubStore,
             writer.startElement("itemref");
             writer.addAttribute("idref", file->m_id);
             writer.endElement(); // itemref
+            break;
         }
     }
     foreach(FileInfo *file, files()) {
@@ -249,6 +250,11 @@ KoFilter::ConversionStatus EpubFile::writeOpf(KoStore *epubStore,
 
     writer.endElement(); // spine
 
+    /*
+    This part is only efficient in EPub2.X
+    In fact the <guide> element is ignores by EPub3 readers
+    For more info. see official specifications
+    */
     bool atLeastOneInfo = false;
 
     foreach (FileInfo *file, files()) {
@@ -256,6 +262,7 @@ KoFilter::ConversionStatus EpubFile::writeOpf(KoStore *epubStore,
         // For now, be simple
         if ( file->m_id == "cover") {
             atLeastOneInfo = true;
+            break;
         }
     }
 
@@ -271,6 +278,7 @@ KoFilter::ConversionStatus EpubFile::writeOpf(KoStore *epubStore,
                 writer.addAttribute("href", "cover.xhtml");
                 writer.addAttribute("type", "cover");
                 writer.endElement(); // reference
+                break;
             }
         }
 
@@ -374,6 +382,7 @@ KoFilter::ConversionStatus EpubFile::writeNcx(KoStore *epubStore,
 
             writer.endElement(); // navePoint
             playOrder ++;
+            break;
         }
     }
 

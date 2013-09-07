@@ -20,7 +20,6 @@
 #ifndef STATISTICSPREFERENCESPOPUP_H
 #define STATISTICSPREFERENCESPOPUP_H
 
-#include "ui_StatisticsPreferencesPopup.h"
 #include <QWidget>
 #include<QToolButton>
 #include<QMenu>

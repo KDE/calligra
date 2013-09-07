@@ -34,28 +34,28 @@ ProjectAccess::ProjectAccess( ReportData *rd )
 {
 }
 
-QString ProjectAccess::Name() const
+QVariant ProjectAccess::Name() const
 {
     if ( m_reportdata && m_reportdata->project() ) {
-        return m_reportdata->project()->name();
+        return m_reportdata->project()->name().toUtf8();
     }
-    return QString();
+    return QVariant();
 }
 
-QString ProjectAccess::Manager() const
+QVariant ProjectAccess::Manager() const
 {
     if ( m_reportdata && m_reportdata->project() ) {
-        return m_reportdata->project()->leader();
+        return m_reportdata->project()->leader().toUtf8();
     }
-    return QString();
+    return QVariant();
 }
 
-QString ProjectAccess::Plan() const
+QVariant ProjectAccess::Plan() const
 {
     if ( m_reportdata && m_reportdata->scheduleManager() ) {
-        return m_reportdata->scheduleManager()->name();
+        return m_reportdata->scheduleManager()->name().toUtf8();
     }
-    return QString();
+    return QVariant();
 }
 
 QVariant ProjectAccess::BCWS() const
@@ -63,9 +63,9 @@ QVariant ProjectAccess::BCWS() const
     if ( m_reportdata && m_reportdata->project() ) {
         long id = m_reportdata->scheduleManager() ? m_reportdata->scheduleManager()->scheduleId() : BASELINESCHEDULE;
         double r = m_reportdata->project()->bcws( QDate::currentDate(), id );
-        return KGlobal::locale()->formatNumber( r, 2 );
+        return KGlobal::locale()->formatNumber( r, 2 ).toUtf8();
     }
-    return QString();
+    return QVariant();
 }
 
 QVariant ProjectAccess::BCWP() const
@@ -73,10 +73,10 @@ QVariant ProjectAccess::BCWP() const
     if ( m_reportdata && m_reportdata->project() ) {
         long id = m_reportdata->scheduleManager() ? m_reportdata->scheduleManager()->scheduleId() : BASELINESCHEDULE;
         double r = m_reportdata->project()->bcwp( QDate::currentDate(), id );
-        return KGlobal::locale()->formatNumber( r, 2 );
+        return KGlobal::locale()->formatNumber( r, 2 ).toUtf8();
     }
     kWarning()<<"No report data or project"<<m_reportdata;
-    return QString();
+    return QVariant();
 }
 
 QVariant ProjectAccess::ACWP() const
@@ -84,9 +84,9 @@ QVariant ProjectAccess::ACWP() const
     if ( m_reportdata && m_reportdata->project() ) {
         long id = m_reportdata->scheduleManager() ? m_reportdata->scheduleManager()->scheduleId() : BASELINESCHEDULE;
         double r = m_reportdata->project()->acwp( QDate::currentDate(), id ).cost();
-        return KGlobal::locale()->formatNumber( r, 2 );
+        return KGlobal::locale()->formatNumber( r, 2 ).toUtf8();
     }
-    return QString();
+    return QVariant();
 }
 
 QVariant ProjectAccess::CPI() const
@@ -99,7 +99,7 @@ QVariant ProjectAccess::CPI() const
         if ( a > 0 ) {
             r = b / a;
         }
-        return KGlobal::locale()->formatNumber( r, 2 );
+        return KGlobal::locale()->formatNumber( r, 2 ).toUtf8();
     }
     return QVariant();
 }
@@ -110,7 +110,7 @@ QVariant ProjectAccess::SPI() const
     if ( m_reportdata && m_reportdata->project() ) {
         int id = m_reportdata->scheduleManager() ? m_reportdata->scheduleManager()->scheduleId() : BASELINESCHEDULE;
         double r = m_reportdata->project()->schedulePerformanceIndex( QDate::currentDate(), id );
-        return KGlobal::locale()->formatNumber( r, 2 );
+        return KGlobal::locale()->formatNumber( r, 2 ).toUtf8();
     }
     return QVariant();
 }

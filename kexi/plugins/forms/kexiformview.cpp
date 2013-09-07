@@ -966,7 +966,7 @@ KexiFormView::storeData(bool dontAsk)
 
             QString originalFileName(h.originalFileName());
             QFileInfo fi(originalFileName);
-            QString caption(fi.baseName().replace('_', " ").simplified());
+            QString caption(fi.baseName().replace('_', ' ').simplified());
 
             if (st) {
                 *st /* << NO, (pgsql doesn't support this):QVariant()*/ /*id*/

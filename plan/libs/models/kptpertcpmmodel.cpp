@@ -166,7 +166,7 @@ QVariant CriticalPathItemModel::duration( int role ) const
         case Qt::DisplayRole:
         case Qt::ToolTipRole: {
             Duration v = m_project->duration( m_manager->scheduleId() );
-            return KGlobal::locale()->formatNumber( v.toDouble( presentationUnit( v ) ), 1 ) + Duration::unitToString( presentationUnit( v ) );
+            return QVariant(KGlobal::locale()->formatNumber( v.toDouble( presentationUnit( v ) ), 1 ) + Duration::unitToString( presentationUnit( v ) ));
         }
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:

@@ -19,7 +19,6 @@ set( calligrastageprivate_LIB_SRCS
      KPrDeclarations.cpp
      KPrPart.cpp
      KPrView.cpp
-     KPrViewAdaptor.cpp
      KPrViewModePresentation.cpp
      KPrViewModeNotes.cpp
      KPrViewModeSlidesSorter.cpp
@@ -59,7 +58,6 @@ set( calligrastageprivate_LIB_SRCS
      KPrPresentationHighlightStrategy.cpp
      KPrPresentationBlackStrategy.cpp
      KPrPresentationStrategyBase.cpp
-     KPrPresentationToolAdaptor.cpp
      KPrPresentationToolEventForwarder.cpp
      KPrPresentationDrawStrategy.cpp
      KPrPageSelectStrategyBase.cpp
@@ -74,6 +72,7 @@ set( calligrastageprivate_LIB_SRCS
      KPrSlidesManagerView.cpp
      KPrCustomSlideShowsModel.cpp
      KPrSlidesSorterItemDelegate.cpp
+     KPrPageLayoutWidget.cpp
 
      commands/KPrAnimationCreateCommand.cpp
      commands/KPrAnimationRemoveCommand.cpp
@@ -90,8 +89,6 @@ set( calligrastageprivate_LIB_SRCS
      commands/KPrReplaceAnimationCommand.cpp
 
      dockers/KPrPreviewWidget.cpp
-     dockers/KPrPageLayoutDockerFactory.cpp
-     dockers/KPrPageLayoutDocker.cpp
 
      pageeffects/KPrPageEffectRunner.cpp
      pageeffects/KPrPageEffect.cpp
@@ -140,6 +137,14 @@ set( calligrastageprivate_LIB_SRCS
      tools/KPrPlaceholderToolFactory.cpp
    )
 
+if(QT_QTDBUS_FOUND)
+set( calligrastageprivate_LIB_SRCS
+     ${calligrastageprivate_LIB_SRCS}
+     KPrViewAdaptor.cpp
+     KPrPresentationToolAdaptor.cpp
+   )
+endif()
+
 kde4_add_ui_files(calligrastageprivate_LIB_SRCS
      ui/KPrConfigureSlideShow.ui
      ui/KPrConfigurePresenterView.ui
@@ -149,7 +154,7 @@ kde4_add_ui_files(calligrastageprivate_LIB_SRCS
 
 kde4_add_library(calligrastageprivate SHARED ${calligrastageprivate_LIB_SRCS})
 
-target_link_libraries(calligrastageprivate kopageapp kowidgets textlayout ${KDE4_PHONON_LIBRARY} ${QT_QTOPENGL_LIBRARY} ${QT_QTWEBKIT_LIBRARY})
+target_link_libraries(calligrastageprivate kopageapp kowidgets kotextlayout ${KDE4_PHONON_LIBRARY} ${QT_QTOPENGL_LIBRARY} ${QT_QTWEBKIT_LIBRARY})
 target_link_libraries(calligrastageprivate LINK_INTERFACE_LIBRARIES kopageapp)
 
 set_target_properties(calligrastageprivate PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )

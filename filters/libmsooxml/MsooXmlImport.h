@@ -26,7 +26,7 @@
 #ifndef MSOOXMLIMPORT_H
 #define MSOOXMLIMPORT_H
 
-#include "msooxml_export.h"
+#include "komsooxml_export.h"
 
 #include <QByteArray>
 #include <QHash>
@@ -53,7 +53,7 @@ class MsooXmlRelationships;
 class DrawingMLTheme;
 
 //! A base class for MSOOXML-to-ODF import filters
-class MSOOXML_EXPORT MsooXmlImport : public KoOdfExporter
+class KOMSOOXML_EXPORT MsooXmlImport : public KoOdfExporter
 {
     Q_OBJECT
 public:

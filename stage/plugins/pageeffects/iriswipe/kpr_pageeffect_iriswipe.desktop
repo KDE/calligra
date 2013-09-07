@@ -63,6 +63,7 @@ Comment[uk]=Ефект витирання сторінки веселкою
 Comment[wa]=Efets d' pådje schover l' iris evoye
 Comment[x-test]=xxIris Wipe Page Effectsxx
 Comment[zh_TW]=彩虹掃描頁面效果
+X-KDE-PluginInfo-Name=kpr_pageeffect_iriswipe
 X-KDE-ServiceTypes=CalligraStage/PageEffect
 Type=Service
 X-KDE-Library=kpr_pageeffect_iriswipe

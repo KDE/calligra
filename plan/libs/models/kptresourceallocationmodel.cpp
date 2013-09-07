@@ -316,7 +316,7 @@ QVariant ResourceAllocationModel::data( const ResourceGroup *group, int property
         default:
             if ( role == Qt::DisplayRole ) {
                 if ( property < propertyCount() ) {
-                    result = "";
+                    result = QString();
                 } else {
                     kDebug(planDbg())<<"data: invalid display value column"<<property;;
                     return QVariant();

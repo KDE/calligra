@@ -36,8 +36,6 @@
 #include "ValueConverter.h"
 #include "ValueFormatter.h"
 
-#include <klocale.h>
-
 using namespace Calligra::Sheets;
 
 // Functions DOLLAR and FIXED convert data to double, hence they will not

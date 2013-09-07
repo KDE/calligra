@@ -202,7 +202,7 @@ public Q_SLOTS:
     void recalcWorkSheet();
     void paperLayoutDlg();
     void resetPrintRange();
-    void togglePageBorders(bool);
+    void togglePageOutline(bool);
     void toggleProtectSheet(bool);
     void toggleProtectDoc(bool);
     void viewZoom(KoZoomMode::Mode mode, qreal zoom);

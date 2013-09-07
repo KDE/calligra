@@ -24,7 +24,7 @@
 
 static QString stripText(const QString &text)
 {
-    return QString(text).replace('&', "").replace("...", "");
+    return QString(text).remove('&').remove("...");
 }
 
 KexiMainImportExportPage::KexiMainImportExportPage(

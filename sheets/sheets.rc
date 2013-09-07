@@ -50,7 +50,7 @@
 <!-- <<<<<<<<<<<<<<<<<<<<<<<<<<<   View Menu   >>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
  <Menu name="View"><text>&amp;View</text>
   <Action name="view_newview"/>
-  <Action name="showPageBorders"/>
+  <Action name="showPageOutline"/>
 <!--   <Action name="showCommentIndicator"/> -->
   <Separator/>
   <Action name="zoom_out"/>

@@ -24,8 +24,8 @@
 #include <klocale.h>
 #include <calligraversion.h>
 
-static const char* WORDS_DESCRIPTION = I18N_NOOP("Word processor");
-static const char* WORDS_VERSION = CALLIGRA_VERSION_STRING;
+static const char WORDS_DESCRIPTION[] = I18N_NOOP("Word processor");
+static const char WORDS_VERSION[] = CALLIGRA_VERSION_STRING;
 
 KAboutData * newWordsAboutData()
 {

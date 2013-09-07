@@ -46,7 +46,7 @@ KPrBoxSnakesWipeEffectFactory::~KPrBoxSnakesWipeEffectFactory()
 {
 }
 
-static const char* s_subTypes[] = {
+static const char* const s_subTypes[] = {
     I18N_NOOP( "Two Box Top In" ),
     I18N_NOOP( "Two Box Bottom In" ),
     I18N_NOOP( "Two Box Left In" ),

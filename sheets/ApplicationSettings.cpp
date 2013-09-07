@@ -25,7 +25,7 @@ class ApplicationSettings::Private
 {
 public:
     QColor gridColor;
-    QColor pageBorderColor;
+    QColor pageOutlineColor;
     KGlobalSettings::Completion completionMode;
     Calligra::Sheets::MoveTo moveTo;
     MethodOfCalc calcMethod;
@@ -43,7 +43,7 @@ ApplicationSettings::ApplicationSettings()
         : d(new Private)
 {
     d->gridColor = Qt::lightGray;
-    d->pageBorderColor = Qt::red;
+    d->pageOutlineColor = Qt::red;
     d->completionMode = KGlobalSettings::CompletionAuto;
     d->moveTo = Bottom;
     d->calcMethod = SumOfNumber;
@@ -180,14 +180,14 @@ MethodOfCalc ApplicationSettings::getTypeOfCalc() const
     return d->calcMethod;
 }
 
-QColor ApplicationSettings::pageBorderColor() const
+QColor ApplicationSettings::pageOutlineColor() const
 {
-    return d->pageBorderColor;
+    return d->pageOutlineColor;
 }
 
-void ApplicationSettings::changePageBorderColor(const QColor& color)
+void ApplicationSettings::changePageOutlineColor(const QColor& color)
 {
-    d->pageBorderColor = color;
+    d->pageOutlineColor = color;
 }
 
 void ApplicationSettings::setCaptureAllArrowKeys(bool capture)

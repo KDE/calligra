@@ -3,13 +3,13 @@ include_directories(
     ${LIBWPG_INCLUDE_DIR}
 )
 
-if(NOT MSVC)
+if(NOT MSVC AND NOT (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
     if("${CMAKE_CXX_COMPILER_ID}" MATCHES "SunPro")
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -KPIC")
     else("${CMAKE_CXX_COMPILER_ID}" MATCHES "SunPro")
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
     endif("${CMAKE_CXX_COMPILER_ID}" MATCHES "SunPro")
-endif(NOT MSVC)
+endif(NOT MSVC AND NOT (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
 
 kde4_add_library(writerperfect STATIC
             DiskDocumentHandler.cxx

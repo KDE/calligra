@@ -18,6 +18,7 @@
  */
 
 #include "StatisticsPreferencesPopup.h"
+#include "ui_StatisticsPreferencesPopup.h"
 #include <QMenu>
 
 StatisticsPreferencesPopup::StatisticsPreferencesPopup(QWidget *parent)

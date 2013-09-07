@@ -3275,7 +3275,7 @@ void Completion::addUsedEffort( const Resource *resource, Completion::UsedEffort
     } else {
         m_usedEffort.insert( resource, v );
     }
-    changed();
+    changed(Node::CompletionUsedEffort);
 }
 
 QString Completion::note() const

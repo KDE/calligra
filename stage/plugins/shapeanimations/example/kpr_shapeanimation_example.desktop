@@ -65,6 +65,7 @@ Comment[uk]=Похитайте і потрусіть цю форму!
 Comment[wa]=Harloxhî eyet hossî cisse fôme la!
 Comment[x-test]=xxJiggle and Wiggle that Shape!xx
 Comment[zh_TW]=讓元件動起來！
+X-KDE-PluginInfo-Name=kpr_shapeanimation_example
 X-KDE-ServiceTypes=CalligraStage/ShapeAnimation
 Type=Service
 X-KDE-Library=kpr_shapeanimation_example

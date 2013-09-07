@@ -296,9 +296,9 @@ pqxx::oid PqxxMigrate::tableOid(const QString& table)
     }
 
     try {
-        statement = "SELECT relfilenode FROM pg_class WHERE (relname = '";
-        statement += table;
-        statement += "')";
+        statement = "SELECT relfilenode FROM pg_class WHERE (relname = '" +
+                    table +
+                    "')";
 
         tran = new pqxx::nontransaction(*m_conn, "find_t_oid");
         tmpres = new pqxx::result(tran->exec(statement.toLatin1().constData()));

@@ -37,6 +37,7 @@
 
 #include <KarbonFactory.h>
 
+#ifdef MAINTANER_WANTED_SPLASH
 class KoSplashScreen : public KSplashScreen
 {
 public:
@@ -48,7 +49,7 @@ public:
         deleteLater();
     }
 };
-
+#endif
 
 extern "C" KDE_EXPORT int kdemain( int argc, char* argv[] )
 {
@@ -59,6 +60,8 @@ extern "C" KDE_EXPORT int kdemain( int argc, char* argv[] )
     KCmdLineArgs::addCmdLineOptions( options );
 
     KoApplication app;
+
+#ifdef MAINTANER_WANTED_SPLASH
     // After creating the KApplication then create the pixmap from an xpm: we cannot get the
     // location of our datadir before we've started our components,
     // so use an xpm.
@@ -68,6 +71,7 @@ extern "C" KDE_EXPORT int kdemain( int argc, char* argv[] )
     "<b>Calligra Karbon is unmaintained!</b><br><br>"
     "The Calligra community welcomes someone to take over.<br><br>"
     "See community.kde.org/Calligra</p>");
+#endif
 
     if( !app.start() )  // parses command line args, create initial docs and shells
         return 1;

@@ -147,7 +147,7 @@ KoFilter::ConversionStatus QpImport::convert(const QByteArray& from, const QByte
     QpRecPageName*          lRecPageName = 0;
 
     do {
-        field = "";
+        field.clear();
         lRec  = lFactory.nextRecord();
 
         switch (lRec->type()) {

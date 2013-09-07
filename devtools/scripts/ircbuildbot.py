@@ -44,7 +44,7 @@ joined = False
 message = ""
 lastchecktime = time.time() - 55
 while 1:
-        line = s.recv(500) #recieve server messages
+        line = s.recv(500) #receive server messages
         print line.rstrip() #server message is output
         if not joined:
                 s.send('JOIN ' + CHANNELINIT + '\n') #Join a channel

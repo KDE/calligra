@@ -122,6 +122,11 @@ KoStore *OdfReaderContext::odfStore() const
     return d->odfStore;
 }
 
+KoOdfStyleManager *OdfReaderContext::styleManager() const
+{
+    return d->styleManager;
+}
+
 QHash<QString, QString> OdfReaderContext::metadata() const
 {
     return d->metadata;

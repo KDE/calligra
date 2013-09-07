@@ -29,7 +29,7 @@
 #include <KoXmlStreamReader.h>
 
 // this library
-#include "odfreader_export.h"
+#include "koodfreader_export.h"
 
 
 class QSizeF;
@@ -39,6 +39,8 @@ class KoStore;
 
 class OdtReaderBackend;
 class OdfReaderContext;
+
+class OdfTextReader;
 
 
 /** @brief Read the XML tree of the content of an ODT file.
@@ -62,11 +64,13 @@ class OdfReaderContext;
  * processing such as internal links, lists of embedded data such as
  * pictures.
  */
-class ODFREADER_EXPORT OdtReader
+class KOODFREADER_EXPORT OdtReader
 {
  public:
     OdtReader();
     ~OdtReader();
+
+    void setTextReader(OdfTextReader *textReader);
 
     bool readContent(OdtReaderBackend *backend, OdfReaderContext *context);
 
@@ -79,23 +83,6 @@ class ODFREADER_EXPORT OdtReader
     void readElementOfficeText(KoXmlStreamReader &reader);
 
     // ----------------------------------------------------------------
-    // Text level functions: paragraphs, headings, sections, frames, objects, etc
-
-    // Read all common text level elements like text:p, text:h, draw:frame, etc.
-    void readTextLevelElement(KoXmlStreamReader &reader);
-
-    void readElementTextH(KoXmlStreamReader &reader);
-    void readElementTextP(KoXmlStreamReader &reader);
-
-    // ----------------------------------------------------------------
-    // Paragraph level functions: spans, annotations, notes, text content itself, etc.
-
-    void readParagraphContents(KoXmlStreamReader &reader);
-
-    void readElementTextSpan(KoXmlStreamReader &reader);
-    void readElementTextS(KoXmlStreamReader &reader);
-
-    // ----------------------------------------------------------------
     // Other functions
 
     void readUnknownElement(KoXmlStreamReader &reader);
@@ -104,6 +91,9 @@ class ODFREADER_EXPORT OdtReader
  private:
     OdtReaderBackend  *m_backend;
     OdfReaderContext  *m_context;
+
+    // Helper readers
+    OdfTextReader     *m_textReader;
 };
 
 #endif // ODTREADER_H

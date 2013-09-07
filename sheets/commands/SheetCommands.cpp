@@ -196,7 +196,7 @@ SheetPropertiesCommand::SheetPropertiesCommand(Sheet* s)
     oldDirection = newDirection = sheet->layoutDirection();
     oldAutoCalc = newAutoCalc = sheet->isAutoCalculationEnabled();
     oldShowGrid = newShowGrid = sheet->getShowGrid();
-    oldShowPageBorders = newShowPageBorders = sheet->isShowPageBorders();
+    oldShowPageOutline = newShowPageOutline = sheet->isShowPageOutline();
     oldShowFormula = newShowFormula = sheet->getShowFormula();
     oldHideZero = newHideZero = sheet->getHideZero();
     oldShowFormulaIndicator = newShowFormulaIndicator = sheet->getShowFormulaIndicator();
@@ -222,9 +222,9 @@ void SheetPropertiesCommand::setShowGrid(bool b)
     newShowGrid = b;
 }
 
-void SheetPropertiesCommand::setShowPageBorders(bool b)
+void SheetPropertiesCommand::setShowPageOutline(bool b)
 {
-    newShowPageBorders = b;
+    newShowPageOutline = b;
 }
 
 void SheetPropertiesCommand::setShowFormula(bool b)
@@ -267,7 +267,7 @@ void SheetPropertiesCommand::redo()
     sheet->setLayoutDirection(newDirection);
     sheet->setAutoCalculationEnabled(newAutoCalc);
     sheet->setShowGrid(newShowGrid);
-    sheet->setShowPageBorders(newShowPageBorders);
+    sheet->setShowPageOutline(newShowPageOutline);
     sheet->setShowFormula(newShowFormula);
     sheet->setHideZero(newHideZero);
     sheet->setShowFormulaIndicator(newShowFormulaIndicator);
@@ -283,7 +283,7 @@ void SheetPropertiesCommand::undo()
     sheet->setLayoutDirection(oldDirection);
     sheet->setAutoCalculationEnabled(oldAutoCalc);
     sheet->setShowGrid(oldShowGrid);
-    sheet->setShowPageBorders(oldShowPageBorders);
+    sheet->setShowPageOutline(oldShowPageOutline);
     sheet->setShowFormula(oldShowFormula);
     sheet->setHideZero(oldHideZero);
     sheet->setShowFormulaIndicator(oldShowFormulaIndicator);

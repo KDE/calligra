@@ -134,7 +134,7 @@ bool& Kexi::tempShowScripts()
 QString Kexi::nameForViewMode(ViewMode mode, bool withAmpersand)
 {
     if (!withAmpersand)
-        return Kexi::nameForViewMode(mode, true).replace("&", "");
+        return Kexi::nameForViewMode(mode, true).remove('&');
 
     if (mode == NoViewMode)
         return i18n("&No View");
@@ -318,7 +318,7 @@ void KEXI_UNFINISHED_INTERNAL(const QString& feature_name, const QString& extra_
         QString feature_name_(feature_name);
         *line1 = i18n(
                   "\"%1\" function is not available for version %2 of %3 application.",
-                  feature_name_.replace("&", ""), QString(KEXI_VERSION_STRING), QString(KEXI_APP_NAME));
+                  feature_name_.remove('&'), QString(KEXI_VERSION_STRING), QString(KEXI_APP_NAME));
     }
 
     *line2 = extra_text;

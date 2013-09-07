@@ -99,7 +99,7 @@ KPrStarWipeEffectFactory::~KPrStarWipeEffectFactory()
 {
 }
 
-static const char* s_subTypes[] = {
+static const char* const s_subTypes[] = {
     I18N_NOOP( "Four Point Star" ),
     I18N_NOOP( "Four Point Star Reverse" ),
     I18N_NOOP( "Five Point Star" ),

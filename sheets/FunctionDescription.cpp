@@ -173,8 +173,7 @@ QString FunctionDescription::toQML() const
         text += "<p>";
         QStringList::ConstIterator it = m_help.begin();
         for (; it != m_help.end(); ++it) {
-            text += *it;
-            text += "<p>";
+            text += *it + "<p>";
         }
         text += "</p>";
     }
@@ -185,8 +184,7 @@ QString FunctionDescription::toQML() const
         text += "<h2>" + i18n("Syntax") + "</h2><ul>";
         QStringList::ConstIterator it = m_syntax.begin();
         for (; it != m_syntax.end(); ++it) {
-            text += "<li>";
-            text += *it;
+            text += "<li>" + *it + "</li>";
         }
         text += "</ul>";
     }
@@ -195,8 +193,8 @@ QString FunctionDescription::toQML() const
         text += "<h2>" + i18n("Parameters") + "</h2><ul>";
         QList<FunctionParameter>::ConstIterator it = m_params.begin();
         for (; it != m_params.end(); ++it) {
-            text += i18n("<li><b>Comment:</b> %1", (*it).helpText());
-            text += i18n("<br><b>Type:</b> %1", toString((*it).type(), (*it).hasRange()));
+            text += i18n("<li><b>Comment:</b> %1", (*it).helpText()) +
+                    i18n("<br><b>Type:</b> %1", toString((*it).type(), (*it).hasRange()));
         }
         text += "</ul>";
     }
@@ -205,8 +203,7 @@ QString FunctionDescription::toQML() const
         text += "<h2>" + i18n("Examples") + "</h2><ul>";
         QStringList::ConstIterator it = m_examples.begin();
         for (; it != m_examples.end(); ++it) {
-            text += "<li>";
-            text += *it;
+            text += "<li>" + *it + "</li>";
         }
         text += "</ul>";
     }
@@ -215,10 +212,11 @@ QString FunctionDescription::toQML() const
         text += "<h2>" + i18n("Related Functions") + "</h2><ul>";
         QStringList::ConstIterator it = m_related.begin();
         for (; it != m_related.end(); ++it) {
-            text += "<li>";
-            text += "<a href=\"" + *it + "\">";
-            text += *it;
-            text += "</a>";
+            text += "<li>"
+                    "<a href=\"" + *it + "\">" +
+                    *it +
+                    "</a>"
+                    "</li>";
         }
         text += "</ul>";
     }

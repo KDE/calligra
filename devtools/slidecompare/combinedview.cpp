@@ -121,7 +121,7 @@ CombinedView::openFile(const QString& path) {
         }
         koodploader->open(nextodpfile);
     } else {
-        nextodpfile = "";
+        nextodpfile.clear();
         koodploader->open(path);
     }
     quint32 nslides = koodploader->numberOfSlides();
@@ -163,7 +163,7 @@ CombinedView::slotHandleOoPng(const QString& /*path*/) {
         QString dir = oothread->toPng(nextodpfile,
             koodploader->slideSize().width());
         oopptloader->setSlideDir(dir);
-        nextodpfile = "";
+        nextodpfile.clear();
     }
 }
 void CombinedView::dragEnterEvent(QDragEnterEvent *event)

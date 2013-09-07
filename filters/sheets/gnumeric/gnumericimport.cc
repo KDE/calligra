@@ -188,8 +188,8 @@ void  convert_string_to_qcolor(QString color_string, QColor * color)
 
     bool number_ok;
 
-    first_col_pos  = color_string.indexOf(":", 0);
-    second_col_pos = color_string.indexOf(":", first_col_pos + 1);
+    first_col_pos  = color_string.indexOf(':', 0);
+    second_col_pos = color_string.indexOf(':', first_col_pos + 1);
 
     /* Fore="0:0:FF00" */
     /* If GNUmeric kicks out some invalid colors, we could crash. */
@@ -780,9 +780,9 @@ QString GNUMERICFilter::convertVars(QString const & str, Sheet * table) const
         if (n != -1) {
             kDebug(30521) << "Found var:" << list1[i];
             if (i == 0)
-                result = result.replace(list1[i], table->sheetName());
+                result.replace(list1[i], table->sheetName());
             else
-                result = result.replace(list1[i], list2[i]);
+                result.replace(list1[i], list2[i]);
         }
     }
 
@@ -879,7 +879,7 @@ void GNUMERICFilter::ParsePrintInfo(QDomNode const & printInfo, Sheet * table)
         QString repeate = repeateRow.attribute("value");
         if (!repeate.isEmpty()) {
             //fix row too high
-            repeate = repeate.replace("65536", "32500");
+            repeate.replace("65536", "32500");
             const Calligra::Sheets::Region region(repeate);
             //kDebug()<<" repeate :"<<repeate<<"range. ::start row :"<<range.startRow ()<<" start col :"<<range.startCol ()<<" end row :"<<range.endRow ()<<" end col :"<<range.endCol ();
             table->printSettings()->setRepeatedColumns(qMakePair(region.firstRange().left(), region.firstRange().right()));
@@ -1020,7 +1020,7 @@ void GNUMERICFilter::convertFormula(QString & formula) const
 
     // TODO: check if we do not screw something up here...
     if (n != -1)
-        formula = formula.replace(n, 1, "==");
+        formula.replace(n, 1, "==");
 
     bool inQuote1 = false;
     bool inQuote2 = false;
@@ -1031,7 +1031,7 @@ void GNUMERICFilter::convertFormula(QString & formula) const
         else if (formula[i] == '"')
             inQuote2 = !inQuote2;
         else if (formula[i] == ',' && !inQuote1 && !inQuote2)
-            formula = formula.replace(i, 1, ";");
+            formula.replace(i, 1, ';');
     }
 }
 

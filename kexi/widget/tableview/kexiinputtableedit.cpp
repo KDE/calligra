@@ -217,7 +217,7 @@ QVariant KexiInputTableEdit::value()
         //! js @todo PRESERVE PRECISION!
         QString txt = m_lineedit->text();
         if (m_decsym != ".")
-            txt = txt.replace(m_decsym, ".");//convert back
+            txt.replace(m_decsym, ".");//convert back
         bool ok;
         const double result = txt.toDouble(&ok);
         return ok ? QVariant(result) : QVariant();

@@ -1301,7 +1301,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert(const QByteArray& from, const
                     if (cell.isFormula()) {
                         QString tmp = cell.userInput();
                         if (tmp.contains("=="))
-                            tmp = tmp.replace("==", "=");
+                            tmp.replace("==", "=");
                         text = tmp;
                         isLink = false;
                     } else if (!cell.link().isEmpty()) {
@@ -1511,12 +1511,12 @@ QString GNUMERICExport::convertRefToBase(const QString & table, const QRect & re
 
 QString GNUMERICExport::convertVariable(QString headerFooter)
 {
-    headerFooter = headerFooter.replace("<sheet>", "&[TAB]");
-    headerFooter = headerFooter.replace("<date>", "&[DATE]");
-    headerFooter = headerFooter.replace("<page>", "&[PAGE]");
-    headerFooter = headerFooter.replace("<pages>", "&[PAGES]");
-    headerFooter = headerFooter.replace("<time>", "&[TIME]");
-    headerFooter = headerFooter.replace("<file>", "&[FILE]");
+    headerFooter.replace("<sheet>", "&[TAB]");
+    headerFooter.replace("<date>", "&[DATE]");
+    headerFooter.replace("<page>", "&[PAGE]");
+    headerFooter.replace("<pages>", "&[PAGES]");
+    headerFooter.replace("<time>", "&[TIME]");
+    headerFooter.replace("<file>", "&[FILE]");
 
     return headerFooter;
 }

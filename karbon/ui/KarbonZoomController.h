@@ -105,7 +105,7 @@ private slots:
     void requestZoomRelative(const qreal factor, const QPointF &stillPoint);
 
     /// so we know when the page size changed
-    void resourceChanged(int key, const QVariant & value);
+    void canvasResourceChanged(int key, const QVariant & value);
 
     /// zoom in relative to current zoom
     void zoomInRelative();

@@ -177,7 +177,7 @@ OdtMobiHtmlConverter::convertContent(KoStore *odfStore,
     // Write the beginning of the output.
     beginHtmlFile(metaData);
 
-    QString currentChapterTitle = "";
+    QString currentChapterTitle;
 
     m_currentChapter = 1;       // Number of current output chapter.
     forEachElement (nodeElement, currentNode) {
@@ -660,11 +660,11 @@ void OdtMobiHtmlConverter::handleTagA(KoXmlElement &nodeElement, KoXmlWriter *ht
     htmlWriter->startElement("a", m_doIndent);
     QString reference = nodeElement.attribute("href");
     //    QString chapter = m_linksInfo.value(reference);
-    QString mark = m_linksInfo.value(reference); // refrence without # at its begining.
+    QString mark = m_linksInfo.value(reference); // refrence without # at its beginning.
     if (!mark.isEmpty() /*&& !m_options->stylesInCssFile*/) {
 //        // This is internal link.
-//        reference = reference.remove("|");
-//        reference = reference.remove(" ");// remove spaces
+//        reference.remove('|');
+//        reference.remove(' ');// remove spaces
 //        reference = chapter+reference;
 //        htmlWriter->addAttribute("href", reference);
         m_refrencesList.insert(htmlWriter->device()->pos(), mark);
@@ -721,8 +721,8 @@ void OdtMobiHtmlConverter::handleTagBookMark(KoXmlElement &nodeElement, KoXmlWri
     QString anchor = nodeElement.attribute("name");
     // This is haed codevalidator gets error for characters "|" and spaces
     // FIXME : we should handle ids better after move file to class
-//    anchor = anchor.remove("|");
-//    anchor = anchor.remove(" ");//remove spaces
+//    anchor.remove('|');
+//    anchor.remove(' ');//remove spaces
 //    htmlWriter->startElement("a", m_doIndent);
 //    htmlWriter->addAttribute("id", anchor);
     m_bookMarksList.insert(anchor, htmlWriter->device()->pos());
@@ -1297,12 +1297,12 @@ KoFilter::ConversionStatus OdtMobiHtmlConverter::createCSS(QHash<QString, StyleI
             continue;
 
         // The style name
-        head = QString("." + styleName).toUtf8();
+        head = QString('.' + styleName).toUtf8();
         cssContent.append(head);
         cssContent.append(begin);
 
         foreach (const QString &propName, styleInfo->attributes.keys()) {
-            attributeList += (propName + ':' + styleInfo->attributes.value(propName)).toUtf8() + ";\n";
+            attributeList += QString(propName + ':' + styleInfo->attributes.value(propName)).toUtf8() + ";\n";
         }
 
         cssContent.append(attributeList);

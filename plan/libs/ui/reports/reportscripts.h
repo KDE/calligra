@@ -37,9 +37,9 @@ public:
     explicit ProjectAccess(ReportData *rd);
 
 public slots:
-    QString Name() const;
-    QString Manager() const;
-    QString Plan() const;
+    QVariant Name() const;
+    QVariant Manager() const;
+    QVariant Plan() const;
     QVariant BCWS() const;
     QVariant BCWP() const;
     QVariant ACWP() const;

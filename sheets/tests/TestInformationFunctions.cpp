@@ -203,7 +203,7 @@ void TestInformationFunctions::initTestCase()
      storage->setFormula(2,1, formula2);
      storage->setFormula(2,2, Formula::empty());
 
-    // Add the theird sheet
+    // Add the third sheet
     m_map->addNewSheet();
     sheet = m_map->sheet(2);
     sheet->setSheetName("Sheet3");

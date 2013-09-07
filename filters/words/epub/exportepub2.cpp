@@ -499,7 +499,7 @@ void ExportEpub2::writeCoverImage(EpubFile *epubFile, const QString coverPath)
     writer->addTextNode("\n");
     writer->addTextNode("   @page { padding:Opt; margin:Opt } \n");
     writer->addTextNode("   body { text-align:center; padding:Opt; margin:Opt } \n");
-    writer->addTextNode("   img { padding:Opt; margin:Opt; max-width: 100% } \n");
+    writer->addTextNode("   img { padding:Opt; margin:Opt; max-height: 100% ; max-width: 100% } \n");
 
     writer->endElement(); //style
 

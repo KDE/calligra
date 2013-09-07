@@ -52,7 +52,9 @@
 #include <QResizeEvent>
 #include <QTimer>
 #include <QToolButton>
+#ifndef QT_NO_SQL
 #include <QSqlDatabase>
+#endif
 #include <QSizePolicy>
 #include <QScrollBar>
 
@@ -75,7 +77,7 @@
 #include <kparts/event.h>
 #include <kpushbutton.h>
 #include <kxmlguifactory.h>
-#include <knotifyconfigwidget.h>
+#include <kservicetypetrader.h>
 
 // Calligra includes
 #include <KoGlobal.h>
@@ -160,6 +162,7 @@
 // D-Bus
 #ifndef QT_NO_DBUS
 #include "interfaces/ViewAdaptor.h"
+#include <knotifyconfigwidget.h>
 #include <QtDBus>
 #endif
 
@@ -234,7 +237,7 @@ public:
     // page layout
     QAction * paperLayout;
     QAction * resetPrintRange;
-    KToggleAction* showPageBorders;
+    KToggleAction* showPageOutline;
 
     // recalculation
     KAction * recalcWorksheet;
@@ -328,10 +331,10 @@ void View::Private::initActions()
     connect(actions->resetPrintRange, SIGNAL(triggered(bool)), view, SLOT(resetPrintRange()));
     actions->resetPrintRange->setToolTip(i18n("Reset the print range in the current sheet"));
 
-    actions->showPageBorders = new KToggleAction(i18n("Page Borders"), view);
-    actions->showPageBorders->setToolTip(i18n("Show on the spreadsheet where the page borders will be"));
-    ac->addAction("showPageBorders", actions->showPageBorders);
-    connect(actions->showPageBorders, SIGNAL(toggled(bool)), view, SLOT(togglePageBorders(bool)));
+    actions->showPageOutline = new KToggleAction(i18n("Page Outline"), view);
+    actions->showPageOutline->setToolTip(i18n("Show on the spreadsheet where the page boundary will be"));
+    ac->addAction("showPageOutline", actions->showPageOutline);
+    connect(actions->showPageOutline, SIGNAL(toggled(bool)), view, SLOT(togglePageOutline(bool)));
 
     actions->recalcWorksheet  = new KAction(i18n("Recalculate Sheet"), view);
     actions->recalcWorksheet->setIcon(koIcon("view-refresh"));
@@ -574,6 +577,28 @@ View::View(KoPart *part, QWidget *_parent, Doc *_doc)
     initView();
 
     d->initActions();
+
+    KService::List offers = KServiceTypeTrader::self()->query(QString::fromLatin1("Sheets/ViewPlugin"),
+                                                              QString::fromLatin1("(Type == 'Service') and "
+                                                                                  "([X-Sheets-Version] == 28)"));
+
+    KService::List::ConstIterator iter;
+    for(iter = offers.constBegin(); iter != offers.constEnd(); ++iter) {
+
+        KService::Ptr service = *iter;
+
+        QString error;
+        KXMLGUIClient* plugin =
+                dynamic_cast<KXMLGUIClient*>(service->createInstance<QObject>(this, QVariantList(), &error));
+        if(plugin) {
+            insertChildClient(plugin);
+        } else {
+            if(!error.isEmpty()) {
+                kWarning() << " Error loading plugin was : ErrNoLibrary" << error;
+            }
+        }
+    }
+
 
     // Connect updateView() signal to View::update() in order to repaint its
     // child widgets: the column/row headers and the select all button.
@@ -968,7 +993,7 @@ void View::initConfig()
 
     const KConfigGroup colorGroup = config->group("KSpread Color");
     doc()->map()->settings()->setGridColor(colorGroup.readEntry("GridColor", QColor(Qt::lightGray)));
-    doc()->map()->settings()->changePageBorderColor(colorGroup.readEntry("PageBorderColor", QColor(Qt::red)));
+    doc()->map()->settings()->changePageOutlineColor(colorGroup.readEntry("PageOutlineColor", QColor(Qt::red)));
     doc()->map()->settings()->setCaptureAllArrowKeys(config->group("Editor").readEntry("CaptureAllArrowKeys", true));
 
     initCalcMenu();
@@ -1153,7 +1178,7 @@ void View::updateReadWrite(bool readwrite)
         d->actions->showSheet->setEnabled(true);
         d->actions->hideSheet->setEnabled(true);
     }
-    d->actions->showPageBorders->setEnabled(true);
+    d->actions->showPageOutline->setEnabled(true);
     d->tabBar->setReadOnly(doc()->map()->isProtected());
 }
 
@@ -1256,9 +1281,9 @@ void View::setActiveSheet(Sheet* sheet, bool updateSheet)
     d->selection->setOriginSheet(d->activeSheet);
     d->selection->initialize(QRect(newMarker, newAnchor));
 
-    d->actions->showPageBorders->blockSignals(true);
-    d->actions->showPageBorders->setChecked(d->activeSheet->isShowPageBorders());
-    d->actions->showPageBorders->blockSignals(false);
+    d->actions->showPageOutline->blockSignals(true);
+    d->actions->showPageOutline->setChecked(d->activeSheet->isShowPageOutline());
+    d->actions->showPageOutline->blockSignals(false);
 
     d->actions->protectSheet->blockSignals(true);
     d->actions->protectSheet->setChecked(d->activeSheet->isProtected());
@@ -1320,7 +1345,7 @@ void View::sheetProperties()
     dlg->setLayoutDirection(d->activeSheet->layoutDirection());
     dlg->setAutoCalculationEnabled(d->activeSheet->isAutoCalculationEnabled());
     dlg->setShowGrid(d->activeSheet->getShowGrid());
-    dlg->setShowPageBorders(d->activeSheet->isShowPageBorders());
+    dlg->setShowPageOutline(d->activeSheet->isShowPageOutline());
     dlg->setShowFormula(d->activeSheet->getShowFormula());
     dlg->setHideZero(d->activeSheet->getHideZero());
     dlg->setShowFormulaIndicator(d->activeSheet->getShowFormulaIndicator());
@@ -1341,7 +1366,7 @@ void View::sheetProperties()
         command->setLayoutDirection(dlg->layoutDirection());
         command->setAutoCalculationEnabled(dlg->autoCalc());
         command->setShowGrid(dlg->showGrid());
-        command->setShowPageBorders(dlg->showPageBorders());
+        command->setShowPageOutline(dlg->showPageOutline());
         command->setShowFormula(dlg->showFormula());
         command->setHideZero(dlg->hideZero());
         command->setShowFormulaIndicator(dlg->showFormulaIndicator());
@@ -1520,12 +1545,12 @@ void View::toggleProtectSheet(bool mode)
     emit sheetProtectionToggled(mode);
 }
 
-void View::togglePageBorders(bool mode)
+void View::togglePageOutline(bool mode)
 {
     if (!d->activeSheet)
         return;
 
-    d->activeSheet->setShowPageBorders(mode);
+    d->activeSheet->setShowPageOutline(mode);
 }
 
 void View::viewZoom(KoZoomMode::Mode mode, qreal zoom)
@@ -1584,8 +1609,10 @@ void View::showTabBar(bool enable)
 }
 
 void View::optionsNotifications()
-{
+{  
+#ifndef QT_NO_DBUS
     KNotifyConfigWidget::configure(this);
+#endif
 }
 
 void View::preference()
@@ -1982,7 +2009,7 @@ void View::popupTabBarMenu(const QPoint & _point)
 void View::updateBorderButton()
 {
     if (d->activeSheet)
-        d->actions->showPageBorders->setChecked(d->activeSheet->isShowPageBorders());
+        d->actions->showPageOutline->setChecked(d->activeSheet->isShowPageOutline());
 }
 
 void View::addSheet(Sheet *sheet)
