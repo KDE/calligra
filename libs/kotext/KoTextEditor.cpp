@@ -91,7 +91,7 @@
 
 #include <KoDocumentRdfBase.h>
 
-#include "../libs/kostep/StepAddTextStep.h"
+#include "../libs/kostep/StepSteps.h"
 #include "../libs/kostep/StepStepLocation.h"
 
 Q_DECLARE_METATYPE(QTextFrame*)
@@ -117,6 +117,11 @@ void KoTextEditor::Private::emitTextFormatChanged()
 
 void KoTextEditor::Private::newLine(KUndo2Command *parent)
 {
+    StepStepLocation location(caret);
+    StepAddTextBlockStep step;
+    step.setLocation(location);
+    changeStack.push(step);
+
     // Handle if this is the special block before a table
     bool hiddenTableHandling = caret.blockFormat().hasProperty(KoParagraphStyle::HiddenByTable);
     if (hiddenTableHandling) {
