@@ -46,7 +46,7 @@ class KoGenStyles;
 class KoParagraphStyle;
 #include "KoXmlReaderForward.h"
 class KoOdfLoadingContext;
-class KoShapeSavingContext;
+class KoOdfSavingContext;
 class KoTableCellStylePrivate;
 
 /**
@@ -270,7 +270,7 @@ public:
      */
     void loadOdf(const KoXmlElement *element, KoOdfLoadingContext &oContext);
 
-    void saveOdf(KoGenStyle &style, KoShapeSavingContext &context);
+    void saveOdf(KoGenStyle &style, KoOdfSavingContext &context);
 
     /**
      * Returns true if this paragraph style has the property set.

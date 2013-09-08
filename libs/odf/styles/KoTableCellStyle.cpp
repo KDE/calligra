@@ -777,7 +777,7 @@ void KoTableCellStyle::removeDuplicates(const KoTableCellStyle &other)
     d->stylesPrivate.removeDuplicates(otherD->stylesPrivate);
 }
 
-void KoTableCellStyle::saveOdf(KoGenStyle &style, KoShapeSavingContext &context)
+void KoTableCellStyle::saveOdf(KoGenStyle &style, KoOdfSavingContext &context)
 {
     Q_D(KoTableCellStyle);
     QList<int> keys = d->stylesPrivate.keys();
@@ -866,7 +866,6 @@ void KoTableCellStyle::saveOdf(KoGenStyle &style, KoShapeSavingContext &context)
     if (d->paragraphStyle) {
         d->paragraphStyle->saveOdf(style, context);
     }
-
 }
 
 void KoTableCellStyle::setEdge(KoBorder::BorderSide side, KoBorder::BorderStyle style,
