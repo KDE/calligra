@@ -25,9 +25,10 @@ class StepDeleteTextStepPrivate
 public:
   StepDeleteTextStepPrivate (StepDeleteTextStep * q);
   virtual ~ StepDeleteTextStepPrivate ();
-
+  int length;
 private:
   class StepDeleteTextStep * const q;
+
 };
 
 #endif // STEPDELETETEXTSTEPPRIVATE_H

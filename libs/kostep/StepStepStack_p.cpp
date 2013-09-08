@@ -111,6 +111,13 @@ void StepStepStackPrivate::serialize (StepStepBase & step, QString Filename)
 
 void StepStepStackPrivate::deserialize(QString Filename)
 {
+    QFile file(Filename);
+    file.open(QIODevice::ReadOnly|QIODevice::Text|QIODevice::Unbuffered);
+    QString fileContents = file.readAll();
+    file.close();
+
+    fileContents = fileContents.trimmed();
+    QStringList fileContentsList = fileContents.split(' ');
 
 }
 void StepStepStackPrivate::insertAt(int i, StepStepBase step)

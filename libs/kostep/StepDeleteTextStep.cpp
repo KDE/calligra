@@ -20,6 +20,8 @@
 #include "StepDeleteTextStep.h"
 #include "StepDeleteTextStep_p.h"
 #include "StepStepLocation.h"
+#include "QStringList"
+#include "QDebug"
 
 StepDeleteTextStepPrivate::StepDeleteTextStepPrivate (StepDeleteTextStep *q):q (q)
 {
@@ -32,14 +34,15 @@ StepDeleteTextStepPrivate::~StepDeleteTextStepPrivate ()
 StepDeleteTextStep::StepDeleteTextStep (QObject *parent):StepStepBase ("Delete Text",parent),
   d(new StepDeleteTextStepPrivate(this))
 {
+    d->length = 0;
 
 }
 
 
-StepDeleteTextStep::StepDeleteTextStep (QString Text, QObject *parent):d (new
+StepDeleteTextStep::StepDeleteTextStep (int length, QObject *parent):d (new
    StepDeleteTextStepPrivate (this)), StepStepBase("Delete Text",parent)
 {
-    setStepText(Text);
+    d->length = length;
 
 }
 
@@ -58,8 +61,21 @@ StepDeleteTextStep::~StepDeleteTextStep ()
 
 QString StepDeleteTextStep::toXML ()
 {
-    QString end = location().toString().remove(1,location().toString().length()-1);
-    int length = stepText().length();
-    end += length;
-    return "<del "+location().toString() + " " + end + " />" ;
+    QStringList locationList = location().toString().split('/');
+    qDebug() << " End of Stringlist: "<< locationList.last();
+    QString temp = locationList.last().remove("\"");
+    int end = temp.toInt();
+    qDebug() << "End: "<< end;
+    locationList.removeLast();
+    locationList.append(QString::number(end + d->length));
+    QString locationEnd = "";
+    foreach (QString positionPart, locationList)
+    {
+        qDebug()<< positionPart;
+        locationEnd += positionPart;
+        locationEnd += "/";
+    }
+    locationEnd.remove(locationEnd.length()-1,1);
+
+    return "<del "+location().toString() + " " + locationEnd+ " />" ;
 }

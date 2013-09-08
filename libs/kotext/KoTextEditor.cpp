@@ -117,6 +117,7 @@ void KoTextEditor::Private::emitTextFormatChanged()
 
 void KoTextEditor::Private::newLine(KUndo2Command *parent)
 {
+    //changetracking code
     StepStepLocation location(caret);
     StepAddTextBlockStep step;
     step.setLocation(location);
@@ -845,6 +846,12 @@ void KoTextEditor::deleteChar()
         if (d->caret.atEnd())
             return;
 
+        //changetracking code
+        StepDeleteTextStep step;
+        StepStepLocation Location(d->caret);
+        step.setLocation(Location);
+        d->changeStack.push(step);
+
         // We also need to refuse delete if it will delete a note frame
         QTextCursor after(d->caret);
         after.movePosition(QTextCursor::NextCharacter);
@@ -881,6 +888,13 @@ void KoTextEditor::deletePreviousChar()
         // We also need to refuse delete if it will delete a note frame
         QTextCursor after(d->caret);
         after.movePosition(QTextCursor::PreviousCharacter);
+
+        //changetracking code we use after here because the previous character is the
+        //one being deleted
+        StepDeleteTextStep step;
+        StepStepLocation location(after);
+        step.setLocation(location);
+        d->changeStack.push(step);
 
         QTextFrame *beforeFrame = d->caret.currentFrame();
         while (qobject_cast<QTextTable *>(beforeFrame)) {
@@ -1601,6 +1615,12 @@ void KoTextEditor::newLine()
     } else {
         d->updateState(KoTextEditor::Private::NoOp);
     }
+    //changetracking code
+    //NOTE: See whether this is needed here or in KoTextEditor::Private:newline()
+    StepAddTextBlockStep step;
+    StepStepLocation location(d->caret);
+    step.setLocation(location);
+    d->changeStack.push(step);
 
     emit cursorPositionChanged();
 }
