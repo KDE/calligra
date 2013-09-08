@@ -112,8 +112,16 @@ void KoTextDocument::setStyleManager(KoStyleManager *sm)
     QVariant v;
     v.setValue(sm);
     m_document->addResource(KoTextDocument::StyleManager, StyleManagerURL, v);
-    if (sm)
-        sm->add(m_document);
+    if (sm) {
+        connect(sm, SIGNAL(), this, SLOT());
+        foreach(ChangeFollower *cf, d->documentUpdaterProxies) {
+            if (cf->document() == document) {
+                return; // already present.
+            }
+        }
+        ChangeFollower *cf = new ChangeFollower(document, this);
+        d->documentUpdaterProxies.append(cf);
+    }
 }
 
 void KoTextDocument::setInlineTextObjectManager(KoInlineTextObjectManager *manager)

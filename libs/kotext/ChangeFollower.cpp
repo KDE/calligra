@@ -23,6 +23,9 @@
 #include "KoParagraphStyle.h"
 #include "KoTextDocument.h"
 #include "KoList.h"
+#include "commands/ChangeStylesMacroCommand.h"
+
+#include <kundo2stack.h>
 
 #include <QVector>
 #include <QTextDocument>
@@ -42,6 +45,20 @@ ChangeFollower::~ChangeFollower()
     KoStyleManager *sm = m_styleManager.data();
     if (sm)
         sm->remove(this);
+}
+
+void ChangeFollower::beginEdit()
+{
+    d->changeCommand = new ChangeStylesMacroCommand(d->documentUpdaterProxies, this);
+}
+
+void ChangeFollower::endEdit()
+{
+    Q_ASSERT (d->changeCommand);
+    if (d->undoStack) {
+        d->undoStack->push(d->changeCommand);
+    }
+    d->changeCommand = 0;
 }
 
 void ChangeFollower::collectNeededInfo(const QSet<int> &changedStyles)

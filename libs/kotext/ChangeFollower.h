@@ -58,6 +58,28 @@ public:
     ~ChangeFollower();
 
     /**
+     * Mark the beginning of a sequence of style changes, additions, and deletions
+     *
+     * Important: This method must be called even if only working on a single style.
+     *
+     * See also \ref endEdit
+     */
+    void beginEdit();
+
+    /**
+     * Mark the end of a sequence of style changes, additions, and deletions.
+     *
+     * Manipulation to the styles happen immidiately, but calling this method
+     * will put a command on the stack for undo, plus it changes all the "listening"
+     * qtextdocuments to reflect the style changes.
+     *
+     * Important: This method must be called even if only working on a single style.
+     *
+     * See also \ref beginEdit
+     */
+    void endEdit();
+
+    /**
      * Will collect the needed info from the document finding the autostyles that we
      * need to preserve during theprocessUpdates
      *

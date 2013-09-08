@@ -32,7 +32,6 @@
 #include <QMetaType>
 #include <QVector>
 
-class QTextDocument;
 class KoCharacterStyle;
 class KoParagraphStyle;
 class KoListStyle;
@@ -42,11 +41,8 @@ class KoTableRowStyle;
 class KoTableCellStyle;
 class KoSectionStyle;
 class KoXmlWriter;
-class ChangeFollower;
-class KoShapeSavingContext;
+class KoOdfSavingContext;
 class KoTextShapeData;
-class KUndo2Stack;
-class ChangeStylesMacroCommand;
 class KoTextTableTemplate;
 
 /**
@@ -68,54 +64,22 @@ public:
      */
     virtual ~KoStyleManager();
 
-    /**
-     * This explicitly set the undo stack used for storing undo commands
-     *
-     * Please note that adding documents \ref add(QTextDocument *document)
-     * extracts the undo stack from those documents,
-     * which can override what you set here. This method is mostly for cases
-     * where you use the style manager, but don't have qtextdocuments.
-     */
-    void setUndoStack(KUndo2Stack *undoStack);
-
-    /**
-     * Mark the beginning of a sequence of style changes, additions, and deletions
-     *
-     * Important: This method must be called even if only working on a single style.
-     *
-     * See also \ref endEdit
-     */
-    void beginEdit();
-
-    /**
-     * Mark the end of a sequence of style changes, additions, and deletions.
-     *
-     * Manipulation to the styles happen immidiately, but calling this method
-     * will put a command on the stack for undo, plus it changes all the "listening"
-     * qtextdocuments to reflect the style changes.
-     *
-     * Important: This method must be called even if only working on a single style.
-     *
-     * See also \ref beginEdit
-     */
-    void endEdit();
-
     // load is not needed as it is done in KoTextSharedLoadingData
 
     /**
      * Save document styles
      */
-    void saveOdf(KoShapeSavingContext &context);
+    void saveOdf(KoOdfSavingContext &context);
 
     /**
      * Save document styles that are being referred to but not yet saved
      */
-    void saveReferredStylesToOdf(KoShapeSavingContext &context);
+    void saveReferredStylesToOdf(KoOdfSavingContext &context);
 
     /**
      * Save the default-style styles
      */
-    void saveOdfDefaultStyles(KoShapeSavingContext &context);
+    void saveOdfDefaultStyles(KoOdfSavingContext &context);
 
     /**
      * Add a new style, automatically giving it a new styleId.
@@ -195,17 +159,6 @@ public:
      * Remove a section style.
      */
     void remove(KoSectionStyle *style);
-
-    /**
-     * Add a document for which the styles will be applied.
-     * Whenever a style is changed (signified by a alteredStyle() call) all
-     * registered documents will be updated to reflect that change.
-     */
-    void add(QTextDocument *document);
-    /**
-     * Remove a previously registered document.
-     */
-    void remove(QTextDocument *document);
 
     /**
      * Return a characterStyle by its id.
@@ -538,9 +491,7 @@ public slots:
     void slotAppliedStyle(const KoParagraphStyle*);
 
 private:
-    friend class ChangeFollower;
     friend class ChangeStylesMacroCommand;
-    void remove(ChangeFollower *cf);
 
     friend class KoTextSharedLoadingData;
     void addAutomaticListStyle(KoListStyle *listStyle);
