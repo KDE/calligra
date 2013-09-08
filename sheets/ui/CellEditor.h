@@ -65,7 +65,7 @@ public:
     void populateWordCollection();
 
     QPoint globalCursorPosition() const;
-    QAbstractItemModel *getModel();
+    QAbstractItemModel *model();
 
     /**
      * Replaces the current formula token(/reference) with the name of the
@@ -116,7 +116,7 @@ private:
 
     class Private;
     Private * const d;
-    QCompleter *c;
+    //QCompleter *c;
 };
 
 } // namespace Sheets
