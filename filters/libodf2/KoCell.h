@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef kOCELL_H
+#ifndef KOCELL_H
 #define KOCELL_H
 
 #include "KoCellStyle.h"

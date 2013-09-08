@@ -106,7 +106,6 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
 
     m_cmbCursorShape->setCurrentIndex(cfg.cursorStyle());
     chkShowRootLayer->setChecked(cfg.showRootLayer());
-    chkZoomWithWheel->setChecked(cfg.zoomWithWheel());
 
     int autosaveInterval = cfg.autoSaveInterval();
     //convert to minutes
@@ -137,7 +136,6 @@ void GeneralTab::setDefault()
 
     m_cmbCursorShape->setCurrentIndex(cfg.getDefaultCursorStyle());
     chkShowRootLayer->setChecked(false);
-    chkZoomWithWheel->setChecked(true);
     m_autosaveCheckBox->setChecked(true);
     //convert to minutes
     m_autosaveSpinBox->setValue(KoDocument::defaultAutoSave() / 60);
@@ -740,14 +738,15 @@ bool KisDlgPreferences::editPreferences()
         cfg.setAutoSaveInterval(dialog->m_general->autoSaveInterval());
         cfg.setBackupFile(dialog->m_general->m_backupFileCheckBox->isChecked());
         KoApplication *app = qobject_cast<KoApplication*>(qApp);
-        foreach(KoPart* part, app->partList()) {
-            KoDocument *doc = part->document();
-            doc->setAutoSave(dialog->m_general->autoSaveInterval());
-            doc->setBackupFile(dialog->m_general->m_backupFileCheckBox->isChecked());
-            doc->undoStack()->setUndoLimit(dialog->m_general->undoStackSize());
+        if (app) {
+            foreach(KoPart* part, app->partList()) {
+                KoDocument *doc = part->document();
+                doc->setAutoSave(dialog->m_general->autoSaveInterval());
+                doc->setBackupFile(dialog->m_general->m_backupFileCheckBox->isChecked());
+                doc->undoStack()->setUndoLimit(dialog->m_general->undoStackSize());
+            }
         }
         cfg.setUndoStackLimit(dialog->m_general->undoStackSize());
-        cfg.setZoomWithWheel(dialog->m_general->chkZoomWithWheel->isChecked());
 
         // Color settings
         cfg.setUseSystemMonitorProfile(dialog->m_colorSettings->m_page->chkUseSystemMonitorProfile->isChecked());

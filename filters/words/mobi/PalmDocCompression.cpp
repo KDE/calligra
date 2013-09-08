@@ -209,7 +209,7 @@ void PalmDocCompression::startCompressing(QByteArray input, QDataStream &out,
             lookahead++;
         }
         else {
-            // I dont encode the match over 3 bits
+            // I do not encode the match over 3 bits
             if (length == 1 ) {
                 out << (qint8) input.at((winIndex + 1));
             }

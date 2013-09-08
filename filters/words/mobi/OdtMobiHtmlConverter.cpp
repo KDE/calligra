@@ -660,7 +660,7 @@ void OdtMobiHtmlConverter::handleTagA(KoXmlElement &nodeElement, KoXmlWriter *ht
     htmlWriter->startElement("a", m_doIndent);
     QString reference = nodeElement.attribute("href");
     //    QString chapter = m_linksInfo.value(reference);
-    QString mark = m_linksInfo.value(reference); // refrence without # at its begining.
+    QString mark = m_linksInfo.value(reference); // refrence without # at its beginning.
     if (!mark.isEmpty() /*&& !m_options->stylesInCssFile*/) {
 //        // This is internal link.
 //        reference.remove('|');

@@ -100,16 +100,18 @@ endif(NOT PRODUCTSET)
 calligra_define_product(LIB_KDGANTT "libkdgantt")
 calligra_define_product(LIB_KDCHART "libkdchart")
 calligra_define_product(LIB_WRITERPERFECT "libwriterperfect")
+# building tools
+calligra_define_product(RNG2CPP "rng2cpp")
 # Calligra-independent utility libs
 calligra_define_product(LIB_KOVECTORIMAGE "libkovectorimage")
 calligra_define_product(LIB_KOPROPERTY "libkoproperty")
 calligra_define_product(LIB_KOREPORT "libkoreport" NEEDS LIB_KOPROPERTY)
 calligra_define_product(LIB_CALLIGRADB "libcalligradb")
 # calligra libs
-calligra_define_product(CALLIGRA_LIBS "Calligra core libs")
+calligra_define_product(CALLIGRA_LIBS "Calligra core libs"  NEEDS RNG2CPP)
 calligra_define_product(LIB_KOPAGEAPP "Lib for paged documents"  NEEDS CALLIGRA_LIBS)
 calligra_define_product(LIB_KOODF2 "libkoodf2"  NEEDS CALLIGRA_LIBS)
-calligra_define_product(LIB_KOODFREADER "libkoodfreader"  NEEDS CALLIGRA_LIBS)
+calligra_define_product(LIB_KOODFREADER "libkoodfreader"  NEEDS LIB_KOODF2 CALLIGRA_LIBS)
 calligra_define_product(LIB_MSO "libmso"  NEEDS CALLIGRA_LIBS)
 calligra_define_product(LIB_KOMSOOXML "libkomsooxml"  NEEDS LIB_KOODF2 CALLIGRA_LIBS)
 calligra_define_product(SCRIPTING "Scripting feature") # TODO
@@ -197,7 +199,7 @@ calligra_define_product(FILTER_DOCX_TO_ODT "DOCX to ODT filter" NEEDS LIB_KOMSOO
 calligra_define_product(FILTER_WORDPERFECT_TO_ODT "Word Perfect to ODT filter"  NEEDS LIB_WRITERPERFECT CALLIGRA_LIBS)
 calligra_define_product(FILTER_WORKS_TO_ODT "MS Works to ODT filter"  NEEDS LIB_WRITERPERFECT CALLIGRA_LIBS)
 calligra_define_product(FILTER_APPLIXWORD_TO_ODT "Applixword to ODT filter"  NEEDS CALLIGRA_LIBS)
-calligra_define_product(FILTER_ASCII_TO_WORDS "Words ASCII import filter"  NEEDS WORDS_PART)
+calligra_define_product(FILTER_ASCII_TO_WORDS "Words ASCII import filter"  NEEDS WORDS_PART LIB_KOODF2)
 calligra_define_product(FILTER_ODT_TO_ASCII "ODT to ASCII filter"  NEEDS LIB_KOODFREADER CALLIGRA_LIBS)
 calligra_define_product(FILTER_RTF_TO_ODT "RTF to ODT filter"  NEEDS CALLIGRA_LIBS)
 calligra_define_product(FILTER_ODT_TO_MOBI "Mobi export filter"  NEEDS CALLIGRA_LIBS)
@@ -220,7 +222,7 @@ calligra_define_product(FILTER_SVG_TO_KARBON "Karbon SVG import filter"  NEEDS K
 calligra_define_product(FILTER_KARBON_TO_WMF "Karbon WMF export filter"  NEEDS KARBON_APP)
 calligra_define_product(FILTER_WMF_TO_SVG "WMF to SVG filter"  NEEDS LIB_KOVECTORIMAGE CALLIGRA_LIBS)
 calligra_define_product(FILTER_KARBON1X_TO_KARBON "Karbon 1.x import filter"  NEEDS KARBON_APP)
-calligra_define_product(FILTER_KARBON_IMPORT "All Karbon import filter"  WANTS FILTER_EPS_TO_SVG_AI FILTER_PDF_TO_SVG FILTER_WPG_TO_SVG FILTER_SVG_TO_KARBON FILTER_WMF_TO_SVG FILTER_KARBON1X_TO_KARBON)
+calligra_define_product(FILTER_KARBON_IMPORT "All Karbon import filter"  WANTS FILTER_EPS_TO_SVG_AI FILTER_XFIG_TO_ODG FILTER_PDF_TO_SVG FILTER_WPG_TO_SVG FILTER_SVG_TO_KARBON FILTER_WMF_TO_SVG FILTER_KARBON1X_TO_KARBON)
 calligra_define_product(FILTER_KARBON_EXPORT "All Karbon export filter"  WANTS FILTER_KARBON_TO_IMAGE FILTER_KARBON_TO_SVG FILTER_KARBON_TO_WMF)
 calligra_define_product(FILTER_KARBON "All Karbon filter"  WANTS FILTER_KARBON_IMPORT FILTER_KARBON_EXPORT)
 # meta apps
@@ -303,10 +305,14 @@ if(KDE4_BUILD_TESTS)
     add_definitions(-DCOMPILING_TESTS)
 endif(KDE4_BUILD_TESTS)
 
-add_definitions(
-    -DQT_USE_FAST_CONCATENATION
-    -DQT_USE_FAST_OPERATOR_PLUS
-)
+# would need more code changes before 4.8.0, e.g. with qPrintable()
+if(NOT ${QTVERSION} VERSION_LESS 4.8.0)
+    # enable QStringBuilder enhancement
+    add_definitions(
+        -DQT_USE_FAST_CONCATENATION
+        -DQT_USE_FAST_OPERATOR_PLUS
+    )
+endif(NOT ${QTVERSION} VERSION_LESS 4.8.0)
 
 
  ###########################
@@ -587,12 +593,6 @@ if(QT_QTWEBKIT_FOUND)
 endif(QT_QTWEBKIT_FOUND)
 
 ##
-## QImageBlitz (for Kexi)
-##
-#macro_optional_find_package(QImageBlitz)
-#macro_log_feature(QIMAGEBLITZ_FOUND "QImageBlitz" "Fast, smooth scaling of QImages" "sourceforge.net/projects/qimageblitz/" FALSE "" "Required for Kexi")
-
-##
 ## Test for KDeclarative
 ##
 macro_optional_find_package(KDeclarative)
@@ -809,6 +809,11 @@ set(WRITERPERFECT_INCLUDES
 # libodf2
 set(KOODF2_INCLUDES
     ${CMAKE_SOURCE_DIR}/filters/libodf2
+)
+
+# libodfreader
+set(KOODFREADER_INCLUDES
+    ${CMAKE_SOURCE_DIR}/filters/libodfreader
 )
 
  #########################################

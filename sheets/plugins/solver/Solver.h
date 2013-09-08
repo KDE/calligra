@@ -22,7 +22,7 @@
 
 #include <gsl/gsl_multimin.h>
 
-#include <kparts/plugin.h>
+#include <kxmlguiclient.h>
 
 #include <calligra_sheets_export.h>
 
@@ -42,7 +42,7 @@ namespace Plugins
  * \class Solver Function Optimizer
  * \author Stefan Nikolaus <stefan.nikolaus@kdemail.net>
  */
-class CALLIGRA_SHEETS_SOLVER_EXPORT Solver : public KParts::Plugin
+class CALLIGRA_SHEETS_SOLVER_EXPORT Solver : public QObject, public KXMLGUIClient
 {
     Q_OBJECT
 

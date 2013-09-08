@@ -13,7 +13,7 @@ target_link_libraries(calligra_filter_csv2sheets calligrasheetscommon kowidgets)
 
 install(TARGETS calligra_filter_csv2sheets DESTINATION ${PLUGIN_INSTALL_DIR})
 
-install( FILES  kspread_csv_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  calligra_filter_csv2sheets.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 endif(SHOULD_BUILD_FILTER_CSV_TO_SHEETS)
 
@@ -30,6 +30,6 @@ target_link_libraries(calligra_filter_sheets2csv calligrasheetscommon)
 
 install(TARGETS calligra_filter_sheets2csv  DESTINATION ${PLUGIN_INSTALL_DIR})
 
-install( FILES  kspread_csv_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  calligra_filter_sheets2csv.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 endif(SHOULD_BUILD_FILTER_SHEETS_TO_CSV)
