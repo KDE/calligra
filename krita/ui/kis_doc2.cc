@@ -201,6 +201,33 @@ bool KisDoc2::init()
     return true;
 }
 
+bool KisDoc2::saveNativeFormat(const QString &file)
+{
+    const int realAutoSaveInterval = KisConfig().autoSaveInterval();
+    const int emergencyAutoSaveInterval = 10; // sec
+
+    if (!m_d->image->tryBarrierLock()) {
+        if (isAutosaving()) {
+            if (realAutoSaveInterval) {
+                setAutoSave(emergencyAutoSaveInterval);
+            }
+            return false;
+        } else {
+            m_d->image->requestStrokeEnd();
+            QApplication::processEvents();
+            if (!m_d->image->tryBarrierLock()) {
+                return false;
+            }
+        }
+    }
+
+    bool retval = KoDocument::saveNativeFormat(file);
+    m_d->image->unlock();
+    setAutoSave(realAutoSaveInterval);
+
+    return retval;
+}
+
 QDomDocument KisDoc2::saveXML()
 {
     dbgFile << url();
@@ -211,9 +238,8 @@ QDomDocument KisDoc2::saveXML()
     root.setAttribute("syntaxVersion", "2");
 
     Q_ASSERT(m_d->kraSaver == 0);
-
-    m_d->image->barrierLock();
     m_d->kraSaver = new KisKraSaver(this);
+
     root.appendChild(m_d->kraSaver->saveXML(doc, m_d->image));
 
     return doc;
@@ -291,7 +317,6 @@ bool KisDoc2::completeSaving(KoStore *store)
 
     delete m_d->kraSaver;
     m_d->kraSaver = 0;
-    m_d->image->unlock();
 
     return true;
 }
