@@ -14,6 +14,7 @@ endif( QCA2_FOUND )
 set(koodf_LIB_SRCS
     KoOdf.cpp
     KoXmlNS.cpp
+    KoOdfSavingContext.cpp
     KoOdfManifestEntry.cpp
     KoDom.cpp
     KoGenStyle.cpp
