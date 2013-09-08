@@ -89,6 +89,4 @@ enum Direction {
 
 }
 
-Q_DECLARE_METATYPE(KoText::Tab)
-
 #endif

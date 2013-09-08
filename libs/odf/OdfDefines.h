@@ -136,4 +136,7 @@ KOODF_EXPORT QTextLength parseLength (const QString &length);
 }
 
 
+Q_DECLARE_METATYPE(KoOdf::Tab)
+
+
 #endif

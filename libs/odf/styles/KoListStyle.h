@@ -32,8 +32,8 @@
 #include <KoXmlReader.h>
 
 class KoListLevelProperties;
-class KoShapeLoadingContext;
-class KoShapeSavingContext;
+class KoOdfLoadingContext;
+class KoOdfSavingContext;
 class KoGenStyle;
 
 
@@ -239,12 +239,12 @@ public:
      * Load the style from the \a KoStyleStack style stack using the
      * OpenDocument format.
      */
-    void loadOdf(KoShapeLoadingContext& context, const KoXmlElement& style = KoXmlElement());
+    void loadOdf(KoOdfLoadingContext& context, const KoXmlElement& style = KoXmlElement());
 
     /**
      * Save the style to a KoGenStyle object using the OpenDocument format
      */
-    void saveOdf(KoGenStyle &style, KoShapeSavingContext &context) const;
+    void saveOdf(KoGenStyle &style, KoOdfSavingContext &context) const;
 
     /// copy all the properties from the other style to this style, effectively duplicating it.
     void copyProperties(KoListStyle *other);

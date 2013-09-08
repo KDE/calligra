@@ -40,16 +40,19 @@
 #include <KoShadowStyle.h>
 
 extern QVariant val;
+class QTextBlock;
 struct Property;
+
+class KoOdfLoadingContext;
+class KoOdfSavingContext;
+
 class KoCharacterStyle;
 class KoListStyle;
-class QTextBlock;
 class KoStyleStack;
 class KoGenStyle;
 class KoGenStyles;
-class KoShapeLoadingContext;
-class KoShapeSavingContext;
 class KoList;
+
 
 /**
  * A container for all properties for the paragraph wide style.
@@ -690,7 +693,7 @@ public:
     void loadOdf(const KoXmlElement *element, KoOdfLoadingContext &oContext,
                 bool loadParents = false);
 
-    void saveOdf(KoGenStyle &style, KoShapeSavingContext &context) const;
+    void saveOdf(KoGenStyle &style, KoOdfSavingContext &context) const;
 
     /**
      * Returns true if this paragraph style has the property set.

@@ -29,7 +29,7 @@
 #include "KoStyleManager.h"
 #include "KoListLevelProperties.h"
 //#include "KoTextSharedLoadingData.h"
-//#include <KoShapeSavingContext.h>
+#include <KoOdfSavingContext.h>
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
 #include "Styles_p.h"
@@ -1725,6 +1725,7 @@ void KoParagraphStyle::loadOdfProperties(KoOdfLoadingContext &oContext)
         const qreal distance = KoUnit::parseValue(dropCap.attributeNS(KoXmlNS::style, "distance", QString()));
         setDropCapsDistance(distance);
 
+#if 0  // FIXME: Implement this some other way. We should not have to use data intended for shapes when we load styles.
         const QString dropstyle = dropCap.attributeNS(KoXmlNS::style, "style-name");
         if (! dropstyle.isEmpty()) {
             KoSharedLoadingData *sharedData = scontext.sharedData(KOTEXT_SHARED_LOADING_ID);
@@ -1736,6 +1737,7 @@ void KoParagraphStyle::loadOdfProperties(KoOdfLoadingContext &oContext)
                     setDropCapsTextStyleId(cs->styleId());
             }
         }
+#endif
     }
 
     // The fo:break-before and fo:break-after attributes insert a page or column break before or after a paragraph.
@@ -2016,7 +2018,7 @@ void KoParagraphStyle::removeDuplicates(const KoParagraphStyle &other)
     KoCharacterStyle::removeDuplicates(other);
 }
 
-void KoParagraphStyle::saveOdf(KoGenStyle &style, KoShapeSavingContext &context) const
+void KoParagraphStyle::saveOdf(KoGenStyle &style, KoOdfSavingContext &context) const
 {
     bool writtenLineSpacing = false;
     KoCharacterStyle::saveOdf(style);
