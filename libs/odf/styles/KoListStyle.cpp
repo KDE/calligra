@@ -174,7 +174,7 @@ void KoListStyle::applyStyle(const QTextBlock &block, int level)
     KoList::applyStyle(block, this, level);
 }
 #endif
-void KoListStyle::loadOdf(KoShapeLoadingContext& scontext, const KoXmlElement& style)
+void KoListStyle::loadOdf(KoOdfLoadingContext& ocontext, const KoXmlElement& style)
 {
     d->name = style.attributeNS(KoXmlNS::style, "display-name", QString());
     // if no style:display-name is given us the style:name
@@ -186,7 +186,7 @@ void KoListStyle::loadOdf(KoShapeLoadingContext& scontext, const KoXmlElement& s
     KoXmlElement styleElem;
     forEachElement(styleElem, style) {
         KoListLevelProperties properties;
-        properties.loadOdf(scontext, styleElem);
+        properties.loadOdf(ocontext, styleElem);
         if (d->styleId)
             properties.setStyleId(d->styleId);
         setLevelProperties(properties);
@@ -202,7 +202,7 @@ void KoListStyle::loadOdf(KoShapeLoadingContext& scontext, const KoXmlElement& s
     }
 }
 
-void KoListStyle::saveOdf(KoGenStyle &style, KoShapeSavingContext &context) const
+void KoListStyle::saveOdf(KoGenStyle &style, KoOdfSavingContext &context) const
 {
     // style:display-name can be used in list styles but not in outline styles
     if (!d->name.isEmpty() && !style.isDefaultStyle() && !isOulineStyle()) {

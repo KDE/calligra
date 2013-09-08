@@ -30,8 +30,8 @@
 
 class KoCharacterStyle;
 class KoListStyle;
-class KoShapeLoadingContext;
-class KoShapeSavingContext;
+class KoOdfLoadingContext;
+class KoOdfSavingContext;
 class KoXmlWriter;
 class KoImageData;
 
@@ -188,12 +188,12 @@ public:
     /**
      * Load the properties from the \p style using the OpenDocument format.
      */
-    void loadOdf(KoShapeLoadingContext& scontext, const KoXmlElement& style);
+    void loadOdf(KoOdfLoadingContext& scontext, const KoXmlElement& style);
 
     /**
      * Save the properties of the style using the OpenDocument format
      */
-    void saveOdf(KoXmlWriter *writer, KoShapeSavingContext &context) const;
+    void saveOdf(KoXmlWriter *writer, KoOdfSavingContext &context) const;
 
 public slots:
     void onStyleChanged(int key);

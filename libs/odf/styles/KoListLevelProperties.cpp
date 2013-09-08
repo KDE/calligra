@@ -25,20 +25,19 @@
  */
 
 #include "KoListLevelProperties.h"
-#include "KoTextSharedLoadingData.h"
+//#include "KoTextSharedLoadingData.h"
 #include "Styles_p.h"
 
 #include <float.h>
 
 #include <kdebug.h>
 
+#include <OdfDefines.h>
 #include <KoXmlNS.h>
 #include <KoOdfLoadingContext.h>
-#include <KoShapeLoadingContext.h>
-#include <KoShapeSavingContext.h>
+//#include <KoShapeSavingContext.h>
 #include <KoXmlWriter.h>
 #include <KoUnit.h>
-#include <KoText.h>
 #include <KoImageCollection.h>
 #include <KoImageData.h>
 #include <KoImageData_p.h>
