@@ -101,7 +101,7 @@ Panel {
         target: sketchView;
         onLoadingFinished: {
 //            if(window.applicationName === undefined) {
-                presetsModel.currentPreset = "Basic Rounded";
+                presetsModel.currentPreset = "Basic circle";
 //            }
         }
     }
