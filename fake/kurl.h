@@ -348,9 +348,7 @@ public:
 
     static KUrl fromPath(const QString &path)
     {
-        KUrl u;
-        u.setPath(path);
-        return u;
+        return KUrl::fromLocalFile(path);
     }
 
     void adjustPath(AdjustPathOption trailing) {Q_UNUSED(trailing);}
