@@ -499,9 +499,6 @@ void KoMainWindow::setRootDocument(KoDocument *doc, KoPart *part)
 
     if (doc) {
         d->dockWidgetMenu->setVisible(true);
-
-        // don't add parts more than once :)
-        Q_ASSERT(d->m_registeredPart.isNull());
         d->m_registeredPart = d->rootPart.data();
 
         KoView *view = d->rootPart->createView(doc, this);
