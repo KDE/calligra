@@ -77,6 +77,14 @@ public:
         m_convChannelList = this->convolvableChannelList(src);
         m_convolveChannelsNo = m_convChannelList.count();
 
+        //Checking for alpha channel
+        alphaChannelIndex = -1;
+        for (quint32 i = 0; i < m_convolveChannelsNo; ++i) {
+            if (m_convChannelList.at(i)->channelType() == KoChannelInfo::ALPHA) {
+                alphaChannelIndex = i;
+            }
+        }
+
         bool hasProgressUpdater = this->m_progress;
         if (hasProgressUpdater)
             this->m_progress->setProgress(0);
@@ -122,6 +130,26 @@ public:
             } while (hitInitSrc->nextPixel());
             hitInitSrc->nextRow();
         }
+        
+        // the code is devoted to premultiplication of alpha
+        if(alphaChannelIndex >= 0)
+        {
+            quint32 i = 0;
+            for(quint32 krow = 0; krow < m_kh; ++krow)
+            {
+                for(quint32 kcol = 0; kcol < m_kw; ++kcol)
+                {
+                    for(quint32 k = 0; k < m_convolveChannelsNo; ++k)
+                    {
+                        if(k == (quint32)alphaChannelIndex) {
+                            continue;
+                        }
+                        m_pixelPtrCacheCopy[i][k] *= (m_pixelPtrCacheCopy[i][alphaChannelIndex] / 255.0);
+                    }
+                    ++i;
+                }
+            }
+        }
 
         m_kernelFactor = kernel->factor() ? 1.0 / kernel->factor() : 1;
         m_maxClamp = new double[m_convChannelList.count()];
@@ -151,7 +179,6 @@ public:
                     // write original channel values
                     memcpy(hitDst->rawData(), hitSrc->oldRawData(), m_pixelSize);
                     convolveCache(hitDst->rawData());
-
                     ++col;
                     kitSrc->nextColumn();
                     hitDst->nextPixel();
@@ -225,24 +252,59 @@ public:
     }
 
     inline void convolveCache(quint8* dstPtr) {
-        for (quint32 k = 0; k < m_convolveChannelsNo; ++k) {
-            qreal interimConvoResult = 0;
-
-            for (quint32 pIndex = 0; pIndex < m_cacheSize; ++pIndex) {
-                qreal cacheValue = m_pixelPtrCache[pIndex][k];
-                interimConvoResult += m_kernelData[m_cacheSize - pIndex - 1] * cacheValue;
+        if(alphaChannelIndex >= 0)
+        {
+            qreal interimAlphaValue = 0;
+            for(quint32 i = 0 ; i < m_cacheSize; ++i)
+            {
+                interimAlphaValue += m_kernelData[m_cacheSize - i - 1] * m_pixelPtrCache[i][alphaChannelIndex];
             }
+            double alphaChannelPixelValue = (double)(interimAlphaValue * m_kernelFactor + m_absoluteOffset[alphaChannelIndex]);
 
-            double channelPixelValue = (double)(interimConvoResult * m_kernelFactor + m_absoluteOffset[k]);
+            for (quint32 k = 0; k < m_convolveChannelsNo; ++k) {
+                qreal interimConvoResult = 0;
 
-            // clamp values
-            if (channelPixelValue > m_maxClamp[k])
-                channelPixelValue = m_maxClamp[k];
-            else if (channelPixelValue < m_minClamp[k])
-                channelPixelValue = m_minClamp[k];
+                for (quint32 pIndex = 0; pIndex < m_cacheSize; ++pIndex) {
+                    qreal cacheValue = m_pixelPtrCache[pIndex][k];
+                    interimConvoResult += m_kernelData[m_cacheSize - pIndex - 1] * cacheValue;
+                }
 
-            const quint32 channelPos = m_convChannelList[k]->pos();
-            m_fromDoubleFuncPtr[k](dstPtr, channelPos, channelPixelValue);
+                double channelPixelValue = (double)(interimConvoResult * m_kernelFactor + m_absoluteOffset[k]);
+
+                if(k != (quint32)alphaChannelIndex && alphaChannelPixelValue)
+                    channelPixelValue /= (alphaChannelPixelValue / 255.0);
+
+                // clamp values
+                if (channelPixelValue > m_maxClamp[k])
+                    channelPixelValue = m_maxClamp[k];
+                else if (channelPixelValue < m_minClamp[k])
+                    channelPixelValue = m_minClamp[k];
+
+                const quint32 channelPos = m_convChannelList[k]->pos();
+                m_fromDoubleFuncPtr[k](dstPtr, channelPos, channelPixelValue);
+            }
+        }
+        else
+        {
+            for (quint32 k = 0; k < m_convolveChannelsNo; ++k) {
+                qreal interimConvoResult = 0;
+
+                for (quint32 pIndex = 0; pIndex < m_cacheSize; ++pIndex) {
+                    qreal cacheValue = m_pixelPtrCache[pIndex][k];
+                    interimConvoResult += m_kernelData[m_cacheSize - pIndex - 1] * cacheValue;
+                }
+
+                double channelPixelValue = (double)(interimConvoResult * m_kernelFactor + m_absoluteOffset[k]);
+
+                // clamp values
+                if (channelPixelValue > m_maxClamp[k])
+                    channelPixelValue = m_maxClamp[k];
+                else if (channelPixelValue < m_minClamp[k])
+                    channelPixelValue = m_minClamp[k];
+
+                const quint32 channelPos = m_convChannelList[k]->pos();
+                m_fromDoubleFuncPtr[k](dstPtr, channelPos, channelPixelValue);
+            }
         }
     }
 
@@ -264,6 +326,18 @@ public:
             }
             i += m_kw;
         } while (kitSrc->nextPixel());
+        if(alphaChannelIndex >= 0)
+        do {
+                i = m_kw - 1;
+                for(quint32 k = 0; k < m_convolveChannelsNo; ++k)
+                {
+                    if(k == (quint32)alphaChannelIndex) {
+                        continue;
+                    }
+                    pixelPtrCache[i][k] *= (pixelPtrCache[i][alphaChannelIndex] / 255.0);
+                }
+                i += m_kw;
+            } while(kitSrc->nextPixel());
     }
 
     inline void moveKernelDown(typename _IteratorFactory_::HLineIterator& kitSrc, double **pixelPtrCache) {
@@ -281,6 +355,18 @@ public:
             }
             i++;
         } while (kitSrc->nextPixel());
+        if(alphaChannelIndex >= 0)
+        do {
+                quint32 i = m_kw * (m_kh - 1);
+                for(quint32 k = 0; k < m_convolveChannelsNo; ++k)
+                {
+                    if(k == (quint32)alphaChannelIndex) {
+                        continue;
+                    }
+                    pixelPtrCache[i][k] *= (pixelPtrCache[i][alphaChannelIndex] / 255.0);
+                }
+                i++;
+            } while(kitSrc->nextPixel());
     }
 
     void cleanUp() {
@@ -303,6 +389,7 @@ private:
     quint32 m_khalfWidth, m_khalfHeight;
     quint32 m_convolveChannelsNo;
     quint32 m_cacheSize, m_pixelSize;
+    qint32 alphaChannelIndex;
 
     qreal *m_kernelData;
     double** m_pixelPtrCache, ** m_pixelPtrCacheCopy;
