@@ -101,7 +101,7 @@ Panel {
         target: sketchView;
         onLoadingFinished: {
 //            if(window.applicationName === undefined) {
-                presetsModel.currentPreset = "inking doodle brush";
+                presetsModel.currentPreset = "Basic Rounded";
 //            }
         }
     }
