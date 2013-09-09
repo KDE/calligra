@@ -31,44 +31,48 @@ class KWDocument;
 class KWPage;
 class KoPageLayout;
 class KWPageStyle;
-enum Selection{NONE,MARGIN_TOP,MARGIN_BOTTOM,MARGIN_LEFT,MARGIN_RIGHT,HEADER,FOOTER,BORDER_LEFT,BORDER_RIGHT,BORDER_TOP,BORDER_BOTTOM};
+
+enum Selection{
+    NONE,
+    MARGIN_TOP,
+    MARGIN_BOTTOM,
+    MARGIN_LEFT,
+    MARGIN_RIGHT,
+    HEADER,FOOTER,
+    BORDER_LEFT,
+    BORDER_RIGHT,
+    BORDER_TOP,
+    BORDER_BOTTOM
+};
 
 class KWPageTool : public KoToolBase
 {
     Q_OBJECT
+
 public:
     explicit KWPageTool(KoCanvasBase *canvas);
     virtual ~KWPageTool();
     bool wantsAutoScroll() const;
     void setStyleFromWidget(QString style);
-    void applyStyle(int page, QString style);
+    void applyStyle(int page, const QString &styleName);
     void applyStyle(int page, KWPageStyle style);
-public:
-    virtual void paint(QPainter &painter, const KoViewConverter &converter);
     //Get the page under the mouse
     KWPage pageUnderMouse();
-public slots:
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
-
-public: // Events
-
+    // Events
+    virtual void paint(QPainter &painter, const KoViewConverter &converter);
     virtual void mousePressEvent(KoPointerEvent *event);
     virtual void mouseMoveEvent(KoPointerEvent *event);
     virtual void mouseReleaseEvent(KoPointerEvent *event);
-
     virtual void mouseDoubleClickEvent(KoPointerEvent *event);
 
-//  virtual void keyPressEvent(QKeyEvent *event);
 public slots:
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+//  virtual void keyPressEvent(QKeyEvent *event);
     void enableHeader();
     void enableFooter();
     void disableHeader();
     void disableFooter();
 
-private slots:
-    ///Force the remaining content on the page to next page.
-    void insertPageBreak();
-    void resizePage();
 
 private:
     KWCanvas *getCanvas() const;
@@ -87,11 +91,9 @@ private:
     //Change the layout of a page style
     void changeLayoutInStyle(KoPageLayout layout, KWPageStyle style);
 
-protected:
     QList<QWidget *> createOptionWidgets();
     void refreshCanvas();
 
-private:
     Selection m_selection;
 
     //Style from SimplePagesStyles
@@ -105,6 +107,11 @@ private:
 
     KAction *m_actionViewHeader;
     KAction *m_actionViewFooter;
+
+private slots:
+    ///Force the remaining content on the page to next page.
+    void insertPageBreak();
+    void resizePage();
 };
 
 #endif

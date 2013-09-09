@@ -37,7 +37,7 @@ public:
     ~SimplePageStyleWidget();
     
 private slots:
-    void refreshInformations();
+    void refreshInformation();
 
     void on_spinTo_valueChanged(int arg1);
 
@@ -48,8 +48,8 @@ private slots:
     void on_list_clicked(const int &index);
 
 private:
-    KWPageTool* m_pageTool;
-    KWView* m_view;
+    KWPageTool *m_pageTool;
+    KWView *m_view;
     Ui::SimplePageStyleWidget *ui;
 };
 

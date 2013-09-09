@@ -24,19 +24,20 @@
 #include "KWDocument.h"
 #include <QTimer>
 
-SimplePageStyleWidget::SimplePageStyleWidget(KWView* view, KWPageTool* pageTool, QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::SimplePageStyleWidget)
+SimplePageStyleWidget::SimplePageStyleWidget(KWView* view, KWPageTool* pageTool, QWidget *parent)
+    : QWidget(parent),
+    ui(new Ui::SimplePageStyleWidget),
+    m_view(view),
+    m_pageTool(pageTool)
 {
     ui->setupUi(this);
     ui->list->updatesEnabled();
-    m_view = view;
-    m_pageTool = pageTool;
     connect(m_view->kwdocument(), SIGNAL(pageSetupChanged()), this, SLOT(refreshInformations()));
-    refreshInformations();
+    refreshInformation();
 }
 
-void SimplePageStyleWidget::refreshInformations() {
+void SimplePageStyleWidget::refreshInformation()
+{
     ui->spinFrom->setMinimum(1);
     ui->spinTo->setMinimum(1);
     ui->spinFrom->setMaximum(m_view->kwdocument()->pageCount());
@@ -76,6 +77,7 @@ void SimplePageStyleWidget::on_buttonApply_clicked()
     }
 }
 
-void SimplePageStyleWidget::on_list_clicked(const int &index) {
-    refreshInformations();
+void SimplePageStyleWidget::on_list_clicked(const int &index)
+{
+    refreshInformation();
 }

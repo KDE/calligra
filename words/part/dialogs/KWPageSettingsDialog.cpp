@@ -247,17 +247,19 @@ void KWPageSettingsDialog::pageStyleCurrentRowChanged(int row)
     enableButtonApply(pagestyle.isValid());
 }
 
-void KWPageSettingsDialog::refreshInformations() {
-        /////////////
+void KWPageSettingsDialog::refreshInformations()
+{
         //Only way found to refresh all field in the dialog box
         //Indeed, all fields are refreshed when we change the page format
-        /*KoPageLayout layout = m_pageStyle.pageLayout();
+        /*
+        KoPageLayout layout = m_pageStyle.pageLayout();
         layout.format = KoPageFormat::IsoA0Size;
         setPageLayout(layout);
         layout.format = KoPageFormat::CustomSize;
-        setPageLayout(layout);*/
+        setPageLayout(layout);
+        */
         setPageLayout(m_pageStyle.pageLayout());
-        //////////////////////
+
         setPageSpread(m_pageStyle.isPageSpread());
         setTextDirection(m_pageStyle.direction());
         m_columns->setColumns(m_pageStyle.columns());
