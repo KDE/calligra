@@ -17,11 +17,11 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KPrPageLayoutDocker.h"
+#include "KPrPageLayoutWidget.h"
 
 #include <QListWidget>
 #include <QSize>
-#include <QVBoxLayout>
+#include <QGridLayout>
 
 #include <klocale.h>
 
@@ -38,29 +38,30 @@
 // this is needed so it can be used in a QVariant
 Q_DECLARE_METATYPE( KPrPageLayout* )
 
-KPrPageLayoutDocker::KPrPageLayoutDocker( QWidget* parent, Qt::WindowFlags flags )
-: QDockWidget( parent, flags )
-, m_view( 0 )
-, m_previousItem( 0 )
+KPrPageLayoutWidget::KPrPageLayoutWidget( QWidget* parent)
+: QWidget(parent)
+, m_view(0)
+, m_previousItem(0)
 {
-    setWindowTitle( i18n( "Slide Layouts" ) );
+    setWindowTitle(i18n( "Layout"));
+    setObjectName("Slide Layouts");
 
-    QWidget* base = new QWidget( this );
-    m_layoutsView = new QListWidget( base );
-    m_layoutsView->setIconSize( QSize( 80, 60 ) );
-    m_layoutsView->setGridSize( QSize( 80, 60 ) );
-    m_layoutsView->setViewMode( QListView::IconMode );
-    m_layoutsView->setResizeMode( QListView::Adjust );
-    m_layoutsView->setMovement( QListView::Static );
+    m_layoutsView = new QListWidget();
+    m_layoutsView->setIconSize(QSize( 80, 60));
+    m_layoutsView->setGridSize(QSize( 80, 60));
+    m_layoutsView->setViewMode(QListView::IconMode);
+    m_layoutsView->setResizeMode(QListView::Adjust);
+    m_layoutsView->setMovement(QListView::Static);
     m_layoutsView->setSelectionRectVisible(false);
 
-    QVBoxLayout* layout = new QVBoxLayout;
-    layout->addWidget( m_layoutsView );
-    base->setLayout( layout );
-    setWidget( base );
+    QGridLayout* layout = new QGridLayout;
+    layout->addWidget(m_layoutsView);
+    layout->setMargin(0);
+
+    setLayout(layout);
 }
 
-void KPrPageLayoutDocker::setView( KPrView* view )
+void KPrPageLayoutWidget::setView( KPrView* view )
 {
     Q_ASSERT( view );
     if (m_view) {
@@ -96,7 +97,7 @@ void KPrPageLayoutDocker::setView( KPrView* view )
              this, SLOT(slotCurrentItemChanged(QListWidgetItem*,QListWidgetItem*)) );
 }
 
-void KPrPageLayoutDocker::slotActivePageChanged()
+void KPrPageLayoutWidget::slotActivePageChanged()
 {
     Q_ASSERT( m_view );
 
@@ -125,7 +126,7 @@ void KPrPageLayoutDocker::slotActivePageChanged()
     }
 }
 
-void KPrPageLayoutDocker::slotItemPressed( QListWidgetItem * item )
+void KPrPageLayoutWidget::slotItemPressed( QListWidgetItem * item )
 {
     if ( item == m_previousItem ) {
         applyLayout( item );
@@ -135,14 +136,14 @@ void KPrPageLayoutDocker::slotItemPressed( QListWidgetItem * item )
     }
 }
 
-void KPrPageLayoutDocker::slotCurrentItemChanged( QListWidgetItem * item, QListWidgetItem * previous )
+void KPrPageLayoutWidget::slotCurrentItemChanged( QListWidgetItem * item, QListWidgetItem * previous )
 {
     applyLayout( item );
     m_previousItem = previous;
 }
 
 
-QListWidgetItem * KPrPageLayoutDocker::addLayout( KPrPageLayout * layout )
+QListWidgetItem * KPrPageLayoutWidget::addLayout( KPrPageLayout * layout )
 {
     QListWidgetItem * item = new QListWidgetItem( QIcon( layout->thumbnail() ), "", m_layoutsView );
     item->setData( Qt::UserRole, QVariant::fromValue( layout ) );
@@ -150,7 +151,7 @@ QListWidgetItem * KPrPageLayoutDocker::addLayout( KPrPageLayout * layout )
     return item;
 }
 
-void KPrPageLayoutDocker::applyLayout( QListWidgetItem * item )
+void KPrPageLayoutWidget::applyLayout( QListWidgetItem * item )
 {
     // don't crash when all items are replaced
     if ( item ) {
@@ -162,4 +163,4 @@ void KPrPageLayoutDocker::applyLayout( QListWidgetItem * item )
     }
 }
 
-#include "KPrPageLayoutDocker.moc"
+#include "KPrPageLayoutWidget.moc"

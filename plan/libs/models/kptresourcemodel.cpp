@@ -42,7 +42,6 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kactioncollection.h>
-#include <kxmlguifactory.h>
 #include <kio/netaccess.h>
 #include <kmimetype.h>
 #include <kio/job.h>

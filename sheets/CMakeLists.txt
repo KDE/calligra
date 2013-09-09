@@ -133,7 +133,6 @@ SET (functions_DIR_SRCS
     functions/trig.cpp
     )
 
-SET (interfaces_DIR_SRC )
 if( QT_QTDBUS_FOUND )
 SET (interfaces_DIR_SRCS
     interfaces/MapAdaptor.cpp
@@ -217,6 +216,13 @@ SET (calligrasheetscommon_LIB_SRCS
     ${part_DIR_SRCS}
     ${ui_DIR_SRCS}
     )
+
+if(QT_QTDBUS_FOUND)
+set (calligrasheetscommon_LIB_SRCS
+    ${calligrasheetscommon_LIB_SRCS}
+    ${interfaces_DIR_SRCS}
+    )
+endif()
 
 set (calligrasheetsodf_LIB_SRCS
     part/Digest.cpp
@@ -302,6 +308,10 @@ target_link_libraries(calligrasheetscommon
     ${KDE4_KNOTIFYCONFIG_LIBS}
     ${KDE4_THREADWEAVER_LIBS}
 )
+if(QT_QTDBUS_FOUND)
+    target_link_libraries(calligrasheetscommon ${KDE4_KNOTIFYCONFIG_LIBS} )
+endif()
+
 if(KDE4_KCMUTILS_LIBS)
     target_link_libraries(calligrasheetscommon ${KDE4_KCMUTILS_LIBS} )
 else()

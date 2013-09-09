@@ -48,7 +48,6 @@
 #include <QAction>
 #include <kglobal.h>
 #include <klocale.h>
-#include <kxmlguifactory.h>
 #include <kactioncollection.h>
 #include <ktabwidget.h>
 

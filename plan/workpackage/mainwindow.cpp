@@ -61,7 +61,6 @@
 #include <kactioncollection.h>
 
 #include <kaboutdata.h>
-#include <kxmlguifactory.h>
 #include <kcomponentdata.h>
 #include <ktoolinvocation.h>
 #include <kio/netaccess.h>

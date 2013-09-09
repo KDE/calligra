@@ -54,7 +54,6 @@
 #include <kfileitem.h>
 #include <kio/netaccess.h>
 #include <klocale.h>
-#include <kxmlguifactory.h>
 #include <kdebug.h>
 #include <kstandarddirs.h>
 #include <kdesktopfile.h>
