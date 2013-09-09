@@ -116,7 +116,6 @@ private:
 
     class Private;
     Private * const d;
-    //QCompleter *c;
 };
 
 } // namespace Sheets

@@ -72,7 +72,7 @@ public:
     QTimer*                   functionCompletionTimer;
     QHash<int,QString>        wordCollection;
     QPoint globalCursorPos;
-    QCompleter*               complete;
+    QCompleter                *complete;
     bool captureAllKeyEvents : 1;
     bool selectionChangedLocked     : 1;
 
@@ -295,25 +295,30 @@ CellEditor::CellEditor(CellToolBase *cellTool, QWidget* parent)
 
 void CellEditor::populateWordCollection()
 {
-  ValueConverter *conv;
+  ValueConverter *conv,*conv2;
  
-  const Cell cell(d->selection->activeSheet(), d->selection->marker());
+  const Cell cell( d->selection->activeSheet(), d->selection->marker());
   int lastrow=d->selection->activeSheet()->cellStorage()->rows();
   int lastcolumn=d->selection->activeSheet()->cellStorage()->columns();
   for (int j=1 ; j <= lastcolumn ; j++) {
     for (int i=1; i<=lastrow ; i++) {
-      QString value=conv->toString(Value(Cell(d->selection->activeSheet(),j,i).value()));
-      if(!d->wordCollection.values(j).contains(value))
-      d->wordCollection.insertMulti(j,value);
-    }
+      Value val=Cell( d->selection->activeSheet(), j, i).value();
+      if(val.isString()) {
+	QString value=conv->toString( conv2->asString(val) );
+	  
+	if(!d->wordCollection.values(j).contains(value)){
+	    d->wordCollection.insertMulti(j, value);
+	  }
+	  }
   }
+}
 }
 
 CellEditor::~CellEditor()
 {
-    if (selection())
+    if (selection()){
         selection()->endReferenceSelection();
-
+    }
     delete d;
 }
 
@@ -649,9 +654,9 @@ void CellEditor::keyPressEvent(QKeyEvent *event)
         // editing mode. To insert literal tabs you can always use the external
         // editor.
         
-	if(textUnderCursor()!="")
-	d->wordCollection.insertMulti(cell_temp.column(),textUnderCursor());
-	
+	if(textUnderCursor()!=""){
+	  d->wordCollection.insertMulti(cell_temp.column(),textUnderCursor());
+	}
 	event->ignore();
 	return;
     case Qt::Key_Return:
@@ -661,9 +666,9 @@ void CellEditor::keyPressEvent(QKeyEvent *event)
             break; // pass to TextEdit
         }
 	//const Cell cell2(d->selection->activeSheet(), d->selection->marker());
-	if(textUnderCursor()!="")
-	d->wordCollection.insertMulti(cell_temp.column(),textUnderCursor());
-	
+	if(textUnderCursor()!="") {
+	  d->wordCollection.insertMulti(cell_temp.column(),textUnderCursor());
+	}
 	event->ignore(); // pass to parent
         return;
     }
