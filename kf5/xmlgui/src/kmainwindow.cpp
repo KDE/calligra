@@ -173,16 +173,6 @@ void KMainWindowPrivate::init(KMainWindow *_q)
 
     q->setAttribute( Qt::WA_DeleteOnClose );
 
-    // TODO QT5: check if this call is still necessary
-    // We handle this functionality (quitting the app) ourselves, with QEventLoopLocker
-    // This makes apps stay alive even if they only have a systray icon visible, or
-    // a progress widget with "keep open" checked, for instance.
-    // So don't let the default Qt mechanism allow any toplevel widget to just quit the app on us.
-    // Setting WA_QuitOnClose to false for all KMainWindows is not enough, any progress widget
-    // or dialog box would still quit the app...
-    if (qApp)
-        qApp->setQuitOnLastWindowClosed(false);
-
     helpMenu = 0;
 
     //actionCollection()->setWidget( this );
