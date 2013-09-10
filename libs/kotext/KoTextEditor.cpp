@@ -846,12 +846,6 @@ void KoTextEditor::deleteChar()
         if (d->caret.atEnd())
             return;
 
-        //changetracking code
-        StepDeleteTextStep step;
-        StepStepLocation Location(d->caret);
-        step.setLocation(Location);
-        d->changeStack.push(step);
-
         // We also need to refuse delete if it will delete a note frame
         QTextCursor after(d->caret);
         after.movePosition(QTextCursor::NextCharacter);
@@ -869,6 +863,11 @@ void KoTextEditor::deleteChar()
             return;
         }
     }
+    //changetracking code
+    StepDeleteTextStep step(d->caret.selectionEnd() - d->caret.selectionStart());
+    StepStepLocation Location(d->caret);
+    step.setLocation(Location);
+    d->changeStack.push(step);
 
     deleteChar(false);
 
@@ -889,12 +888,7 @@ void KoTextEditor::deletePreviousChar()
         QTextCursor after(d->caret);
         after.movePosition(QTextCursor::PreviousCharacter);
 
-        //changetracking code we use after here because the previous character is the
-        //one being deleted
-        StepDeleteTextStep step;
-        StepStepLocation location(after);
-        step.setLocation(location);
-        d->changeStack.push(step);
+
 
         QTextFrame *beforeFrame = d->caret.currentFrame();
         while (qobject_cast<QTextTable *>(beforeFrame)) {
@@ -910,6 +904,11 @@ void KoTextEditor::deletePreviousChar()
             return;
         }
     }
+    //changetracking code
+    StepDeleteTextStep step(d->caret.selectionEnd() - d->caret.selectionStart());
+    StepStepLocation Location(d->caret);
+    step.setLocation(Location);
+    d->changeStack.push(step);
 
     deleteChar(true);
 
