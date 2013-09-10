@@ -167,7 +167,7 @@ public:
                         
                         // Pentalis comments: PREMULTIPLY BY ALPHA
                         // This code works because m_channelPtr has already been filled entirely
-                        *m_channelPtr[k] *= *m_channelPtr[alphaChannelIndex];
+                        *m_channelPtr[k] *= *m_channelPtr[alphaChannelIndex] / 255.0;
                         *m_channelPtr[k]++;   // careful, this increment is deep Hocus Pocus, don't touch unless you know what you're doing
                     }
                 }
@@ -264,7 +264,7 @@ public:
                             // Pentalis comment: divide the PREMULTIPLIED (see conditionals above) channels by the
                             // CONVOLUTED alpha channel. Also, avoid division by zero.
                             if (alphaChannelIndex != 0) {
-                                channelPixelValue /= alphaChannelPixelValue;
+                                channelPixelValue /= alphaChannelPixelValue / 255.0;
                             }
                         }
                         
