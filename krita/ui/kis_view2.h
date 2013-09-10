@@ -191,6 +191,14 @@ public:  // Krita specific interfaces
     /// shows a floating message in the top right corner of the canvas
     void showFloatingMessage(const QString message, const QIcon& icon);
 
+    /// The QMainWindow associated with this view. This is most likely going to be shell(), but
+    /// when running as Gemini or Sketch, this will be set to the applications' own QMainWindow.
+    /// This can be checked by qobject_casting to KoMainWindow to check the difference.
+    QMainWindow* qtMainWindow();
+    /// The mainWindow function will return the shell() value, unless this function is called
+    /// with a non-null value. To make it return shell() again, simply pass null to this function.
+    void setQtMainWindow(QMainWindow* newMainWindow);
+
 public slots:
 
     void slotLoadingFinished();

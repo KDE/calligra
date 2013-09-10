@@ -41,6 +41,7 @@
 #include <QByteArray>
 #include <QBuffer>
 #include <QScrollBar>
+#include <QMainWindow>
 
 #include <kio/netaccess.h>
 #include <kmenubar.h>
@@ -166,6 +167,7 @@ public:
         , perspectiveGridManager(0)
         , paintingAssistantManager(0)
         , actionManager(0)
+        , mainWindow(0)
     {
     }
 
@@ -214,6 +216,7 @@ public:
     BlockingUserInputEventFilter blockingEventFilter;
     KisFlipbook *flipbook;
     KisActionManager* actionManager;
+    QMainWindow* mainWindow;
 };
 
 
@@ -1093,6 +1096,18 @@ KisGridManager * KisView2::gridManager()
 KisPaintingAssistantsManager* KisView2::paintingAssistantManager()
 {
     return m_d->paintingAssistantManager;
+}
+
+QMainWindow* KisView2::qtMainWindow()
+{
+    if(m_d->mainWindow)
+        return m_d->mainWindow;
+    return shell();
+}
+
+void KisView2::setQtMainWindow(QMainWindow* newMainWindow)
+{
+    m_d->mainWindow = newMainWindow;
 }
 
 void KisView2::slotTotalRefresh()
