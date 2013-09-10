@@ -68,10 +68,16 @@ StepStepBase StepStepStack::top()
 }
 
 
-void StepStepStack::deserialize(QString Filename)
+void StepStepStack::deserialize(QString text)
 {
-    d->deserialize(Filename);
+    d->deserialize(text);
 }
+void StepStepStack::loadFile(QString filename)
+{
+    d->loadFile(filename);
+
+}
+
 void StepStepStack::insertAt(int i, StepStepBase step)
 {
     d->insertAt(i,step);

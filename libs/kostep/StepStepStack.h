@@ -43,8 +43,9 @@ public:
     const StepStepBase& pop();
     StepStepBase top();
 
-    void serialize (QString Filename="changes.xml");
-    void deserialize (QString Filename="changes.xml");
+    void serialize (QString text);
+    void loadFile (QString filename="changes.xml");
+    void deserialize (QString text);
 
     void insertAt (int i, StepStepBase step);
     void removeAt (int i);

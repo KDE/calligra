@@ -96,11 +96,11 @@ void StepStepStackPrivate::serialize(QString Filename)
     file.close();
 }
 
-void StepStepStackPrivate::serialize (StepStepBase & step, QString Filename)
+void StepStepStackPrivate::serialize (StepStepBase & step, QString filename)
 {
     QDir directory;
-    QString Location = directory.homePath() +"/" + Filename;
-    QFile file(Filename);
+    QString location = directory.homePath() +"/" + filename;
+    QFile file(filename);
     file.open(QIODevice::WriteOnly|QIODevice::Append|QIODevice::Text);
     QTextStream out(&file);
     out << step.toXML();
@@ -109,17 +109,25 @@ void StepStepStackPrivate::serialize (StepStepBase & step, QString Filename)
     file.close();
 }
 
-void StepStepStackPrivate::deserialize(QString Filename)
+void StepStepStackPrivate::deserialize(QString text)
 {
-    QFile file(Filename);
+    text = text.simplified();
+
+
+
+}
+void StepStepStackPrivate::loadFile(QString filename)
+{
+    QFile file(filename);
     file.open(QIODevice::ReadOnly|QIODevice::Text|QIODevice::Unbuffered);
     QString fileContents = file.readAll();
     file.close();
 
     fileContents = fileContents.trimmed();
-    QStringList fileContentsList = fileContents.split(' ');
+    deserialize(fileContents);
 
 }
+
 void StepStepStackPrivate::insertAt(int i, StepStepBase step)
 {
     //stub method for now will need to implement Operational Transformation Methods to

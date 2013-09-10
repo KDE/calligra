@@ -33,9 +33,10 @@ public:
     const StepStepBase& pop();
     StepStepBase top();
     void push(StepStepBase &step);
-    void serialize(QString Filename);
-    void serialize(StepStepBase &step, QString Filename);
-    void deserialize(QString Filename);
+    void serialize(QString filename);
+    void serialize(StepStepBase &step, QString filename);
+    void deserialize(QString text);
+    void loadFile(QString filename);
     void insertAt(int i, StepStepBase step);
     void removeAt(int i);
     int rowcount();
