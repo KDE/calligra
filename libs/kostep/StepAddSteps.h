@@ -16,8 +16,9 @@
     License along with this library; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
-#ifndef STEPSTEPS_H
-#define STEPSTEPS_H
-#include "StepAddSteps.h"
-#include "StepDeleteSteps.h"
-#endif // STEPSTEPS_H
+
+#ifndef STEPADDSTEPS_H
+#define STEPADDSTEPS_H
+#include "StepAddTextBlockStep.h"
+#include "StepAddTextStep.h"
+#endif // STEPADDSTEPS_H
