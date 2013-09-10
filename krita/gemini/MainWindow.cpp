@@ -378,6 +378,9 @@ void MainWindow::documentChanged()
     d->initDesktopView();
     d->desktopView->setRootDocument(DocumentManager::instance()->document(), DocumentManager::instance()->part(), false);
     qApp->processEvents();
+    qobject_cast<KisView2*>(d->desktopView->rootView())->setQtMainWindow(d->desktopView);
+    if(d->sketchKisView)
+        d->sketchKisView->setQtMainWindow(this);
     if(!d->forceSketch && !d->slateMode)
         switchToDesktop(true);
 }
