@@ -592,7 +592,7 @@ void KisCanvas2::updateCanvas()
 
 void KisCanvas2::updateCanvas(const QRectF& documentRect)
 {
-    if (m_d->currentCanvasIsOpenGL) {
+    if (m_d->currentCanvasIsOpenGL && m_d->canvasWidget->decorations().size() > 0) {
         m_d->canvasWidget->widget()->update();
     }
     else {
@@ -611,6 +611,11 @@ void KisCanvas2::disconnectCanvasObserver(QObject *object)
 {
     KoCanvasBase::disconnectCanvasObserver(object);
     m_d->view->disconnect(object);
+}
+
+void KisCanvas2::toggleTabletLogger()
+{
+    m_d->inputManager->toggleTabletLogger();
 }
 
 void KisCanvas2::notifyZoomChanged()

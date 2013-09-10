@@ -214,6 +214,7 @@ private slots:
     void slotSaveIncrementalBackup();
     void showStatusBar(bool toggled);
     void showJustTheCanvas(bool toggled);
+    void toggleTabletLogger();
 
 private:
     void createGUI();
