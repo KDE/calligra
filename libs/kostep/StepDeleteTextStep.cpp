@@ -44,6 +44,7 @@ StepDeleteTextStep::StepDeleteTextStep (int length, QObject *parent):d (new
 {
     d->length = length;
 
+
 }
 
 StepDeleteTextStep::StepDeleteTextStep (const StepDeleteTextStep &other):
@@ -76,6 +77,7 @@ QString StepDeleteTextStep::toXML ()
         locationEnd += "/";
     }
     locationEnd.remove(locationEnd.length()-1,1);
+    locationEnd.append("\"");
 
-    return "<del "+location().toString() + " " + locationEnd+ " />" ;
+    return "<del "+location().toString() + " " + locationEnd + " />" ;
 }
