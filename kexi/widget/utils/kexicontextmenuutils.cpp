@@ -54,7 +54,7 @@ public:
     KActionCollection actionCollection;
     KAction *insertFromFileAction, *saveAsAction, *cutAction, *copyAction, *pasteAction,
     *deleteAction
-//#ifdef KEXI_NO_UNFINISHED
+//#ifndef KEXI_SHOW_UNFINISHED
     , *propertiesAction
 //#endif
     ;
@@ -90,7 +90,7 @@ KexiImageContextMenu::KexiImageContextMenu(QWidget* parent)
     connect(d->deleteAction, SIGNAL(triggered()),
             this, SLOT(clear()));
     addAction(d->deleteAction);
-#ifdef KEXI_NO_UNFINISHED
+#ifndef KEXI_SHOW_UNFINISHED
     d->propertiesAction = 0;
 #else
     addSeparator();
@@ -276,7 +276,7 @@ void KexiImageContextMenu::updateActionsAvailability()
     d->copyAction->setEnabled(!valueIsNull);
     d->pasteAction->setEnabled(!valueIsReadOnly);
     d->deleteAction->setEnabled(!valueIsNull && !valueIsReadOnly);
-#ifdef KEXI_NO_UNFINISHED
+#ifndef KEXI_SHOW_UNFINISHED
     if (d->propertiesAction)
         d->propertiesAction->setEnabled(!valueIsNull);
 #endif
