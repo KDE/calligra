@@ -190,7 +190,7 @@ bool KexiTableDesignerViewPrivate::updatePropertiesVisibility(KexiDB::Field::Typ
 //    changed = true;
     }
     setVisibilityIfNeeded(set, prop, visible, changed, commandGroup);
-#ifndef KEXI_NO_UNFINISHED
+#ifdef KEXI_SHOW_UNFINISHED
     prop = &set["precision"];
     visible = KexiDB::Field::isFPNumericType(fieldType);
     setVisibilityIfNeeded(set, prop, visible, changed, commandGroup);
@@ -216,7 +216,7 @@ bool KexiTableDesignerViewPrivate::updatePropertiesVisibility(KexiDB::Field::Typ
     setVisibilityIfNeeded(set, prop, visible, changed, commandGroup);
 
 //! @todo remove this when BLOB supports default value
-#ifdef KEXI_NO_UNFINISHED
+#ifndef KEXI_SHOW_UNFINISHED
     prop = &set["defaultValue"];
     visible = !isObjectTypeGroup;
     setVisibilityIfNeeded(set, prop, visible, changed, commandGroup);

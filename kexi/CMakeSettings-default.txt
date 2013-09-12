@@ -1,7 +1,0 @@
-# remove before release:
-ADD_DEFINITIONS(
-        -DKEXI_DEBUG_GUI
-)
-
-#set(WITH_WEBFORMS TRUE)
-set(SHOULD_BUILD_SCRIPTING TRUE)
