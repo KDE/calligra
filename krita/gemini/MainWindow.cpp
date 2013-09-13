@@ -94,13 +94,16 @@ public:
         , forceSketch(false)
         , wasMaximized(true)
         , temporaryFile(false)
-        , desktopInitialized(false)
         , syncObject(0)
     {
 #ifdef Q_OS_WIN
         slateMode = (GetSystemMetrics(SM_CONVERTIBLESLATEMODE) == 0);
         docked = (GetSystemMetrics(SM_SYSTEMDOCKED) != 0);
 #endif
+        centerer = new QTimer(q);
+        centerer->setInterval(10);
+        centerer->setSingleShot(true);
+        connect(centerer, SIGNAL(timeout()), q, SLOT(adjustZoomOnDocumentChangedAndStuff()));
 }
     MainWindow* q;
     bool allowClose;
@@ -119,8 +122,8 @@ public:
     bool forceSketch;
     bool wasMaximized;
     bool temporaryFile;
-    bool desktopInitialized;
     ViewModeSynchronisationObject* syncObject;
+    QTimer* centerer;
 
     void initSketchView(QObject* parent)
     {
@@ -183,9 +186,6 @@ public:
         // DesktopViewProxy connects itself up to everything appropriate on construction,
         // and destroys itself again when the view is removed
         desktopViewProxy = new DesktopViewProxy(q, desktopView);
-        desktopInitialized = false;
-        KisConfig cfg;
-        cfg.setCursorStyle(desktopCursorStyle);
     }
 
     void notifySlateModeChange();
@@ -257,7 +257,8 @@ void MainWindow::switchToSketch()
         d->desktopView->setParent(0);
         d->wasMaximized = isMaximized();
 
-        sketchChange();
+        if(!d->slateMode)
+            sketchChange();
     }
 
     setCentralWidget(d->sketchView);
@@ -269,7 +270,6 @@ void MainWindow::switchToSketch()
         if(d->syncObject->initialized)
             QTimer::singleShot(100, this, SLOT(sketchChange()));
     }
-    cfg.setCursorStyle(CURSOR_STYLE_NO_CURSOR);
     qDebug() << "milliseconds to switch to sketch:" << timer.elapsed();
 }
 
@@ -282,6 +282,9 @@ void MainWindow::sketchChange()
         //so it can use those values to sync with the old view.
         ViewModeSwitchEvent switchedEvent(ViewModeSwitchEvent::SwitchedToSketchModeEvent, view, d->sketchView, d->syncObject);
         QApplication::sendEvent(d->sketchView, &switchedEvent);
+        qApp->processEvents();
+        KisConfig cfg;
+        cfg.setCursorStyle(CURSOR_STYLE_NO_CURSOR);
     }
 }
 
@@ -318,34 +321,17 @@ void MainWindow::switchToDesktop(bool justLoaded)
 
     qApp->processEvents();
 
-    if(view && !justLoaded) {
+    if(view) {
         qApp->processEvents();
-
-        if(d->desktopInitialized)
-            initialDesktopChange();
-        else
-            QTimer::singleShot(1500, this, SLOT(initialDesktopChange()));
-    }
-    else if(justLoaded)
-    {
-        QTimer::singleShot(0, this, SLOT(adjustZoomOnDocumentChangedAndStuff()));
-    }
-
-    qDebug() << "milliseconds to switch to desktop:" << timer.elapsed();
-}
-
-void MainWindow::initialDesktopChange()
-{
-    d->desktopInitialized = true;
-    if(d->desktopView) {
-        KisView2* view = qobject_cast<KisView2*>(d->desktopView->rootView());
         //Notify the new view that we just switched to it, passing our synchronisation object
         //so it can use those values to sync with the old view.
         ViewModeSwitchEvent switchedEvent(ViewModeSwitchEvent::SwitchedToDesktopModeEvent, d->sketchView, view, d->syncObject);
         QApplication::sendEvent(view, &switchedEvent);
+        KisConfig cfg;
+        cfg.setCursorStyle(d->desktopCursorStyle);
     }
-    KisConfig cfg;
-    cfg.setCursorStyle(d->desktopCursorStyle);
+
+    qDebug() << "milliseconds to switch to desktop:" << timer.elapsed();
 }
 
 void MainWindow::adjustZoomOnDocumentChangedAndStuff()
@@ -357,7 +343,6 @@ void MainWindow::adjustZoomOnDocumentChangedAndStuff()
         qApp->processEvents();
         QPoint center = view->rect().center();
         view->canvasControllerWidget()->zoomRelativeToPoint(center, 0.9);
-        d->desktopInitialized = true;
     }
     else if(d->sketchKisView && centralWidget() == d->sketchView) {
         qApp->processEvents();
@@ -378,11 +363,13 @@ void MainWindow::documentChanged()
     d->initDesktopView();
     d->desktopView->setRootDocument(DocumentManager::instance()->document(), DocumentManager::instance()->part(), false);
     qApp->processEvents();
-    qobject_cast<KisView2*>(d->desktopView->rootView())->setQtMainWindow(d->desktopView);
+    KisView2* view = qobject_cast<KisView2*>(d->desktopView->rootView());
+    view->setQtMainWindow(d->desktopView);
+    connect(view, SIGNAL(sigLoadingFinished()), d->centerer, SLOT(start()));
     if(d->sketchKisView)
         d->sketchKisView->setQtMainWindow(this);
     if(!d->forceSketch && !d->slateMode)
-        switchToDesktop(true);
+        switchToDesktop();
 }
 
 bool MainWindow::allowClose() const
@@ -418,7 +405,7 @@ void MainWindow::setCurrentSketchPage(QString newPage)
         }
         else
         {
-            QTimer::singleShot(3000, this, SLOT(adjustZoomOnDocumentChangedAndStuff()));
+            //QTimer::singleShot(3000, this, SLOT(adjustZoomOnDocumentChangedAndStuff()));
         }
     }
 }
@@ -441,9 +428,13 @@ QObject* MainWindow::sketchKisView() const
 
 void MainWindow::setSketchKisView(QObject* newView)
 {
+    if(d->sketchKisView)
+        d->sketchKisView->disconnect(this);
     if(d->sketchKisView != newView)
     {
         d->sketchKisView = qobject_cast<KisView2*>(newView);
+        connect(d->sketchKisView, SIGNAL(sigLoadingFinished()), d->centerer, SLOT(start()));
+        d->centerer->start();
         emit sketchKisViewChanged();
     }
 }

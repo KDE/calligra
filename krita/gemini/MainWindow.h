@@ -77,7 +77,6 @@ private Q_SLOTS:
     void switchSketchForced();
     void adjustZoomOnDocumentChangedAndStuff();
     void sketchChange();
-    void initialDesktopChange();
 
 private:
     void cloneResources(KisCanvasResourceProvider *from, KisCanvasResourceProvider *to);
