@@ -115,18 +115,17 @@ KexiTemplateSelectionPage::KexiTemplateSelectionPage(QWidget* parent)
     info.icon = KIcon(KexiDB::defaultFileBasedDriverIconName()); //"x-office-document");
     templateCategory.addTemplate(info);
     templateCategories.append(templateCategory);
-    
+
+#ifdef KEXI_SHOW_UNIMPLEMENTED
     templateCategory = KexiTemplateCategoryInfo();
     templateCategory.name = "office";
     templateCategory.caption = i18n("Office Templates");
-    //templateCategory.enabled = false;
     
     info = KexiTemplateInfo();
     info.name = "contacts";
     info.caption = i18n("Contacts");
     info.description = i18n("Database for collecting and managing contacts");
     info.icon = koIcon("view-pim-contacts");
-    //info.enabled = false;
     templateCategory.addTemplate(info);
     
     info = KexiTemplateInfo();
@@ -134,10 +133,10 @@ KexiTemplateSelectionPage::KexiTemplateSelectionPage(QWidget* parent)
     info.caption = i18n("Movie catalog");
     info.description = i18n("Database for collecting movies");
     info.icon = koIcon("video-x-generic");
-    //info.enabled = false;
     templateCategory.addTemplate(info);
     templateCategories.append(templateCategory);
-    
+#endif // KEXI_SHOW_UNIMPLEMENTED
+
     KexiTemplatesProxyModel* proxyModel = new KexiTemplatesProxyModel(m_templatesList);
     KexiTemplatesModel* model = new KexiTemplatesModel(templateCategories);
     proxyModel->setSourceModel(model);

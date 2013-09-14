@@ -80,7 +80,7 @@ public:
         // by providing this in propeditor
         advancedProperties.insert("minimumSize");
         advancedProperties.insert("maximumSize");
-#ifdef KEXI_NO_UNFINISHED
+#ifndef KEXI_SHOW_UNFINISHED
 /*! @todo reenable */
         advancedProperties.insert("accel");
         advancedProperties.insert("icon");
