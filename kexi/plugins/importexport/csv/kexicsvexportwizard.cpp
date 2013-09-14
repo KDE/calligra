@@ -29,7 +29,7 @@
 #include <core/kexiguimsghandler.h>
 #include <kexiutils/utils.h>
 #include <widget/kexicharencodingcombobox.h>
-#include <KoFileDialog.h>
+#include <widget/KexiFileWidget.h>
 #include <KoIcon.h>
 
 #include <QCheckBox>
@@ -109,12 +109,20 @@ KexiCSVExportWizard::KexiCSVExportWizard(const KexiCSVExport::Options& options,
 
     // 1. File Save Page
     if (m_options.mode == KexiCSVExport::File) {
-        m_exportFile = QFileDialog::getSaveFileName(this,
-                                                          i18n("Enter Name of File You Want to Save Data To"),
-                                                          KoFileDialog::getNameFilters(csvMimeTypes()));
-
-        m_infoLblTo->setFileName(m_exportFile);
-        next();
+        m_fileSaveWidget = new KexiFileWidget(
+            KUrl("kfiledialog:///CSVImportExport"), //startDir
+            KexiFileWidget::Custom | KexiFileWidget::SavingFileBasedDB,
+            this);
+        m_fileSaveWidget->setObjectName("m_fileSavePage");
+        //m_fileSavePage->setMinimumHeight(kapp->desktop()->availableGeometry().height() / 2);
+        m_fileSaveWidget->setAdditionalFilters(csvMimeTypes().toSet());
+        m_fileSaveWidget->setDefaultExtension("csv");
+        m_fileSaveWidget->setLocationText(
+            KexiUtils::stringToFileName(m_tableOrQuery->captionOrName()));
+        m_fileSavePage = new KPageWidgetItem(m_fileSaveWidget, i18n("Enter Name of File You Want to Save Data To"));
+        addPage(m_fileSavePage);
+        connect(this, SIGNAL(currentPageChanged(KPageWidgetItem*,KPageWidgetItem*)),
+                this, SLOT(slotCurrentPageChanged(KPageWidgetItem*,KPageWidgetItem*)));
     }
 
     /* 2. Export options
@@ -271,8 +279,31 @@ bool KexiCSVExportWizard::cancelled() const
     return m_cancelled;
 }
 
+void KexiCSVExportWizard::slotCurrentPageChanged(KPageWidgetItem *page, KPageWidgetItem *prev)
+{
+    Q_UNUSED(prev)
+
+    if (page == m_fileSavePage) {
+        m_fileSaveWidget->setFocus();
+    } else if (page == m_exportOptionsPage) {
+        if (m_options.mode == KexiCSVExport::File)
+            m_infoLblTo->setFileName(m_fileSaveWidget->highlightedFile());
+    }
+
+}
+
 void KexiCSVExportWizard::next()
 {
+    if (currentPage() == m_fileSavePage) {
+        if (!m_fileSaveWidget->checkSelectedFile()) {
+            return;
+        }
+        kDebug() << "selectedFile:" << m_fileSaveWidget->selectedFile();
+        kDebug() << "selectedUrl:" << m_fileSaveWidget->selectedUrl();
+        kDebug() << "highlightedFile:" << m_fileSaveWidget->highlightedFile();
+        KAssistantDialog::next();
+        return;
+    }
     KAssistantDialog::next();
 }
 
@@ -280,8 +311,8 @@ void KexiCSVExportWizard::done(int result)
 {
     if (QDialog::Accepted == result) {
         if (m_fileSavePage) {
-            kDebug() << m_exportFile;
-            m_options.fileName = m_exportFile;
+            kDebug() << m_fileSaveWidget->highlightedFile();
+            m_options.fileName = m_fileSaveWidget->highlightedFile();
         }
         m_options.delimiter = m_delimiterWidget->delimiter();
         m_options.textQuote = m_textQuote->textQuote();

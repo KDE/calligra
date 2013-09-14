@@ -102,6 +102,7 @@
 #include <widget/utils/KexiDockableWidget.h>
 #include <widget/navigator/KexiProjectNavigator.h>
 #include <widget/navigator/KexiProjectModel.h>
+#include <widget/KexiFileWidget.h>
 #include <widget/KexiNameDialog.h>
 #include <widget/KexiNameWidget.h>
 #include <koproperty/EditorView.h>
@@ -115,7 +116,6 @@
 #include "startup/KexiStartupDialog.h"
 
 #include <KoIcon.h>
-#include <KoFileDialog.h>
 
 
 #if !defined(KexiVDebug)
@@ -1388,7 +1388,7 @@ tristate KexiMainWindow::createProjectFromTemplate(const KexiProjectData& projec
     const QString startDir("kfiledialog:///OpenExistingOrCreateNewProject"/*as in KexiNewProjectWizard*/);
     const QString caption(i18n("Select New Project's Location"));
 
-    //while (true) {
+    while (true) {
 #ifdef __GNUC__
 #warning TODO - remove win32 case
 #else
@@ -1402,14 +1402,21 @@ tristate KexiMainWindow::createProjectFromTemplate(const KexiProjectData& projec
         }
         const bool specialDir = fname.isEmpty();
         kDebug() << fname << ".............";
-        KoFileDialog dlg;
-        fname = dlg.getSaveFileName(this, caption, specialDir ? startDir : QString(),
-                            KoFileDialog::getNameFilters(mimetypes));
+        KFileDialog dlg(specialDir ? KUrl(startDir) : KUrl(),
+                        QString(), this);
+        dlg.setModal(true);
+        dlg.setMimeFilter(mimetypes);
+        if (!specialDir)
+            dlg.setSelection(fname);   // may also be a filename
+        dlg.setOperationMode(KFileDialog::Saving);
+        dlg.setWindowTitle(caption);
+        dlg.exec();
+        fname = dlg.selectedFile();
         if (fname.isEmpty())
             return cancelled;
-        /*if (KexiFileWidget::askForOverwriting(fname, this))
+        if (KexiFileWidget::askForOverwriting(fname, this))
             break;
-    }*/
+    }
 
     QFile sourceFile(projectData.constConnectionData()->fileName());
     if (!sourceFile.copy(fname)) {

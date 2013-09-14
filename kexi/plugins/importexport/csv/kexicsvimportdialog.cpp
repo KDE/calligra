@@ -68,7 +68,6 @@
 #include <KProgressDialog>
 
 #include <KoIcon.h>
-#include <KoFileDialog.h>
 
 #include <kexiutils/identifier.h>
 #include <kexiutils/utils.h>
@@ -85,6 +84,7 @@
 #include <db/tristate.h>
 #include <db/utils.h>
 #include <widget/kexicharencodingcombobox.h>
+#include <widget/KexiFileWidget.h>
 #include <kexiutils/KexiCommandLinkButton.h>
 #include <widget/KexiNameWidget.h>
 #include <widget/navigator/KexiProjectNavigator.h>
@@ -475,7 +475,7 @@ void KexiCSVImportDialog::next()
     KPageWidgetItem *curPage = currentPage();
 
     if (curPage == m_openFilePage) {
-        //m_fname = m_openFileWidget->highlightedFile();
+        m_fname = m_openFileWidget->highlightedFile();
         if (m_fname.isEmpty()) {
             KMessageBox::sorry(this, i18nc("@info", "Select source filename."));
             return;
@@ -648,12 +648,16 @@ void KexiCSVImportDialog::slotCurrentPageChanged(KPageWidgetItem *page, KPageWid
 
 void KexiCSVImportDialog::createFileOpenPage()
 {
-    KoFileDialog dlg;
-    QString file = dlg.getOpenFileName(this, i18n("Select file name for import"),
-                        KoFileDialog::getNameFilters(csvMimeTypes()));
-    //TODO connect(this, SIGNAL(fileSelected(KUrl)), this, SLOT(next()));
-    //m_openFilePage = new KPageWidgetItem(i18n("Select file name for import"));
-    //addPage(m_openFilePage);
+    m_openFileWidget = new KexiFileWidget(
+        KUrl("kfiledialog:///CSVImportExport"), //startDir
+        KexiFileWidget::Custom | KexiFileWidget::Opening,
+        this);
+    m_openFileWidget->setObjectName("m_openFileWidget");
+    m_openFileWidget->setAdditionalFilters(csvMimeTypes().toSet());
+    m_openFileWidget->setDefaultExtension("csv");
+    connect(m_openFileWidget, SIGNAL(fileSelected(KUrl)), this, SLOT(next()));
+    m_openFilePage = new KPageWidgetItem(m_openFileWidget, i18n("Select file name for import"));
+    addPage(m_openFilePage);
 }
 
 void KexiCSVImportDialog::createOptionsPage()

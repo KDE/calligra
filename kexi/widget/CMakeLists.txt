@@ -58,22 +58,13 @@ ELSE (KEXI_MOBILE)
   #   pixmapcollection.cpp 
 # TODO replace use of KexiProjectListView and KexiProjectListViewList (with KexiProjectNavigator) 
 #      in kexiactionselectiondialog and remove them
+    kexiprjtypeselector.cpp
+    KexiConnectionSelectorWidget.cpp
+    KexiFileWidget.cpp
     KexiNameWidget.cpp
     KexiNameDialog.cpp
     KexiPasswordWidget.cpp
   )
-  if (APPLE)
-    LIST(APPEND kexiextendedwidgets_LIB_SRCS
-      KexiConnectionSelectorWidget.cpp
-    )
-  else (APPLE)
-    LIST(APPEND kexiextendedwidgets_LIB_SRCS
-      kexiprjtypeselector.cpp
-      KexiConnectionSelectorWidget.cpp
-      KexiFileWidget.cpp
-    )
-  endif (APPLE)
-
   kde4_add_ui_files(kexiextendedwidgets_LIB_SRCS
     KexiConnectionSelector.ui
     kexidbconnectionwidget.ui

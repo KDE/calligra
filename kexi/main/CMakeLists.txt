@@ -63,7 +63,6 @@ target_link_libraries(
     ${CALLIGRADB_LIBS}
     kexiextendedwidgets
     kexiguiutils
-    komain
     ${KDE4_KNEWSTUFF_LIBS}
     ${KDE4_KIO_LIBS}
     ${KDE4_KFILE_LIBS}
