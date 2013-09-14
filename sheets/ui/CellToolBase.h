@@ -106,8 +106,9 @@ public Q_SLOTS:
 
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     virtual void deactivate();
-
     virtual void deleteEditor(bool saveChanges, bool expandMatrix = false);
+    void populateWordCollection();
+    QHash<int,QString> WordCollection();
 
 protected:
     void init();

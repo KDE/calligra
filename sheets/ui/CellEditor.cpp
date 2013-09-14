@@ -70,12 +70,11 @@ public:
     FormulaEditorHighlighter* highlighter;
     FunctionCompletion*       functionCompletion;
     QTimer*                   functionCompletionTimer;
-    QHash<int,QString>        wordCollection;
+    QHash<int, QString> *wordCollection;
     QPoint globalCursorPos;
     QCompleter                *complete;
     bool captureAllKeyEvents : 1;
     bool selectionChangedLocked     : 1;
-
     int currentToken;
 
 public:
@@ -246,7 +245,7 @@ void CellEditor::Private::updateActiveSubRegion(const Tokens &tokens)
 }
 
 
-CellEditor::CellEditor(CellToolBase *cellTool, QWidget* parent)
+CellEditor::CellEditor(CellToolBase *cellTool,QHash<int,QString> &wordList, QWidget* parent)
         : KTextEdit(parent)
         , d(new Private)
 {
@@ -257,6 +256,7 @@ CellEditor::CellEditor(CellToolBase *cellTool, QWidget* parent)
     d->captureAllKeyEvents = d->selection->activeSheet()->map()->settings()->captureAllArrowKeys();
     d->selectionChangedLocked = false;
     d->currentToken = 0;
+    d->wordCollection=&wordList;
 
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -279,7 +279,7 @@ CellEditor::CellEditor(CellToolBase *cellTool, QWidget* parent)
     setCompletionObject(&selection()->view()->doc()->map()->stringCompletion(), true);
 #endif
     
-    populateWordCollection();
+    //populateWordCollection();
     
     //AutoCompletion Code
     d->complete = new QCompleter(this);
@@ -305,11 +305,12 @@ void CellEditor::populateWordCollection()
       Value val=Cell( d->selection->activeSheet(), j, i).value();
       if(val.isString()) {
 	QString value=conv->toString( conv2->asString(val) );
-	  
-	if(!d->wordCollection.values(j).contains(value)){
-	    d->wordCollection.insertMulti(j, value);
+	
+	if(!d->wordCollection->values(j).contains(value)){
+	    d->wordCollection->insertMulti(j, value);
 	  }
 	  }
+	//  qDebug()<<i<<" "<<j<<"Working";
   }
 }
 }
@@ -341,7 +342,7 @@ QAbstractItemModel *CellEditor::model()
   const Cell cell(d->selection->activeSheet(), d->selection->marker());
   int col=cell.column();
 
-  words=d->wordCollection.values(col);
+  words=d->wordCollection->values(col);
   for (int i=0; i<3 && (!words.isEmpty()) ; i++) {
     wordlist.push_back(words.front());
     words.pop_front();
@@ -655,7 +656,7 @@ void CellEditor::keyPressEvent(QKeyEvent *event)
         // editor.
         
 	if(textUnderCursor()!=""){
-	  d->wordCollection.insertMulti(cell_temp.column(),textUnderCursor());
+	  d->wordCollection->insertMulti(cell_temp.column(),textUnderCursor());
 	}
 	event->ignore();
 	return;
@@ -667,7 +668,7 @@ void CellEditor::keyPressEvent(QKeyEvent *event)
         }
 	//const Cell cell2(d->selection->activeSheet(), d->selection->marker());
 	if(textUnderCursor()!="") {
-	  d->wordCollection.insertMulti(cell_temp.column(),textUnderCursor());
+	  d->wordCollection->insertMulti(cell_temp.column(),textUnderCursor());
 	}
 	event->ignore(); // pass to parent
         return;
