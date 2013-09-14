@@ -319,8 +319,8 @@ QAbstractItemModel *CellEditor::model()
   QList<QString> words,wordlist;
   const Cell cell(d->selection->activeSheet(), d->selection->marker());
   int col=cell.column();
-
   words=d->wordCollection->values(col);
+  qDebug()<<"wordlist:"<<words;
   for (int i=0; i<3 && (!words.isEmpty()) ; i++) {
     wordlist.push_back(words.front());
     words.pop_front();
@@ -633,7 +633,7 @@ void CellEditor::keyPressEvent(QKeyEvent *event)
         // editing mode. To insert literal tabs you can always use the external
         // editor.
         
-	if(textUnderCursor()!=""){
+	if(textUnderCursor()!="" && !d->wordCollection->values(cell_temp.column()).contains(textUnderCursor())){
 	  d->wordCollection->insertMulti(cell_temp.column(),textUnderCursor());
 	}
 	event->ignore();
@@ -644,8 +644,7 @@ void CellEditor::keyPressEvent(QKeyEvent *event)
         if (event->modifiers() & Qt::ShiftModifier) {
             break; // pass to TextEdit
         }
-	//const Cell cell2(d->selection->activeSheet(), d->selection->marker());
-	if(textUnderCursor()!="") {
+	if(textUnderCursor()!="" && !d->wordCollection->values(cell_temp.column()).contains(textUnderCursor() )) {
 	  d->wordCollection->insertMulti(cell_temp.column(),textUnderCursor());
 	}
 	event->ignore(); // pass to parent

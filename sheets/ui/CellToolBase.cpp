@@ -1469,7 +1469,7 @@ void CellToolBase::populateWordCollection()
   
   int lastrow=cellstore->rows();
   int lastcolumn=cellstore->columns();
-  
+  if( lastrow < 2000 && lastcolumn < 20) {
   for (int j=1 ; j <= lastcolumn ; j++) {
     for (int i=1; i<=lastrow ; i++) {
       Value val=Cell( selection()->activeSheet(), j, i).value();
@@ -1482,6 +1482,7 @@ void CellToolBase::populateWordCollection()
       }
 	  qDebug()<<i<<" "<<j<<"Working";
     }
+  }
   }
 }
 
