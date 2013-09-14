@@ -1394,8 +1394,7 @@ bool CellToolBase::createEditor(bool clear, bool focus)
             d->externalEditor->applyAction()->setEnabled(true);
             d->externalEditor->cancelAction()->setEnabled(true);
         }
-        qDebug()<<"Cell Selected";
-
+        
         double w = cell.width();
         double h = cell.height();
         double min_w = cell.width();
@@ -1463,14 +1462,14 @@ bool CellToolBase::createEditor(bool clear, bool focus)
     return true;
 }
 
-
 void CellToolBase::populateWordCollection()
 {
   const CellStorage* cellstore=selection()->activeSheet()->cellStorage();
   ValueConverter *conv,*conv2;
-  //qDebug()<<"activesheet:"<<d->activeSheet;
+  
   int lastrow=cellstore->rows();
   int lastcolumn=cellstore->columns();
+  
   for (int j=1 ; j <= lastcolumn ; j++) {
     for (int i=1; i<=lastrow ; i++) {
       Value val=Cell( selection()->activeSheet(), j, i).value();
@@ -1480,18 +1479,11 @@ void CellToolBase::populateWordCollection()
 	if(!d->wordCollection.values(j).contains(value)){
 	    d->wordCollection.insertMulti(j, value);
 	  }
-	  }
+      }
 	  qDebug()<<i<<" "<<j<<"Working";
+    }
   }
 }
-}
-
-QHash<int, QString> CellToolBase::WordCollection()
-{
-  return d->wordCollection;
-}
-
-
 
 void CellToolBase::deleteEditor(bool saveChanges, bool expandMatrix)
 {
@@ -1528,7 +1520,6 @@ void CellToolBase::activeSheetChanged(Sheet* sheet)
 #else
     Q_ASSERT(selection()->activeSheet() == sheet);
 #endif
-    qDebug()<<"Sheet Changed";
     populateWordCollection();
     if (!selection()->referenceSelectionMode()) {
         return;

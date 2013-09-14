@@ -70,7 +70,7 @@ public:
     FormulaEditorHighlighter* highlighter;
     FunctionCompletion*       functionCompletion;
     QTimer*                   functionCompletionTimer;
-    QHash<int, QString> *wordCollection;
+    QHash<int, QString>       *wordCollection;
     QPoint globalCursorPos;
     QCompleter                *complete;
     bool captureAllKeyEvents : 1;
@@ -291,28 +291,6 @@ CellEditor::CellEditor(CellToolBase *cellTool,QHash<int,QString> &wordList, QWid
     
     connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(slotCursorPositionChanged()));
     connect(this, SIGNAL(textChanged()), this, SLOT(slotTextChanged()));
-}
-
-void CellEditor::populateWordCollection()
-{
-  ValueConverter *conv,*conv2;
- 
-  const Cell cell( d->selection->activeSheet(), d->selection->marker());
-  int lastrow=d->selection->activeSheet()->cellStorage()->rows();
-  int lastcolumn=d->selection->activeSheet()->cellStorage()->columns();
-  for (int j=1 ; j <= lastcolumn ; j++) {
-    for (int i=1; i<=lastrow ; i++) {
-      Value val=Cell( d->selection->activeSheet(), j, i).value();
-      if(val.isString()) {
-	QString value=conv->toString( conv2->asString(val) );
-	
-	if(!d->wordCollection->values(j).contains(value)){
-	    d->wordCollection->insertMulti(j, value);
-	  }
-	  }
-	//  qDebug()<<i<<" "<<j<<"Working";
-  }
-}
 }
 
 CellEditor::~CellEditor()
