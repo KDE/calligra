@@ -1466,7 +1466,7 @@ void CellToolBase::populateWordCollection()
 {
   const CellStorage* cellstore=selection()->activeSheet()->cellStorage();
   ValueConverter *conv,*conv2;
-  
+  qDebug()<<"value"<<cellstore->firstInColumn(3);
   int lastrow=cellstore->rows();
   int lastcolumn=cellstore->columns();
   if( lastrow < 2000 && lastcolumn < 20) {
