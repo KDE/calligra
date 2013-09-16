@@ -340,7 +340,7 @@ void KexiProjectSelectorDialog::init(KexiProjectSet* prj_set, bool showProjectNa
     setObjectName("KexiProjectSelectorDialog");
     setModal(true);
     setButtons(
-#ifndef KEXI_NO_UNFINISHED
+#ifdef KEXI_SHOW_UNFINISHED
         //! @todo re-add Help when doc is available
         Help |
 #endif

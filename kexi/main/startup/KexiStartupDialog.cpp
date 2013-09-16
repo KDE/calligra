@@ -105,7 +105,7 @@ public:
     //int pageTemplatesID;
     //int pageOpenExistingID, pageOpenRecentID;
     //int templatesSectionID_blank, templatesSectionID_import;
-//#ifdef DB_TEMPLATES
+//#ifdef KEXI_PROJECT_TEMPLATES
 // int templatesSectionID_templates; //, templatesSectionID_custom2;
 //#endif
     QCheckBox *chkDoNotShow;
@@ -260,7 +260,7 @@ void KexiStartupDialog::done(int r)
             KPageWidgetItem *currenTemplatesPageWidgetItem = d->templatesWidget->currentPage();
             if (currenTemplatesPageWidgetItem == d->templPageWidgetItem_BlankDatabase)
                 d->result = CreateBlankResult;
-#ifdef DB_TEMPLATES
+#ifdef KEXI_PROJECT_TEMPLATES
             else if (currenTemplatesPageWidgetItem == d->templPageWidgetItem_CreateFromTemplate)
                 d->result = CreateFromTemplateResult;
 #endif
@@ -365,7 +365,7 @@ void KexiStartupDialog::setupPageTemplates()
     tmplyr->addWidget(lbl_blank);
     tmplyr->addStretch(1);
 
-#ifdef DB_TEMPLATES
+#ifdef KEXI_PROJECT_TEMPLATES
     //- page "templates"
 // d->templatesSectionID_templates = itemID++;
     QString none;
@@ -416,7 +416,7 @@ void KexiStartupDialog::setupPageTemplates()
       connect(d->viewBusinessTempl->templates,SIGNAL(returnPressed(QIconViewItem*)),this,SLOT(templateItemExecuted(QIconViewItem*)));
       connect(d->viewBusinessTempl->templates,SIGNAL(currentChanged(QIconViewItem*)),this,SLOT(templateItemSelected(QIconViewItem*)));
     */
-#endif //DB_TEMPLATES
+#endif //KEXI_PROJECT_TEMPLATES
 
     //- page "import db"
 // d->templatesSectionID_import = itemID++;
@@ -452,7 +452,7 @@ void KexiStartupDialog::slotCurrentTemplatesubpageChanged(KPageWidgetItem* curre
     if (current == d->templPageWidgetItem_BlankDatabase) {//blank
     } else if (current == d->templPageWidgetItem_ImportExisting) {
     }
-#ifdef DB_TEMPLATES
+#ifdef KEXI_PROJECT_TEMPLATES
     else if (current == d->templPageWidgetItem_CreateFromTemplate) {
         d->viewTemplates->populate();
     }
@@ -494,7 +494,7 @@ void KexiStartupDialog::templateItemExecuted(Q3IconViewItem *item)
     if (!item)
         return;
 // updateSelectedTemplateKeyInfo();
-#ifdef DB_TEMPLATES
+#ifdef KEXI_PROJECT_TEMPLATES
     accept();
 #endif
 }
@@ -511,7 +511,7 @@ void KexiStartupDialog::updateSelectedTemplateKeyInfo()
     } else if (d->templatesWidget->activePageIndex() == d->templatesSectionID_import) {
         d->selectedTemplateKey = "import";
     }
-#ifdef DB_TEMPLATES
+#ifdef KEXI_PROJECT_TEMPLATES
     else if (d->templatesWidget->activePageIndex() == d->templatesSectionID_templates) {
         item = d->viewTemplates->templates->currentItem();
         if (!item) {
@@ -562,7 +562,7 @@ void KexiStartupDialog::updateDialogOKButton(KPageWidgetItem *pageWidgetItem)
     if (pageWidgetItem == d->pageTemplates) {
         //int t_id = d->templatesWidget->activePageIndex();
         KPageWidgetItem *currenTemplatesPageWidgetItem = d->templatesWidget->currentPage();
-#ifdef DB_TEMPLATES
+#ifdef KEXI_PROJECT_TEMPLATES
         enable =
             currenTemplatesPageWidgetItem == d->templPageWidgetItem_BlankDatabase
             || currenTemplatesPageWidgetItem == d->templPageWidgetItem_ImportExisting
