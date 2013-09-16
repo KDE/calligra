@@ -263,12 +263,11 @@ void MainWindow::switchToSketch()
 
     setCentralWidget(d->sketchView);
     emit switchedToSketch();
-    qApp->processEvents();
 
     if(d->slateMode) {
-        QTimer::singleShot(50, this, SLOT(showFullScreen()));
+        showFullScreen();
         if(d->syncObject->initialized)
-            QTimer::singleShot(100, this, SLOT(sketchChange()));
+            QTimer::singleShot(0, this, SLOT(sketchChange()));
     }
     qDebug() << "milliseconds to switch to sketch:" << timer.elapsed();
 }
