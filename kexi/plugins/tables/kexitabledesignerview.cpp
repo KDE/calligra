@@ -1428,6 +1428,7 @@ KexiDB::SchemaData* KexiTableDesignerView::storeNewData(const KexiDB::SchemaData
     if (res == true) {
         //we've current schema
         tempData()->tableSchemaChangedInPreviousView = true;
+        d->history->clear();
 //not needed; KexiProject emits newItemStored signal //let project know the table is created
 //  KexiMainWindowIface::global()->project()->emitTableCreated(*tempData()->table);
     } else {
