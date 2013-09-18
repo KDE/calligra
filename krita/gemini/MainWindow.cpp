@@ -149,6 +149,9 @@ public:
 
         KAction* toDesktop = new KAction(q);
         toDesktop->setText(tr("Switch to Desktop"));
+        // useful for monkey-testing to crash...
+        //toDesktop->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_D);
+        //q->addAction(toDesktop);
         //connect(toDesktop, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), q, SLOT(switchDesktopForced()));
         connect(toDesktop, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), q, SLOT(switchToDesktop()));
         sketchView->engine()->rootContext()->setContextProperty("switchToDesktopAction", toDesktop);
@@ -287,7 +290,7 @@ void MainWindow::sketchChange()
     }
 }
 
-void MainWindow::switchToDesktop(bool justLoaded)
+void MainWindow::switchToDesktop()
 {
     QTime timer;
     timer.start();
@@ -303,28 +306,23 @@ void MainWindow::switchToDesktop(bool justLoaded)
     else
         showNormal();
 
-    d->syncObject = new ViewModeSynchronisationObject;
+    ViewModeSynchronisationObject* syncObject = new ViewModeSynchronisationObject;
 
     KisView2* view = 0;
     if(d->desktopView) {
         view = qobject_cast<KisView2*>(d->desktopView->rootView());
     }
 
-    if(!justLoaded)
-    {
-        //Notify the view we are switching away from that we are about to switch away from it
-        //giving it the possibility to set up the synchronisation object.
-        ViewModeSwitchEvent aboutToSwitchEvent(ViewModeSwitchEvent::AboutToSwitchViewModeEvent, d->sketchView, view, d->syncObject);
-        QApplication::sendEvent(d->sketchView, &aboutToSwitchEvent);
-    }
-
+    //Notify the view we are switching away from that we are about to switch away from it
+    //giving it the possibility to set up the synchronisation object.
+    ViewModeSwitchEvent aboutToSwitchEvent(ViewModeSwitchEvent::AboutToSwitchViewModeEvent, d->sketchView, view, syncObject);
+    QApplication::sendEvent(d->sketchView, &aboutToSwitchEvent);
     qApp->processEvents();
 
     if(view) {
-        qApp->processEvents();
         //Notify the new view that we just switched to it, passing our synchronisation object
         //so it can use those values to sync with the old view.
-        ViewModeSwitchEvent switchedEvent(ViewModeSwitchEvent::SwitchedToDesktopModeEvent, d->sketchView, view, d->syncObject);
+        ViewModeSwitchEvent switchedEvent(ViewModeSwitchEvent::SwitchedToDesktopModeEvent, d->sketchView, view, syncObject);
         QApplication::sendEvent(view, &switchedEvent);
         KisConfig cfg;
         cfg.setCursorStyle(d->desktopCursorStyle);
