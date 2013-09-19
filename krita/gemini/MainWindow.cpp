@@ -381,6 +381,8 @@ void MainWindow::adjustZoomOnDocumentChangedAndStuff()
         qApp->processEvents();
         QPoint center = d->sketchKisView->rect().center();
         d->sketchKisView->canvasControllerWidget()->zoomRelativeToPoint(center, 0.9);
+        qApp->processEvents();
+        d->toDesktop->setEnabled(true);
     }
 }
 
@@ -591,12 +593,11 @@ void MainWindow::Private::notifySlateModeChange()
         emit q->slateModeChanged();
         if(forceSketch || (slateMode && !forceDesktop))
         {
-            if(toSketch->isEnabled())
+            if(!toSketch || (toSketch && toSketch->isEnabled()))
                 q->switchToSketch();
         }
         else
         {
-            if(toDesktop->isEnabled())
                 q->switchToDesktop();
         }
         qDebug() << "Slate mode is now" << slateMode;
