@@ -159,6 +159,7 @@ Item {
                 visible: switchToDesktopAction !== undefined;
                 color: "#000000"
                 shadow: false
+                enabled: switchToDesktopAction ? switchToDesktopAction.enabled : false;
                 image: "../images/svg/icon-switch.svg"
                 highlightColor: Constants.Theme.HighlightColor;
                 onClicked: base.buttonClicked( "switchToDesktop" );
