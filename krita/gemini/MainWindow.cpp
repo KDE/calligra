@@ -590,9 +590,15 @@ void MainWindow::Private::notifySlateModeChange()
         slateMode = bSlateMode;
         emit q->slateModeChanged();
         if(forceSketch || (slateMode && !forceDesktop))
-            q->switchToSketch();
+        {
+            if(d->toSketch->isEnabled())
+                q->switchToSketch();
+        }
         else
-            q->switchToDesktop();
+        {
+            if(d->toDesktop->isEnabled())
+                q->switchToDesktop();
+        }
         qDebug() << "Slate mode is now" << slateMode;
     } 
 #endif
