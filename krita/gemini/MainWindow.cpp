@@ -95,6 +95,9 @@ public:
         , wasMaximized(true)
         , temporaryFile(false)
         , syncObject(0)
+        , toDesktop(0)
+        , toSketch(0)
+        , switcher(0)
     {
 #ifdef Q_OS_WIN
         slateMode = (GetSystemMetrics(SM_CONVERTIBLESLATEMODE) == 0);
@@ -125,6 +128,10 @@ public:
     ViewModeSynchronisationObject* syncObject;
     QTimer* centerer;
 
+    KAction* toDesktop;
+    KAction* toSketch;
+    QToolButton* switcher;
+
     void initSketchView(QObject* parent)
     {
         sketchView = new SketchDeclarativeView();
@@ -147,7 +154,8 @@ public:
         sketchView->setSource(QUrl::fromLocalFile(fi.canonicalFilePath()));
         sketchView->setResizeMode( QDeclarativeView::SizeRootObjectToView );
 
-        KAction* toDesktop = new KAction(q);
+        toDesktop = new KAction(q);
+        toDesktop->setEnabled(false);
         toDesktop->setText(tr("Switch to Desktop"));
         // useful for monkey-testing to crash...
         //toDesktop->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_D);
@@ -171,14 +179,16 @@ public:
             qobject_cast<QApplication*>(QApplication::instance())->setStyle("Oxygen");
         }
 
-        KAction* toSketch = new KAction(desktopView);
+        toSketch = new KAction(desktopView);
+        toSketch->setEnabled(false);
         toSketch->setText(tr("Switch to Sketch"));
         toSketch->setIcon(QIcon::fromTheme("system-reboot"));
         toSketch->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_S);
         //connect(toSketch, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), q, SLOT(switchSketchForced()));
         connect(toSketch, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), q, SLOT(switchToSketch()));
         desktopView->actionCollection()->addAction("SwitchToSketchView", toSketch);
-        QToolButton* switcher = new QToolButton();
+        switcher = new QToolButton();
+        switcher->setEnabled(false);
         switcher->setText(tr("Switch to Sketch"));
         switcher->setIcon(QIcon::fromTheme("system-reboot"));
         switcher->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
@@ -244,6 +254,12 @@ void MainWindow::switchToSketch()
     QTime timer;
     timer.start();
 
+    if(d->toSketch)
+    {
+        d->toSketch->setEnabled(false);
+        d->switcher->setEnabled(false);
+    }
+
     d->syncObject = new ViewModeSynchronisationObject;
     KisView2* view = 0;
 
@@ -288,12 +304,20 @@ void MainWindow::sketchChange()
         KisConfig cfg;
         cfg.setCursorStyle(CURSOR_STYLE_NO_CURSOR);
     }
+    if(d->toDesktop)
+    {
+        qApp->processEvents();
+        d->toDesktop->setEnabled(true);
+    }
 }
 
-void MainWindow::switchToDesktop()
+void MainWindow::switchToDesktop(bool justLoaded)
 {
     QTime timer;
     timer.start();
+
+    if(d->toDesktop)
+        d->toDesktop->setEnabled(false);
 
     if(d->currentSketchPage == "MainPage")
     {
@@ -328,6 +352,13 @@ void MainWindow::switchToDesktop()
         cfg.setCursorStyle(d->desktopCursorStyle);
     }
 
+    if(d->toSketch && !justLoaded)
+    {
+        qApp->processEvents();
+        d->toSketch->setEnabled(true);
+        d->switcher->setEnabled(true);
+    }
+
     qDebug() << "milliseconds to switch to desktop:" << timer.elapsed();
 }
 
@@ -340,6 +371,9 @@ void MainWindow::adjustZoomOnDocumentChangedAndStuff()
         qApp->processEvents();
         QPoint center = view->rect().center();
         view->canvasControllerWidget()->zoomRelativeToPoint(center, 0.9);
+        qApp->processEvents();
+        d->toSketch->setEnabled(true);
+        d->switcher->setEnabled(true);
     }
     else if(d->sketchKisView && centralWidget() == d->sketchView) {
         qApp->processEvents();
@@ -366,7 +400,7 @@ void MainWindow::documentChanged()
     if(d->sketchKisView)
         d->sketchKisView->setQtMainWindow(this);
     if(!d->forceSketch && !d->slateMode)
-        switchToDesktop();
+        switchToDesktop(true);
 }
 
 bool MainWindow::allowClose() const

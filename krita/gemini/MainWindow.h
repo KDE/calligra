@@ -62,7 +62,7 @@ public Q_SLOTS:
     void closeWindow();
 
     void switchToSketch();
-    void switchToDesktop();
+    void switchToDesktop(bool justLoaded = false);
     void documentChanged();
 Q_SIGNALS:
     void closeRequested();
