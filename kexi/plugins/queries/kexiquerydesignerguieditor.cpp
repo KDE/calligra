@@ -1737,11 +1737,11 @@ void KexiQueryDesignerGuiEditor::updatePropertiesVisibility(KoProperty::Set& set
     const bool asterisk = isAsterisk(
                               set["table"].value().toString(), set["field"].value().toString()
                           );
-#ifndef KEXI_NO_UNFINISHED
+#ifdef KEXI_SHOW_UNFINISHED
     set["caption"].setVisible(!asterisk);
 #endif
     set["alias"].setVisible(!asterisk);
-    /*always invisible #ifndef KEXI_NO_UNFINISHED
+    /*always invisible #ifdef KEXI_SHOW_UNFINISHED
       set["sorting"].setVisible( !asterisk );
     #endif*/
     propertySetReloaded(true);
@@ -1769,7 +1769,7 @@ KexiQueryDesignerGuiEditor::createPropertySet(int row,
     prop->setVisible(false);//always hidden
 
     set->addProperty(prop = new KoProperty::Property("caption", QVariant(QString()), i18n("Caption")));
-#ifdef KEXI_NO_UNFINISHED
+#ifndef KEXI_SHOW_UNFINISHED
     prop->setVisible(false);
 #endif
 
