@@ -103,5 +103,20 @@ inline T pow2(T x) {
     return x * x;
 }
 
+template<>
+inline QPointF qAbs(const QPointF &pt) {
+    return QPointF(qAbs(pt.x()), qAbs(pt.y()));
+}
+
+template<typename T>
+inline T kisDegreesToRadians(T degrees) {
+    return degrees * M_PI / 180.0;
+}
+
+template<typename T>
+inline T kisRadiansToDegrees(T radians) {
+    return radians * 180.0 / M_PI;
+}
+
 #endif // KISGLOBAL_H_
 

@@ -405,7 +405,7 @@ KexiTableDesignerView::createPropertySet(int row, const KexiDB::Field& field, bo
 
     set->addProperty(prop = new KoProperty::Property("precision", (int)field.precision()/*200?*/,
                                                      i18n("Precision")));
-#ifdef KEXI_NO_UNFINISHED
+#ifndef KEXI_SHOW_UNFINISHED
     prop->setVisible(false);
 #endif
     set->addProperty(prop = new KoProperty::Property("visibleDecimalPlaces",
@@ -416,7 +416,7 @@ KexiTableDesignerView::createPropertySet(int row, const KexiDB::Field& field, bo
 //! @todo set reasonable default for column width
     set->addProperty(prop = new KoProperty::Property("defaultWidth", QVariant(0) /*field.width()*//*200?*/,
                                                      i18n("Default Width")));
-#ifdef KEXI_NO_UNFINISHED
+#ifndef KEXI_SHOW_UNFINISHED
     prop->setVisible(false);
 #endif
 
@@ -1428,6 +1428,7 @@ KexiDB::SchemaData* KexiTableDesignerView::storeNewData(const KexiDB::SchemaData
     if (res == true) {
         //we've current schema
         tempData()->tableSchemaChangedInPreviousView = true;
+        d->history->clear();
 //not needed; KexiProject emits newItemStored signal //let project know the table is created
 //  KexiMainWindowIface::global()->project()->emitTableCreated(*tempData()->table);
     } else {
