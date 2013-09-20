@@ -201,7 +201,7 @@ void KexiFormPart::initInstanceActions()
     createSharedAction(Kexi::DesignViewMode, i18n("Send Widget to Back"), koIconName("lower"),
                        KShortcut(), "formpart_format_lower");
 
-#ifndef KEXI_NO_UNFINISHED
+#ifdef KEXI_SHOW_UNFINISHED
     action = createSharedAction(Kexi::DesignViewMode, i18n("Other Widgets"), QString(),
                                 KShortcut(), "other_widgets_menu", "KActionMenu");
 #endif

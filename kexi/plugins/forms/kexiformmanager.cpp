@@ -291,13 +291,14 @@ void KexiFormManager::createActions(KActionCollection* collection)
         }
 
         QSet<QString> iconOnlyActions;
-        iconOnlyActions << "show_form_ui";
+        //appendWidgetToToolbar doesn't work: iconOnlyActions << "show_form_ui";
         const QList<QAction*> actions( d->collection->actions() );
         foreach( QAction *a, actions ) {
             if (iconOnlyActions.contains(a->objectName())) { // icon only
                 KexiSmallToolButton *btn = new KexiSmallToolButton(a, win->toolBar("form"));
                 btn->setToolButtonStyle(Qt::ToolButtonIconOnly);
                 win->appendWidgetToToolbar("form", btn);
+                win->setWidgetVisibleInToolbar(btn, true);
             }
             else {
                 win->addToolBarAction("form", a);

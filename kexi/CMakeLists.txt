@@ -13,28 +13,21 @@ IF(EXISTS ${CMAKE_SOURCE_DIR}/kexi/CMakeSettings.txt)
 ENDIF(EXISTS ${CMAKE_SOURCE_DIR}/kexi/CMakeSettings.txt)
 
 option(KEXI_DEBUG_GUI "Debugging GUI for Kexi (requires CALLIGRADB_DEBUG_GUI to be set too)" OFF)
+option(KEXI_SHOW_UNFINISHED, "Show unfinnished features in Kexi. Thus is useful for testing but may confuse end-user." OFF)
+option(KEXI_SHOW_UNIMPLEMENTED "Forces to show menu entries and dialogs just to give impression about development plans for Kexi. Only recommended for test/development versions." OFF)
 
-if(KEXI_AUTORISE_TABBED_TOOLBAR)
-    ADD_DEFINITIONS(-DKEXI_AUTORISE_TABBED_TOOLBAR)
-endif(KEXI_AUTORISE_TABBED_TOOLBAR)
-
-if(NOT KEXI_UNFINISHED)
-  ADD_DEFINITIONS(-DKEXI_NO_UNFINISHED)
-endif(NOT KEXI_UNFINISHED)
-
-if(KEXI_SHOW_UNIMPLEMENTED)
-  ADD_DEFINITIONS(-DKEXI_SHOW_UNIMPLEMENTED)
-endif(KEXI_SHOW_UNIMPLEMENTED)
+# Experimental:
+option(KEXI_SCRIPTS_SUPPORT "Experimental: Enable scripting in Kexi" ON)
+option(KEXI_PROJECT_TEMPLATES "Experimental: Enable support for project templates in Kexi" ON)
+option(KEXI_AUTORISE_TABBED_TOOLBAR "Experimental: Autorise the main tabbed toolbar in Kexi" OFF)
 
 ADD_DEFINITIONS(
   -DKEXI_NO_CURSOR_PROPERTY 
   -DKEXI_NO_CTXT_HELP
   -DKEXI_NO_SUBFORM
   -DKEXI_DB_COMBOBOX_WIDGET
-  -DDB_TEMPLATES
-  -DKEXI_SCRIPTS_SUPPORT
   -DKEXI_NO_QUICK_PRINTING # print/print preview for tables/queries in the navigator
-# temporary for 2.2:
+# temporary for 2.x:
   -DKEXI_NO_AUTOFIELD_WIDGET
   -DKEXI_NO_FORM_LAYOUTS
   -DKEXI_NO_FORM_SPRING_ELEMENT

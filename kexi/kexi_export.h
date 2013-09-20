@@ -118,10 +118,6 @@
 # endif
 #endif
 
-/* additional default options */
-#ifndef KEXI_NO_CTXT_HELP
-# define KEXI_NO_CTXT_HELP
-#endif
 # define KDE_CXXFLAGS
 
 /* -- compile-time settings -- */

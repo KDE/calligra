@@ -177,7 +177,6 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
         addClass(wi);
     }
 
-#ifndef KEXI_NO_IMAGEBOX_WIDGET
     {
         KexiDataAwareWidgetInfo* wi = new KexiDataAwareWidgetInfo(this);
         wi->setIconName(koIconName("pixmaplabel"));
@@ -196,9 +195,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
         wi->setInternalProperty("dontStartEditingOnInserting", true);
         addClass(wi);
     }
-#endif
 
-#ifdef KEXI_DB_COMBOBOX_WIDGET
     {
         KexiDataAwareWidgetInfo* wi = new KexiDataAwareWidgetInfo(this);
         wi->setIconName(koIconName("combo"));
@@ -213,7 +210,6 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
         wi->setDescription(i18n("A combo box widget"));
         addClass(wi);
     }
-#endif
     {
         KexiDataAwareWidgetInfo* wi = new KexiDataAwareWidgetInfo(this);
         wi->setIconName(koIconName("check"));
@@ -417,12 +413,10 @@ KexiDBFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
         createContainer = true;
     } else if (c == "KexiDBLabel")
         w = new KexiDBLabel(text, p);
-#ifndef KEXI_NO_IMAGEBOX_WIDGET
     else if (c == "KexiDBImageBox") {
         w = new KexiDBImageBox(designMode, p);
         connect(w, SIGNAL(idChanged(long)), this, SLOT(slotImageBoxIdChanged(long)));
     }
-#endif
 #ifndef KEXI_NO_AUTOFIELD_WIDGET
     else if (c == "KexiDBAutoField")
         w = new KexiDBAutoField(p);
@@ -653,7 +647,7 @@ KexiDBFactory::isPropertyVisibleInternal(const QByteArray& classname, QWidget *w
     bool ok = true;
     if (classname == "KexiPushButton") {
         ok = property != "isDragEnabled"
-#ifdef KEXI_NO_UNFINISHED
+#ifndef KEXI_SHOW_UNFINISHED
              && property != "onClickAction" /*! @todo reenable */
              && property != "onClickActionOption" /*! @todo reenable */
              && property != "iconSet" /*! @todo reenable */
@@ -669,7 +663,7 @@ KexiDBFactory::isPropertyVisibleInternal(const QByteArray& classname, QWidget *w
              && property != "autoRepeat"
              && property != "autoRepeatDelay"
              && property != "autoRepeatInterval"
-#ifdef KEXI_NO_UNFINISHED
+#ifndef KEXI_SHOW_UNFINISHED
              && property != "onClickAction" /*! @todo reenable */
              && property != "onClickActionOption" /*! @todo reenable */
              && property != "iconSet" /*! @todo reenable */
@@ -687,7 +681,7 @@ KexiDBFactory::isPropertyVisibleInternal(const QByteArray& classname, QWidget *w
         ok = property != "urlDropsEnabled"
              && property != "vAlign"
              && property != "echoMode"
-#ifdef KEXI_NO_UNFINISHED
+#ifndef KEXI_SHOW_UNFINISHED
              && property != "inputMask"
              && property != "maxLength" //!< we may want to integrate this with db schema
 #endif
@@ -707,7 +701,7 @@ KexiDBFactory::isPropertyVisibleInternal(const QByteArray& classname, QWidget *w
              && property != "autoFormatting" //too complex
              && property != "documentTitle"
              && property != "cursorWidth"
-#ifdef KEXI_NO_UNFINISHED
+#ifndef KEXI_SHOW_UNFINISHED
              && property != "paper"
 #endif
              && property != "textInteractionFlags"

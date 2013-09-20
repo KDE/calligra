@@ -906,7 +906,7 @@ ContainerFactory::isPropertyVisibleInternal(const QByteArray &classname,
     }
     else if (classname == "QGroupBox") {
         ok =
-#ifdef KEXI_NO_UNFINISHED
+#ifndef KEXI_SHOW_UNFINISHED
             /*! @todo Hidden for now in Kexi. "checkable" and "checked" props need adding
             a fake properties which will allow to properly work in design mode, otherwise
             child widgets become frozen when checked==true */
