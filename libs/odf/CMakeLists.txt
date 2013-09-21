@@ -19,6 +19,7 @@ set(koodf_LIB_SRCS
     KoGenStyles.cpp
     KoFontFace.cpp
     KoOdfLoadingContext.cpp
+    KoOdfSavingContext.cpp
     KoOasisSettings.cpp
     KoOdfStylesReader.cpp
     KoOdfNumberStyles.cpp
@@ -79,6 +80,7 @@ install( FILES
     KoGenStyles.h
     KoFontFace.h
     KoOdfLoadingContext.h
+    KoOdfSavingContext.h
     KoOasisSettings.h
     KoOdfStylesReader.h
     KoOdfNotesConfiguration.h
