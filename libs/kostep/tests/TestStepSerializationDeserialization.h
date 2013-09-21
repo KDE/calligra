@@ -17,46 +17,27 @@
  *     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "StepDeleteTextBlockStep.h"
-#include "StepDeleteTextBlockStep_p.h"
-#include "StepStepLocation.h"
+#ifndef TESTSTEPSERIALIZATIONDESERIALIZATION_H
+#define TESTSTEPSERIALIZATIONDESERIALIZATION_H
 
-StepDeleteTextBlockStepPrivate::StepDeleteTextBlockStepPrivate (StepDeleteTextBlockStep *q):q (q)
+#include <QtCore/QObject>
+#include "../StepStepStack.h"
+
+
+class TestStepSerializationDeserialization : public QObject
 {
-}
+  Q_OBJECT
+  private slots:void initTestCase ();
+  void cleanupTestCase ();
 
-StepDeleteTextBlockStepPrivate::~StepDeleteTextBlockStepPrivate ()
-{
-}
+  void init ();
+  void cleanup ();
 
-StepDeleteTextBlockStep::StepDeleteTextBlockStep (QObject *parent):d (new
-   StepDeleteTextBlockStepPrivate(this)), StepStepBase("Delete TextBlock",parent)
-{
+  void deserializeAddSteps ();
+  void deserializeDelSteps ();
+private:
+  StepStepStack* stack;
+  StepStepBase* step;
 
-}
-
-StepDeleteTextBlockStep::StepDeleteTextBlockStep (QTextBlock *block, QObject *parent):StepStepBase
-  ("Delete TextBlock",parent), d(new StepDeleteTextBlockStepPrivate(this))
-{
-
-}
-
-
-StepDeleteTextBlockStep::StepDeleteTextBlockStep (const StepDeleteTextBlockStep & other):
-d (new StepDeleteTextBlockStepPrivate (this))
-{
-
-
-}
-
-StepDeleteTextBlockStep::~StepDeleteTextBlockStep ()
-{
-    delete d;
-
-}
-
-QString StepDeleteTextBlockStep::toXML ()
-{
-    return "<del type=\"paragraph\" " + location().toString() + " />";
-
-}
+};
+#endif // TESTSTEPSERIALIZATIONDESERIALIZATION_H

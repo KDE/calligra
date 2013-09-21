@@ -131,9 +131,9 @@ void StepStepStackPrivate::deserialize (QString text)
         //if the tag has text inbetween it grab it and
         // remove the end of the XML tag
         QString stepContents;
-        if(stepText.find(">") < stepText.length())
+        if(stepText.indexOf(">") < stepText.length())
         {
-            stepContents = stepText.mid(stepText.find(">"));
+            stepContents = stepText.mid(stepText.indexOf(">")+1);
         }
         stepText.remove(">");
 
