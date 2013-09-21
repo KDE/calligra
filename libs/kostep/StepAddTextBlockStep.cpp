@@ -51,6 +51,6 @@ StepAddTextBlockStep::~StepAddTextBlockStep ()
 
 QString StepAddTextBlockStep::toXML ()
 {
-  return "<add type=\"Paragraph\""+ location().toString() + "/>";
+  return "<add type=\"Paragraph\""+ location().toString() + " />";
 
 }

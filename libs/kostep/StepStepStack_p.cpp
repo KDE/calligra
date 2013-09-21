@@ -122,8 +122,7 @@ void StepStepStackPrivate::deserialize (QString text)
 
     //we're going to remove each tag from the list as we go through
     //the deserialization process
-    while (!stepList.empty())
-    {
+    while (!stepList.empty()) {
         //Grab the first tag off of the list and remove it from the list
         QString stepText = stepList.first();
         stepList.removeFirst();
@@ -131,8 +130,7 @@ void StepStepStackPrivate::deserialize (QString text)
         //if the tag has text inbetween it grab it and
         // remove the end of the XML tag
         QString stepContents;
-        if(stepText.indexOf(">") < stepText.length())
-        {
+        if(stepText.indexOf(">") < stepText.length()) {
             stepContents = stepText.mid(stepText.indexOf(">")+1);
         }
         stepText.remove(">");
@@ -141,11 +139,9 @@ void StepStepStackPrivate::deserialize (QString text)
         QStringList stepTextList = stepText.split(" ");
 
         //Add steps
-        if (stepTextList.at(0).toLower() == "add")
-        {
+        if (stepTextList.at(0).toLower() == "add") {
             //Add text steps
-            if (stepTextList.at(1).toLower() == "type=\"text\"")
-            {
+            if (stepTextList.at(1).toLower() == "type=\"text\"") {
                 //Example Add Text Step
                 //<add type="text" s="/1/2" > dogs </add>
                 //  0       1          2
@@ -163,8 +159,7 @@ void StepStepStackPrivate::deserialize (QString text)
             }
 
             //add text paragraph (block) steps
-            if (stepTextList.at(1).toLower() == "type=\"paragraph\"")
-            {
+            if (stepTextList.at(1).toLower() == "type=\"paragraph\"") {
                 //Example Add Text Block Step
                 //<add type="paragraph" s="/1/2" />
                 //  0        1            2
@@ -176,15 +171,13 @@ void StepStepStackPrivate::deserialize (QString text)
                 stack.push(step);
                 step =0;
             }
-        }
-        //delete steps
-        else if (stepTextList.at(0).toLower() == "del")
-        {
-            if (stepTextList.at(1).toLower() == "type=\"text\"")
-            {
+                  //delete steps
+        } else if (stepTextList.at(0).toLower() == "del") {
+
+            if (stepTextList.at(1).toLower() == "type=\"text\"") {
                 //Example Delete Text Step
-                //<del type="text" s="/1/2" />
-                //  0        1         2
+                //<del type="text" s="/1/2" s="/1/3"/>
+                //  0        1         2        3
 
                 StepDeleteTextStep *step = new StepDeleteTextStep();
                 StepStepLocation stepLocation;
@@ -196,8 +189,8 @@ void StepStepStackPrivate::deserialize (QString text)
                 stack.push(step);
                 step = 0;
             }
-            if (stepTextList.at(1).toLower() == "type=\"paragraph\"")
-            {
+
+            if (stepTextList.at(1).toLower() == "type=\"paragraph\"") {
                 //Example Delete Text Block Step
                 //<del type="paragraph" s="/1/2" />
                 //  0        1            2

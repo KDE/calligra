@@ -68,10 +68,11 @@ QString StepDeleteTextStep::toXML ()
 #endif DEBUG
     QString temp = locationList.last().remove("\"");
     int end = temp.toInt();
-    qDebug() << "End: "<< end;
 #ifdef DEBUG
-    locationList.removeLast();
+    qDebug() << "End: "<< end;
 #endif DEBUG
+    locationList.removeLast();
+
     locationList.append(QString::number(end + d->length));
     QString locationEnd = "";
     foreach (QString positionPart, locationList)
@@ -85,7 +86,7 @@ QString StepDeleteTextStep::toXML ()
     locationEnd.remove(locationEnd.length()-1,1);
     locationEnd.append("\"");
 
-    return "<del "+location().toString() + " " + locationEnd + " />" ;
+    return "<del type=\"text\" "+location().toString() + " " + d->endLocation.toString() + " />" ;
 }
 
 void StepDeleteTextStep::setEndLocation(StepStepLocation endLocation)

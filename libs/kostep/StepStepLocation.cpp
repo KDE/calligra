@@ -58,8 +58,7 @@ void StepStepLocation::fromString(QString string)
     string.remove(string.length()-1,1);
     QStringList locationList = string.split("/");
     locationList.removeFirst();
-    while(!locationList.isEmpty())
-    {
+    while(!locationList.isEmpty()) {
         d->location.push(locationList.first().toInt());
         locationList.removeFirst();
     }

@@ -49,26 +49,49 @@ void TestStepSerializationDeserialization::cleanup ()
 
 }
 
-void TestStepSerializationDeserialization::deserializeAddSteps()
+void TestStepSerializationDeserialization::deserializeAddSteps ()
 {
     stack->deserialize("<add type=\"text\" s=\"/1/5\"> text </add>");
     qDebug() << stack->toString();
+    Q_ASSERT(stack->toString() == "<add type=\"text\" s=\"/1/5\" > text </add>");
+
+    delete stack;
+    stack = new StepStepStack();
     stack->deserialize("<add type=\"paragraph\" s=\"/2/5\" />");
     qDebug() << stack->toString();
-    stack->deserialize("<add type=\"paragraph\" s=\"/2/5\" /><add type=\"paragraph\" s=\"/2/5\" /><add type=\"paragraph\" s=\"/2/5\" />"
-                       +(QString)"<add type=\"paragraph\" s=\"/2/5\" /><add type=\"paragraph\" s=\"/2/5\" /><add type=\"paragraph\" s=\"/2/5\" />");
-    qDebug() << stack->toString();
+    //Q_ASSERT(stack->toString().toLower() == "<add type=\"paragraph\" s=\"/2/5\" />");
 
-}
-void TestStepSerializationDeserialization::deserializeDelSteps()
-{
-    stack->deserialize("<del type=\"text\" s=\"/1/5\" />");
+    delete stack;
+    stack = new StepStepStack();
+    stack->deserialize("<add type=\"paragraph\" s=\"/2/5\" /><add type=\"text\" s=\"/1/5\"> text </add><add type=\"paragraph\" s=\"/2/5\" />");
     qDebug() << stack->toString();
+    //Q_ASSERT(stack->toString().toLower() == "<add type=\"paragraph\" s=\"/2/5\" /><add type=\"text\" s=\"/1/5\"> text </add><add type=\"paragraph\" s=\"/2/5\" />");
+}
+void TestStepSerializationDeserialization::deserializeDelSteps ()
+{
+    //test delete textstep
+    stack->deserialize("<del type=\"text\" s=\"/1/5\" s=\"/1/6\" />");
+    qDebug() << stack->toString();
+    Q_ASSERT(stack->toString() == "<del type=\"text\" s=\"/1/5\" s=\"/1/6\" />");
+
+    //test delete paragraph step
+    delete stack;
+    stack = new StepStepStack();
     stack->deserialize("<del type=\"paragraph\" s=\"/2/5\" />");
     qDebug() << stack->toString();
+    Q_ASSERT(stack->toString() == "<del type=\"paragraph\" s=\"/2/5\" />");
 
-    stack->deserialize("<del type=\"paragraph\" s=\"/2/5\" /><del type=\"paragraph\" s=\"/2/5\" />" +
-                       (QString)"<del type=\"paragraph\" s=\"/2/5\" /><del type=\"paragraph\" s=\"/2/5\" /><del type=\"paragraph\" s=\"/2/5\" />" +
-            (QString)"<del type=\"paragraph\" s=\"/2/5\" /><del type=\"paragraph\" s=\"/2/5\" /><del type=\"paragraph\" s=\"/2/5\" />");
+    //test delete multiple steps
+    delete stack;
+    stack = new StepStepStack();
+    stack->deserialize("<del type=\"paragraph\" s=\"/2/5\" /><del type=\"paragraph\" s=\"/2/5\" />");
     qDebug() << stack->toString();
+    Q_ASSERT(stack->toString() == "<del type=\"paragraph\" s=\"/2/5\" /><del type=\"paragraph\" s=\"/2/5\" />");
+
+    //test having whitespace in the text
+    delete stack;
+    stack = new StepStepStack();
+    stack->deserialize("<del         type=\"paragraph\"   \n\n\n     s=\"/2/5\" />   \n\n\n <\ndel\n type=\"paragraph\" s=\"/2/5\" />");
+    qDebug() << stack->toString();
+    Q_ASSERT(stack->toString() == "<del type=\"paragraph\" s=\"/2/5\" /><del type=\"paragraph\" s=\"/2/5\" />");
 }

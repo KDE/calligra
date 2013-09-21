@@ -45,7 +45,7 @@ StepAddTextStepPrivate::~StepAddTextStepPrivate ()
 
 QString StepAddTextStep::toXML ()
 {
-  QString string ="<add type=\"text\" " + location().toString()+" >" + stepText() + " </add>";
+  QString string ="<add type=\"text\" " + location().toString()+" >" + stepText() + "</add>";
   return string;
 
 }
