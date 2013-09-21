@@ -111,34 +111,64 @@ void StepStepStackPrivate::serialize (StepStepBase & step, QString filename)
     file.close();
 }
 
-void StepStepStackPrivate::deserialize(QString text)
+void StepStepStackPrivate::deserialize (QString text)
 {
+    //remove all whitespace
+    text = text.remove("\n");
     text = text.simplified();
+
+    //split the steps based upon the opening of an XML tag
     QStringList stepList = text.split("<");
-    while(!stepList.empty())
+
+    //we're going to remove each tag from the list as we go through
+    //the deserialization process
+    while (!stepList.empty())
     {
+        //Grab the first tag off of the list and remove it from the list
         QString stepText = stepList.first();
         stepList.removeFirst();
 
+        //if the tag has text inbetween it grab it and
+        // remove the end of the XML tag
+        QString stepContents;
+        if(stepText.find(">") < stepText.length())
+        {
+            stepContents = stepText.mid(stepText.find(">"));
+        }
         stepText.remove(">");
+
+        //split the tag into it's components based upon spaces
         QStringList stepTextList = stepText.split(" ");
+
+        //Add steps
         if (stepTextList.at(0).toLower() == "add")
         {
+            //Add text steps
             if (stepTextList.at(1).toLower() == "type=\"text\"")
             {
-                StepAddTextStep *step = new StepAddTextStep(stepList.first());
+                //Example Add Text Step
+                //<add type="text" s="/1/2" > dogs </add>
+                //  0       1          2
+
+                //Create the Add Text Step
+                StepAddTextStep *step = new StepAddTextStep(stepContents);
                 StepStepLocation stepLocation;
                 stepLocation.fromString(stepTextList.at(2));
                 step->setLocation(stepLocation);
                 stack.push(step);
                 step = 0;
-                //deletes the text inbetween the tags
-                stepList.removeFirst();
+
                 //deletes the closing tag
                 stepList.removeFirst();
             }
+
+            //add text paragraph (block) steps
             if (stepTextList.at(1).toLower() == "type=\"paragraph\"")
             {
+                //Example Add Text Block Step
+                //<add type="paragraph" s="/1/2" />
+                //  0        1            2
+
                 StepAddTextBlockStep *step = new StepAddTextBlockStep();
                 StepStepLocation stepLocation;
                 stepLocation.fromString(stepTextList.at(2));
@@ -147,10 +177,15 @@ void StepStepStackPrivate::deserialize(QString text)
                 step =0;
             }
         }
+        //delete steps
         else if (stepTextList.at(0).toLower() == "del")
         {
             if (stepTextList.at(1).toLower() == "type=\"text\"")
             {
+                //Example Delete Text Step
+                //<del type="text" s="/1/2" />
+                //  0        1         2
+
                 StepDeleteTextStep *step = new StepDeleteTextStep();
                 StepStepLocation stepLocation;
                 stepLocation.fromString(stepTextList.at(2));
@@ -163,6 +198,10 @@ void StepStepStackPrivate::deserialize(QString text)
             }
             if (stepTextList.at(1).toLower() == "type=\"paragraph\"")
             {
+                //Example Delete Text Block Step
+                //<del type="paragraph" s="/1/2" />
+                //  0        1            2
+
                 StepDeleteTextBlockStep *step = new StepDeleteTextBlockStep();
                 StepStepLocation stepLocation;
                 stepLocation.fromString(stepTextList.at(2));
