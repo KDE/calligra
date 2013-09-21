@@ -81,3 +81,9 @@ QString StepDeleteTextStep::toXML ()
 
     return "<del "+location().toString() + " " + locationEnd + " />" ;
 }
+
+void StepDeleteTextStep::setEndLocation(StepStepLocation endLocation)
+{
+    d->endLocation = endLocation;
+
+}

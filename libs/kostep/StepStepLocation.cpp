@@ -51,6 +51,17 @@ StepStepLocation::StepStepLocation(const StepStepLocation& locate): QObject(),d(
     d->location = locate.d->location;
 
 }
+void StepStepLocation::fromString(QString string)
+{
+    string.remove("s=\"");
+    string.remove(string.length()-1,1);
+    QStringList locationList = string.split("/");
+    while(!locationList.isEmpty())
+    {
+        d->location.push(locationList.last().toInt());
+        locationList.removeLast();
+    }
+}
 
 QString StepStepLocation::toString ()
 {

@@ -23,8 +23,10 @@
 #include <QtCore/QTextStream>
 #include <QtCore/QVariant>
 #include <QDir>
+#include "StepStepLocation.h"
 
 #include <QDebug>
+#include "StepSteps.h"
 
 StepStepStackPrivate::StepStepStackPrivate()
 {
@@ -112,7 +114,66 @@ void StepStepStackPrivate::serialize (StepStepBase & step, QString filename)
 void StepStepStackPrivate::deserialize(QString text)
 {
     text = text.simplified();
+    QStringList stepList = text.split("<");
+    while(!stepList.empty())
+    {
+        QString stepText = stepList.first();
+        stepList.removeFirst();
 
+        stepText.remove(">");
+        QStringList stepTextList = stepText.split(" ");
+        if (stepTextList.at(0).toLower() == "add")
+        {
+            if (stepTextList.at(1).toLower() == "type=\"text\"")
+            {
+                StepAddTextStep *step = new StepAddTextStep(stepList.first());
+                StepStepLocation stepLocation;
+                stepLocation.fromString(stepTextList.at(2));
+                step->setLocation(stepLocation);
+                stack.push(step);
+                step = 0;
+                //deletes the text inbetween the tags
+                stepList.removeFirst();
+                //deletes the closing tag
+                stepList.removeFirst();
+            }
+            if (stepTextList.at(1).toLower() == "type=\"paragraph\"")
+            {
+                StepAddTextBlockStep *step = new StepAddTextBlockStep();
+                StepStepLocation stepLocation;
+                stepLocation.fromString(stepTextList.at(2));
+                step->setLocation(stepLocation);
+                stack.push(step);
+                step =0;
+            }
+        }
+        else if (stepTextList.at(0).toLower() == "del")
+        {
+            if (stepTextList.at(1).toLower() == "type=\"text\"")
+            {
+                StepDeleteTextStep *step = new StepDeleteTextStep();
+                StepStepLocation stepLocation;
+                stepLocation.fromString(stepTextList.at(2));
+                step->setLocation(stepLocation);
+                StepStepLocation endLocation;
+                endLocation.fromString(stepTextList.at(3));
+                step->setEndLocation(endLocation);
+                stack.push(step);
+                step = 0;
+            }
+            if (stepTextList.at(1).toLower() == "type=\"paragraph\"")
+            {
+                StepDeleteTextBlockStep *step = new StepDeleteTextBlockStep();
+                StepStepLocation stepLocation;
+                stepLocation.fromString(stepTextList.at(2));
+                step->setLocation(stepLocation);
+                stack.push(step);
+                step =0;
+            }
+
+        }
+
+    }
 
 
 }

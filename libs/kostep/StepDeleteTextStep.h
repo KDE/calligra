@@ -31,6 +31,7 @@ public:
     StepDeleteTextStep (const StepDeleteTextStep &other);
     ~StepDeleteTextStep ();
     virtual QString toXML ();
+    void setEndLocation (StepStepLocation endLocation);
 
 private:
     class StepDeleteTextStepPrivate * const d;

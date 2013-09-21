@@ -38,6 +38,7 @@ public:
     StepStepLocation* operator=(const StepStepLocation &other);
 
     QTextCursor toQTextCursor(QTextDocument *document);
+    void fromString(QString string);
     //The format of the location of a step is
     //s="/x/y/z" it can be as short as /x for inserting a block,
     //and /x/y for a text fragment and can go on infinitely.

@@ -19,6 +19,7 @@
 
 #ifndef STEPDELETETEXTSTEPPRIVATE_H
 #define STEPDELETETEXTSTEPPRIVATE_H
+#include "StepStepLocation.h"
 
 class StepDeleteTextStepPrivate
 {
@@ -26,6 +27,7 @@ public:
   StepDeleteTextStepPrivate (StepDeleteTextStep * q);
   virtual ~ StepDeleteTextStepPrivate ();
   int length;
+  StepStepLocation endLocation;
 private:
   class StepDeleteTextStep * const q;
 

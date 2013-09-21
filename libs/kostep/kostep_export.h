@@ -20,7 +20,7 @@
 #ifndef KOSTEP_EXPORT_H
 #define KOSTEP_EXPORT_H
 
-#include <kde4/kdemacros.h>
+#include <kdemacros.h>
 
 #ifndef KOSTEP_EXPORT
 # if defined(MAKE_KOSTEP_LIB)
