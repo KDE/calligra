@@ -20,13 +20,13 @@
 #define STEPADDCOMMAND_H
 #include "StepCommand.h"
 
-class StepAddCommand : public StepCommand
+class KOSTEP_EXPORT StepAddCommand : public StepCommand
 {
 public:
     //handles AddTestSteps
-    StepAddCommand(QTextCursor caret, QString text, StepStepStack &changeStack);
+    StepAddCommand(QTextCursor caret, QString text, StepStepStack *changeStack);
     //handles AddTextBlock Steps
-    StepAddCommand(QTextCursor caret, StepStepStack &changestack);
+    StepAddCommand(QTextCursor caret, StepStepStack *changestack);
 private:
     void finalize (StepStepBase &step);
 };

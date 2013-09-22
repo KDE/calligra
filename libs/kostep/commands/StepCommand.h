@@ -25,9 +25,9 @@ class StepCommand
 {
     StepCommand ();
 public:
-    StepCommand (QTextCursor caret, StepStepStack stack);
+    StepCommand (QTextCursor caret, StepStepStack *stack);
 protected:
-    StepStepStack changeStack;
+    StepStepStack* changeStack;
     StepStepLocation Location;
     QTextCursor caret;
 };
