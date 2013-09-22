@@ -110,6 +110,7 @@ endif( SHOULD_BUILD_RDF )
 kde4_add_library(wordsprivate SHARED ${wordsprivate_LIB_SRCS})
 
 target_link_libraries(wordsprivate komain kotextlayout)
+target_link_libraries(wordsprivate kostep)
 if( SHOULD_BUILD_RDF )
     target_link_libraries(wordsprivate kordf)
 endif( SHOULD_BUILD_RDF )

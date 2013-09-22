@@ -89,6 +89,9 @@
 #include <QTextBlock>
 #include <QTime>
 
+//changetracking
+#include "../../libs/kostep/StepStepStack.h"
+
 KWDocument::KWDocument(KoPart *part)
         : KoDocument(part),
         m_isMasterDocument(false),
@@ -135,6 +138,7 @@ KWDocument::KWDocument(KoPart *part)
     }
 
     clear();
+    m_changeStack = new StepStepStack(this);
 }
 
 KWDocument::~KWDocument()
@@ -143,6 +147,12 @@ KWDocument::~KWDocument()
     m_config.setUnit(unit());
     saveConfig();
     qDeleteAll(m_frameSets);
+    delete m_changeStack;
+}
+
+StepStepStack* KWDocument::getChangeStack()
+{
+    return m_changeStack;
 }
 
 bool KWDocument::isMasterDocument() const

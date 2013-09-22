@@ -55,6 +55,7 @@ class KoPart;
 class KoPageWidgetItem;
 class KLocalizedString;
 class QIODevice;
+class StepStepStack;
 
 /**
  * The class that represents a Words document containing content and settings.
@@ -68,6 +69,9 @@ public:
      */
     explicit KWDocument(KoPart *part);
     ~KWDocument();
+
+    //changetracking
+    StepStepStack* getChangeStack();
 
     // KoShapeBasedDocumentBase interface
     /// reimplemented from KoShapeBasedDocumentBase
@@ -272,8 +276,6 @@ private:
      */
     void saveConfig();
 
-    StepStepStack changeStack;
-
 private:
     bool m_isMasterDocument;
     QList<KWFrameSet*> m_frameSets;
@@ -285,6 +287,7 @@ private:
     QPointer<KoUpdater> m_layoutProgressUpdater;
     KoShapeController *m_shapeController;
     QPair<QString, QByteArray> m_coverImage;
+    StepStepStack *m_changeStack;
 
 };
 
