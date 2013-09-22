@@ -23,7 +23,12 @@
 class StepAddCommand : public StepCommand
 {
 public:
-    StepAddCommand();
+    //handles AddTestSteps
+    StepAddCommand(QTextCursor caret, QString text, StepStepStack &changeStack);
+    //handles AddTextBlock Steps
+    StepAddCommand(QTextCursor caret, StepStepStack &changestack);
+private:
+    void finalize (StepStepBase &step);
 };
 
 #endif // STEPADDCOMMAND_H

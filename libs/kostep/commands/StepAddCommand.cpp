@@ -17,7 +17,26 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 #include "StepAddCommand.h"
+#include "../StepSteps.h"
 
-StepAddCommand::StepAddCommand()
+StepAddCommand::StepAddCommand (QTextCursor caret, QString text, StepStepStack &changeStack) : StepCommand (caret,changeStack)
 {
+    StepAddTextStep step (text);
+    finalize (step);
+
+}
+StepAddCommand::StepAddCommand (QTextCursor caret, StepStepStack &changestack) : StepCommand (caret,changestack)
+{
+    StepAddTextBlockStep step = new StepAddTextBlockStep ();
+    finalize (step);
+
+}
+
+void StepAddCommand::finalize (StepStepBase &step)
+{
+    StepStepLocation location (caret);
+    step.setLocation (location);
+
+    changeStack.push (step);
+    step =0;
 }

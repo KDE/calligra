@@ -20,14 +20,16 @@
 #define STEPCOMMAND_H
 #include "../StepStepLocation.h"
 #include "../StepStepStack.h"
-
+#include <QTextCursor>
 class StepCommand
 {
-    StepCommand();
+    StepCommand ();
+public:
+    StepCommand (QTextCursor caret, StepStepStack stack);
 protected:
     StepStepStack changeStack;
     StepStepLocation Location;
-
+    QTextCursor caret;
 };
 
 #endif // STEPCOMMAND_H

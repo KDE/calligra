@@ -17,7 +17,53 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 #include "StepDeleteCommand.h"
+#include "../StepDeleteSteps.h"
 
-StepDeleteCommand::StepDeleteCommand(QTextCursor caret, int distance, StepStepStack &changestack):StepCommand(caret, changestack)
+StepDeleteCommand::StepDeleteCommand(QTextCursor caret, StepStepStack &changeStack):StepCommand(caret, changeStack)
 {
+    if( caret.hasSelection ()) {
+        handleHasSelection();
+    } else {
+        StepDeleteTextStep step;
+        StepStepLocation location(caret);
+
+        step.setLocation(location);
+        changeStack.push(step);
+    }
+
+}
+
+void StepDeleteCommand::handleHasSelection()
+{
+    QTextCursor documentTraverser(caret);
+    QTextCursor start(caret);
+    documentTraverser.setPosition(caret.selectionStart());
+    while (documentTraverser.position() != caret.selectionEnd())
+    {
+        QTextBlock block = documentTraverser.block();
+        documentTraverser.movePosition(QTextCursor::NextCharacter);
+        QTextBlock block2 = documentTraverser.block();
+        if(block != block2) {
+            handleDeleteText(start, documentTraverser);
+            start = documentTraverser;
+
+            StepDeleteTextBlockStep step;
+            StepStepLocation location(documentTraverser);
+            step.setLocation(location);
+            changeStack.push(step);
+        }
+
+    }
+    handleDeleteText(start, documentTraverser);
+}
+
+void StepDeleteCommand::handleDeleteText(QTextCursor start, QTextCursor end)
+{
+    end.movePosition(QTextCursor::PreviousCharacter);
+    StepDeleteTextStep step;
+    StepStepLocation startLocation(start);
+    StepStepLocation endLocation(end);
+    step.setLocation(startLocation);
+    step.setEndLocation(endLocation);
+    changeStack.push(step);
 }

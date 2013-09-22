@@ -93,6 +93,8 @@
 
 #include "../libs/kostep/StepSteps.h"
 #include "../libs/kostep/StepStepLocation.h"
+#include "../kostep/commands/StepAddCommand.h"
+#include "../kostep/commands/StepDeleteCommand.h"
 
 Q_DECLARE_METATYPE(QTextFrame*)
 
@@ -117,11 +119,7 @@ void KoTextEditor::Private::emitTextFormatChanged()
 
 void KoTextEditor::Private::newLine(KUndo2Command *parent)
 {
-    //changetracking code
-    StepStepLocation location(caret);
-    StepAddTextBlockStep step;
-    step.setLocation(location);
-    changeStack.push(step);
+    StepAddCommand stepAddCommand (caret,changeStack);
 
     // Handle if this is the special block before a table
     bool hiddenTableHandling = caret.blockFormat().hasProperty(KoParagraphStyle::HiddenByTable);
@@ -863,11 +861,7 @@ void KoTextEditor::deleteChar()
             return;
         }
     }
-    //changetracking code
-    StepDeleteTextStep step(d->caret.selectionEnd() - d->caret.selectionStart());
-    StepStepLocation Location(d->caret);
-    step.setLocation(Location);
-    d->changeStack.push(step);
+    StepDeleteCommand stepDeleteCommand (d->caret, d->changeStack);
 
     deleteChar(false);
 
@@ -904,11 +898,8 @@ void KoTextEditor::deletePreviousChar()
             return;
         }
     }
-    //changetracking code
-    StepDeleteTextStep step(d->caret.selectionEnd() - d->caret.selectionStart());
-    StepStepLocation Location(d->caret);
-    step.setLocation(Location);
-    d->changeStack.push(step);
+
+    StepDeleteCommand stepDeleteCommand(d->caret,d->changeStack);
 
     deleteChar(true);
 
@@ -1439,16 +1430,7 @@ void KoTextEditor::insertText(const QString &text, const QString &hRef)
         return;
     }
 
-    //Change Tracking Code, Generates a step, and then converts the current location
-    //via d->caret into a StepStepLocation and then assigns that location to the step
-    //and pushes it onto the stack in the d->pointer. location and step pointers are then
-    //set to 0 to insure that they can't accidentally be deleted
-    StepAddTextStep* step = new StepAddTextStep(text);
-    StepStepLocation* location = new StepStepLocation(d->caret);
-    step->setLocation(*location);
-    d->changeStack.push(*step);
-    location =0;
-    step = 0;
+    StepAddCommand stepAddCommand (d->caret, text,d->changeStack);
 
     bool hasSelection = d->caret.hasSelection();
     if (!hasSelection) {
@@ -1616,10 +1598,7 @@ void KoTextEditor::newLine()
     }
     //changetracking code
     //NOTE: See whether this is needed here or in KoTextEditor::Private:newline()
-    StepAddTextBlockStep step;
-    StepStepLocation location(d->caret);
-    step.setLocation(location);
-    d->changeStack.push(step);
+    StepAddCommand stepAddCommand (d->caret,d->changeStack);
 
     emit cursorPositionChanged();
 }

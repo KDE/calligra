@@ -25,8 +25,10 @@
 class StepDeleteCommand : public StepCommand
 {
 public:
-    StepDeleteCommand(QTextCursor caret, int distance, StepStepStack &changestack);
+    StepDeleteCommand(QTextCursor caret, StepStepStack &changeStack);
 private:
+    void handleHasSelection();
+    void handleDeleteText(QTextCursor start, QTextCursor end);
     StepStepLocation locationEnd;
 };
 

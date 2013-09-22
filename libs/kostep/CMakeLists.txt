@@ -15,6 +15,9 @@ set(kostep_LIB_SRCS
         StepStepStack_p.cpp
         StepStepLocation.cpp
         StepStepLocation_p.cpp
+        commands/StepCommand.cpp
+        commands/StepAddCommand.cpp
+        commands/StepDeleteCommand.cpp
 )
 
 kde4_add_library(kostep SHARED ${kostep_LIB_SRCS})
@@ -47,5 +50,8 @@ install( FILES
         StepDeleteTextBlockStep.h
         StepDeleteTextBlockStep_p.h
         StepSteps.h
+        commands/StepCommand.h
+        commands/StepAddCommand.h
+        commands/StepDeleteCommand.h
 DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
 
