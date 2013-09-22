@@ -19,13 +19,13 @@
 #include "StepAddCommand.h"
 #include "../StepSteps.h"
 
-StepAddCommand::StepAddCommand (QTextCursor caret, QString text, StepStepStack &changeStack) : StepCommand (caret,changeStack)
+StepAddCommand::StepAddCommand (QTextCursor caret, QString text, StepStepStack *changeStack) : StepCommand (caret, changeStack)
 {
     StepAddTextStep step (text);
     finalize (step);
 
 }
-StepAddCommand::StepAddCommand (QTextCursor caret, StepStepStack &changestack) : StepCommand (caret,changestack)
+StepAddCommand::StepAddCommand (QTextCursor caret, StepStepStack *changestack) : StepCommand (caret, changestack)
 {
     StepAddTextBlockStep step = new StepAddTextBlockStep ();
     finalize (step);
@@ -37,6 +37,7 @@ void StepAddCommand::finalize (StepStepBase &step)
     StepStepLocation location (caret);
     step.setLocation (location);
 
-    changeStack.push (step);
+    changeStack->push (step);
     step =0;
+    changeStack = 0;
 }

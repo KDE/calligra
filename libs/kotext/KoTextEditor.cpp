@@ -119,7 +119,7 @@ void KoTextEditor::Private::emitTextFormatChanged()
 
 void KoTextEditor::Private::newLine(KUndo2Command *parent)
 {
-    StepAddCommand stepAddCommand (caret,changeStack);
+    //StepAddCommand stepAddCommand (caret, &changeStack);
 
     // Handle if this is the special block before a table
     bool hiddenTableHandling = caret.blockFormat().hasProperty(KoParagraphStyle::HiddenByTable);
@@ -867,7 +867,7 @@ void KoTextEditor::deleteChar()
             return;
         }
     }
-    StepDeleteCommand stepDeleteCommand (d->caret, d->changeStack);
+    StepDeleteCommand stepDeleteCommand (d->caret, &d->changeStack);
 
     deleteChar(false);
 
@@ -905,7 +905,7 @@ void KoTextEditor::deletePreviousChar()
         }
     }
 
-    StepDeleteCommand stepDeleteCommand(d->caret,d->changeStack);
+    StepDeleteCommand stepDeleteCommand(d->caret, &d->changeStack);
 
     deleteChar(true);
 
@@ -1436,7 +1436,7 @@ void KoTextEditor::insertText(const QString &text, const QString &hRef)
         return;
     }
 
-    StepAddCommand stepAddCommand (d->caret, text,d->changeStack);
+    StepAddCommand stepAddCommand (d->caret, text, &d->changeStack);
 
     bool hasSelection = d->caret.hasSelection();
     if (!hasSelection) {
@@ -1604,7 +1604,7 @@ void KoTextEditor::newLine()
     }
     //changetracking code
     //NOTE: See whether this is needed here or in KoTextEditor::Private:newline()
-    StepAddCommand stepAddCommand (d->caret,d->changeStack);
+    StepAddCommand stepAddCommand (d->caret, &d->changeStack);
 
     emit cursorPositionChanged();
 }

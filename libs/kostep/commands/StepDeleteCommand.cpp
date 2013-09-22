@@ -19,17 +19,26 @@
 #include "StepDeleteCommand.h"
 #include "../StepDeleteSteps.h"
 
-StepDeleteCommand::StepDeleteCommand(QTextCursor caret, StepStepStack &changeStack):StepCommand(caret, changeStack)
+StepDeleteCommand::StepDeleteCommand(QTextCursor caret, StepStepStack *changeStack):StepCommand(caret, changeStack)
 {
     if( caret.hasSelection ()) {
         handleHasSelection();
     } else {
-        StepDeleteTextStep step;
-        StepStepLocation location(caret);
+        QTextCursor documentTraverser(caret);
+        QTextBlock block = documentTraverser.block();
+        documentTraverser.movePosition(QTextCursor::NextCharacter);
+        QTextBlock block2 = documentTraverser.block();
 
-        step.setLocation(location);
-        changeStack.push(step);
+        if (block == block2) {
+            handleDeleteText(caret,caret);
+        } else {
+            StepDeleteTextStep step;
+            StepStepLocation location(caret);
+            step.setLocation(location);
+            changeStack->push(step);
+        }
     }
+    changeStack =0;
 
 }
 
@@ -37,33 +46,47 @@ void StepDeleteCommand::handleHasSelection()
 {
     QTextCursor documentTraverser(caret);
     QTextCursor start(caret);
+    start.setPosition(caret.selectionStart());
     documentTraverser.setPosition(caret.selectionStart());
+
+    //counter for the number of blocks
+    int count =0;
+
     while (documentTraverser.position() != caret.selectionEnd())
     {
         QTextBlock block = documentTraverser.block();
         documentTraverser.movePosition(QTextCursor::NextCharacter);
         QTextBlock block2 = documentTraverser.block();
         if(block != block2) {
-            handleDeleteText(start, documentTraverser);
-            start = documentTraverser;
+            QTextCursor endPosition(documentTraverser);
+            endPosition.movePosition(QTextCursor::PreviousCharacter);
+            handleDeleteText(start, endPosition);
 
-            StepDeleteTextBlockStep step;
-            StepStepLocation location(documentTraverser);
-            step.setLocation(location);
-            changeStack.push(step);
+            start = documentTraverser;
+            count++;
         }
 
     }
     handleDeleteText(start, documentTraverser);
+    while (count !=0)
+    {
+        count--;
+        StepDeleteTextBlockStep step;
+        QTextCursor startOfCursor(caret);
+        startOfCursor.setPosition(caret.selectionStart());
+        StepStepLocation location(startOfCursor);
+        step.setLocation(location);
+        changeStack->push(step);
+    }
 }
 
 void StepDeleteCommand::handleDeleteText(QTextCursor start, QTextCursor end)
 {
-    end.movePosition(QTextCursor::PreviousCharacter);
+
     StepDeleteTextStep step;
     StepStepLocation startLocation(start);
     StepStepLocation endLocation(end);
     step.setLocation(startLocation);
     step.setEndLocation(endLocation);
-    changeStack.push(step);
+    changeStack->push(step);
 }

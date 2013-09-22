@@ -22,7 +22,7 @@ StepCommand::StepCommand ()
 {
 }
 
-StepCommand::StepCommand (QTextCursor caret, StepStepStack stack)
+StepCommand::StepCommand (QTextCursor caret, StepStepStack* stack)
 {
     this->caret = caret;
     this->changeStack = stack;

@@ -22,10 +22,10 @@
 #include <QtGui/QTextCursor>
 #include "../StepStepStack.h"
 
-class StepDeleteCommand : public StepCommand
+class KOSTEP_EXPORT StepDeleteCommand : public StepCommand
 {
 public:
-    StepDeleteCommand(QTextCursor caret, StepStepStack &changeStack);
+    StepDeleteCommand(QTextCursor caret, StepStepStack *changeStack);
 private:
     void handleHasSelection();
     void handleDeleteText(QTextCursor start, QTextCursor end);
