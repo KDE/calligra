@@ -71,6 +71,16 @@ public: // QWidget
     /// reimplemented method from superclass
     virtual void inputMethodEvent(QInputMethodEvent *event);
 
+#if defined(Q_WS_MAC)
+    virtual bool macEvent(EventHandlerCallRef, EventRef);
+#endif
+#if defined(Q_WS_WIN)
+    virtual bool winEvent(MSG *message, long *result);
+#endif
+#if defined(Q_WS_X11)
+    virtual bool x11Event(XEvent *);
+#endif
+
 public: // KisAbstractCanvasWidget
 
     QWidget * widget() {

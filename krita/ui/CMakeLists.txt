@@ -35,6 +35,7 @@ set(kritaui_LIB_SRCS
     canvas/kis_image_patch.cpp
     canvas/kis_image_pyramid.cpp
     canvas/kis_infinity_manager.cpp
+    canvas/kis_tablet_event_handler.cpp
     dialogs/kis_dlg_adj_layer_props.cc
     dialogs/kis_dlg_adjustment_layer.cc
     dialogs/kis_dlg_filter.cpp
@@ -262,6 +263,25 @@ if(HAVE_OPENGL)
         kis_3d_object_model.cpp
         )
 endif(HAVE_OPENGL)
+
+if (WIN32)
+    set(kritaui_LIB_SRCS
+        ${kritaui_LIB_SRCS}
+        canvas/kis_wintab_tablet_hander.cpp
+    )
+endif (WIN32)
+if (APPLE)
+    set(kritaui_LIB_SRCS
+        ${kritaui_LIB_SRCS}
+        canvas/kis_mac_tablet_hander.cpp
+    )
+endif (APPLE)
+if (UNIX AND NOT APPLE)
+    set(kritaui_LIB_SRCS
+        ${kritaui_LIB_SRCS}
+        canvas/kis_x11_tablet_handler.cpp
+    )
+endif (UNIX AND NOT APPLE)
 
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})
 
