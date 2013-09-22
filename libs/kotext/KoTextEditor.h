@@ -57,6 +57,7 @@ class QString;
 class KUndo2Command;
 
 class KoTextVisitor;
+class StepStepStack;
 
 /**
  * KoTextEditor is a wrapper around QTextCursor. It handles undo/redo and change
@@ -91,6 +92,8 @@ public:
      */
     static KoTextEditor *getTextEditorFromCanvas(KoCanvasBase *canvas);
 
+public slots: //Changetracking
+    void setChangeStack(StepStepStack* changeStack);
 
 public: // KoToolSelection overloads
 

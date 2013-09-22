@@ -90,7 +90,7 @@
 #include "KoTextDebug.h"
 
 #include <KoDocumentRdfBase.h>
-
+#include "../libs/kostep/StepStepStack.h"
 #include "../libs/kostep/StepSteps.h"
 #include "../libs/kostep/StepStepLocation.h"
 #include "../kostep/commands/StepAddCommand.h"
@@ -234,6 +234,7 @@ KoTextEditor::KoTextEditor(QTextDocument *document)
 
 KoTextEditor::~KoTextEditor()
 {
+    d->changeStack =0;
     delete d;
 }
 
@@ -249,6 +250,11 @@ KoTextEditor *KoTextEditor::getTextEditorFromCanvas(KoCanvasBase *canvas)
         }
     }
     return 0;
+}
+
+void KoTextEditor::setChangeStack(StepStepStack *changeStack)
+{
+    d->changeStack = changeStack;
 }
 
 QTextCursor* KoTextEditor::cursor()

@@ -447,7 +447,7 @@ bool KWOdfWriter::saveOdfSettings(KoStore *store)
     return true;
 }
 
-bool KWOdfWriter::saveSteps (KoStore * store)
+bool KWOdfWriter::saveSteps (StepStepStack *changeStack, KoStore * store)
 {
 
   KoStoreDevice stepDevice(store);

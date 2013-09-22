@@ -37,6 +37,7 @@ class KWTextFrameSet;
 class KWPage;
 
 class KoGenChanges;
+class StepStepStack;
 
 /**
  * Class that has a lot of the OpenDocument (ODF) saving code for Words.
@@ -71,7 +72,7 @@ private:
     void addShapeToTree(KoShape *shape);
 
     bool saveOdfSettings(KoStore *store);
-    bool saveSteps(KoStore *store);
+    bool saveSteps(StepStepStack *changeStack, KoStore *store);
 
     /// The Words document.
     KWDocument *m_document;

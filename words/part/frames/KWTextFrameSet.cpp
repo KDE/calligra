@@ -134,14 +134,14 @@ void KWTextFrameSet::setupDocument()
     doc.setTextRangeManager(m_wordsDocument->textRangeManager());
     KoStyleManager *styleManager = m_wordsDocument->resourceManager()->resource(KoText::StyleManager).value<KoStyleManager*>();
     doc.setStyleManager(styleManager);
-    KoChangeTracker *changeTracker = m_wordsDocument->resourceManager()->resource(KoText::ChangeTracker).value<KoChangeTracker*>();
-    doc.setChangeTracker(changeTracker);
+    //KoChangeTracker *changeTracker = m_wordsDocument->resourceManager()->resource(KoText::ChangeTracker).value<KoChangeTracker*>();
+    //doc.setChangeTracker(changeTracker);
     doc.setUndoStack(m_wordsDocument->resourceManager()->undoStack());
     doc.setShapeController(m_wordsDocument->shapeController());
 
     doc.setRelativeTabs(true);
     doc.setParaTableSpacingAtStart(true);
-
+    doc.textEditor()->setChangeStack(&m_wordsDocument->changeStack);
     // the KoTextDocumentLayout needs to be setup after the actions above are done to prepare the document
     KoTextDocumentLayout *lay = new KoTextDocumentLayout(m_document, m_rootAreaProvider);
     lay->setWordprocessingMode();

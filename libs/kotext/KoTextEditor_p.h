@@ -76,7 +76,7 @@ public:
 
     bool editProtected;
     bool editProtectionCached;
-    StepStepStack changeStack;
+    StepStepStack *changeStack;
 };
 
 class KoTextVisitor

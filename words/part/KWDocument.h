@@ -39,6 +39,7 @@
 #include <QPainter>
 #include <QRect>
 #include <QPointer>
+#include "../../libs/kostep/StepStepStack.h"
 
 class KWView;
 class KWPage;
@@ -270,6 +271,8 @@ private:
      * emits pageSetupChanged
      */
     void saveConfig();
+
+    StepStepStack changeStack;
 
 private:
     bool m_isMasterDocument;
