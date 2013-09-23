@@ -258,7 +258,6 @@ calligra_set_productset(${PRODUCTSET})
 set(KDE_MIN_VERSION "4.3.0")
 find_package(KDE4 4.3.0 REQUIRED)
 
-## Please note, for Krita Sketch (once merged), the minimum requirement is 4.8.0 (due to threaded OpenGL available from that version)
 if (QT3SUPPORT)
     find_package(Qt4 4.6.0 REQUIRED QtCore QtGui QtXml QtScript QtSvg QtTest QtWebKit QtDBus QtOpenGL Qt3Support)
 else (QT3SUPPORT)
