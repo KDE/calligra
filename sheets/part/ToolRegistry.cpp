@@ -59,6 +59,7 @@ ToolRegistry* ToolRegistry::instance()
 
 void ToolRegistry::loadTools()
 {
+#if 0
     const QString serviceType = QLatin1String("CalligraSheets/Plugin");
     const QString query = QLatin1String("([X-CalligraSheets-InterfaceVersion] == 0) and "
                                         "([X-KDE-PluginInfo-Category] == 'Tool')");
@@ -95,4 +96,5 @@ void ToolRegistry::loadTools()
             KoToolRegistry::instance()->remove(toolFactory->id());
         }
     }
+#endif
 }
