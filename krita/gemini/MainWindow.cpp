@@ -275,9 +275,6 @@ void MainWindow::switchToSketch()
 
         d->desktopView->setParent(0);
         d->wasMaximized = isMaximized();
-
-        if(!d->slateMode)
-            sketchChange();
     }
 
     setCentralWidget(d->sketchView);
@@ -288,6 +285,9 @@ void MainWindow::switchToSketch()
         if(d->syncObject->initialized)
             QTimer::singleShot(0, this, SLOT(sketchChange()));
     }
+    else
+        QTimer::singleShot(0, this, SLOT(sketchChange()));
+
     qDebug() << "milliseconds to switch to sketch:" << timer.elapsed();
 }
 
@@ -295,6 +295,7 @@ void MainWindow::sketchChange()
 {
     if(d->desktopView)
     {
+        qApp->processEvents();
         KisView2* view = qobject_cast<KisView2*>(d->desktopView->rootView());
         //Notify the new view that we just switched to it, passing our synchronisation object
         //so it can use those values to sync with the old view.
