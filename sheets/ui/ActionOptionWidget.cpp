@@ -83,12 +83,12 @@ ActionOptionWidget::ActionOptionWidget(CellToolBase* cellTool, const QDomElement
         // In each group there are a number of actions that will be layouted together.
         for (QDomElement action = group.firstChildElement("action"); !action.isNull(); action = action.nextSiblingElement("action")) {
             QString actionName = action.attribute("name");
-            QWidgetAction* a = qobject_cast<QWidgetAction*>(cellTool->action(actionName));
+            QAction* a = cellTool->action(actionName);
             if (!a) {
                 kWarning() << "unknown action" << actionName << "in CellToolOptionWidgets.xml";
                 continue;
             }
-            QWidget* w = a->requestWidget(this);
+            QWidget* w = qobject_cast<QWidgetAction*>(a) ? qobject_cast<QWidgetAction*>(a)->requestWidget(this) : 0;
             if (w && w->inherits("QFontComboBox")) {
                 w->setMinimumWidth(w->minimumWidth() / 2);
             }
