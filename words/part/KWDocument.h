@@ -71,7 +71,7 @@ public:
     ~KWDocument();
 
     //changetracking
-    StepStepStack* getChangeStack();
+    StepStepStack* changeStack();
 
     // KoShapeBasedDocumentBase interface
     /// reimplemented from KoShapeBasedDocumentBase

@@ -150,7 +150,7 @@ KWDocument::~KWDocument()
     delete m_changeStack;
 }
 
-StepStepStack* KWDocument::getChangeStack()
+StepStepStack* KWDocument::changeStack()
 {
     return m_changeStack;
 }
