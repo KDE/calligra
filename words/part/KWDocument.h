@@ -39,7 +39,7 @@
 #include <QPainter>
 #include <QRect>
 #include <QPointer>
-#include "../../libs/kostep/StepStepStack.h"
+#include <StepStepStack.h>
 
 class KWView;
 class KWPage;

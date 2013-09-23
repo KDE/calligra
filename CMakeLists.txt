@@ -365,7 +365,7 @@ macro_log_feature(ICU_FOUND "ICU" "International Components for Unicode (ICU) Li
                   "Required by Calligra's default database handler for Kexi and Words.")
 
 ##
-## Check for OpenEXR 
+## Check for OpenEXR
 ##
 
 macro_optional_find_package(OpenEXR)
@@ -715,12 +715,17 @@ set(FLAKE_INCLUDES ${CMAKE_SOURCE_DIR}/libs/flake
                    ${CMAKE_BINARY_DIR}/libs/flake)
 
 # vectorimage
-set(VECTORIMAGE_INCLUDES 
+set(VECTORIMAGE_INCLUDES
                    ${CMAKE_SOURCE_DIR}/libs/vectorimage
                    ${CMAKE_SOURCE_DIR}/libs/vectorimage/libemf
                    ${CMAKE_SOURCE_DIR}/libs/vectorimage/libsvm
                    ${CMAKE_SOURCE_DIR}/libs/vectorimage/libwmf)
-                   
+#KoStep
+set(KOSTEP_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kostep
+                   ${CMAKE_BINARY_DIR}/libs/kostep
+                   ${CMAKE_SOURCE_DIR}/libs/kostep/commands)
+
+
 # KoText depends on koplugin, odf
 set(KOTEXT_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kotext
                    ${CMAKE_BINARY_DIR}/libs/kotext
@@ -730,6 +735,7 @@ set(KOTEXT_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kotext
                    ${SOPRANO_INCLUDE_DIR}
                    ${FLAKE_INCLUDES}
                    ${KOODF_INCLUDES}
+                   ${KOSTEP_INCLUDES}
                    ${CMAKE_SOURCE_DIR}/libs/main)
 
 # TextLayout depends on kotext

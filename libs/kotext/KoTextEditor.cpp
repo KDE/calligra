@@ -90,11 +90,9 @@
 #include "KoTextDebug.h"
 
 #include <KoDocumentRdfBase.h>
-#include "../libs/kostep/StepStepStack.h"
-#include "../libs/kostep/StepSteps.h"
-#include "../libs/kostep/StepStepLocation.h"
-#include "../kostep/commands/StepAddCommand.h"
-#include "../kostep/commands/StepDeleteCommand.h"
+
+#include <commands/StepAddCommand.h>
+#include <commands/StepDeleteCommand.h>
 
 Q_DECLARE_METATYPE(QTextFrame*)
 
