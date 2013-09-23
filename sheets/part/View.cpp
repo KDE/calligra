@@ -578,7 +578,7 @@ View::View(KoPart *part, QWidget *_parent, Doc *_doc)
     initView();
 
     d->initActions();
-
+#if 0
     KService::List offers = KServiceTypeTrader::self()->query(QString::fromLatin1("Sheets/ViewPlugin"),
                                                               QString::fromLatin1("(Type == 'Service') and "
                                                                                   "([X-Sheets-Version] == 28)"));
@@ -599,7 +599,7 @@ View::View(KoPart *part, QWidget *_parent, Doc *_doc)
             }
         }
     }
-
+#endif
 
     // Connect updateView() signal to View::update() in order to repaint its
     // child widgets: the column/row headers and the select all button.
