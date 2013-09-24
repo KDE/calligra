@@ -293,14 +293,23 @@ void MainWindow::switchToSketch()
 
 void MainWindow::sketchChange()
 {
+    if(centralWidget() != d->sketchView || !d->syncObject)
+        return;
+
     if(d->desktopView)
     {
+        if(!d->sketchKisView || !d->sketchView->canvasWidget())
+        {
+            QTimer::singleShot(100, this, SLOT(sketchChange()));
+            return;
+        }
         qApp->processEvents();
         KisView2* view = qobject_cast<KisView2*>(d->desktopView->rootView());
         //Notify the new view that we just switched to it, passing our synchronisation object
         //so it can use those values to sync with the old view.
         ViewModeSwitchEvent switchedEvent(ViewModeSwitchEvent::SwitchedToSketchModeEvent, view, d->sketchView, d->syncObject);
         QApplication::sendEvent(d->sketchView, &switchedEvent);
+        d->syncObject = 0;
         qApp->processEvents();
         KisConfig cfg;
         cfg.setCursorStyle(CURSOR_STYLE_NO_CURSOR);
