@@ -283,10 +283,10 @@ void MainWindow::switchToSketch()
     if(d->slateMode) {
         showFullScreen();
         if(d->syncObject->initialized)
-            QTimer::singleShot(0, this, SLOT(sketchChange()));
+            QTimer::singleShot(50, this, SLOT(sketchChange()));
     }
     else
-        QTimer::singleShot(0, this, SLOT(sketchChange()));
+        QTimer::singleShot(50, this, SLOT(sketchChange()));
 
     qDebug() << "milliseconds to switch to sketch:" << timer.elapsed();
 }
