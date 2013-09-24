@@ -1,3 +1,5 @@
+include(GNUInstallDirs)
+
 set(declarativedragdrop_SRCS
     draganddropplugin.cpp
     DeclarativeDragArea.cpp
