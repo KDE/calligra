@@ -29,6 +29,7 @@
 #include "kis_coordinates_converter.h"
 #include "kis_config.h"
 
+#include "KisSketchView.h"
 #include "gemini/ViewModeSwitchEvent.h"
 
 SketchDeclarativeView::SketchDeclarativeView(QWidget *parent)
@@ -36,6 +37,7 @@ SketchDeclarativeView::SketchDeclarativeView(QWidget *parent)
     , m_drawCanvas(false)
     , m_canvasWidget(0)
     , m_GLInitialized(false)
+    , m_sketchView(0)
 {
     setCacheMode(QGraphicsView::CacheNone);
     setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
@@ -54,6 +56,7 @@ SketchDeclarativeView::SketchDeclarativeView(const QUrl &url, QWidget *parent)
     , m_drawCanvas(false)
     , m_canvasWidget(0)
     , m_GLInitialized(false)
+    , m_sketchView(0)
 {
     setCacheMode(QGraphicsView::CacheNone);
     setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
@@ -72,10 +75,16 @@ SketchDeclarativeView::~SketchDeclarativeView()
     m_canvasWidget = 0;
 }
 
+QWidget* SketchDeclarativeView::canvasWidget() const
+{
+    return m_canvasWidget.data();
+}
+
 void SketchDeclarativeView::setCanvasWidget(QWidget *canvasWidget)
 {
     m_canvasWidget = qobject_cast<KisOpenGLCanvas2*>(canvasWidget);
     connect(m_canvasWidget, SIGNAL(destroyed(QObject*)), this, SLOT(resetInitialized()));
+    emit canvasWidgetChanged();
 }
 
 void SketchDeclarativeView::resetInitialized()
@@ -141,13 +150,18 @@ bool SketchDeclarativeView::event( QEvent* event )
         case QEvent::TabletRelease: {
             // If we don't have a canvas widget yet, we don't really have anywhere to send those events
             // so... let's just not
-            if(!m_canvasWidget.data())
+            if(m_canvasWidget.data())
             {
                 //QGraphicsScene is silly and will not forward unknown events to its items, so emulate that
                 //functionality.s
                 QList<QGraphicsItem*> items = scene()->items();
                 Q_FOREACH(QGraphicsItem* item, items) {
-                    scene()->sendEvent(item, event);
+                    if(item == m_sketchView || qobject_cast<KisSketchView*>((item))) {
+                        if(item != m_sketchView)
+                            m_sketchView = item;
+                        scene()->sendEvent(item, event);
+                        break;
+                    }
                 }
             }
             break;

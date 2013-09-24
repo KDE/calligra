@@ -32,19 +32,21 @@ class KRITASKETCH_EXPORT SketchDeclarativeView : public QDeclarativeView
     Q_OBJECT
 
     Q_PROPERTY(bool drawCanvas READ drawCanvas WRITE setDrawCanvas NOTIFY drawCanvasChanged);
+    Q_PROPERTY(QWidget* canvasWidget READ canvasWidget WRITE setCanvasWidget NOTIFY canvasWidgetChanged);
 
 public:
     SketchDeclarativeView(QWidget *parent = 0);
     SketchDeclarativeView(const QUrl &url, QWidget *parent = 0);
     virtual ~SketchDeclarativeView();
 
+    QWidget* canvasWidget() const;
     void setCanvasWidget(QWidget *canvasWidget);
 
     bool drawCanvas() const;
     void setDrawCanvas(bool drawCanvas);
 
 signals:
-
+    void canvasWidgetChanged();
     void drawCanvasChanged();
 
 protected:
@@ -57,6 +59,7 @@ private:
     bool m_drawCanvas;
     QPointer<KisOpenGLCanvas2> m_canvasWidget;
     bool m_GLInitialized;
+    QGraphicsItem* m_sketchView;
     Q_SLOT void resetInitialized();
 };
 
