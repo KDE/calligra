@@ -228,6 +228,8 @@ void KoToolProxy::mousePressEvent(KoPointerEvent *ev)
             break;
         case 2:
             d->activeTool->mouseDoubleClickEvent(ev);
+            if (!ev->isAccepted() && d->activeTool)
+                d->activeTool->canvas()->shapeManager()->suggestChangeTool(ev);
             break;
         case 3:
         default:
@@ -248,16 +250,14 @@ void KoToolProxy::mousePressEvent(QMouseEvent *event, const QPointF &point)
 
 void KoToolProxy::mouseDoubleClickEvent(QMouseEvent *event, const QPointF &point)
 {
-    KoPointerEvent ev(event, point);
-    mouseDoubleClickEvent(&ev);
+    // In Qt5 we get both a normal pointereven plus a doublc click even, but since we handle our own
+    // double and tripple clicks we just ignore this one from Qt
 }
 
 void KoToolProxy::mouseDoubleClickEvent(KoPointerEvent *event)
 {
-     // let us handle it as any other mousepress (where we then detect multi clicks
-    mousePressEvent(event);
-    if (!event->isAccepted() && d->activeTool)
-        d->activeTool->canvas()->shapeManager()->suggestChangeTool(event);
+    // In Qt5 we get both a normal pointereven plus a doublc click even, but since we handle our own
+    // double and tripple clicks we just ignore this one from Qt
 }
 
 void KoToolProxy::mouseMoveEvent(QMouseEvent *event, const QPointF &point)
