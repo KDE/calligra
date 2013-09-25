@@ -329,17 +329,6 @@ void MainWindow::switchToDesktop(bool justLoaded)
     if(d->toDesktop)
         d->toDesktop->setEnabled(false);
 
-    if(d->currentSketchPage == "MainPage")
-    {
-        d->sketchView->setParent(0);
-        setCentralWidget(d->desktopView);
-    }
-
-    if(d->wasMaximized)
-        showMaximized();
-    else
-        showNormal();
-
     ViewModeSynchronisationObject* syncObject = new ViewModeSynchronisationObject;
 
     KisView2* view = 0;
@@ -352,6 +341,17 @@ void MainWindow::switchToDesktop(bool justLoaded)
     ViewModeSwitchEvent aboutToSwitchEvent(ViewModeSwitchEvent::AboutToSwitchViewModeEvent, d->sketchView, view, syncObject);
     QApplication::sendEvent(d->sketchView, &aboutToSwitchEvent);
     qApp->processEvents();
+
+    if(d->currentSketchPage == "MainPage")
+    {
+        d->sketchView->setParent(0);
+        setCentralWidget(d->desktopView);
+    }
+
+    if(d->wasMaximized)
+        showMaximized();
+    else
+        showNormal();
 
     if(view) {
         //Notify the new view that we just switched to it, passing our synchronisation object
