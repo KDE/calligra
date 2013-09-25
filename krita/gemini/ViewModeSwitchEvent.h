@@ -51,6 +51,7 @@ struct ViewModeSynchronisationObject
     KisPaintOpPresetSP paintOp;
     float opacity;
     bool globalAlphaLock;
+    QString activeToolId;
 };
 
 class ViewModeSwitchEvent : public QEvent
