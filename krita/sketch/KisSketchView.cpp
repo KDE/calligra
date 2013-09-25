@@ -392,6 +392,8 @@ bool KisSketchView::event( QEvent* event )
                 syncObject->zoomLevel = d->view->zoomController()->zoomAction()->effectiveZoom();
                 syncObject->rotationAngle = d->view->canvasBase()->rotationAngle();
 
+                syncObject->activeToolId = KoToolManager::instance()->activeToolId();
+
                 syncObject->initialized = true;
             }
 
@@ -399,6 +401,8 @@ bool KisSketchView::event( QEvent* event )
         }
         case ViewModeSwitchEvent::SwitchedToSketchModeEvent: {
             ViewModeSynchronisationObject* syncObject = static_cast<ViewModeSwitchEvent*>(event)->synchronisationObject();
+            d->view->canvasControllerWidget()->setFocus();
+            qApp->processEvents();
 
             if(d->view && syncObject->initialized) {
                 KisCanvasResourceProvider* provider = d->view->resourceProvider();
@@ -424,6 +428,9 @@ bool KisSketchView::event( QEvent* event )
                 qApp->processEvents();
                 QPoint newOffset = syncObject->documentOffset;
                 d->view->canvasControllerWidget()->setScrollBarValue(newOffset);
+
+                qApp->processEvents();
+                KoToolManager::instance()->switchToolRequested(syncObject->activeToolId);
             }
 
             return true;

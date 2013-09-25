@@ -595,12 +595,16 @@ bool KisView2::event( QEvent* event )
             syncObject->zoomLevel = zoomController()->zoomAction()->effectiveZoom();
             syncObject->rotationAngle = canvasBase()->rotationAngle();
 
+            syncObject->activeToolId = KoToolManager::instance()->activeToolId();
+
             syncObject->initialized = true;
 
             return true;
         }
         case ViewModeSwitchEvent::SwitchedToDesktopModeEvent: {
             ViewModeSynchronisationObject* syncObject = static_cast<ViewModeSwitchEvent*>(event)->synchronisationObject();
+            canvasControllerWidget()->setFocus();
+            qApp->processEvents();
 
             if(syncObject->initialized) {
                 KisCanvasResourceProvider* provider = resourceProvider();
@@ -627,6 +631,9 @@ bool KisView2::event( QEvent* event )
                 QPoint newOffset = syncObject->documentOffset + pos();
                 qApp->processEvents();
                 canvasControllerWidget()->setScrollBarValue(newOffset);
+
+                qApp->processEvents();
+                KoToolManager::instance()->switchToolRequested(syncObject->activeToolId);
             }
 
             return true;
