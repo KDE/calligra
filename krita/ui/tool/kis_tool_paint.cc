@@ -50,7 +50,6 @@
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
 
-#include <opengl/kis_opengl.h>
 #include <kis_types.h>
 #include <kis_global.h>
 #include <kis_image.h>
@@ -403,29 +402,9 @@ void KisToolPaint::resetCursorStyle()
     if (cfg.cursorStyle() == CURSOR_STYLE_OUTLINE) {
         if (m_supportOutline) {
             // do not show cursor, tool will paint outline
-            useCursor(KisCursor::blankCursor());
-        } else {
-            // if the tool does not support outline, use tool icon cursor
-            useCursor(cursor());
-        }
-    }
-
-#if defined(HAVE_OPENGL)
-    // TODO: maybe m_support 3D outline would be cooler. So far just freehand tool support 3D_MODEL cursor style
-    if (cfg.cursorStyle() == CURSOR_STYLE_3D_MODEL) {
-        if(isCanvasOpenGL()) {
-            if (m_supportOutline) {
                 useCursor(KisCursor::blankCursor());
-            } else {
-                useCursor(cursor());
-            }
-        } else {
-            useCursor(KisCursor::arrowCursor());
         }
     }
-#endif
-
-
 }
 
 void KisToolPaint::updateTabletPressureSamples()
@@ -543,7 +522,7 @@ void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint)
     outlineMode = KisPaintOpSettings::CursorIsNotOutline;
 
     if (mode() == KisTool::GESTURE_MODE ||
-        (cfg.cursorStyle() == CURSOR_STYLE_OUTLINE &&
+        ((cfg.cursorStyle() == CURSOR_STYLE_OUTLINE || cfg.cursorStyle() == CURSOR_STYLE_OUTLINE_CENTER_DOT || cfg.cursorStyle() == CURSOR_STYLE_OUTLINE_CENTER_CROSS )&&
          ((mode() == HOVER_MODE && !specialHoverModeActive()) ||
           (mode() == PAINT_MODE && cfg.showOutlineWhilePainting())))) {
 
@@ -578,7 +557,7 @@ void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint)
 }
 
 QPainterPath KisToolPaint::getOutlinePath(const QPointF &documentPos,
-                                             KisPaintOpSettings::OutlineMode outlineMode)
+                                          KisPaintOpSettings::OutlineMode outlineMode)
 {
     qreal scale = 1.0;
     qreal rotation = 0;

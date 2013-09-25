@@ -29,9 +29,6 @@
 
 #include "krita_export.h"
 
-// OpenGL
-#include <opengl/kis_opengl.h>
-
 class KAction;
 
 class KoPointerEvent;
@@ -77,11 +74,13 @@ protected:
 
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
 
+    virtual QPainterPath getOutlinePath(const QPointF &documentPos,
+                                        KisPaintOpSettings::OutlineMode outlineMode);
+
 
     KisPaintingInformationBuilder* paintingInformationBuilder() const;
     KisRecordingAdapter* recordingAdapter() const;
     void resetHelper(KisToolFreehandHelper *helper);
-    void requestUpdateOutline(const QPointF &outlineDocPoint);
 
 protected slots:
 
@@ -104,8 +103,6 @@ private:
 
     void showOutlineTemporary();
 
-
-
 private slots:
     void hideOutline();
 
@@ -116,16 +113,6 @@ protected:
     double m_magnetism;
 
 private:
-#if defined(HAVE_OPENGL)
-    qreal m_xTilt;
-    qreal m_yTilt;
-
-    qreal m_prevxTilt;
-    qreal m_prevyTilt;
-
-    GLuint m_displayList;
-    QString m_brushModelName;
-#endif
 
     QTimer m_outlineTimer;
     bool m_explicitShowOutline;

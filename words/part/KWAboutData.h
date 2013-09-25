@@ -31,7 +31,7 @@ KAboutData * newWordsAboutData()
 {
     KAboutData * aboutData = new KAboutData("words", 0, ki18nc("application name", "Calligra Words"),
                                             WORDS_VERSION, ki18n(WORDS_DESCRIPTION), KAboutData::License_LGPL,
-                                            ki18n("© 1998-2012, The Words Team"), KLocalizedString(),
+                                            ki18n("© 1998-2013, The Words Team"), KLocalizedString(),
                                             "http://www.calligra.org/words/");
     aboutData->setProductName("calligrawords"); // for bugs.kde.org
     aboutData->setProgramIconName(QLatin1String("calligrawords"));
