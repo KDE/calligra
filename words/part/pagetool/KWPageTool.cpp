@@ -472,21 +472,44 @@ qreal KWPageTool::yMouseInDocument()
 
 KWPage KWPageTool::pageUnderMouse()
 {
+
     int yPosition = 0;
     int yMouse = int(yMouseInDocument());
-    for (int i = 1; i <= m_document->pageCount(); i++) {
+    for (int i = 1; i <= m_document->pageCount()+1; i++) {
         if (yPosition > yMouse) {
             //To avoid crash on first page
+
+            //qDebug() << "you arae on the page " << i-1;
             if (i > 1)
                 return m_document->pageManager()->page(i-1);
             else
-                return m_document->pageManager()->page(i);
+                return m_document->pageManager()->page(1);
         }
-        yPosition += m_document->pageManager()->page(i).pageStyle().pageLayout().height + 21;
+        yPosition += m_document->pageManager()->page(i).height() + 21;
     }
     return m_document->pageManager()->page(m_document->pageCount());
     //return m_document->pageManager()->page(yMouseInDocument());
     //Sometimes page(qreal y) return a page after the one that's really under the mouse
+
+    /*
+    int yMouse = int(yMouseInDocument());
+
+    qDebug() << "Y " << yMouse;
+    if (yMouse < m_document->pageManager()->page(1).height()) {
+        qDebug() << "Page 1 ou moins";
+        return m_document->pageManager()->page(1);
+    }
+
+    for (int i = 2; i <= m_document->pageCount(); i++) {
+        qDebug() << "Offset page " << i << " = " << m_document->pageManager()->page(i).offsetInDocument();
+        if (m_document->pageManager()->page(i).offsetInDocument() > yMouse) {
+            qDebug() << "you are on the page " << i;
+            return m_document->pageManager()->page(i-1);
+        }
+    }
+
+    return m_document->pageManager()->page(m_document->pageCount());
+    */
 }
 
 int KWPageTool::distanceOverPage(int pageNumber)
