@@ -382,6 +382,9 @@ void MainWindow::adjustZoomOnDocumentChangedAndStuff()
         QPoint center = view->rect().center();
         view->canvasControllerWidget()->zoomRelativeToPoint(center, 0.9);
         qApp->processEvents();
+        // We have to set the focus on the view here, otherwise the toolmanager is unaware of which
+        // canvas should be handled.
+        d->desktopView->rootView()->setFocus();
         d->toSketch->setEnabled(true);
         d->switcher->setEnabled(true);
     }
