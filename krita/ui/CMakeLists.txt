@@ -267,13 +267,13 @@ endif(HAVE_OPENGL)
 if (WIN32)
     set(kritaui_LIB_SRCS
         ${kritaui_LIB_SRCS}
-        canvas/kis_wintab_tablet_hander.cpp
+        canvas/kis_wintab_tablet_handler.cpp
     )
 endif (WIN32)
 if (APPLE)
     set(kritaui_LIB_SRCS
         ${kritaui_LIB_SRCS}
-        canvas/kis_mac_tablet_hander.cpp
+        canvas/kis_mac_tablet_handler.cpp
     )
 endif (APPLE)
 if (UNIX AND NOT APPLE)
