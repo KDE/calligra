@@ -401,10 +401,11 @@ bool KisSketchView::event( QEvent* event )
         }
         case ViewModeSwitchEvent::SwitchedToSketchModeEvent: {
             ViewModeSynchronisationObject* syncObject = static_cast<ViewModeSwitchEvent*>(event)->synchronisationObject();
-            d->view->canvasControllerWidget()->setFocus();
-            qApp->processEvents();
 
             if(d->view && syncObject->initialized) {
+                d->view->canvasControllerWidget()->setFocus();
+                qApp->processEvents();
+
                 KisCanvasResourceProvider* provider = d->view->resourceProvider();
 
                 provider->setBGColor(syncObject->backgroundColor);
