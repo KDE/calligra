@@ -609,18 +609,28 @@ bool KisView2::event( QEvent* event )
             if(syncObject->initialized) {
                 KisCanvasResourceProvider* provider = resourceProvider();
 
+                provider->setPaintOpPreset(syncObject->paintOp);
+                qApp->processEvents();
+
+                KoToolManager::instance()->switchToolRequested(syncObject->activeToolId);
+                qApp->processEvents();
+
+                KisPaintOpPresetSP preset = canvasBase()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
+                preset->settings()->setProperty("CompositeOp", syncObject->compositeOp);
+                if(preset->settings()->hasProperty("OpacityValue"))
+                    preset->settings()->setProperty("OpacityValue", syncObject->opacity);
+                provider->setPaintOpPreset(preset);
 
                 provider->setBGColor(syncObject->backgroundColor);
                 provider->setFGColor(syncObject->foregroundColor);
                 provider->setHDRExposure(syncObject->exposure);
                 provider->setHDRGamma(syncObject->gamma);
-                provider->setCurrentCompositeOp(syncObject->compositeOp);
                 provider->slotPatternActivated(syncObject->pattern);
                 provider->slotGradientActivated(syncObject->gradient);
                 provider->slotNodeActivated(syncObject->node);
-                provider->setPaintOpPreset(syncObject->paintOp);
                 provider->setOpacity(syncObject->opacity);
                 provider->setGlobalAlphaLock(syncObject->globalAlphaLock);
+                provider->setCurrentCompositeOp(syncObject->compositeOp);
 
                 actionCollection()->action("zoom_in")->trigger();
                 qApp->processEvents();
@@ -631,9 +641,6 @@ bool KisView2::event( QEvent* event )
                 QPoint newOffset = syncObject->documentOffset + pos();
                 qApp->processEvents();
                 canvasControllerWidget()->setScrollBarValue(newOffset);
-
-                qApp->processEvents();
-                KoToolManager::instance()->switchToolRequested(syncObject->activeToolId);
             }
 
             return true;
