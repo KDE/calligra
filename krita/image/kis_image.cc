@@ -312,6 +312,7 @@ void KisImage::init(KisUndoStore *undoStore, qint32 width, qint32 height, const 
 
     m_d->lockCount = 0;
     m_d->perspectiveGrid = 0;
+	m_d->scheduler = 0;
 
     m_d->signalRouter = new KisImageSignalRouter(this);
 
@@ -338,7 +339,6 @@ void KisImage::init(KisUndoStore *undoStore, qint32 width, qint32 height, const 
 
     m_d->compositeProgressProxy = new KisCompositeProgressProxy();
 
-    m_d->scheduler = 0;
     if (m_d->startProjection) {
         m_d->scheduler = new KisUpdateScheduler(this);
         m_d->scheduler->setProgressProxy(m_d->compositeProgressProxy);
