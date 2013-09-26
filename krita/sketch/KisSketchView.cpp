@@ -408,17 +408,22 @@ bool KisSketchView::event( QEvent* event )
 
                 KisCanvasResourceProvider* provider = d->view->resourceProvider();
 
+                provider->setPaintOpPreset(syncObject->paintOp);
+                qApp->processEvents();
+
+                KoToolManager::instance()->switchToolRequested(syncObject->activeToolId);
+                qApp->processEvents();
+
                 provider->setBGColor(syncObject->backgroundColor);
                 provider->setFGColor(syncObject->foregroundColor);
                 provider->setHDRExposure(syncObject->exposure);
                 provider->setHDRGamma(syncObject->gamma);
-                provider->setCurrentCompositeOp(syncObject->compositeOp);
                 provider->slotPatternActivated(syncObject->pattern);
                 provider->slotGradientActivated(syncObject->gradient);
                 provider->slotNodeActivated(syncObject->node);
-                provider->setPaintOpPreset(syncObject->paintOp);
                 provider->setOpacity(syncObject->opacity);
                 provider->setGlobalAlphaLock(syncObject->globalAlphaLock);
+                provider->setCurrentCompositeOp(syncObject->compositeOp);
 
                 zoomIn();
                 qApp->processEvents();
@@ -429,9 +434,6 @@ bool KisSketchView::event( QEvent* event )
                 qApp->processEvents();
                 QPoint newOffset = syncObject->documentOffset;
                 d->view->canvasControllerWidget()->setScrollBarValue(newOffset);
-
-                qApp->processEvents();
-                KoToolManager::instance()->switchToolRequested(syncObject->activeToolId);
             }
 
             return true;
