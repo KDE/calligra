@@ -241,10 +241,13 @@ void KisTool::canvasResourceChanged(int key, const QVariant & v)
         break;
     case(KisCanvasResourceProvider::HdrExposure):
         d->currentExposure = static_cast<float>(v.toDouble());
+	break;
     case(KisCanvasResourceProvider::CurrentGeneratorConfiguration):
         d->currentGenerator = static_cast<KisFilterConfiguration*>(v.value<void *>());
+	break;
     case(KisCanvasResourceProvider::CurrentKritaNode):
         d->currentNode = (v.value<KisNodeSP>());
+	break;
     default:
         ;
         // Do nothing
@@ -719,26 +722,31 @@ void KisTool::paintToolOutline(QPainter* painter, const QPainterPath &path)
 void KisTool::resetCursorStyle()
 {
     KisConfig cfg;
+    useCursor(d->cursor);
+
     switch (cfg.cursorStyle()) {
     case CURSOR_STYLE_TOOLICON:
         useCursor(d->cursor);
         break;
     case CURSOR_STYLE_CROSSHAIR:
+    case CURSOR_STYLE_OUTLINE_CENTER_CROSS:
         useCursor(KisCursor::crossCursor());
         break;
-    case CURSOR_STYLE_SMALL_ROUND:
-        useCursor(KisCursor::roundCursor());
-        break;
     case CURSOR_STYLE_POINTER:
-        useCursor(KisCursor::upArrowCursor());
+        useCursor(KisCursor::arrowCursor());
         break;
     case CURSOR_STYLE_NO_CURSOR:
         useCursor(KisCursor::blankCursor());
         break;
+    case CURSOR_STYLE_SMALL_ROUND:
+    case CURSOR_STYLE_OUTLINE_CENTER_DOT:
+        useCursor(KisCursor::roundCursor());
+        break;
     case CURSOR_STYLE_OUTLINE:
+        break;
     default:
         // use tool cursor as default, if the tool supports outline, it will set the cursor to blank and show outline
-        useCursor(d->cursor);
+        ;
     }
 }
 

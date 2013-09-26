@@ -57,6 +57,7 @@ public:
     virtual ~KisOpenGLCanvas2();
 
     void setDisplayFilter(KisDisplayFilter *displayFilter);
+    void setWrapAroundViewingMode(bool value);
 
 public: // QWidget
 
@@ -70,6 +71,8 @@ public: // QWidget
     void initializeDisplayShader();
     void renderCanvasGL() const;
     void renderDecorations(QPainter *painter);
+
+    virtual void paintEvent(QPaintEvent* event);
 
 private slots:
     void slotConfigChanged();
