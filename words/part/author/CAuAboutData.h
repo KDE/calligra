@@ -35,7 +35,7 @@ KAboutData * newAuthorAboutData()
     //        our own top level directory.
     KAboutData * aboutData = new KAboutData("author", "words", ki18nc("application name", "Calligra Author"),
                                             AUTHOR_VERSION, ki18n(AUTHOR_DESCRIPTION), KAboutData::License_LGPL,
-                                            ki18n("© 2012, The Author Team"), KLocalizedString(),
+                                            ki18n("© 2012-2013, The Author Team"), KLocalizedString(),
                                             "http://www.calligra.org/author/");
     aboutData->setProductName("calligraauthor"); // for bugs.kde.org
     aboutData->setProgramIconName(QLatin1String("calligraauthor"));

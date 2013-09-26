@@ -31,7 +31,7 @@ KAboutData* newFlowAboutData()
 {
   KAboutData* aboutData = new KAboutData("flow", 0, ki18nc("application name", "Flow"),
                                 FLOW_VERSION, ki18n(FLOW_DESCRIPTION), KAboutData::License_LGPL,
-                                ki18n("(C) 2000-2011, The Flow Team"), KLocalizedString(),
+                                ki18n("(C) 2000-2013, The Flow Team"), KLocalizedString(),
                                 "http://www.calligra.org/flow/");
   aboutData->setProductName("calligraflow"); // for bugs.kde.org
   aboutData->setProgramIconName(QLatin1String("calligraflow"));
