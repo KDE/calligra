@@ -208,24 +208,4 @@ bool KisQPainterCanvas::callFocusNextPrevChild(bool next)
     return focusNextPrevChild(next);
 }
 
-
-#if defined(Q_WS_MAC)
-    bool KisQPainterCanvas::macEvent(EventHandlerCallRef er, EventRef event)
-    {
-        return m_d->tabletEventHandler->macEvent(er, event);
-    }
-#endif
-#if defined(Q_WS_WIN)
-    bool KisQPainterCanvas::winEvent(MSG *message, long *result)
-    {
-        return m_d->tabletEventHandler->winEventEvent(message, result);
-    }
-#endif
-#if defined(Q_WS_X11)
-    bool KisQPainterCanvas::x11Event(XEvent *e)
-    {
-        return m_d->tabletEventHandler->x11Event(e);
-    }
-#endif
-
 #include "kis_qpainter_canvas.moc"

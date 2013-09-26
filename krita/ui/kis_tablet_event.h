@@ -3,9 +3,15 @@
 
 #include <QTabletEvent>
 
-class KisTabletEvent
+class KisTabletEvent : public QInputEvent
 {
 public:
+
+    enum TabletDevice { NoDevice, Puck, Stylus, Airbrush, FourDMouse,
+                        XFreeEraser /*internal*/, RotationStylus };
+    enum PointerType { UnknownPointer, Pen, Cursor, Eraser };
+
+
     KisTabletEvent(Type t, const QPoint &pos, const QPoint &globalPos, const QPointF &hiResGlobalPos,
                  int device, int pointerType, qreal pressure, int xTilt, int yTilt,
                  qreal tangentialPressure, qreal rotation, int z,

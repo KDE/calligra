@@ -114,7 +114,7 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas, KisCoordinatesConverter *
     , KisCanvasWidgetBase(canvas, coordinatesConverter)
     , d(new Private())
 {
-    m_d->tabletEventHandler = new KisTabletEventHandler(this);
+    d->tabletEventHandler = new KisTabletEventHandler(this);
     d->openGLImageTextures = imageTextures;
 
     setAcceptDrops(true);
@@ -448,25 +448,6 @@ bool KisOpenGLCanvas2::callFocusNextPrevChild(bool next)
 {
     return focusNextPrevChild(next);
 }
-
-#if defined(Q_WS_MAC)
-    bool KisOpenGLCanvas2::macEvent(EventHandlerCallRef er, EventRef event)
-    {
-        return m_d->tabletEventHandler->macEvent(er, event);
-    }
-#endif
-#if defined(Q_WS_WIN)
-    bool KisOpenGLCanvas2::winEvent(MSG *message, long *result)
-    {
-        return m_d->tabletEventHandler->winEventEvent(message, result);
-    }
-#endif
-#if defined(Q_WS_X11)
-    bool KisOpenGLCanvas2::x11Event(XEvent *e)
-    {
-        return m_d->tabletEventHandler->x11Event(e);
-    }
-#endif
 
 void KisOpenGLCanvas2::paintEvent(QPaintEvent* event)
 {

@@ -20,6 +20,8 @@
 
 #include <stdlib.h>
 
+#include <QFile>
+#include <QTextStream>
 #include <QString>
 #include <QPixmap>
 #include <QDebug>
@@ -45,8 +47,33 @@
 #include "stdlib.h"
 #endif
 
+void myMessageOutput(QtMsgType type, const char *msg)
+{
+    QString txt;
+    switch (type) {
+    case QtDebugMsg:
+        txt = QString("Debug: %1").arg(msg);
+        break;
+    case QtWarningMsg:
+        txt = QString("Warning: %1").arg(msg);
+    break;
+    case QtCriticalMsg:
+        txt = QString("Critical: %1").arg(msg);
+    break;
+    case QtFatalMsg:
+        txt = QString("Fatal: %1").arg(msg);
+    break;
+    }
+    QFile outFile("kritalog");
+    outFile.open(QIODevice::WriteOnly | QIODevice::Append);
+    QTextStream ts(&outFile);
+    ts << txt << endl;
+}
+
 extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 {
+    qInstallMsgHandler(myMessageOutput); //install : set the callback
+
 #ifdef Q_WS_X11
     setenv("QT_NO_GLIB", "1", true);
 #endif

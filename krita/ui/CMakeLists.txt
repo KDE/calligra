@@ -8,6 +8,7 @@ include_directories( ${KOTEXT_INCLUDES}
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/resources
     ${CMAKE_CURRENT_SOURCE_DIR}/ora
     ${CMAKE_SOURCE_DIR}/krita/image/metadata
+    ${CMAKE_SOURCE_DIR}/krita/tablet
     ${EXIV2_INCLUDE_DIR} )
 
 add_subdirectory( tests )
@@ -35,7 +36,6 @@ set(kritaui_LIB_SRCS
     canvas/kis_image_patch.cpp
     canvas/kis_image_pyramid.cpp
     canvas/kis_infinity_manager.cpp
-    canvas/kis_tablet_event_handler.cpp
     dialogs/kis_dlg_adj_layer_props.cc
     dialogs/kis_dlg_adjustment_layer.cc
     dialogs/kis_dlg_filter.cpp
@@ -246,25 +246,6 @@ set(kritaui_LIB_SRCS
     input/config/kis_key_input_editor.cpp
     processing/fill_processing_visitor.cpp
 )
-
-if (WIN32)
-    set(kritaui_LIB_SRCS
-        ${kritaui_LIB_SRCS}
-        canvas/kis_wintab_tablet_handler.cpp
-    )
-endif (WIN32)
-if (APPLE)
-    set(kritaui_LIB_SRCS
-        ${kritaui_LIB_SRCS}
-        canvas/kis_mac_tablet_handler.cpp
-    )
-endif (APPLE)
-if (UNIX AND NOT APPLE)
-    set(kritaui_LIB_SRCS
-        ${kritaui_LIB_SRCS}
-        canvas/kis_x11_tablet_handler.cpp
-    )
-endif (UNIX AND NOT APPLE)
 
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})
 

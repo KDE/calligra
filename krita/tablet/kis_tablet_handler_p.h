@@ -3,11 +3,10 @@
 
 #include <QtGlobal>
 
-#if defined (Q_OS_WIN32) || defined (Q_OS_CYGWIN) || defined(Q_OS_WINCE)
+#if defined (Q_OS_WIN32)
 enum { QT_TABLET_NPACKETQSIZE = 128 };
 #endif
 
-#ifndef QT_NO_TABLET
 struct QTabletDeviceData
 {
 #ifndef Q_WS_MAC

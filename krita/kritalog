@@ -1,0 +1,90 @@
+Warning: QCoreApplication::postEvent: Unexpected null receiver
+Warning: QCoreApplication::postEvent: Unexpected null receiver
+Debug: krita(4080)/kdecore (trader) class QList<class KSharedPtr<class KService> > __cdecl KServiceTypeTrader::defaultOffers(const class QString &,const class QString &) const: KServiceTypeTrader: serviceType  "ThumbCreator"  not found 
+Debug: krita(4080)/kdecore (trader) class QList<class KSharedPtr<class KService> > __cdecl KServiceTypeTrader::defaultOffers(const class QString &,const class QString &) const: KServiceTypeTrader: serviceType  "ThumbCreator"  not found 
+Debug: OpenGL version 1.1 or higher is present. 
+Debug: OpenGL version 1.2 or higher is present. 
+Debug: OpenGL version 1.3 or higher is present. 
+Debug: OpenGL version 1.4 or higher is present. 
+Debug: OpenGL version 1.5 or higher is present. 
+Debug: OpenGL version 2.0 or higher is present. 
+Debug: OpenGL version 2.1 or higher is present. 
+Debug: OpenGL version 3.0 or higher is present. 
+Debug: OpenGL version 3.1 or higher is present. 
+Debug: OpenGL version 3.2 or higher is present. 
+Debug: OpenGL version 3.3 or higher is present. 
+Debug: OpenGL version 4.0 or higher is present. 
+Debug: Using the core profile 
+Debug: Creating KisWinTabTabletHandler for KisOpenGLCanvas2(0xfe3b6d0) 
+Debug: Initializing WinTab 32752 
+Debug: KisWintabTabletHandler::winEvent 70 
+Debug: KisWintabTabletHandler::winEvent 131 
+Debug: KisWintabTabletHandler::winEvent 71 
+Debug: KisWintabTabletHandler::winEvent 3 
+Debug: KisWintabTabletHandler::winEvent 5 
+Warning: libpng warning: Duplicate iCCP chunk
+Warning: libpng warning: Duplicate iCCP chunk
+Warning: libpng warning: Duplicate iCCP chunk
+Warning: libpng warning: Duplicate iCCP chunk
+Warning: WARNING (KoResourceItemChooser::updatePreview): the resource "2B pencil Grain 2 b" has created a non-rgb32 image thumbnail. It may not work properly. 
+Warning: WARNING (KoResourceItemChooser::updatePreview): the resource "2B pencil Grain 2 b" has created a non-rgb32 image thumbnail. It may not work properly. 
+Debug: KisWintabTabletHandler::winEvent 528 
+Critical: krita(4080)/kdeui (kdelibs): No such XML file "c:/users/boud/appdata/roaming/.kde/share/apps/" 
+Debug: KisWintabTabletHandler::winEvent 70 
+Debug: KisWintabTabletHandler::winEvent 70 
+Debug: KisWintabTabletHandler::winEvent 70 
+Debug: KisWintabTabletHandler::winEvent 70 
+Debug: KisWintabTabletHandler::winEvent 131 
+Debug: KisWintabTabletHandler::winEvent 71 
+Debug: KisWintabTabletHandler::winEvent 5 
+Warning: QGLShader::link: "No errors.
+" 
+Debug: no display filter "c:/dev/desktop64/i/share/apps/krita/shaders/display.frag" 
+Warning: QGLShader::link: "No errors.
+" 
+Debug: KisWintabTabletHandler::winEvent 24 
+Debug: KisWintabTabletHandler::winEvent 133 
+Debug: KisWintabTabletHandler::winEvent 20 
+Debug: KisWintabTabletHandler::winEvent 70 
+Debug: KisWintabTabletHandler::winEvent 70 
+Debug: KisWintabTabletHandler::winEvent 70 
+Debug: KisWintabTabletHandler::winEvent 70 
+Debug: KisWintabTabletHandler::winEvent 131 
+Debug: KisWintabTabletHandler::winEvent 71 
+Debug: KisWintabTabletHandler::winEvent 5 
+Debug: KisWintabTabletHandler::winEvent 70 
+Debug: KisWintabTabletHandler::winEvent 133 
+Debug: KisWintabTabletHandler::winEvent 20 
+Debug: KisWintabTabletHandler::winEvent 70 
+Debug: KisWintabTabletHandler::winEvent 70 
+Debug: KisWintabTabletHandler::winEvent 70 
+Debug: KisWintabTabletHandler::winEvent 131 
+Debug: KisWintabTabletHandler::winEvent 71 
+Debug: KisWintabTabletHandler::winEvent 5 
+Debug: KisWintabTabletHandler::winEvent 133 
+Debug: KisWintabTabletHandler::winEvent 20 
+Debug: KisWintabTabletHandler::winEvent 133 
+Debug: KisWintabTabletHandler::winEvent 20 
+Debug: KisWintabTabletHandler::winEvent 70 
+Debug: KisWintabTabletHandler::winEvent 133 
+Debug: KisWintabTabletHandler::winEvent 20 
+Debug: KisWintabTabletHandler::winEvent 70 
+Debug: KisWintabTabletHandler::winEvent 70 
+Debug: KisWintabTabletHandler::winEvent 70 
+Debug: KisWintabTabletHandler::winEvent 131 
+Debug: KisWintabTabletHandler::winEvent 71 
+Debug: KisWintabTabletHandler::winEvent 5 
+Warning: libpng warning: Duplicate iCCP chunk
+Warning: libpng warning: Duplicate iCCP chunk
+Warning: libpng warning: Duplicate iCCP chunk
+Warning: libpng warning: Duplicate iCCP chunk
+Warning: QGLShader::link: "No errors.
+" 
+Warning: QGLShader::link: "No errors.
+" 
+Warning: QGLShader::link: "No errors.
+" 
+Warning: QCoreApplication::postEvent: Unexpected null receiver
+Warning: QCoreApplication::postEvent: Unexpected null receiver
+Warning: QWaitCondition: Destroyed while threads are still waiting
+Warning: QWaitCondition: Destroyed while threads are still waiting
