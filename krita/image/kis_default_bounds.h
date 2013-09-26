@@ -71,6 +71,7 @@ public:
     KisSelectionEmptyBounds();
     virtual ~KisSelectionEmptyBounds();
     QRect bounds() const;
+    virtual bool wrapAroundMode() const { return false; }
 };
 
 #endif // KIS_DEFAULT_BOUNDS_H
