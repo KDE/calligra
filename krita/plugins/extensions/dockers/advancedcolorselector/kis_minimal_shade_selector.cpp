@@ -46,10 +46,16 @@ KisMinimalShadeSelector::KisMinimalShadeSelector(QWidget *parent) :
     setMouseTracking(true);
 }
 
+void KisMinimalShadeSelector::unsetCanvas()
+{
+    KisColorSelectorBase::unsetCanvas();
+    m_canvas = 0;
+}
+
 void KisMinimalShadeSelector::setCanvas(KisCanvas2 *canvas)
 {
     KisColorSelectorBase::setCanvas(canvas);
-    m_canvas=canvas;
+    m_canvas = canvas;
 }
 
 void KisMinimalShadeSelector::setColor(const QColor& color)
@@ -135,7 +141,7 @@ void KisMinimalShadeSelector::mouseReleaseEvent(QMouseEvent * e)
     KisColorSelectorBase::mouseReleaseEvent(e);
 }
 
-void KisMinimalShadeSelector::resourceChanged(int key, const QVariant &v)
+void KisMinimalShadeSelector::canvasResourceChanged(int key, const QVariant &v)
 {
     if(m_colorUpdateAllowed==false)
         return;

@@ -48,8 +48,8 @@ TaskWorkPackageModel::TaskWorkPackageModel( Part *part, QObject *parent )
     : ItemModelBase( parent ),
     m_part( part )
 {
-    connect( part, SIGNAL( workPackageAdded( WorkPackage*, int ) ), this, SLOT( addWorkPackage( WorkPackage*, int ) ) );
-    connect( part, SIGNAL( workPackageRemoved( WorkPackage*, int ) ), this, SLOT( removeWorkPackage( WorkPackage*, int ) ) );
+    connect( part, SIGNAL(workPackageAdded(WorkPackage*,int)), this, SLOT(addWorkPackage(WorkPackage*,int)) );
+    connect( part, SIGNAL(workPackageRemoved(WorkPackage*,int)), this, SLOT(removeWorkPackage(WorkPackage*,int)) );
 }
 
 Qt::ItemFlags TaskWorkPackageModel::flags( const QModelIndex &index ) const
@@ -156,16 +156,16 @@ void TaskWorkPackageModel::addWorkPackage( WorkPackage *package, int row )
     Project *project = package->project();
     endInsertRows();
     if ( project ) {
-        connect( project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
-        connect( project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SLOT( slotNodeToBeInserted(  Node*, int ) ) );
-        connect( project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeToBeRemoved( Node* ) ) );
+        connect( project, SIGNAL(nodeChanged(Node*)), this, SLOT(slotNodeChanged(Node*)) );
+        connect( project, SIGNAL(nodeToBeAdded(Node*,int)), this, SLOT(slotNodeToBeInserted(Node*,int)) );
+        connect( project, SIGNAL(nodeToBeRemoved(Node*)), this, SLOT(slotNodeToBeRemoved(Node*)) );
 
-        connect( project, SIGNAL( nodeAdded( Node* ) ), this, SLOT( slotNodeInserted( Node* ) ) );
-        connect( project, SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeRemoved( Node* ) ) );
+        connect( project, SIGNAL(nodeAdded(Node*)), this, SLOT(slotNodeInserted(Node*)) );
+        connect( project, SIGNAL(nodeRemoved(Node*)), this, SLOT(slotNodeRemoved(Node*)) );
 
-        connect(project, SIGNAL( documentAdded( Node*, Document*, int)), this, SLOT(slotDocumentAdded(Node*, Document*, int)));
-        connect(project, SIGNAL( documentRemoved( Node*, Document*, int)), this, SLOT(slotDocumentRemoved(Node*, Document*, int)));
-        connect(project, SIGNAL( documentChanged( Node*, Document*, int)), this, SLOT(slotDocumentChanged(Node*, Document*, int)));
+        connect(project, SIGNAL(documentAdded(Node*,Document*,int)), this, SLOT(slotDocumentAdded(Node*,Document*,int)));
+        connect(project, SIGNAL(documentRemoved(Node*,Document*,int)), this, SLOT(slotDocumentRemoved(Node*,Document*,int)));
+        connect(project, SIGNAL(documentChanged(Node*,Document*,int)), this, SLOT(slotDocumentChanged(Node*,Document*,int)));
     }
 }
 
@@ -175,16 +175,16 @@ void TaskWorkPackageModel::removeWorkPackage( WorkPackage *package, int row )
     Project *project = package->project();
     kDebug(planworkDbg())<<package->project();
     if ( project ) {
-        disconnect( project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
-        disconnect( project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SLOT( slotNodeToBeInserted(  Node*, int ) ) );
-        disconnect( project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeToBeRemoved( Node* ) ) );
+        disconnect( project, SIGNAL(nodeChanged(Node*)), this, SLOT(slotNodeChanged(Node*)) );
+        disconnect( project, SIGNAL(nodeToBeAdded(Node*,int)), this, SLOT(slotNodeToBeInserted(Node*,int)) );
+        disconnect( project, SIGNAL(nodeToBeRemoved(Node*)), this, SLOT(slotNodeToBeRemoved(Node*)) );
 
-        disconnect( project, SIGNAL( nodeAdded( Node* ) ), this, SLOT( slotNodeInserted( Node* ) ) );
-        disconnect( project, SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeRemoved( Node* ) ) );
+        disconnect( project, SIGNAL(nodeAdded(Node*)), this, SLOT(slotNodeInserted(Node*)) );
+        disconnect( project, SIGNAL(nodeRemoved(Node*)), this, SLOT(slotNodeRemoved(Node*)) );
 
-        disconnect(project, SIGNAL( documentAdded( Node*, Document*, int)), this, SLOT(slotDocumentAdded(Node*, Document*, int)));
-        disconnect(project, SIGNAL( documentRemoved( Node*, Document*, int)), this, SLOT(slotDocumentRemoved(Node*, Document*, int)));
-        disconnect(project, SIGNAL( documentChanged( Node*, Document*, int)), this, SLOT(slotDocumentChanged(Node*, Document*, int)));
+        disconnect(project, SIGNAL(documentAdded(Node*,Document*,int)), this, SLOT(slotDocumentAdded(Node*,Document*,int)));
+        disconnect(project, SIGNAL(documentRemoved(Node*,Document*,int)), this, SLOT(slotDocumentRemoved(Node*,Document*,int)));
+        disconnect(project, SIGNAL(documentChanged(Node*,Document*,int)), this, SLOT(slotDocumentChanged(Node*,Document*,int)));
     }
     endRemoveRows();
 }

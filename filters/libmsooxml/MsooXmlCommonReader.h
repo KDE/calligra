@@ -35,7 +35,7 @@ namespace MSOOXML
 {
 
 //! A class reading generic parts of MSOOXML main document's markup.
-class MSOOXML_EXPORT MsooXmlCommonReader : public MsooXmlReader
+class KOMSOOXML_EXPORT MsooXmlCommonReader : public MsooXmlReader
 {
 protected:
     explicit MsooXmlCommonReader(KoOdfWriters *writers);

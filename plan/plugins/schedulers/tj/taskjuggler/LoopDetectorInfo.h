@@ -83,7 +83,7 @@ public:
         leaf(0)
     { }
 
-    LDIList(LDIList& list) :
+    LDIList(const LDIList& list) :
         items(0),
         root(0),
         leaf(0)

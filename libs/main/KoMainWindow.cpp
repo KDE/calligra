@@ -95,22 +95,6 @@
 
 #include "calligraversion.h"
 
-class KoPartManager : public KParts::PartManager
-{
-public:
-    KoPartManager(QWidget * parent)
-            : KParts::PartManager(parent) {
-        setSelectionPolicy(KParts::PartManager::TriState);
-        setAllowNestedParts(false);
-        setIgnoreScrollBars(true);
-    }
-    virtual bool eventFilter(QObject *obj, QEvent *ev) {
-        if (!obj || !ev || !obj->isWidgetType())
-            return false;
-        return KParts::PartManager::eventFilter(obj, ev);
-    }
-};
-
 class KoMainWindowPrivate
 {
 public:
@@ -255,7 +239,7 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
 
     connect(this, SIGNAL(restoringDone()), this, SLOT(forceDockTabFonts()));
 
-    d->manager = new KoPartManager(this);
+    d->manager = new KParts::PartManager(this);
 
     connect(d->manager, SIGNAL(activePartChanged(KParts::Part *)),
             this, SLOT(slotActivePartChanged(KParts::Part *)));
@@ -343,7 +327,6 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
     d->toggleDockers->setChecked(true);
     actionCollection()->addAction("view_toggledockers", d->toggleDockers);
 
-    d->toggleDockers->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_H));
     connect(d->toggleDockers, SIGNAL(toggled(bool)), SLOT(toggleDockersVisibility(bool)));
 
     d->dockWidgetMenu  = new KActionMenu(i18n("Dockers"), this);
@@ -358,7 +341,7 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
 
     createShellGUI();
     d->mainWindowGuiIsBuilt = true;
-
+#ifndef Q_OS_WIN
     // if the user didn's specify the geometry on the command line (does anyone do that still?),
     // we first figure out some good default size and restore the x,y position. See bug 285804Z.
     if (!initialGeometrySet()) {
@@ -394,6 +377,7 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
         y = cfg.readEntry("ko_y", y);
         setGeometry(x, y, w, h);
     }
+#endif
 
     // Now ask kde to restore the size of the window; this could probably be replaced by
     // QWidget::saveGeometry and QWidget::restoreGeometry, but let's stay with the KDE
@@ -445,7 +429,6 @@ KoMainWindow::~KoMainWindow()
     if (d->rootPart && d->rootPart->viewCount() == 0) {
         //kDebug(30003) <<"Destructor. No more views, deleting old doc" << d->rootDoc;
         delete d->rootDocument;
-        delete d->rootPart;
     }
 
     delete d->manager;
@@ -772,6 +755,7 @@ void KoMainWindow::slotLoadCompleted()
     disconnect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
     disconnect(newpart, SIGNAL(completed()), this, SLOT(slotLoadCompleted()));
     disconnect(newpart, SIGNAL(canceled(const QString &)), this, SLOT(slotLoadCanceled(const QString &)));
+    emit loadCompleted();
 }
 
 void KoMainWindow::slotLoadCanceled(const QString & errMsg)
@@ -959,7 +943,6 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent)
                 outputFormat = outputFormatString.toLatin1();
 
                 specialOutputFlag = dialog->specialEntrySelected();
-                kDebug(30003) << "KoMainWindow::saveDocument outputFormat =" << outputFormat;
 
                 if (!isExporting())
                     justChangingFilterOptions = (newURL == d->rootPart->url()) &&
@@ -1451,7 +1434,7 @@ private:
     KoPageLayoutWidget *m_pageLayoutWidget;
 };
 
-KoPrintJob* KoMainWindow::exportToPdf(QString pdfFileName)
+KoPrintJob* KoMainWindow::exportToPdf(const QString &pdfFileName)
 {
     if (!rootView())
         return 0;
@@ -1690,7 +1673,6 @@ void KoMainWindow::slotActivePartChanged(KParts::Part *newPart)
         return;
     }
 
-
     KXMLGUIFactory *factory = guiFactory();
 
 // ###  setUpdatesEnabled( false );
@@ -1721,8 +1703,10 @@ void KoMainWindow::slotActivePartChanged(KParts::Part *newPart)
 
         factory->addClient(d->activeView);
 
-        // Position and show toolbars according to user's preference
-        setAutoSaveSettings(newPart->componentData().componentName(), false);
+        // Position and show toolbars according to user's preference. 
+		QRect rc = geometry();
+		setAutoSaveSettings(newPart->componentData().componentName(), true);
+		setGeometry(rc);
 
         foreach (QDockWidget *wdg, d->dockWidgets) {
             if ((wdg->features() & QDockWidget::DockWidgetClosable) == 0) {

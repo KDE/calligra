@@ -45,7 +45,7 @@ KPrWaterfallWipeEffectFactory::~KPrWaterfallWipeEffectFactory()
 {
 }
 
-static const char* s_subTypes[] = {
+static const char* const s_subTypes[] = {
     I18N_NOOP( "Top Left Vertical" ),
     I18N_NOOP( "Top Left Horizontal" ),
     I18N_NOOP( "Top Right Vertical" ),

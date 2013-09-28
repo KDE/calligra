@@ -33,7 +33,7 @@
 #include <kdebug.h>
 
 #ifdef KEXI_MOBILE
-KexiTableEdit::KexiTableEdit(KexiTableViewColumn &column, QWidget* parent)
+KexiTableEdit::KexiTableEdit(KexiDB::TableViewColumn &column, QWidget* parent)
         : QWidget(parent)
         , m_column(&column)
 // ,m_field(&f)
@@ -43,7 +43,7 @@ KexiTableEdit::KexiTableEdit(KexiTableViewColumn &column, QWidget* parent)
 // ,m_hasFocusableWidget(true)
 // ,m_acceptEditorAfterDeleteContents(false)
 #else
-        KexiTableEdit::KexiTableEdit(KexiTableViewColumn &column, QWidget* parent)
+        KexiTableEdit::KexiTableEdit(KexiDB::TableViewColumn &column, QWidget* parent)
         : QWidget(dynamic_cast<Q3ScrollView*>(parent) ? dynamic_cast<Q3ScrollView*>(parent)->viewport() : parent)
         , m_column(&column)
         // ,m_field(&f)

@@ -48,7 +48,7 @@
 #include "kis_canvas_resource_provider.h"
 #include "kis_global.h"
 
-#include "config-ocio.h"
+#include <config-ocio.h>
 
 
 namespace
@@ -365,34 +365,24 @@ void KisConfig::setUseOpenGL(bool useOpenGL)
     m_cfg.writeEntry("useOpenGL", useOpenGL);
 }
 
-bool KisConfig::useOpenGLShaders() const
+int KisConfig::openGLFilteringMode() const
 {
-    return m_cfg.readEntry("useOpenGLShaders", false);
+    return m_cfg.readEntry("OpenGLFilterMode", 1);
 }
 
-void KisConfig::setUseOpenGLShaders(bool useOpenGLShaders)
+void KisConfig::setOpenGLFilteringMode(int filteringMode)
 {
-    m_cfg.writeEntry("useOpenGLShaders", useOpenGLShaders);
+    m_cfg.writeEntry("OpenGLFilterMode", filteringMode);
 }
 
-bool KisConfig::useOpenGLToolOutlineWorkaround() const
+bool KisConfig::useOpenGLTextureBuffer() const
 {
-    return m_cfg.readEntry("useOpenGLToolOutlineWorkaround", false);
+    return m_cfg.readEntry("useOpenGLTextureBuffer", false);
 }
 
-void KisConfig::setUseOpenGLToolOutlineWorkaround(bool useWorkaround)
+void KisConfig::setUseOpenGLTextureBuffer(bool useBuffer)
 {
-    m_cfg.writeEntry("useOpenGLToolOutlineWorkaround", useWorkaround);
-}
-
-bool KisConfig::useOpenGLTrilinearFiltering() const
-{
-    return m_cfg.readEntry("useOpenGLTrilinearFiltering", true);
-}
-
-void KisConfig::setUseOpenGLTrilinearFiltering(bool useTrilinearFiltering)
-{
-    m_cfg.writeEntry("useOpenGLTrilinearFiltering", useTrilinearFiltering);
+    m_cfg.writeEntry("useOpenGLTextureBuffer", useBuffer);
 }
 
 qint32 KisConfig::maxNumberOfThreads()
@@ -571,15 +561,25 @@ void KisConfig::setCanvasBorderColor(const QColor& color)
 }
 
 
-QColor KisConfig::checkersColor()
+QColor KisConfig::checkersColor1()
 {
     QColor col(220, 220, 220);
     return m_cfg.readEntry("checkerscolor", col);
 }
 
-void KisConfig::setCheckersColor(const QColor & v)
+void KisConfig::setCheckersColor1(const QColor & v)
 {
     m_cfg.writeEntry("checkerscolor", v);
+}
+
+QColor KisConfig::checkersColor2()
+{
+    return m_cfg.readEntry("checkerscolor2", QColor(Qt::white));
+}
+
+void KisConfig::setCheckersColor2(const QColor & v)
+{
+    m_cfg.writeEntry("checkerscolor2", v);
 }
 
 bool KisConfig::antialiasCurves()
@@ -706,16 +706,6 @@ void KisConfig::setPressureTabletCurve(const QString& curveString) const
     m_cfg.writeEntry("tabletPressureCurve", curveString);
 }
 
-bool KisConfig::zoomWithWheel() const
-{
-    return m_cfg.readEntry("ZoomWithWheel", true);
-}
-
-void KisConfig::setZoomWithWheel(const bool zoom) const
-{
-    m_cfg.writeEntry("ZoomWithWheel", zoom);
-}
-
 qreal KisConfig::vastScrolling() const
 {
     return m_cfg.readEntry("vastScrolling", 0.9);
@@ -734,17 +724,6 @@ int KisConfig::presetChooserViewMode() const
 void KisConfig::setPresetChooserViewMode(const int mode)
 {
     m_cfg.writeEntry("presetChooserViewMode", mode);
-}
-
-
-bool KisConfig::presetShowAllMode() const
-{
-    return m_cfg.readEntry("presetChooserShowAllPresets", true);
-}
-
-void KisConfig::setPresetShowAllMode(bool showAll)
-{
-    m_cfg.writeEntry("presetChooserShowAllPresets", showAll);
 }
 
 bool KisConfig::firstRun() const
@@ -944,6 +923,15 @@ void KisConfig::setToolbarSlider(int sliderNumber, const QString &slider)
     m_cfg.writeEntry(QString("toolbarslider_%1").arg(sliderNumber), slider);
 }
 
+QString KisConfig::currentInputProfile() const
+{
+    return m_cfg.readEntry("currentInputProfile", QString());
+}
+
+void KisConfig::setCurrentInputProfile(const QString& name)
+{
+    m_cfg.writeEntry("currentInputProfile", name);
+}
 
 bool KisConfig::useSystemMonitorProfile() const
 {
@@ -953,4 +941,24 @@ bool KisConfig::useSystemMonitorProfile() const
 void KisConfig::setUseSystemMonitorProfile(bool _useSystemMonitorProfile)
 {
     m_cfg.writeEntry("ColorManagement/UseSystemMonitorProfile", _useSystemMonitorProfile);
+}
+
+bool KisConfig::presetStripVisible() const
+{
+    return m_cfg.readEntry("presetStripVisible", true);
+}
+
+void KisConfig::setPresetStripVisible(bool visible)
+{
+    m_cfg.writeEntry("presetStripVisible", visible);
+}
+
+bool KisConfig::scratchpadVisible() const
+{
+    return m_cfg.readEntry("scratchpadVisible", true);
+}
+
+void KisConfig::setScratchpadVisible(bool visible)
+{
+    m_cfg.writeEntry("scratchpadVisible", visible);
 }

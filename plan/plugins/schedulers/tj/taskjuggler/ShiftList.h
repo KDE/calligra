@@ -51,7 +51,7 @@ public:
 class ShiftListIterator : public virtual CoreAttributesListIterator
 {
 public:
-    ShiftListIterator(const CoreAttributesList& l) :
+    explicit ShiftListIterator(const CoreAttributesList& l) :
         CoreAttributesListIterator(l) { }
     virtual ~ShiftListIterator() { }
     Shift* operator*();

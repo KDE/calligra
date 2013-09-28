@@ -26,6 +26,7 @@
 #include <KoColor.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoCompositeOpRegistry.h>
 #include <KoViewConverter.h>
 
 #include "kis_node.h"
@@ -140,6 +141,10 @@ bool KisPaintOpSettings::isLoadable()
     return isValid();
 }
 
+QString KisPaintOpSettings::indirectPaintingCompositeOp() const {
+    return COMPOSITE_ALPHA_DARKEN;
+}
+
 QPainterPath KisPaintOpSettings::brushOutline(const QPointF& pos, OutlineMode mode, qreal scale, qreal rotation) const
 {
     QPainterPath path;
@@ -150,7 +155,9 @@ QPainterPath KisPaintOpSettings::brushOutline(const QPointF& pos, OutlineMode mo
         path.moveTo(rc.topRight());
         path.lineTo(rc.bottomLeft());
         QTransform m;
-        m.reset(); m.scale(scale,scale); m.rotateRadians(rotation);
+        m.reset();
+        m.scale(scale, scale);
+        m.rotateRadians(rotation);
         path = m.map(path);
         path.translate(pos);
     }
@@ -160,7 +167,7 @@ QPainterPath KisPaintOpSettings::brushOutline(const QPointF& pos, OutlineMode mo
 QPainterPath KisPaintOpSettings::ellipseOutline(qreal width, qreal height, qreal scale, qreal rotation) const
 {
     QPainterPath path;
-    QRectF ellipse(0,0,width * scale,height * scale);
+    QRectF ellipse(0,0, width * scale, height * scale);
     ellipse.translate(-ellipse.center());
     path.addEllipse(ellipse);
 
@@ -177,7 +184,11 @@ void KisPaintOpSettings::setCanvasRotation(qreal angle)
     setPropertyNotSaved("runtimeCanvasRotation");
 }
 
-qreal KisPaintOpSettings::canvasRotation() const
+void KisPaintOpSettings::setCanvasMirroring(bool xAxisMirrored, bool yAxisMirrored)
 {
-    return getDouble("runtimeCanvasRotation");
+    setProperty("runtimeCanvasMirroredX", xAxisMirrored);
+    setPropertyNotSaved("runtimeCanvasMirroredX");
+
+    setProperty("runtimeCanvasMirroredY", yAxisMirrored);
+    setPropertyNotSaved("runtimeCanvasMirroredY");
 }

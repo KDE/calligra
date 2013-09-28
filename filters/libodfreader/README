@@ -1,0 +1,27 @@
+This directory contains the odf reader library.
+
+The purpose of this library is to traverse the contents of an ODF file
+using so called XML stream reading. The library contains a recursive
+descent parser for ODF contents. At the time of this writing only an
+ODT parser is available but later we will provide parsers for all of
+the ODF document types. Much of the actual contents use the same XML
+elements so supporting a new document type is not a lot of work.
+
+During the parsing functions are called in a backend class that the
+programmer should subclass in order to provide specific output from
+the parser. A so called reader context (OdfReaderContext) is
+maintained and passed to all functions in the backend class.  This
+class should also be subclassed.  For a very simple example, see the
+text export filter in filters/words/ascii/AsciiExport.cpp.
+
+
+About Stream Reading
+--------------------
+
+The classes in this library are all based on KoXmlStreamReader which
+is a source compatible subclass of QXmlStreamReader. Stream reading an
+XML file is much more efficient than DOM parsing since it reads the
+XML data as a stream (as indicated by the name) and does not build any
+elaborate data structure. It is also easier to use than the third
+alternative, SAX parsing.  Qt have classes to help whichever of these
+3 methods you want to use.

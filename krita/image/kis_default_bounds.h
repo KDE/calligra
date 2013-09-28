@@ -35,12 +35,15 @@ public:
     KisDefaultBounds(KisImageWSP image = 0);
     virtual ~KisDefaultBounds();
 
-    virtual QRect bounds() const;
+    QRect bounds() const;
+    bool wrapAroundMode() const;
 
 protected:
     static const QRect infiniteRect;
 
 private:
+    Q_DISABLE_COPY(KisDefaultBounds)
+
     struct Private;
     Private * const m_d;
 };
@@ -54,6 +57,8 @@ public:
     QRect bounds() const;
 
 private:
+    Q_DISABLE_COPY(KisSelectionDefaultBounds)
+
     struct Private;
     Private * const m_d;
 };

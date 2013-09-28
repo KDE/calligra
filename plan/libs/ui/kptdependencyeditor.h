@@ -448,7 +448,7 @@ public:
 signals:
     void selectionChanged();
     void selectionChanged( QGraphicsItem * );
-    void selectionChanged( QList<QGraphicsItem*> );
+    void selectionChanged( const QList<QGraphicsItem*>& );
     void makeConnection( DependencyConnectorItem *pred, DependencyConnectorItem *succ );
     void contextMenuRequested( QGraphicsItem*, const QPoint& );
 
@@ -534,7 +534,7 @@ signals:
     void addMilestone();
     void addSubtask();
     void addSubMilestone();
-    void deleteTaskList( QList<Node*> );
+    void deleteTaskList( const QList<Node*>& );
 
     void addRelation( Node*, Node*, int );
     void modifyRelation( Relation*, int );
@@ -556,7 +556,7 @@ protected:
 private slots:
     void slotItemDoubleClicked( QGraphicsItem *item );
     void slotCurrentChanged( const QModelIndex&, const QModelIndex& );
-    void slotSelectionChanged(  QList<QGraphicsItem*> lst );
+    void slotSelectionChanged( const QList<QGraphicsItem*> &lst );
     void slotContextMenuRequested( QGraphicsItem *item, const QPoint& pos );
     
     void slotEnableActions();

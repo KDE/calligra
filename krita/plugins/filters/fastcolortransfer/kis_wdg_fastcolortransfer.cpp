@@ -34,7 +34,6 @@
 #include <kis_paint_device.h>
 #include <kundo2command.h>
 #include <KoColorSpaceRegistry.h>
-#include <kis_part2.h>
 
 #include "ui_wdgfastcolortransfer.h"
 
@@ -71,9 +70,7 @@ KisPropertiesConfiguration* KisWdgFastColorTransfer::configuration() const
 
     dbgPlugins << "Use as reference file : " << fileName;
 
-    KisPart2 part;
-    KisDoc2 d(&part);
-    part.setDocument(&d);
+    KisDoc2 d;
 
     KoFilterManager manager(&d);
     KoFilter::ConversionStatus status;
@@ -97,14 +94,14 @@ KisPropertiesConfiguration* KisWdgFastColorTransfer::configuration() const
     }
 
     dbgPlugins << "convert ref to lab";
-    KUndo2Command* cmd = ref->convertTo(labCS, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
+    KUndo2Command* cmd = ref->convertTo(labCS, KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
     delete cmd;
 
     // Compute the means and sigmas of ref
     double meanL_ref = 0., meanA_ref = 0., meanB_ref = 0.;
     double sigmaL_ref = 0., sigmaA_ref = 0., sigmaB_ref = 0.;
 
-    KisRectConstIteratorSP refIt = ref->createRectConstIteratorNG(0, 0, importedImage->width(), importedImage->height());
+    KisRectConstIteratorSP refIt = ref->createRectConstIteratorNG(importedImage->bounds());
     do {
         const quint16* data = reinterpret_cast<const quint16*>(refIt->oldRawData());
 

@@ -135,7 +135,7 @@ public:
 };
 
 // Make sure an appropriate DTD is available in www/calligra/DTD if changing this value
-static const char * CURRENT_DTD_VERSION = "1.2";
+static const char CURRENT_DTD_VERSION[] = "1.2";
 
 /*****************************************************************************
  *
@@ -457,12 +457,12 @@ void Doc::loadPaper(KoXmlElement const & paper)
             fright = right.text();
     }
     //The macro "<sheet>" formerly was typed as "<table>"
-    hleft   = hleft.replace("<table>", "<sheet>");
-    hcenter = hcenter.replace("<table>", "<sheet>");
-    hright  = hright.replace("<table>", "<sheet>");
-    fleft   = fleft.replace("<table>", "<sheet>");
-    fcenter = fcenter.replace("<table>", "<sheet>");
-    fright  = fright.replace("<table>", "<sheet>");
+    hleft.replace("<table>", "<sheet>");
+    hcenter.replace("<table>", "<sheet>");
+    hright.replace("<table>", "<sheet>");
+    fleft.replace("<table>", "<sheet>");
+    fcenter.replace("<table>", "<sheet>");
+    fright.replace("<table>", "<sheet>");
 
     foreach(Sheet* sheet, map()->sheetList()) {
         sheet->print()->headerFooter()->setHeadFootLine(hleft, hcenter, hright,

@@ -40,7 +40,7 @@ KPrDoubleFanWipeEffectFactory::~KPrDoubleFanWipeEffectFactory()
 {
 }
 
-static const char* s_subTypes[] = {
+static const char* const s_subTypes[] = {
     I18N_NOOP( "Fan Out Vertical" ),
     I18N_NOOP( "Fan Out Horizontal" ),
     I18N_NOOP( "Fan In Vertical" ),

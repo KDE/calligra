@@ -24,7 +24,6 @@
 #include <KoColor.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
-#include <KoColorSpace.h>
 #include <KoColorProfile.h>
 
 #include "kis_random_accessor_ng.h"
@@ -32,7 +31,6 @@
 
 #include "kis_paint_device.h"
 #include <kis_iterator_ng.h>
-#include <kis_random_accessor_ng.h>
 
 void KisIteratorTest::allCsApplicator(void (KisIteratorTest::* funcPtr)(const KoColorSpace*cs))
 {
@@ -142,14 +140,14 @@ void KisIteratorTest::rectIter(const KoColorSpace * colorSpace)
 
     // Const does not extend the extent
 
-    KisRectConstIteratorSP cit = dev.createRectConstIteratorNG(0, 0, 128, 128);
+    KisRectConstIteratorSP cit = dev.createRectConstIteratorNG(QRect(0, 0, 128, 128));
     while (cit->nextPixel());
     QCOMPARE(dev.extent(), QRect(qint32_MAX, qint32_MAX, 0, 0));
     QCOMPARE(dev.exactBounds(), QRect(qint32_MAX, qint32_MAX, 0, 0));
 
     // Non-const does
 
-    KisRectIteratorSP it = dev.createRectIteratorNG(0, 0, 128, 128);
+    KisRectIteratorSP it = dev.createRectIteratorNG(QRect(0, 0, 128, 128));
     do {
         memcpy(it->rawData(), bytes, colorSpace->pixelSize());
     } while (it->nextPixel());
@@ -158,7 +156,7 @@ void KisIteratorTest::rectIter(const KoColorSpace * colorSpace)
 
     dev.clear();
 
-    it = dev.createRectIteratorNG(10, 10, 128, 128);
+    it = dev.createRectIteratorNG(QRect(10, 10, 128, 128));
     do {
         memcpy(it->rawData(), bytes, colorSpace->pixelSize());
     } while (it->nextPixel());
@@ -169,14 +167,14 @@ void KisIteratorTest::rectIter(const KoColorSpace * colorSpace)
     dev.setX(10);
     dev.setY(-15);
 
-    it = dev.createRectIteratorNG(10, 10, 128, 128);
+    it = dev.createRectIteratorNG(QRect(10, 10, 128, 128));
     do {
         memcpy(it->rawData(), bytes, colorSpace->pixelSize());
     } while (it->nextPixel());
     QCOMPARE(dev.extent(), QRect(10, -15, 128, 192));
     QCOMPARE(dev.exactBounds(), QRect(10, 10, 128, 128));
     
-    it = dev.createRectIteratorNG(10, 10, 128, 128);
+    it = dev.createRectIteratorNG(QRect(10, 10, 128, 128));
     QCOMPARE(it->rawData(), it->oldRawData());
     
 

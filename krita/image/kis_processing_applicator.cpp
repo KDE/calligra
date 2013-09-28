@@ -155,7 +155,7 @@ public:
             KisImageSignalVector::iterator i = m_emitSignals.end();
             while (i != m_emitSignals.begin()) {
                 --i;
-                reverseSignals.append(*i);
+                reverseSignals.append(i->inverted());
             }
 
             doUpdate(reverseSignals);
@@ -267,3 +267,7 @@ void KisProcessingApplicator::end()
     m_image->endStroke(m_strokeId);
 }
 
+void KisProcessingApplicator::cancel()
+{
+    m_image->cancelStroke(m_strokeId);
+}

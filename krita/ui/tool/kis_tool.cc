@@ -16,16 +16,21 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include "kis_tool.h"
-
+#include "opengl/kis_opengl.h"
 #include <QCursor>
 #include <QLabel>
 #include <QWidget>
 #include <QPolygonF>
 #include <QTransform>
+#include <QGLShaderProgram>
+#include <QGLBuffer>
+#include <QGLFramebufferObject>
+#include <QGLContext>
 
 #include <klocale.h>
 #include <kaction.h>
 #include <kactioncollection.h>
+#include <kstandarddirs.h>
 
 #include <KoIcon.h>
 #include <KoColorSpaceRegistry.h>
@@ -34,18 +39,11 @@
 #include <KoCanvasController.h>
 #include <KoShapeManager.h>
 #include <KoToolBase.h>
-#include <KoColor.h>
 #include <KoID.h>
 #include <KoPointerEvent.h>
 #include <KoViewConverter.h>
 #include <KoSelection.h>
 #include <KoAbstractGradient.h>
-
-#include <opengl/kis_opengl.h>
-
-#ifdef HAVE_OPENGL
-#include <opengl/kis_opengl_canvas2.h>
-#endif
 
 #include <kis_view2.h>
 #include <kis_selection.h>
@@ -59,9 +57,9 @@
 #include <kis_paintop_settings.h>
 #include <kis_pattern.h>
 #include <kis_transaction.h>
-#include <kis_selection.h>
 #include <kis_floating_message.h>
 
+#include "opengl/kis_opengl_canvas2.h"
 #include "kis_canvas_resource_provider.h"
 #include "canvas/kis_canvas2.h"
 #include "kis_coordinates_converter.h"
@@ -79,7 +77,12 @@ struct KisTool::Private {
           currentPaintOpPreset(0),
           currentGenerator(0),
           optionWidget(0),
-          spacePressed(0) { }
+          spacePressed(0),
+          cursorShader(0),
+          useGLToolOutlineWorkaround(false)
+    {
+    }
+
     QCursor cursor; // the cursor that should be shown on tool activation.
 
     // From the canvas resources
@@ -97,14 +100,27 @@ struct KisTool::Private {
     QPointF lastDocumentPoint;
     QPointF initialGestureDocPoint;
     QPoint initialGestureGlobalPoint;
+
+    QTimer delayedGestureTimer;
+    QPointF delayedGestureOffset;
+    QPointF delayedGesturePoint;
+
+    QGLShaderProgram *cursorShader; // Make static instead of creating for all tools?
+
+    bool useGLToolOutlineWorkaround;
+
 };
 
 KisTool::KisTool(KoCanvasBase * canvas, const QCursor & cursor)
-        : KoToolBase(canvas)
-        , d(new Private)
+    : KoToolBase(canvas)
+    , d(new Private)
 {
     d->cursor = cursor;
     m_outlinePaintMode = XOR_MODE;
+
+    d->delayedGestureTimer.setSingleShot(true);
+    d->delayedGestureTimer.setInterval(40); // 25fps
+    connect(&d->delayedGestureTimer, SIGNAL(timeout()), SLOT(slotDelayedGesture()));
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(resetCursorStyle()));
 
@@ -126,10 +142,22 @@ KisTool::KisTool(KoCanvasBase * canvas, const QCursor & cursor)
     addAction("reset_fg_bg", dynamic_cast<KAction*>(collection->action("reset_fg_bg")));
 
     setMode(HOVER_MODE);
+
+    QStringList qtVersion = QString(qVersion()).split('.');
+    int versionNumber = qtVersion.at(0).toInt()*10000
+            + qtVersion.at(1).toInt()*100
+            + qtVersion.at(2).toInt();
+    if (versionNumber>=40603) {
+        d->useGLToolOutlineWorkaround = false;
+    }
+    else {
+        d->useGLToolOutlineWorkaround = true;
+    }
 }
 
 KisTool::~KisTool()
 {
+    delete d->cursorShader;
     delete d;
 }
 
@@ -140,24 +168,24 @@ void KisTool::activate(ToolActivation, const QSet<KoShape*> &)
     d->currentFgColor = canvas()->resourceManager()->resource(KoCanvasResourceManager::ForegroundColor).value<KoColor>();
     d->currentBgColor = canvas()->resourceManager()->resource(KoCanvasResourceManager::BackgroundColor).value<KoColor>();
     d->currentPattern = static_cast<KisPattern *>(canvas()->resourceManager()->
-                        resource(KisCanvasResourceProvider::CurrentPattern).value<void *>());
+                                                  resource(KisCanvasResourceProvider::CurrentPattern).value<void *>());
     d->currentGradient = static_cast<KoAbstractGradient *>(canvas()->resourceManager()->
-                         resource(KisCanvasResourceProvider::CurrentGradient).value<void *>());
+                                                           resource(KisCanvasResourceProvider::CurrentGradient).value<void *>());
 
 
     d->currentPaintOpPreset =
-        canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
+            canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
 
     if (d->currentPaintOpPreset && d->currentPaintOpPreset->settings()) {
         d->currentPaintOpPreset->settings()->activate();
     }
 
     d->currentNode = canvas()->resourceManager()->
-                     resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>();
+            resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>();
     d->currentExposure = static_cast<float>(canvas()->resourceManager()->
                                             resource(KisCanvasResourceProvider::HdrExposure).toDouble());
     d->currentGenerator = static_cast<KisFilterConfiguration*>(canvas()->resourceManager()->
-                          resource(KisCanvasResourceProvider::CurrentGeneratorConfiguration).value<void *>());
+                                                               resource(KisCanvasResourceProvider::CurrentGeneratorConfiguration).value<void *>());
 
     connect(actions().value("toggle_fg_bg"), SIGNAL(triggered()), SLOT(slotToggleFgBg()), Qt::UniqueConnection);
     connect(actions().value("reset_fg_bg"), SIGNAL(triggered()), SLOT(slotResetFgBg()), Qt::UniqueConnection);
@@ -191,7 +219,7 @@ void KisTool::requestStrokeEnd()
 {
 }
 
-void KisTool::resourceChanged(int key, const QVariant & v)
+void KisTool::canvasResourceChanged(int key, const QVariant & v)
 {
 
     switch (key) {
@@ -209,14 +237,17 @@ void KisTool::resourceChanged(int key, const QVariant & v)
         break;
     case(KisCanvasResourceProvider::CurrentPaintOpPreset):
         d->currentPaintOpPreset =
-            canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
+                canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
         break;
     case(KisCanvasResourceProvider::HdrExposure):
         d->currentExposure = static_cast<float>(v.toDouble());
+	break;
     case(KisCanvasResourceProvider::CurrentGeneratorConfiguration):
         d->currentGenerator = static_cast<KisFilterConfiguration*>(v.value<void *>());
+	break;
     case(KisCanvasResourceProvider::CurrentKritaNode):
         d->currentNode = (v.value<KisNodeSP>());
+	break;
     default:
         ;
         // Do nothing
@@ -438,9 +469,10 @@ void KisTool::mousePressEvent(KoPointerEvent *event)
 
     KisConfig cfg;
 
-    if (mode() == KisTool::HOVER_MODE &&
-             (event->button() == Qt::LeftButton &&
-              event->modifiers() == Qt::ShiftModifier)) {
+    if (isGestureSupported() &&
+            mode() == KisTool::HOVER_MODE &&
+            (event->button() == Qt::LeftButton &&
+             event->modifiers() == Qt::ShiftModifier)) {
 
         initGesture(event->point);
         event->accept();
@@ -517,15 +549,36 @@ void KisTool::processGesture(const QPointF &docPoint)
      * need to scale the gesture down, not rotate or anything
      */
     QPointF scaledOffset = canvas()->viewConverter()->viewToDocument(offset);
-    gesture(scaledOffset, d->initialGestureDocPoint);
+
+    d->delayedGestureOffset += scaledOffset;
+    d->delayedGesturePoint = d->initialGestureDocPoint;
+    if (!d->delayedGestureTimer.isActive()) {
+        d->delayedGestureTimer.start();
+    }
 }
 
 void KisTool::endGesture()
 {
-    gesture(QPointF(), d->initialGestureDocPoint);
+    // d->delayedGestureOffset += QPointF();
+    d->delayedGesturePoint = d->initialGestureDocPoint;
+    if (!d->delayedGestureTimer.isActive()) {
+        d->delayedGestureTimer.start();
+    }
+
     setMode(HOVER_MODE);
     resetCursorStyle();
     QCursor::setPos(d->initialGestureGlobalPoint);
+}
+
+void KisTool::slotDelayedGesture()
+{
+    gesture(d->delayedGestureOffset, d->delayedGesturePoint);
+    d->delayedGestureOffset = QPointF();
+}
+
+bool KisTool::isGestureSupported() const
+{
+    return false;
 }
 
 void KisTool::gesture(const QPointF &offsetInDocPixels, const QPointF &initialDocPoint)
@@ -572,50 +625,85 @@ void KisTool::setupPaintAction(KisRecordedPaintAction* action)
 QWidget* KisTool::createOptionWidget()
 {
     d->optionWidget = new QLabel(i18n("No options"));
-    d->optionWidget->setObjectName(toolId() + " Option Widget");
+    d->optionWidget->setObjectName("SpecialSpacer");
     return d->optionWidget;
 }
 
+#define NEAR_VAL -1000.0
+#define FAR_VAL 1000.0
+#define PROGRAM_VERTEX_ATTRIBUTE 0
+
 void KisTool::paintToolOutline(QPainter* painter, const QPainterPath &path)
 {
-    //KisToolSelectMagnetic uses custom painting, so don't forget to update that as well
-    KisConfig cfg;
-    bool useWorkaround = cfg.useOpenGLToolOutlineWorkaround();
-#if defined(HAVE_OPENGL)
+    KisOpenGLCanvas2 *canvasWidget = dynamic_cast<KisOpenGLCanvas2 *>(canvas()->canvasWidget());
+    // the workaround option is enabled for Qt 4.6 < 4.6.3... Only relevant on CentOS.
+    if (canvasWidget && !d->useGLToolOutlineWorkaround)  {
+        painter->beginNativePainting();
 
-    if (m_outlinePaintMode==XOR_MODE && isCanvasOpenGL() && !useWorkaround) {
-        beginOpenGL();
+        if (d->cursorShader == 0) {
+            d->cursorShader = new QGLShaderProgram();
+            d->cursorShader->addShaderFromSourceFile(QGLShader::Vertex, KGlobal::dirs()->findResource("data", "krita/shaders/cursor.vert"));
+            d->cursorShader->addShaderFromSourceFile(QGLShader::Fragment, KGlobal::dirs()->findResource("data", "krita/shaders/cursor.frag"));
+            d->cursorShader->bindAttributeLocation("a_vertexPosition", PROGRAM_VERTEX_ATTRIBUTE);
 
-        glEnable(GL_LINE_SMOOTH);
+            if (! d->cursorShader->link()) {
+                qDebug() << "OpenGL error" << glGetError();
+                qFatal("Failed linking cursor shader");
+            }
+            Q_ASSERT(d->cursorShader->isLinked());
+        }
+
+        d->cursorShader->bind();
+
+        // setup the mvp transformation
+        KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas());
+        Q_ASSERT(kritaCanvas);
+        const KisCoordinatesConverter *converter = kritaCanvas->coordinatesConverter();
+
+        QMatrix4x4 projectionMatrix;
+        projectionMatrix.setToIdentity();
+        projectionMatrix.ortho(0, canvasWidget->width(), canvasWidget->height(), 0, NEAR_VAL, FAR_VAL);
+
+        // Set view/projection matrices
+        QMatrix4x4 modelMatrix(converter->flakeToWidgetTransform());
+        modelMatrix.optimize();
+        modelMatrix = projectionMatrix * modelMatrix;
+        d->cursorShader->setUniformValue("modelViewProjection", modelMatrix);
+
+        glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+        // XXX: not in ES 2.0 -- in that case, we should not go here. it seems to be in 3.1 core profile, but my book is very unclear
         glEnable(GL_COLOR_LOGIC_OP);
         glLogicOp(GL_XOR);
-        glColor3f(0.501961f, 1.0f, 0.501961f);
 
+        // setup the array of vertices
+        QVector<QVector3D> vertices;
         QList<QPolygonF> subPathPolygons = path.toSubpathPolygons();
-        for(int i=0; i<subPathPolygons.size(); i++) {
+        for (int i=0; i<subPathPolygons.size(); i++) {
             const QPolygonF& polygon = subPathPolygons.at(i);
-
-            glBegin(GL_LINE_STRIP);
-            for(int j=0; j<polygon.count(); j++) {
+            for (int j=0; j < polygon.count(); j++) {
                 QPointF p = polygon.at(j);
-                glVertex2f(p.x(), p.y());
+                vertices << QVector3D(p.x(), p.y(), 0.f);
             }
-            glEnd();
+            d->cursorShader->enableAttributeArray(PROGRAM_VERTEX_ATTRIBUTE);
+            d->cursorShader->setAttributeArray(PROGRAM_VERTEX_ATTRIBUTE, vertices.constData());
+
+            glDrawArrays(GL_LINE_STRIP, 0, vertices.size());
+
+            vertices.clear();
         }
 
         glDisable(GL_COLOR_LOGIC_OP);
-        glDisable(GL_LINE_SMOOTH);
 
-        endOpenGL();
+        d->cursorShader->release();
+
+        painter->endNativePainting();
     }
-    else
-#endif
-    if (m_outlinePaintMode==XOR_MODE && !(isCanvasOpenGL() && useWorkaround)) {
+    else if (m_outlinePaintMode == XOR_MODE) {
         painter->setCompositionMode(QPainter::RasterOp_SourceXorDestination);
         painter->setPen(QColor(128, 255, 128));
         painter->drawPath(path);
     }
-    else/* if (m_outlinePaintMode==BW_MODE)*/
+    else /* if (m_outlinePaintMode==BW_MODE)*/
     {
         QPen pen = painter->pen();
         pen.setWidth(3);
@@ -626,41 +714,39 @@ void KisTool::paintToolOutline(QPainter* painter, const QPainterPath &path)
         pen.setColor(Qt::white);
         painter->setPen(pen);
         painter->drawPath(path);
+
+
     }
 }
 
 void KisTool::resetCursorStyle()
 {
     KisConfig cfg;
+    useCursor(d->cursor);
+
     switch (cfg.cursorStyle()) {
     case CURSOR_STYLE_TOOLICON:
         useCursor(d->cursor);
         break;
     case CURSOR_STYLE_CROSSHAIR:
+    case CURSOR_STYLE_OUTLINE_CENTER_CROSS:
         useCursor(KisCursor::crossCursor());
         break;
-    case CURSOR_STYLE_SMALL_ROUND:
-        useCursor(KisCursor::roundCursor());
-        break;
     case CURSOR_STYLE_POINTER:
-        useCursor(KisCursor::upArrowCursor());
+        useCursor(KisCursor::arrowCursor());
         break;
     case CURSOR_STYLE_NO_CURSOR:
         useCursor(KisCursor::blankCursor());
         break;
-#if defined(HAVE_OPENGL)
-    case CURSOR_STYLE_3D_MODEL:
-        if(isCanvasOpenGL()) {
-            useCursor(d->cursor);
-        } else {
-            useCursor(KisCursor::upArrowCursor());
-        }
+    case CURSOR_STYLE_SMALL_ROUND:
+    case CURSOR_STYLE_OUTLINE_CENTER_DOT:
+        useCursor(KisCursor::roundCursor());
         break;
-#endif
     case CURSOR_STYLE_OUTLINE:
+        break;
     default:
         // use tool cursor as default, if the tool supports outline, it will set the cursor to blank and show outline
-        useCursor(d->cursor);
+        ;
     }
 }
 
@@ -680,35 +766,6 @@ void KisTool::slotResetFgBg()
     resourceManager->setBackgroundColor(KoColor(Qt::white, KoColorSpaceRegistry::instance()->rgb8()));
 }
 
-bool KisTool::isCanvasOpenGL() const
-{
-    return canvas()->canvasIsOpenGL();
-}
-
-void KisTool::beginOpenGL()
-{
-#if defined(HAVE_OPENGL)
-    KisOpenGLCanvas2 *canvasWidget = dynamic_cast<KisOpenGLCanvas2 *>(canvas()->canvasWidget());
-    Q_ASSERT(canvasWidget);
-
-    if (canvasWidget) {
-        canvasWidget->beginOpenGL();
-        canvasWidget->setupFlakeToWidgetTransformation();
-    }
-#endif
-}
-
-void KisTool::endOpenGL()
-{
-#if defined(HAVE_OPENGL)
-    KisOpenGLCanvas2 *canvasWidget = dynamic_cast<KisOpenGLCanvas2 *>(canvas()->canvasWidget());
-    Q_ASSERT(canvasWidget);
-
-    if (canvasWidget) {
-        canvasWidget->endOpenGL();
-    }
-#endif
-}
 
 void KisTool::setCurrentNodeLocked(bool locked)
 {

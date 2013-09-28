@@ -63,8 +63,8 @@ ResourceAppointmentsDisplayOptionsPanel::ResourceAppointmentsDisplayOptionsPanel
     setupUi( this );
     setValues( *model );
 
-    connect( ui_internalAppointments, SIGNAL(  stateChanged ( int ) ), SIGNAL( changed() ) );
-    connect( ui_externalAppointments, SIGNAL(  stateChanged ( int ) ), SIGNAL( changed() ) );
+    connect( ui_internalAppointments, SIGNAL(stateChanged(int)), SIGNAL(changed()) );
+    connect( ui_externalAppointments, SIGNAL(stateChanged(int)), SIGNAL(changed()) );
 }
 
 void ResourceAppointmentsDisplayOptionsPanel::slotOk()
@@ -134,7 +134,7 @@ ResourceAppointmentsTreeView::ResourceAppointmentsTreeView( QWidget *parent )
     hideColumns( lst1, lst2 );
 
     m_leftview->resizeColumnToContents ( 1 );
-    connect( m, SIGNAL( modelReset() ), SLOT( slotRefreshed() ) );
+    connect( m, SIGNAL(modelReset()), SLOT(slotRefreshed()) );
 
     m_rightview->setObjectName( "ResourceAppointments" );
 }
@@ -192,15 +192,15 @@ ResourceAppointmentsView::ResourceAppointmentsView(KoPart *part, KoDocument *doc
 
     m_view->setEditTriggers( m_view->editTriggers() | QAbstractItemView::EditKeyPressed );
 
-    connect( model(), SIGNAL( executeCommand( KUndo2Command* ) ), doc, SLOT( addCommand( KUndo2Command* ) ) );
+    connect( model(), SIGNAL(executeCommand(KUndo2Command*)), doc, SLOT(addCommand(KUndo2Command*)) );
 
-    connect( m_view, SIGNAL( currentChanged( const QModelIndex &, const QModelIndex & ) ), this, SLOT( slotCurrentChanged( const QModelIndex & ) ) );
+    connect( m_view, SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(slotCurrentChanged(QModelIndex)) );
 
-    connect( m_view, SIGNAL( selectionChanged( const QModelIndexList ) ), this, SLOT( slotSelectionChanged( const QModelIndexList ) ) );
+    connect( m_view, SIGNAL(selectionChanged(QModelIndexList)), this, SLOT(slotSelectionChanged(QModelIndexList)) );
 
-    connect( m_view, SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ), this, SLOT( slotContextMenuRequested( QModelIndex, const QPoint& ) ) );
+    connect( m_view, SIGNAL(contextMenuRequested(QModelIndex,QPoint)), this, SLOT(slotContextMenuRequested(QModelIndex,QPoint)) );
 
-    connect( m_view, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
+    connect( m_view, SIGNAL(headerContextMenuRequested(QPoint)), SLOT(slotHeaderContextMenuRequested(QPoint)) );
 
 }
 
@@ -233,7 +233,7 @@ void ResourceAppointmentsView::setGuiActive( bool activate )
     }
 }
 
-void ResourceAppointmentsView::slotContextMenuRequested( QModelIndex index, const QPoint& pos )
+void ResourceAppointmentsView::slotContextMenuRequested( const QModelIndex &index, const QPoint& pos )
 {
     kDebug(planDbg())<<index<<pos;
     QString name;
@@ -273,7 +273,7 @@ void ResourceAppointmentsView::slotCurrentChanged(  const QModelIndex & )
 //    slotEnableActions();
 }
 
-void ResourceAppointmentsView::slotSelectionChanged( const QModelIndexList )
+void ResourceAppointmentsView::slotSelectionChanged( const QModelIndexList& )
 {
     //kDebug(planDbg())<<list.count();
     updateActionsEnabled();

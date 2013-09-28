@@ -30,6 +30,7 @@
 #include "kis_canvas2.h"
 #include "kis_image.h"
 
+#include "kis_tool_utils.h"
 #include "kis_paint_layer.h"
 #include "strokes/move_stroke_strategy.h"
 #include "strokes/move_selection_stroke_strategy.h"
@@ -75,42 +76,6 @@ void KisToolMove::requestStrokeCancellation()
     cancelStroke();
 }
 
-// recursively search a node with a non-transparent pixel
-KisNodeSP findNode(KisNodeSP node, const QPoint &point, bool wholeGroup)
-{
-    KisNodeSP foundNode = 0;
-    while (node) {
-        KisLayerSP layer = dynamic_cast<KisLayer*>(node.data());
-
-        if (!layer || !layer->isEditable()) {
-            node = node->prevSibling();
-            continue;
-        }
-
-        KoColor color(layer->projection()->colorSpace());
-        layer->projection()->pixel(point.x(), point.y(), &color);
-
-        if(color.opacityU8() != OPACITY_TRANSPARENT_U8) {
-            if (layer->inherits("KisGroupLayer")) {
-                // if this is a group and the pixel is transparent,
-                // don't even enter it
-
-                foundNode = findNode(node->lastChild(), point, wholeGroup);
-            }
-            else {
-                foundNode = !wholeGroup ? node : node->parent();
-            }
-
-        }
-
-        if (foundNode) break;
-
-        node = node->prevSibling();
-    }
-
-    return foundNode;
-}
-
 void KisToolMove::mousePressEvent(KoPointerEvent *event)
 {
     if(PRESS_CONDITION_OM(event, KisTool::HOVER_MODE,
@@ -122,8 +87,6 @@ void KisToolMove::mousePressEvent(KoPointerEvent *event)
         QPoint pos = convertToPixelCoord(event).toPoint();
         m_dragStart = pos;
         m_lastDragPos = m_dragStart;
-
-        if (m_strokeId) return;
 
         KisNodeSP node;
         KisImageSP image = this->image();
@@ -137,11 +100,22 @@ void KisToolMove::mousePressEvent(KoPointerEvent *event)
                 (m_optionsWidget->radioGroup->isChecked() ||
                  event->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier));
 
-            node = findNode(image->root(), pos, wholeGroup);
+            node = KisToolUtils::findNode(image->root(), pos, wholeGroup);
         }
 
         if((!node && !(node = currentNode())) || !node->isEditable()) return;
 
+        /**
+         * If the target node has changed, the stroke should be
+         * restarted. Otherwise just continue processing current node.
+         */
+        if (m_strokeId) {
+            if (node == m_currentlyProcessingNode) {
+                return;
+            } else {
+                endStroke();
+            }
+        }
 
         KisStrokeStrategy *strategy;
 
@@ -164,6 +138,7 @@ void KisToolMove::mousePressEvent(KoPointerEvent *event)
         }
 
         m_strokeId = image->startStroke(strategy);
+        m_currentlyProcessingNode = node;
     }
     else {
         KisTool::mousePressEvent(event);
@@ -217,6 +192,7 @@ void KisToolMove::endStroke()
     KisImageWSP image = currentImage();
     image->endStroke(m_strokeId);
     m_strokeId.clear();
+    m_currentlyProcessingNode.clear();
 }
 
 void KisToolMove::cancelStroke()
@@ -226,6 +202,7 @@ void KisToolMove::cancelStroke()
     KisImageWSP image = currentImage();
     image->cancelStroke(m_strokeId);
     m_strokeId.clear();
+    m_currentlyProcessingNode.clear();
 }
 
 QWidget* KisToolMove::createOptionWidget()

@@ -176,7 +176,7 @@ public:
         QVariant value = QStandardItemModel::headerData(section, orientation, role);
         if (orientation == Qt::Vertical && role == Qt::DisplayRole) {
             if (section == 0) {
-                return i18nc("@title:row", "Column name") + "  ";
+                return QString(i18nc("@title:row", "Column name") + "  ");
             } else {
                 return QString::number(section);
             }
@@ -609,7 +609,7 @@ void KexiCSVImportDialog::slotCurrentPageChanged(KPageWidgetItem *page, KPageWid
                 suggestedName = KUrl(m_fname).fileName();
                 //remove extension
                 if (!suggestedName.isEmpty()) {
-                    const int idx = suggestedName.lastIndexOf(".");
+                    const int idx = suggestedName.lastIndexOf('.');
                     if (idx != -1) {
                          suggestedName = suggestedName.mid(0, idx).simplified();
                     }
@@ -1401,7 +1401,7 @@ void KexiCSVImportDialog::updateColumnText(int col)
     }
 
     m_table->setHeaderData(col, Qt::Horizontal,
-        i18n("Column %1", col + 1) + "  \n(" + kexiCSVImportStatic->typeNames[detectedType].toLower() + ")  ");
+        QString(i18n("Column %1", col + 1) + "  \n(" + kexiCSVImportStatic->typeNames[detectedType].toLower() + ")  "));
     m_tableView->horizontalHeader()->adjustSize();
 
     //check uniqueness
@@ -1478,7 +1478,7 @@ void KexiCSVImportDialog::detectTypeAndUniqueness(int row, int col, const QStrin
             if (row == 1 || type == KexiDB::Field::InvalidType) {
                 bool detected = text.isEmpty();
                 if (!detected) {
-                    const QStringList dateTimeList(text.split(" "));
+                    const QStringList dateTimeList(text.split(' '));
                     bool ok = dateTimeList.count() >= 2;
 //! @todo also support ISODateTime's "T" separator?
 //! @todo also support timezones?
@@ -1637,9 +1637,9 @@ void KexiCSVImportDialog::setText(int row, int col, const QString& text, bool in
             else
                 m_tmpValues << QVariant();
         } else if (detectedType == KexiDB::Field::DateTime) {
-            QStringList dateTimeList(text.split(" "));
+            QStringList dateTimeList(text.split(' '));
             if (dateTimeList.count() < 2)
-                dateTimeList = text.split("T"); //also support ISODateTime's "T" separator
+                dateTimeList = text.split('T'); //also support ISODateTime's "T" separator
 //! @todo also support timezones?
             if (dateTimeList.count() >= 2) {
                 //try all combinations

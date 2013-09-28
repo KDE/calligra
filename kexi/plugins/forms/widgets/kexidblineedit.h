@@ -25,7 +25,6 @@
 #include <QEvent>
 #include <QPaintEvent>
 #include <klineedit.h>
-#include <QValidator>
 
 #include <widget/dataviewcommon/kexiformdataiteminterface.h>
 #include "kexidbtextwidgetinterface.h"

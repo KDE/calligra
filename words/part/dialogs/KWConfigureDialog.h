@@ -35,6 +35,10 @@ class KWConfigureDialog : public KPageDialog
 public:
     explicit KWConfigureDialog(KWView* parent);
 
+signals:
+    /// Emitted when the configuration may have changed.
+    void changed();
+
 public slots:
     void slotApply();
     void slotDefault();

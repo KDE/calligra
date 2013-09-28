@@ -1,4 +1,4 @@
-include_directories( ${KRITA_INCLUDES} ${OCIO_INCLUDE_DIRECTORY})
+include_directories( ${OCIO_INCLUDE_DIRECTORY})
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})
 
 set(KRITA_LUTDOCKER_PART_SRCS lutdocker.cpp lutdocker_dock.cpp ocio_display_filter.cpp )
@@ -9,6 +9,10 @@ kde4_add_ui_files(KRITA_LUTDOCKER_PART_SRCS
 
 kde4_add_plugin(kritalutdocker ${KRITA_LUTDOCKER_PART_SRCS})
 target_link_libraries(kritalutdocker kritaui ${OCIO_LIBRARIES})
+
+if(HAVE_OPENGL)
+    target_link_libraries(kritalutdocker ${_LIBRARIES})
+endif(HAVE_OPENGL)
 
 if(HAVE_OPENGL)
     if(HAVE_GLEW)

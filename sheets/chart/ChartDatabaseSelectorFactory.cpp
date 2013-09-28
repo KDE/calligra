@@ -22,7 +22,7 @@
 
 #include <klocale.h>
 
-#include <koChart.h>
+#include <KoChartInterface.h>
 
 #include "ChartDatabaseSelector.h"
 

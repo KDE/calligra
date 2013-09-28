@@ -39,6 +39,7 @@
 #include "kis_brush_chooser.h"
 #include "kis_auto_brush_widget.h"
 #include "kis_custom_brush_widget.h"
+#include "kis_clipboard_brush_widget.h"
 #include "kis_text_brush_chooser.h"
 
 KisBrushSelectionWidget::KisBrushSelectionWidget(QWidget * parent)
@@ -62,6 +63,10 @@ KisBrushSelectionWidget::KisBrushSelectionWidget(QWidget * parent)
     m_customBrushWidget = new KisCustomBrushWidget(0, i18n("Custom Brush"), 0);
     connect(m_customBrushWidget, SIGNAL(sigBrushChanged()), SIGNAL(sigBrushChanged()));
     addChooser(i18n("Custom Brush"), m_customBrushWidget, CUSTOMBRUSH, KoGroupButton::GroupCenter);
+
+    m_clipboardBrushWidget = new KisClipboardBrushWidget(0, i18n("Clipboard Brush"), 0);
+    connect(m_clipboardBrushWidget, SIGNAL(sigBrushChanged()), SIGNAL(sigBrushChanged()));
+    addChooser(i18n("Clipboard Brush"), m_clipboardBrushWidget, CLIPBOARDBRUSH, KoGroupButton::GroupCenter);
 
     m_textBrushWidget = new KisTextBrushChooser(this, "textbrush", i18n("Text Brush"));
     connect(m_textBrushWidget, SIGNAL(sigBrushChanged()), SIGNAL(sigBrushChanged()));
@@ -90,7 +95,7 @@ KisBrushSelectionWidget::~KisBrushSelectionWidget()
 {
 }
 
-KisBrushSP KisBrushSelectionWidget::brush()
+KisBrushSP KisBrushSelectionWidget::brush() const
 {
     KisBrushSP theBrush;
     switch (m_buttonGroup->checkedId()) {
@@ -103,6 +108,9 @@ KisBrushSP KisBrushSelectionWidget::brush()
     case CUSTOMBRUSH:
        theBrush = m_customBrushWidget->brush();
        break;
+    case CLIPBOARDBRUSH:
+        theBrush = m_clipboardBrushWidget->brush();
+        break;
     case TEXTBRUSH:
         theBrush = m_textBrushWidget->brush();
         break;
@@ -132,6 +140,10 @@ void KisBrushSelectionWidget::setPredefinedBrushes(bool on)
 void KisBrushSelectionWidget::setCustomBrush(bool on)
 {
     m_buttonGroup->button(CUSTOMBRUSH)->setVisible(on);
+}
+
+void KisBrushSelectionWidget::setClipboardBrush(bool on){
+    m_buttonGroup->button(CLIPBOARDBRUSH)->setVisible(on);
 }
 
 void KisBrushSelectionWidget::setTextBrush(bool on)
@@ -169,25 +181,32 @@ void KisBrushSelectionWidget::setBrushSize(qreal dxPixels, qreal dyPixels)
 {
     if (m_buttonGroup->checkedId() == AUTOBRUSH){
         m_autoBrushWidget->setBrushSize(dxPixels, dyPixels);
-    }else if (m_buttonGroup->checkedId() == PREDEFINEDBRUSH){
+    } else if (m_buttonGroup->checkedId() == PREDEFINEDBRUSH) {
         m_brushChooser->setBrushSize(dxPixels, dyPixels);
+    } else if (m_buttonGroup->checkedId() == CUSTOMBRUSH ||
+               m_buttonGroup->checkedId() == CLIPBOARDBRUSH) {
+
+        // switch to the predefined brush and resize it
+        KisBrushSP brush = this->brush();
+        if (brush) {
+            setCurrentWidget(m_brushChooser);
+            m_brushChooser->setBrush(brush);
+            m_brushChooser->setBrushSize(dxPixels, dyPixels);
+        }
     }
 }
 
 
 QSizeF KisBrushSelectionWidget::brushSize() const
 {
-    switch (m_buttonGroup->checkedId()) {
-        case AUTOBRUSH: {
-            return m_autoBrushWidget->brushSize();
-        }
-        case PREDEFINEDBRUSH: {
-            return m_brushChooser->brushSize();
-        }
-        default: {
-            break;
-        }
+    if (m_buttonGroup->checkedId() == AUTOBRUSH) {
+        return m_autoBrushWidget->brushSize();
+    } else if (KisBrushSP brush = this->brush()) {
+        qreal width = brush->width() * brush->scale();
+        qreal height = brush->height() * brush->scale();
+        return QSizeF(width, height);
     }
+
     // return neutral value
     return QSizeF(1.0, 1.0);
 }

@@ -30,7 +30,6 @@
 #include <QHash>
 #include <QTransform>
 #include <QImage>
-#include <QTransform>
 
 #include <kis_random_accessor_ng.h>
 #include <kis_random_sub_accessor.h>
@@ -48,6 +47,15 @@
 #include <ctime>
 
 #include "random_gauss.h"
+
+#include <QtGlobal>
+#ifdef Q_OS_WIN
+// quoting DRAND48(3) man-page:
+// These functions are declared obsolete by  SVID  3,
+// which  states  that rand(3) should be used instead.
+#define drand48() (static_cast<double>(qrand()) / static_cast<double>(RAND_MAX))
+#endif
+
 
 SprayBrush::SprayBrush()
 {
@@ -180,7 +188,7 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
 
             if (m_shapeDynamicsProperties->followDrawingAngle){
 
-                rotationZ = linearInterpolation( rotationZ,info.angle(),m_shapeDynamicsProperties->followDrawingAngleWeight );
+                rotationZ = linearInterpolation( rotationZ,info.drawingAngle(),m_shapeDynamicsProperties->followDrawingAngleWeight );
             }
 
             // random size - scale

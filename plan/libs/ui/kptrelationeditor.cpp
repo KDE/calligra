@@ -64,7 +64,7 @@ RelationTreeView::RelationTreeView( QWidget *parent )
     createItemDelegates( m );
 
     //HACK to simulate SingleSelection *and* get indication of current item
-    connect( selectionModel(), SIGNAL( currentChanged(const QModelIndex&, const QModelIndex& ) ), SLOT( slotCurrentChanged(const QModelIndex&, const QModelIndex& ) ) );
+    connect( selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), SLOT(slotCurrentChanged(QModelIndex,QModelIndex)) );
 }
 
 void RelationTreeView::slotCurrentChanged(const QModelIndex &curr, const QModelIndex& )
@@ -85,15 +85,15 @@ RelationEditor::RelationEditor(KoPart *part, KoDocument *doc, QWidget *parent)
     //kDebug(planDbg())<<m_view->actionSplitView();
     setupGui();
 
-    connect( m_view, SIGNAL( currentChanged( const QModelIndex &, const QModelIndex & ) ), this, SLOT ( slotCurrentChanged( const QModelIndex &, const QModelIndex & ) ) );
+    connect( m_view, SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(slotCurrentChanged(QModelIndex,QModelIndex)) );
 
-    connect( m_view, SIGNAL( selectionChanged( const QModelIndexList ) ), this, SLOT ( slotSelectionChanged( const QModelIndexList ) ) );
+    connect( m_view, SIGNAL(selectionChanged(QModelIndexList)), this, SLOT(slotSelectionChanged(QModelIndexList)) );
 
-    connect( m_view, SIGNAL( contextMenuRequested( const QModelIndex&, const QPoint& ) ), SLOT( slotContextMenuRequested( const QModelIndex&, const QPoint& ) ) );
+    connect( m_view, SIGNAL(contextMenuRequested(QModelIndex,QPoint)), SLOT(slotContextMenuRequested(QModelIndex,QPoint)) );
 
-    connect( m_view, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
+    connect( m_view, SIGNAL(headerContextMenuRequested(QPoint)), SLOT(slotHeaderContextMenuRequested(QPoint)) );
 
-    connect(model(), SIGNAL(executeCommand(KUndo2Command *)), doc, SLOT(addCommand(KUndo2Command *)));
+    connect(model(), SIGNAL(executeCommand(KUndo2Command*)), doc, SLOT(addCommand(KUndo2Command*)));
 }
 
 void RelationEditor::updateReadWrite( bool rw )
@@ -120,7 +120,7 @@ void RelationEditor::slotCurrentChanged(  const QModelIndex &/*curr*/, const QMo
     slotEnableActions();
 }
 
-void RelationEditor::slotSelectionChanged( const QModelIndexList /*list*/)
+void RelationEditor::slotSelectionChanged( const QModelIndexList& /*list*/)
 {
     //kDebug(planDbg())<<list.count();
     slotEnableActions();
@@ -164,7 +164,7 @@ void RelationEditor::updateActionsEnabled( bool /*on */)
 void RelationEditor::setupGui()
 {
     // Add the context menu actions for the view options
-    connect(m_view->actionSplitView(), SIGNAL(triggered(bool) ), SLOT(slotSplitView()));
+    connect(m_view->actionSplitView(), SIGNAL(triggered(bool)), SLOT(slotSplitView()));
     addContextAction( m_view->actionSplitView() );
 
     createOptionAction();

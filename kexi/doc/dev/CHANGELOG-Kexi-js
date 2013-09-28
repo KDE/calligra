@@ -159,6 +159,44 @@ TODO: Table View
 *Fix support for displaying and storing rich text
 REVIEW:312134
 
+2013-05-09
+KexiDB
+*Properly return list of lookup fields when there are more than one
+
+2013-03-12
+Main Window
+*Improved messages when opening read-only projects
+*Fixed opening projects as read-only
+*Added proposing opening read-only for projects that cannot be open read-write
+*Added "(read only)" string to the window title to indicate read-only mode
+REVIEW:109486
+
+2013-02-28
+Main Window
+*[code] Message handler now can set redirection to other handler (needed to cleanly implement error callouts for the Welcome assistant)
+*[code] Improved message handler API
+*Kexi asks for passwords directly on pages without modal dialogs (for New, Open, Welcome assistants)
+*Improved layout of the context message widget
+*Improved support for moving back to previous assistant page
+KexiDB
+*[code] ConnectionData now "knows" if specifing password is needed for performing connection
+REVIEW:109214
+BUG:313025
+
+2013-01-09
+Tests
+*Added kexiTester() modelled after kDebug(), so it's no-op when testing is disabled; no ifdefs needed
+General
+*Warn when opening database files with no write access
+
+2013-01-06
+Tests
+*Added KexiDB Connection test
+
+2013-01-06
+Buildsystem
+*calligra_build_test convenience macro added
+
 2012-12-30
 Tests
 *KexiTester introduced: Global object for setting up GUI tests
@@ -191,6 +229,56 @@ Script Designer
 
 ===================== Kexi 2.6  =====================
 
+~~~~~~~~~~~~~~~~ 2.6.4 ~~~~~~~~~~~~~~~~
+
+2013-04-09
+Main Window
+*fix look of the modern menu and tabbed toolbar for the bespin widget style
+REVIEW:109894
+
+2013-04-10
+KexiDB
+*PostgreSQL Driver
+**Fix escaping of single quote "'"
+BUG:318129
+Query Designer
+*Fix saving new query designs in SQL view
+
+~~~~~~~~~~~~~~~~ 2.6.3 ~~~~~~~~~~~~~~~~
+
+~~~~~~~~~~~~~~~~ 2.6.2 ~~~~~~~~~~~~~~~~
+
+KexiDB
+*don't require write access in file connection for read-only mode
+
+~~~~~~~~~~~~~~~~ 2.6.1 ~~~~~~~~~~~~~~~~
+
+2013-02-14
+CSV Export
+*Fix options in the CSV Export dialog
+**Fix saving options for text quote and text encoding
+**Fix function of "Default" button
+**Pressing Cancel button should not save options
+BUG:314766
+REVIEW:314766
+
+2013-02-09
+Forms
+*Fix crash while creating new object form and closing without saving
+BUG:314747
+
+~~~~~~~~~~~~~~~~ 2.6 RC 3 (2.5.94) ~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~ 2.6 RC 2 (2.5.93) ~~~~~~~~~~~~~~~~
+
+2013-01-16
+Main Window
+*Connection widget: improve items sorting and column sizes
+*Make main window title more standard
+
+2013-01-12
+*Fix MySql login failure when not saving password
+BUG:313025
+
 2012-12-27
 Main Window
 *Fix regression in global search (introduced in commit 8bcbf0202, Oct 19)
@@ -198,7 +286,7 @@ BUG:312258
 *Fix possible crash when pressing tab in the global search box
 *Make Clear button work in the global search box
 
-~~~~~~~~~~~~~~~~ 2.6 RC (2.4.92) ~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~ 2.6 RC (2.5.92) ~~~~~~~~~~~~~~~~
 
 2012-10-29
 Forms
@@ -219,7 +307,7 @@ BUG:301136
 REVIEW:107068
 DIGEST:Kexi shows indication that edited or pasted text is trimmed, more at http://blogs.kde.org/2012/10/27/kexi-26-text-trimming
 
-~~~~~~~~~~~~~~~~ 2.6 Beta (2.4.91) ~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~ 2.6 Beta (2.5.91) ~~~~~~~~~~~~~~~~
 
 2012-10-17..18
 General
@@ -8735,4 +8823,4 @@ dock windows visiblity fixed, simplified code
 
 2002-06-23, Sunday, 00:20:36 (Lucijan)
 - First Kexi commit, SVN revision #162554
-  details: http://websvn.kde.org/trunk/koffice/kexi/?rev=162554
+  details: http://websvn.kde.org/?view=revision&revision=162554

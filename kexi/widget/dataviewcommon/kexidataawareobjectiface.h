@@ -34,12 +34,11 @@
 #include <kdebug.h>
 #include <core/kexisearchandreplaceiface.h>
 #include <kexiutils/KexiContextMessage.h>
-#include "kexitableviewdata.h"
+#include <db/tableviewdata.h>
 
 class QObject;
 class QScrollBar;
 class KMenu;
-class KexiTableViewData;
 class KexiRecordMarker;
 class KexiTableViewHeader;
 class KexiRecordNavigatorIface;
@@ -49,6 +48,7 @@ namespace KexiDB
 {
 class RowEditBuffer;
 class RecordData;
+class TableViewData;
 }
 
 //! default column width in pixels
@@ -80,10 +80,10 @@ public:
      If widget already has _different_ data object assigned (and owns this data),
      old data is destroyed before new assignment.
      */
-    void setData(KexiTableViewData *data, bool owner = true);
+    void setData(KexiDB::TableViewData *data, bool owner = true);
 
     /*! \return data structure displayed for this object */
-    inline KexiTableViewData *data() const {
+    inline KexiDB::TableViewData *data() const {
         return m_data;
     }
 
@@ -289,7 +289,7 @@ public:
     /*! Clears entire table data, its visible representation
      and deletes data at database backend (if this is db-aware object).
      Does not clear columns information.
-     Does not destroy KexiTableViewData object (if present) but only clears its contents.
+     Does not destroy KexiDB::TableViewData object (if present) but only clears its contents.
      Displays confirmation dialog if \a ask is true (the default is false).
      Repaints widget if \a repaint is true (the default).
      For empty tables, true is returned immediately.
@@ -408,7 +408,7 @@ public:
      but for Kexi Forms column data
      corresponding to widget number is used here
      (see KexiFormScrollView::fieldNumberForColumn()). */
-    virtual KexiTableViewColumn* column(int col);
+    virtual KexiDB::TableViewColumn* column(int col);
 
     /*! \return field number within data model connected to a data-aware
      widget at column \a col. Can return -1 if there's no such column. */
@@ -416,7 +416,7 @@ public:
         return col;
     }
 
-    bool hasDefaultValueAt(const KexiTableViewColumn& tvcol);
+    bool hasDefaultValueAt(const KexiDB::TableViewColumn& tvcol);
 
     const QVariant* bufferedValueAt(int col, bool useDefaultValueIfPossible = true);
 
@@ -450,7 +450,7 @@ public:
 
     /*! Data has been refreshed on-screen - emitted from initDataContents(). */
     virtual void dataRefreshed() = 0;
-    virtual void dataSet(KexiTableViewData *data) = 0;
+    virtual void dataSet(KexiDB::TableViewData *data) = 0;
 
     /*! \return a pointer to context menu. This can be used to plug some actions there. */
     KMenu* contextMenu() const {
@@ -594,7 +594,7 @@ protected:
      Sets cursor positin (using setCursorPosition()) to first row or sets
      (-1, -1) position if no rows are available.
      Called on setData(). Also called once on show event after
-     refreshRequested() signal was received from KexiTableViewData object. */
+     refreshRequested() signal was received from TableViewData object. */
     virtual void initDataContents();
 
     /*! Clears columns information and thus all internal table data
@@ -716,19 +716,19 @@ protected:
      Reimplemented by KexiFormScrollView. */
     virtual void updateAfterAcceptRowEdit();
 
-    //! Handles KexiTableViewData::rowRepaintRequested() signal
+    //! Handles TableViewData::rowRepaintRequested() signal
     virtual void slotRowRepaintRequested(KexiDB::RecordData& record) {
         Q_UNUSED(record);
     }
 
-    //! Handles KexiTableViewData::aboutToDeleteRow() signal. Prepares info for slotRowDeleted().
+    //! Handles TableViewData::aboutToDeleteRow() signal. Prepares info for slotRowDeleted().
     virtual void slotAboutToDeleteRow(KexiDB::RecordData& record, KexiDB::ResultInfo* result,
                                       bool repaint);
 
-    //! Handles KexiTableViewData::rowDeleted() signal to repaint when needed.
+    //! Handles TableViewData::rowDeleted() signal to repaint when needed.
     virtual void slotRowDeleted();
 
-    //! Handles KexiTableViewData::rowInserted() signal to repaint when needed.
+    //! Handles TableViewData::rowInserted() signal to repaint when needed.
     virtual void slotRowInserted(KexiDB::RecordData *record, bool repaint);
 
     //! Like above, not db-aware version
@@ -806,7 +806,7 @@ protected:
     void updateIndicesForVisibleValues();
 
     //! data structure displayed for this object
-    KexiTableViewData *m_data;
+    KexiDB::TableViewData *m_data;
 
     //! current row (cursor)
     int m_curRow;
@@ -818,7 +818,7 @@ protected:
     KexiDB::RecordData *m_currentItem;
 
     //! data iterator
-    KexiTableViewData::Iterator m_itemIterator;
+    KexiDB::TableViewData::Iterator m_itemIterator;
 
     //! record's data for inserting
     KexiDB::RecordData *m_insertItem;
@@ -861,7 +861,7 @@ protected:
 
     /*! Contains 1 if the object is readOnly, 0 if not;
      otherwise (-1 means "do not know") the 'readOnly' flag from object's
-     internal data structure (KexiTableViewData *KexiTableView::m_data) is reused.
+     internal data structure (KexiDB::TableViewData *KexiTableView::m_data) is reused.
      */
     int m_readOnly;
 
@@ -935,9 +935,9 @@ protected:
 
     /*! Row number (>=0 or -1 == no row) that will be deleted in deleteRow().
      It is set in slotAboutToDeleteRow(KexiDB::RecordData&,KexiDB::ResultInfo*,bool)) slot
-     received from KexiTableViewData member.
+     received from KexiDB::TableViewData member.
      This value will be used in slotRowDeleted() after rowDeleted() signal
-     is received from KexiTableViewData member and then cleared (set to -1). */
+     is received from KexiDB::TableViewData member and then cleared (set to -1). */
     int m_rowWillBeDeleted;
 
     /*! Displays passive error popup label used when invalid data has been entered. */
@@ -1027,7 +1027,7 @@ inline KexiDB::RecordData *KexiDataAwareObjectInterface::itemAt(int pos) const
     } \
     void connectDataSetSignal(const QObject* receiver, \
                               const char* kexiTableViewDataMember) { \
-        connect(this, SIGNAL(dataSet(KexiTableViewData*)), receiver, kexiTableViewDataMember); \
+        connect(this, SIGNAL(dataSet(KexiDB::TableViewData*)), receiver, kexiTableViewDataMember); \
     } \
     void connectToReloadDataSlot(const QObject* sender, const char* voidSignal) { \
         connect(sender, voidSignal, this, SLOT(reloadData())); \

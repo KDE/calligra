@@ -120,12 +120,12 @@ KexiTableDesignerView::KexiTableDesignerView(QWidget *parent)
     KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
     d->view = dynamic_cast<KexiTableView*>(mainWidget());
 
-    d->data = new KexiTableViewData();
+    d->data = new KexiDB::TableViewData();
     if (conn->isReadOnly())
         d->data->setReadOnly(true);
     d->data->setInsertingEnabled(false);
 
-    KexiTableViewColumn *col = new KexiTableViewColumn("pk", KexiDB::Field::Text, QString(),
+    KexiDB::TableViewColumn *col = new KexiDB::TableViewColumn("pk", KexiDB::Field::Text, QString(),
             i18n("Additional information about the field"));
     col->setIcon(KexiUtils::colorizeIconToTextColor(koSmallIcon("help-about"), d->view->palette()));
     col->setHeaderTextVisible(false);
@@ -133,15 +133,15 @@ KexiTableDesignerView::KexiTableDesignerView(QWidget *parent)
     col->setReadOnly(true);
     d->data->addColumn(col);
 
-// col = new KexiTableViewColumn("name", KexiDB::Field::Text, i18n("Field Name"),
-    col = new KexiTableViewColumn("caption", KexiDB::Field::Text, i18n("Field Caption"),
+// col = new KexiDB::TableViewColumn("name", KexiDB::Field::Text, i18n("Field Name"),
+    col = new KexiDB::TableViewColumn("caption", KexiDB::Field::Text, i18n("Field Caption"),
                                   i18n("Describes caption for the field"));
-// KexiUtils::Validator *vd = new KexiUtils::IdentifierValidator();
+// KexiDB::Validator *vd = new KexiUtils::IdentifierValidator();
 // vd->setAcceptsEmptyValue(true);
 // col->setValidator( vd );
     d->data->addColumn(col);
 
-    col = new KexiTableViewColumn("type", KexiDB::Field::Enum, i18n("Data Type"),
+    col = new KexiDB::TableViewColumn("type", KexiDB::Field::Enum, i18n("Data Type"),
                                   i18n("Describes data type for the field"));
     d->data->addColumn(col);
 
@@ -159,7 +159,7 @@ KexiTableDesignerView::KexiTableDesignerView(QWidget *parent)
     }
     col->field()->setEnumHints(types);
 
-    d->data->addColumn(col = new KexiTableViewColumn("comments", KexiDB::Field::Text,
+    d->data->addColumn(col = new KexiDB::TableViewColumn("comments", KexiDB::Field::Text,
             i18n("Comments"), i18n("Describes additional comments for the field")));
 
     d->view->setSpreadSheetMode();
@@ -405,7 +405,7 @@ KexiTableDesignerView::createPropertySet(int row, const KexiDB::Field& field, bo
 
     set->addProperty(prop = new KoProperty::Property("precision", (int)field.precision()/*200?*/,
                                                      i18n("Precision")));
-#ifdef KEXI_NO_UNFINISHED
+#ifndef KEXI_SHOW_UNFINISHED
     prop->setVisible(false);
 #endif
     set->addProperty(prop = new KoProperty::Property("visibleDecimalPlaces",
@@ -416,7 +416,7 @@ KexiTableDesignerView::createPropertySet(int row, const KexiDB::Field& field, bo
 //! @todo set reasonable default for column width
     set->addProperty(prop = new KoProperty::Property("defaultWidth", QVariant(0) /*field.width()*//*200?*/,
                                                      i18n("Default Width")));
-#ifdef KEXI_NO_UNFINISHED
+#ifndef KEXI_SHOW_UNFINISHED
     prop->setVisible(false);
 #endif
 
@@ -1428,6 +1428,7 @@ KexiDB::SchemaData* KexiTableDesignerView::storeNewData(const KexiDB::SchemaData
     if (res == true) {
         //we've current schema
         tempData()->tableSchemaChangedInPreviousView = true;
+        d->history->clear();
 //not needed; KexiProject emits newItemStored signal //let project know the table is created
 //  KexiMainWindowIface::global()->project()->emitTableCreated(*tempData()->table);
     } else {

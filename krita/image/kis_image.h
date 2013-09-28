@@ -54,6 +54,7 @@ class KoColorProfile;
 class KoUpdater;
 class KisPerspectiveGrid;
 class KisLayerComposition;
+class KisSpontaneousJob;
 
 namespace KisMetaData
 {
@@ -84,9 +85,11 @@ public:
 
 public: // KisNodeGraphListener implementation
 
+    void aboutToAddANode(KisNode *parent, int index);
     void nodeHasBeenAdded(KisNode *parent, int index);
     void aboutToRemoveANode(KisNode *parent, int index);
     void nodeChanged(KisNode * node);
+    void notifySelectionChanged();
     void requestProjectionUpdate(KisNode *node, const QRect& rect);
 
 public: // KisProjectionUpdateListener implementation
@@ -387,22 +390,6 @@ public:
     }
 
     /**
-     * Starting form 2.3 mergedImage() is declared deprecated.
-     * If you want to get a projection of the image, please use
-     * something like:
-     *
-     * image->lock();
-     * read_something_from_the_image(image->projection());
-     * image->unlock();
-     *
-     * or if you want to get a full refresh of the image graph
-     * performed beforehand (do you really want it?) (sure?) then
-     * you can add a call to image->refreshGraph() before locking
-     * the image.
-     */
-    KDE_DEPRECATED KisPaintDeviceSP mergedImage();
-
-    /**
      * @return the root node of the image node graph
      */
     KisGroupLayerSP rootLayer() const;
@@ -450,16 +437,6 @@ public:
 
     /// use if the layers have changed _completely_ (eg. when flattening)
     void notifyLayersChanged();
-
-    /**
-     * Called whenever a layer has changed. The layer is added to a
-     * list of dirty layers and as soon as the document stores the
-     * command that is now in progress, the image will be notified.
-     * Then the image will notify the dirty layers, the dirty layers
-     * will notify their parents & emit a signal that will be caught
-     * by the layer box, which will request a new thumbnail.
-    */
-    void notifyLayerUpdated(KisLayerSP layer);
 
     void setRootLayer(KisGroupLayerSP rootLayer);
 
@@ -513,6 +490,39 @@ public:
      */
     void removeComposition(KisLayerComposition* composition);
 
+    /**
+     * Permit or deny the wrap-around mode for all the paint devices
+     * of the image. Note that permitting the wraparound mode will not
+     * necessarily activate it right now. To be activated the wrap
+     * around mode should be 1) permitted; 2) supported by the
+     * currently running stroke.
+     */
+    void setWrapAroundModePermitted(bool value);
+
+    /**
+     * \return whether the wrap-around mode is permitted for this
+     *         image. If the wrap around mode is permitted and the
+     *         currently running stroke supports it, the mode will be
+     *         activated for all paint devices of the image.
+     *
+     * \see setWrapAroundMode
+     */
+    bool wrapAroundModePermitted() const;
+
+
+    /**
+     * \return whether the wraparound mode is activated for all the
+     *         devices of the image. The mode is activated when both
+     *         factors are true: the user permitted it and the stroke
+     *         supports it
+     */
+    bool wrapAroundModeActive() const;
+
+public:
+    void startIsolatedMode(KisNodeSP node);
+    void stopIsolatedMode();
+    KisNodeSP isolatedModeRoot() const;
+
 signals:
 
     /**
@@ -529,7 +539,24 @@ signals:
      */
     void sigImageModified();
 
-    void sigSizeChanged(qint32 w, qint32 h);
+    /**
+     * The signal is emitted when the size of the image is changed.
+     * \p oldStillPoint and \p newStillPoint give the receiver the
+     * hint about how the new and old rect of the image correspond to
+     * each other. They specify the point of the image around which
+     * the conversion was done. This point will stay still on the
+     * user's screen. That is the \p newStillPoint of the new image
+     * will be painted at the same screen position, where \p
+     * oldStillPoint of the old image was painted.
+     *
+     * \param oldStillPoint is a still point represented in *old*
+     *                      image coordinates
+     *
+     * \param newStillPoint is a still point represented in *new*
+     *                      image coordinates
+     */
+    void sigSizeChanged(const QPointF &oldStillPoint, const QPointF &newStillPoint);
+
     void sigProfileChanged(const KoColorProfile *  profile);
     void sigColorSpaceChanged(const KoColorSpace*  cs);
     void sigResolutionChanged(double xRes, double yRes);
@@ -615,6 +642,15 @@ signals:
      */
     void sigStrokeEndRequested();
 
+    /**
+     * Emitted when the isolated mode status has changed.
+     *
+     * Can be used by the receivers to catch a fact of forcefully
+     * stopping the isolated mode by the image when some complex
+     * action was requested
+     */
+    void sigIsolatedModeChanged();
+
 public slots:
     KisCompositeProgressProxy* compositeProgressProxy();
 
@@ -674,6 +710,15 @@ public slots:
     void initialRefreshGraph();
 
     /**
+     * Adds a spontaneous job to the updates queue.
+     *
+     * A spontaneous job may do some trivial tasks in the background,
+     * like updating the outline of selection or purging unused tiles
+     * from the existing paint devices.
+     */
+    void addSpontaneousJob(KisSpontaneousJob *spontaneousJob);
+
+    /**
      * This method is called by the UI (*not* by the creator of the
      * stroke) when it thinks current stroke should undo its last
      * action. For example, when the user presses Ctrl+Z while some
@@ -719,6 +764,10 @@ private:
 
     void refreshHiddenArea(KisNodeSP rootNode, const QRect &preparedArea);
     static QRect realNodeExtent(KisNodeSP rootNode, QRect currentRect = QRect());
+
+    void requestProjectionUpdateImpl(KisNode *node,
+                                     const QRect& rect,
+                                     const QRect &cropRect);
 
     friend class KisImageResizeCommand;
     void setSize(const QSize& size);

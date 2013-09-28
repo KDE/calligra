@@ -24,13 +24,13 @@
 #ifndef MSOOXMLNS_H
 #define MSOOXMLNS_H
 
-#include "msooxml_export.h"
+#include "komsooxml_export.h"
 
 namespace MSOOXML
 {
 
 //! MSOOXML Schemas
-class MSOOXML_EXPORT Schemas
+class KOMSOOXML_EXPORT Schemas
 {
 public:
     //! Content types
@@ -56,7 +56,7 @@ public:
     static const char* const presentationml;
 
     //! DrawingML
-    class MSOOXML_EXPORT drawingml
+    class KOMSOOXML_EXPORT drawingml
     {
     public:
         //! A.4 DrawingML - Framework
@@ -75,7 +75,7 @@ public:
 
 
     //! A.6 Shared MLs
-    class MSOOXML_EXPORT officeDocument
+    class KOMSOOXML_EXPORT officeDocument
     {
     public:
         static const char* const math;

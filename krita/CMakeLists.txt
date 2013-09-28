@@ -15,10 +15,9 @@ if(CMAKE_COMPILER_IS_GNUCXX)
     set(CMAKE_CXX_FLAGS_KRITADEVS "-O3 -g" CACHE STRING "" FORCE)
 endif(CMAKE_COMPILER_IS_GNUCXX)
 
-if(MSVC)
+if(MSVC OR (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj")
-endif(MSVC)
-
+endif(MSVC OR (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
 
 include(CheckFunctionExists)
 
@@ -28,10 +27,11 @@ configure_file(config-glew.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-glew.h )
 macro_log_feature(HAVE_GLEW "GLEW" "The OpenGL Extension Wrangler Library" "http://glew.sourceforge.net" FALSE "" "Required by the Krita shader filter plugin")
 
 if(HAVE_GLEW)
-        message(STATUS "GLEW found!")
+    message(STATUS "GLEW found!")
 else(HAVE_GLEW)
-        message(STATUS "GLEW NOT found - krita will not be able to use OpenGL shaders")
+    message(STATUS "GLEW NOT found - krita will not be able to use OpenGL.")
 endif(HAVE_GLEW)
+
 if(HAVE_OPENGL)
     message(STATUS "OpenGL found -- krita will be able  to use OpenGL for hardware accelerated rendering.")
 else(HAVE_OPENGL)
@@ -157,6 +157,8 @@ install(TARGETS kdeinit_krita ${INSTALL_TARGETS_DEFAULT_ARGS})
 install( PROGRAMS  krita.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 install( FILES  kritapart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 install( FILES  krita.rc DESTINATION ${DATA_INSTALL_DIR}/krita)
+
+add_subdirectory(tablettester)
 
 
 

@@ -55,7 +55,7 @@ KisPaintOpRegistry* KisPaintOpRegistry::instance()
 {
     K_GLOBAL_STATIC(KisPaintOpRegistry, s_instance);
     if (!s_instance.exists()) {
-        KoPluginLoader::instance()->load("Krita/Paintop", "(Type == 'Service') and ([X-Krita-Version] == 27)");
+        KoPluginLoader::instance()->load("Krita/Paintop", "(Type == 'Service') and ([X-Krita-Version] == 28)");
 
 
         KisImageSP img = new KisImage(0, 0, 0, 0, 0, KoColorSpaceRegistry::instance()->alpha8());
@@ -82,10 +82,6 @@ KisPaintOp * KisPaintOpRegistry::paintOp(const QString & id, const KisPaintOpSet
     if (painter == 0) {
         warnKrita << " KisPaintOpRegistry::paintOp painter is null";
         return 0;
-    }
-
-    if (!painter->bounds().isValid() && image) {
-        painter->setBounds(image->bounds());
     }
 
     Q_ASSERT(settings);

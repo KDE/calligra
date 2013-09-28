@@ -297,7 +297,7 @@ KexiDataItemInterface *KexiFormScrollView::editor(int col, bool ignoreMissingEdi
     //return item;
 
     /*
-      KexiTableViewColumn *tvcol = m_data->column(col);
+      KexiDB::TableViewColumn *tvcol = m_data->column(col);
     // int t = tvcol->fielm_type();
 
       //find the editor for this column
@@ -516,7 +516,7 @@ void KexiFormScrollView::initDataContents()
     }
 }
 
-KexiTableViewColumn* KexiFormScrollView::column(int col)
+KexiDB::TableViewColumn* KexiFormScrollView::column(int col)
 {
     const int id = fieldNumberForColumn(col);
     return (id >= 0) ? m_data->column(id) : 0;

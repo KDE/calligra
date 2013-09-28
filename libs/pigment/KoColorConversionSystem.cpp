@@ -295,10 +295,10 @@ void KoColorConversionSystem::createColorConverters(const KoColorSpace* colorSpa
     }
     Q_ASSERT(bestPath);
     const KoColorSpace* endColorSpace = defaultColorSpaceForNode(bestPath->endNode());
-    fromCS = createTransformationFromPath(bestPath, colorSpace, endColorSpace, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
+    fromCS = createTransformationFromPath(bestPath, colorSpace, endColorSpace, KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
     Path* returnPath = findBestPath(bestPath->endNode(), csNode);
     Q_ASSERT(returnPath);
-    toCS = createTransformationFromPath(returnPath, endColorSpace, colorSpace, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
+    toCS = createTransformationFromPath(returnPath, endColorSpace, colorSpace, KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
     Q_ASSERT(*toCS->dstColorSpace() == *fromCS->srcColorSpace());
     Q_ASSERT(*fromCS->dstColorSpace() == *toCS->srcColorSpace());
 }
@@ -419,11 +419,11 @@ QString KoColorConversionSystem::bestPathToDot(const QString& srcKey, const QStr
     }
     Path* p = findBestPath(srcNode, dstNode);
     Q_ASSERT(p);
-    QString dot = "digraph CCS {\n";
-    dot += QString("  \"%1\" [color=red]\n").arg(srcNode->id());
-    dot += QString("  \"%1\" [color=red]\n").arg(dstNode->id());
+    QString dot = "digraph CCS {\n" +
+                  QString("  \"%1\" [color=red]\n").arg(srcNode->id()) +
+                  QString("  \"%1\" [color=red]\n").arg(dstNode->id());
     foreach(Vertex* oV, d->vertexes) {
-        QString options = "";
+        QString options;
         if (p->vertexes.contains(oV)) {
             options = "[color=red]";
         }

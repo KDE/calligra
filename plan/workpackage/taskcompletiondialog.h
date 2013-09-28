@@ -85,7 +85,7 @@ public slots:
     void slotEntryChanged();
     void slotSelectionChanged( const QItemSelection &sel );
 
-    void slotEntryAdded( const QDate date );
+    void slotEntryAdded( const QDate& date );
 
     void slotEditmodeChanged( int );
 

@@ -66,9 +66,9 @@ public:
 
     void setShowGrid(bool b);
 
-    bool showPageBorders() const;
+    bool showPageOutline() const;
 
-    void setShowPageBorders(bool b);
+    void setShowPageOutline(bool b);
 
     bool showFormula() const;
 

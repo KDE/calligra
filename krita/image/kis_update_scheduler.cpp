@@ -167,6 +167,12 @@ void KisUpdateScheduler::fullRefresh(KisNodeSP root, const QRect& rc, const QRec
     if(needLock) unlock();
 }
 
+void KisUpdateScheduler::addSpontaneousJob(KisSpontaneousJob *spontaneousJob)
+{
+    m_d->updatesQueue->addSpontaneousJob(spontaneousJob);
+    processQueues();
+}
+
 KisStrokeId KisUpdateScheduler::startStroke(KisStrokeStrategy *strokeStrategy)
 {
     KisStrokeId id  = m_d->strokesQueue->startStroke(strokeStrategy);
@@ -191,6 +197,11 @@ bool KisUpdateScheduler::cancelStroke(KisStrokeId id)
     bool result = m_d->strokesQueue->cancelStroke(id);
     processQueues();
     return result;
+}
+
+bool KisUpdateScheduler::wrapAroundModeSupported() const
+{
+    return m_d->strokesQueue->wrapAroundModeSupported();
 }
 
 void KisUpdateScheduler::updateSettings()

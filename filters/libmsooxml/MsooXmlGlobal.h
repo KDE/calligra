@@ -26,7 +26,7 @@
 #ifndef MSOOXML_GLOBAL_H
 #define MSOOXML_GLOBAL_H
 
-#include "msooxml_export.h"
+#include "komsooxml_export.h"
 
 //! Common utilities for handling MSOOXML formats
 namespace MSOOXML
@@ -34,10 +34,10 @@ namespace MSOOXML
 
 //! @return maximum number of spreadsheet columns per worksheet. Currently set to 32767, which is KSpread maximum.
 //! See http://en.wikipedia.org/wiki/OpenOffice.org_Calc#Specifications
-MSOOXML_EXPORT uint maximumSpreadsheetColumns();
+KOMSOOXML_EXPORT uint maximumSpreadsheetColumns();
 
 //! @return maximum number of spreadsheet rows per worksheet. Currently set to 32767, which is KSpread maximum.
-MSOOXML_EXPORT uint maximumSpreadsheetRows();
+KOMSOOXML_EXPORT uint maximumSpreadsheetRows();
 
 } // MSOOXML namespace
 

@@ -110,7 +110,7 @@ WPDImport::~WPDImport()
 
 KoFilter::ConversionStatus WPDImport::convert(const QByteArray& from, const QByteArray& to)
 {
-    if (from != "application/wordperfect" || to != KoOdf::mimeType(KoOdf::Text))
+    if (from != "application/vnd.wordperfect" || to != KoOdf::mimeType(KoOdf::Text))
         return KoFilter::NotImplemented;
 
     const char mimetypeStr[] = "application/vnd.oasis.opendocument.text";

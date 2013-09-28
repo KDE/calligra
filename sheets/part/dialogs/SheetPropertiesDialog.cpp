@@ -60,7 +60,7 @@ void SheetPropertiesDialog::slotDefault()
     setHideZero(false);
     setShowFormulaIndicator(true);
     setShowCommentIndicator(true);
-    setShowPageBorders(false);
+    setShowPageOutline(false);
     setColumnAsNumber(false);
     setLcMode(false);
     setCapitalizeFirstLetter(false);
@@ -111,14 +111,14 @@ void SheetPropertiesDialog::setShowGrid(bool b)
     m_widget->showGridCheckBox->setChecked(b);
 }
 
-bool SheetPropertiesDialog::showPageBorders() const
+bool SheetPropertiesDialog::showPageOutline() const
 {
-    return m_widget->showPageBordersCheckBox->isChecked();
+    return m_widget->showPageOutlineCheckBox->isChecked();
 }
 
-void SheetPropertiesDialog::setShowPageBorders(bool b)
+void SheetPropertiesDialog::setShowPageOutline(bool b)
 {
-    m_widget->showPageBordersCheckBox->setChecked(b);
+    m_widget->showPageOutlineCheckBox->setChecked(b);
 }
 
 bool SheetPropertiesDialog::showFormula() const

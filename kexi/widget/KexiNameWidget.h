@@ -27,9 +27,14 @@
 
 #include <kexi_export.h>
 
-namespace KexiUtils
+
+namespace KexiDB
 {
 class Validator;
+}
+
+namespace KexiUtils
+{
 class MultiValidator;
 }
 
@@ -80,12 +85,12 @@ public:
     /*! \return true if name or caption is empty. */
     bool empty() const;
 
-    KexiUtils::Validator *nameValidator() const;
+    KexiDB::Validator *nameValidator() const;
 
     /*! Adds subvalidator for name field. In fact it is added to internal
      multivalidator. If \a owned is true, \a validator will be owned by the object.
      \sa MultiValidator::addSubvalidator(). */
-    void addNameSubvalidator(KexiUtils::Validator* validator, bool owned = true);
+    void addNameSubvalidator(KexiDB::Validator* validator, bool owned = true);
 
     /*! \return true if name text cannot be empty (true by default). */
     bool isNameRequired() const;

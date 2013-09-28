@@ -119,7 +119,6 @@ void KisToolSelectOutline::mouseReleaseEvent(KoPointerEvent *event)
                 KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
 
                 KisPainter painter(tmpSel);
-                painter.setBounds(currentImage()->bounds());
                 painter.setPaintColor(KoColor(Qt::black, tmpSel->colorSpace()));
                 painter.setPaintOpPreset(currentPaintOpPreset(), currentImage());
                 painter.setAntiAliasPolygonFill(selectionOptionWidget()->antiAliasSelection());
@@ -127,6 +126,11 @@ void KisToolSelectOutline::mouseReleaseEvent(KoPointerEvent *event)
                 painter.setStrokeStyle(KisPainter::StrokeStyleNone);
 
                 painter.paintPolygon(m_points);
+
+                QPainterPath cache;
+                cache.addPolygon(m_points);
+                cache.closeSubpath();
+                tmpSel->setOutlineCache(cache);
 
                 helper.selectPixelSelection(tmpSel, selectionAction());
             } else {

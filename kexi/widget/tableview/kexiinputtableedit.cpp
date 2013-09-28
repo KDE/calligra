@@ -59,7 +59,7 @@ protected:
 
 //======================================================
 
-KexiInputTableEdit::KexiInputTableEdit(KexiTableViewColumn &column, QWidget *parent)
+KexiInputTableEdit::KexiInputTableEdit(KexiDB::TableViewColumn &column, QWidget *parent)
         : KexiTableEdit(column, parent)
 {
 // m_type = f.type(); //copied because the rest of code uses m_type
@@ -217,7 +217,7 @@ QVariant KexiInputTableEdit::value()
         //! js @todo PRESERVE PRECISION!
         QString txt = m_lineedit->text();
         if (m_decsym != ".")
-            txt = txt.replace(m_decsym, ".");//convert back
+            txt.replace(m_decsym, ".");//convert back
         bool ok;
         const double result = txt.toDouble(&ok);
         return ok ? QVariant(result) : QVariant();

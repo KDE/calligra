@@ -403,7 +403,7 @@ public:
     /// Create a unique schedule manager identity
     QString uniqueScheduleManagerId() const;
     ScheduleManager *createScheduleManager();
-    ScheduleManager *createScheduleManager( const QString name );
+    ScheduleManager *createScheduleManager( const QString &name );
     /// Returns a list of all top level schedule managers
     QList<ScheduleManager*> scheduleManagers() const { return m_managers; }
     int numScheduleManagers() const { return m_managers.count(); }

@@ -38,11 +38,16 @@
 #include "kis_config.h"
 
 class ThumbnailBounds : public KisDefaultBounds {
+public:
+    ThumbnailBounds() : KisDefaultBounds() {}
+    virtual ~ThumbnailBounds() {}
 
     QRect bounds() const
     {
         return QRect(0, 0, 100, 100);
     }
+private:
+    Q_DISABLE_COPY(ThumbnailBounds)
 };
 
 
@@ -127,6 +132,11 @@ void KisFilterSelectorWidget::showFilterGallery(bool visible)
 bool KisFilterSelectorWidget::isFilterGalleryVisible() const
 {
     return d->uiFilterSelector.splitter->sizes()[0] > 0;
+}
+
+const QString KisFilterSelectorWidget::currentFilterName() const
+{
+    return d->currentFilter->name();
 }
 
 void KisFilterSelectorWidget::setFilter(KisFilterSP f)

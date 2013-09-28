@@ -30,7 +30,7 @@ namespace Marble
 {
     class MarbleWidget;
     class LatLonEdit;
-};
+}
 
 /**
  * This class allows the map to adjust the LatLonEdit widgets as the
@@ -38,7 +38,7 @@ namespace Marble
  */
 class KoRdfLocationEditWidget : public QWidget
 {
-    Q_OBJECT;
+    Q_OBJECT
     KoRdfLocationEditWidgetPrivate* const d;
     
 public:
@@ -50,7 +50,7 @@ public:
 //#endif
     
 public slots:
-    void mouseMoveGeoPosition(QString);
+    void mouseMoveGeoPosition(const QString&);
 
 };
 

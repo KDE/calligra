@@ -103,7 +103,7 @@ public:
 
     KexiTableView *view; //!< helper
 
-    KexiTableViewData *data;
+    KexiDB::TableViewData *data;
 
     KexiDataAwarePropertySet *sets;
 

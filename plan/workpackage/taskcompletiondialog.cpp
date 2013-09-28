@@ -53,7 +53,7 @@ TaskCompletionDialog::TaskCompletionDialog(WorkPackage &p, ScheduleManager *sm, 
 
     enableButtonOk(false);
 
-    connect(m_panel, SIGNAL( changed( bool ) ), SLOT(slotChanged( bool )));
+    connect(m_panel, SIGNAL(changed(bool)), SLOT(slotChanged(bool)));
 }
 
 void TaskCompletionDialog::slotChanged( bool )
@@ -131,16 +131,16 @@ TaskCompletionPanel::TaskCompletionPanel(WorkPackage &p, ScheduleManager *sm, QW
         entryTable->scrollTo( idx );
     }
 
-    connect( addEntryBtn, SIGNAL( clicked() ), this, SLOT( slotAddEntry() ) );
-    connect( removeEntryBtn, SIGNAL( clicked() ), entryTable, SLOT( removeEntry() ) );
+    connect( addEntryBtn, SIGNAL(clicked()), this, SLOT(slotAddEntry()) );
+    connect( removeEntryBtn, SIGNAL(clicked()), entryTable, SLOT(removeEntry()) );
 
-    connect( entryTable, SIGNAL( rowInserted( const QDate ) ), SLOT( slotEntryAdded( const QDate ) ) );
-    connect(entryTable, SIGNAL(changed() ), SLOT( slotChanged() ) );
-    connect(entryTable, SIGNAL(changed() ), SLOT( slotEntryChanged() ) );
-    connect(entryTable, SIGNAL(rowInserted( const QDate ) ), SLOT( slotChanged() ) );
-    connect(entryTable, SIGNAL(rowInserted( const QDate ) ), SLOT( slotEntryChanged() ) );
-    connect(entryTable, SIGNAL(rowRemoved( const QDate ) ), SLOT( slotEntryChanged() ) );
-    connect(entryTable, SIGNAL(selectionChanged( const QItemSelection&, const QItemSelection& ) ), SLOT( slotSelectionChanged( const QItemSelection& ) ) );
+    connect( entryTable, SIGNAL(rowInserted(QDate)), SLOT(slotEntryAdded(QDate)) );
+    connect(entryTable, SIGNAL(changed()), SLOT(slotChanged()) );
+    connect(entryTable, SIGNAL(changed()), SLOT(slotEntryChanged()) );
+    connect(entryTable, SIGNAL(rowInserted(QDate)), SLOT(slotChanged()) );
+    connect(entryTable, SIGNAL(rowInserted(QDate)), SLOT(slotEntryChanged()) );
+    connect(entryTable, SIGNAL(rowRemoved(QDate)), SLOT(slotEntryChanged()) );
+    connect(entryTable, SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(slotSelectionChanged(QItemSelection)) );
     
 
     connect(started, SIGNAL(toggled(bool)), SLOT(slotStartedChanged(bool)));
@@ -148,10 +148,10 @@ TaskCompletionPanel::TaskCompletionPanel(WorkPackage &p, ScheduleManager *sm, QW
     connect(finished, SIGNAL(toggled(bool)), SLOT(slotFinishedChanged(bool)));
     connect(finished, SIGNAL(toggled(bool)), SLOT(slotChanged()));
 
-    connect(startTime, SIGNAL(dateTimeChanged(const QDateTime &)), SLOT(slotChanged()));
-    connect(startTime, SIGNAL(dateTimeChanged(const QDateTime &)), SLOT(slotStartTimeChanged( const QDateTime& )));
-    connect(finishTime, SIGNAL(dateTimeChanged(const QDateTime &)), SLOT(slotChanged()));
-    connect(finishTime, SIGNAL(dateTimeChanged(const QDateTime &)), SLOT(slotFinishTimeChanged( const QDateTime& )));
+    connect(startTime, SIGNAL(dateTimeChanged(QDateTime)), SLOT(slotChanged()));
+    connect(startTime, SIGNAL(dateTimeChanged(QDateTime)), SLOT(slotStartTimeChanged(QDateTime)));
+    connect(finishTime, SIGNAL(dateTimeChanged(QDateTime)), SLOT(slotChanged()));
+    connect(finishTime, SIGNAL(dateTimeChanged(QDateTime)), SLOT(slotFinishTimeChanged(QDateTime)));
 
     removeEntryBtn->setEnabled( false );
 }
@@ -297,7 +297,7 @@ void TaskCompletionPanel::slotCalculateEffort()
 {
 }
 
-void TaskCompletionPanel::slotEntryAdded( const QDate date )
+void TaskCompletionPanel::slotEntryAdded( const QDate& date )
 {
     kDebug(planworkDbg())<<date;
 }

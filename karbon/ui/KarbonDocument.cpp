@@ -46,7 +46,6 @@
 #include "KarbonFactory.h"
 #include "KarbonView.h"
 #include <KarbonCanvas.h>
-#include <KarbonDocument.h>
 
 #include <KoApplication.h>
 #include <KoImageCollection.h>
@@ -55,7 +54,6 @@
 #include <KoStyleManager.h>
 #include <KoTextSharedLoadingData.h>
 #include <KoOdfStylesReader.h>
-#include <KoOdfStyleManager.h>
 #include <KoOdfLoadingContext.h>
 #include <KoOdfReadStore.h>
 #include <KoOdfWriteStore.h>
@@ -108,9 +106,7 @@ public:
 
     ~Private()
     {
-        qDeleteAll(layers);
         layers.clear();
-        qDeleteAll(objects);
         objects.clear();
         if (!hasExternalDataCenterMap)
             qDeleteAll(dataCenterMap);
@@ -145,9 +141,6 @@ public:
     bool showStatusBar;       ///< enable/disable status bar in attached view(s)
     bool merge;
     uint maxRecentFiles;      ///< max. number of files shown in open recent menu item
-
-    // For common styles (a.k.a. named styles)
-    KoOdfStyleManager styleManager;
 };
 
 
@@ -754,10 +747,6 @@ void KarbonDocument::useExternalDataCenterMap(QMap<QString, KoDataCenterBase*> d
 
 void KarbonDocument::loadOdfStyles(KoShapeLoadingContext & context)
 {
-    // Common styles (named styles) in general
-    KoOdfLoadingContext &odfLoadingContext = context.odfLoadingContext();
-    d->styleManager.loadStyles(odfLoadingContext.store());
-
     // Only text styles (old style system).
     KoStyleManager *styleManager = resourceManager()->resource(KoText::StyleManager).value<KoStyleManager*>();
 

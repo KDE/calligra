@@ -21,7 +21,8 @@
 #define KEXI_DB_FIELDVALIDATOR_H
 
 #include "kexidb_export.h"
-#include <kexiutils/validator.h>
+#include <kexiutils/multivalidator.h>
+#include <db/validator.h>
 
 class QWidget;
 

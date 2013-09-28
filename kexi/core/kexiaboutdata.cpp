@@ -26,7 +26,7 @@
 #include <KoIcon.h>
 #include <klocale.h>
 
-static const char *description =
+static const char description[] =
     I18N_NOOP("Database creation for everyone\n\n"
               "This application is a part of the Calligra Suite.");
 
@@ -37,7 +37,7 @@ KexiAboutData::KexiAboutData()
         KEXI_VERSION_STRING,
         ki18n(description),
         KAboutData::License_LGPL_V2,
-        ki18n("© 2002-2012, The Kexi Team"),
+        ki18n("© 2002-2013, The Kexi Team"),
         ki18n("This software is developed by Kexi Team - an international group\n"
               "of independent developers."),
         "http://www.calligra.org/kexi",

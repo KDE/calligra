@@ -28,6 +28,7 @@ class KisMinimalShadeSelector : public KisColorSelectorBase
 Q_OBJECT
 public:
     explicit KisMinimalShadeSelector(QWidget *parent = 0);
+    void unsetCanvas();
     void setCanvas(KisCanvas2* canvas);
 
 public slots:
@@ -38,7 +39,7 @@ public slots:
     void mouseReleaseEvent(QMouseEvent *);
 
 protected slots:
-    void resourceChanged(int key, const QVariant& v);
+    void canvasResourceChanged(int key, const QVariant& v);
 
 protected:
     void paintEvent(QPaintEvent *);

@@ -51,7 +51,6 @@
 #include <filter/kis_filter_configuration.h>
 #include <kis_processing_information.h>
 #include <kis_paint_device.h>
-#include <kis_iterator_ng.h>
 #include "widgets/kis_multi_integer_filter_widget.h"
 
 
@@ -61,11 +60,11 @@ KisOilPaintFilter::KisOilPaintFilter() : KisFilter(id(), KisFilter::categoryArti
     setSupportsThreading(false);
 }
 
-void KisOilPaintFilter::process(KisPaintDeviceSP device,
-                         const QRect& applyRect,
-                         const KisFilterConfiguration* config,
-                         KoUpdater* progressUpdater
-                               ) const
+void KisOilPaintFilter::processImpl(KisPaintDeviceSP device,
+                                    const QRect& applyRect,
+                                    const KisFilterConfiguration* config,
+                                    KoUpdater* progressUpdater
+                                    ) const
 {
     QPoint srcTopLeft = applyRect.topLeft();
     Q_ASSERT(!device.isNull());
@@ -162,7 +161,7 @@ void KisOilPaintFilter::MostFrequentColor(KisPaintDeviceSP src, quint8* dst, con
     int height = (2 * Radius) + 1;
     if ((starty + height) > bounds.bottom()) height = bounds.bottom() - starty + 1;
     Q_ASSERT((starty + height - 1) <= bounds.bottom());
-    KisRectIteratorSP it = src->createRectIteratorNG(startx, starty, width, height);
+    KisRectIteratorSP it = src->createRectIteratorNG(QRect(startx, starty, width, height));
     do {
 
         cs->normalisedChannelsValue(it->rawData(), channel);

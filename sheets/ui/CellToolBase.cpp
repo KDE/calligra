@@ -140,7 +140,9 @@
 #include <QHash>
 #include <QMenu>
 #include <QPainter>
+#ifndef QT_NO_SQL
 #include <QSqlDatabase>
+#endif
 
 #ifndef NDEBUG
 #include <QTableView>
@@ -1064,6 +1066,7 @@ void CellToolBase::keyPressEvent(QKeyEvent* event)
             return;
         break;
 
+    case Qt::Key_Backspace:
     case Qt::Key_Delete:
 	clearContents();
 	break;

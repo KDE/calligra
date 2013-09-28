@@ -80,6 +80,8 @@ public:
 
     virtual void disconnectCanvasObserver(QObject *object);
 
+    void toggleTabletLogger();
+
 public: // KoCanvasBase implementation
 
     bool canvasIsOpenGL();
@@ -150,12 +152,12 @@ public: // KisCanvas2 methods
 signals:
     void imageChanged(KisImageWSP image);
 
-    void canvasDestroyed(QWidget *);
-
     void favoritePaletteCalled(const QPoint&);
 
     void sigCanvasCacheUpdated(KisUpdateInfoSP);
     void sigContinueResizeImage(qint32 w, qint32 h);
+
+    void documentOffsetUpdateFinished();
 
 public slots:
 
@@ -164,7 +166,7 @@ public slots:
 
     void setDisplayFilter(KisDisplayFilter *displayFilter);
 
-    void startResizingImage(qint32 w, qint32 h);
+    void startResizingImage();
     void finishResizingImage(qint32 w, qint32 h);
 
     /// canvas rotation in degrees
@@ -202,13 +204,14 @@ private slots:
      */
     void slotSetDisplayProfile(const KoColorProfile * profile);
 
-    void slotCanvasDestroyed(QWidget* w);
-
     void setCursor(const QCursor &cursor);
 
     void slotSelectionChanged();
 
 public:
+
+    // interafce for KisCanvasController only
+    void setWrapAroundViewingMode(bool value);
 
     // interface for KisView2 only
     void connectCurrentImage();

@@ -52,10 +52,10 @@ public:
     Project &project() const { return *m_project; }
     
     QString version() const { return m_version; }
-    void setVersion( const QString ver ) { m_version = ver; }
-    
+    void setVersion( const QString &ver ) { m_version = ver; }
+
     QString workVersion() const { return m_workversion; }
-    void setWorkVersion( const QString ver ) { m_workversion = ver; }
+    void setWorkVersion( const QString &ver ) { m_workversion = ver; }
 
     QString mimetype() const { return m_mimetype; }
     void setMimetype( const QString &mime ) { m_mimetype = mime; }

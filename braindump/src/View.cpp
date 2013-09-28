@@ -58,10 +58,8 @@
 #include <ktoggleaction.h>
 #include <kactionmenu.h>
 #include <kactioncollection.h>
+#include <kstandarddirs.h>
 #include <kstatusbar.h>
-#include <kparts/event.h>
-#include <kparts/partmanager.h>
-#include <kparts/plugin.h>
 #include <kservicetypetrader.h>
 
 #include "KoOdf.h"
@@ -213,14 +211,14 @@ void View::loadExtensions()
 {
     KService::List offers = KServiceTypeTrader::self()->query(QString::fromLatin1("Braindump/Extensions"),
                             QString::fromLatin1("(Type == 'Service') && "
-                                    "([X-Braindump-Version] == 27)"));
+                                    "([X-Braindump-Version] == 28)"));
     KService::List::ConstIterator iter;
     for(iter = offers.constBegin(); iter != offers.constEnd(); ++iter) {
 
         KService::Ptr service = *iter;
         QString error;
-        KParts::Plugin* plugin =
-            service->createInstance<KParts::Plugin> (this, QVariantList(), &error);
+        KXMLGUIClient* plugin =
+                dynamic_cast<KXMLGUIClient*>(service->createInstance<QObject>(this, QVariantList(), &error));
         if(plugin) {
             insertChildClient(plugin);
         } else {

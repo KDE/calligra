@@ -42,7 +42,7 @@ PackageSettingsDialog::PackageSettingsDialog(WorkPackage &p, QWidget *parent)
     setMainWidget(dia);
     enableButtonOk(false);
 
-    connect(dia, SIGNAL(changed(bool) ), SLOT(enableButtonOk(bool)));
+    connect(dia, SIGNAL(changed(bool)), SLOT(enableButtonOk(bool)));
 }
 
 KUndo2Command *PackageSettingsDialog::buildCommand()
@@ -60,9 +60,9 @@ PackageSettingsPanel::PackageSettingsPanel(WorkPackage &p, QWidget *parent)
 
     setSettings( p.settings() );
 
-    connect( ui_usedEffort, SIGNAL( stateChanged( int ) ), SLOT( slotChanged() ) );
-    connect( ui_progress, SIGNAL( stateChanged( int ) ), SLOT( slotChanged() ) );
-    connect( ui_documents, SIGNAL( stateChanged( int ) ), SLOT( slotChanged() ) );
+    connect( ui_usedEffort, SIGNAL(stateChanged(int)), SLOT(slotChanged()) );
+    connect( ui_progress, SIGNAL(stateChanged(int)), SLOT(slotChanged()) );
+    connect( ui_documents, SIGNAL(stateChanged(int)), SLOT(slotChanged()) );
 }
 
 KUndo2Command *PackageSettingsPanel::buildCommand()

@@ -56,12 +56,16 @@ target_link_libraries(calligraactive
     ${QT_LIBRARIES}
     ${KDECLARATIVE_LIBRARIES}
     komain
-    kordf
     wordsprivate
     calligrasheetscommon
     kopageapp
     calligrastageprivate
 )
+
+if( SHOULD_BUILD_RDF )
+    target_link_libraries(calligraactive kordf)
+endif( SHOULD_BUILD_RDF )
+
 
 install(TARGETS calligraactive RUNTIME DESTINATION bin)
 install(FILES calligraactive.desktop DESTINATION share/applications)

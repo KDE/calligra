@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Calligra Author" version="136">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Calligra Author" version="139">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Action name="extra_template"/>
@@ -44,10 +44,13 @@
   <Action name="view_grid"/>
   <Action name="view_snaptogrid"/>
   <Separator/>
+  <Action name="view_wordCount"/>
+  <Separator/>
   <Action name="zoom_out"/>
   <Action name="zoom_in"/>
   <Action name="view_zoom"/>
   <Action name="view_fullscreen"/>
+  <Action name="view_distractionfreemode"/>
  </Menu>
  
   <Menu name="book"><text>Book</text>

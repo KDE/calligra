@@ -103,7 +103,7 @@ void KoZoomController::setTextMinMax(qreal min, qreal max)
 void KoZoomController::setDocumentSize(const QSizeF &documentSize, bool recalculateCenter)
 {
     d->documentSize = documentSize;
-    d->canvasController->updateDocumentSize( d->zoomHandler->documentToView(d->documentSize).toSize(), recalculateCenter);
+    d->canvasController->updateDocumentSize(documentToViewport(d->documentSize), recalculateCenter);
 
     // Finally ask the canvasController to recenter
     d->canvasController->recenterPreferred();
@@ -240,7 +240,9 @@ QSize KoZoomController::documentToViewport(const QSizeF &size)
 
 void KoZoomController::setAspectMode(bool status)
 {
-    d->action->setAspectMode(status);
+    if (d->action) {
+        d->action->setAspectMode(status);
+    }
 }
 
 #include <KoZoomController.moc>

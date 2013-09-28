@@ -55,7 +55,7 @@ QString normalizeCellRange(QString range)
     if(range.startsWith('[') && range.endsWith(']')) {
         range.remove(0, 1).chop(1);
     }
-    range = range.remove('$');
+    range.remove('$');
 
     const bool isPoint = !range.contains( ':' );
     QRegExp regEx(isPoint ? "(|.*\\.|.*\\!)([A-Z0-9]+)" : "(|.*\\.|.*\\!)([A-Z]+[0-9]+)\\:(|.*\\.|.*\\!)([A-Z0-9]+)");
@@ -359,7 +359,7 @@ QString ChartExport::genPlotAreaStyle( KoGenStyles& styles, KoGenStyles& mainSty
 
 QString replaceSheet( const QString &originalString, const QString &replacementSheet )
 {
-    QStringList split = originalString.split( QString::fromLatin1( "!" ) );
+    QStringList split = originalString.split( QLatin1Char('!') );
     split[0] = replacementSheet;
     return split.join( QString::fromLatin1( "!" ) );
 }

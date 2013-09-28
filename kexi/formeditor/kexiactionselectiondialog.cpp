@@ -152,7 +152,7 @@ void KActionsListViewBase::init()
         if (!isActionVisible(action->objectName().toLatin1(), actionCategories))
             continue;
         ActionSelectorDialogTreeItem *pitem = new ActionSelectorDialogTreeItem(
-            action->toolTip().isEmpty() ? action->text().replace("&", "") : action->toolTip(), this);
+            action->toolTip().isEmpty() ? action->text().remove('&') : action->toolTip(), this);
 
         pitem->setData(ActionSelectorDialogTreeItem::ActionCategoryRole, "kaction");
         pitem->setData(ActionSelectorDialogTreeItem::ActionDataRole, action->objectName());
@@ -287,7 +287,7 @@ public:
             printItem->setPixmap(0, koIcon("document-print"));
             KAction *a = KStandardAction::printPreview(0, 0, 0);
             item = new ActionSelectorDialogListItem("printPreview", printItem,
-                                                    a->text().replace("&", "").replace("...", ""));
+                                                    a->text().remove('&').remove("..."));
             item->setPixmap(0, a->icon().pixmap(16));
             delete a;
             item = new ActionSelectorDialogListItem(

@@ -41,7 +41,7 @@ BoxWipeEffectFactory::~BoxWipeEffectFactory()
 {
 }
 
-static const char* s_subTypes[] = {
+static const char* const s_subTypes[] = {
     I18N_NOOP( "From Top Left" ),
     I18N_NOOP( "From Top Right" ),
     I18N_NOOP( "From Bottom Left" ),

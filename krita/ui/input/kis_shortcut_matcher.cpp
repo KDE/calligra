@@ -213,6 +213,18 @@ void KisShortcutMatcher::suppressAllActions(bool value)
     m_d->suppressAllActions = value;
 }
 
+void KisShortcutMatcher::clearShortcuts()
+{
+    reset();
+    qDeleteAll(m_d->singleActionShortcuts);
+    m_d->singleActionShortcuts.clear();
+    qDeleteAll(m_d->strokeShortcuts);
+    m_d->strokeShortcuts.clear();
+    m_d->readyShortcuts.clear();
+    m_d->runningShortcut = 0;
+    m_d->readyShortcut = 0;
+}
+
 bool KisShortcutMatcher::tryRunWheelShortcut(KisSingleActionShortcut::WheelAction wheelAction, QWheelEvent *event)
 {
     return tryRunSingleActionShortcutImpl(wheelAction, event, m_d->keys);
@@ -328,8 +340,9 @@ bool KisShortcutMatcher::tryEndRunningShortcut(Qt::MouseButton button, QMouseEve
 
     if (m_d->runningShortcut->matchBegin(button)) {
         if (m_d->runningShortcut->action()) {
-            m_d->runningShortcut->action()->end(event);
-            m_d->runningShortcut->action()->deactivate();
+            KisAbstractInputAction* action = m_d->runningShortcut->action();
+            action->end(event);
+            action->deactivate();
         }
         m_d->runningShortcut = 0;
     }

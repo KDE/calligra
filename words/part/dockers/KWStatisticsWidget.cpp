@@ -27,6 +27,7 @@
 #include "frames/KWFrameSet.h"
 #include "frames/KWTextFrameSet.h"
 #include "dockers/StatisticsPreferencesPopup.h"
+#include "ui_StatisticsPreferencesPopup.h"
 #include <KoCanvasResourceManager.h>
 #include <KoSelection.h>
 #include <KoShape.h>
@@ -37,7 +38,7 @@
 #include <QTextBlock>
 #include <QTimer>
 
-KWStatisticsWidget::KWStatisticsWidget(QWidget *parent)
+KWStatisticsWidget::KWStatisticsWidget(QWidget *parent, bool shortVersion)
         : QWidget(parent),
           m_resourceManager(0),
           m_selection(0),
@@ -53,42 +54,63 @@ KWStatisticsWidget::KWStatisticsWidget(QWidget *parent)
           m_lines(0),
           m_paragraphs(0)
 {
+    this->shortVersion = shortVersion;
     m_timer = new QTimer(this);
     initUi();
     initLayout();
-    m_menu = new StatisticsPreferencesPopup(m_preferencesButton);
-    m_preferencesButton->setMenu(m_menu);
-    m_preferencesButton->setPopupMode(QToolButton::InstantPopup);
-    m_preferencesButton->setIcon(koIcon("configure"));
+    //All kind of stuff related to the option menu, unnecessary stuff in short version
+    if(!shortVersion) {
+        m_menu = new StatisticsPreferencesPopup(m_preferencesButton);
+        m_preferencesButton->setMenu(m_menu);
+        m_preferencesButton->setPopupMode(QToolButton::InstantPopup);
+        m_preferencesButton->setIcon(koIcon("configure"));
 
-    connect(m_timer, SIGNAL(timeout()), this, SLOT(updateData()));
+        connect(m_menu, SIGNAL(wordsDisplayChange(int)), this, SLOT(wordsDisplayChanged(int)));
+        connect(m_menu, SIGNAL(sentencesDisplayChange(int)), this, SLOT(sentencesDisplayChanged(int)));
+        connect(m_menu, SIGNAL(linesDisplayChange(int)), this, SLOT(linesDisplayChanged(int)));
+        connect(m_menu, SIGNAL(syllablesDisplayChange(int)), this, SLOT(syllablesDisplayChanged(int)));
+        connect(m_menu, SIGNAL(charspaceDisplayChange(int)), this, SLOT(charspaceDisplayChanged(int)));
+        connect(m_menu, SIGNAL(charnospaceDisplayChange(int)), this, SLOT(charnospaceDisplayChanged(int)));
+        connect(m_menu, SIGNAL(eastDisplayChange(int)), this, SLOT(eastDisplayChanged(int)));
+        connect(m_menu, SIGNAL(fleschDisplayChange(int)), this, SLOT(fleschDisplayChanged(int)));
 
-    connect(m_preferencesButton, SIGNAL(clicked()), m_preferencesButton, SLOT(showMenu()));
-    connect(m_menu, SIGNAL(wordsDisplayChange(int)), this, SLOT(wordsDisplayChanged(int)));
-    connect(m_menu, SIGNAL(sentencesDisplayChange(int)), this, SLOT(sentencesDisplayChanged(int)));
-    connect(m_menu, SIGNAL(linesDisplayChange(int)), this, SLOT(linesDisplayChanged(int)));
-    connect(m_menu, SIGNAL(syllablesDisplayChange(int)), this, SLOT(syllablesDisplayChanged(int)));
-    connect(m_menu, SIGNAL(charspaceDisplayChange(int)), this, SLOT(charspaceDisplayChanged(int)));
-    connect(m_menu, SIGNAL(charnospaceDisplayChange(int)), this, SLOT(charnospaceDisplayChanged(int)));
-    connect(m_menu, SIGNAL(eastDisplayChange(int)), this, SLOT(eastDisplayChanged(int)));
-    connect(m_menu, SIGNAL(fleschDisplayChange(int)), this, SLOT(fleschDisplayChanged(int)));
+        connect(m_preferencesButton, SIGNAL(clicked()), m_preferencesButton, SLOT(showMenu()));
+    }
+
+    //use to refresh statistics
+    connect(m_timer, SIGNAL(timeout()), this, SLOT(updateData())); // FIXME: better idea ?
 
     KConfigGroup cfgGroup = KGlobal::config()->group("Statistics");
-    bool visible = cfgGroup.readEntry("WordsVisible", true);
+    bool visible = false;
+
+    // --- Elements present in short AND full version ---
+    visible = cfgGroup.readEntry("WordsVisible", true);
+    visible |= shortVersion;
     m_wordsLabel->setVisible(visible);
     m_countWords->setVisible(visible);
-    if (visible) {
+    if (visible && !shortVersion) {
         m_menu->w->check_words->setCheckState(Qt::Checked);
     }
 
     visible = cfgGroup.readEntry("SentencesVisible", true);
+    visible |= shortVersion;
     m_sentencesLabel->setVisible(visible);
     m_countSentences->setVisible(visible);
-    if (visible) {
+    if (visible && !shortVersion) {
         m_menu->w->check_sentences->setCheckState(Qt::Checked);
     }
 
+    // --- Elements present ONLY in full version --
+    visible = cfgGroup.readEntry("FleschVisible", true);
+    visible &= !shortVersion;
+    m_fleschLabel->setVisible(visible);
+    m_countFlesch->setVisible(visible);
+    if (visible) {
+        m_menu->w->check_flesch->setCheckState(Qt::Checked);
+    }
+
     visible = cfgGroup.readEntry("SyllablesVisible", true);
+    visible &= !shortVersion;
     m_syllablesLabel->setVisible(visible);
     m_countSyllables->setVisible(visible);
     if (visible) {
@@ -96,6 +118,7 @@ KWStatisticsWidget::KWStatisticsWidget(QWidget *parent)
     }
 
     visible = cfgGroup.readEntry("LinesVisible", true);
+    visible &= !shortVersion;
     m_linesLabel->setVisible(visible);
     m_countLines->setVisible(visible);
     if (visible) {
@@ -103,20 +126,15 @@ KWStatisticsWidget::KWStatisticsWidget(QWidget *parent)
     }
 
     visible = cfgGroup.readEntry("EastAsianCharactersVisible", true);
+    visible &= !shortVersion;
     m_cjkcharsLabel->setVisible(visible);
     m_countCjkchars->setVisible(visible);
     if (visible) {
         m_menu->w->check_east->setCheckState(Qt::Checked);
     }
 
-    visible = cfgGroup.readEntry("FleschVisible", true);
-    m_fleschLabel->setVisible(visible);
-    m_countFlesch->setVisible(visible);
-    if (visible) {
-        m_menu->w->check_flesch->setCheckState(Qt::Checked);
-    }
-
     visible = cfgGroup.readEntry("CharspacesVisible", true);
+    visible &= !shortVersion;
     m_spacesLabel->setVisible(visible);
     m_countSpaces->setVisible(visible);
     if (visible) {
@@ -124,6 +142,7 @@ KWStatisticsWidget::KWStatisticsWidget(QWidget *parent)
     }
 
     visible = cfgGroup.readEntry("CharnospacesVisible", true);
+    visible &= !shortVersion;
     m_nospacesLabel->setVisible(visible);
     m_countNospaces->setVisible(visible);
     if (visible) {
@@ -164,7 +183,9 @@ void KWStatisticsWidget::initUi()
     m_cjkcharsLabel = new QLabel(i18n("East asian characters:"));
     m_countCjkchars = new QLabel;
 
-    m_preferencesButton = new QToolButton;
+    if (!shortVersion) {
+        m_preferencesButton = new QToolButton;
+    }
 }
 
 void KWStatisticsWidget::initLayout()
@@ -211,8 +232,10 @@ void KWStatisticsWidget::initLayout()
     m_linesLayout->addWidget(m_linesLabel);
     m_linesLayout->addWidget(m_countLines);
 
-    // The button that opens the preferences dialog.
-    m_mainBox->addWidget(m_preferencesButton);
+    if (!shortVersion) {
+        // The button that opens the preferences dialog.
+        m_mainBox->addWidget(m_preferencesButton);
+    }
 
     setLayout(m_mainBox); // FIXME: Is this necessary?
 }

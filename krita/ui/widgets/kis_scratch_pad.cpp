@@ -30,7 +30,7 @@
 #include <KoAbstractGradient.h>
 
 #include <kis_cursor.h>
-#include <kis_color_picker_utils.h>
+#include <kis_tool_utils.h>
 #include <kis_paint_layer.h>
 #include <kis_paint_device.h>
 #include <kis_gradient_painter.h>
@@ -78,11 +78,15 @@ public:
     {
     }
 
-    QRect bounds() const {
+    virtual ~KisScratchPadDefaultBounds() {}
+
+    virtual QRect bounds() const {
         return m_scratchPad->imageBounds();
     }
 
 private:
+    Q_DISABLE_COPY(KisScratchPadDefaultBounds)
+
     KisScratchPad *m_scratchPad;
 };
 
@@ -99,7 +103,8 @@ KisScratchPad::KisScratchPad(QWidget *parent)
     m_cursor = KisCursor::load("tool_freehand_cursor.png", 5, 5);
     setCursor(m_cursor);
 
-    QImage checkImage = KisCanvasWidgetBase::checkImage();
+    KisConfig cfg;
+    QImage checkImage = KisCanvasWidgetBase::createCheckersImage(cfg.checkSize());
     m_checkBrush = QBrush(checkImage);
 
 
@@ -193,11 +198,13 @@ void KisScratchPad::beginStroke(KoPointerEvent *event)
 {
     KoCanvasResourceManager *resourceManager = m_resourceProvider->resourceManager();
 
-    m_helper->initPaint(event, resourceManager,
+    m_helper->initPaint(event,
+                        resourceManager,
                         0,
                         m_updateScheduler,
                         m_undoAdapter,
-                        m_paintLayer);
+                        m_paintLayer,
+                        m_paintLayer->paintDevice()->defaultBounds());
 }
 
 void KisScratchPad::doStroke(KoPointerEvent *event)
@@ -295,8 +302,8 @@ void KisScratchPad::paintEvent ( QPaintEvent * event ) {
                                                alignedImageRect.y(),
                                                alignedImageRect.width(),
                                                alignedImageRect.height(),
-                                               KoColorConversionTransformation::IntentPerceptual,
-                                               KoColorConversionTransformation::BlackpointCompensation);
+                                               KoColorConversionTransformation::InternalRenderingIntent,
+                                               KoColorConversionTransformation::InternalConversionFlags);
 
     QPainter gc(this);
     gc.fillRect(event->rect(), m_checkBrush);
@@ -339,7 +346,7 @@ void KisScratchPad::setupScratchPad(KisCanvasResourceProvider* resourceProvider,
 
     m_paintLayer = new KisPaintLayer(0, "ScratchPad", OPACITY_OPAQUE_U8, paintDevice);
     m_paintLayer->setGraphListener(m_nodeListener);
-    paintDevice->setDefaultBounds(new KisScratchPadDefaultBounds(this));
+    m_paintLayer->paintDevice()->setDefaultBounds(new KisScratchPadDefaultBounds(this));
 
     fillDefault();
 }
@@ -355,7 +362,7 @@ QImage KisScratchPad::cutoutOverlay() const
     KisPaintDeviceSP paintDevice = m_paintLayer->paintDevice();
 
     QRect rc = widgetToDocument().mapRect(m_cutoutOverlay);
-    QImage rawImage = paintDevice->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height(), KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
+    QImage rawImage = paintDevice->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height(), KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags);
 
     QImage scaledImage = rawImage.scaled(m_cutoutOverlay.size(),
                                          Qt::IgnoreAspectRatio,

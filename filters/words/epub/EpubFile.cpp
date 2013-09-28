@@ -153,7 +153,6 @@ KoFilter::ConversionStatus EpubFile::writeOpf(KoStore *epubStore,
     writer.startElement("metadata");
 
     // Required elements are: title, language and identifier
-
     writer.startElement("dc:title");
     writer.addTextNode(metadata.value("title"));
     writer.endElement(); // dc:title
@@ -176,7 +175,15 @@ KoFilter::ConversionStatus EpubFile::writeOpf(KoStore *epubStore,
     writer.addTextNode("123456789X");  // FIXME: Where to get this?
     writer.endElement(); // dc:identifier
 
-    // FIXME: dc:creator and many more (optional)
+    writer.startElement("dc:creator");
+    writer.addTextNode(metadata.value("creator"));  // It's the "Author" profile name
+    writer.endElement(); // dc:creator
+
+    writer.startElement("dc:subject");
+    writer.addTextNode("");  // FIXME: Here should come suject info with form : Fiction &amp; Fantasy &amp; ...
+    writer.endElement(); // dc:subject
+
+    // FIXME: many more (optional)
 
     writer.endElement(); // metadata
 
@@ -208,7 +215,7 @@ KoFilter::ConversionStatus EpubFile::writeOpf(KoStore *epubStore,
 
     writer.endElement(); // manifest
 
-    // ==== spine ==== 
+    // ==== spine ====
     writer.startElement("spine");
     writer.addAttribute("toc", "ncx");
 
@@ -220,6 +227,7 @@ KoFilter::ConversionStatus EpubFile::writeOpf(KoStore *epubStore,
             writer.startElement("itemref");
             writer.addAttribute("idref", file->m_id);
             writer.endElement(); // itemref
+            break;
         }
     }
     foreach(FileInfo *file, files()) {
@@ -241,6 +249,41 @@ KoFilter::ConversionStatus EpubFile::writeOpf(KoStore *epubStore,
     }
 
     writer.endElement(); // spine
+
+    /*
+    This part is only efficient in EPub2.X
+    In fact the <guide> element is ignores by EPub3 readers
+    For more info. see official specifications
+    */
+    bool atLeastOneInfo = false;
+
+    foreach (FileInfo *file, files()) {
+        // Here we coul expend the filter with cover | toc | index, etc..
+        // For now, be simple
+        if ( file->m_id == "cover") {
+            atLeastOneInfo = true;
+            break;
+        }
+    }
+
+    // If we have something interesting to point out, write <guide> element
+    if (atLeastOneInfo) {
+        // ==== Guide ====
+        writer.startElement("guide");
+
+        //if there is a cover
+        foreach (FileInfo *file, files()) {
+            if ( file->m_id == "cover") {
+                writer.startElement("reference");
+                writer.addAttribute("href", "cover.xhtml");
+                writer.addAttribute("type", "cover");
+                writer.endElement(); // reference
+                break;
+            }
+        }
+
+        writer.endElement(); // guide
+    }
 
     writer.endElement(); // package
 
@@ -339,6 +382,7 @@ KoFilter::ConversionStatus EpubFile::writeNcx(KoStore *epubStore,
 
             writer.endElement(); // navePoint
             playOrder ++;
+            break;
         }
     }
 

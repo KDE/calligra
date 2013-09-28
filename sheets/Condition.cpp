@@ -331,26 +331,26 @@ QString Conditions::saveOdfConditionValue(const Conditional &condition, ValueCon
         value = "cell-content()<=" + converter->asString(condition.value1).asString();
         break;
     case Conditional::Between:
-        value = "cell-content-is-between(";
-        value += converter->asString(condition.value1).asString();
-        value += ',';
-        value += converter->asString(condition.value2).asString();
-        value += ')';
+        value = "cell-content-is-between(" +
+                converter->asString(condition.value1).asString() +
+                ',' +
+                converter->asString(condition.value2).asString() +
+                ')';
         break;
     case Conditional::DifferentTo:
         value = "cell-content()!=" + converter->asString(condition.value1).asString();
         break;
     case Conditional::Different:
-        value = "cell-content-is-not-between(";
-        value += converter->asString(condition.value1).asString();
-        value += ',';
-        value += converter->asString(condition.value2).asString();
-        value += ')';
+        value = "cell-content-is-not-between(" +
+                converter->asString(condition.value1).asString() +
+                ',' +
+                converter->asString(condition.value2).asString() +
+                ')';
         break;
     case Conditional::IsTrueFormula:
-        value = "is-true-formula(";
-        value += Odf::encodeFormula(condition.value1.asString());
-        value += ')';
+        value = "is-true-formula(" +
+                Odf::encodeFormula(condition.value1.asString()) +
+                ')';
     }
     return value;
 }
@@ -446,24 +446,24 @@ void Conditions::loadOdfConditionValue(const QString &styleCondition, Conditiona
 {
     QString val(styleCondition);
     if (val.contains("cell-content()")) {
-        val = val.remove("cell-content()");
+        val.remove("cell-content()");
         loadOdfCondition(val, newCondition, parser);
     } else if (val.contains("value()")) {
-        val = val.remove("value()");
+        val.remove("value()");
         loadOdfCondition(val, newCondition, parser);
     }
 
     //GetFunction ::= cell-content-is-between(Value, Value) | cell-content-is-not-between(Value, Value)
     //for the moment we support just int/double value, not text/date/time :(
     if (val.contains("cell-content-is-between(")) {
-        val = val.remove("cell-content-is-between(");
-        val = val.remove(')');
+        val.remove("cell-content-is-between(");
+        val.remove(')');
         QStringList listVal = val.split(',', QString::SkipEmptyParts);
         loadOdfValidationValue(listVal, newCondition, parser);
         newCondition.cond = Conditional::Between;
     } else if (val.contains("cell-content-is-not-between(")) {
-        val = val.remove("cell-content-is-not-between(");
-        val = val.remove(')');
+        val.remove("cell-content-is-not-between(");
+        val.remove(')');
         QStringList listVal = val.split(',', QString::SkipEmptyParts);
         loadOdfValidationValue(listVal, newCondition, parser);
         newCondition.cond = Conditional::Different;

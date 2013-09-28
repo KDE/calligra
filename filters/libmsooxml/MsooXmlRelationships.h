@@ -25,7 +25,7 @@
 #ifndef MSOOXMLRELATIONSHIPS_H
 #define MSOOXMLRELATIONSHIPS_H
 
-#include "msooxml_export.h"
+#include "komsooxml_export.h"
 
 struct KoOdfWriters;
 
@@ -36,7 +36,7 @@ class MsooXmlImport;
 //! Global document relationships handler.
 /*! It supports delayed loading of any *.xml.rels file. */
 //! @todo add write methods and saving support
-class MSOOXML_EXPORT MsooXmlRelationships
+class KOMSOOXML_EXPORT MsooXmlRelationships
 {
 public:
     explicit MsooXmlRelationships(MsooXmlImport& importer, KoOdfWriters *writers, QString& errorMessage);

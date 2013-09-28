@@ -596,8 +596,11 @@ const Calligra::Sheets::Token& TokenStack::top(unsigned index)
 
 void TokenStack::ensureSpace()
 {
-    while ((int) topIndex >= size())
-        resize(size() + 10);
+    int add = int(topIndex) - size();
+    if (add >= 0) {
+        add = (add / 10 + 1) * 10;
+        resize(size() + add);
+    }
 }
 
 // helper function: give operator precedence

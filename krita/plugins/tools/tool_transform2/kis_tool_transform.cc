@@ -852,7 +852,7 @@ void KisToolTransform::setTransformFunction(QPointF mousePos, Qt::KeyboardModifi
 
 void KisToolTransform::mousePressEvent(KoPointerEvent *event)
 {
-    if (!PRESS_CONDITION_OM(event, KisTool::HOVER_MODE, Qt::LeftButton, Qt::ControlModifier)) {
+    if (!PRESS_CONDITION_OM(event, KisTool::HOVER_MODE, Qt::LeftButton, Qt::ControlModifier | Qt::ShiftModifier)) {
 
         KisTool::mousePressEvent(event);
         return;
@@ -1927,23 +1927,19 @@ void KisToolTransform::updateSelectionPath()
 {
     m_selectionPath = QPainterPath();
 
-    QVector<QPolygon> selectionOutline;
+    QPainterPath selectionOutline;
     KisSelectionSP selection = currentSelection();
 
-    if (selection) {
-        selectionOutline = selection->outline();
+    if (selection && selection->outlineCacheValid()) {
+        selectionOutline = selection->outlineCache();
     } else {
-        selectionOutline << m_selectedPortionCache->exactBounds();
+        selectionOutline.addRect(m_selectedPortionCache->exactBounds());
     }
 
     const KisCoordinatesConverter *converter = m_canvas->coordinatesConverter();
     QTransform i2f = converter->imageToDocumentTransform() * converter->documentToFlakeTransform();
 
-    foreach(const QPolygon &polygon, selectionOutline) {
-        QPolygon p = i2f.map(polygon);
-
-        m_selectionPath.addPolygon(p);
-    }
+    m_selectionPath = i2f.map(selectionOutline);
 }
 
 void KisToolTransform::initThumbnailImage(KisPaintDeviceSP previewDevice)
@@ -1969,11 +1965,14 @@ void KisToolTransform::initThumbnailImage(KisPaintDeviceSP previewDevice)
             createThumbnail(thumbRect.width(),
                             thumbRect.height(),
                             srcRect,
-                            KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
+                            KoColorConversionTransformation::InternalRenderingIntent,
+                            KoColorConversionTransformation::InternalConversionFlags);
         m_thumbToImageTransform = scaleTransform.inverted();
 
     } else {
-        m_origImg = m_selectedPortionCache->convertToQImage(0, x, y, w, h, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
+        m_origImg = m_selectedPortionCache->convertToQImage(0, x, y, w, h,
+                                                            KoColorConversionTransformation::InternalRenderingIntent,
+                                                            KoColorConversionTransformation::InternalConversionFlags);
         m_thumbToImageTransform = QTransform();
     }
 
@@ -2050,7 +2049,7 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode)
             !currentNode->paintDevice();
     }
 
-    TransformStrokeStrategy *strategy = new TransformStrokeStrategy(currentNode, currentSelection(), image()->postExecutionUndoAdapter(), image()->undoAdapter());
+    TransformStrokeStrategy *strategy = new TransformStrokeStrategy(currentNode, currentSelection(), image()->postExecutionUndoAdapter());
     KisPaintDeviceSP previewDevice = strategy->previewDevice();
 
     KisSelectionSP selection = currentSelection();

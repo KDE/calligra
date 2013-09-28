@@ -24,7 +24,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include "kexitableviewdata.h"
+#include <db/tableviewdata.h>
 #include <db/queryschema.h>
 #include <kexiutils/utils.h>
 #include <kexi_global.h>

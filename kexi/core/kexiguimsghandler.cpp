@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2013 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -37,22 +37,21 @@ KexiGUIMessageHandler::~KexiGUIMessageHandler()
 
 /*virtual*/
 void
-KexiGUIMessageHandler::showErrorMessage(KexiDB::Object *obj,
-                                        const QString& msg)
+KexiGUIMessageHandler::showErrorMessageInternal(KexiDB::Object *obj, const QString& msg)
 {
     QString _msg(msg);
     if (!obj) {
-        showErrorMessage(_msg);
+        showErrorMessageInternal(_msg);
         return;
     }
     QString details;
     KexiDB::getHTMLErrorMesage(obj, _msg, details);
-    showErrorMessage(_msg, details);
+    showErrorMessageInternal(_msg, details);
 }
 
 /*virtual*/
 void
-KexiGUIMessageHandler::showErrorMessage(const QString &title, const QString &details)
+KexiGUIMessageHandler::showErrorMessageInternal(const QString &title, const QString &details)
 {
     showMessage(Error, title, details);
 }
@@ -166,21 +165,22 @@ void KexiGUIMessageHandler::showWarningContinueMessage(const QString &title, con
 #endif
 }
 
-int KexiGUIMessageHandler::askQuestion(const QString& message,
-                                       KMessageBox::DialogType dlgType, KMessageBox::ButtonCode defaultResult,
-                                       const KGuiItem &buttonYes,
-                                       const KGuiItem &buttonNo,
-                                       const QString &dontShowAskAgainName,
-                                       KMessageBox::Options options)
+int KexiGUIMessageHandler::askQuestionInternal(const QString& message,
+                                               KMessageBox::DialogType dlgType, KMessageBox::ButtonCode defaultResult,
+                                               const KGuiItem &buttonYes,
+                                               const KGuiItem &buttonNo,
+                                               const QString &dontShowAskAgainName,
+                                               KMessageBox::Options options)
 {
     Q_UNUSED(defaultResult);
-    if (KMessageBox::WarningContinueCancel == dlgType)
+    if (KMessageBox::WarningContinueCancel == dlgType) {
         return KMessageBox::warningContinueCancel(m_messageHandlerParentWidget,
                 message, QString(), buttonYes, KStandardGuiItem::cancel(),
                 dontShowAskAgainName, options);
-    else
+    }
+    else {
         return KMessageBox::messageBox(m_messageHandlerParentWidget,
                                        dlgType, message, QString(), buttonYes, buttonNo, KStandardGuiItem::cancel(),
                                        dontShowAskAgainName, options);
+    }
 }
-

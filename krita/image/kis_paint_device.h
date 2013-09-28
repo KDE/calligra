@@ -356,7 +356,7 @@ public:
      * @param data The address of the memory to receive the bytes read
      * @param rect The rectangle in the paint device to read from
      */
-    void readBytes(quint8 * data, const QRect &rect);
+    void readBytes(quint8 * data, const QRect &rect) const;
 
     /**
      * Copy the bytes in data into the rect specified by x, y, w, h. If the
@@ -386,7 +386,7 @@ public:
      * paint device. If the specified area is larger than the paint
      * device's extent, the default pixel will be read.
      */
-    QVector<quint8*> readPlanarBytes(qint32 x, qint32 y, qint32 w, qint32 h);
+    QVector<quint8*> readPlanarBytes(qint32 x, qint32 y, qint32 w, qint32 h) const;
 
     /**
      * Write the data in the separate arrays to the channes. If there
@@ -409,8 +409,8 @@ public:
      * @return a command that can be used to undo the conversion.
      */
     KUndo2Command* convertTo(const KoColorSpace * dstColorSpace,
-                             KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual,
-                             KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::Empty);
+                             KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::InternalRenderingIntent,
+                             KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::InternalConversionFlags);
 
     /**
      * Changes the profile of the colorspace of this paint device to the given
@@ -436,8 +436,8 @@ public:
      * like sRGB).
      */
     virtual QImage convertToQImage(const KoColorProfile *dstProfile, qint32 x, qint32 y, qint32 w, qint32 h,
-                                   KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual,
-                                   KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::Empty) const;
+                                   KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::InternalRenderingIntent,
+                                   KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::InternalConversionFlags) const;
 
     /**
      * Create an RGBA QImage from a rectangle in the paint device. The
@@ -448,8 +448,8 @@ public:
      * like sRGB).
      */
     virtual QImage convertToQImage(const KoColorProfile *  dstProfile,
-                                   KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual,
-                                   KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::Empty) const;
+                                   KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::InternalRenderingIntent,
+                                   KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::InternalConversionFlags) const;
 
     /**
      * Creates a paint device thumbnail of the paint device, retaining
@@ -474,15 +474,15 @@ public:
      * @param rect: only this rect will be used for the thumbnail
      */
     virtual QImage createThumbnail(qint32 maxw, qint32 maxh, QRect rect,
-                                   KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual,
-                                   KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::Empty);
+                                   KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::InternalRenderingIntent,
+                                   KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::InternalConversionFlags);
 
     /**
      * Cached version of createThumbnail(qint32 maxw, qint32 maxh, const KisSelection *selection, QRect rect)
      */
     virtual QImage createThumbnail(qint32 maxw, qint32 maxh,
-                                   KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual,
-                                   KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::Empty);
+                                   KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::InternalRenderingIntent,
+                                   KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::InternalConversionFlags);
 
     /**
      * Fill c and opacity with the values found at x and y.
@@ -576,6 +576,27 @@ public:
     KisPaintDeviceSP createCompositionSourceDevice() const;
 
     /**
+     * The same as createCompositionSourceDevice(), but initializes the
+     * newly created device with the content of \p cloneSource
+     *
+     * \see createCompositionSourceDevice()
+     */
+    KisPaintDeviceSP createCompositionSourceDevice(KisPaintDeviceSP cloneSource) const;
+
+    /**
+     * The same as createCompositionSourceDevice(), but initializes
+     * the newly created device with the *rough* \p roughRect of
+     * \p cloneSource.
+     *
+     * "Rough rect" means that it may copy a bit more than
+     * requested. It is expected that the caller will not use the area
+     * outside \p roughRect.
+     *
+     * \see createCompositionSourceDevice()
+     */
+    KisPaintDeviceSP createCompositionSourceDevice(KisPaintDeviceSP cloneSource, const QRect roughRect) const;
+
+    /**
      * This is a convenience method for createCompositionSourceDevice()
      *
      * \see createCompositionSourceDevice()
@@ -637,21 +658,15 @@ public:
 public:
 
     KisHLineIteratorSP createHLineIteratorNG(qint32 x, qint32 y, qint32 w);
-
     KisHLineConstIteratorSP createHLineConstIteratorNG(qint32 x, qint32 y, qint32 w) const;
 
     KisVLineIteratorSP createVLineIteratorNG(qint32 x, qint32 y, qint32 h);
-
     KisVLineConstIteratorSP createVLineConstIteratorNG(qint32 x, qint32 y, qint32 h) const;
 
-    KisRectIteratorSP createRectIteratorNG(qint32 x, qint32 y, qint32 w, qint32 h);
-    KisRectIteratorSP createRectIteratorNG(const QRect& r);
-
-    KisRectConstIteratorSP createRectConstIteratorNG(qint32 x, qint32 y, qint32 w, qint32 h) const;
-    KisRectConstIteratorSP createRectConstIteratorNG(const QRect& r) const;
+    KisRectIteratorSP createRectIteratorNG(const QRect &rc);
+    KisRectConstIteratorSP createRectConstIteratorNG(const QRect &rc) const;
 
     KisRandomAccessorSP createRandomAccessorNG(qint32 x, qint32 y);
-
     KisRandomConstAccessorSP createRandomConstAccessorNG(qint32 x, qint32 y) const;
 
     /**
@@ -708,39 +723,18 @@ private:
     friend class KisPainter;
 
     /**
-     * Get the number of contiguous columns starting at x, valid for all values
-     * of y between minY and maxY.
-     */
-    qint32 numContiguousColumns(qint32 x, qint32 minY, qint32 maxY) const;
-
-    /**
-     * Get the number of contiguous rows starting at y, valid for all values
-     * of x between minX and maxX.
-     */
-    qint32 numContiguousRows(qint32 y, qint32 minX, qint32 maxX) const;
-
-    /**
-     * Get the row stride at pixel (x, y). This is the number of bytes to add to a
-     * pointer to pixel (x, y) to access (x, y + 1).
-     */
-    qint32 rowStride(qint32 x, qint32 y) const;
-
-    /**
      * Return a vector with in order the size in bytes of the channels
      * in the colorspace of this paint device.
      */
-    QVector<qint32> channelSizes();
+    QVector<qint32> channelSizes() const;
 
-private:
+protected:
     friend class KisSelectionTest;
     KisNodeWSP parentNode() const;
 
 private:
-    KisDataManagerSP m_datamanager;
-
     struct Private;
     Private * const m_d;
-
 };
 
 #endif // KIS_PAINT_DEVICE_IMPL_H_

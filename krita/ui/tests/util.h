@@ -29,7 +29,6 @@
 #include <KoColorSpace.h>
 #include <KoPathShape.h>
 
-#include "kis_part2.h"
 #include <kis_count_visitor.h>
 #include "kis_types.h"
 #include "filter/kis_filter_registry.h"
@@ -55,7 +54,7 @@ KisSelectionSP createPixelSelection(KisPaintDeviceSP paintDevice)
 {
     KisSelectionSP pixelSelection = new KisSelection(new KisSelectionDefaultBounds(paintDevice));
 
-    KisFillPainter gc(pixelSelection->getOrCreatePixelSelection());
+    KisFillPainter gc(pixelSelection->pixelSelection());
     gc.fillRect(10, 10, 200, 200, KoColor(gc.device()->colorSpace()));
     gc.fillRect(150, 150, 200, 200, KoColor(QColor(100, 100, 100, 100), gc.device()->colorSpace()));
     gc.end();
@@ -86,10 +85,7 @@ KisDoc2* createCompleteDocument()
 {
     KisImageWSP image = new KisImage(0, 1024, 1024, KoColorSpaceRegistry::instance()->rgb8(), "test for roundtrip", false);
 
-    // FIXME: p will leak here
-    KisPart2 *p = new KisPart2();
-    KisDoc2 *doc = new KisDoc2(p);
-    p->setDocument(doc);
+    KisDoc2 *doc = new KisDoc2();
 
     doc->setCurrentImage(image);
     doc->documentInfo()->setAboutInfo("title", image->objectName());
@@ -195,10 +191,7 @@ KisDoc2* createEmptyDocument()
 {
     KisImageWSP image = new KisImage(0, 1024, 1024, KoColorSpaceRegistry::instance()->rgb8(), "test for roundtrip", false);
 
-    // FIXME: p will leak here
-    KisPart2 *p = new KisPart2();
-    KisDoc2 *doc = new KisDoc2(p);
-    p->setDocument(doc);
+    KisDoc2 *doc = new KisDoc2();
 
     doc->setCurrentImage(image);
     doc->documentInfo()->setAboutInfo("title", image->objectName());

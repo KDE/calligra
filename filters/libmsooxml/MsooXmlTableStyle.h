@@ -20,7 +20,7 @@
 #ifndef MSOOXMLTABLESTYLE_H
 #define MSOOXMLTABLESTYLE_H
 
-#include "msooxml_export.h"
+#include "komsooxml_export.h"
 
 #include <KoCellStyle.h>
 #include <KoBorder.h>
@@ -34,7 +34,7 @@ namespace MSOOXML {
 
 /// Reading and storage
 
-struct MSOOXML_EXPORT TableStyleProperties
+struct KOMSOOXML_EXPORT TableStyleProperties
 {
     TableStyleProperties()
     :    target(Table)
@@ -95,7 +95,7 @@ struct MSOOXML_EXPORT TableStyleProperties
     KoGenStyle paragraphStyle;
 };
 
-class MSOOXML_EXPORT TableStyle
+class KOMSOOXML_EXPORT TableStyle
 {
 public:
 
@@ -111,7 +111,7 @@ private:
 
 /// Instantiation classes
 
-class MSOOXML_EXPORT LocalTableStyles
+class KOMSOOXML_EXPORT LocalTableStyles
 {
 public:
     LocalTableStyles();
@@ -124,7 +124,7 @@ private:
     QMap<QPair<int,int>, TableStyleProperties*> m_properties;
 };
 
-class MSOOXML_EXPORT TableStyleConverterProperties
+class KOMSOOXML_EXPORT TableStyleConverterProperties
 {
 public:
     TableStyleConverterProperties();
@@ -159,7 +159,7 @@ private:
     MSOOXML::TableStyleProperties* m_localDefaultCellStyle;
 };
 
-class MSOOXML_EXPORT TableStyleConverter
+class KOMSOOXML_EXPORT TableStyleConverter
 {
 public:
     TableStyleConverter(int row, int column);

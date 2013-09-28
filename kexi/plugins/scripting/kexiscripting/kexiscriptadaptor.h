@@ -293,7 +293,7 @@ private:
         return project() ? project()->itemForClass(partClass(className), name) : 0;
     }
     QString partClass(const QString& partClass) const {
-        return partClass.contains(".") ? partClass : (QString::fromLatin1("org.kexi-project.")+partClass);
+        return partClass.contains('.') ? partClass : (QString::fromLatin1("org.kexi-project.")+partClass);
     }
     QString viewModeToString(Kexi::ViewMode mode, const QString& defaultViewMode = QString()) const {
         switch (mode) {

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2013 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -97,7 +97,7 @@ QString ConnectionData::serverInfoString(bool addUser) const
     const QString& i18nFile = i18n("file");
 
     if (!m_dbFileName.isEmpty())
-        return i18nFile + ": " + (m_dbPath.isEmpty() ? "" : m_dbPath
+        return i18nFile + ": " + (m_dbPath.isEmpty() ? QString() : m_dbPath
                                   + QDir::separator()) + m_dbFileName;
 
     DriverManager man;
@@ -111,4 +111,12 @@ QString ConnectionData::serverInfoString(bool addUser) const
            + (hostName.isEmpty() ? QString("localhost") : hostName)
            + (port != 0 ? (QString(":") + QString::number(port)) : QString());
 }
+
+bool ConnectionData::passwordNeeded() const
+{
+    return !savePassword
+           && fileName().isEmpty(); //!< @todo temp.: change this if there are
+                                    //!< file-based drivers requiring a password
+}
+
 

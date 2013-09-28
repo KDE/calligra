@@ -44,7 +44,7 @@ public:
     virtual ~KexiDBComboBox();
 
     //! Implemented for KexiComboBoxBase: form has no 'related data' model (only the full database model)
-    virtual KexiTableViewColumn *column() const {
+    virtual KexiDB::TableViewColumn *column() const {
         return 0;
     }
 

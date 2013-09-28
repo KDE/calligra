@@ -22,6 +22,7 @@
 #include "kis_kra_utils.h"
 
 #include <QTextStream>
+#include <QDir>
 
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
@@ -40,15 +41,16 @@
 #include <kis_selection_mask.h>
 #include <kis_shape_layer.h>
 #include <kis_transparency_mask.h>
-
+#include <kis_file_layer.h>
 
 using namespace KRA;
 
-KisSaveXmlVisitor::KisSaveXmlVisitor(QDomDocument doc, const QDomElement & element, quint32 &count, bool root) :
-        KisNodeVisitor(),
-        m_doc(doc),
-        m_count(count),
-        m_root(root)
+KisSaveXmlVisitor::KisSaveXmlVisitor(QDomDocument doc, const QDomElement & element, quint32 &count, const QString &url, bool root)
+    : KisNodeVisitor()
+    , m_doc(doc)
+    , m_count(count)
+    , m_url(url)
+    , m_root(root)
 {
     Q_ASSERT(!element.isNull());
     m_elem = element;
@@ -64,6 +66,22 @@ bool KisSaveXmlVisitor::visit(KisExternalLayer * layer)
     if (layer->inherits("KisShapeLayer")) {
         QDomElement layerElement = m_doc.createElement(LAYER);
         saveLayer(layerElement, SHAPE_LAYER, layer);
+        m_elem.appendChild(layerElement);
+        m_count++;
+        return saveMasks(layer, layerElement);
+    }
+    else if (layer->inherits("KisFileLayer")) {
+        QDomElement layerElement = m_doc.createElement(LAYER);
+        saveLayer(layerElement, FILE_LAYER, layer);
+
+        QString path = dynamic_cast<KisFileLayer*>(layer)->path();
+
+        QDir d(QFileInfo(m_url).absolutePath());
+
+        layerElement.setAttribute("source", d.relativeFilePath(path));
+        layerElement.setAttribute("scale", dynamic_cast<KisFileLayer*>(layer)->scaleToImageResolution() ?  "true" : "false");
+        layerElement.setAttribute(COLORSPACE_NAME, layer->original()->colorSpace()->id());
+
         m_elem.appendChild(layerElement);
         m_count++;
         return saveMasks(layer, layerElement);
@@ -103,11 +121,10 @@ bool KisSaveXmlVisitor::visit(KisGroupLayer *layer)
         saveLayer(layerElement, GROUP_LAYER, layer);
         m_elem.appendChild(layerElement);
     }
-
     QDomElement elem = m_doc.createElement(LAYERS);
     Q_ASSERT(!layerElement.isNull());
     layerElement.appendChild(elem);
-    KisSaveXmlVisitor visitor(m_doc, elem, m_count);
+    KisSaveXmlVisitor visitor(m_doc, elem, m_count, m_url, false);
     visitor.setSelectedNodes(m_selectedNodes);
     m_count++;
     bool success = visitor.visitAllInverse(layer);
@@ -225,9 +242,9 @@ void KisSaveXmlVisitor::saveLayer(QDomElement & el, const QString & layerType, c
     m_nodeFileNames[layer] = LAYER + QString::number(m_count);
 
     dbgFile << "Saved layer "
-    << layer->name()
-    << " of type " << layerType
-    << " with filename " << LAYER + QString::number(m_count);
+            << layer->name()
+            << " of type " << layerType
+            << " with filename " << LAYER + QString::number(m_count);
 }
 
 void KisSaveXmlVisitor::saveMask(QDomElement & el, const QString & maskType, const KisMask * mask)
@@ -248,9 +265,9 @@ void KisSaveXmlVisitor::saveMask(QDomElement & el, const QString & maskType, con
     m_nodeFileNames[mask] = MASK + QString::number(m_count);
 
     dbgFile << "Saved mask "
-    << mask->name()
-    << " of type " << maskType
-    << " with filename " << MASK + QString::number(m_count);
+            << mask->name()
+            << " of type " << maskType
+            << " with filename " << MASK + QString::number(m_count);
 }
 
 bool KisSaveXmlVisitor::saveMasks(KisNode * node, QDomElement & layerElement)
@@ -259,7 +276,7 @@ bool KisSaveXmlVisitor::saveMasks(KisNode * node, QDomElement & layerElement)
         QDomElement elem = m_doc.createElement(MASKS);
         Q_ASSERT(!layerElement.isNull());
         layerElement.appendChild(elem);
-        KisSaveXmlVisitor visitor(m_doc, elem, m_count);
+        KisSaveXmlVisitor visitor(m_doc, elem, m_count, m_url, false);
         visitor.setSelectedNodes(m_selectedNodes);
         bool success =  visitor.visitAllInverse(node);
 

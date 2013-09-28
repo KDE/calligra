@@ -29,16 +29,16 @@ namespace Calligra
 namespace Sheets
 {
 
-static const char* description = I18N_NOOP("Calligra Spreadsheet Application");
+static const char description[] = I18N_NOOP("Calligra Spreadsheet Application");
 
 // Always the same as the Calligra version
-static const char* version = CALLIGRA_VERSION_STRING;
+static const char version[] = CALLIGRA_VERSION_STRING;
 
-KAboutData * newAboutData()
+static KAboutData * newAboutData()
 {
     KAboutData * aboutData = new KAboutData("sheets", 0, ki18nc("application name", "Calligra Sheets"),
                                             version, ki18n(description), KAboutData::License_LGPL,
-                                            ki18n("(c) 1998-2011, The Calligra Sheets Team"), KLocalizedString(),
+                                            ki18n("(c) 1998-2013, The Calligra Sheets Team"), KLocalizedString(),
                                             "http://www.calligra.org/sheets/");
     aboutData->setProductName("calligrasheets"); // for bugs.kde.org
     aboutData->setProgramIconName(QLatin1String("calligrasheets"));

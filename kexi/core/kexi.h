@@ -136,8 +136,6 @@ protected:
     KexiDB::MessageHandler* msgHandler;
 };
 
-KEXICORE_EXPORT QString msgYouCanImproveData();
-
 }//namespace Kexi
 
 //! Icon name for database servers

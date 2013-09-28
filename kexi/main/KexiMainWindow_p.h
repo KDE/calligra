@@ -153,7 +153,6 @@ private:
     QVBoxLayout *lyr;
 };
 
-//#include <qimageblitz/qimageblitz.h>
 #include <kfadewidgeteffect.h>
 #include <QStyleOptionMenuItem>
 #include <QGraphicsOpacityEffect>
@@ -562,7 +561,6 @@ public:
 
 #include <ktabbar.h>
 #include <QTabBar>
-#include <QPainter>
 
 class KexiTabbedToolBarStyle;
 
@@ -1916,10 +1914,10 @@ public:
         m_findDialog->setButtonsEnabled(true);
 
         /* //update "look in" list
-          KexiTableViewColumn::List columns( dataAwareObject()->data()->columns );
+          KexiDB::TableViewColumn::List columns( dataAwareObject()->data()->columns );
           QStringList columnNames;
           QStringList columnCaptions;
-          for (KexiTableViewColumn::ListIterator it(columns); it.current(); ++it) {
+          for (KexiDB::TableViewColumn::ListIterator it(columns); it.current(); ++it) {
             if (!it.current()->visible())
               continue;
             columnNames.append( it.current()->field()->name() );

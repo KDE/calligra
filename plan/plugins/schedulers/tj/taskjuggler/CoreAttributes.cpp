@@ -103,7 +103,7 @@ CoreAttributes::getHierarchNo() const
     do
     {
         if (!text.isEmpty())
-            text = "." + text;
+            text.prepend(QLatin1Char('.'));
         text = QString("%1").arg(ca->hierarchNo) + text;
         ca = ca->getParent();
     }
@@ -144,7 +144,7 @@ CoreAttributes::getHierarchIndex() const
     while (ca)
     {
         if (!text.isEmpty())
-            text = "." + text;
+            text.prepend(QLatin1Char('.'));
         text = QString("%1").arg(ca->hierarchIndex) + text;
         ca = ca->getParent();
     }
@@ -162,7 +162,7 @@ CoreAttributes::getFullName(QString& fullName) const
 {
     fullName.clear();
     for (const CoreAttributes* c = this; c != 0; c = c->parent)
-        fullName = c->name + "." + fullName;
+        fullName = c->name + QLatin1Char('.') + fullName;
     // Remove trailing dot.
     fullName.remove(fullName.length() - 1, 1);
 }
@@ -172,7 +172,7 @@ CoreAttributes::getFullId() const
 {
     QString fullID = id;
     for (const CoreAttributes* c = parent; c != 0; c = c->parent)
-        fullID = c->id + "." + fullID;
+        fullID = c->id + QLatin1Char('.') + fullID;
     return fullID;
 }
 

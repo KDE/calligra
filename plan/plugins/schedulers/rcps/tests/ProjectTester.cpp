@@ -77,7 +77,7 @@ void ProjectTester::initTimezone()
     KConfig config("ktimezonedrc");
     KConfigGroup group(&config, "TimeZones");
     group.writeEntry("ZoneinfoDir", m_tmp.name());
-    group.writeEntry("Zonetab", m_tmp.name() + QString::fromLatin1("zone.tab"));
+    group.writeEntry("Zonetab", QString(m_tmp.name() + QString::fromLatin1("zone.tab")));
     group.writeEntry("LocalZone", QString::fromLatin1("Europe/Berlin"));
     config.sync();
 }

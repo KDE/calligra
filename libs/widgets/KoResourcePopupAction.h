@@ -23,6 +23,8 @@
 
 #include <kaction.h>
 
+#include <QSharedPointer>
+
 class KoShapeBackground;
 class KoAbstractResourceServerAdapter;
 class QModelIndex;
@@ -44,18 +46,18 @@ public:
      */
     virtual ~KoResourcePopupAction();
 
-    KoShapeBackground *currentBackground();
-    void setCurrentBackground(KoShapeBackground *background);
+    QSharedPointer<KoShapeBackground> currentBackground() const;
+    void setCurrentBackground(QSharedPointer<KoShapeBackground> background);
 
 signals:
     /// Emitted when a resource was selected
-    void resourceSelected(KoShapeBackground * background);
+    void resourceSelected(QSharedPointer<KoShapeBackground>  background);
 
 public slots:
     void updateIcon();
 
 private slots:
-    void indexChanged(QModelIndex modelIndex);
+    void indexChanged(const QModelIndex &modelIndex);
 
 private:
     class Private;

@@ -197,26 +197,26 @@ void AccountItemModel::setProject( Project *project )
 {
     if ( m_project ) {
         Accounts *acc = &( m_project->accounts() );
-        disconnect( acc , SIGNAL( changed( Account* ) ), this, SLOT( slotAccountChanged( Account* ) ) );
+        disconnect( acc , SIGNAL(changed(Account*)), this, SLOT(slotAccountChanged(Account*)) );
 
-        disconnect( acc, SIGNAL( accountAdded( const Account* ) ), this, SLOT( slotAccountInserted( const Account* ) ) );
-        disconnect( acc, SIGNAL( accountToBeAdded( const Account*, int ) ), this, SLOT( slotAccountToBeInserted( const Account*, int ) ) );
+        disconnect( acc, SIGNAL(accountAdded(const Account*)), this, SLOT(slotAccountInserted(const Account*)) );
+        disconnect( acc, SIGNAL(accountToBeAdded(const Account*,int)), this, SLOT(slotAccountToBeInserted(const Account*,int)) );
 
-        disconnect( acc, SIGNAL( accountRemoved( const Account* ) ), this, SLOT( slotAccountRemoved( const Account* ) ) );
-        disconnect( acc, SIGNAL( accountToBeRemoved( const Account* ) ), this, SLOT( slotAccountToBeRemoved( const Account* ) ) );
+        disconnect( acc, SIGNAL(accountRemoved(const Account*)), this, SLOT(slotAccountRemoved(const Account*)) );
+        disconnect( acc, SIGNAL(accountToBeRemoved(const Account*)), this, SLOT(slotAccountToBeRemoved(const Account*)) );
     }
     m_project = project;
     m_model.m_project = project;
     if ( project ) {
         Accounts *acc = &( project->accounts() );
         kDebug(planDbg())<<acc;
-        connect( acc, SIGNAL( changed( Account* ) ), this, SLOT( slotAccountChanged( Account* ) ) );
+        connect( acc, SIGNAL(changed(Account*)), this, SLOT(slotAccountChanged(Account*)) );
 
-        connect( acc, SIGNAL( accountAdded( const Account* ) ), this, SLOT( slotAccountInserted( const Account* ) ) );
-        connect( acc, SIGNAL( accountToBeAdded( const Account*, int ) ), this, SLOT( slotAccountToBeInserted( const Account*, int ) ) );
+        connect( acc, SIGNAL(accountAdded(const Account*)), this, SLOT(slotAccountInserted(const Account*)) );
+        connect( acc, SIGNAL(accountToBeAdded(const Account*,int)), this, SLOT(slotAccountToBeInserted(const Account*,int)) );
 
-        connect( acc, SIGNAL( accountRemoved( const Account* ) ), this, SLOT( slotAccountRemoved( const Account* ) ) );
-        connect( acc, SIGNAL( accountToBeRemoved( const Account* ) ), this, SLOT( slotAccountToBeRemoved( const Account* ) ) );
+        connect( acc, SIGNAL(accountRemoved(const Account*)), this, SLOT(slotAccountRemoved(const Account*)) );
+        connect( acc, SIGNAL(accountToBeRemoved(const Account*)), this, SLOT(slotAccountToBeRemoved(const Account*)) );
     }
 }
 
@@ -528,41 +528,41 @@ void CostBreakdownItemModel::setProject( Project *project )
 {
     if ( m_project ) {
         Accounts *acc = &( m_project->accounts() );
-        disconnect( acc , SIGNAL( changed( Account* ) ), this, SLOT( slotAccountChanged( Account* ) ) );
+        disconnect( acc , SIGNAL(changed(Account*)), this, SLOT(slotAccountChanged(Account*)) );
 
-        disconnect( acc, SIGNAL( accountAdded( const Account* ) ), this, SLOT( slotAccountInserted( const Account* ) ) );
-        disconnect( acc, SIGNAL( accountToBeAdded( const Account*, int ) ), this, SLOT( slotAccountToBeInserted( const Account*, int ) ) );
+        disconnect( acc, SIGNAL(accountAdded(const Account*)), this, SLOT(slotAccountInserted(const Account*)) );
+        disconnect( acc, SIGNAL(accountToBeAdded(const Account*,int)), this, SLOT(slotAccountToBeInserted(const Account*,int)) );
 
-        disconnect( acc, SIGNAL( accountRemoved( const Account* ) ), this, SLOT( slotAccountRemoved( const Account* ) ) );
-        disconnect( acc, SIGNAL( accountToBeRemoved( const Account* ) ), this, SLOT( slotAccountToBeRemoved( const Account* ) ) );
+        disconnect( acc, SIGNAL(accountRemoved(const Account*)), this, SLOT(slotAccountRemoved(const Account*)) );
+        disconnect( acc, SIGNAL(accountToBeRemoved(const Account*)), this, SLOT(slotAccountToBeRemoved(const Account*)) );
 
-        disconnect( m_project , SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotDataChanged() ) );
-        disconnect( m_project , SIGNAL( nodeAdded( Node* ) ), this, SLOT( slotDataChanged() ) );
-        disconnect( m_project , SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotDataChanged() ) );
+        disconnect( m_project , SIGNAL(nodeChanged(Node*)), this, SLOT(slotDataChanged()) );
+        disconnect( m_project , SIGNAL(nodeAdded(Node*)), this, SLOT(slotDataChanged()) );
+        disconnect( m_project , SIGNAL(nodeRemoved(Node*)), this, SLOT(slotDataChanged()) );
 
-        disconnect( m_project , SIGNAL( resourceChanged( Resource* ) ), this, SLOT( slotDataChanged() ) );
-        disconnect( m_project , SIGNAL( resourceAdded( const Resource* ) ), this, SLOT( slotDataChanged() ) );
-        disconnect( m_project , SIGNAL( resourceRemoved( const Resource* ) ), this, SLOT( slotDataChanged() ) );
+        disconnect( m_project , SIGNAL(resourceChanged(Resource*)), this, SLOT(slotDataChanged()) );
+        disconnect( m_project , SIGNAL(resourceAdded(const Resource*)), this, SLOT(slotDataChanged()) );
+        disconnect( m_project , SIGNAL(resourceRemoved(const Resource*)), this, SLOT(slotDataChanged()) );
     }
     m_project = project;
     if ( project ) {
         Accounts *acc = &( project->accounts() );
         kDebug(planDbg())<<acc;
-        connect( acc, SIGNAL( changed( Account* ) ), this, SLOT( slotAccountChanged( Account* ) ) );
+        connect( acc, SIGNAL(changed(Account*)), this, SLOT(slotAccountChanged(Account*)) );
 
-        connect( acc, SIGNAL( accountAdded( const Account* ) ), this, SLOT( slotAccountInserted( const Account* ) ) );
-        connect( acc, SIGNAL( accountToBeAdded( const Account*, int ) ), this, SLOT( slotAccountToBeInserted( const Account*, int ) ) );
+        connect( acc, SIGNAL(accountAdded(const Account*)), this, SLOT(slotAccountInserted(const Account*)) );
+        connect( acc, SIGNAL(accountToBeAdded(const Account*,int)), this, SLOT(slotAccountToBeInserted(const Account*,int)) );
 
-        connect( acc, SIGNAL( accountRemoved( const Account* ) ), this, SLOT( slotAccountRemoved( const Account* ) ) );
-        connect( acc, SIGNAL( accountToBeRemoved( const Account* ) ), this, SLOT( slotAccountToBeRemoved( const Account* ) ) );
+        connect( acc, SIGNAL(accountRemoved(const Account*)), this, SLOT(slotAccountRemoved(const Account*)) );
+        connect( acc, SIGNAL(accountToBeRemoved(const Account*)), this, SLOT(slotAccountToBeRemoved(const Account*)) );
 
-        connect( m_project , SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotDataChanged() ) );
-        connect( m_project , SIGNAL( nodeAdded( Node* ) ), this, SLOT( slotDataChanged() ) );
-        connect( m_project , SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotDataChanged() ) );
+        connect( m_project , SIGNAL(nodeChanged(Node*)), this, SLOT(slotDataChanged()) );
+        connect( m_project , SIGNAL(nodeAdded(Node*)), this, SLOT(slotDataChanged()) );
+        connect( m_project , SIGNAL(nodeRemoved(Node*)), this, SLOT(slotDataChanged()) );
 
-        connect( m_project , SIGNAL( resourceChanged( Resource* ) ), this, SLOT( slotDataChanged() ) );
-        connect( m_project , SIGNAL( resourceAdded( const Resource* ) ), this, SLOT( slotDataChanged() ) );
-        connect( m_project , SIGNAL( resourceRemoved( const Resource* ) ), this, SLOT( slotDataChanged() ) );
+        connect( m_project , SIGNAL(resourceChanged(Resource*)), this, SLOT(slotDataChanged()) );
+        connect( m_project , SIGNAL(resourceAdded(const Resource*)), this, SLOT(slotDataChanged()) );
+        connect( m_project , SIGNAL(resourceRemoved(const Resource*)), this, SLOT(slotDataChanged()) );
     }
 }
 

@@ -32,7 +32,7 @@
 
 
 // for calculation of the needed alignment
-#include "config-vc.h"
+#include <config-vc.h>
 #ifdef HAVE_VC
 #include <Vc/Vc>
 #include <Vc/IO>
@@ -41,8 +41,8 @@
 #include <KoOptimizedCompositeOpAlphaDarken32.h>
 #endif
 
-// for memalign()
-#include <malloc.h>
+// for posix_memalign()
+#include <stdlib.h>
 
 const int alpha_pos = 3;
 
@@ -152,10 +152,13 @@ QVector<Tile> generateTiles(int size,
 #endif
 
     for (int i = 0; i < size; i++) {
-        tiles[i].src = (quint8*)memalign(vecSize * 4, numPixels * 4 + srcAlignmentShift) + srcAlignmentShift;
-        tiles[i].dst = (quint8*)memalign(vecSize * 4, numPixels * 4 + dstAlignmentShift) + dstAlignmentShift;
-        tiles[i].mask = (quint8*)memalign(vecSize, numPixels);
-
+        void *ptr = NULL;
+        posix_memalign(&ptr, vecSize * 4, numPixels * 4 + srcAlignmentShift);
+        tiles[i].src = (quint8*)ptr + srcAlignmentShift;
+        posix_memalign(&ptr, vecSize * 4, numPixels * 4 + dstAlignmentShift);
+        tiles[i].dst = (quint8*)ptr + dstAlignmentShift;
+        posix_memalign(&ptr, vecSize, numPixels);
+        tiles[i].mask = (quint8*)ptr;
         generateDataLine(1, numPixels, tiles[i].src, tiles[i].dst, tiles[i].mask, srcAlphaRange, dstAlphaRange);
     }
 
@@ -346,7 +349,7 @@ void benchmarkCompositeOp(const KoCompositeOp *op, const QString &postfix)
 #ifdef HAVE_VC
 
 template<class Compositor>
-void checkRounding()
+void checkRounding(qreal opacity, qreal flow, qreal averageOpacity = -1)
 {
     QVector<Tile> tiles =
         generateTiles(2, 0, 0, ALPHA_RANDOM, ALPHA_RANDOM);
@@ -363,11 +366,29 @@ void checkRounding()
     quint8 *dst2 = tiles[1].dst;
     quint8 *msk2 = tiles[1].mask;
 
+    KoCompositeOp::ParameterInfo params;
+    params.opacity = opacity;
+    params.flow = flow;
+
+    if (averageOpacity >= 0.0) {
+        params._lastOpacityData = averageOpacity;
+        params.lastOpacity = &params._lastOpacityData;
+    }
+
+    params.channelFlags = QBitArray();
+    typename Compositor::OptionalParams optionalParams(params);
+
     for (int i = 0; i < numBlocks; i++) {
-        Compositor::template compositeVector<true,true, VC_IMPL>(src1, dst1, msk1, 0.5, 0.3);
+        Compositor::template compositeVector<true,true, VC_IMPL>(src1, dst1, msk1, params.opacity, optionalParams);
         for (int j = 0; j < vecSize; j++) {
 
-            Compositor::template compositeOnePixelScalar<true, VC_IMPL>(src2, dst2, msk2, 0.5, 0.3, QBitArray());
+            //if (8 * i + j == 7080) {
+            //    qDebug() << "src: " << src2[0] << src2[1] << src2[2] << src2[3];
+            //    qDebug() << "dst: " << dst2[0] << dst2[1] << dst2[2] << dst2[3];
+            //    qDebug() << "msk:" << msk2[0];
+            //}
+
+            Compositor::template compositeOnePixelScalar<true, VC_IMPL>(src2, dst2, msk2, params.opacity, optionalParams);
 
             if(!comparePixels(dst1, dst2, 0)) {
                 qDebug() << "Wrong rounding in pixel:" << 8 * i + j;
@@ -395,17 +416,45 @@ void checkRounding()
 #endif
 
 
-void KisCompositionBenchmark::checkRoundingAlphaDarken()
+void KisCompositionBenchmark::checkRoundingAlphaDarken_05_03()
 {
 #ifdef HAVE_VC
-    checkRounding<AlphaDarkenCompositor32<quint8, quint32> >();
+    checkRounding<AlphaDarkenCompositor32<quint8, quint32> >(0.5,0.3);
+#endif
+}
+
+void KisCompositionBenchmark::checkRoundingAlphaDarken_05_05()
+{
+#ifdef HAVE_VC
+    checkRounding<AlphaDarkenCompositor32<quint8, quint32> >(0.5,0.5);
+#endif
+}
+
+void KisCompositionBenchmark::checkRoundingAlphaDarken_05_07()
+{
+#ifdef HAVE_VC
+    checkRounding<AlphaDarkenCompositor32<quint8, quint32> >(0.5,0.7);
+#endif
+}
+
+void KisCompositionBenchmark::checkRoundingAlphaDarken_05_10()
+{
+#ifdef HAVE_VC
+    checkRounding<AlphaDarkenCompositor32<quint8, quint32> >(0.5,1.0);
+#endif
+}
+
+void KisCompositionBenchmark::checkRoundingAlphaDarken_05_10_08()
+{
+#ifdef HAVE_VC
+    checkRounding<AlphaDarkenCompositor32<quint8, quint32> >(0.5,1.0,0.8);
 #endif
 }
 
 void KisCompositionBenchmark::checkRoundingOver()
 {
 #ifdef HAVE_VC
-    checkRounding<OverCompositor32<quint8, quint32, false, true> >();
+    checkRounding<OverCompositor32<quint8, quint32, false, true> >(0.5, 0.3);
 #endif
 }
 
@@ -523,8 +572,11 @@ void KisCompositionBenchmark::benchmarkUintFloat()
     const int vecSize = Vc::float_v::Size;
 
     const int dataSize = 4096;
-    quint8 *iData = (quint8*) memalign(vecSize, dataSize);
-    float *fData = (float*) memalign(vecSize * 4, dataSize * 4);
+    void *ptr = NULL;
+    posix_memalign(&ptr, vecSize, dataSize);
+    quint8 *iData = (quint8*)ptr;
+    posix_memalign(&ptr, vecSize * 4, dataSize * 4);
+    float *fData = (float*)ptr;
 
     QBENCHMARK {
         for (int i = 0; i < dataSize; i += Vc::float_v::Size) {
@@ -546,8 +598,11 @@ void KisCompositionBenchmark::benchmarkUintIntFloat()
     const int vecSize = Vc::float_v::Size;
 
     const int dataSize = 4096;
-    quint8 *iData = (quint8*) memalign(vecSize, dataSize);
-    float *fData = (float*) memalign(vecSize * 4, dataSize * 4);
+    void *ptr = NULL;
+    posix_memalign(&ptr, vecSize, dataSize);
+    quint8 *iData = (quint8*)ptr;
+    posix_memalign(&ptr, vecSize * 4, dataSize * 4);
+    float *fData = (float*)ptr;
 
     QBENCHMARK {
         for (int i = 0; i < dataSize; i += Vc::float_v::Size) {
@@ -569,8 +624,11 @@ void KisCompositionBenchmark::benchmarkFloatUint()
     const int vecSize = Vc::float_v::Size;
 
     const int dataSize = 4096;
-    quint32 *iData = (quint32*) memalign(vecSize * 4, dataSize * 4);
-    float *fData = (float*) memalign(vecSize * 4, dataSize * 4);
+    void *ptr = NULL;
+    posix_memalign(&ptr, vecSize * 4, dataSize * 4);
+    quint32 *iData = (quint32*)ptr;
+    posix_memalign(&ptr, vecSize * 4, dataSize * 4);
+    float *fData = (float*)ptr;
 
     QBENCHMARK {
         for (int i = 0; i < dataSize; i += Vc::float_v::Size) {
@@ -592,8 +650,11 @@ void KisCompositionBenchmark::benchmarkFloatIntUint()
     const int vecSize = Vc::float_v::Size;
 
     const int dataSize = 4096;
-    quint32 *iData = (quint32*) memalign(vecSize * 4, dataSize * 4);
-    float *fData = (float*) memalign(vecSize * 4, dataSize * 4);
+    void *ptr = NULL;
+    posix_memalign(&ptr, vecSize * 4, dataSize * 4);
+    quint32 *iData = (quint32*)ptr;
+    posix_memalign(&ptr, vecSize * 4, dataSize * 4);
+    float *fData = (float*)ptr;
 
     QBENCHMARK {
         for (int i = 0; i < dataSize; i += Vc::float_v::Size) {

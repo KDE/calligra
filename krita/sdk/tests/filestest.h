@@ -15,6 +15,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#ifndef FILESTEST
+#define FILESTEST
 
 #include "testutil.h"
 
@@ -34,7 +36,6 @@
 #include <KoFilterManager.h>
 
 #include <kis_doc2.h>
-#include <kis_part2.h>
 #include <KoPart.h>
 #include <kis_image.h>
 #include <KoColorSpace.h>
@@ -65,9 +66,7 @@ void testFiles(const QString& _dirname, const QStringList& exclusions, const QSt
                 continue;
             }
 
-            KisPart2 part;
-            KisDoc2 doc(&part);
-            part.setDocument(&doc);
+            KisDoc2 doc;
 
             KoFilterManager manager(&doc);
             manager.setBatchMode(true);
@@ -94,7 +93,7 @@ void testFiles(const QString& _dirname, const QStringList& exclusions, const QSt
             tmpFile.open();
             doc.setBackupFile(false);
             doc.setOutputMimeType("image/png");
-            doc.documentPart()->saveAs("file://" + tmpFile.fileName());
+            doc.documentPart()->saveAs(KUrl("file://" + tmpFile.fileName()));
 
             QImage resultImage(resultFileInfo.absoluteFilePath());
             resultImage = resultImage.convertToFormat(QImage::Format_ARGB32);
@@ -123,3 +122,4 @@ void testFiles(const QString& _dirname, const QStringList& exclusions, const QSt
 }
 
 }
+#endif

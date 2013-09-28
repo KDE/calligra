@@ -47,7 +47,7 @@ KPrFanWipeEffectFactory::~KPrFanWipeEffectFactory()
 {
 }
 
-static const char* s_subTypes[] = {
+static const char* const s_subTypes[] = {
     I18N_NOOP( "Center Right" ),
     I18N_NOOP( "Center Top" ),
     I18N_NOOP( "Center Left" ),

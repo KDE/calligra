@@ -446,19 +446,19 @@ QStringList Resource::typeToStringList( bool trans ) {
             << (trans ? i18nc( "@item:inlistbox resource type", "Team" ) : QString( "Team" ) );
 }
 
-void Resource::setName( const QString n )
+void Resource::setName( const QString &n )
 {
     m_name = n.trimmed();
     changed();
 }
 
-void Resource::setInitials( const QString initials )
+void Resource::setInitials( const QString &initials )
 {
     m_initials = initials.trimmed();
     changed();
 }
 
-void Resource::setEmail( const QString email )
+void Resource::setEmail( const QString &email )
 {
     m_email = email;
     changed();
@@ -509,11 +509,11 @@ DateTime Resource::firstAvailableAfter(const DateTime &, const DateTime & ) cons
     return DateTime();
 }
 
-DateTime Resource::getBestAvailableTime(Duration /*duration*/) {
+DateTime Resource::getBestAvailableTime(const Duration &/*duration*/) {
     return DateTime();
 }
 
-DateTime Resource::getBestAvailableTime(const DateTime /*after*/, const Duration /*duration*/) {
+DateTime Resource::getBestAvailableTime(const DateTime &/*after*/, const Duration &/*duration*/) {
     return DateTime();
 }
 

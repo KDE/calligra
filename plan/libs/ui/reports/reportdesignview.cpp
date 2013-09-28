@@ -171,36 +171,36 @@ tristate ReportDesignView::afterSwitchFrom ( ::ViewMode mode ) {
 
     scr->setWidget ( _rd );
 
-    //plugSharedAction ( "edit_copy", _rd, SLOT ( slotEditCopy() ) );
-    //plugSharedAction ( "edit_cut", _rd, SLOT ( slotEditCut() ) );
-    //plugSharedAction ( "edit_paste", _rd, SLOT ( slotEditPaste() ) );
-    //plugSharedAction ( "edit_delete", _rd, SLOT ( slotEditDelete() ) );
+    //plugSharedAction ( "edit_copy", _rd, SLOT(slotEditCopy()) );
+    //plugSharedAction ( "edit_cut", _rd, SLOT(slotEditCut()) );
+    //plugSharedAction ( "edit_paste", _rd, SLOT(slotEditPaste()) );
+    //plugSharedAction ( "edit_delete", _rd, SLOT(slotEditDelete()) );
 
-    connect ( _rd, SIGNAL ( propertySetChanged() ), this, SLOT ( slotDesignerPropertySetChanged() ) );
-    connect ( _rd, SIGNAL ( dirty() ), this, SLOT ( setDirty() ) );
+    connect ( _rd, SIGNAL(propertySetChanged()), this, SLOT(slotDesignerPropertySetChanged()) );
+    connect ( _rd, SIGNAL(dirty()), this, SLOT(setDirty()) );
 
     //Edit Actions
-    connect ( editCutAction, SIGNAL ( activated() ), _rd, SLOT ( slotEditCut() ) );
-    connect ( editCopyAction, SIGNAL ( activated() ), _rd, SLOT ( slotEditCopy() ) );
-    connect ( editPasteAction, SIGNAL ( activated() ), _rd, SLOT ( slotEditPaste() ) );
-    connect ( editDeleteAction, SIGNAL ( activated() ), _rd, SLOT ( slotEditDelete() ) );
+    connect ( editCutAction, SIGNAL(activated()), _rd, SLOT(slotEditCut()) );
+    connect ( editCopyAction, SIGNAL(activated()), _rd, SLOT(slotEditCopy()) );
+    connect ( editPasteAction, SIGNAL(activated()), _rd, SLOT(slotEditPaste()) );
+    connect ( editDeleteAction, SIGNAL(activated()), _rd, SLOT(slotEditDelete()) );
 
-    connect ( sectionEdit, SIGNAL ( activated() ), _rd, SLOT ( slotSectionEditor() ) );
+    connect ( sectionEdit, SIGNAL(activated()), _rd, SLOT(slotSectionEditor()) );
 
     //Control Actions
-    connect ( res->itemLabel, SIGNAL ( clicked() ), this, SLOT ( slotLabel() ) );
-    connect ( res->itemField, SIGNAL ( clicked() ), this, SLOT ( slotField() ) );
-    connect ( res->itemText, SIGNAL ( clicked() ), this, SLOT ( slotText() ) );
-    connect ( res->itemLine, SIGNAL ( clicked() ), this, SLOT ( slotLine() ) );
-    connect ( res->itemBarcode, SIGNAL ( clicked() ), this, SLOT ( slotBarcode() ) );
-    connect ( res->itemChart, SIGNAL ( clicked() ),this, SLOT ( slotChart() ) );
-    connect ( res->itemImage, SIGNAL ( clicked() ), this, SLOT ( slotImage() ) );
-    connect ( res->itemShape, SIGNAL ( clicked() ), this, SLOT ( slotShape() ) );
-    connect ( res->itemCheck, SIGNAL ( clicked() ), this, SLOT ( slotCheck() ) );
+    connect ( res->itemLabel, SIGNAL(clicked()), this, SLOT(slotLabel()) );
+    connect ( res->itemField, SIGNAL(clicked()), this, SLOT(slotField()) );
+    connect ( res->itemText, SIGNAL(clicked()), this, SLOT(slotText()) );
+    connect ( res->itemLine, SIGNAL(clicked()), this, SLOT(slotLine()) );
+    connect ( res->itemBarcode, SIGNAL(clicked()), this, SLOT(slotBarcode()) );
+    connect ( res->itemChart, SIGNAL(clicked()),this, SLOT(slotChart()) );
+    connect ( res->itemImage, SIGNAL(clicked()), this, SLOT(slotImage()) );
+    connect ( res->itemShape, SIGNAL(clicked()), this, SLOT(slotShape()) );
+    connect ( res->itemCheck, SIGNAL(clicked()), this, SLOT(slotCheck()) );
 
     //Raise/Lower
-    connect ( itemRaiseAction, SIGNAL ( activated() ), _rd, SLOT ( slotRaiseSelected() ) );
-    connect ( itemLowerAction, SIGNAL ( activated() ), _rd, SLOT ( slotLowerSelected() ) );
+    connect ( itemRaiseAction, SIGNAL(activated()), _rd, SLOT(slotRaiseSelected()) );
+    connect ( itemLowerAction, SIGNAL(activated()), _rd, SLOT(slotLowerSelected()) );
     return true;
 }
 

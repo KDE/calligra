@@ -23,6 +23,8 @@
 #include <kdebug.h>
 #include <kpluginfactory.h>
 #include <ktextedit.h>
+#include <kaction.h>
+#include <kstandarddirs.h>
 #include <kactioncollection.h>
 #include <Formula.h>
 #include <Cell.h>
@@ -53,10 +55,11 @@ public:
 };
 
 Solver::Solver(QObject* parent, const QVariantList& args)
-        : KParts::Plugin(parent),
-        d(new Private)
+    : d(new Private)
 {
     Q_UNUSED(args)
+
+    setXMLFile(KStandardDirs::locate("data", "sheets/viewplugins/solver.rc"), true);
 
     d->dialog = 0;
     d->view = qobject_cast<View*>(parent);

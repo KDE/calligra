@@ -18,6 +18,10 @@ if (SHOULD_BUILD_EXTRA_QUICKPRINT)
     add_subdirectory( quickprint )
 endif(SHOULD_BUILD_EXTRA_QUICKPRINT)
 
+if(SHOULD_BUILD_EXTRA_FILEMANAGER_TEMPLATES)
+    add_subdirectory( filemanagertemplates )
+endif(SHOULD_BUILD_EXTRA_FILEMANAGER_TEMPLATES)
+
 if(SHOULD_BUILD_OKULARODPGENERATOR)
     add_subdirectory( okularodpgenerator )
 endif(SHOULD_BUILD_OKULARODPGENERATOR)

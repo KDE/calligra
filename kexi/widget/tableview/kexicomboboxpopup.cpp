@@ -71,7 +71,7 @@ public:
         installEventFilter(this);
         setBottomMarginInternal(- horizontalScrollBar()->sizeHint().height());
     }
-    virtual void setData(KexiTableViewData *data, bool owner = true) {
+    virtual void setData(KexiDB::TableViewData *data, bool owner = true) {
         KexiTableView::setData(data, owner);
     }
     bool setData(KexiDB::Cursor *cursor) {
@@ -105,7 +105,7 @@ public:
 
 const int KexiComboBoxPopup::defaultMaxRows = 8;
 
-KexiComboBoxPopup::KexiComboBoxPopup(QWidget* parent, KexiTableViewColumn &column)
+KexiComboBoxPopup::KexiComboBoxPopup(QWidget* parent, KexiDB::TableViewColumn &column)
         : QFrame(parent, Qt::Popup)
         , d( new KexiComboBoxPopupPrivate )
 {
@@ -156,7 +156,7 @@ void KexiComboBoxPopup::init()
             this, SLOT(slotTVItemAccepted(KexiDB::RecordData*,int,int)));
 }
 
-void KexiComboBoxPopup::setData(KexiTableViewColumn *column, KexiDB::Field *field)
+void KexiComboBoxPopup::setData(KexiDB::TableViewColumn *column, KexiDB::Field *field)
 {
     if (column && !field)
         field = column->field();
@@ -279,8 +279,8 @@ void KexiComboBoxPopup::setData(KexiTableViewColumn *column, KexiDB::Field *fiel
 
 //! @todo THIS IS PRIMITIVE: we'd need to employ KexiDB::Reference here!
     d->int_f = new KexiDB::Field(field->name(), KexiDB::Field::Text);
-    KexiTableViewData *data = new KexiTableViewData();
-    data->addColumn(new KexiTableViewColumn(*d->int_f));
+    KexiDB::TableViewData *data = new KexiDB::TableViewData();
+    data->addColumn(new KexiDB::TableViewColumn(*d->int_f));
     const QVector<QString> hints(field->enumHints());
     for (int i = 0; i < hints.size(); i++) {
         KexiDB::RecordData *record = data->createItem();
@@ -291,7 +291,7 @@ void KexiComboBoxPopup::setData(KexiTableViewColumn *column, KexiDB::Field *fiel
     setDataInternal(data, true);
 }
 
-void KexiComboBoxPopup::setDataInternal(KexiTableViewData *data, bool owner)
+void KexiComboBoxPopup::setDataInternal(KexiDB::TableViewData *data, bool owner)
 {
     if (d->tv->data())
         d->tv->data()->disconnect(this);

@@ -83,7 +83,7 @@ SectionContainer::SectionContainer(const SectionContainer& _rhs, Section* _secti
 
     SectionContainerShapePaste paste(this, m_layer, _section->layout());
     bool success = paste.paste(KoOdf::Text, mimeData);
-    Q_ASSERT(success);
+    Q_ASSERT(success); Q_UNUSED(success)
 
     delete mimeData;
 }

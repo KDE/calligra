@@ -320,6 +320,11 @@ public slots:
      */
     void slotClearStatusText();
 
+    /**
+     * Updates the author profile actions from configuration.
+     */
+    void slotUpdateAuthorProfileActions();
+
 protected:
     /**
      * This method handles three events: KParts::PartActivateEvent, KParts::PartSelectEvent
@@ -356,21 +361,6 @@ signals:
     void regionInvalidated(const QRegion &region, bool erase);
 
     void invalidated();
-
-// KDE invents public signals :)
-#undef signals
-#define signals public
-signals:
-
-    /**
-      * Make it possible for plugins to request
-      * the embedding of an image into the current
-      * document. Used e.g. by the scan-plugin
-    */
-    void embedImage(const QString &filename);
-
-#undef signals
-#define signals protected
 
 protected slots:
     virtual void slotAutoScroll();

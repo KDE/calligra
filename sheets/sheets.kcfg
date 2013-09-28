@@ -310,16 +310,16 @@
       <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:766 -->
       <!--     config->writeEntry( "GridColor", _col ); -->
     </entry>
-    <entry key="PageBorderColor" type="Color">
+    <entry key="PageOutlineColor" type="Color">
       <default></default>
       <label></label>
       <whatsthis></whatsthis>
       <!-- kspread_view.cc:2125 -->
-      <!--      _pbCol = config->readColorEntry("PageBorderColor", &_pbCol); -->
+      <!--      _pbCol = config->readColorEntry("PageOutlineColor", &_pbCol); -->
       <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:746 -->
-      <!--     _pbColor = config->readColorEntry("PageBorderColor", &_pbColor); -->
+      <!--     _pbColor = config->readColorEntry("PageOutlineColor", &_pbColor); -->
       <!-- /usr/local/src/kde/3.5/calligra/kspread/dialogs/kspread_dlg_preference.cc:774 -->
-      <!--     config->writeEntry( "PageBorderColor", _pbColor ); -->
+      <!--     config->writeEntry( "PageOutlineColor", _pbColor ); -->
     </entry>
   </group>
   <group name="Sheet-Style">

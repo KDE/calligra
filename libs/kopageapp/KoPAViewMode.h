@@ -48,7 +48,7 @@ class KOPAGEAPP_EXPORT KoPAViewMode : public QObject
 
     Q_OBJECT
 public:
-    KoPAViewMode(KoPAViewBase * view, KoPACanvasBase * canvas, QString name = "");
+    KoPAViewMode(KoPAViewBase * view, KoPACanvasBase * canvas, const QString& name = QString());
     virtual ~KoPAViewMode();
 
     virtual void paint(KoPACanvasBase* canvas, QPainter& painter, const QRectF &paintRect) = 0;
@@ -79,9 +79,9 @@ public:
     /**
      * @brief Check if the active view mode works on master/normal pages
      *
-     * The default impementation always returns true
+     * The default impementation always returns false
      *
-     * @return true
+     * @return false
      */
     virtual bool masterMode();
 

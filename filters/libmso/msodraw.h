@@ -355,6 +355,17 @@ enum MSOPATHTYPE
 };
 
 /**
+ * The MSOWRAPMODE enumeration specifies how text wraps 
+ * SHOULD be interpreted.  [MS-ODRAW] — v20101219
+ */
+enum MSOWRAPMODE
+{
+    msowrapSquare = 0,
+    msowrapByPoints,
+    msowrapNone
+};
+
+/**
  * The MSOANCHOR enumeration specifies the suggested placement rule for a body
  * of text.  These enumeration values are relative to the orientation, text box
  * area, and margin sizes of the containing shape.  The exact placement of the

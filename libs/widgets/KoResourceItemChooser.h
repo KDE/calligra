@@ -5,6 +5,7 @@
    Copyright (c) 2010 Boudewijn Rempt <boud@valdyas.org>
    Copyright (C) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
    Copyright (c) 2011 José Luis Vergara <pentalis@gmail.com>
+   Copyright (c) 2013 Sascha Suelzer <s.suelzer@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,6 +27,7 @@
 #define KO_RESOURCE_ITEM_CHOOSER
 
 #include <QWidget>
+#include <QAction>
 #include <QModelIndex>
 #include <QCompleter>
 
@@ -35,6 +37,7 @@
 class QAbstractProxyModel;
 class QButtonGroup;
 class QAbstractItemDelegate;
+class QToolButton;
 class KoAbstractResourceServerAdapter;
 class KoResourceItemView;
 class KoResource;
@@ -48,7 +51,7 @@ class KOWIDGETS_EXPORT KoResourceItemChooser : public QWidget
   Q_OBJECT
 public:
     enum Buttons { Button_Import, Button_Remove, Button_GhnsDownload, Button_GhnsUpload };
-    
+
     explicit KoResourceItemChooser( KoAbstractResourceServerAdapter * resourceAdapter, QWidget *parent = 0 );
     ~KoResourceItemChooser();
 
@@ -57,19 +60,19 @@ public:
 
     /// Sets number of rows in the view and causes the number of columns to be calculated accordingly
     void setRowCount( int rowCount );
-    
+
     /// Sets the height of the view rows
     void setRowHeight( int rowHeight );
 
     /// Sets the width of the view columns
     void setColumnWidth( int columnWidth );
-    
+
     /// Sets a custom delegate for the view
     void setItemDelegate( QAbstractItemDelegate * delegate );
 
     /// Gets the currently selected resource
     /// @returns the selected resource, 0 is no resource is selected
-    KoResource *currentResource();
+    KoResource *currentResource() const;
 
     /// Sets the item representing the resource as selected
     void setCurrentResource(KoResource* resource);
@@ -101,13 +104,12 @@ public:
     void setProxyModel( QAbstractProxyModel* proxyModel );
 
     void setKnsrcFile(const QString& knsrcFileArg);
-    QSize viewSize();
-    /// Gets the tagged resource names from tagObject in resource Server
-    QStringList getTaggedResourceFileNames(QString lineEditText);
-    /// Gets the tag Names from tag Object for setting the Completer Object
-    QStringList getTagNamesList(QString lineEditText);
+    QSize viewSize() const;
 
-    KoResourceItemView *itemView();
+    KoResourceItemView *itemView() const;
+
+    void setViewModeButtonVisible(bool visible);
+    QToolButton *viewModeButton() const;
 
 signals:
     /// Emitted when a resource was selected
@@ -115,25 +117,19 @@ signals:
     void splitterMoved();
 public slots:
     void slotButtonClicked( int button );
-    
+
 private slots:
     void activated ( const QModelIndex & index );
-
-    void setTagOpLineEdit(QStringList assignedTagsList);
-
-    void tagOpLineEditActivated(QString lineEditText);
-    void tagOpLineEditTextChanged(QString lineEditText);
-
-    void tagSearchLineEditActivated(QString lineEditText);
-    void tagSearchLineEditTextChanged(QString lineEditText);
+    void contextMenuRequested(const QPoint &pos);
 
 private:
     void updateButtonState();
     void updatePreview(KoResource *resource);
 
+
     /// Resource for a given model index
     /// @returns the resource pointer, 0 is index not valid
-    KoResource* resourceFromModelIndex(const QModelIndex & index );
+    KoResource* resourceFromModelIndex(const QModelIndex & index ) const;
 
     class Private;
     Private * const d;

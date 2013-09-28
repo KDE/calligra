@@ -78,12 +78,12 @@ ItemViewSettup::ItemViewSettup( TreeViewBase *view, bool includeColumn0, QWidget
         selector->selectedListWidget()->addItem( i );
     }
 
-    connect( stretchLastSection, SIGNAL( stateChanged ( int ) ), this, SLOT( slotChanged() ) );
+    connect( stretchLastSection, SIGNAL(stateChanged(int)), this, SLOT(slotChanged()) );
     
-    connect( selector, SIGNAL( added (QListWidgetItem *) ), this, SLOT( slotChanged() ) );
-    connect( selector, SIGNAL( removed (QListWidgetItem *) ), this, SLOT( slotChanged() ) );
-    connect( selector, SIGNAL( movedUp (QListWidgetItem *) ), this, SLOT( slotChanged() ) );
-    connect( selector, SIGNAL( movedDown (QListWidgetItem *) ), this, SLOT( slotChanged() ) );
+    connect( selector, SIGNAL(added(QListWidgetItem*)), this, SLOT(slotChanged()) );
+    connect( selector, SIGNAL(removed(QListWidgetItem*)), this, SLOT(slotChanged()) );
+    connect( selector, SIGNAL(movedUp(QListWidgetItem*)), this, SLOT(slotChanged()) );
+    connect( selector, SIGNAL(movedDown(QListWidgetItem*)), this, SLOT(slotChanged()) );
 
 }
 
@@ -153,8 +153,8 @@ ItemViewSettupDialog::ItemViewSettupDialog( ViewBase *view, TreeViewBase *treevi
     addPage( page );
     m_pageList.append( page );
     
-    connect(this, SIGNAL(okClicked()), this, SLOT( slotOk()));
-    connect(this, SIGNAL(okClicked()), m_panel, SLOT( slotOk()));
+    connect(this, SIGNAL(okClicked()), this, SLOT(slotOk()));
+    connect(this, SIGNAL(okClicked()), m_panel, SLOT(slotOk()));
     connect(this, SIGNAL(defaultClicked()), m_panel, SLOT(setDefault()));
 }
 
@@ -232,14 +232,14 @@ SplitItemViewSettupDialog::SplitItemViewSettupDialog( ViewBase *view, DoubleTree
     addPage( page );
     m_pageList.append( page );
 
-    //connect( m_page1, SIGNAL( enableButtonOk( bool ) ), this, SLOT( enableButtonOk( bool ) ) );
-    //connect( m_page2, SIGNAL( enableButtonOk( bool ) ), this, SLOT( enableButtonOk( bool ) ) );
+    //connect( m_page1, SIGNAL(enableButtonOk(bool)), this, SLOT(enableButtonOk(bool)) );
+    //connect( m_page2, SIGNAL(enableButtonOk(bool)), this, SLOT(enableButtonOk(bool)) );
 
-    connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
-    connect( this, SIGNAL( okClicked() ), m_page1, SLOT( slotOk() ) );
-    connect( this, SIGNAL( okClicked() ), m_page2, SLOT( slotOk() ) );
-    connect( this, SIGNAL( defaultClicked() ), m_page1, SLOT( setDefault() ) );
-    connect( this, SIGNAL( defaultClicked() ), m_page2, SLOT( setDefault() ) );
+    connect( this, SIGNAL(okClicked()), this, SLOT(slotOk()) );
+    connect( this, SIGNAL(okClicked()), m_page1, SLOT(slotOk()) );
+    connect( this, SIGNAL(okClicked()), m_page2, SLOT(slotOk()) );
+    connect( this, SIGNAL(defaultClicked()), m_page1, SLOT(setDefault()) );
+    connect( this, SIGNAL(defaultClicked()), m_page2, SLOT(setDefault()) );
 }
 
 void SplitItemViewSettupDialog::slotOk()

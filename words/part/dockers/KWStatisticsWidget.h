@@ -25,6 +25,7 @@
 #include <QWidget>
 #include <QToolButton>
 #include <QLabel>
+#include <QHBoxLayout>
 
 #include <kglobal.h>
 
@@ -57,7 +58,7 @@ class KWStatisticsWidget : public QWidget
     Q_OBJECT
 
 public:
-    KWStatisticsWidget(QWidget *parent = 0);
+    KWStatisticsWidget(QWidget *parent = 0, bool shortVersion = false);
     virtual ~KWStatisticsWidget();
 
     enum LayoutDirection {
@@ -95,6 +96,9 @@ private:
     int countCJKChars(const QString &text);
 
 private:
+    //to know if this instance is a short version or a full one
+    bool shortVersion;
+
     // Labels, e.g. "Words:"
     QLabel *m_wordsLabel;
     QLabel *m_sentencesLabel;

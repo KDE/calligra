@@ -106,7 +106,7 @@ bool Manager::lookup()
                        KGlobal::mainComponent().aboutData()->programName(), QLatin1String("Parts/Order")));
         return false;
     }
-    const QStringList sl_order = cg.readEntry("Order").split(",");  //we'll set parts in defined order
+    const QStringList sl_order = cg.readEntry("Order").split(',');  //we'll set parts in defined order
     QVector<KService::Ptr> ordered(sl_order.count());
 
     //compute order
@@ -200,13 +200,13 @@ Part* Manager::part(Info *i)
 
 static QString realPartClass(const QString &className)
 {
-    if (className.contains(".")) {
+    if (className.contains('.')) {
         return className;
     }
     else {
         // not like "org.kexi-project.table" - construct
         return QString::fromLatin1("org.kexi-project.")
-            + QString(className).replace("kexi/", QString());
+            + QString(className).remove("kexi/");
     }
 }
 

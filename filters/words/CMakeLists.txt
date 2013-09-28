@@ -52,9 +52,7 @@ if(SHOULD_BUILD_FILTER_APPLIXWORD_TO_ODT)
     add_subdirectory( applixword )
 endif(SHOULD_BUILD_FILTER_APPLIXWORD_TO_ODT)
 
-if(SHOULD_BUILD_FILTER_WORDPERFECT_IMPORT)
-    add_subdirectory( wordperfect )
-endif(SHOULD_BUILD_FILTER_WORDPERFECT_IMPORT)
+add_subdirectory( wordperfect )
 
 add_subdirectory( works )
 

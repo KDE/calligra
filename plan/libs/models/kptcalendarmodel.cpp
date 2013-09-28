@@ -77,11 +77,11 @@ void CalendarDayItemModelBase::setProject( Project *project )
 {
     setCalendar( 0 );
     if ( m_project ) {
-        disconnect( m_project, SIGNAL( calendarToBeRemoved( const Calendar* ) ), this, SLOT( slotCalendarToBeRemoved( const Calendar* ) ) );
+        disconnect( m_project, SIGNAL(calendarToBeRemoved(const Calendar*)), this, SLOT(slotCalendarToBeRemoved(const Calendar*)) );
     }
     m_project = project;
     if ( project ) {
-        connect( m_project, SIGNAL( calendarToBeRemoved( const Calendar* ) ), this, SLOT( slotCalendarToBeRemoved( const Calendar* ) ) );
+        connect( m_project, SIGNAL(calendarToBeRemoved(const Calendar*)), this, SLOT(slotCalendarToBeRemoved(const Calendar*)) );
     }
     reset();
 }
@@ -139,23 +139,23 @@ void CalendarItemModel::slotCalendarRemoved( const Calendar * )
 void CalendarItemModel::setProject( Project *project )
 {
     if ( m_project ) {
-        disconnect( m_project , SIGNAL( calendarChanged( Calendar* ) ), this, SLOT( slotCalendarChanged( Calendar* ) ) );
+        disconnect( m_project , SIGNAL(calendarChanged(Calendar*)), this, SLOT(slotCalendarChanged(Calendar*)) );
 
-        disconnect( m_project, SIGNAL( calendarAdded( const Calendar* ) ), this, SLOT( slotCalendarInserted( const Calendar* ) ) );
-        disconnect( m_project, SIGNAL( calendarToBeAdded( const Calendar*, int ) ), this, SLOT( slotCalendarToBeInserted( const Calendar*, int ) ) );
+        disconnect( m_project, SIGNAL(calendarAdded(const Calendar*)), this, SLOT(slotCalendarInserted(const Calendar*)) );
+        disconnect( m_project, SIGNAL(calendarToBeAdded(const Calendar*,int)), this, SLOT(slotCalendarToBeInserted(const Calendar*,int)) );
 
-        disconnect( m_project, SIGNAL( calendarRemoved( const Calendar* ) ), this, SLOT( slotCalendarRemoved( const Calendar* ) ) );
-        disconnect( m_project, SIGNAL( calendarToBeRemoved( const Calendar* ) ), this, SLOT( slotCalendarToBeRemoved( const Calendar* ) ) );
+        disconnect( m_project, SIGNAL(calendarRemoved(const Calendar*)), this, SLOT(slotCalendarRemoved(const Calendar*)) );
+        disconnect( m_project, SIGNAL(calendarToBeRemoved(const Calendar*)), this, SLOT(slotCalendarToBeRemoved(const Calendar*)) );
     }
     m_project = project;
     if ( project ) {
-        connect( m_project, SIGNAL( calendarChanged( Calendar* ) ), this, SLOT( slotCalendarChanged( Calendar* ) ) );
+        connect( m_project, SIGNAL(calendarChanged(Calendar*)), this, SLOT(slotCalendarChanged(Calendar*)) );
 
-        connect( m_project, SIGNAL( calendarAdded( const Calendar* ) ), this, SLOT( slotCalendarInserted( const Calendar* ) ) );
-        connect( m_project, SIGNAL( calendarToBeAdded( const Calendar*, int ) ), this, SLOT( slotCalendarToBeInserted( const Calendar*, int ) ) );
+        connect( m_project, SIGNAL(calendarAdded(const Calendar*)), this, SLOT(slotCalendarInserted(const Calendar*)) );
+        connect( m_project, SIGNAL(calendarToBeAdded(const Calendar*,int)), this, SLOT(slotCalendarToBeInserted(const Calendar*,int)) );
 
-        connect( m_project, SIGNAL( calendarRemoved( const Calendar* ) ), this, SLOT( slotCalendarRemoved( const Calendar* ) ) );
-        connect( m_project, SIGNAL( calendarToBeRemoved( const Calendar* ) ), this, SLOT( slotCalendarToBeRemoved( const Calendar* ) ) );
+        connect( m_project, SIGNAL(calendarRemoved(const Calendar*)), this, SLOT(slotCalendarRemoved(const Calendar*)) );
+        connect( m_project, SIGNAL(calendarToBeRemoved(const Calendar*)), this, SLOT(slotCalendarToBeRemoved(const Calendar*)) );
     }
     reset();
 }
@@ -648,19 +648,19 @@ void CalendarDayItemModel::setCalendar( Calendar *calendar )
 {
     //kDebug(planDbg())<<m_calendar<<" -->"<<calendar;
     if ( m_calendar ) {
-        disconnect( m_calendar, SIGNAL( changed( CalendarDay*) ), this, SLOT( slotDayChanged( CalendarDay* ) ) );
-        disconnect( m_calendar, SIGNAL( changed( TimeInterval* ) ), this, SLOT( slotTimeIntervalChanged( TimeInterval* ) ) );
+        disconnect( m_calendar, SIGNAL(changed(CalendarDay*)), this, SLOT(slotDayChanged(CalendarDay*)) );
+        disconnect( m_calendar, SIGNAL(changed(TimeInterval*)), this, SLOT(slotTimeIntervalChanged(TimeInterval*)) );
 
-        disconnect( m_calendar, SIGNAL( workIntervalAdded( CalendarDay*, TimeInterval* ) ), this, SLOT( slotWorkIntervalAdded( CalendarDay*, TimeInterval* ) ) );
-        disconnect( m_calendar, SIGNAL( workIntervalRemoved( CalendarDay*, TimeInterval* ) ), this, SLOT( slotWorkIntervalRemoved( CalendarDay*, TimeInterval* ) ) );
+        disconnect( m_calendar, SIGNAL(workIntervalAdded(CalendarDay*,TimeInterval*)), this, SLOT(slotWorkIntervalAdded(CalendarDay*,TimeInterval*)) );
+        disconnect( m_calendar, SIGNAL(workIntervalRemoved(CalendarDay*,TimeInterval*)), this, SLOT(slotWorkIntervalRemoved(CalendarDay*,TimeInterval*)) );
     }
     m_calendar = calendar;
     if ( calendar ) {
-        connect( m_calendar, SIGNAL( changed( CalendarDay*) ), this, SLOT( slotDayChanged( CalendarDay* ) ) );
-        connect( m_calendar, SIGNAL( changed( TimeInterval* ) ), this, SLOT( slotTimeIntervalChanged( TimeInterval* ) ) );
+        connect( m_calendar, SIGNAL(changed(CalendarDay*)), this, SLOT(slotDayChanged(CalendarDay*)) );
+        connect( m_calendar, SIGNAL(changed(TimeInterval*)), this, SLOT(slotTimeIntervalChanged(TimeInterval*)) );
 
-        connect( m_calendar, SIGNAL( workIntervalAdded( CalendarDay*, TimeInterval* ) ), this, SLOT( slotWorkIntervalAdded( CalendarDay*, TimeInterval* ) ) );
-        connect( m_calendar, SIGNAL( workIntervalRemoved( CalendarDay*, TimeInterval* ) ), this, SLOT( slotWorkIntervalRemoved( CalendarDay*, TimeInterval* ) ) );
+        connect( m_calendar, SIGNAL(workIntervalAdded(CalendarDay*,TimeInterval*)), this, SLOT(slotWorkIntervalAdded(CalendarDay*,TimeInterval*)) );
+        connect( m_calendar, SIGNAL(workIntervalRemoved(CalendarDay*,TimeInterval*)), this, SLOT(slotWorkIntervalRemoved(CalendarDay*,TimeInterval*)) );
     }
     reset();
 }
@@ -955,15 +955,15 @@ DateTableDataModel::DateTableDataModel( QObject *parent )
 void DateTableDataModel::setCalendar( Calendar *calendar )
 {
     if ( m_calendar ) {
-        disconnect( m_calendar, SIGNAL( dayAdded( CalendarDay* ) ), this, SIGNAL( reset() ) );
-        disconnect( m_calendar, SIGNAL( dayRemoved( CalendarDay* ) ), this, SIGNAL( reset() ) );
-        disconnect( m_calendar, SIGNAL( changed( CalendarDay* ) ), this, SIGNAL( reset() ) );
+        disconnect( m_calendar, SIGNAL(dayAdded(CalendarDay*)), this, SIGNAL(reset()) );
+        disconnect( m_calendar, SIGNAL(dayRemoved(CalendarDay*)), this, SIGNAL(reset()) );
+        disconnect( m_calendar, SIGNAL(changed(CalendarDay*)), this, SIGNAL(reset()) );
     }
     m_calendar = calendar;
     if ( m_calendar ) {
-        connect( m_calendar, SIGNAL( dayAdded( CalendarDay* ) ), this, SIGNAL( reset() ) );
-        connect( m_calendar, SIGNAL( dayRemoved( CalendarDay* ) ), this, SIGNAL( reset() ) );
-        connect( m_calendar, SIGNAL( changed( CalendarDay* ) ), this, SIGNAL( reset() ) );
+        connect( m_calendar, SIGNAL(dayAdded(CalendarDay*)), this, SIGNAL(reset()) );
+        connect( m_calendar, SIGNAL(dayRemoved(CalendarDay*)), this, SIGNAL(reset()) );
+        connect( m_calendar, SIGNAL(changed(CalendarDay*)), this, SIGNAL(reset()) );
     }
     emit reset();
 }

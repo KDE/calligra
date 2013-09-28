@@ -38,7 +38,7 @@ FourBoxWipeEffectFactory::~FourBoxWipeEffectFactory()
 {
 }
 
-static const char* s_subTypes[] = {
+static const char* const s_subTypes[] = {
     I18N_NOOP( "Corners In" ),
     I18N_NOOP( "Corners In Reverse" ),
     I18N_NOOP( "Corners Out" ),

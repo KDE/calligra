@@ -62,6 +62,8 @@ public:
      */
     ~KisInputManager();
 
+    void toggleTabletLogger();
+
     /**
      * Event filter method. Overridden from QObject.
      */
@@ -90,6 +92,7 @@ public:
 private Q_SLOTS:
     void setMirrorAxis();
     void slotToolChanged();
+    void profileChanged();
 
 private:
     class Private;

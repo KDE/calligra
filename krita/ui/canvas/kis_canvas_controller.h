@@ -37,6 +37,8 @@ public:
     virtual bool eventFilter(QObject *watched, QEvent *event);
     virtual void updateDocumentSize(const QSize &sz, bool recalculateCenter);
 
+public:
+    using KoCanvasController::documentSize;
 
 public slots:
     void mirrorCanvas(bool enable);
@@ -44,6 +46,7 @@ public slots:
     void rotateCanvasRight15();
     void rotateCanvasLeft15();
     void resetCanvasTransformations();
+    void slotToggleWrapAroundMode(bool value);
 
 signals:
     void documentSizeChanged();

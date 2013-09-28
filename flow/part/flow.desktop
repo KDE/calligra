@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
 Name=Calligra Flow
-Name[bs]=Calligra tok
+Name[bs]=Calligra Flow
 Name[ca]=Calligra Flow
 Name[ca@valencia]=Flux del Calligra
 Name[cs]=Calligra Flow
@@ -29,6 +29,7 @@ Name[sk]=Calligra Flow
 Name[sl]=Calligra Flow
 Name[sv]=Calligra Flow
 Name[tr]=Calligra Flow
+Name[ug]=Calligra Flow
 Name[uk]=Calligra Flow
 Name[x-test]=xxCalligra Flowxx
 Name[zh_CN]=Calligra Flow
@@ -80,6 +81,7 @@ GenericName[sv]=Flödesscheman och diagramredigering
 GenericName[ta]=பாய்வு நிரல்பட மற்றும் வரிபட தொகுப்பு
 GenericName[tg]=Ҷадвалҳо ва диаграмма
 GenericName[tr]=Diyagram Düzenleyici
+GenericName[ug]=ئېقىن رەسىم ۋە چېرتيوژ تەھرىرلەش
 GenericName[uk]=Редагування діаграм та блок-схем
 GenericName[uz]=Sxema va diagrammalarni tahrirlash
 GenericName[uz@cyrillic]=Схема ва диаграммаларни таҳрирлаш

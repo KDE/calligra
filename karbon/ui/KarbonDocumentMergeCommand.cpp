@@ -20,7 +20,6 @@
 #include "KarbonDocumentMergeCommand.h"
 #include "KarbonPart.h"
 #include "KarbonDocument.h"
-#include "KarbonDocument.h"
 #include "KoShapeLayer.h"
 #include <klocale.h>
 

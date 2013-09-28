@@ -79,16 +79,16 @@ GanttChartDisplayOptionsPanel::GanttChartDisplayOptionsPanel( GanttItemDelegate 
     setupUi( this );
     setValues( *delegate );
 
-    connect( ui_showTaskName, SIGNAL(  stateChanged ( int ) ), SIGNAL( changed() ) );
-    connect( ui_showResourceNames, SIGNAL(  stateChanged ( int ) ), SIGNAL( changed() ) );
-    connect( ui_showDependencies, SIGNAL(  stateChanged ( int ) ), SIGNAL( changed() ) );
-    connect( ui_showPositiveFloat, SIGNAL(  stateChanged ( int ) ), SIGNAL( changed() ) );
-    connect( ui_showNegativeFloat, SIGNAL(  stateChanged ( int ) ), SIGNAL( changed() ) );
-    connect( ui_showCriticalPath, SIGNAL(  stateChanged ( int ) ), SIGNAL( changed() ) );
-    connect( ui_showCriticalTasks, SIGNAL(  stateChanged ( int ) ), SIGNAL( changed() ) );
-    connect( ui_showCompletion, SIGNAL(  stateChanged ( int ) ), SIGNAL( changed() ) );
-    connect( ui_showSchedulingError, SIGNAL(  stateChanged ( int ) ), SIGNAL( changed() ) );
-    connect( ui_showTimeConstraint, SIGNAL(  stateChanged ( int ) ), SIGNAL( changed() ) );
+    connect( ui_showTaskName, SIGNAL(stateChanged(int)), SIGNAL(changed()) );
+    connect( ui_showResourceNames, SIGNAL(stateChanged(int)), SIGNAL(changed()) );
+    connect( ui_showDependencies, SIGNAL(stateChanged(int)), SIGNAL(changed()) );
+    connect( ui_showPositiveFloat, SIGNAL(stateChanged(int)), SIGNAL(changed()) );
+    connect( ui_showNegativeFloat, SIGNAL(stateChanged(int)), SIGNAL(changed()) );
+    connect( ui_showCriticalPath, SIGNAL(stateChanged(int)), SIGNAL(changed()) );
+    connect( ui_showCriticalTasks, SIGNAL(stateChanged(int)), SIGNAL(changed()) );
+    connect( ui_showCompletion, SIGNAL(stateChanged(int)), SIGNAL(changed()) );
+    connect( ui_showSchedulingError, SIGNAL(stateChanged(int)), SIGNAL(changed()) );
+    connect( ui_showTimeConstraint, SIGNAL(stateChanged(int)), SIGNAL(changed()) );
 }
 
 void GanttChartDisplayOptionsPanel::slotOk()
@@ -143,9 +143,9 @@ GanttViewSettingsDialog::GanttViewSettingsDialog( GanttViewBase *gantt, GanttIte
     tab->addTab( m_printingoptions, m_printingoptions->windowTitle() );
     /*KPageWidgetItem *page = */insertWidget( 2, tab, i18n( "Printing" ), i18n( "Printing Options" ) );
 
-    connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
-    connect( this, SIGNAL( okClicked() ), panel, SLOT( slotOk() ) );
-    connect( this, SIGNAL( defaultClicked() ), panel, SLOT( setDefault() ) );
+    connect( this, SIGNAL(okClicked()), this, SLOT(slotOk()) );
+    connect( this, SIGNAL(okClicked()), panel, SLOT(slotOk()) );
+    connect( this, SIGNAL(defaultClicked()), panel, SLOT(setDefault()) );
 }
 
 void GanttViewSettingsDialog::slotOk()
@@ -315,7 +315,7 @@ GanttTreeView::GanttTreeView( QWidget* parent )
     setSelectionMode( QAbstractItemView::ExtendedSelection );
 
     header()->setContextMenuPolicy( Qt::CustomContextMenu );
-    connect( header(), SIGNAL( customContextMenuRequested( const QPoint& ) ), this, SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
+    connect( header(), SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(slotHeaderContextMenuRequested(QPoint)) );
 }
 
 
@@ -499,7 +499,7 @@ MyKDGanttView::MyKDGanttView( QWidget *parent )
     format.insert( "%l", "h a" );
     g->setHourFormat( format.value( KGlobal::locale()->timeFormat().left( 2 ) ) );
 
-    connect( model(), SIGNAL( nodeInserted( Node* ) ), this, SLOT( slotNodeInserted( Node* ) ) );
+    connect( model(), SIGNAL(nodeInserted(Node*)), this, SLOT(slotNodeInserted(Node*)) );
 }
 
 GanttItemModel *MyKDGanttView::model() const
@@ -511,19 +511,19 @@ void MyKDGanttView::setProject( Project *proj )
 {
     clearDependencies();
     if ( project() ) {
-        disconnect( project(), SIGNAL( relationToBeModified(Relation*)), this, SLOT( removeDependency(Relation*)));
-        disconnect( project(), SIGNAL( relationModified(Relation*)), this, SLOT( addDependency(Relation*)));
-        disconnect( project(), SIGNAL( relationAdded( Relation* ) ), this, SLOT( addDependency( Relation* ) ) );
-        disconnect( project(), SIGNAL( relationToBeRemoved( Relation* ) ), this, SLOT( removeDependency( Relation* ) ) );
-        disconnect( project(), SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );
+        disconnect( project(), SIGNAL(relationToBeModified(Relation*)), this, SLOT(removeDependency(Relation*)));
+        disconnect( project(), SIGNAL(relationModified(Relation*)), this, SLOT(addDependency(Relation*)));
+        disconnect( project(), SIGNAL(relationAdded(Relation*)), this, SLOT(addDependency(Relation*)) );
+        disconnect( project(), SIGNAL(relationToBeRemoved(Relation*)), this, SLOT(removeDependency(Relation*)) );
+        disconnect( project(), SIGNAL(projectCalculated(ScheduleManager*)), this, SLOT(slotProjectCalculated(ScheduleManager*)) );
     }
     NodeGanttViewBase::setProject( proj );
     if ( proj ) {
-        connect( project(), SIGNAL( relationToBeModified(Relation*)), this, SLOT( removeDependency(Relation*)));
-        connect( project(), SIGNAL( relationModified(Relation*)), this, SLOT( addDependency(Relation*)));
-        connect( proj, SIGNAL( relationAdded( Relation* ) ), this, SLOT( addDependency( Relation* ) ) );
-        connect( proj, SIGNAL( relationToBeRemoved( Relation* ) ), this, SLOT( removeDependency( Relation* ) ) );
-        connect( proj, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );
+        connect( project(), SIGNAL(relationToBeModified(Relation*)), this, SLOT(removeDependency(Relation*)));
+        connect( project(), SIGNAL(relationModified(Relation*)), this, SLOT(addDependency(Relation*)));
+        connect( proj, SIGNAL(relationAdded(Relation*)), this, SLOT(addDependency(Relation*)) );
+        connect( proj, SIGNAL(relationToBeRemoved(Relation*)), this, SLOT(removeDependency(Relation*)) );
+        connect( proj, SIGNAL(projectCalculated(ScheduleManager*)), this, SLOT(slotProjectCalculated(ScheduleManager*)) );
     }
 
     createDependencies();
@@ -626,12 +626,12 @@ GanttView::GanttView(KoPart *part, KoDocument *doc, QWidget *parent, bool readWr
     setupGui();
 
     updateReadWrite( readWrite );
-    //connect( m_gantt->constraintModel(), SIGNAL( constraintAdded( const Constraint& )), this, SLOT( update() ) );
+    //connect( m_gantt->constraintModel(), SIGNAL(constraintAdded(Constraint)), this, SLOT(update()) );
     kDebug(planDbg()) <<m_gantt->constraintModel();
 
-    connect( m_gantt->treeView(), SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ), SLOT( slotContextMenuRequested( QModelIndex, const QPoint& ) ) );
+    connect( m_gantt->treeView(), SIGNAL(contextMenuRequested(QModelIndex,QPoint)), SLOT(slotContextMenuRequested(QModelIndex,QPoint)) );
 
-    connect( m_gantt->treeView(), SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
+    connect( m_gantt->treeView(), SIGNAL(headerContextMenuRequested(QPoint)), SLOT(slotHeaderContextMenuRequested(QPoint)) );
 }
 
 KoPrintJob *GanttView::createPrintJob()
@@ -649,7 +649,7 @@ void GanttView::setupGui()
 {
     // create context menu actions
     actionShowProject = new KToggleAction( i18n( "Show Project" ), this );
-    connect(actionShowProject, SIGNAL(triggered(bool) ), m_gantt->model(), SLOT(setShowProject(bool)));
+    connect(actionShowProject, SIGNAL(triggered(bool)), m_gantt->model(), SLOT(setShowProject(bool)));
     addContextAction( actionShowProject );
 
     createOptionAction();
@@ -753,7 +753,7 @@ Node *GanttView::currentNode() const
     return m_gantt->model()->node( m_gantt->sfModel()->mapToSource( idx ) );
 }
 
-void GanttView::slotContextMenuRequested( QModelIndex idx, const QPoint &pos )
+void GanttView::slotContextMenuRequested( const QModelIndex &idx, const QPoint &pos )
 {
     kDebug(planDbg());
     QString name;
@@ -824,7 +824,7 @@ MilestoneGanttViewSettingsDialog::MilestoneGanttViewSettingsDialog( GanttViewBas
     tab->addTab( m_printingoptions, m_printingoptions->windowTitle() );
     /*KPageWidgetItem *page = */insertWidget( -1, tab, i18n( "Printing" ), i18n( "Printing Options" ) );
 
-    connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
+    connect( this, SIGNAL(okClicked()), this, SLOT(slotOk()) );
 }
 
 void MilestoneGanttViewSettingsDialog::slotOk()
@@ -890,11 +890,11 @@ MilestoneItemModel *MilestoneKDGanttView::model() const
 void MilestoneKDGanttView::setProject( Project *proj )
 {
     if ( project() ) {
-        disconnect( project(), SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );
+        disconnect( project(), SIGNAL(projectCalculated(ScheduleManager*)), this, SLOT(slotProjectCalculated(ScheduleManager*)) );
     }
     NodeGanttViewBase::setProject( proj );
     if ( proj ) {
-        connect( proj, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );
+        connect( proj, SIGNAL(projectCalculated(ScheduleManager*)), this, SLOT(slotProjectCalculated(ScheduleManager*)) );
     }
 }
 
@@ -964,9 +964,9 @@ MilestoneGanttView::MilestoneGanttView(KoPart *part, KoDocument *doc, QWidget *p
 
     updateReadWrite( readWrite );
 
-    connect( m_gantt->treeView(), SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ), SLOT( slotContextMenuRequested( QModelIndex, const QPoint& ) ) );
+    connect( m_gantt->treeView(), SIGNAL(contextMenuRequested(QModelIndex,QPoint)), SLOT(slotContextMenuRequested(QModelIndex,QPoint)) );
 
-    connect( m_gantt->treeView(), SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
+    connect( m_gantt->treeView(), SIGNAL(headerContextMenuRequested(QPoint)), SLOT(slotHeaderContextMenuRequested(QPoint)) );
 }
 
 void MilestoneGanttView::setZoom( double )
@@ -1017,7 +1017,7 @@ void MilestoneGanttView::setupGui()
     createOptionAction();
 }
 
-void MilestoneGanttView::slotContextMenuRequested( QModelIndex idx, const QPoint &pos )
+void MilestoneGanttView::slotContextMenuRequested( const QModelIndex &idx, const QPoint &pos )
 {
     kDebug(planDbg());
     QString name;
@@ -1129,9 +1129,9 @@ ResourceAppointmentsGanttView::ResourceAppointmentsGanttView(KoPart *part, KoDoc
 
     updateReadWrite( readWrite );
 
-    connect( m_gantt->leftView(), SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ), SLOT( slotContextMenuRequested( QModelIndex, const QPoint& ) ) );
+    connect( m_gantt->leftView(), SIGNAL(contextMenuRequested(QModelIndex,QPoint)), SLOT(slotContextMenuRequested(QModelIndex,QPoint)) );
 
-    connect( m_gantt->leftView(), SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
+    connect( m_gantt->leftView(), SIGNAL(headerContextMenuRequested(QPoint)), SLOT(slotHeaderContextMenuRequested(QPoint)) );
 }
 
 ResourceAppointmentsGanttView::~ResourceAppointmentsGanttView()
@@ -1173,7 +1173,7 @@ Node *ResourceAppointmentsGanttView::currentNode() const
     return m_model->node( idx );
 }
 
-void ResourceAppointmentsGanttView::slotContextMenuRequested( QModelIndex idx, const QPoint &pos )
+void ResourceAppointmentsGanttView::slotContextMenuRequested( const QModelIndex &idx, const QPoint &pos )
 {
     kDebug(planDbg());
     QString name;

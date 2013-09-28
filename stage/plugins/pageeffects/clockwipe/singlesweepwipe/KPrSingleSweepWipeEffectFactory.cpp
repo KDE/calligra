@@ -65,7 +65,7 @@ KPrSingleSweepWipeEffectFactory::~KPrSingleSweepWipeEffectFactory()
 {
 }
 
-static const char* s_subTypes[] = {
+static const char* const s_subTypes[] = {
     I18N_NOOP( "Clockwise Top" ),
     I18N_NOOP( "Clockwise Right" ),
     I18N_NOOP( "Clockwise Bottom" ),

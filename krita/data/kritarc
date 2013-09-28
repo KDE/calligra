@@ -1,7 +1,8 @@
+favoriteCompositeOps=normal,erase,multiply,burn,darken,add,dodge,screen,overlay,soft_light_svg,luminize,lighten,saturation,color
+
 [krita]
 WantExportConfirmation=false
 cursorStyleDef=3
-favoriteCompositeOps=normal,erase,multiply,burn,darken,add,dodge,screen,overlay,soft_light_svg,luminize,lighten,saturation,color
 
 [TemplateChooserDialog]
 ShowCustomDocumentWidgetByDefault=true
@@ -161,7 +162,7 @@ ShapePluginsDisabled=musicshape,pictureshape,videoshape,chartshape,spreadsheetsh
 TextEditingPluginsDisabled=thesaurustool,changecase,autocorrect,spellcheck
 TextInlinePluginsDisabled=textvariables,kprvariables
 ToolPluginsDisabled=paragraphtool,kopabackgroundtool,calligrastagetoolanimation
-ToolsBlacklist=CreatePathTool,KoPencilTool,ConnectionTool,KarbonFilterEffectsTool,PanTool,KoZoomToolId
+ToolsBlacklist=CreatePathTool,KoPencilTool,ConnectionTool,KarbonFilterEffectsTool,PanTool,KoZoomToolId,GuidesTool_ID
 
 [favoriteList]
 favoritePresets=Basic_Airbrush,Basic_ink_10,Hairy_clean,Hatch_diag_S,Pencil_2B,Pencil_HB,Sketch_ink_small,Sketch_wires,

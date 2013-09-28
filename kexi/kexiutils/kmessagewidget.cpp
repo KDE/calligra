@@ -1,7 +1,7 @@
 /* This file is part of the KDE libraries
  *
  * Copyright (c) 2011 Aurélien Gâteau <agateau@kde.org>
- * Copyright (C) 2011-2012 Jarosław Staniek <staniek@kde.org>
+ * Copyright (C) 2011-2013 Jarosław Staniek <staniek@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -43,7 +43,7 @@
 #include <QTransform>
 #include <QTimer>
 
-#define LAYOUT_SPACING 6
+static const int LAYOUT_SPACING = 6;
 
 ClickableLabel::ClickableLabel(QWidget *parent)
  : QLabel(parent)
@@ -271,7 +271,7 @@ void KMessageWidgetPrivate::init(KMessageWidget *q_ptr)
     }
     else {
         iconLabel = new ClickableLabel(content);
-        iconLabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        iconLabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Minimum);
         QObject::connect(iconLabel, SIGNAL(clicked()), q, SLOT(tryClickCloseMessage()));
 
         textLabel = new ClickableLabel(content);
@@ -336,15 +336,34 @@ void KMessageWidgetPrivate::createLayout()
     // button looks weird
     //closeButton->setAutoRaise(buttons.isEmpty());
 
+    QHBoxLayout* buttonLayout = 0;
+    QSpacerItem *leftContentSpacerItem = 0;
+    QSpacerItem *rightContentSpacerItem = 0;
+    int leftContentSpacerItemWidth = LAYOUT_SPACING;
+    int rightContentSpacerItemWidth = LAYOUT_SPACING;
+    int bottomContentSpacerItemHeight = LAYOUT_SPACING;
+    switch (content->calloutPointerDirection()) {
+    case KMessageWidget::Up:
+        break;
+    case KMessageWidget::Down:
+        bottomContentSpacerItemHeight = content->radius * 2 + LAYOUT_SPACING;
+        break;
+    case KMessageWidget::Left:
+        leftContentSpacerItemWidth = content->radius * 2 + LAYOUT_SPACING;
+        break;
+    case KMessageWidget::Right:
+        rightContentSpacerItemWidth = content->radius * 2 + LAYOUT_SPACING;
+        break;
+    default:;
+    }
     if (wordWrap) {
         QGridLayout* layout = new QGridLayout(content);
         layout->setSpacing(LAYOUT_SPACING);
         if (contentsWidget) {
-            layout->addItem(new QSpacerItem(1, 6), 0, 0);
+            layout->addItem(leftContentSpacerItem = new QSpacerItem(leftContentSpacerItemWidth, LAYOUT_SPACING), 0, 0);
             layout->addWidget(contentsWidget, 1, 0, 1, 2);
-            layout->addItem(new QSpacerItem(1, 6), 2, 0);
+            layout->addItem(rightContentSpacerItem = new QSpacerItem(rightContentSpacerItemWidth, LAYOUT_SPACING), 3, 0);
 
-           
 /*            if (contentsWidget->maximumWidth() < QWIDGETSIZE_MAX
                 && contentsWidget->maximumHeight() < QWIDGETSIZE_MAX
                 && contentsWidget->maximumSize() == contentsWidget->minimumSize())
@@ -360,11 +379,17 @@ void KMessageWidgetPrivate::createLayout()
             }*/
         }
         else {
-            layout->addWidget(iconLabel, 0, 0);
-            layout->addWidget(textLabel, 0, 1);
+            layout->addItem(leftContentSpacerItem = new QSpacerItem(leftContentSpacerItemWidth, LAYOUT_SPACING), 0, 0);
+            layout->addWidget(iconLabel, 1, 1, Qt::AlignCenter | Qt::AlignTop);
+            //iconLabel->setContentsMargins(0, LAYOUT_SPACING, 0, 0);
+            iconLabel->setAlignment(Qt::AlignCenter | Qt::AlignTop);
+            layout->addWidget(textLabel, 1, 2);
+            textLabel->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+            layout->addItem(rightContentSpacerItem = new QSpacerItem(rightContentSpacerItemWidth, LAYOUT_SPACING), 0, 3);
         }
 
-        QHBoxLayout* buttonLayout = new QHBoxLayout;
+        buttonLayout = new QHBoxLayout;
+        buttonLayout->setSpacing(LAYOUT_SPACING);
         bool stretchAdded = false;
         Q_FOREACH(QToolButton* button, buttons) {
             if (!stretchAdded && !leftAlignedButtons.contains(button->defaultAction())) {
@@ -384,11 +409,13 @@ void KMessageWidgetPrivate::createLayout()
         }
         else {
             buttonLayout->addWidget(closeButton);
-            layout->addItem(buttonLayout, 1, 0, 1, 2);
+            //?? buttonLayout->setContentsMargins(0, 10, 0, 0);
+            layout->addItem(buttonLayout, 2, 1, 1, 2);
+            layout->addItem(new QSpacerItem(rightContentSpacerItemWidth, bottomContentSpacerItemHeight), 3, 3);
         }
     } else {
         QHBoxLayout* layout = new QHBoxLayout(content);
-        layout->setSpacing(6);
+        layout->setSpacing(LAYOUT_SPACING);
         if (contentsWidget) {
             layout->addWidget(contentsWidget);
         }
@@ -427,12 +454,16 @@ void KMessageWidgetPrivate::createLayout()
             right += 3;
         }
         break;
-    case KMessageWidget::Left:
+    case KMessageWidget::Left: {
         left += 0;
         top += 3;
         bottom += 3;
         right += 1;
+        int leftSp = content->radius * 2 + LAYOUT_SPACING;
+        buttonLayout->insertSpacing(0, leftSp);
+        buttonLayout->addSpacing(LAYOUT_SPACING);
         break;
+    }
     case KMessageWidget::Right:
         left += 0;
         top += 3;
@@ -511,7 +542,7 @@ void KMessageWidgetPrivate::updateStyleSheet()
     kDebug() << "content->getContentsMargins:" << left << top << right << bottom;
     if (!buttons.isEmpty()) {
         //q->setContentsMargins(0, 0, 0, 0);
-        content->setContentsMargins(6, 0, 0, 0);
+        content->setContentsMargins(LAYOUT_SPACING, 0, 0, 0);
     }
     q->getContentsMargins(&left, &top, &right, &bottom);
     kDebug() << "q->getContentsMargins:" << left << top << right << bottom;

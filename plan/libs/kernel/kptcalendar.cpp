@@ -283,7 +283,7 @@ TimeInterval CalendarDay::interval(const QTime &start, int length, const KDateTi
     return interval( m_date, start, length, spec, sch );
 }
 
-TimeInterval CalendarDay::interval(const QDate date, const QTime &start, int length, const KDateTime::Spec &spec, Schedule *sch) const
+TimeInterval CalendarDay::interval(const QDate &date, const QTime &start, int length, const KDateTime::Spec &spec, Schedule *sch) const
 {
     //kDebug(planDbg())<<"Inp:"<<date<<start<<"+"<<length<<"="<<QDateTime(date, start).addMSecs( length );
     Q_ASSERT( length > 0 );
@@ -343,7 +343,7 @@ bool CalendarDay::hasInterval(const QTime &start, int length, const KDateTime::S
     return hasInterval( m_date, start, length, spec, sch );
 }
 
-bool CalendarDay::hasInterval(const QDate date, const QTime &start, int length, const KDateTime::Spec &spec, Schedule *sch) const
+bool CalendarDay::hasInterval(const QDate &date, const QTime &start, int length, const KDateTime::Spec &spec, Schedule *sch) const
 {
     //kDebug(planDbg())<<(m_date.isValid()?m_date.toString(Qt::ISODate):"Weekday")<<""<<start<<"->"<<length;
     return interval( date, start, length, spec, sch ).first.isValid();
@@ -560,7 +560,7 @@ Duration CalendarWeekdays::effort(const QDate &date, const QTime &start, int len
     return Duration::zeroDuration;
 }
 
-TimeInterval CalendarWeekdays::interval(const QDate date, const QTime &start, int length, const KDateTime::Spec &spec, Schedule *sch) const
+TimeInterval CalendarWeekdays::interval(const QDate &date, const QTime &start, int length, const KDateTime::Spec &spec, Schedule *sch) const
 {
     //kDebug(planDbg());
     CalendarDay *day = weekday( date.dayOfWeek() );
@@ -570,7 +570,7 @@ TimeInterval CalendarWeekdays::interval(const QDate date, const QTime &start, in
     return TimeInterval();
 }
 
-bool CalendarWeekdays::hasInterval(const QDate date, const QTime &start, int length, const KDateTime::Spec &spec, Schedule *sch) const
+bool CalendarWeekdays::hasInterval(const QDate &date, const QTime &start, int length, const KDateTime::Spec &spec, Schedule *sch) const
 {
     //kDebug(planDbg())<<date<<":"<<start<<"+"<<length;
     CalendarDay *day = weekday( date.dayOfWeek() );

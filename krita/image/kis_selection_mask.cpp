@@ -78,7 +78,7 @@ void KisSelectionMask::setSelection(KisSelectionSP selection)
         KisMask::setSelection(new KisSelection());
 
         const KoColorSpace * cs = KoColorSpaceRegistry::instance()->alpha8();
-        KisFillPainter gc(KisPaintDeviceSP(this->selection()->getOrCreatePixelSelection().data()));
+        KisFillPainter gc(KisPaintDeviceSP(this->selection()->pixelSelection().data()));
         gc.fillRect(image()->bounds(), KoColor(Qt::white, cs), MAX_SELECTED);
         gc.end();
     }
@@ -114,13 +114,15 @@ void KisSelectionMask::setSectionModelProperties(const KoDocumentSectionModel::P
     setActive(properties.at(2).state.toBool());
 }
 
-void KisSelectionMask::setVisible(bool visible)
+void KisSelectionMask::setVisible(bool visible, bool isLoading)
 {
     nodeProperties().setProperty("visible", visible);
 
-    if (selection())
-        selection()->setVisible(visible);
-    emit(visibilityChanged(visible));
+    if (!isLoading) {
+        if (selection())
+            selection()->setVisible(visible);
+        emit(visibilityChanged(visible));
+    }
 }
 
 bool KisSelectionMask::active() const

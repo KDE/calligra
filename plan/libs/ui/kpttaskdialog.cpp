@@ -74,13 +74,13 @@ TaskDialog::TaskDialog( Project &project, Task &task, Accounts &accounts, QWidge
 
     enableButtonOk(false);
 
-    connect(this, SIGNAL(currentPageChanged(KPageWidgetItem*, KPageWidgetItem*)), SLOT(slotCurrentChanged(KPageWidgetItem*, KPageWidgetItem*)));
+    connect(this, SIGNAL(currentPageChanged(KPageWidgetItem*,KPageWidgetItem*)), SLOT(slotCurrentChanged(KPageWidgetItem*,KPageWidgetItem*)));
 
-    connect(m_generalTab, SIGNAL( obligatedFieldsFilled(bool) ), this, SLOT( enableButtonOk(bool) ));
-    connect(m_resourcesTab, SIGNAL( changed() ), m_generalTab, SLOT( checkAllFieldsFilled() ));
-    connect(m_documentsTab, SIGNAL( changed() ), m_generalTab, SLOT( checkAllFieldsFilled() ));
-    connect(m_costTab, SIGNAL( changed() ), m_generalTab, SLOT( checkAllFieldsFilled() ));
-    connect(m_descriptionTab, SIGNAL( textChanged(bool) ), m_generalTab, SLOT( checkAllFieldsFilled() ));
+    connect(m_generalTab, SIGNAL(obligatedFieldsFilled(bool)), this, SLOT(enableButtonOk(bool)));
+    connect(m_resourcesTab, SIGNAL(changed()), m_generalTab, SLOT(checkAllFieldsFilled()));
+    connect(m_documentsTab, SIGNAL(changed()), m_generalTab, SLOT(checkAllFieldsFilled()));
+    connect(m_costTab, SIGNAL(changed()), m_generalTab, SLOT(checkAllFieldsFilled()));
+    connect(m_descriptionTab, SIGNAL(textChanged(bool)), m_generalTab, SLOT(checkAllFieldsFilled()));
 
     connect(&project, SIGNAL(nodeRemoved(Node*)), this, SLOT(slotTaskRemoved(Node*)));
 }

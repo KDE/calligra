@@ -9,10 +9,6 @@ include_directories(
     ${KDE4_INCLUDES}
 )
 
-if (SHOULD_BUILD_KCHART)
-    include_directories(${CMAKE_SOURCE_DIR}/kchart/kdchart/include)
-endif (SHOULD_BUILD_KCHART)
-
 #build a shared library
 set(kexihandler_report_SRCS 
     kexireports.cpp

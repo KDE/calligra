@@ -19,8 +19,6 @@
 #ifndef KIS_PAINTOP_SETTINGS_H_
 #define KIS_PAINTOP_SETTINGS_H_
 
-#include "opengl/kis_opengl.h"
-
 #include "kis_types.h"
 #include "krita_export.h"
 
@@ -100,6 +98,13 @@ public:
     }
 
     /**
+     * @return the composite op it to which the indirect painting device
+     * should be initialized to. This is used by duplicate op to reset
+     * the composite op to COMPOSITE_COPY
+     */
+    virtual QString indirectPaintingCompositeOp() const;
+
+    /**
      * Whether this paintop wants to deposit paint even when not moving, i.e. the
      * tool needs to activate its timer.
      */
@@ -171,8 +176,14 @@ public:
     /// @return loadable state of the settings, by default implementation return the same as isValid()
     virtual bool isLoadable();
 
+    /**
+     * These methods are populating properties with runtime
+     * information about canvas rotation/mirroring. This information
+     * is set directly by KisToolFreehand. Later the data is accessed
+     * by the pressure options to make a final decision.
+     */
     void setCanvasRotation(qreal angle);
-    qreal canvasRotation() const;
+    void setCanvasMirroring(bool xAxisMirrored, bool yAxisMirrored);
 
 protected:
      /**

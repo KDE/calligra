@@ -44,8 +44,8 @@ ViewListDialog::ViewListDialog( View *view, ViewListWidget &viewlist, QWidget *p
     enableButtonOk(false);
 
     connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
-    connect( m_panel, SIGNAL( enableButtonOk( bool ) ), SLOT( enableButtonOk( bool ) ) );
-    connect( m_panel, SIGNAL( viewCreated( ViewBase* ) ), SIGNAL( viewCreated( ViewBase* ) ) );
+    connect( m_panel, SIGNAL(enableButtonOk(bool)), SLOT(enableButtonOk(bool)) );
+    connect( m_panel, SIGNAL(viewCreated(ViewBase*)), SIGNAL(viewCreated(ViewBase*)) );
 
     connect(&viewlist, SIGNAL(viewListItemRemoved(ViewListItem*)), SLOT(slotViewListItemRemoved(ViewListItem*)));
 }
@@ -124,13 +124,13 @@ AddViewPanel::AddViewPanel( View *view, ViewListWidget &viewlist, QWidget *paren
 
     viewtypeChanged( widget.viewtype->currentIndex() );
 
-    connect( widget.viewname, SIGNAL( textChanged( const QString& ) ), SLOT( changed() ) );
-    connect( widget.tooltip, SIGNAL( textChanged( const QString& ) ), SLOT( changed() ) );
-    connect( widget.viewname, SIGNAL( textChanged( const QString& ) ), SLOT( viewnameChanged( const QString& ) ) );
-    connect( widget.tooltip, SIGNAL( textChanged( const QString& ) ), SLOT( viewtipChanged( const QString& ) ) );
-    connect( widget.insertAfter, SIGNAL( currentIndexChanged( int ) ), SLOT( changed() ) );
-    connect( widget.viewtype, SIGNAL( currentIndexChanged( int ) ), SLOT( viewtypeChanged( int ) ) );
-    connect( widget.category, SIGNAL( editTextChanged( const QString& ) ), SLOT( categoryChanged() ) );
+    connect( widget.viewname, SIGNAL(textChanged(QString)), SLOT(changed()) );
+    connect( widget.tooltip, SIGNAL(textChanged(QString)), SLOT(changed()) );
+    connect( widget.viewname, SIGNAL(textChanged(QString)), SLOT(viewnameChanged(QString)) );
+    connect( widget.tooltip, SIGNAL(textChanged(QString)), SLOT(viewtipChanged(QString)) );
+    connect( widget.insertAfter, SIGNAL(currentIndexChanged(int)), SLOT(changed()) );
+    connect( widget.viewtype, SIGNAL(currentIndexChanged(int)), SLOT(viewtypeChanged(int)) );
+    connect( widget.category, SIGNAL(editTextChanged(QString)), SLOT(categoryChanged()) );
 }
 
 void AddViewPanel::viewnameChanged( const QString &text )
@@ -286,7 +286,7 @@ ViewListEditViewDialog::ViewListEditViewDialog( ViewListWidget &viewlist, ViewLi
     enableButtonOk(false);
 
     connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
-    connect( m_panel, SIGNAL( enableButtonOk( bool ) ), SLOT( enableButtonOk( bool ) ) );
+    connect( m_panel, SIGNAL(enableButtonOk(bool)), SLOT(enableButtonOk(bool)) );
 
     connect(&viewlist, SIGNAL(viewListItemRemoved(ViewListItem*)), SLOT(slotViewListItemRemoved(ViewListItem*)));
 }
@@ -322,10 +322,10 @@ EditViewPanel::EditViewPanel( ViewListWidget &viewlist, ViewListItem *item, QWid
     }
     categoryChanged();
 
-    connect( widget.viewname, SIGNAL( textChanged( const QString& ) ), SLOT( changed() ) );
-    connect( widget.tooltip, SIGNAL( textChanged( const QString& ) ), SLOT( changed() ) );
-    connect( widget.insertAfter, SIGNAL( currentIndexChanged( int ) ), SLOT( changed() ) );
-    connect( widget.category, SIGNAL( editTextChanged( const QString& ) ), SLOT( categoryChanged() ) );
+    connect( widget.viewname, SIGNAL(textChanged(QString)), SLOT(changed()) );
+    connect( widget.tooltip, SIGNAL(textChanged(QString)), SLOT(changed()) );
+    connect( widget.insertAfter, SIGNAL(currentIndexChanged(int)), SLOT(changed()) );
+    connect( widget.category, SIGNAL(editTextChanged(QString)), SLOT(categoryChanged()) );
 }
 
 bool EditViewPanel::ok()
@@ -400,7 +400,7 @@ ViewListEditCategoryDialog::ViewListEditCategoryDialog( ViewListWidget &viewlist
     enableButtonOk(false);
 
     connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
-    connect( m_panel, SIGNAL( enableButtonOk( bool ) ), SLOT( enableButtonOk( bool ) ) );
+    connect( m_panel, SIGNAL(enableButtonOk(bool)), SLOT(enableButtonOk(bool)) );
 
     connect(&viewlist, SIGNAL(viewListItemRemoved(ViewListItem*)), SLOT(slotViewListItemRemoved(ViewListItem*)));
 }
@@ -428,9 +428,9 @@ EditCategoryPanel::EditCategoryPanel( ViewListWidget &viewlist, ViewListItem *it
 
     fillAfter();
 
-    connect( widget.viewname, SIGNAL( textChanged( const QString& ) ), SLOT( changed() ) );
-    connect( widget.tooltip, SIGNAL( textChanged( const QString& ) ), SLOT( changed() ) );
-    connect( widget.insertAfter, SIGNAL( currentIndexChanged( int ) ), SLOT( changed() ) );
+    connect( widget.viewname, SIGNAL(textChanged(QString)), SLOT(changed()) );
+    connect( widget.tooltip, SIGNAL(textChanged(QString)), SLOT(changed()) );
+    connect( widget.insertAfter, SIGNAL(currentIndexChanged(int)), SLOT(changed()) );
 }
 
 bool EditCategoryPanel::ok()
@@ -488,8 +488,8 @@ ViewListReportsDialog::ViewListReportsDialog( View *view, ViewListWidget &viewli
     enableButtonOk(true);
 
     connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
-    connect( m_panel, SIGNAL( enableButtonOk( bool ) ), SLOT( enableButtonOk( bool ) ) );
-    connect( m_panel, SIGNAL( viewCreated( ViewBase* ) ), SIGNAL( viewCreated( ViewBase* ) ) );
+    connect( m_panel, SIGNAL(enableButtonOk(bool)), SLOT(enableButtonOk(bool)) );
+    connect( m_panel, SIGNAL(viewCreated(ViewBase*)), SIGNAL(viewCreated(ViewBase*)) );
 
     connect(&viewlist, SIGNAL(viewListItemRemoved(ViewListItem*)), SLOT(slotViewListItemRemoved(ViewListItem*)));
 }
@@ -533,13 +533,13 @@ AddReportsViewPanel::AddReportsViewPanel( View *view, ViewListWidget &viewlist, 
 
     viewtypeChanged( widget.viewtype->currentIndex() );
 
-    connect( widget.viewname, SIGNAL( textChanged( const QString& ) ), SLOT( changed() ) );
-    connect( widget.tooltip, SIGNAL( textChanged( const QString& ) ), SLOT( changed() ) );
-    connect( widget.viewname, SIGNAL( textChanged( const QString& ) ), SLOT( viewnameChanged( const QString& ) ) );
-    connect( widget.tooltip, SIGNAL( textChanged( const QString& ) ), SLOT( viewtipChanged( const QString& ) ) );
-    connect( widget.insertAfter, SIGNAL( currentIndexChanged( int ) ), SLOT( changed() ) );
-    connect( widget.viewtype, SIGNAL( currentIndexChanged( int ) ), SLOT( viewtypeChanged( int ) ) );
-    connect( widget.category, SIGNAL( editTextChanged( const QString& ) ), SLOT( categoryChanged() ) );
+    connect( widget.viewname, SIGNAL(textChanged(QString)), SLOT(changed()) );
+    connect( widget.tooltip, SIGNAL(textChanged(QString)), SLOT(changed()) );
+    connect( widget.viewname, SIGNAL(textChanged(QString)), SLOT(viewnameChanged(QString)) );
+    connect( widget.tooltip, SIGNAL(textChanged(QString)), SLOT(viewtipChanged(QString)) );
+    connect( widget.insertAfter, SIGNAL(currentIndexChanged(int)), SLOT(changed()) );
+    connect( widget.viewtype, SIGNAL(currentIndexChanged(int)), SLOT(viewtypeChanged(int)) );
+    connect( widget.category, SIGNAL(editTextChanged(QString)), SLOT(categoryChanged()) );
 }
 
 void AddReportsViewPanel::viewnameChanged( const QString &text )

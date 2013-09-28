@@ -61,8 +61,7 @@ QPainterPath KisBrushBasedPaintOpSettings::brushOutline(const QPointF& pos, KisP
         m.rotateRadians(-rotation - brush->angle()); 
         m.scale(brush->scale() * scale, brush->scale() * scale);
         m.translate(-hotSpot.x(), -hotSpot.y());
-        
-        
+
         path = brush->outline();
         path = m.map(path);
         
@@ -75,7 +74,7 @@ bool KisBrushBasedPaintOpSettings::isValid()
 {
     QString filename = getString("requiredBrushFile","");
     if (!filename.isEmpty()) {
-        KisBrushSP brush = KisBrushServer::instance()->brushServer()->getResourceByFilename(filename);
+        KisBrushSP brush = KisBrushServer::instance()->brushServer()->resourceByFilename(filename);
         if (!brush) {
             return false;
         }

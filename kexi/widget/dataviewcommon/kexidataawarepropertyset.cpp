@@ -18,12 +18,12 @@
 */
 
 #include "kexidataawarepropertyset.h"
-#include "kexitableviewdata.h"
 #include "kexidataawareobjectiface.h"
 
 #include <kexi_global.h>
 #include <koproperty/Property.h>
 #include <core/KexiView.h>
+#include <db/tableviewdata.h>
 
 class KexiDataAwarePropertySet::Private
 {
@@ -45,7 +45,7 @@ public:
 
     QPointer<KexiView> view;
     KexiDataAwareObjectInterface* dataObject;
-    QPointer<KexiTableViewData> currentTVData;
+    QPointer<KexiDB::TableViewData> currentTVData;
 
     int row; //!< used to know if a new row is selected in slotCellSelected()
 };
@@ -56,7 +56,7 @@ KexiDataAwarePropertySet::KexiDataAwarePropertySet(KexiView *view,
         , d(new Private(view, dataObject))
 {
     setObjectName(view->objectName() + "_KexiDataAwarePropertySet");
-    d->dataObject->connectDataSetSignal(this, SLOT(slotDataSet(KexiTableViewData*)));
+    d->dataObject->connectDataSetSignal(this, SLOT(slotDataSet(KexiDB::TableViewData*)));
     d->dataObject->connectCellSelectedSignal(this, SLOT(slotCellSelected(int,int)));
     slotDataSet(d->dataObject->data());
     const bool wasDirty = view->isDirty();
@@ -70,7 +70,7 @@ KexiDataAwarePropertySet::~KexiDataAwarePropertySet()
     delete d;
 }
 
-void KexiDataAwarePropertySet::slotDataSet(KexiTableViewData *data)
+void KexiDataAwarePropertySet::slotDataSet(KexiDB::TableViewData *data)
 {
     if (!d->currentTVData.isNull()) {
         d->currentTVData->disconnect(this);

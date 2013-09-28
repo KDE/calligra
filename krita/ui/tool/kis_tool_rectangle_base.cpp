@@ -34,8 +34,10 @@ void KisToolRectangleBase::paint(QPainter& gc, const KoViewConverter &converter)
     Q_UNUSED(converter);
     Q_ASSERT(currentImage());
 
-    if (mode() == KisTool::PAINT_MODE)
-        paintRectangle(gc, QRect());
+    if(mode() == KisTool::PAINT_MODE) {
+        paintRectangle(gc,QRect());
+    }
+    KisToolPaint::paint(gc,converter);
 }
 
 void KisToolRectangleBase::deactivate()
@@ -46,8 +48,9 @@ void KisToolRectangleBase::deactivate()
 
 void KisToolRectangleBase::mousePressEvent(KoPointerEvent *event)
 {
-    if(PRESS_CONDITION(event, KisTool::HOVER_MODE,
-                       Qt::LeftButton, Qt::NoModifier)) {
+    if(PRESS_CONDITION_OM(event, KisTool::HOVER_MODE,
+                          Qt::LeftButton,
+                          Qt::AltModifier | Qt::ControlModifier | Qt::ShiftModifier)) {
 
         if (m_type == PAINT) {
             if (!nodeEditable() || nodePaintAbility() == NONE) {
@@ -101,6 +104,8 @@ void KisToolRectangleBase::mouseMoveEvent(KoPointerEvent *event)
 
         m_dragCenter = QPointF((m_dragStart.x() + m_dragEnd.x()) / 2,
                                (m_dragStart.y() + m_dragEnd.y()) / 2);
+
+        KisToolPaint::requestUpdateOutline(event->point);
     }
     else {
         KisToolShape::mouseMoveEvent(event);

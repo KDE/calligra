@@ -233,7 +233,7 @@ public:
      * If no 'work interval' exists, returns the interval start, end.
      * Use @ref hasInterval() to check if a 'work interval' exists.
      */
-    TimeInterval interval(const QDate date, const QTime &start, int length, const KDateTime::Spec &spec, Schedule *sch=0) const;
+    TimeInterval interval(const QDate &date, const QTime &start, int length, const KDateTime::Spec &spec, Schedule *sch=0) const;
     
     bool hasInterval() const;
 
@@ -249,7 +249,7 @@ public:
      * Assumes this day is date. (Used by weekday hasInterval().)
      * If @p sch is not 0, the schedule is checked for availability.
      */
-    bool hasInterval(const QDate date, const QTime &start, int length, const KDateTime::Spec &spec, Schedule *sch=0) const;
+    bool hasInterval(const QDate &date, const QTime &start, int length, const KDateTime::Spec &spec, Schedule *sch=0) const;
     
     Duration duration() const;
     
@@ -331,12 +331,12 @@ public:
      * Use @ref hasInterval() to check if a 'work interval' exists.
      * If @p sch is not 0, the schedule is checked for availability.
      */
-    TimeInterval interval(const QDate date, const QTime &start, int length, const KDateTime::Spec &spec, Schedule *sch) const;
+    TimeInterval interval(const QDate &date, const QTime &start, int length, const KDateTime::Spec &spec, Schedule *sch) const;
     /**
      * Returns true if at least a part of a 'work interval' exists 
      * on the weekday defined by date for the interval start to end.
      */
-    bool hasInterval(const QDate date, const QTime &start, int length, const KDateTime::Spec &spec, Schedule *sch) const;
+    bool hasInterval(const QDate &date, const QTime &start, int length, const KDateTime::Spec &spec, Schedule *sch) const;
     bool hasInterval() const;
 
     Duration duration() const;

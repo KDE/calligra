@@ -1,7 +1,5 @@
 add_subdirectory(tests)
 
-include_directories( ${KRITA_INCLUDES} )
-
 macro_optional_find_package(ZLIB)
 macro_bool_to_01(ZLIB_FOUND HAVE_ZLIB)
 configure_file(config_psd.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config_psd.h)
@@ -27,7 +25,12 @@ set(kritapsdimport_PART_SRCS
 )
 
 kde4_add_plugin(kritapsdimport ${kritapsdimport_PART_SRCS})
-target_link_libraries(kritapsdimport kritaui )
+if (WIN32)
+	target_link_libraries(kritapsdimport kritaui ${WIN32_PLATFORM_NET_LIBS})
+else (WIN32)
+	target_link_libraries(kritapsdimport kritaui )
+endif (WIN32)
+
 install(TARGETS kritapsdimport DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### next target ###############
@@ -39,7 +42,12 @@ set(kritapsdexport_PART_SRCS
 )
 
 kde4_add_plugin(kritapsdexport ${kritapsdexport_PART_SRCS})
-target_link_libraries(kritapsdexport kritaui )
+
+if (WIN32)
+    target_link_libraries(kritapsdexport kritaui ${WIN32_PLATFORM_NET_LIBS})
+else (WIN32)	
+    target_link_libraries(kritapsdexport kritaui )
+endif (WIN32)	
 install(TARGETS kritapsdexport DESTINATION ${PLUGIN_INSTALL_DIR})
 
 install( FILES krita_psd_import.desktop 

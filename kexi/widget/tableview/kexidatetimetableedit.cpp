@@ -46,7 +46,7 @@
 
 #include <kexiutils/utils.h>
 
-KexiDateTimeTableEdit::KexiDateTimeTableEdit(KexiTableViewColumn &column, QWidget *parent)
+KexiDateTimeTableEdit::KexiDateTimeTableEdit(KexiDB::TableViewColumn &column, QWidget *parent)
         : KexiInputTableEdit(column, parent)
 {
     setObjectName("KexiDateTimeTableEdit");

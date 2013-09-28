@@ -302,7 +302,7 @@ Value ValueConverter::asString(const Value &value) const
             s = QString::number(numToDouble(value.asFloat()), 'g', 10);
             const QString decimalSymbol = m_parser->settings()->locale()->decimalSymbol();
             if (!decimalSymbol.isNull() && ((pos = s.indexOf('.')) != -1))
-                s = s.replace(pos, 1, decimalSymbol);
+                s.replace(pos, 1, decimalSymbol);
             if (fmt == Value::fmt_Percent)
                 s += " %";
             val = Value(s);
@@ -321,10 +321,10 @@ Value ValueConverter::asString(const Value &value) const
             const QString decimalSymbol = m_parser->settings()->locale()->decimalSymbol();
             QString real = QString::number(numToDouble(value.asComplex().real()), 'g', 10);
             if (!decimalSymbol.isNull() && ((pos = real.indexOf('.')) != -1))
-                real = real.replace(pos, 1, decimalSymbol);
+                real.replace(pos, 1, decimalSymbol);
             QString imag = QString::number(numToDouble(value.asComplex().imag()), 'g', 10);
             if (!decimalSymbol.isNull() && ((pos = imag.indexOf('.')) != -1))
-                imag = imag.replace(pos, 1, decimalSymbol);
+                imag.replace(pos, 1, decimalSymbol);
             s = real;
             if (value.asComplex().imag() >= 0.0)
                 s += '+';

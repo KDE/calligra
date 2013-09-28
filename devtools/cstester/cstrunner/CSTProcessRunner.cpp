@@ -25,7 +25,7 @@
 #include <QString>
 #include <QDebug>
 
-static const char * PROGRAM = "cstwrapper.sh";
+static const char PROGRAM[] = "cstwrapper.sh";
 
 CSTProcessRunner::CSTProcessRunner(const QString &documentDir, const QString &resultDir, int concurrentProcesses, bool pickup)
 : m_resultDir(resultDir)
