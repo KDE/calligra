@@ -58,7 +58,6 @@
 #include <kio/netaccess.h>
 #include <kedittoolbar.h>
 #include <ktemporaryfile.h>
-#include <krecentdocument.h>
 #include <klocale.h>
 #include <kglobalsettings.h>
 #include <ktoolinvocation.h>
@@ -576,25 +575,7 @@ void KoMainWindow::addRecentURL(const KUrl& url)
     // Add entry to recent documents list
     // (call coming from KoDocument because it must work with cmd line, template dlg, file/open, etc.)
     if (!url.isEmpty()) {
-        bool ok = true;
-        if (url.isLocalFile()) {
-            QString path = url.toLocalFile(KUrl::RemoveTrailingSlash);
-            const QStringList tmpDirs = KGlobal::dirs()->resourceDirs("tmp");
-            for (QStringList::ConstIterator it = tmpDirs.begin() ; ok && it != tmpDirs.end() ; ++it)
-                if (path.contains(*it))
-                    ok = false; // it's in the tmp resource
-            if (ok) {
-                KRecentDocument::add(path);
-#if KDE_IS_VERSION(4,6,0)
-                KRecentDirs::add(":OpenDialog", QFileInfo(path).dir().canonicalPath());
-#endif
-            }
-        } else {
-            KRecentDocument::add(url.url(KUrl::RemoveTrailingSlash), true);
-        }
-        if (ok) {
-            d->recent->addUrl(url);
-        }
+        d->recent->addUrl(url);
         saveRecentFiles();
 
 #ifdef HAVE_KACTIVITIES

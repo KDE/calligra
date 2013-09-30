@@ -41,7 +41,6 @@
 #include <QLineEdit>
 #include <kmessagebox.h>
 #include <klocale.h>
-#include <krecentdocument.h>
 #include <kurlrequester.h>
 #include <kurlcompletion.h>
 
@@ -124,29 +123,9 @@ LinkDialog::LinkDialog(QWidget* parent, Selection* selection)
     d->fileLink->completionObject()->setReplaceHome(true);
     d->fileLink->completionObject()->setReplaceEnv(true);
     fLayout->addWidget(d->fileLink);
-    fLayout->addWidget(new QLabel(i18n("Recent file:"), d->filePage));
-    KComboBox* recentFile = new KComboBox(d->filePage);
-    recentFile->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    recentFile->setMinimumContentsLength(40);
-    fLayout->addWidget(recentFile);
     fLayout->addItem(new QSpacerItem(0, 40, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding));
     connect(d->fileText, SIGNAL(textChanged(QString)), this,
             SLOT(setText(QString)));
-    QObject::connect(recentFile, SIGNAL(highlighted(QString)),
-                     d->fileLink->lineEdit(), SLOT(setText(QString)));
-
-    // populate recent files
-    int index = 0;
-    const QStringList fileList = KRecentDocument::recentDocuments();
-    for (QStringList::ConstIterator it = fileList.constBegin(); it != fileList.constEnd(); ++it) {
-        KDesktopFile f(*it);
-        if (!f.readUrl().isEmpty())
-            recentFile->insertItem(index++, f.readUrl());
-    }
-    if (recentFile->count() == 0) {
-        recentFile->insertItem(0, i18n("No Entries"));
-        recentFile->setEnabled(false);
-    }
 
     // link to another cell
     d->cellPage = new QWidget();

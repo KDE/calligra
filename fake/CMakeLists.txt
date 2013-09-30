@@ -38,7 +38,7 @@ set(kofake_HEADERS_ONLY
     kfind.h
     #kxmlguiwindow.h
     #kmessagebox.h
-    krecentdocument.h
+    #krecentdocument.h
     kfilewidget.h
     #kparts/componentfactory.h
     #kparts/browserextension.h
