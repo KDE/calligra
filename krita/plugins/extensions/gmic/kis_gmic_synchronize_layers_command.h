@@ -16,26 +16,35 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_GMIC_SIMPLE_CONVERTOR_H
-#define __KIS_GMIC_SIMPLE_CONVERTOR_H
+#ifndef _KIS_GMIC_SYNCHRONIZE_LAYERS_COMMAND
+#define _KIS_GMIC_SYNCHRONIZE_LAYERS_COMMAND
 
-#include <QRect>
-#include <kis_paint_device.h>
+#include <commands/kis_image_layer_add_command.h>
+#include <commands/kis_image_layer_remove_command.h>
+
 #include <gmic.h>
+#include <kundo2command.h>
 
-class QImage;
-class KoColorSpace;
+#include <QSharedPointer>
+#include <QList>
 
-class KisGmicSimpleConvertor
+#include <kis_types.h>
+#include <kis_node.h>
+
+
+class KisGmicSynchronizeLayersCommand : public KUndo2Command
 {
 public:
-    static QImage convertToQImage(gmic_image<float>& gmicImage, float gmicMaxChannelValue = 255.0);
-    static void convertFromQImage(const QImage &image, gmic_image<float>& gmicImage, float gmicMaxChannelValue = 1.0);
+    KisGmicSynchronizeLayersCommand(KisNodeListSP nodes, QSharedPointer< gmic_list<float> > images, KisImageWSP image);
 
-    // output gmic image will have max channel 1.0 as in Krita's float rgba color-space
-    static void convertToGmicImage(KisPaintDeviceSP dev, gmic_image<float>& gmicImage, QRect rc = QRect());
-    // gmicMaxChannelValue indicates if the gmic image pixels rgb has range 0..255 or 0..1.0
-    static void convertFromGmicImage(gmic_image<float>& gmicImage, KisPaintDeviceSP dst, float gmicMaxChannelValue);
+    virtual void redo();
+    virtual void undo();
+
+private:
+    KisNodeListSP m_nodes;
+    QSharedPointer< gmic_list<float> > m_images;
+    KisImageWSP m_image;
+    bool m_firstRedo;
 };
 
 #endif

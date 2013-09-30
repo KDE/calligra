@@ -201,6 +201,7 @@ void KisPaintOpPresetsPopup::changeSavePresetButtonText(bool change)
 
     if (change) {
         palette.setColor(QPalette::Base, QColor(255,200,200));
+        palette.setColor(QPalette::Text, Qt::black);
         m_d->uiWdgPaintOpPresetSettings.bnSave->setText(i18n("Overwrite Preset"));
         m_d->uiWdgPaintOpPresetSettings.txtPreset->setPalette(palette);
     }
@@ -286,6 +287,7 @@ void KisPaintOpPresetsPopup::setPaintOpList(const QList< KisPaintOpFactory* >& l
 void KisPaintOpPresetsPopup::setCurrentPaintOp(const QString& paintOpId)
 {
     m_d->uiWdgPaintOpPresetSettings.paintopList->setCurrent(paintOpId);
+    m_d->uiWdgPaintOpPresetSettings.presetWidget->setPresetFilter(paintOpId);
 }
 
 QString KisPaintOpPresetsPopup::currentPaintOp()
