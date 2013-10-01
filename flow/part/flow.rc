@@ -2,6 +2,10 @@
 
 <kpartgui name="flow" version="33">
     <MenuBar>
+        <Menu name="file">
+            <Text>&amp;File</Text>
+            <Action name="file_encrypt_doc" />
+            <Action name="file_uncompress_doc" />
         <Menu name="edit">
             <Text>&amp;Edit</Text>
             <Action name="edit_undo"/>
