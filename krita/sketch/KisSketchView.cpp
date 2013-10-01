@@ -483,6 +483,11 @@ bool KisSketchView::sceneEvent(QEvent* event)
             emit interactionStarted();
             return true;
         }
+	case QEvent::TabletPress:
+	case QEvent::TabletMove:
+	case QEvent::TabletRelease:
+	    QApplication::sendEvent(d->canvasWidget, event);
+	    return true;
         default:
             if(QApplication::sendEvent(d->canvasWidget, event)) {
             emit interactionStarted();
