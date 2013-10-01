@@ -205,15 +205,7 @@ public:
      **/
     static QString locate(const char *type, const QString& filename, const KComponentData &cData = KGlobal::mainComponent())
     {
-        if (type == QString("data")) {
-            return QCoreApplication::applicationDirPath()+QString("/../share/")+filename;
-  //      } else if (type == "apps"|| type == "xdgdata-apps") {
-        } else if (type == QString("config")|| type == QString("appdata")) {
-            return QCoreApplication::applicationDirPath()+QString("/../share/")+cData.componentName()+QString("/")+filename;
-  //      } else if (type == "pixmap" || type == "xdgdata-pixmap" || type == "xdgdata-icon") {
-        }
-        //Q_ASSERT(false);
-        return QString()+filename;
+        return cData.dirs()->findResource(type, filename);
     }
 
     /**
