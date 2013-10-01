@@ -35,11 +35,11 @@ Boston, MA 02110-1301, USA.
 KoFilterEntry::KoFilterEntry(QPluginLoader *loader)
         : m_loader(loader)
 {
-    import = loader->property("X-KDE-Import").toStringList();
-    export_ = loader->property("X-KDE-Export").toStringList();
-    int w = loader->property("X-KDE-Weight").toInt();
+    import = loader->metaData().value("MetaData").toObject().value("X-KDE-Import").toString().split(',');
+    export_ = loader->metaData().value("MetaData").toObject().value("X-KDE-Export").toString().split(',');
+    int w = loader->metaData().value("MetaData").toObject().value("X-KDE-Weight").toString().toInt();
     weight = w < 0 ? UINT_MAX : static_cast<unsigned int>(w);
-    available = loader->property("X-KDE-Available").toString();
+    available = loader->metaData().value("MetaData").toObject().value("X-KDE-Available").toString();
 }
 
 QList<KoFilterEntry::Ptr> KoFilterEntry::query()
