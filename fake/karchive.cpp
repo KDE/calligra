@@ -176,15 +176,16 @@ bool KArchive::close()
             d->abortWriting();
     }
 
-    if ( d->dev )
-        d->dev->close();
-
     // if d->saveFile is not null then it is equal to d->dev.
     if ( d->saveFile ) {
         closeSucceeded = d->saveFile->commit();
         delete d->saveFile;
         d->saveFile = 0;
-    } if ( d->deviceOwned ) {
+    } else {
+        d->dev->close();
+    }
+
+    if ( d->deviceOwned ) {
         delete d->dev; // we created it ourselves in open()
     }
 
