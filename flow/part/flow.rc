@@ -7,6 +7,7 @@
             <Separator/>
             <Action name="file_encrypt_doc"/>
             <Action name="file_uncompress_doc"/>
+        </Menu>
         <Menu name="edit">
             <Text>&amp;Edit</Text>
             <Action name="edit_undo"/>
