@@ -169,7 +169,7 @@ bool MDBMigrate::drv_readTableSchema(const QString& originalName,
         QString fldName = QString::fromUtf8(col->name);
         kDebug() << "got column" << fldName << col->name;
 
-        QString fldID(KexiUtils::string2Identifier(fldName));
+        QString fldID(KexiUtils::stringToIdentifier(fldName));
 
         // Field type
         KexiDB::Field *fld =

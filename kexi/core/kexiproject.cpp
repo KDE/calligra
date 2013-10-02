@@ -1063,9 +1063,9 @@ KexiPart::Item* KexiProject::createPartItem(KexiPart::Info *info, const QString&
         base_name = part->instanceName();
     } else {
         n = 0; //means: try not to add 'n'
-        base_name = KexiUtils::string2Identifier(suggestedCaption).toLower();
+        base_name = KexiUtils::stringToIdentifier(suggestedCaption).toLower();
     }
-    base_name = KexiUtils::string2Identifier(base_name).toLower();
+    base_name = KexiUtils::stringToIdentifier(base_name).toLower();
     do {
         new_name = base_name;
         if (n >= 1)
