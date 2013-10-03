@@ -3,6 +3,7 @@ Airbrush_eraser.kpp
 Airbrush_linear.kpp
 Airbrush_linear_noisy.kpp
 Airbrush_pressure.kpp
+Airbrush_overlay.kpp
 Basic_circle.kpp
 Basic_circle_wet.kpp
 Block_basic.kpp
