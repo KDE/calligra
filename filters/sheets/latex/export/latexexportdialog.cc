@@ -27,7 +27,6 @@
 #include <klocale.h>
 #include <kconfig.h>
 #include <kstandarddirs.h>
-#include <krecentdocument.h>
 #include <kurlrequester.h>
 #include <kdebug.h>
 #include <KoFilterManager.h>
