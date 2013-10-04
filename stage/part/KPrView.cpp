@@ -49,9 +49,7 @@
 #include "KPrPage.h"
 #include "KPrMasterPage.h"
 #include "KPrPageApplicationData.h"
-#ifndef CALLIGRA_DISABLE_DBUS
-#   include "KPrViewAdaptor.h"
-#endif
+//#   include "KPrViewAdaptor.h"
 #include "KPrViewModePresentation.h"
 #include "KPrViewModeNotes.h"
 #include "KPrViewModeSlidesSorter.h"
@@ -80,7 +78,9 @@ KPrView::KPrView(KPrPart *part, KPrDocument *document, QWidget *parent)
   , m_notesMode( new KPrViewModeNotes( this, kopaCanvas() ))
   , m_slidesSorterMode(new KPrViewModeSlidesSorter(this, kopaCanvas()))
 #ifndef CALLIGRA_DISABLE_DBUS
-  , m_dbus( new KPrViewAdaptor( this ) )
+  , m_dbus(new KPrViewAdaptor( this ) )
+#else
+  , m_dbus(0)
 #endif
 {
     m_normalMode->setName(i18n("Normal"));
@@ -141,12 +141,10 @@ KPrDocument * KPrView::kprDocument() const
     return static_cast<KPrDocument *>( kopaDocument() );
 }
 
-#ifndef CALLIGRA_DISABLE_DBUS
 KPrViewAdaptor * KPrView::dbusObject() const
 {
     return m_dbus;
 }
-#endif
 KPrViewModePresentation * KPrView::presentationMode() const
 {
     return m_presentationMode;
