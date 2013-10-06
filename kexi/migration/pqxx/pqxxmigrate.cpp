@@ -97,7 +97,7 @@ bool PqxxMigrate::drv_readTableSchema(
     for (uint i = 0; i < (uint)m_res->columns(); i++) {
         QString fldName(m_res->column_name(i));
         KexiDB::Field::Type fldType = type(m_res->column_type(i), fldName);
-        QString fldID(KexiUtils::string2Identifier(fldName));
+        QString fldID(KexiUtils::stringToIdentifier(fldName));
         const pqxx::oid toid = tableOid(originalName);
         if (toid == 0)
             return false;
