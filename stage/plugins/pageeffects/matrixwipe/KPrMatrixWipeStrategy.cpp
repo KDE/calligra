@@ -19,6 +19,7 @@
 
 #include "KPrMatrixWipeStrategy.h"
 
+#include <cmath>
 #include <QWidget>
 #include <QPainter>
 #include <kdebug.h>
@@ -49,8 +50,8 @@ void KPrMatrixWipeStrategy::setup( const KPrPageEffect::Data &data, QTimeLine &t
     timeLine.setFrameRange( 0, (m_smooth ? framesPerSquare : 1) * maxIndex(m_squaresPerRow, m_squaresPerCol) );
 }
 
-static inline int floor(double d) { return (int) (d + 1e-5); }
-static inline int ceil(double d) { return (int) (d + 1 - 1e-5); }
+// static inline int floor(double d) { return (int) (d + 1e-5); }
+// static inline int ceil(double d) { return (int) (d + 1 - 1e-5); }
 
 static QRect tileRect(KPrMatrixWipeStrategy::Direction direction, int step, const QRect& base) {
     switch (direction) {
