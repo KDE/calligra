@@ -363,9 +363,18 @@ remove_definitions(-DQT_NO_CAST_FROM_ASCII -DQT_STRICT_ITERATORS -DQT_NO_CAST_FR
 SET(KDE4_KDECORE_LIBS ${QT_QTGUI_LIBRARIES} kofake)
 SET(KDE4_KDEUI_LIBS ${KDE4_KDECORE_LIBS})
 
+set(CXX11 "")
+if(CMAKE_COMPILER_IS_GNUCXX)
+    if(CMAKE_CXX_COMPILER_VERSION VERSION_LESS "4.7")
+        set(CXX11 "-std=c++0x")
+    else(CMAKE_CXX_COMPILER_VERSION VERSION_LESS "4.7")
+        set(CXX11 "-std=c++11")
+    endif(CMAKE_CXX_COMPILER_VERSION VERSION_LESS "4.7")
+endif(CMAKE_COMPILER_IS_GNUCXX)
+
 SET(WARN "${WARN} -Wno-unused-parameter -Wno-unused-function -Wno-undef")
 SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${WARN}")
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${WARN}")
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${WARN} ${CXX11}")
 
 # Now first build the kf5 frameworks we need
 add_subdirectory(kf5)
