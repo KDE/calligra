@@ -251,6 +251,7 @@ calligra_define_product(FLOW "Full Flow (for Desktop)"  NEEDS FLOW_APP  WANTS FI
 calligra_define_product(PLAN "Full Plan (for Desktop)"  NEEDS PLAN_APP  WANTS FILTER_PLAN)
 calligra_define_product(BRAINDUMP "Full Braindump (for Desktop)"  NEEDS BRAINDUMP_APP)
 calligra_define_product(ACTIVE "Calligra Active"  NEEDS SHEETS_PART STAGE_PART WORDS_PART)
+calligra_define_product(COMPONENTS "Calligra QtQuick Components" NEEDS WORDS_PART SHEETS_PART STAGE_PART)
 calligra_define_product(CALLIGRA ""  NEEDS CALLIGRA_LIBS)
 # developer utils
 calligra_define_product(DEVTOOLS "Tools for developers")
@@ -1149,6 +1150,10 @@ endif(SHOULD_BUILD_ACTIVE)
 if(SHOULD_BUILD_DOC)
 #    add_subdirectory(doc)
 endif(SHOULD_BUILD_DOC)
+
+if(SHOULD_BUILD_COMPONENTS)
+    add_subdirectory(components)
+endif(SHOULD_BUILD_COMPONENTS)
 
 # non-app directories are moved here because they can depend on SHOULD_BUILD_{appname} variables set above
 add_subdirectory(libs)
