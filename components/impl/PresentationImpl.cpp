@@ -19,14 +19,19 @@
 
 #include "PresentationImpl.h"
 
+#include <stage/part/KPrPart.h>
+#include <stage/part/KPrDocument.h>
+
 using namespace Calligra::Components;
 
 class PresentationImpl::Private
 {
 public:
-    Private()
+    Private() : part{nullptr}, document{nullptr}
     { }
 
+    KPrPart* part;
+    KPrDocument* document;
 };
 
 PresentationImpl::PresentationImpl(QObject* parent)
@@ -47,7 +52,16 @@ Global::DocumentType PresentationImpl::documentType() const
 
 bool PresentationImpl::load(const QUrl& url)
 {
-    return false;
+    if(d->part) {
+        delete d->part;
+        delete d->document;
+    }
+
+    d->part = new KPrPart{this};
+    d->document = new KPrDocument{d->part};
+    d->part->setDocument(d->document);
+
+    return d->document->openUrl(url);
 }
 
 KoFindBase* PresentationImpl::finder() const

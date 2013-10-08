@@ -19,14 +19,19 @@
 
 #include "SpreadsheetImpl.h"
 
+#include "sheets/part/Part.h"
+#include "sheets/part/Doc.h"
+
 using namespace Calligra::Components;
 
 class SpreadsheetImpl::Private
 {
 public:
-    Private()
+    Private() : part{nullptr}, document{nullptr}
     { }
 
+    Calligra::Sheets::Part* part;
+    Calligra::Sheets::Doc* document;
 };
 
 SpreadsheetImpl::SpreadsheetImpl(QObject* parent)
@@ -47,7 +52,16 @@ Global::DocumentType SpreadsheetImpl::documentType() const
 
 bool SpreadsheetImpl::load(const QUrl& url)
 {
-    return false;
+    if(d->part) {
+        delete d->part;
+        delete d->document;
+    }
+
+    d->part = new Calligra::Sheets::Part{this};
+    d->document = new Calligra::Sheets::Doc{d->part};
+    d->part->setDocument(d->document);
+
+    return d->document->openUrl(url);
 }
 
 KoFindBase* SpreadsheetImpl::finder() const
