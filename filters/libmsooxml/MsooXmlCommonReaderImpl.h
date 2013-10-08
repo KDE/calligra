@@ -193,6 +193,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_Fallback()
         }
 
         if (isStartElement()) {
+#ifdef PPTXXMLSLIDEREADER_CPP
+            TRY_READ_IF_NS(p, sp)
+#endif
 #ifdef DOCXXMLDOCREADER_H
             TRY_READ_IF_NS(w, pict)
 #endif
