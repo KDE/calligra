@@ -75,11 +75,10 @@ QList<QPluginLoader *> KoJsonTrader::query(const QString &servicetype, const QSt
                 }
             }
         }
-        qDebug() << "KoJsonTrader will load its plugins from" << m_pluginPath;
+        kDebug() << "KoJsonTrader will load its plugins from" << m_pluginPath;
 
     }
 
-//    qDebug() << servicetype << mimetype;
     QList<QPluginLoader *>list;
     QDirIterator dirIter(m_pluginPath, QDirIterator::Subdirectories);
     while (dirIter.hasNext()) {
@@ -89,11 +88,7 @@ QList<QPluginLoader *> KoJsonTrader::query(const QString &servicetype, const QSt
             QJsonObject json = loader->metaData().value("MetaData").toObject();
 
             if (json.isEmpty()) {
-                qDebug() << dirIter.filePath() << "has no json!";
-                //            foreach(QString key, loader->metaData().keys()) {
-                //                qDebug() << key << loader->metaData().value(key);
-                //            }
-
+                kDebug() << dirIter.filePath() << "has no json!";
             }
             if (!json.isEmpty()) {
                 if (! json.value("X-KDE-ServiceTypes").toArray().contains(QJsonValue(servicetype))) {
