@@ -30,6 +30,7 @@ set(components_SRCS
     impl/SpreadsheetImpl.cpp
     impl/PresentationImpl.cpp
     impl/PresentationKoPAView.cpp
+    impl/ComponentsKoCanvasController.cpp
 )
 
 kde4_add_library(CalligraComponentsPlugin SHARED ${components_SRCS})
