@@ -19,26 +19,55 @@
 
 #include "View.h"
 
+#include <QtCore/QTimer>
+#include <QtGui/QPainter>
+#include <QtQuick/QQuickWindow>
+#include <QtWidgets/QGraphicsWidget>
+#include <QtWidgets/QStyleOptionGraphicsItem>
+
+#include "Document.h"
+
 using namespace Calligra::Components;
 
 class View::Private
 {
 public:
-    Private() : document{nullptr}
+    Private(View* qq) : q{qq}, document{nullptr}, canvas{nullptr}
     { }
 
+    void updateCanvas();
+
+    View* q;
+
     Document* document;
+    QGraphicsWidget* canvas;
+
+    QTimer updateTimer;
 };
 
 View::View(QQuickItem* parent)
-    : QQuickItem{parent}, d{new Private}
+    : QQuickPaintedItem{parent}, d{new Private{this}}
 {
-
+    d->updateTimer.setInterval(5000);
+    d->updateTimer.setSingleShot(true);
+    connect(&d->updateTimer, &QTimer::timeout, [&]() { update(); });
 }
 
 View::~View()
 {
     delete d;
+}
+
+void View::paint(QPainter* painter)
+{
+    if(!d->document || !d->canvas) {
+        return;
+    }
+
+    QStyleOptionGraphicsItem option;
+    option.exposedRect = QRectF{0, 0, width(), height()};
+    option.rect = option.exposedRect.toAlignedRect();
+    d->canvas->paint(painter, &option);
 }
 
 Document* View::document() const
@@ -50,6 +79,18 @@ void View::setDocument(Document* newDocument)
 {
     if(newDocument != d->document) {
         d->document = newDocument;
+        connect(d->document, &Document::stateChanged, [&]() { d->updateCanvas(); });
+
+        d->updateCanvas();
         emit documentChanged();
+    }
+}
+
+void View::Private::updateCanvas()
+{
+    if(document && document->state() == Document::LoadedState) {
+        canvas = document->canvas();
+        canvas->setGeometry(0, 0, q->width(), q->height());
+        updateTimer.start();
     }
 }

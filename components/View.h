@@ -20,7 +20,7 @@
 #ifndef CALLIGRA_COMPONENTS_VIEW_H
 #define CALLIGRA_COMPONENTS_VIEW_H
 
-#include <QtQuick/QQuickItem>
+#include <QtQuick/QQuickPaintedItem>
 
 namespace Calligra {
 namespace Components {
@@ -32,14 +32,16 @@ class Document;
  *
  */
 
-class View : public QQuickItem
+class View : public QQuickPaintedItem
 {
     Q_OBJECT
-    Q_PROPERTY(Document* document READ document WRITE setDocument NOTIFY documentChanged)
+    Q_PROPERTY(Calligra::Components::Document* document READ document WRITE setDocument NOTIFY documentChanged)
 
 public:
     View(QQuickItem* parent = 0);
     virtual ~View();
+
+    virtual void paint(QPainter* painter);
 
     Document* document() const;
     void setDocument(Document* newDocument);
@@ -51,7 +53,6 @@ Q_SIGNALS:
 private:
     class Private;
     Private* const d;
-
 };
 
 } // Namespace Components
