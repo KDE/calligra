@@ -22,6 +22,12 @@ import org.kde.calligra 1.0 as Calligra
 
 Item {
     Calligra.Document {
+        id: doc;
         source: "mp07_intranet_textbox_colorfill_156824x.odp";
+    }
+
+    Calligra.View {
+        anchors.fill: parent;
+        document: doc;
     }
 }

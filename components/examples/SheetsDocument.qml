@@ -22,6 +22,12 @@ import org.kde.calligra 1.0 as Calligra
 
 Item {
     Calligra.Document {
+        id: doc;
         source: "Frequencies.ods";
+    }
+
+    Calligra.View {
+        anchors.fill: parent;
+        document: doc;
     }
 }

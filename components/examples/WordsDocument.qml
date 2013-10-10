@@ -22,6 +22,13 @@ import org.kde.calligra 1.0 as Calligra
 
 Item {
     Calligra.Document {
+        id: doc;
         source: "DanskTest10.odt";
+    }
+
+    Calligra.View {
+        anchors.fill: parent;
+        
+        document: doc;
     }
 }
