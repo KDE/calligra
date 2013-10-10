@@ -31,7 +31,7 @@ using namespace Calligra::Components;
 class Document::Private
 {
 public:
-    Private(Document* qq) : q{qq}, impl{nullptr}
+    Private(Document* qq) : q{qq}, impl{nullptr}, state{UnloadedState}
     { }
 
     void updateImpl();
@@ -40,6 +40,7 @@ public:
 
     QUrl source;
     DocumentImpl* impl;
+    State state;
 };
 
 Document::Document(QObject* parent)
@@ -62,16 +63,24 @@ void Document::setSource(const QUrl& value)
 {
     if(value != d->source) {
         d->source = value;
+        emit sourceChanged();
+
+        d->state = LoadingState;
+        emit stateChanged();
 
         d->updateImpl();
 
         if(d->impl) {
             if(d->impl->load(d->source)) {
-                qDebug() << "Loaded" << d->source;
+                d->state = LoadedState;
+            } else {
+                d->state = FailedState;
             }
+        } else {
+            d->state = UnloadedState;
         }
 
-        emit sourceChanged();
+        emit stateChanged();
     }
 }
 
@@ -84,10 +93,24 @@ Global::DocumentType Document::documentType() const
     return Global::UnknownType;
 }
 
+Document::State Document::state() const
+{
+    return d->state;
+}
+
 KoFindBase* Document::finder() const
 {
     if(d->impl) {
         return d->impl->finder();
+    }
+
+    return nullptr;
+}
+
+QGraphicsWidget* Document::canvas() const
+{
+    if(d->impl) {
+        return d->impl->canvas();
     }
 
     return nullptr;
@@ -100,7 +123,7 @@ void Document::Private::updateImpl()
     }
 
     if(!source.isEmpty()) {
-        Global::DocumentType type = Global::documentType(source);
+        auto type = Global::documentType(source);
         switch(type) {
             case Global::TextDocumentType:
                 impl = new TextDocumentImpl{q};

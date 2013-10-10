@@ -25,6 +25,7 @@
 
 #include "Global.h"
 
+class QGraphicsWidget;
 class KoFindBase;
 
 namespace Calligra {
@@ -39,24 +40,50 @@ class Document : public QObject
     Q_OBJECT
     Q_PROPERTY(QUrl source READ source WRITE setSource NOTIFY sourceChanged)
     Q_PROPERTY(Global::DocumentType documentType READ documentType NOTIFY sourceChanged)
+    Q_PROPERTY(State state READ state NOTIFY stateChanged)
 
 public:
+    enum State {
+        UnloadedState,
+        LoadingState,
+        LoadedState,
+        FailedState,
+    };
+    Q_ENUMS(State);
+
     Document(QObject* parent = 0);
     ~Document();
 
+    /**
+     * @{
+     *
+     * \property source
+     */
     QUrl source() const;
     void setSource(const QUrl& value);
+    /**
+     * @}
+     */
 
     Global::DocumentType documentType() const;
 
+    State state() const;
+
     /**
-     * The following methods are internal to the components and not
-     * exposed to QML.
+     * \defgroup internal Internal Methods
+     * The methods are used internally by the components and not exposed
+     * to QML.
+     * @{
      */
     KoFindBase* finder() const;
+    QGraphicsWidget* canvas() const;
 
+    /**
+     * @}
+     */
 Q_SIGNALS:
     void sourceChanged();
+    void stateChanged();
 
 private:
     class Private;
