@@ -18,11 +18,13 @@
  */
 
 #include "PresentationImpl.h"
+#include "PresentationKoPAView.h"
 
 #include <QtWidgets/QGraphicsWidget>
 
 #include <stage/part/KPrPart.h>
 #include <stage/part/KPrDocument.h>
+#include <KoPACanvasItem.h>
 
 using namespace Calligra::Components;
 
@@ -34,6 +36,8 @@ public:
 
     KPrPart* part;
     KPrDocument* document;
+
+    PresentationKoPAView* koPaView;
 };
 
 PresentationImpl::PresentationImpl(QObject* parent)
@@ -60,7 +64,20 @@ bool PresentationImpl::load(const QUrl& url)
 
     bool retval = d->document->openUrl(url);
 
-    setCanvas(static_cast<QGraphicsWidget*>(d->part->canvasItem(d->document)));
+    KoPACanvasItem* canvas = static_cast<KoPACanvasItem*>(d->part->canvasItem(d->document));
+
+    createAndSetCanvasController(canvas);
+
+    d->koPaView = new PresentationKoPAView(canvasController(), canvas, d->document);
+    canvas->setView(d->koPaView);
+
+    createAndSetZoomController(canvas);
+    d->koPaView->setZoomController(zoomController());
+    d->koPaView->connectToZoomController();
+
+    d->koPaView->doUpdateActivePage(d->document->pageByIndex(0, false));
+
+    setCanvas(canvas);
 
     return retval;
 }

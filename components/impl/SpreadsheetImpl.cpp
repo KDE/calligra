@@ -23,6 +23,7 @@
 
 #include "sheets/part/Part.h"
 #include "sheets/part/Doc.h"
+#include <part/CanvasItem.h>
 
 using namespace Calligra::Components;
 
@@ -60,7 +61,13 @@ bool SpreadsheetImpl::load(const QUrl& url)
 
     bool retval = d->document->openUrl(url);
 
-    setCanvas(static_cast<QGraphicsWidget*>(d->part->canvasItem(d->document)));
+    Calligra::Sheets::CanvasItem* canvas = static_cast<Calligra::Sheets::CanvasItem*>(d->part->canvasItem(d->document));
+
+    createAndSetCanvasController(canvas);
+    createAndSetZoomController(canvas);
+    //connect(canvas, SIGNAL(documentSizeChanged(QSize)), zoomController(), setDocumentSize);
+
+    setCanvas(canvas);
 
     return retval;
 }

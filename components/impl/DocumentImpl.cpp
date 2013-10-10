@@ -19,6 +19,15 @@
 
 #include "DocumentImpl.h"
 
+#include <kactioncollection.h>
+
+#include <KoCanvasBase.h>
+#include <KoToolManager.h>
+#include <KoZoomHandler.h>
+#include <KoZoomController.h>
+
+#include "ComponentsKoCanvasController.h"
+
 using namespace Calligra::Components;
 
 class DocumentImpl::Private
@@ -89,12 +98,18 @@ void DocumentImpl::setFinder(KoFindBase* newFinder)
     d->finder = newFinder;
 }
 
-void DocumentImpl::setCanvasController(KoCanvasController* controller)
+void DocumentImpl::createAndSetCanvasController(KoCanvasBase* canvas)
 {
-    d->canvasController = controller;
+    d->canvasController = new ComponentsKoCanvasController(new KActionCollection(this));
+    d->canvasController->setCanvas(canvas);
+    KoToolManager::instance()->addController(d->canvasController);
 }
 
-void DocumentImpl::setZoomController(KoZoomController* controller)
+void DocumentImpl::createAndSetZoomController(KoCanvasBase* canvas)
 {
-    d->zoomController = controller;
+    KoZoomHandler* zoomHandler = static_cast<KoZoomHandler*>(canvas->viewConverter());
+    d->zoomController = new KoZoomController(d->canvasController, zoomHandler, new KActionCollection(this));
+
+    QObject* canvasQObject = dynamic_cast<QObject*>(canvas);
+    connect(d->canvasController->proxyObject, SIGNAL(moveDocumentOffset(QPoint)), canvasQObject, SLOT(setDocumentOffset(QPoint)));
 }

@@ -22,9 +22,16 @@
 #include <QtWidgets/QGraphicsWidget>
 
 #include <kservice.h>
+#include <kactioncollection.h>
 
 #include <KWPart.h>
 #include <KWDocument.h>
+#include <KWCanvasItem.h>
+#include <KoToolManager.h>
+#include <KoZoomController.h>
+#include <KoZoomHandler.h>
+
+#include "ComponentsKoCanvasController.h"
 
 using namespace Calligra::Components;
 
@@ -60,9 +67,19 @@ bool TextDocumentImpl::load(const QUrl& url)
     d->document = new KWDocument{d->part};
     d->part->setDocument(d->document);
 
+    d->document->setAutoSave(0);
+    d->document->setCheckAutoSaveFile(false);
+
     bool retval = d->document->openUrl(url);
 
-    setCanvas(static_cast<QGraphicsWidget*>(d->part->canvasItem(d->document)));
+    KWCanvasItem* canvas = static_cast<KWCanvasItem*>(d->part->canvasItem(d->document));
+
+    createAndSetCanvasController(canvas);
+    createAndSetZoomController(canvas);
+    zoomController()->setPageSize(d->document->pageManager()->begin().rect().size());
+    connect(canvas, SIGNAL(documentSize(QSizeF)), zoomController(), SLOT(setDocumentSize(QSizeF)));
+
+    setCanvas(canvas);
 
     return retval;
 }

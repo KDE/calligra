@@ -27,6 +27,8 @@ class QGraphicsWidget;
 class KoFindBase;
 class KoCanvasController;
 class KoZoomController;
+class KoDocument;
+class KoCanvasBase;
 
 namespace Calligra {
 namespace Components {
@@ -55,8 +57,9 @@ protected:
     void setDocumentType(Global::DocumentType type);
     void setCanvas(QGraphicsWidget* newCanvas);
     void setFinder(KoFindBase* newFinder);
-    void setCanvasController(KoCanvasController* controller);
-    void setZoomController(KoZoomController* controller);
+
+    void createAndSetCanvasController(KoCanvasBase* canvas);
+    void createAndSetZoomController(KoCanvasBase* canvas);
 
 private:
     class Private;
