@@ -48,7 +48,8 @@ public:
 View::View(QQuickItem* parent)
     : QQuickPaintedItem{parent}, d{new Private{this}}
 {
-    d->updateTimer.setInterval(5000);
+    //Workaround because there is no "repaint" signal in Calligra
+    d->updateTimer.setInterval(1000);
     d->updateTimer.setSingleShot(true);
     connect(&d->updateTimer, &QTimer::timeout, [&]() { update(); });
 }
