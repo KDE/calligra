@@ -26,9 +26,10 @@ set(components_SRCS
     models/ThumbnailModel.cpp
 
     impl/DocumentImpl.cpp
-    impl/PresentationImpl.cpp
-    impl/SpreadsheetImpl.cpp
     impl/TextDocumentImpl.cpp
+    impl/SpreadsheetImpl.cpp
+    impl/PresentationImpl.cpp
+    impl/PresentationKoPAView.cpp
 )
 
 kde4_add_library(CalligraComponentsPlugin SHARED ${components_SRCS})
