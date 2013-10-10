@@ -55,7 +55,7 @@ public:
 
 public slots:
 
-    void slotSetDocumentOffset(const QPoint &offset) { setDocumentOffset(offset); }
+    void setDocumentOffset(const QPoint &offset) { KoPACanvasBase::setDocumentOffset(offset); }
 
 signals:
 
