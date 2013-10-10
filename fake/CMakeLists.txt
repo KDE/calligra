@@ -5,6 +5,11 @@ set_package_properties(ZLIB PROPERTIES DESCRIPTION "Support for gzip compressed 
                        PURPOSE "Required by core Calligra kofake-library to read/write compressed zip archive files"
                       )
 
+option(DISABLE_KDEBUG "Disable non-critical output of kdebug.h" OFF)
+if(DISABLE_KDEBUG)
+    add_definitions(-DDISABLE_KDEBUG)
+endif()
+
 set(kofake_LIB_SRCS
     karchive.cpp
     kdatewidget.cpp

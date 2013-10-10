@@ -4,30 +4,38 @@
 #include <QDebug>
 #include <kglobal.h>
 
+#ifdef DISABLE_KDEBUG
+#include <QFile>
+static QFile devnull{"/dev/null"};
+#define Q_DEBUG(MsgType) QDebug(&devnull)
+#else
+#define Q_DEBUG(MsgType) QDebug(MsgType)
+#endif
+
 static inline QDebug kDebug(int area = 0)
 {
     Q_UNUSED(area);
-    return QDebug(QtDebugMsg);
+    return Q_DEBUG(QtDebugMsg);
 }
 
 static inline QDebug kDebug(bool cond, int area = 0)
 {
     Q_UNUSED(cond);
     Q_UNUSED(area);
-    return QDebug(QtDebugMsg);
+    return Q_DEBUG(QtDebugMsg);
 }
 
 static inline QDebug kWarning(int area = 0)
 {
     Q_UNUSED(area);
-    return QDebug(QtWarningMsg);
+    return Q_DEBUG(QtWarningMsg);
 }
 
 static inline QDebug kWarning(bool cond, int area = 0)
 {
     Q_UNUSED(cond);
     Q_UNUSED(area);
-    return QDebug(QtWarningMsg);
+    return Q_DEBUG(QtWarningMsg);
 }
 
 static inline QDebug kError(int area = 0)
