@@ -92,6 +92,11 @@ option(SHOULD_BUILD_DOC "Build documetation" OFF)
 set(SHOULD_BUILD_LIB_KOPROPERTY FALSE)
 set(SHOULD_BUILD_LIB_KOREPORT FALSE)
 
+option(DISABLE_KDEBUG "Disable non-critical output of kdebug.h" OFF)
+if(DISABLE_KDEBUG)
+    add_definitions(-DDISABLE_KDEBUG)
+endif()
+
 # temporary migration support
 set(PRODUCTSET_DEFAULT "ALL")
 if (CREATIVEONLY)
