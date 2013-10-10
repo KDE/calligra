@@ -19,6 +19,8 @@
 
 #include "SpreadsheetImpl.h"
 
+#include <QtWidgets/QGraphicsWidget>
+
 #include "sheets/part/Part.h"
 #include "sheets/part/Doc.h"
 
@@ -37,17 +39,12 @@ public:
 SpreadsheetImpl::SpreadsheetImpl(QObject* parent)
     : DocumentImpl{parent}, d{new Private}
 {
-
+    setDocumentType(Global::SpreadsheetType);
 }
 
 SpreadsheetImpl::~SpreadsheetImpl()
 {
     delete d;
-}
-
-Global::DocumentType SpreadsheetImpl::documentType() const
-{
-    return Global::SpreadsheetType;
 }
 
 bool SpreadsheetImpl::load(const QUrl& url)
@@ -61,10 +58,9 @@ bool SpreadsheetImpl::load(const QUrl& url)
     d->document = new Calligra::Sheets::Doc{d->part};
     d->part->setDocument(d->document);
 
-    return d->document->openUrl(url);
-}
+    bool retval = d->document->openUrl(url);
 
-KoFindBase* SpreadsheetImpl::finder() const
-{
-    return nullptr;
+    setCanvas(static_cast<QGraphicsWidget*>(d->part->canvasItem(d->document)));
+
+    return retval;
 }

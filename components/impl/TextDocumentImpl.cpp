@@ -19,7 +19,7 @@
 
 #include "TextDocumentImpl.h"
 
-#include <QDebug>
+#include <QtWidgets/QGraphicsWidget>
 
 #include <kservice.h>
 
@@ -41,17 +41,12 @@ public:
 TextDocumentImpl::TextDocumentImpl(QObject* parent)
     : DocumentImpl{parent}, d{new Private}
 {
-    qDebug() << Q_FUNC_INFO;
+    setDocumentType(Global::TextDocumentType);
 }
 
 TextDocumentImpl::~TextDocumentImpl()
 {
     delete d;
-}
-
-Global::DocumentType TextDocumentImpl::documentType() const
-{
-    return Global::TextDocumentType;
 }
 
 bool TextDocumentImpl::load(const QUrl& url)
@@ -65,11 +60,9 @@ bool TextDocumentImpl::load(const QUrl& url)
     d->document = new KWDocument{d->part};
     d->part->setDocument(d->document);
 
-    return d->document->openUrl(url);
-}
+    bool retval = d->document->openUrl(url);
 
-KoFindBase* TextDocumentImpl::finder() const
-{
-    return nullptr;
-}
+    setCanvas(static_cast<QGraphicsWidget*>(d->part->canvasItem(d->document)));
 
+    return retval;
+}

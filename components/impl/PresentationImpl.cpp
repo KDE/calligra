@@ -19,6 +19,8 @@
 
 #include "PresentationImpl.h"
 
+#include <QtWidgets/QGraphicsWidget>
+
 #include <stage/part/KPrPart.h>
 #include <stage/part/KPrDocument.h>
 
@@ -37,17 +39,12 @@ public:
 PresentationImpl::PresentationImpl(QObject* parent)
     : DocumentImpl{parent}, d{new Private}
 {
-
+    setDocumentType(Global::PresentationType);
 }
 
 PresentationImpl::~PresentationImpl()
 {
     delete d;
-}
-
-Global::DocumentType PresentationImpl::documentType() const
-{
-    return Global::PresentationType;
 }
 
 bool PresentationImpl::load(const QUrl& url)
@@ -61,10 +58,9 @@ bool PresentationImpl::load(const QUrl& url)
     d->document = new KPrDocument{d->part};
     d->part->setDocument(d->document);
 
-    return d->document->openUrl(url);
-}
+    bool retval = d->document->openUrl(url);
 
-KoFindBase* PresentationImpl::finder() const
-{
-    return nullptr;
+    setCanvas(static_cast<QGraphicsWidget*>(d->part->canvasItem(d->document)));
+
+    return retval;
 }

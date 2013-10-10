@@ -23,7 +23,10 @@
 #include <QtCore/QObject>
 #include "Global.h"
 
+class QGraphicsWidget;
 class KoFindBase;
+class KoCanvasController;
+class KoZoomController;
 
 namespace Calligra {
 namespace Components {
@@ -40,11 +43,24 @@ public:
     explicit DocumentImpl(QObject* parent = 0);
     virtual ~DocumentImpl();
 
-    virtual Global::DocumentType documentType() const = 0;
-
     virtual bool load(const QUrl& url) = 0;
-    virtual KoFindBase* finder() const = 0;
 
+    Global::DocumentType documentType() const;
+    KoFindBase* finder() const;
+    QGraphicsWidget* canvas() const;
+    KoCanvasController* canvasController() const;
+    KoZoomController* zoomController() const;
+
+protected:
+    void setDocumentType(Global::DocumentType type);
+    void setCanvas(QGraphicsWidget* newCanvas);
+    void setFinder(KoFindBase* newFinder);
+    void setCanvasController(KoCanvasController* controller);
+    void setZoomController(KoZoomController* controller);
+
+private:
+    class Private;
+    Private* const d;
 };
 
 } // Namespace Components

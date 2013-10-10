@@ -31,10 +31,8 @@ class PresentationImpl : public DocumentImpl
 public:
     PresentationImpl(QObject* parent = 0);
     ~PresentationImpl();
-
-    virtual Global::DocumentType documentType() const;
+    
     virtual bool load(const QUrl& url);
-    virtual KoFindBase* finder() const;
 
 private:
     class Private;

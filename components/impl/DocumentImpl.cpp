@@ -21,8 +21,25 @@
 
 using namespace Calligra::Components;
 
+class DocumentImpl::Private
+{
+public:
+    Private() : type{Global::UnknownType},
+        canvas{nullptr},
+        finder{nullptr},
+        canvasController{nullptr},
+        zoomController{nullptr}
+    { }
+
+    Global::DocumentType type;
+    QGraphicsWidget* canvas;
+    KoFindBase* finder;
+    KoCanvasController* canvasController;
+    KoZoomController* zoomController;
+};
+
 DocumentImpl::DocumentImpl(QObject* parent)
-    : QObject{parent}
+    : QObject{parent}, d{new Private}
 {
 
 }
@@ -30,4 +47,54 @@ DocumentImpl::DocumentImpl(QObject* parent)
 DocumentImpl::~DocumentImpl()
 {
 
+}
+
+Global::DocumentType DocumentImpl::documentType() const
+{
+    return d->type;
+}
+
+QGraphicsWidget* DocumentImpl::canvas() const
+{
+    return d->canvas;
+}
+
+KoFindBase* DocumentImpl::finder() const
+{
+    return d->finder;
+}
+
+KoCanvasController* DocumentImpl::canvasController() const
+{
+    return d->canvasController;
+}
+
+KoZoomController* DocumentImpl::zoomController() const
+{
+    return d->zoomController;
+}
+
+void DocumentImpl::setDocumentType(Global::DocumentType type)
+{
+    d->type = type;
+}
+
+void DocumentImpl::setCanvas(QGraphicsWidget* newCanvas)
+{
+    d->canvas = newCanvas;
+}
+
+void DocumentImpl::setFinder(KoFindBase* newFinder)
+{
+    d->finder = newFinder;
+}
+
+void DocumentImpl::setCanvasController(KoCanvasController* controller)
+{
+    d->canvasController = controller;
+}
+
+void DocumentImpl::setZoomController(KoZoomController* controller)
+{
+    d->zoomController = controller;
 }

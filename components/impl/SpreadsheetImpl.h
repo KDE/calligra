@@ -32,9 +32,7 @@ public:
     SpreadsheetImpl(QObject* parent = 0);
     ~SpreadsheetImpl();
 
-    virtual Global::DocumentType documentType() const;
     virtual bool load(const QUrl& url);
-    virtual KoFindBase* finder() const;
 
 private:
     class Private;

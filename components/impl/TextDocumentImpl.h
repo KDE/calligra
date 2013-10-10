@@ -32,9 +32,7 @@ public:
     explicit TextDocumentImpl(QObject* parent = 0);
     virtual ~TextDocumentImpl();
 
-    Global::DocumentType documentType() const;
     virtual bool load(const QUrl& url);
-    virtual KoFindBase* finder() const;
 
 private:
     class Private;
