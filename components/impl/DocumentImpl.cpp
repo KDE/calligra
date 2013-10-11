@@ -45,6 +45,7 @@ public:
     KoFindBase* finder;
     KoCanvasController* canvasController;
     KoZoomController* zoomController;
+    QSize documentSize;
 };
 
 DocumentImpl::DocumentImpl(QObject* parent)
@@ -83,6 +84,11 @@ KoZoomController* DocumentImpl::zoomController() const
     return d->zoomController;
 }
 
+QSize DocumentImpl::documentSize() const
+{
+    return d->documentSize;
+}
+
 void DocumentImpl::setDocumentType(Global::DocumentType type)
 {
     d->type = type;
@@ -100,16 +106,26 @@ void DocumentImpl::setFinder(KoFindBase* newFinder)
 
 void DocumentImpl::createAndSetCanvasController(KoCanvasBase* canvas)
 {
-    d->canvasController = new ComponentsKoCanvasController(new KActionCollection(this));
-    d->canvasController->setCanvas(canvas);
-    KoToolManager::instance()->addController(d->canvasController);
+    ComponentsKoCanvasController* controller = new ComponentsKoCanvasController{new KActionCollection{this}};
+    d->canvasController = controller;
+    controller->setCanvas(canvas);
+    KoToolManager::instance()->addController(controller);
+    connect(controller, &ComponentsKoCanvasController::documentSizeChanged, this, &DocumentImpl::setDocumentSize);
 }
 
 void DocumentImpl::createAndSetZoomController(KoCanvasBase* canvas)
 {
     KoZoomHandler* zoomHandler = static_cast<KoZoomHandler*>(canvas->viewConverter());
-    d->zoomController = new KoZoomController(d->canvasController, zoomHandler, new KActionCollection(this));
+    d->zoomController = new KoZoomController{d->canvasController, zoomHandler, new KActionCollection(this)};
 
     QObject* canvasQObject = dynamic_cast<QObject*>(canvas);
     connect(d->canvasController->proxyObject, SIGNAL(moveDocumentOffset(QPoint)), canvasQObject, SLOT(setDocumentOffset(QPoint)));
+}
+
+void DocumentImpl::setDocumentSize(const QSize& size)
+{
+    if(size != d->documentSize) {
+        d->documentSize = size;
+        emit documentSizeChanged();
+    }
 }

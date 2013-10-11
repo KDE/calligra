@@ -52,6 +52,10 @@ public:
     QGraphicsWidget* canvas() const;
     KoCanvasController* canvasController() const;
     KoZoomController* zoomController() const;
+    QSize documentSize() const;
+
+Q_SIGNALS:
+    void documentSizeChanged();
 
 protected:
     void setDocumentType(Global::DocumentType type);
@@ -60,6 +64,9 @@ protected:
 
     void createAndSetCanvasController(KoCanvasBase* canvas);
     void createAndSetZoomController(KoCanvasBase* canvas);
+
+private Q_SLOTS:
+    void setDocumentSize(const QSize& size);
 
 private:
     class Private;
