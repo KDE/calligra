@@ -69,11 +69,15 @@ public:
      */
     virtual ~KoMainWindow();
 
+    // If noCleanup is set, KoMainWindow will not delete the root document
+    // or part manager on destruction.
+    void setNoCleanup(bool noCleanup);
+
     /**
      * Called when a document is assigned to this mainwindow.
      * This creates a view for this document, makes it the active part, etc.
      */
-    void setRootDocument(KoDocument *doc, KoPart *rootPart = 0);
+    void setRootDocument(KoDocument *doc, KoPart *rootPart = 0, bool deletePrevious = true);
 
     /**
      * This is used to handle the document used at start up before it actually
@@ -344,7 +348,7 @@ private:
      *         (don't display anything in this case, the error dialog box is also implemented here
      *         but restore the original URL in slotFileSaveAs)
      */
-    bool saveDocument(bool saveas = false, bool silent = false);
+    public: bool saveDocument(bool saveas = false, bool silent = false); private:
 
     void closeEvent(QCloseEvent * e);
     void resizeEvent(QResizeEvent * e);
