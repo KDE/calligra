@@ -27,8 +27,18 @@ Item {
     }
 
     Calligra.View {
+        id: v;
+        anchors.fill: parent;
+        document: doc;
+    }
+
+    Flickable {
+        id: f;
         anchors.fill: parent;
         
-        document: doc;
+        Calligra.ViewController {
+            view: v;
+            flickable: f;
+        }
     }
 }
