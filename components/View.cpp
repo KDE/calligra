@@ -26,6 +26,7 @@
 #include <QtWidgets/QStyleOptionGraphicsItem>
 
 #include "Document.h"
+#include <KoCanvasController.h>
 
 using namespace Calligra::Components;
 
@@ -87,11 +88,21 @@ void View::setDocument(Document* newDocument)
     }
 }
 
+void View::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry)
+{
+    if (d->canvas) {
+        d->canvas->setGeometry(newGeometry);
+    }
+    QQuickPaintedItem::geometryChanged(newGeometry, oldGeometry);
+}
+
 void View::Private::updateCanvas()
 {
     if(document && document->state() == Document::LoadedState) {
         canvas = document->canvas();
         canvas->setGeometry(0, 0, q->width(), q->height());
         updateTimer.start();
+
+        connect(document->canvasController()->proxyObject, SIGNAL(moveDocumentOffset(QPoint)), q, SLOT(update()));
     }
 }

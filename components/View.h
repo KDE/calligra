@@ -50,6 +50,9 @@ Q_SIGNALS:
     void linkClicked(const QUrl& url);
     void documentChanged();
 
+protected:
+    virtual void geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry);
+
 private:
     class Private;
     Private* const d;
