@@ -20,7 +20,7 @@
 #ifndef CALLIGRA_COMPONENTS_VIEWCONTROLLER_H
 #define CALLIGRA_COMPONENTS_VIEWCONTROLLER_H
 
-#include <QtQuick/QQuickItem>
+#include <QtQuick/QQuickPaintedItem>
 
 namespace Calligra {
 namespace Components {
@@ -32,19 +32,32 @@ class View;
  *
  */
 
-class ViewController : public QQuickItem
+class ViewController : public QQuickPaintedItem
 {
     Q_OBJECT
-    Q_PROPERTY(View* view READ view WRITE setView NOTIFY viewChanged)
+    Q_PROPERTY(Calligra::Components::View* view READ view WRITE setView NOTIFY viewChanged)
+    Q_PROPERTY(QQuickItem* flickable READ flickable WRITE setFlickable NOTIFY flickableChanged)
+
 public:
     ViewController(QQuickItem* parent = 0);
     virtual ~ViewController();
 
+    virtual void paint(QPainter* painter);
+
     View* view() const;
     void setView(View* newView);
 
+    QQuickItem* flickable() const;
+    void setFlickable(QQuickItem* item);
+
 Q_SIGNALS:
     void viewChanged();
+    void flickableChanged();
+
+private Q_SLOTS:
+    void documentChanged();
+    void contentPositionChanged();
+    void documentSizeChanged();
 
 private:
     class Private;
