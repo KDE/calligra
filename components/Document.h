@@ -25,6 +25,7 @@
 
 #include "Global.h"
 
+class KoCanvasController;
 class QGraphicsWidget;
 class KoFindBase;
 
@@ -41,6 +42,7 @@ class Document : public QObject
     Q_PROPERTY(QUrl source READ source WRITE setSource NOTIFY sourceChanged)
     Q_PROPERTY(Global::DocumentType documentType READ documentType NOTIFY sourceChanged)
     Q_PROPERTY(State state READ state NOTIFY stateChanged)
+    Q_PROPERTY(QSize documentSize READ documentSize NOTIFY documentSizeChanged)
 
 public:
     enum State {
@@ -69,6 +71,8 @@ public:
 
     State state() const;
 
+    QSize documentSize() const;
+
     /**
      * \defgroup internal Internal Methods
      * The methods are used internally by the components and not exposed
@@ -77,6 +81,7 @@ public:
      */
     KoFindBase* finder() const;
     QGraphicsWidget* canvas() const;
+    KoCanvasController* canvasController() const;
 
     /**
      * @}
@@ -84,6 +89,7 @@ public:
 Q_SIGNALS:
     void sourceChanged();
     void stateChanged();
+    void documentSizeChanged();
 
 private:
     class Private;

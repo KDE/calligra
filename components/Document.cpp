@@ -21,6 +21,7 @@
 
 #include <QtCore/QDebug>
 #include <QtCore/QUrl>
+#include <QtCore/QSizeF>
 
 #include "impl/TextDocumentImpl.h"
 #include "impl/SpreadsheetImpl.h"
@@ -98,6 +99,15 @@ Document::State Document::state() const
     return d->state;
 }
 
+QSize Document::documentSize() const
+{
+    if(d->impl) {
+        return d->impl->documentSize();
+    }
+
+    return QSize{};
+}
+
 KoFindBase* Document::finder() const
 {
     if(d->impl) {
@@ -115,6 +125,16 @@ QGraphicsWidget* Document::canvas() const
 
     return nullptr;
 }
+
+KoCanvasController* Document::canvasController() const
+{
+    if(d->impl) {
+        return d->impl->canvasController();
+    }
+
+    return nullptr;
+}
+
 
 void Document::Private::updateImpl()
 {
@@ -140,6 +160,10 @@ void Document::Private::updateImpl()
         }
     } else {
         impl = nullptr;
+    }
+
+    if(impl) {
+        connect(impl, &DocumentImpl::documentSizeChanged, q, &Document::documentSizeChanged);
     }
 }
 
