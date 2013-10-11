@@ -34,6 +34,9 @@ public:
 
     virtual bool load(const QUrl& url);
 
+private Q_SLOTS:
+    void updateDocumentSize(const QSize& size);
+
 private:
     class Private;
     Private* const d;

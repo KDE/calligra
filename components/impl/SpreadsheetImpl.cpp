@@ -21,9 +21,12 @@
 
 #include <QtWidgets/QGraphicsWidget>
 
-#include "sheets/part/Part.h"
-#include "sheets/part/Doc.h"
-#include <part/CanvasItem.h>
+#include <KoZoomController.h>
+#include <sheets/part/Part.h>
+#include <sheets/part/Doc.h>
+#include <sheets/part/CanvasItem.h>
+#include <sheets/Map.h>
+#include <sheets/Sheet.h>
 
 using namespace Calligra::Components;
 
@@ -65,9 +68,19 @@ bool SpreadsheetImpl::load(const QUrl& url)
 
     createAndSetCanvasController(canvas);
     createAndSetZoomController(canvas);
-    //connect(canvas, SIGNAL(documentSizeChanged(QSize)), zoomController(), setDocumentSize);
+    connect(canvas, &Calligra::Sheets::CanvasItem::documentSizeChanged, this, &SpreadsheetImpl::updateDocumentSize);
+
+    Calligra::Sheets::Sheet *sheet = d->document->map()->sheet(0);
+    if(sheet) {
+        updateDocumentSize(sheet->documentSize().toSize());
+    }
 
     setCanvas(canvas);
 
     return retval;
+}
+
+void SpreadsheetImpl::updateDocumentSize(const QSize& size)
+{
+    zoomController()->setDocumentSize(size, false);
 }
