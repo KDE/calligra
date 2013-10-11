@@ -79,6 +79,8 @@ bool TextDocumentImpl::load(const QUrl& url)
     zoomController()->setPageSize(d->document->pageManager()->begin().rect().size());
     connect(canvas, SIGNAL(documentSize(QSizeF)), zoomController(), SLOT(setDocumentSize(QSizeF)));
 
+    canvas->updateSize();
+
     setCanvas(canvas);
 
     return retval;
