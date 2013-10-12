@@ -27,8 +27,8 @@ class TestIdentifier : public QObject
     Q_OBJECT
 private Q_SLOTS:
     void initTestCase();
-    void testString2FileName_data();
-    void testString2FileName();
+    //TODO void testStringToIdentifier_data();
+    //TODO void testStringToIdentifier();
     void cleanupTestCase();
 };
 

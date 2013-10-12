@@ -9,102 +9,98 @@
     <height>200</height>
    </rect>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout_2" >
+  <layout class="QHBoxLayout" >
    <property name="margin" >
     <number>0</number>
    </property>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout" >
+    <widget class="QTreeWidget" name="taskList" >
+     <column>
+      <property name="text" >
+       <string>Tasks</string>
+      </property>
+     </column>
+    </widget>
+   </item>
+   <item>
+    <widget class="QTreeWidget" name="available" >
+     <column>
+      <property name="text" >
+       <string>Available tasks</string>
+      </property>
+     </column>
+    </widget>
+   </item>
+   <item>
+    <layout class="QVBoxLayout" >
      <item>
-      <widget class="QTreeWidget" name="taskList" >
-       <column>
-        <property name="text" >
-         <string>Tasks</string>
-        </property>
-       </column>
+      <spacer>
+       <property name="orientation" >
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0" >
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="addBtn" >
+       <property name="sizePolicy" >
+        <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="maximumSize" >
+        <size>
+         <width>25</width>
+         <height>25</height>
+        </size>
+       </property>
+       <property name="toolTip" >
+        <string>Add required task</string>
+       </property>
+       <property name="text" >
+        <string/>
+       </property>
       </widget>
      </item>
      <item>
-      <widget class="QTreeWidget" name="available" >
-       <column>
-        <property name="text" >
-         <string>Available tasks</string>
-        </property>
-       </column>
+      <widget class="QPushButton" name="removeBtn" >
+       <property name="maximumSize" >
+        <size>
+         <width>25</width>
+         <height>25</height>
+        </size>
+       </property>
+       <property name="toolTip" >
+        <string>Remove required task</string>
+       </property>
+       <property name="text" >
+        <string/>
+       </property>
       </widget>
      </item>
      <item>
-      <layout class="QVBoxLayout" >
-       <item>
-        <spacer>
-         <property name="orientation" >
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0" >
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <widget class="QPushButton" name="addBtn" >
-         <property name="sizePolicy" >
-          <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="maximumSize" >
-          <size>
-           <width>25</width>
-           <height>25</height>
-          </size>
-         </property>
-         <property name="toolTip" >
-          <string>Add required task</string>
-         </property>
-         <property name="text" >
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="removeBtn" >
-         <property name="maximumSize" >
-          <size>
-           <width>25</width>
-           <height>25</height>
-          </size>
-         </property>
-         <property name="toolTip" >
-          <string>Remove required task</string>
-         </property>
-         <property name="text" >
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer>
-         <property name="orientation" >
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0" >
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <widget class="RelationTreeView" name="required" />
+      <spacer>
+       <property name="orientation" >
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0" >
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
      </item>
     </layout>
+   </item>
+   <item>
+    <widget class="RelationTreeView" name="required" />
    </item>
   </layout>
  </widget>

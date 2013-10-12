@@ -57,7 +57,7 @@ public:
     virtual void setValue(const QVariant &value, bool rememberOldValue) {
         Q_UNUSED(rememberOldValue);
         if (!value.toString().isEmpty())
-            m_value = KexiUtils::string2Identifier(value.toString()).toLower();
+            m_value = KexiUtils::stringToIdentifier(value.toString()).toLower();
     }
     virtual QVariant value() const {
         return m_value;

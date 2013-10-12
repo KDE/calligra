@@ -114,7 +114,7 @@ Part::Part(QObject *parent,
     , d(new Private())
 {
     Q_UNUSED(list);
-    d->instanceName = KexiUtils::string2Identifier(
+    d->instanceName = KexiUtils::stringToIdentifier(
         instanceName.isEmpty()
         ? i18nc("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
                 "Use '_' character instead of spaces. First character should be a..z character. "

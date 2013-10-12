@@ -109,7 +109,7 @@ bool SybaseMigrate::drv_readTableSchema(
         }
 
         QString fldName(dbcolname(d->dbProcess, i));
-        QString fldID(KexiUtils::string2Identifier(fldName));
+        QString fldID(KexiUtils::stringToIdentifier(fldName));
 
         KexiDB::Field *fld =
             new KexiDB::Field(fldID, type(originalName, dbcoltype(d->dbProcess, i)));
