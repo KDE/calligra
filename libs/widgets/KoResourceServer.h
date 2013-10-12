@@ -284,6 +284,7 @@ public:
      * @param fileCreation decides whether to create the file in the saveLocation() directory
      */
     virtual void importResourceFile(const QString & filename , bool fileCreation=true) {
+        qDebug() << "Loading resource " << filename;
         QFileInfo fi( filename );
         if( fi.exists() == false )
             return;
