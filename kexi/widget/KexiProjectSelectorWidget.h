@@ -117,9 +117,7 @@ public:
     KexiProjectData* selectedProjectData() const;
 
     /*! \return currently assigned project set or NULL if no project set is assigned. */
-    inline KexiProjectSet *projectSet() const {
-        return m_sel->projectSet();
-    }
+    KexiProjectSet *projectSet() const;
 
     virtual void showEvent(QShowEvent * event);
 
@@ -132,7 +130,6 @@ protected:
 
     class Private;
     Private * const d;
-    KexiProjectSelectorWidget* m_sel;
 };
 
 #endif
