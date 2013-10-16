@@ -14,6 +14,7 @@ include_directories(
 set(components_SRCS
     CalligraComponentsPlugin.cpp
     Document.cpp
+    Enums.cpp
     Global.cpp
     PixmapItem.cpp
     View.cpp
