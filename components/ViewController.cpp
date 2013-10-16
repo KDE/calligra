@@ -32,7 +32,17 @@ using namespace Calligra::Components;
 class ViewController::Private
 {
 public:
-    Private() : view{nullptr}, flickable{nullptr}, canvasController{nullptr}
+    Private()
+        : view{nullptr}
+        , flickable{nullptr}
+        , canvasController{nullptr}
+        , lastX{0.f}
+        , lastY{0.f}
+        , minimumZoom{.5f}
+        , minimumZoomFitsWidth{false}
+        , zoom{1.f}
+        , maximumZoom{2.f}
+        , useZoomProxy{true}
     { }
 
     View* view;
@@ -42,6 +52,12 @@ public:
 
     float lastX;
     float lastY;
+
+    float minimumZoom;
+    bool minimumZoomFitsWidth;
+    float zoom;
+    float maximumZoom;
+    bool useZoomProxy;
 };
 
 ViewController::ViewController(QQuickItem* parent)
@@ -110,6 +126,79 @@ void ViewController::setFlickable(QQuickItem* item)
     }
 }
 
+float ViewController::minimumZoom() const
+{
+    return d->minimumZoom;
+}
+
+void ViewController::setMinimumZoom(float newValue)
+{
+    if(newValue != d->minimumZoom) {
+        d->minimumZoom = newValue;
+        emit minimumZoomChanged();
+    }
+}
+
+bool ViewController::minimumZoomFitsWidth() const
+{
+    return d->minimumZoomFitsWidth;
+}
+
+void ViewController::setMinimumZoomFitsWidth(bool newValue)
+{
+
+}
+
+float ViewController::zoom() const
+{
+    return d->zoom;
+}
+
+void ViewController::setZoom(float newZoom)
+{
+    if(newZoom != d->zoom) {
+        d->zoom = newZoom;
+
+        emit zoomChanged();
+    }
+}
+
+float ViewController::maximumZoom() const
+{
+    return d->maximumZoom;
+}
+
+void ViewController::setMaximumZoom(float newValue)
+{
+    if(newValue != d->maximumZoom) {
+        d->maximumZoom = newValue;
+        emit maximumZoomChanged();
+    }
+}
+
+bool ViewController::useZoomProxy() const
+{
+    return d->useZoomProxy;
+}
+
+void ViewController::setUseZoomProxy(bool proxy)
+{
+    if(proxy != d->useZoomProxy) {
+        d->useZoomProxy = proxy;
+        emit useZoomProxyChanged();
+    }
+}
+
+void ViewController::zoomAroundPoint(float amount, const QPointF& point)
+{
+
+}
+
+void ViewController::zoomToFitWidth(float width)
+{
+    
+}
+
 void ViewController::contentPositionChanged()
 {
     if(!d->canvasController)
@@ -119,8 +208,8 @@ void ViewController::contentPositionChanged()
     float newY = d->flickable->property("contentY").toFloat();
 
     //TODO: The rounding here causes some issues at edges. Need to investigate how to fix it.
-    QPoint diff = QPoint{int{newX - d->lastX}, int{newY - d->lastY}};
-    d->canvasController->pan(diff);
+    QPointF diff = QPointF{newX - d->lastX, newY - d->lastY};
+    d->canvasController->pan(diff.toPoint());
 
     d->lastX = newX;
     d->lastY = newY;
