@@ -142,17 +142,17 @@ void updateProgressBar(KProgressDialog *pd, char *buffer, int buflen)
 class KexiDBPasswordDialog::Private
 {
  public:
-    Private(KexiDB::ConnectionData& data, bool showButton);
+    Private(KexiDB::ConnectionData* data);
     ~Private();
 
     KexiDB::ConnectionData *cdata;
     bool showConnectionDetailsRequested;
 };
 
-KexiDBPasswordDialog::Private::Private(KexiDB::ConnectionData& data, bool showButton)
+KexiDBPasswordDialog::Private::Private(KexiDB::ConnectionData* data)
+    : cdata(data)
+    , showConnectionDetailsRequested(false)
 {
-    cdata = &data;
-    showConnectionDetailsRequested = showButton;
 }
 
 KexiDBPasswordDialog::Private::~Private()
@@ -164,7 +164,7 @@ KexiDBPasswordDialog::Private::~Private()
 KexiDBPasswordDialog::KexiDBPasswordDialog(QWidget *parent, KexiDB::ConnectionData& cdata, bool showDetailsButton)
         : KPasswordDialog(parent, ShowUsernameLine | ShowDomainLine,
                           showDetailsButton ? KDialog::User1 : KDialog::None)
-        , d(new Private(cdata, showDetailsButton))
+        , d(new Private(&cdata))
 {
     setCaption(i18nc("@title:window", "Opening Database"));
     setPrompt(i18nc("@info", "Supply a password below."));
