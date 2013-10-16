@@ -382,3 +382,8 @@ void KexiProjectSelectorDialog::showEvent(QShowEvent * event)
     KPageDialog::showEvent(event);
     KPageDialog::centerOnScreen(this);
 }
+
+KexiProjectSet* KexiProjectSelectorDialog::projectSet() const
+{
+    return d->sel->projectSet();
+}
