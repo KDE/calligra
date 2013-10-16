@@ -25,11 +25,17 @@
 #include "View.h"
 #include "Global.h"
 #include "ViewController.h"
+#include "Enums.h"
 
 #include "models/ContentsModel.h"
 #include "models/ThumbnailModel.h"
 
 using namespace Calligra::Components;
+
+QObject* singletonFactory(QQmlEngine*, QJSEngine*)
+{
+    return new Calligra::Components::Global{};
+}
 
 void CalligraComponentsPlugin::registerTypes(const char* uri)
 {
@@ -42,10 +48,8 @@ void CalligraComponentsPlugin::registerTypes(const char* uri)
     qmlRegisterType<Calligra::Components::ContentsModel>(uri, 1, 0, "ContentsModel");
     qmlRegisterType<Calligra::Components::ThumbnailModel>(uri, 1, 0, "ThumbnailModel");
 
-    qmlRegisterSingletonType<Calligra::Components::Global>(uri, 1, 0, "Global", &CalligraComponentsPlugin::globalSingleton);
-}
+    qmlRegisterUncreatableType<Calligra::Components::DocumentType>(uri, 1, 0, "DocumentType", "Provides the DocumentType enum");
+    qmlRegisterUncreatableType<Calligra::Components::DocumentStatus>(uri, 1, 0, "DocumentStatus", "Provides the DocumentStatus enum");
 
-QObject* CalligraComponentsPlugin::globalSingleton(QQmlEngine* , QJSEngine*)
-{
-    return new Calligra::Components::Global{};
+    qmlRegisterSingletonType<Calligra::Components::Global>(uri, 1, 0, "Global", &singletonFactory);
 }

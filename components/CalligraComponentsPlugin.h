@@ -31,9 +31,6 @@ class CalligraComponentsPlugin : public QQmlExtensionPlugin
 
 public:
     virtual void registerTypes(const char* uri);
-
-private:
-    static QObject* globalSingleton(QQmlEngine*, QJSEngine*);
 };
 
 #endif // CALLIGRACOMPONENTSPLUGIN_H
