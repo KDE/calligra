@@ -3,6 +3,8 @@ set(koplugin_LIB_SRCS
         KoJsonTrader.cpp
 )
 
+add_definitions(-DCMAKE_INSTALL_PREFIX="${CMAKE_INSTALL_PREFIX}")
+
 kde4_add_library(koplugin SHARED ${koplugin_LIB_SRCS})
 
 target_link_libraries(koplugin Qt5::Core kofake)

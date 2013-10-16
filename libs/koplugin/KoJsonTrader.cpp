@@ -45,34 +45,47 @@ QList<QPluginLoader *> KoJsonTrader::query(const QString &servicetype, const QSt
 {
 
     if (m_pluginPath.isEmpty()) {
+
+        QList<QDir> searchDirs;
+
         QDir appDir(qApp->applicationDirPath());
         appDir.cdUp();
-        foreach(QString entry, appDir.entryList()) {
-            QFileInfo info(appDir, entry);
-            if (info.isDir() && info.fileName().contains("lib")) {
-                QDir libDir(info.absoluteFilePath());
 
-                // on many systems this will be the actual lib dir (and calligra subdir contains plugins)
-                if (libDir.entryList(QStringList() << "calligra").size() > 0) {
-                    m_pluginPath = info.absoluteFilePath() + "/calligra";
-                    break;
-                }
+        searchDirs << appDir;
+        searchDirs << QDir{CMAKE_INSTALL_PREFIX};
 
-                // on debian at least the actual libdir is a subdir named like "lib/x86_64-linux-gnu"
-                // so search there for the calligra subdir which will contain our plugins
-                foreach(QString subEntry, libDir.entryList()) {
-                    QFileInfo subInfo(libDir, subEntry);
-                    if (subInfo.isDir()) {
-                        if (QDir(subInfo.absoluteFilePath()).entryList(QStringList() << "calligra").size() > 0) {
-                            m_pluginPath = subInfo.absoluteFilePath() + "/calligra";
-                            break; // will only break inner loop so we need the extra check below
+        foreach(const QDir& dir, searchDirs) {
+            foreach(QString entry, dir.entryList()) {
+                QFileInfo info(dir, entry);
+                if (info.isDir() && info.fileName().contains("lib")) {
+                    QDir libDir(info.absoluteFilePath());
+
+                    // on many systems this will be the actual lib dir (and calligra subdir contains plugins)
+                    if (libDir.entryList(QStringList() << "calligra").size() > 0) {
+                        m_pluginPath = info.absoluteFilePath() + "/calligra";
+                        break;
+                    }
+
+                    // on debian at least the actual libdir is a subdir named like "lib/x86_64-linux-gnu"
+                    // so search there for the calligra subdir which will contain our plugins
+                    foreach(QString subEntry, libDir.entryList()) {
+                        QFileInfo subInfo(libDir, subEntry);
+                        if (subInfo.isDir()) {
+                            if (QDir(subInfo.absoluteFilePath()).entryList(QStringList() << "calligra").size() > 0) {
+                                m_pluginPath = subInfo.absoluteFilePath() + "/calligra";
+                                break; // will only break inner loop so we need the extra check below
+                            }
                         }
                     }
-                }
 
-                if (!m_pluginPath.isEmpty()) {
-                    break;
+                    if (!m_pluginPath.isEmpty()) {
+                        break;
+                    }
                 }
+            }
+
+            if(!m_pluginPath.isEmpty()) {
+                break;
             }
         }
         kDebug() << "KoJsonTrader will load its plugins from" << m_pluginPath;
