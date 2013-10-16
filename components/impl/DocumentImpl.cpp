@@ -33,14 +33,15 @@ using namespace Calligra::Components;
 class DocumentImpl::Private
 {
 public:
-    Private() : type{Global::UnknownType},
-        canvas{nullptr},
-        finder{nullptr},
-        canvasController{nullptr},
-        zoomController{nullptr}
+    Private()
+        : type{DocumentType::Unknown}
+        , canvas{nullptr}
+        , finder{nullptr}
+        , canvasController{nullptr}
+        , zoomController{nullptr}
     { }
 
-    Global::DocumentType type;
+    DocumentType::Type type;
     QGraphicsWidget* canvas;
     KoFindBase* finder;
     KoCanvasController* canvasController;
@@ -59,7 +60,7 @@ DocumentImpl::~DocumentImpl()
 
 }
 
-Global::DocumentType DocumentImpl::documentType() const
+DocumentType::Type DocumentImpl::documentType() const
 {
     return d->type;
 }
@@ -89,7 +90,7 @@ QSize DocumentImpl::documentSize() const
     return d->documentSize;
 }
 
-void DocumentImpl::setDocumentType(Global::DocumentType type)
+void DocumentImpl::setDocumentType(DocumentType::Type type)
 {
     d->type = type;
 }
@@ -106,7 +107,7 @@ void DocumentImpl::setFinder(KoFindBase* newFinder)
 
 void DocumentImpl::createAndSetCanvasController(KoCanvasBase* canvas)
 {
-    ComponentsKoCanvasController* controller = new ComponentsKoCanvasController{new KActionCollection{this}};
+    auto controller = new ComponentsKoCanvasController{new KActionCollection{this}};
     d->canvasController = controller;
     controller->setCanvas(canvas);
     KoToolManager::instance()->addController(controller);
@@ -115,10 +116,10 @@ void DocumentImpl::createAndSetCanvasController(KoCanvasBase* canvas)
 
 void DocumentImpl::createAndSetZoomController(KoCanvasBase* canvas)
 {
-    KoZoomHandler* zoomHandler = static_cast<KoZoomHandler*>(canvas->viewConverter());
+    auto zoomHandler = static_cast<KoZoomHandler*>(canvas->viewConverter());
     d->zoomController = new KoZoomController{d->canvasController, zoomHandler, new KActionCollection(this)};
 
-    QObject* canvasQObject = dynamic_cast<QObject*>(canvas);
+    auto canvasQObject = dynamic_cast<QObject*>(canvas);
     connect(d->canvasController->proxyObject, SIGNAL(moveDocumentOffset(QPoint)), canvasQObject, SLOT(setDocumentOffset(QPoint)));
 }
 

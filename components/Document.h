@@ -40,19 +40,11 @@ class Document : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QUrl source READ source WRITE setSource NOTIFY sourceChanged)
-    Q_PROPERTY(Global::DocumentType documentType READ documentType NOTIFY sourceChanged)
-    Q_PROPERTY(State state READ state NOTIFY stateChanged)
+    Q_PROPERTY(DocumentType::Type documentType READ documentType NOTIFY sourceChanged)
+    Q_PROPERTY(DocumentStatus::Status status READ status NOTIFY statusChanged)
     Q_PROPERTY(QSize documentSize READ documentSize NOTIFY documentSizeChanged)
 
 public:
-    enum State {
-        UnloadedState,
-        LoadingState,
-        LoadedState,
-        FailedState,
-    };
-    Q_ENUMS(State);
-
     Document(QObject* parent = 0);
     ~Document();
 
@@ -67,15 +59,13 @@ public:
      * @}
      */
 
-    Global::DocumentType documentType() const;
-
-    State state() const;
-
+    DocumentType::Type documentType() const;
+    DocumentStatus::Status status() const;
     QSize documentSize() const;
 
     /**
-     * \defgroup internal Internal Methods
-     * The methods are used internally by the components and not exposed
+     * \internal
+     * These methods are used internally by the components and not exposed
      * to QML.
      * @{
      */
@@ -88,7 +78,7 @@ public:
      */
 Q_SIGNALS:
     void sourceChanged();
-    void stateChanged();
+    void statusChanged();
     void documentSizeChanged();
 
 private:

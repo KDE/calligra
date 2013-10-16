@@ -39,7 +39,7 @@ void Global::loadPlugins()
 
 }
 
-Global::DocumentType Global::documentType(const QUrl& document)
+DocumentType::Type Global::documentType(const QUrl& document)
 {
     QMimeType mime = QMimeDatabase{}.mimeTypeForUrl(document);
 
@@ -48,13 +48,13 @@ Global::DocumentType Global::documentType(const QUrl& document)
         QPluginLoader* loader = plugins.at(0);
 
         if(loader->fileName().contains("words")) {
-            return TextDocumentType;
+            return DocumentType::TextDocument;
         } else if(loader->fileName().contains("sheets")) {
-            return SpreadsheetType;
+            return DocumentType::Spreadsheet;
         } else if(loader->fileName().contains("stage")) {
-            return PresentationType;
+            return DocumentType::Presentation;
         }
     }
 
-    return UnknownType;
+    return DocumentType::Unknown;
 }

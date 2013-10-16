@@ -32,7 +32,7 @@ using namespace Calligra::Components;
 class Document::Private
 {
 public:
-    Private(Document* qq) : q{qq}, impl{nullptr}, state{UnloadedState}
+    Private(Document* qq) : q{qq}, impl{nullptr}, status{DocumentStatus::Unloaded}
     { }
 
     void updateImpl();
@@ -41,7 +41,7 @@ public:
 
     QUrl source;
     DocumentImpl* impl;
-    State state;
+    DocumentStatus::Status status;
 };
 
 Document::Document(QObject* parent)
@@ -66,37 +66,37 @@ void Document::setSource(const QUrl& value)
         d->source = value;
         emit sourceChanged();
 
-        d->state = LoadingState;
-        emit stateChanged();
+        d->status = DocumentStatus::Loading;
+        emit statusChanged();
 
         d->updateImpl();
 
         if(d->impl) {
             if(d->impl->load(d->source)) {
-                d->state = LoadedState;
+                d->status = DocumentStatus::Loaded;
             } else {
-                d->state = FailedState;
+                d->status = DocumentStatus::Failed;
             }
         } else {
-            d->state = UnloadedState;
+            d->status = DocumentStatus::Unloaded;
         }
 
-        emit stateChanged();
+        emit statusChanged();
     }
 }
 
-Global::DocumentType Document::documentType() const
+DocumentType::Type Document::documentType() const
 {
     if(d->impl) {
         return d->impl->documentType();
     }
 
-    return Global::UnknownType;
+    return DocumentType::Unknown;
 }
 
-Document::State Document::state() const
+DocumentStatus::Status Document::status() const
 {
-    return d->state;
+    return d->status;
 }
 
 QSize Document::documentSize() const
@@ -145,13 +145,13 @@ void Document::Private::updateImpl()
     if(!source.isEmpty()) {
         auto type = Global::documentType(source);
         switch(type) {
-            case Global::TextDocumentType:
+            case DocumentType::TextDocument:
                 impl = new TextDocumentImpl{q};
                 break;
-            case Global::SpreadsheetType:
+            case DocumentType::Spreadsheet:
                 impl = new SpreadsheetImpl{q};
                 break;
-            case Global::PresentationType:
+            case DocumentType::Presentation:
                 impl = new PresentationImpl{q};
                 break;
             default:

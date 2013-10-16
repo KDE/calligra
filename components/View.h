@@ -41,7 +41,7 @@ public:
     View(QQuickItem* parent = 0);
     virtual ~View();
 
-    virtual void paint(QPainter* painter);
+    virtual void paint(QPainter* painter) Q_DECL_OVERRIDE;
 
     Document* document() const;
     void setDocument(Document* newDocument);
@@ -51,7 +51,7 @@ Q_SIGNALS:
     void documentChanged();
 
 protected:
-    virtual void geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry);
+    virtual void geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry) Q_DECL_OVERRIDE;
 
 private:
     class Private;

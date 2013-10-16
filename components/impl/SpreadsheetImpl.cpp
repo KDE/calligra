@@ -43,7 +43,7 @@ public:
 SpreadsheetImpl::SpreadsheetImpl(QObject* parent)
     : DocumentImpl{parent}, d{new Private}
 {
-    setDocumentType(Global::SpreadsheetType);
+    setDocumentType(DocumentType::Spreadsheet);
 }
 
 SpreadsheetImpl::~SpreadsheetImpl()
@@ -64,13 +64,13 @@ bool SpreadsheetImpl::load(const QUrl& url)
 
     bool retval = d->document->openUrl(url);
 
-    Calligra::Sheets::CanvasItem* canvas = static_cast<Calligra::Sheets::CanvasItem*>(d->part->canvasItem(d->document));
+    auto canvas = static_cast<Calligra::Sheets::CanvasItem*>(d->part->canvasItem(d->document));
 
     createAndSetCanvasController(canvas);
     createAndSetZoomController(canvas);
     connect(canvas, &Calligra::Sheets::CanvasItem::documentSizeChanged, this, &SpreadsheetImpl::updateDocumentSize);
 
-    Calligra::Sheets::Sheet *sheet = d->document->map()->sheet(0);
+    auto sheet = d->document->map()->sheet(0);
     if(sheet) {
         updateDocumentSize(sheet->documentSize().toSize());
     }

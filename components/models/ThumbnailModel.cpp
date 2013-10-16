@@ -92,13 +92,13 @@ void ThumbnailModel::Private::updateImpl()
 
     if(document) {
         switch(document->documentType()) {
-            case Global::TextDocumentType:
+            case DocumentType::TextDocument:
                 impl = new TextDocumentThumbnailModelImpl;
                 break;
-            case Global::SpreadsheetType:
+            case DocumentType::Spreadsheet:
                 impl = new SpreadsheetThumbnailModelImpl;
                 break;
-            case Global::PresentationType:
+            case DocumentType::Presentation:
                 impl = new PresentationThumbnailModelImpl;
                 break;
             default:

@@ -22,6 +22,8 @@
 
 #include <QObject>
 
+#include "Enums.h"
+
 namespace Calligra {
 namespace Components {
 
@@ -34,19 +36,10 @@ class Global : public QObject
 {
     Q_OBJECT
 public:
-    enum DocumentType {
-        UnknownType, ///< An unknown document.
-        TextDocumentType, ///< A text document, for example an OpenDocument Text document.
-        SpreadsheetType, ///< A spreadsheet, for example an Excel document.
-        PresentationType, ///< A presentation, for example a Keynote document.
-        StaticTextDocumentType, ///< An unmodifiable text document, for example a PDF document.
-    };
-    Q_ENUMS(DocumentType);
-
     Global(QObject* parent = 0);
 
     static Q_INVOKABLE void loadPlugins();
-    static Q_INVOKABLE DocumentType documentType(const QUrl& document);
+    static Q_INVOKABLE DocumentType::Type documentType(const QUrl& document);
 };
 
 } // Namespace Components

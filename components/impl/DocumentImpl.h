@@ -47,7 +47,7 @@ public:
 
     virtual bool load(const QUrl& url) = 0;
 
-    Global::DocumentType documentType() const;
+    DocumentType::Type documentType() const;
     KoFindBase* finder() const;
     QGraphicsWidget* canvas() const;
     KoCanvasController* canvasController() const;
@@ -58,7 +58,7 @@ Q_SIGNALS:
     void documentSizeChanged();
 
 protected:
-    void setDocumentType(Global::DocumentType type);
+    void setDocumentType(DocumentType::Type type);
     void setCanvas(QGraphicsWidget* newCanvas);
     void setFinder(KoFindBase* newFinder);
 

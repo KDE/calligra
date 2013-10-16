@@ -25,7 +25,7 @@
 namespace Calligra {
 namespace Components {
 
-class SpreadsheetImpl : public DocumentImpl
+class SpreadsheetImpl  : public DocumentImpl
 {
     Q_OBJECT
 public:

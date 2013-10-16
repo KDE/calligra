@@ -81,7 +81,7 @@ void View::setDocument(Document* newDocument)
 {
     if(newDocument != d->document) {
         d->document = newDocument;
-        connect(d->document, &Document::stateChanged, [&]() { d->updateCanvas(); });
+        connect(d->document, &Document::statusChanged, [&]() { d->updateCanvas(); });
 
         d->updateCanvas();
         emit documentChanged();
@@ -98,7 +98,7 @@ void View::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry)
 
 void View::Private::updateCanvas()
 {
-    if(document && document->state() == Document::LoadedState) {
+    if(document && document->status() == DocumentStatus::Loaded) {
         canvas = document->canvas();
         canvas->setGeometry(0, 0, q->width(), q->height());
         updateTimer.start();

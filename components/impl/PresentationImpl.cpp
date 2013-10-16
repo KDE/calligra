@@ -43,7 +43,7 @@ public:
 PresentationImpl::PresentationImpl(QObject* parent)
     : DocumentImpl{parent}, d{new Private}
 {
-    setDocumentType(Global::PresentationType);
+    setDocumentType(DocumentType::Presentation);
 }
 
 PresentationImpl::~PresentationImpl()
@@ -64,7 +64,7 @@ bool PresentationImpl::load(const QUrl& url)
 
     bool retval = d->document->openUrl(url);
 
-    KoPACanvasItem* canvas = static_cast<KoPACanvasItem*>(d->part->canvasItem(d->document));
+    auto canvas = static_cast<KoPACanvasItem*>(d->part->canvasItem(d->document));
 
     createAndSetCanvasController(canvas);
 
