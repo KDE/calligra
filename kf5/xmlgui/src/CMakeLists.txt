@@ -7,10 +7,16 @@ set_package_properties(LibAttica PROPERTIES DESCRIPTION "A Qt library that imple
                        URL "https://projects.kde.org/attica"
                        TYPE OPTIONAL
                       )
+if (FORCE_X11_OFF)
+   set (X11_FOUND 0)
+endif (FORCE_X11_OFF)
 
 if (X11_FOUND)
+   if(NOT WIN32)
+      find_package(Qt5 5.1.0 REQUIRED NO_MODULE COMPONENTS X11Extras)
+   endif(NOT WIN32)
    set (HAVE_X11 1)
-   set (XMLGUI_EXTRA_LIBS ${XMLGUI_EXTRA_LIBS} ${X11_LIBRARIES})
+   set (XMLGUI_EXTRA_LIBS ${XMLGUI_EXTRA_LIBS} ${X11_LIBRARIES} Qt5::X11Extras)
 else ()
    set (HAVE_X11 0)
 endif ()
@@ -95,7 +101,6 @@ generate_export_header(XmlGui)
 target_link_libraries(XmlGui LINK_PUBLIC
     Qt5::Widgets
     Qt5::DBus
-    Qt5::X11Extras
     Qt5::Xml
     Qt5::Network
     Qt5::PrintSupport
