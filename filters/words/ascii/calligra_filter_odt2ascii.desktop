@@ -2,6 +2,7 @@
 Type=Service
 Name=Words ASCII Export Filter
 Name[ca]=Filtre d'exportació ASCII per al Words
+Name[ca@valencia]=Filtre d'exportació ASCII per al Words
 Name[cs]=Exportní filtr formátu ASCII pro Words
 Name[da]=ASCII-eksportfilter til Words
 Name[de]=Words ASCII-Exportfilter

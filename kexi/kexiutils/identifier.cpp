@@ -26,7 +26,7 @@
 
 using namespace KexiUtils;
 
-inline QString char2Identifier(const QChar& c)
+inline QString charToIdentifier(const QChar& c)
 {
     if (c.unicode() >= TRANSLITERATION_TABLE_SIZE)
         return QString(QChar('_'));
@@ -34,7 +34,7 @@ inline QString char2Identifier(const QChar& c)
     return s ? QString::fromLatin1(s) : QString(QChar('_'));
 }
 
-QString KexiUtils::string2Identifier(const QString &s)
+QString KexiUtils::stringToIdentifier(const QString &s)
 {
     if (s.isEmpty())
         return QString();
@@ -50,14 +50,14 @@ QString KexiUtils::string2Identifier(const QString &s)
     if (c >= '0' && c <= '9') {
         r += '_' + c;
     } else {
-        add = char2Identifier(c);
+        add = charToIdentifier(c);
         r += add;
         wasUnderscore = add == "_";
     }
 
     const uint idLength = id.length();
     for (uint i = 1; i < idLength; i++) {
-        add = char2Identifier(id.at(i));
+        add = charToIdentifier(id.at(i));
         if (wasUnderscore && add == "_")
             continue;
         wasUnderscore = add == "_";
@@ -102,7 +102,7 @@ QValidator::State IdentifierValidator::validate(QString& input, int& pos) const
     if ((int)i < input.length() && input.at(i) >= '0' && input.at(i) <= '9')
         pos++; //_ will be added at the beginning
     bool addspace = (input.right(1) == " ");
-    input = d->isLowerCaseForced ? string2Identifier(input).toLower() : string2Identifier(input);
+    input = d->isLowerCaseForced ? stringToIdentifier(input).toLower() : stringToIdentifier(input);
     if (addspace)
         input += "_";
     if (pos > input.length())

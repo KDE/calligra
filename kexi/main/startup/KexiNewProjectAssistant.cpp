@@ -255,7 +255,7 @@ void KexiProjectTitleSelectionPage::titleTextChanged(const QString & text)
 void KexiProjectTitleSelectionPage::updateUrl()
 {
     KUrl url = contents->file_requester->url();
-    QString fn = KexiDB::string2FileName(contents->le_title->text());
+    QString fn = KexiUtils::stringToFileName(contents->le_title->text());
     if (!fn.isEmpty() && !fn.endsWith(".kexi"))
         fn += ".kexi";
     url.setFileName(fn);
@@ -440,7 +440,7 @@ void KexiProjectDatabaseNameSelectionPage::slotTitleChanged(const QString &capt)
         m_dbNameAutofill = true;
     if (m_dbNameAutofill) {
         m_le_dbname_txtchanged_enabled = false;
-        QString captionAsId = KexiUtils::string2Identifier(capt).toLower();
+        QString captionAsId = KexiUtils::stringToIdentifier(capt).toLower();
         contents->le_dbname->setText(captionAsId);
         m_projectDataToOverwrite = 0;
         m_le_dbname_txtchanged_enabled = true;

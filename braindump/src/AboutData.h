@@ -31,7 +31,7 @@ inline KAboutData* newBrainDumpAboutData()
 {
     KAboutData* aboutData = new KAboutData("braindump", 0, ki18n("Braindump"),
                                            BRAINDUMP_VERSION, ki18n(BRAINDUMP_DESCRIPTION), KAboutData::License_LGPL,
-                                           ki18n("(c) 2009, 2010, 2011, 2012 Cyrille Berger"), KLocalizedString(),
+                                           ki18n("(c) 2009, 2010, 2011, 2012, 2013 Cyrille Berger"), KLocalizedString(),
                                            "");
     aboutData->addAuthor(ki18n("Cyrille Berger"), ki18n("Maintainer"), "cberger@cberger.net");
 

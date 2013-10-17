@@ -1930,7 +1930,7 @@ void KexiCSVImportDialog::import()
 
         for (uint col = 0; col < numCols; col++) {
             QString fieldCaption(m_table->data(m_table->index(0, col)).toString().simplified());
-            QString fieldName(KexiUtils::string2Identifier(fieldCaption));
+            QString fieldName(KexiUtils::stringToIdentifier(fieldCaption));
             if (m_destinationTableSchema->field(fieldName)) {
                 QString fixedFieldName;
                 uint i = 2; //"apple 2, apple 3, etc. if there're many "apple" names

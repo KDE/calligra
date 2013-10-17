@@ -709,7 +709,7 @@ void KexiTableDesignerView::slotBeforeCellChanged(
             //update field caption and name
             propertySetForRecord->changeProperty("caption", newValue);
             propertySetForRecord->changeProperty("name",
-                                                 KexiUtils::string2Identifier(newValue.toString()));
+                                                 KexiUtils::stringToIdentifier(newValue.toString()));
 
             //Child 2 is the name
             /*ChangeFieldPropertyCommand *changeNameCommand =*/
@@ -876,7 +876,7 @@ void KexiTableDesignerView::slotRowUpdated(KexiDB::RecordData *record)
         QString description(record->at(COLUMN_ID_DESC).toString());
 
 //! @todo check uniqueness:
-        QString fieldName(KexiUtils::string2Identifier(fieldCaption));
+        QString fieldName(KexiUtils::stringToIdentifier(fieldCaption));
 
         KexiDB::Field::Type fieldType = KexiDB::intToFieldType(intFieldType);
         uint maxLength = 0;     
@@ -1428,6 +1428,7 @@ KexiDB::SchemaData* KexiTableDesignerView::storeNewData(const KexiDB::SchemaData
     if (res == true) {
         //we've current schema
         tempData()->tableSchemaChangedInPreviousView = true;
+        d->history->clear();
 //not needed; KexiProject emits newItemStored signal //let project know the table is created
 //  KexiMainWindowIface::global()->project()->emitTableCreated(*tempData()->table);
     } else {

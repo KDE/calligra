@@ -31,6 +31,7 @@
 #include <string.h> // memcpy
 #include <algorithm>
 #include <functional> // std::bind2nd for gcc 2.9x
+#include <cstdlib>
 
 #include "wvlog.h"
 
@@ -730,7 +731,7 @@ namespace
         {
             m_center = readS16( ptr + index * sizeof( S16 ) );
             // A negative value doesn't make sense here, right? Hmmm
-            m_plusMinus = std::abs( readS16( ptr + itbdDelMax * sizeof( S16 ) + index * sizeof( S16 ) ) );
+            m_plusMinus = std::abs( (int)( readS16( ptr + itbdDelMax * sizeof( S16 ) + index * sizeof( S16 ) ) ) );
         }
 
         bool contains( S16 position ) const { return m_center - m_plusMinus <= position && m_center + m_plusMinus >= position; }
