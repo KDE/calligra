@@ -1,0 +1,82 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="6">
+<MenuBar>
+ <Menu name="view"><text>&amp;View</text>
+  <Action name="view_formattingchars"/>
+  <Action name="view_zoom"/>
+ </Menu>
+ <Menu name="edit"><text>&amp;Edit</text>
+  <Action name="edit_copy"/>
+  <Separator/>
+  <Action name="edit_find"/>
+ </Menu>
+ <Menu name="Slide Show"><text>Sli&amp;de Show</text>
+  <Action name="screen_first"/>
+  <Action name="screen_prev"/>
+  <Action name="screen_next"/>
+  <Action name="screen_last"/>
+ </Menu>
+</MenuBar>
+<StatusBar/>
+<ToolBar name="editToolBar" position="top" fullWidth="false"><Text>Edit</Text>
+  <Action name="edit_copy"/>
+  <Separator/>
+  <Action name="view_zoom"/>
+</ToolBar>
+<ToolBar name="screenToolBar" position="top" fullWidth="false"><Text>Presentation</Text>
+  <Action name="screen_first"/>
+  <Action name="screen_prev"/>
+  <Action name="screen_next"/>
+  <Action name="screen_last"/>
+</ToolBar>
+<Menu name="zoom_popup">
+ <Action name="zoom_plus"/>
+ <Action name="zoom_minus"/>
+ <Separator/>
+ <Action name="zoom_entire_page"/>
+ <Action name="zoom_page_width"/>
+ <Action name="zoom_page_height"/>
+ <Separator/>
+ <Action name="zoom_selected_object"/>
+ <Action name="zoom_all_object"/>
+</Menu>
+<Menu name="menupage_popup">
+</Menu>
+<Menu name="textobject_popup">
+</Menu>
+<Menu name="partobject_popup">
+</Menu>
+<Menu name="rectangleobject_popup">
+</Menu>
+<Menu name="graphmenu_popup">
+</Menu>
+<Menu name="flip_popup">
+</Menu>
+<Menu name="closed_popup">
+</Menu>
+<Menu name="piemenu_popup">
+</Menu>
+<Menu name="clipmenu_popup">
+</Menu>
+<Menu name="picmenu_popup">
+</Menu>
+<Menu name="sidebarmenu_popup">
+</Menu>
+<Menu name="variable_popup">
+</Menu>
+<Menu name="text_popup">
+</Menu>
+<Menu name="custom_var_popup">
+</Menu>
+<Menu name="text_popup_link">
+</Menu>
+<Menu name="note_popup">
+</Menu>
+<Menu name="polygonobject_popup">
+</Menu>
+<Menu name="helpline_popup">
+</Menu>
+<Menu name="helppoint_popup">
+</Menu>
+<Menu name="zoom_popup">
+</Menu>
+</kpartgui>
