@@ -1303,7 +1303,7 @@ QString KuitFormatterPrivate::toVisualText(const QString &text_,
     while (p >= 0) {
         text.append(original.mid(0, p + 1));
         original.remove(0, p + 1);
-        static QRegExp staticRestRx(QString::fromLatin1("^("ENTITY_SUBRX");"));
+        static QRegExp staticRestRx(QString::fromLatin1("^(" ENTITY_SUBRX ");"));
         QRegExp restRx = staticRestRx; // QRegExp not thread-safe
         if (original.indexOf(restRx) != 0) { // not an entity
             text.append(QL1S("amp;"));
@@ -1523,7 +1523,7 @@ QString KuitFormatterPrivate::finalizeVisualText(const QString &text_,
 
     // Resolve XML entities.
     if (format != Kuit::RichText) {
-        static QRegExp staticEntRx(QL1S("&("ENTITY_SUBRX");"));
+        static QRegExp staticEntRx(QL1S("&(" ENTITY_SUBRX ");"));
         QRegExp entRx = staticEntRx; // QRegExp not thread-safe
         int p = entRx.indexIn(text);
         QString plain;
