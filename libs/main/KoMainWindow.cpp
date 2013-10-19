@@ -135,7 +135,7 @@ public:
         activityResource = 0;
 #endif
         themeManager = 0;
-        noCleanup = 0;
+        noCleanup = false;
     }
     ~KoMainWindowPrivate() {
         qDeleteAll(toolbarList);
