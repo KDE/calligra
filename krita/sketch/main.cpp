@@ -39,8 +39,7 @@
 #include "DocumentListModel.h"
 #include "KisSketchView.h"
 #include "SketchInputContext.h"
-#include "cpuid.h"
-
+`
 #include "stdlib.h"
 
 

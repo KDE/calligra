@@ -42,7 +42,6 @@
 
 #include "kis_config.h"
 
-#include "cpuid.h"
 #include "SketchDeclarativeView.h"
 #include "RecentFileManager.h"
 #include "DocumentManager.h"

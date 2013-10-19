@@ -38,7 +38,6 @@
 #include "MainWindow.h"
 
 #include "sketch/SketchInputContext.h"
-#include "sketch/cpuid.h"
 
 #include "stdlib.h"
 

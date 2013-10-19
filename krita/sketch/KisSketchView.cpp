@@ -77,7 +77,6 @@
 #include "KisSketchPart.h"
 #include "KisSelectionExtras.h"
 #include "Settings.h"
-#include "cpuid.h"
 #include "DocumentManager.h"
 #include "SketchDeclarativeView.h"
 #include <gemini/ViewModeSwitchEvent.h>
