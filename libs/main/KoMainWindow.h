@@ -318,6 +318,19 @@ public slots:
      */
     void toggleDockersVisibility(bool visible);
 
+    /**
+     * Saves the document, asking for a filename if necessary.
+     *
+     * @param saveas if set to TRUE the user is always prompted for a filename
+     *
+     * @param silent if set to TRUE rootDocument()->setTitleModified will not be called.
+     *
+     * @return TRUE on success, false on error or cancel
+     *         (don't display anything in this case, the error dialog box is also implemented here
+     *         but restore the original URL in slotFileSaveAs)
+     */
+    bool saveDocument(bool saveas = false, bool silent = false); 
+
 private:
 
     /**
@@ -336,19 +349,6 @@ private:
      * Create a new empty document.
      */
     KoPart* createPart() const;
-
-    /**
-     * Saves the document, asking for a filename if necessary.
-     *
-     * @param saveas if set to TRUE the user is always prompted for a filename
-     *
-     * @param silent if set to TRUE rootDocument()->setTitleModified will not be called.
-     *
-     * @return TRUE on success, false on error or cancel
-     *         (don't display anything in this case, the error dialog box is also implemented here
-     *         but restore the original URL in slotFileSaveAs)
-     */
-    public: bool saveDocument(bool saveas = false, bool silent = false); private:
 
     void closeEvent(QCloseEvent * e);
     void resizeEvent(QResizeEvent * e);
