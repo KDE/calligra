@@ -288,7 +288,7 @@ void MainWindow::switchToSketch()
     else
         QTimer::singleShot(50, this, SLOT(sketchChange()));
 
-    qDebug() << "milliseconds to switch to sketch:" << timer.elapsed();
+    //qDebug() << "milliseconds to switch to sketch:" << timer.elapsed();
 }
 
 void MainWindow::sketchChange()
@@ -369,7 +369,7 @@ void MainWindow::switchToDesktop(bool justLoaded)
         d->switcher->setEnabled(true);
     }
 
-    qDebug() << "milliseconds to switch to desktop:" << timer.elapsed();
+    //qDebug() << "milliseconds to switch to desktop:" << timer.elapsed();
 }
 
 void MainWindow::adjustZoomOnDocumentChangedAndStuff()
@@ -613,7 +613,7 @@ void MainWindow::Private::notifySlateModeChange()
         {
                 q->switchToDesktop();
         }
-        qDebug() << "Slate mode is now" << slateMode;
+        //qDebug() << "Slate mode is now" << slateMode;
     } 
 #endif
 }
@@ -626,7 +626,7 @@ void MainWindow::Private::notifyDockingModeChange()
     if (docked != bDocked)
     {
         docked = bDocked;
-        qDebug() << "Docking mode is now" << docked;
+        //qDebug() << "Docking mode is now" << docked;
     }
 #endif
 }
