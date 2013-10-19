@@ -347,7 +347,7 @@ void CASpreadsheetHandler::findNoMatchFound()
 
 void CASpreadsheetHandler::resizeCanvas (const QSizeF& canvasSize)
 {
-    canvas()->canvasItem()->setGeometry (QRectF (QPointF (0, 0), canvasSize));
+    static_cast<QGraphicsWidget*>(canvas()->canvasItem())->setGeometry (QRectF (QPointF (0, 0), canvasSize));
 }
 
 int CASpreadsheetHandler::sheetCount() const

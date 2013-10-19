@@ -74,12 +74,12 @@ public:
     }
 
     /// reimplemented method from superclass
-    virtual QGraphicsWidget *canvasItem() {
+    virtual QGraphicsObject *canvasItem() {
         return this;
     }
 
     /// reimplemented method from superclass
-    virtual const QGraphicsWidget *canvasItem() const {
+    virtual const QGraphicsObject *canvasItem() const {
         return this;
     }
 

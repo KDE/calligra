@@ -184,8 +184,8 @@ void CATextDocumentHandler::resizeCanvas (const QSizeF& canvasSize)
     if (currentPage.isValid()) {
         documentController()->canvasController()->zoomHandler()->setZoom (canvasSize.width() / currentPage.width() * 0.75);
     }
-    canvas()->canvasItem()->setGeometry (0, 0, width, height);
-    dynamic_cast<KWCanvasItem*> (canvas())->updateSize();
+    static_cast<QGraphicsWidget*>(canvas()->canvasItem())->setGeometry (0, 0, width, height);
+    static_cast<KWCanvasItem*> (canvas())->updateSize();
 }
 
 QString CATextDocumentHandler::searchString() const

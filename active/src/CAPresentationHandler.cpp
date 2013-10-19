@@ -223,7 +223,7 @@ QString CAPresentationHandler::documentTypeName()
 void CAPresentationHandler::resizeCanvas (const QSizeF& canvasSize)
 {
     QSizeF pageSize = d->paView->activePage()->boundingRect().size();
-    QGraphicsWidget* canvasItem = canvas()->canvasItem();
+    QGraphicsWidget* canvasItem = static_cast<QGraphicsWidget*>(canvas()->canvasItem());
     QSizeF newSize (pageSize);
     newSize.scale (canvasSize, Qt::KeepAspectRatio);
 
