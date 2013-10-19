@@ -23,7 +23,7 @@ Rectangle {
     id: base;
 
     property bool keyboardVisible: false;
-    onKeyboardVisibleChanged: if(!keyboardVisible) keys.mode = KeyboardModel.NormalMode;
+    onKeyboardVisibleChanged: if (!keyboardVisible) keys.mode = KeyboardModel.NormalMode;
 
     anchors.left: parent.left;
     anchors.right: parent.right;
@@ -81,11 +81,11 @@ Rectangle {
         target: Settings;
 
         onFocusItemChanged: {
-            if(Settings.focusItem != null && Settings.focusItem != undefined) {
-                if(Settings.focusItem.text == "") {
+            if (Settings.focusItem != null && Settings.focusItem != undefined) {
+                if (Settings.focusItem.text == "") {
                     keys.mode = KeyboardModel.CapitalMode;
                 }
-                if(Settings.focusItem.numeric != undefined && Settings.focusItem.numeric === true) {
+                if (Settings.focusItem.numeric != undefined && Settings.focusItem.numeric === true) {
                     keys.mode = KeyboardModel.NumericMode;
                 }
             }
@@ -118,9 +118,9 @@ Rectangle {
                 radius: 8;
 
                 color: {
-                    if(model.keyType == KeyboardModel.ShiftKey && keys.mode == KeyboardModel.CapitalMode) {
+                    if (model.keyType == KeyboardModel.ShiftKey && keys.mode == KeyboardModel.CapitalMode) {
                         return "#666666";
-                    } else if(model.keyType == KeyboardModel.NumericModeKey && keys.mode == KeyboardModel.NumericMode) {
+                    } else if (model.keyType == KeyboardModel.NumericModeKey && keys.mode == KeyboardModel.NumericMode) {
                         return "#666666";
                     } else {
                         return "transparent";
@@ -149,7 +149,7 @@ Rectangle {
                             keys.mode = keys.mode != KeyboardModel.NumericMode ? KeyboardModel.NumericMode : KeyboardModel.NormalMode;
                         case KeyboardModel.NormalKey: {
                             Settings.focusItem.text += model.text;
-                            if(keys.mode == KeyboardModel.CapitalMode) {
+                            if (keys.mode == KeyboardModel.CapitalMode) {
                                 keys.mode = KeyboardModel.NormalMode;
                             }
                             return;

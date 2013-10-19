@@ -79,19 +79,19 @@ QDeclarativeListProperty< QDeclarativeItem > PanelConfiguration::panelAreas()
 void PanelConfiguration::restore()
 {
     qDebug() << Q_FUNC_INFO << d->panels.count() << d->panelAreas.count();
-    if(d->panelAreaMap.count() == d->panels.count()) {
+    if (d->panelAreaMap.count() == d->panels.count()) {
         foreach(QDeclarativeItem* panel, d->panels) {
             QString panelName = panel->objectName();
             QString area = d->panelAreaMap.value(panelName);
 
             foreach(QDeclarativeItem* panelArea, d->panelAreas) {
-                if(panelArea->objectName() == area) {
+                if (panelArea->objectName() == area) {
                     panel->setParentItem(panelArea);
                     break;
                 }
             }
         }
-    } else if(d->panels.count() <= d->panelAreas.count()) {
+    } else if (d->panels.count() <= d->panelAreas.count()) {
         for(int i = 0; i < d->panels.count(); ++i) {
             d->panels.at(i)->setParentItem(d->panelAreas.at(i));
         }

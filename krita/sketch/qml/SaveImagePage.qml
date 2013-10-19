@@ -173,11 +173,11 @@ Page {
                 image: "images/svg/icon-filesave.svg";
 
                 onClicked: {
-                    if( fileNameField.text != "" ) {
+                    if ( fileNameField.text != "" ) {
                         var filePath = "%1/%2.%3".arg(view.model.path).arg(fileNameField.text).arg(fileType.model.get(fileType.currentIndex).type);
                         base.view.saveAs( filePath, fileType.model.get(fileType.currentIndex).mime );
 
-                        if(base.updateCurrentFile) {
+                        if (base.updateCurrentFile) {
                             // The current file is updated by the saveAs call above
                             Settings.temporaryFile = false;
                         }
@@ -207,7 +207,7 @@ Page {
             description: model.fileType != "inode/directory" ? model.date : "";
 
             onClicked: {
-                if( model.fileType == "inode/directory" ) {
+                if ( model.fileType == "inode/directory" ) {
                     GridView.view.model.path = model.path;
                 } else {
                     fileNameField.text = model.fileName.substring(0, model.fileName.lastIndexOf('.'));

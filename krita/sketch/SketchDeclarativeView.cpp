@@ -150,14 +150,14 @@ bool SketchDeclarativeView::event( QEvent* event )
         case QEvent::TabletRelease: {
             // If we don't have a canvas widget yet, we don't really have anywhere to send those events
             // so... let's just not
-            if(m_canvasWidget.data())
+            if (m_canvasWidget.data())
             {
                 //QGraphicsScene is silly and will not forward unknown events to its items, so emulate that
                 //functionality.s
                 QList<QGraphicsItem*> items = scene()->items();
                 Q_FOREACH(QGraphicsItem* item, items) {
-                    if(item == m_sketchView || qobject_cast<KisSketchView*>((item))) {
-                        if(item != m_sketchView)
+                    if (item == m_sketchView || qobject_cast<KisSketchView*>((item))) {
+                        if (item != m_sketchView)
                             m_sketchView = item;
                         scene()->sendEvent(item, event);
                         break;

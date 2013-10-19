@@ -159,13 +159,13 @@ KisSketchView::KisSketchView(QDeclarativeItem* parent)
     connect(DocumentManager::instance()->progressProxy(), SIGNAL(valueChanged(int)), SIGNAL(progress(int)));
     connect(DocumentManager::instance(), SIGNAL(documentSaved()), d->savedTimer, SLOT(start()));
 
-    if(DocumentManager::instance()->document())
+    if (DocumentManager::instance()->document())
         documentChanged();
 }
 
 KisSketchView::~KisSketchView()
 {
-    if(d->doc) {
+    if (d->doc) {
         DocumentManager::instance()->closeDocument();
     }
     if (d->canvasWidget) {
@@ -181,7 +181,7 @@ KisSketchView::~KisSketchView()
 
 QObject* KisSketchView::selectionManager() const
 {
-    if(!d->view)
+    if (!d->view)
         return 0;
     return d->view->selectionManager();
 }
@@ -226,7 +226,7 @@ void KisSketchView::setFile(const QString& file)
         d->file = file;
         emit fileChanged();
 
-        if(!file.startsWith("temp://")) {
+        if (!file.startsWith("temp://")) {
             DocumentManager::instance()->openDocument(file);
         }
     }
@@ -238,28 +238,28 @@ void KisSketchView::componentComplete()
 
 bool KisSketchView::canUndo() const
 {
-    if(d->undoAction)
+    if (d->undoAction)
         return d->undoAction->isEnabled();
     return false;
 }
 
 bool KisSketchView::canRedo() const
 {
-    if(d->redoAction)
+    if (d->redoAction)
         return d->redoAction->isEnabled();
     return false;
 }
 
 int KisSketchView::imageHeight() const
 {
-    if(d->doc)
+    if (d->doc)
         return d->doc->image()->height();
     return 0;
 }
 
 int KisSketchView::imageWidth() const
 {
-    if(d->doc)
+    if (d->doc)
         return d->doc->image()->width();
     return 0;
 }
@@ -296,10 +296,10 @@ void KisSketchView::saveAs(const QString& fileName, const QString& mimeType)
 
 void KisSketchView::documentAboutToBeDeleted()
 {
-    if(d->undoAction)
+    if (d->undoAction)
         d->undoAction->disconnect(this);
 
-    if(d->redoAction)
+    if (d->redoAction)
         d->redoAction->disconnect(this);
 
     KisView2 *oldView = d->view;
@@ -373,7 +373,7 @@ bool KisSketchView::event( QEvent* event )
         case ViewModeSwitchEvent::AboutToSwitchViewModeEvent: {
             ViewModeSynchronisationObject* syncObject = static_cast<ViewModeSwitchEvent*>(event)->synchronisationObject();
 
-            if(d->view) {
+            if (d->view) {
                 KisCanvasResourceProvider* provider = d->view->resourceProvider();
                 syncObject->backgroundColor = provider->bgColor();
                 syncObject->foregroundColor = provider->fgColor();
@@ -401,7 +401,7 @@ bool KisSketchView::event( QEvent* event )
         case ViewModeSwitchEvent::SwitchedToSketchModeEvent: {
             ViewModeSynchronisationObject* syncObject = static_cast<ViewModeSwitchEvent*>(event)->synchronisationObject();
 
-            if(d->view && syncObject->initialized) {
+            if (d->view && syncObject->initialized) {
                 d->view->canvasControllerWidget()->setFocus();
                 qApp->processEvents();
 
@@ -488,7 +488,7 @@ bool KisSketchView::sceneEvent(QEvent* event)
 	    QApplication::sendEvent(d->canvasWidget, event);
 	    return true;
         default:
-            if(QApplication::sendEvent(d->canvasWidget, event)) {
+            if (QApplication::sendEvent(d->canvasWidget, event)) {
             emit interactionStarted();
                 return true;
         }
@@ -508,14 +508,14 @@ void KisSketchView::geometryChanged(const QRectF& newGeometry, const QRectF& old
         // This is a touch on the hackish side - i'm sure there's a better way of doing it
         // but it's taking a long time to work it out. Problem: When switching orientation,
         // the canvas is rendered wrong, in what looks like an off-by-one ish kind of fashion.
-        if(oldGeometry.height() == oldGeometry.width() && oldGeometry.height() == newGeometry.width()) {
+        if (oldGeometry.height() == oldGeometry.width() && oldGeometry.height() == newGeometry.width()) {
             // in this case, we've just rotated the display... do something useful!
             // Turns out we get /two/ resize events per rotation, one one per setting each height and width.
             // So we can't just check it normally. Annoying, but there you go.
             QTimer::singleShot(100, this, SLOT(centerDoc()));
             QTimer::singleShot(150, this, SLOT(zoomOut()));
         }
-        if(oldGeometry.height() == oldGeometry.width() && oldGeometry.width() == newGeometry.height()) {
+        if (oldGeometry.height() == oldGeometry.width() && oldGeometry.width() == newGeometry.height()) {
             // in this case, we've just rotated the display... do something useful!
             // Turns out we get /two/ resize events per rotation, one one per setting each height and width.
             // So we can't just check it normally. Annoying, but there you go.
@@ -564,7 +564,7 @@ void KisSketchView::Private::resetDocumentPosition()
 
 void KisSketchView::Private::removeNodeAsync(KisNodeSP removedNode)
 {
-    if(removedNode) {
+    if (removedNode) {
         imageUpdated(removedNode->extent());
     }
 }

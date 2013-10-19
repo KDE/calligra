@@ -46,7 +46,7 @@ Item {
         }
         property bool firstSet: false;
         onCurrentIndexChanged: {
-            if(firstSet) { model.activateItem(currentIndex); }
+            if (firstSet) { model.activateItem(currentIndex); }
             else { firstSet = true; }
         }
         model: compositeOpModel;
@@ -57,7 +57,7 @@ Item {
         onOpacityChanged: opacityInput.value = compositeOpModel.opacity;
         onCurrentCompositeOpIDChanged: {
             var newIndex = compositeOpModel.indexOf(compositeOpModel.currentCompositeOpID);
-            if(compositeModeList.currentIndex !== newIndex) {
+            if (compositeModeList.currentIndex !== newIndex) {
                 compositeModeList.currentIndex = newIndex;
             }
         }
@@ -98,7 +98,7 @@ Item {
             right: parent.right;
             rightMargin: Constants.DefaultMargin;
         }
-        onCurrentIndexChanged: if(toolManager.currentTool && toolManager.currentTool.slotSetShape) toolManager.currentTool.slotSetShape(currentIndex);
+        onCurrentIndexChanged: if (toolManager.currentTool && toolManager.currentTool.slotSetShape) toolManager.currentTool.slotSetShape(currentIndex);
         model: ListModel {
             ListElement {
                 text: "Linear"
@@ -135,7 +135,7 @@ Item {
             placeholder: "Anti-alias";
             min: 0; max: 1; decimals: 3;
             value: 0.2;
-            onValueChanged: if(toolManager.currentTool) toolManager.currentTool.slotSetAntiAliasThreshold(value);
+            onValueChanged: if (toolManager.currentTool) toolManager.currentTool.slotSetAntiAliasThreshold(value);
         }
 
         RangeInput {
@@ -143,20 +143,20 @@ Item {
             placeholder: "Preview";
             min: 0; max: 100; decimals: 0;
             value: 75;
-            onValueChanged: if(toolManager.currentTool) toolManager.currentTool.slotSetPreviewOpacity(value);
+            onValueChanged: if (toolManager.currentTool) toolManager.currentTool.slotSetPreviewOpacity(value);
         }
 
         CheckBox {
             width: parent.width;
             text: "Reverse";
             checked: false;
-            onCheckedChanged: if(toolManager.currentTool) toolManager.currentTool.slotSetReverse(checked);
+            onCheckedChanged: if (toolManager.currentTool) toolManager.currentTool.slotSetReverse(checked);
         }
         CheckBox {
             width: parent.width;
             text: "Repeat";
             checked: false;
-            onCheckedChanged: if(toolManager.currentTool) toolManager.currentTool.slotSetRepeat(checked);
+            onCheckedChanged: if (toolManager.currentTool) toolManager.currentTool.slotSetRepeat(checked);
         }
     }
 }

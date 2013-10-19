@@ -56,7 +56,7 @@ public:
         FiltersModel* category = 0;
         for(int i = 0; i < categories.count(); ++i)
         {
-            if(categories.at(i)->categoryId == name)
+            if (categories.at(i)->categoryId == name)
             {
                 category = categories[i];
                 break;
@@ -117,7 +117,7 @@ FiltersCategoryModel::~FiltersCategoryModel()
 QVariant FiltersCategoryModel::data(const QModelIndex& index, int role) const
 {
     QVariant data;
-    if(index.isValid())
+    if (index.isValid())
     {
         switch(role)
         {
@@ -133,21 +133,21 @@ QVariant FiltersCategoryModel::data(const QModelIndex& index, int role) const
 
 int FiltersCategoryModel::rowCount(const QModelIndex& parent) const
 {
-    if(parent.isValid())
+    if (parent.isValid())
         return 0;
     return d->categories.count();
 }
 
 QObject* FiltersCategoryModel::filterModel() const
 {
-    if(d->currentCategory == -1)
+    if (d->currentCategory == -1)
         return 0;
     return d->categories[d->currentCategory];
 }
 
 void FiltersCategoryModel::activateItem(int index)
 {
-    if(index > -1 && index < d->categories.count())
+    if (index > -1 && index < d->categories.count())
     {
         d->currentCategory = index;
         emit filterModelChanged();
@@ -161,14 +161,14 @@ QObject* FiltersCategoryModel::view() const
 
 void FiltersCategoryModel::setView(QObject* newView)
 {
-    if(d->view)
+    if (d->view)
     {
         setPreviewEnabled(false);
         d->view->nodeManager()->disconnect(this);
         d->view->selectionManager()->disconnect(this);
     }
     d->view = qobject_cast<KisView2*>( newView );
-    if(d->view)
+    if (d->view)
     {
         d->refreshContents();
         connect(d->view->nodeManager(), SIGNAL(sigLayerActivated(KisLayerSP)), this, SLOT(activeLayerChanged(KisLayerSP)));
@@ -197,19 +197,17 @@ void FiltersCategoryModel::filterActivated(int index)
 void FiltersCategoryModel::filterConfigurationChanged(int index, FiltersModel* model)
 {
     d->previewFilterID = index;
-    if(d->previewEnabled && index > -1)
+    if (d->previewEnabled && index > -1)
     {
-        if(!model)
+        if (!model) {
             model = qobject_cast<FiltersModel*>(sender());
-        if(!model)
-        {
-            qDebug() << "How is the model null now?! Oh, someone forgot to send it along";
+        } 
+        if (!model) {
             return;
         }
         KisSafeFilterConfigurationSP config(KisFilterRegistry::instance()->cloneConfiguration(model->filter(index)->defaultConfiguration(d->view->activeNode()->original())));
         QObject* configuration = d->categories[d->currentCategory]->configuration(index);
-        foreach(const QByteArray& propName, configuration->dynamicPropertyNames())
-        {
+        foreach(const QByteArray& propName, configuration->dynamicPropertyNames()) {
             config->setProperty(QString(propName), configuration->property(propName));
         }
         configuration->deleteLater();
@@ -230,18 +228,18 @@ bool FiltersCategoryModel::previewEnabled() const
 
 void FiltersCategoryModel::filterSelected(int index)
 {
-    if(d->previewEnabled)
+    if (d->previewEnabled)
         filterConfigurationChanged(index, d->categories[d->currentCategory]);
 }
 
 void FiltersCategoryModel::setPreviewEnabled(bool enabled)
 {
-    if(d->previewEnabled != enabled)
+    if (d->previewEnabled != enabled)
     {
         d->previewEnabled = enabled;
         emit previewEnabledChanged();
 
-        if(enabled)
+        if (enabled)
             filterConfigurationChanged(d->previewFilterID, d->categories[d->currentCategory]);
         else
             d->view->filterManager()->cancel();
@@ -251,7 +249,7 @@ void FiltersCategoryModel::setPreviewEnabled(bool enabled)
 int FiltersCategoryModel::categoryIndexForConfig(QObject* config)
 {
     PropertyContainer* configuration = qobject_cast<PropertyContainer*>(config);
-    if(!configuration)
+    if (!configuration)
         return -1;
     FiltersModel* model = 0;
     int i = 0;
@@ -262,7 +260,7 @@ int FiltersCategoryModel::categoryIndexForConfig(QObject* config)
         // is something to put in it
         for(int j = 0; j < cat->rowCount(); ++j)
         {
-            if(cat->filter(j)->id() == configuration->name())
+            if (cat->filter(j)->id() == configuration->name())
                 return i;
         }
         ++i;
@@ -273,16 +271,16 @@ int FiltersCategoryModel::categoryIndexForConfig(QObject* config)
 int FiltersCategoryModel::filterIndexForConfig(int categoryIndex, QObject* filterConfig)
 {
     PropertyContainer* configuration = qobject_cast<PropertyContainer*>(filterConfig);
-    if(!configuration)
+    if (!configuration)
         return -1;
-    if(categoryIndex < 0 || categoryIndex > d->categories.count() - 1)
+    if (categoryIndex < 0 || categoryIndex > d->categories.count() - 1)
         return -1;
     FiltersModel* cat = d->categories.at(categoryIndex);
     // i know there's no check here - but a category is not created unless there
     // is something to put in it
     for(int j = 0; j < cat->rowCount(); ++j)
     {
-        if(cat->filter(j)->id() == configuration->name())
+        if (cat->filter(j)->id() == configuration->name())
             return j;
     }
     return -1;

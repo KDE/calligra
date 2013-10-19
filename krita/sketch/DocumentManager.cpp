@@ -62,7 +62,7 @@ KisDoc2* DocumentManager::document() const
 
 KisSketchPart* DocumentManager::part()
 {
-    if(!d->part)
+    if (!d->part)
         d->part = new KisSketchPart(this);
     return d->part;
 }
@@ -125,7 +125,7 @@ void DocumentManager::delayedOpenDocument()
     part()->setDocument(d->document);
 
     d->document->setModified(false);
-    if(d->importingDocument)
+    if (d->importingDocument)
         d->document->importDocument(QUrl::fromLocalFile(d->openDocumentFilename));
     else
         d->document->openUrl(QUrl::fromLocalFile(d->openDocumentFilename));
@@ -135,7 +135,7 @@ void DocumentManager::delayedOpenDocument()
 
 void DocumentManager::closeDocument()
 {
-    if(d->document) {
+    if (d->document) {
         emit aboutToDeleteDocument();
         part()->closeUrl(false);
         //d->document->deleteLater();
@@ -145,7 +145,7 @@ void DocumentManager::closeDocument()
 
 bool DocumentManager::save()
 {
-    if(part()->save())
+    if (part()->save())
     {
         d->recentFileManager->addRecent(d->document->url().toLocalFile());
         emit documentSaved();
@@ -182,7 +182,7 @@ void DocumentManager::reload()
 
 DocumentManager* DocumentManager::instance()
 {
-    if(!sm_instance) {
+    if (!sm_instance) {
         sm_instance = new DocumentManager(QCoreApplication::instance());
     }
 

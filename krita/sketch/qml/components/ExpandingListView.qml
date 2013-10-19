@@ -74,7 +74,7 @@ Item {
         MouseArea {
             anchors.fill: parent;
             onClicked: {
-                if(base.state === "expanded") {
+                if (base.state === "expanded") {
                     base.state = "";
                 }
                 else {
@@ -134,7 +134,7 @@ Item {
                 MouseArea {
                     anchors.fill: parent;
                     onClicked: {
-                        if(model.isCategory) {
+                        if (model.isCategory) {
                             return;
                         }
                         listView.currentIndex = index;

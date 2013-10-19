@@ -216,7 +216,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     KisConfig cfg;
     // Store the current setting before we do "things", and heuristic our way to a reasonable
     // default if it's no cursor (that's most likely due to a broken config)
-    if(cfg.cursorStyle() != CURSOR_STYLE_NO_CURSOR)
+    if (cfg.cursorStyle() != CURSOR_STYLE_NO_CURSOR)
         d->desktopCursorStyle = cfg.cursorStyle();
     cfg.setCursorStyle(CURSOR_STYLE_NO_CURSOR);
     cfg.setUseOpenGL(true);
@@ -237,14 +237,14 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
 
 void MainWindow::switchDesktopForced()
 {
-    if(d->slateMode)
+    if (d->slateMode)
         d->forceDesktop = true;
     d->forceSketch = false;
 }
 
 void MainWindow::switchSketchForced()
 {
-    if(!d->slateMode)
+    if (!d->slateMode)
         d->forceSketch = true;
     d->forceDesktop = false;
 }
@@ -254,7 +254,7 @@ void MainWindow::switchToSketch()
     QTime timer;
     timer.start();
 
-    if(d->toSketch)
+    if (d->toSketch)
     {
         d->toSketch->setEnabled(false);
         d->switcher->setEnabled(false);
@@ -264,7 +264,7 @@ void MainWindow::switchToSketch()
     KisView2* view = 0;
 
     KisConfig cfg;
-    if(d->desktopView && centralWidget() == d->desktopView) {
+    if (d->desktopView && centralWidget() == d->desktopView) {
         d->desktopCursorStyle = cfg.cursorStyle();
         view = qobject_cast<KisView2*>(d->desktopView->rootView());
 
@@ -280,9 +280,9 @@ void MainWindow::switchToSketch()
     setCentralWidget(d->sketchView);
     emit switchedToSketch();
 
-    if(d->slateMode) {
+    if (d->slateMode) {
         showFullScreen();
-        if(d->syncObject->initialized)
+        if (d->syncObject->initialized)
             QTimer::singleShot(50, this, SLOT(sketchChange()));
     }
     else
@@ -293,12 +293,12 @@ void MainWindow::switchToSketch()
 
 void MainWindow::sketchChange()
 {
-    if(centralWidget() != d->sketchView || !d->syncObject)
+    if (centralWidget() != d->sketchView || !d->syncObject)
         return;
 
-    if(d->desktopView)
+    if (d->desktopView)
     {
-        if(!d->sketchKisView || !d->sketchView->canvasWidget())
+        if (!d->sketchKisView || !d->sketchView->canvasWidget())
         {
             QTimer::singleShot(100, this, SLOT(sketchChange()));
             return;
@@ -314,7 +314,7 @@ void MainWindow::sketchChange()
         KisConfig cfg;
         cfg.setCursorStyle(CURSOR_STYLE_NO_CURSOR);
     }
-    if(d->toDesktop)
+    if (d->toDesktop)
     {
         qApp->processEvents();
         d->toDesktop->setEnabled(true);
@@ -326,13 +326,13 @@ void MainWindow::switchToDesktop(bool justLoaded)
     QTime timer;
     timer.start();
 
-    if(d->toDesktop)
+    if (d->toDesktop)
         d->toDesktop->setEnabled(false);
 
     ViewModeSynchronisationObject* syncObject = new ViewModeSynchronisationObject;
 
     KisView2* view = 0;
-    if(d->desktopView) {
+    if (d->desktopView) {
         view = qobject_cast<KisView2*>(d->desktopView->rootView());
     }
 
@@ -342,18 +342,18 @@ void MainWindow::switchToDesktop(bool justLoaded)
     QApplication::sendEvent(d->sketchView, &aboutToSwitchEvent);
     qApp->processEvents();
 
-    if(d->currentSketchPage == "MainPage")
+    if (d->currentSketchPage == "MainPage")
     {
         d->sketchView->setParent(0);
         setCentralWidget(d->desktopView);
     }
 
-    if(d->wasMaximized)
+    if (d->wasMaximized)
         showMaximized();
     else
         showNormal();
 
-    if(view) {
+    if (view) {
         //Notify the new view that we just switched to it, passing our synchronisation object
         //so it can use those values to sync with the old view.
         ViewModeSwitchEvent switchedEvent(ViewModeSwitchEvent::SwitchedToDesktopModeEvent, d->sketchView, view, syncObject);
@@ -362,7 +362,7 @@ void MainWindow::switchToDesktop(bool justLoaded)
         cfg.setCursorStyle(d->desktopCursorStyle);
     }
 
-    if(d->toSketch && !justLoaded)
+    if (d->toSketch && !justLoaded)
     {
         qApp->processEvents();
         d->toSketch->setEnabled(true);
@@ -374,7 +374,7 @@ void MainWindow::switchToDesktop(bool justLoaded)
 
 void MainWindow::adjustZoomOnDocumentChangedAndStuff()
 {
-    if(d->desktopView && centralWidget() == d->desktopView) {
+    if (d->desktopView && centralWidget() == d->desktopView) {
         KisView2* view = qobject_cast<KisView2*>(d->desktopView->rootView());
         qApp->processEvents();
         view->zoomController()->setZoom(KoZoomMode::ZOOM_PAGE, 1.0);
@@ -388,7 +388,7 @@ void MainWindow::adjustZoomOnDocumentChangedAndStuff()
         d->toSketch->setEnabled(true);
         d->switcher->setEnabled(true);
     }
-    else if(d->sketchKisView && centralWidget() == d->sketchView) {
+    else if (d->sketchKisView && centralWidget() == d->sketchView) {
         qApp->processEvents();
         d->sketchKisView->zoomController()->setZoom(KoZoomMode::ZOOM_PAGE, 1.0);
         qApp->processEvents();
@@ -401,7 +401,7 @@ void MainWindow::adjustZoomOnDocumentChangedAndStuff()
 
 void MainWindow::documentChanged()
 {
-    if(d->desktopView) {
+    if (d->desktopView) {
         d->desktopView->setNoCleanup(true);
         d->desktopView->deleteLater();
         d->desktopView = 0;
@@ -412,9 +412,9 @@ void MainWindow::documentChanged()
     KisView2* view = qobject_cast<KisView2*>(d->desktopView->rootView());
     view->setQtMainWindow(d->desktopView);
     connect(view, SIGNAL(sigLoadingFinished()), d->centerer, SLOT(start()));
-    if(d->sketchKisView)
+    if (d->sketchKisView)
         d->sketchKisView->setQtMainWindow(this);
-    if(!d->forceSketch && !d->slateMode)
+    if (!d->forceSketch && !d->slateMode)
         switchToDesktop(true);
 }
 
@@ -443,9 +443,9 @@ void MainWindow::setCurrentSketchPage(QString newPage)
     d->currentSketchPage = newPage;
     emit currentSketchPageChanged();
 
-    if(newPage == "MainPage")
+    if (newPage == "MainPage")
     {
-        if(!d->forceSketch && !d->slateMode)
+        if (!d->forceSketch && !d->slateMode)
         {
             // Just loaded to desktop, do nothing
         }
@@ -474,9 +474,9 @@ QObject* MainWindow::sketchKisView() const
 
 void MainWindow::setSketchKisView(QObject* newView)
 {
-    if(d->sketchKisView)
+    if (d->sketchKisView)
         d->sketchKisView->disconnect(this);
-    if(d->sketchKisView != newView)
+    if (d->sketchKisView != newView)
     {
         d->sketchKisView = qobject_cast<KisView2*>(newView);
         connect(d->sketchKisView, SIGNAL(sigLoadingFinished()), d->centerer, SLOT(start()));
@@ -547,18 +547,18 @@ bool MainWindow::Private::queryClose()
 
 void MainWindow::closeEvent(QCloseEvent* event)
 {
-    if(centralWidget() == d->desktopView)
+    if (centralWidget() == d->desktopView)
     {
-        if(DocumentManager::instance()->document()->isLoading()) {
+        if (DocumentManager::instance()->document()->isLoading()) {
             event->ignore();
             return;
         }
         d->allowClose = d->queryClose();
     }
 
-    if(d->allowClose)
+    if (d->allowClose)
     {
-        if(d->desktopView)
+        if (d->desktopView)
         {
             d->desktopView->setNoCleanup(true);
             d->desktopView->close();
@@ -582,11 +582,11 @@ MainWindow::~MainWindow()
 #ifdef Q_OS_WIN
 bool MainWindow::winEvent( MSG * message, long * result )
 {
-    if(message->message == WM_SETTINGCHANGE)
+    if (message->message == WM_SETTINGCHANGE)
     {
-        if(wcscmp(TEXT("ConvertibleSlateMode"), (TCHAR *) message->lParam) == 0)
+        if (wcscmp(TEXT("ConvertibleSlateMode"), (TCHAR *) message->lParam) == 0)
             d->notifySlateModeChange();
-        else if(wcscmp(TEXT("SystemDockMode"), (TCHAR *) message->lParam) == 0)
+        else if (wcscmp(TEXT("SystemDockMode"), (TCHAR *) message->lParam) == 0)
             d->notifyDockingModeChange();
         *result = 0;
         return true;
@@ -604,9 +604,9 @@ void MainWindow::Private::notifySlateModeChange()
     {
         slateMode = bSlateMode;
         emit q->slateModeChanged();
-        if(forceSketch || (slateMode && !forceDesktop))
+        if (forceSketch || (slateMode && !forceDesktop))
         {
-            if(!toSketch || (toSketch && toSketch->isEnabled()))
+            if (!toSketch || (toSketch && toSketch->isEnabled()))
                 q->switchToSketch();
         }
         else

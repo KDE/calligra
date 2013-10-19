@@ -36,10 +36,10 @@ Panel {
             shadow: false;
             highlight: false;
             onClicked: {
-                if(base.state === "full") {
+                if (base.state === "full") {
                     fullFilters.model.activateFilter(fullFilters.currentIndex);
                 }
-                else if(base.state === "peek") {
+                else if (base.state === "peek") {
                     peekFilters.model.activateFilter(peekFilters.currentIndex);
                 }
             }
@@ -103,7 +103,7 @@ Panel {
             width: parent.width;
             model: filtersCategoryModel;
             onCurrentIndexChanged: {
-                if(categoryList.currentIndex !== currentIndex) {
+                if (categoryList.currentIndex !== currentIndex) {
                     categoryList.currentIndex = currentIndex;
                 }
             }
@@ -117,11 +117,11 @@ Panel {
             }
             onModelChanged: currentIndex = 0;
             onCurrentIndexChanged: {
-                if(model.filterRequiresConfiguration(currentIndex)) {
+                if (model.filterRequiresConfiguration(currentIndex)) {
                     noConfigNeeded.visible = false;
                     configNeeded.visible = true;
                     configLoader.source = "filterconfigpages/" + model.filterID(currentIndex) + ".qml";
-                    if(typeof(configLoader.item.configuration) !== 'undefined') {
+                    if (typeof(configLoader.item.configuration) !== 'undefined') {
                         configLoader.item.configuration = model.configuration(currentIndex);
                     }
                 }

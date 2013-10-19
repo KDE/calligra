@@ -168,7 +168,7 @@ PageStack {
                     color: "transparent";
                     image: "../images/svg/icon-apply-black.svg";
                     onClicked: {
-                        if(width.acceptableInput && height.acceptableInput && resolution.acceptableInput) {
+                        if (width.acceptableInput && height.acceptableInput && resolution.acceptableInput) {
                             base.clicked();
                             Settings.currentFile = Krita.ImageBuilder.createBlankImage(parseInt(width.text), parseInt(height.text), parseInt(resolution.text));
                             Settings.temporaryFile = true;

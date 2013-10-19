@@ -35,7 +35,7 @@ Panel {
             shadow: false;
             highlight: false;
             enabled: sketchView.selectionManager ? sketchView.selectionManager.havePixelsSelected : false;
-            onClicked: if(sketchView.selectionManager) sketchView.selectionManager.deselect();
+            onClicked: if (sketchView.selectionManager) sketchView.selectionManager.deselect();
         },
         Button {
             id: reselectButton;
@@ -146,7 +146,7 @@ Panel {
                 shadow: false;
                 highlight: false;
                 checked: (toolManager.currentTool && toolManager.currentTool.selectionAction === 0) ? true : false;
-                onClicked: if(toolManager.currentTool && toolManager.currentTool.selectionAction !== undefined) toolManager.currentTool.selectionAction = 0;
+                onClicked: if (toolManager.currentTool && toolManager.currentTool.selectionAction !== undefined) toolManager.currentTool.selectionAction = 0;
             }
             Button {
                 id: selectIntersect;
@@ -158,7 +158,7 @@ Panel {
                 shadow: false;
                 highlight: false;
                 checked: (toolManager.currentTool && toolManager.currentTool.selectionAction === 3) ? true : false;
-                onClicked: if(toolManager.currentTool && toolManager.currentTool.selectionAction !== undefined) toolManager.currentTool.selectionAction = 3;
+                onClicked: if (toolManager.currentTool && toolManager.currentTool.selectionAction !== undefined) toolManager.currentTool.selectionAction = 3;
             }
             Button {
                 id: selectAdd;
@@ -170,7 +170,7 @@ Panel {
                 shadow: false;
                 highlight: false;
                 checked: (toolManager.currentTool && toolManager.currentTool.selectionAction === 1) ? true : false;
-                onClicked: if(toolManager.currentTool && toolManager.currentTool.selectionAction !== undefined) toolManager.currentTool.selectionAction = 1;
+                onClicked: if (toolManager.currentTool && toolManager.currentTool.selectionAction !== undefined) toolManager.currentTool.selectionAction = 1;
             }
             Button {
                 id: selectSub;
@@ -182,7 +182,7 @@ Panel {
                 shadow: false;
                 highlight: false;
                 checked: (toolManager.currentTool && toolManager.currentTool.selectionAction === 2) ? true : false;
-                onClicked: if(toolManager.currentTool && toolManager.currentTool.selectionAction !== undefined) toolManager.currentTool.selectionAction = 2;
+                onClicked: if (toolManager.currentTool && toolManager.currentTool.selectionAction !== undefined) toolManager.currentTool.selectionAction = 2;
             }
         }
         Item {
@@ -341,7 +341,7 @@ Panel {
                         shadow: false;
                         highlight: false;
                         checked: (toolManager.currentTool && toolManager.currentTool.selectionAction === 0) ? true : false;
-                        onClicked: if(toolManager.currentTool && toolManager.currentTool.selectionAction !== undefined) toolManager.currentTool.selectionAction = 0;
+                        onClicked: if (toolManager.currentTool && toolManager.currentTool.selectionAction !== undefined) toolManager.currentTool.selectionAction = 0;
                     }
                     Button {
                         id: selectIntersectFull;
@@ -353,7 +353,7 @@ Panel {
                         shadow: false;
                         highlight: false;
                         checked: (toolManager.currentTool && toolManager.currentTool.selectionAction === 3) ? true : false;
-                        onClicked: if(toolManager.currentTool && toolManager.currentTool.selectionAction !== undefined) toolManager.currentTool.selectionAction = 3;
+                        onClicked: if (toolManager.currentTool && toolManager.currentTool.selectionAction !== undefined) toolManager.currentTool.selectionAction = 3;
                     }
                     Button {
                         id: selectAddFull;
@@ -365,7 +365,7 @@ Panel {
                         shadow: false;
                         highlight: false;
                         checked: (toolManager.currentTool && toolManager.currentTool.selectionAction === 1) ? true : false;
-                        onClicked: if(toolManager.currentTool && toolManager.currentTool.selectionAction !== undefined) toolManager.currentTool.selectionAction = 1;
+                        onClicked: if (toolManager.currentTool && toolManager.currentTool.selectionAction !== undefined) toolManager.currentTool.selectionAction = 1;
                     }
                     Button {
                         id: selectSubFull;
@@ -377,7 +377,7 @@ Panel {
                         shadow: false;
                         highlight: false;
                         checked: (toolManager.currentTool && toolManager.currentTool.selectionAction === 2) ? true : false;
-                        onClicked: if(toolManager.currentTool && toolManager.currentTool.selectionAction !== undefined) toolManager.currentTool.selectionAction = 2;
+                        onClicked: if (toolManager.currentTool && toolManager.currentTool.selectionAction !== undefined) toolManager.currentTool.selectionAction = 2;
                     }
                 }
                 Label {

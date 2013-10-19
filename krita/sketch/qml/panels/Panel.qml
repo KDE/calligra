@@ -142,7 +142,7 @@ Item {
                         handle.dragStarted();
                     }
                     onDrop: {
-                        if(action == Qt.IgnoreAction) {
+                        if (action == Qt.IgnoreAction) {
                             handle.opacity = 0;
                         }
                         handle.drop(action);
@@ -214,7 +214,7 @@ Item {
                         handle.dragStarted();
                     }
                     onDrop: {
-                        if(action == Qt.IgnoreAction) {
+                        if (action == Qt.IgnoreAction) {
                             handle.opacity = 0;
                         }
                         handle.drop(action);
@@ -256,7 +256,7 @@ Item {
         property bool dragging: false;
 
         function fixParent() {
-            if(!handleDragArea.dragging && !xHandleAnim.animation.running && !yHandleAnim.animation.running) {
+            if (!handleDragArea.dragging && !xHandleAnim.animation.running && !yHandleAnim.animation.running) {
                 xHandleAnim.enabled = false;
                 yHandleAnim.enabled = false;
                 handle.parent = base;

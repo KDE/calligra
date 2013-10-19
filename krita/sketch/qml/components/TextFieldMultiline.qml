@@ -94,7 +94,7 @@ Item {
 
                         font.pixelSize: Constants.DefaultFontSize;
                         onFocusChanged: {
-                            if(focus === false) {
+                            if (focus === false) {
                                 closeSoftwareInputPanel();
                                 Settings.focusItem = null;
                                 base.focusLost();

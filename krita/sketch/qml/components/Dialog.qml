@@ -36,14 +36,14 @@ Item {
     signal canceled();
 
     function show(message) {
-        if(message) {
+        if (message) {
             base.message = message;
         }
         base.opacity = 1;
     }
 
     function hide(message) {
-        if(message) {
+        if (message) {
             base.message = message;
         }
         base.opacity = 0;
@@ -60,7 +60,7 @@ Item {
         onClicked: {
             // Don't allow people to click away a progress bar...
             // horrible things could happen if they do so (inconsistent states and what not)
-            if(progress !== -1)
+            if (progress !== -1)
                 return;
             base.canceled();
             base.hide();
@@ -71,7 +71,7 @@ Item {
         onTouched: {
             // Don't allow people to click away a progress bar...
             // horrible things could happen if they do so (inconsistent states and what not)
-            if(progress !== -1)
+            if (progress !== -1)
                 return;
             base.canceled();
             base.hide();
@@ -88,7 +88,7 @@ Item {
         Keys.onEscapePressed: {
                 // Don't allow people to escape from a progress bar...
                 // horrible things could happen if they do so (inconsistent states and what not)
-                if(progress !== -1)
+                if (progress !== -1)
                     return;
                 base.canceled();
                 base.hide();
@@ -98,7 +98,7 @@ Item {
         focus: Keys.enabled;
         Keys.onTabPressed: {
             base.currentButton += 1;
-            if(base.currentButton >= base.buttons.length) {
+            if (base.currentButton >= base.buttons.length) {
                 base.currentButton = 0;
             }
         }

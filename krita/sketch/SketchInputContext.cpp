@@ -56,13 +56,13 @@ QString SketchInputContext::identifierName()
 
 bool SketchInputContext::filterEvent(const QEvent* event)
 {
-    if(event->type() == QEvent::RequestSoftwareInputPanel) {
+    if (event->type() == QEvent::RequestSoftwareInputPanel) {
         VirtualKeyboardController::instance()->requestShowKeyboard();
 #ifdef Q_OS_WIN
         QProcess::execute("cmd /c \"C:\\Program Files\\Common Files\\Microsoft Shared\\Ink\\Tabtip.exe\"");
 #endif
         return true;
-    } else if(event->type() == QEvent::CloseSoftwareInputPanel) {
+    } else if (event->type() == QEvent::CloseSoftwareInputPanel) {
         VirtualKeyboardController::instance()->requestHideKeyboard();
 #ifdef Q_OS_WIN
         HWND kbd = ::FindWindow(L"IPTip_Main_Window", NULL);

@@ -50,7 +50,7 @@ QString Settings::currentFile() const
 void Settings::setCurrentFile(const QString& fileName)
 {
     qApp->processEvents();
-    if(fileName != d->currentFile) {
+    if (fileName != d->currentFile) {
         d->currentFile = fileName;
         emit currentFileChanged();
     }
@@ -63,7 +63,7 @@ bool Settings::isTemporaryFile() const
 
 void Settings::setTemporaryFile(bool temp)
 {
-    if(temp != d->temporaryFile) {
+    if (temp != d->temporaryFile) {
         d->temporaryFile = temp;
         emit temporaryFileChanged();
     }
@@ -76,7 +76,7 @@ QDeclarativeItem* Settings::focusItem()
 
 void Settings::setFocusItem(QDeclarativeItem* item)
 {
-    if(item != d->focusItem) {
+    if (item != d->focusItem) {
         d->focusItem = item;
         emit focusItemChanged();
     }

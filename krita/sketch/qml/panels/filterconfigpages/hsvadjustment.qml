@@ -26,7 +26,7 @@ Item {
         fullFilters.applyConfiguration(configuration);
     }
     function setProp(name, value) {
-        if(configuration !== null) {
+        if (configuration !== null) {
             configuration.writeProperty(name, value);
             base.applyConfigurationChanges();
         }
@@ -83,7 +83,7 @@ Item {
             width: parent.width;
             text: "Colorize";
             onCheckedChanged: {
-                if(checked) {
+                if (checked) {
                     hue.min = 0;
                     hue.max = 360;
                     saturation.min = 0;

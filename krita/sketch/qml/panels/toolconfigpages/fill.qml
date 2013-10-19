@@ -47,7 +47,7 @@ Item {
         }
         property bool firstSet: false;
         onCurrentIndexChanged: {
-            if(firstSet) { model.activateItem(currentIndex); }
+            if (firstSet) { model.activateItem(currentIndex); }
             else { firstSet = true; }
         }
         model: compositeOpModel;
@@ -58,7 +58,7 @@ Item {
         onOpacityChanged: opacityInput.value = compositeOpModel.opacity;
         onCurrentCompositeOpIDChanged: {
             var newIndex = compositeOpModel.indexOf(compositeOpModel.currentCompositeOpID);
-            if(compositeModeList.currentIndex !== newIndex) {
+            if (compositeModeList.currentIndex !== newIndex) {
                 compositeModeList.currentIndex = newIndex;
             }
         }
@@ -95,7 +95,7 @@ Item {
             placeholder: "Threshold";
             min: 0; max: 255; decimals: 0;
             value: 255;
-            onValueChanged: if(toolManager.currentTool) toolManager.currentTool.slotSetThreshold(value);
+            onValueChanged: if (toolManager.currentTool) toolManager.currentTool.slotSetThreshold(value);
         }
 
         CheckBox {
@@ -108,7 +108,7 @@ Item {
             }
             text: "Fill Selection";
             checked: false;
-            onCheckedChanged: if(toolManager.currentTool) toolManager.currentTool.slotSetFillSelection(checked);
+            onCheckedChanged: if (toolManager.currentTool) toolManager.currentTool.slotSetFillSelection(checked);
         }
         CheckBox {
             id: limitToLayerCheck;
@@ -120,7 +120,7 @@ Item {
             }
             text: "Limit to Layer";
             checked: false;
-            onCheckedChanged: if(toolManager.currentTool) toolManager.currentTool.slotSetSampleMerged(checked);
+            onCheckedChanged: if (toolManager.currentTool) toolManager.currentTool.slotSetSampleMerged(checked);
         }
         /*CheckBox {
             id: usePatternCheck;
@@ -132,7 +132,7 @@ Item {
             }
             text: "Use Pattern";
             checked: false;
-            onCheckedChanged: if(toolManager.currentTool) toolManager.currentTool.slotSetUsePattern(checked);
+            onCheckedChanged: if (toolManager.currentTool) toolManager.currentTool.slotSetUsePattern(checked);
         }*/
     }
 }

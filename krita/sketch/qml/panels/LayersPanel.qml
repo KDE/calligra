@@ -53,7 +53,7 @@ Panel {
             shadow: false;
             highlight: false;
             onClicked: {
-                if(base.state === "full") {
+                if (base.state === "full") {
                     addLayerButtons.toggle();
                 }
                 else {

@@ -56,9 +56,9 @@ Item {
         }
 
         function ensureVisible(item) {
-            if(item !== undefined && item !== null) {
+            if (item !== undefined && item !== null) {
                 var targetPosition = item.mapToItem(screenScroller, item.x, item.y);
-                if(targetPosition.y > base.height * 0.5) {
+                if (targetPosition.y > base.height * 0.5) {
                     screenScroller.contentY = targetPosition.y - base.height / 2;
                     screenScroller.returnToBounds();
                 }
@@ -86,12 +86,12 @@ Item {
 
     VirtualKeyboard {
         id: keyboard;
-        onKeyboardVisibleChanged: if(keyboardVisible) screenScroller.ensureVisible(Settings.focusItem);
+        onKeyboardVisibleChanged: if (keyboardVisible) screenScroller.ensureVisible(Settings.focusItem);
     }
 
     Connections {
         target: Settings;
 
-        onFocusItemChanged: if(keyboard.keyboardVisible) screenScroller.ensureVisible(Settings.focusItem);
+        onFocusItemChanged: if (keyboard.keyboardVisible) screenScroller.ensureVisible(Settings.focusItem);
     }
 }

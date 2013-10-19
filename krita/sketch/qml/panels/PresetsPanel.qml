@@ -100,7 +100,7 @@ Panel {
     Connections {
         target: sketchView;
         onLoadingFinished: {
-//            if(window.applicationName === undefined) {
+//            if (window.applicationName === undefined) {
                 presetsModel.currentPreset = "Basic circle";
 //            }
         }
@@ -229,15 +229,15 @@ Panel {
         }
     }
 
-    onStateChanged: if( state != "edit" && contentArea.depth > 1 ) {
+    onStateChanged: if ( state != "edit" && contentArea.depth > 1 ) {
         contentArea.pop();
     }
 
     function toggleEdit() {
-        if( base.state == "edit" ) {
+        if ( base.state == "edit" ) {
             base.state = "full";
             contentArea.pop();
-        } else if( base.state == "full" ) {
+        } else if ( base.state == "full" ) {
             base.state = "edit";
             contentArea.push( editPresetPage );
         }

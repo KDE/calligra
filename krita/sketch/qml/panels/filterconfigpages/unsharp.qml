@@ -26,7 +26,7 @@ Item {
         fullFilters.applyConfiguration(configuration);
     }
     function setProp(name, value) {
-        if(configuration !== null) {
+        if (configuration !== null) {
             configuration.writeProperty(name, value);
             base.applyConfigurationChanges();
         }

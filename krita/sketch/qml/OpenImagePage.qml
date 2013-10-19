@@ -124,10 +124,10 @@ Page {
             description: model.fileType !== "inode/directory" ? model.date : "";
 
             onClicked: {
-                if( GridView.view.navigating ) {
+                if ( GridView.view.navigating ) {
                     return;
                 }
-                if( model.fileType === "inode/directory" ) {
+                if ( model.fileType === "inode/directory" ) {
                     view.startNavigation(model.path);
                 } else {
                     base.itemClicked();

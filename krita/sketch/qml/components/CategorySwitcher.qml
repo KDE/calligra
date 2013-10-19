@@ -43,7 +43,7 @@ Row {
             MouseArea {
                 anchors.fill: parent;
                 onClicked: {
-                    if( view.currentIndex != index ) {
+                    if ( view.currentIndex != index ) {
                         view.currentIndex = index;
                         pageStack.replace( modelData.page );
                     }

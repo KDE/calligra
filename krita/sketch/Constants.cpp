@@ -114,7 +114,7 @@ qreal Constants::toolbarButtonSize() const
 
 int Constants::gridRows() const
 {
-    if(isLandscape())
+    if (isLandscape())
         return 18;
     return 12;
 }

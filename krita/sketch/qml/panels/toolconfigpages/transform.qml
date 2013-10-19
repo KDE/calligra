@@ -59,10 +59,10 @@ Column {
             checkable: true;
             checked: true;
             onCheckedChanged: {
-                if(checked) {
+                if (checked) {
                     warpModeButton.checked = false;
                     toolManager.currentTool.transformMode = 0;
-                } else if( !warpModeButton.checked ) {
+                } else if ( !warpModeButton.checked ) {
                     checked = true;
                 }
             }
@@ -89,10 +89,10 @@ Column {
 
             checkable: true;
             onCheckedChanged: {
-                if(checked) {
+                if (checked) {
                     freeModeButton.checked = false;
                     toolManager.currentTool.transformMode = 1;
-                } else if( !freeModeButton.checked ) {
+                } else if ( !freeModeButton.checked ) {
                     checked = true;
                 }
             }
@@ -179,7 +179,7 @@ Column {
             property bool preventUpdateText: false;
 
             function updateTransform() {
-                if( preventUpdate )
+                if ( preventUpdate )
                     return;
 
                 toolManager.currentTool.translateX = parseFloat(translateX.text);
@@ -197,7 +197,7 @@ Column {
             }
 
             function updateFreeTransformText() {
-                if(preventUpdateText)
+                if (preventUpdateText)
                     return;
 
                 translateX.text = toolManager.currentTool.translateX;
@@ -252,7 +252,7 @@ Column {
             property bool preventUpdateText: false;
 
             function updateTransform() {
-                if(preventUpdate)
+                if (preventUpdate)
                     return;
 
                 toolManager.currentTool.warpType = warpTypeCombo.currentIndex;
@@ -261,7 +261,7 @@ Column {
             }
 
             function updateTransformText() {
-                if(preventUpdateText)
+                if (preventUpdateText)
                     return;
 
                 warpTypeCombo.currentIndex = toolManager.currentTool.warpType;

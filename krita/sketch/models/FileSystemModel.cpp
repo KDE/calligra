@@ -57,9 +57,9 @@ FileSystemModel::~FileSystemModel()
 
 QVariant FileSystemModel::data(const QModelIndex& index, int role) const
 {
-    if(index.isValid()) {
+    if (index.isValid()) {
         KFileItem item(KFileItem::Unknown, KFileItem::Unknown, d->list.at(index.row()).absoluteFilePath(), false);
-        if(!item.isNull()) {
+        if (!item.isNull()) {
             switch(role) {
                 case FileNameRole:
                     return item.name();
@@ -99,7 +99,7 @@ void FileSystemModel::componentComplete()
 QString FileSystemModel::path()
 {
     QString path = d->dir.absolutePath();
-    if(path.isEmpty()) {
+    if (path.isEmpty()) {
         return Private::drivesPath;
     } else {
         return d->dir.absolutePath();
@@ -108,17 +108,17 @@ QString FileSystemModel::path()
 
 void FileSystemModel::setPath(const QString& path)
 {
-    if(path != d->dir.path()) {
-        if(d->list.count() > 0) {
+    if (path != d->dir.path()) {
+        if (d->list.count() > 0) {
             beginRemoveRows(QModelIndex(), 0, d->list.count() - 1);
             endRemoveRows();
         }
 
-        if(path != Private::drivesPath) {
+        if (path != Private::drivesPath) {
             d->dir.setPath(path);
             d->dir.refresh();
             d->list = d->dir.entryInfoList();
-            if(d->list.count() > 0) {
+            if (d->list.count() > 0) {
                 beginInsertRows(QModelIndex(), 0, d->list.count() - 1);
                 endInsertRows();
             }
@@ -136,9 +136,9 @@ void FileSystemModel::setPath(const QString& path)
 
 QString FileSystemModel::parentFolder()
 {
-    if(path() != Private::drivesPath) {
+    if (path() != Private::drivesPath) {
         KUrl root = QUrl::fromLocalFile(path());
-        if(QRegExp("^[A-Z]{1,3}:/$").exactMatch(root.toLocalFile())) {
+        if (QRegExp("^[A-Z]{1,3}:/$").exactMatch(root.toLocalFile())) {
             return Private::drivesPath;
         } else {
             root.cd("..");

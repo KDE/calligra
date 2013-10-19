@@ -34,35 +34,35 @@ Item {
     onMinChanged: d.fixHandle();
     onMaxChanged: d.fixHandle();
     onValueChanged: {
-        if(decimals === 0) {
-            if(value !== Math.round(value))
+        if (decimals === 0) {
+            if (value !== Math.round(value))
             {
                 value = Math.round(value);
                 return;
             }
         }
-        else if(value * Math.pow(10, decimals) !== Math.round(value * Math.pow(10, decimals))) {
+        else if (value * Math.pow(10, decimals) !== Math.round(value * Math.pow(10, decimals))) {
             value = Math.round(value * Math.pow(10, decimals)) / Math.pow(10, decimals);
             return;
         }
-        if(value < min) {
+        if (value < min) {
             value = min;
             return;
         }
-        if(value > max) {
+        if (value > max) {
             value = max;
             return;
         }
-        if(textField.text != value) {
+        if (textField.text != value) {
             textField.text = value.toFixed(decimals);
         }
-        if(useExponentialValue) {
-             if(valueSlider.exponentialValue !== value) {
+        if (useExponentialValue) {
+             if (valueSlider.exponentialValue !== value) {
                  valueSlider.exponentialValue = ( (value - min) / (max - min) ) * 100;
              }
         }
         else {
-            if(valueSlider.value !== value) {
+            if (valueSlider.value !== value) {
                 valueSlider.value = ( (value - min) / (max - min) ) * 100;
             }
         }
@@ -90,12 +90,12 @@ Item {
         }
         highPrecision: true;
         onExponentialValueChanged: {
-            if(useExponentialValue) {
+            if (useExponentialValue) {
                 base.value = base.min + ((exponentialValue / 100) * (base.max - base.min))
             }
         }
         onValueChanged: {
-            if(!useExponentialValue) {
+            if (!useExponentialValue) {
                 base.value = base.min + ((value / 100) * (base.max - base.min));
             }
         }

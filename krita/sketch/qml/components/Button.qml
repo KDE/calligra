@@ -113,7 +113,7 @@ Item {
         onTouched: {
             if (base.enabled) {
                 base.clicked();
-                if( base.checkable ) {
+                if ( base.checkable ) {
                     base.checked = !base.checked;
                 }
             }
@@ -125,7 +125,7 @@ Item {
         onClicked: {
             if (base.enabled) {
                 base.clicked();
-                if( base.checkable ) {
+                if ( base.checkable ) {
                     base.checked = !base.checked;
                 }
             }

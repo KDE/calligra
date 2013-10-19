@@ -47,7 +47,7 @@ Item {
         }
         property bool firstSet: false;
         onCurrentIndexChanged: {
-            if(firstSet) { model.activateItem(currentIndex); }
+            if (firstSet) { model.activateItem(currentIndex); }
             else { firstSet = true; }
         }
         model: compositeOpModel;
@@ -60,7 +60,7 @@ Item {
         onFlowChanged: flowInput.value = compositeOpModel.flow;
         onCurrentCompositeOpIDChanged: {
             var newIndex = compositeOpModel.indexOf(compositeOpModel.currentCompositeOpID);
-            if(compositeModeList.currentIndex !== newIndex) {
+            if (compositeModeList.currentIndex !== newIndex) {
                 compositeModeList.currentIndex = newIndex;
             }
         }
@@ -126,7 +126,7 @@ Item {
                     ListElement { text: "Weighted smoothing" }
                 }
                 currentIndex: (toolManager.currentTool && toolManager.currentTool.smoothingType) ? toolManager.currentTool.smoothingType : 1;
-                onCurrentIndexChanged: if(toolManager.currentTool && toolManager.currentTool.smoothingType !== undefined && toolManager.currentTool.smoothingType !== currentIndex) toolManager.currentTool.smoothingType = currentIndex;
+                onCurrentIndexChanged: if (toolManager.currentTool && toolManager.currentTool.smoothingType !== undefined && toolManager.currentTool.smoothingType !== currentIndex) toolManager.currentTool.smoothingType = currentIndex;
             }
             RangeInput {
                 id: smoothnessQualitySlider;
@@ -138,7 +138,7 @@ Item {
                 min: 3; max: 1000; decimals: 1;
                 useExponentialValue: true;
                 value: toolManager.currentTool.smoothnessQuality;
-                onValueChanged: if(toolManager.currentTool && toolManager.currentTool.smoothnessQuality !== undefined && toolManager.currentTool.smoothnessQuality !== value) toolManager.currentTool.smoothnessQuality = value;
+                onValueChanged: if (toolManager.currentTool && toolManager.currentTool.smoothnessQuality !== undefined && toolManager.currentTool.smoothnessQuality !== value) toolManager.currentTool.smoothnessQuality = value;
             }
             RangeInput {
                 id: smoothnessFactorSlider;
@@ -150,7 +150,7 @@ Item {
                 useExponentialValue: true;
                 min: 0; max: 1; decimals: 2;
                 value: toolManager.currentTool.smoothnessFactor;
-                onValueChanged: if(toolManager.currentTool && toolManager.currentTool.smoothnessFactor !== undefined && toolManager.currentTool.smoothnessFactor !== value) toolManager.currentTool.smoothnessFactor = value;
+                onValueChanged: if (toolManager.currentTool && toolManager.currentTool.smoothnessFactor !== undefined && toolManager.currentTool.smoothnessFactor !== value) toolManager.currentTool.smoothnessFactor = value;
             }
             CheckBox {
                 id: smoothPressureCheck;
@@ -160,10 +160,10 @@ Item {
                 width: parent.width;
                 text: "Smooth Pressure";
                 checked: toolManager.currentTool ? toolManager.currentTool.smoothPressure : false;
-                onCheckedChanged: if(toolManager.currentTool && toolManager.currentTool.smoothPressure !== undefined && toolManager.currentTool.smoothPressure !== checked) toolManager.currentTool.smoothPressure = checked;
+                onCheckedChanged: if (toolManager.currentTool && toolManager.currentTool.smoothPressure !== undefined && toolManager.currentTool.smoothPressure !== checked) toolManager.currentTool.smoothPressure = checked;
             }
             Component.onCompleted: {
-                if(toolManager.currentTool === null)
+                if (toolManager.currentTool === null)
                     return;
                 smoothnessQualitySlider.value = toolManager.currentTool.smoothnessQuality;
                 smoothnessFactorSlider.value = toolManager.currentTool.smoothnessFactor;
@@ -172,7 +172,7 @@ Item {
             Connections {
                 target: toolManager;
                 onCurrentToolChanged: {
-                    if(toolManager.currentTool.smoothnessQuality === undefined)
+                    if (toolManager.currentTool.smoothnessQuality === undefined)
                         return;
                     smoothnessQualitySlider.value = toolManager.currentTool.smoothnessQuality;
                     smoothnessFactorSlider.value = toolManager.currentTool.smoothnessFactor;
@@ -187,7 +187,7 @@ Item {
 //             placeholder: "Assistant";
 //             min: 0; max: 1000; decimals: 0;
 //             value: 1000;
-//             onValueChanged: if(toolManager.currentTool) toolManager.currentTool.slotSetMagnetism(value);
+//             onValueChanged: if (toolManager.currentTool) toolManager.currentTool.slotSetMagnetism(value);
 //         }
 
         Label {

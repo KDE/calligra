@@ -51,7 +51,7 @@ FiltersModel::~FiltersModel()
 QVariant FiltersModel::data(const QModelIndex& index, int role) const
 {
     QVariant data;
-    if(index.isValid())
+    if (index.isValid())
     {
         switch(role)
         {
@@ -67,14 +67,14 @@ QVariant FiltersModel::data(const QModelIndex& index, int role) const
 
 int FiltersModel::rowCount(const QModelIndex& parent) const
 {
-    if(parent.isValid())
+    if (parent.isValid())
         return 0;
     return d->filters.count();
 }
 
 bool FiltersModel::filterRequiresConfiguration(int index)
 {
-    if(index > -1 && index < d->filters.count())
+    if (index > -1 && index < d->filters.count())
     {
         return d->filters[index]->showConfigurationWidget();
     }
@@ -83,7 +83,7 @@ bool FiltersModel::filterRequiresConfiguration(int index)
 
 QString FiltersModel::filterID(int index)
 {
-    if(index > -1 && index < d->filters.count())
+    if (index > -1 && index < d->filters.count())
     {
         return d->filters[index]->id();
     }
@@ -92,9 +92,9 @@ QString FiltersModel::filterID(int index)
 
 void FiltersModel::activateFilter(int index)
 {
-    if(index > -1 && index < d->filters.count())
+    if (index > -1 && index < d->filters.count())
     {
-        if(d->configurations[index])
+        if (d->configurations[index])
         {
             d->view->filterManager()->apply(d->configurations[index]);
         }
@@ -109,7 +109,7 @@ void FiltersModel::activateFilter(int index)
 
 KisFilter* FiltersModel::filter(int index)
 {
-    if(index > -1 && index < d->filters.count())
+    if (index > -1 && index < d->filters.count())
     {
         return d->filters[index].data();
     }
@@ -118,7 +118,7 @@ KisFilter* FiltersModel::filter(int index)
 
 void FiltersModel::addFilter(KisFilterSP filter)
 {
-    if(!filter.isNull())
+    if (!filter.isNull())
     {
         int newRow = d->filters.count();
         beginInsertRows(QModelIndex(), newRow, newRow);
@@ -142,11 +142,11 @@ void FiltersModel::setView(QObject* newView)
 QObject* FiltersModel::configuration(int index)
 {
     // If index is out of bounds, return /something/ for the object work on at least.
-    if(index < 0 || index > d->configurations.count() - 1)
+    if (index < 0 || index > d->configurations.count() - 1)
         return new PropertyContainer("", this);
     QObject* config = new PropertyContainer(d->filters[index]->id(), this);
     // If we've not got one already, assign the default configuration to the cache
-    if(!d->configurations[index])
+    if (!d->configurations[index])
         d->configurations[index] = KisSafeFilterConfigurationSP(d->filters[index]->defaultConfiguration(d->view->activeNode()->original()));
     QMap<QString, QVariant> props = d->configurations[index]->getProperties();
     QMap<QString, QVariant>::const_iterator i;
@@ -159,7 +159,7 @@ QObject* FiltersModel::configuration(int index)
 
 void FiltersModel::setConfiguration(int index, QObject* configuration)
 {
-    if(configuration && index > -1 && index < d->configurations.count() - 1)
+    if (configuration && index > -1 && index < d->configurations.count() - 1)
     {
         KisSafeFilterConfigurationSP config = d->configurations[index];
         foreach(const QByteArray& propName, configuration->dynamicPropertyNames())

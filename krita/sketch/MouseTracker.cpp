@@ -48,7 +48,7 @@ void MouseTracker::removeItem(QDeclarativeItem* item)
 bool MouseTracker::eventFilter(QObject* target, QEvent* event)
 {
     Q_UNUSED(target)
-    if(m_trackedItems.count() > 0) {
+    if (m_trackedItems.count() > 0) {
         switch(event->type()) {
             case QEvent::GraphicsSceneMouseMove: {
                 QGraphicsSceneMouseEvent* mevent = static_cast<QGraphicsSceneMouseEvent*>(event);
@@ -61,7 +61,7 @@ bool MouseTracker::eventFilter(QObject* target, QEvent* event)
                 QTouchEvent* tevent = static_cast<QTouchEvent*>(event);
                 QTouchEvent::TouchPoint primary;
                 foreach(const QTouchEvent::TouchPoint& point, tevent->touchPoints()) {
-                    if(point.isPrimary()) {
+                    if (point.isPrimary()) {
                         primary = point;
                         break;
                     }

@@ -24,7 +24,7 @@ Item {
     id: base;
 
     function collapse() {
-        if(d.peeking) {
+        if (d.peeking) {
             d.peeking.state = "collapsed";
             d.peeking.z = 0;
             d.peeking = null;
@@ -117,7 +117,7 @@ Item {
         anchors.bottom: parent.bottom;
         anchors.left: parent.left;
 
-        onHeightChanged: if(children.length > 0) children[0].height = height;
+        onHeightChanged: if (children.length > 0) children[0].height = height;
         width: Constants.GridWidth * 2;
         state: "full";
     }
@@ -131,7 +131,7 @@ Item {
         anchors.bottom: parent.bottom;
         anchors.right: parent.right;
 
-        onHeightChanged: if(children.length > 0) children[0].height = height;
+        onHeightChanged: if (children.length > 0) children[0].height = height;
         width: Constants.GridWidth * 2;
         state: "full";
     }
@@ -353,7 +353,7 @@ Item {
     function beginPeek( item ) {
         for( var i in d.panels ) {
             var obj = d.panels[i];
-            if( obj.state == "peek" && obj.objectName != item.objectName ) {
+            if ( obj.state == "peek" && obj.objectName != item.objectName ) {
                 obj.state = "collapsed";
             }
         }
@@ -363,7 +363,7 @@ Item {
     }
 
     function endPeek( item ) {
-        if(d.peeking == item)
+        if (d.peeking == item)
         {
             d.peeking = null;
         }
@@ -381,13 +381,13 @@ Item {
     function endDrag( item, action ) {
         dropOverlay.opacity = 0;
         item.opacity = 1;
-        if(action == Qt.IgnoreAction) {
+        if (action == Qt.IgnoreAction) {
             item.parent = d.dragParent;
         }
     }
 
     onHeightChanged: {
-        if(height > width) {
+        if (height > width) {
             state = "portrait";
         }
         else {
@@ -395,7 +395,7 @@ Item {
         }
     }
     onWidthChanged: {
-        if(height > width) {
+        if (height > width) {
             state = "portrait";
         }
         else {

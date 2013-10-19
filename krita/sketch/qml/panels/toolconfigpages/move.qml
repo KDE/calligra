@@ -40,6 +40,6 @@ Item {
                 text: "Group";
             }
         }
-        onCurrentIndexChanged: if(toolManager.currentTool && toolManager.currentTool.setMoveToolMode) toolManager.currentTool.moveToolMode = currentIndex;
+        onCurrentIndexChanged: if (toolManager.currentTool && toolManager.currentTool.setMoveToolMode) toolManager.currentTool.moveToolMode = currentIndex;
     }
 }

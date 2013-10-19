@@ -25,8 +25,8 @@ DnD.DropArea {
     property string state: "collapsed";
 
     onYChanged: {
-        if(children.length > 0) {
-            if(Constants.IsLandscape && y > 0) {
+        if (children.length > 0) {
+            if (Constants.IsLandscape && y > 0) {
                 children[0].roundTop = true;
             }
             else {
@@ -41,7 +41,7 @@ DnD.DropArea {
 
     onDrop: {
         var item = event.mimeData.source;
-        if(children.length > 0) {
+        if (children.length > 0) {
             children[0].state = "collapsed";
             children[0].parent = item.lastArea;
         }
@@ -49,7 +49,7 @@ DnD.DropArea {
     }
 
     onChildrenChanged: {
-        if(children.length > 0) {
+        if (children.length > 0) {
             var item = children[0];
             item.state = base.state;
             item.lastArea = base;

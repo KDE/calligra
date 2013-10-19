@@ -50,20 +50,20 @@ Item {
         property bool settingExp: false;
         function resetHandle(resetExponential)
         {
-            if(!settingSelf) {
+            if (!settingSelf) {
                 // Yes, this seems very odd. However, one cannot assign something undefined to a bool property, so...
                 settingExp = resetExponential ? true : false;
                 // This is required as width is not set if we are not done initialising yet.
-                if(base.width === 0)
+                if (base.width === 0)
                     return;
                 var newX = 0;
-                if(resetExponential) {
+                if (resetExponential) {
                     var newX = Math.round(Math.log(1 + (base.exponentialValue / 100 * 15)) / 2.77258872 * (mouseArea.drag.maximumX - mouseArea.drag.minimumX) + mouseArea.drag.minimumX);
                 }
                 else {
                     var newX = Math.round(base.value / 100 * (mouseArea.drag.maximumX - mouseArea.drag.minimumX) + mouseArea.drag.minimumX);
                 }
-                if(newX !== handle.x)
+                if (newX !== handle.x)
                     handle.x = newX;
                 settingExp = false;
             }
@@ -82,19 +82,19 @@ Item {
             return Math.min(100, Math.max(0, v));
         }
         onXChanged: {
-             if(settingExp)
+             if (settingExp)
                  return;
             settingSelf = true;
-            if(highPrecision) {
+            if (highPrecision) {
                 var newValue = ((handle.x - mouseArea.drag.minimumX) * 100) / (mouseArea.drag.maximumX - mouseArea.drag.minimumX);
-                if(base.value != newValue) {
+                if (base.value != newValue) {
                     base.exponentialValue = calculateWidth(newValue);
                     base.value = Math.max(0, newValue);
                 }
             }
             else {
                 var newValue = Math.round( ((handle.x - mouseArea.drag.minimumX) * 100) / (mouseArea.drag.maximumX - mouseArea.drag.minimumX) );
-                if(base.value != newValue) {
+                if (base.value != newValue) {
                     base.exponentialValue = calculateWidth(newValue);
                     base.value = Math.max(0, newValue);
                 }

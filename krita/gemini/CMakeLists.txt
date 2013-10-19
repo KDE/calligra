@@ -1,10 +1,10 @@
-if(WIN32)
+if (WIN32)
     option(ENABLE_GEMINI_STARTUP_MAGIC "Enable Gemini's windows startup magic" ON)
 
-    if(ENABLE_GEMINI_STARTUP_MAGIC)
+    if (ENABLE_GEMINI_STARTUP_MAGIC)
         add_definitions(-DGEMINI_ENABLE_STARTUP_MAGIC)
-    endif(ENABLE_GEMINI_STARTUP_MAGIC)
-endif(WIN32)
+    endif (ENABLE_GEMINI_STARTUP_MAGIC)
+endif (WIN32)
 
 add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
 

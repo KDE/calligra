@@ -34,7 +34,7 @@ void VirtualKeyboardController::requestHideKeyboard()
 
 VirtualKeyboardController* VirtualKeyboardController::instance()
 {
-    if(!sm_instance)
+    if (!sm_instance)
         sm_instance = new VirtualKeyboardController(QCoreApplication::instance());
 
     return sm_instance;

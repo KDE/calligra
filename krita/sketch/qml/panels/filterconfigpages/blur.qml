@@ -27,7 +27,7 @@ Item {
         fullFilters.applyConfiguration(configuration);
     }
     function setProp(name, value) {
-        if(configuration !== null) {
+        if (configuration !== null) {
             configuration.writeProperty(name, value);
             base.applyConfigurationChanges();
         }
@@ -51,7 +51,7 @@ Item {
             min: 1; max: 100; decimals: 0;
             value: 1;
             onValueChanged: {
-                if(lockAspect.checked && vertRadius.value != value) {
+                if (lockAspect.checked && vertRadius.value != value) {
                     vertRadius.value = value;
                 }
                 setProp("halfWidth", value);
@@ -64,7 +64,7 @@ Item {
             min: 1; max: 100; decimals: 0;
             value: 1;
             onValueChanged: {
-                if(lockAspect.checked && horizRadius.value != value) {
+                if (lockAspect.checked && horizRadius.value != value) {
                     horizRadius.value = value;
                 }
                 setProp("halfHeight", value);
@@ -76,7 +76,7 @@ Item {
             text: "Lock aspect ratio";
             checked: false;
             onCheckedChanged: {
-                if(checked && vertRadius.value != horizRadius.value) {
+                if (checked && vertRadius.value != horizRadius.value) {
                     vertRadius.value = horizRadius.value;
                 }
                 setProp("lockAspect", checked);

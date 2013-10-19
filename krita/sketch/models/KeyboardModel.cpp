@@ -230,7 +230,7 @@ void KeyboardModel::componentComplete()
 
 QVariant KeyboardModel::data(const QModelIndex& index, int role) const
 {
-    if(!index.isValid())
+    if (!index.isValid())
         return QVariant();
 
     switch(role) {
@@ -260,7 +260,7 @@ KeyboardModel::KeyboardMode KeyboardModel::keyboardMode() const
 
 void KeyboardModel::setKeyboardMode(KeyboardModel::KeyboardMode mode)
 {
-    if(mode != d->mode) {
+    if (mode != d->mode) {
         d->mode = mode;
 
         beginRemoveRows(QModelIndex(), 0, d->currentKeys->count() - 1);

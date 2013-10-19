@@ -75,13 +75,13 @@ Panel {
     }
 
     function changeTool(toolName) {
-        if(toolName === "paint" || toolName === "fill" || toolName === "gradient") {
+        if (toolName === "paint" || toolName === "fill" || toolName === "gradient") {
             eraserButton.visible = true;
         }
         else {
             eraserButton.visible = false;
         }
-        if(toolName === "transform" || toolName === "crop") {
+        if (toolName === "transform" || toolName === "crop") {
             topApplyButton.visible = true;
         }
         else {

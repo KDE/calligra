@@ -214,7 +214,7 @@ Page {
     Connections {
         target: Settings;
 
-        onCurrentFileChanged: if(!d.mainPageActive) {
+        onCurrentFileChanged: if (!d.mainPageActive) {
             d.mainPageActive = true;
             pageStack.push( main );
             baseLoadingDialog.hideMe();

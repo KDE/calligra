@@ -38,14 +38,14 @@ Page {
             savingDialog.hide("Done!");
         }
         onProgress: {
-            if(value === -1 || value === 100) {
+            if (value === -1 || value === 100) {
                 loadingDialog.hide("Done!");
                 savingDialog.hide("Done!");
             }
             loadingDialog.progress = value;
             savingDialog.progress = value;
         }
-        onViewChanged: if(window.sketchKisView !== undefined) { window.sketchKisView = view; }
+        onViewChanged: if (window.sketchKisView !== undefined) { window.sketchKisView = view; }
     }
     Connections {
         target: window;
@@ -99,7 +99,7 @@ Page {
         newButtonChecked: !newPanel.collapsed;
         openButtonChecked: !openPanel.collapsed;
 
-        onCollapsedChanged: if( collapsed ) {
+        onCollapsedChanged: if ( collapsed ) {
             newPanel.collapsed = true;
             openPanel.collapsed = true;
         }
@@ -117,7 +117,7 @@ Page {
                     newPanel.collapsed = true;
                 }
                 case "save":
-                    if(!Settings.temporaryFile) {
+                    if (!Settings.temporaryFile) {
                         savingDialog.show("Saving file...");
                         sketchView.save();
                     } else {
@@ -194,13 +194,13 @@ Page {
         onButtonClicked: {
             switch(button) {
                 case 0: {
-                    if(Settings.temporaryFile) {
+                    if (Settings.temporaryFile) {
                         pageStack.push( saveAsPage, { view: sketchView, updateCurrentFile: false } );
                     } else {
                         savingDialog.show("Please wait...");
                         sketchView.save();
 
-                        if(d.closeRequested) {
+                        if (d.closeRequested) {
                             d.closeWindow();
                         } else {
                             d.loadNewFile();
@@ -208,7 +208,7 @@ Page {
                     }
                 }
                 case 1: {
-                    if(d.closeRequested) {
+                    if (d.closeRequested) {
                         d.closeWindow();
                     } else {
                         d.loadNewFile();
@@ -242,24 +242,24 @@ Page {
         target: Settings;
 
         onCurrentFileChanged: {
-            if(sketchView.modified) {
+            if (sketchView.modified) {
                 d.saveRequested = true;
                 modifiedDialog.show();
             } else {
                 d.loadNewFile();
             }
         }
-        onTemporaryFileChanged: if(window.temporaryFile !== undefined) window.temporaryFile = Settings.temporaryFile;
+        onTemporaryFileChanged: if (window.temporaryFile !== undefined) window.temporaryFile = Settings.temporaryFile;
     }
 
     onStatusChanged: {
-        if(status == 0) {
-            if(d.saveRequested) {
+        if (status == 0) {
+            if (d.saveRequested) {
                 d.loadNewFile();
                 return;
             }
 
-            if(d.closeRequested) {
+            if (d.closeRequested) {
                 d.closeWindow();
                 return;
             }
@@ -272,7 +272,7 @@ Page {
         target: Krita.Window;
 
         onCloseRequested: {
-            if(sketchView.modified) {
+            if (sketchView.modified) {
                 d.closeRequested = true;
                 modifiedDialog.show();
             } else {

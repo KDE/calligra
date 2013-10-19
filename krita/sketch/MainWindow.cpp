@@ -142,7 +142,7 @@ void MainWindow::resizeEvent(QResizeEvent* event)
 
 void MainWindow::closeEvent(QCloseEvent* event)
 {
-    if(!d->allowClose) {
+    if (!d->allowClose) {
         event->ignore();
         emit closeRequested();
     } else {

@@ -154,7 +154,7 @@ QObject* PresetModel::view() const
 void PresetModel::setView(QObject* newView)
 {
     d->view = qobject_cast<KisView2*>( newView );
-    if(d->view)
+    if (d->view)
     {
         connect(d->view->canvasBase()->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
                 this, SLOT(resourceChanged(int, const QVariant&)));
@@ -180,7 +180,7 @@ int PresetModel::nameToIndex(QString presetName) const
     QList<KisPaintOpPreset*> resources = d->rserver->resources();
     for(int i = 0; i < resources.count(); ++i)
     {
-        if(resources.at(i)->name() == presetName || resources.at(i)->name().replace(QLatin1String("_"), QLatin1String(" ")) == presetName)
+        if (resources.at(i)->name() == presetName || resources.at(i)->name().replace(QLatin1String("_"), QLatin1String(" ")) == presetName)
         {
             index = i;
             break;
@@ -203,10 +203,10 @@ void PresetModel::activatePreset(int index)
 
 void PresetModel::resourceChanged(int /*key*/, const QVariant& /*v*/)
 {
-    if(d->view)
+    if (d->view)
     {
         KisPaintOpPresetSP preset = d->view->canvasBase()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
-        if(preset && d->currentPreset != preset->name())
+        if (preset && d->currentPreset != preset->name())
         {
             d->currentPreset = preset->name();
             emit currentPresetChanged();

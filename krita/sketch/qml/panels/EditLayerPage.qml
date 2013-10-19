@@ -28,15 +28,15 @@ Item {
     property bool isShown: false;
     property bool isChangingConfig: false;
     onIsShownChanged: {
-        if(!isShown)
+        if (!isShown)
             return;
         var filterConfig = layersModel.activeFilterConfig;
-        if(filterConfig !== null) {
+        if (filterConfig !== null) {
             var categoryIndex = filtersCategoryModel.categoryIndexForConfig(filterConfig);
             var filterIndex = filtersCategoryModel.filterIndexForConfig(categoryIndex, filterConfig);
             filtersCategoryList.currentIndex = categoryIndex;
             fullFilters.currentIndex = filterIndex;
-            if(configLoader.item && typeof(configLoader.item.configuration) !== "undefined") {
+            if (configLoader.item && typeof(configLoader.item.configuration) !== "undefined") {
                 configLoader.item.configuration = filterConfig;
             }
         }
@@ -59,8 +59,8 @@ Item {
         }
         placeholder: "Name";
         text: layersModel ? layersModel.activeName : "";
-        onAccepted: if(layersModel) layersModel.activeName = text;
-        onFocusLost: if(layersModel) layersModel.activeName = text;
+        onAccepted: if (layersModel) layersModel.activeName = text;
+        onFocusLost: if (layersModel) layersModel.activeName = text;
     }
     ExpandingListView {
         id: compositeOpList;
@@ -74,7 +74,7 @@ Item {
         height: visible ? Constants.GridHeight / 2 : 0;
         model: compositeOpModel; // composite ops list
         currentIndex: layersModel ? layersModel.activeCompositeOp : 0;
-        onNewIndex: if(layersModel) layersModel.activeCompositeOp = currentIndex;
+        onNewIndex: if (layersModel) layersModel.activeCompositeOp = currentIndex;
     }
 
     FiltersCategoryModel {
@@ -95,7 +95,7 @@ Item {
         onModelChanged: currentIndex = 0;
         onCurrentIndexChanged: {
             model.activateItem(currentIndex)
-            if(base.isInitialised) {
+            if (base.isInitialised) {
                 fullFilters.currentIndex = 0;
             }
         }
@@ -112,25 +112,25 @@ Item {
         height: visible ? Constants.GridHeight / 2 : 0;
         model: filtersCategoryModel.filterModel;
         function applyConfiguration(configuration) {
-            if(base.isChangingConfig === true) {
+            if (base.isChangingConfig === true) {
                 return;
             }
             base.isChangingConfig = true;
-            if(base.isInitialised) {
+            if (base.isInitialised) {
                 layersModel.activeFilterConfig = configuration;
             }
             base.isChangingConfig = false;
         }
         onCurrentIndexChanged: {
-            if(layersModel.activeType === "KisFilterMask" || layersModel.activeType === "KisAdjustmentLayer") {
+            if (layersModel.activeType === "KisFilterMask" || layersModel.activeType === "KisAdjustmentLayer") {
                 filtersCategoryModel.filterSelected(currentIndex);
-                if(base.isInitialised) {
+                if (base.isInitialised) {
                     //console.debug("Setting new configuration...");
                     base.isChangingConfig = true;
                     layersModel.activeFilterConfig = model.configuration(currentIndex);
                     base.isChangingConfig = false;
                 }
-                if(model.filterRequiresConfiguration(currentIndex)) {
+                if (model.filterRequiresConfiguration(currentIndex)) {
                     noConfigNeeded.visible = false;
                     configNeeded.visible = true;
                     configLoader.source = "filterconfigpages/" + model.filterID(currentIndex) + ".qml";
@@ -153,7 +153,7 @@ Item {
         placeholder: "Opacity"
         min: 0; max: 255; decimals: 0;
         value: layersModel ? layersModel.activeOpacity : 0;
-        onValueChanged: if(layersModel) layersModel.activeOpacity = value;
+        onValueChanged: if (layersModel) layersModel.activeOpacity = value;
     }
     Row {
         id: visibleAndLockRow;
@@ -173,7 +173,7 @@ Item {
             textColor: "white";
             shadow: false;
             highlight: false;
-            onClicked: if(layersModel) layersModel.activeVisible = !layersModel.activeVisible;
+            onClicked: if (layersModel) layersModel.activeVisible = !layersModel.activeVisible;
         }
         Button {
             id: lockstateButton
@@ -184,7 +184,7 @@ Item {
             textColor: "white";
             shadow: false;
             highlight: false;
-            onClicked: if(layersModel) layersModel.activeLocked = !layersModel.activeLocked;
+            onClicked: if (layersModel) layersModel.activeLocked = !layersModel.activeLocked;
         }
     }
     Label {
@@ -223,7 +223,7 @@ Item {
             border { width: 1; color: "silver"; }
             radius: Constants.DefaultMargin;
             color: (layersModel && layersModel.activeRChannelActive) ? "#EAEAEA" : "transparent";
-            onClicked: if(layersModel) layersModel.activeRChannelActive = !layersModel.activeRChannelActive;
+            onClicked: if (layersModel) layersModel.activeRChannelActive = !layersModel.activeRChannelActive;
         }
         Button {
             id: greenChannel
@@ -235,7 +235,7 @@ Item {
             border { width: 1; color: "silver"; }
             radius: Constants.DefaultMargin;
             color: (layersModel && layersModel.activeGChannelActive) ? "#EAEAEA" : "transparent";
-            onClicked: if(layersModel) layersModel.activeGChannelActive = !layersModel.activeGChannelActive;
+            onClicked: if (layersModel) layersModel.activeGChannelActive = !layersModel.activeGChannelActive;
         }
         Button {
             id: blueChannel
@@ -247,7 +247,7 @@ Item {
             border { width: 1; color: "silver"; }
             radius: Constants.DefaultMargin;
             color: (layersModel && layersModel.activeBChannelActive) ? "#EAEAEA" : "transparent";
-            onClicked: if(layersModel) layersModel.activeBChannelActive = !layersModel.activeBChannelActive;
+            onClicked: if (layersModel) layersModel.activeBChannelActive = !layersModel.activeBChannelActive;
         }
         Button {
             id: alphaChannel
@@ -259,7 +259,7 @@ Item {
             border { width: 1; color: "silver"; }
             radius: Constants.DefaultMargin;
             color: (layersModel && layersModel.activeAChannelActive) ? "#EAEAEA" : "transparent";
-            onClicked: if(layersModel) layersModel.activeAChannelActive = !layersModel.activeAChannelActive;
+            onClicked: if (layersModel) layersModel.activeAChannelActive = !layersModel.activeAChannelActive;
         }
     }
     Label {
@@ -298,7 +298,7 @@ Item {
             border { width: 1; color: "silver"; }
             radius: Constants.DefaultMargin;
             color: (layersModel && layersModel.activeRChannelLocked) ? "#EAEAEA" : "transparent";
-            onClicked: if(layersModel) layersModel.activeRChannelLocked = !layersModel.activeRChannelLocked;
+            onClicked: if (layersModel) layersModel.activeRChannelLocked = !layersModel.activeRChannelLocked;
         }
         Button {
             id: greenLockedChannel
@@ -310,7 +310,7 @@ Item {
             border { width: 1; color: "silver"; }
             radius: Constants.DefaultMargin;
             color: (layersModel && layersModel.activeGChannelLocked) ? "#EAEAEA" : "transparent";
-            onClicked: if(layersModel) layersModel.activeGChannelLocked = !layersModel.activeGChannelLocked;
+            onClicked: if (layersModel) layersModel.activeGChannelLocked = !layersModel.activeGChannelLocked;
         }
         Button {
             id: blueLockedChannel
@@ -322,7 +322,7 @@ Item {
             border { width: 1; color: "silver"; }
             radius: Constants.DefaultMargin;
             color: (layersModel && layersModel.activeBChannelLocked) ? "#EAEAEA" : "transparent";
-            onClicked: if(layersModel) layersModel.activeBChannelLocked = !layersModel.activeBChannelLocked;
+            onClicked: if (layersModel) layersModel.activeBChannelLocked = !layersModel.activeBChannelLocked;
         }
         Button {
             id: alphaLockedChannel
@@ -334,7 +334,7 @@ Item {
             border { width: 1; color: "silver"; }
             radius: Constants.DefaultMargin;
             color: (layersModel && layersModel.activeAChannelLocked) ? "#EAEAEA" : "transparent";
-            onClicked: if(layersModel) layersModel.activeAChannelLocked = !layersModel.activeAChannelLocked;
+            onClicked: if (layersModel) layersModel.activeAChannelLocked = !layersModel.activeAChannelLocked;
         }
     }
     Item {
@@ -397,18 +397,18 @@ Item {
             width: parent.width;
             height: item ? item.height : 1;
             onItemChanged: {
-                if(item && typeof(item.configuration) !== 'undefined') {
+                if (item && typeof(item.configuration) !== 'undefined') {
                     item.configuration = layersModel.activeFilterConfig;
                 }
             }
             Connections {
                 target: layersModel;
                 onActiveFilterConfigChanged: {
-                    if(base.isChangingConfig === false && typeof(configLoader.item.configuration) !== 'undefined') {
+                    if (base.isChangingConfig === false && typeof(configLoader.item.configuration) !== 'undefined') {
                         base.isChangingConfig = true;
                         var filterConfig = layersModel.activeFilterConfig;
                         configLoader.item.configuration = filterConfig;
-                        if(filterConfig.name !== fullFilters.model.filterID(fullFilters.currentIndex)) {
+                        if (filterConfig.name !== fullFilters.model.filterID(fullFilters.currentIndex)) {
                             var categoryIndex = filtersCategoryModel.categoryIndexForConfig(filterConfig);
                             var filterIndex = filtersCategoryModel.filterIndexForConfig(categoryIndex, filterConfig);
                             filtersCategoryList.currentIndex = categoryIndex;

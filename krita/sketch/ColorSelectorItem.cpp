@@ -93,7 +93,7 @@ void ColorSelectorItem::Private::commitColor(const KoColor& color, KisColorSelec
 
     if (role==KisColorSelectorBase::Foreground)
     {
-        if(view->resourceProvider()->fgColor() == color)
+        if (view->resourceProvider()->fgColor() == color)
             return;
         colorUpdateAllowed=false;
         view->resourceProvider()->setFGColor(color);
@@ -102,7 +102,7 @@ void ColorSelectorItem::Private::commitColor(const KoColor& color, KisColorSelec
     }
     else
     {
-        if(view->resourceProvider()->bgColor() == color)
+        if (view->resourceProvider()->bgColor() == color)
             return;
         colorUpdateAllowed=false;
         view->resourceProvider()->setBGColor(color);
@@ -249,9 +249,9 @@ void ColorSelectorItem::setChangeBackground(bool newChangeBackground)
     d->changeBackground = newChangeBackground;
     d->colorRole = newChangeBackground ? KisColorSelectorBase::Background : KisColorSelectorBase::Foreground;
     emit changeBackgroundChanged();
-    if(!d->view)
+    if (!d->view)
         return;
-    if(newChangeBackground)
+    if (newChangeBackground)
         d->currentColor = d->view->resourceProvider()->bgColor().toQColor();
     else
         d->currentColor = d->view->resourceProvider()->fgColor().toQColor();
@@ -264,7 +264,7 @@ void ColorSelectorItem::setAlpha(int percentValue)
 {
     qreal alpha = (float)percentValue / 100.0;
     d->currentColor.setAlphaF(alpha);
-    if(d->view) {
+    if (d->view) {
         d->commitColor(KoColor(d->currentColor, d->view->resourceProvider()->fgColor().colorSpace()), d->colorRole);
     }
 }
