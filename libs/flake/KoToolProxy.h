@@ -66,7 +66,6 @@ public:
     virtual ~KoToolProxy();
 
     /// Forwarded to the current KoToolBase
-
     void paint(QPainter &painter, const KoViewConverter &converter);
 
     /// Forwarded to the current KoToolBase
