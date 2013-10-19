@@ -17,7 +17,6 @@
  */
 
 #include "KeyboardModel.h"
-#include <QDebug>
 
 struct Key {
     explicit Key(QString keyText, KeyboardModel::KeyType key = KeyboardModel::NormalKey, float size = 1.0f)
@@ -42,7 +41,7 @@ public:
     {
 #ifdef Q_OS_WIN
         useBuiltIn = false;
-#endif 
+#endif
     }
     KeyboardMode mode;
     QList<Key> *currentKeys;

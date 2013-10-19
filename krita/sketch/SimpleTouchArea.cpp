@@ -19,7 +19,6 @@
 #include "SimpleTouchArea.h"
 #include <QTouchEvent>
 #include <QApplication>
-#include <QDebug>
 
 SimpleTouchArea::SimpleTouchArea(QDeclarativeItem* parent)
     : QDeclarativeItem(parent)

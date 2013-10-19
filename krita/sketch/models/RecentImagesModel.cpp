@@ -22,7 +22,6 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QDateTime>
-#include <QDebug>
 
 class RecentImagesModel::Private {
 public:

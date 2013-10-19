@@ -18,7 +18,6 @@
  */
 
 #include "Settings.h"
-#include <QDebug>
 #include <QApplication>
 
 class Settings::Private

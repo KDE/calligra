@@ -26,7 +26,6 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QMouseEvent>
 #include <QScrollBar>
-#include <QDebug>
 
 #include <kdebug.h>
 #include <kmimetype.h>

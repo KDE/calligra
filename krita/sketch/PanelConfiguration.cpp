@@ -78,7 +78,6 @@ QDeclarativeListProperty< QDeclarativeItem > PanelConfiguration::panelAreas()
 
 void PanelConfiguration::restore()
 {
-    qDebug() << Q_FUNC_INFO << d->panels.count() << d->panelAreas.count();
     if (d->panelAreaMap.count() == d->panels.count()) {
         foreach(QDeclarativeItem* panel, d->panels) {
             QString panelName = panel->objectName();

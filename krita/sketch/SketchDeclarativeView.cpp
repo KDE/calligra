@@ -21,7 +21,6 @@
 #include <QWidget>
 #include <QGLWidget>
 #include <QGLFramebufferObject>
-#include <QDebug>
 #include <QResizeEvent>
 #include <QApplication>
 #include <QGraphicsItem>

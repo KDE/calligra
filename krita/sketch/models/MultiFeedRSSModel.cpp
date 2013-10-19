@@ -1,4 +1,4 @@
-/**************************************************************************
+q/**************************************************************************
 **
 ** This file is part of Qt Creator
 **
@@ -40,8 +40,6 @@
 #include <QtNetwork/QNetworkRequest>
 #include <QtNetwork/QNetworkReply>
 #include <NetworkAccessManager.h>
-
-#include <QDebug>
 
 namespace Welcome {
 

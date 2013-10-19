@@ -17,7 +17,6 @@
  */
 
 #include "RecentImageImageProvider.h"
-#include <QDebug>
 #include <QFile>
 #include <QImage>
 #include <QImageReader>

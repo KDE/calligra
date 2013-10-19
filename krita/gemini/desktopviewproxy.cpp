@@ -31,7 +31,6 @@
 
 #include <kactioncollection.h>
 
-#include <QDebug>
 #include <QProcess>
 #include <QDir>
 #include <QApplication>

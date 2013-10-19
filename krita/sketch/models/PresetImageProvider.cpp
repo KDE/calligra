@@ -22,8 +22,6 @@
 #include <ui/kis_resource_server_provider.h>
 #include <image/brushengine/kis_paintop_preset.h>
 
-#include <QDebug>
-
 class PresetImageProvider::Private {
 public:
     Private()
