@@ -795,7 +795,7 @@ void GanttView::updateDateTimeGrid( WorkPackage *wp )
     KDGantt::DateTimeGrid *g = static_cast<KDGantt::DateTimeGrid*>( grid() );
     QDateTime gst = g->startDateTime();
     if ( ! gst.isValid() || gst > st ) {
-        st.setTime( QTime() );
+        st.setTime(QTime(0, 0, 0, 0));
         g->setStartDateTime( st );
     }
 }
