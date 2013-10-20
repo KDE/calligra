@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Karbon Round Corners plugin
+X-KDE-ServiceTypes=Karbon/ViewPlugin
+Type=Service
+X-KDE-Library=karbon_roundcornersplugin
+X-Karbon-Version=28

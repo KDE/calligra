@@ -62,7 +62,7 @@ KarbonPart::KarbonPart(QObject *parent)
     : KoPart(parent)
 {
     setTemplateType("karbon_template");
-    setComponentData(KarbonFactory::componentData(), false);
+    setComponentData(KarbonFactory::componentData());
 }
 
 KarbonPart::~KarbonPart()
@@ -76,9 +76,9 @@ void KarbonPart::setDocument(KoDocument *document)
     connect(doc, SIGNAL(applyCanvasConfiguration(KarbonCanvas*)), SLOT(applyCanvasConfiguration(KarbonCanvas*)));
 }
 
-KoView * KarbonPart::createViewInstance(QWidget *parent)
+KoView * KarbonPart::createViewInstance(KoDocument *_document, QWidget *parent)
 {
-    KarbonDocument *doc = qobject_cast<KarbonDocument*>(document());
+    KarbonDocument *doc = qobject_cast<KarbonDocument*>(_document);
 
     KarbonView *result = new KarbonView(this, doc, parent);
 
@@ -88,6 +88,11 @@ KoView * KarbonPart::createViewInstance(QWidget *parent)
     applyCanvasConfiguration(result->canvasWidget());
 
     return result;
+}
+
+KoMainWindow *KarbonPart::createMainWindow()
+{
+    return new KoMainWindow(KARBON_MIME_TYPE, componentData());
 }
 
 void KarbonPart::openTemplate(const KUrl& url)

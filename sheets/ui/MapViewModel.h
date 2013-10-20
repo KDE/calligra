@@ -36,6 +36,10 @@ namespace Sheets
 
 /**
  * Extends the map model by active sheet tracking.
+ *
+ * KPART_TODO: fix the actions in a document with multiple sheets, we used to call
+ *             d->xmlGuiClient->plugActionList("go_goto_sheet_actionlist", actions);
+ *             in the eventFilter.
  */
 class MapViewModel : public MapModel
 {
@@ -56,13 +60,6 @@ public Q_SLOTS:
      * Set the active \p sheet and emits activeSheetChanged(Sheet*) afterwards.
      */
     void setActiveSheet(Sheet* sheet);
-
-protected:
-    /**
-     * Plugs the action lists in, if a KParts::GUIActivateEvent is received.
-     * \return always \c false
-     */
-    bool eventFilter(QObject *object, QEvent *event);
 
 private Q_SLOTS:
     /**

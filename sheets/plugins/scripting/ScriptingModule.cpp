@@ -178,7 +178,7 @@ bool ScriptingModule::openUrl(const QString& url)
 
 bool ScriptingModule::saveUrl(const QString& url)
 {
-    return kspreadDoc()->documentPart()->saveAs(url);
+    return kspreadDoc()->saveAs(url);
 }
 
 bool ScriptingModule::importUrl(const QString& url)

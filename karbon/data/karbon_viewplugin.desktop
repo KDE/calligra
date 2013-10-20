@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=ServiceType
+X-KDE-ServiceType=Karbon/ViewPlugin
+Comment=GUI functionality for Karbon
+[PropertyDef::X-Karbon-Version]
+Type=int

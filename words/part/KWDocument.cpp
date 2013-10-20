@@ -69,9 +69,12 @@
 #include <KoTextDocumentLayout.h>
 #include <KoTextLayoutRootArea.h>
 #include <KoPart.h>
+#include <KoDocumentInfoDlg.h>
 #include <KoDocumentRdfBase.h>
+#include <KoPageWidgetItem.h>
 #ifdef SHOULD_BUILD_RDF
 #include <KoDocumentRdf.h>
+#include <KoDocumentRdfEditWidget.h>
 #endif
 
 #include <KoProgressUpdater.h>
@@ -232,7 +235,7 @@ QPixmap KWDocument::generatePreview(const QSize &size)
     // use shape manager from canvasItem even for QWidget environments
     // if using the shape manager from one of the views there is no guarantee
     // that the view, its canvas and the shapemanager is not destroyed in between
-    KoShapeManager* shapeManager = static_cast<KWCanvasItem*>(documentPart()->canvasItem())->shapeManager();
+    KoShapeManager* shapeManager = static_cast<KWCanvasItem*>(documentPart()->canvasItem(this))->shapeManager();
 
     return QPixmap::fromImage(firstPage.thumbnail(size, shapeManager));
 }
@@ -769,3 +772,15 @@ QPair<QString, QByteArray> KWDocument::coverImage()
 {
     return m_coverImage;
 }
+
+KoDocumentInfoDlg *KWDocument::createDocumentInfoDialog(QWidget *parent, KoDocumentInfo *docInfo) const
+{
+    KoDocumentInfoDlg *dlg = new KoDocumentInfoDlg(parent, docInfo);
+#ifdef SHOULD_BUILD_RDF
+    KoPageWidgetItem *rdfEditWidget = new KoDocumentRdfEditWidget(static_cast<KoDocumentRdf*>(documentRdf()));
+    dlg->addPageItem(rdfEditWidget);
+#endif
+    return dlg;
+
+}
+

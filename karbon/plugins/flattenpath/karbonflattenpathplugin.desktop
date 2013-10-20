@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Karbon Flatten Path plugin
+X-KDE-ServiceTypes=Karbon/ViewPlugin
+Type=Service
+X-KDE-Library=karbon_flattenpathplugin
+X-Karbon-Version=28

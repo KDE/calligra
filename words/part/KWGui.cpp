@@ -74,11 +74,11 @@ KWGui::KWGui(const QString &viewMode, KWView *parent)
     KoToolManager::instance()->addController(m_canvasController);
     KoToolManager::instance()->registerTools(m_view->actionCollection(), m_canvasController);
 
-    if (m_view->shell())
+    if (m_view->mainWindow())
     {
         KoModeBoxFactory modeBoxFactory(canvasController, qApp->applicationName(), i18n("Tools"));
-        QDockWidget* modeBox = m_view->shell()->createDockWidget(&modeBoxFactory);
-        m_view->shell()->dockerManager()->removeToolOptionsDocker();
+        QDockWidget* modeBox = m_view->mainWindow()->createDockWidget(&modeBoxFactory);
+        m_view->mainWindow()->dockerManager()->removeToolOptionsDocker();
         dynamic_cast<KoCanvasObserverBase*>(modeBox)->setObservedCanvas(m_canvas);
     }
 

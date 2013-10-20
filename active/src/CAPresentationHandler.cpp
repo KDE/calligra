@@ -118,7 +118,7 @@ bool CAPresentationHandler::openDocument (const QString& uri)
     d->document = qobject_cast<KPrDocument*> (part->document());
     d->document->openUrl (KUrl (uri));
 
-    KoCanvasBase* paCanvas = dynamic_cast<KoCanvasBase*> (part->canvasItem());
+    KoCanvasBase* paCanvas = dynamic_cast<KoCanvasBase*>(part->canvasItem(d->document));
     KoPACanvasItem* paCanvasItem = dynamic_cast<KoPACanvasItem*> (paCanvas);
     if (!paCanvasItem) {
         kDebug() << "Failed to fetch a canvas item";
