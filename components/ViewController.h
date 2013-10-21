@@ -30,6 +30,19 @@ class View;
 /**
  * \brief Provides an object to control the document transformation within a View.
  *
+ * Due to API restrictions it is not easily possible to inherit Flickable's behaviour
+ * in custom QtQuick items. This object works around that by providing an item that
+ * can be put inside a Flickable and will scroll a View object based on the Flickable's
+ * scrolling.
+ *
+ * In addition, this object controls the zoom level of a view. It can clamps zoom to a
+ * minimum and maximum value and can optionally use an image during zoom operations to
+ * accelerate the zoom operation, since zooming an actual document can be an expensive
+ * operation.
+ *
+ * \note This object will control its own width and height as well as the contentWidth
+ * and contentHeight of #flickable. While it is possible to put this item outside of a
+ * flickable this is not recommended.
  */
 
 class ViewController : public QQuickPaintedItem
@@ -39,6 +52,7 @@ class ViewController : public QQuickPaintedItem
      * \property view
      * \brief The view to control.
      *
+     * \default null
      * \get view() const
      * \set setView()
      * \notify viewChanged()
@@ -48,6 +62,7 @@ class ViewController : public QQuickPaintedItem
      * \property flickable
      * \brief The flickable that is used to control scrolling.
      *
+     * \default null
      * \get flickable() const
      * \set setFlickable()
      * \notify flickableChanged()
@@ -57,6 +72,7 @@ class ViewController : public QQuickPaintedItem
      * \property minimumZoom
      * \brief The minimum zoom level.
      *
+     * \default 0.5
      * \get minimumZoom() const
      * \set setMinimumZoom()
      * \notify minimumZoomChanged()
@@ -69,6 +85,7 @@ class ViewController : public QQuickPaintedItem
      * When true, the minimum zoom level will be determined automatically  based on the width of
      * the item assigned to this controller's #flickable property.
      *
+     * \default false
      * \get minimumZoomFitsWidth() const
      * \set setMinimumZoomFitsWidth()
      * \notify minimumZoomFitsWidthChanged()
@@ -78,6 +95,7 @@ class ViewController : public QQuickPaintedItem
      * \property zoom
      * \brief The zoom amount of the view.
      *
+     * \default 1.0
      * \get zoom() const
      * \set setZoom()
      * \notify zoomChanged()
@@ -87,6 +105,7 @@ class ViewController : public QQuickPaintedItem
      * \property maximumZoom
      * \brief The maximum zoom amount.
      *
+     * \default 2.0
      * \get maximumZoom() const
      * \set setMaximumZoom()
      * \notify maximumZoomChanged()
@@ -100,6 +119,7 @@ class ViewController : public QQuickPaintedItem
      * short duration before applying it to the view. This makes continuous zooming operations
      * far smoother.
      *
+     * \default true
      * \get useZoomProxy() const
      * \set setUseZoomProxy()
      * \notify useZoomProxyChanged()
@@ -107,7 +127,15 @@ class ViewController : public QQuickPaintedItem
     Q_PROPERTY(bool useZoomProxy READ useZoomProxy WRITE setUseZoomProxy NOTIFY useZoomProxyChanged)
 
 public:
-    ViewController(QQuickItem* parent = 0);
+    /**
+     * Constructor.
+     *
+     * \param parent The parent item.
+     */
+    explicit ViewController(QQuickItem* parent = 0);
+    /**
+     * Destructor.
+     */
     virtual ~ViewController();
 
     /**
@@ -119,61 +147,59 @@ public:
      */
     View* view() const;
     /**
-     * Getter for property #flickable
-     */
-    QQuickItem* flickable() const;
-    /**
-     * Getter for property #minimumZoom
-     */
-    float minimumZoom() const;
-    /**
-     * Getter for property #minimumZoomFitsWidth
-     */
-    bool minimumZoomFitsWidth() const;
-    /**
-     * Getter for property #zoom
-     */
-    float zoom() const;
-    /**
-     * Getter for property #maximumZoom
-     */
-    float maximumZoom() const;
-    /**
-     * Getter for property #useZoomProxy
-     */
-    bool useZoomProxy() const;
-
-public Q_SLOTS:
-    /**
      * Setter for property #view
      */
     void setView(View* newView);
+    /**
+     * Getter for property #flickable
+     */
+    QQuickItem* flickable() const;
     /**
      * Setter for property #flickable
      */
     void setFlickable(QQuickItem* item);
     /**
+     * Getter for property #minimumZoom
+     */
+    float minimumZoom() const;
+    /**
      * Setter for property #minimumZoom
      */
     void setMinimumZoom(float newValue);
+    /**
+     * Getter for property #minimumZoomFitsWidth
+     */
+    bool minimumZoomFitsWidth() const;
     /**
      * Setter for property #minimumZoomFitsWidth
      */
     void setMinimumZoomFitsWidth(bool newValue);
     /**
+     * Getter for property #zoom
+     */
+    float zoom() const;
+    /**
      * Setter for property #zoom
      */
     void setZoom(float newZoom);
+    /**
+     * Getter for property #maximumZoom
+     */
+    float maximumZoom() const;
     /**
      * Setter for property #maximumZoom
      */
     void setMaximumZoom(float newValue);
     /**
+     * Getter for property #useZoomProxy
+     */
+    bool useZoomProxy() const;
+    /**
      * Setter for property #useZoomProxy
      */
     void setUseZoomProxy(bool proxy);
 
-    
+public Q_SLOTS:
     void zoomAroundPoint(float amount, const QPointF& point);
     void zoomToFitWidth(float width);
 
@@ -211,6 +237,7 @@ private Q_SLOTS:
     void documentChanged();
     void contentPositionChanged();
     void documentSizeChanged();
+    void zoomTimeout();
 
 private:
     class Private;

@@ -20,7 +20,9 @@
 #include "ViewController.h"
 
 #include <QtCore/QDebug>
+#include <QTimer>
 #include <QQuickWindow>
+#include <QPainter>
 
 #include <KoCanvasController.h>
 
@@ -41,8 +43,11 @@ public:
         , minimumZoom{.5f}
         , minimumZoomFitsWidth{false}
         , zoom{1.f}
+        , zoomChange{0.f}
         , maximumZoom{2.f}
         , useZoomProxy{true}
+        , zoomProxy{nullptr}
+        , zoomTimer{nullptr}
     { }
 
     View* view;
@@ -56,13 +61,21 @@ public:
     float minimumZoom;
     bool minimumZoomFitsWidth;
     float zoom;
+    float zoomChange;
     float maximumZoom;
+
     bool useZoomProxy;
+    QImage* zoomProxy;
+    QTimer* zoomTimer;
 };
 
 ViewController::ViewController(QQuickItem* parent)
     : QQuickPaintedItem{parent}, d{new Private}
 {
+    d->zoomTimer = new QTimer{this};
+    d->zoomTimer->setInterval(500);
+    d->zoomTimer->setSingleShot(true);
+    connect(d->zoomTimer, &QTimer::timeout, this, &ViewController::zoomTimeout);
 }
 
 ViewController::~ViewController()
@@ -72,7 +85,11 @@ ViewController::~ViewController()
 
 void ViewController::paint(QPainter* painter)
 {
-
+    if(d->zoomProxy) {
+        QPoint contentPos{d->flickable->property("contentX").toInt(), d->flickable->property("contentY").toInt()};
+        QRect targetRect{contentPos, QSize{int(d->flickable->width() * (1.f + d->zoomChange)), int(d->flickable->height() * (1.f + d->zoomChange))}};
+        painter->drawImage(targetRect, *(d->zoomProxy));
+    }
 }
 
 View* ViewController::view() const
@@ -94,9 +111,7 @@ void ViewController::setView(View* newView)
         connect(d->view, &View::documentChanged, this, &ViewController::documentChanged);
 
         if(d->view->document()) {
-            d->canvasController = d->view->document()->canvasController();
-            connect(d->view->document(), &Document::documentSizeChanged, this, &ViewController::documentSizeChanged);
-            documentSizeChanged();
+            documentChanged();
         } else {
             d->canvasController = nullptr;
         }
@@ -112,16 +127,20 @@ QQuickItem* ViewController::flickable() const
 
 void ViewController::setFlickable(QQuickItem* item)
 {
+    qDebug() << Q_FUNC_INFO << item;
     if(item != d->flickable) {
-        if(item->metaObject()->indexOfProperty("contentWidth") == -1) {
+        if(item && item->metaObject()->indexOfProperty("contentWidth") == -1) {
             qWarning() << Q_FUNC_INFO << "Item does not seem to be a flickable, ignoring.";
             return;
         }
 
         d->flickable = item;
-        documentSizeChanged();
-        connect(d->flickable, SIGNAL(contentXChanged()), this, SLOT(contentPositionChanged()) );
-        connect(d->flickable, SIGNAL(contentYChanged()), this, SLOT(contentPositionChanged()) );
+
+        if(item) {
+            documentSizeChanged();
+            connect(d->flickable, SIGNAL(contentXChanged()), this, SLOT(contentPositionChanged()) );
+            connect(d->flickable, SIGNAL(contentYChanged()), this, SLOT(contentPositionChanged()) );
+        }
         emit flickableChanged();
     }
 }
@@ -151,13 +170,33 @@ void ViewController::setMinimumZoomFitsWidth(bool newValue)
 
 float ViewController::zoom() const
 {
+    if(d->useZoomProxy && d->zoomProxy) {
+        return d->zoom + d->zoomChange;
+    }
+
     return d->zoom;
 }
 
 void ViewController::setZoom(float newZoom)
 {
     if(newZoom != d->zoom) {
-        d->zoom = newZoom;
+        if(d->useZoomProxy) {
+            if(!d->zoomProxy) {
+                d->zoomProxy = new QImage{int(d->view->width()), int(d->view->height()), QImage::Format_ARGB32};
+
+                QPainter p;
+                p.begin(d->zoomProxy);
+                d->view->paint(&p);
+                p.end();
+            }
+
+            d->zoomChange = newZoom - d->zoom;
+            update();
+            d->zoomTimer->start();
+        } else {
+            d->zoom = newZoom;
+            d->view->setZoom(d->zoom);
+        }
 
         emit zoomChanged();
     }
@@ -185,6 +224,13 @@ void ViewController::setUseZoomProxy(bool proxy)
 {
     if(proxy != d->useZoomProxy) {
         d->useZoomProxy = proxy;
+
+        if(!d->useZoomProxy && d->zoomProxy) {
+            delete d->zoomProxy;
+            d->zoomProxy = nullptr;
+            update();
+        }
+
         emit useZoomProxyChanged();
     }
 }
@@ -225,8 +271,21 @@ void ViewController::documentChanged()
 void ViewController::documentSizeChanged()
 {
     if(d->view && d->view->document() && d->flickable) {
+        if(!d->canvasController) {
+            d->canvasController = d->view->document()->canvasController();
+        }
+
         QSizeF docSize = d->view->document()->documentSize();
         d->flickable->setProperty("contentWidth", docSize.width());
         d->flickable->setProperty("contentHeight", docSize.height());
     }
+}
+
+void ViewController::zoomTimeout()
+{
+    delete d->zoomProxy;
+    d->zoomProxy = nullptr;
+    d->zoom = d->zoom + d->zoomChange;
+    d->view->setZoom(d->zoom);
+    update();
 }
