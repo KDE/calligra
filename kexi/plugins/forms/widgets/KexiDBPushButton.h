@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2012-2013 Oleg Kukharchuk <oleg.kuh@gmail.com>
+   Copyright (C) 2013 Oleg Kukharchuk <oleg.kuh@gmail.com>
    Copyright (C) 2005 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004-2006 Jarosław Staniek <staniek@kde.org>
 
@@ -19,20 +19,20 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KexiDBCommandLinkButton_H
-#define KexiDBCommandLinkButton_H
+#ifndef KexiDBPushButton_H
+#define KexiDBPushButton_H
 
 #include <widget/dataviewcommon/kexiformdataiteminterface.h>
-#include <kexiutils/KexiCommandLinkButton.h>
 #include <formeditor/kexiformeventhandler.h>
 #include <formeditor/FormWidgetInterface.h>
+#include <kexiutils/KexiPushButton.h>
 
-class KexiDBCommandLinkButtonPrivate;
+class KexiDBPushButtonPrivate;
 
 //! @short Push Button widget for Kexi forms
-class KEXIFORMUTILS_EXPORT KexiDBCommandLinkButton : public KexiCommandLinkButton,
-                                                     public KexiFormDataItemInterface,
-                                                     public KFormDesigner::FormWidgetInterface
+class KEXIFORMUTILS_EXPORT KexiDBPushButton : public KexiPushButton,
+                                              public KexiFormDataItemInterface,
+                                              public KFormDesigner::FormWidgetInterface
 {
     Q_OBJECT
     Q_PROPERTY(QString onClickAction READ onClickAction WRITE setOnClickAction)
@@ -41,8 +41,8 @@ class KEXIFORMUTILS_EXPORT KexiDBCommandLinkButton : public KexiCommandLinkButto
     Q_PROPERTY(QString dataSourcePartClass READ dataSourcePartClass WRITE setDataSourcePartClass)
 
 public:
-    KexiDBCommandLinkButton ( const QString & text, const QString &description, QWidget * parent );
-    ~KexiDBCommandLinkButton();
+    explicit KexiDBPushButton(const QString & text, QWidget * parent);
+    ~KexiDBPushButton();
 
     inline QString dataSource() const {
         return KexiFormDataItemInterface::dataSource();
@@ -53,8 +53,14 @@ public:
 
     virtual QVariant value();
 
+    //! \return true if editor's value is null (not empty)
+    //! Used for checking if a given constraint within table of form is met.
     virtual bool valueIsNull();
 
+    //! \return true if editor's value is empty (not necessary null).
+    //! Only few data types can accept "EMPTY" property
+    //! (use KexiDB::Field::hasEmptyProperty() to check this).
+    //! Used for checking if a given constraint within table or form is met.
     virtual bool valueIsEmpty();
 
     //! always false
@@ -93,13 +99,12 @@ public slots:
         KexiFormDataItemInterface::setDataSourcePartClass(partClass);
     }
     virtual void setReadOnly(bool readOnly);
-
 protected:
     //! Sets value \a value for a widget.
     virtual void setValueInternal(const QVariant& add, bool removeOld);
 
-    friend class KexiDBCommanLinkButtonPrivate;
-    KexiDBCommandLinkButtonPrivate * const d;
+    friend class KexiDBPushButtonPrivate;
+    KexiDBPushButtonPrivate * const d;
 };
 
 #endif

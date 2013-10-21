@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2012-2013 Oleg Kukharchuk <oleg.kuh@gmail.com>
+   Copyright (C) 2013 Oleg Kukharchuk <oleg.kuh@gmail.com>
    Copyright (C) 2005 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004-2005 Jarosław Staniek <staniek@kde.org>
 
@@ -19,35 +19,34 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kexidbcommandlinkbutton.h"
+#include "KexiDBPushButton.h"
 #include <core/kexiproject.h>
 #include <core/KexiMainWindowIface.h>
 #include <db/connection.h>
 #include <KUrl>
 #include <QDebug>
 
-class KexiDBCommandLinkButtonPrivate
+class KexiDBPushButtonPrivate
 {
 public:
-    KexiDBCommandLinkButtonPrivate() {}
+    KexiDBPushButtonPrivate() {}
 
     KexiFormEventAction::ActionData onClickActionData;
 };
 
-KexiDBCommandLinkButton::KexiDBCommandLinkButton(const QString &text,
-                                                 const QString &description, QWidget * parent)
-        : KexiCommandLinkButton(text, description, parent)
-        , d(new KexiDBCommandLinkButtonPrivate)
+KexiDBPushButton::KexiDBPushButton(const QString & text, QWidget * parent)
+        : KexiPushButton(text, parent)
+        , d(new KexiDBPushButtonPrivate)
 {
     setLocalBasePath(KexiMainWindowIface::global()->project()->dbConnection()->data()->dbPath());
 }
 
-KexiDBCommandLinkButton::~KexiDBCommandLinkButton()
+KexiDBPushButton::~KexiDBPushButton()
 {
     delete d;
 }
 
-void KexiDBCommandLinkButton::setValueInternal(const QVariant& add, bool removeOld)
+void KexiDBPushButton::setValueInternal(const QVariant& add, bool removeOld)
 {
     Q_UNUSED(add)
     Q_UNUSED(removeOld)
@@ -55,13 +54,23 @@ void KexiDBCommandLinkButton::setValueInternal(const QVariant& add, bool removeO
     if (KexiPushButton::hyperlinkType() == KexiPushButton::DynamicHyperlink) {
         KexiPushButton::setHyperlink(KexiDataItemInterface::originalValue().toString());
     }
-
     KUrl url(KexiDataItemInterface::originalValue().toString());
-    setDescription(url.pathOrUrl());
+    QFontMetrics f(font());
+    QString text;
+    QString path = url.pathOrUrl();
+    if (url.isLocalFile()){
+        QString fileName = url.fileName();
+        text = f.elidedText(path.left(path.size() - fileName.size()),
+                               Qt::ElideMiddle, width()-f.width(fileName) - 10) + fileName;
+    } else {
+        text = f.elidedText(path, Qt::ElideMiddle, width() - 10);
+
+    }
+    setText(text);
     setToolTip(url.pathOrUrl());
 }
 
-QVariant KexiDBCommandLinkButton::value()
+QVariant KexiDBPushButton::value()
 {
     if (KexiPushButton::hyperlinkType() == KexiPushButton::DynamicHyperlink) {
         return KexiPushButton::hyperlink();
@@ -69,24 +78,24 @@ QVariant KexiDBCommandLinkButton::value()
     return QVariant();
 }
 
-void KexiDBCommandLinkButton::clear()
+void KexiDBPushButton::clear()
 {
     if (KexiPushButton::hyperlinkType() == KexiPushButton::DynamicHyperlink) {
         KexiPushButton::setHyperlink(QString());
     }
 }
 
-bool KexiDBCommandLinkButton::cursorAtStart()
+bool KexiDBPushButton::cursorAtStart()
 {
     return false;
 }
 
-bool KexiDBCommandLinkButton::cursorAtEnd()
+bool KexiDBPushButton::cursorAtEnd()
 {
     return false;
 }
 
-bool KexiDBCommandLinkButton::valueIsNull()
+bool KexiDBPushButton::valueIsNull()
 {
     if (KexiPushButton::hyperlinkType() == KexiPushButton::DynamicHyperlink) {
         return KexiPushButton::hyperlink().isNull();
@@ -94,7 +103,7 @@ bool KexiDBCommandLinkButton::valueIsNull()
     return true;
 }
 
-bool KexiDBCommandLinkButton::valueIsEmpty()
+bool KexiDBPushButton::valueIsEmpty()
 {
     if (KexiPushButton::hyperlinkType() == KexiPushButton::DynamicHyperlink) {
         return KexiPushButton::hyperlink().isEmpty();
@@ -102,40 +111,40 @@ bool KexiDBCommandLinkButton::valueIsEmpty()
     return true;
 }
 
-void KexiDBCommandLinkButton::setInvalidState(const QString &displayText)
+void KexiDBPushButton::setInvalidState(const QString &displayText)
 {
     if (KexiPushButton::hyperlinkType() == KexiPushButton::DynamicHyperlink) {
         setText(displayText);
     }
 }
-bool KexiDBCommandLinkButton::isReadOnly() const
+
+bool KexiDBPushButton::isReadOnly() const
 {
     return true;
 }
 
-void KexiDBCommandLinkButton::setReadOnly(bool readOnly)
+void KexiDBPushButton::setReadOnly(bool readOnly)
 {
     Q_UNUSED(readOnly);
 }
 
-QString KexiDBCommandLinkButton::onClickAction() const
+QString KexiDBPushButton::onClickAction() const
 {
     return d->onClickActionData.string;
 }
 
-void KexiDBCommandLinkButton::setOnClickAction(const QString& actionString)
+void KexiDBPushButton::setOnClickAction(const QString& actionString)
 {
     d->onClickActionData.string = actionString;
 }
 
-QString KexiDBCommandLinkButton::onClickActionOption() const
+QString KexiDBPushButton::onClickActionOption() const
 {
      return d->onClickActionData.option;
 }
 
-void KexiDBCommandLinkButton::setOnClickActionOption(const QString& option)
+void KexiDBPushButton::setOnClickActionOption(const QString& option)
 {
      d->onClickActionData.option = option;
 }
-
-#include "kexidbcommandlinkbutton.moc"
+#include "KexiDBPushButton.moc"
