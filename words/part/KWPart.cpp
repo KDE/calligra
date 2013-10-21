@@ -51,9 +51,9 @@ KWPart::~KWPart()
 {
 }
 
-void KWPart::setDocument(KWDocument *document)
+void KWPart::addDocument(KWDocument *document)
 {
-    KoPart::setDocument(document);
+    KoPart::addDocument(document);
     m_document = document;
 }
 

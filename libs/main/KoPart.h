@@ -83,9 +83,9 @@ public:
     KComponentData componentData() const;
 
     /**
-     * @param document the document this part manages
+     * Add the specified document to the list of documents this KoPart manages.
      */
-    void setDocument(KoDocument *document);
+    void addDocument(KoDocument *document);
 
     /**
      * @return the document this part loads and saves to and makes views for

@@ -41,7 +41,7 @@ public:
 
     virtual ~Part();
 
-    void setDocument(KPlato::MainDocument *document);
+    void addDocument(KPlato::MainDocument *document);
 
     /// reimplemented
     virtual KoView *createViewInstance(KoDocument *document, QWidget *parent);

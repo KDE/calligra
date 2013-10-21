@@ -46,9 +46,9 @@ KPrPart::~KPrPart()
 {
 }
 
-void KPrPart::setDocument(KPrDocument *document)
+void KPrPart::addDocument(KPrDocument *document)
 {
-    KoPart::setDocument(document);
+    KoPart::addDocument(document);
     m_document = document;
 }
 

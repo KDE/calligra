@@ -51,9 +51,9 @@ Part::~Part()
 {
 }
 
-void Part::setDocument(Doc *document)
+void Part::addDocument(Doc *document)
 {
-    KoPart::setDocument(document);
+    KoPart::addDocument(document);
     m_document = document;
 }
 

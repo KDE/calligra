@@ -47,7 +47,7 @@ void InsertProjectTester::testAccount()
 {
     Part pp(0);
     MainDocument part( &pp );
-    pp.setDocument( &part );
+    pp.addDocument( &part );
 
     addAccount( part );
     Project &p = part.getProject();
@@ -55,7 +55,7 @@ void InsertProjectTester::testAccount()
 
     Part pp2(0);
     MainDocument part2( &pp2 );
-    pp2.setDocument( &part2 );
+    pp2.addDocument( &part2 );
 
     part2.insertProject( p, 0, 0 );
     QCOMPARE( part2.getProject().accounts().accountCount(), 1 );
@@ -65,7 +65,7 @@ void InsertProjectTester::testAccount()
 
     Part ppB(0);
     MainDocument partB( &ppB );
-    ppB.setDocument( &partB );
+    ppB.addDocument( &partB );
 
     Account *parent = addAccount( partB );
     QCOMPARE( partB.getProject().accounts().accountCount(), 1 );
@@ -91,7 +91,7 @@ void InsertProjectTester::testCalendar()
 {
     Part pp(0);
     MainDocument part( &pp );
-    pp.setDocument( &part );
+    pp.addDocument( &part );
 
     addCalendar( part );
     Project &p = part.getProject();
@@ -99,7 +99,7 @@ void InsertProjectTester::testCalendar()
 
     Part pp2(0);
     MainDocument part2( &pp2 );
-    pp2.setDocument( &part2 );
+    pp2.addDocument( &part2 );
 
     part2.insertProject( part.getProject(), 0, 0 );
     QVERIFY( part2.getProject().calendarCount() == 1 );
@@ -110,7 +110,7 @@ void InsertProjectTester::testDefaultCalendar()
 {
     Part pp(0);
     MainDocument part( &pp );
-    pp.setDocument( &part );
+    pp.addDocument( &part );
 
     Calendar *c = addCalendar( part );
     Project &p = part.getProject();
@@ -120,7 +120,7 @@ void InsertProjectTester::testDefaultCalendar()
 
     Part pp2(0);
     MainDocument part2( &pp2 );
-    pp2.setDocument( &part2 );
+    pp2.addDocument( &part2 );
 
     part2.insertProject( p, 0, 0 );
     QVERIFY( part2.getProject().calendarCount() == 1 );
@@ -128,7 +128,7 @@ void InsertProjectTester::testDefaultCalendar()
 
     Part ppB(0);
     MainDocument partB( &ppB );
-    ppB.setDocument( &partB );
+    ppB.addDocument( &partB );
 
     Calendar *c2 = addCalendar( partB );
     partB.getProject().setDefaultCalendar( c2 );
@@ -152,7 +152,7 @@ void InsertProjectTester::testResourceGroup()
 {
     Part pp(0);
     MainDocument part( &pp );
-    pp.setDocument( &part );
+    pp.addDocument( &part );
 
     addResourceGroup( part );
     Project &p = part.getProject();
@@ -160,7 +160,7 @@ void InsertProjectTester::testResourceGroup()
 
     Part pp2(0);
     MainDocument part2( &pp2 );
-    pp2.setDocument( &part2 );
+    pp2.addDocument( &part2 );
     part2.insertProject( p, 0, 0 );
     QVERIFY( part2.getProject().resourceGroupCount() == 1 );
 }
@@ -183,7 +183,7 @@ void InsertProjectTester::testResource()
 {
     Part pp(0);
     MainDocument part( &pp );
-    pp.setDocument( &part );
+    pp.addDocument( &part );
 
     addResourceGroup( part );
     addResource( part );
@@ -192,7 +192,7 @@ void InsertProjectTester::testResource()
 
     Part pp2(0);
     MainDocument part2( &pp2 );
-    pp2.setDocument( &part2 );
+    pp2.addDocument( &part2 );
     part2.insertProject( p, 0, 0 );
     QVERIFY( part2.getProject().resourceGroupAt( 0 )->numResources() == 1 );
 }
@@ -201,7 +201,7 @@ void InsertProjectTester::testTeamResource()
 {
     Part pp(0);
     MainDocument part( &pp );
-    pp.setDocument( &part );
+    pp.addDocument( &part );
 
     addResourceGroup( part );
     Resource *r = addResource( part );
@@ -220,7 +220,7 @@ void InsertProjectTester::testTeamResource()
 
     Part pp2(0);
     MainDocument part2( &pp2 );
-    pp2.setDocument( &part2 );
+    pp2.addDocument( &part2 );
 
     part2.insertProject( p, 0, 0 );
     Project &p2 = part2.getProject();
@@ -236,7 +236,7 @@ void InsertProjectTester::testResourceAccount()
 {
     Part pp(0);
     MainDocument part( &pp );
-    pp.setDocument( &part );
+    pp.addDocument( &part );
 
     addResourceGroup( part );
     Resource *r = addResource( part );
@@ -248,7 +248,7 @@ void InsertProjectTester::testResourceAccount()
 
     Part pp2(0);
     MainDocument part2( &pp2 );
-    pp2.setDocument( &part2 );
+    pp2.addDocument( &part2 );
 
     part2.insertProject( p, 0, 0 );
     QVERIFY( part2.getProject().resourceGroupAt( 0 )->numResources() == 1 );
@@ -260,7 +260,7 @@ void InsertProjectTester::testResourceCalendar()
 {
     Part pp(0);
     MainDocument part( &pp );
-    pp.setDocument( &part );
+    pp.addDocument( &part );
 
     Calendar *c = addCalendar( part );
     Project &p = part.getProject();
@@ -274,7 +274,7 @@ void InsertProjectTester::testResourceCalendar()
 
     Part pp2(0);
     MainDocument part2( &pp2 );
-    pp2.setDocument( &part2 );
+    pp2.addDocument( &part2 );
 
     part2.insertProject( p, 0, 0 );
     QVERIFY( part2.getProject().resourceGroupAt( 0 )->numResources() == 1 );
@@ -297,7 +297,7 @@ void InsertProjectTester::testTask()
 {
     Part pp(0);
     MainDocument part( &pp );
-    pp.setDocument( &part );
+    pp.addDocument( &part );
 
     addTask( part );
     Project &p = part.getProject();
@@ -305,7 +305,7 @@ void InsertProjectTester::testTask()
 
     Part pp2(0);
     MainDocument part2( &pp2 );
-    pp2.setDocument( &part2 );
+    pp2.addDocument( &part2 );
 
     part2.insertProject( p, 0, 0 );
     QVERIFY( part2.getProject().numChildren() == 1 );
@@ -323,7 +323,7 @@ void InsertProjectTester::testGroupRequest()
 {
     Part pp(0);
     MainDocument part( &pp );
-    pp.setDocument( &part );
+    pp.addDocument( &part );
 
     addCalendar( part );
     addResourceGroup( part );
@@ -336,7 +336,7 @@ void InsertProjectTester::testGroupRequest()
 
     Part pp2(0);
     MainDocument part2( &pp2 );
-    pp2.setDocument( &part2 );
+    pp2.addDocument( &part2 );
 
     part2.insertProject( p, 0, 0 );
     Project &p2 = part2.getProject();
@@ -355,7 +355,7 @@ void InsertProjectTester::testResourceRequest()
 {
     Part pp(0);
     MainDocument part( &pp );
-    pp.setDocument( &part );
+    pp.addDocument( &part );
 
     addCalendar( part );
     addResourceGroup( part );
@@ -367,7 +367,7 @@ void InsertProjectTester::testResourceRequest()
     Project &p = part.getProject();
     Part pp2(0);
     MainDocument part2( &pp2 );
-    pp2.setDocument( &part2 );
+    pp2.addDocument( &part2 );
     part2.insertProject( p, 0, 0 );
     Project &p2 = part2.getProject();
     QVERIFY( p2.childNode( 0 )->requests().find( p2.resourceGroupAt( 0 )->resourceAt( 0 ) ) != 0 );
@@ -377,7 +377,7 @@ void InsertProjectTester::testTeamResourceRequest()
 {
     Part pp(0);
     MainDocument part( &pp );
-    pp.setDocument( &part );
+    pp.addDocument( &part );
 
     addCalendar( part );
     addResourceGroup( part );
@@ -395,7 +395,7 @@ void InsertProjectTester::testTeamResourceRequest()
     qDebug()<<"Start test:";
     Part pp2(0);
     MainDocument part2( &pp2 );
-    pp2.setDocument( &part2 );
+    pp2.addDocument( &part2 );
     part2.insertProject( part.getProject(), 0, 0 );
     Project &p2 = part2.getProject();
     ResourceRequest *rr = p2.childNode( 0 )->requests().find( p2.resourceGroupAt( 0 )->resourceAt( 0 ) );
@@ -418,7 +418,7 @@ void InsertProjectTester::testDependencies()
 {
     Part pp(0);
     MainDocument part( &pp );
-    pp.setDocument( &part );
+    pp.addDocument( &part );
 
     Task *t1 = addTask( part );
     Task *t2 = addTask( part );
@@ -434,7 +434,7 @@ void InsertProjectTester::testDependencies()
 
     Part pp2(0);
     MainDocument part2( &pp2 );
-    pp2.setDocument( &part2 );
+    pp2.addDocument( &part2 );
 
     QVERIFY( part2.insertProject( part.getProject(), 0, 0 ) );
     Project &p2 = part2.getProject();
@@ -453,7 +453,7 @@ void InsertProjectTester::testExistingResourceAccount()
 {
     Part pp(0);
     MainDocument part( &pp );
-    pp.setDocument( &part );
+    pp.addDocument( &part );
 
     addResourceGroup( part );
     Resource *r = addResource( part );
@@ -467,7 +467,7 @@ void InsertProjectTester::testExistingResourceAccount()
 
     Part pp2(0);
     MainDocument part2( &pp2 );
-    pp2.setDocument( &part2 );
+    pp2.addDocument( &part2 );
 
     part2.insertProject( p, 0, 0 );
     QVERIFY( part2.getProject().resourceGroupAt( 0 )->numResources() == 1 );
@@ -490,7 +490,7 @@ void InsertProjectTester::testExistingResourceCalendar()
 {
     Part pp(0);
     MainDocument part( &pp );
-    pp.setDocument( &part );
+    pp.addDocument( &part );
 
     Calendar *c = addCalendar( part );
     Project &p = part.getProject();
@@ -506,7 +506,7 @@ void InsertProjectTester::testExistingResourceCalendar()
 
     Part pp2(0);
     MainDocument part2( &pp2 );
-    pp2.setDocument( &part2 );
+    pp2.addDocument( &part2 );
 
     part2.insertProject( p, 0, 0 );
     QVERIFY( part2.getProject().resourceGroupAt( 0 )->numResources() == 1 );
@@ -531,7 +531,7 @@ void InsertProjectTester::testExistingResourceRequest()
 {
     Part pp(0);
     MainDocument part( &pp );
-    pp.setDocument( &part );
+    pp.addDocument( &part );
 
     addCalendar( part );
     addResourceGroup( part );
@@ -545,7 +545,7 @@ void InsertProjectTester::testExistingResourceRequest()
     Project &p = part.getProject();
     Part pp2(0);
     MainDocument part2( &pp2 );
-    pp2.setDocument( &part2 );
+    pp2.addDocument( &part2 );
     part2.insertProject( p, 0, 0 );
     Project &p2 = part2.getProject();
     QVERIFY( p2.childNode( 0 )->requests().find( p2.resourceGroupAt( 0 )->resourceAt( 0 ) ) != 0 );
@@ -563,7 +563,7 @@ void InsertProjectTester::testExistingRequiredResourceRequest()
 {
     Part pp(0);
     MainDocument part( &pp );
-    pp.setDocument( &part );
+    pp.addDocument( &part );
 
     addCalendar( part );
     addResourceGroup( part );
@@ -582,7 +582,7 @@ void InsertProjectTester::testExistingRequiredResourceRequest()
     Project &p = part.getProject();
     Part pp2(0);
     MainDocument part2( &pp2 );
-    pp2.setDocument( &part2 );
+    pp2.addDocument( &part2 );
     part2.insertProject( p, 0, 0 );
     Project &p2 = part2.getProject();
     ResourceRequest *rr = p2.childNode( 0 )->requests().find( p2.resourceGroupAt( 0 )->resourceAt( 0 ) );
@@ -610,7 +610,7 @@ void InsertProjectTester::testExistingTeamResourceRequest()
 {
     Part pp(0);
     MainDocument part( &pp );
-    pp.setDocument( &part );
+    pp.addDocument( &part );
 
     addCalendar( part );
     addResourceGroup( part );
@@ -633,7 +633,7 @@ void InsertProjectTester::testExistingTeamResourceRequest()
 
     Part pp2(0);
     MainDocument part2( &pp2 );
-    pp2.setDocument( &part2 );
+    pp2.addDocument( &part2 );
 
     Project &p2 = part2.getProject();
     part2.insertProject( part.getProject(), 0, 0 );

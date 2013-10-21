@@ -39,7 +39,7 @@ public:
 
     virtual ~KisPart2();
 
-    void setDocument(KisDoc2 *document);
+    void addDocument(KisDoc2 *document);
 
     /**
      * Creates and shows the start up widget. Reimplemented from KoDocument.

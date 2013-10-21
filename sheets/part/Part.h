@@ -56,7 +56,7 @@ public:
      */
     ~Part();
 
-    void setDocument(Doc *document);
+    void addDocument(Doc *document);
 
     virtual void addView(KoView *_view, KoDocument *document); /// reimplemented
 

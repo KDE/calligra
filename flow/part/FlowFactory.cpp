@@ -54,7 +54,7 @@ QObject* FlowFactory::create( const char* /*iface*/, QWidget* /*parentWidget*/, 
     Q_UNUSED( keyword );
     FlowPart *part = new FlowPart(parent);
     FlowDocument* doc = new FlowDocument(part);
-    part->setDocument(doc);
+    part->addDocument(doc);
 
     return part;
 }

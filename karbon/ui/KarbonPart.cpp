@@ -69,9 +69,9 @@ KarbonPart::~KarbonPart()
 {
 }
 
-void KarbonPart::setDocument(KoDocument *document)
+void KarbonPart::addDocument(KoDocument *document)
 {
-    KoPart::setDocument(document);
+    KoPart::addDocument(document);
     KarbonDocument *doc = qobject_cast<KarbonDocument*>(document);
     connect(doc, SIGNAL(applyCanvasConfiguration(KarbonCanvas*)), SLOT(applyCanvasConfiguration(KarbonCanvas*)));
 }

@@ -36,9 +36,9 @@ Part::~Part()
 {
 }
 
-void Part::setDocument(KPlato::MainDocument *document)
+void Part::addDocument(KPlato::MainDocument *document)
 {
-    KoPart::setDocument(document);
+    KoPart::addDocument(document);
     m_document = document;
 }
 

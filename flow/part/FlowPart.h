@@ -37,7 +37,7 @@ public:
 
     virtual ~FlowPart();
 
-    void setDocument(FlowDocument *document);
+    void addDocument(FlowDocument *document);
 
     /**
      * Creates and shows the start up widget. Reimplemented from KoDocument.

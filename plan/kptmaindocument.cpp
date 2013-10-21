@@ -953,7 +953,7 @@ void MainDocument::insertFile( const QString &filename, Node *parent, Node *afte
 {
     Part *part = new Part( this );
     MainDocument *doc = new MainDocument( part );
-    part->setDocument( doc );
+    part->addDocument( doc );
     doc->disconnect(); // doc shall not handle feedback from openUrl()
     doc->setAutoSave( 0 ); //disable
     doc->m_insertFileInfo.url = filename;

@@ -44,9 +44,9 @@ FlowPart::~FlowPart()
 {
 }
 
-void FlowPart::setDocument(FlowDocument *document)
+void FlowPart::addDocument(FlowDocument *document)
 {
-    KoPart::setDocument(document);
+    KoPart::addDocument(document);
     m_document = document;
 }
 

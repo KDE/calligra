@@ -71,7 +71,7 @@ QObject* CAuFactory::create(const char* /*iface*/, QWidget* /*parentWidget*/, QO
 
     CAuPart *part = new CAuPart(parent);
     KWDocument *doc = new KWDocument(part);
-    part->setDocument(doc);
+    part->addDocument(doc);
     KoToolRegistry::instance()->add(new KWPageToolFactory());
     return part;
 }

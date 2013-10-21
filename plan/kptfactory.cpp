@@ -55,7 +55,7 @@ QObject* Factory::create( const char* /*iface*/, QWidget* /*parentWidget*/, QObj
 
     Part *part = new Part(parent);
     MainDocument *doc = new MainDocument(part);
-    part->setDocument(doc);
+    part->addDocument(doc);
 
     return part;
 }

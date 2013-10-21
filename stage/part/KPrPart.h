@@ -35,7 +35,7 @@ public:
 
     virtual ~KPrPart();
 
-    void setDocument(KPrDocument *document);
+    void addDocument(KPrDocument *document);
 
     /**
      * Creates and shows the start up widget. Reimplemented from KoDocument.

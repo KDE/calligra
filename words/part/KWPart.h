@@ -41,7 +41,7 @@ public:
 
     QGraphicsItem *createCanvasItem(KoDocument *document); ///reimplemented
 
-    void setDocument(KWDocument *document);
+    void addDocument(KWDocument *document);
     KWDocument *document() const;
 
     /// reimplemented from super

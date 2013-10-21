@@ -118,7 +118,7 @@ KComponentData KoPart::componentData() const
     return d->m_componentData;
 }
 
-void KoPart::setDocument(KoDocument *document)
+void KoPart::addDocument(KoDocument *document)
 {
     Q_ASSERT(document);
     d->document = document;

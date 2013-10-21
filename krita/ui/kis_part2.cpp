@@ -59,9 +59,9 @@ KisPart2::~KisPart2()
     delete m_flipbook;
 }
 
-void KisPart2::setDocument(KisDoc2 *document)
+void KisPart2::addDocument(KisDoc2 *document)
 {
-    KoPart::setDocument(document);
+    KoPart::addDocument(document);
 }
 
 KoView *KisPart2::createViewInstance(KoDocument *document, QWidget *parent)

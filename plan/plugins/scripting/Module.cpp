@@ -98,7 +98,7 @@ KPlato::MainDocument* Module::part()
         if( ! d->doc ) {
             KPlato::Part *part = new KPlato::Part(this);
             d->doc = new KPlato::MainDocument(part);
-            part->setDocument(d->doc);
+            part->addDocument(d->doc);
         }
     }
     return d->doc;

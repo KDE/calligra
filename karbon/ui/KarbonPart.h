@@ -51,7 +51,7 @@ public:
 
     virtual ~KarbonPart();
 
-    void setDocument(KoDocument *document);
+    void addDocument(KoDocument *document);
 
     /// reimplemented
     virtual KoView *createViewInstance(KoDocument *document, QWidget *parent);

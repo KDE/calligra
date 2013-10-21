@@ -39,7 +39,7 @@ int main(int argc, char** argv)
 
     Calligra::Sheets::Part part;
     Calligra::Sheets::Doc doc(&part);
-    part.setDocument(&doc);
+    part.addDocument(&doc);
 
 
     bool ok = doc.openUrl(KUrl("/home/marijn/kde/src/calligra/docs/oos_AMSAT-IARU_Link_Model.ods"));

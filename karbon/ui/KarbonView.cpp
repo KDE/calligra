@@ -510,7 +510,7 @@ void KarbonView::fileImportGraphic()
 
     KarbonPart importPart(0);
     KarbonDocument importDocument(&importPart);
-    importPart.setDocument(&importDocument);
+    importPart.addDocument(&importDocument);
 
     // use data centers of this document for importing
     importDocument.useExternalDataCenterMap(dataCenters);

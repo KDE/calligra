@@ -83,7 +83,7 @@ Calligra::Sheets::Doc* ScriptingModule::kspreadDoc()
         if (! d->doc) {
             Calligra::Sheets::Part *part = new Calligra::Sheets::Part(this);
             d->doc = new Calligra::Sheets::Doc(part);
-            part->setDocument(d->doc);
+            part->addDocument(d->doc);
         }
     }
     return d->doc;
