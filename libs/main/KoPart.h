@@ -155,7 +155,8 @@ public:
     //------------------ view management ------------------
 
     /**
-     *  Create a new view for the document.
+     * Create a new view for the document. The view is added to the list of
+     * views, and if the document wasn't known yet, it's registered as well.
      */
     KoView *createView(KoDocument *document, QWidget *parent = 0);
 
