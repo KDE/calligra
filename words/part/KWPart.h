@@ -42,7 +42,6 @@ public:
     QGraphicsItem *createCanvasItem(KoDocument *document); ///reimplemented
 
     void addDocument(KWDocument *document);
-    KWDocument *document() const;
 
     /// reimplemented from super
     QList<KoPart::CustomDocumentWidgetItem> createCustomDocumentWidgets(QWidget *parent);

@@ -57,11 +57,6 @@ void KWPart::addDocument(KWDocument *document)
     m_document = document;
 }
 
-KWDocument *KWPart::document() const
-{
-    return m_document;
-}
-
 KoView *KWPart::createViewInstance(KoDocument *document, QWidget *parent)
 {
     KWView *view = new KWView(this, qobject_cast<KWDocument*>(document), parent);
