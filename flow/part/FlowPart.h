@@ -37,8 +37,6 @@ public:
 
     virtual ~FlowPart();
 
-    void addDocument(FlowDocument *document);
-
     /**
      * Creates and shows the start up widget. Reimplemented from KoDocument.
      *
@@ -59,7 +57,6 @@ protected slots:
 
 protected:
     QString m_errorMessage;
-    FlowDocument *m_document;
 };
 
 #endif // FLOWPART_H

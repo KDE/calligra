@@ -46,12 +46,6 @@ KPrPart::~KPrPart()
 {
 }
 
-void KPrPart::addDocument(KPrDocument *document)
-{
-    KoPart::addDocument(document);
-    m_document = document;
-}
-
 KoView * KPrPart::createViewInstance(KoDocument *document, QWidget *parent)
 {
     KPrView *view = new KPrView(this, qobject_cast<KPrDocument*>(document), parent);

@@ -44,12 +44,6 @@ FlowPart::~FlowPart()
 {
 }
 
-void FlowPart::addDocument(FlowDocument *document)
-{
-    KoPart::addDocument(document);
-    m_document = document;
-}
-
 KoView * FlowPart::createViewInstance(KoDocument *document, QWidget *parent)
 {
     FlowView *view = new FlowView(this, qobject_cast<FlowDocument*>(document), parent);

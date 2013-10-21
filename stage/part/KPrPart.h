@@ -35,8 +35,6 @@ public:
 
     virtual ~KPrPart();
 
-    void addDocument(KPrDocument *document);
-
     /**
      * Creates and shows the start up widget. Reimplemented from KoDocument.
      *
@@ -57,7 +55,6 @@ protected slots:
 
 protected:
     QString m_errorMessage;
-    KPrDocument *m_document;
 };
 
 #endif
