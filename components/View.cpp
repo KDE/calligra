@@ -27,6 +27,7 @@
 
 #include "Document.h"
 #include <KoCanvasController.h>
+#include <KoZoomController.h>
 
 using namespace Calligra::Components;
 
@@ -66,6 +67,7 @@ void View::paint(QPainter* painter)
         return;
     }
 
+    //TODO: This should probably be double-buffered to prevent flickering
     QStyleOptionGraphicsItem option;
     option.exposedRect = QRectF{0, 0, width(), height()};
     option.rect = option.exposedRect.toAlignedRect();
@@ -77,14 +79,35 @@ Document* View::document() const
     return d->document;
 }
 
-void View::setDocument(Document* newDocument)
+void View::setDocument(Document* newValue)
 {
-    if(newDocument != d->document) {
-        d->document = newDocument;
+    if(newValue != d->document) {
+        d->document = newValue;
         connect(d->document, &Document::statusChanged, [&]() { d->updateCanvas(); });
+        connect(d->document, SIGNAL(currentIndexChanged()), this, SLOT(update()));
 
         d->updateCanvas();
         emit documentChanged();
+    }
+}
+
+float View::zoom() const
+{
+    if(d->document && d->document->zoomController()) {
+        return d->document->zoomController()->zoomAction()->effectiveZoom();
+    }
+
+    return -1.f;
+}
+
+void View::setZoom(float newValue)
+{
+    if(zoom() == newValue)
+        return;
+
+    if(d->document && d->document->zoomController()) {
+        d->document->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, newValue);
+        update();
     }
 }
 
