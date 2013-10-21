@@ -46,6 +46,24 @@ class Document : public QObject
     Q_PROPERTY(DocumentStatus::Status status READ status NOTIFY statusChanged)
     Q_PROPERTY(QSize documentSize READ documentSize NOTIFY documentSizeChanged)
 
+    /**
+     * \property currentIndex
+     * \brief The current visible 'index', i.e. page, sheet or slide.
+     *
+     * Due to the abstraction of the difference between the three document types
+     * we need some way to handle the "current visible item" based on an arbitrary
+     * number.
+     *
+     * \default -1 if #source is not set or failed to load. 0 otherwise.
+     * \get currentIndex() const
+     * \set setcurrentIndex()
+     * \notify currentIndexChanged()
+     *
+     * \todo This should probably be a property of View, but since DocumentImpl currently
+     * creates the canvas it is currently pretty much a document property.
+     */
+    Q_PROPERTY(int currentIndex READ currentIndex WRITE setCurrentIndex NOTIFY currentIndexChanged)
+
 public:
     Document(QObject* parent = 0);
     ~Document();
@@ -66,6 +84,15 @@ public:
     QSize documentSize() const;
 
     /**
+     * Getter for property #currentIndex.
+     */
+    int currentIndex() const;
+    /**
+     * Setter for property #currentIndex.
+     */
+    void setCurrentIndex(int newValue);
+
+    /**
      * \internal
      * These methods are used internally by the components and not exposed
      * to QML.
@@ -84,6 +111,11 @@ Q_SIGNALS:
     void sourceChanged();
     void statusChanged();
     void documentSizeChanged();
+
+    /**
+     * Notify signal for property #currentIndex.
+     */
+    void currentIndexChanged();
 
 private:
     class Private;
