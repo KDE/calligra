@@ -404,6 +404,10 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
             return false;
         }
     }
+    if (connDataOptionsSpecified && cdata.driverName.isEmpty()) {
+        KMessageBox::sorry(0, i18n("Could not open database. No database driver specified."));
+        return false;
+    }
 
     KexiStartupData::setForcedUserMode(args->isSet("user-mode"));
     KexiStartupData::setForcedDesignMode(args->isSet("design-mode"));
