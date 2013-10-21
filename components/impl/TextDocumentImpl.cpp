@@ -43,6 +43,7 @@ public:
 
     KWPart* part;
     KWDocument* document;
+    KWCanvasItem* canvas;
 };
 
 TextDocumentImpl::TextDocumentImpl(QObject* parent)
@@ -65,6 +66,7 @@ bool TextDocumentImpl::load(const QUrl& url)
 
     d->part = new KWPart{this};
     d->document = new KWDocument{d->part};
+    setKoDocument(d->document);
     d->part->setDocument(d->document);
 
     d->document->setAutoSave(0);
@@ -72,16 +74,25 @@ bool TextDocumentImpl::load(const QUrl& url)
 
     bool retval = d->document->openUrl(url);
 
-    auto canvas = static_cast<KWCanvasItem*>(d->part->canvasItem(d->document));
+    d->canvas = static_cast<KWCanvasItem*>(d->part->canvasItem(d->document));
 
-    createAndSetCanvasController(canvas);
-    createAndSetZoomController(canvas);
+    createAndSetCanvasController(d->canvas);
+    createAndSetZoomController(d->canvas);
     zoomController()->setPageSize(d->document->pageManager()->begin().rect().size());
-    connect(canvas, SIGNAL(documentSize(QSizeF)), zoomController(), SLOT(setDocumentSize(QSizeF)));
+    connect(d->canvas, SIGNAL(documentSize(QSizeF)), zoomController(), SLOT(setDocumentSize(QSizeF)));
 
-    canvas->updateSize();
+    d->canvas->updateSize();
 
-    setCanvas(canvas);
+    setCanvas(d->canvas);
 
     return retval;
+}
+
+int TextDocumentImpl::currentIndex()
+{
+    return -1;
+}
+
+void TextDocumentImpl::setCurrentIndex(int newValue)
+{
 }

@@ -33,6 +33,8 @@ public:
     ~SpreadsheetImpl();
 
     virtual bool load(const QUrl& url);
+    virtual int currentIndex();
+    virtual void setCurrentIndex(int newValue);
 
 private Q_SLOTS:
     void updateDocumentSize(const QSize& size);

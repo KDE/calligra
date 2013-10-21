@@ -47,6 +47,8 @@ public:
     virtual ~DocumentImpl();
 
     virtual bool load(const QUrl& url) = 0;
+    virtual int currentIndex() = 0;
+    virtual void setCurrentIndex(int newValue) = 0;
 
     DocumentType::Type documentType() const;
     KoFindBase* finder() const;
@@ -58,6 +60,7 @@ public:
 
 Q_SIGNALS:
     void documentSizeChanged();
+    void currentIndexChanged();
 
 protected:
     void setDocumentType(DocumentType::Type type);

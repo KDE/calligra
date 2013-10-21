@@ -38,6 +38,7 @@ public:
 
     Calligra::Sheets::Part* part;
     Calligra::Sheets::Doc* document;
+    Calligra::Sheets::CanvasItem* canvas;
 };
 
 SpreadsheetImpl::SpreadsheetImpl(QObject* parent)
@@ -60,24 +61,38 @@ bool SpreadsheetImpl::load(const QUrl& url)
 
     d->part = new Calligra::Sheets::Part{this};
     d->document = new Calligra::Sheets::Doc{d->part};
+    setKoDocument(d->document);
     d->part->setDocument(d->document);
 
     bool retval = d->document->openUrl(url);
 
-    auto canvas = static_cast<Calligra::Sheets::CanvasItem*>(d->part->canvasItem(d->document));
+    d->canvas = static_cast<Calligra::Sheets::CanvasItem*>(d->part->canvasItem(d->document));
 
-    createAndSetCanvasController(canvas);
-    createAndSetZoomController(canvas);
-    connect(canvas, &Calligra::Sheets::CanvasItem::documentSizeChanged, this, &SpreadsheetImpl::updateDocumentSize);
+    createAndSetCanvasController(d->canvas);
+    createAndSetZoomController(d->canvas);
+    connect(d->canvas, &Calligra::Sheets::CanvasItem::documentSizeChanged, this, &SpreadsheetImpl::updateDocumentSize);
 
     auto sheet = d->document->map()->sheet(0);
     if(sheet) {
         updateDocumentSize(sheet->documentSize().toSize());
     }
 
-    setCanvas(canvas);
+    setCanvas(d->canvas);
 
     return retval;
+}
+
+int SpreadsheetImpl::currentIndex()
+{
+    return d->document->map()->indexOf(d->canvas->activeSheet());
+}
+
+void SpreadsheetImpl::setCurrentIndex(int newValue)
+{
+    if(newValue != currentIndex()) {
+        d->canvas->setActiveSheet(d->document->map()->sheet(newValue));
+        emit currentIndexChanged();
+    }
 }
 
 void SpreadsheetImpl::updateDocumentSize(const QSize& size)

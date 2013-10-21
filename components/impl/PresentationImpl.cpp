@@ -60,6 +60,7 @@ bool PresentationImpl::load(const QUrl& url)
 
     d->part = new KPrPart{this};
     d->document = new KPrDocument{d->part};
+    setKoDocument(d->document);
     d->part->setDocument(d->document);
 
     bool retval = d->document->openUrl(url);
@@ -80,4 +81,17 @@ bool PresentationImpl::load(const QUrl& url)
     setCanvas(canvas);
 
     return retval;
+}
+
+int PresentationImpl::currentIndex()
+{
+    return d->document->pageIndex(d->koPaView->activePage());
+}
+
+void PresentationImpl::setCurrentIndex(int newValue)
+{
+    if(newValue != currentIndex()) {
+        d->koPaView->doUpdateActivePage(d->document->pageByIndex(newValue, false));
+        emit currentIndexChanged();
+    }
 }
