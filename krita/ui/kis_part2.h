@@ -72,7 +72,6 @@ protected:
     KisFlipbook *m_flipbook;
     QString m_errorMessage;
     bool m_dieOnError;
-    KisDoc2 *m_document;
 };
 
 #endif

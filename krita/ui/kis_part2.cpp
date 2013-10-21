@@ -49,7 +49,6 @@ KisPart2::KisPart2(QObject *parent)
     : KoPart(parent)
     , m_flipbook(0)
     , m_dieOnError(false)
-    , m_document(0)
 {
     setComponentData(KisFactory2::componentData());
     setTemplateType("krita_template");
@@ -63,7 +62,6 @@ KisPart2::~KisPart2()
 void KisPart2::setDocument(KisDoc2 *document)
 {
     KoPart::setDocument(document);
-    m_document = document;
 }
 
 KoView *KisPart2::createViewInstance(KoDocument *document, QWidget *parent)
