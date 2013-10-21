@@ -25,6 +25,8 @@
 
 #include "Global.h"
 
+class KoDocument;
+class KoZoomController;
 class KoCanvasController;
 class QGraphicsWidget;
 class KoFindBase;
@@ -72,6 +74,8 @@ public:
     KoFindBase* finder() const;
     QGraphicsWidget* canvas() const;
     KoCanvasController* canvasController() const;
+    KoZoomController* zoomController() const;
+    KoDocument* koDocument() const;
 
     /**
      * @}

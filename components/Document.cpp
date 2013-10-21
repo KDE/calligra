@@ -135,6 +135,23 @@ KoCanvasController* Document::canvasController() const
     return nullptr;
 }
 
+KoZoomController* Document::zoomController() const
+{
+    if(d->impl) {
+        return d->impl->zoomController();
+    }
+
+    return nullptr;
+}
+
+KoDocument* Document::koDocument() const
+{
+    if(d->impl) {
+        return d->impl->koDocument();
+    }
+
+    return nullptr;
+}
 
 void Document::Private::updateImpl()
 {
