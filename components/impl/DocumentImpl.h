@@ -23,6 +23,7 @@
 #include <QtCore/QObject>
 #include "Global.h"
 
+class KoDocument;
 class QGraphicsWidget;
 class KoFindBase;
 class KoCanvasController;
@@ -53,12 +54,14 @@ public:
     KoCanvasController* canvasController() const;
     KoZoomController* zoomController() const;
     QSize documentSize() const;
+    KoDocument* koDocument() const;
 
 Q_SIGNALS:
     void documentSizeChanged();
 
 protected:
     void setDocumentType(DocumentType::Type type);
+    void setKoDocument(KoDocument* document);
     void setCanvas(QGraphicsWidget* newCanvas);
     void setFinder(KoFindBase* newFinder);
 

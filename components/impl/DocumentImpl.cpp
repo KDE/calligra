@@ -39,6 +39,7 @@ public:
         , finder{nullptr}
         , canvasController{nullptr}
         , zoomController{nullptr}
+        , document{nullptr}
     { }
 
     DocumentType::Type type;
@@ -47,6 +48,7 @@ public:
     KoCanvasController* canvasController;
     KoZoomController* zoomController;
     QSize documentSize;
+    KoDocument* document;
 };
 
 DocumentImpl::DocumentImpl(QObject* parent)
@@ -90,9 +92,19 @@ QSize DocumentImpl::documentSize() const
     return d->documentSize;
 }
 
+KoDocument* DocumentImpl::koDocument() const
+{
+    return d->document;
+}
+
 void DocumentImpl::setDocumentType(DocumentType::Type type)
 {
     d->type = type;
+}
+
+void DocumentImpl::setKoDocument(KoDocument* document)
+{
+    d->document = document;
 }
 
 void DocumentImpl::setCanvas(QGraphicsWidget* newCanvas)
