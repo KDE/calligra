@@ -22,8 +22,8 @@
  *
  */
 
-#ifndef CQCANVASCONTROLLER_H
-#define CQCANVASCONTROLLER_H
+#ifndef CALLIGRA_COMPONENTS_COMPONENTSKOCANVASCONTROLLER_H
+#define CALLIGRA_COMPONENTS_COMPONENTSKOCANVASCONTROLLER_H
 
 #include <KoCanvasController.h>
 
@@ -31,6 +31,9 @@
 #include <QtCore/QPoint>
 
 class KoCanvasBase;
+namespace Calligra {
+namespace Components {
+
 class ComponentsKoCanvasController : public QObject, public KoCanvasController
 {
     Q_OBJECT
@@ -74,6 +77,9 @@ private:
     Private * const d;
 };
 
-#endif // CQCANVASCONTROLLER_H
+} // Namespace Components
+} // Namespace Calligra
+
+#endif // CALLIGRA_COMPONENTS_COMPONENTSKOCANVASCONTROLLER_H
 
 

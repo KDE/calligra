@@ -32,6 +32,8 @@
 
 #include <KoCanvasBase.h>
 
+using namespace Calligra::Components;
+
 class ComponentsKoCanvasController::Private
 {
 public:
