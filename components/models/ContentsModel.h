@@ -29,23 +29,28 @@ class Document;
 class ContentsModel : public QAbstractListModel
 {
     Q_OBJECT
-    Q_PROPERTY(Document* document READ document WRITE setDocument NOTIFY documentChanged)
+    Q_PROPERTY(Calligra::Components::Document* document READ document WRITE setDocument NOTIFY documentChanged)
 public:
     enum Role {
-
+        TitleRole = Qt::UserRole + 1,
+        IndexRole,
+        LevelRole
     };
     
     explicit ContentsModel(QObject* parent = 0);
     virtual ~ContentsModel();
 
-    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-    virtual int rowCount(const QModelIndex& parent = QModelIndex{}) const;
+    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const Q_DECL_OVERRIDE;
+    virtual int rowCount(const QModelIndex& parent = QModelIndex{}) const Q_DECL_OVERRIDE;
 
     Document* document() const;
     void setDocument(Document* newDocument);
 
 Q_SIGNALS:
     void documentChanged();
+
+private Q_SLOTS:
+    void listContents();
 
 private:
     class Private;
