@@ -69,6 +69,12 @@ KarbonPart::~KarbonPart()
 {
 }
 
+KoDocument *KarbonPart::createDocument() const
+{
+    KarbonDocument* doc = new KarbonDocument(this);
+    return doc;
+}
+
 void KarbonPart::addDocument(KoDocument *document)
 {
     KoPart::addDocument(document);

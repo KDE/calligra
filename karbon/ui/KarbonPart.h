@@ -51,6 +51,7 @@ public:
 
     virtual ~KarbonPart();
 
+    KoDocument *createDocument() const;
     void addDocument(KoDocument *document);
 
     /// reimplemented

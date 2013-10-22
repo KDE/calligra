@@ -147,9 +147,10 @@ QString KoDocument::newObjectName()
 class KoDocument::Private
 {
 public:
-    Private(KoDocument *document, KoPart *part) :
+    Private(KoDocument *document, const KoPart *part) :
         document(document),
-        parentPart(part),
+        // XXX: the part should _not_ be modified from the document
+        parentPart(const_cast<KoPart*>(part)),
         docInfo(0),
         docRdf(0),
         progressUpdater(0),
@@ -441,7 +442,7 @@ public:
 
 };
 
-KoDocument::KoDocument(KoPart *parent, KUndo2Stack *undoStack)
+KoDocument::KoDocument(const KoPart *parent, KUndo2Stack *undoStack)
     : d(new Private(this, parent))
 {
     Q_ASSERT(parent);
@@ -474,6 +475,8 @@ KoDocument::~KoDocument()
 {
     d->autoSaveTimer.disconnect(this);
     d->autoSaveTimer.stop();
+
+    // XXX: the document should _not_ delete the part
     d->parentPart->deleteLater();
 
     delete d->filterManager;

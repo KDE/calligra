@@ -46,6 +46,7 @@
 #include "kis_transaction_based_command.h"
 #include "kis_selection_filters.h"
 #include "kis_shape_selection.h"
+#include "kis_part2.h"
 
 #include <processing/fill_processing_visitor.h>
 
@@ -324,7 +325,9 @@ void KisPasteNewActionFactory::run(KisView2 *view)
     QRect rect = clip->exactBounds();
     if (rect.isEmpty()) return;
 
-    KisDoc2 *doc = new KisDoc2();
+    KisPart2 *part = new KisPart2;
+    KisDoc2 *doc = qobject_cast<KisDoc2*>(part->createDocument());
+
     if (!doc) return;
 
     KisImageSP image = new KisImage(doc->createUndoStore(),

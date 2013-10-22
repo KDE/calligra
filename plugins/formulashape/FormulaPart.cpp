@@ -33,6 +33,12 @@ FormulaPart::~FormulaPart()
 {
 }
 
+KoDocument *FormulaPart::createDocument() const
+{
+    qFatal("Do not call FormulaPart::createDocument, the FormulaDocument creates its own part");
+    return 0;
+}
+
 KoView * FormulaPart::createViewInstance(KoDocument *document, QWidget *parent)
 {
     Q_UNUSED(document);

@@ -59,6 +59,12 @@ KisPart2::~KisPart2()
     delete m_flipbook;
 }
 
+KoDocument *KisPart2::createDocument() const
+{
+    KoDocument *doc = new KisDoc2(this);
+    return doc;
+}
+
 KoView *KisPart2::createViewInstance(KoDocument *document, QWidget *parent)
 {
     qApp->setOverrideCursor(Qt::WaitCursor);

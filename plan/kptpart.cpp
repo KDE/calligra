@@ -36,10 +36,15 @@ Part::~Part()
 {
 }
 
-void Part::addDocument(KPlato::MainDocument *document)
+KoDocument *Part::createDocument() const
+{
+    return new MainDocument(this);
+}
+
+void Part::addDocument(KoDocument *document)
 {
     KoPart::addDocument(document);
-    m_document = document;
+    m_document = qobject_cast<KPlato::MainDocument*>(document);
 }
 
 KoView *Part::createViewInstance(KoDocument *document, QWidget *parent)

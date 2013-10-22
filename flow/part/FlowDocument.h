@@ -34,7 +34,7 @@ class FLOW_EXPORT FlowDocument : public KoPADocument
     Q_OBJECT
 
 public:
-    explicit FlowDocument(KoPart *part);
+    explicit FlowDocument(const KoPart *part);
     ~FlowDocument();
 
     virtual KoOdf::DocumentType documentType() const;

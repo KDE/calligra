@@ -71,7 +71,7 @@
 namespace KPlato
 {
 
-MainDocument::MainDocument(KoPart *part)
+MainDocument::MainDocument(const KoPart *part)
         : KoDocument(part),
         m_project( 0 ),
         m_context( 0 ), m_xmlLoader(),

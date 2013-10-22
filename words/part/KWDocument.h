@@ -68,7 +68,7 @@ public:
     /**
      * Constructor, normally called by the KWFactory::createPartObject()
      */
-    explicit KWDocument(KoPart *part);
+    explicit KWDocument(const KoPart *part);
     ~KWDocument();
 
     // KoShapeBasedDocumentBase interface

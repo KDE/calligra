@@ -92,6 +92,12 @@ void KPrPart::showStartUpWidget(KoMainWindow *parent, bool alwaysShow)
     }
 }
 
+KoDocument *KPrPart::createDocument() const
+{
+    KPrDocument *doc = new KPrDocument(this);
+    return doc;
+}
+
 void KPrPart::showErrorAndDie()
 {
     KMessageBox::error(0, m_errorMessage, i18n( "Installation Error"));

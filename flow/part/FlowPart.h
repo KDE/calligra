@@ -37,6 +37,8 @@ public:
 
     virtual ~FlowPart();
 
+    KoDocument *createDocument() const;
+
     /**
      * Creates and shows the start up widget. Reimplemented from KoDocument.
      *

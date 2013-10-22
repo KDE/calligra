@@ -52,8 +52,8 @@ public:
         m_image->initialRefreshGraph();
         QVERIFY(checkLayersInitial(m_image));
 
-        m_doc = new KisDoc2();
-        m_part = m_doc->documentPart();
+        m_part = new KisPart2;
+        m_doc = qobject_cast<KisDoc2*>(m_part->createDocument());
 
         m_doc->setCurrentImage(m_image);
 

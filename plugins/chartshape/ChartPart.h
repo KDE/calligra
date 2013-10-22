@@ -33,6 +33,8 @@ public:
 
     virtual ~ChartPart();
 
+    virtual KoDocument *createDocument() const;
+
     /// reimplemented
     virtual KoView *createViewInstance(KoDocument *document, QWidget *parent);
 

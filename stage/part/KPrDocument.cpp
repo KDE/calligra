@@ -66,7 +66,7 @@ public:
     }
 };
 
-KPrDocument::KPrDocument(KoPart *part)
+KPrDocument::KPrDocument(const KoPart *part)
 : KoPADocument(part)
 , m_customSlideShows(new KPrCustomSlideShows())
 , m_presentationMonitor( 0 )

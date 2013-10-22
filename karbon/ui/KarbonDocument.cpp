@@ -144,7 +144,7 @@ public:
 };
 
 
-KarbonDocument::KarbonDocument(KarbonPart* part)
+KarbonDocument::KarbonDocument(const KarbonPart *part)
         : KoDocument(part)
         , d(new Private())
 {

@@ -60,7 +60,7 @@ class KPLATO_EXPORT MainDocument : public KoDocument
     Q_OBJECT
 
 public:
-    explicit MainDocument(KoPart *part = 0);
+    explicit MainDocument(const KoPart *part = 0);
     ~MainDocument();
 
 

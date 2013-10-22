@@ -35,7 +35,7 @@ class STAGE_EXPORT KPrDocument : public KoPADocument
 {
     Q_OBJECT
 public:
-    explicit KPrDocument(KoPart *part=0);
+    explicit KPrDocument(const KoPart *part = 0);
     ~KPrDocument();
 
     /// reimplemented

@@ -64,7 +64,7 @@ public:
      * @param parent the parent object
      * @param singleViewMode enables single view mode, if @c true
      */
-    explicit DocBase(KoPart *part = 0);
+    explicit DocBase(const KoPart *part = 0);
     ~DocBase();
 
     /**

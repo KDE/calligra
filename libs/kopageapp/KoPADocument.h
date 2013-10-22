@@ -45,7 +45,7 @@ class KOPAGEAPP_EXPORT KoPADocument : public KoDocument, public KoShapeBasedDocu
     Q_OBJECT
 public:
 
-    explicit KoPADocument(KoPart *part);
+    explicit KoPADocument(const KoPart *part);
     virtual ~KoPADocument();
 
     QPixmap generatePreview(const QSize& size);

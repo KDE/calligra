@@ -27,7 +27,7 @@
 #include "FlowView.h"
 #include "FlowFactory.h"
 
-FlowDocument::FlowDocument(KoPart *part)
+FlowDocument::FlowDocument(const KoPart *part)
   : KoPADocument(part)
 {
 }

@@ -84,7 +84,7 @@ public:
      * @param parent the parent object
      * @param singleViewMode enables single view mode, if @c true
      */
-    explicit Doc(KoPart *part = 0);
+    explicit Doc(const KoPart *part = 0);
 
     /**
      * Destroys the document.

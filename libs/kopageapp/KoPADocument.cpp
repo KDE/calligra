@@ -78,7 +78,7 @@ public:
     QPointer<KoUpdater> odfPageProgressUpdater;
 };
 
-KoPADocument::KoPADocument(KoPart *part)
+KoPADocument::KoPADocument(const KoPart *part)
     : KoDocument(part),
     d(new Private())
 {

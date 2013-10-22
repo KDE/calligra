@@ -22,6 +22,7 @@
 #include <qtest_kde.h>
 #include <kis_debug.h>
 
+#include "kis_part2.h"
 #include "kis_doc2.h"
 
 #include "kis_node_model.h"
@@ -33,7 +34,9 @@
 
 void KisNodeModelTest::init()
 {
-    m_doc = new KisDoc2();
+
+    KisPart2 *part = new KisPart2;
+    m_doc = qobject_cast<KisDoc2*>(part->createDocument());
 
     m_nameServer = new KisNameServer();
     m_shapeController = new KisShapeController(m_doc, m_nameServer);

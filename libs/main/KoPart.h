@@ -82,10 +82,17 @@ public:
      */
     KComponentData componentData() const;
 
+    // ----------------- mainwindow management -----------------
+
+    /**
+     * create an empty document. The document is not automatically registered.
+     */
+    virtual KoDocument *createDocument() const = 0;
+
     /**
      * Add the specified document to the list of documents this KoPart manages.
      */
-    void addDocument(KoDocument *document);
+    virtual void addDocument(KoDocument *document);
 
     /**
      * @return the document this part loads and saves to and makes views for
@@ -283,7 +290,7 @@ class MockPart : public KoPart
 public:
     MockPart()
     : KoPart( 0 )
-    {}
+    {} KoDocument *createDocument() const { return 0; }
     KoView *createViewInstance(KoDocument */*document*/, QWidget * /* parent */ ) { return 0; }
     virtual KoMainWindow *createMainWindow() { return 0; }
 protected:

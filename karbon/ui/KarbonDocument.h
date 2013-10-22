@@ -67,7 +67,7 @@ class KARBONUI_EXPORT KarbonDocument : public KoDocument, public KoShapeBasedDoc
 {
     Q_OBJECT
 public:
-    explicit KarbonDocument(KarbonPart *part);
+    explicit KarbonDocument(const KarbonPart *part);
     virtual ~KarbonDocument();
 
     /// reimplemented form KoDocument

@@ -21,6 +21,7 @@
 
 #include "kis_transform_worker.h"
 #include "kis_filter_strategy.h"
+#include "kis_part2.h"
 #include "kis_doc2.h"
 #include "kis_node_progress_proxy.h"
 #include "kis_node_visitor.h"
@@ -30,11 +31,14 @@
 
 KisFileLayer::KisFileLayer(KisImageWSP image, const QString &basePath, const QString &filename, bool scaleToImageResolution, const QString &name, quint8 opacity)
     : KisExternalLayer(image, name, opacity)
-    , m_doc(new KisDoc2())
     , m_basePath(basePath)
     , m_filename(filename)
     , m_scaleToImageResolution(scaleToImageResolution)
 {
+
+    KisPart2 *part = new KisPart2;
+    m_doc = qobject_cast<KisDoc2*>(part->createDocument());
+
     if (QFile::exists(path())) {
         m_fileWatcher.addPath(path());
     }
@@ -49,8 +53,11 @@ KisFileLayer::~KisFileLayer()
 
 KisFileLayer::KisFileLayer(const KisFileLayer &rhs)
     : KisExternalLayer(rhs)
-    , m_doc(new KisDoc2())
 {
+
+    KisPart2 *part = new KisPart2;
+    m_doc = qobject_cast<KisDoc2*>(part->createDocument());
+
     connect(&m_fileWatcher, SIGNAL(fileChanged(QString)), SLOT(reloadImage()));
     m_basePath = rhs.m_basePath;
     m_filename = rhs.m_filename;

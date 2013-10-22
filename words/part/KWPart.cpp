@@ -51,10 +51,10 @@ KWPart::~KWPart()
 {
 }
 
-void KWPart::addDocument(KWDocument *document)
+void KWPart::addDocument(KoDocument *document)
 {
     KoPart::addDocument(document);
-    m_document = document;
+    m_document = qobject_cast<KWDocument*>(document);
 }
 
 KoView *KWPart::createViewInstance(KoDocument *document, QWidget *parent)
@@ -105,6 +105,12 @@ QGraphicsItem *KWPart::createCanvasItem(KoDocument *document)
         }
     }
     return item;
+}
+
+KoDocument *KWPart::createDocument() const
+{
+    KWDocument *doc = new KWDocument(this);
+    return doc;
 }
 
 QList<KoPart::CustomDocumentWidgetItem> KWPart::createCustomDocumentWidgets(QWidget *parent)

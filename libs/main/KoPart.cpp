@@ -93,6 +93,7 @@ KoPart::KoPart(QObject *parent)
     new KoPartAdaptor(this);
     QDBusConnection::sessionBus().registerObject('/' + objectName(), this);
 #endif
+
 }
 
 KoPart::~KoPart()

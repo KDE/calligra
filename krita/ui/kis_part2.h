@@ -39,6 +39,8 @@ public:
 
     virtual ~KisPart2();
 
+    virtual KoDocument *createDocument() const;
+
     /**
      * Creates and shows the start up widget. Reimplemented from KoDocument.
      *

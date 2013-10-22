@@ -136,26 +136,10 @@ public:
 };
 
 
-KisDoc2::KisDoc2()
-    : KoDocument(new KisPart2, new UndoStack(this))
-    , m_d(new KisDocPrivate())
-{
-    qobject_cast<KisPart2*>(documentPart())->addDocument(this);
-    // preload the krita resources
-    KisResourceServerProvider::instance();
-
-    init();
-    connect(this, SIGNAL(sigLoadingFinished()), this, SLOT(slotLoadingFinished()));
-    undoStack()->setUndoLimit(KisConfig().undoStackLimit());
-    setBackupFile(KisConfig().backupFile());
-
-}
-
-KisDoc2::KisDoc2(KisPart2 *part)
+KisDoc2::KisDoc2(const KisPart2 *part)
     : KoDocument(part, new UndoStack(this))
     , m_d(new KisDocPrivate())
 {
-    qobject_cast<KisPart2*>(documentPart())->setDocument(this);
     // preload the krita resources
     KisResourceServerProvider::instance();
 
@@ -165,8 +149,6 @@ KisDoc2::KisDoc2(KisPart2 *part)
     setBackupFile(KisConfig().backupFile());
 
 }
-
-
 
 KisDoc2::~KisDoc2()
 {

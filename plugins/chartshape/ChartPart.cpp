@@ -30,6 +30,12 @@ ChartPart::~ChartPart()
 {
 }
 
+KoDocument *ChartPart::createDocument() const
+{
+    qFatal("Do not call ChartPart::createDocument, the ChartDocument creates its own part");
+    return 0;
+}
+
 KoView * ChartPart::createViewInstance(KoDocument *document, QWidget *parent)
 {
     Q_UNUSED(document);

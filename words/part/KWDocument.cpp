@@ -92,7 +92,7 @@
 #include <QTextBlock>
 #include <QTime>
 
-KWDocument::KWDocument(KoPart *part)
+KWDocument::KWDocument(const KoPart *part)
         : KoDocument(part),
         m_isMasterDocument(false),
         m_frameLayout(&m_pageManager, m_frameSets),

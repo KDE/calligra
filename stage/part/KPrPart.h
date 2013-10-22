@@ -42,7 +42,8 @@ public:
      * @param alwaysShow always show the widget even if the user has configured it to not show.
      */
     void showStartUpWidget(KoMainWindow *parent, bool alwaysShow);
-
+    /// reimplemented
+    virtual KoDocument *createDocument() const;
     /// reimplemented
     virtual KoView *createViewInstance(KoDocument *document, QWidget *parent);
     /// reimplemented
