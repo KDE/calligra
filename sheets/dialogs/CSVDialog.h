@@ -26,6 +26,8 @@
 
 #include <KoCsvImportDialog.h>
 
+class QFileDialog;
+
 namespace Calligra
 {
 namespace Sheets

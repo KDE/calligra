@@ -4,6 +4,9 @@
     <MenuBar>
         <Menu name="file">
             <Action name="file_export_html" />
+            <Separator/>
+            <Action name="file_encrypt_doc" />
+            <Action name="file_uncompress_doc" />
         </Menu>
         <Menu name="edit"><text>&amp;Edit</text>
             <Action name="edit_undo"/>

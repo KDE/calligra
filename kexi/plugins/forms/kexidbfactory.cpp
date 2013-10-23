@@ -58,7 +58,7 @@
 #include "widgets/kexidblineedit.h"
 #include "widgets/kexidbtextedit.h"
 #include "widgets/kexidbcombobox.h"
-#include "widgets/kexipushbutton.h"
+#include "widgets/KexiDBPushButton.h"
 #include "widgets/kexidbform.h"
 #include "widgets/kexidbcommandlinkbutton.h"
 #include "widgets/kexidbslider.h"
@@ -243,6 +243,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
     {
         // inherited
         KFormDesigner::WidgetInfo* wi = new KFormDesigner::WidgetInfo(this);
+        wi->addAlternateClassName("KexiDBPushButton");
         wi->addAlternateClassName("KexiPushButton");
         wi->setName(i18n("Button"));
         wi->setNamePrefix(
@@ -374,6 +375,21 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
 
     //for combobox
     setPropertyDescription("editable", i18nc("Editable combobox", "Editable"));
+
+    //for kexipushbutton
+    setPropertyDescription("hyperlink" , i18nc("Hyperlink address", "Hyperlink"));
+    setPropertyDescription("hyperlinkType", i18nc("Type of hyperlink", "Hyperlink Type"));
+    setPropertyDescription("hyperlinkTool", i18nc("Tool used for opening a hyperlink", "Hyperlink Tool"));
+    setPropertyDescription("remoteHyperlink", i18nc("Allow to open remote hyperlinks", "Remote Hyperlink"));
+    setPropertyDescription("hyperlinkExecutable", i18nc("Allow to open executables", "Executable Hyperlink"));
+
+    setValueDescription("NoHyperlink", i18nc("Hyperlink type, NoHyperlink", "No Hyperlink"));
+    setValueDescription("StaticHyperlink", i18nc("Hyperlink type, StaticHyperlink", "Static"));
+    setValueDescription("DynamicHyperlink", i18nc("Hyperlink type, DynamicHyperlink", "Dynamic"));
+
+    setValueDescription("DefaultHyperlinkTool", i18nc("Hyperlink tool, DefaultTool", "Default"));
+    setValueDescription("BrowserHyperlinkTool", i18nc("Hyperlink tool, BrowserTool", "Browser"));
+    setValueDescription("MailerHyperlinkTool", i18nc("Hyperlink tool, MailerTool", "Mailer"));
 }
 
 KexiDBFactory::~KexiDBFactory()
@@ -433,8 +449,8 @@ KexiDBFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
 
     else if (c == "KexiDBComboBox")
         w = new KexiDBComboBox(p);
-    else if (c == "KPushButton" || c == "KexiPushButton")
-        w = new KexiPushButton(text, p);
+    else if (c == "KPushButton" || c == "KexiDBPushButton" || c == "KexiPushButton")
+        w = new KexiDBPushButton(text, p);
     else if (c == "KexiDBCommandLinkButton" || c == "KexiCommandLinkButton") {
         w = new KexiDBCommandLinkButton(text, QString(), p);
     }
@@ -645,7 +661,7 @@ KexiDBFactory::isPropertyVisibleInternal(const QByteArray& classname, QWidget *w
 {
     //general
     bool ok = true;
-    if (classname == "KexiPushButton") {
+    if (classname == "KexiDBPushButton" || classname == "KexiPushButton") {
         ok = property != "isDragEnabled"
 #ifndef KEXI_SHOW_UNFINISHED
              && property != "onClickAction" /*! @todo reenable */

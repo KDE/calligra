@@ -17,7 +17,7 @@ set(krossmodulesheets_PART_SRCS ScriptingModule.cpp ScriptingFunction.cpp Script
 qt4_wrap_cpp(krossmodulesheets_PART_SRCS ScriptingReader.h ScriptingWriter.h)
 kde4_add_plugin(krossmodulesheets ${krossmodulesheets_PART_SRCS})
 
-target_link_libraries(krossmodulesheets ${KDE4_KDEUI_LIBS} ${KDE4_KPARTS_LIBS} calligrasheetscommon kokross)
+target_link_libraries(krossmodulesheets ${KDE4_KDEUI_LIBS}  calligrasheetscommon kokross)
 install(TARGETS krossmodulesheets DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############

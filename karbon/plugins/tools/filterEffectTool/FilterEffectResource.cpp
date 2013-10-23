@@ -45,6 +45,9 @@ FilterEffectResource::FilterEffectResource(const QString &filename)
 bool FilterEffectResource::load()
 {
     QFile file(filename());
+
+    if (file.size() == 0) return false;
+
     if (!file.open(QIODevice::ReadOnly))
         return false;
 
