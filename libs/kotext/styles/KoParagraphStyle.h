@@ -47,8 +47,7 @@ class KoGenStyles;
 class KoShapeLoadingContext;
 class KoShapeSavingContext;
 class KoList;
-
-#include <KoListStyle.h>
+class KoListStyle;
 
 /**
  * A container for all properties for the paragraph wide style.
@@ -749,6 +748,5 @@ private:
 };
 Q_DECLARE_METATYPE(KoParagraphStyle *)
 Q_DECLARE_METATYPE(const KoParagraphStyle *)
-Q_DECLARE_METATYPE(KoListStyle *)
 Q_DECLARE_METATYPE(QSharedPointer<KoParagraphStyle>)
 #endif
