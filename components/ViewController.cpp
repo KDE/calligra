@@ -57,6 +57,8 @@ public:
 
     float lastX;
     float lastY;
+    bool ignoreOffsetChange;
+    bool ignoreFlickableChange;
 
     float minimumZoom;
     bool minimumZoomFitsWidth;
@@ -102,7 +104,10 @@ void ViewController::setView(View* newView)
     if(newView != d->view) {
         if(d->view) {
             if(d->view->document()) {
-                disconnect(d->view->document(), &Document::documentSizeChanged, this, &ViewController::documentSizeChanged);
+                if(d->canvasController) {
+                    disconnect(d->canvasController->proxyObject, &KoCanvasControllerProxyObject::moveDocumentOffset, this, &ViewController::documentOffsetChanged);
+                }
+                d->view->document()->disconnect(this);
             }
             disconnect(d->view, &View::documentChanged, this, &ViewController::documentChanged);
         }
@@ -127,7 +132,6 @@ QQuickItem* ViewController::flickable() const
 
 void ViewController::setFlickable(QQuickItem* item)
 {
-    qDebug() << Q_FUNC_INFO << item;
     if(item != d->flickable) {
         if(item && item->metaObject()->indexOfProperty("contentWidth") == -1) {
             qWarning() << Q_FUNC_INFO << "Item does not seem to be a flickable, ignoring.";
@@ -247,7 +251,7 @@ void ViewController::zoomToFitWidth(float width)
 
 void ViewController::contentPositionChanged()
 {
-    if(!d->canvasController)
+    if(!d->canvasController || d->ignoreFlickableChange)
         return;
 
     float newX = d->flickable->property("contentX").toFloat();
@@ -255,7 +259,9 @@ void ViewController::contentPositionChanged()
 
     //TODO: The rounding here causes some issues at edges. Need to investigate how to fix it.
     QPointF diff = QPointF{newX - d->lastX, newY - d->lastY};
+    d->ignoreOffsetChange = true;
     d->canvasController->pan(diff.toPoint());
+    d->ignoreOffsetChange = false;
 
     d->lastX = newX;
     d->lastY = newY;
@@ -263,8 +269,9 @@ void ViewController::contentPositionChanged()
 
 void ViewController::documentChanged()
 {
-    d->canvasController = d->view->document()->canvasController();
+    connect(d->view->document(), &Document::statusChanged, this, &ViewController::documentStatusChanged);
     connect(d->view->document(), &Document::documentSizeChanged, this, &ViewController::documentSizeChanged);
+    documentStatusChanged();
     documentSizeChanged();
 }
 
@@ -279,6 +286,31 @@ void ViewController::documentSizeChanged()
         d->flickable->setProperty("contentWidth", docSize.width());
         d->flickable->setProperty("contentHeight", docSize.height());
     }
+}
+
+void ViewController::documentStatusChanged()
+{
+    if(d->view->document()->status() == DocumentStatus::Loaded) {
+        d->canvasController = d->view->document()->canvasController();
+        connect(d->canvasController->proxyObject, &KoCanvasControllerProxyObject::moveDocumentOffset, this, &ViewController::documentOffsetChanged);
+    }
+}
+
+void ViewController::documentOffsetChanged(const QPoint& offset)
+{
+    if(d->ignoreOffsetChange || !d->flickable) {
+        return;
+    }
+
+    d->ignoreFlickableChange = true;
+    d->flickable->setProperty("contentX", offset.x());
+    d->flickable->setProperty("contentY", offset.y());
+    d->ignoreFlickableChange = false;
+
+    d->lastX = offset.x();
+    d->lastY = offset.y();
+
+    QMetaObject::invokeMethod(d->flickable, "returnToBounds");
 }
 
 void ViewController::zoomTimeout()

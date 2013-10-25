@@ -237,6 +237,8 @@ private Q_SLOTS:
     void documentChanged();
     void contentPositionChanged();
     void documentSizeChanged();
+    void documentStatusChanged();
+    void documentOffsetChanged(const QPoint& offset);
     void zoomTimeout();
 
 private:
