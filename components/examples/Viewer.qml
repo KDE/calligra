@@ -59,15 +59,54 @@ ApplicationWindow {
     SplitView {
         id: centralWidget;
         anchors.fill: parent;
-        TableView {
-            id: contents;
 
-            alternatingRowColors: true;
+        ScrollView {
+            ListView {
+                id: contents;
 
-            model: Calligra.ContentsModel { document: doc; }
-            TableViewColumn { role: "contentTitle"; title: "Item"; }
+                property int thumbnailWidth: 120;
+                property int thumbnailHeight: doc.documentType == Calligra.DocumentType.TextDocument ? 180 : 90;
 
-            onActivated: doc.currentIndex = row;
+                model: Calligra.ContentsModel {
+                    document: doc;
+                    thumbnailSize.width: contents.thumbnailWidth;
+                    thumbnailSize.height: contents.thumbnailHeight;
+                }
+
+                delegate: Rectangle {
+                    width: ListView.view.width;
+                    height: ListView.view.thumbnailHeight + 30;
+                    color: doc.currentIndex == model.contentIndex ? "lightBlue" : index % 2 == 0 ? "white" : "lightGrey";
+
+                    Calligra.ImageDataItem {
+                        id: thumbnail;
+                        anchors.top: parent.top;
+                        anchors.horizontalCenter: parent.horizontalCenter;
+
+                        width: parent.ListView.view.thumbnailWidth;
+                        height: parent.ListView.view.thumbnailHeight;
+
+                        data: model.thumbnail;
+                    }
+
+                    Label {
+                        anchors {
+                            bottom: parent.bottom;
+                            left: parent.left;
+                            right: parent.right;
+                        }
+
+                        text: model.title;
+                        elide: Text.ElideRight;
+                        horizontalAlignment: Text.AlignHCenter;
+                    }
+
+                    MouseArea {
+                        anchors.fill: parent;
+                        onClicked: doc.currentIndex = model.contentIndex;
+                    }
+                }
+            }
         }
 
         Calligra.View {
@@ -138,7 +177,7 @@ ApplicationWindow {
 
     Action {
         id: zoomOutAction;
-        
+
         iconName: "zoom-out";
         text: "Zoom Out";
         tooltip: "Zoom Out";
