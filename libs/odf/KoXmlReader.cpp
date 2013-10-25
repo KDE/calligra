@@ -533,7 +533,9 @@ QByteArray KoLZF::compress(const QByteArray& input)
     unsigned int in_len = (unsigned int)input.size();
 
     QByteArray output;
-    output.resize(in_len + 4 + 1);
+    //FIXME: 1 is to small, 101 may be too much, but at least it works.
+    //FIXME: We need a proper fix though.
+    output.resize(in_len + 4 + 101);
 
     // we use 4 bytes to store uncompressed length
     // and 1 extra byte as flag (0=uncompressed, 1=compressed)
