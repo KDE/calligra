@@ -38,12 +38,13 @@ using namespace Calligra::Components;
 class TextDocumentImpl::Private
 {
 public:
-    Private() : part{nullptr}, document{nullptr}
+    Private() : part{nullptr}, document{nullptr}, currentPage{-1}
     { }
 
     KWPart* part;
     KWDocument* document;
     KWCanvasItem* canvas;
+    int currentPage;
 };
 
 TextDocumentImpl::TextDocumentImpl(QObject* parent)
@@ -90,9 +91,13 @@ bool TextDocumentImpl::load(const QUrl& url)
 
 int TextDocumentImpl::currentIndex()
 {
-    return -1;
+    return d->currentPage;
 }
 
 void TextDocumentImpl::setCurrentIndex(int newValue)
 {
+    KWPage newPage = d->document->pageManager()->page(newValue + 1);
+    QRectF newRect = d->canvas->viewConverter()->documentToView(newPage.rect());
+    canvasController()->setScrollBarValue(newRect.topLeft().toPoint());
+    emit currentIndexChanged();
 }
