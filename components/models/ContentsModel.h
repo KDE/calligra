@@ -30,11 +30,22 @@ class ContentsModel : public QAbstractListModel
 {
     Q_OBJECT
     Q_PROPERTY(Calligra::Components::Document* document READ document WRITE setDocument NOTIFY documentChanged)
+    /**
+     * \property thumbnailSize
+     * \brief The size of thumbnails this model creates.
+     *
+     * \default 128x128
+     * \get thumbnailSize() const
+     * \set setthumbnailSize()
+     * \notify thumbnailSizeChanged()
+     */
+    Q_PROPERTY(QSize thumbnailSize READ thumbnailSize WRITE setThumbnailSize NOTIFY thumbnailSizeChanged)
 public:
     enum Role {
         TitleRole = Qt::UserRole + 1,
-        IndexRole,
-        LevelRole
+        LevelRole,
+        ThumbnailRole,
+        ContentIndexRole,
     };
     
     explicit ContentsModel(QObject* parent = 0);
@@ -46,11 +57,24 @@ public:
     Document* document() const;
     void setDocument(Document* newDocument);
 
+    /**
+     * Getter for property #thumbnailSize.
+     */
+    QSize thumbnailSize() const;
+    /**
+     * Setter for property #thumbnailSize.
+     */
+    void setThumbnailSize(QSize newValue);
+
 Q_SIGNALS:
     void documentChanged();
+    /**
+     * Notify signal for property #thumbnailSize.
+     */
+    void thumbnailSizeChanged();
 
 private Q_SLOTS:
-    void listContents();
+    void updateImpl();
 
 private:
     class Private;

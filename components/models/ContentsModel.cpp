@@ -19,45 +19,37 @@
 
 #include "ContentsModel.h"
 
-#include <QDebug>
+#include <QSize>
+#include <QGraphicsWidget>
+
+#include <KoCanvasBase.h>
 
 #include "Document.h"
-#include <part/Doc.h>
-#include <Map.h>
-#include <Sheet.h>
-#include <KPrDocument.h>
-#include <KoPAPageBase.h>
+#include "PresentationContentsModelImpl.h"
+#include "SpreadsheetContentsModelImpl.h"
+#include "TextContentsModelImpl.h"
 
 using namespace Calligra::Components;
-
-struct ContentsEntry
-{
-    ContentsEntry() : level{0}, index{0}
-    { }
-
-    QString title;
-    int level;
-    int index;
-};
 
 class ContentsModel::Private
 {
 public:
-    Private() : document{nullptr}
+    Private() : impl{nullptr}, document{nullptr}, thumbnailSize{128, 128}
     { }
 
+    ContentsModelImpl* impl;
     Document* document;
-
-    QList<ContentsEntry> contents;
+    QSize thumbnailSize;
 };
 
 ContentsModel::ContentsModel(QObject* parent)
     : QAbstractListModel{parent}, d{new Private}
 {
     QHash<int, QByteArray> roleNames;
-    roleNames.insert(TitleRole, "contentTitle");
-    roleNames.insert(IndexRole, "contentIndex");
-    roleNames.insert(LevelRole, "contentLevel");
+    roleNames.insert(TitleRole, "title");
+    roleNames.insert(LevelRole, "level");
+    roleNames.insert(ThumbnailRole, "thumbnail");
+    roleNames.insert(ContentIndexRole, "contentIndex");
     setRoleNames(roleNames);
 }
 
@@ -68,25 +60,20 @@ ContentsModel::~ContentsModel()
 
 QVariant ContentsModel::data(const QModelIndex& index, int role) const
 {
-    if(!d->document || !index.isValid())
+    if(!d->impl || !index.isValid())
         return QVariant();
 
-    switch(role) {
-        case TitleRole:
-            return d->contents.at(index.row()).title;
-        case IndexRole:
-            return d->contents.at(index.row()).index;
-        case LevelRole:
-            return d->contents.at(index.row()).level;
-        default:
-            return QVariant();
-    }
+    return d->impl->data(index.row(), static_cast<Role>(role));
 }
 
 int ContentsModel::rowCount(const QModelIndex& parent) const
 {
     Q_UNUSED(parent);
-    return d->contents.count();
+    if(d->impl) {
+        return d->impl->rowCount();
+    }
+
+    return 0;
 }
 
 Document* ContentsModel::document() const
@@ -98,64 +85,70 @@ void ContentsModel::setDocument(Document* newDocument)
 {
     if(newDocument != d->document) {
         if(d->document) {
-            disconnect(d->document, &Document::statusChanged, this, &ContentsModel::listContents);
+            disconnect(d->document, &Document::statusChanged, this, &ContentsModel::updateImpl);
         }
 
         d->document = newDocument;
-        connect(d->document, &Document::statusChanged, this, &ContentsModel::listContents);
-        listContents();
+        connect(d->document, &Document::statusChanged, this, &ContentsModel::updateImpl);
+
+        updateImpl();
 
         emit documentChanged();
     }
 }
 
-void ContentsModel::listContents()
+QSize ContentsModel::thumbnailSize() const
 {
-    if(!d->document || !d->document->status() == DocumentStatus::Loaded) {
-        d->contents = QList<ContentsEntry>{};
-        return;
-    }
-
-    beginRemoveRows(QModelIndex(), 0, d->contents.count() - 1);
-    d->contents.clear();
-    endRemoveRows();
-
-    switch(d->document->documentType()) {
-        case DocumentType::TextDocument:
-            break;
-        case DocumentType::Spreadsheet: {
-            Calligra::Sheets::Doc* doc = static_cast<Calligra::Sheets::Doc*>(d->document->koDocument());
-            Calligra::Sheets::Map* map = doc->map();
-
-            for(Calligra::Sheets::Sheet* sheet : map->sheetList()) {
-                ContentsEntry newEntry;
-                newEntry.index = map->indexOf(sheet);
-                newEntry.title = sheet->sheetName();
-                d->contents.append(newEntry);
-            }
-            break;
-        }
-        case DocumentType::Presentation: {
-            KPrDocument* doc = static_cast<KPrDocument*>(d->document->koDocument());
-
-            for(int i = 0; i < doc->pageCount(); ++i) {
-                KoPAPageBase* page = doc->pageByIndex(i, false);
-
-                ContentsEntry newEntry;
-                newEntry.title = QString("%1: %2").arg(i + 1).arg(page->name());
-                newEntry.index = i;
-                d->contents.append(newEntry);
-            }
-            break;
-        }
-        default:
-            qWarning() << "Unknown document type, unable to list contents.";
-            d->contents = QList<ContentsEntry>{};
-            break;
-    }
-
-    beginInsertRows(QModelIndex(), 0, d->contents.count() - 1);
-    endInsertRows();
+    return d->thumbnailSize;
 }
 
+void ContentsModel::setThumbnailSize(QSize newValue)
+{
+    if(newValue != d->thumbnailSize) {
+        d->thumbnailSize = newValue;
 
+        if(d->impl) {
+            d->impl->setThumbnailSize(newValue);
+            emit dataChanged(index(0), index(d->impl->rowCount() - 1), QVector<int>{} << ThumbnailRole);
+        }
+
+        emit thumbnailSizeChanged();
+    }
+}
+
+void ContentsModel::updateImpl()
+{
+    beginResetModel();
+
+    if(d->impl) {
+        delete d->impl;
+    }
+
+    if(d->document && d->document->status() == DocumentStatus::Loaded) {
+        switch(d->document->documentType()) {
+            case DocumentType::TextDocument: {
+                auto textImpl = new TextContentsModelImpl{d->document->koDocument(), dynamic_cast<KoCanvasBase*>(d->document->canvas())};
+                d->impl = textImpl;
+                connect(textImpl, &TextContentsModelImpl::listContentsCompleted, this, &ContentsModel::reset);
+                break;
+            }
+            case DocumentType::Spreadsheet:
+                d->impl = new SpreadsheetContentsModelImpl{d->document->koDocument()};
+                break;
+            case DocumentType::Presentation:
+                d->impl = new PresentationContentsModelImpl{d->document->koDocument()};
+                break;
+            default:
+                d->impl = nullptr;
+                break;
+        }
+    } else {
+        d->impl = nullptr;
+    }
+
+    if(d->impl) {
+        d->impl->setThumbnailSize(d->thumbnailSize);
+    }
+
+    endResetModel();
+}
