@@ -46,14 +46,18 @@ KoDpi::KoDpi()
     m_dpiX = QX11Info::appDpiX();
     m_dpiY = QX11Info::appDpiY();
 #else
-    QDesktopWidget *w = QApplication::desktop();
-    if (w) {
-        m_dpiX = w->logicalDpiX();
-        m_dpiY = w->logicalDpiY();
-    } else {
-        m_dpiX = 75;
-        m_dpiY = 75;
+    //Since we now use Qt5, we may not always have a QApplication
+    if(qobject_cast<QApplication*>(QCoreApplication::instance())) {
+        QDesktopWidget *w = QApplication::desktop();
+        if (w) {
+            m_dpiX = w->logicalDpiX();
+            m_dpiY = w->logicalDpiY();
+            return;
+        }
     }
+
+    m_dpiX = 75;
+    m_dpiY = 75;
 #endif
 }
 
