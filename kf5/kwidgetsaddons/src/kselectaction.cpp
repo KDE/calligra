@@ -258,7 +258,9 @@ void KSelectAction::addAction(QAction* action)
     comboBox->addAction(action);
   }
 
-  menu()->addAction(action);
+  if(menu()) {
+    menu()->addAction(action);
+  }
 }
 
 QAction* KSelectAction::addAction(const QString &text)
@@ -310,8 +312,9 @@ QAction* KSelectAction::removeAction(QAction* action)
     comboBox->removeAction(action);
   }
 
-  menu()->removeAction(action);
-
+  if(menu()) {
+    menu()->removeAction(action);
+  }
 
   return action;
 }
