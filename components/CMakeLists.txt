@@ -16,7 +16,7 @@ set(components_SRCS
     Document.cpp
     Enums.cpp
     Global.cpp
-    PixmapItem.cpp
+    ImageDataItem.cpp
     View.cpp
     ViewController.cpp
 

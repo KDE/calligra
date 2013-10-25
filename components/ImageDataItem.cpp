@@ -17,39 +17,65 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "PixmapItem.h"
+#include "ImageDataItem.h"
 
 #include <QtGui/QPixmap>
+#include <QtQuick/QSGSimpleTextureNode>
+#include <QQuickWindow>
 
 using namespace Calligra::Components;
 
-class PixmapItem::Private
+class ImageDataItem::Private
 {
 public:
     Private()
     { }
 
-    QPixmap contents;
+    QImage data;
 };
 
-PixmapItem::PixmapItem(QQuickItem* parent)
+ImageDataItem::ImageDataItem(QQuickItem* parent)
     : QQuickItem{parent}, d{new Private}
 {
-
+    setFlag(QQuickItem::ItemHasContents, true);
 }
 
-PixmapItem::~PixmapItem()
+ImageDataItem::~ImageDataItem()
 {
     delete d;
 }
 
-QPixmap PixmapItem::contents() const
+QImage ImageDataItem::data() const
 {
-    return d->contents;
+    return d->data;
 }
 
-void PixmapItem::setContents(const QPixmap& content)
+void ImageDataItem::setData(const QImage& newValue)
 {
-    d->contents = content;
-    emit contentsChanged();
+    if(newValue != d->data) {
+        d->data = newValue;
+        update();
+        emit dataChanged();
+    }
+}
+
+QSGNode* ImageDataItem::updatePaintNode(QSGNode* node, QQuickItem::UpdatePaintNodeData*)
+{
+    if(d->data.isNull()) {
+        return node;
+    }
+
+    auto texNode = static_cast<QSGSimpleTextureNode*>(node);
+    if(!texNode) {
+        texNode = new QSGSimpleTextureNode{};
+    }
+    texNode->setRect(0, 0, width(), height());
+
+    auto texture = window()->createTextureFromImage(d->data);
+    if(texNode->texture()) {
+        delete texNode->texture();
+    }
+    texNode->setTexture(texture);
+
+    return texNode;
 }

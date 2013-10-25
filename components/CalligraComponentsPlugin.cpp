@@ -26,9 +26,8 @@
 #include "Global.h"
 #include "ViewController.h"
 #include "Enums.h"
-
+#include "ImageDataItem.h"
 #include "models/ContentsModel.h"
-#include "models/ThumbnailModel.h"
 
 using namespace Calligra::Components;
 
@@ -44,9 +43,8 @@ void CalligraComponentsPlugin::registerTypes(const char* uri)
     qmlRegisterType<Calligra::Components::Document>(uri, 1, 0, "Document");
     qmlRegisterType<Calligra::Components::View>(uri, 1, 0, "View");
     qmlRegisterType<Calligra::Components::ViewController>(uri, 1, 0, "ViewController");
-
     qmlRegisterType<Calligra::Components::ContentsModel>(uri, 1, 0, "ContentsModel");
-    qmlRegisterType<Calligra::Components::ThumbnailModel>(uri, 1, 0, "ThumbnailModel");
+    qmlRegisterType<Calligra::Components::ImageDataItem>(uri, 1, 0, "ImageDataItem");
 
     qmlRegisterUncreatableType<Calligra::Components::DocumentType>(uri, 1, 0, "DocumentType", "Provides the DocumentType enum");
     qmlRegisterUncreatableType<Calligra::Components::DocumentStatus>(uri, 1, 0, "DocumentStatus", "Provides the DocumentStatus enum");

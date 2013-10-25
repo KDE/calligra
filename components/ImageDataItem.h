@@ -31,19 +31,39 @@ namespace Components {
  *
  */
 
-class PixmapItem : public QQuickItem
+class ImageDataItem : public QQuickItem
 {
     Q_OBJECT
-    Q_PROPERTY(QPixmap contents READ contents WRITE setContents NOTIFY contentsChanged)
+
+    /**
+     * \property data
+     * \brief The data this item needs to display.
+     *
+     * \default null
+     * \get data() const
+     * \set setData()
+     * \notify dataChanged()
+     */
+    Q_PROPERTY(QImage data READ data WRITE setData NOTIFY dataChanged)
+
 public:
-    PixmapItem(QQuickItem* parent = 0);
-    virtual ~PixmapItem();
+    explicit ImageDataItem(QQuickItem* parent = 0);
+    virtual ~ImageDataItem();
     
-    QPixmap contents() const;
-    void setContents(const QPixmap& content);
+    /**
+     * Getter for property #data.
+     */
+    QImage data() const;
+    /**
+     * Setter for property #data.
+     */
+    void setData(const QImage& newValue);
 
 Q_SIGNALS:
-    void contentsChanged();
+    void dataChanged();
+
+protected:
+    virtual QSGNode* updatePaintNode(QSGNode* node, QQuickItem::UpdatePaintNodeData*) Q_DECL_OVERRIDE;
 
 private:
     class Private;
