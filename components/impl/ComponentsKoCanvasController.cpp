@@ -67,6 +67,9 @@ void ComponentsKoCanvasController::updateDocumentSize(const QSize& sz, bool reca
 
 void ComponentsKoCanvasController::setScrollBarValue(const QPoint& value)
 {
+    setDocumentOffset(value);
+    proxyObject->emitMoveDocumentOffset(value);
+    emit documentPositionChanged(value);
 }
 
 QPoint ComponentsKoCanvasController::scrollBarValue() const
