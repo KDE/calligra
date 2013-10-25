@@ -42,8 +42,8 @@ class Document : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QUrl source READ source WRITE setSource NOTIFY sourceChanged)
-    Q_PROPERTY(DocumentType::Type documentType READ documentType NOTIFY sourceChanged)
-    Q_PROPERTY(DocumentStatus::Status status READ status NOTIFY statusChanged)
+    Q_PROPERTY(Calligra::Components::DocumentType::Type documentType READ documentType NOTIFY documentTypeChanged)
+    Q_PROPERTY(Calligra::Components::DocumentStatus::Status status READ status NOTIFY statusChanged)
     Q_PROPERTY(QSize documentSize READ documentSize NOTIFY documentSizeChanged)
 
     /**
@@ -111,6 +111,7 @@ Q_SIGNALS:
     void sourceChanged();
     void statusChanged();
     void documentSizeChanged();
+    void documentTypeChanged();
 
     /**
      * Notify signal for property #currentIndex.

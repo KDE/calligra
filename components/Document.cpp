@@ -70,6 +70,7 @@ void Document::setSource(const QUrl& value)
         emit statusChanged();
 
         d->updateImpl();
+        emit documentTypeChanged();
 
         if(d->impl) {
             if(d->impl->load(d->source)) {
