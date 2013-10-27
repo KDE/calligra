@@ -26,9 +26,6 @@
 #include "KoSopranoTableModel.h"
 #include "KoRdfSemanticTreeWidgetItem.h"
 #include "../KoGlobal.h"
-#include "KoRdfFoaF.h"
-#include "KoRdfCalendarEvent.h"
-#include "KoRdfLocation.h"
 
 #include <kdebug.h>
 #include <QComboBox>
@@ -157,8 +154,6 @@ public:
         buildComboBox(m_ui->m_defaultEventsSheet,    m_semItemEventTemplate );
         buildComboBox(m_ui->m_defaultLocationsSheet, m_semItemLocationTemplate );
         kDebug(30015) << "format(), setting up ss page.";
-        QList<hKoRdfFoaF> foaf = m_rdf->foaf();
-        kDebug(30015) << "format(), setting up ss page, foaf.sz:" << foaf.size();
     }
 
     void buildComboBox(QComboBox *w, hKoRdfSemanticItem si) {
@@ -486,9 +481,9 @@ void KoDocumentRdfEditWidget::defaultContactsSheetButton()
         si->defaultStylesheet(ss);
     }
     QMap<int, KoDocumentRdf::reflowItem> reflowCol;
-    QList<hKoRdfFoaF> col = rdf->foaf();
-    foreach (hKoRdfSemanticItem obj, col) {
-        rdf->insertReflow(reflowCol, obj, ss);
+    const QList<hKoRdfSemanticItem> semanticItems = rdf->semanticItems("Contact");
+    foreach (hKoRdfSemanticItem semanticItem, semanticItems) {
+        rdf->insertReflow(reflowCol, semanticItem, ss);
     }
     rdf->applyReflow(reflowCol);
 }
@@ -504,9 +499,9 @@ void KoDocumentRdfEditWidget::defaultEventsSheetButton()
         si->defaultStylesheet(ss);
     }
     QMap<int, KoDocumentRdf::reflowItem> reflowCol;
-    QList<hKoRdfCalendarEvent> col = rdf->calendarEvents();
-    foreach (hKoRdfSemanticItem obj, col) {
-        rdf->insertReflow(reflowCol, obj, ss);
+    const QList<hKoRdfSemanticItem> semanticItems = rdf->semanticItems("Event");
+    foreach (hKoRdfSemanticItem semanticItem, semanticItems) {
+        rdf->insertReflow(reflowCol, semanticItem, ss);
     }
     rdf->applyReflow(reflowCol);
 }
@@ -522,9 +517,9 @@ void KoDocumentRdfEditWidget::defaultLocationsSheetButton()
         si->defaultStylesheet(ss);
     }
     QMap<int, KoDocumentRdf::reflowItem> reflowCol;
-    QList<hKoRdfLocation> col = rdf->locations();
-    foreach (hKoRdfSemanticItem obj, col) {
-        rdf->insertReflow(reflowCol, obj, ss);
+    const QList<hKoRdfSemanticItem> semanticItems = rdf->semanticItems("Location");
+    foreach (hKoRdfSemanticItem semanticItem, semanticItems) {
+        rdf->insertReflow(reflowCol, semanticItem, ss);
     }
     rdf->applyReflow(reflowCol);
 }

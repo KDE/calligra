@@ -7,6 +7,10 @@ include_directories( ${KORDF_INCLUDES})
 ########### next target ###############
 
 set(kordf_LIB_SRCS
+    KoRdfSemanticItemReader.cpp
+    KoRdfCalendarEventReader.cpp
+    KoRdfFoaFReader.cpp
+    KoRdfLocationReader.cpp
     KoDocumentRdf.cpp
     KoDocumentRdfEditWidget.cpp
     KoSopranoTableModelDelegate.cpp

@@ -1,0 +1,107 @@
+/* This file is part of the KDE project
+   Copyright (C) 2010 KO GmbH <ben.martin@kogmbh.com>
+   Copyright (C) 2013 Friedrich W. H. Kossebau <kossebau@kde.org>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+   Boston, MA 02110-1301, USA.
+*/
+
+#include "KoRdfCalendarEventReader.h"
+
+// lib
+#include "KoRdfCalendarEvent.h"
+// KDE
+#include <kdebug.h>
+
+
+KoRdfCalendarEventReader::KoRdfCalendarEventReader()
+{
+}
+
+KoRdfCalendarEventReader::~KoRdfCalendarEventReader()
+{
+}
+
+void KoRdfCalendarEventReader::updateSemanticItems(QList<hKoRdfSemanticItem> &semanticItems, KoDocumentRdf *rdf, QSharedPointer<Soprano::Model> m)
+{
+    const QString sparqlQuery = QLatin1String(
+        " prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n"
+        " prefix foaf: <http://xmlns.com/foaf/0.1/>  \n"
+        " prefix cal:  <http://www.w3.org/2002/12/cal/icaltzd#>  \n"
+        " select distinct ?graph ?ev ?uid ?dtstart ?dtend ?summary ?location ?geo ?long ?lat \n"
+        " where {  \n"
+        "  GRAPH ?graph { \n"
+        "    ?ev rdf:type cal:Vevent . \n"
+        "    ?ev cal:uid      ?uid . \n"
+        "    ?ev cal:dtstart  ?dtstart . \n"
+        "    ?ev cal:dtend    ?dtend \n"
+        "    OPTIONAL { ?ev cal:summary  ?summary  } \n"
+        "    OPTIONAL { ?ev cal:location ?location } \n"
+        "    OPTIONAL {  \n"
+        "               ?ev cal:geo ?geo . \n"
+        "               ?geo rdf:first ?lat . \n"
+       "               ?geo rdf:rest ?joiner . \n"
+       "               ?joiner rdf:first ?long \n"
+       "              } \n"
+       "    } \n"
+       "  } \n");
+
+    Soprano::QueryResultIterator it =
+        m->executeQuery(sparqlQuery,
+                        Soprano::Query::QueryLanguageSparql);
+
+    QList<hKoRdfSemanticItem> oldSemanticItems = semanticItems;
+    // uniqfilter is needed because soprano is not honouring
+    // the DISTINCT sparql keyword
+    QSet<QString> uniqfilter;
+    while (it.next()) {
+        const QString name = it.binding("uid").toString();
+        if (uniqfilter.contains(name)) {
+            continue;
+        }
+        uniqfilter += name;
+
+        hKoRdfSemanticItem newSemanticItem(new KoRdfCalendarEvent(0, rdf, it));
+
+        const QString newSemanticItemLinkingSubject = newSemanticItem->linkingSubject().toString();
+        foreach (hKoRdfSemanticItem semItem, oldSemanticItems) {
+            if (newSemanticItemLinkingSubject == semItem->linkingSubject().toString()) {
+                oldSemanticItems.removeAll(semItem);
+                newSemanticItem = 0;
+                break;
+            }
+        }
+
+        if (newSemanticItem) {
+            semanticItems << newSemanticItem;
+        }
+    }
+
+    foreach (hKoRdfSemanticItem semItem, oldSemanticItems) {
+        semanticItems.removeAll(semItem);
+    }
+
+#ifndef NDEBUG
+    if (semanticItems.empty() && m->statementCount())
+    {
+        kDebug(30015) << "foaf() have data, but no foafs!" << endl;
+        QList<Soprano::Statement> allStatements = m->listStatements().allElements();
+        foreach (Soprano::Statement s, allStatements)
+        {
+            kDebug(30015) << s;
+        }
+    }
+#endif
+}
