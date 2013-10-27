@@ -171,3 +171,8 @@ void KoRdfLocationReader::updateSemanticItems(QList<hKoRdfSemanticItem> &semanti
         }
     }
 }
+
+hKoRdfSemanticItem KoRdfLocationReader::createSemanticItem(const KoDocumentRdf* rdf, QObject* parent)
+{
+    return hKoRdfSemanticItem(new KoRdfLocation(parent, rdf));
+}

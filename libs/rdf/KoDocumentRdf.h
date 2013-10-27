@@ -279,6 +279,21 @@ public:
      */
     QList<hKoRdfSemanticItem> semanticItems(const QString &className, QSharedPointer<Soprano::Model> m = QSharedPointer<Soprano::Model>(0));
 
+    /**
+     * Gets a list of SemanticItem subclasses that can be created.
+     * Any of the strings in the return value can be created using
+     * createSemanticItem().
+     *
+     * @see createSemanticItem()
+     */
+    QStringList classNames() const;
+
+    /**
+     * Create a SemanticItem subclass using its name from
+     * classNames(). Useful for menus and other places that want to
+     * allow the user to create new SemanticItem Objects.
+     */
+     hKoRdfSemanticItem createSemanticItem(const QString &semanticClass, QObject *parent = 0) const;
 
     /**
      * For Rdf stored in manifest.rdf or another rdf file referenced

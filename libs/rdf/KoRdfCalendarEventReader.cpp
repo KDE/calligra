@@ -105,3 +105,8 @@ void KoRdfCalendarEventReader::updateSemanticItems(QList<hKoRdfSemanticItem> &se
     }
 #endif
 }
+
+hKoRdfSemanticItem KoRdfCalendarEventReader::createSemanticItem(const KoDocumentRdf* rdf, QObject* parent)
+{
+    return hKoRdfSemanticItem(new KoRdfCalendarEvent(parent, rdf));
+}

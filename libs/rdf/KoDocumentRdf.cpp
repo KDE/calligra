@@ -249,9 +249,8 @@ bool KoDocumentRdf::loadRdf(KoStore *store, const Soprano::Parser *parser, const
     if (fileName == "manifest.rdf" && d->prefixMapping) {
         d->prefixMapping->load(d->model);
 
-        QStringList classNames = KoRdfSemanticItem::classNames();
-        foreach (const QString &semanticClass, classNames) {
-            hKoRdfSemanticItem si = KoRdfSemanticItem::createSemanticItem(this, this, semanticClass);
+        foreach (const QString &semanticClass, classNames()) {
+            hKoRdfSemanticItem si = createSemanticItem(semanticClass, this);
             si->loadUserStylesheets(d->model);
         }
     }
@@ -331,9 +330,8 @@ bool KoDocumentRdf::saveRdf(KoStore *store, KoXmlWriter *manifestWriter, const S
     if (fileName == "manifest.rdf" && d->prefixMapping) {
         d->prefixMapping->save(d->model, context);
 
-        QStringList classNames = KoRdfSemanticItem::classNames();
-        foreach (const QString &semanticClass, classNames) {
-            hKoRdfSemanticItem si = KoRdfSemanticItem::createSemanticItem(qobject_cast<QObject*>(const_cast<KoDocumentRdf*>(this)), this, semanticClass);
+        foreach (const QString &semanticClass, classNames()) {
+            hKoRdfSemanticItem si = createSemanticItem(semanticClass, const_cast<KoDocumentRdf*>(this));
             si->saveUserStylesheets(d->model, context);
         }
     }
@@ -443,6 +441,20 @@ QList<hKoRdfSemanticItem> KoDocumentRdf::semanticItems(const QString &className,
     }
 
     return items;
+}
+
+QStringList KoDocumentRdf::classNames() const
+{
+    return d->readers.keys();
+}
+
+hKoRdfSemanticItem KoDocumentRdf::createSemanticItem(const QString &semanticClass, QObject *parent) const
+{
+    KoRdfSemanticItemReader *reader = d->readers.value(semanticClass);
+    if (reader) {
+        return reader->createSemanticItem(this, parent);
+    }
+    return hKoRdfSemanticItem(0);
 }
 
 void KoDocumentRdf::dumpModel(const QString &msg, QSharedPointer<Soprano::Model> m) const
@@ -640,7 +652,7 @@ KAction *KoDocumentRdf::createInsertSemanticObjectReferenceAction(KoCanvasBase *
 QList<KAction*> KoDocumentRdf::createInsertSemanticObjectNewActions(KoCanvasBase *host)
 {
     QList<KAction*> ret;
-    foreach (const QString &semanticClass,  KoRdfSemanticItem::classNames()) {
+    foreach (const QString &semanticClass,  classNames()) {
         ret.append(new InsertSemanticObjectCreateAction(host, this, semanticClass));
     }
     return ret;

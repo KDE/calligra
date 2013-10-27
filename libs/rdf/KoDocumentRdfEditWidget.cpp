@@ -146,10 +146,10 @@ public:
         m_semanticItemsTree = KoRdfSemanticTree::createTree(v);
         m_semanticItemsTree.update(m_rdf);
         // stylesheets page
-        m_semItemContactTemplate  = KoRdfSemanticItem::createSemanticItem(kdrew, m_rdf, "Contact");
-        m_semItemEventTemplate    = KoRdfSemanticItem::createSemanticItem(kdrew, m_rdf, "Event");
-        m_semItemLocationTemplate = KoRdfSemanticItem::createSemanticItem(kdrew, m_rdf, "Location");
-        
+        m_semItemContactTemplate  = m_rdf->createSemanticItem("Contact", kdrew);
+        m_semItemEventTemplate    = m_rdf->createSemanticItem("Event", kdrew);
+        m_semItemLocationTemplate = m_rdf->createSemanticItem("Location", kdrew);
+
         buildComboBox(m_ui->m_defaultContactsSheet,  m_semItemContactTemplate );
         buildComboBox(m_ui->m_defaultEventsSheet,    m_semItemEventTemplate );
         buildComboBox(m_ui->m_defaultLocationsSheet, m_semItemLocationTemplate );
@@ -305,15 +305,15 @@ bool KoDocumentRdfEditWidget::shouldDialogCloseBeVetoed()
 void KoDocumentRdfEditWidget::apply()
 {
     KoDocumentRdf *rdf = d->m_rdf;
-    if (hKoRdfSemanticItem si = KoRdfSemanticItem::createSemanticItem(0, rdf, "Contact")) {
+    if (hKoRdfSemanticItem si = rdf->createSemanticItem("Contact")) {
         si->defaultStylesheet(
                     stylesheetFromComboBox(d->m_ui->m_defaultContactsSheet));
     }
-    if (hKoRdfSemanticItem si = KoRdfSemanticItem::createSemanticItem(0, rdf, "Event")) {
+    if (hKoRdfSemanticItem si = rdf->createSemanticItem("Event")) {
         si->defaultStylesheet(
                     stylesheetFromComboBox(d->m_ui->m_defaultEventsSheet));
     }
-    if (hKoRdfSemanticItem si = KoRdfSemanticItem::createSemanticItem(0, rdf, "Location")) {
+    if (hKoRdfSemanticItem si = rdf->createSemanticItem("Location")) {
         si->defaultStylesheet(
                     stylesheetFromComboBox(d->m_ui->m_defaultLocationsSheet));
     }
@@ -477,7 +477,7 @@ void KoDocumentRdfEditWidget::defaultContactsSheetButton()
     QString stylesheetName = d->m_ui->m_defaultContactsSheet->currentText();
     kDebug(30015) << "changing contact default stylesheet to:" << stylesheetName;
     hKoSemanticStylesheet ss = stylesheetFromComboBox(d->m_ui->m_defaultContactsSheet);
-    if (hKoRdfSemanticItem si = KoRdfSemanticItem::createSemanticItem(0, rdf, "Contact")) {
+    if (hKoRdfSemanticItem si = rdf->createSemanticItem("Contact")) {
         si->defaultStylesheet(ss);
     }
     QMap<int, KoDocumentRdf::reflowItem> reflowCol;
@@ -495,7 +495,7 @@ void KoDocumentRdfEditWidget::defaultEventsSheetButton()
     QString stylesheetName = d->m_ui->m_defaultEventsSheet->currentText();
     kDebug(30015) << "changing event default stylesheet to:" << stylesheetName;
     hKoSemanticStylesheet ss = stylesheetFromComboBox(d->m_ui->m_defaultEventsSheet);
-    if (hKoRdfSemanticItem si = KoRdfSemanticItem::createSemanticItem(0, rdf, "Event")) {
+    if (hKoRdfSemanticItem si = rdf->createSemanticItem("Event")) {
         si->defaultStylesheet(ss);
     }
     QMap<int, KoDocumentRdf::reflowItem> reflowCol;
@@ -513,7 +513,7 @@ void KoDocumentRdfEditWidget::defaultLocationsSheetButton()
     QString stylesheetName = d->m_ui->m_defaultLocationsSheet->currentText();
     kDebug(30015) << stylesheetName;
     hKoSemanticStylesheet ss = stylesheetFromComboBox(d->m_ui->m_defaultLocationsSheet);
-    if (hKoRdfSemanticItem si = KoRdfSemanticItem::createSemanticItem(0, rdf, "Location")) {
+    if (hKoRdfSemanticItem si = rdf->createSemanticItem("Location")) {
         si->defaultStylesheet(ss);
     }
     QMap<int, KoDocumentRdf::reflowItem> reflowCol;

@@ -242,22 +242,6 @@ public:
     virtual QString className() const = 0;
 
     /**
-     * Gets a list of SemanticItem subclasses that can be created.
-     * Any of the strings in the return value can be created using
-     * createSemanticItem().
-     *
-     * @see createSemanticItem()
-     */
-    static QStringList classNames();
-
-    /**
-     * Create a SemanticItem subclass using its name from
-     * classNames(). Useful for menus and other places that want to
-     * allow the user to create new SemanticItem Objects.
-     */
-    static QExplicitlySharedDataPointer<KoRdfSemanticItem> createSemanticItem(QObject *parent, const KoDocumentRdf *rdf, const QString &semanticClass);
-
-    /**
      * Get the system semantic stylesheets that are supported for this
      * particular semantic item subclass.
      */

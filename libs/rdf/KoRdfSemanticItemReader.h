@@ -36,6 +36,7 @@ public:
 
 public: // API to be implemented
     virtual void updateSemanticItems(QList<hKoRdfSemanticItem> &semanticItems, KoDocumentRdf *rdf, QSharedPointer<Soprano::Model> m) = 0;
+    virtual hKoRdfSemanticItem createSemanticItem(const KoDocumentRdf *rdf, QObject *parent) = 0;
 };
 
 #endif

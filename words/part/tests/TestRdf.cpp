@@ -772,7 +772,7 @@ void TestRdf::createUserStylesheet()
     QSharedPointer<Soprano::Model> m = rdf->model();
     QVERIFY(m);
 
-    hKoRdfSemanticItem f = KoRdfSemanticItem::createSemanticItem(rdf, rdf, "Contact");
+    hKoRdfSemanticItem f = rdf->createSemanticItem("Contact", rdf);
     int originalUserStylesheetsSize = f->userStylesheets().size();
     hKoSemanticStylesheet ss = f->createUserStylesheet("test sheet A",
                                                        "%NAME% and again %NAME%");

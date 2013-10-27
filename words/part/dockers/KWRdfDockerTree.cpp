@@ -96,12 +96,12 @@ bool KWRdfDockerTree::dropMimeData(QTreeWidgetItem *parent, int index,
     } else if (data->hasFormat("text/calendar")) {
         QByteArray ba = data->data("text/calendar");
         //kDebug(30015) << "data:" << ba;
-        hKoRdfSemanticItem semObj = KoRdfSemanticItem::createSemanticItem(m_rdf, m_rdf, "Event");
+        hKoRdfSemanticItem semObj = m_rdf->createSemanticItem("Event", m_rdf);
         semObj->importFromData(ba, m_rdf, m_canvas);
     } else if (data->hasFormat("text/x-vcard")) {
         QByteArray ba = data->data("text/x-vcard");
         //kDebug(30015) << "data:" << ba;
-        hKoRdfSemanticItem semObj = KoRdfSemanticItem::createSemanticItem(m_rdf, m_rdf, "Contact");
+        hKoRdfSemanticItem semObj = m_rdf->createSemanticItem("Contact", m_rdf);
         semObj->importFromData(ba, m_rdf, m_canvas);
     } else if (data->hasFormat("text/uri-list")) {
         QByteArray urilist = data->data("text/uri-list");
@@ -121,7 +121,7 @@ bool KWRdfDockerTree::dropMimeData(QTreeWidgetItem *parent, int index,
             //kDebug(30015) << "MIME Type:" << mt;
             // BEGIN:VCARD
             if (mt == "text/directory") {
-                hKoRdfSemanticItem semObj = KoRdfSemanticItem::createSemanticItem(m_rdf, m_rdf, "Contact");
+                hKoRdfSemanticItem semObj = m_rdf->createSemanticItem("Contact", m_rdf);
                 semObj->importFromData(ba, m_rdf, m_canvas);
             }
         }

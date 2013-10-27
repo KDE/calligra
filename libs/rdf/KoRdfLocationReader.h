@@ -33,7 +33,7 @@ public:
 
 public: // KoRdfSemanticItemReader API
     virtual void updateSemanticItems(QList<hKoRdfSemanticItem> &semanticItems, KoDocumentRdf *rdf, QSharedPointer<Soprano::Model> m);
-
+    virtual hKoRdfSemanticItem createSemanticItem(const KoDocumentRdf *rdf, QObject *parent);
 };
 
 #endif

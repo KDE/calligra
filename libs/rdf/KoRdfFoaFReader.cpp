@@ -104,3 +104,9 @@ void KoRdfFoaFReader::updateSemanticItems(QList<hKoRdfSemanticItem> &semanticIte
     }
 #endif
 }
+
+hKoRdfSemanticItem KoRdfFoaFReader::createSemanticItem(const KoDocumentRdf* rdf, QObject* parent)
+{
+    return hKoRdfSemanticItem(new KoRdfFoaF(parent, rdf));
+
+}
