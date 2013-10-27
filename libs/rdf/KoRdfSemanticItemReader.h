@@ -24,7 +24,7 @@
 // lib
 #include "KoRdfSemanticItem.h"
 
-class KoDocumentRdf;
+class QMimeData;
 
 /**
  */
@@ -37,6 +37,9 @@ public:
 public: // API to be implemented
     virtual void updateSemanticItems(QList<hKoRdfSemanticItem> &semanticItems, KoDocumentRdf *rdf, QSharedPointer<Soprano::Model> m) = 0;
     virtual hKoRdfSemanticItem createSemanticItem(const KoDocumentRdf *rdf, QObject *parent) = 0;
+    virtual bool acceptsMimeData(const QMimeData *mimeData) const = 0;
+    virtual hKoRdfSemanticItem createSemanticItemFromMimeData(const QMimeData* mimeData, KoCanvasBase *host,
+                                                              const KoDocumentRdf *rdf, QObject *parent = 0) const = 0;
 };
 
 #endif

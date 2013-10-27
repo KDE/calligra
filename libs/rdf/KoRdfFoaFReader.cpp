@@ -24,6 +24,8 @@
 #include "KoRdfFoaF.h"
 // KDE
 #include <kdebug.h>
+// Qt
+#include <QMimeData>
 
 
 KoRdfFoaFReader::KoRdfFoaFReader()
@@ -109,4 +111,20 @@ hKoRdfSemanticItem KoRdfFoaFReader::createSemanticItem(const KoDocumentRdf* rdf,
 {
     return hKoRdfSemanticItem(new KoRdfFoaF(parent, rdf));
 
+}
+
+bool KoRdfFoaFReader::acceptsMimeData(const QMimeData *mimeData) const
+{
+    return mimeData->hasFormat(QLatin1String("text/x-vcard"));
+}
+
+hKoRdfSemanticItem KoRdfFoaFReader::createSemanticItemFromMimeData(const QMimeData *mimeData,
+                                                                   KoCanvasBase *host,
+                                                                   const KoDocumentRdf *rdf,
+                                                                   QObject *parent) const
+{
+    const QByteArray ba = mimeData->data(QLatin1String("text/x-vcard"));
+    hKoRdfSemanticItem semanticItem = hKoRdfSemanticItem(new KoRdfFoaF(parent, rdf));
+    semanticItem->importFromData(ba, rdf, host);
+    return semanticItem;
 }

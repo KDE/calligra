@@ -457,6 +457,27 @@ hKoRdfSemanticItem KoDocumentRdf::createSemanticItem(const QString &semanticClas
     return hKoRdfSemanticItem(0);
 }
 
+hKoRdfSemanticItem KoDocumentRdf::createSemanticItemFromMimeData(const QMimeData *mimeData, KoCanvasBase *host,
+                                                                 QObject *parent) const
+{
+    foreach(KoRdfSemanticItemReader *reader, d->readers) {
+        if (reader->acceptsMimeData(mimeData)) {
+            return reader->createSemanticItemFromMimeData(mimeData, host, this, parent);
+        }
+    }
+    return hKoRdfSemanticItem(0);
+}
+
+bool KoDocumentRdf::acceptsMimeData(const QMimeData* mimeData) const
+{
+    foreach(KoRdfSemanticItemReader *reader, d->readers) {
+        if (reader->acceptsMimeData(mimeData)) {
+            return true;
+        }
+    }
+    return false;
+}
+
 void KoDocumentRdf::dumpModel(const QString &msg, QSharedPointer<Soprano::Model> m) const
 {
     if (!m) {

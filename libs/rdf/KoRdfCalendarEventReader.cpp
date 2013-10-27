@@ -24,6 +24,8 @@
 #include "KoRdfCalendarEvent.h"
 // KDE
 #include <kdebug.h>
+// Qt
+#include <QMimeData>
 
 
 KoRdfCalendarEventReader::KoRdfCalendarEventReader()
@@ -109,4 +111,20 @@ void KoRdfCalendarEventReader::updateSemanticItems(QList<hKoRdfSemanticItem> &se
 hKoRdfSemanticItem KoRdfCalendarEventReader::createSemanticItem(const KoDocumentRdf* rdf, QObject* parent)
 {
     return hKoRdfSemanticItem(new KoRdfCalendarEvent(parent, rdf));
+}
+
+bool KoRdfCalendarEventReader::acceptsMimeData(const QMimeData *mimeData) const
+{
+    return mimeData->hasFormat(QLatin1String("text/calendar"));
+}
+
+hKoRdfSemanticItem KoRdfCalendarEventReader::createSemanticItemFromMimeData(const QMimeData *mimeData,
+                                                                            KoCanvasBase *host,
+                                                                            const KoDocumentRdf *rdf,
+                                                                            QObject *parent) const
+{
+    const QByteArray ba = mimeData->data(QLatin1String("text/calendar"));
+    hKoRdfSemanticItem semanticItem = hKoRdfSemanticItem(new KoRdfCalendarEvent(parent, rdf));
+    semanticItem->importFromData(ba, rdf, host);
+    return semanticItem;
 }

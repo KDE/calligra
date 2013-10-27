@@ -277,7 +277,7 @@ QString KoRdfLocation::className() const
     return "Location";
 }
 
-void KoRdfLocation::importFromData(const QByteArray& ba, KoDocumentRdf* m_rdf, KoCanvasBase* host)
+void KoRdfLocation::importFromData(const QByteArray& ba, const KoDocumentRdf* m_rdf, KoCanvasBase* host)
 {
     Q_UNUSED(ba);
     Q_UNUSED(m_rdf);

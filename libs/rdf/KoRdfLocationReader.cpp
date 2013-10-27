@@ -176,3 +176,18 @@ hKoRdfSemanticItem KoRdfLocationReader::createSemanticItem(const KoDocumentRdf* 
 {
     return hKoRdfSemanticItem(new KoRdfLocation(parent, rdf));
 }
+
+bool KoRdfLocationReader::acceptsMimeData(const QMimeData* mimeData) const
+{
+    Q_UNUSED(mimeData);
+    return false;
+}
+
+hKoRdfSemanticItem KoRdfLocationReader::createSemanticItemFromMimeData(const QMimeData* mimeData, KoCanvasBase* host, const KoDocumentRdf* rdf, QObject* parent) const
+{
+    Q_UNUSED(mimeData);
+    Q_UNUSED(host);
+    Q_UNUSED(rdf);
+    Q_UNUSED(parent);
+    return hKoRdfSemanticItem(0);
+}

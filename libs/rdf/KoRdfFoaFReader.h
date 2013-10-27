@@ -34,6 +34,9 @@ public:
 public: // KoRdfSemanticItemReader API
     virtual void updateSemanticItems(QList<hKoRdfSemanticItem> &semanticItems, KoDocumentRdf *rdf, QSharedPointer<Soprano::Model> m);
     virtual hKoRdfSemanticItem createSemanticItem(const KoDocumentRdf *rdf, QObject *parent);
+    virtual bool acceptsMimeData(const QMimeData *mimeData) const;
+    virtual hKoRdfSemanticItem createSemanticItemFromMimeData(const QMimeData* mimeData, KoCanvasBase* host,
+                                                              const KoDocumentRdf *rdf, QObject *parent = 0) const;
 };
 
 #endif

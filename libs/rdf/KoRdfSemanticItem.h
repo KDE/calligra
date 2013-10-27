@@ -229,7 +229,7 @@ public:
      * This method calls also insert() which links the semanticItem with the
      * KoDocumentRdf object m_rdf.
      */
-    virtual void importFromData(const QByteArray &ba, KoDocumentRdf *rdf = 0, KoCanvasBase *host = 0) = 0;
+    virtual void importFromData(const QByteArray &ba, const KoDocumentRdf *rdf = 0, KoCanvasBase *host = 0) = 0;
 
     /**
      * A simple description of the semantic item that can be shown to the user
