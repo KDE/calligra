@@ -43,6 +43,8 @@ public:
         , canvasController{nullptr}
         , lastX{0.f}
         , lastY{0.f}
+        , ignoreOffsetChange{false}
+        , ignoreFlickableChange{false}
         , minimumZoom{.5f}
         , minimumZoomFitsWidth{false}
         , zoom{1.f}
