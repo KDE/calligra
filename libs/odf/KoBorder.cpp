@@ -56,6 +56,8 @@ KoBorder::BorderData::BorderData()
     , innerPen(QPen())
     , spacing(0)
 {
+    outerPen.setWidthF(0.0);
+    innerPen.setWidthF(0.0);
 }
 
 bool KoBorder::BorderData::operator==(const KoBorder::BorderData& other) const
