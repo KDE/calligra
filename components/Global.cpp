@@ -47,8 +47,8 @@ DocumentType::Type Global::documentType(const QUrl& document)
     QMimeType mime = QMimeDatabase{}.mimeTypeForUrl(document);
 
     QList<QPluginLoader*> plugins = KoJsonTrader::self()->query("Calligra/Part", mime.name());
-    if(plugins.count() > 0) {
-        QPluginLoader* loader = plugins.at(0);
+    for (int i=0; i < plugins.count(); i++) {
+        QPluginLoader* loader = plugins.at(i);
 
         if(loader->fileName().contains("words")) {
             return DocumentType::TextDocument;
