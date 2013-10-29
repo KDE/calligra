@@ -315,7 +315,7 @@ QPoint CellEditor::globalCursorPosition() const
 
 QAbstractItemModel *CellEditor::model()
 {
-  ValueConverter *conv;
+  //ValueConverter *conv;
   QList<QString> words;
   QList<QString> wordlist;
   const Cell cell(d->selection->activeSheet(), d->selection->marker());

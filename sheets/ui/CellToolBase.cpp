@@ -1465,7 +1465,7 @@ bool CellToolBase::createEditor(bool clear, bool focus)
 void CellToolBase::populateWordCollection()
 {
   const CellStorage* cellstore=selection()->activeSheet()->cellStorage();
-  ValueConverter *conv,*conv2;
+  ValueConverter *conv=0,*conv2=0;
   int lastrow=cellstore->rows();
   int lastcolumn=cellstore->columns();
   if( lastrow < 2000 && lastcolumn < 20) {
