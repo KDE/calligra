@@ -128,7 +128,7 @@ bool MySQLMigrate::drv_readTableSchema(
 
     for (unsigned int i = 0; i < numFlds; i++) {
         QString fldName(fields[i].name);
-        QString fldID(KexiUtils::string2Identifier(fldName.toLower()));
+        QString fldID(KexiUtils::stringToIdentifier(fldName.toLower()));
 
         KexiDB::Field *fld =
             new KexiDB::Field(fldID, type(originalName, &fields[i]));

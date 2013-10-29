@@ -157,7 +157,7 @@ bool xBaseMigrate::drv_readTableSchema(
 
   for( xbShort i = 0; i < numFlds; ++i ) {
     QString fldName = QString::fromLatin1( tableDbf->GetFieldName( i ) );
-    QString fldID( KexiUtils::string2Identifier( fldName.toLower() ) );
+    QString fldID( KexiUtils::stringToIdentifier( fldName.toLower() ) );
 
     KexiDB::Field *fld =
         new KexiDB::Field( fldID, type( tableDbf->GetFieldType( i ) ) );

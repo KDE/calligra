@@ -230,7 +230,7 @@ public:
      If \a suggestedCaption is not empty, it will be set as a caption
      (with number suffix, to avoid duplicated, e.g. "employees7"
      for "employees" sugested name). Name will be then built based
-     on this caption using KexiUtils::string2Identifier().
+     on this caption using KexiUtils::stringToIdentifier().
 
      This method is used before creating new object.
      \return newly created part item or NULL on any error. */

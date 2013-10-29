@@ -45,6 +45,7 @@
 #include <QDesktopServices>
 
 MainWindow::MainWindow (QWidget* parent)
+: QMainWindow(parent)
 {
     CAImageProvider::s_imageProvider = new CAImageProvider;
 

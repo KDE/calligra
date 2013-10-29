@@ -1,7 +1,13 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 
-<kpartgui name="flow" version="33">
+<kpartgui name="flow" version="34">
     <MenuBar>
+        <Menu name="file">
+            <Text>&amp;File</Text>
+            <Separator/>
+            <Action name="file_encrypt_doc"/>
+            <Action name="file_uncompress_doc"/>
+        </Menu>
         <Menu name="edit">
             <Text>&amp;Edit</Text>
             <Action name="edit_undo"/>

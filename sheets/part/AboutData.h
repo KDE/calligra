@@ -38,7 +38,7 @@ static KAboutData * newAboutData()
 {
     KAboutData * aboutData = new KAboutData("sheets", 0, ki18nc("application name", "Calligra Sheets"),
                                             version, ki18n(description), KAboutData::License_LGPL,
-                                            ki18n("(c) 1998-2011, The Calligra Sheets Team"), KLocalizedString(),
+                                            ki18n("(c) 1998-2013, The Calligra Sheets Team"), KLocalizedString(),
                                             "http://www.calligra.org/sheets/");
     aboutData->setProductName("calligrasheets"); // for bugs.kde.org
     aboutData->setProgramIconName(QLatin1String("calligrasheets"));

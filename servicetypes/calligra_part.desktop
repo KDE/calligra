@@ -47,5 +47,3 @@ Type=QString
 [PropertyDef::X-KDE-ExtraNativeMimeTypes]
 Type=QStringList
 
-[PropertyDef::X-KDE-NOTKoDocumentEmbeddable]
-Type=bool

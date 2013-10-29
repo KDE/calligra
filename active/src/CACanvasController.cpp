@@ -181,7 +181,7 @@ int CACanvasController::visibleHeight() const
 {
     if (m_caCanvasItem == 0)
         return 0;
-    QGraphicsWidget *canvasItem = m_caCanvasItem->koCanvas()->canvasItem();
+    QGraphicsWidget *canvasItem = dynamic_cast<QGraphicsWidget*>(m_caCanvasItem->koCanvas()->canvasItem());
 
     int height1;
     if (canvasItem == 0)
@@ -196,7 +196,7 @@ int CACanvasController::visibleWidth() const
 {
     if (m_caCanvasItem == 0)
         return 0;
-    QGraphicsWidget *canvasItem = m_caCanvasItem->koCanvas()->canvasItem();
+    QGraphicsWidget *canvasItem = dynamic_cast<QGraphicsWidget*>(m_caCanvasItem->koCanvas()->canvasItem());
 
     int width1;
     if (canvasItem == 0)
