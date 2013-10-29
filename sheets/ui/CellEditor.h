@@ -54,7 +54,7 @@ public:
     * \param cellTool the cell tool
     * \param parent the parent widget
     */
-    explicit CellEditor(CellToolBase *cellTool,QHash<int, QString> &wordList, QWidget *parent = 0);
+    explicit CellEditor(CellToolBase *cellTool, QHash<int, QString> &wordList, QWidget *parent = 0);
     ~CellEditor();
 
     Selection* selection() const;

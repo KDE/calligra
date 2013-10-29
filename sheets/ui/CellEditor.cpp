@@ -256,7 +256,7 @@ CellEditor::CellEditor(CellToolBase *cellTool,QHash<int,QString> &wordList, QWid
     d->captureAllKeyEvents = d->selection->activeSheet()->map()->settings()->captureAllArrowKeys();
     d->selectionChangedLocked = false;
     d->currentToken = 0;
-    d->wordCollection=&wordList;
+    d->wordCollection = &wordList;
 
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -316,16 +316,16 @@ QPoint CellEditor::globalCursorPosition() const
 QAbstractItemModel *CellEditor::model()
 {
   ValueConverter *conv;
-  QList<QString> words,wordlist;
+  QList<QString> words;
+  QList<QString> wordlist;
   const Cell cell(d->selection->activeSheet(), d->selection->marker());
-  int col=cell.column();
-  words=d->wordCollection->values(col);
-  qDebug()<<"wordlist:"<<words;
-  for (int i=0; i<3 && (!words.isEmpty()) ; i++) {
+  int col = cell.column();
+  words = d->wordCollection->values(col);
+  for (int i = 0; i < 3 && (!words.isEmpty()) ; i++) {
     wordlist.push_back(words.front());
     words.pop_front();
   }
-    return new QStringListModel(wordlist,d->complete);
+    return new QStringListModel(wordlist, d->complete);
 }
 
 void CellEditor::setCompleter(QCompleter *completer)
@@ -633,8 +633,8 @@ void CellEditor::keyPressEvent(QKeyEvent *event)
         // editing mode. To insert literal tabs you can always use the external
         // editor.
         
-	if(textUnderCursor()!="" && !d->wordCollection->values(cell_temp.column()).contains(textUnderCursor())){
-	  d->wordCollection->insertMulti(cell_temp.column(),textUnderCursor());
+	if (textUnderCursor()!= "" && !d->wordCollection->values(cell_temp.column()).contains(textUnderCursor())){
+	  d->wordCollection->insertMulti(cell_temp.column(), textUnderCursor());
 	}
 	event->ignore();
 	return;
@@ -644,8 +644,8 @@ void CellEditor::keyPressEvent(QKeyEvent *event)
         if (event->modifiers() & Qt::ShiftModifier) {
             break; // pass to TextEdit
         }
-	if(textUnderCursor()!="" && !d->wordCollection->values(cell_temp.column()).contains(textUnderCursor() )) {
-	  d->wordCollection->insertMulti(cell_temp.column(),textUnderCursor());
+	if (textUnderCursor()!= "" && !d->wordCollection->values(cell_temp.column()).contains(textUnderCursor())) {
+	  d->wordCollection->insertMulti(cell_temp.column(), textUnderCursor());
 	}
 	event->ignore(); // pass to parent
         return;
@@ -689,7 +689,7 @@ void CellEditor::keyPressEvent(QKeyEvent *event)
     }
      QRect cr = cursorRect();
      cr.setWidth(d->complete->popup()->sizeHintForColumn(0) + d->complete->popup()->verticalScrollBar()->sizeHint().width());
-     d->complete->complete(); // popup it up!
+     d->complete->complete(); // pop it up! 
     
 }
 
