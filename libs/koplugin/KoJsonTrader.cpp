@@ -110,6 +110,7 @@ QList<QPluginLoader *> KoJsonTrader::query(const QString &servicetype, const QSt
 
                 if (!mimetype.isEmpty()) {
                     QStringList mimeTypes = json.value("X-KDE-ExtraNativeMimeTypes").toString().split(',');
+                    mimeTypes += json.value("MimeType").toString().split(',');
                     mimeTypes += json.value("X-KDE-NativeMimeType").toString();
                     if (! mimeTypes.contains(mimetype)) {
                         continue;
