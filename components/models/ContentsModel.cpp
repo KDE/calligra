@@ -48,12 +48,6 @@ public:
 ContentsModel::ContentsModel(QObject* parent)
     : QAbstractListModel{parent}, d{new Private}
 {
-    QHash<int, QByteArray> roleNames;
-    roleNames.insert(TitleRole, "title");
-    roleNames.insert(LevelRole, "level");
-    roleNames.insert(ThumbnailRole, "thumbnail");
-    roleNames.insert(ContentIndexRole, "contentIndex");
-    setRoleNames(roleNames);
 }
 
 ContentsModel::~ContentsModel()
@@ -154,4 +148,14 @@ void ContentsModel::updateImpl()
     }
 
     endResetModel();
+}
+
+QHash<int, QByteArray> ContentsModel::roleNames() const
+{
+    QHash<int, QByteArray> roleNames;
+    roleNames.insert(TitleRole, "title");
+    roleNames.insert(LevelRole, "level");
+    roleNames.insert(ThumbnailRole, "thumbnail");
+    roleNames.insert(ContentIndexRole, "contentIndex");
+    return roleNames;
 }

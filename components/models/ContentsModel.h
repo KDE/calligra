@@ -75,6 +75,9 @@ Q_SIGNALS:
      * Notify signal for property #thumbnailSize.
      */
     void thumbnailSizeChanged();
+    
+protected:
+    virtual QHash<int, QByteArray> roleNames() const;
 
 private Q_SLOTS:
     void updateImpl();
