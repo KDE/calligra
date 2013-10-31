@@ -83,7 +83,7 @@ bool RunAroundHelper::fit(const bool resetHorizontalPosition, bool isRightToLeft
 
     // Too little width because of  wrapping is handled in the remainder of this method
     line.setLineWidth(maxLineWidth);
-    const qreal maxLineHeight = line.height();
+    const qreal maxLineHeight = qMax(qreal(1.0),line.naturalTextRect().height());
     const qreal maxNaturalTextWidth = line.naturalTextWidth();
     QRectF lineRect(position, QSizeF(maxLineWidth, maxLineHeight));
     QRectF lineRectPart;
@@ -96,7 +96,6 @@ bool RunAroundHelper::fit(const bool resetHorizontalPosition, bool isRightToLeft
         // (and that is divided into new line parts). Line rect is at different position to
         // obstructions, so new parts are completely different. if there are no obstructions, then we
         // have only one line part which is full line rect
-
         lineRectPart = getLineRect(lineRect, maxNaturalTextWidth);
         if (!lineRectPart.isValid()) {
             m_horizontalPosition = RIDICULOUSLY_LARGE_NEGATIVE_INDENT;
@@ -217,7 +216,7 @@ QRectF RunAroundHelper::minimizeHeightToLeastNeeded(const QRectF &lineRect)
     }
     line.setLineWidth(m_textWidth);
     // Base linerect height on the width calculated above.
-    lineRectBase.setHeight(line.height());
+    lineRectBase.setHeight(qMax(qreal(1.0),line.height()));
     return lineRectBase;
 }
 
