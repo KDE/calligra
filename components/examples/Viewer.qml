@@ -112,9 +112,12 @@ ApplicationWindow {
             }
         }
 
-        Calligra.View {
-            id: v;
-            document: doc;
+        Item {
+            Calligra.View {
+                id: v;
+                anchors.fill: parent;
+                document: doc;
+            }
 
             ScrollView {
                 id: f;
@@ -124,6 +127,7 @@ ApplicationWindow {
                     id: controller;
                     view: v;
                     flickable: f.flickableItem;
+                    minimumZoomFitsWidth: true;
                 }
             }
         }
@@ -175,7 +179,7 @@ ApplicationWindow {
         tooltip: "Zoom In";
         shortcut: "Ctrl+=";
 
-        onTriggered: controller.zoom += 0.1;
+        onTriggered: controller.zoomAroundPoint(0.1, v.width / 2, v.height / 2);
     }
 
     Action {
@@ -186,6 +190,6 @@ ApplicationWindow {
         tooltip: "Zoom Out";
         shortcut: "Ctrl+-";
 
-        onTriggered: controller.zoom -= 0.1;
+        onTriggered: controller.zoomAroundPoint(-0.1, v.width / 2, v.height / 2);
     }
 }

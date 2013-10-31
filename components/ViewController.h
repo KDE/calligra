@@ -23,7 +23,7 @@
 #ifndef CALLIGRA_COMPONENTS_VIEWCONTROLLER_H
 #define CALLIGRA_COMPONENTS_VIEWCONTROLLER_H
 
-#include <QtQuick/QQuickPaintedItem>
+#include <QtQuick/QQuickItem>
 
 namespace Calligra {
 namespace Components {
@@ -48,7 +48,7 @@ class View;
  * flickable this is not recommended.
  */
 
-class ViewController : public QQuickPaintedItem
+class ViewController : public QQuickItem
 {
     Q_OBJECT
     /**
@@ -142,10 +142,6 @@ public:
     virtual ~ViewController();
 
     /**
-     * Inherited from QQuickPaintedItem.
-     */
-    virtual void paint(QPainter* painter) Q_DECL_OVERRIDE;
-    /**
      * Getter for property #view
      */
     View* view() const;
@@ -203,7 +199,7 @@ public:
     void setUseZoomProxy(bool proxy);
 
 public Q_SLOTS:
-    void zoomAroundPoint(float amount, const QPointF& point);
+    void zoomAroundPoint(float amount, float x, float y);
     void zoomToFitWidth(float width);
 
 Q_SIGNALS:
@@ -236,6 +232,9 @@ Q_SIGNALS:
      */
     void useZoomProxyChanged();
 
+protected:
+    virtual QSGNode* updatePaintNode(QSGNode* node, QQuickItem::UpdatePaintNodeData* );
+
 private Q_SLOTS:
     void documentChanged();
     void contentPositionChanged();
@@ -243,6 +242,7 @@ private Q_SLOTS:
     void documentStatusChanged();
     void documentOffsetChanged(const QPoint& offset);
     void zoomTimeout();
+    void flickableWidthChanged();
 
 private:
     class Private;
