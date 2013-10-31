@@ -87,7 +87,11 @@ bool SpreadsheetImpl::load(const QUrl& url)
 
 int SpreadsheetImpl::currentIndex()
 {
-    return d->document->map()->indexOf(d->canvas->activeSheet());
+    if (d->document && d->document->map() && d->canvas->activeSheet()) {
+        return d->document->map()->indexOf(d->canvas->activeSheet());
+    } else {
+        return -1;
+    }
 }
 
 void SpreadsheetImpl::setCurrentIndex(int newValue)

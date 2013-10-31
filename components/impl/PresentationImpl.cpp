@@ -88,7 +88,11 @@ bool PresentationImpl::load(const QUrl& url)
 
 int PresentationImpl::currentIndex()
 {
-    return d->document->pageIndex(d->koPaView->activePage());
+    if (d->document && d->koPaView && d->koPaView->activePage()) {
+        return d->document->pageIndex(d->koPaView->activePage());
+    } else {
+        return -1;
+    }
 }
 
 void PresentationImpl::setCurrentIndex(int newValue)
