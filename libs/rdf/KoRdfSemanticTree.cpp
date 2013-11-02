@@ -89,7 +89,7 @@ void KoRdfSemanticTreePrivate::clear(QTreeWidgetItem *parent)
 {
     while (parent->childCount()) {
         QTreeWidgetItem* c = parent->child(0);
-        m_peopleItem->removeChild(c);
+        parent->removeChild(c);
         delete c;
     }
 }
