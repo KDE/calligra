@@ -76,15 +76,18 @@ using namespace Soprano;
 
 class KoDocumentRdfPrivate
 {
+private:
+    void addReader(KoRdfSemanticItemReader *reader) { readers.insert(reader->className(), reader); }
+
 public:
 
     KoDocumentRdfPrivate()
             : model(Soprano::createModel())
             , prefixMapping(0)
     {
-        readers.insert("Contact", new KoRdfFoaFReader());
-        readers.insert("Event", new KoRdfCalendarEventReader());
-        readers.insert("Location", new KoRdfLocationReader());
+        addReader(new KoRdfFoaFReader());
+        addReader(new KoRdfCalendarEventReader());
+        addReader(new KoRdfLocationReader());
     }
 
     ~KoDocumentRdfPrivate()
@@ -447,6 +450,12 @@ QStringList KoDocumentRdf::classNames() const
 {
     return d->readers.keys();
 }
+
+QMap<QString, KoRdfSemanticItemReader*> KoDocumentRdf::readers() const
+{
+    return d->readers;
+}
+
 
 hKoRdfSemanticItem KoDocumentRdf::createSemanticItem(const QString &semanticClass, QObject *parent) const
 {

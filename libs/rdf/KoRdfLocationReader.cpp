@@ -24,6 +24,7 @@
 #include "KoRdfLocation.h"
 // KDE
 #include <kdebug.h>
+#include <klocale.h>
 
 
 KoRdfLocationReader::KoRdfLocationReader()
@@ -32,6 +33,16 @@ KoRdfLocationReader::KoRdfLocationReader()
 
 KoRdfLocationReader::~KoRdfLocationReader()
 {
+}
+
+QString KoRdfLocationReader::className() const
+{
+    return QLatin1String("Location");
+}
+
+QString KoRdfLocationReader::classDisplayName() const
+{
+    return i18nc("displayname of the semantic item type Location", "Location");
 }
 
 /**

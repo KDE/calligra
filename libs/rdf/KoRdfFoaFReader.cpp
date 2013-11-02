@@ -24,6 +24,7 @@
 #include "KoRdfFoaF.h"
 // KDE
 #include <kdebug.h>
+#include <klocale.h>
 // Qt
 #include <QMimeData>
 
@@ -34,6 +35,16 @@ KoRdfFoaFReader::KoRdfFoaFReader()
 
 KoRdfFoaFReader::~KoRdfFoaFReader()
 {
+}
+
+QString KoRdfFoaFReader::className() const
+{
+    return QLatin1String("Contact");
+}
+
+QString KoRdfFoaFReader::classDisplayName() const
+{
+    return i18nc("displayname of the semantic item type Contact", "Contact");
 }
 
 void KoRdfFoaFReader::updateSemanticItems(QList<hKoRdfSemanticItem> &semanticItems, KoDocumentRdf *rdf, QSharedPointer<Soprano::Model> m)

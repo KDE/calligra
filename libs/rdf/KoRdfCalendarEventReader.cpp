@@ -24,6 +24,7 @@
 #include "KoRdfCalendarEvent.h"
 // KDE
 #include <kdebug.h>
+#include <klocale.h>
 // Qt
 #include <QMimeData>
 
@@ -34,6 +35,16 @@ KoRdfCalendarEventReader::KoRdfCalendarEventReader()
 
 KoRdfCalendarEventReader::~KoRdfCalendarEventReader()
 {
+}
+
+QString KoRdfCalendarEventReader::className() const
+{
+    return QLatin1String("Event");
+}
+
+QString KoRdfCalendarEventReader::classDisplayName() const
+{
+    return i18nc("displayname of the semantic item type Event", "Event");
 }
 
 void KoRdfCalendarEventReader::updateSemanticItems(QList<hKoRdfSemanticItem> &semanticItems, KoDocumentRdf *rdf, QSharedPointer<Soprano::Model> m)

@@ -32,6 +32,9 @@ public:
     virtual ~KoRdfLocationReader();
 
 public: // KoRdfSemanticItemReader API
+    virtual QString className() const;
+    virtual QString classDisplayName() const;
+
     virtual void updateSemanticItems(QList<hKoRdfSemanticItem> &semanticItems, KoDocumentRdf *rdf, QSharedPointer<Soprano::Model> m);
     virtual hKoRdfSemanticItem createSemanticItem(const KoDocumentRdf *rdf, QObject *parent);
     virtual bool acceptsMimeData(const QMimeData *mimeData) const;

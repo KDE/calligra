@@ -54,6 +54,7 @@ class KoTextEditor;
 #include "InsertSemanticObjectReferenceAction.h"
 #include "KoRdfSemanticTree.h"
 
+class KoRdfSemanticItemReader;
 class KoDocumentRdfPrivate;
 
 
@@ -287,6 +288,7 @@ public:
      * @see createSemanticItem()
      */
     QStringList classNames() const;
+    QMap<QString, KoRdfSemanticItemReader*> readers() const;
 
     /**
      * Create a SemanticItem subclass using its name from
