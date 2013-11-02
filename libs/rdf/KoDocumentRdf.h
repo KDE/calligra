@@ -54,7 +54,6 @@ class KoTextEditor;
 #include "InsertSemanticObjectReferenceAction.h"
 #include "KoRdfSemanticTree.h"
 
-class KoRdfSemanticItemReader;
 class KoDocumentRdfPrivate;
 
 
@@ -281,29 +280,11 @@ public:
     QList<hKoRdfSemanticItem> semanticItems(const QString &className, QSharedPointer<Soprano::Model> m = QSharedPointer<Soprano::Model>(0));
 
     /**
-     * Gets a list of SemanticItem subclasses that can be created.
-     * Any of the strings in the return value can be created using
-     * createSemanticItem().
-     *
-     * @see createSemanticItem()
-     */
-    QStringList classNames() const;
-    QMap<QString, KoRdfSemanticItemReader*> readers() const;
-
-    /**
      * Create a SemanticItem subclass using its name from
      * classNames(). Useful for menus and other places that want to
      * allow the user to create new SemanticItem Objects.
      */
      hKoRdfSemanticItem createSemanticItem(const QString &semanticClass, QObject *parent = 0) const;
-
-     /**
-      * Create a SemanticItem subclass from the passed mimeData.
-      * TODO: support that mimedata could be used for different semantic item classes
-      */
-     hKoRdfSemanticItem createSemanticItemFromMimeData(const QMimeData* mimeData, KoCanvasBase* host, QObject *parent = 0) const;
-
-     bool acceptsMimeData(const QMimeData* mimeData) const;
 
     /**
      * For Rdf stored in manifest.rdf or another rdf file referenced

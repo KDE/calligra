@@ -47,7 +47,7 @@ QString KoRdfFoaFReader::classDisplayName() const
     return i18nc("displayname of the semantic item type Contact", "Contact");
 }
 
-void KoRdfFoaFReader::updateSemanticItems(QList<hKoRdfSemanticItem> &semanticItems, KoDocumentRdf *rdf, QSharedPointer<Soprano::Model> m)
+void KoRdfFoaFReader::updateSemanticItems(QList<hKoRdfSemanticItem> &semanticItems, const KoDocumentRdf *rdf, QSharedPointer<Soprano::Model> m)
 {
     const QString sparqlQuery = QLatin1String(
         "prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n"
@@ -124,7 +124,7 @@ hKoRdfSemanticItem KoRdfFoaFReader::createSemanticItem(const KoDocumentRdf* rdf,
 
 }
 
-bool KoRdfFoaFReader::acceptsMimeData(const QMimeData *mimeData) const
+bool KoRdfFoaFReader::canCreateSemanticItemFromMimeData(const QMimeData *mimeData) const
 {
     return mimeData->hasFormat(QLatin1String("text/x-vcard"));
 }

@@ -47,7 +47,7 @@ QString KoRdfCalendarEventReader::classDisplayName() const
     return i18nc("displayname of the semantic item type Event", "Event");
 }
 
-void KoRdfCalendarEventReader::updateSemanticItems(QList<hKoRdfSemanticItem> &semanticItems, KoDocumentRdf *rdf, QSharedPointer<Soprano::Model> m)
+void KoRdfCalendarEventReader::updateSemanticItems(QList<hKoRdfSemanticItem> &semanticItems, const KoDocumentRdf *rdf, QSharedPointer<Soprano::Model> m)
 {
     const QString sparqlQuery = QLatin1String(
         " prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n"
@@ -124,7 +124,7 @@ hKoRdfSemanticItem KoRdfCalendarEventReader::createSemanticItem(const KoDocument
     return hKoRdfSemanticItem(new KoRdfCalendarEvent(parent, rdf));
 }
 
-bool KoRdfCalendarEventReader::acceptsMimeData(const QMimeData *mimeData) const
+bool KoRdfCalendarEventReader::canCreateSemanticItemFromMimeData(const QMimeData *mimeData) const
 {
     return mimeData->hasFormat(QLatin1String("text/calendar"));
 }

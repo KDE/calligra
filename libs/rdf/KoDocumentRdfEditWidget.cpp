@@ -20,6 +20,7 @@
 #include "KoDocumentRdfEditWidget.h"
 #include <ui_KoDocumentRdfEditWidget.h>
 #include "KoDocumentRdf.h"
+#include "KoRdfSemanticItemRegistry.h"
 #include "KoRdfSemanticItemReader.h"
 #include "KoRdfPrefixMapping.h"
 #include "../KoDocument.h"
@@ -240,10 +241,9 @@ KoDocumentRdfEditWidget::KoDocumentRdfEditWidget( KoDocumentRdf *docRdf)
     const QString buttonText = i18n("Set For All Existing");
     QGridLayout *styleSheetsGridLayout = d->m_ui->m_styleSheetsGridLayout;
     int row = 0;
-    foreach (KoRdfSemanticItemReader *semanticItemReader, docRdf->readers()) {
-        const QString semanticItemName = semanticItemReader->className();
-
-        QLabel *semanticItemLabel = new QLabel(semanticItemReader->classDisplayName());
+    foreach (const QString &semanticItemName, KoRdfSemanticItemRegistry::instance()->classNames()) {
+        QLabel *semanticItemLabel =
+            new QLabel(KoRdfSemanticItemRegistry::instance()->classDisplayName(semanticItemName));
         styleSheetsGridLayout->addWidget(semanticItemLabel, row, 0, Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
         QComboBox *defaultStylesheetComboBox = new QComboBox;

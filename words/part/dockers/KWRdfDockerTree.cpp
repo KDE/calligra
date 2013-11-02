@@ -30,6 +30,7 @@
 #include <QMimeData>
 
 #include <KoDocumentRdf.h>
+#include <KoRdfSemanticItemRegistry.h>
 
 #include "KWCanvas.h"
 
@@ -64,7 +65,7 @@ void KWRdfDockerTree::setCanvas(KoCanvasBase *canvas)
 void KWRdfDockerTree::dragEnterEvent(QDragEnterEvent *event)
 {
     //kDebug(30015) << "dragEnterEvent() mime format:" << event->mimeData()->formats();
-    if (m_rdf->acceptsMimeData(event->mimeData()) ||
+    if (KoRdfSemanticItemRegistry::instance()->canCreateSemanticItemFromMimeData(event->mimeData()) ||
         event->mimeData()->hasFormat("text/uri-list")) {
         event->accept();
     }
@@ -105,10 +106,10 @@ bool KWRdfDockerTree::dropMimeData(QTreeWidgetItem *parent, int index,
             QMimeData linkedData;
             linkedData.setData(mt, ba);
             //kDebug(30015) << "MIME Type:" << mt;
-            m_rdf->createSemanticItemFromMimeData(&linkedData, m_canvas, m_rdf);
+            KoRdfSemanticItemRegistry::instance()->createSemanticItemFromMimeData(&linkedData, m_canvas, m_rdf, m_rdf);
         }
     } else {
-        m_rdf->createSemanticItemFromMimeData(data, m_canvas, m_rdf);
+        KoRdfSemanticItemRegistry::instance()->createSemanticItemFromMimeData(data, m_canvas, m_rdf, m_rdf);
     }
     return true;
 }

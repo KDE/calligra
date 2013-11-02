@@ -85,7 +85,7 @@ private:
  * and latitude with triples in Rdf, the locations() method farms off discovering
  * these values to this method using specific SPARQL query text.
  */
-static void addLocations(QList<hKoRdfSemanticItem> &ret, KoDocumentRdf *rdf, QSharedPointer<Soprano::Model> m,
+static void addLocations(QList<hKoRdfSemanticItem> &ret, const KoDocumentRdf *rdf, QSharedPointer<Soprano::Model> m,
                          bool isGeo84,
                          const QString &sparqlQuery)
 {
@@ -104,7 +104,7 @@ static void addLocations(QList<hKoRdfSemanticItem> &ret, KoDocumentRdf *rdf, QSh
 }
 
 
-void KoRdfLocationReader::updateSemanticItems(QList<hKoRdfSemanticItem> &semanticItems, KoDocumentRdf *rdf, QSharedPointer<Soprano::Model> m)
+void KoRdfLocationReader::updateSemanticItems(QList<hKoRdfSemanticItem> &semanticItems, const KoDocumentRdf *rdf, QSharedPointer<Soprano::Model> m)
 {
     QList<hKoRdfSemanticItem> currentKoRdfLocations;
     addLocations(currentKoRdfLocations, rdf, m, false,
@@ -188,7 +188,7 @@ hKoRdfSemanticItem KoRdfLocationReader::createSemanticItem(const KoDocumentRdf* 
     return hKoRdfSemanticItem(new KoRdfLocation(parent, rdf));
 }
 
-bool KoRdfLocationReader::acceptsMimeData(const QMimeData* mimeData) const
+bool KoRdfLocationReader::canCreateSemanticItemFromMimeData(const QMimeData* mimeData) const
 {
     Q_UNUSED(mimeData);
     return false;

@@ -21,21 +21,37 @@
 
 #include "KoRdfSemanticItemRegistry.h"
 
+#include "KoRdfCalendarEventReader.h"
+#include "KoRdfFoaFReader.h"
+#include "KoRdfLocationReader.h"
+
+
 #include <kdebug.h>
 #include <kglobal.h>
 
 class KoRdfSemanticItemRegistry::Private
 {
 public:
+    ~Private();
 //     void insertFactory(KoRdfSemanticItemFactoryBase *factory);
     void init(KoRdfSemanticItemRegistry *q);
+    void addReader(KoRdfSemanticItemReader *reader) { readers.insert(reader->className(), reader); }
 
     QHash<QPair<QString, QString>, KoRdfSemanticItemFactoryBase *> factories;
+    QMap<QString,KoRdfSemanticItemReader*> readers;
 };
 
 
+KoRdfSemanticItemRegistry::Private::~Private()
+{
+    qDeleteAll(readers);
+}
+
 void KoRdfSemanticItemRegistry::Private::init(KoRdfSemanticItemRegistry *q)
 {
+        addReader(new KoRdfFoaFReader());
+        addReader(new KoRdfCalendarEventReader());
+        addReader(new KoRdfLocationReader());
 #if 0
     KoPluginLoader::PluginsConfig config;
     config.whiteList = "TextInlinePlugins";
@@ -106,6 +122,55 @@ KoInlineObject *KoRdfSemanticItemRegistry::createFromOdf(const KoXmlElement &ele
     return object;
 }
 #endif
+
+QStringList KoRdfSemanticItemRegistry::classNames() const
+{
+    return d->readers.keys();
+}
+
+QString KoRdfSemanticItemRegistry::classDisplayName(const QString& className) const
+{
+    const KoRdfSemanticItemReader *reader = d->readers.value(className);
+    return reader ? reader->classDisplayName() : QString();
+}
+
+
+hKoRdfSemanticItem KoRdfSemanticItemRegistry::createSemanticItem(const QString &semanticClass, const KoDocumentRdf *docRdf, QObject *parent) const
+{
+    KoRdfSemanticItemReader *reader = d->readers.value(semanticClass);
+    if (reader) {
+        return reader->createSemanticItem(docRdf, parent);
+    }
+    return hKoRdfSemanticItem(0);
+}
+
+hKoRdfSemanticItem KoRdfSemanticItemRegistry::createSemanticItemFromMimeData(const QMimeData *mimeData, KoCanvasBase *host, const KoDocumentRdf *docRdf, QObject *parent) const
+{
+    foreach(KoRdfSemanticItemReader *reader, d->readers) {
+        if (reader->canCreateSemanticItemFromMimeData(mimeData)) {
+            return reader->createSemanticItemFromMimeData(mimeData, host, docRdf, parent);
+        }
+    }
+    return hKoRdfSemanticItem(0);
+}
+
+bool KoRdfSemanticItemRegistry::canCreateSemanticItemFromMimeData(const QMimeData *mimeData) const
+{
+    foreach(KoRdfSemanticItemReader *reader, d->readers) {
+        if (reader->canCreateSemanticItemFromMimeData(mimeData)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+void KoRdfSemanticItemRegistry::updateSemanticItems(QList<hKoRdfSemanticItem> &semanticItems, const KoDocumentRdf *docRdf, const QString &className, QSharedPointer<Soprano::Model> m) const
+{
+    KoRdfSemanticItemReader *reader = d->readers.value(className);
+    if (reader) {
+        reader->updateSemanticItems(semanticItems, docRdf, m);
+    }
+}
 
 KoRdfSemanticItemRegistry::~KoRdfSemanticItemRegistry()
 {

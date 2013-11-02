@@ -24,8 +24,12 @@
 
 #include "kordf_export.h"
 
+#include "KoRdfSemanticItem.h"
 #include "KoRdfSemanticItemFactoryBase.h"
 #include <KoGenericRegistry.h>
+
+class KoRdfSemanticItemReader;
+class KoCanvasBase;
 
 /**
  * This singleton class keeps a register of all available InlineObject factories.
@@ -65,6 +69,34 @@ public:
      * @returns the variable or 0 if no variable could be created
      */
 //     KoInlineObject *createFromOdf(const KoXmlElement &element, KoShapeLoadingContext &context) const;
+    /**
+     * Gets a list of SemanticItem subclasses that can be created.
+     * Any of the strings in the return value can be created using
+     * createSemanticItem().
+     *
+     * @see createSemanticItem()
+     */
+    QStringList classNames() const;
+    QString classDisplayName(const QString &className) const;
+
+    /**
+     * Create a SemanticItem subclass using its name from
+     * classNames(). Useful for menus and other places that want to
+     * allow the user to create new SemanticItem Objects.
+     */
+     hKoRdfSemanticItem createSemanticItem(const QString &semanticClass, const KoDocumentRdf *docRdf, QObject *parent = 0) const;
+
+     /**
+      * Create a SemanticItem subclass from the passed mimeData.
+      * TODO: support that mimedata could be used for different semantic item classes
+      */
+     hKoRdfSemanticItem createSemanticItemFromMimeData(const QMimeData *mimeData, KoCanvasBase *host, const KoDocumentRdf *docRdf, QObject *parent = 0) const;
+
+     bool canCreateSemanticItemFromMimeData(const QMimeData *mimeData) const;
+
+    void updateSemanticItems(QList<hKoRdfSemanticItem> &semanticItems, const KoDocumentRdf *docRdf,
+                             const QString &className,
+                             QSharedPointer<Soprano::Model> m = QSharedPointer<Soprano::Model>(0)) const;
 
 private:
     KoRdfSemanticItemRegistry();

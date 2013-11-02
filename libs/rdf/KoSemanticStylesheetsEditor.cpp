@@ -18,8 +18,11 @@
 */
 
 #include "KoSemanticStylesheetsEditor.h"
+
 #include "ui_KoSemanticStylesheetsEditor.h"
+
 #include "KoRdfSemanticItem.h"
+#include "KoRdfSemanticItemRegistry.h"
 #include "KoDocumentRdf.h"
 
 #include <kdebug.h>
@@ -120,7 +123,7 @@ KoSemanticStylesheetsEditor::KoSemanticStylesheetsEditor(QWidget *parent, KoDocu
 
     QTreeWidgetItem *treewidget = 0;
     treewidget = d->m_systemSheetsParentItem;
-    const QStringList classNames = rdf->classNames();
+    const QStringList classNames = KoRdfSemanticItemRegistry::instance()->classNames();
     foreach (const QString &semanticClass, classNames) {
         hKoRdfSemanticItem si = rdf->createSemanticItem(semanticClass, this);
         KoSemanticStylesheetWidgetItem *item = new KoSemanticStylesheetWidgetItem(rdf, si, treewidget);

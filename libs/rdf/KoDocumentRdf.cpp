@@ -21,10 +21,7 @@
 #include "KoDocumentRdf.h"
 #include "KoRdfPrefixMapping.h"
 #include "RdfSemanticTreeWidgetSelectAction.h"
-
-#include "KoRdfCalendarEventReader.h"
-#include "KoRdfFoaFReader.h"
-#include "KoRdfLocationReader.h"
+#include "KoRdfSemanticItemRegistry.h"
 
 #include "../KoView.h"
 #include "../KoDocument.h"
@@ -76,23 +73,16 @@ using namespace Soprano;
 
 class KoDocumentRdfPrivate
 {
-private:
-    void addReader(KoRdfSemanticItemReader *reader) { readers.insert(reader->className(), reader); }
-
 public:
 
     KoDocumentRdfPrivate()
             : model(Soprano::createModel())
             , prefixMapping(0)
     {
-        addReader(new KoRdfFoaFReader());
-        addReader(new KoRdfCalendarEventReader());
-        addReader(new KoRdfLocationReader());
     }
 
     ~KoDocumentRdfPrivate()
     {
-        qDeleteAll(readers);
         prefixMapping->deleteLater();
         model->deleteLater();
     }
@@ -102,7 +92,6 @@ public:
     KoRdfPrefixMapping *prefixMapping;     ///< prefix -> URI mapping
 
     QMap<QString, QList<hKoRdfSemanticItem> > semanticItems;
-    QMap<QString,KoRdfSemanticItemReader*> readers;
     QMap<QString,QList<hKoSemanticStylesheet> > userStylesheets;
 };
 
@@ -252,8 +241,8 @@ bool KoDocumentRdf::loadRdf(KoStore *store, const Soprano::Parser *parser, const
     if (fileName == "manifest.rdf" && d->prefixMapping) {
         d->prefixMapping->load(d->model);
 
-        foreach (const QString &semanticClass, classNames()) {
-            hKoRdfSemanticItem si = createSemanticItem(semanticClass, this);
+        foreach (const QString &semanticClass, KoRdfSemanticItemRegistry::instance()->classNames()) {
+            hKoRdfSemanticItem si = KoRdfSemanticItemRegistry::instance()->createSemanticItem(semanticClass, this, this);
             si->loadUserStylesheets(d->model);
         }
     }
@@ -333,8 +322,8 @@ bool KoDocumentRdf::saveRdf(KoStore *store, KoXmlWriter *manifestWriter, const S
     if (fileName == "manifest.rdf" && d->prefixMapping) {
         d->prefixMapping->save(d->model, context);
 
-        foreach (const QString &semanticClass, classNames()) {
-            hKoRdfSemanticItem si = createSemanticItem(semanticClass, const_cast<KoDocumentRdf*>(this));
+        foreach (const QString &semanticClass, KoRdfSemanticItemRegistry::instance()->classNames()) {
+            hKoRdfSemanticItem si = KoRdfSemanticItemRegistry::instance()->createSemanticItem(semanticClass, this, const_cast<KoDocumentRdf*>(this));
             si->saveUserStylesheets(d->model, context);
         }
     }
@@ -437,54 +426,18 @@ QList<hKoRdfSemanticItem> KoDocumentRdf::semanticItems(const QString &className,
     }
 
     QList<hKoRdfSemanticItem> items;
-    KoRdfSemanticItemReader *reader = d->readers.value(className);
-    if (reader) {
-        reader->updateSemanticItems(d->semanticItems[className], this, m);
+    // TODO: improve double lookup
+    if (KoRdfSemanticItemRegistry::instance()->classNames().contains(className)) {
+        KoRdfSemanticItemRegistry::instance()->updateSemanticItems(d->semanticItems[className], this, className, m);
         items = d->semanticItems[className];
     }
 
     return items;
 }
 
-QStringList KoDocumentRdf::classNames() const
-{
-    return d->readers.keys();
-}
-
-QMap<QString, KoRdfSemanticItemReader*> KoDocumentRdf::readers() const
-{
-    return d->readers;
-}
-
-
 hKoRdfSemanticItem KoDocumentRdf::createSemanticItem(const QString &semanticClass, QObject *parent) const
 {
-    KoRdfSemanticItemReader *reader = d->readers.value(semanticClass);
-    if (reader) {
-        return reader->createSemanticItem(this, parent);
-    }
-    return hKoRdfSemanticItem(0);
-}
-
-hKoRdfSemanticItem KoDocumentRdf::createSemanticItemFromMimeData(const QMimeData *mimeData, KoCanvasBase *host,
-                                                                 QObject *parent) const
-{
-    foreach(KoRdfSemanticItemReader *reader, d->readers) {
-        if (reader->acceptsMimeData(mimeData)) {
-            return reader->createSemanticItemFromMimeData(mimeData, host, this, parent);
-        }
-    }
-    return hKoRdfSemanticItem(0);
-}
-
-bool KoDocumentRdf::acceptsMimeData(const QMimeData* mimeData) const
-{
-    foreach(KoRdfSemanticItemReader *reader, d->readers) {
-        if (reader->acceptsMimeData(mimeData)) {
-            return true;
-        }
-    }
-    return false;
+    return KoRdfSemanticItemRegistry::instance()->createSemanticItem(semanticClass, this, parent);
 }
 
 void KoDocumentRdf::dumpModel(const QString &msg, QSharedPointer<Soprano::Model> m) const
@@ -682,7 +635,7 @@ KAction *KoDocumentRdf::createInsertSemanticObjectReferenceAction(KoCanvasBase *
 QList<KAction*> KoDocumentRdf::createInsertSemanticObjectNewActions(KoCanvasBase *host)
 {
     QList<KAction*> ret;
-    foreach (const QString &semanticClass,  classNames()) {
+    foreach (const QString &semanticClass, KoRdfSemanticItemRegistry::instance()->classNames()) {
         ret.append(new InsertSemanticObjectCreateAction(host, this, semanticClass));
     }
     return ret;
