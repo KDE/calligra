@@ -21,17 +21,17 @@
 #ifndef KORDFCALENDAREVENTREADER_H
 #define KORDFCALENDAREVENTREADER_H
 
-#include "KoRdfSemanticItemReader.h"
+#include "KoRdfSemanticItemFactoryBase.h"
 
 /**
  */
-class KoRdfCalendarEventReader : public KoRdfSemanticItemReader
+class KoRdfCalendarEventReader : public KoRdfSemanticItemFactoryBase
 {
 public:
     KoRdfCalendarEventReader();
     virtual ~KoRdfCalendarEventReader();
 
-public: // KoRdfSemanticItemReader API
+public: // KoRdfSemanticItemFactoryBase API
     virtual QString className() const;
     virtual QString classDisplayName() const;
 

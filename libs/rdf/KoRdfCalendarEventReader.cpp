@@ -30,6 +30,7 @@
 
 
 KoRdfCalendarEventReader::KoRdfCalendarEventReader()
+  : KoRdfSemanticItemFactoryBase("Event")
 {
 }
 

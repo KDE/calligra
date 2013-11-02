@@ -19,16 +19,21 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOINLINEOBJECTFACTORY_H
-#define KOINLINEOBJECTFACTORY_H
-
-#include <QString>
+#ifndef KORDFSEMANTICITEMFACTORYBASE_H
+#define KORDFSEMANTICITEMFACTORYBASE_H
 
 #include "kordf_export.h"
 
+// lib
+#include "KoRdfSemanticItem.h"
+
+class QMimeData;
+
+#include <QString>
+
 
 /**
- * A factory for inline text objects. There should be one for each plugin type to
+ * A factory for semantic item objects. There should be one for each semantic item class to
  * allow the creation of the inlineObject from that plugin.
  * The factory additionally has information to allow showing a menu entry for user
  * access to the object-type.
@@ -51,6 +56,16 @@ public: // API required by KoGenericRegistry
      * @return the id for the semantic item this factory creates.
      */
     QString id() const;
+
+public: // API to be implemented
+    virtual QString className() const = 0;
+    virtual QString classDisplayName() const = 0;
+
+    virtual void updateSemanticItems(QList<hKoRdfSemanticItem> &semanticItems, const KoDocumentRdf *rdf, QSharedPointer<Soprano::Model> m) = 0;
+    virtual hKoRdfSemanticItem createSemanticItem(const KoDocumentRdf *rdf, QObject *parent) = 0;
+    virtual bool canCreateSemanticItemFromMimeData(const QMimeData *mimeData) const = 0;
+    virtual hKoRdfSemanticItem createSemanticItemFromMimeData(const QMimeData* mimeData, KoCanvasBase *host,
+                                                              const KoDocumentRdf *rdf, QObject *parent = 0) const = 0;
 #if 0
     /**
      * Create a new instance of an inline object.

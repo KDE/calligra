@@ -28,6 +28,7 @@
 
 
 KoRdfLocationReader::KoRdfLocationReader()
+: KoRdfSemanticItemFactoryBase("Location")
 {
 }
 

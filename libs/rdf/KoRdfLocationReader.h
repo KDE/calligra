@@ -21,17 +21,17 @@
 #ifndef KORDFLOCATIONREADER_H
 #define KORDFLOCATIONREADER_H
 
-#include "KoRdfSemanticItemReader.h"
+#include "KoRdfSemanticItemFactoryBase.h"
 
 /**
  */
-class KoRdfLocationReader : public KoRdfSemanticItemReader
+class KoRdfLocationReader : public KoRdfSemanticItemFactoryBase
 {
 public:
     KoRdfLocationReader();
     virtual ~KoRdfLocationReader();
 
-public: // KoRdfSemanticItemReader API
+public: // KoRdfSemanticItemFactoryBase API
     virtual QString className() const;
     virtual QString classDisplayName() const;
 

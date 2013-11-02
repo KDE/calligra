@@ -9,7 +9,6 @@ include_directories( ${KORDF_INCLUDES})
 set(kordf_LIB_SRCS
     KoRdfSemanticItemReader.cpp
     KoRdfCalendarEventReader.cpp
-    KoRdfFoaFReader.cpp
     KoRdfLocationReader.cpp
     KoDocumentRdf.cpp
     KoDocumentRdfEditWidget.cpp
@@ -20,14 +19,12 @@ set(kordf_LIB_SRCS
     KoRdfSemanticItem.cpp
     KoRdfSemanticItemFactoryBase.cpp
     KoRdfSemanticItemRegistry.cpp
-    KoRdfFoaF.cpp
     KoRdfCalendarEvent.cpp
     KoRdfLocationEditWidget.cpp
     KoRdfLocation.cpp
     KoRdfSemanticItemViewSite.cpp
     KoRdfSemanticTree.cpp
     KoRdfSemanticTreeWidgetItem.cpp
-    KoRdfFoaFTreeWidgetItem.cpp
     KoRdfCalendarEventTreeWidgetItem.cpp
     KoRdfLocationTreeWidgetItem.cpp
     KoSemanticStylesheetsEditor.cpp
@@ -41,7 +38,6 @@ set(kordf_LIB_SRCS
 
 kde4_add_ui_files( kordf_LIB_SRCS
    KoDocumentRdfEditWidget.ui
-   KoRdfFoaFEditWidget.ui
    KoRdfCalendarEventEditWidget.ui
    KoSemanticStylesheetsEditor.ui
 )

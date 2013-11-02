@@ -28,16 +28,16 @@ class KoContactSemanticItemFactory : public KoRdfSemanticItemFactoryBase
 {
 public:
     KoContactSemanticItemFactory();
-#if 0
-    virtual KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const;
-    virtual KoShape *createShape(const KoProperties *params, KoDocumentResourceManager *documentResources = 0) const;
-    virtual bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const;
 
-    /// reimplemented
-    virtual void newDocumentResourceManager(KoDocumentResourceManager *manager) const;
-    /// reimplemented
-    virtual QList<KoShapeConfigWidgetBase*> createShapeOptionPanels();
-#endif
+public: // KoRdfSemanticItemFactoryBase API
+    virtual QString className() const;
+    virtual QString classDisplayName() const;
+
+    virtual void updateSemanticItems(QList<hKoRdfSemanticItem> &semanticItems, const KoDocumentRdf *rdf, QSharedPointer<Soprano::Model> m);
+    virtual hKoRdfSemanticItem createSemanticItem(const KoDocumentRdf *rdf, QObject *parent);
+    virtual bool canCreateSemanticItemFromMimeData(const QMimeData *mimeData) const;
+    virtual hKoRdfSemanticItem createSemanticItemFromMimeData(const QMimeData* mimeData, KoCanvasBase* host,
+                                                              const KoDocumentRdf *rdf, QObject *parent = 0) const;
 };
 
 #endif

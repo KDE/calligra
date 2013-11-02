@@ -20,110 +20,121 @@
 */
 
 #include "KoContactSemanticItemFactory.h"
-#if 0
-#include "PictureShape.h"
-#include "PictureShapeConfigWidget.h"
 
-#include <QByteArray>
-#include <QBuffer>
-#include <QImage>
-
-#include <KoXmlNS.h>
-#include "KoShapeBasedDocumentBase.h"
-#include <KoShapeLoadingContext.h>
-#include <KoOdfLoadingContext.h>
-#include <KoDocumentResourceManager.h>
-#include <KoImageCollection.h>
-#include <KoImageData.h>
-#include <KoProperties.h>
-#include <KoIcon.h>
-#include <klocale.h>
+// plugin
+#include "KoRdfFoaF.h"
+// KDE
 #include <kdebug.h>
-#endif
+#include <klocale.h>
+// Qt
+#include <QMimeData>
+
 
 KoContactSemanticItemFactory::KoContactSemanticItemFactory()
-    : KoRdfSemanticItemFactoryBase("Contact")//PICTURESHAPEID, i18n("Image"))
+    : KoRdfSemanticItemFactoryBase("Contact")
 {
-#if 0
-    setToolTip(i18n("Image shape that can display jpg, png etc."));
-    setIconName(koIconNameCStr("x-shape-image"));
-    setLoadingPriority(1);
+}
 
-    QList<QPair<QString, QStringList> > elementNamesList;
-    elementNamesList.append(qMakePair(QString(KoXmlNS::draw), QStringList("image")));
-    elementNamesList.append(qMakePair(QString(KoXmlNS::svg), QStringList("image")));
-    setXmlElements(elementNamesList);
+
+QString KoContactSemanticItemFactory::className() const
+{
+    return QLatin1String("Contact");
+}
+
+QString KoContactSemanticItemFactory::classDisplayName() const
+{
+    return i18nc("displayname of the semantic item type Contact", "Contact");
+}
+
+void KoContactSemanticItemFactory::updateSemanticItems(QList<hKoRdfSemanticItem> &semanticItems, const KoDocumentRdf *rdf, QSharedPointer<Soprano::Model> m)
+{
+    const QString sparqlQuery = QLatin1String(
+        "prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n"
+        "prefix foaf: <http://xmlns.com/foaf/0.1/> \n"
+        "prefix pkg: <http://docs.oasis-open.org/opendocument/meta/package/common#> \n"
+        "select distinct ?graph ?person ?name ?nick ?homepage ?img ?phone \n"
+        "where { \n"
+        "  GRAPH ?graph { \n"
+        "    ?person rdf:type foaf:Person . \n"
+        "    ?person foaf:name ?name \n"
+        "    OPTIONAL { ?person foaf:phone ?phone } \n"
+        "    OPTIONAL { ?person foaf:nick ?nick } \n"
+        "    OPTIONAL { ?person foaf:homepage ?homepage } \n"
+        "    OPTIONAL { ?person foaf:img ?img } \n"
+        "    }\n"
+        "}\n");
+
+    Soprano::QueryResultIterator it =
+        m->executeQuery(sparqlQuery,
+                        Soprano::Query::QueryLanguageSparql);
+
+    // lastKnownObjects is used to perform a sematic set diff
+    // at return time d->foafObjects will have any new objects and
+    // ones that are no longer available will be removed.
+    QList<hKoRdfSemanticItem> oldSemanticItems = semanticItems;
+
+    // uniqfilter is needed because soprano is not honouring
+    // the DISTINCT sparql keyword
+    QSet<QString> uniqfilter;
+    while (it.next()) {
+
+        QString name = it.binding("name").toString();
+        if (uniqfilter.contains(name)) {
+            continue;
+        }
+        uniqfilter += name;
+
+        hKoRdfSemanticItem newSemanticItem(new KoRdfFoaF(0, rdf, it));
+
+        const QString newItemLs = newSemanticItem->linkingSubject().toString();
+        foreach (hKoRdfSemanticItem semItem, oldSemanticItems) {
+            if (newItemLs == semItem->linkingSubject().toString()) {
+                oldSemanticItems.removeAll(semItem);
+                newSemanticItem = 0;
+                break;
+            }
+        }
+
+        if (newSemanticItem) {
+            semanticItems << newSemanticItem;
+        }
+    }
+
+    foreach (hKoRdfSemanticItem semItem, oldSemanticItems) {
+        semanticItems.removeAll(semItem);
+    }
+
+#ifndef NDEBUG
+    if (semanticItems.empty() && m->statementCount())
+    {
+        kDebug(30015) << "foaf() have data, but no foafs!" << endl;
+        QList<Soprano::Statement> allStatements = m->listStatements().allElements();
+        foreach (Soprano::Statement s, allStatements)
+        {
+            kDebug(30015) << s;
+        }
+    }
 #endif
 }
-#if 0
-KoShape *KoContactSemanticItemFactory::createDefaultShape(KoDocumentResourceManager *documentResources) const
-{
-    PictureShape * defaultShape = new PictureShape();
-    defaultShape->setShapeId(PICTURESHAPEID);
-    if (documentResources) {
-        defaultShape->setImageCollection(documentResources->imageCollection());
-    }
-    return defaultShape;
-}
 
-KoShape *KoContactSemanticItemFactory::createShape(const KoProperties *params, KoDocumentResourceManager *documentResources) const
+hKoRdfSemanticItem KoContactSemanticItemFactory::createSemanticItem(const KoDocumentRdf* rdf, QObject* parent)
 {
-    PictureShape *shape = static_cast<PictureShape*>(createDefaultShape(documentResources));
-    if (params->contains("qimage")) {
-        QImage image = params->property("qimage").value<QImage>();
-        Q_ASSERT(!image.isNull());
-
-        if (shape->imageCollection()) {
-            KoImageData *data = shape->imageCollection()->createImageData(image);
-            shape->setUserData(data);
-            shape->setSize(data->imageSize());
-            shape->update();
-        }
-    }
-    return shape;
+    return hKoRdfSemanticItem(new KoRdfFoaF(parent, rdf));
 
 }
 
-bool KoContactSemanticItemFactory::supports(const KoXmlElement &e, KoShapeLoadingContext &context) const
+bool KoContactSemanticItemFactory::canCreateSemanticItemFromMimeData(const QMimeData *mimeData) const
 {
-    if (e.localName() == "image" && e.namespaceURI() == KoXmlNS::draw) {
-        QString href = e.attribute("href");
-        if (!href.isEmpty()) {
-            // check the mimetype
-            if (href.startsWith(QLatin1String("./"))) {
-                href.remove(0, 2);
-            }
-            QString mimetype = context.odfLoadingContext().mimeTypeForPath(href);
-            if (!mimetype.isEmpty()) {
-                return mimetype.startsWith("image");
-            }
-            else {
-                return ( href.endsWith("bmp") ||
-                         href.endsWith("jpg") ||
-                         href.endsWith("gif") ||
-                         href.endsWith("eps") ||
-                         href.endsWith("png") ||
-                         href.endsWith("tif") ||
-                         href.endsWith("tiff"));
-            }
-        }
-        else {
-            return !KoXml::namedItemNS(e, KoXmlNS::office, "binary-data").isNull();
-        }
-    }
-    return false;
+    return mimeData->hasFormat(QLatin1String("text/x-vcard"));
 }
 
-QList<KoShapeConfigWidgetBase*> KoContactSemanticItemFactory::createShapeOptionPanels()
+hKoRdfSemanticItem KoContactSemanticItemFactory::createSemanticItemFromMimeData(const QMimeData *mimeData,
+                                                                   KoCanvasBase *host,
+                                                                   const KoDocumentRdf *rdf,
+                                                                   QObject *parent) const
 {
-    QList<KoShapeConfigWidgetBase*> panels;
-    panels.append( new PictureShapeConfigWidget() );
-    return panels;
+    const QByteArray ba = mimeData->data(QLatin1String("text/x-vcard"));
+    hKoRdfSemanticItem semanticItem = hKoRdfSemanticItem(new KoRdfFoaF(parent, rdf));
+    semanticItem->importFromData(ba, rdf, host);
+    return semanticItem;
 }
-
-void KoContactSemanticItemFactory::newDocumentResourceManager(KoDocumentResourceManager *manager) const
-{
-    if (!manager->imageCollection())
-        manager->setImageCollection(new KoImageCollection(manager));
-}
-#endif

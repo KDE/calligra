@@ -4,6 +4,12 @@ include_directories(
 set(calligra_semanticitem_contact_LIB_SRCS
     KoContactSemanticItemFactory.cpp
     KoContactSemanticItemPlugin.cpp
+    KoRdfFoaF.cpp
+    KoRdfFoaFTreeWidgetItem.cpp
+)
+
+kde4_add_ui_files( calligra_semanticitem_contact_LIB_SRCS
+   KoRdfFoaFEditWidget.ui
 )
 
 kde4_add_plugin(calligra_semanticitem_contact ${calligra_semanticitem_contact_LIB_SRCS})
