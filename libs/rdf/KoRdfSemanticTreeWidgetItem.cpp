@@ -172,7 +172,7 @@ void KoRdfSemanticTreeWidgetItem::edit()
     dialog.setCaption(caption);
     dialog.addPage(widget, QString());
     if (dialog.exec() == KPageDialog::Accepted) {
-        kDebug(30015) << "KoRdfCalendarEventTreeWidgetItem::edit() accepted...";
+        kDebug(30015) << "KoRdfSemanticTreeWidgetItem::edit() accepted...";
         semanticItem()->updateFromEditorData();
     }
 }

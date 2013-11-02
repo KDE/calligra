@@ -92,4 +92,7 @@ private:
 #endif
 
 };
+
+typedef QExplicitlySharedDataPointer<KoRdfFoaF> hKoRdfFoaF;
+
 #endif

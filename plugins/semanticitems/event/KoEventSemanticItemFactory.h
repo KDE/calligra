@@ -1,4 +1,5 @@
-/* This file is part of the KDE project
+/* This file is part of the Calligra project, made with-in the KDE community
+
    Copyright (C) 2010 KO GmbH <ben.martin@kogmbh.com>
    Copyright (C) 2013 Friedrich W. H. Kossebau <kossebau@kde.org>
 
@@ -23,13 +24,10 @@
 
 #include "KoRdfSemanticItemFactoryBase.h"
 
-/**
- */
-class KoRdfCalendarEventReader : public KoRdfSemanticItemFactoryBase
+class KoEventSemanticItemFactory : public KoRdfSemanticItemFactoryBase
 {
 public:
-    KoRdfCalendarEventReader();
-    virtual ~KoRdfCalendarEventReader();
+    KoEventSemanticItemFactory();
 
 public: // KoRdfSemanticItemFactoryBase API
     virtual QString className() const;

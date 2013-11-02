@@ -20,7 +20,6 @@
 #ifndef __rdf_KoRdfFoaFTreeWidgetItem_h__
 #define __rdf_KoRdfFoaFTreeWidgetItem_h__
 
-#include "RdfForward.h"
 #include "KoRdfFoaF.h"
 #include "KoRdfSemanticTreeWidgetItem.h"
 

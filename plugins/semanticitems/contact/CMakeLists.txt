@@ -17,7 +17,7 @@ kde4_add_plugin(calligra_semanticitem_contact ${calligra_semanticitem_contact_LI
 if (KdepimLibs_FOUND)
    include_directories(${KDEPIMLIBS_INCLUDE_DIR})
    add_definitions(-DKDEPIMLIBS_FOUND)
-   target_link_libraries(calligra_semanticitem_contact ${KDE4_KABC_LIBS} ${KDE4_KCAL_LIBS})
+   target_link_libraries(calligra_semanticitem_contact ${KDE4_KABC_LIBS})
 endif (KdepimLibs_FOUND)
 
 target_link_libraries(calligra_semanticitem_contact ${KDE4_KDECORE_LIBS}  ${KORDF_LIBS})

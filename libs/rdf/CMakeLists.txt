@@ -8,7 +8,6 @@ include_directories( ${KORDF_INCLUDES})
 
 set(kordf_LIB_SRCS
     KoRdfSemanticItemReader.cpp
-    KoRdfCalendarEventReader.cpp
     KoRdfLocationReader.cpp
     KoDocumentRdf.cpp
     KoDocumentRdfEditWidget.cpp
@@ -19,13 +18,11 @@ set(kordf_LIB_SRCS
     KoRdfSemanticItem.cpp
     KoRdfSemanticItemFactoryBase.cpp
     KoRdfSemanticItemRegistry.cpp
-    KoRdfCalendarEvent.cpp
     KoRdfLocationEditWidget.cpp
     KoRdfLocation.cpp
     KoRdfSemanticItemViewSite.cpp
     KoRdfSemanticTree.cpp
     KoRdfSemanticTreeWidgetItem.cpp
-    KoRdfCalendarEventTreeWidgetItem.cpp
     KoRdfLocationTreeWidgetItem.cpp
     KoSemanticStylesheetsEditor.cpp
     KoChangeTrackerDisabledRAII.cpp
@@ -38,7 +35,6 @@ set(kordf_LIB_SRCS
 
 kde4_add_ui_files( kordf_LIB_SRCS
    KoDocumentRdfEditWidget.ui
-   KoRdfCalendarEventEditWidget.ui
    KoSemanticStylesheetsEditor.ui
 )
 
@@ -59,12 +55,6 @@ kde4_add_library(kordf SHARED ${kordf_LIB_SRCS})
 target_link_libraries(kordf ${extra_libs} komain )
 target_link_libraries(kordf ${SOPRANO_LIBRARIES})
 target_link_libraries(kordf LINK_INTERFACE_LIBRARIES  ${SOPRANO_LIBRARIES})
-
-if (KdepimLibs_FOUND)
-   include_directories(${KDEPIMLIBS_INCLUDE_DIR})
-   add_definitions(-DKDEPIMLIBS_FOUND)
-    target_link_libraries(kordf ${KDE4_KABC_LIBS} ${KDE4_KCAL_LIBS})
-endif (KdepimLibs_FOUND)
 
 if( MARBLE_FOUND )
 include_directories(${MARBLE_INCLUDE_DIR})

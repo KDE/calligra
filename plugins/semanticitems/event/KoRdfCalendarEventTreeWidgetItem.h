@@ -20,7 +20,6 @@
 #ifndef __rdf_KoRdfCalendarEventTreeWidgetItem_h__
 #define __rdf_KoRdfCalendarEventTreeWidgetItem_h__
 
-#include "RdfForward.h"
 #include "KoRdfCalendarEvent.h"
 #include "KoRdfSemanticTreeWidgetItem.h"
 

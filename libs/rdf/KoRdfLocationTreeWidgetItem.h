@@ -23,7 +23,6 @@
 #include "RdfForward.h"
 #include "KoRdfLocation.h"
 #include "KoRdfSemanticTreeWidgetItem.h"
-#include "KoRdfCalendarEventTreeWidgetItem.h"
 
 class KoCanvasBase;
 
@@ -37,7 +36,8 @@ class KoRdfLocationTreeWidgetItem : public KoRdfSemanticTreeWidgetItem
     Q_OBJECT
 public:
     enum {
-        Type = KoRdfCalendarEventTreeWidgetItem::Type + 1
+//         Type = KoRdfCalendarEventTreeWidgetItem::Type + 1
+        Type = KoRdfSemanticTreeWidgetItem::Type + 3
     };
     KoRdfLocationTreeWidgetItem(QTreeWidgetItem *parent, hKoRdfLocation semObj);
     virtual ~KoRdfLocationTreeWidgetItem();

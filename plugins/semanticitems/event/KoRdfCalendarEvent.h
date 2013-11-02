@@ -96,4 +96,7 @@ private:
     Ui::KoRdfCalendarEventEditWidget editWidget;
 
 };
+
+typedef QExplicitlySharedDataPointer<KoRdfCalendarEvent> hKoRdfCalendarEvent;
+
 #endif

@@ -1,4 +1,5 @@
-/* This file is part of the KDE project
+/* This file is part of the Calligra project, made with-in the KDE community
+
    Copyright (C) 2010 KO GmbH <ben.martin@kogmbh.com>
    Copyright (C) 2013 Friedrich W. H. Kossebau <kossebau@kde.org>
 
@@ -18,7 +19,7 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "KoRdfCalendarEventReader.h"
+#include "KoEventSemanticItemFactory.h"
 
 // lib
 #include "KoRdfCalendarEvent.h"
@@ -29,26 +30,22 @@
 #include <QMimeData>
 
 
-KoRdfCalendarEventReader::KoRdfCalendarEventReader()
+KoEventSemanticItemFactory::KoEventSemanticItemFactory()
   : KoRdfSemanticItemFactoryBase("Event")
 {
 }
 
-KoRdfCalendarEventReader::~KoRdfCalendarEventReader()
-{
-}
-
-QString KoRdfCalendarEventReader::className() const
+QString KoEventSemanticItemFactory::className() const
 {
     return QLatin1String("Event");
 }
 
-QString KoRdfCalendarEventReader::classDisplayName() const
+QString KoEventSemanticItemFactory::classDisplayName() const
 {
     return i18nc("displayname of the semantic item type Event", "Event");
 }
 
-void KoRdfCalendarEventReader::updateSemanticItems(QList<hKoRdfSemanticItem> &semanticItems, const KoDocumentRdf *rdf, QSharedPointer<Soprano::Model> m)
+void KoEventSemanticItemFactory::updateSemanticItems(QList<hKoRdfSemanticItem> &semanticItems, const KoDocumentRdf *rdf, QSharedPointer<Soprano::Model> m)
 {
     const QString sparqlQuery = QLatin1String(
         " prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n"
@@ -120,17 +117,17 @@ void KoRdfCalendarEventReader::updateSemanticItems(QList<hKoRdfSemanticItem> &se
 #endif
 }
 
-hKoRdfSemanticItem KoRdfCalendarEventReader::createSemanticItem(const KoDocumentRdf* rdf, QObject* parent)
+hKoRdfSemanticItem KoEventSemanticItemFactory::createSemanticItem(const KoDocumentRdf* rdf, QObject* parent)
 {
     return hKoRdfSemanticItem(new KoRdfCalendarEvent(parent, rdf));
 }
 
-bool KoRdfCalendarEventReader::canCreateSemanticItemFromMimeData(const QMimeData *mimeData) const
+bool KoEventSemanticItemFactory::canCreateSemanticItemFromMimeData(const QMimeData *mimeData) const
 {
     return mimeData->hasFormat(QLatin1String("text/calendar"));
 }
 
-hKoRdfSemanticItem KoRdfCalendarEventReader::createSemanticItemFromMimeData(const QMimeData *mimeData,
+hKoRdfSemanticItem KoEventSemanticItemFactory::createSemanticItemFromMimeData(const QMimeData *mimeData,
                                                                             KoCanvasBase *host,
                                                                             const KoDocumentRdf *rdf,
                                                                             QObject *parent) const

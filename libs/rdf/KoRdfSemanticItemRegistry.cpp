@@ -21,7 +21,6 @@
 
 #include "KoRdfSemanticItemRegistry.h"
 
-#include "KoRdfCalendarEventReader.h"
 #include "KoRdfLocationReader.h"
 
 #include <KoPluginLoader.h>
@@ -49,7 +48,6 @@ KoRdfSemanticItemRegistry::Private::~Private()
 
 void KoRdfSemanticItemRegistry::Private::init(KoRdfSemanticItemRegistry *q)
 {
-        addReader(new KoRdfCalendarEventReader());
         addReader(new KoRdfLocationReader());
 
     KoPluginLoader::PluginsConfig config;
