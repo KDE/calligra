@@ -18,6 +18,8 @@ set(kordf_LIB_SRCS
     KoRdfPrefixMapping.cpp
     KoSemanticStylesheet.cpp
     KoRdfSemanticItem.cpp
+    KoRdfSemanticItemFactoryBase.cpp
+    KoRdfSemanticItemRegistry.cpp
     KoRdfFoaF.cpp
     KoRdfCalendarEvent.cpp
     KoRdfLocationEditWidget.cpp
@@ -81,14 +83,10 @@ VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSI
 )
 install(TARGETS kordf ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
+install( FILES calligra_semanticitem.desktop  DESTINATION ${SERVICETYPES_INSTALL_DIR})
+
 install( FILES
     kordf_export.h
-    KoRdfFoaF.h
-    KoRdfCalendarEvent.h
-    KoRdfLocation.h
-    KoRdfFoaFTreeWidgetItem.h
-    KoRdfCalendarEventTreeWidgetItem.h
-    KoRdfLocationTreeWidgetItem.h
     KoChangeTrackerDisabledRAII.h
     RdfForward.h
     KoDocumentRdf.h
@@ -96,6 +94,8 @@ install( FILES
     KoSopranoTableModel.h
     KoSemanticStylesheet.h
     KoRdfSemanticItem.h
+    KoRdfSemanticItemFactoryBase.h
+    KoRdfSemanticItemRegistry.h
     KoRdfSemanticItemViewSite.h
     KoRdfSemanticTree.h
     KoRdfSemanticTreeWidgetItem.h
