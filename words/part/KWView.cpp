@@ -369,7 +369,7 @@ void KWView::setupActions()
     action = new KAction(i18n("Semantic Stylesheets..."), this);
     actionCollection()->addAction("edit_semantic_stylesheets", action);
     action->setToolTip(i18n("Modify and add semantic stylesheets"));
-    action->setWhatsThis(i18n("Stylesheets are used to format contact, event, and location information which is stored in Rdf"));
+    action->setWhatsThis(i18n("Stylesheets are used to format the display of information which is stored in RDF."));
     connect(action, SIGNAL(triggered()), this, SLOT(editSemanticStylesheets()));
 
     if (KoDocumentRdf* rdf = dynamic_cast<KoDocumentRdf*>(m_document->documentRdf())) {
