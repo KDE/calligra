@@ -51,7 +51,6 @@ void KoContactSemanticItemFactory::updateSemanticItems(QList<hKoRdfSemanticItem>
     const QString sparqlQuery = QLatin1String(
         "prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n"
         "prefix foaf: <http://xmlns.com/foaf/0.1/> \n"
-        "prefix pkg: <http://docs.oasis-open.org/opendocument/meta/package/common#> \n"
         "select distinct ?graph ?person ?name ?nick ?homepage ?img ?phone \n"
         "where { \n"
         "  GRAPH ?graph { \n"

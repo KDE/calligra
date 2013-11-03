@@ -111,7 +111,6 @@ void KoLocationSemanticItemFactory::updateSemanticItems(QList<hKoRdfSemanticItem
     QList<hKoRdfSemanticItem> currentKoRdfLocations;
     addLocations(currentKoRdfLocations, rdf, m, false,
         "prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n"
-        "prefix foaf: <http://xmlns.com/foaf/0.1/>  \n"
         "prefix cal:  <http://www.w3.org/2002/12/cal/icaltzd#> \n"
         "select distinct ?graph ?geo ?long ?lat ?joiner \n"
         "where {  \n"
@@ -124,7 +123,6 @@ void KoLocationSemanticItemFactory::updateSemanticItems(QList<hKoRdfSemanticItem
         "} \n");
     addLocations(currentKoRdfLocations, rdf, m, true,
         "prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n"
-        "prefix foaf:  <http://xmlns.com/foaf/0.1/>  \n"
         "prefix geo84: <http://www.w3.org/2003/01/geo/wgs84_pos#> \n"
         "select ?graph ?geo ?long ?lat ?type \n"
         "where {  \n"

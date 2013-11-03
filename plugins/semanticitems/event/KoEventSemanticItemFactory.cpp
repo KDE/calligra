@@ -49,7 +49,6 @@ void KoEventSemanticItemFactory::updateSemanticItems(QList<hKoRdfSemanticItem> &
 {
     const QString sparqlQuery = QLatin1String(
         " prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n"
-        " prefix foaf: <http://xmlns.com/foaf/0.1/>  \n"
         " prefix cal:  <http://www.w3.org/2002/12/cal/icaltzd#>  \n"
         " select distinct ?graph ?ev ?uid ?dtstart ?dtend ?summary ?location ?geo ?long ?lat \n"
         " where {  \n"

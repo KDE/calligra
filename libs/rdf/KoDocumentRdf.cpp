@@ -494,9 +494,7 @@ void KoDocumentRdf::addStatements(QSharedPointer<Soprano::Model> model, const QS
     QTextStream queryss(&sparqlQuery);
 
     RDEBUG << "addStatements model.sz:" << d->model->statementCount() << " xmlid:" << xmlid;
-    queryss << "prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n"
-            << "prefix foaf: <http://xmlns.com/foaf/0.1/> \n"
-            << "prefix pkg:  <http://docs.oasis-open.org/opendocument/meta/package/common#> \n"
+    queryss << "prefix pkg:  <http://docs.oasis-open.org/opendocument/meta/package/common#> \n"
             << ""
             << "select ?s ?p ?o ?g \n"
             << "where { \n"
