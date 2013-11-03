@@ -49,26 +49,6 @@ public:
     static KoRdfSemanticItemRegistry *instance();
 
     /**
-     * Create a list of actions that can be used to plug into a menu, for example.
-     * This method will find all the InlineObjectFactories that are installed in the system and
-     * find out which object they provide. If a factory provides a variable, then all its
-     * templates will be added to the response.
-     * Each of thse actions, when executed, will insert the relevant variable in the current text-position.
-     * The actions assume that the text tool is selected, if thats not the case then they will silently fail.
-     * @param host the canvas for which these actions are created.  Note that the actions will get these
-     *  actions as a parent (for memory management purposes) as well.
-     * @see KoInlineTextObjectManager::createInsertVariableActions()
-     */
-//     QList<QAction*> createInsertVariableActions(KoCanvasBase *host) const;
-
-    /**
-     * Use the element to find out which variable plugin can load it, and returns the loaded
-     * variable. The element expected is one of 'text:subject', 'text:date' / etc.
-     *
-     * @returns the variable or 0 if no variable could be created
-     */
-//     KoInlineObject *createFromOdf(const KoXmlElement &element, KoShapeLoadingContext &context) const;
-    /**
      * Gets a list of SemanticItem subclasses that can be created.
      * Any of the strings in the return value can be created using
      * createSemanticItem().
@@ -76,6 +56,10 @@ public:
      * @see createSemanticItem()
      */
     QStringList classNames() const;
+
+    /**
+     * Returns the display name of the class, or an empty string if none was found.
+     */
     QString classDisplayName(const QString &className) const;
 
     /**
@@ -91,6 +75,10 @@ public:
       */
      hKoRdfSemanticItem createSemanticItemFromMimeData(const QMimeData *mimeData, KoCanvasBase *host, const KoDocumentRdf *docRdf, QObject *parent = 0) const;
 
+    /**
+     * Returns if a semantic item could be principially created from the passed mimeData.
+     * Creation could still fail if actually tried.
+     */
      bool canCreateSemanticItemFromMimeData(const QMimeData *mimeData) const;
 
     void updateSemanticItems(QList<hKoRdfSemanticItem> &semanticItems, const KoDocumentRdf *docRdf,

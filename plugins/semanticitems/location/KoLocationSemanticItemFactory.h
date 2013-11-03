@@ -22,7 +22,7 @@
 #ifndef KOLOCATIONSEMANTICITEMFACTORY_H
 #define KOLOCATIONSEMANTICITEMFACTORY_H
 
-#include "KoRdfSemanticItemFactoryBase.h"
+#include <KoRdfSemanticItemFactoryBase.h>
 
 /**
  */

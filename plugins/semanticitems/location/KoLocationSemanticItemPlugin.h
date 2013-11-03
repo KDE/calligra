@@ -32,4 +32,4 @@ public:
     explicit KoLocationSemanticItemPlugin(QObject *parent, const QVariantList &args = QVariantList());
 };
 
-#endif // KOEVENTSEMANTICITEMPLUGIN_H
+#endif // KOLOCATIONSEMANTICITEMPLUGIN_H

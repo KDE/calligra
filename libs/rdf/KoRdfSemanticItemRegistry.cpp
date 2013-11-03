@@ -30,21 +30,15 @@ class KoRdfSemanticItemRegistry::Private
 {
 public:
     ~Private();
-//     void insertFactory(KoRdfSemanticItemFactoryBase *factory);
-    void init(KoRdfSemanticItemRegistry *q);
-    void addReader(KoRdfSemanticItemFactoryBase *reader) { readers.insert(reader->className(), reader); }
-
-    QHash<QPair<QString, QString>, KoRdfSemanticItemFactoryBase *> factories;
-    QMap<QString,KoRdfSemanticItemFactoryBase*> readers;
+    void init();
 };
 
 
 KoRdfSemanticItemRegistry::Private::~Private()
 {
-    qDeleteAll(readers);
 }
 
-void KoRdfSemanticItemRegistry::Private::init(KoRdfSemanticItemRegistry *q)
+void KoRdfSemanticItemRegistry::Private::init()
 {
     KoPluginLoader::PluginsConfig config;
     config.whiteList = "SemanticItemPlugins";
@@ -52,30 +46,13 @@ void KoRdfSemanticItemRegistry::Private::init(KoRdfSemanticItemRegistry *q)
     config.group = "calligra";
     KoPluginLoader::instance()->load(QString::fromLatin1("Calligra/SemanticItem"),
                                      QString::fromLatin1("[X-Calligra-PluginVersion] == 28"), config);
-
-    foreach (KoRdfSemanticItemFactoryBase *factory, q->values()) {
-#if 0
-        QString nameSpace = factory->odfNameSpace();
-        if (nameSpace.isEmpty() || factory->odfElementNames().isEmpty()) {
-            kDebug(32500) << "Variable factory" << factory->id() << " does not have odfNameSpace defined, ignoring";
-        } else {
-            foreach (const QString &elementName, factory->odfElementNames()) {
-                factories.insert(QPair<QString, QString>(nameSpace, elementName), factory);
-
-                kDebug(32500) << "Inserting variable factory" << factory->id() << " for"
-                    << nameSpace << ":" << elementName;
-            }
-        }
-#endif
-        addReader(factory);
-    }
 }
 
 KoRdfSemanticItemRegistry* KoRdfSemanticItemRegistry::instance()
 {
     K_GLOBAL_STATIC(KoRdfSemanticItemRegistry, s_instance)
     if (!s_instance.exists()) {
-        s_instance->d->init(s_instance);
+        s_instance->d->init();
     }
     return s_instance;
 }
@@ -100,50 +77,35 @@ QList<QAction*> KoRdfSemanticItemRegistry::createInsertVariableActions(KoCanvasB
     return answer;
 }
 
-KoInlineObject *KoRdfSemanticItemRegistry::createFromOdf(const KoXmlElement &element, KoShapeLoadingContext &context) const
-{
-    KoRdfSemanticItemFactoryBase *factory = d->factories.value(
-            QPair<QString, QString>(element.namespaceURI(), element.tagName()));
-    if (factory == 0) {
-        kDebug(32500) << "No factory for" << element.namespaceURI() << ":" << element.tagName();
-        return 0;
-    }
-
-    KoInlineObject *object = factory->createInlineObject(0);
-    if (object) {
-        object->loadOdf(element, context);
-    }
-
-    return object;
-}
 #endif
 
 QStringList KoRdfSemanticItemRegistry::classNames() const
 {
-    return d->readers.keys();
+    return keys();
 }
 
 QString KoRdfSemanticItemRegistry::classDisplayName(const QString& className) const
 {
-    const KoRdfSemanticItemFactoryBase *reader = d->readers.value(className);
-    return reader ? reader->classDisplayName() : QString();
+    const KoRdfSemanticItemFactoryBase *factory = value(className);
+    return factory ? factory->classDisplayName() : QString();
 }
 
 
 hKoRdfSemanticItem KoRdfSemanticItemRegistry::createSemanticItem(const QString &semanticClass, const KoDocumentRdf *docRdf, QObject *parent) const
 {
-    KoRdfSemanticItemFactoryBase *reader = d->readers.value(semanticClass);
-    if (reader) {
-        return reader->createSemanticItem(docRdf, parent);
+    KoRdfSemanticItemFactoryBase *factory = value(semanticClass);
+    if (factory) {
+        return factory->createSemanticItem(docRdf, parent);
     }
     return hKoRdfSemanticItem(0);
 }
 
 hKoRdfSemanticItem KoRdfSemanticItemRegistry::createSemanticItemFromMimeData(const QMimeData *mimeData, KoCanvasBase *host, const KoDocumentRdf *docRdf, QObject *parent) const
 {
-    foreach(KoRdfSemanticItemFactoryBase *reader, d->readers) {
-        if (reader->canCreateSemanticItemFromMimeData(mimeData)) {
-            return reader->createSemanticItemFromMimeData(mimeData, host, docRdf, parent);
+    foreach (const QString &key, keys()) {
+        KoRdfSemanticItemFactoryBase *factory = value(key);
+        if (factory->canCreateSemanticItemFromMimeData(mimeData)) {
+            return factory->createSemanticItemFromMimeData(mimeData, host, docRdf, parent);
         }
     }
     return hKoRdfSemanticItem(0);
@@ -151,8 +113,9 @@ hKoRdfSemanticItem KoRdfSemanticItemRegistry::createSemanticItemFromMimeData(con
 
 bool KoRdfSemanticItemRegistry::canCreateSemanticItemFromMimeData(const QMimeData *mimeData) const
 {
-    foreach(KoRdfSemanticItemFactoryBase *reader, d->readers) {
-        if (reader->canCreateSemanticItemFromMimeData(mimeData)) {
+    foreach (const QString &key, keys()) {
+        KoRdfSemanticItemFactoryBase *factory = value(key);
+        if (factory->canCreateSemanticItemFromMimeData(mimeData)) {
             return true;
         }
     }
@@ -161,16 +124,14 @@ bool KoRdfSemanticItemRegistry::canCreateSemanticItemFromMimeData(const QMimeDat
 
 void KoRdfSemanticItemRegistry::updateSemanticItems(QList<hKoRdfSemanticItem> &semanticItems, const KoDocumentRdf *docRdf, const QString &className, QSharedPointer<Soprano::Model> m) const
 {
-    KoRdfSemanticItemFactoryBase *reader = d->readers.value(className);
-    if (reader) {
-        reader->updateSemanticItems(semanticItems, docRdf, m);
+    KoRdfSemanticItemFactoryBase *factory = value(className);
+    if (factory) {
+        factory->updateSemanticItems(semanticItems, docRdf, m);
     }
 }
 
 KoRdfSemanticItemRegistry::~KoRdfSemanticItemRegistry()
 {
-//     qDeleteAll(doubleEntries());
-//     qDeleteAll(values());
     delete d;
 }
 

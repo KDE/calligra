@@ -21,9 +21,6 @@
 
 #include "KoRdfSemanticItemFactoryBase.h"
 
-// #include <KoProperties.h>
-
-#include <QStringList>
 
 class KoRdfSemanticItemFactoryBase::Private
 {
@@ -32,24 +29,12 @@ public:
             : id(identifier) {
     }
 
-    ~Private() {
-//         foreach(const KoInlineObjectTemplate &t, templates)
-//             delete t.properties;
-//         templates.clear();
-    }
     const QString id;
-#if 0
-    QString iconName;
-    QString odfNameSpace;
-    QStringList odfElementNames;
-    QList<KoInlineObjectTemplate> templates;
-#endif
 };
 
 KoRdfSemanticItemFactoryBase::KoRdfSemanticItemFactoryBase(const QString &id)
         : d(new Private(id))
 {
-//     d->type = type;
 }
 
 KoRdfSemanticItemFactoryBase::~KoRdfSemanticItemFactoryBase()
@@ -61,36 +46,3 @@ QString KoRdfSemanticItemFactoryBase::id() const
 {
     return d->id;
 }
-
-#if 0
-QList<KoInlineObjectTemplate> KoRdfSemanticItemFactoryBase::templates() const
-{
-    return d->templates;
-}
-
-void KoRdfSemanticItemFactoryBase::addTemplate(const KoInlineObjectTemplate &params)
-{
-    d->templates.append(params);
-}
-
-QStringList KoRdfSemanticItemFactoryBase::odfElementNames() const
-{
-    return d->odfElementNames;
-}
-
-QString KoRdfSemanticItemFactoryBase::odfNameSpace() const
-{
-    return d->odfNameSpace;
-}
-
-void KoRdfSemanticItemFactoryBase::setOdfElementNames(const QString & nameSpace, const QStringList &names)
-{
-    d->odfNameSpace = nameSpace;
-    d->odfElementNames = names;
-}
-
-KoRdfSemanticItemFactoryBase::ObjectType KoRdfSemanticItemFactoryBase::type() const
-{
-    return d->type;
-}
-#endif

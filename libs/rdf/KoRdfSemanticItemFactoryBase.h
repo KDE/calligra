@@ -58,46 +58,34 @@ public: // API required by KoGenericRegistry
     QString id() const;
 
 public: // API to be implemented
+    /**
+     * Returns the name of the class of semantic items this factory creates.
+     */
     virtual QString className() const = 0;
+
+    /**
+     * Returns the display name of the class of semantic items this factory creates.
+     */
     virtual QString classDisplayName() const = 0;
 
     virtual void updateSemanticItems(QList<hKoRdfSemanticItem> &semanticItems, const KoDocumentRdf *rdf, QSharedPointer<Soprano::Model> m) = 0;
+
+    /**
+     * Create a new instance of a semantic item.
+     */
     virtual hKoRdfSemanticItem createSemanticItem(const KoDocumentRdf *rdf, QObject *parent) = 0;
+
+    /**
+     * Returns if a semantic item could be principially created from the passed mimeData.
+     * Creation could still fail if actually tried.
+     */
     virtual bool canCreateSemanticItemFromMimeData(const QMimeData *mimeData) const = 0;
+
+    /**
+     * Create a new instance of a semantic item from the passed mimeData. Returns 0 if that fails.
+     */
     virtual hKoRdfSemanticItem createSemanticItemFromMimeData(const QMimeData* mimeData, KoCanvasBase *host,
                                                               const KoDocumentRdf *rdf, QObject *parent = 0) const = 0;
-#if 0
-    /**
-     * Create a new instance of an inline object.
-     */
-    virtual KoInlineObject *createInlineObject(const KoProperties *properties = 0) const = 0;
-
-    /**
-     * Returns the type of object this factory creates.
-     * The main purpose is to group plugins per type in, for example, a menu.
-     */
-    ObjectType type() const;
-
-    /**
-     * Return all the templates this factory knows about.
-     * Each template shows a different way to create an object this factory is specialized in.
-     */
-    QList<KoInlineObjectTemplate> templates() const;
-
-    QStringList odfElementNames() const;
-
-    QString odfNameSpace() const;
-
-    void setOdfElementNames(const QString &nameSpace, const QStringList &names);
-
-protected:
-    /**
-     * Add a template with the properties of a speficic type of object this factory can generate
-     * using the createInlineObject() method.
-     * @param params The new template this factory knows to produce
-     */
-    void addTemplate(const KoInlineObjectTemplate &params);
-#endif
 private:
     class Private;
     Private * const d;

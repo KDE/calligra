@@ -22,7 +22,7 @@
 #ifndef KORDFCALENDAREVENTREADER_H
 #define KORDFCALENDAREVENTREADER_H
 
-#include "KoRdfSemanticItemFactoryBase.h"
+#include <KoRdfSemanticItemFactoryBase.h>
 
 class KoEventSemanticItemFactory : public KoRdfSemanticItemFactoryBase
 {
