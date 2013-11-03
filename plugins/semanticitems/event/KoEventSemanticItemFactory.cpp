@@ -103,18 +103,6 @@ void KoEventSemanticItemFactory::updateSemanticItems(QList<hKoRdfSemanticItem> &
     foreach (hKoRdfSemanticItem semItem, oldSemanticItems) {
         semanticItems.removeAll(semItem);
     }
-
-#ifndef NDEBUG
-    if (semanticItems.empty() && m->statementCount())
-    {
-        kDebug(30015) << "foaf() have data, but no foafs!" << endl;
-        QList<Soprano::Statement> allStatements = m->listStatements().allElements();
-        foreach (Soprano::Statement s, allStatements)
-        {
-            kDebug(30015) << s;
-        }
-    }
-#endif
 }
 
 hKoRdfSemanticItem KoEventSemanticItemFactory::createSemanticItem(const KoDocumentRdf* rdf, QObject* parent)
