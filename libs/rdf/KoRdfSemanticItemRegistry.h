@@ -65,13 +65,13 @@ public:
      * classNames(). Useful for menus and other places that want to
      * allow the user to create new SemanticItem Objects.
      */
-     hKoRdfSemanticItem createSemanticItem(const QString &semanticClass, const KoDocumentRdf *docRdf, QObject *parent = 0) const;
+    hKoRdfSemanticItem createSemanticItem(const QString &semanticClass, const KoDocumentRdf *docRdf, QObject *parent = 0) const;
 
-     /**
-      * Create a SemanticItem subclass from the passed mimeData.
-      * TODO: support that mimedata could be used for different semantic item classes
-      */
-     hKoRdfSemanticItem createSemanticItemFromMimeData(const QMimeData *mimeData, KoCanvasBase *host, const KoDocumentRdf *docRdf, QObject *parent = 0) const;
+    /**
+     * Create a SemanticItem subclass from the passed mimeData.
+     * TODO: support that mimedata could be used for different semantic item classes
+     */
+    hKoRdfSemanticItem createSemanticItemFromMimeData(const QMimeData *mimeData, KoCanvasBase *host, const KoDocumentRdf *docRdf, QObject *parent = 0) const;
 
     /**
      * Returns if a semantic item could be principially created from the passed mimeData.
