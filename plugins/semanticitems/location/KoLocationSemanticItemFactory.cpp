@@ -1,4 +1,5 @@
-/* This file is part of the KDE project
+/* This file is part of the Calligra project, made with-in the KDE community
+
    Copyright (C) 2010 KO GmbH <ben.martin@kogmbh.com>
    Copyright (C) 2013 Friedrich W. H. Kossebau <kossebau@kde.org>
 
@@ -18,7 +19,7 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "KoRdfLocationReader.h"
+#include "KoLocationSemanticItemFactory.h"
 
 // lib
 #include "KoRdfLocation.h"
@@ -27,21 +28,21 @@
 #include <klocale.h>
 
 
-KoRdfLocationReader::KoRdfLocationReader()
+KoLocationSemanticItemFactory::KoLocationSemanticItemFactory()
 : KoRdfSemanticItemFactoryBase("Location")
 {
 }
 
-KoRdfLocationReader::~KoRdfLocationReader()
+KoLocationSemanticItemFactory::~KoLocationSemanticItemFactory()
 {
 }
 
-QString KoRdfLocationReader::className() const
+QString KoLocationSemanticItemFactory::className() const
 {
     return QLatin1String("Location");
 }
 
-QString KoRdfLocationReader::classDisplayName() const
+QString KoLocationSemanticItemFactory::classDisplayName() const
 {
     return i18nc("displayname of the semantic item type Location", "Location");
 }
@@ -105,7 +106,7 @@ static void addLocations(QList<hKoRdfSemanticItem> &ret, const KoDocumentRdf *rd
 }
 
 
-void KoRdfLocationReader::updateSemanticItems(QList<hKoRdfSemanticItem> &semanticItems, const KoDocumentRdf *rdf, QSharedPointer<Soprano::Model> m)
+void KoLocationSemanticItemFactory::updateSemanticItems(QList<hKoRdfSemanticItem> &semanticItems, const KoDocumentRdf *rdf, QSharedPointer<Soprano::Model> m)
 {
     QList<hKoRdfSemanticItem> currentKoRdfLocations;
     addLocations(currentKoRdfLocations, rdf, m, false,
@@ -184,18 +185,18 @@ void KoRdfLocationReader::updateSemanticItems(QList<hKoRdfSemanticItem> &semanti
     }
 }
 
-hKoRdfSemanticItem KoRdfLocationReader::createSemanticItem(const KoDocumentRdf* rdf, QObject* parent)
+hKoRdfSemanticItem KoLocationSemanticItemFactory::createSemanticItem(const KoDocumentRdf* rdf, QObject* parent)
 {
     return hKoRdfSemanticItem(new KoRdfLocation(parent, rdf));
 }
 
-bool KoRdfLocationReader::canCreateSemanticItemFromMimeData(const QMimeData* mimeData) const
+bool KoLocationSemanticItemFactory::canCreateSemanticItemFromMimeData(const QMimeData* mimeData) const
 {
     Q_UNUSED(mimeData);
     return false;
 }
 
-hKoRdfSemanticItem KoRdfLocationReader::createSemanticItemFromMimeData(const QMimeData* mimeData, KoCanvasBase* host, const KoDocumentRdf* rdf, QObject* parent) const
+hKoRdfSemanticItem KoLocationSemanticItemFactory::createSemanticItemFromMimeData(const QMimeData* mimeData, KoCanvasBase* host, const KoDocumentRdf* rdf, QObject* parent) const
 {
     Q_UNUSED(mimeData);
     Q_UNUSED(host);

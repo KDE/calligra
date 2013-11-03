@@ -1,4 +1,5 @@
-/* This file is part of the KDE project
+/* This file is part of the Calligra project, made with-in the KDE community
+
    Copyright (C) 2010 KO GmbH <ben.martin@kogmbh.com>
    Copyright (C) 2013 Friedrich W. H. Kossebau <kossebau@kde.org>
 
@@ -18,18 +19,18 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KORDFLOCATIONREADER_H
-#define KORDFLOCATIONREADER_H
+#ifndef KOLOCATIONSEMANTICITEMFACTORY_H
+#define KOLOCATIONSEMANTICITEMFACTORY_H
 
 #include "KoRdfSemanticItemFactoryBase.h"
 
 /**
  */
-class KoRdfLocationReader : public KoRdfSemanticItemFactoryBase
+class KoLocationSemanticItemFactory : public KoRdfSemanticItemFactoryBase
 {
 public:
-    KoRdfLocationReader();
-    virtual ~KoRdfLocationReader();
+    KoLocationSemanticItemFactory();
+    virtual ~KoLocationSemanticItemFactory();
 
 public: // KoRdfSemanticItemFactoryBase API
     virtual QString className() const;

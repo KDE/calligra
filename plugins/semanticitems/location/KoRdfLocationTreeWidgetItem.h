@@ -20,7 +20,6 @@
 #ifndef __rdf_KoRdfLocationTreeWidgetItem_h__
 #define __rdf_KoRdfLocationTreeWidgetItem_h__
 
-#include "RdfForward.h"
 #include "KoRdfLocation.h"
 #include "KoRdfSemanticTreeWidgetItem.h"
 

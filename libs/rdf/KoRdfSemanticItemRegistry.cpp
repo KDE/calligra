@@ -21,8 +21,6 @@
 
 #include "KoRdfSemanticItemRegistry.h"
 
-#include "KoRdfLocationReader.h"
-
 #include <KoPluginLoader.h>
 
 #include <kdebug.h>
@@ -48,8 +46,6 @@ KoRdfSemanticItemRegistry::Private::~Private()
 
 void KoRdfSemanticItemRegistry::Private::init(KoRdfSemanticItemRegistry *q)
 {
-        addReader(new KoRdfLocationReader());
-
     KoPluginLoader::PluginsConfig config;
     config.whiteList = "SemanticItemPlugins";
     config.blacklist = "SemanticItemPluginsDisabled";

@@ -20,7 +20,6 @@
 #ifndef __rdf_KoRdfLocationEditWidget_h__
 #define __rdf_KoRdfLocationEditWidget_h__
 
-#include "RdfForward.h"
 #include <QObject>
 #include <QWidget>
 
@@ -30,6 +29,10 @@ namespace Marble
 {
     class MarbleWidget;
     class LatLonEdit;
+}
+namespace Ui
+{
+    class KoRdfLocationEditWidget;
 }
 
 /**
