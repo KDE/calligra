@@ -35,7 +35,7 @@
 #include <kmessagebox.h>
 
 
-static const char ComboBoxSemanticItemClassId[] = "Ko_semanticItemClass";
+static const char SemanticItemClassId[] = "Ko_semanticItemClass";
 
 /**
  * Helper class to maintain a single row in the namespace editing
@@ -95,7 +95,7 @@ public:
     QWidget *m_widget;
     KoDocumentRdf *m_rdf;
     Ui::KoDocumentRdfEditWidget *m_ui;
-    QMap<QString, QComboBox*> m_defaultStylesheetComboBoxMap;
+    QHash<QString, QComboBox*> m_defaultStylesheetComboBoxMap;
     KoSopranoTableModel *m_tripleModel;
     KoSopranoTableModel *m_sparqlResultModel;
     QSortFilterProxyModel *m_tripleProxyModel;
@@ -247,7 +247,7 @@ KoDocumentRdfEditWidget::KoDocumentRdfEditWidget( KoDocumentRdf *docRdf)
         styleSheetsGridLayout->addWidget(defaultStylesheetComboBox, row, 1);
 
         QPushButton *setStylesheetButton = new QPushButton(buttonText);
-        setStylesheetButton->setProperty(ComboBoxSemanticItemClassId, semanticItemName);
+        setStylesheetButton->setProperty(SemanticItemClassId, semanticItemName);
         styleSheetsGridLayout->addWidget(setStylesheetButton, row, 2);
         connect(setStylesheetButton, SIGNAL(clicked()), SLOT(onDefaultSheetButtonClicked()));
 
@@ -328,8 +328,12 @@ void KoDocumentRdfEditWidget::apply()
 {
     KoDocumentRdf *rdf = d->m_rdf;
 
-    foreach(QComboBox *comboBox, d->m_defaultStylesheetComboBoxMap) {
-        hKoRdfSemanticItem si = rdf->createSemanticItem(comboBox->property(ComboBoxSemanticItemClassId).toString());
+    QHash<QString, QComboBox*>::ConstIterator it = d->m_defaultStylesheetComboBoxMap.constBegin();
+    QHash<QString, QComboBox*>::ConstIterator end = d->m_defaultStylesheetComboBoxMap.constEnd();
+    for( ; it != end; ++it) {
+        const QString &semanticClass = it.key();
+        QComboBox *comboBox = it.value();
+        hKoRdfSemanticItem si = rdf->createSemanticItem(semanticClass);
         si->defaultStylesheet(stylesheetFromComboBox(comboBox));
     }
 }
@@ -489,7 +493,7 @@ void KoDocumentRdfEditWidget::applyStylesheetFromComboBox(QComboBox *comboBox) c
     QString stylesheetName = comboBox->currentText();
     kDebug(30015) << "changing default stylesheet to:" << stylesheetName;
     hKoSemanticStylesheet ss = stylesheetFromComboBox(comboBox);
-    const QString semanticItemClass = comboBox->property(ComboBoxSemanticItemClassId).toString();
+    const QString semanticItemClass = comboBox->property(SemanticItemClassId).toString();
     if (hKoRdfSemanticItem si = rdf->createSemanticItem(semanticItemClass)) {
         si->defaultStylesheet(ss);
     }
@@ -508,7 +512,10 @@ void KoDocumentRdfEditWidget::applyStylesheetFromComboBox(QComboBox *comboBox) c
 //
 void KoDocumentRdfEditWidget::onDefaultSheetButtonClicked()
 {
-    QComboBox *comboBox = qobject_cast<QComboBox*>(sender());
+    QPushButton *pushButton = qobject_cast<QPushButton*>(sender());
+    Q_ASSERT(pushButton);
+    const QString semanticItemClass = pushButton->property(SemanticItemClassId).toString();
+    QComboBox *comboBox = d->m_defaultStylesheetComboBoxMap.value(semanticItemClass);
     Q_ASSERT(comboBox);
     applyStylesheetFromComboBox(comboBox);
 }
