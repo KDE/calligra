@@ -34,10 +34,8 @@ class QMimeData;
 
 /**
  * A factory for semantic item objects. There should be one for each semantic item class to
- * allow the creation of the inlineObject from that plugin.
- * The factory additionally has information to allow showing a menu entry for user
- * access to the object-type.
- * @see KoInlineObjectRegistry
+ * allow the creation of such items from that plugin.
+ * @see KoRdfSemanticItemRegistry
  */
 class KORDF_EXPORT KoRdfSemanticItemFactoryBase
 {
@@ -45,7 +43,7 @@ public:
     /**
      * Create the new factory
      * @param parent the parent QObject for memory management usage.
-     * @param id a string that will be used internally for referencing the variable-type.
+     * @param id a string that will be used internally for referencing the semantic item type.
      */
     explicit KoRdfSemanticItemFactoryBase(const QString &id);
     virtual ~KoRdfSemanticItemFactoryBase();

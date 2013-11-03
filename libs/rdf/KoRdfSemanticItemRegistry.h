@@ -31,11 +31,9 @@
 class KoCanvasBase;
 
 /**
- * This singleton class keeps a register of all available InlineObject factories.
- * @see KoInlineObjectFactoryBase
- * @see KoInlineTextObjectManager
- * @see KoInlineObject
- * @see KoVariable
+ * This singleton class keeps a register of all available semantic item factories.
+ * @see KoRdfSemanticItemFactoryBase
+ * @see KoRdfSemanticItem
  */
 class KORDF_EXPORT KoRdfSemanticItemRegistry : public KoGenericRegistry<KoRdfSemanticItemFactoryBase*>
 {
