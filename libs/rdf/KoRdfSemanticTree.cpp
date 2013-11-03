@@ -133,8 +133,8 @@ void KoRdfSemanticTreePrivate::update(KoDocumentRdf *rdf, QSharedPointer<Soprano
             //kDebug(30015) << "expanding lists... new.sz:" << model->statementCount();
         }
 
-        const QList<hKoRdfSemanticItem> contactSemanticItems = rdf->semanticItems(semanticClass, model);
-        foreach (hKoRdfSemanticItem semanticItem, contactSemanticItems) {
+        const QList<hKoRdfSemanticItem> semanticItems = rdf->semanticItems(semanticClass, model);
+        foreach (hKoRdfSemanticItem semanticItem, semanticItems) {
             KoRdfSemanticTreeWidgetItem *item = semanticItem->createQTreeWidgetItem(treeWidgetItem);
             if (selectedItems.contains(item->semanticItem()->name())) {
                 item->setSelected(true);
