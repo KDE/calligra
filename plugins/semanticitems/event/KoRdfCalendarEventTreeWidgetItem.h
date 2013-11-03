@@ -35,10 +35,6 @@ class KoRdfCalendarEventTreeWidgetItem : public KoRdfSemanticTreeWidgetItem
     Q_OBJECT
 
 public:
-    enum {
-//         Type = KoRdfFoaFTreeWidgetItem::Type + 1
-        Type = KoRdfSemanticTreeWidgetItem::Type + 2
-    };
     KoRdfCalendarEventTreeWidgetItem(QTreeWidgetItem *parent, hKoRdfCalendarEvent ev);
 
     // inherited and reimplemented...

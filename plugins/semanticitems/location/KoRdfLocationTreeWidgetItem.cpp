@@ -32,7 +32,7 @@
 
 KoRdfLocationTreeWidgetItem::KoRdfLocationTreeWidgetItem(QTreeWidgetItem *parent,
                                                          hKoRdfLocation semObj)
-        : KoRdfSemanticTreeWidgetItem(parent, Type)
+        : KoRdfSemanticTreeWidgetItem(parent)
         , m_semanticObject(semObj)
 {
     setText(ColName, m_semanticObject->name());

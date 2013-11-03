@@ -34,13 +34,9 @@ class KoRdfLocationTreeWidgetItem : public KoRdfSemanticTreeWidgetItem
 {
     Q_OBJECT
 public:
-    enum {
-//         Type = KoRdfCalendarEventTreeWidgetItem::Type + 1
-        Type = KoRdfSemanticTreeWidgetItem::Type + 3
-    };
     KoRdfLocationTreeWidgetItem(QTreeWidgetItem *parent, hKoRdfLocation semObj);
     virtual ~KoRdfLocationTreeWidgetItem();
-    
+
     /****************************************/
     /****************************************/
     /**** inherited and reimplemented... **/

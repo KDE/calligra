@@ -34,9 +34,6 @@ class KoRdfFoaFTreeWidgetItem : public KoRdfSemanticTreeWidgetItem
 {
     Q_OBJECT
 public:
-    enum {
-        Type = KoRdfSemanticTreeWidgetItem::Type + 1
-    };
     KoRdfFoaFTreeWidgetItem(QTreeWidgetItem *parent, hKoRdfFoaF foaf);
 
     // inherited and reimplemented...

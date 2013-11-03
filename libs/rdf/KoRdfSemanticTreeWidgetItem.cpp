@@ -80,8 +80,8 @@ void RdfSemanticTreeWidgetApplyStylesheet::activated()
 }
 
 
-KoRdfSemanticTreeWidgetItem::KoRdfSemanticTreeWidgetItem(QTreeWidgetItem *parent, int Type)
-    : QTreeWidgetItem(parent, Type)
+KoRdfSemanticTreeWidgetItem::KoRdfSemanticTreeWidgetItem(QTreeWidgetItem *parent)
+    : QTreeWidgetItem(parent)
 {
 }
 

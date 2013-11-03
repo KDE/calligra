@@ -27,7 +27,7 @@
 
 KoRdfCalendarEventTreeWidgetItem::KoRdfCalendarEventTreeWidgetItem(QTreeWidgetItem* parent,
                                                                    hKoRdfCalendarEvent ev)
-        : KoRdfSemanticTreeWidgetItem(parent, Type)
+        : KoRdfSemanticTreeWidgetItem(parent)
         , m_semanticObject(ev)
 {
     setText(ColName, m_semanticObject->name());
