@@ -57,28 +57,6 @@ KoRdfSemanticItemRegistry* KoRdfSemanticItemRegistry::instance()
     return s_instance;
 }
 
-#if 0
-QList<QAction*> KoRdfSemanticItemRegistry::createInsertVariableActions(KoCanvasBase *host) const
-{
-    QList<QAction*> answer;
-    foreach (const QString &key, keys()) {
-        KoRdfSemanticItemFactoryBase *factory = value(key);
-        if (factory->type() == KoRdfSemanticItemFactoryBase::TextVariable) {
-            foreach (const KoInlineObjectTemplate &templ, factory->templates()) {
-                answer.append(new InsertVariableAction(host, factory, templ));
-            }
-#ifndef NDEBUG
-           if (factory->templates().isEmpty()) {
-                kWarning(32500) << "Variable factory" << factory->id() << "has no templates, skipping.";
-           }
-#endif
-        }
-    }
-    return answer;
-}
-
-#endif
-
 QStringList KoRdfSemanticItemRegistry::classNames() const
 {
     return keys();
