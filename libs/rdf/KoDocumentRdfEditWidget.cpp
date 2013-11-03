@@ -261,6 +261,10 @@ KoDocumentRdfEditWidget::KoDocumentRdfEditWidget( KoDocumentRdf *docRdf)
         ++row;
     }
     QPushButton *setAllStylesheetsButton = new QPushButton(buttonText);
+    // no semantic item plugins installed?
+    if (row == 0) {
+        setAllStylesheetsButton->setEnabled(false);
+    }
     styleSheetsGridLayout->addWidget(setAllStylesheetsButton, row, 2);
     connect(setAllStylesheetsButton, SIGNAL(clicked()), SLOT(onDefaultAllSheetButtonClicked()));
 
