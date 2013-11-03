@@ -77,7 +77,7 @@ public:
      * Returns if a semantic item could be principially created from the passed mimeData.
      * Creation could still fail if actually tried.
      */
-     bool canCreateSemanticItemFromMimeData(const QMimeData *mimeData) const;
+    bool canCreateSemanticItemFromMimeData(const QMimeData *mimeData) const;
 
     void updateSemanticItems(QList<hKoRdfSemanticItem> &semanticItems, const KoDocumentRdf *docRdf,
                              const QString &className,
