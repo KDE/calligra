@@ -43,7 +43,7 @@ class KoRdfLocationEditWidget : public QWidget
 {
     Q_OBJECT
     KoRdfLocationEditWidgetPrivate* const d;
-    
+
 public:
     KoRdfLocationEditWidget(QWidget *parent, Ui::KoRdfLocationEditWidget *ew);
     ~KoRdfLocationEditWidget();
@@ -51,7 +51,7 @@ public:
 //#ifdef CAN_USE_MARBLE
 //    void setupMap(Marble::MarbleWidget* map, Marble::LatLonEdit* xlat, Marble::LatLonEdit* xlong);
 //#endif
-    
+
 public slots:
     void mouseMoveGeoPosition(const QString&);
 

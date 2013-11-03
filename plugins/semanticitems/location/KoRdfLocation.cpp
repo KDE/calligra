@@ -132,7 +132,7 @@ QWidget *KoRdfLocation::createEditor(QWidget *parent)
 
         editWidget.setupUi(ret);
         editWidget.name->setText(m_name);
-        
+
         return ret;
     }
 #else
@@ -165,7 +165,7 @@ void KoRdfLocation::updateFromEditorData()
 
     QString rdfBase  = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
     QString predBase = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
-    
+
     if (!m_linkSubject.isValid()) {
         m_linkSubject = createNewUUIDNode();
     }
