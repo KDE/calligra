@@ -21,7 +21,6 @@
 #include <ui_KoDocumentRdfEditWidget.h>
 #include "KoDocumentRdf.h"
 #include "KoRdfSemanticItemRegistry.h"
-#include "KoRdfSemanticItemReader.h"
 #include "KoRdfPrefixMapping.h"
 #include "../KoDocument.h"
 #include "KoSopranoTableModelDelegate.h"
@@ -101,9 +100,6 @@ public:
     KoSopranoTableModel *m_sparqlResultModel;
     QSortFilterProxyModel *m_tripleProxyModel;
     KoRdfSemanticTree m_semanticItemsTree;
-    hKoRdfSemanticItem m_semItemContactTemplate;
-    hKoRdfSemanticItem m_semItemEventTemplate;
-    hKoRdfSemanticItem m_semItemLocationTemplate;
     QList<hKoSemanticStylesheet> m_stylesheets;
 
     KoDocumentRdfEditWidgetPrivate(KoDocumentRdf *m_rdf)

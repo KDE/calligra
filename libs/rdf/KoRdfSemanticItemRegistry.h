@@ -28,7 +28,6 @@
 #include "KoRdfSemanticItemFactoryBase.h"
 #include <KoGenericRegistry.h>
 
-class KoRdfSemanticItemReader;
 class KoCanvasBase;
 
 /**
