@@ -78,6 +78,7 @@ Comment[sl]=Nov dokument za Karbon:
 Comment[sv]=Nytt Karbon-dokument:
 Comment[uk]=Новий документ Karbon:
 Comment[x-test]=xxNew Karbon document:xx
+Comment[zh_CN]=新建 Karbon 文档：
 Type=Link
 URL=.source/Illustration.odg
 Icon=application-vnd.oasis.opendocument.graphics
