@@ -77,6 +77,7 @@ Comment[sk]=Nový dokument Sheets:
 Comment[sv]=Nytt Sheets-dokument
 Comment[uk]=Новий документ Sheets:
 Comment[x-test]=xxNew Sheets document:xx
+Comment[zh_CN]=新建表格文档：
 Type=Link
 URL=.source/SpreadSheet.ods
 Icon=application-vnd.oasis.opendocument.spreadsheet

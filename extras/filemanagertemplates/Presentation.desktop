@@ -78,6 +78,7 @@ Comment[sk]=Nový dokument prezentácie Stage:
 Comment[sv]=Nytt Stage presentationsdokument
 Comment[uk]=Новий документ презентації Stage:
 Comment[x-test]=xxNew Stage presentation document:xx
+Comment[zh_CN]=新建 Stage 演示文档：
 Type=Link
 URL=.source/Presentation.odp
 Icon=application-vnd.oasis.opendocument.presentation

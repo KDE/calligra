@@ -25,8 +25,14 @@
 #include <kglobalsettings.h>
 #include <ktextedit.h>
 
+
 #include "calligra_sheets_export.h"
 #include "CellEditorBase.h"
+
+#include <QCompleter>
+#include <QAbstractItemModel>
+#include <QThread>
+#include <QHash>
 class KoViewConverter;
 
 namespace Calligra
@@ -48,7 +54,7 @@ public:
     * \param cellTool the cell tool
     * \param parent the parent widget
     */
-    explicit CellEditor(CellToolBase *cellTool, QWidget *parent = 0);
+    explicit CellEditor(CellToolBase *cellTool, QHash<int, QString> &wordList, QWidget *parent = 0);
     ~CellEditor();
 
     Selection* selection() const;
@@ -59,6 +65,7 @@ public:
     void setCursorPosition(int pos);
 
     QPoint globalCursorPosition() const;
+    QAbstractItemModel *model();
 
     /**
      * Replaces the current formula token(/reference) with the name of the
@@ -89,24 +96,23 @@ public slots:
      * is placed. It is only active, if a formula is edited.
      */
     void permuteFixation();
+    void setCompleter(QCompleter *c);
+    QCompleter *completer() const;
 
 private slots:
     void  slotTextChanged();
     void  slotCompletionModeChanged(KGlobalSettings::Completion _completion);
     void  slotCursorPositionChanged();
+    void insertCompletion(const QString &completion);
 
 protected: // reimplementations
     virtual void keyPressEvent(QKeyEvent *event);
     virtual void focusInEvent(QFocusEvent *event);
     virtual void focusOutEvent(QFocusEvent *event);
 
-protected slots:
-    void checkFunctionAutoComplete();
-    void triggerFunctionAutoComplete();
-    void functionAutoComplete(const QString& item);
-
 private:
     Q_DISABLE_COPY(CellEditor)
+    QString textUnderCursor() const;
 
     class Private;
     Private * const d;
