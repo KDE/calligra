@@ -103,6 +103,8 @@ signals:
      */
     void documentSize(const QSizeF &size);
 
+    void canvasUpdated();
+
 protected: //QGraphicsWidget
     /// reimplemented method from superclass
     virtual void keyPressEvent(QKeyEvent *e);

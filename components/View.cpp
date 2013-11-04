@@ -53,10 +53,6 @@ public:
 View::View(QQuickItem* parent)
     : QQuickPaintedItem{parent}, d{new Private{this}}
 {
-    //Workaround because there is no "repaint" signal in Calligra
-    d->updateTimer.setInterval(1000);
-    d->updateTimer.setSingleShot(true);
-    connect(&d->updateTimer, &QTimer::timeout, [&]() { update(); });
 }
 
 View::~View()
@@ -87,7 +83,7 @@ void View::setDocument(Document* newValue)
     if(newValue != d->document) {
         d->document = newValue;
         connect(d->document, &Document::statusChanged, [&]() { d->updateCanvas(); });
-        connect(d->document, SIGNAL(currentIndexChanged()), this, SLOT(update()));
+        connect(d->document, SIGNAL(requestViewUpdate()), this, SLOT(update()));
 
         d->updateCanvas();
         emit documentChanged();
@@ -127,8 +123,6 @@ void View::Private::updateCanvas()
     if(document && document->status() == DocumentStatus::Loaded) {
         canvas = document->canvas();
         canvas->setGeometry(0, 0, q->width(), q->height());
-        updateTimer.start();
-
-        connect(document->canvasController()->proxyObject, SIGNAL(moveDocumentOffset(QPoint)), q, SLOT(update()));
+        q->update();
     }
 }

@@ -82,6 +82,8 @@ void KoPACanvasItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
 {
     Q_UNUSED(widget)
     KoPACanvasBase::paint(*painter, option->exposedRect);
+
+    emit canvasUpdated();
 }
 
 

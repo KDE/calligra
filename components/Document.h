@@ -121,6 +121,11 @@ Q_SIGNALS:
      */
     void currentIndexChanged();
 
+    /**
+     * \brief Emitted whenever the backend wants to update the view.
+     */
+    void requestViewUpdate();
+
 private:
     class Private;
     Private* const d;

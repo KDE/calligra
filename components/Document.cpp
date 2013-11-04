@@ -202,6 +202,7 @@ void Document::Private::updateImpl()
     if(impl) {
         connect(impl, &DocumentImpl::documentSizeChanged, q, &Document::documentSizeChanged);
         connect(impl, &DocumentImpl::currentIndexChanged, q, &Document::currentIndexChanged);
+        connect(impl, &DocumentImpl::requestViewUpdate, q, &Document::requestViewUpdate);
     }
 }
 

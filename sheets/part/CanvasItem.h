@@ -131,6 +131,8 @@ Q_SIGNALS:
     /* virtual */ void documentSizeChanged(const QSize&);
     void obscuredRangeChanged(const Calligra::Sheets::Sheet* sheet, const QSize&);
 
+    void canvasUpdated();
+
 public:
     virtual void mousePressEvent(QGraphicsSceneMouseEvent* _ev);
     virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent* _ev);

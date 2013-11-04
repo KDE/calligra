@@ -64,6 +64,7 @@ public:
 Q_SIGNALS:
     void documentSizeChanged();
     void currentIndexChanged();
+    void requestViewUpdate();
 
 protected:
     void setDocumentType(DocumentType::Type type);

@@ -218,6 +218,7 @@ void CanvasItem::paint(QPainter* painter, const QStyleOptionGraphicsItem * optio
 {
     Q_UNUSED(widget);
     CanvasBase::paint(painter, option->exposedRect);
+    emit canvasUpdated();
 }
 
 void CanvasItem::dragEnterEvent(QGraphicsSceneDragDropEvent* event)

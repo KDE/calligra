@@ -136,6 +136,7 @@ void DocumentImpl::createAndSetZoomController(KoCanvasBase* canvas)
 
     auto canvasQObject = dynamic_cast<QObject*>(canvas);
     connect(d->canvasController->proxyObject, SIGNAL(moveDocumentOffset(QPoint)), canvasQObject, SLOT(setDocumentOffset(QPoint)));
+    connect(canvasQObject, SIGNAL(canvasUpdated()), this, SIGNAL(requestViewUpdate()));
 }
 
 void DocumentImpl::setDocumentSize(const QSize& size)
