@@ -207,7 +207,7 @@ void ViewController::setZoom(float newZoom)
 {
     newZoom = qBound(d->minimumZoom, newZoom, d->maximumZoom);
     if(newZoom != d->zoom) {
-        if(d->useZoomProxy) {
+        if(d->useZoomProxy && d->view) {
             if(!d->zoomProxy) {
                 d->zoomProxy = new QImage{int(d->flickable->width()), int(d->flickable->height()), QImage::Format_ARGB32};
 
@@ -227,7 +227,10 @@ void ViewController::setZoom(float newZoom)
             d->zoomTimer->start();
         } else {
             d->zoom = newZoom;
-            d->view->setZoom(d->zoom);
+
+            if(d->view) {
+                d->view->setZoom(d->zoom);
+            }
         }
 
         emit zoomChanged();
@@ -379,6 +382,8 @@ void ViewController::documentSizeChanged()
         setHeight(d->documentSize.height());
         d->flickable->setProperty("contentWidth", d->documentSize.width());
         d->flickable->setProperty("contentHeight", d->documentSize.height());
+
+        flickableWidthChanged();
     }
 }
 

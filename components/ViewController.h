@@ -199,7 +199,31 @@ public:
     void setUseZoomProxy(bool proxy);
 
 public Q_SLOTS:
+    /**
+     * \brief Zoom by a specific amount around a centre point.
+     *
+     * \note The centre point should be relative to this item. The easiest way
+     * to achieve this in QML is to use the following:
+     *
+     * \code
+     * var newCenter = mapToItem(controller, center.x, center.y);
+     * controller.zoomAroundPoint(amount, newCenter.x, newCenter.y);
+     * \endcode
+     *
+     * \param amount The amount to zoom by, relative to the current zoom level.
+     * \param x The horizontal coordinate of the centre point.
+     * \param y The vertical coordinate of the centre point.
+     */
     void zoomAroundPoint(float amount, float x, float y);
+    /**
+     * \brief Zoom the item such that it will fit a certain width.
+     *
+     * This will zoom the view to make sure that the document fits the specified
+     * width, as long as the resulting zoom level is not less than #minimumZoom or
+     * more than #maximumZoom.
+     *
+     * \param width The width to fit to.
+     */
     void zoomToFitWidth(float width);
 
 Q_SIGNALS:
