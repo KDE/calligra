@@ -156,6 +156,8 @@ protected:
     KoTextEditor *textEditor() { return m_textEditor.data(); }
 
 public slots:
+    /// Insert comment to document.
+     void insertAnnotation();
     /// start the textedit-plugin.
     void startTextEditingPlugin(const QString &pluginId);
     /// reimplemented from KoToolBase

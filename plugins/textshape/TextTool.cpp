@@ -92,6 +92,14 @@
 #include <QDragMoveEvent>
 #include <QDropEvent>
 
+#include "AnnotationTextShape.h"
+#define AnnotationShape_SHAPEID "AnnotationTextShapeID"
+#include "KoShapeBasedDocumentBase.h"
+#include <KoAnnotation.h>
+#include <KoGlobal.h>
+#include <KoShapeRegistry.h>
+#include <kuser.h>
+
 #include <KoDocumentRdfBase.h>
 
 class TextToolSelection : public KoToolSelection
@@ -472,6 +480,11 @@ void TextTool::createActions()
     action->setIcon(koIcon("view-refresh"));
     addAction("repaint", action);
     connect(action, SIGNAL(triggered()), this, SLOT(relayoutContent()));
+
+    action = new KAction(i18n("Insert Comment"), this);
+    addAction("insert_annotation", action);
+    action->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_C);
+    connect(action, SIGNAL(triggered()), this, SLOT(insertAnnotation()));
 
 #ifndef NDEBUG
     action = new KAction("Paragraph Debug", this); // do NOT add i18n!
@@ -2917,6 +2930,38 @@ void TextTool::setListLevel(int level)
         textEditor->addCommand(cll);
         editingPluginEvents();
     }
+}
+
+void TextTool::insertAnnotation()
+{
+    AnnotationTextShape *shape = (AnnotationTextShape*)KoShapeRegistry::instance()->value(AnnotationShape_SHAPEID)->createDefaultShape(canvas()->shapeController()->resourceManager());
+    canvas()->shapeController()->documentBase()->addShape(shape);
+    KoAnnotation *annotation = textEditor()->addAnnotation();
+    annotation->setAnnotationShape(shape);
+
+    // Set annotation creator.
+    KConfig *config = KoGlobal::calligraConfig();
+    config->reparseConfiguration();
+    KConfigGroup authorGroup(config, "Author");
+    QStringList profiles = authorGroup.readEntry("profile-names", QStringList());
+    KGlobal::config()->reparseConfiguration();
+    KConfigGroup appAuthorGroup(KGlobal::config(), "Author");
+    QString profile = appAuthorGroup.readEntry("active-profile", "");
+    KConfigGroup cgs(&authorGroup, "Author-" + profile);
+
+    if (profiles.contains(profile)) {
+        KConfigGroup cgs(&authorGroup, "Author-" + profile);
+        shape->setCreator(cgs.readEntry("creator"));
+    } else {
+        if (profile == "anonymous") {
+            shape->setCreator("Anonymous");
+        } else {
+            KUser user(KUser::UseRealUserID);
+            shape->setCreator(user.property(KUser::FullName).toString());
+        }
+    }
+    // Set Annotation creation date.
+    shape->setDate(QDate::currentDate().toString(Qt::ISODate));
 }
 
 #include <TextTool.moc>

@@ -146,38 +146,6 @@ QList<QWidget *> ReviewTool::createOptionWidgets()
     return widgets;
 }
 
-void ReviewTool::insertAnnotation()
-{
-    AnnotationTextShape *shape = (AnnotationTextShape*)KoShapeRegistry::instance()->value(AnnotationShape_SHAPEID)->createDefaultShape(m_canvas->shapeController()->resourceManager());
-    m_canvas->shapeController()->documentBase()->addShape(shape);
-    KoAnnotation *annotation = textEditor()->addAnnotation();
-    annotation->setAnnotationShape(shape);
-
-    // Set annotation creator.
-    KConfig *config = KoGlobal::calligraConfig();
-    config->reparseConfiguration();
-    KConfigGroup authorGroup(config, "Author");
-    QStringList profiles = authorGroup.readEntry("profile-names", QStringList());
-    KGlobal::config()->reparseConfiguration();
-    KConfigGroup appAuthorGroup(KGlobal::config(), "Author");
-    QString profile = appAuthorGroup.readEntry("active-profile", "");
-    KConfigGroup cgs(&authorGroup, "Author-" + profile);
-
-    if (profiles.contains(profile)) {
-        KConfigGroup cgs(&authorGroup, "Author-" + profile);
-        shape->setCreator(cgs.readEntry("creator"));
-    } else {
-        if (profile == "anonymous") {
-            shape->setCreator("Anonymous");
-        } else {
-            KUser user(KUser::UseRealUserID);
-            shape->setCreator(user.property(KUser::FullName).toString());
-        }
-    }
-    // Set Annotation creation date.
-    shape->setDate(QDate::currentDate().toString(Qt::ISODate));
-}
-
 void ReviewTool::removeAnnotation()
 {
     if (m_currentAnnotationShape) {

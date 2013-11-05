@@ -59,9 +59,7 @@ public:
     virtual QList<QWidget *> createOptionWidgets();
 
 public slots:
-    void insertAnnotation();
     void removeAnnotation();
-
 
 private:
 
