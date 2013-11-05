@@ -11,8 +11,6 @@ Bugs
     - paragraphs
     - list entries
 
- * Default tool for annotations should be the text tool.
-
  * When an annotation is deleted, the behaviour of the toolbox is strange.
    It's not really clear what should happen though.
 
