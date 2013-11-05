@@ -175,7 +175,7 @@ void ReviewTool::insertAnnotation()
         }
     }
     // Set Annotation creation date.
-    shape->setDate(QDate::currentDate().toString(Qt::LocalDate));
+    shape->setDate(QDate::currentDate().toString(Qt::ISODate));
 }
 
 void ReviewTool::removeAnnotation()

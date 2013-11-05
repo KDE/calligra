@@ -75,7 +75,8 @@ void AnnotationTextShape::paintComponent(QPainter &painter, const KoViewConverte
     painter.setPen(peninfo);
     painter.setFont(serifFont);
 
-    QString info = "  " + m_creator + "\n  " + m_date;
+    QDate date = QDate::fromString(m_date, Qt::ISODate);
+    QString info = "  " + m_creator + "\n  " + date.toString(Qt::LocalDate);
     painter.drawText(clipRect, Qt::AlignTop, info);
 }
 
