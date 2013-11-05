@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
+   Copyright (C) 2012-2013 Oleg Kukharchuk <oleg.kuh@gmail.com>
    Copyright (C) 2005 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004-2006 Jarosław Staniek <staniek@kde.org>
-   Copyright (C) 2012 Oleg Kukharchuk <oleg.kuh@gmail.com>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,46 +22,84 @@
 #ifndef KexiDBCommandLinkButton_H
 #define KexiDBCommandLinkButton_H
 
+#include <widget/dataviewcommon/kexiformdataiteminterface.h>
 #include <kexiutils/KexiCommandLinkButton.h>
 #include <formeditor/kexiformeventhandler.h>
 #include <formeditor/FormWidgetInterface.h>
 
+class KexiDBCommandLinkButtonPrivate;
+
 //! @short Push Button widget for Kexi forms
 class KEXIFORMUTILS_EXPORT KexiDBCommandLinkButton : public KexiCommandLinkButton,
-                                                   public KFormDesigner::FormWidgetInterface
+                                                     public KexiFormDataItemInterface,
+                                                     public KFormDesigner::FormWidgetInterface
 {
     Q_OBJECT
     Q_PROPERTY(QString onClickAction READ onClickAction WRITE setOnClickAction)
     Q_PROPERTY(QString onClickActionOption READ onClickActionOption WRITE setOnClickActionOption)
+    Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource)
+    Q_PROPERTY(QString dataSourcePartClass READ dataSourcePartClass WRITE setDataSourcePartClass)
 
 public:
     KexiDBCommandLinkButton ( const QString & text, const QString &description, QWidget * parent );
     ~KexiDBCommandLinkButton();
 
+    inline QString dataSource() const {
+        return KexiFormDataItemInterface::dataSource();
+    }
+    inline QString dataSourcePartClass() const {
+        return KexiFormDataItemInterface::dataSourcePartClass();
+    }
+
+    virtual QVariant value();
+
+    virtual bool valueIsNull();
+
+    virtual bool valueIsEmpty();
+
+    //! always false
+    virtual bool cursorAtStart();
+
+    //! always false
+    virtual bool cursorAtEnd();
+
+    virtual void clear();
+
+    virtual void setInvalidState(const QString& displayText);
+
+    virtual bool isReadOnly() const;
 public slots:
     //! action string for "on click" event
     //! @see KexiFormPart::slotAssignAction()
     //! @see KexiFormEventAction::ActionData
-    QString onClickAction() const {
-        return m_onClickActionData.string;
-    }
-    void setOnClickAction(const QString& actionString) {
-        m_onClickActionData.string = actionString;
-    }
+    QString onClickAction() const;
+
+    void setOnClickAction(const QString& actionString);
 
     /*! action option allowing to select whether the object should be opened
      data view mode or printed, etc.
      @see KexiFormPart::slotAssignAction()
      @see KexiFormEventAction::ActionData */
-    QString onClickActionOption() const {
-        return m_onClickActionData.option;
-    }
-    void setOnClickActionOption(const QString& option) {
-        m_onClickActionData.option = option;
+    QString onClickActionOption() const;
+
+    void setOnClickActionOption(const QString& option);
+
+    //! Sets the datasource to \a ds
+    inline void setDataSource(const QString &ds) {
+        KexiFormDataItemInterface::setDataSource(ds);
     }
 
+    inline void setDataSourcePartClass(const QString &partClass) {
+        KexiFormDataItemInterface::setDataSourcePartClass(partClass);
+    }
+    virtual void setReadOnly(bool readOnly);
+
 protected:
-    KexiFormEventAction::ActionData m_onClickActionData;
+    //! Sets value \a value for a widget.
+    virtual void setValueInternal(const QVariant& add, bool removeOld);
+
+    friend class KexiDBCommanLinkButtonPrivate;
+    KexiDBCommandLinkButtonPrivate * const d;
 };
 
 #endif

@@ -66,7 +66,7 @@ public:
 
 public slots:
     /*! Reimplemented: sets \a value but it is converted to identifier
-     using KexiUtils::string2Identifier().
+     using KexiUtils::stringToIdentifier().
      If \a value is empty string, this method has no effect. */
     virtual void setValue(const QString &value);
 };

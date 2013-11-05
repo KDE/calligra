@@ -51,10 +51,14 @@ class KoShapeAnchor;
 class KoShapeContainer;
 class KoShapeController;
 class KoPart;
-class KoPageWidgetItem;
 class KLocalizedString;
 class QIODevice;
 class KoAnnotationLayoutManager;
+class KoDocumentInfoDlg;
+
+
+#define WORDS_MIME_TYPE "application/vnd.oasis.opendocument.text"
+
 
 /**
  * The class that represents a Words document containing content and settings.
@@ -92,6 +96,17 @@ public:
     virtual int pageCount() const {
         return pageManager()->pageCount();
     }
+    /// reimplemented from KoDocument
+    virtual QByteArray nativeFormatMimeType() const { return WORDS_MIME_TYPE; }
+    /// reimplemented from KoDocument
+    virtual QByteArray nativeOasisMimeType() const {return WORDS_MIME_TYPE;}
+    /// reimplemented from KoDocument
+    virtual QStringList extraNativeMimeTypes() const
+    {
+        return QStringList() << "application/vnd.oasis.opendocument.text-master"
+                             << "application/vnd.oasis.opendocument.text-template";
+    }
+
 
     bool isMasterDocument() const;
     void setIsMasterDocument(bool isMasterDocument);
@@ -202,6 +217,8 @@ public:
 
     /// return cover data.
     QPair<QString, QByteArray> coverImage();
+
+    KoDocumentInfoDlg* createDocumentInfoDialog(QWidget *parent, KoDocumentInfo *docInfo) const;
 
 public slots:
     /**

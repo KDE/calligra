@@ -23,8 +23,7 @@
 
 #include <KoFilter.h>
 
-
-#include <kcal/calendarlocal.h>
+#include <kcalcore/calendar.h>
 
 #include <QObject>
 #include <QVariantList>
@@ -33,10 +32,6 @@ class QFile;
 class QByteArray;
 class QStringList;
 
-namespace KCal
-{
-class Todo;
-}
 namespace KPlato
 {
 class Project;
@@ -56,7 +51,7 @@ public:
 
 protected:
     KoFilter::ConversionStatus convert(const KPlato::Project &project, QFile &file);
-    void createTodos(KCal::CalendarLocal &cal, const KPlato::Node *node, long id, KCal::Todo *parent = 0);
+    void createTodos(KCalCore::Calendar::Ptr cal, const KPlato::Node *node, long id, KCalCore::Todo::Ptr parent = KCalCore::Todo::Ptr());
 };
 
 #endif // ICALENDAREXPORT_H

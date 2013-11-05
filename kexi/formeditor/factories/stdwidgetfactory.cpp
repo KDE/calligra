@@ -991,7 +991,7 @@ StdWidgetFactory::isPropertyVisibleInternal(const QByteArray &classname,
               && property != "overwriteMode" //always false!
               && property != "resizePolicy"
               && property != "autoFormatting" //too complex
-#ifdef KEXI_NO_UNFINISHED
+#ifndef KEXI_SHOW_UNFINISHED
               && property != "paper"
 #endif
              );

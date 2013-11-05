@@ -3,6 +3,8 @@ Type=Service
 Name=OpenDocument Presentations
 Name[bs]=OpenDocument prezentacije
 Name[ca]=Presentacions OpenDocument
+Name[ca@valencia]=Presentacions OpenDocument
+Name[cs]=Prezentace OpenDocument
 Name[da]=OpenDocument-præsentationer
 Name[de]=OpenDocument-Präsentationen
 Name[el]=OpenDocument παρουσιάσεις
@@ -25,6 +27,7 @@ Name[sl]=Predstavitve OpenDocument
 Name[sv]=OpenDocument-presentationer
 Name[uk]=Презентації OpenDocument (ODP)
 Name[x-test]=xxOpenDocument Presentationsxx
+Name[zh_CN]=OpenDocument 展示
 
 X-KDE-ServiceTypes=ThumbCreator
 MimeType=application/vnd.oasis.opendocument.presentation;application/vnd.oasis.opendocument.presentation-template;

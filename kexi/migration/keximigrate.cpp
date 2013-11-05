@@ -254,7 +254,7 @@ bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
                 || tableCaption.toLower().startsWith("kexi__")) //tables at KexiProject level, e.g. "kexi__blobs"
             continue;
         // this is a non-KexiDB table: generate schema from native data source
-        const QString tableIdentifier(KexiUtils::string2Identifier(tableCaption.toLower()));
+        const QString tableIdentifier(KexiUtils::stringToIdentifier(tableCaption.toLower()));
         nativeNames.insert(tableIdentifier, tableCaption);
         KexiDB::TableSchema *tableSchema = new KexiDB::TableSchema(tableIdentifier);
         tableSchema->setCaption(tableCaption);   //caption is equal to the original name

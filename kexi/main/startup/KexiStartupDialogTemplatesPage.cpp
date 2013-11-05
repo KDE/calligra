@@ -134,7 +134,7 @@ void TemplatesPage::itemClicked(QIconViewItem *item) {
   QString t = QString("<h2>%1</h2><p>%2</p>")
     .arg(static_cast<TemplateItem*>(item)->name)
     .arg(static_cast<TemplateItem*>(item)->description);
-#ifndef DB_TEMPLATES
+#ifndef KEXI_PROJECT_TEMPLATES
   t += QString("<p>") + i18n("We are sorry, templates are not yet available.") +"</p>";
 #endif
 

@@ -1,3 +1,4 @@
+*.trace
 build
 qtcreator-build
 *.kdev4

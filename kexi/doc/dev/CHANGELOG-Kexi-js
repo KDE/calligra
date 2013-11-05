@@ -159,6 +159,41 @@ TODO: Table View
 *Fix support for displaying and storing rich text
 REVIEW:312134
 
+~~~~~~~~~~~~~~~~ 2.7.3 ~~~~~~~~~~~~~~~~
+
+2013-08-18
+*Saving new table design for the first time does not clear history of edits
+BUG:325070
+
+2013-09-11
+General
+*Fix build when KEXI_DEBUG_GUI is set
+*Move custom build settings to cmake options
+*Fix Show Form UI toolbar button
+Main Window
+*Welcome view: hide placeholder for templates by default. This way users won't be confused.
+
+2013-09-04
+KexiDB
+*Fix sorting error in table views
+**The sorting was broken when NULL values are compared with text for text columns
+BUG:324224
+
+2013-08-21
+Table Designer
+*Inserting new fields in Table Designer is inconvenient
+**Internally it just fixes "spreadsheet" mode of the table view component
+BUG:323827
+
+
+2013-08-20
+KexiDB
+*Table Designer does not display properties in Kexi 2.7.x.
+**Cause: TableView data was moved into the namespace in commit b9e664c9
+BUG:323804
+
+~~~~~~~~~~~~~~~~ 2.7.2 ~~~~~~~~~~~~~~~~
+
 2013-05-09
 KexiDB
 *Properly return list of lookup fields when there are more than one
