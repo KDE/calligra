@@ -75,7 +75,7 @@ protected:
     void createAndSetCanvasController(KoCanvasBase* canvas);
     void createAndSetZoomController(KoCanvasBase* canvas);
 
-private Q_SLOTS:
+protected Q_SLOTS:
     void setDocumentSize(const QSize& size);
 
 private:

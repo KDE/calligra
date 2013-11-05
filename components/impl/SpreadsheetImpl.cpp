@@ -23,13 +23,16 @@
 #include "SpreadsheetImpl.h"
 
 #include <QtWidgets/QGraphicsWidget>
+#include <KoToolManager.h>
 
 #include <KoZoomController.h>
+#include <KoViewConverter.h>
 #include <sheets/part/Part.h>
 #include <sheets/part/Doc.h>
 #include <sheets/part/CanvasItem.h>
 #include <sheets/Map.h>
 #include <sheets/Sheet.h>
+#include <Damages.h>
 
 using namespace Calligra::Components;
 
@@ -104,5 +107,7 @@ void SpreadsheetImpl::setCurrentIndex(int newValue)
 
 void SpreadsheetImpl::updateDocumentSize(const QSize& size)
 {
-    zoomController()->setDocumentSize(size, false);
+    QRectF activeRect = d->canvas->viewConverter()->documentToView(d->canvas->activeSheet()->cellCoordinatesToDocument(d->canvas->activeSheet()->usedArea(true)));
+    zoomController()->setDocumentSize(activeRect.size(), false);
+    setDocumentSize(activeRect.size().toSize());
 }
