@@ -145,7 +145,7 @@ void KoAnnotationLayoutManager::registerAnnotationRefPosition(KoShape *annotatio
     }
     d->annotationShapePositions.append(QPair< QPointF, KoShape * >(pos, annotationShape));
     layoutAnnotationShapes();
-    if (yPositionChanged) {
+    if (d->canvas && yPositionChanged) {
         d->canvas->canvasWidget()->update();
     }
 }
