@@ -11,9 +11,6 @@ Bugs
     - paragraphs
     - list entries
 
- * When an annotation is deleted, the behaviour of the toolbox is strange.
-   It's not really clear what should happen though.
-
 
 Annoyances
 ----------
@@ -28,6 +25,10 @@ Annoyances
    be spread out evenly in the layout, not be stacked to the left.
 
  * Setting of "Show notes" also available in the review tool?
+ 
+ 
+ * When an annotation is deleted, the behaviour of the toolbox is strange.
+   It's not really clear what should happen though.
 
 
 To Check / Test
