@@ -81,6 +81,10 @@ Document* View::document() const
 void View::setDocument(Document* newValue)
 {
     if(newValue != d->document) {
+        if(d->document) {
+            disconnect(d->document, SIGNAL(requestViewUpdate()), this, SLOT(update()));
+        }
+
         d->document = newValue;
         connect(d->document, &Document::statusChanged, [&]() { d->updateCanvas(); });
         connect(d->document, SIGNAL(requestViewUpdate()), this, SLOT(update()));
@@ -124,5 +128,7 @@ void View::Private::updateCanvas()
         canvas = document->canvas();
         canvas->setGeometry(0, 0, q->width(), q->height());
         q->update();
+    } else {
+        canvas = nullptr;
     }
 }
