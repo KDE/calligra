@@ -205,7 +205,7 @@ signals:
     void selectionContentChanged();
     /// emitted when any object changed (moved/rotated etc)
     void contentChanged();
-    /// emitted when a shape removed.
+    /// emitted when a shape is removed.
     void shapeRemoved(KoShape *);
     /// emitted when any shape changed.
     void shapeChanged(KoShape *);

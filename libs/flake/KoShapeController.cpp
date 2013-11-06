@@ -194,9 +194,8 @@ KoDocumentResourceManager *KoShapeController::resourceManager() const
         return 0;
     return d->shapeBasedDocument->resourceManager();
 }
+
 KoShapeBasedDocumentBase *KoShapeController::documentBase() const
 {
-    if (!d->shapeBasedDocument)
-        return 0;
     return d->shapeBasedDocument;
 }
