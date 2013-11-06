@@ -69,8 +69,8 @@ public:
       for file-based onces because in this case name is equal to database's filename
       (cdata.dbFileName()).
       @a caption is for setting project's caption. */
-    KexiProjectData(const KexiDB::ConnectionData &cdata,
-                    const QString& dbname = QString(), const QString& caption = QString());
+    explicit KexiProjectData(const KexiDB::ConnectionData &cdata,
+                             const QString& dbname = QString(), const QString& caption = QString());
 
     /*! Constructs a copy of \a pdata */
     KexiProjectData(const KexiProjectData& pdata);

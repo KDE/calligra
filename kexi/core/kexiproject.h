@@ -75,7 +75,7 @@ public:
     /*! Constructor 1. Creates a new object using \a pdata.
      \a handler can be provided to receive error messages during
      entire KexiProject object's lifetime. */
-    KexiProject(const KexiProjectData& pdata, KexiDB::MessageHandler* handler = 0);
+    explicit KexiProject(const KexiProjectData& pdata, KexiDB::MessageHandler* handler = 0);
 
     /*! Constructor 2. Like above but sets predefined connections \a conn.
      The connection should be created using the same connection data

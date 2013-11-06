@@ -37,7 +37,7 @@ class KEXIFORMUTILS_EXPORT KexiDBDatePicker : public KDatePicker,
     Q_PROPERTY(bool readOnly READ isReadOnly WRITE setReadOnly)
 
 public:
-    KexiDBDatePicker(QWidget *parent);
+    explicit KexiDBDatePicker(QWidget *parent);
     virtual ~KexiDBDatePicker();
 
     inline QString dataSource() const {

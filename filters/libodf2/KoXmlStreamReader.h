@@ -85,10 +85,10 @@ class KOODF2_EXPORT KoXmlStreamReader : public QXmlStreamReader
 
 public:
     KoXmlStreamReader();
-    KoXmlStreamReader(QIODevice *device);
-    KoXmlStreamReader(const QByteArray &data);
-    KoXmlStreamReader(const QString &data);
-    KoXmlStreamReader(const char *data);
+    explicit KoXmlStreamReader(QIODevice *device);
+    explicit KoXmlStreamReader(const QByteArray &data);
+    explicit KoXmlStreamReader(const QString &data);
+    explicit KoXmlStreamReader(const char *data);
 
     ~KoXmlStreamReader();
 
@@ -107,8 +107,8 @@ public:
 
 private:
     // No copying
-    KoXmlStreamReader(KoXmlStreamReader &other);
-    KoXmlStreamReader &operator=(KoXmlStreamReader &other);
+    KoXmlStreamReader(const KoXmlStreamReader &other);
+    KoXmlStreamReader &operator=(const KoXmlStreamReader &other);
 
     // Only for friend classes KoXmlStreamAttributes and KoXmlStreamAttribute.
     bool isSound() const;

@@ -43,7 +43,7 @@ namespace KPlato
 
 void CalendarTester::initTestCase()
 {
-    QString kdehome = getenv("KDEHOME");
+    QString kdehome = qgetenv("KDEHOME");
     QDir d(kdehome);
     d.mkpath("calendartest");
     d.cd("calendartest");
@@ -88,7 +88,7 @@ void CalendarTester::initTestCase()
 
 void CalendarTester::cleanupTestCase()
 {
-    QString kdehome = getenv("KDEHOME");
+    QString kdehome = qgetenv("KDEHOME");
     removeDir( kdehome + "/calendartest/Africa" );
     removeDir( kdehome + "/calendartest/America" );
     removeDir( kdehome + "/calendartest/Europe" );

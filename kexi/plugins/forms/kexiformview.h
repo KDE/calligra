@@ -70,7 +70,7 @@ public:
         NoResize = 2 /*! @todo */
     };
 
-    KexiFormView(QWidget *parent, bool dbAware = true);
+    explicit KexiFormView(QWidget *parent, bool dbAware = true);
     virtual ~KexiFormView();
 
 //  KexiDB::Connection* connection() { return m_conn; }

@@ -28,7 +28,7 @@
 class KEXICORE_EXPORT KexiWindowData : public QObject
 {
 public:
-    KexiWindowData(QObject* parent);
+    explicit KexiWindowData(QObject* parent);
 
     ~KexiWindowData();
 

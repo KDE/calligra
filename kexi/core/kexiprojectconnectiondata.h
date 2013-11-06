@@ -44,7 +44,7 @@ public:
     /**
      * connect to a embedded database
      */
-    KexiProjectConnectionData(const QString &driverName, const QString &fileName = QString());
+    explicit KexiProjectConnectionData(const QString &driverName, const QString &fileName = QString());
 
     ~KexiProjectConnectionData();
 
