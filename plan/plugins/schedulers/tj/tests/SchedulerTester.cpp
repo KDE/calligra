@@ -59,7 +59,7 @@ QStringList SchedulerTester::data()
 
 void SchedulerTester::initTimezone()
 {
-    QString kdehome = getenv("KDEHOME");
+    QString kdehome = qgetenv("KDEHOME");
     QDir d(kdehome);
     d.mkpath("tjtest");
     d.cd("tjtest");
@@ -104,7 +104,7 @@ void SchedulerTester::initTimezone()
 
 void SchedulerTester::cleanupTimezone()
 {
-    QString kdehome = getenv("KDEHOME");
+    QString kdehome = qgetenv("KDEHOME");
     removeDir( kdehome + "/tjtest/Africa" );
     removeDir( kdehome + "/tjtest/America" );
     removeDir( kdehome + "/tjtest/Europe" );
