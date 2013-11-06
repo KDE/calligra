@@ -163,7 +163,7 @@ private:
 class EmptyMenuContentWidget : public QWidget
 {
 public:
-    EmptyMenuContentWidget(QWidget* parent = 0)
+    explicit EmptyMenuContentWidget(QWidget* parent = 0)
      : QWidget(parent)
     {
         setAutoFillBackground(true);
@@ -188,7 +188,7 @@ public:
 class TopLineKexiMainMenuWidget : public QWidget
 {
 public:
-    TopLineKexiMainMenuWidget(QWidget* parent)
+    explicit TopLineKexiMainMenuWidget(QWidget* parent)
      : QWidget(parent) 
     {
         setAttribute(Qt::WA_TransparentForMouseEvents, true);
@@ -230,7 +230,7 @@ class KexiFadeWidgetEffect : public KFadeWidgetEffect
 {
     Q_OBJECT
 public:
-    KexiFadeWidgetEffect(QWidget *destWidget, int duration = 250)
+    explicit KexiFadeWidgetEffect(QWidget *destWidget, int duration = 250)
     : KFadeWidgetEffect(destWidget)
     , m_duration(duration)
     {
@@ -281,7 +281,7 @@ class KexiMainMenu : public QWidget
 {
     Q_OBJECT
 public:
-    KexiMainMenu(KexiTabbedToolBar *toolBar, QWidget* parent = 0) : QWidget(parent),
+    explicit KexiMainMenu(KexiTabbedToolBar *toolBar, QWidget* parent = 0) : QWidget(parent),
         m_topLineHeight(5), m_toolBar(toolBar), m_initialized(false)
     {
         //setAutoFillBackground(true); // to cover the lower layer

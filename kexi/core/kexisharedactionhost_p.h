@@ -45,7 +45,7 @@ class KexiSharedActionHostPrivate : public QObject
     Q_OBJECT
 
 public:
-    KexiSharedActionHostPrivate(KexiSharedActionHost *h);
+    explicit KexiSharedActionHostPrivate(KexiSharedActionHost *h);
 
     ~KexiSharedActionHostPrivate();
 

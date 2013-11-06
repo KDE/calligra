@@ -29,7 +29,7 @@ class KAction_setEnabled_Helper : public QObject
 {
     Q_OBJECT
 public:
-    KAction_setEnabled_Helper(KexiActionProxy* proxy);
+    explicit KAction_setEnabled_Helper(KexiActionProxy* proxy);
 
 public slots:
     void slotSetEnabled(bool enabled);
@@ -43,7 +43,7 @@ class KexiActionProxySignal : public QObject
 {
     Q_OBJECT
 public:
-    KexiActionProxySignal(QObject *parent) : QObject(parent) {}
+    explicit KexiActionProxySignal(QObject *parent) : QObject(parent) {}
     void activate() { emit invoke(); }
 signals:
     void invoke();
