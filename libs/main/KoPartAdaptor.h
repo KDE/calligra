@@ -128,7 +128,7 @@ public slots: // METHODS
 public:
 
 protected:
-    KoPart* m_pDoc;
+    KoPart* m_part;
 };
 
 #endif // QT_NO_DBUS
