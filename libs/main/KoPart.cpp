@@ -279,7 +279,7 @@ void KoPart::openTemplate(const KUrl& url)
         doc->initEmpty();
     }
     addDocument(doc);
-    mainWindows().first()->setRootDocument(doc, this);
+    mainWindows().first()->setRootDocument(doc);
     qApp->restoreOverrideCursor();
 }
 
@@ -335,8 +335,6 @@ void KoPart::showStartUpWidget(KoMainWindow *mainWindow, bool alwaysShow)
         d->startUpWidget = createOpenPane(mainWindow, componentData(), d->templateType);
         mainWindow->setCentralWidget(d->startUpWidget);
     }
-
-    mainWindow->setPartToOpen(this);
 }
 
 void KoPart::deleteOpenPane()
@@ -353,7 +351,7 @@ void KoPart::deleteOpenPane()
 void KoPart::deleteOpenPane(KoDocument *document)
 {
     deleteOpenPane();
-    mainWindows().first()->setRootDocument(document, this);
+    mainWindows().first()->setRootDocument(document);
     KoPart::mainWindows().first()->factory()->container("mainToolBar",
                                                         mainWindows().first())->show();
 }

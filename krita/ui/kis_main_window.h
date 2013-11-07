@@ -20,11 +20,13 @@
 
 #include <KoMainWindow.h>
 
+class KoPart;
+
 class KisMainWindow : public KoMainWindow
 {
     Q_OBJECT
 public:
-    explicit KisMainWindow(const QByteArray nativeMimeType, const KComponentData &instance);
+    explicit KisMainWindow(KoPart *part, const KComponentData &instance);
     
 signals:
     

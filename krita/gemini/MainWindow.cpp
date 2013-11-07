@@ -172,7 +172,7 @@ public:
         // Initialize all Calligra directories etc.
         KoGlobal::initialize();
 
-        desktopView = new KoMainWindow(KIS_MIME_TYPE, KisFactory2::componentData());
+        desktopView = new KoMainWindow(DocumentManager::instance()->part(), KisFactory2::componentData());
         if (qgetenv("KDE_FULL_SESSION").isEmpty()) {
             // There are two themes that work for Krita, oxygen and plastique. Try to set plastique first, then oxygen
             qobject_cast<QApplication*>(QApplication::instance())->setStyle("Plastique");
@@ -407,7 +407,7 @@ void MainWindow::documentChanged()
         d->desktopView = 0;
     }
     d->initDesktopView();
-    d->desktopView->setRootDocument(DocumentManager::instance()->document(), DocumentManager::instance()->part(), false);
+    d->desktopView->setRootDocument(DocumentManager::instance()->document(), false);
     qApp->processEvents();
     KisView2* view = qobject_cast<KisView2*>(d->desktopView->activeView());
     view->setQtMainWindow(d->desktopView);

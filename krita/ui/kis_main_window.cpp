@@ -17,7 +17,7 @@
  */
 #include "kis_main_window.h"
 
-KisMainWindow::KisMainWindow(const QByteArray nativeMimeType, const KComponentData &instance)
-    : KoMainWindow(nativeMimeType, instance)
+KisMainWindow::KisMainWindow(KoPart *part, const KComponentData &instance)
+    : KoMainWindow(part, instance)
 {
 }

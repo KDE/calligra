@@ -334,7 +334,7 @@ bool KoApplication::start()
             KUrl url;
             // bah, we need to re-use the document that was already created
             url.setPath(QDir::homePath() + "/" + autoSaveFiles.takeFirst());
-            if (mainWindow->openDocument(part, url)) {
+            if (mainWindow->createDocumentFromUrl(url)) {
                 doc->resetURL();
                 doc->setModified(true);
                 QFile::remove(url.toLocalFile());
@@ -352,7 +352,7 @@ bool KoApplication::start()
 
                     KoMainWindow *mainWindow = part->createMainWindow();
                     mainWindow->show();
-                    if (mainWindow->openDocument(part, url)) {
+                    if (mainWindow->createDocumentFromUrl(url)) {
                         doc->resetURL();
                         doc->setModified(true);
                         QFile::remove(url.toLocalFile());
@@ -443,7 +443,7 @@ bool KoApplication::start()
                         QString templateName = templateInfo.readUrl();
                         KUrl templateURL;
                         templateURL.setPath(templateBase.directory() + '/' + templateName);
-                        if (mainWindow->openDocument(part, templateURL)) {
+                        if (mainWindow->createDocumentFromUrl(templateURL)) {
                             doc->resetURL();
                             doc->setEmpty();
                             doc->setTitleModified();
@@ -456,7 +456,7 @@ bool KoApplication::start()
                     }
                     // now try to load
                 }
-                else if (mainWindow->openDocument(part, args->url(argNumber))) {
+                else if (mainWindow->createDocumentFromUrl(args->url(argNumber))) {
                     if (print) {
                         mainWindow->slotFilePrint();
                         // delete mainWindow; done by ~KoDocument

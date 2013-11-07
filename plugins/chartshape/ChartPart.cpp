@@ -46,5 +46,5 @@ KoView * ChartPart::createViewInstance(KoDocument *document, QWidget *parent)
 
 KoMainWindow *ChartPart::createMainWindow()
 {
-    return new KoMainWindow(CHART_MIME_TYPE, componentData());
+    return new KoMainWindow(this, componentData());
 }

@@ -29,6 +29,7 @@
 #include "kis_selection_manager.h"
 #include "kis_node_manager.h"
 #include "kis_view2.h"
+#include "kis_part2.h"
 #include <KoDocument.h>
 #include <KoPart.h>
 #include <kis_action_manager.h>
@@ -47,8 +48,10 @@ public:
         undoStore = new KisSurrogateUndoStore();
         image = createImage(undoStore);
 
-        doc = new KisDoc2();
+        part = new KisPart2();
+        doc = new KisDoc2(part);
         doc->setCurrentImage(image);
+
 
         if(useSelection) addGlobalSelection(image);
         if(useShapeLayer) addShapeLayer(doc, image);
@@ -56,7 +59,7 @@ public:
 
         QVERIFY(checkLayersInitial());
 
-        mainWindow = new KoMainWindow(KIS_MIME_TYPE, doc->documentPart()->componentData());
+        mainWindow = new KoMainWindow(part, doc->documentPart()->componentData());
         view = new KisView2(doc->documentPart(), doc, mainWindow);
 
         KisPattern *newPattern = new KisPattern(fetchDataFileLazy("HR_SketchPaper_01.pat"));
@@ -157,6 +160,7 @@ public:
 protected:
     KisView2 *view;
     KisDoc2 *doc;
+    KisPart2 *part;
     KoMainWindow *mainWindow;
 };
 

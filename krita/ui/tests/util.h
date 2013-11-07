@@ -35,6 +35,7 @@
 #include "filter/kis_filter_configuration.h"
 #include "filter/kis_filter.h"
 #include "kis_doc2.h"
+#include "kis_part2.h"
 #include "kis_image.h"
 #include "kis_pixel_selection.h"
 #include "kis_group_layer.h"
@@ -190,8 +191,8 @@ KisDoc2* createCompleteDocument()
 KisDoc2* createEmptyDocument()
 {
     KisImageWSP image = new KisImage(0, 1024, 1024, KoColorSpaceRegistry::instance()->rgb8(), "test for roundtrip", false);
-
-    KisDoc2 *doc = new KisDoc2();
+    KisPart2 *part = new KisPart2;
+    KisDoc2 *doc = static_cast<KisDoc2*>(part->createDocument());
 
     doc->setCurrentImage(image);
     doc->documentInfo()->setAboutInfo("title", image->objectName());

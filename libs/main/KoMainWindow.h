@@ -62,7 +62,7 @@ public:
      *
      *  Initializes a Calligra main window (with its basic GUI etc.).
      */
-    explicit KoMainWindow(const QByteArray nativeMimeType, const KComponentData &instance);
+    explicit KoMainWindow(KoPart *part, const KComponentData &instance);
 
     /**
      *  Destructor.
@@ -77,13 +77,7 @@ public:
      * Called when a document is assigned to this mainwindow.
      * This creates a view for this document, makes it the active part, etc.
      */
-    void setRootDocument(KoDocument *doc, KoPart *part = 0, bool deletePrevious = true);
-
-    /**
-     * This is used to handle the document used at start up before it actually
-     * added as root document.
-     */
-    void setPartToOpen(KoPart *part);
+    void setRootDocument(KoDocument *doc, bool deletePrevious = true);
 
     /**
      * Update caption from document info - call when document info
@@ -140,7 +134,7 @@ public:
      *
      * Special method for KoApplication::start, don't use.
      */
-    bool openDocument(KoPart *newPart, const KUrl & url);
+    bool createDocumentFromUrl(const KUrl & url);
 
 private:
 
@@ -359,11 +353,6 @@ private:
     /// Helper method for slotFileNew and slotFileClose
     void chooseNewDocument(InitDocFlags initDocFlags);
 
-    /**
-     * Create a new empty document.
-     */
-    KoPart* createPart() const;
-
     void closeEvent(QCloseEvent * e);
     void resizeEvent(QResizeEvent * e);
 
@@ -372,7 +361,7 @@ private:
      */
     bool queryClose();
 
-    bool openDocumentInternal(const KUrl &url, KoPart *newpart = 0, KoDocument *newdoc = 0);
+    bool openDocumentInternal(const KUrl &url, KoDocument *newdoc = 0);
 
     /**
      * Returns whether or not the current slotFileSave[As]() or saveDocument()
@@ -424,23 +413,10 @@ private slots:
 // ---------------------  PartManager
 private:
 
-    friend class KoPart;
     /**
-     * Removes a part from the manager (this does not delete the object) .
-     *
-     * Sets the active part to 0 if @p part is the activePart() .
+     * Sets the active View.
      */
-    virtual void removePart( KoPart *part );
-
-    /**
-     * Sets the active part.
-     *
-     * The active part receives activation events.
-     *
-     * @p widget can be used to specify which widget was responsible for the activation.
-     * This is important if you have multiple views for a document/part , like in KOffice .
-     */
-    virtual void setActivePart(KoPart *part, QWidget *widget);
+    virtual void setActiveView(QWidget *widget);
 
 private slots:
 

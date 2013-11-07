@@ -100,16 +100,13 @@
 class KoMainWindowPrivate
 {
 public:
-    KoMainWindowPrivate(const QByteArray &_nativeMimeType, KoMainWindow *w)
+    KoMainWindowPrivate(KoPart *_part, KoMainWindow *w)
     {
-        nativeMimeType = _nativeMimeType;
+        part = _part;
         parent = w;
         rootDocument = 0;
-        rootPart = 0;
-        partToOpen = 0;
         mainWindowGuiIsBuilt = false;
         forQuit = false;
-        activePart = 0;
         activeView = 0;
         firstTime = true;
         progress = 0;
@@ -142,12 +139,8 @@ public:
         activityResource = 0;
 #endif
         themeManager = 0;
-
         m_helpMenu = 0;
-
-        // PartManager
         m_activeWidget = 0;
-        m_activePart = 0;
 
         noCleanup = false;
     }
@@ -180,18 +173,13 @@ public:
         printer.setDocName(title);
     }
 
-    QByteArray nativeMimeType;
+    // PartManager
+    QPointer<KoPart> part;
 
     KoMainWindow *parent;
     KoDocument *rootDocument;
     QList<KoView*> rootViews;
 
-    // PartManager
-    QPointer<KoPart> rootPart;
-    QPointer<KoPart> partToOpen;
-    QPointer<KoPart> activePart;
-    QPointer<KoPart> m_activePart;
-    QPointer<KoPart> m_registeredPart;
 
     KoView *activeView;
     QWidget *m_activeWidget;
@@ -254,9 +242,9 @@ public:
 
 };
 
-KoMainWindow::KoMainWindow(const QByteArray nativeMimeType, const KComponentData &componentData)
+KoMainWindow::KoMainWindow(KoPart *part, const KComponentData &componentData)
     : KXmlGuiWindow()
-    , d(new KoMainWindowPrivate(nativeMimeType, this))
+    , d(new KoMainWindowPrivate(part, this))
 {
 #ifdef __APPLE__
     //setUnifiedTitleAndToolBarOnMac(true);
@@ -268,9 +256,6 @@ KoMainWindow::KoMainWindow(const QByteArray nativeMimeType, const KComponentData
     setTabPosition(Qt::AllDockWidgetAreas, QTabWidget::North);
 
     connect(this, SIGNAL(restoringDone()), this, SLOT(forceDockTabFonts()));
-
-    // PartManager
-    // End
 
     if (componentData.isValid()) {
         setComponentData(componentData);   // don't load plugins! we don't want
@@ -454,30 +439,19 @@ KoMainWindow::~KoMainWindow()
     d->dockerManager = 0;
 
     // The doc and view might still exist (this is the case when closing the window)
-    if (d->rootPart)
-        d->rootPart->removeMainWindow(this);
-
-    if (d->partToOpen) {
-        d->partToOpen->removeMainWindow(this);
-        delete d->partToOpen;
+    if (d->part) {
+        d->part->removeMainWindow(this);
     }
 
     // safety first ;)
-    setActivePart(0, 0);
-
-    if (d->rootViews.indexOf(d->activeView) == -1) {
-        delete d->activeView;
-        d->activeView = 0;
-    }
-    while (!d->rootViews.isEmpty()) {
-        delete d->rootViews.takeFirst();
-    }
+    setActiveView(0);
 
     if(d->noCleanup)
         return;
+
     // We have to check if this was a root document.
     // This has to be checked from queryClose, too :)
-    if (d->rootPart && d->rootPart->viewCount() == 0) {
+    if (d->part && d->part->viewCount() == 0) {
         //kDebug(30003) <<"Destructor. No more views, deleting old doc" << d->rootDoc;
         delete d->rootDocument;
     }
@@ -485,26 +459,18 @@ KoMainWindow::~KoMainWindow()
     delete d;
 }
 
-void KoMainWindow::setRootDocument(KoDocument *doc, KoPart *part, bool deletePrevious)
+void KoMainWindow::setRootDocument(KoDocument *doc, bool deletePrevious)
 {
     if (d->rootDocument == doc)
         return;
-
-//    if (d->partToOpen && d->partToOpen->document() != doc) {
-//        d->partToOpen->removeMainWindow(this);
-//        if (deletePrevious) delete d->partToOpen;
-//    }
-//    d->partToOpen = 0;
 
     //kDebug(30003) <<"KoMainWindow::setRootDocument this =" << this <<" doc =" << doc;
     QList<KoView*> oldRootViews = d->rootViews;
     d->rootViews.clear();
     KoDocument *oldRootDoc = d->rootDocument;
-    KoPart *oldRootPart = d->rootPart;
 
     if (oldRootDoc) {
         oldRootDoc->disconnect(this);
-        oldRootPart->removeMainWindow(this);
 
         if (dockerManager()) {
             dockerManager()->resetToolDockerWidgets();
@@ -522,19 +488,11 @@ void KoMainWindow::setRootDocument(KoDocument *doc, KoPart *part, bool deletePre
     }
 
     d->rootDocument = doc;
-    // XXX remove this after the splitting
-    if (!part && doc) {
-        d->rootPart = doc->documentPart();
-    }
-    else {
-        d->rootPart = part;
-    }
 
     if (doc) {
         d->dockWidgetMenu->setVisible(true);
-        d->m_registeredPart = d->rootPart.data();
 
-        KoView *view = d->rootPart->createView(doc, this);
+        KoView *view = d->part->createView(doc, this);
         setCentralWidget(view);
         d->rootViews.append(view);
 
@@ -542,8 +500,8 @@ void KoMainWindow::setRootDocument(KoDocument *doc, KoPart *part, bool deletePre
         view->setFocus();
 
         // The addMainWindow has been done already if using openUrl
-        if (!d->rootPart->mainWindows().contains(this)) {
-            d->rootPart->addMainWindow(this);
+        if (!d->part->mainWindows().contains(this)) {
+            d->part->addMainWindow(this);
         }
     }
 
@@ -564,18 +522,18 @@ void KoMainWindow::setRootDocument(KoDocument *doc, KoPart *part, bool deletePre
     d->closeFile->setEnabled(enable);
     updateCaption();
 
-    setActivePart(d->rootPart, doc ? d->rootViews.first() : 0);
+    setActiveView(doc ? d->rootViews.first() : 0);
     emit restoringDone();
 
     while(!oldRootViews.isEmpty()) {
         delete oldRootViews.takeFirst();
     }
-    if (oldRootPart && oldRootPart->viewCount() == 0) {
-        //kDebug(30003) <<"No more views, deleting old doc" << oldRootDoc;
-        oldRootDoc->clearUndoHistory();
-        if(deletePrevious)
-            delete oldRootDoc;
-    }
+//    if (oldRootPart && oldRootPart->viewCount() == 0) {
+//        //kDebug(30003) <<"No more views, deleting old doc" << oldRootDoc;
+//        oldRootDoc->clearUndoHistory();
+//        if(deletePrevious)
+//            delete oldRootDoc;
+//    }
 
     if (doc && !d->dockWidgetVisibilityMap.isEmpty()) {
         foreach(QDockWidget* dockWidget, d->dockWidgetsMap) {
@@ -666,18 +624,6 @@ void KoMainWindow::reloadRecentFileList()
     d->recent->loadEntries(config->group("RecentFiles"));
 }
 
-KoPart* KoMainWindow::createPart() const
-{
-    KoDocumentEntry entry = KoDocumentEntry::queryByMimeType(d->nativeMimeType);
-    QString errorMsg;
-    KoPart *part = entry.createKoPart(&errorMsg);
-
-    if (!part || !errorMsg.isEmpty()) {
-        return 0;
-    }
-    return part;
-}
-
 void KoMainWindow::updateCaption()
 {
     kDebug(30003) << "KoMainWindow::updateCaption()";
@@ -740,13 +686,13 @@ bool KoMainWindow::openDocument(const KUrl & url)
     return openDocumentInternal(url);
 }
 
-bool KoMainWindow::openDocument(KoPart *newPart, const KUrl & url)
+bool KoMainWindow::createDocumentFromUrl(const KUrl & url)
 {
-    KoDocument *newdoc = newPart->createDocument();
-    newPart->addDocument(newdoc);
+    KoDocument *newdoc = d->part->createDocument();
+    d->part->addDocument(newdoc);
     if (!KIO::NetAccess::exists(url, KIO::NetAccess::SourceSide, 0)) {
         newdoc->initEmpty(); //create an empty document
-        setRootDocument(newdoc, newPart);
+        setRootDocument(newdoc);
         newdoc->setUrl(url);
         QString mime = KMimeType::findByUrl(url)->name();
         if (mime.isEmpty() || mime == KMimeType::defaultMimeType())
@@ -755,34 +701,27 @@ bool KoMainWindow::openDocument(KoPart *newPart, const KUrl & url)
         updateCaption();
         return true;
     }
-    return openDocumentInternal(url, newPart, newdoc);
+    return openDocumentInternal(url, newdoc);
 }
 
-bool KoMainWindow::openDocumentInternal(const KUrl & url, KoPart *newpart, KoDocument *newdoc)
+bool KoMainWindow::openDocumentInternal(const KUrl & url, KoDocument *newdoc)
 {
     kDebug(30003) <<"KoMainWindow::openDocument" << url.url();
 
-    if (!newpart)
-        newpart = createPart();
-
-    if (!newpart)
-        return false;
-
     if (!newdoc) {
-        newdoc = newpart->createDocument();
-        newpart->addDocument(newdoc);
+        newdoc = d->part->createDocument();
+        d->part->addDocument(newdoc);
     }
 
     d->firstTime = true;
     connect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
     connect(newdoc, SIGNAL(completed()), this, SLOT(slotLoadCompleted()));
     connect(newdoc, SIGNAL(canceled(const QString &)), this, SLOT(slotLoadCanceled(const QString &)));
-    newpart->addMainWindow(this);   // used by openUrl
+    d->part->addMainWindow(this);   // used by openUrl
     bool openRet = (!isImporting()) ? newdoc->openUrl(url) : newdoc->importDocument(url);
     if (!openRet) {
-        newpart->removeMainWindow(this);
+        d->part->removeMainWindow(this);
         delete newdoc;
-        delete newpart;
         return false;
     }
     updateReloadFileAction(newdoc);
@@ -800,19 +739,19 @@ void KoMainWindow::slotLoadCompleted()
 {
     kDebug(30003) << "KoMainWindow::slotLoadCompleted";
     KoDocument *newdoc = qobject_cast<KoDocument*>(sender());
-    KoPart *newpart = newdoc->documentPart();
 
     if (d->rootDocument && d->rootDocument->isEmpty()) {
         // Replace current empty document
         setRootDocument(newdoc);
-    } else if (d->rootDocument && !d->rootDocument->isEmpty()) {
+    }
+    else if (d->rootDocument && !d->rootDocument->isEmpty()) {
         // Open in a new main window
         // (Note : could create the main window first and the doc next for this
         // particular case, that would give a better user feedback...)
-        KoMainWindow *s = newpart->createMainWindow();
+        KoMainWindow *s = d->part->createMainWindow();
         s->show();
-        newpart->removeMainWindow(this);
-        s->setRootDocument(newdoc, newpart);
+        d->part->removeMainWindow(this);
+        s->setRootDocument(newdoc);
     } else {
         // We had no document, set the new one
         setRootDocument(newdoc);
@@ -862,7 +801,7 @@ void KoMainWindow::slotSaveCompleted()
 // returns true if we should save, false otherwise.
 bool KoMainWindow::exportConfirmation(const QByteArray &outputFormat)
 {
-    KConfigGroup group = KGlobal::config()->group(d->rootPart->componentData().componentName());
+    KConfigGroup group = KGlobal::config()->group(d->part->componentData().componentName());
     if (!group.readEntry("WantExportConfirmation", true)) {
         return true;
     }
@@ -903,7 +842,7 @@ bool KoMainWindow::exportConfirmation(const QByteArray &outputFormat)
 
 bool KoMainWindow::saveDocument(bool saveas, bool silent, int specialOutputFlag)
 {
-    if (!d->rootDocument || !d->rootPart) {
+    if (!d->rootDocument || !d->part) {
         return true;
     }
 
@@ -1140,9 +1079,9 @@ void KoMainWindow::closeEvent(QCloseEvent *e)
     }
     if (queryClose()) {
         d->deferredClosingEvent = e;
-        if (d->partToOpen) {
+        if (d->part) {
             // The open pane is visible
-            d->partToOpen->deleteOpenPane();
+            d->part->deleteOpenPane();
         }
         if (!d->m_dockerStateBeforeHiding.isEmpty()) {
             restoreState(d->m_dockerStateBeforeHiding);
@@ -1179,8 +1118,7 @@ void KoMainWindow::saveWindowSettings()
     if ( d->rootDocument) {
 
         // Save toolbar position into the config file of the app, under the doc's component name
-        KConfigGroup group = KGlobal::config()->group(d->rootPart->componentData().componentName());
-        //kDebug(30003) <<"KoMainWindow::closeEvent -> saveMainWindowSettings rootdoc's componentData=" << d->rootPart->componentData().componentName();
+        KConfigGroup group = KGlobal::config()->group(d->part->componentData().componentName());
         saveMainWindowSettings(group);
 
         // Save collapsable state of dock widgets
@@ -1212,7 +1150,7 @@ bool KoMainWindow::queryClose()
         return true;
     //kDebug(30003) <<"KoMainWindow::queryClose() viewcount=" << d->rootDocument->viewCount()
     //               << " mainWindowCount=" << d->rootDocument->mainWindowCount() << endl;
-    if (!d->forQuit && d->rootPart->mainwindowCount() > 1)
+    if (!d->forQuit && d->part->mainwindowCount() > 1)
         // there are more open, and we are closing just one, so no problem for closing
         return true;
 
@@ -1257,9 +1195,8 @@ bool KoMainWindow::queryClose()
 void KoMainWindow::chooseNewDocument(InitDocFlags initDocFlags)
 {
     KoDocument* doc = d->rootDocument;
-    KoPart *newpart = createPart();
-    KoDocument *newdoc = newpart->createDocument();
-    newpart->addDocument(newdoc);
+    KoDocument *newdoc = d->part->createDocument();
+    d->part->addDocument(newdoc);
 
     if (!newdoc)
         return;
@@ -1267,10 +1204,10 @@ void KoMainWindow::chooseNewDocument(InitDocFlags initDocFlags)
     disconnect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
 
     if ((!doc && initDocFlags == InitDocFileNew) || (doc && !doc->isEmpty())) {
-        KoMainWindow *s = newpart->createMainWindow();
+        KoMainWindow *s = d->part->createMainWindow();
         s->show();
-        newpart->addMainWindow(s);
-        newpart->showStartUpWidget(s, true /*Always show widget*/);
+        d->part->addMainWindow(s);
+        d->part->showStartUpWidget(s, true /*Always show widget*/);
         return;
     }
 
@@ -1282,8 +1219,8 @@ void KoMainWindow::chooseNewDocument(InitDocFlags initDocFlags)
         d->rootDocument = 0;
     }
 
-    newpart->addMainWindow(this);
-    newpart->showStartUpWidget(this, true /*Always show widget*/);
+    d->part->addMainWindow(this);
+    d->part->showStartUpWidget(this, true /*Always show widget*/);
 }
 
 void KoMainWindow::slotFileNew()
@@ -1542,7 +1479,7 @@ void KoMainWindow::slotConfigureKeys()
 void KoMainWindow::slotConfigureToolbars()
 {
     if (d->rootDocument)
-        saveMainWindowSettings(KGlobal::config()->group(d->rootPart->componentData().componentName()));
+        saveMainWindowSettings(KGlobal::config()->group(d->part->componentData().componentName()));
     KEditToolBar edit(factory(), this);
     connect(&edit, SIGNAL(newToolBarConfig()), this, SLOT(slotNewToolbarConfig()));
     (void) edit.exec();
@@ -1551,7 +1488,7 @@ void KoMainWindow::slotConfigureToolbars()
 void KoMainWindow::slotNewToolbarConfig()
 {
     if (d->rootDocument) {
-        applyMainWindowSettings(KGlobal::config()->group(d->rootPart->componentData().componentName()));
+        applyMainWindowSettings(KGlobal::config()->group(d->part->componentData().componentName()));
     }
 
     KXMLGUIFactory *factory = guiFactory();
@@ -1576,7 +1513,7 @@ void KoMainWindow::slotToolbarToggled(bool toggle)
             bar->hide();
 
         if (d->rootDocument)
-            saveMainWindowSettings(KGlobal::config()->group(d->rootPart->componentData().componentName()));
+            saveMainWindowSettings(KGlobal::config()->group(d->part->componentData().componentName()));
     } else
         kWarning(30003) << "slotToolbarToggled : Toolbar " << sender()->objectName() << " not found!";
 }
@@ -1790,11 +1727,6 @@ bool KoMainWindow::isExporting() const
     return d->isExporting;
 }
 
-void KoMainWindow::setPartToOpen(KoPart *part)
-{
-    d->partToOpen = part;
-}
-
 QDockWidget* KoMainWindow::createDockWidget(KoDockFactoryBase* factory)
 {
     QDockWidget* dockWidget = 0;
@@ -1843,7 +1775,7 @@ QDockWidget* KoMainWindow::createDockWidget(KoDockFactoryBase* factory)
         }
 
         if (d->rootDocument) {
-            KConfigGroup group = KGlobal::config()->group(d->rootPart->componentData().componentName()).group("DockWidget " + factory->id());
+            KConfigGroup group = KGlobal::config()->group(d->part->componentData().componentName()).group("DockWidget " + factory->id());
             side = static_cast<Qt::DockWidgetArea>(group.readEntry("DockArea", static_cast<int>(side)));
             if (side == Qt::NoDockWidgetArea) side = Qt::RightDockWidgetArea;
         }
@@ -1856,7 +1788,7 @@ QDockWidget* KoMainWindow::createDockWidget(KoDockFactoryBase* factory)
 
         bool collapsed = factory->defaultCollapsed();
         if (d->rootDocument) {
-            KConfigGroup group = KGlobal::config()->group(d->rootPart->componentData().componentName()).group("DockWidget " + factory->id());
+            KConfigGroup group = KGlobal::config()->group(d->part->componentData().componentName()).group("DockWidget " + factory->id());
             collapsed = group.readEntry("Collapsed", collapsed);
         }
         if (titleBar && collapsed)
@@ -1951,10 +1883,10 @@ void KoMainWindow::slotSetStatusBarText( const QString & text )
 
 void KoMainWindow::newView()
 {
-    Q_ASSERT((d != 0 && d->activeView && d->activePart && d->activeView->koDocument()));
+    Q_ASSERT((d != 0 && d->activeView && d->part && d->activeView->koDocument()));
 
-    KoMainWindow *mainWindow = d->activePart->createMainWindow();
-    mainWindow->setRootDocument(d->activeView->koDocument(), d->activePart);
+    KoMainWindow *mainWindow = d->part->createMainWindow();
+    mainWindow->setRootDocument(d->activeView->koDocument());
     mainWindow->show();
 }
 
@@ -1979,60 +1911,27 @@ void KoMainWindow::createMainwindowGUI()
 
 // PartManager
 
-void KoMainWindow::removePart( KoPart *part )
+void KoMainWindow::setActiveView(QWidget *widget)
 {
-    if (d->m_registeredPart.data() != part) {
-        return;
-    }
-    d->m_registeredPart = 0;
-    if ( part == d->m_activePart ) {
-        setActivePart(0, 0);
-    }
-}
-
-void KoMainWindow::setActivePart(KoPart *part, QWidget *widget )
-{
-    if (part && d->m_registeredPart.data() != part) {
-        kWarning(1000) << "trying to activate a non-registered part!" << part->objectName();
-        return; // don't allow someone call setActivePart with a part we don't know about
-    }
-
     // don't activate twice
-    if ( d->m_activePart && part && d->m_activePart == part &&
-         (!widget || d->m_activeWidget == widget) )
+    if (!widget || d->m_activeWidget == widget)
         return;
 
-    KoPart *oldActivePart = d->m_activePart;
     QWidget *oldActiveWidget = d->m_activeWidget;
 
-    d->m_activePart = part;
     d->m_activeWidget = widget;
 
-    if (oldActivePart) {
-        KoPart *savedActivePart = part;
+    if (oldActiveWidget) {
         QWidget *savedActiveWidget = widget;
-
-        if ( oldActiveWidget ) {
-            disconnect( oldActiveWidget, SIGNAL(destroyed()), this, SLOT(slotWidgetDestroyed()) );
-        }
-
-        d->m_activePart = savedActivePart;
+        disconnect( oldActiveWidget, SIGNAL(destroyed()), this, SLOT(slotWidgetDestroyed()) );
         d->m_activeWidget = savedActiveWidget;
     }
 
-    if (d->m_activePart && d->m_activeWidget ) {
+    if (d->m_activeWidget ) {
         connect( d->m_activeWidget, SIGNAL(destroyed()), this, SLOT(slotWidgetDestroyed()) );
     }
     // Set the new active instance in KGlobal
-    KGlobal::setActiveComponent(d->m_activePart ? d->m_activePart->componentData() : KGlobal::mainComponent());
-
-    // old slot called from part manager
-    KoPart *newPart = static_cast<KoPart*>(d->m_activePart.data());
-
-    if (d->activePart && d->activePart == newPart) {
-        //kDebug(30003) <<"no need to change the GUI";
-        return;
-    }
+    KGlobal::setActiveComponent(d->part ? d->part->componentData() : KGlobal::mainComponent());
 
     KXMLGUIFactory *factory = guiFactory();
 
@@ -2049,15 +1948,12 @@ void KoMainWindow::setActivePart(KoPart *part, QWidget *widget )
         createMainwindowGUI();
     }
 
-    if (newPart && d->m_activeWidget && d->m_activeWidget->inherits("KoView")) {
+    if (d->part && d->m_activeWidget && d->m_activeWidget->inherits("KoView")) {
         d->activeView = qobject_cast<KoView *>(d->m_activeWidget);
-        d->activePart = newPart;
-        //kDebug(30003) <<"new active part is" << d->activePart;
-
         factory->addClient(d->activeView);
 
         // Position and show toolbars according to user's preference
-        setAutoSaveSettings(newPart->componentData().componentName(), false);
+        setAutoSaveSettings(d->part->componentData().componentName(), false);
 
         foreach (QDockWidget *wdg, d->dockWidgets) {
             if ((wdg->features() & QDockWidget::DockWidgetClosable) == 0) {
@@ -2083,7 +1979,6 @@ void KoMainWindow::setActivePart(KoPart *part, QWidget *widget )
     }
     else {
         d->activeView = 0;
-        d->activePart = 0;
     }
 
     if (d->activeView) {
@@ -2094,9 +1989,8 @@ void KoMainWindow::setActivePart(KoPart *part, QWidget *widget )
 void KoMainWindow::slotWidgetDestroyed()
 {
     kDebug(1000);
-    if ( static_cast<const QWidget *>( sender() ) == d->m_activeWidget )
-        setActivePart(0, 0); //do not remove the part because if the part's widget dies, then the
-    //part will delete itself anyway, invoking removePart() in its destructor
+    if (static_cast<const QWidget *>( sender() ) == d->m_activeWidget)
+        setActiveView(0);
 }
 
 void KoMainWindow::slotDocumentTitleModified(const QString &caption, bool mod)
@@ -2106,9 +2000,5 @@ void KoMainWindow::slotDocumentTitleModified(const QString &caption, bool mod)
     updateVersionsFileAction(d->rootDocument);
 
 }
-
-
-
-
 
 #include <KoMainWindow.moc>
