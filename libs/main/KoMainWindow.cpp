@@ -145,7 +145,7 @@ public:
 
         m_helpMenu = 0;
 
-        // PartManger
+        // PartManager
         m_activeWidget = 0;
         m_activePart = 0;
 
