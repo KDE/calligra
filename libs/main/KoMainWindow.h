@@ -170,7 +170,6 @@ public:
      * @return the KoDockerManager which is assigned
      * WARNING: this could be 0, if no docker have been assigned yet. In that case create one
       * and assign it.
-     * Note This should only be called by KoView
      * @ref setDockerManager to assign it.
      */
     KoDockerManager * dockerManager() const;
