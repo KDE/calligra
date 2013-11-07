@@ -76,6 +76,7 @@
 #ifndef QT_NO_DBUS
 #include <kio/jobuidelegate.h>
 #include <QDBusConnection>
+#include "KoDocumentAdaptor.h"
 #endif
 #include <QApplication>
 
@@ -451,11 +452,19 @@ KoDocument::KoDocument(const KoPart *parent, KUndo2Stack *undoStack)
 {
     Q_ASSERT(parent);
 
+
     d->isEmpty = true;
     connect(&d->autoSaveTimer, SIGNAL(timeout()), this, SLOT(slotAutoSave()));
     setAutoSave(defaultAutoSave());
 
     setObjectName(newObjectName());
+
+#ifndef QT_NO_DBUS
+    new KoDocumentAdaptor(this);
+    QDBusConnection::sessionBus().registerObject('/' + objectName(), this);
+#endif
+
+
     d->docInfo = new KoDocumentInfo(this);
 
     d->pageLayout.width = 0;

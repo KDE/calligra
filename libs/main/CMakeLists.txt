@@ -19,6 +19,7 @@ set(komain_LIB_SRCS
     KoApplication.cpp
     KoDockerManager.cpp
     KoDocument.cpp
+    KoDocumentAdaptor.cpp
     KoDocumentEntry.cpp
     KoDocumentInfo.cpp
     KoDocumentInfoDlg.cpp

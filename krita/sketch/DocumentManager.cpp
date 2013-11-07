@@ -102,7 +102,7 @@ void DocumentManager::delayedNewDocument()
     d->document = new KisDoc2(part());
     d->document->setProgressProxy(d->proxy);
     d->document->setSaveInBatchMode(true);
-    part()->setDocument(d->document);
+
     d->document->newImage("New Image", d->newDocWidth, d->newDocHeight, KoColorSpaceRegistry::instance()->rgb8());
     d->document->image()->setResolution(d->newDocResolution, d->newDocResolution);
 
@@ -122,7 +122,7 @@ void DocumentManager::delayedOpenDocument()
     d->document = new KisDoc2(part());
     d->document->setProgressProxy(d->proxy);
     d->document->setSaveInBatchMode(true);
-    part()->setDocument(d->document);
+
 
     d->document->setModified(false);
     if (d->importingDocument)

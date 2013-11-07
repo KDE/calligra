@@ -132,6 +132,16 @@ KoDocument *KoPart::document() const
     return d->document;
 }
 
+QList<KoDocument *> KoPart::documents() const
+{
+    return d->documents;
+}
+
+int KoPart::documentCount() const
+{
+    return d->documents.size();
+}
+
 KoView *KoPart::createView(KoDocument *document, QWidget *parent)
 {
     KoView *view = createViewInstance(document, parent);

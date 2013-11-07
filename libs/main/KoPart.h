@@ -99,6 +99,17 @@ public:
      */
     KoDocument *document() const;
 
+    /**
+     * @return a list of views this document is displayed in
+     */
+    QList<KoDocument*> documents() const;
+
+    /**
+     * @return number of views this document is displayed in
+     */
+    int documentCount() const;
+
+
     // ----------------- mainwindow management -----------------
 
     /**
