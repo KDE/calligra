@@ -92,7 +92,6 @@ public:
     virtual QStringList extraNativeMimeTypes() const
     {
         return QStringList() << KIS_MIME_TYPE
-                             << "image/openraster"
                              << "application/x-krita-flipbook";
     }
 

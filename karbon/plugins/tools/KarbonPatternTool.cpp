@@ -334,7 +334,9 @@ void KarbonPatternTool::patternChanged()
         QSharedPointer<KoPatternBackground> newFill(new KoPatternBackground(imageCollection));
         if (! newFill)
             return;
-        *newFill = *oldFill;
+        newFill->setTransform(oldFill->transform());
+        newFill->setPattern(oldFill->pattern());
+
         newFill->setRepeat(m_optionsWidget->repeat());
         newFill->setReferencePoint(m_optionsWidget->referencePoint());
         newFill->setReferencePointOffset(m_optionsWidget->referencePointOffset());

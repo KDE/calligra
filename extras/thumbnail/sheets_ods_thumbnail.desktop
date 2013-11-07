@@ -27,6 +27,7 @@ Name[sl]=Preglednice OpenDocument
 Name[sv]=OpenDocument-kalkylark
 Name[uk]=Електронні таблиці OpenDocument (ODS)
 Name[x-test]=xxOpenDocument Spreadsheetsxx
+Name[zh_CN]=OpenDocument 表格
 
 X-KDE-ServiceTypes=ThumbCreator
 MimeType=application/vnd.oasis.opendocument.spreadsheet;application/vnd.oasis.opendocument.spreadsheet-template;

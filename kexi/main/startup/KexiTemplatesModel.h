@@ -34,8 +34,8 @@ public:
         CategoryRole = 0xA2BEF158
     };
 
-    KexiTemplatesModel(const KexiTemplateCategoryInfoList& templateCategories,
-                       QObject *parent = 0);
+    explicit KexiTemplatesModel(const KexiTemplateCategoryInfoList& templateCategories,
+                                QObject *parent = 0);
     ~KexiTemplatesModel();
 
     QModelIndex  index(int row, int column = 0,

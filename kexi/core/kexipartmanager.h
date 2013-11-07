@@ -58,7 +58,7 @@ public:
     /**
      * creates an empty instance
      */
-    Manager(QObject *parent = 0);
+    explicit Manager(QObject *parent = 0);
     ~Manager();
 
     /**

@@ -387,7 +387,11 @@ public:
         // this could maybe confuse some apps? So for now we'll just fallback to KIO::get
         // and error again. Well, maybe this even helps with wrong stat results.
         if (!job->error()) {
+#if KDE_IS_VERSION(4,4,0)
             const KUrl localUrl = static_cast<KIO::StatJob*>(job)->mostLocalUrl();
+#else
+            const KUrl localUrl = static_cast<KIO::StatJob*>(job)->url();
+#endif
             if (localUrl.isLocalFile()) {
                 m_file = localUrl.toLocalFile();
                 openLocalFile();
@@ -1646,6 +1650,13 @@ void KoDocument::setProgressProxy(KoProgressProxy *progressProxy)
 
 KoProgressProxy* KoDocument::progressProxy() const
 {
+    if (!d->progressProxy) {
+        KoMainWindow *mainWindow = 0;
+        if (d->parentPart->mainwindowCount() > 0) {
+            mainWindow = d->parentPart->mainWindows()[0];
+        }
+        d->progressProxy = new DocumentProgressProxy(mainWindow);
+    }
     return d->progressProxy;
 }
 
