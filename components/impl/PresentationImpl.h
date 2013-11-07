@@ -38,6 +38,7 @@ public:
     virtual bool load(const QUrl& url);
     virtual int currentIndex();
     virtual void setCurrentIndex(int newValue);
+    virtual void indexCount() const;
 
 private:
     class Private;

@@ -85,6 +85,7 @@ void Document::setSource(const QUrl& value)
             d->status = DocumentStatus::Unloaded;
         }
 
+        emit indexCountChanged();
         emit statusChanged();
     }
 }
@@ -126,6 +127,15 @@ void Document::setCurrentIndex(int newValue)
     if(d->impl) {
         d->impl->setCurrentIndex(newValue);
     }
+}
+
+void Document::indexCount() const
+{
+    if(d->impl) {
+        return d->impl->indexCount();
+    }
+
+    return 0;
 }
 
 KoFindBase* Document::finder() const

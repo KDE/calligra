@@ -66,21 +66,22 @@ class Document : public QObject
      * creates the canvas it is currently pretty much a document property.
      */
     Q_PROPERTY(int currentIndex READ currentIndex WRITE setCurrentIndex NOTIFY currentIndexChanged)
+    /**
+     * \property indexCount
+     * \brief The number of "indexes" in the document, i.e. pages, slides, etc.
+     *
+     * \default 0
+     * \get indexCount() const
+     * \notify indexCountChanged()
+     */
+    Q_PROPERTY(int indexCount READ indexCount NOTIFY indexCountChanged)
 
 public:
     Document(QObject* parent = 0);
     ~Document();
 
-    /**
-     * @{
-     *
-     * \property source
-     */
     QUrl source() const;
     void setSource(const QUrl& value);
-    /**
-     * @}
-     */
 
     DocumentType::Type documentType() const;
     DocumentStatus::Status status() const;
@@ -94,6 +95,10 @@ public:
      * Setter for property #currentIndex.
      */
     void setCurrentIndex(int newValue);
+    /**
+     * Getter for property #indexCount.
+     */
+    void indexCount() const;
 
     /**
      * \internal
@@ -120,7 +125,10 @@ Q_SIGNALS:
      * Notify signal for property #currentIndex.
      */
     void currentIndexChanged();
-
+    /**
+     * Notify signal for property #indexCount
+     */
+    void indexCountChanged();
     /**
      * \brief Emitted whenever the backend wants to update the view.
      */

@@ -102,3 +102,8 @@ void PresentationImpl::setCurrentIndex(int newValue)
         emit currentIndexChanged();
     }
 }
+
+void PresentationImpl::indexCount() const
+{
+    return d->document->pageCount();
+}

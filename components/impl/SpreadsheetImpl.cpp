@@ -111,3 +111,8 @@ void SpreadsheetImpl::updateDocumentSize(const QSize& size)
     zoomController()->setDocumentSize(activeRect.size(), false);
     setDocumentSize(activeRect.size().toSize());
 }
+
+void SpreadsheetImpl::indexCount() const
+{
+    return d->document->map()->count();
+}

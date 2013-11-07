@@ -104,3 +104,8 @@ void TextDocumentImpl::setCurrentIndex(int newValue)
     canvasController()->setScrollBarValue(newRect.topLeft().toPoint());
     emit currentIndexChanged();
 }
+
+void TextDocumentImpl::indexCount() const
+{
+    return d->document->pageCount();
+}
