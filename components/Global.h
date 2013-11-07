@@ -42,7 +42,7 @@ public:
     Global(QObject* parent = 0);
 
     static Q_INVOKABLE void loadPlugins();
-    static Q_INVOKABLE DocumentType::Type documentType(const QUrl& document);
+    static Q_INVOKABLE Calligra::Components::DocumentType::Type documentType(const QUrl& document);
 };
 
 } // Namespace Components

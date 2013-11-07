@@ -42,7 +42,7 @@ void Global::loadPlugins()
 
 }
 
-DocumentType::Type Global::documentType(const QUrl& document)
+Calligra::Components::DocumentType::Type Global::documentType(const QUrl& document)
 {
     QMimeType mime = QMimeDatabase{}.mimeTypeForUrl(document);
 
