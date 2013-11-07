@@ -1629,7 +1629,7 @@ bool KoDocument::openFile()
         notify->setText(i18n("Document <i>%1</i> loaded", url().url()));
         notify->addContext("url", url().url());
         QTimer::singleShot(0, notify, SLOT(sendEvent()));
-        d->parentPart->deleteOpenPane();
+        d->parentPart->deleteOpenPane(this);
     }
 
     if (progressUpdater()) {

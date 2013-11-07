@@ -26,12 +26,13 @@
 #include "CAPADocumentModel.h"
 
 #include <stage/part/KPrDocument.h>
-
 #include <KoPACanvasItem.h>
 #include <KoPAPageBase.h>
 #include <KoCanvasController.h>
 #include <KoSelection.h>
 
+
+#include <KoDocument.h>
 #include <KoPart.h>
 #include <KoToolManager.h>
 #include <KoZoomHandler.h>
@@ -115,7 +116,7 @@ bool CAPresentationHandler::openDocument (const QString& uri)
         return false;
     }
 
-    d->document = qobject_cast<KPrDocument*> (part->document());
+    d->document = static_cast<KPrDocument*> (part->createDocument());
     d->document->openUrl (KUrl (uri));
 
     KoCanvasBase* paCanvas = dynamic_cast<KoCanvasBase*>(part->canvasItem(d->document));

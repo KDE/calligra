@@ -26,6 +26,7 @@
 
 #include <QWidget>
 
+class KoDocument;
 class KWDocument;
 class KoPageLayoutWidget;
 class KWDocumentColumns;
@@ -55,7 +56,7 @@ private slots:
 
 signals:
     /// this signal is emitted (as defined by KoDocument) the moment the document is 'ready'
-    void documentSelected();
+    void documentSelected(KoDocument*);
 
 private:
     KoPageLayoutWidget *m_sizeWidget;

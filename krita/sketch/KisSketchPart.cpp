@@ -29,10 +29,10 @@ KisSketchPart::~KisSketchPart()
 
 bool KisSketchPart::openFile()
 {
-    return document()->openFile();
+    return false;
 }
 
 bool KisSketchPart::saveFile()
 {
-    return document()->saveFile();
+    return false;
 }

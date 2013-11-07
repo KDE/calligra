@@ -53,7 +53,7 @@ bool convertPdf(const KUrl &uIn, const QString &inputFormat, const KUrl &uOut, c
         return false;
     }
 
-    KoDocument *doc = part->document();
+    KoDocument *doc = part->createDocument();
 
     doc->setCheckAutoSaveFile(false);
     doc->setAutoErrorHandlingEnabled(false);

@@ -107,7 +107,8 @@ bool CASpreadsheetHandler::openDocument (const QString& uri)
         return false;
     }
 
-    d->document = static_cast<Calligra::Sheets::Doc*> (part->document());
+    d->document = static_cast<Calligra::Sheets::Doc*> (part->createDocument());
+    part->addDocument(d->document);
     d->document->openUrl (KUrl (uri));
 
     setCanvas (dynamic_cast<KoCanvasBase*>(part->canvasItem(d->document)));

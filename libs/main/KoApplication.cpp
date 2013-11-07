@@ -134,8 +134,6 @@ bool KoApplication::initHack()
     options.add("dpi <dpiX,dpiY>", ki18n("Override display DPI"));
     options.add("export-pdf", ki18n("Only export to PDF and exit"));
     options.add("export-filename <filename>", ki18n("Filename for export-pdf"));
-    options.add("benchmark-loading", ki18n("just load the file and then exit"));
-    options.add("benchmark-loading-show-window", ki18n("load the file, show the window and progressbar and then exit"));
     options.add("profile-filename <filename>", ki18n("Filename to write profiling information into."));
     options.add("roundtrip-filename <filename>", ki18n("Load a file and save it as an ODF file. Meant for debugging."));
     KCmdLineArgs::addCmdLineOptions(options, ki18n("Calligra"), "calligra", "kde");
@@ -248,7 +246,8 @@ bool KoApplication::start()
         }
 
         // XXX: the document should be separate plugin
-        KoDocument *doc = part->document();
+        KoDocument *doc = part->createDocument();
+        part->addDocument(doc);
 
         KoMainWindow *mainWindow = part->createMainWindow();
         mainWindow->show();
@@ -374,16 +373,10 @@ bool KoApplication::start()
         const QString pdfFileName = koargs->getOption("export-filename");
         const QString roundtripFileName = koargs->getOption("roundtrip-filename");
         const bool doTemplate = koargs->isSet("template");
-        const bool benchmarkLoading = koargs->isSet("benchmark-loading")
-                || koargs->isSet("benchmark-loading-show-window")
-                || !roundtripFileName.isEmpty();
         // only show the mainWindow when no command-line mode option is passed
-        const bool showmainWindow =
-                koargs->isSet("benchmark-loading-show-window") || (
-                    !koargs->isSet("export-pdf")
-                    && !koargs->isSet("benchmark-loading")
-                    && !koargs->isSet("roundtrip-filename")
-                    && roundtripFileName.isEmpty());
+        const bool showmainWindow = (   !koargs->isSet("export-pdf")
+                                     && !koargs->isSet("roundtrip-filename")
+                                     && roundtripFileName.isEmpty());
         const QString profileFileName = koargs->getOption("profile-filename");
         koargs->clear();
 
@@ -403,16 +396,13 @@ bool KoApplication::start()
             QString errorMsg;
             KoPart *part = entry.createKoPart(&errorMsg);
             if (part) {
-                KoDocument *doc = part->document();
+                KoDocument *doc = part->createDocument();
+                part->addDocument(doc);
                 // show a mainWindow asap
                 KoMainWindow *mainWindow = part->createMainWindow();
                 if (showmainWindow) {
                     mainWindow->show();
                 }
-                if (benchmarkLoading) {
-                    doc->setReadWrite(false);
-                }
-
                 if (profileoutput.device()) {
                     doc->setProfileStream(&profileoutput);
                     profileoutput << "KoApplication::start\t"
@@ -467,20 +457,7 @@ bool KoApplication::start()
                     // now try to load
                 }
                 else if (mainWindow->openDocument(part, args->url(argNumber))) {
-                    if (benchmarkLoading) {
-                        if (profileoutput.device()) {
-                            profileoutput << "KoApplication::start\t"
-                                          << appStartTime.msecsTo(QTime::currentTime())
-                                          <<"\t100" << endl;
-                        }
-                        if (!roundtripFileName.isEmpty()) {
-                            part->document()->saveAs(KUrl("file:"+roundtripFileName));
-                        }
-                        // close the document
-                        mainWindow->slotFileQuit();
-                        return true; // only load one document!
-                    }
-                    else if (print) {
+                    if (print) {
                         mainWindow->slotFilePrint();
                         // delete mainWindow; done by ~KoDocument
                         nPrinted++;
@@ -508,9 +485,6 @@ bool KoApplication::start()
 
                 d->partList << part;
             }
-        }
-        if (benchmarkLoading) {
-            return false; // no valid urls found.
         }
         if (print || exportAsPdf)
             return nPrinted > 0;
@@ -549,7 +523,7 @@ int KoApplication::documentCount()
     QList<KoPart*> parts = d->partList;
     foreach(KoPart* part, parts) {
         foreach(KoDocument *doc, part->documents()) {
-            nameList.insert(doc->url());
+            nameList.insert(doc->objectName());
         }
     }
     return nameList.size();

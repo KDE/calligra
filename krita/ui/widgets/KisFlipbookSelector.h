@@ -20,6 +20,7 @@
 #include <QWidget>
 #include "ui_wdgflipbookselector.h"
 
+class KoDocument;
 class KisDoc2;
 
 class KisFlipbookSelector : public QWidget, public Ui::WdgFlipbookSelector
@@ -27,10 +28,10 @@ class KisFlipbookSelector : public QWidget, public Ui::WdgFlipbookSelector
     Q_OBJECT
 public:
     KisFlipbookSelector(QWidget *parent, KisDoc2 *document);
-    
+
 signals:
-    
-    void documentSelected();
+
+    void documentSelected(KoDocument*);
 
 private slots:
 

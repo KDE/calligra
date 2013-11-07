@@ -204,7 +204,7 @@ void KisCustomImageWidget::createImage()
 {
     createNewImage();
 
-    emit documentSelected();
+    emit documentSelected(m_doc);
 }
 
 void KisCustomImageWidget::createNewImage()

@@ -63,8 +63,7 @@ KoDocument* openFile(const QString &filename)
         return 0;
     }
 
-    KoDocument *document = part->document();
-
+    KoDocument *document = part->createDocument();
     if (0 != document) {
         KUrl url;
         url.setPath(filename);

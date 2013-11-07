@@ -970,14 +970,15 @@ void MainDocument::insertFileCompleted()
     kDebug(planDbg())<<sender();
     Part *part = qobject_cast<Part*>( sender() );
     if ( part ) {
-        MainDocument *doc = qobject_cast<MainDocument*>( part->document() );
+        MainDocument *doc = qobject_cast<MainDocument*>( part->createDocument() );
         if ( doc ) {
             Project &p = doc->getProject();
             insertProject( p, doc->m_insertFileInfo.parent, doc->m_insertFileInfo.after );
         } else {
             KMessageBox::error( 0, i18n("Internal error, failed to insert file.") );
         }
-        part->deleteLater(); // also deletes document
+        doc->deleteLater();
+        part->deleteLater();
     }
 }
 

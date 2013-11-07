@@ -103,7 +103,7 @@ bool CATextDocumentHandler::openDocument (const QString& uri)
         return false;
     }
 
-    d->document = static_cast<KWDocument*> (part->document());
+    d->document = qobject_cast<KWDocument*>(part->createDocument());
     d->document->openUrl (KUrl (uri));
 
     setCanvas (dynamic_cast<KoCanvasBase*> (part->canvasItem(d->document)));

@@ -25,6 +25,7 @@
 
 #include <ui_wdgnewimage.h>
 
+class KoDocument;
 class KisDoc2;
 class KoID;
 
@@ -72,7 +73,7 @@ private slots:
     void switchPortraitLandscape();
 signals:
     /// this signal is emitted (as defined by KoDocument) the moment the document is 'ready'
-    void documentSelected();
+    void documentSelected(KoDocument*);
 
 protected:
     KisDoc2 *m_doc;

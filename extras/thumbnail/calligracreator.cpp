@@ -91,7 +91,7 @@ bool CalligraCreator::create(const QString &path, int width, int height, QImage 
 
     if (!m_part) return false;
 
-    m_doc = m_part->document();
+    m_doc = m_part->createDocument();
 
     // prepare the document object
     m_doc->setCheckAutoSaveFile(false);

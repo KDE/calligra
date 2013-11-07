@@ -68,5 +68,5 @@ void KisFlipbookSelector::createImage()
 
     static_cast<KisPart2*>(m_document->documentPart())->setFlipbook(flipbook);
     QApplication::restoreOverrideCursor();
-    emit documentSelected();
+    emit documentSelected(m_document);
 }

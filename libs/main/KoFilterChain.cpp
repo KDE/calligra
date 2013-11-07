@@ -533,7 +533,7 @@ KoDocument* KoFilterChain::createDocument(const QByteArray& mimeType)
         kError(30500) << "Couldn't create the document: " << errorMsg << endl;
         return 0;
     }
-    return part->document();
+    return part->createDocument();
 }
 
 int KoFilterChain::weight() const

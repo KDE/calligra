@@ -85,7 +85,7 @@ public:
     // ----------------- mainwindow management -----------------
 
     /**
-     * create an empty document. The document is not automatically registered.
+     * create an empty document. The document is not automatically registered with the part.
      */
     virtual KoDocument *createDocument() const = 0;
 
@@ -93,11 +93,6 @@ public:
      * Add the specified document to the list of documents this KoPart manages.
      */
     virtual void addDocument(KoDocument *document);
-
-    /**
-     * @return the document this part loads and saves to and makes views for
-     */
-    KoDocument *document() const;
 
     /**
      * @return a list of views this document is displayed in
@@ -165,7 +160,7 @@ signals:
 
 private slots:
 
-    void startCustomDocument();
+    void startCustomDocument(KoDocument *doc);
 
 
 public:
@@ -230,7 +225,8 @@ public:
     /**
      * Removes the startupWidget shown at application start up.
      */
-    void deleteOpenPane(bool closing = false);
+    void deleteOpenPane();
+    void deleteOpenPane(KoDocument *document);
 
 protected:
 
@@ -258,7 +254,7 @@ protected:
      * not based on a template).
      * The returned widget should provide its own button (preferably 'Create') and
      * implement the logic to implement the document instance correctly.
-     * After initializing the widget should emit a signal called 'documentSelected()' which
+     * After initializing the widget should emit a signal called 'documentSelected(KoDocument*)' which
      * will remove the startupWidget and show the document.
      * @param parent the parent of the to be created widget.
      * @return a list of KoDocument::CustomDocumentWidgetItem.

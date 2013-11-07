@@ -82,7 +82,7 @@ bool OkularOdpGenerator::loadDocument( const QString &fileName, QVector<Okular::
         return 0;
     }
 
-    KoPADocument* doc = qobject_cast<KoPADocument*>(part->document());
+    KoPADocument* doc = qobject_cast<KoPADocument*>(part->createDocument());
     m_doc = doc;
     KUrl url;
     url.setPath(fileName);

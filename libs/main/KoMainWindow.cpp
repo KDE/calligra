@@ -490,11 +490,11 @@ void KoMainWindow::setRootDocument(KoDocument *doc, KoPart *part, bool deletePre
     if (d->rootDocument == doc)
         return;
 
-    if (d->partToOpen && d->partToOpen->document() != doc) {
-        d->partToOpen->removeMainWindow(this);
-        if (deletePrevious) delete d->partToOpen;
-    }
-    d->partToOpen = 0;
+//    if (d->partToOpen && d->partToOpen->document() != doc) {
+//        d->partToOpen->removeMainWindow(this);
+//        if (deletePrevious) delete d->partToOpen;
+//    }
+//    d->partToOpen = 0;
 
     //kDebug(30003) <<"KoMainWindow::setRootDocument this =" << this <<" doc =" << doc;
     QList<KoView*> oldRootViews = d->rootViews;
@@ -742,8 +742,8 @@ bool KoMainWindow::openDocument(const KUrl & url)
 
 bool KoMainWindow::openDocument(KoPart *newPart, const KUrl & url)
 {
-    // the part always has a document; the document doesn't know about the part.
-    KoDocument *newdoc = newPart->document();
+    KoDocument *newdoc = newPart->createDocument();
+    newPart->addDocument(newdoc);
     if (!KIO::NetAccess::exists(url, KIO::NetAccess::SourceSide, 0)) {
         newdoc->initEmpty(); //create an empty document
         setRootDocument(newdoc, newPart);
@@ -768,8 +768,10 @@ bool KoMainWindow::openDocumentInternal(const KUrl & url, KoPart *newpart, KoDoc
     if (!newpart)
         return false;
 
-    if (!newdoc)
-        newdoc = newpart->document();
+    if (!newdoc) {
+        newdoc = newpart->createDocument();
+        newpart->addDocument(newdoc);
+    }
 
     d->firstTime = true;
     connect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
@@ -1140,7 +1142,7 @@ void KoMainWindow::closeEvent(QCloseEvent *e)
         d->deferredClosingEvent = e;
         if (d->partToOpen) {
             // The open pane is visible
-            d->partToOpen->deleteOpenPane(true);
+            d->partToOpen->deleteOpenPane();
         }
         if (!d->m_dockerStateBeforeHiding.isEmpty()) {
             restoreState(d->m_dockerStateBeforeHiding);
@@ -1256,7 +1258,8 @@ void KoMainWindow::chooseNewDocument(InitDocFlags initDocFlags)
 {
     KoDocument* doc = rootDocument();
     KoPart *newpart = createPart();
-    KoDocument *newdoc = newpart->document();
+    KoDocument *newdoc = newpart->createDocument();
+    newpart->addDocument(newdoc);
 
     if (!newdoc)
         return;

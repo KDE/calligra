@@ -107,9 +107,11 @@ void KarbonPart::openTemplate(const KUrl& url)
 
     // explicitly set the output mimetype to our native mimetype
     // so that autosaving works for not yet saved templates as well
-    if (document()->outputMimeType().isEmpty()) {
-        document()->setOutputMimeType("application/vnd.oasis.opendocument.graphics");
+    KoDocument *document = createDocument();
+    if (document->outputMimeType().isEmpty()) {
+        document->setOutputMimeType("application/vnd.oasis.opendocument.graphics");
     }
+    addDocument(document);
 }
 
 

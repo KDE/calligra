@@ -47,29 +47,14 @@ KoApplicationAdaptor::~KoApplicationAdaptor()
     // destructor
 }
 
-//QString KoApplicationAdaptor::createDocument(const QString &nativeFormat)
-//{
-//    KoDocumentEntry entry = KoDocumentEntry::queryByMimeType(nativeFormat);
-//    if (entry.isEmpty()) {
-//        KMessageBox::questionYesNo(0, i18n("Unknown Calligra MimeType %1. Check your installation.", nativeFormat));
-//        return QString();
-//    }
-//    KoPart *part = entry.createKoPart(0);
-//    if (part) {
-//        m_application->addPart(part);
-//        return '/' + part->document()->objectName();
-//    }
-//    else {
-//        return QString();
-//    }
-//}
-
 QStringList KoApplicationAdaptor::getDocuments()
 {
     QStringList lst;
     QList<KoPart*> parts = m_application->partList();
     foreach(KoPart *part, parts) {
-        lst.append('/' + part->document()->objectName());
+        foreach(KoDocument *document, part->documents()) {
+            lst.append('/' + document->objectName());
+        }
     }
     return lst;
 }
