@@ -194,7 +194,7 @@ Value func_info(valVector args, ValueCalc *calc, FuncExtra *)
         if(! app) {
            return Value(0);
         } else {
-           int val = app->documents();
+           int val = app->documentCount();
            return Value(val);
         }
     }

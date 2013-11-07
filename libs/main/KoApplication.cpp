@@ -543,12 +543,14 @@ QList<KoPart*> KoApplication::partList() const
     return d->partList;
 }
 
-int KoApplication::documents()
+int KoApplication::documentCount()
 {
     QSet<QString> nameList;
     QList<KoPart*> parts = d->partList;
     foreach(KoPart* part, parts) {
-        nameList.insert(part->document()->objectName());
+        foreach(KoDocument *doc, part->documents()) {
+            nameList.insert(doc->url());
+        }
     }
     return nameList.size();
 }
