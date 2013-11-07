@@ -96,6 +96,8 @@ public:
      */
     KoView *activeView() const;
 
+private:
+
     /**
      * The application should call this to show or hide a toolbar.
      * It also takes care of the corresponding action in the settings menu.
@@ -112,6 +114,8 @@ public:
      * You can also insert other items in the status bar by using QStatusBar::addWidget.
      */
     QLabel *statusBarLabel();
+
+public:
 
     /**
      * Sets the maximum number of recent documents entries.
@@ -138,6 +142,8 @@ public:
      */
     bool openDocument(KoPart *newPart, const KUrl & url);
 
+private:
+
     /**
      * Reloads the recent documents list.
      */
@@ -150,6 +156,7 @@ public:
     void updateReloadFileAction(KoDocument *doc);
     void updateVersionsFileAction(KoDocument *doc);
 
+public:
     void setReadWrite(bool readwrite);
 
     /**
@@ -190,7 +197,7 @@ signals:
     /// and the document anymore.
     void loadCompleted();
 
-public slots:
+private slots:
 
     /**
      * Slot for eMailing the document using KMail
@@ -223,24 +230,27 @@ public slots:
      *  If not a new mainwindow will be opened for showing the opened file.
      */
     void slotFileOpenRecent(const KUrl &);
-
+public slots:
     /**
      *  Saves the current document with the current name.
      */
     void slotFileSave();
-
+private slots:
     /**
      *  Saves the current document with a new name.
      */
     void slotFileSaveAs();
-
+public slots:
     /**
      *  Prints the actual document.
      */
     void slotFilePrint();
-    void slotFilePrintPreview();
 
+private slots:
+    void slotFilePrintPreview();
+public slots:
     KoPrintJob* exportToPdf(const QString &pdfFileName = QString());
+private slots:
     KoPrintJob* exportToPdf(KoPageLayout pageLayout, QString pdfFileName = QString());
 
     /**
@@ -278,12 +288,12 @@ public slots:
      *  Shows or hides a toolbar
      */
     void slotToolbarToggled(bool toggle);
-
+public slots:
     /**
      * Toggle full screen on/off.
      */
     void viewFullscreen(bool fullScreen);
-
+private slots:
     /**
      * Reload file
      */
@@ -312,7 +322,7 @@ public slots:
 
     void slotEncryptDocument();
     void slotUncompressToDir();
-
+public slots:
     void slotProgress(int value);
 
     /**
