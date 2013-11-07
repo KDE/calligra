@@ -266,7 +266,7 @@ void MainWindow::switchToSketch()
     KisConfig cfg;
     if (d->desktopView && centralWidget() == d->desktopView) {
         d->desktopCursorStyle = cfg.cursorStyle();
-        view = qobject_cast<KisView2*>(d->desktopView->rootView());
+        view = qobject_cast<KisView2*>(d->desktopView->activeView());
 
         //Notify the view we are switching away from that we are about to switch away from it
         //giving it the possibility to set up the synchronisation object.
@@ -304,7 +304,7 @@ void MainWindow::sketchChange()
             return;
         }
         qApp->processEvents();
-        KisView2* view = qobject_cast<KisView2*>(d->desktopView->rootView());
+        KisView2* view = qobject_cast<KisView2*>(d->desktopView->activeView());
         //Notify the new view that we just switched to it, passing our synchronisation object
         //so it can use those values to sync with the old view.
         ViewModeSwitchEvent switchedEvent(ViewModeSwitchEvent::SwitchedToSketchModeEvent, view, d->sketchView, d->syncObject);
@@ -333,7 +333,7 @@ void MainWindow::switchToDesktop(bool justLoaded)
 
     KisView2* view = 0;
     if (d->desktopView) {
-        view = qobject_cast<KisView2*>(d->desktopView->rootView());
+        view = qobject_cast<KisView2*>(d->desktopView->activeView());
     }
 
     //Notify the view we are switching away from that we are about to switch away from it
@@ -375,7 +375,7 @@ void MainWindow::switchToDesktop(bool justLoaded)
 void MainWindow::adjustZoomOnDocumentChangedAndStuff()
 {
     if (d->desktopView && centralWidget() == d->desktopView) {
-        KisView2* view = qobject_cast<KisView2*>(d->desktopView->rootView());
+        KisView2* view = qobject_cast<KisView2*>(d->desktopView->activeView());
         qApp->processEvents();
         view->zoomController()->setZoom(KoZoomMode::ZOOM_PAGE, 1.0);
         qApp->processEvents();
@@ -384,7 +384,7 @@ void MainWindow::adjustZoomOnDocumentChangedAndStuff()
         qApp->processEvents();
         // We have to set the focus on the view here, otherwise the toolmanager is unaware of which
         // canvas should be handled.
-        d->desktopView->rootView()->setFocus();
+        d->desktopView->activeView()->setFocus();
         d->toSketch->setEnabled(true);
         d->switcher->setEnabled(true);
     }
@@ -409,7 +409,7 @@ void MainWindow::documentChanged()
     d->initDesktopView();
     d->desktopView->setRootDocument(DocumentManager::instance()->document(), DocumentManager::instance()->part(), false);
     qApp->processEvents();
-    KisView2* view = qobject_cast<KisView2*>(d->desktopView->rootView());
+    KisView2* view = qobject_cast<KisView2*>(d->desktopView->activeView());
     view->setQtMainWindow(d->desktopView);
     connect(view, SIGNAL(sigLoadingFinished()), d->centerer, SLOT(start()));
     if (d->sketchKisView)

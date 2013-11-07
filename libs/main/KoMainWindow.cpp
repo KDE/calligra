@@ -718,11 +718,15 @@ void KoMainWindow::updateCaption(const QString & caption, bool mod)
 }
 
 
-KoView *KoMainWindow::rootView() const
+KoView *KoMainWindow::activeView() const
 {
-    if (d->rootViews.indexOf(d->activeView) != -1)
+    if (d->activeView) {
         return d->activeView;
-    return d->rootViews.first();
+    }
+    else if (!d->rootViews.isEmpty()) {
+        return d->rootViews.first();
+    }
+    return 0;
 }
 
 bool KoMainWindow::openDocument(const KUrl & url)
@@ -1394,13 +1398,13 @@ void KoMainWindow::slotFileQuit()
 
 void KoMainWindow::slotFilePrint()
 {
-    if (!rootView())
+    if (!activeView())
         return;
-    KoPrintJob *printJob = rootView()->createPrintJob();
+    KoPrintJob *printJob = activeView()->createPrintJob();
     if (printJob == 0)
         return;
     d->applyDefaultSettings(printJob->printer());
-    QPrintDialog *printDialog = rootView()->createPrintDialog( printJob, this );
+    QPrintDialog *printDialog = activeView()->createPrintDialog( printJob, this );
     if (printDialog && printDialog->exec() == QDialog::Accepted)
         printJob->startPrinting(KoPrintJob::DeleteWhenDone);
     else
@@ -1410,9 +1414,9 @@ void KoMainWindow::slotFilePrint()
 
 void KoMainWindow::slotFilePrintPreview()
 {
-    if (!rootView())
+    if (!activeView())
         return;
-    KoPrintJob *printJob = rootView()->createPrintJob();
+    KoPrintJob *printJob = activeView()->createPrintJob();
     if (printJob == 0)
         return;
 
@@ -1431,16 +1435,16 @@ void KoMainWindow::slotFilePrintPreview()
 
 KoPrintJob* KoMainWindow::exportToPdf(const QString &pdfFileName)
 {
-    if (!rootView())
+    if (!activeView())
         return 0;
     KoPageLayout pageLayout;
-    pageLayout = rootView()->pageLayout();
+    pageLayout = activeView()->pageLayout();
     return exportToPdf(pageLayout, pdfFileName);
 }
 
 KoPrintJob* KoMainWindow::exportToPdf(KoPageLayout pageLayout, QString pdfFileName)
 {
-    if (!rootView())
+    if (!activeView())
         return 0;
     if (pdfFileName.isEmpty()) {
         KConfigGroup group = KGlobal::config()->group("File Dialogs");
@@ -1477,7 +1481,7 @@ KoPrintJob* KoMainWindow::exportToPdf(KoPageLayout pageLayout, QString pdfFileNa
             return 0;
     }
 
-    KoPrintJob *printJob = rootView()->createPdfPrintJob();
+    KoPrintJob *printJob = activeView()->createPdfPrintJob();
     if (printJob == 0)
         return 0;
     if (isHidden()) {
@@ -1517,10 +1521,10 @@ void KoMainWindow::slotConfigureKeys()
     QAction* redoAction=0;
     QString oldUndoText;
     QString oldRedoText;
-    if(currentView()) {
+    if(activeView()) {
         //The undo/redo action text is "undo" + command, replace by simple text while inside editor
-        undoAction = currentView()->actionCollection()->action("edit_undo");
-        redoAction = currentView()->actionCollection()->action("edit_redo");
+        undoAction = activeView()->actionCollection()->action("edit_undo");
+        redoAction = activeView()->actionCollection()->action("edit_redo");
         oldUndoText = undoAction->text();
         oldRedoText = redoAction->text();
         undoAction->setText(i18n("Undo"));
@@ -1529,7 +1533,7 @@ void KoMainWindow::slotConfigureKeys()
 
     guiFactory()->configureShortcuts();
 
-    if(currentView()) {
+    if(activeView()) {
         undoAction->setText(oldUndoText);
         redoAction->setText(oldRedoText);
     }
@@ -1939,17 +1943,6 @@ KRecentFilesAction *KoMainWindow::recentAction() const
     return d->recent;
 }
 
-KoView* KoMainWindow::currentView() const
-{
-    // XXX
-    if (d->activeView) {
-        return d->activeView;
-    }
-    else if (!d->rootViews.isEmpty()) {
-        return d->rootViews.first();
-    }
-    return 0;
-}
 
 void KoMainWindow::slotSetStatusBarText( const QString & text )
 {

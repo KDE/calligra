@@ -207,7 +207,7 @@ void KoScriptingPart::slotStarted(Kross::Action *action)
     kDebug(32010) << "action=" << action->objectName();
     KoMainWindow *mainwin = dynamic_cast<KoMainWindow*>(qApp->activeWindow());
     KoView *view = d->module ? d->module->view() : 0;
-    if (view && mainwin && view->mainWindow() == mainwin && view == mainwin->rootView()) {
+    if (view && mainwin && view->mainWindow() == mainwin && view == mainwin->activeView()) {
         action->addObject(d->module);
         d->actions.append(action);
         connect(action, SIGNAL(finished(Kross::Action*)), this, SLOT(slotFinished(Kross::Action*)));

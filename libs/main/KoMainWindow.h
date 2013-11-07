@@ -91,7 +91,10 @@ public:
      */
     void updateCaption();
 
-    KoView *rootView() const;
+    /**
+     * @returns the currently active view
+     */
+    KoView *activeView() const;
 
     /**
      * The application should call this to show or hide a toolbar.
@@ -452,9 +455,6 @@ private:
     bool exportConfirmation(const QByteArray &outputFormat);
 
     void saveWindowSettings();
-
-    // retrieve the current KoView
-    KoView* currentView() const;
 
 private:
 
