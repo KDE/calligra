@@ -129,7 +129,7 @@ void Document::setCurrentIndex(int newValue)
     }
 }
 
-void Document::indexCount() const
+int Document::indexCount() const
 {
     if(d->impl) {
         return d->impl->indexCount();

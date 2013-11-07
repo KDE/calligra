@@ -105,7 +105,7 @@ void TextDocumentImpl::setCurrentIndex(int newValue)
     emit currentIndexChanged();
 }
 
-void TextDocumentImpl::indexCount() const
+int TextDocumentImpl::indexCount() const
 {
     return d->document->pageCount();
 }

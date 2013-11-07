@@ -112,7 +112,7 @@ void SpreadsheetImpl::updateDocumentSize(const QSize& size)
     setDocumentSize(activeRect.size().toSize());
 }
 
-void SpreadsheetImpl::indexCount() const
+int SpreadsheetImpl::indexCount() const
 {
     return d->document->map()->count();
 }

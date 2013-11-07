@@ -98,7 +98,7 @@ public:
     /**
      * Getter for property #indexCount.
      */
-    void indexCount() const;
+    int indexCount() const;
 
     /**
      * \internal
