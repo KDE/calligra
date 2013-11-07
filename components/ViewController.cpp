@@ -100,10 +100,7 @@ ViewController::ViewController(QQuickItem* parent)
 
 ViewController::~ViewController()
 {
-    delete d;    QMatrix4x4 mat;
-    mat.scale(d->zoomChange);
-    mat.translate(d->flickable->property("contentX").toInt(), d->flickable->property("contentY").toInt());
-
+    delete d;
 }
 
 View* ViewController::view() const
