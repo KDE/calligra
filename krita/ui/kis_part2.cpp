@@ -18,6 +18,7 @@
 */
 
 #include "kis_part2.h"
+#include "kis_main_window.h"
 #include "kis_view2.h"
 #include "kis_doc2.h"
 #include "kis_factory2.h"
@@ -92,7 +93,7 @@ QGraphicsItem *KisPart2::createCanvasItem(KoDocument *document)
 
 KoMainWindow *KisPart2::createMainWindow()
 {
-    return new KoMainWindow(KIS_MIME_TYPE, componentData());
+    return new KisMainWindow(KIS_MIME_TYPE, componentData());
 }
 
 void KisPart2::showStartUpWidget(KoMainWindow *parent, bool alwaysShow)

@@ -88,6 +88,7 @@ set(kritaui_LIB_SRCS
     kis_image_view_converter.cpp
     kis_import_catcher.cc
     kis_layer_manager.cc
+    kis_main_window.cpp
     kis_mask_manager.cc
     kis_mimedata.cpp
     kis_node_commands_adapter.cpp
