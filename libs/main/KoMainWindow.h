@@ -91,10 +91,6 @@ public:
      */
     void updateCaption();
 
-    /**
-     *  Retrieves the document that is displayed in the mainwindow.
-     */
-    KoDocument *rootDocument() const;
     KoView *rootView() const;
 
     /**
