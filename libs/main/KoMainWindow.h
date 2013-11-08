@@ -407,7 +407,7 @@ private slots:
     /**
      * Slot to create a new view for the currently activate @ref #koDocument.
      */
-    virtual void newView();
+    virtual void newWindow();
 
 
 // ---------------------  PartManager

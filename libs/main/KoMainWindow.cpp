@@ -315,7 +315,7 @@ KoMainWindow::KoMainWindow(KoPart *part, const KComponentData &componentData)
 
     KAction *actionNewView  = new KAction(koIcon("window-new"), i18n("&New View"), this);
     actionCollection()->addAction("view_newview", actionNewView);
-    connect(actionNewView, SIGNAL(triggered(bool)), this, SLOT(newView()));
+    connect(actionNewView, SIGNAL(triggered(bool)), this, SLOT(newWindow()));
 
     /* The following entry opens the document information dialog.  Since the action is named so it
         intends to show data this entry should not have a trailing ellipses (...).  */
@@ -1880,7 +1880,7 @@ void KoMainWindow::slotSetStatusBarText( const QString & text )
     statusBar()->showMessage( text );
 }
 
-void KoMainWindow::newView()
+void KoMainWindow::newWindow()
 {
     Q_ASSERT((d != 0 && d->activeView && d->part && d->activeView->koDocument()));
 
