@@ -84,6 +84,7 @@ public:
         viewBar = 0;
         actionAuthor = 0;
     }
+
     ~KoViewPrivate() {
     }
 
@@ -209,7 +210,7 @@ KoView::~KoView()
 {
     delete d->scrollTimer;
     if (!d->documentDeleted) {
-        if (d->document) {
+        if (d->part) {
             d->part->removeView(this);
         }
     }
