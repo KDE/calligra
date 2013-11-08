@@ -36,7 +36,6 @@
 #include "KoDockFactoryBase.h"
 #include "KoDockWidgetTitleBar.h"
 #include "KoPrintJob.h"
-#include "KoDocumentEntry.h"
 #include "KoDockerManager.h"
 #include "KoPart.h"
 #include <KoPageLayoutDialog.h>
