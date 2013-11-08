@@ -155,7 +155,7 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas, KisCoordinatesConverter *
     slotConfigChanged();
 
     KisConfig cfg;
-    d->openGLImageTextures->generateCheckerTexture(createCheckersImage(cfg.checkSize()));
+    //d->openGLImageTextures->generateCheckerTexture(createCheckersImage(cfg.checkSize()));
 
 }
 
@@ -198,7 +198,7 @@ void KisOpenGLCanvas2::initializeGL()
         }
     }
 
-    initializeCheckerShader();
+    //initializeCheckerShader();
     initializeDisplayShader();
 }
 
@@ -396,10 +396,8 @@ void KisOpenGLCanvas2::drawImage() const
             KisTextureTile *tile =
                     d->openGLImageTextures->getTextureTileCR(effectiveCol, effectiveRow);
 
-            Q_ASSERT(tile);
-            if (!tile) {
-                continue;
-            }
+            KIS_ASSERT_RECOVER_BREAK(tile);
+
             /*
              * We create a float rect here to workaround Qt's
              * "history reasons" in calculation of right()
@@ -550,7 +548,7 @@ void KisOpenGLCanvas2::renderCanvasGL() const
     glClearColor(widgetBackgroundColor.redF(), widgetBackgroundColor.greenF(), widgetBackgroundColor.blueF(), 1.0);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    drawCheckers();
+    //drawCheckers();
     drawImage();
 }
 
