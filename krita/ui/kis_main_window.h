@@ -19,6 +19,9 @@
 #define KIS_MAIN_WINDOW_H
 
 #include <KoMainWindow.h>
+#include <QMdiArea>
+#include <QMdiSubWindow>
+
 
 class KoPart;
 
@@ -31,7 +34,13 @@ public:
 signals:
     
 public slots:
-    
+
+    void slotPreferences();
+
+private:
+    QMdiArea *m_mdiArea;
+
+
 };
 
 #endif // KIS_MAIN_WINDOW_H

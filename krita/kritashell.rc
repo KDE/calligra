@@ -1,0 +1,14 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Krita" version="48">
+
+<MenuBar>
+<Menu name="settings"><text>Settings</text>
+  <!--Action name="view_fullscreen" group="settings_show"/-->
+  <!--Action name="view_toggledockers" group="settings_show"/-->
+  <!--Action name="showStatusBar" group="settings_show"/-->
+  <Action name="preferences" group="settings_configure"/>
+  <Action name="theme_menu" />
+</Menu>
+
+</MenuBar>
+
+</kpartgui>

@@ -17,7 +17,60 @@
  */
 #include "kis_main_window.h"
 
+#include <QDesktopWidget>
+
+#include <kxmlguiclient.h>
+#include <kxmlguifactory.h>
+#include <kactioncollection.h>
+
+#include <KoView.h>
+
+#include "kis_view2.h"
+#include "dialogs/kis_dlg_preferences.h"
+#include "kis_config_notifier.h"
+#include "kis_canvas_resource_provider.h"
+#include "kis_node.h"
+#include "kis_image.h"
+#include "kis_group_layer.h"
+
+
+class KisMainGui : public KXMLGUIClient {
+public:
+    KisMainGui(KisMainWindow *mw) {
+        setXMLFile("kritashell.rc", true);
+        actionCollection()->addAction(KStandardAction::Preferences, "preferences", mw, SLOT(slotPreferences()));
+    }
+};
+
 KisMainWindow::KisMainWindow(KoPart *part, const KComponentData &instance)
     : KoMainWindow(part, instance)
+    , m_mdiArea(new QMdiArea(this))
 {
+    setCentralWidget(m_mdiArea);
+    guiFactory()->addClient(new KisMainGui(this));
 }
+
+void KisMainWindow::slotPreferences()
+{
+    if (KisDlgPreferences::editPreferences()) {
+        KisConfigNotifier::instance()->notifyConfigChanged();
+
+        // XXX: should this be changed for the views in other windows as well?
+        foreach(KoView *koview, views()) {
+
+            KisView2 *view = dynamic_cast<KisView2*>(koview);
+            if (view) {
+                view->resourceProvider()->resetDisplayProfile(QApplication::desktop()->screenNumber(this));
+
+                // Update the settings for all nodes -- they don't query
+                // KisConfig directly because they need the settings during
+                // compositing, and they don't connect to the config notifier
+                // because nodes are not QObjects (because only one base class
+                // can be a QObject).
+                KisNode* node = dynamic_cast<KisNode*>(view->image()->rootLayer().data());
+                node->updateSettings();
+            }
+        }
+    }
+}
+

@@ -88,7 +88,6 @@
 #include "canvas/kis_canvas_controller.h"
 #include "canvas/kis_grid_manager.h"
 #include "canvas/kis_perspective_grid_manager.h"
-#include "dialogs/kis_dlg_preferences.h"
 #include "dialogs/kis_dlg_blacklist_cleanup.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_config.h"
@@ -893,14 +892,11 @@ void KisView2::slotLoadingFinished()
 
 void KisView2::createActions()
 {
-    actionCollection()->addAction(KStandardAction::Preferences,  "preferences", this, SLOT(slotPreferences()));
 
     KAction *action = new KAction(i18n("Cleanup removed files..."), this);
     actionCollection()->addAction("edit_blacklist_cleanup", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotBlacklistCleanup()));
 }
-
-
 
 void KisView2::createManagers()
 {
@@ -954,23 +950,6 @@ void KisView2::updateGUI()
     m_d->actionManager->updateGUI();
 }
 
-
-void KisView2::slotPreferences()
-{
-    if (KisDlgPreferences::editPreferences()) {
-        KisConfigNotifier::instance()->notifyConfigChanged();
-        m_d->resourceProvider->resetDisplayProfile(QApplication::desktop()->screenNumber(this));
-        KisConfig cfg;
-
-        // Update the settings for all nodes -- they don't query
-        // KisConfig directly because they need the settings during
-        // compositing, and they don't connect to the confignotifier
-        // because nodes are not QObjects (because only one base class
-        // can be a QObject).
-        KisNode* node = dynamic_cast<KisNode*>(image()->rootLayer().data());
-        node->updateSettings();
-    }
-}
 
 void KisView2::slotBlacklistCleanup()
 {

@@ -179,7 +179,6 @@ public:
     KoDocument *rootDocument;
     QList<KoView*> rootViews;
 
-
     KoView *activeView;
     QWidget *m_activeWidget;
 
@@ -672,6 +671,11 @@ KoView *KoMainWindow::activeView() const
         return d->rootViews.first();
     }
     return 0;
+}
+
+QList<KoView *> KoMainWindow::views() const
+{
+    return d->rootViews;
 }
 
 bool KoMainWindow::openDocument(const KUrl & url)
