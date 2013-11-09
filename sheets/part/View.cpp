@@ -654,9 +654,7 @@ View::~View()
     d->selection->endReferenceSelection(false);
     d->activeSheet = 0; // set the active sheet to 0 so that when during destruction
     // of embedded child documents possible repaints in Sheet are not
-    // performed. The repains can happen if you delete an embedded document,
-    // which leads to an regionInvalidated() signal emission in KoView, which calls
-    // repaint, etc.etc. :-) (Simon)
+    // performed.
 
     // delete the sheetView's after calling d->selection->emitCloseEditor cause the
     // emitCloseEditor may trigger over the Selection::emitChanged a Canvas::scrollToCell
