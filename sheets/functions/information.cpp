@@ -198,7 +198,9 @@ Value func_info(valVector args, ValueCalc *calc, FuncExtra *)
             QSet<QString> nameList;
             QList<KoPart*> parts = app->partList();
             foreach(KoPart* part, parts) {
-                nameList.insert(part->document()->objectName());
+                foreach(KoDocument *doc, part->documents()) {
+                    nameList.insert(doc->objectName());
+                }
             }
             return Value(nameList.size());
         }
