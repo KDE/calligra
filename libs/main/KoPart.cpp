@@ -53,6 +53,9 @@
 #include "KoPartAdaptor.h"
 #endif
 
+
+
+
 class KoPart::Private
 {
 public:
@@ -92,6 +95,8 @@ KoPart::KoPart(QObject *parent)
     QDBusConnection::sessionBus().registerObject('/' + objectName(), this);
 #endif
 
+    s_partList << this;
+
 }
 
 KoPart::~KoPart()
@@ -109,7 +114,14 @@ KoPart::~KoPart()
     delete d->startUpWidget;
     d->startUpWidget = 0;
 
+    s_partList.removeAll(this);
+
     delete d;
+}
+
+QList<QPointer<KoPart *> > KoPart::partList() const
+{
+    return s_partList;
 }
 
 KComponentData KoPart::componentData() const

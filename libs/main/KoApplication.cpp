@@ -75,7 +75,6 @@ public:
     {}
     QByteArray nativeMimeType;
     QSplashScreen *splashScreen;
-    QList<KoPart *> partList;
 };
 
 KoApplication::KoApplication(const QByteArray &nativeMimeType)
@@ -477,8 +476,6 @@ bool KoApplication::start()
                                   << appStartTime.msecsTo(QTime::currentTime())
                                   <<"\t100" << endl;
                 }
-
-                d->partList << part;
             }
         }
         if (print || exportAsPdf)
@@ -500,11 +497,6 @@ KoApplication::~KoApplication()
 void KoApplication::setSplashScreen(QSplashScreen *splashScreen)
 {
     d->splashScreen = splashScreen;
-}
-
-QList<KoPart*> KoApplication::partList() const
-{
-    return d->partList;
 }
 
 QStringList KoApplication::mimeFilter(KoFilterManager::Direction direction) const

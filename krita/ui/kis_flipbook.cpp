@@ -105,7 +105,7 @@ void KisFlipbook::save(const QString &url)
 
     KoApplication *app = dynamic_cast<KoApplication*>(qApp);
     if (app) {
-        foreach(KoPart *part, app->partList()) {
+        foreach(KoPart *part, KoPart::partList()) {
             part->addRecentURLToAllMainWindows(url);
         }
     }

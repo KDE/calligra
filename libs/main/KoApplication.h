@@ -85,12 +85,6 @@ public:
      */
     void setSplashScreen(QSplashScreen *splash);
 
-
-    /**
-     * @return the list of KoParts instantiated in this application.
-     */
-    QList<KoPart*> partList() const;
-
     /**
      * return a list of mimetypes this application supports.
      */

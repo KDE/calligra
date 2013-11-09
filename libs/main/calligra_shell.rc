@@ -26,6 +26,7 @@
   <DefineGroup name="file_infos" />
   <Separator />
   <Action name="file_close" />
+  <Action name="file_close_all" />
   <Action name="file_quit" />
  </Menu>
  <Merge />
@@ -41,6 +42,8 @@
   <DefineGroup name="settings_configure"/>
   <Action name="preferences" group="settings_configure"/>
   <Action name="theme_menu" />
+ </Menu>
+ <Menu name="window" noMerge="1"<text>&amp;Window</text>
  </Menu>
 </MenuBar>
 <ToolBar name="mainToolBar" fullWidth="false" noMerge="1"><Text>File</Text>
