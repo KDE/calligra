@@ -279,7 +279,16 @@ void KoPart::openTemplate(const KUrl& url)
         doc->initEmpty();
     }
     addDocument(doc);
-    mainWindows().first()->setRootDocument(doc);
+    KoMainWindow *mw = 0;
+    foreach(KoMainWindow *mainWin, mainWindows()) {
+        if (mainWin->isActiveWindow()) {
+            mw = mainWin;
+            break;
+        }
+    }
+    if (!mw) mw = mainWindows().first();
+    mw->setRootDocument(doc);
+
     qApp->restoreOverrideCursor();
 }
 
@@ -351,9 +360,17 @@ void KoPart::deleteOpenPane()
 void KoPart::deleteOpenPane(KoDocument *document)
 {
     deleteOpenPane();
-    mainWindows().first()->setRootDocument(document);
-    KoPart::mainWindows().first()->factory()->container("mainToolBar",
-                                                        mainWindows().first())->show();
+
+    KoMainWindow *mw = 0;
+    foreach(KoMainWindow *mainWin, mainWindows()) {
+        if (mainWin->isActiveWindow()) {
+            mw = mainWin;
+            break;
+        }
+    }
+    if (!mw) mw = mainWindows().first();
+    mw->setRootDocument(document);
+    mw->factory()->container("mainToolBar", mw)->show();
 }
 
 QList<KoPart::CustomDocumentWidgetItem> KoPart::createCustomDocumentWidgets(QWidget * /*parent*/)
