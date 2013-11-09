@@ -777,8 +777,6 @@ void View::initView()
     QWidget::setFocusPolicy(Qt::StrongFocus);
     setFocusProxy(d->canvas);
 
-    connect(this, SIGNAL(invalidated()), d->canvas, SLOT(update()));
-
     // Vert. Scroll Bar
     d->calcLabel  = 0;
     d->vertScrollBar = new QScrollBar(this);
