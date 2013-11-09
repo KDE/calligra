@@ -177,15 +177,11 @@ public:
     KoDockerManager * dockerManager() const;
 
 signals:
+
     /**
      * This signal is emitted if the document has been saved successfully.
      */
     void documentSaved();
-    /// This signals is emmitted before the save dialog is shown
-    void saveDialogShown();
-
-    /// This signal is emitted right after the docker states have been succefully restored from config
-    void restoringDone();
 
     /// This signal is emitted when this windows has finished loading of a
     /// document. The document may be opened in another window in the end.

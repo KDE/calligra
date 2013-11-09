@@ -253,8 +253,6 @@ KoMainWindow::KoMainWindow(KoPart *part, const KComponentData &componentData)
 
     setTabPosition(Qt::AllDockWidgetAreas, QTabWidget::North);
 
-    connect(this, SIGNAL(restoringDone()), this, SLOT(forceDockTabFonts()));
-
     if (componentData.isValid()) {
         setComponentData(componentData);   // don't load plugins! we don't want
         // the part's plugins with this main window, even though we are using the
@@ -521,7 +519,7 @@ void KoMainWindow::setRootDocument(KoDocument *doc, bool deletePrevious)
     updateCaption();
 
     setActiveView(doc ? d->rootViews.first() : 0);
-    emit restoringDone();
+    forceDockTabFonts();
 
     while(!oldRootViews.isEmpty()) {
         delete oldRootViews.takeFirst();
@@ -852,7 +850,6 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent, int specialOutputFlag)
     bool reset_url;
 
     if (d->rootDocument->url().isEmpty()) {
-        emit saveDialogShown();
         reset_url = true;
         saveas = true;
     } else {
