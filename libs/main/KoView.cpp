@@ -55,7 +55,6 @@
 #include <kconfiggroup.h>
 #include <kdeprintdialog.h>
 
-#include <QTimer>
 #include <QDockWidget>
 #include <QToolBar>
 #include <QApplication>
@@ -93,7 +92,6 @@ public:
     bool documentDeleted; // true when document gets deleted [can't use document==0
     // since this only happens in ~QObject, and views
     // get deleted by ~KoDocument].
-    QTimer *scrollTimer;
 
 
     // Hmm sorry for polluting the private class with such a big inner class.
@@ -189,9 +187,6 @@ KoView::KoView(KoPart *part, KoDocument *document, QWidget *parent)
                 this, SLOT(slotClearStatusText()));
     }
 
-    d->scrollTimer = new QTimer(this);
-    connect(d->scrollTimer, SIGNAL(timeout()), this, SLOT(slotAutoScroll()));
-
     // add all plugins.
     foreach(const QString & docker, KoDockRegistry::instance()->keys()) {
         KoDockFactoryBase *factory = KoDockRegistry::instance()->value(docker);
@@ -206,7 +201,6 @@ KoView::KoView(KoPart *part, KoDocument *document, QWidget *parent)
 
 KoView::~KoView()
 {
-    delete d->scrollTimer;
     if (!d->documentDeleted) {
         if (d->part) {
             d->part->removeView(this);
@@ -310,41 +304,11 @@ QAction *KoView::action(const char* name) const
     return act;
 }
 
-int KoView::leftBorder() const
-{
-    return 0;
-}
-
-int KoView::rightBorder() const
-{
-    return 0;
-}
-
-int KoView::topBorder() const
-{
-    return 0;
-}
-
-int KoView::bottomBorder() const
-{
-    return 0;
-}
-
 QWidget *KoView::canvas() const
 {
     //dfaure: since the view plays two roles in this method (the const means "you can modify the canvas
     // but not the view", it's just coincidence that the view is the canvas by default ;)
     return const_cast<KoView *>(this);
-}
-
-int KoView::canvasXOffset() const
-{
-    return 0;
-}
-
-int KoView::canvasYOffset() const
-{
-    return 0;
 }
 
 void KoView::addStatusBarItem(QWidget * widget, int stretch, bool permanent)
@@ -371,57 +335,6 @@ void KoView::removeStatusBarItem(QWidget *widget)
             d->statusBarItems.removeOne(sbItem);
             break;
         }
-    }
-}
-
-void KoView::enableAutoScroll()
-{
-    d->scrollTimer->start(50);
-}
-
-void KoView::disableAutoScroll()
-{
-    d->scrollTimer->stop();
-}
-
-int KoView::autoScrollAcceleration(int offset) const
-{
-    if (offset < 40)
-        return offset;
-    else
-        return offset*offset / 40;
-}
-
-void KoView::slotAutoScroll()
-{
-    QPoint scrollDistance;
-    bool actuallyDoScroll = false;
-    QPoint pos(mapFromGlobal(QCursor::pos()));
-
-    //Provide progressive scrolling depending on the mouse position
-    if (pos.y() < topBorder()) {
-        scrollDistance.setY((int) - autoScrollAcceleration(- pos.y() + topBorder()));
-        actuallyDoScroll = true;
-    } else if (pos.y() > height() - bottomBorder()) {
-        scrollDistance.setY((int) autoScrollAcceleration(pos.y() - height() + bottomBorder()));
-        actuallyDoScroll = true;
-    }
-
-    if (pos.x() < leftBorder()) {
-        scrollDistance.setX((int) - autoScrollAcceleration(- pos.x() + leftBorder()));
-        actuallyDoScroll = true;
-    } else if (pos.x() > width() - rightBorder()) {
-        scrollDistance.setX((int) autoScrollAcceleration(pos.x() - width() + rightBorder()));
-        actuallyDoScroll = true;
-    }
-
-    if (actuallyDoScroll) {
-        pos = canvas()->mapFrom(this, pos);
-        QMouseEvent* event = new QMouseEvent(QEvent::MouseMove, pos, Qt::NoButton, Qt::NoButton,
-                                             QApplication::keyboardModifiers());
-
-        QApplication::postEvent(canvas(), event);
-        emit autoScroll(scrollDistance);
     }
 }
 

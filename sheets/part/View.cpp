@@ -57,6 +57,7 @@
 #endif
 #include <QSizePolicy>
 #include <QScrollBar>
+#include <QTimer>
 
 // KDE includes
 #include <kactioncollection.h>
@@ -216,6 +217,8 @@ public:
     // On timeout this will execute the status bar operation (e.g. SUM).
     // This is delayed to speed up the selection.
     QTimer statusBarOpTimer;
+
+    QTimer *scrollTimer;
 };
 
 class ViewActions
@@ -633,6 +636,9 @@ View::View(KoPart *part, QWidget *_parent, Doc *_doc)
     new ViewAdaptor(this);
 #endif
 
+    d->scrollTimer = new QTimer(this);
+    connect(d->scrollTimer, SIGNAL(timeout()), this, SLOT(slotAutoScroll()));
+
     initialPosition();
 
     d->canvas->setFocus();
@@ -648,14 +654,14 @@ View::~View()
     d->selection->endReferenceSelection(false);
     d->activeSheet = 0; // set the active sheet to 0 so that when during destruction
     // of embedded child documents possible repaints in Sheet are not
-    // performed. The repains can happen if you delete an embedded document,
-    // which leads to an regionInvalidated() signal emission in KoView, which calls
-    // repaint, etc.etc. :-) (Simon)
+    // performed.
 
     // delete the sheetView's after calling d->selection->emitCloseEditor cause the
     // emitCloseEditor may trigger over the Selection::emitChanged a Canvas::scrollToCell
     // which in turn needs the sheetview's to access the sheet itself.
     qDeleteAll(d->sheetViews.values());
+
+    delete d->scrollTimer;
 
     delete d->selection;
     delete d->calcLabel;
@@ -770,8 +776,6 @@ void View::initView()
     d->canvas->setFocusPolicy(Qt::StrongFocus);
     QWidget::setFocusPolicy(Qt::StrongFocus);
     setFocusProxy(d->canvas);
-
-    connect(this, SIGNAL(invalidated()), d->canvas, SLOT(update()));
 
     // Vert. Scroll Bar
     d->calcLabel  = 0;
@@ -2160,5 +2164,58 @@ void View::updateAccessedCellRange(Sheet* sheet, const QPoint &location)
 {
     sheetView(sheet)->updateAccessedCellRange(location);
 }
+
+void View::enableAutoScroll()
+{
+    d->scrollTimer->start(50);
+}
+
+void View::disableAutoScroll()
+{
+    d->scrollTimer->stop();
+}
+
+int View::autoScrollAcceleration(int offset) const
+{
+    if (offset < 40)
+        return offset;
+    else
+        return offset*offset / 40;
+}
+
+void View::slotAutoScroll()
+{
+    QPoint scrollDistance;
+    bool actuallyDoScroll = false;
+    QPoint pos(mapFromGlobal(QCursor::pos()));
+
+    //Provide progressive scrolling depending on the mouse position
+    if (pos.y() < topBorder()) {
+        scrollDistance.setY((int) - autoScrollAcceleration(- pos.y() + topBorder()));
+        actuallyDoScroll = true;
+    } else if (pos.y() > height() - bottomBorder()) {
+        scrollDistance.setY((int) autoScrollAcceleration(pos.y() - height() + bottomBorder()));
+        actuallyDoScroll = true;
+    }
+
+    if (pos.x() < leftBorder()) {
+        scrollDistance.setX((int) - autoScrollAcceleration(- pos.x() + leftBorder()));
+        actuallyDoScroll = true;
+    } else if (pos.x() > width() - rightBorder()) {
+        scrollDistance.setX((int) autoScrollAcceleration(pos.x() - width() + rightBorder()));
+        actuallyDoScroll = true;
+    }
+
+    if (actuallyDoScroll) {
+        pos = canvas()->mapFrom(this, pos);
+        QMouseEvent* event = new QMouseEvent(QEvent::MouseMove, pos, Qt::NoButton, Qt::NoButton,
+                                             QApplication::keyboardModifiers());
+
+        QApplication::postEvent(canvas(), event);
+        emit autoScroll(scrollDistance);
+    }
+}
+
+
 
 #include "View.moc"

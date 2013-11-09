@@ -79,11 +79,6 @@ public:
     virtual bool start();
 
     /**
-     * @return true if the application is starting
-     */
-    static bool isStarting();
-
-    /**
      * Tell KoApplication to show this splashscreen when you call start();
      * when start returns, the splashscreen is hidden. Use KSplashScreen
      * to have the splash show correctly on Xinerama displays. 
@@ -95,11 +90,6 @@ public:
      * @return the list of KoParts instantiated in this application.
      */
     QList<KoPart*> partList() const;
-
-    /**
-     *  Get the number of currently open documents, by unique url
-     */
-    int documentCount();
 
     /**
      * return a list of mimetypes this application supports.
@@ -123,9 +113,11 @@ public:
 
 signals:
 
-    /// KoDocument needs to be able to emit document signals from here.
-    friend class KoDocument; // remove this line when done
+    /// KoPart needs to be able to emit document signals from here. These
+    /// signals are used for the dbus interface of stage, see commit
+    /// d102d9beef80cc93fc9c130b0ad5fe1caf238267
     friend class KoPart;
+
     /**
      * emitted when a new document is opened.
      */
