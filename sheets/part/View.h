@@ -352,6 +352,17 @@ public: // reimplementations
     virtual int topBorder() const;
     virtual int bottomBorder() const;
 
+    /**
+     * Sets up so that autoScroll signals are emitted when the mouse pointer is outside the view
+     */
+    void enableAutoScroll();
+
+    /**
+     * Stops the emitting of autoScroll signals
+     */
+    void disableAutoScroll();
+
+
 protected: // reimplementations
     // QWidget interface
     virtual void keyPressEvent(QKeyEvent * _ev);
@@ -368,6 +379,8 @@ Q_SIGNALS:
     /** Indicates that the sheet's protection state has changed. */
     void sheetProtectionToggled(bool protect);
 
+    void autoScroll(const QPoint &scrollDistance);
+
 private Q_SLOTS:
     /** Adds \p sheet to the displayed sheets. */
     void addSheet(Sheet *sheet);
@@ -378,8 +391,13 @@ private Q_SLOTS:
     /** Called if a Sheet-instance is deleted to proper clean-up internal pointers. */
     void sheetDestroyed(QObject* obj);
 
+    void slotAutoScroll();
+
 private:
     Q_DISABLE_COPY(View)
+
+
+    int autoScrollAcceleration(int offset) const;
 
     class Private;
     Private * const d;
