@@ -1,4 +1,4 @@
-	<chapter id="hardsums">
+<chapter id="hardsums">
 <chapterinfo>
 <authorgroup>
 <author>
@@ -235,7 +235,7 @@ for a normal <guimenuitem>Paste</guimenuitem> operation.</para>
 <title>Array Formulas</title>
 <para>&sheets; allows you to use formulas whose result is a matrix or a range
 of values. Normally, only the first value is displayed in a cell. If you would
-like to display the entire matrix, simply use Ctrl+Alt+Enter when editing
+like to display the entire matrix, simply use <keycombo>&Ctrl;&Alt;&Enter;</keycombo> when editing
 a formula, and it will be converted into an array formula, occupying neighboring
 cells as needed.</para>
 <para>Cells that are a part of an array formula are locked for editing.</para>
