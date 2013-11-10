@@ -56,10 +56,10 @@ GridAttributes::Private::Private()
       subStepWidth( 0.0 ),
       adjustLower( true ),
       adjustUpper( true ),
-      pen( QColor(0xa0, 0xa0, 0xa0 ) ),
+      pen( QColor(0xa0, 0xa0, 0xa0 ), 0 ),
       subVisible( true ),
-      subPen( QColor(0xd0, 0xd0, 0xd0 ) ),
-      zeroPen( QColor( 0x00, 0x00, 0x80 ) )
+      subPen( QColor(0xd0, 0xd0, 0xd0 ), 0 ),
+      zeroPen( QColor( 0x00, 0x00, 0x80 ), 0 )
 {
     pen.setCapStyle(     Qt::FlatCap );
     subPen.setCapStyle(  Qt::FlatCap );

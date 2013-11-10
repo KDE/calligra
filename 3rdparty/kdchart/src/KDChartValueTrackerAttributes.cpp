@@ -44,7 +44,7 @@ class ValueTrackerAttributes::Private
 };
 
 ValueTrackerAttributes::Private::Private()
-    : pen( QPen( QColor( 80, 80, 80, 200 ) ) ),
+    : pen( QPen( QColor( 80, 80, 80, 200 ), 0 ) ),
       markerSize( QSizeF( 6.0, 6.0 ) ),
       enabled( false ),
       areaBrush( QBrush() )

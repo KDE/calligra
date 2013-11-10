@@ -352,7 +352,8 @@ void StockDiagram::Private::drawCandlestick( int /*dataset*/, const CartesianDia
     bool drawLowerLine;
     bool drawCandlestick = !open.hidden && !close.hidden;
     bool drawUpperLine;
-
+    pen.setWidth(0);
+ 
     // Find out if we need to paint a down-trend or up-trend candlestick
     // and set brush and pen accordingly
     // Also, determine what the top and bottom points of the candlestick are

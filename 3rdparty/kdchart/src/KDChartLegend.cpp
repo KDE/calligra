@@ -115,14 +115,14 @@ void Legend::init()
     const Measure minimalFontSize(       4, KDChartEnums::MeasureCalculationModeAbsolute );
 
     TextAttributes textAttrs;
-    textAttrs.setPen( QPen( Qt::black ) );
+    textAttrs.setPen( QPen( Qt::black, 0 ) );
     textAttrs.setFont( QFont( QLatin1String( "helvetica" ), 10, QFont::Normal, false ) );
     textAttrs.setFontSize(        normalFontSizeLabels );
     textAttrs.setMinimalFontSize( minimalFontSize );
     setTextAttributes( textAttrs );
 
     TextAttributes titleTextAttrs;
-    titleTextAttrs.setPen( QPen( Qt::black ) );
+    titleTextAttrs.setPen( QPen( Qt::black, 0 ) );
     titleTextAttrs.setFont( QFont( QLatin1String( "helvetica" ), 12, QFont::Bold, false ) );
     titleTextAttrs.setFontSize(        normalFontSizeTitle );
     titleTextAttrs.setMinimalFontSize( minimalFontSize );
@@ -130,7 +130,7 @@ void Legend::init()
 
     FrameAttributes frameAttrs;
     frameAttrs.setVisible( true );
-    frameAttrs.setPen( QPen( Qt::black ) );
+    frameAttrs.setPen( QPen( Qt::black, 0 ) );
     frameAttrs.setPadding( 1 );
     setFrameAttributes( frameAttrs );
 

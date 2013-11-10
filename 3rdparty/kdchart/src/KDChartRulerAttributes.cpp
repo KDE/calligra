@@ -59,10 +59,10 @@ private:
 };
 
 RulerAttributes::Private::Private()
-    : tickMarkPen( QColor( 0x00, 0x00, 0x00 ) )
-    , majorTickMarkPen( QColor( 0x00, 0x00, 0x00 ) )
-    , minorTickMarkPen( QColor( 0x00, 0x00, 0x00 ) )
-    , pen( Qt::black )
+    : tickMarkPen( QColor( 0x00, 0x00, 0x00 ), 0 )
+    , majorTickMarkPen( QColor( 0x00, 0x00, 0x00 ), 0 )
+    , minorTickMarkPen( QColor( 0x00, 0x00, 0x00 ), 0 )
+    , pen( Qt::black, 0 )
 {
     pen.setCapStyle( Qt::FlatCap );
     tickMarkPen.setCapStyle( Qt::FlatCap );

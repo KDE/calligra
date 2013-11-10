@@ -159,7 +159,8 @@ struct Polygon {
     QPolygonF polygon;
     QBrush brush;
     QPen pen;
-    Polygon(const QPolygonF &polygon, const QBrush &brush, const QPen &pen) : polygon(polygon), brush(brush), pen(pen) {}
+    Polygon(const QPolygonF &polygon, const QBrush &brush, const QPen &pen) : polygon(polygon), brush(brush), pen(pen) {
+    }
 };
 
 void RadarDiagram::paint( PaintContext* ctx,
