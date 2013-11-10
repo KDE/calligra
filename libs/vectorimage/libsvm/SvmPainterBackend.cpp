@@ -167,6 +167,7 @@ void SvmPainterBackend::updateFromGraphicscontext(SvmGraphicsContext &context)
 {
     if (context.changedItems & GCLineColor) {
         QPen pen = m_painter->pen();
+        pen.setWidth(0.0);
         if (context.lineColorSet) {
             pen.setColor(context.lineColor);
             pen.setStyle(Qt::SolidLine);

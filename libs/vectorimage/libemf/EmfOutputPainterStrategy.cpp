@@ -85,7 +85,7 @@ void OutputPainterStrategy::paintBounds(const Header *header)
     m_painter->save();
 
     // Draw a simple cross in a rectangle to show the bounds.
-    m_painter->setPen(QPen(QColor(172, 196, 206)));
+    m_painter->setPen(QPen(QColor(172, 196, 206), 0));
     m_painter->drawRect(rect);
     m_painter->drawLine(rect.topLeft(), rect.bottomRight());
     m_painter->drawLine(rect.bottomLeft(), rect.topRight());
@@ -206,8 +206,7 @@ void OutputPainterStrategy::setPixelV( QPoint &point, quint8 red, quint8 green, 
 
     m_painter->save();
 
-    QPen pen;
-    pen.setColor( QColor( red, green, blue ) );
+    QPen pen( QColor( red, green, blue ), 0 );
     m_painter->setPen( pen );
     m_painter->drawPoint( point );
 
@@ -539,8 +538,7 @@ void OutputPainterStrategy::createPen( quint32 ihPen, quint32 penStyle, quint32 
                   << red << green << blue << reserved;
 #endif
 
-    QPen pen;
-    pen.setColor( QColor( red, green, blue ) );
+    QPen pen( QColor( red, green, blue ), 0 );
 
     if ( penStyle & PS_GEOMETRIC ) {
 	pen.setCosmetic( false );
@@ -720,10 +718,10 @@ void OutputPainterStrategy::selectStockObject( const quint32 ihObject )
 	m_painter->setBrush( QBrush() );
 	break;
     case WHITE_PEN:
-	m_painter->setPen( QPen( Qt::white ) );
+	m_painter->setPen( QPen( Qt::white, 0 ) );
 	break;
     case BLACK_PEN:
-	m_painter->setPen( QPen( Qt::black ) );
+	m_painter->setPen( QPen( Qt::black, 0 ) );
 	break;
     case NULL_PEN:
 	m_painter->setPen( QPen( Qt::NoPen ) );

@@ -48,7 +48,7 @@ void WmfDeviceContext::reset()
     orientation = 0;
     height = 0;
     //Palette
-    pen = QPen(Qt::black);
+    pen = QPen(Qt::black, 0);
     clipRegion = QRegion();
 
     // Structure Objects
