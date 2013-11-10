@@ -51,6 +51,7 @@ bool AbstractDataManipulator::process(Element* element)
     QRect range = element->rect();
     for (int col = range.left(); col <= range.right(); ++col)
         for (int row = range.top(); row <= range.bottom(); ++row) {
+          qWarning() << "col" << col << "row" << row << endl;
             Value val;
             QString text;
 //       int colidx = col - range.left();
@@ -63,6 +64,7 @@ bool AbstractDataManipulator::process(Element* element)
                 continue;
 
             val = newValue(element, col, row, &parse, &fmtType);
+          qWarning() << "new val is"<<val << endl;
 
             Cell cell = Cell(m_sheet, col, row);
             if (cell.isPartOfMerged()) cell = cell.masterCell();
@@ -199,6 +201,18 @@ bool DataManipulator::process(Element* element)
     return true;
 }
 
+bool DataManipulator::wantChange(Element *element, int col, int row)
+{
+  if (m_expandMatrix) {
+    QRect range = element->rect();
+    int colidx = col - range.left();
+    int rowidx = row - range.top();
+    // don't set this value, RecalcManager already did it
+    if (colidx || rowidx) return false;
+  }
+  return true;
+}
+
 Value DataManipulator::newValue(Element *element, int col, int row,
                                 bool *parsing, Format::Type *formatType)
 {
@@ -208,14 +222,7 @@ Value DataManipulator::newValue(Element *element, int col, int row,
     QRect range = element->rect();
     int colidx = col - range.left();
     int rowidx = row - range.top();
-    if (m_parsing && m_expandMatrix) {
-        if (colidx || rowidx) {
-            *parsing = false;
-            if (m_data.asString().isEmpty() || m_data.asString().at(0) == '=')
-                m_sheet->cellStorage()->setValue(col, row, Value()); // for proper undo
-            return Cell(m_sheet, range.topLeft()).value().element(colidx, rowidx);
-        }
-    }
+    qWarning() << "newValue" << colidx << rowidx << col << row << m_parsing << m_expandMatrix << endl;
     return m_data.element(colidx, rowidx);
 }
 
