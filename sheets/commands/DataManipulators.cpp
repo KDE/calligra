@@ -51,7 +51,6 @@ bool AbstractDataManipulator::process(Element* element)
     QRect range = element->rect();
     for (int col = range.left(); col <= range.right(); ++col)
         for (int row = range.top(); row <= range.bottom(); ++row) {
-          qWarning() << "col" << col << "row" << row << endl;
             Value val;
             QString text;
 //       int colidx = col - range.left();
@@ -64,7 +63,6 @@ bool AbstractDataManipulator::process(Element* element)
                 continue;
 
             val = newValue(element, col, row, &parse, &fmtType);
-          qWarning() << "new val is"<<val << endl;
 
             Cell cell = Cell(m_sheet, col, row);
             if (cell.isPartOfMerged()) cell = cell.masterCell();
@@ -222,7 +220,6 @@ Value DataManipulator::newValue(Element *element, int col, int row,
     QRect range = element->rect();
     int colidx = col - range.left();
     int rowidx = row - range.top();
-    qWarning() << "newValue" << colidx << rowidx << col << row << m_parsing << m_expandMatrix << endl;
     return m_data.element(colidx, rowidx);
 }
 
