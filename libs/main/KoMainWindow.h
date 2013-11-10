@@ -316,12 +316,12 @@ private slots:
     void slotUncompressToDir();
 public slots:
     void slotProgress(int value);
-
+private slots:
     /**
      * Hide the dockers
      */
     void toggleDockersVisibility(bool visible);
-
+public slots:
     /**
      * Saves the document, asking for a filename if necessary.
      *

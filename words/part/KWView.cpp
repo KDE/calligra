@@ -760,12 +760,18 @@ void KWView::setDistractionFreeMode(bool status)
 {
     m_isDistractionFreeMode = status;
 
-    mainWindow()->toggleDockersVisibility(!status);
+    KToggleAction *action;
+
+    action = dynamic_cast<KToggleAction*>(mainWindow()->actionCollection()->action("view_toggledockers"));
+    if (action) {
+        action->setChecked(!status);
+    }
+
     mainWindow()->menuBar()->setVisible(!status);
 
-    KToggleAction *action = dynamic_cast<KToggleAction*>(mainWindow()->actionCollection()->action("view_fullscreen"));
+    action = dynamic_cast<KToggleAction*>(mainWindow()->actionCollection()->action("view_fullscreen"));
     if (action) {
-        action->setChecked(true);
+        action->setChecked(status);
     }
 
     foreach(KToolBar* toolbar, mainWindow()->toolBars()) {
