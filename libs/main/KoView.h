@@ -100,7 +100,12 @@ public:
     /**
      *  Retrieves the document object of this view.
      */
-    KoDocument *koDocument() const;
+    KoDocument *document() const;
+
+    /**
+     * Reset the view to show the given document.
+     */
+    virtual void setDocument(KoDocument *document);
 
     /**
      * Tells this view that its document has got deleted (called internally)

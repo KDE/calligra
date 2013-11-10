@@ -102,6 +102,13 @@ public:
     /// XXX: Temporary!
     KoPart *documentPart() const;
 
+
+    /**
+     * @brief reload Reloads the document from the original url
+     * @return the result of loading the document
+     */
+    virtual bool reload();
+
     /**
      * Reimplemented from KoParts::ReadWritePart for internal reasons
      * (for the autosave functionality)

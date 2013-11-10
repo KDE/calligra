@@ -349,7 +349,7 @@ void KisPasteNewActionFactory::run(KisView2 *view)
 
     KoMainWindow *win = part->createMainWindow();
     win->show();
-    win->setRootDocument(doc);
+    win->addView(part->createView(doc));
 }
 
 void KisInvertSelectionOperaton::runFromXML(KisView2* view, const KisOperationConfiguration& config)

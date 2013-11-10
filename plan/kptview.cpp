@@ -1252,7 +1252,7 @@ ViewBase *View::createTaskWorkPackageView( ViewListItem *cat, const QString &tag
 
 ViewBase *View::createGanttView( ViewListItem *cat, const QString &tag, const QString &name, const QString &tip, int index )
 {
-    GanttView *ganttview = new GanttView(getKoPart(), getPart(), m_tab, koDocument()->isReadWrite() );
+    GanttView *ganttview = new GanttView(getKoPart(), getPart(), m_tab, document()->isReadWrite() );
     m_tab->addWidget( ganttview );
 
     ViewListItem *i = m_viewlist->addView( cat, tag, name, ganttview, getPart(), "", index );
@@ -1286,7 +1286,7 @@ ViewBase *View::createGanttView( ViewListItem *cat, const QString &tag, const QS
 
 ViewBase *View::createMilestoneGanttView( ViewListItem *cat, const QString &tag, const QString &name, const QString &tip, int index )
 {
-    MilestoneGanttView *ganttview = new MilestoneGanttView(getKoPart(), getPart(), m_tab, koDocument()->isReadWrite() );
+    MilestoneGanttView *ganttview = new MilestoneGanttView(getKoPart(), getPart(), m_tab, document()->isReadWrite() );
     m_tab->addWidget( ganttview );
 
     ViewListItem *i = m_viewlist->addView( cat, tag, name, ganttview, getPart(), "", index );
@@ -2560,7 +2560,7 @@ void View::updateReadWrite( bool readwrite )
 
 MainDocument *View::getPart() const
 {
-    return ( MainDocument * ) koDocument();
+    return ( MainDocument * ) document();
 }
 
 KoPart *View::getKoPart() const

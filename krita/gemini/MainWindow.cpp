@@ -407,9 +407,9 @@ void MainWindow::documentChanged()
         d->desktopView = 0;
     }
     d->initDesktopView();
-    d->desktopView->setRootDocument(DocumentManager::instance()->document(), false);
+    KisView2 *view = static_cast<KisView2*>(DocumentManager::instance()->part()->createView(DocumentManager::instance()->document()));
+    d->desktopView->addView(view);
     qApp->processEvents();
-    KisView2* view = qobject_cast<KisView2*>(d->desktopView->activeView());
     view->setQtMainWindow(d->desktopView);
     connect(view, SIGNAL(sigLoadingFinished()), d->centerer, SLOT(start()));
     if (d->sketchKisView)

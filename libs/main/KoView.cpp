@@ -268,9 +268,22 @@ void KoView::addImages(const QList<QImage> &, const QPoint &)
     // override in your application
 }
 
-KoDocument *KoView::koDocument() const
+KoDocument *KoView::document() const
 {
     return d->document;
+}
+
+void KoView::setDocument(KoDocument *document)
+{
+    d->document->disconnect(this);
+    d->document = document;
+    KStatusBar *sb = statusBar();
+    if (sb) { // No statusbar in e.g. konqueror
+        connect(d->document, SIGNAL(statusBarMessage(const QString&)),
+                this, SLOT(slotActionStatusText(const QString&)));
+        connect(d->document, SIGNAL(clearStatusBarMessage()),
+                this, SLOT(slotClearStatusText()));
+    }
 }
 
 void KoView::setDocumentDeleted()
@@ -351,7 +364,7 @@ KoPrintJob * KoView::createPdfPrintJob()
 
 KoPageLayout KoView::pageLayout() const
 {
-    return koDocument()->pageLayout();
+    return document()->pageLayout();
 }
 
 QPrintDialog *KoView::createPrintDialog(KoPrintJob *printJob, QWidget *parent)

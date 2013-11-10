@@ -69,21 +69,28 @@ public:
      */
     virtual ~KoMainWindow();
 
-    // If noCleanup is set, KoMainWindow will not delete the root document
-    // or part manager on destruction.
-    void setNoCleanup(bool noCleanup);
-
-    /**
-     * Called when a document is assigned to this mainwindow.
-     * This creates a view for this document, makes it the active part, etc.
-     */
-    void setRootDocument(KoDocument *doc, bool deletePrevious = true);
-
     /**
      * Update caption from document info - call when document info
      * (title in the about page) changes.
      */
     void updateCaption();
+
+
+    // If noCleanup is set, KoMainWindow will not delete the root document
+    // or part manager on destruction.
+    void setNoCleanup(bool noCleanup);
+
+    /**
+     * Add a the given view to the list of views of this mainwindow.
+     */
+    void addView(KoView *view);
+
+    /**
+     * @brief showView shows the given view. Override this if you want to show
+     * the view in a different way than by making it the central widget, for instance
+     * as an QMdiSubWindow
+     */
+    virtual void showView(KoView *view);
 
     /**
      * @returns the currently active view
@@ -347,9 +354,6 @@ private:
      * - create an empty document with default settings if InitDocEmpty
      */
     enum InitDocFlags { /*InitDocAppStarting, */ InitDocFileNew, InitDocFileClose /*, InitDocEmbedded, InitDocEmpty*/ };
-
-    /// Helper method for slotFileNew and slotFileClose
-    void chooseNewDocument(InitDocFlags initDocFlags);
 
     void closeEvent(QCloseEvent * e);
     void resizeEvent(QResizeEvent * e);

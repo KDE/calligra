@@ -147,6 +147,12 @@ int KoPart::documentCount() const
     return d->documents.size();
 }
 
+void KoPart::removeDocument(KoDocument *document)
+{
+    d->documents.removeAll(document);
+    document->deleteLater();
+}
+
 KoView *KoPart::createView(KoDocument *document, QWidget *parent)
 {
     KoView *view = createViewInstance(document, parent);
@@ -178,7 +184,24 @@ void KoPart::addView(KoView *view, KoDocument *document)
 
 void KoPart::removeView(KoView *view)
 {
+    KoDocument *doc = view->document();
+
     d->views.removeAll(view);
+
+    if (doc) {
+        bool found = false;
+        foreach(KoView *view, d->views) {
+            if (view->document() == doc) {
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            removeDocument(doc);
+        }
+    }
+
+    view->deleteLater();
 
     if (d->views.isEmpty()) {
         KoApplication *app = qobject_cast<KoApplication*>(KApplication::kApplication());
@@ -208,6 +231,8 @@ QGraphicsItem *KoPart::canvasItem(KoDocument *document, bool create)
 
 QGraphicsItem *KoPart::createCanvasItem(KoDocument *document)
 {
+    if (!document) return 0;
+
     KoView *view = createView(document);
     QGraphicsProxyWidget *proxy = new QGraphicsProxyWidget();
     QWidget *canvasController = view->findChild<KoCanvasControllerWidget*>();
@@ -217,10 +242,12 @@ QGraphicsItem *KoPart::createCanvasItem(KoDocument *document)
 
 void KoPart::addMainWindow(KoMainWindow *mainWindow)
 {
-    if (d->mainWindows.indexOf(mainWindow) == -1) {
-        kDebug(30003) <<"mainWindow" << (void*)mainWindow <<"added to doc" << this;
-        d->mainWindows.append(mainWindow);
-    }
+    if (!mainWindow) return;
+    if (d->mainWindows.contains(mainWindow)) return;
+
+    kDebug(30003) <<"mainWindow" << (void*)mainWindow <<"added to doc" << this;
+    d->mainWindows.append(mainWindow);
+
 }
 
 void KoPart::removeMainWindow(KoMainWindow *mainWindow)
@@ -271,25 +298,25 @@ void KoPart::openExistingFile(const KUrl& url)
 void KoPart::openTemplate(const KUrl& url)
 {
     qApp->setOverrideCursor(Qt::BusyCursor);
-    KoDocument *doc = createDocument();
+    KoDocument *document = createDocument();
 
-    bool ok = doc->loadNativeFormat(url.toLocalFile());
-    doc->setModified(false);
-    doc->undoStack()->clear();
+    bool ok = document->loadNativeFormat(url.toLocalFile());
+    document->setModified(false);
+    document->undoStack()->clear();
 
     if (ok) {
         QString mimeType = KMimeType::findByUrl( url, 0, true )->name();
         // in case this is a open document template remove the -template from the end
         mimeType.remove( QRegExp( "-template$" ) );
-        doc->setMimeTypeAfterLoading(mimeType);
-        deleteOpenPane(doc);
-        doc->resetURL();
-        doc->setEmpty();
+        document->setMimeTypeAfterLoading(mimeType);
+        deleteOpenPane(document);
+        document->resetURL();
+        document->setEmpty();
     } else {
-        doc->showLoadingErrorDialog();
-        doc->initEmpty();
+        document->showLoadingErrorDialog();
+        document->initEmpty();
     }
-    addDocument(doc);
+    addDocument(document);
     KoMainWindow *mw = 0;
     foreach(KoMainWindow *mainWin, mainWindows()) {
         if (mainWin->isActiveWindow()) {
@@ -298,7 +325,8 @@ void KoPart::openTemplate(const KUrl& url)
         }
     }
     if (!mw) mw = mainWindows().first();
-    mw->setRootDocument(doc);
+    KoView *view = createView(document);
+    mw->addView(view);
 
     qApp->restoreOverrideCursor();
 }
@@ -380,7 +408,8 @@ void KoPart::deleteOpenPane(KoDocument *document)
         }
     }
     if (!mw) mw = mainWindows().first();
-    mw->setRootDocument(document);
+    KoView *view = createView(document);
+    mw->addView(view);
     mw->factory()->container("mainToolBar", mw)->show();
 }
 

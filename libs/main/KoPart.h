@@ -111,6 +111,8 @@ public:
      */
     int documentCount() const;
 
+    void removeDocument(KoDocument *document);
+
 
     // ----------------- mainwindow management -----------------
 

@@ -496,7 +496,7 @@ ViewBase::ViewBase(KoPart *part, KoDocument *doc, QWidget *parent)
 
 ViewBase::~ViewBase()
 {
-    if ( koDocument() ) {
+    if ( document() ) {
         //HACK to avoid ~View to access koDocument()
         setDocumentDeleted();
     }
@@ -510,7 +510,7 @@ void ViewBase::setProject( Project *project )
 
 KoDocument *ViewBase::part() const
 {
-     return koDocument();
+     return document();
 }
 
 KoPageLayout ViewBase::pageLayout() const

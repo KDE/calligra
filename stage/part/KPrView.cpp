@@ -229,7 +229,7 @@ void KPrView::initGUI()
 void KPrView::initActions()
 {
     setComponentData(KPrFactory::componentData());
-    if (!koDocument()->isReadWrite() )
+    if (!document()->isReadWrite() )
        setXMLFile( "stage_readonly.rc" );
     else
        setXMLFile( "stage.rc" );
@@ -461,8 +461,8 @@ void KPrView::configurePresenterView()
 
 void KPrView::exportToHtml()
 {
-    KPrHtmlExportDialog *dialog = new KPrHtmlExportDialog(kopaDocument()->pages(),koDocument()->documentInfo()->aboutInfo("title"),
-                                                          koDocument()->documentInfo()->authorInfo("creator"), this);
+    KPrHtmlExportDialog *dialog = new KPrHtmlExportDialog(kopaDocument()->pages(),document()->documentInfo()->aboutInfo("title"),
+                                                          document()->documentInfo()->authorInfo("creator"), this);
     if (dialog->exec() == QDialog::Accepted && !dialog->checkedSlides().isEmpty()) {
         // Get the export directory
         KUrl directoryUrl = KFileDialog::getExistingDirectoryUrl();

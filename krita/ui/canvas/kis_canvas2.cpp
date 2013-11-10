@@ -259,17 +259,17 @@ void KisCanvas2::channelSelectionChanged()
 
 void KisCanvas2::addCommand(KUndo2Command *command)
 {
-    m_d->view->koDocument()->addCommand(command);
+    m_d->view->document()->addCommand(command);
 }
 
 void KisCanvas2::startMacro(const QString &title)
 {
-    m_d->view->koDocument()->beginMacro(title);
+    m_d->view->document()->beginMacro(title);
 }
 
 void KisCanvas2::stopMacro()
 {
-    m_d->view->koDocument()->endMacro();
+    m_d->view->document()->endMacro();
 }
 
 KoShapeManager* KisCanvas2::shapeManager() const

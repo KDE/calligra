@@ -502,6 +502,12 @@ KoPart *KoDocument::documentPart() const
     return d->parentPart;
 }
 
+bool KoDocument::reload()
+{
+    // XXX: reimplement!
+    return false;
+}
+
 bool KoDocument::exportDocument(const KUrl & _url)
 {
     bool ret;

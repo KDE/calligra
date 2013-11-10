@@ -63,7 +63,7 @@ KWGui::KWGui(const QString &viewMode, KWView *parent)
     m_verticalRuler->setUnit(m_view->kwdocument()->unit());
     m_verticalRuler->setShowMousePosition(true);
 
-    m_canvas = new KWCanvas(viewMode, static_cast<KWDocument*>(m_view->koDocument()), m_view, this);
+    m_canvas = new KWCanvas(viewMode, static_cast<KWDocument*>(m_view->document()), m_view, this);
     KoCanvasControllerWidget *canvasController = new KoCanvasControllerWidget(m_view->actionCollection(), this);
     m_canvasController = canvasController;
     // We need to set this as QDeclarativeView sets them a bit differnt from QAbstractScrollArea
