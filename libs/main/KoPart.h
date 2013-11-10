@@ -81,7 +81,7 @@ public:
     /**
      * @return the list of all part objects created in this process
      */
-    static QList<QPointer<KoPart*> > partList() const;
+    static QList<QPointer<KoPart> > partList();
 
     /**
      * @return The componentData ( KComponentData ) for this GUI client. You set the componentdata
@@ -297,8 +297,7 @@ private:
     class Private;
     Private *const d;
 
-
-    static QList<QPointer<KoPart*> > s_partList;
+    static QList<QPointer<KoPart> > s_partList;
 };
 
 class MockPart : public KoPart

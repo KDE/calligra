@@ -54,7 +54,7 @@
 #endif
 
 
-
+QList<QPointer<KoPart> > KoPart::s_partList;
 
 class KoPart::Private
 {
@@ -95,8 +95,7 @@ KoPart::KoPart(QObject *parent)
     QDBusConnection::sessionBus().registerObject('/' + objectName(), this);
 #endif
 
-    s_partList << this;
-
+    s_partList.append(this);
 }
 
 KoPart::~KoPart()
@@ -119,7 +118,7 @@ KoPart::~KoPart()
     delete d;
 }
 
-QList<QPointer<KoPart *> > KoPart::partList() const
+QList<QPointer<KoPart> > KoPart::partList()
 {
     return s_partList;
 }

@@ -325,7 +325,7 @@ void KisPasteNewActionFactory::run(KisView2 *view)
     QRect rect = clip->exactBounds();
     if (rect.isEmpty()) return;
 
-    KisPart2 *part = new KisPart2;
+    KisPart2 *part = static_cast<KisPart2*>(view->document()->documentPart());
     KisDoc2 *doc = qobject_cast<KisDoc2*>(part->createDocument());
 
     if (!doc) return;
@@ -347,7 +347,7 @@ void KisPasteNewActionFactory::run(KisView2 *view)
     image->addNode(layer.data(), image->rootLayer());
     doc->setCurrentImage(image);
 
-    KoMainWindow *win = doc->documentPart()->createMainWindow();
+    KoMainWindow *win = part->createMainWindow();
     win->show();
     win->setRootDocument(doc);
 }

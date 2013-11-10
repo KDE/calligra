@@ -720,7 +720,8 @@ bool KisDlgPreferences::editPreferences()
         cfg.setBackupFile(dialog->m_general->m_backupFileCheckBox->isChecked());
         KoApplication *app = qobject_cast<KoApplication*>(qApp);
         if (app) {
-            foreach(KoPart* part, KoPart::partList()) {
+            foreach(QPointer<KoPart> part, KoPart::partList()) {
+                if (!part) continue;
                 foreach(KoDocument *doc, part->documents()) {
                     doc->setAutoSave(dialog->m_general->autoSaveInterval());
                     doc->setBackupFile(dialog->m_general->m_backupFileCheckBox->isChecked());

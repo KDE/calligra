@@ -50,8 +50,9 @@ KoApplicationAdaptor::~KoApplicationAdaptor()
 QStringList KoApplicationAdaptor::getDocuments()
 {
     QStringList lst;
-    QList<KoPart*> parts = KoPart::partList();
+    QList<QPointer<KoPart> > parts = KoPart::partList();
     foreach(KoPart *part, parts) {
+        if (!part) continue;
         foreach(KoDocument *document, part->documents()) {
             lst.append('/' + document->objectName());
         }
@@ -62,8 +63,9 @@ QStringList KoApplicationAdaptor::getDocuments()
 QStringList KoApplicationAdaptor::getViews()
 {
     QStringList lst;
-    QList<KoPart*> parts = KoPart::partList();
+    QList<QPointer<KoPart> > parts = KoPart::partList();
     foreach(KoPart *part, parts) {
+        if (!part) continue;
         foreach(KoView* view, part->views()) {
             lst.append('/' + view->objectName());
         }
