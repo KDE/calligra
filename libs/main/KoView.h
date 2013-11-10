@@ -133,32 +133,6 @@ public:
      */
     virtual QAction *action(const char* name) const;
 
-
-    /**
-     * Retrieves the left border width that is displayed around the content if
-     * the view is active.
-     *
-     * In a spread sheet this border is for example used to display the
-     * rows, while a top border is used to display the names of the cells
-     * and a right and bottom border is used to display scrollbars. If the view
-     * becomes inactive, then this stuff is not displayed anymore.
-     *
-     * The default border is 0.
-     */
-    virtual int leftBorder() const;
-    /**
-     * @see #leftBorder
-     */
-    virtual int rightBorder() const;
-    /**
-     * @see #leftBorder
-     */
-    virtual int topBorder() const;
-    /**
-     * @see #leftBorder
-     */
-    virtual int bottomBorder() const;
-
     /**
      * Overload this function if the content will be displayed
      * on some child widget instead of the view directly.
@@ -166,34 +140,6 @@ public:
      * By default this function returns a pointer to the view.
      */
     virtual QWidget *canvas() const;
-
-    /**
-     * Overload this function if the content will be displayed
-     * with an offset relative to the upper left corner
-     * of the canvas widget.
-     *
-     * By default this function returns 0.
-     */
-    virtual int canvasXOffset() const;
-
-    /**
-     * Overload this function if the content will be displayed
-     * with an offset relative to the upper left corner
-     * of the canvas widget.
-     *
-     * By default this function returns 0.
-     */
-    virtual int canvasYOffset() const;
-
-    /**
-     * Sets up so that autoScroll signals are emitted when the mouse pointer is outside the view
-     */
-    void enableAutoScroll();
-
-    /**
-     * Stops the emitting of autoScroll signals
-     */
-    void disableAutoScroll();
 
     /**
      * In order to print the document represented by this view a new print job should
@@ -260,11 +206,6 @@ public:
      */
     virtual KoZoomController *zoomController() const = 0;
 
-    /**
-     * @return the view bar. The bar is created only if this function is called.
-     */
-    QToolBar* viewBar();
-
     /// create a list of actions that when activated will change the unit on the document.
     QList<QAction*> createChangeUnitActions();
 
@@ -299,22 +240,13 @@ protected:
      */
     QString newObjectName();
 
-signals:
-    void autoScroll(const QPoint &scrollDistance);
-
-    void regionInvalidated(const QRegion &region, bool erase);
-
-    void invalidated();
-
 protected slots:
-    virtual void slotAutoScroll();
+
     virtual void changeAuthorProfile(const QString &profileName);
 
 private:
     virtual void setupGlobalActions(void);
     KoViewPrivate * const d;
-    int autoScrollAcceleration(int offset) const;
-
 };
 
 #endif

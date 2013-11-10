@@ -1,6 +1,5 @@
 /*
- *  Copyright (c) 2008 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2008,2009 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,28 +15,24 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_DEFORM_PAINTOP_SETTINGS_H_
-#define KIS_DEFORM_PAINTOP_SETTINGS_H_
 
-class KisDeformPaintOpSettingsWidget;
+#ifndef __KIS_ASSERT_EXCEPTION_H
+#define __KIS_ASSERT_EXCEPTION_H
 
-#include <kis_paintop_settings.h>
-#include <kis_types.h>
-#include <kis_outline_generation_policy.h>
+#include <QtCore>
+#include <stdexcept>
 
-class KisDeformPaintOpSettings : public KisOutlineGenerationPolicy<KisPaintOpSettings>
+
+class KisAssertException : public std::runtime_error, public QtConcurrent::Exception
 {
-
 public:
-    KisDeformPaintOpSettings();
+    KisAssertException(const std::string& what_arg)
+        : std::runtime_error(what_arg)
+    {
+    }
 
-    QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) const;
-
-    bool paintIncremental();
-    bool isAirbrushing() const;
-    int rate() const;
-
-private:
-    KisDeformPaintOpSettingsWidget* m_options;
+    Exception* clone() const { return new KisAssertException(*this); }
+    void raise() const { throw *this; }
 };
-#endif
+
+#endif /* __KIS_ASSERT_EXCEPTION_H */

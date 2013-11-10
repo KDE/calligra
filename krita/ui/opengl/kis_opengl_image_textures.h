@@ -104,7 +104,10 @@ public:
     }
 
     inline KisTextureTile* getTextureTileCR(int col, int row) {
-        return m_textureTiles[row * m_numCols + col];
+        int tile = row * m_numCols + col;
+        KIS_ASSERT_RECOVER_RETURN_VALUE(m_textureTiles.size() > tile, 0);
+
+        return m_textureTiles[tile];
     }
 
     inline KisTextureTile* getTextureTile(int x, int y) {

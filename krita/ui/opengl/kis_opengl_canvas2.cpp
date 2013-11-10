@@ -395,6 +395,9 @@ void KisOpenGLCanvas2::drawImage() const
 
             KisTextureTile *tile =
                     d->openGLImageTextures->getTextureTileCR(effectiveCol, effectiveRow);
+
+            KIS_ASSERT_RECOVER_BREAK(tile);
+
             /*
              * We create a float rect here to workaround Qt's
              * "history reasons" in calculation of right()

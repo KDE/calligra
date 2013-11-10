@@ -42,6 +42,7 @@
 #include "CellStorage.h"
 
 #include <KoDocument.h>
+#include <KoPart.h>
 #include <KoApplication.h>
 
 using namespace Calligra::Sheets;
@@ -194,8 +195,13 @@ Value func_info(valVector args, ValueCalc *calc, FuncExtra *)
         if(! app) {
            return Value(0);
         } else {
-           int val = app->documents();
-           return Value(val);
+
+            QSet<QString> nameList;
+            QList<KoPart*> parts = app->partList();
+            foreach(KoPart* part, parts) {
+                nameList.insert(part->document()->objectName());
+            }
+            return Value(nameList.size());
         }
     }
 
