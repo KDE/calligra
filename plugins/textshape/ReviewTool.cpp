@@ -65,13 +65,10 @@ ReviewTool::~ReviewTool()
 
 void ReviewTool::createActions()
 {
-    m_insertAnnotationAction = new KAction(i18n("Insert Note"), this);
-    m_insertAnnotationAction->setToolTip(i18n("Insert Note"));
-    addAction("insert_annotation", m_insertAnnotationAction);
-
-    m_removeAnnotationAction = new KAction(i18n("Remove Note"), this);
-    m_removeAnnotationAction->setToolTip(i18n("Remove Note"));
+    m_removeAnnotationAction = new KAction(i18n("Remove Comment"), this);
+    m_removeAnnotationAction->setToolTip(i18n("Remove Comment"));
     addAction("remove_annotation", m_removeAnnotationAction);
+    connect(m_removeAnnotationAction, SIGNAL(triggered()), this, SLOT(removeAnnotation()));
 }
 
 void ReviewTool::mouseReleaseEvent(KoPointerEvent* event)
@@ -137,10 +134,10 @@ QList<QWidget *> ReviewTool::createOptionWidgets()
 
     connect(saw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
 
-    sscw->setWindowTitle("SpellCheck");
+    sscw->setWindowTitle(i18n("SpellCheck"));
     widgets.append(sscw);
 
-    saw->setWindowTitle("Notes");
+    saw->setWindowTitle(i18n("Comments"));
     widgets.append(saw);
 
     return widgets;

@@ -67,7 +67,6 @@ private:
     KoTextShapeData *m_textShapeData;
     KoCanvasBase *m_canvas;
     TextShape *m_textShape;
-    KAction *m_insertAnnotationAction;
     KAction *m_removeAnnotationAction;
     KoShape *m_currentAnnotationShape;
 };

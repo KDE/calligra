@@ -17,10 +17,6 @@ public:
 signals:
     void doneWithFocus();
 
-private slots:
-    void addAnnotation();
-    void removeAnnotation();
-
 private:
     Ui::SimpleAnnotationWidget widget;
     ReviewTool *m_tool;

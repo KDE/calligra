@@ -9,21 +9,6 @@ SimpleAnnotationWidget::SimpleAnnotationWidget(ReviewTool *tool, QWidget *parent
     m_tool(tool)
 {
     widget.setupUi(this);
-
-    connect(widget.insertAnnotation, SIGNAL(clicked()), this, SLOT(addAnnotation()));
-    connect(widget.removeAnnotation, SIGNAL(clicked()), this, SLOT(removeAnnotation()));
-}
-
-void SimpleAnnotationWidget::addAnnotation()
-{
-    if (m_tool) {
-        m_tool->insertAnnotation();
-    }
-}
-
-void SimpleAnnotationWidget::removeAnnotation()
-{
-    if (m_tool) {
-        m_tool->removeAnnotation();
-    }
+    widget.insertAnnotation->setDefaultAction(m_tool->action("insert_annotation"));
+    widget.removeAnnotation->setDefaultAction(m_tool->action("remove_annotation"));
 }
