@@ -638,6 +638,7 @@ bool ChartProxyModel::loadOdf(const KoXmlElement &element,
     int loadedDataSetCount = 0;
     KoXmlElement n;
     QPen p;
+    p.setWidth(0);
     QBrush brush;
     bool penLoaded = false;
     bool brushLoaded = false;

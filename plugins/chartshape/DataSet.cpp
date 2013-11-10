@@ -253,6 +253,7 @@ DataSet::Private::Private(DataSet *parent, int dataSetNr) :
     loadedDimensions(0),
     numericStyleFormat(0)
 {
+    pen.setWidth(0);
 }
 
 DataSet::Private::~Private()
@@ -478,14 +479,14 @@ QBrush DataSet::Private::defaultBrush(int section) const
 
 QPen DataSet::Private::defaultPen() const
 {
-    QPen pen(Qt::black);
+    QPen pen(Qt::black, 0);
     ChartType chartType = effectiveChartType();
     if (chartType == LineChartType ||
          chartType == ScatterChartType) {
         if (penIsSet) {
             pen = pen;
         } else {
-            pen = QPen(defaultDataSetColor(num));
+            pen = QPen(defaultDataSetColor(num), 0);
         }
     }
     return pen;

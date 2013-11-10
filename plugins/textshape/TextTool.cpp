@@ -793,7 +793,7 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
                 if (m_textEditor.data()->isEditProtected(true)) {
                     QRectF circleRect(shapeMatrix.map(baselinePoint),QSizeF(14, 14));
                     circleRect.translate(-6.5, -6.5);
-                    QPen pen(QColor(16, 255, 255));
+                    QPen pen(QColor(16, 255, 255), 0);
                     pen.setWidthF(2.0);
                     painter.setPen(pen);
                     painter.setRenderHint(QPainter::Antialiasing, true);

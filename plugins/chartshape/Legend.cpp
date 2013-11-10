@@ -97,6 +97,7 @@ Legend::Private::Private()
     lineBorder = new KoShapeStroke(0.5, Qt::black);
     showFrame = false;
     framePen = QPen();
+    framePen.setWidth(0);
     backgroundBrush = QBrush();
     expansion = HighLegendExpansion;
     alignment = Qt::AlignRight;
