@@ -280,7 +280,7 @@ private slots:
      *  Shows or hides a toolbar
      */
     void slotToolbarToggled(bool toggle);
-public slots:
+
     /**
      * Toggle full screen on/off.
      */
@@ -403,10 +403,9 @@ private slots:
     virtual void slotSetStatusBarText(const QString &);
 
     /**
-     * Slot to create a new view for the currently activate @ref #koDocument.
+     * Slot to create a new view for the currently activated @ref #koDocument.
      */
-    virtual void newWindow();
-
+    void newWindow();
 
 // ---------------------  PartManager
 private:
