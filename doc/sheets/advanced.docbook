@@ -1,4 +1,4 @@
-	<chapter id="hardsums">
+<chapter id="hardsums">
 <chapterinfo>
 <authorgroup>
 <author>
@@ -229,6 +229,16 @@ C10:C15, and 10 to B10:B15 and D10:D15.</para>
 <para>Note that a modifier value can be a formula as well as a simple numeric 
 value. If it is a formula then &sheets; will adjust the cell references as 
 for a normal <guimenuitem>Paste</guimenuitem> operation.</para>
+</sect1>
+
+<sect1 id="arrayformulas">
+<title>Array Formulas</title>
+<para>&sheets; allows you to use formulas whose result is a matrix or a range
+of values. Normally, only the first value is displayed in a cell. If you would
+like to display the entire matrix, simply use <keycombo>&Ctrl;&Alt;&Enter;</keycombo> when editing
+a formula, and it will be converted into an array formula, occupying neighboring
+cells as needed.</para>
+<para>Cells that are a part of an array formula are locked for editing.</para>
 </sect1>
 
 <sect1 id="goalseek">

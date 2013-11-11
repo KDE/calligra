@@ -350,7 +350,6 @@ KoMainWindow::KoMainWindow(KoPart *part, const KComponentData &componentData)
     d->themeManager->setCurrentTheme(group.readEntry("Theme",
                                                      d->themeManager->defaultThemeName()));
 
-    // set up the action "list" for "Close all Views" (hacky :) (Werner)
     KToggleAction *fullscreenAction  = new KToggleAction(koIcon("view-fullscreen"), i18n("Full Screen Mode"), this);
     actionCollection()->addAction("view_fullscreen", fullscreenAction);
     fullscreenAction->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_F));
