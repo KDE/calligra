@@ -65,6 +65,7 @@
 #include "commands/InsertInlineObjectCommand.h"
 #include "commands/DeleteCommand.h"
 #include "commands/DeleteAnchorsCommand.h"
+#include "commands/DeleteAnnotationsCommand.h"
 #include "commands/InsertNoteCommand.h"
 #include "commands/AddTextRangeCommand.h"
 
@@ -590,6 +591,12 @@ void KoTextEditor::removeAnchors(const QList<KoShapeAnchor*> &anchors, KUndo2Com
 {
     Q_ASSERT(parent);
     addCommand(new DeleteAnchorsCommand(anchors, d->document, parent));
+}
+
+void KoTextEditor::removeAnnotations(const QList<KoShape *> &annotationShapes, KUndo2Command *parent)
+{
+    Q_ASSERT(parent);
+    addCommand(new DeleteAnnotationsCommand(annotationShapes, d->document, parent));
 }
 
 void KoTextEditor::insertFrameBreak()

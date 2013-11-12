@@ -238,7 +238,14 @@ public slots:
      *
      * NOTE: Call this method only when the shapes belonging to the anchors have been deleted.
      */
-    void removeAnchors(const QList<KoShapeAnchor*> &anchors, KUndo2Command *parent);
+    void removeAnchors(const QList<KoShapeAnchor *> &anchors, KUndo2Command *parent);
+
+    /**
+     * Remove the KoAnnotation objects from the document.
+     *
+     * NOTE: Call this method only when the shapes belonging to the annotations have been deleted.
+     */
+    void removeAnnotations(const QList<KoShape *> &annotations, KUndo2Command *parent);
 
     /**
     * At the current cursor position, insert a marker that marks the next word as being part of the index.

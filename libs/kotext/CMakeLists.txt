@@ -100,6 +100,7 @@ set(kotext_LIB_SRCS
     commands/ChangeStylesCommand.cpp
     commands/ChangeStylesMacroCommand.cpp
     commands/DeleteAnchorsCommand.cpp
+    commands/DeleteAnnotationsCommand.cpp
     commands/DeleteCommand.cpp
     commands/DeleteTableColumnCommand.cpp
     commands/DeleteTableRowCommand.cpp
