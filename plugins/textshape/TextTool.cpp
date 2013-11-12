@@ -2947,7 +2947,7 @@ void TextTool::setListLevel(int level)
 void TextTool::insertAnnotation()
 {
     AnnotationTextShape *shape = (AnnotationTextShape*)KoShapeRegistry::instance()->value(AnnotationShape_SHAPEID)->createDefaultShape(canvas()->shapeController()->resourceManager());
-    KoAnnotation *annotation = textEditor()->addAnnotation(shape);
+    textEditor()->addAnnotation(shape);
 
     // Set annotation creator.
     KConfig *config = KoGlobal::calligraConfig();
