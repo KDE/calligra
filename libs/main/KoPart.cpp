@@ -62,7 +62,6 @@ public:
     Private(KoPart *_parent)
         : parent(_parent)
         , canvasItem(0)
-        , startUpWidget(0)
         , m_componentData(KGlobal::mainComponent())
     {
     }
@@ -102,10 +101,12 @@ KoPart::~KoPart()
 {
     qDebug() << "Deleting KoPart" << this << kdBacktrace();
 
-    // Tell our views that the document is already destroyed and
-    // that they shouldn't try to access it.
-    foreach(KoView *view, views()) {
-        view->setDocumentDeleted();
+    while (!d->documents.isEmpty()) {
+        delete d->documents.takeFirst();
+    }
+
+    while (!d->views.isEmpty()) {
+        delete d->views.takeFirst();
     }
 
     while (!d->mainWindows.isEmpty()) {
@@ -113,7 +114,6 @@ KoPart::~KoPart()
     }
 
     delete d->startUpWidget;
-    d->startUpWidget = 0;
 
     s_partList.removeAll(this);
 
