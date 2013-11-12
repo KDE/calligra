@@ -43,6 +43,7 @@ template <class T> class QVector;
 
 class ReviewTool : public TextTool
 {
+    Q_OBJECT
 public:
     explicit ReviewTool(KoCanvasBase *canvas);
     ~ReviewTool();

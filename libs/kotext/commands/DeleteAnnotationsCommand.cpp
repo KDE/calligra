@@ -27,17 +27,12 @@
 
 #include <kdebug.h>
 
-DeleteAnnotationsCommand::DeleteAnnotationsCommand(const QList<KoShape *> &annotationShapes, QTextDocument *document, KUndo2Command *parent)
-: KUndo2Command(parent)
-, m_document(document)
-, m_deleteAnnotations(false)
+DeleteAnnotationsCommand::DeleteAnnotationsCommand(const QList<KoAnnotation *> &annotations, QTextDocument *document, KUndo2Command *parent)
+    : KUndo2Command(parent)
+    , m_annotations(annotations)
+    , m_deleteAnnotations(false)
+    , m_document(document)
 {
-    foreach (KoShape *annotationShape, annotationShapes) {
-        KoAnnotation *annotation = 0;//FIXMEdynamic_cast<KoAnnotation *>(annotationShape->annotation());
-        if (annotation && annotation->document() == document) {
-            m_annotations.append(annotation);
-        }
-    }
 }
 
 DeleteAnnotationsCommand::~DeleteAnnotationsCommand()
@@ -66,7 +61,10 @@ void DeleteAnnotationsCommand::undo()
     if (rangeManager) {
         foreach (KoAnnotation *annotation, m_annotations) {
             rangeManager->insert(annotation);
-        }
+            //it's a textrange so we need to ask for a layout so we know where it is
+            m_document->markContentsDirty(annotation->rangeStart(), 0);
+       }
     }
+
     m_deleteAnnotations = false;
 }

@@ -244,8 +244,10 @@ public slots:
      * Remove the KoAnnotation objects from the document.
      *
      * NOTE: Call this method only when the shapes belonging to the annotations have been deleted.
+     * This is not the way to delete annotations directly - instead delete the shape or
+     * delete the text containing the annotation
      */
-    void removeAnnotations(const QList<KoShape *> &annotations, KUndo2Command *parent);
+    void removeAnnotations(const QList<KoAnnotation *> &annotations, KUndo2Command *parent);
 
     /**
     * At the current cursor position, insert a marker that marks the next word as being part of the index.

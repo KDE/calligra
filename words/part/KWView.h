@@ -43,7 +43,6 @@ class KoCanvasBase;
 class KoZoomController;
 class KoFindText;
 class KoFindStyle;
-class KoAnnotationLayoutManager;
 
 class QPushButton;
 #ifdef SHOULD_BUILD_RDF
@@ -146,9 +145,6 @@ public slots:
     void goToNextPage(Qt::KeyboardModifiers modifiers = Qt::NoModifier);
     /// Call when "Exit Distraction-Free Mode" in staus bar clicked.
     void exitDistractioFreeMode();
-
-    /// Remove an annotation shape.
-    void annotationShapeRemoved(KoShape *);
 
 protected:
     /// reimplemented method from superclass

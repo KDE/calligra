@@ -593,10 +593,10 @@ void KoTextEditor::removeAnchors(const QList<KoShapeAnchor*> &anchors, KUndo2Com
     addCommand(new DeleteAnchorsCommand(anchors, d->document, parent));
 }
 
-void KoTextEditor::removeAnnotations(const QList<KoShape *> &annotationShapes, KUndo2Command *parent)
+void KoTextEditor::removeAnnotations(const QList<KoAnnotation *> &annotations, KUndo2Command *parent)
 {
     Q_ASSERT(parent);
-    addCommand(new DeleteAnnotationsCommand(annotationShapes, d->document, parent));
+    addCommand(new DeleteAnnotationsCommand(annotations, d->document, parent));
 }
 
 void KoTextEditor::insertFrameBreak()

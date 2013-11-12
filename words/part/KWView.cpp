@@ -136,7 +136,6 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
     m_document->annotationLayoutManager()->setCanvasBase(m_canvas);
     m_document->annotationLayoutManager()->setViewContentWidth(m_canvas->viewMode()->contentsSize().width());
     connect(m_document, SIGNAL(annotationShapeAdded(bool)), this, SLOT(showNotes(bool)));
-    connect(m_canvas->shapeManager(), SIGNAL(shapeRemoved(KoShape*)), this, SLOT(annotationShapeRemoved(KoShape *)));
     //We need to create associate widget before connect them in actions
     //Perhaps there is a better place for the WordCount widget creates here
     //If you know where to move it in a better place, just do it
@@ -428,9 +427,9 @@ void KWView::setupActions()
         m_actionViewFooter->setEnabled(m_currentPage.pageStyle().footerPolicy() == Words::HFTypeNone);
     connect(m_actionViewFooter, SIGNAL(triggered()), this, SLOT(enableFooter()));
 
-    // -------- Show annotations (called Notes in the UI)
-    tAction = new KToggleAction(i18n("Show Notes"), this);
-    tAction->setToolTip(i18n("Shows notes in the document"));
+    // -------- Show annotations (called Comments in the UI)
+    tAction = new KToggleAction(i18n("Show Comments"), this);
+    tAction->setToolTip(i18n("Shows comments in the document"));
     tAction->setChecked(m_canvas && m_canvas->showAnnotations());
     actionCollection()->addAction("view_notes", tAction);
     connect(tAction, SIGNAL(toggled(bool)), this, SLOT(showNotes(bool)));
@@ -1228,20 +1227,5 @@ void KWView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
         selection->deselectAll();
         selection->select(shape);
         m_canvas->addCommand(cmd);
-    }
-}
-
-void KWView::annotationShapeRemoved(KoShape *shape)
-{
-    const KoAnnotationManager *annotationManager = m_document->textRangeManager()->annotationManager();
-    KoTextRangeManager *manager = m_document->textRangeManager();
-    foreach (QString name, annotationManager->annotationNameList()) {
-        KoAnnotation *annotation = annotationManager->annotation(name);
-        if (annotation->annotationShape() == shape) {
-            manager->remove(annotation);
-            // Remove From annotation layout manager.
-            m_document->annotationLayoutManager()->removeAnnotationShape(shape);
-            break;
-        }
     }
 }

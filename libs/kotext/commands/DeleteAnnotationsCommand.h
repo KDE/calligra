@@ -31,7 +31,7 @@ class KoShape;
 class DeleteAnnotationsCommand : public KUndo2Command
 {
 public:
-    DeleteAnnotationsCommand(const QList<KoShape *> &annotationShapes, QTextDocument *document, KUndo2Command *parent);
+    DeleteAnnotationsCommand(const QList<KoAnnotation *> &annotations, QTextDocument *document, KUndo2Command *parent);
     virtual ~DeleteAnnotationsCommand();
 
     virtual void redo();

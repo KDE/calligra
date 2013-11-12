@@ -146,7 +146,9 @@ QList<QWidget *> ReviewTool::createOptionWidgets()
 void ReviewTool::removeAnnotation()
 {
     if (m_currentAnnotationShape) {
-        m_canvas->shapeManager()->remove(m_currentAnnotationShape);
+        QList<KoShape *> shapes;
+        shapes << m_currentAnnotationShape;
+        canvas()->addCommand(canvas()->shapeController()->removeShapes(shapes));
         m_currentAnnotationShape = 0;
     }
 }

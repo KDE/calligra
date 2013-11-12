@@ -32,7 +32,7 @@
 AddAnnotationCommand::AddAnnotationCommand(KoAnnotation *annotation, KUndo2Command *parent)
     : AddTextRangeCommand(annotation, parent)
     , m_annotation(annotation)
-    , m_deleteShape(true)
+    , m_shape(0)
 {
     setText("internal step");
 }
@@ -41,8 +41,8 @@ void AddAnnotationCommand::undo()
 {
     AddTextRangeCommand::undo();
     KoShapeController *shapeController = KoTextDocument(m_annotation->document()).shapeController();
-    shapeController->documentBase()->removeShape(m_annotation->annotationShape());
-    m_deleteShape = true;
+    m_shape = m_annotation->annotationShape();
+    shapeController->documentBase()->removeShape(m_shape);
 }
 
 void AddAnnotationCommand::redo()
@@ -52,7 +52,7 @@ void AddAnnotationCommand::redo()
     KoShapeController *shapeController = KoTextDocument(m_annotation->document()).shapeController();
     shapeController->documentBase()->addShape(m_annotation->annotationShape());
  
-    m_deleteShape = false;
+    m_shape = 0;
 
     //it's a textrange so we need to ask for a layout so we know where it is
     m_annotation->document()->markContentsDirty(m_annotation->rangeStart(), 0);

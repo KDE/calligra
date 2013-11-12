@@ -23,6 +23,7 @@
 #include "AddTextRangeCommand.h"
 
 class KoAnnotation;
+class KoShape;
 
 class AddAnnotationCommand : public AddTextRangeCommand
 {
@@ -35,7 +36,7 @@ public:
 
 private:
     KoAnnotation *m_annotation;
-    bool m_deleteShape;
+    KoShape *m_shape;
 };
 
 #endif // ADDANNOTATIONCOMMAND_H
