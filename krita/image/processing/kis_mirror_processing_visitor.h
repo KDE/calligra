@@ -1,6 +1,5 @@
- 
- /*
- *  Copyright (c) 2010 José Luis Vergara <pentalis@gmail.com>
+/*
+ *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,23 +14,26 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- */ 
- 
- #include "kis_hatching_pressure_separation_option.h"
- #include <kis_pressure_opacity_option.h>
- 
- #include <klocale.h>
- #include <kis_painter.h>
- #include <KoColor.h>
- 
- 
- KisHatchingPressureSeparationOption::KisHatchingPressureSeparationOption()
- : KisCurveOption(i18n("Separation"), "Separation", KisPaintOpOption::brushCategory(), true )
- {
- }
- 
- double KisHatchingPressureSeparationOption::apply(const KisPaintInformation & info) const
- {
-     if (!isChecked()) return 0.5;
-     return computeValue(info);
- }
+ */
+
+#ifndef __KIS_MIRROR_PROCESSING_VISITOR_H
+#define __KIS_MIRROR_PROCESSING_VISITOR_H
+
+#include "kis_simple_processing_visitor.h"
+#include <QRect>
+
+
+class KRITAIMAGE_EXPORT KisMirrorProcessingVisitor : public KisSimpleProcessingVisitor
+{
+public:
+    KisMirrorProcessingVisitor(const QRect &bounds, Qt::Orientation orientation);
+
+private:
+    void visitNodeWithPaintDevice(KisNode *node, KisUndoAdapter *undoAdapter);
+    void visitExternalLayer(KisExternalLayer *layer, KisUndoAdapter *undoAdapter);
+
+    QRect m_bounds;;
+    Qt::Orientation m_orientation;
+};
+
+#endif /* __KIS_MIRROR_PROCESSING_VISITOR_H */

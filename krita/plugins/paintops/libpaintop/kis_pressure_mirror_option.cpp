@@ -25,7 +25,6 @@
 #include <widgets/kis_curve_widget.h>
 
 #include <KoColor.h>
-#include <KoColorSpace.h>
 
 KisPressureMirrorOption::KisPressureMirrorOption()
         : KisCurveOption(i18n("Mirror"), "Mirror", KisPaintOpOption::brushCategory(), false)
@@ -69,9 +68,8 @@ void KisPressureMirrorOption::readOptionSetting(const KisPropertiesConfiguration
     m_enableHorizontalMirror = setting->getBool(MIRROR_HORIZONTAL_ENABLED,false);
     m_enableVerticalMirror = setting->getBool(MIRROR_VERTICAL_ENABLED, false);
 
-    // inversion of the axis names is done intentively due to weird naming
-    m_canvasAxisXMirrored = setting->getBool("runtimeCanvasMirroredY", false);
-    m_canvasAxisYMirrored = setting->getBool("runtimeCanvasMirroredX", false);
+    m_canvasAxisXMirrored = setting->getBool("runtimeCanvasMirroredX", false);
+    m_canvasAxisYMirrored = setting->getBool("runtimeCanvasMirroredY", false);
 }
 
 MirrorProperties KisPressureMirrorOption::apply(const KisPaintInformation& info) const

@@ -21,6 +21,7 @@
 #ifdef HAVE_OPENGL
 #include <QGLWidget>
 
+#include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
 #include <KoColorModelStandardIds.h>
 
@@ -46,6 +47,7 @@ KisOpenGLImageTextures::KisOpenGLImageTextures()
     : m_image(0)
     , m_monitorProfile(0)
     , m_checkerTexture(0)
+    , m_allChannelsSelected(true)
 {
     KisConfig cfg;
     m_renderingIntent = (KoColorConversionTransformation::Intent)cfg.renderIntent();
