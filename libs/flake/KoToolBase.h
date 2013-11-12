@@ -500,6 +500,10 @@ protected:
 
     KoToolBasePrivate *d_ptr;
 
+private slots:
+
+    void optionWidgetDeleted();
+
 private:
     KoToolBase();
     KoToolBase(const KoToolBase&);

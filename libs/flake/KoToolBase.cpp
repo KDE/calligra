@@ -47,6 +47,16 @@ KoToolBase::KoToolBase(KoToolBasePrivate &dd)
     d->connectSignals();
 }
 
+void KoToolBase::optionWidgetDeleted()
+{
+    Q_D(KoToolBase);
+    QWidget *widget = qobject_cast<QWidget*>(sender());
+    if (widget) {
+        d->optionWidgets.removeAll(widget);
+    }
+
+}
+
 KoToolBase::~KoToolBase()
 {
     delete d_ptr;
@@ -172,6 +182,9 @@ QList<QWidget *> KoToolBase::optionWidgets()
     Q_D(KoToolBase);
     if (d->optionWidgets.empty()) {
         d->optionWidgets = createOptionWidgets();
+        foreach(QWidget *w, d->optionWidgets) {
+            connect(w, SIGNAL(destroyed()), this, SLOT(optionWidgetDeleted()));
+        }
     }
     return d->optionWidgets;
 }
