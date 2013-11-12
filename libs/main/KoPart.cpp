@@ -311,7 +311,7 @@ void KoPart::openTemplate(const KUrl& url)
         // in case this is a open document template remove the -template from the end
         mimeType.remove( QRegExp( "-template$" ) );
         document->setMimeTypeAfterLoading(mimeType);
-        deleteOpenPane(document);
+        deleteOpenPane();
         document->resetURL();
         document->setEmpty();
     } else {

@@ -1038,7 +1038,7 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent, int specialOutputFlag)
 
 void KoMainWindow::closeEvent(QCloseEvent *e)
 {
-    if(d->activeView->document() && d->activeView->document()->isLoading()) {
+    if(d->activeView && d->activeView->document() && d->activeView->document()->isLoading()) {
         e->setAccepted(false);
         return;
     }
