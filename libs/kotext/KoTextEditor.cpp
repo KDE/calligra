@@ -68,6 +68,7 @@
 #include "commands/DeleteAnnotationsCommand.h"
 #include "commands/InsertNoteCommand.h"
 #include "commands/AddTextRangeCommand.h"
+#include "commands/AddAnnotationCommand.h"
 
 #include <KoShapeCreateCommand.h>
 
@@ -490,7 +491,7 @@ KoTextRangeManager *KoTextEditor::textRangeManager()
     return KoTextDocument(d->document).textRangeManager();
 }
 
-KoAnnotation *KoTextEditor::addAnnotation()
+KoAnnotation *KoTextEditor::addAnnotation(KoShape *annotationShape)
 {
     KUndo2Command *topCommand = beginEditBlock(i18nc("(qtundo-format)", "Add Annotation"));
 
@@ -501,12 +502,11 @@ KoAnnotation *KoTextEditor::addAnnotation()
     // to do it for us.
     QString name = annotation->createUniqueAnnotationName(textRangeManager->annotationManager(), "", false);
     annotation->setName(name);
-    addCommand(new AddTextRangeCommand(annotation, topCommand));
+    annotation->setAnnotationShape(annotationShape);
+
+    addCommand(new AddAnnotationCommand(annotation, topCommand));
 
     endEditBlock();
-
-    //it's a textrange so we need to ask for a layout so we know where it is
-    d->document->markContentsDirty(annotation->rangeStart(), 0);
 
     return annotation;
 }

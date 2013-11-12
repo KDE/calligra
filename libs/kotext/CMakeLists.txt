@@ -112,6 +112,7 @@ set(kotext_LIB_SRCS
     commands/ListItemNumberingCommand.cpp
     commands/TextPasteCommand.cpp
     commands/AddTextRangeCommand.cpp
+    commands/AddAnnotationCommand.cpp
     commands/ParagraphFormattingCommand.cpp
 
     KoTextDrag.cpp

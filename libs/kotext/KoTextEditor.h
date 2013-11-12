@@ -258,7 +258,7 @@ public slots:
     KoBookmark *addBookmark(const QString &name);
 
     /// Add an annotation at the current cursor location or the current selection.
-    KoAnnotation *addAnnotation();
+    KoAnnotation *addAnnotation(KoShape *annotationShape);
 
     KoTextRangeManager *textRangeManager();
 
