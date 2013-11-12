@@ -33,8 +33,8 @@ class KexiMainImportExportPage : public KexiAssistantPage,
 {
     Q_OBJECT
 public:
-    KexiMainImportExportPage(KexiImportExportAssistant *assistant,
-                             QWidget* parent = 0);
+    explicit KexiMainImportExportPage(KexiImportExportAssistant *assistant,
+                                      QWidget* parent = 0);
     ~KexiMainImportExportPage();
 };
 

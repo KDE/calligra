@@ -32,7 +32,7 @@ namespace KexiUtils
  Non-alphanumeric characters (or spaces) are replaced with '_'.
  If a number is at the beginning, '_' is added at start.
  Empty strings are not changed. Case remains unchanged. */
-KEXIUTILS_EXPORT QString string2Identifier(const QString &s);
+KEXIUTILS_EXPORT QString stringToIdentifier(const QString &s);
 
 /*! \return useful message "Value of "valueName" column must be an identifier.
   "v" is not a valid identifier.". It is also used by IdentifierValidator.  */

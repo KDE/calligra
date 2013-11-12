@@ -78,7 +78,7 @@ class KEXICORE_EXPORT KexiView : public QWidget, public KexiActionProxy
     Q_OBJECT
 
 public:
-    KexiView(QWidget *parent);
+    explicit KexiView(QWidget *parent);
     virtual ~KexiView();
 
 //  //! \return kexi main window that contain this view

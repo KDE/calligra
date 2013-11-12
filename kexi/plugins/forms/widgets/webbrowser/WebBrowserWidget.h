@@ -57,7 +57,7 @@ class WebBrowserWidget : public QWidget,
     
      
 public:
-    WebBrowserWidget(QWidget *parent = 0);
+    explicit WebBrowserWidget(QWidget *parent = 0);
     ~WebBrowserWidget();
 
     inline QString dataSource() const {

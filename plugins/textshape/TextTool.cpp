@@ -84,7 +84,7 @@
 #include <QTextDocumentFragment>
 #include <QToolTip>
 #include <QSignalMapper>
-#include <QGraphicsWidget>
+#include <QGraphicsObject>
 #include <QLinearGradient>
 #include <QBitmap>
 #include <QDrag>
@@ -647,7 +647,6 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
     QTransform shapeMatrix = m_textShape->absoluteTransformation(&converter);
     shapeMatrix.scale(zoomX, zoomY);
     shapeMatrix.translate(0, -m_textShapeData->documentOffset());
-    shapeMatrix.translate(m_textShapeData->leftPadding(), m_textShapeData->topPadding());
 
     // Possibly draw table dragging visual cues
     const qreal boxHeight = 20;
@@ -867,6 +866,10 @@ void TextTool::mousePressEvent(KoPointerEvent *event)
             }
         }
     }
+
+    repaintSelection(); //needed to delete any possible text selection i other text docs
+
+    m_textEditor.data()->setPosition(m_textEditor.data()->position());
 
     updateSelectedShape(event->point);
 
@@ -1213,7 +1216,6 @@ KoPointedAt TextTool::hitTest(const QPointF & point) const
     }
     QPointF p = m_textShape->convertScreenPos(point);
     KoTextLayoutRootArea *rootArea = m_textShapeData->rootArea();
-    p -= QPointF(m_textShapeData->leftPadding(), m_textShapeData->topPadding());
     return rootArea ? rootArea->hitTest(p, Qt::FuzzyHit) : KoPointedAt();
 }
 
@@ -1690,8 +1692,7 @@ QVariant TextTool::inputMethodQuery(Qt::InputMethodQuery query, const KoViewConv
     case Qt::ImMicroFocus: {
         // The rectangle covering the area of the input cursor in widget coordinates.
         QRectF rect = caretRect(textEditor->cursor());
-        rect.moveTop(rect.top() - m_textShapeData->documentOffset() + m_textShapeData->topPadding());
-        rect.moveLeft(rect.left() + m_textShapeData->leftPadding());
+        rect.moveTop(rect.top() - m_textShapeData->documentOffset());
         QTransform shapeMatrix = m_textShape->absoluteTransformation(&converter);
         qreal zoomX, zoomY;
         converter.zoom(&zoomX, &zoomY);
@@ -1778,8 +1779,7 @@ void TextTool::ensureCursorVisible(bool moveView)
         m_delayedEnsureVisible = true;
         return; // we shouldn't move to an obsolete position
     }
-    cRect.moveTop(cRect.top() - m_textShapeData->documentOffset() + m_textShapeData->topPadding());
-    cRect.moveLeft(cRect.left() + m_textShapeData->leftPadding());
+    cRect.moveTop(cRect.top() - m_textShapeData->documentOffset());
     canvas()->ensureVisible(m_textShape->absoluteTransformation(0).mapRect(cRect));
 }
 
@@ -1923,6 +1923,12 @@ void TextTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &sha
     rect = m_textShape->absoluteTransformation(0).mapRect(rect);
     v.setValue(rect);
     canvas()->resourceManager()->setResource(KoCanvasResourceManager::ActiveRange, v);
+    if ((!m_oldTextEditor.isNull()) && m_oldTextEditor.data()->document() != static_cast<KoTextShapeData*>(m_textShape->userData())->document()) {
+        m_oldTextEditor.data()->setPosition(m_oldTextEditor.data()->position());
+        //we need to redraw like this so we update the old textshape whereever it may be
+        if (canvas()->canvasWidget())
+            canvas()->canvasWidget()->update();
+    }
     setShapeData(static_cast<KoTextShapeData*>(m_textShape->userData()));
     useCursor(Qt::IBeamCursor);
 
@@ -1945,6 +1951,7 @@ void TextTool::deactivate()
     // No shape means no active range
     canvas()->resourceManager()->setResource(KoCanvasResourceManager::ActiveRange, QVariant(QRectF()));
 
+    m_oldTextEditor = m_textEditor;
     setShapeData(0);
 
     updateSelectionHandler();
@@ -1980,8 +1987,7 @@ void TextTool::repaintCaret()
 
     bool upToDate;
     QRectF repaintRect = caretRect(textEditor->cursor(), &upToDate);
-    repaintRect.moveTop(repaintRect.top() - m_textShapeData->documentOffset() + m_textShapeData->topPadding());
-    repaintRect.moveLeft(repaintRect.left() + m_textShapeData->leftPadding());
+    repaintRect.moveTop(repaintRect.top() - m_textShapeData->documentOffset());
     if (repaintRect.isValid()) {
         repaintRect = m_textShape->absoluteTransformation(0).mapRect(repaintRect);
 
@@ -2003,7 +2009,7 @@ void TextTool::repaintSelection()
     QTextCursor cursor = *textEditor->cursor();
 
     QList<TextShape *> shapes;
-    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
+    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(textEditor->document()->documentLayout());
     Q_ASSERT(lay);
     foreach (KoShape* shape, lay->shapes()) {
         TextShape *textShape = dynamic_cast<TextShape*>(shape);
@@ -2051,7 +2057,8 @@ QRectF TextTool::textRect(QTextCursor &cursor) const
 {
     if (!m_textShapeData)
         return QRectF();
-    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
+    KoTextEditor *textEditor = m_textEditor.data();
+    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(textEditor->document()->documentLayout());
     return lay->selectionBoundingBox(cursor);
 }
 

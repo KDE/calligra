@@ -31,7 +31,7 @@ class KexiMobileToolbar : public QToolBar
 {
     Q_OBJECT
 public:
-    KexiMobileToolbar(QWidget* parent = 0);
+    explicit KexiMobileToolbar(QWidget* parent = 0);
     virtual ~KexiMobileToolbar();
 
     void setRecordHandler(KexiRecordNavigatorHandler *handler);

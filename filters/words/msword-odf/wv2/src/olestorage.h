@@ -62,7 +62,7 @@ public:
      * Specify a name for the storage. Note: It will *not* be opened
      * right now, call @see open() to do that
      */
-    OLEStorage( const std::string& fileName );
+    explicit OLEStorage( const std::string& fileName );
 
     /**
      * Destroy the current storage. Open streams on it will

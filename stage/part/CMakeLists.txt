@@ -19,7 +19,6 @@ set( calligrastageprivate_LIB_SRCS
      KPrDeclarations.cpp
      KPrPart.cpp
      KPrView.cpp
-     KPrViewAdaptor.cpp
      KPrViewModePresentation.cpp
      KPrViewModeNotes.cpp
      KPrViewModeSlidesSorter.cpp
@@ -59,7 +58,6 @@ set( calligrastageprivate_LIB_SRCS
      KPrPresentationHighlightStrategy.cpp
      KPrPresentationBlackStrategy.cpp
      KPrPresentationStrategyBase.cpp
-     KPrPresentationToolAdaptor.cpp
      KPrPresentationToolEventForwarder.cpp
      KPrPresentationDrawStrategy.cpp
      KPrPageSelectStrategyBase.cpp
@@ -74,6 +72,7 @@ set( calligrastageprivate_LIB_SRCS
      KPrSlidesManagerView.cpp
      KPrCustomSlideShowsModel.cpp
      KPrSlidesSorterItemDelegate.cpp
+     KPrPageLayoutWidget.cpp
 
      commands/KPrAnimationCreateCommand.cpp
      commands/KPrAnimationRemoveCommand.cpp
@@ -90,8 +89,6 @@ set( calligrastageprivate_LIB_SRCS
      commands/KPrReplaceAnimationCommand.cpp
 
      dockers/KPrPreviewWidget.cpp
-     dockers/KPrPageLayoutDockerFactory.cpp
-     dockers/KPrPageLayoutDocker.cpp
 
      pageeffects/KPrPageEffectRunner.cpp
      pageeffects/KPrPageEffect.cpp
@@ -139,6 +136,14 @@ set( calligrastageprivate_LIB_SRCS
      tools/KPrPlaceholderTool.cpp
      tools/KPrPlaceholderToolFactory.cpp
    )
+
+if(QT_QTDBUS_FOUND)
+set( calligrastageprivate_LIB_SRCS
+     ${calligrastageprivate_LIB_SRCS}
+     KPrViewAdaptor.cpp
+     KPrPresentationToolAdaptor.cpp
+   )
+endif()
 
 kde4_add_ui_files(calligrastageprivate_LIB_SRCS
      ui/KPrConfigureSlideShow.ui

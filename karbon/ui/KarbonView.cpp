@@ -123,13 +123,12 @@
 #include <kmessagebox.h>
 #include <kcomponentdata.h>
 #include <kactioncollection.h>
-#include <kxmlguifactory.h>
 #include <kstatusbar.h>
 #include <kfiledialog.h>
 #include <kstandardaction.h>
-#include <kparts/partmanager.h>
 #include <ktoggleaction.h>
 #include <kdebug.h>
+#include <kservicetypetrader.h>
 
 // qt header
 #include <QIcon>
@@ -205,7 +204,7 @@ public:
 KarbonView::KarbonView(KarbonPart *karbonPart, KarbonDocument* doc, QWidget* parent)
         : KoView(karbonPart, doc, parent), d(new Private(karbonPart, doc))
 {
-    setComponentData(KarbonFactory::componentData(), true);
+    setComponentData(KarbonFactory::componentData());
     setAcceptDrops(true);
 
     setXMLFile(QString::fromLatin1("karbon.rc"));
@@ -260,6 +259,27 @@ KarbonView::KarbonView(KarbonPart *karbonPart, KarbonDocument* doc, QWidget* par
 
     initActions();
 
+    // Load all plugins
+    KService::List offers = KServiceTypeTrader::self()->query(QString::fromLatin1("Karbon/ViewPlugin"),
+                                                              QString::fromLatin1("(Type == 'Service') and "
+                                                                                  "([X-Karbon-Version] == 28)"));
+    KService::List::ConstIterator iter;
+    for (iter = offers.constBegin(); iter != offers.constEnd(); ++iter) {
+
+        KService::Ptr service = *iter;
+
+        QString error;
+
+        KXMLGUIClient* plugin =
+                dynamic_cast<KXMLGUIClient*>(service->createInstance<QObject>(this, QVariantList(), &error));
+        if (plugin) {
+            insertChildClient(plugin);
+        } else {
+            kWarning() << "Fail to create an instance for " << service->name() << " " << error;
+        }
+    }
+
+
     unsigned int max = part()->maxRecentFiles();
     setNumberOfRecentFiles(max);
 
@@ -293,7 +313,7 @@ KarbonView::KarbonView(KarbonPart *karbonPart, KarbonDocument* doc, QWidget* par
     connect(d->canvas->shapeManager(), SIGNAL(selectionContentChanged()), d->colorBar, SLOT(updateDocumentColors()));
     connect(part(), SIGNAL(shapeCountChanged()), d->colorBar, SLOT(updateDocumentColors()));
 
-    if (shell()) {
+    if (mainWindow()) {
         // set the first layer active
         d->canvasController->canvas()->shapeManager()->selection()->setActiveLayer(part()->layers().first());
 
@@ -302,10 +322,10 @@ KarbonView::KarbonView(KarbonPart *karbonPart, KarbonDocument* doc, QWidget* par
 
         // set one whitespace as title to allow a one column toolbox
         KoToolBoxFactory toolBoxFactory(d->canvasController);
-        shell()->createDockWidget(&toolBoxFactory);
+        mainWindow()->createDockWidget(&toolBoxFactory);
 
         connect(canvasController, SIGNAL(toolOptionWidgetsChanged(QList<QWidget*>)),
-                shell()->dockerManager(), SLOT(newOptionWidgets(QList<QWidget*>)));
+                mainWindow()->dockerManager(), SLOT(newOptionWidgets(QList<QWidget*>)));
 
         KoToolManager::instance()->requestToolActivation(d->canvasController);
 
@@ -560,7 +580,7 @@ void KarbonView::fileImportGraphic()
         // directly load the native format
         success = importDocument.loadNativeFormat(fname);
         if (!success) {
-            importPart.showLoadingErrorDialog();
+            importDocument.showLoadingErrorDialog();
         }
     } else {
         // use import filters to load the file
@@ -568,12 +588,12 @@ void KarbonView::fileImportGraphic()
         KoFilter::ConversionStatus status = KoFilter::OK;
         QString importedFile = man.importDocument(fname, QString(), status);
         if (status != KoFilter::OK) {
-            importPart.showLoadingErrorDialog();
+            importDocument.showLoadingErrorDialog();
             success = false;
         } else if (!importedFile.isEmpty()) {
             success = importDocument.loadNativeFormat(importedFile);
             if (!success) {
-                importPart.showLoadingErrorDialog();
+                importDocument.showLoadingErrorDialog();
             }
             // remove the temporary file created during format conversion
             unlink(QFile::encodeName(importedFile));
@@ -1022,7 +1042,7 @@ void KarbonView::initActions()
     connect(d->showPageMargins, SIGNAL(toggled(bool)), SLOT(togglePageMargins(bool)));
 
     // No need for the other actions in read-only (embedded) mode
-    if (!shell())
+    if (!mainWindow())
         return;
 
     // edit ----->
@@ -1241,13 +1261,13 @@ void KarbonView::reorganizeGUI()
 
 void KarbonView::setNumberOfRecentFiles(unsigned int number)
 {
-    if (shell())     // 0L when embedded into konq !
-        shell()->setMaxRecentItems(number);
+    if (mainWindow())     // 0L when embedded into konq !
+        mainWindow()->setMaxRecentItems(number);
 }
 
 void KarbonView::showRuler()
 {
-    if(!shell())
+    if(!mainWindow())
         return;
 
     const bool showRuler = d->showRulerAction->isChecked();
@@ -1302,7 +1322,7 @@ void KarbonView::snapToGrid()
 
 void KarbonView::showPalette()
 {
-    if(!shell())
+    if(!mainWindow())
         return;
 
     const bool showPalette = d->showPaletteAction->isChecked();
@@ -1343,7 +1363,7 @@ void KarbonView::configurePageLayout()
 
 void KarbonView::selectionChanged()
 {
-    if (!shell())
+    if (!mainWindow())
         return;
     KoSelection *selection = d->canvas->shapeManager()->selection();
     QList<KoShape*> selectedShapes = selection->selectedShapes(KoFlake::FullSelection);
@@ -1413,10 +1433,10 @@ void KarbonView::setCursor(const QCursor &c)
 
 void KarbonView::createLayersTabDock()
 {
-    if (shell())
+    if (mainWindow())
     {
         KarbonLayerDockerFactory layerFactory;
-        KarbonLayerDocker * layerDocker = qobject_cast<KarbonLayerDocker*>(shell()->createDockWidget(&layerFactory));
+        KarbonLayerDocker * layerDocker = qobject_cast<KarbonLayerDocker*>(mainWindow()->createDockWidget(&layerFactory));
         layerDocker->setCanvas(d->canvas);
         connect(d->canvas->shapeManager(), SIGNAL(selectionChanged()),
                 layerDocker, SLOT(updateView()));

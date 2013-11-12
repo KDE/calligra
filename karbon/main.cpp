@@ -36,6 +36,7 @@
 #include <KoApplication.h>
 
 #include <KarbonFactory.h>
+#include <KarbonDocument.h>
 
 #ifdef MAINTANER_WANTED_SPLASH
 class KoSplashScreen : public KSplashScreen
@@ -59,7 +60,7 @@ extern "C" KDE_EXPORT int kdemain( int argc, char* argv[] )
     options.add("+[file]", ki18n( "File to open" ));
     KCmdLineArgs::addCmdLineOptions( options );
 
-    KoApplication app;
+    KoApplication app(KARBON_MIME_TYPE);
 
 #ifdef MAINTANER_WANTED_SPLASH
     // After creating the KApplication then create the pixmap from an xpm: we cannot get the
@@ -73,7 +74,7 @@ extern "C" KDE_EXPORT int kdemain( int argc, char* argv[] )
     "See community.kde.org/Calligra</p>");
 #endif
 
-    if( !app.start() )  // parses command line args, create initial docs and shells
+    if( !app.start() )  // parses command line args, create initial docs and mainwindows
         return 1;
 
     return app.exec();

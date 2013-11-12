@@ -45,4 +45,5 @@ set_target_properties(krossmoduleplan PROPERTIES DEFINE_SYMBOL MAKE_KPLATOSCRIPT
 
 install(TARGETS krossmoduleplan DESTINATION ${PLUGIN_INSTALL_DIR})
 install(FILES krossmoduleplan.desktop DESTINATION ${SERVICES_INSTALL_DIR})
-install(FILES scripting.rc DESTINATION ${DATA_INSTALL_DIR}/plan/kpartplugins)
+install(FILES planscripting.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install(FILES scripting.rc DESTINATION ${DATA_INSTALL_DIR}/plan/viewplugins)

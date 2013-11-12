@@ -24,8 +24,7 @@
 
 #include <KoPointerEvent.h>
 #include <KoColor.h>
-#include <KoColorSpace.h>
-#include <KoColorSpaceRegistry.h>
+#include <KoCompositeOpRegistry.h>
 #include <KoViewConverter.h>
 
 #include "kis_node.h"
@@ -50,7 +49,6 @@ KisPaintOpSettings::KisPaintOpSettings()
 
 KisPaintOpSettings::~KisPaintOpSettings()
 {
-    delete d;
 }
 
 void KisPaintOpSettings::setOptionsWidget(KisPaintOpSettingsWidget* widget)
@@ -140,27 +138,26 @@ bool KisPaintOpSettings::isLoadable()
     return isValid();
 }
 
-QPainterPath KisPaintOpSettings::brushOutline(const QPointF& pos, OutlineMode mode, qreal scale, qreal rotation) const
+QString KisPaintOpSettings::indirectPaintingCompositeOp() const {
+    return COMPOSITE_ALPHA_DARKEN;
+}
+
+QPainterPath KisPaintOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode) const
 {
+    Q_UNUSED(info);
+
     QPainterPath path;
     if (mode == CursorIsOutline){
-        QRectF rc(-5,-5, 10, 10);
-        path.moveTo(rc.topLeft());
-        path.lineTo(rc.bottomRight());
-        path.moveTo(rc.topRight());
-        path.lineTo(rc.bottomLeft());
-        QTransform m;
-        m.reset(); m.scale(scale,scale); m.rotateRadians(rotation);
-        path = m.map(path);
-        path.translate(pos);
+        path = ellipseOutline(10,10,0,0);
     }
+
     return path;
 }
 
 QPainterPath KisPaintOpSettings::ellipseOutline(qreal width, qreal height, qreal scale, qreal rotation) const
 {
     QPainterPath path;
-    QRectF ellipse(0,0,width * scale,height * scale);
+    QRectF ellipse(0,0, width * scale, height * scale);
     ellipse.translate(-ellipse.center());
     path.addEllipse(ellipse);
 
@@ -184,4 +181,14 @@ void KisPaintOpSettings::setCanvasMirroring(bool xAxisMirrored, bool yAxisMirror
 
     setProperty("runtimeCanvasMirroredY", yAxisMirrored);
     setPropertyNotSaved("runtimeCanvasMirroredY");
+}
+
+void KisPaintOpSettings::setProperty(const QString & name, const QVariant & value)
+{
+    KisPropertiesConfiguration::setProperty(name, value);
+    onPropertyChanged();
+}
+
+void KisPaintOpSettings::onPropertyChanged()
+{
 }

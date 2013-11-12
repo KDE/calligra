@@ -21,7 +21,7 @@
 #include <KoIcon.h>
 
 #include <kis_cmb_composite.h>
-#include <KoCompositeOp.h>
+#include <KoCompositeOpRegistry.h>
 #include <kis_types.h>
 #include <KoID.h>
 #include <ui_wdgCompositeOpOption.h>
@@ -90,10 +90,10 @@ void KisCompositeOpOption::changeCompositeOp(const KoID& compositeOp)
 
 void KisCompositeOpOption::slotCompositeOpChanged(const QModelIndex& index)
 {
-    KoID compositeOp;
-    
-    if(m_list->entryAt(compositeOp, index.row()))
-        changeCompositeOp(compositeOp);
+    Q_UNUSED(index);
+
+    KoID compositeOp = m_list->selectedCompositeOp();
+    changeCompositeOp(compositeOp);
 }
 
 void KisCompositeOpOption::slotEraserToggled(bool toggled)

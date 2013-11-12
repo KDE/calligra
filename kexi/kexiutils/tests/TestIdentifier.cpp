@@ -25,7 +25,8 @@ void TestIdentifier::initTestCase()
 {
 }
 
-void TestIdentifier::testString2FileName_data()
+#if 0 // TODO
+void TestIdentifier::testStringToIdentifier_data()
 {
     QTest::addColumn<QString>("string1");
     QTest::addColumn<QString>("string2");
@@ -36,12 +37,13 @@ void TestIdentifier::testString2FileName_data()
     QTest::newRow("special chars2") << " */$" << "_";
 }
 
-void TestIdentifier::testString2FileName()
+void TestIdentifier::testStringToIdentifier()
 {
     QFETCH(QString, string1);
     QFETCH(QString, string2);
     QCOMPARE(KexiUtils::string2Identifier(string1), string2);
 }
+#endif
 
 void TestIdentifier::cleanupTestCase()
 {

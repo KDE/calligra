@@ -2,6 +2,9 @@
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Action name="extra_template"/>
+  <Separator/>
+  <Action name="file_encrypt_doc" />
+  <Action name="file_uncompress_doc" />
  </Menu>
 
  <Menu name="edit"><text>&amp;Edit</text>

@@ -212,17 +212,35 @@ Calligra applications can use plugins, placed in plugins/ subdirectory.
 Some of them are very special and/or have extra dependencies so should
 be packaged separately.
 
+
  Suggested Name            Details
  ------------------------------------------------------------------------
- calligra-map-shape      Description: Map shape for Calligra applications
+ calligra-semanticitems  Description: Calligra semantic item plugins
                            Contents:
-                               mapshape.so
-                               mapshape.desktop
+                               calligra_semanticitem_contact.so
+                               calligra_semanticitem_contact.desktop
+                               calligra_semanticitem_event.so
+                               calligra_semanticitem_event.desktop
+                               calligra_semanticitem_location.so
+                               calligra_semanticitem_location.desktop
                            Translation File:
-                               MapShape.mo
+                               calligra_semanticitem_contact.mo
+                               calligra_semanticitem_contact.mo
+                               calligra_semanticitem_location.mo
                            Dependencies:
+                               libkdepimlibs (kabc, kcalcore, akonadi)
                                libmarble4-kde4 or marble
                                                       (provides libmarblewidget)
+
+If Calligra is build with support for RDF enabled, it is STRONGLY RECOMMENDED to
+separate the semantic item plugins coming from "plugins/semanticitems" into
+their own package. That package should not be an automatic dependency on any
+other Calligra package, but only installed explicitely by the user. Reason are
+the external dependencies with these plugins, especially kdepimlibs.
+
+So if e.g. a user just installs the Krita package, this should not pull in all
+the things that KDEPIM/Akonadi pulls in.
+
 
 5. Calligra libraries
 ====================
@@ -243,10 +261,11 @@ koplugin                                                               NO
 koproperty                                 Kexi, Plan                  NO
 koreports                                  Kexi, Plan                  NO
 kotext
-main
-odf
+komain
+koodf
+kordf                                      Words/Author, Active
 pigment
-widgets
+kowidgets
 
 
 5.1. Calligra default database driver: SQLite

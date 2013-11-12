@@ -60,10 +60,10 @@ public:
     KoResource* currentResource();
     /// Sets the visibility of tagging klineEdits
     void showTaggingBar( bool showSearchBar, bool showOpBar );
-    void enableContextMenu(bool enable);
-
 
     KoResourceItemChooser *itemChooser();
+
+    void setPresetFilter(const QString& paintOpId);
 
 signals:
     void resourceSelected(KoResource * resource);

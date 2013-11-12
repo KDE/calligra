@@ -93,7 +93,7 @@ class KEXIMAIN_EXPORT KexiMainWindow
 
 public:
     /*! Creates an empty mainwindow. */
-    KexiMainWindow(QWidget *parent = 0);
+    explicit KexiMainWindow(QWidget *parent = 0);
     virtual ~KexiMainWindow();
 
     virtual KActionCollection* actionCollection() const;

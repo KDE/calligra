@@ -57,6 +57,7 @@
 #endif
 #include <QSizePolicy>
 #include <QScrollBar>
+#include <QTimer>
 
 // KDE includes
 #include <kactioncollection.h>
@@ -74,10 +75,9 @@
 #include <kstandardaction.h>
 #include <ktoggleaction.h>
 #include <ktoolinvocation.h>
-#include <kparts/event.h>
 #include <kpushbutton.h>
 #include <kxmlguifactory.h>
-#include <knotifyconfigwidget.h>
+#include <kservicetypetrader.h>
 
 // Calligra includes
 #include <KoGlobal.h>
@@ -162,6 +162,7 @@
 // D-Bus
 #ifndef QT_NO_DBUS
 #include "interfaces/ViewAdaptor.h"
+#include <knotifyconfigwidget.h>
 #include <QtDBus>
 #endif
 
@@ -216,6 +217,8 @@ public:
     // On timeout this will execute the status bar operation (e.g. SUM).
     // This is delayed to speed up the selection.
     QTimer statusBarOpTimer;
+
+    QTimer *scrollTimer;
 };
 
 class ViewActions
@@ -577,6 +580,28 @@ View::View(KoPart *part, QWidget *_parent, Doc *_doc)
 
     d->initActions();
 
+    KService::List offers = KServiceTypeTrader::self()->query(QString::fromLatin1("Sheets/ViewPlugin"),
+                                                              QString::fromLatin1("(Type == 'Service') and "
+                                                                                  "([X-Sheets-Version] == 28)"));
+
+    KService::List::ConstIterator iter;
+    for(iter = offers.constBegin(); iter != offers.constEnd(); ++iter) {
+
+        KService::Ptr service = *iter;
+
+        QString error;
+        KXMLGUIClient* plugin =
+                dynamic_cast<KXMLGUIClient*>(service->createInstance<QObject>(this, QVariantList(), &error));
+        if(plugin) {
+            insertChildClient(plugin);
+        } else {
+            if(!error.isEmpty()) {
+                kWarning() << " Error loading plugin was : ErrNoLibrary" << error;
+            }
+        }
+    }
+
+
     // Connect updateView() signal to View::update() in order to repaint its
     // child widgets: the column/row headers and the select all button.
     // Connect to Canvas::update() explicitly as it lives in the viewport
@@ -611,6 +636,11 @@ View::View(KoPart *part, QWidget *_parent, Doc *_doc)
     new ViewAdaptor(this);
 #endif
 
+    d->scrollTimer = new QTimer(this);
+    connect(d->scrollTimer, SIGNAL(timeout()), this, SLOT(slotAutoScroll()));
+
+    initialPosition();
+
     d->canvas->setFocus();
 }
 
@@ -624,14 +654,14 @@ View::~View()
     d->selection->endReferenceSelection(false);
     d->activeSheet = 0; // set the active sheet to 0 so that when during destruction
     // of embedded child documents possible repaints in Sheet are not
-    // performed. The repains can happen if you delete an embedded document,
-    // which leads to an regionInvalidated() signal emission in KoView, which calls
-    // repaint, etc.etc. :-) (Simon)
+    // performed.
 
     // delete the sheetView's after calling d->selection->emitCloseEditor cause the
     // emitCloseEditor may trigger over the Selection::emitChanged a Canvas::scrollToCell
     // which in turn needs the sheetview's to access the sheet itself.
     qDeleteAll(d->sheetViews.values());
+
+    delete d->scrollTimer;
 
     delete d->selection;
     delete d->calcLabel;
@@ -687,7 +717,6 @@ void View::initView()
 
     // Setup the map model.
     d->mapViewModel = new MapViewModel(d->doc->map(), d->canvas, this);
-    installEventFilter(d->mapViewModel); // listen to KParts::GUIActivateEvent
     connect(d->mapViewModel, SIGNAL(addCommandRequested(KUndo2Command*)),
             doc(), SLOT(addCommand(KUndo2Command*)));
     connect(d->mapViewModel, SIGNAL(activeSheetChanged(Sheet*)),
@@ -716,18 +745,18 @@ void View::initView()
     // Load the KSpread Tools
     ToolRegistry::instance()->loadTools();
 
-    if (shell())
+    if (mainWindow())
     {
         KoToolManager::instance()->addController(d->canvasController);
         KoToolManager::instance()->registerTools(actionCollection(), d->canvasController);
         KoModeBoxFactory modeBoxFactory(canvasController, qApp->applicationName(), i18n("Tools"));
-        QDockWidget* modeBox = shell()->createDockWidget(&modeBoxFactory);
-        shell()->dockerManager()->removeToolOptionsDocker();
+        QDockWidget* modeBox = mainWindow()->createDockWidget(&modeBoxFactory);
+        mainWindow()->dockerManager()->removeToolOptionsDocker();
         dynamic_cast<KoCanvasObserverBase*>(modeBox)->setObservedCanvas(d->canvas);
 
         // Setup the tool options dock widget manager.
         //connect(canvasController, SIGNAL(toolOptionWidgetsChanged(QList<QWidget*>)),
-        //        shell()->dockerManager(), SLOT(newOptionWidgets(QList<QWidget*>)));
+        //        mainWindow()->dockerManager(), SLOT(newOptionWidgets(QList<QWidget*>)));
     }
     // Setup the zoom controller.
     d->zoomHandler = new KoZoomHandler();
@@ -747,8 +776,6 @@ void View::initView()
     d->canvas->setFocusPolicy(Qt::StrongFocus);
     QWidget::setFocusPolicy(Qt::StrongFocus);
     setFocusProxy(d->canvas);
-
-    connect(this, SIGNAL(invalidated()), d->canvas, SLOT(update()));
 
     // Vert. Scroll Bar
     d->calcLabel  = 0;
@@ -979,8 +1006,8 @@ void View::initConfig()
 
 void View::changeNbOfRecentFiles(int _nb)
 {
-    if (shell())
-        shell()->setMaxRecentItems(_nb);
+    if (mainWindow())
+        mainWindow()->setMaxRecentItems(_nb);
 }
 
 void View::initCalcMenu()
@@ -1132,7 +1159,7 @@ void View::finishLoading()
     setHeaderMinima();
 
     // Activate the cell tool.
-    if (shell())
+    if (mainWindow())
         KoToolManager::instance()->switchToolRequested("KSpreadCellToolId");
 }
 
@@ -1586,8 +1613,10 @@ void View::showTabBar(bool enable)
 }
 
 void View::optionsNotifications()
-{
+{  
+#ifndef QT_NO_DBUS
     KNotifyConfigWidget::configure(this);
+#endif
 }
 
 void View::preference()
@@ -1919,24 +1948,6 @@ QWidget* View::canvas() const
     return d->canvas;
 }
 
-void View::guiActivateEvent(KParts::GUIActivateEvent *ev)
-{
-    // We need a width/height > 0 for setting the initial position properly.
-    // This is not always the case from the beginning of the View's lifetime.
-    if (ev->activated()) {
-        initialPosition();
-    }
-
-    if (d->activeSheet) {
-        if (ev->activated()) {
-            if (d->calcLabel)
-                calcStatusBarOp();
-        }
-    }
-
-    KoView::guiActivateEvent(ev);
-}
-
 void View::popupTabBarMenu(const QPoint & _point)
 {
     if (!factory())
@@ -2153,5 +2164,58 @@ void View::updateAccessedCellRange(Sheet* sheet, const QPoint &location)
 {
     sheetView(sheet)->updateAccessedCellRange(location);
 }
+
+void View::enableAutoScroll()
+{
+    d->scrollTimer->start(50);
+}
+
+void View::disableAutoScroll()
+{
+    d->scrollTimer->stop();
+}
+
+int View::autoScrollAcceleration(int offset) const
+{
+    if (offset < 40)
+        return offset;
+    else
+        return offset*offset / 40;
+}
+
+void View::slotAutoScroll()
+{
+    QPoint scrollDistance;
+    bool actuallyDoScroll = false;
+    QPoint pos(mapFromGlobal(QCursor::pos()));
+
+    //Provide progressive scrolling depending on the mouse position
+    if (pos.y() < topBorder()) {
+        scrollDistance.setY((int) - autoScrollAcceleration(- pos.y() + topBorder()));
+        actuallyDoScroll = true;
+    } else if (pos.y() > height() - bottomBorder()) {
+        scrollDistance.setY((int) autoScrollAcceleration(pos.y() - height() + bottomBorder()));
+        actuallyDoScroll = true;
+    }
+
+    if (pos.x() < leftBorder()) {
+        scrollDistance.setX((int) - autoScrollAcceleration(- pos.x() + leftBorder()));
+        actuallyDoScroll = true;
+    } else if (pos.x() > width() - rightBorder()) {
+        scrollDistance.setX((int) autoScrollAcceleration(pos.x() - width() + rightBorder()));
+        actuallyDoScroll = true;
+    }
+
+    if (actuallyDoScroll) {
+        pos = canvas()->mapFrom(this, pos);
+        QMouseEvent* event = new QMouseEvent(QEvent::MouseMove, pos, Qt::NoButton, Qt::NoButton,
+                                             QApplication::keyboardModifiers());
+
+        QApplication::postEvent(canvas(), event);
+        emit autoScroll(scrollDistance);
+    }
+}
+
+
 
 #include "View.moc"

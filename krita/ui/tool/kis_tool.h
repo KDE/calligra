@@ -29,26 +29,26 @@
 #include <kis_types.h>
 
 #define PRESS_CONDITION(_event, _mode, _button, _modifier)              \
-    (mode() == (_mode) && (_event)->button() == (_button) &&            \
-     (_event)->modifiers() == (_modifier) && !specialModifierActive())
+    (this->mode() == (_mode) && (_event)->button() == (_button) &&            \
+     (_event)->modifiers() == (_modifier) && !this->specialModifierActive())
 
 #define PRESS_CONDITION_WB(_event, _mode, _button, _modifier)            \
-    (mode() == (_mode) && (_event)->button() & (_button) &&            \
-     (_event)->modifiers() == (_modifier) && !specialModifierActive())
+    (this->mode() == (_mode) && (_event)->button() & (_button) &&            \
+     (_event)->modifiers() == (_modifier) && !this->specialModifierActive())
 
 #define PRESS_CONDITION_OM(_event, _mode, _button, _modifier)           \
-    (mode() == (_mode) && (_event)->button() == (_button) &&            \
+    (this->mode() == (_mode) && (_event)->button() == (_button) &&      \
      ((_event)->modifiers() & (_modifier) ||                            \
       (_event)->modifiers() == Qt::NoModifier) &&                       \
-     !specialModifierActive())
+     !this->specialModifierActive())
 
 #define RELEASE_CONDITION(_event, _mode, _button)               \
-    (mode() == (_mode) && (_event)->button() == (_button))
+    (this->mode() == (_mode) && (_event)->button() == (_button))
 
 #define RELEASE_CONDITION_WB(_event, _mode, _button)               \
-    (mode() == (_mode) && (_event)->button() & (_button))
+    (this->mode() == (_mode) && (_event)->button() & (_button))
 
-#define MOVE_CONDITION(_event, _mode) (mode() == (_mode))
+#define MOVE_CONDITION(_event, _mode) (this->mode() == (_mode))
 
 class KActionCollection;
 class KoCanvasBase;
@@ -183,17 +183,6 @@ protected:
     /// paint the path which is in view coordinates, default paint mode is XOR_MODE, BW_MODE is also possible
     /// never apply transformations to the painter, they would be useless, if drawing in OpenGL mode. The coordinates in the path should be in view coordinates.
     void paintToolOutline(QPainter * painter, const QPainterPath &path);
-
-    /// Returns true if the canvas this tool is associated with supports OpenGL rendering.
-    bool isCanvasOpenGL() const;
-
-    /// Call before starting to use native OpenGL commands when painting this tool's decorations.
-    /// This is a convenience method that calls beginOpenGL() on the OpenGL canvas object.
-    void beginOpenGL();
-
-    /// Call after finishing use of native OpenGL commands when painting this tool's decorations.
-    /// This is a convenience method that calls endOpenGL() on the OpenGL canvas object.
-    void endOpenGL();
 
     /// Sets the systemLocked for the current node, this will not deactivate the tool buttons
     void setCurrentNodeLocked(bool locked);

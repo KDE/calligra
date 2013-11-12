@@ -160,6 +160,15 @@ KisBaseNodeSP KisNode::parentCallback() const
     return parent();
 }
 
+void KisNode::notifyParentVisibilityChanged(bool value)
+{
+    KisSafeReadNodeList::const_iterator iter;
+    FOREACH_SAFE(iter, m_d->nodes) {
+        KisNodeSP child = (*iter);
+        child->notifyParentVisibilityChanged(value);
+    }
+}
+
 void KisNode::baseNodeChangedCallback()
 {
     if(m_d->graphListener) {
@@ -246,7 +255,7 @@ QList<KisNodeSP> KisNode::childNodes(const QStringList & nodeTypes, const KoProp
                         }
                     }
                 }
-                if(rightType) {
+                if (rightType) {
                     nodes.append(*iter);
                 }
             }

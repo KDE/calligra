@@ -48,7 +48,6 @@
 #include <QDropEvent>
 #include <QPixmap>
 #include <QDesktopWidget>
-#include <QMatrix>
 #include <QScrollArea>
 
 #include <kglobal.h>

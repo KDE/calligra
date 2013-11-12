@@ -33,7 +33,7 @@
 #include <kpluginfactory.h>
 #include <kstandarddirs.h>
 #include <kmimetype.h>
-#include <KParts/ComponentFactory>
+#include <kmimetypetrader.h>
 
 #include <okular/core/page.h>
 #include <okular/core/version.h>

@@ -248,6 +248,7 @@ void KisAbstractSliderSpinBox::wheelEvent(QWheelEvent *e)
     } else {
         setInternalValue(d->value - d->singleStep);
     }
+    update();
     e->accept();
 }
 
@@ -531,6 +532,7 @@ void KisDoubleSliderSpinBox::setRange(qreal minimum, qreal maximum, int decimals
     d->maximum = maximum * d->factor;
     d->validator->setRange(minimum, maximum, decimals);
     update();
+    setValue(value());
 }
 
 qreal KisDoubleSliderSpinBox::value()

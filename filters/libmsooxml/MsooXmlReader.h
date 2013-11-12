@@ -98,21 +98,21 @@ public:
     //void undoReadNext();
 
     // const strings (for optimization)
-    static const char* constOn;
-    static const char* constOff;
-    static const char* constTrue;
-    static const char* constFalse;
-    static const char* constNone;
-    static const char* const1;
-    static const char* const0;
-    static const char* constAuto;
-    static const char* constFloat;
-    static const char* constPercentage;
-    static const char* constCurrency;
-    static const char* constDate;
-    static const char* constTime;
-    static const char* constBoolean;
-    static const char* constString;
+    static const char constOn[];
+    static const char constOff[];
+    static const char constTrue[];
+    static const char constFalse[];
+    static const char constNone[];
+    static const char const1[];
+    static const char const0[];
+    static const char constAuto[];
+    static const char constFloat[];
+    static const char constPercentage[];
+    static const char constCurrency[];
+    static const char constDate[];
+    static const char constTime[];
+    static const char constBoolean[];
+    static const char constString[];
 
 protected:
     // -- general

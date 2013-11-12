@@ -358,10 +358,12 @@ QList<KWPage> KWPageManager::pages(const QString &pageStyle) const
 {
     QList<KWPage> answer;
     const bool checkForStyle = !pageStyle.isEmpty();
-    foreach (int key, d->pages.keys()) {
-        if (checkForStyle && d->pages.value(key).style.name() != pageStyle)
+    QHash<int, KWPageManagerPrivate::Page>::ConstIterator it = d->pages.constBegin();
+    QHash<int, KWPageManagerPrivate::Page>::ConstIterator end = d->pages.constEnd();
+    for(; it != end; ++it) {
+        if (checkForStyle && it.value().style.name() != pageStyle)
             continue;
-        answer << KWPage(d, key);
+        answer << KWPage(d, it.key());
     }
     return answer;
 }

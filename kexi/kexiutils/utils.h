@@ -41,6 +41,7 @@ class KAction;
 //! @short General Utils
 namespace KexiUtils
 {
+
 //! \return true if \a o has parent \a par.
 inline bool hasParent(QObject* par, QObject* o)
 {
@@ -550,6 +551,42 @@ public:
 private:
     bool m_enabled;
 };
+
+/*!
+ * \short Options for opening of hyperlinks
+ * \sa openHyperLink()
+ */
+class KEXIUTILS_EXPORT OpenHyperlinkOptions : public QObject
+{
+    Q_OBJECT
+    Q_ENUMS(HyperlinkTool)
+
+public:
+
+    /*!
+     * A tool used for opening hyperlinks
+     */
+    enum HyperlinkTool{
+        DefaultHyperlinkTool, /*!< Default tool for a given type of the hyperlink */
+        BrowserHyperlinkTool, /*!< Opens hyperlink in a browser */
+        MailerHyperlinkTool /*!< Opens hyperlink in a default mailer */
+    };
+
+    OpenHyperlinkOptions() :
+        tool(DefaultHyperlinkTool)
+      , allowExecutable(false)
+      , allowRemote(false)
+    {}
+
+    HyperlinkTool tool;
+    bool allowExecutable;
+    bool allowRemote;
+};
+
+/*!
+ * Opens the given \a url using \a options
+*/
+KEXIUTILS_EXPORT void openHyperLink(const KUrl &url, QWidget *parent, const OpenHyperlinkOptions &options);
 
 } //namespace KexiUtils
 

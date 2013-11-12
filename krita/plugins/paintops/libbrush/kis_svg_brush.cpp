@@ -24,10 +24,8 @@
 #include <QImageReader>
 #include <QSvgRenderer>
 
-struct KisSvgBrush::Private {
-};
-
-KisSvgBrush::KisSvgBrush(const QString& filename) : KisBrush(filename), d(new Private)
+KisSvgBrush::KisSvgBrush(const QString& filename)
+    : KisBrush(filename)
 {
     setBrushType(INVALID);
     setSpacing(0.25);
@@ -37,6 +35,9 @@ KisSvgBrush::KisSvgBrush(const QString& filename) : KisBrush(filename), d(new Pr
 
 bool KisSvgBrush::load()
 {
+    QFileInfo fi(filename());
+    if (fi.size() == 0) return false;
+
     QSvgRenderer renderer(filename());
     
     QRect box = renderer.viewBox();
@@ -78,9 +79,6 @@ QString KisSvgBrush::defaultFileExtension() const
 
 void KisSvgBrush::toXML(QDomDocument& d, QDomElement& e) const
 {
-    Q_UNUSED(d);
-    e.setAttribute("type", "svg_brush");
-    e.setAttribute("filename", shortFilename());
-    e.setAttribute("spacing", spacing());
+    predefinedBrushToXML("svg_brush", e);
     KisBrush::toXML(d, e);
 }

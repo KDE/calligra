@@ -20,7 +20,6 @@
 
 #include <QObject>
 
-#include <KoColorSpace.h>
 #include <opengl/kis_opengl.h>
 #include <krita_export.h>
 
@@ -39,8 +38,8 @@ public:
     float gamma;
 
 #ifdef HAVE_OPENGL
-    virtual GLuint program() const = 0;
-    virtual GLuint lut3dTexID() const = 0;
+    virtual QString program() const = 0;
+    virtual GLuint lutTexture() const = 0;
 #endif
     virtual void filter(quint8 *src, quint8 *dst, quint32 numPixels) = 0;
 

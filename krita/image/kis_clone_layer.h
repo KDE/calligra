@@ -27,7 +27,6 @@
 #include "kis_clone_info.h"
 
 class KisNodeVisitor;
-class KoCompositeOp;
 
 enum CopyLayerType {
     COPY_PROJECTION,
@@ -116,6 +115,9 @@ public:
      * us that it is dirty
      */
     void setDirtyOriginal(const QRect &rect);
+
+protected:
+    void notifyParentVisibilityChanged(bool value);
 
 private:
 

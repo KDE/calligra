@@ -20,6 +20,7 @@
 
 #include <KoColor.h>
 #include <KoAbstractGradient.h>
+#include <KoCompositeOpRegistry.h>
 #include "kis_paintop_preset.h"
 #include "kis_paintop_settings.h"
 #include "kis_pattern.h"
@@ -119,7 +120,6 @@ KisResourcesSnapshot::~KisResourcesSnapshot()
 
 void KisResourcesSnapshot::setupPainter(KisPainter* painter)
 {
-    painter->setBounds(m_d->bounds->bounds());
     painter->setPaintColor(m_d->currentFgColor);
     painter->setBackgroundColor(m_d->currentBgColor);
     painter->setGenerator(m_d->currentGenerator);
@@ -206,6 +206,11 @@ bool KisResourcesSnapshot::needsIndirectPainting() const
     return !m_d->currentPaintOpPreset->settings()->paintIncremental();
 }
 
+QString KisResourcesSnapshot::indirectPaintingCompositeOp() const
+{
+    return m_d->currentPaintOpPreset->settings()->indirectPaintingCompositeOp();
+}
+
 bool KisResourcesSnapshot::needsAirbrushing() const
 {
     return m_d->currentPaintOpPreset->settings()->isAirbrushing();
@@ -240,6 +245,12 @@ KoColor KisResourcesSnapshot::currentBgColor() const
 {
     return m_d->currentBgColor;
 }
+
+KisPaintOpPresetSP KisResourcesSnapshot::currentPaintOpPreset() const
+{
+    return m_d->currentPaintOpPreset;
+}
+
 
 QBitArray KisResourcesSnapshot::channelLockFlags() const
 {

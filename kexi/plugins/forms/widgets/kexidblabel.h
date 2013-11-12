@@ -54,7 +54,7 @@ class KEXIFORMUTILS_EXPORT KexiDBLabel : public QLabel,
     Q_PROPERTY(QColor frameColor READ frameColor WRITE setFrameColor)
 
 public:
-    KexiDBLabel(QWidget *parent, Qt::WFlags f = 0);
+    explicit KexiDBLabel(QWidget *parent, Qt::WFlags f = 0);
     KexiDBLabel(const QString& text, QWidget *parent, Qt::WFlags f = 0);
     virtual ~KexiDBLabel();
 

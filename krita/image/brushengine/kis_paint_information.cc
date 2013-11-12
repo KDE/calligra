@@ -19,8 +19,8 @@
 #include "kis_paint_information.h"
 
 #include <QDomElement>
+#include <QScopedPointer>
 
-#include <boost/scoped_ptr.hpp>
 #include "kis_paintop.h"
 #include "kis_distance_information.h"
 
@@ -66,7 +66,7 @@ struct KisPaintInformation::Private {
     qreal perspective;
     int time;
 
-    boost::scoped_ptr<qreal> drawingAngleOverride;
+    QScopedPointer<qreal> drawingAngleOverride;
     KisDistanceInformation *currentDistanceInfo;
 
     void registerDistanceInfo(KisDistanceInformation *di) {
@@ -77,6 +77,19 @@ struct KisPaintInformation::Private {
         currentDistanceInfo = 0;
     }
 };
+
+KisPaintInformation::DistanceInformationRegistrar::
+DistanceInformationRegistrar(KisPaintInformation *_p, KisDistanceInformation *distanceInfo)
+    : p(_p)
+{
+    p->d->registerDistanceInfo(distanceInfo);
+}
+
+KisPaintInformation::DistanceInformationRegistrar::
+~DistanceInformationRegistrar()
+{
+    p->d->unregisterDistanceInfo();
+}
 
 KisPaintInformation::KisPaintInformation(const QPointF & pos_,
                                          qreal pressure_,
@@ -191,6 +204,12 @@ qreal KisPaintInformation::drawingAngleSafe(const KisDistanceInformation &distan
 
     QVector2D diff(pos() - distance.lastPosition());
     return atan2(diff.y(), diff.x());
+}
+
+KisPaintInformation::DistanceInformationRegistrar
+KisPaintInformation::registerDistanceInformation(KisDistanceInformation *distance)
+{
+    return DistanceInformationRegistrar(this, distance);
 }
 
 qreal KisPaintInformation::drawingAngle() const

@@ -19,12 +19,11 @@
 #ifndef KIS_PAINTOP_SETTINGS_H_
 #define KIS_PAINTOP_SETTINGS_H_
 
-#include "opengl/kis_opengl.h"
-
 #include "kis_types.h"
 #include "krita_export.h"
 
 #include <QImage>
+#include <QScopedPointer>
 
 #include "kis_shared.h"
 #include "kis_properties_configuration.h"
@@ -100,6 +99,13 @@ public:
     }
 
     /**
+     * @return the composite op it to which the indirect painting device
+     * should be initialized to. This is used by duplicate op to reset
+     * the composite op to COMPOSITE_COPY
+     */
+    virtual QString indirectPaintingCompositeOp() const;
+
+    /**
      * Whether this paintop wants to deposit paint even when not moving, i.e. the
      * tool needs to activate its timer.
      */
@@ -127,7 +133,7 @@ public:
      * Outline mode has to be passed to the paintop which builds the outline as some paintops have to paint outline
      * always like duplicate paintop indicating the duplicate position
      */
-    virtual QPainterPath brushOutline(const QPointF& pos, OutlineMode mode, qreal scale = 1.0, qreal rotation = 0.0) const;
+    virtual QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) const;
 
     /**
     * Useful for simple elliptical brush outline.
@@ -180,17 +186,27 @@ public:
     void setCanvasRotation(qreal angle);
     void setCanvasMirroring(bool xAxisMirrored, bool yAxisMirrored);
 
+    /**
+     * Overrides the method in KisPropertiesCofiguration to allow
+     * onPropertyChanged() callback
+     */
+    void setProperty(const QString & name, const QVariant & value);
+
 protected:
      /**
      * @return the option widget of the paintop (can be 0 is no option widgets is set)
      */
     KisPaintOpSettingsWidget* optionsWidget() const;
 
+    /**
+     * The callback is called every time when a property changes
+     */
+    virtual void onPropertyChanged();
+
+
 private:
-
     struct Private;
-    Private* const d;
-
+    const QScopedPointer<Private> d;
 };
 
 #endif

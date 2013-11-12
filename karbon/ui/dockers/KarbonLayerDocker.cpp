@@ -45,7 +45,6 @@
 #include <klocale.h>
 #include <kinputdialog.h>
 #include <kmessagebox.h>
-#include <kparts/part.h>
 #include <kmenu.h>
 #include <kconfiggroup.h>
 

@@ -35,8 +35,8 @@ install(TARGETS calligra_filter_xlsx2ods DESTINATION ${PLUGIN_INSTALL_DIR})
 ########### install files ###############
 
 install( FILES
-  kspread_xlsx_import.desktop
-#  kspread_xlsx_export.desktop
+  calligra_filter_xlsx2ods.desktop
+#  calligra_filter_ods2xlsx.desktop
   DESTINATION ${SERVICES_INSTALL_DIR}
 )
 

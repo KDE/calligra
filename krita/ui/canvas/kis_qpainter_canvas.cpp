@@ -36,8 +36,6 @@
 #include <kis_debug.h>
 
 #include <KoColorProfile.h>
-#include <KoColorSpace.h>
-#include <KoColorSpaceRegistry.h>
 #include <KoShapeManager.h>
 #include "kis_coordinates_converter.h"
 #include <KoZoomHandler.h>
@@ -196,7 +194,7 @@ void KisQPainterCanvas::resizeEvent(QResizeEvent *e)
 
 void KisQPainterCanvas::slotConfigChanged()
 {
-    m_d->checkBrush = QBrush(checkImage());
+    m_d->checkBrush = QBrush(createCheckersImage());
     notifyConfigChanged();
 }
 

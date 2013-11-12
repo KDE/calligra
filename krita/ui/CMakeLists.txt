@@ -4,11 +4,11 @@ include_directories( ${KOTEXT_INCLUDES}
     ${TEXTLAYOUT_INCLUDES}
     ${CMAKE_SOURCE_DIR}/libs/pigment/colorprofiles
     ${CMAKE_CURRENT_SOURCE_DIR}/flake
-	${CMAKE_CURRENT_SOURCE_DIR}/pigment/resources
-	${CMAKE_CURRENT_SOURCE_DIR}/widgets/resources
-	${CMAKE_CURRENT_SOURCE_DIR}/ora
-	${CMAKE_SOURCE_DIR}/krita/image/metadata
-	${EXIV2_INCLUDE_DIR} )
+    ${CMAKE_CURRENT_SOURCE_DIR}/pigment/resources
+    ${CMAKE_CURRENT_SOURCE_DIR}/widgets/resources
+    ${CMAKE_CURRENT_SOURCE_DIR}/ora
+    ${CMAKE_SOURCE_DIR}/krita/image/metadata
+    ${EXIV2_INCLUDE_DIR} )
 
 add_subdirectory( tests )
 
@@ -34,6 +34,7 @@ set(kritaui_LIB_SRCS
     canvas/kis_update_info.cpp
     canvas/kis_image_patch.cpp
     canvas/kis_image_pyramid.cpp
+    canvas/kis_qpainter_canvas_widget_factory.cpp
     canvas/kis_infinity_manager.cpp
     dialogs/kis_dlg_adj_layer_props.cc
     dialogs/kis_dlg_adjustment_layer.cc
@@ -62,6 +63,8 @@ set(kritaui_LIB_SRCS
     kis_bookmarked_configurations_model.cc
     kis_bookmarked_filter_configurations_model.cc
     kis_canvas_resource_provider.cpp
+    kis_categories_mapper.cpp
+    kis_categorized_list_model.cpp
     kis_categorized_item_delegate.cpp
     kis_clipboard.cc
     kis_config.cc
@@ -96,6 +99,9 @@ set(kritaui_LIB_SRCS
     kis_painting_assistant.cc
     kis_painting_assistants_manager.cc
     kis_paintop_box.cc
+    kis_paintop_option.cpp
+    kis_paintop_options_model.cpp
+    kis_paintop_options_widget.cpp
     kis_palette_manager.cpp
     kis_popup_palette.cpp
     kis_png_converter.cpp
@@ -109,10 +115,10 @@ set(kritaui_LIB_SRCS
     kis_zoom_manager.cc
     ko_favorite_resource_manager.cpp
     kis_workspace_resource.cpp
-    kis_mirror_visitor.cpp
     kis_action.cpp
     kis_action_manager.cpp
     kis_view_plugin.cpp
+    kis_canvas_controls_manager.cpp
     kisexiv2/kis_exif_io.cpp
     kisexiv2/kis_exiv2.cpp
     kisexiv2/kis_iptc_io.cpp
@@ -154,7 +160,7 @@ set(kritaui_LIB_SRCS
     tool/kis_tool_ellipse_base.cpp
     tool/kis_tool_rectangle_base.cpp
     tool/kis_tool_polyline_base.cpp
-    tool/kis_color_picker_utils.cpp
+    tool/kis_tool_utils.cpp
     tool/kis_resources_snapshot.cpp
     tool/kis_smoothing_options.cpp
     tool/strokes/freehand_stroke.cpp
@@ -213,6 +219,7 @@ set(kritaui_LIB_SRCS
     input/kis_single_action_shortcut.cpp
     input/kis_stroke_shortcut.cpp
     input/kis_shortcut_matcher.cpp
+    input/kis_select_layer_action.cpp
     operations/kis_operation.cpp
     operations/kis_operation_configuration.cpp
     operations/kis_operation_registry.cpp
@@ -220,6 +227,7 @@ set(kritaui_LIB_SRCS
     operations/kis_operation_ui_widget.cpp
     operations/kis_filter_selection_operation.cpp
     actions/kis_selection_action_factories.cpp
+    input/kis_touch_shortcut.cpp
     kis_document_undo_store.cpp
     kis_transaction_based_command.cpp
     input/kis_input_profile_manager.cpp
@@ -237,27 +245,43 @@ set(kritaui_LIB_SRCS
     input/config/kis_mouse_input_editor.cpp
     input/config/kis_wheel_input_editor.cpp
     input/config/kis_key_input_editor.cpp
+    processing/fill_processing_visitor.cpp
 )
 
-if(HAVE_OPENGL)
-    if(HAVE_GLEW)
-        set(kritaui_LIB_SRCS
-            ${kritaui_LIB_SRCS}
-            opengl/kis_opengl_shader.cpp
-            opengl/kis_opengl_fragment_shader.cpp
-            opengl/kis_opengl_vertex_shader.cpp
-            opengl/kis_opengl_program.cpp
-            opengl/kis_opengl_gradient_program.cpp
-            )
-    endif(HAVE_GLEW)
+if(WIN32)
     set(kritaui_LIB_SRCS
         ${kritaui_LIB_SRCS}
-        kis_3d_object_model.cpp
+        input/kis_tablet_event.cpp
+        input/wintab/kis_tablet_support_win.cpp
         )
-endif(HAVE_OPENGL)
+endif(WIN32)
+
+if(UNIX AND NOT APPLE)
+    find_path(QT_X11_P_PATH qt_x11_p.h
+      PATHS /usr/include/QtGui/private/
+      /usr/include/src/gui/kernel/
+      /usr/include/qt4/QtGui/private/)
+
+    if(QT_X11_P_PATH)
+      message("-- Found system qt_x11_p.h")
+      include_directories(${QT_X11_P_PATH})
+      set(HAVE_SYSTEM_PRIVATE_HEADERS 1)
+    else(QT_X11_P_PATH)
+      set(HAVE_SYSTEM_PRIVATE_HEADERS 0)
+      message("** Fetching qt_x11_p.h from a local copy! May not work properly! Please install libqt4-private-headers-devel or libqt4-private-dev to get it working!")
+    endif(QT_X11_P_PATH)
+
+    configure_file(input/wintab/config-qt_x11_p.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/input/wintab/config-qt_x11_p.h)
+
+    set(kritaui_LIB_SRCS
+        ${kritaui_LIB_SRCS}
+        input/kis_tablet_event.cpp
+        input/wintab/kis_tablet_support.cpp
+        input/wintab/kis_tablet_support_x11.cpp
+        )
+endif(UNIX AND NOT APPLE)
 
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})
-
 
 kde4_add_ui_files(kritaui_LIB_SRCS
     forms/wdgfullscreensettings.ui
@@ -307,7 +331,8 @@ kde4_add_ui_files(kritaui_LIB_SRCS
 
 kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS} )
 
-target_link_libraries(kritaui ${X11_X11_LIB})
+target_link_libraries(kritaui ${QT_QTDECLARATIVE_LIBRARY}
+                              ${X11_X11_LIB})
 
 target_link_libraries(kritaui ${GLEW_LIBRARIES})
 
@@ -321,7 +346,6 @@ if(HAVE_OPENGL)
     target_link_libraries(kritaui ${OPENGL_LIBRARIES} ${QT_QTOPENGL_LIBRARY} ${OPENEXR_LIBRARIES})
 
     # activate workaround for the VSync disable
-    # TODO: port this to Glew when Glew 1.7 will become a mandatory dep
     if(NOT WIN32)
       target_link_libraries(kritaui ${CMAKE_DL_LIBS})
     endif(NOT WIN32)
@@ -330,6 +354,7 @@ if(HAVE_OPENGL)
     if(HAVE_GLEW)
         target_link_libraries(kritaui ${GLEW_LIBRARIES})
     endif(HAVE_GLEW)
+
 endif(HAVE_OPENGL)
 
 target_link_libraries(kritaui LINK_INTERFACE_LIBRARIES kritaimage komain ${GL_INTERFACE_LIBRARIES} )
@@ -347,6 +372,7 @@ install( FILES
     canvas/kis_canvas_decoration.h
     canvas/kis_coordinates_converter.h
     tool/kis_tool.h
+    kis_canvas_resource_provider.h
     kis_cursor.h
     kis_view2.h
     kis_ui_types.h
@@ -378,4 +404,8 @@ install( FILES
 #    kis_tool_types.h
 #    KoInputDevice.h
 #    canvas/kis_perspective_grid_manager.h
+    kis_paintop_option.h
+    kis_paintop_options_model.h
+    kis_paintop_options_widget.h
+    processing/fill_processing_visitor.h
    DESTINATION ${INCLUDE_INSTALL_DIR}/krita)

@@ -23,6 +23,7 @@
 
 #include "kis_coordinates_converter.h"
 #include "kis_canvas2.h"
+#include "kis_image.h"
 
 
 struct KisCanvasController::Private {
@@ -115,7 +116,7 @@ void KisCanvasController::updateDocumentSize(const QSize &sz, bool recalculateCe
 
 void KisCanvasController::mirrorCanvas(bool enable)
 {
-    QPoint newOffset = m_d->coordinatesConverter->mirror(m_d->coordinatesConverter->widgetCenterPoint(), false, enable);
+    QPoint newOffset = m_d->coordinatesConverter->mirror(m_d->coordinatesConverter->widgetCenterPoint(), enable, false);
     m_d->updateDocumentSizeAfterTransform();
     setScrollBarValue(newOffset);
 }
@@ -142,4 +143,13 @@ void KisCanvasController::resetCanvasTransformations()
     QPoint newOffset = m_d->coordinatesConverter->resetRotation(m_d->coordinatesConverter->widgetCenterPoint());
     m_d->updateDocumentSizeAfterTransform();
     setScrollBarValue(newOffset);
+}
+
+void KisCanvasController::slotToggleWrapAroundMode(bool value)
+{
+    KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    Q_ASSERT(kritaCanvas);
+
+    kritaCanvas->setWrapAroundViewingMode(value);
+    kritaCanvas->image()->setWrapAroundModePermitted(value);
 }

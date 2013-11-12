@@ -31,7 +31,7 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoColorModelStandardIds.h>
 #include <KoIntegerMaths.h>
-#include <KoCompositeOp.h>
+#include <KoCompositeOpRegistry.h>
 
 #include "kis_layer.h"
 #include "kis_debug.h"
@@ -237,7 +237,7 @@ void KisPixelSelection::invert()
     QRect rc = region().boundingRect();
 
     if (!rc.isEmpty()) {
-        KisRectIteratorSP it = createRectIteratorNG(rc.x(), rc.y(), rc.width(), rc.height());
+        KisRectIteratorSP it = createRectIteratorNG(rc);
         do {
             *(it->rawData()) = MAX_SELECTED - *(it->rawData());
         } while (it->nextPixel());

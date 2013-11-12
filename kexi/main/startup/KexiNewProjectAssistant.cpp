@@ -53,7 +53,6 @@
 #include <kurlcombobox.h>
 #include <kmessagebox.h>
 #include <klineedit.h>
-#include <kurlcombobox.h>
 #include <ktitlewidget.h>
 #include <kcategorydrawer.h>
 #include <kpushbutton.h>
@@ -115,18 +114,17 @@ KexiTemplateSelectionPage::KexiTemplateSelectionPage(QWidget* parent)
     info.icon = KIcon(KexiDB::defaultFileBasedDriverIconName()); //"x-office-document");
     templateCategory.addTemplate(info);
     templateCategories.append(templateCategory);
-    
+
+#ifdef KEXI_SHOW_UNIMPLEMENTED
     templateCategory = KexiTemplateCategoryInfo();
     templateCategory.name = "office";
     templateCategory.caption = i18n("Office Templates");
-    //templateCategory.enabled = false;
     
     info = KexiTemplateInfo();
     info.name = "contacts";
     info.caption = i18n("Contacts");
     info.description = i18n("Database for collecting and managing contacts");
     info.icon = koIcon("view-pim-contacts");
-    //info.enabled = false;
     templateCategory.addTemplate(info);
     
     info = KexiTemplateInfo();
@@ -134,10 +132,10 @@ KexiTemplateSelectionPage::KexiTemplateSelectionPage(QWidget* parent)
     info.caption = i18n("Movie catalog");
     info.description = i18n("Database for collecting movies");
     info.icon = koIcon("video-x-generic");
-    //info.enabled = false;
     templateCategory.addTemplate(info);
     templateCategories.append(templateCategory);
-    
+#endif // KEXI_SHOW_UNIMPLEMENTED
+
     KexiTemplatesProxyModel* proxyModel = new KexiTemplatesProxyModel(m_templatesList);
     KexiTemplatesModel* model = new KexiTemplatesModel(templateCategories);
     proxyModel->setSourceModel(model);
@@ -257,7 +255,7 @@ void KexiProjectTitleSelectionPage::titleTextChanged(const QString & text)
 void KexiProjectTitleSelectionPage::updateUrl()
 {
     KUrl url = contents->file_requester->url();
-    QString fn = KexiDB::string2FileName(contents->le_title->text());
+    QString fn = KexiUtils::stringToFileName(contents->le_title->text());
     if (!fn.isEmpty() && !fn.endsWith(".kexi"))
         fn += ".kexi";
     url.setFileName(fn);
@@ -442,7 +440,7 @@ void KexiProjectDatabaseNameSelectionPage::slotTitleChanged(const QString &capt)
         m_dbNameAutofill = true;
     if (m_dbNameAutofill) {
         m_le_dbname_txtchanged_enabled = false;
-        QString captionAsId = KexiUtils::string2Identifier(capt).toLower();
+        QString captionAsId = KexiUtils::stringToIdentifier(capt).toLower();
         contents->le_dbname->setText(captionAsId);
         m_projectDataToOverwrite = 0;
         m_le_dbname_txtchanged_enabled = true;

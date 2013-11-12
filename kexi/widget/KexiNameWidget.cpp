@@ -31,8 +31,6 @@
 #include <kexiutils/multivalidator.h>
 #include <core/kexi.h>
 
-using namespace KexiUtils;
-
 class KexiNameWidget::Private
 {
 public:
@@ -120,9 +118,9 @@ void KexiNameWidget::init(
     QSizePolicy le_nameSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     le_captionSizePolicy.setHorizontalStretch(1);
     d->le_name->setSizePolicy(le_captionSizePolicy);
-    IdentifierValidator *idValidator = new IdentifierValidator(0);
+    KexiUtils::IdentifierValidator *idValidator = new KexiUtils::IdentifierValidator(0);
     idValidator->setLowerCaseForced(true);
-    d->le_name->setValidator(d->validator = new MultiValidator(idValidator, this));
+    d->le_name->setValidator(d->validator = new KexiUtils::MultiValidator(idValidator, this));
     d->lyr->addWidget(d->le_name, 2, 1);
 
     setFocusProxy(d->le_caption);
@@ -185,7 +183,7 @@ void KexiNameWidget::slotCaptionTxtChanged(const QString &capt)
         d->le_name_autofill = true;
     if (d->le_name_autofill) {
         d->le_name_txtchanged_disable = true;
-        d->le_name->setText(string2Identifier(capt).toLower());
+        d->le_name->setText(KexiUtils::stringToIdentifier(capt).toLower());
         d->le_name_txtchanged_disable = false;
     }
 }

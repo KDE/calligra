@@ -51,6 +51,7 @@ public:
     KisNodeSP currentNode() const;
     KisImageWSP image() const;
     bool needsIndirectPainting() const;
+    QString indirectPaintingCompositeOp() const;
 
     bool needsAirbrushing() const;
     int airbrushingRate() const;
@@ -61,6 +62,7 @@ public:
     KisPattern* currentPattern() const;
     KoColor currentFgColor() const;
     KoColor currentBgColor() const;
+    KisPaintOpPresetSP currentPaintOpPreset() const;
 
     /// @return the channel lock flags of the current node with the global override applied
     QBitArray channelLockFlags() const;
