@@ -126,7 +126,7 @@ void KisToolText::finishRect(const QRectF &rect)
     }
 }
 
-QList< QWidget* > KisToolText::createOptionWidgets()
+QList<QPointer<QWidget> > KisToolText::createOptionWidgets()
 {
     m_optionsWidget = new KisTextToolOptionWidget();
     // See https://bugs.kde.org/show_bug.cgi?id=316896
@@ -135,8 +135,9 @@ QList< QWidget* > KisToolText::createOptionWidgets()
     specialSpacer->setFixedSize(0, 0);
     m_optionsWidget->layout()->addWidget(specialSpacer);
 
-    QList< QWidget* > widgets;
+    QList<QPointer<QWidget> > widgets;
     widgets.append(m_optionsWidget);
+
     return widgets;
 }
 

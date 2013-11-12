@@ -111,7 +111,7 @@ public Q_SLOTS:
 
 protected:
     void init();
-    virtual QList <QWidget*> createOptionWidgets();
+    virtual QList<QPointer<QWidget> > createOptionWidgets();
     void applyUserInput(const QString &userInput, bool expandMatrix = false);
     virtual KoInteractionStrategy* createStrategy(KoPointerEvent* event);
 

@@ -2118,9 +2118,9 @@ KoToolSelection* TextTool::selection()
     return m_toolSelection;
 }
 
-QList<QWidget *> TextTool::createOptionWidgets()
+QList<QPointer<QWidget> > TextTool::createOptionWidgets()
 {
-    QList<QWidget *> widgets;
+    QList<QPointer<QWidget> > widgets;
     SimpleCharacterWidget *scw = new SimpleCharacterWidget(this, 0);
     SimpleParagraphWidget *spw = new SimpleParagraphWidget(this, 0);
     if (m_textEditor.data()) {

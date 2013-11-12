@@ -53,9 +53,9 @@ void KisToolSelectPath::mousePressEvent(KoPointerEvent* event)
     DelegatedSelectPathTool::mousePressEvent(event);
 }
 
-QList<QWidget *> KisToolSelectPath::createOptionWidgets()
+QList<QPointer<QWidget> > KisToolSelectPath::createOptionWidgets()
 {
-    QList<QWidget*> widgetsList =
+    QList<QPointer<QWidget> > widgetsList =
         DelegatedSelectPathTool::createOptionWidgets();
     selectionOptionWidget()->disableAntiAliasSelectionOption();
     return widgetsList;

@@ -1151,9 +1151,9 @@ void CellToolBase::init()
 {
 }
 
-QList <QWidget*> CellToolBase::createOptionWidgets()
+QList<QPointer<QWidget> >  CellToolBase::createOptionWidgets()
 {
-    QList<QWidget *> widgets;
+    QList<QPointer<QWidget> > widgets;
 
     QString xmlName = KStandardDirs::locate("appdata", "CellToolOptionWidgets.xml");
     kDebug() << xmlName;

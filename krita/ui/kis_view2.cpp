@@ -385,8 +385,8 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
         KoToolBoxFactory toolBoxFactory;
         mainWindow()->createDockWidget(&toolBoxFactory);
 
-        connect(canvasController, SIGNAL(toolOptionWidgetsChanged(QList<QWidget*>)),
-                mainWindow()->dockerManager(), SLOT(newOptionWidgets(QList<QWidget*>)));
+        connect(canvasController, SIGNAL(toolOptionWidgetsChanged(QList<QPointer<QWidget> >)),
+                mainWindow()->dockerManager(), SLOT(newOptionWidgets(QList<QPointer<QWidget> >)));
 
         mainWindow()->dockerManager()->setIcons(false);
     }

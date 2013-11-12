@@ -49,7 +49,7 @@ public:
     void deactivate();
 
 protected:
-    virtual QList<QWidget *> createOptionWidgets();
+    virtual QList<QPointer<QWidget> > createOptionWidgets();
 
     /**
      * Add path shape to document.

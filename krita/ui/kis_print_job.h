@@ -33,7 +33,7 @@ protected:
     virtual QPrinter &printer() {
         return m_printer;
     }
-    virtual QList<QWidget*> createOptionWidgets() const;
+    virtual QList<QWidget *> createOptionWidgets() const;
     virtual void startPrinting(RemovePolicy removePolicy = DoNotDelete);
 
 private:

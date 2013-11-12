@@ -59,7 +59,7 @@ public:
     {
     }
 
-    QList<QWidget *> currentWidgetList;
+    QList<QPointer<QWidget> > currentWidgetList;
     QSet<QWidget *> currentAuxWidgets;
     QScrollArea *scrollArea;
     QWidget *hiderWidget; // non current widgets are hidden by being children of this
@@ -76,8 +76,8 @@ public:
     QToolButton *lockButton;
     QToolButton *tabButton;
 
-    void recreateLayout(const QList<QWidget *> &optionWidgetList) {
-        foreach(QWidget * widget, currentWidgetList) {
+    void recreateLayout(const QList<QPointer<QWidget> > &optionWidgetList) {
+        foreach(QPointer<QWidget> widget, currentWidgetList) {
             widget->setParent(hiderWidget);
         }
         qDeleteAll(currentAuxWidgets);

@@ -57,7 +57,7 @@ public:
     KisToolPath(KoCanvasBase * canvas);
     void mousePressEvent(KoPointerEvent *event);
 
-    virtual QList< QWidget* > createOptionWidgets();
+    virtual QList< QPointer<QWidget> > createOptionWidgets();
 
 protected:
     void requestStrokeCancellation();

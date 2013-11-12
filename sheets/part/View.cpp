@@ -754,8 +754,8 @@ void View::initView()
         dynamic_cast<KoCanvasObserverBase*>(modeBox)->setObservedCanvas(d->canvas);
 
         // Setup the tool options dock widget manager.
-        //connect(canvasController, SIGNAL(toolOptionWidgetsChanged(QList<QWidget*>)),
-        //        mainWindow()->dockerManager(), SLOT(newOptionWidgets(QList<QWidget*>)));
+        //connect(canvasController, SIGNAL(toolOptionWidgetsChanged(QList<QPointer<QWidget> >)),
+        //        mainWindow()->dockerManager(), SLOT(newOptionWidgets(QList<QPointer<QWidget> >)));
     }
     // Setup the zoom controller.
     d->zoomHandler = new KoZoomHandler();

@@ -56,7 +56,7 @@ private:
     KWDocument *getDocument() const;
 
 protected:
-    QList<QWidget *> createOptionWidgets();
+    QList<QPointer<QWidget> > createOptionWidgets();
 
 private:
     KWCanvas *m_canvas;

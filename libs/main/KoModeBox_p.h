@@ -25,6 +25,7 @@
 
 #include <KoCanvasObserverBase.h>
 
+#include <QPointer>
 #include <QList>
 #include <QMap>
 #include <QHash>
@@ -105,7 +106,7 @@ public slots:
      */
     void updateShownTools(const QList<QString> &codes);
 
-    void setOptionWidgets(const QList<QWidget *> &optionWidgetList);
+    void setOptionWidgets(const QList<QPointer<QWidget> > &optionWidgetList);
 
     /// set the canvas this docker should listen to for changes.
     void setCanvas(KoCanvasBase *canvas);

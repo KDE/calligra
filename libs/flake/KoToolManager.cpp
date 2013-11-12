@@ -332,7 +332,7 @@ void KoToolManager::Private::postSwitchTool(bool temporary)
         canvasData->activeTool->activate(toolActivation, shapesToOperateOn);
     }
 
-    QList<QWidget *> optionWidgetList = canvasData->activeTool->optionWidgets();
+    QList<QPointer<QWidget> > optionWidgetList = canvasData->activeTool->optionWidgets();
     if (optionWidgetList.empty()) { // no option widget.
         QWidget *toolWidget;
         QString title;
@@ -447,7 +447,7 @@ void KoToolManager::Private::detachCanvas(KoCanvasController *controller)
         } else {
             KoCanvasControllerWidget *canvasControllerWidget = dynamic_cast<KoCanvasControllerWidget*>(canvasData->canvas);
             if (canvasControllerWidget) {
-                canvasControllerWidget->setToolOptionWidgets(QList<QWidget *>());
+                canvasControllerWidget->setToolOptionWidgets(QList<QPointer<QWidget> >());
             }
             // as a last resort just set a blank one
             canvasData = 0;

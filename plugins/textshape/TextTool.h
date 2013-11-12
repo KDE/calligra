@@ -128,7 +128,7 @@ public:
     /// reimplemented from superclass
     virtual KoToolSelection* selection();
     /// reimplemented from superclass
-    virtual QList<QWidget *> createOptionWidgets();
+    virtual QList<QPointer<QWidget> > createOptionWidgets();
 
     /// reimplemented from superclass
     virtual QVariant inputMethodQuery(Qt::InputMethodQuery query, const KoViewConverter &converter) const;

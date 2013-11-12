@@ -71,7 +71,7 @@ KoDockerManager::~KoDockerManager()
     delete d;
 }
 
-void KoDockerManager::newOptionWidgets(const QList<QWidget *> &optionWidgetList)
+void KoDockerManager::newOptionWidgets(const QList<QPointer<QWidget> > &optionWidgetList)
 {
     d->toolOptionsDocker->setOptionWidgets(optionWidgetList);
 

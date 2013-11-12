@@ -47,7 +47,7 @@ public:
 signals:
     void shapeChanged(WebShape*);
 protected:
-    virtual QList<QWidget *> createOptionWidgets();
+    virtual QList<QPointer<QWidget> > createOptionWidgets();
 
 private:
     WebShape* m_currentShape;
