@@ -482,6 +482,9 @@ void KoMainWindow::addView(KoView *view)
     d->dockWidgetMenu->setVisible(true);
 
     d->views.append(view);
+    // XXX: This should change -- with multiple views per main window, the view should
+    // no longer be a kxmlguiclient.
+    guiFactory()->addClient(view);
     showView(view);
 
     bool viewHasDocument = d->activeView->document() != 0 ? true : false;
