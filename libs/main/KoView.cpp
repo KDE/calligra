@@ -201,6 +201,7 @@ KoView::KoView(KoPart *part, KoDocument *document, QWidget *parent)
 
 KoView::~KoView()
 {
+    qDebug() << "Deleting KoView" << this << kdBacktrace();
     delete d;
 }
 

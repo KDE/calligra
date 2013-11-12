@@ -198,8 +198,10 @@ Value func_info(valVector args, ValueCalc *calc, FuncExtra *)
             QSet<QString> nameList;
             foreach(QPointer<KoPart> part, KoPart::partList()) {
                 if (!part) continue;
-                foreach(KoDocument *doc, part->documents()) {
-                    nameList.insert(doc->objectName());
+                foreach(QPointer<KoDocument> doc, part->documents()) {
+                    if (doc) {
+                        nameList.insert(doc->objectName());
+                    }
                 }
             }
             return Value(nameList.size());

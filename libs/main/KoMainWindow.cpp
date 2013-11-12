@@ -179,8 +179,8 @@ public:
 
     KoMainWindow *parent;
 
-    QList<KoView*> views;
-    KoView *activeView;
+    QList<QPointer<KoView> > views;
+    QPointer<KoView> activeView;
 
     QWidget *m_activeWidget;
 
@@ -652,11 +652,6 @@ KoView *KoMainWindow::activeView() const
         return d->views.first();
     }
     return 0;
-}
-
-QList<KoView *> KoMainWindow::views() const
-{
-    return d->views;
 }
 
 bool KoMainWindow::openDocument(const KUrl & url)
@@ -1268,10 +1263,10 @@ void KoMainWindow::slotFileClose()
 
         KoView *activeView = d->activeView;
         d->views.removeAll(activeView);
-        d->part->removeView(activeView);
         if (activeView->document()) {
             activeView->document()->clearUndoHistory();
         }
+        d->part->removeView(activeView);
 
         if (d->views.size() > 0) {
             showView(d->views.first());

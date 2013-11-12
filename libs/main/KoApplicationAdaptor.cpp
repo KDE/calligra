@@ -53,8 +53,10 @@ QStringList KoApplicationAdaptor::getDocuments()
     QList<QPointer<KoPart> > parts = KoPart::partList();
     foreach(KoPart *part, parts) {
         if (!part) continue;
-        foreach(KoDocument *document, part->documents()) {
-            lst.append('/' + document->objectName());
+        foreach(QPointer<KoDocument> document, part->documents()) {
+            if (document) {
+                lst.append('/' + document->objectName());
+            }
         }
     }
     return lst;

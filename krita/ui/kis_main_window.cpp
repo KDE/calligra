@@ -24,6 +24,7 @@
 #include <kactioncollection.h>
 
 #include <KoView.h>
+#include <KoPart.h>
 
 #include "kis_view2.h"
 #include "dialogs/kis_dlg_preferences.h"
@@ -56,19 +57,21 @@ void KisMainWindow::slotPreferences()
         KisConfigNotifier::instance()->notifyConfigChanged();
 
         // XXX: should this be changed for the views in other windows as well?
-        foreach(KoView *koview, views()) {
+        foreach(QPointer<KoPart> part, KoPart::partList()) {
+            foreach(QPointer<KoView> koview, part->views()) {
+                KisView2 *view = qobject_cast<KisView2*>(koview);
+                if (view) {
+                    view->resourceProvider()->resetDisplayProfile(QApplication::desktop()->screenNumber(this));
 
-            KisView2 *view = dynamic_cast<KisView2*>(koview);
-            if (view) {
-                view->resourceProvider()->resetDisplayProfile(QApplication::desktop()->screenNumber(this));
+                    // Update the settings for all nodes -- they don't query
+                    // KisConfig directly because they need the settings during
+                    // compositing, and they don't connect to the config notifier
+                    // because nodes are not QObjects (because only one base class
+                    // can be a QObject).
+                    KisNode* node = dynamic_cast<KisNode*>(view->image()->rootLayer().data());
+                    node->updateSettings();
+                }
 
-                // Update the settings for all nodes -- they don't query
-                // KisConfig directly because they need the settings during
-                // compositing, and they don't connect to the config notifier
-                // because nodes are not QObjects (because only one base class
-                // can be a QObject).
-                KisNode* node = dynamic_cast<KisNode*>(view->image()->rootLayer().data());
-                node->updateSettings();
             }
         }
     }

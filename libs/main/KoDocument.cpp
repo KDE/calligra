@@ -485,7 +485,7 @@ KoDocument::KoDocument(const KoPart *parent, KUndo2Stack *undoStack)
 
 KoDocument::~KoDocument()
 {
-    qDebug() << ">>>>>>>>>>>>>>>>>>>>>>>" << kdBacktrace();
+    qDebug() << "Deleting KoDocument" << this << kdBacktrace();
 
     d->autoSaveTimer.disconnect(this);
     d->autoSaveTimer.stop();

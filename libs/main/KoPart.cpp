@@ -74,9 +74,9 @@ public:
 
     KoPart *parent;
 
-    QList<KoView*> views;
-    QList<KoMainWindow*> mainWindows;
-    QList<KoDocument*> documents;
+    QList<QPointer<KoView> > views;
+    QList<QPointer<KoMainWindow> > mainWindows;
+    QList<QPointer<KoDocument> > documents;
     QGraphicsItem *canvasItem;
     QPointer<KoOpenPane> startUpWidget;
     QString templateType;
@@ -100,6 +100,8 @@ KoPart::KoPart(QObject *parent)
 
 KoPart::~KoPart()
 {
+    qDebug() << "Deleting KoPart" << this << kdBacktrace();
+
     // Tell our views that the document is already destroyed and
     // that they shouldn't try to access it.
     foreach(KoView *view, views()) {
@@ -137,7 +139,7 @@ void KoPart::addDocument(KoDocument *document)
 
 }
 
-QList<KoDocument *> KoPart::documents() const
+QList<QPointer<KoDocument> > KoPart::documents() const
 {
     return d->documents;
 }
@@ -187,13 +189,13 @@ void KoPart::addView(KoView *view, KoDocument *document)
 void KoPart::removeView(KoView *view)
 {
     if (!view) return;
-    KoDocument *doc = view->document();
+    QPointer<KoDocument> doc = view->document();
     d->views.removeAll(view);
 
     if (doc) {
         bool found = false;
-        foreach(KoView *view, d->views) {
-            if (view->document() == doc) {
+        foreach(QPointer<KoView> view, d->views) {
+            if (view && view->document() == doc) {
                 found = true;
                 break;
             }
@@ -211,7 +213,7 @@ void KoPart::removeView(KoView *view)
     }
 }
 
-QList<KoView*> KoPart::views() const
+QList<QPointer<KoView> > KoPart::views() const
 {
     return d->views;
 }
@@ -258,7 +260,7 @@ void KoPart::removeMainWindow(KoMainWindow *mainWindow)
     }
 }
 
-const QList<KoMainWindow*>& KoPart::mainWindows() const
+const QList<QPointer<KoMainWindow> > &KoPart::mainWindows() const
 {
     return d->mainWindows;
 }

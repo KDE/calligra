@@ -48,8 +48,8 @@ int KoPartAdaptor::documentCount()
 
 QString KoPartAdaptor::document(int idx)
 {
-    QList<KoDocument*> documents = m_part->documents();
-    KoDocument *doc = documents.at(idx);
+    QList<QPointer<KoDocument> > documents = m_part->documents();
+    QPointer<KoDocument> doc = documents.at(idx);
     if (!doc)
         return QString();
 
@@ -64,8 +64,8 @@ int KoPartAdaptor::viewCount()
 
 QString KoPartAdaptor::view(int idx)
 {
-    QList<KoView*> views = m_part->views();
-    KoView *v = views.at(idx);
+    QList<QPointer<KoView> > views = m_part->views();
+    QPointer<KoView> v = views.at(idx);
     if (!v)
         return QString();
 

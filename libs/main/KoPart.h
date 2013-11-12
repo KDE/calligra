@@ -102,12 +102,12 @@ public:
     virtual void addDocument(KoDocument *document);
 
     /**
-     * @return a list of views this document is displayed in
+     * @return a list of all documents this part manages
      */
-    QList<KoDocument*> documents() const;
+    QList<QPointer<KoDocument> > documents() const;
 
     /**
-     * @return number of views this document is displayed in
+     * @return number of documents this part manages.
      */
     int documentCount() const;
 
@@ -138,7 +138,7 @@ public:
     /**
      * @return the list of main windows.
      */
-    const QList<KoMainWindow*>& mainWindows() const;
+    const QList<QPointer<KoMainWindow> >& mainWindows() const;
 
     /**
      * @return the number of shells for the main window
@@ -203,7 +203,7 @@ public:
     /**
      * @return a list of views this document is displayed in
      */
-    QList<KoView*> views() const;
+    QList<QPointer<KoView> > views() const;
 
     /**
      * @return number of views this document is displayed in

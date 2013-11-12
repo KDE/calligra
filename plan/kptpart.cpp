@@ -50,7 +50,7 @@ void Part::addDocument(KoDocument *document)
 KoView *Part::createViewInstance(KoDocument *document, QWidget *parent)
 {
     // synchronize view selector
-    View *view = dynamic_cast<View*>(views().value(0));
+    View *view = qobject_cast<View*>(views().value(0));
     /*FIXME
     if (view && m_context) {
         QDomDocument doc = m_context->save(view);

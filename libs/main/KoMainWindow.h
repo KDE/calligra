@@ -96,7 +96,6 @@ public:
      * @returns the currently active view
      */
     KoView *activeView() const;
-    QList<KoView *> views() const;
 
 
 private:

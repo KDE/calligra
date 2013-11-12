@@ -722,10 +722,12 @@ bool KisDlgPreferences::editPreferences()
         if (app) {
             foreach(QPointer<KoPart> part, KoPart::partList()) {
                 if (!part) continue;
-                foreach(KoDocument *doc, part->documents()) {
-                    doc->setAutoSave(dialog->m_general->autoSaveInterval());
-                    doc->setBackupFile(dialog->m_general->m_backupFileCheckBox->isChecked());
-                    doc->undoStack()->setUndoLimit(dialog->m_general->undoStackSize());
+                foreach(QPointer<KoDocument> doc, part->documents()) {
+                    if (doc) {
+                        doc->setAutoSave(dialog->m_general->autoSaveInterval());
+                        doc->setBackupFile(dialog->m_general->m_backupFileCheckBox->isChecked());
+                        doc->undoStack()->setUndoLimit(dialog->m_general->undoStackSize());
+                    }
                 }
             }
         }
