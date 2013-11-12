@@ -163,6 +163,10 @@ protected slots:
      */
     virtual void openTemplate(const KUrl& url);
 
+private slots:
+
+    void viewDestroyed();
+
 signals:
 
     void closeEmbedInitDialog();

@@ -172,6 +172,8 @@ void KoPart::addView(KoView *view, KoDocument *document)
         d->documents.append(document);
     }
 
+    connect(view, SIGNAL(destroyed()), this, SLOT(viewDestroyed()));
+
     view->updateReadWrite(document->isReadWrite());
 
     if (d->views.size() == 1) {
@@ -184,8 +186,8 @@ void KoPart::addView(KoView *view, KoDocument *document)
 
 void KoPart::removeView(KoView *view)
 {
+    if (!view) return;
     KoDocument *doc = view->document();
-
     d->views.removeAll(view);
 
     if (doc) {
@@ -200,8 +202,6 @@ void KoPart::removeView(KoView *view)
             removeDocument(doc);
         }
     }
-
-    view->deleteLater();
 
     if (d->views.isEmpty()) {
         KoApplication *app = qobject_cast<KoApplication*>(KApplication::kApplication());
@@ -233,7 +233,7 @@ QGraphicsItem *KoPart::createCanvasItem(KoDocument *document)
 {
     if (!document) return 0;
 
-    KoView *view = createView(document);
+    KoView *view = createView(document, 0);
     QGraphicsProxyWidget *proxy = new QGraphicsProxyWidget();
     QWidget *canvasController = view->findChild<KoCanvasControllerWidget*>();
     proxy->setWidget(canvasController);
@@ -325,10 +325,19 @@ void KoPart::openTemplate(const KUrl& url)
         }
     }
     if (!mw) mw = mainWindows().first();
-    KoView *view = createView(document);
+    KoView *view = createView(document, mw);
     mw->addView(view);
 
     qApp->restoreOverrideCursor();
+}
+
+void KoPart::viewDestroyed()
+{
+    KoView *view = qobject_cast<KoView*>(sender());
+    if (view) {
+        view->factory()->removeClient(view);
+        removeView(view);
+    }
 }
 
 void KoPart::addRecentURLToAllMainWindows(KUrl url)
@@ -408,7 +417,7 @@ void KoPart::deleteOpenPane(KoDocument *document)
         }
     }
     if (!mw) mw = mainWindows().first();
-    KoView *view = createView(document);
+    KoView *view = createView(document, mw);
     mw->addView(view);
     mw->factory()->container("mainToolBar", mw)->show();
 }
