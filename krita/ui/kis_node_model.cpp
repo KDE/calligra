@@ -63,7 +63,7 @@ public:
     QTimer* updateTimer;
 
     KisModelIndexConverterBase *indexConverter;
-    KisDummiesFacadeBase *dummiesFacade;
+    QPointer<KisDummiesFacadeBase> dummiesFacade;
     bool needFinishRemoveRows;
     bool needFinishInsertRows;
 };
