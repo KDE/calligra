@@ -75,9 +75,11 @@ KoFilter::ConversionStatus XlsxXmlCommentsReader::read(MSOOXML::MsooXmlReaderCon
     m_themes = m_context->themes;
     const KoFilter::ConversionStatus result = readInternal();
     m_context = 0;
-    if (result == KoFilter::OK)
-        return KoFilter::OK;
-    return result;
+    if (result != KoFilter::OK) {
+        kWarning() << "Failure reading the comments";
+    }
+    // We're not going to fail reading the whole file because the comments cannot be read
+    return KoFilter::OK;
 }
 
 KoFilter::ConversionStatus XlsxXmlCommentsReader::readInternal()
