@@ -69,7 +69,7 @@ DockerManager::~DockerManager()
     delete d;
 }
 
-void DockerManager::newOptionWidgets(const QList<QWidget*> &optionWidgetMap)
+void DockerManager::newOptionWidgets(const QList<QPointer<QWidget> > &optionWidgetMap)
 {
     d->toolOptionsDocker->setOptionWidgets(optionWidgetMap);
 }

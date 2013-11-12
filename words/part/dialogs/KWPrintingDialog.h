@@ -37,7 +37,7 @@ public:
     KWPrintingDialog(KWDocument *document, KoShapeManager *shapeManager, KWView *view);
     ~KWPrintingDialog();
 
-    virtual QList<QWidget*> createOptionWidgets() const;
+    virtual QList<QWidget *> createOptionWidgets() const;
 
     virtual QAbstractPrintDialog::PrintDialogOptions printDialogOptions() const;
 

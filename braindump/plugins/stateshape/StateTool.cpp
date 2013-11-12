@@ -99,9 +99,9 @@ void StateTool::mouseReleaseEvent(KoPointerEvent *event)
     event->ignore();
 }
 
-QList<QWidget *> StateTool::createOptionWidgets()
+QList<QPointer<QWidget> > StateTool::createOptionWidgets()
 {
-    QList<QWidget *> widgets;
+    QList<QPointer<QWidget> > widgets;
     StateToolWidget* widget = new StateToolWidget(this);
     widget->open(m_currentShape);
     widget->setWindowTitle(i18n("State tool options"));

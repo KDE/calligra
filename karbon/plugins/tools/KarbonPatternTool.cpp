@@ -267,9 +267,9 @@ void KarbonPatternTool::documentResourceChanged(int key, const QVariant & res)
     }
 }
 
-QList<QWidget *> KarbonPatternTool::createOptionWidgets()
+QList<QPointer<QWidget> > KarbonPatternTool::createOptionWidgets()
 {
-    QList<QWidget *> widgets;
+    QList<QPointer<QWidget> > widgets;
 
     m_optionsWidget = new KarbonPatternOptionsWidget();
     connect(m_optionsWidget, SIGNAL(patternChanged()),

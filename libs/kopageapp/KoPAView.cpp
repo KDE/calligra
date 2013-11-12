@@ -326,8 +326,8 @@ void KoPAView::initGUI(KoPAFlags flags)
         if (mw) {
             KoToolBoxFactory toolBoxFactory(d->canvasController);
             mw->createDockWidget( &toolBoxFactory );
-            connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QList<QWidget *> &)),
-            mw->dockerManager(), SLOT(newOptionWidgets(const  QList<QWidget *> &) ));
+            connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QList<QPointer<QWidget> > &)),
+            mw->dockerManager(), SLOT(newOptionWidgets(const  QList<QPointer<QWidget> > &) ));
         }
     }
 

@@ -474,7 +474,7 @@ void KoCanvasControllerWidget::zoomTo(const QRect &viewRect)
     zoomBy(viewRect.center(), scale);
 }
 
-void KoCanvasControllerWidget::setToolOptionWidgets(const QList<QWidget *>&widgetMap)
+void KoCanvasControllerWidget::setToolOptionWidgets(const QList<QPointer<QWidget> >&widgetMap)
 {
     emit toolOptionWidgetsChanged(widgetMap);
 }

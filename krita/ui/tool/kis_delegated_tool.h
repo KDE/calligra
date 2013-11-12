@@ -20,7 +20,7 @@
 #define __KIS_DELEGATED_TOOL_H
 
 #include <KoPointerEvent.h>
-
+#include <QPointer>
 
 template <class BaseClass, class DelegateTool>
     class KisDelegatedTool : public BaseClass
@@ -107,9 +107,9 @@ public:
         m_localTool->paint(painter, converter);
     }
 
-    QList<QWidget *> createOptionWidgets()
+    QList<QPointer<QWidget> > createOptionWidgets()
     {
-        QList<QWidget *> list = BaseClass::createOptionWidgets();
+        QList<QPointer<QWidget> > list = BaseClass::createOptionWidgets();
         list.append(m_localTool->createOptionWidgets());
         return list;
     }

@@ -109,9 +109,9 @@ void KisToolPencil::paint(QPainter &painter, const KoViewConverter &converter)
     m_localTool->paint(painter, converter);
 }
 
-QList<QWidget *> KisToolPencil::createOptionWidgets()
+QList<QPointer<QWidget> > KisToolPencil::createOptionWidgets()
 {
-    QList<QWidget *> list = KisToolShape::createOptionWidgets();
+    QList<QPointer<QWidget> > list = KisToolShape::createOptionWidgets();
     list.append(m_localTool->createOptionWidgets());
     return list;
 }

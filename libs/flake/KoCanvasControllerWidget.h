@@ -33,6 +33,7 @@
 #endif
 #include <QMap>
 #include <QString>
+#include <QPointer>
 
 #include "KoCanvasController.h"
 
@@ -111,7 +112,7 @@ public:
      *
      * @param widgets the map of widgets
      */
-    void setToolOptionWidgets(const QList<QWidget *> &widgets);
+    void setToolOptionWidgets(const QList<QPointer<QWidget> > &widgets);
 
     virtual void zoomIn(const QPoint &center);
 
@@ -167,7 +168,7 @@ signals:
     /**
      * Emit the new tool option widgets to be used with this canvas.
      */
-    void toolOptionWidgetsChanged(const QList<QWidget *> &widgets);
+    void toolOptionWidgetsChanged(const QList<QPointer<QWidget> > &widgets);
 
 private slots:
 

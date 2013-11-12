@@ -324,8 +324,8 @@ KarbonView::KarbonView(KarbonPart *karbonPart, KarbonDocument* doc, QWidget* par
         KoToolBoxFactory toolBoxFactory(d->canvasController);
         mainWindow()->createDockWidget(&toolBoxFactory);
 
-        connect(canvasController, SIGNAL(toolOptionWidgetsChanged(QList<QWidget*>)),
-                mainWindow()->dockerManager(), SLOT(newOptionWidgets(QList<QWidget*>)));
+        connect(canvasController, SIGNAL(toolOptionWidgetsChanged(QList<QPointer<QWidget> >)),
+                mainWindow()->dockerManager(), SLOT(newOptionWidgets(QList<QPointer<QWidget> >)));
 
         KoToolManager::instance()->requestToolActivation(d->canvasController);
 

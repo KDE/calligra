@@ -486,7 +486,7 @@ void KarbonGradientTool::documentResourceChanged(int key, const QVariant & res)
     }
 }
 
-QList<QWidget *> KarbonGradientTool::createOptionWidgets()
+QList<QPointer<QWidget> > KarbonGradientTool::createOptionWidgets()
 {
     m_gradientWidget = new KarbonGradientEditWidget();
     m_gradientWidget->setGradient(*m_gradient);
@@ -502,7 +502,7 @@ QList<QWidget *> KarbonGradientTool::createOptionWidgets()
     connect(chooser, SIGNAL(resourceSelected(KoResource*)),
             this, SLOT(gradientSelected(KoResource*)));
 
-    QList<QWidget *> widgets;
+    QList<QPointer<QWidget> > widgets;
     m_gradientWidget->setWindowTitle(i18n("Edit Gradient"));
     widgets.append(m_gradientWidget);
     chooser->setWindowTitle(i18n("Predefined Gradients"));

@@ -84,7 +84,7 @@ signals:
     void pathChanged(KoPathShape* path); // TODO this is unused, can we remove this one?
 protected:
     /// reimplemented
-    virtual QList<QWidget *>  createOptionWidgets();
+    virtual QList<QPointer<QWidget> >  createOptionWidgets();
 
 private:
     struct PathSegment;

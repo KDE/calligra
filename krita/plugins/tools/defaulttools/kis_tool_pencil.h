@@ -50,7 +50,7 @@ public slots:
 
 private:
     /// reimplemented
-    virtual QList<QWidget *> createOptionWidgets();
+    virtual QList<QPointer<QWidget> > createOptionWidgets();
 
     class LocalTool : public KoPencilTool {
         friend class KisToolPencil;

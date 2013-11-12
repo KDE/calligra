@@ -53,7 +53,7 @@ public:
     {
     }
 
-    QList<QWidget *> currentWidgetList;
+    QList<QPointer<QWidget> > currentWidgetList;
     QSet<QWidget *> currentAuxWidgets;
     QScrollArea *scrollArea;
     QWidget *hiderWidget; // non current widgets are hidden by being children of this
@@ -74,7 +74,7 @@ public:
         currentAuxWidgets.clear();
     }
 
-    void recreateLayout(const QList<QWidget *> &optionWidgetList)
+    void recreateLayout(const QList<QPointer<QWidget> > &optionWidgetList)
     {
         foreach(QWidget* widget, currentWidgetList) {
             widget->setParent(hiderWidget);
@@ -248,7 +248,7 @@ void KoToolDocker::setTabEnabled(bool enabled)
     d->tabButton->setVisible(enabled);
 }
 
-void KoToolDocker::setOptionWidgets(const QList<QWidget *> &optionWidgetList)
+void KoToolDocker::setOptionWidgets(const QList<QPointer<QWidget> > &optionWidgetList)
 {
     d->recreateLayout(optionWidgetList);
 }

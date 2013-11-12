@@ -201,11 +201,6 @@ KoView::KoView(KoPart *part, KoDocument *document, QWidget *parent)
 
 KoView::~KoView()
 {
-    if (!d->documentDeleted) {
-        if (d->part) {
-            d->part->removeView(this);
-        }
-    }
     delete d;
 }
 

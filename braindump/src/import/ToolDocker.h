@@ -22,6 +22,7 @@
 #define _TOOL_DOCKER_H
 
 #include <QDockWidget>
+#include <QPointer>
 
 class QWidget;
 
@@ -42,7 +43,7 @@ public slots:
     /**
      * Update the option widgets to the argument one, removing the currently set widget.
      */
-    void setOptionWidgets(const QList<QWidget *> &optionWidgetList);
+    void setOptionWidgets(const QList<QPointer<QWidget> > &optionWidgetList);
 
     /**
      * Returns whether the docker has an optionwidget attached

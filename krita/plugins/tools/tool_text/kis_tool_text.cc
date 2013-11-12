@@ -73,10 +73,10 @@ void KisToolText::finishRect(const QRectF &rect)
     }
 }
 
-QList< QWidget* > KisToolText::createOptionWidgets()
+QList<QPointer<QWidget> > KisToolText::createOptionWidgets()
 {
     m_optionWidget = new KisTextToolOptionWidget();
-    QList< QWidget* > widgets;
+    QList<QPointer<QWidget> > widgets;
     widgets.append(m_optionWidget);
     return widgets;
 }

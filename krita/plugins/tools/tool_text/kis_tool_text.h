@@ -35,7 +35,7 @@ public:
     KisToolText(KoCanvasBase * canvas);
     virtual ~KisToolText();
 
-    virtual QList< QWidget* > createOptionWidgets();
+    virtual QList<QPointer<QWidget> > createOptionWidgets();
 
     virtual KisPainter::FillStyle fillStyle();
 

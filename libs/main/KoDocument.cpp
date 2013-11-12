@@ -485,11 +485,10 @@ KoDocument::KoDocument(const KoPart *parent, KUndo2Stack *undoStack)
 
 KoDocument::~KoDocument()
 {
+    qDebug() << ">>>>>>>>>>>>>>>>>>>>>>>" << kdBacktrace();
+
     d->autoSaveTimer.disconnect(this);
     d->autoSaveTimer.stop();
-
-    // XXX: the document should _not_ delete the part
-    d->parentPart->deleteLater();
 
     delete d->filterManager;
     delete d;

@@ -47,7 +47,7 @@ public:
 signals:
     void shapeChanged(StateShape*);
 protected:
-    virtual QList<QWidget *> createOptionWidgets();
+    virtual QList<QPointer<QWidget> > createOptionWidgets();
 
 private:
     StateShape* m_currentShape;
