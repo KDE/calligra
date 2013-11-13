@@ -11,6 +11,16 @@ Bugs
     - paragraphs
     - list entries
 
+ * Possiblity to insert an annotation into another should be prevented
+
+ * Annotation shapes should be handled gracefully in stage, (and any other app for that matter)
+
+ * Annotations should only be printed if the user want's it (different option to view->"Show comments")
+
+ * The view has lost the horizontal scrollbar
+
+ * The background of the annotation area should be more neutral in color
+
 
 Annoyances
 ----------
@@ -19,17 +29,9 @@ Annoyances
 
  * Zoom to Page Width should include the annotation area if active.
 
- * Use same shortcut as LO/AOO to insert a note.
+ * The review tool's annotation widget should have icons rather than text buttons .
 
- * The review tool's annotation widget is ugly.  The buttons should
-   be spread out evenly in the layout, not be stacked to the left.
-
- * Setting of "Show notes" also available in the review tool?
- 
- 
- * When an annotation is deleted, the behaviour of the toolbox is strange.
-   It's not really clear what should happen though.
-
+ * Setting of "Show comments" also available in the review tool?
 
 To Check / Test
 ---------------
