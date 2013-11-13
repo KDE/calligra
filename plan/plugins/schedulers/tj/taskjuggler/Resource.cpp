@@ -1383,6 +1383,7 @@ Resource::updateSlotMarks(int sc)
 
 QDomElement Resource::xmlIDElement( QDomDocument& doc ) const
 {
+   Q_UNUSED(doc);
    QDomElement elem;/* = ReportXML::createXMLElem( doc, "Resource", getName());
    elem.setAttribute( "Id", getId() );*/
 

@@ -87,6 +87,7 @@ Allocation::isWorker() const
 /* Creation of the XML Reprsentation of the Allocation */
 QDomElement Allocation::xmlElement( QDomDocument& doc )
 {
+   Q_UNUSED(doc);
    QDomElement elem;/* = doc.createElement( "Allocation" );
    elem.appendChild(ReportXML::createXMLElem( doc, "Persistent", isPersistent() ? "Yes":"No" ));
    elem.setAttribute( "ResourceID", candidates.first()->getId());*/
