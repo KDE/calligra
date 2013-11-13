@@ -179,7 +179,6 @@ Task::inheritValues()
 
         // Inherit allocations from parent.
         for (QListIterator<Allocation*> ali(p->allocations); ali.hasNext();) {
-            Allocation *a = static_cast<Allocation*>(ali.next());
             allocations.append(new Allocation(*(ali.next())));
         }
 
@@ -3267,7 +3266,6 @@ Task::analyzePath(int sc, double minSlack, time_t pathStart, long busyTime,
         for (TaskListIterator tli(allFollowers); tli.hasNext();) {
             Task *t = static_cast<Task*>(tli.next());
             for (Task* p = t->getParent(); p; p = p->getParent()) {
-                Task *t = static_cast<Task*>(tli.next());
                 if (allFollowers.indexOf(p) >= 0 && ignoreList.indexOf(p) < 0)
                     ignoreList.append(p);
             }
