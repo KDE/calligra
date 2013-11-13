@@ -2178,7 +2178,7 @@ Task::resolveId(QString relId)
         return relId;
 
     Task* t = this;
-    unsigned int i;
+    int i;
     for (i = 0; i < relId.length() && relId.mid(i, 1) == "!"; ++i)
     {
         if (t == 0)
