@@ -35,6 +35,7 @@ CATextDocumentModel::CATextDocumentModel(QObject* /*parent*/, KWDocument* docume
 
 int CATextDocumentModel::rowCount(const QModelIndex& parent) const
 {
+    Q_UNUSED(parent);
     return kw_document->pageManager()->pageCount();
 }
 
