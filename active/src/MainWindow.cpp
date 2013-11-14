@@ -82,6 +82,8 @@ MainWindow::MainWindow (QWidget* parent)
         case CADocumentInfo::Presentation:
             recentPresentations.append (docInfo);
             break;
+        default:
+            ;
         }
     }
 
