@@ -32,6 +32,8 @@
 
 using namespace Calligra::Components;
 
+static const QStringList staticTextTypes{ "application/pdf" };
+
 Calligra::Components::Global::Global(QObject* parent)
     : QObject{parent}
 {
@@ -42,17 +44,13 @@ void Global::loadPlugins()
 
 }
 
-Calligra::Components::DocumentType::Type Global::documentType(const QUrl& document)
+int Global::documentType(const QUrl& document)
 {
     QMimeType mime = QMimeDatabase{}.mimeTypeForUrl(document);
 
     QList<QPluginLoader*> plugins = KoJsonTrader::self()->query("Calligra/Part", mime.name());
 
-    if(plugins.size() == 0) {
-        qWarning() << "Could not find a plugin to handle" << mime.name();
-    }
-
-    for (int i=0; i < plugins.count(); i++) {
+    for (int i = 0; i < plugins.count(); i++) {
         QPluginLoader* loader = plugins.at(i);
 
         if(loader->fileName().contains("words")) {
@@ -62,6 +60,11 @@ Calligra::Components::DocumentType::Type Global::documentType(const QUrl& docume
         } else if(loader->fileName().contains("stage")) {
             return DocumentType::Presentation;
         }
+    }
+
+    // Since we don't actually have a Calligra plugin that handles these...
+    if(staticTextTypes.contains(mime.name())) {
+        return DocumentType::StaticTextDocument;
     }
 
     return DocumentType::Unknown;

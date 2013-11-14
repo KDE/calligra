@@ -57,19 +57,6 @@ public:
     };
 };
 
-// class ZoomMode : public QObject
-// {
-//     Q_OBJECT
-//     Q_ENUMS(Mode)
-//
-// public:
-//     enum Mode {
-//         Constant,
-//         FitPage,
-//         FitWidth,
-//     };
-// };
-
 } // Namespace Components
 } // Namespace Calligra
 
