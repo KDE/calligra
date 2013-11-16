@@ -7,12 +7,6 @@ Features
 
 Bugs
 ----
- * Possible to insert other things than allowed by the standard into the annotation shapes:
-    - paragraphs
-    - list entries
-
- * Possiblity to insert an annotation into another should be prevented
-
  * Annotation shapes should be handled gracefully in stage, (and any other app for that matter)
 
  * Annotations should only be printed if the user want's it (different option to view->"Show comments")

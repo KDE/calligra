@@ -1813,6 +1813,7 @@ void TextTool::keyReleaseEvent(QKeyEvent *event)
 
 void TextTool::updateActions()
 {
+    bool notInAnnotation = !dynamic_cast<AnnotationTextShape *>(m_textShape);
     KoTextEditor *textEditor = m_textEditor.data();
     if (textEditor == 0) {
         return;
@@ -1844,13 +1845,13 @@ void TextTool::updateActions()
     if(m_textShapeData) {
         resizemethod = m_textShapeData->resizeMethod();
     }
-    m_shrinkToFitAction->setEnabled(resizemethod != KoTextShapeData::AutoResize);
+    m_shrinkToFitAction->setEnabled(resizemethod != KoTextShapeData::AutoResize && notInAnnotation);
     m_shrinkToFitAction->setChecked(resizemethod == KoTextShapeData::ShrinkToFitResize);
 
-    m_growWidthAction->setEnabled(resizemethod != KoTextShapeData::AutoResize);
+    m_growWidthAction->setEnabled(resizemethod != KoTextShapeData::AutoResize && notInAnnotation);
     m_growWidthAction->setChecked(resizemethod == KoTextShapeData::AutoGrowWidth || resizemethod == KoTextShapeData::AutoGrowWidthAndHeight);
 
-    m_growHeightAction->setEnabled(resizemethod != KoTextShapeData::AutoResize);
+    m_growHeightAction->setEnabled(resizemethod != KoTextShapeData::AutoResize && notInAnnotation);
     m_growHeightAction->setChecked(resizemethod == KoTextShapeData::AutoGrowHeight || resizemethod == KoTextShapeData::AutoGrowWidthAndHeight);
 
     //update paragraphStyle GUI element
@@ -1892,17 +1893,19 @@ void TextTool::updateActions()
     bool useAdvancedText = !(canvas()->resourceManager()->intResource(KoCanvasResourceManager::ApplicationSpeciality)
                             & KoCanvasResourceManager::NoAdvancedText);
     if (useAdvancedText) {
-        const QTextTable *table = textEditor->currentTable();
+        bool hasTable = textEditor->currentTable();
 
-        action("insert_tablerow_above")->setEnabled(table);
-        action("insert_tablerow_below")->setEnabled(table);
-        action("insert_tablecolumn_left")->setEnabled(table);
-        action("insert_tablecolumn_right")->setEnabled(table);
-        action("delete_tablerow")->setEnabled(table);
-        action("delete_tablecolumn")->setEnabled(table);
-        action("merge_tablecells")->setEnabled(table);
-        action("split_tablecells")->setEnabled(table);
+        action("insert_tablerow_above")->setEnabled(hasTable && notInAnnotation);
+        action("insert_tablerow_below")->setEnabled(hasTable && notInAnnotation);
+        action("insert_tablecolumn_left")->setEnabled(hasTable && notInAnnotation);
+        action("insert_tablecolumn_right")->setEnabled(hasTable && notInAnnotation);
+        action("delete_tablerow")->setEnabled(hasTable && notInAnnotation);
+        action("delete_tablecolumn")->setEnabled(hasTable && notInAnnotation);
+        action("merge_tablecells")->setEnabled(hasTable && notInAnnotation);
+        action("split_tablecells")->setEnabled(hasTable && notInAnnotation);
     }
+    action("insert_annotation")->setEnabled(notInAnnotation);
+    action("insert_table")->setEnabled(notInAnnotation);
 
     ///TODO if selection contains several different format
     emit blockChanged(textEditor->block());
