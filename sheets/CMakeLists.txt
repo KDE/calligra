@@ -98,6 +98,11 @@ SET (dialogs_DIR_SRCS
     dialogs/StyleManagerDialog.cpp
     dialogs/SubtotalDialog.cpp
     dialogs/ValidityDialog.cpp
+    dialogs/pivot.cpp
+    dialogs/pivotfilters.cpp
+    dialogs/pivotoptions.cpp
+    dialogs/pivotmain.cpp
+
     )
 
 
@@ -113,6 +118,11 @@ kde4_add_ui_files(dialogs_DIR_SRCS
     dialogs/SortDetailsWidget.ui
     dialogs/SubtotalWidget.ui
     dialogs/SubtotalsDetailsWidget.ui
+    dialogs/pivot.ui
+    dialogs/pivotfilters.ui
+    dialogs/pivotoptions.ui
+    dialogs/pivotmain.ui
+
     )
 
 SET (functions_DIR_SRCS
@@ -384,6 +394,11 @@ install( FILES
     commands/AbstractRegionCommand.h
     commands/DataManipulators.h
     commands/SortManipulator.h
+    dialogs/pivot.h
+    dialogs/pivotfilters.h
+    dialogs/pivotoptions.h
+    dialogs/pivotmain.h
+
 DESTINATION ${INCLUDE_INSTALL_DIR}/sheets/commands COMPONENT Devel)
 
 endif (SHOULD_BUILD_SHEETS_PART)
