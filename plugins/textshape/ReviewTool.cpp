@@ -19,6 +19,8 @@
  */
 
 #include "ReviewTool.h"
+#include "AnnotationTextShape.h"
+
 #include <KoToolBase.h>
 #include <KoCanvasBase.h>
 #include <KoPointerEvent.h>
@@ -32,7 +34,6 @@
 #include <KoShapeUserData.h>
 #include <KoTextShapeData.h>
 #include <KoGlobal.h>
-#include <AnnotationTextShape.h>
 
 #include <dialogs/SimpleSpellCheckingWidget.h>
 #include <dialogs/SimpleAnnotationWidget.h>
@@ -74,6 +75,7 @@ void ReviewTool::createActions()
 void ReviewTool::mouseReleaseEvent(KoPointerEvent* event)
 {
     TextTool::mouseReleaseEvent(event);
+    event->accept();
 }
 void ReviewTool::activate(KoToolBase::ToolActivation toolActivation, const QSet< KoShape* >& shapes)
 {
@@ -87,35 +89,10 @@ void ReviewTool::mouseMoveEvent(KoPointerEvent* event)
 {
     TextTool::mouseMoveEvent(event);
 }
-void ReviewTool::mousePressEvent(KoPointerEvent* event)
+void ReviewTool::mousePressEvent(KoPointerEvent *event)
 {
-    KoShape *annotationShape = canvas()->shapeManager()->shapeAt(event->point);
-    if (annotationShape) {
-        if (annotationShape->shapeId() == AnnotationShape_SHAPEID) {
-            KoCanvasResourceManager *rm = canvas()->resourceManager();
-            const KoAnnotationManager *annotationManager = textEditor()->textRangeManager()->annotationManager();
-            m_currentAnnotationShape = annotationShape;
-            foreach (QString name, annotationManager->annotationNameList()) {
-                KoAnnotation *annotation = annotationManager->annotation(name);
-                if(annotation->annotationShape() == m_currentAnnotationShape) {
-                    if ((annotation->positionOnlyMode() == false) && annotation->hasRange()) {
-                        rm->clearResource(KoText::SelectedTextPosition);
-                        rm->clearResource(KoText::SelectedTextAnchor);
-                    }
-                    if (annotation->positionOnlyMode()) {
-                        rm->setResource(KoText::CurrentTextPosition, annotation->rangeStart());
-                        rm->setResource(KoText::CurrentTextAnchor, annotation->rangeStart());
-                    } else {
-                        rm->setResource(KoText::CurrentTextPosition, annotation->rangeStart());
-                        rm->setResource(KoText::CurrentTextAnchor, annotation->rangeEnd());
-                    }
-                    break;
-                }
-            }
-            return;
-        }
-    }
     TextTool::mousePressEvent(event);
+    m_currentAnnotationShape = dynamic_cast<AnnotationTextShape *>(textShape());
 }
 void ReviewTool::keyPressEvent(QKeyEvent* event)
 {

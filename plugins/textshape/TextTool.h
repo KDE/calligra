@@ -149,6 +149,7 @@ public:
 
 protected:
     virtual void createActions();
+    TextShape *textShape() {return m_textShape;}
 
     friend class SimpleParagraphWidget;
     friend class ParagraphSettingsDialog;
