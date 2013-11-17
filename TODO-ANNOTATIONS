@@ -18,6 +18,9 @@ Bugs
 
 Annoyances
 ----------
+ * after inserting a comment the annotationshape should be active
+
+ * when clicking esc inside an annotation the cursor should return to the original textshape
 
  * Save and load status of "Show notes".
 
