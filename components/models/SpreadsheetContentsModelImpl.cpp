@@ -38,6 +38,8 @@ public:
     Private()
     { }
 
+    QImage renderThumbnail(Calligra::Sheets::Sheet* sheet, int width, int height);
+
     Calligra::Sheets::Doc* document;
 
     QHash<int, QImage> thumbnails;
@@ -79,27 +81,7 @@ QVariant SpreadsheetContentsModelImpl::data(int index, ContentsModel::Role role)
                 return QImage{};
             }
 
-            QImage thumbnail{d->thumbnailSize, QImage::Format_RGB32};
-            QRect rect{QPoint{0, 0}, d->thumbnailSize};
-
-            QPainter p{&thumbnail};
-
-            p.fillRect(rect, Qt::white);
-
-            Calligra::Sheets::SheetView sheetView{sheet};
-
-            qreal zoom = 0.5;
-            KoZoomHandler zoomHandler;
-            zoomHandler.setZoom(zoom);
-            p.setClipRect(rect);
-            p.scale(zoom, zoom);
-            sheetView.setViewConverter(&zoomHandler);
-
-            QRectF area = zoomHandler.viewToDocument(rect);
-            QRect range = sheet->documentToCellCoordinates(area).adjusted(0, 0, 2, 2);
-            sheetView.setPaintCellRange(range);
-            sheetView.paintCells(p, area, QPointF(0,0));
-
+            QImage thumbnail = d->renderThumbnail(sheet, d->thumbnailSize.width(), d->thumbnailSize.height());
             d->thumbnails.insert(index, thumbnail);
             return thumbnail;
         }
@@ -114,4 +96,35 @@ void SpreadsheetContentsModelImpl::setThumbnailSize(const QSize& size)
 {
     d->thumbnailSize = size;
     d->thumbnails.clear();
+}
+
+QImage SpreadsheetContentsModelImpl::thumbnail(int index, int width) const
+{
+    return d->renderThumbnail(d->document->map()->sheet(index), width, width);
+}
+
+QImage SpreadsheetContentsModelImpl::Private::renderThumbnail(Calligra::Sheets::Sheet* sheet, int width, int height)
+{
+    QImage thumbnail{width, height, QImage::Format_RGB32};
+    QRect rect{0, 0, width, height};
+
+    QPainter p{&thumbnail};
+
+    p.fillRect(rect, Qt::white);
+
+    Calligra::Sheets::SheetView sheetView{sheet};
+
+    qreal zoom = 0.5;
+    KoZoomHandler zoomHandler;
+    zoomHandler.setZoom(zoom);
+    p.setClipRect(rect);
+    p.scale(zoom, zoom);
+    sheetView.setViewConverter(&zoomHandler);
+
+    QRectF area = zoomHandler.viewToDocument(rect);
+    QRect range = sheet->documentToCellCoordinates(area).adjusted(0, 0, 2, 2);
+    sheetView.setPaintCellRange(range);
+    sheetView.paintCells(p, area, QPointF(0,0));
+
+    return thumbnail;
 }

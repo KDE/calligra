@@ -25,6 +25,7 @@
 
 #include "ContentsModel.h"
 
+class QImage;
 class QVariant;
 namespace Calligra {
 namespace Components {
@@ -43,6 +44,8 @@ public:
     virtual int rowCount() const = 0;
     virtual QVariant data(int index, ContentsModel::Role role) const = 0;
     virtual void setThumbnailSize(const QSize& size) = 0;
+
+    virtual QImage thumbnail(int index, int width) const = 0;
 };
 
 } // Namespace Components

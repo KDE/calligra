@@ -90,3 +90,9 @@ void PresentationContentsModelImpl::setThumbnailSize(const QSize& size)
     d->thumbnails.clear();
 }
 
+QImage PresentationContentsModelImpl::thumbnail(int index, int width) const
+{
+    KoPAPageBase* page = d->document->pageByIndex(index, false);
+    QSize thumbSize{width, int((page->pageLayout().height / page->pageLayout().width) * width)};
+    return page->thumbImage(thumbSize);
+}

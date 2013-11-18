@@ -151,6 +151,12 @@ void TextContentsModelImpl::setThumbnailSize(const QSize& size)
     d->thumbnails.clear();
 }
 
+QImage TextContentsModelImpl::thumbnail(int index, int width) const
+{
+    KWPage page = d->document->pageManager()->page( index + 1 );
+    return page.thumbnail(QSize{ width, int((page.height() / page.width()) * width)}, d->canvas->shapeManager());
+}
+
 void TextContentsModelImpl::documentLayoutFinished()
 {
     QTextBlock block = d->textDocument->firstBlock();

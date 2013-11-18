@@ -43,6 +43,7 @@ class ContentsModel : public QAbstractListModel
      * \notify thumbnailSizeChanged()
      */
     Q_PROPERTY(QSize thumbnailSize READ thumbnailSize WRITE setThumbnailSize NOTIFY thumbnailSizeChanged)
+
 public:
     enum Role {
         TitleRole = Qt::UserRole + 1,
@@ -68,6 +69,16 @@ public:
      * Setter for property #thumbnailSize.
      */
     void setThumbnailSize(QSize newValue);
+
+    /**
+     * Render a thumbnail at a specified width.
+     *
+     * \param index The index of the item to render a thumbnail of.
+     * \param width The width to render the thumbnail at.
+     * \return A thumbnail or an empty image when the thumbnail could not
+     * be rendered.
+     */
+    Q_INVOKABLE QImage thumbnail(int index, int width) const;
 
 Q_SIGNALS:
     void documentChanged();

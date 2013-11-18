@@ -40,6 +40,7 @@ public:
     virtual int rowCount() const Q_DECL_OVERRIDE;
     virtual QVariant data(int index, Calligra::Components::ContentsModel::Role role) const Q_DECL_OVERRIDE;
     virtual void setThumbnailSize(const QSize& size) Q_DECL_OVERRIDE;
+    virtual QImage thumbnail(int index, int width) const Q_DECL_OVERRIDE;
 
 Q_SIGNALS:
     void listContentsCompleted();

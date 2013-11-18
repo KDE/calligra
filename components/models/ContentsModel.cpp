@@ -113,6 +113,17 @@ void ContentsModel::setThumbnailSize(QSize newValue)
     }
 }
 
+QImage ContentsModel::thumbnail(int index, int width) const
+{
+    if(!d->impl)
+        return QImage{};
+
+    if(index < 0 || index >= d->impl->rowCount())
+        return QImage{};
+
+    return d->impl->thumbnail(index, width);
+}
+
 void ContentsModel::updateImpl()
 {
     beginResetModel();
