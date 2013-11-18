@@ -57,6 +57,8 @@ void ImageDataItem::setData(const QImage& newValue)
 {
     if(newValue != d->data) {
         d->data = newValue;
+        setImplicitWidth(d->data.width());
+        setImplicitHeight(d->data.height());
         update();
         emit dataChanged();
     }
@@ -68,11 +70,14 @@ QSGNode* ImageDataItem::updatePaintNode(QSGNode* node, QQuickItem::UpdatePaintNo
         return node;
     }
 
+    float w = widthValid() ? width() : d->data.width();
+    float h = heightValid() ? height() : d->data.height();
+
     auto texNode = static_cast<QSGSimpleTextureNode*>(node);
     if(!texNode) {
         texNode = new QSGSimpleTextureNode{};
     }
-    texNode->setRect(0, 0, width(), height());
+    texNode->setRect(0, 0, w, h);
 
     auto texture = window()->createTextureFromImage(d->data);
     if(texNode->texture()) {
