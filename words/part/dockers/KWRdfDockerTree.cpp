@@ -30,6 +30,7 @@
 #include <QMimeData>
 
 #include <KoDocumentRdf.h>
+#include <KoRdfSemanticItemRegistry.h>
 
 #include "KWCanvas.h"
 
@@ -64,14 +65,8 @@ void KWRdfDockerTree::setCanvas(KoCanvasBase *canvas)
 void KWRdfDockerTree::dragEnterEvent(QDragEnterEvent *event)
 {
     //kDebug(30015) << "dragEnterEvent() mime format:" << event->mimeData()->formats();
-    if (event->mimeData()->hasFormat("text/calendar")) {
-        //kDebug(30015) << "accepting...";
-        event->accept();
-    } else if (event->mimeData()->hasFormat("text/x-vcard")) {
-        //kDebug(30015) << "accepting...";
-        event->accept();
-    } else if (event->mimeData()->hasFormat("text/uri-list")) {
-        //kDebug(30015) << "accepting...URI list";
+    if (KoRdfSemanticItemRegistry::instance()->canCreateSemanticItemFromMimeData(event->mimeData()) ||
+        event->mimeData()->hasFormat("text/uri-list")) {
         event->accept();
     }
 }
@@ -93,16 +88,6 @@ bool KWRdfDockerTree::dropMimeData(QTreeWidgetItem *parent, int index,
     if (data->hasFormat("text/directory")) {
         QByteArray ba = data->data("text/directory");
         //kDebug(30015) << "text/directory:" << ba;
-    } else if (data->hasFormat("text/calendar")) {
-        QByteArray ba = data->data("text/calendar");
-        //kDebug(30015) << "data:" << ba;
-        hKoRdfSemanticItem semObj = KoRdfSemanticItem::createSemanticItem(m_rdf, m_rdf, "Event");
-        semObj->importFromData(ba, m_rdf, m_canvas);
-    } else if (data->hasFormat("text/x-vcard")) {
-        QByteArray ba = data->data("text/x-vcard");
-        //kDebug(30015) << "data:" << ba;
-        hKoRdfSemanticItem semObj = KoRdfSemanticItem::createSemanticItem(m_rdf, m_rdf, "Contact");
-        semObj->importFromData(ba, m_rdf, m_canvas);
     } else if (data->hasFormat("text/uri-list")) {
         QByteArray urilist = data->data("text/uri-list");
         //kDebug(30015) << "uri-list:" << urilist;
@@ -115,16 +100,16 @@ bool KWRdfDockerTree::dropMimeData(QTreeWidgetItem *parent, int index,
             }
             QFile f(fileName);
             f.open(QIODevice::ReadOnly);
-            QByteArray ba = f.readAll();
+            const QByteArray ba = f.readAll();
             // Try to work out what ba contains....
-            QString mt =  KMimeType::findByContent(ba)->name();
+            const QString mt =  KMimeType::findByContent(ba)->name();
+            QMimeData linkedData;
+            linkedData.setData(mt, ba);
             //kDebug(30015) << "MIME Type:" << mt;
-            // BEGIN:VCARD
-            if (mt == "text/directory") {
-                hKoRdfSemanticItem semObj = KoRdfSemanticItem::createSemanticItem(m_rdf, m_rdf, "Contact");
-                semObj->importFromData(ba, m_rdf, m_canvas);
-            }
+            KoRdfSemanticItemRegistry::instance()->createSemanticItemFromMimeData(&linkedData, m_canvas, m_rdf, m_rdf);
         }
+    } else {
+        KoRdfSemanticItemRegistry::instance()->createSemanticItemFromMimeData(data, m_canvas, m_rdf, m_rdf);
     }
     return true;
 }

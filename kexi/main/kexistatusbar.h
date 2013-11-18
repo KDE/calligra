@@ -43,7 +43,7 @@ class KexiStatusBar : public KStatusBar
 {
     Q_OBJECT
 public:
-    KexiStatusBar(QWidget *parent = 0);
+    explicit KexiStatusBar(QWidget *parent = 0);
     virtual ~KexiStatusBar();
 //  virtual void addWidget( QWidget *widget, int stretch = 0, bool permanent = false);
 

@@ -40,7 +40,7 @@ class KEXIFORMUTILS_EXPORT KexiDBComboBox : public KexiDBAutoField,
 //2.0    Q_PROPERTY(QColor paletteBackgroundColor READ paletteBackgroundColor WRITE setPaletteBackgroundColor RESET unsetPalette)
 
 public:
-    KexiDBComboBox(QWidget *parent);
+    explicit KexiDBComboBox(QWidget *parent);
     virtual ~KexiDBComboBox();
 
     //! Implemented for KexiComboBoxBase: form has no 'related data' model (only the full database model)

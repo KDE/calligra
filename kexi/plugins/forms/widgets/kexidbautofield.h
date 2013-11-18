@@ -67,7 +67,7 @@ public:
 
     KexiDBAutoField(const QString &text, WidgetType type, LabelPosition pos,
                     QWidget *parent = 0);
-    KexiDBAutoField(QWidget *parent = 0, LabelPosition pos = Left);
+    explicit KexiDBAutoField(QWidget *parent = 0, LabelPosition pos = Left);
 
     virtual ~KexiDBAutoField();
 

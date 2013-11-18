@@ -52,7 +52,7 @@ class KEXIFORMUTILS_EXPORT KexiDBLineEdit : public KLineEdit,
     Q_PROPERTY(bool readOnly READ isReadOnly WRITE setReadOnly)
 
 public:
-    KexiDBLineEdit(QWidget *parent);
+    explicit KexiDBLineEdit(QWidget *parent);
     virtual ~KexiDBLineEdit();
 
 //    //! Sets design mode on or off. Reimplemented to alter the cursor.

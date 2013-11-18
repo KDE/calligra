@@ -117,6 +117,7 @@ void CACanvasItem::setEditable(bool value)
 
 void CACanvasItem::updateDocumentSize(QSize sz, bool recalculateCenter)
 {
+    Q_UNUSED(recalculateCenter);
     setHeight(sz.height());
     setWidth(sz.width());
 

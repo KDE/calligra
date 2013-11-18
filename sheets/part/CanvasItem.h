@@ -98,12 +98,12 @@ public:
     /**
      * Return the widget that will be added to the scrollArea.
      */
-    virtual QGraphicsWidget *canvasItem() { return this; }
+    virtual QGraphicsObject *canvasItem() { return this; }
 
     /**
      * Return the widget that will be added to the scrollArea.
      */
-    virtual const QGraphicsWidget *canvasItem() const{ return this; }
+    virtual const QGraphicsObject *canvasItem() const{ return this; }
 
 
 public Q_SLOTS:

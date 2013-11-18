@@ -29,7 +29,7 @@ class KexiStartupDialogTemplatesPage : public K3ListView
     Q_OBJECT
 
 public:
-    KexiStartupDialogTemplatesPage(QWidget * parent = 0);
+    explicit KexiStartupDialogTemplatesPage(QWidget * parent = 0);
     ~KexiStartupDialogTemplatesPage();
 //  void addItem(const QString& key, const QString& name,
 //   const QString& description, const QPixmap& icon);

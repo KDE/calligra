@@ -41,7 +41,7 @@ private slots:
 
 protected:
 
-    virtual KoView *createViewInstance(QWidget *parent); ///< reimplemented
+    virtual KoView *createViewInstance(KoDocument *document, QWidget *parent); ///< reimplemented
 };
 
 #endif

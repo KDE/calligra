@@ -37,7 +37,7 @@ class MapBrowserWidget : public Marble::MarbleWidget,
     Q_PROPERTY(QString dataSourcePartClass READ dataSourcePartClass WRITE setDataSourcePartClass)
     Q_PROPERTY(bool readOnly READ isReadOnly WRITE setReadOnly)
 public:
-    MapBrowserWidget(QWidget *parent=0);
+    explicit MapBrowserWidget(QWidget *parent=0);
     virtual ~MapBrowserWidget();
 
     inline QString dataSource() const {

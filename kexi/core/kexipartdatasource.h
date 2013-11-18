@@ -43,7 +43,7 @@ class Part;
 class KEXICORE_EXPORT DataSource
 {
 public:
-    DataSource(Part *part);
+    explicit DataSource(Part *part);
     virtual ~DataSource();
 
     /**

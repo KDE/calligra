@@ -3,6 +3,7 @@ Type=Service
 Name=Krita Documents
 Name[bs]=Krita dokumentu
 Name[ca]=Documents del Krita
+Name[ca@valencia]=Documents del Krita
 Name[cs]=Dokumenty Krita
 Name[da]=Krita-dokumenter
 Name[de]=Krita-Dokumente
@@ -28,6 +29,7 @@ Name[sl]=Dokumenti Krite
 Name[sv]=Krita-dokument
 Name[uk]=Документи Krita
 Name[x-test]=xxKrita Documentsxx
+Name[zh_CN]=Krita 文档
 
 X-KDE-ServiceTypes=ThumbCreator
 MimeType=application/x-krita;

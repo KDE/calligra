@@ -36,7 +36,7 @@
 #include "kexidblineedit.h"
 #include "kexidbtextedit.h"
 #include "kexidbcombobox.h"
-#include "kexipushbutton.h"
+#include "KexiDBPushButton.h"
 #include "kexidbform.h"
 
 #include <kexi_global.h>

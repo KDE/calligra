@@ -57,7 +57,7 @@ class KEXICORE_EXPORT KexiSharedActionHost
 public:
 
     /*! Constructs host for main window \a mainWin. */
-    KexiSharedActionHost(KexiMainWindowIface* mainWin);
+    explicit KexiSharedActionHost(KexiMainWindowIface* mainWin);
 
     virtual ~KexiSharedActionHost();
 

@@ -42,7 +42,7 @@ namespace KPlato
 
 void WorkInfoCacheTester::initTestCase()
 {
-    QString kdehome = getenv("KDEHOME");
+    QString kdehome = qgetenv("KDEHOME");
     QDir d(kdehome);
     d.mkpath("workinfocachetester");
     d.cd("workinfocachetester");
@@ -80,7 +80,7 @@ void WorkInfoCacheTester::initTestCase()
 
 void WorkInfoCacheTester::cleanupTestCase()
 {
-    QString kdehome = getenv("KDEHOME");
+    QString kdehome = qgetenv("KDEHOME");
     removeDir( kdehome + "/workinfocachetester/Africa" );
     removeDir( kdehome + "/workinfocachetester/America" );
     removeDir( kdehome + "/workinfocachetester/Europe" );

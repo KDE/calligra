@@ -197,27 +197,20 @@ bool KoOdfStyle::readOdf(KoXmlStreamReader &reader)
     while (reader.readNextStartElement()) {
 
         // So far we only have support for text-, paragraph- and graphic-properties
-        QString propertiesType = reader.qualifiedName().toString();
-        if (propertiesType == "style:text-properties"
-            || propertiesType == "style:paragraph-properties"
-            || propertiesType == "style:graphic-properties")
-        {
-            //kDebug() << "properties type: " << propertiesType;
+        const QString propertiesType = reader.qualifiedName().toString();
+        // Create a new propertyset variable depending on the type of properties.
+        KoOdfStyleProperties *properties = 0;
+        if (propertiesType == "style:text-properties") {
+            properties = new KoOdfTextProperties();
+        } else if (propertiesType == "style:paragraph-properties") {
+            properties = new KoOdfParagraphProperties();
+        } else if (propertiesType == "style:graphic-properties") {
+            properties = new KoOdfGraphicProperties();
+        }
 
-            // Create a new propertyset variable depending on the type of properties.
-            KoOdfStyleProperties *properties;
-            if (propertiesType == "style:text-properties") {
-                properties = new KoOdfTextProperties();
-            }
-            else if (propertiesType == "style:paragraph-properties") {
-                properties = new KoOdfParagraphProperties();
-            }
-            else if (propertiesType == "style:graphic-properties") {
-                properties = new KoOdfGraphicProperties();
-            }
-
-
+        if (properties) {
             if (!properties->readOdf(reader)) {
+                delete properties;
                 return false;
             }
             d->properties[propertiesType] = properties;
