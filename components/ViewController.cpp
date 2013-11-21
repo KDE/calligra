@@ -70,6 +70,9 @@ public:
     bool ignoreOffsetChange;
     bool ignoreFlickableChange;
 
+    float newX;
+    float newY;
+
     float minimumZoom;
     bool minimumZoomFitsWidth;
     float zoom;
@@ -322,6 +325,9 @@ QSGNode* ViewController::updatePaintNode(QSGNode* node, QQuickItem::UpdatePaintN
     float left = -newWidth * (d->zoomCenter.x() / newWidth);
     float top = -newHeight * (d->zoomCenter.y() / newHeight);
 
+    d->newX = -left;
+    d->newY = -top;
+
     centerToView.translate(left, top);
     center->setMatrix(centerToView);
 
@@ -419,10 +425,10 @@ void ViewController::zoomTimeout()
     float oldX = d->flickable->property("contentX").toReal();
     float oldY = d->flickable->property("contentY").toReal();
 
-    float xoff = (d->zoomCenter.x() + oldX) * newZoom / d->zoom;
+    float xoff = (d->zoomCenter.x() + oldX) * (1.0 + d->zoomChange);
     d->flickable->setProperty("contentX", xoff - d->zoomCenter.x());
 
-    qreal yoff = (d->zoomCenter.y() + oldY ) * newZoom / d->zoom;
+    float yoff = (d->zoomCenter.y() + oldY ) * (1.0 + d->zoomChange);
     d->flickable->setProperty("contentY", yoff - d->zoomCenter.y());
 
     QMetaObject::invokeMethod(d->flickable, "returnToBounds");
