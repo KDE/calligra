@@ -127,18 +127,20 @@ XlsxXmlWorksheetReaderContext::~XlsxXmlWorksheetReaderContext()
     delete sheet;
 }
 
-static void splitToRowAndColumn(const QString source, QString& row, int& column)
+static void splitToRowAndColumn(const char *source, int sourceStart, int sourceLength, QString& row, int& column)
 {
-    // Checking whether the 2nd char is a number
-    const char second = source.at(1).toLatin1();
-    if (second < 65) {
-        row = source.at(0);
-        column = source.mid(1).toInt();
+    // find the position of the first number
+    int pos = 0;
+    while (pos < sourceLength) {
+        if (source[sourceStart + pos] < 65) {
+            break;
+        }
+        row.append(source[sourceStart + pos]);
+        pos++;
     }
-    else {
-        row = source.left(2);
-        column = source.mid(2).toInt();
-    }
+
+    char *pEnd = 0;
+    column = strtol(source + sourceStart + pos, &pEnd, 10);
 }
 
 //! @return value @a cm with cm suffix
@@ -166,6 +168,9 @@ QList<QMap<QString, QString> > XlsxXmlWorksheetReaderContext::conditionalStyleFo
 
     int index = 0;
     while (index < conditionalStyles.size()) {
+        startLetter.clear();
+        endLetter.clear();
+
         QString range = conditionalStyles.at(index).first;
         if (cachedHits.contains(range)) {
             if (!addedConditions.contains(conditionalStyles.at(index).second.value("style:condition"))) {
@@ -179,14 +184,17 @@ QList<QMap<QString, QString> > XlsxXmlWorksheetReaderContext::conditionalStyleFo
             ++index;
             continue;
         }
-        int columnIndex = range.indexOf(':');
+
+        QByteArray ba = range.toLatin1();
+
+        int columnIndex = ba.indexOf(':');
         if (columnIndex < 0) {
-            splitToRowAndColumn(range, startLetter, startNumber);
+            splitToRowAndColumn(ba.constData(), 0, ba.length(), startLetter, startNumber);
             endLetter.clear();
         }
         else {
-            splitToRowAndColumn(range.left(columnIndex), startLetter, startNumber);
-            splitToRowAndColumn(range.mid(columnIndex + 1), endLetter, endNumber);
+            splitToRowAndColumn(ba.constData(), 0, columnIndex, startLetter, startNumber);
+            splitToRowAndColumn(ba.constData(), columnIndex + 1, ba.size() - (columnIndex + 1), endLetter, endNumber);
         }
 
         if ((positionLetter == startLetter && positionNumber == startNumber && endLetter.isEmpty()) ||
@@ -1495,7 +1503,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
         if (!m_context->conditionalStyles.isEmpty()) {
             QString positionLetter;
             int positionNumber;
-            splitToRowAndColumn(r, positionLetter, positionNumber);
+            splitToRowAndColumn(r.toLatin1().constData(), 0, r.size(), positionLetter, positionNumber);
             QList<QMap<QString, QString> > maps = m_context->conditionalStyleForPosition(positionLetter, positionNumber);
             int index = maps.size();
             // Adding the lists in reversed priority order, as KoGenStyle when creating the style
