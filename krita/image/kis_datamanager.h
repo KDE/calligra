@@ -24,10 +24,8 @@ class QRect;
 class KisPaintDeviceWriter;
 class QIODevice;
 
-// Change the following line to switch (at compiletime) to different datamanager
+// Change cmake to switch (at compiletime) to different datamanager
 #include <config-tiles.h> // For the next define
-#include KIS_TILED_DATA_MANAGER_HEADER
-#include KIS_MEMENTO_HEADER
 
 #define ACTUAL_DATAMGR KisTiledDataManager
 
@@ -56,11 +54,10 @@ public:
      * Note that if pixelSize > size of the defPixel array, we will happily read beyond the
      * defPixel array.
      */
-KisDataManager(quint32 pixelSize, const quint8 *defPixel) : ACTUAL_DATAMGR(pixelSize, defPixel), m_abstractCache(0) {}
-KisDataManager(const KisDataManager& dm) : ACTUAL_DATAMGR(dm), m_abstractCache(0) { }
+KisDataManager(quint32 pixelSize, const quint8 *defPixel) : ACTUAL_DATAMGR(pixelSize, defPixel) {}
+    KisDataManager(const KisDataManager& dm) : ACTUAL_DATAMGR(dm) { }
 
     ~KisDataManager() {
-        delete m_abstractCache;
     }
 
 public:
@@ -254,8 +251,9 @@ public:
      */
     inline void readBytes(quint8 * data,
                           qint32 x, qint32 y,
-                          qint32 w, qint32 h) const {
-        ACTUAL_DATAMGR::readBytes(data, x, y, w, h);
+                          qint32 w, qint32 h,
+                          qint32 dataRowStride = -1) const {
+        ACTUAL_DATAMGR::readBytes(data, x, y, w, h, dataRowStride);
     }
 
     /**
@@ -264,8 +262,9 @@ public:
      */
     inline void writeBytes(const quint8 * data,
                            qint32 x, qint32 y,
-                           qint32 w, qint32 h) {
-        ACTUAL_DATAMGR::writeBytes(data, x, y, w, h);
+                           qint32 w, qint32 h,
+                           qint32 dataRowStride = -1) {
+        ACTUAL_DATAMGR::writeBytes(data, x, y, w, h, dataRowStride);
     }
 
 
@@ -277,7 +276,7 @@ public:
      *
      * @param channelsize a vector with for every channel its size in bytes
      */
-    QVector<quint8*> readPlanarBytes(QVector<qint32> channelsizes, qint32 x, qint32 y, qint32 w, qint32 h) {
+    QVector<quint8*> readPlanarBytes(QVector<qint32> channelsizes, qint32 x, qint32 y, qint32 w, qint32 h) const {
         return ACTUAL_DATAMGR::readPlanarBytes(channelsizes, x, y, w, h);
     }
 
@@ -329,27 +328,10 @@ public:
         return ACTUAL_DATAMGR::rowStride(x, y);
     }
 
-public:
-    class AbstractCache {
-    public:
-        virtual ~AbstractCache() {}
-    };
-
-    inline void setCache(AbstractCache* cache) {
-        delete m_abstractCache;
-        m_abstractCache = cache;
-    }
-
-    inline AbstractCache* cache() const {
-        return m_abstractCache;
-    }
-
 protected:
     friend class KisRectIterator;
     friend class KisHLineIterator;
     friend class KisVLineIterator;
-private:
-    mutable AbstractCache* m_abstractCache;
 };
 
 

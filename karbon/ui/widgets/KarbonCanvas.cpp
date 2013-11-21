@@ -101,6 +101,7 @@ KarbonCanvas::KarbonCanvas(KarbonDocument *p)
     setFocusPolicy(Qt::StrongFocus); // allow to receive keyboard input
     updateSizeAndOffset();
     setAttribute(Qt::WA_InputMethodEnabled, true);
+    setAttribute(Qt::WA_AcceptTouchEvents, true);
 }
 
 KarbonCanvas::~KarbonCanvas()
@@ -136,6 +137,13 @@ const QWidget * KarbonCanvas::canvasWidget() const
 bool KarbonCanvas::event(QEvent *e)
 {
     if(toolProxy()) {
+
+        if (e->type() == QEvent::TouchBegin ||
+                 e->type() == QEvent::TouchUpdate ||
+                 e->type() == QEvent::TouchEnd) {
+            toolProxy()->touchEvent(dynamic_cast<QTouchEvent*>(e), viewConverter(), documentOffset());
+        }
+
         toolProxy()->processEvent(e);
     }
     return QWidget::event(e);

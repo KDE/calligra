@@ -72,6 +72,7 @@ set( calligrastageprivate_LIB_SRCS
      KPrSlidesManagerView.cpp
      KPrCustomSlideShowsModel.cpp
      KPrSlidesSorterItemDelegate.cpp
+     KPrPageLayoutWidget.cpp
 
      commands/KPrAnimationCreateCommand.cpp
      commands/KPrAnimationRemoveCommand.cpp
@@ -88,8 +89,6 @@ set( calligrastageprivate_LIB_SRCS
      commands/KPrReplaceAnimationCommand.cpp
 
      dockers/KPrPreviewWidget.cpp
-     dockers/KPrPageLayoutDockerFactory.cpp
-     dockers/KPrPageLayoutDocker.cpp
 
      pageeffects/KPrPageEffectRunner.cpp
      pageeffects/KPrPageEffect.cpp
@@ -138,7 +137,7 @@ set( calligrastageprivate_LIB_SRCS
      tools/KPrPlaceholderToolFactory.cpp
    )
 
-if(NOT QT_NO_DBUS)
+if(QT_QTDBUS_FOUND)
 set( calligrastageprivate_LIB_SRCS
      ${calligrastageprivate_LIB_SRCS}
      KPrViewAdaptor.cpp

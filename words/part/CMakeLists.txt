@@ -129,7 +129,7 @@ kde4_add_plugin(wordspart ${wordspart_PART_SRCS})
 
 
 
-target_link_libraries(wordspart ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} wordsprivate )
+target_link_libraries(wordspart ${KDE4_KDECORE_LIBS}  wordsprivate )
 
 install(TARGETS wordspart  DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -174,7 +174,7 @@ set(authorpart_PART_SRCS author/CAuFactoryInit.cpp )
 
 kde4_add_plugin(authorpart ${authorpart_PART_SRCS})
 
-target_link_libraries(authorpart ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} wordsprivate )
+target_link_libraries(authorpart ${KDE4_KDECORE_LIBS}  wordsprivate )
 
 install(TARGETS authorpart DESTINATION ${PLUGIN_INSTALL_DIR})
 

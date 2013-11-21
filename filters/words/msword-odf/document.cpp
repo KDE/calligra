@@ -181,7 +181,7 @@ void Document::finishDocument()
                                "text:start-numbering-at=\"%4\" "
                                "/>");
         //FIXME: If document that has an nFib <= 0x00D9, then use DOP.  Else
-        //use the infos from SEP (sprmSFpc, sprmSRncFtn, sprmSNFtn, sprmSNfcFtnRef).
+        //use the info from SEP (sprmSFpc, sprmSRncFtn, sprmSNFtn, sprmSNfcFtnRef).
         m_mainStyles->insertRawOdfStyles(KoGenStyles::DocumentStyles,
                                          footnoteConfig.arg(Conversion::numberFormatCode(dop.nfcFtnRef2))
                                          .arg(dop.nFtn)
@@ -202,7 +202,7 @@ void Document::finishDocument()
                               "/>");
 
         //FIXME: If document that has an nFib <= 0x00D9, then use DOP.  Else
-        //use the infos from SEP (sprmSFEndnote, sprmSRncEdn, sprmSNEdn, sprmSNfcEdnRef).
+        //use the info from SEP (sprmSFEndnote, sprmSRncEdn, sprmSNEdn, sprmSNfcEdnRef).
         m_mainStyles->insertRawOdfStyles(KoGenStyles::DocumentStyles,
                                          endnoteConfig.arg(Conversion::numberFormatCode(dop.nfcEdnRef2))
                                          .arg(dop.nEdn)

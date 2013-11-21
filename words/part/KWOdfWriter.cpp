@@ -140,13 +140,17 @@ void KWOdfWriter::saveHeaderFooter(KoShapeSavingContext &context)
           << Words::OddPagesFooterTextFrameSet
           << Words::EvenPagesFooterTextFrameSet;
 
-    foreach (const KWPageStyle &pageStyle, data.keys()) {
+    QHash<KWPageStyle, QHash<int, KWTextFrameSet*> >::ConstIterator it = data.constBegin();
+    QHash<KWPageStyle, QHash<int, KWTextFrameSet*> >::ConstIterator end = data.constEnd();
+    for(; it != end; ++it) {
+        const KWPageStyle &pageStyle = it.key();
+        const QHash<int, KWTextFrameSet*> &headersAndFooters = it.value();
+
         KoGenStyle masterStyle(KoGenStyle::MasterPageStyle);
         //masterStyle.setAutoStyleInStylesDotXml(true);
         KoGenStyle layoutStyle = pageStyle.saveOdf();
         masterStyle.addProperty("style:page-layout-name", context.mainStyles().insert(layoutStyle, "pm"));
 
-        QHash<int, KWTextFrameSet*> headersAndFooters = data.value(pageStyle);
         int index = 0;
         foreach (int type, order) {
             if (! headersAndFooters.contains(type))

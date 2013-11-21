@@ -29,9 +29,6 @@
 
 #include "krita_export.h"
 
-// OpenGL
-#include <opengl/kis_opengl.h>
-
 class KAction;
 
 class KoPointerEvent;
@@ -70,18 +67,19 @@ protected:
     virtual bool wantsAutoScroll() const;
     void activate(ToolActivation activation, const QSet<KoShape*> &shapes);
     void deactivate();
+    void resetCursorStyle();
 
     virtual void initStroke(KoPointerEvent *event);
     virtual void doStroke(KoPointerEvent *event);
     virtual void endStroke();
 
-    virtual void paint(QPainter& gc, const KoViewConverter &converter);
+    virtual QPainterPath getOutlinePath(const QPointF &documentPos,
+                                        KisPaintOpSettings::OutlineMode outlineMode);
 
 
     KisPaintingInformationBuilder* paintingInformationBuilder() const;
     KisRecordingAdapter* recordingAdapter() const;
     void resetHelper(KisToolFreehandHelper *helper);
-    void requestUpdateOutline(const QPointF &outlineDocPoint);
 
 protected slots:
 
@@ -102,18 +100,6 @@ private:
      */
     qreal calculatePerspective(const QPointF &documentPoint);
 
-    void showOutlineTemporary();
-
-    QPainterPath getOutlinePath(const QPointF &documentPos,
-                                KisPaintOpSettings::OutlineMode outlineMode);
-
-
-
-private slots:
-    void increaseBrushSize();
-    void decreaseBrushSize();
-    void hideOutline();
-
 protected:
 
     KisSmoothingOptions m_smoothingOptions;
@@ -121,23 +107,6 @@ protected:
     double m_magnetism;
 
 private:
-#if defined(HAVE_OPENGL)
-    qreal m_xTilt;
-    qreal m_yTilt;
-
-    qreal m_prevxTilt;
-    qreal m_prevyTilt;
-
-    GLuint m_displayList;
-    QString m_brushModelName;
-#endif
-
-    QPointF m_outlineDocPoint;
-    QTimer m_outlineTimer;
-    QRectF m_oldOutlineRect;
-    QPainterPath m_currentOutline;
-    bool m_explicitShowOutline;
-
     KisPaintingInformationBuilder *m_infoBuilder;
     KisToolFreehandHelper *m_helper;
     KisRecordingAdapter *m_recordingAdapter;

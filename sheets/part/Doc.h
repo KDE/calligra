@@ -57,9 +57,6 @@ class KoXmlWriter;
 class KoView;
 class KoPart;
 
-#define MIME_TYPE "application/x-kspread"
-
-
 namespace Calligra
 {
 namespace Sheets
@@ -95,12 +92,6 @@ public:
     ~Doc();
 
 
-    /**
-     * @return the MIME type of KSpread document
-     */
-    virtual QByteArray mimeType() const {
-        return MIME_TYPE;
-    }
 
     virtual bool completeSaving(KoStore* _store);
 

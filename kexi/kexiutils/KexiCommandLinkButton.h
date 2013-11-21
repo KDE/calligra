@@ -23,11 +23,11 @@
 
 #include <kexiutils/kexiutils_export.h>
 
-#include <QPushButton>
+#include <kexiutils/KexiPushButton.h>
 
 class KexiCommandLinkButtonPrivate;
 
-class KEXIUTILS_EXPORT KexiCommandLinkButton : public QPushButton 
+class KEXIUTILS_EXPORT KexiCommandLinkButton : public KexiPushButton
 {
     Q_OBJECT
 

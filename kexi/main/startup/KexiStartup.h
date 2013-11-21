@@ -49,7 +49,7 @@ public:
     static bool getPasswordIfNeeded(KexiDB::ConnectionData *data, QWidget *parent = 0);
 
 protected slots:
-    virtual void done(int r);
+    virtual void slotButtonClicked(int button);
     void slotShowConnectionDetails();
 
 protected:

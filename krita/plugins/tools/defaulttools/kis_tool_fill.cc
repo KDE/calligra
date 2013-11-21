@@ -35,7 +35,6 @@
 #include <knuminput.h>
 
 #include <KoUpdater.h>
-#include <KoColorSpace.h>
 #include <KoCanvasBase.h>
 #include <KoPointerEvent.h>
 #include <KoProgressUpdater.h>
@@ -57,7 +56,7 @@
 #include <recorder/kis_action_recorder.h>
 #include "kis_resources_snapshot.h"
 
-#include <processings/fill_processing_visitor.h>
+#include <processing/fill_processing_visitor.h>
 #include <kis_processing_applicator.h>
 
 
@@ -140,7 +139,8 @@ void KisToolFill::mouseReleaseEvent(KoPointerEvent *event)
                                       m_feather,
                                       m_sizemod,
                                       m_threshold,
-                                      m_unmerged);
+                                      m_unmerged,
+                                      false);
 
         applicator.applyVisitor(visitor,
                                 KisStrokeJobData::SEQUENTIAL,

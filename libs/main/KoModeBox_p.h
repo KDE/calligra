@@ -29,6 +29,7 @@
 #include <QMap>
 #include <QHash>
 #include <QDockWidget>
+#include <QScrollArea>
 
 #include <KoToolManager.h>
 
@@ -37,6 +38,13 @@ class KoCanvasControllerWidget;
 class KoCanvasController;
 class KoCanvasBase;
 class KoShapeLayer;
+
+class ScrollArea : public QScrollArea
+{
+    Q_OBJECT
+protected:
+    void showEvent(QShowEvent *);
+};
 
 /**
  * KoModeBox is housed in a dock widget that presents tools as headings in a QToolBox
@@ -72,6 +80,13 @@ public:
      */
     void addButton(const KoToolButton &button);
 
+    /**
+     * Should been called when the docker position has changed.
+     * Organise widgets and icons and orientation of the tabs.
+     *
+     * @param area the new location area
+     */
+    void locationChanged(Qt::DockWidgetArea area);
 public slots:
     /**
      * Using the buttongroup id passed in addButton() you can set the new active tool.
@@ -112,6 +127,9 @@ private slots:
     /// switch icon mode
     void switchIconMode(int);
 
+    /// switch tabs side
+    void switchTabsSide(int);
+
 public:
     static QString applicationName;
 
@@ -121,7 +139,17 @@ private:
         IconOnly
     };
 
-    QIcon createRotatedIcon(const KoToolButton button);
+    enum VerticalTabsSide {
+        TopSide,
+        BottomSide
+    };
+
+    enum HorizontalTabsSide {
+        LeftSide,
+        RightSide
+    };
+
+    QIcon createTextIcon(const KoToolButton button);
     QIcon createSimpleIcon(const KoToolButton button);
     void addItem(const KoToolButton button);
 

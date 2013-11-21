@@ -14,7 +14,7 @@ set(icalendarexport_PART_SRCS
 
 kde4_add_plugin(planicalexport ${icalendarexport_PART_SRCS})
 
-target_link_libraries(planicalexport planprivate kplatokernel komain ${LIBKCAL_LIBRARY})
+target_link_libraries(planicalexport planprivate kplatokernel komain ${KDEPIMLIBS_KCALCORE_LIBS})
 
 install(TARGETS planicalexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

@@ -23,10 +23,10 @@
 
 #include <KoMainWindow.h>
 #include <KoDocumentEntry.h>
-#include <KoServiceProvider.h>
 #include <KoPart.h>
 #include <KoPathShape.h>
 #include <KoShapeController.h>
+#include <KoCompositeOpRegistry.h>
 
 #include "kis_view2.h"
 #include "kis_canvas_resource_provider.h"
@@ -47,6 +47,8 @@
 #include "kis_transaction_based_command.h"
 #include "kis_selection_filters.h"
 #include "kis_shape_selection.h"
+
+#include <processing/fill_processing_visitor.h>
 
 namespace ActionHelper {
 
@@ -145,82 +147,64 @@ void KisReselectActionFactory::run(KisView2 *view)
 void KisFillActionFactory::run(const QString &fillSource, KisView2 *view)
 {
     KisNodeSP node = view->activeNode();
-    if (!node || !node->isEditable()) return;
+    if (!node || !node->hasEditablePaintDevice()) return;
 
     KisSelectionSP selection = view->selection();
     QRect selectedRect = selection ?
         selection->selectedRect() : view->image()->bounds();
+    Q_UNUSED(selectedRect);
     KisPaintDeviceSP filled = node->paintDevice()->createCompositionSourceDevice();
-
-    QString actionName;
-
+    Q_UNUSED(filled);
+    bool usePattern = false;
+    bool useBgColor = false;
+    
     if (fillSource == "pattern") {
-        KisFillPainter painter(filled);
-        painter.fillRect(selectedRect.x(), selectedRect.y(),
-                         selectedRect.width(), selectedRect.height(),
-                         view->resourceProvider()->currentPattern());
-        painter.end();
-        actionName = i18n("Fill with Pattern");
-    } else if (fillSource == "bg") {
-        KoColor color(filled->colorSpace());
-        color.fromKoColor(view->resourceProvider()->bgColor());
-        filled->setDefaultPixel(color.data());
-        actionName = i18n("Fill with Background Color");
-    } else if (fillSource == "fg") {
-        KoColor color(filled->colorSpace());
-        color.fromKoColor(view->resourceProvider()->fgColor());
-        filled->setDefaultPixel(color.data());
-        actionName = i18n("Fill with Foreground Color");
+        usePattern = true;
     }
+    else if (fillSource == "bg") {
+        useBgColor = true;
+    }
+        
+    KisProcessingApplicator applicator(view->image(), node,
+                                       KisProcessingApplicator::NONE,
+                                       KisImageSignalVector() << ModifiedSignal,
+                                       i18n("Flood Fill"));
 
-    struct BitBlt : public KisTransactionBasedCommand {
-        BitBlt(KisPaintDeviceSP src, KisPaintDeviceSP dst,
-               KisSelectionSP sel, const QRect &rc)
-            : m_src(src), m_dst(dst), m_sel(sel), m_rc(rc){}
-        KisPaintDeviceSP m_src;
-        KisPaintDeviceSP m_dst;
-        KisSelectionSP m_sel;
-        QRect m_rc;
+    KisResourcesSnapshotSP resources =
+        new KisResourcesSnapshot(view->image(), 0, view->resourceProvider()->resourceManager());
 
-        KUndo2Command* paint() {
-            KisPainter gc(m_dst, m_sel);
-            gc.beginTransaction("");
-            gc.bitBlt(m_rc.x(), m_rc.y(),
-                      m_src,
-                      m_rc.x(), m_rc.y(),
-                      m_rc.width(), m_rc.height());
-            m_dst->setDirty(m_rc);
-            return gc.endAndTakeTransaction();
-        }
-    };
+    KisProcessingVisitorSP visitor =
+        new FillProcessingVisitor(QPoint(0, 0), // start position
+                                  selection,
+                                  resources,
+                                  usePattern,
+                                  true, // fill only selection,
+                                  0, // feathering radius
+                                  0, // sizemod
+                                  80, // threshold,
+                                  false, // unmerged
+                                  useBgColor);
+                        
+    applicator.applyVisitor(visitor,
+                            KisStrokeJobData::SEQUENTIAL,
+                            KisStrokeJobData::EXCLUSIVE);
 
-    KisProcessingApplicator *ap = beginAction(view, actionName);
-    ap->applyCommand(new BitBlt(filled, view->activeDevice()/*node->paintDevice()*/, selection, selectedRect),
-                     KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::NORMAL);
-
-    KisOperationConfiguration config(id());
-    config.setProperty("fill-source", fillSource);
-
-    endAction(ap, config.toXML());
+    applicator.end();
 }
 
 void KisClearActionFactory::run(KisView2 *view)
 {
-#ifdef __GNUC__
-#warning "Add saving of XML data for Clear action"
-#endif
+    // XXX: "Add saving of XML data for Clear action"
 
     KisNodeSP node = view->activeNode();
-    if (!node || !node->isEditable()) return;
+    if (!node || !node->hasEditablePaintDevice()) return;
 
     view->canvasBase()->toolProxy()->deleteSelection();
 }
 
 void KisImageResizeToSelectionActionFactory::run(KisView2 *view)
 {
-#ifdef __GNUC__
-#warning "Add saving of XML data for Image Resize To Selection action"
-#endif
+    // XXX: "Add saving of XML data for Image Resize To Selection action"
 
     KisSelectionSP selection = view->selection();
     if (!selection) return;
@@ -234,9 +218,7 @@ void KisCutCopyActionFactory::run(bool willCut, KisView2 *view)
     bool haveShapesSelected = view->selectionManager()->haveShapesSelected();
 
     if (haveShapesSelected) {
-#ifdef __GNUC__
-#warning "Add saving of XML data for Cut/Copy of shapes"
-#endif
+        // XXX: "Add saving of XML data for Cut/Copy of shapes"
 
         image->barrierLock();
         if (willCut) {
@@ -250,12 +232,16 @@ void KisCutCopyActionFactory::run(bool willCut, KisView2 *view)
         if (!node) return;
 
         image->barrierLock();
-        ActionHelper::copyFromDevice(view, node->paintDevice());
+        KisPaintDeviceSP dev = node->paintDevice();
+        if (!dev) {
+            dev = node->projection();
+        }
+        ActionHelper::copyFromDevice(view, dev);
         image->unlock();
 
         KUndo2Command *command = 0;
 
-        if (willCut && node->isEditable()) {
+        if (willCut && node->hasEditablePaintDevice()) {
             struct ClearSelection : public KisTransactionBasedCommand {
                 ClearSelection(KisNodeSP node, KisSelectionSP sel)
                     : m_node(node), m_sel(sel) {}
@@ -316,10 +302,7 @@ void KisPasteActionFactory::run(KisView2 *view)
         ap->applyCommand(cmd, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::NORMAL);
         endAction(ap, KisOperationConfiguration(id()).toXML());
     } else {
-#ifdef __GNUC__
-#warning "Add saving of XML data for Paste of shapes"
-#endif
-
+        // XXX: "Add saving of XML data for Paste of shapes"
         view->canvasBase()->toolProxy()->paste();
     }
 }
@@ -354,7 +337,7 @@ void KisPasteNewActionFactory::run(KisView2 *view)
     image->addNode(layer.data(), image->rootLayer());
     doc->setCurrentImage(image);
 
-    KoMainWindow *win = new KoMainWindow(doc->documentPart()->componentData());
+    KoMainWindow *win = doc->documentPart()->createMainWindow();
     win->show();
     win->setRootDocument(doc);
 }

@@ -196,9 +196,9 @@ void KisTextureOption::readOptionSetting(const KisPropertiesConfiguration* setti
 
 void KisTextureOption::resetGUI(KoResource* res)
 {
-    KisPattern *pattern = static_cast<KisPattern *>(res);
-    m_optionWidget->offsetSliderX->setRange(0, pattern->image().width() / 2);
-    m_optionWidget->offsetSliderY->setRange(0, pattern->image().height() / 2);
+    KisPattern *pat = static_cast<KisPattern *>(res);
+    m_optionWidget->offsetSliderX->setRange(0, pat->image().width() / 2);
+    m_optionWidget->offsetSliderY->setRange(0, pat->image().height() / 2);
 }
 
 void KisTextureProperties::recalculateMask()
@@ -208,6 +208,12 @@ void KisTextureProperties::recalculateMask()
     m_mask = 0;
 
     QImage mask = pattern->image();
+
+    if (mask.format() != QImage::Format_RGB32 ||
+        mask.format() != QImage::Format_ARGB32) {
+
+        mask = mask.convertToFormat(QImage::Format_ARGB32);
+    }
 
     if (!qFuzzyCompare(scale, 0.0)) {
         QTransform tf;
@@ -293,9 +299,6 @@ void KisTextureProperties::apply(KisFixedPaintDeviceSP dab, const QPoint &offset
 
     int x = offset.x() % m_maskBounds.width() - offsetX;
     int y = offset.y() % m_maskBounds.height() - offsetY;
-
-    fillDevice->setX(x);
-    fillDevice->setY(y);
 
     KisFillPainter fillPainter(fillDevice);
     fillPainter.fillRect(x - 1, y - 1, rect.width() + 2, rect.height() + 2, m_mask, m_maskBounds);

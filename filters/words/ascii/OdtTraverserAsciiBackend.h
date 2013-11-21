@@ -50,7 +50,7 @@ class OdtTraverserAsciiContext : public OdfTraverserContext
 class OdtTraverserAsciiBackend : public OdtTraverserBackend
 {
  public:
-    OdtTraverserAsciiBackend(OdfTraverserContext *context);
+    explicit OdtTraverserAsciiBackend(OdfTraverserContext *context);
     virtual ~OdtTraverserAsciiBackend();
 
     // The only output functions that we need in this filter.

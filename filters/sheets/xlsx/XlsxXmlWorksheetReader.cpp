@@ -211,11 +211,11 @@ QList<QMap<QString, QString> > XlsxXmlWorksheetReaderContext::conditionalStyleFo
     return returnMaps;
 }
 
-const char* XlsxXmlWorksheetReader::officeValue = "office:value";
-const char* XlsxXmlWorksheetReader::officeDateValue = "office:date-value";
-const char* XlsxXmlWorksheetReader::officeStringValue = "office:string-value";
-const char* XlsxXmlWorksheetReader::officeTimeValue = "office:time-value";
-const char* XlsxXmlWorksheetReader::officeBooleanValue = "office:boolean-value";
+const char XlsxXmlWorksheetReader::officeValue[] = "office:value";
+const char XlsxXmlWorksheetReader::officeDateValue[] = "office:date-value";
+const char XlsxXmlWorksheetReader::officeStringValue[] = "office:string-value";
+const char XlsxXmlWorksheetReader::officeTimeValue[] = "office:time-value";
+const char XlsxXmlWorksheetReader::officeBooleanValue[] = "office:boolean-value";
 
 class XlsxXmlWorksheetReader::Private
 {

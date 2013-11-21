@@ -26,10 +26,10 @@
 #include <kptdocuments.h>
 #include "kptdebug.h"
 
-#include <kcal/attendee.h>
-#include <kcal/attachment.h>
-#include <kcal/todo.h>
-#include <kcal/icalformat.h>
+#include <kcalcore/attendee.h>
+#include <kcalcore/attachment.h>
+#include <kcalcore/icalformat.h>
+#include <kcalcore/memorycalendar.h>
 
 #include <QTextCodec>
 #include <QByteArray>
@@ -95,7 +95,7 @@ KoFilter::ConversionStatus ICalendarExport::convert(const QByteArray& from, cons
 
 KoFilter::ConversionStatus ICalendarExport::convert(const Project &project, QFile &file)
 {
-    KCal::CalendarLocal cal("UTC");
+    KCalCore::Calendar::Ptr cal(new KCalCore::MemoryCalendar("UTC"));
 
     //TODO: schedule selection dialog
     long id = ANYSCHEDULED;
@@ -116,38 +116,42 @@ KoFilter::ConversionStatus ICalendarExport::convert(const Project &project, QFil
     //kDebug(planDbg())<<id;
     createTodos(cal, &project, id);
 
-    KCal::ICalFormat format;
-    qint64 n = file.write(format.toString(&cal).toUtf8());
+    KCalCore::ICalFormat format;
+    qint64 n = file.write(format.toString(cal).toUtf8());
     if (n < 0) {
         return KoFilter::InternalError;
     }
     return KoFilter::OK;
 }
 
-void ICalendarExport::createTodos(KCal::CalendarLocal &cal, const Node *node, long id, KCal::Todo *parent)
+void ICalendarExport::createTodos(KCalCore::Calendar::Ptr cal, const Node *node, long id, KCalCore::Todo::Ptr parent)
 {
-    KCal::Todo *todo = new KCal::Todo();
+    KCalCore::Todo::Ptr todo(new KCalCore::Todo());
     todo->setUid( node->id() );
     todo->setSummary(node->name());
     todo->setDescription(node->description());
-    todo->setCategories("Plan");
+    todo->setCategories(QLatin1String("Plan"));
     if (! node->projectNode()->leader().isEmpty()) {
         todo->setOrganizer(node->projectNode()->leader());
     }
     if ( node->type() != Node::Type_Project && ! node->leader().isEmpty()) {
-        KCal::Person p = KCal::Person::fromFullName(node->leader());
-        KCal::Attendee *a = new KCal::Attendee(p.name(), p.email());
-        a->setRole(KCal::Attendee::NonParticipant);
+        KCalCore::Person::Ptr p = KCalCore::Person::fromFullName(node->leader());
+        KCalCore::Attendee::Ptr a(new KCalCore::Attendee(p->name(), p->email()));
+        a->setRole(KCalCore::Attendee::NonParticipant);
         todo->addAttendee(a);
     }
     DateTime st = node->startTime(id);
     DateTime et = node->endTime(id);
     if (st.isValid()) {
+#if PLAN_KDEPIMLIBS_HEXVERSION < KDE_MAKE_VERSION(4,11,0)
         todo->setHasStartDate(true);
+#endif
         todo->setDtStart( KDateTime( st ) );
     }
     if (et.isValid()) {
+#if PLAN_KDEPIMLIBS_HEXVERSION < KDE_MAKE_VERSION(4,11,0)
         todo->setHasDueDate(true);
+#endif
         todo->setDtDue( KDateTime( et ) );
     }
     if (node->type() == Node::Type_Task) {
@@ -158,29 +162,33 @@ void ICalendarExport::createTodos(KCal::CalendarLocal &cal, const Node *node, lo
             const QList<Resource*> lst = task->requestedResources();
             foreach(const Resource *r, lst) {
                 if (r->type() == Resource::Type_Work) {
-                    todo->addAttendee(new KCal::Attendee(r->name(), r->email()));
+                    todo->addAttendee(KCalCore::Attendee::Ptr(new KCalCore::Attendee(r->name(), r->email())));
                 }
             }
         } else {
             foreach(const Resource *r, s->resources()) {
                 if (r->type() == Resource::Type_Work) {
-                    todo->addAttendee(new KCal::Attendee(r->name(), r->email()));
+                    todo->addAttendee(KCalCore::Attendee::Ptr(new KCalCore::Attendee(r->name(), r->email())));
                 }
             }
 
         }
     } else if (node->type() == Node::Type_Milestone) {
         const Task *task = qobject_cast<Task*>(const_cast<Node*>(node));
+#if PLAN_KDEPIMLIBS_HEXVERSION < KDE_MAKE_VERSION(4,11,0)
         todo->setHasStartDate(false);
+#else
+        todo->setDtStart(KDateTime());
+#endif
         todo->setPercentComplete(task->completion().percentFinished());
     }
     foreach(const Document *doc, node->documents().documents()) {
-        todo->addAttachment(new KCal::Attachment(doc->url().url()));
+        todo->addAttachment(KCalCore::Attachment::Ptr(new KCalCore::Attachment(doc->url().url())));
     }
-    if (parent) {
-        todo->setRelatedTo(parent);
+    if (! parent.isNull()) {
+        todo->setRelatedTo(parent->uid(), KCalCore::Incidence::RelTypeParent);
     }
-    cal.addTodo(todo);
+    cal->addTodo(todo);
     foreach(const Node *n, node->childNodeIterator()) {
         createTodos(cal, n, id, todo);
     }

@@ -730,7 +730,6 @@ Resource::getCurrentWeekSlots(time_t date, const Task* t)
     {
         uint timeSlots = 0;
         for (ResourceListIterator rli(getSubListIterator()); rli.hasNext();) {
-            Resource *r = static_cast<Resource*>(rli.next());
             timeSlots += (*rli)->getCurrentWeekSlots(date, t);
         }
         return timeSlots;
@@ -767,7 +766,6 @@ Resource::getCurrentMonthSlots(time_t date, const Task* t)
     {
         uint timeSlots = 0;
         for (ResourceListIterator rli(getSubListIterator()); rli.hasNext();) {
-            Resource *r = static_cast<Resource*>(rli.next());
             timeSlots += (*rli)->getCurrentMonthSlots(date, t);
         }
         return timeSlots;
@@ -1385,6 +1383,7 @@ Resource::updateSlotMarks(int sc)
 
 QDomElement Resource::xmlIDElement( QDomDocument& doc ) const
 {
+   Q_UNUSED(doc);
    QDomElement elem;/* = ReportXML::createXMLElem( doc, "Resource", getName());
    elem.setAttribute( "Id", getId() );*/
 

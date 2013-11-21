@@ -130,14 +130,14 @@ KoFilter::ConversionStatus CSVExport::convert(const QByteArray & from, const QBy
         kWarning(30501) << "document isn't a Calligra::Sheets::Doc but a " << document->metaObject()->className();
         return KoFilter::NotImplemented;
     }
-    if ((to != "text/csv" && to != "text/plain") || from != "application/x-kspread") {
+    if ((to != "text/csv" && to != "text/plain") || from != "application/vnd.oasis.opendocument.spreadsheet") {
         kWarning(30501) << "Invalid mimetypes " << to << " " << from;
         return KoFilter::NotImplemented;
     }
 
     Doc *ksdoc = qobject_cast<Doc *>(document);
 
-    if (ksdoc->mimeType() != "application/x-kspread") {
+    if (ksdoc->mimeType() != "application/vnd.oasis.opendocument.spreadsheet") {
         kWarning(30501) << "Invalid document mimetype " << ksdoc->mimeType();
         return KoFilter::NotImplemented;
     }

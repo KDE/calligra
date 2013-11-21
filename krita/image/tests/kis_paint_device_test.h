@@ -50,6 +50,15 @@ private slots:
     void testOpacity();
     void testExactBoundsWeirdNullAlphaCase();
     void benchmarkExactBoundsNullDefaultPixel();
+
+    void testReadBytesWrapAround();
+    void testWrappedRandomAccessor();
+    void testWrappedHLineIterator();
+    void testWrappedVLineIterator();
+    void testWrappedRectIterator();
+    void testMoveWrapAround();
+
+    void testCacheState();
 };
 
 #endif

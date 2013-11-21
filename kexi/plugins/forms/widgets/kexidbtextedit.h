@@ -41,7 +41,7 @@ class KEXIFORMUTILS_EXPORT KexiDBTextEdit :  public KTextEdit,
     Q_PROPERTY(QString dataSourcePartClass READ dataSourcePartClass WRITE setDataSourcePartClass)
 
 public:
-    KexiDBTextEdit(QWidget *parent);
+    explicit KexiDBTextEdit(QWidget *parent);
     virtual ~KexiDBTextEdit();
 
     inline QString dataSource() const {

@@ -45,6 +45,7 @@
 #include <QDesktopServices>
 
 MainWindow::MainWindow (QWidget* parent)
+: QMainWindow(parent)
 {
     CAImageProvider::s_imageProvider = new CAImageProvider;
 
@@ -81,6 +82,8 @@ MainWindow::MainWindow (QWidget* parent)
         case CADocumentInfo::Presentation:
             recentPresentations.append (docInfo);
             break;
+        default:
+            ;
         }
     }
 

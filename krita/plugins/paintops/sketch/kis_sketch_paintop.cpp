@@ -40,6 +40,15 @@
 #include <kis_pressure_opacity_option.h>
 #include <kis_dab_cache.h>
 
+#include <QtGlobal>
+#ifdef Q_OS_WIN
+// quoting DRAND48(3) man-page:
+// These functions are declared obsolete by  SVID  3,
+// which  states  that rand(3) should be used instead.
+#define drand48() (static_cast<double>(qrand()) / static_cast<double>(RAND_MAX))
+#endif
+
+
 /*
 * Based on Harmony project http://github.com/mrdoob/harmony/
 */
@@ -98,13 +107,17 @@ void KisSketchPaintOp::drawConnection(const QPointF& start, const QPointF& end, 
 }
 
 void KisSketchPaintOp::updateBrushMask(const KisPaintInformation& info, qreal scale, qreal rotation){
-    m_maskDab = m_dabCache->fetchDab(m_dab->colorSpace(), painter()->paintColor(), scale, scale,
-                                     rotation, info);
+    QRect dstRect;
+    m_maskDab = m_dabCache->fetchDab(m_dab->colorSpace(),
+                                     painter()->paintColor(),
+                                     info.pos(),
+                                     scale, scale, rotation,
+                                     info, 1.0,
+                                     &dstRect);
 
-    // update bounding box
-    m_brushBoundingBox = m_maskDab->bounds();
-    m_hotSpot = m_brush->hotSpot(scale,scale,rotation,info);
-    m_brushBoundingBox.translate(info.pos() - m_hotSpot);
+    m_brushBoundingBox = dstRect;
+    m_hotSpot = QPointF(0.5 * m_brushBoundingBox.width(),
+                        0.5 * m_brushBoundingBox.height());
 }
 
 void KisSketchPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance)
@@ -192,14 +205,17 @@ void KisSketchPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintI
                 makeConnection = true;
             }
         // mask test
-        }else{
-
+        }
+        else {
             if ( m_brushBoundingBox.contains( m_points.at(i) ) ){
                 positionInMask = (diff + m_hotSpot).toPoint();
-                pixel = m_maskDab->data() + ((positionInMask.y() * w + positionInMask.x()) * m_maskDab->pixelSize());
-                opacityU8 = m_maskDab->colorSpace()->opacityU8( pixel );
-                if (opacityU8 != 0){
-                    makeConnection = true;
+                uint pos = ((positionInMask.y() * w + positionInMask.x()) * m_maskDab->pixelSize());
+                if (pos < m_maskDab->allocatedPixels() * m_maskDab->pixelSize()) {
+                    pixel = m_maskDab->data() + pos;
+                    opacityU8 = m_maskDab->colorSpace()->opacityU8( pixel );
+                    if (opacityU8 != 0){
+                        makeConnection = true;
+                    }
                 }
             }
 

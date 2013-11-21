@@ -25,7 +25,7 @@
 #include <QSize>
 #include <QString>
 
-#include <KoColorSpace.h>
+#include <KoColorConversionTransformation.h>
 #include <KoCanvasBase.h>
 #include <krita_export.h>
 #include <kis_types.h>
@@ -42,6 +42,7 @@ class KisView2;
 class KisPaintopBox;
 class KoFavoriteResourceManager;
 class KisDisplayFilter;
+class KisInputManager;
 
 enum KisCanvasType {
     QPAINTER,
@@ -79,6 +80,8 @@ public:
     void notifyZoomChanged();
 
     virtual void disconnectCanvasObserver(QObject *object);
+
+    void toggleTabletLogger();
 
 public: // KoCanvasBase implementation
 
@@ -138,6 +141,9 @@ public: // KoCanvasBase implementation
     // current shape selection.
     KisImageWSP currentImage();
 
+
+    KisInputManager *inputManager() const;
+
 public: // KisCanvas2 methods
 
     KisImageWSP image();
@@ -150,14 +156,15 @@ public: // KisCanvas2 methods
 signals:
     void imageChanged(KisImageWSP image);
 
-    void canvasDestroyed(QWidget *);
-
     void favoritePaletteCalled(const QPoint&);
 
     void sigCanvasCacheUpdated(KisUpdateInfoSP);
     void sigContinueResizeImage(qint32 w, qint32 h);
 
     void documentOffsetUpdateFinished();
+
+    // emitted whenever the canvas widget thinks sketch should update
+    void updateCanvasRequested(const QRect &rc);
 
 public slots:
 
@@ -171,7 +178,8 @@ public slots:
 
     /// canvas rotation in degrees
     qreal rotationAngle() const;
-    void setSmoothingEnabled(bool smooth);
+
+    void channelSelectionChanged();
 
 private slots:
 
@@ -204,13 +212,16 @@ private slots:
      */
     void slotSetDisplayProfile(const KoColorProfile * profile);
 
-    void slotCanvasDestroyed(QWidget* w);
-
     void setCursor(const QCursor &cursor);
 
     void slotSelectionChanged();
 
+    void slotDoCanvasUpdate();
+
 public:
+
+    // interafce for KisCanvasController only
+    void setWrapAroundViewingMode(bool value);
 
     // interface for KisView2 only
     void connectCurrentImage();
@@ -228,6 +239,7 @@ private:
     void createCanvas(bool useOpenGL);
     void createQPainterCanvas();
     void createOpenGLCanvas();
+    void updateCanvasWidgetImpl(const QRect &rc = QRect());
 
 private:
 

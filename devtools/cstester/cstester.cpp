@@ -106,7 +106,7 @@ QString saveFile(KoDocument *document, const QString &filename, const QString &o
     KUrl url;
     url.setPath(saveAs);
     document->setOutputMimeType(mimetype, 0);
-    document->documentPart()->saveAs(url);
+    document->saveAs(url);
     kDebug(31000) << "save done";
     return saveAs;
 }

@@ -39,7 +39,7 @@ class KEXICORE_EXPORT KexiDBShortcutFile
 {
 public:
     /*! Creates a new object for \a fileName. */
-    KexiDBShortcutFile(const QString& fileName);
+    explicit KexiDBShortcutFile(const QString& fileName);
 
     ~KexiDBShortcutFile();
 
@@ -60,7 +60,7 @@ class KEXICORE_EXPORT KexiDBConnShortcutFile : protected KexiDBShortcutFile
 {
 public:
     /*! Creates a new object for \a fileName. */
-    KexiDBConnShortcutFile(const QString& fileName);
+    explicit KexiDBConnShortcutFile(const QString& fileName);
 
     ~KexiDBConnShortcutFile();
 
