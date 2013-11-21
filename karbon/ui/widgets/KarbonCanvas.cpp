@@ -141,7 +141,7 @@ bool KarbonCanvas::event(QEvent *e)
         if (e->type() == QEvent::TouchBegin ||
                  e->type() == QEvent::TouchUpdate ||
                  e->type() == QEvent::TouchEnd) {
-            toolProxy()->touchEvent(dynamic_cast<QTouchEvent*>(e), viewConverter(), documentOffset());
+            toolProxy()->touchEvent(dynamic_cast<QTouchEvent*>(e));
         }
 
         toolProxy()->processEvent(e);
