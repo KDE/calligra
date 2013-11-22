@@ -130,7 +130,6 @@ protected:
 private:
     bool initHack();
     KoApplicationPrivate * const d;
-    static bool m_starting ; ///< is the application starting or not
     class ResetStarting;
     friend class ResetStarting;
 };
