@@ -31,6 +31,7 @@
 #include "Enums.h"
 #include "ImageDataItem.h"
 #include "models/ContentsModel.h"
+#include "LinkArea.h"
 
 using namespace Calligra::Components;
 
@@ -48,6 +49,7 @@ void CalligraComponentsPlugin::registerTypes(const char* uri)
     qmlRegisterType<Calligra::Components::ViewController>(uri, 1, 0, "ViewController");
     qmlRegisterType<Calligra::Components::ContentsModel>(uri, 1, 0, "ContentsModel");
     qmlRegisterType<Calligra::Components::ImageDataItem>(uri, 1, 0, "ImageDataItem");
+    qmlRegisterType<Calligra::Components::LinkArea>(uri, 1, 0, "LinkArea");
 
     qmlRegisterUncreatableType<Calligra::Components::DocumentType>(uri, 1, 0, "DocumentType", "Provides the DocumentType enum");
     qmlRegisterUncreatableType<Calligra::Components::DocumentStatus>(uri, 1, 0, "DocumentStatus", "Provides the DocumentStatus enum");

@@ -17,6 +17,7 @@ set(components_SRCS
     Enums.cpp
     Global.cpp
     ImageDataItem.cpp
+    LinkArea.cpp
     View.cpp
     ViewController.cpp
 
