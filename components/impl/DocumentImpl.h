@@ -53,6 +53,7 @@ public:
     virtual int currentIndex() = 0;
     virtual void setCurrentIndex(int newValue) = 0;
     virtual int indexCount() const = 0;
+    virtual QUrl urlAtPoint(QPoint point) = 0;
 
     DocumentType::Type documentType() const;
     KoFindBase* finder() const;

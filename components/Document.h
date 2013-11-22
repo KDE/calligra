@@ -113,6 +113,11 @@ public:
     KoDocument* koDocument() const;
 
     /**
+     * \return The url of the link at point or an empty url if there is no link at point.
+     */
+    virtual QUrl urlAtPoint( const QPoint& point );
+
+    /**
      * @}
      */
 Q_SIGNALS:

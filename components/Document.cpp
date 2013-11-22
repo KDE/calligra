@@ -25,6 +25,7 @@
 #include <QtCore/QDebug>
 #include <QtCore/QUrl>
 #include <QtCore/QSizeF>
+#include <QtCore/QPoint>
 
 #include "impl/TextDocumentImpl.h"
 #include "impl/SpreadsheetImpl.h"
@@ -181,6 +182,13 @@ KoDocument* Document::koDocument() const
     }
 
     return nullptr;
+}
+
+QUrl Document::urlAtPoint(const QPoint& point)
+{
+    if(d->impl)
+        return d->impl->urlAtPoint(point);
+    return QUrl();
 }
 
 void Document::Private::updateImpl()
