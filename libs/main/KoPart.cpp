@@ -401,9 +401,6 @@ void KoPart::deleteOpenPane()
     if (d->startUpWidget) {
         d->startUpWidget->hide();
         d->startUpWidget->deleteLater();
-
-    } else {
-        emit closeEmbedInitDialog();
     }
 }
 

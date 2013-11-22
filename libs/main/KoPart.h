@@ -167,12 +167,6 @@ private slots:
 
     void viewDestroyed();
 
-signals:
-
-    void closeEmbedInitDialog();
-
-private slots:
-
     void startCustomDocument(KoDocument *doc);
 
 
