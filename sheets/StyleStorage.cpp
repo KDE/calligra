@@ -893,6 +893,14 @@ Style StyleStorage::composeStyle(const QList<SharedSubStyle>& subStyles) const
                 style.setParentName(namedStyle->name());
 //                 kDebug(36006) <<"StyleStorage: merging done";
             }
+        }
+    }
+
+    for (int i = 0; i < subStyles.count(); ++i) {
+        if (subStyles[i]->type() == Style::DefaultStyleKey)
+            continue; //already handled in above loop
+        else if (subStyles[i]->type() == Style::NamedStyleKey) {
+            continue; //already handled in above loop
         } else if (subStyles[i]->type() == Style::Indentation) {
             // special handling for indentation
             const int indentation = static_cast<const SubStyleOne<Style::Indentation, int>*>(subStyles[i].data())->value1;
