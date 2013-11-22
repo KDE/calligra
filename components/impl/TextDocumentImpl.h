@@ -39,6 +39,7 @@ public:
     virtual int currentIndex();
     virtual void setCurrentIndex(int newValue);
     virtual int indexCount() const;
+    virtual QUrl urlAtPoint(QPoint point);
 
 private:
     class Private;

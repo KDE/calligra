@@ -24,10 +24,19 @@
 #include "PresentationKoPAView.h"
 
 #include <QtWidgets/QGraphicsWidget>
+#include <QtGui/QTextDocument>
+#include <QtGui/QTextFrame>
+#include <QtGui/QTextLayout>
+#include <QtCore/QDebug>
 
 #include <stage/part/KPrPart.h>
 #include <stage/part/KPrDocument.h>
+#include <libs/textlayout/KoTextShapeData.h>
+#include <KoFindText.h>
 #include <KoPACanvasItem.h>
+#include <KoPAPageBase.h>
+#include <KoShape.h>
+#include <KoZoomController.h>
 
 using namespace Calligra::Components;
 
@@ -41,7 +50,100 @@ public:
     KPrDocument* document;
 
     PresentationKoPAView* koPaView;
+
+    QList< QPair< QRectF, QUrl > > links;
+
+    QList<KoShape*> deepShapeFind(QList<KoShape*> shapes)
+    {
+        QList<KoShape*> allShapes;
+        foreach(KoShape* shape, shapes) {
+            allShapes.append(shape);
+            KoShapeContainer *container = dynamic_cast<KoShapeContainer*>(shape);
+            if(container) {
+                allShapes.append(deepShapeFind(container->shapes()));
+            }
+        }
+        return allShapes;
+    }
+
+    void updateLinkTargets()
+    {
+        links.clear();
+
+        if(!koPaView)
+            return;
+
+        foreach(const KoShape* shape, koPaView->activePage()->shapes()) {
+            if(!shape->hyperLink().isEmpty()) {
+                QRectF rect = shape->boundingRect();
+                while(KoShapeContainer* parent = shape->parent()) {
+                    rect.translate(parent->position());
+                }
+                links.append(QPair<QRectF, QUrl>(rect, QUrl(shape->hyperLink())));
+            }
+        }
+
+        QList<QTextDocument*> texts;
+        KoFindText::findTextInShapes(koPaView->activePage()->shapes(), texts);
+        QList<KoShape*> allShapes = deepShapeFind(koPaView->activePage()->shapes());
+        foreach(QTextDocument* text, texts) {
+            QTextBlock block = text->rootFrame()->firstCursorPosition().block();
+            for (; block.isValid(); block = block.next()) {
+                block.begin();
+                QTextBlock::iterator it;
+                for (it = block.begin(); !(it.atEnd()); ++it) {
+                    QTextFragment fragment = it.fragment();
+                    if (fragment.isValid()) {
+                        QTextCharFormat format = fragment.charFormat();
+                        if(format.isAnchor()) {
+                            // This is an anchor, store target and position...
+                            QRectF rect = getFragmentPosition(block, fragment);
+                            foreach(KoShape* shape, allShapes) {
+                                KoTextShapeData *shapeData = dynamic_cast<KoTextShapeData*>(shape->userData());
+                                if (!shapeData)
+                                    continue;
+                                if(shapeData->document() == text)
+                                {
+                                    rect.translate(shape->position());
+                                    while(KoShapeContainer* parent = shape->parent()) {
+                                        rect.translate(parent->position());
+                                    }
+                                    break;
+                                }
+                            }
+                            links.append(QPair<QRectF, QUrl>(koPaView->kopaCanvas()->viewConverter()->documentToView(rect), QUrl(format.anchorHref())));
+                        }
+                    }
+                }
+            }
+        }
+        qDebug() << links;
+    }
+
+    QRectF getFragmentPosition(QTextBlock block, QTextFragment fragment)
+    {
+        // TODO this only produces a position for the first part, if the link spans more than one line...
+        // Need to sort that somehow, unfortunately probably by slapping this code into the above function.
+        // For now leave it like this, more important things are needed.
+        QTextLayout* layout = block.layout();
+        QTextLine line = layout->lineForTextPosition(fragment.position() - block.position());
+        if(!line.isValid())
+        {
+            // fragment has no valid position and consequently no line...
+            return QRectF();
+        }
+        qreal top = line.position().y() + (line.height() / 2);
+        qreal bottom = top + line.height();
+        qreal left = line.cursorToX(fragment.position() - block.position());
+        qreal right = line.cursorToX((fragment.position() - block.position()) + fragment.length());
+        QRectF fragmentPosition(QPointF(left, top), QPointF(right, bottom));
+        return fragmentPosition.adjusted(layout->position().x(), layout->position().y(), 0, 0);
+    }
+
+    static const float wiggleFactor;
 };
+
+const float Calligra::Components::PresentationImpl::Private::wiggleFactor{ 4.f };
 
 PresentationImpl::PresentationImpl(QObject* parent)
     : DocumentImpl{parent}, d{new Private}
@@ -80,6 +182,7 @@ bool PresentationImpl::load(const QUrl& url)
     d->koPaView->connectToZoomController();
 
     d->koPaView->doUpdateActivePage(d->document->pageByIndex(0, false));
+    d->updateLinkTargets();
 
     setCanvas(canvas);
 
@@ -99,6 +202,7 @@ void PresentationImpl::setCurrentIndex(int newValue)
 {
     if(newValue != currentIndex()) {
         d->koPaView->doUpdateActivePage(d->document->pageByIndex(newValue, false));
+        d->updateLinkTargets();
         emit currentIndexChanged();
     }
 }
@@ -106,4 +210,23 @@ void PresentationImpl::setCurrentIndex(int newValue)
 int PresentationImpl::indexCount() const
 {
     return d->document->pageCount();
+}
+
+QUrl PresentationImpl::urlAtPoint(QPoint point)
+{
+    for( const QPair< QRectF, QUrl >& link : d->links )
+    {
+        QRectF hitTarget{
+            link.first.x() - Private::wiggleFactor,
+            link.first.y() - Private::wiggleFactor,
+            link.first.width() + Private::wiggleFactor * 2,
+            link.first.height() + Private::wiggleFactor * 2
+        };
+
+        if( hitTarget.contains( point ) )
+        {
+            return link.second;
+        }
+    }
+    return QUrl();
 }
