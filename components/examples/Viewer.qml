@@ -117,6 +117,11 @@ ApplicationWindow {
                 id: v;
                 anchors.fill: parent;
                 document: doc;
+                Calligra.LinkArea {
+                    anchors.fill: parent;
+                    document: doc;
+                    onLinkClicked: console.debug(linkTarget);
+                }
             }
 
             ScrollView {
