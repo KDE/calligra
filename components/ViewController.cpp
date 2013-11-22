@@ -425,16 +425,18 @@ void ViewController::zoomTimeout()
     float oldX = d->flickable->property("contentX").toReal();
     float oldY = d->flickable->property("contentY").toReal();
 
-    float xoff = (d->zoomCenter.x() + oldX) * (1.0 + d->zoomChange);
-    d->flickable->setProperty("contentX", xoff - d->zoomCenter.x());
+    d->ignoreOffsetChange = true;
+    d->view->setZoom(newZoom);
+    d->ignoreOffsetChange = false;
 
-    float yoff = (d->zoomCenter.y() + oldY ) * (1.0 + d->zoomChange);
-    d->flickable->setProperty("contentY", yoff - d->zoomCenter.y());
+    float z = 1.0 + d->zoomChange;
+    d->flickable->setProperty("contentX", oldX + ((d->zoomCenter.x() * z - d->zoomCenter.x())) );
+    d->flickable->setProperty("contentY", oldY + ((d->zoomCenter.y() * z - d->zoomCenter.y())) );
 
     QMetaObject::invokeMethod(d->flickable, "returnToBounds");
 
     d->zoom = newZoom;
-    d->view->setZoom(newZoom);
+
 
     d->view->setVisible(true);
     d->zoomCenter = QVector3D{};
