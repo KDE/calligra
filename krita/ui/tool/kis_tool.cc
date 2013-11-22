@@ -54,7 +54,7 @@
 #include <kis_painter.h>
 #include <kis_paintop_preset.h>
 #include <kis_paintop_settings.h>
-#include <kis_pattern.h>
+#include <KoPattern.h>
 #include <kis_transaction.h>
 #include <kis_floating_message.h>
 
@@ -84,7 +84,7 @@ struct KisTool::Private {
     QCursor cursor; // the cursor that should be shown on tool activation.
 
     // From the canvas resources
-    KisPattern * currentPattern;
+    KoPattern * currentPattern;
     KoAbstractGradient * currentGradient;
     KoColor currentFgColor;
     KoColor currentBgColor;
@@ -164,7 +164,7 @@ void KisTool::activate(ToolActivation, const QSet<KoShape*> &)
 
     d->currentFgColor = canvas()->resourceManager()->resource(KoCanvasResourceManager::ForegroundColor).value<KoColor>();
     d->currentBgColor = canvas()->resourceManager()->resource(KoCanvasResourceManager::BackgroundColor).value<KoColor>();
-    d->currentPattern = static_cast<KisPattern *>(canvas()->resourceManager()->
+    d->currentPattern = static_cast<KoPattern *>(canvas()->resourceManager()->
                                                   resource(KisCanvasResourceProvider::CurrentPattern).value<void *>());
     d->currentGradient = static_cast<KoAbstractGradient *>(canvas()->resourceManager()->
                                                            resource(KisCanvasResourceProvider::CurrentGradient).value<void *>());
@@ -222,7 +222,7 @@ void KisTool::canvasResourceChanged(int key, const QVariant & v)
         d->currentBgColor = v.value<KoColor>();
         break;
     case(KisCanvasResourceProvider::CurrentPattern):
-        d->currentPattern = static_cast<KisPattern *>(v.value<void *>());
+        d->currentPattern = static_cast<KoPattern *>(v.value<void *>());
         break;
     case(KisCanvasResourceProvider::CurrentGradient):
         d->currentGradient = static_cast<KoAbstractGradient *>(v.value<void *>());
@@ -391,7 +391,7 @@ void KisTool::notifyModified() const
     }
 }
 
-KisPattern * KisTool::currentPattern()
+KoPattern * KisTool::currentPattern()
 {
     return d->currentPattern;
 }
@@ -450,11 +450,6 @@ KisTool::ToolMode KisTool::mode() const {
 
 void KisTool::mousePressEvent(KoPointerEvent *event)
 {
-    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
-    if (kisCanvas) {
-        kisCanvas->setSmoothingEnabled(false);
-    }
-
     KisConfig cfg;
 
     if (isGestureSupported() &&
@@ -482,11 +477,6 @@ void KisTool::mouseMoveEvent(KoPointerEvent *event)
 
 void KisTool::mouseReleaseEvent(KoPointerEvent *event)
 {
-
-    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
-    if (kisCanvas) {
-        kisCanvas->setSmoothingEnabled(true);
-    }
     KisConfig cfg;
 
     if (mode() == GESTURE_MODE) {
@@ -711,31 +701,6 @@ void KisTool::resetCursorStyle()
 {
     KisConfig cfg;
     useCursor(d->cursor);
-
-    switch (cfg.cursorStyle()) {
-    case CURSOR_STYLE_TOOLICON:
-        useCursor(d->cursor);
-        break;
-    case CURSOR_STYLE_CROSSHAIR:
-    case CURSOR_STYLE_OUTLINE_CENTER_CROSS:
-        useCursor(KisCursor::crossCursor());
-        break;
-    case CURSOR_STYLE_POINTER:
-        useCursor(KisCursor::arrowCursor());
-        break;
-    case CURSOR_STYLE_NO_CURSOR:
-        useCursor(KisCursor::blankCursor());
-        break;
-    case CURSOR_STYLE_SMALL_ROUND:
-    case CURSOR_STYLE_OUTLINE_CENTER_DOT:
-        useCursor(KisCursor::roundCursor());
-        break;
-    case CURSOR_STYLE_OUTLINE:
-        break;
-    default:
-        // use tool cursor as default, if the tool supports outline, it will set the cursor to blank and show outline
-        ;
-    }
 }
 
 

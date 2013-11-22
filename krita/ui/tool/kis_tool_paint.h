@@ -39,7 +39,7 @@
 #include <kis_image.h>
 #include <kis_paintop_settings.h>
 
-#include <kis_pattern.h>
+#include <KoPattern.h>
 
 #include "kis_tool.h"
 #include <QCheckBox>
@@ -147,7 +147,6 @@ private slots:
     void decreaseBrushSize();
 
 protected slots:
-    virtual void resetCursorStyle();
     virtual void updateTabletPressureSamples();
 
 
@@ -159,6 +158,9 @@ protected:
     QPainterPath m_currentOutline;
     QRectF m_oldOutlineRect;
     bool m_toForegroundColor;
+
+private:
+    QPainterPath tryFixTooBigBrush(const QPainterPath &originalOutline);
 
 private:
 
