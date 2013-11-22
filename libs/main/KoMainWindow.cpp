@@ -254,6 +254,7 @@ KoMainWindow::KoMainWindow(KoPart *part, const KComponentData &componentData)
     Q_ASSERT(componentData.isValid());
 
     setTabPosition(Qt::AllDockWidgetAreas, QTabWidget::North);
+    connect(this, SIGNAL(restoringDone()), this, SLOT(forceDockTabFonts()));
 
     if (componentData.isValid()) {
         setComponentData(componentData);   // don't load plugins! we don't want
@@ -506,7 +507,8 @@ void KoMainWindow::addView(KoView *view)
     statusBar()->setVisible(viewHasDocument);
 
     updateCaption();
-    forceDockTabFonts();
+
+    emit restoringDone();
 
     if (viewHasDocument && !d->dockWidgetVisibilityMap.isEmpty()) {
         foreach(QDockWidget* dockWidget, d->dockWidgetsMap) {

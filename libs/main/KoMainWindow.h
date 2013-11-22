@@ -195,6 +195,9 @@ signals:
     /// and the document anymore.
     void loadCompleted();
 
+    /// This signal is emitted right after the docker states have been succefully restored from config
+    void restoringDone();
+
 private slots:
 
     /**
