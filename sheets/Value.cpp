@@ -126,6 +126,8 @@ public:
         if (type == Value::Complex) delete pc;
         if (type == Value::Error)   delete ps;
         if (type == Value::String)  delete ps;
+        type = Value::Empty;
+        b = 0;
     }
 
     /** set most probable formatting based on the type */

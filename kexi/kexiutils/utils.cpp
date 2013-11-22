@@ -31,6 +31,12 @@
 #include <QFile>
 #include <QStyle>
 #include <QLayout>
+#include <KMessageBox>
+#include <QFileInfo>
+#include <KUrl>
+#include <KRun>
+#include <KToolInvocation>
+#include <KLocalizedString>
 
 #include <kdebug.h>
 #include <kcursor.h>
@@ -744,4 +750,57 @@ bool PaintBlocker::eventFilter(QObject* watched, QEvent* event)
     return false;
 }
 
+void KexiUtils::openHyperLink(const KUrl &url, QWidget *parent, const OpenHyperlinkOptions &options)
+{
+    if (url.isLocalFile()) {
+        QFileInfo fileInfo(url.toLocalFile());
+        if (!fileInfo.exists()) {
+            KMessageBox::sorry(parent, i18nc("@info", "The file or directory <filename>%1</filename> does not exist.", fileInfo.absoluteFilePath()));
+            return;
+        }
+    }
+
+    if (!url.isValid()) {
+        KMessageBox::sorry(parent, i18nc("@info", "Invalid hyperlink <link>%1</link>.", url.pathOrUrl()));
+        return;
+    }
+
+    QString type = KMimeType::findByUrl(url)->name();
+
+    if (!options.allowExecutable && KRun::isExecutableFile(url, type)) {
+        KMessageBox::sorry(parent, i18nc("@info", "Executable <link>%1</link> not allowed.", url.pathOrUrl()));
+        return;
+    }
+
+    if (!options.allowRemote && !url.isLocalFile()) {
+        KMessageBox::sorry(parent, i18nc("@info", "Remote hyperlink <link>%1</link> not allowed.", url.pathOrUrl()));
+        return;
+    }
+
+    if (KRun::isExecutableFile(url, type)) {
+        int ret = KMessageBox::warningYesNo(parent
+                                            , i18nc("@info", "Do you want to run this file?"
+                                                    "<warning>Running executables can be dangerous.</warning>")
+                                            , QString(), KStandardGuiItem::yes(), KStandardGuiItem::no()
+                                            , "AllowRunExecutable", KMessageBox::Dangerous);
+
+        if (ret != KMessageBox::Yes) {
+            return;
+        }
+    }
+
+    switch(options.tool) {
+        case OpenHyperlinkOptions::DefaultHyperlinkTool:
+            KRun::runUrl(url, type, parent);
+            break;
+        case OpenHyperlinkOptions::BrowserHyperlinkTool:
+            KToolInvocation::invokeBrowser(url.url());
+            break;
+        case OpenHyperlinkOptions::MailerHyperlinkTool:
+            KToolInvocation::invokeMailer(url);
+            break;
+    }
+}
+
+#include "moc_utils.cpp"
 #include "utils_p.moc"

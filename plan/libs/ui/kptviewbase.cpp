@@ -24,7 +24,6 @@
 
 #include <kaction.h>
 #include <kparts/event.h>
-#include <kxmlguifactory.h>
 #include <kmessagebox.h>
 #include <knotification.h>
 #include <kactioncollection.h>
@@ -70,11 +69,11 @@ DockWidget::DockWidget( ViewBase *v, const QString &identity,  const QString &ti
     connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), SLOT(setLocation(Qt::DockWidgetArea)));
 }
 
-void DockWidget::activate( KoMainWindow *shell )
+void DockWidget::activate( KoMainWindow *mainWindow )
 {
     connect(this, SIGNAL(visibilityChanged(bool)), this, SLOT(setShown(bool)));
     setVisible( m_shown );
-    shell->addDockWidget( location, this );
+    mainWindow->addDockWidget( location, this );
 
     foreach(const KActionCollection *c, KActionCollection::allCollections()) {
         KActionMenu *a = qobject_cast<KActionMenu*>(c->action("settings_dockers_menu"));
@@ -85,10 +84,10 @@ void DockWidget::activate( KoMainWindow *shell )
     }
 }
 
-void DockWidget::deactivate( KoMainWindow *shell )
+void DockWidget::deactivate( KoMainWindow *mainWindow )
 {
     disconnect(this, SIGNAL(visibilityChanged(bool)), this, SLOT(setShown(bool)));
-    shell->removeDockWidget( this );
+    mainWindow->removeDockWidget( this );
      // activation re-parents to QMainWindow, so re-parent back to view
     setParent( const_cast<ViewBase*>( view ) );
     foreach(const KActionCollection *c, KActionCollection::allCollections()) {

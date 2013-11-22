@@ -39,6 +39,8 @@ class KoOasisSettings;
 class KoDocumentResourceManager;
 class KoPart;
 
+#define SHEETS_MIME_TYPE "application/vnd.oasis.opendocument.spreadsheet"
+
 namespace Calligra
 {
 namespace Sheets
@@ -71,6 +73,25 @@ public:
     static QList<DocBase*> documents();
 
     virtual void setReadWrite(bool readwrite = true);
+
+    /// reimplemented from KoDocument
+    virtual QByteArray nativeFormatMimeType() const { return SHEETS_MIME_TYPE; }
+    /// reimplemented from KoDocument
+    virtual QByteArray nativeOasisMimeType() const {return SHEETS_MIME_TYPE;}
+    /// reimplemented from KoDocument
+    virtual QStringList extraNativeMimeTypes() const
+    {
+        return QStringList() << "application/vnd.oasis.opendocument.spreadsheet-template"
+                             << "application/x-kspread";
+    }
+
+    /**
+     * @return the MIME type of KSpread document
+     */
+    virtual QByteArray mimeType() const {
+        return SHEETS_MIME_TYPE;
+    }
+
 
     /**
      * @return the Map that belongs to this Document

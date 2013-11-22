@@ -62,7 +62,7 @@ public:
     class TempData : public KexiWindowData
     {
     public:
-        TempData(QObject* parent);
+        explicit TempData(QObject* parent);
         ~TempData();
         QPointer<KFormDesigner::Form> form;
         QPointer<KFormDesigner::Form> previewForm;

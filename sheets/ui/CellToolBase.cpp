@@ -54,6 +54,9 @@
 #include "Sheet.h"
 #include "SheetView.h"
 #include "StyleManager.h"
+#include "CellStorage.h"
+#include "Value.h"
+#include "ValueConverter.h"
 
 // commands
 #include "commands/AutoFilterCommand.h"
@@ -179,7 +182,7 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
 
     // Create the extra and ones with extended names for the context menu.
     d->createPopupMenuActions();
-
+    
     // Create the actions.
     KAction* action = 0;
 
@@ -856,6 +859,7 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     action->setToolTip(i18n("Permute the fixation of the reference at the text cursor"));
 
     setTextMode(true);
+
 }
 
 CellToolBase::~CellToolBase()
@@ -1101,10 +1105,11 @@ void CellToolBase::activate(ToolActivation toolActivation, const QSet<KoShape*> 
     }
 
     useCursor(Qt::ArrowCursor);
+    
 
     // paint the selection rectangle
     selection()->update();
-
+    populateWordCollection();
     // Initialize cell style selection action.
     const StyleManager* styleManager = selection()->activeSheet()->map()->styleManager();
     static_cast<KSelectAction*>(this->action("setStyle"))->setItems(styleManager->styleNames());
@@ -1376,7 +1381,7 @@ bool CellToolBase::createEditor(bool clear, bool focus)
         return false;
 
     if (!editor()) {
-        d->cellEditor = new CellEditor(this, canvas()->canvasWidget());
+        d->cellEditor = new CellEditor(this, d->wordCollection,canvas()->canvasWidget());
         d->cellEditor->setEditorFont(cell.style().font(), true, canvas()->viewConverter());
         connect(action("permuteFixation"), SIGNAL(triggered(bool)),
                 d->cellEditor, SLOT(permuteFixation()));
@@ -1389,7 +1394,7 @@ bool CellToolBase::createEditor(bool clear, bool focus)
             d->externalEditor->applyAction()->setEnabled(true);
             d->externalEditor->cancelAction()->setEnabled(true);
         }
-
+        
         double w = cell.width();
         double h = cell.height();
         double min_w = cell.width();
@@ -1457,6 +1462,28 @@ bool CellToolBase::createEditor(bool clear, bool focus)
     return true;
 }
 
+void CellToolBase::populateWordCollection()
+{
+  const CellStorage* cellstore=selection()->activeSheet()->cellStorage();
+  ValueConverter *conv=0,*conv2=0;
+  int lastrow=cellstore->rows();
+  int lastcolumn=cellstore->columns();
+  if( lastrow < 2000 && lastcolumn < 20) {
+  for (int j=1 ; j <= lastcolumn ; j++) {
+    for (int i=1; i<=lastrow ; i++) {
+      Value val=Cell( selection()->activeSheet(), j, i).value();
+      if(val.isString()) {
+	QString value=conv->toString( conv2->asString(val) );
+	
+	if(!d->wordCollection.values(j).contains(value)){
+	    d->wordCollection.insertMulti(j, value);
+	  }
+      }	 
+    }
+  }
+  }
+}
+
 void CellToolBase::deleteEditor(bool saveChanges, bool expandMatrix)
 {
     if (!d->cellEditor) {
@@ -1492,6 +1519,7 @@ void CellToolBase::activeSheetChanged(Sheet* sheet)
 #else
     Q_ASSERT(selection()->activeSheet() == sheet);
 #endif
+    populateWordCollection();
     if (!selection()->referenceSelectionMode()) {
         return;
     }

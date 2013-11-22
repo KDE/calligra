@@ -174,7 +174,7 @@ void MobiHeaderGenerator::generatePalmDataBase()
     // palmDBHeader length + palmDoc header length (16) + MobiHeader length + EXTH header length
     // + EHTH header padding + book name (title) length + padding
     // *(padding are for to make it multiple of four bytes)
-    // + 2052 bytes (I dont know what exactly it is for but i see it in
+    // + 2052 bytes (I don't know what exactly it is for but i see it in
     // every file that i have made it by mobi packet creator)
     // + 1 ( to point the first character of text)
 

@@ -96,21 +96,21 @@ MsooXmlReader::~MsooXmlReader()
 {
 }
 
-const char* MsooXmlReader::constOn = "on";
-const char* MsooXmlReader::constOff = "off";
-const char* MsooXmlReader::constTrue = "true";
-const char* MsooXmlReader::constFalse = "false";
-const char* MsooXmlReader::constNone = "none";
-const char* MsooXmlReader::const1 = "1";
-const char* MsooXmlReader::const0 = "0";
-const char* MsooXmlReader::constAuto = "auto";
-const char* MsooXmlReader::constFloat = "float";
-const char* MsooXmlReader::constPercentage = "percentage";
-const char* MsooXmlReader::constCurrency = "currency";
-const char* MsooXmlReader::constDate = "date";
-const char* MsooXmlReader::constTime = "time";
-const char* MsooXmlReader::constBoolean = "boolean";
-const char* MsooXmlReader::constString = "string";
+const char MsooXmlReader::constOn[] = "on";
+const char MsooXmlReader::constOff[] = "off";
+const char MsooXmlReader::constTrue[] = "true";
+const char MsooXmlReader::constFalse[] = "false";
+const char MsooXmlReader::constNone[] = "none";
+const char MsooXmlReader::const1[] = "1";
+const char MsooXmlReader::const0[]  = "0";
+const char MsooXmlReader::constAuto[] = "auto";
+const char MsooXmlReader::constFloat[] = "float";
+const char MsooXmlReader::constPercentage[] = "percentage";
+const char MsooXmlReader::constCurrency[] = "currency";
+const char MsooXmlReader::constDate[] = "date";
+const char MsooXmlReader::constTime[] = "time";
+const char MsooXmlReader::constBoolean[] = "boolean";
+const char MsooXmlReader::constString[] = "string";
 
 
 void MsooXmlReader::init()

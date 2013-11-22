@@ -143,11 +143,15 @@ void ICalendarExport::createTodos(KCalCore::Calendar::Ptr cal, const Node *node,
     DateTime st = node->startTime(id);
     DateTime et = node->endTime(id);
     if (st.isValid()) {
+#if PLAN_KDEPIMLIBS_HEXVERSION < KDE_MAKE_VERSION(4,11,0)
         todo->setHasStartDate(true);
+#endif
         todo->setDtStart( KDateTime( st ) );
     }
     if (et.isValid()) {
+#if PLAN_KDEPIMLIBS_HEXVERSION < KDE_MAKE_VERSION(4,11,0)
         todo->setHasDueDate(true);
+#endif
         todo->setDtDue( KDateTime( et ) );
     }
     if (node->type() == Node::Type_Task) {
@@ -171,7 +175,11 @@ void ICalendarExport::createTodos(KCalCore::Calendar::Ptr cal, const Node *node,
         }
     } else if (node->type() == Node::Type_Milestone) {
         const Task *task = qobject_cast<Task*>(const_cast<Node*>(node));
+#if PLAN_KDEPIMLIBS_HEXVERSION < KDE_MAKE_VERSION(4,11,0)
         todo->setHasStartDate(false);
+#else
+        todo->setDtStart(KDateTime());
+#endif
         todo->setPercentComplete(task->completion().percentFinished());
     }
     foreach(const Document *doc, node->documents().documents()) {

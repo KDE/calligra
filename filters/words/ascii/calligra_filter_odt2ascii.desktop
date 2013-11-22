@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=Words ASCII Export Filter
+Name[bs]=Words ASCII unosni Filter
 Name[ca]=Filtre d'exportació ASCII per al Words
 Name[ca@valencia]=Filtre d'exportació ASCII per al Words
 Name[cs]=Exportní filtr formátu ASCII pro Words
@@ -23,6 +24,7 @@ Name[sk]=ASCII filter pre export z Words
 Name[sv]=Words ASCII-exportfilter
 Name[uk]=Фільтр імпорту ASCII для Words
 Name[x-test]=xxWords ASCII Export Filterxx
+Name[zh_CN]=Words ASCII 导出过滤器
 X-KDE-Import=application/vnd.oasis.opendocument.text
 X-KDE-Export=text/plain
 X-KDE-Weight=1

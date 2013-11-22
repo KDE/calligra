@@ -43,7 +43,7 @@ using namespace Calligra::Sheets;
 Part::Part(QObject *parent)
     : KoPart(parent)
 {
-    setComponentData(Factory::global(), false);
+    setComponentData(Factory::global());
     setTemplateType("sheets_template");
 }
 
@@ -57,9 +57,9 @@ void Part::setDocument(Doc *document)
     m_document = document;
 }
 
-KoView* Part::createViewInstance(QWidget* parent)
+KoView* Part::createViewInstance(KoDocument *document, QWidget* parent)
 {
-    View *view = new View(this, parent, m_document);
+    View *view = new View(this, parent, qobject_cast<Sheets::Doc*>(document));
     // If we don't have this here, the next call will die horribly
     KoToolManager::instance()->addController(view->canvasController());
     // explicit switch tool to be sure that the list of option-widgets (CellToolOptionWidget
@@ -68,13 +68,18 @@ KoView* Part::createViewInstance(QWidget* parent)
     // We need to set the active sheet, otherwise we will break various other bits of the API
     // which expect your view to actually be ready for interaction after being created (e.g.
     // printing)
-    view->setActiveSheet(m_document->map()->sheet(0));
+    view->setActiveSheet(qobject_cast<Sheets::Doc*>(document)->map()->sheet(0));
     return view;
 }
 
-QGraphicsItem *Part::createCanvasItem()
+QGraphicsItem *Part::createCanvasItem(KoDocument *document)
 {
-    return new CanvasItem(m_document);
+    return new CanvasItem(qobject_cast<Sheets::Doc*>(document));
+}
+
+KoMainWindow *Part::createMainWindow()
+{
+    return new KoMainWindow(SHEETS_MIME_TYPE, componentData());
 }
 
 void Part::openTemplate(const KUrl& url)
@@ -85,10 +90,11 @@ void Part::openTemplate(const KUrl& url)
     m_document->initConfig();
 }
 
-void Part::addView(KoView *_view)
+void Part::addView(KoView *_view, KoDocument *document)
 {
-    KoPart::addView(_view);
-    foreach(KoView* view, views())
-    static_cast<View*>(view)->selection()->emitCloseEditor(true);
+    KoPart::addView(_view, document);
+    foreach(KoView* view, views()) {
+        static_cast<View*>(view)->selection()->emitCloseEditor(true);
+    }
 }
 

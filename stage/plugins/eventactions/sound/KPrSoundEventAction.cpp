@@ -94,7 +94,7 @@ void KPrSoundEventAction::start()
     if ( m_soundData ) {
         finish();
         m_media = Phonon::createPlayer( Phonon::MusicCategory,
-                                        Phonon::MediaSource( m_soundData->nameOfTempFile() ) );
+                                        Phonon::MediaSource(QUrl::fromLocalFile(m_soundData->nameOfTempFile())) );
         connect( m_media, SIGNAL(finished()), this, SLOT(finished()) );
         m_media->play();
     }

@@ -36,7 +36,7 @@ KAboutData * newAboutData()
     KAboutData * aboutData=new KAboutData( "planwork", 0, ki18nc("application name", "Plan WorkPackage Handler"),
                                            PLANWORK_VERSION, ki18n(PLANWORK_DESCRIPTION),
                                            KAboutData::License_GPL,
-                                           ki18n("(c) 2007-2011, The Plan Team"),
+                                           ki18n("Copyright (C) 2007-2013, The Plan Team"),
                                            KLocalizedString(),
                                            "http://www.calligra.org/plan/" );
 

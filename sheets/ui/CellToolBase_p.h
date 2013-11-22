@@ -96,6 +96,7 @@ public:
     QPoint findStart;
     QPoint findPos;
     QPoint findEnd;
+    QHash<int, QString> wordCollection;
 
     struct {
         Sheet * currentSheet;

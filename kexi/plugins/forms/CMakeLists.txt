@@ -32,7 +32,6 @@ target_link_libraries(
     kexiformutils
     ${KDE4_KDECORE_LIBS}
     ${QT_QT3SUPPORT_LIBRARY}
-    kexiextendedwidgets
     )
 
 install(TARGETS kexihandler_form  DESTINATION ${PLUGIN_INSTALL_DIR})
@@ -85,7 +84,7 @@ set(kexiformutils_LIB_SRCS
 # todo  widgets/kexidbsubform.cpp
   widgets/kexidblabel.cpp
   widgets/kexidbimagebox.cpp
-  widgets/kexipushbutton.cpp
+  widgets/KexiDBPushButton.cpp
   widgets/kexiframe.cpp
   widgets/kexidblineedit.cpp
   widgets/kexidbcheckbox.cpp
