@@ -30,6 +30,8 @@ class KisMainWindow : public KoMainWindow
     Q_OBJECT
 public:
     explicit KisMainWindow(KoPart *part, const KComponentData &instance);
+
+    void showView(KoView *view);
     
 signals:
     

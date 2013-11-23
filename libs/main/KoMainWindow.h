@@ -417,7 +417,7 @@ private slots:
     void newWindow();
 
 // ---------------------  PartManager
-private:
+protected:
 
     /**
      * Sets the active View.

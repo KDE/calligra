@@ -48,7 +48,16 @@ KisMainWindow::KisMainWindow(KoPart *part, const KComponentData &instance)
     , m_mdiArea(new QMdiArea(this))
 {
     setCentralWidget(m_mdiArea);
+    m_mdiArea->show();
     guiFactory()->addClient(new KisMainGui(this));
+}
+
+void KisMainWindow::showView(KoView *view)
+{
+    setActiveView(view);
+    m_mdiArea->addSubWindow(view);
+    view->show();
+    view->setFocus();
 }
 
 void KisMainWindow::slotPreferences()

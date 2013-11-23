@@ -1169,9 +1169,7 @@ bool KoMainWindow::queryClose()
 
 void KoMainWindow::slotFileNew()
 {
-    KoMainWindow *s = d->part->createMainWindow();
-    s->show();
-    d->part->showStartUpWidget(s, true /*Always show widget*/);
+    d->part->showStartUpWidget(this, true /*Always show widget*/);
 }
 
 void KoMainWindow::slotFileOpen()
