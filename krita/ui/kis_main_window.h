@@ -19,11 +19,17 @@
 #define KIS_MAIN_WINDOW_H
 
 #include <KoMainWindow.h>
-#include <QMdiArea>
-#include <QMdiSubWindow>
 
+class QMdiArea;
+class QSignalMapper;
+class QCloseEvent;
+
+class KAction;
 
 class KoPart;
+
+class KisMainGui;
+class KisView2;
 
 class KisMainWindow : public KoMainWindow
 {
@@ -39,8 +45,28 @@ public slots:
 
     void slotPreferences();
 
+protected:
+
+    void closeEvent(QCloseEvent *e);
+
+private slots:
+
+    void updateMenus();
+    void updateWindowMenu();
+    void setActiveSubWindow(QWidget *window);
+
 private:
+    KisView2 *activeKisView();
+
+    KisMainGui *m_guiClient;
+
     QMdiArea *m_mdiArea;
+    QSignalMapper *m_windowMapper;
+
+    KAction *m_mdiCascade;
+    KAction *m_mdiTile;
+    KAction *m_mdiNextWindow;
+    KAction *m_mdiPreviousWindow;
 
 
 };

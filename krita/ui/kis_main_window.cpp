@@ -18,10 +18,15 @@
 #include "kis_main_window.h"
 
 #include <QDesktopWidget>
+#include <QMdiSubWindow>
+#include <QMdiArea>
+#include <QSignalMapper>
+#include <QCloseEvent>
 
 #include <kxmlguiclient.h>
 #include <kxmlguifactory.h>
 #include <kactioncollection.h>
+#include <kaction.h>
 
 #include <KoView.h>
 #include <KoPart.h>
@@ -37,19 +42,51 @@
 
 class KisMainGui : public KXMLGUIClient {
 public:
-    KisMainGui(KisMainWindow *mw) {
+    KisMainGui(KisMainWindow *mw)
+        : KXMLGUIClient(mw)
+    {
         setXMLFile("kritashell.rc", true);
-        actionCollection()->addAction(KStandardAction::Preferences, "preferences", mw, SLOT(slotPreferences()));
     }
+
 };
 
 KisMainWindow::KisMainWindow(KoPart *part, const KComponentData &instance)
     : KoMainWindow(part, instance)
     , m_mdiArea(new QMdiArea(this))
 {
+    m_mdiArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    m_mdiArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+
     setCentralWidget(m_mdiArea);
     m_mdiArea->show();
-    guiFactory()->addClient(new KisMainGui(this));
+
+    connect(m_mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(updateMenus()));
+    m_windowMapper = new QSignalMapper(this);
+    connect(m_windowMapper, SIGNAL(mapped(QWidget*)), this, SLOT(setActiveSubWindow(QWidget*)));
+
+    m_guiClient = new KisMainGui(this);
+
+    m_guiClient->actionCollection()->addAction(KStandardAction::Preferences, "preferences", this, SLOT(slotPreferences()));
+
+    m_mdiCascade = new KAction(i18n("Cascade"), this);
+    m_guiClient->actionCollection()->addAction("windows_cascade", m_mdiCascade);
+    connect(m_mdiCascade, SIGNAL(triggered()), m_mdiArea, SLOT(cascadeSubWindows()));
+
+    m_mdiTile = new KAction(i18n("Tile"), this);
+    m_guiClient->actionCollection()->addAction("windows_tile", m_mdiTile);
+    connect(m_mdiTile, SIGNAL(triggered()), m_mdiArea, SLOT(tileSubWindows()));
+
+    m_mdiNextWindow = new KAction(i18n("Next"), this);
+    m_guiClient->actionCollection()->addAction("windows_next", m_mdiNextWindow);
+    connect(m_mdiNextWindow, SIGNAL(triggered()), m_mdiArea, SLOT(activateNextSubWindow()));
+
+    m_mdiPreviousWindow = new KAction(i18n("Previous"), this);
+    m_guiClient->actionCollection()->addAction("windows_previous", m_mdiPreviousWindow);
+    connect(m_mdiPreviousWindow, SIGNAL(triggered()), m_mdiArea, SLOT(activatePreviousSubWindow()));
+
+    guiFactory()->addClient(m_guiClient);
+
+    updateMenus();
 }
 
 void KisMainWindow::showView(KoView *view)
@@ -84,5 +121,38 @@ void KisMainWindow::slotPreferences()
             }
         }
     }
+}
+
+void KisMainWindow::closeEvent(QCloseEvent *e)
+{
+    m_mdiArea->closeAllSubWindows();
+    KoMainWindow::closeEvent(e);
+}
+
+void KisMainWindow::updateMenus()
+{
+
+}
+
+void KisMainWindow::updateWindowMenu()
+{
+
+}
+
+void KisMainWindow::setActiveSubWindow(QWidget *window)
+{
+    if (!window) return;
+    QMdiSubWindow *subwin = qobject_cast<QMdiSubWindow *>(window);
+    if (subwin) {
+        m_mdiArea->setActiveSubWindow(subwin);
+        setActiveView(subwin->widget());
+    }
+}
+
+KisView2 *KisMainWindow::activeKisView()
+{
+    if (QMdiSubWindow *activeSubWindow = m_mdiArea->activeSubWindow())
+        return qobject_cast<KisView2 *>(activeSubWindow->widget());
+    return 0;
 }
 
