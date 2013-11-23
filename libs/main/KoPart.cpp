@@ -426,6 +426,12 @@ QString KoPart::templateType() const
 
 void KoPart::startCustomDocument(KoDocument* doc)
 {
+    addDocument(doc);
+    KoMainWindow *mw = qobject_cast<KoMainWindow*>(d->startupWidget->parent());
+    if (!mw) mw = currentMainwindow();
+    KoView *view = createView(doc, mw);
+    mw->addView(view);
+
     d->startupWidget->setParent(0);
     d->startupWidget->hide();
 }

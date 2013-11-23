@@ -608,7 +608,7 @@ void KoMainWindow::reloadRecentFileList()
 void KoMainWindow::updateCaption()
 {
     kDebug(30003) << "KoMainWindow::updateCaption()";
-    if (!d->activeView->document()) {
+    if (!d->activeView || !d->activeView->document()) {
         updateCaption(QString(), false);
     }
     else {
