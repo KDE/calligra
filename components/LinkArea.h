@@ -34,6 +34,7 @@ class LinkArea : public QQuickItem
 {
     Q_OBJECT
     Q_PROPERTY( Calligra::Components::Document* document READ document WRITE setDocument NOTIFY documentChanged )
+    Q_PROPERTY( float controllerZoom READ controllerZoom WRITE setControllerZoom NOTIFY controllerZoomChanged )
 
 public:
     LinkArea(QQuickItem* parent = 0);
@@ -42,12 +43,16 @@ public:
     Calligra::Components::Document* document() const;
     void setDocument( Calligra::Components::Document* newDocument );
 
+    float controllerZoom() const;
+    void setControllerZoom(float newZoom);
+
 Q_SIGNALS:
     void clicked();
     void doubleClicked();
     void linkClicked(QUrl linkTarget);
 
     void documentChanged();
+    void controllerZoomChanged();
 
 protected:
     virtual void mousePressEvent(QMouseEvent* event);

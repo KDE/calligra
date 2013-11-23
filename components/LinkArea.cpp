@@ -30,11 +30,13 @@ class LinkArea::Private
 public:
     Private()
         : document{ nullptr }
+        , controllerZoom(1.f)
         , clickInProgress(false)
         , wiggleFactor(4)
     { }
 
     Calligra::Components::Document* document;
+    float controllerZoom;
 
     bool clickInProgress;
     QPointF clickLocation;
@@ -70,21 +72,22 @@ void LinkArea::setDocument(Calligra::Components::Document* newDocument)
 void LinkArea::mousePressEvent(QMouseEvent* event)
 {
     d->clickInProgress = true;
-    d->clickLocation = event->pos();
+    d->clickLocation = event->pos() / d->controllerZoom;
 }
 
 void LinkArea::mouseReleaseEvent(QMouseEvent* event)
 {
     d->clickInProgress = false;
+    QPoint pos = event->pos() / d->controllerZoom;
     // Don't activate anything if the finger has moved too far
     QRect rect((d->clickLocation - QPointF(d->wiggleFactor, d->wiggleFactor)).toPoint(), QSize(d->wiggleFactor * 2, d->wiggleFactor * 2));
-    if(!rect.contains(event->pos())) {
+    if(!rect.contains(pos)) {
         return;
     }
 
     QUrl url;
     if( d->document )
-        url = d->document->urlAtPoint( event->pos() );
+        url = d->document->urlAtPoint( pos );
 
     if(url.isEmpty()) {
         emit clicked();
@@ -98,4 +101,18 @@ void LinkArea::mouseReleaseEvent(QMouseEvent* event)
 void LinkArea::mouseDoubleClickEvent(QMouseEvent* event)
 {
     emit doubleClicked();
+}
+
+float LinkArea::controllerZoom() const
+{
+    return d->controllerZoom;
+}
+
+void LinkArea::setControllerZoom(float newZoom)
+{
+    if(d->controllerZoom != newZoom)
+    {
+        d->controllerZoom = newZoom;
+        emit controllerZoomChanged();
+    }
 }
