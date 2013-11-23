@@ -410,6 +410,9 @@ KexiDB::SchemaData* KexiQueryDesignerSQLView::storeNewData(const KexiDB::SchemaD
 
 tristate KexiQueryDesignerSQLView::storeData(bool dontAsk)
 {
+    if (window()->schemaData()) { //set this instance as obsolete (only if it's stored)
+        KexiMainWindowIface::global()->project()->dbConnection()->setQuerySchemaObsolete(window()->schemaData()->name());
+    }
     tristate res = KexiView::storeData(dontAsk);
     if (~res)
         return res;
