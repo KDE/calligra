@@ -267,6 +267,12 @@ private slots:
      */
     void slotFileClose();
 
+
+    /**
+     * Closes all open documents.
+     */
+    void slotFileCloseAll();
+
     /**
      *  Closes the mainwindow.
      */

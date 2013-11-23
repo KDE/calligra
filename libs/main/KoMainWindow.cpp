@@ -117,6 +117,7 @@ public:
         sendFileAction = 0;
         exportPdf = 0;
         closeFile = 0;
+        closeAll = 0;
         reloadFile = 0;
         showFileVersions = 0;
         importFile = 0;
@@ -203,6 +204,7 @@ public:
     KAction *sendFileAction;
     KAction *exportPdf;
     KAction *closeFile;
+    KAction *closeAll;
     KAction *reloadFile;
     KAction *showFileVersions;
     KAction *importFile;
@@ -274,6 +276,7 @@ KoMainWindow::KoMainWindow(KoPart *part, const KComponentData &componentData)
     connect(d->recent, SIGNAL(recentListCleared()), this, SLOT(saveRecentFiles()));
     d->saveAction = actionCollection()->addAction(KStandardAction::Save,  "file_save", this, SLOT(slotFileSave()));
     d->saveActionAs = actionCollection()->addAction(KStandardAction::SaveAs,  "file_save_as", this, SLOT(slotFileSaveAs()));
+    d->saveActionAs->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_S));
     d->printAction = actionCollection()->addAction(KStandardAction::Print,  "file_print", this, SLOT(slotFilePrint()));
     d->printActionPreview = actionCollection()->addAction(KStandardAction::PrintPreview,  "file_print_preview", this, SLOT(slotFilePrintPreview()));
 
@@ -286,6 +289,12 @@ KoMainWindow::KoMainWindow(KoPart *part, const KComponentData &componentData)
 
     d->closeFile = actionCollection()->addAction(KStandardAction::Close,  "file_close", this, SLOT(slotFileClose()));
     actionCollection()->addAction(KStandardAction::Quit,  "file_quit", this, SLOT(slotFileQuit()));
+
+    d->closeAll = new KAction(i18n("Close All"), this);
+    d->closeAll->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_W));
+    actionCollection()->addAction("file_close_all", d->closeAll);
+    connect(d->closeAll, SIGNAL(triggered()), this, SLOT(slotFileCloseAll()));
+
 
     d->reloadFile  = new KAction(i18n("Reload"), this);
     actionCollection()->addAction("file_reload_file", d->reloadFile);
@@ -1281,6 +1290,11 @@ void KoMainWindow::slotFileClose()
         delete activeView;
         d->part->showStartUpWidget(this, true /*Always show widget*/);
     }
+}
+
+void KoMainWindow::slotFileCloseAll()
+{
+
 }
 
 void KoMainWindow::slotFileQuit()
