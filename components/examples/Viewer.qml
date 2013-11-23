@@ -121,6 +121,7 @@ ApplicationWindow {
                     anchors.fill: parent;
                     document: doc;
                     onLinkClicked: console.debug(linkTarget);
+                    controllerZoom: controller.zoom;
                 }
             }
 
