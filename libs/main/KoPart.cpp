@@ -100,7 +100,7 @@ KoPart::KoPart(QObject *parent)
 
 KoPart::~KoPart()
 {
-    qDebug() << "Deleting KoPart" << this << kBacktrace();
+    //qDebug() << "Deleting KoPart" << this << kBacktrace();
 
     while (!d->documents.isEmpty()) {
         delete d->documents.takeFirst();

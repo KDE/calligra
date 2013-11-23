@@ -359,10 +359,10 @@ private:
      * - create an empty document with default settings if InitDocEmpty
      */
     enum InitDocFlags { /*InitDocAppStarting, */ InitDocFileNew, InitDocFileClose /*, InitDocEmbedded, InitDocEmpty*/ };
-
+protected:
     void closeEvent(QCloseEvent * e);
     void resizeEvent(QResizeEvent * e);
-
+private:
     /**
      * Ask user about saving changes to the document upon exit.
      */
