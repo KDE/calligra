@@ -485,7 +485,7 @@ KoDocument::KoDocument(const KoPart *parent, KUndo2Stack *undoStack)
 
 KoDocument::~KoDocument()
 {
-    qDebug() << "Deleting KoDocument" << this << kdBacktrace();
+    qDebug() << "Deleting KoDocument" << this << kBacktrace();
 
     d->autoSaveTimer.disconnect(this);
     d->autoSaveTimer.stop();
@@ -1634,7 +1634,7 @@ bool KoDocument::openFile()
         notify->setText(i18n("Document <i>%1</i> loaded", url().url()));
         notify->addContext("url", url().url());
         QTimer::singleShot(0, notify, SLOT(sendEvent()));
-        d->parentPart->deleteOpenPane(this);
+
     }
 
     if (progressUpdater()) {

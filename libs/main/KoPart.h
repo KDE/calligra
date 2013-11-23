@@ -122,11 +122,7 @@ public:
     virtual KoMainWindow *createMainWindow() = 0;
 
     /**
-     * Appends the mainwindow to the list of mainwindows which show this
-     * document as their root document.
-     *
-     * This method is automatically called from KoMainWindow::setRootDocument,
-     * so you do not need to call it.
+     * Appends the mainwindow to the list of mainwindows which this part manages.
      */
     virtual void addMainWindow(KoMainWindow *mainWindow);
 
@@ -229,12 +225,6 @@ public:
      */
     virtual void showStartUpWidget(KoMainWindow *parent, bool alwaysShow = false);
 
-    /**
-     * Removes the startupWidget shown at application start up.
-     */
-    void deleteOpenPane();
-    void deleteOpenPane(KoDocument *document);
-
 protected:
 
     /**
@@ -267,15 +257,6 @@ protected:
      * @return a list of KoDocument::CustomDocumentWidgetItem.
      */
     virtual QList<CustomDocumentWidgetItem> createCustomDocumentWidgets(QWidget *parent);
-
-    /**
-     * Creates the open widget showed at application start up.
-     * @param parent the parent widget
-     * @param instance the KComponentData to be used for KConfig data
-     * @param templateType the template-type (group) that should be selected on creation.
-     */
-    KoOpenPane *createOpenPane(QWidget *parent, const KComponentData &instance,
-                               const QString& templateType = QString());
 
     virtual KoView *createViewInstance(KoDocument *document, QWidget *parent) = 0;
 

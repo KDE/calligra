@@ -667,11 +667,14 @@ bool KoMainWindow::openDocument(const KUrl & url)
     return openDocumentInternal(url);
 }
 
-bool KoMainWindow::createDocumentFromUrl(const KUrl & url)
+KoDocument *KoMainWindow::createDocumentFromUrl(const KUrl & url)
 {
     KoDocument *newdoc = d->part->createDocument();
     KoView *view = d->part->createView(newdoc);
     d->part->addDocument(newdoc);
+
+    // For remote documents
+#if 0 // XXX: seems broken for now
     if (!KIO::NetAccess::exists(url, KIO::NetAccess::SourceSide, 0)) {
         newdoc->initEmpty(); //create an empty document
         addView(view);
@@ -681,9 +684,13 @@ bool KoMainWindow::createDocumentFromUrl(const KUrl & url)
             mime = newdoc->nativeFormatMimeType();
         newdoc->setMimeTypeAfterLoading(mime);
         updateCaption();
-        return true;
+        return newdoc;
     }
-    return openDocumentInternal(url, newdoc);
+#endif
+    if (openDocumentInternal(url, newdoc)) {
+        addView(view);
+    }
+    return newdoc;
 }
 
 bool KoMainWindow::openDocumentInternal(const KUrl & url, KoDocument *newdoc)
@@ -699,7 +706,6 @@ bool KoMainWindow::openDocumentInternal(const KUrl & url, KoDocument *newdoc)
     connect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
     connect(newdoc, SIGNAL(completed()), this, SLOT(slotLoadCompleted()));
     connect(newdoc, SIGNAL(canceled(const QString &)), this, SLOT(slotLoadCanceled(const QString &)));
-    d->part->addMainWindow(this);   // used by openUrl
     bool openRet = (!isImporting()) ? newdoc->openUrl(url) : newdoc->importDocument(url);
     if (!openRet) {
         d->part->removeMainWindow(this);
@@ -1046,10 +1052,7 @@ void KoMainWindow::closeEvent(QCloseEvent *e)
     }
     if (queryClose()) {
         d->deferredClosingEvent = e;
-        if (d->part) {
-            // The open pane is visible
-            d->part->deleteOpenPane();
-        }
+
         if (!d->m_dockerStateBeforeHiding.isEmpty()) {
             restoreState(d->m_dockerStateBeforeHiding);
         }
@@ -1087,7 +1090,7 @@ void KoMainWindow::saveWindowSettings()
         d->windowSizeDirty = false;
     }
 
-    if ( d->activeView->document()) {
+    if (!d->activeView || d->activeView->document()) {
 
         // Save toolbar position into the config file of the app, under the doc's component name
         KConfigGroup group = KGlobal::config()->group(d->part->componentData().componentName());
@@ -1118,8 +1121,9 @@ void KoMainWindow::resizeEvent(QResizeEvent * e)
 
 bool KoMainWindow::queryClose()
 {
-    if (d->activeView->document() == 0)
+    if (!d->activeView || d->activeView->document() == 0)
         return true;
+
     //kDebug(30003) <<"KoMainWindow::queryClose() viewcount=" << d->activeView->document()->viewCount()
     //               << " mainWindowCount=" << d->activeView->document()->mainWindowCount() << endl;
     if (!d->forQuit && d->part->mainwindowCount() > 1)
@@ -1167,7 +1171,6 @@ void KoMainWindow::slotFileNew()
 {
     KoMainWindow *s = d->part->createMainWindow();
     s->show();
-    d->part->addMainWindow(s);
     d->part->showStartUpWidget(s, true /*Always show widget*/);
 }
 

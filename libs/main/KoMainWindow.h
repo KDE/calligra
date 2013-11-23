@@ -137,12 +137,15 @@ public:
      */
     bool openDocument(const KUrl & url);
 
+private:
+    friend class KoApplication;
     /**
-     * Load the URL into this document (and make it root doc after loading)
+     * Create a document, open the given url, create a view, set the document
+     * on the view and add the view to the mainwindow.
      *
      * Special method for KoApplication::start, don't use.
      */
-    bool createDocumentFromUrl(const KUrl & url);
+    KoDocument *createDocumentFromUrl(const KUrl & url);
 
 private:
 

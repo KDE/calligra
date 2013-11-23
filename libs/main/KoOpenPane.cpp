@@ -57,7 +57,7 @@ class KoSectionListItem : public QTreeWidgetItem
 {
 public:
     KoSectionListItem(QTreeWidget* treeWidget, const QString& name, int sortWeight, int widgetIndex = -1)
-            : QTreeWidgetItem(treeWidget, QStringList() << name), m_sortWeight(sortWeight), m_widgetIndex(widgetIndex) {
+        : QTreeWidgetItem(treeWidget, QStringList() << name), m_sortWeight(sortWeight), m_widgetIndex(widgetIndex) {
         Qt::ItemFlags newFlags = Qt::NoItemFlags;
 
         if(m_widgetIndex >= 0)
@@ -116,7 +116,7 @@ class KoOpenPanePrivate : public Ui_KoOpenPaneBase
 {
 public:
     KoOpenPanePrivate() :
-            Ui_KoOpenPaneBase() {
+        Ui_KoOpenPaneBase() {
         m_customWidgetsSeparator = 0;
         m_templatesSeparator = 0;
     }
@@ -128,8 +128,8 @@ public:
 };
 
 KoOpenPane::KoOpenPane(QWidget *parent, const KComponentData &componentData, const QStringList& mimeFilter, const QString& templateType)
-        : QWidget(parent)
-        , d(new KoOpenPanePrivate)
+    : QDialog(parent)
+    , d(new KoOpenPanePrivate)
 {
     d->m_componentData = componentData;
     d->setupUi(this);
@@ -203,9 +203,9 @@ void KoOpenPane::openFileDialog()
     if (defaultDir.isEmpty())
         defaultDir = QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation);
     QString url = KoFileDialogHelper::getOpenFileName(this,
-                                               i18n("Open Existing Document"),
-                                               defaultDir,
-                                               m_mimeFiletr);
+                                                      i18n("Open Existing Document"),
+                                                      defaultDir,
+                                                      m_mimeFiletr);
     group.writeEntry("OpenDialog", url);
     emit openExistingFile(KUrl(url));
 }
@@ -245,7 +245,7 @@ void KoOpenPane::initTemplates(const QString& templateType)
             }
 
             KoTemplatesPane* pane = new KoTemplatesPane(this, d->m_componentData, group->name(),
-                    group, templateTree.defaultTemplate());
+                                                        group, templateTree.defaultTemplate());
             connect(pane, SIGNAL(openUrl(const KUrl&)), this, SIGNAL(openTemplate(const KUrl&)));
             connect(pane, SIGNAL(alwaysUseChanged(KoTemplatesPane*, const QString&)),
                     this, SIGNAL(alwaysUseChanged(KoTemplatesPane*, const QString&)));
@@ -256,7 +256,7 @@ void KoOpenPane::initTemplates(const QString& templateType)
             connect(this, SIGNAL(splitterResized(KoDetailsPane*, const QList<int>&)),
                     pane, SLOT(resizeSplitter(KoDetailsPane*, const QList<int>&)));
             QTreeWidgetItem* item = addPane(group->name(), group->templates().first()->loadPicture(),
-                                           pane, group->sortingWeight() + templateOffset);
+                                            pane, group->sortingWeight() + templateOffset);
 
             if (!firstItem) {
                 firstItem = item;

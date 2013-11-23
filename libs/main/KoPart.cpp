@@ -45,6 +45,7 @@
 #include <kmessagebox.h>
 #include <kmimetype.h>
 
+#include <QDialog>
 #include <QGraphicsScene>
 #include <QGraphicsProxyWidget>
 
@@ -62,6 +63,7 @@ public:
     Private(KoPart *_parent)
         : parent(_parent)
         , canvasItem(0)
+        , startupWidget(0)
         , m_componentData(KGlobal::mainComponent())
     {
     }
@@ -77,9 +79,8 @@ public:
     QList<QPointer<KoMainWindow> > mainWindows;
     QList<QPointer<KoDocument> > documents;
     QGraphicsItem *canvasItem;
-    QPointer<KoOpenPane> startUpWidget;
     QString templateType;
-
+    KoOpenPane *startupWidget;
     KComponentData m_componentData;
 
 };
@@ -99,7 +100,7 @@ KoPart::KoPart(QObject *parent)
 
 KoPart::~KoPart()
 {
-    qDebug() << "Deleting KoPart" << this << kdBacktrace();
+    qDebug() << "Deleting KoPart" << this << kBacktrace();
 
     while (!d->documents.isEmpty()) {
         delete d->documents.takeFirst();
@@ -112,8 +113,6 @@ KoPart::~KoPart()
     while (!d->mainWindows.isEmpty()) {
         delete d->mainWindows.takeFirst();
     }
-
-    delete d->startUpWidget;
 
     s_partList.removeAll(this);
 
@@ -290,10 +289,18 @@ KoMainWindow *KoPart::currentMainwindow() const
 void KoPart::openExistingFile(const KUrl& url)
 {
     qApp->setOverrideCursor(Qt::BusyCursor);
-    KoDocument *doc = createDocument();
-    doc->openUrl(url);
-    doc->setModified(false);
-    addDocument(doc);
+    KoDocument *document = createDocument();
+    document->openUrl(url);
+    document->setModified(false);
+    addDocument(document);
+
+    KoMainWindow *mw = qobject_cast<KoMainWindow*>(d->startupWidget->parent());
+    if (!mw) mw = currentMainwindow();
+    KoView *view = createView(document, mw);
+    mw->addView(view);
+
+    d->startupWidget->setParent(0);
+    d->startupWidget->hide();
     qApp->restoreOverrideCursor();
 }
 
@@ -311,7 +318,6 @@ void KoPart::openTemplate(const KUrl& url)
         // in case this is a open document template remove the -template from the end
         mimeType.remove( QRegExp( "-template$" ) );
         document->setMimeTypeAfterLoading(mimeType);
-        deleteOpenPane();
         document->resetURL();
         document->setEmpty();
     } else {
@@ -319,17 +325,14 @@ void KoPart::openTemplate(const KUrl& url)
         document->initEmpty();
     }
     addDocument(document);
-    KoMainWindow *mw = 0;
-    foreach(KoMainWindow *mainWin, mainWindows()) {
-        if (mainWin->isActiveWindow()) {
-            mw = mainWin;
-            break;
-        }
-    }
-    if (!mw) mw = mainWindows().first();
+
+    KoMainWindow *mw = qobject_cast<KoMainWindow*>(d->startupWidget->parent());
+    if (!mw) mw = currentMainwindow();
     KoView *view = createView(document, mw);
     mw->addView(view);
 
+    d->startupWidget->setParent(0);
+    d->startupWidget->hide();
     qApp->restoreOverrideCursor();
 }
 
@@ -348,7 +351,6 @@ void KoPart::addRecentURLToAllMainWindows(KUrl url)
     foreach(KoMainWindow *mainWindow, d->mainWindows) {
         mainWindow->addRecentURL(url);
     }
-
 }
 
 void KoPart::showStartUpWidget(KoMainWindow *mainWindow, bool alwaysShow)
@@ -386,39 +388,25 @@ void KoPart::showStartUpWidget(KoMainWindow *mainWindow, bool alwaysShow)
         }
     }
 
-    mainWindow->factory()->container("mainToolBar", mainWindow)->hide();
+    if (!d->startupWidget) {
+        const QStringList mimeFilter = koApp->mimeFilter(KoFilterManager::Import);
 
-    if (d->startUpWidget) {
-        d->startUpWidget->show();
-    } else {
-        d->startUpWidget = createOpenPane(mainWindow, componentData(), d->templateType);
-        mainWindow->setCentralWidget(d->startUpWidget);
-    }
-}
-
-void KoPart::deleteOpenPane()
-{
-    if (d->startUpWidget) {
-        d->startUpWidget->hide();
-        d->startUpWidget->deleteLater();
-    }
-}
-
-void KoPart::deleteOpenPane(KoDocument *document)
-{
-    deleteOpenPane();
-
-    KoMainWindow *mw = 0;
-    foreach(KoMainWindow *mainWin, mainWindows()) {
-        if (mainWin->isActiveWindow()) {
-            mw = mainWin;
-            break;
+        d->startupWidget = new KoOpenPane(0, componentData(), mimeFilter, d->templateType);
+        d->startupWidget->setWindowModality(Qt::WindowModal);
+        QList<CustomDocumentWidgetItem> widgetList = createCustomDocumentWidgets(d->startupWidget);
+        foreach(const CustomDocumentWidgetItem & item, widgetList) {
+            d->startupWidget->addCustomDocumentWidget(item.widget, item.title, item.icon);
+            connect(item.widget, SIGNAL(documentSelected(KoDocument*)), this, SLOT(startCustomDocument(KoDocument*)));
         }
+
+        connect(d->startupWidget, SIGNAL(openExistingFile(const KUrl&)), this, SLOT(openExistingFile(const KUrl&)));
+        connect(d->startupWidget, SIGNAL(openTemplate(const KUrl&)), this, SLOT(openTemplate(const KUrl&)));
+
     }
-    if (!mw) mw = mainWindows().first();
-    KoView *view = createView(document, mw);
-    mw->addView(view);
-    mw->factory()->container("mainToolBar", mw)->show();
+
+    d->startupWidget->setParent(mainWindow);
+    d->startupWidget->setWindowFlags(Qt::Dialog);
+    d->startupWidget->exec();
 }
 
 QList<KoPart::CustomDocumentWidgetItem> KoPart::createCustomDocumentWidgets(QWidget * /*parent*/)
@@ -438,26 +426,8 @@ QString KoPart::templateType() const
 
 void KoPart::startCustomDocument(KoDocument* doc)
 {
-    deleteOpenPane(doc);
-}
-
-KoOpenPane *KoPart::createOpenPane(QWidget *parent, const KComponentData &componentData,
-                                       const QString& templateType)
-{
-    const QStringList mimeFilter = koApp->mimeFilter(KoFilterManager::Import);
-
-    KoOpenPane *openPane = new KoOpenPane(parent, componentData, mimeFilter, templateType);
-    QList<CustomDocumentWidgetItem> widgetList = createCustomDocumentWidgets(openPane);
-    foreach(const CustomDocumentWidgetItem & item, widgetList) {
-        openPane->addCustomDocumentWidget(item.widget, item.title, item.icon);
-        connect(item.widget, SIGNAL(documentSelected(KoDocument*)), this, SLOT(startCustomDocument(KoDocument*)));
-    }
-    openPane->show();
-
-    connect(openPane, SIGNAL(openExistingFile(const KUrl&)), this, SLOT(openExistingFile(const KUrl&)));
-    connect(openPane, SIGNAL(openTemplate(const KUrl&)), this, SLOT(openTemplate(const KUrl&)));
-
-    return openPane;
+    d->startupWidget->setParent(0);
+    d->startupWidget->hide();
 }
 
 void KoPart::setComponentData(const KComponentData &componentData)
