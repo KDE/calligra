@@ -93,7 +93,12 @@ void KisMainWindow::showView(KoView *view)
 {
     setActiveView(view);
     m_mdiArea->addSubWindow(view);
-    view->show();
+    if (m_mdiArea->subWindowList().size() == 1) {
+        view->showMaximized();
+    }
+    else {
+        view->show();
+    }
     view->setFocus();
 }
 
@@ -131,7 +136,11 @@ void KisMainWindow::closeEvent(QCloseEvent *e)
 
 void KisMainWindow::updateMenus()
 {
-
+    bool enabled = (activeKisView() != 0);
+    m_mdiCascade->setEnabled(enabled);
+    m_mdiNextWindow->setEnabled(enabled);
+    m_mdiPreviousWindow->setEnabled(enabled);
+    m_mdiTile->setEnabled(enabled);
 }
 
 void KisMainWindow::updateWindowMenu()
