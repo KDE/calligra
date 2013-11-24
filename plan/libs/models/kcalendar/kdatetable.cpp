@@ -480,7 +480,13 @@ void KDateTable::initAccels()
 int KDateTable::posFromDate( const QDate &dt )
 {
   const KCalendarSystem * calendar = KGlobal::locale()->calendar();
-  const int firstWeekDay = KGlobal::locale()->weekStartDay();
+  int firstWeekDay;
+  if (KGlobal::locale()->weekNumberSystem() == KLocale::IsoWeekNumber) {
+      // ISO Week numbering always uses Monday as first day of week
+      firstWeekDay = Qt::Monday;
+  } else {
+      firstWeekDay = KGlobal::locale()->weekStartDay();
+  }
   int pos = calendar->day( dt );
   int offset = (d->firstday - firstWeekDay + 7) % 7;
   // make sure at least one day of the previous month is visible.
@@ -495,7 +501,14 @@ QDate KDateTable::dateFromPos( int pos )
   const KCalendarSystem * calendar = KGlobal::locale()->calendar();
   calendar->setDate(pCellDate, calendar->year(d->mDate), calendar->month(d->mDate), 1);
 
-  int firstWeekDay = KGlobal::locale()->weekStartDay();
+  int firstWeekDay;
+  if (KGlobal::locale()->weekNumberSystem() == KLocale::IsoWeekNumber) {
+      // ISO Week numbering always uses Monday as first day of week
+      firstWeekDay = Qt::Monday;
+  } else {
+      firstWeekDay = KGlobal::locale()->weekStartDay();
+  }
+
   int offset = (d->firstday - firstWeekDay + 7) % 7;
   // make sure at least one day of the previous month is visible.
   // adjust this <1 if more days should be forced visible:
@@ -519,7 +532,13 @@ bool KDateTable::event( QEvent *event )
             // corner
         } else if ( row == 0 ) { // we are drawing the headline (weekdays)
             int col = d->m_paintweeknumbers ? column - 1 : column;
-            int firstWeekDay = KGlobal::locale()->weekStartDay();
+            int firstWeekDay;
+            if (KGlobal::locale()->weekNumberSystem() == KLocale::IsoWeekNumber) {
+                // ISO Week numbering always uses Monday as first day of week
+                firstWeekDay = Qt::Monday;
+            } else {
+                firstWeekDay = KGlobal::locale()->weekStartDay();
+            }
             int day = ( col+firstWeekDay < 8 ) ? col+firstWeekDay : col+firstWeekDay-7;
             if ( d->m_weekDayDelegate )
             {
@@ -615,7 +634,13 @@ KDateTable::paintCell(QPainter *painter, int row, int column)
     d->m_styleOptionWeekDay.state = QStyle::State_None;
 
     int col = d->m_paintweeknumbers ? column - 1 : column;
-    int firstWeekDay = KGlobal::locale()->weekStartDay();
+    int firstWeekDay;
+    if (KGlobal::locale()->weekNumberSystem() == KLocale::IsoWeekNumber) {
+        // ISO Week numbering always uses Monday as first day of week
+        firstWeekDay = Qt::Monday;
+    } else {
+        firstWeekDay = KGlobal::locale()->weekStartDay();
+    }
     int day = ( col+firstWeekDay < 8 ) ? col+firstWeekDay : col+firstWeekDay-7;
     if ( d->m_weekDayDelegate )
     {

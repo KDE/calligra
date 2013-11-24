@@ -326,7 +326,14 @@ GanttViewBase::GanttViewBase( QWidget *parent )
     const KLocale *locale = KGlobal::locale();
     if ( locale ) {
         KDGantt::DateTimeGrid *g = static_cast<KDGantt::DateTimeGrid*>( grid() );
-        g->setWeekStart( static_cast<Qt::DayOfWeek>( locale->weekStartDay() ) );
+        int firstWeekDay;
+        if (locale->weekNumberSystem() == KLocale::IsoWeekNumber) {
+            // ISO Week numbering always uses Monday as first day of week
+            firstWeekDay = Qt::Monday;
+        } else {
+            firstWeekDay = locale->weekStartDay();
+        }
+        g->setWeekStart( static_cast<Qt::DayOfWeek>( firstWeekDay ) );
         int ws = locale->workingWeekStartDay();
         int we = locale->workingWeekEndDay();
         QSet<Qt::DayOfWeek> fd;

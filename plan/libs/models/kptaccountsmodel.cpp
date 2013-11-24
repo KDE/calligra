@@ -36,10 +36,10 @@
 #include <QList>
 #include <QObject>
 
-
+#include <kcalendarsystem.h>
+#include <kdeversion.h>
 #include <kglobal.h>
 #include <klocale.h>
-
 
 namespace KPlato
 {
@@ -701,7 +701,14 @@ int CostBreakdownItemModel::columnCount( const QModelIndex & ) const
                 break;
             }
             case Period_Week: {
-                int days = KGlobal::locale()->weekStartDay() - startDate().dayOfWeek();
+                int firstWeekDay;
+                if (KGlobal::locale()->weekNumberSystem() == KLocale::IsoWeekNumber) {
+                    // ISO Week numbering always uses Monday as first day of week
+                    firstWeekDay = Qt::Monday;
+                } else {
+                    firstWeekDay = KGlobal::locale()->weekStartDay();
+                }
+                int days = firstWeekDay - startDate().dayOfWeek();
                 if ( days > 0 ) {
                     days -= 7;
                 }
@@ -786,7 +793,14 @@ QVariant CostBreakdownItemModel::data( const QModelIndex &index, int role ) cons
                         return formatMoney( planned, actual );
                     }
                     case Period_Week: {
-                        int days = KGlobal::locale()->weekStartDay() - startDate().dayOfWeek();
+                        int firstWeekDay;
+                        if (KGlobal::locale()->weekNumberSystem() == KLocale::IsoWeekNumber) {
+                            // ISO Week numbering always uses Monday as first day of week
+                            firstWeekDay = Qt::Monday;
+                        } else {
+                            firstWeekDay = KGlobal::locale()->weekStartDay();
+                        }
+                        int days = firstWeekDay - startDate().dayOfWeek();
                         if ( days > 0 ) {
                             days -= 7; ;
                         }
@@ -879,7 +893,14 @@ QVariant CostBreakdownItemModel::cost( const Account *a, int offset, int role ) 
             break;
         }
         case Period_Week: {
-            int days = KGlobal::locale()->weekStartDay() - startDate().dayOfWeek();
+            int firstWeekDay;
+            if (KGlobal::locale()->weekNumberSystem() == KLocale::IsoWeekNumber) {
+                // ISO Week numbering always uses Monday as first day of week
+                firstWeekDay = Qt::Monday;
+            } else {
+                firstWeekDay = KGlobal::locale()->weekStartDay();
+            }
+            int days = firstWeekDay - startDate().dayOfWeek();
             if ( days > 0 ) {
                 days -= 7; ;
             }
@@ -1042,7 +1063,12 @@ QVariant CostBreakdownItemModel::headerData( int section, Qt::Orientation orient
                     return startDate().addDays( col ).toString( Qt::ISODate );
                 }
                 case Period_Week: {
-                    return startDate().addDays( ( col ) * 7 ).weekNumber();
+                    const KCalendarSystem * calendar = KGlobal::locale()->calendar();
+#if KDE_IS_VERSION(4,7,0)
+                    return calendar->week(startDate().addDays( ( col ) * 7 ));
+#else
+                    return calendar->weekNumber(startDate().addDays( ( col ) * 7 ));
+#endif
                 }
                 case Period_Month: {
                     int days = startDate().daysInMonth() - startDate().day() + 1;
@@ -1075,7 +1101,12 @@ QVariant CostBreakdownItemModel::headerData( int section, Qt::Orientation orient
                     return startDate().addDays( col );
                 }
                 case Period_Week: {
-                    return startDate().addDays( ( col ) * 7 ).weekNumber();
+                    const KCalendarSystem * calendar = KGlobal::locale()->calendar();
+#if KDE_IS_VERSION(4,7,0)
+                    return calendar->week(startDate().addDays( ( col ) * 7 ));
+#else
+                    return calendar->weekNumber(startDate().addDays( ( col ) * 7 ));
+#endif
                 }
                 case Period_Month: {
                     int days = startDate().daysInMonth() - startDate().day() + 1;
