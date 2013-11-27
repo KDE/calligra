@@ -225,7 +225,6 @@ private:
     KAction *m_actionCreateTemplate;
     KAction *m_actionFormatFrameSet;
     KAction *m_actionInsertFrameBreak;
-    KAction *m_actionAddBookmark;
     KAction *m_actionFormatFont;
     KAction *m_actionEditDelFrame;
     KAction *m_actionRaiseFrame;

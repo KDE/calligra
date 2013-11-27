@@ -210,7 +210,6 @@ void KWView::updateReadWrite(bool readWrite)
     m_actionViewHeader->setEnabled(readWrite);
     m_actionViewFooter->setEnabled(readWrite);
     m_actionViewSnapToGrid->setEnabled(readWrite);
-    m_actionAddBookmark->setEnabled(readWrite);
     QAction *action = actionCollection()->action("insert_framebreak");
     if (action) action->setEnabled(readWrite);
     action = actionCollection()->action("insert_variable");
@@ -765,16 +764,6 @@ void KWView::selectionChanged()
     KoShape *shape = canvasBase()->shapeManager()->selection()-> firstSelectedShape();
 
     m_actionFormatFrameSet->setEnabled(shape != 0);
-    m_actionAddBookmark->setEnabled(shape != 0);
-    if (shape) {
-        setCurrentPage(m_document->pageManager()->page(shape));
-        KWFrame *frame = kwdocument()->frameOfShape(shape);
-        KWTextFrameSet *fs = frame == 0 ? 0 : dynamic_cast<KWTextFrameSet*>(frame->frameSet());
-        if (fs)
-            m_actionAddBookmark->setEnabled(true);
-        else
-            m_actionAddBookmark->setEnabled(false);
-    }
     // actions that need at least one shape selected
     QAction *action = actionCollection()->action("create_linked_frame");
     if (action) action->setEnabled(shape);
