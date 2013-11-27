@@ -215,8 +215,6 @@ void KWView::updateReadWrite(bool readWrite)
     if (action) action->setEnabled(readWrite);
     action = actionCollection()->action("insert_variable");
     if (action) action->setEnabled(readWrite);
-    action = actionCollection()->action("select_bookmark"); // TODO fix the dialog to honor read-only instead
-    if (action) action->setEnabled(readWrite);
     action = actionCollection()->action("format_page");
     if (action) action->setEnabled(readWrite);
     action = actionCollection()->action("anchor");
@@ -254,19 +252,7 @@ void KWView::setupActions()
     m_actionFormatFrameSet->setEnabled(false);
     connect(m_actionFormatFrameSet, SIGNAL(triggered()), this, SLOT(editFrameProperties()));
 
-    m_actionAddBookmark = new KAction(koIcon("bookmark-new"), i18n("Bookmark..."), this);
-    m_actionAddBookmark->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_G);
-    actionCollection()->addAction("add_bookmark", m_actionAddBookmark);
-    connect(m_actionAddBookmark, SIGNAL(triggered()), this, SLOT(addBookmark()));
-
-    KAction *action = new KAction(i18n("Select Bookmark..."), this);
-    action->setIconText(i18n("Bookmark"));
-    action->setIcon(koIcon("bookmarks"));
-    action->setShortcut(Qt::CTRL + Qt::Key_G);
-    actionCollection()->addAction("select_bookmark", action);
-    connect(action, SIGNAL(triggered()), this, SLOT(selectBookmark()));
-
-    action = actionCollection()->addAction(KStandardAction::Prior,  "page_previous", this, SLOT(goToPreviousPage()));
+    KAction *action = actionCollection()->addAction(KStandardAction::Prior,  "page_previous", this, SLOT(goToPreviousPage()));
 
     action = actionCollection()->addAction(KStandardAction::Next,  "page_next", this, SLOT(goToNextPage()));
 
@@ -438,16 +424,6 @@ void KWView::setupActions()
     m_actionImportStyle= new KAction(i18n("Import Styles..."), 0,
             this, SLOT(importStyle()),
             actionCollection(), "import_style");
-    m_actionAddLinkToBookmak = new KAction(i18n("Add to Bookmark"), 0,
-            this, SLOT(addToBookmark()),
-            actionCollection(), "add_to_bookmark");
-
-    m_actionAddBookmark= new KAction(i18n("Bookmark..."), 0,
-            this, SLOT(addBookmark()),
-            actionCollection(), "add_bookmark");
-    m_actionSelectBookmark= new KAction(i18n("Select Bookmark..."), 0,
-            this, SLOT(selectBookmark()),
-            actionCollection(), "select_bookmark");
 
     m_actionConfigureCompletion = new KAction(i18n("Configure Completion..."), 0,
             this, SLOT(configureCompletion()),
@@ -523,115 +499,6 @@ void KWView::createTemplate()
 {
     KoTemplateCreateDia::createTemplate("words_template", ".ott",
                                         KWFactory::componentData(), m_document, this);
-}
-
-void KWView::addBookmark()
-{
-    QString name, suggestedName;
-
-    KoSelection *selection = canvasBase()->shapeManager()->selection();
-    KoShape *shape = 0;
-    shape = selection->firstSelectedShape();
-    if (shape == 0) return; // no shape selected
-
-    KWFrame *frame = kwdocument()->frameOfShape(shape);
-    Q_ASSERT(frame);
-    KWTextFrameSet *fs = dynamic_cast<KWTextFrameSet*>(frame->frameSet());
-    if (fs == 0) return;
-
-    QString tool = KoToolManager::instance()->preferredToolForSelection(selection->selectedShapes());
-    KoToolManager::instance()->switchToolRequested(tool);
-    KoTextEditor *editor = KoTextEditor::getTextEditorFromCanvas(canvasBase());
-    Q_ASSERT(editor);
-
-    const KoBookmarkManager *manager = m_document->textRangeManager()->bookmarkManager();
-    if (editor->hasSelection()) {
-        suggestedName = editor->selectedText();
-    }
-
-    QPointer<KWCreateBookmarkDialog> dia = new KWCreateBookmarkDialog(manager->bookmarkNameList(), suggestedName, m_canvas->canvasWidget());
-    if (dia->exec() == QDialog::Accepted) {
-        name = dia->newBookmarkName();
-    }
-    else {
-        delete dia;
-        return;
-    }
-    delete dia;
-
-    editor->addBookmark(name);
-}
-
-void KWView::selectBookmark()
-{
-    QString name;
-    const KoBookmarkManager *manager = m_document->textRangeManager()->bookmarkManager();
-
-    QPointer<KWSelectBookmarkDialog> dia = new KWSelectBookmarkDialog(manager->bookmarkNameList(), m_canvas->canvasWidget());
-    connect(dia, SIGNAL(nameChanged(const QString &, const QString &)),
-            manager, SLOT(rename(const QString &, const QString &)));
-    connect(dia, SIGNAL(bookmarkDeleted(const QString &)),
-            this, SLOT(deleteBookmark(const QString &)));
-    if (dia->exec() == QDialog::Accepted)
-        name = dia->selectedBookmarkName();
-    else {
-        delete dia;
-        return;
-    }
-    delete dia;
-    KoBookmark *bookmark = manager->bookmark(name);
-#if 0
-    KoShape *shape = bookmark->shape();
-    KoSelection *selection = canvasBase()->shapeManager()->selection();
-    selection->deselectAll();
-    selection->select(shape);
-
-    QString tool = KoToolManager::instance()->preferredToolForSelection(selection->selectedShapes());
-    KoToolManager::instance()->switchToolRequested(tool);
-#else
-#ifdef __GNUC__
-    #warning FIXME: port to textlayout-rework
-#endif
-#endif
-
-    KoCanvasResourceManager *rm = m_canvas->resourceManager();
-    if ((bookmark->positionOnlyMode() == false) && bookmark->hasRange()) {
-        rm->clearResource(KoText::SelectedTextPosition);
-        rm->clearResource(KoText::SelectedTextAnchor);
-    }
-    if (bookmark->positionOnlyMode()) {
-        rm->setResource(KoText::CurrentTextPosition, bookmark->rangeStart());
-        rm->setResource(KoText::CurrentTextAnchor, bookmark->rangeStart());
-    } else {
-        rm->setResource(KoText::CurrentTextPosition, bookmark->rangeStart());
-        rm->setResource(KoText::CurrentTextAnchor, bookmark->rangeEnd());
-    }
-}
-
-void KWView::deleteBookmark(const QString &name)
-{
-    Q_UNUSED(name);
-#if 0
-    KoInlineTextObjectManager*manager = m_document->inlineTextObjectManager();
-    KoBookmark *bookmark = manager->bookmarkManager()->bookmark(name);
-    if (!bookmark || !bookmark->shape())
-        return;
-
-    KoTextShapeData *data = qobject_cast<KoTextShapeData*>(bookmark->shape()->userData());
-    if (!data)
-        return;
-    QTextCursor cursor(data->document());
-    if (bookmark->hasSelection()) {
-        cursor.setPosition(bookmark->endBookmark()->position() - 1);
-        manager->removeInlineObject(cursor);
-    }
-    cursor.setPosition(bookmark->position());
-    manager->removeInlineObject(cursor);
-#else
-#ifdef __GNUC__
-    #warning FIXME: port to textlayout-rework
-#endif
-#endif
 }
 
 void KWView::enableHeader()

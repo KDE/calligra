@@ -164,12 +164,6 @@ private slots:
     void editFrameProperties();
     /// called if another shape got selected
     void selectionChanged();
-    /// insert a bookmark on current text cursor location or selection
-    void addBookmark();
-    /// go to previously bookmarked text cursor location or selection
-    void selectBookmark();
-    /// delete previously bookmarked text cursor location or selection (from the Select Bookmark dialog)
-    void deleteBookmark(const QString &name);
     /// enable document headers
     void enableHeader();
     /// enable document footers
