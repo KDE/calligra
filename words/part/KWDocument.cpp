@@ -39,8 +39,6 @@
 #include "frames/KWFrameLayout.h"
 #include "frames/KWOutlineShape.h"
 #include "dialogs/KWFrameDialog.h"
-#include "commands/KWPageInsertCommand.h"
-#include "commands/KWPageRemoveCommand.h"
 #include "KWRootAreaProvider.h"
 
 // calligra libs includes
@@ -244,40 +242,44 @@ void KWDocument::paintContent(QPainter &, const QRect &)
 {
 }
 
-KWPage KWDocument::insertPage(int afterPageNum, const QString &masterPageName, bool addUndoRedoCommand)
+KWPage KWDocument::insertPage(int afterPageNum, const QString &masterPageName)
 {
     kDebug(32001) << "afterPageNum=" << afterPageNum << "masterPageName=" << masterPageName;
-    KWPageInsertCommand *cmd = new KWPageInsertCommand(this, afterPageNum, masterPageName);
-    if (addUndoRedoCommand)
-        addCommand(cmd);
-    else
-        cmd->redo();
-    Q_ASSERT(cmd->page().isValid());
-    KWPage page = cmd->page();
-    if (!addUndoRedoCommand)
-        delete cmd;
+
+    //KWPage prevPage = m_document->pageManager().page(m_afterPageNum);
+    KWPageStyle pageStyle = pageManager()->pageStyle(masterPageName);
+    KWPage page = pageManager()->insertPage(afterPageNum + 1, pageStyle);
+    Q_ASSERT(page.isValid());
+    Q_ASSERT(page.pageNumber() >= 1 && page.pageNumber() <= pageManager()->pageCount());
+
+    // Set the y-offset of the new page.
+    KWPage prevPage = page.previous();
+    if (prevPage.isValid()) {
+        KoInsets padding = pageManager()->padding();
+        page.setOffsetInDocument(prevPage.offsetInDocument() + prevPage.height() + padding.top + padding.bottom);
+    } else {
+        page.setOffsetInDocument(0.0);
+    }
+
+    kDebug(32001) << "pageNumber=" << page.pageNumber();
+
+    // Create the KWTextFrame's for the new KWPage
+    KWFrameLayout *framelayout = frameLayout();
+    framelayout->createNewFramesForPage(page.pageNumber());
+
+    // make sure we have updated the view before we do anything else
+    firePageSetupChanged();
+
     return page;
 }
 
-KWPage KWDocument::appendPage(const QString &masterPageName, bool addUndoRedoCommand)
+KWPage KWDocument::appendPage(const QString &masterPageName)
 {
     int number = 0;
     KWPage last = m_pageManager.last();
     if (last.isValid())
         number = last.pageNumber();
-    return insertPage(number, masterPageName, addUndoRedoCommand);
-}
-
-void KWDocument::removePage(int pageNumber)
-{
-    if (pageCount() <= 1)
-        return;
-    KWPage page = m_pageManager.page(pageNumber);
-    if (! page.isValid()) {
-        kWarning(32001) << "remove page requested for a non exiting page!" << pageNumber;
-        return;
-    }
-    addCommand(new KWPageRemoveCommand(this, page));
+    return insertPage(number, masterPageName);
 }
 
 void KWDocument::firePageSetupChanged()
@@ -449,9 +451,9 @@ void KWDocument::removeFrame(KWFrame *frame)
                 return;
         }
     }
-    KWPageRemoveCommand *cmd = new KWPageRemoveCommand(this, page);
-    cmd->redo();
-    delete cmd;
+    //KWPageRemoveCommand *cmd = new KWPageRemoveCommand(this, page);
+    //cmd->redo();
+    //delete cmd;
 }
 
 void KWDocument::mainTextFrameSetLayoutDone()
