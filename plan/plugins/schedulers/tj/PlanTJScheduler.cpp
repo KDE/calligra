@@ -128,6 +128,7 @@ void PlanTJScheduler::run()
 
         bool x = connect(m_manager, SIGNAL(sigLogAdded(Schedule::Log)), this, SLOT(slotAddLog(Schedule::Log)));
         Q_ASSERT( x );
+        Q_UNUSED( x );
 
         m_project->initiateCalculation( *m_schedule );
         m_project->initiateCalculationLists( *m_schedule );
