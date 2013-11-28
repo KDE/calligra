@@ -1,3 +1,9 @@
+# To hide all the warnings from 3rd-party writerperfect code
+if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
+    add_definitions(-Wno-unused-parameter)
+    add_definitions(-Wno-sign-compare)
+endif (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
+
 include_directories(
     ${WPD_INCLUDE_DIR}
     ${LIBWPG_INCLUDE_DIR}

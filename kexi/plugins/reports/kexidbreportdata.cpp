@@ -130,7 +130,9 @@ bool KexiDBReportData::getSchema()
     if ( d->connection )
     {
         delete d->originalSchema;
+        d->originalSchema = 0;
         delete d->copySchema;
+        d->copySchema = 0;
 
         if ( d->connection->tableSchema ( d->qstrQuery ) )
         {

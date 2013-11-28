@@ -220,6 +220,10 @@ KoGenStyle ODrawClient::createGraphicStyle(const MSO::OfficeArtClientTextBox *ct
         case Swinder::TxORecord::Right:
             style.addProperty("draw:textarea-horizontal-align", "right");
             break;
+        case Swinder::TxORecord::Justified:   // FIXME: Not supported
+        case Swinder::TxORecord::Distributed: // FIXME: Not supported
+        default:
+            ;
         }
         switch (m_shapeText.vAlign()) {
         case Swinder::TxORecord::Top:
@@ -231,6 +235,10 @@ KoGenStyle ODrawClient::createGraphicStyle(const MSO::OfficeArtClientTextBox *ct
         case Swinder::TxORecord::Bottom:
             style.addProperty("draw:textarea-vertical-align", "bottom");
             break;
+        case Swinder::TxORecord::VJustified:   // FIXME: Not supported
+        case Swinder::TxORecord::VDistributed: // FIXME: Not supported
+        default:
+            ;
         }
     }
     //draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="top"

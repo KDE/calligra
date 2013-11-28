@@ -183,7 +183,7 @@ int AssignCRC32(unsigned char *p, unsigned long reclen, unsigned long checksumpo
 {
 	unsigned long CRCValue;              /* value of CRC checksum for record */
 	unsigned long Mask = 0x0000000FL;    /* Mask for converting hex string */
-	char *HexString ="0123456789ABCDEF"; /* hex string characters */
+    const char HexString[] = "0123456789ABCDEF"; /* hex string characters */
 	unsigned char *s;                    /* string pointer */
 
 	/* validate checksum length */

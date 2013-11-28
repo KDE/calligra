@@ -45,6 +45,11 @@
 #include "RowFormatStorage.h"
 
 // needed by MDETERM and MINVERSE
+// Don't show this warning: it's an issue in eigen
+#ifdef __GNUC__
+#pragma GCC diagnostic ignored "-Wunused-local-typedefs"
+#endif
+
 #include <Eigen/LU>
 
 using namespace Calligra::Sheets;
