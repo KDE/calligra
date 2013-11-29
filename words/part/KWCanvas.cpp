@@ -21,6 +21,7 @@
  */
 
 // words includes
+#define  SHOW_ANNOTATIONS 1
 #include "KWCanvas.h"
 #include "KWGui.h"
 #include "KWView.h"
@@ -68,7 +69,7 @@ void KWCanvas::pageSetupChanged()
 void KWCanvas::updateSize()
 {
     resourceManager()->setResource(Words::CurrentPageCount, m_document->pageCount());
-    emit documentSize(m_viewMode->contentsSize());
+    emit documentSize(m_viewMode->contentsSize() + QSize(KWView::AnnotationAreaWidth, 0.0));
 }
 
 void KWCanvas::setDocumentOffset(const QPoint &offset)
@@ -183,7 +184,15 @@ void KWCanvas::paintEvent(QPaintEvent *ev)
 {
     QPainter painter(this);
     painter.eraseRect(ev->rect());
+#ifdef SHOW_ANNOTATIONS
+    QColor color = Qt::red;
+    QRect annotationRect(m_viewMode->contentsSize().width(), 0,
+                         KWView::AnnotationAreaWidth, m_viewMode->contentsSize().height());
+    qDebug()<<"annotation rect "<< annotationRect;
+    painter.fillRect(m_viewMode->documentToView(annotationRect, m_viewConverter), QBrush(color));
+#endif
     paint(painter, ev->rect());
+
     painter.end();
 }
 
