@@ -11,9 +11,13 @@ Bugs
 
  * Annotations should only be printed if the user want's it (different option to view->"Show comments")
 
- * The view has lost the horizontal scrollbar
 
- * The background of the annotation area should be more neutral in color
+
+To Check / Test
+---------------
+
+
+---------------- Milestone 1: merge with master ----------------
 
 
 Annoyances
@@ -22,6 +26,8 @@ Annoyances
 
  * when clicking esc inside an annotation the cursor should return to the original textshape
 
+ * The background of the annotation area should be more neutral in color
+
  * Save and load status of "Show notes".
 
  * Zoom to Page Width should include the annotation area if active.
@@ -29,14 +35,6 @@ Annoyances
  * The review tool's annotation widget should have icons rather than text buttons .
 
  * Setting of "Show comments" also available in the review tool?
-
-To Check / Test
----------------
-
- * Check undo/redo handling
-
-
----------------- Milestone 1: merge with master ----------------
 
 
 More work
