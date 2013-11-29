@@ -1,6 +1,6 @@
 include_directories(
     ${WRITERPERFECT_INCLUDES}
-    ${WPD_INCLUDE_DIR}
+    ${LIBWPD_INCLUDE_DIRS}
     ${LIBWPG_INCLUDE_DIR}
 )
 

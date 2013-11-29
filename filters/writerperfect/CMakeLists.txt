@@ -5,7 +5,7 @@ if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
 endif (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
 
 include_directories(
-    ${WPD_INCLUDE_DIR}
+    ${LIBWPD_INCLUDE_DIRS}
     ${LIBWPG_INCLUDE_DIR}
 )
 
@@ -33,4 +33,4 @@ kde4_add_library(writerperfect STATIC
             TableStyle.cxx
             TextRunStyle.cxx
 )
-target_link_libraries(writerperfect ${WPD_LIBRARIES} ${LIBWPG_LIBRARIES})
+target_link_libraries(writerperfect ${LIBWPD_LIBRARIES} ${LIBWPG_LIBRARIES})
