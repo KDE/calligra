@@ -142,23 +142,14 @@ public:
      * In all cases, the new page will have the number afterPageNum+1.
      * Use appendPage in WP mode, insertPage in DTP mode.
      * @param masterPageName the name of the master page to use for this new page.
-     * @param addUndoRedoCommand if true then an undo-redo action is added to the
-     * document to allow undo/redo inserting the page.
      */
-    KWPage insertPage(int afterPageNum, const QString &masterPageName = QString(), bool addUndoRedoCommand = true);
+    KWPage insertPage(int afterPageNum, const QString &masterPageName = QString());
     /**
      * Append a new page, creating followup frames (but not headers/footers),
      * and return the page number.
      * @param masterPageName the name of the master page to use for this new page.
-     * @param addUndoRedoCommand if true then an undo-redo action is added to the
-     * document to allow undo/redo appending the page.
      */
-    KWPage appendPage(const QString &masterPageName = QString(), bool addUndoRedoCommand = true);
-    /**
-     * remove a page from the document.
-     * @param pageNumber the pageNumber that should be removed.
-     */
-    void removePage(int pageNumber);
+    KWPage appendPage(const QString &masterPageName = QString());
 
     /// return the amount of framesets this document holds
     int frameSetCount() const {

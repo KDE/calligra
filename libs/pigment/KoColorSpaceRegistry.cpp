@@ -185,6 +185,7 @@ void KoColorSpaceRegistry::addProfileAlias(const QString& name, const QString& t
 
 QString KoColorSpaceRegistry::profileAlias(const QString& _name) const
 {
+    QReadLocker l(&d->registrylock);
     return d->profileAlias.value(_name, _name);
 }
 
@@ -310,7 +311,12 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
         profileName = csf->defaultProfile();
     }
 
+    if (profileName.isEmpty()) {
+        return 0;
+    }
+
     if (!isCached(csID, profileName)) {
+
         d->registrylock.lockForRead();
         KoColorSpaceFactory *csf = d->colorSpaceFactoryRegistry.value(csID);
         d->registrylock.unlock();
@@ -323,27 +329,33 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
         const KoColorProfile *p = profileByName(profileName);
         if (!p) {
             dbgPigmentCSRegistry << "Profile not found :" << profileName;
-            QList<const KoColorProfile *> profiles = profilesFor(csID);
-            if (profiles.isEmpty()) {
-                dbgPigmentCSRegistry << "No profile at all available for " << csf << " " << csf->id();
-                p = 0;
-            } else {
-                // Get the default profile if the asked-for profile isn't available
-                profileName = csf->defaultProfile();
-                const KoColorProfile *p = profileByName(profileName);
-                if (!p) {
-                    // And if that doesn't work get the first one
+
+            /**
+             * If the requested profile is not available, try fetching the
+             * default one
+             */
+            profileName = csf->defaultProfile();
+            p = profileByName(profileName);
+
+            /**
+             * If there is no luck, try to fetch the first one
+             */
+            if (!p) {
+                QList<const KoColorProfile *> profiles = profilesFor(csID);
+                if (!profiles.isEmpty()) {
                     p = profiles[0];
                     Q_ASSERT(p);
                 }
             }
         }
+
         // We did our best, but still have no profile: and since csf->grabColorSpace
         // needs the profile to find the colorspace, we have to give up.
         if (!p) {
             return 0;
         }
         profileName = p->name();
+
         const KoColorSpace *cs = csf->grabColorSpace(p);
         if (!cs) {
             dbgPigmentCSRegistry << "Unable to create color space";

@@ -55,24 +55,25 @@ public:
     virtual int flags() const;
 
 protected:
-    bool isGestureSupported() const;
-    void gesture(const QPointF &offsetInDocPixels,
-                 const QPointF &initialDocPoint);
+    bool tryPickByPaintOp(KoPointerEvent *event, AlternateAction action);
 
-    virtual void mousePressEvent(KoPointerEvent *e);
-    virtual void mouseMoveEvent(KoPointerEvent *e);
-    virtual void mouseReleaseEvent(KoPointerEvent *e);
-    virtual void keyPressEvent(QKeyEvent *event);
-    virtual void keyReleaseEvent(QKeyEvent* event);
+    bool primaryActionSupportsHiResEvents() const;
+    void beginPrimaryAction(KoPointerEvent *event);
+    void continuePrimaryAction(KoPointerEvent *event);
+    void endPrimaryAction(KoPointerEvent *event);
+
+    void beginAlternateAction(KoPointerEvent *event, AlternateAction action);
+    void continueAlternateAction(KoPointerEvent *event, AlternateAction action);
+    void endAlternateAction(KoPointerEvent *event, AlternateAction action);
+
     virtual bool wantsAutoScroll() const;
     void activate(ToolActivation activation, const QSet<KoShape*> &shapes);
     void deactivate();
+    void resetCursorStyle();
 
     virtual void initStroke(KoPointerEvent *event);
     virtual void doStroke(KoPointerEvent *event);
     virtual void endStroke();
-
-    virtual void paint(QPainter& gc, const KoViewConverter &converter);
 
     virtual QPainterPath getOutlinePath(const QPointF &documentPos,
                                         KisPaintOpSettings::OutlineMode outlineMode);
@@ -101,11 +102,6 @@ private:
      */
     qreal calculatePerspective(const QPointF &documentPoint);
 
-    void showOutlineTemporary();
-
-private slots:
-    void hideOutline();
-
 protected:
 
     KisSmoothingOptions m_smoothingOptions;
@@ -113,13 +109,13 @@ protected:
     double m_magnetism;
 
 private:
-
-    QTimer m_outlineTimer;
-    bool m_explicitShowOutline;
-
     KisPaintingInformationBuilder *m_infoBuilder;
     KisToolFreehandHelper *m_helper;
     KisRecordingAdapter *m_recordingAdapter;
+
+    QPointF m_initialGestureDocPoint;
+    QPointF m_lastDocumentPoint;
+    QPoint m_initialGestureGlobalPoint;
 };
 
 

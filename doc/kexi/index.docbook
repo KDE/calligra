@@ -59,7 +59,7 @@
 </para>
 <para>If you have any questions about &kexi;, there are two mailing lists you can use. The &kexi; user mailing list can be used to ask questions about using &kexi; or about the &kexi; project. The &kexi; development mailing list can be used to ask questions about the development of &kexi;. Further information on how to subscribe to these lists, together with a few other ways of making contact with &kexi; developers, can be found  <ulink url="http://www.kexi-project.org/support.html">here</ulink>.
 </para>
-<para><note><para>This handbook for &kexi; 2.5 is meant to be based on the &kexi; Handbook <ulink url="http://docs.kde.org/stable/en/koffice/kexi/index.html">for Kexi 1.1</ulink>. Please coordinate any effort with Jarosław Staniek, email: kexi at kde.org</para></note>
+<para><note><para>This handbook for &kexi; 2.5 is meant to be based on the &kexi; Handbook for Kexi 1.1. Please coordinate any effort with Jarosław Staniek, email: kexi at kde.org</para></note>
 </para>
 </chapter>
 <chapter id="kexi-basics"><title>Kexi Basics</title> 

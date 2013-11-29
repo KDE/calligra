@@ -62,8 +62,6 @@ set(wordsprivate_LIB_SRCS
     dockers/StatisticsPreferencesPopup.cpp
 
     commands/KWPageStylePropertiesCommand.cpp
-    commands/KWPageInsertCommand.cpp
-    commands/KWPageRemoveCommand.cpp
     commands/KWNewPageStyleCommand.cpp
     commands/KWFrameDeleteCommand.cpp
     commands/KWFrameCreateCommand.cpp

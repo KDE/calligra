@@ -25,12 +25,6 @@ target_link_libraries(TestClipToPage wordsprivate ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
-#set(TestPageCommands_test_SRCS TestPageCommands.cpp)
-#kde4_add_unit_test(TestPageCommands TESTNAME words-part-TestPageCommands  ${TestPageCommands_test_SRCS})
-#target_link_libraries(TestPageCommands wordsprivate ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-
 #set(TestViewMode_test_SRCS TestViewMode.cpp)
 #kde4_add_unit_test(TestViewMode TESTNAME words-part-TestViewMode  ${TestViewMode_test_SRCS})
 #target_link_libraries(TestViewMode wordsprivate ${QT_QTTEST_LIBRARY})
@@ -66,9 +60,4 @@ if( SHOULD_BUILD_RDF )
 #  target_link_libraries(TestRdf wordsprivate ${QT_QTTEST_LIBRARY})
 endif( SHOULD_BUILD_RDF )
 
-########### next target ###############
-
-#set(TestKoBookmark_test_SRCS TestKoBookmark.cpp)
-#kde4_add_unit_test(TestKoBookmark TESTNAME words-part-TestKoBookmark  ${TestKoBookmark_test_SRCS})
-#target_link_libraries(TestKoBookmark wordsprivate ${QT_QTTEST_LIBRARY})
 

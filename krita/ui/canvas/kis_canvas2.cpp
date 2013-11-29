@@ -105,7 +105,7 @@ public:
 #ifdef HAVE_OPENGL
     int openGLFilterMode;
 #endif
-    KoToolProxy *toolProxy;
+    KisToolProxy *toolProxy;
     KoFavoriteResourceManager *favoriteResourceManager;
 #ifdef HAVE_OPENGL
     KisOpenGLImageTexturesSP openGLImageTextures;
@@ -221,14 +221,6 @@ bool KisCanvas2::snapToGrid() const
 qreal KisCanvas2::rotationAngle() const
 {
     return m_d->coordinatesConverter->rotationAngle();
-}
-
-void KisCanvas2::setSmoothingEnabled(bool smooth)
-{
-    KisQPainterCanvas *canvas = dynamic_cast<KisQPainterCanvas*>(m_d->canvasWidget);
-    if (canvas) {
-        canvas->setSmoothingEnabled(smooth);
-    }
 }
 
 void KisCanvas2::channelSelectionChanged()
