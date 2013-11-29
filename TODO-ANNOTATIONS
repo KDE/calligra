@@ -28,7 +28,7 @@ Annoyances
 
  * The background of the annotation area should be more neutral in color
 
- * Save and load status of "Show notes".
+ * Save and load status of "Show Comments".
 
  * Zoom to Page Width should include the annotation area if active.
 
@@ -43,6 +43,10 @@ More work
  * Load more attributes, especially the styles.
 
  * roundtrip tests
+
+ * different layout when printing with comments
+
+ * Annotations to the left for people who use RTL languages.
 
 
 Ideas
