@@ -78,6 +78,7 @@ target_link_libraries(
     planworkfactory
     kplatokernel
     komain
+    ${KDE4_KPARTS_LIBS}
     )
 
 set_target_properties(planworkapp PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
