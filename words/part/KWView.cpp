@@ -1055,3 +1055,4 @@ void KWView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
     }
 }
 
+const qreal KWView::AnnotationAreaWidth = 200.0; // only static const integral data members can be initialized within a class

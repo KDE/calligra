@@ -61,7 +61,7 @@ class WORDS_EXPORT KWView : public KoView
     Q_OBJECT
 
 public:
-    static const qreal AnnotationAreaWidth = 200.0;
+    static const qreal AnnotationAreaWidth;
 
     /**
      * Construct a new view on the words document.
