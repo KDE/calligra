@@ -64,6 +64,7 @@
 #include <KoToolManager.h>
 #include <KoTextRangeManager.h>
 #include <KoAnnotationManager.h>
+#include <KoAnnotation.h>
 #include <KoTextEditor.h>
 #include <KoToolProxy.h>
 #include <KoShapeAnchor.h>
@@ -75,6 +76,7 @@
 #include <KoCanvasController.h>
 #include <KoDocumentRdfBase.h>
 #include <KoDocumentInfo.h>
+#include <KoAnnotationLayoutManager.h>
 #include <KoMainWindow.h>
 #include <KoCanvasControllerWidget.h>
 
@@ -119,8 +121,8 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
     m_snapToGrid = m_document->gridData().snapToGrid();
     m_gui = new KWGui(QString(), this);
     m_canvas = m_gui->canvas();
-    setFocusProxy(m_canvas);
 
+    setFocusProxy(m_canvas);
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setMargin(0);
     layout->addWidget(m_gui);
@@ -130,6 +132,10 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
 
     m_currentPage = m_document->pageManager()->begin();
 
+    m_document->annotationLayoutManager()->setShapeManager(m_canvas->shapeManager());
+    m_document->annotationLayoutManager()->setCanvasBase(m_canvas);
+    m_document->annotationLayoutManager()->setViewContentWidth(m_canvas->viewMode()->contentsSize().width());
+    connect(m_document, SIGNAL(annotationShapeAdded(bool)), this, SLOT(showNotes(bool)));
     //We need to create associate widget before connect them in actions
     //Perhaps there is a better place for the WordCount widget creates here
     //If you know where to move it in a better place, just do it
@@ -147,6 +153,8 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
     // The text documents to search in will potentially change when we add/remove shapes and after load
     connect(m_document, SIGNAL(shapeAdded(KoShape *, KoShapeManager::Repaint)), this, SLOT(refreshFindTexts()));
     connect(m_document, SIGNAL(shapeRemoved(KoShape *)), this, SLOT(refreshFindTexts()));
+
+
     refreshFindTexts();
 
     layout->addWidget(toolbar);
@@ -157,7 +165,11 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
 
     // the zoom controller needs to be initialized after the status bar gets initialized as
     // that resulted in bug 180759
-    m_zoomController->setPageSize(m_currentPage.rect().size() + QSize(AnnotationAreaWidth, 0.0));
+    QSizeF pageSize = m_currentPage.rect().size();
+    if (m_canvas->showAnnotations()) {
+        pageSize += QSize(KWCanvasBase::AnnotationAreaWidth, 0.0);
+    }
+    m_zoomController->setPageSize(pageSize);
     m_zoomController->setTextMinMax(m_currentPage.contentRect().left(), m_currentPage.contentRect().right());
     KoZoomMode::Modes modes = KoZoomMode::ZOOM_WIDTH | KoZoomMode::ZOOM_TEXT;
     if (m_canvas->viewMode()->hasPages())
@@ -400,6 +412,12 @@ void KWView::setupActions()
         m_actionViewFooter->setEnabled(m_currentPage.pageStyle().footerPolicy() == Words::HFTypeNone);
     connect(m_actionViewFooter, SIGNAL(triggered()), this, SLOT(enableFooter()));
 
+    // -------- Show annotations (called Comments in the UI)
+    tAction = new KToggleAction(i18n("Show Comments"), this);
+    tAction->setToolTip(i18n("Shows comments in the document"));
+    tAction->setChecked(m_canvas && m_canvas->showAnnotations());
+    actionCollection()->addAction("view_notes", tAction);
+    connect(tAction, SIGNAL(toggled(bool)), this, SLOT(showNotes(bool)));
 
     // -------- Statistics in the status bar
     KToggleAction *tActionBis = new KToggleAction(i18n("Word Count"), this);
@@ -472,10 +490,19 @@ void KWView::pasteRequested()
     }
 }
 
-void KWView::showWordCountInStatusBar(bool toggled)
+void KWView::showNotes(bool doShow)
 {
-    kwdocument()->config().setStatusBarShowWordCount(toggled);
-    wordCount->setVisible(toggled);
+    m_canvas->setShowAnnotations(doShow);
+    m_canvas->updateSize();
+
+    KToggleAction *action = (KToggleAction*) actionCollection()->action("view_notes");
+    action->setChecked(doShow);
+}
+
+void KWView::showWordCountInStatusBar(bool doShow)
+{
+    kwdocument()->config().setStatusBarShowWordCount(doShow);
+    wordCount->setVisible(doShow);
 }
 
 void KWView::editFrameProperties()
@@ -938,7 +965,11 @@ void KWView::offsetInDocumentMoved(int yOffset)
 
     if (maxPageSize != m_pageSize) {
         m_pageSize = maxPageSize;
-        m_zoomController->setPageSize(m_pageSize + QSize(AnnotationAreaWidth, 0.0));
+        QSizeF pageSize = m_pageSize;
+        if (m_canvas->showAnnotations()) {
+            pageSize += QSize(KWCanvasBase::AnnotationAreaWidth, 0.0);
+        }
+        m_zoomController->setPageSize(pageSize);
     }
     if (minTextX != m_textMinX || maxTextX != m_textMaxX) {
         m_textMinX = minTextX;
@@ -998,7 +1029,7 @@ void KWView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
         return;
     }
 
-    QPointF pos = viewConverter()->viewToDocument(m_canvas->documentOffset() + insertAt - KWView::pos());
+    QPointF pos = viewConverter()->viewToDocument(m_canvas->documentOffset() + insertAt - canvas()->pos());
     pos.setX(qMax(qreal(0), pos.x()));
     pos.setY(qMax(qreal(0), pos.y()));
 

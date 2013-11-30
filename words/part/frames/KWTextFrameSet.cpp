@@ -36,6 +36,7 @@
 #include <KoTextDocumentLayout.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeFactoryBase.h>
+#include <KoAnnotationLayoutManager.h>
 
 #include <changetracker/KoChangeTracker.h>
 
@@ -145,6 +146,10 @@ void KWTextFrameSet::setupDocument()
     // the KoTextDocumentLayout needs to be setup after the actions above are done to prepare the document
     KoTextDocumentLayout *lay = new KoTextDocumentLayout(m_document, m_rootAreaProvider);
     lay->setWordprocessingMode();
+
+    QObject::connect(lay, SIGNAL(foundAnnotation(KoShape *, QPointF)),
+                     m_wordsDocument->annotationLayoutManager(), SLOT(registerAnnotationRefPosition(KoShape *, QPointF)));
+
     m_document->setDocumentLayout(lay);
     QObject::connect(lay, SIGNAL(layoutIsDirty()), lay, SLOT(scheduleLayout()));
 }
