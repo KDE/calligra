@@ -53,10 +53,12 @@ class KoShapeController;
 class KoPart;
 class KLocalizedString;
 class QIODevice;
+class KoAnnotationLayoutManager;
 class KoDocumentInfoDlg;
 
 
 #define WORDS_MIME_TYPE "application/vnd.oasis.opendocument.text"
+
 
 /**
  * The class that represents a Words document containing content and settings.
@@ -110,6 +112,9 @@ public:
     void setIsMasterDocument(bool isMasterDocument);
 
     // others
+    KoAnnotationLayoutManager *annotationLayoutManager() const {
+        return m_annotationManager;
+    }
     /**
      * Return the pageManager used in this document.
      */
@@ -236,6 +241,12 @@ signals:
     /// emitted whenever a shape is added.
     void shapeAdded(KoShape *, KoShapeManager::Repaint);
 
+    /// emitted whenever an annotation shape is added.
+    void annotationShapeAdded(bool);
+
+    /// emitted whenever an annotation shape is removed
+    void annotationShapeRemoved(KoShape *);
+
     /// emitted whenever a shape is removed
     void shapeRemoved(KoShape *);
 
@@ -289,7 +300,8 @@ private:
     QPointer<KoUpdater> m_layoutProgressUpdater;
     KoShapeController *m_shapeController;
     QPair<QString, QByteArray> m_coverImage;
-
+    QList<KoShape*> m_loadedAnnotationShapes;
+    KoAnnotationLayoutManager *m_annotationManager;
 };
 
 #endif
