@@ -179,7 +179,6 @@ void KoAnnotationLayoutManager::updateLayout(KoShape *shape)
 
 void KoAnnotationLayoutManager::layoutAnnotationShapes()
 {
-    qDebug() << "*** Layout annotation shapes ***";
     qreal currentY = 0.0;
     qStableSort(d->annotationShapePositions.begin(), d->annotationShapePositions.end(), compare);
 
