@@ -797,3 +797,5 @@ QPoint KWCanvasBase::documentOffset() const
 {
     return m_documentOffset;
 }
+
+const qreal KWCanvasBase::AnnotationAreaWidth = 200.0; // only static const integral data members can be initialized within a class

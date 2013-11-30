@@ -48,7 +48,7 @@ class KWPageCacheManager;
 class WORDS_EXPORT KWCanvasBase : public KoCanvasBase
 {
 public:
-    static const qreal AnnotationAreaWidth = 200.0;
+    static const qreal AnnotationAreaWidth;
 
     explicit KWCanvasBase(KWDocument *document, QObject *parent = 0);
     ~KWCanvasBase();
