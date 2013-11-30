@@ -1029,7 +1029,7 @@ void KWView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
         return;
     }
 
-    QPointF pos = viewConverter()->viewToDocument(m_canvas->documentOffset() + insertAt - KWView::pos());
+    QPointF pos = viewConverter()->viewToDocument(m_canvas->documentOffset() + insertAt - canvas()->pos());
     pos.setX(qMax(qreal(0), pos.x()));
     pos.setY(qMax(qreal(0), pos.y()));
 
