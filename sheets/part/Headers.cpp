@@ -279,7 +279,7 @@ void RowHeader::equalizeRow(double resize)
     if (resize != 0.0) {
         ResizeRowManipulator* command = new ResizeRowManipulator();
         command->setSheet(m_pCanvas->activeSheet());
-        command->setSize(qMax(2.0, resize));
+        command->setSize(qMax(qreal(2.0), resize));
         command->add(*m_pCanvas->selection());
         if (!command->execute())
             delete command;
@@ -778,7 +778,7 @@ void ColumnHeader::equalizeColumn(double resize)
     if (resize != 0.0) {
         ResizeColumnManipulator* command = new ResizeColumnManipulator();
         command->setSheet(m_pCanvas->activeSheet());
-        command->setSize(qMax(2.0, resize));
+        command->setSize(qMax(qreal(2.0), resize));
         command->add(*m_pCanvas->selection());
         if (!command->execute())
             delete command;

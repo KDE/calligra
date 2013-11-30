@@ -30,7 +30,11 @@ Dual-licensed under LGPL v2+higher and the BSD license.
 """
 
 import os, datetime, sys, traceback, urlparse
-import Kross
+
+try:
+    import Kross
+except:
+    raise Exception, "Failed to import the Kross module."
 
 T = Kross.module("kdetranslation")
 
@@ -43,7 +47,7 @@ class Config:
     ignored if the htmlexport.py script got executed embedded within KSpreadsince
     in that case always the current document will be used. """
 
-    Infos = {
+    Info = {
         'Title' : 'Spreadsheet',
         'Subject' : '',
         'Author' : '',
@@ -121,7 +125,7 @@ class Reader:
 
         def __init__(self):
             self.filename = ''
-            self.infos = {
+            self.info = {
                 'Title' : 'Some Title',
                 'Subject' : 'Some Subject',
                 'Author' : 'Tester',
@@ -185,13 +189,13 @@ class Reader:
             elif self.document.url():
                 self.setFile(self.document.url())
 
-            self.infos = {
-                'Title' : self.document.documentInfoTitle() or Config.Infos['Title'],
-                'Subject' : self.document.documentInfoSubject() or Config.Infos['Subject'],
-                'Author' : self.document.documentInfoAuthorName() or Config.Infos['Author'],
-                'EMail' : self.document.documentInfoEmail() or Config.Infos['EMail'],
-                'Keywords' : self.document.documentInfoKeywords() or Config.Infos['Keywords'],
-                'Filename' : self.document.url() or Config.Infos['Filename'],
+            self.info = {
+                'Title' : self.document.documentInfoTitle() or Config.Info['Title'],
+                'Subject' : self.document.documentInfoSubject() or Config.Info['Subject'],
+                'Author' : self.document.documentInfoAuthorName() or Config.Info['Author'],
+                'EMail' : self.document.documentInfoEmail() or Config.Info['EMail'],
+                'Keywords' : self.document.documentInfoKeywords() or Config.Info['Keywords'],
+                'Filename' : self.document.url() or Config.Info['Filename'],
                 'Date' : datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
             }
 
@@ -274,7 +278,7 @@ class Writer:
 
         def __init__(self):
             self.filename = ''
-            self.infos = {}
+            self.info = {}
         def hasFile(self):
             return True
         def setFile(self, filename):
@@ -291,7 +295,7 @@ class Writer:
 
         def __init__(self):
             self.filename = ''
-            self.infos = {}
+            self.info = {}
         def hasFile(self):
             return False
         def setFile(self, filename):
@@ -303,8 +307,8 @@ class Writer:
                 self.file = open(self.filename, "w")
             except IOError, (errno, strerror):
                 raise Exception, T.i18n("Failed to create HTML file \"%1\":\n%2", [self.filename], [strerror])
-            if self.infos.has_key('Title'):
-                title = self.infos['Title']
+            if self.info.has_key('Title'):
+                title = self.info['Title']
             else:
                 title = "Spreadsheet"
 
@@ -325,7 +329,7 @@ class Writer:
             self.file.write( "</head><h1>%s</h1><ul>" % title )
             for s in ['Title','Subject','Author','EMail','Keywords','Filename','Date']:
                 try:
-                    self.file.write( "<li>%s: %s</li>" % (s,self.infos[s]) )
+                    self.file.write( "<li>%s: %s</li>" % (s,self.info[s]) )
                 except:
                     pass
             self.file.write( "</ul><table border=\"1\">" )
@@ -375,11 +379,11 @@ class Dialog:
             self.savewidget.setMode("Saving")
             self.savewidget.setFilter("*.html *.htm *.xhtml|%(1)s\n*|%(2)s"  % { '1' : T.i18n("HTML Documents"), '2' : T.i18n("All Files") } )
 
-        infospage = self.dialog.addPage(T.i18n("Info"),T.i18n("HTML Document Information"),"document-properties")
-        self.infoswidget = self.forms.createWidgetFromUIFile(infospage, os.path.join(self.exporter.currentpath, "htmlexportinfos.ui"))
-        for i in self.exporter.reader.infos.keys():
-            w = self.infoswidget[i]
-            w.setText( self.exporter.reader.infos[i] )
+        infopage = self.dialog.addPage(T.i18n("Info"),T.i18n("HTML Document Information"),"document-properties")
+        self.infowidget = self.forms.createWidgetFromUIFile(infopage, os.path.join(self.exporter.currentpath, "htmlexportinfos.ui"))
+        for i in self.exporter.reader.info.keys():
+            w = self.infowidget[i]
+            w.setText( self.exporter.reader.info[i] )
 
         layoutpage = self.dialog.addPage(T.i18n("Styles"),T.i18n("Style of the HTML Document"),"fill-color")
         layoutwidget = self.forms.createWidgetFromUI(layoutpage,
@@ -409,7 +413,7 @@ class Dialog:
         if result:
 
             #FIXME this one throws a bad python-error. Handle it!
-            #self.writer.infos = {}
+            #self.writer.info = {}
 
             # set reader
             if hasattr(self,"openwidget"):
@@ -427,7 +431,7 @@ class Dialog:
             # set information
             for s in ['Title','Subject','Author','EMail','Keywords','Filename','Date']:
                 try:
-                    self.exporter.writer.infos[s] = self.infoswidget[s].text
+                    self.exporter.writer.info[s] = self.infowidget[s].text
                 except:
                     pass
 
