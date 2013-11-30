@@ -192,6 +192,9 @@ void KoAnnotationLayoutManager::layoutAnnotationShapes()
         shape->update();
         shape->setSize(QSize(shapeWidth, shape->size().height()));
         shape->setPosition(QPointF(d->x, currentY));
+
+        // This makes the shape visible. It was set to invisible when it was created.
+        shape->setVisible(true);
         shape->update();
         currentY += shape->size().height() + shapeSpace;
 

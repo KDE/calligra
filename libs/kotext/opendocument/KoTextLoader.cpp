@@ -1100,6 +1100,13 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
                     textRangeManager->insert(annotation);
 
                     KoShape *shape = KoShapeRegistry::instance()->createShapeFromOdf(ts, d->context);
+                    // Don't show it before it's being laid out.
+                    //
+                    // Also this hides it in all applications but
+                    // those that have an annotation layout manager
+                    // (currently: words, author).
+                    shape->setVisible(false);
+
                     d->textSharedData->shapeInserted(shape, element, d->context);
                     annotation->setAnnotationShape(shape);
                 }
