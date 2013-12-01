@@ -23,8 +23,6 @@
 #include "config.h"
 #endif
 
-#include <stdio.h>
-
 #include "OutputFileHelper.hxx"
 
 #ifdef USE_GSF_OUTPUT
@@ -39,6 +37,7 @@
 
 #include "DiskDocumentHandler.hxx"
 #include "StdOutHandler.hxx"
+#include <libwpd-stream/WPXStreamImplementation.h>
 
 struct OutputFileHelperImpl
 {
@@ -67,44 +66,44 @@ OutputFileHelper::OutputFileHelper(const char *outFileName, const char *password
 	GsfOutput  *pOutput = 0;
 	GError   *err = 0;
 
-	gsf_init();
+	gsf_init ();
 
 	if (!outFileName)
 		pOutput = 0;
 	else
 	{
-		pOutput = GSF_OUTPUT(gsf_output_stdio_new(outFileName, &err));
+		pOutput = GSF_OUTPUT(gsf_output_stdio_new (outFileName, &err));
 		if (pOutput == 0)
 		{
 			if (err)
 			{
-				g_warning("'%s' error: %s", outFileName, err->message);
-				g_error_free(err);
+				g_warning ("'%s' error: %s", outFileName, err->message);
+				g_error_free (err);
 			}
-			gsf_shutdown();
+			gsf_shutdown ();
 		}
 		else
 		{
 			if (err)
-				g_error_free(err);
+				g_error_free (err);
 			err = 0;
-			m_impl->mpOutfile = GSF_OUTFILE(gsf_outfile_zip_new(pOutput, &err));
+			m_impl->mpOutfile = GSF_OUTFILE(gsf_outfile_zip_new (pOutput, &err));
 			if (m_impl->mpOutfile == 0)
 			{
 				if (err)
 				{
-					g_warning("'%s' error: %s",
-					          "gsf_outfile_zip_new", err->message);
-					g_error_free(err);
+					g_warning ("'%s' error: %s",
+					           "gsf_outfile_zip_new", err->message);
+					g_error_free (err);
 				}
-				gsf_shutdown();
+				gsf_shutdown ();
 			}
 			else
 			{
 				if (err)
-					g_error_free(err);
+					g_error_free (err);
 				err = 0;
-				g_object_unref(pOutput);
+				g_object_unref (pOutput);
 			}
 		}
 	}
@@ -117,13 +116,13 @@ OutputFileHelper::OutputFileHelper(const char *outFileName, const char *password
 OutputFileHelper::~OutputFileHelper()
 {
 #ifdef USE_GSF_OUTPUT
-	if (m_impl->mpOutfile && !gsf_output_close((GsfOutput *) m_impl->mpOutfile))
+	if (m_impl->mpOutfile && !gsf_output_close ((GsfOutput *) m_impl->mpOutfile))
 		fprintf(stderr, "ERROR : Couldn't close outfile\n");
 
 	if (m_impl->mpOutfile)
-		g_object_unref(m_impl->mpOutfile);
+		g_object_unref (m_impl->mpOutfile);
 
-	gsf_shutdown();
+	gsf_shutdown ();
 #else
 	if (m_impl->mpOutfile)
 		delete m_impl->mpOutfile;
@@ -138,11 +137,11 @@ bool OutputFileHelper::writeChildFile(const char *childFileName, const char *str
 		return true;
 #ifdef USE_GSF_OUTPUT
 	GsfOutput *child;
-	if (0 != (child = gsf_outfile_new_child(m_impl->mpOutfile, childFileName, FALSE)))
+	if (0 != (child = gsf_outfile_new_child  (m_impl->mpOutfile, childFileName, FALSE)))
 	{
-		bool res = gsf_output_puts(child, str) &&
-		           gsf_output_close(child);
-		g_object_unref(child);
+		bool res = gsf_output_puts (child, str) &&
+		           gsf_output_close (child);
+		g_object_unref (child);
 		return res;
 	}
 	return false;
@@ -163,7 +162,7 @@ bool OutputFileHelper::writeChildFile(const char *childFileName, const char *str
 #if defined(USE_GSF_OUTPUT) && defined(GSF_HAS_COMPRESSION_LEVEL)
 bool OutputFileHelper::writeChildFile(const char *childFileName, const char *str, const char compression_level)
 #else
-bool OutputFileHelper::writeChildFile(const char *childFileName, const char *str, const char)
+bool OutputFileHelper::writeChildFile(const char *childFileName, const char *str, const char )
 #endif
 {
 	if (!m_impl->mpOutfile)
@@ -171,14 +170,14 @@ bool OutputFileHelper::writeChildFile(const char *childFileName, const char *str
 #ifdef USE_GSF_OUTPUT
 	GsfOutput *child;
 #ifdef GSF_HAS_COMPRESSION_LEVEL
-	if (0 != (child = gsf_outfile_new_child_full(m_impl->mpOutfile, childFileName, FALSE,"compression-level", compression_level, (void *)0)))
+	if (0 != (child = gsf_outfile_new_child_full  (m_impl->mpOutfile, childFileName, FALSE,"compression-level", compression_level, (void *)0)))
 #else
-	if (0 != (child = gsf_outfile_new_child(m_impl->mpOutfile, childFileName, FALSE)))
+	if (0 != (child = gsf_outfile_new_child  (m_impl->mpOutfile, childFileName, FALSE)))
 #endif
 	{
-		bool res = gsf_output_puts(child, str) &&
-		           gsf_output_close(child);
-		g_object_unref(child);
+		bool res = gsf_output_puts (child, str) &&
+		           gsf_output_close (child);
+		g_object_unref (child);
 		return res;
 	}
 	return false;
@@ -198,12 +197,12 @@ bool OutputFileHelper::writeChildFile(const char *childFileName, const char *str
 
 bool OutputFileHelper::writeConvertedContent(const char *childFileName, const char *inFileName, const OdfStreamType streamType)
 {
-	librevenge::RVNGFileStream input(inFileName);
+	WPXFileStream input(inFileName);
 
 	if (!_isSupportedFormat(&input, m_impl->mpPassword))
 		return false;
 
-	input.seek(0, librevenge::RVNG_SEEK_SET);
+	input.seek(0, WPX_SEEK_SET);
 
 	OdfDocumentHandler *pHandler;
 #ifdef USE_GSF_OUTPUT
@@ -230,7 +229,7 @@ bool OutputFileHelper::writeConvertedContent(const char *childFileName, const ch
 	if (pContentChild)
 	{
 		gsf_output_close(pContentChild);
-		g_object_unref(G_OBJECT(pContentChild));
+		g_object_unref(G_OBJECT (pContentChild));
 	}
 
 #else
@@ -240,19 +239,6 @@ bool OutputFileHelper::writeConvertedContent(const char *childFileName, const ch
 	delete pHandler;
 
 	return bRetVal;
-}
-
-bool OutputFileHelper::_isSupportedFormat(librevenge::RVNGInputStream *, const char *)
-{
-	fprintf(stderr, "ERROR OutputFileHelper::_isSupportedFormat: must be redefined\n");
-	return false;
-}
-
-
-bool OutputFileHelper::_convertDocument(librevenge::RVNGInputStream *, const char *, OdfDocumentHandler *, const OdfStreamType)
-{
-	fprintf(stderr, "ERROR OutputFileHelper::_convertDocument: must be redefined\n");
-	return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

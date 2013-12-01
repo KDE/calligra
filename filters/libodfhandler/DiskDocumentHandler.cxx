@@ -37,7 +37,7 @@ DiskOdfDocumentHandler::DiskOdfDocumentHandler(FemtoZip *pOutput) :
 {
 }
 
-void DiskOdfDocumentHandler::startElement(const char *psName, const librevenge::RVNGPropertyList &xPropList)
+void DiskOdfDocumentHandler::startElement(const char *psName, const WPXPropertyList &xPropList)
 {
 	if (mbIsTagOpened)
 	{
@@ -46,11 +46,11 @@ void DiskOdfDocumentHandler::startElement(const char *psName, const librevenge::
 	}
 	PUTSTRING("<");
 	PUTSTRING(psName);
-	librevenge::RVNGPropertyList::Iter i(xPropList);
-	for (i.rewind(); i.next();)
+	WPXPropertyList::Iter i(xPropList);
+	for (i.rewind(); i.next(); )
 	{
 		// filter out libwpd elements
-		if (strncmp(i.key(), "librevenge", 10) != 0)
+		if (strncmp(i.key(), "libwpd", 6) != 0)
 		{
 			PUTSTRING(" ");
 			PUTSTRING(i.key());
@@ -68,7 +68,7 @@ void DiskOdfDocumentHandler::endElement(const char *psName)
 {
 	if (mbIsTagOpened)
 	{
-		if (msOpenedTagName == psName)
+		if( msOpenedTagName == psName )
 		{
 			PUTSTRING("/>");
 			mbIsTagOpened = false;
@@ -91,14 +91,14 @@ void DiskOdfDocumentHandler::endElement(const char *psName)
 	}
 }
 
-void DiskOdfDocumentHandler::characters(const librevenge::RVNGString &sCharacters)
+void DiskOdfDocumentHandler::characters(const WPXString &sCharacters)
 {
 	if (mbIsTagOpened)
 	{
 		PUTSTRING(">");
 		mbIsTagOpened = false;
 	}
-	librevenge::RVNGString sEscapedCharacters(sCharacters, true);
+	WPXString sEscapedCharacters(sCharacters, true);
 	if (sEscapedCharacters.len() > 0)
 		PUTSTRING(sEscapedCharacters.cstr());
 }
