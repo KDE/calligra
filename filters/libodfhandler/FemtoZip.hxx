@@ -53,9 +53,9 @@ public:
 
 	enum
 	{
-		NoError = 0,
-		ErrorCreateZip = 1,
-		ErrorWriteData = 2
+	    NoError = 0,
+	    ErrorCreateZip = 1,
+	    ErrorWriteData = 2
 	};
 
 	/*!

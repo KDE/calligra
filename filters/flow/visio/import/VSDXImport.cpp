@@ -20,9 +20,9 @@
 #include "VSDXImport.h"
 
 #include <libvisio/libvisio.h>
+#include <libodfgen/OdgGenerator.hxx>
 
-#include <OutputFileHelper.hxx>
-#include <OdgGenerator.hxx>
+#include "OutputFileHelper.hxx"
 #include <KoFilterChain.h>
 #include <KoGlobal.h>
 #include <KoOdf.h>
