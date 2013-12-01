@@ -1,0 +1,56 @@
+Things left to do for the annotations branch
+
+
+Features
+--------
+
+
+Bugs
+----
+ * Annotation shapes should be handled gracefully in stage, (and any other app for that matter)
+
+ * Annotations should only be printed if the user want's it (different option to view->"Show comments")
+
+
+
+To Check / Test
+---------------
+
+
+---------------- Milestone 1: merge with master ----------------
+
+
+Annoyances
+----------
+ * after inserting a comment the annotationshape should be active
+
+ * when clicking esc inside an annotation the cursor should return to the original textshape
+
+ * The background of the annotation area should be more neutral in color
+
+ * Save and load status of "Show Comments".
+
+ * Zoom to Page Width should include the annotation area if active.
+
+ * The review tool's annotation widget should have icons rather than text buttons .
+
+ * Setting of "Show comments" also available in the review tool?
+
+
+More work
+---------
+
+ * Load more attributes, especially the styles.
+
+ * roundtrip tests
+
+ * different layout when printing with comments
+
+ * Annotations to the left for people who use RTL languages.
+
+
+Ideas
+-----
+
+ * Use color coding for different authors
+   (This is probably already possible through the styles)

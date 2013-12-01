@@ -61,6 +61,8 @@ class WORDS_EXPORT KWView : public KoView
     Q_OBJECT
 
 public:
+    static const qreal AnnotationAreaWidth;
+
     /**
      * Construct a new view on the words document.
      * The view will have a canvas as a member which does all the actual painting, the view will
@@ -203,7 +205,9 @@ private slots:
     /// user wants to past data from the clipboard
     void pasteRequested();
     /// Call when the user want to show/hide the WordsCount in the statusbar
-    void showWordCountInStatusBar(bool toggled);
+    void showWordCountInStatusBar(bool doShow);
+    /// Show annotations ("notes" in the UI) on the canvas
+    void showNotes(bool doShow);
     /**
      * Set view into distraction free mode, hide menu bar, staus bar, tool bar, dockes
      * and set view into  full screen mode.

@@ -45,6 +45,7 @@
 #include <changetracker/KoChangeTracker.h>
 #include <KoShapeManager.h>
 #include <KoTextDocument.h>
+#include <KoAnnotation.h>
 #include <KoShapeAnchor.h>
 #include <KoShapeContainer.h>
 #include <KoOdfWriteStore.h>
@@ -69,7 +70,9 @@
 #include <KoPart.h>
 #include <KoDocumentInfoDlg.h>
 #include <KoDocumentRdfBase.h>
+#include <KoAnnotationLayoutManager.h>
 #include <KoPageWidgetItem.h>
+
 #ifdef SHOULD_BUILD_RDF
 #include <KoDocumentRdf.h>
 #include <KoDocumentRdfEditWidget.h>
@@ -95,6 +98,7 @@ KWDocument::KWDocument(KoPart *part)
         m_isMasterDocument(false),
         m_frameLayout(&m_pageManager, m_frameSets),
         m_mainFramesetEverFinished(false)
+        , m_annotationManager(0)
 {
     m_frameLayout.setDocument(this);
     resourceManager()->setOdfDocument(this);
@@ -123,6 +127,7 @@ KWDocument::KWDocument(KoPart *part)
 #endif
 
 
+
 /* TODO reenable after release
     QVariant variant;
     variant.setValue(new KoChangeTracker(resourceManager()));
@@ -134,6 +139,8 @@ KWDocument::KWDocument(KoPart *part)
         connect(documentInfo(), SIGNAL(infoUpdated(const QString &, const QString &)),
                 inlineTextObjectManager(), SLOT(documentInformationUpdated(const QString &, const QString &)));
     }
+
+    m_annotationManager = new KoAnnotationLayoutManager();
 
     clear();
 }
@@ -181,7 +188,11 @@ void KWDocument::addShape(KoShape *shape)
         addFrameSet(frame->frameSet());
     }
 
-    emit shapeAdded(shape, KoShapeManager::PaintShapeOnAdd);
+    if (shape->shapeId() == "AnnotationTextShapeID") {
+        emit annotationShapeAdded(true);
+    } else {
+        emit shapeAdded(shape, KoShapeManager::PaintShapeOnAdd);
+    }
 
     shape->update();
 }
@@ -189,7 +200,7 @@ void KWDocument::addShape(KoShape *shape)
 void KWDocument::removeShape(KoShape *shape)
 {
     KWFrame *frame = dynamic_cast<KWFrame*>(shape->applicationData());
-    qDebug() << "shape=" << shape << "frame=" << frame << "frameSetType=" << (frame ? Words::frameSetTypeName(frame->frameSet()) : QString());
+    kDebug(32001) << "shape=" << shape << "frame=" << frame << "frameSetType=" << (frame ? Words::frameSetTypeName(frame->frameSet()) : QString());
     if (frame) { // not all shapes have to have a frame. Only top-level ones do.
         KWFrameSet *fs = frame->frameSet();
         Q_ASSERT(fs);
@@ -200,11 +211,16 @@ void KWDocument::removeShape(KoShape *shape)
     } else { // not a frame, but we still have to remove it from views.
         emit shapeRemoved(shape);
     }
+    if (shape->shapeId() == "AnnotationTextShapeID") {
+        annotationLayoutManager()->removeAnnotationShape(shape);
+    }
 }
 
 void KWDocument::shapesRemoved(const QList<KoShape*> &shapes, KUndo2Command *command)
 {
     QMap<KoTextEditor *, QList<KoShapeAnchor *> > anchors;
+    QMap<KoTextEditor *, QList<KoAnnotation *> > annotations;
+    const KoAnnotationManager *annotationManager = textRangeManager()->annotationManager();
     foreach (KoShape *shape, shapes) {
         KoShapeAnchor *anchor = shape->anchor();
         if (anchor && anchor->textLocation()) {
@@ -213,11 +229,27 @@ void KWDocument::shapesRemoved(const QList<KoShape*> &shapes, KUndo2Command *com
                 KoTextEditor *editor = KoTextDocument(document).textEditor();
                 anchors[editor].append(anchor);
             }
+            break;
+        }
+        foreach (QString name, annotationManager->annotationNameList()) {
+            KoAnnotation *annotation = annotationManager->annotation(name);
+            if (annotation->annotationShape() == shape) {
+                // Remove From annotation layout manager.
+                KoTextEditor *editor = KoTextDocument(annotation->document()).textEditor();
+                annotations[editor].append(annotation);
+                break;
+            }
         }
     }
-    QMap<KoTextEditor *, QList<KoShapeAnchor *> >::const_iterator it(anchors.constBegin());
-    for (; it != anchors.constEnd(); ++it) {
-        it.key()->removeAnchors(it.value(), command);
+
+    QMap<KoTextEditor *, QList<KoShapeAnchor *> >::const_iterator anchorIter(anchors.constBegin());
+    for (; anchorIter != anchors.constEnd(); ++anchorIter) {
+        anchorIter.key()->removeAnchors(anchorIter.value(), command);
+    }
+ 
+    QMap<KoTextEditor *, QList<KoAnnotation *> >::const_iterator annotationIter(annotations.constBegin());
+    for (; annotationIter != annotations.constEnd(); ++annotationIter) {
+        annotationIter.key()->removeAnnotations(annotationIter.value(), command);
     }
 }
 
