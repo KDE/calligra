@@ -22,6 +22,8 @@
 
 #include <KoDocumentSectionModel.h>
 
+#include <QPointer>
+
 class KarbonDocument;
 class KoShape;
 class KoShapeContainer;
@@ -73,7 +75,7 @@ private:
     /// Recursively locks children of the specified shape container
     void lockRecursively(KoShapeContainer *container, bool lock);
 
-    KarbonDocument *m_document; ///< the underlying data structure
+    QPointer<KarbonDocument> m_document; ///< the underlying data structure
 };
 
 #endif // KARBONLAYERMODEL_H
