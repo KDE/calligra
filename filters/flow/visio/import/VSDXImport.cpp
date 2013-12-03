@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2011 Yue Liu <yue.liu@mail.com>
+   Copyright (C) 2011-2013 Yue Liu <yue.liu@mail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,7 +22,8 @@
 #include <libvisio/libvisio.h>
 #include <libodfgen/OdgGenerator.hxx>
 
-#include "OutputFileHelper.hxx"
+#include <OutputWriter.h>
+#include <KoStore.h>
 #include <KoFilterChain.h>
 #include <KoGlobal.h>
 #include <KoOdf.h>
@@ -34,15 +35,15 @@
 
 #include <stdio.h>
 
-class OdgOutputFileHelper : public OutputFileHelper
+class OdgOutputWriter : public OutputWriter
 {
 public:
-    OdgOutputFileHelper(const char *outFileName, const char *password) :
-        OutputFileHelper(outFileName, password) {}
-    ~OdgOutputFileHelper() {}
+    OdgOutputWriter(KoStore *outputStore) :
+        OutputWriter(outputStore) {}
+    ~OdgOutputWriter() {}
 
 private:
-    bool _isSupportedFormat(WPXInputStream *input, const char * /* password */)
+    bool _isSupportedFormat(WPXInputStream *input)
     {
         if (!libvisio::VisioDocument::isSupported(input))
         {
@@ -52,7 +53,7 @@ private:
         return true;
     }
 
-    bool _convertDocument(WPXInputStream *input, const char * /* password */, OdfDocumentHandler *handler, OdfStreamType streamType)
+    bool _convertDocument(WPXInputStream *input, OdfDocumentHandler *handler, OdfStreamType streamType)
     {
         OdgGenerator exporter(handler, streamType);
         return libvisio::VisioDocument::parse(input, &exporter);
@@ -76,8 +77,6 @@ KoFilter::ConversionStatus VSDXImport::convert(const QByteArray& from, const QBy
     if (from != "application/vnd.visio" || to != KoOdf::mimeType(KoOdf::Graphics))
         return KoFilter::NotImplemented;
 
-    const char mimetypeStr[] = "application/vnd.oasis.opendocument.graphics";
-
     const char manifestStr[] = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
             "<manifest:manifest xmlns:manifest=\"urn:oasis:names:tc:opendocument:xmlns:manifest:1.0\">"
             " <manifest:file-entry manifest:media-type=\"application/vnd.oasis.opendocument.graphics\" manifest:version=\"1.0\" manifest:full-path=\"/\"/>"
@@ -87,40 +86,48 @@ KoFilter::ConversionStatus VSDXImport::convert(const QByteArray& from, const QBy
             "</manifest:manifest>";
 
 
-    QByteArray input = m_chain->inputFile().toLocal8Bit();
-    m_inputFile = input.data();
-    QByteArray output = m_chain->outputFile().toLocal8Bit();
-    m_outputFile = output.data();
+    QByteArray inputFile = m_chain->inputFile().toLocal8Bit();
 
-    OdgOutputFileHelper helper(m_outputFile, 0);
+    KoStore* outputStore = KoStore::createStore( m_chain->outputFile(), KoStore::Write,
+                                                 KoOdf::mimeType(KoOdf::Graphics), KoStore::Zip );
+    if (!outputStore)
+        return KoFilter::CreationError;
 
-    if (!helper.writeChildFile("mimetype", mimetypeStr, (char)0)) {
+    OdgOutputWriter writer(outputStore);
+
+    if (!writer.writeChildFile("mimetype", KoOdf::mimeType(KoOdf::Graphics))) {
         fprintf(stderr, "ERROR : Couldn't write mimetype\n");
+        delete outputStore;
         return KoFilter::ParsingError;
     }
 
-    if (!helper.writeChildFile("META-INF/manifest.xml", manifestStr)) {
+    if (!writer.writeChildFile("META-INF/manifest.xml", manifestStr)) {
         fprintf(stderr, "ERROR : Couldn't write manifest\n");
+        delete outputStore;
         return KoFilter::ParsingError;
     }
 
-    if (m_outputFile && !helper.writeConvertedContent("settings.xml", m_inputFile, ODF_SETTINGS_XML))
+    if (!writer.writeConvertedContent("settings.xml", inputFile.data(), ODF_SETTINGS_XML))
     {
         fprintf(stderr, "ERROR : Couldn't write document settings\n");
+        delete outputStore;
         return KoFilter::ParsingError;
     }
 
-    if (m_outputFile && !helper.writeConvertedContent("styles.xml", m_inputFile, ODF_STYLES_XML))
+    if (!writer.writeConvertedContent("styles.xml", inputFile.data(), ODF_STYLES_XML))
     {
         fprintf(stderr, "ERROR : Couldn't write document styles\n");
+        delete outputStore;
         return KoFilter::ParsingError;
     }
 
-    if (!helper.writeConvertedContent("content.xml", m_inputFile, m_outputFile ? ODF_CONTENT_XML : ODF_FLAT_XML))
+    if (!writer.writeConvertedContent("content.xml", inputFile.data(), ODF_CONTENT_XML))
     {
             fprintf(stderr, "ERROR : Couldn't write document content\n");
+            delete outputStore;
             return KoFilter::ParsingError;
     }
 
+    delete outputStore;
     return KoFilter::OK;
 }

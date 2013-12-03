@@ -1,5 +1,5 @@
 include_directories(
-    ../../../libodfhandler/
+    ../../../libodfgenhandler/
     ${LIBODFGEN_INCLUDE_DIRS}
     ${LIBVISIO_INCLUDE_DIRS}
     ${KOTEXT_INCLUDES}
@@ -9,10 +9,8 @@ include_directories(
 
 set(vsdx2odg_PART_SRCS
     VSDXImport.cpp
-    ../../../libodfhandler/DiskDocumentHandler.cxx
-    ../../../libodfhandler/FemtoZip.cxx
-    ../../../libodfhandler/OutputFileHelper.cxx
-    ../../../libodfhandler/StdOutHandler.cxx
+    ../../../libodfgenhandler/KoStoreHandler.cpp
+    ../../../libodfgenhandler/OutputWriter.cpp
 )
 
 kde4_add_plugin(calligra_filter_vsdx2odg ${vsdx2odg_PART_SRCS})
