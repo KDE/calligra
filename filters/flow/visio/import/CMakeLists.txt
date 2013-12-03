@@ -2,9 +2,7 @@ include_directories(
     ../../../libodfhandler/
     ${LIBODFGEN_INCLUDE_DIRS}
     ${LIBVISIO_INCLUDE_DIRS}
-    ${KOTEXT_INCLUDES}
     ${KOMAIN_INCLUDES}
-    ${FLAKE_INCLUDES}
 )
 
 set(vsdx2odg_PART_SRCS
