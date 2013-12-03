@@ -49,6 +49,7 @@ KWOdfSharedLoadingData::KWOdfSharedLoadingData(KWOdfLoader *loader)
 
 void KWOdfSharedLoadingData::shapeInserted(KoShape *shape, const KoXmlElement &element, KoShapeLoadingContext &context)
 {
+
     shape->removeAdditionalAttribute("text:anchor-type");
     const KoXmlElement *style = 0;
     if (element.hasAttributeNS(KoXmlNS::draw, "style-name")) {

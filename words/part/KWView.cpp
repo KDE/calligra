@@ -20,6 +20,7 @@
  */
 
 // words includes
+#define  SHOW_ANNOTATIONS 1
 #include "KWView.h"
 #include "KWGui.h"
 #include "KWDocument.h"
@@ -63,6 +64,7 @@
 #include <KoToolManager.h>
 #include <KoTextRangeManager.h>
 #include <KoAnnotationManager.h>
+#include <KoAnnotation.h>
 #include <KoTextEditor.h>
 #include <KoToolProxy.h>
 #include <KoShapeAnchor.h>
@@ -74,6 +76,7 @@
 #include <KoCanvasController.h>
 #include <KoDocumentRdfBase.h>
 #include <KoDocumentInfo.h>
+#include <KoAnnotationLayoutManager.h>
 #include <KoMainWindow.h>
 #include <KoCanvasControllerWidget.h>
 
@@ -118,8 +121,8 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
     m_snapToGrid = m_document->gridData().snapToGrid();
     m_gui = new KWGui(QString(), this);
     m_canvas = m_gui->canvas();
-    setFocusProxy(m_canvas);
 
+    setFocusProxy(m_canvas);
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setMargin(0);
     layout->addWidget(m_gui);
@@ -129,6 +132,10 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
 
     m_currentPage = m_document->pageManager()->begin();
 
+    m_document->annotationLayoutManager()->setShapeManager(m_canvas->shapeManager());
+    m_document->annotationLayoutManager()->setCanvasBase(m_canvas);
+    m_document->annotationLayoutManager()->setViewContentWidth(m_canvas->viewMode()->contentsSize().width());
+    connect(m_document, SIGNAL(annotationShapeAdded(bool)), this, SLOT(showNotes(bool)));
     //We need to create associate widget before connect them in actions
     //Perhaps there is a better place for the WordCount widget creates here
     //If you know where to move it in a better place, just do it
@@ -146,6 +153,8 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
     // The text documents to search in will potentially change when we add/remove shapes and after load
     connect(m_document, SIGNAL(shapeAdded(KoShape *, KoShapeManager::Repaint)), this, SLOT(refreshFindTexts()));
     connect(m_document, SIGNAL(shapeRemoved(KoShape *)), this, SLOT(refreshFindTexts()));
+
+
     refreshFindTexts();
 
     layout->addWidget(toolbar);
@@ -156,7 +165,11 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
 
     // the zoom controller needs to be initialized after the status bar gets initialized as
     // that resulted in bug 180759
-    m_zoomController->setPageSize(m_currentPage.rect().size());
+    QSizeF pageSize = m_currentPage.rect().size();
+    if (m_canvas->showAnnotations()) {
+        pageSize += QSize(KWCanvasBase::AnnotationAreaWidth, 0.0);
+    }
+    m_zoomController->setPageSize(pageSize);
     m_zoomController->setTextMinMax(m_currentPage.contentRect().left(), m_currentPage.contentRect().right());
     KoZoomMode::Modes modes = KoZoomMode::ZOOM_WIDTH | KoZoomMode::ZOOM_TEXT;
     if (m_canvas->viewMode()->hasPages())
@@ -210,12 +223,9 @@ void KWView::updateReadWrite(bool readWrite)
     m_actionViewHeader->setEnabled(readWrite);
     m_actionViewFooter->setEnabled(readWrite);
     m_actionViewSnapToGrid->setEnabled(readWrite);
-    m_actionAddBookmark->setEnabled(readWrite);
     QAction *action = actionCollection()->action("insert_framebreak");
     if (action) action->setEnabled(readWrite);
     action = actionCollection()->action("insert_variable");
-    if (action) action->setEnabled(readWrite);
-    action = actionCollection()->action("select_bookmark"); // TODO fix the dialog to honor read-only instead
     if (action) action->setEnabled(readWrite);
     action = actionCollection()->action("format_page");
     if (action) action->setEnabled(readWrite);
@@ -254,19 +264,7 @@ void KWView::setupActions()
     m_actionFormatFrameSet->setEnabled(false);
     connect(m_actionFormatFrameSet, SIGNAL(triggered()), this, SLOT(editFrameProperties()));
 
-    m_actionAddBookmark = new KAction(koIcon("bookmark-new"), i18n("Bookmark..."), this);
-    m_actionAddBookmark->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_G);
-    actionCollection()->addAction("add_bookmark", m_actionAddBookmark);
-    connect(m_actionAddBookmark, SIGNAL(triggered()), this, SLOT(addBookmark()));
-
-    KAction *action = new KAction(i18n("Select Bookmark..."), this);
-    action->setIconText(i18n("Bookmark"));
-    action->setIcon(koIcon("bookmarks"));
-    action->setShortcut(Qt::CTRL + Qt::Key_G);
-    actionCollection()->addAction("select_bookmark", action);
-    connect(action, SIGNAL(triggered()), this, SLOT(selectBookmark()));
-
-    action = actionCollection()->addAction(KStandardAction::Prior,  "page_previous", this, SLOT(goToPreviousPage()));
+    KAction *action = actionCollection()->addAction(KStandardAction::Prior,  "page_previous", this, SLOT(goToPreviousPage()));
 
     action = actionCollection()->addAction(KStandardAction::Next,  "page_next", this, SLOT(goToNextPage()));
 
@@ -414,6 +412,12 @@ void KWView::setupActions()
         m_actionViewFooter->setEnabled(m_currentPage.pageStyle().footerPolicy() == Words::HFTypeNone);
     connect(m_actionViewFooter, SIGNAL(triggered()), this, SLOT(enableFooter()));
 
+    // -------- Show annotations (called Comments in the UI)
+    tAction = new KToggleAction(i18n("Show Comments"), this);
+    tAction->setToolTip(i18n("Shows comments in the document"));
+    tAction->setChecked(m_canvas && m_canvas->showAnnotations());
+    actionCollection()->addAction("view_notes", tAction);
+    connect(tAction, SIGNAL(toggled(bool)), this, SLOT(showNotes(bool)));
 
     // -------- Statistics in the status bar
     KToggleAction *tActionBis = new KToggleAction(i18n("Word Count"), this);
@@ -438,16 +442,6 @@ void KWView::setupActions()
     m_actionImportStyle= new KAction(i18n("Import Styles..."), 0,
             this, SLOT(importStyle()),
             actionCollection(), "import_style");
-    m_actionAddLinkToBookmak = new KAction(i18n("Add to Bookmark"), 0,
-            this, SLOT(addToBookmark()),
-            actionCollection(), "add_to_bookmark");
-
-    m_actionAddBookmark= new KAction(i18n("Bookmark..."), 0,
-            this, SLOT(addBookmark()),
-            actionCollection(), "add_bookmark");
-    m_actionSelectBookmark= new KAction(i18n("Select Bookmark..."), 0,
-            this, SLOT(selectBookmark()),
-            actionCollection(), "select_bookmark");
 
     m_actionConfigureCompletion = new KAction(i18n("Configure Completion..."), 0,
             this, SLOT(configureCompletion()),
@@ -496,10 +490,19 @@ void KWView::pasteRequested()
     }
 }
 
-void KWView::showWordCountInStatusBar(bool toggled)
+void KWView::showNotes(bool doShow)
 {
-    kwdocument()->config().setStatusBarShowWordCount(toggled);
-    wordCount->setVisible(toggled);
+    m_canvas->setShowAnnotations(doShow);
+    m_canvas->updateSize();
+
+    KToggleAction *action = (KToggleAction*) actionCollection()->action("view_notes");
+    action->setChecked(doShow);
+}
+
+void KWView::showWordCountInStatusBar(bool doShow)
+{
+    kwdocument()->config().setStatusBarShowWordCount(doShow);
+    wordCount->setVisible(doShow);
 }
 
 void KWView::editFrameProperties()
@@ -523,115 +526,6 @@ void KWView::createTemplate()
 {
     KoTemplateCreateDia::createTemplate("words_template", ".ott",
                                         KWFactory::componentData(), m_document, this);
-}
-
-void KWView::addBookmark()
-{
-    QString name, suggestedName;
-
-    KoSelection *selection = canvasBase()->shapeManager()->selection();
-    KoShape *shape = 0;
-    shape = selection->firstSelectedShape();
-    if (shape == 0) return; // no shape selected
-
-    KWFrame *frame = kwdocument()->frameOfShape(shape);
-    Q_ASSERT(frame);
-    KWTextFrameSet *fs = dynamic_cast<KWTextFrameSet*>(frame->frameSet());
-    if (fs == 0) return;
-
-    QString tool = KoToolManager::instance()->preferredToolForSelection(selection->selectedShapes());
-    KoToolManager::instance()->switchToolRequested(tool);
-    KoTextEditor *editor = KoTextEditor::getTextEditorFromCanvas(canvasBase());
-    Q_ASSERT(editor);
-
-    const KoBookmarkManager *manager = m_document->textRangeManager()->bookmarkManager();
-    if (editor->hasSelection()) {
-        suggestedName = editor->selectedText();
-    }
-
-    QPointer<KWCreateBookmarkDialog> dia = new KWCreateBookmarkDialog(manager->bookmarkNameList(), suggestedName, m_canvas->canvasWidget());
-    if (dia->exec() == QDialog::Accepted) {
-        name = dia->newBookmarkName();
-    }
-    else {
-        delete dia;
-        return;
-    }
-    delete dia;
-
-    editor->addBookmark(name);
-}
-
-void KWView::selectBookmark()
-{
-    QString name;
-    const KoBookmarkManager *manager = m_document->textRangeManager()->bookmarkManager();
-
-    QPointer<KWSelectBookmarkDialog> dia = new KWSelectBookmarkDialog(manager->bookmarkNameList(), m_canvas->canvasWidget());
-    connect(dia, SIGNAL(nameChanged(const QString &, const QString &)),
-            manager, SLOT(rename(const QString &, const QString &)));
-    connect(dia, SIGNAL(bookmarkDeleted(const QString &)),
-            this, SLOT(deleteBookmark(const QString &)));
-    if (dia->exec() == QDialog::Accepted)
-        name = dia->selectedBookmarkName();
-    else {
-        delete dia;
-        return;
-    }
-    delete dia;
-    KoBookmark *bookmark = manager->bookmark(name);
-#if 0
-    KoShape *shape = bookmark->shape();
-    KoSelection *selection = canvasBase()->shapeManager()->selection();
-    selection->deselectAll();
-    selection->select(shape);
-
-    QString tool = KoToolManager::instance()->preferredToolForSelection(selection->selectedShapes());
-    KoToolManager::instance()->switchToolRequested(tool);
-#else
-#ifdef __GNUC__
-    #warning FIXME: port to textlayout-rework
-#endif
-#endif
-
-    KoCanvasResourceManager *rm = m_canvas->resourceManager();
-    if ((bookmark->positionOnlyMode() == false) && bookmark->hasRange()) {
-        rm->clearResource(KoText::SelectedTextPosition);
-        rm->clearResource(KoText::SelectedTextAnchor);
-    }
-    if (bookmark->positionOnlyMode()) {
-        rm->setResource(KoText::CurrentTextPosition, bookmark->rangeStart());
-        rm->setResource(KoText::CurrentTextAnchor, bookmark->rangeStart());
-    } else {
-        rm->setResource(KoText::CurrentTextPosition, bookmark->rangeStart());
-        rm->setResource(KoText::CurrentTextAnchor, bookmark->rangeEnd());
-    }
-}
-
-void KWView::deleteBookmark(const QString &name)
-{
-    Q_UNUSED(name);
-#if 0
-    KoInlineTextObjectManager*manager = m_document->inlineTextObjectManager();
-    KoBookmark *bookmark = manager->bookmarkManager()->bookmark(name);
-    if (!bookmark || !bookmark->shape())
-        return;
-
-    KoTextShapeData *data = qobject_cast<KoTextShapeData*>(bookmark->shape()->userData());
-    if (!data)
-        return;
-    QTextCursor cursor(data->document());
-    if (bookmark->hasSelection()) {
-        cursor.setPosition(bookmark->endBookmark()->position() - 1);
-        manager->removeInlineObject(cursor);
-    }
-    cursor.setPosition(bookmark->position());
-    manager->removeInlineObject(cursor);
-#else
-#ifdef __GNUC__
-    #warning FIXME: port to textlayout-rework
-#endif
-#endif
 }
 
 void KWView::enableHeader()
@@ -898,16 +792,6 @@ void KWView::selectionChanged()
     KoShape *shape = canvasBase()->shapeManager()->selection()-> firstSelectedShape();
 
     m_actionFormatFrameSet->setEnabled(shape != 0);
-    m_actionAddBookmark->setEnabled(shape != 0);
-    if (shape) {
-        setCurrentPage(m_document->pageManager()->page(shape));
-        KWFrame *frame = kwdocument()->frameOfShape(shape);
-        KWTextFrameSet *fs = frame == 0 ? 0 : dynamic_cast<KWTextFrameSet*>(frame->frameSet());
-        if (fs)
-            m_actionAddBookmark->setEnabled(true);
-        else
-            m_actionAddBookmark->setEnabled(false);
-    }
     // actions that need at least one shape selected
     QAction *action = actionCollection()->action("create_linked_frame");
     if (action) action->setEnabled(shape);
@@ -1081,7 +965,11 @@ void KWView::offsetInDocumentMoved(int yOffset)
 
     if (maxPageSize != m_pageSize) {
         m_pageSize = maxPageSize;
-        m_zoomController->setPageSize(m_pageSize);
+        QSizeF pageSize = m_pageSize;
+        if (m_canvas->showAnnotations()) {
+            pageSize += QSize(KWCanvasBase::AnnotationAreaWidth, 0.0);
+        }
+        m_zoomController->setPageSize(pageSize);
     }
     if (minTextX != m_textMinX || maxTextX != m_textMaxX) {
         m_textMinX = minTextX;
@@ -1141,7 +1029,7 @@ void KWView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
         return;
     }
 
-    QPointF pos = viewConverter()->viewToDocument(m_canvas->documentOffset() + insertAt - KWView::pos());
+    QPointF pos = viewConverter()->viewToDocument(m_canvas->documentOffset() + insertAt - canvas()->pos());
     pos.setX(qMax(qreal(0), pos.x()));
     pos.setY(qMax(qreal(0), pos.y()));
 
@@ -1198,3 +1086,4 @@ void KWView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
     }
 }
 
+const qreal KWView::AnnotationAreaWidth = 200.0; // only static const integral data members can be initialized within a class

@@ -20,8 +20,10 @@
  * Boston, MA 02110-1301, USA.
  */
 
-// words includes
+// Own
 #include "KWCanvas.h"
+
+// words includes
 #include "KWGui.h"
 #include "KWView.h"
 #include "KWViewMode.h"
@@ -29,6 +31,7 @@
 
 // calligra libs includes
 #include <KoShapeManager.h>
+#include <KoAnnotationLayoutManager.h>
 #include <KoPointerEvent.h>
 #include <KoToolManager.h>
 #include <KoCanvasController.h>
@@ -68,7 +71,11 @@ void KWCanvas::pageSetupChanged()
 void KWCanvas::updateSize()
 {
     resourceManager()->setResource(Words::CurrentPageCount, m_document->pageCount());
-    emit documentSize(m_viewMode->contentsSize());
+    QSizeF  canvasSize = m_viewMode->contentsSize();
+    if (showAnnotations()) {
+        canvasSize += QSize(AnnotationAreaWidth, 0.0);
+    }
+    emit documentSize(canvasSize);
 }
 
 void KWCanvas::setDocumentOffset(const QPoint &offset)
@@ -183,7 +190,8 @@ void KWCanvas::paintEvent(QPaintEvent *ev)
 {
     QPainter painter(this);
     painter.eraseRect(ev->rect());
-    paint(painter, ev->rect());
+    paint(painter, ev->rect()); // In KWCanvasBase
+
     painter.end();
 }
 

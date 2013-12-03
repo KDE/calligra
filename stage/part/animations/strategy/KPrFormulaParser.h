@@ -23,6 +23,13 @@
 #ifndef KPRFORMULAPARSER_H
 #define KPRFORMULAPARSER_H
 
+// Don't show this warning: it occurs because we inherit from QVector, which we
+// strictly speaking shouldn't do, but which we apparently feel is fine
+// anyway.
+#ifdef __GNUC__
+#pragma GCC diagnostic ignored "-Wstrict-overflow"
+#endif
+
 #include <QVector>
 #include <QString>
 #include <QStack>

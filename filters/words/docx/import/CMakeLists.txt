@@ -43,7 +43,7 @@ install(TARGETS calligra_filter_docx2odt DESTINATION ${PLUGIN_INSTALL_DIR})
 
 IF(FALSE) # not implemented yet
 
-set(docxexport_PART_SRCS DocxExport.cpp ExportFilter.cpp ${libcommon_SRCS} ${liboofilter_SRCS})
+set(docxexport_PART_SRCS DocxExport.cpp ExportFilter.cpp ${libcommon_SRCS} )
 
 kde4_add_plugin(docxexport ${docxexport_PART_SRCS})
 
