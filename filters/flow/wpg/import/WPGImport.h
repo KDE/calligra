@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2011-2013 Yue Liu <yue.liu@mail.com>
+   Copyright (C) 2013 Yue Liu <yue.liu@mail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,15 +23,15 @@
 #include <KoFilter.h>
 #include <QVariantList>
 
-class VSDXImport : public KoFilter
+class WPGImport : public KoFilter
 {
 
     Q_OBJECT
 
 public:
 
-    VSDXImport(QObject *parent, const QVariantList&);
-    virtual ~VSDXImport();
+    WPGImport(QObject *parent, const QVariantList&);
+    virtual ~WPGImport();
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 };
