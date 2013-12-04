@@ -126,6 +126,7 @@ private slots:
     void slotVerticalMirrorChanged(bool value);
     void slotSlider1Changed();
     void slotSlider2Changed();
+    void slotSlider3Changed();
     void slotToolChanged(KoCanvasController* canvas, int toolId);
     void slotOpacityChanged(qreal);
     void slotPreviousFavoritePreset();
@@ -149,7 +150,7 @@ private:
     KisPaintOpPresetsChooserPopup*       m_presetsChooserPopup;
     KisView2*                            m_view;
     KisPopupButton*                      m_workspaceWidget;
-    KisWidgetChooser*                    m_sliderChooser[2];
+    KisWidgetChooser*                    m_sliderChooser[3];
     QMap<KoID,KisPaintOpSettingsWidget*> m_paintopOptionWidgets;
 
 //    KisPaintOpPresetSP  m_activePreset;
