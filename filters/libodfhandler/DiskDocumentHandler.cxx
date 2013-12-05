@@ -1,21 +1,23 @@
-/* writerperfect:
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
+/* writerperfect
+ * Version: MPL 2.0 / LGPLv2.1+
  *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * Major Contributor(s):
  * Copyright (C) 2002-2004 William Lachance (wrlach@gmail.com)
  * Copyright (C) 2004-2006 Fridrich Strba (fridrich.strba@bluewin.ch)
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of version 2 of the GNU General Public
- * License as published by the Free Software Foundation.
+ * For minor contributions see the git repository.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Alternatively, the contents of this file may be used under the terms
+ * of the GNU Lesser General Public License Version 2.1 or later
+ * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
+ * applicable instead of those above.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
- * USA
+ * For further information visit http://libwpd.sourceforge.net
  */
 
 #include "DiskDocumentHandler.hxx"
@@ -29,8 +31,9 @@ DiskOdfDocumentHandler::DiskOdfDocumentHandler(GsfOutput *pOutput) :
 #define PUTSTRING(M) mpOutput->writeString(M)
 DiskOdfDocumentHandler::DiskOdfDocumentHandler(FemtoZip *pOutput) :
 #endif
-        mpOutput(pOutput),
-	mbIsTagOpened(false)
+	mpOutput(pOutput),
+	mbIsTagOpened(false),
+	msOpenedTagName()
 {
 }
 
@@ -43,11 +46,11 @@ void DiskOdfDocumentHandler::startElement(const char *psName, const WPXPropertyL
 	}
 	PUTSTRING("<");
 	PUTSTRING(psName);
-        WPXPropertyList::Iter i(xPropList);
-        for (i.rewind(); i.next(); )
-        {
-                // filter out libwpd elements
-                if (strncmp(i.key(), "libwpd", 6) != 0)
+	WPXPropertyList::Iter i(xPropList);
+	for (i.rewind(); i.next(); )
+	{
+		// filter out libwpd elements
+		if (strncmp(i.key(), "libwpd", 6) != 0)
 		{
 			PUTSTRING(" ");
 			PUTSTRING(i.key());
@@ -56,7 +59,7 @@ void DiskOdfDocumentHandler::startElement(const char *psName, const WPXPropertyL
 			PUTSTRING("\"");
 		}
 
-        }
+	}
 	mbIsTagOpened = true;
 	msOpenedTagName.sprintf("%s", psName);
 }
@@ -108,3 +111,5 @@ void DiskOdfDocumentHandler::endDocument()
 		mbIsTagOpened = false;
 	}
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

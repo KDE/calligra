@@ -14,9 +14,9 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-#include "VSDXImport.h"
+#include "WPGImport.h"
 
-#include <libvisio/libvisio.h>
+#include <libwpg/libwpg.h>
 #include <libodfgen/OdgGenerator.hxx>
 
 #include "OutputFileHelper.hxx"
@@ -41,9 +41,9 @@ public:
 private:
     bool _isSupportedFormat(WPXInputStream *input, const char * /* password */)
     {
-        if (!libvisio::VisioDocument::isSupported(input))
+        if (!libwpg::WPGraphics::isSupported(input))
         {
-            fprintf(stderr, "ERROR: We have no confidence that you are giving us a valid Visio Document.\n");
+            fprintf(stderr, "ERROR: We have no confidence that you are giving us a valid WordPerfect Graphics.\n");
             return false;
         }
         return true;
@@ -52,25 +52,25 @@ private:
     bool _convertDocument(WPXInputStream *input, const char * /* password */, OdfDocumentHandler *handler, OdfStreamType streamType)
     {
         OdgGenerator exporter(handler, streamType);
-        return libvisio::VisioDocument::parse(input, &exporter);
+        return libwpg::WPGraphics::parse(input, &exporter);
     }
 };
 
-K_PLUGIN_FACTORY(VSDXImportFactory, registerPlugin<VSDXImport>();)
+K_PLUGIN_FACTORY(VSDXImportFactory, registerPlugin<WPGImport>();)
 K_EXPORT_PLUGIN(VSDXImportFactory("calligrafilters"))
 
-VSDXImport::VSDXImport(QObject* parent, const QVariantList&)
+WPGImport::WPGImport(QObject* parent, const QVariantList&)
         : KoFilter(parent)
 {
 }
 
-VSDXImport::~VSDXImport()
+WPGImport::~WPGImport()
 {
 }
 
-KoFilter::ConversionStatus VSDXImport::convert(const QByteArray& from, const QByteArray& to)
+KoFilter::ConversionStatus WPGImport::convert(const QByteArray& from, const QByteArray& to)
 {
-    if (from != "application/vnd.visio" || to != KoOdf::mimeType(KoOdf::Graphics))
+    if (from != "application/x-wpg" || to != KoOdf::mimeType(KoOdf::Graphics))
         return KoFilter::NotImplemented;
 
     const char mimetypeStr[] = "application/vnd.oasis.opendocument.graphics";

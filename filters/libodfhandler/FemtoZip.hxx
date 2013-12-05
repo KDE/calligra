@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /* femtozip - superlightweight class to create a compressed ZIP archive
    Copyright (C) 2005-2006 Ariya Hidayat <ariya@kde.org>
 
@@ -41,20 +42,20 @@ class FemtoZip
 {
 public:
 
-	explicit FemtoZip(const char* zipfile);
+	explicit FemtoZip(const char *zipfile);
 	~FemtoZip();
 
-	void createEntry(const char* name, int compressionLevel = 3);
+	void createEntry(const char *name, int compressionLevel = 3);
 
-	void writeString(const char* str);
+	void writeString(const char *str);
 
 	void closeEntry();
 
 	enum
 	{
-		NoError = 0,
-		ErrorCreateZip = 1,
-		ErrorWriteData = 2
+	    NoError = 0,
+	    ErrorCreateZip = 1,
+	    ErrorWriteData = 2
 	};
 
 	/*!
@@ -64,12 +65,14 @@ public:
 
 private:
 	// no copy and assign allowed
-	FemtoZip(const FemtoZip&);
-	FemtoZip& operator=(const FemtoZip&);
+	FemtoZip(const FemtoZip &);
+	FemtoZip &operator=(const FemtoZip &);
 
-	FemtoZipPrivate* d;
+	FemtoZipPrivate *d;
 };
 
 #endif // FEMTOZIP_H
 
 #endif // USE_GSF_OUTPUT
+
+/* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */
