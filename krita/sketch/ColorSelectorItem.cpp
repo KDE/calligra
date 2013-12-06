@@ -62,6 +62,8 @@ public:
     {
         selector->deleteLater();
     }
+    void repaint();
+    QImage paintedItem;
 
     ColorSelectorItem* q;
 
@@ -128,6 +130,23 @@ void ColorSelectorItem::paint(QPainter* painter, const QStyleOptionGraphicsItem*
 {
     Q_UNUSED(option)
     Q_UNUSED(widget)
+    painter->drawImage(boundingRect(), d->paintedItem);
+
+}
+
+void ColorSelectorItem::Private::repaint()
+{
+    paintedItem = QImage(q->boundingRect().size().toSize(), QImage::Format_ARGB32_Premultiplied);
+    paintedItem.fill(Qt::transparent);
+    QPainter painter;
+    painter.begin(&paintedItem);
+    main->paintEvent(&painter);
+    sub->paintEvent(&painter);
+    painter.end();
+}
+
+void ColorSelectorItem::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry)
+{
     QRectF bounds = boundingRect();
     if (d->selector->configuration().subType==KisColorSelector::Ring)
     {
@@ -177,9 +196,8 @@ void ColorSelectorItem::paint(QPainter* painter, const QStyleOptionGraphicsItem*
         else
             d->selector->setColor(d->view->resourceProvider()->resourceManager()->backgroundColor().toQColor());
     }
-
-    d->main->paintEvent(painter);
-    d->sub->paintEvent(painter);
+    d->repaint();
+    QDeclarativeItem::geometryChanged(newGeometry, oldGeometry);
 }
 
 void ColorSelectorItem::mousePressEvent(QGraphicsSceneMouseEvent* event)
@@ -215,6 +233,7 @@ void ColorSelectorItem::mouseEvent(QGraphicsSceneMouseEvent* event)
         d->currentColor=d->main->currentColor();
         d->currentColor.setAlphaF(alpha);
         d->commitColor(KoColor(d->currentColor, d->view->resourceProvider()->fgColor().colorSpace()), d->colorRole);
+        d->repaint();
         update();
     }
 }
