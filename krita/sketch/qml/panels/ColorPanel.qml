@@ -95,6 +95,7 @@ Panel {
                 anchors.fill: parent;
                 view: sketchView.view;
                 changeBackground: swatch.chooseBG;
+                shown: (base.state === "peek") && colorSelectorPeek.visible
                 onColorChanged: {
                     if (backgroundChanged) {
                         swatch.bgColor = newColor;
@@ -138,6 +139,7 @@ Panel {
                 anchors.fill: parent;
                 view: sketchView.view;
                 changeBackground: swatch.chooseBG;
+                shown: (base.state === "full") && colorSelector.visible
                 onColorChanged: {
                     if (backgroundChanged) {
                         swatch.bgColor = newColor;
