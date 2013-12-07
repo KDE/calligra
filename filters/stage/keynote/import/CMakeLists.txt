@@ -23,3 +23,8 @@ install(FILES calligra_filter_key2odp.desktop DESTINATION ${SERVICES_INSTALL_DIR
 if(SHOULD_BUILD_EXTRA_THUMBNAIL)
     install(FILES stage_key_thumbnail.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 endif(SHOULD_BUILD_EXTRA_THUMBNAIL)
+
+if (SHARED_MIME_INFO_FOUND)
+    install(FILES x-iwork-keynote-sffkey.xml DESTINATION ${XDG_MIME_INSTALL_DIR})
+    update_xdg_mimetypes(${XDG_MIME_INSTALL_DIR})
+endif (SHARED_MIME_INFO_FOUND)
