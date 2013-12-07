@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Service
+Name=Stage Apple Keynote Import Filter
+Name[x-test]=xxStage Apple Keynote Import Filterxx
+
+X-KDE-Export=application/vnd.oasis.opendocument.presentation
+X-KDE-Import=application/x-iwork-keynote-sffkey
+X-KDE-Weight=1
+X-KDE-Library=calligra_filter_key2odp
+X-KDE-ServiceTypes=Calligra/Filter

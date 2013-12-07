@@ -14,10 +14,10 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-#include "VSDXImport.h"
+#include "KeyImport.h"
 
-#include <libvisio/libvisio.h>
-#include <libodfgen/OdgGenerator.hxx>
+#include <libetonyek/libetonyek.h>
+#include <libodfgen/OdpGenerator.hxx>
 
 #include "OutputFileHelper.hxx"
 #include <KoFilterChain.h>
@@ -31,19 +31,19 @@
 
 #include <stdio.h>
 
-class OdgOutputFileHelper : public OutputFileHelper
+class OdpOutputFileHelper : public OutputFileHelper
 {
 public:
-    OdgOutputFileHelper(const char *outFileName, const char *password) :
+    OdpOutputFileHelper(const char *outFileName, const char *password) :
         OutputFileHelper(outFileName, password) {}
-    ~OdgOutputFileHelper() {}
+    ~OdpOutputFileHelper() {}
 
 private:
     bool _isSupportedFormat(WPXInputStream *input, const char * /* password */)
     {
-        if (!libvisio::VisioDocument::isSupported(input))
+        if (!libetonyek::KEYDocument::isSupported(input))
         {
-            fprintf(stderr, "ERROR: We have no confidence that you are giving us a valid Visio Document.\n");
+            fprintf(stderr, "ERROR: We have no confidence that you are giving us a valid Keynote Document.\n");
             return false;
         }
         return true;
@@ -51,35 +51,36 @@ private:
 
     bool _convertDocument(WPXInputStream *input, const char * /* password */, OdfDocumentHandler *handler, OdfStreamType streamType)
     {
-        OdgGenerator exporter(handler, streamType);
-        return libvisio::VisioDocument::parse(input, &exporter);
+        OdpGenerator exporter(handler, streamType);
+        return libetonyek::KEYDocument::parse(input, &exporter);
     }
 };
 
-K_PLUGIN_FACTORY(VSDXImportFactory, registerPlugin<VSDXImport>();)
-K_EXPORT_PLUGIN(VSDXImportFactory("calligrafilters"))
 
-VSDXImport::VSDXImport(QObject* parent, const QVariantList&)
+K_PLUGIN_FACTORY(KeyImportFactory, registerPlugin<KeyImport>();)
+K_EXPORT_PLUGIN(KeyImportFactory("calligrafilters"))
+
+KeyImport::KeyImport(QObject* parent, const QVariantList&)
         : KoFilter(parent)
 {
 }
 
-VSDXImport::~VSDXImport()
+KeyImport::~KeyImport()
 {
 }
 
-KoFilter::ConversionStatus VSDXImport::convert(const QByteArray& from, const QByteArray& to)
+KoFilter::ConversionStatus KeyImport::convert(const QByteArray& from, const QByteArray& to)
 {
-    if (from != "application/vnd.visio" || to != KoOdf::mimeType(KoOdf::Graphics))
+    if (from != "application/x-iwork-keynote-sffkey" || to != KoOdf::mimeType(KoOdf::Presentation))
         return KoFilter::NotImplemented;
 
     const char manifestStr[] = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-            "<manifest:manifest xmlns:manifest=\"urn:oasis:names:tc:opendocument:xmlns:manifest:1.0\">"
-            " <manifest:file-entry manifest:media-type=\"application/vnd.oasis.opendocument.graphics\" manifest:version=\"1.0\" manifest:full-path=\"/\"/>"
-            " <manifest:file-entry manifest:media-type=\"text/xml\" manifest:full-path=\"content.xml\"/>"
-            " <manifest:file-entry manifest:media-type=\"text/xml\" manifest:full-path=\"settings.xml\"/>"
-            " <manifest:file-entry manifest:media-type=\"text/xml\" manifest:full-path=\"styles.xml\"/>"
-            "</manifest:manifest>";
+                               "<manifest:manifest xmlns:manifest=\"urn:oasis:names:tc:opendocument:xmlns:manifest:1.0\">"
+                               " <manifest:file-entry manifest:media-type=\"application/vnd.oasis.opendocument.presentation\" manifest:version=\"1.0\" manifest:full-path=\"/\"/>"
+                               " <manifest:file-entry manifest:media-type=\"text/xml\" manifest:full-path=\"content.xml\"/>"
+                               " <manifest:file-entry manifest:media-type=\"text/xml\" manifest:full-path=\"settings.xml\"/>"
+                               " <manifest:file-entry manifest:media-type=\"text/xml\" manifest:full-path=\"styles.xml\"/>"
+                               "</manifest:manifest>";
 
 
     QByteArray input = m_chain->inputFile().toLocal8Bit();
@@ -87,9 +88,9 @@ KoFilter::ConversionStatus VSDXImport::convert(const QByteArray& from, const QBy
     const char *inputFile = input.data();
     const char *outputFile = output.data();
 
-    OdgOutputFileHelper helper(outputFile, 0);
+    OdpOutputFileHelper helper(outputFile, 0);
 
-    if (!helper.writeChildFile("mimetype", KoOdf::mimeType(KoOdf::Graphics), (char)0)) {
+    if (!helper.writeChildFile("mimetype", KoOdf::mimeType(KoOdf::Presentation), (char)0)) {
         fprintf(stderr, "ERROR : Couldn't write mimetype\n");
         return KoFilter::ParsingError;
     }

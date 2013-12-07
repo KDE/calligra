@@ -78,8 +78,6 @@ KoFilter::ConversionStatus WPSImport::convert(const QByteArray& from, const QByt
     if (from != "application/vnd.ms-works" || to != KoOdf::mimeType(KoOdf::Text))
         return KoFilter::NotImplemented;
 
-    const char mimetypeStr[] = "application/vnd.oasis.opendocument.text";
-
     const char manifestStr[] = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
                                "<manifest:manifest xmlns:manifest=\"urn:oasis:names:tc:opendocument:xmlns:manifest:1.0\">"
                                " <manifest:file-entry manifest:media-type=\"application/vnd.oasis.opendocument.text\" manifest:full-path=\"/\"/>"
@@ -167,7 +165,7 @@ KoFilter::ConversionStatus WPSImport::convert(const QByteArray& from, const QByt
 
     OdtOutputFileHelper helper(outputFile, 0);
 
-    if (!helper.writeChildFile("mimetype", mimetypeStr, (char)0)) {
+    if (!helper.writeChildFile("mimetype", KoOdf::mimeType(KoOdf::Text), (char)0)) {
         fprintf(stderr, "ERROR : Couldn't write mimetype\n");
         return KoFilter::ParsingError;
     }
@@ -183,7 +181,7 @@ KoFilter::ConversionStatus WPSImport::convert(const QByteArray& from, const QByt
         return KoFilter::ParsingError;
     }
 
-    if (!helper.writeConvertedContent("content.xml", inputFile, outputFile ? ODF_CONTENT_XML : ODF_FLAT_XML))
+    if (!helper.writeConvertedContent("content.xml", inputFile, ODF_CONTENT_XML))
     {
             fprintf(stderr, "ERROR : Couldn't write document content\n");
             return KoFilter::ParsingError;
