@@ -55,13 +55,15 @@
 #include <kconfiggroup.h>
 
 KisPaletteManager::KisPaletteManager(KoFavoriteResourceManager *manager, KisPaintopBox *paintOpBox)
-    : QDialog(paintOpBox)
+    : KDialog(paintOpBox)
     , m_saveButton(0)
     , m_removeButton(0)
     , m_resourceManager(manager)
     , m_paintOpBox(paintOpBox)
 {
     setWindowTitle(i18n("Palette Manager"));
+    setButtons(KDialog::Close);
+
 
     m_allPresetsView = new KisPresetChooser(this);
     m_allPresetsView->showButtons(false);
@@ -138,7 +140,9 @@ KisPaletteManager::KisPaletteManager(KoFavoriteResourceManager *manager, KisPain
     mainLayout->addWidget(VSeparator);
     mainLayout->addLayout(rightLayout);
 
-    setLayout(mainLayout);
+    QWidget *mainPage = new QWidget(this);
+    mainPage->setLayout(mainLayout);
+    setMainWidget(mainPage);
 
     /*SIGNALS AND SLOTS*/
     connect(m_allPresetsView, SIGNAL(resourceSelected(KoResource*)), this, SLOT(slotUpdateAddButton()) );
