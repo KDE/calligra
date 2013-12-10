@@ -70,6 +70,7 @@ public:
     #endif
         , lastTabletEvent(0)
         , lastTouchEvent(0)
+        , eventsReceiver(0)
         , moveEventCompressor(10 /* ms */, KisSignalCompressor::FIRST_ACTIVE)
         , logTabletEvents(false)
     {
@@ -107,6 +108,7 @@ public:
 
     KisToolInvocationAction *defaultInputAction;
 
+    QObject *eventsReceiver;
     KisSignalCompressor moveEventCompressor;
     QScopedPointer<KisTabletEvent> compressedMoveEvent;
 
@@ -510,9 +512,17 @@ void KisInputManager::toggleTabletLogger()
     }
 }
 
+void KisInputManager::setupAsEventFilter(QObject *receiver)
+{
+    receiver->installEventFilter(this);
+
+    KIS_ASSERT_RECOVER_RETURN(!d->eventsReceiver);
+    d->eventsReceiver = receiver;
+}
+
 bool KisInputManager::eventFilter(QObject* object, QEvent* event)
 {
-    Q_UNUSED(object)
+    KIS_ASSERT_RECOVER_NOOP(object == d->eventsReceiver);
 
     bool retval = false;
 
@@ -724,23 +734,23 @@ bool KisInputManager::Private::handleKisTabletEvent(QObject *object, KisTabletEv
 
     QTabletEvent qte = tevent->toQTabletEvent();
     qte.ignore();
-    retval = q->eventFilter(object, &qte);
+    QApplication::sendEvent(object, &qte);
     tevent->setAccepted(qte.isAccepted());
 
     if (!retval && !qte.isAccepted()) {
         QMouseEvent qme = tevent->toQMouseEvent();
         qme.ignore();
-        retval = q->eventFilter(object, &qme);
+        QApplication::sendEvent(object, &qme);
         tevent->setAccepted(qme.isAccepted());
     }
 
-    return retval;
+    return tevent->isAccepted();
 }
 
 void KisInputManager::slotCompressedMoveEvent()
 {
     if (d->compressedMoveEvent) {
-        (void) d->handleKisTabletEvent(this, d->compressedMoveEvent.data());
+        (void) d->handleKisTabletEvent(d->eventsReceiver, d->compressedMoveEvent.data());
         d->compressedMoveEvent.reset();
     }
 }
