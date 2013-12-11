@@ -1168,12 +1168,13 @@
 <para>From the <guilabel>Tools</guilabel> tab you can you can manipulate your projects.
 </para>
 <variablelist>
-  <!--FIXME no aktion Import Database in the toolbar in kexi 2.4 here-->
+  <!--FIXME no aktion Import Database in the toolbar in kexi 2.7 here
   <varlistentry><term><emphasis role="bold"><guilabel>Import Database</guilabel></emphasis></term>
     <listitem>
     <para><guilabel>Import Database</guilabel>, opens the <guilabel>Database Importing Wizard</guilabel> that allows to import complete data from an <filename>mdb</filename> file or another database server.</para>
      </listitem>
   </varlistentry>
+  -->
   <varlistentry><term><emphasis role="bold"><guilabel>Compact Database</guilabel></emphasis></term>
     <listitem>
     <para><guilabel>Compact Database</guilabel>, checks for minor error in the database and reduces the database's size.</para>
@@ -1214,11 +1215,6 @@
     <para>A <guilabel>Label</guilabel> widget displays predefined information on a form. Usually it is used as a caption next to other data-aware widgets.</para>
      </listitem>
   </varlistentry>
-  <varlistentry><term><emphasis role="bold"><guilabel>Image Box</guilabel></emphasis></term>
-    <listitem>
-      <para>An <guilabel>Image Box</guilabel> holds an image, bound to a field in a table.<!--FIXME can also display an image loaded from file--></para>
-     </listitem>
-  </varlistentry>
   <varlistentry><term><emphasis role="bold"><guilabel>Text Box</guilabel></emphasis></term>
     <listitem>
     <para>A <guilabel>Text Box</guilabel> is a single line container for data contained in your table.</para>
@@ -1227,11 +1223,6 @@
   <varlistentry><term><emphasis role="bold"><guilabel>Text Editor</guilabel></emphasis></term>
     <listitem>
     <para>A <guilabel>Text Editor</guilabel> is a multiline container for data contained in your table.</para>
-     </listitem>
-  </varlistentry>
-  <varlistentry><term><emphasis role="bold"><guilabel>Button</guilabel></emphasis></term>
-    <listitem>
-    <para>A <guilabel>Button</guilabel> allows you to define actions to be executed upon clicking on it.</para>
      </listitem>
   </varlistentry>
   <varlistentry><term><emphasis role="bold"><guilabel>Combo Box</guilabel></emphasis></term>
@@ -1244,9 +1235,14 @@
     <para>A <guilabel>Check Box</guilabel> holds two or three states of data (&eg; On/Off)</para>
      </listitem>
   </varlistentry>
-  <varlistentry><term><emphasis role="bold"><guilabel>Line</guilabel></emphasis></term>
+  <varlistentry><term><emphasis role="bold"><guilabel>Image Box</guilabel></emphasis></term>
     <listitem>
-    <para>A <guilabel>Line</guilabel> is used as a logical separator between different parts of a form.</para>
+      <para>An <guilabel>Image Box</guilabel> holds an image, bound to a field in a table.<!--FIXME can also display an image loaded from file--></para>
+     </listitem>
+  </varlistentry>
+  <varlistentry><term><emphasis role="bold"><guilabel>Button</guilabel></emphasis></term>
+    <listitem>
+    <para>A <guilabel>Button</guilabel> allows you to define actions to be executed upon clicking on it.</para>
      </listitem>
   </varlistentry>
   <varlistentry><term><emphasis role="bold"><guilabel>Frame</guilabel></emphasis></term>
@@ -1264,11 +1260,16 @@
     <para>A <guilabel>Tab Widget</guilabel> is used as a container for other widgets and can have many pages that contain different widgets.</para>
      </listitem>
   </varlistentry>
+  <varlistentry><term><emphasis role="bold"><guilabel>Line</guilabel></emphasis></term>
+    <listitem>
+    <para>A <guilabel>Line</guilabel> is used as a logical separator between different parts of a form.</para>
+     </listitem>
+  </varlistentry>
   <varlistentry><term><emphasis role="bold"><guilabel>Web Browser</guilabel></emphasis></term>
     <listitem>
     <para>A <guilabel>Web Browser</guilabel> is a widget that allows to display a web page inside the form.</para>
      </listitem>
-     <!--FIXME missing Map Browser-->
+     <!--FIXME missing Map Browser + Slider + Progress Bar + Link Button + Date Picker-->
   </varlistentry>
   <varlistentry><term><emphasis role="bold"><guilabel>Assign Action</guilabel></emphasis></term>
     <listitem>
@@ -1324,7 +1325,7 @@
     <para>A <guilabel>Line</guilabel> is used as a logical separator between different parts of a form.</para>
      </listitem>
   </varlistentry>
-  <!--FIXME no Shape in 2.4.0
+  <!--FIXME no Shape in 2.7
   <varlistentry><term><emphasis role="bold">Shape</emphasis></term>
     <listitem>
     <para>A <guilabel>Shape</guilabel> widget is used to add special shape visuals to your report.</para>
