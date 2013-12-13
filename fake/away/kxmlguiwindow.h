@@ -4,15 +4,16 @@
 #include <QObject>
 #include <QDebug>
 #include <kxmlguiclient.h>
+#include <kxmlguifactory.h>
 #include <kmainwindow.h>
 
 class KXmlGuiWindow : public KMainWindow, public KXMLGUIBuilder, virtual public KXMLGUIClient
 {
 public:
-    KXmlGuiWindow( QWidget* parent = 0 ) : KMainWindow(parent) {}
+    KXmlGuiWindow( QWidget* parent = 0 ) : KMainWindow(parent) { setFactory(new KXMLGUIFactory(this)); }
     void setHelpMenuEnabled(bool showHelpMenu = true) {}
     bool isHelpMenuEnabled() const { return false; }
-    virtual KXMLGUIFactory *guiFactory() { return 0; }
+    virtual KXMLGUIFactory *guiFactory() { return factory(); }
     void createGUI( const QString &xmlfile = QString() ) {}
     void setStandardToolBarMenuEnabled( bool enable ) {}
     bool isStandardToolBarMenuEnabled() const { return false; }

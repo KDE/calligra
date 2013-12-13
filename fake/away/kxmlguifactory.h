@@ -8,7 +8,7 @@
 class KXMLGUIFactory : public QObject
 {
 public:
-
+    KXMLGUIFactory(QObject *parent = 0) : QObject(parent) {}
 #if 0
   /**
    * Constructs a KXMLGUIFactory. The provided @p builder KXMLGUIBuilder will be called

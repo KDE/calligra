@@ -34,12 +34,12 @@ public:
     {
         QStringList parts = m_path.split('/', QString::SkipEmptyParts);
         if (parts.isEmpty()) return false;
-        QSettings settings(parts.first());
-        for(int i = 1; i < parts.count(); ++i) {
-            if (!settings.childGroups().contains(parts[i]))
-                return false;
-            settings.beginGroup(parts[i]);
-        }
+//         QSettings settings(parts.first());
+//         for(int i = 1; i < parts.count(); ++i) {
+//             if (!settings.childGroups().contains(parts[i]))
+//                 return false;
+//             settings.beginGroup(parts[i]);
+//         }
         return true;
     }
 

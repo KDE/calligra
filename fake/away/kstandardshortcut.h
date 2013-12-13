@@ -77,7 +77,7 @@ public:
         StandardShortcutCount // number of standard shortcuts
     };
 
-    static const KShortcut &shortcut(StandardShortcut) { static KShortcut sh; return sh; }
+    static const QList<QKeySequence> &shortcut(StandardShortcut) { static const QList<QKeySequence> sh; return sh; }
     static QString name(StandardShortcut) { return QString(); }
     static QString label(StandardShortcut) { return QString(); }
     static QString whatsThis(StandardShortcut) { return QString(); }
