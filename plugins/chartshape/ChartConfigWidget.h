@@ -31,7 +31,6 @@
 
 // KChart
 #include "ChartShape.h"
-#include "ui_ChartConfigWidget.h"
 
 
 class KoShape;

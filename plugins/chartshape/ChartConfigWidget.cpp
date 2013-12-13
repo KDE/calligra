@@ -21,6 +21,7 @@
 
 // Own
 #include "ChartConfigWidget.h"
+#include "ui_ChartConfigWidget.h"
 
 // Qt
 #include <QButtonGroup>
