@@ -381,10 +381,22 @@ void ViewController::documentSizeChanged()
         }
 
         d->documentSize = d->view->document()->documentSize();
-        setWidth(d->documentSize.width());
-        setHeight(d->documentSize.height());
-        d->flickable->setProperty("contentWidth", d->documentSize.width());
-        d->flickable->setProperty("contentHeight", d->documentSize.height());
+        if(d->documentSize.width() > d->flickable->width()) {
+            setWidth(d->documentSize.width());
+            d->flickable->setProperty("contentWidth", d->documentSize.width());
+        }
+        else {
+            setWidth(d->flickable->width() - 1);
+            d->flickable->setProperty("contentWidth", d->flickable->width() - 1);
+        }
+        if(d->documentSize.height() > d->flickable->height()) {
+            setHeight(d->documentSize.height());
+            d->flickable->setProperty("contentHeight", d->documentSize.height());
+        }
+        else {
+            setHeight(d->flickable->height() - 1);
+            d->flickable->setProperty("contentHeight", d->flickable->height() - 1);
+        }
 
         flickableWidthChanged();
     }
