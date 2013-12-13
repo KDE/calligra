@@ -117,12 +117,6 @@ ApplicationWindow {
                 id: v;
                 anchors.fill: parent;
                 document: doc;
-                Calligra.LinkArea {
-                    anchors.fill: parent;
-                    document: doc;
-                    onLinkClicked: console.debug(linkTarget);
-                    controllerZoom: controller.zoom;
-                }
             }
 
             ScrollView {
@@ -134,6 +128,13 @@ ApplicationWindow {
                     view: v;
                     flickable: f.flickableItem;
                     minimumZoomFitsWidth: true;
+                    Calligra.LinkArea {
+                        anchors.fill: parent;
+                        document: doc;
+                        onClicked: console.debug("clicked somewhere without a link");
+                        onLinkClicked: console.debug("clicked on the link: " + linkTarget);
+                        controllerZoom: controller.zoom;
+                    }
                 }
             }
         }
