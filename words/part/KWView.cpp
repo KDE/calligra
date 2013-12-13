@@ -243,7 +243,8 @@ void KWView::buildAssociatedWidget() {
     wordCount = new KWStatisticsWidget(this,true);
     wordCount->setLayoutDirection(KWStatisticsWidget::LayoutHorizontal);
     wordCount->setCanvas(dynamic_cast<KWCanvas*>(this->canvas()));
-    statusBar()->insertWidget(0,wordCount);
+    if (statusBar())
+        statusBar()->insertWidget(0,wordCount);
 }
 
 void KWView::setupActions()
