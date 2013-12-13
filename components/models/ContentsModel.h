@@ -24,6 +24,7 @@
 #define CALLIGRA_COMPONENTS_CONTENTSMODEL_H
 
 #include <QtCore/QAbstractListModel>
+#include <QImage>
 
 namespace Calligra {
 namespace Components {
