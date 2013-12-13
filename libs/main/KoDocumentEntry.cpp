@@ -48,6 +48,16 @@ KoDocumentEntry::~KoDocumentEntry()
 {
 }
 
+QString KoDocumentEntry::name() const
+{
+    return m_loader->fileName(); //FIXME should return servicename
+}
+
+QStringList KoDocumentEntry::mimeTypes() const
+{
+    return QStringList();//FIXME m_loader->serviceTypes();
+}
+
 /**
  *  @return TRUE if the document can handle the requested mimetype.
  */

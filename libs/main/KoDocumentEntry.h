@@ -65,16 +65,12 @@ public:
     /**
      * @return name of the associated service
      */
-    QString name() const {
-        return m_loader->fileName(); //FIXME should return servicename
-    }
+    QString name() const;
 
     /**
      *  Mimetypes (and other service types) which this document can handle.
      */
-    QStringList mimeTypes() const {
-        return QStringList();//FIXME m_loader->serviceTypes();
-    }
+    QStringList mimeTypes() const;
 
     /**
      *  @return TRUE if the document can handle the requested mimetype.
