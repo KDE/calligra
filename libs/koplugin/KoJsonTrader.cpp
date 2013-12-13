@@ -52,7 +52,9 @@ QList<QPluginLoader *> KoJsonTrader::query(const QString &servicetype, const QSt
         appDir.cdUp();
 
         searchDirs << appDir;
+#ifdef CMAKE_INSTALL_PREFIX
         searchDirs << QDir{CMAKE_INSTALL_PREFIX};
+#endif
 
         foreach(const QDir& dir, searchDirs) {
             foreach(QString entry, dir.entryList()) {
