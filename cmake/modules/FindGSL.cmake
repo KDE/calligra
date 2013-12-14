@@ -39,14 +39,21 @@ ELSE (GSL_INCLUDE_DIR AND GSL_LIBRARIES AND GSL_CBLAS_LIBRARIES AND GSL_VERSION)
 	#	STRING (REGEX REPLACE "-L([^ ]*)" "\\1" GSL_LIBRARIES "${gsl_libraries}")
 		SET (GSL_VERSION ${gsl_version} CACHE STRING "GNU Scientific Library Version")
 		# TODO check version! 1.6 suffices?
+	ELSE (GSL_CONFIG)
+		IF (WIN32)
+			EXEC_PROGRAM("FindStr" ARGS "/r" "#define.GSL_VERSION" "${GSL_INCLUDE_DIR}\\gsl_version.h" OUTPUT_VARIABLE gsl_version_line)
+			IF (gsl_version_line)
+				STRING (REGEX REPLACE "[^1-9\\.]" "" GSL_VERSION "${gsl_version_line}")
+			ENDIF (gsl_version_line)
+		ENDIF (WIN32)
 	ENDIF (GSL_CONFIG)
 
-	IF (NOT GSL_INCLUDE_DIR OR NOT GSL_CONFIG)
+	IF (NOT GSL_INCLUDE_DIR OR NOT GSL_VERSION)
 		# Try pkg-config instead, but only for the
 		# include directory, since we really need
 		# the *LIBRARIES to point to the actual .so's.
 		PKGCONFIG(gsl GSL_INCLUDE_DIR dummy dummy dummy)
-	ENDIF (NOT GSL_INCLUDE_DIR OR NOT GSL_CONFIG)
+	ENDIF (NOT GSL_INCLUDE_DIR OR NOT GSL_VERSION)
 	#
 	# everything necessary found?
 	#
