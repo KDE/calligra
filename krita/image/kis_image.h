@@ -147,16 +147,6 @@ public:
     bool locked() const;
 
     /**
-     * @return the image that is used as background tile.
-     */
-    KisBackgroundSP backgroundPattern() const;
-
-    /**
-     * Set a 64x64 tile for the background of the image.
-     */
-    void setBackgroundPattern(KisBackgroundSP image);
-
-    /**
      * @return the global selection object or 0 if there is none. The
      * global selection is always read-write.
      */
@@ -203,6 +193,7 @@ public:
     void cropNode(KisNodeSP node, const QRect& newRect);
 
     void scaleImage(const QSize &size, qreal xres, qreal yres, KisFilterStrategy *filterStrategy);
+    void scaleNode(KisNodeSP node, qreal sx, qreal sy, KisFilterStrategy *filterStrategy);
 
     /**
      * Execute a rotate transform on all layers in this image.

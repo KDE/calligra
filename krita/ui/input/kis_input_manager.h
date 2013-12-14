@@ -24,7 +24,7 @@
 class QPointF;
 class QTabletEvent;
 class QTouchEvent;
-class KoToolProxy;
+class KisToolProxy;
 class KisCanvas2;
 class KisInputAction;
 /**
@@ -57,13 +57,23 @@ public:
      * \param canvas The parent canvas.
      * \param proxy The application's tool proxy.
      */
-    explicit KisInputManager(KisCanvas2* canvas, KoToolProxy* proxy);
+    explicit KisInputManager(KisCanvas2* canvas, KisToolProxy* proxy);
     /**
      * Destructor.
      */
     ~KisInputManager();
 
     void toggleTabletLogger();
+
+    /**
+     * Installs the input manager as an event filter for \p receiver.
+     * Please note that KisInputManager is supposed to handle events
+     * for a single receiver only. This is defined by the fact that it
+     * resends some of the events back through the Qt's queue to the
+     * reciever. That is why the input manager will assert when it gets
+     * an event with wrong destination.
+     */
+    void setupAsEventFilter(QObject *receiver);
 
     /**
      * Event filter method. Overridden from QObject.
@@ -78,7 +88,7 @@ public:
     /**
      * The tool proxy of the current application.
      */
-    KoToolProxy *toolProxy() const;
+    KisToolProxy *toolProxy() const;
 
     /**
      * Returns the event object for the last tablet event
@@ -94,9 +104,9 @@ public:
     QTouchEvent *lastTouchEvent() const;
 
     /**
-     * Convert a widget position to a pixel position.
+     * Convert a widget position to a document position.
      */
-    QPointF widgetToPixel(const QPointF &position);
+    QPointF widgetToDocument(const QPointF &position);
 
 public Q_SLOTS:
     void setMirrorAxis();
@@ -104,6 +114,7 @@ public Q_SLOTS:
 private Q_SLOTS:
     void slotToolChanged();
     void profileChanged();
+    void slotCompressedMoveEvent();
 
 private:
     class Private;

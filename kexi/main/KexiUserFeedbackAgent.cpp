@@ -33,7 +33,11 @@
 #include <QProcess>
 #include <QUuid>
 
-#if defined HAVE_UNAME || defined Q_WS_WIN
+#if defined Q_OS_WIN
+#include <windows.h>
+#endif
+
+#if defined HAVE_UNAME
 # include <sys/utsname.h>
 #endif
 
@@ -114,20 +118,48 @@ void KexiUserFeedbackAgent::Private::updateData()
         }
         p.close();
     }
-#elif defined(Q_WS_MAC)
+#elif defined(Q_OS_MAC)
     ADD("os", "mac", SystemInfoArea);
-#elif defined(Q_WS_WIN)
+#elif defined(Q_OS_WIN)
     ADD("os", "windows", SystemInfoArea);
 #else
 //! @todo BSD?
     ADD("os", "other", SystemInfoArea);
 #endif
 
-#if defined HAVE_UNAME || defined Q_WS_WIN
+#if defined HAVE_UNAME
     struct utsname buf;
     if (uname(&buf) == 0) {
         ADD("os_release", buf.release, SystemInfoArea);
         ADD("os_machine", buf.machine, SystemInfoArea);
+    }
+#elif defined(Q_OS_WIN)
+    OSVERSIONINFO versionInfo;
+    SYSTEM_INFO sysInfo;
+    char* releaseStr;
+    releaseStr = new char[6]; // "xx.xx\0"
+    
+    versionInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
+    GetVersionEx(&versionInfo);
+    GetSystemInfo(&sysInfo);
+    
+    snprintf(releaseStr, 6, "%2d.%2d", versionInfo.dwMajorVersion, versionInfo.dwMinorVersion);
+    ADD("os_release", releaseStr, SystemInfoArea);
+    
+    delete [6] releaseStr;
+    
+    switch(sysInfo.wProcessorArchitecture) {
+    case PROCESSOR_ARCHITECTURE_AMD64:
+        ADD("os_machine", "x86_64", SystemInfoArea);
+        break;
+    case PROCESSOR_ARCHITECTURE_IA64:
+        ADD("os_machine", "ia64", SystemInfoArea);
+        break;
+    case PROCESSOR_ARCHITECTURE_INTEL:
+        ADD("os_machine", "x86", SystemInfoArea);
+        break;
+    default:
+        ADD("os_machine", "unknown", SystemInfoArea);
     }
 #endif
 

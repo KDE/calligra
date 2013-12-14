@@ -146,6 +146,12 @@ void MSOOXML_CURRENT_CLASS::inheritDefaultBodyProperties()
 // DrawingML tags
 // ================================================================
 
+// Don't show this warning: it occurs because gcc gets confused, but
+// it _is_ used.
+#ifdef __GNUC__
+#pragma GCC diagnostic ignored "-Wunused-function"
+#endif
+
 static QString mirrorToOdf(bool flipH, bool flipV)
 {
     if (!flipH && !flipV)

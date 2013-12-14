@@ -24,7 +24,6 @@
 #include "frames/KWFrame.h"
 #include "frames/KWTextFrameSet.h"
 #include "frames/KWFrameLayout.h"
-#include "commands/KWPageInsertCommand.h"
 #include "commands/KWFrameDeleteCommand.h"
 
 #include <KoShapeMoveCommand.h>

@@ -39,14 +39,13 @@
 #include "frames/KWFrameLayout.h"
 #include "frames/KWOutlineShape.h"
 #include "dialogs/KWFrameDialog.h"
-#include "commands/KWPageInsertCommand.h"
-#include "commands/KWPageRemoveCommand.h"
 #include "KWRootAreaProvider.h"
 
 // calligra libs includes
 #include <changetracker/KoChangeTracker.h>
 #include <KoShapeManager.h>
 #include <KoTextDocument.h>
+#include <KoAnnotation.h>
 #include <KoShapeAnchor.h>
 #include <KoShapeContainer.h>
 #include <KoOdfWriteStore.h>
@@ -71,7 +70,9 @@
 #include <KoPart.h>
 #include <KoDocumentInfoDlg.h>
 #include <KoDocumentRdfBase.h>
+#include <KoAnnotationLayoutManager.h>
 #include <KoPageWidgetItem.h>
+
 #ifdef SHOULD_BUILD_RDF
 #include <KoDocumentRdf.h>
 #include <KoDocumentRdfEditWidget.h>
@@ -97,6 +98,7 @@ KWDocument::KWDocument(KoPart *part)
         m_isMasterDocument(false),
         m_frameLayout(&m_pageManager, m_frameSets),
         m_mainFramesetEverFinished(false)
+        , m_annotationManager(0)
 {
     m_frameLayout.setDocument(this);
     resourceManager()->setOdfDocument(this);
@@ -125,6 +127,7 @@ KWDocument::KWDocument(KoPart *part)
 #endif
 
 
+
 /* TODO reenable after release
     QVariant variant;
     variant.setValue(new KoChangeTracker(resourceManager()));
@@ -136,6 +139,8 @@ KWDocument::KWDocument(KoPart *part)
         connect(documentInfo(), SIGNAL(infoUpdated(const QString &, const QString &)),
                 inlineTextObjectManager(), SLOT(documentInformationUpdated(const QString &, const QString &)));
     }
+
+    m_annotationManager = new KoAnnotationLayoutManager();
 
     clear();
 }
@@ -183,7 +188,11 @@ void KWDocument::addShape(KoShape *shape)
         addFrameSet(frame->frameSet());
     }
 
-    emit shapeAdded(shape, KoShapeManager::PaintShapeOnAdd);
+    if (shape->shapeId() == "AnnotationTextShapeID") {
+        emit annotationShapeAdded(true);
+    } else {
+        emit shapeAdded(shape, KoShapeManager::PaintShapeOnAdd);
+    }
 
     shape->update();
 }
@@ -191,7 +200,7 @@ void KWDocument::addShape(KoShape *shape)
 void KWDocument::removeShape(KoShape *shape)
 {
     KWFrame *frame = dynamic_cast<KWFrame*>(shape->applicationData());
-    qDebug() << "shape=" << shape << "frame=" << frame << "frameSetType=" << (frame ? Words::frameSetTypeName(frame->frameSet()) : QString());
+    kDebug(32001) << "shape=" << shape << "frame=" << frame << "frameSetType=" << (frame ? Words::frameSetTypeName(frame->frameSet()) : QString());
     if (frame) { // not all shapes have to have a frame. Only top-level ones do.
         KWFrameSet *fs = frame->frameSet();
         Q_ASSERT(fs);
@@ -202,11 +211,16 @@ void KWDocument::removeShape(KoShape *shape)
     } else { // not a frame, but we still have to remove it from views.
         emit shapeRemoved(shape);
     }
+    if (shape->shapeId() == "AnnotationTextShapeID") {
+        annotationLayoutManager()->removeAnnotationShape(shape);
+    }
 }
 
 void KWDocument::shapesRemoved(const QList<KoShape*> &shapes, KUndo2Command *command)
 {
     QMap<KoTextEditor *, QList<KoShapeAnchor *> > anchors;
+    QMap<KoTextEditor *, QList<KoAnnotation *> > annotations;
+    const KoAnnotationManager *annotationManager = textRangeManager()->annotationManager();
     foreach (KoShape *shape, shapes) {
         KoShapeAnchor *anchor = shape->anchor();
         if (anchor && anchor->textLocation()) {
@@ -215,11 +229,27 @@ void KWDocument::shapesRemoved(const QList<KoShape*> &shapes, KUndo2Command *com
                 KoTextEditor *editor = KoTextDocument(document).textEditor();
                 anchors[editor].append(anchor);
             }
+            break;
+        }
+        foreach (QString name, annotationManager->annotationNameList()) {
+            KoAnnotation *annotation = annotationManager->annotation(name);
+            if (annotation->annotationShape() == shape) {
+                // Remove From annotation layout manager.
+                KoTextEditor *editor = KoTextDocument(annotation->document()).textEditor();
+                annotations[editor].append(annotation);
+                break;
+            }
         }
     }
-    QMap<KoTextEditor *, QList<KoShapeAnchor *> >::const_iterator it(anchors.constBegin());
-    for (; it != anchors.constEnd(); ++it) {
-        it.key()->removeAnchors(it.value(), command);
+
+    QMap<KoTextEditor *, QList<KoShapeAnchor *> >::const_iterator anchorIter(anchors.constBegin());
+    for (; anchorIter != anchors.constEnd(); ++anchorIter) {
+        anchorIter.key()->removeAnchors(anchorIter.value(), command);
+    }
+ 
+    QMap<KoTextEditor *, QList<KoAnnotation *> >::const_iterator annotationIter(annotations.constBegin());
+    for (; annotationIter != annotations.constEnd(); ++annotationIter) {
+        annotationIter.key()->removeAnnotations(annotationIter.value(), command);
     }
 }
 
@@ -244,40 +274,44 @@ void KWDocument::paintContent(QPainter &, const QRect &)
 {
 }
 
-KWPage KWDocument::insertPage(int afterPageNum, const QString &masterPageName, bool addUndoRedoCommand)
+KWPage KWDocument::insertPage(int afterPageNum, const QString &masterPageName)
 {
     kDebug(32001) << "afterPageNum=" << afterPageNum << "masterPageName=" << masterPageName;
-    KWPageInsertCommand *cmd = new KWPageInsertCommand(this, afterPageNum, masterPageName);
-    if (addUndoRedoCommand)
-        addCommand(cmd);
-    else
-        cmd->redo();
-    Q_ASSERT(cmd->page().isValid());
-    KWPage page = cmd->page();
-    if (!addUndoRedoCommand)
-        delete cmd;
+
+    //KWPage prevPage = m_document->pageManager().page(m_afterPageNum);
+    KWPageStyle pageStyle = pageManager()->pageStyle(masterPageName);
+    KWPage page = pageManager()->insertPage(afterPageNum + 1, pageStyle);
+    Q_ASSERT(page.isValid());
+    Q_ASSERT(page.pageNumber() >= 1 && page.pageNumber() <= pageManager()->pageCount());
+
+    // Set the y-offset of the new page.
+    KWPage prevPage = page.previous();
+    if (prevPage.isValid()) {
+        KoInsets padding = pageManager()->padding();
+        page.setOffsetInDocument(prevPage.offsetInDocument() + prevPage.height() + padding.top + padding.bottom);
+    } else {
+        page.setOffsetInDocument(0.0);
+    }
+
+    kDebug(32001) << "pageNumber=" << page.pageNumber();
+
+    // Create the KWTextFrame's for the new KWPage
+    KWFrameLayout *framelayout = frameLayout();
+    framelayout->createNewFramesForPage(page.pageNumber());
+
+    // make sure we have updated the view before we do anything else
+    firePageSetupChanged();
+
     return page;
 }
 
-KWPage KWDocument::appendPage(const QString &masterPageName, bool addUndoRedoCommand)
+KWPage KWDocument::appendPage(const QString &masterPageName)
 {
     int number = 0;
     KWPage last = m_pageManager.last();
     if (last.isValid())
         number = last.pageNumber();
-    return insertPage(number, masterPageName, addUndoRedoCommand);
-}
-
-void KWDocument::removePage(int pageNumber)
-{
-    if (pageCount() <= 1)
-        return;
-    KWPage page = m_pageManager.page(pageNumber);
-    if (! page.isValid()) {
-        kWarning(32001) << "remove page requested for a non exiting page!" << pageNumber;
-        return;
-    }
-    addCommand(new KWPageRemoveCommand(this, page));
+    return insertPage(number, masterPageName);
 }
 
 void KWDocument::firePageSetupChanged()
@@ -449,9 +483,9 @@ void KWDocument::removeFrame(KWFrame *frame)
                 return;
         }
     }
-    KWPageRemoveCommand *cmd = new KWPageRemoveCommand(this, page);
-    cmd->redo();
-    delete cmd;
+    //KWPageRemoveCommand *cmd = new KWPageRemoveCommand(this, page);
+    //cmd->redo();
+    //delete cmd;
 }
 
 void KWDocument::mainTextFrameSetLayoutDone()

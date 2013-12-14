@@ -42,7 +42,6 @@
 #include "recorder/kis_action_recorder.h"
 #include "kis_adjustment_layer.h"
 #include "kis_annotation.h"
-#include "kis_background.h"
 #include "kis_change_profile_visitor.h"
 #include "kis_colorspace_convert_visitor.h"
 #include "kis_count_visitor.h"
@@ -58,7 +57,6 @@
 #include "kis_perspective_grid.h"
 #include "kis_selection.h"
 #include "kis_transaction.h"
-#include "kis_transform_visitor.h"
 #include "kis_types.h"
 #include "kis_meta_data_merge_strategy.h"
 
@@ -70,6 +68,7 @@
 #include "kis_legacy_undo_adapter.h"
 #include "kis_post_execution_undo_adapter.h"
 
+#include "kis_transform_worker.h"
 #include "kis_processing_applicator.h"
 #include "processing/kis_crop_processing_visitor.h"
 #include "processing/kis_transform_processing_visitor.h"
@@ -95,7 +94,6 @@
 class KisImage::KisImagePrivate
 {
 public:
-    KisBackgroundSP  backgroundPattern;
     quint32 lockCount;
     KisPerspectiveGrid* perspectiveGrid;
 
@@ -274,19 +272,6 @@ void KisImage::reselectGlobalSelection()
 {
     if(m_d->deselectedGlobalSelection) {
         setGlobalSelection(m_d->deselectedGlobalSelection);
-    }
-}
-
-KisBackgroundSP KisImage::backgroundPattern() const
-{
-    return m_d->backgroundPattern;
-}
-
-void KisImage::setBackgroundPattern(KisBackgroundSP background)
-{
-    if (background != m_d->backgroundPattern) {
-        m_d->backgroundPattern = background;
-        emit sigImageUpdated(bounds());
     }
 }
 
@@ -535,6 +520,28 @@ void KisImage::scaleImage(const QSize &size, qreal xres, qreal yres, KisFilterSt
         applicator.applyCommand(new KisImageResizeCommand(this, size));
     }
 
+    applicator.end();
+}
+
+void KisImage::scaleNode(KisNodeSP node, qreal sx, qreal sy, KisFilterStrategy *filterStrategy)
+{
+    QString actionName(i18n("Scale Layer"));
+    KisImageSignalVector emitSignals;
+    emitSignals << ModifiedSignal;
+
+    KisProcessingApplicator applicator(this, node,
+                                       KisProcessingApplicator::RECURSIVE,
+                                       emitSignals, actionName);
+
+    KisProcessingVisitorSP visitor =
+        new KisTransformProcessingVisitor(sx, sy,
+                                          0, 0,
+                                          QPointF(),
+                                          0,
+                                          0, 0,
+                                          filterStrategy);
+
+    applicator.applyVisitor(visitor, KisStrokeJobData::CONCURRENT);
     applicator.end();
 }
 
@@ -1092,9 +1099,6 @@ QImage KisImage::convertToQImage(qint32 x,
                                         KoColorConversionTransformation::InternalRenderingIntent,
                                         KoColorConversionTransformation::InternalConversionFlags);
 
-    if (m_d->backgroundPattern) {
-        m_d->backgroundPattern->paintBackground(image, QRect(x, y, w, h));
-    }
     if (!image.isNull()) {
 #ifdef WORDS_BIGENDIAN
         uchar * data = image.bits();
@@ -1174,10 +1178,6 @@ QImage KisImage::convertToQImage(const QRect& scaledRect, const QSize& scaledIma
     QImage image = colorSpace()->convertToQImage(scaledImageData, scaledRect.width(), scaledRect.height(), const_cast<KoColorProfile*>(profile),
                                                  KoColorConversionTransformation::InternalRenderingIntent,
                                                  KoColorConversionTransformation::InternalConversionFlags);
-
-    if (m_d->backgroundPattern) {
-        m_d->backgroundPattern->paintBackground(image, scaledRect, scaledImageSize, QSize(imageWidth, imageHeight));
-    }
 
     delete [] scaledImageData;
 
@@ -1294,28 +1294,6 @@ void KisImage::removeAnnotation(const QString& type)
 
 vKisAnnotationSP_it KisImage::beginAnnotations()
 {
-    const KoColorProfile * profile = colorSpace()->profile();
-    KisAnnotationSP annotation;
-
-    if (profile) {
-#ifdef __GNUC__
-#warning "KisImage::beginAnnotations: make it possible to save any profile, not just icc profiles."
-#endif
-#if 0
-        // XXX we hardcode icc, this is correct for icc?
-        // XXX productName(), or just "ICC Profile"?
-        if (profile->valid() && profile->type() == "icc" && !profile->rawData().isEmpty()) {
-                annotation = new  KisAnnotation("icc", profile->name(), profile->rawData());
-            }
-        }
-#endif
-    }
-
-    if (annotation)
-        addAnnotation(annotation);
-    else
-        removeAnnotation("icc");
-
     return m_d->annotations.begin();
 }
 
@@ -1522,9 +1500,12 @@ void KisImage::notifyProjectionUpdated(const QRect &rc)
 
 void KisImage::notifySelectionChanged()
 {
-    if (!m_d->disableUIUpdateSignals) {
-        m_d->legacyUndoAdapter->emitSelectionChanged();
-    }
+    /**
+     * The selection is calculated asynchromously, so it is not
+     * handled by disableUIUpdates() and other special signals of
+     * KisImageSignalRouter
+     */
+    m_d->legacyUndoAdapter->emitSelectionChanged();
 }
 
 void KisImage::requestProjectionUpdateImpl(KisNode *node,

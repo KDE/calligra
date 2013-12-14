@@ -39,7 +39,7 @@
 #include <kis_image.h>
 #include <kis_paintop_settings.h>
 
-#include <kis_pattern.h>
+#include <KoPattern.h>
 
 #include "kis_tool.h"
 #include <QCheckBox>
@@ -78,12 +78,14 @@ protected:
 
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
 
+    void beginAlternateAction(KoPointerEvent *event, AlternateAction action);
+    void continueAlternateAction(KoPointerEvent *event, AlternateAction action);
+    void endAlternateAction(KoPointerEvent *event, AlternateAction action);
+
     virtual void mousePressEvent(KoPointerEvent *event);
     virtual void mouseReleaseEvent(KoPointerEvent *event);
     virtual void mouseMoveEvent(KoPointerEvent *event);
 
-    virtual void keyPressEvent(QKeyEvent *event);
-    virtual void keyReleaseEvent(QKeyEvent* event);
     virtual void requestUpdateOutline(const QPointF &outlineDocPoint);
 
     /** If the paint tool support outline like brushes, set to true.
@@ -97,10 +99,7 @@ protected:
                                 KisPaintOpSettings::OutlineMode outlineMode);
 
 protected:
-    bool specialHoverModeActive() const;
-
-    void pickColor(const QPointF &documentPixel, bool fromCurrentNode,
-                   bool toForegroundColor);
+    bool pickColor(const QPointF &documentPixel, AlternateAction action);
 
     /// Add the tool-specific layout to the default option widget layout.
     void addOptionWidgetLayout(QLayout *layout);
@@ -147,7 +146,6 @@ private slots:
     void decreaseBrushSize();
 
 protected slots:
-    virtual void resetCursorStyle();
     virtual void updateTabletPressureSamples();
 
 
@@ -159,6 +157,9 @@ protected:
     QPainterPath m_currentOutline;
     QRectF m_oldOutlineRect;
     bool m_toForegroundColor;
+
+private:
+    QPainterPath tryFixBrushOutline(const QPainterPath &originalOutline);
 
 private:
 

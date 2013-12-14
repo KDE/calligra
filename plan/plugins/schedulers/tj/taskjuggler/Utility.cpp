@@ -215,7 +215,7 @@ setTimezone(const char* tZone)
     return true;
 }
 
-const struct tm * const
+const struct tm *
 clocaltime(const time_t* t)
 {
     /* In some cases we haven't initialized the module yet. So we do not use

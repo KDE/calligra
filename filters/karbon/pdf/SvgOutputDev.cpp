@@ -93,7 +93,7 @@ GBool SvgOutputDev::interpretType3Chars()
     return gFalse;
 }
 
-void SvgOutputDev::startPage(int pageNum, GfxState *state)
+void SvgOutputDev::startPage(int pageNum, GfxState *state, XRef */*xref*/)
 {
     kDebug(30516) << "starting page" << pageNum;
     d->pageSize = QSizeF(state->getPageWidth(), state->getPageHeight());

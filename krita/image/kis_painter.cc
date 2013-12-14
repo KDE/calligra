@@ -90,7 +90,7 @@ struct KisPainter::Private {
     FillStyle                   fillStyle;
     StrokeStyle                 strokeStyle;
     bool                        antiAliasPolygonFill;
-    const KisPattern*           pattern;
+    const KoPattern*           pattern;
     QPointF                     duplicateOffset;
     quint32                     pixelSize;
     const KoColorSpace*         colorSpace;
@@ -1109,6 +1109,8 @@ void KisPainter::paintPainterPath(const QPainterPath& path)
     if (d->fillStyle != FillStyleNone) {
         fillPainterPath(path);
     }
+
+    if (d->strokeStyle == StrokeStyleNone) return;
 
     QPointF lastPoint, nextPoint;
     int elementCount = path.elementCount();
@@ -2268,12 +2270,12 @@ QBitArray KisPainter::channelFlags()
     return d->paramInfo.channelFlags;
 }
 
-void KisPainter::setPattern(const KisPattern * pattern)
+void KisPainter::setPattern(const KoPattern * pattern)
 {
     d->pattern = pattern;
 }
 
-const KisPattern * KisPainter::pattern() const
+const KoPattern * KisPainter::pattern() const
 {
     return d->pattern;
 }

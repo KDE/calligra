@@ -90,6 +90,7 @@ KisAutoContrast::KisAutoContrast() : KisFilter(id(), categoryAdjust(), i18n("&Au
 {
     setSupportsPainting(false);
     setSupportsThreading(false);
+    setSupportsAdjustmentLayers(false);
     setColorSpaceIndependence(TO_LAB16);
     setShowConfigurationWidget(false);
 }
@@ -190,7 +191,6 @@ KisDesaturateFilter::KisDesaturateFilter()
         : KisColorTransformationFilter(id(), categoryAdjust(), i18n("&Desaturate"))
 {
     setSupportsPainting(true);
-    setSupportsIncrementalPainting(false);
     setColorSpaceIndependence(TO_LAB16);
     setShowConfigurationWidget(false);
 }

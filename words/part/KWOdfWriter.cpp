@@ -36,6 +36,7 @@
 #include <KoParagraphStyle.h>
 #include <KoShapeGroup.h>
 #include <KoShapeLayer.h>
+#include <KoAnnotationLayoutManager.h>
 
 #include <KoGenChanges.h>
 #include <changetracker/KoChangeTracker.h>
@@ -302,6 +303,11 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
         for (int i = 0; i < frames.count(); ++i) {
             KWFrame *frame = frames.at(i);
             KWPage page = m_document->pageManager()->page(frame->shape());
+            KoShape *shape = frame->shape();
+            if (m_document->annotationLayoutManager()->isAnnotationShape(shape)) {
+                // Skip to save annotation shapes.
+                continue;
+            }
             frame->saveOdf(context, page, m_zIndexOffsets.value(page));
         }
     }

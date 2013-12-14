@@ -1,4 +1,12 @@
-add_definitions(${KDE4_ENABLE_EXCEPTIONS})
+# Disable -Wswitch because of the extra definitions we here:
+# kis_input_manager.cpp: In member function ‘virtual bool KisInputManager::eventFilter(QObject*, QEvent*)’:
+# warning: case value ‘1001’ not in enumerated type ‘QEvent::Type’ [-Wswitch]
+# warning: case value ‘1002’ not in enumerated type ‘QEvent::Type’ [-Wswitch]
+if (CMAKE_COMPILER_IS_GNUCXX)
+    add_definitions(${KDE4_ENABLE_EXCEPTIONS} -Wno-switch)
+else (CMAKE_COMPILER_IS_GNUCXX)
+    add_definitions(${KDE4_ENABLE_EXCEPTIONS} )
+endif (CMAKE_COMPILER_IS_GNUCXX)
 
 include_directories( ${KOTEXT_INCLUDES}
     ${TEXTLAYOUT_INCLUDES}
@@ -207,6 +215,7 @@ set(kritaui_LIB_SRCS
     widgets/kis_tool_button.cpp
     widgets/kis_floating_message.cpp
     input/kis_input_manager.cpp
+    input/kis_extended_modifiers_mapper.cpp
     input/kis_abstract_input_action.cpp
     input/kis_tool_invocation_action.cpp
     input/kis_pan_action.cpp
@@ -257,22 +266,6 @@ if(WIN32)
 endif(WIN32)
 
 if(UNIX AND NOT APPLE)
-    find_path(QT_X11_P_PATH qt_x11_p.h
-      PATHS /usr/include/QtGui/private/
-      /usr/include/src/gui/kernel/
-      /usr/include/qt4/QtGui/private/)
-
-    if(QT_X11_P_PATH)
-      message("-- Found system qt_x11_p.h")
-      include_directories(${QT_X11_P_PATH})
-      set(HAVE_SYSTEM_PRIVATE_HEADERS 1)
-    else(QT_X11_P_PATH)
-      set(HAVE_SYSTEM_PRIVATE_HEADERS 0)
-      message("** Fetching qt_x11_p.h from a local copy! May not work properly! Please install libqt4-private-headers-devel or libqt4-private-dev to get it working!")
-    endif(QT_X11_P_PATH)
-
-    configure_file(input/wintab/config-qt_x11_p.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/input/wintab/config-qt_x11_p.h)
-
     set(kritaui_LIB_SRCS
         ${kritaui_LIB_SRCS}
         input/kis_tablet_event.cpp
@@ -332,7 +325,8 @@ kde4_add_ui_files(kritaui_LIB_SRCS
 kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS} )
 
 target_link_libraries(kritaui ${QT_QTDECLARATIVE_LIBRARY}
-                              ${X11_X11_LIB})
+                              ${X11_X11_LIB}
+                              ${X11_Xinput_LIB})
 
 target_link_libraries(kritaui ${GLEW_LIBRARIES})
 

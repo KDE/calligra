@@ -2270,7 +2270,7 @@ void CellToolBase::equalizeColumn()
         if (size != 0.0) {
             ResizeColumnManipulator* command = new ResizeColumnManipulator();
             command->setSheet(selection()->activeSheet());
-            command->setSize(qMax(2.0, size));
+            command->setSize(qMax(qreal(2.0), size));
             command->add(*selection());
             if (!command->execute())
                 delete command;

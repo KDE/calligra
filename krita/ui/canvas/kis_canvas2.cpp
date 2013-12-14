@@ -105,7 +105,7 @@ public:
 #ifdef HAVE_OPENGL
     int openGLFilterMode;
 #endif
-    KoToolProxy *toolProxy;
+    KisToolProxy *toolProxy;
     KoFavoriteResourceManager *favoriteResourceManager;
 #ifdef HAVE_OPENGL
     KisOpenGLImageTexturesSP openGLImageTextures;
@@ -190,7 +190,7 @@ void KisCanvas2::setCanvasWidget(QWidget * widget)
     widget->setAttribute(Qt::WA_OpaquePaintEvent);
     widget->setMouseTracking(true);
     widget->setAcceptDrops(true);
-    widget->installEventFilter(m_d->inputManager);
+    m_d->inputManager->setupAsEventFilter(widget);
     KoCanvasControllerWidget *controller = dynamic_cast<KoCanvasControllerWidget*>(canvasController());
     if (controller) {
         Q_ASSERT(controller->canvas() == this);
@@ -221,14 +221,6 @@ bool KisCanvas2::snapToGrid() const
 qreal KisCanvas2::rotationAngle() const
 {
     return m_d->coordinatesConverter->rotationAngle();
-}
-
-void KisCanvas2::setSmoothingEnabled(bool smooth)
-{
-    KisQPainterCanvas *canvas = dynamic_cast<KisQPainterCanvas*>(m_d->canvasWidget);
-    if (canvas) {
-        canvas->setSmoothingEnabled(smooth);
-    }
 }
 
 void KisCanvas2::channelSelectionChanged()
@@ -354,6 +346,7 @@ void KisCanvas2::createOpenGLCanvas()
     m_d->openGLFilterMode = cfg.openGLFilteringMode();
     m_d->currentCanvasIsOpenGL = true;
 
+    KisOpenGL::initialMakeContextCurrent();
     m_d->openGLImageTextures = KisOpenGLImageTextures::getImageTextures(m_d->view->image(), m_d->monitorProfile, m_d->renderingIntent, m_d->conversionFlags);
     KisOpenGLCanvas2 *canvasWidget = new KisOpenGLCanvas2(this, m_d->coordinatesConverter, 0, m_d->openGLImageTextures);
     setCanvasWidget(canvasWidget);
