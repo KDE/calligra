@@ -60,7 +60,7 @@ bool ResizeColumnManipulator::process(Element* element)
         if (m_firstrun)
             m_oldSizes[col] = format->width();
         qreal delta = format->width();
-        format->setWidth(m_reverse ? m_oldSizes[col] : qMax(qreal(2.0), m_newSize));
+        format->setWidth(m_reverse ? m_oldSizes[col] : qMax(2.0, m_newSize));
         delta = format->width() - delta;
         m_sheet->adjustCellAnchoredShapesX(delta, col+1);
     }
@@ -282,7 +282,7 @@ bool AdjustColumnRowManipulator::process(Element* element)
                         if (widths.contains(col) && widths[col] != -1.0) {
                             ColumnFormat* format = sheet->nonDefaultColumnFormat(col);
                             if (qAbs(format->width() - widths[col]) > DBL_EPSILON) {
-                                format->setWidth(qMax(qreal(2.0), widths[col]));
+                                format->setWidth(qMax(2.0, widths[col]));
                             }
                         }
                     }
@@ -294,7 +294,7 @@ bool AdjustColumnRowManipulator::process(Element* element)
                 if (widths.contains(col) && widths[col] != -1.0) {
                     ColumnFormat* format = sheet->nonDefaultColumnFormat(col);
                     if (qAbs(format->width() - widths[col]) > DBL_EPSILON) {
-                        format->setWidth(qMax(qreal(2.0), widths[col]));
+                        format->setWidth(qMax(2.0, widths[col]));
                     }
                 }
             }
