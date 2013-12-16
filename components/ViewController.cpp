@@ -386,7 +386,7 @@ void ViewController::documentSizeChanged()
         //where children cannot interact, for example when using the
         //LinkArea as a child of this item.
         setWidth(qMax(d->flickable->width() - 1, d->documentSize.width()));
-        setHeight(qMax(d->flickable->height() - 1, d->documentSize.height());
+        setHeight(qMax(d->flickable->height() - 1, d->documentSize.height()));
 
         d->flickable->setProperty("contentWidth", width());
         d->flickable->setProperty("contentHeight", height());
