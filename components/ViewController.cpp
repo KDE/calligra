@@ -430,9 +430,6 @@ void ViewController::zoomTimeout()
     float oldX = d->flickable->property("contentX").toReal();
     float oldY = d->flickable->property("contentY").toReal();
 
-    d->ignoreOffsetChange = true;
-    d->view->setZoom(newZoom);
-    d->ignoreOffsetChange = false;
 
     float z = 1.0 + d->zoomChange;
     d->flickable->setProperty("contentX", oldX + ((d->zoomCenter.x() * z - d->zoomCenter.x())) );
@@ -442,6 +439,9 @@ void ViewController::zoomTimeout()
 
     d->zoom = newZoom;
 
+    d->ignoreOffsetChange = true;
+    d->view->setZoom(newZoom);
+    d->ignoreOffsetChange = false;
 
     d->view->setVisible(true);
     d->zoomCenter = QVector3D{};
