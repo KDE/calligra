@@ -381,6 +381,10 @@ void ViewController::documentSizeChanged()
         }
 
         d->documentSize = d->view->document()->documentSize();
+        //Limit the size of this item to always be at least the same size
+        //as the flickable, since otherwise we can end up with situations
+        //where children cannot interact, for example when using the
+        //LinkArea as a child of this item.
         setWidth(qMax(d->flickable->width() - 1, d->documentSize.width()));
         setHeight(qMax(d->flickable->height() - 1, d->documentSize.height());
 
