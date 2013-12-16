@@ -30,10 +30,9 @@ class QJSEngine;
 class CalligraComponentsPlugin : public QQmlExtensionPlugin
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.kde.calligra.CalligraComponentsPlugin")
+    Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QQmlExtensionInterface")
 
 public:
-    CalligraComponentsPlugin() : QQmlExtensionPlugin() {}
     virtual void registerTypes(const char* uri);
 };
 
