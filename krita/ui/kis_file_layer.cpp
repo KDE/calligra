@@ -116,20 +116,24 @@ KisFileLayer::ScalingMethod KisFileLayer::scalingMethod() const
 void KisFileLayer::slotLoadingFinished()
 {
     KisImageWSP importedImage = m_loader.image();
-
+    m_image = importedImage->projection();
     if (m_scalingMethod == ToImagePPI && (image()->xRes() != importedImage->xRes()
-                                     || image()->yRes() != importedImage->yRes()))
-    {
+                                          || image()->yRes() != importedImage->yRes())) {
         qreal xscale = image()->xRes() / importedImage->xRes();
         qreal yscale = image()->yRes() / importedImage->yRes();
-        m_image = importedImage->projection();
+
         KisTransformWorker worker(m_image, xscale, yscale, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, KisFilterStrategyRegistry::instance()->get("Bicubic"));
         worker.run();
     }
     else if (m_scalingMethod == ToImageSize) {
-        importedImage->resizeImage(image()->bounds());
+        QSize sz = importedImage->size();
+        sz.scale(image()->size(), Qt::KeepAspectRatio);
+        qreal xscale =  sz.width() / importedImage->width();
+        qreal yscale = sz.height() / importedImage->height();
+        KisTransformWorker worker(m_image, xscale, yscale, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, KisFilterStrategyRegistry::instance()->get("Bicubic"));
+        worker.run();
     }
-    m_image = importedImage->projection();
+
     setDirty();
 }
 
