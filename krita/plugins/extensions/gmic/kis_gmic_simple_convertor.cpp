@@ -393,7 +393,9 @@ void KisGmicSimpleConvertor::convertFromGmicFast(gmic_image<float>& gmicImage, K
 void KisGmicSimpleConvertor::convertToGmicImageFast(KisPaintDeviceSP dev, CImg< float >& gmicImage, QRect rc)
 {
     KoColorTransformation * pixelToGmicPixelFormat = createTransformation(dev->colorSpace());
-    if (pixelToGmicPixelFormat == 0)
+
+    // Temporarily force the fallback conversion since the fast conversion is buggy: https://bugs.kde.org/show_bug.cgi?id=327980
+    if (true || pixelToGmicPixelFormat == 0)
     {
         dbgPlugins << "Fall-back to slow color conversion method";
         convertToGmicImage(dev, gmicImage, rc);
