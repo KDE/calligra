@@ -169,9 +169,9 @@ bool CalculationSettings::saveOdf(KoXmlWriter &xmlWriter) const
     if (d->precisionAsShown)
         xmlWriter.addAttribute("table:precision-as-shown", "true");
     if (!d->wholeCellSearchCriteria)
-        xmlWriter.addAttribute("table:search-criteria-must-apply-to-whole-cell", "true");
+        xmlWriter.addAttribute("table:search-criteria-must-apply-to-whole-cell", "false");
     if (!d->automaticFindLabels)
-        xmlWriter.addAttribute("table:automatic-find-labels", "true");
+        xmlWriter.addAttribute("table:automatic-find-labels", "false");
     if (!d->useRegularExpressions)
         xmlWriter.addAttribute("table:use-regular-expressions", "false");
     if (d->useWildcards)
