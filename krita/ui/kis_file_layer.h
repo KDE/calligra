@@ -25,6 +25,7 @@
 class KisDoc2;
 class KisPart2;
 
+
 /**
  * @brief The KisFileLayer class loads a particular file as a layer into the layer stack.
  */
@@ -32,7 +33,14 @@ class KisFileLayer : public KisExternalLayer
 {
     Q_OBJECT
 public:
-    explicit KisFileLayer(KisImageWSP image, const QString& basePath, const QString &filename, bool scaleToImageResolution, const QString &name, quint8 opacity);
+
+    enum ScalingMethod {
+        None,
+        ToImageSize,
+        ToImagePPI
+    };
+
+    explicit KisFileLayer(KisImageWSP image, const QString& basePath, const QString &filename, ScalingMethod scalingMethod, const QString &name, quint8 opacity);
     ~KisFileLayer();
     KisFileLayer(const KisFileLayer& rhs);
 
@@ -47,8 +55,8 @@ public:
     void setFileName(const QString &basePath, const QString &filename);
     QString fileName() const;
     QString path() const;
-    void setScaleToImageResolution(bool scale);
-    bool scaleToImageResolution() const;
+
+    ScalingMethod scalingMethod() const;
     
     KisNodeSP clone() const;
     bool allowAsChild(KisNodeSP) const;
@@ -65,7 +73,7 @@ private:
 
     QString m_basePath;
     QString m_filename;
-    bool m_scaleToImageResolution;
+    ScalingMethod m_scalingMethod;
 
     KisPaintDeviceSP m_image;
 
