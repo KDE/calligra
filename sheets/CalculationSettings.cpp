@@ -163,6 +163,22 @@ void CalculationSettings::loadOdf(const KoXmlElement& body)
 
 bool CalculationSettings::saveOdf(KoXmlWriter &xmlWriter) const
 {
+    xmlWriter.startElement("table:calculation-settings");
+    if (!d->caseSensitiveComparisons)
+        xmlWriter.addAttribute("table:case-sensitive", "false");
+    if (d->precisionAsShown)
+        xmlWriter.addAttribute("table:precision-as-shown", "true");
+    if (!d->wholeCellSearchCriteria)
+        xmlWriter.addAttribute("table:search-criteria-must-apply-to-whole-cell", "true");
+    if (!d->automaticFindLabels)
+        xmlWriter.addAttribute("table:automatic-find-labels", "true");
+    if (!d->useRegularExpressions)
+        xmlWriter.addAttribute("table:use-regular-expressions", "false");
+    if (d->useWildcards)
+        xmlWriter.addAttribute("table:use-wildcards", "true");
+    if (d->refYear != 1930)
+        xmlWriter.addAttribute("table:null-year", QString::number(d->refYear));
+    xmlWriter.endElement();
     return true;
 }
 
