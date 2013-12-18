@@ -128,8 +128,8 @@ void KisFileLayer::slotLoadingFinished()
     }
     else if (m_scalingMethod == ToImageSize) {
         importedImage->resizeImage(image()->bounds());
-        m_image = importedImage->projection();
     }
+    m_image = importedImage->projection();
     setDirty();
 }
 
