@@ -12,6 +12,7 @@ Name[sv]=Insticksprogram för RDF-plats
 Name[uk]=Додаток місць RDF
 Name[x-test]=xxRDF Location Pluginxx
 Comment=A plugin to map location items between document and RDF database
+Comment[de]=Ein Modul, um Ortseinträge zwischen Dokument und RDF-Datenbank zuzuordnen
 Comment[es]=Un complemento para asignar elementos de ubicación entre un documento y una base de datos RDF
 Comment[it]=Una estensione per associare le posizioni tra documento e database RDF
 Comment[kk]=Құжаттағы және RDF деректер қорындағы орындарын сәйкестіретін плагині

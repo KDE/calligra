@@ -12,6 +12,7 @@ Name[sv]=Insticksprogram för RDF-kalenderhändelser
 Name[uk]=Додаток подій календаря RDF
 Name[x-test]=xxRDF Calendar Event Pluginxx
 Comment=A plugin to map calendar event items between document and RDF database
+Comment[de]=Ein Modul, um Kalenderereignisse zwischen Dokument und RDF-Datenbank zuzuordnen
 Comment[es]=Un complemento para asignar elementos de calendarios de eventos entre un documento y una base de datos RDF
 Comment[it]=Una estensione per associare gli eventi di calendario tra documento e database RDF
 Comment[kk]=Құжаттағы және RDF деректер қорындағы күнтізбе оқиғаларды сәйкестіретін плагині

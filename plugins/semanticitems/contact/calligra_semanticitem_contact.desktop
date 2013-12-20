@@ -12,6 +12,7 @@ Name[sv]=Insticksprogram för RDF-kontakt
 Name[uk]=Додаток контактів RDF
 Name[x-test]=xxRDF Contact Pluginxx
 Comment=A plugin to map contact items between document and RDF database
+Comment[de]=Ein Modul, um Kontakteinträge zwischen Dokument und RDF-Datenbank zuzuordnen
 Comment[es]=Un complemento para asignar elementos de contacto entre un documento y una base de datos RDF
 Comment[it]=Una estensione per associare i contatti tra documento e database RDF
 Comment[kk]=Құжаттағы және RDF деректер қорындағы контактарды сәйкестіретін плагині
