@@ -18,8 +18,9 @@ include_directories( ${KOTEXT_INCLUDES}
     ${CMAKE_SOURCE_DIR}/krita/image/metadata
     ${EXIV2_INCLUDE_DIR} )
 
+if(NOT APPLE)
 add_subdirectory( tests )
-
+endif()
 
 configure_file(config-processor.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-processor.h )
 
