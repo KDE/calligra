@@ -229,7 +229,7 @@ KEXIUTILS_EXPORT QString fileDialogFilterStrings(const QStringList& mimeStrings,
 
 /*! A global setting for minimal readable font.
  \a init is a widget that should be passed if no qApp->mainWidget() is available yet.
- The size of font is not smaller than he one returned by
+ The size of font is not smaller than the one returned by
  KGlobalSettings::smallestReadableFont(). */
 KEXIUTILS_EXPORT QFont smallFont(QWidget *init = 0);
 

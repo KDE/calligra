@@ -373,7 +373,7 @@ class ConstraintAtom : public AbstractAtom
         QString m_op;
         /// Specifies the type of data point to select.
         QString m_ptType;
-        /// The point type used int he referenced constraint.
+        /// The point type used in the referenced constraint.
         QString m_refPtType;
         /// Specifies the type of a reference constraint.
         QString m_refType;

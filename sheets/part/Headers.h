@@ -79,7 +79,7 @@ protected:
     /**
      * Flag that indicates whether the user wants to mark columns.
      * The user may mark columns by dragging the mouse around in th XBorder widget.
-     * If he is doing that right now, this flag is true. Mention that the user may
+     * If the user is doing that right now, this flag is true. Mention that the user may
      * also resize columns by dragging the mouse. This case is not covered by this flag.
      */
     bool m_bSelection;
@@ -87,21 +87,21 @@ protected:
     /**
      * The column over which the user pressed the mouse button.
      * If the user marks columns in the XBorder widget, then this is the initial
-     * column on which he pressed the mouse button.
+     * column on which the user pressed the mouse button.
      */
     int m_iSelectionAnchor;
 
     /**
      * Flag that indicates whether the user resizes a column
      * The user may resize columns by dragging the mouse around in the ColumnHeader widget.
-     * If he is doing that right now, this flag is true.
+     * If the user is doing that right now, this flag is true.
      */
     bool m_bResize;
 
     /**
      * The column over which the user pressed the mouse button.
      * The user may resize columns by dragging the mouse around the XBorder widget.
-     * This is the column over which he pressed the mouse button. This column is going
+     * This is the column over which the user pressed the mouse button. This column is going
      * to be resized.
       */
     int m_iResizedColumn;
