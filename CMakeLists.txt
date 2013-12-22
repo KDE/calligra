@@ -879,6 +879,24 @@ set(KOODFREADER_INCLUDES
     ${CMAKE_SOURCE_DIR}/filters/libodfreader
 )
 
+#######################################################
+####  Utility macro to remove duplicated includes  ####
+####                                               ####
+####  On Windows duplicated include path may       ####
+####  cause too long command line for the compiler ####
+####  and also for moc.                            ####
+####                                               ####
+####  Other platforms may also benefit from this.  ####
+####                                               ####
+####  CMake >= 2.8.8 do not do this automatically. ####
+#######################################################
+
+macro(remove_duplicated_include_directories)
+    get_directory_property(dupdirs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} INCLUDE_DIRECTORIES)
+    list(REMOVE_DUPLICATES dupdirs)
+    set_directory_properties(PROPERTIES INCLUDE_DIRECTORIES "${dupdirs}")
+endmacro()
+
  #########################################
 ##########################################
 ## Detect which products can be compile ##

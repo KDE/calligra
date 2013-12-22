@@ -44,6 +44,9 @@ include_directories( ${CMAKE_SOURCE_DIR}/krita/image/metadata
                      ${KOMAIN_INCLUDES}
 )
 
+#KOMAIN_INCLUDES has some includes already added before, let's cleanup
+remove_duplicated_include_directories()
+
 if(FFTW3_FOUND)
   include_directories(${FFTW3_INCLUDE_DIRS})
 endif(FFTW3_FOUND)
