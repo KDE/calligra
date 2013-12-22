@@ -1,0 +1,37 @@
+[Desktop Entry]
+Type=ServiceType
+X-KDE-ServiceType=Karbon/Dock
+Comment=Docker for Karbon
+Comment[bs]=Docker za Karbon
+Comment[ca]=Acoblador per al Karbon
+Comment[ca@valencia]=Acoblador per al Karbon
+Comment[cs]=Dok pro Karbon
+Comment[da]=Dokker til Karbon
+Comment[de]=Docker für Karbon
+Comment[el]=Προσάρτηση για το Karbon
+Comment[es]=Ventana acoplable para Karbon
+Comment[et]=Karbon dokk
+Comment[fi]=Karbon-telakka
+Comment[fr]=Panneau pour Karbon
+Comment[gl]=Doca para Karbon
+Comment[hu]=Dokkoló a Karbonhoz
+Comment[it]=Gancio per Karbon
+Comment[ja]=Karbon のドッキングパネル
+Comment[kk]=Karbon-дың докері
+Comment[nb]=Dokker for Karbon
+Comment[nds]=Andockmoduul för Karbon
+Comment[nl]=Vastzetten van Karbon
+Comment[pl]=Dokowanie dla Karbon
+Comment[pt]=Acoplador para o Karbon
+Comment[pt_BR]=Acoplador para o Karbon
+Comment[ru]=Панель для Karbon
+Comment[sk]=Docker pre Karbon
+Comment[sl]=Sidrišče za Karbon
+Comment[sv]=Dockningsfönster för Karbon
+Comment[tr]=Karbon için Docker
+Comment[uk]=Бічна панель Karbon
+Comment[x-test]=xxDocker for Karbonxx
+Comment[zh_CN]=Karbon 停靠栏
+Comment[zh_TW]=Karbon 的嵌入器
+[PropertyDef::X-KDE-PluginInfo-Name]
+Type=QString
