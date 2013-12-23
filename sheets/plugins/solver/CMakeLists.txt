@@ -27,8 +27,12 @@ kde4_add_plugin( sheetssolver ${solver_PART_SRCS} )
 
 target_link_libraries( sheetssolver
 	${GSL_LIBRARIES}
-        calligrasheetscommon
+	calligrasheetscommon
 )
+
+if(WIN32)
+	target_link_libraries( sheetssolver ${GSL_CBLAS_LIBRARIES} )
+endif(WIN32)
 
 install(TARGETS sheetssolver  DESTINATION ${PLUGIN_INSTALL_DIR})
 
