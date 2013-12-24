@@ -2,5 +2,13 @@
 Type=ServiceType
 X-KDE-ServiceType=Karbon/Dock
 Comment=Docker for Karbon
+Comment[de]=Docker für Karbon
+Comment[eu]=Karbon-erako panela
+Comment[nl]=Vastzetten van Karbon
+Comment[pt]=Acoplador para o Karbon
+Comment[pt_BR]=Acoplador para o Karbon
+Comment[sk]=Docker pre Karbon
+Comment[uk]=Бічна панель Karbon
+Comment[x-test]=xxDocker for Karbonxx
 [PropertyDef::X-KDE-PluginInfo-Name]
 Type=QString
