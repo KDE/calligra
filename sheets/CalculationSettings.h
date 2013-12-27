@@ -110,6 +110,9 @@ public:
      */
     QDate referenceDate() const;
 
+    void setPrecisionAsShown(bool enable);
+    bool precisionAsShown() const;
+
     /**
      * Sets the default decimal precision.
      * It is used to format decimal numbers, if the cell style does not define
@@ -153,6 +156,9 @@ public:
      */
     bool isAutoCalculationEnabled() const;
 
+    void setAutomaticFindLabels(bool enabled);
+    bool automaticFindLabels() const;
+
     /**
      * Sets the comparisons on this document to be case sensitive or not.
      */
@@ -162,6 +168,9 @@ public:
      * Returns whether comparisons in this document are case sensitive.
      */
     Qt::CaseSensitivity caseSensitiveComparisons() const;
+
+    void setWholeCellSearchCriteria(bool enabled);
+    bool wholeCellSearchCriteria() const;
 
     /**
      * If true, regular expressions are used for character string

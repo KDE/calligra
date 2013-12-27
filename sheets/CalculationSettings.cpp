@@ -208,6 +208,16 @@ QDate CalculationSettings::referenceDate() const
     return d->refDate;
 }
 
+void CalculationSettings::setPrecisionAsShown(bool enable)
+{
+    d->precisionAsShown = enable;
+}
+
+bool CalculationSettings::precisionAsShown() const
+{
+    return d->precisionAsShown;
+}
+
 void CalculationSettings::setDefaultDecimalPrecision(int precision)
 {
     d->precision = precision;
@@ -238,6 +248,16 @@ bool CalculationSettings::isAutoCalculationEnabled() const
     return d->automaticCalculation;
 }
 
+void CalculationSettings::setAutomaticFindLabels(bool enabled)
+{
+    d->automaticFindLabels = enabled;
+}
+
+bool CalculationSettings::automaticFindLabels() const
+{
+    return d->automaticFindLabels;
+}
+
 void CalculationSettings::setCaseSensitiveComparisons(Qt::CaseSensitivity caseSensitive)
 {
     d->caseSensitiveComparisons = caseSensitive == Qt::CaseSensitive;
@@ -246,6 +266,16 @@ void CalculationSettings::setCaseSensitiveComparisons(Qt::CaseSensitivity caseSe
 Qt::CaseSensitivity CalculationSettings::caseSensitiveComparisons() const
 {
     return d->caseSensitiveComparisons ? Qt::CaseSensitive : Qt::CaseInsensitive;
+}
+
+void CalculationSettings::setWholeCellSearchCriteria(bool enabled)
+{
+    d->wholeCellSearchCriteria = enabled;
+}
+
+bool CalculationSettings::wholeCellSearchCriteria() const
+{
+    return d->wholeCellSearchCriteria;
 }
 
 void CalculationSettings::setUseRegularExpressions(bool enabled)
