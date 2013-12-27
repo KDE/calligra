@@ -316,35 +316,35 @@ QString Conditions::saveOdfConditionValue(const Conditional &condition, ValueCon
     case Conditional::None:
         break;
     case Conditional::Equal:
-        value = "cell-content()=" + converter->asString(condition.value1).asString();
+        value = "cell-content()=" + converter->asString(condition.value1).asStringWithDoubleQuotes();
         break;
     case Conditional::Superior:
-        value = "cell-content()>" + converter->asString(condition.value1).asString();
+        value = "cell-content()>" + converter->asString(condition.value1).asStringWithDoubleQuotes();
         break;
     case Conditional::Inferior:
-        value = "cell-content()<" + converter->asString(condition.value1).asString();
+        value = "cell-content()<" + converter->asString(condition.value1).asStringWithDoubleQuotes();
         break;
     case Conditional::SuperiorEqual:
-        value = "cell-content()>=" + converter->asString(condition.value1).asString();
+        value = "cell-content()>=" + converter->asString(condition.value1).asStringWithDoubleQuotes();
         break;
     case Conditional::InferiorEqual:
-        value = "cell-content()<=" + converter->asString(condition.value1).asString();
+        value = "cell-content()<=" + converter->asString(condition.value1).asStringWithDoubleQuotes();
         break;
     case Conditional::Between:
         value = "cell-content-is-between(" +
-                converter->asString(condition.value1).asString() +
+                converter->asString(condition.value1).asStringWithDoubleQuotes() +
                 ',' +
-                converter->asString(condition.value2).asString() +
+                converter->asString(condition.value2).asStringWithDoubleQuotes() +
                 ')';
         break;
     case Conditional::DifferentTo:
-        value = "cell-content()!=" + converter->asString(condition.value1).asString();
+        value = "cell-content()!=" + converter->asString(condition.value1).asStringWithDoubleQuotes();
         break;
     case Conditional::Different:
         value = "cell-content-is-not-between(" +
-                converter->asString(condition.value1).asString() +
+                converter->asString(condition.value1).asStringWithDoubleQuotes() +
                 ',' +
-                converter->asString(condition.value2).asString() +
+                converter->asString(condition.value2).asStringWithDoubleQuotes() +
                 ')';
         break;
     case Conditional::IsTrueFormula:
@@ -497,8 +497,9 @@ void Conditions::loadOdfCondition(QString &valExpression, Conditional &newCondit
     } else if (valExpression.indexOf('=') == 0) {
         value = valExpression.remove(0, 1);
         newCondition.cond = Conditional::Equal;
-    } else
-        kDebug(36003) << " I don't know how to parse it :" << valExpression;
+    } else {
+        kWarning() << " I don't know how to parse it :" << valExpression;
+    }
     //kDebug(36003) << "\tvalue:" << value;
 
     if (value.length() > 1 && value[0] == '"' && value[value.length()-1] == '"') {

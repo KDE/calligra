@@ -439,6 +439,19 @@ QString Value::asString() const
     return result;
 }
 
+QString Value::asStringWithDoubleQuotes() const
+{
+    QString s = asString();
+    if (type() == Value::String) {
+        if (!(s.startsWith("\"") && s.endsWith("\""))) {
+            if (s.startsWith("'") && s.endsWith("'"))
+                s = s.mid(1, s.length()-2);
+            s = "\"" + s + "\"";
+        }
+    }
+    return s;
+}
+
 // get the value as QVariant
 QVariant Value::asVariant() const
 {
