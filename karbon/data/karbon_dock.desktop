@@ -4,10 +4,12 @@ X-KDE-ServiceType=Karbon/Dock
 Comment=Docker for Karbon
 Comment[de]=Docker für Karbon
 Comment[eu]=Karbon-erako panela
+Comment[it]=Area di aggancio per Krita
 Comment[nl]=Vastzetten van Karbon
 Comment[pt]=Acoplador para o Karbon
 Comment[pt_BR]=Acoplador para o Karbon
 Comment[sk]=Docker pre Karbon
+Comment[sv]=Dockningsfönster för Karbon
 Comment[uk]=Бічна панель Karbon
 Comment[x-test]=xxDocker for Karbonxx
 [PropertyDef::X-KDE-PluginInfo-Name]
