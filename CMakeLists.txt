@@ -29,6 +29,17 @@ set(GENERIC_CALLIGRA_LIB_SOVERSION "13")
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 
+# fetch git revision for the current build
+
+set(CALLIGRA_GIT_SHA1_STRING "")
+
+include(GetGitRevisionDescription)
+get_git_head_revision(GIT_REFSPEC GIT_SHA1)
+
+if(GIT_SHA1)
+    string(SUBSTRING ${GIT_SHA1} 0 7 GIT_SHA1)
+    set(CALLIGRA_GIT_SHA1_STRING ${GIT_SHA1})
+endif(GIT_SHA1)
 
  ########################
 #########################
@@ -813,6 +824,7 @@ set(KOMAIN_INCLUDES ${KDE4_INCLUDES}
                     ${CMAKE_SOURCE_DIR}/libs/widgets
                     ${CMAKE_SOURCE_DIR}/libs/widgetutils
                     ${CMAKE_SOURCE_DIR}/libs/main
+                    ${CMAKE_BINARY_DIR}/libs/main
                     ${CMAKE_SOURCE_DIR}/libs/main/config)
 
 set(KORDF_INCLUDES ${KOMAIN_INCLUDES}
