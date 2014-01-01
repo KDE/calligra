@@ -564,7 +564,8 @@ void KexiMainWindow::setupActions()
 
     d->action_tools_compact_database = addAction("tools_compact_database",
 //! @todo icon
-                                                 koIcon("calligrakexi"), i18n("&Compact Database..."));
+                                                 KIcon(KexiDB::defaultFileBasedDriverIconName()),
+                                                 i18n("&Compact Database..."));
     d->action_tools_compact_database->setToolTip(i18n("Compact the current database project"));
     d->action_tools_compact_database->setWhatsThis(
         i18n("Compacts the current database project, so it will take less space and work faster."));
