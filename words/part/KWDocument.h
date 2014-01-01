@@ -53,10 +53,12 @@ class KoShapeController;
 class KoPart;
 class KLocalizedString;
 class QIODevice;
+class KoAnnotationLayoutManager;
 class KoDocumentInfoDlg;
 
 
 #define WORDS_MIME_TYPE "application/vnd.oasis.opendocument.text"
+
 
 /**
  * The class that represents a Words document containing content and settings.
@@ -110,6 +112,9 @@ public:
     void setIsMasterDocument(bool isMasterDocument);
 
     // others
+    KoAnnotationLayoutManager *annotationLayoutManager() const {
+        return m_annotationManager;
+    }
     /**
      * Return the pageManager used in this document.
      */
@@ -137,23 +142,14 @@ public:
      * In all cases, the new page will have the number afterPageNum+1.
      * Use appendPage in WP mode, insertPage in DTP mode.
      * @param masterPageName the name of the master page to use for this new page.
-     * @param addUndoRedoCommand if true then an undo-redo action is added to the
-     * document to allow undo/redo inserting the page.
      */
-    KWPage insertPage(int afterPageNum, const QString &masterPageName = QString(), bool addUndoRedoCommand = true);
+    KWPage insertPage(int afterPageNum, const QString &masterPageName = QString());
     /**
      * Append a new page, creating followup frames (but not headers/footers),
      * and return the page number.
      * @param masterPageName the name of the master page to use for this new page.
-     * @param addUndoRedoCommand if true then an undo-redo action is added to the
-     * document to allow undo/redo appending the page.
      */
-    KWPage appendPage(const QString &masterPageName = QString(), bool addUndoRedoCommand = true);
-    /**
-     * remove a page from the document.
-     * @param pageNumber the pageNumber that should be removed.
-     */
-    void removePage(int pageNumber);
+    KWPage appendPage(const QString &masterPageName = QString());
 
     /// return the amount of framesets this document holds
     int frameSetCount() const {
@@ -245,6 +241,12 @@ signals:
     /// emitted whenever a shape is added.
     void shapeAdded(KoShape *, KoShapeManager::Repaint);
 
+    /// emitted whenever an annotation shape is added.
+    void annotationShapeAdded(bool);
+
+    /// emitted whenever an annotation shape is removed
+    void annotationShapeRemoved(KoShape *);
+
     /// emitted whenever a shape is removed
     void shapeRemoved(KoShape *);
 
@@ -298,7 +300,8 @@ private:
     QPointer<KoUpdater> m_layoutProgressUpdater;
     KoShapeController *m_shapeController;
     QPair<QString, QByteArray> m_coverImage;
-
+    QList<KoShape*> m_loadedAnnotationShapes;
+    KoAnnotationLayoutManager *m_annotationManager;
 };
 
 #endif

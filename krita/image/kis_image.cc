@@ -57,7 +57,6 @@
 #include "kis_perspective_grid.h"
 #include "kis_selection.h"
 #include "kis_transaction.h"
-#include "kis_transform_visitor.h"
 #include "kis_types.h"
 #include "kis_meta_data_merge_strategy.h"
 
@@ -69,6 +68,7 @@
 #include "kis_legacy_undo_adapter.h"
 #include "kis_post_execution_undo_adapter.h"
 
+#include "kis_transform_worker.h"
 #include "kis_processing_applicator.h"
 #include "processing/kis_crop_processing_visitor.h"
 #include "processing/kis_transform_processing_visitor.h"
@@ -211,7 +211,7 @@ void KisImage::aboutToRemoveANode(KisNode *parent, int index)
 void KisImage::nodeChanged(KisNode* node)
 {
     KisNodeGraphListener::nodeChanged(node);
-
+    requestStrokeEnd();
     m_d->signalRouter->emitNodeChanged(node);
 }
 
@@ -523,6 +523,28 @@ void KisImage::scaleImage(const QSize &size, qreal xres, qreal yres, KisFilterSt
     applicator.end();
 }
 
+void KisImage::scaleNode(KisNodeSP node, qreal sx, qreal sy, KisFilterStrategy *filterStrategy)
+{
+    QString actionName(i18n("Scale Layer"));
+    KisImageSignalVector emitSignals;
+    emitSignals << ModifiedSignal;
+
+    KisProcessingApplicator applicator(this, node,
+                                       KisProcessingApplicator::RECURSIVE,
+                                       emitSignals, actionName);
+
+    KisProcessingVisitorSP visitor =
+        new KisTransformProcessingVisitor(sx, sy,
+                                          0, 0,
+                                          QPointF(),
+                                          0,
+                                          0, 0,
+                                          filterStrategy);
+
+    applicator.applyVisitor(visitor, KisStrokeJobData::CONCURRENT);
+    applicator.end();
+}
+
 void KisImage::rotateImpl(const QString &actionName,
                           KisNodeSP rootNode,
                           bool resizeImage,
@@ -696,20 +718,19 @@ void KisImage::convertImageColorSpace(const KoColorSpace *dstColorSpace,
     setModified();
 }
 
-void KisImage::assignImageProfile(const KoColorProfile *profile)
+bool KisImage::assignImageProfile(const KoColorProfile *profile)
 {
-    if (!profile) return;
+    if (!profile) return false;
 
     const KoColorSpace *dstCs = KoColorSpaceRegistry::instance()->colorSpace(colorSpace()->colorModelId().id(), colorSpace()->colorDepthId().id(), profile);
     const KoColorSpace *srcCs = colorSpace();
 
-    Q_ASSERT(dstCs);
-    Q_ASSERT(srcCs);
+    if (!dstCs) return false;
 
     m_d->colorSpace = dstCs;
 
     KisChangeProfileVisitor visitor(srcCs, dstCs);
-    m_d->rootLayer->accept(visitor);
+    return m_d->rootLayer->accept(visitor);
 
 }
 
@@ -1478,9 +1499,12 @@ void KisImage::notifyProjectionUpdated(const QRect &rc)
 
 void KisImage::notifySelectionChanged()
 {
-    if (!m_d->disableUIUpdateSignals) {
-        m_d->legacyUndoAdapter->emitSelectionChanged();
-    }
+    /**
+     * The selection is calculated asynchromously, so it is not
+     * handled by disableUIUpdates() and other special signals of
+     * KisImageSignalRouter
+     */
+    m_d->legacyUndoAdapter->emitSelectionChanged();
 }
 
 void KisImage::requestProjectionUpdateImpl(KisNode *node,

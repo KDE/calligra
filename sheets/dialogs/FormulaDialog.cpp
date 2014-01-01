@@ -521,6 +521,8 @@ QString FormulaDialog::createParameter(const QString& _text, int param)
         return _text;
     case KSpread_Int:
         return _text;
+    case KSpread_Date:
+        return _text;
     }
 
     // Never reached
@@ -539,6 +541,7 @@ static void showEntry(KLineEdit* edit, QLabel* label,
     case KSpread_String:
     case KSpread_Boolean:
     case KSpread_Any:
+    case KSpread_Date:
         edit->setValidator(0);
         break;
     case KSpread_Float:
@@ -552,6 +555,8 @@ static void showEntry(KLineEdit* edit, QLabel* label,
         edit->setText("0");
         break;
     }
+
+
 
 }
 

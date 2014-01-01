@@ -1,28 +1,25 @@
 /* This file is part of the KDE project
-   Copyright (C) 2011 Yue Liu <yue.liu@mail.com>
-
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-   Boston, MA 02110-1301, USA.
-*/
+ *
+ * Based on writerperfect code, major Contributor(s):
+ * Copyright (C) 2006 Ariya Hidayat (ariya@kde.org)
+ * Copyright (C) 2006-2007 Fridrich Strba (fridrich.strba@bluewin.ch)
+ *
+ * For minor contributions see the writerperfect git repository.
+ *
+ * The contents of this file may be used under the terms
+ * of the GNU Lesser General Public License Version 2.1 or later
+ * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
+ * applicable instead of those above.
+ *
+ * For further information visit http://libwpd.sourceforge.net
+ */
 
 #include "VSDXImport.h"
 
 #include <libvisio/libvisio.h>
+#include <libodfgen/OdgGenerator.hxx>
 
-#include <OutputFileHelper.hxx>
-#include <OdgGenerator.hxx>
+#include "OutputFileHelper.hxx"
 #include <KoFilterChain.h>
 #include <KoGlobal.h>
 #include <KoOdf.h>
@@ -76,8 +73,6 @@ KoFilter::ConversionStatus VSDXImport::convert(const QByteArray& from, const QBy
     if (from != "application/vnd.visio" || to != KoOdf::mimeType(KoOdf::Graphics))
         return KoFilter::NotImplemented;
 
-    const char mimetypeStr[] = "application/vnd.oasis.opendocument.graphics";
-
     const char manifestStr[] = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
             "<manifest:manifest xmlns:manifest=\"urn:oasis:names:tc:opendocument:xmlns:manifest:1.0\">"
             " <manifest:file-entry manifest:media-type=\"application/vnd.oasis.opendocument.graphics\" manifest:version=\"1.0\" manifest:full-path=\"/\"/>"
@@ -88,13 +83,13 @@ KoFilter::ConversionStatus VSDXImport::convert(const QByteArray& from, const QBy
 
 
     QByteArray input = m_chain->inputFile().toLocal8Bit();
-    m_inputFile = input.data();
     QByteArray output = m_chain->outputFile().toLocal8Bit();
-    m_outputFile = output.data();
+    const char *inputFile = input.data();
+    const char *outputFile = output.data();
 
-    OdgOutputFileHelper helper(m_outputFile, 0);
+    OdgOutputFileHelper helper(outputFile, 0);
 
-    if (!helper.writeChildFile("mimetype", mimetypeStr, (char)0)) {
+    if (!helper.writeChildFile("mimetype", KoOdf::mimeType(KoOdf::Graphics), (char)0)) {
         fprintf(stderr, "ERROR : Couldn't write mimetype\n");
         return KoFilter::ParsingError;
     }
@@ -104,19 +99,19 @@ KoFilter::ConversionStatus VSDXImport::convert(const QByteArray& from, const QBy
         return KoFilter::ParsingError;
     }
 
-    if (m_outputFile && !helper.writeConvertedContent("settings.xml", m_inputFile, ODF_SETTINGS_XML))
+    if (outputFile && !helper.writeConvertedContent("settings.xml", inputFile, ODF_SETTINGS_XML))
     {
         fprintf(stderr, "ERROR : Couldn't write document settings\n");
         return KoFilter::ParsingError;
     }
 
-    if (m_outputFile && !helper.writeConvertedContent("styles.xml", m_inputFile, ODF_STYLES_XML))
+    if (outputFile && !helper.writeConvertedContent("styles.xml", inputFile, ODF_STYLES_XML))
     {
         fprintf(stderr, "ERROR : Couldn't write document styles\n");
         return KoFilter::ParsingError;
     }
 
-    if (!helper.writeConvertedContent("content.xml", m_inputFile, m_outputFile ? ODF_CONTENT_XML : ODF_FLAT_XML))
+    if (!helper.writeConvertedContent("content.xml", inputFile, ODF_CONTENT_XML))
     {
             fprintf(stderr, "ERROR : Couldn't write document content\n");
             return KoFilter::ParsingError;

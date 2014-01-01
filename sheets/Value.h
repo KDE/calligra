@@ -307,6 +307,15 @@ public:
     QString asString() const;
 
     /**
+     * Returns the double quoted string value of this value.
+     *
+     * Same as \a asString but with double quotes around. This
+     * is needed for example in Conditions::saveOdfConditionValue
+     * to save Value strings with double quotes.
+     */
+    QString asStringWithDoubleQuotes() const;
+
+    /**
      * Returns the data as a QVariant
      */
     QVariant asVariant() const;

@@ -28,19 +28,19 @@
 #include <krita_export.h>
 #include <kis_types.h>
 
+
 #define PRESS_CONDITION(_event, _mode, _button, _modifier)              \
     (this->mode() == (_mode) && (_event)->button() == (_button) &&            \
-     (_event)->modifiers() == (_modifier) && !this->specialModifierActive())
+     (_event)->modifiers() == (_modifier))
 
 #define PRESS_CONDITION_WB(_event, _mode, _button, _modifier)            \
     (this->mode() == (_mode) && (_event)->button() & (_button) &&            \
-     (_event)->modifiers() == (_modifier) && !this->specialModifierActive())
+     (_event)->modifiers() == (_modifier))
 
 #define PRESS_CONDITION_OM(_event, _mode, _button, _modifier)           \
     (this->mode() == (_mode) && (_event)->button() == (_button) &&      \
      ((_event)->modifiers() & (_modifier) ||                            \
-      (_event)->modifiers() == Qt::NoModifier) &&                       \
-     !this->specialModifierActive())
+      (_event)->modifiers() == Qt::NoModifier))
 
 #define RELEASE_CONDITION(_event, _mode, _button)               \
     (this->mode() == (_mode) && (_event)->button() == (_button))
@@ -49,6 +49,14 @@
     (this->mode() == (_mode) && (_event)->button() & (_button))
 
 #define MOVE_CONDITION(_event, _mode) (this->mode() == (_mode))
+
+#ifdef __GNUC__
+#define WARN_WRONG_MODE(_mode) qWarning() << "Unexpected tool event has come to" << __func__ << "while being mode" << _mode << "!"
+#else
+#define WARN_WRONG_MODE(_mode) qWarning() << "Unexpected tool event has come while being mode" << _mode << "!"
+#endif
+
+#define CHECK_MODE_SANITY_OR_RETURN(_mode) if (mode() != _mode) { WARN_WRONG_MODE(mode()); return; }
 
 class KActionCollection;
 class KoCanvasBase;
@@ -93,22 +101,93 @@ public:
     void deleteSelection();
 // KoToolBase Implementation.
 
+public:
+
+    /**
+     * Called by KisToolProxy when a primary action for the tool is
+     * activated. The \p event stores the original event that
+     * activated the stroke. The \p event is _accepted_ by default. If
+     * the tool decides to ignore this particular action (e.g. when
+     * the node is not editable), it should call event->ignore(). Then
+     * no further continuePrimaryAction() or endPrimaryAction() will
+     * be called until the next user action.
+     */
+    virtual void beginPrimaryAction(KoPointerEvent *event);
+
+    /**
+     * Called by KisToolProxy when the primary action is in progress
+     * of pointer movement.  If the tool has ignored the event in
+     * beginPrimaryAction(), this method will not be called.
+     */
+    virtual void continuePrimaryAction(KoPointerEvent *event);
+
+    /**
+     * Called by KisToolProxy when the primary action is being
+     * finished, that is while mouseRelease or tabletRelease event.
+     * If the tool has ignored the event in beginPrimaryAction(), this
+     * method will not be called.
+     */
+    virtual void endPrimaryAction(KoPointerEvent *event);
+
+    /**
+     * The same as beginPrimaryAction(), but called when the stroke is
+     * started by a double-click
+     *
+     * \see beginPrimaryAction()
+     */
+    virtual void beginPrimaryDoubleClickAction(KoPointerEvent *event);
+
+    /**
+     * Returns true if the tool can handle (and wants to handle) a
+     * very tight flow of input events from the tablet
+     */
+    virtual bool primaryActionSupportsHiResEvents() const;
+
+    enum ToolAction {
+        Primary,
+        AlternateChangeSize,
+        AlternatePickFgNode,
+        AlternatePickBgNode,
+        AlternatePickFgImage,
+        AlternatePickBgImage,
+        AlternateSecondary,
+        AlternateThird,
+        AlternateFourth,
+        AlternateFifth
+    };
+
+    enum AlternateAction {
+        ChangeSize = AlternateChangeSize,
+        PickFgNode = AlternatePickFgNode,
+        PickBgNode = AlternatePickBgNode,
+        PickFgImage = AlternatePickFgImage,
+        PickBgImage = AlternatePickBgImage,
+        Secondary = AlternateSecondary,
+        Third = AlternateThird,
+        Fourth = AlternateFourth,
+        Fifth = AlternateFifth
+    };
+
+    static AlternateAction actionToAlternateAction(ToolAction action);
+
+    virtual void beginAlternateAction(KoPointerEvent *event, AlternateAction action);
+    virtual void continueAlternateAction(KoPointerEvent *event, AlternateAction action);
+    virtual void endAlternateAction(KoPointerEvent *event, AlternateAction action);
+    virtual void beginAlternateDoubleClickAction(KoPointerEvent *event, AlternateAction action);
+
+
+    void mousePressEvent(KoPointerEvent *event);
+    void mouseDoubleClickEvent(KoPointerEvent *event);
+    void mouseTripleClickEvent(KoPointerEvent *event);
+    void mouseReleaseEvent(KoPointerEvent *event);
+    void mouseMoveEvent(KoPointerEvent *event);
+
 public slots:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     virtual void deactivate();
     virtual void canvasResourceChanged(int key, const QVariant & res);
 
 protected:
-    virtual void mousePressEvent(KoPointerEvent *event);
-    virtual void mouseMoveEvent(KoPointerEvent *event);
-    virtual void mouseReleaseEvent(KoPointerEvent *event);
-
-    virtual void keyPressEvent(QKeyEvent *event);
-    virtual void keyReleaseEvent(QKeyEvent* event);
-
-    /// reimplemented from superclass
-    virtual void mouseDoubleClickEvent(KoPointerEvent *) {}  // when a krita tool is enabled, don't push double click on
-
     QPointF widgetCenterInWidgetPixels();
     QPointF convertDocumentToWidget(const QPointF& pt);
 
@@ -155,11 +234,6 @@ protected:
     }
 
 protected:
-    bool specialModifierActive();
-    virtual bool isGestureSupported() const;
-    virtual void gesture(const QPointF &offsetInDocPixels,
-                         const QPointF &initialDocPoint);
-
     KisImageWSP image() const;
     QCursor cursor() const;
 
@@ -242,21 +316,10 @@ protected slots:
 private slots:
     void slotToggleFgBg();
     void slotResetFgBg();
-    void slotDelayedGesture();
-
-private:
-    void initPan(const QPointF &docPoint);
-    void pan(const QPointF &docPoint);
-    void endPan();
-
-    void initGesture(const QPointF &docPoint);
-    void processGesture(const QPointF &docPoint);
-    void endGesture();
 
 private:
     PaintMode m_outlinePaintMode;
     ToolMode m_mode;
-    QPointF m_lastPosition;
 
     struct Private;
     Private* const d;

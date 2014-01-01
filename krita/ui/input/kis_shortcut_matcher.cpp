@@ -49,7 +49,6 @@ public:
     QList<KisSingleActionShortcut*> singleActionShortcuts;
     QList<KisStrokeShortcut*> strokeShortcuts;
     QList<KisTouchShortcut*> touchShortcuts;
-    QList<KisAbstractInputAction*> actions;
 
     QList<Qt::Key> keys;
     QList<Qt::MouseButton> buttons;
@@ -75,7 +74,6 @@ KisShortcutMatcher::~KisShortcutMatcher()
 {
     qDeleteAll(m_d->singleActionShortcuts);
     qDeleteAll(m_d->strokeShortcuts);
-    qDeleteAll(m_d->actions);
     delete m_d;
 }
 
@@ -94,9 +92,12 @@ void KisShortcutMatcher::addShortcut( KisTouchShortcut* shortcut )
     m_d->touchShortcuts.append(shortcut);
 }
 
-void KisShortcutMatcher::addAction(KisAbstractInputAction *action)
+bool KisShortcutMatcher::supportsHiResInputEvents()
 {
-    m_d->actions.append(action);
+    return
+        m_d->runningShortcut &&
+        m_d->runningShortcut->action() &&
+        m_d->runningShortcut->action()->supportsHiResInputEvents();
 }
 
 bool KisShortcutMatcher::keyPressed(Qt::Key key)
@@ -257,25 +258,6 @@ Qt::MouseButtons listToFlags(const QList<Qt::MouseButton> &list) {
         flags |= b;
     }
     return flags;
-}
-
-bool KisShortcutMatcher::tabletMoved(QTabletEvent *event)
-{
-    if (!m_d->runningShortcut) return false;
-    bool retval = false;
-
-    KisAbstractInputAction *action = m_d->runningShortcut->action();
-    if (action->supportsHiResInputEvents()) {
-        QMouseEvent mouseEvent(QEvent::MouseMove,
-                               event->pos(),
-                               Qt::NoButton,
-                               listToFlags(m_d->buttons),
-                               event->modifiers());
-        action->inputEvent(&mouseEvent);
-        retval = true;
-    }
-
-    return retval;
 }
 
 void KisShortcutMatcher::reset()

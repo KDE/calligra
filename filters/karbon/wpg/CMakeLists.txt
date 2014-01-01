@@ -1,11 +1,11 @@
 
-include_directories(${CMAKE_BINARY_DIR}/filters/ ${WPD_INCLUDE_DIR} ${LIBWPG_INCLUDE_DIR}/)
+include_directories(${CMAKE_BINARY_DIR}/filters/ ${LIBWPD_INCLUDE_DIRS} ${LIBWPG_INCLUDE_DIR}/)
 
 set(wpg2svg_PART_SRCS WPGImport.cpp)
 
 kde4_add_plugin(calligra_filter_wpg2svg ${wpg2svg_PART_SRCS})
 
-target_link_libraries(calligra_filter_wpg2svg komain ${LIBWPG_LIBRARIES} ${LIBWPG_STREAM_LIBRARIES} ${WPD_LIBRARIES})
+target_link_libraries(calligra_filter_wpg2svg komain ${LIBWPG_LIBRARIES} ${LIBWPG_STREAM_LIBRARIES} ${LIBWPD_LIBRARIES})
 
 install(TARGETS calligra_filter_wpg2svg DESTINATION ${PLUGIN_INSTALL_DIR})
 install(FILES calligra_filter_wpg2svg.desktop DESTINATION ${SERVICES_INSTALL_DIR})

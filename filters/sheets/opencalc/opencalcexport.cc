@@ -41,6 +41,11 @@
 #include <KoFilterChain.h>
 #include <KoGlobal.h>
 
+// Don't show this warning: it occurs because gcc gets confused, but
+// it _is_ used.
+#ifdef __GNUC__
+#pragma GCC diagnostic ignored "-Wunused-function"
+#endif
 #include <sheets/part/AboutData.h> // for version
 #include <sheets/part/Canvas.h>
 #include <sheets/CalculationSettings.h>

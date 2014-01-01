@@ -106,6 +106,9 @@ private slots:
     void testSUBTOTAL();
     void testSUMA();
     void testSUMIF();
+    void testSUMIF_STRING();
+    void testSUMIF_WILDCARDS();
+    void testSUMIF_REGULAREXPRESSIONS();
     void testSUMSQ();
     void testTRUNC();
 

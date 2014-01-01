@@ -550,6 +550,12 @@ void ExcelImport::Private::processWorkbookForBody(Workbook* workbook, KoXmlWrite
 
     office_spreadsheet spreadsheet(body.add_office_spreadsheet());
 
+    table_calculation_settings calcsettings = spreadsheet.add_table_calculation_settings();
+    calcsettings.set_table_case_sensitive(false);
+    calcsettings.set_table_automatic_find_labels(false);
+    calcsettings.set_table_use_regular_expressions(false);
+    calcsettings.set_table_use_wildcards(true);
+
     // count the number of rows in total to provide a good progress value
     rowsCountTotal = rowsCountDone = 0;
     for (unsigned i = 0; i < workbook->sheetCount(); i++) {

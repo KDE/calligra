@@ -216,6 +216,7 @@ private slots:
     void showStatusBar(bool toggled);
     void showJustTheCanvas(bool toggled);
     void toggleTabletLogger();
+    void openResourcesDirectory();
 
 private:
     void createActions();

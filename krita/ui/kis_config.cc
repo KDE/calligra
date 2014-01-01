@@ -403,7 +403,7 @@ int KisConfig::numMipmapLevels() const
 
 int KisConfig::textureOverlapBorder() const
 {
-    return 1 << qMax(0, numMipmapLevels() - 1);
+    return 1 << qMax(0, numMipmapLevels());
 }
 
 qint32 KisConfig::maxNumberOfThreads()
@@ -631,6 +631,16 @@ bool KisConfig::showOutlineWhilePainting() const
 void KisConfig::setShowOutlineWhilePainting(bool showOutlineWhilePainting) const
 {
     m_cfg.writeEntry("ShowOutlineWhilePainting", showOutlineWhilePainting);
+}
+
+qreal KisConfig::outlineSizeMinimum() const
+{
+    return m_cfg.readEntry("OutlineSizeMinimum", 1.0);
+}
+
+void KisConfig::setOutlineSizeMinimum(qreal outlineSizeMinimum) const
+{
+    m_cfg.writeEntry("OutlineSizeMinimum", outlineSizeMinimum);
 }
 
 int KisConfig::autoSaveInterval()  const

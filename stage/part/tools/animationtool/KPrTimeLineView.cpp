@@ -148,7 +148,7 @@ void KPrTimeLineView::mousePressEvent(QMouseEvent *event)
             QRectF endLineRect = QRectF(lineRect.right() - RESIZE_RADIUS, lineRect.top(),
                                         RESIZE_RADIUS * 2, lineRect.height());
 
-            // If user click near the end of the line he could resize otherwise he move the bar
+            // If the user clicks near the end of the line they could resize otherwise they move the bar.
             if (endLineRect.contains(event->x(), event->y())) {
                 m_resize = true;
                 m_resizedRow = row;
@@ -255,7 +255,7 @@ void KPrTimeLineView::mouseMoveEvent(QMouseEvent *event)
         QRectF endLineRect = QRectF(lineRect.right() - RESIZE_RADIUS, lineRect.top() + BAR_MARGIN,
                                     RESIZE_RADIUS * 2,  lineRect.height() - 2 * BAR_MARGIN);
 
-        // If user is near the end of the line he could resize
+        // If the user is near the end of the line they could resize
         if (endLineRect.contains(event->x(), event->y())) {
             setCursor(Qt::SizeHorCursor);
         }

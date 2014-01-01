@@ -54,10 +54,12 @@
 typedef UINT (API *PtrWTInfo)(UINT, UINT, LPVOID);
 typedef int  (API *PtrWTPacketsGet)(HCTX, int, LPVOID);
 typedef BOOL (API *PtrWTGet)(HCTX, LPLOGCONTEXT);
+typedef BOOL (API *PtrWTOverlap)(HCTX, BOOL);
 
 static PtrWTInfo ptrWTInfo = 0;
 static PtrWTPacketsGet ptrWTPacketsGet = 0;
 static PtrWTGet ptrWTGet = 0;
+static PtrWTOverlap ptrWTOverlap = 0;
 
 /**
  * A cached array for fetching packets from the WinTab queue
@@ -143,6 +145,7 @@ static void initWinTabFunctions()
     ptrWTInfo = (PtrWTInfo)library.resolve("WTInfoW");
     ptrWTGet = (PtrWTGet)library.resolve("WTGetW");
     ptrWTPacketsGet = (PtrWTPacketsGet)library.resolve("WTPacketsGet");
+    ptrWTOverlap = (PtrWTOverlap)library.resolve("WTOverlap");
 }
 
 #ifdef DEBUG_WINTAB_TABLET
@@ -346,19 +349,27 @@ bool translateTabletEvent(const MSG &msg, PACKET *localPacketBuf,
         QPoint globalPos(qRound(hiResGlobal.x()), qRound(hiResGlobal.y()));
 
         // make sure the tablet event get's sent to the proper widget...
-        QWidget *w = QApplication::activePopupWidget();
+        QWidget *w = 0;
 
         /**
          * Find the appropriate window in an order of preference
          */
 
+        if (!w) w = qApp->widgetAt(globalPos);
+        if (!w) w = QWidget::find(msg.hwnd);
+
+        QWidget *parentOverride = 0;
+
+        if (!parentOverride) parentOverride = qApp->activePopupWidget();
+        if (!parentOverride) parentOverride = qApp->activeModalWidget();
+
+        if (!w || (parentOverride && !parentOverride->isAncestorOf(w))) {
+            w = parentOverride;
+        }
+
         if (kis_tablet_pressed) {
             w = kis_tablet_pressed;
         }
-
-        if (!w) w = qApp->activeModalWidget();
-        if (!w) w = qApp->widgetAt(globalPos);
-        if (!w) w = QWidget::find(msg.hwnd);
 
         if (t == KisTabletEvent::TabletPressEx && !kis_tablet_pressed) {
             kis_tablet_pressed = w;
@@ -437,12 +448,41 @@ bool KisTabletSupportWin::eventFilter(void *message, long *result)
     MSG *msg = static_cast<MSG*>(message);
     Q_UNUSED(result);
 
+    static bool mouseEnteredFlag = false;
+
     switch(msg->message){
     case WT_CTXOPEN:
         qt_tablet_context = reinterpret_cast<HCTX>(msg->wParam);
         break;
     case WT_CTXCLOSE:
         qt_tablet_context = 0;
+        break;
+    case WM_ACTIVATE: {
+        /**
+         * Workaround for a focus bug by Qt
+         *
+         * Looks like modal windows do not grab focus on Windows. The
+         * parent widget will still be regarded as a focusWidget()
+         * although it gets no events. So notify the pure parent that
+         * he is not in focus anymore.
+         */
+        QWidget *modalWidget = QApplication::activeModalWidget();
+        if (modalWidget) {
+            QWidget *w = QApplication::focusWidget();
+            bool active = msg->wParam == WA_ACTIVE || msg->wParam == WA_CLICKACTIVE;
+            QFocusEvent fevent(active ? QEvent::FocusIn : QEvent::FocusOut);
+            QApplication::sendEvent(w, &fevent);
+        }
+        break;
+    }
+    case WM_MOUSELEAVE:
+        mouseEnteredFlag = false;
+        break;
+    case WM_MOUSEMOVE:
+        if (qt_tablet_context && !mouseEnteredFlag) {
+            ptrWTOverlap(qt_tablet_context, true);
+            mouseEnteredFlag = true;
+        }
         break;
     case WT_PROXIMITY:
             if (ptrWTPacketsGet && ptrWTInfo) {

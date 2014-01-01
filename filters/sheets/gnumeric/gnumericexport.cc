@@ -253,6 +253,7 @@ QDomElement GNUMERICExport::GetValidity(QDomDocument gnumeric_doc, const Cell& c
 
     switch (kspread_validity.condition()) {
     case Conditional::None:
+    case Conditional::IsTrueFormula: // FIXME: handle isTrueFormula
         //Nothing
         break;
     case Conditional::Equal:
@@ -288,6 +289,7 @@ QDomElement GNUMERICExport::GetValidity(QDomDocument gnumeric_doc, const Cell& c
         val.setAttribute("Type", "2");
         switch (kspread_validity.condition()) {
         case Conditional::None:
+        case Conditional::IsTrueFormula: // FIXME: handle isTrueFormula
             //Nothing
             break;
         case Conditional::Equal:
@@ -323,6 +325,7 @@ QDomElement GNUMERICExport::GetValidity(QDomDocument gnumeric_doc, const Cell& c
         val.setAttribute("Type", "5");
         switch (kspread_validity.condition()) {
         case Conditional::None:
+        case Conditional::IsTrueFormula: // FIXME: handle isTrueFormula
             //Nothing
             break;
         case Conditional::Equal:
@@ -353,6 +356,7 @@ QDomElement GNUMERICExport::GetValidity(QDomDocument gnumeric_doc, const Cell& c
         val.setAttribute("Type", "4");
         switch (kspread_validity.condition()) {
         case Conditional::None:
+        case Conditional::IsTrueFormula: // FIXME: handle isTrueFormula
             //Nothing
             break;
         case Conditional::Equal:
@@ -383,6 +387,7 @@ QDomElement GNUMERICExport::GetValidity(QDomDocument gnumeric_doc, const Cell& c
         val.setAttribute("Type", "1");
         switch (kspread_validity.condition()) {
         case Conditional::None:
+        case Conditional::IsTrueFormula: // FIXME: handle isTrueFormula
             //Nothing
             break;
         case Conditional::Equal:
@@ -412,6 +417,7 @@ QDomElement GNUMERICExport::GetValidity(QDomDocument gnumeric_doc, const Cell& c
         val.setAttribute("Type", "6");
         switch (kspread_validity.condition()) {
         case Conditional::None:
+        case Conditional::IsTrueFormula: // FIXME: handle isTrueFormula
             //Nothing
             break;
         case Conditional::Equal:
@@ -441,6 +447,7 @@ QDomElement GNUMERICExport::GetValidity(QDomDocument gnumeric_doc, const Cell& c
         val.setAttribute("Type", "3");
         switch (kspread_validity.condition()) {
         case Conditional::None:
+        case Conditional::IsTrueFormula: // FIXME: handle isTrueFormula
             //Nothing
             break;
         case Conditional::Equal:
