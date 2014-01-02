@@ -236,7 +236,7 @@ KoFilter::ConversionStatus KoFilterManager::exportDocument(const QString& url, Q
 
     if (!chain) {
         kError(30500) << "Couldn't create a valid filter chain to " << mimeType << " !" << endl;
-        if (!d->batch) KMessageBox::error(0, i18n("Could not export file."), i18n("Missing Export Filter"));
+        if (!d->batch) KMessageBox::error(0, i18n("Could not export file. Did you specify the correct file format?"), i18n("Missing Export Filter"));
         return KoFilter::BadConversionGraph;
     }
 
