@@ -1,5 +1,7 @@
 [Desktop Entry]
 Name=RDF Location Plugin
+Name[ca]=Connector d'ubicació RDF
+Name[da]=Pluigin til RDF-lokation
 Name[de]=RDF-Ortsmodul
 Name[es]=Complemento de ubicación RDF
 Name[it]=Estensione RDF di posizione
@@ -12,6 +14,8 @@ Name[sv]=Insticksprogram för RDF-plats
 Name[uk]=Додаток місць RDF
 Name[x-test]=xxRDF Location Pluginxx
 Comment=A plugin to map location items between document and RDF database
+Comment[ca]=Un connector per relacionar elements d'ubicació entre documents i una base de dades RDF
+Comment[da]=Et plugin til at koble lokationselementer mellem dokument og RDF-database
 Comment[de]=Ein Modul, um Ortseinträge zwischen Dokument und RDF-Datenbank zuzuordnen
 Comment[es]=Un complemento para asignar elementos de ubicación entre un documento y una base de datos RDF
 Comment[it]=Una estensione per associare le posizioni tra documento e database RDF
