@@ -1,0 +1,18 @@
+[Desktop Entry]
+Type=Service
+ServiceTypes=Kexi/Handler
+GenericName=QuickForm
+GenericName[x-test]=xxQuickFormxx
+Name=QuickForm
+Name[x-test]=xxQuickFormxx
+X-KDE-Library=kexihandler_quickform
+X-KDE-ParentApp=kexi
+X-Kexi-PartVersion=2
+X-Kexi-TypeName=quickform
+X-Kexi-Class=org.kexi-project.quickform
+X-Kexi-ItemIcon=quickform
+X-Kexi-SupportsDataView=true
+X-Kexi-SupportsDesignView=true
+X-Kexi-SupportsDataViewInUserMode=true
+X-Kexi-SupportsDataExport=false
+X-Kexi-SupportsPrinting=false
