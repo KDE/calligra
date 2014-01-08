@@ -25,12 +25,27 @@
 
 #include <QGraphicsView>
 
+class QDeclarativeComponent; 
+class QDeclarativeItem;
+class QDeclarativeEngine;
+
 class QuickFormView : public QGraphicsView
 {
 public:
     QuickFormView(QWidget* parent);
+    
+    void setDeclarativeComponent(const QByteArray& def);
+    void addContextProperty(const QString &n, QObject* obj);
+    
 protected:
     virtual void resizeEvent(QResizeEvent* event);
+    
+private:
+    QGraphicsScene *m_scene;
+    QDeclarativeItem *m_object;
+    QDeclarativeComponent *m_component;
+    QDeclarativeEngine *m_engine;
+    
 };
 
 #endif // QUICKFORMVIEW_H

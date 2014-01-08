@@ -22,35 +22,25 @@
 
 #include "quickformdataview.h"
 #include "quickformview.h"
+#include "kexiscriptadapterq.h"
 
-#include <QDeclarativeEngine>
-#include <QDeclarativeComponent>
-#include <QGraphicsScene>
-#include <QGraphicsView>
 #include <KDebug>
 #include <QDomElement>
-#include <qgraphicsitem.h>
 
 QuickFormDataView::QuickFormDataView(QWidget* parent): KexiView(parent)
 {
-    //m_view = new QDeclarativeView(this);
     m_view = new QuickFormView(this);
-    m_scene = new QGraphicsScene(this);
-    m_scene->setSceneRect(5,5,100,100);
-    m_view->setScene(m_scene);
-    
-    m_scene->setBackgroundBrush(palette().brush(QPalette::Dark));
-    m_scene->setItemIndexMethod(QGraphicsScene::NoIndex);
-    
     m_view->setBackgroundBrush(palette().brush(QPalette::Light));
-    setViewWidget(m_view);
+    setViewWidget(m_view);  
     
-    m_engine = new QDeclarativeEngine;    
+    m_kexi = new KexiScriptAdaptorQ();
+    
+    m_view->addContextProperty("Kexi", m_kexi);
 }
 
 QuickFormDataView::~QuickFormDataView()
 {
-
+    delete m_kexi;
 }
 
 void QuickFormDataView::setDefinition(const QString& def)
@@ -64,16 +54,6 @@ void QuickFormDataView::setDefinition(const QString& def)
     QDomElement qf = root.firstChildElement("quickform");
     kDebug() << root.text();
 
-    QDeclarativeComponent *c = new QDeclarativeComponent(m_engine);
-    kDebug() << "Setting definition";
-    c->setData(root.text().toLocal8Bit(), QUrl());
+    m_view->setDeclarativeComponent(root.text().toLocal8Bit());
     
-    kDebug() << "Creating object";
-
-    m_object = qobject_cast<QGraphicsObject*>(c->create());
-    
-    kDebug() << "Adding object to scene";
-    if (m_object) {
-        m_scene->addItem(m_object);
-    }
 }

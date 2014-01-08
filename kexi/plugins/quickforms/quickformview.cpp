@@ -25,9 +25,23 @@
 #include <qgraphicsitem.h>
 #include <QDeclarativeItem>
 #include <kdebug.h>
+#include <QDeclarativeEngine>
+#include <QDeclarativeComponent>
+#include <QGraphicsScene>
+#include <QGraphicsView>
+#include <QDeclarativeContext>
 
-QuickFormView::QuickFormView(QWidget* parent) : QGraphicsView(parent)
+QuickFormView::QuickFormView(QWidget* parent) : m_object(0), m_component(0), QGraphicsView(parent)
 {
+    m_scene = new QGraphicsScene(this);
+    m_scene->setSceneRect(0,0,100,100);
+    setScene(m_scene);
+    
+    m_scene->setBackgroundBrush(palette().brush(QPalette::Dark));
+    m_scene->setItemIndexMethod(QGraphicsScene::NoIndex);
+    
+    m_engine = new QDeclarativeEngine; 
+    
     setOptimizationFlags(QGraphicsView::DontSavePainterState);
     setViewportUpdateMode(QGraphicsView::BoundingRectViewportUpdate);
 }
@@ -40,9 +54,33 @@ void QuickFormView::resizeEvent(QResizeEvent* event)
         
         kDebug() << scene()->items().count();
         
-        QDeclarativeItem *rootItem = qobject_cast< QDeclarativeItem* >(items().at(0));
-        rootItem->setWidth(event->size().width());
-        rootItem->setHeight(event->size().height());
+        if (m_object) {
+            m_object->setWidth(event->size().width());
+            m_object->setHeight(event->size().height());
+        }
     }
+}
 
+void QuickFormView::setDeclarativeComponent(const QByteArray& def)
+{
+    m_component = new QDeclarativeComponent(m_engine);
+    kDebug() << "Setting definition";
+    m_component->setData(def, QUrl());
+    
+    kDebug() << "Creating object";
+    
+    m_object = qobject_cast<QDeclarativeItem*>(m_component->create());
+    
+    kDebug() << "Adding object to scene";
+    if (m_object) {
+        m_scene->addItem(m_object);
+    }
+}
+
+void QuickFormView::addContextProperty(const QString &n, QObject* obj)
+{
+    kDebug() << n << obj;
+    if (obj) {
+        m_engine->rootContext()->setContextProperty(n, obj);
+    }
 }

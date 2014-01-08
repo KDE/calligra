@@ -9,11 +9,15 @@ include_directories(
 )
 
 #build a shared library
-set(kexihandler_quickform_SRCS quickformview.cpp quickformdataview.cpp quickformdesignview.cpp 
+set(kexihandler_quickform_SRCS 
+    quickformview.cpp 
+    quickformdataview.cpp 
+    quickformdesignview.cpp 
     kexiquickform.cpp
     quickformpart.cpp
+    kexiscriptadapterq.cpp
     )
-    
+
 kde4_add_plugin(kexihandler_quickform ${kexihandler_quickform_SRCS})
 
 target_link_libraries(kexihandler_quickform
