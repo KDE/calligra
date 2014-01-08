@@ -200,6 +200,7 @@ QRect KexiDBComboBox::editorGeometry() const
                 style()->subControlRect(QStyle::CC_ComboBox, 0, QStyle::SC_ComboBoxEditField, d->paintedCombo)));
 #else
     QRect r = d->paintedCombo->geometry();
+    r.setSize(size());
 #endif
 
     //if ((height()-r.bottom())<6)
