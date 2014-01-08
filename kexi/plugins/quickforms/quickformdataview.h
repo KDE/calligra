@@ -25,11 +25,13 @@
 
 #include <KexiView.h>
 
+class QuickFormView;
 class QGraphicsObject;
 class QDeclarativeEngine;
 class QDeclarativeEngine;
 class QGraphicsView;
 class QGraphicsScene;
+class KexiScriptAdaptorQ;
 
 class QuickFormDataView : public KexiView
 {
@@ -41,11 +43,10 @@ public:
     void setDefinition(const QString &def);
 
 private:
-    //QDeclarativeView *m_view;
-    QGraphicsView *m_view;
-    QGraphicsScene *m_scene;
-    QDeclarativeEngine *m_engine;
-    QGraphicsObject *m_object;
+    QuickFormView *m_view;
+    KexiScriptAdaptorQ *m_kexi;
+
+    
 };
 
 #endif // QUICKFORMDATAVIEW_H
