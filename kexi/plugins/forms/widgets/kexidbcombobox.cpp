@@ -407,7 +407,7 @@ bool KexiDBComboBox::eventFilter(QObject *o, QEvent *e)
             }
         }
     } else if (!d->isEditable && d->subWidgetsWithDisabledEvents.contains(dynamic_cast<QWidget*>(o))) {
-        kDebug() << "**********************####" << e->type() << o;
+        //kDebug() << "**********************####" << e->type() << o;
         if (e->type() == QEvent::MouseButtonPress) {
             // clicking the subwidget should mean the same as clicking the combo box (i.e. show the popup)
             if (handleMousePressEvent(static_cast<QMouseEvent*>(e)))
