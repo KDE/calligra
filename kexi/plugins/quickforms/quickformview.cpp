@@ -84,3 +84,4 @@ void QuickFormView::addContextProperty(const QString &n, QObject* obj)
         m_engine->rootContext()->setContextProperty(n, obj);
     }
 }
+

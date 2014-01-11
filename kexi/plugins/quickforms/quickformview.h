@@ -1,6 +1,6 @@
 /*
- * <one line to give the library's name and an idea of what it does.>
- * Copyright 2014  Adam Pigg <email>
+ * Kexi QuickForm plugin
+ * Copyright 2014  Adam Pigg <adam@piggz.co.uk>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -44,8 +44,7 @@ private:
     QGraphicsScene *m_scene;
     QDeclarativeItem *m_object;
     QDeclarativeComponent *m_component;
-    QDeclarativeEngine *m_engine;
-    
+    QDeclarativeEngine *m_engine;    
 };
 
 #endif // QUICKFORMVIEW_H
