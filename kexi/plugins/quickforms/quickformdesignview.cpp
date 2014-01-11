@@ -22,7 +22,7 @@
 
 #include "quickformdesignview.h"
 
-#include <QPlainTextEdit>
+
 #include <QBoxLayout>
 #include <QDomDocument>
 #include <QDomElement>
@@ -31,15 +31,29 @@
 #include <kdebug.h>
 #include <KexiMainWindowIface.h>
 #include <db/connection.h>
-
+#include <core/kexiproject.h>
+#include <widget/kexieditor.h>
 
 QuickFormDesignView::QuickFormDesignView(QWidget* parent) : KexiView(parent)
 {
-    m_editor = new QPlainTextEdit("Some text", this);
-    m_editor->setTabStopWidth(20);
+    m_editor = new KexiEditor(this);
+    //m_editor->setTabStopWidth(20);
+    m_editor->setHighlightMode("qml");
     setViewWidget(m_editor);
     connect(m_editor, SIGNAL(textChanged()), this, SLOT(setDirty()));
-
+    
+    //Properties
+    QStringList keys, strings;
+    keys = strings = queryList();
+    
+    m_propertySet = new KoProperty::Set(0, "QuickForm");
+    m_recordSource = new KoProperty::Property("record-source", keys, strings, "", i18n("Record Source"));
+    
+    m_propertySet->addProperty(m_recordSource);
+    
+    connect(m_propertySet, SIGNAL(propertyChanged(KoProperty::Set&, KoProperty::Property&)),
+            this, SLOT(slotPropertyChanged(KoProperty::Set&, KoProperty::Property&)));
+    
     loadData();
 }
 
@@ -75,12 +89,21 @@ tristate QuickFormDesignView::storeData(bool dontAsk)
     kDebug(); //<< window()->partItem()->name() << " [" << window()->id() << "]";
 
     QDomDocument domdoc("quickform");
-    QDomElement scriptelem = domdoc.createElement("quickform");
-    domdoc.appendChild(scriptelem);
+    QDomElement rootelem = domdoc.createElement("quickform");
+    domdoc.appendChild(rootelem);
 
-    QDomText scriptcode = domdoc.createTextNode(m_editor->toPlainText());
-    scriptelem.appendChild(scriptcode);
-
+    QDomElement formelem = domdoc.createElement("quickform:definition");
+    
+    QDomText scriptcode = domdoc.createTextNode(m_editor->text());
+    formelem.appendChild(scriptcode);
+    rootelem.appendChild(formelem);
+    
+    QDomElement connection = domdoc.createElement("quickform:connection");
+    connection.setAttribute("record-source", m_recordSource->value().toString());
+    rootelem.appendChild(connection);
+    
+    kDebug() << "Saving form" << domdoc.toString();
+    
     return storeDataBlock(domdoc.toString());
 }
 
@@ -104,13 +127,62 @@ bool QuickFormDesignView::loadData()
         return false;
     }
 
-    QDomElement scriptelem = domdoc.namedItem("quickform").toElement();
-    if (scriptelem.isNull()) {
-        kDebug() << "quickform domelement is null";
+    QDomElement rootelem = domdoc.namedItem("quickform").toElement();
+    if (rootelem.isNull()) {
+        kDebug() << "quickform root is null";
+        return false;
+    }
+    
+    QDomElement formelem = rootelem.namedItem("quickform:definition").toElement();
+    if (rootelem.isNull()) {
+        kDebug() << "quickform root is null";
         return false;
     }
 
-    m_editor->setPlainText(scriptelem.text().toUtf8());
+    m_editor->setText(formelem.text());
 
+    QDomElement cnxn = rootelem.namedItem("quickform:connection").toElement();
+    if (cnxn.isNull()) {
+        kDebug() << "quickform connection is null";
+        return false;
+    }
+    
+    m_recordSource->setValue(cnxn.attribute("record-source"));
+    
     return true;
+}
+
+KoProperty::Set* QuickFormDesignView::propertySet()
+{
+    return m_propertySet;
+}
+
+QStringList QuickFormDesignView::queryList(){
+    //Get the list of queries in the database
+    QStringList qs;
+    KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
+    
+    if (conn && conn->isConnected()) {
+        QList<int> tids = conn->tableIds();
+        qs << "";
+        for (int i = 0; i < tids.size(); ++i) {
+            KexiDB::TableSchema* tsc = conn->tableSchema(tids[i]);
+            if (tsc)
+                qs << tsc->name();
+        }
+        
+        QList<int> qids = conn->queryIds();
+        qs << "";
+        for (int i = 0; i < qids.size(); ++i) {
+            KexiDB::QuerySchema* qsc = conn->querySchema(qids[i]);
+            if (qsc)
+                qs << qsc->name();
+        }
+    }
+    
+    return qs;
+}
+
+void QuickFormDesignView::slotPropertyChanged(KoProperty::Set&, KoProperty::Property&){
+        setDirty();
 }

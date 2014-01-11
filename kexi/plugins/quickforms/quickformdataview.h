@@ -45,8 +45,6 @@ public:
 private:
     QuickFormView *m_view;
     KexiScriptAdaptorQ *m_kexi;
-
-    
 };
 
 #endif // QUICKFORMDATAVIEW_H

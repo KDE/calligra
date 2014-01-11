@@ -30,6 +30,7 @@ target_link_libraries(kexihandler_quickform
     kexicore
     ${KOPROPERTY_LIBS}
     kexiguiutils
+    kexiextendedwidgets
 )
 
 install(TARGETS kexihandler_quickform DESTINATION ${PLUGIN_INSTALL_DIR})

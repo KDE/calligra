@@ -28,7 +28,8 @@
 #include <koproperty/Set.h>
 #include <koproperty/Property.h>
 
-class QPlainTextEdit;
+class KexiEditor;
+
 class QuickFormDesignView : public KexiView
 {
 
@@ -58,10 +59,21 @@ public:
      */
     virtual tristate storeData(bool dontAsk = false);
 
+protected:
+    virtual KoProperty::Set *propertySet();
+    
+private slots:
+    void slotPropertyChanged(KoProperty::Set&, KoProperty::Property&);
+    
 private:
-    QPlainTextEdit* m_editor;
+    KexiEditor* m_editor;
+    KoProperty::Set *m_propertySet;
+    KoProperty::Property* m_recordSource;
+    
     bool loadData();
-
+    QStringList queryList();
+    
+    
 };
 
 #endif // QUICKFORMDESIGNVIEW_H
