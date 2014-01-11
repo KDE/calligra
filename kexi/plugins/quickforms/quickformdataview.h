@@ -24,6 +24,7 @@
 #define QUICKFORMDATAVIEW_H
 
 #include <KexiView.h>
+#include <core/KexiRecordNavigatorHandler.h>
 
 class QuickFormView;
 class QGraphicsObject;
@@ -32,8 +33,9 @@ class QDeclarativeEngine;
 class QGraphicsView;
 class QGraphicsScene;
 class KexiScriptAdaptorQ;
+class KexiRecordNavigator;
 
-class QuickFormDataView : public KexiView
+class QuickFormDataView : public KexiView, public KexiRecordNavigatorHandler
 {
     Q_OBJECT
 public:
@@ -41,10 +43,22 @@ public:
     virtual ~QuickFormDataView();
     
     void setDefinition(const QString &def);
+    
+    virtual void addNewRecordRequested();
+    virtual void moveToFirstRecordRequested();
+    virtual void moveToLastRecordRequested();
+    virtual void moveToNextRecordRequested();
+    virtual void moveToPreviousRecordRequested();
+    virtual void moveToRecordRequested(uint r);
+    virtual int currentRecord() const;
+    virtual int recordCount() const;
 
 private:
     QuickFormView *m_view;
     KexiScriptAdaptorQ *m_kexi;
+    KexiRecordNavigator *m_recordSelector;
 };
 
 #endif // QUICKFORMDATAVIEW_H
+
+class KexiRecordNavigator;

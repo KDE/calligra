@@ -26,15 +26,33 @@
 
 #include <KDebug>
 #include <QDomElement>
+#include <QLayout>
+#include <widget/utils/kexirecordnavigator.h>
 
 QuickFormDataView::QuickFormDataView(QWidget* parent): KexiView(parent)
 {
     m_view = new QuickFormView(this);
     m_view->setBackgroundBrush(palette().brush(QPalette::Light));
-    setViewWidget(m_view);  
+    layout()->addWidget(m_view);  
+    
+    m_recordSelector = new KexiRecordNavigator(this, 0);
+    layout()->addWidget(m_recordSelector);
+    m_recordSelector->setRecordCount(0);
+    m_recordSelector->setInsertingButtonVisible(true);
+    m_recordSelector->setLabelText(i18n("Record"));
+    m_recordSelector->setButtonToolTipText(KexiRecordNavigator::ButtonFirst, i18n("Go to first record"));
+    m_recordSelector->setButtonWhatsThisText(KexiRecordNavigator::ButtonFirst, i18n("Goes to first record"));
+    m_recordSelector->setButtonToolTipText(KexiRecordNavigator::ButtonPrevious, i18n("Go to previous record"));
+    m_recordSelector->setButtonWhatsThisText(KexiRecordNavigator::ButtonPrevious, i18n("Goes to previous record"));
+    m_recordSelector->setButtonToolTipText(KexiRecordNavigator::ButtonNext, i18n("Go to next record"));
+    m_recordSelector->setButtonWhatsThisText(KexiRecordNavigator::ButtonNext, i18n("Goes to next record"));
+    m_recordSelector->setButtonToolTipText(KexiRecordNavigator::ButtonLast, i18n("Go to last record"));
+    m_recordSelector->setButtonWhatsThisText(KexiRecordNavigator::ButtonLast, i18n("Goes to last record"));
+    m_recordSelector->setNumberFieldToolTips(i18n("Current record number"), i18n("Number of records"));
+    m_recordSelector->setRecordHandler(this);
+    
     
     m_kexi = new KexiScriptAdaptorQ();
-    
     m_view->addContextProperty("Kexi", m_kexi);
 }
 
@@ -56,4 +74,44 @@ void QuickFormDataView::setDefinition(const QString& def)
 
     m_view->setDeclarativeComponent(root.text().toLocal8Bit());
     
+}
+
+void QuickFormDataView::addNewRecordRequested()
+{
+    
+}
+
+void QuickFormDataView::moveToFirstRecordRequested()
+{
+
+}
+
+void QuickFormDataView::moveToLastRecordRequested()
+{
+
+}
+
+void QuickFormDataView::moveToNextRecordRequested()
+{
+
+}
+
+void QuickFormDataView::moveToPreviousRecordRequested()
+{
+
+}
+
+void QuickFormDataView::moveToRecordRequested(uint r)
+{
+    Q_UNUSED(r);
+}
+
+int QuickFormDataView::currentRecord() const
+{
+    return 0;
+}
+
+int QuickFormDataView::recordCount() const
+{
+    return 0;
 }
