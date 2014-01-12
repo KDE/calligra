@@ -1,6 +1,6 @@
 project(krita)
 
-add_definitions(${KDE4_ENABLE_EXCEPTIONS})
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS}")
 
 # To avoid the confusion of an endless stream of Eigen warnings. 
 if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
