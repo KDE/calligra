@@ -1575,7 +1575,7 @@ public:
 //  : dialogs(401)
             : wnd(w) {
         dummy_KXMLGUIClient = new KXMLGUIClient();
-        dummy_KXMLGUIFactory = new KXMLGUIFactory(0);
+        dummy_KoXMLGUIFactory = new KoXMLGUIFactory(0);
 
         actionCollection = new KActionCollection(w);
         propEditor = 0;
@@ -1634,7 +1634,7 @@ public:
     ~Private() {
         qDeleteAll(m_openedCustomObjectsForItem);
         delete dummy_KXMLGUIClient;
-        delete dummy_KXMLGUIFactory;
+        delete dummy_KoXMLGUIFactory;
     }
 
 #ifndef KEXI_NO_PENDING_DIALOGS
@@ -1952,7 +1952,7 @@ public:
     }
 
     KXMLGUIClient* dummy_KXMLGUIClient;
-    KXMLGUIFactory* dummy_KXMLGUIFactory;
+    KoXMLGUIFactory* dummy_KoXMLGUIFactory;
 
     KexiMainWindow *wnd;
     KexiMainWidget *mainWidget;

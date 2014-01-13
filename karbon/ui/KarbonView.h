@@ -36,7 +36,7 @@
 
 #include <KoView.h>
 #include <QPointF>
-#include <kxmlguibuilder.h>
+#include <KoXMLGUIBuilder.h>
 #include <KoUnit.h>
 #include <KoShapeAlignCommand.h>
 #include <KoShapeDistributeCommand.h>

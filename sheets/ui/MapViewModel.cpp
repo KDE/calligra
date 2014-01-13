@@ -32,7 +32,7 @@
 #include <KoIcon.h>
 
 #include <kaction.h>
-#include <kxmlguiclient.h>
+#include <KoXMLGUIClient.h>
 
 using namespace Calligra::Sheets;
 
@@ -41,12 +41,12 @@ class MapViewModel::Private
 public:
     Sheet* activeSheet;
     KoCanvasBase *canvas;
-    KXMLGUIClient *xmlGuiClient;
+    KoXMLGUIClient *xmlGuiClient;
     QActionGroup *gotoSheetActionGroup;
 };
 
 
-MapViewModel::MapViewModel(Map *map, KoCanvasBase *canvas, KXMLGUIClient *xmlGuiClient)
+MapViewModel::MapViewModel(Map *map, KoCanvasBase *canvas, KoXMLGUIClient *xmlGuiClient)
         : MapModel(map)
         , d(new Private)
 {

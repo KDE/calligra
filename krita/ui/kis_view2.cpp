@@ -57,8 +57,8 @@
 #include <kservicetypetrader.h>
 #include <kstandardaction.h>
 #include <kurl.h>
-#include <kxmlguiwindow.h>
-#include <kxmlguifactory.h>
+#include <KoXMLGUIWindow.h>
+#include <KoXMLGUIFactory.h>
 #include <kmessagebox.h>
 #include <kactioncollection.h>
 
@@ -1059,8 +1059,8 @@ void KisView2::loadPlugins()
         dbgUI << "Load plugin " << service->name();
         QString error;
 
-        KXMLGUIClient* plugin =
-                dynamic_cast<KXMLGUIClient*>(service->createInstance<QObject>(this, QVariantList(), &error));
+        KoXMLGUIClient* plugin =
+                dynamic_cast<KoXMLGUIClient*>(service->createInstance<QObject>(this, QVariantList(), &error));
         if (plugin) {
             insertChildClient(plugin);
         } else {

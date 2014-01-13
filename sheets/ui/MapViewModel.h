@@ -25,7 +25,7 @@
 class KoCanvasBase;
 class KoShape;
 
-class KXMLGUIClient;
+class KoXMLGUIClient;
 
 class QAction;
 
@@ -45,7 +45,7 @@ class MapViewModel : public MapModel
 {
     Q_OBJECT
 public:
-    MapViewModel(Map *map, KoCanvasBase *canvas, KXMLGUIClient *xmlGuiClient);
+    MapViewModel(Map *map, KoCanvasBase *canvas, KoXMLGUIClient *xmlGuiClient);
     virtual ~MapViewModel();
 
     // QAbstractItemModel interface

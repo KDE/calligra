@@ -26,7 +26,7 @@
 #ifndef ROUNDCORNERSPLUGIN_H
 #define ROUNDCORNERSPLUGIN_H
 
-#include <kxmlguiclient.h>
+#include <KoXMLGUIClient.h>
 #include <kdialog.h>
 #include <QVariantList>
 
@@ -35,7 +35,7 @@
 class KarbonView;
 class RoundCornersDlg;
 
-class RoundCornersPlugin : public QObject, public KXMLGUIClient
+class RoundCornersPlugin : public QObject, public KoXMLGUIClient
 {
     Q_OBJECT
 public:

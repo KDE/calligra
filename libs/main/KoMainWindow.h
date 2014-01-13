@@ -23,7 +23,7 @@
 
 #include "komain_export.h"
 
-#include <kxmlguiwindow.h>
+#include <KoXMLGUIWindow.h>
 #include <kurl.h>
 #include <KoCanvasObserverBase.h>
 #include <KoCanvasSupervisor.h>
@@ -52,7 +52,7 @@ class KoDockerManager;
  *
  * @note This class does NOT need to be subclassed in your application.
  */
-class KOMAIN_EXPORT KoMainWindow : public KXmlGuiWindow, public KoCanvasSupervisor
+class KOMAIN_EXPORT KoMainWindow : public KoXmlGuiWindow, public KoCanvasSupervisor
 {
     Q_OBJECT
 public:

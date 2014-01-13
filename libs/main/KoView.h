@@ -22,7 +22,7 @@
 #define __koView_h__
 
 #include <QWidget>
-#include <kxmlguiclient.h>
+#include <KoXMLGUIClient.h>
 #include "komain_export.h"
 
 class KoPart;
@@ -35,7 +35,7 @@ struct KoPageLayout;
 
 // KDE classes
 class KStatusBar;
-class KXmlGuiWindow;
+class KoXmlGuiWindow;
 class KAction;
 
 // Qt classes
@@ -49,7 +49,7 @@ class QPrintDialog;
  *
  * Multiple views can be attached to one document at a time.
  */
-class KOMAIN_EXPORT KoView : public QWidget, public KXMLGUIClient
+class KOMAIN_EXPORT KoView : public QWidget, public KoXMLGUIClient
 {
     Q_OBJECT
 
@@ -118,10 +118,10 @@ public:
      * of @p element is of interest here. The method searches in the
      * KActionCollection of this view.
      *
-     * Please notice that KoView indirectly inherits KXMLGUIClient.
+     * Please notice that KoView indirectly inherits KoXMLGUIClient.
      *
-     * @see KXMLGUIClient
-     * @see KXMLGUIClient::actionCollection
+     * @see KoXMLGUIClient
+     * @see KoXMLGUIClient::actionCollection
      * @see KoDocument::action
      */
     virtual QAction *action(const QDomElement &element) const;
@@ -130,10 +130,10 @@ public:
      * Returns the action with the given name. The method searches in the
      * KActionCollection of this view.
      *
-     * Please notice that KoView indirectly inherits KXMLGUIClient.
+     * Please notice that KoView indirectly inherits KoXMLGUIClient.
      *
-     * @see KXMLGUIClient
-     * @see KXMLGUIClient::actionCollection
+     * @see KoXMLGUIClient
+     * @see KoXMLGUIClient::actionCollection
      * @see KoDocument::action
      */
     virtual QAction *action(const char* name) const;

@@ -23,8 +23,8 @@
 #include <QSignalMapper>
 #include <QCloseEvent>
 
-#include <kxmlguiclient.h>
-#include <kxmlguifactory.h>
+#include <KoXMLGUIClient.h>
+#include <KoXMLGUIFactory.h>
 #include <kactioncollection.h>
 #include <kaction.h>
 
@@ -40,10 +40,10 @@
 #include "kis_group_layer.h"
 
 
-class KisMainGui : public KXMLGUIClient {
+class KisMainGui : public KoXMLGUIClient {
 public:
     KisMainGui(KisMainWindow *mw)
-        : KXMLGUIClient(mw)
+        : KoXMLGUIClient(mw)
     {
         setXMLFile("kritashell.rc", true);
     }

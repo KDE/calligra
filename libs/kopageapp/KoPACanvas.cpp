@@ -31,7 +31,7 @@
 #include "KoPAPage.h"
 #include "KoPAPageProvider.h"
 
-#include <kxmlguifactory.h>
+#include <KoXMLGUIFactory.h>
 
 #include <kaction.h>
 #include <QMenu>

@@ -847,6 +847,7 @@ set(KOMAIN_INCLUDES ${KDE4_INCLUDES}
                     ${CMAKE_SOURCE_DIR}/libs/widgetutils
                     ${CMAKE_SOURCE_DIR}/libs/main
                     ${CMAKE_BINARY_DIR}/libs/main
+                    ${CMAKE_SOURCE_DIR}/libs/main/xmlgui
                     ${CMAKE_SOURCE_DIR}/libs/main/config)
 
 set(KORDF_INCLUDES ${KOMAIN_INCLUDES}

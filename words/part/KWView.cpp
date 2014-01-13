@@ -99,7 +99,7 @@
 #include <ktoggleaction.h>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
-#include <kxmlguifactory.h>
+#include <KoXMLGUIFactory.h>
 #include <kstatusbar.h>
 #include <ktoolbar.h>
 #include <kmenubar.h>

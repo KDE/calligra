@@ -41,7 +41,7 @@ class KisPaintopBox;
 class KisView2;
 class KisIconWidget;
 class KoPattern;
-class KXmlGuiWindow;
+class KoXmlGuiWindow;
 
 /**
  *   Control Frame - status display with access to

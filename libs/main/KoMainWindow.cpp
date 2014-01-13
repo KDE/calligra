@@ -62,7 +62,7 @@
 #include <kstatusbar.h>
 #include <kglobalsettings.h>
 #include <ktoolinvocation.h>
-#include <kxmlguifactory.h>
+#include <KoXMLGUIFactory.h>
 #include <kfileitem.h>
 #include <ktoolbar.h>
 #include <kdebug.h>
@@ -246,7 +246,7 @@ public:
 };
 
 KoMainWindow::KoMainWindow(KoPart *part, const KComponentData &componentData)
-    : KXmlGuiWindow()
+    : KoXmlGuiWindow()
     , d(new KoMainWindowPrivate(part, this))
 {
 #ifdef __APPLE__
@@ -489,7 +489,7 @@ void KoMainWindow::addView(KoView *view)
 
     d->views.append(view);
     // XXX: This should change -- with multiple views per main window, the view should
-    // no longer be a kxmlguiclient.
+    // no longer be a KoXMLGUIClient.
     guiFactory()->addClient(view);
     showView(view);
 
@@ -600,7 +600,7 @@ void KoMainWindow::saveRecentFiles()
 
     // Tell all windows to reload their list, after saving
     // Doesn't work multi-process, but it's a start
-    foreach(KMainWindow* window, KMainWindow::memberList())
+    foreach(KoMainWindowBase* window, KoMainWindowBase::memberList())
         static_cast<KoMainWindow *>(window)->reloadRecentFileList();
 }
 
@@ -773,7 +773,7 @@ void KoMainWindow::slotSaveCompleted()
     disconnect(doc, SIGNAL(canceled(const QString &)), this, SLOT(slotSaveCanceled(const QString &)));
 
     if (d->deferredClosingEvent) {
-        KXmlGuiWindow::closeEvent(d->deferredClosingEvent);
+        KoXmlGuiWindow::closeEvent(d->deferredClosingEvent);
     }
 }
 
@@ -1114,14 +1114,14 @@ void KoMainWindow::saveWindowSettings()
     }
 
     KGlobal::config()->sync();
-    resetAutoSaveSettings(); // Don't let KMainWindow override the good stuff we wrote down
+    resetAutoSaveSettings(); // Don't let KoMainWindowBase override the good stuff we wrote down
 
 }
 
 void KoMainWindow::resizeEvent(QResizeEvent * e)
 {
     d->windowSizeDirty = true;
-    KXmlGuiWindow::resizeEvent(e);
+    KoXmlGuiWindow::resizeEvent(e);
 }
 
 bool KoMainWindow::queryClose()
@@ -1445,9 +1445,9 @@ void KoMainWindow::slotConfigureToolbars()
 {
     if (d->activeView->document())
         saveMainWindowSettings(KGlobal::config()->group(d->part->componentData().componentName()));
-    KEditToolBar edit(factory(), this);
-    connect(&edit, SIGNAL(newToolBarConfig()), this, SLOT(slotNewToolbarConfig()));
-    (void) edit.exec();
+    //KEditToolBar edit(factory(), this);
+    //connect(&edit, SIGNAL(newToolBarConfig()), this, SLOT(slotNewToolbarConfig()));
+    //(void) edit.exec();
 }
 
 void KoMainWindow::slotNewToolbarConfig()
@@ -1456,7 +1456,7 @@ void KoMainWindow::slotNewToolbarConfig()
         applyMainWindowSettings(KGlobal::config()->group(d->part->componentData().componentName()));
     }
 
-    KXMLGUIFactory *factory = guiFactory();
+    KoXMLGUIFactory *factory = guiFactory();
     Q_UNUSED(factory);
 
     // Check if there's an active view
@@ -1855,7 +1855,7 @@ void KoMainWindow::newWindow()
 void KoMainWindow::createMainwindowGUI()
 {
     if ( isHelpMenuEnabled() && !d->m_helpMenu )
-        d->m_helpMenu = new KHelpMenu( this, componentData().aboutData(), true, actionCollection() );
+        d->m_helpMenu = new KHelpMenu( this, componentData().aboutData(), false, actionCollection() );
 
     QString f = xmlFile();
     setXMLFile( KStandardDirs::locate( "config", "ui/ui_standards.rc", componentData() ) );
@@ -1895,7 +1895,7 @@ void KoMainWindow::setActiveView(QWidget *widget)
     // Set the new active instance in KGlobal
     KGlobal::setActiveComponent(d->part ? d->part->componentData() : KGlobal::mainComponent());
 
-    KXMLGUIFactory *factory = guiFactory();
+    KoXMLGUIFactory *factory = guiFactory();
 
     if (d->activeView) {
 

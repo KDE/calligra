@@ -135,7 +135,7 @@ void TasksetDockerDock::setCanvas(KoCanvasBase * canvas)
 {
     if (m_canvas && m_canvas->view()) {
          m_canvas->view()->actionCollection()->disconnect(this);
-         foreach(KXMLGUIClient* client, m_canvas->view()->childClients()) {
+         foreach(KoXMLGUIClient* client, m_canvas->view()->childClients()) {
             client->actionCollection()->disconnect(this);
         }
     }
@@ -171,7 +171,7 @@ void TasksetDockerDock::recordClicked()
         KisView2* view = m_canvas->view();
         connect(view->actionCollection(), SIGNAL(actionTriggered(QAction*)),
                 this, SLOT(actionTriggered(QAction*)), Qt::UniqueConnection);
-        foreach(KXMLGUIClient* client, view->childClients()) {
+        foreach(KoXMLGUIClient* client, view->childClients()) {
             connect(client->actionCollection(), SIGNAL(actionTriggered(QAction*)),
                     this, SLOT(actionTriggered(QAction*)), Qt::UniqueConnection);
         }

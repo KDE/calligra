@@ -79,9 +79,9 @@ QStringList KoApplicationAdaptor::getViews()
 QStringList KoApplicationAdaptor::getWindows()
 {
     QStringList lst;
-    QList<KMainWindow*> mainWindows = KMainWindow::memberList();
+    QList<KoMainWindowBase*> mainWindows = KoMainWindowBase::memberList();
     if (!mainWindows.isEmpty()) {
-        foreach(KMainWindow* mainWindow, mainWindows) {
+        foreach(KoMainWindowBase* mainWindow, mainWindows) {
             lst.append(static_cast<KoMainWindow*>(mainWindow)->objectName());
         }
     }

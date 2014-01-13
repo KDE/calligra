@@ -31,7 +31,7 @@
 #include <KoUnit.h>
 #include <KoText.h>
 
-#include <kxmlguifactory.h>
+#include <KoXMLGUIFactory.h>
 #include <kaction.h>
 
 #include <QStyleOptionGraphicsItem>

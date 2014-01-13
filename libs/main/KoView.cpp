@@ -293,7 +293,7 @@ QAction *KoView::action(const QDomElement &element) const
     static const QString &attrName = KGlobal::staticQString("name");
     QString name = element.attribute(attrName);
 
-    QAction *act = KXMLGUIClient::action(name.toUtf8());
+    QAction *act = KoXMLGUIClient::action(name.toUtf8());
 
     // last resort, try to get action from the main window if there is one
     if (!act && mainWindow())
@@ -304,7 +304,7 @@ QAction *KoView::action(const QDomElement &element) const
 
 QAction *KoView::action(const char* name) const
 {
-    QAction *act = KXMLGUIClient::action(name);
+    QAction *act = KoXMLGUIClient::action(name);
 
     // last resort, try to get action from the main window if there is one
     if (!act && mainWindow())

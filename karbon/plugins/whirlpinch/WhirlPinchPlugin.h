@@ -25,7 +25,7 @@
 #define WHIRLPINCHPLUGIN_H
 
 #include <kdialog.h>
-#include <kxmlguiclient.h>
+#include <KoXMLGUIClient.h>
 
 #include <QPointF>
 #include <QVariantList>
@@ -33,7 +33,7 @@
 class KarbonView;
 class WhirlPinchDlg;
 
-class WhirlPinchPlugin : public QObject, public KXMLGUIClient
+class WhirlPinchPlugin : public QObject, public KoXMLGUIClient
 {
     Q_OBJECT
 public:

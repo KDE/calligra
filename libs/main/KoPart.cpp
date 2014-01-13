@@ -37,7 +37,7 @@
 
 #include <kdebug.h>
 #include <kstandarddirs.h>
-#include <kxmlguifactory.h>
+#include <KoXMLGUIFactory.h>
 #include <kdeprintdialog.h>
 #include <knotification.h>
 #include <kdialog.h>

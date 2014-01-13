@@ -270,8 +270,8 @@ KarbonView::KarbonView(KarbonPart *karbonPart, KarbonDocument* doc, QWidget* par
 
         QString error;
 
-        KXMLGUIClient* plugin =
-                dynamic_cast<KXMLGUIClient*>(service->createInstance<QObject>(this, QVariantList(), &error));
+        KoXMLGUIClient* plugin =
+                dynamic_cast<KoXMLGUIClient*>(service->createInstance<QObject>(this, QVariantList(), &error));
         if (plugin) {
             insertChildClient(plugin);
         } else {

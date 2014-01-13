@@ -82,7 +82,7 @@
 #include <kmimetype.h>
 #include <ksharedptr.h>
 #include <kwordwrap.h>
-#include <kxmlguifactory.h>
+#include <KoXMLGUIFactory.h>
 
 // Calligra
 #include <KoCanvasController.h>
@@ -208,7 +208,7 @@ void Canvas::showContextMenu(const QPoint& globalPos)
 {
     view()->unplugActionList("toolproxy_action_list");
     view()->plugActionList("toolproxy_action_list", toolProxy()->popupActionList());
-    if (KXMLGUIFactory *factory = view()->factory()) {
+    if (KoXMLGUIFactory *factory = view()->factory()) {
         QMenu* menu = dynamic_cast<QMenu*>(factory->container("default_canvas_popup", view()));
         // Only show the menu, if there are items. The plugged action list counts as one action.
         if (menu && menu->actions().count() > 1) {

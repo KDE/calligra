@@ -90,6 +90,16 @@ set(komain_LIB_SRCS
     KoPart.cpp
 
     thememanager.cpp
+    xmlgui/KoMainWindowBase.cpp
+    xmlgui/KoMenuMenuHandler_p.cpp
+    xmlgui/KoXMLGUIBuilder.cpp
+    xmlgui/KoXMLGUIFactory.cpp
+    xmlgui/KoXMLGUIVersionHandler.cpp
+    xmlgui/KoToolBarHandler.cpp
+    xmlgui/KoXMLGUIClient.cpp
+    xmlgui/KoXMLGUIFactory_p.cpp
+    xmlgui/KoXMLGUIWindow.cpp
+
 )
 
 if( QT_QTDBUS_FOUND )

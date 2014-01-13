@@ -76,7 +76,7 @@
 #include <ktoggleaction.h>
 #include <ktoolinvocation.h>
 #include <kpushbutton.h>
-#include <kxmlguifactory.h>
+#include <KoXMLGUIFactory.h>
 #include <kservicetypetrader.h>
 
 // Calligra includes
@@ -590,8 +590,8 @@ View::View(KoPart *part, QWidget *_parent, Doc *_doc)
         KService::Ptr service = *iter;
 
         QString error;
-        KXMLGUIClient* plugin =
-                dynamic_cast<KXMLGUIClient*>(service->createInstance<QObject>(this, QVariantList(), &error));
+        KoXMLGUIClient* plugin =
+                dynamic_cast<KoXMLGUIClient*>(service->createInstance<QObject>(this, QVariantList(), &error));
         if(plugin) {
             insertChildClient(plugin);
         } else {

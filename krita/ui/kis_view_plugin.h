@@ -20,7 +20,7 @@
 #ifndef KIS_VIEW_PLUGIN_H
 #define KIS_VIEW_PLUGIN_H
 
-#include <kxmlguiclient.h>
+#include <KoXMLGUIClient.h>
 #include <krita_export.h>
 #include "operations/kis_operation_ui_factory.h"
 
@@ -31,7 +31,7 @@ class KisView2;
 /**
  *  KisViewPlugin is the base for plugins which add actions to the view
  */
-class KRITAUI_EXPORT KisViewPlugin : public QObject, public KXMLGUIClient
+class KRITAUI_EXPORT KisViewPlugin : public QObject, public KoXMLGUIClient
 {
     Q_OBJECT
 public:

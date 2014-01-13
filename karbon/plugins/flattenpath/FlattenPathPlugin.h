@@ -23,12 +23,12 @@
 #ifndef FLATTENPATHPLUGIN_H
 #define FLATTENPATHPLUGIN_H
 
-#include <kxmlguiclient.h>
+#include <KoXMLGUIClient.h>
 #include <kdialog.h>
 
 class FlattenDlg;
 
-class FlattenPathPlugin : public QObject, public KXMLGUIClient
+class FlattenPathPlugin : public QObject, public KoXMLGUIClient
 {
     Q_OBJECT
 public:

@@ -112,7 +112,7 @@ void FlipbookDockerDock::setCanvas(KoCanvasBase * canvas)
 {
     if (m_canvas && m_canvas->view()) {
         m_canvas->view()->actionCollection()->disconnect(this);
-        foreach(KXMLGUIClient* client, m_canvas->view()->childClients()) {
+        foreach(KoXMLGUIClient* client, m_canvas->view()->childClients()) {
             client->actionCollection()->disconnect(this);
         }
     }
