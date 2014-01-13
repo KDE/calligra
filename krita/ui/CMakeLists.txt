@@ -28,6 +28,7 @@ set(kritaui_LIB_SRCS
     canvas/kis_grid_manager.cpp
     canvas/kis_grid_painter_configuration.cpp
     canvas/kis_perspective_grid_manager.cpp
+    canvas/kis_perspective_grid_managerng.cpp
     canvas/kis_prescaled_projection.cpp
     canvas/kis_qpainter_canvas.cpp
     canvas/kis_projection_backend.cpp

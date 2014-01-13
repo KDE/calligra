@@ -1,6 +1,7 @@
 /*
- * Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
- * Copyright (c) 2013 Shivaraman Aiyer<sra392@gmail.com>
+ *  kis_tool_perspectivegrid.h - part of Krita
+ *
+ *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -16,33 +17,33 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_RULER_ASSISTANT_TOOL_H_
-#define _KIS_RULER_ASSISTANT_TOOL_H_
+#ifndef _KIS_TOOL_PERSPECTIVE_GRIDNG_H_
+#define _KIS_TOOL_PERSPECTIVE_GRIDNG_H_
 
+#include <kis_perspective_gridng.h>
 #include <kis_tool.h>
 #include <KoToolFactoryBase.h>
-#include "kis_painting_assistant.h"
-#include "ui_AssistantsToolOptions.h"
 #include <KoIcon.h>
 
-
-class RulerDecoration;
 class KisCanvas2;
-class ConstraintSolver;
-class KJob;
 
-class KisRulerAssistantTool : public KisTool
+class KisToolPerspectiveGridNG : public KisTool
 {
     Q_OBJECT
-    enum PerspectiveAssistantEditionMode {
+    enum PerspectiveGridEditionMode {
         MODE_CREATION, // This is the mode when there is not yet a perspective grid
         MODE_EDITING, // This is the mode when the grid has been created, and we are waiting for the user to click on a control box
         MODE_DRAGGING_NODE, // In this mode one node is translated
         MODE_DRAGGING_TRANSLATING_TWONODES // This mode is used when creating a new sub perspective grid
     };
+
 public:
-    KisRulerAssistantTool(KoCanvasBase * canvas);
-    virtual ~KisRulerAssistantTool();
+    KisToolPerspectiveGridNG(KoCanvasBase * canvas);
+    virtual ~KisToolPerspectiveGridNG();
+
+    //
+    // KisToolPaint interface
+    //
 
     virtual quint32 priority() {
         return 3;
@@ -51,63 +52,55 @@ public:
     virtual void mouseMoveEvent(KoPointerEvent *event);
     virtual void mouseReleaseEvent(KoPointerEvent *event);
 
-    virtual QWidget *createOptionWidget();
-private:
-    void addAssistant();
-    void removeAssistant(KisPaintingAssistant *assistant);
-    bool mouseNear(const QPointF& mousep, const QPointF& point);
-    KisPaintingAssistantHandleSP nodeNearPoint(KisPaintingAssistant* grid, QPointF point);
 public slots:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     void deactivate();
-private slots:
-    void removeAllAssistants();
 
-    void saveAssistants();
-    void loadAssistants();
-
-    void saveFinish(KJob* job);
-    void openFinish(KJob* job);
 protected:
 
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
-
-protected:
-    KisCanvas2* m_canvas;
-    QList<KisPaintingAssistantHandleSP> m_handles, m_sideHandles;
-    KisPaintingAssistantHandleSP m_handleDrag;
-    KisPaintingAssistantHandleSP m_handleCombine;
-    KisPaintingAssistant* m_assistantDrag;
-    KisPaintingAssistant* m_newAssistant;
-    QPointF m_mousePosition;
-    Ui::AssistantsToolOptions m_options;
-    QWidget* m_optionsWidget;
-    QPointF m_dragEnd;
+    void drawGridCreation(QPainter& gc);
+    void drawGrid(QPainter& gc);
 
 private:
-    PerspectiveAssistantEditionMode m_internalMode;
+    void drawSmallRectangle(QPainter& gc, const QPointF& p);
+    bool mouseNear(const QPointF& mousep, const QPointF& point);
+    KisPerspectiveGridNodeSP nodeNearPoint(KisSubPerspectiveGrid* grid, QPointF point);
+
+protected:
+    QPointF m_dragEnd;
+
+    bool m_isFirstPoint;
+    QPointF m_currentPt;
+private:
+    typedef QVector<QPointF> QPointFVector;
+
+    QPointFVector m_points;
+    PerspectiveGridEditionMode m_internalMode;
     qint32 m_handleSize, m_handleHalfSize;
-    KisPaintingAssistantHandleSP m_selectedNode1, m_selectedNode2, m_higlightedNode;
+    KisPerspectiveGridNodeSP m_selectedNode1, m_selectedNode2, m_higlightedNode;
+    KisCanvas2* m_canvas;
 };
 
 
-class KisRulerAssistantToolFactory : public KoToolFactoryBase
+class KisToolPerspectiveGridNGFactory : public KoToolFactoryBase
 {
+
 public:
-    KisRulerAssistantToolFactory()
-            : KoToolFactoryBase("KisRulerAssistantTool") {
-        setToolTip(i18n("Ruler assistant editor tool"));
+    KisToolPerspectiveGridNGFactory(const QStringList&)
+            : KoToolFactoryBase("KisToolPerspectiveGridNG") {
+        setToolTip(i18n("Edit the perspective grid"));
         setToolType(TOOL_TYPE_VIEW);
-        setIconName(koIconNameCStr("krita_tool_ruler_assistant"));
-        setPriority(0);
+        setIconName(koIconNameCStr("tool_perspectivegridng"));
+        setPriority(16);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
     };
 
 
-    virtual ~KisRulerAssistantToolFactory() {}
+    virtual ~KisToolPerspectiveGridNGFactory() {}
 
     virtual KoToolBase * createTool(KoCanvasBase * canvas) {
-        return new KisRulerAssistantTool(canvas);
+        return new KisToolPerspectiveGridNG(canvas);
     }
 
 };
