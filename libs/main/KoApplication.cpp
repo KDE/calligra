@@ -236,10 +236,18 @@ bool KoApplication::start()
     // Find the *.desktop file corresponding to the kapp instance name
     KoDocumentEntry entry = KoDocumentEntry::queryByMimeType(d->nativeMimeType);
     if (entry.isEmpty()) {
-        kError(30003) << KGlobal::mainComponent().componentName() << "part.desktop not found." << endl;
-        kError(30003) << "Run 'kde4-config --path services' to see which directories were searched, assuming kde startup had the same environment as your current mainWindow." << endl;
-        kError(30003) << "Check your installation (did you install Calligra in a different prefix than KDE, without adding the prefix to /etc/kderc ?)" << endl;
-        return false;
+#ifdef Q_OS_WIN
+        QProcess::execute(applicationDirPath() + "/kbuildsycoca4.exe");
+        entry = KoDocumentEntry::queryByMimeType(d->nativeMimeType);
+        if (entry.isEmpty()) {
+#endif
+            kError(30003) << KGlobal::mainComponent().componentName() << "part.desktop not found." << endl;
+            kError(30003) << "Run 'kde4-config --path services' to see which directories were searched, assuming kde startup had the same environment as your current mainWindow." << endl;
+            kError(30003) << "Check your installation (did you install Calligra in a different prefix than KDE, without adding the prefix to /etc/kderc ?)" << endl;
+            return false;
+#ifdef Q_OS_WIN
+        }
+#endif
     }
 
     // Get the command line arguments which we have to parse
@@ -374,7 +382,6 @@ bool KoApplication::start()
             if (mainWindow->openDocument(part, url)) {
                 doc->resetURL();
                 doc->setModified(true);
-                QFile::remove(url.toLocalFile());
                 numberOfOpenDocuments++;
             }
 
@@ -392,7 +399,6 @@ bool KoApplication::start()
                     if (mainWindow->openDocument(part, url)) {
                         doc->resetURL();
                         doc->setModified(true);
-                        QFile::remove(url.toLocalFile());
                         numberOfOpenDocuments++;
                     }
                 }
