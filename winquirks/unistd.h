@@ -116,7 +116,12 @@ static int gethostname(char *__name, size_t __len) {
 #if _MSC_VER < 1600
 #define ENOTSUP       ENOSYS
 #endif
+
+#ifndef _MODE_T_
+#define _MODE_T_
 typedef int mode_t;
+#endif
+
 typedef unsigned int gid_t;
 typedef unsigned int uid_t;
 
