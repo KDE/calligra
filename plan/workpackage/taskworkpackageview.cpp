@@ -83,7 +83,7 @@ TaskWorkPackageTreeView::TaskWorkPackageTreeView( Part *part, QWidget *parent )
 
     createItemDelegates( m );
 
-    QList<int> lst1; lst1 << 2 << -1; // display column 0 and 1 (NodeName and NodeType ) in left view
+    QList<int> list1; list1 << 2 << -1; // display column 0 and 1 (NodeName and NodeType ) in left view
     masterView()->setDefaultColumns( QList<int>() << 0 << 1 );
     QList<int> show;
     show << TaskWorkPackageModel::NodeCompleted
@@ -97,13 +97,13 @@ TaskWorkPackageTreeView::TaskWorkPackageTreeView( Part *part, QWidget *parent )
             << TaskWorkPackageModel::ProjectName
             << TaskWorkPackageModel::ProjectManager;
 
-    QList<int> lst2;
+    QList<int> list2;
     for ( int i = 0; i < m->columnCount(); ++i ) {
         if ( ! show.contains( i ) ) {
-            lst2 << i;
+            list2 << i;
         }
     }
-    hideColumns( lst1, lst2 );
+    hideColumns( list1, list2 );
     slaveView()->setDefaultColumns( show );
     masterView()->setFocus();
 

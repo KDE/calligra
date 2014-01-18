@@ -970,16 +970,16 @@ void Appointment::merge(const Appointment &app) {
         return;
     }
     QList<AppointmentInterval> result;
-    QList<AppointmentInterval> lst1 = m_intervals.map().values();
+    QList<AppointmentInterval> list1 = m_intervals.map().values();
     AppointmentInterval i1;
-    QList<AppointmentInterval> lst2 = app.intervals().map().values();
-    //kDebug(planDbg())<<"add"<<lst1.count()<<" intervals to"<<lst2.count()<<" intervals";
+    QList<AppointmentInterval> list2 = app.intervals().map().values();
+    //kDebug(planDbg())<<"add"<<list1.count()<<" intervals to"<<list2.count()<<" intervals";
     AppointmentInterval i2;
     int index1 = 0, index2 = 0;
     DateTime from;
-    while (index1 < lst1.size() || index2 < lst2.size()) {
-        if (index1 >= lst1.size()) {
-            i2 = lst2[index2];
+    while (index1 < list1.size() || index2 < list2.size()) {
+        if (index1 >= list1.size()) {
+            i2 = list2[index2];
             if (!from.isValid() || from < i2.startTime())
                 from = i2.startTime();
             result.append(AppointmentInterval(from, i2.endTime(), i2.load()));
@@ -988,8 +988,8 @@ void Appointment::merge(const Appointment &app) {
             ++index2;
             continue;
         }
-        if (index2 >= lst2.size()) {
-            i1 = lst1[index1];
+        if (index2 >= list2.size()) {
+            i1 = list1[index1];
             if (!from.isValid() || from < i1.startTime())
                 from = i1.startTime();
             result.append(AppointmentInterval(from, i1.endTime(), i1.load()));
@@ -998,8 +998,8 @@ void Appointment::merge(const Appointment &app) {
             ++index1;
             continue;
         }
-        i1 = lst1[index1];
-        i2 = lst2[index2];
+        i1 = list1[index1];
+        i2 = list2[index2];
         AppointmentInterval i =  i1.firstInterval(i2, from);
         if (!i.isValid()) {
             break;

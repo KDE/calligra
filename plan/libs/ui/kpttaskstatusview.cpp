@@ -91,7 +91,7 @@ TaskStatusTreeView::TaskStatusTreeView( QWidget *parent )
 
     createItemDelegates( m );
 
-    QList<int> lst1; lst1 << 1 << -1; // only display column 0 (NodeName) in left view
+    QList<int> list1; list1 << 1 << -1; // only display column 0 (NodeName) in left view
     masterView()->setDefaultColumns( QList<int>() << 0 );
     QList<int> show;
     show << NodeModel::NodeCompleted
@@ -105,13 +105,13 @@ TaskStatusTreeView::TaskStatusTreeView( QWidget *parent )
             << NodeModel::NodeActualFinish
             << NodeModel::NodeStatusNote;
 
-    QList<int> lst2;
+    QList<int> list2;
     for ( int i = 0; i < m->columnCount(); ++i ) {
         if ( ! show.contains( i ) ) {
-            lst2 << i;
+            list2 << i;
         }
     }
-    hideColumns( lst1, lst2 );
+    hideColumns( list1, list2 );
     slaveView()->setDefaultColumns( show );
 }
 
@@ -1044,9 +1044,9 @@ PerformanceStatusTreeView::PerformanceStatusTreeView( QWidget *parent )
     m_tree = new TreeViewBase( this );
     NodeItemModel *m = new NodeItemModel( m_tree );
     m_tree->setModel( m );
-    QList<int> lst1; lst1 << 1 << -1; // only display column 0 (NodeName) in tree view
+    QList<int> list1; list1 << 1 << -1; // only display column 0 (NodeName) in tree view
     m_tree->setDefaultColumns( QList<int>() << 0 );
-    m_tree->setColumnsHidden( lst1 );
+    m_tree->setColumnsHidden( list1 );
     m_tree->setSelectionMode( QAbstractItemView::ExtendedSelection );
     addWidget( m_tree );
 
