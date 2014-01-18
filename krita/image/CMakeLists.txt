@@ -244,6 +244,10 @@ set(kritaimage_LIB_SRCS
 
 kde4_add_library(kritaimage SHARED ${kritaimage_LIB_SRCS})
 
+if(HAVE_VC)
+  target_link_libraries(kritaimage  ${Vc_LIBRARIES})
+endif(HAVE_VC)
+
 target_link_libraries(kritaimage ${KDE4_KDEUI_LIBS} pigmentcms kundo2 kowidgetutils)
 target_link_libraries(kritaimage LINK_INTERFACE_LIBRARIES pigmentcms kundo2 kowidgetutils)
 
@@ -254,10 +258,6 @@ endif(OPENEXR_FOUND)
 if(FFTW3_FOUND)
   target_link_libraries(kritaimage  ${FFTW3_LIBRARIES})
 endif(FFTW3_FOUND)
-
-if(HAVE_VC)
-  target_link_libraries(kritaimage  ${Vc_LIBRARIES})
-endif(HAVE_VC)
 
 set_target_properties(kritaimage PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}

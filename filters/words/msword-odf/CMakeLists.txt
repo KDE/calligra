@@ -25,7 +25,7 @@ kde4_add_plugin(calligra_filter_doc2odt ${doc2odt_PART_SRCS})
 
 #TODO cause of NumberFormatParser we depend on komsooxml. Fix that!
 #target_link_libraries(calligra_filter_doc2odt kowv2 komain mso ${ZLIB_LIBRARIES})
-target_link_libraries(calligra_filter_doc2odt kowv2 komain mso komsooxml ${ZLIB_LIBRARIES})
+target_link_libraries(calligra_filter_doc2odt mso kowv2 komain komsooxml ${ZLIB_LIBRARIES})
 
 install(TARGETS calligra_filter_doc2odt  DESTINATION ${PLUGIN_INSTALL_DIR})
 
