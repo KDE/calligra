@@ -22,7 +22,7 @@
 
 #include "kis_paintop.h"
 
-#include <math.h>
+#include <cmath>
 
 #include <KoColor.h>
 #include <KoColorSpace.h>
@@ -46,8 +46,8 @@
 #define BEZIER_FLATNESS_THRESHOLD 0.5
 #include <kis_distance_information.h>
 
-#ifdef Q_OS_WIN
-#include <float.h>
+#ifdef Q_CC_MSVC
+#include <cfloat>
 #define isnan _isnan
 #endif
 
