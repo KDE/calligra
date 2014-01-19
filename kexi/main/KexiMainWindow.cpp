@@ -806,7 +806,7 @@ void KexiMainWindow::setupActions()
 //temp. disable because of problems with volatile actions setActionVolatile( d->action_data_save_row, true );
 
     d->action_data_cancel_row_changes = createSharedAction(i18n("&Cancel Record Changes"),
-                                        koIconName("dialog-cancel"), KShortcut(), "data_cancel_row_changes");
+                                        koIconName("dialog-cancel"), KShortcut(Qt::Key_Escape), "data_cancel_row_changes");
     d->action_data_cancel_row_changes->setToolTip(
         i18n("Cancel changes made to the current record"));
     d->action_data_cancel_row_changes->setWhatsThis(
