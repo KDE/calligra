@@ -61,8 +61,6 @@ public:
     /*! Default maximum number of rows for KexiComboBoxPopup objects. */
     static const int defaultMaxRows;
 
-    virtual bool eventFilter(QObject *o, QEvent *e);
-
 signals:
     void rowAccepted(KexiDB::RecordData *record, int row);
     void cancelled();
@@ -78,6 +76,9 @@ protected slots:
 
 protected:
     void init();
+
+    virtual bool eventFilter(QObject *o, QEvent *e);
+
     //! The main function for setting data; data can be set either by passing \a column or \a field.
     //! The second case is used for lookup
     void setData(KexiDB::TableViewColumn *column, KexiDB::Field *field);

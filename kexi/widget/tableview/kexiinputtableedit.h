@@ -55,9 +55,6 @@ public:
     virtual bool cursorAtStart();
     virtual bool cursorAtEnd();
 
-//  virtual bool eventFilter(QObject* watched, QEvent* e);
-//js  void end(bool mark);
-//js  void backspace();
     virtual void clear();
 
     /*! \return total size of this editor, including any buttons, etc. (if present). */
