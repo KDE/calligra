@@ -124,7 +124,6 @@ signals:
 protected slots:
     void slotNameTxtChanged(const QString&);
     void slotCaptionTxtChanged(const QString&);
-//  bool eventFilter( QObject *obj, QEvent *ev );
 
 protected:
     void init(

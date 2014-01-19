@@ -100,8 +100,6 @@ public:
      yoursize.boundedTo( KexiView::preferredSizeHint(otherSize) ). */
     virtual QSize preferredSizeHint(const QSize& otherSize);
 
-    virtual bool eventFilter(QObject *o, QEvent *e);
-
     void addChildView(KexiView* childView);
 
     void removeView(Kexi::ViewMode mode);
@@ -199,6 +197,8 @@ signals:
     void focus(bool in);
 
 protected:
+    virtual bool eventFilter(QObject *o, QEvent *e);
+
     /*! called by KexiWindow::switchToViewMode() right before window is switched to new mode
      By default does nothing. Reimplement this if you need to do something
      before switching to this view.
