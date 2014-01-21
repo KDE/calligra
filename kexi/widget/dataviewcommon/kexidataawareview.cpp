@@ -23,6 +23,7 @@
 #include <utils/kexisharedactionclient.h>
 #include <core/KexiMainWindowIface.h>
 #include <core/KexiStandardAction.h>
+#include <core/KexiWindow.h>
 #include <db/roweditbuffer.h>
 
 #include <QVBoxLayout>
@@ -260,6 +261,30 @@ QWidget* KexiDataAwareView::internalView() const
     return d->internalView;
 }
 
+bool KexiDataAwareView::eventFilter(QObject *o, QEvent *e)
+{
+    // kDebug() << "***" << o << e << window()->selectedView() << this;
+    if (e->type() == QEvent::ShortcutOverride && o == this) {
+        QKeyEvent *ke = static_cast<QKeyEvent*>(e);
+        QAction *a = sharedAction("data_cancel_row_changes");
+        if (QKeySequence(ke->key()) == a->shortcut()) {
+            KexiDataItemInterface *editor = d->dataAwareObject->editor();
+            if (editor) {
+                d->dataAwareObject->cancelEditor();
+            }
+            else {
+                a->trigger();
+            }
+            return true;
+        }
+        a = sharedAction("data_save_row");
+        if (QKeySequence(ke->key() | ke->modifiers()) == a->shortcut()) {
+            a->trigger();
+            return true;
+        }
+    }
+    return KexiView::eventFilter(o, e);
+}
 
 void KexiDataAwareView::reloadActions()
 {

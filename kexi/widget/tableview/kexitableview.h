@@ -252,8 +252,6 @@ public:
         ScrollRight
     };
 
-    virtual bool eventFilter(QObject *o, QEvent *e);
-
     //! Initializes standard editor cell editor factories. This is called internally, once.
     static void initCellEditorFactories();
 
@@ -514,6 +512,8 @@ protected slots:
     }
 /* not needed after #2010-01-05 fix    void slotContentsMoving(int x, int y);*/
 protected:
+    virtual bool eventFilter(QObject *o, QEvent *e);
+
     /*! Reimplementation for KexiDataAwareObjectInterface
      Initializes data contents (resizes it, sets cursor at 1st row).
      Called on setData(). Also called once on show event after

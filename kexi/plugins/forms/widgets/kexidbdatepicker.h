@@ -83,7 +83,6 @@ public slots:
 
 protected:
     virtual void setValueInternal(const QVariant& add, bool removeOld);
-//    virtual bool eventFilter(QObject *o, QEvent *e);
 
 private:
     bool m_invalidState;

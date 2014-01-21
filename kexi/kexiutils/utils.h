@@ -547,6 +547,7 @@ public:
     PaintBlocker(QWidget* parent);
     void setEnabled(bool set);
     bool enabled() const;
+protected:
     virtual bool eventFilter(QObject* watched, QEvent* event);
 private:
     bool m_enabled;

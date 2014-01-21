@@ -91,9 +91,6 @@ public:
      for usage examples. */
     virtual void setHBarGeometry(QScrollBar & hbar, int x, int y, int w, int h);
 
-    /*! @internal used for keyboard handling. */
-    virtual bool eventFilter(QObject *o, QEvent *e);
-
     /*! \return true if "editing" indicator is visible for this navigator.
      @see showEditingIndicator() */
     bool editingIndicatorVisible() const;
@@ -171,6 +168,9 @@ protected slots:
     //void slotRecordNumberReturnPressed(const QString& text);
 
 protected:
+    //! @internal used for keyboard handling.
+    virtual bool eventFilter(QObject *o, QEvent *e);
+
     QToolButton* createAction(const KGuiItem& item);
     virtual void paintEvent(QPaintEvent* pe);
     void updateButtons(uint recCnt);
