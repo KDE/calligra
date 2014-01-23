@@ -1,5 +1,5 @@
 /* XPM */
-static char * splash_screen_xpm[] = {
+static const char *splash_screen_xpm[]={
 "440 286 12526 3",
 "   	c None",
 ".  	c #414141",
