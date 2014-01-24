@@ -24,6 +24,7 @@
 #include <QThreadPool>
 #include <QApplication>
 
+#include <klocale.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kcomponentdata.h>
