@@ -683,6 +683,10 @@ void KisNodeManager::mirrorNodeY()
     mirrorNode(node, commandName, Qt::Vertical);
 }
 
+inline bool checkForGlobalSelection(KisNodeSP node) {
+    return dynamic_cast<KisSelectionMask*>(node.data()) && node->parent() && !node->parent()->parent();
+}
+
 void KisNodeManager::activateNextNode()
 {
     KisNodeSP activeNode = this->activeNode();
@@ -692,6 +696,10 @@ void KisNodeManager::activateNextNode()
 
     if (!node && activeNode->parent() && activeNode->parent()->parent()) {
         node = activeNode->parent();
+    }
+
+    while(node && checkForGlobalSelection(node)) {
+        node = node->nextSibling();
     }
 
     if (node) {
@@ -708,6 +716,10 @@ void KisNodeManager::activatePreviousNode()
 
     if (!node && activeNode->parent()) {
         node = activeNode->parent()->prevSibling();
+    }
+
+    while(node && checkForGlobalSelection(node)) {
+        node = node->prevSibling();
     }
 
     if (node) {
