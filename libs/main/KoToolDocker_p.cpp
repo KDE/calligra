@@ -41,6 +41,8 @@
 #include <QAction>
 #include <QStyleOptionFrame>
 #include <QToolButton>
+#include <QVBoxLayout>
+#include <QSpacerItem>
 #include <QTabWidget>
 
 
@@ -53,12 +55,12 @@ public:
         , unTabIcon(koIconName("tab-close"))
     {
     }
-
     QList<QWidget *> currentWidgetList;
     QSet<QWidget *> currentAuxWidgets;
     QScrollArea *scrollArea;
     QWidget *hiderWidget; // non current widgets are hidden by being children of this
     QWidget *housekeeperWidget;
+    QVBoxLayout *mainLayout;
     QGridLayout *housekeeperLayout;
     KoToolDocker *q;
     Qt::DockWidgetArea dockingArea;
@@ -133,6 +135,7 @@ public:
                 housekeeperLayout->setVerticalSpacing(2);
                 int specialCount = 0;
                 foreach(QWidget *widget, currentWidgetList) {
+                    bool strechable = true;
                     if (widget->objectName().isEmpty()) {
                         Q_ASSERT(!(widget->objectName().isEmpty()));
                         continue; // skip this docker in release build when assert don't crash
@@ -148,17 +151,21 @@ public:
                             QWidget *spacerWidget = subLayout->itemAt(i)->widget();
                             if (spacerWidget && spacerWidget->objectName().contains("SpecialSpacer")) {
                                 specialCount++;
+                                strechable = false;
                             }
                         }
                     }
                     widget->show();
                     if (widget != currentWidgetList.last()) {
                         housekeeperLayout->addWidget(s = new QFrame(), cnt++, 0);
+                        if (!strechable) {
+                            housekeeperLayout->setRowStretch(cnt, 0);
+                        }
                         s->setFrameShape(QFrame::HLine);
                         currentAuxWidgets.insert(s);
                     }
                 }
-                if (specialCount == currentWidgetList.count() || qApp->applicationName().contains("krita")) {
+               if ((specialCount == currentWidgetList.count()) || qApp->applicationName().contains("krita")) {
                     housekeeperLayout->setRowStretch(cnt, 10000);
                 }
                 break;
@@ -207,7 +214,15 @@ KoToolDocker::KoToolDocker(QWidget *parent)
 
     d->housekeeperWidget = new QWidget();
     d->housekeeperLayout = new QGridLayout();
-    d->housekeeperWidget->setLayout(d->housekeeperLayout);
+
+    if (qApp->applicationName().contains("krita")) {
+        d->mainLayout = new QVBoxLayout(d->housekeeperWidget);
+        d->mainLayout->addLayout(d->housekeeperLayout);
+        d->mainLayout->addItem(new QSpacerItem(1, 1, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding));
+    }
+    else {
+        d->housekeeperWidget->setLayout(d->housekeeperLayout);
+    }
 
     d->housekeeperLayout->setSizeConstraint(QLayout::SetMinAndMaxSize);
 
