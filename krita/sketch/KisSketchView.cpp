@@ -102,6 +102,7 @@ public:
     void zoomChanged();
     void resetDocumentPosition();
     void removeNodeAsync(KisNodeSP removedNode);
+    void updateDisplay();
 
     KisSketchView* q;
 
@@ -372,6 +373,7 @@ void KisSketchView::documentChanged()
     d->resetDocumentPosition();
 
 	emit viewChanged();
+    QTimer::singleShot(1000, this, SLOT(updateDisplay()));
 }
 
 bool KisSketchView::event( QEvent* event )
@@ -601,6 +603,15 @@ void KisSketchView::activate()
 {
     d->canvasWidget->setFocus();
     d->view->canvasControllerWidget()->activate();
+}
+
+void KisSketchView::Private::updateDisplay()
+{
+    if (q->scene()) {
+        q->scene()->invalidate( 0, 0, q->width(), q->height() );
+
+        QTimer::singleShot(50, q, SLOT(updateDisplay()));
+    }
 }
 
 #include "KisSketchView.moc"
