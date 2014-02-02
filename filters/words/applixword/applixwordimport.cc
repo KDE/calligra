@@ -733,29 +733,34 @@ APPLIXWORDImport::replaceSpecial(QString &textstr)
 int
 APPLIXWORDImport::readHeader(QTextStream &stream)
 {
-    int     rueck;
     int     vers[3] = { 0, 0, 0 };
 
     // Read Headline
     QString mystr = readTagLine(stream);
 
-    rueck = sscanf((const char *) mystr.toLatin1() ,
+    // Example: *BEGIN WORDS VERSION=430/320 ENCODING=7BIT
+    int ret = sscanf(mystr.toLatin1(),
                    "*BEGIN WORDS VERSION=%d/%d ENCODING=%dBIT",
                    &vers[0], &vers[1], &vers[2]);
+    if (ret <= 0) {
+        // Older version. Example: *START WORDS VERSION=311 ENCODING=7BIT
+        ret = sscanf(mystr.toLatin1(),
+                   "*START WORDS VERSION=%d ENCODING=%dBIT",
+                   &vers[0], &vers[2]);
+        vers[1] = vers[0];
+    }
     printf("Versions info: %d %d %d\n", vers[0], vers[1], vers[2]);
 
     // Check the headline
-    if (rueck <= 0) {
-        printf("Header not correkt - May be it is not an applixword file\n");
-        printf("Headerline: <%s>\n", (const char *) mystr.toLatin1());
+    if (ret <= 0) {
+        printf("Incorrect header - maybe it is not an applixword file\n");
+        printf("Headerline: <%s>\n", (const char *) mystr.toLatin1().constData());
 
         QMessageBox::critical(0L, "Applixword header problem",
                               QString("The Applixword header is not correct. "
                                       "May be it is not an applixword file! <BR>"
                                       "This is the header line I did read:<BR><B>%1</B>").arg(mystr),
                               "Okay");
-
-        // i18n( "What is the separator used in this file ? First line is \n%1" ).arg(firstLine),
         return false;
     } else return true;
 }
