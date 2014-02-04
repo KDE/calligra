@@ -293,6 +293,7 @@ void KexiComboBoxTableEdit::show()
 
 bool KexiComboBoxTableEdit::handleKeyPress(QKeyEvent *ke, bool editorActive)
 {
+    //kDebug() << ke;
     const int k = ke->key();
     if ((ke->modifiers() == Qt::NoButton && k == Qt::Key_F4)
             || (ke->modifiers() == Qt::AltButton && k == Qt::Key_Down)) {
@@ -341,6 +342,18 @@ int KexiComboBoxTableEdit::widthForValue(const QVariant &val, const QFontMetrics
 
 bool KexiComboBoxTableEdit::eventFilter(QObject *o, QEvent *e)
 {
+#if 0
+    if (e->type() != QEvent::Paint
+            && e->type() != QEvent::Leave
+            && e->type() != QEvent::MouseMove
+            && e->type() != QEvent::HoverMove
+            && e->type() != QEvent::HoverEnter
+            && e->type() != QEvent::HoverLeave)
+    {
+        kDebug() << e << o;
+        kDebug() << "FOCUS WIDGET:" << focusWidget();
+    }
+#endif
     if (!column()->isReadOnly() && e->type() == QEvent::MouseButtonPress && m_scrollView) {
         QPoint gp = static_cast<QMouseEvent*>(e)->globalPos()
                     + QPoint(m_scrollView->childX(d->button), m_scrollView->childY(d->button));
