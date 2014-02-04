@@ -3,7 +3,7 @@
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2003 Daniel Molkentin <molkentin@kde.org>
    Copyright (C) 2003 Joseph Wenninger <jowenn@kde.org>
-   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -442,8 +442,9 @@ void KexiTableView::updateFonts(bool repaint)
 // if(d->rowHeight < 22)
 //  d->rowHeight = 22;
     setMargins(
-        qMin(m_horizontalHeader->sizeHint().height(), d->rowHeight),
-        m_horizontalHeader->sizeHint().height(), 0, 0);
+        qMin(m_horizontalHeader->height(), d->rowHeight),
+             horizontalHeaderVisible() ? m_horizontalHeader->height() : 0,
+             0, 0);
 // setMargins(14, d->rowHeight, 0, 0);
     m_verticalHeader->setCellHeight(d->rowHeight);
 
@@ -2619,8 +2620,8 @@ void KexiTableView::setAppearance(const Appearance& a)
         m_verticalHeader->setCellHeight(d->rowHeight);
     if (m_horizontalHeader) {
         setMargins(
-            qMin(m_horizontalHeader->sizeHint().height(), d->rowHeight),
-            m_horizontalHeader->sizeHint().height(), 0, 0);
+            qMin(m_horizontalHeader->height(), d->rowHeight),
+                 horizontalHeaderVisible() ? m_horizontalHeader->height() : 0, 0, 0);
     }
 // }
     if (a.recordHighlightingEnabled)
