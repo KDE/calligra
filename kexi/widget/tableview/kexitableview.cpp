@@ -75,6 +75,8 @@
 #include <db/cursor.h>
 #include <db/validator.h>
 
+//#define KEXITABLEVIEW_DEBUG
+
 KexiTableView::Appearance::Appearance(QWidget *widget)
         : alternateBackgroundColor(
             KColorScheme(QPalette::Active, KColorScheme::View).background(KColorScheme::AlternateBackground).color())
@@ -669,9 +671,9 @@ inline void KexiTableView::paintRow(KexiDB::RecordData *record,
 void KexiTableView::drawContents(QPainter *p, int cx, int cy, int cw, int ch)
 {
 #ifdef KEXITABLEVIEW_DEBUG
-    kDebug() << "disable" << d->disableDrawContents << "cx" << cx << "cy" << cy << "cw" << cw << "ch" << ch;
+    kDebug() << "disable" << d->disableDrawContents << "cx" << cx << "cy" << cy << "cw" << cw << "ch" << ch
+             << "contentsRect" << contentsRect() << "geo" << geometry();
 #endif
-
     if (d->disableDrawContents)
         return;
 
@@ -1334,6 +1336,9 @@ void KexiTableView::contextMenuEvent(QContextMenuEvent* e)
 
 void KexiTableView::keyPressEvent(QKeyEvent* e)
 {
+#ifdef KEXITABLEVIEW_DEBUG
+    kDebug() << e;
+#endif
     if (!hasData())
         return;
 // kDebug() << "key=" <<e->key() << " txt=" <<e->text();
@@ -1576,7 +1581,7 @@ void KexiTableView::editorShowFocus(int /*row*/, int col)
       return;
     }*/
     if (edit) {
-        kDebug() << "IN";
+        //kDebug() << "IN";
         QRect rect = cellGeometry(m_curRow, m_curCol);
 //  rect.moveBy( -contentsX(), -contentsY() );
         edit->showFocus(rect, isReadOnly() || m_data->column(col)->isReadOnly());
@@ -2477,6 +2482,20 @@ bool KexiTableView::eventFilter(QObject *o, QEvent *e)
 {
     //don't allow to stole key my events by others:
 // kDebug() << "spontaneous " << e->spontaneous() << " type=" << e->type();
+#ifdef KEXITABLEVIEW_DEBUG
+    if (e->type() != QEvent::Paint
+        && e->type() != QEvent::Leave
+        && e->type() != QEvent::MouseMove
+        && e->type() != QEvent::HoverMove
+        && e->type() != QEvent::HoverEnter
+        && e->type() != QEvent::HoverLeave)
+    {
+        kDebug() << e << o;
+    }
+    if (e->type() == QEvent::Paint) {
+        kDebug() << "PAINT!" << static_cast<QPaintEvent*>(e) << static_cast<QPaintEvent*>(e)->rect();
+    }
+#endif
     if (e->type() == QEvent::KeyPress) {
         if (e->spontaneous() /*|| e->type()==QEvent::AccelOverride*/) {
             QKeyEvent *ke = static_cast<QKeyEvent*>(e);
