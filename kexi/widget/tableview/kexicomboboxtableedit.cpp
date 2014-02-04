@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002   Peter Simonsson <psn@linux.se>
-   Copyright (C) 2003-2006 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -30,6 +30,7 @@
 
 #include "kexicomboboxtableedit.h"
 #include <widget/utils/kexicomboboxdropdownbutton.h>
+#include <kexiutils/utils.h>
 #include "kexicomboboxpopup.h"
 #include "kexitableview.h"
 #include "kexi.h"
@@ -51,7 +52,7 @@ public:
         delete visibleTableViewColumn;
     }
 
-    KPushButton *button;
+    KexiComboBoxDropDownButton *button;
     KexiComboBoxPopup *popup;
     int currentEditorWidth;
     QSize totalSize;
@@ -67,6 +68,7 @@ KexiComboBoxTableEdit::KexiComboBoxTableEdit(KexiDB::TableViewColumn &column, QW
         , d(new Private())
 {
     m_setVisibleValueOnSetValueInternal = true;
+    m_reinstantiatePopupOnShow = true; // needed because re-opening of the popup fails for unknown reason
     d->button = new KexiComboBoxDropDownButton(parentWidget() /*usually a viewport*/);
     d->button->hide();
     d->button->setFocusPolicy(Qt::NoFocus);
@@ -254,33 +256,27 @@ void KexiComboBoxTableEdit::slotButtonClicked()
 
     if (m_mouseBtnPressedWhenPopupVisible) {
         m_mouseBtnPressedWhenPopupVisible = false;
-        d->button->setChecked(false);
         return;
     }
     kDebug();
     if (!popup() || !popup()->isVisible()) {
         kDebug() << "SHOW POPUP";
         showPopup();
-        d->button->setChecked(true);
     }
 }
 
 void KexiComboBoxTableEdit::slotPopupHidden()
 {
-    d->button->setChecked(false);
-// d->currentEditorWidth = 0;
 }
 
 void KexiComboBoxTableEdit::updateButton()
 {
-    d->button->setChecked(popup()->isVisible());
 }
 
 void KexiComboBoxTableEdit::hide()
 {
     KexiInputTableEdit::hide();
     KexiComboBoxBase::hide();
-    d->button->setChecked(false);
 }
 
 void KexiComboBoxTableEdit::show()
@@ -305,7 +301,7 @@ bool KexiComboBoxTableEdit::handleKeyPress(QKeyEvent *ke, bool editorActive)
         if (enterPressed && m_internalEditorValueChanged) {
             createPopup(false);
             selectItemForEnteredValueInLookupTable(m_userEnteredValue);
-            return false;
+            return true;
         }
 
         return handleKeyPressForPopup(ke);
@@ -354,6 +350,12 @@ bool KexiComboBoxTableEdit::eventFilter(QObject *o, QEvent *e)
         kDebug() << "FOCUS WIDGET:" << focusWidget();
     }
 #endif
+    KexiTableView *tv = dynamic_cast<KexiTableView*>(m_scrollView);
+    if (tv && e->type() == QEvent::KeyPress) {
+        if (tv->eventFilter(o, e)) {
+            return true;
+        }
+    }
     if (!column()->isReadOnly() && e->type() == QEvent::MouseButtonPress && m_scrollView) {
         QPoint gp = static_cast<QMouseEvent*>(e)->globalPos()
                     + QPoint(m_scrollView->childX(d->button), m_scrollView->childY(d->button));
@@ -403,6 +405,7 @@ void KexiComboBoxTableEdit::selectAll()
 
 void KexiComboBoxTableEdit::setValueInInternalEditor(const QVariant& value)
 {
+    KexiUtils::BoolBlocker guard(m_slotInternalEditorValueChanged_enabled, false);
     m_lineedit->setText(value.toString());
 }
 

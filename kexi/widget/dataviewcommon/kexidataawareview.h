@@ -131,6 +131,7 @@ protected:
     QWidget* internalView() const;
 
     virtual bool eventFilter(QObject *o, QEvent *e);
+    QAction* sharedActionRequested(QKeyEvent *ke, const char *actionName);
 
 private:
     class Private;

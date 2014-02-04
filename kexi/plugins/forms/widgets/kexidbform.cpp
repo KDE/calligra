@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Lucijan Busch <lucijan@kde.org>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2005-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2014 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -438,8 +438,7 @@ bool KexiDBForm::eventFilter(QObject * watched, QEvent * e)
     if (e->type() == QEvent::Resize && watched == this)
         kDebug() << "RESIZE";
 #endif
-
-    if (e->type() == QEvent::KeyPress) {
+    if (e->type() == QEvent::KeyPress || e->type() == QEvent::ShortcutOverride) {
         if (isPreviewing()) {
             QKeyEvent *ke = static_cast<QKeyEvent*>(e);
             const int key = ke->key();
@@ -550,6 +549,8 @@ bool KexiDBForm::eventFilter(QObject * watched, QEvent * e)
                     realWidget = dynamic_cast<QWidget*>(dynamic_cast<KexiDataItemInterface*>(realWidget)->parentDataItemInterface());
 
                 d->setOrderedFocusWidgetsIteratorTo(realWidget);
+                dynamic_cast<KexiDataItemInterface*>(realWidget)->moveCursorToEnd();
+
                 //kDebug() << realWidget->objectName();
 
                 // find next/prev widget to focus
