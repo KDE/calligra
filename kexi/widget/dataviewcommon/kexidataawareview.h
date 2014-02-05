@@ -130,6 +130,8 @@ protected:
 
     QWidget* internalView() const;
 
+    virtual bool eventFilter(QObject *o, QEvent *e);
+
 private:
     class Private;
     Private * const d;

@@ -429,6 +429,8 @@ bool Map::saveOdf(KoXmlWriter & xmlWriter, KoShapeSavingContext & savingContext)
     defaultRowStyle.setDefaultStyle(true);
     savingContext.mainStyles().insert(defaultRowStyle, "Default", KoGenStyles::DontAddNumberToName);
 
+    d->calculationSettings->saveOdf(xmlWriter); // table::calculation-settings
+
     QByteArray password;
     this->password(password);
     if (!password.isNull()) {

@@ -78,7 +78,7 @@ class KMessageWidgetPrivate;
  * <b>Opportunistic interaction</b>
  *
  * Opportunistic interaction is the situation where the application suggests to
- * the user an action he could be interested in perform, either based on an
+ * the user an action they could be interested in perform, either based on an
  * action the user just triggered or an event which the application noticed.
  *
  * Example of acceptable uses:

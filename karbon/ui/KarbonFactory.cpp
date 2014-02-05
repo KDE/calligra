@@ -44,6 +44,8 @@
 
 #include <kdebug.h>
 
+#include <KoPluginLoader.h>
+
 KComponentData* KarbonFactory::s_instance = 0L;
 KAboutData* KarbonFactory::s_aboutData = 0L;
 
@@ -93,6 +95,9 @@ const KComponentData &KarbonFactory::componentData()
         s_instance->dirs()->addResourceType("karbon_effects", "data", "karbon/effects/");
         // Tell the iconloader about share/apps/calligra/icons
         KIconLoader::global()->addAppDir("calligra");
+
+        // Load Karbon specific dockers.
+        KoPluginLoader::instance()->load(QString::fromLatin1("Karbon/Dock"));
     }
 
     return *s_instance;

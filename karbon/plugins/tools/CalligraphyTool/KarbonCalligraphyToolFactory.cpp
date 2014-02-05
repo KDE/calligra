@@ -29,7 +29,7 @@
 KarbonCalligraphyToolFactory::KarbonCalligraphyToolFactory()
         : KoToolFactoryBase("KarbonCalligraphyTool")
 {
-    setToolTip(i18n("Calligraphy Tool"));
+    setToolTip(i18n("Calligraphy"));
     setToolType("karbon,krita");
     setIconName(koIconNameCStr("calligraphy"));
     setPriority(3);

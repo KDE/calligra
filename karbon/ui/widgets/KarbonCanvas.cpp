@@ -153,7 +153,6 @@ void KarbonCanvas::paintEvent(QPaintEvent * ev)
 {
     QPainter painter(this);
     painter.translate(-d->documentOffset);
-    painter.setRenderHint(QPainter::Antialiasing);
 
     QRect clipRect = ev->rect().translated(d->documentOffset);
     painter.setClipRect(clipRect);

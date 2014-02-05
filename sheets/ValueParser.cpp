@@ -44,7 +44,7 @@ Value ValueParser::parse(const QString& str) const
     Value val;
 
     // If the text is empty, we don't have a value
-    // If the user stated explicitly that he wanted text
+    // If the user stated explicitly that they wanted text
     // (using the format or using a quote),
     // then we don't parse as a value, but as string.
     if (str.isEmpty() || str.at(0) == '\'') {

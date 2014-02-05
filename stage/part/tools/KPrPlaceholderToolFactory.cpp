@@ -25,7 +25,7 @@
 KPrPlaceholderToolFactory::KPrPlaceholderToolFactory()
     : KoToolFactoryBase("Layout Tool")
 {
-    setToolTip(i18n("Layout Tool"));
+    setToolTip(i18n("Layout"));
     setToolType(dynamicToolType());
     setPriority(0);
     setActivationShapeId(KPrPlaceholderShapeId);

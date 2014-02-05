@@ -19,10 +19,6 @@ if(SHOULD_BUILD_LIB_KOODF2)
     add_subdirectory( libodf2 )
 endif(SHOULD_BUILD_LIB_KOODF2)
 
-if(SHOULD_BUILD_LIB_WRITERPERFECT)
-    add_subdirectory( writerperfect )
-endif(SHOULD_BUILD_LIB_WRITERPERFECT)
-
 if(SHOULD_BUILD_LIB_KOODFREADER)
     add_subdirectory(libodfreader)
 endif(SHOULD_BUILD_LIB_KOODFREADER)

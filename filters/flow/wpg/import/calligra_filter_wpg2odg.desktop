@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Service
+Name=Flow WPG Import Filter
+Name[x-test]=xxFlow WPG Import Filterxx
+X-KDE-Export=application/vnd.oasis.opendocument.graphics
+X-KDE-Import=application/x-wpg
+X-KDE-Weight=1
+X-KDE-Library=calligra_filter_wpg2odg
+X-KDE-ServiceTypes=Calligra/Filter

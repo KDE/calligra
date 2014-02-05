@@ -518,7 +518,7 @@
            <Type>String</Type>
        </Parameter>
        <Help>
-           <Text>The EURO() function converts one Euro to a given national currency in the European monetary union. Currency is one of the following: ATS (Austria), BEF (Belgium), DEM (Germany), ESP (Spain), EUR (Euro), FIM (Finland), FRF (France), GRD (Greece), IEP (Ireland), ITL (Italy), LUF (Luxembourg), NLG (Netherlands), or PTE (Portugal).</Text>
+           <Text>The EURO() function converts one Euro to a given national currency in the European monetary union. Currency is one of the following: ATS (Austria), BEF (Belgium), CYP (Cyprus), DEM (Germany), EEK (Estonia), ESP (Spain), EUR (Euro), FIM (Finland), FRF (France), GRD (Greece), IEP (Ireland), ITL (Italy), LUF (Luxembourg), LVL (Latvia), MTL (Malta), NLG (Netherlands), PTE (Portugal), SIT (Slovenia), or SKK (Slovakia).</Text>
            <Syntax>EURO(currency)</Syntax>
            <Example>EURO("DEM") equals 1.95583</Example>
            <Related>EUROCONVERT</Related>

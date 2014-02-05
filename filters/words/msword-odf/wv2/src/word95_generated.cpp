@@ -1283,9 +1283,7 @@ bool DPPOLYLINE::read(OLEStreamReader *stream, bool preservePos) {
     xaEnd=stream->readU16();
     yaEnd=stream->readU16();
     // Attention: I don't know how to read rgpta - U16[]
-#ifdef __GNUC__
-#warning "Couldn't generate reading code for DPPOLYLINE::rgpta"
-#endif
+
 
     if(preservePos)
         stream->pop();
@@ -1327,9 +1325,6 @@ bool DPPOLYLINE::write(OLEStreamWriter *stream, bool preservePos) const {
     stream->write(xaEnd);
     stream->write(yaEnd);
     // Attention: I don't know how to write rgpta - U16[]
-#ifdef __GNUC__
-#warning "Couldn't generate writing code for DPPOLYLINE::rgpta"
-#endif
 
     if(preservePos)
         stream->pop();
@@ -1371,9 +1366,6 @@ void DPPOLYLINE::clearInternal() {
 
 bool operator==(const DPPOLYLINE &lhs, const DPPOLYLINE &rhs) {
     // Attention: I don't know how to compare rgpta - U16[]
-#ifdef __GNUC__
-#warning "Can't compare DPPOLYLINE::rgpta items"
-#endif
 
     return lhs.dphead==rhs.dphead &&
            lhs.lnpc==rhs.lnpc &&
@@ -6856,9 +6848,6 @@ bool SEPX::read(OLEStreamReader *stream, bool preservePos) {
 
     cb=stream->readU8();
     // Attention: I don't know how to read grpprl - U8[]
-#ifdef __GNUC__
-#warning "Couldn't generate reading code for SEPX::grpprl"
-#endif
 
     if(preservePos)
         stream->pop();
@@ -6872,9 +6861,6 @@ bool SEPX::write(OLEStreamWriter *stream, bool preservePos) const {
 
     stream->write(cb);
     // Attention: I don't know how to write grpprl - U8[]
-#ifdef __GNUC__
-#warning "Couldn't generate writing code for SEPX::grpprl"
-#endif
 
     if(preservePos)
         stream->pop();
@@ -6893,9 +6879,6 @@ void SEPX::clearInternal() {
 
 bool operator==(const SEPX &lhs, const SEPX &rhs) {
     // Attention: I don't know how to compare grpprl - U8[]
-#ifdef __GNUC__
-#warning "Can't compare SEPX::grpprl items"
-#endif
 
     return lhs.cb==rhs.cb;
 }

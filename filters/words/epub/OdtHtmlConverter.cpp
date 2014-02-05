@@ -577,7 +577,9 @@ void OdtHtmlConverter::handleTagFrame(KoXmlElement &nodeElement, KoXmlWriter *ht
             }
             htmlWriter->addAttribute("alt", "(No Description)");
 
-            QString imgSrc = framePartElement.attribute("href").section('/', -1);
+            QString href = framePartElement.attribute("href");
+            QString imgSrc = href.section('/', -1);
+            //kDebug(30503) << "image source:" << href << imgSrc;
 
             if (m_options->useMobiConventions) {
                 // Mobi

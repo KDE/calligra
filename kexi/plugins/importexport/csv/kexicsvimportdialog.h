@@ -105,9 +105,9 @@ public:
     virtual ~KexiCSVImportDialog();
 
     bool cancelled() const;
-    virtual bool eventFilter(QObject * watched, QEvent * e);
 
 protected:
+    virtual bool eventFilter(QObject *watched, QEvent *e);
     bool openData();
     virtual void accept();
     virtual void reject();

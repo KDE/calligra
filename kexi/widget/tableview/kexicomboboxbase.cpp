@@ -347,6 +347,7 @@ void KexiComboBoxBase::createPopup(bool show)
     m_insideCreatePopup = true;
     QWidget* thisWidget = dynamic_cast<QWidget*>(this);
     QWidget *widgetToFocus = internalEditor() ? internalEditor() : thisWidget;
+    //kDebug() << "widgetToFocus:" << widgetToFocus;
 
     if (m_reinstantiatePopupOnShow) {
         QWidget *oldPopup = popup();

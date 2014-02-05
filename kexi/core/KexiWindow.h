@@ -126,9 +126,6 @@ public:
 
     void setContextHelp(const QString& caption, const QString& text, const QString& iconName);
 
-    /*! Internal reimplementation. */
-    virtual bool eventFilter(QObject *obj, QEvent *e);
-
     //! \return true if the window is attached within the main window
     bool isAttached() const {
         return true;
@@ -273,6 +270,9 @@ protected:
 
     //! \internal
     void removeView(Kexi::ViewMode mode);
+
+    //! \internal
+    virtual bool eventFilter(QObject *obj, QEvent *e);
 
     //! Used by \a view to inform the dialog about changing state of the "dirty" flag.
     void dirtyChanged(KexiView* view);

@@ -832,7 +832,7 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     connect(action, SIGNAL(triggered(bool)), this, SLOT(sheetFormat()));
     action->setToolTip(i18n("Set the worksheet formatting"));
 
-    action = new KAction(i18n("Document Settings..."), this);
+    action = new KAction(koIcon("application-vnd.oasis.opendocument.spreadsheet"), i18n("Document Settings..."), this);
     addAction("documentSettingsDialog", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(documentSettingsDialog()));
     action->setToolTip(i18n("Show document settings dialog"));
@@ -2270,7 +2270,7 @@ void CellToolBase::equalizeColumn()
         if (size != 0.0) {
             ResizeColumnManipulator* command = new ResizeColumnManipulator();
             command->setSheet(selection()->activeSheet());
-            command->setSize(qMax(qreal(2.0), size));
+            command->setSize(qMax(2.0, size));
             command->add(*selection());
             if (!command->execute())
                 delete command;

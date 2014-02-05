@@ -325,7 +325,7 @@ protected:
     /*! This function creates a little editor to modify rich text. It supports alignment,
      subscript and superscript and all basic formatting properties.
      If the user presses "Ok", the edited text is put into @a text and true is returned. 
-     If he presses "Cancel" false is returned. */
+     If the user presses "Cancel" false is returned. */
     bool editRichText(QWidget *w, QString &text) const;
 
 #ifndef KEXI_FORMS_NO_LIST_WIDGET

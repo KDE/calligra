@@ -66,6 +66,9 @@ public:
         QString name;
     };
 
+    virtual KLocalizedString i18nMessage(const QString& englishMessage,
+                                         KexiWindow* window) const;
+
 private slots:
     void slotToolboxActionTriggered(bool checked);
     //! Unchecks toolbox action for @a entity after it is used.
