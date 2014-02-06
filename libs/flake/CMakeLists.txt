@@ -169,6 +169,7 @@ set(flake_SRCS
     commands/KoShapeUnclipCommand.cpp
     commands/KoPathShapeMarkerCommand.cpp
     commands/KoShapeConnectionChangeCommand.cpp
+    commands/KoTosContainerAddTextCommand.cpp
     tools/KoCreateShapeStrategy.cpp
     tools/KoPathToolFactory.cpp
     tools/KoPathTool.cpp
@@ -341,6 +342,7 @@ install(
     commands/KoShapeUngroupCommand.h
     commands/KoSubpathRemoveCommand.h
     commands/KoPathShapeMarkerCommand.h
+    commands/KoTosContainerAddTextCommand.h
     tools/KoInteractionTool.h
     tools/KoPanTool.h
     KoViewConverter.h

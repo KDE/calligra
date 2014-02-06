@@ -107,6 +107,8 @@ private slots:
     void selectionGroup();
     void selectionUngroup();
 
+    void addTextToShape();
+
     /// Update actions on selection change
     void updateActions();
 

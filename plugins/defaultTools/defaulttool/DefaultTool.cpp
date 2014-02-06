@@ -52,7 +52,9 @@
 #include <commands/KoShapeCreateCommand.h>
 #include <commands/KoShapeGroupCommand.h>
 #include <commands/KoShapeUngroupCommand.h>
+#include <commands/KoTosContainerAddTextCommand.h>
 #include <KoSnapGuide.h>
+#include <KoTosContainer.h>
 #include <KoStrokeConfigWidget.h>
 #include <KoFillConfigWidget.h>
 #include <KoShadowConfigWidget.h>
@@ -270,6 +272,18 @@ void DefaultTool::setupActions()
                                                 i18n("Ungroup"), this);
     addAction("object_ungroup", actionUngroupBottom);
     connect(actionUngroupBottom, SIGNAL(triggered()), this, SLOT(selectionUngroup()));
+
+    KAction* actionAddTextToShape = new KAction(i18n("Add Text"), this);
+    addAction("add_text_to_shape", actionAddTextToShape);
+    connect(actionAddTextToShape, SIGNAL(triggered()), this, SLOT(addTextToShape()));
+
+    // setup the context list.
+    KConfigGroup group(KGlobal::config(), "calligra");
+    if (group.readEntry("AllowAddTextToShape", true)) {
+        QList<QAction*> list;
+        list.append(this->action("add_text_to_shape"));
+        setPopupActionList(list);
+    }
 }
 
 qreal DefaultTool::rotationOfHandle(KoFlake::SelectionHandle handle, bool useEdgeRotation)
@@ -1099,6 +1113,34 @@ void DefaultTool::selectionReorder(KoShapeReorderCommand::MoveShapeType order)
         return;
 
     KUndo2Command * cmd = KoShapeReorderCommand::createCommand(editableShapes, canvas()->shapeManager(), order);
+    if (cmd) {
+        canvas()->addCommand(cmd);
+    }
+}
+
+void DefaultTool::addTextToShape()
+{
+    KoSelection* selection = canvas()->shapeManager()->selection();
+    if (! selection)
+        return;
+
+    QList<KoShape*> selectedShapes = selection->selectedShapes(KoFlake::TopLevelSelection);
+    if (selectedShapes.count() < 1)
+        return;
+
+    QList<KoTosContainer*> editableKoTosContainers;
+    foreach( KoShape * shape, selectedShapes ) {
+        if (shape->isEditable()) {
+            KoTosContainer* tos = dynamic_cast<KoTosContainer*>(shape);
+            if (tos) editableKoTosContainers.append(tos);
+        }
+    }
+
+    if (editableKoTosContainers.empty())
+        return;
+
+    KUndo2Command * cmd = new KoTosContainerAddTextCommand(
+        editableKoTosContainers, canvas()->shapeController()->resourceManager());
     if (cmd) {
         canvas()->addCommand(cmd);
     }
