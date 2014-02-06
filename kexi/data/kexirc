@@ -3,3 +3,6 @@ Order=org.kexi-project.table,org.kexi-project.query,org.kexi-project.form,org.ke
 
 [MainWindow]
 HoverCloseButtonForTabs=false
+
+[calligra]
+AllowAddTextToShapePopupAction=false

@@ -6,6 +6,7 @@ FlakePluginsDisabled=
 TextEditingPluginsDisabled=thesaurustool
 TextInlinePluginsDisabled=kprvariables
 ToolPluginsDisabled=calligrastagetoolanimation,kopabackgroundtool
+AllowAddTextToShapePopupAction=false
 
 # Set which toolbars sholuld be hidden/visible per default.
 [DockerManager]

@@ -279,7 +279,7 @@ void DefaultTool::setupActions()
 
     // setup the context list.
     KConfigGroup group(KGlobal::config(), "calligra");
-    if (group.readEntry("AllowAddTextToShape", true)) {
+    if (group.readEntry("AllowAddTextToShapePopupAction", true)) {
         QList<QAction*> list;
         list.append(this->action("add_text_to_shape"));
         setPopupActionList(list);

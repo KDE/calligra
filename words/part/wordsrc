@@ -6,6 +6,7 @@ TextEditingPluginsDisabled=thesaurustool
 ShapePluginsDisabled=kritashape
 TextInlinePluginsDisabled=kprvariables
 ToolPluginsDisabled=calligrastagetoolanimation,kopabackgroundtool
+AllowAddTextToShapePopupAction=false
 
 [KoShapeCollection]
 QuickShapes=TextShapeID,PictureShape,ArtisticText
