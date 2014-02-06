@@ -377,6 +377,18 @@ void KexiDBComboBox::mouseDoubleClickEvent(QMouseEvent *e)
 
 bool KexiDBComboBox::eventFilter(QObject *o, QEvent *e)
 {
+#if 0
+    if (e->type() != QEvent::Paint
+            && e->type() != QEvent::Leave
+            && e->type() != QEvent::MouseMove
+            && e->type() != QEvent::HoverMove
+            && e->type() != QEvent::HoverEnter
+            && e->type() != QEvent::HoverLeave)
+    {
+        kDebug() << e << o << subwidget();
+        kDebug() << "FOCUS WIDGET:" << focusWidget();
+    }
+#endif
     if (o == this) {
         if (e->type() == QEvent::Resize) {
             d->paintedCombo->resize(size());
