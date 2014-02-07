@@ -549,7 +549,9 @@ QSize KexiTableView::sizeHint() const
     w = qMin(w, qApp->desktop()->availableGeometry(this).width() * 3 / 4); //stretch
     h = qMin(h, qApp->desktop()->availableGeometry(this).height() * 3 / 4); //stretch
 
-// kDebug() << w << << h;
+#ifdef KEXITABLEVIEW_DEBUG
+    kDebug() << w << h;
+#endif
 
     return QSize(w, h);
     /*QSize(
@@ -984,6 +986,11 @@ void KexiTableView::paintCell(QPainter* p, KexiDB::RecordData *record, int col, 
                     w - (x + x) - ((align & Qt::AlignLeft) ? 2 : 0)/*right space*/, h,
                     align, txt);
     }
+#ifdef KEXITABLEVIEW_DEBUG
+    p->setPen(QPen(QColor(255, 0, 0, 150), 1, Qt::DashLine));
+    p->drawRect(x, y_offset, w - 1, h - 1);
+    kDebug() << cellValue << "x:" << x << "y:" <<  y_offset << "w:" << w << "h:" << h;
+#endif
     p->restore();
 }
 
@@ -2032,7 +2039,7 @@ QSize KexiTableView::tableSize() const
 
 //  kDebug() << rows()-1 <<" "<< (isInsertingEnabled()?1:0) <<" "<< (rowEditing()?1:0) << " " <<  s;
 #ifdef KEXITABLEVIEW_DEBUG
-kDebug() << s;
+kDebug() << s << "cw(last):" << columnWidth(columns() - 1);
 #endif
         return s;
 //   +horizontalScrollBar()->sizeHint().height() + margin() );
