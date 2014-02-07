@@ -37,6 +37,9 @@
 
 #include <klineedit.h>
 
+// the right margin is too large when the editor is show, reduce it
+const int RIGHT_MARGIN_DELTA = 6;
+
 //! @internal
 class KexiComboBoxTableEdit::Private
 {
@@ -75,6 +78,11 @@ KexiComboBoxTableEdit::KexiComboBoxTableEdit(KexiDB::TableViewColumn &column, QW
     connect(d->button, SIGNAL(clicked()), this, SLOT(slotButtonClicked()));
 
     connect(m_lineedit, SIGNAL(textChanged(QString)), this, SLOT(slotLineEditTextChanged(QString)));
+
+    m_rightMarginWhenFocused = this->column()->isReadOnly() ? 0 : d->button->width();
+    m_rightMarginWhenFocused -= RIGHT_MARGIN_DELTA;
+    updateLineEditStyleSheet();
+    m_rightMarginWhenFocused += RIGHT_MARGIN_DELTA;
 
 // m_lineedit = new KLineEdit(this, "lineedit");
 // m_lineedit->setFrame(false);
@@ -144,10 +152,7 @@ void KexiComboBoxTableEdit::showFocus(const QRect& r, bool readOnly)
 // d->button->move( pos().x()+ width(), pos().y() );
     updateFocus(r);
     d->button->setEnabled(!readOnly);
-    if (readOnly)
-        d->button->hide();
-    else
-        d->button->show();
+    d->button->setVisible(!readOnly);
 }
 
 void KexiComboBoxTableEdit::resize(int w, int h)
@@ -155,9 +160,12 @@ void KexiComboBoxTableEdit::resize(int w, int h)
     d->totalSize = QSize(w, h);
     if (!column()->isReadOnly()) {
         d->button->resize(h, h);
-        QWidget::resize(w - d->button->width(), h);
+        QWidget::resize(w, h);
     }
-    m_rightMarginWhenFocused = m_rightMargin + (column()->isReadOnly() ? 0 : d->button->width());
+    m_rightMarginWhenFocused = /*m_rightMargin +*/ (column()->isReadOnly() ? 0 : d->button->width());
+    m_rightMarginWhenFocused -= RIGHT_MARGIN_DELTA;
+    updateLineEditStyleSheet();
+    m_rightMarginWhenFocused += RIGHT_MARGIN_DELTA;
     QRect r(pos().x(), pos().y(), w + 1, h + 1);
     if (m_scrollView)
         r.translate(m_scrollView->contentsX(), m_scrollView->contentsY());
@@ -225,8 +233,6 @@ void KexiComboBoxTableEdit::setupContents(QPainter *p, bool focused, const QVari
     } else {
         KexiInputTableEdit::setupContents(p, focused, val, txt, align, x, y_offset, w, h);
     }
-    if (!column()->isReadOnly() && focused && (w > d->button->width()))
-        w -= (d->button->width() - x);
     if (!val.isNull()) {
         KexiDB::TableViewData *relData = column()->relatedData();
         KexiDB::LookupFieldSchema *lookupFieldSchema = 0;
