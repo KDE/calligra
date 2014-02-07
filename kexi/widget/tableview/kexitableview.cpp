@@ -1571,7 +1571,7 @@ KexiDataItemInterface *KexiTableView::editor(int col, bool ignoreMissingEditor)
     connect(editor, SIGNAL(cancelRequested()), this, SLOT(cancelEditor()));
     connect(editor, SIGNAL(acceptRequested()), this, SLOT(acceptEditor()));
 
-    editor->resize(columnWidth(col) - 1, rowHeight() - 1);
+    editor->resize(columnWidth(col), rowHeight());
     editor->installEventFilter(this);
     if (editor->widget())
         editor->widget()->installEventFilter(this);
@@ -1658,7 +1658,7 @@ void KexiTableView::createEditor(int row, int col, const QString& addText, bool 
     if (m_editor->hasFocusableWidget()) {
         moveChild(editorWidget, columnPos(m_curCol), rowPos(m_curRow));
 
-        editorWidget->resize(columnWidth(m_curCol) - 1, rowHeight() - 1);
+        editorWidget->resize(columnWidth(m_curCol), rowHeight());
         editorWidget->show();
 
         m_editor->setFocus();
@@ -1898,7 +1898,7 @@ void KexiTableView::slotColumnWidthChanged(int, int, int)
 // updateContents(0, 0, d->pBufferPm->width(), d->pBufferPm->height());
     QWidget *editorWidget = dynamic_cast<QWidget*>(m_editor);
     if (editorWidget) {
-        editorWidget->resize(columnWidth(m_curCol) - 1, rowHeight() - 1);
+        editorWidget->resize(columnWidth(m_curCol), rowHeight());
         moveChild(editorWidget, columnPos(m_curCol), rowPos(m_curRow));
     }
     updateGeometries();
@@ -2272,7 +2272,7 @@ void KexiTableView::adjustColumnWidthToContents(int colNum)
             maxw = qMax(maxw, wfw);
         }
         const bool focused = currentColumn() == colNum;
-        maxw += (fm.width("  ") + ed->leftMargin() + ed->rightMargin(focused));
+        maxw += (fm.width("  ") + ed->leftMargin() + ed->rightMargin(focused) + 2);
     }
     if (maxw < KEXITV_MINIMUM_COLUMN_WIDTH)
         maxw = KEXITV_MINIMUM_COLUMN_WIDTH; //not too small
