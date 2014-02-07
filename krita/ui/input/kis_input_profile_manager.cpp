@@ -218,7 +218,7 @@ void KisInputProfileManager::loadProfiles()
             profileEntries[entry.name] = QList<ProfileEntry>();
         }
 
-        if (p.contains(".kde") || p.contains(".krita")) {
+        if (p.contains(".kde") || p.contains("AppData")) {
             // It's the user define one, drop the others
             profileEntries[entry.name].clear();
             profileEntries[entry.name].append(entry);
