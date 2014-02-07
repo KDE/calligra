@@ -33,7 +33,12 @@ public:
     explicit KexiComboBoxDropDownButton(QWidget *parent = 0);
     virtual ~KexiComboBoxDropDownButton();
 
+protected:
+    virtual bool event(QEvent *event);
+
 private:
+    void styleChanged();
+
     class Private;
     Private * const d;
 };

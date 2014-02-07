@@ -23,15 +23,40 @@
 #include <kcombobox.h>
 
 #include <QStyle>
+#include <QStyleOptionToolButton>
 #include <QPainter>
 #include <QEvent>
-#include <kexi_global.h>
+
+#include <kexiutils/styleproxy.h>
+
+
+
+//! @internal A style that allows to alter some painting in KexiComboBoxDropDownButton.
+class KexiComboBoxDropDownButtonStyle : public KexiUtils::StyleProxy
+{
+public:
+    KexiComboBoxDropDownButtonStyle(QStyle *parentStyle, QWidget*)
+            : KexiUtils::StyleProxy(parentStyle)
+    {
+    }
+    virtual ~KexiComboBoxDropDownButtonStyle() {}
+    virtual void drawComplexControl( ComplexControl control, const QStyleOptionComplex * option, QPainter * painter, const QWidget * widget = 0 ) const
+    {
+        QStyleOptionToolButton opt(*qstyleoption_cast<const QStyleOptionToolButton*>(option));
+        opt.state |= (State_MouseOver | State_DownArrow | State_Sunken);
+        opt.state ^= (State_MouseOver | State_DownArrow | State_Sunken);
+        KexiUtils::StyleProxy::drawComplexControl(control, &opt, painter, widget);
+    }
+};
+
+// ----
 
 class KexiComboBoxDropDownButton::Private
 {
 public:
-    Private() {}
-    bool dummy;
+    Private() : styleChangeEnabled(true) {}
+    QPointer<QStyle> privateStyle;
+    bool styleChangeEnabled;
 };
 
 KexiComboBoxDropDownButton::KexiComboBoxDropDownButton(QWidget *parent)
@@ -40,9 +65,30 @@ KexiComboBoxDropDownButton::KexiComboBoxDropDownButton(QWidget *parent)
 {
     setAutoRaise(true);
     setArrowType(Qt::DownArrow);
+    styleChanged();
 }
 
 KexiComboBoxDropDownButton::~KexiComboBoxDropDownButton()
 {
     delete d;
+}
+
+void KexiComboBoxDropDownButton::styleChanged()
+{
+    if (!d->styleChangeEnabled)
+        return;
+    d->styleChangeEnabled = false;
+    if (d->privateStyle) {
+        setStyle(0);
+        delete static_cast<QStyle*>(d->privateStyle);
+    }
+    setStyle(d->privateStyle = new KexiComboBoxDropDownButtonStyle(style(), this));
+    d->styleChangeEnabled = true;
+}
+
+bool KexiComboBoxDropDownButton::event(QEvent *event)
+{
+    if (event->type() == QEvent::StyleChange)
+        styleChanged();
+    return QToolButton::event(event);
 }
