@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Semantic item definition
+Name[bs]=Definicija semantičkog objekta
 Name[ca]=Definició d'element semàntic
 Name[da]=Definition af semantisk element
 Name[de]=Definition eines semantischen Elements
@@ -15,6 +16,7 @@ Name[sv]=Definition av semantiskt objekt
 Name[uk]=Визначення семантичного запису
 Name[x-test]=xxSemantic item definitionxx
 Comment=Definition of a semantic item object
+Comment[bs]=Definicija objekta semantike
 Comment[ca]=Definició d'objecte d'element semàntic
 Comment[da]=Definition af semantisk elementobjekt
 Comment[de]=Definition eines Objekts für ein semantisches Element

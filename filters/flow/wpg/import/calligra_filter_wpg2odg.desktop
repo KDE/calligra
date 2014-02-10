@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=Flow WPG Import Filter
+Name[bs]=Flow WPG uvozni filter
 Name[ca]=Filtre d'importació WPG per al Flow
 Name[cs]=Importní filtr formátu SPG pro Flow
 Name[da]=WPG-importfilter til Flow

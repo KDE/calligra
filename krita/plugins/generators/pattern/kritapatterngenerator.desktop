@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Solid Pattern Layer
+Name[bs]=Sloj punog uzorka
 Name[ca]=Capa de patrons sòlids
 Name[ca@valencia]=Capa de patrons sòlids
 Name[da]=Lag med massivt mønster
@@ -18,6 +19,7 @@ Name[sv]=Helmönstergenerator
 Name[uk]=Шар суцільного візерунка
 Name[x-test]=xxSolid Pattern Layerxx
 Comment=generates a pattern layer
+Comment[bs]=generiše sloj uzorka
 Comment[ca]=Genera una capa de patrons
 Comment[ca@valencia]=Genera una capa de patrons
 Comment[da]=genererer et mønster-lag

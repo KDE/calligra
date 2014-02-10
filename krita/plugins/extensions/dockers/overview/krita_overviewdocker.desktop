@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Overview Docker
+Name[bs]=Doker za opšti pregled
 Name[ca]=Acoblador de vista general
 Name[ca@valencia]=Acoblador de vista general
 Name[cs]=Dok přehledů
@@ -19,6 +20,7 @@ Name[sv]=Dockningsfönster med översikt
 Name[uk]=Панель ескіза
 Name[x-test]=xxOverview Dockerxx
 Comment=Docker for showing an image overview
+Comment[bs]=Doker za pregled opšteg izgleda slike
 Comment[ca]=Acoblador per mostrar una vista general d'una imatge
 Comment[ca@valencia]=Acoblador per mostrar una vista general d'una imatge
 Comment[da]=Dokker til at vise en billedoversigt
