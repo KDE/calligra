@@ -171,16 +171,16 @@ void KisCurveOption::readNamedOptionSetting(const QString& prefix, const KisProp
 //    // Only load the old curve format if the curve wasn't saved by the sensor
 //    // This will give every sensor the same curve.
 //    //qDebug() << ">>>>>>>>>>>" << prefix + "Sensor" << setting->getString(prefix + "Sensor");
-//    if (!setting->getString(prefix + "Sensor").contains("curve")) {
-//        //qDebug() << "\told format";
-//        if (setting->getBool("Custom" + prefix, false)) {
-//            foreach(KisDynamicSensor *s, m_sensorMap.values()) {
-//                s->setCurve(setting->getCubicCurve("Curve" + prefix));
-//                s->setActive(true);
-//                replaceSensor(s);
-//            }
-//        }
-//    }
+    if (!setting->getString(prefix + "Sensor").contains("curve")) {
+        //qDebug() << "\told format";
+        if (setting->getBool("Custom" + prefix, false)) {
+            foreach(KisDynamicSensor *s, m_sensorMap.values()) {
+                s->setCurve(setting->getCubicCurve("Curve" + prefix));
+                s->setActive(true);
+                replaceSensor(s);
+            }
+        }
+    }
 
     // At least one sensor needs to be active
     if (activeSensors().size() == 0) {
