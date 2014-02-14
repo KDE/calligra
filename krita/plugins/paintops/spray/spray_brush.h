@@ -47,26 +47,26 @@ public:
     ~SprayBrush();
 
     void paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,  const KisPaintInformation& info, qreal rotation, qreal scale, const KoColor &color, const KoColor &bgColor);
-    void setProperties(KisSprayProperties * properties, 
-                       KisColorProperties * colorProperties, 
-                       KisShapeProperties * shapeProperties, 
+    void setProperties(KisSprayProperties * properties,
+                       KisColorProperties * colorProperties,
+                       KisShapeProperties * shapeProperties,
                        KisShapeDynamicsProperties * shapeDynamicsProperties,
-                       KisBrushSP brush){
+                       KisBrushSP brush) {
         m_properties = properties;
         m_colorProperties = colorProperties;
         m_shapeProperties = shapeProperties;
         m_shapeDynamicsProperties = shapeDynamicsProperties;
         m_brush = brush;
     }
-   
-    void setFixedDab(KisFixedPaintDeviceSP dab){
+
+    void setFixedDab(KisFixedPaintDeviceSP dab) {
         m_fixedDab = dab;
     }
-    
+
 private:
     KoColor m_inkColor;
     qreal m_radius;
-    quint32 m_particlesCount; 
+    quint32 m_particlesCount;
     quint8 m_dabPixelSize;
 
     RandomGauss * m_rand;
@@ -76,15 +76,15 @@ private:
     QImage m_transformed;
 
     KoColorTransformation* m_transfo;
-    
+
     const KisSprayProperties * m_properties;
     const KisColorProperties * m_colorProperties;
     const KisShapeProperties * m_shapeProperties;
     const KisShapeDynamicsProperties * m_shapeDynamicsProperties;
-    
+
     const KisBrushSP m_brush;
     KisFixedPaintDeviceSP m_fixedDab;
-    
+
 private:
     /// rotation in radians according the settings (gauss distribution, uniform distribution or fixed angle)
     qreal rotationAngle();
@@ -104,12 +104,12 @@ private:
     // TODO: move this somewhere where I can reuse it
     /// convert radians to degrees
     inline qreal rad2deg(qreal rad) const {
-        return rad * (180.0/M_PI);
+        return rad * (180.0 / M_PI);
     }
 
     /// convert degrees to radians
     inline qreal deg2rad(quint16 deg) const {
-        return deg * (M_PI/180.0);
+        return deg * (M_PI / 180.0);
     }
 };
 
