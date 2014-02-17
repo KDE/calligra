@@ -1,13 +1,12 @@
 include_directories(
     ${CMAKE_SOURCE_DIR}/sheets
-    ${CMAKE_SOURCE_DIR}/filters/liboofilter
     ${KOMAIN_INCLUDES}
 )
 
 
 if(SHOULD_BUILD_FILTER_OPENCALC_TO_SHEETS)
 
-set(opencalc2sheets_PART_SRCS opencalcimport.cc ${liboofilter_SRCS} )
+set(opencalc2sheets_PART_SRCS opencalcimport.cc ooutils.cc )
 
 kde4_add_plugin(calligra_filter_opencalc2sheets ${opencalc2sheets_PART_SRCS})
 

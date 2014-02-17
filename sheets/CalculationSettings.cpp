@@ -34,6 +34,7 @@
 #include "Localization.h"
 
 #include <KoXmlNS.h>
+#include <KoXmlWriter.h>
 
 #include <kdebug.h>
 
@@ -48,6 +49,7 @@ public:
     bool wholeCellSearchCriteria  : 1;
     bool automaticFindLabels      : 1;
     bool useRegularExpressions    : 1;
+    bool useWildcards             : 1;
     bool automaticCalculation     : 1;
     int refYear; // the reference year two-digit years are relative to
     QDate refDate; // the reference date all dates are relative to
@@ -72,6 +74,7 @@ CalculationSettings::CalculationSettings()
     d->wholeCellSearchCriteria  = true;
     d->automaticFindLabels      = true;
     d->useRegularExpressions    = true;
+    d->useWildcards             = false;
     d->automaticCalculation     = true;
     d->refYear = 1930;
     d->refDate = QDate(1899, 12, 30);
@@ -115,11 +118,20 @@ void CalculationSettings::loadOdf(const KoXmlElement& body)
             QString value = element.attributeNS(KoXmlNS::table, "use-regular-expressions", "true");
             if (value == "false")
                 d->useRegularExpressions = false;
+        } else if (element.hasAttributeNS(KoXmlNS::table, "use-wildcards")) {
+            d->useWildcards = false;
+            QString value = element.attributeNS(KoXmlNS::table, "use-wildcards", "false");
+            if (value == "true")
+                d->useWildcards = true;
         } else if (element.hasAttributeNS(KoXmlNS::table, "null-year")) {
             d->refYear = 1930;
             QString value = element.attributeNS(KoXmlNS::table, "null-year", "1930");
-            if (value == "false")
-                d->refYear = false;
+            if (!value.isEmpty() && value != "1930") {
+                bool ok;
+                int refYear = value.toInt(&ok);
+                if (ok)
+                    d->refYear = refYear;
+            }
         }
 
         forEachElement(element, settings) {
@@ -138,6 +150,9 @@ void CalculationSettings::loadOdf(const KoXmlElement& body)
                     << "Value type """ << valueType << """ not handled"
                     << ", falling back to default." << endl;
                     // NOTE Stefan: I don't know why different types are possible here!
+                    // sebsauer: because according to ODF-specs a zero null date can
+                    // mean QDate::currentDate(). Still unclear what a numeric value !=0
+                    // means through :-/
                 }
             } else if (element.tagName() ==  "iteration") {
                 // TODO
@@ -146,8 +161,24 @@ void CalculationSettings::loadOdf(const KoXmlElement& body)
     }
 }
 
-bool CalculationSettings::saveOdf(KoXmlWriter &/*settingsWriter*/) const
+bool CalculationSettings::saveOdf(KoXmlWriter &xmlWriter) const
 {
+    xmlWriter.startElement("table:calculation-settings");
+    if (!d->caseSensitiveComparisons)
+        xmlWriter.addAttribute("table:case-sensitive", "false");
+    if (d->precisionAsShown)
+        xmlWriter.addAttribute("table:precision-as-shown", "true");
+    if (!d->wholeCellSearchCriteria)
+        xmlWriter.addAttribute("table:search-criteria-must-apply-to-whole-cell", "false");
+    if (!d->automaticFindLabels)
+        xmlWriter.addAttribute("table:automatic-find-labels", "false");
+    if (!d->useRegularExpressions)
+        xmlWriter.addAttribute("table:use-regular-expressions", "false");
+    if (d->useWildcards)
+        xmlWriter.addAttribute("table:use-wildcards", "true");
+    if (d->refYear != 1930)
+        xmlWriter.addAttribute("table:null-year", QString::number(d->refYear));
+    xmlWriter.endElement();
     return true;
 }
 
@@ -158,10 +189,7 @@ KLocale* CalculationSettings::locale() const
 
 void CalculationSettings::setReferenceYear(int year)
 {
-    if (year < 100)
-        d->refYear = 1900 + year;
-    else
-        d->refYear = year;
+    d->refYear = year;
 }
 
 int CalculationSettings::referenceYear() const
@@ -178,6 +206,16 @@ void CalculationSettings::setReferenceDate(const QDate& date)
 QDate CalculationSettings::referenceDate() const
 {
     return d->refDate;
+}
+
+void CalculationSettings::setPrecisionAsShown(bool enable)
+{
+    d->precisionAsShown = enable;
+}
+
+bool CalculationSettings::precisionAsShown() const
+{
+    return d->precisionAsShown;
 }
 
 void CalculationSettings::setDefaultDecimalPrecision(int precision)
@@ -210,6 +248,16 @@ bool CalculationSettings::isAutoCalculationEnabled() const
     return d->automaticCalculation;
 }
 
+void CalculationSettings::setAutomaticFindLabels(bool enabled)
+{
+    d->automaticFindLabels = enabled;
+}
+
+bool CalculationSettings::automaticFindLabels() const
+{
+    return d->automaticFindLabels;
+}
+
 void CalculationSettings::setCaseSensitiveComparisons(Qt::CaseSensitivity caseSensitive)
 {
     d->caseSensitiveComparisons = caseSensitive == Qt::CaseSensitive;
@@ -218,4 +266,34 @@ void CalculationSettings::setCaseSensitiveComparisons(Qt::CaseSensitivity caseSe
 Qt::CaseSensitivity CalculationSettings::caseSensitiveComparisons() const
 {
     return d->caseSensitiveComparisons ? Qt::CaseSensitive : Qt::CaseInsensitive;
+}
+
+void CalculationSettings::setWholeCellSearchCriteria(bool enabled)
+{
+    d->wholeCellSearchCriteria = enabled;
+}
+
+bool CalculationSettings::wholeCellSearchCriteria() const
+{
+    return d->wholeCellSearchCriteria;
+}
+
+void CalculationSettings::setUseRegularExpressions(bool enabled)
+{
+    d->useRegularExpressions = enabled;
+}
+
+bool CalculationSettings::useRegularExpressions() const
+{
+    return d->useRegularExpressions;
+}
+
+void CalculationSettings::setUseWildcards(bool enabled)
+{
+    d->useWildcards = enabled;
+}
+
+bool CalculationSettings::useWildcards() const
+{
+    return d->useWildcards;
 }

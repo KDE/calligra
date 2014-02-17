@@ -1,12 +1,14 @@
 [Desktop Entry]
 Name=Sheets Scripting Plugin
 Name[ca]=Connector per crear scripts del Sheets
+Name[ca@valencia]=Connector per crear scripts del Sheets
 Name[cs]=Skriptovací modul pro Sheets
 Name[de]=Sheets-Skripting-Modul
 Name[es]=Complemento de programación de guiones de Sheets
 Name[hu]=Sheets szkriptelés bővítmény
 Name[it]=Estensione di scripting di Sheets
 Name[kk]=Sheets скрипт плагині
+Name[nb]=Sheets-tillegg for skripting
 Name[nl]=Scriptplug-in van Sheets
 Name[pl]=Wtyczka skryptów dla Arkuszy
 Name[pt]='Plugin' de Programação do Sheets

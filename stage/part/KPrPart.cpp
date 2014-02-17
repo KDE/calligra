@@ -55,8 +55,6 @@ void KPrPart::setDocument(KPrDocument *document)
 KoView * KPrPart::createViewInstance(KoDocument *document, QWidget *parent)
 {
     KPrView *view = new KPrView(this, qobject_cast<KPrDocument*>(document), parent);
-    connect(document, SIGNAL(shapeAdded(KoShape*)), view->viewMode(), SLOT(addShape(KoShape*)));
-    connect(document, SIGNAL(shapeRemoved(KoShape*)), view->viewMode(), SLOT(removeShape(KoShape*)));
     connect(document, SIGNAL(replaceActivePage(KoPAPageBase*,KoPAPageBase*)), view, SLOT(replaceActivePage(KoPAPageBase*,KoPAPageBase*)));
     return view;
 }

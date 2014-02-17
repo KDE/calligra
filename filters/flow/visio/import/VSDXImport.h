@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2011 Yue Liu <yue.liu@mail.com>
+   Copyright (C) 2011-2013 Yue Liu <yue.liu@mail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -34,10 +34,6 @@ public:
     virtual ~VSDXImport();
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
-
-private:
-    const char *m_inputFile;
-    const char *m_outputFile;
 };
 
 #endif // VSDXIMPORT_H

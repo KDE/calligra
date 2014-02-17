@@ -87,7 +87,7 @@ macro_log_feature(MYSQL_FOUND "libmysqlclient" "MySQL Client Library" "http://ww
 INCLUDE (FindPostgreSQL)
 
 set (PQXX_MIN_VERSION "3.0.0")
-set (PQXX_MAX_VERSION "4.0.0")
+set (PQXX_MAX_VERSION "5.0.0")
 
 macro_optional_find_package(PostgreSQL)
 macro_log_feature(POSTGRESQL_FOUND "libpq" "C application programmer's interface to PostgreSQL" "http://www.postgresql.org" FALSE "" "Required by Kexi PostgreSQL driver")

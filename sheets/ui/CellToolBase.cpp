@@ -838,7 +838,7 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     connect(action, SIGNAL(triggered(bool)), this, SLOT(sheetFormat()));
     action->setToolTip(i18n("Set the worksheet formatting"));
 
-    action = new KAction(i18n("Document Settings..."), this);
+    action = new KAction(koIcon("application-vnd.oasis.opendocument.spreadsheet"), i18n("Document Settings..."), this);
     addAction("documentSettingsDialog", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(documentSettingsDialog()));
     action->setToolTip(i18n("Show document settings dialog"));

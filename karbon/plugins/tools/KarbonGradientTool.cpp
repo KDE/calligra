@@ -104,6 +104,8 @@ void KarbonGradientTool::repaintDecorations()
 void KarbonGradientTool::mousePressEvent(KoPointerEvent *event)
 {
     Q_UNUSED(event);
+    if (!m_gradient) return;
+
     // do we have a selected gradient ?
     if (m_currentStrategy) {
         // now select whatever we hit
@@ -442,7 +444,9 @@ void KarbonGradientTool::initialize()
     GradientStrategy::setGrabSensitivity(grabSensitivity());
     m_gradient = KoFlake::cloneGradient(strategy->gradient());
     if (m_gradientWidget) {
-        m_gradientWidget->setGradient(*m_gradient);
+        if (m_gradient) {
+            m_gradientWidget->setGradient(*m_gradient);
+        }
         if (strategy->target() == GradientStrategy::Fill)
             m_gradientWidget->setTarget(KarbonGradientEditWidget::FillGradient);
         else
@@ -489,7 +493,9 @@ void KarbonGradientTool::documentResourceChanged(int key, const QVariant & res)
 QList<QWidget *> KarbonGradientTool::createOptionWidgets()
 {
     m_gradientWidget = new KarbonGradientEditWidget();
-    m_gradientWidget->setGradient(*m_gradient);
+    if (m_gradient) {
+        m_gradientWidget->setGradient(*m_gradient);
+    }
 
     connect(m_gradientWidget, SIGNAL(changed()), this, SLOT(gradientChanged()));
 

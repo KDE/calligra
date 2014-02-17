@@ -27,7 +27,7 @@
 WebToolFactory::WebToolFactory()
     : KoToolFactoryBase("WebToolFactoryID")
 {
-    setToolTip(i18n("Web Shape Tool"));
+    setToolTip(i18n("Web shape editing"));
     setToolType(dynamicToolType());
     setIconName(koIconNameCStr("applications-internet"));
     setPriority(1);

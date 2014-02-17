@@ -43,6 +43,7 @@
 #include <ktoolbar.h>
 #include <kactioncollection.h>
 #include <kfiledialog.h>
+#include <KFileFilterCombo>
 
 // added because of lack of krecentdirs.h
 namespace KRecentDirs
@@ -244,13 +245,10 @@ void KexiFileWidget::updateFilters()
         allfilters += mime->patterns();
     }
 
-    if (!d->excludedMimeTypes.contains("all/allfiles"))
-        filter += KexiUtils::fileDialogFilterString("all/allfiles");
-// mime = KMimeType::mimeType("all/allfiles");
-// if (mime) {
-//  filter += QString(mime->patterns().isEmpty() ? "*" : mime->patterns().join(" "))
-//   + "|" + mime->comment()+ " (*)\n";
-// }
+    if (!d->excludedMimeTypes.contains("all/allfiles")) {
+        filter += filterWidget()->defaultFilter();
+    }
+
     //remove duplicates made because upper- and lower-case extenstions are used:
     QStringList allfiltersUnique = allfilters.toSet().toList();
     qSort(allfiltersUnique);

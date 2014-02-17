@@ -553,6 +553,7 @@ KoFilter::ConversionStatus XlsxImport::parseParts(KoOdfWriters *writers,
     writers->body->addAttribute("table:case-sensitive", "false");
     writers->body->addAttribute("table:automatic-find-labels", "false");
     writers->body->addAttribute("table:use-regular-expressions", "false");
+    writers->body->addAttribute("table:use-wildcards", "true");
     writers->body->endElement(); // table:calculation-settings
 
     // 1. parse themes

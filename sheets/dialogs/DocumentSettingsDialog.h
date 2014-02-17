@@ -42,6 +42,8 @@ class KIntNumInput;
 class KDoubleNumInput;
 class KSpellConfig;
 class QCheckBox;
+class QSpinBox;
+class QComboBox;
 class KComboBox;
 class QPushButton;
 class KColorButton;
@@ -56,6 +58,24 @@ namespace Calligra
 namespace Sheets
 {
 class Selection;
+class CalculationSettings;
+
+/**
+ * \ingroup UI
+ * Dialog page to show the calculation settings used by the document.
+ */
+class calcSettings :  public QObject
+{
+    Q_OBJECT
+public:
+    calcSettings(Selection* selection, KVBox *box);
+    void apply();
+protected:
+    CalculationSettings *m_cs;
+    QCheckBox *m_caseSensitiveCheckbox, *m_precisionAsShownCheckbox, *m_searchCriteriaMustApplyToWholeCellCheckbox, *m_automaticFindLabelsCheckbox;
+    QComboBox *m_matchModeCombobox;
+    QSpinBox *m_nullYearEdit;
+};
 
 /**
  * \ingroup UI
@@ -65,7 +85,7 @@ class parameterLocale :  public QObject
 {
     Q_OBJECT
 public:
-    parameterLocale(Selection* selection, KVBox *box, char *name = 0);
+    parameterLocale(Selection* selection, KVBox *box);
     void apply();
 public slots:
     void updateDefaultSystemConfig();

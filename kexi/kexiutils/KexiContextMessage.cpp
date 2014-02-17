@@ -148,7 +148,9 @@ public:
     void setDisabledColorsForPage()
     {
         Palette *p = origPagesPalettes->value(page);
+#ifdef __GNUC__
 #warning TODO: remove p in page dtor
+#endif
         if (!p) {
             p = new Palette;
             p->palette = page->palette();

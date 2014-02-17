@@ -14,10 +14,10 @@ HTML view of the Manual:
 
 The chapter numbers in section headings here refer to
 the Chapters in the HTML manual at
-    http://kexi.pl/doc/en/
+    http://web.archive.org/web/20090720052136/http://kexi.pl/doc/en/
 
 The original Polish version can be found here:
-    http://kexi.pl/doc/pl/
+    http://web.archive.org/web/20111223071101/http://www.kexi.pl/doc/pl/
 
 Chapter numbers in each descriptions refers to docbook version.
 

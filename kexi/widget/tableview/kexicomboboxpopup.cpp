@@ -310,9 +310,9 @@ void KexiComboBoxPopup::updateSize(int minWidth)
     KexiTableEdit *te = dynamic_cast<KexiTableEdit*>(parentWidget());
     const int width = qMax(d->tv->tableSize().width(),
                            (te ? te->totalSize().width() : (parentWidget() ? parentWidget()->width() : 0/*sanity*/)));
-    kDebug() << "size=" << size();
+    //kDebug() << "size=" << size();
     resize(qMax(minWidth, width)/*+(d->tv->columns()>1?2:0)*/ /*(d->updateSizeCalled?0:1)*/, d->tv->rowHeight() * rows + 2);
-    kDebug() << "size after=" << size();
+    //kDebug() << "size after=" << size();
 
     //stretch the last column
     d->tv->setColumnStretchEnabled(true, d->tv->columns() - 1);
@@ -352,6 +352,15 @@ void KexiComboBoxPopup::slotTVItemAccepted(KexiDB::RecordData *record, int row, 
 
 bool KexiComboBoxPopup::eventFilter(QObject *o, QEvent *e)
 {
+#if 0
+    if (e->type() == QEvent::Resize) {
+        kDebug() << "QResizeEvent"
+                 << dynamic_cast<QResizeEvent*>(e)->size()
+                 << "old=" << dynamic_cast<QResizeEvent*>(e)->oldSize()
+                 << o << qobject_cast<QWidget*>(o)->geometry()
+                 << "visible=" << qobject_cast<QWidget*>(o)->isVisible();
+    }
+#endif
     if (o == this && e->type() == QEvent::Hide) {
         kDebug(44010) << "HIDE!!!";
         emit hidden();
