@@ -145,6 +145,7 @@ static KisTabletSupportWin::ButtonsConverter *globalButtonsConverter =
 static void initWinTabFunctions()
 {
     QLibrary library(QLatin1String("wintab32"));
+    library.load();
     Q_ASSERT(library.isLoaded());
     ptrWTInfo = (PtrWTInfo)library.resolve("WTInfoW");
     ptrWTGet = (PtrWTGet)library.resolve("WTGetW");
