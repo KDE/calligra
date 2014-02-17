@@ -38,12 +38,14 @@ void KisMultiSensorsModel::setCurveOption(KisCurveOption *curveOption)
 
 int KisMultiSensorsModel::rowCount(const QModelIndex &/*parent*/) const
 {
+    if (!m_curveOption) return 0;
     return m_curveOption->sensors().size();
 }
 
 QVariant KisMultiSensorsModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid()) return QVariant();
+    if (!m_curveOption) return QVariant();
 
     if (role == Qt::DisplayRole) {
         return KisDynamicSensor::sensorsIds()[index.row()].name();
@@ -63,6 +65,7 @@ QVariant KisMultiSensorsModel::data(const QModelIndex &index, int role) const
 
 bool KisMultiSensorsModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
+    if (!m_curveOption) return false;
     if (role == Qt::CheckStateRole) {
         emit(parametersChanged());
         bool checked = (value.toInt() == Qt::Checked);
@@ -93,6 +96,7 @@ Qt::ItemFlags KisMultiSensorsModel::flags(const QModelIndex & /*index */) const
 
 KisDynamicSensor *KisMultiSensorsModel::getSensor(const QModelIndex& index)
 {
+    if (!m_curveOption) return 0;
     if (!index.isValid()) return 0;
     QString id = KisDynamicSensor::sensorsIds()[index.row()].id();
     return m_curveOption->sensor(id, false);
@@ -100,6 +104,7 @@ KisDynamicSensor *KisMultiSensorsModel::getSensor(const QModelIndex& index)
 
 void KisMultiSensorsModel::setCurrentCurve(const QModelIndex& currentIndex, const KisCubicCurve& curve, bool useSameCurve)
 {
+    if (!m_curveOption) return;
     if (!currentIndex.isValid()) return;
 
     QString selectedSensorId =  KisDynamicSensor::sensorsIds()[currentIndex.row()].id();
