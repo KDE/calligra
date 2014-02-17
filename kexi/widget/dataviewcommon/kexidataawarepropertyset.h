@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004-2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2014 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -95,6 +95,9 @@ signals:
     /*! Emmited when row is inserted.
      Purpose of this signal is similar to rowDeleted() signal. */
     void rowInserted();
+
+    /*! Emitted when the value of @a property is changed in @a set.*/
+    void propertyChanged(KoProperty::Set& set, KoProperty::Property& property);
 
 public slots:
     void eraseCurrentPropertySet();
