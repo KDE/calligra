@@ -79,14 +79,19 @@ public:
         //! Connection used for retrieving definition of the query
         KexiDB::Connection *conn;
 
-        /*! true, if \a query member has changed in previous view.
+        /*! @return true if \a query member has changed in previous view.
          Used on view switching. We're checking this flag to see if we should
          rebuild internal structure for DesignViewMode of regenerated sql text
          in TextViewMode after switch from other view. */
-    bool queryChangedInPreviousView : 1;
+        bool queryChangedInPreviousView() const;
 
-    protected:
+        /*! Sets the queryChangedInPreviousView flag.
+         @see queryChangedInPreviousView() */
+        void setQueryChangedInPreviousView(bool set);
+
+    private:
         KexiDB::QuerySchema *m_query;
+        bool m_queryChangedInPreviousView;
     };
 
     virtual KLocalizedString i18nMessage(const QString& englishMessage,
