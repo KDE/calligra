@@ -334,7 +334,7 @@ bool PivotMain::checkCondition(QString field,QString condition,QString value,int
   Sheet *const sheet1 = d->selection->lastSheet();
   const QRect range2 = d->selection->lastRange();
   int r= range2.right();
-  int b=range2.bottom();
+  //int b=range2.bottom();
   int row=range2.top();
   
   QVector<QString> vect;
@@ -421,7 +421,7 @@ void PivotMain::Summarize()
     int bottom=range.bottom();
     Cell cell;
     
-    ValueConverter *c;
+    ValueConverter *c=0;
     
     Value res(0);
     ValueCalc *calc= new ValueCalc(c);
@@ -704,7 +704,7 @@ QVector<QString> PivotMain::ValueData(QString str)
       int bottom = range.bottom();
       int r=range.right();
       
-      ValueConverter *conv;
+      ValueConverter *conv=0;
     
       for (int i = range.left(); i <= r; ++i) {
 	d->posVect.append(Value(Cell(sheet,i,row).value()));
@@ -728,13 +728,12 @@ QVector<QString> PivotMain::ValueData(QString str)
 
 void PivotMain::clean(Sheet* sheet)
 {
-  ValueConverter *conv;
+  ValueConverter *conv=0;
   int lastRow=sheet->cellStorage()->rows();
   int lastColumn=sheet->cellStorage()->columns();
   for(int i=d->mainWidget.Rows->count()+1;i<=lastRow+1;i++){
     int temp=0;
     for(int j=d->mainWidget.Columns->count()+1;j<=lastColumn;j++){
-	qDebug()<<"i:"<<i<<" j:"<<j<<" value:"<<conv->toInteger(Cell(sheet,j,i).value());
 	if(!conv->toInteger(Cell(sheet,j,i).value())==0){
 	  temp=1;
 	  break;

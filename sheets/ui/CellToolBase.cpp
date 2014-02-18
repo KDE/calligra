@@ -2899,8 +2899,7 @@ void CellToolBase::pivot()
         KMessageBox::error(canvas()->canvasWidget(), i18n("You must select multiple cells."));
         return;
     }
-    qDebug()<<"here";
-    
+
     QPointer<Pivot> dialog = new Pivot(canvas()->canvasWidget(), selection());
     dialog->exec();
     delete dialog;

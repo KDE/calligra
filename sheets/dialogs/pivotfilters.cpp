@@ -76,7 +76,7 @@ void PivotFilters::selectFields(QComboBox* box)
       Cell cell;
       
       QString text;
-      int index = 0;
+    //  int index = 0;
       for (int i = range.left(); i <= r; ++i) {
 	  cell = Cell(sheet, i, row);
 	  text = cell.displayText();
