@@ -1,7 +1,7 @@
 /*
- *  kis_tool_perspectivegrid.h - part of Krita
+ *  kis_tool_perspectivegridng.h - part of Krita
  *
- *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2014 Shivaraman Aiyer<sra392@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -20,30 +20,30 @@
 #ifndef _KIS_TOOL_PERSPECTIVE_GRIDNG_H_
 #define _KIS_TOOL_PERSPECTIVE_GRIDNG_H_
 
-#include <kis_perspective_gridng.h>
 #include <kis_tool.h>
 #include <KoToolFactoryBase.h>
+#include "kis_perspective_gridng.h"
+//#include "ui_PerspectiveGridNgToolsOptions.h"
 #include <KoIcon.h>
 
-class KisCanvas2;
 
-class KisToolPerspectiveGridNG : public KisTool
+class RulerDecoration;
+class KisCanvas2;
+class ConstraintSolver;
+class KJob;
+
+class KisPerspectiveGridNgTool : public KisTool
 {
     Q_OBJECT
-    enum PerspectiveGridEditionMode {
+    enum PerspectiveGridNgEditionMode {
         MODE_CREATION, // This is the mode when there is not yet a perspective grid
         MODE_EDITING, // This is the mode when the grid has been created, and we are waiting for the user to click on a control box
         MODE_DRAGGING_NODE, // In this mode one node is translated
         MODE_DRAGGING_TRANSLATING_TWONODES // This mode is used when creating a new sub perspective grid
     };
-
 public:
-    KisToolPerspectiveGridNG(KoCanvasBase * canvas);
-    virtual ~KisToolPerspectiveGridNG();
-
-    //
-    // KisToolPaint interface
-    //
+    KisPerspectiveGridNgTool(KoCanvasBase * canvas);
+    virtual ~KisPerspectiveGridNgTool();
 
     virtual quint32 priority() {
         return 3;
@@ -52,55 +52,63 @@ public:
     virtual void mouseMoveEvent(KoPointerEvent *event);
     virtual void mouseReleaseEvent(KoPointerEvent *event);
 
+    //virtual QWidget *createOptionWidget();
+private:
+    void addAssistant();
+    void removeAssistant(KisPerspectiveGridNg *assistant);
+    bool mouseNear(const QPointF& mousep, const QPointF& point);
+    KisPerspectiveGridNgHandleSP nodeNearPoint(KisPerspectiveGridNg* grid, QPointF point);
 public slots:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     void deactivate();
+private slots:
+    void removeAllAssistants();
 
+    void saveAssistants();
+    void loadAssistants();
+
+    void saveFinish(KJob* job);
+    void openFinish(KJob* job);
 protected:
 
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
-    void drawGridCreation(QPainter& gc);
-    void drawGrid(QPainter& gc);
-
-private:
-    void drawSmallRectangle(QPainter& gc, const QPointF& p);
-    bool mouseNear(const QPointF& mousep, const QPointF& point);
-    KisPerspectiveGridNodeSP nodeNearPoint(KisSubPerspectiveGrid* grid, QPointF point);
 
 protected:
+    KisCanvas2* m_canvas;
+    QList<KisPerspectiveGridNgHandleSP> m_handles, m_sideHandles;
+    KisPerspectiveGridNgHandleSP m_handleDrag;
+    KisPerspectiveGridNgHandleSP m_handleCombine;
+    KisPerspectiveGridNg* m_assistantDrag;
+    KisPerspectiveGridNg* m_newAssistant;
+    QPointF m_mousePosition;
+    //Ui::PerspectiveGridNgToolOptions m_options;
+    //QWidget* m_optionsWidget;
     QPointF m_dragEnd;
 
-    bool m_isFirstPoint;
-    QPointF m_currentPt;
 private:
-    typedef QVector<QPointF> QPointFVector;
-
-    QPointFVector m_points;
-    PerspectiveGridEditionMode m_internalMode;
+    PerspectiveGridNgEditionMode m_internalMode;
     qint32 m_handleSize, m_handleHalfSize;
-    KisPerspectiveGridNodeSP m_selectedNode1, m_selectedNode2, m_higlightedNode;
-    KisCanvas2* m_canvas;
+    KisPerspectiveGridNgHandleSP m_selectedNode1, m_selectedNode2, m_higlightedNode;
 };
 
 
-class KisToolPerspectiveGridNGFactory : public KoToolFactoryBase
+class KisPerspectiveGridNgToolFactory : public KoToolFactoryBase
 {
-
 public:
-    KisToolPerspectiveGridNGFactory(const QStringList&)
-            : KoToolFactoryBase("KisToolPerspectiveGridNG") {
-        setToolTip(i18n("Edit the perspective grid"));
+    KisPerspectiveGridNgToolFactory()
+            : KoToolFactoryBase("KisPerspectiveGridNgTool") {
+        setToolTip(i18n("Perspective Grid Editor"));
         setToolType(TOOL_TYPE_VIEW);
-        setIconName(koIconNameCStr("tool_perspectivegridng"));
-        setPriority(16);
+        setIconName(koIconNameCStr("krita_tool_perspectivegridng"));
+        setPriority(0);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
     };
 
 
-    virtual ~KisToolPerspectiveGridNGFactory() {}
+    virtual ~KisPerspectiveGridNgToolFactory() {}
 
     virtual KoToolBase * createTool(KoCanvasBase * canvas) {
-        return new KisToolPerspectiveGridNG(canvas);
+        return new KisPerspectiveGridNgTool(canvas);
     }
 
 };

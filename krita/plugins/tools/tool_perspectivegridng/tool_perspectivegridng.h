@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2014 Shivaraman Aiyer<sra392@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -21,16 +21,20 @@
 #include <QObject>
 #include <QVariant>
 
-/**
- * A module that provides a tool for editing the perspective grid.
- */
-class ToolPerspectiveGridNG : public QObject
+class KisView;
+
+class KisPerspectiveGridNgToolPlugin : public QObject
 {
-    Q_OBJECT
+   Q_OBJECT
 public:
-    ToolPerspectiveGridNG(QObject *parent, const QVariantList &);
-    virtual ~ToolPerspectiveGridNG();
+   KisPerspectiveGridNgToolPlugin(QObject *parent, const QVariantList &);
+   virtual ~KisPerspectiveGridNgToolPlugin();
+
+private:
+
+   KisView * m_view;
 
 };
 
-#endif // TOOL_PERSPECTIVE_GRIDNG_H_
+#endif
+

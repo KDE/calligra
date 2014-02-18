@@ -108,7 +108,7 @@ public:
     QList<KisPaintingAssistantHandleSP> sideHandles();
     QByteArray saveXml( QMap<KisPaintingAssistantHandleSP, int> &handleMap);
     void loadXml(KoStore *store, QMap<int, KisPaintingAssistantHandleSP> &handleMap, QString path);
-    void saveXmlList(QDomDocument& doc, QDomElement& ssistantsElement, int count);
+    void saveXmlList(QDomDocument& doc, QDomElement& assistantsElement, int count);
     void findHandleLocation();
     KisPaintingAssistantHandleSP oppHandleOne();
 

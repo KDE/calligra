@@ -48,6 +48,7 @@ class KisNodeManager;
 class KisPaintingAssistantsManager;
 class KisPaintopBox;
 class KisPerspectiveGridManager;
+class KisPerspectiveGridNgManager;
 class KisSelectionManager;
 class KisStatusBar;
 class KisUndoAdapter;
@@ -177,6 +178,7 @@ public:  // Krita specific interfaces
 
     KisGridManager * gridManager();
     KisPerspectiveGridManager* perspectiveGridManager();
+    KisPerspectiveGridNgManager* perspectiveGridNgManager();
     KisPaintingAssistantsManager* paintingAssistantManager();
 
     /// disable and enable toolbar controls. used for disabling them during painting.

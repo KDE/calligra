@@ -213,6 +213,7 @@ public:
     KisImageManager *imageManager;
     KisGridManager *gridManager;
     KisPerspectiveGridManager * perspectiveGridManager;
+    KisPerspectiveGridNgManager * perspectiveGridNgManager;
     KisPaintingAssistantsManager *paintingAssistantManager;
     BlockingUserInputEventFilter blockingEventFilter;
     KisFlipbook *flipbook;
@@ -1006,6 +1007,11 @@ KisPerspectiveGridManager* KisView2::perspectiveGridManager()
     return m_d->perspectiveGridManager;
 }
 
+KisPerspectiveGridNgManager* KisView2::perspectiveGridNgManager()
+{
+    return m_d->perspectiveGridNgManager;
+}
+
 KisGridManager * KisView2::gridManager()
 {
     return m_d->gridManager;
@@ -1015,6 +1021,8 @@ KisPaintingAssistantsManager* KisView2::paintingAssistantManager()
 {
     return m_d->paintingAssistantManager;
 }
+
+
 
 void KisView2::slotTotalRefresh()
 {

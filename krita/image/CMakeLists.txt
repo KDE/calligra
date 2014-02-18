@@ -176,7 +176,6 @@ set(kritaimage_LIB_SRCS
    kis_paint_layer.cc
    kis_pattern.cc
    kis_perspective_grid.cpp
-   kis_perspective_gridng.cpp
    kis_perspective_math.cpp
    kis_pixel_selection.cpp
    kis_processing_information.cpp
