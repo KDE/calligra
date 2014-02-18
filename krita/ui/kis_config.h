@@ -301,7 +301,6 @@ public:
 
     bool showSingleChannelAsColor() const;
     void setShowSingleChannelAsColor(bool asColor);
-
     
     template<class T>
     void writeEntry(const QString& name, const T& value) {
