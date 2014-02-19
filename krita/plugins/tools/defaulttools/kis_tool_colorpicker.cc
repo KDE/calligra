@@ -35,21 +35,22 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 
-#include "kis_layer.h"
-#include "kis_cursor.h"
-#include "kis_image.h"
-#include "kis_paint_device.h"
-#include "kis_properties_configuration.h"
-
-#include "kis_tool_colorpicker.moc"
-#include "KoPointerEvent.h"
-#include "KoCanvasBase.h"
-#include "kis_random_accessor_ng.h"
-#include "KoColor.h"
-#include "KoResourceServerProvider.h"
-#include "KoColorSet.h"
+#include <KoPointerEvent.h>
+#include <KoCanvasBase.h>
+#include <KoColor.h>
+#include <KoColorSet.h>
 #include <KoChannelInfo.h>
 #include <KoMixColorsOp.h>
+#include <KoResourceServerProvider.h>
+
+#include <kis_layer.h>
+#include <kis_cursor.h>
+#include <kis_image.h>
+#include <kis_paint_device.h>
+#include <kis_properties_configuration.h>
+#include <kis_config.h>
+#include <kis_random_accessor_ng.h>
+
 
 namespace
 {
@@ -227,7 +228,11 @@ void KisToolColorPicker::pickColor(const QPointF& pos)
             delete[] data;
         }
 
-        m_pickedColor.setOpacity(OPACITY_OPAQUE_U8);
+        KisConfig cfg;
+        if (!cfg.colorPickerPicksOpacity()) {
+            m_pickedColor.setOpacity(OPACITY_OPAQUE_U8);
+        }
+
         if (m_config.updateColor) {
             if (m_config.toForegroundColor)
                 canvas()->resourceManager()->setResource(KoCanvasResourceManager::ForegroundColor, m_pickedColor);
@@ -423,3 +428,4 @@ void KisToolColorPicker::slotAddPalette(KoResource* resource)
     }
 }
 
+#include "kis_tool_colorpicker.moc"

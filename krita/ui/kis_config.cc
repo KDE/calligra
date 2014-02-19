@@ -1014,3 +1014,14 @@ void KisConfig::setShowSingleChannelAsColor(bool asColor)
 {
     m_cfg.writeEntry("showSingleChannelAsColor", asColor);
 }
+
+
+bool KisConfig::colorPickerPicksOpacity() const
+{
+    return  m_cfg.readEntry("colorPickerPicksOpacity", false);
+}
+
+void KisConfig::setColorPickerPicksOpacity(bool pickOpacity)
+{
+    m_cfg.writeEntry("colorPickerPicksOpacity", pickOpacity);
+}

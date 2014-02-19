@@ -302,6 +302,9 @@ public:
     bool showSingleChannelAsColor() const;
     void setShowSingleChannelAsColor(bool asColor);
     
+    bool colorPickerPicksOpacity() const;
+    void setColorPickerPicksOpacity(bool pickOpacity);
+
     template<class T>
     void writeEntry(const QString& name, const T& value) {
         m_cfg.writeEntry(name, value);

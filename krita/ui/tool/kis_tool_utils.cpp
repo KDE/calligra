@@ -21,13 +21,18 @@
 #include <kis_paint_device.h>
 #include <kis_layer.h>
 
+#include "kis_config.h"
+
 namespace KisToolUtils {
 
     KoColor pick(KisPaintDeviceSP dev, const QPoint& pos)
     {
         KoColor pickedColor;
         dev->pixel(pos.x(), pos.y(), &pickedColor);
-        pickedColor.setOpacity(OPACITY_OPAQUE_U8);
+        KisConfig cfg;
+        if (!cfg.colorPickerPicksOpacity()) {
+            pickedColor.setOpacity(OPACITY_OPAQUE_U8);
+        }
         return pickedColor;
     }
 
