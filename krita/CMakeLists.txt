@@ -2,7 +2,7 @@ project(krita)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS}")
 
-# To avoid the confusion of an endless stream of Eigen warnings. 
+# To avoid the confusion of an endless stream of Eigen warnings.
 if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
     add_definitions(-Wno-unused-local-typedefs)
 endif (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
@@ -30,6 +30,24 @@ if(MSVC OR (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
     endif (USE_BREAKPAD)
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /STACK:10000000") # for g'mic...
 endif(MSVC OR (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
+
+if(USE_STEAMWORKS)
+    macro_optional_find_package(Steamworks)
+    macro_log_feature(STEAMWORKS_FOUND "Steamworks SDK" "The official Steamworks libraries." "https://partner.steamgames.com/" FALSE "" "Required by Krita for Steam integration")
+    macro_bool_to_01(STEAMWORKS_FOUND HAVE_STEAMWORKS)
+endif(USE_STEAMWORKS)
+
+if(HAVE_STEAMWORKS)
+    include_directories(${STEAMWORKS_INCLUDE_DIR})
+    message(STATUS "Steamworks found!")
+    add_definitions( -DHAVE_STEAMWORKS )
+    if(WIN32)
+        install(FILES ${STEAMWORKS_SHARED_LIBRARY_PATH} DESTINATION ${CMAKE_INSTALL_PREFIX}/bin/)
+    endif(WIN32)
+else(HAVE_STEAMWORKS)
+    message(STATUS "Steamworks NOT found - krita will not include Steam integration features.")
+endif(HAVE_STEAMWORKS)
+
 
 if(NOT WIN32)
     macro_optional_find_package(FFTW3)
@@ -99,7 +117,7 @@ set(KRITA_INCLUDES
 
     # For generated files from .ui
     ${CMAKE_BINARY_DIR}/krita/ui
-    
+
     ${PIGMENT_INCLUDES}
     ${KOTEXT_INCLUDES}
     ${KOMAIN_INCLUDES}
@@ -162,6 +180,7 @@ endif (Q_WS_MAC)
 target_link_libraries(kdeinit_krita kritaui ${BREAKPAD_LIBS})
 target_link_libraries(krita kdeinit_krita)
 
+install()
 install(TARGETS krita ${INSTALL_TARGETS_DEFAULT_ARGS})
 install(TARGETS kdeinit_krita ${INSTALL_TARGETS_DEFAULT_ARGS})
 install(PROGRAMS krita.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
