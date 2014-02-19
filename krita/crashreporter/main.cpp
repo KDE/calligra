@@ -68,6 +68,7 @@ int main( int argc, char **argv )
     KCmdLineOptions options;
     options.add("+[arg1]");
     options.add("+[arg2]");
+    options.add("+[arg3]");
     KCmdLineArgs::addCmdLineOptions( options );
 
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
@@ -79,15 +80,16 @@ int main( int argc, char **argv )
     QStringList arguments = args->allArguments();
 
     // Something went wrong, whatever: we restart Krita
-    if (arguments.size() != 3)  {
-        MainWindow mw("", "");
+    if (arguments.size() != 4)  {
+        MainWindow mw("", "", "");
         mw.restart();
     }
 
     QString dumpPath = arguments[1];
     QString dumpId = arguments[2];
+    QString applicationId = arguments[3];
 
-    MainWindow mw(dumpPath, dumpId);
+    MainWindow mw(dumpPath, dumpId, applicationId);
 
     mw.show();
     return app.exec();

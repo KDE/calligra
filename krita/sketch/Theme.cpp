@@ -385,7 +385,7 @@ Theme* Theme::load(const QString& id, QObject* parent)
 
 bool Theme::eventFilter(QObject* target, QEvent* event)
 {
-    if(target == qApp->activeWindow() && target->inherits("QMainWindow") && event->type() == QEvent::Resize) {
+    if(target && target == qApp->activeWindow() && target->inherits("QMainWindow") && event->type() == QEvent::Resize) {
         d->rebuildFontCache();
         emit fontCacheRebuilt();
     }

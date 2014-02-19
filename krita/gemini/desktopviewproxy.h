@@ -43,6 +43,7 @@ public Q_SLOTS:
     void reload();
     void loadExistingAsNew();
     void slotFileOpenRecent(const KUrl &url);
+    void toggleShowJustTheCanvas();
 
 Q_SIGNALS:
     void documentSaved();

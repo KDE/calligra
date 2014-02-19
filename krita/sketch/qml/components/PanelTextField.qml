@@ -17,6 +17,7 @@
  */
 
 import QtQuick 1.1
+import org.krita.sketch 1.0
 
 TextField {
     property bool enabled: true;

@@ -34,12 +34,28 @@
 #include <kstandarddirs.h>
 #include <kglobal.h>
 #include <kiconloader.h>
+#include <KoConfig.h>
 
 #include "MainWindow.h"
 
 #include "DocumentListModel.h"
 #include "KisSketchView.h"
 #include "SketchInputContext.h"
+
+#ifdef USE_BREAKPAD
+    #include "../kis_crash_handler.h"
+#endif
+
+#if defined HAVE_STEAMWORKS
+#include "steam/kritasteam.h"
+
+#ifndef STEAM_APP_ID_SKETCH
+#pragma warning "No Steam APP ID! You will require steam_appid.txt in your executable directory to define this."
+#include <steam/steamtypes.h>
+#define STEAM_APP_ID_SKETCH k_uAppIdInvalid
+#endif
+
+#endif
 
 
 #if defined Q_OS_WIN
@@ -50,8 +66,34 @@
 #endif
 
 
+
+
 int main( int argc, char** argv )
 {
+    int result;
+
+#ifdef USE_BREAKPAD
+    qDebug() << "Enabling breakpad";
+    qputenv("KDE_DEBUG", "1");
+
+#ifdef HAVE_STEAMWORKS
+    KisCrashHandler crashHandler("kritasketchsteam");
+#else
+    KisCrashHandler crashHandler("kritasketch");
+#endif
+    Q_UNUSED(crashHandler);
+#endif
+
+#if defined HAVE_STEAMWORKS
+    KritaSteamClient* steamClient = KritaSteamClient::instance();
+    if (!steamClient->initialise(STEAM_APP_ID_SKETCH))
+    {
+        /* Krita wasn't launched from Steam, shutdown (it should launch separately */
+        qDebug("Krita didn't launch correctly, shutting down.");
+        return 1;
+    }
+#endif
+
     KAboutData aboutData("kritasketch",
                          "krita",
                          ki18n("Krita Sketch"),
@@ -142,5 +184,20 @@ int main( int argc, char** argv )
         window.showFullScreen();
     }
 
-    return app.exec();
+#if defined HAVE_STEAMWORKS
+    if (!steamClient->isInitialised()) {
+        QMessageBox::warning(&window,
+                             i18n("Steam initialisation error"),
+                             i18n("There was a problem starting Steam services. Krita Gemini will run without Steam features. If you are seeing this message, please let us know on the Steam forum."));
+    }
+    steamClient->mainWindowCreated();
+#endif
+
+    result = app.exec();
+
+#if defined HAVE_STEAMWORKS
+    steamClient->mainWindowBeingDestroyed();
+    steamClient->shutdown();
+#endif
+    return result;
 }

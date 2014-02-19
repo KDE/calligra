@@ -18,7 +18,7 @@
 
 import QtQuick 1.1
 import org.krita.sketch 1.0
-import "components"
+import org.krita.sketch.components 1.0
 import "panels"
 
 Page {
@@ -341,10 +341,7 @@ Page {
 
             if(newFileOptions !== undefined) {
                 loadingDialog.show("Creating new image...");
-                if(newFileOptions.template !== undefined) {
-                    Settings.currentFile = Krita.ImageBuilder.createImageFromTemplate(newFileOptions);
-                    settings.temporaryFile = true;
-                } else if(newFileOptions.source === undefined) {
+                if(newFileOptions.source === undefined) {
                     Settings.currentFile = Krita.ImageBuilder.createBlankImage(newFileOptions);
                     Settings.temporaryFile = true;
                 } else if(newFileOptions.source == "clipboard") {

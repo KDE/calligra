@@ -19,29 +19,41 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <QList>
 #include <QNetworkReply>
+#include <QString>
 #include <QWidget>
 #include <kaboutdata.h>
 
 #include "ui_wdg_crash_reporter.h"
 
+
 class MainWindow : public QWidget, public Ui::WdgCrashReporter
 {
     Q_OBJECT
 public:
-    MainWindow(const QString &dumpPath, const QString &id, QWidget *parent = 0);
+    MainWindow(const QString &dumpPath, const QString &id, const QString &applicationId, QWidget *parent = 0);
     virtual ~MainWindow();
+
+    static QString getApplicationExeFromId(const QString &applicationId);
 
 public slots:
     void restart();
 
 private slots:
     void close();
+    void onToggleAllowUpload(int state);
     void startUpload();
     void uploadDone(QNetworkReply *reply);
     void uploadProgress(qint64 received, qint64 total);
     void uploadError(QNetworkReply::NetworkError);
 private:
+    void addFileAsField(const QString &filename, const QString &fieldName, QList<QPair<QByteArray, QByteArray>> *fields);
+    bool checkForOpenglProblems();
+    bool checkAmdDriver(const QString& openglString);
+    bool checkNvidiaDriver(const QString& openglString);
+    bool checkIntelDriver(const QString& openglString);
+
     struct Private;
     Private *const m_d;
 };

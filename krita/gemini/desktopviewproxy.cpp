@@ -45,6 +45,10 @@
 #include <kis_doc2.h>
 #include <kis_view2.h>
 
+#ifdef HAVE_STEAMWORKS
+#include "steam/kritasteam.h"
+#endif
+
 class DesktopViewProxy::Private
 {
 public:
@@ -89,6 +93,8 @@ DesktopViewProxy::DesktopViewProxy(MainWindow* mainWindow, KoMainWindow* parent)
     //does the same as open. We cannot just remove it from the action collection though
     //since that causes a crash in KoMainWindow.
     loadExistingAsNewAction->setVisible(false);
+    QAction* toggleJustTheCanvasAction = d->desktopView->actionCollection()->action("view_show_just_the_canvas");
+    connect(toggleJustTheCanvasAction, SIGNAL(toggled(bool)), this, SLOT(toggleShowJustTheCanvas()));
 
     // Recent files need a touch more work, as they aren't simply an action.
     KRecentFilesAction* recent = qobject_cast<KRecentFilesAction*>(d->desktopView->actionCollection()->action("file_open_recent"));
@@ -175,6 +181,15 @@ void DesktopViewProxy::loadExistingAsNew()
 void DesktopViewProxy::slotFileOpenRecent(const KUrl& url)
 {
     QProcess::startDetached(qApp->applicationFilePath(), QStringList() << url.toLocalFile(), QDir::currentPath());
+}
+
+void DesktopViewProxy::toggleShowJustTheCanvas()
+{
+#ifdef HAVE_STEAMWORKS
+    if (KritaSteamClient::instance()->isInBigPictureMode()) {
+        d->mainWindow->setWindowState( d->mainWindow->windowState() | Qt::WindowFullScreen);
+    }
+#endif
 }
 
 #include "desktopviewproxy.moc"

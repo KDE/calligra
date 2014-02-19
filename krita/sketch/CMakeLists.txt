@@ -30,12 +30,18 @@ set(kritasketchlib_SRCS
     VirtualKeyboardController.cpp
     Theme.cpp
     QmlGlobalEngine.cpp
+    ${KRITA_STEAM_SRCS}
 )
 
 set(kritasketch_SRCS
     main.cpp
     MainWindow.cpp
 )
+if(WIN32 AND USE_BREAKPAD)
+    set(kritasketch_SRCS ${kritasketch_SRCS} ../kis_crash_handler.cpp)
+    set(BREAKPAD_LIBS breakpad)
+endif(WIN32 AND USE_BREAKPAD)
+
 
 set(kritasketchplugin_SRCS
     kritasketchplugin.cpp
@@ -53,7 +59,6 @@ set(kritasketchplugin_SRCS
 )
 
 set(kritasketch_kritaintegrationmodels_SRCS
-    models/TemplatesModel.cpp
     models/KeyboardModel.cpp
     models/ColorImageProvider.cpp
     models/CompositeOpModel.cpp
@@ -99,12 +104,19 @@ set(KRITA_COLORSELECTORNG_PART_SRCS
 ../plugins/extensions/dockers/advancedcolorselector/kis_color_selector_combo_box.cpp
 )
 
+if (WIN32)
+	set(kritasketchlib_SRCS ${kritasketchlib_SRCS} pathconverter.cpp)
+endif (WIN32)
 
 if (WIN32)
     set(kritasketch_SRCS ${kritasketch_SRCS} KritaSketchWin.rc)
 else (WIN32)
     kde4_add_app_icon(kritasketch_SRCS "${KDE4_ICON_DIR}/oxygen/*/apps/kritasketch.png")
 endif (WIN32)
+
+if (HAVE_STEAMWORKS)
+set_source_files_properties(main.cpp PROPERTIES COMPILE_FLAGS -DSTEAM_APP_ID_SKETCH=${STEAM_APP_ID_SKETCH})
+endif (HAVE_STEAMWORKS)
 
 # Krita Sketch library with shared things needed in both plugin and application
 # =============================================================================
@@ -127,6 +139,12 @@ target_link_libraries(kritasketchlib
     ${GLEW_LIBRARIES}
 )
 
+if (HAVE_STEAMWORKS)
+    target_link_libraries(kritasketchlib
+        ${STEAMWORKS_LIBRARY}
+    )
+endif (HAVE_STEAMWORKS)
+
 include(GNUInstallDirs)
 
 #install(TARGETS   kritasketchlib DESTINATION ${CMAKE_INSTALL_LIBDIR})
@@ -145,6 +163,7 @@ target_link_libraries(kritasketch
     ${QT_LIBRARIES}
     ${GLEW_LIBRARIES}
     kritaui
+    ${BREAKPAD_LIBS}
     ${GLEW_LIBRARIES}
     kritasketchlib
 )

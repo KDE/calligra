@@ -18,6 +18,7 @@
  */
 
 #include <QApplication>
+#include <QDebug>
 #include <QFontDatabase>
 #include <QFile>
 #include <QStringList>
@@ -27,6 +28,7 @@
 #include <QDir>
 #include <QMessageBox>
 #include <QSplashScreen>
+#include <QTextStream>
 
 #include <kapplication.h>
 #include <kaboutdata.h>
@@ -35,45 +37,144 @@
 #include <kstandarddirs.h>
 #include <kglobal.h>
 #include <kiconloader.h>
+#include <kcrash.h>
+#include <KoConfig.h>
+
 #include "data/splash/splash_screen.xpm"
 #include "MainWindow.h"
 
 #include "sketch/SketchInputContext.h"
 
-#include <calligraversion.h>
-#include <calligragitversion.h>
+#ifdef USE_BREAKPAD
+#include "../kis_crash_handler.h"
+#endif
+
+#if defined HAVE_STEAMWORKS
+#include <unistd.h>
+#include "steam/kritasteam.h"
+
+#ifndef STEAM_APP_ID_GEMINI
+#pragma warning "No Steam APP ID! You will require steam_appid.txt in your executable directory to define this."
+#include <steam/steamtypes.h>
+#define STEAM_APP_ID_GEMINI k_uAppIdInvalid
+#endif
+
+#endif
 
 #if defined Q_OS_WIN
 #include "stdlib.h"
 #include <ui/input/wintab/kis_tablet_support_win.h>
+
+// Using breakpad support rather than Steam's minidump error reporting
+/*
+void MiniDumpFunction( unsigned int nExceptionCode, EXCEPTION_POINTERS *pException )
+{
+    QMessageBox box(0);
+    box.setText("Testing");
+    box.setModal(true);
+    box.show();
+    QString comment = "Minidump comment: kritagemini.exe\n";
+    KritaSteamClient::MiniDumpFunction(comment, nExceptionCode, (void*) pException);
+}
+*/
 #elif defined Q_WS_X11
 #include <ui/input/wintab/kis_tablet_support_x11.h>
 #endif
 
 
+
+// Startup Message Handler (write to disk)
+QFile *startupLogFile = 0;
+QTextStream *startupLogStream = 0;
+
+void prepareStartupLogfile() {
+    startupLogFile = new QFile(QDesktopServices::storageLocation(QDesktopServices::TempLocation) + "/krita-startup.txt");
+    startupLogFile->open(QIODevice::WriteOnly);
+    startupLogStream = new QTextStream(startupLogFile);
+    *startupLogStream << QString("Krita Gemini - Startup") << endl << endl;
+}
+
+void closeStartupLogfile() {
+    if (startupLogStream != 0) {
+        startupLogStream->flush();
+        delete startupLogStream;
+        startupLogStream = 0;
+    }
+
+    if (startupLogFile != 0) {
+        startupLogFile->close();
+        delete startupLogFile;
+        startupLogFile = 0;
+    }
+}
+
+void customDebugMessageHandler(QtMsgType type, const char *msg)
+{
+    QString txt;
+    switch (type) {
+    case QtDebugMsg:
+        txt = QString("Debug: %1").arg(msg);
+        break;
+
+    case QtWarningMsg:
+        txt = QString("Warning: %1").arg(msg);
+        break;
+    case QtCriticalMsg:
+        txt = QString("Critical: %1").arg(msg);
+        break;
+    case QtFatalMsg:
+        txt = QString("Fatal: %1").arg(msg);
+        abort();
+    }
+
+    if (startupLogStream != 0) {
+        *startupLogStream << txt << endl;
+    }
+}
+
 int main( int argc, char** argv )
 {
-    QString calligraVersion(CALLIGRA_VERSION_STRING);
-    QString version;
+    int result;
 
+    prepareStartupLogfile();
+    qInstallMsgHandler(customDebugMessageHandler);
+#ifdef Q_OS_WIN
+    // TODO: re-enabled Steam error reporting if Breakpad support is disabled
+    //qDebug("Registering Steam Error handler");
+    //_set_se_translator(MiniDumpFunction);
+#endif Q_OS_WIN
+#ifdef USE_BREAKPAD
+    qDebug() << "Enabling breakpad";
+    qputenv("KDE_DEBUG", "1");
 
-#ifdef CALLIGRA_GIT_SHA1_STRING
-    QString gitVersion(CALLIGRA_GIT_SHA1_STRING);
-    version = QString("%1 (git %2)").arg(calligraVersion).arg(gitVersion).toLatin1();
+#ifdef HAVE_STEAMWORKS
+    KisCrashHandler crashHandler("kritageministeam");
 #else
-    version = calligraVersion;
+    KisCrashHandler crashHandler("kritagemini");
+#endif
+    Q_UNUSED(crashHandler);
+#else
+    qDebug() << "BREAKPAD IS NOT ENABLED";
 #endif
 
+#if defined HAVE_STEAMWORKS
+    KritaSteamClient* steamClient = KritaSteamClient::instance();
+    if (!steamClient->initialise(STEAM_APP_ID_GEMINI))
+    {
+        /* Krita wasn't launched from Steam, shutdown (it should launch separately */
+        return 1;
+    }
+#endif
 
     KAboutData aboutData("kritagemini",
                          "krita",
                          ki18n("Krita Gemini"),
-                         version.toLatin1(),
+                         "0.1",
                          ki18n("Krita Gemini: Painting at Home and on the Go for Artists"),
                          KAboutData::License_GPL,
-                         ki18n("(c) 1999-%1 The Krita team and KO GmbH.\n").subs(CALLIGRA_YEAR),
+                         ki18n("(c) 1999-2014 The Krita team and KO GmbH.\n"),
                          KLocalizedString(),
-                         "http://www.kritastudio.com",
+                         "http://www.krita.org",
                          "submit@bugs.kde.org");
 
     KCmdLineArgs::init (argc, argv, &aboutData);
@@ -106,9 +207,11 @@ int main( int argc, char** argv )
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
     // If there's no kdehome, set it and restart the process.
     //QMessageBox::information(0, "krita sketch", "KDEHOME: " + env.value("KDEHOME"));
+    /*
     if (!env.contains("KDEHOME") ) {
         _putenv_s("KDEHOME", QDesktopServices::storageLocation(QDesktopServices::DataLocation).toLocal8Bit());
     }
+    */
     if (!env.contains("KDESYCOCA")) {
         _putenv_s("KDESYCOCA", QString(appdir.absolutePath() + "/sycoca").toLocal8Bit());
     }
@@ -122,9 +225,9 @@ int main( int argc, char** argv )
         _putenv_s("KDEDIRS", appdir.absolutePath().toLocal8Bit());
     }
     _putenv_s("PATH", QString(appdir.absolutePath() + "/bin" + ";"
-              + appdir.absolutePath() + "/lib" + ";"
-              + appdir.absolutePath() + "/lib"  +  "/kde4" + ";"
-              + appdir.absolutePath()).toLocal8Bit());
+                              + appdir.absolutePath() + "/lib" + ";"
+                              + appdir.absolutePath() + "/lib"  +  "/kde4" + ";"
+                              + appdir.absolutePath()).toLocal8Bit());
 
     app.addLibraryPath(appdir.absolutePath());
     app.addLibraryPath(appdir.absolutePath() + "/bin");
@@ -139,21 +242,35 @@ int main( int argc, char** argv )
     KisTabletSupportX11::init();
     app.setEventFilter(&KisTabletSupportX11::eventFilter);
 #endif
-	
-	if (qgetenv("KDE_FULL_SESSION").isEmpty()) {
+
+    if (qgetenv("KDE_FULL_SESSION").isEmpty()) {
         // There are two themes that work for Krita, oxygen and plastique. Try to set plastique first, then oxygen
         qobject_cast<QApplication*>(QApplication::instance())->setStyle("Plastique");
-		qobject_cast<QApplication*>(QApplication::instance())->setStyle("Oxygen");
+        qobject_cast<QApplication*>(QApplication::instance())->setStyle("Oxygen");
     }
 
+    // Prepare to show window fullscreen if required
+    bool showFullscreen = false;
     // then create the pixmap from an xpm: we cannot get the
     // location of our datadir before we've started our components,
     // so use an xpm.
     QPixmap pm(splash_screen_xpm);
     QSplashScreen splash(pm);
+#ifdef HAVE_STEAMWORKS
+    if (steamClient->isInBigPictureMode()) {
+        // Show main window full screen, do not show splash screen
+        showFullscreen = true;
+    } else {
+        splash.show();
+        splash.showMessage(".");
+        app.processEvents();
+    }
+#else
     splash.show();
     splash.showMessage(".");
     app.processEvents();
+#endif
+
 
 #if defined Q_WS_X11 && QT_VERSION >= 0x040800
     QApplication::setAttribute(Qt::AA_X11InitThreads);
@@ -165,12 +282,38 @@ int main( int argc, char** argv )
         app.setInputContext(new SketchInputContext(&app));
     }
 
+    if (showFullscreen) {
+        window.showFullScreen();
+    } else {
 #ifdef Q_OS_WIN
-    window.showMaximized();
+        window.showMaximized();
 #else
-    window.show();
+        window.show();
 #endif
+    }
+
+    // Revert to standard message handler
+    qInstallMsgHandler(0);
+    closeStartupLogfile();
+
     splash.finish(&window);
 
-    return app.exec();
+#if defined HAVE_STEAMWORKS
+    if (!steamClient->isInitialised()) {
+        // Occasionally it seems that the Steam API might not initialise
+        // Alert the user
+        QMessageBox::warning(&window,
+                             i18n("Steam initialisation error"),
+                             i18n("There was a problem starting Steam services. Krita Gemini will run without Steam features. If you are seeing this message, please let us know on the Steam forum."));
+    }
+    steamClient->mainWindowCreated();
+#endif
+
+    result = app.exec();
+
+#if defined HAVE_STEAMWORKS
+    steamClient->mainWindowBeingDestroyed();
+    steamClient->shutdown();
+#endif
+    return result;
 }

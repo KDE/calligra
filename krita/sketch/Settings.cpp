@@ -19,6 +19,9 @@
 
 #include "Settings.h"
 #include <QApplication>
+#include <QDir>
+#include <QFile>
+#include <QMessageBox>
 
 #include <kglobal.h>
 #include <ksharedconfig.h>

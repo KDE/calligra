@@ -198,6 +198,7 @@ Item {
                 color: Settings.theme.color("components/dialog/progress/bar");
             }
         }
+
         BusyIndicator {
             id: busy;
             anchors.fill: progressBase;

@@ -79,6 +79,7 @@ Q_SIGNALS:
     void documentSaved();
 
 private Q_SLOTS:
+    void debugTestCrash();
     void switchDesktopForced();
     void switchSketchForced();
     void adjustZoomOnDocumentChangedAndStuff();

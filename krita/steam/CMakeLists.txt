@@ -1,0 +1,4 @@
+if(HAVE_STEAMWORKS)
+    set(KRITASTEAM_INCLUDE_DIR steam PARENT_SCOPE)
+    set(KRITA_STEAM_SRCS ../steam/kritasteamclient.cpp PARENT_SCOPE)
+endif(HAVE_STEAMWORKS)

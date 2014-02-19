@@ -18,7 +18,7 @@
 
 import QtQuick 1.1
 import org.krita.sketch 1.0
-import "../components"
+import org.krita.sketch.components 1.0
 
 Panel {
     id: base;
@@ -31,7 +31,7 @@ Panel {
             height: parent.height;
             width: height;
             onChooseBGChanged: {
-                if (toolManager.currentTool !== null && toolManager.currentTool.toolId() === "KritaSelected/KisToolColorPicker") {
+                if (toolManager.currentTool.toolId() === "KritaSelected/KisToolColorPicker") {
                     toolManager.currentTool.toForeground = !swatch.chooseBG;
                 }
             }

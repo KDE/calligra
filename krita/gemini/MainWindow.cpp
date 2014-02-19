@@ -76,10 +76,16 @@
 #include "sketch/Settings.h"
 
 #ifdef Q_OS_WIN
+// qml requires correct-case to path, even in Windows
+#include "sketch/pathconverter.h"
 // Slate mode/docked detection stuff
 #include <shellapi.h>
 #define SM_CONVERTIBLESLATEMODE 0x2003
 #define SM_SYSTEMDOCKED         0x2004
+#endif
+
+#ifdef HAVE_STEAMWORKS
+#include "steam/kritasteam.h"
 #endif
 
 class MainWindow::Private
@@ -108,6 +114,10 @@ public:
 #ifdef Q_OS_WIN
 //         slateMode = (GetSystemMetrics(SM_CONVERTIBLESLATEMODE) == 0);
 //         docked = (GetSystemMetrics(SM_SYSTEMDOCKED) != 0);
+#endif
+#ifdef HAVE_STEAMWORKS
+        // Big Picture Mode should force full-screen behaviour in Sketch mode
+        slateMode = KritaSteamClient::instance()->isInBigPictureMode();
 #endif
         centerer = new QTimer(q);
         centerer->setInterval(10);
@@ -138,40 +148,27 @@ public:
     KAction* toSketch;
     QToolButton* switcher;
 
+    KAction* crashTest;
+
     void initSketchView(QObject* parent)
     {
         sketchView = new SketchDeclarativeView();
         QmlGlobalEngine::instance()->setEngine(sketchView->engine());
         sketchView->engine()->rootContext()->setContextProperty("mainWindow", parent);
 
-#ifdef Q_OS_WIN
-        QDir appdir(qApp->applicationDirPath());
-
-        // Corrects for mismatched case errors in path (qtdeclarative fails to load)
-        wchar_t buffer[1024];
-        QString absolute = appdir.absolutePath();
-        DWORD rv = ::GetShortPathName((wchar_t*)absolute.utf16(), buffer, 1024);
-        rv = ::GetLongPathName(buffer, buffer, 1024);
-        QString correctedPath((QChar *)buffer);
-        appdir.setPath(correctedPath);
-
-        // for now, the app in bin/ and we still use the env.bat script
-        appdir.cdUp();
-
-        sketchView->engine()->addImportPath(appdir.canonicalPath() + "/lib/calligra/imports");
-        sketchView->engine()->addImportPath(appdir.canonicalPath() + "/lib64/calligra/imports");
-        QString mainqml = appdir.canonicalPath() + "/share/apps/kritagemini/kritagemini.qml";
-#else
-        sketchView->engine()->addImportPath(KGlobal::dirs()->findDirs("lib", "calligra/imports").value(0));
+        QString importPath = KGlobal::dirs()->findDirs("lib", "calligra/imports").value(0);
         QString mainqml = KGlobal::dirs()->findResource("data", "kritagemini/kritagemini.qml");
+#ifdef Q_OS_WIN
+        importPath = WindowsTools::correctPathForCase(importPath);
+        mainqml = WindowsTools::correctPathForCase(mainqml);
 #endif
+        sketchView->engine()->addImportPath(importPath);
 
         Q_ASSERT(QFile::exists(mainqml));
         if (!QFile::exists(mainqml)) {
             QMessageBox::warning(0, "No QML found", mainqml + " doesn't exist.");
         }
         QFileInfo fi(mainqml);
-
         sketchView->setSource(QUrl::fromLocalFile(fi.canonicalFilePath()));
         sketchView->setResizeMode( QDeclarativeView::SizeRootObjectToView );
 
@@ -184,6 +181,16 @@ public:
         //connect(toDesktop, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), q, SLOT(switchDesktopForced()));
         connect(toDesktop, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), q, SLOT(switchToDesktop()));
         sketchView->engine()->rootContext()->setContextProperty("switchToDesktopAction", toDesktop);
+
+        // Uncomment these lines to enable a crash when the combination Ctrl+Shift+D is pressed
+        /*
+        crashTest = new KAction(q);
+        crashTest->setEnabled(true);
+        crashTest->setText(tr("Sample crash"));
+        crashTest->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_D);
+        q->addAction(crashTest);
+        connect(crashTest, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), q, SLOT(debugTestCrash()));
+        */
     }
 
     void initDesktopView()
@@ -238,9 +245,9 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     setWindowTitle(i18n("Krita Gemini"));
     setWindowIcon(KIcon("kritagemini"));
 
-	// Load filters and other plugins in the gui thread
-	Q_UNUSED(KisFilterRegistry::instance());
-	Q_UNUSED(KisPaintOpRegistry::instance());
+    // Load filters and other plugins in the gui thread
+    Q_UNUSED(KisFilterRegistry::instance());
+    Q_UNUSED(KisPaintOpRegistry::instance());
 
     KisConfig cfg;
     // Store the current setting before we do "things", and heuristic our way to a reasonable
@@ -278,6 +285,16 @@ void MainWindow::resetWindowTitle()
     if(url.protocol() == "temp")
         fileName = i18n("Untitled");
     setWindowTitle(QString("%1 - %2").arg(fileName).arg(i18n("Krita Gemini")));
+}
+
+void MainWindow::debugTestCrash()
+{
+    QMessageBox msg(this);
+    msg.setText("Debug Test Crash");
+    msg.setModal(true);
+    msg.show();
+    MainWindow* thisWillCrash;
+    thisWillCrash->debugTestCrash();
 }
 
 void MainWindow::switchDesktopForced()
@@ -392,7 +409,13 @@ void MainWindow::switchToDesktop(bool justLoaded)
         setCentralWidget(d->desktopView);
     }
 
+#ifdef HAVE_STEAMWORKS
+    if (!KritaSteamClient::instance()->isInBigPictureMode()) {
+        setWindowState(windowState() & ~Qt::WindowFullScreen);
+    }
+#else
     setWindowState(windowState() & ~Qt::WindowFullScreen);
+#endif
 
     if (view) {
         //Notify the new view that we just switched to it, passing our synchronisation object
@@ -689,7 +712,7 @@ void MainWindow::Private::notifySlateModeChange()
                 q->switchToDesktop();
         }
         //qDebug() << "Slate mode is now" << slateMode;
-    } 
+    }
 #endif
 }
 

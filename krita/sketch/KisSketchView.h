@@ -79,6 +79,11 @@ public Q_SLOTS:
 
     void activate();
 
+#if defined HAVE_STEAMWORKS
+    void steamOverlayActivated();
+    void steamOverlayDeactivated();
+#endif
+
 Q_SIGNALS:
     // This is directly forwarded from the document, which means that
     // value 0-100 means in progress
@@ -106,6 +111,7 @@ private:
     Q_PRIVATE_SLOT(d, void imageUpdated(const QRect &updated))
     Q_PRIVATE_SLOT(d, void documentOffsetMoved())
     Q_PRIVATE_SLOT(d, void zoomChanged())
+    Q_PRIVATE_SLOT(d, void updateDisplay())
     Q_PRIVATE_SLOT(d, void resetDocumentPosition())
     Q_PRIVATE_SLOT(d, void removeNodeAsync(KisNodeSP removedNode))
 };

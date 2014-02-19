@@ -79,35 +79,61 @@
 
 //#else // Q_WS_WIN
 
-void doRestart(bool resetConfig)
+
+class GfxCheckIntelInfo
 {
+public:
+    GfxCheckIntelInfo(const QString& card, int v1, int v2, int v3, int v4)
+    : cardString(card)
+    {
+        version[0] = v1;
+        version[1] = v2;
+        version[2] = v3;
+        version[3] = v4;
+    }
+    QString cardString;
+    int version[4];
+};
+
+void doResetConfig(const QString &applicationId)
+{
+    QString applicationExecutable = MainWindow::getApplicationExeFromId(applicationId);
+    QString appRcFile = applicationExecutable + "rc";
+
+    {
+        QString appdata = qgetenv("APPDATA");
+        QDir inputDir(appdata + "/krita/share/apps/krita/input/");
+        foreach(QString entry, inputDir.entryList(QStringList("*.profile"))) {
+            inputDir.remove(entry);
+        }
+        QDir configDir(appdata + "/krita/share/config/");
+        configDir.remove(appRcFile);
+    }
+    {
+        QString appdata = qgetenv("LOCALAPPDATA");
+        QDir inputDir(appdata + "/krita/share/apps/krita/input/");
+        foreach(QString entry, inputDir.entryList(QStringList("*.profile"))) {
+            inputDir.remove(entry);
+        }
+        QDir configDir(appdata + "/krita/share/config/");
+        configDir.remove(appRcFile);
+    }
+    {
+        QDir inputDir(KGlobal::dirs()->saveLocation("appdata", "input/"));
+        foreach(QString entry, inputDir.entryList(QStringList("*.profile"))) {
+            inputDir.remove(entry);
+        }
+        QDir configDir(KGlobal::dirs()->saveLocation("config"));
+        configDir.remove(appRcFile);
+    }
+}
+
+void doRestart(const QString &applicationId, bool resetConfig)
+{
+    QString applicationExecutable = MainWindow::getApplicationExeFromId(applicationId);
+
     if (resetConfig) {
-        {
-            QString appdata = qgetenv("APPDATA");
-            QDir inputDir(appdata + "/krita/share/apps/krita/input/");
-            foreach(QString entry, inputDir.entryList(QStringList("*.profile"))) {
-                inputDir.remove(entry);
-            }
-            QDir configDir(appdata + "/krita/share/config/");
-            configDir.remove("kritarc");
-        }
-        {
-            QString appdata = qgetenv("LOCALAPPDATA");
-            QDir inputDir(appdata + "/krita/share/apps/krita/input/");
-            foreach(QString entry, inputDir.entryList(QStringList("*.profile"))) {
-                inputDir.remove(entry);
-            }
-            QDir configDir(appdata + "/krita/share/config/");
-            configDir.remove("kritarc");
-        }
-        {
-            QDir inputDir(KGlobal::dirs()->saveLocation("appdata", "input/"));
-            foreach(QString entry, inputDir.entryList(QStringList("*.profile"))) {
-                inputDir.remove(entry);
-            }
-            QDir configDir(KGlobal::dirs()->saveLocation("config"));
-            configDir.remove("kritarc");
-        }
+        doResetConfig(applicationId);
     }
 
     QString restartCommand;
@@ -119,15 +145,15 @@ void doRestart(bool resetConfig)
     bundleDir.cdUp();
     bundleDir.cdUp();
 
-    restartCommand = QString("open \"") + QString(bundleDir.absolutePath() + "/krita.app\"");
+    restartCommand = QString("open \"") + QString(bundleDir.absolutePath() + "/" + applicationExecutable + ".app\"");
 #endif
 
 #ifdef Q_WS_WIN
-    restartCommand = qApp->applicationDirPath().replace(' ', "\\ ") + "/krita.exe \"";
+    restartCommand = qApp->applicationDirPath().replace(' ', "\\ ") + "/" + applicationExecutable + ".exe \"";
 #endif
 
 #ifdef Q_WS_X11
-    restartCommand = "sh -c \"" + qApp->applicationDirPath().replace(' ', "\\ ") + "/krita \"";
+    restartCommand = "sh -c \"" + qApp->applicationDirPath().replace(' ', "\\ ") + "/" + applicationExecutable + "\"";
 #endif
 
     qDebug() << "restartCommand" << restartCommand;
@@ -208,7 +234,11 @@ QString platformToStringWin(QSysInfo::WinVersion version)
 struct MainWindow::Private {
     QString dumpPath;
     QString id;
+    QString applicationId;
     QNetworkAccessManager *networkAccessManager;
+
+    QString graphicsWarning;
+    QString graphicsInformation;
 
     bool doRestart;
     bool uploadStarted;
@@ -219,8 +249,9 @@ struct MainWindow::Private {
     }
 };
 
+typedef QPair<QByteArray, QByteArray> Field;
 
-MainWindow::MainWindow(const QString &dumpPath, const QString &id, QWidget *parent)
+MainWindow::MainWindow(const QString &dumpPath, const QString &id, const QString &applicationId, QWidget *parent)
     : QWidget(parent)
     , m_d(new Private())
 {
@@ -232,11 +263,22 @@ MainWindow::MainWindow(const QString &dumpPath, const QString &id, QWidget *pare
     m_d->networkAccessManager = new QNetworkAccessManager(this);
     connect(m_d->networkAccessManager, SIGNAL(finished(QNetworkReply *)), SLOT(uploadDone(QNetworkReply *)));
 
+    connect(chkAllowUpload, SIGNAL(stateChanged(int)), this, SLOT(onToggleAllowUpload(int)));
     connect(bnRestart, SIGNAL(clicked()), this, SLOT(restart()));
     connect(bnClose, SIGNAL(clicked()), this, SLOT(close()));
 
     m_d->dumpPath = dumpPath;
     m_d->id = id;
+    m_d->applicationId = applicationId;
+
+    if (checkForOpenglProblems()) {
+        // driver issue found
+        QPalette warning_palette;
+        warning_palette.setColor(QPalette::WindowText, Qt::red);
+        lblDriverWarning->setPalette(warning_palette);
+
+        lblDriverWarning->setText(m_d->graphicsInformation);
+    }
 }
 
 MainWindow::~MainWindow()
@@ -251,7 +293,7 @@ void MainWindow::restart()
         startUpload();
     }
     else {
-        doRestart(chkRemoveSettings->isChecked());
+        doRestart(m_d->applicationId, chkRemoveSettings->isChecked());
         qApp->quit();
     }
 }
@@ -263,7 +305,25 @@ void MainWindow::close()
         startUpload();
     }
     else {
+        if (chkRemoveSettings->isChecked())
+        {
+            doResetConfig(m_d->applicationId);
+        }
         qApp->quit();
+    }
+}
+
+void MainWindow::onToggleAllowUpload(int state)
+{
+    switch(state) {
+    case Qt::Unchecked:
+        bnClose->setText("&Close");
+        bnRestart->setText("&Restart");
+        break;
+    case Qt::Checked:
+        bnClose->setText("Send && &Close");
+        bnRestart->setText("Send && R&estart");
+        break;
     }
 }
 
@@ -281,7 +341,6 @@ void MainWindow::startUpload()
 
     QString boundary = "--9876543210";
 
-    typedef QPair<QByteArray, QByteArray> Field;
     QList<Field> fields;
 
     QString calligraVersion(CALLIGRA_VERSION_STRING);
@@ -296,7 +355,7 @@ void MainWindow::startUpload()
 #endif
 
     fields << Field("BuildID", CALLIGRA_GIT_SHA1_STRING)
-           << Field("ProductName", "krita")
+           << Field("ProductName", m_d->applicationId.toLatin1())
            << Field("Version", version.toLatin1())
            << Field("Vendor", "KO GmbH")
            << Field("Email", txtEmail->text().toLatin1())
@@ -321,13 +380,13 @@ void MainWindow::startUpload()
     fields << Field("Platform", platformToStringMac(QSysInfo::MacintoshVersion).toAscii());
 #endif
 
-    QFile f(QDesktopServices::storageLocation(QDesktopServices::TempLocation) + "/krita-opengl.txt");
-    qDebug() << KGlobal::dirs()->saveLocation("config") + "/krita-opengl.txt" << f.exists();
+    addFileAsField(QDesktopServices::storageLocation(QDesktopServices::TempLocation) + "/krita-startup.txt",
+                   "Startup",
+                   &fields);
 
-    if (f.exists()) {
-        f.open(QFile::ReadOnly);
-        fields << Field("OpenGL", f.readAll());
-    }
+    addFileAsField(QDesktopServices::storageLocation(QDesktopServices::TempLocation) + "/krita-opengl.txt",
+                   "OpenGL",
+                   &fields);
 
     QString body;
     foreach(Field const field, fields) {
@@ -356,7 +415,7 @@ void MainWindow::startUpload()
     body += boundary + "\r\n";
     body += "Content-Disposition: form-data; name=\"description\"\r\n";
     body += "\r\n";
-    body +=	txtDescription->toPlainText();
+    body += txtDescription->toPlainText();
 
     body += "\r\n";
     body += boundary + "--" + "\r\n";
@@ -371,6 +430,19 @@ void MainWindow::startUpload()
     connect(reply, SIGNAL(uploadProgress(qint64, qint64)), this, SLOT(uploadProgress(qint64,qint64)));
 }
 
+
+void MainWindow::addFileAsField(const QString &filename, const QString &fieldName, QList<QPair<QByteArray, QByteArray>> *fields)
+{
+    QFile f(filename);
+
+    qDebug() << filename << f.exists();
+
+    if (f.exists()) {
+        f.open(QFile::ReadOnly);
+        *fields << Field(fieldName.toUtf8(), f.readAll());
+    }
+}
+
 void MainWindow::uploadDone(QNetworkReply *reply)
 {
     qDebug() << "updloadDone";
@@ -378,7 +450,9 @@ void MainWindow::uploadDone(QNetworkReply *reply)
         qCritical() << "uploadDone: Error uploading crash report: " << reply->errorString();
     }
     if (m_d->doRestart) {
-        doRestart(chkRemoveSettings->isChecked());
+        doRestart(m_d->applicationId, chkRemoveSettings->isChecked());
+    } else if (chkRemoveSettings->isChecked()) {
+        doResetConfig(m_d->applicationId);
     }
     qApp->quit();
 
@@ -400,4 +474,223 @@ void MainWindow::uploadError(QNetworkReply::NetworkError error)
     qCritical() << "UploadError: Error uploading crash report: " << error;
 
     uploadDone(0);
+}
+
+QString MainWindow::getApplicationExeFromId(const QString &applicationId)
+{
+    QString applicationExecutable;
+
+    if (applicationId == "") {
+        applicationExecutable = "";
+    } else if (applicationId == "kritageministeam") {
+        applicationExecutable = "kritagemini";
+    } else if (applicationId == "kritasketchsteam") {
+        applicationExecutable = "kritasketch";
+    } else {
+        applicationExecutable = applicationId;
+    }
+
+    return applicationExecutable;
+}
+
+/**
+ * @brief Inspect the contents of the OpenGL info file and alert the user if they might be running an old version
+ *
+ */
+bool MainWindow::checkForOpenglProblems()
+{
+    bool showWarning = false;
+    QFile f(QDesktopServices::storageLocation(QDesktopServices::TempLocation) + "/krita-opengl.txt");
+    QString openglString;
+
+    const QString AMD_DRIVER_STRING = "ATI Technologies Inc.";
+    const QString AMD_TAG_STRING = "AMD";
+
+    const QString NVIDIA_DRIVER_STRING = "NVIDIA Corporation";
+    const QString NVIDIA_TAG_STRING = "GeForce";
+
+    const QString INTEL_DRIVER_STRING = "Intel";
+    const QString INTEL_CARD_STRING = "HD Graphics";
+    const QString INTEL_BUILD_STRING = "Build";
+
+
+    if (f.exists()) {
+        // (otherwise krita crashed before initialising the opengl canvas)
+        if (f.open(QFile::ReadOnly)) {
+            openglString = f.readAll();
+            f.close();
+
+            openglString = openglString.section("\r", 0, 0);
+
+            // Check for AMD/ATI drivers
+            if (openglString.contains(AMD_DRIVER_STRING)
+                    || openglString.contains(AMD_TAG_STRING)) {
+
+                showWarning = checkAmdDriver(openglString);
+            } // end check for AMD/ATi drivers
+
+            // Check nVidia drivers here
+            if (openglString.contains(NVIDIA_DRIVER_STRING)
+                || openglString.contains(NVIDIA_TAG_STRING)) {
+                // The string from NVIDIA cards are less descriptive
+                showWarning = checkNvidiaDriver(openglString);
+            }
+
+            // Check for intel drivers here
+            if (openglString.contains(INTEL_DRIVER_STRING)
+                || openglString.contains(INTEL_CARD_STRING)) {
+                // The string from NVIDIA cards are less descriptive
+                showWarning = checkIntelDriver(openglString);
+            }
+        }
+
+        /*
+        if (showWarning) {
+            QMessageBox msg;
+            msg.setWindowTitle("Graphics");
+            msg.setText(m_d->graphicsWarning);
+            msg.setInformativeText(m_d->graphicsInformation);
+
+            msg.setIcon(QMessageBox::Critical);
+            msg.exec();
+        }
+        */
+    }
+
+    return showWarning;
+}
+
+bool MainWindow::checkAmdDriver(const QString& openglString)
+{
+    const QString AMD_CONTEXT_STRING = "Compatibility Profile Context";
+
+    bool showWarning = false;
+    QString driverVersionString;
+    QStringList stringParts = openglString.split(",");
+
+    if (stringParts.size()>=3) {
+        // Third part is of the form:  (opengl version) Compatibility Profile Context (driver version)
+        // version is stored at the end of the third part
+        int index = stringParts[2].indexOf(AMD_CONTEXT_STRING);
+        if (index != -1) {
+            index += AMD_CONTEXT_STRING.size() + 1;
+            if (index < stringParts[2].size()) {
+                driverVersionString = stringParts[2].mid(index).trimmed();
+                QStringList driverVersionParts = driverVersionString.split(".");
+
+                if (driverVersionParts.size()>=2) {
+                    int mainVer = driverVersionParts[0].toInt();
+                    int minorVer = driverVersionParts[1].toInt();
+                    showWarning = ( mainVer < 14)
+                                  || ((mainVer == 14) && (minorVer < 4));
+
+                    if (showWarning) {
+                        m_d->graphicsWarning = "Possible outdated AMD driver";
+                        m_d->graphicsInformation = "It appears that you may be using AMD graphics (Radeon) with older drivers. These are known to cause problems with Krita. You should visit support.amd.com to download the latest driver.";                               }
+                }
+            }
+        }
+    }
+    return showWarning;
+}
+
+/**
+ * @brief Checks for potential issues with NVIDIA graphics
+ *
+ * Examines the opengl string which is the form: <GL_VENDOR>, <GL_RENDERER>, <GL_VERSION>
+ * The issue is that GL_VERSION for the GeForce driver does not give any driver version
+ * information, justt the OpenGL version supported
+ * more driver info
+ */
+bool MainWindow::checkNvidiaDriver(const QString& openglString)
+{
+    bool showWarning = false;
+    QString driverVersionString;
+    QStringList stringParts = openglString.split(",");
+
+    if (stringParts.size()>=3) {
+        // Third part is of the form:  (opengl version)
+        // We can only really test against a known working version 4.4.0
+        driverVersionString = stringParts[2].trimmed();
+        QStringList driverVersionParts = driverVersionString.split(".");
+
+        if (driverVersionParts.size()>=2) {
+            int mainVer = driverVersionParts[0].toInt();
+            int minorVer = driverVersionParts[1].toInt();
+            showWarning = ( mainVer < 4)
+                          || ((mainVer == 4) && (minorVer < 4));
+
+            if (showWarning) {
+                m_d->graphicsWarning = "Possible outdated NVIDIA driver";
+                m_d->graphicsInformation = "It appears that you may be using NVIDIA graphics (GeForce) with older drivers. These are known to cause problems with Krita. You should visit www.geforce.com/drivers to download the latest driver.";                               }
+        }
+    }
+
+    return showWarning;
+}
+
+/**
+ * @brief Checks for potential issues with NVIDIA graphics
+ *
+ * Examines the opengl string which is the form: <GL_VENDOR>, <GL_RENDERER>, <GL_VERSION>
+ * The issue is that GL_VERSION for the GeForce driver does not give any driver version
+ * information, justt the OpenGL version supported
+ * more driver info
+ */
+bool MainWindow::checkIntelDriver(const QString& openglString)
+{
+    const QString INTEL_BUILD_STRING = "Build";
+    bool showWarning = false;
+    QString driverVersionString;
+    QStringList stringParts = openglString.split(",");
+
+    if (stringParts.size()>=3) {
+        // Third part is of the form:  (opengl version) - Build (driver version)
+        // version is stored at the end of the third part
+        // Known working version is 9.17.10.3040 for HD Graphics 2500
+        // Known working version is 10.18.10.3316 for HD Graphics 4400
+
+        QList<GfxCheckIntelInfo> testStrings;
+        testStrings.append(GfxCheckIntelInfo("HD Graphics 2500", 9,17,10,3040));
+        testStrings.append(GfxCheckIntelInfo("HD Graphics 4400", 10,18,10,3316));
+        testStrings.append(GfxCheckIntelInfo(" ", 9,17,10,3040)); // catch for other cards
+
+        int index = stringParts[2].indexOf(INTEL_BUILD_STRING);
+        if (index != -1) {
+            index += INTEL_BUILD_STRING.size() + 1;
+            if (index < stringParts[2].size()) {
+                driverVersionString = stringParts[2].mid(index).trimmed();
+                QStringList driverVersionParts = driverVersionString.split(".");
+
+                if (driverVersionParts.size()>=4) {
+                    int v1 = driverVersionParts[0].toInt();
+                    int v2 = driverVersionParts[1].toInt();
+                    int v3 = driverVersionParts[2].toInt();
+                    int v4 = driverVersionParts[3].toInt();
+                    int tv1, tv2, tv3, tv4;
+
+                    for(int infoIndex=0; !showWarning && infoIndex<testStrings.size(); infoIndex++) {
+
+                        if (stringParts[1].contains(testStrings[infoIndex].cardString)) {
+                            tv1 = testStrings[infoIndex].version[0];
+                            tv2 = testStrings[infoIndex].version[1];
+                            tv3 = testStrings[infoIndex].version[2];
+                            tv4 = testStrings[infoIndex].version[3];
+                            showWarning = ( v1 < tv1)
+                                          || ((v1 == tv1) && (v2 < tv2))
+                                          || ((v1 == tv1) && (v2 == tv2) && (v3 < tv3))
+                                          || ((v1 == tv1) && (v2 == tv2) && (v3 == tv3) && (v4 < tv4));
+                        }
+                    }
+
+                    if (showWarning) {
+                        m_d->graphicsWarning = "Possible outdated Intel driver";
+                        m_d->graphicsInformation = "It appears that you may be using Intel graphics with older drivers. These are known to cause problems with Krita. You should visit downloadcenter.intel.com to download the latest driver.";
+                    }
+                }
+            }
+        }
+    }
+
+    return showWarning;
 }

@@ -17,6 +17,7 @@
  */
 
 import QtQuick 1.1
+import org.krita.sketch 1.0
 
 Image {
     source: Settings.theme.image("shadow.png");

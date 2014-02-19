@@ -19,6 +19,10 @@ set(kritagemini_SRCS
     desktopviewproxy.cpp
 )
 
+if(WIN32 AND USE_BREAKPAD)
+    set(kritagemini_SRCS ${kritagemini_SRCS} ../kis_crash_handler.cpp)
+    set(BREAKPAD_LIBS breakpad)
+endif(WIN32 AND USE_BREAKPAD)
 
 if (WIN32)
     set(kritagemini_SRCS ${kritagemini_SRCS} KritaGeminiWin.rc)
@@ -26,11 +30,14 @@ else (WIN32)
     kde4_add_app_icon(kritagemini_SRCS "${KDE4_ICON_DIR}/oxygen/*/apps/kritagemini.png")
 endif (WIN32)
 
+if (HAVE_STEAMWORKS)
+set_source_files_properties(main.cpp PROPERTIES COMPILE_FLAGS -DSTEAM_APP_ID_GEMINI=${STEAM_APP_ID_GEMINI})
+endif (HAVE_STEAMWORKS)
+
 # Krita Gemini application
 # =============================================================================
 
 kde4_add_executable(kritagemini ${kritagemini_SRCS})
-
 target_link_libraries(kritagemini
     ${QT_QTDECLARATIVE_LIBRARY}
     ${QT_QTGUI_LIBRARIES}
@@ -38,6 +45,7 @@ target_link_libraries(kritagemini
     ${QT_LIBRARIES}
     ${GLEW_LIBRARIES}
     kritaui
+    ${BREAKPAD_LIBS}
     ${GLEW_LIBRARIES}
     kritasketchlib
 )
