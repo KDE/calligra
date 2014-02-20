@@ -236,9 +236,13 @@ KoReportDesigner::KoReportDesigner(QWidget *parent, QDomElement data) : QWidget(
                 if (pagetype == "predefined") {
                     m_pageSize->setValue(it.toElement().attribute("report:page-size", "A4"));
                 } else if (pagetype == "custom") {
+#if 0 // temp. fix crash
                     m_pageSize->setValue("custom");
                     m_customHeight->setValue(KoUnit::parseValue(it.toElement().attribute("report:custom-page-height", "")));
                     m_customWidth->setValue(KoUnit::parseValue(it.toElement().attribute("report:custom-page-widtht", "")));
+#else
+                    m_pageSize->setValue("A4");
+#endif
                 } else if (pagetype == "label") {
                     //TODO
                 }
@@ -315,12 +319,15 @@ QDomElement KoReportDesigner::document() const
     // -- size
     QDomElement pagestyle = doc.createElement("report:page-style");
 
+#if 0 // temp. fix crash
     if (m_pageSize->value().toString() == "Custom") {
         pagestyle.appendChild(doc.createTextNode("custom"));
         KRUtils::setAttribute(pagestyle, "report:custom-page-width", m_customWidth->value().toDouble());
         KRUtils::setAttribute(pagestyle, "report:custom-page-height", m_customHeight->value().toDouble());
 
-    } else if (m_pageSize->value().toString() == "Label") {
+    } else
+#endif
+    if (m_pageSize->value().toString() == "Label") {
         pagestyle.appendChild(doc.createTextNode("label"));
         pagestyle.setAttribute("report:page-label-type", m_labelType->value().toString());
     } else {
@@ -615,6 +622,11 @@ void KoReportDesigner::createProperties()
     keys.clear();
     keys =  KoPageFormat::pageFormatNames();
     strings = KoPageFormat::localizedPageFormatNames();
+#if 0 // temp. fix crash
+#else
+    keys.removeAll("Custom");
+    strings.removeAll(KoPageFormat::name(KoPageFormat::CustomSize));
+#endif
     QString defaultKey = KoPageFormat::formatString(KoPageFormat::defaultFormat());
     m_pageSize = new KoProperty::Property("page-size", keys, strings, defaultKey, i18n("Page Size"));
 

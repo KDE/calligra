@@ -69,9 +69,13 @@ KoReportReportData::KoReportReportData(const QDomElement & elemSource, QObject *
             if (pagetype == "predefined") {
                 page.setPageSize(elemThis.attribute("report:page-size", "A4"));
             } else if (pagetype == "custom") {
+#if 0 // temp. fix crash
                 page.setCustomWidth(POINT_TO_INCH(KoUnit::parseValue(elemThis.attribute("report:custom-page-width", ""))) * KoDpi::dpiX());
                 page.setCustomHeight(POINT_TO_INCH(KoUnit::parseValue(elemThis.attribute("report:custom-page-height", ""))) * KoDpi::dpiY());
                 page.setPageSize("Custom");
+#else
+                page.setPageSize("A4");
+#endif
             } else if (pagetype == "label") {
                 page.setLabelType(elemThis.firstChild().nodeValue());
             }

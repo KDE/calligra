@@ -509,10 +509,13 @@ ORODocument* KoReportPreRenderer::generate()
     kDebug() << "Calculating Page Size";
     ReportPageOptions rpo(d->m_reportData->page);
     // This should reflect the information of the report page size
+#if 0 // temp. fix crash
     if (d->m_reportData->page.getPageSize() == "Custom") {
         d->m_maxWidth = d->m_reportData->page.getCustomWidth();
         d->m_maxHeight = d->m_reportData->page.getCustomHeight();
-    } else {
+    } else
+#endif
+    {
         if (!label.isNull()) {
             d->m_maxWidth = label.width();
             d->m_maxHeight = label.height();

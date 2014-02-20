@@ -43,11 +43,14 @@ KoReportPage::KoReportPage(QWidget *parent, ORODocument *document)
         QString pageSize = m_reportDocument->pageOptions().getPageSize();
 
 
+#if 0 // temp. fix crash
         if (pageSize == "Custom") {
             // if this is custom sized sheet of paper we will just use those values
             pageWidth = (int)(m_reportDocument->pageOptions().getCustomWidth());
             pageHeight = (int)(m_reportDocument->pageOptions().getCustomHeight());
-        } else {
+        } else
+#endif
+        {
             // lookup the correct size information for the specified size paper
             pageWidth = m_reportDocument->pageOptions().widthPx();
             pageHeight = m_reportDocument->pageOptions().heightPx();
