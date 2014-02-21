@@ -62,7 +62,7 @@ private slots:
     void slotZoomChanged(KoZoomMode::Mode mode, qreal zoom);
     void slotScrollAreaSizeChanged();
     void toggleShowRulers(bool show);
-    void mousePositionChanged(const QPoint &pos);
+    void mousePositionChanged(const QPoint &viewPos);
     void changeAspectMode(bool aspectMode);
     void pageOffsetChanged();
     void zoomTo100();
@@ -80,6 +80,7 @@ private:
     KoZoomAction * m_zoomAction;
     QWidget * m_zoomActionWidget;
     KAction *m_100pct;
+    QPoint m_rulersOffset;
 };
 
 #endif
