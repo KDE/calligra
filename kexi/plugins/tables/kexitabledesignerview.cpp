@@ -220,6 +220,12 @@ KexiTableDesignerView::KexiTableDesignerView(QWidget *parent)
     KexiUtils::connectPushButtonActionForDebugWindow(
         "executeRealAlterTable", this, SLOT(executeRealAlterTable()));
 #endif
+    // setup main menu actions
+    QList<QAction*> mainMenuActions;
+    a = sharedAction("edit_clear_table");
+    mainMenuActions << a;
+
+    setMainMenuActions(mainMenuActions);
 }
 
 KexiTableDesignerView::~KexiTableDesignerView()

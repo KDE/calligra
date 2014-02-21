@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 Peter Simonsson <psn@linux.se>
-   Copyright (C) 2003-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -171,6 +171,10 @@ protected:
     //! we want to set visible value on setValueInternal()
     //! - true for table view's combo box
     bool m_setVisibleValueOnSetValueInternal;
+    //! Checked in createPopup(), true for form's combo box, so the popup is focused before showing;
+    //! false for table view's combo box, so the popup is focused after showing.
+    //! False by default.
+    bool m_focusPopupBeforeShow;
 };
 
 #endif
