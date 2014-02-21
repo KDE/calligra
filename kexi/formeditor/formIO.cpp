@@ -38,7 +38,7 @@
 #include <QPixmap>
 #include <QImageWriter>
 
-#include <kfiledialog.h>
+#include <kofiledialog.h>
 #include <klocale.h>
 #include <k3command.h>
 #include <kacceleratormanager.h>
@@ -145,7 +145,10 @@ FormIO::saveFormToFile(Form *form, const QString &filename)
     }
 
     if (filename.isEmpty()) {
-        _filename = KFileDialog::getSaveFileName(KUrl(), i18n("*.ui|Qt Designer UI Files"));
+        KoFileDialog dlg(this,
+                         KoFileDialog::DialogSaveFile);
+        dlg.setNameFilter(i18n("*.ui|Qt Designer UI Files"));
+        _filename = dlg.getQString();
         if (_filename.isEmpty()) {
             return false;
         }
@@ -330,7 +333,10 @@ FormIO::loadFormFromFile(Form *form, QWidget *container, const QString &filename
     QString _filename;
 
     if (filename.isEmpty()) {
-        _filename = KFileDialog::getOpenFileName(KUrl(), i18n("*.ui|Qt Designer UI Files"));
+        KoFileDialog dlg(this,
+                         KoFileDialog::DialogOpenFile);
+        dlg.setNameFilter(i18n("*.ui|Qt Designer UI Files"));
+        _filename = dlg.getQString();
         if (_filename.isEmpty()) {
             return false;
         }
