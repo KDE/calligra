@@ -728,6 +728,7 @@ void KisConfig::setCanvasState(const QString& state) const
     }
     if (acceptableStates.contains(state)) {
         m_cfg.writeEntry("canvasState", state);
+        m_cfg.sync();
     }
 }
 
