@@ -1,6 +1,6 @@
 /* Part of the Calligra project
  * Copyright (C) 2008 Peter Simonsson <peter.simonsson@gmail.com>
- * Copyright (C) 2010 Yue Liu <opuspace@gmail.com>
+ * Copyright (C) 2010-2014 Yue Liu <yue.liu@mail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -64,35 +64,11 @@
 
 #define StencilShapeId "StencilShape"
 
-//
-// StencilBoxDockerFactory
-//
-
-StencilBoxDockerFactory::StencilBoxDockerFactory()
-    : KoDockFactoryBase()
-{
-}
-
-QString StencilBoxDockerFactory::id() const
-{
-    return QString("FlowStencilBoxDocker");
-}
-
-QDockWidget* StencilBoxDockerFactory::createDockWidget()
-{
-    StencilBoxDocker* docker = new StencilBoxDocker();
-    return docker;
-}
-
-//
-// StencilBoxDocker
-//
-
 StencilBoxDocker::StencilBoxDocker(QWidget* parent)
     : QDockWidget(parent)
 {
     setWindowTitle(i18n("Stencil Box"));
-    QWidget* mainWidget = new QWidget(this);
+    QWidget* mainWidget = new QWidget(this); // todo
     setWidget(mainWidget);
 
     m_menu = new QMenu();

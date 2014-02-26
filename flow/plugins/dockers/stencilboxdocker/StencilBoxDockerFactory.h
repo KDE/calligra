@@ -1,5 +1,5 @@
-/* This file is part of the KDE project
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+/* This file is part of the Calligra project
+ * Copyright (C) 2014 Yue Liu <yue.liu@mail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,19 +16,24 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "Plugin.h"
-#include "stencilboxdocker/StencilBoxDockerFactory.h"
+#ifndef STENCILBOXDOCKERFACTORY_H
+#define STENCILBOXDOCKERFACTORY_H
 
-#include <KoDockRegistry.h>
+#include "StencilBoxDocker.h"
+#include <KoDockFactoryBase.h>
+#include <QDockWidget>
 
-#include <kpluginfactory.h>
-
-K_PLUGIN_FACTORY(PluginFactory, registerPlugin<Plugin>();)
-K_EXPORT_PLUGIN(PluginFactory("flowdockersplugin"))
-
-Plugin::Plugin(QObject *parent, const QVariantList&)
-    : QObject(parent)
+class StencilBoxDockerFactory : public KoDockFactoryBase
 {
-    Q_UNUSED(parent);
-    KoDockRegistry::instance()->add(new StencilBoxDockerFactory());
-}
+public:
+    QString id() const {
+        return QString("FlowStencilBoxDocker");
+    }
+    QDockWidget* createDockWidget() {
+        return new StencilBoxDocker();
+    }
+    DockPosition defaultDockPosition() const {
+        return DockLeft;
+    }
+};
+#endif //STENCILBOXDOCKERFACTORY_H

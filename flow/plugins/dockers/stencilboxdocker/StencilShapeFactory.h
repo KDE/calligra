@@ -28,7 +28,7 @@ class KoShapeBasedDocumentBase;
 class StencilShapeFactory : public KoShapeFactoryBase
 {
     public:
-        StencilShapeFactory(const QString &id, const QString &name, const QString &source, KoProperties* props);
+        StencilShapeFactory(const QString &id, const QString &name, const QString source, KoProperties* props);
         ~StencilShapeFactory();
 
         virtual KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = new KoDocumentResourceManager()) const;
