@@ -1,6 +1,6 @@
 /* This file is part of the Calligra project
  * Copyright (C) 2008 Peter Simonsson <peter.simonsson@gmail.com>
- * Copyright (C) 2010 Yue Liu <opuspace@gmail.com>
+ * Copyright (C) 2010-2014 Yue Liu <yue.liu@mail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,8 +26,6 @@
 #include <QMap>
 #include <QIcon>
 
-#include <KoDockFactoryBase.h>
-
 class CollectionItemModel;
 class CollectionTreeWidget;
 class KoShape;
@@ -39,19 +37,6 @@ class QMenu;
 class QVBoxLayout;
 class QHBoxLayout;
 class QSortFilterProxyModel;
-
-class StencilBoxDockerFactory : public KoDockFactoryBase
-{
-    public:
-        StencilBoxDockerFactory();
-
-        QString id() const;
-        QDockWidget* createDockWidget();
-        DockPosition defaultDockPosition() const
-        {
-            return DockLeft;
-        }
-};
 
 class StencilBoxDocker : public QDockWidget
 {
