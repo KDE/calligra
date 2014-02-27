@@ -35,7 +35,6 @@ class StencilShapeFactory : public KoShapeFactoryBase
         virtual bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const;
 
     private:
-        KoShape* m_shape;
         KoProperties* m_params;
         QString m_path;
 };
