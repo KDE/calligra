@@ -41,7 +41,6 @@ StencilShapeFactory::StencilShapeFactory(const QString &id,
 					 const QString source,
 					 KoProperties* params)
     : KoShapeFactoryBase(id, name)
-    , m_shape(0)
     , m_params(params)
     , m_path(source)
 {
@@ -49,7 +48,6 @@ StencilShapeFactory::StencilShapeFactory(const QString &id,
 
 StencilShapeFactory::~StencilShapeFactory()
 {
-    delete m_shape;
 }
 
 KoShape *StencilShapeFactory::createDefaultShape(KoDocumentResourceManager *documentResources) const
@@ -150,6 +148,7 @@ KoShape *StencilShapeFactory::createDefaultShape(KoDocumentResourceManager *docu
 
 bool StencilShapeFactory::supports(const KoXmlElement &e, KoShapeLoadingContext &context) const
 {
+    // the factory is only used for 
     Q_UNUSED(e);
     Q_UNUSED(context);
     return false;
