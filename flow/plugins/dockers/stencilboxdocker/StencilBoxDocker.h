@@ -20,6 +20,7 @@
 #define KOSTENCILBOXDOCKER_H
 
 #include <QDockWidget>
+#include <QListView>
 #include <QMap>
 #include <QIcon>
 
