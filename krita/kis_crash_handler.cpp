@@ -184,7 +184,7 @@ KisCrashHandler::KisCrashHandler()
     QString tempPath = QDesktopServices::storageLocation(QDesktopServices::TempLocation);
 
 #ifdef Q_WS_WIN
-    qDebug() << "Installing CrashHandler" << tempPath; // do not remove this line; it is needed to make it work on linux.
+    qDebug() << "Installing CrashHandler" << tempPath;
     typedef std::basic_string<wchar_t> wstring;
     wstring str;
     str.resize(tempPath.length());
