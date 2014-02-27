@@ -79,7 +79,9 @@ else (RELEASE_BUILD)
     set(CALLIGRA_SHOULD_BUILD_STAGING TRUE)
 endif (RELEASE_BUILD)
 
-
+if (WIN32)
+    option(USE_BREAKPAD "Build the crash handler for Krita (only on windows)" OFF)
+endif (WIN32)
 option(GHNS "support Get Hot New Stuff" OFF)
 # TODO: orthogonal setting, results in minimal features, yet needs to be defined
 # option(TINY "compile a tiny Calligra" OFF)

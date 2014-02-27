@@ -35,6 +35,7 @@
 #include <kstandarddirs.h>
 
 #include <KoApplication.h>
+#include <KoConfig.h>
 
 #include <krita_export.h>
 
@@ -45,7 +46,9 @@
 #if defined Q_OS_WIN
 #include "stdlib.h"
 #include <ui/input/wintab/kis_tablet_support_win.h>
-
+#ifdef USE_BREAKPAD
+    #include "kis_crash_handler.h"
+#endif
 #elif defined Q_WS_X11
 #include <ui/input/wintab/kis_tablet_support_x11.h>
 
@@ -57,6 +60,10 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
     if (!qgetenv("KDE_FULL_SESSION").isEmpty()) {
         setenv("QT_NO_GLIB", "1", true);
     }
+#endif
+#ifdef USE_BREAKPAD
+    KisCrashHandler crashHandler;
+    Q_UNUSED(crashHandler);
 #endif
 
     int state;
