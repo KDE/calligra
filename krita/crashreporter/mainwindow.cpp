@@ -225,7 +225,6 @@ void MainWindow::restart()
         startUpload();
     }
     else {
-        hide();
         doRestart(chkRemoveSettings->isChecked());
     }
     qApp->quit();
@@ -251,7 +250,7 @@ void MainWindow::startUpload()
     m_d->uploadStarted = true;
 
     // Upload minidump
-    QNetworkRequest request(QUrl("http://krita-breakpad.kogmbh.net/submit"));
+    QNetworkRequest request(QUrl("http://krita-breakpad.kogmbh.net:1127/post"));
     request.setHeader(QNetworkRequest::ContentTypeHeader, "multipart/form-data; boundary=9876543210");
 
     QString boundary = "--9876543210";
@@ -296,6 +295,8 @@ void MainWindow::startUpload()
     }
     body += "\r\n";
 
+    qDebug() << body;
+
     //    // add logfile
     //    body += boundary + "\r\n";
     //    body += "Content-Disposition: form-data; name=\"logfile\"\r\n";
@@ -322,11 +323,11 @@ void MainWindow::startUpload()
 
 void MainWindow::uploadDone(QNetworkReply *reply)
 {
+    qDebug() << "updloadDone" << reply->errorString();
     if (reply && reply->error() != QNetworkReply::NoError) {
         qCritical() << "uploadDone: Error uploading crash report: " << reply->errorString();
     }
     if (m_d->doRestart) {
-        hide();
         doRestart(chkRemoveSettings->isChecked());
     }
     qApp->quit();
