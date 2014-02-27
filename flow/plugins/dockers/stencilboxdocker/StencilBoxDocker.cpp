@@ -58,8 +58,10 @@
 #include <QSize>
 #include <QToolButton>
 #include <QDir>
+#include <QFile>
 #include <QMenu>
 #include <QPainter>
+#include <QDesktopServices>
 
 #define StencilShapeId "StencilShape"
 
@@ -72,11 +74,11 @@ StencilBoxDocker::StencilBoxDocker(QWidget* parent)
     setWidget(mainWidget);
 
     m_menu = new QMenu();
-    QAction *ghnsAction = m_menu->addAction(koIcon("get-hot-new-stuff"), i18n("Get more stencils"));
-    QAction *installAction = m_menu->addAction(koIcon("document-open-folder"), i18n("Install stencil"));
+    QAction *ghnsAction = m_menu->addAction(koIcon("get-hot-new-stuff"), i18n("Stencils Online"));
+    QAction *installAction = m_menu->addAction(koIcon("document-open-folder"), i18n("Add/Remove Stencil"));
 
     connect(ghnsAction, SIGNAL(triggered()), this, SLOT(getHotNewStuff()));
-    connect(installAction, SIGNAL(triggered()), this, SLOT(installStencil()));
+    connect(installAction, SIGNAL(triggered()), this, SLOT(manageStencilsFolder()));
 
     m_button = new QToolButton;
     /*
@@ -137,35 +139,46 @@ void StencilBoxDocker::getHotNewStuff()
     }
 }
 
-void StencilBoxDocker::installStencil()
+void StencilBoxDocker::manageStencilsFolder()
 {
-    KUrl dir;
-    QString path = KFileDialog::getOpenFileName(dir,
-           "*.cstencil.tar *.cstencil.tar.bz2 *.cstencil.tar.gz|"
-           + i18n("Calligra Stencil Packages (*.cstencil.tar, *.cstencil.tar.bz2, *.cstencil.tar.gz)")
-           , this);
-    if(path.isNull()) return;
-    
-    KTar archive(path);
-    if(!archive.open(QIODevice::ReadOnly)) {
-        KMessageBox::sorry(0, i18n("Could not read this package."));
-        return;
+    QString destination = KStandardDirs::locateLocal("data", "flow/stencils/", true);
+    QFile file(destination + "/readme.txt");
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        qDebug() << "could not open" << destination + "/readme.txt" << "for writing";
+    } else {
+        QTextStream out(&file);
+        out << i18n("\
+This is the user stencils directory.\n\
+From here you can add / remove stencils for use in the Stencil Box docker.\n\
+\n\
+Stencils are organized in collections, a collection is a folder containing a text file 'collection.desktop':\n\
+\n\
+ollection.desktop\n\
+\n\
+[Desktop Entry]\n\
+Name=Your Stencil Collection Name\n\
+\n\
+A stencil is an ODG file, a desktop file, an optional PNG icon file, all with with name under its cpollection folder:\n\
+\n\
+foo.odg\n\
+\n\
+ODF elements for stencil should be a <draw:g> element or <draw:custom-shape> element\n\
+\n\
+foo.desktop\n\
+\n\
+[Desktop Entry]\n\
+Name=Foo\n\
+CS-KeepAspectRatio=1\n\
+\n\
+If CS-KeepAspectRatio=1, the stencil added to canvas will have geomatry aspect ratio locked, by default it's 0.\n\
+\n\
+foo.png\n\
+\n\
+Should have size 32x32 pixel, if the png file is not included, Flow will render the ODG file as the icon,\n\
+but it won't look good under small pixels when the stencil stroke is complicated.\n");
+        file.close();
     }
-    
-    QString destination = KStandardDirs::locateLocal("data", "flow/stencils", true);
-    const KArchiveDirectory* const archiveDir = archive.directory();
-
-    // Prevent installing a stencil collection that's already installed
-    const QString collectionFolder = destination + QDir::separator() + archiveDir->entries().first();
-    //kDebug() << destination << archiveDir << collectionFolder;
-    if(QFile::exists(collectionFolder)) {
-        KMessageBox::error(0, i18n("A collection of stencils in family '%1' is already installed. "
-                                   "Please uninstall it first.", archiveDir->entries().first()));
-        return;
-    }
-    
-    archiveDir->copyTo(destination);
-    KMessageBox::information(0, i18n("Stencils successfully installed."));
+    QDesktopServices::openUrl(QUrl::fromLocalFile(destination));
 }
 
 void StencilBoxDocker::locationChanged(Qt::DockWidgetArea area)
@@ -196,6 +209,7 @@ void StencilBoxDocker::loadShapeCollections()
     QStringList dirs = KGlobal::activeComponent().dirs()->resourceDirs("app_shape_collections");
     foreach(const QString& path, dirs)
     {
+        qDebug() << path;
         QDir dir(path);
         QStringList collectionDirs = dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
         foreach(const QString & collectionDirName, collectionDirs) {
