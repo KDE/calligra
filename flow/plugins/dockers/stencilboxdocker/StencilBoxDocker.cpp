@@ -1,5 +1,4 @@
 /* Part of the Calligra project
- * Copyright (C) 2008 Peter Simonsson <peter.simonsson@gmail.com>
  * Copyright (C) 2010-2014 Yue Liu <yue.liu@mail.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -19,9 +18,9 @@
  */
 
 #include "StencilBoxDocker.h"
-
 #include "StencilShapeFactory.h"
-#include "StencilBoxView.h"
+#include "CollectionItemModel.h"
+#include "CollectionTreeWidget.h"
 
 #include <KoShapeFactoryBase.h>
 #include <KoShapeRegistry.h>
@@ -68,7 +67,8 @@ StencilBoxDocker::StencilBoxDocker(QWidget* parent)
     : QDockWidget(parent)
 {
     setWindowTitle(i18n("Stencil Box"));
-    QWidget* mainWidget = new QWidget(this); // todo
+    QWidget* mainWidget = new QWidget(this);
+    mainWidget->setAcceptDrops(true);
     setWidget(mainWidget);
 
     m_menu = new QMenu();
@@ -79,6 +79,18 @@ StencilBoxDocker::StencilBoxDocker(QWidget* parent)
     connect(installAction, SIGNAL(triggered()), this, SLOT(installStencil()));
 
     m_button = new QToolButton;
+    /*
+    m_button->setFixedHeight(qApp->fontMetrics().height()+3);
+    m_button->setAutoFillBackground(true);
+    m_button->setStyleSheet("\
+        QToolButton {\
+            border: 1px solid #a0a0a0;\
+            border-top: 0px;\
+            border-left: 0px;\
+            border-right: 0px;\
+            background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1,\
+            stop:0 #ffffff, stop:0.5 #e0e0e0, stop:1 #ffffff);\
+        }");*/
     m_button->setIcon(koIcon("list-add"));
     m_button->setToolTip(i18n("More shapes"));
     m_button->setMenu(m_menu);
@@ -102,9 +114,7 @@ StencilBoxDocker::StencilBoxDocker(QWidget* parent)
     m_layout->addLayout(m_panelLayout);
     m_layout->addWidget(m_treeWidget);
     
-    loadDefaultShapes();
-    if(! KGlobal::activeComponent().dirs()->resourceDirs("app_shape_collections").isEmpty())
-    {
+    if(! KGlobal::activeComponent().dirs()->resourceDirs("app_shape_collections").empty()) {
         loadShapeCollections();
     }
 
@@ -180,74 +190,6 @@ void StencilBoxDocker::reapplyFilter()
     m_treeWidget->setFilter(regExp);
 }
 
-/// Generate lists of shapes registered
-void StencilBoxDocker::loadDefaultShapes()
-{
-    QMap<QString, QList<KoCollectionItem> > familyMap;
-    foreach( const QString & id, KoShapeRegistry::instance()->keys() )
-    {
-        KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value(id);
-        // don't show hidden factories
-        if ( factory->hidden() )
-        {
-            continue;
-        }
-        bool oneAdded = false;
-
-        foreach( const KoShapeTemplate & shapeTemplate, factory->templates() )
-        {
-            oneAdded = true;
-            KoCollectionItem temp;
-            temp.id = shapeTemplate.id;
-            temp.name = shapeTemplate.name;
-            temp.toolTip = shapeTemplate.toolTip;
-            temp.icon = KIcon(shapeTemplate.iconName);
-            temp.properties = shapeTemplate.properties;
-
-            if(familyMap.contains(shapeTemplate.family))
-            {
-                familyMap[shapeTemplate.family].append(temp);
-            }
-            else
-            {
-                QList<KoCollectionItem> list;
-                list.append(temp);
-                familyMap.insert(shapeTemplate.family, list);
-            }
-        }
-
-        if(!oneAdded)
-        {
-            KoCollectionItem temp;
-            temp.id = factory->id();
-            temp.name = factory->name();
-            temp.toolTip = factory->toolTip();
-            temp.icon = KIcon(factory->iconName());
-            temp.properties = 0;
-
-            if(familyMap.contains(factory->family()))
-            {
-                familyMap[factory->family()].append(temp);
-            }
-            else
-            {
-                QList<KoCollectionItem> list;
-                list.append(temp);
-                familyMap.insert(factory->family(), list);
-            }
-        }
-    }
-
-    QMapIterator<QString, QList<KoCollectionItem> > i(familyMap);
-    while(i.hasNext())
-    {
-        i.next();
-        CollectionItemModel* model = new CollectionItemModel(this);
-        model->setShapeTemplateList(i.value());
-        m_modelMap.insert(i.key(), model);
-    }
-}
-
 /// Load shape collections to m_modelMap and register in the KoShapeRegistry
 void StencilBoxDocker::loadShapeCollections()
 {
@@ -272,11 +214,7 @@ bool StencilBoxDocker::addCollection(const QString& path)
     KDesktopFile collection(dir.absoluteFilePath("collection.desktop"));
     KConfigGroup dg = collection.desktopGroup();
     QString family = dg.readEntry("Name");
-    QString type = dg.readEntry("X-KDE-DirType");
-    //kDebug() << family << type;
 
-    if(type != "odg-collection")
-        return false;
     if(!m_modelMap.contains(family)) {
         CollectionItemModel* model = new CollectionItemModel(this);
         m_modelMap.insert(family, model);

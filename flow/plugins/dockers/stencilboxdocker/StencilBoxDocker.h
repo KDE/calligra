@@ -1,5 +1,4 @@
 /* This file is part of the Calligra project
- * Copyright (C) 2008 Peter Simonsson <peter.simonsson@gmail.com>
  * Copyright (C) 2010-2014 Yue Liu <yue.liu@mail.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -19,8 +18,6 @@
  */
 #ifndef KOSTENCILBOXDOCKER_H
 #define KOSTENCILBOXDOCKER_H
-
-#include "CollectionItemModel.h"
 
 #include <QDockWidget>
 #include <QMap>
@@ -46,8 +43,6 @@ class StencilBoxDocker : public QDockWidget
         void setViewMode(QListView::ViewMode iconMode);
 
     protected:
-        /// Load the default calligra shapes
-        void loadDefaultShapes();
 
         /// Load odf shape collections
         void loadShapeCollections();
