@@ -991,7 +991,7 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent, int specialOutputFlag)
         bool justChangingFilterOptions = false;
 
         KoFileDialog dialog(this,
-                            KoFileDialog::DialogSaveFile,
+                            KoFileDialog::FileSaveDialog,
                             i18n("untitled"),
                             (isExporting() && !d->lastExportUrl.isEmpty()) ?
                                 d->lastExportUrl.toLocalFile() : suggestedURL.toLocalFile());
@@ -1305,7 +1305,7 @@ void KoMainWindow::slotFileOpen()
     KUrl url;
     if (!isImporting()) {
         KoFileDialog dialog(this,
-                            KoFileDialog::DialogOpenFile,
+                            KoFileDialog::FileOpenDialog,
                             i18n("Open Document"),
                             (qApp->applicationName().contains("krita") || qApp->applicationName().contains("karbon"))
                                ? QDesktopServices::storageLocation(QDesktopServices::PicturesLocation)
@@ -1315,7 +1315,7 @@ void KoMainWindow::slotFileOpen()
         url = dialog.getKUrl();
     } else {
         KoFileDialog dialog(this,
-                            KoFileDialog::DialogImportFile,
+                            KoFileDialog::FileImportDialog,
                             i18n("Import Document"),
                             (qApp->applicationName().contains("krita") || qApp->applicationName().contains("karbon"))
                                 ? QDesktopServices::storageLocation(QDesktopServices::PicturesLocation)
@@ -1479,7 +1479,7 @@ KoPrintJob* KoMainWindow::exportToPdf(KoPageLayout pageLayout, QString pdfFileNa
         delete layoutDlg;
 
         KoFileDialog dialog(this,
-                            KoFileDialog::DialogSaveFile,
+                            KoFileDialog::FileSaveDialog,
                             i18n("Export as PDF"),
                             startUrl.toLocalFile());
         dialog.setMimeTypeFilters(QStringList() << "application/pdf");
