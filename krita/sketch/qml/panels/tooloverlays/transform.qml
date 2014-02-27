@@ -20,15 +20,15 @@ import QtQuick 1.1
 import "../../components"
 
 Item {
-    height: Constants.GridHeight * 1.5 + Constants.DefaultMargin * 2;
+    height: opacity > 0 ? Constants.GridHeight * 1.5 + Constants.DefaultMargin * 2 : 0;
+    opacity: toolManager.currentTool.isActive ? 1 : 0;
+    Behavior on opacity { PropertyAnimation { duration: 200; } }
     Rectangle {
         anchors {
             top: parent.top;
             bottom: parent.bottom;
             right: parent.right;
         }
-        opacity: toolManager.currentTool.isActive ? 1 : 0;
-        Behavior on opacity { PropertyAnimation { duration: 200; } }
         width: Constants.GridWidth * 3 + Constants.DefaultMargin * 3;
         color: "#63ffffff";
         border.width: 1;

@@ -36,6 +36,8 @@ Item {
 
     Loader {
         id: toolOverlayContainer;
+        y: height > 0 ? 0 : Constants.DefaultMargin * 2;
+        Behavior on y { PropertyAnimation { duration: 150; } }
         width: parent.width;
         height: item.childrenRect.height;
         source: "tooloverlays/none.qml";
