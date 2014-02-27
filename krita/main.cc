@@ -33,6 +33,7 @@
 #include <ksplashscreen.h>
 #include <ksycoca.h>
 #include <kstandarddirs.h>
+#include <kcrash.h>
 
 #include <KoApplication.h>
 #include <KoConfig.h>
@@ -62,6 +63,8 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
     }
 #endif
 #ifdef USE_BREAKPAD
+    qDebug() << "Enabling breakpad";
+    qputenv("KDE_DEBUG", "1");
     KisCrashHandler crashHandler;
     Q_UNUSED(crashHandler);
 #endif
