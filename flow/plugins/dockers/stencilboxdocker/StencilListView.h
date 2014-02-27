@@ -1,5 +1,4 @@
-/* This file is part of the KDE project
- * Copyright (C) 2008 Peter Simonsson <peter.simonsson@gmail.com>
+/* This file is part of the Calligra project
  * Copyright (C) 2010-2014 Yue Liu <yue.liu@mail.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -17,26 +16,27 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef KOSTENCILSHAPEFACTORY_H
-#define KOSTENCILSHAPEFACTORY_H
 
-#include <KoShapeFactoryBase.h>
-#include <KoDocumentResourceManager.h>
+#ifndef STENCILLISTVIEW_H
+#define STENCILLISTVIEW_H
 
-class KoProperties;
+#include <QListView>
 
-class StencilShapeFactory : public KoShapeFactoryBase
+class StencilListView : public QListView
 {
-    public:
-        StencilShapeFactory(const QString &id, const QString &name, const QString source, KoProperties* props);
-        ~StencilShapeFactory();
+    Q_OBJECT
+    
+public:
+    using QListView::contentsSize;
 
-        virtual KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = new KoDocumentResourceManager()) const;
-        virtual bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const;
+    explicit StencilListView(QWidget *parent = 0);
 
-    private:
-        KoProperties* m_params;
-        QString m_path;
+signals:
+    void pressed(const QString &name, const QString &xml, const QPoint &globalPos);
+
+protected:
+    void dragEnterEvent(QDragEnterEvent *event);
+    void dropEvent(QDropEvent *event);
 };
 
-#endif //KOSTENCILSHAPEFACTORY_H
+#endif // STENCILLISTVIEW_H
