@@ -266,6 +266,7 @@ void MainWindow::startUpload()
            << Field("ProductName", "krita")
            << Field("Version", CALLIGRA_VERSION_STRING)
            << Field("Vendor", "KO GmbH")
+           << Field("Email", txtEmail->text())
            << Field("timestamp", QByteArray::number(QDateTime::currentDateTime().toTime_t()));
 
 #ifdef Q_WS_WIN
@@ -306,23 +307,13 @@ void MainWindow::startUpload()
     }
     body += "\r\n";
 
-    //    // add logfile
-    //    body += boundary + "\r\n";
-    //    body += "Content-Disposition: form-data; name=\"logfile\"\r\n";
-    //    body += "\r\n";
-    //    QString dataLocation = QDesktopServices::storageLocation(QDesktopServices::DataLocation);
-    //    QString logFileLocation = dataLocation + "/log/session.txt";
-    //    QFile logFile(logFileLocation);
-    //    if (logFile.exists() && logFile.open(QFile::ReadOnly)) {
-    //        // truncate logfile if necessary, only submit whole lines
-    //        if (logFile.size() > MAX_LOGUPLOAD_SIZE) {
-    //            logFile.seek(logFile.size() - (MAX_LOGUPLOAD_SIZE + 1));
-    //            logFile.readLine();
-    //        }
-    //        body +=	logFile.read(MAX_LOGUPLOAD_SIZE);
-    //        logFile.close();
-    //    }
-    //    body += "\r\n";
+    // add description
+    body += boundary + "\r\n";
+    body += "Content-Disposition: form-data; name=\"description\"\r\n";
+    body += "\r\n";
+    body +=	txtDescription->toPlainText();
+
+    body += "\r\n";
     body += boundary + "--" + "\r\n";
 
     QNetworkReply *reply = m_d->networkAccessManager->post(request, body.toLatin1());
