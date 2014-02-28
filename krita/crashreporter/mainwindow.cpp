@@ -266,7 +266,7 @@ void MainWindow::startUpload()
            << Field("ProductName", "krita")
            << Field("Version", CALLIGRA_VERSION_STRING)
            << Field("Vendor", "KO GmbH")
-           << Field("Email", txtEmail->text())
+           << Field("Email", txtEmail->text().toLatin1())
            << Field("timestamp", QByteArray::number(QDateTime::currentDateTime().toTime_t()));
 
 #ifdef Q_WS_WIN
