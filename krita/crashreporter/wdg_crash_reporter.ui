@@ -98,7 +98,14 @@
     <widget class="QTextEdit" name="txtDescription"/>
    </item>
    <item row="1" column="1">
-    <widget class="QLineEdit" name="txtEmail"/>
+    <widget class="QLineEdit" name="txtEmail">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+       <horstretch>10</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
    </item>
    <item row="2" column="0" colspan="2">
     <widget class="QLabel" name="label_3">

@@ -79,6 +79,7 @@
 
 void doRestart(bool resetConfig)
 {
+    qDebug() << "doRestart" << resetConfig;
     if (resetConfig) {
         QDir userDir(KGlobal::dirs()->saveLocation("appdata", "input/"));
         foreach(QString entry, userDir.entryList(QStringList("*.profile"))) {
@@ -230,8 +231,8 @@ void MainWindow::restart()
     }
     else {
         doRestart(chkRemoveSettings->isChecked());
+        qApp->quit();
     }
-    qApp->quit();
 }
 
 void MainWindow::close()
@@ -304,7 +305,6 @@ void MainWindow::startUpload()
     if (file.exists()) {
         file.open(QFile::ReadOnly);
         QByteArray ba = file.readAll();
-        qDebug() << "\tread:" << ba.size() << "file size" << file.size();
         body += ba.toBase64();
         file.remove();
     }
@@ -319,7 +319,7 @@ void MainWindow::startUpload()
     body += "\r\n";
     body += boundary + "--" + "\r\n";
 
-    QFile report(QDir::homePath() + "/" + m_d->id + ".report");
+    QFile report(QDir::homePath() + "/krita-" + m_d->id + ".report");
     report.open(QFile::WriteOnly);
     report.write(body.toLatin1());
     report.close();
@@ -331,7 +331,7 @@ void MainWindow::startUpload()
 
 void MainWindow::uploadDone(QNetworkReply *reply)
 {
-    qDebug() << "updloadDone" << reply->errorString();
+    qDebug() << "updloadDone";
     if (reply && reply->error() != QNetworkReply::NoError) {
         qCritical() << "uploadDone: Error uploading crash report: " << reply->errorString();
     }
@@ -344,13 +344,14 @@ void MainWindow::uploadDone(QNetworkReply *reply)
 
 void MainWindow::uploadProgress(qint64 received, qint64 total)
 {
+    qDebug() << "updloadProgress";
     progressBar->setMaximum(total);
     progressBar->setValue(received);
-
 }
 
 void MainWindow::uploadError(QNetworkReply::NetworkError error)
 {
+    qDebug() << "updloadError" << error;
     // Fake success...
     progressBar->setRange(0, 100);
     progressBar->setValue(100);
