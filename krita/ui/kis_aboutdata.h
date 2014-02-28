@@ -27,6 +27,10 @@
 #include <calligragitversion.h>
 #include <KoIcon.h>
 
+#ifdef Q_OS_WIN
+#include <windows.h>
+#endif
+
 KAboutData * newKritaAboutData()
 {
     QString calligraVersion(CALLIGRA_VERSION_STRING);
@@ -38,6 +42,16 @@ KAboutData * newKritaAboutData()
     version = QString("%1 (git %2)").arg(calligraVersion).arg(gitVersion).toLatin1();
 #else
     version = calligraVersion;
+#endif
+
+#ifdef Q_WS_WIN
+
+#ifdef ENV32BIT
+    version += " (x86)";
+#else
+    version += " (x64)";
+#endif
+
 #endif
 
     KAboutData * aboutData = new KAboutData("krita", 0,
