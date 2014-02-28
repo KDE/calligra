@@ -296,13 +296,16 @@ void MainWindow::startUpload()
 
     // add minidump file
     QString dumpfile = m_d->dumpPath + "/" + m_d->id + ".dmp";
+    qDebug() << "dumpfile" << dumpfile;
     body += "Content-Disposition: form-data; name=\"upload_file_minidump\"; filename=\""
             + QFileInfo(dumpfile).fileName().toAscii() + "\"\r\n";
     body += "Content-Type: application/octet-stream\r\n\r\n";
     QFile file(dumpfile);
     if (file.exists()) {
         file.open(QFile::ReadOnly);
-        body += file.readAll();
+        QByteArray ba = file.readAll();
+        qDebug() << "\tread:" << ba.size() << "file size" << file.size();
+        body += ba.toBase64();
         file.remove();
     }
     body += "\r\n";
@@ -315,6 +318,11 @@ void MainWindow::startUpload()
 
     body += "\r\n";
     body += boundary + "--" + "\r\n";
+
+    QFile report(QDir::homePath() + "/" + m_d->id + ".report");
+    report.open(QFile::WriteOnly);
+    report.write(body.toLatin1());
+    report.close();
 
     QNetworkReply *reply = m_d->networkAccessManager->post(request, body.toLatin1());
     connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(uploadError(QNetworkReply::NetworkError)));
