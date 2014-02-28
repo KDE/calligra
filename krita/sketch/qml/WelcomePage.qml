@@ -166,7 +166,7 @@ Page {
                     leftMargin: Constants.DefaultMargin;
                     verticalCenter: parent.verticalCenter;
                 }
-                text: "Community News";
+                text: "Collections";
                 font.pixelSize: Constants.LargeFontSize;
                 color: "white";
             }
@@ -199,7 +199,7 @@ Page {
 
         Divider { height: Constants.GridHeight * (Constants.GridRows - 3); }
 
-        NewsList {
+        CollectionsList {
             width: parent.width / 3 - 4;
             height: Constants.GridHeight * (Constants.GridRows - 3);
         }
