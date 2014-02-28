@@ -153,12 +153,12 @@ From here you can add / remove stencils for use in the Stencil Box docker.\n\
 \n\
 Stencils are organized in collections, a collection is a folder containing a text file 'collection.desktop':\n\
 \n\
-ollection.desktop\n\
+collection.desktop\n\
 \n\
 [Desktop Entry]\n\
 Name=Your Stencil Collection Name\n\
 \n\
-A stencil is an ODG/SVG file, a desktop file, an optional PNG icon file, all with with name under its cpollection folder:\n\
+A stencil is an ODG/SVG file, a desktop file, an optional PNG icon file, all with the same name under its collection folder:\n\
 \n\
 foo.odg or foo.svgz or foo.svg\n\
 \n\
@@ -171,7 +171,7 @@ foo.desktop\n\
 Name=Foo\n\
 CS-KeepAspectRatio=1\n\
 \n\
-If CS-KeepAspectRatio=1, the stencil added to canvas will have geomatry aspect ratio locked, by default it's 0.\n\
+If CS-KeepAspectRatio=1, the stencil added to canvas will have geometry aspect ratio locked, by default it's 0.\n\
 \n\
 foo.png\n\
 \n\
