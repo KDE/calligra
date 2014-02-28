@@ -24,19 +24,23 @@
 #include <KoDocumentResourceManager.h>
 
 class KoProperties;
+class KoStore;
+class QIODevice;
 
 class StencilShapeFactory : public KoShapeFactoryBase
 {
-    public:
-        StencilShapeFactory(const QString &id, const QString &name, const QString source, KoProperties* props);
-        ~StencilShapeFactory();
+public:
+    /// id is the absolute file path
+    StencilShapeFactory(const QString& id, const QString& name, KoProperties* props);
+    ~StencilShapeFactory();
 
-        virtual KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = new KoDocumentResourceManager()) const;
-        virtual bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const;
+    KoShape* createDefaultShape(KoDocumentResourceManager* documentResources = new KoDocumentResourceManager()) const;
+    bool supports(const KoXmlElement& e, KoShapeLoadingContext& context) const;
 
-    private:
-        KoProperties* m_params;
-        QString m_path;
+private:
+    KoShape* createFromOdf(KoStore* store, KoDocumentResourceManager* documentRes) const;
+    KoShape* createFromSvg(QIODevice* in, KoDocumentResourceManager* documentRes) const;
+    KoProperties* m_properties;
 };
 
 #endif //KOSTENCILSHAPEFACTORY_H

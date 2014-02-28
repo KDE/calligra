@@ -158,11 +158,12 @@ ollection.desktop\n\
 [Desktop Entry]\n\
 Name=Your Stencil Collection Name\n\
 \n\
-A stencil is an ODG file, a desktop file, an optional PNG icon file, all with with name under its cpollection folder:\n\
+A stencil is an ODG/SVG file, a desktop file, an optional PNG icon file, all with with name under its cpollection folder:\n\
 \n\
-foo.odg\n\
+foo.odg or foo.svgz or foo.svg\n\
 \n\
 ODF elements for stencil should be a <draw:g> element or <draw:custom-shape> element\n\
+No special requirements to SVG file\n\
 \n\
 foo.desktop\n\
 \n\
@@ -174,7 +175,7 @@ If CS-KeepAspectRatio=1, the stencil added to canvas will have geomatry aspect r
 \n\
 foo.png\n\
 \n\
-Should have size 32x32 pixel, if the png file is not included, Flow will render the ODG file as the icon,\n\
+Should have size 32x32 pixel, if the png file is not included, Flow will render the ODG/SVG file as the icon,\n\
 but it won't look good under small pixels when the stencil stroke is complicated.\n");
         file.close();
     }
@@ -240,26 +241,46 @@ bool StencilBoxDocker::addCollection(const QString& path)
     foreach(const QString & stencil, stencils) {
         if(stencil == "collection.desktop")
             continue;
+
         KDesktopFile entry(dir.absoluteFilePath(stencil));
         KConfigGroup content = entry.desktopGroup();
         QString name = content.readEntry("Name");
-        QString noExt = dir.absoluteFilePath(stencil);
-        noExt.chop(7);
-        QString source = noExt + "odg";
-        QString icon = noExt + "png";
-        //kDebug() << name << source << icon;
-        QString keepAspectRatio = content.readEntry("CS-KeepAspectRatio", "0");
+        bool keepAspectRatio = content.readEntry("CS-KeepAspectRatio", false);
         KoProperties* props = new KoProperties();
-        props->setProperty("keepAspectRatio", keepAspectRatio.toInt());
+        props->setProperty("keepAspectRatio", keepAspectRatio);
+
+        // find data file path
+        QString filename = dir.absoluteFilePath(stencil);
+        filename.chop(7); // remove 'desktop'
+        QString source = filename;
+        if (QFile(filename+"odg").exists())
+            source += "odg";
+        else if (QFile(filename+"svgz").exists())
+            source += "svgz";
+        else if (QFile(filename+"svg").exists())
+            source += "svg";
+        else {
+            qDebug() << filename << "not found";
+            continue;
+        }
+
+        // register shape factory
+        StencilShapeFactory* factory = new StencilShapeFactory(source, name, props);
+        KoShapeRegistry::instance()->add(source, factory);
+
         KoCollectionItem temp;
         temp.id = source;
         temp.name = name;
         temp.toolTip = name;
-        temp.icon = QIcon(icon);
-        temp.properties = props;
+
+        if (QFile(filename+"png").exists()) {
+            temp.icon = QIcon(filename+"png");
+        } else {
+            // generate icon using factory
+            temp.icon = QIcon();
+        }
+
         templateList.append(temp);
-        StencilShapeFactory* factory = new StencilShapeFactory(source, name, source, props);
-        KoShapeRegistry::instance()->add(source, factory);
     }
     model->setShapeTemplateList(templateList);
     return true;
