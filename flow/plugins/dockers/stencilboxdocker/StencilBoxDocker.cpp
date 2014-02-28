@@ -30,6 +30,7 @@
 #include <KoShape.h>
 #include <KoShapeGroup.h>
 #include <KoZoomHandler.h>
+#include <KoShapePaintingContext.h>
 #include <KoProperties.h>
 #include <KoIcon.h>
 
@@ -62,6 +63,7 @@
 #include <QMenu>
 #include <QPainter>
 #include <QDesktopServices>
+#include <QPixmapCache>
 
 #define StencilShapeId "StencilShape"
 
@@ -238,6 +240,7 @@ bool StencilBoxDocker::addCollection(const QString& path)
     CollectionItemModel* model = m_modelMap[family];
     QList<KoCollectionItem> templateList = model->shapeTemplateList();
     QStringList stencils = dir.entryList(QStringList("*.desktop"));
+
     foreach(const QString & stencil, stencils) {
         if(stencil == "collection.desktop")
             continue;
@@ -277,7 +280,26 @@ bool StencilBoxDocker::addCollection(const QString& path)
             temp.icon = QIcon(filename+"png");
         } else {
             // generate icon using factory
-            temp.icon = QIcon();
+            QPixmap pix(32, 32);
+            pix.fill(Qt::white);
+            if (!QPixmapCache::find(source, &pix)) {
+                KoShape* shape = factory->createDefaultShape();
+                if (shape) {
+                    KoZoomHandler converter;
+                    qreal diffx = 30 / converter.documentToViewX(shape->size().width());
+                    qreal diffy = 30 / converter.documentToViewY(shape->size().height());
+                    converter.setZoom(qMin(diffx, diffy));
+                    QPainter painter(&pix);
+                    painter.setRenderHint(QPainter::Antialiasing, true);
+                    painter.translate(1, 1);
+                    KoShapePaintingContext paintContext;
+                    shape->paint(painter, converter, paintContext);
+                    painter.end();
+                    QPixmapCache::insert(source, pix);
+                    delete shape;
+                }
+            }
+            temp.icon = QIcon(pix);
         }
 
         templateList.append(temp);
