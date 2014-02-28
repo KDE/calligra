@@ -115,6 +115,7 @@ PaletteDockerDock::PaletteDockerDock( ) : QDockWidget(i18n("Palette"))
     m_wdgPaletteDock->paletteView->setItemDelegate(new PaletteDelegate());
     m_wdgPaletteDock->paletteView->horizontalHeader()->setDefaultSectionSize(12);
     m_wdgPaletteDock->paletteView->verticalHeader()->setDefaultSectionSize(12);
+    m_wdgPaletteDock->paletteView->setSelectionMode(QAbstractItemView::SingleSelection);
 
     QPalette pal(palette());
     pal.setColor(QPalette::Base, pal.dark().color());
