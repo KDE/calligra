@@ -62,7 +62,9 @@ public:
         m_iterators = iterators;
 
         int iterationWidth = m_splitRect->topLeft().width() + m_splitRect->topRight().width();
+        Q_UNUSED(iterationWidth);
         int iterationHeight = m_splitRect->topLeft().height() + m_splitRect->topRight().height();
+        Q_UNUSED(iterationHeight);
 
         if (m_splitRect->wrapRect().width() < m_splitRect->originalRect().width() ||
             m_splitRect->wrapRect().width() < m_splitRect->originalRect().height()) {

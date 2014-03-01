@@ -1051,7 +1051,7 @@ bool checkConseqPixels<KisHLineIteratorSP>(int value, const QPoint &pt, const QR
 }
 
 template <>
-bool checkConseqPixels<KisVLineIteratorSP>(int value, const QPoint &pt, const QRect &rect) {
+bool checkConseqPixels<KisVLineIteratorSP>(int value, const QPoint &/*pt*/, const QRect &/*rect*/) {
     return value == 1;
 }
 
