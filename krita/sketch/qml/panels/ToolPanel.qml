@@ -100,11 +100,7 @@ Panel {
             onToolNameChanged: changeTool(toolName);
             width: height;
             height: Constants.ToolbarButtonSize
-            color: "transparent";
             image: Settings.theme.icon(toolName);
-            textColor: "white";
-            shadow: false;
-            highlight: false;
             onClicked: {
                 fullContentsItem.state = "";
                 changeTool(toolName);
@@ -116,11 +112,7 @@ Panel {
             onToolNameChanged: changeTool(toolName);
             width: height;
             height: Constants.ToolbarButtonSize
-            color: "transparent";
             image: Settings.theme.icon(toolName);
-            textColor: "white";
-            shadow: false;
-            highlight: false;
             onClicked: {
                 fullContentsItem.state = "secondTool";
                 changeTool(toolName);
@@ -134,11 +126,7 @@ Panel {
             id: eraserButton;
             width: height;
             height: Constants.ToolbarButtonSize
-            color: "transparent";
             image: Settings.theme.icon("erase");
-            textColor: "white";
-            shadow: false;
-            highlight: false;
             checked: compositeOpModel.eraserMode;
             onClicked: compositeOpModel.eraserMode = !compositeOpModel.eraserMode;
         },
@@ -146,12 +134,7 @@ Panel {
             id: topApplyButton;
             width: height;
             height: Constants.ToolbarButtonSize;
-            color: "transparent";
             image: Settings.theme.icon("apply");
-            textColor: "white";
-            shadow: false;
-            highlight: false;
-            visible: false;
             onClicked: state === "peek" ? toolOptionsPeek.item.apply() : toolOptionsFull.item.apply();
         }
     ]
@@ -202,7 +185,7 @@ Panel {
                 height: Constants.ToolbarButtonSize;
                 Rectangle {
                     anchors.fill: parent;
-                    color: Settings.theme.color("tool/subheader");
+                    color: Settings.theme.color("panels/tool/subheader");
                 }
                 Row {
                     anchors.horizontalCenter: parent.horizontalCenter;
@@ -213,11 +196,7 @@ Panel {
                         delegate: Button {
                             width: height;
                             height: Constants.ToolbarButtonSize
-                            color: "transparent";
                             image: Settings.theme.icon(model.name + "-black");
-                            textColor: "white";
-                            shadow: false;
-                            highlight: false;
                             checked: toolManager.currentTool !== null ? (toolManager.currentTool.toolId() === toolNameToID(model.name)) : false;
                             onClicked: {
                                 firstTool.toolName = model.name;
@@ -234,7 +213,7 @@ Panel {
                 visible: false;
                 Rectangle {
                     anchors.fill: parent;
-                    color: Settings.theme.color("tool/subheader");
+                    color: Settings.theme.color("panels/tool/subheader");
                 }
                 Row {
                     anchors.horizontalCenter: parent.horizontalCenter;
@@ -245,11 +224,7 @@ Panel {
                         delegate: Button {
                             width: height;
                             height: Constants.ToolbarButtonSize
-                            color: "transparent";
                             image: Settings.theme.icon(model.name + "-black");
-                            textColor: "white";
-                            shadow: false;
-                            highlight: false;
                             checked: toolManager.currentTool !== null ? (toolManager.currentTool.toolId() === toolNameToID(model.name)) : false;
                             onClicked: {
                                 secondTool.toolName = model.name;
