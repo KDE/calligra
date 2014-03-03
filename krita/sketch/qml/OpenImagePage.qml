@@ -26,6 +26,7 @@ Page {
 
     Rectangle {
         anchors.fill: parent;
+        color: Settings.theme.color("pages/open/background");
     }
 
     Header {
@@ -45,14 +46,14 @@ Page {
             width: Constants.GridWidth;
             height: Constants.GridHeight;
             highlightColor: Constants.Theme.HighlightColor;
-            image: "images/svg/icon-back.svg";
+            image: Settings.theme.icon("back");
             onClicked: pageStack.pop();
         }
 
         rightArea: Button {
             width: Constants.GridWidth;
             height: Constants.GridHeight;
-            image: "images/svg/icon-up.svg";
+            image: Settings.theme.icon("up");
             onClicked: view.model.path = view.model.parentFolder;
         }
 
@@ -62,7 +63,7 @@ Page {
             anchors.bottom: parent.bottom;
             anchors.horizontalCenter: parent.horizontalCenter;
 
-            color: "white";
+            color: Settings.theme.color("pages/open/location");
             text: view.model.path;
         }
     }
@@ -114,7 +115,7 @@ Page {
 
             width: GridView.view.cellWidth;
 
-            image: model.fileType !== "inode/directory" ? model.icon : "images/svg/icon-fileopen-black.svg";
+            image: model.fileType !== "inode/directory" ? model.icon : Settings.theme.icon("fileopen-black");
             imageShadow: model.fileType !== "inode/directory" ? true : false;
             imageFillMode: model.fileType !== "inode/directory" ? Image.PreserveAspectCrop : Image.PreserveAspectFit;
             imageSmooth: model.fileType !== "inode/directory" ? false : true;

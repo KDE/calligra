@@ -28,6 +28,7 @@ Page {
 
     Rectangle {
         anchors.fill: parent;
+        color: Settings.theme.color("pages/save/background");
     }
 
     Header {
@@ -46,14 +47,14 @@ Page {
             width: Constants.GridWidth;
             height: Constants.GridHeight;
             highlightColor: Constants.Theme.HighlightColor;
-            image: "images/svg/icon-back.svg";
+            image: Settings.theme.icon("back");
             onClicked: pageStack.pop();
         }
 
         rightArea: Button {
             width: Constants.GridWidth;
             height: Constants.GridHeight;
-            image: "images/svg/icon-up.svg";
+            image: Settings.theme.icon("up");
             onClicked: view.model.path = view.model.parentFolder;
         }
 
@@ -63,7 +64,7 @@ Page {
             anchors.bottom: parent.bottom;
             anchors.horizontalCenter: parent.horizontalCenter;
 
-            color: "white";
+            color: Settings.theme.color("pages/save/location");
             text: view.model.path;
         }
     }
@@ -111,7 +112,7 @@ Page {
         }
 
         height: Constants.GridHeight;
-        color: "#000000"
+        color: Settings.theme.color("pages/save/footer")
 
         Row {
             anchors {
@@ -140,7 +141,7 @@ Page {
 
                 radius: Constants.GridHeight * 0.25;
 
-                color: "#000000"
+                color: Settings.theme.color("pages/save/footer");
 
                 ExpandingListView {
                     id: fileType;
@@ -170,7 +171,7 @@ Page {
                 height: Constants.GridHeight * 0.75;
                 width: Constants.GridWidth * 0.5;
 
-                image: "images/svg/icon-filesave.svg";
+                image: Settings.theme.icon("filesave");
 
                 onClicked: {
                     if ( fileNameField.text != "" ) {
@@ -198,7 +199,7 @@ Page {
             width: GridView.view.cellWidth;
             z: 10;
 
-            image: model.fileType != "inode/directory" ? model.icon : "images/svg/icon-fileopen-black.svg";
+            image: model.fileType != "inode/directory" ? model.icon : Settings.theme.icon("fileopen-black");
             imageShadow: model.fileType != "inode/directory" ? true : false;
             imageFillMode: model.fileType != "inode/directory" ? Image.PreserveAspectCrop : Image.PreserveAspectFit;
             imageSmooth: model.fileType != "inode/directory" ? false : true;
