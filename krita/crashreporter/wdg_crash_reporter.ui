@@ -11,13 +11,13 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Hyves Desktop Error Reporter</string>
+   <string>Krita Error Reporter</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="5" column="0" colspan="2">
     <widget class="QCheckBox" name="chkRemoveSettings">
      <property name="toolTip">
-      <string>This information includes the type of computer you use, and information about the usage of Hyves Desktop. No personal information is sent to Hyves.</string>
+      <string>This information includes the type of computer you use, and information about the usage of Krita. No personal information is sent to Krita.</string>
      </property>
      <property name="text">
       <string>&amp;Remove settings before starting Krita again</string>
@@ -125,9 +125,6 @@
    </item>
    <item row="4" column="0" colspan="2">
     <widget class="QCheckBox" name="chkAllowUpload">
-     <property name="toolTip">
-      <string>This information includes the type of computer you use, and information about the usage of Hyves Desktop. No personal information is sent to Hyves.</string>
-     </property>
      <property name="text">
       <string>&amp;Send information about this problem to KO GmbH</string>
      </property>
