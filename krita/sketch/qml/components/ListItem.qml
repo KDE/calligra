@@ -48,8 +48,8 @@ Item {
         }
 
         gradient: Gradient {
-            GradientStop { position: 0; color: "#FBFBFB"; }
-            GradientStop { position: 0.4; color: "#F0F0F0" }
+            GradientStop { position: 0; color: Settings.theme.color("components/listItem/background/start"); }
+            GradientStop { position: 0.4; color: Settings.theme.color("components/listItem/background/stop"); }
         }
 
         Image {
@@ -112,6 +112,7 @@ Item {
             }
 
             verticalAlignment: Text.AlignTop;
+            color: Settings.theme.color("components/listItem/title");
         }
 
         Label {
@@ -126,8 +127,8 @@ Item {
                 rightMargin: Constants.GridWidth * 0.25;
             }
 
-            color: Constants.Theme.SecondaryTextColor;
-            font.pixelSize: Constants.SmallFontSize;
+            color: Settings.theme.color("components/listItem/description");
+            font: Settings.theme.font("small");
             verticalAlignment: Text.AlignBottom;
         }
     }
