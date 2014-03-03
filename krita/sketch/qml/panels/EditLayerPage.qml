@@ -168,22 +168,14 @@ Item {
             id: visibilityButton
             width: height;
             height: Constants.GridHeight
-            color: "transparent";
             image: (layersModel && layersModel.activeVisible) ? "../images/svg/icon-visible_on-black.svg" : "../images/svg/icon-visible_off-black.svg";
-            textColor: "white";
-            shadow: false;
-            highlight: false;
             onClicked: if (layersModel) layersModel.activeVisible = !layersModel.activeVisible;
         }
         Button {
             id: lockstateButton
             width: height;
             height: Constants.GridHeight
-            color: "transparent";
             image: (layersModel && layersModel.activeLocked) ? "../images/svg/icon-locked_on-black.svg" : "../images/svg/icon-locked_off-black.svg";
-            textColor: "white";
-            shadow: false;
-            highlight: false;
             onClicked: if (layersModel) layersModel.activeLocked = !layersModel.activeLocked;
         }
     }
@@ -213,16 +205,17 @@ Item {
         height: visible ? childrenRect.height : 0;
         width: childrenRect.width;
         spacing: Constants.DefaultMargin;
+
         Button {
             id: redChannel
             height: Constants.DefaultFontSize + Constants.DefaultMargin * 2;
             width: height;
             text: "R";
-            textColor: "gray";
+            textColor: d.buttonTextColor;
             bold: true;
-            border { width: 1; color: "silver"; }
+            border { width: 1; color: d.buttonBorderColor; }
             radius: Constants.DefaultMargin;
-            color: (layersModel && layersModel.activeRChannelActive) ? "#EAEAEA" : "transparent";
+            color: (layersModel && layersModel.activeRChannelActive) ? d.buttonActiveColor : d.buttonInactiveColor;
             onClicked: if (layersModel) layersModel.activeRChannelActive = !layersModel.activeRChannelActive;
         }
         Button {
@@ -230,11 +223,11 @@ Item {
             height: Constants.DefaultFontSize + Constants.DefaultMargin * 2;
             width: height;
             text: "G";
-            textColor: "gray";
+            textColor: d.buttonTextColor;
             bold: true;
-            border { width: 1; color: "silver"; }
+            border { width: 1; color: d.buttonBorderColor; }
             radius: Constants.DefaultMargin;
-            color: (layersModel && layersModel.activeGChannelActive) ? "#EAEAEA" : "transparent";
+            color: (layersModel && layersModel.activeGChannelActive) ? d.buttonActiveColor : d.buttonInactiveColor;
             onClicked: if (layersModel) layersModel.activeGChannelActive = !layersModel.activeGChannelActive;
         }
         Button {
@@ -242,11 +235,11 @@ Item {
             height: Constants.DefaultFontSize + Constants.DefaultMargin * 2;
             width: height;
             text: "B";
-            textColor: "gray";
+            textColor: d.buttonTextColor;
             bold: true;
-            border { width: 1; color: "silver"; }
+            border { width: 1; color: d.buttonBorderColor; }
             radius: Constants.DefaultMargin;
-            color: (layersModel && layersModel.activeBChannelActive) ? "#EAEAEA" : "transparent";
+            color: (layersModel && layersModel.activeBChannelActive) ? d.buttonActiveColor : d.buttonInactiveColor;
             onClicked: if (layersModel) layersModel.activeBChannelActive = !layersModel.activeBChannelActive;
         }
         Button {
@@ -254,11 +247,11 @@ Item {
             height: Constants.DefaultFontSize + Constants.DefaultMargin * 2;
             width: height;
             text: "A";
-            textColor: "gray";
+            textColor: d.buttonTextColor;
             bold: true;
-            border { width: 1; color: "silver"; }
+            border { width: 1; color: d.buttonBorderColor; }
             radius: Constants.DefaultMargin;
-            color: (layersModel && layersModel.activeAChannelActive) ? "#EAEAEA" : "transparent";
+            color: (layersModel && layersModel.activeAChannelActive) ? d.buttonActiveColor : d.buttonInactiveColor;
             onClicked: if (layersModel) layersModel.activeAChannelActive = !layersModel.activeAChannelActive;
         }
     }
@@ -293,11 +286,11 @@ Item {
             height: Constants.DefaultFontSize + Constants.DefaultMargin * 2;
             width: height;
             text: "R";
-            textColor: "gray";
+            textColor: d.buttonTextColor;
             bold: true;
-            border { width: 1; color: "silver"; }
+            border { width: 1; color: d.buttonBorderColor; }
             radius: Constants.DefaultMargin;
-            color: (layersModel && layersModel.activeRChannelLocked) ? "#EAEAEA" : "transparent";
+            color: (layersModel && layersModel.activeRChannelLocked) ? d.buttonActiveColor : d.buttonInactiveColor;
             onClicked: if (layersModel) layersModel.activeRChannelLocked = !layersModel.activeRChannelLocked;
         }
         Button {
@@ -305,11 +298,11 @@ Item {
             height: Constants.DefaultFontSize + Constants.DefaultMargin * 2;
             width: height;
             text: "G";
-            textColor: "gray";
+            textColor: d.buttonTextColor;
             bold: true;
-            border { width: 1; color: "silver"; }
+            border { width: 1; color: d.buttonBorderColor; }
             radius: Constants.DefaultMargin;
-            color: (layersModel && layersModel.activeGChannelLocked) ? "#EAEAEA" : "transparent";
+            color: (layersModel && layersModel.activeGChannelLocked) ? d.buttonActiveColor : d.buttonInactiveColor;
             onClicked: if (layersModel) layersModel.activeGChannelLocked = !layersModel.activeGChannelLocked;
         }
         Button {
@@ -317,11 +310,11 @@ Item {
             height: Constants.DefaultFontSize + Constants.DefaultMargin * 2;
             width: height;
             text: "B";
-            textColor: "gray";
+            textColor: d.buttonTextColor;
             bold: true;
-            border { width: 1; color: "silver"; }
+            border { width: 1; color: d.buttonBorderColor; }
             radius: Constants.DefaultMargin;
-            color: (layersModel && layersModel.activeBChannelLocked) ? "#EAEAEA" : "transparent";
+            color: (layersModel && layersModel.activeBChannelLocked) ? d.buttonActiveColor : d.buttonInactiveColor;
             onClicked: if (layersModel) layersModel.activeBChannelLocked = !layersModel.activeBChannelLocked;
         }
         Button {
@@ -329,11 +322,11 @@ Item {
             height: Constants.DefaultFontSize + Constants.DefaultMargin * 2;
             width: height;
             text: "A";
-            textColor: "gray";
+            textColor: d.buttonTextColor;
             bold: true;
-            border { width: 1; color: "silver"; }
+            border { width: 1; color: d.buttonBorderColor; }
             radius: Constants.DefaultMargin;
-            color: (layersModel && layersModel.activeAChannelLocked) ? "#EAEAEA" : "transparent";
+            color: (layersModel && layersModel.activeAChannelLocked) ? d.buttonActiveColor : d.buttonInactiveColor;
             onClicked: if (layersModel) layersModel.activeAChannelLocked = !layersModel.activeAChannelLocked;
         }
     }
@@ -352,11 +345,8 @@ Item {
                 width: parent.width;
                 height: Constants.GridHeight;
             }
-            Text {
+            Label {
                 width: parent.width;
-                font.pixelSize: Constants.DefaultFontSize;
-                color: Constants.Theme.TextColor;
-                font.family: "Source Sans Pro"
                 wrapMode: Text.WordWrap;
                 horizontalAlignment: Text.AlignHCenter;
                 text: "This filter requires no configuration. Click below to apply it.";
@@ -369,11 +359,7 @@ Item {
                 width: height;
                 height: Constants.GridHeight
                 anchors.horizontalCenter: parent.horizontalCenter;
-                color: "transparent";
-                image: "../images/svg/icon-apply.svg"
-                textColor: "white";
-                shadow: false;
-                highlight: false;
+                image: Settings.theme.icon("apply");
                 onClicked: fullFilters.model.activateFilter(fullFilters.currentIndex);
             }
         }
@@ -419,5 +405,14 @@ Item {
                 }
             }
         }
+    }
+
+    QtObject {
+        id: d;
+
+        property color buttonTextColor: Settings.theme.color("panels/layers/editorButtons/text");
+        property color buttonBorderColor: Settings.theme.color("panels/layers/editorButtons/border");
+        property color buttonActiveColor: Settings.theme.color("panels/layers/editorButtons/active");
+        property color buttonInactiveColor: Settings.theme.color("panels/layers/editorButtons/inactive");
     }
 }
