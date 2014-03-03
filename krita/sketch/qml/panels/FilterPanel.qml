@@ -29,12 +29,8 @@ Panel {
         Button {
             id: applyButton;
             width: height;
-            height: Constants.ToolbarButtonSize
-            color: "transparent";
-            image: "../images/svg/icon-apply.svg"
-            textColor: "white";
-            shadow: false;
-            highlight: false;
+            height: Constants.ToolbarButtonSize;
+            image: Settings.theme.icon("apply")
             onClicked: {
                 if (base.state === "full") {
                     fullFilters.model.activateFilter(fullFilters.currentIndex);
@@ -52,11 +48,7 @@ Panel {
             id: toggleShowPreviewButton;
             width: height;
             height: Constants.ToolbarButtonSize
-            color: "transparent";
-            image: filtersCategoryModel.previewEnabled ? "../images/svg/icon-visible_on.svg" : "../images/svg/icon-visible_off.svg";
-            textColor: "white";
-            shadow: false;
-            highlight: false;
+            image: filtersCategoryModel.previewEnabled ? Settings.theme.icon("visible_on") : Settings.theme.icon("visible_off");
             onClicked: filtersCategoryModel.previewEnabled = !filtersCategoryModel.previewEnabled;
         }
     ]
@@ -142,11 +134,8 @@ Panel {
                     width: parent.width;
                     height: Constants.GridHeight;
                 }
-                Text {
+                Label {
                     width: parent.width;
-                    font.pixelSize: Constants.DefaultFontSize;
-                    color: Constants.Theme.TextColor;
-                    font.family: "Source Sans Pro"
                     wrapMode: Text.WordWrap;
                     horizontalAlignment: Text.AlignHCenter;
                     text: "This filter requires no configuration. Click below to apply it.";
@@ -159,11 +148,7 @@ Panel {
                     width: height;
                     height: Constants.GridHeight
                     anchors.horizontalCenter: parent.horizontalCenter;
-                    color: "transparent";
-                    image: "../images/svg/icon-apply.svg"
-                    textColor: "white";
-                    shadow: false;
-                    highlight: false;
+                    image: Settings.theme.icon("apply")
                     onClicked: fullFilters.model.activateFilter(fullFilters.currentIndex);
                 }
             }
