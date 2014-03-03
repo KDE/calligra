@@ -27,7 +27,6 @@ Item {
     property bool roundTop: false;
 
     property string colorSet: "base";
-    property color textColor: "white";
     property string name;
 
     property alias actions: actionsLayout.children;
@@ -82,7 +81,7 @@ Item {
                     topMargin: Constants.DefaultMargin;
                     bottomMargin: Constants.DefaultMargin;
                 }
-                color: Settings.theme.color(base.colorSet + "/base");
+                color: Settings.theme.color("panels/" + base.colorSet + "/base");
 //                 Rectangle {
 //                     id: rectangle4
 //                     anchors.fill: parent;
@@ -120,7 +119,7 @@ Item {
                 Rectangle {
                     id: rectangle1
                     anchors.fill: parent;
-                    color: Settings.theme.color(base.colorSet + "/header");
+                    color: Settings.theme.color("panels/" + base.colorSet + "/header");
                     radius: Constants.DefaultMargin;
                 }
 
@@ -130,7 +129,7 @@ Item {
                     anchors.left: parent.left;
                     anchors.right: parent.right;
                     height: Constants.DefaultMargin;
-                    color: Settings.theme.color(base.colorSet + "/header");
+                    color: Settings.theme.color("panels/" + base.colorSet + "/header");
                 }
 
                 DnD.DragArea {
@@ -184,7 +183,7 @@ Item {
 
                 Rectangle {
                     id: rectanglefoot
-                    color: Settings.theme.color(base.colorSet + "/header");
+                    color: Settings.theme.color("panels/" + base.colorSet + "/header");
                     width: parent.width;
                     height: parent.height + Constants.DefaultMargin;
                     y: -Constants.DefaultMargin;
@@ -202,7 +201,8 @@ Item {
                         anchors.baselineOffset: -16;
 
                         text: base.name;
-                        color: Settings.theme.color(base.colorSet + "/headerText");
+                        color: Settings.theme.color("panels/" + base.colorSet + "/headerText");
+                        font: Settings.theme.font("panelHeader");
                     }
                 }
 
@@ -298,7 +298,7 @@ Item {
                 left: handleBackground.left;//parent.horizontalCenter;
                 //leftMargin: -handle.anchors.leftMargin;
             }
-            color: Settings.theme.color(base.colorSet + "/header");
+            color: Settings.theme.color("panels/" + base.colorSet + "/header");
             radius: 0
 
             width: handleBackground.width //handle.anchors.leftMargin * 2;
@@ -316,7 +316,7 @@ Item {
 
             width: handle.anchors.leftMargin * 2
             height: handle.anchors.topMargin * 2
-            color: Settings.theme.color(base.colorSet + "/header");
+            color: Settings.theme.color("panels/" + base.colorSet + "/header");
             radius: 8
 
             Label {
@@ -325,9 +325,8 @@ Item {
                 anchors.centerIn: parent;
 
                 text: base.name;
-                color: Settings.theme.color(base.colorSet + "/headerText");
-
-                font.pixelSize: Constants.DefaultFontSize;
+                color: Settings.theme.color("panels/" + base.colorSet + "/headerText");
+                font: Settings.theme.font("panelHandle");
             }
         }
 
