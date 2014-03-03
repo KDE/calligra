@@ -19,6 +19,8 @@
 
 #include "kra/kis_kra_loader.h"
 
+#include <QMessageBox>
+
 #include "kis_kra_tags.h"
 #include "kis_kra_utils.h"
 #include "kis_kra_load_visitor.h"
@@ -406,6 +408,9 @@ KisNodeSP KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image,
         dbgFile << "found colorspace" << colorSpace;
     }
     KIS_ASSERT_RECOVER_RETURN_VALUE(colorSpace, 0);
+    if (!colorSpace) {
+        return 0;
+    }
 
     bool visible = element.attribute(VISIBLE, "1") == "0" ? false : true;
     bool locked = element.attribute(LOCKED, "0") == "0" ? false : true;
