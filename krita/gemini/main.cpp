@@ -147,9 +147,6 @@ int main( int argc, char** argv )
         QFontDatabase::addApplicationFont( font );
     }
 
-    QFontDatabase db;
-    QApplication::setFont( db.font( "Source Sans Pro", "Regular", 12 ) );
-
     MainWindow window(fileNames);
 
     if (args->isSet("vkb")) {
