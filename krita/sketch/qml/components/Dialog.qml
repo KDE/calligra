@@ -82,7 +82,7 @@ Item {
         id: modalFill;
 
         anchors.fill: parent;
-        color: "#80000000";
+        color: Settings.theme.color("components/dialog/modalOverlay");
 
         Keys.enabled: base.visible && base.opacity === 1;
         Keys.onEscapePressed: {
@@ -115,8 +115,8 @@ Item {
         radius: 8;
 
         gradient: Gradient {
-            GradientStop { position: 0; color: "#F7F8FC"; }
-            GradientStop { position: 0.4; color: "#F0F0FA"; }
+            GradientStop { position: 0; color: Settings.theme.color("components/dialog/background/start"); }
+            GradientStop { position: 0.4; color: Settings.theme.color("components/dialog/background/stop"); }
         }
 
         Rectangle {
@@ -129,7 +129,7 @@ Item {
             }
 
             height: Constants.GridHeight;
-            color: "#9AA1B2";
+            color: Settings.theme.color("components/dialog/header");
             radius: 8;
 
             Rectangle {
@@ -139,14 +139,14 @@ Item {
                     bottom: parent.bottom;
                 }
                 height: 8;
-                color: "#9AA1B2";
+                color: Settings.theme.color("components/dialog/header");
             }
 
             Label {
                 id: dialogTitle;
                 anchors.centerIn: parent;
-                color: "white";
-                font.pixelSize: Constants.LargeFontSize;
+                color: Settings.theme.color("components/dialog/headerText");
+                font: Settings.theme.font("title");
             }
 
             Image {
@@ -187,9 +187,9 @@ Item {
             radius: height / 2;
             border {
                 width: 1;
-                color: "silver";
+                color: Settings.theme.color("components/dialog/progress/border");
             }
-            color: "white";
+            color: Settings.theme.color("components/dialog/progress/background");
             Rectangle {
                 id: progressBar;
                 anchors {
@@ -201,7 +201,7 @@ Item {
                 width: progress >= 0 ? (progress * 2) + 1: 100;
                 height: parent.height - 7;
                 Behavior on width { PropertyAnimation { duration: 100; } }
-                color: "gray";
+                color: Settings.theme.color("components/dialog/progress/bar");
             }
         }
         BusyIndicator {
@@ -235,8 +235,8 @@ Item {
                     radius: 8;
 
                     text: modelData;
-                    color: "#9AA1B2";
-                    textColor: "white";
+                    color: Settings.theme.color("components/dialog/button");
+                    textColor: Settings.theme.color("components/dialog/buttonText");
 
                     onClicked: { base.buttonClicked(index); base.hide(); }
                     hasFocus: index === base.currentButton;
