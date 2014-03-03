@@ -50,9 +50,8 @@ Image {
         id: title;
         anchors.centerIn: parent;
 
-        font.pixelSize: Constants.HugeFontSize;
-        font.bold: true;
-        color: "white";
+        font: Settings.theme.font("pageHeader");
+        color: Settings.theme.color("components/header");
     }
 
     Row {
