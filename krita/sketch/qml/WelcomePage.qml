@@ -22,6 +22,12 @@ import "panels"
 
 Page {
     property string pageName: "WelcomePage"
+
+    Rectangle {
+        anchors.fill: parent;
+        color: Settings.theme.color("pages/welcome/background");
+    }
+
     Header {
         id: header;
 
@@ -50,8 +56,7 @@ Page {
                 width: Constants.GridWidth * 0.75;
                 height: Constants.GridHeight * 0.75;
 
-                image: "images/svg/icon-minimize.svg"
-                highlightColor: Constants.Theme.HighlightColor;
+                image: Settings.theme.icon("minimize");
                 onClicked: Krita.Window.minimize();
             },
             Button {
@@ -61,8 +66,7 @@ Page {
                 width: Constants.GridWidth * 0.75;
                 height: Constants.GridHeight * 0.75;
 
-                image: "images/svg/icon-close.svg"
-                highlightColor: Constants.Theme.HighlightColor;
+                image: Settings.theme.icon("close");
                 onClicked: Krita.Window.close();
             }
         ]
@@ -85,13 +89,13 @@ Page {
             gradient: Gradient {
                 GradientStop {
                     position: 0
-                    color: "#707070"
+                    color: Settings.theme.color("pages/welcome/open/header/start");
                 }
 
 
                 GradientStop {
                     position: 1
-                    color: "#565656"
+                    color: Settings.theme.color("pages/welcome/open/header/stop");
                 }
             }
 
@@ -103,8 +107,8 @@ Page {
                     verticalCenter: parent.verticalCenter;
                 }
                 text: "Recent Images";
-                font.pixelSize: Constants.LargeFontSize;
-                color: "white";
+                font: Settings.theme.font("title");
+                color: Settings.theme.color("pages/welcome/open/header/text");
             }
 
             Image { source: "./images/shadow-smooth.png"; width: parent.width; height: Constants.GridHeight / 8; anchors.top: parent.bottom;}
@@ -118,13 +122,13 @@ Page {
             gradient: Gradient {
                 GradientStop {
                     position: 0
-                    color: "#565656"
+                    color: Settings.theme.color("pages/welcome/create/header/start");
                 }
 
 
                 GradientStop {
                     position: 1
-                    color: "#707070"
+                    color: Settings.theme.color("pages/welcome/create/header/stop");
                 }
             }
 
@@ -135,8 +139,8 @@ Page {
                     verticalCenter: parent.verticalCenter;
                 }
                 text: "Create New";
-                font.pixelSize: Constants.LargeFontSize;
-                color: "white";
+                font: Settings.theme.font("title");
+                color: Settings.theme.color("pages/welcome/create/header/text");
             }
 
             Image { source: "./images/shadow-smooth.png"; width: parent.width; height: Constants.GridHeight / 8; anchors.top: parent.bottom;}
@@ -150,13 +154,13 @@ Page {
             gradient: Gradient {
                 GradientStop {
                     position: 0
-                    color: "#707070"
+                    color: Settings.theme.color("pages/welcome/news/header/start");
                 }
 
 
                 GradientStop {
                     position: 1
-                    color: "#565656"
+                    color: Settings.theme.color("pages/welcome/news/header/stop");
                 }
             }
 
@@ -167,8 +171,8 @@ Page {
                     verticalCenter: parent.verticalCenter;
                 }
                 text: "Community News";
-                font.pixelSize: Constants.LargeFontSize;
-                color: "white";
+                font: Settings.theme.font("title");
+                color: Settings.theme.color("pages/welcome/news/header/text");
             }
 
             Image { source: "./images/shadow-smooth.png"; width: parent.width; height: Constants.GridHeight / 8; anchors.top: parent.bottom;}
