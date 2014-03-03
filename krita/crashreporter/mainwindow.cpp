@@ -263,9 +263,30 @@ void MainWindow::startUpload()
     typedef QPair<QByteArray, QByteArray> Field;
     QList<Field> fields;
 
+    QString calligraVersion(CALLIGRA_VERSION_STRING);
+    QString version;
+
+
+#ifdef CALLIGRA_GIT_SHA1_STRING
+    QString gitVersion(CALLIGRA_GIT_SHA1_STRING);
+    version = QString("%1 (git %2)").arg(calligraVersion).arg(gitVersion).toLatin1();
+#else
+    version = calligraVersion;
+#endif
+
+#ifdef Q_WS_WIN
+
+#ifdef ENV32BIT
+    version += " (x86)";
+#else
+    version += " (x64)";
+#endif
+
+#endif
+
     fields << Field("BuildID", CALLIGRA_GIT_SHA1_STRING)
            << Field("ProductName", "krita")
-           << Field("Version", CALLIGRA_VERSION_STRING)
+           << Field("Version", version.toLatin1())
            << Field("Vendor", "KO GmbH")
            << Field("Email", txtEmail->text().toLatin1())
            << Field("timestamp", QByteArray::number(QDateTime::currentDateTime().toTime_t()));
@@ -273,11 +294,13 @@ void MainWindow::startUpload()
 #ifdef Q_WS_WIN
 
     QString platform = platformToStringWin(QSysInfo::WindowsVersion);
+
 #ifdef ENV32BIT
-    platform += "_x86";
+    platform += " (x86)";
 #else
-    platform += "_x64";
+    platform += " (x64)";
 #endif
+
     fields << Field("Platform", platform.toAscii());
 #endif
 #ifdef Q_WS_X11
