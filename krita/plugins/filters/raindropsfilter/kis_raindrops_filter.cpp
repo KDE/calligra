@@ -93,10 +93,18 @@ void KisRainDropsFilter::processImpl(KisPaintDeviceSP device,
     Q_ASSERT(device);
 
     //read the filter configuration values from the KisFilterConfiguration object
-    quint32 DropSize = config->getInt("dropSize", 80);
-    quint32 number = config->getInt("number", 80);
-    quint32 fishEyes = config->getInt("fishEyes", 30);
-    srand(config->getInt("seed"));
+    quint32 DropSize = config ? config->getInt("dropSize", 80) : 80;
+    quint32 number = config ? config->getInt("number", 80) : 80;
+    quint32 fishEyes = config ? config->getInt("fishEyes", 30) : 30;
+    if (config) {
+        srand(config->getInt("seed"));
+    }
+    else {
+        QDateTime dt = QDateTime::currentDateTime();
+        QDateTime Y2000(QDate(2000, 1, 1), QTime(0, 0, 0));
+        srand(dt.secsTo(Y2000));
+
+    }
 
     if (progressUpdater) {
         progressUpdater->setRange(0, applyRect.width() * applyRect.height());
