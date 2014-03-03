@@ -40,12 +40,7 @@ Panel {
             id: colorPicker;
             width: height;
             height: Constants.ToolbarButtonSize;
-            color: "transparent";
             image: Settings.theme.icon("icon-colorpicker");
-            textColor: "white";
-            shadow: false;
-            highlight: false;
-            checked: false;
             onClicked: toolManager.requestToolChange("KritaSelected/KisToolColorPicker");
         },
         Item {
@@ -57,12 +52,7 @@ Panel {
             visible: base.state === "peek";
             width: height;
             height: Constants.ToolbarButtonSize
-            color: "transparent";
             image: colorSelectorPeek.visible ? Settings.theme.icon("icon-palette") : Settings.theme.icon("icon-color_wheel");
-            textColor: "white";
-            shadow: false;
-            highlight: false;
-            checked: false;
             onClicked: colorSelectorPeek.visible = !colorSelectorPeek.visible;
         }
     ]
