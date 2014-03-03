@@ -182,8 +182,7 @@ KisPaintDevice::Private::Private(KisPaintDevice *paintDevice)
 {
 }
 
-KisPaintDevice::Private::KisPaintDeviceStrategy*
-KisPaintDevice::Private::currentStrategy()
+KisPaintDevice::Private::KisPaintDeviceStrategy* KisPaintDevice::Private::currentStrategy()
 {
     if (!defaultBounds->wrapAroundMode()) {
         return basicStrategy.data();
