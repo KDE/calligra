@@ -21,8 +21,11 @@
 
 #include <QtCore/QStringList>
 #include <QtCore/QUrl>
+#include <QtCore/QDebug>
 #include <QtGui/QColor>
 #include <QtGui/QFont>
+#include <QtGui/QFontDatabase>
+#include <QtGui/QApplication>
 
 #include <kglobal.h>
 #include <kstandarddirs.h>
@@ -42,6 +45,8 @@ public:
     QVariantMap fonts;
 
     QString iconPath;
+
+    QHash<QString, QFont> fontMap;
 };
 
 Theme::Theme(QObject* parent)
@@ -135,6 +140,10 @@ QColor Theme::color(const QString& name)
         }
     }
 
+    if(!result.isValid()) {
+        qWarning() << "Unable to find color" << name;
+    }
+
     return result;
 }
 
@@ -163,14 +172,37 @@ QVariantMap Theme::fonts() const
 
 void Theme::setFonts(const QVariantMap& newValue)
 {
-    if(newValue != d->fonts) {
+    if(newValue != d->fonts)
+    {
         d->fonts = newValue;
+
+        d->fontMap.clear();
+
+        QFontDatabase db;
+        for(QVariantMap::iterator itr = d->fonts.begin(); itr != d->fonts.end(); ++itr)
+        {
+            QVariantMap map = itr->toMap();
+            if(map.isEmpty())
+                continue;
+
+            QFont font = db.font(map.value("family").toString(), map.value("style", "Regular").toString(), map.value("size", 12).toInt());
+
+            if(font.isCopyOf(qApp->font()))
+                qWarning() << "Could not find font" << map.value("family") << "with style" << map.value("style", "Regular");
+
+            d->fontMap.insert(itr.key(), font);
+        }
+
         emit fontsChanged();
     }
 }
 
 QFont Theme::font(const QString& name)
 {
+    if(d->fontMap.contains(name))
+        return d->fontMap.value(name);
+
+    qWarning() << "Unable to find font" << name;
     return QFont();
 }
 
