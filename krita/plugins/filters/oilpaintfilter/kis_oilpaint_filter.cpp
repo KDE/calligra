@@ -75,9 +75,16 @@ void KisOilPaintFilter::processImpl(KisPaintDeviceSP device,
     qint32 height = applyRect.height();
 
     //read the filter configuration values from the KisFilterConfiguration object
-    quint32 brushSize = config->getInt("brushSize", 1);
-    quint32 smooth = config->getInt("smooth", 30);
-    srand(config->getInt("seed"));
+    quint32 brushSize = config ? config->getInt("brushSize", 1) : 1;
+    quint32 smooth = config ? config->getInt("smooth", 30) : 30;
+    if (config) {
+        srand(config->getInt("seed"));
+    }
+    else {
+        QDateTime dt = QDateTime::currentDateTime();
+        QDateTime Y2000(QDate(2000, 1, 1), QTime(0, 0, 0));
+        srand(dt.secsTo(Y2000));
+    }
 
     OilPaint(device, device, srcTopLeft, applyRect.topLeft(), width, height, brushSize, smooth, progressUpdater);
 
