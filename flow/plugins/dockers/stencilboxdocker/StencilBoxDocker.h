@@ -41,7 +41,6 @@ class StencilBoxDocker : public QDockWidget
     Q_OBJECT
     public:
         explicit StencilBoxDocker(QWidget* parent = 0);
-        void setViewMode(QListView::ViewMode iconMode);
 
     protected:
 
