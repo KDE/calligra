@@ -28,7 +28,6 @@ StencilListView::StencilListView(QWidget* parent) :
     setFocusPolicy(Qt::NoFocus);
     setFrameShape(QFrame::NoFrame);
     setIconSize(QSize(32, 32));
-    setMovement(QListView::Static);
     setSpacing(1);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
