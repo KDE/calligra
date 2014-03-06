@@ -73,6 +73,8 @@
 #include "sketch/KisSketchPart.h"
 
 #ifdef Q_OS_WIN
+// qml requires correct-case to path, even in Windows
+#include "sketch/pathconverter.h"
 // Slate mode/docked detection stuff
 #include <shellapi.h>
 #define SM_CONVERTIBLESLATEMODE 0x2003
@@ -140,34 +142,19 @@ public:
         sketchView = new SketchDeclarativeView();
         sketchView->engine()->rootContext()->setContextProperty("mainWindow", parent);
 
-#ifdef Q_OS_WIN
-        QDir appdir(qApp->applicationDirPath());
-
-        // Corrects for mismatched case errors in path (qtdeclarative fails to load)
-        wchar_t buffer[1024];
-        QString absolute = appdir.absolutePath();
-        DWORD rv = ::GetShortPathName((wchar_t*)absolute.utf16(), buffer, 1024);
-        rv = ::GetLongPathName(buffer, buffer, 1024);
-        QString correctedPath((QChar *)buffer);
-        appdir.setPath(correctedPath);
-
-        // for now, the app in bin/ and we still use the env.bat script
-        appdir.cdUp();
-
-        sketchView->engine()->addImportPath(appdir.canonicalPath() + "/lib/calligra/imports");
-        sketchView->engine()->addImportPath(appdir.canonicalPath() + "/lib64/calligra/imports");
-        QString mainqml = appdir.canonicalPath() + "/share/apps/kritagemini/kritagemini.qml";
-#else
-        sketchView->engine()->addImportPath(KGlobal::dirs()->findDirs("lib", "calligra/imports").value(0));
+        QString importPath = KGlobal::dirs()->findDirs("lib", "calligra/imports").value(0);
         QString mainqml = KGlobal::dirs()->findResource("data", "kritagemini/kritagemini.qml");
+#ifdef Q_OS_WIN
+        importPath = WindowsTools::correctPathForCase(importPath);
+        mainqml = WindowsTools::correctPathForCase(mainqml);
 #endif
+        sketchView->engine()->addImportPath(importPath);
 
         Q_ASSERT(QFile::exists(mainqml));
         if (!QFile::exists(mainqml)) {
             QMessageBox::warning(0, "No QML found", mainqml + " doesn't exist.");
         }
         QFileInfo fi(mainqml);
-
         sketchView->setSource(QUrl::fromLocalFile(fi.canonicalFilePath()));
         sketchView->setResizeMode( QDeclarativeView::SizeRootObjectToView );
 
@@ -225,9 +212,9 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
 
     setWindowTitle(i18n("Krita Gemini"));
 
-	// Load filters and other plugins in the gui thread
-	Q_UNUSED(KisFilterRegistry::instance());
-	Q_UNUSED(KisPaintOpRegistry::instance());
+    // Load filters and other plugins in the gui thread
+    Q_UNUSED(KisFilterRegistry::instance());
+    Q_UNUSED(KisPaintOpRegistry::instance());
 
     KisConfig cfg;
     // Store the current setting before we do "things", and heuristic our way to a reasonable
@@ -630,7 +617,7 @@ void MainWindow::Private::notifySlateModeChange()
                 q->switchToDesktop();
         }
         //qDebug() << "Slate mode is now" << slateMode;
-    } 
+    }
 #endif
 }
 

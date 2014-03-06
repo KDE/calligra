@@ -19,7 +19,6 @@ set(kritagemini_SRCS
     desktopviewproxy.cpp
 )
 
-
 if (WIN32)
     set(kritagemini_SRCS ${kritagemini_SRCS} KritaGemini.rc)
 else (WIN32)

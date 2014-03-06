@@ -34,6 +34,8 @@ set(kritasketch_SRCS
     MainWindow.cpp
 )
 
+
+
 set(kritasketchplugin_SRCS
     kritasketchplugin.cpp
     ColorSelectorItem.cpp
@@ -91,6 +93,9 @@ set(KRITA_COLORSELECTORNG_PART_SRCS
 ../plugins/extensions/dockers/advancedcolorselector/kis_color_selector_combo_box.cpp
 )
 
+if (WIN32)
+	set(kritasketchlib_SRCS ${kritasketchlib_SRCS} pathconverter.cpp)
+endif (WIN32)
 
 if (WIN32)
     set(kritasketch_SRCS ${kritasketch_SRCS} KritaSketch.rc)
