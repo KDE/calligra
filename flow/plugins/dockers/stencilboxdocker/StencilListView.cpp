@@ -35,7 +35,7 @@ StencilListView::StencilListView(QWidget* parent) :
     setResizeMode(QListView::Adjust);
     setUniformItemSizes(true);
 
-    setSelectionMode(QAbstractItemView::SingleSelection);
+    //setSelectionMode(QAbstractItemView::SingleSelection);
     setDragDropMode(QAbstractItemView::DragDrop);
     setDropIndicatorShown(true);
     setAcceptDrops(true);
