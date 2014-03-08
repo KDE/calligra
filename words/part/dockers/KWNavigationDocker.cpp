@@ -30,7 +30,7 @@ KWNavigationDocker::KWNavigationDocker()
 {
     m_canvasReset = false;
     setWindowTitle(i18n("Navigation"));
-    
+
     m_navigationWidget = new KWNavigationWidget(this);
     setWidget(m_navigationWidget);
 }

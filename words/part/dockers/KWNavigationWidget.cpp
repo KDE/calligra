@@ -51,10 +51,10 @@ m_canvas(0)
     m_timer = new QTimer(this);
     initUi();
     initLayout();
-    
+
     //use to refresh navigator
     connect(m_timer, SIGNAL(timeout()), this, SLOT(updateData())); // FIXME: better idea ?
-    
+
     //TODO: some configuration??
 }
 
@@ -83,12 +83,12 @@ void KWNavigationWidget::headerClicked(QModelIndex idx)
 {
     QTextDocument *doc = static_cast<QTextDocument *>(
         m_model->itemFromIndex(idx)->data(Qt::UserRole + 2).value<void *>());
-    
+
     int position = m_model->itemFromIndex(idx)->data(Qt::UserRole + 1).toInt();
-    
+
     KoTextDocument(doc).textEditor()->setPosition(position); // placing cursor
     m_canvas->view()->setFocus(); // passing focus
-    
+
     KoTextDocumentLayout *l = qobject_cast<KoTextDocumentLayout *>(
         m_document->mainFrameSet()->document()->documentLayout());
     KoTextLayoutRootArea *a = l->rootAreaForPosition(position);
@@ -100,51 +100,51 @@ void KWNavigationWidget::updateData()
     if (!isVisible()) {
         return;
     }
-    
+
     m_model->clear();
     m_model->setColumnCount(2);
 
     QStringList head;
     head << "Header" << "Page number";
     m_model->setHorizontalHeaderLabels(head);
-    
+
     QStack< QPair<QStandardItem *, int> > curChain;
     curChain.push(QPair<QStandardItem *, int>(m_model->invisibleRootItem(), 0));
-    
+
     foreach (KWFrameSet *fs, m_document->frameSets()) {
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
         if (tfs == 0) continue;
-        
+
         tfs->wordsDocument();
         QTextDocument *doc = tfs->document();
         QTextBlock block = doc->begin();
         while (block.isValid()) {
             int blockLevel = block.blockFormat().intProperty(KoParagraphStyle::OutlineLevel);
-            
+
             if (!blockLevel) {
                 block = block.next();
                 continue;
             }
-            
+
             QStandardItem *item = new QStandardItem(block.text());
             item->setData(block.position(), Qt::UserRole + 1);
             item->setData(qVariantFromValue((void *)doc), Qt::UserRole + 2);
             QList< QStandardItem *> buf;
-            
+
             KoTextDocumentLayout *l = qobject_cast<KoTextDocumentLayout *>(
                 m_document->mainFrameSet()->document()->documentLayout());
             KoTextLayoutRootArea *a = l->rootAreaForPosition(block.position());
-            
+
             buf.push_back(item);
             buf.push_back(new QStandardItem(QString("%1").arg(a->page()->visiblePageNumber())));
-            
+
             while (curChain.top().second >= blockLevel) {
                 curChain.pop();
             }
-            
+
             curChain.top().first->appendRow(buf);
             curChain.push(QPair<QStandardItem *, int>(item, blockLevel));
-            
+
             block = block.next();
         }
     }

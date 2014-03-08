@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2014 Denis Kupluakov <dener.kup@gmail.com>
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -44,42 +44,42 @@ class StatisticsPreferencesPopup;
 /** KWNavigationWidget shows document structure by parsing
  *  headers levels. You can click on the header to momentally
  *  get to another part of the document.
- */ 
+ */
 
 class KWNavigationWidget : public QWidget
 {
     Q_OBJECT
-    
+
 public:
     explicit KWNavigationWidget(QWidget *parent = 0);
     virtual ~KWNavigationWidget();
-    
+
     friend class KWNavigationDocker;
-    
+
     void setCanvas(KWCanvas* canvas);
-    
+
     void unsetCanvas();
-    
+
 private slots:
     void headerClicked(QModelIndex idx);
-    
+
 public slots:
     void updateData();
-    
+
 private:
     void initUi();
     void initLayout();
-    
+
     void updateDataUi();
-    
+
 private:
     // The main layout
     QBoxLayout *m_mainBox;
-    
+
     //shows the navigation
     QTreeView *m_treeView;
     QStandardItemModel *m_model;
-    
+
     KoCanvasResourceManager *m_resourceManager;
     KWDocument *m_document;
     QTimer *m_timer;

@@ -38,17 +38,16 @@ class KoCanvasBase;
 class KWNavigationDocker : public QDockWidget, public KoCanvasObserverBase
 {
     Q_OBJECT
-    
 public:
     explicit KWNavigationDocker();
     ~KWNavigationDocker();
     /// reimplemented from KoCanvasObserver
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas();
-    
+
 private:
     bool m_canvasReset;
-    
+
     // The navigation widget
     KWNavigationWidget *m_navigationWidget;
 };
