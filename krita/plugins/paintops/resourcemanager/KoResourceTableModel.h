@@ -1,5 +1,5 @@
-/* This file is part of the Calligra project
- * Copyright (C) 2010-2014 Yue Liu <yue.liu@mail.com>
+/*
+ *  Copyright (c) 2014 Victor Lafon metabolic.ewilan@hotmail.fr
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,26 +17,22 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef STENCILLISTVIEW_H
-#define STENCILLISTVIEW_H
+#ifndef KORESOURCETABLEMODEL_H
+#define KORESOURCETABLEMODEL_H
 
-#include <QListView>
+#include "KoResourceModel.h"
 
-class StencilListView : public QListView
+class KoResourceTableModel : public KoResourceModel
 {
     Q_OBJECT
-    
-public:
-    using QListView::contentsSize;
-
-    explicit StencilListView(QWidget *parent = 0);
-
-signals:
-    void pressed(const QString &name, const QString &xml, const QPoint &globalPos);
-
-protected:
-    void dragEnterEvent(QDragEnterEvent *event);
-    void dropEvent(QDropEvent *event);
+    public:
+        KoResourceTableModel(KoAbstractResourceServerAdapter * resourceAdapter, QObject * parent = 0 );
+        int rowCount(const QModelIndex &parent = QModelIndex()) const ;
+        int columnCount(const QModelIndex &parent = QModelIndex()) const;
+        QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+        QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+        QModelIndex index ( int row, int column, const QModelIndex & ) const;
 };
 
-#endif // STENCILLISTVIEW_H
+#endif // KORESOURCETABLEMODEL_H
+

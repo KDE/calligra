@@ -217,6 +217,7 @@ void StencilBoxDocker::loadShapeCollections()
         QStringList collectionDirs = dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
         foreach(const QString & collectionDirName, collectionDirs) {
             addCollection(path + collectionDirName);
+            qDebug() << path + collectionDirName;
         }
     }
 }
@@ -324,15 +325,5 @@ void StencilBoxDocker::removeCollection(const QString& family)
         m_modelMap.remove(family);
         delete model;
         m_treeWidget->regenerateFilteredMap();
-    }
-}
-
-void StencilBoxDocker::setViewMode(QListView::ViewMode iconMode)
-{
-    QMapIterator<QString, CollectionItemModel*> i(m_modelMap);
-    while(i.hasNext())
-    {
-        i.next();
-        i.value()->setViewMode(iconMode);
     }
 }
