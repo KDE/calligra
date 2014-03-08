@@ -60,6 +60,9 @@ set(wordsprivate_LIB_SRCS
     dockers/KWStatisticsDocker.cpp
     dockers/KWStatisticsWidget.cpp
     dockers/StatisticsPreferencesPopup.cpp
+    
+    dockers/KWNavigationDocker.cpp
+    dockers/KWNavigationWidget.cpp
 
     commands/KWPageStylePropertiesCommand.cpp
     commands/KWNewPageStyleCommand.cpp
