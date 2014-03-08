@@ -55,7 +55,7 @@ m_canvas(0)
     //use to refresh navigator
     connect(m_timer, SIGNAL(timeout()), this, SLOT(updateData())); // FIXME: better idea ?
     
-    //TODO: some configutaion??
+    //TODO: some configuration??
 }
 
 KWNavigationWidget::~KWNavigationWidget()
@@ -150,15 +150,6 @@ void KWNavigationWidget::updateData()
     }
     m_treeView->expandAll();
     m_treeView->resizeColumnToContents(0);
-}
-
-void KWNavigationWidget::setLayoutDirection(KWNavigationWidget::LayoutDirection direction)
-{
-    if (direction == KWNavigationWidget::LayoutHorizontal) {
-        m_mainBox->setDirection(QBoxLayout::LeftToRight);
-    } else {
-        m_mainBox->setDirection(QBoxLayout::TopToBottom);
-    }
 }
 
 void KWNavigationWidget::setCanvas(KWCanvas* canvas)

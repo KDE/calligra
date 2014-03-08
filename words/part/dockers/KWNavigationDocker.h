@@ -51,10 +51,6 @@ private:
     
     // The navigation widget
     KWNavigationWidget *m_navigationWidget;
-    
-    
-public slots:
-    void ondockLocationChanged(Qt::DockWidgetArea newArea);
 };
 
 class KWNavigationDockerFactory : public KoDockFactoryBase

@@ -54,13 +54,6 @@ public:
     explicit KWNavigationWidget(QWidget *parent = 0);
     virtual ~KWNavigationWidget();
     
-    enum LayoutDirection {
-        LayoutVertical,
-        LayoutHorizontal
-    };
-    
-    void setLayoutDirection(LayoutDirection direction);
-    
     friend class KWNavigationDocker;
     
     void setCanvas(KWCanvas* canvas);
@@ -72,7 +65,6 @@ private slots:
     
 public slots:
     void updateData();
-    void selectionChanged();
     
 private:
     void initUi();

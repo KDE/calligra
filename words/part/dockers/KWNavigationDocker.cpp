@@ -32,8 +32,6 @@ KWNavigationDocker::KWNavigationDocker()
     setWindowTitle(i18n("Navigation"));
     
     m_navigationWidget = new KWNavigationWidget(this);
-    connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
-            this, SLOT(ondockLocationChanged(Qt::DockWidgetArea)));
     setWidget(m_navigationWidget);
 }
 
@@ -51,16 +49,6 @@ void KWNavigationDocker::unsetCanvas()
 {
     m_navigationWidget->unsetCanvas();
 }
-
-void KWNavigationDocker::ondockLocationChanged(Qt::DockWidgetArea newArea)
-{
-    if (newArea == Qt::TopDockWidgetArea || newArea == Qt::BottomDockWidgetArea) {
-        m_navigationWidget->setLayoutDirection(KWNavigationWidget::LayoutHorizontal);
-    } else {
-        m_navigationWidget->setLayoutDirection(KWNavigationWidget::LayoutVertical);
-    }
-}
-
 
 KWNavigationDockerFactory::KWNavigationDockerFactory()
 {
