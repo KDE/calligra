@@ -115,10 +115,10 @@ void KexiProjectModel::setProject(KexiProject* prj, const QString& itemsPartClas
                 }
             }
 
+            groupItem->sortChildren();
             if (!d->itemsPartClass.isEmpty()) {
                 break; //the only group added, so our work is completed
             }
-            groupItem->sortChildren();
 /* no need to load part so early:            
         } else {
             //add this error to the list that will be displayed later
