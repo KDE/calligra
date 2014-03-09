@@ -42,10 +42,9 @@
 #include <QTimer>
 
 KWNavigationWidget::KWNavigationWidget(QWidget *parent)
-: QWidget(parent),
-m_document(0),
-m_timer(0),
-m_canvas(0)
+    : QWidget(parent)
+    , m_document(0)
+    , m_canvas(0)
 {
     m_model = new QStandardItemModel(this);
     m_timer = new QTimer(this);
@@ -73,10 +72,10 @@ void KWNavigationWidget::initUi()
 
 void KWNavigationWidget::initLayout()
 {
-    m_mainBox = new QBoxLayout(QBoxLayout::LeftToRight, this);
-    m_mainBox->addWidget(m_treeView);
+    QHBoxLayout *mainBox = new QHBoxLayout(this);
+    mainBox->addWidget(m_treeView);
 
-    setLayout(m_mainBox); // FIXME: Is this necessary?
+    setLayout(mainBox); // FIXME: Is this necessary?
 }
 
 void KWNavigationWidget::headerClicked(QModelIndex idx)
@@ -135,8 +134,8 @@ void KWNavigationWidget::updateData()
                 m_document->mainFrameSet()->document()->documentLayout());
             KoTextLayoutRootArea *a = l->rootAreaForPosition(block.position());
 
-            buf.push_back(item);
-            buf.push_back(new QStandardItem(QString("%1").arg(a->page()->visiblePageNumber())));
+            buf.append(item);
+            buf.append(new QStandardItem(QString::number(a->page()->visiblePageNumber())));
 
             while (curChain.top().second >= blockLevel) {
                 curChain.pop();

@@ -73,9 +73,6 @@ private:
     void updateDataUi();
 
 private:
-    // The main layout
-    QBoxLayout *m_mainBox;
-
     //shows the navigation
     QTreeView *m_treeView;
     QStandardItemModel *m_model;
