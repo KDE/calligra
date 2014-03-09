@@ -32,19 +32,19 @@
 #include <QStack>
 #include <QTextDocument>
 #include <QTextBlock>
+#include <QHeaderView>
 
 KWNavigationWidget::KWNavigationWidget(QWidget *parent)
     : QWidget(parent)
     , m_document(0)
     , m_canvas(0)
     , m_layout(0)
+    , m_updateTimer(0)
 {
     m_model = new QStandardItemModel(this);
 
-    QStringList head;
-    head << "Header" << "Page number";
-    m_model->setHorizontalHeaderLabels(head);
-    m_model->setColumnCount(2);
+    m_updateTimer = new QTimer(this);
+    m_updateTimer->setSingleShot(true);
 
     initUi();
     initLayout();
@@ -63,7 +63,12 @@ void KWNavigationWidget::initUi()
     m_treeView->setItemsExpandable(false);
     m_treeView->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
-    connect(m_treeView, SIGNAL(clicked(QModelIndex)), this, SLOT(headerClicked(QModelIndex)));
+    m_treeView->header()->setResizeMode(0, QHeaderView::Stretch);
+    m_treeView->header()->setResizeMode(1, QHeaderView::Interactive);
+    m_treeView->header()->setStretchLastSection(false);
+    m_treeView->header()->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+    connect(m_treeView, SIGNAL(clicked(QModelIndex)), this, SLOT(navigationClicked(QModelIndex)));
 }
 
 void KWNavigationWidget::initLayout()
@@ -74,7 +79,7 @@ void KWNavigationWidget::initLayout()
     setLayout(mainBox); // FIXME: Is this necessary?
 }
 
-void KWNavigationWidget::headerClicked(QModelIndex idx)
+void KWNavigationWidget::navigationClicked(QModelIndex idx)
 {
     if (idx.column() == 0) {
         QTextDocument *doc = static_cast<QTextDocument *>(
@@ -96,7 +101,17 @@ void KWNavigationWidget::updateData()
         return;
     }
 
+    // don't refresh too often
+    if (m_updateTimer->isActive()) {
+        return;
+    }
+
     m_model->clear();
+
+    QStringList head;
+    head << "Header" << "Page number";
+    m_model->setHorizontalHeaderLabels(head);
+    m_model->setColumnCount(2);
 
     QStack< QPair<QStandardItem *, int> > curChain;
     curChain.push(QPair<QStandardItem *, int>(m_model->invisibleRootItem(), 0));
@@ -137,7 +152,9 @@ void KWNavigationWidget::updateData()
         }
     }
     m_treeView->expandAll();
-    m_treeView->resizeColumnToContents(0);
+    m_treeView->resizeColumnToContents(1);
+
+    m_updateTimer->start(300);
 }
 
 void KWNavigationWidget::setCanvas(KWCanvas* canvas)

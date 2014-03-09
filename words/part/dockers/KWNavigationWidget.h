@@ -24,6 +24,7 @@
 #include <QHBoxLayout>
 #include <QStandardItem>
 #include <QTreeView>
+#include <QTimer>
 
 #include <kglobal.h>
 
@@ -61,7 +62,7 @@ public:
     void unsetCanvas();
 
 private slots:
-    void headerClicked(QModelIndex idx);
+    void navigationClicked(QModelIndex idx);
 
 public slots:
     void updateData();
@@ -73,7 +74,6 @@ private:
     void updateDataUi();
 
 private:
-    //shows the navigation
     QTreeView *m_treeView;
     QStandardItemModel *m_model;
 
@@ -81,6 +81,7 @@ private:
     KWDocument *m_document;
     KWCanvas *m_canvas;
     KoTextDocumentLayout *m_layout;
+    QTimer *m_updateTimer;
 };
 
 #endif // KWNAVIGATIONWIDGET_H
