@@ -25,41 +25,29 @@
 #include "frames/KWFrameSet.h"
 #include "frames/KWTextFrameSet.h"
 #include <KWView.h>
-#include <KoCanvasResourceManager.h>
-#include <KoSelection.h>
-#include <KoShape.h>
-#include <KoShapeController.h>
-#include <KoIcon.h>
 #include <KoParagraphStyle.h>
 #include <KoTextDocument.h>
-#include <KoTextDocumentLayout.h>
 #include <KoTextLayoutRootArea.h>
 
 #include <QStack>
-#include <QTextLayout>
 #include <QTextDocument>
 #include <QTextBlock>
-#include <QTimer>
 
 KWNavigationWidget::KWNavigationWidget(QWidget *parent)
     : QWidget(parent)
     , m_document(0)
     , m_canvas(0)
+    , m_layout(0)
 {
     m_model = new QStandardItemModel(this);
-    m_timer = new QTimer(this);
     initUi();
     initLayout();
-
-    //use to refresh navigator
-    connect(m_timer, SIGNAL(timeout()), this, SLOT(updateData())); // FIXME: better idea ?
 
     //TODO: some configuration??
 }
 
 KWNavigationWidget::~KWNavigationWidget()
 {
-    m_timer->stop();
 }
 
 void KWNavigationWidget::initUi()
@@ -88,9 +76,7 @@ void KWNavigationWidget::headerClicked(QModelIndex idx)
     KoTextDocument(doc).textEditor()->setPosition(position); // placing cursor
     m_canvas->view()->setFocus(); // passing focus
 
-    KoTextDocumentLayout *l = qobject_cast<KoTextDocumentLayout *>(
-        m_document->mainFrameSet()->document()->documentLayout());
-    KoTextLayoutRootArea *a = l->rootAreaForPosition(position);
+    KoTextLayoutRootArea *a = m_layout->rootAreaForPosition(position);
     m_canvas->view()->goToPage(*(static_cast<KWPage *>(a->page()))); // showing needed page
 }
 
@@ -130,9 +116,7 @@ void KWNavigationWidget::updateData()
             item->setData(qVariantFromValue((void *)doc), Qt::UserRole + 2);
             QList< QStandardItem *> buf;
 
-            KoTextDocumentLayout *l = qobject_cast<KoTextDocumentLayout *>(
-                m_document->mainFrameSet()->document()->documentLayout());
-            KoTextLayoutRootArea *a = l->rootAreaForPosition(block.position());
+            KoTextLayoutRootArea *a = m_layout->rootAreaForPosition(block.position());
 
             buf.append(item);
             buf.append(new QStandardItem(QString::number(a->page()->visiblePageNumber())));
@@ -154,12 +138,20 @@ void KWNavigationWidget::updateData()
 void KWNavigationWidget::setCanvas(KWCanvas* canvas)
 {
     m_document = canvas->document();
+    if (m_layout) {
+        disconnect(m_layout, SIGNAL(finishedLayout()), this, SLOT(updateData()));
+    }
+    m_layout = qobject_cast<KoTextDocumentLayout *>(
+        m_document->mainFrameSet()->document()->documentLayout());
+    connect(m_layout, SIGNAL(finishedLayout()), this, SLOT(updateData()));
     m_canvas = canvas;
-    m_timer->start(2500);
 }
 
 void KWNavigationWidget::unsetCanvas()
 {
-    m_timer->stop();
     m_document = 0;
+    if (m_layout) {
+        disconnect(m_layout, SIGNAL(finishedLayout()), this, SLOT(updateData()));
+    }
+    m_layout = 0;
 }

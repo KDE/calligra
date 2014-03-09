@@ -31,8 +31,8 @@
 //#include "KWNavigationDocker.h"
 #include "StatisticsPreferencesPopup.h"
 #include <KWCanvas.h>
+#include <KoTextDocumentLayout.h>
 
-class QTimer;
 class QTextDocument;
 class QToolButton;
 class KConfigGroup;
@@ -79,8 +79,8 @@ private:
 
     KoCanvasResourceManager *m_resourceManager;
     KWDocument *m_document;
-    QTimer *m_timer;
     KWCanvas *m_canvas;
+    KoTextDocumentLayout *m_layout;
 };
 
 #endif // KWNAVIGATIONWIDGET_H
