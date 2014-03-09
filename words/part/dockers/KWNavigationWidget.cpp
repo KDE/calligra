@@ -40,6 +40,12 @@ KWNavigationWidget::KWNavigationWidget(QWidget *parent)
     , m_layout(0)
 {
     m_model = new QStandardItemModel(this);
+
+    QStringList head;
+    head << "Header" << "Page number";
+    m_model->setHorizontalHeaderLabels(head);
+    m_model->setColumnCount(2);
+
     initUi();
     initLayout();
 
@@ -55,6 +61,8 @@ void KWNavigationWidget::initUi()
     m_treeView = new QTreeView;
     m_treeView->setModel(m_model);
     m_treeView->setItemsExpandable(false);
+    m_treeView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+
     connect(m_treeView, SIGNAL(clicked(QModelIndex)), this, SLOT(headerClicked(QModelIndex)));
 }
 
@@ -68,16 +76,18 @@ void KWNavigationWidget::initLayout()
 
 void KWNavigationWidget::headerClicked(QModelIndex idx)
 {
-    QTextDocument *doc = static_cast<QTextDocument *>(
-        m_model->itemFromIndex(idx)->data(Qt::UserRole + 2).value<void *>());
+    if (idx.column() == 0) {
+        QTextDocument *doc = static_cast<QTextDocument *>(
+            m_model->itemFromIndex(idx)->data(Qt::UserRole + 2).value<void *>());
 
-    int position = m_model->itemFromIndex(idx)->data(Qt::UserRole + 1).toInt();
+        int position = m_model->itemFromIndex(idx)->data(Qt::UserRole + 1).toInt();
 
-    KoTextDocument(doc).textEditor()->setPosition(position); // placing cursor
-    m_canvas->view()->setFocus(); // passing focus
+        KoTextDocument(doc).textEditor()->setPosition(position); // placing cursor
+        m_canvas->view()->setFocus(); // passing focus
 
-    KoTextLayoutRootArea *a = m_layout->rootAreaForPosition(position);
-    m_canvas->view()->goToPage(*(static_cast<KWPage *>(a->page()))); // showing needed page
+        KoTextLayoutRootArea *a = m_layout->rootAreaForPosition(position);
+        m_canvas->view()->goToPage(*(static_cast<KWPage *>(a->page()))); // showing needed page
+    }
 }
 
 void KWNavigationWidget::updateData()
@@ -87,11 +97,6 @@ void KWNavigationWidget::updateData()
     }
 
     m_model->clear();
-    m_model->setColumnCount(2);
-
-    QStringList head;
-    head << "Header" << "Page number";
-    m_model->setHorizontalHeaderLabels(head);
 
     QStack< QPair<QStandardItem *, int> > curChain;
     curChain.push(QPair<QStandardItem *, int>(m_model->invisibleRootItem(), 0));
