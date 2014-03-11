@@ -428,8 +428,8 @@ protected:
     /**
      * Sets the active View.
      */
-    virtual void setActiveView(QWidget *widget);
-
+    void createMainwindowGUI();
+    void setToolbarList(QList<QAction*> toolbarList);
 private slots:
 
     /**
@@ -440,8 +440,6 @@ private slots:
 // ---------------------  PartManager
 
 private:
-
-    void createMainwindowGUI();
 
     /**
      * Asks the user if they really want to save the document.

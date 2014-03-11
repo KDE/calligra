@@ -501,7 +501,7 @@ void KoMainWindow::addView(KoView *view)
     guiFactory()->addClient(view);
     showView(view);
 
-    bool viewHasDocument = d->activeView->document() != 0 ? true : false;
+    bool viewHasDocument = d->activeView ? (d->activeView->document() ? true : false) : false;
 
     d->showDocumentInfo->setEnabled(viewHasDocument);
     d->saveAction->setEnabled(viewHasDocument);
@@ -1483,13 +1483,16 @@ void KoMainWindow::slotToolbarToggled(bool toggle)
     // The action (sender) and the toolbar have the same name
     KToolBar * bar = toolBar(sender()->objectName());
     if (bar) {
-        if (toggle)
+        if (toggle) {
             bar->show();
-        else
+        }
+        else {
             bar->hide();
+        }
 
-        if (d->activeView->document())
+        if (d->activeView && d->activeView->document()) {
             saveMainWindowSettings(KGlobal::config()->group(d->part->componentData().componentName()));
+        }
     } else
         kWarning(30003) << "slotToolbarToggled : Toolbar " << sender()->objectName() << " not found!";
 }
@@ -1869,6 +1872,8 @@ void KoMainWindow::newWindow()
 
 void KoMainWindow::createMainwindowGUI()
 {
+    if (d->mainWindowGuiIsBuilt) return;
+
     if ( isHelpMenuEnabled() && !d->m_helpMenu )
         d->m_helpMenu = new KHelpMenu( this, componentData().aboutData(), false, actionCollection() );
 
@@ -1886,77 +1891,10 @@ void KoMainWindow::createMainwindowGUI()
 
 }
 
-// PartManager
-
-void KoMainWindow::setActiveView(QWidget *widget)
+void KoMainWindow::setToolbarList(QList<QAction *> toolbarList)
 {
-    // don't activate twice
-    if (!widget || d->m_activeWidget == widget)
-        return;
-
-    QWidget *oldActiveWidget = d->m_activeWidget;
-
-    d->m_activeWidget = widget;
-
-    if (oldActiveWidget) {
-        QWidget *savedActiveWidget = widget;
-        d->m_activeWidget = savedActiveWidget;
-    }
-
-    // Set the new active instance in KGlobal
-    KGlobal::setActiveComponent(d->part ? d->part->componentData() : KGlobal::mainComponent());
-
-    KoXMLGUIFactory *factory = guiFactory();
-
-    if (d->activeView) {
-
-        factory->removeClient(d->activeView);
-
-        unplugActionList("toolbarlist");
-        qDeleteAll(d->toolbarList);
-        d->toolbarList.clear();
-    }
-
-    if (!d->mainWindowGuiIsBuilt) {
-        createMainwindowGUI();
-    }
-
-    if (d->part && d->m_activeWidget && d->m_activeWidget->inherits("KoView")) {
-        d->activeView = qobject_cast<KoView *>(d->m_activeWidget);
-        factory->addClient(d->activeView);
-
-        // Position and show toolbars according to user's preference
-        setAutoSaveSettings(d->part->componentData().componentName(), false);
-
-        foreach (QDockWidget *wdg, d->dockWidgets) {
-            if ((wdg->features() & QDockWidget::DockWidgetClosable) == 0) {
-                wdg->setVisible(true);
-            }
-        }
-
-        // Create and plug toolbar list for Settings menu
-        foreach(QWidget* it, factory->containers("ToolBar")) {
-            KToolBar * toolBar = ::qobject_cast<KToolBar *>(it);
-            if (toolBar) {
-                KToggleAction * act = new KToggleAction(i18n("Show %1 Toolbar", toolBar->windowTitle()), this);
-                actionCollection()->addAction(toolBar->objectName().toUtf8(), act);
-                act->setCheckedState(KGuiItem(i18n("Hide %1 Toolbar", toolBar->windowTitle())));
-                connect(act, SIGNAL(toggled(bool)), this, SLOT(slotToolbarToggled(bool)));
-                act->setChecked(!toolBar->isHidden());
-                d->toolbarList.append(act);
-            } else
-                kWarning(30003) << "Toolbar list contains a " << it->metaObject()->className() << " which is not a toolbar!";
-        }
-        plugActionList("toolbarlist", d->toolbarList);
-
-    }
-    else {
-        d->activeView = 0;
-    }
-
-    if (d->activeView) {
-        d->activeView->guiActivateEvent(true);
-    }
+    qDeleteAll(d->toolbarList);
+    d->toolbarList = toolbarList;
 }
 
 void KoMainWindow::slotDocumentTitleModified(const QString &caption, bool mod)

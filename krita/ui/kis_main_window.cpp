@@ -25,8 +25,11 @@
 
 #include <KoXMLGUIClient.h>
 #include <KoXMLGUIFactory.h>
+
 #include <kactioncollection.h>
 #include <kaction.h>
+#include <ktoggleaction.h>
+#include <ktoolbar.h>
 
 #include <KoView.h>
 #include <KoPart.h>
@@ -86,14 +89,42 @@ KisMainWindow::KisMainWindow(KoPart *part, const KComponentData &instance)
 
     guiFactory()->addClient(m_guiClient);
 
+    KGlobal::setActiveComponent(part ? part->componentData() : KGlobal::mainComponent());
 
+    createMainwindowGUI();
+
+    setAutoSaveSettings(part->componentData().componentName(), false);
+
+    foreach (QDockWidget *wdg, dockWidgets()) {
+        if ((wdg->features() & QDockWidget::DockWidgetClosable) == 0) {
+            wdg->setVisible(true);
+        }
+    }
+
+    // Create and plug toolbar list for Settings menu
+    QList<QAction *> toolbarList;
+    foreach(QWidget* it, guiFactory()->containers("ToolBar")) {
+        KToolBar * toolBar = ::qobject_cast<KToolBar *>(it);
+        if (toolBar) {
+            KToggleAction * act = new KToggleAction(i18n("Show %1 Toolbar", toolBar->windowTitle()), this);
+            actionCollection()->addAction(toolBar->objectName().toUtf8(), act);
+            act->setCheckedState(KGuiItem(i18n("Hide %1 Toolbar", toolBar->windowTitle())));
+            connect(act, SIGNAL(toggled(bool)), this, SLOT(slotToolbarToggled(bool)));
+            act->setChecked(!toolBar->isHidden());
+            toolbarList.append(act);
+        } else
+            kWarning(30003) << "Toolbar list contains a " << it->metaObject()->className() << " which is not a toolbar!";
+    }
+    plugActionList("toolbarlist", toolbarList);
+    setToolbarList(toolbarList);
 
     updateMenus();
 }
 
 void KisMainWindow::showView(KoView *view)
 {
-    setActiveView(view);
+    view->guiActivateEvent(true);
+
     m_mdiArea->addSubWindow(view);
     if (m_mdiArea->subWindowList().size() == 1) {
         view->showMaximized();
@@ -148,7 +179,6 @@ void KisMainWindow::updateMenus()
 
 void KisMainWindow::updateWindowMenu()
 {
-
 }
 
 void KisMainWindow::setActiveSubWindow(QWidget *window)
@@ -157,7 +187,10 @@ void KisMainWindow::setActiveSubWindow(QWidget *window)
     QMdiSubWindow *subwin = qobject_cast<QMdiSubWindow *>(window);
     if (subwin) {
         m_mdiArea->setActiveSubWindow(subwin);
-        setActiveView(subwin->widget());
+        KoView *view = qobject_cast<KoView *>(subwin->widget());
+        if (view) {
+            view->guiActivateEvent(true);
+        }
     }
 }
 
