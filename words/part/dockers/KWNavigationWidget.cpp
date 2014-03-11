@@ -48,8 +48,6 @@ KWNavigationWidget::KWNavigationWidget(QWidget *parent)
 
     initUi();
     initLayout();
-
-    //TODO: some configuration??
 }
 
 KWNavigationWidget::~KWNavigationWidget()
@@ -109,7 +107,7 @@ void KWNavigationWidget::updateData()
     m_model->clear();
 
     QStringList head;
-    head << "Header" << "Page number";
+    head << i18n("Section") << i18n("Page number");
     m_model->setHorizontalHeaderLabels(head);
     m_model->setColumnCount(2);
 

@@ -17,31 +17,21 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KWNAVIGATIONDOCKER_H
-#define KWNAVIGATIONDOCKER_H
+#include "KWNavigationDockerFactory.h"
+#include <dockers/KWNavigationDocker.h>
 
-// Base classes
-#include <QDockWidget>
-#include <KoCanvasObserverBase.h>
-
-class KWNavigationWidget;
-class KoCanvasBase;
-
-class KWNavigationDocker : public QDockWidget, public KoCanvasObserverBase
+KWNavigationDockerFactory::KWNavigationDockerFactory()
 {
-    Q_OBJECT
-public:
-    explicit KWNavigationDocker();
-    ~KWNavigationDocker();
-    /// reimplemented from KoCanvasObserver
-    virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas();
+}
 
-private:
-    bool m_canvasReset;
+QString KWNavigationDockerFactory::id() const
+{
+    return QString("Navigation");
+}
 
-    // The navigation widget
-    KWNavigationWidget *m_navigationWidget;
-};
-
-#endif //KWNAVIGATIONDOCKER_H
+QDockWidget *KWNavigationDockerFactory::createDockWidget()
+{
+    KWNavigationDocker *widget = new KWNavigationDocker();
+    widget->setObjectName(id());
+    return widget;
+}

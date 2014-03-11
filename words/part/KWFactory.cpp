@@ -41,7 +41,7 @@
 #endif
 #include "dockers/KWStatisticsDocker.h"
 #include "pagetool/KWPageToolFactory.h"
-#include "dockers/KWNavigationDocker.h"
+#include "dockers/KWNavigationDockerFactory.h"
 
 KComponentData *KWFactory::s_instance = 0;
 KAboutData *KWFactory::s_aboutData = 0;

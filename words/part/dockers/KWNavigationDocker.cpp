@@ -24,14 +24,16 @@
 #include <KoToolManager.h>
 #include <KoShapeManager.h>
 #include <KoCanvasResourceManager.h>
-#include "KWCanvas.h"
+#include <KWCanvas.h>
+
+#include <dockers/KWNavigationWidget.h>
 
 KWNavigationDocker::KWNavigationDocker()
+    : m_canvasReset(false)
+    , m_navigationWidget(new KWNavigationWidget(this))
 {
-    m_canvasReset = false;
     setWindowTitle(i18n("Navigation"));
 
-    m_navigationWidget = new KWNavigationWidget(this);
     setWidget(m_navigationWidget);
 }
 
@@ -49,21 +51,3 @@ void KWNavigationDocker::unsetCanvas()
 {
     m_navigationWidget->unsetCanvas();
 }
-
-KWNavigationDockerFactory::KWNavigationDockerFactory()
-{
-}
-
-QString KWNavigationDockerFactory::id() const
-{
-    return QString("Navigation");
-}
-
-QDockWidget *KWNavigationDockerFactory::createDockWidget()
-{
-    KWNavigationDocker *widget = new KWNavigationDocker();
-    widget->setObjectName(id());
-    return widget;
-}
-
-
