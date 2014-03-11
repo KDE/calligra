@@ -46,7 +46,7 @@ class Part;
 }
 
 class KXMLGUIClient;
-class KoXMLGUIFactory;
+class KXMLGUIFactory;
 class KexiMainWidget;
 class KexiUserFeedbackAgent;
 
@@ -145,12 +145,12 @@ public:
     //! Implemented by KMainWindow
 #ifdef KEXI_IMPL_WARNINGS
 #ifdef __GNUC__
-#warning TODO virtual KoXMLGUIFactory * KMainWindow::guiFactory();
+#warning TODO virtual KXMLGUIFactory * KMainWindow::guiFactory();
 #else
-#pragma WARNING( TODO virtual KoXMLGUIFactory * KMainWindow::guiFactory(); )
+#pragma WARNING( TODO virtual KXMLGUIFactory * KMainWindow::guiFactory(); )
 #endif
 #endif
-    virtual KoXMLGUIFactory* guiFactory();
+    virtual KXMLGUIFactory* guiFactory();
 
 
     /*! Used by the main kexi routine. Creates a new Kexi main window and a new KApplication object.

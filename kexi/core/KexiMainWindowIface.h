@@ -36,7 +36,7 @@ class KexiWindow;
 class KexiProject;
 class KActionCollection;
 class KXMLGUIClient;
-class KoXMLGUIFactory;
+class KXMLGUIFactory;
 class KexiSearchableModel;
 class KexiUserFeedbackAgent;
 namespace KexiPart
@@ -125,12 +125,12 @@ public:
     //! Implemented by KMainWindow
 #ifdef KEXI_IMPL_WARNINGS
 #ifdef __GNUC__
-#warning TODO virtual KoXMLGUIFactory * KMainWindow::guiFactory() = 0;
+#warning TODO virtual KXMLGUIFactory * KMainWindow::guiFactory() = 0;
 #else
-#pragma WARNING( TODO virtual KoXMLGUIFactory * KMainWindow::guiFactory() = 0; )
+#pragma WARNING( TODO virtual KXMLGUIFactory * KMainWindow::guiFactory() = 0; )
 #endif
 #endif
-    virtual KoXMLGUIFactory * guiFactory() = 0;
+    virtual KXMLGUIFactory * guiFactory() = 0;
 
     /*! Registers window \a window for watching and adds it to the main window's stack. */
     virtual void registerChild(KexiWindow *window) = 0;

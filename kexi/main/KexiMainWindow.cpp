@@ -371,9 +371,9 @@ KXMLGUIClient* KexiMainWindow::guiClient() const
     return d->dummy_KXMLGUIClient;
 }
 
-KoXMLGUIFactory* KexiMainWindow::guiFactory()
+KXMLGUIFactory* KexiMainWindow::guiFactory()
 {
-    return d->dummy_KoXMLGUIFactory;
+    return d->dummy_KXMLGUIFactory;
 }
 
 QList<QAction*> KexiMainWindow::allActions() const

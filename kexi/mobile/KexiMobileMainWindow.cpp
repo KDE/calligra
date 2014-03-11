@@ -276,7 +276,7 @@ KXMLGUIClient* KexiMobileMainWindow::guiClient() const
     return 0;
 }
 
-KoXMLGUIFactory* KexiMobileMainWindow::guiFactory()
+KXMLGUIFactory* KexiMobileMainWindow::guiFactory()
 {
     return 0;
 }

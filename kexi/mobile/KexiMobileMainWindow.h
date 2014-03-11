@@ -54,7 +54,7 @@ public slots:
     virtual QWidget* focusWidget() const;
     virtual tristate getNewObjectInfo(KexiPart::Item* partItem, KexiPart::Part* part, bool& allowOverwriting, const QString& messageWhenAskingForName = QString());
     virtual KXMLGUIClient* guiClient() const;
-    virtual KoXMLGUIFactory* guiFactory();
+    virtual KXMLGUIFactory* guiFactory();
     virtual void highlightObject(const QString& mime, const QString& name);
     virtual bool newObject(KexiPart::Info* info, bool& openingCancelled);
     virtual KexiWindow* openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool& openingCancelled, QMap< QString, QVariant >* staticObjectArgs = 0, QString* errorMessage = 0);
