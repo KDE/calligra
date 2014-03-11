@@ -129,8 +129,8 @@ KActionCollection *KoXMLGUIClient::actionCollection() const
 {
   if ( !d->m_actionCollection )
   {
-//      d->m_actionCollection = new KActionCollection( this );
-//      d->m_actionCollection->setObjectName( "KoXMLGUIClient-KActionCollection" );
+      d->m_actionCollection = new KActionCollection(0, d->m_componentData);
+      d->m_actionCollection->setObjectName( "KoXMLGUIClient-KActionCollection" );
   }
   return d->m_actionCollection;
 }

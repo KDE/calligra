@@ -45,6 +45,7 @@ namespace KDEPrivate { class KEditToolBarWidget; }
  */
 class KDEUI_EXPORT KoXMLGUIClient
 {
+
     friend class KDEPrivate::KEditToolBarWidget; // for setXMLFile(3 args)
 public:
   /**
