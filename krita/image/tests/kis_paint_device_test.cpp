@@ -136,7 +136,7 @@ void KisPaintDeviceTest::testGeometry()
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
 
-    quint8* pixel = cs->allocPixelBuffer(1);
+    quint8* pixel = new quint8[cs->pixelSize()];
     cs->fromQColor(Qt::white, pixel);
     dev->fill(0, 0, 512, 512, pixel);
 
@@ -202,7 +202,7 @@ void KisPaintDeviceTest::testCrop()
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
-    quint8* pixel = cs->allocPixelBuffer(1);
+    quint8* pixel = new quint8[cs->pixelSize()];
     cs->fromQColor(Qt::white, pixel);
     dev->fill(-14, 8, 433, 512, pixel);
 
@@ -223,7 +223,8 @@ void KisPaintDeviceTest::testRoundtripReadWrite()
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "tile.png");
     dev->convertFromQImage(image, 0);
-    quint8* bytes = cs->allocPixelBuffer(image.width() * image.height());
+
+    quint8* bytes = new quint8[cs->pixelSize() * image.width() * image.height()];
     memset(bytes, 0, image.width() * image.height() * dev->pixelSize());
     dev->readBytes(bytes, image.rect());
 
@@ -413,10 +414,10 @@ void KisPaintDeviceTest::testCaching()
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
 
-    quint8* whitePixel = cs->allocPixelBuffer(1);
+    quint8* whitePixel = new quint8[cs->pixelSize()];
     cs->fromQColor(Qt::white, whitePixel);
 
-    quint8* blackPixel = cs->allocPixelBuffer(1);
+    quint8* blackPixel = new quint8[cs->pixelSize()];
     cs->fromQColor(Qt::black, blackPixel);
 
     dev->fill(0, 0, 512, 512, whitePixel);
@@ -451,7 +452,7 @@ void KisPaintDeviceTest::testRegion()
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
 
-    quint8* whitePixel = cs->allocPixelBuffer(1);
+    quint8* whitePixel = new quint8[cs->pixelSize()];
     cs->fromQColor(Qt::white, whitePixel);
 
     dev->fill(0, 0, 10, 10, whitePixel);
@@ -494,7 +495,7 @@ void KisPaintDeviceTest::testPlanarReadWrite()
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
 
-    quint8* pixel = cs->allocPixelBuffer(1);
+    quint8* pixel = new quint8[cs->pixelSize()];
     cs->fromQColor(QColor(255, 200, 155, 100), pixel);
     dev->fill(0, 0, 5000, 5000, pixel);
     delete[] pixel;
@@ -550,7 +551,6 @@ void KisPaintDeviceTest::testPlanarReadWrite()
     QCOMPARE(c1.green(), 200);
     QCOMPARE(c1.blue(), 155);
     QCOMPARE(c1.alpha(), 100);
-
 
     qDeleteAll(planes);
     swappedPlanes.clear();
@@ -1013,11 +1013,46 @@ static bool nextRowGeneral(KisVLineIteratorSP it, int y, const QRect &rc) {
     return y < rc.width();
 }
 
-static bool nextRowGeneral(KisRectIteratorSP it, int y, const QRect &rc) {
-    Q_UNUSED(it);
-    Q_UNUSED(y);
-    Q_UNUSED(rc);
+template <class T>
+bool checkXY(const QPoint &pt, const QPoint &realPt) {
+    Q_UNUSED(pt);
+    Q_UNUSED(realPt);
     return false;
+}
+
+template <>
+bool checkXY<KisHLineIteratorSP>(const QPoint &pt, const QPoint &realPt) {
+    return pt == realPt;
+}
+
+template <>
+bool checkXY<KisVLineIteratorSP>(const QPoint &pt, const QPoint &realPt) {
+    return pt.x() == realPt.y() && pt.y() == realPt.x();
+}
+#include <kis_wrapped_rect.h>
+template <class T>
+bool checkConseqPixels(int value, const QPoint &pt, const KisWrappedRect &wrappedRect) {
+    Q_UNUSED(value);
+    Q_UNUSED(pt);
+    Q_UNUSED(wrappedRect);
+    return false;
+}
+
+template <>
+bool checkConseqPixels<KisHLineIteratorSP>(int value, const QPoint &pt, const KisWrappedRect &wrappedRect) {
+    int x = KisWrappedRect::xToWrappedX(pt.x(), wrappedRect.wrapRect());
+    int borderX = wrappedRect.originalRect().x() + wrappedRect.wrapRect().width();
+    int conseq = x >= borderX ? wrappedRect.wrapRect().right() - x + 1 : borderX - x;
+    conseq = qMin(conseq, wrappedRect.originalRect().right() - pt.x() + 1);
+
+    return value == conseq;
+}
+
+template <>
+bool checkConseqPixels<KisVLineIteratorSP>(int value, const QPoint &pt, const KisWrappedRect &wrappedRect) {
+    Q_UNUSED(pt);
+    Q_UNUSED(wrappedRect);
+    return value == 1;
 }
 
 template <class IteratorSP>
@@ -1037,12 +1072,6 @@ template <>
 KisVLineIteratorSP createIterator(KisPaintDeviceSP dev,
                                   const QRect &rc) {
     return dev->createVLineIteratorNG(rc.x(), rc.y(), rc.height());
-}
-
-template <>
-KisRectIteratorSP createIterator(KisPaintDeviceSP dev,
-                                 const QRect &rc) {
-    return dev->createRectIteratorNG(rc);
 }
 
 template <class IteratorSP>
@@ -1102,9 +1131,66 @@ void KisPaintDeviceTest::testWrappedVLineIterator()
     testWrappedLineIterator<KisVLineIteratorSP>("vline_iterator");
 }
 
-void KisPaintDeviceTest::testWrappedRectIterator()
+template <class IteratorSP>
+void testWrappedLineIteratorReadMoreThanBounds(QString testName)
 {
-    testWrappedLineIterator<KisRectIteratorSP>("rect_iterator");
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisPaintDeviceSP dev = createWrapAroundPaintDevice(cs);
+    KisPaintDeviceSP dst = new KisPaintDevice(cs);
+
+    // fill device with a gradient
+    QRect bounds = dev->defaultBounds()->bounds();
+    for (int y = bounds.y(); y < bounds.y() + bounds.height(); y++) {
+        for (int x = bounds.x(); x < bounds.x() + bounds.width(); x++) {
+            QColor c((10 * x) % 255, (10 * y) % 255, 0, 255);
+            dev->setPixel(x, y, c);
+        }
+    }
+
+    // test rect doesn't fit the wrap rect in both dimentions
+    const QRect &rect(bounds.adjusted(-6,-6,8,8));
+    KisRandomAccessorSP dstIt = dst->createRandomAccessorNG(rect.x(), rect.y());
+    IteratorSP it = createIterator<IteratorSP>(dev, rect);
+
+    for (int y = rect.y(); y < rect.y() + rect.height(); y++) {
+        for (int x = rect.x(); x < rect.x() + rect.width(); x++) {
+            quint8 *data = it->rawData();
+
+            QVERIFY(checkConseqPixels<IteratorSP>(it->nConseqPixels(), QPoint(x, y), KisWrappedRect(rect, bounds)));
+
+            dstIt->moveTo(x, y);
+            memcpy(dstIt->rawData(), data, cs->pixelSize());
+
+            QVERIFY(checkXY<IteratorSP>(QPoint(it->x(), it->y()), QPoint(x,y)));
+
+            bool stepDone = it->nextPixel();
+            QCOMPARE(stepDone, x < rect.x() + rect.width() - 1);
+        }
+        if (!nextRowGeneral(it, y, rect)) break;
+    }
+
+    testName = QString("%1_%2_%3_%4_%5")
+        .arg(testName)
+        .arg(rect.x())
+        .arg(rect.y())
+        .arg(rect.width())
+        .arg(rect.height());
+
+    QRect rc = rect;
+    QImage result = dst->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height());
+    QImage ref = dev->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height());
+
+    QVERIFY(TestUtil::checkQImage(result, "paint_device_test", "wrapped_iterators_huge", testName));
+}
+
+void KisPaintDeviceTest::testWrappedHLineIteratorReadMoreThanBounds()
+{
+    testWrappedLineIteratorReadMoreThanBounds<KisHLineIteratorSP>("hline_iterator");
+}
+
+void KisPaintDeviceTest::testWrappedVLineIteratorReadMoreThanBounds()
+{
+    testWrappedLineIteratorReadMoreThanBounds<KisVLineIteratorSP>("vline_iterator");
 }
 
 void KisPaintDeviceTest::testMoveWrapAround()
@@ -1209,5 +1295,3 @@ void KisPaintDeviceTest::testCacheState()
 
 QTEST_KDEMAIN(KisPaintDeviceTest, GUI)
 #include "kis_paint_device_test.moc"
-
-

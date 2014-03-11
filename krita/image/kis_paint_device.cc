@@ -51,7 +51,6 @@
 
 #include "tiles3/kis_hline_iterator.h"
 #include "tiles3/kis_vline_iterator.h"
-#include "tiles3/kis_rect_iterator.h"
 #include "tiles3/kis_random_accessor.h"
 
 #include "kis_default_bounds.h"
@@ -182,8 +181,7 @@ KisPaintDevice::Private::Private(KisPaintDevice *paintDevice)
 {
 }
 
-KisPaintDevice::Private::KisPaintDeviceStrategy*
-KisPaintDevice::Private::currentStrategy()
+KisPaintDevice::Private::KisPaintDeviceStrategy* KisPaintDevice::Private::currentStrategy()
 {
     if (!defaultBounds->wrapAroundMode()) {
         return basicStrategy.data();
@@ -596,10 +594,10 @@ KUndo2Command* KisPaintDevice::convertTo(const KoColorSpace * dstColorSpace, KoC
     h = rc.height();
 
     if (w == 0 || h == 0) {
-        quint8 *defPixel = dstColorSpace->allocPixelBuffer(1, true);
+        quint8 *defPixel = new quint8[dstColorSpace->pixelSize()];
+        memset(defPixel, 0, pixelSize());
         m_d->colorSpace->convertPixelsTo(defaultPixel(), defPixel, dstColorSpace, 1, renderingIntent, conversionFlags);
         setDefaultPixel(defPixel);
-        delete defPixel;
     }
     else {
         KisRandomConstAccessorSP srcIt = createRandomConstAccessorNG(x, y);
@@ -681,17 +679,30 @@ void KisPaintDevice::convertFromQImage(const QImage& _image, const KoColorProfil
     }
     // Don't convert if not no profile is given and both paint dev and qimage are rgba.
     if (!profile && colorSpace()->id() == "RGBA") {
+#if QT_VERSION >= 0x040700
+        writeBytes(image.constBits(), offsetX, offsetY, image.width(), image.height());
+#else
         writeBytes(image.bits(), offsetX, offsetY, image.width(), image.height());
+#endif
     } else {
-        quint8 * dstData = new quint8[image.width() * image.height() * pixelSize()];
-        KoColorSpaceRegistry::instance()
-                ->colorSpace(RGBAColorModelID.id(), Integer8BitsColorDepthID.id(), profile)
-                ->convertPixelsTo(image.bits(), dstData, colorSpace(), image.width() * image.height(),
-                                  KoColorConversionTransformation::InternalRenderingIntent,
-                                  KoColorConversionTransformation::InternalConversionFlags);
+        try {
+            quint8 * dstData = new quint8[image.width() * image.height() * pixelSize()];
+            KoColorSpaceRegistry::instance()
+                    ->colorSpace(RGBAColorModelID.id(), Integer8BitsColorDepthID.id(), profile)
+#if QT_VERSION >= 0x040700
+                    ->convertPixelsTo(image.constBits(), dstData, colorSpace(), image.width() * image.height(),
+#else
+                    ->convertPixelsTo(image.bits(), dstData, colorSpace(), image.width() * image.height(),
+#endif
+                                      KoColorConversionTransformation::InternalRenderingIntent,
+                                      KoColorConversionTransformation::InternalConversionFlags);
 
-        writeBytes(dstData, offsetX, offsetY, image.width(), image.height());
-        delete[] dstData;
+            writeBytes(dstData, offsetX, offsetY, image.width(), image.height());
+            delete[] dstData;
+        } catch (std::bad_alloc) {
+            warnKrita << "KisPaintDevice::convertFromQImage: Could not allocate" << image.width() * image.height() * pixelSize() << "bytes";
+            return;
+        }
     }
     m_d->cache.invalidate();
 }
@@ -721,7 +732,7 @@ QImage KisPaintDevice::convertToQImage(const KoColorProfile *  dstProfile, qint3
     if (h < 0)
         return QImage();
 
-    quint8 * data;
+    quint8 *data = 0;
     try {
         data = new quint8 [w * h * pixelSize()];
     } catch (std::bad_alloc) {
@@ -813,17 +824,6 @@ KisVLineIteratorSP KisPaintDevice::createVLineIteratorNG(qint32 x, qint32 y, qin
 KisVLineConstIteratorSP KisPaintDevice::createVLineConstIteratorNG(qint32 x, qint32 y, qint32 w) const
 {
     return m_d->currentStrategy()->createVLineConstIteratorNG(x, y, w);
-}
-
-KisRectIteratorSP KisPaintDevice::createRectIteratorNG(const QRect &rc)
-{
-    m_d->cache.invalidate();
-    return m_d->currentStrategy()->createRectIteratorNG(rc);
-}
-
-KisRectConstIteratorSP KisPaintDevice::createRectConstIteratorNG(const QRect &rc) const
-{
-    return m_d->currentStrategy()->createRectConstIteratorNG(rc);
 }
 
 KisRepeatHLineConstIteratorSP KisPaintDevice::createRepeatHLineConstIterator(qint32 x, qint32 y, qint32 w, const QRect& _dataWidth) const

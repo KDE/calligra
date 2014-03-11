@@ -24,8 +24,11 @@
 #include <KoViewConverter.h>
 
 
-KisToolRectangleBase::KisToolRectangleBase(KoCanvasBase * canvas, KisToolRectangleBase::ToolType type, const QCursor & cursor) :
-    KisToolShape(canvas, cursor), m_dragStart(0, 0), m_dragEnd(0, 0), m_type(type)
+KisToolRectangleBase::KisToolRectangleBase(KoCanvasBase * canvas, KisToolRectangleBase::ToolType type, const QCursor & cursor)
+    : KisToolShape(canvas, cursor)
+    , m_dragStart(0, 0)
+    , m_dragEnd(0, 0)
+    , m_type(type)
 {
 }
 
@@ -92,7 +95,7 @@ void KisToolRectangleBase::continuePrimaryAction(KoPointerEvent *event)
 
     m_dragCenter = QPointF((m_dragStart.x() + m_dragEnd.x()) / 2,
                            (m_dragStart.y() + m_dragEnd.y()) / 2);
-    KisToolPaint::requestUpdateOutline(event->point);
+    KisToolPaint::requestUpdateOutline(event->point, event);
 }
 
 void KisToolRectangleBase::endPrimaryAction(KoPointerEvent *event)

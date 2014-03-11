@@ -66,7 +66,6 @@ set(kowidgets_LIB_SRCS
     KoViewItemContextBar.cpp
     KoContextBarButton.cpp
     KoResourceFiltering.cpp
-
 )
 
 kde4_add_ui_files( kowidgets_LIB_SRCS

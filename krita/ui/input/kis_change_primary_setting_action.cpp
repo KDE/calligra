@@ -29,6 +29,7 @@
 
 
 KisChangePrimarySettingAction::KisChangePrimarySettingAction()
+    : KisAbstractInputAction("Change Primary Setting")
 {
     setName(i18n("Change Primary Setting"));
     setDescription(i18n("The <i>Change Primary Setting</i> action changes a tool's \"Primary Setting\", for example the brush size for the brush tool."));
@@ -37,6 +38,18 @@ KisChangePrimarySettingAction::KisChangePrimarySettingAction()
 KisChangePrimarySettingAction::~KisChangePrimarySettingAction()
 {
 
+}
+
+void KisChangePrimarySettingAction::activate(int shortcut)
+{
+    Q_UNUSED(shortcut);
+    inputManager()->toolProxy()->activateToolAction(KisTool::AlternateChangeSize);
+}
+
+void KisChangePrimarySettingAction::deactivate(int shortcut)
+{
+    Q_UNUSED(shortcut);
+    inputManager()->toolProxy()->deactivateToolAction(KisTool::AlternateChangeSize);
 }
 
 int KisChangePrimarySettingAction::priority() const

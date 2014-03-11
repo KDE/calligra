@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2014 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -568,6 +568,10 @@ void KexiFormScrollView::updateAfterCancelRowEdit()
     }
     recordNavigator()->showEditingIndicator(false);
     dbFormWidget()->editedItem = 0;
+    KexiFormDataItemInterface *item = dynamic_cast<KexiFormDataItemInterface*>(focusWidget());
+    if (item) {
+        item->selectAllOnFocusIfNeeded();
+    }
 }
 
 void KexiFormScrollView::updateAfterAcceptRowEdit()
@@ -579,6 +583,10 @@ void KexiFormScrollView::updateAfterAcceptRowEdit()
     //update visible data because there could be auto-filled (eg. autonumber) fields
     fillDataItems(*m_currentItem, cursorAtNewRow());
     d->previousRecord = m_currentItem;
+    KexiFormDataItemInterface *item = dynamic_cast<KexiFormDataItemInterface*>(focusWidget());
+    if (item) {
+        item->selectAllOnFocusIfNeeded();
+    }
 }
 
 int KexiFormScrollView::fieldNumberForColumn(int col)

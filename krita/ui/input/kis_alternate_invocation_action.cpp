@@ -34,7 +34,8 @@ struct KisAlternateInvocationAction::Private
 };
 
 KisAlternateInvocationAction::KisAlternateInvocationAction()
-    : m_d(new Private)
+    : KisAbstractInputAction("Alternate Invocation")
+    , m_d(new Private)
 {
     setName(i18n("Alternate Invocation"));
     setDescription(i18n("The <i>Alternate Invocation</i> action performs an alternate action with the current tool. For example, using the brush tool it picks a color from the canvas."));
@@ -55,6 +56,46 @@ KisAlternateInvocationAction::~KisAlternateInvocationAction()
 {
 }
 
+KisTool::ToolAction KisAlternateInvocationAction::shortcutToToolAction(int shortcut)
+{
+    KisTool::ToolAction action = KisTool::Alternate_NONE;
+
+    switch ((Shortcut)shortcut) {
+    case PickColorFgNodeToggleShortcut:
+        action = KisTool::AlternatePickFgNode;
+        break;
+    case PickColorBgNodeToggleShortcut:
+        action = KisTool::AlternatePickBgNode;
+        break;
+    case PickColorFgImageToggleShortcut:
+        action = KisTool::AlternatePickFgImage;
+        break;
+    case PickColorBgImageToggleShortcut:
+        action = KisTool::AlternatePickBgImage;
+        break;
+    case PrimaryAlternateToggleShortcut:
+        action = KisTool::AlternateSecondary;
+        break;
+    case SecondaryAlternateToggleShortcut:
+        action = KisTool::AlternateThird;
+        break;
+    }
+
+    return action;
+}
+
+void KisAlternateInvocationAction::activate(int shortcut)
+{
+    KisTool::ToolAction action = shortcutToToolAction(shortcut);
+    inputManager()->toolProxy()->activateToolAction(action);
+}
+
+void KisAlternateInvocationAction::deactivate(int shortcut)
+{
+    KisTool::ToolAction action = shortcutToToolAction(shortcut);
+    inputManager()->toolProxy()->deactivateToolAction(action);
+}
+
 int KisAlternateInvocationAction::priority() const
 {
     return 9;
@@ -69,26 +110,7 @@ void KisAlternateInvocationAction::begin(int shortcut, QEvent *event)
     QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
     QMouseEvent targetEvent(QEvent::MouseButtonPress, mouseEvent->pos(), Qt::LeftButton, Qt::LeftButton, Qt::ControlModifier);;
 
-    switch ((Shortcut)shortcut) {
-    case PickColorFgNodeToggleShortcut:
-        m_d->savedAction = KisTool::AlternatePickFgNode;
-        break;
-    case PickColorBgNodeToggleShortcut:
-        m_d->savedAction = KisTool::AlternatePickBgNode;
-        break;
-    case PickColorFgImageToggleShortcut:
-        m_d->savedAction = KisTool::AlternatePickFgImage;
-        break;
-    case PickColorBgImageToggleShortcut:
-        m_d->savedAction = KisTool::AlternatePickBgImage;
-        break;
-    case PrimaryAlternateToggleShortcut:
-        m_d->savedAction = KisTool::AlternateSecondary;
-        break;
-    case SecondaryAlternateToggleShortcut:
-        m_d->savedAction = KisTool::AlternateThird;
-        break;
-    }
+    m_d->savedAction = shortcutToToolAction(shortcut);
 
     inputManager()->toolProxy()->forwardEvent(
         KisToolProxy::BEGIN, m_d->savedAction, &targetEvent, event,

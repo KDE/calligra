@@ -41,6 +41,7 @@
 #include "kis_outline_generator.h"
 #include <kis_iterator_ng.h>
 
+
 struct KisPixelSelection::Private {
     KisSelectionWSP parentSelection;
 
@@ -244,10 +245,10 @@ void KisPixelSelection::invert()
     QRect rc = region().boundingRect();
 
     if (!rc.isEmpty()) {
-        KisRectIteratorSP it = createRectIteratorNG(rc);
+        KisSequentialIterator it(this, rc);
         do {
-            *(it->rawData()) = MAX_SELECTED - *(it->rawData());
-        } while (it->nextPixel());
+            *(it.rawData()) = MAX_SELECTED - *(it.rawData());
+        } while (it.nextPixel());
     }
     quint8 defPixel = MAX_SELECTED - *defaultPixel();
     setDefaultPixel(&defPixel);
@@ -258,6 +259,15 @@ void KisPixelSelection::invert()
 
         m_d->outlineCache = path - m_d->outlineCache;
     }
+}
+
+void KisPixelSelection::move(const QPoint &pt)
+{
+    if (m_d->outlineCacheValid) {
+        m_d->outlineCache.translate(pt - QPoint(x(), y()));
+    }
+
+    KisPaintDevice::move(pt);
 }
 
 bool KisPixelSelection::isTotallyUnselected(const QRect & r) const
@@ -287,8 +297,8 @@ QVector<QPolygon> KisPixelSelection::outline() const
     qint32 height = selectionExtent.height();
 
     KisOutlineGenerator generator(colorSpace(), MIN_SELECTED);
-    // If the selection is small using a buffer is much fast
-    if (width*height < 5000000) {
+    // If the selection is small using a buffer is much faster
+    try {
         quint8* buffer = new quint8[width*height];
         readBytes(buffer, xOffset, yOffset, width, height);
 
@@ -297,6 +307,11 @@ QVector<QPolygon> KisPixelSelection::outline() const
         delete[] buffer;
         return paths;
     }
+    catch(std::bad_alloc) {
+        // Allocating so much memory failed, so we fall through to the slow option.
+        warnKrita << "KisPixelSelection::outline ran out of memory allocating" << width << "*" << height << "bytes.";
+    }
+
     return generator.outline(this, xOffset, yOffset, width, height);
 }
 

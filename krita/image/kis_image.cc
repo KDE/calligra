@@ -71,6 +71,7 @@
 #include "kis_transform_worker.h"
 #include "kis_processing_applicator.h"
 #include "processing/kis_crop_processing_visitor.h"
+#include "processing/kis_crop_selections_processing_visitor.h"
 #include "processing/kis_transform_processing_visitor.h"
 #include "commands_new/kis_image_resize_command.h"
 #include "commands_new/kis_image_set_resolution_command.h"
@@ -939,12 +940,17 @@ KisLayerSP KisImage::mergeDown(KisLayerSP layer, const KisMetaData::MergeStrateg
     QRect layerProjectionExtent = layer->projection()->extent();
     QRect prevLayerProjectionExtent = prevLayer->projection()->extent();
 
+    bool alphaDisabled = layer->alphaChannelDisabled();
+    bool prevAlphaDisabled = prevLayer->alphaChannelDisabled();
     KisPaintDeviceSP mergedDevice;
 
-    if (layer->compositeOpId() != prevLayer->compositeOpId() || layer->opacity() != prevLayer->opacity()) {
+    if (layer->compositeOpId() != prevLayer->compositeOpId() || prevLayer->opacity() != OPACITY_OPAQUE_U8) {
 
         mergedDevice = new KisPaintDevice(layer->colorSpace(), "merged");
         KisPainter gc(mergedDevice);
+
+        //Copy the pixels of previous layer with their actual alpha value
+        prevLayer->disableAlphaChannel(false);
 
         gc.setChannelFlags(prevLayer->channelFlags());
         gc.setCompositeOp(mergedDevice->colorSpace()->compositeOp(prevLayer->compositeOpId()));
@@ -952,30 +958,49 @@ KisLayerSP KisImage::mergeDown(KisLayerSP layer, const KisMetaData::MergeStrateg
 
         gc.bitBlt(prevLayerProjectionExtent.topLeft(), prevLayer->projection(), prevLayerProjectionExtent);
 
+        //Restore the previous prevLayer disableAlpha status for correct undo/redo
+        prevLayer->disableAlphaChannel(prevAlphaDisabled);
 
+        //Paint the pixels of the current layer, using their actual alpha value
+        if (alphaDisabled == prevAlphaDisabled) {
+            layer->disableAlphaChannel(false);
+        }
         gc.setChannelFlags(layer->channelFlags());
         gc.setCompositeOp(mergedDevice->colorSpace()->compositeOp(layer->compositeOpId()));
         gc.setOpacity(layer->opacity());
 
         gc.bitBlt(layerProjectionExtent.topLeft(), layer->projection(), layerProjectionExtent);
+
+        //Restore the layer disableAlpha status for correct undo/redo
+        layer->disableAlphaChannel(alphaDisabled);
     }
     else {
+        //Copy prevLayer
         lock();
         mergedDevice = new KisPaintDevice(*prevLayer->projection());
         unlock();
 
+        //Paint layer on the copy
         KisPainter gc(mergedDevice);
+        if (alphaDisabled == prevAlphaDisabled) {
+            layer->disableAlphaChannel(false);
+        }
         gc.setChannelFlags(layer->channelFlags());
         gc.setCompositeOp(mergedDevice->colorSpace()->compositeOp(layer->compositeOpId()));
         gc.setOpacity(layer->opacity());
+
         gc.bitBlt(layerProjectionExtent.topLeft(), layer->projection(), layerProjectionExtent);
+
+        //Restore the layer disableAlpha status for correct undo/redo
+        layer->disableAlphaChannel(alphaDisabled);
     }
+
 
     KisPaintLayerSP mergedLayer = new KisPaintLayer(this, prevLayer->name(), OPACITY_OPAQUE_U8, mergedDevice);
     Q_CHECK_PTR(mergedLayer);
     mergedLayer->setCompositeOp(COMPOSITE_OVER);
     mergedLayer->setChannelFlags(layer->channelFlags());
-    mergedLayer->disableAlphaChannel(prevLayer->alphaChannelDisabled());
+    mergedLayer->disableAlphaChannel(prevAlphaDisabled);
 
     // Merge meta data
     QList<const KisMetaData::Store*> srcs;
@@ -1130,73 +1155,79 @@ QImage KisImage::convertToQImage(const QRect& scaledRect, const QSize& scaledIma
         return QImage();
     }
 
-    qint32 imageWidth = width();
-    qint32 imageHeight = height();
-    quint32 pixelSize = colorSpace()->pixelSize();
+    try {
+        qint32 imageWidth = width();
+        qint32 imageHeight = height();
+        quint32 pixelSize = colorSpace()->pixelSize();
 
-    double xScale = static_cast<double>(imageWidth) / scaledImageSize.width();
-    double yScale = static_cast<double>(imageHeight) / scaledImageSize.height();
+        double xScale = static_cast<double>(imageWidth) / scaledImageSize.width();
+        double yScale = static_cast<double>(imageHeight) / scaledImageSize.height();
 
-    QRect srcRect;
+        QRect srcRect;
 
-    srcRect.setLeft(static_cast<int>(scaledRect.left() * xScale));
-    srcRect.setRight(static_cast<int>(ceil((scaledRect.right() + 1) * xScale)) - 1);
-    srcRect.setTop(static_cast<int>(scaledRect.top() * yScale));
-    srcRect.setBottom(static_cast<int>(ceil((scaledRect.bottom() + 1) * yScale)) - 1);
+        srcRect.setLeft(static_cast<int>(scaledRect.left() * xScale));
+        srcRect.setRight(static_cast<int>(ceil((scaledRect.right() + 1) * xScale)) - 1);
+        srcRect.setTop(static_cast<int>(scaledRect.top() * yScale));
+        srcRect.setBottom(static_cast<int>(ceil((scaledRect.bottom() + 1) * yScale)) - 1);
 
-    KisPaintDeviceSP mergedImage = projection();
-    quint8 *scaledImageData = new quint8[scaledRect.width() * scaledRect.height() * pixelSize];
+        KisPaintDeviceSP mergedImage = projection();
+        quint8 *scaledImageData = new quint8[scaledRect.width() * scaledRect.height() * pixelSize];
 
-    quint8 *imageRow = new quint8[srcRect.width() * pixelSize];
-    const qint32 imageRowX = srcRect.x();
+        quint8 *imageRow = new quint8[srcRect.width() * pixelSize];
+        const qint32 imageRowX = srcRect.x();
 
-    for (qint32 y = 0; y < scaledRect.height(); ++y) {
+        for (qint32 y = 0; y < scaledRect.height(); ++y) {
 
-        qint32 dstY = scaledRect.y() + y;
-        qint32 dstX = scaledRect.x();
-        qint32 srcY = (dstY * imageHeight) / scaledImageSize.height();
+            qint32 dstY = scaledRect.y() + y;
+            qint32 dstX = scaledRect.x();
+            qint32 srcY = (dstY * imageHeight) / scaledImageSize.height();
 
-        mergedImage->readBytes(imageRow, imageRowX, srcY, srcRect.width(), 1);
+            mergedImage->readBytes(imageRow, imageRowX, srcY, srcRect.width(), 1);
 
-        quint8 *dstPixel = scaledImageData + (y * scaledRect.width() * pixelSize);
-        quint32 columnsRemaining = scaledRect.width();
+            quint8 *dstPixel = scaledImageData + (y * scaledRect.width() * pixelSize);
+            quint32 columnsRemaining = scaledRect.width();
 
-        while (columnsRemaining > 0) {
+            while (columnsRemaining > 0) {
 
-            qint32 srcX = (dstX * imageWidth) / scaledImageSize.width();
+                qint32 srcX = (dstX * imageWidth) / scaledImageSize.width();
 
-            memcpy(dstPixel, imageRow + ((srcX - imageRowX) * pixelSize), pixelSize);
+                memcpy(dstPixel, imageRow + ((srcX - imageRowX) * pixelSize), pixelSize);
 
-            ++dstX;
-            dstPixel += pixelSize;
-            --columnsRemaining;
+                ++dstX;
+                dstPixel += pixelSize;
+                --columnsRemaining;
+            }
         }
-    }
-    delete [] imageRow;
+        delete [] imageRow;
 
-    QImage image = colorSpace()->convertToQImage(scaledImageData, scaledRect.width(), scaledRect.height(), const_cast<KoColorProfile*>(profile),
-                                                 KoColorConversionTransformation::InternalRenderingIntent,
-                                                 KoColorConversionTransformation::InternalConversionFlags);
+        QImage image = colorSpace()->convertToQImage(scaledImageData, scaledRect.width(), scaledRect.height(), const_cast<KoColorProfile*>(profile),
+                                                     KoColorConversionTransformation::InternalRenderingIntent,
+                                                     KoColorConversionTransformation::InternalConversionFlags);
 
-    delete [] scaledImageData;
+        delete [] scaledImageData;
 
-#ifdef __BIG_ENDIAN__
-    uchar * data = image.bits();
-    for (int i = 0; i < image.width() * image.height(); ++i) {
-        uchar r, g, b, a;
-        a = data[0];
-        b = data[1];
-        g = data[2];
-        r = data[3];
-        data[0] = r;
-        data[1] = g;
-        data[2] = b;
-        data[3] = a;
-        data += 4;
-    }
+#ifdef WORDS_BIGENDIAN
+        uchar * data = image.bits();
+        for (int i = 0; i < image.width() * image.height(); ++i) {
+            uchar r, g, b, a;
+            a = data[0];
+            b = data[1];
+            g = data[2];
+            r = data[3];
+            data[0] = r;
+            data[1] = g;
+            data[2] = b;
+            data[3] = a;
+            data += 4;
+        }
 #endif
 
-    return image;
+        return image;
+    }
+    catch (std::bad_alloc) {
+        warnKrita << "KisImage::convertToQImage ran out of memory";
+        return QImage();
+    }
 }
 
 void KisImage::notifyLayersChanged()
@@ -1556,9 +1587,47 @@ void KisImage::removeComposition(KisLayerComposition* composition)
     delete composition;
 }
 
+bool checkMasksNeedConersion(KisNodeSP root, const QRect &bounds)
+{
+    KisSelectionMask *mask = dynamic_cast<KisSelectionMask*>(root.data());
+    if (mask &&
+        (!bounds.contains(mask->paintDevice()->exactBounds()) ||
+         mask->selection()->hasShapeSelection())) {
+
+        return true;
+    }
+
+    KisNodeSP node = root->firstChild();
+
+    while (node) {
+        if (checkMasksNeedConersion(node, bounds)) {
+            return true;
+        }
+
+        node = node->nextSibling();
+    }
+
+    return false;
+}
+
 void KisImage::setWrapAroundModePermitted(bool value)
 {
     m_d->wrapAroundModePermitted = value;
+
+    if (m_d->wrapAroundModePermitted &&
+        checkMasksNeedConersion(root(), bounds())) {
+
+        KisProcessingApplicator applicator(this, root(),
+                                           KisProcessingApplicator::RECURSIVE,
+                                           KisImageSignalVector() << ModifiedSignal,
+                                           i18n("Crop Selections"));
+
+        KisProcessingVisitorSP visitor =
+            new KisCropSelectionsProcessingVisitor(bounds());
+
+        applicator.applyVisitor(visitor, KisStrokeJobData::CONCURRENT);
+        applicator.end();
+    }
 }
 
 bool KisImage::wrapAroundModePermitted() const

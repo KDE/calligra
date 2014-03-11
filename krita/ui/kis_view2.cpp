@@ -118,7 +118,6 @@
 #include "kra/kis_kra_loader.h"
 #include "widgets/kis_floating_message.h"
 
-#include <QDebug>
 #include <QPoint>
 #include "kis_node_commands_adapter.h"
 #include <kis_paintop_preset.h>
@@ -232,6 +231,7 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
     Q_ASSERT(doc->image());
 
     setXMLFile("krita.rc");
+    KisConfig cfg;
 
     setFocusPolicy(Qt::NoFocus);
 
@@ -248,7 +248,6 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
     canvasController->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     canvasController->setDrawShadow(false);
     canvasController->setCanvasMode(KoCanvasController::Infinite);
-    KisConfig cfg;
     canvasController->setVastScrolling(cfg.vastScrolling());
 
     m_d->canvasController = canvasController;
@@ -258,26 +257,32 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
 
     KConfigGroup grp(KGlobal::config(), "krita/crashprevention");
     if (grp.readEntry("CreatingCanvas", false)) {
-        KisConfig cfg;
+        cfg.setUseOpenGL(false);
+    }
+    if (cfg.canvasState() == "OPENGL_FAILED") {
         cfg.setUseOpenGL(false);
     }
     grp.writeEntry("CreatingCanvas", true);
+    grp.sync();
     m_d->canvas = new KisCanvas2(m_d->viewConverter, this, doc->shapeController());
     grp.writeEntry("CreatingCanvas", false);
+    grp.sync();
     connect(m_d->resourceProvider, SIGNAL(sigDisplayProfileChanged(const KoColorProfile*)), m_d->canvas, SLOT(slotSetDisplayProfile(const KoColorProfile*)));
 
     m_d->canvasController->setCanvas(m_d->canvas);
 
     m_d->resourceProvider->setResourceManager(m_d->canvas->resourceManager());
 
-    createManagers();
     createActions();
+    createManagers();
 
     m_d->controlFrame = new KisControlFrame(this);
 
     Q_ASSERT(m_d->canvasController);
     KoToolManager::instance()->addController(m_d->canvasController);
     KoToolManager::instance()->registerTools(actionCollection(), m_d->canvasController);
+
+
 
     // krita/krita.rc must also be modified to add actions to the menu entries
 
@@ -446,7 +451,7 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
 #endif
 
     KoResourceServer<KisPaintOpPreset> * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
-    KisPaintOpPreset *preset = rserver->resourceByName("Basic_circle");
+    KisPaintOpPreset *preset = rserver->resourceByName("Basic_tip_default");
     if (!preset) {
         if (rserver->resources().isEmpty()) {
             KMessageBox::error(this, i18n("Krita cannot find any brush presets and will close now. Please check your installation.", i18n("Critical Error")));
@@ -629,6 +634,16 @@ bool KisView2::event( QEvent* event )
 
             syncObject->initialized = true;
 
+            QMainWindow* mainWindow = qobject_cast<QMainWindow*>(qApp->activeWindow());
+            if(mainWindow) {
+                QList<QDockWidget*> dockWidgets = mainWindow->findChildren<QDockWidget*>();
+                foreach(QDockWidget* widget, dockWidgets) {
+                    if (widget->isFloating()) {
+                        widget->hide();
+                    }
+                }
+            }
+
             return true;
         }
         case ViewModeSwitchEvent::SwitchedToDesktopModeEvent: {
@@ -664,6 +679,17 @@ bool KisView2::event( QEvent* event )
 
                 actionCollection()->action("zoom_in")->trigger();
                 qApp->processEvents();
+
+
+                QMainWindow* mainWindow = qobject_cast<QMainWindow*>(qApp->activeWindow());
+                if(mainWindow) {
+                    QList<QDockWidget*> dockWidgets = mainWindow->findChildren<QDockWidget*>();
+                    foreach(QDockWidget* widget, dockWidgets) {
+                        if (widget->isFloating()) {
+                            widget->show();
+                        }
+                    }
+                }
 
                 zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, syncObject->zoomLevel);
                 canvasControllerWidget()->rotateCanvas(syncObject->rotationAngle - canvasBase()->rotationAngle());
@@ -854,7 +880,7 @@ void KisView2::slotLoadingFinished()
      */
     //image()->compositeProgressProxy()->addProxy(m_d->statusBar->progress()->progressProxy());
 
-    m_d->canvas->connectCurrentImage();
+    m_d->canvas->initializeImage();
 
     if (m_d->controlFrame) {
         connect(image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), m_d->controlFrame->paintopBox(), SLOT(slotColorSpaceChanged(const KoColorSpace*)));
@@ -967,6 +993,7 @@ void KisView2::updateGUI()
     m_d->perspectiveGridManager->updateGUI();
     m_d->actionManager->updateGUI();
 }
+
 
 
 void KisView2::slotBlacklistCleanup()
@@ -1363,40 +1390,91 @@ void KisView2::showStatusBar(bool toggled)
     }
 }
 
+#if defined HAVE_OPENGL && defined Q_OS_WIN32
+#include <QGLContext>
+#endif
+
 void KisView2::showJustTheCanvas(bool toggled)
 {
     KisConfig cfg;
-    KToggleAction *action;
+
+/**
+ * Workaround for a broken Intel video driver on Windows :(
+ * See bug 330040
+ */
+#if defined HAVE_OPENGL && defined Q_OS_WIN32
+
+    if (toggled && cfg.useOpenGL()) {
+        QString renderer((const char*)glGetString(GL_RENDERER));
+        bool failingDriver = renderer.startsWith("Intel(R) HD Graphics");
+
+        if (failingDriver &&
+            cfg.hideStatusbarFullscreen() &&
+            cfg.hideDockersFullscreen() &&
+            cfg.hideTitlebarFullscreen() &&
+            cfg.hideMenuFullscreen() &&
+            cfg.hideToolbarFullscreen() &&
+            cfg.hideScrollbarsFullscreen()) {
+
+            int result =
+                KMessageBox::warningYesNo(this,
+                                          "Intel(R) HD Graphics video adapters "
+                                          "are known to have problems with running "
+                                          "Krita in pure canvas only mode. At least "
+                                          "one UI control must be shown to "
+                                          "workaround it.\n\nShow the scroll bars?",
+                                          "Failing video adapter",
+                                          KStandardGuiItem::yes(),
+                                          KStandardGuiItem::no(),
+                                          "messagebox_WorkaroundIntelVideoOnWindows");
+
+            if (result == KMessageBox::Yes) {
+                cfg.setHideScrollbarsFullscreen(false);
+            }
+        }
+    }
+
+#endif /* defined HAVE_OPENGL && defined Q_OS_WIN32 */
+
+    KoMainWindow* main = mainWindow();
+    if(!main) {
+        main = window()->findChildren<KoMainWindow*>().value(0);
+    }
+    if(!main) {
+        dbgUI << "Unable to switch to canvas-only mode, main window not found";
+        return;
+    }
 
     if (cfg.hideStatusbarFullscreen()) {
-        action = dynamic_cast<KToggleAction*>(actionCollection()->action("showStatusBar"));
+        if(main->statusBar() && main->statusBar()->isVisible() == toggled) {
+            main->statusBar()->setVisible(!toggled);
+        }
+    }
+
+    if (cfg.hideDockersFullscreen()) {
+        KToggleAction* action = qobject_cast<KToggleAction*>(main->actionCollection()->action("view_toggledockers"));
         if (action && action->isChecked() == toggled) {
             action->setChecked(!toggled);
         }
     }
 
-    if (cfg.hideDockersFullscreen() && mainWindow()) {
-        action = dynamic_cast<KToggleAction*>(mainWindow()->actionCollection()->action("view_toggledockers"));
-        if (action && action->isChecked() == toggled) {
-            action->setChecked(!toggled);
+    if (cfg.hideTitlebarFullscreen()) {
+        if(toggled) {
+            window()->setWindowState( window()->windowState() | Qt::WindowFullScreen);
+        } else {
+            window()->setWindowState( window()->windowState() & ~Qt::WindowFullScreen);
         }
     }
 
-    if (cfg.hideTitlebarFullscreen() && mainWindow()) {
-        action = dynamic_cast<KToggleAction*>(mainWindow()->actionCollection()->action("view_fullscreen"));
-        if (action && action->isChecked() != toggled) {
-            action->setChecked(toggled);
+    if (cfg.hideMenuFullscreen()) {
+        if (main->menuBar()->isVisible() == toggled) {
+            main->menuBar()->setVisible(!toggled);
         }
     }
 
-    if (cfg.hideMenuFullscreen() && mainWindow()) {
-        if (mainWindow()->menuBar()->isVisible() == toggled) {
-            mainWindow()->menuBar()->setVisible(!toggled);
-        }
-    }
-
-    if (cfg.hideToolbarFullscreen() && mainWindow()) {
-        foreach(KToolBar* toolbar, mainWindow()->toolBars()) {
+    if (cfg.hideToolbarFullscreen()) {
+        QList<QToolBar*> toolBars = main->findChildren<QToolBar*>();
+        foreach(QToolBar* toolbar, toolBars) {
             if (toolbar->isVisible() == toggled) {
                 toolbar->setVisible(!toggled);
             }

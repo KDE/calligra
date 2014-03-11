@@ -146,6 +146,9 @@ KisTIFFConverter::KisTIFFConverter(KisDoc2 *doc)
     m_doc = doc;
     m_job = 0;
     m_stop = false;
+
+    TIFFSetWarningHandler(0);
+    TIFFSetErrorHandler(0);
 }
 
 KisTIFFConverter::~KisTIFFConverter()
@@ -230,7 +233,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory(TIFF* image)
         color_type = PHOTOMETRIC_MINISWHITE;
     }
 
-    uint8 dstDepth;
+    uint8 dstDepth = 0;
     QPair<QString, QString> colorSpaceId = getColorSpaceForColorType(sampletype, color_type, depth, image, nbchannels, extrasamplescount, dstDepth);
     if (colorSpaceId.first.isEmpty()) {
         dbgFile << "Image has an unsupported colorspace :" << color_type << " for this depth :" << depth;

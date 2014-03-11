@@ -55,7 +55,8 @@ private slots:
     void testWrappedRandomAccessor();
     void testWrappedHLineIterator();
     void testWrappedVLineIterator();
-    void testWrappedRectIterator();
+    void testWrappedHLineIteratorReadMoreThanBounds();
+    void testWrappedVLineIteratorReadMoreThanBounds();
     void testMoveWrapAround();
 
     void testCacheState();

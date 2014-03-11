@@ -22,10 +22,12 @@
 #include <iostream>
 
 KisVLineIterator2::KisVLineIterator2(KisDataManager *dataManager, qint32 x, qint32 y, qint32 h, qint32 offsetX, qint32 offsetY, bool writable)
-    : KisBaseIterator(dataManager, writable)
+    : KisBaseIterator(dataManager, writable),
+      m_offsetX(offsetX),
+      m_offsetY(offsetY)
 {
-    x -= offsetX;
-    y -= offsetY;
+    x -= m_offsetX;
+    y -= m_offsetY;
     Q_ASSERT(dataManager != 0);
 
     Q_ASSERT(h > 0); // for us, to warn us when abusing the iterators
@@ -38,6 +40,8 @@ KisVLineIterator2::KisVLineIterator2(KisDataManager *dataManager, qint32 x, qint
 
     m_top = y;
     m_bottom = y + h - 1;
+
+    m_left = m_x;
 
     m_havePixels = (h == 0) ? false : true;
     if (m_top > m_bottom) {
@@ -64,6 +68,27 @@ KisVLineIterator2::KisVLineIterator2(KisDataManager *dataManager, qint32 x, qint
     }
     m_index = 0;
     switchToTile(m_topInTopmostTile);
+}
+
+void KisVLineIterator2::resetPixelPos()
+{
+    m_y = m_top;
+
+    m_index = 0;
+    switchToTile(m_topInTopmostTile);
+
+    m_havePixels = true;
+}
+
+void KisVLineIterator2::resetColumnPos()
+{
+    m_x = m_left;
+
+    m_column = xToCol(m_x);
+    m_xInTile = calcXInTile(m_x, m_column);
+    preallocateTiles();
+
+    resetPixelPos();
 }
 
 bool KisVLineIterator2::nextPixel()
@@ -201,10 +226,10 @@ void KisVLineIterator2::preallocateTiles()
 
 qint32 KisVLineIterator2::x() const
 {
-    return m_x;
+    return m_x + m_offsetX;
 }
 
 qint32 KisVLineIterator2::y() const
 {
-    return m_y;
+    return m_y + m_offsetY;
 }

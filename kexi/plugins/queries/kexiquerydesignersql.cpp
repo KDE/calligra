@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2004-2013 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2014 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -210,7 +210,7 @@ tristate KexiQueryDesignerSQLView::beforeSwitchTo(Kexi::ViewMode mode, bool &don
         if (sqlText.isEmpty()) {
             //special case: empty SQL text
             if (temp->query()) {
-                temp->queryChangedInPreviousView = true; //query changed
+                temp->setQueryChangedInPreviousView(true); //query changed
                 temp->setQuery(0);
 //    delete temp->query; //safe?
 //    temp->query = 0;
@@ -222,7 +222,7 @@ tristate KexiQueryDesignerSQLView::beforeSwitchTo(Kexi::ViewMode mode, bool &don
                     && !d->justSwitchedFromNoViewMode //unchanged, but we should check SQL text
                     && compareSQL(d->origStatement, d->editor->text())) {
                 //statement unchanged! - nothing to do
-                temp->queryChangedInPreviousView = false;
+                temp->setQueryChangedInPreviousView(false);
             } else {
                 //yes: parse SQL text
                 if (!slotCheckQuery()) {
@@ -233,7 +233,7 @@ tristate KexiQueryDesignerSQLView::beforeSwitchTo(Kexi::ViewMode mode, bool &don
                         return cancelled;
                     }
                     //do not change original query - it's invalid
-                    temp->queryChangedInPreviousView = false;
+                    temp->setQueryChangedInPreviousView(false);
                     //this view is no longer _just_ switched from "NoViewMode"
                     d->justSwitchedFromNoViewMode = false;
                     return true;
@@ -245,9 +245,10 @@ tristate KexiQueryDesignerSQLView::beforeSwitchTo(Kexi::ViewMode mode, bool &don
 //    delete temp->query; //safe?
 //    temp->query = d->parsedQuery;
                 d->parsedQuery = 0;
-                temp->queryChangedInPreviousView = true;
+                temp->setQueryChangedInPreviousView(true);
             }
         }
+        d->origStatement = d->editor->text();
     }
 
     d->editor->setFocus();
@@ -276,23 +277,28 @@ KexiQueryDesignerSQLView::afterSwitchFrom(Kexi::ViewMode mode)
         return false;
     }
 
-    if (!query) {
-        //no valid query schema delivered: just load sql text, no matter if it's valid
-        if (!loadDataBlock(d->origStatement, "sql", true /*canBeEmpty*/))
-            return false;
-    } else {
+    if (query) {
         // Use query with Kexi keywords (but not driver-specific keywords) escaped.
         temp->setQuery(query);
-//  temp->query = query;
-        KexiDB::Connection::SelectStatementOptions options;
-        options.identifierEscaping = KexiDB::Driver::EscapeKexi;
-        options.addVisibleLookupColumns = false;
-        d->origStatement = KexiDB::selectStatement(0, *query, options).trimmed();
+        if (temp->queryChangedInPreviousView()) {
+            KexiDB::Connection::SelectStatementOptions options;
+            options.identifierEscaping = KexiDB::Driver::EscapeKexi;
+            options.addVisibleLookupColumns = false;
+            d->origStatement = KexiDB::selectStatement(0, *query, options).trimmed();
+        }
+    }
+    if (d->origStatement.isEmpty()) {
+        //no valid query delivered or query has not been modified:
+        // just load sql text, no matter if it's valid
+        if (!loadDataBlock(d->origStatement, "sql", true /*canBeEmpty*/))
+            return false;
     }
 
-    d->slotTextChangedEnabled = false;
-    d->editor->setText(d->origStatement);
-    d->slotTextChangedEnabled = true;
+    if (!compareSQL(d->origStatement, d->editor->text())) {
+        d->slotTextChangedEnabled = false;
+        d->editor->setText(d->origStatement);
+        d->slotTextChangedEnabled = true;
+    }
     QTimer::singleShot(100, d->editor, SLOT(setFocus()));
     return true;
 }

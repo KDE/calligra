@@ -98,7 +98,7 @@ protected:
     virtual void dropEvent(QDropEvent * event);
 
 private:
-    QStringList m_mimeFiletr;
+    QStringList m_mimeFilter;
 
     KoOpenPanePrivate * const d;
 };

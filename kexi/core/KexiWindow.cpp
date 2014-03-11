@@ -199,12 +199,6 @@ void KexiWindow::addView(KexiView *view, Kexi::ViewMode mode)
 {
     d->stack->addWidget(view);
     d->views.insert(mode, view);
-
-    //set focus proxy inside this view
-    QWidget *ch = KexiUtils::findFirstChild<QWidget*>(view, "QWidget");
-    if (ch)
-        view->setFocusProxy(ch);
-
     d->openedViewModes |= mode;
 }
 

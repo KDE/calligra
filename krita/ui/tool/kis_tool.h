@@ -104,9 +104,27 @@ public:
 public:
 
     /**
+     * Called by KisToolProxy when the primary action of the tool is
+     * going to be started now, that is when all the modifiers are
+     * pressed and the only thing left is just to press the mouse
+     * button.  On coming of this callback the tool is supposed to
+     * prepare the cursor and/or the outline to show the user shat is
+     * going to happen next
+     */
+    virtual void activatePrimaryAction();
+
+    /**
+     * Called by KisToolProxy when the primary is no longer possible
+     * to be started now, e.g. when its modifiers and released. The
+     * tool is supposed revert all the preparetions it has doen in
+     * activatePrimaryAction().
+     */
+    virtual void deactivatePrimaryAction();
+
+    /**
      * Called by KisToolProxy when a primary action for the tool is
-     * activated. The \p event stores the original event that
-     * activated the stroke. The \p event is _accepted_ by default. If
+     * started. The \p event stores the original event that
+     * started the stroke. The \p event is _accepted_ by default. If
      * the tool decides to ignore this particular action (e.g. when
      * the node is not editable), it should call event->ignore(). Then
      * no further continuePrimaryAction() or endPrimaryAction() will
@@ -153,7 +171,8 @@ public:
         AlternateSecondary,
         AlternateThird,
         AlternateFourth,
-        AlternateFifth
+        AlternateFifth,
+        Alternate_NONE = 10000
     };
 
     enum AlternateAction {
@@ -165,10 +184,14 @@ public:
         Secondary = AlternateSecondary,
         Third = AlternateThird,
         Fourth = AlternateFourth,
-        Fifth = AlternateFifth
+        Fifth = AlternateFifth,
+        NONE = 10000
     };
 
     static AlternateAction actionToAlternateAction(ToolAction action);
+
+    virtual void activateAlternateAction(AlternateAction action);
+    virtual void deactivateAlternateAction(AlternateAction action);
 
     virtual void beginAlternateAction(KoPointerEvent *event, AlternateAction action);
     virtual void continueAlternateAction(KoPointerEvent *event, AlternateAction action);

@@ -111,7 +111,7 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     m_eraseModeButton->setCheckable(true);
 
     KAction* eraseAction = new KAction(i18n("Set eraser mode"), m_eraseModeButton);
-    eraseAction->setIcon(koIcon("draw-eraser"));
+    eraseAction->setIcon(koIcon("eraser-toggle"));
     eraseAction->setShortcut(Qt::Key_E);
     eraseAction->setCheckable(true);
     m_eraseModeButton->setDefaultAction(eraseAction);
@@ -130,7 +130,7 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     hMirrorButton->setFixedSize(32, 32);
     hMirrorButton->setCheckable(true);
     KAction* hMirrorAction = new KAction(i18n("Set horizontal mirror mode"), hMirrorButton);
-    hMirrorAction->setIcon(koIcon("object-flip-horizontal"));
+    hMirrorAction->setIcon(koIcon("symmetry-horyzontal"));
     hMirrorAction->setCheckable(true);
     hMirrorButton->setDefaultAction(hMirrorAction);
     m_view->actionCollection()->addAction("hmirror_action", hMirrorAction);
@@ -139,7 +139,7 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     vMirrorButton->setFixedSize(32, 32);
     vMirrorButton->setCheckable(true);
     KAction* vMirrorAction = new KAction(i18n("Set vertical mirror mode"), vMirrorButton);
-    vMirrorAction->setIcon(koIcon("object-flip-vertical"));
+    vMirrorAction->setIcon(koIcon("symmetry-vertical"));
     vMirrorAction->setCheckable(true);
     vMirrorButton->setDefaultAction(vMirrorAction);
     m_view->actionCollection()->addAction("vmirror_action", vMirrorAction);
@@ -178,7 +178,7 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     m_cmbCompositeOp->setFixedHeight(30);
 
     m_workspaceWidget = new KisPopupButton(view);
-    m_workspaceWidget->setIcon(koIcon("document-multiple"));
+    m_workspaceWidget->setIcon(koIcon("workspace-chooser"));
     m_workspaceWidget->setToolTip(i18n("Choose workspace"));
     m_workspaceWidget->setFixedSize(32, 32);
     m_workspaceWidget->setPopupWidget(new KisWorkspaceChooser(view));
@@ -224,12 +224,12 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
 
     action = new KAction(i18n("Next Favourite Preset"), this);
     view->actionCollection()->addAction("next_favorite_preset", action);
-    action->setShortcut(KShortcut(Qt::Key_Right));
+    action->setShortcut(KShortcut(Qt::Key_Comma));
     connect(action, SIGNAL(triggered()), this, SLOT(slotNextFavoritePreset()));
 
     action = new KAction(i18n("Previous Favourite Preset"), this);
     view->actionCollection()->addAction("previous_favorite_preset", action);
-    action->setShortcut(KShortcut(Qt::Key_Left));
+    action->setShortcut(KShortcut(Qt::Key_Stop));
     connect(action, SIGNAL(triggered()), this, SLOT(slotPreviousFavoritePreset()));
 
     action = new KAction(i18n("Switch to Previous Preset"), this);
@@ -259,7 +259,7 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     m_presetsPopup->switchDetached(false);
 
     m_presetsChooserPopup = new KisPaintOpPresetsChooserPopup();
-    m_presetsChooserPopup->setFixedSize(500, 500);
+    m_presetsChooserPopup->setFixedSize(500, 600);
     m_presetWidget->setPopupWidget(m_presetsChooserPopup);
 
     m_prevCompositeOpID = KoCompositeOpRegistry::instance().getDefaultCompositeOp().id();
@@ -322,7 +322,6 @@ void KisPaintopBox::updatePaintops(const KoColorSpace* colorSpace)
 
 void KisPaintopBox::resourceSelected(KoResource* resource)
 {
-    m_resourceProvider->resourceManager()->blockSignals(true);
     KisPaintOpPreset* preset = dynamic_cast<KisPaintOpPreset*>(resource);
     if (preset) {
         if(!preset->settings()->isLoadable())
@@ -332,7 +331,6 @@ void KisPaintopBox::resourceSelected(KoResource* resource)
         m_presetsPopup->setPresetImage(preset->image());
         m_presetsPopup->resourceSelected(resource);
     }
-    m_resourceProvider->resourceManager()->blockSignals(false);
 }
 
 QPixmap KisPaintopBox::paintopPixmap(const KoID& paintop)
@@ -401,6 +399,13 @@ void KisPaintopBox::setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP pr
         // by the new colorspace.
         kWarning() << "current paintop " << paintop.name() << " was not set, not supported by colorspace";
     }
+
+    /**
+     * We will get more update signals from the configuration widgets
+     * but they might be delayed by some internal deferring timers,
+     * so just call the slot directly
+     */
+    slotUpdatePreset();
 }
 
 KoID KisPaintopBox::defaultPaintOp()

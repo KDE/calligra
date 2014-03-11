@@ -78,7 +78,7 @@ signals:
 protected:
     KisDoc2 *m_doc;
     
-    void createNewImage();
+    bool createNewImage();
     
 private:
     

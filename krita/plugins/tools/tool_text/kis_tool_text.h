@@ -35,7 +35,12 @@ public:
     KisToolText(KoCanvasBase * canvas);
     virtual ~KisToolText();
 
+    virtual void beginPrimaryAction(KoPointerEvent *event);
+    virtual void continuePrimaryAction(KoPointerEvent *event);
+    virtual void endPrimaryAction(KoPointerEvent *event);
+
     virtual QList<QPointer<QWidget> > createOptionWidgets();
+
 
     virtual KisPainter::FillStyle fillStyle();
 
@@ -44,7 +49,7 @@ private slots:
 
 protected:
     virtual void finishRect(const QRectF& rect);
-    KisTextToolOptionWidget* m_optionWidget;
+    KisTextToolOptionWidget* m_optionsWidget;
 };
 
 class KisToolTextFactory : public KoToolFactoryBase

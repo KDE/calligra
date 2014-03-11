@@ -46,12 +46,14 @@ public:
 
     virtual int priority() const;
 
-    void activate();
-    void deactivate();
+    void activate(int shortcut);
+    void deactivate(int shortcut);
 
     void begin(int shortcut, QEvent *event = 0);
     void inputEvent(QEvent* event);
     void mouseMoved(const QPointF &lastPos, const QPointF &pos);
+
+    virtual bool isShortcutRequired(int shortcut) const;
 
 private:
     class Private;

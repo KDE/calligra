@@ -1,3 +1,21 @@
+// Check windows
+#ifdef Q_OS_WIN
+   #if _WIN64
+     #define ENV64BIT
+  #else
+    #define ENV32BIT
+  #endif
+#endif
+
+// Check GCC
+#if __GNUC__
+  #if defined (__x86_64__) || defined (__ppc64__)
+    #define ENV64BIT
+  #else
+    #define ENV32BIT
+  #endif
+#endif
+
 #ifdef __APPLE__
 # ifdef __BIG_ENDIAN__
 #  define WORDS_BIGENDIAN 1

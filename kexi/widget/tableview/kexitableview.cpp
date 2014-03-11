@@ -3,7 +3,7 @@
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2003 Daniel Molkentin <molkentin@kde.org>
    Copyright (C) 2003 Joseph Wenninger <jowenn@kde.org>
-   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -74,6 +74,8 @@
 #include <widget/utils/kexidisplayutils.h>
 #include <db/cursor.h>
 #include <db/validator.h>
+
+//#define KEXITABLEVIEW_DEBUG
 
 KexiTableView::Appearance::Appearance(QWidget *widget)
         : alternateBackgroundColor(
@@ -440,8 +442,9 @@ void KexiTableView::updateFonts(bool repaint)
 // if(d->rowHeight < 22)
 //  d->rowHeight = 22;
     setMargins(
-        qMin(m_horizontalHeader->sizeHint().height(), d->rowHeight),
-        m_horizontalHeader->sizeHint().height(), 0, 0);
+        qMin(m_horizontalHeader->height(), d->rowHeight),
+             horizontalHeaderVisible() ? m_horizontalHeader->height() : 0,
+             0, 0);
 // setMargins(14, d->rowHeight, 0, 0);
     m_verticalHeader->setCellHeight(d->rowHeight);
 
@@ -546,7 +549,9 @@ QSize KexiTableView::sizeHint() const
     w = qMin(w, qApp->desktop()->availableGeometry(this).width() * 3 / 4); //stretch
     h = qMin(h, qApp->desktop()->availableGeometry(this).height() * 3 / 4); //stretch
 
-// kDebug() << w << << h;
+#ifdef KEXITABLEVIEW_DEBUG
+    kDebug() << w << h;
+#endif
 
     return QSize(w, h);
     /*QSize(
@@ -669,9 +674,9 @@ inline void KexiTableView::paintRow(KexiDB::RecordData *record,
 void KexiTableView::drawContents(QPainter *p, int cx, int cy, int cw, int ch)
 {
 #ifdef KEXITABLEVIEW_DEBUG
-    kDebug() << "disable" << d->disableDrawContents << "cx" << cx << "cy" << cy << "cw" << cw << "ch" << ch;
+    kDebug() << "disable" << d->disableDrawContents << "cx" << cx << "cy" << cy << "cw" << cw << "ch" << ch
+             << "contentsRect" << contentsRect() << "geo" << geometry();
 #endif
-
     if (d->disableDrawContents)
         return;
 
@@ -981,6 +986,11 @@ void KexiTableView::paintCell(QPainter* p, KexiDB::RecordData *record, int col, 
                     w - (x + x) - ((align & Qt::AlignLeft) ? 2 : 0)/*right space*/, h,
                     align, txt);
     }
+#ifdef KEXITABLEVIEW_DEBUG
+    p->setPen(QPen(QColor(255, 0, 0, 150), 1, Qt::DashLine));
+    p->drawRect(x, y_offset, w - 1, h - 1);
+    kDebug() << cellValue << "x:" << x << "y:" <<  y_offset << "w:" << w << "h:" << h;
+#endif
     p->restore();
 }
 
@@ -1334,6 +1344,9 @@ void KexiTableView::contextMenuEvent(QContextMenuEvent* e)
 
 void KexiTableView::keyPressEvent(QKeyEvent* e)
 {
+#ifdef KEXITABLEVIEW_DEBUG
+    kDebug() << e;
+#endif
     if (!hasData())
         return;
 // kDebug() << "key=" <<e->key() << " txt=" <<e->text();
@@ -1558,7 +1571,7 @@ KexiDataItemInterface *KexiTableView::editor(int col, bool ignoreMissingEditor)
     connect(editor, SIGNAL(cancelRequested()), this, SLOT(cancelEditor()));
     connect(editor, SIGNAL(acceptRequested()), this, SLOT(acceptEditor()));
 
-    editor->resize(columnWidth(col) - 1, rowHeight() - 1);
+    editor->resize(columnWidth(col), rowHeight());
     editor->installEventFilter(this);
     if (editor->widget())
         editor->widget()->installEventFilter(this);
@@ -1576,7 +1589,7 @@ void KexiTableView::editorShowFocus(int /*row*/, int col)
       return;
     }*/
     if (edit) {
-        kDebug() << "IN";
+        //kDebug() << "IN";
         QRect rect = cellGeometry(m_curRow, m_curCol);
 //  rect.moveBy( -contentsX(), -contentsY() );
         edit->showFocus(rect, isReadOnly() || m_data->column(col)->isReadOnly());
@@ -1645,7 +1658,7 @@ void KexiTableView::createEditor(int row, int col, const QString& addText, bool 
     if (m_editor->hasFocusableWidget()) {
         moveChild(editorWidget, columnPos(m_curCol), rowPos(m_curRow));
 
-        editorWidget->resize(columnWidth(m_curCol) - 1, rowHeight() - 1);
+        editorWidget->resize(columnWidth(m_curCol), rowHeight());
         editorWidget->show();
 
         m_editor->setFocus();
@@ -1885,7 +1898,7 @@ void KexiTableView::slotColumnWidthChanged(int, int, int)
 // updateContents(0, 0, d->pBufferPm->width(), d->pBufferPm->height());
     QWidget *editorWidget = dynamic_cast<QWidget*>(m_editor);
     if (editorWidget) {
-        editorWidget->resize(columnWidth(m_curCol) - 1, rowHeight() - 1);
+        editorWidget->resize(columnWidth(m_curCol), rowHeight());
         moveChild(editorWidget, columnPos(m_curCol), rowPos(m_curRow));
     }
     updateGeometries();
@@ -2026,7 +2039,7 @@ QSize KexiTableView::tableSize() const
 
 //  kDebug() << rows()-1 <<" "<< (isInsertingEnabled()?1:0) <<" "<< (rowEditing()?1:0) << " " <<  s;
 #ifdef KEXITABLEVIEW_DEBUG
-kDebug() << s;
+kDebug() << s << "cw(last):" << columnWidth(columns() - 1);
 #endif
         return s;
 //   +horizontalScrollBar()->sizeHint().height() + margin() );
@@ -2259,7 +2272,7 @@ void KexiTableView::adjustColumnWidthToContents(int colNum)
             maxw = qMax(maxw, wfw);
         }
         const bool focused = currentColumn() == colNum;
-        maxw += (fm.width("  ") + ed->leftMargin() + ed->rightMargin(focused));
+        maxw += (fm.width("  ") + ed->leftMargin() + ed->rightMargin(focused) + 2);
     }
     if (maxw < KEXITV_MINIMUM_COLUMN_WIDTH)
         maxw = KEXITV_MINIMUM_COLUMN_WIDTH; //not too small
@@ -2477,6 +2490,20 @@ bool KexiTableView::eventFilter(QObject *o, QEvent *e)
 {
     //don't allow to stole key my events by others:
 // kDebug() << "spontaneous " << e->spontaneous() << " type=" << e->type();
+#ifdef KEXITABLEVIEW_DEBUG
+    if (e->type() != QEvent::Paint
+        && e->type() != QEvent::Leave
+        && e->type() != QEvent::MouseMove
+        && e->type() != QEvent::HoverMove
+        && e->type() != QEvent::HoverEnter
+        && e->type() != QEvent::HoverLeave)
+    {
+        kDebug() << e << o;
+    }
+    if (e->type() == QEvent::Paint) {
+        kDebug() << "PAINT!" << static_cast<QPaintEvent*>(e) << static_cast<QPaintEvent*>(e)->rect();
+    }
+#endif
     if (e->type() == QEvent::KeyPress) {
         if (e->spontaneous() /*|| e->type()==QEvent::AccelOverride*/) {
             QKeyEvent *ke = static_cast<QKeyEvent*>(e);
@@ -2600,8 +2627,8 @@ void KexiTableView::setAppearance(const Appearance& a)
         m_verticalHeader->setCellHeight(d->rowHeight);
     if (m_horizontalHeader) {
         setMargins(
-            qMin(m_horizontalHeader->sizeHint().height(), d->rowHeight),
-            m_horizontalHeader->sizeHint().height(), 0, 0);
+            qMin(m_horizontalHeader->height(), d->rowHeight),
+                 horizontalHeaderVisible() ? m_horizontalHeader->height() : 0, 0, 0);
     }
 // }
     if (a.recordHighlightingEnabled)

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2006-2014 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -79,6 +79,7 @@ KexiDBComboBox::KexiDBComboBox(QWidget *parent)
 #pragma WARNING( fix creating popup for forms instead; remove KexiComboBoxBase::m_setReinstantiatePopupOnShow )
 #endif
     m_reinstantiatePopupOnShow = true;
+    m_focusPopupBeforeShow = true;
 
     setMouseTracking(true);
     setFocusPolicy(Qt::WheelFocus);
@@ -102,6 +103,15 @@ KexiComboBoxPopup *KexiDBComboBox::popup() const
 void KexiDBComboBox::setPopup(KexiComboBoxPopup *popup)
 {
     d->popup = popup;
+    if (popup) {
+        connect(popup, SIGNAL(hidden()), this, SLOT(slotPopupHidden()));
+    }
+}
+
+void KexiDBComboBox::slotPopupHidden()
+{
+    moveCursorToEnd();
+    selectAll();
 }
 
 void KexiDBComboBox::setEditable(bool set)
@@ -200,6 +210,7 @@ QRect KexiDBComboBox::editorGeometry() const
                 style()->subControlRect(QStyle::CC_ComboBox, 0, QStyle::SC_ComboBoxEditField, d->paintedCombo)));
 #else
     QRect r = d->paintedCombo->geometry();
+    r.setSize(size());
 #endif
 
     //if ((height()-r.bottom())<6)
@@ -225,6 +236,8 @@ void KexiDBComboBox::createEditor()
             kDebug() << "altered margins:" << l << t << r << b;
 
             subwidget()->setFocusPolicy(Qt::NoFocus);
+            setFocusProxy(0); // Subwidget is not focusable but the form requires focusable
+                              // widget in order to manage data updates so let it be this KexiDBComboBox.
             subwidget()->setCursor(QCursor(Qt::ArrowCursor)); // widgets like listedit have IbeamCursor, we don't want that
             QPalette subwidgetPalette(subwidget()->palette());
             subwidgetPalette.setColor(QColorGroup::Base, Qt::transparent);
@@ -374,6 +387,25 @@ void KexiDBComboBox::mouseDoubleClickEvent(QMouseEvent *e)
 
 bool KexiDBComboBox::eventFilter(QObject *o, QEvent *e)
 {
+#if 0
+    if (e->type() != QEvent::Paint
+            && e->type() != QEvent::Leave
+            && e->type() != QEvent::MouseMove
+            && e->type() != QEvent::HoverMove
+            && e->type() != QEvent::HoverEnter
+            && e->type() != QEvent::HoverLeave)
+    {
+        kDebug() << e << o << subwidget();
+        kDebug() << "FOCUS WIDGET:" << focusWidget();
+    }
+#endif
+    if (o == this || o == popup() || o == subwidget()) {
+        if (e->type() == QEvent::KeyPress) {
+            // handle F2/F4
+            if (handleKeyPressEvent(static_cast<QKeyEvent*>(e)))
+                return true;
+        }
+    }
     if (o == this) {
         if (e->type() == QEvent::Resize) {
             d->paintedCombo->resize(size());
@@ -396,18 +428,21 @@ bool KexiDBComboBox::eventFilter(QObject *o, QEvent *e)
         } else if (e->type() == QEvent::Leave) {
             d->mouseOver = false;
             update();
-        } else if (e->type() == QEvent::KeyPress) {
-            // handle F2/F4
-            if (handleKeyPressEvent(static_cast<QKeyEvent*>(e)))
-                return true;
-        } else if (e->type() == QEvent::FocusOut) {
-            if (popup() && popup()->isVisible()) {
-//                popup()->hide();
-//                undoChanges();
+        } else if (e->type() == QEvent::FocusOut || e->type() == QEvent::Hide) {
+            if (!d->isEditable) {
+                moveCursorToEnd();
             }
+            if (popup()) {
+                popup()->hide();
+            }
+            if (popup() && popup()->isVisible()) {
+                undoChanges();
+            }
+            return true;
         }
-    } else if (!d->isEditable && d->subWidgetsWithDisabledEvents.contains(dynamic_cast<QWidget*>(o))) {
-        kDebug() << "**********************####" << e->type() << o;
+    }
+    if (!d->isEditable && d->subWidgetsWithDisabledEvents.contains(dynamic_cast<QWidget*>(o))) {
+        //kDebug() << "**********************####" << e->type() << o;
         if (e->type() == QEvent::MouseButtonPress) {
             // clicking the subwidget should mean the same as clicking the combo box (i.e. show the popup)
             if (handleMousePressEvent(static_cast<QMouseEvent*>(e)))
@@ -464,13 +499,13 @@ KexiDB::QueryColumnInfo* KexiDBComboBox::visibleColumnInfo() const
 
 void KexiDBComboBox::moveCursorToEndInInternalEditor()
 {
-    if (d->isEditable && m_moveCursorToEndInInternalEditor_enabled)
+    if (m_moveCursorToEndInInternalEditor_enabled)
         moveCursorToEnd();
 }
 
 void KexiDBComboBox::selectAllInInternalEditor()
 {
-    if (d->isEditable && m_selectAllInInternalEditor_enabled)
+    if (m_selectAllInInternalEditor_enabled)
         selectAll();
 }
 

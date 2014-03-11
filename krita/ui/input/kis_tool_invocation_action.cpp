@@ -39,7 +39,8 @@ public:
 };
 
 KisToolInvocationAction::KisToolInvocationAction()
-    : d(new Private)
+    : KisAbstractInputAction("Tool Invocation")
+    , d(new Private)
 {
     setName(i18n("Tool Invocation"));
     setDescription(i18n("The <i>Tool Invocation</i> action invokes the current tool, for example, using the brush tool, it will start painting."));
@@ -56,6 +57,18 @@ KisToolInvocationAction::~KisToolInvocationAction()
     delete d;
 }
 
+void KisToolInvocationAction::activate(int shortcut)
+{
+    Q_UNUSED(shortcut);
+    inputManager()->toolProxy()->activateToolAction(KisTool::Primary);
+}
+
+void KisToolInvocationAction::deactivate(int shortcut)
+{
+    Q_UNUSED(shortcut);
+    inputManager()->toolProxy()->deactivateToolAction(KisTool::Primary);
+}
+
 int KisToolInvocationAction::priority() const
 {
     return 0;
@@ -69,11 +82,12 @@ bool KisToolInvocationAction::canIgnoreModifiers() const
 void KisToolInvocationAction::begin(int shortcut, QEvent *event)
 {
     if (shortcut == ActivateShortcut) {
+        QPoint workaround = inputManager()->canvas()->canvasWidget()->mapToGlobal(QPoint(0, 0));
         d->active =
             inputManager()->toolProxy()->forwardEvent(
                 KisToolProxy::BEGIN, KisTool::Primary, event, event,
                 inputManager()->lastTabletEvent(),
-                inputManager()->canvas()->canvasWidget()->mapToGlobal(QPoint(0, 0)));
+                workaround);
     } else if (shortcut == ConfirmShortcut) {
         QKeyEvent pressEvent(QEvent::KeyPress, Qt::Key_Return, 0);
         inputManager()->toolProxy()->keyPressEvent(&pressEvent);
@@ -100,10 +114,11 @@ void KisToolInvocationAction::begin(int shortcut, QEvent *event)
 void KisToolInvocationAction::end(QEvent *event)
 {
     if (d->active) {
+        QPoint workaround = inputManager()->canvas()->canvasWidget()->mapToGlobal(QPoint(0, 0));
         inputManager()->toolProxy()->
             forwardEvent(KisToolProxy::END, KisTool::Primary, event, event,
                          inputManager()->lastTabletEvent(),
-                         inputManager()->canvas()->canvasWidget()->mapToGlobal(QPoint(0, 0)));
+                         workaround);
 
         d->active = false;
     }
@@ -115,10 +130,11 @@ void KisToolInvocationAction::inputEvent(QEvent* event)
 {
     if (!d->active) return;
 
+    QPoint workaround = inputManager()->canvas()->canvasWidget()->mapToGlobal(QPoint(0, 0));
+
     inputManager()->toolProxy()->
         forwardEvent(KisToolProxy::CONTINUE, KisTool::Primary, event, event,
-                     inputManager()->lastTabletEvent(),
-                     inputManager()->canvas()->canvasWidget()->mapToGlobal(QPoint(0, 0)));
+                     inputManager()->lastTabletEvent(), workaround);
 }
 
 void KisToolInvocationAction::processUnhandledEvent(QEvent* event)
@@ -132,4 +148,11 @@ void KisToolInvocationAction::processUnhandledEvent(QEvent* event)
 bool KisToolInvocationAction::supportsHiResInputEvents() const
 {
     return inputManager()->toolProxy()->primaryActionSupportsHiResEvents();
+}
+
+bool KisToolInvocationAction::isShortcutRequired(int shortcut) const
+{
+    //These really all are pretty important for basic user interaction.
+    Q_UNUSED(shortcut)
+    return true;
 }

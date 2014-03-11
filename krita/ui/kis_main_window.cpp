@@ -128,6 +128,7 @@ void KisMainWindow::slotPreferences()
     }
 }
 
+
 void KisMainWindow::closeEvent(QCloseEvent *e)
 {
     m_mdiArea->closeAllSubWindows();

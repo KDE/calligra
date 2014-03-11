@@ -564,7 +564,8 @@ void KexiMainWindow::setupActions()
 
     d->action_tools_compact_database = addAction("tools_compact_database",
 //! @todo icon
-                                                 koIcon("calligrakexi"), i18n("&Compact Database..."));
+                                                 KIcon(KexiDB::defaultFileBasedDriverIconName()),
+                                                 i18n("&Compact Database..."));
     d->action_tools_compact_database->setToolTip(i18n("Compact the current database project"));
     d->action_tools_compact_database->setWhatsThis(
         i18n("Compacts the current database project, so it will take less space and work faster."));
@@ -805,7 +806,7 @@ void KexiMainWindow::setupActions()
 //temp. disable because of problems with volatile actions setActionVolatile( d->action_data_save_row, true );
 
     d->action_data_cancel_row_changes = createSharedAction(i18n("&Cancel Record Changes"),
-                                        koIconName("dialog-cancel"), KShortcut(), "data_cancel_row_changes");
+                                        koIconName("dialog-cancel"), KShortcut(Qt::Key_Escape), "data_cancel_row_changes");
     d->action_data_cancel_row_changes->setToolTip(
         i18n("Cancel changes made to the current record"));
     d->action_data_cancel_row_changes->setWhatsThis(
@@ -882,8 +883,8 @@ void KexiMainWindow::setupActions()
     d->action_window_fullscreen = KStandardAction::fullScreen(this, SLOT(toggleFullScreen(bool)), this, ac);
     ac->addAction("full_screen", d->action_window_fullscreen);
     QList<QKeySequence> shortcuts;
-    KShortcut *shortcut = new KShortcut(d->action_window_fullscreen->shortcut().primary(), QKeySequence("F11"));
-    shortcuts = shortcut->toList();
+    KShortcut shortcut(d->action_window_fullscreen->shortcut().primary(), QKeySequence("F11"));
+    shortcuts = shortcut.toList();
     d->action_window_fullscreen->setShortcuts(shortcuts);
     QShortcut *s = new QShortcut(d->action_window_fullscreen->shortcut().primary(), this);
     connect(s, SIGNAL(activated()), d->action_window_fullscreen, SLOT(trigger()));

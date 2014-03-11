@@ -127,7 +127,7 @@ KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
     QString knsrcFile = "kritabrushes.knsrc";
     m_itemChooser->setKnsrcFile(knsrcFile);
     m_itemChooser->showGetHotNewStuff(true, true);
-    m_itemChooser->showTaggingBar(true,true);
+    m_itemChooser->showTaggingBar(true, true);
     m_itemChooser->setColumnCount(10);
     m_itemChooser->setRowHeight(30);
     m_itemChooser->setItemDelegate(new KisBrushDelegate(this));
@@ -243,9 +243,9 @@ void KisBrushChooser::update(KoResource * resource)
     if (brush) {
         blockSignals(true);
         QString text = QString("%1 (%2 x %3)")
-                .arg(i18n(brush->name().toUtf8().data()))
-                .arg(brush->width())
-                .arg(brush->height());
+                       .arg(i18n(brush->name().toUtf8().data()))
+                       .arg(brush->width())
+                       .arg(brush->height());
 
         m_lbName->setText(text);
         m_slSpacing->blockSignals(true);
@@ -291,7 +291,7 @@ void KisBrushChooser::setBrushSize(qreal xPixels, qreal yPixels)
     qreal oldWidth = m_brush->width() * m_brush->scale();
     qreal newWidth = oldWidth + xPixels;
 
-    newWidth = qMax(newWidth, 0.1);
+    newWidth = qMax(newWidth, qreal(0.1));
 
     m_slSize->setValue(newWidth);
 }

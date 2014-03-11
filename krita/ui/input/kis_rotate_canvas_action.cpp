@@ -37,7 +37,8 @@ public:
 
 
 KisRotateCanvasAction::KisRotateCanvasAction()
-    : d(new Private())
+    : KisAbstractInputAction("Rotate Canvas")
+    , d(new Private())
 {
     setName(i18n("Rotate Canvas"));
     setDescription(i18n("The <i>Rotate Canvas</i> action rotates the canvas."));
@@ -61,13 +62,18 @@ int KisRotateCanvasAction::priority() const
     return 3;
 }
 
-void KisRotateCanvasAction::activate()
+void KisRotateCanvasAction::activate(int shortcut)
 {
-    QApplication::setOverrideCursor(KisCursor::rotateCursor());
+    if (shortcut == DiscreteRotateToggleShortcut) {
+        QApplication::setOverrideCursor(KisCursor::rotateCanvasDiscreteCursor());
+    } else /* if (shortcut == SmoothRotateToggleShortcut) */ {
+        QApplication::setOverrideCursor(KisCursor::rotateCanvasSmoothCursor());
+    }
 }
 
-void KisRotateCanvasAction::deactivate()
+void KisRotateCanvasAction::deactivate(int shortcut)
 {
+    Q_UNUSED(shortcut);
     QApplication::restoreOverrideCursor();
 }
 

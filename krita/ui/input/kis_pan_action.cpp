@@ -44,7 +44,8 @@ public:
 };
 
 KisPanAction::KisPanAction()
-    : d(new Private)
+    : KisAbstractInputAction("Pan Canvas")
+    , d(new Private)
 {
     setName(i18n("Pan Canvas"));
     setDescription(i18n("The <i>Pan Canvas</i> action pans the canvas."));
@@ -68,13 +69,15 @@ int KisPanAction::priority() const
     return 5;
 }
 
-void KisPanAction::activate()
+void KisPanAction::activate(int shortcut)
 {
+    Q_UNUSED(shortcut);
     QApplication::setOverrideCursor(Qt::OpenHandCursor);
 }
 
-void KisPanAction::deactivate()
+void KisPanAction::deactivate(int shortcut)
 {
+    Q_UNUSED(shortcut);
     QApplication::restoreOverrideCursor();
 }
 
@@ -156,4 +159,9 @@ QPointF KisPanAction::Private::averagePoint( QTouchEvent* event )
     } else {
         return QPointF();
     }
+}
+
+bool KisPanAction::isShortcutRequired(int shortcut) const
+{
+    return shortcut == PanToggleShortcut;
 }

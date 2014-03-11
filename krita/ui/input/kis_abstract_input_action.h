@@ -59,7 +59,7 @@ public:
      *
      * \param manager The InputManager this action belongs to.
      */
-    explicit KisAbstractInputAction();
+    explicit KisAbstractInputAction(const QString &id);
     /**
      * Destructor.
      */
@@ -72,7 +72,7 @@ public:
      * place to show the user what is going to happen, e.g. change the
      * cursor.
      */
-    virtual void activate();
+    virtual void activate(int shortcut);
 
     /**
      * The method is called when the action is not a candidate for
@@ -81,7 +81,7 @@ public:
      *
      * \see activate()
      */
-    virtual void deactivate();
+    virtual void deactivate(int shortcut);
 
     /**
      * Begin the action.
@@ -120,10 +120,17 @@ public:
      * The indexes of shortcut behaviours available.
      */
     virtual QHash<QString, int> shortcutIndexes() const;
+
     /**
-     * The name of this action.
+     * The id of this action.
+     */
+    virtual QString id() const;
+
+    /**
+     * The translated name of this action.
      */
     virtual QString name() const;
+
     /**
      * A short description of this action.
      */
@@ -143,6 +150,16 @@ public:
      * used for making one type of actions default one.
      */
     virtual bool canIgnoreModifiers() const;
+
+    /**
+     * Return true when the specified shortcut is required for basic
+     * user interaction. This is used by the configuration system to
+     * prevent basic actions like painting from being removed.
+     *
+     * \param shortcut The shortcut index to check.
+     * \return True if the shortcut is required, false if not.
+     */
+    virtual bool isShortcutRequired(int shortcut) const;
 
 protected:
     /**

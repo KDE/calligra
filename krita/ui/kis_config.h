@@ -88,7 +88,7 @@ public:
     void setCursorStyle(enumCursorStyle style) const;
 
     QString monitorProfile() const;
-    void setMonitorProfile(const QString & monitorProfile, bool override = false) const;
+    void setMonitorProfile(const QString & monitorProfile, bool override) const;
     static const KoColorProfile* getScreenProfile(int screen = -1);
     const KoColorProfile *displayProfile(int screen = -1) const;
 
@@ -189,6 +189,9 @@ public:
 
     bool antialiasCurves() const;
     void setAntialiasCurves(bool v) const;
+
+    bool antialiasSelectionOutline() const;
+    void setAntialiasSelectionOutline(bool v) const;
 
     bool showRootLayer() const;
     void setShowRootLayer(bool showRootLayer) const;
@@ -302,7 +305,9 @@ public:
     bool showSingleChannelAsColor() const;
     void setShowSingleChannelAsColor(bool asColor);
 
-    
+    int numDefaultLayers() const;
+    void setNumDefaultLayers(int num);
+
     template<class T>
     void writeEntry(const QString& name, const T& value) {
         m_cfg.writeEntry(name, value);

@@ -38,6 +38,9 @@ public:
     explicit KisToolInvocationAction();
     virtual ~KisToolInvocationAction();
 
+    void activate(int shortcut);
+    void deactivate(int shortcut);
+
     virtual int priority() const;
     virtual bool canIgnoreModifiers() const;
 
@@ -48,6 +51,8 @@ public:
     void processUnhandledEvent(QEvent* event);
 
     bool supportsHiResInputEvents() const;
+
+    virtual bool isShortcutRequired(int shortcut) const;
 
 private:
     class Private;

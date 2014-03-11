@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2006-2014 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,30 +21,24 @@
 #define KexiComboBoxDropDownButton_H
 
 #include <kexi_export.h>
-#include <kpushbutton.h>
-
-class KComboBox;
+#include <QToolButton>
 
 //! @short A drop-down button for combo box widgets
 /*! Used in KexiComboBoxTableEdit.
 */
-class KEXIGUIUTILS_EXPORT KexiComboBoxDropDownButton : public KPushButton
+class KEXIGUIUTILS_EXPORT KexiComboBoxDropDownButton : public QToolButton
 {
+    Q_OBJECT
 public:
-    KexiComboBoxDropDownButton(QWidget *parent = 0);
+    explicit KexiComboBoxDropDownButton(QWidget *parent = 0);
     virtual ~KexiComboBoxDropDownButton();
 
 protected:
-    /*! Reimplemented after @ref KPushButton to draw drop-down arrow. */
-    virtual void paintEvent(QPaintEvent *pe);
-
-    /*! Reimplemented after @ref KPushButton to adapt size to style changes. */
     virtual bool event(QEvent *event);
 
-    /*! Adjusts appearance for current style. */
+private:
     void styleChanged();
 
-private:
     class Private;
     Private * const d;
 };

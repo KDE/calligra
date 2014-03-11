@@ -89,7 +89,7 @@ void KisPainterBasedStrokeStrategy::initPainters(KisPaintDeviceSP targetDevice,
     foreach(PainterInfo *info, m_painterInfos) {
         KisPainter *painter = info->painter;
 
-        painter->begin(targetDevice, selection);
+        painter->begin(targetDevice, !hasIndirectPainting ? selection : 0);
         m_resources->setupPainter(painter);
 
         if(hasIndirectPainting) {
@@ -116,6 +116,14 @@ void KisPainterBasedStrokeStrategy::initStrokeCallback()
     KisPaintDeviceSP targetDevice = paintDevice;
     bool hasIndirectPainting = needsIndirectPainting();
 
+    KisSelectionSP selection;
+    KisLayerSP layer = dynamic_cast<KisLayer*>(node.data());
+    if(layer) {
+        selection = layer->selection();
+    } else {
+        selection = m_resources->image()->globalSelection();
+    }
+
     if (hasIndirectPainting) {
         KisIndirectPaintingSupport *indirect =
             dynamic_cast<KisIndirectPaintingSupport*>(node.data());
@@ -126,23 +134,14 @@ void KisPainterBasedStrokeStrategy::initStrokeCallback()
             indirect->setTemporaryTarget(targetDevice);
             indirect->setTemporaryCompositeOp(m_resources->compositeOp());
             indirect->setTemporaryOpacity(m_resources->opacity());
+            indirect->setTemporarySelection(selection);
 
             QBitArray channelLockFlags = m_resources->channelLockFlags();
-            if (channelLockFlags.size() > 0) {
-                indirect->setTemporaryChannelFlags(channelLockFlags);
-            }
+            indirect->setTemporaryChannelFlags(channelLockFlags);
         }
         else {
             hasIndirectPainting = false;
         }
-    }
-
-    KisSelectionSP selection;
-    KisLayerSP layer = dynamic_cast<KisLayer*>(node.data());
-    if(layer) {
-        selection = layer->selection();
-    } else {
-        selection = m_resources->image()->globalSelection();
     }
 
     m_transaction = new KisTransaction(name(), targetDevice);
@@ -151,6 +150,14 @@ void KisPainterBasedStrokeStrategy::initStrokeCallback()
 
     m_targetDevice = targetDevice;
     m_activeSelection = selection;
+
+    // sanity check: selection should be applied only once
+    if (selection && !m_painterInfos.isEmpty()) {
+        KisIndirectPaintingSupport *indirect =
+            dynamic_cast<KisIndirectPaintingSupport*>(node.data());
+        KIS_ASSERT_RECOVER_RETURN(hasIndirectPainting || m_painterInfos.first()->painter->selection());
+        KIS_ASSERT_RECOVER_RETURN(!hasIndirectPainting || !indirect->temporarySelection() || !m_painterInfos.first()->painter->selection());
+    }
 }
 
 void KisPainterBasedStrokeStrategy::finishStrokeCallback()

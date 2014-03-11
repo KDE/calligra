@@ -35,4 +35,5 @@ Type=Service
 X-KDE-Export=image/jpeg
 X-KDE-Import=application/vnd.oasis.opendocument.graphics
 X-KDE-Library=calligra_filter_karbon2image
+X-KDE-PluginInfo-Name=karbonimagefilter
 X-KDE-Weight=1

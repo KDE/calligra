@@ -159,6 +159,7 @@
   <Action name="validity"/>
   <Separator/>
   <Action name="goalSeek"/>
+  <Action name="Pivot"/>
  </Menu>
 <!-- <<<<<<<<<<<<<<<<<<<<<<<<<<   Tools Menu   >>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
  <Menu name="tools"><text>&amp;Tools</text>
@@ -379,7 +380,6 @@
     <Action name="namedAreaDialog"/><!--FIXME also jumps to named area-->
     <Action name="consolidate"/>
     <Action name="subtotals"/>
-    <Action name="pivot"/>
     <Action name="validity"/>
     <Action name="goalSeek"/>
     <!-- Tools Menu Actions -->
