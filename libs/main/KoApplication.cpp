@@ -318,7 +318,8 @@ bool KoApplication::start()
                                                                                     "Try restarting, running kbuildsycoca4 or reinstalling."));
 #ifdef Q_OS_WIN
         QProcess::execute(applicationDirPath() + "/kbuildsycoca4.exe");
-#endifreturn false;
+#endif
+        return false;
     }
 
     // Create the global document, view, window factory
