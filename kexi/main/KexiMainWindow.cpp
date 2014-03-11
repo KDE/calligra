@@ -883,8 +883,8 @@ void KexiMainWindow::setupActions()
     d->action_window_fullscreen = KStandardAction::fullScreen(this, SLOT(toggleFullScreen(bool)), this, ac);
     ac->addAction("full_screen", d->action_window_fullscreen);
     QList<QKeySequence> shortcuts;
-    KShortcut *shortcut = new KShortcut(d->action_window_fullscreen->shortcut().primary(), QKeySequence("F11"));
-    shortcuts = shortcut->toList();
+    KShortcut shortcut(d->action_window_fullscreen->shortcut().primary(), QKeySequence("F11"));
+    shortcuts = shortcut.toList();
     d->action_window_fullscreen->setShortcuts(shortcuts);
     QShortcut *s = new QShortcut(d->action_window_fullscreen->shortcut().primary(), this);
     connect(s, SIGNAL(activated()), d->action_window_fullscreen, SLOT(trigger()));

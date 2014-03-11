@@ -118,7 +118,7 @@ tristate KexiQueryView::afterSwitchFrom(Kexi::ViewMode mode)
         KexiQueryPart::TempData * temp = static_cast<KexiQueryPart::TempData*>(window()->data());
 
         //remember what view we should use to store data changes, if needed
-//  if (temp->queryChangedInPreviousView)
+//  if (temp->queryChangedInPreviousView())
 //   d->queryHasBeenChangedInViewMode = mode;
 //  else
 //   d->queryHasBeenChangedInViewMode = Kexi::NoViewMode;

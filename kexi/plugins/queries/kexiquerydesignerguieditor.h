@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2004-2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2014 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -152,7 +152,7 @@ protected slots:
 
     void addConnection(KexiDB::Field *masterField, KexiDB::Field *detailsField);
 
-    void slotPropertyChanged(KoProperty::Set& list, KoProperty::Property& property);
+    void slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& property);
 
 //  void slotObjectCreated(const QString &mime, const QString& name);
     void slotNewItemStored(KexiPart::Item&);

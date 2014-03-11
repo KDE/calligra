@@ -46,6 +46,7 @@ Name[zh_CN]=Karbon SVGZ 导入过滤器
 Name[zh_TW]=Karbon SVGZ 匯入過濾程式
 X-KDE-Export=application/vnd.oasis.opendocument.graphics
 X-KDE-Import=image/svg+xml-compressed
+X-KDE-PluginInfo-Name=karbonsvgfilter
 X-KDE-Weight=1
 X-KDE-Library=calligra_filter_svg2karbon
 X-KDE-ServiceTypes=Calligra/Filter

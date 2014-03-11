@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004-2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2014 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -156,6 +156,8 @@ void KexiDataAwarePropertySet::set(uint row, KoProperty::Set* set, bool newOne)
     d->sets[row] = set;
 
     connect(set, SIGNAL(propertyChanged(KoProperty::Set&,KoProperty::Property&)), d->view, SLOT(setDirty()));
+    connect(set, SIGNAL(propertyChanged(KoProperty::Set&,KoProperty::Property&)),
+            this, SIGNAL(propertyChanged(KoProperty::Set&,KoProperty::Property&)));
 
     if (newOne) {
         //add a special property indicating that this is brand new set,

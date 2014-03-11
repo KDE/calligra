@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2014 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -361,7 +361,7 @@ bool KexiComboBoxPopup::eventFilter(QObject *o, QEvent *e)
                  << "visible=" << qobject_cast<QWidget*>(o)->isVisible();
     }
 #endif
-    if (o == this && e->type() == QEvent::Hide) {
+    if (o == this && (e->type() == QEvent::Hide || e->type() == QEvent::FocusOut)) {
         kDebug(44010) << "HIDE!!!";
         emit hidden();
     } else if (e->type() == QEvent::MouseButtonPress) {
@@ -375,6 +375,7 @@ bool KexiComboBoxPopup::eventFilter(QObject *o, QEvent *e)
                     || (ke->modifiers() == Qt::AltModifier && k == Qt::Key_Up)) {
                 hide();
                 emit cancelled();
+                emit hidden();
                 return true;
             }
         }
