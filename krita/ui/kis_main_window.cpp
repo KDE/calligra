@@ -86,6 +86,8 @@ KisMainWindow::KisMainWindow(KoPart *part, const KComponentData &instance)
 
     guiFactory()->addClient(m_guiClient);
 
+
+
     updateMenus();
 }
 
@@ -161,8 +163,9 @@ void KisMainWindow::setActiveSubWindow(QWidget *window)
 
 KisView2 *KisMainWindow::activeKisView()
 {
-    if (QMdiSubWindow *activeSubWindow = m_mdiArea->activeSubWindow())
+    if (QMdiSubWindow *activeSubWindow = m_mdiArea->activeSubWindow()) {
         return qobject_cast<KisView2 *>(activeSubWindow->widget());
+    }
     return 0;
 }
 

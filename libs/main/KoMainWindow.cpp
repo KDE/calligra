@@ -461,10 +461,7 @@ KoMainWindow::~KoMainWindow()
         d->part->removeMainWindow(this);
     }
 
-    // safety first ;)
-    setActiveView(0);
-
-    if(d->noCleanup)
+    if (d->noCleanup)
         return;
 
     delete d;
@@ -1903,13 +1900,9 @@ void KoMainWindow::setActiveView(QWidget *widget)
 
     if (oldActiveWidget) {
         QWidget *savedActiveWidget = widget;
-        disconnect( oldActiveWidget, SIGNAL(destroyed()), this, SLOT(slotWidgetDestroyed()) );
         d->m_activeWidget = savedActiveWidget;
     }
 
-    if (d->m_activeWidget ) {
-        connect( d->m_activeWidget, SIGNAL(destroyed()), this, SLOT(slotWidgetDestroyed()) );
-    }
     // Set the new active instance in KGlobal
     KGlobal::setActiveComponent(d->part ? d->part->componentData() : KGlobal::mainComponent());
 
@@ -1964,13 +1957,6 @@ void KoMainWindow::setActiveView(QWidget *widget)
     if (d->activeView) {
         d->activeView->guiActivateEvent(true);
     }
-}
-
-void KoMainWindow::slotWidgetDestroyed()
-{
-    kDebug(1000);
-    if (static_cast<const QWidget *>( sender() ) == d->m_activeWidget)
-        setActiveView(0);
 }
 
 void KoMainWindow::slotDocumentTitleModified(const QString &caption, bool mod)
