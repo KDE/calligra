@@ -31,4 +31,5 @@ Theme {
     fonts: Fonts.values;
 
     iconPath: "icons/"
+    imagePath: "images/"
 }
