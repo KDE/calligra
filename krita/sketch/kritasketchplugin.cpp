@@ -87,7 +87,7 @@ void KritaSketchPlugin::initializeEngine(QDeclarativeEngine* engine, const char*
     Q_ASSERT(uri == QLatin1String("org.krita.sketch"));
 
     Constants *constants = new Constants( this );
-    Settings *settings = new Settings( engine, this );
+    Settings *settings = new Settings( this );
     DocumentManager::instance()->setSettingsManager( settings );
     RecentFileManager *recentFileManager = DocumentManager::instance()->recentFileManager();
 

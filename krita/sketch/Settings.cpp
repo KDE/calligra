@@ -21,6 +21,8 @@
 #include <QApplication>
 
 #include <kglobal.h>
+#include <ksharedconfig.h>
+#include <kconfiggroup.h>
 #include <kstandarddirs.h>
 
 #include "Theme.h"
@@ -36,19 +38,11 @@ public:
     Theme* theme;
 };
 
-Settings::Settings( QDeclarativeEngine* engine, QObject* parent )
+Settings::Settings( QObject* parent )
     : QObject( parent ), d( new Private )
 {
-    QDeclarativeComponent* themeComponent = new QDeclarativeComponent(engine, this);
-    themeComponent->loadUrl(KGlobal::dirs()->findResource("data", "kritasketch/themes/default/theme.qml"));
-    if(themeComponent->isError())
-    {
-        qDebug() << themeComponent->errorString();
-    }
-    d->theme = qobject_cast<Theme*>(themeComponent->create());
-    if(!d->theme)
-        qDebug() << "Failed to create theme instance!";
-    delete themeComponent;
+    QString theme = KGlobal::config()->group("General").readEntry<QString>("theme", "default");
+    d->theme = Theme::load(theme, this);
 }
 
 Settings::~Settings()
@@ -100,6 +94,29 @@ void Settings::setFocusItem(QDeclarativeItem* item)
 QObject* Settings::theme() const
 {
     return d->theme;
+}
+
+QString Settings::themeID() const
+{
+    if(d->theme)
+        return d->theme->id();
+
+    return QString();
+}
+
+void Settings::setThemeID(const QString& id)
+{
+    if(!d->theme || id != d->theme->id()) {
+        if(d->theme) {
+            delete d->theme;
+            d->theme = 0;
+        }
+
+        d->theme = Theme::load(id, this);
+        KGlobal::config()->group("General").writeEntry<QString>("theme", id);
+
+        emit themeChanged();
+    }
 }
 
 #include "Settings.moc"
