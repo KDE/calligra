@@ -18,10 +18,10 @@
 
 var values = {
     base: {
-        base: "#999999",
-        text: "#000000",
-        header: "#666666",
-        headerText: "#ff0000",
+        base: "#a0a0a0",
+        text: "#ffffff",
+        header: "#000000",
+        headerText: "#ffffff",
     },
 
     components: {
@@ -82,6 +82,61 @@ var values = {
                 border: "silver",
             },
         },
+        newImageList: {
+            start: "#FBFBFB",
+            stop: "#F0F0F0",
+        },
+        newsList: {
+            listItem: {
+                start: "#FBFBFB",
+                stop: "#F0F0F0",
+                moreLink: "#999999",
+            },
+            title: "#000000",
+            date: "#666666",
+            description: "#000000",
+            backLink: "#999999",
+        },
+        panelTextField: {
+            border: "silver",
+            background: Qt.rgba(1.0, 1.0, 1.0, 0.4),
+            enabled: Qt.rgba(0.0, 0.0, 0.0, 0.0),
+            disabled: Qt.rgba(0.0, 0.0, 0.0, 0.7),
+        },
+        rangeInput: {
+
+        },
+        recentFilesList: {
+            start: "#FBFBFB",
+            stop: "#F0F0F0",
+        },
+        scrollDecorator: {
+            base: "silver",
+            border: "transparent"
+        },
+        slider: {
+            background: {
+                fill: Qt.rgba(1.0, 1.0, 1.0, 0.75),
+                border: "silver",
+            },
+            handle: {
+                fill: "silver",
+                border: "transparent",
+            },
+        },
+        textField: {
+            background: Qt.rgba(1.0, 1.0, 1.0, 0.75),
+            border: {
+                normal: "silver",
+                error: "red",
+                focus: "gray",
+            },
+            placeholder: "#5a5a5a",
+        },
+        textFieldMultiline: {
+            background: Qt.rgba(1.0, 1.0, 1.0, 0.75),
+            border: "silver",
+        },
     },
 
     panels: {
@@ -91,17 +146,17 @@ var values = {
         },
 
         base: {
-            base: "#ffff00",
-            text: "#000000",
-            header: "#00ffff",
-            headerText: "#000000",
+            base: "#a0a0a0",
+            text: "#ffffff",
+            header: "#000000",
+            headerText: "#ffffff",
         },
 
         presets: {
-            base: "#ffff00",
-            text: "#000000",
-            header: "#00ffff",
-            headerText: "#000000",
+            base: "#a0a0a0",
+            text: "#ffffff",
+            header: "#000000",
+            headerText: "#ffffff",
 
             preset: {
                 active: "#D7D7D7",
@@ -110,11 +165,11 @@ var values = {
         },
 
         layers: {
-            base: "#eeeeff",
-            text: "#000000",
-            header: "#aaaaff",
-            headerText: "#000000",
-            subheader: "#ffaaaa",
+            base: "#a0a0a0",
+            text: "#ffffff",
+            header: "#000000",
+            headerText: "#ffffff",
+            subheader: Qt.rgba(1.0, 1.0, 1.0, 0.5),
             editorButtons: {
                 active: "#EAEAEA",
                 inactive: "transparent",
@@ -125,16 +180,16 @@ var values = {
                 active: Qt.rgba(1.0, 1.0, 1.0, 0.5),
                 inactive: Qt.rgba(1.0, 1.0, 1.0, 0.2),
                 text: "#000000",
-                visible: "#ff0000",
-                locked: "#00ff00",
+                visible: "#ffffff",
+                locked: "#ffffff",
             },
         },
 
         selection: {
-            base: "#ffff00",
-            text: "#000000",
-            header: "#00ffff",
-            headerText: "#000000",
+            base: "#a0a0a0",
+            text: "#ffffff",
+            header: "#000000",
+            headerText: "#ffffff",
 
             buttons: {
                 color: Qt.rgba(1.0, 1.0, 1.0, 0.4),
@@ -144,31 +199,31 @@ var values = {
         },
 
         filter: {
-            base: "#ffff00",
-            text: "#000000",
-            header: "#00ffff",
-            headerText: "#000000",
+            base: "#a0a0a0",
+            text: "#ffffff",
+            header: "#000000",
+            headerText: "#ffffff",
         },
 
         color: {
-            base: "#ffff00",
-            text: "#000000",
-            header: "#00ffff",
-            headerText: "#000000",
+            base: "#a0a0a0",
+            text: "#ffffff",
+            header: "#000000",
+            headerText: "#ffffff",
         },
 
         tool: {
-            base: "#ffff00",
-            text: "#000000",
-            header: "#00ffff",
-            headerText: "#000000",
-            subheader: "#ffaaaa",
+            base: "#a0a0a0",
+            text: "#ffffff",
+            header: "#000000",
+            headerText: "#ffffff",
+            subheader: Qt.rgba(1.0, 1.0, 1.0, 0.5),
         },
 
         menu: {
-            base: "#00ff00",
+            base: "#00000",
             text: "#ffffff",
-            buttonHighlight: "#aaaaaa",
+            buttonHighlight: "#dcdcdc",
         },
 
         newImage: {
@@ -192,37 +247,37 @@ var values = {
 
     pages: {
         welcome: {
-            background: "#eeffff",
+            background: "#ffffff",
             open:{
                 header: {
-                    start: "#707000",
-                    stop: "#565600",
+                    start: "#707070",
+                    stop: "#565656",
                     text: "#ffffff",
                 },
             },
             create: {
                 header: {
-                    start: "#005656",
-                    stop: "#007070",
+                    start: "#565656",
+                    stop: "#707070",
                     text: "#ffffff",
                 },
             },
             news: {
                 header: {
-                    start: "#700070",
-                    stop: "#560056",
+                    start: "#707070",
+                    stop: "#565656",
                     text: "#ffffff",
                 },
             },
         },
         open: {
-            background: "#ffeeff",
+            background: "#ffffff",
             location: "#ffffff",
         },
         save: {
-            background: "#ffffee",
+            background: "#ffffff",
             location: "#ffffff",
-            footer: "#551111",
+            footer: "#000000",
         },
     },
 }
