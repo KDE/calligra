@@ -58,6 +58,7 @@ public:
     QString imagePath;
     QString fontPath;
 
+    QHash<QString, QColor> colorCache;
     QHash<QString, QFont> fontMap;
 
     bool fontsAdded;
@@ -134,6 +135,9 @@ void Theme::setColors(const QVariantMap& newValue)
 
 QColor Theme::color(const QString& name)
 {
+    if(d->colorCache.contains(name))
+        return d->colorCache.value(name);
+
     QStringList parts = name.split('/');
     QColor result;
 
@@ -163,6 +167,8 @@ QColor Theme::color(const QString& name)
 
     if(!result.isValid()) {
         qWarning() << "Unable to find color" << name;
+    } else {
+        d->colorCache.insert(name, result);
     }
 
     return result;
