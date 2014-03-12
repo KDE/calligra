@@ -40,7 +40,7 @@ Panel {
             id: colorPicker;
             width: height;
             height: Constants.ToolbarButtonSize;
-            image: Settings.theme.icon("icon-colorpicker");
+            image: Settings.theme.icon("colorpicker");
             onClicked: toolManager.requestToolChange("KritaSelected/KisToolColorPicker");
         },
         Item {
@@ -52,7 +52,7 @@ Panel {
             visible: base.state === "peek";
             width: height;
             height: Constants.ToolbarButtonSize
-            image: colorSelectorPeek.visible ? Settings.theme.icon("icon-palette") : Settings.theme.icon("icon-color_wheel");
+            image: colorSelectorPeek.visible ? Settings.theme.icon("palette") : Settings.theme.icon("color_wheel");
             onClicked: colorSelectorPeek.visible = !colorSelectorPeek.visible;
         }
     ]

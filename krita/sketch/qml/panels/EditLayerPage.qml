@@ -168,14 +168,14 @@ Item {
             id: visibilityButton
             width: height;
             height: Constants.GridHeight
-            image: (layersModel && layersModel.activeVisible) ? "../images/svg/icon-visible_on-black.svg" : "../images/svg/icon-visible_off-black.svg";
+            image: (layersModel && layersModel.activeVisible) ? Settings.theme.icon("visible_on-black") : Settings.theme.icon("visible_off-black");
             onClicked: if (layersModel) layersModel.activeVisible = !layersModel.activeVisible;
         }
         Button {
             id: lockstateButton
             width: height;
             height: Constants.GridHeight
-            image: (layersModel && layersModel.activeLocked) ? "../images/svg/icon-locked_on-black.svg" : "../images/svg/icon-locked_off-black.svg";
+            image: (layersModel && layersModel.activeLocked) ? Settings.theme.icon("locked_on-black") : Settings.theme.icon("locked_off-black");
             onClicked: if (layersModel) layersModel.activeLocked = !layersModel.activeLocked;
         }
     }
