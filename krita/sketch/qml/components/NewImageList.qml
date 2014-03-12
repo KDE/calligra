@@ -33,12 +33,13 @@ PageStack {
                 width: ListView.view.width;
 
                 title: model.name;
-                image: model.image;
+                image.source: Settings.theme.icon(model.image);
+                image.asynchronous: false;
                 imageShadow: false;
 
                 gradient: Gradient {
-                    GradientStop { position: 0; color: "#FBFBFB"; }
-                    GradientStop { position: 0.4; color: "#F0F0F0"; }
+                    GradientStop { position: 0; color: Settings.theme.color("components/newImageList/start") }
+                    GradientStop { position: 0.4; color: Settings.theme.color("components/newImageList/stop"); }
                 }
 
                 onClicked: {
@@ -86,13 +87,13 @@ PageStack {
             }
 
             model: ListModel {
-                ListElement { bnrole: "a4p";    name: "Blank Image (A4 Portrait)"; image: "../images/svg/icon-A4portrait-black.svg" }
-                ListElement { bnrole: "a4l";    name: "Blank Image (A4 Landscape)"; image: "../images/svg/icon-A4landscape-black.svg" }
+                ListElement { bnrole: "a4p";    name: "Blank Image (A4 Portrait)"; image: "A4portrait-black"; }
+                ListElement { bnrole: "a4l";    name: "Blank Image (A4 Landscape)"; image: "A4landscape-black"; }
 //                 ListElement { bnrole: "a5p";    name: "Blank Image (A5 Portrait)"; image: "../images/svg/icon-A4portrait-black.svg" }
 //                 ListElement { bnrole: "a5l";    name: "Blank Image (A5 Landscape)"; image: "../images/svg/icon-A4landscape-black.svg" }
-                ListElement { bnrole: "screen"; name: "Blank Image (Screen Size)"; image: "../images/svg/icon-filenew-black.svg" }
-                ListElement { bnrole: "custom"; name: "Custom Size"; image: "../images/svg/icon-filenew-black.svg" }
-                ListElement { bnrole: "clip";   name: "From Clipboard"; image: "../images/svg/icon-fileclip-black.svg" }
+                ListElement { bnrole: "screen"; name: "Blank Image (Screen Size)"; image: "filenew-black" }
+                ListElement { bnrole: "custom"; name: "Custom Size"; image: "filenew-black" }
+                ListElement { bnrole: "clip";   name: "From Clipboard"; image: "fileclip-black" }
 //                 ListElement { bnrole: "webcam"; name: "From Camera"; image: "../images/svg/icon-camera-black.svg" }
             }
 
@@ -116,14 +117,14 @@ PageStack {
                     id: titleImage;
                     anchors.left: parent.left;
                     anchors.verticalCenter: parent.verticalCenter;
-                    source: "../images/svg/icon-filenew-black.svg"
+                    source: Settings.theme.icon("filenew-black");
                 }
                 Label {
                     anchors.left: titleImage.right;
                     anchors.leftMargin: Constants.DefaultMargin;
                     anchors.verticalCenter: parent.verticalCenter;
                     text: "Custom Size";
-                    font.pixelSize: Constants.LargeFontSize;
+                    font: Settings.theme.font("title");
                 }
             }
             TextField {
@@ -159,14 +160,12 @@ PageStack {
                 width: parent.width;
                 Button {
                     width: parent.width / 2;
-                    color: "transparent";
-                    image: "../images/svg/icon-cancel-black.svg";
+                    image: Settings.theme.icon("cancel-black");
                     onClicked: pageStack.pop();
                 }
                 Button {
                     width: parent.width / 2;
-                    color: "transparent";
-                    image: "../images/svg/icon-apply-black.svg";
+                    image: Settings.theme.icon("apply-black");
                     onClicked: {
                         if (width.acceptableInput && height.acceptableInput && resolution.acceptableInput) {
                             base.clicked();
