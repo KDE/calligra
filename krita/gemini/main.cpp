@@ -142,11 +142,6 @@ int main( int argc, char** argv )
     QApplication::setAttribute(Qt::AA_X11InitThreads);
 #endif
 
-    QStringList fonts = KGlobal::dirs()->findAllResources( "appdata", "fonts/*.otf" );
-    foreach( const QString &font, fonts ) {
-        QFontDatabase::addApplicationFont( font );
-    }
-
     MainWindow window(fileNames);
 
     if (args->isSet("vkb")) {
