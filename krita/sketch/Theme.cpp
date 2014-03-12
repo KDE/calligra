@@ -282,7 +282,16 @@ void Theme::setIconPath(const QString& newValue)
 
 QUrl Theme::icon(const QString& name)
 {
-    return QUrl::fromLocalFile(KGlobal::dirs()->findResource("data", QString("kritasketch/themes/%1/%2/%3.svg").arg(d->id, d->iconPath, name)));
+    QString url = QString("%1/%2/%3.svg").arg(d->basePath, d->iconPath, name);
+    if(!QFile::exists(url)) {
+        if(d->inheritedTheme) {
+            return d->inheritedTheme->icon(name);
+        } else {
+            qWarning() << "Unable to find icon" << url;
+        }
+    }
+
+    return QUrl::fromLocalFile(url);
 }
 
 QString Theme::imagePath() const
