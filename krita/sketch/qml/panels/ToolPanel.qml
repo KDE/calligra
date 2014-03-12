@@ -135,6 +135,7 @@ Panel {
             width: height;
             height: Constants.ToolbarButtonSize;
             image: Settings.theme.icon("apply");
+            visible: false;
             onClicked: state === "peek" ? toolOptionsPeek.item.apply() : toolOptionsFull.item.apply();
         }
     ]
