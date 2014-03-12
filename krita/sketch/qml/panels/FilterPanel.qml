@@ -110,47 +110,15 @@ Panel {
             onModelChanged: currentIndex = 0;
             onCurrentIndexChanged: {
                 if (model.filterRequiresConfiguration(currentIndex)) {
-                    noConfigNeeded.visible = false;
-                    configNeeded.visible = true;
                     configLoader.source = "filterconfigpages/" + model.filterID(currentIndex) + ".qml";
                     if (typeof(configLoader.item.configuration) !== 'undefined') {
                         configLoader.item.configuration = model.configuration(currentIndex);
                     }
                 }
                 else {
-                    noConfigNeeded.visible = true;
-                    configNeeded.visible = false;
+                    configLoader.source = "filterconfigpages/nothing-to-configure.qml";
                 }
                 filtersCategoryModel.filterSelected(currentIndex);
-            }
-        }
-        Item {
-            id: noConfigNeeded;
-            width: parent.width;
-            height: parent.width;
-            Column {
-                anchors.fill: parent;
-                Item {
-                    width: parent.width;
-                    height: Constants.GridHeight;
-                }
-                Label {
-                    width: parent.width;
-                    wrapMode: Text.WordWrap;
-                    horizontalAlignment: Text.AlignHCenter;
-                    text: "This filter requires no configuration. Click below to apply it.";
-                }
-                Item {
-                    width: parent.width;
-                    height: Constants.GridHeight / 2;
-                }
-                Button {
-                    width: height;
-                    height: Constants.GridHeight
-                    anchors.horizontalCenter: parent.horizontalCenter;
-                    image: Settings.theme.icon("apply")
-                    onClicked: fullFilters.model.activateFilter(fullFilters.currentIndex);
-                }
             }
         }
         Item {

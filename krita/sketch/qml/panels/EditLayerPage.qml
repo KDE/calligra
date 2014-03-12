@@ -131,13 +131,10 @@ Item {
                     base.isChangingConfig = false;
                 }
                 if (model.filterRequiresConfiguration(currentIndex)) {
-                    noConfigNeeded.visible = false;
-                    configNeeded.visible = true;
                     configLoader.source = "filterconfigpages/" + model.filterID(currentIndex) + ".qml";
                 }
                 else {
-                    noConfigNeeded.visible = true;
-                    configNeeded.visible = false;
+                    configLoader.source = "filterconfigpages/nothing-to-configure.qml";
                 }
             }
         }
@@ -328,40 +325,6 @@ Item {
             radius: Constants.DefaultMargin;
             color: (layersModel && layersModel.activeAChannelLocked) ? d.buttonActiveColor : d.buttonInactiveColor;
             onClicked: if (layersModel) layersModel.activeAChannelLocked = !layersModel.activeAChannelLocked;
-        }
-    }
-    Item {
-        id: noConfigNeeded;
-        visible: layersModel ? (layersModel.activeType === "KisFilterMask" || layersModel.activeType === "KisAdjustmentLayer") : false;
-        anchors {
-           top: lockedChannelsRow.bottom;
-           left: parent.left;
-           right: parent.right;
-           bottom: parent.bottom;
-        }
-        Column {
-            anchors.fill: parent;
-            Item {
-                width: parent.width;
-                height: Constants.GridHeight;
-            }
-            Label {
-                width: parent.width;
-                wrapMode: Text.WordWrap;
-                horizontalAlignment: Text.AlignHCenter;
-                text: "This filter requires no configuration. Click below to apply it.";
-            }
-            Item {
-                width: parent.width;
-                height: Constants.GridHeight / 2;
-            }
-            Button {
-                width: height;
-                height: Constants.GridHeight
-                anchors.horizontalCenter: parent.horizontalCenter;
-                image: Settings.theme.icon("apply");
-                onClicked: fullFilters.model.activateFilter(fullFilters.currentIndex);
-            }
         }
     }
     Flickable {
