@@ -115,7 +115,16 @@ QString Theme::inherits() const
 void Theme::setInherits(const QString& newValue)
 {
     if(newValue != d->inherits) {
+        if(d->inheritedTheme) {
+            delete d->inheritedTheme;
+            d->inheritedTheme = 0;
+        }
         d->inherits = newValue;
+
+        if(!d->inherits.isEmpty()) {
+            d->inheritedTheme = Theme::load(d->inherits, this);
+        }
+
         emit inheritsChanged();
     }
 }
@@ -163,6 +172,10 @@ QColor Theme::color(const QString& name)
                 map = QVariantMap();
             }
         }
+    }
+
+    if(!result.isValid() && d->inheritedTheme) {
+        result = d->inheritedTheme->color(name);
     }
 
     if(!result.isValid()) {
