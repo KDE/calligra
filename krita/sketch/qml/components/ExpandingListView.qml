@@ -29,7 +29,7 @@ Item {
         id: topButton
         border {
             width: 1;
-            color: Settings.theme.color("components/expandingListview/selection/border");
+            color: Settings.theme.color("components/expandingListView/selection/border");
         }
         radius: (Constants.GridHeight / 4) - 2;
         anchors {
@@ -114,13 +114,12 @@ Item {
                     color: Settings.theme.color("components/expandingListView/list/item");
                     opacity: model.isCategory ? 0.3 : 0;
                 }
-                Image {
+                Shadow {
                     anchors {
                         bottom: delegateLabel.bottom;
                         left: delegateLabel.left;
                         right: delegateLabel.right;
                     }
-                    source: "../images/shadow-smooth.png";
                     visible: listView.currentIndex === index;
                 }
                 Label {

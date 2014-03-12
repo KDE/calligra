@@ -30,7 +30,7 @@ Image {
     height: Constants.GridHeight * 2;
     width: parent.width;
 
-    source: "../images/header_krita_sketch.png"
+    source: Settings.theme.image("header_krita_sketch.png");
     smooth: true;
 
     Row {

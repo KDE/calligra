@@ -23,13 +23,9 @@ Item {
 
     property alias title: title.text;
     property alias description: description.text;
-    property alias image: image.source;
     property alias gradient: background.gradient;
-
+    property alias image: image;
     property alias imageShadow: imageShadow.visible;
-    property alias imageFillMode: image.fillMode;
-    property alias imageSmooth: image.smooth;
-    property alias imageCache: image.cache;
 
     signal clicked();
 
@@ -52,14 +48,7 @@ Item {
             GradientStop { position: 0.4; color: Settings.theme.color("components/listItem/background/stop"); }
         }
 
-        Image {
-            anchors.top: parent.bottom;
-
-            width: parent.width;
-            height: Constants.GridHeight / 8;
-
-            source: "../images/shadow-smooth.png";
-        }
+        Shadow { anchors.top: parent.bottom; width: parent.width; height: Constants.GridHeight / 8; }
 
         Image {
             id: image
@@ -84,7 +73,7 @@ Item {
             sourceSize.height: width > height ? height : width;
         }
 
-        Image {
+        Shadow {
             id: imageShadow;
 
             visible: false;
@@ -94,8 +83,6 @@ Item {
 
             width: image.width;
             height: Constants.GridHeight / 8;
-
-            source: "../images/shadow-smooth.png";
         }
 
         Label {
