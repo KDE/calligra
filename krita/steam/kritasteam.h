@@ -16,28 +16,14 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef _PATHCONVERTER_H
-#define _PATHCONVERTER_H
+
+#ifndef KRITASTEAM_H
+#define KRITASTEAM_H
 
 
+#define KRITA_SKETCH_APPID 280680
+#define KRITA_GEMINI_APPID 280680
 
-#include <QDir>
-#include <QString>
-#include "image/krita_export.h"
-
-#ifdef Q_OS_WIN
-
-class KRITASKETCH_EXPORT WindowsTools  {
-/**
- * Ensures that a path given to the function uses the correct case.
- *
- * QML checks paths to see if they are correctt according to case. This causes
- * problems if the application is launched with a bad path, as it launches but 
- * QML fails at the test. 
- */
- public:
-	static QString  correctPathForCase(const QString& directory);
-};
-#endif 
-
+#include "kritasteamachievements.h"
+#include "kritasteamclient.h"
 #endif

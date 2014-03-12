@@ -39,6 +39,10 @@
 
 #include "sketch/SketchInputContext.h"
 
+#if defined HAVE_STEAMWORKS
+#include <unistd.h>
+#include "steam/kritasteam.h"
+#endif
 
 #if defined Q_OS_WIN
 #include "stdlib.h"
@@ -47,9 +51,20 @@
 #include <ui/input/wintab/kis_tablet_support_x11.h>
 #endif
 
-
 int main( int argc, char** argv )
 {
+    int result;
+    #if defined HAVE_STEAMWORKS
+        KritaSteamClient* steamClient = KritaSteamClient::instance();
+        if (!steamClient->initialise(KRITA_GEMINI_APPID))
+        {
+            /* Either steam isn't running or there is a problem
+               SteamClient::initialse may force a relaunch from Steam
+               so this must close. */
+            return 1;
+        }
+    #endif
+
     KAboutData aboutData("krita",
                          0,
                          ki18n("Krita Gemini"),
@@ -156,12 +171,34 @@ int main( int argc, char** argv )
         app.setInputContext(new SketchInputContext(&app));
     }
 
-#ifdef Q_OS_WIN
-    window.showMaximized();
-#else
-    window.show();
+    bool showFullscreen = false;
+#if defined HAVE_STEAMWORKS
+    if (steamClient->isInBigPictureMode()) {
+        showFullscreen = true;
+    }
 #endif
+
+    if (showFullscreen) {
+        window.showFullScreen();
+    } else {
+#ifdef Q_OS_WIN
+        window.showMaximized();
+#else
+        window.show();
+#endif
+    }
+
     splash.finish(&window);
 
-    return app.exec();
+#if defined HAVE_STEAMWORKS
+    steamClient->mainWindowCreated();
+#endif
+
+    result = app.exec();
+
+#if defined HAVE_STEAMWORKS
+    steamClient->mainWindowBeingDestroyed();
+    steamClient->shutdown();
+#endif
+    return result;
 }

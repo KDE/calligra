@@ -19,7 +19,7 @@ message(STATUS "Steamworks - Finding include dirs")
 find_path(STEAMWORKS_INCLUDE_DIR
     NAMES steam/steam_api.h
     #HINTS ${FFTW3_PKGCONF_INCLUDE_DIRS} ${FFTW3_PKGCONF_INCLUDEDIR}
-    #PATH_SUFFIXES fftw3
+    PATH_SUFFIXES public
 )
 
 IF (WIN32)
@@ -31,9 +31,11 @@ IF (WIN32)
 	
 	find_library(STEAMWORKS_LIBRARY
 		NAMES ${STEAMWORKS_SHARED_LIBRARY_NAME}
+                PATH_SUFFIXES redistributable_bin redistributable_bin/win64
 	)
 	find_file(STEAMWORKS_SHARED_LIBRARY_PATH
 		NAMES ${STEAMWORKS_SHARED_LIBRARY_NAME}.dll
+                PATH_SUFFIXES redistributable_bin redistributable_bin/win64
 	)
 ELSE (WIN32)
 	find_library(STEAMWORKS_LIBRARY

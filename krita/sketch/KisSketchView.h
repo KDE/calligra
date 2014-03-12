@@ -78,6 +78,11 @@ public Q_SLOTS:
 
     void activate();
 
+#if defined HAVE_STEAMWORKS
+    void steamOverlayActivated();
+    void steamOverlayDeactivated();
+#endif
+
 Q_SIGNALS:
     // This is directly forwarded from the document, which means that
     // value 0-100 means in progress

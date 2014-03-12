@@ -79,6 +79,10 @@
 #include "SketchDeclarativeView.h"
 #include <gemini/ViewModeSwitchEvent.h>
 
+#if defined HAVE_STEAMWORKS
+#include "steam/kritasteamclient.h"
+#endif
+
 class KisSketchView::Private
 {
 public:
@@ -125,6 +129,10 @@ public:
     QAction* redoAction;
 
     unsigned char tabletEventCount;
+
+#if defined HAVE_STEAMWORKS
+    QTimer *steamOverlayTimer;
+#endif
 };
 
 KisSketchView::KisSketchView(QDeclarativeItem* parent)
@@ -161,6 +169,15 @@ KisSketchView::KisSketchView(QDeclarativeItem* parent)
     connect(DocumentManager::instance()->progressProxy(), SIGNAL(valueChanged(int)), SIGNAL(progress(int)));
     connect(DocumentManager::instance(), SIGNAL(documentSaved()), d->savedTimer, SLOT(start()));
 
+#if defined HAVE_STEAMWORKS
+    d->steamOverlayTimer = new QTimer(this);
+    d->steamOverlayTimer->setSingleShot(false);
+    d->steamOverlayTimer->setInterval(40);
+    connect(d->steamOverlayTimer, SIGNAL(timeout()), SLOT(updateDisplay()));
+
+    connect(KritaSteamClient::instance(), SIGNAL(overlayActivated()), SLOT(steamOverlayActivated()));
+    connect(KritaSteamClient::instance(), SIGNAL(overlayDeactivated()), SLOT(steamOverlayDeactivated()));
+#endif
     if (DocumentManager::instance()->document())
         documentChanged();
 }
@@ -373,7 +390,7 @@ void KisSketchView::documentChanged()
     d->resetDocumentPosition();
 
 	emit viewChanged();
-    QTimer::singleShot(1000, this, SLOT(updateDisplay()));
+    QTimer::singleShot(200, this, SLOT(updateDisplay()));
 }
 
 bool KisSketchView::event( QEvent* event )
@@ -607,11 +624,35 @@ void KisSketchView::activate()
 
 void KisSketchView::Private::updateDisplay()
 {
-    if (q->scene()) {
-        q->scene()->invalidate( 0, 0, q->width(), q->height() );
+#if defined HAVE_STEAMWORKS
+    if (SteamUtils()->BOverlayNeedsPresent()) {
+        if (q->scene()) {
+            q->scene()->invalidate( 0, 0, q->width(), q->height() );
 
-        QTimer::singleShot(50, q, SLOT(updateDisplay()));
+            QTimer::singleShot(50, q, SLOT(updateDisplay()));
+        }
+    } else {
+        QTimer::singleShot(200, q, SLOT(updateDisplay()));
     }
+#endif
 }
+
+#if defined HAVE_STEAMWORKS
+void KisSketchView::steamOverlayActivated()
+{
+    // TODO fix Steam Event handling so steam can capture keyboard input
+    // without screen refresh
+    //d->steamOverlayTimer->start();
+    qDebug("Steam OverlayActivated");
+}
+
+void KisSketchView::steamOverlayDeactivated()
+{
+    // TODO fix Steam Event handling so steam can capture keyboard input
+    // without screen refresh
+    //d->steamOverlayTimer->stop();
+    qDebug("Steam OverlayDeactivated");
+}
+#endif
 
 #include "KisSketchView.moc"

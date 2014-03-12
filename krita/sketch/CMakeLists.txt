@@ -27,6 +27,7 @@ set(kritasketchlib_SRCS
     SketchDeclarativeView.cpp
     SketchInputContext.cpp
     VirtualKeyboardController.cpp
+    ${KRITA_STEAM_SRCS}
 )
 
 set(kritasketch_SRCS
@@ -118,6 +119,7 @@ target_link_libraries(kritasketchlib
     kowidgets
     ${KDE4_KFILE_LIBRARY}
     ${GLEW_LIBRARIES}
+    ${STEAMWORKS_LIBRARY}
 )
 
 include(GNUInstallDirs)
@@ -139,7 +141,6 @@ target_link_libraries(kritasketch
     ${GLEW_LIBRARIES}
     kritaui
     ${GLEW_LIBRARIES}
-    ${STEAMWORKS_LIBRARIES}
     kritasketchlib
 )
 

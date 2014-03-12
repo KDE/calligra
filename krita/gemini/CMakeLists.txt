@@ -38,7 +38,6 @@ target_link_libraries(kritagemini
     ${GLEW_LIBRARIES}
     kritaui
     ${GLEW_LIBRARIES}
-    ${STEAMWORKS_LIBRARIES}
     kritasketchlib
 )
 

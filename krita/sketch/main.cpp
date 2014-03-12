@@ -41,8 +41,7 @@
 #include "SketchInputContext.h"
 
 #if defined HAVE_STEAMWORKS
-#include <unistd.h>
-#include "steam/steam_api.h"
+#include "steam/kritasteam.h"
 #endif
 
 #if defined Q_OS_WIN
@@ -53,29 +52,22 @@
 #endif
 
 
-#if defined HAVE_STEAMWORKS
-//-----------------------------------------------------------------------------
-// Callback hook for debug text emitted from the Steam API
-//-----------------------------------------------------------------------------
-extern "C" void __cdecl SteamAPIDebugTextHook( int nSeverity, const char *pchDebugText )
-{
-    // if you're running in the debugger, only warnings (nSeverity >= 1) will be sent
-    // if you add -debug_steamapi to the command-line, a lot of extra informational messages will also be sent
-    qDebug( pchDebugText );
-
-    if ( nSeverity >= 1 )
-    {
-        // place to set a breakpoint for catching API errors
-        int x = 3;
-        x = x;
-    }
-}
-#endif
 
 
 int main( int argc, char** argv )
 {
     int result;
+#if defined HAVE_STEAMWORKS
+    KritaSteamClient* pSteamClient = KritaSteamClient::instance();
+    if (!pSteamClient->initialise(KRITA_SKETCH_APPID))
+    {
+        /* Either steam isn't running or there is a problem
+           SteamClient::initialse may force a relaunch from Steam
+           so this must close. */
+        return 1;
+    }
+#endif
+
     KAboutData aboutData("kritasketch",
                          0,
                          ki18n("Krita Sketch"),
@@ -94,46 +86,6 @@ int main( int argc, char** argv )
     options.add( "novkb", ki18n( "Don't use the virtual keyboard" ) );
     options.add( "windowed", ki18n( "Open sketch in a window, otherwise defaults to full-screen" ) );
     KCmdLineArgs::addCmdLineOptions( options );
-
-#if defined HAVE_STEAMWORKS
-    qDebug("RestartSteam Test");
-    if ( SteamAPI_RestartAppIfNecessary( k_uAppIdInvalid ) )
-    {
-        // if Steam is not running or the game wasn't started through Steam, SteamAPI_RestartAppIfNecessary starts the
-        // local Steam client and also launches this game again.
-
-        // Once you get a public Steam AppID assigned for this game, you need to replace k_uAppIdInvalid with it and
-        // removed steam_appid.txt from the game depot.
-        return 1;
-    }
-
-    qDebug("Initialising Steam");
-    bool steamSuccess = SteamAPI_Init();
-    if (steamSuccess) {
-        qDebug("Steam initialised correctly!");
-
-        // set our debug handler
-        SteamClient()->SetWarningMessageHook( &SteamAPIDebugTextHook );
-
-        // We are going to use the controller interface, initialize it, which is a seperate step as it
-        // create a new thread in the game proc and we don't want to force that on games that don't
-        // have native Steam controller implementations
-
-        char rgchCWD[1024];
-        getcwd( rgchCWD, sizeof( rgchCWD ) );
-
-        char rgchFullPath[1024];
-    #if defined(_WIN32)
-        _snprintf( rgchFullPath, sizeof( rgchFullPath ), "%s\\%s", rgchCWD, "controller.vdf" );
-    #else
-        _snprintf( rgchFullPath, sizeof( rgchFullPath ), "%s/%s", rgchCWD, "controller.vdf" );
-    #endif
-        qDebug("Initialising Steam Controller");
-        SteamController()->Init( rgchFullPath );
-    } else {
-        qDebug("Steam did not initialise!");
-    }
-#endif
 
     KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
     QStringList fileNames;
@@ -213,13 +165,15 @@ int main( int argc, char** argv )
         window.showFullScreen();
     }
 
+#if defined HAVE_STEAMWORKS
+    pSteamClient->mainWindowCreated();
+#endif
+
     result = app.exec();
 
 #if defined HAVE_STEAMWORKS
-    if(steamSuccess) {
-        SteamController()->Shutdown();
-        SteamAPI_Shutdown();
-    }
+    pSteamClient->mainWindowBeingDestroyed();
+    pSteamClient->shutdown();
 #endif
     return result;
 }
