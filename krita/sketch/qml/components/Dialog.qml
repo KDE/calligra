@@ -149,13 +149,7 @@ Item {
                 font: Settings.theme.font("title");
             }
 
-            Image {
-                anchors.left: parent.left;
-                anchors.right: parent.right;
-                anchors.top: parent.bottom;
-
-                source: "../images/shadow-smooth.png";
-            }
+            Shadow { anchors { left: parent.left; right: parent.right; top: parent.bottom; } }
         }
 
         Label {
@@ -245,7 +239,7 @@ Item {
         }
     }
 
-    Image {
+    Shadow {
         anchors {
             left: dialogBackground.left;
             leftMargin: dialogBackground.radius;
@@ -253,7 +247,5 @@ Item {
             rightMargin: dialogBackground.radius;
             top: dialogBackground.bottom;
         }
-
-        source: "../images/shadow-smooth.png";
     }
 }
