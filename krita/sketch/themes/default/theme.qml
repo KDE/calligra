@@ -32,4 +32,5 @@ Theme {
 
     iconPath: "icons/"
     imagePath: "images/"
+    fontPath: "fonts/"
 }
