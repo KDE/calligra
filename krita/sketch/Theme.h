@@ -98,7 +98,18 @@ class KRITA_SKETCH_EXPORT Theme : public QObject
      * \notify iconPathChanged()
      */
     Q_PROPERTY(QString iconPath READ iconPath WRITE setIconPath NOTIFY iconPathChanged)
-
+    /**
+     * \property imagePath
+     * \brief The path used to look up images from the theme.
+     *
+     * Relative paths are relative to the theme directory.
+     *
+     * \default "images/"
+     * \get imagePath() const
+     * \set setImagePath()
+     * \notify imagePathChanged()
+     */
+    Q_PROPERTY(QString imagePath READ imagePath WRITE setImagePath NOTIFY imagePathChanged)
 public:
     explicit Theme(QObject* parent = 0);
     virtual ~Theme();
@@ -167,6 +178,15 @@ public:
     void setIconPath(const QString& newValue);
 
     /**
+     * Getter for property #imagePath.
+     */
+    QString imagePath() const;
+    /**
+     * Setter for property #imagePath.
+     */
+    void setImagePath(const QString& newValue);
+
+    /**
      * Get a single color from the theme.
      *
      * \param name The color to get.
@@ -185,6 +205,10 @@ public:
      * Get a font from the theme.
      */
     Q_INVOKABLE QFont font(const QString& name);
+    /**
+     * Get an image from the theme.
+     */
+    Q_INVOKABLE QUrl image(const QString& name);
 
 Q_SIGNALS:
     void idChanged();
@@ -194,6 +218,7 @@ Q_SIGNALS:
     void sizesChanged();
     void fontsChanged();
     void iconPathChanged();
+    void imagePathChanged();
 
 private:
     class Private;

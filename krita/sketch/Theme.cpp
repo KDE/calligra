@@ -22,6 +22,8 @@
 #include <QtCore/QStringList>
 #include <QtCore/QUrl>
 #include <QtCore/QDebug>
+#include <QtCore/QFile>
+#include <QtCore/QDir>
 #include <QtGui/QColor>
 #include <QtGui/QFont>
 #include <QtGui/QFontDatabase>
@@ -29,11 +31,16 @@
 
 #include <kglobal.h>
 #include <kstandarddirs.h>
+#include <kurl.h>
 
 class Theme::Private
 {
 public:
-    Private() : iconPath("icons/") { }
+    Private()
+        : inheritedTheme(0)
+        , iconPath("icons/")
+        , imagePath("images/")
+    { }
 
     QString id;
     QString name;
@@ -44,7 +51,9 @@ public:
     QVariantMap sizes;
     QVariantMap fonts;
 
+    QString basePath;
     QString iconPath;
+    QString imagePath;
 
     QHash<QString, QFont> fontMap;
 };
@@ -68,6 +77,7 @@ void Theme::setId(const QString& newValue)
 {
     if(newValue != d->id) {
         d->id = newValue;
+        d->basePath = KUrl(KGlobal::dirs()->findResource("data", QString("kritasketch/themes/%1/theme.qml").arg(d->id))).directory();
         emit idChanged();
     }
 }
@@ -162,6 +172,7 @@ void Theme::setSizes(const QVariantMap& newValue)
 
 float Theme::size(const QString& name)
 {
+    Q_UNUSED(name);
     return 0.f;
 }
 
@@ -222,6 +233,33 @@ void Theme::setIconPath(const QString& newValue)
 QUrl Theme::icon(const QString& name)
 {
     return QUrl::fromLocalFile(KGlobal::dirs()->findResource("data", QString("kritasketch/themes/%1/%2/%3.svg").arg(d->id, d->iconPath, name)));
+}
+
+QString Theme::imagePath() const
+{
+    return d->imagePath;
+}
+
+void Theme::setImagePath(const QString& newValue)
+{
+    if(newValue != d->imagePath) {
+        d->imagePath = newValue;
+        emit imagePathChanged();
+    }
+}
+
+QUrl Theme::image(const QString& name)
+{
+    QString url = QString("%1/%2/%3").arg(d->basePath, d->imagePath, name);
+    if(!QFile::exists(url)) {
+        if(d->inheritedTheme) {
+            return d->inheritedTheme->image(name);
+        } else {
+            qWarning() << "Unable to find image" << url;
+        }
+    }
+
+    return QUrl::fromLocalFile(url);
 }
 
 #include "Theme.moc"
