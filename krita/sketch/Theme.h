@@ -232,6 +232,8 @@ public:
      */
     Q_INVOKABLE QUrl image(const QString& name);
 
+    static Theme* load(const QString& id, QObject* parent = 0);
+
 Q_SIGNALS:
     void idChanged();
     void nameChanged();

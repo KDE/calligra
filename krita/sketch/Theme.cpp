@@ -28,10 +28,13 @@
 #include <QtGui/QFont>
 #include <QtGui/QFontDatabase>
 #include <QtGui/QApplication>
+#include <QtDeclarative/QDeclarativeComponent>
 
 #include <kglobal.h>
 #include <kstandarddirs.h>
 #include <kurl.h>
+
+#include "QmlGlobalEngine.h"
 
 class Theme::Private
 {
@@ -338,6 +341,25 @@ QUrl Theme::image(const QString& name)
     }
 
     return QUrl::fromLocalFile(url);
+}
+
+Theme* Theme::load(const QString& id, QObject* parent)
+{
+    QDeclarativeComponent themeComponent(QmlGlobalEngine::instance()->engine(), parent);
+    themeComponent.loadUrl(KGlobal::dirs()->findResource("data", QString("kritasketch/themes/%1/theme.qml").arg(id)));
+
+    if(themeComponent.isError()) {
+        qWarning() << themeComponent.errorString();
+        return 0;
+    }
+
+    Theme* theme = qobject_cast<Theme*>(themeComponent.create());
+    if(!theme) {
+        qWarning() << "Failed to create theme instance!";
+        return 0;
+    }
+
+    return theme;
 }
 
 #include "Theme.moc"
