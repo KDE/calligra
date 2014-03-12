@@ -42,7 +42,7 @@ Page {
         leftArea: Image {
             width: Constants.GridWidth * 0.5;
             height: parent.height;
-            source: "images/kritasketch.png";
+            source: Settings.theme.image("kritasketch.png");
             fillMode: Image.PreserveAspectFit;
 
             sourceSize.width: width;
@@ -73,7 +73,7 @@ Page {
 
         Image {
             anchors.fill: parent;
-            source: "images/header_krita_sketch_light.png";
+            source: Settings.theme.image("header_krita_sketch_light.png");
         }
     }
 
@@ -111,8 +111,7 @@ Page {
                 color: Settings.theme.color("pages/welcome/open/header/text");
             }
 
-            Image { source: "./images/shadow-smooth.png"; width: parent.width; height: Constants.GridHeight / 8; anchors.top: parent.bottom;}
-
+            Shadow { width: parent.width; height: Constants.GridHeight / 8; anchors.top: parent.bottom; }
         }
 
         Rectangle {
@@ -143,8 +142,7 @@ Page {
                 color: Settings.theme.color("pages/welcome/create/header/text");
             }
 
-            Image { source: "./images/shadow-smooth.png"; width: parent.width; height: Constants.GridHeight / 8; anchors.top: parent.bottom;}
-
+            Shadow { width: parent.width; height: Constants.GridHeight / 8; anchors.top: parent.bottom; }
         }
 
         Rectangle {
@@ -175,8 +173,7 @@ Page {
                 color: Settings.theme.color("pages/welcome/news/header/text");
             }
 
-            Image { source: "./images/shadow-smooth.png"; width: parent.width; height: Constants.GridHeight / 8; anchors.top: parent.bottom;}
-
+            Shadow { width: parent.width; height: Constants.GridHeight / 8; anchors.top: parent.bottom; }
         }
     }
 

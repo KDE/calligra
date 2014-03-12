@@ -45,7 +45,6 @@ Page {
         leftArea: Button {
             width: Constants.GridWidth;
             height: Constants.GridHeight;
-            highlightColor: Constants.Theme.HighlightColor;
             image: Settings.theme.icon("back");
             onClicked: pageStack.pop();
         }
@@ -68,11 +67,12 @@ Page {
         }
     }
 
-    Image {
-        anchors.top: header.bottom;
-        anchors.left: parent.left;
-        anchors.right: parent.right;
-        source: "images/shadow-smooth.png";
+    Shadow {
+        anchors {
+            top: header.bottom;
+            left: parent.left;
+            right: parent.right;
+        }
         z: 5;
     }
 
@@ -115,11 +115,12 @@ Page {
 
             width: GridView.view.cellWidth;
 
-            image: model.fileType !== "inode/directory" ? model.icon : Settings.theme.icon("fileopen-black");
-            imageShadow: model.fileType !== "inode/directory" ? true : false;
-            imageFillMode: model.fileType !== "inode/directory" ? Image.PreserveAspectCrop : Image.PreserveAspectFit;
-            imageSmooth: model.fileType !== "inode/directory" ? false : true;
-            imageCache: model.fileType !== "inode/directory" ? true : false;
+            property bool directory: model.fileType === "inode/directory";
+
+            imageShadow: directory ? false : true;
+            image.source: directory ? Settings.theme.icon("fileopen-black") : model.icon;
+            image.fillMode: directory ? Image.PreserveAspectFit : Image.PreserveAspectCrop;
+            image.smooth: true;
 
             title: model.fileName;
             description: model.fileType !== "inode/directory" ? model.date : "";
