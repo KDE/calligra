@@ -39,7 +39,7 @@ class KRITA_SKETCH_EXPORT Theme : public QObject
     Q_PROPERTY(QString id READ id WRITE setId NOTIFY idChanged)
     /**
      * \property name
-     * \brief
+     * \brief The user-visible name of this theme.
      *
      * \get name() const
      * \set setName()
@@ -48,7 +48,10 @@ class KRITA_SKETCH_EXPORT Theme : public QObject
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     /**
      * \property inherits
-     * \brief
+     * \brief The id of the theme this theme inherits.
+     *
+     * If a certain property can not be found, the theme will try to get that property
+     * from the inherited theme.
      *
      * \default None
      * \get inherits() const
@@ -58,7 +61,7 @@ class KRITA_SKETCH_EXPORT Theme : public QObject
     Q_PROPERTY(QString inherits READ inherits WRITE setInherits NOTIFY inheritsChanged)
     /**
      * \property colors
-     * \brief
+     * \brief A JavaScript object describing the colors to be used by this theme.
      *
      * \get colors() const
      * \set setColors()
@@ -67,7 +70,7 @@ class KRITA_SKETCH_EXPORT Theme : public QObject
     Q_PROPERTY(QVariantMap colors READ colors WRITE setColors NOTIFY colorsChanged)
     /**
      * \property sizes
-     * \brief
+     * \brief A JavaScript object describing a number of sizes to be used by this theme.
      *
      * \get sizes() const
      * \set setSizes()
@@ -76,7 +79,7 @@ class KRITA_SKETCH_EXPORT Theme : public QObject
     Q_PROPERTY(QVariantMap sizes READ sizes WRITE setSizes NOTIFY sizesChanged)
     /**
      * \property fonts
-     * \brief
+     * \brief A JavaScript object describing the fonts to be used by this theme.
      *
      * \get fonts() const
      * \set setFonts()
@@ -85,7 +88,9 @@ class KRITA_SKETCH_EXPORT Theme : public QObject
     Q_PROPERTY(QVariantMap fonts READ fonts WRITE setFonts NOTIFY fontsChanged)
     /**
      * \property iconPath
-     * \brief
+     * \brief The path used to look up icons from the theme.
+     *
+     * Relative paths are relative to the theme directory.
      *
      * \default "icons/"
      * \get iconPath() const
