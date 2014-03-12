@@ -110,6 +110,19 @@ class KRITA_SKETCH_EXPORT Theme : public QObject
      * \notify imagePathChanged()
      */
     Q_PROPERTY(QString imagePath READ imagePath WRITE setImagePath NOTIFY imagePathChanged)
+    /**
+     * \property fontPath
+     * \brief A path containing additional fonts to load.
+     *
+     * The fontPath specifies a directory that will be searched for font files. These
+     * font files will then be made available for use in the theme.
+     *
+     * \default "fonts/"
+     * \get fontPath() const
+     * \set setFontPath()
+     * \notify fontPathChanged()
+     */
+    Q_PROPERTY(QString fontPath READ fontPath WRITE setFontPath NOTIFY fontPathChanged)
 public:
     explicit Theme(QObject* parent = 0);
     virtual ~Theme();
@@ -187,6 +200,15 @@ public:
     void setImagePath(const QString& newValue);
 
     /**
+     * Getter for property #fontPath.
+     */
+    QString fontPath() const;
+    /**
+     * Setter for property #fontPath.
+     */
+    void setFontPath(const QString& newValue);
+
+    /**
      * Get a single color from the theme.
      *
      * \param name The color to get.
@@ -219,6 +241,7 @@ Q_SIGNALS:
     void fontsChanged();
     void iconPathChanged();
     void imagePathChanged();
+    void fontPathChanged();
 
 private:
     class Private;

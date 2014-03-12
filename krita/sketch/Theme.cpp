@@ -40,6 +40,8 @@ public:
         : inheritedTheme(0)
         , iconPath("icons/")
         , imagePath("images/")
+        , fontPath("fonts/")
+        , fontsAdded(false)
     { }
 
     QString id;
@@ -54,8 +56,12 @@ public:
     QString basePath;
     QString iconPath;
     QString imagePath;
+    QString fontPath;
 
     QHash<QString, QFont> fontMap;
+
+    bool fontsAdded;
+    QList<int> addedFonts;
 };
 
 Theme::Theme(QObject* parent)
@@ -65,6 +71,11 @@ Theme::Theme(QObject* parent)
 
 Theme::~Theme()
 {
+    QFontDatabase db;
+    Q_FOREACH(int id, d->addedFonts) {
+        db.removeApplicationFont(id);
+    }
+
     delete d;
 }
 
@@ -189,6 +200,23 @@ void Theme::setFonts(const QVariantMap& newValue)
 
         d->fontMap.clear();
 
+        emit fontsChanged();
+    }
+}
+
+QFont Theme::font(const QString& name)
+{
+    if(!d->fontsAdded) {
+        QDir fontDir(d->basePath + '/' + d->fontPath);
+        QStringList entries = fontDir.entryList(QDir::Files);
+        QFontDatabase db;
+        Q_FOREACH(QString entry, entries) {
+            d->addedFonts.append(db.addApplicationFont(fontDir.absoluteFilePath(entry)));
+        }
+        d->fontsAdded = true;
+    }
+
+    if(d->fontMap.isEmpty()) {
         QFontDatabase db;
         for(QVariantMap::iterator itr = d->fonts.begin(); itr != d->fonts.end(); ++itr)
         {
@@ -203,19 +231,41 @@ void Theme::setFonts(const QVariantMap& newValue)
 
             d->fontMap.insert(itr.key(), font);
         }
-
-        emit fontsChanged();
     }
-}
 
-QFont Theme::font(const QString& name)
-{
     if(d->fontMap.contains(name))
         return d->fontMap.value(name);
+
+    if(d->inheritedTheme)
+        return d->inheritedTheme->font(name);
 
     qWarning() << "Unable to find font" << name;
     return QFont();
 }
+
+QString Theme::fontPath() const
+{
+    return d->fontPath;
+}
+
+void Theme::setFontPath(const QString& newValue)
+{
+    if(newValue != d->fontPath) {
+        if(!d->addedFonts.isEmpty()) {
+            QFontDatabase db;
+            Q_FOREACH(int id, d->addedFonts) {
+                db.removeApplicationFont(id);
+            }
+            d->addedFonts.clear();
+        }
+
+        d->fontPath = newValue;
+        d->fontsAdded = false;
+
+        emit fontPathChanged();
+    }
+}
+
 
 QString Theme::iconPath() const
 {
