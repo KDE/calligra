@@ -165,13 +165,7 @@ Item {
                 }
             }
 
-            Image {
-                anchors.top: header.bottom;
-                anchors.left: header.left;
-                anchors.right: header.right;
-
-                source: "../images/shadow-smooth.png";
-            }
+            Shadow { anchors { top: header.bottom; left: header.left; right: header.right; } }
 
             Item {
                 id: footer;
@@ -228,15 +222,7 @@ Item {
                 }
             }
 
-            Image {
-                anchors.bottom: footer.top;
-                anchors.left: footer.left;
-                anchors.right: footer.right;
-
-                rotation: 180;
-
-                source: "../images/shadow-smooth.png";
-            }
+            Shadow { anchors { bottom: footer.top; left: footer.left; right: footer.right; } rotation: 180; }
         }
     }
 
