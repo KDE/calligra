@@ -206,7 +206,7 @@ void KisOpenGLCanvas2::initializeGL()
 
 void KisOpenGLCanvas2::resizeGL(int w, int h)
 {
-    if (w == width() && h == height()) return;
+//    if (w == width() && h == height()) return;
     glViewport(0, 0, (GLint)w, (GLint)h);
     coordinatesConverter()->setCanvasWidgetSize(QSize(w, h));
 }
