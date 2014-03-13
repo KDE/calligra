@@ -39,7 +39,6 @@
 #include <kexiutils/utils.h>
 #include <kexi_version.h>
 
-#include <QDebug>
 #include <QCache>
 #include <QStyle>
 #include <QEvent>
@@ -414,7 +413,7 @@ void KexiMenuWidgetAction::setPersistentlySelected(bool set)
 {
     if (set == d->persistentlySelected)
         return;
-    qDebug() << "^^^^" << objectName() << set;
+    //kDebug() << "^^^^" << objectName() << set;
     d->persistentlySelected = set;
 }
 
@@ -2391,7 +2390,7 @@ void KexiMenuWidget::mouseReleaseEvent(QMouseEvent *e)
     d->mouseDown = 0;
     d->setSyncAction();
     QAction *action = d->actionAt(e->pos());
-qDebug() << "action:" << action << "d->currentAction:" << d->currentAction; // << action->menu();
+    //kDebug() << "action:" << action << "d->currentAction:" << d->currentAction; // << action->menu();
     if (action && action == d->currentAction) {
         if (!action->menu()){
 #if defined(Q_WS_WIN)
