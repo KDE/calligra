@@ -36,6 +36,10 @@
 
 #include "QmlGlobalEngine.h"
 
+#ifdef Q_OS_WIN
+#include <windows.h>
+#endif
+
 class Theme::Private
 {
 public:
@@ -345,8 +349,29 @@ QUrl Theme::image(const QString& name)
 
 Theme* Theme::load(const QString& id, QObject* parent)
 {
+    QString qml;
+
+    //Ugly hacky stuff for making things work on Windows
+#ifdef Q_OS_WIN
+    QDir appdir(qApp->applicationDirPath());
+
+    // Corrects for mismatched case errors in path (qtdeclarative fails to load)
+    wchar_t buffer[1024];
+    QString absolute = appdir.absolutePath();
+    DWORD rv = ::GetShortPathName((wchar_t*)absolute.utf16(), buffer, 1024);
+    rv = ::GetLongPathName(buffer, buffer, 1024);
+    QString correctedPath((QChar *)buffer);
+    appdir.setPath(correctedPath);
+
+    // for now, the app in bin/ and we still use the env.bat script
+    appdir.cdUp();
+    qml = QString("%1/share/apps/kritasketch/themes/%2/theme.qml").arg(appdir.canonicalPath(), id);
+#else
+    qml = KGlobal::dirs()->findResource("data", QString("kritasketch/themes/%1/theme.qml").arg(id))
+#endif
+
     QDeclarativeComponent themeComponent(QmlGlobalEngine::instance()->engine(), parent);
-    themeComponent.loadUrl(KGlobal::dirs()->findResource("data", QString("kritasketch/themes/%1/theme.qml").arg(id)));
+    themeComponent.loadUrl(QUrl::fromLocalFile(qml));
 
     if(themeComponent.isError()) {
         qWarning() << themeComponent.errorString();
