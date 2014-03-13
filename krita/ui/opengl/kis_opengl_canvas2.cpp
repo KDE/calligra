@@ -558,8 +558,6 @@ void KisOpenGLCanvas2::slotConfigChanged()
     KisConfig cfg;
     d->openGLImageTextures->generateCheckerTexture(createCheckersImage(cfg.checkSize()));
     d->filterMode = (KisTextureTile::FilterMode) cfg.openGLFilteringMode();
-    QColor widgetBackgroundColor = borderColor();
-    glClearColor(widgetBackgroundColor.redF(), widgetBackgroundColor.greenF(), widgetBackgroundColor.blueF(), 1.0);
 
     notifyConfigChanged();
 }
@@ -577,6 +575,8 @@ void KisOpenGLCanvas2::inputMethodEvent(QInputMethodEvent *event)
 void KisOpenGLCanvas2::renderCanvasGL() const
 {
     // Draw the border (that is, clear the whole widget to the border color)
+    QColor widgetBackgroundColor = borderColor();
+    glClearColor(widgetBackgroundColor.redF(), widgetBackgroundColor.greenF(), widgetBackgroundColor.blueF(), 1.0);
     glClear(GL_COLOR_BUFFER_BIT);
 
     drawCheckers();
