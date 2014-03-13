@@ -180,6 +180,5 @@ install(FILES
 install(DIRECTORY qml/components    DESTINATION ${CMAKE_INSTALL_LIBDIR}/calligra/imports/org/krita/sketch PATTERN "*~" EXCLUDE)
 install(DIRECTORY qml/images        DESTINATION ${CMAKE_INSTALL_LIBDIR}/calligra/imports/org/krita/sketch PATTERN "*~" EXCLUDE)
 install(DIRECTORY qml/panels        DESTINATION ${CMAKE_INSTALL_LIBDIR}/calligra/imports/org/krita/sketch PATTERN "*~" EXCLUDE)
-install(DIRECTORY fonts             DESTINATION ${DATA_INSTALL_DIR}/kritasketch)
 
 install(DIRECTORY themes DESTINATION ${DATA_INSTALL_DIR}/kritasketch)
