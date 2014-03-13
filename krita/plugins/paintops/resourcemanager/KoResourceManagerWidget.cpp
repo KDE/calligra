@@ -19,25 +19,42 @@
 
 #include "KoResourceManagerWidget.h"
 #include "ui_KoResourceManagerWidget.h"
+#include "KoResourceServerProvider.h"
 #include <QCheckBox>
 #include <QWidgetAction>
 
-Manager::Manager(QWidget *parent) :
-    QMainWindow(parent),ui(new Ui::Manager)
+KoResourceManagerWidget::KoResourceManagerWidget(QWidget *parent) :
+    QMainWindow(parent),ui(new Ui::KoResourceManagerWidget)
 {
+    control=new KoResourceManagerControl();
     ui->setupUi(this);
     initializeModel();
     initializeConnect();
     ui->actionAll->setChecked(true);
+
+    /*this->model2=new MyTableModel(0);
+
+    m_filter = new QSortFilterProxyModel(this);
+    m_filter->setSourceModel(model2);
+    connect(ui->lineEdit,SIGNAL(textChanged(QString)),
+            m_filter,SLOT(setFilterFixedString(QString)));
+    m_filter->setFilterKeyColumn(1);
+    m_filter->setFilterCaseSensitivity(Qt::CaseInsensitive);
+
+    ui->tableView->setModel(m_filter);
+    ui->tableView_2->setModel(m_filter);
+    ui->tableView_3->setModel(m_filter);
+    ui->tableView_4->setModel(m_filter);
+    ui->tableView_5->setModel(m_filter);*/
 }
 
-Manager::~Manager()
+KoResourceManagerWidget::~KoResourceManagerWidget()
 {
     delete ui;
     delete model;
 }
 
-void Manager::initializeModel()
+void KoResourceManagerWidget::initializeModel()
 {
     QList<QAction*> liste;
     liste.append(ui->actionAll);
@@ -50,7 +67,7 @@ void Manager::initializeModel()
     buttonMenu->addActions(liste);
     ui->pushButton_10->setMenu(buttonMenu);
 
-    this->model=new MyTableModel(0);
+    this->model=new KoResourceTableModel(new KoResourceServerAdapter<KoPattern>(KoResourceServerProvider::instance()->patternServer()));
     ui->tableView->setModel(model);
     ui->tableView_2->setModel(model);
     ui->tableView_3->setModel(model);
@@ -63,7 +80,7 @@ void Manager::initializeModel()
     ui->tableView_5->resizeColumnsToContents();
 }
 
-void Manager::initializeConnect()
+void KoResourceManagerWidget::initializeConnect()
 {
     connect(ui->pushButton_6,SIGNAL(clicked()),this,SLOT(showHide()));
 
@@ -87,60 +104,73 @@ void Manager::initializeConnect()
     connect(ui->actionAuthor,SIGNAL(toggled(bool)),this,SLOT(filterFieldSelected(bool)));
     connect(ui->actionLicense,SIGNAL(toggled(bool)),this,SLOT(filterFieldSelected(bool)));
 
+    connect(ui->actionInstall,SIGNAL(triggered()),this,SLOT(installPack()));
+    connect(ui->actionUninstall,SIGNAL(triggered()),this,SLOT(uninstallPack()));
+    connect(ui->actionDelete,SIGNAL(triggered()),this,SLOT(deletePack()));
+    connect(ui->actionCreate_Resources_Set,SIGNAL(triggered()),this,SLOT(createPack()));
+
     connect(ui->actionRename,SIGNAL(triggered()),this,SLOT(rename()));
     connect(ui->actionAbout_ResManager,SIGNAL(triggered()),this,SLOT(about()));
 
-    connect(ui->actionQuit,SIGNAL(toggled(bool)),this,SLOT(close()));
+    connect(ui->actionQuit,SIGNAL(triggered()),this,SLOT(close()));
     connect(ui->pushButton_3,SIGNAL(clicked()),this,SLOT(close()));
 
-    createMiniature(*ui->label->pixmap());
+    connect(ui->pushButton_2,SIGNAL(clicked()),this,SLOT(createPack()));
+
+    //createMiniature(*ui->label->pixmap());
 }
 
-void Manager::showHide()
+void KoResourceManagerWidget::showHide()
 {
     ui->widget_2->setVisible(!ui->widget_2->isVisible());
 }
 
-void Manager::createMiniature(QPixmap pix)
+void KoResourceManagerWidget::createMiniature(QPixmap pix)
 {
     QLabel *label = new QLabel;
     label->setPixmap(pix.scaled(50,50,Qt::KeepAspectRatio));
 }
 
-void Manager::installPack()
+void KoResourceManagerWidget::createPack()
+{
+    control->createPack();
+}
+
+
+void KoResourceManagerWidget::installPack()
 {
     control->installPack(ui->label_2->text());
 }
 
-void Manager::uninstallPack()
+void KoResourceManagerWidget::uninstallPack()
 {
     control->uninstallPack(ui->label_2->text());
 }
 
-void Manager::deletePack()
+void KoResourceManagerWidget::deletePack()
 {
     control->deletePack(ui->label_2->text());
 }
 
-void Manager::refreshCurrentTable()
+void KoResourceManagerWidget::refreshCurrentTable()
 {
     control->refreshCurrentTable();
 }
 
 //TODO Décider comment renommer un paquet (Fenetre, tableau ...)
-void Manager::rename()
+void KoResourceManagerWidget::rename()
 {
     //TODO Récupérer les/la valeur(s) correspondante(s)
     control->rename(ui->label->text(),"New_Value");
 }
 
-void Manager::about()
+void KoResourceManagerWidget::about()
 {
     //TODO Vérifier si control doit intervenir
     control->about();
 }
 
-void Manager::filterFieldSelected(bool value)
+void KoResourceManagerWidget::filterFieldSelected(bool value)
 {
     QAction *emetteur = (QAction*)sender();
 
@@ -165,7 +195,7 @@ void Manager::filterFieldSelected(bool value)
     }
 }
 
-void Manager::setMeta()
+void KoResourceManagerWidget::setMeta()
 {
     QObject *emetteur = sender();
     if(emetteur->inherits("QLineEdit")){

@@ -23,6 +23,8 @@
 
 #include <kdebug.h>
 #include <klocale.h>
+#include <kglobal.h>
+#include <kconfiggroup.h>
 #include <QTreeWidgetItem>
 #include <QApplication>
 #include <QContextMenuEvent>
@@ -196,13 +198,16 @@ StencilListView* CollectionTreeWidget::stencilListViewAt(int idx) const
 
 void CollectionTreeWidget::saveOptions()
 {
-    //FIXME
+    KConfigGroup group = KGlobal::config()->group("Stencil Box");
+    group.writeEntry("viewMode", (int)m_viewMode);
 }
 
 void  CollectionTreeWidget::loadOptions()
 {
-    //FIXME
-    m_viewMode = QListView::IconMode;
+    KConfigGroup group = KGlobal::config()->group("Stencil Box");
+    int viewMode = group.readEntry("viewMode", (int)QListView::IconMode);
+    m_viewMode = (QListView::ViewMode)viewMode;
+    updateViewMode();
 }
 
 void CollectionTreeWidget::handleMousePress(QTreeWidgetItem* item)

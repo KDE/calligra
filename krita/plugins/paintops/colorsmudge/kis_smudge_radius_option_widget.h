@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2012 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (C) 2014 Mohit Goyal <mohit.bits2011@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,34 +15,14 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#ifndef KIS_SMUDGE_RADIUS_OPTION_WIDGET_H
+#define KIS_SMUDGE_RADIUS_OPTION_WIDGET_H
 
-#include "kis_transaction_based_command.h"
+#include <kis_curve_option_widget.h>
 
-KisTransactionBasedCommand::KisTransactionBasedCommand(const QString& text, KUndo2Command* parent)
-    : KUndo2Command(text, parent), m_transactionData(0)
+class KisSmudgeRadiusOptionWidget: public KisCurveOptionWidget
 {
-}
-
-KisTransactionBasedCommand::~KisTransactionBasedCommand()
-{
-    delete m_transactionData;
-}
-
-void KisTransactionBasedCommand::redo()
-{
-    if (!m_transactionData) {
-        m_transactionData = paint();
-    }
-
-    if (m_transactionData) {
-        m_transactionData->redo();
-    }
-}
-
-void KisTransactionBasedCommand::undo()
-{
-    if (m_transactionData) {
-        m_transactionData->undo();
-    }
-}
-
+public:
+    KisSmudgeRadiusOptionWidget(const QString& label, const QString& sliderLabel, const QString& name, bool checked);
+};
+#endif // KIS_SMUDGE_RADIUS_OPTION_WIDGET_H

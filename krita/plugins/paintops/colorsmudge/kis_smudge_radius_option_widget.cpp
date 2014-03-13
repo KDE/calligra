@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2012 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (C) 2014 Mohit Goyal <mohit.bits2011@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,33 +16,21 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_transaction_based_command.h"
+#include <klocale.h>
+#include <QWidget>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QComboBox>
+#include <QLabel>
 
-KisTransactionBasedCommand::KisTransactionBasedCommand(const QString& text, KUndo2Command* parent)
-    : KUndo2Command(text, parent), m_transactionData(0)
+#include "kis_smudge_radius_option_widget.h"
+#include "kis_smudge_radius_option.h"
+#include <kis_curve_option_widget.h>
+
+
+KisSmudgeRadiusOptionWidget::KisSmudgeRadiusOptionWidget(const QString& label, const QString& /*sliderLabel*/, const QString& name, bool checked):
+    KisCurveOptionWidget(new KisSmudgeRadiusOption(name, label, checked))
 {
-}
-
-KisTransactionBasedCommand::~KisTransactionBasedCommand()
-{
-    delete m_transactionData;
-}
-
-void KisTransactionBasedCommand::redo()
-{
-    if (!m_transactionData) {
-        m_transactionData = paint();
-    }
-
-    if (m_transactionData) {
-        m_transactionData->redo();
-    }
-}
-
-void KisTransactionBasedCommand::undo()
-{
-    if (m_transactionData) {
-        m_transactionData->undo();
-    }
+    KisCurveOptionWidget::setConfigurationPage(curveWidget());
 }
 
