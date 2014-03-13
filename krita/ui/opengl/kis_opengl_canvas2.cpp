@@ -155,6 +155,8 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas, KisCoordinatesConverter *
     KisConfig cfg;
     d->openGLImageTextures->generateCheckerTexture(createCheckersImage(cfg.checkSize()));
 
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 KisOpenGLCanvas2::~KisOpenGLCanvas2()
@@ -202,10 +204,11 @@ void KisOpenGLCanvas2::initializeGL()
     Sync::init();
 }
 
-void KisOpenGLCanvas2::resizeGL(int width, int height)
+void KisOpenGLCanvas2::resizeGL(int w, int h)
 {
-    glViewport(0, 0, (GLint)width, (GLint)height);
-    coordinatesConverter()->setCanvasWidgetSize(QSize(width, height));
+    if (w == width() && h == height()) return;
+    glViewport(0, 0, (GLint)w, (GLint)h);
+    coordinatesConverter()->setCanvasWidgetSize(QSize(w, h));
 }
 
 void KisOpenGLCanvas2::paintGL()
@@ -304,7 +307,7 @@ void KisOpenGLCanvas2::drawCheckers() const
     d->checkerShader->setAttributeArray(PROGRAM_TEXCOORD_ATTRIBUTE, texCoords.constData());
 
      // render checkers
-    glActiveTexture(GL_TEXTURE0);
+    //glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, d->openGLImageTextures->checkerTexture());
 
     glDrawArrays(GL_TRIANGLES, 0, 6);
@@ -319,9 +322,6 @@ void KisOpenGLCanvas2::drawImage() const
 {
     if(!d->displayShader)
         return;
-
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     KisCoordinatesConverter *converter = coordinatesConverter();
 
@@ -414,7 +414,9 @@ void KisOpenGLCanvas2::drawImage() const
             d->displayShader->enableAttributeArray(PROGRAM_TEXCOORD_ATTRIBUTE);
             d->displayShader->setAttributeArray(PROGRAM_TEXCOORD_ATTRIBUTE, texCoords.constData());
 
-            glActiveTexture(GL_TEXTURE0);
+            if (d->displayFilter) {
+                glActiveTexture(GL_TEXTURE0);
+            }
             tile->bindToActiveTexture();
             d->displayShader->setUniformValue("texture0", 0);
 
@@ -428,7 +430,9 @@ void KisOpenGLCanvas2::drawImage() const
             glDrawArrays(GL_TRIANGLES, 0, 6);
         }
     }
-
+    if (d->displayFilter) {
+        glActiveTexture(GL_TEXTURE0);
+    }
     glBindTexture(GL_TEXTURE_2D, 0);
     d->displayShader->release();
 }
@@ -532,6 +536,8 @@ void KisOpenGLCanvas2::slotConfigChanged()
     KisConfig cfg;
     d->openGLImageTextures->generateCheckerTexture(createCheckersImage(cfg.checkSize()));
     d->filterMode = (KisTextureTile::FilterMode) cfg.openGLFilteringMode();
+    QColor widgetBackgroundColor = borderColor();
+    glClearColor(widgetBackgroundColor.redF(), widgetBackgroundColor.greenF(), widgetBackgroundColor.blueF(), 1.0);
 
     notifyConfigChanged();
 }
@@ -549,8 +555,6 @@ void KisOpenGLCanvas2::inputMethodEvent(QInputMethodEvent *event)
 void KisOpenGLCanvas2::renderCanvasGL() const
 {
     // Draw the border (that is, clear the whole widget to the border color)
-    QColor widgetBackgroundColor = borderColor();
-    glClearColor(widgetBackgroundColor.redF(), widgetBackgroundColor.greenF(), widgetBackgroundColor.blueF(), 1.0);
     glClear(GL_COLOR_BUFFER_BIT);
 
     drawCheckers();
