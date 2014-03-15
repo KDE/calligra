@@ -34,6 +34,7 @@
 #include "canvas/kis_canvas2.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_coordinates_converter.h"
+#include "krita_utils.h"
 
 static const unsigned int ANT_LENGTH = 4;
 static const unsigned int ANT_SPACE = 4;
@@ -42,20 +43,11 @@ static const unsigned int ANT_ADVANCE_WIDTH = ANT_LENGTH + ANT_SPACE;
 KisSelectionDecoration::KisSelectionDecoration(KisView2* view)
     : KisCanvasDecoration("selection", i18n("Selection decoration"), view),
       m_signalCompressor(500 /*ms*/, KisSignalCompressor::FIRST_INACTIVE),
-      m_outlinePath(),
       m_offset(0),
-      m_antsPen(Qt::CustomDashLine),
-      m_outlinePen(Qt::SolidLine),
       m_mode(Ants)
 {
-    QVector<qreal> antDashPattern;
-    antDashPattern << ANT_LENGTH << ANT_SPACE;
-    m_antsPen.setDashPattern(antDashPattern);
-    m_antsPen.setCosmetic(true);
-    m_antsPen.setColor(Qt::black);
-
-    m_outlinePen.setCosmetic(true);
-    m_outlinePen.setColor(Qt::white);
+    KritaUtils::initAntsPen(&m_antsPen, &m_outlinePen,
+                            ANT_LENGTH, ANT_SPACE);
 
     m_antsTimer = new QTimer(this);
     m_antsTimer->setInterval(150);
