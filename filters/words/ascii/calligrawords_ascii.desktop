@@ -1,0 +1,15 @@
+[Desktop Entry]
+Categories=Qt;KDE;Office;
+Exec=calligrawords %u
+Icon=calligrawords
+MimeType=text/plain;
+Name=Calligra Words
+StartupNotify=true
+Terminal=false
+Type=Application
+X-KDE-ServiceTypes=Calligra/Application
+X-Calligra-DefaultMimeTypes=text/plain
+X-DBUS-StartupType=Multi
+X-DBUS-ServiceName=org.calligra.words
+X-KDE-SubstituteUID=false
+NoDisplay=true

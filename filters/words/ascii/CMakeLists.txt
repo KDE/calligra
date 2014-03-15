@@ -37,3 +37,6 @@ install(TARGETS calligra_filter_odt2ascii DESTINATION ${PLUGIN_INSTALL_DIR})
 install( FILES calligra_filter_odt2ascii.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 
 endif(SHOULD_BUILD_FILTER_ODT_TO_ASCII)
+
+install( FILES calligrawords_ascii.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+
