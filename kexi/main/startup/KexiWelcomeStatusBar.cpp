@@ -522,61 +522,6 @@ public:
                 q, SLOT(showShareUsageInfo()));
         connect(statusWidget, "link_show_contribution_details", SIGNAL(linkActivated(QString)),
                 q, SLOT(showContributionDetails()));
-#if 0
-        baseFname = QString("status/%1/status.html").arg(Kexi::stableVersionString());
-        fname = KStandardDirs::locate("data", "kexi/" + baseFname);
-
-        QString html;
-        if (!fname.isEmpty()) {
-            QFile file(fname);
-            if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-                html = file.readAll();
-                file.close();
-            }
-        }
-        if (html.isEmpty()) {
-            //! @todo hardcode simplest version
-        }
-
-        QString newHtml = transform(html);
-        
-        kDebug() << html;
-        kDebug() << "-----------";
-        kDebug() << newHtml;
-        html = newHtml;
-        
-        title = translate("You in Kexi Project"); // Your Status in Kexi Project
-    //TODO: replace every ${..}
-
-        QString t = "What's New?";
-        // <img src='ext'>
-        html += QString(
-            "<br>"
-            "<p><b class=\"head\">%1</b></p>"
-            "<p><a href=\"news://0\"> Fruits of CSS2: Office Forms</a></p>"
-            "<p align=\"right\"><a href=\"news://show_all\">See all <b>News</b> &raquo;</a></p>"
-            ).arg(t);
-
-        t = "Recent Releases";
-        html += QString(
-            "<br>"
-            "<p><b class=\"head\">%1</b></p>"
-            "<p><table>"
-            "<tr><td><p>Stable release: </p></td><td><a href=\"http://www.koffice.org/news/announcements/koffice-2-3-3-update/\">2.3.3</a></td></tr>"
-            "<tr><td><p>Preview release: </p></td><td><a href=\"http://www.calligra.org/news/announcements/calligra-2-4-beta-6/\">2.4 Beta 6</a></td></tr>"
-            "</table></p>"
-            "<p align=\"right\"><a href=\"releases://show_all\">See more <b>Releases</b> &raquo;</a></p>"
-            ).arg(t);
-        
-        QString htmlHead(QLatin1String(
-            "<html><head>"
-            "<link rel='stylesheet' type='text/css' href='format.css'>"
-            "</head><body>"));
-        doc->setHtml(htmlHead + html + "</body></html>");
-        statusBrowser->setDocument(doc);
-
-        kDebug() << statusBrowser->toHtml();
-#endif
     }
 
     void setUserProgress(int progress)
@@ -737,21 +682,6 @@ KexiWelcomeStatusBar::~KexiWelcomeStatusBar()
 
 void KexiWelcomeStatusBar::init()
 {
-#if 0
-    <p><span class="head">${YOU_IN_KEXI}</span> <a class='gray' href='feedback://help_your_status'>(?)</a></p>
-<p><img src='feedbackdata://progress'> ${PERCENT_INVOLVED}</p>
-<p><b>${CONTRIBUTE}</b> <a class='gray' href='feedback://help_why_contribute'>(${WHY}?)</a></p>
-<p><img src="kicon://list-add"> <a href='feedback://show_share_usage_info'>${SHARE_USAGE_INFO}</a> <span class='gray'>(+5%)</span></p>
-
-    QString title("You in Kexi Project"); // Your Status in Kexi Project
-    QString html = QString(
-        "<p><span class=\"head\">%1</span> <a class='gray' href='feedback://help_your_status'>(?)</a></p>"
-        "<p><img src='feedbackdata://progress'> <b>%2%</b> involved</p>"
-        "<p><b>Contribute</b> <a class='gray' href='feedback://help_why_contribute'>(Why?)</a></p>"
-        "<p><img src=\"kicon://list-add\"> <a href='feedback://show_share_usage_info'>Share Usage Info</a> <span class='gray'>(+5%)</span></p>"
-        ).arg(title).arg(d->userProgressBar.value());
-#endif
-
     d->statusScrollArea = new ScrollArea(this);
     d->lyr->addWidget(d->statusScrollArea);
 
@@ -765,39 +695,6 @@ void KexiWelcomeStatusBar::showContributionHelp()
                                   &d->contributionHelpLayout,
                                   SLOT(slotShowContributionHelpContents()));
     d->msgWidget->animatedShow();
-/*    int msgWidth = parentWidget()->width() - width();
-    QWidget *widget = new QWidget;
-    d->contributionHelpLayout = new QGridLayout(widget);
-    if (msgWidth > 100) { // nice text margin
-        d->contributionHelpLayout->setColumnMinimumWidth(0, 50);
-    }
-    kDebug() << (parentWidget()->width() - width()) << "***";
-    KexiContextMessage msg(widget);
-    if (d->msgWidget) {
-        delete static_cast<KexiContextMessageWidget*>(d->msgWidget);
-    }
-    d->msgWidget
-        = new KexiContextMessageWidget(parentWidget(), 0, 0, msg);
-    d->msgWidget->setCalloutPointerDirection(KMessageWidget::Right);
-    kDebug() << pos() << mapToGlobal(QPoint(0, 100));
-    QPoint p(mapToGlobal(QPoint(0, 100)));
-    QWidget *link_contribute_show_help = d->widget("link_contribute_show_help");
-    if (link_contribute_show_help) {
-        p.setY(
-            link_contribute_show_help->mapToGlobal(
-                QPoint(-5, link_contribute_show_help->height() / 2)).y());
-    }
-    d->msgWidget->setMessageType(KMessageWidget::Information);
-    d->msgWidget->setCalloutPointerPosition(p);
-    d->msgWidget->setCloseButtonVisible(true);
-    d->msgWidget->resize(msgWidth, parentWidget()->height() - 12);
-    d->statusScrollArea->setEnabled(false);
-    // async show to for speed up
-    connect(d->msgWidget, SIGNAL(animatedShowFinished()),
-            this, SLOT(slotShowContributionHelpContents()));
-    connect(d->msgWidget, SIGNAL(animatedHideFinished()),
-            this, SLOT(slotContributionHelpClosed()));
-    d->msgWidget->animatedShow();*/
 }
 
 void KexiWelcomeStatusBar::slotShowContributionHelpContents()
@@ -858,12 +755,6 @@ void KexiWelcomeStatusBar::showShareUsageInfo()
     d->msgWidget->setMaximumWidth(parentWidget()->width() - width());
     d->msgWidget->setResizeTrackingPolicy(Qt::Horizontal);
 
-    /*foreach (QLabel *lbl, d->statusScrollArea->findChildren<QLabel*>()) {
-        if (lbl->isEnabled()) {
-            //d->enabledLinks.append(w);
-            lbl->setEnabled(false);
-        }
-    }*/
     d->msgWidget->animatedShow();
 }
 
@@ -970,13 +861,7 @@ void KexiWelcomeStatusBar::slotShareContributionDetailsToggled(bool on)
     for (int i=0; i < group_share->layout()->count(); i++) {
         QWidget *w = group_share->layout()->itemAt(i)->widget();
         if (w) {
-            /*if (w->objectName() == "group_basic" && on) {
-                // do nothing
-            }
-            else*/
-            {
-                w->setVisible(on);
-            }
+            w->setVisible(on);
         }
     }
     if (d->detailsDataVisible) {
@@ -1021,15 +906,7 @@ void KexiWelcomeStatusBar::slotShareContributionDetailsToggled(bool on)
             }
         }
         else if (lbl->objectName().startsWith(QLatin1String("desc_"))) {
-//             QFont f(lbl->font());
-//             f.setPointSizeF(KGlobalSettings::smallestReadableFont().pointSizeF());
             lbl->setFont(d->smallFont);
-/*            QPalette pal(lbl->palette());
-            QColor c(pal.color(QPalette::WindowText));
-            c.setAlpha(100);
-            pal.setColor(QPalette::WindowText, Qt::red);
-            pal.setColor(QPalette::Text, Qt::green);
-            lbl->setPalette(pal);*/
         }
     }
 }
@@ -1070,11 +947,6 @@ void KexiWelcomeStatusBar::slotShareContributionDetailsGroupToggled(bool on)
 
 void KexiWelcomeStatusBar::slotToggleContributionDetailsDataVisibility()
 {
-/*    QWidget* group_share = d->widget(d->contributionDetailsWidget, "group_share");
-    if (!group_share) {
-        return;
-    }
-    bool enabled = group_share->property("checked");*/
     QWidget* value_app_ver = d->widget(d->contributionDetailsWidget, "value_app_ver");
     if (!value_app_ver) {
         return;
@@ -1091,9 +963,6 @@ void KexiWelcomeStatusBar::slotToggleContributionDetailsDataVisibility()
     if (group_basic) {
         list += group_basic->findChildren<QWidget*>();
     }
-//     if (group_basic) {
-//         group_basic->setVisible(d->detailsDataVisible);
-//     }
     QWidget* group_system = d->widget(d->contributionDetailsWidget, "group_system");
     if (group_system) {
         list += group_system->findChildren<QWidget*>();
