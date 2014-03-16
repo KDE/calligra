@@ -102,6 +102,9 @@ endif (RELEASE_BUILD)
 ############
 
 option(USEOPENGL "Allow the use of OpenGL for Krita" ON)
+if (WIN32)
+    option(USE_BREAKPAD "Build the crash handler for Krita (only on windows)" OFF)
+endif (WIN32)
 option(GHNS "support Get Hot New Stuff" OFF)
 # TODO: orthogonal setting, results in minimal features, yet needs to be defined
 # option(TINY "compile a tiny Calligra" OFF)
@@ -634,19 +637,19 @@ endif(WIN32)
 ## Test for Fontconfig
 ##
 ## Only test if on non-Windows system
-if(!WIN32)
+if(NOT WIN32)
     macro_optional_find_package(Fontconfig)
     macro_log_feature(FONTCONFIG_FOUND "Fontconfig" "Library for configuring and customizing font access" "http://fontconfig.org" FALSE "" "Required to handle exact font size")
-endif(!WIN32)
+endif(NOT WIN32)
 
 ##
 ## Test for Freetype
 ##
 ## Only test if on non-Windows system
-if(!WIN32)
+if(NOT WIN32)
     macro_optional_find_package(Freetype)
     macro_log_feature(FREETYPE_FOUND "Freetype" "A Free, High-Quality, and Portable Font Engine" "http://www.freetype.org/" FALSE "" "Required to handle exact font size")
-endif(!WIN32)
+endif(NOT WIN32)
 
 if(NOT FONTCONFIG_FOUND OR NOT FREETYPE_FOUND)
     set(FONTCONFIG_INCLUDE_DIR "")
