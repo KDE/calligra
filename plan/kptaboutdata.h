@@ -36,7 +36,7 @@ KAboutData * newAboutData()
 {
     KAboutData * aboutData=new KAboutData( "plan", QByteArray(), ki18nc("application name", "Plan"),
                                            PLAN_VERSION, ki18n(PLAN_DESCRIPTION), KAboutData::License_GPL,
-                                           ki18n("Copyright (C) 1998-2013, The Plan Team"),
+                                           ki18n("© 1998-%1, The Plan Team").subs(CALLIGRA_YEAR),
                                            KLocalizedString(),
                                            "http://www.calligra.org/plan/" );
     aboutData->addAuthor(ki18n("Thomas Zander")); // please don't re-add, I don't like getting personal emails :)
