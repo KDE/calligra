@@ -196,6 +196,7 @@ Page {
             width: parent.width / 3 - 8;
             height: Constants.GridHeight * (Constants.GridRows - 3);
             onClicked: baseLoadingDialog.visible = true;
+            onCustomImageClicked: pageStack.push( customImagePage );
         }
 
         Divider { height: Constants.GridHeight * (Constants.GridRows - 3); }
@@ -225,4 +226,5 @@ Page {
     Component { id: main; MainPage { } }
     Component { id: help; HelpPage { } }
     Component { id: openImage; OpenImagePage { onItemClicked: baseLoadingDialog.visible = true; } }
+    Component { id: customImagePage; CustomImagePage { onFinished: baseLoadingDialog.visible = true; } }
 }
