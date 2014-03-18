@@ -60,11 +60,7 @@ void KWNavigationWidget::initUi()
     m_treeView->setModel(m_model);
     m_treeView->setItemsExpandable(false);
     m_treeView->setEditTriggers(QAbstractItemView::NoEditTriggers);
-
-    m_treeView->header()->setResizeMode(0, QHeaderView::Stretch);
-    m_treeView->header()->setResizeMode(1, QHeaderView::Interactive);
-    m_treeView->header()->setStretchLastSection(false);
-    m_treeView->header()->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_treeView->setSelectionMode(QAbstractItemView::NoSelection);
 
     connect(m_treeView, SIGNAL(clicked(QModelIndex)), this, SLOT(navigationClicked(QModelIndex)));
 }
@@ -73,6 +69,8 @@ void KWNavigationWidget::initLayout()
 {
     QHBoxLayout *mainBox = new QHBoxLayout(this);
     mainBox->addWidget(m_treeView);
+
+    m_treeView->header()->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     setLayout(mainBox); // FIXME: Is this necessary?
 }
@@ -107,9 +105,13 @@ void KWNavigationWidget::updateData()
     m_model->clear();
 
     QStringList head;
-    head << i18n("Section") << i18n("Page number");
+    head << i18n("Section") << i18n("Page #");
     m_model->setHorizontalHeaderLabels(head);
     m_model->setColumnCount(2);
+
+    m_treeView->header()->setResizeMode(0, QHeaderView::Stretch);
+    m_treeView->header()->setResizeMode(1, QHeaderView::ResizeToContents);
+    m_treeView->header()->setStretchLastSection(false);
 
     QStack< QPair<QStandardItem *, int> > curChain;
     curChain.push(QPair<QStandardItem *, int>(m_model->invisibleRootItem(), 0));
