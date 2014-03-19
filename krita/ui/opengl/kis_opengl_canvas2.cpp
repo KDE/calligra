@@ -89,12 +89,22 @@ public:
     ~Private() {
         delete displayShader;
         delete checkerShader;
+        Sync::deleteSync(glSyncObject);
     }
 
     KisOpenGLImageTexturesSP openGLImageTextures;
 
     QGLShaderProgram *displayShader;
+    int displayUniformLocationModelViewProjection;
+    int displayUniformLocationTextureMatrix;
+    int displayUniformLocationViewPortScale;
+    int displayUniformLocationTexelSize;
+    int displayUniformLocationTexture0;
+    int displayUniformLocationTexture1;
+
     QGLShaderProgram *checkerShader;
+    int checkerUniformLocationModelViewProjection;
+    int checkerUniformLocationTextureMatrix;
 
     KisDisplayFilter *displayFilter;
     KisTextureTile::FilterMode filterMode;
@@ -155,6 +165,8 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas, KisCoordinatesConverter *
     KisConfig cfg;
     d->openGLImageTextures->generateCheckerTexture(createCheckersImage(cfg.checkSize()));
 
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 KisOpenGLCanvas2::~KisOpenGLCanvas2()
@@ -202,10 +214,11 @@ void KisOpenGLCanvas2::initializeGL()
     Sync::init();
 }
 
-void KisOpenGLCanvas2::resizeGL(int width, int height)
+void KisOpenGLCanvas2::resizeGL(int w, int h)
 {
-    glViewport(0, 0, (GLint)width, (GLint)height);
-    coordinatesConverter()->setCanvasWidgetSize(QSize(width, height));
+//    if (w == width() && h == height()) return;
+    glViewport(0, 0, (GLint)w, (GLint)h);
+    coordinatesConverter()->setCanvasWidgetSize(QSize(w, h));
 }
 
 void KisOpenGLCanvas2::paintGL()
@@ -289,10 +302,10 @@ void KisOpenGLCanvas2::drawCheckers() const
     QMatrix4x4 modelMatrix(modelTransform);
     modelMatrix.optimize();
     modelMatrix = projectionMatrix * modelMatrix;
-    d->checkerShader->setUniformValue("modelViewProjection", modelMatrix);
+    d->checkerShader->setUniformValue(d->checkerUniformLocationModelViewProjection, modelMatrix);
 
     QMatrix4x4 textureMatrix(textureTransform);
-    d->checkerShader->setUniformValue("textureMatrix", textureMatrix);
+    d->checkerShader->setUniformValue(d->checkerUniformLocationTextureMatrix, textureMatrix);
 
     //Setup the geometry for rendering
     QVector<QVector3D> vertices = rectToVertices(modelRect);
@@ -304,7 +317,7 @@ void KisOpenGLCanvas2::drawCheckers() const
     d->checkerShader->setAttributeArray(PROGRAM_TEXCOORD_ATTRIBUTE, texCoords.constData());
 
      // render checkers
-    glActiveTexture(GL_TEXTURE0);
+    //glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, d->openGLImageTextures->checkerTexture());
 
     glDrawArrays(GL_TRIANGLES, 0, 6);
@@ -320,9 +333,6 @@ void KisOpenGLCanvas2::drawImage() const
     if(!d->displayShader)
         return;
 
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
     KisCoordinatesConverter *converter = coordinatesConverter();
 
     d->displayShader->bind();
@@ -335,19 +345,19 @@ void KisOpenGLCanvas2::drawImage() const
     QMatrix4x4 modelMatrix(coordinatesConverter()->imageToWidgetTransform());
     modelMatrix.optimize();
     modelMatrix = projectionMatrix * modelMatrix;
-    d->displayShader->setUniformValue("modelViewProjection", modelMatrix);
+    d->displayShader->setUniformValue(d->displayUniformLocationModelViewProjection, modelMatrix);
 
     QMatrix4x4 textureMatrix;
     textureMatrix.setToIdentity();
-    d->displayShader->setUniformValue("textureMatrix", textureMatrix);
+    d->displayShader->setUniformValue(d->displayUniformLocationTextureMatrix, textureMatrix);
 
     QRectF widgetRect(0,0, width(), height());
     QRectF widgetRectInImagePixels = converter->documentToImage(converter->widgetToDocument(widgetRect));
 
     qreal scaleX, scaleY;
     converter->imageScale(&scaleX, &scaleY);
-    d->displayShader->setUniformValue("viewportScale", (GLfloat) scaleX);
-    d->displayShader->setUniformValue("texelSize", (GLfloat) d->openGLImageTextures->texelSize());
+    d->displayShader->setUniformValue(d->displayUniformLocationViewPortScale, (GLfloat) scaleX);
+    d->displayShader->setUniformValue(d->displayUniformLocationTexelSize, (GLfloat) d->openGLImageTextures->texelSize());
 
     QRect ir = d->openGLImageTextures->storedImageBounds();
     QRect wr = widgetRectInImagePixels.toAlignedRect();
@@ -414,21 +424,25 @@ void KisOpenGLCanvas2::drawImage() const
             d->displayShader->enableAttributeArray(PROGRAM_TEXCOORD_ATTRIBUTE);
             d->displayShader->setAttributeArray(PROGRAM_TEXCOORD_ATTRIBUTE, texCoords.constData());
 
-            glActiveTexture(GL_TEXTURE0);
+            if (d->displayFilter) {
+                glActiveTexture(GL_TEXTURE0);
+            }
             tile->bindToActiveTexture();
-            d->displayShader->setUniformValue("texture0", 0);
+            d->displayShader->setUniformValue(d->displayUniformLocationTexture0, 0);
 
             if (d->displayFilter) {
                 glActiveTexture(GL_TEXTURE0 + 1);
                 glBindTexture(GL_TEXTURE_3D, d->displayFilter->lutTexture());
-                d->displayShader->setUniformValue("texture1", 1);
+                d->displayShader->setUniformValue(d->displayUniformLocationTexture1, 1);
             }
 
             d->activateFilteringMode(scaleX, scaleY);
             glDrawArrays(GL_TRIANGLES, 0, 6);
         }
     }
-
+    if (d->displayFilter) {
+        glActiveTexture(GL_TEXTURE0);
+    }
     glBindTexture(GL_TEXTURE_2D, 0);
     d->displayShader->release();
 }
@@ -491,6 +505,10 @@ void KisOpenGLCanvas2::initializeCheckerShader()
         exit(1);
     }
     Q_ASSERT(d->checkerShader->isLinked());
+
+    d->checkerUniformLocationModelViewProjection = d->checkerShader->uniformLocation("modelViewProjection");
+    d->checkerUniformLocationTextureMatrix = d->checkerShader->uniformLocation("textureMatrix");
+
 }
 
 void KisOpenGLCanvas2::initializeDisplayShader()
@@ -525,6 +543,14 @@ void KisOpenGLCanvas2::initializeDisplayShader()
     }
 
     Q_ASSERT(d->displayShader->isLinked());
+
+    d->displayUniformLocationModelViewProjection = d->displayShader->uniformLocation("modelViewProjection");
+    d->displayUniformLocationTextureMatrix = d->displayShader->uniformLocation("textureMatrix");
+    d->displayUniformLocationViewPortScale = d->displayShader->uniformLocation("viewportScale");
+    d->displayUniformLocationTexelSize = d->displayShader->uniformLocation("texelSize");
+    d->displayUniformLocationTexture0 = d->displayShader->uniformLocation("texture0");
+    d->displayUniformLocationTexture1 = d->displayShader->uniformLocation("texture1");
+
 }
 
 void KisOpenGLCanvas2::slotConfigChanged()

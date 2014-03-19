@@ -221,9 +221,6 @@ Panel {
                     }
                 }
                 Button {
-                    // Disabled until issues resolved
-                    visible: false;
-                    enabled: false;
                     width: height; height: Constants.ToolbarButtonSize * 0.9
                     color: "transparent"; textColor: "white"; shadow: false; highlight: false;
                     image: "../images/svg/icon-layer_filter-black.svg"
