@@ -26,10 +26,7 @@ Page {
 
     Rectangle {
         anchors.fill: parent;
-<<<<<<< HEAD
         color: Settings.theme.color("pages/customImagePage/background");
-=======
->>>>>>> b20fe23... sketch: Change the custom image creation to a page with many more options
     }
 
     Header {
@@ -45,22 +42,14 @@ Page {
         leftArea: Button {
             width: Constants.GridWidth;
             height: Constants.GridHeight;
-<<<<<<< HEAD
             image: Settings.theme.icon("back");
-=======
-            image: "images/svg/icon-back.svg";
->>>>>>> b20fe23... sketch: Change the custom image creation to a page with many more options
             onClicked: pageStack.pop();
         }
 
         rightArea: Button {
             width: Constants.GridWidth;
             height: Constants.GridHeight;
-<<<<<<< HEAD
             image: Settings.theme.icon("apply");
-=======
-            image: "images/svg/icon-apply.svg";
->>>>>>> b20fe23... sketch: Change the custom image creation to a page with many more options
             onClicked: {
                 var options = {
                     name: nameField.text,
@@ -90,11 +79,7 @@ Page {
             leftMargin: Constants.GridWidth * 0.25;
             rightMargin: Constants.GridWidth * 0.25;
         }
-<<<<<<< HEAD
         spacing: Constants.DefaultMargin;
-=======
-        spacing: Constants.GridHeight * 0.25;
->>>>>>> b20fe23... sketch: Change the custom image creation to a page with many more options
 
         TextField {
             id: nameField;
@@ -108,22 +93,14 @@ Page {
         }
 
         Rectangle {
-<<<<<<< HEAD
             color: Settings.theme.color("pages/customImagePage/groupBox");
-=======
-            color: "lightGray"
->>>>>>> b20fe23... sketch: Change the custom image creation to a page with many more options
 
             height: childrenRect.height;
             width: parent.width;
             radius: Constants.DefaultMargin;
 
             Column {
-<<<<<<< HEAD
                 spacing: Constants.DefaultMargin;
-=======
-                spacing: Constants.GridHeight * 0.1;
->>>>>>> b20fe23... sketch: Change the custom image creation to a page with many more options
                 width: parent.width;
 
                 Label {
@@ -134,7 +111,6 @@ Page {
                     text: "Image Size"
                 }
 
-<<<<<<< HEAD
                 Row {
                     height: Constants.GridHeight * 0.75;
                     width: parent.width;
@@ -173,52 +149,14 @@ Page {
 
                         Component.onCompleted: text = Krita.Window.height;
                     }
-=======
-                TextField {
-                    id: widthField;
-
-                    height: Constants.GridHeight * 0.75;
-
-                    placeholder: "Width";
-                    validator: IntValidator{bottom: 0; top: 10000;}
-                    numeric: true;
-                    nextFocus: heightField;
-
-                    background: "#63ffffff";
-                    border.color: "white";
-                    border.width: 1;
-
-                    Component.onCompleted: text = Krita.Window.width;
-                }
-                TextField {
-                    id: heightField;
-
-                    height: Constants.GridHeight * 0.75;
-
-                    placeholder: "Height"
-                    validator: IntValidator{bottom: 0; top: 10000;}
-                    numeric: true;
-                    nextFocus: resolutionField;
-
-                    background: "#63ffffff";
-                    border.color: "white";
-                    border.width: 1;
-
-                    Component.onCompleted: text = Krita.Window.height;
->>>>>>> b20fe23... sketch: Change the custom image creation to a page with many more options
                 }
                 TextField {
                     id: resolutionField;
 
                     height: Constants.GridHeight * 0.75;
 
-<<<<<<< HEAD
                     background: Settings.theme.color("pages/customImagePage/controls/background");
                     border.color: Settings.theme.color("pages/customImagePage/controls/border");
-=======
-                    background: "#63ffffff";
-                    border.color: "white";
->>>>>>> b20fe23... sketch: Change the custom image creation to a page with many more options
                     border.width: 1;
 
                     placeholder: "Resolution"
@@ -229,11 +167,7 @@ Page {
             }
         }
         Rectangle {
-<<<<<<< HEAD
             color: Settings.theme.color("pages/customImagePage/groupBox");
-=======
-            color: "lightGray"
->>>>>>> b20fe23... sketch: Change the custom image creation to a page with many more options
 
             height: childrenRect.height;
             width: parent.width;
@@ -311,7 +245,7 @@ Page {
                     height: Constants.GridHeight * 0.75;
                     width: parent.width;
 
-                    expandedHeight: Constants.GridHeight * 3;
+                    expandedHeight: Constants.GridHeight * 2;
 
                     model: ListModel {
                         ListElement { text: "White"; r: 1.0; g: 1.0; b: 1.0; }
