@@ -244,6 +244,10 @@ Q_SIGNALS:
     void iconPathChanged();
     void imagePathChanged();
     void fontPathChanged();
+    void fontCacheRebuilt();
+
+protected:
+    virtual bool eventFilter(QObject*, QEvent*);
 
 private:
     class Private;

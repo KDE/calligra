@@ -28,6 +28,7 @@
 #include <QtGui/QFont>
 #include <QtGui/QFontDatabase>
 #include <QtGui/QApplication>
+#include <QtGui/QWidget>
 #include <QtDeclarative/QDeclarativeComponent>
 
 #include <kglobal.h>
@@ -49,7 +50,10 @@ public:
         , imagePath("images/")
         , fontPath("fonts/")
         , fontsAdded(false)
+        , lineCount(60)
     { }
+
+    void rebuildFontCache();
 
     QString id;
     QString name;
@@ -70,11 +74,13 @@ public:
 
     bool fontsAdded;
     QList<int> addedFonts;
+    int lineCount;
 };
 
 Theme::Theme(QObject* parent)
     : QObject(parent), d(new Private)
 {
+    qApp->installEventFilter(this);
 }
 
 Theme::~Theme()
@@ -130,6 +136,7 @@ void Theme::setInherits(const QString& newValue)
 
         if(!d->inherits.isEmpty()) {
             d->inheritedTheme = Theme::load(d->inherits, this);
+            connect(d->inheritedTheme, SIGNAL(fontCacheRebuilt()), SIGNAL(fontCacheRebuilt()));
         }
 
         emit inheritsChanged();
@@ -243,20 +250,7 @@ QFont Theme::font(const QString& name)
     }
 
     if(d->fontMap.isEmpty()) {
-        QFontDatabase db;
-        for(QVariantMap::iterator itr = d->fonts.begin(); itr != d->fonts.end(); ++itr)
-        {
-            QVariantMap map = itr->toMap();
-            if(map.isEmpty())
-                continue;
-
-            QFont font = db.font(map.value("family").toString(), map.value("style", "Regular").toString(), map.value("size", 12).toInt());
-
-            if(font.isCopyOf(qApp->font()))
-                qWarning() << "Could not find font" << map.value("family") << "with style" << map.value("style", "Regular");
-
-            d->fontMap.insert(itr.key(), font);
-        }
+        d->rebuildFontCache();
     }
 
     if(d->fontMap.contains(name))
@@ -367,7 +361,7 @@ Theme* Theme::load(const QString& id, QObject* parent)
     appdir.cdUp();
     qml = QString("%1/share/apps/kritasketch/themes/%2/theme.qml").arg(appdir.canonicalPath(), id);
 #else
-    qml = KGlobal::dirs()->findResource("data", QString("kritasketch/themes/%1/theme.qml").arg(id))
+    qml = KGlobal::dirs()->findResource("data", QString("kritasketch/themes/%1/theme.qml").arg(id));
 #endif
 
     QDeclarativeComponent themeComponent(QmlGlobalEngine::instance()->engine(), parent);
@@ -385,6 +379,38 @@ Theme* Theme::load(const QString& id, QObject* parent)
     }
 
     return theme;
+}
+
+bool Theme::eventFilter(QObject* target, QEvent* event)
+{
+    if(target == qApp->activeWindow() && event->type() == QEvent::Resize) {
+        d->rebuildFontCache();
+        emit fontCacheRebuilt();
+    }
+
+    return QObject::eventFilter(target, event);
+}
+
+void Theme::Private::rebuildFontCache()
+{
+    fontMap.clear();
+    QFontDatabase db;
+    for(QVariantMap::iterator itr = fonts.begin(); itr != fonts.end(); ++itr)
+    {
+        QVariantMap map = itr->toMap();
+        if(map.isEmpty())
+            continue;
+
+        QFont font = db.font(map.value("family").toString(), map.value("style", "Regular").toString(), 10);
+
+        if(font.isCopyOf(qApp->font()))
+            qWarning() << "Could not find font" << map.value("family") << "with style" << map.value("style", "Regular");
+
+        float lineHeight = qApp->activeWindow()->height() / lineCount;
+        font.setPixelSize(lineHeight * map.value("size", 1).toInt());
+
+        fontMap.insert(itr.key(), font);
+    }
 }
 
 #include "Theme.moc"

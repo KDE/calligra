@@ -20,37 +20,37 @@ var values = {
     application: {
         family: "Source Sans Pro",
         style: "Light",
-        size: 14,
+        size: 1,
     },
     small: {
         family: "Source Sans Pro",
         style: "Light",
-        size: 10,
+        size: 0.75,
     },
     pageHeader: {
         family: "Source Sans Pro",
         style: "Bold",
-        size: 48,
+        size: 4,
     },
     title: {
         family: "Source Sans Pro",
         style: "Regular",
-        size: 24,
+        size: 1.75,
     },
     panelHandle: {
         family: "Source Sans Pro",
         style: "Regular",
-        size: 16,
+        size: 1.25,
     },
     panelHeader: {
         family: "Source Sans Pro",
         style: "Regular",
-        size: 24,
+        size: 1.5,
     },
     panelSection: {
         family: "Source Sans Pro",
         style: "Regular",
-        size: 18,
+        size: 1.25,
     },
 
 }
