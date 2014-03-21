@@ -40,6 +40,10 @@
 #include "FileSystemModel.h"
 #include "CompositeOpModel.h"
 #include "KeyboardModel.h"
+#include "ColorModelModel.h"
+#include "ColorDepthModel.h"
+#include "ColorProfileModel.h"
+#include "Theme.h"
 
 #include "Constants.h"
 #include "Settings.h"
@@ -75,6 +79,10 @@ void KritaSketchPlugin::registerTypes(const char* uri)
     qmlRegisterType<CompositeOpModel>("org.krita.sketch", 1, 0, "CompositeOpModel");
     qmlRegisterType<PanelConfiguration>("org.krita.sketch", 1, 0, "PanelConfiguration");
     qmlRegisterType<KeyboardModel>("org.krita.sketch", 1, 0, "KeyboardModel");
+    qmlRegisterType<ColorModelModel>("org.krita.sketch", 1, 0, "ColorModelModel");
+    qmlRegisterType<ColorDepthModel>("org.krita.sketch", 1, 0, "ColorDepthModel");
+    qmlRegisterType<ColorProfileModel>("org.krita.sketch", 1, 0, "ColorProfileModel");
+    qmlRegisterType<Theme>("org.krita.sketch", 1, 0, "Theme");
 
     qmlRegisterUncreatableType<LayerCompositeDetails>("org.krita.sketch", 1, 0, "LayerCompositeDetails", "This type is returned by the LayerModel class");
 }

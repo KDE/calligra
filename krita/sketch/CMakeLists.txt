@@ -27,6 +27,8 @@ set(kritasketchlib_SRCS
     SketchDeclarativeView.cpp
     SketchInputContext.cpp
     VirtualKeyboardController.cpp
+    Theme.cpp
+    QmlGlobalEngine.cpp
     ${KRITA_STEAM_SRCS}
 )
 
@@ -108,6 +110,10 @@ endif (WIN32)
 # =============================================================================
 
 kde4_add_library(kritasketchlib SHARED ${kritasketchlib_SRCS})
+set_target_properties(kritasketchlib
+    PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} DEFINE_SYMBOL MAKE_KRITA_SKETCH_LIB
+)
+
 
 target_link_libraries(kritasketchlib
     ${QT_QTDECLARATIVE_LIBRARY}
@@ -182,4 +188,5 @@ install(FILES
 install(DIRECTORY qml/components    DESTINATION ${CMAKE_INSTALL_LIBDIR}/calligra/imports/org/krita/sketch PATTERN "*~" EXCLUDE)
 install(DIRECTORY qml/images        DESTINATION ${CMAKE_INSTALL_LIBDIR}/calligra/imports/org/krita/sketch PATTERN "*~" EXCLUDE)
 install(DIRECTORY qml/panels        DESTINATION ${CMAKE_INSTALL_LIBDIR}/calligra/imports/org/krita/sketch PATTERN "*~" EXCLUDE)
-install(DIRECTORY fonts             DESTINATION ${DATA_INSTALL_DIR}/kritasketch)
+
+install(DIRECTORY themes DESTINATION ${DATA_INSTALL_DIR}/kritasketch)

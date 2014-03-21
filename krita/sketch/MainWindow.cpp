@@ -52,6 +52,7 @@
 #include "SketchDeclarativeView.h"
 #include "RecentFileManager.h"
 #include "DocumentManager.h"
+#include "QmlGlobalEngine.h"
 
 #ifdef Q_OS_WIN
 // qml requires correct-case to path, even in Windows
@@ -98,6 +99,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     }
 
     QDeclarativeView* view = new SketchDeclarativeView();
+    QmlGlobalEngine::instance()->setEngine(view->engine());
     view->engine()->rootContext()->setContextProperty("mainWindow", this);
 
     QString importPath = KGlobal::dirs()->findDirs("lib", "calligra/imports").value(0);
