@@ -17,18 +17,26 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <QtCore/QDir>
 #include "KoResourceBundle.h"
+#include "KoResourceBundleManager.h"
 #include "KoXmlResourceBundleManifest.h"
 #include "KoXmlResourceBundleMeta.h"
-#include "KoResourceBundleManager.h"
+
+#include <kglobal.h>
+#include <kcomponentdata.h>
+#include <kstandarddirs.h>
+
+#include <QtCore/QProcessEnvironment>
+#include <QtCore/QDate>
+#include <QtCore/QDir>
+
 #include <iostream>
 using namespace std;
 
-KoResourceBundle::KoResourceBundle(QString const& bundlePath, QString kritaPath):KoResource(bundlePath)
+KoResourceBundle::KoResourceBundle(QString const& bundlePath):KoResource(bundlePath)
 {
-    manager=new KoResourceBundleManager(kritaPath);
-    isInstalled=false; //TODO A vérifier
+    installed=false; //TODO Vérifier l'utilité
+    manager=new KoResourceBundleManager(QProcessEnvironment::systemEnvironment().value("KDEDIRS").section(':',0,0).append("/share/apps/krita/"));
 }
 
 KoResourceBundle::~KoResourceBundle()
@@ -38,6 +46,16 @@ KoResourceBundle::~KoResourceBundle()
     delete manifest;
 }
 
+QString KoResourceBundle::defaultFileExtension() const
+{
+    return QString(".zip");
+}
+
+QImage KoResourceBundle::image() const
+{
+    return thumbnail;
+}
+
 bool KoResourceBundle::load()
 {
     manager->setReadPack(filename());
@@ -45,30 +63,77 @@ bool KoResourceBundle::load()
         manifest=new KoXmlResourceBundleManifest();
         meta=new KoXmlResourceBundleMeta();
         meta->addTag("name",filename(),true);
+        installed=false;
     }
     else {
         //TODO Vérifier si on peut éviter de recréer manifest et meta à chaque load
+        //A optimiser si possible
         manifest=new KoXmlResourceBundleManifest(manager->getFile("manifest.xml"));
         meta=new KoXmlResourceBundleMeta(manager->getFile("meta.xml"));
-        thumbnail.load(manager->getFile("thumbnail.jpg"),"jpg");
+        thumbnail.load(manager->getFile("thumbnail.jpg"),"JPG");
         manager->close();
+        installed=manifest->isInstalled();
         setValid(true);
     }
     return true;
 }
 
+//TODO Vérifier que l'updated est bien placé
 bool KoResourceBundle::save()
 {
     if (manager->bad()) {
         meta->addTags(manifest->getTagList());
     }
+    addMeta("updated",QDate::currentDate().toString("dd/MM/yyyy"));
+
     manager->createPack(manifest,meta);
+
     setValid(true);
-    load();
-    return true;
+
+    return load();
 }
 
-void KoResourceBundle::addMeta(QString type,QString value){
+void KoResourceBundle::install()
+{
+    load(); //TODO Vérifier si ce load est nécessaire
+    if (!manager->bad()) {
+        manager->extractKFiles(manifest->getFilesToExtract());
+        manifest->exportTags();
+        //TODO Vérifier que l'export est validé et copié dans les fichiers
+        //TODO Sinon, déterminer pourquoi et comment faire
+        installed=true;
+        manifest->install();
+        //TODO Modifier les chemins des fichiers si c'est la première installation
+    }
+}
+
+void KoResourceBundle::uninstall()
+{
+    if (!installed)
+        return;
+
+    QList<QString> directoryList = manifest->getDirList();
+    QString shortPackName = meta->getShortPackName();
+    QString dirPath;
+
+    for (int i = 0; i < directoryList.size(); i++) {
+        dirPath = this->manager->getKritaPath();
+        dirPath.append(directoryList.at(i)).append("/").append(shortPackName);
+
+        if (!removeDir(dirPath)) {
+            cerr<<"Error : Couldn't delete folder : "<<qPrintable(dirPath)<<endl;
+        }
+    }
+
+    installed=false;
+    manifest->uninstall();
+}
+
+void KoResourceBundle::addMeta(QString type,QString value)
+{
+    if (type=="created") {
+        setValid(true);
+    }
     meta->addTag(type,value);
     meta->show();
 }
@@ -81,52 +146,10 @@ void KoResourceBundle::addFile(QString fileType,QString filePath)
 void KoResourceBundle::removeFile(QString fileName)
 {
     QList<QString> list=manifest->removeFile(fileName);
+
     for (int i=0;i<list.size();i++) {
         meta->removeFirstTag("tag",list.at(i));
     }
-}
-
-QString KoResourceBundle::defaultFileExtension() const
-{
-    return QString(".zip");
-}
-
-QImage KoResourceBundle::image() const
-{
-	return thumbnail;
-}
-
-void KoResourceBundle::install()
-{
-    load();
-    if (!manager->bad()) {
-        manager->extractKFiles(manifest->getFilesToExtract());
-        manifest->exportTags();
-        //TODO Vérifier que l'export est validé et copié dans les fichiers
-        //TODO Sinon, déterminer pourquoi et comment faire
-        isInstalled=true;
-        //Modifier les chemins des fichiers si c'est la première installation
-    }
-}
-
-void KoResourceBundle::uninstall()
-{
-    if(!isInstalled)
-        return;
-
-    QList<QString> directoryList = manifest->getDirList();
-    QString shortPackName = meta->getShortPackName();
-    QString dirPath;
-
-    for (int i = 0; i < directoryList.size(); i++) {
-        dirPath = this->manager->kritaPath;
-        dirPath.append(directoryList.at(i)).append("/").append(shortPackName);
-
-        if (!removeDir(dirPath)) {
-            cerr<<"Error : Couldn't delete folder : "<<qPrintable(dirPath)<<endl;
-        }
-    }    
-    isInstalled=false;
 }
 
 bool KoResourceBundle::removeDir(const QString & dirName)
@@ -151,4 +174,57 @@ bool KoResourceBundle::removeDir(const QString & dirName)
         result = dir.rmdir(dirName);
     }
     return result;
+}
+
+void KoResourceBundle::addResourceDirs()
+{
+    QList<QString> listeType = manifest->getDirList();
+    for(int i = 0; i < listeType.size();i++) {
+        KGlobal::mainComponent().dirs()->addResourceDir(listeType.at(i).toLatin1().data(), this->manager->getKritaPath()+listeType.at(i)+"/"+this->name());
+    }
+}
+
+bool KoResourceBundle::isInstalled()
+{
+    return installed;
+}
+
+void KoResourceBundle::rename(QString filename)
+{
+    addMeta("name",filename);
+    if (isInstalled()) {
+        QList<QString> directoryList = manifest->getDirList();
+        QString dirPath;
+        QDir dir;
+        for (int i = 0; i < directoryList.size(); i++) {
+            dirPath = this->manager->getKritaPath();
+            dirPath.append(directoryList.at(i)).append("/").append(filename);
+            dir.rename(dirPath,dirPath.section('/',0,dirPath.count('/')-1).append("/").append(filename));
+        }
+    }
+}
+
+QString KoResourceBundle::getAuthor()
+{
+    return meta->getValue("author");
+}
+
+QString KoResourceBundle::getLicense()
+{
+    return meta->getValue("license");
+}
+
+QString KoResourceBundle::getWebSite()
+{
+    return meta->getValue("website");
+}
+
+QString KoResourceBundle::getCreated()
+{
+    return meta->getValue("created");
+}
+
+QString KoResourceBundle::getUpdated()
+{
+    return meta->getValue("updated");
 }

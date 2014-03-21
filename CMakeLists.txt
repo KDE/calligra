@@ -25,6 +25,7 @@ set(CALLIGRA_VERSION_RELEASE 89)  # 89 for Alpha, increase for next test release
 set(CALLIGRA_ALPHA 1) # uncomment only for Pre-Alpha and Alpha
 #set(CALLIGRA_BETA 1) # uncomment only for Beta
 #set(CALLIGRA_RC 1) # uncomment only for RC
+set(CALLIGRA_YEAR 2014) # update every year
 
 if(NOT DEFINED CALLIGRA_ALPHA AND NOT DEFINED CALLIGRA_BETA AND NOT DEFINED CALLIGRA_RC)
     set(CALLIGRA_STABLE 1) # do not edit
@@ -399,7 +400,7 @@ endif (APPLE)
 ## Test for sqlite
 ##
 set(SQLITE_MIN_VERSION 3.6.16)
-set(SQLITE_RECOMMENDED_VERSION 3.8.2)
+set(SQLITE_RECOMMENDED_VERSION 3.8.4)
 set(SQLITE_LOAD_EXTENSION_REQUIRED ON)
 macro_optional_find_package(CalligraSqlite ${SQLITE_MIN_VERSION})
 macro_bool_to_01(SQLITE_FOUND HAVE_SQLITE)

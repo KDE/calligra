@@ -15,25 +15,20 @@
    License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <QtCore/QFile>
 #include "KoResourceBundleManager.h"
 #include "KoXmlResourceBundleManifest.h"
 #include "KoXmlResourceBundleMeta.h"
-#include "KoResourceServer.h"
-
-#include <kglobal.h>
-#include <kstandarddirs.h>
-#include <kcomponentdata.h>
 
 #include <sys/stat.h>
+
 #include <iostream>
 using namespace std;
+
 
 KoResourceBundleManager::KoResourceBundleManager(QString kPath,QString pName,KoStore::Mode mode):kritaPath(kPath),packName(pName)
 {
     if (packName!="") {
         resourcePack=KoStore::createStore(packName,mode,"",KoStore::Zip);
-
     }
 
     if (kritaPath!="" && kritaPath.at(kritaPath.size()-1)!='/') {
@@ -110,7 +105,6 @@ void KoResourceBundleManager::extractKFiles(QList<QString> pathList)
     int pathSize;
     QString name = packName.section('/',packName.count('/')).remove(".zip");
 
-    QDir resourceRootDir(kritaPath);
     if (isPathSet()) {
         for (int i=0;i<pathList.size();i++) {
             toRoot();
@@ -121,7 +115,7 @@ void KoResourceBundleManager::extractKFiles(QList<QString> pathList)
             if (!resourcePack->extractFile(currentPath,targetPath.append("/").append(name)
                         .append("/").append(currentPath.section('/',pathSize)))) {
                 dirPath = targetPath.section('/',0,targetPath.count('/')-1);
-                resourceRootDir.mkpath(dirPath);
+                mkdir(dirPath.toUtf8().constData(),S_IRWXU|S_IRGRP|S_IXGRP);
                 if(!resourcePack->extractFile(currentPath,targetPath)){
                     //TODO Supprimer le dossier créé
                     exit(1);
@@ -136,8 +130,7 @@ void KoResourceBundleManager::createPack(KoXmlResourceBundleManifest* manifest, 
     if (meta->getPackName()!="") {
         packName=meta->getPackName();
         resourcePack=KoStore::createStore(packName,KoStore::Write,"",KoStore::Zip);
-
-        if (resourcePack!=NULL) {
+        if (resourcePack!=NULL && !resourcePack->bad()) {
             addKFiles(manifest->getFileList());
             addManiMeta(manifest,meta);
             resourcePack->finalize();
@@ -185,6 +178,16 @@ QIODevice* KoResourceBundleManager::getFile(const QString &fileName)
     }
 
     return 0;
+}
+
+QString KoResourceBundleManager::getKritaPath()
+{
+    return kritaPath;
+}
+
+QString KoResourceBundleManager::getPackName()
+{
+    return packName;
 }
 
 //File Method Shortcuts

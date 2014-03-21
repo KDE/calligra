@@ -20,61 +20,75 @@
 #ifndef KORESOURCEMANAGERWIDGET_H
 #define KORESOURCEMANAGERWIDGET_H
 
-#include <QMainWindow>
-#include <QString>
-#include "KoResourceTableModel.h"
-#include "KoResourceModel.h"
-#include "KoResourceServerAdapter.h"
-#include "KoResourceManagerControl.h"
-#include <QSortFilterProxyModel>
+#include <QtGui/QMainWindow>
+#include <QtCore/QModelIndex>
 #include <krita_export.h>
+#include <QtGui/QLabel>
 
-// Disable export in windows, to allow Linux tests to work
-#ifdef WIN32
-#undef KRITAUI_EXPORT
-#endif /* WIN32 */
-
-namespace Ui {
-class KoResourceManagerWidget;
+namespace Ui
+{
+    class KoResourceManagerWidget;
 }
 
-
-class KRITAUI_EXPORT KoResourceManagerWidget : public QMainWindow
+class ClickLabel : public QLabel
 {
     Q_OBJECT
+
+public:
+    ClickLabel(QWidget * parent = 0)
+        :QLabel(parent)
+    {
+
+    }
+
+signals:
+    void clicked();
+
+private:
+    void mousePressEvent ( QMouseEvent * event )
+    {
+        Q_UNUSED(event);
+        emit clicked();
+    }
+};
+
+class KoResourceManagerControl;
+
+class KoResourceManagerWidget : public QMainWindow
+{
+    Q_OBJECT
+
 public:
     explicit KoResourceManagerWidget(QWidget *parent = 0);
     ~KoResourceManagerWidget();
 
+    void initializeModel();
+    void initializeConnect();
+    void connectTables();
+
+private slots:
+    void about();
+    void createPack();
+    void deletePack();
+    void endRenaming();
+    void filterFieldSelected(bool);
+    void filterResourceTypes(int index);
+    void installPack();
+    void refreshCurrentTable();
+    void refreshDetails(QModelIndex newIndex);
+    void setMeta();
+    void showHide();
+    void startRenaming();
+    void uninstallPack();
+
 private:
     KoResourceManagerControl *control;
-    KoResourceTableModel *model;
-    QMenu *buttonMenu;
     Ui::KoResourceManagerWidget *ui;
+    ClickLabel *resourceNameLabel;
+    bool firstRefresh;
 
     /*QSortFilterProxyModel* m_filter;
     MyTableModel *model2;*/
-
-    void initializeModel();
-    void initializeConnect();
-    void createMiniature(QPixmap);
-
-private slots:
-    void showHide();
-    void createPack();
-    void installPack();
-    void uninstallPack();
-    void deletePack();
-    void setMeta();
-    void refreshCurrentTable();
-    void filterFieldSelected(bool);
-    void rename();
-    void about();
-
-signals:
-
-public slots:
-
 };
 
 #endif // KORESOURCEMANAGERWIDGET_H

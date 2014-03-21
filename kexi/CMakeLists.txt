@@ -8,10 +8,6 @@ option(KEXI_MOBILE "compile a mobile Kexi" OFF)
 
 check_function_exists("uname" HAVE_UNAME)
 
-IF(EXISTS ${CMAKE_SOURCE_DIR}/kexi/CMakeSettings.txt)
-  INCLUDE(${CMAKE_SOURCE_DIR}/kexi/CMakeSettings.txt)
-ENDIF(EXISTS ${CMAKE_SOURCE_DIR}/kexi/CMakeSettings.txt)
-
 option(KEXI_DEBUG_GUI "Debugging GUI for Kexi (requires CALLIGRADB_DEBUG_GUI to be set too)" OFF)
 option(KEXI_SHOW_UNFINISHED, "Show unfinnished features in Kexi. Thus is useful for testing but may confuse end-user." OFF)
 option(KEXI_SHOW_UNIMPLEMENTED "Forces to show menu entries and dialogs just to give impression about development plans for Kexi. Only recommended for test/development versions." OFF)

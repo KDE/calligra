@@ -20,15 +20,16 @@
 #define DOCUMENTMANAGER_H
 
 #include <QObject>
+#include <QtCore/QVariantMap>
 
-#include "image/krita_export.h"
+#include "krita_sketch_export.h"
 
 class RecentFileManager;
 class Settings;
 class ProgressProxy;
 class KisDoc2;
 class KisSketchPart;
-class KRITASKETCH_EXPORT DocumentManager : public QObject
+class KRITA_SKETCH_EXPORT DocumentManager : public QObject
 {
     Q_OBJECT
 public:
@@ -41,6 +42,7 @@ public:
 
 public Q_SLOTS:
     void newDocument(int width, int height, float resolution);
+    void newDocument(const QVariantMap& options);
     void openDocument(const QString& document, bool import = false);
     void closeDocument();
     bool save();

@@ -28,12 +28,16 @@ Item {
     property bool useExponentialValue: false;
     onValueChanged: handle.resetHandle();
     onExponentialValueChanged: handle.resetHandle(true);
+
+    property alias border: fill.border;
+    property alias background: fill.color;
+
     Rectangle {
         id: fill;
         anchors.fill: parent;
         border.width: 1;
-        border.color: "silver";
-        color: "#bdffffff";
+        border.color: Settings.theme.color("components/slider/background/border");
+        color: Settings.theme.color("components/slider/background/fill");
         radius: height / 2;
     }
     MouseArea {
@@ -104,7 +108,9 @@ Item {
         height: parent.height - 4;
         width: height;
         radius: (height / 2) + 1;
-        color: "silver"
+        color: Settings.theme.color("components/slider/handle/fill");
+        border.width: 1;
+        border.color: Settings.theme.color("components/slider/handle/border");
         MouseArea {
             id: mouseArea;
             anchors.fill: parent;

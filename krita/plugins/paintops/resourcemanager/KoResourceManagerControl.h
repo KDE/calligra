@@ -21,50 +21,45 @@
 #define KORESOURCEMANAGERCONTROL_H
 
 #include "KoResourceBundle.h"
-#include <QString>
+#include <QtCore/QModelIndex>
 
-class QIODevice;
 class KoXmlResourceBundleMeta;
 class KoXmlResourceBundleManifest;
 class KoResourceBundleManager;
+class KoResourceTableModel;
 template <class T> class KoResourceServer;
 
 class KoResourceManagerControl
 {
+
+public:
+    KoResourceManagerControl();
+    ~KoResourceManagerControl();
+
+    KoResourceTableModel* getModel();
+    void launchServer();
+
+    void about();
+    void createPack();
+    void filterResourceTypes(int index);
+    void modifySelected(int mode);
+    void refreshCurrentTable();
+    bool rename(QModelIndex index,QString);
+    void setMeta(QModelIndex index,QString,QString);
+
+private:
     KoXmlResourceBundleMeta *meta;
     KoXmlResourceBundleManifest *manifest;
     KoResourceBundleManager *extractor;
-    QString root;
-    QString currentMeta;
-    QString currentManifest;
     KoResourceServer<KoResourceBundle> *bundleServer;
-    KoResourceBundle *current;
+    KoResourceTableModel *model;
+    QString root;
 
-public:
-    KoResourceManagerControl(QString="/home/metabolic");
-    ~KoResourceManagerControl();
-
-    void setMeta(QString,QString,QString);
-    QIODevice* getDevice(QString);
-    void createPack();
-    void installPack(QString);
-    void uninstallPack(QString);
-    void deletePack(QString);
-    void refreshCurrentTable();
-    void rename(QString,QString);
-    void about();
-
-    /**
-     * @brief launchServer : Create the resource server for bundles.
-     */
-    void launchServer();
-
-    /**
-     * @brief getServer
-     * @return the ResourceBundle server
-     */
-    KoResourceServer<KoResourceBundle>* getServer();
-
+    enum {
+        Install=0,
+        Uninstall,
+        Delete
+    };
 };
 
 #endif // KORESOURCEMANAGERCONTROL_H

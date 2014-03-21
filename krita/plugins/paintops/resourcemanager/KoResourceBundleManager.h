@@ -19,12 +19,6 @@
 #define KORESOURCEBUNDLEMANAGER_H
 
 #include "KoStore.h"
-#include <krita_export.h> 
-
-// Disable export in windows, to allow Linux tests to work
-#ifdef WIN32
-#undef KRITAUI_EXPORT
-#endif /* WIN32 */
 
 class KoXmlResourceBundleManifest;
 class KoXmlResourceBundleMeta;
@@ -33,7 +27,7 @@ class KoXmlResourceBundleMeta;
  * @brief The KoResourceBundleManager class
  * @details Manage resource bundles structure
  */
-class KRITAUI_EXPORT KoResourceBundleManager
+class KoResourceBundleManager
 {
 public:
 
@@ -73,12 +67,6 @@ public:
      * @brief toRoot : Go to the root of the store
      */
     void toRoot();
-
-    /**
-     * Add a Krita resource file to the store.
-     * @param path the path containing the Krita resource File.
-     * @return true if succeed, false otherwise.
-     */
 
     /**
      * @brief addKFile : Add a Krita resource file to the store.
@@ -134,6 +122,18 @@ public:
      */
     QIODevice* getFile(const QString &fileName);
 
+    /**
+     * @brief getKritaPath
+     * @return the path of Krita used when initialized
+     */
+    QString getKritaPath();
+
+    /**
+     * @brief getPackName
+     * @return the name of the current bundle
+     */
+    QString getPackName();
+
     ///File Method shortcuts
 
     bool atEnd() const;
@@ -147,10 +147,9 @@ public:
     qint64 size() const;
     qint64 write(const QByteArray &_data);
 
+private:
     QString kritaPath;
     QString packName;
-
-private:
     KoStore* resourcePack;
 };
 
