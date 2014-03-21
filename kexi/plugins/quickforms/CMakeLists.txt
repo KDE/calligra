@@ -9,7 +9,7 @@ include_directories(
 )
 
 #build a shared library
-set(kexihandler_quickform_SRCS 
+set(kexihandler_quickform_SRCS quickrecordset.cpp quickrecord.cpp 
     quickformview.cpp 
     quickformdataview.cpp 
     quickformdesignview.cpp 

@@ -22,6 +22,7 @@
 
 #include "quickformdataview.h"
 #include "quickformview.h"
+#include "quickrecordset.h"
 #include "kexiscriptadapterq.h"
 
 #include <KDebug>
@@ -29,7 +30,7 @@
 #include <QLayout>
 #include <widget/utils/kexirecordnavigator.h>
 
-QuickFormDataView::QuickFormDataView(QWidget* parent): KexiView(parent)
+QuickFormDataView::QuickFormDataView(QWidget* parent): KexiView(parent), m_cursor(0)
 {
     m_view = new QuickFormView(this);
     m_view->setBackgroundBrush(palette().brush(QPalette::Light));
@@ -54,6 +55,7 @@ QuickFormDataView::QuickFormDataView(QWidget* parent): KexiView(parent)
     
     m_kexi = new KexiScriptAdaptorQ();
     m_view->addContextProperty("Kexi", m_kexi);
+        
 }
 
 QuickFormDataView::~QuickFormDataView()
@@ -69,11 +71,16 @@ void QuickFormDataView::setDefinition(const QString& def)
     doc.setContent(def);
         
     QDomElement root = doc.documentElement();
-    QDomElement qf = root.firstChildElement("quickform");
-    kDebug() << root.text();
+    QDomElement qf = root.firstChildElement("quickform:definition");
+    kDebug() << "quickform:definition" << qf.text();
 
     m_view->setDeclarativeComponent(root.text().toLocal8Bit());
     
+    m_recordSource = root.firstChildElement("quickform:connection").attribute("record-source");
+    kDebug() << "Record Source: " << m_recordSource;
+    
+    m_recordSet = new QuickRecordSet(m_recordSource,  KexiMainWindowIface::global()->project()->dbConnection());
+    m_view->addContextProperty("RecordSet", m_recordSet);
 }
 
 void QuickFormDataView::addNewRecordRequested()

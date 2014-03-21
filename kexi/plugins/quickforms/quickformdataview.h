@@ -25,7 +25,9 @@
 
 #include <KexiView.h>
 #include <core/KexiRecordNavigatorHandler.h>
+#include <db/cursor.h>
 
+class QuickRecordSet;
 class QuickFormView;
 class QGraphicsObject;
 class QDeclarativeEngine;
@@ -57,6 +59,10 @@ private:
     QuickFormView *m_view;
     KexiScriptAdaptorQ *m_kexi;
     KexiRecordNavigator *m_recordSelector;
+    
+    QString m_recordSource;
+    KexiDB::Cursor *m_cursor;
+    QuickRecordSet *m_recordSet;
 };
 
 #endif // QUICKFORMDATAVIEW_H
