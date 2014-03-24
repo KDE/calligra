@@ -170,7 +170,11 @@ KexiMainWindowTabWidget::KexiMainWindowTabWidget(QWidget *parent, KexiMainWidget
     m_closeAction = new KAction(koIcon("tab-close"), i18n("&Close Tab"), this);
     m_closeAction->setToolTip(i18n("Close the current tab"));
     m_closeAction->setWhatsThis(i18n("Closes the current tab."));
+    m_closeAllTabsAction = new KAction(i18n("Cl&ose All Tabs"), this);
+    m_closeAllTabsAction->setToolTip(i18n("Close all tabs"));
+    m_closeAllTabsAction->setWhatsThis(i18n("Closes all tabs."));
     connect(m_closeAction, SIGNAL(triggered()), this, SLOT(closeTab()));
+    connect(m_closeAllTabsAction, SIGNAL(triggered()), this, SLOT(closeAllTabs()));
 //! @todo  insert window list in the corner widget as in firefox
 #if 0
     // close-tab button:
@@ -203,6 +207,28 @@ void KexiMainWindowTabWidget::closeTab()
     dynamic_cast<KexiMainWindow*>(KexiMainWindowIface::global())->closeWindowForTab(m_tabIndex);
 }
 
+tristate KexiMainWindowTabWidget::closeAllTabs()
+{
+    tristate alternateResult = true; 
+    QList<KexiWindow*> windowList;
+    for (int i = 0; i < count(); i++) {
+        KexiWindow *window = dynamic_cast<KexiMainWindow*>(KexiMainWindowIface::global())->windowForTab(i);
+        if (window) {
+            windowList.append(window);
+        }
+    }
+    foreach (KexiWindow *window, windowList) {
+        tristate result = dynamic_cast<KexiMainWindow*>(KexiMainWindowIface::global())->closeWindow(window);
+        if (result != true && result != false) {
+            return result;
+        }
+        if (result == false) {
+            alternateResult = false;
+        }
+    }
+    return alternateResult;
+}
+
 void KexiMainWindowTabWidget::tabInserted(int index)
 {
     KTabWidget::tabInserted(index);
@@ -213,6 +239,7 @@ void KexiMainWindowTabWidget::contextMenu(int index, const QPoint& point)
 {
     QMenu menu;
     menu.addAction(m_closeAction);
+    menu.addAction(m_closeAllTabsAction);
 //! @todo add "&Detach Tab"
     setTabIndexFromContextMenu(index);
     menu.exec(point);
