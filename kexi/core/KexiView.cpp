@@ -44,52 +44,36 @@
 #include <QVBoxLayout>
 #include <QLabel>
 
-/*class KexiToggleViewModeAction::Private
+//! @internal Action for toggling view mode
+class KEXICORE_EXPORT KexiToggleViewModeAction : public KAction
 {
-  public:
-    Private()
-    {
-    }
-  Kexi::ViewMode mode;
-};*/
-
-KexiToggleViewModeAction::KexiToggleViewModeAction(
-    Kexi::ViewMode mode, QObject* parent)//, QObject* receiver, const char* slot)
+public:
+    //! Creates action for toggling to view mode @a mode. @a slot should have signature
+    //! matching switchedTo(Kexi::ViewMode mode) signal.
+    KexiToggleViewModeAction(Kexi::ViewMode mode, QObject* parent)
         : KAction(
             KIcon(Kexi::iconNameForViewMode(mode)),
             Kexi::nameForViewMode(mode, true/*withAmpersand*/),
             parent)
-// , d( new Private )
-{
-// d->mode = mode;
-// connect(this, SIGNAL(toggled(bool)), this, SLOT(slotToggled(bool)));
-// if (receiver && slot)
-//  connect(this, SIGNAL(switchedTo(Kexi::ViewMode)), receiver, slot);
-    setCheckable(true);
-    if (mode == Kexi::DataViewMode) {
-        setObjectName("view_data_mode");
-        setToolTip(i18n("Switch to data view"));
-        setWhatsThis(i18n("Switches to data view."));
-    } else if (mode == Kexi::DesignViewMode) {
-        setObjectName("view_design_mode");
-        setToolTip(i18n("Switch to design view"));
-        setWhatsThis(i18n("Switches to design view."));
-    } else if (mode == Kexi::TextViewMode) {
-        setObjectName("view_text_mode");
-        setToolTip(i18n("Switch to text view"));
-        setWhatsThis(i18n("Switches to text view."));
-    } else {
-        kWarning() << "KexiToggleViewModeAction: invalid mode " << mode;
+    {
+        setCheckable(true);
+        if (mode == Kexi::DataViewMode) {
+            setObjectName("view_data_mode");
+            setToolTip(i18n("Switch to data view"));
+            setWhatsThis(i18n("Switches to data view."));
+        } else if (mode == Kexi::DesignViewMode) {
+            setObjectName("view_design_mode");
+            setToolTip(i18n("Switch to design view"));
+            setWhatsThis(i18n("Switches to design view."));
+        } else if (mode == Kexi::TextViewMode) {
+            setObjectName("view_text_mode");
+            setToolTip(i18n("Switch to text view"));
+            setWhatsThis(i18n("Switches to text view."));
+        } else {
+            kWarning() << "KexiToggleViewModeAction: invalid mode " << mode;
+        }
     }
-}
-
-/*
-void KexiToggleViewModeAction::slotToggled(bool checked)
-{
-  if (!checked)
-    return;
-  emit switchedTo(d->mode);
-}*/
+};
 
 //-------------------------
 
@@ -97,7 +81,6 @@ class KexiView::Private
 {
 public:
     Private(KexiView *qq)
-    //: viewModeGroup(0)
             : q(qq)
             , viewWidget(0)
             , parentView(0)
@@ -112,12 +95,6 @@ public:
     }
 
     ~Private() {
-        /*   qDeleteAll(viewActions); */
-        /*   foreach(KAction* action, viewActions) {
-                //only delete action if it is not shared (otherwise, window itself will delete it)
-                if (!window->sharedViewAction(action->name()))
-                  delete action;
-              }*/
     }
 
     void toggleViewModeButtonBack(Kexi::ViewMode mode) {
@@ -129,7 +106,6 @@ public:
             toggleViewModeButtons.value(mode)->setChecked(viewMode == mode);
             toggleViewModeActions.value(mode)->blockSignals(false);
             toggleViewModeButtons.value(mode)->blockSignals(false);
-            //a->setChecked(viewMode == mode);
             slotSwitchToViewModeInternalEnabled = true;
         }
     }
@@ -187,12 +163,10 @@ public:
     QVBoxLayout* mainLyr;
     QWidget *topBarHWidget;
     KexiFlowLayout *topBarLyr;
-    //QActionGroup* viewModeGroup;
     QHash<Kexi::ViewMode, QAction*> toggleViewModeActions;
     QHash<Kexi::ViewMode, KoGroupButton*> toggleViewModeButtons;
 
     KexiSmallToolButton* saveDesignButton;
-//  KexiToolBarSeparator* saveDesignButtonSeparator;
 
     QString defaultIconName;
     KexiWindow *window;
@@ -261,7 +235,6 @@ KexiView::KexiView(QWidget *parent)
 
     installEventFilter(this);
 
-    // QLayout *l = layout(); -- FIXME: Not used?
     d->mainLyr = new QVBoxLayout(this);
     d->mainLyr->setContentsMargins(0, KDialog::marginHint() / 3, 0, 0);
 
@@ -520,11 +493,10 @@ bool KexiView::eventFilter(QObject *o, QEvent *e)
 {
     if (e->type() == QEvent::FocusIn || e->type() == QEvent::FocusOut) {// && o->inherits("QWidget")) {
 //  //hp==true if currently focused widget is a child of this table view
-//  const bool hp = Kexi::hasParent( static_cast<QWidget*>(o), focusWidget());
-        kDebug() << "this=[" << o->metaObject()->className()
-            << objectName() << "] o=[" << o->metaObject()->className() << o->objectName()
-            << "] focusWidget=[" << (qApp->focusWidget() ? qApp->focusWidget()->metaObject()->className() : QString())
-            << (qApp->focusWidget() ? qApp->focusWidget()->objectName() : QString()) << "] ev.type=" << e->type();
+//        kDebug() << "this=[" << o->metaObject()->className()
+//            << objectName() << "] o=[" << o->metaObject()->className() << o->objectName()
+//            << "] focusWidget=[" << (qApp->focusWidget() ? qApp->focusWidget()->metaObject()->className() : QString())
+//            << (qApp->focusWidget() ? qApp->focusWidget()->objectName() : QString()) << "] ev.type=" << e->type();
         if (KexiUtils::hasParent(this, o)) {
             if (e->type() == QEvent::FocusOut && qApp->focusWidget()
                     && !KexiUtils::hasParent(this, qApp->focusWidget())) {
@@ -563,7 +535,6 @@ void KexiView::setViewWidget(QWidget* w, bool focusProxy)
     }
     d->viewWidget = w;
     if (d->viewWidget) {
-        //if (!d->children.contains(dynamic_cast<KexiView*>(d->viewWidget))) {
         d->viewWidget->setParent(this);
         d->mainLyr->addWidget(d->viewWidget);
         d->viewWidget->installEventFilter(this);
@@ -578,12 +549,6 @@ void KexiView::addChildView(KexiView* childView)
     d->children.append(childView);
     addActionProxyChild(childView);
     childView->d->parentView = this;
-
-    //childView->setParent(this);
-    //d->mainLyr->addWidget(childView);
-
-// if (d->parentView)
-//  childView->installEventFilter(d->parentView);
     childView->installEventFilter(this);
 }
 
@@ -672,11 +637,9 @@ QList<QAction*> KexiView::viewActions() const
 
 void KexiView::toggleViewModeButtonBack()
 {
-// d->switchToViewModeInternalEnabled = false;
     d->toggleViewModeButtonBack(Kexi::DataViewMode);
     d->toggleViewModeButtonBack(Kexi::DesignViewMode);
     d->toggleViewModeButtonBack(Kexi::TextViewMode);
-// d->switchToViewModeInternalEnabled = true;
 }
 
 void KexiView::createViewModeToggleButtons()
