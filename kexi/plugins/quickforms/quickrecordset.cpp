@@ -20,6 +20,7 @@
 #include <db/connection.h>
 #include <db/cursor.h>
 #include <db/utils.h>
+#include <db/tableviewdata.h>
 
 class QuickRecordSet::Private
 {
@@ -42,6 +43,9 @@ public:
     KexiDB::Connection *connection;
     KexiDB::QuerySchema *originalSchema;
     KexiDB::QuerySchema *copySchema;
+    KexiDB::TableViewData *data;
+    
+    qint64 currentRecord;
 };
 
 QuickRecordSet::QuickRecordSet(const QString& source, KexiDB::Connection* pConnection, QObject* parent): QObject(parent), d(new Private(pConnection))
@@ -59,76 +63,75 @@ QuickRecordSet::~QuickRecordSet()
 
 qint64 QuickRecordSet::at() const
 {
-  if (d->cursor) {
-    return d->cursor->at();
+  if (d->data) {
+    return d->currentRecord;
   }
   return -1;
 }
 
 qint64 QuickRecordSet::recordCount() const
 {
-    if ( d->copySchema )
+    if ( d->data )
     {
-        return KexiDB::rowCount ( *d->copySchema );
+        kDebug() << "Record Count:" << d->data->count();
+        return d->data->count();
     }
     else
     {
-        return 1;
+        return 0;
     }
 }
 
 bool QuickRecordSet::moveFirst()
 {
-    if ( d->cursor ) {
-      if ( d->cursor->moveFirst() ) {
-	emit positionChanged(at());
-	return true;
-      } else {
-	return false;
-      }
-    }
-
+    if ( d->data) {
+      d->currentRecord = 0;
+      emit positionChanged(d->currentRecord);
+      return true;
+    } 
     return false;
 }
 
 bool QuickRecordSet::movePrevious()
 {
-    if ( d->cursor ){
-      if ( d->cursor->movePrev() ) {
-	emit positionChanged(at());
-	return true;
-      } else {
-	return false;
-      }
-    }
+    if ( d->data && d->currentRecord > 0){
+      d->currentRecord--;
+      emit positionChanged(d->currentRecord);
+      return true;
+    } 
     return false;
 }
 
 bool QuickRecordSet::moveNext()
 {
-    if ( d->cursor ){
-      if ( d->cursor->moveNext() ) {
-	emit positionChanged(at());
-	return true;
-      } else {
-	return false;
-      }
-    }
+    if ( d->data && d->currentRecord < recordCount() - 1){
+      d->currentRecord++;
+      emit positionChanged(d->currentRecord);
+      return true;
+    } 
     return false;
 }
 
 bool QuickRecordSet::moveLast()
 {
-    if ( d->cursor ){
-      if ( d->cursor->moveLast() ) {
-	emit positionChanged(at());
-	return true;
-      } else {
-	return false;
-      }
-    }
+    if ( d->data ){
+      d->currentRecord = recordCount() - 1;
+      emit positionChanged(d->currentRecord);
+      return true;
+    } 
     return false;
 }
+
+bool QuickRecordSet::moveTo(qint64 r)
+{
+  if (r >= 0 && r < recordCount() - 1) {
+    d->currentRecord = r;
+    emit positionChanged(d->currentRecord);
+    return true;
+  }
+  return false;
+}
+
 
 bool QuickRecordSet::open()
 {
@@ -142,13 +145,15 @@ bool QuickRecordSet::open()
         {
             kDebug() << "Opening cursor.." << d->copySchema->debugString();
             d->cursor = d->connection->executeQuery ( *d->copySchema, 1 );
+	    d->data = new KexiDB::TableViewData(d->cursor);
+	    d->data->preloadAllRows(); //!@todo do i really want to do this?
+	    kDebug() << "***Column Count:" << d->data->columnsCount();
         }
 
-
-        if ( d->cursor )
+        if ( d->data )
         {
             kDebug() << "Moving to first record..";
-            return d->cursor->moveFirst();
+            return moveFirst();
         }
         else
             return false;
@@ -202,4 +207,10 @@ bool QuickRecordSet::getSchema()
     }
     return false;
 }
+
+KexiDB::TableViewData* QuickRecordSet::data()
+{
+  return d->data;
+}
+
 #include "quickrecordset.moc"

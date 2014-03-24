@@ -28,6 +28,7 @@
 #include <db/cursor.h>
 
 class QuickRecordSet;
+class QuickRecord;
 class QuickFormView;
 class QGraphicsObject;
 class QDeclarativeEngine;
@@ -63,6 +64,11 @@ private:
     QString m_recordSource;
     KexiDB::Cursor *m_cursor;
     QuickRecordSet *m_recordSet;
+    QuickRecord *m_currentRecord;
+    
+private slots:
+    void positionChanged(qint64 r);
+    
 };
 
 #endif // QUICKFORMDATAVIEW_H

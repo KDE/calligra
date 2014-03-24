@@ -16,13 +16,72 @@
  */
 
 #include "quickrecord.h"
+#include "quickrecordset.h"
+#include <kdebug.h>
+#include <db/tableviewdata.h>
+#include <db/cursor.h>
 
-QuickRecord::QuickRecord()
+QuickRecord::QuickRecord(QuickRecordSet* set): QObject(), m_data(0)
 {
+  m_recordSet = set;
+  
+  connect(m_recordSet, SIGNAL(positionChanged(qint64)), this, SLOT(recordChanged(qint64)));
+  recordChanged(0);
 }
 
 QuickRecord::~QuickRecord()
 {
 }
 
+int QuickRecord::fieldCount() const
+{
+  if (m_recordSet->data()) {
+        return m_recordSet->data()->columnsCount();
+    }
+    return 0;
+   
+}
+
+QString QuickRecord::fieldName(int) const
+{
+  return QString();
+}
+
+QVariant QuickRecord::value(int i)
+{
+  kDebug() << "Getting value for field" << i;
+  if (i < fieldCount() && m_data && i < m_data->size()) {  
+    return m_data->at(i);
+  }
+  return QVariant();
+}
+
+QVariant QuickRecord::value(const QString &f)
+{
+  kDebug() << "Getting value for field" << f;
+  return value(fieldNumber(f));
+}
+
+void QuickRecord::recordChanged(qint64 r)
+{
+  //Update the record data
+  kDebug() << "Getting record data:" << r;
+  m_data = m_recordSet->data()->at(m_recordSet->at());
+  kDebug() << m_data;
+}
+
+int QuickRecord::fieldNumber ( const QString &fld ) const
+{
+    if (!m_recordSet->data()->cursor() || !m_recordSet->data()->cursor()->query()) {
+        return -1;
+    }
+    const KexiDB::QueryColumnInfo::Vector fieldsExpanded(
+        m_recordSet->data()->cursor()->query()->fieldsExpanded(KexiDB::QuerySchema::Unique));
+    for (int i = 0; i < fieldsExpanded.size() ; ++i) {
+        if (0 == QString::compare(fld, fieldsExpanded[i]->aliasOrName(), Qt::CaseInsensitive)) {
+            return i;
+        }
+    }
+    return -1;
+}
 #include "quickrecord.moc"

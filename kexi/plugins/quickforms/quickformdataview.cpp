@@ -23,6 +23,7 @@
 #include "quickformdataview.h"
 #include "quickformview.h"
 #include "quickrecordset.h"
+#include "quickrecord.h"
 #include "kexiscriptadapterq.h"
 
 #include <KDebug>
@@ -55,7 +56,6 @@ QuickFormDataView::QuickFormDataView(QWidget* parent): KexiView(parent), m_curso
     
     m_kexi = new KexiScriptAdaptorQ();
     m_view->addContextProperty("Kexi", m_kexi);
-        
 }
 
 QuickFormDataView::~QuickFormDataView()
@@ -74,13 +74,18 @@ void QuickFormDataView::setDefinition(const QString& def)
     QDomElement qf = root.firstChildElement("quickform:definition");
     kDebug() << "quickform:definition" << qf.text();
 
-    m_view->setDeclarativeComponent(root.text().toLocal8Bit());
-    
     m_recordSource = root.firstChildElement("quickform:connection").attribute("record-source");
     kDebug() << "Record Source: " << m_recordSource;
     
     m_recordSet = new QuickRecordSet(m_recordSource,  KexiMainWindowIface::global()->project()->dbConnection());
     m_view->addContextProperty("RecordSet", m_recordSet);
+    connect(m_recordSet, SIGNAL(positionChanged(qint64)), this, SLOT(positionChanged(qint64)));
+    
+    m_currentRecord = new QuickRecord(m_recordSet);
+    m_view->addContextProperty("CurrentRecord", m_currentRecord);
+    
+    m_view->setDeclarativeComponent(root.text().toLocal8Bit());
+    m_recordSelector->setRecordCount(recordCount());
 }
 
 void QuickFormDataView::addNewRecordRequested()
@@ -90,35 +95,40 @@ void QuickFormDataView::addNewRecordRequested()
 
 void QuickFormDataView::moveToFirstRecordRequested()
 {
-
+  m_recordSet->moveFirst();
 }
 
 void QuickFormDataView::moveToLastRecordRequested()
 {
-
+  m_recordSet->moveLast();
 }
 
 void QuickFormDataView::moveToNextRecordRequested()
 {
-
+  m_recordSet->moveNext();
 }
 
 void QuickFormDataView::moveToPreviousRecordRequested()
 {
-
+  m_recordSet->movePrevious();
 }
 
 void QuickFormDataView::moveToRecordRequested(uint r)
 {
-    Q_UNUSED(r);
+  m_recordSet->moveTo(r);
 }
 
 int QuickFormDataView::currentRecord() const
 {
-    return 0;
+    return m_recordSet->at();
 }
 
 int QuickFormDataView::recordCount() const
 {
-    return 0;
+    return m_recordSet->recordCount();
+}
+
+void QuickFormDataView::positionChanged(qint64 r)
+{
+    m_recordSelector->setCurrentRecordNumber(r + 1);
 }

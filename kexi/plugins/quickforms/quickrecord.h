@@ -19,16 +19,38 @@
 #define QUICKRECORD_H
 
 #include <QObject>
+#include <db/RecordData.h>
+
+namespace KexiDB {
+class Cursor;
+class QuerySchema;
+}
+
+class QuickRecordSet;
 
 class QuickRecord : public QObject
 {
     Q_OBJECT
 
 public:
-    QuickRecord();
+    QuickRecord(QuickRecordSet *set);
     ~QuickRecord();
+    
+    Q_INVOKABLE int fieldCount() const;
+    Q_INVOKABLE QString fieldName(int) const;
+    Q_INVOKABLE QVariant value(int);
+    Q_INVOKABLE QVariant value(const QString&);
+    
 
 private:
+  QuickRecordSet *m_recordSet;
+  KexiDB::RecordData *m_data;
+  
+  int fieldNumber(const QString& name) const;
+
+private slots:
+    void recordChanged(qint64 r);
+    
 };
 
 #endif // QUICKRECORD_H

@@ -19,9 +19,11 @@
 #define QUICKRECORDSET_H
 
 #include <QObject>
+#include "quickrecord.h"
 
 namespace KexiDB {
   class Connection;
+  class TableViewData;
 }
 
 class QuickRecordSet : public QObject
@@ -37,6 +39,7 @@ public:
     Q_INVOKABLE bool movePrevious();
     Q_INVOKABLE bool moveNext();
     Q_INVOKABLE bool moveLast();
+    Q_INVOKABLE bool moveTo(qint64);
     Q_INVOKABLE qint64 at() const;
     Q_INVOKABLE qint64 recordCount() const;
     
@@ -47,9 +50,13 @@ private:
     class Private;
     Private * const d;
     
+    KexiDB::TableViewData* data();
+    
     bool getSchema();
     bool open();
     bool close();
+    
+    friend class QuickRecord;
 };
 
 #endif // QUICKRECORDSET_H
