@@ -18,7 +18,9 @@
   */
 
 #include "KexiStartupDialog.h"
+#ifdef KEXI_PROJECT_TEMPLATES
 #include "KexiStartupDialogTemplatesPage.h"
+#endif
 #include "kexi.h"
 #include <widget/KexiProjectSelectorWidget.h>
 #include <widget/KexiConnectionSelectorWidget.h>
@@ -102,28 +104,20 @@ public:
     // subpages within "templates" page
     KPageWidgetItem *templPageWidgetItem_BlankDatabase,
     *templPageWidgetItem_ImportExisting, *templPageWidgetItem_CreateFromTemplate;
-    //int pageTemplatesID;
-    //int pageOpenExistingID, pageOpenRecentID;
-    //int templatesSectionID_blank, templatesSectionID_import;
-//#ifdef KEXI_PROJECT_TEMPLATES
-// int templatesSectionID_templates; //, templatesSectionID_custom2;
-//#endif
     QCheckBox *chkDoNotShow;
 
     //widgets for template tab:
     KPageWidget* templatesWidget;
     QListView *templatesWidget_IconListView;//helper
 
+#ifdef KEXI_PROJECT_TEMPLATES
     KexiStartupDialogTemplatesPage *viewTemplates;
-    //TemplatesPage *viewBusinessTempl;
+#endif
 
     int result;
 
     KIcon kexi_sqlite_icon;
     KIcon kexi_shortcut_icon;
-
-// //! Key string of selected database template. \sa selectedTemplateKey()
-// QString selectedTemplateKey;
 
     //! used for "open existing"
     KexiDBConnectionSet *connSet;
@@ -315,8 +309,6 @@ void KexiStartupDialog::setupPageTemplates()
     lyr->setSpacing(KDialog::spacingHint());
     lyr->setMargin(0);
 
-// d->templatesWidget = new KJanusWidget(
-//  d->pageTemplates, "templatesWidget", KJanusWidget::IconList);
     d->templatesWidget = new KPageWidget(pageTemplatesFrame);
     d->templatesWidget->setObjectName("templatesWidget");
     d->templatesWidget->setFaceType(KPageWidget::List);
@@ -683,8 +675,10 @@ QString KexiStartupDialog::selectedFileName() const
 {
     if (d->result == OpenExistingResult)
         return d->openExistingFileWidget->highlightedFile();
+#ifdef KEXI_PROJECT_TEMPLATES
     else if (d->result == CreateFromTemplateResult && d->viewTemplates)
         return d->viewTemplates->selectedFileName();
+#endif
     else
         return QString();
 }
@@ -777,6 +771,7 @@ void KexiStartupDialog::templateSelected(const QString& fileName)
         accept();
 }
 
+#ifdef KEXI_PROJECT_TEMPLATES
 const KexiProjectData::AutoOpenObjects& KexiStartupDialog::autoopenObjects() const
 {
     if (d->result != CreateFromTemplateResult || !d->viewTemplates)
@@ -784,5 +779,6 @@ const KexiProjectData::AutoOpenObjects& KexiStartupDialog::autoopenObjects() con
 
     return d->viewTemplates->autoopenObjectsForSelectedTemplate();
 }
+#endif
 
 #include "KexiStartupDialog.moc"

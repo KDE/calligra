@@ -757,7 +757,9 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
                 return false;
             cdata.driverName = detectedDriverName;
             KexiStartupData::setProjectData(new KexiProjectData(cdata, selFile));
+#ifdef KEXI_PROJECT_TEMPLATES
             KexiStartupData::projectData()->autoopenObjects = d->startupDialog->autoopenObjects();
+#endif
             KexiStartupData::setAction(CreateFromTemplate);
             return true;
         } else if (r == KexiStartupDialog::OpenExistingResult) {
