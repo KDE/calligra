@@ -42,6 +42,7 @@ set(kritasketch_SRCS
 set(kritasketchplugin_SRCS
     kritasketchplugin.cpp
     ColorSelectorItem.cpp
+    CurveEditorItem.cpp
     Constants.cpp
     ToolManager.cpp
     SimpleTouchArea.cpp
