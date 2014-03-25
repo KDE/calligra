@@ -36,6 +36,7 @@
 #include <KoShapeGroup.h>
 #include <KoShapeGroupCommand.h>
 
+#include <KoProperties.h>
 #include <kdebug.h>
 #include <kfilterdev.h>
 

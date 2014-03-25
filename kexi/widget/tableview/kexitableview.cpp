@@ -35,13 +35,14 @@
 #include <QLayout>
 #include <QLabel>
 #include <QToolTip>
-#include <Q3WhatsThis>
+#include <QWhatsThis>
 #include <kcolorscheme.h>
 #include <QResizeEvent>
 #include <QMouseEvent>
 #include <QFocusEvent>
 #include <QShowEvent>
 #include <QKeyEvent>
+#include <QHelpEvent>
 #include <QEvent>
 #include <QDragMoveEvent>
 #include <QDragLeaveEvent>
@@ -102,38 +103,6 @@ KexiTableView::Appearance::Appearance(QWidget *widget)
     fullRecordSelection = false;
     gridEnabled = true;
 }
-
-//-----------------------------------------
-
-//! @internal A special What's This class displaying information about a given column
-//! @todo port to QWhatsThis
-class KexiTableView::WhatsThis : public Q3WhatsThis
-{
-public:
-    WhatsThis(KexiTableView* tv) : Q3WhatsThis(tv), m_tv(tv) {
-        Q_ASSERT(tv);
-    }
-    virtual ~WhatsThis() {
-    }
-    virtual QString text(const QPoint & pos) {
-        const int leftMargin = m_tv->verticalHeaderVisible() ? m_tv->verticalHeader()->width() : 0;
-        //const int topMargin = m_tv->horizontalHeaderVisible() ? m_tv->d->pTopHeader->height() : 0;
-        //const int bottomMargin = m_tv->d->appearance.navigatorEnabled ? m_tv->m_navPanel->height() : 0;
-        if (KexiUtils::hasParent(m_tv->verticalHeader(), m_tv->childAt(pos))) {
-            return i18n("Contains a pointer to the currently selected record");
-        } else if (KexiUtils::hasParent(dynamic_cast<QObject*>(m_tv->m_navPanel), m_tv->childAt(pos))) {
-            return i18n("Record navigator");
-//    return QWhatsThis::textFor(m_tv->m_navPanel, QPoint( pos.x(), pos.y() - m_tv->height() + bottomMargin ));
-        }
-        const int col = m_tv->columnAt(pos.x() - leftMargin);
-        KexiDB::Field *f = col == -1 ? 0 : m_tv->field(col);
-        if (!f)
-            return QString();
-        return f->description().isEmpty() ? f->captionOrName() : f->description();
-    }
-protected:
-    KexiTableView *m_tv;
-};
 
 //-----------------------------------------
 
@@ -206,6 +175,7 @@ KexiTableView::KexiTableView(KexiDB::TableViewData* data, QWidget* parent, const
         , d( new KexiTableViewPrivate(this) )
 {
     setAttribute(Qt::WA_StaticContents, true);
+    setAttribute(Qt::WA_CustomWhatsThis, true);
 //not needed KexiTableView::initCellEditorFactories();
 
     m_data = new KexiDB::TableViewData(); //to prevent crash because m_data==0
@@ -340,7 +310,6 @@ KexiTableView::KexiTableView(KexiDB::TableViewData* data, QWidget* parent, const
 #else
 #pragma WARNING( TODO d->cellToolTip = new KexiTableViewCellToolTip(this); )
 #endif
-    new WhatsThis(this);
 }
 
 KexiTableView::~KexiTableView()
@@ -2724,6 +2693,47 @@ int KexiTableView::horizontalHeaderHeight() const
 QWidget* KexiTableView::navPanelWidget() const
 {
     return dynamic_cast<QWidget*>(m_navPanel);
+}
+
+bool KexiTableView::event(QEvent *e)
+{
+    switch (e->type()) {
+    case QEvent::QueryWhatsThis:
+    case QEvent::WhatsThis: {
+        QHelpEvent *he = static_cast<QHelpEvent*>(e);
+        QString text = whatsThisText(he->pos());
+        if (!text.isEmpty()) {
+            if (e->type() == QEvent::WhatsThis) {
+                QWhatsThis::showText(mapToGlobal(he->pos()), text, this);
+            }
+            return true;
+        }
+        return false;
+    }
+    default:
+        break;
+    }
+    return Q3ScrollView::event(e);
+}
+
+//! @internal @return text information about a given column or other specific areas of the table view.
+QString KexiTableView::whatsThisText(const QPoint &pos) const
+{
+    const int leftMargin = verticalHeaderVisible() ? verticalHeader()->width() : 0;
+    QString text;
+    if (KexiUtils::hasParent(verticalHeader(), childAt(pos))) {
+        return i18n("Contains a pointer to the currently selected record.");
+    }
+    else if (KexiUtils::hasParent(navPanelWidget(), childAt(pos))) {
+        return i18n("Record navigator.");
+    }
+    const int col = columnAt(pos.x() - leftMargin);
+    KexiDB::Field *f = col == -1 ? 0 : field(col);
+    if (!f) {
+        return QString();
+    }
+    return i18nc("@info:whatsthis", "Column <resource>%1</resource>.")
+               .arg(f->description().isEmpty() ? f->captionOrName() : f->description());
 }
 
 #include "kexitableview.moc"
