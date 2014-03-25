@@ -17,13 +17,11 @@
  */
 
 import QtQuick 1.1
+import org.krita.sketch 1.0
 import "../../components"
 
 Item {
     id: base
-<<<<<<< HEAD
-    NoConfigNeeded { anchors.fill: parent; }
-=======
     property QtObject configuration;
     function applyConfigurationChanges() {
         fullFilters.applyConfiguration(configuration);
@@ -72,5 +70,4 @@ Item {
             }
         }
     }
->>>>>>> 7804443... Trust in the components! ...needs work ;)
 }
