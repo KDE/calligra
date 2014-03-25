@@ -31,11 +31,9 @@ if(MSVC OR (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /STACK:10000000") # for g'mic...
 endif(MSVC OR (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
 
-if(USE_STEAMWORKS)
-    macro_optional_find_package(Steamworks)
-    macro_log_feature(STEAMWORKS_FOUND "Steamworks SDK" "The official Steamworks libraries." "https://partner.steamgames.com/" FALSE "" "Required by Krita for Steam integration")
-    macro_bool_to_01(STEAMWORKS_FOUND HAVE_STEAMWORKS)
-endif(USE_STEAMWORKS)
+macro_optional_find_package(Steamworks)
+macro_log_feature(STEAMWORKS_FOUND "Steamworks SDK" "The official Steamworks libraries." "https://partner.steamgames.com/" FALSE "" "Required by Krita for Steam integration")
+macro_bool_to_01(STEAMWORKS_FOUND HAVE_STEAMWORKS)
 
 if(HAVE_STEAMWORKS)
     include_directories(${STEAMWORKS_INCLUDE_DIR})

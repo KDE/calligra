@@ -3,12 +3,12 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-# - Try to find the Fftw3 Library
+# - Try to find the Steam Library
 # Once done this will define
 #
-#  STEAMWORKS_FOUND - system has fftw3
-#  STEAMWORKS_INCLUDE_DIRS - the fftw3 include directories
-#  STEAMWORKS_LIBRARIES - the libraries needed to use Steamworks
+#  STEAMWORKS_FOUND - system has SteamWorks
+#  STEAMWORKS_INCLUDE_DIRS - the SteamWorks include directories
+#  STEAMWORKS_LIBRARIES - the libraries needed to use SteamWorks
 #  STEAMWORKS_SHARED_LIBRARY_NAME - Name of DLL we need to distribute (excludes extension)
 #  STEAMWORKS_SHARED_LIBRARY_PATH - Full path of DLL we need to distribute
 # Redistribution and use is allowed according to the terms of the BSD license.
@@ -18,7 +18,7 @@
 message(STATUS "Steamworks - Finding include dirs")
 find_path(STEAMWORKS_INCLUDE_DIR
     NAMES steam/steam_api.h
-    #HINTS ${FFTW3_PKGCONF_INCLUDE_DIRS} ${FFTW3_PKGCONF_INCLUDEDIR}
+    HINTS ${STEAM_PKGCONF_INCLUDE_DIRS} ${STEAM_PKGCONF_INCLUDEDIR}
     PATH_SUFFIXES public
 )
 
@@ -31,11 +31,11 @@ IF (WIN32)
 	
 	find_library(STEAMWORKS_LIBRARY
 		NAMES ${STEAMWORKS_SHARED_LIBRARY_NAME}
-                PATH_SUFFIXES redistributable_bin redistributable_bin/win64
+                PATH_SUFFIXES bin redistributable_bin redistributable_bin/win64
 	)
 	find_file(STEAMWORKS_SHARED_LIBRARY_PATH
 		NAMES ${STEAMWORKS_SHARED_LIBRARY_NAME}.dll
-                PATH_SUFFIXES redistributable_bin redistributable_bin/win64
+                PATH_SUFFIXES bin redistributable_bin redistributable_bin/win64
 	)
 ELSE (WIN32)
 	find_library(STEAMWORKS_LIBRARY
