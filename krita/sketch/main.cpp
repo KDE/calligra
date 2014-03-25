@@ -33,6 +33,7 @@
 #include <kcomponentdata.h>
 #include <kstandarddirs.h>
 #include <kglobal.h>
+#include <kiconloader.h>
 
 #include "MainWindow.h"
 
@@ -100,6 +101,7 @@ int main( int argc, char** argv )
 
     KApplication app;
     app.setApplicationName("kritasketch");
+    KIconLoader::global()->addAppDir("krita");
     QDir appdir(app.applicationDirPath());
     appdir.cdUp();
 
