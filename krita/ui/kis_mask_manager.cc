@@ -56,15 +56,18 @@
 KisMaskManager::KisMaskManager(KisView2 * view)
         : m_view(view)
         , m_activeMask(0)
-        , m_maskToSelection(0)
-        , m_maskToLayer(0)
         , m_commandsAdapter(new KisNodeCommandsAdapter(m_view))
 {
 }
 
-void KisMaskManager::setup(KActionCollection * actionCollection)
+void KisMaskManager::setView(KisImageView */*imageView*/)
+{
+}
+
+void KisMaskManager::setup(KActionCollection *actionCollection, KisActionManager *actionManager)
 {
     Q_UNUSED(actionCollection);
+    Q_UNUSED(actionManager);
 }
 
 void KisMaskManager::updateGUI()

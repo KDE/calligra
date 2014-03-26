@@ -54,9 +54,19 @@
 #include "kis_action_manager.h"
 #include "kis_processing_applicator.h"
 #include "processing/kis_mirror_processing_visitor.h"
-
+#include "kis_image_view.h"
 
 struct KisNodeManager::Private {
+
+    Private()
+        : view(0)
+        , imageView(0)
+        , layerManager(0)
+        , maskManager(0)
+        , self(0)
+        , commandsAdapter(0)
+    {
+    }
 
     ~Private() {
         delete layerManager;
@@ -64,7 +74,7 @@ struct KisNodeManager::Private {
     }
 
     KisView2 * view;
-    KisDoc2 * doc;
+    KisImageView *imageView;
     KisLayerManager * layerManager;
     KisMaskManager * maskManager;
     KisNodeSP activeNode;
@@ -127,22 +137,15 @@ bool KisNodeManager::Private::activateNodeImpl(KisNodeSP node)
     return true;
 }
 
-KisNodeManager::KisNodeManager(KisView2 * view, KisDoc2 * doc)
+KisNodeManager::KisNodeManager(KisView2 *view)
         : m_d(new Private())
 {
     m_d->view = view;
-    m_d->doc = doc;
-    m_d->layerManager = new KisLayerManager(view, doc);
-    
+    m_d->layerManager = new KisLayerManager(view);
     m_d->maskManager = new KisMaskManager(view);
     m_d->self = this;
     m_d->commandsAdapter = new KisNodeCommandsAdapter(view);
 
-    KisShapeController *shapeController =
-        dynamic_cast<KisShapeController*>(doc->shapeController());
-    Q_ASSERT(shapeController);
-
-    connect(shapeController, SIGNAL(sigActivateNode(KisNodeSP)), SLOT(slotNonUiActivatedNode(KisNodeSP)));
     connect(m_d->layerManager, SIGNAL(sigLayerActivated(KisLayerSP)), SIGNAL(sigLayerActivated(KisLayerSP)));
 
 }
@@ -151,6 +154,26 @@ KisNodeManager::~KisNodeManager()
 {
     delete m_d->commandsAdapter;
     delete m_d;
+}
+
+void KisNodeManager::setView(KisImageView *imageView)
+{
+    m_d->maskManager->setView(imageView);
+    m_d->layerManager->setView(imageView);
+
+    if (m_d->imageView) {
+        KisShapeController *shapeController = dynamic_cast<KisShapeController*>(m_d->view->document()->shapeController());
+        Q_ASSERT(shapeController);
+        shapeController->disconnect(SIGNAL(sigActivateNode(KisNodeSP)), this);
+    }
+
+    m_d->imageView = imageView;
+
+    if (m_d->imageView) {
+        KisShapeController *shapeController = dynamic_cast<KisShapeController*>(m_d->view->document()->shapeController());
+        Q_ASSERT(shapeController);
+        connect(shapeController, SIGNAL(sigActivateNode(KisNodeSP)), SLOT(slotNonUiActivatedNode(KisNodeSP)));
+    }
 }
 
 #define NEW_LAYER_ACTION(id, text, layerType, icon)                     \
@@ -187,8 +210,8 @@ KisNodeManager::~KisNodeManager()
 
 void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManager* actionManager)
 {
-    m_d->layerManager->setup(actionCollection);
-    m_d->maskManager->setup(actionCollection);
+    m_d->layerManager->setup(actionCollection, actionManager);
+    m_d->maskManager->setup(actionCollection, actionManager);
 
     KisAction * action  = new KisAction(koIcon("object-flip-horizontal"), i18n("Mirror Layer Horizontally"), this);
     action->setActivationFlags(KisAction::ACTIVE_NODE);

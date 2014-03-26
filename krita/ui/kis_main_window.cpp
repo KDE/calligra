@@ -49,6 +49,7 @@
 
 KisMainWindow::KisMainWindow(KoPart *part, const KComponentData &instance)
     : KoMainWindow(part, instance)
+    , m_constructing(true)
     , m_mdiArea(new QMdiArea(this))
 {
     // 25 px is a distance that works well for Tablet and Mouse events
@@ -116,6 +117,8 @@ KisMainWindow::KisMainWindow(KoPart *part, const KComponentData &instance)
     setToolbarList(toolbarList);
 
     updateMenus();
+
+    m_constructing = false;
 }
 
 void KisMainWindow::showView(KoView *view)
@@ -195,14 +198,16 @@ void KisMainWindow::setActiveSubWindow(QWidget *window)
 
 KisImageView *KisMainWindow::activeKisView()
 {
-    if (QMdiSubWindow *activeSubWindow = m_mdiArea->activeSubWindow()) {
-        return qobject_cast<KisImageView *>(activeSubWindow->widget());
-    }
-    return 0;
+    if (!m_mdiArea) return 0;
+    QMdiSubWindow *activeSubWindow = m_mdiArea->activeSubWindow();
+    if (!activeSubWindow) return 0;
+    return qobject_cast<KisImageView *>(activeSubWindow->widget());
 }
 
 bool KisMainWindow::event( QEvent* event )
 {
+    if (m_constructing) return false;
+
     if (!activeKisView()) {
         event->accept();
         return true;

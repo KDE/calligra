@@ -40,20 +40,27 @@
 #include "kis_doc2.h"
 #include "dialogs/kis_dlg_image_properties.h"
 #include "commands/kis_image_commands.h"
+#include "kis_action.h"
+#include "kis_action_manager.h"
 
 KisImageManager::KisImageManager(KisView2 * view)
         : m_view(view)
 {
 }
 
-void KisImageManager::setup(KActionCollection * actionCollection)
+void KisImageManager::setView(KisImageView *imageView)
 {
-    KAction *action  = new KAction(i18n("I&mport Layer..."), this);
-    actionCollection->addAction("import_layer_from_file", action);
+    Q_UNUSED(imageView);
+}
+
+void KisImageManager::setup(KActionCollection * actionCollection, KisActionManager *actionManager)
+{
+    KisAction *action  = new KisAction(i18n("I&mport Layer..."), this);
+    actionManager->addAction("import_layer_from_file", action, actionCollection);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImportLayerFromFile()));
 
-    action  = new KAction(koIcon("document-properties"), i18n("Properties..."), this);
-    actionCollection->addAction("image_properties", action);
+    action  = new KisAction(koIcon("document-properties"), i18n("Properties..."), this);
+    actionManager->addAction("image_properties", action, actionCollection);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImageProperties()));
 }
 

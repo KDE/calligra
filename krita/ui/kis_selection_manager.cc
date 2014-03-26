@@ -46,6 +46,7 @@
 #include <KoCompositeOp.h>
 #include <KoToolProxy.h>
 
+#include "kis_image_view.h"
 #include "kis_adjustment_layer.h"
 #include "kis_node_manager.h"
 #include "canvas/kis_canvas2.h"
@@ -87,9 +88,9 @@
 #include "operations/kis_operation_configuration.h"
 
 
-KisSelectionManager::KisSelectionManager(KisView2 * view, KisDoc2 * doc)
+KisSelectionManager::KisSelectionManager(KisView2 * view)
         : m_view(view),
-        m_doc(doc),
+          m_imageView(0),
         m_adapter(new KisNodeCommandsAdapter(view)),
         m_copy(0),
         m_copyMerged(0),
@@ -111,15 +112,6 @@ KisSelectionManager::KisSelectionManager(KisView2 * view, KisDoc2 * doc)
         m_imageResizeToSelection(0)
 {
     m_clipboard = KisClipboard::instance();
-
-    KoSelection * selection = m_view->canvasBase()->globalShapeManager()->selection();
-    Q_ASSERT(selection);
-    connect(selection, SIGNAL(selectionChanged()), this, SLOT(shapeSelectionChanged()));
-
-    KisSelectionDecoration* decoration = new KisSelectionDecoration(m_view);
-    connect(this, SIGNAL(currentSelectionChanged()), decoration, SLOT(selectionChanged()));
-    decoration->setVisible(true);
-    m_view->canvasBase()->addDecoration(decoration);
 }
 
 KisSelectionManager::~KisSelectionManager()
@@ -239,8 +231,33 @@ void KisSelectionManager::setup(KActionCollection * collection, KisActionManager
 
     QClipboard *cb = QApplication::clipboard();
     connect(cb, SIGNAL(dataChanged()), SLOT(clipboardDataChanged()));
-    connect(m_view->canvasBase()->toolProxy(), SIGNAL(toolChanged(const QString&)), SLOT(clipboardDataChanged()));
+//    connect(m_view->canvasBase()->toolProxy(), SIGNAL(toolChanged(const QString&)), SLOT(clipboardDataChanged()));
 
+}
+
+void KisSelectionManager::setView(KisImageView *imageView)
+{
+    if (m_imageView && m_imageView->canvasBase()) {
+        KoSelection *selection = m_imageView->canvasBase()->globalShapeManager()->selection();
+        selection->disconnect(this, SLOT(shapeSelectionChanged()));
+        KisSelectionDecoration *decoration = qobject_cast<KisSelectionDecoration*>(m_imageView->canvasBase()->decoration("selection"));
+        if (decoration) {
+            disconnect(SIGNAL(currentSelectionChanged()), decoration);
+        }
+    }
+
+    m_imageView = imageView;
+
+    if (m_imageView) {
+        KoSelection * selection = m_imageView->canvasBase()->globalShapeManager()->selection();
+        Q_ASSERT(selection);
+        connect(selection, SIGNAL(selectionChanged()), this, SLOT(shapeSelectionChanged()));
+
+        KisSelectionDecoration* decoration = new KisSelectionDecoration(m_view);
+        connect(this, SIGNAL(currentSelectionChanged()), decoration, SLOT(selectionChanged()));
+        decoration->setVisible(true);
+        m_imageView->canvasBase()->addDecoration(decoration);
+    }
 }
 
 void KisSelectionManager::clipboardDataChanged()

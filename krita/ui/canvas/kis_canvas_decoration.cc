@@ -53,7 +53,9 @@ const QString& KisCanvasDecoration::name() const
 void KisCanvasDecoration::setVisible(bool v)
 {
     d->visible = v;
-    d->view->canvas()->update();
+    if (d->view && d->view->canvas()) {
+        d->view->canvas()->update();
+    }
 }
 
 bool KisCanvasDecoration::visible() const

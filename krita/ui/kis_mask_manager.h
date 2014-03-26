@@ -24,9 +24,11 @@
 
 class KisView2;
 class KActionCollection;
-class KAction;
+class KisAction;
 class KToggleAction;
 class KisNodeCommandsAdapter;
+class KisImageView;
+class KisActionManager;
 
 #include "kis_mask.h"
 
@@ -43,12 +45,13 @@ public:
 
     KisMaskManager(KisView2 * view);
     ~KisMaskManager() {}
+    void setView(KisImageView *view);
 
 private:
     
     friend class KisNodeManager;
     
-    void setup(KActionCollection * actionCollection);
+    void setup(KActionCollection * actionCollection, KisActionManager *actionManager);
 
     void updateGUI();
     
@@ -125,8 +128,6 @@ private:
     KisView2 * m_view;
 
     KisMaskSP m_activeMask;
-    KAction *m_maskToSelection;
-    KAction *m_maskToLayer;
     KisNodeCommandsAdapter* m_commandsAdapter;
 
 };

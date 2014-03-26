@@ -36,11 +36,13 @@
 #include <filter/kis_filter_registry.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_paint_device.h>
+#include <kis_bookmarked_configuration_manager.h>
 
 // krita/ui
 #include "kis_view2.h"
 #include "kis_canvas2.h"
-#include <kis_bookmarked_configuration_manager.h>
+#include "kis_action.h"
+#include "kis_action_manager.h"
 
 #include "dialogs/kis_dlg_filter.h"
 #include "strokes/kis_filter_stroke_strategy.h"
@@ -51,12 +53,15 @@ struct KisFilterManager::Private {
     Private()
         : reapplyAction(0)
         , actionCollection(0)
+        , actionManager(0)
+        , view(0)
     {
     }
-    KAction* reapplyAction;
+    KisAction* reapplyAction;
     QHash<QString, KActionMenu*> filterActionMenus;
     QHash<KisFilter*, KAction*> filters2Action;
     KActionCollection *actionCollection;
+    KisActionManager *actionManager;
     KisView2 *view;
 
     KisSafeFilterConfigurationSP lastConfiguration;
@@ -68,9 +73,8 @@ struct KisFilterManager::Private {
     QPointer<KisDlgFilter> filterDialog;
 };
 
-KisFilterManager::KisFilterManager(KisView2 * view, KisDoc2 * doc) : d(new Private)
+KisFilterManager::KisFilterManager(KisView2 * view) : d(new Private)
 {
-    Q_UNUSED(doc);
     d->view = view;
 }
 
@@ -79,13 +83,19 @@ KisFilterManager::~KisFilterManager()
     delete d;
 }
 
-void KisFilterManager::setup(KActionCollection * ac)
+void KisFilterManager::setView(KisImageView *imageView)
+{
+    Q_UNUSED(imageView);
+}
+
+void KisFilterManager::setup(KActionCollection * ac, KisActionManager *actionManager)
 {
     d->actionCollection = ac;
+    d->actionManager = actionManager;
 
     // Setup reapply action
-    d->reapplyAction = new KAction(i18n("Apply Filter Again"), this);
-    d->actionCollection->addAction("filter_apply_again", d->reapplyAction);
+    d->reapplyAction = new KisAction(i18n("Apply Filter Again"), this);
+    d->actionManager->addAction("filter_apply_again", d->reapplyAction, ac);
 
     d->reapplyAction->setEnabled(false);
     connect(d->reapplyAction, SIGNAL(triggered()), SLOT(reapplyLastFilter()));
@@ -120,9 +130,9 @@ void KisFilterManager::insertFilter(const QString & filterName)
         d->filterActionMenus[category.id()] = actionMenu;
     }
 
-    KAction *action = new KAction(filter->menuEntry(), this);
+    KisAction *action = new KisAction(filter->menuEntry(), this);
     action->setShortcut(filter->shortcut(), KAction::DefaultShortcut);
-    d->actionCollection->addAction(QString("krita_filter_%1").arg(filterName), action);
+    d->actionManager->addAction(QString("krita_filter_%1").arg(filterName), action, d->actionCollection);
     d->filters2Action[filter.data()] = action;
 
     actionMenu->addAction(action);

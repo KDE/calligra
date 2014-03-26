@@ -61,6 +61,8 @@ private slots:
 private:
     KisImageView *activeKisView();
 
+    bool m_constructing;
+
     KisView2 *m_guiClient;
 
     QMdiArea *m_mdiArea;

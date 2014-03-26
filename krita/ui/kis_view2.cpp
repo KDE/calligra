@@ -344,8 +344,14 @@ void KisView2::setCurrentView(KoView *view)
         mainWindow()->guiFactory()->addClient(imageView);
         imageView->setParentView(this);
         d->currentImageView = imageView;
-
     }
+
+    d->filterManager->setView(imageView);
+    d->selectionManager->setView(imageView);
+    d->nodeManager->setView(imageView);
+    d->imageManager->setView(imageView);
+    d->canvasControlsManager->setView(imageView);
+
 }
 
 KoZoomController *KisView2::zoomController() const
@@ -483,7 +489,10 @@ KisSelectionSP KisView2::selection()
     if (layer)
         return layer->selection(); // falls through to the global
     // selection, or 0 in the end
-    return image()->globalSelection();
+    if (image()) {
+        return image()->globalSelection();
+    }
+    return 0;
 }
 
 bool KisView2::selectionEditable()
@@ -710,22 +719,19 @@ void KisView2::createActions()
 void KisView2::createManagers()
 {
     // Create the managers for filters, selections, layers etc.
-    // XXX: When the currentlayer changes, call updateGUI on all
-    // managers
-
     d->actionManager = new KisActionManager(this);
 
-    d->filterManager = new KisFilterManager(this, document());
-    d->filterManager->setup(actionCollection());
+    d->filterManager = new KisFilterManager(this);
+    d->filterManager->setup(actionCollection(), actionManager());
 
-    d->selectionManager = new KisSelectionManager(this, document());
+    d->selectionManager = new KisSelectionManager(this);
     d->selectionManager->setup(actionCollection(), actionManager());
 
-    d->nodeManager = new KisNodeManager(this, document());
+    d->nodeManager = new KisNodeManager(this);
     d->nodeManager->setup(actionCollection(), actionManager());
 
     d->imageManager = new KisImageManager(this);
-    d->imageManager->setup(actionCollection());
+    d->imageManager->setup(actionCollection(), actionManager());
 
 //    d->gridManager = new KisGridManager(this);
 //    d->gridManager->setup(actionCollection());
@@ -740,7 +746,7 @@ void KisView2::createManagers()
 //    d->canvas->addDecoration(d->paintingAssistantManager);
 
     d->canvasControlsManager = new KisCanvasControlsManager(this);
-    d->canvasControlsManager->setup(actionCollection());
+    d->canvasControlsManager->setup(actionCollection(), actionManager());
 }
 
 void KisView2::updateGUI()

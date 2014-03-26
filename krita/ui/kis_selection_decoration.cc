@@ -96,7 +96,9 @@ void KisSelectionDecoration::selectionChanged()
     } else {
         m_signalCompressor.stop();
         m_outlinePath = QPainterPath();
-        view()->canvasBase()->updateCanvas();
+        if (view() && view()->canvasBase()) {
+            view()->canvasBase()->updateCanvas();
+        }
         m_antsTimer->stop();
     }
 }
