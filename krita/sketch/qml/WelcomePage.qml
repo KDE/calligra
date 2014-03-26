@@ -200,10 +200,10 @@ Page {
 
         Divider { height: Constants.GridHeight * (Constants.GridRows - 3); }
 
-        //CollectionsList {
-        //    width: parent.width / 3 - 4;
-        //    height: Constants.GridHeight * (Constants.GridRows - 3);
-        //}
+        CollectionsList {
+            width: parent.width / 3 - 4;
+            height: Constants.GridHeight * (Constants.GridRows - 3);
+        }
     }
 
     QtObject {

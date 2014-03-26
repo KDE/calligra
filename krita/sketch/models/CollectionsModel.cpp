@@ -19,8 +19,8 @@
 
 #include "RecentFileManager.h"
 
-#include <kcomponentdata.h>
-#include <KoTemplateTree.h>
+#include "KComponentData.h"
+#include "KoTemplateTree.h"
 
 #include <QFile>
 #include <QFileInfo>
