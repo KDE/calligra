@@ -81,9 +81,9 @@ ResourceAllocationEditor::ResourceAllocationEditor(KoPart *part, KoDocument *doc
 
     m_view->setEditTriggers( m_view->editTriggers() | QAbstractItemView::EditKeyPressed );
 
-    QList<int> lst1; lst1 << 1 << -1;
-    QList<int> lst2; lst2 << 0;
-    m_view->hideColumns( lst1, lst2 );
+    QList<int> list1; list1 << 1 << -1;
+    QList<int> list2; list2 << 0;
+    m_view->hideColumns( list1, list2 );
 
     m_view->masterView()->setDefaultColumns( QList<int>() << 0 );
     QList<int> show;

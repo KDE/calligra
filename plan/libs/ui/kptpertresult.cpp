@@ -100,7 +100,7 @@ PertResult::PertResult(KoPart *part, KoDocument *doc, QWidget *parent)
 
     setupGui();
     
-    QList<int> lst1; lst1 << 1 << -1; // only display column 0 (NodeName) in left view
+    QList<int> list1; list1 << 1 << -1; // only display column 0 (NodeName) in left view
     QList<int> show;
     show << NodeModel::NodeEarlyStart
             << NodeModel::NodeEarlyFinish
@@ -112,13 +112,13 @@ PertResult::PertResult(KoPart *part, KoDocument *doc, QWidget *parent)
             << NodeModel::NodeStartFloat
             << NodeModel::NodeFinishFloat;
 
-    QList<int> lst2; 
+    QList<int> list2; 
     for ( int i = 0; i < m->columnCount(); ++i ) {
         if ( ! show.contains( i ) ) {
-            lst2 << i;
+            list2 << i;
         }
     }
-    widget.treeWidgetTaskResult->hideColumns( lst1, lst2 );
+    widget.treeWidgetTaskResult->hideColumns( list1, list2 );
     widget.treeWidgetTaskResult->masterView()->setDefaultColumns( QList<int>() << 0 );
     widget.treeWidgetTaskResult->slaveView()->setDefaultColumns( show );
     
@@ -320,7 +320,7 @@ PertCpmView::PertCpmView(KoPart *part, KoDocument *doc, QWidget *parent)
     
     setupGui();
     
-    QList<int> lst1; lst1 << 1 << -1; // only display first column (NodeName) in left view
+    QList<int> list1; list1 << 1 << -1; // only display first column (NodeName) in left view
     widget.cpmTable->masterView()->setDefaultColumns( QList<int>() << 0 );
     
     QList<int> show;
@@ -334,13 +334,13 @@ PertCpmView::PertCpmView(KoPart *part, KoDocument *doc, QWidget *parent)
             << NodeModel::NodeOptimistic
             << NodeModel::NodePessimistic;
 
-    QList<int> lst2;
+    QList<int> list2;
     for ( int i = 0; i < m->columnCount(); ++i ) {
         if ( ! show.contains( i ) ) {
-            lst2 << i;
+            list2 << i;
         }
     }
-    widget.cpmTable->hideColumns( lst1, lst2 );
+    widget.cpmTable->hideColumns( list1, list2 );
     
     for ( int s = 0; s < show.count(); ++s ) {
         widget.cpmTable->slaveView()->mapToSection( show[s], s );

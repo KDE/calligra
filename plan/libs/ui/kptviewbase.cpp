@@ -2131,8 +2131,8 @@ void DoubleTreeViewBase::setStretchFactors()
 bool DoubleTreeViewBase::loadContext( const QMetaEnum &map, const KoXmlElement &element )
 {
     //kDebug(planDbg());
-    QList<int> lst1;
-    QList<int> lst2;
+    QList<int> list1;
+    QList<int> list2;
     KoXmlElement e = element.namedItem( "slave" ).toElement();
     if ( ! e.isNull() ) {
         if ( e.attribute( "hidden", "false" ) == "true" ) {

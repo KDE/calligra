@@ -490,375 +490,375 @@ void AppointmentIntervalTester::subtractList()
 {
     QString s;
 
-    AppointmentIntervalList lst1;
-    AppointmentIntervalList lst2;
+    AppointmentIntervalList list1;
+    AppointmentIntervalList list2;
     DateTime dt1 = DateTime( QDate( 2011, 01, 02 ), QTime( 7, 0, 0 ) );
     DateTime dt2 = dt1 + Duration( 0, 3, 0 );
     double load = 100;
     
-    lst1.add( dt1, dt2, load );
-    QCOMPARE( dt1, lst1.map().values().first().startTime() );
-    QCOMPARE( dt2, lst1.map().values().first().endTime() );
-    QCOMPARE( load, lst1.map().values().first().load() );
+    list1.add( dt1, dt2, load );
+    QCOMPARE( dt1, list1.map().values().first().startTime() );
+    QCOMPARE( dt2, list1.map().values().first().endTime() );
+    QCOMPARE( load, list1.map().values().first().load() );
     
-    lst2 += lst1;
-    QCOMPARE( dt1, lst2.map().values().first().startTime() );
-    QCOMPARE( dt2, lst2.map().values().first().endTime() );
-    QCOMPARE( load, lst2.map().values().first().load() );
-    QCOMPARE( lst2.map().count(), 1 );
+    list2 += list1;
+    QCOMPARE( dt1, list2.map().values().first().startTime() );
+    QCOMPARE( dt2, list2.map().values().first().endTime() );
+    QCOMPARE( load, list2.map().values().first().load() );
+    QCOMPARE( list2.map().count(), 1 );
     
-    lst2 -= lst1;
-    QVERIFY( lst2.isEmpty() );
+    list2 -= list1;
+    QVERIFY( list2.isEmpty() );
     
-    lst2.add( dt1, dt2, load * 2. );
-    lst2 -= lst1;
-    QCOMPARE( dt1, lst2.map().values().first().startTime() );
-    QCOMPARE( dt2, lst2.map().values().first().endTime() );
-    QCOMPARE( load, lst2.map().values().first().load() );
-    QCOMPARE( lst2.map().count(), 1 );
+    list2.add( dt1, dt2, load * 2. );
+    list2 -= list1;
+    QCOMPARE( dt1, list2.map().values().first().startTime() );
+    QCOMPARE( dt2, list2.map().values().first().endTime() );
+    QCOMPARE( load, list2.map().values().first().load() );
+    QCOMPARE( list2.map().count(), 1 );
     
-    lst1.clear();
+    list1.clear();
     DateTime dt3 = dt2 + Duration( 0, 6, 0 );
     DateTime dt4 = dt3 + Duration( 0, 1, 0 );
-    lst1.add( dt3, dt4, load );
+    list1.add( dt3, dt4, load );
     qDebug()<<"Subtract non-overlapping intervals:";
 
-    qDebug()<<endl<<lst2<<endl<<"minus"<<endl<<lst1;
-    lst2 -= lst1;
-    qDebug()<<endl<<"result:"<<endl<<lst2;
-    QCOMPARE( dt1, lst2.map().values().first().startTime() );
-    QCOMPARE( dt2, lst2.map().values().first().endTime() );
-    QCOMPARE( load, lst2.map().values().first().load() );
-    QCOMPARE( lst2.map().count(), 1 );
+    qDebug()<<endl<<list2<<endl<<"minus"<<endl<<list1;
+    list2 -= list1;
+    qDebug()<<endl<<"result:"<<endl<<list2;
+    QCOMPARE( dt1, list2.map().values().first().startTime() );
+    QCOMPARE( dt2, list2.map().values().first().endTime() );
+    QCOMPARE( load, list2.map().values().first().load() );
+    QCOMPARE( list2.map().count(), 1 );
     
     DateTime dt5 = dt1 - Duration( 0, 6, 0 );
     DateTime dt6 = dt5 + Duration( 0, 1, 0 );
-    lst1.add( dt5, dt6, load );
+    list1.add( dt5, dt6, load );
 
-    qDebug()<<"-------- lst2 -= lst1";
-    qDebug()<<endl<<lst2<<endl<<lst1;
-    lst2 -= lst1;
-    qDebug()<<endl<<lst2;
-    QCOMPARE( dt1, lst2.map().values().first().startTime() );
-    QCOMPARE( dt2, lst2.map().values().first().endTime() );
-    QCOMPARE( load, lst2.map().values().first().load() );
-    QCOMPARE( lst2.map().count(), 1 );
+    qDebug()<<"-------- list2 -= list1";
+    qDebug()<<endl<<list2<<endl<<list1;
+    list2 -= list1;
+    qDebug()<<endl<<list2;
+    QCOMPARE( dt1, list2.map().values().first().startTime() );
+    QCOMPARE( dt2, list2.map().values().first().endTime() );
+    QCOMPARE( load, list2.map().values().first().load() );
+    QCOMPARE( list2.map().count(), 1 );
 
     s = "Subtract tangent intervals";
     qDebug()<<s;
-    lst1.clear();
-    lst1.add( dt1.addDays( -1 ), dt1, load ); // before
-    Debug::print( lst2, "List2: " + s );
-    Debug::print( lst1, "List1: " + s );
+    list1.clear();
+    list1.add( dt1.addDays( -1 ), dt1, load ); // before
+    Debug::print( list2, "List2: " + s );
+    Debug::print( list1, "List1: " + s );
 
-    lst2 -= lst1;
-    Debug::print( lst2, "Result: " + s );
+    list2 -= list1;
+    Debug::print( list2, "Result: " + s );
     
-    QCOMPARE( dt1, lst2.map().values().first().startTime() );
-    QCOMPARE( dt2, lst2.map().values().first().endTime() );
-    QCOMPARE( load, lst2.map().values().first().load() );
-    QCOMPARE( lst2.map().count(), 1 );
+    QCOMPARE( dt1, list2.map().values().first().startTime() );
+    QCOMPARE( dt2, list2.map().values().first().endTime() );
+    QCOMPARE( load, list2.map().values().first().load() );
+    QCOMPARE( list2.map().count(), 1 );
 
-    lst1.clear();
-    lst1.add( dt2, dt2.addDays( 1 ), load ); // after
+    list1.clear();
+    list1.add( dt2, dt2.addDays( 1 ), load ); // after
 
-    lst2 -= lst1;
-    QCOMPARE( dt1, lst2.map().values().first().startTime() );
-    QCOMPARE( dt2, lst2.map().values().first().endTime() );
-    QCOMPARE( load, lst2.map().values().first().load() );
-    QVERIFY( lst2.map().count() == 1 );
+    list2 -= list1;
+    QCOMPARE( dt1, list2.map().values().first().startTime() );
+    QCOMPARE( dt2, list2.map().values().first().endTime() );
+    QCOMPARE( load, list2.map().values().first().load() );
+    QVERIFY( list2.map().count() == 1 );
     
     // Subtract overlapping intervals
-    lst1.clear();
+    list1.clear();
     dt3 = dt1 + Duration( 0, 1, 0 );
     // starts at start, end in the middle
-    lst1.add( dt1, dt3, load / 2. );
+    list1.add( dt1, dt3, load / 2. );
 
     s = "Subtract half the load of the first hour of the interval";
     qDebug()<<s;
-    Debug::print( lst2, "List2: " + s );
-    Debug::print( lst1, "List1: " + s );
+    Debug::print( list2, "List2: " + s );
+    Debug::print( list1, "List1: " + s );
 
-    lst2 -= lst1;
-    Debug::print( lst2, s );
+    list2 -= list1;
+    Debug::print( list2, s );
 
-    QCOMPARE( lst2.map().count(), 2 );
-    QCOMPARE( dt1, lst2.map().values().first().startTime() );
-    QCOMPARE( dt3, lst2.map().values().first().endTime() );
-    QCOMPARE( load / 2., lst2.map().values().first().load() );
+    QCOMPARE( list2.map().count(), 2 );
+    QCOMPARE( dt1, list2.map().values().first().startTime() );
+    QCOMPARE( dt3, list2.map().values().first().endTime() );
+    QCOMPARE( load / 2., list2.map().values().first().load() );
 
-    QCOMPARE( dt3, lst2.map().values().at( 1 ).startTime() );
-    QCOMPARE( dt2, lst2.map().values().at( 1 ).endTime() );
-    QCOMPARE( load, lst2.map().values().at( 1 ).load() );
+    QCOMPARE( dt3, list2.map().values().at( 1 ).startTime() );
+    QCOMPARE( dt2, list2.map().values().at( 1 ).endTime() );
+    QCOMPARE( load, list2.map().values().at( 1 ).load() );
 
     s = "Subtract all load from first interval";
     qDebug()<<s;
-    lst2 -= lst1; // remove first interval
-    QCOMPARE( lst2.map().count(), 1 );
-    QCOMPARE( dt3, lst2.map().values().at( 0 ).startTime() );
-    QCOMPARE( dt2, lst2.map().values().at( 0 ).endTime() );
-    QCOMPARE( load, lst2.map().values().at( 0 ).load() );
+    list2 -= list1; // remove first interval
+    QCOMPARE( list2.map().count(), 1 );
+    QCOMPARE( dt3, list2.map().values().at( 0 ).startTime() );
+    QCOMPARE( dt2, list2.map().values().at( 0 ).endTime() );
+    QCOMPARE( load, list2.map().values().at( 0 ).load() );
 
     s = "Subtract half the load from last hour of the interval";
     qDebug()<<s;
-    lst1.clear();
+    list1.clear();
     dt4 = dt2 - Duration( 0, 1, 0 );
-    lst1.add( dt4, dt2, 50. );
+    list1.add( dt4, dt2, 50. );
     
-    Debug::print( lst1, "List1: " + s );
-    Debug::print( lst2, "List2: " + s );
-    lst2 -= lst1;
+    Debug::print( list1, "List1: " + s );
+    Debug::print( list2, "List2: " + s );
+    list2 -= list1;
     
-    QCOMPARE( lst2.map().count(), 2 );
-    QCOMPARE( dt3, lst2.map().values().at( 0 ).startTime() );
-    QCOMPARE( dt4, lst2.map().values().at( 0 ).endTime() );
-    QCOMPARE( load, lst2.map().values().at( 0 ).load() );
+    QCOMPARE( list2.map().count(), 2 );
+    QCOMPARE( dt3, list2.map().values().at( 0 ).startTime() );
+    QCOMPARE( dt4, list2.map().values().at( 0 ).endTime() );
+    QCOMPARE( load, list2.map().values().at( 0 ).load() );
 
-    QCOMPARE( dt4, lst2.map().values().at( 1 ).startTime() );
-    QCOMPARE( dt2, lst2.map().values().at( 1 ).endTime() );
-    QCOMPARE( 50., lst2.map().values().at( 1 ).load() );
+    QCOMPARE( dt4, list2.map().values().at( 1 ).startTime() );
+    QCOMPARE( dt2, list2.map().values().at( 1 ).endTime() );
+    QCOMPARE( 50., list2.map().values().at( 1 ).load() );
 
     s = "Subtract all load from last interval";
     qDebug()<<s;
-    Debug::print( lst1, "List1: " + s );
-    Debug::print( lst2, "List2: " + s );
+    Debug::print( list1, "List1: " + s );
+    Debug::print( list2, "List2: " + s );
 
-    AppointmentInterval i = lst2.map().values().at( 0 );
-    lst2 -= lst1;
-    Debug::print( lst2, "Result: " + s );
+    AppointmentInterval i = list2.map().values().at( 0 );
+    list2 -= list1;
+    Debug::print( list2, "Result: " + s );
 
-    QCOMPARE( lst2.map().count(), 1 );
-    QCOMPARE( i.startTime(), lst2.map().values().at( 0 ).startTime() );
-    QCOMPARE( i.endTime(), lst2.map().values().at( 0 ).endTime() );
-    QCOMPARE( i.load(), lst2.map().values().at( 0 ).load() );
+    QCOMPARE( list2.map().count(), 1 );
+    QCOMPARE( i.startTime(), list2.map().values().at( 0 ).startTime() );
+    QCOMPARE( i.endTime(), list2.map().values().at( 0 ).endTime() );
+    QCOMPARE( i.load(), list2.map().values().at( 0 ).load() );
 
     // Subtract overlapping intervals (start < start, end > end)
-    lst1.clear();
-    lst2.clear();
-    lst2.add( dt1, dt2, 100. );
+    list1.clear();
+    list2.clear();
+    list2.add( dt1, dt2, 100. );
 
     dt3 = dt1 + Duration( 0, 1, 0 );
     // starts before start, end in the middle
-    lst1.add( dt1.addSecs( -10 ), dt3, load / 2. );
+    list1.add( dt1.addSecs( -10 ), dt3, load / 2. );
 
     s = "Subtract half the load of the first hour of the interval";
     qDebug()<<s;
-    Debug::print( lst2, "List2: " + s );
-    Debug::print( lst1, "List1: " + s );
+    Debug::print( list2, "List2: " + s );
+    Debug::print( list1, "List1: " + s );
 
-    lst2 -= lst1;
-    Debug::print( lst2, s );
+    list2 -= list1;
+    Debug::print( list2, s );
 
-    QCOMPARE( lst2.map().count(), 2 );
-    QCOMPARE( dt1, lst2.map().values().first().startTime() );
-    QCOMPARE( dt3, lst2.map().values().first().endTime() );
-    QCOMPARE( load / 2., lst2.map().values().first().load() );
+    QCOMPARE( list2.map().count(), 2 );
+    QCOMPARE( dt1, list2.map().values().first().startTime() );
+    QCOMPARE( dt3, list2.map().values().first().endTime() );
+    QCOMPARE( load / 2., list2.map().values().first().load() );
 
-    QCOMPARE( dt3, lst2.map().values().at( 1 ).startTime() );
-    QCOMPARE( dt2, lst2.map().values().at( 1 ).endTime() );
-    QCOMPARE( load, lst2.map().values().at( 1 ).load() );
+    QCOMPARE( dt3, list2.map().values().at( 1 ).startTime() );
+    QCOMPARE( dt2, list2.map().values().at( 1 ).endTime() );
+    QCOMPARE( load, list2.map().values().at( 1 ).load() );
 
     s = "Subtract all load from first interval";
     qDebug()<<s;
-    lst2 -= lst1; // remove first interval
-    QCOMPARE( lst2.map().count(), 1 );
-    QCOMPARE( dt3, lst2.map().values().at( 0 ).startTime() );
-    QCOMPARE( dt2, lst2.map().values().at( 0 ).endTime() );
-    QCOMPARE( load, lst2.map().values().at( 0 ).load() );
+    list2 -= list1; // remove first interval
+    QCOMPARE( list2.map().count(), 1 );
+    QCOMPARE( dt3, list2.map().values().at( 0 ).startTime() );
+    QCOMPARE( dt2, list2.map().values().at( 0 ).endTime() );
+    QCOMPARE( load, list2.map().values().at( 0 ).load() );
 
     s = "Subtract half the load from last hour of the interval";
     qDebug()<<s;
-    lst1.clear();
+    list1.clear();
     dt4 = dt2 - Duration( 0, 1, 0 );
-    lst1.add( dt4, dt2.addSecs( 10 ), 50. );
+    list1.add( dt4, dt2.addSecs( 10 ), 50. );
     
-    Debug::print( lst2, "List2: " + s );
-    Debug::print( lst1, "List1: " + s );
-    lst2 -= lst1;
+    Debug::print( list2, "List2: " + s );
+    Debug::print( list1, "List1: " + s );
+    list2 -= list1;
     
-    Debug::print( lst2, "Result: " + s );
+    Debug::print( list2, "Result: " + s );
 
-    QCOMPARE( lst2.map().count(), 2 );
-    QCOMPARE( dt3, lst2.map().values().at( 0 ).startTime() );
-    QCOMPARE( dt4, lst2.map().values().at( 0 ).endTime() );
-    QCOMPARE( load, lst2.map().values().at( 0 ).load() );
+    QCOMPARE( list2.map().count(), 2 );
+    QCOMPARE( dt3, list2.map().values().at( 0 ).startTime() );
+    QCOMPARE( dt4, list2.map().values().at( 0 ).endTime() );
+    QCOMPARE( load, list2.map().values().at( 0 ).load() );
 
-    QCOMPARE( dt4, lst2.map().values().at( 1 ).startTime() );
-    QCOMPARE( dt2, lst2.map().values().at( 1 ).endTime() );
-    QCOMPARE( 50., lst2.map().values().at( 1 ).load() );
+    QCOMPARE( dt4, list2.map().values().at( 1 ).startTime() );
+    QCOMPARE( dt2, list2.map().values().at( 1 ).endTime() );
+    QCOMPARE( 50., list2.map().values().at( 1 ).load() );
 
     s = "Subtract all load from last interval";
     qDebug()<<s;
-    Debug::print( lst1, "List1: " + s );
-    Debug::print( lst2, "List2: " + s );
+    Debug::print( list1, "List1: " + s );
+    Debug::print( list2, "List2: " + s );
 
-    i = lst2.map().values().at( 0 );
+    i = list2.map().values().at( 0 );
     qDebug()<<"i:"<<i;
-    lst2 -= lst1;
-    Debug::print( lst2, "Result: " + s );
+    list2 -= list1;
+    Debug::print( list2, "Result: " + s );
 
-    QCOMPARE( lst2.map().count(), 1 );
-    QCOMPARE( i.startTime(), lst2.map().values().at( 0 ).startTime() );
-    QCOMPARE( i.endTime(), lst2.map().values().at( 0 ).endTime() );
-    QCOMPARE( i.load(), lst2.map().values().at( 0 ).load() );
+    QCOMPARE( list2.map().count(), 1 );
+    QCOMPARE( i.startTime(), list2.map().values().at( 0 ).startTime() );
+    QCOMPARE( i.endTime(), list2.map().values().at( 0 ).endTime() );
+    QCOMPARE( i.load(), list2.map().values().at( 0 ).load() );
 }
 
 void AppointmentIntervalTester::subtractListMidnight()
 {
     QString s;
 
-    AppointmentIntervalList lst1;
-    AppointmentIntervalList lst2;
+    AppointmentIntervalList list1;
+    AppointmentIntervalList list2;
     DateTime dt1 = DateTime( QDate( 2011, 01, 02 ), QTime( 22, 0, 0 ) );
     DateTime dt2 = dt1 + Duration( 0, 3, 0 );
     double load = 100;
     
-    lst1.add( dt1, dt2, load );
-    QCOMPARE( lst1.map().count(), 2 );
-    QCOMPARE( dt1, lst1.map().values().first().startTime() );
-    QCOMPARE( dt2, lst1.map().values().last().endTime() );
-    QCOMPARE( load, lst1.map().values().first().load() );
-    QCOMPARE( load, lst1.map().values().last().load() );
+    list1.add( dt1, dt2, load );
+    QCOMPARE( list1.map().count(), 2 );
+    QCOMPARE( dt1, list1.map().values().first().startTime() );
+    QCOMPARE( dt2, list1.map().values().last().endTime() );
+    QCOMPARE( load, list1.map().values().first().load() );
+    QCOMPARE( load, list1.map().values().last().load() );
     
-    lst2 += lst1;
-    QCOMPARE( lst2.map().count(), 2 );
-    QCOMPARE( dt1, lst2.map().values().first().startTime() );
-    QCOMPARE( dt2, lst2.map().values().last().endTime() );
-    QCOMPARE( load, lst2.map().values().first().load() );
-    QCOMPARE( load, lst2.map().values().last().load() );
+    list2 += list1;
+    QCOMPARE( list2.map().count(), 2 );
+    QCOMPARE( dt1, list2.map().values().first().startTime() );
+    QCOMPARE( dt2, list2.map().values().last().endTime() );
+    QCOMPARE( load, list2.map().values().first().load() );
+    QCOMPARE( load, list2.map().values().last().load() );
     
-    lst2 -= lst1;
-    QVERIFY( lst2.isEmpty() );
+    list2 -= list1;
+    QVERIFY( list2.isEmpty() );
     
-    lst2.add( dt1, dt2, load * 2. );
-    lst2 -= lst1;
-    QCOMPARE( lst2.map().count(), 2 );
-    QCOMPARE( dt1, lst2.map().values().first().startTime() );
-    QCOMPARE( dt2, lst2.map().values().last().endTime() );
-    QCOMPARE( load, lst2.map().values().first().load() );
-    QCOMPARE( load, lst2.map().values().last().load() );
+    list2.add( dt1, dt2, load * 2. );
+    list2 -= list1;
+    QCOMPARE( list2.map().count(), 2 );
+    QCOMPARE( dt1, list2.map().values().first().startTime() );
+    QCOMPARE( dt2, list2.map().values().last().endTime() );
+    QCOMPARE( load, list2.map().values().first().load() );
+    QCOMPARE( load, list2.map().values().last().load() );
     
-    lst1.clear();
+    list1.clear();
     DateTime dt3 = dt2 + Duration( 0, 6, 0 );
     DateTime dt4 = dt3 + Duration( 0, 1, 0 );
-    lst1.add( dt3, dt4, load );
+    list1.add( dt3, dt4, load );
     qDebug()<<"Subtract non-overlapping intervals:";
 
-    qDebug()<<endl<<lst2<<endl<<"minus"<<endl<<lst1;
-    lst2 -= lst1;
-    qDebug()<<endl<<"result:"<<endl<<lst2;
-    QCOMPARE( lst2.map().count(), 2 );
-    QCOMPARE( dt1, lst2.map().values().first().startTime() );
-    QCOMPARE( dt2, lst2.map().values().last().endTime() );
-    QCOMPARE( load, lst2.map().values().first().load() );
-    QCOMPARE( load, lst2.map().values().last().load() );
+    qDebug()<<endl<<list2<<endl<<"minus"<<endl<<list1;
+    list2 -= list1;
+    qDebug()<<endl<<"result:"<<endl<<list2;
+    QCOMPARE( list2.map().count(), 2 );
+    QCOMPARE( dt1, list2.map().values().first().startTime() );
+    QCOMPARE( dt2, list2.map().values().last().endTime() );
+    QCOMPARE( load, list2.map().values().first().load() );
+    QCOMPARE( load, list2.map().values().last().load() );
     
     DateTime dt5 = dt1 - Duration( 0, 6, 0 );
     DateTime dt6 = dt5 + Duration( 0, 1, 0 );
-    lst1.add( dt5, dt6, load );
+    list1.add( dt5, dt6, load );
 
-    qDebug()<<"-------- lst2 -= lst1";
-    qDebug()<<endl<<lst2<<endl<<lst1;
-    lst2 -= lst1;
-    qDebug()<<endl<<lst2;
-    QCOMPARE( lst2.map().count(), 2 );
-    QCOMPARE( dt1, lst2.map().values().first().startTime() );
-    QCOMPARE( dt2, lst2.map().values().last().endTime() );
-    QCOMPARE( load, lst2.map().values().first().load() );
-    QCOMPARE( load, lst2.map().values().last().load() );
+    qDebug()<<"-------- list2 -= list1";
+    qDebug()<<endl<<list2<<endl<<list1;
+    list2 -= list1;
+    qDebug()<<endl<<list2;
+    QCOMPARE( list2.map().count(), 2 );
+    QCOMPARE( dt1, list2.map().values().first().startTime() );
+    QCOMPARE( dt2, list2.map().values().last().endTime() );
+    QCOMPARE( load, list2.map().values().first().load() );
+    QCOMPARE( load, list2.map().values().last().load() );
 
     s = "Subtract tangent intervals";
     qDebug()<<s;
-    lst1.clear();
-    lst1.add( dt1.addDays( -1 ), dt1, load ); // before
-    Debug::print( lst2, "List2: " + s );
-    Debug::print( lst1, "List1: " + s );
+    list1.clear();
+    list1.add( dt1.addDays( -1 ), dt1, load ); // before
+    Debug::print( list2, "List2: " + s );
+    Debug::print( list1, "List1: " + s );
 
-    lst2 -= lst1;
-    Debug::print( lst2, "Result: " + s );
+    list2 -= list1;
+    Debug::print( list2, "Result: " + s );
     
-    QCOMPARE( lst2.map().count(), 2 );
-    QCOMPARE( dt1, lst2.map().values().first().startTime() );
-    QCOMPARE( dt2, lst2.map().values().last().endTime() );
-    QCOMPARE( load, lst2.map().values().first().load() );
-    QCOMPARE( load, lst2.map().values().last().load() );
+    QCOMPARE( list2.map().count(), 2 );
+    QCOMPARE( dt1, list2.map().values().first().startTime() );
+    QCOMPARE( dt2, list2.map().values().last().endTime() );
+    QCOMPARE( load, list2.map().values().first().load() );
+    QCOMPARE( load, list2.map().values().last().load() );
 
-    lst1.clear();
-    lst1.add( dt2, dt2.addDays( 1 ), load ); // after
+    list1.clear();
+    list1.add( dt2, dt2.addDays( 1 ), load ); // after
 
-    lst2 -= lst1;
-    QCOMPARE( lst2.map().count(), 2 );
-    QCOMPARE( dt1, lst2.map().values().first().startTime() );
-    QCOMPARE( dt2, lst2.map().values().last().endTime() );
-    QCOMPARE( load, lst2.map().values().first().load() );
-    QCOMPARE( load, lst2.map().values().last().load() );
+    list2 -= list1;
+    QCOMPARE( list2.map().count(), 2 );
+    QCOMPARE( dt1, list2.map().values().first().startTime() );
+    QCOMPARE( dt2, list2.map().values().last().endTime() );
+    QCOMPARE( load, list2.map().values().first().load() );
+    QCOMPARE( load, list2.map().values().last().load() );
     
     // Subtract overlapping intervals
-    lst1.clear();
+    list1.clear();
     dt3 = dt1 + Duration( 0, 1, 0 );
     // starts at start, end in the middle (at 23:00)
-    lst1.add( dt1, dt3, load / 2. );
+    list1.add( dt1, dt3, load / 2. );
 
     s = "Subtract half the load of the first hour of the interval";
     qDebug()<<s;
-    Debug::print( lst2, "List2: " + s );
-    Debug::print( lst1, "List1: " + s );
+    Debug::print( list2, "List2: " + s );
+    Debug::print( list1, "List1: " + s );
 
-    lst2 -= lst1;
-    Debug::print( lst2, s );
+    list2 -= list1;
+    Debug::print( list2, s );
 
-    QCOMPARE( lst2.map().count(), 3 );
-    QCOMPARE( dt1, lst2.map().values().first().startTime() );
-    QCOMPARE( dt3, lst2.map().values().first().endTime() );
-    QCOMPARE( load / 2., lst2.map().values().first().load() );
+    QCOMPARE( list2.map().count(), 3 );
+    QCOMPARE( dt1, list2.map().values().first().startTime() );
+    QCOMPARE( dt3, list2.map().values().first().endTime() );
+    QCOMPARE( load / 2., list2.map().values().first().load() );
 
-    QCOMPARE( dt3, lst2.map().values().at( 1 ).startTime() );
-    QCOMPARE( dt2, lst2.map().values().at( 2 ).endTime() );
-    QCOMPARE( load, lst2.map().values().at( 1 ).load() );
-    QCOMPARE( load, lst2.map().values().at( 2 ).load() );
+    QCOMPARE( dt3, list2.map().values().at( 1 ).startTime() );
+    QCOMPARE( dt2, list2.map().values().at( 2 ).endTime() );
+    QCOMPARE( load, list2.map().values().at( 1 ).load() );
+    QCOMPARE( load, list2.map().values().at( 2 ).load() );
 
     s = "Subtract all load from first interval";
     qDebug()<<s;
-    lst2 -= lst1; // remove first interval
-    QCOMPARE( lst2.map().count(), 2 );
-    QCOMPARE( dt3, lst2.map().values().at( 0 ).startTime() );
-    QCOMPARE( dt2, lst2.map().values().at( 1 ).endTime() );
-    QCOMPARE( load, lst2.map().values().at( 0 ).load() );
-    QCOMPARE( load, lst2.map().values().at( 1 ).load() );
+    list2 -= list1; // remove first interval
+    QCOMPARE( list2.map().count(), 2 );
+    QCOMPARE( dt3, list2.map().values().at( 0 ).startTime() );
+    QCOMPARE( dt2, list2.map().values().at( 1 ).endTime() );
+    QCOMPARE( load, list2.map().values().at( 0 ).load() );
+    QCOMPARE( load, list2.map().values().at( 1 ).load() );
 
     s = "Subtract half the load from last 30 min of the last interval";
     qDebug()<<s;
-    lst1.clear();
+    list1.clear();
     dt4 = dt2 - Duration( 0, 0, 30 );
-    lst1.add( dt4, dt2, 50. );
+    list1.add( dt4, dt2, 50. );
     
-    Debug::print( lst1, "List1: " + s );
-    Debug::print( lst2, "List2: " + s );
-    lst2 -= lst1;
+    Debug::print( list1, "List1: " + s );
+    Debug::print( list2, "List2: " + s );
+    list2 -= list1;
     
-    QCOMPARE( lst2.map().count(), 3 );
-    QCOMPARE( dt3, lst2.map().values().at( 0 ).startTime() );
-    QCOMPARE( dt4, lst2.map().values().at( 1 ).endTime() );
-    QCOMPARE( load, lst2.map().values().at( 0 ).load() );
-    QCOMPARE( load, lst2.map().values().at( 1 ).load() );
+    QCOMPARE( list2.map().count(), 3 );
+    QCOMPARE( dt3, list2.map().values().at( 0 ).startTime() );
+    QCOMPARE( dt4, list2.map().values().at( 1 ).endTime() );
+    QCOMPARE( load, list2.map().values().at( 0 ).load() );
+    QCOMPARE( load, list2.map().values().at( 1 ).load() );
 
-    QCOMPARE( dt4, lst2.map().values().at( 2 ).startTime() );
-    QCOMPARE( dt2, lst2.map().values().at( 2 ).endTime() );
-    QCOMPARE( 50., lst2.map().values().at( 2 ).load() );
+    QCOMPARE( dt4, list2.map().values().at( 2 ).startTime() );
+    QCOMPARE( dt2, list2.map().values().at( 2 ).endTime() );
+    QCOMPARE( 50., list2.map().values().at( 2 ).load() );
 
     s = "Subtract all load from last interval";
     qDebug()<<s;
-    Debug::print( lst1, "List1: " + s );
-    Debug::print( lst2, "List2: " + s );
+    Debug::print( list1, "List1: " + s );
+    Debug::print( list2, "List2: " + s );
 
-    lst2 -= lst1;
-    Debug::print( lst2, "Result: " + s );
+    list2 -= list1;
+    Debug::print( list2, "Result: " + s );
 
-    QCOMPARE( lst2.map().count(), 2 );
-    QCOMPARE( dt3, lst2.map().values().at( 0 ).startTime() );
-    QCOMPARE( dt4, lst2.map().values().at( 1 ).endTime() );
-    QCOMPARE( load, lst2.map().values().at( 0 ).load() );
-    QCOMPARE( load, lst2.map().values().at( 1 ).load() );
+    QCOMPARE( list2.map().count(), 2 );
+    QCOMPARE( dt3, list2.map().values().at( 0 ).startTime() );
+    QCOMPARE( dt4, list2.map().values().at( 1 ).endTime() );
+    QCOMPARE( load, list2.map().values().at( 0 ).load() );
+    QCOMPARE( load, list2.map().values().at( 1 ).load() );
 
 }
 

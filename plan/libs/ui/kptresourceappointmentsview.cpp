@@ -127,9 +127,9 @@ ResourceAppointmentsTreeView::ResourceAppointmentsTreeView( QWidget *parent )
     ResourceAppointmentsItemModel *m = new ResourceAppointmentsItemModel( this );
     setModel( m );
     setSelectionMode( QAbstractItemView::ExtendedSelection );
-    QList<int> lst1; lst1 << 2 << -1;
-    QList<int> lst2; lst2 << 0 << 1;
-    hideColumns( lst1, lst2 );
+    QList<int> list1; list1 << 2 << -1;
+    QList<int> list2; list2 << 0 << 1;
+    hideColumns( list1, list2 );
 
     m_leftview->resizeColumnToContents ( 1 );
     connect( m, SIGNAL(modelReset()), SLOT(slotRefreshed()) );
@@ -164,9 +164,9 @@ void ResourceAppointmentsTreeView::slotRefreshed()
     setModel( 0 );
     setModel( m );
     setSelectionMode( QAbstractItemView::ExtendedSelection );
-    QList<int> lst1; lst1 << 2 << -1;
-    QList<int> lst2; lst2 << 0 << 1;
-    hideColumns( lst1, lst2 );
+    QList<int> list1; list1 << 2 << -1;
+    QList<int> list2; list2 << 0 << 1;
+    hideColumns( list1, list2 );
 }
 
 QModelIndex ResourceAppointmentsTreeView::currentIndex() const
