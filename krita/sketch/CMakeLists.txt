@@ -55,22 +55,26 @@ set(kritasketchplugin_SRCS
 )
 
 set(kritasketch_kritaintegrationmodels_SRCS
-    models/KeyboardModel.cpp
+    #models/CollectionsModel.cpp
+    models/ColorDepthModel.cpp
     models/ColorImageProvider.cpp
+    models/ColorModelModel.cpp
+    models/ColorProfileModel.cpp
     models/CompositeOpModel.cpp
+    models/FileSystemModel.cpp
     models/FiltersCategoryModel.cpp
     models/FiltersModel.cpp
+    models/KeyboardModel.cpp
     models/LayerCompositeDetails.cpp
     models/LayerModel.cpp
     models/LayerThumbProvider.cpp
+    models/MultiFeedRSSModel.cpp
     models/PaletteColorsModel.cpp
     models/PaletteModel.cpp
     models/PresetImageProvider.cpp
     models/PresetModel.cpp
     models/RecentImageImageProvider.cpp
     models/RecentImagesModel.cpp
-    models/MultiFeedRSSModel.cpp
-    models/FileSystemModel.cpp
 )
 
 

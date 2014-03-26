@@ -37,7 +37,6 @@ PageStack {
                 title: model.name;
                 image: model.image;
                 imageShadow: false;
-                imageSmooth: false;
                 imageFillMode: Image.PreserveAspectCrop;
                 imageCache: false;
 
@@ -206,7 +205,6 @@ PageStack {
 							title: model.name;
 							image: model.image;
 							imageShadow: false;
-							imageSmooth: false;
 							imageFillMode: Image.PreserveAspectCrop;
 							imageCache: false;
 
