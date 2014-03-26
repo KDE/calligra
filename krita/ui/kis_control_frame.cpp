@@ -45,6 +45,7 @@
 #include <KoResourceServer.h>
 #include <KoResourceServerAdapter.h>
 #include <KoResourceServerProvider.h>
+#include <KoColorSpaceRegistry.h>
 
 #include "KoPattern.h"
 #include "kis_resource_server_provider.h"
@@ -95,7 +96,9 @@ KisControlFrame::KisControlFrame(KisView2 * view, QWidget *parent, const char* n
     KoAbstractResourceServerAdapter* adapter = new KoResourceServerAdapter<KoAbstractGradient>(rserver);
     m_gradientWidget->setResourceAdapter(adapter);
 
-    KoDualColorButton * dual = new KoDualColorButton(view->resourceProvider()->fgColor(), view->resourceProvider()->bgColor(), parent, parent);
+    KoColor black(Qt::black, KoColorSpaceRegistry::instance()->rgb8());
+    KoColor white(Qt::white, KoColorSpaceRegistry::instance()->rgb8());
+    KoDualColorButton * dual = new KoDualColorButton(black, white);
     dual->setPopDialog(true);
     action  = new KAction(i18n("&Color"), this);
     view->actionCollection()->addAction("dual", action);
