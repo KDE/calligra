@@ -20,9 +20,12 @@
 #ifndef KRITASTEAM_H
 #define KRITASTEAM_H
 
+#ifndef STEAM_APP_ID
+#pragma warning "No Steam APP ID!"
+#endif
 
-#define KRITA_SKETCH_APPID 280680
-#define KRITA_GEMINI_APPID 280680
+#define KRITA_SKETCH_APPID STEAM_APP_ID
+#define KRITA_GEMINI_APPID STEAM_APP_ID
 
 #include "kritasteamachievements.h"
 #include "kritasteamclient.h"
