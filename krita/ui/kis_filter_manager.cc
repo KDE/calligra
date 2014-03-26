@@ -29,6 +29,7 @@
 #include <kactioncollection.h>
 
 #include <KoID.h>
+#include <KoMainWindow.h>
 
 // krita/image
 #include <filter/kis_filter.h>
@@ -183,7 +184,7 @@ void KisFilterManager::showFilterDialog(const QString &filterId)
     if (dev->colorSpace()->willDegrade(filter->colorSpaceIndependence())) {
         // Warning bells!
         if (filter->colorSpaceIndependence() == TO_LAB16) {
-            if (KMessageBox::warningContinueCancel(d->view,
+            if (KMessageBox::warningContinueCancel(d->view->mainWindow(),
                                                    i18n("The %1 filter will convert your %2 data to 16-bit L*a*b* and vice versa. ",
                                                         filter->name(),
                                                         dev->colorSpace()->name()),
@@ -192,7 +193,7 @@ void KisFilterManager::showFilterDialog(const QString &filterId)
                                                    "lab16degradation") != KMessageBox::Continue) return;
 
         } else if (filter->colorSpaceIndependence() == TO_RGBA16) {
-            if (KMessageBox::warningContinueCancel(d->view,
+            if (KMessageBox::warningContinueCancel(d->view->mainWindow(),
                                                    i18n("The %1 filter will convert your %2 data to 16-bit RGBA and vice versa. ",
                                                         filter->name() , dev->colorSpace()->name()),
                                                    i18n("Filter Will Convert Your Layer Data"),
@@ -203,7 +204,7 @@ void KisFilterManager::showFilterDialog(const QString &filterId)
 
     if (filter->showConfigurationWidget()) {
         if (!d->filterDialog) {
-            d->filterDialog = new KisDlgFilter(d->view , d->view->activeNode(), this);
+            d->filterDialog = new KisDlgFilter(d->view , d->view->activeNode(), this, d->view->mainWindow());
             d->filterDialog->setAttribute(Qt::WA_DeleteOnClose);
         }
         d->filterDialog->setFilter(filter);

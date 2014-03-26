@@ -798,7 +798,7 @@ void KisNodeManager::saveNodeAsImage()
         return;
     }
 
-    QString filename = KoFileDialogHelper::getSaveFileName(m_d->view,
+    QString filename = KoFileDialogHelper::getSaveFileName(m_d->view->mainWindow(),
                                                            i18n("Export Node"),
                                                            QDesktopServices::storageLocation(QDesktopServices::PicturesLocation),
                                                            KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Export));

@@ -63,7 +63,7 @@ void KisDropshadowPlugin::slotDropshadow()
 
     DlgDropshadow * dlgDropshadow = new DlgDropshadow(layer->colorSpace()->name(),
             image->colorSpace()->name(),
-            m_view, "Dropshadow");
+            m_view->mainWindow(), "Dropshadow");
     Q_CHECK_PTR(dlgDropshadow);
 
     dlgDropshadow->setCaption(i18n("Drop Shadow"));

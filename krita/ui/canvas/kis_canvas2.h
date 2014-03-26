@@ -38,11 +38,12 @@ class KoToolProxy;
 class KoColorProfile;
 
 class KisCanvasDecoration;
-class KisView2;
+class KisImageView;
 class KisPaintopBox;
 class KoFavoriteResourceManager;
 class KisDisplayFilter;
 class KisInputManager;
+class KisView2;
 
 enum KisCanvasType {
     QPAINTER,
@@ -71,7 +72,7 @@ public:
      * @param viewConverter the viewconverter for converting between
      *                       window and document coordinates.
      */
-    KisCanvas2(KisCoordinatesConverter* coordConverter, KisView2* view, KoShapeBasedDocumentBase* sc);
+    KisCanvas2(KisCoordinatesConverter* coordConverter, KisImageView* view, KoShapeBasedDocumentBase* sc);
 
     virtual ~KisCanvas2();
 
@@ -141,15 +142,15 @@ public: // KoCanvasBase implementation
     // Temporary! Either get the current layer and image from the
     // resource provider, or use this, which gets them from the
     // current shape selection.
-    KisImageWSP currentImage();
+    KisImageWSP currentImage() const;
 
 
     KisInputManager *inputManager() const;
 
 public: // KisCanvas2 methods
 
-    KisImageWSP image();
-    KisView2* view();
+    KisImageWSP image() const;
+    KisView2* view() const;
 
     /// @return true if the canvas image should be displayed in vertically mirrored mode
     void addDecoration(KisCanvasDecoration* deco);

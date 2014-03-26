@@ -25,6 +25,8 @@
 
 #include "kowidgets_export.h"
 
+class QStatusBar;
+
 /**
  * Class KoZoomAction implements an action to provide zoom values.
  * In a toolbar, KoZoomAction will show a dropdown list (combobox), also with
@@ -51,7 +53,7 @@ public:
     /**
      * Reimplemented from QWidgetAction.
      */
-    virtual QWidget* createWidget(QWidget* parent);
+    virtual QWidget* createZoomWidget(QStatusBar *parent = 0);
 
     enum SpecialButton {
         AspectMode = 1, ///< changing aspect mode

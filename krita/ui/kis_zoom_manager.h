@@ -29,7 +29,7 @@
 #include <KoZoomController.h>
 
 class KoZoomHandler;
-class KisView2;
+class KisImageView;
 class KAction;
 class KoZoomAction;
 class KoRuler;
@@ -49,14 +49,17 @@ class KisZoomManager : public QObject
 
 public:
 
-    KisZoomManager(KisView2 * view, KoZoomHandler*, KoCanvasController *);
+    KisZoomManager(KisImageView *view, KoZoomHandler*, KoCanvasController *);
     ~KisZoomManager();
 
     void setup(KActionCollection * actionCollection);
     void updateGUI();
-    KoZoomController * zoomController() {
+
+    KoZoomController * zoomController() const {
         return m_zoomController;
     }
+
+    QWidget *zoomActionWidget() const;
 
 private slots:
 
@@ -72,17 +75,17 @@ private slots:
 
 private:
 
-    KisView2 * m_view;
-    KoZoomHandler * m_zoomHandler;
+    KisImageView *m_view;
+    KoZoomHandler *m_zoomHandler;
     KoCanvasController *m_canvasController;
     KoZoomController *m_zoomController;
-    KoRuler * m_horizontalRuler;
-    KoRuler * m_verticalRuler;
+    KoRuler *m_horizontalRuler;
+    KoRuler *m_verticalRuler;
     QAction *m_showRulersAction;
-    KoZoomAction * m_zoomAction;
-    QWidget * m_zoomActionWidget;
+    KoZoomAction *m_zoomAction;
+    QWidget *m_zoomActionWidget;
     KAction *m_100pct;
-    QAction * m_showGuidesAction;
+    QAction *m_showGuidesAction;
     QPoint m_rulersOffset;
 };
 

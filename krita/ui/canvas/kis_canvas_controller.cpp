@@ -26,8 +26,9 @@
 #include "kis_paintop_transformation_connector.h"
 #include "kis_coordinates_converter.h"
 #include "kis_canvas2.h"
-#include "kis_image.h"
 #include "kis_view2.h"
+#include "kis_image.h"
+#include "kis_image_view.h"
 #include "input/kis_input_manager.h"
 #include "input/kis_tablet_event.h"
 
@@ -38,7 +39,7 @@ struct KisCanvasController::Private {
     {
     }
 
-    KisView2 *view;
+    KisImageView *view;
     KisCoordinatesConverter *coordinatesConverter;
     KisCanvasController *q;
     KisPaintopTransformationConnector *paintOpTransformationConnector;
@@ -81,7 +82,7 @@ void KisCanvasController::Private::updateDocumentSizeAfterTransform()
 }
 
 
-KisCanvasController::KisCanvasController(KisView2 *parent, KActionCollection * actionCollection)
+KisCanvasController::KisCanvasController(KisImageView *parent, KActionCollection * actionCollection)
     : KoCanvasControllerWidget(actionCollection, parent),
       m_d(new Private(this))
 {
@@ -109,7 +110,7 @@ void KisCanvasController::setCanvas(KoCanvasBase *canvas)
     KoCanvasControllerWidget::setCanvas(canvas);
 
     m_d->paintOpTransformationConnector =
-        new KisPaintopTransformationConnector(m_d->view, this);
+        new KisPaintopTransformationConnector(kritaCanvas, this);
 }
 
 void KisCanvasController::changeCanvasWidget(QWidget *widget)
@@ -190,7 +191,7 @@ void KisCanvasController::slotToggleWrapAroundMode(bool value)
     Q_ASSERT(kritaCanvas);
 
     if (!canvas()->canvasIsOpenGL() && value) {
-        m_d->view->showFloatingMessage(i18n("You are activating wrap-around mode, but have not enabled OpenGL.\n"
+        m_d->view->parentView()->showFloatingMessage(i18n("You are activating wrap-around mode, but have not enabled OpenGL.\n"
                                             "To visualize wrap-around mode, enable OpenGL."), QIcon());
     }
 

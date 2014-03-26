@@ -570,7 +570,7 @@ void KisRulerAssistantTool::saveAssistants()
     xml.writeEndElement();
     xml.writeEndDocument();
 
-    QString filename = KoFileDialogHelper::getSaveFileName(m_canvas->view(),
+    QString filename = KoFileDialogHelper::getSaveFileName(m_canvas->canvasWidget(),
                                                            i18n("Save Assistant"),
                                                            QDesktopServices::storageLocation(QDesktopServices::PicturesLocation),
                                                            QStringList("application/x-krita-assistant"),

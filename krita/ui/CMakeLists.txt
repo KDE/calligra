@@ -95,6 +95,7 @@ set(kritaui_LIB_SRCS
     kis_flipbook_item.cpp
     kis_histogram_view.cc
     kis_image_manager.cc
+    kis_image_view.cpp
     kis_image_view_converter.cpp
     kis_import_catcher.cc
     kis_layer_manager.cc

@@ -239,7 +239,7 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
             else {
 
 
-                QString fileName = KoFileDialogHelper::getSaveFileName(m_view,
+                QString fileName = KoFileDialogHelper::getSaveFileName(m_view->mainWindow(),
                                                                        i18n("Export Layer") + '(' + ch->name() + ')',
                                                                        QDesktopServices::storageLocation(QDesktopServices::PicturesLocation),
                                                                        KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Export),

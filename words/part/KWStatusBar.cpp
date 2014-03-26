@@ -465,7 +465,7 @@ void KWStatusBar::createZoomWidget()
     if (m_currentView) {
         KoZoomController *zoomController = m_currentView->zoomController();
         if (zoomController && !m_zoomWidgets.contains(m_currentView)) {
-            QWidget *zoomWidget = zoomController->zoomAction()->createWidget(m_statusbar);
+            QWidget *zoomWidget = zoomController->zoomAction()->createZoomWidget(m_statusbar);
             m_zoomWidgets.insert(m_currentView, zoomWidget);
             m_statusbar->addWidget(zoomWidget);
             connect(m_zoomAction, SIGNAL(toggled(bool)), this, SLOT(showZoom(bool)));

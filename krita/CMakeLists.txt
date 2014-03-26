@@ -167,7 +167,6 @@ install(TARGETS kdeinit_krita ${INSTALL_TARGETS_DEFAULT_ARGS})
 install(PROGRAMS krita.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 install(FILES kritapart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 install(FILES krita.rc DESTINATION ${DATA_INSTALL_DIR}/krita)
-install(FILES kritashell.rc DESTINATION ${DATA_INSTALL_DIR}/krita)
 install(FILES krita.appdata.xml DESTINATION ${SHARE_INSTALL_PREFIX}/appdata/ )
 
 if (${QTVERSION} VERSION_GREATER 4.7.0 AND NOT APPLE AND HAVE_OPENGL)

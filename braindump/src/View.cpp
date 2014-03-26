@@ -147,7 +147,7 @@ void View::initGUI()
             this, SLOT(slotZoomChanged(KoZoomMode::Mode,qreal)));
 
     m_zoomAction = m_zoomController->zoomAction();
-    m_mainWindow->addStatusBarItem(m_zoomAction->createWidget(m_mainWindow->statusBar()), 0, this);
+    m_mainWindow->addStatusBarItem(m_zoomAction->createZoomWidget(m_mainWindow->statusBar()), 0, this);
 
     m_zoomController->setZoomMode(KoZoomMode::ZOOM_WIDTH);
 

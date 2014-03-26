@@ -23,40 +23,37 @@
 #include <QSignalMapper>
 #include <QCloseEvent>
 
-#include <KoXMLGUIClient.h>
-#include <KoXMLGUIFactory.h>
-
 #include <kactioncollection.h>
 #include <kaction.h>
 #include <ktoggleaction.h>
 #include <ktoolbar.h>
 
+#include <KoXMLGUIClient.h>
+#include <KoXMLGUIFactory.h>
+#include <KoZoomController.h>
 #include <KoView.h>
 #include <KoPart.h>
 
+#include "kis_canvas_controller.h"
+#include "kis_canvas2.h"
 #include "kis_view2.h"
+#include "kis_image_view.h"
 #include "dialogs/kis_dlg_preferences.h"
 #include "kis_config_notifier.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_node.h"
 #include "kis_image.h"
 #include "kis_group_layer.h"
+#include "kis_paintop_settings.h"
 
-
-class KisMainGui : public KoXMLGUIClient {
-public:
-    KisMainGui(KisMainWindow *mw)
-        : KoXMLGUIClient(mw)
-    {
-        setXMLFile("kritashell.rc", true);
-    }
-
-};
 
 KisMainWindow::KisMainWindow(KoPart *part, const KComponentData &instance)
     : KoMainWindow(part, instance)
     , m_mdiArea(new QMdiArea(this))
 {
+    // 25 px is a distance that works well for Tablet and Mouse events
+    qApp->setStartDragDistance(25);
+
     m_mdiArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     m_mdiArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 
@@ -67,7 +64,7 @@ KisMainWindow::KisMainWindow(KoPart *part, const KComponentData &instance)
     m_windowMapper = new QSignalMapper(this);
     connect(m_windowMapper, SIGNAL(mapped(QWidget*)), this, SLOT(setActiveSubWindow(QWidget*)));
 
-    m_guiClient = new KisMainGui(this);
+    m_guiClient = new KisView2(this);
 
     m_guiClient->actionCollection()->addAction(KStandardAction::Preferences, "preferences", this, SLOT(slotPreferences()));
 
@@ -133,6 +130,7 @@ void KisMainWindow::showView(KoView *view)
         view->show();
     }
     view->setFocus();
+    m_guiClient->setCurrentView(view);
 }
 
 void KisMainWindow::slotPreferences()
@@ -190,15 +188,121 @@ void KisMainWindow::setActiveSubWindow(QWidget *window)
         KoView *view = qobject_cast<KoView *>(subwin->widget());
         if (view) {
             view->guiActivateEvent(true);
+            m_guiClient->setCurrentView(view);
         }
     }
 }
 
-KisView2 *KisMainWindow::activeKisView()
+KisImageView *KisMainWindow::activeKisView()
 {
     if (QMdiSubWindow *activeSubWindow = m_mdiArea->activeSubWindow()) {
-        return qobject_cast<KisView2 *>(activeSubWindow->widget());
+        return qobject_cast<KisImageView *>(activeSubWindow->widget());
     }
     return 0;
+}
+
+bool KisMainWindow::event( QEvent* event )
+{
+    if (!activeKisView()) {
+        event->accept();
+        return true;
+    }
+
+    switch(static_cast<int>(event->type()))
+    {
+        case ViewModeSwitchEvent::AboutToSwitchViewModeEvent: {
+            ViewModeSynchronisationObject* syncObject = static_cast<ViewModeSwitchEvent*>(event)->synchronisationObject();
+
+            KisCanvasResourceProvider* provider = m_guiClient->resourceProvider();
+            syncObject->backgroundColor = provider->bgColor();
+            syncObject->foregroundColor = provider->fgColor();
+            syncObject->exposure = provider->HDRExposure();
+            syncObject->gamma = provider->HDRGamma();
+            syncObject->compositeOp = provider->currentCompositeOp();
+            syncObject->pattern = provider->currentPattern();
+            syncObject->gradient = provider->currentGradient();
+            syncObject->node = provider->currentNode();
+            syncObject->paintOp = provider->currentPreset();
+            syncObject->opacity = provider->opacity();
+            syncObject->globalAlphaLock = provider->globalAlphaLock();
+
+            syncObject->documentOffset = m_guiClient->canvasControllerWidget()->scrollBarValue() - pos();
+            syncObject->zoomLevel = activeKisView()->zoomController()->zoomAction()->effectiveZoom();
+            syncObject->rotationAngle = m_guiClient->canvasBase()->rotationAngle();
+
+            syncObject->activeToolId = KoToolManager::instance()->activeToolId();
+
+            syncObject->initialized = true;
+
+            QMainWindow* mainWindow = qobject_cast<QMainWindow*>(qApp->activeWindow());
+            if(mainWindow) {
+                QList<QDockWidget*> dockWidgets = mainWindow->findChildren<QDockWidget*>();
+                foreach(QDockWidget* widget, dockWidgets) {
+                    if (widget->isFloating()) {
+                        widget->hide();
+                    }
+                }
+            }
+
+            return true;
+        }
+        case ViewModeSwitchEvent::SwitchedToDesktopModeEvent: {
+            ViewModeSynchronisationObject* syncObject = static_cast<ViewModeSwitchEvent*>(event)->synchronisationObject();
+            m_guiClient->canvasControllerWidget()->setFocus();
+            qApp->processEvents();
+
+            if(syncObject->initialized) {
+                KisCanvasResourceProvider* provider = m_guiClient->resourceProvider();
+
+                provider->setPaintOpPreset(syncObject->paintOp);
+                qApp->processEvents();
+
+                KoToolManager::instance()->switchToolRequested(syncObject->activeToolId);
+                qApp->processEvents();
+
+                KisPaintOpPresetSP preset = m_guiClient->canvasBase()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
+                preset->settings()->setProperty("CompositeOp", syncObject->compositeOp);
+                if (preset->settings()->hasProperty("OpacityValue"))
+                    preset->settings()->setProperty("OpacityValue", syncObject->opacity);
+                provider->setPaintOpPreset(preset);
+
+                provider->setBGColor(syncObject->backgroundColor);
+                provider->setFGColor(syncObject->foregroundColor);
+                provider->setHDRExposure(syncObject->exposure);
+                provider->setHDRGamma(syncObject->gamma);
+                provider->slotPatternActivated(syncObject->pattern);
+                provider->slotGradientActivated(syncObject->gradient);
+                provider->slotNodeActivated(syncObject->node);
+                provider->setOpacity(syncObject->opacity);
+                provider->setGlobalAlphaLock(syncObject->globalAlphaLock);
+                provider->setCurrentCompositeOp(syncObject->compositeOp);
+
+                actionCollection()->action("zoom_in")->trigger();
+                qApp->processEvents();
+
+
+                QList<QDockWidget*> dockWidgets = findChildren<QDockWidget*>();
+                foreach(QDockWidget* widget, dockWidgets) {
+                    if (widget->isFloating()) {
+                        widget->show();
+                    }
+                }
+
+
+                activeKisView()->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, syncObject->zoomLevel);
+                m_guiClient->canvasControllerWidget()->rotateCanvas(syncObject->rotationAngle - activeKisView()->canvasBase()->rotationAngle());
+
+                QPoint newOffset = syncObject->documentOffset + pos();
+                qApp->processEvents();
+                m_guiClient->canvasControllerWidget()->setScrollBarValue(newOffset);
+            }
+
+            return true;
+        }
+        default:
+            break;
+    }
+
+    return QWidget::event( event );
 }
 

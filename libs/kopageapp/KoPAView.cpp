@@ -271,7 +271,7 @@ void KoPAView::initGUI(KoPAFlags flags)
     addStatusBarItem( d->status, 1 );
     connect( KoToolManager::instance(), SIGNAL( changedStatusText( const QString & ) ),
              d->status, SLOT( setText( const QString & ) ) );
-    d->zoomActionWidget = d->zoomAction->createWidget(  statusBar() );
+    d->zoomActionWidget = d->zoomAction->createZoomWidget(  statusBar() );
     addStatusBarItem( d->zoomActionWidget, 0 );
 
     d->zoomController->setZoomMode( KoZoomMode::ZOOM_PAGE );

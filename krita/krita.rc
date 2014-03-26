@@ -46,8 +46,8 @@
   <Action name="mirror_canvas"/>
   <Action name="wrap_around_mode"/>
   <Separator/>
-  <Action name="view_newview"/>    
-  <Separator/>      
+  <Action name="view_newview"/>
+  <Separator/>
   <Action name="zoom"/>
   <Action name="zoom_in"/>
   <Action name="zoom_out"/>
@@ -166,6 +166,15 @@
   <Action name="preferences" group="settings_configure"/>
   <Action name="theme_menu"/>
   <Action name="palette_manager"/>
+</Menu>
+
+<Menu name="window"><text>&amp;Window</text>
+    <Action name="windows_cascade"/>
+    <Action name="windows_tile"/>
+    <Separator/>
+    <Action name="windows_next"/>
+    <Action name="windows_previous"/>
+    <Separator/>
 </Menu>
 
 </MenuBar>

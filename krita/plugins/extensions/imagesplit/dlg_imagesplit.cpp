@@ -29,7 +29,7 @@
 #include <kis_paint_device.h>
 
 DlgImagesplit::DlgImagesplit(KisView2* view,QString suffix,QStringList listMimeFilter)
-        : KDialog(view)
+        : KDialog(view->mainWindow())
         , m_view(view)
 {
 

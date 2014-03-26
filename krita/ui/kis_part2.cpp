@@ -19,7 +19,7 @@
 
 #include "kis_part2.h"
 #include "kis_main_window.h"
-#include "kis_view2.h"
+#include "kis_image_view.h"
 #include "kis_doc2.h"
 #include "kis_factory2.h"
 #include "kis_config.h"
@@ -74,10 +74,10 @@ KoDocument *KisPart2::createDocument() const
 KoView *KisPart2::createViewInstance(KoDocument *document, QWidget *parent)
 {
     qApp->setOverrideCursor(Qt::WaitCursor);
-    KisView2 *v = new KisView2(this, qobject_cast<KisDoc2*>(document), parent);
+    KisImageView *v = new KisImageView(this, qobject_cast<KisDoc2*>(document), parent);
 
     //XXX : fix this ugliness
-    dynamic_cast<KisShapeController*>(qobject_cast<KisDoc2*>(document)->shapeController())->setInitialShapeForView(v);
+    dynamic_cast<KisShapeController*>(qobject_cast<KisDoc2*>(document)->shapeController())->setInitialShapeForCanvas(v->canvasBase());
     KoToolManager::instance()->switchToolRequested("KritaShape/KisToolBrush");
 
     // XXX: this prevents a crash when opening a new document after opening a

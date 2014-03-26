@@ -38,6 +38,7 @@
 #include <kis_selection.h>
 #include <kis_paint_device.h>
 
+#include <kis_image_view.h>
 #include "kis_view2.h"
 #include "canvas/kis_canvas2.h"
 #include "kis_progress_widget.h"
@@ -50,9 +51,9 @@ enum {
 };
 
 KisStatusBar::KisStatusBar(KisView2 * view)
-        : m_view(view)
+    : m_view(view)
 {
-    m_selectionStatusLabel = new QLabel(view);
+    m_selectionStatusLabel = new QLabel();
     m_selectionStatusLabel->setPixmap(koIcon("selection-info").pixmap(22));
 
     m_selectionStatusLabel->setEnabled(false);

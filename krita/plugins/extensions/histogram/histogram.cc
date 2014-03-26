@@ -51,7 +51,7 @@ Histogram::~Histogram()
 
 void Histogram::slotActivated()
 {
-    DlgHistogram * dlgHistogram = new DlgHistogram(m_view, "Histogram");
+    DlgHistogram * dlgHistogram = new DlgHistogram(m_view->mainWindow(), "Histogram");
     Q_CHECK_PTR(dlgHistogram);
 
     KisLayerSP layer = m_view->nodeManager()->activeLayer();

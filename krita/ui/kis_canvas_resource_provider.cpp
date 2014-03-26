@@ -41,9 +41,10 @@
 
 #include "kis_config.h"
 #include "kis_view2.h"
+#include "kis_image_view.h"
 #include "canvas/kis_canvas2.h"
 
-KisCanvasResourceProvider::KisCanvasResourceProvider(KisView2 * view)
+KisCanvasResourceProvider::KisCanvasResourceProvider(KisImageView *view)
     : m_view(view)
     , m_displayProfile(0)
 {
@@ -161,7 +162,10 @@ KisImageWSP KisCanvasResourceProvider::currentImage() const
 
 KisNodeSP KisCanvasResourceProvider::currentNode() const
 {
-    return m_view->activeNode();
+    if (m_view && m_view->parentView()) {
+        return m_view->parentView()->activeNode();
+    }
+    return 0;
 }
 
 KisPaintOpPresetSP KisCanvasResourceProvider::currentPreset() const

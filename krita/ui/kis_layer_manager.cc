@@ -50,6 +50,7 @@
 #include <KoShapeManager.h>
 #include <KoProgressUpdater.h>
 #include <KoPart.h>
+#include <KoMainWindow.h>
 
 #include <filter/kis_filter_configuration.h>
 #include <filter/kis_filter.h>
@@ -362,7 +363,7 @@ void KisLayerManager::layerProperties()
         KisLayerSP prev = dynamic_cast<KisLayer*>(alayer->prevSibling().data());
         if (prev) dev = prev->projection();
 
-        KisDlgAdjLayerProps dlg(alayer, alayer.data(), dev, m_view, alayer->filter().data(), alayer->name(), i18n("Filter Layer Properties"), m_view, "dlgadjlayerprops");
+        KisDlgAdjLayerProps dlg(alayer, alayer.data(), dev, m_view, alayer->filter().data(), alayer->name(), i18n("Filter Layer Properties"), m_view->mainWindow(), "dlgadjlayerprops");
         dlg.resize(dlg.minimumSizeHint());
 
 
@@ -406,7 +407,7 @@ void KisLayerManager::layerProperties()
     }
     else if (KisGeneratorLayerSP alayer = KisGeneratorLayerSP(dynamic_cast<KisGeneratorLayer*>(layer.data()))) {
 
-        KisDlgGeneratorLayer dlg(alayer->name(), m_view);
+        KisDlgGeneratorLayer dlg(alayer->name(), m_view, m_view->mainWindow());
         dlg.setCaption(i18n("Generator Layer Properties"));
 
         KisSafeFilterConfigurationSP configBefore(alayer->filter());
@@ -595,7 +596,7 @@ void KisLayerManager::addGeneratorLayer(KisNodeSP activeNode)
 {
     KisImageWSP image = m_view->image();
 
-    KisDlgGeneratorLayer dlg(image->nextLayerName(), m_view);
+    KisDlgGeneratorLayer dlg(image->nextLayerName(), m_view, m_view->mainWindow());
     dlg.resize(dlg.minimumSizeHint());
 
     if (dlg.exec() == QDialog::Accepted) {
@@ -626,7 +627,7 @@ void KisLayerManager::layerDuplicate()
     if (dup) {
         activateLayer(dup);
     } else {
-        KMessageBox::error(m_view, i18n("Could not add layer to image."), i18n("Layer Error"));
+        KMessageBox::error(m_view->mainWindow(), i18n("Could not add layer to image."), i18n("Layer Error"));
     }
 }
 
@@ -711,7 +712,7 @@ void KisLayerManager::flattenImage()
         bool doIt = true;
 
         if (image->nHiddenLayers() > 0) {
-            int answer = KMessageBox::warningYesNo(m_view,
+            int answer = KMessageBox::warningYesNo(m_view->mainWindow(),
                                                    i18n("The image contains hidden layers that will be lost."),
                                                    i18n("Flatten Image"),
                                                    KGuiItem(i18n("&Flatten Image")),
@@ -744,7 +745,7 @@ void KisLayerManager::mergeLayer()
         image->mergeDown(layer, KisMetaData::MergeStrategyRegistry::instance()->get("Drop"));
     }
     else {
-        const KisMetaData::MergeStrategy* strategy = KisMetaDataMergeStrategyChooserWidget::showDialog(m_view);
+        const KisMetaData::MergeStrategy* strategy = KisMetaDataMergeStrategyChooserWidget::showDialog(m_view->mainWindow());
         if (!strategy) return;
         image->mergeDown(layer, strategy);
 
@@ -871,7 +872,7 @@ void KisLayerManager::addFileLayer(KisNodeSP activeNode)
     }
     KisImageWSP image = m_view->image();
 
-    KisDlgFileLayer dlg(basePath, image->nextLayerName(), m_view);
+    KisDlgFileLayer dlg(basePath, image->nextLayerName(), m_view->mainWindow());
     dlg.resize(dlg.minimumSizeHint());
 
     if (dlg.exec() == QDialog::Accepted) {
@@ -879,7 +880,7 @@ void KisLayerManager::addFileLayer(KisNodeSP activeNode)
         QString fileName = dlg.fileName();
 
         if(fileName.isEmpty()){
-            KMessageBox::error(m_view, i18n("No file name specified."), i18n("No file specified"));
+            KMessageBox::error(m_view->mainWindow(), i18n("No file name specified."), i18n("No file specified"));
             return;
         }
 

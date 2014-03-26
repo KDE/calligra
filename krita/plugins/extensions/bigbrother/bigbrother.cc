@@ -138,7 +138,7 @@ void BigBrotherPlugin::slotOpenEdit()
     KUrl url;
     KisMacro* m = openMacro(&url);
     if (!m) return;
-    KisActionsEditorDialog aed(m_view);
+    KisActionsEditorDialog aed(m_view->mainWindow());
 
     aed.actionsEditor()->setMacro(m);
 
@@ -184,7 +184,7 @@ KisMacro* BigBrotherPlugin::openMacro(KUrl* url)
     QStringList mimeFilter;
     mimeFilter << "*.krarec|Recorded actions (*.krarec)";
 
-    QString filename = KoFileDialogHelper::getOpenFileName(m_view,
+    QString filename = KoFileDialogHelper::getOpenFileName(m_view->mainWindow(),
                                                            i18n("Open Macro"),
                                                            QDesktopServices::storageLocation(QDesktopServices::PicturesLocation),
                                                            mimeFilter,
@@ -224,7 +224,7 @@ KisMacro* BigBrotherPlugin::openMacro(KUrl* url)
 
 void BigBrotherPlugin::saveMacro(const KisMacro* macro, const KUrl& url)
 {
-    QString filename = QFileDialog::getSaveFileName(m_view, i18n("Save Macro"), url.url(), "*.krarec|Recorded actions (*.krarec)");
+    QString filename = QFileDialog::getSaveFileName(m_view->mainWindow(), i18n("Save Macro"), url.url(), "*.krarec|Recorded actions (*.krarec)");
     if (!filename.isNull()) {
         QDomDocument doc;
         QDomElement e = doc.createElement("RecordedActions");

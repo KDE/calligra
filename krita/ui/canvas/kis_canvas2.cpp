@@ -44,7 +44,6 @@
 #include "kis_doc2.h"
 #include "flake/kis_shape_layer.h"
 #include "kis_canvas_resource_provider.h"
-#include "kis_view2.h"
 #include "kis_config.h"
 #include "kis_config_notifier.h"
 #include "kis_abstract_canvas_widget.h"
@@ -58,9 +57,10 @@
 #include "kis_image_config.h"
 #include "kis_infinity_manager.h"
 #include "kis_signal_compressor.h"
-
+#include "kis_image_view.h"
 #include "opengl/kis_opengl_canvas2.h"
 #include "opengl/kis_opengl_image_textures.h"
+#include "kis_view2.h"
 #ifdef HAVE_OPENGL
 #include <QGLFormat>
 #endif
@@ -76,7 +76,7 @@ class KisCanvas2::KisCanvas2Private
 
 public:
 
-    KisCanvas2Private(KoCanvasBase * parent, KisCoordinatesConverter* coordConverter, KisView2 * view)
+    KisCanvas2Private(KoCanvasBase * parent, KisCoordinatesConverter* coordConverter, KisImageView * view)
         : coordinatesConverter(coordConverter)
         , view(view)
         , canvasWidget(0)
@@ -95,7 +95,7 @@ public:
     }
 
     KisCoordinatesConverter *coordinatesConverter;
-    KisView2 *view;
+    KisImageView *view;
     KisAbstractCanvasWidget *canvasWidget;
     KoShapeManager *shapeManager;
     KoColorProfile *monitorProfile;
@@ -121,12 +121,10 @@ public:
     QBitArray channelFlags;
 };
 
-KisCanvas2::KisCanvas2(KisCoordinatesConverter* coordConverter, KisView2 * view, KoShapeBasedDocumentBase * sc)
+KisCanvas2::KisCanvas2(KisCoordinatesConverter* coordConverter, KisImageView *view, KoShapeBasedDocumentBase * sc)
     : KoCanvasBase(sc)
     , m_d(new KisCanvas2Private(this, coordConverter, view))
 {
-
-
     // a bit of duplication from slotConfigChanged()
     KisConfig cfg;
     m_d->vastScrolling = cfg.vastScrolling();
@@ -182,7 +180,7 @@ void KisCanvas2::setCanvasWidget(QWidget * widget)
     m_d->canvasWidget = tmp;
 
     if (!m_d->canvasWidget->decoration(INFINITY_DECORATION_ID)) {
-        KisInfinityManager *manager = new KisInfinityManager(m_d->view, this);
+        KisInfinityManager *manager = new KisInfinityManager(view(), this);
         m_d->canvasWidget->addDecoration(manager);
     }
 
@@ -266,9 +264,9 @@ void KisCanvas2::stopMacro()
 KoShapeManager* KisCanvas2::shapeManager() const
 {
     if (!m_d->view) return m_d->shapeManager;
-    if (!m_d->view->nodeManager()) return m_d->shapeManager;
+    if (!view()->nodeManager()) return m_d->shapeManager;
 
-    KisLayerSP activeLayer = m_d->view->nodeManager()->activeLayer();
+    KisLayerSP activeLayer = view()->nodeManager()->activeLayer();
     if (activeLayer && activeLayer->isEditable()) {
         KisShapeLayer * shapeLayer = dynamic_cast<KisShapeLayer*>(activeLayer.data());
         if (shapeLayer) {
@@ -359,7 +357,7 @@ void KisCanvas2::createOpenGLCanvas()
 void KisCanvas2::createCanvas(bool useOpenGL)
 {
     KisConfig cfg;
-    const KoColorProfile *profile = m_d->view->resourceProvider()->currentDisplayProfile();
+    const KoColorProfile *profile = view()->resourceProvider()->currentDisplayProfile();
     m_d->monitorProfile = const_cast<KoColorProfile*>(profile);
 
     m_d->conversionFlags = KoColorConversionTransformation::HighQuality;
@@ -698,18 +696,21 @@ KoColorProfile *  KisCanvas2::monitorProfile()
     return m_d->monitorProfile;
 }
 
-KisView2* KisCanvas2::view()
+KisView2* KisCanvas2::view() const
 {
-    return m_d->view;
+    if (m_d->view) {
+        return m_d->view->parentView();
+    }
+    return 0;
 }
 
-KisImageWSP KisCanvas2::image()
+KisImageWSP KisCanvas2::image() const
 {
     return m_d->view->image();
 
 }
 
-KisImageWSP KisCanvas2::currentImage()
+KisImageWSP KisCanvas2::currentImage() const
 {
     return m_d->view->image();
 }

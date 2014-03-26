@@ -19,6 +19,7 @@
 #define KIS_MAIN_WINDOW_H
 
 #include <KoMainWindow.h>
+#include "krita/gemini/ViewModeSwitchEvent.h"
 
 class QMdiArea;
 class QSignalMapper;
@@ -30,6 +31,7 @@ class KoPart;
 
 class KisMainGui;
 class KisView2;
+class KisImageView;
 
 class KisMainWindow : public KoMainWindow
 {
@@ -47,7 +49,8 @@ public slots:
 
 protected:
 
-    void closeEvent(QCloseEvent *e);
+    virtual void closeEvent(QCloseEvent *e);
+    virtual bool event(QEvent* event);
 
 private slots:
 
@@ -56,9 +59,9 @@ private slots:
     void setActiveSubWindow(QWidget *window);
 
 private:
-    KisView2 *activeKisView();
+    KisImageView *activeKisView();
 
-    KisMainGui *m_guiClient;
+    KisView2 *m_guiClient;
 
     QMdiArea *m_mdiArea;
     QSignalMapper *m_windowMapper;

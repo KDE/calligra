@@ -50,9 +50,9 @@ struct KisDlgFilter::Private {
     KisFilterManager *filterManager;
 };
 
-KisDlgFilter::KisDlgFilter(KisView2 *view, KisNodeSP node, KisFilterManager *filterManager) :
-        QDialog(view),
-        d(new Private)
+KisDlgFilter::KisDlgFilter(KisView2 *view, KisNodeSP node, KisFilterManager *filterManager, QWidget *parent)
+    : QDialog(parent)
+    , d(new Private)
 {
     setModal(false);
 

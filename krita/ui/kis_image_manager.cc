@@ -74,7 +74,7 @@ qint32 KisImageManager::importImage(const KUrl& urlArg, bool importAsLayer)
     qint32 rc = 0;
 
     if (urlArg.isEmpty()) {
-        QStringList fileNames = KoFileDialogHelper::getOpenFileNames(m_view,
+        QStringList fileNames = KoFileDialogHelper::getOpenFileNames(m_view->mainWindow(),
                                                                      i18n("Import Image"),
                                                                      QDesktopServices::storageLocation(QDesktopServices::PicturesLocation),
                                                                      KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Import),
@@ -132,7 +132,7 @@ void KisImageManager::slotImageProperties()
 
     if (!image) return;
 
-    QPointer<KisDlgImageProperties> dlg = new KisDlgImageProperties(image, m_view);
+    QPointer<KisDlgImageProperties> dlg = new KisDlgImageProperties(image, m_view->mainWindow());
     if (dlg->exec() == QDialog::Accepted) {
         image->convertProjectionColorSpace(dlg->colorSpace());
     }

@@ -62,7 +62,7 @@
 #include <kis_canvas2.h>
 
 
-KisControlFrame::KisControlFrame(KisView2 * view, const char* name)
+KisControlFrame::KisControlFrame(KisView2 * view, QWidget *parent, const char* name)
         : QObject(view)
         , m_view(view)
         , m_patternWidget(0)
@@ -75,7 +75,7 @@ KisControlFrame::KisControlFrame(KisView2 * view, const char* name)
     KisConfig cfg;
     m_font  = KGlobalSettings::generalFont();
 
-    m_patternWidget = new KisIconWidget(view, "patterns");
+    m_patternWidget = new KisIconWidget(parent, "patterns");
     m_patternWidget->setText(i18n("Fill Patterns"));
     m_patternWidget->setToolTip(i18n("Fill Patterns"));
     m_patternWidget->setFixedSize(26, 26);
@@ -83,7 +83,7 @@ KisControlFrame::KisControlFrame(KisView2 * view, const char* name)
     view->actionCollection()->addAction("patterns", action);
     action->setDefaultWidget(m_patternWidget);
 
-    m_gradientWidget = new KisIconWidget(view, "gradients");
+    m_gradientWidget = new KisIconWidget(parent, "gradients");
     m_gradientWidget->setText(i18n("Gradients"));
     m_gradientWidget->setToolTip(i18n("Gradients"));
     m_gradientWidget->setFixedSize(26, 26);
@@ -95,7 +95,7 @@ KisControlFrame::KisControlFrame(KisView2 * view, const char* name)
     KoAbstractResourceServerAdapter* adapter = new KoResourceServerAdapter<KoAbstractGradient>(rserver);
     m_gradientWidget->setResourceAdapter(adapter);
 
-    KoDualColorButton * dual = new KoDualColorButton(view->resourceProvider()->fgColor(), view->resourceProvider()->bgColor(), view, view);
+    KoDualColorButton * dual = new KoDualColorButton(view->resourceProvider()->fgColor(), view->resourceProvider()->bgColor(), parent, parent);
     dual->setPopDialog(true);
     action  = new KAction(i18n("&Color"), this);
     view->actionCollection()->addAction("dual", action);
@@ -112,7 +112,7 @@ KisControlFrame::KisControlFrame(KisView2 * view, const char* name)
     m_patternWidget->setPopupWidget(m_patternChooserPopup);
     m_gradientWidget->setPopupWidget(m_gradientChooserPopup);
 
-    m_paintopBox = new KisPaintopBox(view, view, "paintopbox");
+    m_paintopBox = new KisPaintopBox(view, parent, "paintopbox");
     action  = new KAction(i18n("&Painter's Tools"), this);
     view->actionCollection()->addAction("paintops", action);
     action->setDefaultWidget(m_paintopBox);

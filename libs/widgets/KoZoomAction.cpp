@@ -291,12 +291,8 @@ void KoZoomAction::zoomOut()
     }
 }
 
-QWidget * KoZoomAction::createWidget(QWidget *parent)
+QWidget * KoZoomAction::createZoomWidget(QStatusBar *parent)
 {
-    // create the custom widget only if we add the action to the status bar
-    if (!qobject_cast<QStatusBar*>(parent))
-        return KSelectAction::createWidget(parent);
-
     QWidget *group = new QWidget(parent);
     QHBoxLayout *layout = new QHBoxLayout(group);
     //layout->setSizeConstraint(QLayout::SetFixedSize);

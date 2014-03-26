@@ -51,7 +51,6 @@ public:
 
     KisNodeManager(KisView2 * view,  KisDoc2 * doc);
     ~KisNodeManager();
-
     
 signals:
 

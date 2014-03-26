@@ -51,7 +51,7 @@ public:
     *  @returns true if the configuration could be constructed (not canceled)
     */
     virtual bool fetchConfiguration(KisView2* view, KisOperationConfiguration* configuration) {
-        KDialog * dialog = new KDialog(view);
+        KDialog * dialog = new KDialog(view->mainWindow());
         Q_CHECK_PTR(dialog);
 
         T* configWidget = new T(dialog, view);

@@ -33,10 +33,10 @@
 #include <kis_transaction.h>
 #include <kis_view2.h>
 
-KisDlgGeneratorLayer::KisDlgGeneratorLayer(const QString & name, KisView2 *view)
-        : KDialog(view)
-        , m_customName(false)
-        , m_freezeName(false)
+KisDlgGeneratorLayer::KisDlgGeneratorLayer(const QString & name, KisView2 *view, QWidget *parent)
+    : KDialog(parent)
+    , m_customName(false)
+    , m_freezeName(false)
 {
 
     setButtons(Ok | Cancel);

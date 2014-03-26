@@ -243,7 +243,7 @@ KarbonView::KarbonView(KarbonPart *karbonPart, KarbonDocument* doc, QWidget* par
     // set up the zoom controller
     KarbonZoomController * zoomController = new KarbonZoomController(d->canvasController, actionCollection(), this);
     zoomController->setPageSize(d->part->pageSize());
-    d->zoomActionWidget = zoomController->zoomAction()->createWidget(statusBar());
+    d->zoomActionWidget = zoomController->zoomAction()->createZoomWidget(statusBar());
     addStatusBarItem(d->zoomActionWidget, 0);
     zoomController->setZoomMode(KoZoomMode::ZOOM_PAGE);
     connect(zoomController, SIGNAL(zoomedToSelection()), this, SLOT(zoomSelection()));

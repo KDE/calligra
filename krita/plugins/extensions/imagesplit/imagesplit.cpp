@@ -49,7 +49,7 @@ K_PLUGIN_FACTORY(ImagesplitFactory, registerPlugin<Imagesplit>();)
 K_EXPORT_PLUGIN(ImagesplitFactory("krita"))
 
 Imagesplit::Imagesplit(QObject *parent, const QVariantList &)
-        : KisViewPlugin(parent, "kritaplugins/imagesplit.rc")
+    : KisViewPlugin(parent, "kritaplugins/imagesplit.rc")
 {
     KisAction *action  = new KisAction(i18n("Image Split "), this);
     addAction("imagesplit", action);
@@ -129,7 +129,7 @@ void Imagesplit::slotImagesplit()
             for(int i=0;i<(numVerticalLines+1);i++) {
               for(int j=0;j<(numHorizontalLines+1);j++)
               {
-                    QString filename = KoFileDialogHelper::getSaveFileName(m_view,
+                    QString filename = KoFileDialogHelper::getSaveFileName(m_view->mainWindow(),
                                                                            i18n("Save Image on Split"),
                                                                            QDesktopServices::storageLocation(QDesktopServices::PicturesLocation),
                                                                            listMimeFilter,

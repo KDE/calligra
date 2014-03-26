@@ -177,7 +177,7 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     m_cmbCompositeOp = new KisCompositeOpComboBox();
     m_cmbCompositeOp->setFixedHeight(30);
 
-    m_workspaceWidget = new KisPopupButton(view);
+    m_workspaceWidget = new KisPopupButton(this);
     m_workspaceWidget->setIcon(koIcon("workspace-chooser"));
     m_workspaceWidget->setToolTip(i18n("Choose workspace"));
     m_workspaceWidget->setFixedSize(32, 32);
