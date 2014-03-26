@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2014 Dan Leinir Turthra Jensen <admin@leinir.dk>
+ * Copyright (C) 2012 Dan Leinir Turthra Jensen <admin@leinir.dk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,15 +20,15 @@ import QtQuick 1.1
 import "../../components"
 
 Item {
-    height: opacity > 0 ? Constants.GridHeight * 1.5 + Constants.DefaultMargin * 2 : 0;
-    opacity: toolManager.currentTool.isActive ? 1 : 0;
-    Behavior on opacity { PropertyAnimation { duration: 200; } }
+    height: Constants.GridHeight * 1.5 + Constants.DefaultMargin * 2;
     Rectangle {
         anchors {
             top: parent.top;
             bottom: parent.bottom;
             right: parent.right;
         }
+        opacity: toolManager.currentTool.isActive ? 1 : 0;
+        Behavior on opacity { PropertyAnimation { duration: 200; } }
         width: Constants.GridWidth * 3 + Constants.DefaultMargin * 3;
         color: "#63ffffff";
         border.width: 1;

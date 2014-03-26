@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2014 Dan Leinir Turthra Jensen <admin@leinir.dk>
+ * Copyright (C) 2012 Dan Leinir Turthra Jensen <admin@leinir.dk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -36,8 +36,6 @@ Item {
 
     Loader {
         id: toolOverlayContainer;
-        y: height > 0 ? 0 : Constants.DefaultMargin * 2;
-        Behavior on y { PropertyAnimation { duration: 150; } }
         width: parent.width;
         height: item.childrenRect.height;
         source: "tooloverlays/none.qml";
