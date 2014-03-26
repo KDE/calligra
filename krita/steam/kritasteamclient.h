@@ -28,7 +28,7 @@
 #include <QObject>
 
 #include "steam/steam_api.h"
-#include "image/krita_export.h"
+#include "sketch/krita_sketch_export.h"
 
 // forward declaration
 class QTimer;
@@ -36,7 +36,7 @@ class QTimer;
 /**
  * Handles interaction with the Steam API
  */
-class KRITASKETCH_EXPORT KritaSteamClient : public QObject
+class KRITA_SKETCH_EXPORT KritaSteamClient : public QObject
 {
     Q_OBJECT
 public:
