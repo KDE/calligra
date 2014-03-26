@@ -164,7 +164,7 @@ void MainWindow::adjustZoomOnDocumentChangedAndStuff()
         qApp->processEvents();
         d->sketchKisView->zoomController()->setZoom(KoZoomMode::ZOOM_PAGE, 1.0);
         qApp->processEvents();
-        QPoint center = d->sketchKisView->rect().center();
+        QPoint center = d->sketchKisView->mainWindow()->rect().center();
         d->sketchKisView->canvasControllerWidget()->zoomRelativeToPoint(center, 0.9);
         qApp->processEvents();
     }

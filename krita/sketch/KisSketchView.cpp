@@ -329,7 +329,7 @@ void KisSketchView::documentChanged()
     connect(d->view, SIGNAL(floatingMessageRequested(QString,QString)), this, SIGNAL(floatingMessageRequested(QString,QString)));
     
     d->view->canvasControllerWidget()->setGeometry(x(), y(), width(), height());
-    d->view->hide();
+    d->view->mainWindow()->hide();
     d->canvas = d->view->canvasBase();
 
     d->undoStack = d->doc->undoStack();
@@ -520,10 +520,10 @@ bool KisSketchView::sceneEvent(QEvent* event)
 void KisSketchView::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry)
 {
     if (d->canvasWidget && !newGeometry.isEmpty()) {
-        d->view->resize(newGeometry.toRect().size());
+        d->view->mainWindow()->resize(newGeometry.toRect().size());
         // If we don't ask for this event to be sent, the view does not actually handle
         // the resize, and we're stuck with a very oddly sized viewport
-        QResizeEvent *event = new QResizeEvent(newGeometry.toRect().size(), d->view->size());
+        QResizeEvent *event = new QResizeEvent(newGeometry.toRect().size(), d->view->mainWindow()->size());
         QApplication::sendEvent(d->view, event);
         // This is a touch on the hackish side - i'm sure there's a better way of doing it
         // but it's taking a long time to work it out. Problem: When switching orientation,

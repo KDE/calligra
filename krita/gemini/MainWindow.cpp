@@ -397,7 +397,7 @@ void MainWindow::adjustZoomOnDocumentChangedAndStuff()
         qApp->processEvents();
         view->zoomController()->setZoom(KoZoomMode::ZOOM_PAGE, 1.0);
         qApp->processEvents();
-        QPoint center = view->rect().center();
+        QPoint center = view->mainWindow()->rect().center();
         view->canvasControllerWidget()->zoomRelativeToPoint(center, 0.9);
         qApp->processEvents();
         // We have to set the focus on the view here, otherwise the toolmanager is unaware of which
@@ -410,7 +410,7 @@ void MainWindow::adjustZoomOnDocumentChangedAndStuff()
         qApp->processEvents();
         d->sketchKisView->zoomController()->setZoom(KoZoomMode::ZOOM_PAGE, 1.0);
         qApp->processEvents();
-        QPoint center = d->sketchKisView->rect().center();
+        QPoint center = d->sketchKisView->mainWindow()->rect().center();
         d->sketchKisView->canvasControllerWidget()->zoomRelativeToPoint(center, 0.9);
         qApp->processEvents();
         d->toDesktop->setEnabled(true);
@@ -425,11 +425,12 @@ void MainWindow::documentChanged()
         d->desktopView = 0;
     }
     d->initDesktopView();
-    KisView2 *view = static_cast<KisView2*>(DocumentManager::instance()->part()->createView(DocumentManager::instance()->document()));
-    d->desktopView->addView(view);
+    // XXX_MVC: this is the big issue for the gemini port!
+    //KisView2 *view = static_cast<KisView2*>(DocumentManager::instance()->part()->createView(DocumentManager::instance()->document()));
+    //d->desktopView->addView(view);
     qApp->processEvents();
-    view->setQtMainWindow(d->desktopView);
-    connect(view, SIGNAL(sigLoadingFinished()), d->centerer, SLOT(start()));
+    //view->setQtMainWindow(d->desktopView);
+    //connect(view, SIGNAL(sigLoadingFinished()), d->centerer, SLOT(start()));
     if (d->sketchKisView)
         d->sketchKisView->setQtMainWindow(this);
     if (!d->forceSketch && !d->slateMode)
