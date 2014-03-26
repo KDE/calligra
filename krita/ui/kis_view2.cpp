@@ -233,8 +233,8 @@ KisView2::KisView2(QWidget *parent)
             action->setShortcut(QKeySequence(), KAction::ActiveShortcut);
         }
 
-        KoToolBoxFactory toolBoxFactory(canvasController());
-        mainWindow()->createDockWidget(&toolBoxFactory);
+        //KoToolBoxFactory toolBoxFactory(canvasController());
+        //mainWindow()->createDockWidget(&toolBoxFactory);
 
         connect(canvasControllerWidget(), SIGNAL(toolOptionWidgetsChanged(QList<QPointer<QWidget> >)),
                 mainWindow()->dockerManager(), SLOT(newOptionWidgets(QList<QPointer<QWidget> >)));
@@ -257,8 +257,8 @@ KisView2::KisView2(QWidget *parent)
     connect(d->nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)),
             resourceProvider(), SLOT(slotNodeActivated(KisNodeSP)));
 
-    connect(resourceProvider()->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
-            d->controlFrame->paintopBox(), SLOT(slotCanvasResourceChanged(int,QVariant)));
+//    connect(resourceProvider()->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
+//            d->controlFrame->paintopBox(), SLOT(slotCanvasResourceChanged(int,QVariant)));
 
 
     loadPlugins();
@@ -278,18 +278,18 @@ KisView2::KisView2(QWidget *parent)
     }
 #endif
 
-    KoResourceServer<KisPaintOpPreset> * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
-    KisPaintOpPreset *preset = rserver->resourceByName("Basic_tip_default");
-    if (!preset) {
-        if (rserver->resources().isEmpty()) {
-            KMessageBox::error(mainWindow(), i18n("Krita cannot find any brush presets and will close now. Please check your installation.", i18n("Critical Error")));
-            exit(0);
-        }
-        preset = rserver->resources().first();
-    }
-    if (preset) {
-        paintOpBox()->resourceSelected(preset);
-    }
+//    KoResourceServer<KisPaintOpPreset> * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
+//    KisPaintOpPreset *preset = rserver->resourceByName("Basic_tip_default");
+//    if (!preset) {
+//        if (rserver->resources().isEmpty()) {
+//            KMessageBox::error(mainWindow(), i18n("Krita cannot find any brush presets and will close now. Please check your installation.", i18n("Critical Error")));
+//            exit(0);
+//        }
+//        preset = rserver->resources().first();
+//    }
+//    if (preset) {
+//        paintOpBox()->resourceSelected(preset);
+//    }
 
 }
 

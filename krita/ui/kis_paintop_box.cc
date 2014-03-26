@@ -266,7 +266,9 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     m_currCompositeOpID = KoCompositeOpRegistry::instance().getDefaultCompositeOp().id();
 
     slotNodeChanged(view->activeNode());
-    updatePaintops(view->image()->colorSpace());
+    if (view->image()) {
+        updatePaintops(view->image()->colorSpace());
+    }
 
     connect(m_presetsPopup       , SIGNAL(paintopActivated(QString))          , SLOT(slotSetPaintop(QString)));
     connect(m_presetsPopup       , SIGNAL(savePresetClicked())                , SLOT(slotSaveActivePreset()));
@@ -292,7 +294,10 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     connect(m_sliderChooser[2]->getWidget<KisDoubleSliderSpinBox>("size")   , SIGNAL(valueChanged(qreal)), SLOT(slotSlider3Changed()));
 
     //Needed to connect canvas to favorite resource manager
-    m_view->canvasBase()->createFavoriteResourceManager(this);
+    if (m_view && m_view->canvasBase()) {
+        m_view->canvasBase()->createFavoriteResourceManager(this);
+    }
+
     connect(m_view->resourceProvider(), SIGNAL(sigOpacityChanged(qreal)), SLOT(slotOpacityChanged(qreal)));
     connect(m_view->resourceProvider(), SIGNAL(sigFGColorChanged(KoColor)), SLOT(slotUnsetEraseMode()));
 }
