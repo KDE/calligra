@@ -156,9 +156,11 @@ void PaletteDockerDock::setCanvas(KoCanvasBase * canvas)
         m_canvas->view()->nodeManager()->disconnect(m_model);
     }
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
-    KisView2* view = m_canvas->view();
-    connect(view->resourceProvider(), SIGNAL(sigSavingWorkspace(KisWorkspaceResource*)), SLOT(saveToWorkspace(KisWorkspaceResource*)));
-    connect(view->resourceProvider(), SIGNAL(sigLoadingWorkspace(KisWorkspaceResource*)), SLOT(loadFromWorkspace(KisWorkspaceResource*)));
+    if (m_canvas && m_canvas->view()) {
+        KisView2* view = m_canvas->view();
+        connect(view->resourceProvider(), SIGNAL(sigSavingWorkspace(KisWorkspaceResource*)), SLOT(saveToWorkspace(KisWorkspaceResource*)));
+        connect(view->resourceProvider(), SIGNAL(sigLoadingWorkspace(KisWorkspaceResource*)), SLOT(loadFromWorkspace(KisWorkspaceResource*)));
+    }
 }
 
 void PaletteDockerDock::setColorSet(KoColorSet* colorSet)

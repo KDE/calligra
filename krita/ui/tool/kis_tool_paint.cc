@@ -69,6 +69,7 @@
 #include "kis_tool_utils.h"
 #include <kis_paintop.h>
 #include <kis_paintop_preset.h>
+#include "kis_image_view.h"
 
 KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
     : KisTool(canvas, cursor),
@@ -102,7 +103,7 @@ KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
 
     KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas);
     connect(this, SIGNAL(sigFavoritePaletteCalled(const QPoint&)), kiscanvas, SIGNAL(favoritePaletteCalled(const QPoint&)));
-    connect(this, SIGNAL(sigPaintingFinished()), kiscanvas->view()->resourceProvider(), SLOT(slotPainting()));
+    connect(this, SIGNAL(sigPaintingFinished()), kiscanvas->imageView()->resourceProvider(), SLOT(slotPainting()));
 }
 
 

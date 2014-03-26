@@ -31,7 +31,7 @@
 #include <kis_canvas_resource_provider.h>
 #include <kis_pattern_chooser.h>
 #include <KoPattern.h>
-
+#include <kis_image_view.h>
 
 PatternDockerDock::PatternDockerDock( )
     : QDockWidget(i18n("Patterns"))
@@ -56,11 +56,11 @@ void PatternDockerDock::setCanvas(KoCanvasBase * canvas)
     Q_ASSERT(m_canvas);
     if (!m_canvas) return;
 
-    connect(m_canvas->view()->resourceProvider(), SIGNAL(sigPatternChanged(KoPattern*)),
+    connect(m_canvas->imageView()->resourceProvider(), SIGNAL(sigPatternChanged(KoPattern*)),
             this, SLOT(patternChanged(KoPattern*)));
 
     connect(m_patternChooser, SIGNAL(resourceSelected(KoResource*)),
-            m_canvas->view()->resourceProvider(), SLOT(slotPatternActivated(KoResource*)));
+            m_canvas->imageView()->resourceProvider(), SLOT(slotPatternActivated(KoResource*)));
 
 }
 

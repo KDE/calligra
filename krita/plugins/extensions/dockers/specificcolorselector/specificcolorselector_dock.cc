@@ -50,6 +50,8 @@ void SpecificColorSelectorDock::setCanvas(KoCanvasBase * canvas)
     Q_ASSERT(canvas);
     KisView2* view = kisCanvas->view();
 
+    if (!view) return;
+
     if (m_colorSelector) {
         m_colorSelector->disconnect(); // explicit disconnect in case Qt gets confused.
         delete m_colorSelector;

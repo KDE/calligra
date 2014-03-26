@@ -151,6 +151,7 @@ public: // KisCanvas2 methods
 
     KisImageWSP image() const;
     KisView2* view() const;
+    KisImageView *imageView() const;
 
     /// @return true if the canvas image should be displayed in vertically mirrored mode
     void addDecoration(KisCanvasDecoration* deco);

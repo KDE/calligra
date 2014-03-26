@@ -37,7 +37,8 @@
 KisInfinityManager::KisInfinityManager(KisView2 *view, KisCanvas2 *canvas)
     : KisCanvasDecoration(INFINITY_DECORATION_ID, i18n("Expand into Infinity Decoration"), view),
       m_filterInstalled(false),
-      m_cursorSwitched(false)
+      m_cursorSwitched(false),
+      m_canvas(canvas)
 {
     connect(canvas, SIGNAL(documentOffsetUpdateFinished()), SLOT(imagePositionChanged()));
 }
@@ -54,8 +55,8 @@ inline void KisInfinityManager::addDecoration(const QRect &areaRect, const QPoin
 
 void KisInfinityManager::imagePositionChanged()
 {
-    QRect imageRect = view()->canvasBase()->coordinatesConverter()->imageRectInWidgetPixels().toAlignedRect();
-    QRect widgetRect = view()->canvasBase()->canvasWidget()->rect();
+    QRect imageRect = m_canvas->coordinatesConverter()->imageRectInWidgetPixels().toAlignedRect();
+    QRect widgetRect = m_canvas->canvasWidget()->rect();
 
     KisConfig cfg;
     qreal vastScrolling = cfg.vastScrolling();
@@ -109,11 +110,11 @@ void KisInfinityManager::imagePositionChanged()
     setVisible(visible);
 
     if (visible && !m_filterInstalled) {
-        view()->canvasBase()->inputManager()->attachPriorityEventFilter(this);
+        m_canvas->inputManager()->attachPriorityEventFilter(this);
     }
 
     if (!visible && m_filterInstalled) {
-        view()->canvasBase()->inputManager()->detachPriorityEventFilter(this);
+        m_canvas->inputManager()->detachPriorityEventFilter(this);
     }
 }
 
@@ -160,13 +161,13 @@ bool KisInfinityManager::eventFilter(QObject *obj, QEvent *event)
 
         if (m_decorationPath.contains(mouseEvent->pos())) {
             if (!m_cursorSwitched) {
-                m_oldCursor = view()->canvas()->cursor();
+                m_oldCursor = m_canvas->canvasWidget()->cursor();
                 m_cursorSwitched = true;
             }
-            view()->canvas()->setCursor(Qt::PointingHandCursor);
+            m_canvas->canvasWidget()->setCursor(Qt::PointingHandCursor);
             retval = true;
         } else if (m_cursorSwitched) {
-            view()->canvas()->setCursor(m_oldCursor);
+            m_canvas->canvasWidget()->setCursor(m_oldCursor);
             m_cursorSwitched = false;
         }
         break;
@@ -186,8 +187,8 @@ bool KisInfinityManager::eventFilter(QObject *obj, QEvent *event)
         retval = mouseEvent->button() == Qt::LeftButton && m_cursorSwitched;
 
         if (retval) {
-            const KisCoordinatesConverter *converter = view()->canvasBase()->coordinatesConverter();
-            QRect widgetRect = converter->widgetToImage(view()->canvas()->rect()).toAlignedRect();
+            const KisCoordinatesConverter *converter = m_canvas->coordinatesConverter();
+            QRect widgetRect = converter->widgetToImage(m_canvas->canvasWidget()->rect()).toAlignedRect();
             KisImageWSP image = view()->document()->image();
             QRect cropRect = widgetRect | image->bounds();
             image->resizeImage(cropRect);

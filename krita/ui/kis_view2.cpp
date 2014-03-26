@@ -337,10 +337,9 @@ void KisView2::setCurrentView(KoView *view)
             slotLoadingFinished();
         }
 
-        connect(canvasController()->proxyObject, SIGNAL(documentMousePositionChanged(QPointF)),
-                d->statusBar, SLOT(documentMousePositionChanged(QPointF)));
+//        connect(canvasController()->proxyObject, SIGNAL(documentMousePositionChanged(QPointF)), d->statusBar, SLOT(documentMousePositionChanged(QPointF)));
 
-        mainWindow()->statusBar()->addWidget(imageView->zoomManager()->zoomActionWidget());
+//        mainWindow()->statusBar()->addWidget(imageView->zoomManager()->zoomActionWidget());
         mainWindow()->guiFactory()->addClient(imageView);
         imageView->setParentView(this);
         d->currentImageView = imageView;
@@ -733,17 +732,17 @@ void KisView2::createManagers()
     d->imageManager = new KisImageManager(this);
     d->imageManager->setup(actionCollection(), actionManager());
 
-//    d->gridManager = new KisGridManager(this);
-//    d->gridManager->setup(actionCollection());
-//    d->canvas->addDecoration(d->gridManager);
+    d->gridManager = new KisGridManager(this);
+    //d->gridManager->setup(actionCollection());
+    //d->canvas->addDecoration(d->gridManager);
 
-//    d->perspectiveGridManager = new KisPerspectiveGridManager(this);
-//    d->perspectiveGridManager->setup(actionCollection());
-//    d->canvas->addDecoration(d->perspectiveGridManager);
+    d->perspectiveGridManager = new KisPerspectiveGridManager(this);
+    //d->perspectiveGridManager->setup(actionCollection());
+    //d->canvas->addDecoration(d->perspectiveGridManager);
 
-//    d->paintingAssistantManager = new KisPaintingAssistantsManager(this);
-//    d->paintingAssistantManager->setup(actionCollection());
-//    d->canvas->addDecoration(d->paintingAssistantManager);
+    d->paintingAssistantManager = new KisPaintingAssistantsManager(this);
+    //d->paintingAssistantManager->setup(actionCollection());
+    //d->canvas->addDecoration(d->paintingAssistantManager);
 
     d->canvasControlsManager = new KisCanvasControlsManager(this);
     d->canvasControlsManager->setup(actionCollection(), actionManager());

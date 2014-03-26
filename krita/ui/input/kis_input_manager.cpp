@@ -487,10 +487,13 @@ KisInputManager::KisInputManager(KisCanvas2 *canvas, KisToolProxy *proxy)
      * There really should be a better way to handle this, one that neither
      * relies on "hidden" mouse interaction or shortcuts.
      */
-    KAction *setMirrorAxis = new KAction(i18n("Set Mirror Axis"), this);
-    d->canvas->view()->actionCollection()->addAction("set_mirror_axis", setMirrorAxis);
-    setMirrorAxis->setShortcut(QKeySequence("Shift+r"));
-    connect(setMirrorAxis, SIGNAL(triggered(bool)), SLOT(setMirrorAxis()));
+//    KAction *setMirrorAxis = new KAction(i18n("Set Mirror Axis"), this);
+//    Q_ASSERT(d->canvas);
+//    Q_ASSERT(d->canvas->view());
+//    Q_ASSERT(d->canvas->view()->actionCollection());
+//    d->canvas->view()->actionCollection()->addAction("set_mirror_axis", setMirrorAxis);
+//    setMirrorAxis->setShortcut(QKeySequence("Shift+r"));
+//    connect(setMirrorAxis, SIGNAL(triggered(bool)), SLOT(setMirrorAxis()));
 
     connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*,int)),
             SLOT(slotToolChanged()));

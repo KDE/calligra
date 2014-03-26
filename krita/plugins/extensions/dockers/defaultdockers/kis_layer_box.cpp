@@ -279,7 +279,6 @@ void expandNodesRecursively(KisNodeSP root, QPointer<KisNodeModel> nodeModel, Ko
 
 void KisLayerBox::setCanvas(KoCanvasBase *canvas)
 {
-
     if (m_canvas) {
         m_canvas->disconnectCanvasObserver(this);
         m_nodeModel->setDummiesFacade(0, 0, 0);
@@ -292,7 +291,7 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
 
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
 
-    if (m_canvas) {
+    if (m_canvas && m_canvas->view()) {
         m_image = m_canvas->view()->image();
 
         m_nodeManager = m_canvas->view()->nodeManager();

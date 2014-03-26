@@ -34,10 +34,12 @@ class KisDoc2;
 class KisCanvasResourceProvider;
 class KisCoordinatesConverter;
 
+#include <krita_export.h>
+
 /**
  * @brief The KisImageView class shows a single document's image in a canvas.
  */
-class KisImageView : public KoView
+class KRITAUI_EXPORT KisImageView : public KoView
 {
     Q_OBJECT
 public:

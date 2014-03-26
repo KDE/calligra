@@ -264,7 +264,7 @@ void KisCanvas2::stopMacro()
 KoShapeManager* KisCanvas2::shapeManager() const
 {
     if (!m_d->view) return m_d->shapeManager;
-    if (!view()->nodeManager()) return m_d->shapeManager;
+    if (!view() || !view()->nodeManager()) return m_d->shapeManager;
 
     KisLayerSP activeLayer = view()->nodeManager()->activeLayer();
     if (activeLayer && activeLayer->isEditable()) {
@@ -357,7 +357,7 @@ void KisCanvas2::createOpenGLCanvas()
 void KisCanvas2::createCanvas(bool useOpenGL)
 {
     KisConfig cfg;
-    const KoColorProfile *profile = view()->resourceProvider()->currentDisplayProfile();
+    const KoColorProfile *profile = m_d->view->resourceProvider()->currentDisplayProfile();
     m_d->monitorProfile = const_cast<KoColorProfile*>(profile);
 
     m_d->conversionFlags = KoColorConversionTransformation::HighQuality;
@@ -702,6 +702,11 @@ KisView2* KisCanvas2::view() const
         return m_d->view->parentView();
     }
     return 0;
+}
+
+KisImageView *KisCanvas2::imageView() const
+{
+    return m_d->view;
 }
 
 KisImageWSP KisCanvas2::image() const

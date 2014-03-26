@@ -764,6 +764,8 @@ void KisPaintopBox::slotToolChanged(KoCanvasController* canvas, int toolId)
     Q_UNUSED(canvas);
     Q_UNUSED(toolId);
     
+    if (!m_view->canvasBase()) return;
+
     QString  id   = KoToolManager::instance()->activeToolId();
     KisTool* tool = dynamic_cast<KisTool*>(KoToolManager::instance()->toolById(m_view->canvasBase(), id));
     

@@ -82,7 +82,7 @@ CompositionDockerDock::~CompositionDockerDock()
 void CompositionDockerDock::setCanvas(KoCanvasBase * canvas)
 {
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
-    updateModel();
+//    updateModel();
 }
 
 void CompositionDockerDock::unsetCanvas()

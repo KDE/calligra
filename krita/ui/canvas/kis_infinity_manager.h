@@ -50,6 +50,7 @@ private:
     bool m_cursorSwitched;
     QCursor m_oldCursor;
     QVector<QTransform> m_handleTransform;
+    KisCanvas2 *m_canvas;
 };
 
 #endif /* __KIS_INFINITY_MANAGER_H */

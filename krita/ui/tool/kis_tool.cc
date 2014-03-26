@@ -166,7 +166,7 @@ void KisTool::activate(ToolActivation, const QSet<KoShape*> &)
                                                            resource(KisCanvasResourceProvider::CurrentGradient).value<void *>());
 
 
-    canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>()->settings()->activate();
+    //canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>()->settings()->activate();
 
     d->currentNode = canvas()->resourceManager()->
             resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>();
