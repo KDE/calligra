@@ -126,8 +126,13 @@ target_link_libraries(kritasketchlib
     kowidgets
     ${KDE4_KFILE_LIBRARY}
     ${GLEW_LIBRARIES}
-    ${STEAMWORKS_LIBRARY}
 )
+
+if (HAVE_STEAMWORKS)
+    target_link_libraries(kritasketchlib
+        ${STEAMWORKS_LIBRARY}
+    )
+endif (HAVE_STEAMWORKS)
 
 include(GNUInstallDirs)
 
