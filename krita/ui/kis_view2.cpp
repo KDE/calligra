@@ -290,7 +290,7 @@ KisView2::KisView2(QWidget *parent)
 //    if (preset) {
 //        paintOpBox()->resourceSelected(preset);
 //    }
-
+    d->actionManager->updateGUI();
 }
 
 
@@ -350,6 +350,7 @@ void KisView2::setCurrentView(KoView *view)
     d->nodeManager->setView(imageView);
     d->imageManager->setView(imageView);
     d->canvasControlsManager->setView(imageView);
+    d->actionManager->setView(imageView);
 
 }
 
