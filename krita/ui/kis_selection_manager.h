@@ -143,10 +143,10 @@ private:
     KAction *m_pasteAt;
     KAction *m_pasteNew;
     KisAction *m_cutToNewLayer;
-    KAction *m_selectAll;
-    KAction *m_deselect;
-    KAction *m_clear;
-    KAction *m_reselect;
+    KisAction *m_selectAll;
+    KisAction *m_deselect;
+    KisAction *m_clear;
+    KisAction *m_reselect;
     KisAction *m_invert;
     KisAction *m_copyToNewLayer;
 //     KAction *m_load;

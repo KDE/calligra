@@ -352,6 +352,7 @@ void KisView2::setCurrentView(KoView *view)
     d->canvasControlsManager->setView(imageView);
     d->actionManager->setView(imageView);
 
+    actionManager()->updateGUI();
 }
 
 KoZoomController *KisView2::zoomController() const

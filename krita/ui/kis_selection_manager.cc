@@ -45,6 +45,7 @@
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
 #include <KoToolProxy.h>
+#include <KoIcon.h>
 
 #include "kis_image_view.h"
 #include "kis_adjustment_layer.h"
@@ -140,15 +141,23 @@ void KisSelectionManager::setup(KActionCollection * collection, KisActionManager
     m_copyMerged->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_C));
     connect(m_copyMerged, SIGNAL(triggered()), this, SLOT(copyMerged()));
 
-    m_selectAll = collection->addAction(KStandardAction::SelectAll,  "select_all", this, SLOT(selectAll()));
+    m_selectAll = new KisAction(koIcon("edit-select-all"), i18n("Select &All"), this);
+    actionManager->addAction("select_all", m_selectAll, collection);
+    m_selectAll->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_A));
+    connect(m_selectAll, SIGNAL(triggered()), this, SLOT(selectAll()));
 
-    m_deselect = collection->addAction(KStandardAction::Deselect,  "deselect", this, SLOT(deselect()));
+    m_deselect = new KisAction(koIcon("edit-select-all"), i18n("Deselect"), this);
+    actionManager->addAction("deselect", m_deselect, collection);
+    m_deselect->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_A));
+    connect(m_deselect, SIGNAL(triggered()), this, SLOT(deselect()));
 
-    m_clear = collection->addAction(KStandardAction::Clear,  "clear", this, SLOT(clear()));
+    m_clear = new KisAction(koIcon("edit-clear"), i18n("Deselect"), this);
+    actionManager->addAction("clear", m_clear, collection);
     m_clear->setShortcut(QKeySequence((Qt::Key_Delete)));
+    connect(m_clear, SIGNAL(triggered()), this, SLOT(clear()));
 
-    m_reselect  = new KAction(i18n("&Reselect"), this);
-    collection->addAction("reselect", m_reselect);
+    m_reselect  = new KisAction(i18n("&Reselect"), this);
+    actionManager->addAction("select_all", m_reselect, collection);
     m_reselect->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_D));
     connect(m_reselect, SIGNAL(triggered()), this, SLOT(reselect()));
 
