@@ -164,6 +164,8 @@ public:
         , actionManager(0)
         , mainWindow(0)
         , currentImageView(0)
+        , canvasResourceProvider(0)
+        , canvasResourceManager(0)
     {
     }
 
@@ -179,6 +181,8 @@ public:
         delete statusBar;
         delete actionManager;
         delete canvasControlsManager;
+        delete canvasResourceProvider;
+        delete canvasResourceManager;
     }
 
 public:
@@ -204,6 +208,8 @@ public:
     KisActionManager* actionManager;
     QMainWindow* mainWindow;
     KisImageView* currentImageView;
+    KisCanvasResourceProvider* canvasResourceProvider;
+    KoCanvasResourceManager* canvasResourceManager;
 };
 
 
@@ -214,6 +220,10 @@ KisView2::KisView2(QWidget *parent)
     d->mainWindow = dynamic_cast<QMainWindow*>(parent);
 
     setXMLFile(QString("%1.rc").arg(qAppName()));
+
+    d->canvasResourceProvider = new KisCanvasResourceProvider(0);
+    d->canvasResourceManager = new KoCanvasResourceManager();
+    d->canvasResourceProvider->setResourceManager(d->canvasResourceManager);
 
     createActions();
     createManagers();
@@ -370,10 +380,7 @@ KisImageWSP KisView2::image() const
 
 KisCanvasResourceProvider * KisView2::resourceProvider()
 {
-    if (d && d->currentImageView) {
-        return resourceProvider();
-    }
-    return 0;
+    return d->canvasResourceProvider;
 }
 
 KisCanvas2 *KisView2::canvasBase() const
