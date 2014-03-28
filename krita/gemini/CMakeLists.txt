@@ -25,6 +25,10 @@ else (WIN32)
     kde4_add_app_icon(kritagemini_SRCS "${KDE4_ICON_DIR}/oxygen/*/apps/kritagemini.png")
 endif (WIN32)
 
+if (HAVE_STEAMWORKS)
+set_source_files_properties(main.cpp PROPERTIES COMPILE_FLAGS -DSTEAM_APP_ID=${STEAM_APP_ID})
+endif (HAVE_STEAMWORKS)
+
 # Krita Gemini application
 # =============================================================================
 

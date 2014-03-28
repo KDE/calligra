@@ -43,6 +43,13 @@
 
 #if defined HAVE_STEAMWORKS
 #include "steam/kritasteam.h"
+
+#ifndef STEAM_APP_ID
+#pragma warning "No Steam APP ID! You will require steam_appid.txt in your executable directory to define this."
+#include <steam/steamtypes.h>
+#define STEAM_APP_ID k_uAppIdInvalid
+#endif
+#define KRITA_SKETCH_APPID STEAM_APP_ID
 #endif
 
 #if defined Q_OS_WIN

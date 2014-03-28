@@ -73,13 +73,14 @@ bool KritaSteamClient::initialise(uint32 appId)
 {
     const char* steamLanguage = 0;
 
-    qDebug("RestartSteam Test");
-    if (SteamAPI_RestartAppIfNecessary(appId))
-    {
-        // if Steam isn't running or Krita is not launched from Steam, this
-        // starts the local client and launches it again.
-        qDebug("Starting the local Steam client and launching through Steam");
-        return false;
+    if (appId != k_uAppIdInvalid) {
+        if (SteamAPI_RestartAppIfNecessary(appId))
+        {
+            // if Steam isn't running or Krita is not launched from Steam, this
+            // starts the local client and launches it again.
+            qDebug("Starting the local Steam client and launching through Steam");
+            return false;
+        }
     }
 
     // Check for Big Picture mode
@@ -123,8 +124,6 @@ bool KritaSteamClient::initialise(uint32 appId)
         qDebug("Initialising Steam Controller");
         SteamController()->Init( rgchFullPath );
         */
-
-
     } else {
         qDebug("Steam did not initialise!");
         return false;
