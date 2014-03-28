@@ -300,6 +300,13 @@ KisView2::KisView2(QWidget *parent)
 //    if (preset) {
 //        paintOpBox()->resourceSelected(preset);
 //    }
+
+    foreach(const QString & docker, KoDockRegistry::instance()->keys()) {
+        KoDockFactoryBase *factory = KoDockRegistry::instance()->value(docker);
+        if (mainWindow())
+            mainWindow()->createDockWidget(factory);
+    }
+
     d->actionManager->updateGUI();
 }
 
