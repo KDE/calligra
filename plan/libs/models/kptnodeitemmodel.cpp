@@ -3899,7 +3899,7 @@ bool NodeItemModel::dropProjectMimeData( const QMimeData *data, Qt::DropAction a
         return false;
     }
     project.generateUniqueNodeIds();
-    KUndo2Command *cmd = new InsertProjectCmd( project, n, n->childNode( row - 1 ), i18nc( "(qtundo) 1=project or task name", "Insert %1", project.name() ) );
+    KUndo2Command *cmd = new InsertProjectCmd( project, n, n->childNode( row - 1 ), i18nc( "(qtundo-format) 1=project or task name", "Insert %1", project.name() ) );
     emit executeCommand( cmd );
     return true;
 }
@@ -3957,7 +3957,7 @@ bool NodeItemModel::importProjectFile( const KUrl &url, Qt::DropAction /*action*
     if ( n == 0 ) {
         n = m_project;
     }
-    KUndo2Command *cmd = new InsertProjectCmd( project, n, n->childNode( row - 1 ), i18nc( "(qtundo)", "Insert %1", url.fileName() ) );
+    KUndo2Command *cmd = new InsertProjectCmd( project, n, n->childNode( row - 1 ), i18nc( "(qtundo-format)", "Insert %1", url.fileName() ) );
     emit executeCommand( cmd );
     return true;
 }
