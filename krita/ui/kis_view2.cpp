@@ -127,6 +127,7 @@
 #include "kis_action_manager.h"
 #include "input/kis_input_profile_manager.h"
 #include "kis_canvas_controls_manager.h"
+#include "kis_mainwindow_observer.h"
 
 
 
@@ -305,6 +306,12 @@ KisView2::KisView2(QWidget *parent)
         KoDockFactoryBase *factory = KoDockRegistry::instance()->value(docker);
         if (mainWindow())
             mainWindow()->createDockWidget(factory);
+    }
+    foreach(KoCanvasObserverBase* observer, mainWindow()->canvasObservers()) {
+        KisMainwindowObserver* mainwindowObserver = dynamic_cast<KisMainwindowObserver*>(observer);
+        if (mainwindowObserver) {
+            mainwindowObserver->setCanvasResourceProvider(d->canvasResourceProvider);
+        }
     }
 
     d->actionManager->updateGUI();
