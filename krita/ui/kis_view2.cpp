@@ -1553,6 +1553,9 @@ void KisView2::updateIcons()
     QStringList whitelist;
     whitelist << "ToolBox";
 
+    QStringList blacklistedIcons;
+    blacklistedIcons << "editpath" << "artistictext-tool";
+
     QList<QDockWidget*> dockers = mainWindow()->dockWidgets();
     foreach(QDockWidget* dock, dockers) {
         if (!whitelist.contains(dock->objectName())) {
@@ -1569,10 +1572,12 @@ void KisView2::updateIcons()
             if (button && !button->icon().name().isEmpty()) {
                 QString name = button->icon().name();
                 name = name.remove("dark_").remove("light_");
-                QString iconName = prefix + name;
 
-                KIcon icon = koIcon(iconName.toLatin1());
-                button->setIcon(icon);
+                if (!blacklistedIcons.contains(name)) {
+                    QString iconName = prefix + name;
+                    KIcon icon = koIcon(iconName.toLatin1());
+                    button->setIcon(icon);
+                }
             }
         }
     }
