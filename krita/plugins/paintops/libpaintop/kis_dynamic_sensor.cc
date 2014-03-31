@@ -26,6 +26,8 @@
 #include "sensors/kis_dynamic_sensor_fade.h"
 #include "sensors/kis_dynamic_sensor_fuzzy.h"
 
+static int sensorcount = 0;
+
 KisDynamicSensor::KisDynamicSensor(const KoID& id)
     : m_id(id)
     , m_customCurve(false)
