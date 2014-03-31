@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Perspective GridNg Tool
+X-KDE-ServiceTypes=Krita/Tool
+Type=Service
+X-KDE-Library=kritatoolperspectivegridng
+X-Krita-Version=28
+Name[en]=Perspective GridNg Tool

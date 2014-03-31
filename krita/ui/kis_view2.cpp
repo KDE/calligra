@@ -90,6 +90,7 @@
 #include "canvas/kis_canvas_controller.h"
 #include "canvas/kis_grid_manager.h"
 #include "canvas/kis_perspective_grid_manager.h"
+#include "kis_perspective_grid_managerng.h"
 #include "dialogs/kis_dlg_preferences.h"
 #include "dialogs/kis_dlg_blacklist_cleanup.h"
 #include "kis_canvas_resource_provider.h"
@@ -167,6 +168,7 @@ public:
         , imageManager(0)
         , gridManager(0)
         , perspectiveGridManager(0)
+        , perspectiveGridNgManager(0)
         , paintingAssistantManager(0)
         , actionManager(0)
     {
@@ -186,6 +188,7 @@ public:
         delete imageManager;
         delete gridManager;
         delete perspectiveGridManager;
+        delete perspectiveGridNgManager;
         delete paintingAssistantManager;
         delete viewConverter;
         delete statusBar;
@@ -794,6 +797,10 @@ void KisView2::createManagers()
     m_d->perspectiveGridManager = new KisPerspectiveGridManager(this);
     m_d->perspectiveGridManager->setup(actionCollection());
     m_d->canvas->addDecoration(m_d->perspectiveGridManager);
+
+    m_d->perspectiveGridNgManager = new KisPerspectiveGridNgManager(this);
+    m_d->perspectiveGridNgManager->setup(actionCollection());
+    m_d->canvas->addDecoration(m_d->perspectiveGridNgManager);
 
     m_d->paintingAssistantManager = new KisPaintingAssistantsManager(this);
     m_d->paintingAssistantManager->setup(actionCollection());

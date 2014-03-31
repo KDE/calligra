@@ -75,7 +75,7 @@ protected:
 
 protected:
     KisCanvas2* m_canvas;
-    QList<KisPerspectiveGridNgHandleSP> m_handles, m_sideHandles;
+    QList<KisPerspectiveGridNgHandleSP> m_handles, m_sideHandles,m_perspectiveHandles;
     KisPerspectiveGridNgHandleSP m_handleDrag;
     KisPerspectiveGridNgHandleSP m_handleCombine;
     KisPerspectiveGridNg* m_assistantDrag;
@@ -97,6 +97,7 @@ class KisPerspectiveGridNgToolFactory : public KoToolFactoryBase
 public:
     KisPerspectiveGridNgToolFactory()
             : KoToolFactoryBase("KisPerspectiveGridNgTool") {
+        qDebug()<<"Shiva: " << "KisPerspectiveGridNgToolFactory";
         setToolTip(i18n("Perspective Grid Editor"));
         setToolType(TOOL_TYPE_VIEW);
         setIconName(koIconNameCStr("krita_tool_perspectivegridng"));

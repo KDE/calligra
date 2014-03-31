@@ -41,6 +41,7 @@ class QRectF;
 class KisCoordinatesConverter;
 class KisDoc2;
 
+#include "kis_abstract_perspective_grid.h"
 #include <kis_shared_ptr.h>
 #include <KoGenericRegistry.h>
 
@@ -80,11 +81,12 @@ private:
  * A KisPerspectiveGridNg is an object that assist the drawing on the canvas.
  * With this class you can implement virtual equivalent to ruler or compas.
  */
-class KRITAUI_EXPORT KisPerspectiveGridNg
+class KRITAUI_EXPORT KisPerspectiveGridNg // : public KisAbstractPerspectiveGrid
 {
 public:
+    KisPerspectiveGridNg();
     KisPerspectiveGridNg(const QString& id, const QString& name);
-    virtual ~KisPerspectiveGridNg();
+    ~KisPerspectiveGridNg();
     const QString& id() const;
     const QString& name() const;
     /**
@@ -92,10 +94,10 @@ public:
      * @param point the coordinates in point in the document reference
      * @param strokeBegin the coordinates of the beginning of the stroke
      */
-    virtual QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin) = 0;
-    virtual void endStroke() { }
-    virtual QPointF buttonPosition() const = 0;
-    virtual int numHandles() const = 0;
+    virtual QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin);
+    virtual void endStroke();
+    virtual QPointF buttonPosition() const;
+    virtual int numHandles() const{ return 4; }
     void replaceHandle(KisPerspectiveGridNgHandleSP _handle, KisPerspectiveGridNgHandleSP _with);
     void addHandle(KisPerspectiveGridNgHandleSP handle);
     void addSideHandle(KisPerspectiveGridNgHandleSP handle);
@@ -138,10 +140,24 @@ public:
     static void drawPath(QPainter& painter, const QPainterPath& path);
 protected:
     virtual QRect boundingRect() const;
-    virtual void drawCache(QPainter& gc, const KisCoordinatesConverter *converter) = 0;
+    virtual void drawCache(QPainter& gc, const KisCoordinatesConverter *converter);
     void initHandles(QList<KisPerspectiveGridNgHandleSP> _handles);
     QList<KisPerspectiveGridNgHandleSP> m_handles;
 private:
+    bool getTransform(QPolygonF& poly, QTransform& transform) const;
+    QPointF project(const QPointF& pt, const QPointF& strokeBegin);
+    // creates the convex hull, returns false if it's not a quadrilateral
+    bool quad(QPolygonF& out) const;
+    // finds the transform from perspective coordinates (a unit square) to the document
+//    bool getTransform(QPolygonF& polyOut, QTransform& transformOut) const;
+
+    // which direction to snap to (in transformed coordinates)
+    QLineF m_snapLine;
+    // cached information
+    mutable QTransform m_cachedTransform;
+    mutable QPolygonF m_cachedPolygon;
+    mutable QPointF m_cachedPoints[4];
+    mutable bool m_cacheValid;
     struct Private;
     Private* const d;
 };
@@ -154,9 +170,9 @@ class KRITAUI_EXPORT KisPerspectiveGridNgFactory
 public:
     KisPerspectiveGridNgFactory();
     virtual ~KisPerspectiveGridNgFactory();
-    virtual QString id() const = 0;
-    virtual QString name() const = 0;
-    virtual KisPerspectiveGridNg* createPerspectiveGridNg() const = 0;
+    QString id() const;
+    QString name() const;
+    virtual KisPerspectiveGridNg* createPerspectiveGridNg() const;
 
 };
 

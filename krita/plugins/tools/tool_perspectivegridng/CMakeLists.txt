@@ -9,7 +9,7 @@ kde4_add_ui_files(kritatoolperspectivegridng_PART_SRCS PerspectiveGridNgToolOpti
 
 kde4_add_plugin(kritatoolperspectivegridng ${kritatoolperspectivegridng_PART_SRCS})
 
-target_link_libraries(kritatoolperspectivegridng kritaui flake ${KDE4_KPARTS_LIBS} ${KDE4_KDEUI_LIBS} )
+target_link_libraries(kritatoolperspectivegridng kritaui )
 
 install(TARGETS kritatoolperspectivegridng  DESTINATION ${PLUGIN_INSTALL_DIR})
 

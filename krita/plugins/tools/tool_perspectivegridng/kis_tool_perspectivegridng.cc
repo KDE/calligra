@@ -49,6 +49,7 @@ KisPerspectiveGridNgTool::KisPerspectiveGridNgTool(KoCanvasBase * canvas)
 {
     Q_ASSERT(m_canvas);
     setObjectName("tool_perspectivegridng");
+    qDebug()<<"Shiva: " << "KisPerspectiveGridNgTool";
 }
 
 KisPerspectiveGridNgTool::~KisPerspectiveGridNgTool()
@@ -62,6 +63,7 @@ QPointF adjustPointF(const QPointF& _pt, const QRectF& _rc)
 
 void KisPerspectiveGridNgTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
+    qDebug()<<"Activating tool";
     // Add code here to initialize your tool when it got activated
     KisTool::activate(toolActivation, shapes);
 
@@ -106,12 +108,14 @@ inline double norm2(const QPointF& p)
 
 void KisPerspectiveGridNgTool::mousePressEvent(KoPointerEvent *event)
 {
+    qDebug()<<"Pressed button";
     if(PRESS_CONDITION_OM(event, KisTool::HOVER_MODE,
                        Qt::LeftButton, Qt::ShiftModifier)) {
 
         setMode(KisTool::PAINT_MODE);
 
         if (m_newAssistant) {
+            qDebug()<<"New Assistant Creation " << m_newAssistant ;
             m_internalMode = MODE_CREATION;
             *m_newAssistant->handles().back() = event->point;
             if (m_newAssistant->handles().size() == m_newAssistant->numHandles()) {
@@ -248,8 +252,9 @@ void KisPerspectiveGridNgTool::mousePressEvent(KoPointerEvent *event)
             }
         }
 
-        QString key = 0;//m_options.comboBox->model()->index( m_options.comboBox->currentIndex(), 0 ).data(Qt::UserRole).toString();
-            m_newAssistant = KisPerspectiveGridNgFactoryRegistry::instance()->get(0)->createPerspectiveGridNg();
+//        QString key = m_options.comboBox->model()->index( m_options.comboBox->currentIndex(), 0 ).data(Qt::UserRole).toString();
+//            m_newAssistant = KisPerspectiveGridNgFactoryRegistry::instance()->get(key)->createPerspectiveGridNg();
+        m_newAssistant = KisPerspectiveGridNgFactoryRegistry::instance()->get("perspectivegridng")->createPerspectiveGridNg();
             m_internalMode = MODE_CREATION;
             m_newAssistant->addHandle(new KisPerspectiveGridNgHandle(event->point));
             if (m_newAssistant->numHandles() <= 1) {
@@ -268,20 +273,20 @@ void KisPerspectiveGridNgTool::addAssistant()
 {
     m_canvas->view()->perspectiveGridNgManager()->addAssistant(m_newAssistant);
     m_handles = m_canvas->view()->perspectiveGridNgManager()->handles();
-//    KisAbstractPerspectiveGrid* grid = dynamic_cast<KisAbstractPerspectiveGrid*>(m_newAssistant);
-//    if (grid) {
-//        m_canvas->view()->resourceProvider()->addPerspectiveGrid(grid);
-//    }
+    KisAbstractPerspectiveGrid* grid = dynamic_cast<KisAbstractPerspectiveGrid*>(m_newAssistant);
+    if (grid) {
+        m_canvas->view()->resourceProvider()->addPerspectiveGrid(grid);
+    }
     m_newAssistant = 0;
 }
 
 
 void KisPerspectiveGridNgTool::removeAssistant(KisPerspectiveGridNg* assistant)
 {
-//    KisAbstractPerspectiveGrid* grid = dynamic_cast<KisAbstractPerspectiveGrid*>(assistant);
-//    if (grid) {
-//        m_canvas->view()->resourceProvider()->removePerspectiveGrid(grid);
-//    }
+    KisAbstractPerspectiveGrid* grid = dynamic_cast<KisAbstractPerspectiveGrid*>(assistant);
+    if (grid) {
+        m_canvas->view()->resourceProvider()->removePerspectiveGrid(grid);
+    }
     m_canvas->view()->perspectiveGridNgManager()->removeAssistant(assistant);
     m_handles = m_canvas->view()->perspectiveGridNgManager()->handles();
 }
@@ -400,7 +405,7 @@ void KisPerspectiveGridNgTool::paint(QPainter& _gc, const KoViewConverter &_conv
 
     foreach(const KisPerspectiveGridNgHandleSP handle, m_handles) {
         QRectF ellipse(_converter.documentToView(*handle) -  QPointF(6, 6), QSizeF(12, 12));
-        if (handle == m_handleDrag || handle == m_handleCombine) {
+        if (handle == m_handleDrag /*|| handle == m_handleCombine*/) {
             _gc.save();
             _gc.setPen(Qt::transparent);
             _gc.setBrush(handlesColor);
@@ -554,10 +559,10 @@ void KisPerspectiveGridNgTool::openFinish(KJob* job)
                 if (assistant) {
                     if (assistant->handles().size() == assistant->numHandles()) {
                         m_canvas->view()->perspectiveGridNgManager()->addAssistant(assistant);
-//                        KisAbstractPerspectiveGrid* grid = dynamic_cast<KisAbstractPerspectiveGrid*>(assistant);
-//                        if (grid) {
-//                            m_canvas->view()->resourceProvider()->addPerspectiveGrid(grid);
-//                        }
+                        KisAbstractPerspectiveGrid* grid = dynamic_cast<KisAbstractPerspectiveGrid*>(assistant);
+                        if (grid) {
+                            m_canvas->view()->resourceProvider()->addPerspectiveGrid(grid);
+                        }
                     } else {
                         errors = true;
                         delete assistant;

@@ -38,9 +38,10 @@ struct KisPerspectiveGridNgManager::Private {
 };
 
 KisPerspectiveGridNgManager::KisPerspectiveGridNgManager(KisView2* parent) :
-        KisCanvasDecoration("paintingAssistantsManager", i18n("Painting assistants"), parent),
+        KisCanvasDecoration("perspectiveGridNgManager", i18n("Perspective GridNg"), parent),
         d(new Private)
 {
+    qDebug() << "Shiva --> KisPerspectiveGridNgManager";
 }
 
 KisPerspectiveGridNgManager::~KisPerspectiveGridNgManager()
