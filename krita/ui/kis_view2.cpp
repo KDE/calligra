@@ -1546,36 +1546,39 @@ void KisView2::updateIcons()
     QString prefix = useDarkIcons ? QString("dark_") : QString("light_");
 
     QStringList whitelist;
-    whitelist << "ToolBox";
+    whitelist << "ToolBox" << "KisLayerBox";
 
     QStringList blacklistedIcons;
-    blacklistedIcons << "editpath" << "artistictext-tool";
+    blacklistedIcons << "editpath" << "artistictext-tool" << "view-choose";
 
-    QList<QDockWidget*> dockers = mainWindow()->dockWidgets();
-    foreach(QDockWidget* dock, dockers) {
-        if (!whitelist.contains(dock->objectName())) {
-            continue;
-        }
+    if (mainWindow()) {
+        QList<QDockWidget*> dockers = mainWindow()->dockWidgets();
+        foreach(QDockWidget* dock, dockers) {
+            kDebug() << "name " << dock->objectName();
+            if (!whitelist.contains(dock->objectName())) {
+                continue;
+            }
 
-        QObjectList objects;
-        objects.append(dock);
-        while (!objects.isEmpty()) {
-            QObject* object = objects.takeFirst();
-            objects.append(object->children());
+            QObjectList objects;
+            objects.append(dock);
+            while (!objects.isEmpty()) {
+                QObject* object = objects.takeFirst();
+                objects.append(object->children());
 
-            QAbstractButton* button = dynamic_cast<QAbstractButton*>(object);
-            if (button && !button->icon().name().isEmpty()) {
-                QString name = button->icon().name();
-                name = name.remove("dark_").remove("light_");
+                QAbstractButton* button = dynamic_cast<QAbstractButton*>(object);
+                if (button && !button->icon().name().isEmpty()) {
+                    QString name = button->icon().name();
+                    name = name.remove("dark_").remove("light_");
 
-                if (!blacklistedIcons.contains(name)) {
-                    QString iconName = prefix + name;
-                    KIcon icon = koIcon(iconName.toLatin1());
-                    button->setIcon(icon);
+                    if (!blacklistedIcons.contains(name)) {
+                        QString iconName = prefix + name;
+                        KIcon icon = koIcon(iconName.toLatin1());
+                        button->setIcon(icon);
+                    }
                 }
             }
         }
-    }
+   }
 }
 
 void KisView2::showFloatingMessage(const QString message, const QIcon& icon)
