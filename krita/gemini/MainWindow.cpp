@@ -83,6 +83,10 @@
 #define SM_SYSTEMDOCKED         0x2004
 #endif
 
+#ifdef HAVE_STEAMWORKS
+#include "steam/kritasteam.h"
+#endif
+
 class MainWindow::Private
 {
 public:
@@ -109,6 +113,10 @@ public:
 #ifdef Q_OS_WIN
 //         slateMode = (GetSystemMetrics(SM_CONVERTIBLESLATEMODE) == 0);
 //         docked = (GetSystemMetrics(SM_SYSTEMDOCKED) != 0);
+#endif
+#ifdef HAVE_STEAMWORKS
+        // Big Picture Mode should force full-screen behaviour in Sketch mode
+        slateMode = KritaSteamClient::instance()->isInBigPictureMode();
 #endif
         centerer = new QTimer(q);
         centerer->setInterval(10);
