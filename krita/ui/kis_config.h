@@ -187,6 +187,9 @@ public:
     QColor canvasBorderColor() const;
     void setCanvasBorderColor(const QColor &color) const;
 
+    bool hideScrollbars() const;
+    void setHideScrollbars(bool value) const;
+
     bool antialiasCurves() const;
     void setAntialiasCurves(bool v) const;
 
