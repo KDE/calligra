@@ -168,7 +168,7 @@ Page {
                     leftMargin: Constants.DefaultMargin;
                     verticalCenter: parent.verticalCenter;
                 }
-                text: "Collections";
+                text: "Community News";
                 font: Settings.theme.font("title");
                 color: Settings.theme.color("pages/welcome/news/header/text");
             }
@@ -199,10 +199,10 @@ Page {
 
         Divider { height: Constants.GridHeight * (Constants.GridRows - 3); }
 
-        //CollectionsList {
-        //    width: parent.width / 3 - 4;
-        //    height: Constants.GridHeight * (Constants.GridRows - 3);
-        //}
+        NewsList {
+            width: parent.width / 3 - 4;
+            height: Constants.GridHeight * (Constants.GridRows - 3);
+        }
     }
 
     QtObject {
