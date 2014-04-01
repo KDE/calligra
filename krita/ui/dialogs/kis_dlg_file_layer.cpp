@@ -93,7 +93,7 @@ QString KisDlgFileLayer::fileName() const
 
 void KisDlgFileLayer::slotSelectFile()
 {
-    const QStringList mimeFilter = koApp->mimeFilter(KoFilterManager::Import);
+    const QStringList mimeFilter = KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Import);
 
     QString url = KoFileDialogHelper::getOpenFileName(this,
                                                       i18n("Select file to use as dynamic file layer."),
