@@ -120,11 +120,7 @@ void DesktopViewProxy::fileOpen()
                                                            "OpenDocument");
     if (filename.isEmpty()) return;
 
-    if(!d->mainWindow->slateMode()) {
-        QProcess::startDetached(qApp->applicationFilePath(), QStringList() << filename);
-    } else {
-        DocumentManager::instance()->openDocument(filename, d->isImporting);
-    }
+    QProcess::startDetached(qApp->applicationFilePath(), QStringList() << filename);
 }
 
 void DesktopViewProxy::fileSave()
