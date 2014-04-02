@@ -103,6 +103,7 @@ void KoResourceBundle::install()
         //TODO Sinon, déterminer pourquoi et comment faire
         installed=true;
         manifest->install();
+        save();
         //TODO Modifier les chemins des fichiers si c'est la première installation
     }
 }
@@ -127,6 +128,7 @@ void KoResourceBundle::uninstall()
 
     installed=false;
     manifest->uninstall();
+    save();
 }
 
 void KoResourceBundle::addMeta(QString type,QString value)
@@ -202,6 +204,7 @@ void KoResourceBundle::rename(QString filename)
             dir.rename(dirPath,dirPath.section('/',0,dirPath.count('/')-1).append("/").append(filename));
         }
     }
+    save();
 }
 
 QString KoResourceBundle::getAuthor()

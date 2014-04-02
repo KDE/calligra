@@ -93,7 +93,7 @@ KisControlFrame::KisControlFrame(KisView2 * view, QWidget *parent, const char* n
     action->setDefaultWidget(m_gradientWidget);
 
     KoResourceServer<KoAbstractGradient> * rserver = KoResourceServerProvider::instance()->gradientServer();
-    KoAbstractResourceServerAdapter* adapter = new KoResourceServerAdapter<KoAbstractGradient>(rserver);
+    QSharedPointer<KoAbstractResourceServerAdapter> adapter (new KoResourceServerAdapter<KoAbstractGradient>(rserver));
     m_gradientWidget->setResourceAdapter(adapter);
 
     KoColor black(Qt::black, KoColorSpaceRegistry::instance()->rgb8());

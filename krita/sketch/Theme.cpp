@@ -50,7 +50,8 @@ public:
         , imagePath("images/")
         , fontPath("fonts/")
         , fontsAdded(false)
-        , lineCount(60)
+        , lineCountLandscape(40)
+        , lineCountPortrait(70)
     { }
 
     void rebuildFontCache();
@@ -74,7 +75,8 @@ public:
 
     bool fontsAdded;
     QList<int> addedFonts;
-    int lineCount;
+    int lineCountLandscape;
+    int lineCountPortrait;
 };
 
 Theme::Theme(QObject* parent)
@@ -406,8 +408,9 @@ void Theme::Private::rebuildFontCache()
         if(font.isCopyOf(qApp->font()))
             qWarning() << "Could not find font" << map.value("family") << "with style" << map.value("style", "Regular");
 
+        float lineCount = qApp->activeWindow()->height() > qApp->activeWindow()->width() ? lineCountPortrait : lineCountLandscape;
         float lineHeight = qApp->activeWindow()->height() / lineCount;
-        font.setPixelSize(lineHeight * map.value("size", 1).toInt());
+        font.setPixelSize(lineHeight * map.value("size", 1).toFloat());
 
         fontMap.insert(itr.key(), font);
     }

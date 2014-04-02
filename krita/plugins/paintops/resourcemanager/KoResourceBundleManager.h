@@ -19,6 +19,8 @@
 #define KORESOURCEBUNDLEMANAGER_H
 
 #include "KoStore.h"
+#include "tests/KoResourceBundleManager_test.h"
+#include "krita_export.h"
 
 class KoXmlResourceBundleManifest;
 class KoXmlResourceBundleMeta;
@@ -27,9 +29,11 @@ class KoXmlResourceBundleMeta;
  * @brief The KoResourceBundleManager class
  * @details Manage resource bundles structure
  */
-class KoResourceBundleManager
+class KRITAUI_EXPORT KoResourceBundleManager
 {
 public:
+
+    friend class KoResourceBundleManager_test;
 
     /**
      * @brief KoResourceBundleManager : Ctor
@@ -92,7 +96,7 @@ public:
      * @brief extractKFiles : Extract several Krita resource files from the store to Krita path.
      * @param pathList the list containing all the paths of the files to be extracted.
      */
-    void extractKFiles(QList<QString> pathList);
+    void extractKFiles(QMap<QString,QString> pathList);
 
     /**
      * @brief createPack : Create a full resource package.

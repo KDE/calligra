@@ -18,12 +18,13 @@
 #ifndef KOXMLRESOURCEBUNDLEMANIFEST_H
 #define KOXMLRESOURCEBUNDLEMANIFEST_H
 
+#include <QMap>
 #include "KoXmlGenerator.h"
 #include "krita_export.h"
 
 class KoResource;
 
-class KoXmlResourceBundleManifest: public KoXmlGenerator
+class KRITAUI_EXPORT KoXmlResourceBundleManifest: public KoXmlGenerator
 {
 private:
     /**
@@ -96,7 +97,7 @@ public:
      * @brief getFilesToExtract
      * @return the list of the files to be extracted
      */
-    QList<QString> getFilesToExtract();
+    QMap<QString,QString> getFilesToExtract();
 
     /**
      * @brief getDirList
@@ -154,6 +155,8 @@ public:
      * @return true if the "installed" tag is in the XML file, false otherwise
      */
     bool isInstalled();
+
+    void updateFilePaths(QString kritaPath,QString bundleName);
  };
 
 

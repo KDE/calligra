@@ -201,7 +201,10 @@ signals:
     /// This signal is emitted right after the docker states have been succefully restored from config
     void restoringDone();
 
-private slots:
+    /// This signal is emitted when the color theme changes
+    void themeChanged();
+
+public slots:
 
     /**
      * Slot for eMailing the document using KMail

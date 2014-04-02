@@ -30,6 +30,7 @@
 #include <QDeclarativeView>
 #include <QDeclarativeContext>
 #include <QDeclarativeEngine>
+#include <QGraphicsObject>
 #include <QDir>
 #include <QFile>
 #include <QMessageBox>
@@ -226,6 +227,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     qApp->setActiveWindow( this );
 
     setWindowTitle(i18n("Krita Gemini"));
+    setWindowIcon(KIcon("kritagemini"));
 
 	// Load filters and other plugins in the gui thread
 	Q_UNUSED(KisFilterRegistry::instance());
@@ -251,6 +253,12 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     // Really, this allows us to show the pleasant welcome screen from Sketch
     switchToSketch();
     d->wasMaximized = true;
+
+    if(!fileNames.isEmpty()) {
+        //It feels a little hacky, but call a QML function to open files.
+        //This saves a lot of hassle required to change state for loading dialogs etc.
+        QMetaObject::invokeMethod(d->sketchView->rootObject(), "openFile", Q_ARG(QVariant, fileNames.at(0)));
+    }
 }
 
 void MainWindow::switchDesktopForced()

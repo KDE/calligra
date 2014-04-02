@@ -139,7 +139,7 @@ public:  // Krita specific interfaces
     KisNodeManager *nodeManager();
 
     KisActionManager *actionManager();
-    
+
     /**
      * Convenience method to get at the active node, which may be
      * a layer or a mask or a selection
@@ -209,6 +209,7 @@ public:
 public slots:
 
     void slotLoadingFinished();
+    void showHideScrollbars();
 
 signals:
 
@@ -230,6 +231,7 @@ private slots:
     void showJustTheCanvas(bool toggled);
     void toggleTabletLogger();
     void openResourcesDirectory();
+    void updateIcons();
 
 private:
     void createActions();

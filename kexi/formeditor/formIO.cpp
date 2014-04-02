@@ -38,9 +38,8 @@
 #include <QPixmap>
 #include <QImageWriter>
 
-#include <kfiledialog.h>
+#include <KoFileDialog.h>
 #include <klocale.h>
-#include <k3command.h>
 #include <kacceleratormanager.h>
 
 #include <kexiutils/utils.h>
@@ -145,7 +144,9 @@ FormIO::saveFormToFile(Form *form, const QString &filename)
     }
 
     if (filename.isEmpty()) {
-        _filename = KFileDialog::getSaveFileName(KUrl(), i18n("*.ui|Qt Designer UI Files"));
+        KoFileDialog dlg(0, KoFileDialog::SaveFile);
+        dlg.setNameFilter(i18n("*.ui|Qt Designer UI Files"));
+        _filename = dlg.url();
         if (_filename.isEmpty()) {
             return false;
         }
@@ -262,8 +263,6 @@ FormIO::saveFormToDom(Form *form, QDomDocument &domDoc)
 
     m_currentForm = 0;
     m_currentItem = 0;
-    //m_currentWidget = 0;
-
     return true;
 }
 
@@ -307,8 +306,8 @@ FormIO::loadFormFromString(Form *form, QWidget *container, QString &src, bool pr
     bool parsed = inBuf.setContent(src, false, &errMsg, &errLine, &errCol);
 
     if (!parsed) {
-        kDebug() << errMsg;
-        kDebug() << "line:" << errLine << "col: " << errCol;
+        kWarning() << errMsg;
+        kWarning() << "line:" << errLine << "col: " << errCol;
         return false;
     }
 
@@ -330,7 +329,9 @@ FormIO::loadFormFromFile(Form *form, QWidget *container, const QString &filename
     QString _filename;
 
     if (filename.isEmpty()) {
-        _filename = KFileDialog::getOpenFileName(KUrl(), i18n("*.ui|Qt Designer UI Files"));
+        KoFileDialog dlg(0, KoFileDialog::OpenFile);
+        dlg.setNameFilter(i18n("*.ui|Qt Designer UI Files"));
+        _filename = dlg.url();
         if (_filename.isEmpty()) {
             return false;
         }
@@ -341,16 +342,16 @@ FormIO::loadFormFromFile(Form *form, QWidget *container, const QString &filename
 
     QFile file(_filename);
     if (!file.open(QIODevice::ReadOnly)) {
-//! @todo proved err msg to the user
-        kDebug() << "Cannot open the file " << _filename;
+//! @todo show err msg to the user
+        kWarning() << "Cannot open the file " << _filename;
         return false;
     }
     QDomDocument doc;
     if (!doc.setContent(&file, false/* !namespaceProcessing*/,
                         &errMsg, &errLine, &errCol)) {
-//! @todo proved err msg to the user
-        kDebug() << errMsg;
-        kDebug() << errLine << "col:" << errCol;
+//! @todo show err msg to the user
+        kWarning() << errMsg;
+        kWarning() << errLine << "col:" << errCol;
         return false;
     }
 
@@ -910,11 +911,6 @@ FormIO::readPropertyValue(QDomNode node, QObject *obj, const QString &name)
         const QMetaProperty meta(KexiUtils::findPropertyWithSuperclasses(subobject, name.toLatin1()));
         if (meta.isValid()) {
             if (meta.isFlagType()) {
-                /*qt4   Q3StrList keys;
-                      QStringList list = QStringList::split("|", text);
-                      QStringList::ConstIterator it, end( list.constEnd() );
-                      for( it = list.constBegin(); it != end; ++it)
-                        keys.append((*it).toLatin1());*/
                 return meta.enumerator().keysToValue(text.toLatin1());
             } else {
                 // Metaproperty not found, probably because subwidget is not created.
@@ -954,10 +950,6 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 
 
     WidgetLibrary *lib = m_currentForm->library();
-// if(item->container())
-//  lib = item->container()->form()->manager()->lib();
-// else
-//  lib = item->parent()->container()->form()->manager()->lib();
 
     // We create the "widget" element
     QDomElement tclass = domDoc.createElement("widget");

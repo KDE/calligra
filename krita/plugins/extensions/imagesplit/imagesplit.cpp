@@ -30,7 +30,7 @@
 #include <kmimetype.h>
 
 #include <KoFilterManager.h>
-#include <KoFileDialogHelper.h>
+#include <KoFileDialog.h>
 #include <KoDocument.h>
 
 #include <kis_debug.h>
@@ -96,7 +96,7 @@ void Imagesplit::slotImagesplit()
     }
 
 
-    DlgImagesplit * dlgImagesplit = new DlgImagesplit(m_view,suffix,listFileType);
+    DlgImagesplit * dlgImagesplit = new DlgImagesplit(m_view, suffix, listFileType);
     dlgImagesplit->setObjectName("Imagesplit");
     Q_CHECK_PTR(dlgImagesplit);
 
@@ -127,16 +127,13 @@ void Imagesplit::slotImagesplit()
         else {
 
             for(int i=0;i<(numVerticalLines+1);i++) {
-              for(int j=0;j<(numHorizontalLines+1);j++)
-              {
-                    QString filename = KoFileDialogHelper::getSaveFileName(m_view->mainWindow(),
-                                                                           i18n("Save Image on Split"),
-                                                                           QDesktopServices::storageLocation(QDesktopServices::PicturesLocation),
-                                                                           listMimeFilter,
-                                                                           "",
-                                                                           "OpenDocument");
-
-                    KUrl url = KUrl::fromLocalFile(filename);
+                for(int j=0;j<(numHorizontalLines+1);j++)
+                {
+                    KoFileDialog dialog(m_view->mainWindow(), KoFileDialog::SaveFile, "OpenDocument");
+                    dialog.setCaption(i18n("Save Image on Split"));
+                    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+                    dialog.setMimeTypeFilters(listMimeFilter);
+                    KUrl url = dialog.url();
 
                     KMimeType::Ptr mime = KMimeType::findByUrl(url);
                     QString mimefilter = mime->name();

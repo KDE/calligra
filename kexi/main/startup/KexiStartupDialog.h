@@ -42,15 +42,7 @@ class KEXIMAIN_EXPORT KexiStartupDialog : public KPageDialog
     Q_OBJECT
 
 public:
-    /*! The Dialog returns one of these values depending
-    on the input of the user.
-    CancelResult The user pressed 'Cancel'
-    CreateBlankResult The user selected a template
-    CreateFromTemplateResult The user selected a template
-    ImportResult The user selected a template
-    OpenExistingResult The user has chosen an existing connection or db file
-    OpenRecentResult The user selected one of recently used databases
-    */
+    //! Result of the user's input.
     enum Result {
         CancelResult,             //!< The user has pressed 'Cancel'
         CreateBlankResult,        //!< The user has selected a template
@@ -115,9 +107,11 @@ public:
     */
     QString selectedFileName() const;
 
+#ifdef KEXI_PROJECT_TEMPLATES
     /*! \return "autoopen" objects defined for selected template.
     Only makes sense if template was used. */
     const KexiProjectData::AutoOpenObjects& autoopenObjects() const;
+#endif
 
     /*! \return a pointer to selected Kexi connection data.
       (if "Open Existing" tab was selected and this connection data was clicked).
@@ -139,15 +133,6 @@ protected slots:
     //! slot activated when one of the subpages within templates tab is shown
     void slotCurrentTemplatesubpageChanged(KPageWidgetItem* current,
                                            KPageWidgetItem* before);
-    /*
-      //! Any icon view item has been executed (dblclicked)
-      void templateItemExecuted(Q3IconViewItem *item);
-
-      //! Any icon view item has been selected
-      void templateItemSelected(QIconViewItem *item);*/
-
-//  //! Any tab has been selected
-//  void tabShown(QWidget *w);
 
     void templateSelected(const QString& fileName);
 
@@ -166,15 +151,10 @@ protected:
     //! helper: updates a state of dialog's OK button
     void updateDialogOKButton(KPageWidgetItem *pageWidgetItem);
 
-    // //! internal reimplementation
-    //int activePageIndex() const;
 private:
     void setupPageTemplates();
     void setupPageOpenExisting();
     void setupPageOpenRecent();
-
-    //! used internally on accepting templates selection
-    // void updateSelectedTemplateKeyInfo();
 
     class Private;
     Private * const d;

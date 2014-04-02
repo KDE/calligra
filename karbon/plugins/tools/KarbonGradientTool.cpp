@@ -500,7 +500,7 @@ QList<QPointer<QWidget> > KarbonGradientTool::createOptionWidgets()
     connect(m_gradientWidget, SIGNAL(changed()), this, SLOT(gradientChanged()));
 
     KoResourceServer<KoAbstractGradient> * rserver = KoResourceServerProvider::instance()->gradientServer();
-    KoAbstractResourceServerAdapter* adapter = new KoResourceServerAdapter<KoAbstractGradient>(rserver);
+    QSharedPointer<KoAbstractResourceServerAdapter> adapter(new KoResourceServerAdapter<KoAbstractGradient>(rserver));
     KoResourceItemChooser * chooser = new KoResourceItemChooser(adapter, m_gradientWidget);
     chooser->setObjectName("KarbonGradientChooser");
     chooser->setColumnCount(1);

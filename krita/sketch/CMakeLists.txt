@@ -39,6 +39,7 @@ set(kritasketch_SRCS
 set(kritasketchplugin_SRCS
     kritasketchplugin.cpp
     ColorSelectorItem.cpp
+    CurveEditorItem.cpp
     Constants.cpp
     ToolManager.cpp
     SimpleTouchArea.cpp
@@ -187,3 +188,5 @@ install(DIRECTORY qml/images        DESTINATION ${CMAKE_INSTALL_LIBDIR}/calligra
 install(DIRECTORY qml/panels        DESTINATION ${CMAKE_INSTALL_LIBDIR}/calligra/imports/org/krita/sketch PATTERN "*~" EXCLUDE)
 
 install(DIRECTORY themes DESTINATION ${DATA_INSTALL_DIR}/kritasketch)
+
+add_subdirectory(icon)

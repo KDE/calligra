@@ -159,7 +159,9 @@ void KisMainWindow::slotPreferences()
 
             }
         }
+        m_guiClient->showHideScrollbars();
     }
+
 }
 
 

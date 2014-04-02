@@ -24,6 +24,9 @@
 #include "kis_paintop_preset.h"
 #include "kis_workspace_resource.h"
 
+#include <iostream>
+using namespace std;
+
 KoXmlResourceBundleManifest::KoXmlResourceBundleManifest(QString xmlName):KoXmlGenerator(xmlName)
 {
     root=xmlDocument.createElement("package");
@@ -157,7 +160,6 @@ QDomElement KoXmlResourceBundleManifest::addTag(QString fileTypeName,QString fil
     }
     else {
         if (newNode) {
-
             root.removeChild(currentNode);
         }
         return QDomElement();
@@ -318,20 +320,22 @@ QList<QString> KoXmlResourceBundleManifest::getFileList()
     return result;
 }
 
-QList<QString> KoXmlResourceBundleManifest::getFilesToExtract()
+QMap<QString,QString> KoXmlResourceBundleManifest::getFilesToExtract()
 {
-    QString currentTagName;
     QString currentFileName;
+    QString srcFileName;
+    QString targetFileName;
 
-    QList<QString> result;
+    QMap<QString,QString> result;
     QDomNodeList fileList=xmlDocument.elementsByTagName("file");
 
     for (int i=0;i<fileList.size();i++) {
-        currentFileName = fileList.at(i).toElement().attributeNode("name").value();
-        currentTagName=fileList.at(i).parentNode().toElement().tagName();
-        currentTagName.append("/");
-        currentTagName.append(currentFileName.section('/',currentFileName.count('/')));
-        result.push_front(currentTagName);
+        targetFileName = fileList.at(i).toElement().attribute("name");
+        srcFileName = fileList.at(i).toElement().attribute("src");
+        currentFileName=fileList.at(i).parentNode().toElement().tagName();
+        currentFileName.append("/");
+        currentFileName.append(srcFileName.section('/',srcFileName.count('/')));
+        result.insert(currentFileName,targetFileName);
     }
 
     return result;
@@ -454,11 +458,29 @@ void KoXmlResourceBundleManifest::exportTags()
 
 
 void KoXmlResourceBundleManifest::install()
-{
+{ 
     if (xmlDocument.elementsByTagName("installed").isEmpty()) {
         root.appendChild(xmlDocument.createElement("installed"));
     }
 }
+
+void KoXmlResourceBundleManifest::updateFilePaths(QString kritaPath,QString bundleName)
+{
+    bundleName=bundleName.section('/',bundleName.count('/')).section('.',0,0);
+
+    QDomNodeList fileList=xmlDocument.elementsByTagName("file");
+    for (int i=0;i<fileList.size();i++) {
+        QDomNode currentNode=fileList.at(i);
+        if(!currentNode.attributes().contains("src")) {
+            QString oldValue=currentNode.toElement().attribute("name");
+            QString newValue=kritaPath+currentNode.parentNode().toElement().tagName()+"/"+bundleName.section('.',0,0)+"/"
+                    +oldValue.section('/',oldValue.count('/'));
+            currentNode.toElement().setAttribute("name",newValue);
+            currentNode.toElement().setAttribute("src",oldValue);
+        }
+    }
+}
+
 
 void KoXmlResourceBundleManifest::uninstall()
 {

@@ -44,6 +44,18 @@ void KisToolPath::mousePressEvent(KoPointerEvent *event)
     DelegatedPathTool::mousePressEvent(event);
 }
 
+QList<QPointer<QWidget> > KisToolPath::createOptionWidgets()
+{
+    QList<QPointer<QWidget> > widgets = DelegatedPathTool::createOptionWidgets();
+    QList<QPointer<QWidget> > filteredWidgets;
+    foreach(QPointer<QWidget> widget, widgets) {
+        if (widget->objectName() != "Stroke widget") {
+            filteredWidgets.push_back(widget);
+        }
+    }
+    return filteredWidgets;
+}
+
 
 __KisToolPathLocalTool::__KisToolPathLocalTool(KoCanvasBase * canvas, KisToolPath* parentTool)
         : KoCreatePathTool(canvas), m_parentTool(parentTool) {}

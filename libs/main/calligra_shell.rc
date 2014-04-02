@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gui name="Calligra"
-     version="26"
+     version="27"
      xmlns="http://www.kde.org/standards/kxmlgui/1.0"
      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0
@@ -20,13 +20,13 @@
   <Separator />
   <Action name="file_import_file" />
   <Action name="file_export_file" />
+  <Action name="file_export_pdf" />
   <Action name="file_send_file" />
   <Separator />
   <Merge/>
   <Separator />
   <Action name="file_print" />
   <Action name="file_print_preview" />
-  <Action name="file_export_pdf" />
   <Separator/>
   <Action name="file_documentinfo" />
   <DefineGroup name="file_infos" />

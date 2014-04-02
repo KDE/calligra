@@ -121,6 +121,7 @@
 #include "kis_zoom_manager.h"
 
 #include <QPoint>
+#include <kapplication.h>
 #include "kis_node_commands_adapter.h"
 #include <kis_paintop_preset.h>
 #include "ko_favorite_resource_manager.h"
@@ -231,6 +232,10 @@ KisView2::KisView2(QWidget *parent)
 
     d->controlFrame = new KisControlFrame(this);
 
+    //Check to draw scrollbars after "Canvas only mode" toggle is created.
+    this->showHideScrollbars();
+
+
     //Workaround, by default has the same shortcut as hide/show dockers
     if (mainWindow()) {
 
@@ -315,6 +320,10 @@ KisView2::KisView2(QWidget *parent)
     }
 
     d->actionManager->updateGUI();
+
+    connect(mainWindow(), SIGNAL(themeChanged()), this, SLOT(updateIcons()));
+    updateIcons();
+
 }
 
 
@@ -716,6 +725,7 @@ void KisView2::createActions()
     actionCollection()->addAction("showStatusBar", tAction);
     connect(tAction, SIGNAL(toggled(bool)), this, SLOT(showStatusBar(bool)));
 
+
     tAction = new KToggleAction(i18n("Show Canvas Only"), this);
     tAction->setCheckedState(KGuiItem(i18n("Return to Window")));
     tAction->setToolTip(i18n("Shows just the canvas or the whole window"));
@@ -737,6 +747,7 @@ void KisView2::createActions()
     actionCollection()->addAction("edit_blacklist_cleanup", a);
     connect(a, SIGNAL(triggered()), this, SLOT(slotBlacklistCleanup()));
 }
+
 
 void KisView2::createManagers()
 {
@@ -1220,16 +1231,7 @@ void KisView2::showJustTheCanvas(bool toggled)
         }
     }
 
-    if (cfg.hideScrollbarsFullscreen()) {
-        if (toggled) {
-            dynamic_cast<KoCanvasControllerWidget*>(canvasController())->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-            dynamic_cast<KoCanvasControllerWidget*>(canvasController())->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-        }
-        else {
-            dynamic_cast<KoCanvasControllerWidget*>(canvasController())->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-            dynamic_cast<KoCanvasControllerWidget*>(canvasController())->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-        }
-    }
+    showHideScrollbars();
 
     if (toggled) {
         // show a fading heads-up display about the shortcut to go back
@@ -1253,6 +1255,47 @@ void KisView2::openResourcesDirectory()
     QDesktopServices::openUrl(QUrl::fromLocalFile(dir));
 }
 
+void KisView2::updateIcons()
+{
+    QColor background = mainWindow()->palette().background().color();
+    bool useDarkIcons = background.value() > 100;
+    QString prefix = useDarkIcons ? QString("dark_") : QString("light_");
+
+    QStringList whitelist;
+    whitelist << "ToolBox";
+
+    QStringList blacklistedIcons;
+    blacklistedIcons << "editpath" << "artistictext-tool";
+
+    if (mainWindow()) {
+        QList<QDockWidget*> dockers = mainWindow()->dockWidgets();
+        foreach(QDockWidget* dock, dockers) {
+            if (!whitelist.contains(dock->objectName())) {
+                continue;
+            }
+
+            QObjectList objects;
+            objects.append(dock);
+            while (!objects.isEmpty()) {
+                QObject* object = objects.takeFirst();
+                objects.append(object->children());
+
+                QAbstractButton* button = dynamic_cast<QAbstractButton*>(object);
+                if (button && !button->icon().name().isEmpty()) {
+                    QString name = button->icon().name();
+                    name = name.remove("dark_").remove("light_");
+
+                    if (!blacklistedIcons.contains(name)) {
+                        QString iconName = prefix + name;
+                        KIcon icon = koIcon(iconName.toLatin1());
+                        button->setIcon(icon);
+                    }
+                }
+            }
+        }
+    }
+}
+
 void KisView2::showFloatingMessage(const QString message, const QIcon& icon)
 {
     // Yes, the @return is correct. But only for widget based KDE apps, not QML based ones
@@ -1267,9 +1310,26 @@ void KisView2::showFloatingMessage(const QString message, const QIcon& icon)
 #endif
 }
 
+
 KoMainWindow *KisView2::mainWindow() const
 {
     return qobject_cast<KoMainWindow*>(d->mainWindow);
+}
+
+void KisView2::showHideScrollbars()
+{
+    if (!canvasController()) return;
+
+    KisConfig cfg;
+    bool toggled = actionCollection()->action("view_show_just_the_canvas")->isChecked();
+
+    if ((toggled && cfg.hideScrollbarsFullscreen()) || (!toggled && cfg.hideScrollbars())) {
+        dynamic_cast<KoCanvasControllerWidget*>(canvasController())->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        dynamic_cast<KoCanvasControllerWidget*>(canvasController())->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    } else {
+        dynamic_cast<KoCanvasControllerWidget*>(canvasController())->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+        dynamic_cast<KoCanvasControllerWidget*>(canvasController())->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    }
 }
 
 #include "kis_view2.moc"
