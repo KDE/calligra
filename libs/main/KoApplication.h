@@ -27,7 +27,7 @@ class KoPart;
 class KoMainWindow;
 class KoApplicationPrivate;
 
-class QSplashScreen;
+class QWidget;
 class QStringList;
 
 #include <KoFilterManager.h>
@@ -82,7 +82,7 @@ public:
      * when start returns, the splashscreen is hidden. Use KSplashScreen
      * to have the splash show correctly on Xinerama displays. 
      */
-    void setSplashScreen(QSplashScreen *splash);
+    void setSplashScreen(QWidget *splash);
 
     /**
      * return a list of mimetypes this application supports.

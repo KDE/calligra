@@ -51,7 +51,7 @@
 #endif
 
 #include <QFile>
-#include <QSplashScreen>
+#include <QWidget>
 #include <QSysInfo>
 #include <QStringList>
 #include <QDesktopServices>
@@ -80,13 +80,13 @@ public:
     {}
     QByteArray nativeMimeType;
     KoPart *part;
-    QSplashScreen *splashScreen;
+    QWidget *splashScreen;
 };
 
 class KoApplication::ResetStarting
 {
 public:
-    ResetStarting(QSplashScreen *splash = 0)
+    ResetStarting(QWidget *splash = 0)
         : m_splash(splash)
     {
     }
@@ -99,7 +99,7 @@ public:
         }
     }
 
-    QSplashScreen *m_splash;
+    QWidget *m_splash;
 };
 
 
@@ -257,7 +257,7 @@ bool KoApplication::start()
 
     if (d->splashScreen) {
         d->splashScreen->show();
-        d->splashScreen->showMessage(".");
+        //d->splashScreen->showMessage(".");
     }
 
     ResetStarting resetStarting(d->splashScreen); // remove the splash when done
@@ -475,7 +475,7 @@ KoApplication::~KoApplication()
     delete d;
 }
 
-void KoApplication::setSplashScreen(QSplashScreen *splashScreen)
+void KoApplication::setSplashScreen(QWidget *splashScreen)
 {
     d->splashScreen = splashScreen;
 }
