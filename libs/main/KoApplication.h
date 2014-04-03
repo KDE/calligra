@@ -85,6 +85,11 @@ public:
     void setSplashScreen(QWidget *splash);
 
     /**
+     * Remove the splash dialog
+     */
+    void removeSplash();
+
+    /**
      * return a list of mimetypes this application supports.
      */
     QStringList mimeFilter(KoFilterManager::Direction direction) const;
