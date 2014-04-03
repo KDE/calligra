@@ -55,14 +55,26 @@
 #if defined Q_OS_WIN
 #include "stdlib.h"
 #include <ui/input/wintab/kis_tablet_support_win.h>
+
+void MiniDumpFunction( unsigned int nExceptionCode, EXCEPTION_POINTERS *pException )
+{
+    QString comment = "Minidump comment: kritagemini.exe\n";
+    KritaSteamClient::MiniDumpFunction(comment, nExceptionCode, (void*) pException);
+}
+
 #elif defined Q_WS_X11
 #include <ui/input/wintab/kis_tablet_support_x11.h>
 #endif
+
+
 
 int main( int argc, char** argv )
 {
     int result;
     #if defined HAVE_STEAMWORKS
+#ifdef Q_OS_WIN
+        _set_se_translator(MiniDumpFunction);
+#endif Q_OS_WIN
         KritaSteamClient* steamClient = KritaSteamClient::instance();
         if (!steamClient->initialise(KRITA_GEMINI_APPID))
         {
@@ -196,7 +208,11 @@ int main( int argc, char** argv )
     steamClient->mainWindowCreated();
 #endif
 
-    result = app.exec();
+    try {
+        result = app.exec();
+    } catch (...) {
+
+    }
 
 #if defined HAVE_STEAMWORKS
     steamClient->mainWindowBeingDestroyed();

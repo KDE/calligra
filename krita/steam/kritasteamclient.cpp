@@ -54,6 +54,22 @@ extern "C" void __cdecl SteamAPIDebugTextHook( int nSeverity, const char *pchDeb
     }
 }
 
+//-----------------------------------------------------------------------------
+// Purpose: Wrapper around SteamAPI_WriteMiniDump which can be used directly
+// as a se translator
+//-----------------------------------------------------------------------------
+void KritaSteamClient::MiniDumpFunction(const QString& comment, unsigned int nExceptionCode, void *pException )
+{
+    SteamAPI_SetMiniDumpComment( comment.toUtf8().constData() );
+
+    // The 0 here is a build ID, which is not set
+#ifdef Q_OS_WIN
+    SteamAPI_WriteMiniDump( nExceptionCode, (EXCEPTION_POINTERS*) pException, 0 );
+#endif
+}
+
+
+
 KritaSteamClient::KritaSteamClient(QObject *parent) :
     QObject(parent),
     m_initialisedWithoutError(false),
