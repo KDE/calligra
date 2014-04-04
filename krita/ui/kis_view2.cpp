@@ -363,12 +363,8 @@ void KisView2::setCurrentView(KoView *view)
 
         // Wait for the async image to have loaded
         KisDoc2* doc = qobject_cast<KisDoc2*>(view->document());
-        connect(doc, SIGNAL(sigLoadingFinished()), this, SLOT(slotLoadingFinished()));
         connect(d->nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)), doc->image(), SLOT(requestStrokeEnd()));
 
-        if (!doc->isLoading() || doc->image()) {
-            slotLoadingFinished();
-        }
 
 //        connect(canvasController()->proxyObject, SIGNAL(documentMousePositionChanged(QPointF)), d->statusBar, SLOT(documentMousePositionChanged(QPointF)));
 
@@ -376,6 +372,7 @@ void KisView2::setCurrentView(KoView *view)
         mainWindow()->guiFactory()->addClient(imageView);
         imageView->setParentView(this);
         d->currentImageView = imageView;
+
     }
 
     d->filterManager->setView(imageView);

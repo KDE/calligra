@@ -131,6 +131,10 @@ KisImageView::KisImageView(KoPart *part, KisDoc2 *doc, QWidget *parent)
     d->zoomManager = new KisZoomManager(this, d->viewConverter, d->canvasController);
     d->zoomManager->setup(actionCollection());
 
+    connect(d->doc, SIGNAL(sigLoadingFinished()), this, SLOT(slotLoadingFinished()));
+    if (!d->doc->isLoading() || d->doc->image()) {
+        slotLoadingFinished();
+    }
 }
 
 KisImageView::~KisImageView()
@@ -362,3 +366,18 @@ void KisImageView::resetImageSizeAndScroll(bool changeCentering,
     d->canvasController->setPreferredCenter(oldPreferredCenter - oldStillPoint + newStillPoint);
 }
 
+void KisImageView::slotLoadingFinished()
+{
+    if (!document()) return;
+
+    canvasBase()->initializeImage();
+
+    /**
+     * Dirty hack alert
+     */
+    d->zoomManager->zoomController()->setAspectMode(true);
+
+    if (viewConverter()) {
+       viewConverter()->setZoomMode(KoZoomMode::ZOOM_PAGE);
+    }
+}

@@ -98,6 +98,9 @@ signals:
 
 public slots:
 
+private slots:
+    void slotLoadingFinished();
+
 private:
     class Private;
     Private * const d;
