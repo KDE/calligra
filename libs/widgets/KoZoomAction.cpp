@@ -322,7 +322,7 @@ QWidget * KoZoomAction::createZoomWidget(QStatusBar *parent)
     if (d->specialButtons & AspectMode) {
         d->aspectButton = new QToolButton(group);
         d->aspectButton->setIcon(koIcon("zoom-pixels"));
-        d->aspectButton->setIconSize(QSize(22,22));
+        d->aspectButton->setIconSize(QSize(16,16));
         d->aspectButton->setCheckable(true);
         d->aspectButton->setChecked(true);
         d->aspectButton->setAutoRaise(true);
@@ -333,7 +333,7 @@ QWidget * KoZoomAction::createZoomWidget(QStatusBar *parent)
     if (d->specialButtons & ZoomToSelection) {
         QToolButton * zoomToSelectionButton = new QToolButton(group);
         zoomToSelectionButton->setIcon(koIcon("zoom-select"));
-        zoomToSelectionButton->setIconSize(QSize(22,22));
+        zoomToSelectionButton->setIconSize(QSize(16,16));
         zoomToSelectionButton->setAutoRaise(true);
         zoomToSelectionButton->setToolTip(i18n("Zoom to Selection"));
         connect(zoomToSelectionButton, SIGNAL(clicked(bool)), this, SIGNAL(zoomedToSelection()));
@@ -342,7 +342,7 @@ QWidget * KoZoomAction::createZoomWidget(QStatusBar *parent)
     if (d->specialButtons & ZoomToAll) {
         QToolButton * zoomToAllButton = new QToolButton(group);
         zoomToAllButton->setIcon(koIcon("zoom-draw"));
-        zoomToAllButton->setIconSize(QSize(22,22));
+        zoomToAllButton->setIconSize(QSize(16,16));
         zoomToAllButton->setAutoRaise(true);
         zoomToAllButton->setToolTip(i18n("Zoom to All"));
         connect(zoomToAllButton, SIGNAL(clicked(bool)), this, SIGNAL(zoomedToAll()));

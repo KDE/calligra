@@ -177,7 +177,7 @@ void KisDoc2::slotLoadingFinished() {
     setAutoSave(KisConfig().autoSaveInterval());
 }
 
-bool KisDoc2::init()
+void KisDoc2::init()
 {
     delete m_d->nserver;
     m_d->nserver = 0;
@@ -189,8 +189,6 @@ bool KisDoc2::init()
 
     m_d->kraSaver = 0;
     m_d->kraLoader = 0;
-
-    return true;
 }
 
 bool KisDoc2::saveNativeFormat(const QString &file)
@@ -234,6 +232,9 @@ QDomDocument KisDoc2::saveXML()
     m_d->kraSaver = new KisKraSaver(this);
 
     root.appendChild(m_d->kraSaver->saveXML(doc, m_d->image));
+    if (!m_d->kraSaver->errorMessages().isEmpty()) {
+        setErrorMessage(m_d->kraLoader->errorMessages().join(".\n"));
+    }
 
     return doc;
 }
@@ -241,6 +242,7 @@ QDomDocument KisDoc2::saveXML()
 bool KisDoc2::loadOdf(KoOdfReadStore & odfStore)
 {
     Q_UNUSED(odfStore);
+    setErrorMessage(i18n("Krita does not support the OpenDocument file format."));
     return false;
 }
 
@@ -248,10 +250,11 @@ bool KisDoc2::loadOdf(KoOdfReadStore & odfStore)
 bool KisDoc2::saveOdf(SavingContext &documentContext)
 {
     Q_UNUSED(documentContext);
+    setErrorMessage(i18n("Krita does not support the OpenDocument file format."));
     return false;
 }
 
-bool KisDoc2::loadXML(const KoXmlDocument& doc, KoStore *)
+bool KisDoc2::loadXML(const KoXmlDocument& doc, KoStore *store)
 {
     if (m_d->image) {
         m_d->shapeController->setImage(0);
@@ -262,16 +265,21 @@ bool KisDoc2::loadXML(const KoXmlDocument& doc, KoStore *)
     KoXmlNode node;
     KisImageWSP image;
 
-    if (!init())
+    init();
+
+    if (doc.doctype().name() != "DOC") {
+        setErrorMessage(i18n("The format is not supported or the file is corrupted"));
         return false;
-    if (doc.doctype().name() != "DOC")
-        return false;
+    }
     root = doc.documentElement();
     int syntaxVersion = root.attribute("syntaxVersion", "3").toInt();
-    if (syntaxVersion > 2)
+    if (syntaxVersion > 2) {
+         setErrorMessage(i18n("The file is too new for this version of Krita (%1).", syntaxVersion));
         return false;
+    }
 
     if (!root.hasChildNodes()) {
+        setErrorMessage(i18n("The file has no layers."));
         return false;
     }
 
@@ -283,10 +291,21 @@ bool KisDoc2::loadXML(const KoXmlDocument& doc, KoStore *)
         if (node.isElement()) {
             if (node.nodeName() == "IMAGE") {
                 KoXmlElement elem = node.toElement();
-                if (!(image = m_d->kraLoader->loadXML(elem)))
+                if (!(image = m_d->kraLoader->loadXML(elem))) {
+                    if (m_d->kraLoader->errorMessages().isEmpty()) {
+                        setErrorMessage(i18n("Unknown error."));
+                    }
+                    else {
+                        setErrorMessage(m_d->kraLoader->errorMessages().join(".\n"));
+                    }
                     return false;
+                }
 
-            } else {
+            }
+            else {
+                if (m_d->kraLoader->errorMessages().isEmpty()) {
+                    setErrorMessage(i18n("The file does not contain an image."));
+                }
                 return false;
             }
         }
@@ -306,6 +325,10 @@ bool KisDoc2::completeSaving(KoStore *store)
     QString uri = url().url();
 
     m_d->kraSaver->saveBinaryData(store, m_d->image, url().url(), isStoredExtern());
+    if (!m_d->kraSaver->errorMessages().isEmpty()) {
+        setErrorMessage(m_d->kraLoader->errorMessages().join(".\n"));
+        return false;
+    }
 
     delete m_d->kraSaver;
     m_d->kraSaver = 0;
@@ -321,9 +344,22 @@ int KisDoc2::supportedSpecialFormats() const
 
 bool KisDoc2::completeLoading(KoStore *store)
 {
-    if (!m_d->image) return false;
+    if (!m_d->image) {
+        if (m_d->kraLoader->errorMessages().isEmpty()) {
+            setErrorMessage(i18n("Unknown error."));
+        }
+        else {
+            setErrorMessage(m_d->kraLoader->errorMessages().join(".\n"));
+        }
+        return false;
+    }
 
     m_d->kraLoader->loadBinaryData(store, m_d->image, url().url(), isStoredExtern());
+
+    if (!m_d->kraLoader->errorMessages().isEmpty()) {
+        setErrorMessage(m_d->kraLoader->errorMessages().join(".\n"));
+        return false;
+    }
 
     vKisNodeSP preselectedNodes = m_d->kraLoader->selectedNodes();
     if (preselectedNodes.size() > 0) {
@@ -366,8 +402,7 @@ bool KisDoc2::newImage(const QString& name,
 {
     Q_ASSERT(cs);
 
-    if (!init())
-        return false;
+    init();
 
     KisConfig cfg;
 
@@ -496,8 +531,9 @@ KisNodeSP KisDoc2::preActivatedNode() const
 
 void KisDoc2::prepareForImport()
 {
-    if (m_d->nserver == 0)
+    if (m_d->nserver == 0) {
         init();
+    }
 }
 
 KisImageWSP KisDoc2::image() const

@@ -325,6 +325,7 @@ void KisCustomImageWidget::fillPredefined()
 
     QString appName = KGlobal::mainComponent().componentName();
     QStringList definitions = KGlobal::dirs()->findAllResources("data", appName + "/predefined_image_sizes/*", KStandardDirs::Recursive);
+    definitions.sort();
 
     if (!definitions.empty()) {
 

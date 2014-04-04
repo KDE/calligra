@@ -25,7 +25,7 @@
 #include <QDomDocument>
 #include <QDomElement>
 #include <QString>
-#include <QMessageBox>
+#include <QStringList>
 
 #include <KoDocumentInfo.h>
 #include <KoColorSpace.h>
@@ -53,6 +53,7 @@ public:
     KisDoc2* doc;
     QMap<const KisNode*, QString> nodeFileNames;
     QString imageName;
+    QStringList errorMessages;
 };
 
 KisKraSaver::KisKraSaver(KisDoc2* document)
@@ -93,6 +94,8 @@ QDomElement KisKraSaver::saveXML(QDomDocument& doc,  KisImageWSP image)
     visitor.setSelectedNodes(m_d->doc->activeNodes());
 
     image->rootLayer()->accept(visitor);
+    m_d->errorMessages.append(visitor.errorMessages());
+
     m_d->nodeFileNames = visitor.nodeFileNames();
 
     saveCompositions(doc, imageElement, image);
@@ -113,6 +116,12 @@ bool KisKraSaver::saveBinaryData(KoStore* store, KisImageWSP image, const QStrin
         visitor.setExternalUri(uri);
 
     image->rootLayer()->accept(visitor);
+
+    m_d->errorMessages.append(visitor.errorMessages());
+    if (!m_d->errorMessages.isEmpty()) {
+        return false;
+    }
+
     // saving annotations
     // XXX this only saves EXIF and ICC info. This would probably need
     // a redesign of the dtd of the krita file to do this more generally correct
@@ -162,6 +171,11 @@ bool KisKraSaver::saveBinaryData(KoStore* store, KisImageWSP image, const QStrin
 
     saveAssistants(store, uri,external);
     return true;
+}
+
+QStringList KisKraSaver::errorMessages() const
+{
+    return m_d->errorMessages;
 }
 
 void KisKraSaver::saveCompositions(QDomDocument& doc, QDomElement& element, KisImageWSP image)
