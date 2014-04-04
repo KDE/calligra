@@ -814,7 +814,7 @@ void KisPaintopBox::slotPreviousFavoritePreset()
     if (!m_view->canvasBase()->favoriteResourceManager()) {
         m_view->canvasBase()->createFavoriteResourceManager(this);
     }
-    KoFavoriteResourceManager *mgr = m_view->canvasBase()->favoriteResourceManager();
+    KisFavoriteResourceManager *mgr = m_view->canvasBase()->favoriteResourceManager();
     int i = 0;
     foreach (const QString &preset, mgr->favoritePresetList()) {
         if (m_resourceProvider->currentPreset()->name() == preset) {
@@ -836,7 +836,7 @@ void KisPaintopBox::slotNextFavoritePreset()
     if (!m_view->canvasBase()->favoriteResourceManager()) {
         m_view->canvasBase()->createFavoriteResourceManager(this);
     }
-    KoFavoriteResourceManager *mgr = m_view->canvasBase()->favoriteResourceManager();
+    KisFavoriteResourceManager *mgr = m_view->canvasBase()->favoriteResourceManager();
     int i = 0;
     foreach (const QString &preset, mgr->favoritePresetList()) {
         if (m_resourceProvider->currentPreset()->name() == preset) {

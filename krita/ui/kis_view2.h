@@ -53,7 +53,7 @@ class KisSelectionManager;
 class KisStatusBar;
 class KisUndoAdapter;
 class KisZoomManager;
-class KoFavoriteResourceManager;
+class KisFavoriteResourceManager;
 class KisPaintopBox;
 class KisCanvasController;
 class KisFlipbook;
