@@ -69,7 +69,7 @@
        </item>
        <item>
         <property name="text">
-         <string>min</string>
+         <string comment="minimum">min</string>
         </property>
        </item>
       </widget>
