@@ -147,6 +147,8 @@ public:
     KAction* toSketch;
     QToolButton* switcher;
 
+    KAction* crashTest;
+
     void initSketchView(QObject* parent)
     {
         sketchView = new SketchDeclarativeView();
@@ -178,6 +180,13 @@ public:
         //connect(toDesktop, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), q, SLOT(switchDesktopForced()));
         connect(toDesktop, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), q, SLOT(switchToDesktop()));
         sketchView->engine()->rootContext()->setContextProperty("switchToDesktopAction", toDesktop);
+
+        crashTest = new KAction(q);
+        crashTest->setEnabled(true);
+        crashTest->setText(tr("Sample crash"));
+        crashTest->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_D);
+        q->addAction(crashTest);
+        connect(crashTest, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), q, SLOT(debugTestCrash()));
     }
 
     void initDesktopView()
@@ -254,6 +263,16 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
         //This saves a lot of hassle required to change state for loading dialogs etc.
         QMetaObject::invokeMethod(d->sketchView->rootObject(), "openFile", Q_ARG(QVariant, fileNames.at(0)));
     }
+}
+
+void MainWindow::debugTestCrash()
+{
+    MainWindow* thisWillCrash;
+    thisWillCrash->debugTestCrash();
+    QMessageBox msg(this);
+    msg.setText("Debug Test Crash");
+    msg.setModal(true);
+    msg.show();
 }
 
 void MainWindow::switchDesktopForced()

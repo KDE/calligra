@@ -75,6 +75,7 @@ Q_SIGNALS:
     void sketchKisViewChanged();
 
 private Q_SLOTS:
+    void debugTestCrash();
     void switchDesktopForced();
     void switchSketchForced();
     void adjustZoomOnDocumentChangedAndStuff();
