@@ -164,7 +164,7 @@ void KisOpenGL::printError(const char *file, int line)
 #ifdef Q_OS_WIN
         QFile f(QDesktopServices::storageLocation(QDesktopServices::TempLocation) + "/krita-opengl.txt");
         f.open(QFile::WriteOnly | QFile::Append);
-        QTextStream debugFilestream(f);
+        QTextStream debugFilestream(&f);
         debugFilestream << errorString << endl;
 #endif
         if (file != 0) {      
