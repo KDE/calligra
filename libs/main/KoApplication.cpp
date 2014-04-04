@@ -231,6 +231,9 @@ bool KoApplication::start()
     KoDocumentEntry entry = KoDocumentEntry::queryByMimeType(d->nativeMimeType);
     if (entry.isEmpty()) {
             kError(30003) << KGlobal::mainComponent().componentName() << "part.desktop not found." << endl;
+#ifdef Q_OS_WIN
+            qDebug() << KGlobal::mainComponent().componentName() << "part.desktop not found." << endl;
+#endif
             QMessageBox::critical(0, applicationName() + i18n(": Critical Error"), i18n("Essential application components could not be found.\n"
                                                                                         "This might be an installation issue.\n"
                                                                                         "Try restarting, running kbuildsycoca4.exe or reinstalling."));

@@ -25,6 +25,7 @@
 #include <QDir>
 #include <QFile>
 #include <QDesktopServices>
+#include <QTextStream>
 
 #include <kis_debug.h>
 #include <kis_config.h>
@@ -128,6 +129,7 @@ void KisOpenGL::createContext()
     f.write(", ");
     QString version((const char*)glGetString(GL_VERSION));
     f.write(version.toLatin1());
+    f.write("\r\n\r\nErrors:\r\n");
 #endif
 }
 
@@ -154,19 +156,37 @@ QGLWidget *KisOpenGL::sharedContextWidget()
 void KisOpenGL::printError(const char *file, int line)
 {
     GLenum glErr = glGetError();
+    const char* errorString = 0;
 
     while (glErr != GL_NO_ERROR) {
-
-        dbgUI << "glError:" << (const char *)gluErrorString(glErr);
-
-        if (file != 0) {
+        errorString = (const char *)gluErrorString(glErr);
+        dbgUI << "glError:" << errorString;
+#ifdef Q_OS_WIN
+        QFile f(QDesktopServices::storageLocation(QDesktopServices::TempLocation) + "/krita-opengl.txt");
+        f.open(QFile::WriteOnly | QFile::Append);
+        QTextStream debugFilestream(f);
+        debugFilestream << errorString << endl;
+#endif
+        if (file != 0) {      
+#ifdef Q_OS_WIN
+            debugFilestream << " at" << file;
+#endif
             if (line != -1) {
                 dbgUI << " at" << file << " line" << line;
+#ifdef Q_OS_WIN
+                debugFilestream << " line" << line;
+#endif
             } else {
                 dbgUI << " in" << file;
+#ifdef Q_OS_WIN
+#endif
             }
         }
-
+#ifdef Q_OS_WIN
+        debugFilestream << endl;
+        debugFilestream.flush();
+        f.close();
+#endif
         glErr = glGetError();
     }
 }

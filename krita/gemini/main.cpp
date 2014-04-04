@@ -27,6 +27,7 @@
 #include <QDir>
 #include <QMessageBox>
 #include <QSplashScreen>
+#include <QTextStream>
 
 #include <kapplication.h>
 #include <kaboutdata.h>
@@ -61,16 +62,68 @@ void MiniDumpFunction( unsigned int nExceptionCode, EXCEPTION_POINTERS *pExcepti
     QString comment = "Minidump comment: kritagemini.exe\n";
     KritaSteamClient::MiniDumpFunction(comment, nExceptionCode, (void*) pException);
 }
-
 #elif defined Q_WS_X11
 #include <ui/input/wintab/kis_tablet_support_x11.h>
 #endif
 
 
 
+// Startup Message Handler (write to disk)
+QFile *startupLogFile = 0;
+QTextStream *startupLogStream = 0;
+
+void prepareStartupLogfile() {
+    startupLogFile = new QFile(QDesktopServices::storageLocation(QDesktopServices::TempLocation) + "/krita_startup-log.txt");
+    startupLogFile->open(QIODevice::WriteOnly);
+    startupLogStream = new QTextStream(startupLogFile);
+    *startupLogStream << QString("Krita Gemini - Startup") << endl << endl;
+}
+
+void closeStartupLogfile() {
+    if (startupLogStream != 0) {
+        startupLogStream->flush();
+        delete startupLogStream;
+        startupLogStream = 0;
+    }
+
+    if (startupLogFile != 0) {
+        startupLogFile->close();
+        delete startupLogFile;
+        startupLogFile = 0;
+    }
+}
+
+void customDebugMessageHandler(QtMsgType type, const char *msg)
+{
+    QString txt;
+    switch (type) {
+    case QtDebugMsg:
+        txt = QString("Debug: %1").arg(msg);
+        break;
+
+    case QtWarningMsg:
+        txt = QString("Warning: %1").arg(msg);
+    break;
+    case QtCriticalMsg:
+        txt = QString("Critical: %1").arg(msg);
+    break;
+    case QtFatalMsg:
+        txt = QString("Fatal: %1").arg(msg);
+        abort();
+    }
+
+    if (startupLogStream != 0) {
+        *startupLogStream << txt << endl;
+    }
+}
+
 int main( int argc, char** argv )
 {
     int result;
+
+    prepareStartupLogfile();
+    qInstallMsgHandler(customDebugMessageHandler);
+
     #if defined HAVE_STEAMWORKS
 #ifdef Q_OS_WIN
         _set_se_translator(MiniDumpFunction);
@@ -201,6 +254,10 @@ int main( int argc, char** argv )
         window.show();
 #endif
     }
+
+    // Revert to standard message handler
+    qInstallMsgHandler(0);
+    closeStartupLogfile();
 
     splash.finish(&window);
 
