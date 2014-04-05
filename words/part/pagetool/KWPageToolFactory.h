@@ -23,14 +23,13 @@
 
 #include <KoToolFactoryBase.h>
 
-/// Factory for the KPrAnimationTool
+/// Factory for the KWPageTool
 class KWPageToolFactory : public KoToolFactoryBase {
 public:
     /// constructor
     KWPageToolFactory();
     ~KWPageToolFactory();
 
-    bool canCreateTool(KoCanvasBase *canvas) const;
     KoToolBase* createTool(KoCanvasBase *canvas);
 };
 #endif
