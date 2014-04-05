@@ -377,6 +377,7 @@ void KisView2::setCurrentView(KoView *view)
         mainWindow()->guiFactory()->addClient(imageView);
         imageView->setParentView(this);
         d->currentImageView = imageView;
+        imageView->canvasBase()->setResourceManager(d->canvasResourceManager);
 
         connect(d->nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)), doc->image(), SLOT(requestStrokeEnd()));
         connect(d->rotateCanvasRight, SIGNAL(triggered()), dynamic_cast<KisCanvasController*>(canvasController()), SLOT(rotateCanvasRight15()));
