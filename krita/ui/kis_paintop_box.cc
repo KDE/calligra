@@ -606,6 +606,8 @@ void KisPaintopBox::slotSaveActivePreset()
 
 void KisPaintopBox::slotUpdatePreset()
 {
+    if (!m_resourceProvider->currentPreset()) return;
+
     // block updates of avoid some over updating of the option widget
     m_blockUpdate = true;
     m_optionWidget->writeConfiguration(const_cast<KisPaintOpSettings*>(m_resourceProvider->currentPreset()->settings().data()));

@@ -74,6 +74,10 @@ KisCanvasWidgetBase::~KisCanvasWidgetBase()
 
 void KisCanvasWidgetBase::drawDecorations(QPainter & gc, const QRect &updateWidgetRect) const
 {
+    if (!m_d->canvas) return;
+    if (!m_d->canvas->view()) return;
+    if (!m_d->canvas->view()->document()) return;
+
     gc.save();
 
     // Setup the painter to take care of the offset; all that the
