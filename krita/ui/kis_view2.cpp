@@ -361,7 +361,6 @@ void KisView2::setCurrentView(KoView *view)
             d->nodeManager->disconnect(doc->image());
             mainWindow()->guiFactory()->removeClient(d->currentImageView);
             mainWindow()->statusBar()->removeWidget(d->currentImageView->zoomManager()->zoomActionWidget());
-            d->currentImageView->setParentView(0);
 
             d->rotateCanvasRight->disconnect();
             d->rotateCanvasLeft->disconnect();
@@ -388,7 +387,7 @@ void KisView2::setCurrentView(KoView *view)
         connect(d->wrapAroundAction, SIGNAL(toggled(bool)), dynamic_cast<KisCanvasController*>(canvasController()), SLOT(slotToggleWrapAroundMode(bool)));
         connect(canvasControllerWidget(), SIGNAL(toolOptionWidgetsChanged(QList<QPointer<QWidget> >)), mainWindow()->dockerManager(), SLOT(newOptionWidgets(QList<QPointer<QWidget> >)));
 
-
+        canvasControllerWidget()->activate();
     }
 
     d->filterManager->setView(imageView);
