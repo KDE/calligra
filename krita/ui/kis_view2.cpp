@@ -200,6 +200,7 @@ public:
     KAction *rotateCanvasRight;
     KAction *rotateCanvasLeft;
     KAction *resetCanvasTransformations;
+    KToggleAction *wrapAroundAction;
     KisSelectionManager *selectionManager;
     KisControlFrame *controlFrame;
     KisNodeManager *nodeManager;
@@ -370,7 +371,7 @@ void KisView2::setCurrentView(KoView *view)
             d->rotateCanvasLeft->disconnect();
             d->resetCanvasTransformations->disconnect();
             d->mirrorCanvas->disconnect();
-
+            d->wrapAroundAction->disconnect();
         }
 
         // Wait for the async image to have loaded
@@ -380,7 +381,7 @@ void KisView2::setCurrentView(KoView *view)
         connect(d->rotateCanvasLeft, SIGNAL(triggered()),dynamic_cast<KisCanvasController*>(canvasController()), SLOT(rotateCanvasLeft15()));
         connect(d->resetCanvasTransformations, SIGNAL(triggered()), dynamic_cast<KisCanvasController*>(canvasController()), SLOT(resetCanvasTransformations()));
         connect(d->mirrorCanvas, SIGNAL(toggled(bool)), dynamic_cast<KisCanvasController*>(canvasController()), SLOT(mirrorCanvas(bool)));
-
+        connect(d->wrapAroundAction, SIGNAL(toggled(bool)), dynamic_cast<KisCanvasController*>(canvasController()), SLOT(slotToggleWrapAroundMode(bool)));
 //        connect(canvasController()->proxyObject, SIGNAL(documentMousePositionChanged(QPointF)), d->statusBar, SLOT(documentMousePositionChanged(QPointF)));
 
 //        mainWindow()->statusBar()->addWidget(imageView->zoomManager()->zoomActionWidget());
@@ -721,10 +722,10 @@ void KisView2::createActions()
     actionCollection()->addAction("reset_canvas_transformations", d->resetCanvasTransformations);
     d->resetCanvasTransformations->setShortcut(QKeySequence("Ctrl+'"));
 
-    KToggleAction *wrapAroundAction = new KToggleAction(i18n("Wrap Around Mode"), this);
-    actionCollection()->addAction("wrap_around_mode", wrapAroundAction);
-    wrapAroundAction->setShortcut(QKeySequence(Qt::Key_W));
-    connect(wrapAroundAction, SIGNAL(toggled(bool)), dynamic_cast<KisCanvasController*>(canvasController()), SLOT(slotToggleWrapAroundMode(bool)));
+    d->wrapAroundAction = new KToggleAction(i18n("Wrap Around Mode"), this);
+    actionCollection()->addAction("wrap_around_mode", d->wrapAroundAction);
+    d->wrapAroundAction->setShortcut(QKeySequence(Qt::Key_W));
+
 
     KToggleAction *tAction = new KToggleAction(i18n("Show Status Bar"), this);
     tAction->setCheckedState(KGuiItem(i18n("Hide Status Bar")));
