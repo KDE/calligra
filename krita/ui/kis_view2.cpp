@@ -348,6 +348,7 @@ KisView2::~KisView2()
 void KisView2::setCurrentView(KoView *view)
 {
     KisImageView *imageView = qobject_cast<KisImageView*>(view);
+    imageView->setParentView(this);
 
     if (imageView) {
         if (d->currentImageView) {
@@ -375,7 +376,6 @@ void KisView2::setCurrentView(KoView *view)
 
 //        mainWindow()->statusBar()->addWidget(imageView->zoomManager()->zoomActionWidget());
         mainWindow()->guiFactory()->addClient(imageView);
-        imageView->setParentView(this);
         d->currentImageView = imageView;
         imageView->canvasBase()->setResourceManager(d->canvasResourceManager);
 
