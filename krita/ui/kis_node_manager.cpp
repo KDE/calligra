@@ -165,6 +165,7 @@ void KisNodeManager::setView(KisImageView *imageView)
         KisShapeController *shapeController = dynamic_cast<KisShapeController*>(m_d->view->document()->shapeController());
         Q_ASSERT(shapeController);
         shapeController->disconnect(SIGNAL(sigActivateNode(KisNodeSP)), this);
+        m_d->imageView->image()->disconnect(this);
     }
 
     m_d->imageView = imageView;
@@ -173,6 +174,8 @@ void KisNodeManager::setView(KisImageView *imageView)
         KisShapeController *shapeController = dynamic_cast<KisShapeController*>(m_d->view->document()->shapeController());
         Q_ASSERT(shapeController);
         connect(shapeController, SIGNAL(sigActivateNode(KisNodeSP)), SLOT(slotNonUiActivatedNode(KisNodeSP)));
+        connect(m_d->imageView->image(), SIGNAL(sigIsolatedModeChanged()),this, SLOT(slotUpdateIsolateModeAction()));
+
     }
 }
 
@@ -304,8 +307,6 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
     actionManager->addAction("isolate_layer", action, actionCollection);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(toggleIsolateMode(bool)));
 
-    connect(m_d->view->image(), SIGNAL(sigIsolatedModeChanged()),
-            this, SLOT(slotUpdateIsolateModeAction()));
     connect(this, SIGNAL(sigNodeActivated(KisNodeSP)), SLOT(slotUpdateIsolateModeAction()));
     connect(this, SIGNAL(sigNodeActivated(KisNodeSP)), SLOT(slotTryFinishIsolatedMode()));
 }
