@@ -67,6 +67,14 @@ KoCanvasBase::~KoCanvasBase()
     delete d;
 }
 
+void KoCanvasBase::setResourceManager(KoCanvasResourceManager *resourceManager)
+{
+    if (d->resourceManager != resourceManager) {
+        delete d->resourceManager;
+    }
+    d->resourceManager = resourceManager;
+}
+
 QPointF KoCanvasBase::viewToDocument(const QPointF &viewPoint) const
 {
     return viewConverter()->viewToDocument(viewPoint - documentOrigin());;
