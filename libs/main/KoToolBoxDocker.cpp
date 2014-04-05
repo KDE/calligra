@@ -44,13 +44,11 @@ KoToolBoxDocker::KoToolBoxDocker(KoToolBox *toolBox)
 
 void KoToolBoxDocker::setCanvas(KoCanvasBase *canvas)
 {
-    qDebug() << "setCanvas called for canvas" << canvas;
     m_toolBox->setCanvas(canvas);
 }
 
 void KoToolBoxDocker::unsetCanvas()
 {
-    qDebug() << "unsetCanvas called for canvas";
     m_toolBox->unsetCanvas();
 }
 
