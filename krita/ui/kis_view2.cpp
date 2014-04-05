@@ -249,7 +249,8 @@ KisView2::KisView2(QWidget *parent)
             action->setShortcut(QKeySequence(), KAction::ActiveShortcut);
         }
 
-        KoToolManager::instance()->registerTools(actionCollection(), new KoDummyCanvasController(actionCollection()));
+        KoCanvasController *dummy = new KoDummyCanvasController(actionCollection());
+        KoToolManager::instance()->registerTools(actionCollection(), dummy);
 
         KoToolBoxFactory toolBoxFactory;
         mainWindow()->createDockWidget(&toolBoxFactory);
