@@ -764,10 +764,10 @@ void KoToolManager::registerTools(KActionCollection *ac, KoCanvasController *con
 
     d->setup();
 
-    if (! d->canvasses.contains(controller)) {
-        kWarning(30006) << "registerTools called on a canvasController that has not been registered (yet)!";
+    if (!d->canvasses.contains(controller)) {
         return;
     }
+
     CanvasData *cd = d->canvasses.value(controller).first();
     foreach(KoToolBase *tool, cd->allTools) {
         QHash<QString, KAction*> actions = tool->actions();
