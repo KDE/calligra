@@ -518,11 +518,6 @@ void KoToolManager::Private::attachCanvas(KoCanvasController *controller)
             SIGNAL(currentLayerChanged(const KoShapeLayer*)),
             q, SLOT(currentLayerChanged(const KoShapeLayer*)));
 
-    KoCanvasControllerWidget *canvasControllerWidget = dynamic_cast<KoCanvasControllerWidget*>(canvasData->canvas);
-    if (canvasControllerWidget) {
-        canvasControllerWidget->activate();
-    }
-
     emit q->changedCanvas(canvasData ? canvasData->canvas->canvas() : 0);
 }
 
