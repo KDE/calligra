@@ -274,7 +274,7 @@ bool KisMainWindow::event( QEvent* event )
                 KoToolManager::instance()->switchToolRequested(syncObject->activeToolId);
                 qApp->processEvents();
 
-                KisPaintOpPresetSP preset = m_guiClient->canvasBase()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
+                KisPaintOpPresetSP preset = m_guiClient->resourceProvider()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
                 preset->settings()->setProperty("CompositeOp", syncObject->compositeOp);
                 if (preset->settings()->hasProperty("OpacityValue"))
                     preset->settings()->setProperty("OpacityValue", syncObject->opacity);

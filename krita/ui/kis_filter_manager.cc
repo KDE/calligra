@@ -43,7 +43,7 @@
 #include "kis_canvas2.h"
 #include "kis_action.h"
 #include "kis_action_manager.h"
-
+#include "kis_canvas_resource_provider.h"
 #include "dialogs/kis_dlg_filter.h"
 #include "strokes/kis_filter_stroke_strategy.h"
 #include "krita_utils.h"
@@ -238,7 +238,7 @@ void KisFilterManager::apply(KisSafeFilterConfigurationSP filterConfig)
     KisPostExecutionUndoAdapter *undoAdapter =
         image->postExecutionUndoAdapter();
     KoCanvasResourceManager *resourceManager =
-        d->view->canvasBase()->resourceManager();
+        d->view->resourceProvider()->resourceManager();
 
     KisResourcesSnapshotSP resources =
         new KisResourcesSnapshot(image,

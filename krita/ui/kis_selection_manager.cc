@@ -287,7 +287,10 @@ bool KisSelectionManager::havePixelsInClipboard()
 
 bool KisSelectionManager::haveShapesSelected()
 {
-    return m_view->canvasBase()->shapeManager()->selection()->count() > 0;
+    if (m_view && m_view->canvasBase() && m_view->canvasBase()->shapeManager() && m_view->canvasBase()->shapeManager()->selection()->count()) {
+        return m_view->canvasBase()->shapeManager()->selection()->count() > 0;
+    }
+    return false;
 }
 
 bool KisSelectionManager::haveShapesInClipboard()
@@ -527,7 +530,7 @@ void KisSelectionManager::paintSelectedShapes()
 
     KisFigurePaintingToolHelper helper(i18n("Stroke Shapes"),
                                         image,
-                                        m_view->canvasBase()->resourceManager(),
+                                        m_view->resourceProvider()->resourceManager(),
                                         KisPainter::StrokeStyleBrush,
                                         KisPainter::FillStyleNone);
 

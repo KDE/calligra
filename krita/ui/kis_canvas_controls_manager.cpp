@@ -76,9 +76,9 @@ void KisCanvasControlsManager::transformColor(int step)
 {
     if (!m_view) return;
     if (!m_view->canvasBase()) return;
-    if (!m_view->canvasBase()->resourceManager()) return;
+    if (!m_view->resourceProvider()->resourceManager()) return;
 
-    KoColor color = m_view->canvasBase()->resourceManager()->resource(KoCanvasResourceManager::ForegroundColor).value<KoColor>();
+    KoColor color = m_view->resourceProvider()->resourceManager()->resource(KoCanvasResourceManager::ForegroundColor).value<KoColor>();
     QColor rgb = color.toQColor();
     int h = 0, s = 0, v = 0;
     rgb.getHsv(&h,&s,&v);
@@ -91,7 +91,7 @@ void KisCanvasControlsManager::transformColor(int step)
     }
     rgb.setHsv(h,s,v);
     color.fromQColor(rgb);
-    m_view->canvasBase()->resourceManager()->setResource(KoCanvasResourceManager::ForegroundColor, color);
+    m_view->resourceProvider()->resourceManager()->setResource(KoCanvasResourceManager::ForegroundColor, color);
 }
 
 
@@ -109,9 +109,9 @@ void KisCanvasControlsManager::stepAlpha(float step)
 {
     if (!m_view) return;
     if (!m_view->canvasBase()) return;
-    if (!m_view->canvasBase()->resourceManager()) return;
+    if (!m_view->resourceProvider()->resourceManager()) return;
 
-    qreal alpha = m_view->canvasBase()->resourceManager()->resource(KisCanvasResourceProvider::Opacity).toDouble();
+    qreal alpha = m_view->resourceProvider()->resourceManager()->resource(KisCanvasResourceProvider::Opacity).toDouble();
     alpha += step;
     alpha = qBound<qreal>(0.0, alpha, 1.0);
     m_view->canvasBase()->resourceManager ()->setResource(KisCanvasResourceProvider::Opacity, alpha);

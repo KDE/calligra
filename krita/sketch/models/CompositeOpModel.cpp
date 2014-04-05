@@ -189,7 +189,7 @@ void CompositeOpModel::setView(QObject* newView)
     d->view = qobject_cast<KisView2*>( newView );
     if (d->view)
     {
-        connect(d->view->canvasBase()->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
+        connect(d->view->resourceProvider()->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
                 this, SLOT(resourceChanged(int, const QVariant&)));
         connect(d->view->nodeManager(), SIGNAL(sigLayerActivated(KisLayerSP)),
                 this, SLOT(currentNodeChanged(KisLayerSP)));
@@ -397,7 +397,7 @@ void CompositeOpModel::resourceChanged(int /*key*/, const QVariant& /*v*/)
 {
     if (d->view)
     {
-        KisPaintOpPresetSP preset = d->view->canvasBase()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
+        KisPaintOpPresetSP preset = d->view->resourceProvider()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
         if (preset && d->currentPreset.data() != preset.data())
         {
             d->currentPreset = preset;

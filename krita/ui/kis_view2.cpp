@@ -276,9 +276,8 @@ KisView2::KisView2(QWidget *parent)
     connect(d->nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)),
             resourceProvider(), SLOT(slotNodeActivated(KisNodeSP)));
 
-//    connect(resourceProvider()->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
-//            d->controlFrame->paintopBox(), SLOT(slotCanvasResourceChanged(int,QVariant)));
-
+    connect(resourceProvider()->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
+            d->controlFrame->paintopBox(), SLOT(slotCanvasResourceChanged(int,QVariant)));
 
     loadPlugins();
 
