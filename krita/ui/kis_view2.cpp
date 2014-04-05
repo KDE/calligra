@@ -62,6 +62,7 @@
 #include <kmessagebox.h>
 #include <kactioncollection.h>
 
+#include <KoToolRegistry.h>
 #include <KoStore.h>
 #include <KoMainWindow.h>
 #include <KoSelection.h>
@@ -74,7 +75,7 @@
 #include <KoResourceServerProvider.h>
 #include <KoCompositeOp.h>
 #include <KoTemplateCreateDia.h>
-#include <KoCanvasControllerWidget.h>
+#include <KoCanvasController.h>
 #include <KoDocumentEntry.h>
 #include <KoProperties.h>
 #include <KoPart.h>
@@ -248,6 +249,8 @@ KisView2::KisView2(QWidget *parent)
             action->setShortcut(QKeySequence(), KAction::ActiveShortcut);
         }
 
+        KoToolManager::instance()->registerTools(actionCollection(), new KoDummyCanvasController(actionCollection()));
+
         KoToolBoxFactory toolBoxFactory;
         mainWindow()->createDockWidget(&toolBoxFactory);
 
@@ -293,18 +296,18 @@ KisView2::KisView2(QWidget *parent)
     }
 #endif
 
-//    KoResourceServer<KisPaintOpPreset> * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
-//    KisPaintOpPreset *preset = rserver->resourceByName("Basic_tip_default");
-//    if (!preset) {
-//        if (rserver->resources().isEmpty()) {
-//            KMessageBox::error(mainWindow(), i18n("Krita cannot find any brush presets and will close now. Please check your installation.", i18n("Critical Error")));
-//            exit(0);
-//        }
-//        preset = rserver->resources().first();
-//    }
-//    if (preset) {
-//        paintOpBox()->resourceSelected(preset);
-//    }
+    KoResourceServer<KisPaintOpPreset> * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
+    KisPaintOpPreset *preset = rserver->resourceByName("Basic_tip_default");
+    if (!preset) {
+        if (rserver->resources().isEmpty()) {
+            KMessageBox::error(mainWindow(), i18n("Krita cannot find any brush presets and will close now. Please check your installation.", i18n("Critical Error")));
+            exit(0);
+        }
+        preset = rserver->resources().first();
+    }
+    if (preset) {
+        paintOpBox()->resourceSelected(preset);
+    }
 
     foreach(const QString & docker, KoDockRegistry::instance()->keys()) {
         KoDockFactoryBase *factory = KoDockRegistry::instance()->value(docker);

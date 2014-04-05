@@ -123,7 +123,6 @@ KisImageView::KisImageView(KoPart *part, KisDoc2 *doc, QWidget *parent)
 
     Q_ASSERT(d->canvasController);
     KoToolManager::instance()->addController(d->canvasController);
-    KoToolManager::instance()->registerTools(actionCollection(), d->canvasController);
 
     connect(d->canvasController, SIGNAL(documentSizeChanged()), d->zoomManager, SLOT(slotScrollAreaSizeChanged()));
     setAcceptDrops(true);
