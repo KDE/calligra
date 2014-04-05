@@ -257,7 +257,9 @@ KisView2::KisView2(QWidget *parent)
         KoToolManager::instance()->registerTools(actionCollection(), dummy);
 
         KoToolBoxFactory toolBoxFactory;
-        mainWindow()->createDockWidget(&toolBoxFactory);
+        QDockWidget* toolbox = mainWindow()->createDockWidget(&toolBoxFactory);
+        toolbox->setMinimumWidth(60);
+
         mainWindow()->dockerManager()->setIcons(false);
     }
 
