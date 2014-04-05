@@ -197,6 +197,9 @@ public:
     KAction *saveIncremental;
     KAction *saveIncrementalBackup;
     KAction *openResourcesDirectory;
+    KAction *rotateCanvasRight;
+    KAction *rotateCanvasLeft;
+    KAction *resetCanvasTransformations;
     KisSelectionManager *selectionManager;
     KisControlFrame *controlFrame;
     KisNodeManager *nodeManager;
@@ -362,12 +365,21 @@ void KisView2::setCurrentView(KoView *view)
             mainWindow()->guiFactory()->removeClient(d->currentImageView);
             mainWindow()->statusBar()->removeWidget(d->currentImageView->zoomManager()->zoomActionWidget());
             d->currentImageView->setParentView(0);
+
+            d->rotateCanvasRight->disconnect();
+            d->rotateCanvasLeft->disconnect();
+            d->resetCanvasTransformations->disconnect();
+            d->mirrorCanvas->disconnect();
+
         }
 
         // Wait for the async image to have loaded
         KisDoc2* doc = qobject_cast<KisDoc2*>(view->document());
         connect(d->nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)), doc->image(), SLOT(requestStrokeEnd()));
-
+        connect(d->rotateCanvasRight, SIGNAL(triggered()), dynamic_cast<KisCanvasController*>(canvasController()), SLOT(rotateCanvasRight15()));
+        connect(d->rotateCanvasLeft, SIGNAL(triggered()),dynamic_cast<KisCanvasController*>(canvasController()), SLOT(rotateCanvasLeft15()));
+        connect(d->resetCanvasTransformations, SIGNAL(triggered()), dynamic_cast<KisCanvasController*>(canvasController()), SLOT(resetCanvasTransformations()));
+        connect(d->mirrorCanvas, SIGNAL(toggled(bool)), dynamic_cast<KisCanvasController*>(canvasController()), SLOT(mirrorCanvas(bool)));
 
 //        connect(canvasController()->proxyObject, SIGNAL(documentMousePositionChanged(QPointF)), d->statusBar, SLOT(documentMousePositionChanged(QPointF)));
 
@@ -690,7 +702,6 @@ void KisView2::createActions()
     d->mirrorCanvas->setChecked(false);
     actionCollection()->addAction("mirror_canvas", d->mirrorCanvas);
     d->mirrorCanvas->setShortcut(QKeySequence(Qt::Key_M));
-    connect(d->mirrorCanvas, SIGNAL(toggled(bool)), dynamic_cast<KisCanvasController*>(canvasController()), SLOT(mirrorCanvas(bool)));
 
     d->openResourcesDirectory = new KAction(i18n("Open Resources Folder"), this);
     d->openResourcesDirectory->setToolTip(i18n("Opens a file browser at the location Krita saves resources such as brushes to."));
@@ -698,20 +709,17 @@ void KisView2::createActions()
     actionCollection()->addAction("open_resources_directory", d->openResourcesDirectory);
     connect(d->openResourcesDirectory, SIGNAL(triggered()), SLOT(openResourcesDirectory()));
 
-    KAction *rotateCanvasRight = new KAction(i18n("Rotate Canvas Right"), this);
-    actionCollection()->addAction("rotate_canvas_right", rotateCanvasRight);
-    rotateCanvasRight->setShortcut(QKeySequence("Ctrl+]"));
-    connect(rotateCanvasRight, SIGNAL(triggered()), dynamic_cast<KisCanvasController*>(canvasController()), SLOT(rotateCanvasRight15()));
+    d->rotateCanvasRight = new KAction(i18n("Rotate Canvas Right"), this);
+    actionCollection()->addAction("rotate_canvas_right", d->rotateCanvasRight);
+    d->rotateCanvasRight->setShortcut(QKeySequence("Ctrl+]"));
 
-    KAction *rotateCanvasLeft = new KAction(i18n("Rotate Canvas Left"), this);
-    actionCollection()->addAction("rotate_canvas_left", rotateCanvasLeft);
-    rotateCanvasLeft->setShortcut(QKeySequence("Ctrl+["));
-    connect(rotateCanvasLeft, SIGNAL(triggered()),dynamic_cast<KisCanvasController*>(canvasController()), SLOT(rotateCanvasLeft15()));
+    d->rotateCanvasLeft = new KAction(i18n("Rotate Canvas Left"), this);
+    actionCollection()->addAction("rotate_canvas_left", d->rotateCanvasLeft);
+    d->rotateCanvasLeft->setShortcut(QKeySequence("Ctrl+["));
 
-    KAction *resetCanvasTransformations = new KAction(i18n("Reset Canvas Transformations"), this);
-    actionCollection()->addAction("reset_canvas_transformations", resetCanvasTransformations);
-    resetCanvasTransformations->setShortcut(QKeySequence("Ctrl+'"));
-    connect(resetCanvasTransformations, SIGNAL(triggered()), dynamic_cast<KisCanvasController*>(canvasController()), SLOT(resetCanvasTransformations()));
+    d->resetCanvasTransformations = new KAction(i18n("Reset Canvas Transformations"), this);
+    actionCollection()->addAction("reset_canvas_transformations", d->resetCanvasTransformations);
+    d->resetCanvasTransformations->setShortcut(QKeySequence("Ctrl+'"));
 
     KToggleAction *wrapAroundAction = new KToggleAction(i18n("Wrap Around Mode"), this);
     actionCollection()->addAction("wrap_around_mode", wrapAroundAction);
@@ -1168,7 +1176,6 @@ void KisView2::showJustTheCanvas(bool toggled)
             cfg.hideMenuFullscreen() &&
             cfg.hideToolbarFullscreen() &&
             cfg.hideScrollbarsFullscreen()) {
-
             int result =
                 KMessageBox::warningYesNo(this,
                                           "Intel(R) HD Graphics video adapters "
