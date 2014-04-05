@@ -116,7 +116,6 @@ public:
         saveActionAs = 0;
         printAction = 0;
         printActionPreview = 0;
-        statusBarLabel = 0;
         sendFileAction = 0;
         exportPdf = 0;
         closeFile = 0;
@@ -188,7 +187,6 @@ public:
 
     QWidget *m_activeWidget;
 
-    QLabel * statusBarLabel;
     QPointer<QProgressBar> progress;
     QMutex progressMutex;
 
@@ -1572,15 +1570,6 @@ void KoMainWindow::slotProgress(int value)
     qApp->processEvents();
 }
 
-QLabel * KoMainWindow::statusBarLabel()
-{
-    if (!d->statusBarLabel) {
-        d->statusBarLabel = new QLabel(statusBar());
-        statusBar()->addPermanentWidget(d->statusBarLabel, 1);
-    }
-    return d->statusBarLabel;
-}
-
 void KoMainWindow::setMaxRecentItems(uint _number)
 {
     d->recent->setMaxItems(_number);
@@ -1673,7 +1662,7 @@ void KoMainWindow::slotReloadFile()
     if (!document->reload()) {
         KMessageBox::error(this, i18n("Could not reload this document", i18n("Warning")));
     }
-    
+
     return;
 
 }
@@ -1851,11 +1840,6 @@ KRecentFilesAction *KoMainWindow::recentAction() const
     return d->recent;
 }
 
-
-void KoMainWindow::slotSetStatusBarText( const QString & text )
-{
-    statusBar()->showMessage( text );
-}
 
 void KoMainWindow::newWindow()
 {
