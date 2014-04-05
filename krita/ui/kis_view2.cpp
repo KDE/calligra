@@ -258,10 +258,6 @@ KisView2::KisView2(QWidget *parent)
 
         KoToolBoxFactory toolBoxFactory;
         mainWindow()->createDockWidget(&toolBoxFactory);
-
-        connect(canvasControllerWidget(), SIGNAL(toolOptionWidgetsChanged(QList<QPointer<QWidget> >)),
-                mainWindow()->dockerManager(), SLOT(newOptionWidgets(QList<QPointer<QWidget> >)));
-
         mainWindow()->dockerManager()->setIcons(false);
     }
 
@@ -372,6 +368,7 @@ void KisView2::setCurrentView(KoView *view)
             d->resetCanvasTransformations->disconnect();
             d->mirrorCanvas->disconnect();
             d->wrapAroundAction->disconnect();
+            canvasControllerWidget()->disconnect(SIGNAL(toolOptionWidgetsChanged(QList<QPointer<QWidget> >)), mainWindow()->dockerManager());
         }
 
         // Wait for the async image to have loaded
@@ -389,6 +386,8 @@ void KisView2::setCurrentView(KoView *view)
         connect(d->resetCanvasTransformations, SIGNAL(triggered()), dynamic_cast<KisCanvasController*>(canvasController()), SLOT(resetCanvasTransformations()));
         connect(d->mirrorCanvas, SIGNAL(toggled(bool)), dynamic_cast<KisCanvasController*>(canvasController()), SLOT(mirrorCanvas(bool)));
         connect(d->wrapAroundAction, SIGNAL(toggled(bool)), dynamic_cast<KisCanvasController*>(canvasController()), SLOT(slotToggleWrapAroundMode(bool)));
+        connect(canvasControllerWidget(), SIGNAL(toolOptionWidgetsChanged(QList<QPointer<QWidget> >)), mainWindow()->dockerManager(), SLOT(newOptionWidgets(QList<QPointer<QWidget> >)));
+
 
     }
 
