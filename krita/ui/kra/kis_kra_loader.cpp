@@ -237,8 +237,7 @@ KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
             // try once more without the profile
             cs = KoColorSpaceRegistry::instance()->colorSpace(colorspaceModel, colorspaceDepth, "");
             if (cs == 0) {
-                qDebug() << "!!!!!!!!!!!!!!!!!";
-                m_d->errorMessages << i18n("Image specifies an unssupported color model: %1.", colorspacename);
+                m_d->errorMessages << i18n("Image specifies an unsupported color model: %1.", colorspacename);
                 return KisImageWSP(0);
             }
         }
@@ -253,6 +252,17 @@ KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
         loadNodes(element, image, const_cast<KisGroupLayer*>(image->rootLayer().data()));
 
         KoXmlNode child;
+        for (child = element.lastChild(); !child.isNull(); child = child.previousSibling()) {
+            KoXmlElement e = child.toElement();
+            if(e.tagName() == "ProjectionBackgroundColor") {
+                if (e.hasAttribute("ColorData")) {
+                    QByteArray colorData = QByteArray::fromBase64(e.attribute("ColorData").toLatin1());
+                    KoColor color((const quint8*)colorData.data(), image->colorSpace());
+                    image->setDefaultProjectionColor(color);
+                }
+            }
+        }
+
         for (child = element.lastChild(); !child.isNull(); child = child.previousSibling()) {
             KoXmlElement e = child.toElement();
             if(e.tagName() == "compositions") {
@@ -450,7 +460,7 @@ KisNodeSP KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image,
     }
 
     if (nodeType.isEmpty()) {
-        m_d->errorMessages << i18n("Layer %1 is an unsupported type.", name);
+        m_d->errorMessages << i18n("Layer %1 has an unsupported type.", name);
         return 0;
     }
 
@@ -479,7 +489,7 @@ KisNodeSP KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image,
         node = loadFileLayer(element, image, name, opacity);
     }
     else {
-        m_d->errorMessages << i18n("Layer %1 is an unsupported type: %2.", name, nodeType);
+        m_d->errorMessages << i18n("Layer %1 has an unsupported type: %2.", name, nodeType);
         return 0;
     }
 

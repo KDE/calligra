@@ -103,7 +103,7 @@
 #include "kis_mimedata.h"
 #include "kis_node.h"
 #include "kis_node_manager.h"
-#include "kis_painting_assistants_manager.h"
+#include "kis_painting_assistants_decoration.h"
 #include <kis_paint_layer.h>
 #include "kis_paintop_box.h"
 #include "kis_print_job.h"
@@ -161,7 +161,7 @@ public:
         , imageManager(0)
         , gridManager(0)
         , perspectiveGridManager(0)
-        , paintingAssistantManager(0)
+        , paintingAssistantsDecoration(0)
         , actionManager(0)
         , mainWindow(0)
         , currentImageView(0)
@@ -178,7 +178,7 @@ public:
         delete imageManager;
         delete gridManager;
         delete perspectiveGridManager;
-        delete paintingAssistantManager;
+        delete paintingAssistantsDecoration;
         delete statusBar;
         delete actionManager;
         delete canvasControlsManager;
@@ -203,7 +203,7 @@ public:
     KisGridManager *gridManager;
     KisCanvasControlsManager *canvasControlsManager;
     KisPerspectiveGridManager * perspectiveGridManager;
-    KisPaintingAssistantsManager *paintingAssistantManager;
+    KisPaintingAssistantsDecoration *paintingAssistantsDecoration;
     BlockingUserInputEventFilter blockingEventFilter;
     KisFlipbook *flipbook;
     KisActionManager* actionManager;
@@ -624,7 +624,7 @@ void KisView2::slotLoadingFinished()
     // get the assistants and push them to the manager
     QList<KisPaintingAssistant*> paintingAssistants = document()->preLoadedAssistants();
     foreach (KisPaintingAssistant* assistant, paintingAssistants) {
-        d->paintingAssistantManager->addAssistant(assistant);
+        d->paintingAssistantsDecoration->addAssistant(assistant);
     }
 
     /**
@@ -636,11 +636,11 @@ void KisView2::slotLoadingFinished()
     if (d->currentImageView && d->currentImageView->viewConverter())
         d->currentImageView->viewConverter()->setZoomMode(KoZoomMode::ZOOM_PAGE);
 
-    if (d->paintingAssistantManager){
+    if (d->paintingAssistantsDecoration){
         foreach(KisPaintingAssistant* assist, document()->preLoadedAssistants()){
-            d->paintingAssistantManager->addAssistant(assist);
+            d->paintingAssistantsDecoration->addAssistant(assist);
         }
-        d->paintingAssistantManager->setVisible(true);
+        d->paintingAssistantsDecoration->setVisible(true);
     }
     updateGUI();
 
@@ -770,9 +770,9 @@ void KisView2::createManagers()
     //d->perspectiveGridManager->setup(actionCollection());
     //d->canvas->addDecoration(d->perspectiveGridManager);
 
-    d->paintingAssistantManager = new KisPaintingAssistantsManager(this);
-    //d->paintingAssistantManager->setup(actionCollection());
-    //d->canvas->addDecoration(d->paintingAssistantManager);
+    d->paintingAssistantsDecoration = new KisPaintingAssistantsDecoration(this);
+    //d->paintingAssistantsDecoration->setup(actionCollection());
+    //d->canvas->addDecoration(d->paintingAssistantsDecoration);
 
     d->canvasControlsManager = new KisCanvasControlsManager(this);
     d->canvasControlsManager->setup(actionCollection(), actionManager());
@@ -863,9 +863,9 @@ KisGridManager * KisView2::gridManager()
     return d->gridManager;
 }
 
-KisPaintingAssistantsManager* KisView2::paintingAssistantManager()
+KisPaintingAssistantsDecoration* KisView2::paintingAssistantsDecoration()
 {
-    return d->paintingAssistantManager;
+    return d->paintingAssistantsDecoration;
 }
 
 QMainWindow* KisView2::qtMainWindow() const

@@ -34,15 +34,140 @@
 #include "kis_palette_manager.h"
 #include "kis_view2.h"
 #include "kis_resource_server_provider.h"
+#include "kis_min_heap.h"
 
 #ifndef _MSC_EXTENSIONS
 const int KisFavoriteResourceManager::MAX_FAVORITE_PRESETS;
 //const int KisFavoriteResourceManager::MAX_RECENT_COLORS;
 #endif
 
-KisFavoriteResourceManager::KisFavoriteResourceManager(KisPaintopBox *paintopBox, QWidget* popupParent)
+class KisFavoriteResourceManager::ColorDataList
+{
+public:
+    static const int MAX_RECENT_COLOR = 12;
+
+    ColorDataList() {
+        m_key = 0;
+    }
+
+    ~ColorDataList() {
+    }
+
+    int size() {
+        return m_guiList.size();
+    }
+
+    int leastUsedGuiPos() {
+        return findPos(m_priorityList.valueAt(0));
+    }
+
+    const KoColor& guiColor(int pos) {
+        Q_ASSERT_X(pos < size(), "ColorDataList::guiColor", "index out of bound");
+        Q_ASSERT_X(pos >= 0, "ColorDataList::guiColor", "negative index");
+
+        return m_guiList.at(pos)->data;
+    }
+
+    void append(const KoColor& data) {
+        int pos = findPos(data);
+        if (pos > -1) updateKey(pos);
+        else appendNew(data);
+    }
+
+    void appendNew(const KoColor& data) {
+        if (size() >= ColorDataList::MAX_RECENT_COLOR) removeLeastUsed();
+
+        PriorityNode<KoColor> * node;
+        node = new PriorityNode <KoColor>();
+        node->data = data;
+        node->key = m_key++;
+        m_priorityList.append(node);
+
+        int pos = guiInsertPos(data);
+        pos >= m_guiList.size() ? m_guiList.append(node)
+        : m_guiList.insert(pos, node);
+        node = 0;
+    }
+
+    void removeLeastUsed() {
+        Q_ASSERT_X(size() >= 0, "ColorDataList::removeLeastUsed", "index out of bound");
+        if (size() <= 0) return;
+
+        int pos = findPos(m_priorityList.valueAt(0));
+        m_guiList.removeAt(pos);
+        m_priorityList.remove(0);
+    }
+
+    void updateKey(int guiPos) {
+        if (m_guiList.at(guiPos)->key == m_key - 1) return;
+        m_priorityList.changeKey(m_guiList.at(guiPos)->pos, m_key++);
+    }
+
+    /*find position of the color on the gui list*/
+    int findPos(const KoColor& color) {
+
+        int low = 0, high = size(), mid = 0;
+        while (low < high) {
+            mid = (low + high) / 2;
+            if (hsvComparison(color, m_guiList.at(mid)->data) == 0) return mid;
+            else if (hsvComparison(color, m_guiList.at(mid)->data) < 0) high = mid;
+            else low = mid + 1;
+        }
+
+        return -1;
+    }
+
+
+private:
+
+    int m_key;
+
+    int guiInsertPos(const KoColor& color) {
+        int low = 0, high = size() - 1, mid = (low + high) / 2;
+        while (low < high) {
+
+            hsvComparison(color, m_guiList[mid]->data) == -1 ? high = mid
+                    : low = mid + 1;
+            mid = (low + high) / 2;
+        }
+
+        if (m_guiList.size() > 0) {
+            if (hsvComparison(color, m_guiList[mid]->data) == 1) ++mid;
+        }
+        return mid;
+    }
+
+    /*compares c1 and c2 based on HSV.
+      c1 < c2, returns -1
+      c1 = c2, returns 0
+      c1 > c2, returns 1 */
+    int hsvComparison(const KoColor& c1, const KoColor& c2) {
+        QColor qc1 = c1.toQColor();
+        QColor qc2 = c2.toQColor();
+
+        if (qc1.hue() < qc2.hue()) return -1;
+        if (qc1.hue() > qc2.hue()) return 1;
+
+        // hue is the same, ok let's compare saturation
+        if (qc1.saturation() < qc2.saturation()) return -1;
+        if (qc1.saturation() > qc2.saturation()) return 1;
+
+        // oh, also saturation is same?
+        if (qc1.value() < qc2.value()) return -1;
+        if (qc1.value() > qc2.value()) return 1;
+
+        // user selected two similar colors
+        return 0;
+    }
+
+    KisMinHeap <KoColor, MAX_RECENT_COLOR> m_priorityList;
+    QList <PriorityNode <KoColor>*> m_guiList;
+};
+
+
+
+KisFavoriteResourceManager::KisFavoriteResourceManager(KisPaintopBox *paintopBox)
     : m_favoriteBrushManager(0)
-    , m_popupPalette(0)
     , m_paintopBox(paintopBox)
     , m_colorList(0)
     , m_blockUpdates(false)
@@ -51,9 +176,7 @@ KisFavoriteResourceManager::KisFavoriteResourceManager(KisPaintopBox *paintopBox
     KConfigGroup group(KGlobal::config(), "favoriteList");
     m_favoritePresetsList = (group.readEntry("favoritePresets")).split(',', QString::SkipEmptyParts);
 
-    m_popupPalette = new KisPopupPalette(this, popupParent);
-    m_popupPalette->showPopupPalette(false);
-    m_colorList = new KisColorDataList();
+    m_colorList = new ColorDataList();
 
     KoResourceServer<KisPaintOpPreset>* rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
     rServer->addObserver(this);
@@ -77,31 +200,15 @@ QStringList KisFavoriteResourceManager::favoritePresetList()
     return m_favoritePresetsList;
 }
 
-//Popup Palette
-void KisFavoriteResourceManager::slotShowPopupPalette(const QPoint &p)
-{
-    if (!m_popupPalette) return;
-    else m_popupPalette->showPopupPalette(p);
-}
-
-void KisFavoriteResourceManager::resetPopupPaletteParent(QWidget* w)
-{
-    if (m_popupPalette)
-    {
-        m_popupPalette->setParent(w);
-    }
-}
-
 QList<QImage> KisFavoriteResourceManager::favoritePresetImages()
 {
     QList<QImage> images;
     KoResourceServer<KisPaintOpPreset>* rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
-    foreach(const QString& name, m_favoritePresetsList) {
+    foreach(const QString & name, m_favoritePresetsList) {
         KoResource* resource = rServer->resourceByName(name);
-        if(!resource) {
+        if (!resource) {
             removeFavoritePreset(name);
-        }
-        else {
+        } else {
             images.append(resource->image());
         }
     }
@@ -115,17 +222,9 @@ void KisFavoriteResourceManager::slotChangeActivePaintop(int pos)
     KoResourceServer<KisPaintOpPreset>* rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
     KoResource* resource = rServer->resourceByName(m_favoritePresetsList.at(pos));
     m_paintopBox->resourceSelected(resource);
-
-    if (m_popupPalette) {
-        m_popupPalette->showPopupPalette(false); //automatically close the palette after a button is clicked.
-    }
+    emit hidePalettes();
 }
 
-bool KisFavoriteResourceManager::isPopupPaletteVisible()
-{
-    if (!m_popupPalette) return false;
-    else return m_popupPalette->isVisible();
-}
 
 //Palette Manager
 void KisFavoriteResourceManager::showPaletteManager()
@@ -143,21 +242,18 @@ int KisFavoriteResourceManager::addFavoritePreset(const QString& name)
 
     int pos = isFavoriteBrushSaved(name);
 
-    if (pos > -1) //brush is saved
-    {
+    if (pos > -1) { //brush is saved
         return pos;
     }
-    else //brush hasn't been saved yet
-    {
-        if (isFavoritePresetsFull())
-        {
+
+    else { //brush hasn't been saved yet
+
+        if (m_favoritePresetsList.size() == KisFavoriteResourceManager::MAX_FAVORITE_PRESETS)  {
             return -2; //list is full!
-        }
-        else
-        {
+        } else {
             m_favoritePresetsList.append(name);
             saveFavoritePresets();
-            m_popupPalette->update();
+            emit updatePalettes();
             return -1;
         }
     }
@@ -170,14 +266,12 @@ int KisFavoriteResourceManager::isFavoriteBrushSaved(const QString& name)
 
 void KisFavoriteResourceManager::removeFavoritePreset(int pos)
 {
-    if (pos < 0 || pos > m_favoritePresetsList.size())
-    {
+    if (pos < 0 || pos > m_favoritePresetsList.size()) {
         return;
-    }
-    else {
+    } else {
         m_favoritePresetsList.removeAt(pos);
         saveFavoritePresets();
-        m_popupPalette->update();
+        emit updatePalettes();
     }
 }
 
@@ -185,11 +279,6 @@ void KisFavoriteResourceManager::removeFavoritePreset(const QString& name)
 {
     int pos = isFavoriteBrushSaved(name);
     if (pos > -1) removeFavoritePreset(pos);
-}
-
-bool KisFavoriteResourceManager::isFavoritePresetsFull()
-{
-    return m_favoritePresetsList.size() == KisFavoriteResourceManager::MAX_FAVORITE_PRESETS;
 }
 
 int KisFavoriteResourceManager::numFavoritePresets()
@@ -202,8 +291,7 @@ void KisFavoriteResourceManager::saveFavoritePresets()
 
     QString favoriteList;
 
-    for (int pos = 0; pos < m_favoritePresetsList.size(); pos++)
-    {
+    for (int pos = 0; pos < m_favoritePresetsList.size(); pos++)  {
         favoriteList.append(m_favoritePresetsList.at(pos));
         favoriteList.append(",");
     }
@@ -216,61 +304,32 @@ void KisFavoriteResourceManager::saveFavoritePresets()
 //Recent Colors
 void KisFavoriteResourceManager::slotUpdateRecentColor(int pos)
 {
-    //    qDebug() << "[KisFavoriteResourceManager] selected color: " << recentColorAt(pos)
-    //            << "(r)" << recentColorAt(pos).red() << "(g)" << recentColorAt(pos).green()
-    //            << "(b)" << recentColorAt(pos).blue();
+    // Do not update the key, the colour might be selected but it is not used yet. So we are not supposed
+    // to update the colour priority when we select it.
+    m_colorList->updateKey(pos);
 
-    addRecentColorUpdate(pos);
-
-    if (m_popupPalette)
-        m_popupPalette->showPopupPalette(false); //automatically close the palette after a button is clicked.
+    emit setSelectedColor(pos);
+    emit sigSetFGColor(m_colorList->guiColor(pos));
+    emit hidePalettes();
 }
 
 void KisFavoriteResourceManager::slotAddRecentColor(const KoColor& color)
 {
-    addRecentColor(color);
+    m_colorList->append(color);
+    int pos = m_colorList->findPos(color);
+    emit setSelectedColor(pos);
 }
 
 void KisFavoriteResourceManager::slotChangeFGColorSelector(KoColor c)
 {
     QColor color;
     color = c.toQColor();
-
-    //qDebug() << "[KisFavoriteResourceManager] slotChangeFGColorSelector | color " << color ;
     emit sigChangeFGColorSelector(color);
-}
-
-void KisFavoriteResourceManager::addRecentColorUpdate(int guipos)
-{
-    // Do not update the key, the colour might be selected but it is not used yet. So we are not supposed
-    // to update the colour priority when we select it.
-    m_colorList->updateKey(guipos);
-    if (m_popupPalette)
-    {
-        m_popupPalette->setSelectedColor(guipos);
-        m_popupPalette->update();
-    }
-
-    emit sigSetFGColor(m_colorList->guiColor(guipos));
-    printColors();
-}
-
-void KisFavoriteResourceManager::addRecentColor(const KoColor& color)
-{
-    m_colorList->append(color);
-    int pos = m_colorList->findPos(color);
-    if (m_popupPalette)
-    {
-        m_popupPalette->setSelectedColor(pos);
-        m_popupPalette->update();
-    }
-
-    printColors();
 }
 
 void KisFavoriteResourceManager::removingResource(KisPaintOpPreset* resource)
 {
-    if(m_blockUpdates) {
+    if (m_blockUpdates) {
         return;
     }
     removeFavoritePreset(resource->name());
@@ -289,10 +348,21 @@ void KisFavoriteResourceManager::setBlockUpdates(bool block)
     m_blockUpdates = block;
 }
 
-void KisFavoriteResourceManager::syncTaggedResourceView(){}
+void KisFavoriteResourceManager::syncTaggedResourceView() {}
 
-void KisFavoriteResourceManager::syncTagAddition(const QString& /*tag*/){}
+void KisFavoriteResourceManager::syncTagAddition(const QString& /*tag*/) {}
 
-void KisFavoriteResourceManager::syncTagRemoval(const QString& /*tag*/){}
+void KisFavoriteResourceManager::syncTagRemoval(const QString& /*tag*/) {}
+
+int KisFavoriteResourceManager::recentColorsTotal()
+{
+    return m_colorList->size();
+}
+
+const KoColor& KisFavoriteResourceManager::recentColorAt(int pos)
+{
+    return m_colorList->guiColor(pos);
+}
 
 #include "kis_favorite_resource_manager.moc"
+

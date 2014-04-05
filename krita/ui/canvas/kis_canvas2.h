@@ -160,8 +160,6 @@ public: // KisCanvas2 methods
 signals:
     void imageChanged(KisImageWSP image);
 
-    void favoritePaletteCalled(const QPoint&);
-
     void sigCanvasCacheUpdated(KisUpdateInfoSP);
     void sigContinueResizeImage(qint32 w, qint32 h);
 
@@ -224,15 +222,16 @@ private slots:
 
 public:
 
+    bool isPopupPaletteVisible();
+    void slotShowPopupPalette(const QPoint& = QPoint(0,0));
+
     // interafce for KisCanvasController only
     void setWrapAroundViewingMode(bool value);
     void initializeImage();
     // interface for KisView2 only
     void resetCanvas(bool useOpenGL);
 
-    void createFavoriteResourceManager(KisPaintopBox*);
-    KisFavoriteResourceManager* favoriteResourceManager();
-    bool handlePopupPaletteIsVisible();
+    void setFavoriteResourceManager(KisFavoriteResourceManager* favoriteResourceManager);
 
 private:
     Q_DISABLE_COPY(KisCanvas2)
