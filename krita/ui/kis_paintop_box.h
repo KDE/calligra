@@ -94,6 +94,8 @@ public slots:
     void slotCanvasResourceChanged(int key, const QVariant& v);
     void resourceSelected(KoResource* resource);
 
+    KisFavoriteResourceManager *favoriteResourcesManager() { return m_favoriteResourceManager; }
+
 private:
 
     KoID currentPaintop();

@@ -45,7 +45,7 @@
 #include "kis_image.h"
 #include "kis_group_layer.h"
 #include "kis_paintop_settings.h"
-
+#include "kis_paintop_box.h"
 
 KisMainWindow::KisMainWindow(KoPart *part, const KComponentData &instance)
     : KoMainWindow(part, instance)
@@ -123,17 +123,24 @@ KisMainWindow::KisMainWindow(KoPart *part, const KComponentData &instance)
 
 void KisMainWindow::showView(KoView *view)
 {
-    view->guiActivateEvent(true);
+    KisImageView *imageView = qobject_cast<KisImageView*>(view);
+    if (imageView) {
+        // XXX: find a better way to initialize this!
+        imageView->canvasBase()->setFavoriteResourceManager(m_guiClient->paintOpBox()->favoriteResourcesManager());
+        view->guiActivateEvent(true);
 
-    m_mdiArea->addSubWindow(view);
-    if (m_mdiArea->subWindowList().size() == 1) {
-        view->showMaximized();
+        m_mdiArea->addSubWindow(view);
+        if (m_mdiArea->subWindowList().size() == 1) {
+            view->showMaximized();
+        }
+        else {
+            view->show();
+        }
+        view->setFocus();
+
+
+        m_guiClient->setCurrentView(view);
     }
-    else {
-        view->show();
-    }
-    view->setFocus();
-    m_guiClient->setCurrentView(view);
 }
 
 void KisMainWindow::slotPreferences()
