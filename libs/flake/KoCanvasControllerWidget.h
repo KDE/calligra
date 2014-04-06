@@ -69,8 +69,7 @@ public:
     /**
      * Activate this canvascontroller
      */
-    void activate();
-
+    virtual void activate();
 
     virtual void setDrawShadow(bool drawShadow);
 

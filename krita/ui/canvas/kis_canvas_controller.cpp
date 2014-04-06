@@ -151,6 +151,12 @@ void KisCanvasController::updateDocumentSize(const QSize &sz, bool recalculateCe
     emit documentSizeChanged();
 }
 
+void KisCanvasController::activate()
+{
+    KoCanvasControllerWidget::activate();
+    m_d->globalEventFilter->setupAsEventFilter(m_d->view->canvasBase()->canvasWidget());
+}
+
 void KisCanvasController::mirrorCanvas(bool enable)
 {
     QPoint newOffset = m_d->coordinatesConverter->mirror(m_d->coordinatesConverter->widgetCenterPoint(), enable, false);
