@@ -185,6 +185,8 @@ void KisMainWindow::updateMenus()
     m_mdiNextWindow->setEnabled(enabled);
     m_mdiPreviousWindow->setEnabled(enabled);
     m_mdiTile->setEnabled(enabled);
+
+    setActiveSubWindow(m_mdiArea->activeSubWindow());
 }
 
 void KisMainWindow::updateWindowMenu()
