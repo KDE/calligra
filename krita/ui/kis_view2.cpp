@@ -387,6 +387,10 @@ void KisView2::setCurrentView(KoView *view)
         connect(d->wrapAroundAction, SIGNAL(toggled(bool)), dynamic_cast<KisCanvasController*>(canvasController()), SLOT(slotToggleWrapAroundMode(bool)));
         connect(canvasControllerWidget(), SIGNAL(toolOptionWidgetsChanged(QList<QPointer<QWidget> >)), mainWindow()->dockerManager(), SLOT(newOptionWidgets(QList<QPointer<QWidget> >)));
 
+        imageView->canvasBase()->addDecoration(d->gridManager);
+        imageView->canvasBase()->addDecoration(d->perspectiveGridManager);
+        imageView->canvasBase()->addDecoration(d->paintingAssistantsDecoration);
+
         canvasControllerWidget()->activate();
     }
 
@@ -396,6 +400,7 @@ void KisView2::setCurrentView(KoView *view)
     d->imageManager->setView(imageView);
     d->canvasControlsManager->setView(imageView);
     d->actionManager->setView(imageView);
+    d->gridManager->setView(imageView);
 
     actionManager()->updateGUI();
 }
@@ -775,16 +780,13 @@ void KisView2::createManagers()
     d->imageManager->setup(actionCollection(), actionManager());
 
     d->gridManager = new KisGridManager(this);
-    //d->gridManager->setup(actionCollection());
-    //d->canvas->addDecoration(d->gridManager);
+    d->gridManager->setup(actionCollection());
 
     d->perspectiveGridManager = new KisPerspectiveGridManager(this);
-    //d->perspectiveGridManager->setup(actionCollection());
-    //d->canvas->addDecoration(d->perspectiveGridManager);
+    d->perspectiveGridManager->setup(actionCollection());
 
     d->paintingAssistantsDecoration = new KisPaintingAssistantsDecoration(this);
-    //d->paintingAssistantsDecoration->setup(actionCollection());
-    //d->canvas->addDecoration(d->paintingAssistantsDecoration);
+    d->paintingAssistantsDecoration->setup(actionCollection());
 
     d->canvasControlsManager = new KisCanvasControlsManager(this);
     d->canvasControlsManager->setup(actionCollection(), actionManager());

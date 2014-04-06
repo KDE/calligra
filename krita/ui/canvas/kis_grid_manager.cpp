@@ -26,7 +26,6 @@
 #include <qgl.h>
 #endif
 
-
 #include <QTransform>
 
 #include <kaction.h>
@@ -35,36 +34,33 @@
 #include <kdialog.h>
 #include <klocale.h>
 
-#include "kis_coordinates_converter.h"
+#include <KoIcon.h>
 
+#include "kis_coordinates_converter.h"
 #include "kis_config.h"
 #include "kis_grid_painter_configuration.h"
 #include "kis_image.h"
 #include "kis_view2.h"
 #include "kis_doc2.h"
+#include "kis_image_view.h"
 
 KisGridManager::KisGridManager(KisView2 * parent)
-        : KisCanvasDecoration("grid", i18n("Grid"), parent), m_view(parent)
+    : KisCanvasDecoration("grid", i18n("Grid"), parent)
+    , m_view(parent)
+    , m_imageView(0)
 {
 
 }
 
 KisGridManager::~KisGridManager()
 {
-
 }
 
 void KisGridManager::setup(KActionCollection * collection)
 {
-    //there is no grid by default
-    m_view->document()->gridData().setShowGrid(false);
-
-    KisConfig config;
-    m_view->document()->gridData().setGrid(config.getGridHSpacing(), config.getGridVSpacing());
-
-    toggleGrid = m_view->document()->gridData().gridToggleAction();
-    collection->addAction("view_grid", toggleGrid);
-    connect(toggleGrid, SIGNAL(triggered()), this, SLOT(toggleVisibility()));
+    m_toggleGrid = new KToggleAction(koIcon("view-grid"), i18n("Show Grid"), 0);
+    collection->addAction("view_grid", m_toggleGrid);
+    connect(m_toggleGrid, SIGNAL(triggered()), this, SLOT(toggleVisibility()));
 
     m_toggleSnapToGrid  = new KToggleAction(i18n("Snap To Grid"), this);
     collection->addAction("view_snap_to_grid", m_toggleSnapToGrid);
@@ -96,14 +92,33 @@ void KisGridManager::setup(KActionCollection * collection)
     connect(m_gridFastConfig40x40, SIGNAL(triggered()), this, SLOT(fastConfig40x40()));
 }
 
+void KisGridManager::setView(KisImageView *imageView)
+{
+    if (m_imageView && m_imageView->document()) {
+        m_view->document()->gridData().gridToggleAction()->disconnect(SIGNAL(toggled()), m_toggleGrid);
+    }
+
+    m_imageView = imageView;
+
+    if (m_imageView) {
+        //there is no grid by default
+        imageView->document()->gridData().setShowGrid(false);
+
+        KisConfig config;
+        imageView->document()->gridData().setGrid(config.getGridHSpacing(), config.getGridVSpacing());
+
+        connect(imageView->document()->gridData().gridToggleAction(), SIGNAL(toggled(bool)), m_toggleGrid, SLOT(slotToggled(bool)));
+
+    }
+}
+
 void KisGridManager::updateGUI()
 {
-
 }
 
 void KisGridManager::checkVisibilityAction(bool check)
 {
-    toggleGrid->setChecked(check);
+    m_toggleGrid->setChecked(check);
 }
 
 void KisGridManager::toggleSnapToGrid()

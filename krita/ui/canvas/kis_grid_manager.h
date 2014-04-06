@@ -28,6 +28,7 @@
 #include <krita_export.h>
 
 class KisView2;
+class KisImageView;
 class KActionCollection;
 class KToggleAction;
 class KAction;
@@ -38,8 +39,9 @@ class KRITAUI_EXPORT KisGridManager : public KisCanvasDecoration
 public:
     KisGridManager(KisView2 * parent);
     ~KisGridManager();
-public:
+
     void setup(KActionCollection * collection);
+    void setView(KisImageView *view);
 
 public slots:
 
@@ -61,7 +63,8 @@ protected:
 private:
 
     KisView2* m_view;
-    KToggleAction *toggleGrid;
+    KisImageView *m_imageView;
+    KToggleAction *m_toggleGrid;
     KToggleAction* m_toggleSnapToGrid;
     KAction* m_gridConfig;
     KAction* m_gridFastConfig1x1;

@@ -155,7 +155,9 @@ void KisCanvasWidgetBase::drawDecorations(QPainter & gc, const QRect &updateWidg
 
 void KisCanvasWidgetBase::addDecoration(KisCanvasDecoration* deco)
 {
-    m_d->decorations.push_back(deco);
+    if (!m_d->decorations.contains(deco)) {
+        m_d->decorations << deco;
+    }
 }
 
 KisCanvasDecoration* KisCanvasWidgetBase::decoration(const QString& id) const
