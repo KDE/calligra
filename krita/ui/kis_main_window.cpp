@@ -175,6 +175,7 @@ void KisMainWindow::slotPreferences()
 void KisMainWindow::closeEvent(QCloseEvent *e)
 {
     m_mdiArea->closeAllSubWindows();
+    guiFactory()->removeClient(m_guiClient);
     KoMainWindow::closeEvent(e);
 }
 
