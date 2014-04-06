@@ -35,8 +35,8 @@ KisPerspectiveGridNgToolPlugin::KisPerspectiveGridNgToolPlugin(QObject *parent, 
 {
     KoToolRegistry * r = KoToolRegistry::instance();
     r->add(new KisPerspectiveGridNgToolFactory());
-//    qDebug()<<"Shiva: " << "KisPerspectiveGridNgToolPlugin";
-//    KisPerspectiveGridNgFactoryRegistry::instance()->add(new RulerAssistantFactory);
+    qDebug()<<"Shiva: " << KisPerspectiveGridNgFactoryRegistry::instance()->count();
+    KisPerspectiveGridNgFactoryRegistry::instance()->add(new KisPerspectiveGridNgFactory);
 //    KisPerspectiveGridNgFactoryRegistry::instance()->add(new EllipseAssistantFactory);
 //    KisPerspectiveGridNgFactoryRegistry::instance()->add(new SplineAssistantFactory);
 //    KisPerspectiveGridNgFactoryRegistry::instance()->add(new PerspectiveAssistantFactory);

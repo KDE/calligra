@@ -67,7 +67,7 @@ public:
     void uncache();
     KisPerspectiveGridNgHandle& operator=(const QPointF&);
     void setType(char type);
-    char handleType();
+    const char handleType() const ;
 private:
     void registerAssistant(KisPerspectiveGridNg*);
     void unregisterAssistant(KisPerspectiveGridNg*);
@@ -132,12 +132,19 @@ public:
     KisPerspectiveGridNgHandleSP leftMiddle();
     const KisPerspectiveGridNgHandleSP bottomMiddle() const;
     KisPerspectiveGridNgHandleSP bottomMiddle();
+    const KisPerspectiveGridNgHandleSP vanishingPointX() const;
+    KisPerspectiveGridNgHandleSP vanishingPointX();
+    const KisPerspectiveGridNgHandleSP vanishingPointY() const;
+    KisPerspectiveGridNgHandleSP vanishingPointY();
+    const KisPerspectiveGridNgHandleSP vanishingPointZ() const;
+    KisPerspectiveGridNgHandleSP vanishingPointZ();
 
 public:
     /**
      * This will paint a path using a white and black colors.
      */
     static void drawPath(QPainter& painter, const QPainterPath& path);
+    static void drawPath(QPainter& painter, const QPainterPath &path, QColor colour);
 protected:
     virtual QRect boundingRect() const;
     virtual void drawCache(QPainter& gc, const KisCoordinatesConverter *converter);

@@ -44,8 +44,8 @@
 #include <kis_perspective_grid_managerng.h>
 
 KisPerspectiveGridNgTool::KisPerspectiveGridNgTool(KoCanvasBase * canvas)
-        : KisTool(canvas, KisCursor::arrowCursor()), m_canvas(dynamic_cast<KisCanvas2*>(canvas)),
-          m_assistantDrag(0), m_newAssistant(0), /*m_optionsWidget(0),*/ m_handleSize(32), m_handleHalfSize(16)
+    : KisTool(canvas, KisCursor::arrowCursor()), m_canvas(dynamic_cast<KisCanvas2*>(canvas)),
+      m_assistantDrag(0), m_newAssistant(0), /*m_optionsWidget(0),*/ m_handleSize(32), m_handleHalfSize(16)
 {
     Q_ASSERT(m_canvas);
     setObjectName("tool_perspectivegridng");
@@ -108,14 +108,13 @@ inline double norm2(const QPointF& p)
 
 void KisPerspectiveGridNgTool::mousePressEvent(KoPointerEvent *event)
 {
-    qDebug()<<"Pressed button";
     if(PRESS_CONDITION_OM(event, KisTool::HOVER_MODE,
-                       Qt::LeftButton, Qt::ShiftModifier)) {
+                          Qt::LeftButton, Qt::ShiftModifier)) {
 
         setMode(KisTool::PAINT_MODE);
 
         if (m_newAssistant) {
-            qDebug()<<"New Assistant Creation " << m_newAssistant ;
+            //qDebug()<<"New Assistant Creation " << m_newAssistant ;
             m_internalMode = MODE_CREATION;
             *m_newAssistant->handles().back() = event->point;
             if (m_newAssistant->handles().size() == m_newAssistant->numHandles()) {
@@ -130,96 +129,96 @@ void KisPerspectiveGridNgTool::mousePressEvent(KoPointerEvent *event)
         double minDist = 81.0;
 
         QPointF mousePos = m_canvas->viewConverter()->documentToView(event->point);
-        foreach(KisPerspectiveGridNg* assistant, m_canvas->view()->perspectiveGridNgManager()->assistants()) {
-            foreach(const KisPerspectiveGridNgHandleSP handle, m_handles) {
-                double dist = norm2(mousePos - m_canvas->viewConverter()->documentToView(*handle));
-                if (dist < minDist) {
-                    minDist = dist;
-                    m_handleDrag = handle;
-                }
-            }
-            if(m_handleDrag && assistant->id() == "perspective") {
-                // Look for the handle which was pressed
+                foreach(KisPerspectiveGridNg* assistant, m_canvas->view()->perspectiveGridNgManager()->assistants()) {
+                    foreach(const KisPerspectiveGridNgHandleSP handle, m_handles) {
+                        double dist = norm2(mousePos - m_canvas->viewConverter()->documentToView(*handle));
+                        if (dist < minDist) {
+                            minDist = dist;
+                            m_handleDrag = handle;
+                        }
+                    }
+                    if(m_handleDrag && assistant->id() == "perspectivegridng") {
+                        // Look for the handle which was pressed
 
-                if (m_handleDrag ==assistant->topLeft()) {
-                    double dist = norm2(mousePos - m_canvas->viewConverter()->documentToView(*m_handleDrag));
-                    if (dist < minDist) {
-                        minDist = dist;
+                        if (m_handleDrag ==assistant->topLeft()) {
+                            double dist = norm2(mousePos - m_canvas->viewConverter()->documentToView(*m_handleDrag));
+                            if (dist < minDist) {
+                                minDist = dist;
+                            }
+                            m_internalMode = MODE_DRAGGING_NODE;
+                        } else if (m_handleDrag ==assistant->topRight()) {
+                            double dist = norm2(mousePos - m_canvas->viewConverter()->documentToView(*m_handleDrag));
+                            if (dist < minDist) {
+                                minDist = dist;
+                            }
+                            m_internalMode = MODE_DRAGGING_NODE;
+                        } else if (m_handleDrag ==assistant->bottomLeft()) {
+                            double dist = norm2(mousePos - m_canvas->viewConverter()->documentToView(*m_handleDrag));
+                            if (dist < minDist) {
+                                minDist = dist;
+                            }
+                            m_internalMode = MODE_DRAGGING_NODE;
+                        } else if (m_handleDrag ==assistant->bottomRight()) {
+                            double dist = norm2(mousePos - m_canvas->viewConverter()->documentToView(*m_handleDrag));
+                            if (dist < minDist) {
+                                minDist = dist;
+                            }
+                            m_internalMode = MODE_DRAGGING_NODE;
+                        }/* else if (m_handleDrag == assistant->leftMiddle()) {
+                            m_internalMode = MODE_DRAGGING_TRANSLATING_TWONODES;
+                            m_selectedNode1 = new KisPerspectiveGridNgHandle(assistant->topLeft().data()->x(),assistant->topLeft().data()->y());
+                            m_selectedNode2 = new KisPerspectiveGridNgHandle(assistant->bottomLeft().data()->x(),assistant->bottomLeft().data()->y());
+                            m_newAssistant = KisPerspectiveGridNgFactoryRegistry::instance()->get(0)->createPerspectiveGridNg();
+                            m_newAssistant->addHandle(assistant->topLeft());
+                            m_newAssistant->addHandle(m_selectedNode1);
+                            m_newAssistant->addHandle(m_selectedNode2);
+                            m_newAssistant->addHandle(assistant->bottomLeft());
+                            m_dragEnd = event->point;
+                            m_handleDrag = 0;
+                            m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
+                            return;
+                        } else if (m_handleDrag == assistant->rightMiddle()) {
+                            m_internalMode = MODE_DRAGGING_TRANSLATING_TWONODES;
+                            m_selectedNode1 = new KisPerspectiveGridNgHandle(assistant->topRight().data()->x(),assistant->topRight().data()->y());
+                            m_selectedNode2 = new KisPerspectiveGridNgHandle(assistant->bottomRight().data()->x(),assistant->bottomRight().data()->y());
+                            m_newAssistant = KisPerspectiveGridNgFactoryRegistry::instance()->get(0)->createPerspectiveGridNg();
+                            m_newAssistant->addHandle(assistant->topRight());
+                            m_newAssistant->addHandle(m_selectedNode1);
+                            m_newAssistant->addHandle(m_selectedNode2);
+                            m_newAssistant->addHandle(assistant->bottomRight());
+                            m_dragEnd = event->point;
+                            m_handleDrag = 0;
+                            m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
+                            return;
+                        } else if (m_handleDrag == assistant->topMiddle()) {
+                            m_internalMode = MODE_DRAGGING_TRANSLATING_TWONODES;
+                            m_selectedNode1 = new KisPerspectiveGridNgHandle(assistant->topLeft().data()->x(),assistant->topLeft().data()->y());
+                            m_selectedNode2 = new KisPerspectiveGridNgHandle(assistant->topRight().data()->x(),assistant->topRight().data()->y());
+                            m_newAssistant = KisPerspectiveGridNgFactoryRegistry::instance()->get(0)->createPerspectiveGridNg();
+                            m_newAssistant->addHandle(m_selectedNode1);
+                            m_newAssistant->addHandle(m_selectedNode2);
+                            m_newAssistant->addHandle(assistant->topRight());
+                            m_newAssistant->addHandle(assistant->topLeft());
+                            m_dragEnd = event->point;
+                            m_handleDrag = 0;
+                            m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
+                            return;
+                        } else if (m_handleDrag == assistant->bottomMiddle()) {
+                            m_internalMode = MODE_DRAGGING_TRANSLATING_TWONODES;
+                            m_selectedNode1 = new KisPerspectiveGridNgHandle(assistant->bottomLeft().data()->x(),assistant->bottomLeft().data()->y());
+                            m_selectedNode2 = new KisPerspectiveGridNgHandle(assistant->bottomRight().data()->x(),assistant->bottomRight().data()->y());
+                            m_newAssistant = KisPerspectiveGridNgFactoryRegistry::instance()->get(0)->createPerspectiveGridNg();
+                            m_newAssistant->addHandle(assistant->bottomLeft());
+                            m_newAssistant->addHandle(assistant->bottomRight());
+                            m_newAssistant->addHandle(m_selectedNode2);
+                            m_newAssistant->addHandle(m_selectedNode1);
+                            m_dragEnd = event->point;
+                            m_handleDrag = 0;
+                            m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
+                            return;
+                        }*/
                     }
-                    m_internalMode = MODE_DRAGGING_NODE;
-                } else if (m_handleDrag ==assistant->topRight()) {
-                    double dist = norm2(mousePos - m_canvas->viewConverter()->documentToView(*m_handleDrag));
-                    if (dist < minDist) {
-                        minDist = dist;
-                    }
-                    m_internalMode = MODE_DRAGGING_NODE;
-                } else if (m_handleDrag ==assistant->bottomLeft()) {
-                    double dist = norm2(mousePos - m_canvas->viewConverter()->documentToView(*m_handleDrag));
-                    if (dist < minDist) {
-                        minDist = dist;
-                    }
-                    m_internalMode = MODE_DRAGGING_NODE;
-                } else if (m_handleDrag ==assistant->bottomRight()) {
-                    double dist = norm2(mousePos - m_canvas->viewConverter()->documentToView(*m_handleDrag));
-                    if (dist < minDist) {
-                        minDist = dist;
-                    }
-                    m_internalMode = MODE_DRAGGING_NODE;
-                } else if (m_handleDrag == assistant->leftMiddle()) {
-                    m_internalMode = MODE_DRAGGING_TRANSLATING_TWONODES;
-                    m_selectedNode1 = new KisPerspectiveGridNgHandle(assistant->topLeft().data()->x(),assistant->topLeft().data()->y());
-                    m_selectedNode2 = new KisPerspectiveGridNgHandle(assistant->bottomLeft().data()->x(),assistant->bottomLeft().data()->y());
-                    m_newAssistant = KisPerspectiveGridNgFactoryRegistry::instance()->get(0)->createPerspectiveGridNg();
-                    m_newAssistant->addHandle(assistant->topLeft());
-                    m_newAssistant->addHandle(m_selectedNode1);
-                    m_newAssistant->addHandle(m_selectedNode2);
-                    m_newAssistant->addHandle(assistant->bottomLeft());
-                    m_dragEnd = event->point;
-                    m_handleDrag = 0;
-                    m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
-                    return;
-                } else if (m_handleDrag == assistant->rightMiddle()) {
-                    m_internalMode = MODE_DRAGGING_TRANSLATING_TWONODES;
-                    m_selectedNode1 = new KisPerspectiveGridNgHandle(assistant->topRight().data()->x(),assistant->topRight().data()->y());
-                    m_selectedNode2 = new KisPerspectiveGridNgHandle(assistant->bottomRight().data()->x(),assistant->bottomRight().data()->y());
-                    m_newAssistant = KisPerspectiveGridNgFactoryRegistry::instance()->get(0)->createPerspectiveGridNg();
-                    m_newAssistant->addHandle(assistant->topRight());
-                    m_newAssistant->addHandle(m_selectedNode1);
-                    m_newAssistant->addHandle(m_selectedNode2);
-                    m_newAssistant->addHandle(assistant->bottomRight());
-                    m_dragEnd = event->point;
-                    m_handleDrag = 0;
-                    m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
-                    return;
-                } else if (m_handleDrag == assistant->topMiddle()) {
-                    m_internalMode = MODE_DRAGGING_TRANSLATING_TWONODES;
-                    m_selectedNode1 = new KisPerspectiveGridNgHandle(assistant->topLeft().data()->x(),assistant->topLeft().data()->y());
-                    m_selectedNode2 = new KisPerspectiveGridNgHandle(assistant->topRight().data()->x(),assistant->topRight().data()->y());
-                    m_newAssistant = KisPerspectiveGridNgFactoryRegistry::instance()->get(0)->createPerspectiveGridNg();
-                    m_newAssistant->addHandle(m_selectedNode1);
-                    m_newAssistant->addHandle(m_selectedNode2);
-                    m_newAssistant->addHandle(assistant->topRight());
-                    m_newAssistant->addHandle(assistant->topLeft());
-                    m_dragEnd = event->point;
-                    m_handleDrag = 0;
-                    m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
-                    return;
-                } else if (m_handleDrag == assistant->bottomMiddle()) {
-                    m_internalMode = MODE_DRAGGING_TRANSLATING_TWONODES;
-                    m_selectedNode1 = new KisPerspectiveGridNgHandle(assistant->bottomLeft().data()->x(),assistant->bottomLeft().data()->y());
-                    m_selectedNode2 = new KisPerspectiveGridNgHandle(assistant->bottomRight().data()->x(),assistant->bottomRight().data()->y());
-                    m_newAssistant = KisPerspectiveGridNgFactoryRegistry::instance()->get(0)->createPerspectiveGridNg();
-                    m_newAssistant->addHandle(assistant->bottomLeft());
-                    m_newAssistant->addHandle(assistant->bottomRight());
-                    m_newAssistant->addHandle(m_selectedNode2);
-                    m_newAssistant->addHandle(m_selectedNode1);
-                    m_dragEnd = event->point;
-                    m_handleDrag = 0;
-                    m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
-                    return;
                 }
-            }
-        }
         if (m_handleDrag) {
             if (event->modifiers() & Qt::ShiftModifier) {
                 m_handleDrag->uncache();
@@ -252,17 +251,17 @@ void KisPerspectiveGridNgTool::mousePressEvent(KoPointerEvent *event)
             }
         }
 
-//        QString key = m_options.comboBox->model()->index( m_options.comboBox->currentIndex(), 0 ).data(Qt::UserRole).toString();
-//            m_newAssistant = KisPerspectiveGridNgFactoryRegistry::instance()->get(key)->createPerspectiveGridNg();
+        //        QString key = m_options.comboBox->model()->index( m_options.comboBox->currentIndex(), 0 ).data(Qt::UserRole).toString();
+        //            m_newAssistant = KisPerspectiveGridNgFactoryRegistry::instance()->get(key)->createPerspectiveGridNg();
         m_newAssistant = KisPerspectiveGridNgFactoryRegistry::instance()->get("perspectivegridng")->createPerspectiveGridNg();
-            m_internalMode = MODE_CREATION;
+        m_internalMode = MODE_CREATION;
+        m_newAssistant->addHandle(new KisPerspectiveGridNgHandle(event->point));
+        if (m_newAssistant->numHandles() <= 1) {
+            addAssistant();
+        } else {
             m_newAssistant->addHandle(new KisPerspectiveGridNgHandle(event->point));
-            if (m_newAssistant->numHandles() <= 1) {
-                addAssistant();
-            } else {
-                m_newAssistant->addHandle(new KisPerspectiveGridNgHandle(event->point));
-            }
-            m_canvas->updateCanvas();
+        }
+        m_canvas->updateCanvas();
     } else {
         KisTool::mousePressEvent(event);
     }
@@ -297,13 +296,13 @@ void KisPerspectiveGridNgTool::mouseMoveEvent(KoPointerEvent *event)
     if (m_newAssistant && m_internalMode == MODE_CREATION) {
         *m_newAssistant->handles().back() = event->point;
         m_canvas->updateCanvas();
-    } else if (m_newAssistant && m_internalMode == MODE_DRAGGING_TRANSLATING_TWONODES) {
+    } /*else if (m_newAssistant && m_internalMode == MODE_DRAGGING_TRANSLATING_TWONODES) {
         QPointF translate = event->point - m_dragEnd;
         m_dragEnd = event->point;
         m_selectedNode1.data()->operator =(QPointF(m_selectedNode1.data()->x(),m_selectedNode1.data()->y()) + translate);
         m_selectedNode2.data()->operator = (QPointF(m_selectedNode2.data()->x(),m_selectedNode2.data()->y()) + translate);
         m_canvas->updateCanvas();
-    } else if(MOVE_CONDITION(event, KisTool::PAINT_MODE)) {
+    } */else if(MOVE_CONDITION(event, KisTool::PAINT_MODE)) {
         if (m_handleDrag) {
             *m_handleDrag = event->point;
             m_handleDrag->uncache();
@@ -375,11 +374,11 @@ void KisPerspectiveGridNgTool::mouseReleaseEvent(KoPointerEvent *event)
         } else if (m_assistantDrag) {
             m_assistantDrag = 0;
             m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
-        } else if(m_internalMode == MODE_DRAGGING_TRANSLATING_TWONODES) {
+        } /*else if(m_internalMode == MODE_DRAGGING_TRANSLATING_TWONODES) {
             addAssistant();
             m_internalMode==MODE_CREATION;
             m_canvas->updateCanvas();
-        }
+        }*/
         else {
             event->ignore();
         }
@@ -396,6 +395,7 @@ void KisPerspectiveGridNgTool::paint(QPainter& _gc, const KoViewConverter &_conv
 
     if (m_newAssistant) {
         m_newAssistant->drawAssistant(_gc, QRectF(QPointF(0, 0), QSizeF(m_canvas->image()->size())), m_canvas->coordinatesConverter(), false,m_canvas);
+        qDebug()<<"Shiva: Handles count " << m_newAssistant->handles().count();
         foreach(const KisPerspectiveGridNgHandleSP handle, m_newAssistant->handles()) {
             QPainterPath path;
             path.addEllipse(QRectF(_converter.documentToView(*handle) -  QPointF(6, 6), QSizeF(12, 12)));
@@ -404,32 +404,49 @@ void KisPerspectiveGridNgTool::paint(QPainter& _gc, const KoViewConverter &_conv
     }
 
     foreach(const KisPerspectiveGridNgHandleSP handle, m_handles) {
-        QRectF ellipse(_converter.documentToView(*handle) -  QPointF(6, 6), QSizeF(12, 12));
-        if (handle == m_handleDrag /*|| handle == m_handleCombine*/) {
-            _gc.save();
-            _gc.setPen(Qt::transparent);
-            _gc.setBrush(handlesColor);
-            _gc.drawEllipse(ellipse);
-            _gc.restore();
-        }
-        QPainterPath path;
-        path.addEllipse(ellipse);
-        KisPerspectiveGridNg::drawPath(_gc, path);
-    }
-    foreach(KisPerspectiveGridNg* assistant, m_canvas->view()->perspectiveGridNgManager()->assistants()) {
-        if(assistant->id()=="perspective") {
-            QPointF topMiddle, bottomMiddle, rightMiddle, leftMiddle;
-            topMiddle = (_converter.documentToView(*assistant->topLeft()) + _converter.documentToView(*assistant->topRight()))*0.5;
-            bottomMiddle = (_converter.documentToView(*assistant->bottomLeft()) + _converter.documentToView(*assistant->bottomRight()))*0.5;
-            rightMiddle = (_converter.documentToView(*assistant->topRight()) + _converter.documentToView(*assistant->bottomRight()))*0.5;
-            leftMiddle = (_converter.documentToView(*assistant->topLeft()) + _converter.documentToView(*assistant->bottomLeft()))*0.5;
+        char typeOfHandle = handle.data()->handleType();
+        if(typeOfHandle!='v'){
+            QRectF ellipse(_converter.documentToView(*handle) -  QPointF(6, 6), QSizeF(12, 12));
+            if (handle == m_handleDrag /*|| handle == m_handleCombine*/) {
+                _gc.save();
+                _gc.setPen(Qt::transparent);
+                _gc.setBrush(handlesColor);
+                _gc.drawEllipse(ellipse);
+                _gc.restore();
+            }
             QPainterPath path;
-            path.addEllipse(QRectF(leftMiddle-QPointF(6,6),QSizeF(12,12)));
-            path.addEllipse(QRectF(topMiddle-QPointF(6,6),QSizeF(12,12)));
-            path.addEllipse(QRectF(rightMiddle-QPointF(6,6),QSizeF(12,12)));
-            path.addEllipse(QRectF(bottomMiddle-QPointF(6,6),QSizeF(12,12)));
+            path.addEllipse(ellipse);
             KisPerspectiveGridNg::drawPath(_gc, path);
         }
+    }
+    //    foreach(KisPerspectiveGridNg* assistant, m_canvas->view()->perspectiveGridNgManager()->assistants()) {
+    //        if(assistant->id()=="perspective") {
+    //            QPointF topMiddle, bottomMiddle, rightMiddle, leftMiddle;
+    //            topMiddle = (_converter.documentToView(*assistant->topLeft()) + _converter.documentToView(*assistant->topRight()))*0.5;
+    //            bottomMiddle = (_converter.documentToView(*assistant->bottomLeft()) + _converter.documentToView(*assistant->bottomRight()))*0.5;
+    //            rightMiddle = (_converter.documentToView(*assistant->topRight()) + _converter.documentToView(*assistant->bottomRight()))*0.5;
+    //            leftMiddle = (_converter.documentToView(*assistant->topLeft()) + _converter.documentToView(*assistant->bottomLeft()))*0.5;
+    //            QPainterPath path;
+    //            path.addEllipse(QRectF(leftMiddle-QPointF(6,6),QSizeF(12,12)));
+    //            path.addEllipse(QRectF(topMiddle-QPointF(6,6),QSizeF(12,12)));
+    //            path.addEllipse(QRectF(rightMiddle-QPointF(6,6),QSizeF(12,12)));
+    //            path.addEllipse(QRectF(bottomMiddle-QPointF(6,6),QSizeF(12,12)));
+    //            KisPerspectiveGridNg::drawPath(_gc, path);
+    //        }
+    //    }
+
+    foreach(KisPerspectiveGridNg* assistant, m_canvas->view()->perspectiveGridNgManager()->assistants()) {
+        QPointF vanishingPointX, vanishingPointY, vanishingPointZ;
+        vanishingPointZ = (_converter.documentToView(*assistant->topLeft()) + _converter.documentToView(*assistant->topRight())-QPointF(0,32))*0.5 ;
+        vanishingPointY = (_converter.documentToView(*assistant->topRight()) + _converter.documentToView(*assistant->bottomRight())+ QPointF(32,0))*0.5 ;
+        vanishingPointX = (_converter.documentToView(*assistant->topLeft()) + _converter.documentToView(*assistant->bottomLeft())-QPointF(32,0))*0.5 ;
+        QPainterPath path;
+        path.addEllipse(QRectF(vanishingPointX-QPointF(6,6),QSizeF(12,12)));
+        path.addEllipse(QRectF(vanishingPointY-QPointF(6,6),QSizeF(12,12)));
+        path.addEllipse(QRectF(vanishingPointZ-QPointF(6,6),QSizeF(12,12)));
+        //            path.addEllipse(QRectF(bottomMiddle-QPointF(6,6),QSizeF(12,12)));
+
+        KisPerspectiveGridNg::drawPath(_gc, path, Qt::blue);
     }
 
     QPixmap iconDelete = KIcon("edit-delete").pixmap(16, 16);
@@ -531,7 +548,7 @@ void KisPerspectiveGridNgTool::openFinish(KJob* job)
                     if (!strId.isEmpty() && !strX.isEmpty() && !strY.isEmpty()) {
                         int id = strId.toInt();
                         double x = strX.toDouble(),
-                               y = strY.toDouble();
+                                y = strY.toDouble();
                         if (!handleMap.contains(id)) {
                             handleMap.insert(id, new KisPerspectiveGridNgHandle(x, y));
                         } else {

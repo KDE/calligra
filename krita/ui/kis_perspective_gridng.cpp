@@ -72,10 +72,10 @@ KisPerspectiveGridNgHandle& KisPerspectiveGridNgHandle::operator=(const QPointF 
 
 void KisPerspectiveGridNgHandle::setType(char type)
 {
-//    d->handle_type = type;
+    d->handle_type = type;
 }
 
-char KisPerspectiveGridNgHandle::handleType()
+const char KisPerspectiveGridNgHandle::handleType() const
 {
     return d->handle_type;
 }
@@ -128,9 +128,9 @@ QList<KisPerspectiveGridNgHandleSP> KisPerspectiveGridNgHandle::split()
 
 void KisPerspectiveGridNgHandle::uncache()
 {
-//    foreach(KisPerspectiveGridNg* assistant, d->assistants) {
-//        assistant->uncache();
-//    }
+    foreach(KisPerspectiveGridNg* assistant, d->assistants) {
+        assistant->uncache();
+    }
 }
 
 
@@ -140,7 +140,7 @@ struct KisPerspectiveGridNg::Private {
     QList<KisPerspectiveGridNgHandleSP> handles,sideHandles;
     QPixmapCache::Key cached;
     QRect cachedRect; // relative to boundingRect().topLeft()
-    KisPerspectiveGridNgHandleSP topLeft, bottomLeft, topRight, bottomRight, topMiddle, bottomMiddle, rightMiddle, leftMiddle;
+    KisPerspectiveGridNgHandleSP topLeft, bottomLeft, topRight, bottomRight, topMiddle, bottomMiddle, rightMiddle, leftMiddle, vanishingPointX,vanishingPointY,vanishingPointZ;
     struct TranslationInvariantTransform {
         qreal m11, m12, m21, m22;
         TranslationInvariantTransform() { }
@@ -164,16 +164,32 @@ KisPerspectiveGridNg::KisPerspectiveGridNg(const QString& id, const QString& nam
 
 void KisPerspectiveGridNg::drawPath(QPainter& painter, const QPainterPath &path)
 {
-//    painter.save();
-//    QPen pen_a(QColor(0, 0, 0, 100), 2);
-//    pen_a.setCosmetic(true);
-//    painter.setPen(pen_a);
-//    painter.drawPath(path);
+    painter.save();
+    QPen pen_a(Qt::black, 2);
+    pen_a.setCosmetic(true);
+    painter.setPen(pen_a);
+    painter.drawPath(path);
 //    QPen pen_b(Qt::white, 0.9);
 //    pen_b.setCosmetic(true);
 //    painter.setPen(pen_b);
 //    painter.drawPath(path);
-//    painter.restore();
+    painter.restore();
+}
+
+void KisPerspectiveGridNg::drawPath(QPainter& painter, const QPainterPath &path, QColor colour)
+{
+    painter.save();
+    QPen pen_a(colour, 2);
+    pen_a.setCosmetic(true);
+    painter.setPen(pen_a);
+    painter.setBrush(QColor(0,0,0,125));
+    painter.drawPath(path);
+
+//    QPen pen_b(Qt::white, 0.9);
+//    pen_b.setCosmetic(true);
+//    painter.setPen(pen_b);
+//    painter.drawPath(path);
+    painter.restore();
 }
 
 //qreal KisPerspectiveGridNg::distance(const QPointF& pt) const
@@ -387,16 +403,19 @@ void KisPerspectiveGridNg::drawCache(QPainter& gc, const KisCoordinatesConverter
         gc.setPen(QColor(0, 0, 0, 125));
         gc.setTransform(transform, true);
         QPainterPath path;
-        for (int y = 0; y <= 8; ++y)
+        for (int y = 0; y <= 8;)
         {
             path.moveTo(QPointF(0.0, y * 0.125));
             path.lineTo(QPointF(1.0, y * 0.125));
+            y+=8;
         }
-        for (int x = 0; x <= 8; ++x)
+        for (int x = 0; x <= 8; )
         {
             path.moveTo(QPointF(x * 0.125, 0.0));
             path.lineTo(QPointF(x * 0.125, 1.0));
+            x+=8;
         }
+
         drawPath(gc, path);
     }
 }
@@ -507,7 +526,7 @@ void KisPerspectiveGridNg::findHandleLocation() {
     QList<KisPerspectiveGridNgHandleSP> vHandlesList;
     uint vHole = 0,hHole = 0;
     KisPerspectiveGridNgHandleSP oppHandle;
-    if (d->handles.size() == 4 && d->id == "perspective") {
+    if (d->handles.size() == 4) {
         //get the handle opposite to the first handle
         oppHandle = oppHandleOne();
         //Sorting handles into two list, X sorted and Y sorted into hHandlesList and vHandlesList respectively.
@@ -536,6 +555,7 @@ void KisPerspectiveGridNg::findHandleLocation() {
          give the handles their respective positions
          */
         if(vHandlesList.at(0).data()->x() > vHandlesList.at(1).data()->x()) {
+//            qDebug() << "Shiva: VCount:" vHandlesList.count();
             d->topLeft = vHandlesList.at(1);
             d->topRight= vHandlesList.at(0);
         }
@@ -582,30 +602,42 @@ void KisPerspectiveGridNg::findHandleLocation() {
         /*
          Setting the middle handles as needed
          */
-        if(!d->bottomMiddle && !d->topMiddle && !d->leftMiddle && !d->rightMiddle) {
-            d->bottomMiddle = new KisPerspectiveGridNgHandle((d->bottomLeft.data()->x() + d->bottomRight.data()->x())*0.5,
-                                                             (d->bottomLeft.data()->y() + d->bottomRight.data()->y())*0.5);
-            d->topMiddle = new KisPerspectiveGridNgHandle((d->topLeft.data()->x() + d->topRight.data()->x())*0.5,
-                                                             (d->topLeft.data()->y() + d->topRight.data()->y())*0.5);
-            d->rightMiddle= new KisPerspectiveGridNgHandle((d->topRight.data()->x() + d->bottomRight.data()->x())*0.5,
-                                                             (d->topRight.data()->y() + d->bottomRight.data()->y())*0.5);
-            d->leftMiddle= new KisPerspectiveGridNgHandle((d->bottomLeft.data()->x() + d->topLeft.data()->x())*0.5,
-                                                             (d->bottomLeft.data()->y() + d->topLeft.data()->y())*0.5);
-            addSideHandle(d->rightMiddle.data());
-            addSideHandle(d->leftMiddle.data());
-            addSideHandle(d->bottomMiddle.data());
-            addSideHandle(d->topMiddle.data());
-        }
-        else
-        {
-            d->bottomMiddle.data()->operator =(QPointF((d->bottomLeft.data()->x() + d->bottomRight.data()->x())*0.5,
-                                                             (d->bottomLeft.data()->y() + d->bottomRight.data()->y())*0.5));
-            d->topMiddle.data()->operator =(QPointF((d->topLeft.data()->x() + d->topRight.data()->x())*0.5,
-                                                             (d->topLeft.data()->y() + d->topRight.data()->y())*0.5));
-            d->rightMiddle.data()->operator =(QPointF((d->topRight.data()->x() + d->bottomRight.data()->x())*0.5,
-                                                             (d->topRight.data()->y() + d->bottomRight.data()->y())*0.5));
-            d->leftMiddle.data()->operator =(QPointF((d->bottomLeft.data()->x() + d->topLeft.data()->x())*0.5,
-                                                             (d->bottomLeft.data()->y() + d->topLeft.data()->y())*0.5));
+//        if(!d->bottomMiddle && !d->topMiddle && !d->leftMiddle && !d->rightMiddle) {
+//            d->bottomMiddle = new KisPerspectiveGridNgHandle((d->bottomLeft.data()->x() + d->bottomRight.data()->x())*0.5,
+//                                                             (d->bottomLeft.data()->y() + d->bottomRight.data()->y())*0.5);
+//            d->topMiddle = new KisPerspectiveGridNgHandle((d->topLeft.data()->x() + d->topRight.data()->x())*0.5,
+//                                                             (d->topLeft.data()->y() + d->topRight.data()->y())*0.5);
+//            d->rightMiddle= new KisPerspectiveGridNgHandle((d->topRight.data()->x() + d->bottomRight.data()->x())*0.5,
+//                                                             (d->topRight.data()->y() + d->bottomRight.data()->y())*0.5);
+//            d->leftMiddle= new KisPerspectiveGridNgHandle((d->bottomLeft.data()->x() + d->topLeft.data()->x())*0.5,
+//                                                             (d->bottomLeft.data()->y() + d->topLeft.data()->y())*0.5);
+//            addSideHandle(d->rightMiddle.data());
+//            addSideHandle(d->leftMiddle.data());
+//            addSideHandle(d->bottomMiddle.data());
+//            addSideHandle(d->topMiddle.data());
+//        }
+//        else
+//        {
+//            d->bottomMiddle.data()->operator =(QPointF((d->bottomLeft.data()->x() + d->bottomRight.data()->x())*0.5,
+//                                                             (d->bottomLeft.data()->y() + d->bottomRight.data()->y())*0.5));
+//            d->topMiddle.data()->operator =(QPointF((d->topLeft.data()->x() + d->topRight.data()->x())*0.5,
+//                                                             (d->topLeft.data()->y() + d->topRight.data()->y())*0.5));
+//            d->rightMiddle.data()->operator =(QPointF((d->topRight.data()->x() + d->bottomRight.data()->x())*0.5,
+//                                                             (d->topRight.data()->y() + d->bottomRight.data()->y())*0.5));
+//            d->leftMiddle.data()->operator =(QPointF((d->bottomLeft.data()->x() + d->topLeft.data()->x())*0.5,
+//                                                             (d->bottomLeft.data()->y() + d->topLeft.data()->y())*0.5));
+//        }
+
+        if(!d->vanishingPointX && !d->vanishingPointY && !d->vanishingPointZ){
+            d->vanishingPointZ = new KisPerspectiveGridNgHandle((d->topLeft.data()->x() + d->topRight.data()->x())*0.5,
+                                                                (d->topLeft.data()->y() + d->topRight.data()->y())*0.5 - 16);
+            d->vanishingPointY= new KisPerspectiveGridNgHandle((d->topRight.data()->x() + d->bottomRight.data()->x())*0.5 + 16,
+                                                                (d->topRight.data()->y() + d->bottomRight.data()->y())*0.5);
+            d->vanishingPointX= new KisPerspectiveGridNgHandle((d->bottomLeft.data()->x() + d->topLeft.data()->x())*0.5 - 16,
+                                                                (d->bottomLeft.data()->y() + d->topLeft.data()->y())*0.5);
+            d->vanishingPointX.data()->setType('v');
+            d->vanishingPointY.data()->setType('v');
+            d->vanishingPointZ.data()->setType('v');
         }
 
     }
@@ -735,7 +767,7 @@ KisPerspectiveGridNgHandleSP KisPerspectiveGridNg::oppHandleOne()
     {
         return d->handles.at(3);
     }
-            return d->handles.at(0);//TODO: comment this line while running
+            //return d->handles.at(0);//TODO: comment this line while running
 }
 
 KisPerspectiveGridNgHandleSP KisPerspectiveGridNg::topLeft()
@@ -816,6 +848,36 @@ KisPerspectiveGridNgHandleSP KisPerspectiveGridNg::leftMiddle()
 const KisPerspectiveGridNgHandleSP KisPerspectiveGridNg::leftMiddle() const
 {
     return d->leftMiddle;
+}
+
+KisPerspectiveGridNgHandleSP KisPerspectiveGridNg::vanishingPointX()
+{
+    return d->vanishingPointX;
+}
+
+const KisPerspectiveGridNgHandleSP KisPerspectiveGridNg::vanishingPointX() const
+{
+    return d->vanishingPointX;
+}
+
+KisPerspectiveGridNgHandleSP KisPerspectiveGridNg::vanishingPointY()
+{
+    return d->vanishingPointY;
+}
+
+const KisPerspectiveGridNgHandleSP KisPerspectiveGridNg::vanishingPointY() const
+{
+    return d->vanishingPointY;
+}
+
+KisPerspectiveGridNgHandleSP KisPerspectiveGridNg::vanishingPointZ()
+{
+    return d->vanishingPointZ;
+}
+
+const KisPerspectiveGridNgHandleSP KisPerspectiveGridNg::vanishingPointZ() const
+{
+    return d->vanishingPointZ;
 }
 
 const QList<KisPerspectiveGridNgHandleSP>& KisPerspectiveGridNg::handles() const

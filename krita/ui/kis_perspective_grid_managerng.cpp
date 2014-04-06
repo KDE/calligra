@@ -130,11 +130,14 @@ QList<KisPerspectiveGridNgHandleSP> KisPerspectiveGridNgManager::handles()
                 hs.push_back(handle);
             }
         }
-        foreach(const KisPerspectiveGridNgHandleSP handle, assistant->sideHandles()) {
-            if (!hs.contains(handle)) {
-                hs.push_back(handle);
-            }
-        }
+        hs.push_back(assistant->vanishingPointX());
+        hs.push_back(assistant->vanishingPointY());
+        hs.push_back(assistant->vanishingPointZ());
+//        foreach(const KisPerspectiveGridNgHandleSP handle, assistant->sideHandles()) {
+//            if (!hs.contains(handle)) {
+//                hs.push_back(handle);
+//            }
+//        }
     }
     return hs;
 }
