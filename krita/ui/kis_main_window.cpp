@@ -37,6 +37,7 @@
 #include "kis_canvas_controller.h"
 #include "kis_canvas2.h"
 #include "kis_view2.h"
+#include "kis_doc2.h"
 #include "kis_image_view.h"
 #include "dialogs/kis_dlg_preferences.h"
 #include "kis_config_notifier.h"
@@ -129,7 +130,8 @@ void KisMainWindow::showView(KoView *view)
         imageView->canvasBase()->setFavoriteResourceManager(m_guiClient->paintOpBox()->favoriteResourcesManager());
         view->guiActivateEvent(true);
 
-        m_mdiArea->addSubWindow(view);
+        QMdiSubWindow *subwin = m_mdiArea->addSubWindow(view);
+        subwin->setWindowTitle(view->document()->url().fileName());
         if (m_mdiArea->subWindowList().size() == 1) {
             view->showMaximized();
         }
