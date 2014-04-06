@@ -95,7 +95,7 @@ void KisGridManager::setup(KActionCollection * collection)
 void KisGridManager::setView(KisImageView *imageView)
 {
     if (m_imageView && m_imageView->document()) {
-        m_view->document()->gridData().gridToggleAction()->disconnect(SIGNAL(toggled()), m_toggleGrid);
+        m_view->document()->gridData().gridToggleAction()->disconnect(SIGNAL(toggled(bool)), m_toggleGrid);
     }
 
     m_imageView = imageView;
