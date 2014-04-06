@@ -361,7 +361,6 @@ void KisView2::setCurrentView(KoView *view)
             }
             canvasController()->proxyObject->disconnect(d->statusBar);
             d->nodeManager->disconnect(doc->image());
-            mainWindow()->guiFactory()->removeClient(d->currentImageView);
             mainWindow()->statusBar()->removeWidget(d->currentImageView->zoomManager()->zoomActionWidget());
 
             d->rotateCanvasRight->disconnect();
@@ -377,7 +376,6 @@ void KisView2::setCurrentView(KoView *view)
 //        connect(canvasController()->proxyObject, SIGNAL(documentMousePositionChanged(QPointF)), d->statusBar, SLOT(documentMousePositionChanged(QPointF)));
 
 //        mainWindow()->statusBar()->addWidget(imageView->zoomManager()->zoomActionWidget());
-        mainWindow()->guiFactory()->addClient(imageView);
         d->currentImageView = imageView;
         imageView->canvasBase()->setResourceManager(d->canvasResourceManager);
 
