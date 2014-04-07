@@ -276,6 +276,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
 void MainWindow::resetWindowTitle()
 {
     setWindowTitle(QString("%1 - %2").arg(DocumentManager::instance()->document()->url().fileName()).arg(i18n("Krita Gemini")));
+}
 
 void MainWindow::debugTestCrash()
 {
