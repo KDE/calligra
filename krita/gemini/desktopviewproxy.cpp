@@ -155,7 +155,7 @@ void DesktopViewProxy::loadExistingAsNew()
 
 void DesktopViewProxy::slotFileOpenRecent(const KUrl& url)
 {
-    DocumentManager::instance()->openDocument(url.toLocalFile());
+    QProcess::startDetached(qApp->applicationFilePath(), QStringList() << url.toLocalFile());
 }
 
 #include "desktopviewproxy.moc"
