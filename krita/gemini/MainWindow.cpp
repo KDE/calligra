@@ -181,12 +181,15 @@ public:
         connect(toDesktop, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), q, SLOT(switchToDesktop()));
         sketchView->engine()->rootContext()->setContextProperty("switchToDesktopAction", toDesktop);
 
+        // Uncomment these lines to enable a crash when the combination Ctrl+Shift+D is pressed
+        /*
         crashTest = new KAction(q);
         crashTest->setEnabled(true);
         crashTest->setText(tr("Sample crash"));
         crashTest->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_D);
         q->addAction(crashTest);
         connect(crashTest, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), q, SLOT(debugTestCrash()));
+        */
     }
 
     void initDesktopView()
@@ -280,12 +283,12 @@ void MainWindow::resetWindowTitle()
 
 void MainWindow::debugTestCrash()
 {
-    MainWindow* thisWillCrash;
-    thisWillCrash->debugTestCrash();
     QMessageBox msg(this);
     msg.setText("Debug Test Crash");
     msg.setModal(true);
     msg.show();
+    MainWindow* thisWillCrash;
+    thisWillCrash->debugTestCrash();
 }
 
 void MainWindow::switchDesktopForced()
