@@ -36,6 +36,8 @@
 #include <kstandarddirs.h>
 #include <kglobal.h>
 #include <kiconloader.h>
+#include <kcrash.h>
+
 #include "data/splash/splash_screen.xpm"
 #include "MainWindow.h"
 
@@ -44,6 +46,10 @@
 #if defined HAVE_STEAMWORKS
 #include <unistd.h>
 #include "steam/kritasteam.h"
+
+#ifdef USE_BREAKPAD
+    #include "kis_crash_handler.h"
+#endif
 
 #ifndef STEAM_APP_ID
 #pragma warning "No Steam APP ID! You will require steam_appid.txt in your executable directory to define this."
@@ -57,10 +63,17 @@
 #include "stdlib.h"
 #include <ui/input/wintab/kis_tablet_support_win.h>
 
+// Using breakpad support rather than Steam's minidump error reporting
 void MiniDumpFunction( unsigned int nExceptionCode, EXCEPTION_POINTERS *pException )
 {
+    /*
+    QMessageBox box(0);
+    box.setText("Testing");
+    box.setModal(true);
+    box.show();
     QString comment = "Minidump comment: kritagemini.exe\n";
     KritaSteamClient::MiniDumpFunction(comment, nExceptionCode, (void*) pException);
+    */
 }
 #elif defined Q_WS_X11
 #include <ui/input/wintab/kis_tablet_support_x11.h>
@@ -121,13 +134,23 @@ int main( int argc, char** argv )
 {
     int result;
 
+
+#ifdef Q_OS_WIN
+    // TODO: re-enabled Steam error reporting if Breakpad support is disabled
+    //qDebug("Registering Steam Error handler");
+    //_set_se_translator(MiniDumpFunction);
+#endif Q_OS_WIN
+#ifdef USE_BREAKPAD
+    qDebug() << "Enabling breakpad";
+    qputenv("KDE_DEBUG", "1");
+    KisCrashHandler crashHandler;
+    Q_UNUSED(crashHandler);
+#endif
+
     prepareStartupLogfile();
     qInstallMsgHandler(customDebugMessageHandler);
 
     #if defined HAVE_STEAMWORKS
-#ifdef Q_OS_WIN
-        _set_se_translator(MiniDumpFunction);
-#endif Q_OS_WIN
         KritaSteamClient* steamClient = KritaSteamClient::instance();
         if (!steamClient->initialise(KRITA_GEMINI_APPID))
         {
@@ -265,11 +288,7 @@ int main( int argc, char** argv )
     steamClient->mainWindowCreated();
 #endif
 
-    try {
-        result = app.exec();
-    } catch (...) {
-
-    }
+    result = app.exec();
 
 #if defined HAVE_STEAMWORKS
     steamClient->mainWindowBeingDestroyed();
