@@ -18,20 +18,12 @@
  */
 
 #include "kra/kis_kra_loader.h"
-
-#include <QMessageBox>
-
-#include "kis_kra_tags.h"
-#include "kis_kra_utils.h"
-#include "kis_kra_load_visitor.h"
+#include <QStringList>
 
 #include <KoStore.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
 #include <KoDocumentInfo.h>
-
-#include "kis_doc2.h"
-#include "kis_config.h"
 
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_registry.h>
@@ -57,6 +49,13 @@
 #include <kis_transparency_mask.h>
 #include <kis_layer_composition.h>
 #include <kis_file_layer.h>
+
+#include "kis_doc2.h"
+#include "kis_config.h"
+#include "kis_kra_tags.h"
+#include "kis_kra_utils.h"
+#include "kis_kra_load_visitor.h"
+
 
 /*
 
@@ -107,6 +106,7 @@ public:
     vKisNodeSP selectedNodes; // the nodes that were active when saving the document.
     QMap<QString, QString> assistantsFilenames;
     QList<KisPaintingAssistant*> assistants;
+    QStringList errorMessages;
 };
 
 void convertColorSpaceNames(QString &colorspacename, QString &profileProductName) {
@@ -177,31 +177,38 @@ KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
 
     if ((attr = element.attribute(MIME)) == NATIVE_MIMETYPE) {
 
-        if ((m_d->imageName = element.attribute(NAME)).isNull())
+        if ((m_d->imageName = element.attribute(NAME)).isNull()) {
+            m_d->errorMessages << i18n("Image does not have a name.");
             return KisImageWSP(0);
+        }
 
         if ((attr = element.attribute(WIDTH)).isNull()) {
+            m_d->errorMessages << i18n("Image does not specify a width.");
             return KisImageWSP(0);
         }
         width = attr.toInt();
 
         if ((attr = element.attribute(HEIGHT)).isNull()) {
+            m_d->errorMessages << i18n("Image does not specify a height.");
             return KisImageWSP(0);
         }
+
         height = attr.toInt();
 
         m_d->imageComment = element.attribute(DESCRIPTION);
 
         xres = 100.0 / 72.0;
         if (!(attr = element.attribute(X_RESOLUTION)).isNull()) {
-            if (attr.toDouble() > 1.0)
+            if (attr.toDouble() > 1.0) {
                 xres = attr.toDouble() / 72.0;
+            }
         }
 
         yres = 100.0;
         if (!(attr = element.attribute(Y_RESOLUTION)).isNull()) {
-            if (attr.toDouble() > 1.0)
+            if (attr.toDouble() > 1.0) {
                 yres = attr.toDouble() / 72.0;
+            }
         }
 
         if ((colorspacename = element.attribute(COLORSPACE_NAME)).isNull()) {
@@ -229,7 +236,8 @@ KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
             // try once more without the profile
             cs = KoColorSpaceRegistry::instance()->colorSpace(colorspaceModel, colorspaceDepth, "");
             if (cs == 0) {
-                warnFile << "Could not open colorspace";
+                qDebug() << "!!!!!!!!!!!!!!!!!";
+                m_d->errorMessages << i18n("Image specifies an unssupported color model: %1.", colorspacename);
                 return KisImageWSP(0);
             }
         }
@@ -288,10 +296,14 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageWSP image, const QStr
     // Load the layers data: if there is a profile associated with a layer it will be set now.
     KisKraLoadVisitor visitor(image, store, m_d->layerFilenames, m_d->imageName, m_d->syntaxVersion);
 
-    if (external)
+    if (external) {
         visitor.setExternalUri(uri);
+    }
 
     image->rootLayer()->accept(visitor);
+    if (!visitor.errorMessages().isEmpty()) {
+        m_d->errorMessages.append(visitor.errorMessages());
+    }
 
     // annotations
     // exif
@@ -310,6 +322,7 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageWSP image, const QStr
         m_d->document->documentInfo()->setAboutInfo("title", m_d->imageName);
     if (m_d->document && m_d->document->documentInfo()->aboutInfo("comment").isNull())
         m_d->document->documentInfo()->setAboutInfo("comment", m_d->imageComment);
+
     loadAssistants(store, uri, external);
 }
 
@@ -321,6 +334,11 @@ vKisNodeSP KisKraLoader::selectedNodes() const
 QList<KisPaintingAssistant *> KisKraLoader::assistants() const
 {
     return m_d->assistants;
+}
+
+QStringList KisKraLoader::errorMessages() const
+{
+    return m_d->errorMessages;
 }
 
 void KisKraLoader::loadAssistants(KoStore *store, const QString &uri, bool external)
@@ -393,7 +411,8 @@ KisNodeSP KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image,
     if ((element.attribute(COLORSPACE_NAME)).isNull()) {
         dbgFile << "No attribute color space for layer: " << name;
         colorSpace = image->colorSpace();
-    } else {
+    }
+    else {
         QString colorspacename = element.attribute(COLORSPACE_NAME);
         QString profileProductName;
 
@@ -406,10 +425,10 @@ KisNodeSP KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image,
 
         colorSpace = KoColorSpaceRegistry::instance()->colorSpace(colorspaceModel, colorspaceDepth, "");
         dbgFile << "found colorspace" << colorSpace;
-    }
-    KIS_ASSERT_RECOVER_RETURN_VALUE(colorSpace, 0);
-    if (!colorSpace) {
-        return 0;
+        if (!colorSpace) {
+            m_d->errorMessages << i18n("Layer %1 specifies an unsupported color model: %2.", name, colorspacename);
+            return 0;
+        }
     }
 
     bool visible = element.attribute(VISIBLE, "1") == "0" ? false : true;
@@ -424,12 +443,15 @@ KisNodeSP KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image,
         if (nodeType.isEmpty()) {
             nodeType = PAINT_LAYER;
         }
-    } else {
+    }
+    else {
         nodeType = element.attribute(NODE_TYPE);
     }
 
-    Q_ASSERT(!nodeType.isEmpty());
-    if (nodeType.isEmpty()) return 0;
+    if (nodeType.isEmpty()) {
+        m_d->errorMessages << i18n("Layer %1 is an unsupported type.", name);
+        return 0;
+    }
 
 
     KisNodeSP node = 0;
@@ -455,12 +477,17 @@ KisNodeSP KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image,
     else if (nodeType == FILE_LAYER) {
         node = loadFileLayer(element, image, name, opacity);
     }
-    else
-        warnKrita << "Trying to load layer of unsupported type " << nodeType;
+    else {
+        m_d->errorMessages << i18n("Layer %1 is an unsupported type: %2.", name, nodeType);
+        return 0;
+    }
 
     // Loading the node went wrong. Return empty node and leave to
     // upstream to complain to the user
-    if (!node) return 0;
+    if (!node) {
+        m_d->errorMessages << i18n("Failure loading layer %1 of type: %2.", name, nodeType);
+        return 0;
+    }
 
     node->setVisible(visible, true);
     node->setUserLocked(locked);

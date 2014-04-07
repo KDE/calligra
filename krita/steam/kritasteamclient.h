@@ -20,12 +20,8 @@
 #ifndef KRITASTEAMCLIENT_H
 #define KRITASTEAMCLIENT_H
 
-
-
-
-
-
 #include <QObject>
+#include <QString>
 
 #include "steam/steam_api.h"
 #include "sketch/krita_sketch_export.h"
@@ -41,6 +37,7 @@ class KRITA_SKETCH_EXPORT KritaSteamClient : public QObject
     Q_OBJECT
 public:
     static KritaSteamClient* instance();
+    static void MiniDumpFunction(const QString& comment, unsigned int nExceptionCode, void *pException);
 
     virtual ~KritaSteamClient();
 

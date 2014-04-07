@@ -83,6 +83,10 @@
 #define SM_SYSTEMDOCKED         0x2004
 #endif
 
+#ifdef HAVE_STEAMWORKS
+#include "steam/kritasteam.h"
+#endif
+
 class MainWindow::Private
 {
 public:
@@ -107,8 +111,12 @@ public:
         , switcher(0)
     {
 #ifdef Q_OS_WIN
-        slateMode = (GetSystemMetrics(SM_CONVERTIBLESLATEMODE) == 0);
-        docked = (GetSystemMetrics(SM_SYSTEMDOCKED) != 0);
+//         slateMode = (GetSystemMetrics(SM_CONVERTIBLESLATEMODE) == 0);
+//         docked = (GetSystemMetrics(SM_SYSTEMDOCKED) != 0);
+#endif
+#ifdef HAVE_STEAMWORKS
+        // Big Picture Mode should force full-screen behaviour in Sketch mode
+        slateMode = KritaSteamClient::instance()->isInBigPictureMode();
 #endif
         centerer = new QTimer(q);
         centerer->setInterval(10);
@@ -138,6 +146,8 @@ public:
     KAction* toDesktop;
     KAction* toSketch;
     QToolButton* switcher;
+
+    KAction* crashTest;
 
     void initSketchView(QObject* parent)
     {
@@ -170,6 +180,13 @@ public:
         //connect(toDesktop, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), q, SLOT(switchDesktopForced()));
         connect(toDesktop, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), q, SLOT(switchToDesktop()));
         sketchView->engine()->rootContext()->setContextProperty("switchToDesktopAction", toDesktop);
+
+        crashTest = new KAction(q);
+        crashTest->setEnabled(true);
+        crashTest->setText(tr("Sample crash"));
+        crashTest->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_D);
+        q->addAction(crashTest);
+        connect(crashTest, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), q, SLOT(debugTestCrash()));
     }
 
     void initDesktopView()
@@ -259,6 +276,15 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
 void MainWindow::resetWindowTitle()
 {
     setWindowTitle(QString("%1 - %2").arg(DocumentManager::instance()->document()->url().fileName()).arg(i18n("Krita Gemini")));
+
+void MainWindow::debugTestCrash()
+{
+    MainWindow* thisWillCrash;
+    thisWillCrash->debugTestCrash();
+    QMessageBox msg(this);
+    msg.setText("Debug Test Crash");
+    msg.setModal(true);
+    msg.show();
 }
 
 void MainWindow::switchDesktopForced()

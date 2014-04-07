@@ -38,6 +38,14 @@ Page {
         onSavingFinished: {
             loadingDialog.hide("Done!");
             savingDialog.hide("Done!");
+
+            if (d.saveRequested) {
+                d.loadNewFile();
+            }
+
+            if (d.closeRequested) {
+                d.closeWindow();
+            }
         }
         onProgress: {
             if (value === -1 || value === 100) {
@@ -260,18 +268,6 @@ Page {
         onTemporaryFileChanged: if (window.temporaryFile !== undefined) window.temporaryFile = Settings.temporaryFile;
     }
 
-    onStatusChanged: {
-        if (status == 0) {
-            if (d.saveRequested) {
-                d.loadNewFile();
-            }
-
-            if (d.closeRequested) {
-                d.closeWindow();
-            }
-        }
-    }
-
     Connections {
         target: Krita.Window;
 
@@ -294,10 +290,10 @@ Page {
         }
     }
 
-    Component { id: openImagePage; OpenImagePage { } }
+    Component { id: openImagePage; OpenImagePage { onFinished: { pageStack.pop(); d.beginOpenFile(file); } } }
     Component { id: settingsPage; SettingsPage { } }
     Component { id: helpPage; HelpPage { } }
-    Component { id: saveAsPage; SaveImagePage { } }
+    Component { id: saveAsPage; SaveImagePage { onFinished: { pageStack.pop(); d.saveFileAs(file, type); } } }
     Component { id: customImagePage; CustomImagePage { onFinished: { pageStack.pop(); d.beginCreateNewFile(options); } } }
 
     QtObject {
@@ -324,6 +320,9 @@ Page {
         }
 
         function beginOpenFile(file) {
+            if(!Settings.temporaryFile && file === sketchView.file)
+                return;
+
             if(file !== "") {
                 fileToOpen = file;
                 if(sketchView.modified) {
@@ -337,7 +336,7 @@ Page {
         }
 
         function loadNewFile() {
-            d.saveRequested = false;
+            saveRequested = false;
             loadingDialog.progress = 0;
 
             if(newFileOptions !== undefined) {
@@ -355,8 +354,16 @@ Page {
                 sketchView.file = Settings.currentFile;
             }
             menuPanel.collapsed = true;
-            d.fileToOpen = "";
-            d.newFileOptions = null;
+            fileToOpen = "";
+            newFileOptions = null;
+        }
+
+        function saveFileAs(file, type) {
+            savingDialog.show("Saving image to " + file);
+
+            sketchView.saveAs( file, type );
+
+            Settings.temporaryFile = false;
         }
 
         function closeWindow() {
