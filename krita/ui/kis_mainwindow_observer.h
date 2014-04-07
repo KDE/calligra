@@ -4,7 +4,7 @@
 #include <KoCanvasObserverBase.h>
 #include <krita_export.h>
 
-class KisCanvasResourceProvider;
+class KisView2;
 
 class KRITAUI_EXPORT KisMainwindowObserver : public KoCanvasObserverBase
 {   
@@ -12,7 +12,7 @@ public:
     KisMainwindowObserver();
     virtual ~KisMainwindowObserver();
 
-    virtual void setCanvasResourceProvider(KisCanvasResourceProvider* canvasResourceProvider) = 0;
+    virtual void setMainWindow(KisView2* kisview) = 0;
     virtual void setCanvas(KoCanvasBase* canvas);
     virtual void unsetCanvas();
 };

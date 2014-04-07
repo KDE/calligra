@@ -24,6 +24,7 @@
 
 #include <kis_canvas_resource_provider.h>
 #include <kis_pattern_chooser.h>
+#include <kis_view2.h>
 #include <KoPattern.h>
 
 PatternDockerDock::PatternDockerDock( )
@@ -36,13 +37,14 @@ PatternDockerDock::PatternDockerDock( )
     setWidget(m_patternChooser);
 }
 
-void PatternDockerDock::setCanvasResourceProvider(KisCanvasResourceProvider* canvasResourceProvider)
+void PatternDockerDock::setMainWindow(KisView2* kisview)
 {
-    connect(canvasResourceProvider, SIGNAL(sigPatternChanged(KoPattern*)),
+    KisCanvasResourceProvider* resourceProvider = kisview->resourceProvider();
+    connect(resourceProvider, SIGNAL(sigPatternChanged(KoPattern*)),
             this, SLOT(patternChanged(KoPattern*)));
 
     connect(m_patternChooser, SIGNAL(resourceSelected(KoResource*)),
-            canvasResourceProvider, SLOT(slotPatternActivated(KoResource*)));
+            resourceProvider, SLOT(slotPatternActivated(KoResource*)));
 }
 
 void PatternDockerDock::patternChanged(KoPattern *pattern)

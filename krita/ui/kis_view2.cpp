@@ -129,6 +129,7 @@
 #include "input/kis_input_profile_manager.h"
 #include "kis_canvas_controls_manager.h"
 #include "kis_mainwindow_observer.h"
+#include "kis_main_window.h"
 
 class StatusBarItem
 {
@@ -375,7 +376,7 @@ KisView2::KisView2(QWidget *parent)
     foreach(KoCanvasObserverBase* observer, mainWindow()->canvasObservers()) {
         KisMainwindowObserver* mainwindowObserver = dynamic_cast<KisMainwindowObserver*>(observer);
         if (mainwindowObserver) {
-            mainwindowObserver->setCanvasResourceProvider(d->canvasResourceProvider);
+            mainwindowObserver->setMainWindow(this);
         }
     }
 

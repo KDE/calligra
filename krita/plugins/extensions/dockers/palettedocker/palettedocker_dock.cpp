@@ -36,6 +36,9 @@
 #include <kis_config.h>
 #include <kis_workspace_resource.h>
 #include <kis_canvas_resource_provider.h>
+#include <kis_main_window.h>
+#include <kis_canvas_resource_provider.h>
+#include <kis_view2.h>
 
 #include "palettemodel.h"
 #include "colorsetchooser.h"
@@ -176,11 +179,11 @@ PaletteDockerDock::~PaletteDockerDock()
     }
 }
 
-void PaletteDockerDock::setCanvasResourceProvider(KisCanvasResourceProvider* canvasResourceProvider)
+void PaletteDockerDock::setMainWindow(KisView2* kisview)
 {
-    m_resourceProvider = canvasResourceProvider;
-    connect(canvasResourceProvider, SIGNAL(sigSavingWorkspace(KisWorkspaceResource*)), SLOT(saveToWorkspace(KisWorkspaceResource*)));
-    connect(canvasResourceProvider, SIGNAL(sigLoadingWorkspace(KisWorkspaceResource*)), SLOT(loadFromWorkspace(KisWorkspaceResource*)));
+    m_resourceProvider = kisview->resourceProvider();
+    connect(m_resourceProvider, SIGNAL(sigSavingWorkspace(KisWorkspaceResource*)), SLOT(saveToWorkspace(KisWorkspaceResource*)));
+    connect(m_resourceProvider, SIGNAL(sigLoadingWorkspace(KisWorkspaceResource*)), SLOT(loadFromWorkspace(KisWorkspaceResource*)));
 }
 
 void PaletteDockerDock::setColorSet(KoColorSet* colorSet)

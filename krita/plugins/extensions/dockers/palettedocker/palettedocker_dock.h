@@ -26,6 +26,8 @@
 #include <KoColorSet.h>
 #include <kis_mainwindow_observer.h>
 
+class KisView2;
+class KisCanvasResourceProvider;
 class KisWorkspaceResource;
 class ColorSetChooser;
 class PaletteModel;
@@ -38,7 +40,7 @@ public:
     PaletteDockerDock();
     virtual ~PaletteDockerDock();
 
-    virtual void setCanvasResourceProvider(KisCanvasResourceProvider* canvasResourceProvider);
+    virtual void setMainWindow(KisView2* kisview);
 
 private slots:
     void addColorForeground();

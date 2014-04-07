@@ -29,7 +29,7 @@ class PatternDockerDock : public QDockWidget, public KisMainwindowObserver {
 public:
     PatternDockerDock( );
 
-    virtual void setCanvasResourceProvider(KisCanvasResourceProvider* canvasResourceProvider);
+    virtual void setMainWindow(KisView2* kisview);
 
 public slots:
     void patternChanged(KoPattern *pattern);
