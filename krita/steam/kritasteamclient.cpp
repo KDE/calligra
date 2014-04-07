@@ -21,6 +21,7 @@
 
 #include <QCoreApplication>
 #include <QDebug>
+#include <QMessageBox>
 #include <QTimer>
 #include <unistd.h>
 #include "steam/steam_api.h"
@@ -62,6 +63,10 @@ void KritaSteamClient::MiniDumpFunction(const QString& comment, unsigned int nEx
 {
     SteamAPI_SetMiniDumpComment( comment.toUtf8().constData() );
 
+    QMessageBox msg(0);
+    msg.setText("Caught error (Steam)");
+    msg.setModal(true);
+    msg.show();
     // The 0 here is a build ID, which is not set
 #ifdef Q_OS_WIN
     SteamAPI_WriteMiniDump( nExceptionCode, (EXCEPTION_POINTERS*) pException, 0 );
