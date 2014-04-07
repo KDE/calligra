@@ -196,6 +196,12 @@ public:
         // Initialize all Calligra directories etc.
         KoGlobal::initialize();
 
+        // The default theme is not what we want for Gemini
+        KConfigGroup group(KGlobal::config(), "theme");
+        if(group.readEntry("Theme", "no-theme-is-set") == QLatin1String("no-theme-is-set")) {
+            group.writeEntry("Theme", "Krita-dark");
+        }
+
         desktopView = new KoMainWindow(KIS_MIME_TYPE, KisFactory2::componentData());
 
         toSketch = new KAction(desktopView);
@@ -250,6 +256,8 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     }
 
     connect(DocumentManager::instance(), SIGNAL(documentChanged()), SLOT(documentChanged()));
+    connect(DocumentManager::instance(), SIGNAL(documentChanged()), SLOT(resetWindowTitle()));
+    connect(DocumentManager::instance(), SIGNAL(documentSaved()), SLOT(resetWindowTitle()));
 
     d->initSketchView(this);
 
@@ -264,6 +272,10 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
         QMetaObject::invokeMethod(d->sketchView->rootObject(), "openFile", Q_ARG(QVariant, fileNames.at(0)));
     }
 }
+
+void MainWindow::resetWindowTitle()
+{
+    setWindowTitle(QString("%1 - %2").arg(DocumentManager::instance()->document()->url().fileName()).arg(i18n("Krita Gemini")));
 
 void MainWindow::debugTestCrash()
 {

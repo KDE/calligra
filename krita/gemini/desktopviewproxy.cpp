@@ -125,7 +125,11 @@ void DesktopViewProxy::fileOpen()
 
 void DesktopViewProxy::fileSave()
 {
-    DocumentManager::instance()->save();
+    if(DocumentManager::instance()->isTemporaryFile()) {
+        d->desktopView->saveDocument(true);
+    } else {
+        DocumentManager::instance()->save();
+    }
 }
 
 bool DesktopViewProxy::fileSaveAs()
@@ -147,7 +151,7 @@ void DesktopViewProxy::loadExistingAsNew()
 
 void DesktopViewProxy::slotFileOpenRecent(const KUrl& url)
 {
-    DocumentManager::instance()->openDocument(url.toLocalFile());
+    QProcess::startDetached(qApp->applicationFilePath(), QStringList() << url.toLocalFile());
 }
 
 #include "desktopviewproxy.moc"

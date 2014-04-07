@@ -48,6 +48,7 @@
 #include "kis_view2.h"
 #include <kis_canvas_controller.h>
 #include "kis_config.h"
+#include <kis_doc2.h>
 
 #include "SketchDeclarativeView.h"
 #include "RecentFileManager.h"
@@ -98,6 +99,8 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     foreach(QString fileName, fileNames) {
         DocumentManager::instance()->recentFileManager()->addRecent(fileName);
     }
+    connect(DocumentManager::instance(), SIGNAL(documentChanged()), SLOT(resetWindowTitle()));
+    connect(DocumentManager::instance(), SIGNAL(documentSaved()), SLOT(resetWindowTitle()));
 
     QDeclarativeView* view = new SketchDeclarativeView();
     QmlGlobalEngine::instance()->setEngine(view->engine());
@@ -126,6 +129,11 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     }
 
     setCentralWidget(view);
+}
+
+void MainWindow::resetWindowTitle()
+{
+    setWindowTitle(QString("%1 - %2").arg(DocumentManager::instance()->document()->url().fileName()).arg(i18n("Krita Sketch")));
 }
 
 bool MainWindow::allowClose() const
