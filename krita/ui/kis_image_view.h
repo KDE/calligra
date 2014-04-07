@@ -20,6 +20,8 @@
 #define KIS_IMAGE_VIEW_H
 
 #include <KoView.h>
+#include <KoColorSpace.h>
+#include <KoColorProfile.h>
 
 #include <kis_types.h>
 
@@ -95,6 +97,10 @@ protected:
 
 
 signals:
+    // From KisImage
+    void sigSizeChanged(const QPointF &oldStillPoint, const QPointF &newStillPoint);
+    void sigProfileChanged(const KoColorProfile *  profile);
+    void sigColorSpaceChanged(const KoColorSpace*  cs);
 
 public slots:
 

@@ -516,7 +516,7 @@ void KoMainWindow::addView(KoView *view)
     d->sendFileAction->setEnabled(viewHasDocument);
     d->exportPdf->setEnabled(viewHasDocument);
     d->closeFile->setEnabled(viewHasDocument);
-    statusBar()->setVisible(viewHasDocument);
+//     statusBar()->setVisible(viewHasDocument);
 
     updateCaption();
 

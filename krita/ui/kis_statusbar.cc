@@ -42,6 +42,7 @@
 #include "kis_view2.h"
 #include "canvas/kis_canvas2.h"
 #include "kis_progress_widget.h"
+#include "kis_zoom_manager.h"
 
 #include "KoViewConverter.h"
 
@@ -51,7 +52,7 @@ enum {
 };
 
 KisStatusBar::KisStatusBar(KisView2 * view)
-    : m_view(view)
+    : m_view(view), m_imageView(0)
 {
     m_selectionStatusLabel = new QLabel();
     m_selectionStatusLabel->setPixmap(koIcon("selection-info").pixmap(22));
@@ -93,6 +94,30 @@ KisStatusBar::~KisStatusBar()
     m_view->removeStatusBarItem(m_imageSizeLabel);
     m_view->removeStatusBarItem(m_pointerPositionLabel);
     m_view->removeStatusBarItem(m_progress);
+}
+
+void KisStatusBar::setView(KisImageView* imageView)
+{
+    if (m_imageView == imageView) {
+        return;
+    }
+    if (m_imageView) {
+        m_imageView->disconnect(this);
+        m_view->removeStatusBarItem(m_imageView->zoomManager()->zoomActionWidget());
+    }
+    if (imageView) {
+        m_imageView = imageView;
+
+        connect(m_imageView, SIGNAL(sigColorSpaceChanged(const KoColorSpace*)),
+                this, SLOT(updateStatusBarProfileLabel()));
+        connect(m_imageView, SIGNAL(sigProfileChanged(const KoColorProfile*)),
+                this, SLOT(updateStatusBarProfileLabel()));
+        connect(m_imageView, SIGNAL(sigSizeChanged(const QPointF&, const QPointF&)),
+                this, SLOT(imageSizeChanged()));
+        updateStatusBarProfileLabel();
+        imageSizeChanged();
+        m_view->addStatusBarItem(m_imageView->zoomManager()->zoomActionWidget());
+    }
 }
 
 void KisStatusBar::documentMousePositionChanged(const QPointF &pos)

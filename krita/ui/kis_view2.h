@@ -231,6 +231,7 @@ private slots:
     void toggleTabletLogger();
     void openResourcesDirectory();
     void updateIcons();
+    void makeStatusBarVisible();
 
 private:
     void createActions();

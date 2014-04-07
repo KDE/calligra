@@ -130,7 +130,62 @@
 #include "kis_canvas_controls_manager.h"
 #include "kis_mainwindow_observer.h"
 
+class StatusBarItem
+{
+public:
+    StatusBarItem() // for QValueList
+        : m_widget(0),
+            m_connected(false),
+            m_hidden(false) {}
 
+    StatusBarItem(QWidget * widget, int stretch, bool permanent)
+        : m_widget(widget),
+            m_stretch(stretch),
+            m_permanent(permanent),
+            m_connected(false),
+            m_hidden(false) {}
+
+    bool operator==(const StatusBarItem& rhs) {
+        return m_widget == rhs.m_widget;
+    }
+
+    bool operator!=(const StatusBarItem& rhs) {
+        return m_widget != rhs.m_widget;
+    }
+
+    QWidget * widget() const {
+        return m_widget;
+    }
+
+    void ensureItemShown(KStatusBar * sb) {
+        Q_ASSERT(m_widget);
+        if (!m_connected) {
+            if (m_permanent)
+                sb->addPermanentWidget(m_widget, m_stretch);
+            else
+                sb->addWidget(m_widget, m_stretch);
+
+            if(!m_hidden)
+                m_widget->show();
+
+            m_connected = true;
+        }
+    }
+    void ensureItemHidden(KStatusBar * sb) {
+        if (m_connected) {
+            m_hidden = m_widget->isHidden();
+            sb->removeWidget(m_widget);
+            m_widget->hide();
+            m_connected = false;
+        }
+    }
+private:
+    QWidget * m_widget;
+    int m_stretch;
+    bool m_permanent;
+    bool m_connected;
+    bool m_hidden;
+};
 
 class BlockingUserInputEventFilter : public QObject
 {
@@ -216,6 +271,7 @@ public:
     KisImageView* currentImageView;
     KisCanvasResourceProvider* canvasResourceProvider;
     KoCanvasResourceManager* canvasResourceManager;
+    QList<StatusBarItem> statusBarItems;
 };
 
 
@@ -264,7 +320,7 @@ KisView2::KisView2(QWidget *parent)
     }
 
     d->statusBar = new KisStatusBar(this);
-
+    QTimer::singleShot(0, this, SLOT(makeStatusBarVisible()));
 
     connect(d->nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)),
             d->controlFrame->paintopBox(), SLOT(slotCurrentNodeChanged(KisNodeSP)));
@@ -361,7 +417,6 @@ void KisView2::setCurrentView(KoView *view)
             }
             canvasController()->proxyObject->disconnect(d->statusBar);
             d->nodeManager->disconnect(doc->image());
-            mainWindow()->statusBar()->removeWidget(d->currentImageView->zoomManager()->zoomActionWidget());
 
             d->rotateCanvasRight->disconnect();
             d->rotateCanvasLeft->disconnect();
@@ -375,7 +430,6 @@ void KisView2::setCurrentView(KoView *view)
         KisDoc2* doc = qobject_cast<KisDoc2*>(view->document());
 //        connect(canvasController()->proxyObject, SIGNAL(documentMousePositionChanged(QPointF)), d->statusBar, SLOT(documentMousePositionChanged(QPointF)));
 
-//        mainWindow()->statusBar()->addWidget(imageView->zoomManager()->zoomActionWidget());
         d->currentImageView = imageView;
         imageView->canvasBase()->setResourceManager(d->canvasResourceManager);
 
@@ -401,6 +455,7 @@ void KisView2::setCurrentView(KoView *view)
     d->canvasControlsManager->setView(imageView);
     d->actionManager->setView(imageView);
     d->gridManager->setView(imageView);
+    d->statusBar->setView(imageView);
 
     actionManager()->updateGUI();
 }
@@ -446,15 +501,28 @@ KisStatusBar *KisView2::statusBar() const
 
 void KisView2::addStatusBarItem(QWidget * widget, int stretch, bool permanent)
 {
-    if (d->currentImageView) {
-        d->currentImageView->addStatusBarItem(widget, stretch, permanent);
+    StatusBarItem item(widget, stretch, permanent);
+    KStatusBar * sb = mainWindow()->statusBar();
+    if (sb) {
+        item.ensureItemShown(sb);
     }
+    d->statusBarItems.append(item);
 }
 
 void KisView2::removeStatusBarItem(QWidget * widget)
 {
-    if (d->currentImageView) {
-        d->currentImageView->removeStatusBarItem(widget);
+    KStatusBar *sb = mainWindow()->statusBar();
+
+    int itemCount = d->statusBarItems.count();
+    for (int i = itemCount-1; i >= 0; --i) {
+        StatusBarItem &sbItem = d->statusBarItems[i];
+        if (sbItem.widget() == widget) {
+            if (sb) {
+                sbItem.ensureItemHidden(sb);
+            }
+            d->statusBarItems.removeOne(sbItem);
+            break;
+        }
     }
 }
 
@@ -576,9 +644,6 @@ void KisView2::slotLoadingFinished()
      * Cold-start of image size/resolution signals
      */
     slotImageResolutionChanged();
-    if (d->statusBar) {
-        d->statusBar->imageSizeChanged();
-    }
     if (resourceProvider()) {
         resourceProvider()->slotImageSizeChanged();
     }
@@ -586,13 +651,6 @@ void KisView2::slotLoadingFinished()
         d->nodeManager->nodesUpdated();
     }
 
-
-    if (d->statusBar) {
-        connect(image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), d->statusBar, SLOT(updateStatusBarProfileLabel()));
-        connect(image(), SIGNAL(sigProfileChanged(const KoColorProfile*)), d->statusBar, SLOT(updateStatusBarProfileLabel()));
-        connect(image(), SIGNAL(sigSizeChanged(const QPointF&, const QPointF&)), d->statusBar, SLOT(imageSizeChanged()));
-
-    }
     connect(image(), SIGNAL(sigSizeChanged(const QPointF&, const QPointF&)), resourceProvider(), SLOT(slotImageSizeChanged()));
 
     connect(image(), SIGNAL(sigResolutionChanged(double,double)),
@@ -1304,6 +1362,11 @@ void KisView2::updateIcons()
             }
         }
     }
+}
+
+void KisView2::makeStatusBarVisible()
+{
+    d->mainWindow->statusBar()->setVisible(true);
 }
 
 void KisView2::showFloatingMessage(const QString message, const QIcon& icon)

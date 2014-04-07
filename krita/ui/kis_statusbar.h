@@ -23,6 +23,7 @@
 
 #include <kis_types.h>
 
+class KisImageView;
 class QLabel;
 class KSqueezedTextLabel;
 class KisView2;
@@ -39,6 +40,8 @@ public:
     KisStatusBar(KisView2 * view);
     ~KisStatusBar();
 
+    void setView(KisImageView* imageView);
+
     KisProgressWidget *progress();
 
 public slots:
@@ -53,6 +56,7 @@ public slots:
 private:
 
     KisView2 * m_view;
+    KisImageView* m_imageView;
     KisProgressWidget * m_progress;
 
     QLabel *m_selectionStatusLabel;

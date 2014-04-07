@@ -379,4 +379,10 @@ void KisImageView::slotLoadingFinished()
     if (viewConverter()) {
        viewConverter()->setZoomMode(KoZoomMode::ZOOM_PAGE);
     }
+    connect(image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)),
+            this, SIGNAL(sigColorSpaceChanged(const KoColorSpace*)));
+    connect(image(), SIGNAL(sigProfileChanged(const KoColorProfile*)),
+            this, SIGNAL(sigProfileChanged(const KoColorProfile*)));
+    connect(image(), SIGNAL(sigSizeChanged(QPointF,QPointF)),
+            this, SIGNAL(sigSizeChanged(QPointF,QPointF)));
 }
