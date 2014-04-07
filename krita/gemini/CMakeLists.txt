@@ -19,6 +19,11 @@ set(kritagemini_SRCS
     desktopviewproxy.cpp
 )
 
+if(WIN32 AND USE_BREAKPAD)
+    set(kritagemini_SRCS ${kritagemini_SRCS} ../kis_crash_handler.cpp)
+    set(BREAKPAD_LIBS breakpad)
+endif(WIN32 AND USE_BREAKPAD)
+
 if (WIN32)
     set(kritagemini_SRCS ${kritagemini_SRCS} KritaGeminiWin.rc)
 else (WIN32)
@@ -33,7 +38,6 @@ endif (HAVE_STEAMWORKS)
 # =============================================================================
 
 kde4_add_executable(kritagemini ${kritagemini_SRCS})
-
 target_link_libraries(kritagemini
     ${QT_QTDECLARATIVE_LIBRARY}
     ${QT_QTGUI_LIBRARIES}
@@ -41,6 +45,7 @@ target_link_libraries(kritagemini
     ${QT_LIBRARIES}
     ${GLEW_LIBRARIES}
     kritaui
+    ${BREAKPAD_LIBS}
     ${GLEW_LIBRARIES}
     kritasketchlib
 )
