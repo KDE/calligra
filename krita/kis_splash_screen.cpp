@@ -22,6 +22,7 @@
 #include <QPixmap>
 #include <QCheckBox>
 #include <QDebug>
+#include <QFile>
 
 #include <KoPart.h>
 #include <KoApplication.h>
