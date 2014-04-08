@@ -123,18 +123,18 @@ void doRestart(bool resetConfig)
 #endif
 
 #ifdef Q_WS_WIN
-    restartCommand = qApp->applicationDirPath().replace(' ', "\\ ") + "/krita.exe \"";
+    restartCommand = qApp->applicationDirPath().replace(' ', "\\ ") + "/kritagemini.exe \"";
 #endif
 
 #ifdef Q_WS_X11
-    restartCommand = "sh -c \"" + qApp->applicationDirPath().replace(' ', "\\ ") + "/krita \"";
+    restartCommand = "sh -c \"" + qApp->applicationDirPath().replace(' ', "\\ ") + "/kritagemini \"";
 #endif
 
     qDebug() << "restartCommand" << restartCommand;
     QProcess restartProcess;
     if (!restartProcess.startDetached(restartCommand)) {
         QMessageBox::warning(0, "krita",
-                             i18n("Could not restart Krita. Please try to restart manually."));
+                             i18n("Could not restart Krita Gemini. Please try to restart manually."));
     }
 }
 //#endif  // Q_WS_WIN
@@ -294,7 +294,7 @@ void MainWindow::startUpload()
 #endif
 
     fields << Field("BuildID", CALLIGRA_GIT_SHA1_STRING)
-           << Field("ProductName", "krita")
+           << Field("ProductName", "kritageministeam")
            << Field("Version", version.toLatin1())
            << Field("Vendor", "KO GmbH")
            << Field("Email", txtEmail->text().toLatin1())
