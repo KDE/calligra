@@ -217,6 +217,7 @@ struct MainWindow::Private {
     }
 };
 
+typedef QPair<QByteArray, QByteArray> Field;
 
 MainWindow::MainWindow(const QString &dumpPath, const QString &id, QWidget *parent)
     : QWidget(parent)
@@ -230,6 +231,7 @@ MainWindow::MainWindow(const QString &dumpPath, const QString &id, QWidget *pare
     m_d->networkAccessManager = new QNetworkAccessManager(this);
     connect(m_d->networkAccessManager, SIGNAL(finished(QNetworkReply *)), SLOT(uploadDone(QNetworkReply *)));
 
+    connect(chkAllowUpload, SIGNAL(stateChanged(int)), this, SLOT(onToggleAllowUpload(int)));
     connect(bnRestart, SIGNAL(clicked()), this, SLOT(restart()));
     connect(bnClose, SIGNAL(clicked()), this, SLOT(close()));
 
@@ -265,6 +267,20 @@ void MainWindow::close()
     }
 }
 
+void MainWindow::onToggleAllowUpload(int state)
+{
+    switch(state) {
+    case Qt::Unchecked:
+        bnClose->setText("&Close");
+        bnRestart->setText("&Restart");
+        break;
+    case Qt::Checked:
+        bnClose->setText("Send && &Close");
+        bnRestart->setText("Send && R&estart");
+        break;
+    }
+}
+
 void MainWindow::startUpload()
 {
     bnRestart->setEnabled(false);
@@ -279,7 +295,6 @@ void MainWindow::startUpload()
 
     QString boundary = "--9876543210";
 
-    typedef QPair<QByteArray, QByteArray> Field;
     QList<Field> fields;
 
     QString calligraVersion(CALLIGRA_VERSION_STRING);
@@ -319,13 +334,13 @@ void MainWindow::startUpload()
     fields << Field("Platform", platformToStringMac(QSysInfo::MacintoshVersion).toAscii());
 #endif
 
-    QFile f(QDesktopServices::storageLocation(QDesktopServices::TempLocation) + "/krita-opengl.txt");
-    qDebug() << KGlobal::dirs()->saveLocation("config") + "/krita-opengl.txt" << f.exists();
+    addFileAsField(QDesktopServices::storageLocation(QDesktopServices::TempLocation) + "/krita-startup.txt",
+                   "Startup",
+                   &fields);
 
-    if (f.exists()) {
-        f.open(QFile::ReadOnly);
-        fields << Field("OpenGL", f.readAll());
-    }
+    addFileAsField(QDesktopServices::storageLocation(QDesktopServices::TempLocation) + "/krita-opengl.txt",
+                   "OpenGL",
+                   &fields);
 
     QString body;
     foreach(Field const field, fields) {
@@ -367,6 +382,19 @@ void MainWindow::startUpload()
     QNetworkReply *reply = m_d->networkAccessManager->post(request, body.toLatin1());
     connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(uploadError(QNetworkReply::NetworkError)));
     connect(reply, SIGNAL(uploadProgress(qint64, qint64)), this, SLOT(uploadProgress(qint64,qint64)));
+}
+
+
+void MainWindow::addFileAsField(const QString &filename, const QString &fieldName, QList<QPair<QByteArray, QByteArray>> *fields)
+{
+    QFile f(filename);
+
+    qDebug() << filename << f.exists();
+
+    if (f.exists()) {
+        f.open(QFile::ReadOnly);
+        *fields << Field(fieldName.toUtf8(), f.readAll());
+    }
 }
 
 void MainWindow::uploadDone(QNetworkReply *reply)

@@ -88,7 +88,7 @@ QFile *startupLogFile = 0;
 QTextStream *startupLogStream = 0;
 
 void prepareStartupLogfile() {
-    startupLogFile = new QFile(QDesktopServices::storageLocation(QDesktopServices::TempLocation) + "/krita_startup-log.txt");
+    startupLogFile = new QFile(QDesktopServices::storageLocation(QDesktopServices::TempLocation) + "/krita-startup.txt");
     startupLogFile->open(QIODevice::WriteOnly);
     startupLogStream = new QTextStream(startupLogFile);
     *startupLogStream << QString("Krita Gemini - Startup") << endl << endl;

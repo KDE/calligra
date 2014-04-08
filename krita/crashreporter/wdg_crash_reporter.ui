@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Krita Error Reporter</string>
+   <string>Krita Gemini Error Reporter</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="5" column="0" colspan="2">
@@ -20,17 +20,17 @@
       <string>This information includes the type of computer you use, and information about the usage of Krita. No personal information is sent to Krita.</string>
      </property>
      <property name="text">
-      <string>&amp;Remove settings before starting Krita again</string>
+      <string>&amp;Remove settings before starting Krita Gemini again</string>
      </property>
      <property name="checked">
-      <bool>true</bool>
+      <bool>false</bool>
      </property>
     </widget>
    </item>
    <item row="0" column="0" colspan="2">
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Krita closed unexpectedly! Please help us make Krita better by sending us more information.&lt;/p&gt;&lt;p&gt;If you'd like us to contact you, please add your email address. We will not share your email address with anyone.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Krita Gemini closed unexpectedly! Please help us make Krita better by sending us more information.&lt;/p&gt;&lt;p&gt;If you'd like us to contact you, please add your email address. We will not share your email address with anyone.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="textFormat">
       <enum>Qt::RichText</enum>
@@ -68,14 +68,14 @@
      <item>
       <widget class="QPushButton" name="bnClose">
        <property name="text">
-        <string>Close</string>
+        <string>Send &amp;&amp; &amp;Close</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="bnRestart">
        <property name="text">
-        <string>&amp;Restart Krita</string>
+        <string>Send &amp;&amp; R&amp;estart Krita</string>
        </property>
       </widget>
      </item>
