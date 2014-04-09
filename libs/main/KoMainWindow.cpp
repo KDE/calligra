@@ -121,7 +121,6 @@ public:
         saveActionAs = 0;
         printAction = 0;
         printActionPreview = 0;
-        statusBarLabel = 0;
         sendFileAction = 0;
         exportPdf = 0;
         closeFile = 0;
@@ -199,7 +198,6 @@ public:
     KoView *activeView;
     QWidget *m_activeWidget;
 
-    QLabel * statusBarLabel;
     QPointer<QProgressBar> progress;
     QMutex progressMutex;
 
@@ -374,6 +372,7 @@ KoMainWindow::KoMainWindow(const QByteArray nativeMimeType, const KComponentData
     d->themeManager->registerThemeActions(actionCollection());
     d->themeManager->setCurrentTheme(group.readEntry("Theme",
                                                      d->themeManager->defaultThemeName()));
+    connect(d->themeManager, SIGNAL(signalThemeChanged()), this, SIGNAL(themeChanged()));
 
     KToggleAction *fullscreenAction  = new KToggleAction(koIcon("view-fullscreen"), i18n("Full Screen Mode"), this);
     actionCollection()->addAction("view_fullscreen", fullscreenAction);
@@ -597,6 +596,9 @@ void KoMainWindow::setRootDocument(KoDocument *doc, KoPart *part, bool deletePre
         statusBar()->setVisible(false);
     }
     else {
+#ifdef Q_OS_MAC
+        statusBar()->setMaximumHeight(28);
+#endif
         connect(d->rootDocument, SIGNAL(titleModified(QString,bool)), SLOT(slotDocumentTitleModified(QString,bool)));
     }
 }
@@ -1309,6 +1311,7 @@ void KoMainWindow::slotFileOpen()
                                ? QDesktopServices::storageLocation(QDesktopServices::PicturesLocation)
                                : QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
         dialog.setMimeTypeFilters(koApp->mimeFilter(KoFilterManager::Import));
+        dialog.setHideNameFilterDetailsOption();
         url = dialog.url();
     } else {
         KoFileDialog dialog(this, KoFileDialog::ImportFile, "OpenDocument");
@@ -1317,6 +1320,7 @@ void KoMainWindow::slotFileOpen()
                                 ? QDesktopServices::storageLocation(QDesktopServices::PicturesLocation)
                                 : QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
         dialog.setMimeTypeFilters(koApp->mimeFilter(KoFilterManager::Import));
+        dialog.setHideNameFilterDetailsOption();
         url = dialog.url();
     }
 
@@ -1662,15 +1666,6 @@ void KoMainWindow::slotProgress(int value)
     qApp->processEvents();
 }
 
-QLabel * KoMainWindow::statusBarLabel()
-{
-    if (!d->statusBarLabel) {
-        d->statusBarLabel = new QLabel(statusBar());
-        statusBar()->addPermanentWidget(d->statusBarLabel, 1);
-    }
-    return d->statusBarLabel;
-}
-
 void KoMainWindow::setMaxRecentItems(uint _number)
 {
     d->recent->setMaxItems(_number);
@@ -1960,11 +1955,6 @@ KoView* KoMainWindow::currentView() const
         return d->rootViews.first();
     }
     return 0;
-}
-
-void KoMainWindow::slotSetStatusBarText( const QString & text )
-{
-    statusBar()->showMessage( text );
 }
 
 void KoMainWindow::newView()
