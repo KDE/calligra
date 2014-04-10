@@ -30,6 +30,7 @@
 #include "KoGlobal.h"
 #include "KoEmbeddedDocumentSaver.h"
 #include "KoFilterManager.h"
+#include "KoFileDialog.h"
 #include "KoDocumentInfo.h"
 #include "KoMainWindow.h"
 #include "KoView.h"
@@ -65,7 +66,6 @@
 #include <kio/netaccess.h>
 #include <kdirnotify.h>
 #include <ktemporaryfile.h>
-#include <kfiledialog.h>
 
 #include <QtGlobal>
 #include <QBuffer>
@@ -918,7 +918,7 @@ bool KoDocument::saveNativeFormatODF(KoStore *store, const QByteArray &mimeType)
         if (store->open("VersionList.xml")) {
             KoStoreDevice dev(store);
             KoXmlWriter *xmlWriter = KoOdfWriteStore::createOasisXmlWriter(&dev,
-                                                                           "VL:version-list");
+                                     "VL:version-list");
             for (int i = 0; i < d->versionInfo.size(); ++i) {
                 KoVersionInfo *version = &d->versionInfo[i];
                 xmlWriter->startElement("VL:version-entry");
@@ -1242,7 +1242,7 @@ bool KoDocument::openUrl(const KUrl & _url)
             //kDebug(30003) <<"asf=" << asf;
             // ## TODO compare timestamps ?
             int res = KMessageBox::warningYesNoCancel(0,
-                                                      i18n("An autosaved file exists for this document.\nDo you want to open it instead?"));
+                      i18n("An autosaved file exists for this document.\nDo you want to open it instead?"));
             switch (res) {
             case KMessageBox::Yes :
                 url.setPath(asf);
@@ -1479,8 +1479,8 @@ bool KoDocument::openFile()
     }
 
     d->progressUpdater = new KoProgressUpdater(progressProxy,
-                                               KoProgressUpdater::Unthreaded,
-                                               d->profileStream);
+            KoProgressUpdater::Unthreaded,
+            d->profileStream);
 
     d->progressUpdater->setReferenceTime(d->profileReferenceTime);
     d->progressUpdater->start(100, i18n("Opening Document"));
@@ -1564,7 +1564,7 @@ bool KoDocument::openFile()
                 QString errorMsg(i18n("Could not open\n%2.\nReason: %1", msg, prettyPathOrUrl()));
                 KMessageBox::error(0, errorMsg);
 #else
-                QString errorMsg(i18n("Could not open\n%1.\nThe filter plugins have not been properly registered. Please reboot Windows. %2 will now close.", prettyPathOrUrl(), qApp->applicationName()));
+                QString errorMsg(i18n("Could not open\n%1.\nThe filter plugins have not been properly registered. Please reboot Windows. Krita Sketch will now close.", prettyPathOrUrl()));
                 KMessageBox::error(0, errorMsg);
 #endif
 
@@ -1615,7 +1615,7 @@ bool KoDocument::openFile()
 #ifndef NDEBUG
             if (!getenv("CALLIGRA_DEBUG_FILTERS"))
 #endif
-                QFile::remove(importedFile);
+            QFile::remove(importedFile);
         }
     }
 
@@ -1695,8 +1695,8 @@ bool KoDocument::oldLoadAndParse(KoStore *store, const QString& filename, KoXmlD
     store->close();
     if (!ok) {
         kError(30003) << "Parsing error in " << filename << "! Aborting!" << endl
-                      << " In line: " << errorLine << ", column: " << errorColumn << endl
-                      << " Error message: " << errorMsg << endl;
+        << " In line: " << errorLine << ", column: " << errorColumn << endl
+        << " Error message: " << errorMsg << endl;
         d->lastErrorMessage = i18n("Parsing error in %1 at line %2, column %3\nError message: %4"
                                    , filename  , errorLine, errorColumn ,
                                    QCoreApplication::translate("QXml", errorMsg.toUtf8(), 0,
@@ -1773,8 +1773,8 @@ bool KoDocument::loadNativeFormat(const QString & file_)
                 res = completeLoading(0);
         } else {
             kError(30003) << "Parsing Error! Aborting! (in KoDocument::loadNativeFormat (QFile))" << endl
-                          << "  Line: " << errorLine << " Column: " << errorColumn << endl
-                          << "  Message: " << errorMsg << endl;
+            << "  Line: " << errorLine << " Column: " << errorColumn << endl
+            << "  Message: " << errorMsg << endl;
             d->lastErrorMessage = i18n("parsing error in the main document at line %1, column %2\nError message: %3", errorLine, errorColumn, i18n(errorMsg.toUtf8()));
             res = false;
         }
@@ -2105,7 +2105,7 @@ int KoDocument::queryCloseDia()
         name = i18n("Untitled");
 
     int res = KMessageBox::warningYesNoCancel(0,
-                                              i18n("<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?</p>", name));
+              i18n("<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?</p>", name));
 
     switch (res) {
     case KMessageBox::Yes :
@@ -2176,8 +2176,8 @@ QDomDocument KoDocument::createDomDocument(const QString& appName, const QString
     QDomImplementation impl;
     QString url = QString("http://www.calligra.org/DTD/%1-%2.dtd").arg(appName).arg(version);
     QDomDocumentType dtype = impl.createDocumentType(tagName,
-                                                     QString("-//KDE//DTD %1 %2//EN").arg(appName).arg(version),
-                                                     url);
+                             QString("-//KDE//DTD %1 %2//EN").arg(appName).arg(version),
+                             url);
     // The namespace URN doesn't need to include the version number.
     QString namespaceURN = QString("http://www.calligra.org/DTD/%1").arg(appName);
     QDomDocument doc = impl.createDocument(namespaceURN, tagName, dtype);
@@ -2604,7 +2604,12 @@ bool KoDocument::queryClose()
         {
             if (d->m_url.isEmpty())
             {
-                KUrl url = KFileDialog::getSaveUrl(KUrl(), QString(), 0);
+                KoMainWindow *mainWindow = 0;
+                if (d->parentPart->mainWindows().count() > 0) {
+                    mainWindow = d->parentPart->mainWindows()[0];
+                }
+                KoFileDialog dialog(mainWindow, KoFileDialog::SaveFile);
+                KUrl url = dialog.url();
                 if (url.isEmpty())
                     return false;
 

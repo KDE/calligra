@@ -23,7 +23,7 @@
 // Local
 #include "CSVDialog.h"
 
-#include <KoFileDialogHelper.h>
+#include <KoFileDialog.h>
 
 #include <QApplication>
 #include <QByteArray>
@@ -76,11 +76,10 @@ CSVDialog::CSVDialog(QWidget* parent, Selection* selection, Mode mode)
         }
     } else if (m_mode == File) {
         //setWindowTitle(i18n("Inserting Text File"));
-        m_filename = KoFileDialogHelper::getImportFileName(parent, i18n("Import CSV Data File"),
-                                                           "",
-                                                           QStringList(i18n("CSV data files (*.csv)")),
-                                                           "",
-                                                           "OpenDocument");
+        KoFileDialog dialog(parent, KoFileDialog::ImportFile, "OpenDocument");
+        dialog.setCaption(i18n("Import CSV Data File"));
+        dialog.setNameFilter(i18n("CSV data files (*.csv)"));
+        m_filename = dialog.url();
         //cancel action !
         if (m_filename.isEmpty()) {
             enableButton(Ok, false);

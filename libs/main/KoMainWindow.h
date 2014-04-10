@@ -109,12 +109,6 @@ public:
     bool toolbarIsVisible(const char *tbName);
 
     /**
-     * Get hold of the label in the statusbar, to write messages to it.
-     * You can also insert other items in the status bar by using QStatusBar::addWidget.
-     */
-    QLabel *statusBarLabel();
-
-    /**
      * Sets the maximum number of recent documents entries.
      */
     void setMaxRecentItems(uint _number);
@@ -399,13 +393,6 @@ private slots:
     void slotSaveCompleted();
     void slotSaveCanceled(const QString &);
     void forceDockTabFonts();
-
-    /**
-     * Called when the active part wants to change the statusbar message
-     * Reimplement if your mainwindow has a complex statusbar
-     * (with several items)
-     */
-    virtual void slotSetStatusBarText(const QString &);
 
     /**
      * Slot to create a new view for the currently activate @ref #koDocument.

@@ -166,11 +166,15 @@ kde4_add_plugin(kritapart ${kritapart_PART_SRCS})
 target_link_libraries(kritapart kritaui)
 install(TARGETS kritapart DESTINATION ${PLUGIN_INSTALL_DIR})
 
-set(krita_KDEINIT_SRCS main.cc)
+set(krita_KDEINIT_SRCS main.cc kis_splash_screen.cpp)
+kde4_add_ui_files(krita_KDEINIT_SRCS
+    wdgsplash.ui
+)
+
 if(WIN32 AND USE_BREAKPAD)
     set(krita_KDEINIT_SRCS ${krita_KDEINIT_SRCS} kis_crash_handler.cpp)
     set(BREAKPAD_LIBS breakpad)
-endif(WIN32 AND USE_BREAKPAD) 
+endif(WIN32 AND USE_BREAKPAD)
 
 kde4_add_app_icon(krita_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/hi*-app-calligrakrita.png")
 kde4_add_kdeinit_executable(krita ${krita_KDEINIT_SRCS})
