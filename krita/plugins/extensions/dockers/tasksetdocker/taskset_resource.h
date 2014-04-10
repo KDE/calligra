@@ -32,7 +32,6 @@ public:
     
     virtual bool save();
     virtual bool load();
-    virtual QImage image() const;
     virtual QString defaultFileExtension() const;
     
     void setActionList(const QStringList actions);

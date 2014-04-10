@@ -87,11 +87,6 @@ bool TasksetResource::load()
     return true;
 }
 
-QImage TasksetResource::image() const
-{
-    return KoResource::image();
-}
-
 QString TasksetResource::defaultFileExtension() const
 {
     return QString(".kts");
