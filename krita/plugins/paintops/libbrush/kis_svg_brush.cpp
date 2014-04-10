@@ -54,7 +54,7 @@ bool KisSvgBrush::load()
     for (int i = 0; i < 256; ++i) table.push_back(qRgb(i, i, i));
     image_ = image_.convertToFormat(QImage::Format_Indexed8, table);
 
-    setImage(image_);
+    setBrushTipImage(image_);
 
     setValid(true);
 

@@ -50,7 +50,7 @@ bool KisPngBrush::load()
         setName(info.baseName());
     }
 
-    setImage(reader.read());
+    setBrushTipImage(reader.read());
     setValid(!image().isNull());
 
     if (image().isGrayscale()) {

@@ -63,12 +63,12 @@ bool KisAbrBrush::saveToDevice(QIODevice* dev) const
     return false;
 }
 
-void KisAbrBrush::setImage(const QImage& image)
+void KisAbrBrush::setBrushTipImage(const QImage& image)
 {
     setValid(true);
     setBrushType(MASK);
     setHasColor(false);
-    KisBrush::setImage(image);
+    KisBrush::setBrushTipImage(image);
 }
 
 void KisAbrBrush::toXML(QDomDocument& d, QDomElement& e) const

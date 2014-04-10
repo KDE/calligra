@@ -132,7 +132,7 @@ KisGbrBrush::KisGbrBrush(const QImage& image, const QString& name)
     setHasColor(false);
     setSpacing(DEFAULT_SPACING);
 
-    setImage(image);
+    setBrushTipImage(image);
     setName(name);
 }
 
@@ -234,7 +234,7 @@ bool KisGbrBrush::init()
         imageFormat = QImage::Format_ARGB32;
     }
 
-    setImage(QImage(bh.width, bh.height, imageFormat));
+    setBrushTipImage(QImage(bh.width, bh.height, imageFormat));
 
     if (m_image.isNull()) {
         return false;
@@ -297,7 +297,7 @@ bool KisGbrBrush::initFromPaintDev(KisPaintDeviceSP image, int x, int y, int w, 
 {
     // Forcefully convert to RGBA8
     // XXX profile and exposure?
-    setImage(image->convertToQImage(0, x, y, w, h, KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags));
+    setBrushTipImage(image->convertToQImage(0, x, y, w, h, KoColorConversionTransformation::InternalRenderingIntent, KoColorConversionTransformation::InternalConversionFlags));
     setName(image->objectName());
 
     setHasColor(true);
@@ -414,9 +414,9 @@ void KisGbrBrush::setBrushType(enumBrushType type)
     qFatal("FATAL: protected member setBrushType has no meaning for KisGbrBrush");
 }
 
-void KisGbrBrush::setImage(const QImage& image)
+void KisGbrBrush::setBrushTipImage(const QImage& image)
 {
-    KisBrush::setImage(image);
+    KisBrush::setBrushTipImage(image);
     setValid(true);
 }
 
@@ -463,7 +463,7 @@ void KisGbrBrush::makeMaskImage()
                 dstPixel[x] = (uchar)a;
             }
         }
-        setImage(image);
+        setBrushTipImage(image);
     }
 
     setHasColor(false);

@@ -139,6 +139,13 @@ public:
     virtual QImage image() const;
 
     /**
+     * @brief brushImage the image the brush tip can paint with. Not all brush types have a single
+     * image.
+     * @return a valid QImage.
+     */
+    virtual QImage brushImage() const;
+
+    /**
      * Change the spacing of the brush.
      * @param spacing a spacing of 1.0 means that strokes will be separated from one time the size
      *                of the brush.
@@ -300,7 +307,7 @@ protected:
      * The image is used to represent the brush in the gui, and may also, depending on the brush type
      * be used to define the actual brush instance.
      */
-    virtual void setImage(const QImage& image);
+    virtual void setBrushTipImage(const QImage& image);
 
     /**
      * XXX

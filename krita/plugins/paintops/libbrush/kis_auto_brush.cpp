@@ -67,7 +67,7 @@ KisAutoBrush::KisAutoBrush(KisMaskGenerator* as, qreal angle, qreal randomness, 
     setHeight(qMax(qreal(1.0), d->shape->height()));
     setAngle(angle);
     QImage image = createBrushPreview();
-    setImage(image);
+    setBrushTipImage(image);
 }
 
 KisAutoBrush::~KisAutoBrush()
@@ -312,7 +312,7 @@ qreal KisAutoBrush::randomness() const
     return d->randomness;
 }
 
-void KisAutoBrush::setImage(const QImage& image)
+void KisAutoBrush::setBrushTipImage(const QImage& image)
 {
     m_image = image;
     clearBrushPyramid();

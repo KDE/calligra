@@ -362,7 +362,7 @@ quint32 KisAbrBrushCollection::abr_brush_load_v6(QDataStream & abr, AbrInfo *abr
     // name - test_number_of_the_brush, e.g test_1, test_2
     KisAbrBrush* abrBrush = new KisAbrBrush(name);
 
-    abrBrush->setImage(convertToQImage(buffer, width, height));
+    abrBrush->setBrushTipImage(convertToQImage(buffer, width, height));
     // XXX: call extra setters on abrBrush for other options of ABR brushes
     abrBrush->setValid(true);
     abrBrush->setName(name);
@@ -451,7 +451,7 @@ qint32 KisAbrBrushCollection::abr_brush_load_v12(QDataStream & abr, AbrInfo *abr
             }
 
             KisAbrBrush* abrBrush = new KisAbrBrush(name);
-            abrBrush->setImage(convertToQImage(buffer, width, height));
+            abrBrush->setBrushTipImage(convertToQImage(buffer, width, height));
             // XXX: call extra setters on abrBrush for other options of ABR brushes   free (buffer);
             abrBrush->setValid(true);
             abrBrush->setName(name);

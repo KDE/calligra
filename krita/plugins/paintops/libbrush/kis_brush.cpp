@@ -166,6 +166,11 @@ QImage KisBrush::image() const
     return m_image;
 }
 
+QImage KisBrush::brushImage() const
+{
+    return m_image;
+}
+
 qint32 KisBrush::width() const
 {
     return d->width;
@@ -244,7 +249,7 @@ bool KisBrush::canPaintFor(const KisPaintInformation& /*info*/)
     return true;
 }
 
-void KisBrush::setImage(const QImage& image)
+void KisBrush::setBrushTipImage(const QImage& image)
 {
     Q_ASSERT(!image.isNull());
     m_image = image;

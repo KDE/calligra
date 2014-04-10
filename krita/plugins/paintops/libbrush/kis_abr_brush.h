@@ -64,7 +64,7 @@ protected:
 
     friend class KisAbrBrushCollection;
 
-    virtual void setImage(const QImage& image);
+    virtual void setBrushTipImage(const QImage& image);
 
     void toXML(QDomDocument& d, QDomElement& e) const;
 
