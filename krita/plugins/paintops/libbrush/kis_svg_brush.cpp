@@ -59,7 +59,7 @@ bool KisSvgBrush::load()
     setValid(true);
 
     // Well for now, always true
-    if (image().isGrayscale()) {
+    if (brushTipImage().isGrayscale()) {
         setBrushType(MASK);
         setHasColor(false);
     }
@@ -67,9 +67,9 @@ bool KisSvgBrush::load()
         setBrushType(IMAGE);
         setHasColor(true);
     }
-    setWidth(image().width());
-    setHeight(image().height());
-    return !image().isNull();
+    setWidth(brushTipImage().width());
+    setHeight(brushTipImage().height());
+    return !brushTipImage().isNull();
 }
 
 QString KisSvgBrush::defaultFileExtension() const

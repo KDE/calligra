@@ -89,7 +89,6 @@ public:
 
 protected:
 
-
     class PlainColoringInformation : public ColoringInformation
     {
     public:
@@ -143,7 +142,7 @@ public:
      * image.
      * @return a valid QImage.
      */
-    virtual QImage brushImage() const;
+    virtual QImage brushTipImage() const;
 
     /**
      * Change the spacing of the brush.

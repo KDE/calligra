@@ -51,9 +51,9 @@ bool KisPngBrush::load()
     }
 
     setBrushTipImage(reader.read());
-    setValid(!image().isNull());
+    setValid(!brushTipImage().isNull());
 
-    if (image().isGrayscale()) {
+    if (brushTipImage().isGrayscale()) {
         setBrushType(MASK);
         setHasColor(false);
     }
@@ -62,9 +62,9 @@ bool KisPngBrush::load()
         setHasColor(true);
     }
 
-    setWidth(image().width());
-    setHeight(image().height());
-    return !image().isNull();
+    setWidth(brushTipImage().width());
+    setHeight(brushTipImage().height());
+    return !brushTipImage().isNull();
 }
 
 QString KisPngBrush::defaultFileExtension() const

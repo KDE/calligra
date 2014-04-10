@@ -166,7 +166,7 @@ QImage KisBrush::image() const
     return m_image;
 }
 
-QImage KisBrush::brushImage() const
+QImage KisBrush::brushTipImage() const
 {
     return m_image;
 }
@@ -365,7 +365,7 @@ void KisBrush::notifyCachedDabPainted()
 void KisBrush::prepareBrushPyramid() const
 {
     if (!d->brushPyramid) {
-        d->brushPyramid = new KisQImagePyramid(image());
+        d->brushPyramid = new KisQImagePyramid(brushTipImage());
     }
 }
 
