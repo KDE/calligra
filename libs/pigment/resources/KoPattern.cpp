@@ -76,7 +76,7 @@ KoPattern::KoPattern(const QString& file)
 KoPattern::KoPattern(const QImage &image, const QString &name, const QString &folderName)
     : KoResource(QString())
 {
-    setImage(image);
+    setPatternImage(image);
     setName(name);
 
     QFileInfo fileInfo(folderName + QDir::separator() + name + defaultFileExtension());
@@ -331,7 +331,7 @@ qint32 KoPattern::height() const
     return m_image.height();
 }
 
-void KoPattern::setImage(const QImage& image)
+void KoPattern::setPatternImage(const QImage& image)
 {
     m_image = image;
     setValid(true);
@@ -340,7 +340,7 @@ void KoPattern::setImage(const QImage& image)
 KoPattern& KoPattern::operator=(const KoPattern & pattern)
 {
     setFilename(pattern.filename());
-    setImage(pattern.image());
+    setPatternImage(pattern.image());
     setValid(true);
     return *this;
 }
@@ -353,7 +353,7 @@ QString KoPattern::defaultFileExtension() const
 KoPattern* KoPattern::clone() const
 {
     KoPattern* pattern = new KoPattern(filename());
-    pattern->setImage(image());
+    pattern->setPatternImage(image());
     pattern->setName(name());
     return pattern;
 }

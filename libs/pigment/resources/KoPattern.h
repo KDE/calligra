@@ -47,8 +47,6 @@ public:
     qint32 width() const;
     qint32 height() const;
 
-    void setImage(const QImage& image);
-
     QString defaultFileExtension() const;
 
     KoPattern& operator=(const KoPattern& pattern);
@@ -57,8 +55,15 @@ public:
 
     QByteArray md5() const;
 
+    /**
+     * @brief pattern the actual pattern image
+     * @return a valid QImage. There are no guarantees to the image format.
+     */
+    QImage pattern() const;
+
 private:
     bool init(QByteArray& data);
+    void setPatternImage(const QImage& image);
 
 private:
     QImage m_image;
