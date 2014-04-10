@@ -79,35 +79,45 @@
 
 //#else // Q_WS_WIN
 
-void doRestart(bool resetConfig)
+void doResetConfig(const QString &applicationId)
 {
+    QString applicationExecutable = MainWindow::getApplicationExeFromId(applicationId);
+    QString appRcFile = applicationExecutable + "rc";
+
+    {
+        QString appdata = qgetenv("APPDATA");
+        QDir inputDir(appdata + "/krita/share/apps/krita/input/");
+        foreach(QString entry, inputDir.entryList(QStringList("*.profile"))) {
+            inputDir.remove(entry);
+        }
+        QDir configDir(appdata + "/krita/share/config/");
+        configDir.remove(appRcFile);
+    }
+    {
+        QString appdata = qgetenv("LOCALAPPDATA");
+        QDir inputDir(appdata + "/krita/share/apps/krita/input/");
+        foreach(QString entry, inputDir.entryList(QStringList("*.profile"))) {
+            inputDir.remove(entry);
+        }
+        QDir configDir(appdata + "/krita/share/config/");
+        configDir.remove(appRcFile);
+    }
+    {
+        QDir inputDir(KGlobal::dirs()->saveLocation("appdata", "input/"));
+        foreach(QString entry, inputDir.entryList(QStringList("*.profile"))) {
+            inputDir.remove(entry);
+        }
+        QDir configDir(KGlobal::dirs()->saveLocation("config"));
+        configDir.remove(appRcFile);
+    }
+}
+
+void doRestart(const QString &applicationId, bool resetConfig)
+{
+    QString applicationExecutable = MainWindow::getApplicationExeFromId(applicationId);
+
     if (resetConfig) {
-        {
-            QString appdata = qgetenv("APPDATA");
-            QDir inputDir(appdata + "/krita/share/apps/krita/input/");
-            foreach(QString entry, inputDir.entryList(QStringList("*.profile"))) {
-                inputDir.remove(entry);
-            }
-            QDir configDir(appdata + "/krita/share/config/");
-            configDir.remove("kritarc");
-        }
-        {
-            QString appdata = qgetenv("LOCALAPPDATA");
-            QDir inputDir(appdata + "/krita/share/apps/krita/input/");
-            foreach(QString entry, inputDir.entryList(QStringList("*.profile"))) {
-                inputDir.remove(entry);
-            }
-            QDir configDir(appdata + "/krita/share/config/");
-            configDir.remove("kritarc");
-        }
-        {
-            QDir inputDir(KGlobal::dirs()->saveLocation("appdata", "input/"));
-            foreach(QString entry, inputDir.entryList(QStringList("*.profile"))) {
-                inputDir.remove(entry);
-            }
-            QDir configDir(KGlobal::dirs()->saveLocation("config"));
-            configDir.remove("kritarc");
-        }
+        doResetConfig(applicationId);
     }
 
     QString restartCommand;
@@ -119,22 +129,22 @@ void doRestart(bool resetConfig)
     bundleDir.cdUp();
     bundleDir.cdUp();
 
-    restartCommand = QString("open \"") + QString(bundleDir.absolutePath() + "/krita.app\"");
+    restartCommand = QString("open \"") + QString(bundleDir.absolutePath() + "/" + applicationExecutable + ".app\"");
 #endif
 
 #ifdef Q_WS_WIN
-    restartCommand = qApp->applicationDirPath().replace(' ', "\\ ") + "/kritagemini.exe \"";
+    restartCommand = qApp->applicationDirPath().replace(' ', "\\ ") + "/" + applicationExecutable + ".exe \"";
 #endif
 
 #ifdef Q_WS_X11
-    restartCommand = "sh -c \"" + qApp->applicationDirPath().replace(' ', "\\ ") + "/kritagemini \"";
+    restartCommand = "sh -c \"" + qApp->applicationDirPath().replace(' ', "\\ ") + "/" + applicationExecutable + "\"";
 #endif
 
     qDebug() << "restartCommand" << restartCommand;
     QProcess restartProcess;
     if (!restartProcess.startDetached(restartCommand)) {
         QMessageBox::warning(0, "krita",
-                             i18n("Could not restart Krita Gemini. Please try to restart manually."));
+                             i18n("Could not restart Krita. Please try to restart manually."));
     }
 }
 //#endif  // Q_WS_WIN
@@ -206,6 +216,7 @@ QString platformToStringWin(QSysInfo::WinVersion version)
 struct MainWindow::Private {
     QString dumpPath;
     QString id;
+    QString applicationId;
     QNetworkAccessManager *networkAccessManager;
 
     bool doRestart;
@@ -219,7 +230,7 @@ struct MainWindow::Private {
 
 typedef QPair<QByteArray, QByteArray> Field;
 
-MainWindow::MainWindow(const QString &dumpPath, const QString &id, QWidget *parent)
+MainWindow::MainWindow(const QString &dumpPath, const QString &id, const QString &applicationId, QWidget *parent)
     : QWidget(parent)
     , m_d(new Private())
 {
@@ -237,6 +248,7 @@ MainWindow::MainWindow(const QString &dumpPath, const QString &id, QWidget *pare
 
     m_d->dumpPath = dumpPath;
     m_d->id = id;
+    m_d->applicationId = applicationId;
 }
 
 MainWindow::~MainWindow()
@@ -251,7 +263,7 @@ void MainWindow::restart()
         startUpload();
     }
     else {
-        doRestart(chkRemoveSettings->isChecked());
+        doRestart(m_d->applicationId, chkRemoveSettings->isChecked());
         qApp->quit();
     }
 }
@@ -263,6 +275,10 @@ void MainWindow::close()
         startUpload();
     }
     else {
+        if (chkRemoveSettings->isChecked())
+        {
+            doResetConfig(m_d->applicationId);
+        }
         qApp->quit();
     }
 }
@@ -309,7 +325,7 @@ void MainWindow::startUpload()
 #endif
 
     fields << Field("BuildID", CALLIGRA_GIT_SHA1_STRING)
-           << Field("ProductName", "kritageministeam")
+           << Field("ProductName", m_d->applicationId.toLatin1())
            << Field("Version", version.toLatin1())
            << Field("Vendor", "KO GmbH")
            << Field("Email", txtEmail->text().toLatin1())
@@ -404,7 +420,9 @@ void MainWindow::uploadDone(QNetworkReply *reply)
         qCritical() << "uploadDone: Error uploading crash report: " << reply->errorString();
     }
     if (m_d->doRestart) {
-        doRestart(chkRemoveSettings->isChecked());
+        doRestart(m_d->applicationId, chkRemoveSettings->isChecked());
+    } else if (chkRemoveSettings->isChecked()) {
+        doResetConfig(m_d->applicationId);
     }
     qApp->quit();
 
@@ -426,4 +444,21 @@ void MainWindow::uploadError(QNetworkReply::NetworkError error)
     qCritical() << "UploadError: Error uploading crash report: " << error;
 
     uploadDone(0);
+}
+
+QString MainWindow::getApplicationExeFromId(const QString &applicationId)
+{
+    QString applicationExecutable;
+
+    if (applicationId == "") {
+        applicationExecutable = "";
+    } else if (applicationId == "kritageministeam") {
+        applicationExecutable = "kritagemini";
+    } else if (applicationId == "kritasketchsteam") {
+        applicationExecutable = "kritasketch";
+    } else {
+        applicationExecutable = applicationId;
+    }
+
+    return applicationExecutable;
 }

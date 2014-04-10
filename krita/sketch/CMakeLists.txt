@@ -36,7 +36,10 @@ set(kritasketch_SRCS
     main.cpp
     MainWindow.cpp
 )
-
+if(WIN32 AND USE_BREAKPAD)
+    set(kritasketch_SRCS ${kritasketch_SRCS} ../kis_crash_handler.cpp)
+    set(BREAKPAD_LIBS breakpad)
+endif(WIN32 AND USE_BREAKPAD)
 
 
 set(kritasketchplugin_SRCS
@@ -159,6 +162,7 @@ target_link_libraries(kritasketch
     ${QT_LIBRARIES}
     ${GLEW_LIBRARIES}
     kritaui
+    ${BREAKPAD_LIBS}
     ${GLEW_LIBRARIES}
     kritasketchlib
 )

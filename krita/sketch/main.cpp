@@ -34,12 +34,17 @@
 #include <kstandarddirs.h>
 #include <kglobal.h>
 #include <kiconloader.h>
+#include <KoConfig.h>
 
 #include "MainWindow.h"
 
 #include "DocumentListModel.h"
 #include "KisSketchView.h"
 #include "SketchInputContext.h"
+
+#ifdef USE_BREAKPAD
+    #include "../kis_crash_handler.h"
+#endif
 
 #if defined HAVE_STEAMWORKS
 #include "steam/kritasteam.h"
@@ -65,6 +70,19 @@
 int main( int argc, char** argv )
 {
     int result;
+
+#ifdef USE_BREAKPAD
+    qDebug() << "Enabling breakpad";
+    qputenv("KDE_DEBUG", "1");
+
+#ifdef HAVE_STEAMWORKS
+    KisCrashHandler crashHandler("kritasketchsteam");
+#else
+    KisCrashHandler crashHandler("kritasketch");
+#endif
+    Q_UNUSED(crashHandler);
+#endif
+
 #if defined HAVE_STEAMWORKS
     KritaSteamClient* pSteamClient = KritaSteamClient::instance();
     if (!pSteamClient->initialise(KRITA_SKETCH_APPID))

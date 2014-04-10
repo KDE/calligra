@@ -32,8 +32,10 @@ class MainWindow : public QWidget, public Ui::WdgCrashReporter
 {
     Q_OBJECT
 public:
-    MainWindow(const QString &dumpPath, const QString &id, QWidget *parent = 0);
+    MainWindow(const QString &dumpPath, const QString &id, const QString &applicationId, QWidget *parent = 0);
     virtual ~MainWindow();
+
+    static QString getApplicationExeFromId(const QString &applicationId);
 
 public slots:
     void restart();

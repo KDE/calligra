@@ -146,7 +146,12 @@ int main( int argc, char** argv )
 #ifdef USE_BREAKPAD
     qDebug() << "Enabling breakpad";
     qputenv("KDE_DEBUG", "1");
-    KisCrashHandler crashHandler;
+
+#ifdef HAVE_STEAMWORKS
+    KisCrashHandler crashHandler("kritageministeam");
+#else
+    KisCrashHandler crashHandler("kritagemini");
+#endif
     Q_UNUSED(crashHandler);
 #else
     qDebug() << "BREAKPAD IS NOT ENABLED";

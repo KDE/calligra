@@ -65,7 +65,7 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 #ifdef USE_BREAKPAD
     qDebug() << "Enabling breakpad";
     qputenv("KDE_DEBUG", "1");
-    KisCrashHandler crashHandler;
+    KisCrashHandler crashHandler("krita");
     Q_UNUSED(crashHandler);
 #endif
 
