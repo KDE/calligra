@@ -20,7 +20,6 @@
 #define KOCOLORSET
 
 #include <QObject>
-#include <QImage>
 #include <QColor>
 #include <QVector>
 #include <QPixmap>
