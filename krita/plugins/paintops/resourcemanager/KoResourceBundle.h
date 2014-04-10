@@ -153,11 +153,11 @@ public:
     bool isInstalled();
 
 private:
-    QImage thumbnail;
-    KoXmlResourceBundleManifest* manifest;
-    KoXmlResourceBundleMeta* meta;
-    KoResourceBundleManager* manager;
-    bool installed;
+    QImage m_thumbnail;
+    KoXmlResourceBundleManifest* m_manifest;
+    KoXmlResourceBundleMeta* m_meta;
+    KoResourceBundleManager* m_manager;
+    bool m_installed;
 };
 
 #endif // KORESOURCEBUNDLE_H
