@@ -46,12 +46,6 @@ public:
     virtual ~KoResourceBundle();
 
     /**
-     * @brief image
-     * @return a QImage representing this resource.
-     */
-    QImage image() const;
-
-    /**
      * @brief defaultFileExtension
      * @return the default file extension which should be when saving the resource
      */
@@ -153,7 +147,6 @@ public:
     bool isInstalled();
 
 private:
-    QImage m_thumbnail;
     KoXmlResourceBundleManifest* m_manifest;
     KoXmlResourceBundleMeta* m_meta;
     KoResourceBundleManager* m_manager;

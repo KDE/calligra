@@ -50,12 +50,6 @@ QString KoResourceBundle::defaultFileExtension() const
 {
     return QString(".zip");
 }
-
-QImage KoResourceBundle::image() const
-{
-    return m_thumbnail;
-}
-
 bool KoResourceBundle::load()
 {
     m_manager->setReadPack(filename());
@@ -70,9 +64,11 @@ bool KoResourceBundle::load()
         //A optimiser si possible
         m_manifest=new KoXmlResourceBundleManifest(m_manager->getFile("manifest.xml"));
         m_meta=new KoXmlResourceBundleMeta(m_manager->getFile("meta.xml"));
-        m_thumbnail.load(m_manager->getFile("thumbnail.jpg"),"JPG");
+        QImage thumbnail;
+        thumbnail.load(m_manager->getFile("thumbnail.jpg"),"JPG");
         m_manager->close();
         m_installed=m_manifest->isInstalled();
+        setImage(thumbnail);
         setValid(true);
     }
     return true;
