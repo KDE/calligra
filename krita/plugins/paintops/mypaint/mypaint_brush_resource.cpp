@@ -409,10 +409,12 @@ bool MyPaintBrushResource::load()
             }
 
         }
+        setImage(m_icon);
         setValid(true);
         return true;
     }
     setValid(false);
+
     return false;
 }
 
@@ -432,12 +434,6 @@ bool MyPaintBrushResource::save()
 #endif
 
     return true;
-}
-
-
-QImage MyPaintBrushResource::image() const
-{
-    return m_icon;
 }
 
 BrushSetting* MyPaintBrushResource::setting_by_cname(const QString& cname)
