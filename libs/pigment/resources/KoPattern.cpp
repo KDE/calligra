@@ -340,7 +340,7 @@ void KoPattern::setPatternImage(const QImage& image)
 KoPattern& KoPattern::operator=(const KoPattern & pattern)
 {
     setFilename(pattern.filename());
-    setPatternImage(pattern.image());
+    setPatternImage(pattern.pattern());
     setValid(true);
     return *this;
 }
@@ -352,17 +352,22 @@ QString KoPattern::defaultFileExtension() const
 
 KoPattern* KoPattern::clone() const
 {
-    KoPattern* pattern = new KoPattern(filename());
-    pattern->setPatternImage(image());
-    pattern->setName(name());
-    return pattern;
+    KoPattern* pat = new KoPattern(filename());
+    pat->setPatternImage(pattern());
+    pat->setName(name());
+    return pat;
 }
 
 QByteArray KoPattern::md5() const
 {
-    if (m_md5.isEmpty() && !image().isNull()) {
-        m_md5 = generateMD5(image().convertToFormat(QImage::Format_ARGB32));
+    if (m_md5.isEmpty() && !pattern().isNull()) {
+        m_md5 = generateMD5(pattern().convertToFormat(QImage::Format_ARGB32));
     }
     return m_md5;
+}
+
+QImage KoPattern::pattern() const
+{
+    return m_image;
 }
 
