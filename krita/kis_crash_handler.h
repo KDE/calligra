@@ -20,9 +20,11 @@
 #ifndef KIS_CRASH_HANDLER_H
 #define KIS_CRASH_HANDLER_H
 
+#include <QString>
+
 class KisCrashHandler {
 public:
-    KisCrashHandler();
+    KisCrashHandler(const QString &applicationIdString);
     ~KisCrashHandler();
 };
 

@@ -100,6 +100,8 @@ typedef char HD_CHAR;
 
 static google_breakpad::ExceptionHandler *exceptionHandler = 0;
 
+static wchar_t applicationId[32] = L"";
+
 // if this is true, we pass the exception on to the OS crash reporter
 // static bool showOSCrashReporter = false;
 
@@ -122,6 +124,8 @@ static bool startCrashReporter(const HD_CHAR *dumpPath, const HD_CHAR *minidumpI
     wcscat(command, dumpPath);
     wcscat(command, L"\" \"");
     wcscat(command, minidumpID);
+    wcscat(command, L"\" \"");
+    wcscat(command, applicationId);
     wcscat(command, L"\"");
 
     STARTUPINFOW si;
@@ -180,10 +184,12 @@ int toWCharArray(const QString str, wchar_t *array)
     }
 }
 
-KisCrashHandler::KisCrashHandler()
+KisCrashHandler::KisCrashHandler(const QString &applicationIdString)
 {
 
     QString tempPath = QDesktopServices::storageLocation(QDesktopServices::TempLocation);
+
+    toWCharArray(applicationIdString, applicationId);
 
 #ifdef Q_WS_WIN
     qDebug() << "Installing CrashHandler" << tempPath;

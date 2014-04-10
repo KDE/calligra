@@ -65,7 +65,7 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 #endif
 #ifdef USE_BREAKPAD
     qputenv("KDE_DEBUG", "1");
-    KisCrashHandler crashHandler;
+    KisCrashHandler crashHandler("krita");
     Q_UNUSED(crashHandler);
 #endif
 

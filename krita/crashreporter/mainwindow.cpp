@@ -79,7 +79,6 @@
 
 //#else // Q_WS_WIN
 
-
 class GfxCheckIntelInfo
 {
 public:
@@ -163,7 +162,6 @@ void doRestart(const QString &applicationId, bool resetConfig)
                              i18n("Could not restart Krita. Please try to restart manually."));
     }
 }
-//#endif  // Q_WS_WIN
 
 #ifdef Q_WS_MAC
 QString platformToStringMac(QSysInfo::MacVersion version)
@@ -691,6 +689,5 @@ bool MainWindow::checkIntelDriver(const QString& openglString)
             }
         }
     }
-
     return showWarning;
 }
