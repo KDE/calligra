@@ -49,13 +49,14 @@
 #if defined HAVE_STEAMWORKS
 #include "steam/kritasteam.h"
 
-#ifndef STEAM_APP_ID
+#ifndef STEAM_APP_ID_SKETCH
 #pragma warning "No Steam APP ID! You will require steam_appid.txt in your executable directory to define this."
 #include <steam/steamtypes.h>
-#define STEAM_APP_ID k_uAppIdInvalid
+#define STEAM_APP_ID_SKETCH k_uAppIdInvalid
 #endif
-#define KRITA_SKETCH_APPID STEAM_APP_ID
+
 #endif
+
 
 #if defined Q_OS_WIN
 #include "stdlib.h"
@@ -85,7 +86,7 @@ int main( int argc, char** argv )
 
 #if defined HAVE_STEAMWORKS
     KritaSteamClient* pSteamClient = KritaSteamClient::instance();
-    if (!pSteamClient->initialise(KRITA_SKETCH_APPID))
+    if (!pSteamClient->initialise(STEAM_APP_ID_SKETCH))
     {
         /* Either steam isn't running or there is a problem
            SteamClient::initialse may force a relaunch from Steam

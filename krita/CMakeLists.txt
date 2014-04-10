@@ -35,9 +35,9 @@ macro_optional_find_package(Steamworks)
 macro_log_feature(STEAMWORKS_FOUND "Steamworks SDK" "The official Steamworks libraries." "https://partner.steamgames.com/" FALSE "" "Required by Krita for Steam integration")
 macro_bool_to_01(STEAMWORKS_FOUND HAVE_STEAMWORKS)
 
-if (HAVE_STEAMWORKS AND NOT STEAM_APP_ID)
+if (HAVE_STEAMWORKS AND NOT STEAM_APP_ID_GEMINI AND NOT STEAM_APP_ID_SKETCH)
     message(STATUS "No Steam AppID given")
-endif (HAVE_STEAMWORKS AND NOT STEAM_APP_ID)
+endif (HAVE_STEAMWORKS AND NOT STEAM_APP_ID_GEMINI AND NOT STEAM_APP_ID_SKETCH)
 
 if(HAVE_STEAMWORKS)
     include_directories(${STEAMWORKS_INCLUDE_DIR})

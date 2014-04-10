@@ -114,7 +114,7 @@ else (WIN32)
 endif (WIN32)
 
 if (HAVE_STEAMWORKS)
-set_source_files_properties(main.cpp PROPERTIES COMPILE_FLAGS -DSTEAM_APP_ID=${STEAM_APP_ID})
+set_source_files_properties(main.cpp PROPERTIES COMPILE_FLAGS -DSTEAM_APP_ID_SKETCH=${STEAM_APP_ID_SKETCH})
 endif (HAVE_STEAMWORKS)
 
 # Krita Sketch library with shared things needed in both plugin and application
