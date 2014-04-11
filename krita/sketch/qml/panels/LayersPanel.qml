@@ -189,7 +189,7 @@ Panel {
                 Button {
                     width: height; height: Constants.ToolbarButtonSize * 0.9
                     image: Settings.theme.icon("fileclip-black")
-                    visible: KisClipBoard.clip;
+                    enabled: KisClipBoard.clip;
                     onClicked: {
                         sketchView.selectionManager.paste();
                         addLayerButtons.state = "";
