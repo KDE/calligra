@@ -201,7 +201,7 @@ QString KoFileDialog::url()
         url = QFileDialog::getOpenFileName(d->parent,
                                            d->caption,
                                            d->directory,
-                                           getFilterString(d->filterList),
+                                           getFilterString(d->filterList, true),
                                            &d->defaultFilter);
         break;
     }
@@ -218,7 +218,7 @@ QString KoFileDialog::url()
         url = QFileDialog::getOpenFileName(d->parent,
                                            d->caption,
                                            d->directory,
-                                           getFilterString(d->filterList),
+                                           getFilterString(d->filterList, true),
                                            &d->defaultFilter);
         break;
     }
