@@ -134,6 +134,11 @@ StatesRegistry::StatesRegistry() : d(new Private)
     }
 }
 
+StatesRegistry::~StatesRegistry()
+{
+    delete d;
+}
+
 const StatesRegistry* StatesRegistry::instance()
 {
     if(!Private::s_instance) {

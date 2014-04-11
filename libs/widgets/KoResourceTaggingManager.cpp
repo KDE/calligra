@@ -354,3 +354,9 @@ KoResourceTaggingManager::KoResourceTaggingManager(KoResourceModel* model, QWidg
     ///  d->tagSearchLineEdit->setCompleter(d->tagCompleter);
 
 }
+
+KoResourceTaggingManager::~KoResourceTaggingManager()
+{
+    delete d;
+
+}
