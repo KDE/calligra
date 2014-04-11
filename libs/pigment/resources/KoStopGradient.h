@@ -41,7 +41,6 @@ public:
     virtual ~KoStopGradient();
 
     virtual bool load();
-    /// Not implemented
     virtual bool save();
 
     /// reimplemented
