@@ -122,7 +122,7 @@ void DesktopViewProxy::fileOpen()
 
     DocumentManager::instance()->recentFileManager()->addRecent(filename);
 
-    QProcess::startDetached(qApp->applicationFilePath(), QStringList() << filename);
+    QProcess::startDetached(qApp->applicationFilePath(), QStringList() << filename, QDir::currentPath());
 }
 
 void DesktopViewProxy::fileSave()
@@ -162,7 +162,7 @@ void DesktopViewProxy::loadExistingAsNew()
 
 void DesktopViewProxy::slotFileOpenRecent(const KUrl& url)
 {
-    QProcess::startDetached(qApp->applicationFilePath(), QStringList() << url.toLocalFile());
+    QProcess::startDetached(qApp->applicationFilePath(), QStringList() << url.toLocalFile(), QDir::currentPath());
 }
 
 #include "desktopviewproxy.moc"
