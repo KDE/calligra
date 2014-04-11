@@ -46,7 +46,7 @@
 #include "sketch/SketchInputContext.h"
 
 #ifdef USE_BREAKPAD
-    #include "../kis_crash_handler.h"
+#include "../kis_crash_handler.h"
 #endif
 
 #if defined HAVE_STEAMWORKS
@@ -118,10 +118,10 @@ void customDebugMessageHandler(QtMsgType type, const char *msg)
 
     case QtWarningMsg:
         txt = QString("Warning: %1").arg(msg);
-    break;
+        break;
     case QtCriticalMsg:
         txt = QString("Critical: %1").arg(msg);
-    break;
+        break;
     case QtFatalMsg:
         txt = QString("Fatal: %1").arg(msg);
         abort();
@@ -157,18 +157,16 @@ int main( int argc, char** argv )
     qDebug() << "BREAKPAD IS NOT ENABLED";
 #endif
 
-
-
-    #if defined HAVE_STEAMWORKS
-        KritaSteamClient* steamClient = KritaSteamClient::instance();
-        if (!steamClient->initialise(STEAM_APP_ID_GEMINI))
-        {
-            /* Either steam isn't running or there is a problem
+#if defined HAVE_STEAMWORKS
+    KritaSteamClient* steamClient = KritaSteamClient::instance();
+    if (!steamClient->initialise(STEAM_APP_ID_GEMINI))
+    {
+        /* Either steam isn't running or there is a problem
                SteamClient::initialse may force a relaunch from Steam
                so this must close. */
-            return 1;
-        }
-    #endif
+        return 1;
+    }
+#endif
 
     KAboutData aboutData("kritagemini",
                          "krita",
@@ -211,11 +209,11 @@ int main( int argc, char** argv )
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
     // If there's no kdehome, set it and restart the process.
     //QMessageBox::information(0, "krita sketch", "KDEHOME: " + env.value("KDEHOME"));
-	/*
+    /*
     if (!env.contains("KDEHOME") ) {
         _putenv_s("KDEHOME", QDesktopServices::storageLocation(QDesktopServices::DataLocation).toLocal8Bit());
     }
-	*/
+    */
     if (!env.contains("KDESYCOCA")) {
         _putenv_s("KDESYCOCA", QString(appdir.absolutePath() + "/sycoca").toLocal8Bit());
     }
@@ -229,9 +227,9 @@ int main( int argc, char** argv )
         _putenv_s("KDEDIRS", appdir.absolutePath().toLocal8Bit());
     }
     _putenv_s("PATH", QString(appdir.absolutePath() + "/bin" + ";"
-              + appdir.absolutePath() + "/lib" + ";"
-              + appdir.absolutePath() + "/lib"  +  "/kde4" + ";"
-              + appdir.absolutePath()).toLocal8Bit());
+                              + appdir.absolutePath() + "/lib" + ";"
+                              + appdir.absolutePath() + "/lib"  +  "/kde4" + ";"
+                              + appdir.absolutePath()).toLocal8Bit());
 
     app.addLibraryPath(appdir.absolutePath());
     app.addLibraryPath(appdir.absolutePath() + "/bin");
@@ -246,11 +244,11 @@ int main( int argc, char** argv )
     KisTabletSupportX11::init();
     app.setEventFilter(&KisTabletSupportX11::eventFilter);
 #endif
-	
-	if (qgetenv("KDE_FULL_SESSION").isEmpty()) {
+
+    if (qgetenv("KDE_FULL_SESSION").isEmpty()) {
         // There are two themes that work for Krita, oxygen and plastique. Try to set plastique first, then oxygen
         qobject_cast<QApplication*>(QApplication::instance())->setStyle("Plastique");
-		qobject_cast<QApplication*>(QApplication::instance())->setStyle("Oxygen");
+        qobject_cast<QApplication*>(QApplication::instance())->setStyle("Oxygen");
     }
 
     // then create the pixmap from an xpm: we cannot get the
