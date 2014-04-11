@@ -79,8 +79,10 @@ public:
         }
     }
 
-    void setColorSpace(KoColorSpace* colorSpace);
-    const KoColorSpace * colorSpace() const;
+    void setColorSpace(KoColorSpace* colorSpace) { m_colorSpace = colorSpace; }
+    const KoColorSpace * colorSpace() const { return m_colorSpace; }
+
+    virtual QByteArray generateMD5() const { return QByteArray(); }
 
 private:
     const KoAbstractGradient *m_subject;

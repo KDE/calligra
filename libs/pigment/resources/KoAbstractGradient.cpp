@@ -20,7 +20,12 @@
 
 #include "KoAbstractGradient.h"
 #include "KoColorSpaceRegistry.h"
+
 #include <KoColor.h>
+
+#include <QCryptographicHash>
+#include <QBuffer>
+#include <QByteArray>
 
 #define PREVIEW_WIDTH 64
 #define PREVIEW_HEIGHT 64
@@ -131,6 +136,11 @@ QImage KoAbstractGradient::generatePreview(int width, int height) const
     }
 
     return image;
+}
+
+QByteArray KoAbstractGradient::generateMD5() const
+{
+    return QByteArray();
 }
 
 QImage KoAbstractGradient::image() const

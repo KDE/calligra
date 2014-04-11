@@ -317,7 +317,9 @@ protected:
 
     virtual void setHasColor(bool hasColor);
 
+
 protected:
+    virtual QByteArray generateMD5() const;
 
     QImage m_image;
 

@@ -26,6 +26,8 @@
 #include <QDomElement>
 #include <QFile>
 #include <QPoint>
+#include <QCryptographicHash>
+#include <QBuffer>
 
 #include <kis_debug.h>
 #include <klocale.h>
@@ -278,6 +280,21 @@ void KisBrush::predefinedBrushToXML(const QString &type, QDomElement& e) const
     e.setAttribute("spacing", QString::number(spacing()));
     e.setAttribute("angle", QString::number(angle()));
     e.setAttribute("scale", QString::number(scale()));
+}
+
+QByteArray KisBrush::generateMD5() const
+{
+    QByteArray ba;
+//    QBuffer buf(&ba);
+//    save(&buf);
+
+//    if (!ba.isEmpty()) {
+//        QCryptographicHash md5(QCryptographicHash::Md5);
+//        md5.addData(ba);
+//        return md5.result();
+//    }
+
+    return ba;
 }
 
 void KisBrush::toXML(QDomDocument& /*document*/ , QDomElement& element) const

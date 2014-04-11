@@ -26,9 +26,11 @@
 #include <kcomponentdata.h>
 #include <kstandarddirs.h>
 
-#include <QtCore/QProcessEnvironment>
-#include <QtCore/QDate>
-#include <QtCore/QDir>
+#include <QProcessEnvironment>
+#include <QDate>
+#include <QDir>
+#include <QCryptographicHash>
+#include <QBuffer>
 
 #include <iostream>
 using namespace std;
@@ -185,6 +187,21 @@ void KoResourceBundle::addResourceDirs()
 bool KoResourceBundle::isInstalled()
 {
     return m_installed;
+}
+
+QByteArray KoResourceBundle::generateMD5() const
+{
+    QByteArray ba;
+//    QBuffer buf(&ba);
+//    save(&buf);
+
+//    if (!ba.isEmpty()) {
+//        QCryptographicHash md5(QCryptographicHash::Md5);
+//        md5.addData(ba);
+//        return md5.result();
+//    }
+
+    return ba;
 }
 
 void KoResourceBundle::rename(QString filename)

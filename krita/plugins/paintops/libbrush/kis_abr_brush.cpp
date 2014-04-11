@@ -52,7 +52,7 @@ bool KisAbrBrush::load()
 
 bool KisAbrBrush::save()
 {
-    //Return true, otherwise the brush won't be add to the
+    //Return true, otherwise the brush won't be added to the
     //resource server if the brush is loaded via import
     return true;
 }

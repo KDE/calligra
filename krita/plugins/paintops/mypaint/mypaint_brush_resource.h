@@ -75,7 +75,8 @@ public: // From mypaint/lib/brush.py Brush_Lowlevel, which inherits brushlib/Bru
 
 
     bool is_eraser();
-
+protected:
+    virtual QByteArray generateMD5() const;
 private:
 
     QImage m_icon;

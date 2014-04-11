@@ -61,7 +61,6 @@ public:
     virtual ~KisGbrBrush();
 
     virtual bool load();
-    /// synchronous, doesn't emit any signal (none defined!)
 
     virtual bool save();
 

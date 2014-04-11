@@ -145,7 +145,8 @@ public:
      * @return true if the bundle is installed, false otherwise.
      */
     bool isInstalled();
-
+protected:
+    virtual QByteArray generateMD5() const;
 private:
     KoXmlResourceBundleManifest* m_manifest;
     KoXmlResourceBundleMeta* m_meta;

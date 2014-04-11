@@ -67,6 +67,8 @@ public:
     void updatePreview();
 
     QImage generatePreview(int width, int height) const;
+protected:
+    virtual QByteArray generateMD5() const;
 
 private:
     struct Private;

@@ -91,7 +91,7 @@ public:
 protected:
 
     /// override generateMD5 and in your resource subclass
-    virtual QByteArray generateMD5() const { return QByteArray(); }
+    virtual QByteArray generateMD5() const = 0;
 
     /// call this when the contents of the resource change so the md5 needs to be recalculated
     void setMD5(const QByteArray &md5);

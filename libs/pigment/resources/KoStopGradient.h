@@ -59,13 +59,22 @@ public:
     QString defaultFileExtension() const;
 
 protected:
+
+    virtual QByteArray generateMD5() const;
+
     QList<KoGradientStop> m_stops;
     QPointF m_start;
     QPointF m_stop;
     QPointF m_focalPoint;
+
 private:
+
     mutable KoColor buffer;
+
 private:
+
+    bool save(QIODevice *io) const;
+
     void loadKarbonGradient(QFile* file);
     void parseKarbonGradient(const QDomElement& element);
 

@@ -36,8 +36,10 @@ public:
     
     void setActionList(const QStringList actions);
     QStringList actionList();
-
+protected:
+    virtual QByteArray generateMD5() const;
 private:
+    void save(QIODevice *io) const;
     QStringList m_actions;
 };
 

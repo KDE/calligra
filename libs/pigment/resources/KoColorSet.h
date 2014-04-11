@@ -74,7 +74,13 @@ public:
     KoColorSetEntry getColor(quint32 index);
     qint32 nColors();
 
+protected:
+
+    virtual QByteArray generateMD5() const;
+
 private:
+
+    void save(QIODevice *io) const;
     bool init();
 
 private:
