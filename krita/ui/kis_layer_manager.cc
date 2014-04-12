@@ -235,7 +235,6 @@ KisLayerManager::KisLayerManager(KisView2 * view)
     , m_imageFlatten(0)
     , m_imageMergeLayer(0)
     , m_groupLayersSave(0)
-    , m_actLayerVis(false)
     , m_imageResizeToLayer(0)
     , m_flattenLayer(0)
     , m_rasterizeLayer(0)
@@ -346,11 +345,6 @@ void KisLayerManager::imageResizeToActiveLayer()
     if (image && (layer = activeLayer())) {
         image->cropImage(layer->exactBounds());
     }
-}
-
-void KisLayerManager::actLayerVisChanged(int show)
-{
-    m_actLayerVis = (show != 0);
 }
 
 void KisLayerManager::layerProperties()
