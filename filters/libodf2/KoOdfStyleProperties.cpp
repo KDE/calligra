@@ -58,7 +58,7 @@ KoOdfStyleProperties::~KoOdfStyleProperties()
 }
 
 
-QString KoOdfStyleProperties::attribute(QString &property) const
+QString KoOdfStyleProperties::attribute(const QString &property) const
 {
     return d->attributes.value(property, QString());
 }

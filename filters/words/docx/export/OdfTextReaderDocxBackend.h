@@ -56,7 +56,7 @@ class OdfTextReaderDocxBackend : public OdfTextReaderBackend
     void characterData(KoXmlStreamReader &reader, OdfReaderContext *context);
 
  private:
-    void startRun(OdfReaderDocxContext *context);
+    void startRun(KoXmlStreamReader &reader, OdfReaderDocxContext *context);
     void endRun(OdfReaderDocxContext *context);
 
  private:

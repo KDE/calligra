@@ -96,6 +96,12 @@ KoFilter::ConversionStatus DocxExport::convert(const QByteArray& from, const QBy
     odfTextReader.setBackend(&docxTextBackend);
     odtReader.setTextReader(&odfTextReader);
 
+    // Add the styles to the docx file.
+    //docxFile.addContentFile("", "word/styles.xml",
+    //                        "vnd.openxmlformats-officedocument.wordprocessingml.styles+xml",
+    //                        docxBackendContext.m_documentContent);
+
+
     odtReader.readContent(&docxBackend, &docxBackendContext);
 
     // Add the newly converted document contents to the docx file.

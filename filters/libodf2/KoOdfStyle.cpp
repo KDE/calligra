@@ -153,7 +153,7 @@ QHash<QString, KoOdfStyleProperties*> KoOdfStyle::properties()
     return d->properties;
 }
 
-KoOdfStyleProperties *KoOdfStyle::properties(QString &name) const
+KoOdfStyleProperties *KoOdfStyle::properties(const QString& name) const
 {
     return d->properties.value(name, 0);
 }

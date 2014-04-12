@@ -44,7 +44,7 @@ class KOODF2_EXPORT KoOdfStyleProperties
     KoOdfStyleProperties();
     virtual ~KoOdfStyleProperties();
 
-    QString attribute(QString &property) const;
+    QString attribute(const QString &property) const;
     void    setAttribute(QString &property, QString &value);
 
     virtual void clear();

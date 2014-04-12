@@ -30,6 +30,9 @@
 
 // Calligra
 #include <KoXmlWriter.h>
+#include <KoOdfStyle.h>
+#include <KoOdfStyleManager.h>
+#include <KoOdfStyleProperties.h>
 
 // This filter
 #include "OdfReaderDocxContext.h"
@@ -82,8 +85,20 @@ void OdfTextReaderDocxBackend::elementTextP(KoXmlStreamReader &reader, OdfReader
     KoXmlWriter  *writer = docxContext->m_documentWriter;
     if (reader.isStartElement()) {
         writer->startElement("w:p");
+        KoXmlStreamAttributes attributes = reader.attributes();
+
         // FIXME: Add paragraph attributes here
         writer->startElement("w:pPr");
+        QString textStyle = attributes.value("text:style-name").toString();
+        KoOdfStyle *style = context->styleManager()->style(textStyle);
+        writer->startElement("w:rPr");
+        QString parent = style->parent();
+        if (!parent.isEmpty()) {
+            writer->startElement("w:rStyle");
+            writer->addAttribute("w:val", parent);
+            writer->endElement(); // w:rStyle
+        }
+        writer->endElement(); // w:rPr
         // FIXME: Add paragraph properties (styling) here
         writer->endElement(); // w:pPr
     }
@@ -106,7 +121,7 @@ void OdfTextReaderDocxBackend::elementTextSpan(KoXmlStreamReader &reader, OdfRea
     }
 
     if (reader.isStartElement()) {
-        startRun(docxContext);
+        startRun(reader, docxContext);
         ++m_insideSpanLevel;
     }
     else {
@@ -153,7 +168,7 @@ void OdfTextReaderDocxBackend::characterData(KoXmlStreamReader &reader, OdfReade
     // can exist also without a text:span surrounding it.
     KoXmlWriter  *writer = docxContext->m_documentWriter;
     if (m_insideSpanLevel == 0) {
-        startRun(docxContext);
+        startRun(reader, docxContext);
     }
 
     writer->startElement("w:t");
@@ -170,12 +185,43 @@ void OdfTextReaderDocxBackend::characterData(KoXmlStreamReader &reader, OdfReade
 //                         Private functions
 
 
-void OdfTextReaderDocxBackend::startRun(OdfReaderDocxContext *docxContext)
+void OdfTextReaderDocxBackend::startRun(KoXmlStreamReader &reader, OdfReaderDocxContext *docxContext)
 {
-    KoXmlWriter  *writer = docxContext->m_documentWriter;
+    KoXmlWriter *writer = docxContext->m_documentWriter;
     writer->startElement("w:r");
+    KoXmlStreamAttributes attributes = reader.attributes();
     writer->startElement("w:rPr");
-    // FIXME: Add run properties here
+    QString textStyle = attributes.value("text:style-name").toString();
+    if (!textStyle.isEmpty()) {
+        KoOdfStyle *style = docxContext->styleManager()->style(textStyle);
+        KoOdfStyleProperties *properties = style->properties("style:text-properties");
+        QString parent = style->parent();
+        if (!parent.isEmpty()) {
+            writer->startElement("w:rStyle");
+            writer->addAttribute("w:val", parent);
+            writer->endElement(); // w:rStyle
+        }
+        if (properties != 0) {
+            QString fontWeight = properties->attribute("fo:font-weight");
+            if (fontWeight == "bold") {
+                writer->startElement("w:b");
+                writer->addAttribute("w:val", "1");
+                writer->endElement(); // w:b
+                writer->startElement("w:bCs");
+                writer->addAttribute("w:val", "1");
+                writer->endElement(); // w:bCs
+            }
+            QString underlineStyle = properties->attribute("style:text-underline-style");
+            if (!underlineStyle.isEmpty()) {
+                if (underlineStyle == "solid") {
+                    writer->startElement("w:u");
+                    writer->addAttribute("w:val", "single");
+                    writer->endElement(); //:u
+                }
+            }
+        }
+    }
+    // FIXME: Add more run properties here
     writer->endElement(); // w:rPr
 }
 

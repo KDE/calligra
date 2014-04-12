@@ -58,7 +58,7 @@ class KOODF2_EXPORT KoOdfStyle
      * @brief Return the list of properties in the selected property set.
      * @param name name of the property set.  Example: "text-properties" or "paragraph-properties"
      */
-    KoOdfStyleProperties *properties(QString &name) const;
+    KoOdfStyleProperties *properties(const QString &name) const;
 
     QString property(QString &propertySet, QString &property) const;
     void    setProperty(QString &propertySet, QString &property, QString &value);
