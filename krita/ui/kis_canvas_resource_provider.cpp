@@ -162,8 +162,8 @@ KisImageWSP KisCanvasResourceProvider::currentImage() const
 
 KisNodeSP KisCanvasResourceProvider::currentNode() const
 {
-    if (m_view && m_view->parentView()) {
-        return m_view->parentView()->activeNode();
+    if (m_view) {
+        return m_view->currentNode();
     }
     return 0;
 }

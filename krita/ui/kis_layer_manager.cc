@@ -71,6 +71,7 @@
 #include <metadata/kis_meta_data_store.h>
 #include <metadata/kis_meta_data_merge_strategy_registry.h>
 
+#include "kis_image_view.h"
 #include "kis_config.h"
 #include "kis_cursor.h"
 #include "dialogs/kis_dlg_adj_layer_props.h"
@@ -238,7 +239,6 @@ KisLayerManager::KisLayerManager(KisView2 * view)
     , m_imageResizeToLayer(0)
     , m_flattenLayer(0)
     , m_rasterizeLayer(0)
-    , m_activeLayer(0)
     , m_commandsAdapter(new KisNodeCommandsAdapter(m_view))
 {
 }
@@ -250,29 +250,34 @@ KisLayerManager::~KisLayerManager()
 
 void KisLayerManager::setView(KisImageView *view)
 {
-    Q_UNUSED(view);
+    m_activeView = view;
 }
 
 KisLayerSP KisLayerManager::activeLayer()
 {
-    return m_activeLayer;
+    if (m_activeView) {
+        return m_activeView->currentLayer();
+    }
+    return 0;
 }
 
 KisPaintDeviceSP KisLayerManager::activeDevice()
 {
-    if (m_activeLayer)
-        return m_activeLayer->paintDevice();
-    else
-        return 0;
+    if (activeLayer()) {
+        return activeLayer()->paintDevice();
+    }
+    return 0;
 }
 
 void KisLayerManager::activateLayer(KisLayerSP layer)
 {
-    m_activeLayer = layer;
-    emit sigLayerActivated(layer);
-    layersUpdated();
-    if (layer) {
-        m_view->resourceProvider()->slotNodeActivated(layer.data());
+    if (m_activeView) {
+        m_activeView->setCurrentLayer(layer);
+        emit sigLayerActivated(layer);
+        layersUpdated();
+        if (layer) {
+            m_view->resourceProvider()->slotNodeActivated(layer.data());
+        }
     }
 }
 
@@ -322,9 +327,8 @@ void KisLayerManager::updateGUI()
     KisLayerSP layer;
     qint32 nlayers = 0;
 
-
     if (image) {
-        layer = m_activeLayer;
+        layer = activeLayer();
         nlayers = image->nlayers();
     }
 
@@ -352,7 +356,7 @@ void KisLayerManager::layerProperties()
     if (!m_view) return;
     if (!m_view->document()) return;
 
-    KisLayerSP layer = m_activeLayer;
+    KisLayerSP layer = activeLayer();
 
     if (!layer) return;
 
@@ -468,9 +472,8 @@ void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)
         gc.setCompositeOp(COMPOSITE_COPY);
         QRect rc(srcDevice->extent());
         gc.bitBlt(rc.topLeft(), srcDevice, rc);
-
-        qDebug() << "Doing complex copying";
-    } else {
+    }
+    else {
         clone = new KisPaintDevice(*srcDevice);
     }
 
@@ -543,7 +546,7 @@ void KisLayerManager::addCloneLayer(KisNodeSP activeNode)
 {
     KisImageWSP image = m_view->image();
     addLayerCommon(activeNode,
-                   new KisCloneLayer(m_activeLayer, image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8));
+                   new KisCloneLayer(activeLayer(), image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8));
 }
 
 void KisLayerManager::addShapeLayer(KisNodeSP activeNode)

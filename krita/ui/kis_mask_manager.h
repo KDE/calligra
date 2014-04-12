@@ -126,8 +126,7 @@ private:
     void createTransparencyMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom);
 
     KisView2 * m_view;
-
-    KisMaskSP m_activeMask;
+    KisImageView *m_imageView;
     KisNodeCommandsAdapter* m_commandsAdapter;
 
 };

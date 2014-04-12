@@ -77,7 +77,6 @@ struct KisNodeManager::Private {
     KisImageView *imageView;
     KisLayerManager * layerManager;
     KisMaskManager * maskManager;
-    KisNodeSP activeNode;
     KisNodeManager* self;
     KisNodeCommandsAdapter* commandsAdapter;
 
@@ -92,8 +91,8 @@ bool KisNodeManager::Private::activateNodeImpl(KisNodeSP node)
     Q_ASSERT(view);
     Q_ASSERT(view->canvasBase());
     Q_ASSERT(view->canvasBase()->globalShapeManager());
-
-    if (node && node == activeNode) {
+    Q_ASSERT(imageView);
+    if (node && node == self->activeNode()) {
         return false;
     }
 
@@ -106,7 +105,9 @@ bool KisNodeManager::Private::activateNodeImpl(KisNodeSP node)
 
     if (!node) {
         selection->setActiveLayer(0);
-        activeNode = 0;
+        imageView->setCurrentNode(0);
+        imageView->setCurrentLayer(0);
+        imageView->setCurrentMask(0);
         maskManager->activateMask(0);
         layerManager->activateLayer(0);
     } else {
@@ -123,7 +124,7 @@ bool KisNodeManager::Private::activateNodeImpl(KisNodeSP node)
         selection->setActiveLayer(shapeLayer);
 
 
-        activeNode = node;
+        imageView->setCurrentNode(node);
         if (KisLayerSP layer = dynamic_cast<KisLayer*>(node.data())) {
             maskManager->activateMask(0);
             layerManager->activateLayer(layer);
@@ -321,7 +322,10 @@ void KisNodeManager::updateGUI()
 
 KisNodeSP KisNodeManager::activeNode()
 {
-    return m_d->activeNode;
+    if (m_d->imageView) {
+        return m_d->imageView->currentNode();
+    }
+    return 0;
 }
 
 KisLayerSP KisNodeManager::activeLayer()

@@ -29,6 +29,8 @@
 #include <kis_image.h>
 #include <kis_node.h>
 #include <kis_group_layer.h>
+#include <kis_layer.h>
+#include <kis_mask.h>
 
 #include "kis_image_manager.h"
 #include "kis_node_manager.h"
@@ -77,6 +79,9 @@ public:
     KisDoc2 *doc;
     KisView2 *parentView;
 
+    KisNodeSP currentNode;
+    KisLayerSP currentLayer;
+    KisMaskSP currentMask;
 };
 
 KisImageView::KisImageView(KoPart *part, KisDoc2 *doc, QWidget *parent)
@@ -364,6 +369,37 @@ void KisImageView::resetImageSizeAndScroll(bool changeCentering,
 
     d->canvasController->setPreferredCenter(oldPreferredCenter - oldStillPoint + newStillPoint);
 }
+
+void KisImageView::setCurrentNode(KisNodeSP node)
+{
+    d->currentNode = node;
+}
+
+KisNodeSP KisImageView::currentNode() const
+{
+    return d->currentNode;
+}
+
+void KisImageView::setCurrentLayer(KisLayerSP layer)
+{
+    d->currentLayer = layer;
+}
+
+KisLayerSP KisImageView::currentLayer() const
+{
+    return d->currentLayer;
+}
+
+void KisImageView::setCurrentMask(KisMaskSP mask)
+{
+    d->currentMask = mask;
+}
+
+KisMaskSP KisImageView::currentMask() const
+{
+   return d->currentMask;
+}
+
 
 void KisImageView::slotLoadingFinished()
 {

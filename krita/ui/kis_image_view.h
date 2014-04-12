@@ -88,6 +88,14 @@ public:
                                  const QPointF oldImageStillPoint = QPointF(),
                                  const QPointF newImageStillPoint = QPointF());
 
+    void setCurrentNode(KisNodeSP node);
+    KisNodeSP currentNode() const;
+
+    void setCurrentLayer(KisLayerSP layer);
+    KisLayerSP currentLayer() const;
+
+    void setCurrentMask(KisMaskSP mask);
+    KisMaskSP currentMask() const;
 
 protected:
 

@@ -123,6 +123,7 @@ private:
 private:
 
     KisView2 * m_view;
+    KisImageView *m_activeView;
 
     KisAction *m_imageFlatten;
     KisAction *m_imageMergeLayer;
@@ -130,7 +131,6 @@ private:
     KisAction *m_imageResizeToLayer;
     KisAction *m_flattenLayer;
     KisAction *m_rasterizeLayer;
-    KisLayerSP m_activeLayer;
     KisNodeCommandsAdapter* m_commandsAdapter;
 };
 
