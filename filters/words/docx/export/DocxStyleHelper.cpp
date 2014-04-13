@@ -55,6 +55,24 @@ void DocxStyleHelper::handleTextStyles(KoOdfStyleProperties *properties, KoXmlWr
            writer->addAttribute("w:val", "1");
            writer->endElement(); // w:iCs
         }
+        QString textPosition = properties->attribute("style:text-position");
+        if (!textPosition.isEmpty()) {
+           writer->startElement("w:vertAlign");
+           if (textPosition == "super") {
+               writer->addAttribute("w:val", "superscript");
+           }
+           else if (textPosition == "sub") {
+               writer->addAttribute("w:val", "subscript");
+           }
+           writer->endElement(); // w:vertAlign
+        }
+        QString textColor = properties->attribute("fo:color");
+        if (!textColor.isEmpty()) {
+            writer->startElement("w:color");
+            writer->addAttribute("w:val", textColor.mid(1));
+            writer->endElement(); // w:color
+        }
+
         QString underlineStyle = properties->attribute("style:text-underline-style");
         if (!underlineStyle.isEmpty()) {
             if (underlineStyle == "solid") {
@@ -70,6 +88,18 @@ void DocxStyleHelper::handleTextStyles(KoOdfStyleProperties *properties, KoXmlWr
 void DocxStyleHelper::handleParagraphStyles(KoOdfStyleProperties *properties, KoXmlWriter *writer)
 {
     if (properties != 0) {
+        QString tabStop = properties->attribute("style:tab-stop-distance");
+        if (!tabStop.isEmpty()) {
+            // todo
+        }
+        QString lineHeight = properties->attribute("fo:line-height");
+        if (!lineHeight.isEmpty()) {
+            writer->startElement("w:spacing");
+            writer->addAttribute("w:lineRule", "auto");
+            int percentage = lineHeight.left(lineHeight.length() - 1).toDouble() * 2.4;
+            writer->addAttribute("w:line", percentage);
+            writer->endElement(); // w:spacing
+        }
     }
 }
 

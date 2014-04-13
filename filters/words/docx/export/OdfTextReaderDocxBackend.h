@@ -33,6 +33,7 @@ class QSizeF;
 class QStringList;
 class KoStore;
 class KoOdfStyleProperties;
+class KoOdfStyleManager;
 class OdfReaderContext;
 class OdfReaderDocxContext;
 
@@ -59,10 +60,12 @@ class OdfTextReaderDocxBackend : public OdfTextReaderBackend
  private:
     void startRun(const KoXmlStreamReader &reader, OdfReaderDocxContext *context);
     void endRun(OdfReaderDocxContext *context);
+    void inheritTextStyles(KoOdfStyleProperties *destinationProperties, const QString &parent, KoOdfStyleManager *manager);
 
  private:
     int  m_insideSpanLevel;    // Number of nexted <text:span> levels.
     KoOdfStyleProperties *m_currentParagraphTextProperties;
+    QString m_currentParagraphParent;
 };
 
 

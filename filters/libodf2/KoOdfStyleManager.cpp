@@ -82,7 +82,7 @@ KoOdfStyle *KoOdfStyleManager::defaultStyle(const QString &family) const
 
 void KoOdfStyleManager::setDefaultStyle(const QString &family, KoOdfStyle *style)
 {
-    d->styles.insert(family, style);
+    d->defaultStyles.insert(family, style);
 }
 
 QList<KoOdfStyle*> KoOdfStyleManager::styles() const
