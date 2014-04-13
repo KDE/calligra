@@ -123,7 +123,7 @@ private:
 private:
 
     KisView2 * m_view;
-    KisImageView *m_activeView;
+    KisImageView *m_imageView;
 
     KisAction *m_imageFlatten;
     KisAction *m_imageMergeLayer;

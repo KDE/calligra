@@ -56,6 +56,7 @@
 
 KisMaskManager::KisMaskManager(KisView2 * view)
     : m_view(view)
+    , m_imageView(0)
     , m_commandsAdapter(new KisNodeCommandsAdapter(m_view))
 {
 }

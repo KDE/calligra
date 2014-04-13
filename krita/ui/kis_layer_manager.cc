@@ -233,6 +233,7 @@ private:
 
 KisLayerManager::KisLayerManager(KisView2 * view)
     : m_view(view)
+    , m_imageView(0)
     , m_imageFlatten(0)
     , m_imageMergeLayer(0)
     , m_groupLayersSave(0)
@@ -250,13 +251,13 @@ KisLayerManager::~KisLayerManager()
 
 void KisLayerManager::setView(KisImageView *view)
 {
-    m_activeView = view;
+    m_imageView = view;
 }
 
 KisLayerSP KisLayerManager::activeLayer()
 {
-    if (m_activeView) {
-        return m_activeView->currentLayer();
+    if (m_imageView) {
+        return m_imageView->currentLayer();
     }
     return 0;
 }
@@ -271,8 +272,8 @@ KisPaintDeviceSP KisLayerManager::activeDevice()
 
 void KisLayerManager::activateLayer(KisLayerSP layer)
 {
-    if (m_activeView) {
-        m_activeView->setCurrentLayer(layer);
+    if (m_imageView) {
+        m_imageView->setCurrentLayer(layer);
         emit sigLayerActivated(layer);
         layersUpdated();
         if (layer) {
