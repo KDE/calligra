@@ -7,6 +7,8 @@ include_directories(
 
 set(DocxExport_PART_SRCS
     DocxExport.cpp
+    DocxStyleWriter.cpp
+    DocxStyleHelper.cpp
     OdfReaderDocxContext.cpp
     OdtReaderDocxBackend.cpp
     OdfTextReaderDocxBackend.cpp

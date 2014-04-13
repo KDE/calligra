@@ -63,7 +63,7 @@ QString KoOdfStyleProperties::attribute(const QString &property) const
     return d->attributes.value(property, QString());
 }
 
-void KoOdfStyleProperties::setAttribute(QString &property, QString &value)
+void KoOdfStyleProperties::setAttribute(const QString &property, const QString &value)
 {
     d->attributes[property] = value;
 }
@@ -94,6 +94,12 @@ bool KoOdfStyleProperties::saveOdf(const QString &propertySet, KoXmlWriter *writ
     return true;
 }
 
+void KoOdfStyleProperties::copyPropertiesFrom(KoOdfStyleProperties *sourceProperties)
+{
+    foreach(const QString &property, sourceProperties->d->attributes.keys()) {
+        d->attributes[property] = sourceProperties->d->attributes[property];
+    }
+}
 
 // ----------------------------------------------------------------
 //                         protected functions

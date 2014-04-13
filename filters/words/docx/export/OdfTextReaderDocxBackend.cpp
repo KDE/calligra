@@ -36,7 +36,7 @@
 
 // This filter
 #include "OdfReaderDocxContext.h"
-
+#include "DocxStyleHelper.h"
 
 #if 0
 #define DEBUG_BACKEND() \
@@ -55,6 +55,7 @@
 OdfTextReaderDocxBackend::OdfTextReaderDocxBackend()
     : OdfTextReaderBackend()
     , m_insideSpanLevel(0)
+    , m_currentParagraphTextProperties(0)
 {
 }
 
@@ -82,21 +83,25 @@ void OdfTextReaderDocxBackend::elementTextP(KoXmlStreamReader &reader, OdfReader
         return;
     }
 
+    m_currentParagraphTextProperties = 0;
     KoXmlWriter  *writer = docxContext->m_documentWriter;
     if (reader.isStartElement()) {
         writer->startElement("w:p");
-        KoXmlStreamAttributes attributes = reader.attributes();
-
         // FIXME: Add paragraph attributes here
         writer->startElement("w:pPr");
-        QString textStyle = attributes.value("text:style-name").toString();
-        KoOdfStyle *style = context->styleManager()->style(textStyle);
+        KoXmlStreamAttributes attributes = reader.attributes();
         writer->startElement("w:rPr");
-        QString parent = style->parent();
-        if (!parent.isEmpty()) {
-            writer->startElement("w:rStyle");
-            writer->addAttribute("w:val", parent);
-            writer->endElement(); // w:rStyle
+        QString textStyle = attributes.value("text:style-name").toString();
+        if (!textStyle.isEmpty()) {
+            KoOdfStyle *style = docxContext->styleManager()->style(textStyle);
+            m_currentParagraphTextProperties = style->properties("style:text-properties");
+            QString parent = style->parent();
+            if (!parent.isEmpty()) {
+                writer->startElement("w:rStyle");
+                writer->addAttribute("w:val", parent);
+                writer->endElement(); // w:rStyle
+            }
+            DocxStyleHelper::handleTextStyles(m_currentParagraphTextProperties, writer);
         }
         writer->endElement(); // w:rPr
         // FIXME: Add paragraph properties (styling) here
@@ -185,43 +190,36 @@ void OdfTextReaderDocxBackend::characterData(KoXmlStreamReader &reader, OdfReade
 //                         Private functions
 
 
-void OdfTextReaderDocxBackend::startRun(KoXmlStreamReader &reader, OdfReaderDocxContext *docxContext)
+void OdfTextReaderDocxBackend::startRun(const KoXmlStreamReader &reader, OdfReaderDocxContext *docxContext)
 {
     KoXmlWriter *writer = docxContext->m_documentWriter;
     writer->startElement("w:r");
-    KoXmlStreamAttributes attributes = reader.attributes();
     writer->startElement("w:rPr");
+    KoXmlStreamAttributes attributes = reader.attributes();
+    KoOdfStyleProperties properties;
+    if (m_currentParagraphTextProperties != 0)
+    {
+        properties.copyPropertiesFrom(m_currentParagraphTextProperties);
+    }
+
     QString textStyle = attributes.value("text:style-name").toString();
     if (!textStyle.isEmpty()) {
         KoOdfStyle *style = docxContext->styleManager()->style(textStyle);
-        KoOdfStyleProperties *properties = style->properties("style:text-properties");
+        KoOdfStyleProperties *textProperties = style->properties("style:text-properties");
+        if (textProperties != 0)
+        {
+            properties.copyPropertiesFrom(textProperties);
+        }
+
         QString parent = style->parent();
         if (!parent.isEmpty()) {
             writer->startElement("w:rStyle");
             writer->addAttribute("w:val", parent);
             writer->endElement(); // w:rStyle
         }
-        if (properties != 0) {
-            QString fontWeight = properties->attribute("fo:font-weight");
-            if (fontWeight == "bold") {
-                writer->startElement("w:b");
-                writer->addAttribute("w:val", "1");
-                writer->endElement(); // w:b
-                writer->startElement("w:bCs");
-                writer->addAttribute("w:val", "1");
-                writer->endElement(); // w:bCs
-            }
-            QString underlineStyle = properties->attribute("style:text-underline-style");
-            if (!underlineStyle.isEmpty()) {
-                if (underlineStyle == "solid") {
-                    writer->startElement("w:u");
-                    writer->addAttribute("w:val", "single");
-                    writer->endElement(); //:u
-                }
-            }
-        }
     }
-    // FIXME: Add more run properties here
+    DocxStyleHelper::handleTextStyles(&properties, writer);
+
     writer->endElement(); // w:rPr
 }
 

@@ -53,6 +53,9 @@ class KOODF2_EXPORT KoOdfStyle
     bool isDefaultStyle() const;
     void setIsDefaultStyle(bool isDefaultStyle);
 
+    bool isFromStylesXml() const;
+    void setIsFromStylesXml(bool isFromStylesXml);
+
     QHash<QString, KoOdfStyleProperties*> properties();
     /**
      * @brief Return the list of properties in the selected property set.

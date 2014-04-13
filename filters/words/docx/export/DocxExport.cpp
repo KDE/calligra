@@ -39,6 +39,7 @@
 
 // This filter
 #include "DocxFile.h"
+#include "DocxStyleWriter.h"
 #include "OdfReaderDocxContext.h"
 #include "OdtReaderDocxBackend.h"
 #include "OdfTextReaderDocxBackend.h"
@@ -96,10 +97,15 @@ KoFilter::ConversionStatus DocxExport::convert(const QByteArray& from, const QBy
     odfTextReader.setBackend(&docxTextBackend);
     odtReader.setTextReader(&odfTextReader);
 
+    odtReader.analyzeContent(&docxBackendContext);
+
+    DocxStyleWriter           styleWriter(&docxBackendContext);
+    styleWriter.read();
+
     // Add the styles to the docx file.
-    //docxFile.addContentFile("", "word/styles.xml",
-    //                        "vnd.openxmlformats-officedocument.wordprocessingml.styles+xml",
-    //                        docxBackendContext.m_documentContent);
+    docxFile.addContentFile("", "word/styles.xml",
+                            "vnd.openxmlformats-officedocument.wordprocessingml.styles+xml",
+                            styleWriter.m_documentContent);
 
 
     odtReader.readContent(&docxBackend, &docxBackendContext);
