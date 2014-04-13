@@ -421,4 +421,19 @@ void KisImageView::slotLoadingFinished()
             this, SIGNAL(sigProfileChanged(const KoColorProfile*)));
     connect(image(), SIGNAL(sigSizeChanged(QPointF,QPointF)),
             this, SIGNAL(sigSizeChanged(QPointF,QPointF)));
+
+
+    KisDoc2* doc = static_cast<KisDoc2*>(document());
+    KisNodeSP activeNode = doc->preActivatedNode();
+    doc->setPreActivatedNode(0); // to make sure that we don't keep a reference to a layer the user can later delete.
+
+    if (!activeNode) {
+        activeNode = image()->rootLayer()->firstChild();
+    }
+
+    while (activeNode && !activeNode->inherits("KisLayer")) {
+        activeNode = activeNode->nextSibling();
+    }
+
+    setCurrentNode(activeNode);
 }

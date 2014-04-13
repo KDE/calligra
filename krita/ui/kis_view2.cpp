@@ -685,22 +685,6 @@ void KisView2::slotLoadingFinished()
         image()->unlock();
     }
 
-    KisNodeSP activeNode = document()->preActivatedNode();
-    document()->setPreActivatedNode(0); // to make sure that we don't keep a reference to a layer the user can later delete.
-
-    if (!activeNode) {
-        activeNode = image()->rootLayer()->firstChild();
-    }
-
-    while (activeNode && !activeNode->inherits("KisLayer")) {
-        activeNode = activeNode->nextSibling();
-    }
-
-    if (activeNode) {
-        d->nodeManager->slotNonUiActivatedNode(activeNode);
-    }
-
-
     // get the assistants and push them to the manager
     QList<KisPaintingAssistant*> paintingAssistants = document()->preLoadedAssistants();
     foreach (KisPaintingAssistant* assistant, paintingAssistants) {

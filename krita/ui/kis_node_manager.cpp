@@ -177,6 +177,11 @@ void KisNodeManager::setView(KisImageView *imageView)
         connect(shapeController, SIGNAL(sigActivateNode(KisNodeSP)), SLOT(slotNonUiActivatedNode(KisNodeSP)));
         connect(m_d->imageView->image(), SIGNAL(sigIsolatedModeChanged()),this, SLOT(slotUpdateIsolateModeAction()));
 
+        KisNodeSP currentNode = m_d->imageView->currentNode();
+        if (currentNode) {
+            emit sigUiNeedChangeActiveNode(currentNode);
+            emit sigNodeActivated(currentNode);
+        }
     }
 }
 

@@ -55,6 +55,7 @@
 #include <KoDocumentSectionView.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOpRegistry.h>
+#include <KoDocument.h>
 
 #include <kis_types.h>
 #include <kis_image.h>
@@ -76,7 +77,7 @@
 #include "kis_doc2.h"
 #include "kis_dummies_facade_base.h"
 #include "kis_shape_controller.h"
-
+#include "kis_image_view.h"
 
 #include "ui_wdglayerbox.h"
 
@@ -277,6 +278,11 @@ void expandNodesRecursively(KisNodeSP root, QPointer<KisNodeModel> nodeModel, Ko
     sectionView->blockSignals(false);
 }
 
+void KisLayerBox::setMainWindow(KisView2* kisview)
+{
+    m_nodeManager = kisview->nodeManager();
+}
+
 void KisLayerBox::setCanvas(KoCanvasBase *canvas)
 {
     if (m_canvas) {
@@ -291,12 +297,11 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
 
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
 
-    if (m_canvas && m_canvas->view()) {
-        m_image = m_canvas->view()->image();
+    if (m_canvas) {
+        m_image = m_canvas->image();
 
-        m_nodeManager = m_canvas->view()->nodeManager();
-
-        KisShapeController *kritaShapeController = dynamic_cast<KisShapeController*>(m_canvas->view()->document()->shapeController());
+        KisDoc2* doc = static_cast<KisDoc2*>(m_canvas->imageView()->document());
+        KisShapeController *kritaShapeController = dynamic_cast<KisShapeController*>(doc->shapeController());
         KisDummiesFacadeBase *kritaDummiesFacade = static_cast<KisDummiesFacadeBase*>(kritaShapeController);
         m_nodeModel->setDummiesFacade(kritaDummiesFacade, m_image, kritaShapeController);
 
