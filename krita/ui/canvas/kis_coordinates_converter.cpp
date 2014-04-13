@@ -177,6 +177,30 @@ qreal KisCoordinatesConverter::rotationAngle() const
 
 void KisCoordinatesConverter::setZoom(qreal zoom)
 {
+
+//    // Sanitize the zoom levels a bit
+//    if (zoom > 0.09 && zoom < 0.11) {
+//        zoom = 0.1;
+//    }
+//    else if (zoom > 0.24 && zoom < 0.27) {
+//        zoom = 0.25;
+//    }
+//    else if (zoom > 0.32 && zoom < 0.34) {
+//        zoom = 0.3333;
+//    }
+//    else if (zoom > 0.48 && zoom < 0.52) {
+//        zoom = 0.5;
+//    }
+//    else if (zoom > 0.65 && zoom < 0.68) {
+//        zoom = 0.6666;
+//    }
+//    else if (zoom > 0.9 && zoom < 1.1) {
+//        zoom = 1.0;
+//    }
+//    else if (zoom > 1.9 && zoom < 2.1) {
+//        zoom = 2.0;
+//    }
+
     KoZoomHandler::setZoom(zoom);
     recalculateTransformations();
 }
@@ -201,8 +225,8 @@ QPoint KisCoordinatesConverter::mirror(QPointF center, bool mirrorXAxis, bool mi
 {
     bool       doXMirroring = m_d->isXAxisMirrored ^ mirrorXAxis;
     bool       doYMirroring = m_d->isYAxisMirrored ^ mirrorYAxis;
-    qreal      scaleX       = doYMirroring ? -1.0 : 1.0;
-    qreal      scaleY       = doXMirroring ? -1.0 : 1.0;
+    qreal      scaleX       = doXMirroring ? -1.0 : 1.0;
+    qreal      scaleY       = doYMirroring ? -1.0 : 1.0;
     QTransform mirror       = QTransform::fromScale(scaleX, scaleY);
     
     QTransform rot;
@@ -316,13 +340,13 @@ void KisCoordinatesConverter::getQPainterCheckersInfo(QTransform *transform,
     }
 }
 
-void KisCoordinatesConverter::getOpenGLCheckersInfo(QTransform *textureTransform,
+void KisCoordinatesConverter::getOpenGLCheckersInfo(const QRectF &viewportRect,
+                                                    QTransform *textureTransform,
                                                     QTransform *modelTransform,
                                                     QRectF *textureRect,
                                                     QRectF *modelRect) const
 {
     KisConfig cfg;
-    QRectF viewportRect = imageRectInViewportPixels();
 
     if(cfg.scrollCheckers()) {
         *textureTransform = QTransform();

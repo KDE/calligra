@@ -37,6 +37,7 @@
 class QAbstractProxyModel;
 class QButtonGroup;
 class QAbstractItemDelegate;
+class QToolButton;
 class KoAbstractResourceServerAdapter;
 class KoResourceItemView;
 class KoResource;
@@ -51,7 +52,7 @@ class KOWIDGETS_EXPORT KoResourceItemChooser : public QWidget
 public:
     enum Buttons { Button_Import, Button_Remove, Button_GhnsDownload, Button_GhnsUpload };
 
-    explicit KoResourceItemChooser( KoAbstractResourceServerAdapter * resourceAdapter, QWidget *parent = 0 );
+    explicit KoResourceItemChooser( QSharedPointer<KoAbstractResourceServerAdapter> resourceAdapter, QWidget *parent = 0 );
     ~KoResourceItemChooser();
 
     /// Sets number of columns in the view and causes the number of rows to be calculated accordingly
@@ -106,6 +107,9 @@ public:
     QSize viewSize() const;
 
     KoResourceItemView *itemView() const;
+
+    void setViewModeButtonVisible(bool visible);
+    QToolButton *viewModeButton() const;
 
 signals:
     /// Emitted when a resource was selected

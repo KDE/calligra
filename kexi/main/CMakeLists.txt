@@ -31,7 +31,7 @@ startup/KexiImportExportAssistant.cpp
 startup/KexiStartupFileHandler.cpp
 startup/KexiStartupDialog.cpp
 startup/KexiStartup.cpp
-startup/KexiStartupDialogTemplatesPage.cpp
+# TODO startup/KexiStartupDialogTemplatesPage.cpp
 startup/KexiTemplatesModel.cpp
 startup/KexiRecentProjectsModel.cpp
 startup/KexiAssistantMessageHandler.cpp

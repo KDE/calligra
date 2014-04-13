@@ -23,7 +23,11 @@
 #include "InformationModule.h"
 
 #include <calligraversion.h>
+#ifdef Q_OS_WIN
+#include <windows.h>
+#else
 #include <sys/utsname.h>
+#endif
 
 #include <QDir>
 #include <kdebug.h>
@@ -42,6 +46,7 @@
 #include "CellStorage.h"
 
 #include <KoDocument.h>
+#include <KoPart.h>
 #include <KoApplication.h>
 
 using namespace Calligra::Sheets;
@@ -194,8 +199,13 @@ Value func_info(valVector args, ValueCalc *calc, FuncExtra *)
         if(! app) {
            return Value(0);
         } else {
-           int val = app->documents();
-           return Value(val);
+
+            QSet<QString> nameList;
+            QList<KoPart*> parts = app->partList();
+            foreach(KoPart* part, parts) {
+                nameList.insert(part->document()->objectName());
+            }
+            return Value(nameList.size());
         }
     }
 
@@ -219,9 +229,13 @@ Value func_info(valVector args, ValueCalc *calc, FuncExtra *)
         return Value::errorVALUE();
 
     if (type == "system") {
+#ifndef Q_OS_WIN
         struct utsname name;
         if (uname(&name) >= 0)
             return Value(QString(name.sysname));
+#else
+        return Value(QString("Windows"));
+#endif
     }
 
     if (type == "totmem")
@@ -229,12 +243,41 @@ Value func_info(valVector args, ValueCalc *calc, FuncExtra *)
         return Value::errorVALUE();
 
     if (type == "osversion") {
+#ifndef Q_OS_WIN
         struct utsname name;
         if (uname(&name) >= 0) {
             QString os = QString("%1 %2 (%3)").arg(name.sysname).
                          arg(name.release).arg(name.machine);
             return Value(os);
         }
+#else
+        OSVERSIONINFO versionInfo;
+        SYSTEM_INFO sysInfo;
+        QString architecture;
+        
+        versionInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
+        
+        GetVersionEx(&versionInfo);
+        GetSystemInfo(&sysInfo);
+        
+        switch(sysInfo.wProcessorArchitecture) {
+        case PROCESSOR_ARCHITECTURE_AMD64:
+            architecture = QString("x86_64");
+            break;
+        case PROCESSOR_ARCHITECTURE_IA64:
+            architecture = QString("ia64");
+            break;
+        case PROCESSOR_ARCHITECTURE_INTEL:
+            architecture = QString("x86");
+            break;
+        default:
+            architecture = QString("unknown");
+        }
+        
+        QString os = QString("Windows %1.%2 (%3)").arg(versionInfo.dwMajorVersion).arg(versionInfo.dwMinorVersion).arg(architecture);
+        
+        return Value(os);
+#endif
     }
 
     return Value::errorVALUE();

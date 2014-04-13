@@ -21,10 +21,10 @@
 #include <QGradient>
 
 #include "KoAbstractGradient.h"
-#include "KoColor.h"
-#include "KoColorSpace.h"
 #include "KoResource.h"
 #include <pigment_export.h>
+
+class KoColorSpace;
 
 /**
  * KoAbstractGradient is the base class of all gradient resources
@@ -43,7 +43,7 @@ public:
     virtual QGradient* toQGradient() const;
 
     /// gets the color data at position 0 <= t <= 1
-    quint8 *cachedAt(qreal t) const;
+    const quint8 *cachedAt(qreal t) const;
 
     void setColorSpace(KoColorSpace* colorSpace);
     const KoColorSpace * colorSpace() const;

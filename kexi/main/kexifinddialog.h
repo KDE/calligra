@@ -37,7 +37,7 @@ class KexiFindDialog : public QDialog, private Ui::KexiFindDialog
     Q_OBJECT
 public:
     //! Creates a new find dialog. Replace mode is off by default.
-    KexiFindDialog(QWidget* parent);
+    explicit KexiFindDialog(QWidget* parent);
     virtual ~KexiFindDialog();
 
     //! Sets actions that receive button clicks and shortcuts within the dialog. Should be called once.

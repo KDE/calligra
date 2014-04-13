@@ -36,6 +36,10 @@ public:
      * Move to the next pixels
      */
     virtual bool nextPixels(qint32 n) = 0;
+    /**
+     * @return return number of consequential numbers of pixels, useful for optimization
+     */
+    virtual qint32 nConseqPixels() const = 0;
 };
 
 class KRITAIMAGE_EXPORT KisBaseIteratorNG : public virtual KisBaseConstIteratorNG, public virtual KisBaseAccessor
@@ -59,6 +63,9 @@ public:
      * Move to the next row
      */
     virtual void nextRow() = 0;
+
+    virtual void resetPixelPos() = 0;
+    virtual void resetRowPos() = 0;
 };
 
 /**
@@ -85,6 +92,9 @@ public:
      * Move to the next row
      */
     virtual void nextColumn() = 0;
+
+    virtual void resetPixelPos() = 0;
+    virtual void resetColumnPos() = 0;
 };
 
 /**
@@ -98,28 +108,6 @@ public:
     virtual ~KisVLineIteratorNG();
 };
 
-/**
- * Create an iterator over a rectangle section of a paint device, the path followed by
- * the iterator is not guaranteed, it is optimized for speed, which means that you shouldn't
- * use this type of iterator if you are combining two differents layers.
- */
-class KRITAIMAGE_EXPORT KisRectConstIteratorNG : public virtual KisBaseConstIteratorNG
-{
-    Q_DISABLE_COPY(KisRectConstIteratorNG)
-public:
-    KisRectConstIteratorNG() {}
-    virtual ~KisRectConstIteratorNG();
-};
-
-/**
- * Also support writing.
- */
-class KRITAIMAGE_EXPORT KisRectIteratorNG : public KisRectConstIteratorNG, public KisBaseIteratorNG
-{
-    Q_DISABLE_COPY(KisRectIteratorNG)
-public:
-    KisRectIteratorNG() {}
-    virtual ~KisRectIteratorNG();
-};
+#include "kis_sequential_iterator.h"
 
 #endif

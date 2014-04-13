@@ -36,6 +36,7 @@
 #include <KoParagraphStyle.h>
 #include <KoShapeGroup.h>
 #include <KoShapeLayer.h>
+#include <KoAnnotationLayoutManager.h>
 
 #include <KoGenChanges.h>
 #include <changetracker/KoChangeTracker.h>
@@ -140,13 +141,17 @@ void KWOdfWriter::saveHeaderFooter(KoShapeSavingContext &context)
           << Words::OddPagesFooterTextFrameSet
           << Words::EvenPagesFooterTextFrameSet;
 
-    foreach (const KWPageStyle &pageStyle, data.keys()) {
+    QHash<KWPageStyle, QHash<int, KWTextFrameSet*> >::ConstIterator it = data.constBegin();
+    QHash<KWPageStyle, QHash<int, KWTextFrameSet*> >::ConstIterator end = data.constEnd();
+    for(; it != end; ++it) {
+        const KWPageStyle &pageStyle = it.key();
+        const QHash<int, KWTextFrameSet*> &headersAndFooters = it.value();
+
         KoGenStyle masterStyle(KoGenStyle::MasterPageStyle);
         //masterStyle.setAutoStyleInStylesDotXml(true);
         KoGenStyle layoutStyle = pageStyle.saveOdf();
         masterStyle.addProperty("style:page-layout-name", context.mainStyles().insert(layoutStyle, "pm"));
 
-        QHash<int, KWTextFrameSet*> headersAndFooters = data.value(pageStyle);
         int index = 0;
         foreach (int type, order) {
             if (! headersAndFooters.contains(type))
@@ -298,6 +303,11 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
         for (int i = 0; i < frames.count(); ++i) {
             KWFrame *frame = frames.at(i);
             KWPage page = m_document->pageManager()->page(frame->shape());
+            KoShape *shape = frame->shape();
+            if (m_document->annotationLayoutManager()->isAnnotationShape(shape)) {
+                // Skip to save annotation shapes.
+                continue;
+            }
             frame->saveOdf(context, page, m_zIndexOffsets.value(page));
         }
     }

@@ -183,7 +183,7 @@ KarbonSmallStylePreview::KarbonSmallStylePreview(QWidget* parent)
     setFont(KGlobalSettings::smallestReadableFont());
 
     /* Create widget layout */
-    QGridLayout *layout = new QGridLayout(this);
+    QHBoxLayout *layout = new QHBoxLayout(this);
     QLabel * strokeLabel = new QLabel(i18n("Stroke:"), this);
     strokeLabel->setMinimumHeight(FRAMEHEIGHT);
     m_strokeFrame = new KarbonStrokeStyleWidget(this);
@@ -194,12 +194,11 @@ KarbonSmallStylePreview::KarbonSmallStylePreview(QWidget* parent)
     m_fillFrame = new KarbonFillStyleWidget(this);
     m_fillFrame->setMinimumSize(QSize(FRAMEWIDTH, FRAMEHEIGHT));
 
-    layout->addWidget(strokeLabel, 0, 0);
-    layout->addWidget(m_strokeFrame, 0, 1);
-    layout->addWidget(fillLabel, 1, 0);
-    layout->addWidget(m_fillFrame, 1, 1);
-    layout->setContentsMargins(10, 0, 10, 0);
-    layout->setVerticalSpacing(0);
+    layout->addWidget(strokeLabel);
+    layout->addWidget(m_strokeFrame);
+    layout->addWidget(fillLabel);
+    layout->addWidget(m_fillFrame);
+    layout->setContentsMargins(0, 0, 0, 0);
 
     setLayout(layout);
 

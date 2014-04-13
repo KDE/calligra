@@ -32,7 +32,7 @@ class KisSelectionOptions;
 class KRITAUI_EXPORT KisSelectionToolConfigWidgetHelper : public QObject
 {
     Q_OBJECT
-
+    Q_PROPERTY(int selectionAction READ action WRITE slotSetAction NOTIFY selectionActionChanged);
 public:
     KisSelectionToolConfigWidgetHelper(const QString &windowTitle);
 
@@ -41,15 +41,19 @@ public:
 
     SelectionMode selectionMode() const;
     SelectionAction selectionAction() const;
+    int action() const { return selectionAction(); };
 
     bool processKeyPressEvent(QKeyEvent *event);
 
-private slots:
+Q_SIGNALS:
+    void selectionActionChanged(int newAction);
+
+public Q_SLOTS:
     void slotSetAction(int action);
     void slotSetSelectionMode(int mode);
 
 private:
-    KisSelectionOptions* m_optionWidget;
+    KisSelectionOptions* m_optionsWidget;
     SelectionAction m_selectionAction;
     SelectionMode m_selectionMode;
 

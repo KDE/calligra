@@ -1,5 +1,13 @@
 project(krita)
 
+add_definitions(${KDE4_ENABLE_EXCEPTIONS})
+
+# To avoid the confusion of an endless stream of Eigen warnings.
+if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
+    add_definitions(-Wno-unused-local-typedefs)
+endif (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
+
+
 set(KRITA_DEFAULT_TEST_DATA_DIR ${CMAKE_CURRENT_SOURCE_DIR}/sdk/tests/data/)
 
 macro(macro_add_unittest_definitions)
@@ -16,9 +24,19 @@ if(CMAKE_COMPILER_IS_GNUCXX)
 endif(CMAKE_COMPILER_IS_GNUCXX)
 
 if(MSVC OR (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj")
+    if (USE_BREAKPAD)
+        include_directories(${CMAKE_SOURCE_DIR}/3rdparty/google-breakpad/src)
+    endif (USE_BREAKPAD)
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /STACK:10000000") # for g'mic...
 endif(MSVC OR (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
 
+if(NOT WIN32)
+    macro_optional_find_package(FFTW3)
+    macro_log_feature(FFTW3_FOUND "FFTW3" "A fast, free C FFT library" "http://www.fftw.org/" FALSE "" "Required by the Krita for fast convolution operators")
+    macro_bool_to_01(FFTW3_FOUND HAVE_FFTW3)
+endif(NOT WIN32)
+configure_file(image/config_convolution.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/image/config_convolution.h)
 
 include(CheckFunctionExists)
 
@@ -28,10 +46,11 @@ configure_file(config-glew.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-glew.h )
 macro_log_feature(HAVE_GLEW "GLEW" "The OpenGL Extension Wrangler Library" "http://glew.sourceforge.net" FALSE "" "Required by the Krita shader filter plugin")
 
 if(HAVE_GLEW)
-        message(STATUS "GLEW found!")
+    message(STATUS "GLEW found!")
 else(HAVE_GLEW)
-        message(STATUS "GLEW NOT found - krita will not be able to use OpenGL shaders")
+    message(STATUS "GLEW NOT found - krita will not be able to use OpenGL.")
 endif(HAVE_GLEW)
+
 if(HAVE_OPENGL)
     message(STATUS "OpenGL found -- krita will be able  to use OpenGL for hardware accelerated rendering.")
 else(HAVE_OPENGL)
@@ -80,7 +99,7 @@ set(KRITA_INCLUDES
 
     # For generated files from .ui
     ${CMAKE_BINARY_DIR}/krita/ui
-    
+
     ${PIGMENT_INCLUDES}
     ${KOTEXT_INCLUDES}
     ${KOMAIN_INCLUDES}
@@ -90,6 +109,7 @@ set(KRITA_INCLUDES
     ${CMAKE_SOURCE_DIR}/libs/widgetutils
 
     ${EIGEN2_INCLUDE_DIR}
+    ${Vc_INCLUDE_DIR}
 
     # 'Export' this for use by filters
     CACHE INTERNAL ""
@@ -110,6 +130,11 @@ add_subdirectory( dtd )
 add_subdirectory( plugins )
 add_subdirectory( data )
 add_subdirectory( pics )
+
+if (WIN32 AND USE_BREAKPAD)
+        add_subdirectory( crashreporter )
+endif (WIN32 AND USE_BREAKPAD)
+
 if (NOT WIN32)
     add_subdirectory( benchmarks )
 endif (NOT WIN32)
@@ -119,7 +144,16 @@ kde4_add_plugin(kritapart ${kritapart_PART_SRCS})
 target_link_libraries(kritapart kritaui)
 install(TARGETS kritapart DESTINATION ${PLUGIN_INSTALL_DIR})
 
-set(krita_KDEINIT_SRCS main.cc)
+set(krita_KDEINIT_SRCS main.cc kis_splash_screen.cpp)
+kde4_add_ui_files(krita_KDEINIT_SRCS
+    wdgsplash.ui
+)
+
+if(WIN32 AND USE_BREAKPAD)
+    set(krita_KDEINIT_SRCS ${krita_KDEINIT_SRCS} kis_crash_handler.cpp)
+    set(BREAKPAD_LIBS breakpad)
+endif(WIN32 AND USE_BREAKPAD)
+
 kde4_add_app_icon(krita_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/hi*-app-calligrakrita.png")
 kde4_add_kdeinit_executable(krita ${krita_KDEINIT_SRCS})
 
@@ -129,34 +163,17 @@ if (Q_WS_MAC)
     set_target_properties(krita PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Krita 2")
 endif (Q_WS_MAC)
 
-target_link_libraries(kdeinit_krita kritaui)
-target_link_libraries(krita ${QT_QTCORE_LIBRARY} kdeinit_krita)
-
-if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-    find_package(OpenCTL)
-    find_package(OpenShiva)
-    find_package(QtShiva )
-    
-    if(NOT ${OPENCTL_VERSION} VERSION_GREATER 0.9.15.1 )
-        # Workaround for the following issues:
-        # http://bugs.kde.org/274675 http://bugs.kde.org/248051
-        # http://redmine.opengtl.org/issues/72
-        message(status "Found OpenGTL < 0.9.15.1, on a 64 bits system, krita will be forced linked to the libraries to make sure opengtl symbols are available")
-        if(HAVE_OPENSHIVA AND HAVE_QTSHIVA)
-            target_link_libraries(krita ${OPENSHIVA_LDFLAGS})
-        endif()
-
-        if(OPENCTL_FOUND AND OPENEXR_FOUND)
-            target_link_libraries(krita ${OPENCTL_LDFLAGS})
-        endif()
-    endif()
-endif()
+target_link_libraries(kdeinit_krita kritaui ${BREAKPAD_LIBS})
+target_link_libraries(krita kdeinit_krita)
 
 install(TARGETS krita ${INSTALL_TARGETS_DEFAULT_ARGS})
 install(TARGETS kdeinit_krita ${INSTALL_TARGETS_DEFAULT_ARGS})
-install( PROGRAMS  krita.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
-install( FILES  kritapart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
-install( FILES  krita.rc DESTINATION ${DATA_INSTALL_DIR}/krita)
+install(PROGRAMS krita.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
+install(FILES  kritapart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install(FILES  krita.rc DESTINATION ${DATA_INSTALL_DIR}/krita)
+install(FILES  krita.appdata.xml DESTINATION ${SHARE_INSTALL_PREFIX}/appdata/ )
 
-
-
+if (${QTVERSION} VERSION_GREATER 4.7.0 AND NOT APPLE AND HAVE_OPENGL)
+    add_subdirectory(sketch)
+    add_subdirectory(gemini)
+endif (${QTVERSION} VERSION_GREATER 4.7.0 AND NOT APPLE AND HAVE_OPENGL)

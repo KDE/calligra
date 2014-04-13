@@ -61,6 +61,7 @@ public:
     virtual ~KexiMainWindowTabWidget();
 public slots:
     void closeTab();
+    tristate closeAllTabs();
 
 protected:
     //! Implemented to add context menu
@@ -74,6 +75,7 @@ protected:
 
     KexiMainWidget *m_mainWidget;
     KAction *m_closeAction;
+    KAction *m_closeAllTabsAction;
 
 private:
     int m_tabIndex;
@@ -93,7 +95,7 @@ class KEXIMAIN_EXPORT KexiMainWindow
 
 public:
     /*! Creates an empty mainwindow. */
-    KexiMainWindow(QWidget *parent = 0);
+    explicit KexiMainWindow(QWidget *parent = 0);
     virtual ~KexiMainWindow();
 
     virtual KActionCollection* actionCollection() const;

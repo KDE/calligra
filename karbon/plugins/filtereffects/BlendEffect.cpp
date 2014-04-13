@@ -60,8 +60,11 @@ QImage BlendEffect::processImages(const QList<QImage> &images, const KoFilterEff
     if (images.count() != 2) {
         return result;
     }
-
-    QRgb *src = (QRgb*)images[1].bits();
+#if QT_VERSION >= 0x040700
+    const QRgb *src = (const QRgb*)images[1].constBits();
+#else
+    const QRgb *src = (const QRgb*)images[1].bits();
+#endif
     QRgb *dst = (QRgb*)result.bits();
     int w = result.width();
 

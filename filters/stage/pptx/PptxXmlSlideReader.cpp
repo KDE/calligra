@@ -1514,6 +1514,10 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_spTree()
                 TRY_READ(cxnSp)
                 potentiallyAddToLayoutFrames = true;
             }
+            else if (qualifiedName() == "mc:AlternateContent") {
+                TRY_READ(AlternateContent)
+                potentiallyAddToLayoutFrames = true;
+            }
             else {
                 potentiallyAddToLayoutFrames = false;
             }

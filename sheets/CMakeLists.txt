@@ -98,6 +98,11 @@ SET (dialogs_DIR_SRCS
     dialogs/StyleManagerDialog.cpp
     dialogs/SubtotalDialog.cpp
     dialogs/ValidityDialog.cpp
+    dialogs/pivot.cpp
+    dialogs/pivotfilters.cpp
+    dialogs/pivotoptions.cpp
+    dialogs/pivotmain.cpp
+
     )
 
 
@@ -113,13 +118,18 @@ kde4_add_ui_files(dialogs_DIR_SRCS
     dialogs/SortDetailsWidget.ui
     dialogs/SubtotalWidget.ui
     dialogs/SubtotalsDetailsWidget.ui
+    dialogs/pivot.ui
+    dialogs/pivotfilters.ui
+    dialogs/pivotoptions.ui
+    dialogs/pivotmain.ui
+
     )
 
 SET (functions_DIR_SRCS
     functions/helper.cpp
     )
 
-if(NOT QT_NO_DBUS)
+if(QT_QTDBUS_FOUND)
 SET (interfaces_DIR_SRCS
     interfaces/MapAdaptor.cpp
     interfaces/SheetAdaptor.cpp
@@ -202,7 +212,7 @@ SET (calligrasheetscommon_LIB_SRCS
     ${ui_DIR_SRCS}
     )
 
-if(NOT QT_NO_DBUS)
+if(QT_QTDBUS_FOUND)
 set (calligrasheetscommon_LIB_SRCS
     ${calligrasheetscommon_LIB_SRCS}
     ${interfaces_DIR_SRCS}
@@ -290,7 +300,7 @@ target_link_libraries(calligrasheetscommon
     ${QT_QTSQL_LIBRARY}
     ${KDE4_THREADWEAVER_LIBS}
 )
-if(NOT QT_NO_DBUS)
+if(QT_QTDBUS_FOUND)
     target_link_libraries(calligrasheetscommon ${KDE4_KNOTIFYCONFIG_LIBS} )
 endif()
 
@@ -384,6 +394,11 @@ install( FILES
     commands/AbstractRegionCommand.h
     commands/DataManipulators.h
     commands/SortManipulator.h
+    dialogs/pivot.h
+    dialogs/pivotfilters.h
+    dialogs/pivotoptions.h
+    dialogs/pivotmain.h
+
 DESTINATION ${INCLUDE_INSTALL_DIR}/sheets/commands COMPONENT Devel)
 
 endif (SHOULD_BUILD_SHEETS_PART)

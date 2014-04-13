@@ -32,7 +32,7 @@ class KexiMobileWidget : public QStackedWidget
 {
     Q_OBJECT
 public:
-    KexiMobileWidget(KexiProject *p);
+    explicit KexiMobileWidget(KexiProject *p);
     virtual ~KexiMobileWidget();
     void databaseOpened(KexiProject*);
 

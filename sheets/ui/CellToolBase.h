@@ -106,8 +106,8 @@ public Q_SLOTS:
 
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     virtual void deactivate();
-
     virtual void deleteEditor(bool saveChanges, bool expandMatrix = false);
+    void populateWordCollection();
 
 protected:
     void init();
@@ -248,6 +248,7 @@ protected Q_SLOTS:
     void consolidate();
     void goalSeek();
     void subtotals();
+    void pivot();
     void setAreaName();
     void namedAreaDialog();
     void formulaSelection(const QString& expression);

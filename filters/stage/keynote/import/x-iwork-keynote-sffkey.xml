@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Remove as soon as this lands in shared-mime-info and we depend on that version.
+-->
+<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+  <mime-type type="application/x-iwork-keynote-sffkey">
+    <comment>Apple Keynote 5 presentation</comment>
+    <sub-class-of type="application/zip"/>
+    <generic-icon name="x-office-presentation"/>
+    <magic priority="50">
+      <match type="string" value="PK\003\004" offset="0">
+        <match type="string" value="index.apxl" offset="30"/>
+      </match>
+    </magic>
+    <glob pattern="*.key"/>
+    <alias type="application/vnd.apple.keynote"/>
+  </mime-type>
+</mime-info>

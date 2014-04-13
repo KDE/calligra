@@ -1,5 +1,5 @@
 add_subdirectory( brushes )
-add_subdirectory( paintoppresets )
+add_subdirectory( bundles )
 add_subdirectory( patterns )
 add_subdirectory( gradients )
 add_subdirectory( profiles )
@@ -10,6 +10,8 @@ add_subdirectory( workspaces )
 add_subdirectory( themes )
 add_subdirectory( predefined_image_sizes )
 add_subdirectory( input )
+add_subdirectory( paintoppresets )
+
 ########### install files ###############
 
 install( FILES  

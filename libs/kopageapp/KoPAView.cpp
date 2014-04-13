@@ -32,7 +32,6 @@
 #include <QLabel>
 #include <QTabBar>
 
-#include <KoServiceProvider.h>
 #include <KoIcon.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeFactoryBase.h>
@@ -47,6 +46,7 @@
 #include <KoToolProxy.h>
 #include <KoZoomHandler.h>
 #include <KoStandardAction.h>
+#include <KoModeBoxFactory.h>
 #include <KoToolBoxFactory.h>
 #include <KoShapeController.h>
 #include <KoShapeManager.h>
@@ -91,7 +91,6 @@
 #include <kactioncollection.h>
 #include <kstatusbar.h>
 #include <kmessagebox.h>
-#include <kparts/event.h>
 #include <kio/netaccess.h>
 #include <ktemporaryfile.h>
 
@@ -160,11 +159,11 @@ public:
 
 
 
-KoPAView::KoPAView(KoPart *part, KoPADocument *document, QWidget *parent)
+KoPAView::KoPAView(KoPart *part, KoPADocument *document, KoPAFlags withModeBox, QWidget *parent)
 : KoView(part, document, parent)
 , d( new Private(document))
 {
-    initGUI();
+    initGUI(withModeBox);
     initActions();
 
     if ( d->doc->pageCount() > 0 )
@@ -228,7 +227,7 @@ void KoPAView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
 }
 
 
-void KoPAView::initGUI()
+void KoPAView::initGUI(KoPAFlags flags)
 {
     d->tabBarLayout = new QGridLayout(this);
     d->tabBarLayout->setMargin(0);
@@ -242,10 +241,10 @@ void KoPAView::initGUI()
     d->canvas = new KoPACanvas( this, d->doc, this );
     KoCanvasControllerWidget *canvasController = new KoCanvasControllerWidget( actionCollection(), this );
 
-    if (shell()) {
+    if (mainWindow()) {
         // this needs to be done before KoCanvasControllerWidget::setCanvas is called
         KoPADocumentStructureDockerFactory structureDockerFactory(KoDocumentSectionView::ThumbnailMode, d->doc->pageType());
-        d->documentStructureDocker = qobject_cast<KoPADocumentStructureDocker*>(shell()->createDockWidget(&structureDockerFactory));
+        d->documentStructureDocker = qobject_cast<KoPADocumentStructureDocker*>(mainWindow()->createDockWidget(&structureDockerFactory));
         connect(d->documentStructureDocker, SIGNAL(pageChanged(KoPAPageBase*)), proxyObject, SLOT(updateActivePage(KoPAPageBase*)));
         connect(d->documentStructureDocker, SIGNAL(dockerReset()), this, SLOT(reinitDocumentDocker()));
     }
@@ -315,12 +314,21 @@ void KoPAView::initGUI()
     d->verticalRuler->createGuideToolConnection(d->canvas);
     d->horizontalRuler->createGuideToolConnection(d->canvas);
 
-    KoToolBoxFactory toolBoxFactory(d->canvasController);
-    if (shell())
-    {
-        shell()->createDockWidget( &toolBoxFactory );
-        connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QList<QWidget *> &)),
-             shell()->dockerManager(), SLOT(newOptionWidgets(const  QList<QWidget *> &) ));
+    KoMainWindow *mw = mainWindow();
+    if (flags & KoPAView::ModeBox) {
+        if (mw) {
+            KoModeBoxFactory modeBoxFactory(canvasController, qApp->applicationName(), i18n("Tools"));
+            QDockWidget* modeBox = mw->createDockWidget(&modeBoxFactory);
+            mw->dockerManager()->removeToolOptionsDocker();
+            dynamic_cast<KoCanvasObserverBase*>(modeBox)->setObservedCanvas(d->canvas);
+        }
+    } else {
+        if (mw) {
+            KoToolBoxFactory toolBoxFactory;
+            mw->createDockWidget( &toolBoxFactory );
+            connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QList<QWidget *> &)),
+            mw->dockerManager(), SLOT(newOptionWidgets(const  QList<QWidget *> &) ));
+        }
     }
 
     connect(shapeManager(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
@@ -332,7 +340,7 @@ void KoPAView::initGUI()
     connect(d->canvasController->proxyObject, SIGNAL(moveDocumentOffset(const QPoint&)), d->canvas, SLOT(slotSetDocumentOffset(const QPoint&)));
     connect(d->canvasController->proxyObject, SIGNAL(sizeChanged(const QSize &)), this, SLOT(updateCanvasSize()));
 
-    if (shell()) {
+    if (mw) {
         KoToolManager::instance()->requestToolActivation( d->canvasController );
     }
 }
@@ -428,6 +436,10 @@ void KoPAView::initActions()
     connect(d->actionConfigure, SIGNAL(triggered()), this, SLOT(configure()));
 
     d->find = new KoFind( this, d->canvas->resourceManager(), actionCollection() );
+    connect( d->find, SIGNAL( findDocumentSetNext( QTextDocument * ) ),
+             this,    SLOT( findDocumentSetNext( QTextDocument * ) ) );
+    connect( d->find, SIGNAL( findDocumentSetPrevious( QTextDocument * ) ),
+             this,    SLOT( findDocumentSetPrevious( QTextDocument * ) ) );
 
     actionCollection()->action( "object_group" )->setShortcut( QKeySequence( "Ctrl+G" ) );
     actionCollection()->action( "object_ungroup" )->setShortcut( QKeySequence( "Ctrl+Shift+G" ) );
@@ -500,12 +512,8 @@ void KoPAView::importDocument()
     // this needs to go via the filters to get the file in the correct format.
     // For now we only support the native mime types
     QStringList mimeFilter;
-#if 1
+
     mimeFilter << KoOdf::mimeType( d->doc->documentType() ) << KoOdf::templateMimeType( d->doc->documentType() );
-#else
-    mimeFilter = KoFilterManager::mimeFilter( KoServiceProvider::readNativeFormatMimeType(d->doc->componentData()), KoFilterManager::Import,
-                                              KoServiceProvider::readExtraNativeMimeTypes() );
-#endif
 
     dialog->setMimeFilter( mimeFilter );
     if (dialog->exec() == QDialog::Accepted) {
@@ -680,7 +688,7 @@ void KoPAView::configure()
 void KoPAView::setMasterMode( bool master )
 {
     viewMode()->setMasterMode( master );
-    if (shell()) {
+    if (mainWindow()) {
         d->documentStructureDocker->setMasterMode(master);
     }
     d->actionMasterPage->setEnabled(!master);
@@ -702,7 +710,7 @@ KoShapeManager* KoPAView::masterShapeManager() const
 
 void KoPAView::reinitDocumentDocker()
 {
-    if (shell()) {
+    if (mainWindow()) {
         d->documentStructureDocker->setActivePage( d->activePage );
     }
 }
@@ -807,7 +815,7 @@ void KoPAView::setActivePage( KoPAPageBase* page )
         masterShapeManager()->setShapes( QList<KoShape*>() );
     }
 
-    if ( shell() && pageChanged ) {
+    if ( mainWindow() && pageChanged ) {
         d->documentStructureDocker->setActivePage(d->activePage);
         proxyObject->emitActivePageChanged();
     }
@@ -944,6 +952,19 @@ void KoPAView::setActionEnabled( int actions, bool enable )
     }
 }
 
+void KoPAView::setViewMode(KoPAViewMode* mode)
+{
+    KoPAViewMode* previousViewMode = viewMode();
+    KoPAViewBase::setViewMode(mode);
+
+    if (previousViewMode && mode != previousViewMode) {
+        disconnect(d->doc, SIGNAL(shapeAdded(KoShape *)), previousViewMode, SLOT(addShape(KoShape *)));
+        disconnect(d->doc, SIGNAL(shapeRemoved(KoShape *)), previousViewMode, SLOT(removeShape(KoShape *)));
+    }
+    connect(d->doc, SIGNAL(shapeAdded(KoShape *)), mode, SLOT(addShape(KoShape *)));
+    connect(d->doc, SIGNAL(shapeRemoved(KoShape *)), mode, SLOT(removeShape(KoShape *)));
+}
+
 QPixmap KoPAView::pageThumbnail(KoPAPageBase* page, const QSize& size)
 {
     return d->doc->pageThumbnail(page, size);
@@ -1018,24 +1039,6 @@ void KoPAView::clipboardDataChanged()
     }
 
     d->editPaste->setEnabled(paste);
-}
-
-void KoPAView::partActivateEvent(KParts::PartActivateEvent* event)
-{
-    if ( event->widget() == this ) {
-        if ( event->activated() ) {
-            clipboardDataChanged();
-            connect( d->find, SIGNAL( findDocumentSetNext( QTextDocument * ) ),
-                     this,    SLOT( findDocumentSetNext( QTextDocument * ) ) );
-            connect( d->find, SIGNAL( findDocumentSetPrevious( QTextDocument * ) ),
-                     this,    SLOT( findDocumentSetPrevious( QTextDocument * ) ) );
-        }
-        else {
-            disconnect( d->find, 0, 0, 0 );
-        }
-    }
-
-    KoView::partActivateEvent(event);
 }
 
 void KoPAView::goToPreviousPage()
@@ -1272,3 +1275,4 @@ void KoPAView::updateUnit(const KoUnit &unit)
 }
 
 #include <KoPAView.moc>
+

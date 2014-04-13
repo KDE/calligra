@@ -63,12 +63,12 @@ SheetAdaptor::~SheetAdaptor()
 QString SheetAdaptor::cellName(int x, int y)
 {
     /* sebsauer 20061206: commented out cause if someone starts to believe that
-    counting starts by 0,0 then he may very surprised why the first col/row
+    counting starts by 0,0 then they may very surprised why the first col/row
     got returned twice. That happened to me and I was believing that's a KSpread
     bug too :-(
-    // if someone calls us with either x or y 0 he _most_ most likely doesn't
+    // if someone calls us with either x or y 0 they _most_ most likely don't
     // know that the cell counting starts with 1 (Simon)
-    // P.S.: I did that mistake for weeks and already started looking for the
+    // P.S.: I made that mistake for weeks and already started looking for the
     // "bug" in kspread ;-)
     if ( x == 0 ) x = 1;
     if ( y == 0 ) y = 1;

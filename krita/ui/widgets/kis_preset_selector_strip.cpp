@@ -41,10 +41,20 @@ KisPresetSelectorStrip::KisPresetSelectorStrip(QWidget* parent)
     /* This is an heuristic to fill smallPresetChooser with only the presets
      * for the paintop that comes selected by default: Pixel Brush. */
     const QString PIXEL_BRUSH_ID = "paintbrush";
+    m_currentPaintopID = PIXEL_BRUSH_ID;
 }
 
 KisPresetSelectorStrip::~KisPresetSelectorStrip()
 {
+}
+
+void KisPresetSelectorStrip::setPresetFilter(const QString& paintOpId)
+{
+    smallPresetChooser->setPresetFilter(paintOpId);
+    if (m_currentPaintopID != paintOpId) {
+        m_resourceItemView->scrollTo(m_resourceItemView->model()->index(0, 0));
+        m_currentPaintopID = paintOpId;
+    }
 }
 
 void KisPresetSelectorStrip::on_leftScrollBtn_pressed()

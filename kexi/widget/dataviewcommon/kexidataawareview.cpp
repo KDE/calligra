@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005-2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2014 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,6 +23,7 @@
 #include <utils/kexisharedactionclient.h>
 #include <core/KexiMainWindowIface.h>
 #include <core/KexiStandardAction.h>
+#include <core/KexiWindow.h>
 #include <db/roweditbuffer.h>
 
 #include <QVBoxLayout>
@@ -246,8 +247,6 @@ KexiDataAwareObjectInterface* KexiDataAwareView::dataAwareObject() const
     return d->dataAwareObject;
 }
 
-
-
 void KexiDataAwareView::updateActions(bool activated)
 {
     setAvailable("data_sort_az", d->dataAwareObject->isSortingEnabled());
@@ -260,6 +259,56 @@ QWidget* KexiDataAwareView::internalView() const
     return d->internalView;
 }
 
+QAction* KexiDataAwareView::sharedActionRequested(QKeyEvent *ke, const char *actionName)
+{
+    QAction *a = sharedAction(actionName);
+    return a && QKeySequence(ke->key() | ke->modifiers()) == a->shortcut()
+            ? a : 0;
+}
+
+bool KexiDataAwareView::eventFilter(QObject *o, QEvent *e)
+{
+    // kDebug() << "***" << o << e << window()->selectedView() << this;
+    if (e->type() == QEvent::FocusIn || e->type() == QEvent::FocusOut) {
+        kDebug() << "F O C U S" << e << o;
+    }
+    if (e->type() == QEvent::ShortcutOverride && o == this) {
+        QKeyEvent *ke = static_cast<QKeyEvent*>(e);
+        QAction *a = sharedActionRequested(ke, "data_cancel_row_changes");
+        if (a) {
+            KexiDataItemInterface *editor = d->dataAwareObject->editor();
+            if (editor) {
+                d->dataAwareObject->cancelEditor();
+                editor->moveCursorToEnd();
+                editor->selectAll();
+            }
+            else {
+                a->trigger();
+            }
+            return true;
+        }
+        a = sharedActionRequested(ke, "data_save_row");
+        if (a) {
+            a->trigger();
+            KexiDataItemInterface *editor = d->dataAwareObject->editor();
+            if (editor) {
+                editor->moveCursorToEnd();
+                editor->selectAll();
+            }
+            return true;
+        }
+        foreach (const QByteArray& actionName,
+                 QList<QByteArray>() << "edit_copy" << "edit_cut" << "edit_paste")
+        {
+            a = sharedActionRequested(ke, actionName);
+            if (a) {
+                a->trigger();
+                return true;
+            }
+        }
+    }
+    return KexiView::eventFilter(o, e);
+}
 
 void KexiDataAwareView::reloadActions()
 {

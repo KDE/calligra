@@ -61,6 +61,11 @@ void KisSaveXmlVisitor::setSelectedNodes(vKisNodeSP selectedNodes)
     m_selectedNodes = selectedNodes;
 }
 
+QStringList KisSaveXmlVisitor::errorMessages() const
+{
+    return m_errorMessages;
+}
+
 bool KisSaveXmlVisitor::visit(KisExternalLayer * layer)
 {
     if (layer->inherits("KisShapeLayer")) {
@@ -74,12 +79,21 @@ bool KisSaveXmlVisitor::visit(KisExternalLayer * layer)
         QDomElement layerElement = m_doc.createElement(LAYER);
         saveLayer(layerElement, FILE_LAYER, layer);
 
-        QString path = dynamic_cast<KisFileLayer*>(layer)->path();
+        KisFileLayer *fileLayer = dynamic_cast<KisFileLayer*>(layer);
+
+        QString path = fileLayer->path();
 
         QDir d(QFileInfo(m_url).absolutePath());
 
         layerElement.setAttribute("source", d.relativeFilePath(path));
-        layerElement.setAttribute("scale", dynamic_cast<KisFileLayer*>(layer)->scaleToImageResolution() ?  "true" : "false");
+
+        if (fileLayer->scalingMethod() == KisFileLayer::ToImagePPI) {
+            layerElement.setAttribute("scale", "true");
+        }
+        else {
+            layerElement.setAttribute("scale", "false");
+        }
+        layerElement.setAttribute("scalingmethod", (int)fileLayer->scalingMethod());
         layerElement.setAttribute(COLORSPACE_NAME, layer->original()->colorSpace()->id());
 
         m_elem.appendChild(layerElement);
@@ -128,6 +142,11 @@ bool KisSaveXmlVisitor::visit(KisGroupLayer *layer)
     visitor.setSelectedNodes(m_selectedNodes);
     m_count++;
     bool success = visitor.visitAllInverse(layer);
+
+    m_errorMessages.append(visitor.errorMessages());
+    if (!m_errorMessages.isEmpty()) {
+        return false;
+    }
 
     QMapIterator<const KisNode*, QString> i(visitor.nodeFileNames());
     while (i.hasNext()) {
@@ -278,7 +297,11 @@ bool KisSaveXmlVisitor::saveMasks(KisNode * node, QDomElement & layerElement)
         layerElement.appendChild(elem);
         KisSaveXmlVisitor visitor(m_doc, elem, m_count, m_url, false);
         visitor.setSelectedNodes(m_selectedNodes);
-        bool success =  visitor.visitAllInverse(node);
+        bool success = visitor.visitAllInverse(node);
+        m_errorMessages.append(visitor.errorMessages());
+        if (!m_errorMessages.isEmpty()) {
+            return false;
+        }
 
         QMapIterator<const KisNode*, QString> i(visitor.nodeFileNames());
         while (i.hasNext()) {

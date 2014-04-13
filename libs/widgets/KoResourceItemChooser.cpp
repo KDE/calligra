@@ -34,6 +34,7 @@
 #include <QPixmap>
 #include <QPainter>
 #include <QSplitter>
+#include <QToolButton>
 
 #include <kfiledialog.h>
 #include <klocale.h>
@@ -51,7 +52,7 @@
 #include "KoResourceItemDelegate.h"
 #include "KoResourceModel.h"
 #include "KoResource.h"
-#include "KoResourceTaggingInterface.h"
+#include "KoResourceTaggingManager.h"
 
 class KoResourceItemChooser::Private
 {
@@ -64,9 +65,10 @@ public:
         , grayscalePreview(false)
     {}
     KoResourceModel* model;
-    KoResourceTaggingInterface* tagChooser;
+    KoResourceTaggingManager* tagManager;
     KoResourceItemView* view;
     QButtonGroup* buttonGroup;
+    QToolButton  *viewModeButton;
 
     QString knsrcFile;
     QScrollArea *previewScroller;
@@ -78,7 +80,7 @@ public:
 
 };
 
-KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * resourceAdapter, QWidget *parent )
+KoResourceItemChooser::KoResourceItemChooser(QSharedPointer<KoAbstractResourceServerAdapter> resourceAdapter, QWidget *parent )
     : QWidget( parent ), d( new Private() )
 {
     Q_ASSERT(resourceAdapter);
@@ -112,7 +114,7 @@ KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * r
     d->buttonGroup = new QButtonGroup(this);
     d->buttonGroup->setExclusive(false);
 
-    QVBoxLayout* layout = new QVBoxLayout(this);
+    QGridLayout* layout = new QGridLayout(this);
 
     QGridLayout* buttonLayout = new QGridLayout;
 
@@ -154,12 +156,18 @@ KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * r
     buttonLayout->setSpacing(0);
     buttonLayout->setMargin(0);
 
-    d->tagChooser = new KoResourceTaggingInterface(d->model, this);
+    d->viewModeButton = new QToolButton(this);
+    d->viewModeButton->setIcon(koIcon("view-choose"));
+    d->viewModeButton->setPopupMode(QToolButton::InstantPopup);
+    d->viewModeButton->setVisible(false);
 
-    layout->addWidget(d->tagChooser->tagChooserWidget());
-    layout->addWidget(d->splitter);
-    layout->addWidget(d->tagChooser->tagFilterWidget());
-    layout->addLayout(buttonLayout);
+    d->tagManager = new KoResourceTaggingManager(d->model, this);
+
+    layout->addWidget(d->tagManager->tagChooserWidget(), 0, 0);
+    layout->addWidget(d->viewModeButton, 0, 1);
+    layout->addWidget(d->splitter, 1, 0, 1, 2);
+    layout->addWidget(d->tagManager->tagFilterWidget(), 2, 0, 1, 2);
+    layout->addLayout(buttonLayout, 3, 0, 1, 2);
     layout->setMargin(0);
     layout->setSpacing(0);
     updateButtonState();
@@ -169,6 +177,7 @@ KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * r
 
 KoResourceItemChooser::~KoResourceItemChooser()
 {
+    disconnect();
     delete d;
 }
 
@@ -266,7 +275,7 @@ void KoResourceItemChooser::showGetHotNewStuff( bool showDownload, bool showUplo
 
 void KoResourceItemChooser::showTaggingBar(bool showSearchBar, bool showOpBar)
 {
-    d->tagChooser->showTaggingBar(showSearchBar, showOpBar);
+    d->tagManager->showTaggingBar(showSearchBar, showOpBar);
 }
 
 void KoResourceItemChooser::setRowCount( int rowCount )
@@ -398,19 +407,11 @@ void KoResourceItemChooser::updatePreview(KoResource *resource)
 
     QImage image = resource->image();
 
-    /**
-     * Most of our resources code expects the image() of the resource
-     * to be in ARGB32 (or alike) format. If some resource returns the
-     * image in another format, then it is actually a bug (and it may
-     * result in a SIGSEGV somewhere). But here we will not assert
-     * with it, just warn the user that something is wrong.
-     */
-    if (image.format() != QImage::Format_RGB32 &&
-        image.format() != QImage::Format_ARGB32 &&
-        image.format() != QImage::Format_ARGB32_Premultiplied) {
+    if (image.format()!= QImage::Format_RGB32 ||
+            image.format() != QImage::Format_ARGB32 ||
+            image.format() != QImage::Format_ARGB32_Premultiplied) {
 
         image = image.convertToFormat(QImage::Format_ARGB32_Premultiplied);
-        qWarning() << "WARNING (KoResourceItemChooser::updatePreview): the resource" << resource->name() << "has created a non-rgb32 image thumbnail. It may not work properly.";
     }
 
     if (d->tiledPreview) {
@@ -425,7 +426,9 @@ void KoResourceItemChooser::updatePreview(KoResource *resource)
         image = img;
     }
 
-    if (d->grayscalePreview) {
+    // Only convert to grayscale if it is rgb. Otherwise, it's gray already.
+    if (d->grayscalePreview && !image.isGrayscale()) {
+
         QRgb* pixel = reinterpret_cast<QRgb*>( image.bits() );
         for (int row = 0; row < image.height(); ++row ) {
             for (int col = 0; col < image.width(); ++col ){
@@ -474,7 +477,17 @@ KoResourceItemView *KoResourceItemChooser::itemView() const
 
 void KoResourceItemChooser::contextMenuRequested(const QPoint& pos)
 {
-    d->tagChooser->contextMenuRequested(currentResource(), pos);
+    d->tagManager->contextMenuRequested(currentResource(), pos);
+}
+
+void KoResourceItemChooser::setViewModeButtonVisible(bool visible)
+{
+    d->viewModeButton->setVisible(visible);
+}
+
+QToolButton* KoResourceItemChooser::viewModeButton() const
+{
+    return d->viewModeButton;
 }
 
 #include <KoResourceItemChooser.moc>

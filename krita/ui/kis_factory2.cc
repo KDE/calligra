@@ -96,10 +96,7 @@ KAboutData* KisFactory2::aboutData()
 const KComponentData &KisFactory2::componentData()
 {
     if (!s_instance) {
-        if (s_aboutData)
-            s_instance = new KComponentData(s_aboutData);
-        else
-            s_instance = new KComponentData(newKritaAboutData());
+        s_instance = new KComponentData(aboutData());
         Q_CHECK_PTR(s_instance);
 
         // XXX_EXIV: make the exiv io backends real plugins
@@ -134,8 +131,6 @@ const KComponentData &KisFactory2::componentData()
         s_instance->dirs()->addResourceType("icc_profiles", 0, "krita/profiles/");
 
         s_instance->dirs()->addResourceType("kis_shaders", "data", "krita/shaders/");
-
-        s_instance->dirs()->addResourceType("kis_backgrounds", "data", "krita/backgrounds/");
 
         // Tell the iconloader about share/apps/calligra/icons
         KIconLoader::global()->addAppDir("calligra");

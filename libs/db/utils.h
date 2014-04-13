@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004-2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2014 Jarosław Staniek <staniek@kde.org>
    Copyright (C) 2012 Dimitrios T. Tanis <dimitrios.tanis@kdemail.net>
 
    This library is free software; you can redistribute it and/or
@@ -550,9 +550,6 @@ private:
  and contains only letters, numbers and '_' character. */
 CALLIGRADB_EXPORT bool isIdentifier(const QString& s);
 
-//! \return Valid filename based on \a s
-CALLIGRADB_EXPORT QString string2FileName(const QString &s);
-
 //! QDateTime - a hack needed because QVariant(QTime) has broken isNull()
 inline CALLIGRADB_EXPORT QDateTime stringToHackedQTime(const QString& s)
 {
@@ -592,6 +589,32 @@ typedef void(*AlterTableActionDebugGUIHandler)(const QString&, int);
 CALLIGRADB_EXPORT void setAlterTableActionDebugHandler(AlterTableActionDebugGUIHandler handler);
 CALLIGRADB_EXPORT void alterTableActionDebugGUI(const QString& text, int nestingLevel = 0);
 #endif
+
+//! @return @a string if it is not empty, else returns @a stringIfEmpty.
+/*! This function is an optimization in cases when @a string is a result of expensive function
+    call because any evaluation will be performed once, not twice. Another advantage is simpified
+    code through the functional approach.
+    The function expects bool isEmpty() method to be present in type T, so T can typically
+    be QString or QByteArray. */
+template<typename T>
+T iifNotEmpty(const T& string, const T& stringIfEmpty)
+{
+    return string.isEmpty() ? stringIfEmpty : string;
+}
+
+//! @overload iifNotEmpty(const T& string, const T& stringIfEmpty)
+template<typename T>
+T iifNotEmpty(const QByteArray& string, const T& stringIfEmpty)
+{
+    return iifNotEmpty(QString(string), stringIfEmpty);
+}
+
+//! @overload iifNotEmpty(const T& string, const T& stringIfEmpty)
+template<typename T>
+T iifNotEmpty(const T& string, const QByteArray& stringIfEmpty)
+{
+    return iifNotEmpty(string, QString(stringIfEmpty));
+}
 
 } // namespace KexiDB
 

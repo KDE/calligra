@@ -26,15 +26,14 @@
 #include <kis_types.h>
 #include <kis_color_option.h>
 
-#include <KoColor.h>
-
 #include "kis_grid_paintop_settings.h"
 
 
 class QPointF;
 class KisPainter;
 
-class KisGridProperties{
+class KisGridProperties
+{
 public:
     quint16 gridWidth;
     quint16 gridHeight;
@@ -44,9 +43,9 @@ public:
     qreal scale;
     qreal vertBorder;
     qreal horizBorder;
-    
+
     quint8 shape;
-public: 
+public:
     void fillProperties(const KisPropertiesConfiguration* setting);
 };
 
@@ -71,12 +70,12 @@ private:
     KisGridProperties   m_properties;
     KisColorProperties  m_colorProperties;
 
-    
+
 #ifdef BENCHMARK
     int m_total;
     int m_count;
 #endif
-    
+
 };
 
 #endif // KIS_GRID_PAINTOP_H_

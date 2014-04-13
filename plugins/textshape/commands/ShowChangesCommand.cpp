@@ -109,7 +109,6 @@ void ShowChangesCommand::enableDisableStates(bool showChanges)
 
 void ShowChangesCommand::insertDeletedChanges()
 {
-    int numAddedChars = 0;
     QVector<KoChangeTrackerElement *> elementVector;
     KoTextDocument(m_textEditor->document()).changeTracker()->getDeletedChanges(elementVector);
     qSort(elementVector.begin(), elementVector.end());
@@ -126,6 +125,7 @@ void ShowChangesCommand::checkAndAddAnchoredShapes(int position, int length)
         QTextCharFormat fmt = cursor.charFormat();
         KoInlineObject *object = inlineObjectManager->inlineTextObject(fmt);
         Q_ASSERT(object);
+        Q_UNUSED(object);
 /* FIXME
         KoTextAnchor *anchor = dynamic_cast<KoTextAnchor *>(object);
         if (!anchor) {
@@ -155,7 +155,6 @@ void ShowChangesCommand::checkAndAddAnchoredShapes(int position, int length)
 
 void ShowChangesCommand::removeDeletedChanges()
 {
-    int numDeletedChars = 0;
     QVector<KoChangeTrackerElement *> elementVector;
     m_changeTracker->getDeletedChanges(elementVector);
     qSort(elementVector.begin(), elementVector.end());
@@ -172,6 +171,7 @@ void ShowChangesCommand::checkAndRemoveAnchoredShapes(int position, int length)
         QTextCharFormat fmt = cursor.charFormat();
         KoInlineObject *object = inlineObjectManager->inlineTextObject(fmt);
         Q_ASSERT(object);
+        Q_UNUSED(object);
         /* FIXME
         KoTextAnchor *anchor = dynamic_cast<KoTextAnchor *>(object);
         if (!anchor)

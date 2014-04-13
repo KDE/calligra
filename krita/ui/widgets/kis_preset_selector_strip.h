@@ -45,6 +45,8 @@ public:
     KisPresetSelectorStrip(QWidget *parent);
     virtual ~KisPresetSelectorStrip();
 
+    void setPresetFilter(const QString& paintOpId);
+
 private slots:
     /// Scrolls the strip's item view to the left
     void on_leftScrollBtn_pressed();
@@ -58,6 +60,7 @@ private:
     * instead of class methods
     */
     KoResourceItemView* m_resourceItemView;
+    QString m_currentPaintopID;
 };
 
 

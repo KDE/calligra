@@ -37,6 +37,7 @@
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
 #include <KoOdfReadStore.h>
+#include <KoUnit.h>
 
 // EPUB filter
 #include "FileCollector.h"
@@ -577,7 +578,9 @@ void OdtHtmlConverter::handleTagFrame(KoXmlElement &nodeElement, KoXmlWriter *ht
             }
             htmlWriter->addAttribute("alt", "(No Description)");
 
-            QString imgSrc = framePartElement.attribute("href").section('/', -1);
+            QString href = framePartElement.attribute("href");
+            QString imgSrc = href.section('/', -1);
+            //kDebug(30503) << "image source:" << href << imgSrc;
 
             if (m_options->useMobiConventions) {
                 // Mobi
@@ -1303,7 +1306,20 @@ void OdtHtmlConverter::collectStyleAttributes(KoXmlElement &propertiesElement, S
         QString attrVal = propertiesElement.attribute(attrName);
 
         if (!attrVal.isEmpty()) {
-            styleInfo->attributes.insert(attrName, attrVal);
+
+            // Book readers don't supprt pt unit to can zoom in document.
+            // We set em  for our font-size and margins value as unit
+            if (attrName == "font-size" || attrName == "margin" || attrName == "margin-right" ||
+                    attrName == "margin-left" || attrName == "margin-bottom" || attrName == "margin-top") {
+                qreal ptSize = KoUnit::parseValue(attrVal);
+                // Convert pt to em: pt/ 12
+                qreal emSize = ptSize / 12.0;
+                QString fontSize = QString::number(emSize,'g', 2) + "em";
+                styleInfo->attributes.insert(attrName, fontSize);
+            }
+            else {
+                styleInfo->attributes.insert(attrName, attrVal);
+            }
         }
     }
 

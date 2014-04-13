@@ -39,7 +39,6 @@
 #include <kis_brush_based_paintop_settings.h>
 #include <kis_color_source.h>
 #include <kis_pressure_sharpness_option.h>
-#include <KoColorSpaceRegistry.h>
 #include <kis_fixed_paint_device.h>
 
 KisBrushOp::KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter *painter, KisImageWSP image)
@@ -56,12 +55,10 @@ KisBrushOp::KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter 
     m_hsvOptions.append(KisPressureHSVOption::createSaturationOption());
     m_hsvOptions.append(KisPressureHSVOption::createValueOption());
 
-    foreach(KisPressureHSVOption* option, m_hsvOptions)
-    {
+    foreach(KisPressureHSVOption * option, m_hsvOptions) {
         option->readOptionSetting(settings);
-        option->sensor()->reset();
-        if(option->isChecked() && !m_hsvTransformation)
-        {
+        option->resetAllSensors();
+        if (option->isChecked() && !m_hsvTransformation) {
             m_hsvTransformation = painter->backgroundColor().colorSpace()->createColorTransformation("hsv_adjustment", QHash<QString, QVariant>());
         }
     }
@@ -76,13 +73,13 @@ KisBrushOp::KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter 
     m_mixOption.readOptionSetting(settings);
     m_scatterOption.readOptionSetting(settings);
 
-    m_opacityOption.sensor()->reset();
-    m_sizeOption.sensor()->reset();
-    m_softnessOption.sensor()->reset();
-    m_sharpnessOption.sensor()->reset();
-    m_darkenOption.sensor()->reset();
-    m_rotationOption.sensor()->reset();
-    m_scatterOption.sensor()->reset();
+    m_opacityOption.resetAllSensors();
+    m_sizeOption.resetAllSensors();
+    m_softnessOption.resetAllSensors();
+    m_sharpnessOption.resetAllSensors();
+    m_darkenOption.resetAllSensors();
+    m_rotationOption.resetAllSensors();
+    m_scatterOption.resetAllSensors();
 
     m_dabCache->setSharpnessPostprocessing(&m_sharpnessOption);
     m_rotationOption.applyFanCornersInfo(this);
@@ -118,20 +115,10 @@ KisSpacingInformation KisBrushOp::paintAt(const KisPaintInformation& info)
     setCurrentScale(scale);
     setCurrentRotation(rotation);
 
-    QPointF hotSpot = brush->hotSpot(scale, scale, rotation, info);
-    // return info.pos() if sensor is not enabled
-    QPointF pos = m_scatterOption.apply(info, qMax(brush->width(), brush->height()) * scale);
-    QPointF pt = pos - hotSpot;
-
-    // Split the coordinates into integer plus fractional parts. The integer
-    // is where the dab will be positioned and the fractional part determines
-    // the sub-pixel positioning.
-    qint32 x;
-    qreal xFraction;
-    qint32 y;
-    qreal yFraction;
-
-    m_sharpnessOption.apply(info, pt, x, y, xFraction, yFraction);
+    QPointF cursorPos =
+        m_scatterOption.apply(info,
+                              brush->maskWidth(scale, rotation, 0, 0, info),
+                              brush->maskHeight(scale, rotation, 0, 0, info));
 
     quint8 origOpacity = painter()->opacity();
     quint8 origFlow    = painter()->flow();
@@ -141,23 +128,30 @@ KisSpacingInformation KisBrushOp::paintAt(const KisPaintInformation& info)
     m_darkenOption.apply(m_colorSource, info);
 
     if (m_hsvTransformation) {
-        foreach(KisPressureHSVOption* option, m_hsvOptions) {
+        foreach(KisPressureHSVOption * option, m_hsvOptions) {
             option->apply(m_hsvTransformation, info);
         }
         m_colorSource->applyColorTransformation(m_hsvTransformation);
     }
 
+    QRect dabRect;
     KisFixedPaintDeviceSP dab = m_dabCache->fetchDab(device->compositionSourceColorSpace(),
-                                                     m_colorSource,
-                                                     scale, scale,
-                                                     rotation,
-                                                     info,
-                                                     xFraction, yFraction,
-                                                     m_softnessOption.apply(info));
+                                m_colorSource,
+                                cursorPos,
+                                scale, scale,
+                                rotation,
+                                info,
+                                m_softnessOption.apply(info),
+                                &dabRect);
 
-    painter()->bltFixed(QPoint(x, y), dab, dab->bounds());
+    // sanity check for the size calculation code
+    if (dab->bounds().size() != dabRect.size()) {
+        warnKrita << "KisBrushOp: dab bounds is not dab rect. See bug 327156" << dab->bounds().size() << dabRect.size();
+    }
 
-    painter()->renderMirrorMaskSafe(QRect(QPoint(x,y), QSize(dab->bounds().width(),dab->bounds().height())),
+    painter()->bltFixed(dabRect.topLeft(), dab, dab->bounds());
+
+    painter()->renderMirrorMaskSafe(dabRect,
                                     dab,
                                     !m_dabCache->needSeparateOriginal());
     painter()->setOpacity(origOpacity);
@@ -170,11 +164,12 @@ KisSpacingInformation KisBrushOp::paintAt(const KisPaintInformation& info)
 
 void KisBrushOp::paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, KisDistanceInformation *currentDistance)
 {
-    if(m_sharpnessOption.isChecked() && m_brush && (m_brush->width() == 1) && (m_brush->height() == 1)) {
+    if (m_sharpnessOption.isChecked() && m_brush && (m_brush->width() == 1) && (m_brush->height() == 1)) {
 
         if (!m_lineCacheDevice) {
             m_lineCacheDevice = source()->createCompositionSourceDevice();
-        } else {
+        }
+        else {
             m_lineCacheDevice->clear();
         }
 
@@ -184,7 +179,8 @@ void KisBrushOp::paintLine(const KisPaintInformation& pi1, const KisPaintInforma
 
         QRect rc = m_lineCacheDevice->extent();
         painter()->bitBlt(rc.x(), rc.y(), m_lineCacheDevice, rc.x(), rc.y(), rc.width(), rc.height());
-    } else {
+    }
+    else {
         KisPaintOp::paintLine(pi1, pi2, currentDistance);
     }
 }

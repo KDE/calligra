@@ -46,7 +46,7 @@ class ValueCalc;
 class ValueConverter;
 
 // Condition structures
-enum Comp { isEqual, isLess, isGreater, lessEqual, greaterEqual, notEqual };
+enum Comp { isEqual, isLess, isGreater, lessEqual, greaterEqual, notEqual, stringMatch, regexMatch, wildcardMatch };
 enum Type { numeric, string };
 
 struct Condition {

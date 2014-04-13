@@ -1,15 +1,16 @@
 [Desktop Entry]
 Type=Application
 Name=Calligra Flow
-Name[bs]=Calligra Flow
+Name[bs]=Calligra tok
 Name[ca]=Calligra Flow
-Name[ca@valencia]=Flux del Calligra
+Name[ca@valencia]=Calligra Flow
 Name[cs]=Calligra Flow
 Name[da]=Calligra Flow
 Name[de]=Calligra Flow
 Name[el]=Calligra Flow
 Name[es]=Calligra Flow
 Name[et]=Calligra Flow
+Name[eu]=Calligra Flow
 Name[fi]=Calligra Flow
 Name[fr]=Calligra Flow
 Name[gl]=Calligra Flow
@@ -65,6 +66,7 @@ GenericName[is]=Flæðirits og skýringamynda vinnsla
 GenericName[it]=Editor di diagrammi di flusso
 GenericName[ja]=フローチャート & ダイアグラム編集
 GenericName[kk]=Блок-сұлба мен Диаграммаларды өңдеу
+GenericName[ko]=순서도와 다이어그램 편집
 GenericName[lv]=Plūsmkaršu un diagrammu rediģēšana
 GenericName[ms]=Pengeditan Carta Aliran & Rajah
 GenericName[nb]=Flytskjema- og diagramredigering

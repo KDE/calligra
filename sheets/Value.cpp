@@ -126,6 +126,8 @@ public:
         if (type == Value::Complex) delete pc;
         if (type == Value::Error)   delete ps;
         if (type == Value::String)  delete ps;
+        type = Value::Empty;
+        b = 0;
     }
 
     /** set most probable formatting based on the type */
@@ -435,6 +437,19 @@ QString Value::asString() const
             result = QString(*d->ps);
 
     return result;
+}
+
+QString Value::asStringWithDoubleQuotes() const
+{
+    QString s = asString();
+    if (type() == Value::String) {
+        if (!(s.startsWith("\"") && s.endsWith("\""))) {
+            if (s.startsWith("'") && s.endsWith("'"))
+                s = s.mid(1, s.length()-2);
+            s = "\"" + s + "\"";
+        }
+    }
+    return s;
 }
 
 // get the value as QVariant

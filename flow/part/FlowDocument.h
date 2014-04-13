@@ -25,24 +25,37 @@
 #include <KoPADocument.h>
 #include "flow_export.h"
 
+#define FLOW_MIME_TYPE "application/vnd.oasis.opendocument.graphics"
+
 class KoPart;
 
 class FLOW_EXPORT FlowDocument : public KoPADocument
 {
     Q_OBJECT
 
-    public:
-        explicit FlowDocument(KoPart *part);
-        ~FlowDocument();
+public:
+    explicit FlowDocument(KoPart *part);
+    ~FlowDocument();
 
-        virtual KoOdf::DocumentType documentType() const;
+    virtual KoOdf::DocumentType documentType() const;
 
-    signals:
-        /// Emitted when the gui needs to be updated.
-        void updateGui();
 
-    protected:
-        const char *odfTagName( bool withNamespace );
+    /// reimplemented from KoDocument
+    virtual QByteArray nativeFormatMimeType() const { return FLOW_MIME_TYPE; }
+    /// reimplemented from KoDocument
+    virtual QByteArray nativeOasisMimeType() const {return FLOW_MIME_TYPE;}
+    /// reimplemented from KoDocument
+    virtual QStringList extraNativeMimeTypes() const
+    {
+        return QStringList() << "application/vnd.oasis.opendocument.graphics-template";
+    }
+
+signals:
+    /// Emitted when the gui needs to be updated.
+    void updateGui();
+
+protected:
+    const char *odfTagName( bool withNamespace );
 };
 
 #endif

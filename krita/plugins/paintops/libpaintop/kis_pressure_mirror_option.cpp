@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -25,10 +25,9 @@
 #include <widgets/kis_curve_widget.h>
 
 #include <KoColor.h>
-#include <KoColorSpace.h>
 
 KisPressureMirrorOption::KisPressureMirrorOption()
-        : KisCurveOption(i18n("Mirror"), "Mirror", KisPaintOpOption::brushCategory(), false)
+    : KisCurveOption(i18n("Mirror"), "Mirror", KisPaintOpOption::brushCategory(), false)
 {
     m_enableHorizontalMirror = false;
     m_enableVerticalMirror = false;
@@ -66,7 +65,7 @@ void KisPressureMirrorOption::writeOptionSetting(KisPropertiesConfiguration* set
 void KisPressureMirrorOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
     KisCurveOption::readOptionSetting(setting);
-    m_enableHorizontalMirror = setting->getBool(MIRROR_HORIZONTAL_ENABLED,false);
+    m_enableHorizontalMirror = setting->getBool(MIRROR_HORIZONTAL_ENABLED, false);
     m_enableVerticalMirror = setting->getBool(MIRROR_VERTICAL_ENABLED, false);
 
     m_canvasAxisXMirrored = setting->getBool("runtimeCanvasMirroredX", false);
@@ -77,19 +76,23 @@ MirrorProperties KisPressureMirrorOption::apply(const KisPaintInformation& info)
 {
     int mirrorXIncrement = m_canvasAxisXMirrored;
     int mirrorYIncrement = m_canvasAxisYMirrored;
+    bool coordinateSystemFlipped = false;
 
-    if (isChecked() && (m_enableHorizontalMirror || m_enableVerticalMirror)){
+    if (isChecked() && (m_enableHorizontalMirror || m_enableVerticalMirror)) {
         qreal sensorResult = computeValue(info);
         bool result = (sensorResult >= 0.5);
 
         mirrorXIncrement += result && m_enableHorizontalMirror;
         mirrorYIncrement += result && m_enableVerticalMirror;
+        coordinateSystemFlipped = result &&
+                                  (m_enableHorizontalMirror != m_enableVerticalMirror);
     }
 
     MirrorProperties mirrors;
 
     mirrors.verticalMirror = mirrorYIncrement % 2;
     mirrors.horizontalMirror = mirrorXIncrement % 2;
+    mirrors.coordinateSystemFlipped = coordinateSystemFlipped;
 
     return mirrors;
 }

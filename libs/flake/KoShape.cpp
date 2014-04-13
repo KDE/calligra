@@ -42,7 +42,6 @@
 #include "KoShapeLoadingContext.h"
 #include "KoViewConverter.h"
 #include "KoShapeStroke.h"
-#include "ShapeDeleter_p.h"
 #include "KoShapeShadow.h"
 #include "KoClipPath.h"
 #include "KoPathShape.h"
@@ -1254,15 +1253,6 @@ void KoShape::waitUntilReady(const KoViewConverter &converter, bool asynchronous
     Q_UNUSED(asynchronous);
 }
 
-void KoShape::deleteLater()
-{
-    Q_D(KoShape);
-    foreach(KoShapeManager *manager, d->shapeManagers)
-        manager->remove(this);
-    d->shapeManagers.clear();
-    new ShapeDeleter(this);
-}
-
 bool KoShape::isEditable() const
 {
     Q_D(const KoShape);
@@ -1278,6 +1268,7 @@ bool KoShape::isEditable() const
 // painting
 void KoShape::paintBorder(QPainter &painter, const KoViewConverter &converter)
 {
+    Q_UNUSED(converter);
     KoBorder *bd = border();
     if (!bd) {
         return;

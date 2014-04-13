@@ -33,6 +33,7 @@
 #include <QSlider>
 #include <QToolButton>
 #include <QThread>
+#include <QDesktopServices>
 #include <QGridLayout>
 #include <QRadioButton>
 #include <QGroupBox>
@@ -45,29 +46,24 @@
 #include <KoColorProfile.h>
 #include <KoApplication.h>
 #include <KoConfigAuthorPage.h>
+#include <KoFileDialog.h>
 #include <KoPart.h>
+#include <KoColorSpaceEngine.h>
+#include <KoIcon.h>
+#include <KoConfig.h>
 
 #include <kapplication.h>
 #include <kmessagebox.h>
 #include <kcolorbutton.h>
 #include <kcombobox.h>
-#include <kfiledialog.h>
 #include <klineedit.h>
 #include <klocale.h>
 #include <kurlrequester.h>
 #include <kpagewidgetmodel.h>
 #include <kvbox.h>
 #include <kundo2stack.h>
+#include <kstandarddirs.h>
 
-#include <KoIcon.h>
-#include <KoConfig.h>
-
-#ifdef NEPOMUK
-#include <kconfiggroup.h>
-#include <ksharedconfig.h>
-#include <KoResourceServer.h>
-#include <KoResourceServerProvider.h>
-#endif
 
 #include "widgets/squeezedcombobox.h"
 #include "kis_clipboard.h"
@@ -93,16 +89,18 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
 {
     KisConfig cfg;
 
+    m_cmbCursorShape->addItem(i18n("Tool Icon"));
+    m_cmbCursorShape->addItem(i18n("Crosshair"));
+    m_cmbCursorShape->addItem(i18n("Arrow"));
+    m_cmbCursorShape->addItem(i18n("Brush Outline"));
+    m_cmbCursorShape->addItem(i18n("No Cursor"));
     m_cmbCursorShape->addItem(i18n("Small Circle"));
-#if defined(HAVE_OPENGL)
-    m_cmbCursorShape->addItem("3D Brush Model");
-#endif
-
-#ifdef NEPOMUK
-    grpResourceTagging->show();
-#else
-    grpResourceTagging->hide();
-#endif
+    m_cmbCursorShape->addItem(i18n("Brush Outline with Small Circle"));
+    m_cmbCursorShape->addItem(i18n("Brush Outline with Crosshair"));
+    m_cmbCursorShape->addItem(i18n("Triangle Righthanded"));
+    m_cmbCursorShape->addItem(i18n("Triangle Lefthanded"));
+    m_cmbCursorShape->addItem(i18n("Brush Outline with Triangle Righthanded"));
+    m_cmbCursorShape->addItem(i18n("Brush Outline with Triangle Lefthanded"));
 
     m_cmbCursorShape->setCurrentIndex(cfg.cursorStyle());
     chkShowRootLayer->setChecked(cfg.showRootLayer());
@@ -114,19 +112,6 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_undoStackSize->setValue(cfg.undoStackLimit());
     m_backupFileCheckBox->setChecked(cfg.backupFile());
     m_showOutlinePainting->setChecked(cfg.showOutlineWhilePainting());
-
-#ifdef NEPOMUK
-    KConfigGroup tagConfig = KConfigGroup( KGlobal::config(), "resource tagging" );
-    bool val = tagConfig.readEntry("nepomuk_usage_for_resource_tagging", false);
-    if(!val) {
-        radioXml->setChecked(true);
-    }
-    else {
-        radioNepomuk->setChecked(true);
-    }
-
-    connect(radioNepomuk,SIGNAL(toggled(bool)),SLOT(tagBackendChange(bool)));
-#endif
 
 }
 
@@ -170,22 +155,6 @@ bool GeneralTab::showOutlineWhilePainting()
     return m_showOutlinePainting->isChecked();
 }
 
-void GeneralTab::tagBackendChange(bool on)
-{
-#ifdef NEPOMUK
-    KoResourceServer<KoPattern>* tagServer = KoResourceServerProvider::instance()->patternServer();
-
-    if(radioNepomuk->isChecked()) {
-        tagServer->updateNepomukXML(on);
-    }
-
-    if (radioXml->isChecked()){
-        tagServer->updateNepomukXML(on);
-    }
-#endif
-}
-
-//---------------------------------------------------------------------------------------------------
 
 ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
     : QWidget(parent)
@@ -203,12 +172,17 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
     KisConfig cfg;
 
     m_page->chkUseSystemMonitorProfile->setChecked(cfg.useSystemMonitorProfile());
+    connect(m_page->chkUseSystemMonitorProfile, SIGNAL(toggled(bool)), this, SLOT(toggleAllowMonitorProfileSelection(bool)));
 
     m_page->cmbWorkingColorSpace->setIDList(KoColorSpaceRegistry::instance()->listKeys());
     m_page->cmbWorkingColorSpace->setCurrent(cfg.workingColorSpace());
 
     m_page->cmbPrintingColorSpace->setIDList(KoColorSpaceRegistry::instance()->listKeys());
     m_page->cmbPrintingColorSpace->setCurrent(cfg.printerColorSpace());
+
+    m_page->bnAddColorProfile->setIcon(koIcon("document-open"));
+    m_page->bnAddColorProfile->setToolTip( i18n("Open Color Profile") );
+    connect(m_page->bnAddColorProfile, SIGNAL(clicked()), SLOT(installProfile()));
 
     refillMonitorProfiles(KoID("RGBA", ""));
     refillPrintProfiles(KoID(cfg.printerColorSpace(), ""));
@@ -237,19 +211,7 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
 
     m_page->cmbMonitorIntent->setCurrentIndex(cfg.renderIntent());
 
-    // XXX: this needs to be available per screen!
-    const KoColorProfile *profile = KisConfig::getScreenProfile();
-    if (profile && profile->isSuitableForDisplay()) {
-        if (cfg.useSystemMonitorProfile()) {
-            // We've got an X11 profile, don't allow to override
-            m_page->cmbMonitorProfile->hide();
-            m_page->lblMonitorProfile->setText(i18n("Monitor profile: ") + profile->name());
-        }
-    } else {
-        m_page->chkUseSystemMonitorProfile->setEnabled(false);
-        m_page->cmbMonitorProfile->show();
-        m_page->lblMonitorProfile->setText(i18n("&Monitor profile: "));
-    }
+    toggleAllowMonitorProfileSelection(cfg.useSystemMonitorProfile());
 
     connect(m_page->cmbPrintingColorSpace, SIGNAL(activated(const KoID &)),
             this, SLOT(refillPrintProfiles(const KoID &)));
@@ -265,6 +227,63 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
     connect(m_page->chkOcioUseEnvironment, SIGNAL(toggled(bool)), this, SLOT(enableOcioConfigPath(bool)));
 
 }
+
+void ColorSettingsTab::installProfile()
+{
+    QStringList mime;
+    mime << "*.icm" <<  "*.icc";
+    KoFileDialog dialog(this, KoFileDialog::OpenFiles, "OpenDocumentICC");
+    dialog.setCaption(i18n("Install Color Profiles"));
+    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
+    dialog.setNameFilters(mime);
+    QStringList profileNames = dialog.urls();
+
+    KoColorSpaceEngine *iccEngine = KoColorSpaceEngineRegistry::instance()->get("icc");
+    Q_ASSERT(iccEngine);
+
+    QString saveLocation = KGlobal::mainComponent().dirs()->saveLocation("icc_profiles");
+
+    foreach (const QString &profileName, profileNames) {
+        KUrl file(profileName);
+        if (!QFile::copy(profileName, saveLocation + file.fileName())) {
+            kWarning() << "Could not install profile!";
+            return;
+        }
+        iccEngine->addProfile(saveLocation + file.fileName());
+
+    }
+
+    KisConfig cfg;
+    refillMonitorProfiles(KoID("RGBA", ""));
+    refillPrintProfiles(KoID(cfg.printerColorSpace(), ""));
+
+    if (m_page->cmbMonitorProfile->contains(cfg.monitorProfile()))
+        m_page->cmbMonitorProfile->setCurrent(cfg.monitorProfile());
+    if (m_page->cmbPrintProfile->contains(cfg.printerProfile()))
+        m_page->cmbPrintProfile->setCurrentIndex(m_page->cmbPrintProfile->findText(cfg.printerProfile()));
+
+
+}
+
+void ColorSettingsTab::toggleAllowMonitorProfileSelection(bool useSystemProfile)
+{
+    // XXX: this needs to be available per screen!
+    if (useSystemProfile) {
+        const KoColorProfile *profile = KisConfig::getScreenProfile();
+        if (profile && profile->isSuitableForDisplay()) {
+            // We've got an X11 profile, don't allow to override
+            m_page->cmbMonitorProfile->hide();
+            m_page->lblMonitorProfile->setText(i18n("Monitor profile: ") + profile->name());
+        }
+    }
+    else {
+        m_page->cmbMonitorProfile->show();
+        m_page->lblMonitorProfile->setText(i18n("&Monitor profile: "));
+    }
+
+
+}
+
 
 void ColorSettingsTab::setDefault()
 {
@@ -333,7 +352,11 @@ void ColorSettingsTab::selectOcioConfigPath()
 {
     QString filename = m_page->txtOcioConfigPath->text();
 
-    filename = KFileDialog::getOpenFileName(QDir::cleanPath(filename), "*.ocio|OpenColorIO configuration (*.ocio)", m_page);
+    KoFileDialog dialog(m_page, KoFileDialog::OpenFile, "OpenDocument");
+    dialog.setCaption(i18n("Select OpenColorIO Configuration"));
+    dialog.setDefaultDir(QDir::cleanPath(filename));
+    dialog.setNameFilter("OpenColorIO configuration (*.ocio)");
+    filename = dialog.url();
     QFile f(filename);
     if (f.exists()) {
         m_page->txtOcioConfigPath->setText(filename);
@@ -398,77 +421,80 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
 {
     KisConfig cfg;
 
-    labelWarning->setPixmap(koIcon("dialog-warning").pixmap(32, 32));
 #ifdef HAVE_OPENGL
     if (!QGLFormat::hasOpenGL()) {
         cbUseOpenGL->setEnabled(false);
-        cbUseOpenGLShaders->setEnabled(false);
-        cbUseOpenGLToolOutlineWorkaround->setEnabled(false);
-        cbUseOpenGLTrilinearFiltering->setEnabled(false);
+        chkUseTextureBuffer->setEnabled(false);
+        chkDisableDoubleBuffering->setEnabled(false);
+        chkDisableVsync->setEnabled(false);
+        cmbFilterMode->setEnabled(false);
     } else {
         cbUseOpenGL->setChecked(cfg.useOpenGL());
-        cbUseOpenGLToolOutlineWorkaround->setEnabled(cfg.useOpenGL());
-        cbUseOpenGLToolOutlineWorkaround->setChecked(cfg.useOpenGLToolOutlineWorkaround());
-        cbUseOpenGLTrilinearFiltering->setEnabled(cfg.useOpenGL());
-        cbUseOpenGLTrilinearFiltering->setChecked(cfg.useOpenGLTrilinearFiltering());
-#ifdef HAVE_GLEW
-        cbUseOpenGLShaders->setChecked(cfg.useOpenGLShaders());
-        if (cfg.useOpenGL() && KisOpenGL::hasShadingLanguage()) {
-            cbUseOpenGLShaders->setEnabled(cfg.useOpenGL());
-        } else {
-            cbUseOpenGLShaders->setEnabled(false);
+        chkUseTextureBuffer->setEnabled(cfg.useOpenGL());
+        chkUseTextureBuffer->setChecked(cfg.useOpenGLTextureBuffer());
+        chkDisableDoubleBuffering->setVisible(cfg.showAdvancedOpenGLSettings());
+        chkDisableDoubleBuffering->setEnabled(cfg.useOpenGL());
+        chkDisableDoubleBuffering->setChecked(cfg.disableDoubleBuffering());
+        chkDisableVsync->setVisible(cfg.showAdvancedOpenGLSettings());
+        chkDisableVsync->setEnabled(cfg.useOpenGL());
+        chkDisableVsync->setChecked(cfg.disableVSync());
+        cmbFilterMode->setEnabled(cfg.useOpenGL());
+        cmbFilterMode->setCurrentIndex(cfg.openGLFilteringMode());
+        // Don't show the high quality filtering mode if it's not available
+        if (!KisOpenGL::supportsGLSL13()) {
+            cmbFilterMode->removeItem(3);
         }
-#else
-        cbUseOpenGLShaders->setChecked(false);
-        cbUseOpenGLShaders->setEnabled(false);
-#endif
+    }
+    if (qApp->applicationName() == "kritasketch" || qApp->applicationName() == "kritagemini") {
+        cbUseOpenGL->setVisible(false);
+        cbUseOpenGL->setMaximumHeight(0);
     }
 #else
     grpOpenGL->setEnabled(false);
-    cbUseOpenGLShaders->setEnabled(false);
 #endif
-
-    QStringList qtVersion = QString(qVersion()).split('.');
-    int versionNumber = qtVersion.at(0).toInt()*10000
-            + qtVersion.at(1).toInt()*100
-            + qtVersion.at(2).toInt();
-    if(versionNumber>=40603)
-        cbUseOpenGLToolOutlineWorkaround->hide();
 
     intCheckSize->setValue(cfg.checkSize());
     chkMoving->setChecked(cfg.scrollCheckers());
-    colorChecks->setColor(cfg.checkersColor());
+    colorChecks1->setColor(cfg.checkersColor1());
+    colorChecks2->setColor(cfg.checkersColor2());
     canvasBorder->setColor(cfg.canvasBorderColor());
+    hideScrollbars->setChecked(cfg.hideScrollbars());
     chkCurveAntialiasing->setChecked(cfg.antialiasCurves());
+    chkSelectionOutlineAntialiasing->setChecked(cfg.antialiasSelectionOutline());
+    chkChannelsAsColor->setChecked(cfg.showSingleChannelAsColor());
 
     connect(cbUseOpenGL, SIGNAL(toggled(bool)), SLOT(slotUseOpenGLToggled(bool)));
 }
 
 void DisplaySettingsTab::setDefault()
 {
-    cbUseOpenGL->setChecked(false);
-    cbUseOpenGLShaders->setChecked(false);
-    cbUseOpenGLShaders->setEnabled(false);
-    cbUseOpenGLToolOutlineWorkaround->setChecked(false);
-    cbUseOpenGLToolOutlineWorkaround->setEnabled(false);
-    cbUseOpenGLTrilinearFiltering->setEnabled(false);
-    cbUseOpenGLTrilinearFiltering->setChecked(true);
+    cbUseOpenGL->setChecked(true);
+    chkUseTextureBuffer->setChecked(false);
+    chkUseTextureBuffer->setEnabled(true);
+    chkDisableDoubleBuffering->setEnabled(true);
+    chkDisableDoubleBuffering->setChecked(true);
+    chkDisableVsync->setEnabled(true);
+    chkDisableVsync->setChecked(true);
+    cmbFilterMode->setEnabled(true);
+    cmbFilterMode->setCurrentIndex(1);
     chkMoving->setChecked(true);
     intCheckSize->setValue(32);
-    colorChecks->setColor(QColor(220, 220, 220));
+    colorChecks1->setColor(QColor(220, 220, 220));
+    colorChecks2->setColor(Qt::white);
     canvasBorder->setColor(QColor(Qt::gray));
+    hideScrollbars->setChecked(false);
+    chkCurveAntialiasing->setChecked(true);
+    chkSelectionOutlineAntialiasing->setChecked(false);
+    chkChannelsAsColor->setChecked(false);
 }
 
 void DisplaySettingsTab::slotUseOpenGLToggled(bool isChecked)
 {
 #ifdef HAVE_OPENGL
-#ifdef HAVE_GLEW
-    if (KisOpenGL::hasShadingLanguage()) {
-        cbUseOpenGLShaders->setEnabled(isChecked);
-    }
-#endif
-    cbUseOpenGLToolOutlineWorkaround->setEnabled(isChecked);
-    cbUseOpenGLTrilinearFiltering->setEnabled(isChecked);
+    chkUseTextureBuffer->setEnabled(isChecked);
+    chkDisableDoubleBuffering->setEnabled(isChecked);
+    chkDisableVsync->setEnabled(isChecked);
+    cmbFilterMode->setEnabled(isChecked);
 #else
     Q_UNUSED(isChecked);
 #endif
@@ -738,17 +764,20 @@ bool KisDlgPreferences::editPreferences()
         cfg.setAutoSaveInterval(dialog->m_general->autoSaveInterval());
         cfg.setBackupFile(dialog->m_general->m_backupFileCheckBox->isChecked());
         KoApplication *app = qobject_cast<KoApplication*>(qApp);
-        foreach(KoPart* part, app->partList()) {
-            KoDocument *doc = part->document();
-            doc->setAutoSave(dialog->m_general->autoSaveInterval());
-            doc->setBackupFile(dialog->m_general->m_backupFileCheckBox->isChecked());
-            doc->undoStack()->setUndoLimit(dialog->m_general->undoStackSize());
+        if (app) {
+            foreach(KoPart* part, app->partList()) {
+                KoDocument *doc = part->document();
+                doc->setAutoSave(dialog->m_general->autoSaveInterval());
+                doc->setBackupFile(dialog->m_general->m_backupFileCheckBox->isChecked());
+                doc->undoStack()->setUndoLimit(dialog->m_general->undoStackSize());
+            }
         }
         cfg.setUndoStackLimit(dialog->m_general->undoStackSize());
 
         // Color settings
         cfg.setUseSystemMonitorProfile(dialog->m_colorSettings->m_page->chkUseSystemMonitorProfile->isChecked());
-        cfg.setMonitorProfile(dialog->m_colorSettings->m_page->cmbMonitorProfile->itemHighlighted());
+        cfg.setMonitorProfile(dialog->m_colorSettings->m_page->cmbMonitorProfile->itemHighlighted(),
+                              dialog->m_colorSettings->m_page->chkUseSystemMonitorProfile->isChecked());
         cfg.setWorkingColorSpace(dialog->m_colorSettings->m_page->cmbWorkingColorSpace->currentItem().id());
         cfg.setPrinterColorSpace(dialog->m_colorSettings->m_page->cmbPrintingColorSpace->currentItem().id());
         cfg.setPrinterProfile(dialog->m_colorSettings->m_page->cmbPrintProfile->itemHighlighted());
@@ -785,18 +814,21 @@ bool KisDlgPreferences::editPreferences()
         }
 
         cfg.setUseOpenGL(dialog->m_displaySettings->cbUseOpenGL->isChecked());
-        cfg.setUseOpenGLShaders(dialog->m_displaySettings->cbUseOpenGLShaders->isChecked());
-        cfg.setUseOpenGLToolOutlineWorkaround(dialog->m_displaySettings->cbUseOpenGLToolOutlineWorkaround->isChecked());
-        cfg.setUseOpenGLTrilinearFiltering(dialog->m_displaySettings->cbUseOpenGLTrilinearFiltering->isChecked());
-#else
-        cfg.setUseOpenGLToolOutlineWorkaround(false);
+        cfg.setUseOpenGLTextureBuffer(dialog->m_displaySettings->chkUseTextureBuffer->isChecked());
+        cfg.setOpenGLFilteringMode(dialog->m_displaySettings->cmbFilterMode->currentIndex());
+        cfg.setDisableDoubleBuffering(dialog->m_displaySettings->chkDisableDoubleBuffering->isChecked());
+        cfg.setDisableVSync(dialog->m_displaySettings->chkDisableVsync->isChecked());
 #endif
 
         cfg.setCheckSize(dialog->m_displaySettings->intCheckSize->value());
         cfg.setScrollingCheckers(dialog->m_displaySettings->chkMoving->isChecked());
-        cfg.setCheckersColor(dialog->m_displaySettings->colorChecks->color());
+        cfg.setCheckersColor1(dialog->m_displaySettings->colorChecks1->color());
+        cfg.setCheckersColor2(dialog->m_displaySettings->colorChecks2->color());
         cfg.setCanvasBorderColor(dialog->m_displaySettings->canvasBorder->color());
+        cfg.setHideScrollbars(dialog->m_displaySettings->hideScrollbars->isChecked());
         cfg.setAntialiasCurves(dialog->m_displaySettings->chkCurveAntialiasing->isChecked());
+        cfg.setAntialiasSelectionOutline(dialog->m_displaySettings->chkSelectionOutlineAntialiasing->isChecked());
+        cfg.setShowSingleChannelAsColor(dialog->m_displaySettings->chkChannelsAsColor->isChecked());
         // Grid settings
         cfg.setGridMainStyle(dialog->m_gridSettings->selectMainStyle->currentIndex());
         cfg.setGridSubdivisionStyle(dialog->m_gridSettings->selectSubdivisionStyle->currentIndex());

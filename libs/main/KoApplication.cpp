@@ -34,8 +34,8 @@
 #include "KoMainWindow.h"
 #include "KoAutoSaveRecoveryDialog.h"
 #include <KoDpi.h>
-#include "KoServiceProvider.h"
 #include "KoPart.h"
+#include <KoConfig.h>
 
 #include <kdeversion.h>
 #include <klocale.h>
@@ -46,22 +46,33 @@
 #include <kiconloader.h>
 #include <kdebug.h>
 #include <kmimetype.h>
+#include <kconfig.h>
+#include <kglobal.h>
+#include <kconfiggroup.h>
 
 #if KDE_IS_VERSION(4,6,0)
 #include <krecentdirs.h>
 #endif
 
 #include <QFile>
-#include <QSplashScreen>
+#include <QWidget>
 #include <QSysInfo>
-
+#include <QStringList>
 #include <QDesktopServices>
 #include <QProcessEnvironment>
 #include <QDir>
 
 #include <stdlib.h>
 
-bool KoApplication::m_starting = true;
+#ifdef Q_OS_WIN
+#include <windows.h>
+#include <tchar.h>
+#endif
+
+
+#include <QDesktopWidget>
+
+KoApplication* KoApplication::KoApp = 0;
 
 namespace {
 const QTime appStartTime(QTime::currentTime());
@@ -73,15 +84,55 @@ public:
     KoApplicationPrivate()
         : splashScreen(0)
     {}
-
-    QSplashScreen *splashScreen;
+    QByteArray nativeMimeType;
+    QWidget *splashScreen;
     QList<KoPart *> partList;
 };
 
-KoApplication::KoApplication()
+class KoApplication::ResetStarting
+{
+public:
+    ResetStarting(QWidget *splash = 0)
+        : m_splash(splash)
+    {
+    }
+
+    ~ResetStarting()  {
+        if (m_splash) {
+
+            KConfigGroup cfg(KGlobal::config(), "SplashScreen");
+            bool hideSplash = cfg.readEntry("HideSplashAfterStartup", false);
+            if (hideSplash) {
+                m_splash->hide();
+            }
+            else {
+                m_splash->setWindowFlags(Qt::Tool | Qt::FramelessWindowHint);
+                m_splash->setParent(qApp->activeWindow());
+                QRect r(QPoint(), m_splash->size());
+                m_splash->move(QApplication::desktop()->screenGeometry().center() - r.center());
+                m_splash->setWindowTitle(qAppName());
+                foreach(QObject *o, m_splash->children()) {
+                    QWidget *w = qobject_cast<QWidget*>(o);
+                    if (w && w->isHidden()) {
+                        w->setVisible(true);
+                    }
+                }
+
+                m_splash->show();
+            }
+        }
+    }
+
+    QWidget *m_splash;
+};
+
+KoApplication::KoApplication(const QByteArray &nativeMimeType)
     : KApplication(initHack())
     , d(new KoApplicationPrivate)
 {
+    KoApplication::KoApp = this;
+
+    d->nativeMimeType = nativeMimeType;
     // Tell the iconloader about share/apps/calligra/icons
     KIconLoader::global()->addAppDir("calligra");
 
@@ -93,19 +144,15 @@ KoApplication::KoApplication()
     QDBusConnection::sessionBus().registerObject("/application", this);
 #endif
 
-    m_starting = true;
-#ifdef Q_OS_MAC
-    QString styleSheetPath = KGlobal::dirs()->findResource("data", "calligra/osx.stylesheet");
-    if (styleSheetPath.isEmpty()) {
-        kError(30003) << KGlobal::mainComponent().componentName() << "Cannot find OS X UI stylesheet." << endl;
+#ifdef Q_OS_MACX
+    if ( QSysInfo::MacintoshVersion > QSysInfo::MV_10_8 )
+    {
+        // fix Mac OS X 10.9 (mavericks) font issue
+        // https://bugreports.qt-project.org/browse/QTBUG-32789
+        QFont::insertSubstitution(".Lucida Grande UI", "Lucida Grande");
     }
-    QFile file(styleSheetPath);
-    if (!file.open(QFile::ReadOnly)) {
-        kError(30003) << KGlobal::mainComponent().componentName() << "Cannot open OS X UI stylesheet." << endl;
-    }
-    QString styleSheet = QLatin1String(file.readAll());
-    file.close();
-    setStyleSheet(styleSheet);
+
+    setAttribute(Qt::AA_DontShowIconsInMenus, true);
 #endif
 
     if (applicationName() == "krita" && qgetenv("KDE_FULL_SESSION").isEmpty()) {
@@ -113,7 +160,6 @@ KoApplication::KoApplication()
         setStyle("Plastique");
         setStyle("Oxygen");
     }
-
 }
 
 // This gets called before entering KApplication::KApplication
@@ -133,28 +179,47 @@ bool KoApplication::initHack()
     return true;
 }
 
-// Small helper for start() so that we don't forget to reset m_starting before a return
-class KoApplication::ResetStarting
-{
-public:
-    ResetStarting(QSplashScreen *splash = 0)
-        : m_splash(splash)
-    {
-    }
+#if defined(Q_OS_WIN) && defined(ENV32BIT)
+typedef BOOL (WINAPI *LPFN_ISWOW64PROCESS) (HANDLE, PBOOL);
 
-    ~ResetStarting()  {
-        KoApplication::m_starting = false;
-        if (m_splash) {
-            m_splash->hide();
+LPFN_ISWOW64PROCESS fnIsWow64Process;
+
+BOOL isWow64()
+{
+    BOOL bIsWow64 = FALSE;
+
+    //IsWow64Process is not available on all supported versions of Windows.
+    //Use GetModuleHandle to get a handle to the DLL that contains the function
+    //and GetProcAddress to get a pointer to the function if available.
+
+    fnIsWow64Process = (LPFN_ISWOW64PROCESS) GetProcAddress(
+        GetModuleHandle(TEXT("kernel32")),"IsWow64Process");
+
+    if(NULL != fnIsWow64Process)
+    {
+        if (!fnIsWow64Process(GetCurrentProcess(),&bIsWow64))
+        {
+            //handle error
         }
     }
-
-    QSplashScreen *m_splash;
-};
+    return bIsWow64;
+}
+#endif
 
 bool KoApplication::start()
 {
 #ifdef Q_OS_WIN
+#ifdef ENV32BIT
+    if (isWow64()) {
+    	KMessageBox::information(0, 
+                                 i18n("You are running a 32 bits build on a 64 bits Windows.\n"
+                                      "This is not recommended.\n"
+                                      "Please download and install the x64 build instead."),
+                                 qApp->applicationName(), 
+                                 "calligra_32_on_64_warning");
+
+    }
+#endif
     QDir appdir(applicationDirPath());
     appdir.cdUp();
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
@@ -182,18 +247,25 @@ bool KoApplication::start()
 
     if (d->splashScreen) {
         d->splashScreen->show();
-        d->splashScreen->showMessage(".");
+        d->splashScreen->repaint();
     }
 
-    ResetStarting resetStarting(d->splashScreen); // reset m_starting to false when we're done
+    ResetStarting resetStarting(d->splashScreen); // remove the splash when done
     Q_UNUSED(resetStarting);
 
     // Find the *.desktop file corresponding to the kapp instance name
-    KoDocumentEntry entry = KoDocumentEntry(KoServiceProvider::readNativeService());
+    KoDocumentEntry entry = KoDocumentEntry::queryByMimeType(d->nativeMimeType);
     if (entry.isEmpty()) {
         kError(30003) << KGlobal::mainComponent().componentName() << "part.desktop not found." << endl;
-        kError(30003) << "Run 'kde4-config --path services' to see which directories were searched, assuming kde startup had the same environment as your current shell." << endl;
+        kError(30003) << "Run 'kde4-config --path services' to see which directories were searched, assuming kde startup had the same environment as your current mainWindow." << endl;
         kError(30003) << "Check your installation (did you install Calligra in a different prefix than KDE, without adding the prefix to /etc/kderc ?)" << endl;
+        kError(30003) << KGlobal::mainComponent().componentName() << "part.desktop not found." << endl;
+        QMessageBox::critical(0, applicationName() + i18n(": Critical Error"), i18n("Essential application components could not be found.\n"
+                                                                                    "This might be an installation issue.\n"
+                                                                                    "Try restarting, running kbuildsycoca4.exe or reinstalling."));
+#ifdef Q_OS_WIN
+        QProcess::execute(applicationDirPath() + "/kbuildsycoca4.exe");
+#endif
         return false;
     }
 
@@ -231,6 +303,7 @@ bool KoApplication::start()
 #endif
         QString errorMsg;
         KoPart *part = entry.createKoPart(&errorMsg);
+        d->partList << part;
 
         if (!part) {
             if (!errorMsg.isEmpty())
@@ -241,12 +314,12 @@ bool KoApplication::start()
         // XXX: the document should be separate plugin
         KoDocument *doc = part->document();
 
-        KoMainWindow *shell = new KoMainWindow(part->componentData());
-        shell->show();
-        QObject::connect(doc, SIGNAL(sigProgress(int)), shell, SLOT(slotProgress(int)));
+        KoMainWindow *mainWindow = part->createMainWindow();
+        mainWindow->show();
+        QObject::connect(doc, SIGNAL(sigProgress(int)), mainWindow, SLOT(slotProgress(int)));
         // for initDoc to fill in the recent docs list
         // and for KoDocument::slotStarted
-        part->addShell(shell);
+        part->addMainWindow(mainWindow);
 
         // Check for autosave files from a previous run. There can be several, and
         // we want to offer a restore for every one. Including a nice thumbnail!
@@ -263,8 +336,12 @@ bool KoApplication::start()
 
         QStringList filters;
         filters << QString(".%1-%2-%3-autosave%4").arg(part->componentData().componentName()).arg("*").arg("*").arg(extension);
-        QDir dir = QDir::home();
 
+#ifdef Q_OS_WIN
+        QDir dir = QDir::tempPath();
+#else
+        QDir dir = QDir::home();
+#endif
         // all autosave files for our application
         autoSaveFiles = dir.entryList(filters, QDir::Files | QDir::Hidden);
 
@@ -326,7 +403,7 @@ bool KoApplication::start()
             KUrl url;
             // bah, we need to re-use the document that was already created
             url.setPath(QDir::homePath() + "/" + autoSaveFiles.takeFirst());
-            if (shell->openDocument(part, url)) {
+            if (mainWindow->openDocument(part, url)) {
                 doc->resetURL();
                 doc->setModified(true);
                 QFile::remove(url.toLocalFile());
@@ -339,12 +416,13 @@ bool KoApplication::start()
                 // For now create an empty document
                 QString errorMsg;
                 KoPart *part = entry.createKoPart(&errorMsg);
+                d->partList << part;
                 if (part) {
                     url.setPath(QDir::homePath() + "/" + autoSaveFile);
 
-                    KoMainWindow *shell = new KoMainWindow(part->componentData());
-                    shell->show();
-                    if (shell->openDocument(part, url)) {
+                    KoMainWindow *mainWindow = part->createMainWindow();
+                    mainWindow->show();
+                    if (mainWindow->openDocument(part, url)) {
                         doc->resetURL();
                         doc->setModified(true);
                         QFile::remove(url.toLocalFile());
@@ -355,7 +433,7 @@ bool KoApplication::start()
             return (numberOfOpenDocuments > 0);
         }
         else {
-            part->showStartUpWidget(shell);
+            part->showStartUpWidget(mainWindow);
         }
 
     }
@@ -368,8 +446,8 @@ bool KoApplication::start()
         const bool benchmarkLoading = koargs->isSet("benchmark-loading")
                 || koargs->isSet("benchmark-loading-show-window")
                 || !roundtripFileName.isEmpty();
-        // only show the shell when no command-line mode option is passed
-        const bool showShell =
+        // only show the mainWindow when no command-line mode option is passed
+        const bool showmainWindow =
                 koargs->isSet("benchmark-loading-show-window") || (
                     !koargs->isSet("export-pdf")
                     && !koargs->isSet("benchmark-loading")
@@ -393,12 +471,13 @@ bool KoApplication::start()
             // For now create an empty document
             QString errorMsg;
             KoPart *part = entry.createKoPart(&errorMsg);
+            d->partList << part;
             if (part) {
                 KoDocument *doc = part->document();
-                // show a shell asap
-                KoMainWindow *shell = new KoMainWindow(part->componentData());
-                if (showShell) {
-                    shell->show();
+                // show a mainWindow asap
+                KoMainWindow *mainWindow = part->createMainWindow();
+                if (showmainWindow) {
+                    mainWindow->show();
                 }
                 if (benchmarkLoading) {
                     doc->setReadWrite(false);
@@ -429,10 +508,10 @@ bool KoApplication::start()
                         }
                         if (paths.isEmpty()) {
                             KMessageBox::error(0, i18n("No template found for: %1", desktopName));
-                            delete shell;
+                            delete mainWindow;
                         } else if (paths.count() > 1) {
                             KMessageBox::error(0, i18n("Too many templates found for: %1", desktopName));
-                            delete shell;
+                            delete mainWindow;
                         }
                     }
 
@@ -444,7 +523,7 @@ bool KoApplication::start()
                         QString templateName = templateInfo.readUrl();
                         KUrl templateURL;
                         templateURL.setPath(templateBase.directory() + '/' + templateName);
-                        if (shell->openDocument(part, templateURL)) {
+                        if (mainWindow->openDocument(part, templateURL)) {
                             doc->resetURL();
                             doc->setEmpty();
                             doc->setTitleModified();
@@ -452,12 +531,12 @@ bool KoApplication::start()
                             numberOfOpenDocuments++;
                         } else {
                             KMessageBox::error(0, i18n("Template %1 failed to load.", templateURL.prettyUrl()));
-                            delete shell;
+                            delete mainWindow;
                         }
                     }
                     // now try to load
                 }
-                else if (shell->openDocument(part, args->url(argNumber))) {
+                else if (mainWindow->openDocument(part, args->url(argNumber))) {
                     if (benchmarkLoading) {
                         if (profileoutput.device()) {
                             profileoutput << "KoApplication::start\t"
@@ -465,20 +544,20 @@ bool KoApplication::start()
                                           <<"\t100" << endl;
                         }
                         if (!roundtripFileName.isEmpty()) {
-                            part->saveAs(KUrl("file:"+roundtripFileName));
+                            part->document()->saveAs(KUrl("file:"+roundtripFileName));
                         }
                         // close the document
-                        shell->slotFileQuit();
+                        mainWindow->slotFileQuit();
                         return true; // only load one document!
                     }
                     else if (print) {
-                        shell->slotFilePrint();
-                        // delete shell; done by ~KoDocument
+                        mainWindow->slotFilePrint();
+                        // delete mainWindow; done by ~KoDocument
                         nPrinted++;
                     } else if (exportAsPdf) {
-                        KoPrintJob *job = shell->exportToPdf(pdfFileName);
+                        KoPrintJob *job = mainWindow->exportToPdf(pdfFileName);
                         if (job)
-                            connect (job, SIGNAL(destroyed(QObject*)), shell,
+                            connect (job, SIGNAL(destroyed(QObject*)), mainWindow,
                                      SLOT(slotFileQuit()), Qt::QueuedConnection);
                         nPrinted++;
                     } else {
@@ -488,7 +567,7 @@ bool KoApplication::start()
                 } else {
                     // .... if failed
                     // delete doc; done by openDocument
-                    // delete shell; done by ~KoDocument
+                    // delete mainWindow; done by ~KoDocument
                 }
 
                 if (profileoutput.device()) {
@@ -497,7 +576,6 @@ bool KoApplication::start()
                                   <<"\t100" << endl;
                 }
 
-                d->partList << part;
             }
         }
         if (benchmarkLoading) {
@@ -516,16 +594,10 @@ bool KoApplication::start()
 
 KoApplication::~KoApplication()
 {
-    //     delete d->m_appIface;
     delete d;
 }
 
-bool KoApplication::isStarting()
-{
-    return KoApplication::m_starting;
-}
-
-void KoApplication::setSplashScreen(QSplashScreen *splashScreen)
+void KoApplication::setSplashScreen(QWidget *splashScreen)
 {
     d->splashScreen = splashScreen;
 }
@@ -535,20 +607,15 @@ QList<KoPart*> KoApplication::partList() const
     return d->partList;
 }
 
-void KoApplication::addPart(KoPart* part)
+QStringList KoApplication::mimeFilter(KoFilterManager::Direction direction) const
 {
-    d->partList << part;
+    KoDocumentEntry entry = KoDocumentEntry::queryByMimeType(d->nativeMimeType);
+    KService::Ptr service = entry.service();
+    return KoFilterManager::mimeFilter(d->nativeMimeType,
+                                       direction,
+                                       service->property("X-KDE-ExtraNativeMimeTypes").toStringList());
 }
 
-int KoApplication::documents()
-{
-    QSet<QString> nameList;
-    QList<KoPart*> parts = d->partList;
-    foreach(KoPart* part, parts) {
-        nameList.insert(part->document()->objectName());
-    }
-    return nameList.size();
-}
 
 bool KoApplication::notify(QObject *receiver, QEvent *event)
 {
@@ -563,6 +630,11 @@ bool KoApplication::notify(QObject *receiver, QEvent *event)
     }
     return false;
 
+}
+
+KoApplication *KoApplication::koApplication()
+{
+    return KoApp;
 }
 
 #include <KoApplication.moc>

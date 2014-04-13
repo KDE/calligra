@@ -83,10 +83,10 @@ public:
     /**
      * The paint device of the pixel selection should report
      * about it's setDirty events to its parent. The creator
-     * should set the parent manually if he wants to get the
+     * should set the parent manually if it wants to get the
      * signals
      */
-    void setParentNode(KisNodeSP node);
+    void setParentNode(KisNodeWSP node);
 
     bool hasPixelSelection() const;
     bool hasShapeSelection() const;
@@ -122,7 +122,7 @@ public:
      * as pixel selection. You must read selection data from this
      * paint device only
      */
-    KisPaintDeviceSP projection() const;
+    KisPixelSelectionSP projection() const;
 
     /**
      * Updates the projection of the selection. You should call this
@@ -172,13 +172,15 @@ public:
 
     void notifySelectionChanged();
 
-    KDE_DEPRECATED quint8 selected(qint32 x, qint32 y) const;
+    /// XXX: This method was marked KDE_DEPRECATED but without information on what to
+    /// replace it with. Undeprecate, therefore.
+    quint8 selected(qint32 x, qint32 y) const;
 
 private:
     friend class KisSelectionTest;
     friend class KisMaskTest;
     friend class KisAdjustmentLayerTest;
-    KisNodeSP parentNode() const;
+    KisNodeWSP parentNode() const;
 
     void copyFrom(const KisSelection &rhs);
 

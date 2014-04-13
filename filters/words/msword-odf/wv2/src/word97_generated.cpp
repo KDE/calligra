@@ -8607,9 +8607,6 @@ bool SEPX::read(OLEStreamReader *stream, bool preservePos) {
 
     cb=stream->readU16();
     // Attention: I don't know how to read grpprl - U8[]
-#ifdef __GNUC__
-#warning "Couldn't generate reading code for SEPX::grpprl"
-#endif
 
     if(preservePos)
         stream->pop();
@@ -8623,9 +8620,6 @@ bool SEPX::write(OLEStreamWriter *stream, bool preservePos) const {
 
     stream->write(cb);
     // Attention: I don't know how to write grpprl - U8[]
-#ifdef __GNUC__
-#warning "Couldn't generate writing code for SEPX::grpprl"
-#endif
 
     if(preservePos)
         stream->pop();
@@ -8644,9 +8638,6 @@ void SEPX::clearInternal() {
 
 bool operator==(const SEPX &lhs, const SEPX &rhs) {
     // Attention: I don't know how to compare grpprl - U8[]
-#ifdef __GNUC__
-#warning "Can't compare SEPX::grpprl items"
-#endif
 
     return lhs.cb==rhs.cb;
 }

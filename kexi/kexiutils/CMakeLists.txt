@@ -29,6 +29,8 @@ set(kexiutils_LIB_SRCS
   KexiTester.cpp
   
   completer/KexiCompleter.cpp
+  KexiPushButton.cpp
+
 )
 
 IF (KEXI_MOBILE)

@@ -67,7 +67,7 @@
      <item row="1" column="0">
       <widget class="QCheckBox" name="smoothCHBox">
        <property name="text">
-        <string>Smooth</string>
+        <string comment="Noun for an experiment brush shape smoothness">Smooth</string>
        </property>
       </widget>
      </item>
@@ -101,6 +101,24 @@
      </item>
      <item>
       <widget class="KisDoubleSliderSpinBox" name="displaceStrength" native="true"/>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="fillLayout" stretch="0,1">
+     <item>
+      <widget class="QCheckBox" name="windingFillCHBox">
+       <property name="text">
+        <string>Winding fill</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="hardEdgeCHBox">
+       <property name="text">
+        <string>Hard edge</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>

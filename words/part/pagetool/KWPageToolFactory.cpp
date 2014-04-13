@@ -39,11 +39,6 @@ KWPageToolFactory::~KWPageToolFactory()
 {
 }
 
-bool KWPageToolFactory::canCreateTool(KoCanvasBase */*canvas*/) const
-{
-    return true;
-}
-
 KoToolBase* KWPageToolFactory::createTool(KoCanvasBase *canvas)
 {
     return new KWPageTool(canvas);

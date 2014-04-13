@@ -31,7 +31,7 @@ public:
     KisBrushesPipe(const KisBrushesPipe &rhs) {
         qDeleteAll(m_brushes);
         m_brushes.clear();
-        foreach(BrushType *brush, rhs.m_brushes) {
+        foreach(BrushType * brush, rhs.m_brushes) {
             m_brushes.append(brush->clone());
         }
     }
@@ -61,36 +61,36 @@ public:
         return chooseNextBrush(info);
     }
 
-    qint32 maskWidth(double scale, double angle, const KisPaintInformation& info) const {
+    qint32 maskWidth(double scale, double angle, double subPixelX, double subPixelY, const KisPaintInformation& info) const {
         BrushType *brush = currentBrush(info);
-        return brush ? brush->maskWidth(scale, angle, info) : 0;
+        return brush ? brush->maskWidth(scale, angle, subPixelX, subPixelY, info) : 0;
     }
 
-    qint32 maskHeight(double scale, double angle, const KisPaintInformation& info) const {
+    qint32 maskHeight(double scale, double angle, double subPixelX, double subPixelY, const KisPaintInformation& info) const {
         BrushType *brush = currentBrush(info);
-        return brush ? brush->maskHeight(scale, angle, info) : 0;
+        return brush ? brush->maskHeight(scale, angle, subPixelX, subPixelY, info) : 0;
     }
 
     void setAngle(qreal angle) {
-        foreach (BrushType *brush, m_brushes) {
+        foreach(BrushType * brush, m_brushes) {
             brush->setAngle(angle);
         }
     }
 
     void setScale(qreal scale) {
-        foreach (BrushType *brush, m_brushes) {
+        foreach(BrushType * brush, m_brushes) {
             brush->setScale(scale);
         }
     }
 
     void setSpacing(double spacing) {
-        foreach (BrushType *brush, m_brushes) {
+        foreach(BrushType * brush, m_brushes) {
             brush->setSpacing(spacing);
         }
     }
 
     bool hasColor() const {
-        foreach (BrushType *brush, m_brushes) {
+        foreach(BrushType * brush, m_brushes) {
             if (brush->hasColor()) return true;
         }
         return false;
@@ -101,9 +101,9 @@ public:
     }
 
     void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst, KisBrush::ColoringInformation* coloringInformation,
-                                             double scaleX, double scaleY, double angle, const KisPaintInformation& info,
-                                             double subPixelX , double subPixelY,
-                                             qreal softnessFactor) {
+            double scaleX, double scaleY, double angle, const KisPaintInformation& info,
+            double subPixelX , double subPixelY,
+            qreal softnessFactor) {
 
         BrushType *brush = currentBrush(info);
         if (!brush) return;

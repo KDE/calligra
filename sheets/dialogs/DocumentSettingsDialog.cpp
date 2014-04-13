@@ -34,6 +34,8 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QScrollBar>
+#include <QComboBox>
+#include <QSpinBox>
 
 #include <kcombobox.h>
 #include <kconfig.h>
@@ -57,8 +59,9 @@ using namespace Calligra::Sheets;
 class DocumentSettingsDialog::Private
 {
 public:
-    KPageWidgetItem* page1;
-
+    KPageWidgetItem *page1, *page2;
+    // Calculation Settings
+    calcSettings* calcPage;
     // Locale Options
     parameterLocale* localePage;
 };
@@ -78,11 +81,17 @@ DocumentSettingsDialog::DocumentSettingsDialog(Selection* selection, QWidget* pa
 //     connect(this, SIGNAL(defaultClicked()), this,SLOT(slotDefault()));
 //     connect(this, SIGNAL(resetClicked()), this, SLOT(slotReset()));
 
-    KVBox *page2 = new KVBox();
-    d->page1 = addPage(page2, i18n("Locale Settings"));
-    d->page1->setHeader(i18n("Document's Locale Settings"));
-    d->page1->setIcon(koIcon("preferences-desktop-locale"));
-    d->localePage = new parameterLocale(selection, page2);
+    KVBox *p1 = new KVBox();
+    d->page1 = addPage(p1, i18n("Calculation"));
+    d->page1->setHeader(QString(""));
+    d->page1->setIcon(koIcon("application-vnd.oasis.opendocument.spreadsheet"));
+    d->calcPage = new calcSettings(selection, p1);
+
+    KVBox *p2 = new KVBox();
+    d->page2 = addPage(p2, i18n("Locale"));
+    d->page2->setHeader(QString(""));
+    d->page2->setIcon(koIcon("preferences-desktop-locale"));
+    d->localePage = new parameterLocale(selection, p2);
 }
 
 DocumentSettingsDialog::~DocumentSettingsDialog()
@@ -92,6 +101,7 @@ DocumentSettingsDialog::~DocumentSettingsDialog()
 
 void DocumentSettingsDialog::slotApply()
 {
+    d->calcPage->apply();
     d->localePage->apply();
 }
 
@@ -104,26 +114,78 @@ void DocumentSettingsDialog::slotReset()
 }
 
 
-parameterLocale::parameterLocale(Selection* selection, KVBox *box , char * /*name*/)
+calcSettings::calcSettings(Selection* selection, KVBox *box)
+        : QObject(box->parent())
+{
+    m_cs = selection->activeSheet()->map()->calculationSettings();
+
+    m_caseSensitiveCheckbox = new QCheckBox(i18n("Case sensitive"), box);
+    m_caseSensitiveCheckbox->setChecked(m_cs->caseSensitiveComparisons() == Qt::CaseSensitive);
+
+    m_precisionAsShownCheckbox = new QCheckBox(i18n("Precision as shown"), box);
+    m_precisionAsShownCheckbox->setChecked(m_cs->precisionAsShown());
+
+    m_searchCriteriaMustApplyToWholeCellCheckbox = new QCheckBox(i18n("Search criteria must apply to whole cell"), box);
+    m_searchCriteriaMustApplyToWholeCellCheckbox->setChecked(m_cs->wholeCellSearchCriteria());
+
+    m_automaticFindLabelsCheckbox = new QCheckBox(i18n("Automatic find labels"), box);
+    m_automaticFindLabelsCheckbox->setChecked(m_cs->automaticFindLabels());
+
+    QHBoxLayout *matchModeLayout = new QHBoxLayout();
+    matchModeLayout->setMargin(0);
+    box->layout()->addItem(matchModeLayout);
+    QLabel *matchModeLabel = new QLabel(i18n("String comparison:"), box);
+    matchModeLayout->addWidget(matchModeLabel);
+    m_matchModeCombobox = new QComboBox(box);
+    matchModeLayout->addWidget(m_matchModeCombobox);
+    matchModeLabel->setBuddy(m_matchModeCombobox);
+    m_matchModeCombobox->setEditable(false);
+    m_matchModeCombobox->addItems(QStringList() << i18n("None") << i18n("Wildcards") << i18n("Regular Expressions"));
+    m_matchModeCombobox->setCurrentIndex(m_cs->useWildcards() ? 1 : m_cs->useRegularExpressions() ? 2 : 0 );
+
+    QHBoxLayout *m_nullYearLayout = new QHBoxLayout();
+    m_nullYearLayout->setMargin(0);
+    box->layout()->addItem(m_nullYearLayout);
+    QLabel *m_nullYearLabel = new QLabel(i18n("Null Year:"), box);
+    m_nullYearLayout->addWidget(m_nullYearLabel);
+    m_nullYearEdit = new QSpinBox(box);
+    m_nullYearLayout->addWidget(m_nullYearEdit);
+    m_nullYearLabel->setBuddy(m_nullYearEdit);
+    m_nullYearEdit->setRange(0, 32767);
+    m_nullYearEdit->setValue(m_cs->referenceYear());
+
+    box->layout()->addItem(new QSpacerItem(1, 1, QSizePolicy::Minimum, QSizePolicy::Expanding));
+}
+
+void calcSettings::apply()
+{
+    m_cs->setCaseSensitiveComparisons(m_caseSensitiveCheckbox->isChecked() ? Qt::CaseSensitive : Qt::CaseInsensitive);
+    m_cs->setPrecisionAsShown(m_precisionAsShownCheckbox->isChecked());
+    m_cs->setWholeCellSearchCriteria(m_searchCriteriaMustApplyToWholeCellCheckbox->isChecked());
+    m_cs->setAutomaticFindLabels(m_automaticFindLabelsCheckbox->isChecked());
+    m_cs->setUseWildcards(m_matchModeCombobox->currentIndex() == 1);
+    m_cs->setUseRegularExpressions(m_matchModeCombobox->currentIndex() == 2);
+    m_cs->setReferenceYear(m_nullYearEdit->value());
+}
+
+parameterLocale::parameterLocale(Selection* selection, KVBox *box)
         : QObject(box->parent())
 {
     m_selection = selection;
     m_bUpdateLocale = false;
-//   QGroupBox* tmpQGroupBox = new QGroupBox( i18n("Settings"), box );
-    KVBox* tmpQGroupBox = box;
 
     KLocale* locale = selection->activeSheet()->map()->calculationSettings()->locale();
 
-    m_language = new QLabel(tmpQGroupBox);
-    m_number = new QLabel(tmpQGroupBox);
-    m_date = new QLabel(tmpQGroupBox);
-    m_shortDate = new QLabel(tmpQGroupBox);
-    m_time = new QLabel(tmpQGroupBox);
-    m_money = new QLabel(tmpQGroupBox);
+    m_language = new QLabel(box);
+    m_number = new QLabel(box);
+    m_date = new QLabel(box);
+    m_shortDate = new QLabel(box);
+    m_time = new QLabel(box);
+    m_money = new QLabel(box);
 
     updateToMatchLocale(locale);
 
-    m_updateButton = new QPushButton(i18n("&Use System's Locale Settings"), tmpQGroupBox);
+    m_updateButton = new QPushButton(i18n("&Use System's Locale Settings"), box);
     connect(m_updateButton, SIGNAL(clicked()), this, SLOT(updateDefaultSystemConfig()));
 
     box->layout()->addItem(new QSpacerItem(1, 1, QSizePolicy::Minimum, QSizePolicy::Expanding));

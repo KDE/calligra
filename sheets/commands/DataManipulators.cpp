@@ -199,6 +199,18 @@ bool DataManipulator::process(Element* element)
     return true;
 }
 
+bool DataManipulator::wantChange(Element *element, int col, int row)
+{
+  if (m_expandMatrix) {
+    QRect range = element->rect();
+    int colidx = col - range.left();
+    int rowidx = row - range.top();
+    // don't set this value, RecalcManager already did it
+    if (colidx || rowidx) return false;
+  }
+  return true;
+}
+
 Value DataManipulator::newValue(Element *element, int col, int row,
                                 bool *parsing, Format::Type *formatType)
 {
@@ -208,14 +220,6 @@ Value DataManipulator::newValue(Element *element, int col, int row,
     QRect range = element->rect();
     int colidx = col - range.left();
     int rowidx = row - range.top();
-    if (m_parsing && m_expandMatrix) {
-        if (colidx || rowidx) {
-            *parsing = false;
-            if (m_data.asString().isEmpty() || m_data.asString().at(0) == '=')
-                m_sheet->cellStorage()->setValue(col, row, Value()); // for proper undo
-            return Cell(m_sheet, range.topLeft()).value().element(colidx, rowidx);
-        }
-    }
     return m_data.element(colidx, rowidx);
 }
 

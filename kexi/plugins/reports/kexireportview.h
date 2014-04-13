@@ -89,6 +89,7 @@ private slots:
     void slotExportAsSpreadsheet();
     void slotExportAsWebPage();
     void slotExportAsTextDocument();
+    void openExportedDocument(const KUrl& destination);
 };
 
 #endif

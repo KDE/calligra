@@ -1,3 +1,10 @@
+if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
+    add_definitions(-Wno-unused-but-set-variable)
+    add_definitions(-Wno-missing-format-attribute)
+    add_definitions(-Wno-sign-compare)
+    add_definitions(-Wno-unused-parameter)
+endif (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
+
 
 include_directories(  ${GLIB2_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/kexi ${KDE4_INCLUDES} ${CMAKE_SOURCE_DIR}/kexi/migration/mdb/src/mdbtools/include )
 

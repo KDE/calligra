@@ -37,7 +37,7 @@ class KEXIFORMUTILS_EXPORT KexiDBDatePicker : public KDatePicker,
     Q_PROPERTY(bool readOnly READ isReadOnly WRITE setReadOnly)
 
 public:
-    KexiDBDatePicker(QWidget *parent);
+    explicit KexiDBDatePicker(QWidget *parent);
     virtual ~KexiDBDatePicker();
 
     inline QString dataSource() const {
@@ -83,7 +83,6 @@ public slots:
 
 protected:
     virtual void setValueInternal(const QVariant& add, bool removeOld);
-//    virtual bool eventFilter(QObject *o, QEvent *e);
 
 private:
     bool m_invalidState;

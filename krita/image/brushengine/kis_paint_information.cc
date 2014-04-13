@@ -19,8 +19,8 @@
 #include "kis_paint_information.h"
 
 #include <QDomElement>
+#include <QScopedPointer>
 
-#include <boost/scoped_ptr.hpp>
 #include "kis_paintop.h"
 #include "kis_distance_information.h"
 
@@ -30,7 +30,7 @@ struct KisPaintInformation::Private {
 
     Private() : currentDistanceInfo(0) {}
     ~Private() {
-        Q_ASSERT(!currentDistanceInfo);
+        KIS_ASSERT_RECOVER_NOOP(!currentDistanceInfo);
     }
     Private(const Private &rhs) {
         copy(rhs);
@@ -49,6 +49,7 @@ struct KisPaintInformation::Private {
         tangentialPressure = rhs.tangentialPressure;
         perspective = rhs.perspective;
         time = rhs.time;
+        isHoveringMode = rhs.isHoveringMode;
         currentDistanceInfo = rhs.currentDistanceInfo;
 
         if (rhs.drawingAngleOverride) {
@@ -65,8 +66,9 @@ struct KisPaintInformation::Private {
     qreal tangentialPressure;
     qreal perspective;
     int time;
+    bool isHoveringMode;
 
-    boost::scoped_ptr<qreal> drawingAngleOverride;
+    QScopedPointer<qreal> drawingAngleOverride;
     KisDistanceInformation *currentDistanceInfo;
 
     void registerDistanceInfo(KisDistanceInformation *di) {
@@ -77,6 +79,19 @@ struct KisPaintInformation::Private {
         currentDistanceInfo = 0;
     }
 };
+
+KisPaintInformation::DistanceInformationRegistrar::
+DistanceInformationRegistrar(KisPaintInformation *_p, KisDistanceInformation *distanceInfo)
+    : p(_p)
+{
+    p->d->registerDistanceInfo(distanceInfo);
+}
+
+KisPaintInformation::DistanceInformationRegistrar::
+~DistanceInformationRegistrar()
+{
+    p->d->unregisterDistanceInfo();
+}
 
 KisPaintInformation::KisPaintInformation(const QPointF & pos_,
                                          qreal pressure_,
@@ -95,6 +110,7 @@ KisPaintInformation::KisPaintInformation(const QPointF & pos_,
     d->tangentialPressure = tangentialPressure_;
     d->perspective = perspective_;
     d->time = time;
+    d->isHoveringMode = false;
 }
 
 KisPaintInformation::KisPaintInformation(const KisPaintInformation& rhs) : d(new Private(*rhs.d))
@@ -111,9 +127,34 @@ KisPaintInformation::~KisPaintInformation()
     delete d;
 }
 
+bool KisPaintInformation::isHoveringMode() const
+{
+    return d->isHoveringMode;
+}
+
+KisPaintInformation
+KisPaintInformation::createHoveringModeInfo(const QPointF &pos,
+                                            qreal pressure,
+                                            qreal xTilt, qreal yTilt,
+                                            qreal rotation,
+                                            qreal tangentialPressure,
+                                            qreal perspective)
+{
+    KisPaintInformation info(pos,
+                             pressure,
+                             xTilt, yTilt,
+                             rotation,
+                             tangentialPressure,
+                             perspective, 0);
+    info.d->isHoveringMode = true;
+    return info;
+}
 
 void KisPaintInformation::toXML(QDomDocument&, QDomElement& e) const
 {
+    // hovering mode infos are not supposed to be saved
+    KIS_ASSERT_RECOVER_NOOP(!d->isHoveringMode);
+
     e.setAttribute("pointX", QString::number(pos().x(), 'g', 15));
     e.setAttribute("pointY", QString::number(pos().y(), 'g', 15));
     e.setAttribute("pressure", QString::number(pressure(), 'g', 15));
@@ -191,6 +232,12 @@ qreal KisPaintInformation::drawingAngleSafe(const KisDistanceInformation &distan
 
     QVector2D diff(pos() - distance.lastPosition());
     return atan2(diff.y(), diff.x());
+}
+
+KisPaintInformation::DistanceInformationRegistrar
+KisPaintInformation::registerDistanceInformation(KisDistanceInformation *distance)
+{
+    return DistanceInformationRegistrar(this, distance);
 }
 
 qreal KisPaintInformation::drawingAngle() const
@@ -283,7 +330,12 @@ KisPaintInformation KisPaintInformation::mix(const QPointF& p, qreal t, const Ki
     qreal tangentialPressure = (1 - t) * pi1.tangentialPressure() + t * pi2.tangentialPressure();
     qreal perspective = (1 - t) * pi1.perspective() + t * pi2.perspective();
     int   time = (1 - t) * pi1.currentTime() + t * pi2.currentTime();
-    return KisPaintInformation(p, pressure, xTilt, yTilt, rotation, tangentialPressure, perspective, time);
+
+    KisPaintInformation result(p, pressure, xTilt, yTilt, rotation, tangentialPressure, perspective, time);
+    KIS_ASSERT_RECOVER_NOOP(pi1.isHoveringMode() == pi2.isHoveringMode());
+    result.d->isHoveringMode = pi1.isHoveringMode();
+
+    return result;
 }
 
 qreal KisPaintInformation::ascension(const KisPaintInformation& info, bool normalize)

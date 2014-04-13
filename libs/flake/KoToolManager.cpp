@@ -51,7 +51,7 @@
 #include <QKeyEvent>
 #include <QGridLayout>
 #include <QDockWidget>
-#include <QGraphicsWidget>
+#include <QGraphicsObject>
 #include <QStringList>
 #include <QAbstractButton>
 #include <QApplication>
@@ -272,7 +272,6 @@ void KoToolManager::Private::switchTool(const QString &id, bool temporary)
     canvasData->activeToolId = id;
     KoToolBase *tool = canvasData->allTools.value(id);
     if (! tool) {
-        kWarning(30006) << "KoToolManager::switchTool() " << (temporary ? "temporary" : "") << " got request to unknown tool: '" << id << "'";
         return;
     }
 
@@ -603,13 +602,22 @@ void KoToolManager::Private::selectionChanged(QList<KoShape*> shapes)
     // to work
     // if not change the current tool to the default tool
     if (!(canvasData->activationShapeId.isNull() && shapes.size() > 0)
-        && canvasData->activationShapeId != "flake/always"
-        && canvasData->activationShapeId != "flake/edit"
-        && ! types.contains(canvasData->activationShapeId)) {
-        switchTool(KoInteractionTool_ID, false);
+                && canvasData->activationShapeId != "flake/always"
+                && canvasData->activationShapeId != "flake/edit") {
+
+        bool currentToolWorks = false;
+        foreach (const QString &type, types) {
+            if (canvasData->activationShapeId.split(',').contains(type)) {
+                currentToolWorks = true;
+                break;
+            }
+        }
+        if (!currentToolWorks) {
+            switchTool(KoInteractionTool_ID, false);
+        }
     }
 
-    emit q->toolCodesSelected(canvasData->canvas, types);
+    emit q->toolCodesSelected(types);
 }
 
 void KoToolManager::Private::currentLayerChanged(const KoShapeLayer *layer)
@@ -635,6 +643,7 @@ void KoToolManager::Private::switchInputDevice(const KoInputDevice &device)
     Q_ASSERT(canvasData);
     if (!canvasData) return;
     if (inputDevice == device) return;
+    if (inputDevice.isMouse() && device.isMouse()) return;
     if (device.isMouse() && !inputDevice.isMouse()) {
         // we never switch back to mouse from a tablet input device, so the user can use the
         // mouse to edit the settings for a tool activated by a tablet. See bugs
@@ -716,14 +725,12 @@ KoToolManager::~KoToolManager()
     delete d;
 }
 
-QList<KoToolButton> KoToolManager::createToolList(KoCanvasBase *canvas) const
+QList<KoToolButton> KoToolManager::createToolList() const
 {
     QList<KoToolButton> answer;
     foreach(ToolHelper *tool, d->tools) {
         if (tool->id() == KoCreateShapesTool_ID)
             continue; // don't show this one.
-        if (!tool->canCreateTool(canvas))
-            continue;
         KoToolButton button;
         button.button = tool->createButton();
         button.section = tool->toolType();
@@ -884,7 +891,15 @@ QString KoToolManager::preferredToolForSelection(const QList<KoShape*> &shapes)
             continue;
         if (helper->toolType() == KoToolFactoryBase::mainToolType())
             continue;
-        if (types.contains(helper->activationShapeId())) {
+
+        bool toolWillWork = false;
+        foreach (const QString &type, types) {
+            if (helper->activationShapeId().split(',').contains(type)) {
+                toolWillWork = true;
+                break;
+            }
+        }
+        if (toolWillWork) {
             toolType = helper->id();
             prio = helper->priority();
         }
@@ -957,7 +972,7 @@ void KoToolManager::addDeferredToolFactory(KoToolFactoryBase *toolFactory)
         }
 
         // Then create a button for the toolbox for this canvas
-        if (tool->id() == KoCreateShapesTool_ID || !tool->canCreateTool(controller->canvas())) {
+        if (tool->id() == KoCreateShapesTool_ID) {
             continue;
         }
 
@@ -985,11 +1000,6 @@ QPair<QString, KoToolBase*> KoToolManager::createTools(KoCanvasController *contr
 
     if (origHash.contains(tool->id())) {
         return QPair<QString, KoToolBase*>(tool->id(), origHash.value(tool->id()));
-    }
-
-    if (!tool->canCreateTool(controller->canvas())) {
-        kDebug(30006) << "Skipping the creation of tool" << tool->id();
-        return  QPair<QString, KoToolBase*>(QString(), 0);
     }
 
     kDebug(30006) << "Creating tool" << tool->id() << ". Activated on:" << tool->activationShapeId() << ", prio:" << tool->priority();

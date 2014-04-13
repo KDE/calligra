@@ -25,6 +25,7 @@
 #include "KoAnnotationManager.h"
 
 #include <QTextCursor>
+#include <kdebug.h>
 
 KoTextRangeManager::KoTextRangeManager(QObject *parent)
     : QObject(parent)
@@ -127,6 +128,13 @@ QHash<int, KoTextRange *> KoTextRangeManager::textRangesChangingWithin(const QTe
                 if (matchLast == -1 || range->rangeStart() <= matchLast) {
                     if (range->rangeStart() >= matchFirst) {
                         ranges.insertMulti(range->rangeEnd(), range);
+                    }
+                }
+            }
+            if (range->rangeStart() >= first && range->rangeStart() <= last) {
+                if (matchLast == -1 || range->rangeEnd() >= matchLast) {
+                    if (range->rangeEnd() >= matchFirst) {
+                        ranges.insert(range->rangeStart(), range);
                     }
                 }
             }

@@ -45,6 +45,11 @@
 #include "RowFormatStorage.h"
 
 // needed by MDETERM and MINVERSE
+// Don't show this warning: it's an issue in eigen
+#ifdef __GNUC__
+#pragma GCC diagnostic ignored "-Wunused-local-typedefs"
+#endif
+
 #include <Eigen/LU>
 
 using namespace Calligra::Sheets;
@@ -573,7 +578,7 @@ Value func_sumif(valVector args, ValueCalc *calc, FuncExtra *e)
     calc->getCond(cond, Value(condition));
 
     if (args.count() == 3) {
-        Cell sumRangeStart(e->sheet, e->ranges[2].col1, e->ranges[2].row1);
+        Cell sumRangeStart(e->regions[2].firstSheet(), e->regions[2].firstRange().topLeft());
         return calc->sumIf(sumRangeStart, checkRange, cond);
     } else {
         return calc->sumIf(checkRange, cond);

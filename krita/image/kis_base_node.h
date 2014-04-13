@@ -325,6 +325,13 @@ public:
     bool isEditable() const;
 
     /**
+     * @return true if the node is editable and has a paintDevice()
+     *         which which can be used for accessing pixels. It is an
+     *         equivalent to (isEditable() && paintDevice())
+     */
+    bool hasEditablePaintDevice() const;
+
+    /**
      * @return the x-offset of this layer in the image plane.
      */
     virtual qint32 x() const {
@@ -390,6 +397,10 @@ protected:
      */
     virtual KisBaseNodeSP parentCallback() const {
         return 0;
+    }
+
+    virtual void notifyParentVisibilityChanged(bool value) {
+        Q_UNUSED(value);
     }
 
     /**

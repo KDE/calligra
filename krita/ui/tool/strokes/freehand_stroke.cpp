@@ -26,28 +26,33 @@
 
 
 FreehandStrokeStrategy::FreehandStrokeStrategy(bool needsIndirectPainting,
+                                               const QString &indirectPaintingCompositeOp,
                                                KisResourcesSnapshotSP resources,
                                                PainterInfo *painterInfo,
                                                const QString &name)
     : KisPainterBasedStrokeStrategy("FREEHAND_STROKE", name,
                                     resources, painterInfo)
 {
-    init(needsIndirectPainting);
+    init(needsIndirectPainting, indirectPaintingCompositeOp);
 }
 
 FreehandStrokeStrategy::FreehandStrokeStrategy(bool needsIndirectPainting,
+                                               const QString &indirectPaintingCompositeOp,
                                                KisResourcesSnapshotSP resources,
                                                QVector<PainterInfo*> painterInfos,
                                                const QString &name)
     : KisPainterBasedStrokeStrategy("FREEHAND_STROKE", name,
                                     resources, painterInfos)
 {
-    init(needsIndirectPainting);
+    init(needsIndirectPainting, indirectPaintingCompositeOp);
 }
 
-void FreehandStrokeStrategy::init(bool needsIndirectPainting)
+void FreehandStrokeStrategy::init(bool needsIndirectPainting,
+                                  const QString &indirectPaintingCompositeOp)
 {
     setNeedsIndirectPainting(needsIndirectPainting);
+    setIndirectPaintingCompositeOp(indirectPaintingCompositeOp);
+    setSupportsWrapAroundMode(true);
     enableJob(KisSimpleStrokeStrategy::JOB_DOSTROKE);
 }
 

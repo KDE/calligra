@@ -132,7 +132,7 @@ qreal KisDistanceInformation::getNextPointPositionIsotropic(const QPointF &start
                                                             const QPointF &end)
 {
     qreal distance = m_d->distance.x();
-    qreal spacing = qMax(0.5, m_d->spacing.spacing().x());
+    qreal spacing = qMax(qreal(0.5), m_d->spacing.spacing().x());
 
     if (start == end) {
         return -1;
@@ -161,8 +161,8 @@ qreal KisDistanceInformation::getNextPointPositionAnisotropic(const QPointF &sta
         return -1;
     }
 
-    qreal a_rev = 1.0 / qMax(0.5, m_d->spacing.spacing().x());
-    qreal b_rev = 1.0 / qMax(0.5, m_d->spacing.spacing().y());
+    qreal a_rev = 1.0 / qMax(qreal(0.5), m_d->spacing.spacing().x());
+    qreal b_rev = 1.0 / qMax(qreal(0.5), m_d->spacing.spacing().y());
 
     qreal x = m_d->distance.x();
     qreal y = m_d->distance.y();
@@ -185,7 +185,8 @@ qreal KisDistanceInformation::getNextPointPositionAnisotropic(const QPointF &sta
             t = k;
             m_d->distance = QPointF();
         } else {
-            m_d->distance += qAbs(end - start);
+            QPointF diff = end - start;
+            m_d->distance += QPointF(qAbs(diff.x()), qAbs(diff.y()));
         }
     } else {
         qWarning() << "BUG: No solution for elliptical spacing equation has been found. This shouldn't have happened.";

@@ -115,6 +115,8 @@ public slots:
      */
     void setMonitorProfile(const KoColorProfile *monitorProfile, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags);
 
+    void setChannelFlags(const QBitArray &channelFlags);
+
     void setDisplayFilter(KisDisplayFilter *displayFilter);
 
     /**
@@ -132,13 +134,6 @@ private:
     KisPrescaledProjection operator=(const KisPrescaledProjection &);
 
     void updateViewportSize();
-
-    /**
-     * preScale and draw onto the scaled projection the specified rect,
-     * in canvas view pixels.
-     */
-    QRect preScale(const QRect & rc);
-
 
     /**
      * This creates an empty update information and fills it with the only

@@ -40,7 +40,7 @@ OLEStorage::~OLEStorage()
     close();  // just in case
 }
 
-bool OLEStorage::open( Mode mode )
+bool OLEStorage::open( Mode /*mode*/ )
 {
     if (!m_storage) {
         m_storage = new POLE::Storage( m_fileName.c_str() );
@@ -77,7 +77,7 @@ OLEStreamReader* OLEStorage::createStreamReader( const std::string& stream )
     return reader;
 }
 
-OLEStreamWriter* OLEStorage::createStreamWriter( const std::string& stream )
+OLEStreamWriter* OLEStorage::createStreamWriter( const std::string& /*stream*/ )
 {
     return 0;
 }

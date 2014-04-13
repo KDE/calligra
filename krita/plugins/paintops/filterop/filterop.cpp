@@ -23,7 +23,7 @@
 #include <kis_debug.h>
 #include <kpluginfactory.h>
 
-#include <KoCompositeOp.h>
+#include <KoCompositeOpRegistry.h>
 
 #include <kis_paintop_registry.h>
 #include "kis_simple_paintop_factory.h"
@@ -35,7 +35,7 @@ K_PLUGIN_FACTORY(FilterOpFactory, registerPlugin<FilterOp>();)
 K_EXPORT_PLUGIN(FilterOpFactory("krita"))
 
 FilterOp::FilterOp(QObject *parent, const QVariantList &)
-        : QObject(parent)
+    : QObject(parent)
 {
     QStringList whiteList;
     whiteList << COMPOSITE_COPY;

@@ -1,5 +1,6 @@
 add_subdirectory( bigbrother )
 add_subdirectory( imagesplit )
+add_subdirectory( clonesarray )
 add_subdirectory( colorrange )
 add_subdirectory( colorspaceconversion )
 add_subdirectory( dropshadow )
@@ -13,14 +14,11 @@ add_subdirectory( separate_channels )
 add_subdirectory( shearimage )
 add_subdirectory( dockers )
 add_subdirectory( layergroupswitcher )
-
-find_package(OpenShiva)
-find_package(QtShiva )
-
-if(HAVE_OPENSHIVA AND HAVE_QTSHIVA)
- add_subdirectory(shiva)
-endif(HAVE_OPENSHIVA AND HAVE_QTSHIVA)
-
-macro_log_feature(HAVE_OPENSHIVA "OpenShiva" "OpenShiva interpreter for the Shiva Kernel Language (part of OpenGTL)" "http://www.opengtl.org" FALSE "" "Required for Shiva based Generators and Filters")
-macro_log_feature(HAVE_QTSHIVA "QtShiva" "Qt bindings for the OpenShiva interpreter (part of libQtGTL)" "http://www.opengtl.org" FALSE "" "Required for Shiva based Generators and Filters")
-
+# Allow to skip building GMIC plugin
+if(NOT DEFINED WITH_GMIC)
+    add_subdirectory( gmic )
+else(NOT DEFINED WITH_GMIC)
+    if(WITH_GMIC)
+        add_subdirectory( gmic )
+    endif(WITH_GMIC)
+endif(NOT DEFINED WITH_GMIC)

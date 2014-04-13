@@ -26,21 +26,20 @@
 #include <kis_random_accessor_ng.h>
 #include <kis_painter.h>
 #include "kis_curve_paintop_settings_widget.h"
-#include <KoColorSpace.h>
 
+class KoColorSpace;
 class CurveProperties;
-class Pen {
+class Pen
+{
 public:
-    Pen():pos(QPointF(0,0)), rotation(0), scale(0)
-    {
+    Pen(): pos(QPointF(0, 0)), rotation(0), scale(0) {
 
     }
 
-    Pen(QPointF ipos,qreal irotation, qreal iscale)
-        :pos(ipos),
-        rotation(irotation),
-        scale(iscale)
-    {
+    Pen(QPointF ipos, qreal irotation, qreal iscale)
+        : pos(ipos),
+          rotation(irotation),
+          scale(iscale) {
 
     }
 

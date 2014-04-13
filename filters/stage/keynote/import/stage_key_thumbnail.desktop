@@ -1,0 +1,18 @@
+[Desktop Entry]
+Type=Service
+Name=Apple Keynote Documents
+Name[cs]=Dokumenty Apple Keynote
+Name[de]=Apple Keynote Dokumente
+Name[nl]=Documenten van Apple-keynote
+Name[pt]=Documentos do Apple Keynote
+Name[pt_BR]=Documentos do Apple Keynote
+Name[sk]=Dokumenty Apple Keynote
+Name[sv]=Apple Keynote-dokument
+Name[uk]=Документи Apple Keynote
+Name[x-test]=xxApple Keynote Documentsxx
+
+X-KDE-ServiceTypes=ThumbCreator
+MimeType=application/x-iwork-keynote-sffkey;
+
+X-KDE-Library=calligraimagethumbnail
+CacheThumbnail=true

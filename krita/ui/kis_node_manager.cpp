@@ -18,6 +18,8 @@
 
 #include "kis_node_manager.h"
 
+#include <QDesktopServices>
+
 #include <kactioncollection.h>
 
 #include <KoIcon.h>
@@ -26,6 +28,7 @@
 #include <KoShape.h>
 #include <KoShapeLayer.h>
 #include <KoFilterManager.h>
+#include <KoFileDialog.h>
 
 #include <kis_types.h>
 #include <kis_node.h>
@@ -47,9 +50,11 @@
 #include "kis_layer_manager.h"
 #include "kis_selection_manager.h"
 #include "kis_node_commands_adapter.h"
-#include "kis_mirror_visitor.h"
 #include "kis_action.h"
 #include "kis_action_manager.h"
+#include "kis_processing_applicator.h"
+#include "processing/kis_mirror_processing_visitor.h"
+
 
 struct KisNodeManager::Private {
 
@@ -389,11 +394,16 @@ void KisNodeManager::slotTryFinishIsolatedMode()
     }
 }
 
-void KisNodeManager::createNode(const QString & nodeType)
+void KisNodeManager::createNode(const QString & nodeType, bool quiet)
 {
     KisNodeSP activeNode = this->activeNode();
     if (!activeNode) {
         activeNode = m_d->view->image()->root();
+    }
+
+    KIS_ASSERT_RECOVER_RETURN(activeNode);
+    if (activeNode->systemLocked()) {
+        return;
     }
 
     // XXX: make factories for this kind of stuff,
@@ -414,7 +424,7 @@ void KisNodeManager::createNode(const QString & nodeType)
     } else if (nodeType == "KisTransparencyMask") {
         m_d->maskManager->createTransparencyMask(activeNode, 0);
     } else if (nodeType == "KisFilterMask") {
-        m_d->maskManager->createFilterMask(activeNode, 0);
+        m_d->maskManager->createFilterMask(activeNode, 0, quiet);
     } else if (nodeType == "KisSelectionMask") {
         m_d->maskManager->createSelectionMask(activeNode, 0);
     } else if (nodeType == "KisFileLayer") {
@@ -673,17 +683,47 @@ void KisNodeManager::mirrorNodeY()
     mirrorNode(node, commandName, Qt::Vertical);
 }
 
+inline bool checkForGlobalSelection(KisNodeSP node) {
+    return dynamic_cast<KisSelectionMask*>(node.data()) && node->parent() && !node->parent()->parent();
+}
+
 void KisNodeManager::activateNextNode()
 {
-    if (activeNode() && activeNode()->nextSibling()) {
-        slotNonUiActivatedNode(activeNode()->nextSibling());
+    KisNodeSP activeNode = this->activeNode();
+    if (!activeNode) return;
+
+    KisNodeSP node = activeNode->nextSibling();
+
+    if (!node && activeNode->parent() && activeNode->parent()->parent()) {
+        node = activeNode->parent();
+    }
+
+    while(node && checkForGlobalSelection(node)) {
+        node = node->nextSibling();
+    }
+
+    if (node) {
+        slotNonUiActivatedNode(node);
     }
 }
 
 void KisNodeManager::activatePreviousNode()
 {
-    if (activeNode() && activeNode()->prevSibling()) {
-        slotNonUiActivatedNode(activeNode()->prevSibling());
+    KisNodeSP activeNode = this->activeNode();
+    if (!activeNode) return;
+
+    KisNodeSP node = activeNode->prevSibling();
+
+    if (!node && activeNode->parent()) {
+        node = activeNode->parent()->prevSibling();
+    }
+
+    while(node && checkForGlobalSelection(node)) {
+        node = node->prevSibling();
+    }
+
+    if (node) {
+        slotNonUiActivatedNode(node);
     }
 }
 
@@ -723,26 +763,30 @@ void KisNodeManager::shear(double angleX, double angleY)
 
 void KisNodeManager::scale(double sx, double sy, KisFilterStrategy *filterStrategy)
 {
-    // XXX: implement scale for masks as well
-    m_d->layerManager->scaleLayer(sx, sy, filterStrategy);
+    KisNodeSP node = activeNode();
+    KIS_ASSERT_RECOVER_RETURN(node);
+
+    m_d->view->image()->scaleNode(node, sx, sy, filterStrategy);
+
+    nodesUpdated();
 }
 
-void KisNodeManager::mirrorNode(KisNodeSP node, const QString& commandName, Qt::Orientation orientation)
+void KisNodeManager::mirrorNode(KisNodeSP node, const QString& actionName, Qt::Orientation orientation)
 {
-    m_d->view->image()->undoAdapter()->beginMacro(commandName);
+    KisImageSignalVector emitSignals;
+    emitSignals << ModifiedSignal;
 
-    KisMirrorVisitor visitor(m_d->view->image(), orientation);
-    node->accept(visitor);
+    KisProcessingApplicator applicator(m_d->view->image(), node,
+                                       KisProcessingApplicator::RECURSIVE,
+                                       emitSignals, actionName);
 
-    m_d->view->image()->undoAdapter()->endMacro();
-    m_d->doc->setModified(true);
+    KisProcessingVisitorSP visitor =
+        new KisMirrorProcessingVisitor(m_d->view->image()->bounds(), orientation);
 
-    if (node->inherits("KisLayer")) {
-        m_d->layerManager->layersUpdated();
-    } else if (node->inherits("KisMask")) {
-        m_d->maskManager->masksUpdated();
-    }
-    m_d->view->canvas()->update();
+    applicator.applyVisitor(visitor, KisStrokeJobData::CONCURRENT);
+    applicator.end();
+
+    nodesUpdated();
 }
 
 void KisNodeManager::saveNodeAsImage()
@@ -754,27 +798,20 @@ void KisNodeManager::saveNodeAsImage()
         return;
     }
 
-    QStringList listMimeFilter = KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Export);
-    QString mimelist = listMimeFilter.join(" ");
+    KoFileDialog dialog(m_d->view, KoFileDialog::SaveFile);
+    dialog.setCaption(i18n("Export Node"));
+    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+    dialog.setMimeTypeFilters(KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Export));
+    QString filename = dialog.url();
 
-    KFileDialog fd(KUrl(QString()), mimelist, m_d->view);
-    fd.setObjectName("Export Node");
-    fd.setCaption(i18n("Export Node"));
-    fd.setMimeFilter(listMimeFilter);
-    fd.setOperationMode(KFileDialog::Saving);
+    if (filename.isEmpty()) return;
 
-    if (!fd.exec()) return;
+    KUrl url = KUrl::fromLocalFile(filename);
 
-    KUrl url = fd.selectedUrl();
-    QString mimefilter = fd.currentMimeFilter();
+    if (url.isEmpty()) return;
 
-    if (mimefilter.isNull()) {
-        KMimeType::Ptr mime = KMimeType::findByUrl(url);
-        mimefilter = mime->name();
-    }
-
-    if (url.isEmpty())
-        return;
+    KMimeType::Ptr mime = KMimeType::findByUrl(url);
+    QString mimefilter = mime->name();
 
     KisImageWSP image = m_d->view->image();
 

@@ -25,6 +25,8 @@
 #include <calligraversion.h>
 
 #include <KoConfig.h>
+#include "kis_assert.h"
+
 
 #define KRITA_VERSION CALLIGRA_VERSION
 
@@ -45,7 +47,12 @@ enum enumCursorStyle {
     CURSOR_STYLE_OUTLINE = 3,
     CURSOR_STYLE_NO_CURSOR = 4,
     CURSOR_STYLE_SMALL_ROUND = 5,
-    CURSOR_STYLE_3D_MODEL = 6
+    CURSOR_STYLE_OUTLINE_CENTER_DOT = 6,
+    CURSOR_STYLE_OUTLINE_CENTER_CROSS = 7,
+    CURSOR_STYLE_TRIANGLE_RIGHTHANDED = 8,
+    CURSOR_STYLE_TRIANGLE_LEFTHANDED = 9,
+    CURSOR_STYLE_OUTLINE_TRIANGLE_RIGHTHANDED = 10,
+    CURSOR_STYLE_OUTLINE_TRIANGLE_LEFTHANDED = 11
 };
 
 /*
@@ -104,9 +111,19 @@ inline T pow2(T x) {
     return x * x;
 }
 
-template<>
-inline QPointF qAbs(const QPointF &pt) {
-    return QPointF(qAbs(pt.x()), qAbs(pt.y()));
+template<typename T>
+inline T kisDegreesToRadians(T degrees) {
+    return degrees * M_PI / 180.0;
+}
+
+template<typename T>
+inline T kisRadiansToDegrees(T radians) {
+    return radians * 180.0 / M_PI;
+}
+
+template<class T, typename U>
+inline T kisGrowRect(const T &rect, U offset) {
+    return rect.adjusted(-offset, -offset, offset, offset);
 }
 
 #endif // KISGLOBAL_H_

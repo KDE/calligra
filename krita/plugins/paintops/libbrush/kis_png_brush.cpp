@@ -22,41 +22,46 @@
 #include <QFileInfo>
 #include <QImageReader>
 
-struct KisPngBrush::Private {
-};
-
-KisPngBrush::KisPngBrush(const QString& filename) : KisBrush(filename), d(new Private)
+KisPngBrush::KisPngBrush(const QString& filename)
+    : KisBrush(filename)
 {
     setBrushType(INVALID);
     setSpacing(0.25);
     setHasColor(false);
-    
+
 }
 
 bool KisPngBrush::load()
 {
+    QFileInfo fi(filename());
+    if (fi.size() == 0) return false;
+
     QImageReader reader(filename(), "PNG");
-    if(reader.textKeys().contains("brush_spacing"))
-    {
+
+    if (reader.textKeys().contains("brush_spacing")) {
         setSpacing(reader.text("brush_spacing").toDouble());
     }
-    if(reader.textKeys().contains("brush_name"))
-    {
+
+    if (reader.textKeys().contains("brush_name")) {
         setName(reader.text("brush_name"));
-    } else {
+    }
+    else {
         QFileInfo info(filename());
         setName(info.baseName());
     }
+
     setImage(reader.read());
     setValid(!image().isNull());
-    if(image().isGrayscale())
-    {
+
+    if (image().isGrayscale()) {
         setBrushType(MASK);
         setHasColor(false);
-    } else {
+    }
+    else {
         setBrushType(IMAGE);
         setHasColor(true);
     }
+
     setWidth(image().width());
     setHeight(image().height());
     return !image().isNull();
@@ -69,9 +74,6 @@ QString KisPngBrush::defaultFileExtension() const
 
 void KisPngBrush::toXML(QDomDocument& d, QDomElement& e) const
 {
-    Q_UNUSED(d);
-    e.setAttribute("type", "png_brush");
-    e.setAttribute("filename", shortFilename());
-    e.setAttribute("spacing", spacing());
+    predefinedBrushToXML("png_brush", e);
     KisBrush::toXML(d, e);
 }

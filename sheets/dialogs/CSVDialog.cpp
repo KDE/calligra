@@ -23,17 +23,18 @@
 // Local
 #include "CSVDialog.h"
 
+#include <KoFileDialog.h>
+
 #include <QApplication>
 #include <QByteArray>
 #include <QMimeData>
 #include <QString>
 #include <QTimer>
 
+
 #include <KoCanvasBase.h>
 
 #include <kdebug.h>
-#include <kdialog.h>
-#include <kfiledialog.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kpushbutton.h>
@@ -74,10 +75,11 @@ CSVDialog::CSVDialog(QWidget* parent, Selection* selection, Mode mode)
             m_canceled = true;
         }
     } else if (m_mode == File) {
-        setWindowTitle(i18n("Inserting Text File"));
-        m_filename = KFileDialog::getOpenFileName(KUrl("kfiledialog:///"),
-                     "text/plain",
-                     this);
+        //setWindowTitle(i18n("Inserting Text File"));
+        KoFileDialog dialog(parent, KoFileDialog::ImportFile, "OpenDocument");
+        dialog.setCaption(i18n("Import CSV Data File"));
+        dialog.setNameFilter(i18n("CSV data files (*.csv)"));
+        m_filename = dialog.url();
         //cancel action !
         if (m_filename.isEmpty()) {
             enableButton(Ok, false);
@@ -151,15 +153,16 @@ void CSVDialog::accept()
     if ((numRows == 0) || (numCols == 0))
         return;  // nothing to do here
 
-    if ((numCols > m_selection->lastRange().width()) && (m_selection->lastRange().width() > 1)) {
-        numCols = m_selection->lastRange().width();
+    QRect range = m_selection->lastRange();
+    if ((numCols > range.width()) && (range.width() > 1)) {
+        numCols = range.width();
     } else
-        m_selection->lastRange().setRight(m_selection->lastRange().left() + numCols - 1);
+        range.setRight(range.left() + numCols - 1);
 
-    if ((numRows > m_selection->lastRange().height()) && (m_selection->lastRange().height() > 1))
-        numRows = m_selection->lastRange().height();
+    if ((numRows > range.height()) && (range.height() > 1))
+        numRows = range.height();
     else
-        m_selection->lastRange().setBottom(m_selection->lastRange().top() + numRows - 1);
+        range.setBottom(range.top() + numRows - 1);
 
     QList<KoCsvImportDialog::DataType> dataTypes;
     Value value(Value::Array);
@@ -190,21 +193,17 @@ void CSVDialog::accept()
         !mimedata->hasHtml() && mimedata->hasText() &&
         mimedata->text().split('\n').count() >= 2 )
     {
-        QRect r = m_selection->lastRange();
-        r.setSize(QSize(numCols, numRows));
-        command->add(r);
-    } else
-        command->add(m_selection->lastRange());
+        range.setSize(QSize(numCols, numRows));
+    }
+    command->add(range);
     if (!command->execute(m_selection->canvas()))
         delete command;
 
-    QRect range = m_selection->lastRange();
-    range.setWidth(qMax(range.width(), numCols));
-    range.setHeight(qMax(range.height(), numRows));
     const CellDamage::Changes changes = CellDamage::Appearance | CellDamage::Value | CellDamage::Formula;
     sheet->map()->addDamage(new CellDamage(sheet, Region(range, sheet), changes));
+    m_selection->clear();
+    m_selection->add(range, sheet);
     m_selection->emitModified();
     KoCsvImportDialog::accept();
 }
 
-#include "CSVDialog.moc"

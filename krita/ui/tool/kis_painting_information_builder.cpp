@@ -64,12 +64,7 @@ KisPaintInformation KisPaintingInformationBuilder::continueStroke(KoPointerEvent
     return createPaintingInformation(event, timeElapsed);
 }
 
-QPointF KisPaintingInformationBuilder::startPoint() const
-{
-    return m_startPoint;
-}
-
-QPointF KisPaintingInformationBuilder::adjustDocumentPoint(const QPointF &point)
+QPointF KisPaintingInformationBuilder::adjustDocumentPoint(const QPointF &point, const QPointF &/*startPoint*/)
 {
     return point;
 }
@@ -90,7 +85,7 @@ KisPaintInformation KisPaintingInformationBuilder::createPaintingInformation(KoP
                                                                              int timeElapsed)
 {
 
-    QPointF adjusted = adjustDocumentPoint(event->point);
+    QPointF adjusted = adjustDocumentPoint(event->point, m_startPoint);
     QPointF imagePoint = documentToImage(adjusted);
     qreal perspective = calculatePerspective(adjusted);
 
@@ -101,6 +96,23 @@ KisPaintInformation KisPaintingInformationBuilder::createPaintingInformation(KoP
                                event->tangentialPressure(),
                                perspective,
                                timeElapsed);
+}
+
+KisPaintInformation KisPaintingInformationBuilder::hover(const QPointF &imagePoint,
+                                                         const KoPointerEvent *event)
+{
+    qreal perspective = calculatePerspective(imagePoint);
+
+    if (event) {
+        return KisPaintInformation::createHoveringModeInfo(imagePoint,
+                                                           PRESSURE_DEFAULT,
+                                                           event->xTilt(), event->yTilt(),
+                                                           event->rotation(),
+                                                           0.0,
+                                                           perspective);
+    } else {
+        return KisPaintInformation::createHoveringModeInfo(imagePoint);
+    }
 }
 
 qreal KisPaintingInformationBuilder::pressureToCurve(qreal pressure)
@@ -120,9 +132,9 @@ KisToolPaintingInformationBuilder::KisToolPaintingInformationBuilder(KisToolFree
 {
 }
 
-QPointF KisToolPaintingInformationBuilder::adjustDocumentPoint(const QPointF &point)
+QPointF KisToolPaintingInformationBuilder::adjustDocumentPoint(const QPointF &point, const QPointF &startPoint)
 {
-    return m_tool->adjustPosition(point, startPoint());
+    return m_tool->adjustPosition(point, startPoint);
 }
 
 QPointF KisToolPaintingInformationBuilder::documentToImage(const QPointF &point)

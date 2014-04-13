@@ -50,7 +50,7 @@ class KoCompositeOp;
 class KisUndoAdapter;
 class KisPostExecutionUndoAdapter;
 class KisTransaction;
-class KisPattern;
+class KoPattern;
 class KisFilterConfiguration;
 class KisPaintInformation;
 class KisPaintOp;
@@ -239,7 +239,7 @@ public:
                                   const KisFixedPaintDeviceSP selection,
                                   qint32 selX, qint32 selY,
                                   qint32 srcX, qint32 srcY,
-                                  quint32 srcWidth, quint32 srcHeight);
+                                  qint32 srcWidth, qint32 srcHeight);
 
     /**
      * Convenience method that assumes @param selX, @param selY, @param srcX and @param srcY are
@@ -256,7 +256,7 @@ public:
     void bitBltWithFixedSelection(qint32 dstX, qint32 dstY,
                                   const KisPaintDeviceSP srcDev,
                                   const KisFixedPaintDeviceSP selection,
-                                  quint32 srcWidth, quint32 srcHeight);
+                                  qint32 srcWidth, qint32 srcHeight);
 
     /**
      * Blast a region of srcWidth @param srcWidth and srcHeight @param srcHeight from @param srcDev onto the current
@@ -609,10 +609,10 @@ public:
     bool hasMirroring() const;
 
     /// Set the current pattern
-    void setPattern(const KisPattern * pattern);
+    void setPattern(const KoPattern * pattern);
 
     /// Returns the currently set pattern
-    const KisPattern * pattern() const;
+    const KoPattern * pattern() const;
 
     /**
      * Set the color that will be used to paint with, and convert it
@@ -677,17 +677,18 @@ public:
 
     quint8 flow() const;
 
+    /**
+     * Sets the opacity of the painting and recalculates the
+     * mean opacity of the stroke. This mean value is used to
+     * make ALPHA_DARKEN painting look correct
+     */
+    void setOpacityUpdateAverage(quint8 opacity);
+
     /// Set the opacity which is used in painting (like filling polygons)
     void setOpacity(quint8 opacity);
 
     /// Returns the opacity that is used in painting
     quint8 opacity() const;
-
-    /// Sets the bounds of the painter area; if not set, the painter
-    /// will happily paint where you ask it, making the paint device
-    /// larger as it goes
-    void setBounds(const QRect & bounds);
-    QRect bounds();
 
     /// Set the composite op for this painter
     void setCompositeOp(const KoCompositeOp * op);
@@ -723,6 +724,13 @@ public:
     * Default and maximum size is 256x256 image
     */
     void setMaskImageSize(qint32 width, qint32 height);
+
+//    /**
+//     * If the alpha channel is locked, the alpha values of the paint device we are painting on
+//     * will not change.
+//     */
+//    void setLockAlpha(bool protect);
+//    bool alphaLocked() const;
 
     /**
      * set the rendering intent in case pixels need to be converted before painting

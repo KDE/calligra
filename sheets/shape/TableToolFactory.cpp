@@ -31,7 +31,7 @@ using namespace Calligra::Sheets;
 TableToolFactory::TableToolFactory()
     : KoToolFactoryBase("TableToolFactoryId")
 {
-    setToolTip(i18n("Table editing tool"));
+    setToolTip(i18n("Table editing"));
     setIconName(koIconNameCStr("spreadsheetshape"));
     setToolType(dynamicToolType());
     setPriority(1);

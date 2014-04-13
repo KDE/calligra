@@ -213,6 +213,21 @@ KUrl KexiReportView::getExportUrl(const QString &mimetype, const QString &captio
     return result;
 }
 
+void KexiReportView::openExportedDocument(const KUrl& destination)
+{
+    const int answer =
+        KMessageBox::questionYesNo(
+            this,
+            i18n("Do you want to open exported document?"),
+            QString(),
+            KStandardGuiItem::open(),
+            KStandardGuiItem::close());
+
+    if (answer == KMessageBox::Yes) {
+        (void)new KRun(destination, this->topLevelWidget());
+    }
+}
+
 void KexiReportView::slotExportAsSpreadsheet()
 {
     KoReportRendererBase *renderer;
@@ -232,7 +247,7 @@ void KexiReportView::slotExportAsSpreadsheet()
                                i18n("Failed to export the report as spreadsheet to %1.", cxt.destinationUrl.prettyUrl()),
                                i18n("Export Failed"));
         } else {
-            (void)new KRun(cxt.destinationUrl, this->topLevelWidget());
+            openExportedDocument(cxt.destinationUrl);
         }
     }
 }
@@ -256,7 +271,7 @@ void KexiReportView::slotExportAsTextDocument()
                                i18n("Exporting the report as text document to %1 failed.", cxt.destinationUrl.prettyUrl()),
                                i18n("Export Failed"));
         } else {
-            (void)new KRun(cxt.destinationUrl, this->topLevelWidget());
+            openExportedDocument(cxt.destinationUrl);
         }
     }
 }
@@ -294,7 +309,7 @@ void KexiReportView::slotExportAsWebPage()
                            i18n("Exporting the report as web page to %1 failed.", cxt.destinationUrl.prettyUrl()),
                            i18n("Export Failed"));
     } else {
-        (void)new KRun(cxt.destinationUrl, this->topLevelWidget());
+        openExportedDocument(cxt.destinationUrl);
     }
 }
 

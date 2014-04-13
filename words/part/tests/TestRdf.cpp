@@ -196,9 +196,10 @@ void TestRdf::foaf()
     expectedNames << "O'Brien";
     expectedNames << nameThatRemains;
 
-    QList<KoRdfFoaF*> col = rdf->foaf();
-    QCOMPARE (col.size(),10);
-    foreach (KoRdfFoaF* f, col) {
+    const QList<hKoRdfSemanticItem> semanticItems = rdf->semanticItems("Contact");
+    QCOMPARE (semanticItems.size(),10);
+    foreach (hKoRdfSemanticItem semanticItem, semanticItems) {
+        KoRdfFoaF* f = static_cast<KoRdfFoaF*>(semanticItem);
         expectedNames.remove (f->name());
         if (f->name()=="Dan Brickley") {
             QTemporaryFile file;
@@ -253,9 +254,10 @@ void TestRdf::calendarEvents()
     expectedNames << "Add Test";
     expectedNames << nameThatRemains;
 
-    QList<KoRdfCalendarEvent*> col = rdf->calendarEvents();
-    QCOMPARE (col.size(),4);
-    foreach (KoRdfCalendarEvent* f, col) {
+    const QList<hKoRdfSemanticItem> semanticItems = rdf->semanticItems("Event");
+    QCOMPARE (semanticItems.size(),4);
+    foreach (hKoRdfSemanticItem semanticItem, semanticItems) {
+        KoRdfCalendarEvent* f = static_cast<KoRdfCalendarEvent*>(semanticItem);
         expectedNames.remove (f->name());
 
         if (f->name()=="Lets party like its 1999") {
@@ -314,9 +316,10 @@ void TestRdf::locations()
     expectedNames << "-79.9458,40.4427";
     expectedNames << nameThatRemains;
 
-    QList<hKoRdfLocation> col = rdf->locations();
-    QCOMPARE (col.size(),2);
-    foreach (hKoRdfLocation f, col) {
+    const QList<hKoRdfSemanticItem> semanticItems = rdf->semanticItems("Location");
+    QCOMPARE (semanticItems.size(),2);
+    foreach (hKoRdfSemanticItem semanticItem, semanticItems) {
+        hKoRdfLocation* f = static_cast<hKoRdfLocation*>(semanticItem);
         expectedNames.remove (f->name());
 
         if (f->name()=="-79.9458,40.4427") {
@@ -476,8 +479,9 @@ void TestRdf::semanticItemViewSite()
     QVERIFY(m);
     QCOMPARE (234, m->statementCount());
 
-    QList<hKoRdfFoaF> col = rdf->foaf();
-    foreach (hKoRdfFoaF f, col) {
+    const QList<hKoRdfSemanticItem> semanticItems = rdf->semanticItems("Contact");
+    foreach (hKoRdfSemanticItem semanticItem, semanticItems) {
+        hKoRdfFoaF f = static_cast<hKoRdfFoaF>(semanticItem);
         if (f->name() == "James Smith") {
 
             hKoSemanticStylesheet ss = f->findStylesheetByUuid("0dd5878d-95c5-47e5-a777-63ec36da3b9a");
@@ -768,7 +772,7 @@ void TestRdf::createUserStylesheet()
     QSharedPointer<Soprano::Model> m = rdf->model();
     QVERIFY(m);
 
-    hKoRdfSemanticItem f = KoRdfSemanticItem::createSemanticItem(rdf, rdf, "Contact");
+    hKoRdfSemanticItem f = rdf->createSemanticItem("Contact", rdf);
     int originalUserStylesheetsSize = f->userStylesheets().size();
     hKoSemanticStylesheet ss = f->createUserStylesheet("test sheet A",
                                                        "%NAME% and again %NAME%");
@@ -904,9 +908,9 @@ void TestRdf::testRoundtrip()
 
         // search for locations and check the position
         // Find the location object
-        QList<hKoRdfLocation> locations = rdfDoc->locations();
+        QList<hKoRdfSemanticItem> locations = rdfDoc->semanticItems("Location");
         Q_ASSERT(locations.size() == 1);
-        hKoRdfLocation location2 = locations[0];
+        hKoRdfLocation location2 = static_cast<hKoRdfLocation>(locations[0]);
         QCOMPARE(location2->dlat(), location->dlat());
         QCOMPARE(location2->dlong(), location->dlong());
 
@@ -926,9 +930,9 @@ void TestRdf::testRoundtrip()
         QCOMPARE(position.second, 0);
 
         // Find the location object
-        locations = rdfDoc->locations();
+        locations = rdfDoc->semanticItems("Location");
         Q_ASSERT(locations.size() == 1);
-        hKoRdfLocation location3 = locations[0];
+        hKoRdfLocation location3 = static_cast<hKoRdfLocation>(locations[0]);
 
         QCOMPARE(location3->dlat(), location->dlat());
         QCOMPARE(location3->dlong(), location->dlong());
@@ -966,9 +970,9 @@ void TestRdf::testRoundtrip()
         editor->updateInlineObjectPosition();
 
         // Check for the rdf statements and spans
-        QList<hKoRdfLocation> locations = rdfDoc->locations();
+        const QList<hKoRdfSemanticItem> locations = rdfDoc->semanticItems("Location");
         Q_ASSERT(locations.size() == 1);
-        hKoRdfLocation location = locations[0];
+        hKoRdfLocation location = static_cast<hKoRdfLocation>(locations[0]);
         Q_ASSERT(location->name() == "10,5");
         Q_ASSERT(location->dlat() == 5.0);
         Q_ASSERT(location->dlong() == 10.0);

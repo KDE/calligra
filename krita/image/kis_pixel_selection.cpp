@@ -31,7 +31,7 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoColorModelStandardIds.h>
 #include <KoIntegerMaths.h>
-#include <KoCompositeOp.h>
+#include <KoCompositeOpRegistry.h>
 
 #include "kis_layer.h"
 #include "kis_debug.h"
@@ -41,15 +41,16 @@
 #include "kis_outline_generator.h"
 #include <kis_iterator_ng.h>
 
+
 struct KisPixelSelection::Private {
-    KisSelectionSP parentSelection;
+    KisSelectionWSP parentSelection;
 
     QPainterPath outlineCache;
     bool outlineCacheValid;
     QMutex outlineCacheMutex;
 };
 
-KisPixelSelection::KisPixelSelection(KisDefaultBoundsBaseSP defaultBounds, KisSelectionSP parentSelection)
+KisPixelSelection::KisPixelSelection(KisDefaultBoundsBaseSP defaultBounds, KisSelectionWSP parentSelection)
         : KisPaintDevice(0, KoColorSpaceRegistry::instance()->alpha8(), defaultBounds)
         , m_d(new Private)
 {
@@ -83,6 +84,13 @@ const KoColorSpace *KisPixelSelection::compositionSourceColorSpace() const
         colorSpace(GrayAColorModelID.id(),
                    Integer8BitsColorDepthID.id(),
                    QString());
+}
+
+bool KisPixelSelection::read(QIODevice *stream)
+{
+    bool retval = KisPaintDevice::read(stream);
+    m_d->outlineCacheValid = false;
+    return retval;
 }
 
 void KisPixelSelection::select(const QRect & rc, quint8 selectedness)
@@ -235,12 +243,19 @@ void KisPixelSelection::invert()
     // Region is needed here (not exactBounds or extent), because
     // unselected but existing pixels need to be inverted too
     QRect rc = region().boundingRect();
+    QRect imageBounds = defaultBounds()->bounds();
+
+    // check if rc have biger size than the whole image and set the rc size to the whole image one if yes.
+    if (rc.width() > imageBounds.width())
+      rc.setWidth(imageBounds.intersect(rc).width());
+    if (rc.height() > imageBounds.height())
+      rc.setHeight(imageBounds.intersect(rc).height());
 
     if (!rc.isEmpty()) {
-        KisRectIteratorSP it = createRectIteratorNG(rc.x(), rc.y(), rc.width(), rc.height());
+        KisSequentialIterator it(this, rc);
         do {
-            *(it->rawData()) = MAX_SELECTED - *(it->rawData());
-        } while (it->nextPixel());
+            *(it.rawData()) = MAX_SELECTED - *(it.rawData());
+        } while (it.nextPixel());
     }
     quint8 defPixel = MAX_SELECTED - *defaultPixel();
     setDefaultPixel(&defPixel);
@@ -251,6 +266,15 @@ void KisPixelSelection::invert()
 
         m_d->outlineCache = path - m_d->outlineCache;
     }
+}
+
+void KisPixelSelection::move(const QPoint &pt)
+{
+    if (m_d->outlineCacheValid) {
+        m_d->outlineCache.translate(pt - QPoint(x(), y()));
+    }
+
+    KisPaintDevice::move(pt);
 }
 
 bool KisPixelSelection::isTotallyUnselected(const QRect & r) const
@@ -280,8 +304,8 @@ QVector<QPolygon> KisPixelSelection::outline() const
     qint32 height = selectionExtent.height();
 
     KisOutlineGenerator generator(colorSpace(), MIN_SELECTED);
-    // If the selection is small using a buffer is much fast
-    if (width*height < 5000000) {
+    // If the selection is small using a buffer is much faster
+    try {
         quint8* buffer = new quint8[width*height];
         readBytes(buffer, xOffset, yOffset, width, height);
 
@@ -290,6 +314,11 @@ QVector<QPolygon> KisPixelSelection::outline() const
         delete[] buffer;
         return paths;
     }
+    catch(std::bad_alloc) {
+        // Allocating so much memory failed, so we fall through to the slow option.
+        warnKrita << "KisPixelSelection::outline ran out of memory allocating" << width << "*" << height << "bytes.";
+    }
+
     return generator.outline(this, xOffset, yOffset, width, height);
 }
 
@@ -331,17 +360,28 @@ void KisPixelSelection::recalculateOutlineCache()
 
     foreach (const QPolygon &polygon, outline()) {
         m_d->outlineCache.addPolygon(polygon);
+
+        /**
+         * The outline generation algorithm has a small bug, which
+         * results in the starting point be repeated twice in the
+         * beginning of the path, instead of being put to the
+         * end. Here we just explicitly close the path to workaround
+         * it.
+         *
+         * \see KisSelectionTest::testOutlineGeneration()
+         */
+        m_d->outlineCache.closeSubpath();
     }
 
     m_d->outlineCacheValid = true;
 }
 
-void KisPixelSelection::setParentSelection(KisSelectionSP selection)
+void KisPixelSelection::setParentSelection(KisSelectionWSP selection)
 {
     m_d->parentSelection = selection;
 }
 
-KisSelectionSP KisPixelSelection::parentSelection() const
+KisSelectionWSP KisPixelSelection::parentSelection() const
 {
     return m_d->parentSelection;
 }

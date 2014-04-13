@@ -190,7 +190,7 @@ KoTextLayoutRootArea* KWRootAreaProvider::provideNext(KoTextDocumentLayout *docu
                             visiblePageNumber = num;
                     }
                 }
-                KWPage page = kwdoc->appendPage(masterPageName, false);
+                KWPage page = kwdoc->appendPage(masterPageName);
                 Q_ASSERT(page.isValid());
                 if (visiblePageNumber >= 0)
                     page.setVisiblePageNumber(visiblePageNumber);

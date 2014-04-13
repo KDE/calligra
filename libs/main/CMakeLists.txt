@@ -1,5 +1,11 @@
 add_subdirectory( tests )
 
+# generate calligraversion.h
+configure_file(calligraversion.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/calligraversion.h)
+
+# generate calligragitversion.h
+configure_file(calligragitversion.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/calligragitversion.h)
+
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})
 
 if (APPLE)
@@ -23,7 +29,6 @@ set(komain_LIB_SRCS
     KoDocumentInfo.cpp
     KoDocumentInfoDlg.cpp
     KoDocumentInfoPropsPage.cpp
-    KoFileDialog.cpp
     KoGlobal.cpp
     KoGridData.cpp
     KoMainWindow.cpp
@@ -51,7 +56,6 @@ set(komain_LIB_SRCS
     KoFilterEdge.cpp
     KoFilterChainLink.cpp
     KoFilterChainLinkList.cpp
-    KoServiceProvider.cpp
     KoStandardAction.cpp
     KoUndoStackAction.cpp
     config/KoConfigDocumentPage.cpp
@@ -64,7 +68,6 @@ set(komain_LIB_SRCS
     KoDocumentSectionView.cpp
 
     KoDetailsPane.cpp
-    KoExistingDocumentPane.cpp
     KoOpenPane.cpp
     KoRecentDocumentsPane.cpp
     KoTemplate.cpp
@@ -111,7 +114,6 @@ kde4_add_ui_files( komain_LIB_SRCS
 kde4_add_library(komain SHARED ${komain_LIB_SRCS})
 
 target_link_libraries(komain ${extra_libs}
-    ${KDE4_KPARTS_LIBS}
     ${KDE4_KFILE_LIBRARY}
     kowidgets
     kotextlayout
@@ -127,7 +129,7 @@ if (APPLE)
     target_link_libraries(komain ${FOUNDATION_LIBRARY})
 endif (APPLE)
 
-target_link_libraries(komain LINK_INTERFACE_LIBRARIES kotext kowidgets ${KDE4_KPARTS_LIBS})
+target_link_libraries(komain LINK_INTERFACE_LIBRARIES kotext kowidgets )
 
 set_target_properties(komain PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
@@ -165,14 +167,15 @@ install( FILES
     KoGlobal.h
     KoGridData.h
     KoMainWindow.h
+    KoPageWidgetItem.h
     MacSupport.h
     KoModeBoxFactory.h
-    KoServiceProvider.h
     KoPart.h
     KoPrintJob.h
     KoVersionDialog.h
     KoView.h
-    calligraversion.h
+    ${CMAKE_CURRENT_BINARY_DIR}/calligraversion.h
+    ${CMAKE_CURRENT_BINARY_DIR}/calligragitversion.h
     KoStandardAction.h
     komain_export.h
 DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel)

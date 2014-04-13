@@ -35,16 +35,17 @@ class QTransform;
 class KRITAIMAGE_EXPORT KisTransformWorker
 {
 
-    /*What are xshearOrigin, yshearOrigin :
-* let's keep it simple and say we only have horizontal shearing (it's similar with vertical shearing)
-* that means we will apply the transformation :
-* x' = x + xshear * y and y' = y, where x,y are the old coordinates of the pixels, and x' y' the new coordinates
-* that means, the more we go down in the image (y++), the more x' is different from x
-* most of the times, we want to shear a part of the image centered at y = y0 != 0.
-* i.e. we want x' = x at y = y0
-* in that case, it's good to apply instead x' = x + xshear * (y - yshearOrigin), y' = y.
-* please note that it's still possible to obtain the same result by copying the part you want to shear at
-* in another paintDevice at y = -y0 and use the transformWorker with yshearOrigin = 0.
+/* What are xshearOrigin, yshearOrigin :
+ *
+ * let's keep it simple and say we only have horizontal shearing (it's similar with vertical shearing)
+ * that means we will apply the transformation :
+ * x' = x + xshear * y and y' = y, where x,y are the old coordinates of the pixels, and x' y' the new coordinates
+ * that means, the more we go down in the image (y++), the more x' is different from x
+ * most of the times, we want to shear a part of the image centered at y = y0 != 0.
+ * i.e. we want x' = x at y = y0
+ * in that case, it's good to apply instead x' = x + xshear * (y - yshearOrigin), y' = y.
+ * please note that it's still possible to obtain the same result by copying the part you want to shear at
+ * in another paintDevice at y = -y0 and use the transformWorker with yshearOrigin = 0.
 */
 public:
     KisTransformWorker(KisPaintDeviceSP dev,
@@ -57,21 +58,24 @@ public:
                        KisFilterStrategy *filter);
     ~KisTransformWorker();
 
-    /**
-     * Mirror the specified device along the X axis
-     * @param dev device to be mirrored
-     * @param axis the axis around which the device will be mirrored, only used if greater zero
-     * @param selection optional selection that will be used for the mirror
-     */
-    static QRect mirrorX(KisPaintDeviceSP dev, qreal axis = -1.0f, const KisSelection* selection = 0);
 
     /**
-     * Mirror the specified device along the Y axis
-     * @param dev device to be mirrored
-     * @param axis the axis around which the device will be mirrored, only used if greater zero
-     * @param selection optional selection that will be used for the mirror
+     * Mirror the specified device along the X or Y axis at the
+     * coordinate \p axis.
      */
-    static QRect mirrorY(KisPaintDeviceSP dev, qreal axis = -1.0f, const KisSelection* selection = 0);
+    static void mirror(KisPaintDeviceSP dev, qreal axis, Qt::Orientation orientation);
+
+    /**
+     * Convenience methods for mirror(dev, axis, orientation)
+     */
+    static void mirrorX(KisPaintDeviceSP dev, qreal axis);
+    static void mirrorY(KisPaintDeviceSP dev, qreal axis);
+
+    /**
+     * Mirror the device relative to the center of its exactBounds()
+     */
+    static void mirrorX(KisPaintDeviceSP dev);
+    static void mirrorY(KisPaintDeviceSP dev);
 
     /**
      * Offset the specified device with wraping around edges of rect specified as QRect(0,0,wrapSize.width, wrapSize.height)*

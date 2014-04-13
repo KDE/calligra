@@ -96,7 +96,9 @@ KisNodeSP KisNodeModel::nodeFromIndex(const QModelIndex &index) const
 QModelIndex KisNodeModel::indexFromNode(KisNodeSP node) const
 {
     KisNodeDummy *dummy = m_d->dummiesFacade->dummyForNode(node);
-    return m_d->indexConverter->indexFromDummy(dummy);
+    if(dummy)
+        return m_d->indexConverter->indexFromDummy(dummy);
+    return QModelIndex();
 }
 
 bool KisNodeModel::belongsToIsolatedGroup(KisNodeSP node) const
@@ -439,6 +441,7 @@ bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int 
                 m_d->image->undoAdapter()->addCommand(cmd);
             }
             else {
+                m_d->image->setModified();
                 cmd->redo();
                 delete cmd;
             }

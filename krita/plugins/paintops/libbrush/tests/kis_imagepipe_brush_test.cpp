@@ -24,6 +24,7 @@
 #include <KoColor.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoCompositeOpRegistry.h>
 #include <kis_fixed_paint_device.h>
 #include <kis_paint_information.h>
 
@@ -43,7 +44,7 @@
 
 inline void KisImagePipeBrushTest::checkConsistency(KisImagePipeBrush *brush)
 {
-    qreal scale = 0.5;
+    qreal scale = 0.5; Q_UNUSED(scale);
     KisGbrBrush *firstBrush = brush->testingGetBrushes().first();
 
     /**
@@ -77,8 +78,8 @@ inline void KisImagePipeBrushTest::checkConsistency(KisImagePipeBrush *brush)
     qreal subPixelX = 0;
     qreal subPixelY = 0;
 
-    int maskWidth = brush->maskWidth(realScale, realAngle, info);
-    int maskHeight = brush->maskHeight(realScale, realAngle, info);
+    int maskWidth = brush->maskWidth(realScale, realAngle, subPixelX, subPixelY, info);
+    int maskHeight = brush->maskHeight(realScale, realAngle, subPixelX, subPixelY, info);
 
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     KisFixedPaintDeviceSP dev = brush->testingGetCurrentBrush(info)->paintDevice(cs, realScale, realAngle, info, subPixelX, subPixelY);
@@ -130,11 +131,13 @@ void checkIncrementalPainting(KisBrush *brush, const QString &prefix)
     KisFixedPaintDeviceSP fixedDab = new KisFixedPaintDevice(cs);
 
     qreal rotation = 0;
+    qreal subPixelX = 0.0;
+    qreal subPixelY = 0.0;
     KisPaintInformation info(QPointF(100.0, 100.0), 0.5, 0, 0, rotation, 0);
 
     for (int i = 0; i < 20; i++) {
-        int maskWidth = brush->maskWidth(realScale, realAngle, info);
-        int maskHeight = brush->maskHeight(realScale, realAngle, info);
+        int maskWidth = brush->maskWidth(realScale, realAngle, subPixelX, subPixelY, info);
+        int maskHeight = brush->maskHeight(realScale, realAngle, subPixelX, subPixelY, info);
         QRect fillRect(0, 0, maskWidth, maskHeight);
 
         fixedDab->setRect(fillRect);
@@ -216,8 +219,8 @@ void KisImagePipeBrushTest::testColoredDabWash()
     const QVector<KisGbrBrush*> gbrs = brush->testingGetBrushes();
 
     KisFixedPaintDeviceSP dab = gbrs.at(0)->paintDevice(cs, 2.0, 0.0, info);
-    painter.bltFixed(0,0, dab, 0,0,dab->bounds().width(), dab->bounds().height());
-    painter.bltFixed(80,60, dab, 0,0,dab->bounds().width(), dab->bounds().height());
+    painter.bltFixed(0, 0, dab, 0, 0, dab->bounds().width(), dab->bounds().height());
+    painter.bltFixed(80, 60, dab, 0, 0, dab->bounds().width(), dab->bounds().height());
 
     painter.end();
 

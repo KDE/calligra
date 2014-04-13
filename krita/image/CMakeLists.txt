@@ -21,7 +21,6 @@ set(libkritatile_SRCS
     ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_memento_manager.cc
     ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_hline_iterator.cpp
     ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_vline_iterator.cpp
-    ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_rect_iterator.cpp
     ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_random_accessor.cc
     ${CMAKE_SOURCE_DIR}/krita/image/tiles3/swap/kis_abstract_compression.cpp
     ${CMAKE_SOURCE_DIR}/krita/image/tiles3/swap/kis_lzf_compression.cpp
@@ -40,16 +39,13 @@ option(HAVE_MEMORY_LEAK_TRACKER "Enable memory leak tracker (always disabled in 
 option(HAVE_BACKTRACE_SUPPORT "Enable recording of backtrace in memory leak tracker" OFF)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-memory-leak-tracker.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-memory-leak-tracker.h) ### WRONG PLACE???
 
-if(NOT WIN32)
-    macro_optional_find_package(FFTW3)
-    macro_log_feature(FFTW3_FOUND "FFTW3" "A fast, free C FFT library" "http://www.fftw.org/" FALSE "" "Required by the Krita for fast convolution operators")
-    macro_bool_to_01(FFTW3_FOUND HAVE_FFTW3)
-endif(NOT WIN32)
-configure_file(config_convolution.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config_convolution.h)
-
 include_directories( ${CMAKE_SOURCE_DIR}/krita/image/metadata
                      ${KOMAIN_INCLUDES}
 )
+
+if(FFTW3_FOUND)
+  include_directories(${FFTW3_INCLUDE_DIRS})
+endif(FFTW3_FOUND)
 
 if(HAVE_VC)
   include_directories(${Vc_INCLUDE_DIR})
@@ -60,6 +56,7 @@ endif(HAVE_VC)
 
 set(kritaimage_LIB_SRCS
    ${libkritatile_SRCS}
+   kis_assert.cpp
    kis_distance_information.cpp
    kis_painter.cc
    kis_progress_updater.cpp
@@ -76,6 +73,7 @@ set(kritaimage_LIB_SRCS
    commands/kis_image_layer_add_command.cpp
    commands/kis_image_layer_move_command.cpp
    commands/kis_image_layer_remove_command.cpp
+   commands/kis_image_layer_remove_command_impl.cpp
    commands/kis_image_node_lower_command.cpp
    commands/kis_image_node_raise_command.cpp
    commands/kis_image_node_to_bottom_command.cpp
@@ -91,13 +89,16 @@ set(kritaimage_LIB_SRCS
    commands/kis_set_global_selection_command.cpp
    commands_new/kis_saved_commands.cpp
    commands_new/kis_processing_command.cpp
-   commands_new/kis_node_move_command2.cpp
    commands_new/kis_image_resize_command.cpp
    commands_new/kis_image_set_resolution_command.cpp
+   commands_new/kis_selection_move_command2.cpp
    commands_new/kis_update_command.cpp
+   processing/kis_do_nothing_processing_visitor.cpp
    processing/kis_simple_processing_visitor.cpp
    processing/kis_crop_processing_visitor.cpp
+   processing/kis_crop_selections_processing_visitor.cpp
    processing/kis_transform_processing_visitor.cpp
+   processing/kis_mirror_processing_visitor.cpp
    filter/kis_filter.cc
    filter/kis_filter_configuration.cc
    filter/kis_filter_registry.cc
@@ -105,10 +106,11 @@ set(kritaimage_LIB_SRCS
    generator/kis_generator.cpp
    generator/kis_generator_layer.cpp
    generator/kis_generator_registry.cpp
+   floodfill/kis_fill_interval_map.cpp
+   floodfill/kis_scanline_fill.cpp
    kis_adjustment_layer.cc
    kis_selection_based_layer.cpp
    kis_node_filter_interface.cpp
-   kis_background.cpp
    kis_base_accessor.cpp
    kis_base_node.cpp
    kis_base_processor.cpp
@@ -120,6 +122,7 @@ set(kritaimage_LIB_SRCS
    kis_config_widget.cpp
    kis_convolution_kernel.cc
    kis_convolution_painter.cc
+   kis_gaussian_kernel.cpp
    kis_cubic_curve.cpp
    kis_default_bounds.cpp
    kis_default_bounds_base.cpp
@@ -162,7 +165,6 @@ set(kritaimage_LIB_SRCS
    kis_gauss_circle_mask_generator.cpp
    kis_gauss_rect_mask_generator.cpp
    ${__per_arch_circle_mask_generator_objs}
-   kis_gtl_lock.cpp
    kis_curve_circle_mask_generator.cpp
    kis_curve_rect_mask_generator.cpp
    kis_math_toolbox.cpp
@@ -175,7 +177,6 @@ set(kritaimage_LIB_SRCS
    kis_paint_device.cc
    kis_fixed_paint_device.cpp
    kis_paint_layer.cc
-   kis_pattern.cc
    kis_perspective_grid.cpp
    kis_perspective_math.cpp
    kis_pixel_selection.cpp
@@ -184,6 +185,7 @@ set(kritaimage_LIB_SRCS
    kis_random_accessor_ng.cpp
    kis_random_generator.cc
    kis_random_sub_accessor.cpp
+   kis_wrapped_random_accessor.cpp
    kis_selection.cc
    kis_selection_mask.cpp
    kis_update_outline_job.cpp

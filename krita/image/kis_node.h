@@ -272,6 +272,7 @@ private:
 
 protected:
     KisBaseNodeSP parentCallback() const;
+    void notifyParentVisibilityChanged(bool value);
     void baseNodeChangedCallback();
 
     /**
@@ -323,6 +324,8 @@ private:
      */
     bool remove(KisNodeSP node);
 
+    KisNodeSP prevChildImpl(KisNodeSP child);
+    KisNodeSP nextChildImpl(KisNodeSP child);
 
 private:
 

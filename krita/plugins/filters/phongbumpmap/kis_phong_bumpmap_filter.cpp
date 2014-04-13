@@ -20,11 +20,13 @@
 #include "kis_phong_bumpmap_config_widget.h"
 #include "phong_pixel_processor.h"
 
+#include "kis_debug.h"
 #include "kis_paint_device.h"
 #include "kis_config_widget.h"
 #include "KoUpdater.h"
 #include "kis_math_toolbox.h"
 #include "KoColorSpaceRegistry.h"
+#include <KoChannelInfo.h>
 #include <filter/kis_filter_configuration.h>
 #include "kis_iterator_ng.h"
 #include "kundo2command.h"
@@ -36,7 +38,6 @@ KisFilterPhongBumpmap::KisFilterPhongBumpmap()
 {
     setColorSpaceIndependence(TO_LAB16);
     setSupportsPainting(true);
-    setSupportsIncrementalPainting(true);
 }
 
 void KisFilterPhongBumpmap::processImpl(KisPaintDeviceSP device,
@@ -68,6 +69,10 @@ void KisFilterPhongBumpmap::processImpl(KisPaintDeviceSP device,
             m_heightChannel = channel;
         }
     }
+    if (!m_heightChannel) {
+        m_heightChannel = device->colorSpace()->channels().first();
+    }
+    KIS_ASSERT_RECOVER_RETURN(m_heightChannel);
 
     QRect inputArea = applyRect;
     QRect outputArea = applyRect;
