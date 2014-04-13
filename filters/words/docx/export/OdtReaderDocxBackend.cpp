@@ -77,18 +77,8 @@ void OdtReaderDocxBackend::elementOfficeBody(KoXmlStreamReader &reader, OdfReade
 
         // Start the document and add all necessary namespaces to it.
         writer->startElement("w:document");
-        writer->addAttribute("xmlns:wpc", "http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas");
-        writer->addAttribute("xmlns:o", "urn:schemas-microsoft-com:office:office");
         writer->addAttribute("xmlns:r", "http://schemas.openxmlformats.org/officeDocument/2006/relationships");
-        writer->addAttribute("xmlns:m", "http://schemas.openxmlformats.org/officeDocument/2006/math");
-        writer->addAttribute("xmlns:v", "urn:schemas-microsoft-com:vml");
-        writer->addAttribute("xmlns:wp", "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing");
-        writer->addAttribute("xmlns:w10", "urn:schemas-microsoft-com:office:word");
         writer->addAttribute("xmlns:w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main");
-        writer->addAttribute("xmlns:wpg", "http://schemas.microsoft.com/office/word/2010/wordprocessingGroup");
-        writer->addAttribute("xmlns:wpi", "http://schemas.microsoft.com/office/word/2010/wordprocessingInk");
-        writer->addAttribute("xmlns:wne", "http://schemas.microsoft.com/office/word/2006/wordml");
-        writer->addAttribute("xmlns:wps", "http://schemas.microsoft.com/office/word/2010/wordprocessingShape");
 
         writer->startElement("w:body");
     }

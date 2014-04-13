@@ -185,18 +185,18 @@ KoFilter::ConversionStatus DocxFile::writeTopLevelRels(KoStore *docxStore)
     writer.endElement();  // Relationship
 
     // Doc props core
-    writer.startElement("Relationship");
-    writer.addAttribute("Id", "rId2");
-    writer.addAttribute("Type", "http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties");
-    writer.addAttribute("Target", "docProps/core.xml");
-    writer.endElement();  // Relationship
+    //writer.startElement("Relationship");
+    //writer.addAttribute("Id", "rId2");
+    //writer.addAttribute("Type", "http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties");
+    //writer.addAttribute("Target", "docProps/core.xml");
+    //writer.endElement();  // Relationship
 
     // Doc props app
-    writer.startElement("Relationship");
-    writer.addAttribute("Id", "rId3");
-    writer.addAttribute("Type", "http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties");
-    writer.addAttribute("Target", "docProps/app.xml");
-    writer.endElement();  // Relationship
+    //writer.startElement("Relationship");
+    //writer.addAttribute("Id", "rId3");
+    //writer.addAttribute("Type", "http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties");
+    //writer.addAttribute("Target", "docProps/app.xml");
+    //writer.endElement();  // Relationship
 
     writer.endElement();  // Relationships
     writer.endDocument();
