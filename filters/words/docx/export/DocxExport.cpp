@@ -103,7 +103,7 @@ KoFilter::ConversionStatus DocxExport::convert(const QByteArray& from, const QBy
     styleWriter.read();
 
     // Add the styles to the docx file.
-    docxFile.addContentFile("", "word/styles.xml",
+    docxFile.addContentFile("", "/word/styles.xml",
                             "vnd.openxmlformats-officedocument.wordprocessingml.styles+xml",
                             styleWriter.m_documentContent);
 
@@ -111,7 +111,7 @@ KoFilter::ConversionStatus DocxExport::convert(const QByteArray& from, const QBy
     odtReader.readContent(&docxBackend, &docxBackendContext);
 
     // Add the newly converted document contents to the docx file.
-    docxFile.addContentFile("", "word/document.xml",
+    docxFile.addContentFile("", "/word/document.xml",
                             "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml",
                             docxBackendContext.m_documentContent);
 
