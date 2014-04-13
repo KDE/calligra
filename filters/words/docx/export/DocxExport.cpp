@@ -3,7 +3,7 @@
    Copyright (C) 2000 Michael Johnson <mikej@xnet.com>
    Copyright (C) 2001, 2002, 2004 Nicolas GOUTTE <goutte@kde.org>
    Copyright (C) 2010-2011 Thorsten Zachmann <zachmann@kde.org>
-   Copyright (C) 2010 Christoph Cullmann <cullmann@kde.org> 
+   Copyright (C) 2010 Christoph Cullmann <cullmann@kde.org>
    Copyright (C) 2013 Inge Wallin <inge@lysator.liu.se>
 
    This library is free software; you can redistribute it and/or
@@ -104,7 +104,7 @@ KoFilter::ConversionStatus DocxExport::convert(const QByteArray& from, const QBy
 
     // Add the styles to the docx file.
     docxFile.addContentFile("", "/word/styles.xml",
-                            "vnd.openxmlformats-officedocument.wordprocessingml.styles+xml",
+                            "application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml",
                             styleWriter.m_documentContent);
 
 

@@ -107,11 +107,11 @@ void DocxStyleWriter::read()
             m_documentWriter->startElement("w:pPr");
             KoOdfStyleProperties *paragraphProperties = style->properties("style:paragraph-properties");
             DocxStyleHelper::handleParagraphStyles(paragraphProperties, m_documentWriter);
+            m_documentWriter->endElement(); // w:pPr
             KoOdfStyleProperties *textProperties = style->properties("style:text-properties");
             m_documentWriter->startElement("w:rPr");
             DocxStyleHelper::handleTextStyles(textProperties, m_documentWriter);
             m_documentWriter->endElement(); // w:rPr
-            m_documentWriter->endElement(); // w:pPr
             m_documentWriter->endElement(); // w:style
         }
         else if (family == "text") {
