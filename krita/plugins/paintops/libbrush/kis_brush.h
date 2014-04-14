@@ -131,11 +131,6 @@ public:
     }
 
     /**
-     * @return a preview of the brush
-     */
-    virtual QImage image() const;
-
-    /**
      * @brief brushImage the image the brush tip can paint with. Not all brush types have a single
      * image.
      * @return a valid QImage.
@@ -319,11 +314,8 @@ protected:
 protected:
     virtual QByteArray generateMD5() const;
 
-    QImage m_image;
-
     void resetBoundary();
 
-protected:
     void predefinedBrushToXML(const QString &type, QDomElement& e) const;
 
 private:

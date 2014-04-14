@@ -54,10 +54,6 @@ public:
 
     virtual QPainterPath outline() const;
 
-protected:
-    virtual void setBrushTipImage(const QImage& image);
-
-
 public:
 
     bool load() {

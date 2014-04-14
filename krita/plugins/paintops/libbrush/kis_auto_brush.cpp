@@ -312,12 +312,6 @@ qreal KisAutoBrush::randomness() const
     return d->randomness;
 }
 
-void KisAutoBrush::setBrushTipImage(const QImage& image)
-{
-    m_image = image;
-    clearBrushPyramid();
-}
-
 QPainterPath KisAutoBrush::outline() const
 {
     bool simpleOutline = (d->density < 1.0);

@@ -124,6 +124,8 @@ struct KisBrush::Private {
     QPointF hotSpot;
 
     mutable KisQImagePyramid *brushPyramid;
+
+    QImage brushTipImage;
 };
 
 KisBrush::KisBrush()
@@ -143,7 +145,7 @@ KisBrush::KisBrush(const KisBrush& rhs)
     , KisShared()
     , d(new Private)
 {
-    m_image = rhs.m_image;
+    setBrushTipImage(rhs.brushTipImage());
     d->brushType = rhs.d->brushType;
     d->width = rhs.d->width;
     d->height = rhs.d->height;
@@ -163,14 +165,9 @@ KisBrush::~KisBrush()
     delete d;
 }
 
-QImage KisBrush::image() const
-{
-    return m_image;
-}
-
 QImage KisBrush::brushTipImage() const
 {
-    return m_image;
+    return d->image;
 }
 
 qint32 KisBrush::width() const
@@ -254,7 +251,8 @@ bool KisBrush::canPaintFor(const KisPaintInformation& /*info*/)
 void KisBrush::setBrushTipImage(const QImage& image)
 {
     Q_ASSERT(!image.isNull());
-    m_image = image;
+    setImage(image);
+    d->image = image;
 
     setWidth(image.width());
     setHeight(image.height());
