@@ -35,7 +35,6 @@ struct KoAbstractGradient::Private {
     const KoColorSpace* colorSpace;
     QGradient::Spread spread;
     QGradient::Type type;
-    QImage image;
 };
 
 KoAbstractGradient::KoAbstractGradient(const QString& filename)
@@ -143,12 +142,7 @@ QByteArray KoAbstractGradient::generateMD5() const
     return QByteArray();
 }
 
-QImage KoAbstractGradient::image() const
-{
-    return d->image;
-}
-
 void KoAbstractGradient::updatePreview()
 {
-    d->image = generatePreview(PREVIEW_WIDTH, PREVIEW_HEIGHT);
+    setImage(generatePreview(PREVIEW_WIDTH, PREVIEW_HEIGHT));
 }
