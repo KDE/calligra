@@ -75,13 +75,29 @@ void KritaSteamClient::MiniDumpFunction(const QString& comment, unsigned int nEx
 
 
 
+class KritaSteamClient::Private
+{
+public:
+    Private(KritaSteamClient* qq)
+    : appId(0)
+      , initialisedWithoutError(false)
+      , bigPictureMode(false)
+      , callbackTimer(0)
+    {
+
+    }
+
+    uint32 appId;
+    bool initialisedWithoutError;
+    bool bigPictureMode;
+    QTimer* callbackTimer;
+};
+
 KritaSteamClient::KritaSteamClient(QObject *parent) :
     QObject(parent),
-    m_initialisedWithoutError(false),
-    m_callbackTimer(0),
-    m_bigPictureMode(false),
     m_gameOverlayActivatedCallback( this, &KritaSteamClient::onGameOverlayActivated ),
-    m_steamShutdownCallback( this, &KritaSteamClient::onSteamShutdown )
+    m_steamShutdownCallback( this, &KritaSteamClient::onSteamShutdown ),
+    d( new Private(this) )
 {
 }
 
@@ -94,6 +110,7 @@ bool KritaSteamClient::initialise(uint32 appId)
 {
     const char* steamLanguage = 0;
 
+    d->appId = appId;
     if (appId != k_uAppIdInvalid) {
         if (SteamAPI_RestartAppIfNecessary(appId))
         {
@@ -109,20 +126,20 @@ bool KritaSteamClient::initialise(uint32 appId)
     if (!bigPictureEnvVar.isEmpty()) {
         qDebug("Steam is in BIG PICTURE mode");
         if (strcmp(bigPictureEnvVar.constData(), "1")==0) {
-            m_bigPictureMode = true;
+            d->bigPictureMode = true;
         }
     }
 
-    if (m_bigPictureMode) {
+    if (d->bigPictureMode) {
         qDebug("Steam is in BIG PICTURE mode");
     } else {
-        qDebug("Steam is in not in BIG PICTURE mode");
+        qDebug("Steam is not in BIG PICTURE mode");
     }
 
 
-    m_initialisedWithoutError = SteamAPI_Init();
-    if (m_initialisedWithoutError) {
-        qDebug("Steam initialised correctly!");
+   d->initialisedWithoutError = SteamAPI_Init();
+    if (d->initialisedWithoutError) {
+        qDebug("Steam initialised correctly");
 
         // set our debug handler
         SteamClient()->SetWarningMessageHook( &SteamAPIDebugTextHook );
@@ -146,22 +163,21 @@ bool KritaSteamClient::initialise(uint32 appId)
         SteamController()->Init( rgchFullPath );
         */
     } else {
-        qDebug("Steam did not initialise!");
-        return false;
+        qDebug("Steam did not initialise correctly!");
     }
     return true;
 }
 
 void KritaSteamClient::shutdown()
 {
-    if(m_initialisedWithoutError) {
+    if(d->initialisedWithoutError) {
         //SteamController()->Shutdown();
         SteamAPI_Shutdown();
     }
 }
 
 bool KritaSteamClient::isInBigPictureMode() {
-    return m_bigPictureMode;
+    return d->bigPictureMode;
 }
 
 // Slots
@@ -174,20 +190,25 @@ void KritaSteamClient::runCallbacks()
 
 void KritaSteamClient::mainWindowCreated()
 {
-    // Register >10Hz timer to process SteamAPI callback mechanism
-    m_callbackTimer = new QTimer(this);
-    m_callbackTimer->setInterval(100); // 10Hz
-    m_callbackTimer->setSingleShot(false);
-    connect(m_callbackTimer, SIGNAL(timeout()), this, SLOT(runCallbacks()));
-    m_callbackTimer->start();
+    if (d->initialisedWithoutError) {
+        // Register >10Hz timer to process SteamAPI callback mechanism
+        d->callbackTimer = new QTimer(this);
+        d->callbackTimer->setInterval(100); // 10Hz
+        d->callbackTimer->setSingleShot(false);
+        connect(d->callbackTimer, SIGNAL(timeout()), this, SLOT(runCallbacks()));
+        d->callbackTimer->start();
+    }
 }
 
 void KritaSteamClient::mainWindowBeingDestroyed()
 {
-    if (m_callbackTimer != 0) {
-        m_callbackTimer->disconnect();
-        m_callbackTimer->stop();
-        delete m_callbackTimer;
+    if (d->initialisedWithoutError) {
+        if (d->callbackTimer != 0) {
+            d->callbackTimer->disconnect();
+            d->callbackTimer->stop();
+            delete d->callbackTimer;
+            d->callbackTimer = 0;
+        }
     }
 }
 
@@ -208,6 +229,11 @@ void KritaSteamClient::onGameOverlayActivated( GameOverlayActivated_t *callback 
 void KritaSteamClient::onSteamShutdown( SteamShutdown_t *callback )
 {
     qDebug("Steam shutdown request, TODO: shutdown");
+}
+
+bool KritaSteamClient::isInitialised()
+{
+    return d->initialisedWithoutError;
 }
 
 #include "kritasteamclient.moc"

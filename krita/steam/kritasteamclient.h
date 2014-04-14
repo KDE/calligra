@@ -42,23 +42,29 @@ public:
     virtual ~KritaSteamClient();
 
     // Steam Functions
+    /**
+     * @brief Initialise the Steam API
+     * @param appId
+     * @return true if Krita was launched from Steam, false otherwise
+     */
     bool initialise(uint32 appId);
     void shutdown();
+
     bool isInBigPictureMode();
+    bool isInitialised();
 
 private:
     // Singleton has private constructor
     explicit KritaSteamClient(QObject *parent = 0);
     static KritaSteamClient *sm_instance;
 
-    bool m_bigPictureMode;
+    class Private;
+    Private * const d;
 
     // Steam callbacks
     STEAM_CALLBACK( KritaSteamClient, onGameOverlayActivated, GameOverlayActivated_t, m_gameOverlayActivatedCallback );
     STEAM_CALLBACK( KritaSteamClient, onSteamShutdown, SteamShutdown_t, m_steamShutdownCallback );
 
-    bool m_initialisedWithoutError;
-    QTimer* m_callbackTimer;
 signals:
     void overlayActivated();
     void overlayDeactivated();

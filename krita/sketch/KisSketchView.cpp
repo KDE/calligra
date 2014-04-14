@@ -171,13 +171,18 @@ KisSketchView::KisSketchView(QDeclarativeItem* parent)
     connect(DocumentManager::instance(), SIGNAL(documentSaved()), d->savedTimer, SLOT(start()));
 
 #if defined HAVE_STEAMWORKS
-    d->steamOverlayTimer = new QTimer(this);
-    d->steamOverlayTimer->setSingleShot(false);
-    d->steamOverlayTimer->setInterval(40);
-    connect(d->steamOverlayTimer, SIGNAL(timeout()), SLOT(updateDisplay()));
 
-    connect(KritaSteamClient::instance(), SIGNAL(overlayActivated()), SLOT(steamOverlayActivated()));
-    connect(KritaSteamClient::instance(), SIGNAL(overlayDeactivated()), SLOT(steamOverlayDeactivated()));
+    if (KritaSteamClient::instance()->isInitialised()) {
+        d->steamOverlayTimer = new QTimer(this);
+        d->steamOverlayTimer->setSingleShot(false);
+        d->steamOverlayTimer->setInterval(40);
+        connect(d->steamOverlayTimer, SIGNAL(timeout()), SLOT(updateDisplay()));
+
+        connect(KritaSteamClient::instance(), SIGNAL(overlayActivated()), SLOT(steamOverlayActivated()));
+        connect(KritaSteamClient::instance(), SIGNAL(overlayDeactivated()), SLOT(steamOverlayDeactivated()));
+    } else {
+        d->steamOverlayTimer = 0;
+    }
 #endif
     if (DocumentManager::instance()->document())
         documentChanged();
@@ -644,14 +649,16 @@ void KisSketchView::activate()
 void KisSketchView::Private::updateDisplay()
 {
 #if defined HAVE_STEAMWORKS
-    if (SteamUtils()->BOverlayNeedsPresent()) {
-        if (q->scene()) {
-            q->scene()->invalidate( 0, 0, q->width(), q->height() );
+    if (KritaSteamClient::instance()->isInitialised()) {
+        if (SteamUtils()->BOverlayNeedsPresent()) {
+            if (q->scene()) {
+                q->scene()->invalidate( 0, 0, q->width(), q->height() );
 
-            QTimer::singleShot(50, q, SLOT(updateDisplay()));
+                QTimer::singleShot(50, q, SLOT(updateDisplay()));
+            }
+        } else {
+            QTimer::singleShot(200, q, SLOT(updateDisplay()));
         }
-    } else {
-        QTimer::singleShot(200, q, SLOT(updateDisplay()));
     }
 #endif
 }

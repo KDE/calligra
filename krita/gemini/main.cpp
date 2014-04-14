@@ -161,9 +161,7 @@ int main( int argc, char** argv )
     KritaSteamClient* steamClient = KritaSteamClient::instance();
     if (!steamClient->initialise(STEAM_APP_ID_GEMINI))
     {
-        /* Either steam isn't running or there is a problem
-               SteamClient::initialse may force a relaunch from Steam
-               so this must close. */
+        /* Krita wasn't launched from Steam, shutdown (it should launch separately */
         return 1;
     }
 #endif
@@ -294,6 +292,13 @@ int main( int argc, char** argv )
     splash.finish(&window);
 
 #if defined HAVE_STEAMWORKS
+    if (!steamClient->isInitialised()) {
+        // Occasionally it seems that the Steam API might not initialise
+        // Alert the user
+        QMessageBox::warning(&window,
+                             i18n("Steam initialisation error"),
+                             i18n("There was a problem starting Steam services. Krita Gemini will run without Steam features. If you are seeing this message, please let us know on the Steam forum."));
+    }
     steamClient->mainWindowCreated();
 #endif
 
