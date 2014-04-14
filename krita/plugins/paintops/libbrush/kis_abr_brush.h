@@ -51,11 +51,6 @@ public:
     virtual bool save();
 
     /**
-     * save the content of this brush to an IO device
-     */
-    virtual bool saveToDevice(QIODevice* dev) const;
-
-    /**
      * @return default file extension for saving the brush
      */
     virtual QString defaultFileExtension() const;

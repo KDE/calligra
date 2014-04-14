@@ -540,12 +540,6 @@ bool KisAbrBrushCollection::save()
     return false;
 }
 
-bool KisAbrBrushCollection::saveToDevice(QIODevice* dev) const
-{
-    Q_UNUSED(dev);
-    return false;
-}
-
 QImage KisAbrBrushCollection::image() const
 {
     return QImage();

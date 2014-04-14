@@ -70,11 +70,6 @@ public:
     virtual QImage image() const;
 
     /**
-     * save the content of this brush to an IO device
-     */
-    virtual bool saveToDevice(QIODevice* dev) const;
-
-    /**
      * If the brush image data are colorful (e.g. you created the brush from the canvas with custom brush)
      * and you want to paint with it as with masks, set to true.
      */
@@ -102,6 +97,11 @@ public:
     virtual QString defaultFileExtension() const;
 
 protected:
+    /**
+     * save the content of this brush to an IO device
+     */
+    friend class KisImageBrushesPipe;
+    virtual bool saveToDevice(QIODevice* dev) const;
 
     KisGbrBrush(const KisGbrBrush& rhs);
 

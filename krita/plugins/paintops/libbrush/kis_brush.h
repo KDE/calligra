@@ -33,8 +33,6 @@ typedef KisSharedPtr<KisQImagemask> KisQImagemaskSP;
 
 class QString;
 class QPoint;
-class QIODevice;
-
 class KoColor;
 class KoColorSpace;
 
