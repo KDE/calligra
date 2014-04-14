@@ -103,8 +103,9 @@ bool KoPattern::load()
         file.close();
         result = init(data);
     } else {
-        result = m_pattern.load(filename());
-        setValid(result);
+        QImage image;
+        result = image.load(filename());
+        setPatternImage(image);
     }
 
     return result;
@@ -218,8 +219,8 @@ bool KoPattern::init(QByteArray& bytes)
         imageFormat = QImage::Format_ARGB32;
     }
 
-    m_pattern = QImage(bh.width, bh.height, imageFormat);
-    if (m_pattern.isNull()) {
+    QImage pattern = QImage(bh.width, bh.height, imageFormat);
+    if (pattern.isNull()) {
         return false;
     }
     k = bh.header_size;
@@ -228,7 +229,7 @@ bool KoPattern::init(QByteArray& bytes)
         // Grayscale
         qint32 val;
         for (quint32 y = 0; y < bh.height; ++y) {
-            QRgb* pixels = reinterpret_cast<QRgb*>( m_pattern.scanLine(y) );
+            QRgb* pixels = reinterpret_cast<QRgb*>( pattern.scanLine(y) );
             for (quint32 x = 0; x < bh.width; ++x, ++k) {
                 if (k > dataSize) {
                     kWarning(30009) << "failed in gray";
@@ -241,14 +242,14 @@ bool KoPattern::init(QByteArray& bytes)
         }
         // It was grayscale, so make the pattern as small as possible
         // by converting it to Indexed8
-        m_pattern = m_pattern.convertToFormat(QImage::Format_Indexed8);
+        pattern = pattern.convertToFormat(QImage::Format_Indexed8);
     }
     else if (bh.bytes == 2) {
         // Grayscale + A
         qint32 val;
         qint32 alpha;
         for (quint32 y = 0; y < bh.height; ++y) {
-            QRgb* pixels = reinterpret_cast<QRgb*>( m_pattern.scanLine(y) );
+            QRgb* pixels = reinterpret_cast<QRgb*>( pattern.scanLine(y) );
             for (quint32 x = 0; x < bh.width; ++x, ++k) {
                 if (k + 2 > dataSize) {
                     kWarning(30009) << "failed in grayA";
@@ -264,7 +265,7 @@ bool KoPattern::init(QByteArray& bytes)
     else if (bh.bytes == 3) {
         // RGB without alpha
         for (quint32 y = 0; y < bh.height; ++y) {
-            QRgb* pixels = reinterpret_cast<QRgb*>( m_pattern.scanLine(y) );
+            QRgb* pixels = reinterpret_cast<QRgb*>( pattern.scanLine(y) );
             for (quint32 x = 0; x < bh.width; ++x) {
                 if (k + 3 > dataSize) {
                     kWarning(30009) << "failed in RGB";
@@ -279,7 +280,7 @@ bool KoPattern::init(QByteArray& bytes)
     } else if (bh.bytes == 4) {
         // Has alpha
         for (quint32 y = 0; y < bh.height; ++y) {
-            QRgb* pixels = reinterpret_cast<QRgb*>( m_pattern.scanLine(y) );
+            QRgb* pixels = reinterpret_cast<QRgb*>( pattern.scanLine(y) );
             for (quint32 x = 0; x < bh.width; ++x) {
                 if (k + 4 > dataSize) {
                     kWarning(30009) << "failed in RGBA";
@@ -297,11 +298,11 @@ bool KoPattern::init(QByteArray& bytes)
         return false;
     }
 
-    if (m_pattern.isNull()) {
+    if (pattern.isNull()) {
         return false;
     }
 
-    setImage(m_pattern);
+    setPatternImage(pattern);
     setValid(true);
 
     return true;
@@ -320,6 +321,7 @@ qint32 KoPattern::height() const
 void KoPattern::setPatternImage(const QImage& image)
 {
     m_pattern = image;
+    setImage(image);
     setValid(true);
 }
 
