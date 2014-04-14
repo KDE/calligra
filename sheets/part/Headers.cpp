@@ -145,7 +145,7 @@ void RowHeader::mousePress(KoPointerEvent * _ev)
     if (sheet->rowFormats()->isHiddenOrFiltered(tmpRow) && tmpRow == 1)
         m_bResize = false;
 
-    // So he clicked between two rows ?
+    // So the user clicked between two rows ?
     if (m_bResize) {
         // Determine row to resize
         qreal tmp;
@@ -279,7 +279,7 @@ void RowHeader::equalizeRow(double resize)
     if (resize != 0.0) {
         ResizeRowManipulator* command = new ResizeRowManipulator();
         command->setSheet(m_pCanvas->activeSheet());
-        command->setSize(qMax(qreal(2.0), resize));
+        command->setSize(qMax(2.0, resize));
         command->add(*m_pCanvas->selection());
         if (!command->execute())
             delete command;
@@ -624,7 +624,7 @@ void ColumnHeader::mousePress(KoPointerEvent * _ev)
             m_bResize = false;
     }
 
-    // So he clicked between two rows ?
+    // So the user clicked between two rows ?
     if (m_bResize) {
         // Determine the column to resize
         qreal tmp;
@@ -778,7 +778,7 @@ void ColumnHeader::equalizeColumn(double resize)
     if (resize != 0.0) {
         ResizeColumnManipulator* command = new ResizeColumnManipulator();
         command->setSheet(m_pCanvas->activeSheet());
-        command->setSize(qMax(qreal(2.0), resize));
+        command->setSize(qMax(2.0, resize));
         command->add(*m_pCanvas->selection());
         if (!command->execute())
             delete command;

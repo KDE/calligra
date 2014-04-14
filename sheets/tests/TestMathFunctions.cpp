@@ -25,6 +25,7 @@
 #include <Formula.h>
 #include <Map.h>
 #include <Sheet.h>
+#include <CalculationSettings.h>
 
 // NOTE: we do not compare the numbers _exactly_ because it is difficult
 // to get one "true correct" expected values for the functions due to:
@@ -98,18 +99,51 @@ void TestMathFunctions::initTestCase()
     FunctionModuleRegistry::instance()->loadFunctionModules();
 
     m_map = new Map(0 /* no Doc */);
-    m_map->addNewSheet();
-    Sheet* sheet = m_map->sheet(0);
-    CellStorage* storage = sheet->cellStorage();
+    m_map->addNewSheet("Sheet1");
+    m_map->addNewSheet("Sheet2");
 
-    // B3:B7
-    storage->setValue(2, 3, Value("7"));
-    storage->setValue(2, 4, Value(2));
-    storage->setValue(2, 5, Value(3));
-    storage->setValue(2, 6, Value(true));
-    storage->setValue(2, 7, Value("Hello"));
-    // B9
-    storage->setValue(2, 9, Value::errorDIV0());
+    Sheet* sheet1 = m_map->sheet(0);
+    CellStorage* storage1 = sheet1->cellStorage();
+
+    // Sheet1!B3:B7
+    storage1->setValue(2, 3, Value("7"));
+    storage1->setValue(2, 4, Value(2));
+    storage1->setValue(2, 5, Value(3));
+    storage1->setValue(2, 6, Value(true));
+    storage1->setValue(2, 7, Value("Hello"));
+    // Sheet1!B9
+    storage1->setValue(2, 9, Value::errorDIV0());
+
+    Sheet* sheet2 = m_map->sheet(1);
+    CellStorage* storage2 = sheet2->cellStorage();
+
+    // Sheet2!A1:B13
+    storage2->setValue(1, 1, Value("test"));
+    storage2->setValue(2, 1, Value(1));
+    storage2->setValue(1, 2, Value("test1"));
+    storage2->setValue(2, 2, Value(2));
+    storage2->setValue(1, 3, Value("test2"));
+    storage2->setValue(2, 3, Value(3));
+    storage2->setValue(1, 4, Value("test1*"));
+    storage2->setValue(2, 4, Value(4));
+    storage2->setValue(1, 5, Value("test1.*"));
+    storage2->setValue(2, 5, Value(5));
+    storage2->setValue(1, 6, Value("TeSt"));
+    storage2->setValue(2, 6, Value(6));
+    storage2->setValue(1, 7, Value("Test1"));
+    storage2->setValue(2, 7, Value(7));
+    storage2->setValue(1, 8, Value("Test2"));
+    storage2->setValue(2, 8, Value(8));
+    storage2->setValue(1, 9, Value(" test"));
+    storage2->setValue(2, 9, Value(9));
+    storage2->setValue(1, 10, Value(" test1"));
+    storage2->setValue(2, 10, Value(10));
+    storage2->setValue(1, 11, Value("*test"));
+    storage2->setValue(2, 11, Value(11));
+    storage2->setValue(1, 12, Value("*test test"));
+    storage2->setValue(2, 12, Value(12));
+    storage2->setValue(1, 13, Value("^test"));
+    storage2->setValue(2, 13, Value(13));
 }
 
 void TestMathFunctions::cleanupTestCase()
@@ -851,6 +885,53 @@ void TestMathFunctions::testSUMIF()
     CHECK_EVAL("SUMIF(B3:B4;\"7\";B4:B5)", Value(2));     // B3 is the string "7", but its match is mapped to B4 for the summation.
     CHECK_EVAL("SUMIF(B3:B10;1+1)",        Value(2));     // The criteria can be an expression.
     CHECK_EVAL("SUMIF(B3:B4;\"7\")",       Value(0));     // TODO B3 is the string "7", but only numbers are summed.
+}
+
+void TestMathFunctions::testSUMIF_STRING()
+{
+    m_map->calculationSettings()->setUseWildcards(false);
+    m_map->calculationSettings()->setUseRegularExpressions(false);
+
+    CHECK_EVAL("=SUMIF(Sheet2!A1:A32767;\"test\";Sheet2!B1:B32767)", Value(7));
+    CHECK_EVAL("=SUMIF(Sheet2!A1:A32767;\"test1\";Sheet2!B1:B32767)", Value(9));
+    CHECK_EVAL("=SUMIF(Sheet2!A1:A32767;\"test*\";Sheet2!B1:B32767)", Value(0));
+    CHECK_EVAL("=SUMIF(Sheet2!A1:A32767;\"test?\";Sheet2!B1:B32767)", Value(0));
+    CHECK_EVAL("=SUMIF(Sheet2!A1:A32767;\"test.*\";Sheet2!B1:B32767)", Value(0));
+    CHECK_EVAL("=SUMIF(Sheet2!A1:A32767;\"test.+\";Sheet2!B1:B32767)", Value(0));
+    CHECK_EVAL("=SUMIF(Sheet2!A1:A32767;\".*est.*1.*\";Sheet2!B1:B32767)", Value(0));
+}
+
+void TestMathFunctions::testSUMIF_WILDCARDS()
+{
+    m_map->calculationSettings()->setUseWildcards(true);
+    m_map->calculationSettings()->setUseRegularExpressions(false);
+
+    CHECK_EVAL("=SUMIF(Sheet2!A1:A32767;\"test\";Sheet2!B1:B32767)", Value(7));
+    CHECK_EVAL("=SUMIF(Sheet2!A1:A32767;\"test*\";Sheet2!B1:B32767)", Value(36));
+    CHECK_EVAL("=SUMIF(Sheet2!A1:A32767;\"test?\";Sheet2!B1:B32767)", Value(20));
+    CHECK_EVAL("=SUMIF(Sheet2!A1:A32767;\"test.*\";Sheet2!B1:B32767)", Value(0));
+    CHECK_EVAL("=SUMIF(Sheet2!A1:A32767;\"test.+\";Sheet2!B1:B32767)", Value(0));
+    CHECK_EVAL("=SUMIF(Sheet2!A1:A32767;\".*est.*1.*\";Sheet2!B1:B32767)", Value(0));
+}
+
+void TestMathFunctions::testSUMIF_REGULAREXPRESSIONS()
+{
+    m_map->calculationSettings()->setUseWildcards(false);
+    m_map->calculationSettings()->setUseRegularExpressions(true);
+
+    CHECK_EVAL("=SUMIF(Sheet2!A1:A32767;\"test\";Sheet2!B1:B32767)", Value(7));
+    CHECK_EVAL("=SUMIF(Sheet2!A1:A32767;\"test*\";Sheet2!B1:B32767)", Value(7));
+    CHECK_EVAL("=SUMIF(Sheet2!A1:A32767;\"test?\";Sheet2!B1:B32767)", Value(7));
+    CHECK_EVAL("=SUMIF(Sheet2!A1:A32767;\"test.*\";Sheet2!B1:B32767)", Value(36));
+    CHECK_EVAL("=SUMIF(Sheet2!A1:A32767;\"test.+\";Sheet2!B1:B32767)", Value(29));
+    CHECK_EVAL("=SUMIF(Sheet2!A1:A32767;\".*est.*1.*\";Sheet2!B1:B32767)", Value(28));
+
+    CHECK_EVAL("=SUMIF(Sheet2!A1:A32767;\".*\";A1:A32767)", Value(0));
+    CHECK_EVAL("=SUMIF(Sheet2!A1:A32767;\".*\";B1:B32767)", Value(5));
+    CHECK_EVAL("=SUMIF(Sheet2!A1:A32767;\".*\";Sheet2!A1:A32767)", Value(0));
+    CHECK_EVAL("=SUMIF(Sheet2!A1:A32767;\".*\";Sheet2!B1:B32767)", Value(91));
+    CHECK_EVAL("=SUMIF(A1:A32767;\".*\";A1:A32767)", Value(0));
+    CHECK_EVAL("=SUMIF(B1:B32767;\".+\";B1:B32767)", Value(5));
 }
 
 void TestMathFunctions::testSUMSQ()

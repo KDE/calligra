@@ -23,6 +23,9 @@
 #include "Cell.h"
 #include "Number.h"
 #include "ValueConverter.h"
+#include "CalculationSettings.h"
+
+#include <QRegExp>
 
 #include <kdebug.h>
 #include <errno.h>
@@ -2454,6 +2457,17 @@ void ValueCalc::getCond(Condition &cond, Value val)
     } else if (text.startsWith(QLatin1Char('='))) {
         cond.comp = isEqual;
         text.remove(0, 1);
+    } else { // character comparision
+        cond.type = string;
+        cond.stringValue = text;
+        if (settings()->useWildcards()) { // HOST-USE-WILDCARDS Excel like wildcard matching
+            cond.comp = wildcardMatch;
+        } else if (settings()->useRegularExpressions()) { // HOST-USE-REGULAR-EXPRESSION ODF like regex matching
+            cond.comp = regexMatch;
+        } else { // Simple string matching
+            cond.comp = stringMatch;
+        }
+        return;
     }
 
     text = text.trimmed();
@@ -2500,6 +2514,9 @@ bool ValueCalc::matches(const Condition &cond, Value val)
         case notEqual:
             if (d != cond.value) return true;
             break;
+
+        default:
+            break;
         }
     } else {
         QString d = converter->asString(val).asString();
@@ -2527,6 +2544,27 @@ bool ValueCalc::matches(const Condition &cond, Value val)
         case notEqual:
             if (d != cond.stringValue) return true;
             break;
+
+        case stringMatch:
+            if (d.toLower() == cond.stringValue.toLower()) return true;
+            break;
+
+        case regexMatch: {
+            QRegExp rx;
+            rx.setPattern(cond.stringValue);
+            rx.setPatternSyntax(QRegExp::RegExp);
+            rx.setCaseSensitivity(Qt::CaseInsensitive);
+            if (rx.exactMatch(d)) return true;
+        } break;
+
+        case wildcardMatch: {
+            QRegExp rx;
+            rx.setPattern(cond.stringValue);
+            rx.setPatternSyntax(QRegExp::Wildcard);
+            rx.setCaseSensitivity(Qt::CaseInsensitive);
+            if (rx.exactMatch(d)) return true;
+        } break;
+
         }
     }
     return false;

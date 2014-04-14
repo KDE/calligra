@@ -171,7 +171,8 @@ public:
         isLoading(false),
         undoStack(0),
         modified(false),
-        readwrite(true)
+        readwrite(true),
+        disregardAutosaveFailure(false)
     {
         m_job = 0;
         m_statJob = 0;
@@ -256,6 +257,8 @@ public:
 
     bool modified;
     bool readwrite;
+
+    bool disregardAutosaveFailure;
 
     bool openFile()
     {
@@ -744,7 +747,7 @@ void KoDocument::slotAutoSave()
             d->autosaving = false;
             emit clearStatusBarMessage();
             disconnect(this, SIGNAL(sigProgress(int)), d->parentPart->currentMainwindow(), SLOT(slotProgress(int)));
-            if (!ret) {
+            if (!ret && !d->disregardAutosaveFailure) {
                 emit statusBarMessage(i18n("Error during autosave! Partition full?"));
             }
         }
@@ -1186,6 +1189,11 @@ QString KoDocument::autoSaveFile(const QString & path) const
     return retval;
 }
 
+void KoDocument::setDisregardAutosaveFailure(bool disregardFailure)
+{
+    d->disregardAutosaveFailure = disregardFailure;
+}
+
 bool KoDocument::importDocument(const KUrl & _url)
 {
     bool ret;
@@ -1254,7 +1262,7 @@ bool KoDocument::openUrl(const KUrl & _url)
     if (autosaveOpened) {
         resetURL(); // Force save to act like 'Save As'
         setReadWrite(true); // enable save button
-        QFile::remove(url.toLocalFile()); // and remove the autosave file
+        setModified(true);
     }
     else {
         d->parentPart->addRecentURLToAllMainWindows(_url);

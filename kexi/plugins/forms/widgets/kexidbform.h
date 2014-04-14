@@ -84,8 +84,6 @@ public:
 
     void updateTabStopsOrder();
 
-    virtual bool eventFilter(QObject * watched, QEvent * e);
-
     virtual bool valueIsNull();
     virtual bool valueIsEmpty();
     virtual bool isReadOnly() const;
@@ -125,6 +123,8 @@ signals:
     void handleDropEvent(QDropEvent *e);
 
 protected:
+    virtual bool eventFilter(QObject * watched, QEvent * e);
+
     //! no effect
     virtual void setValueInternal(const QVariant&, bool) {}
 

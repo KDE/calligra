@@ -8,9 +8,10 @@ if (LIBATTICA_FOUND)
 endif (LIBATTICA_FOUND)
 
 set(kowidgets_LIB_SRCS
+    KoTagToolButton.cpp
     KoTagChooserWidget.cpp
     KoTagFilterWidget.cpp
-    KoResourceTaggingInterface.cpp
+    KoResourceTaggingManager.cpp
     KoResourceItemChooserContextMenu.cpp
     KoAspectButton.cpp
     KoCsvImportDialog.cpp
@@ -49,7 +50,7 @@ set(kowidgets_LIB_SRCS
     KoResourceModel.cpp
     KoResourceItemDelegate.cpp
     KoResourceItemView.cpp
-    KoResourceTagging.cpp
+    KoResourceTagStore.cpp
     KoItemToolTip.cpp
     KoCheckerBoardPainter.cpp
     KoResourceServerAdapter.cpp
@@ -94,7 +95,7 @@ install(TARGETS kowidgets  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 install( FILES
     KoResourceItemChooserContextMenu.h
-    KoResourceTaggingInterface.h
+    KoResourceTaggingManager.h
     KoGenericRegistryModel.h
     KoPageLayoutDialog.h
     KoPageLayoutWidget.h
@@ -128,7 +129,7 @@ install( FILES
     KoResourceServerAdapter.h
     KoResourceServerObserver.h
     KoResourceServerProvider.h
-    KoResourceTagging.h
+    KoResourceTagStore.h
     KoLineStyleSelector.h
     KoDockWidgetTitleBar.h
     KoDockWidgetTitleBarButton.h

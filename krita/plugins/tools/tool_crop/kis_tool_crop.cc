@@ -227,9 +227,10 @@ void KisToolCrop::beginPrimaryAction(KoPointerEvent *event)
 
 void KisToolCrop::continuePrimaryAction(KoPointerEvent *event)
 {
-    KIS_ASSERT_RECOVER_RETURN(mode() == KisTool::PAINT_MODE);
+    CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
 
     QPointF pos = convertToPixelCoord(event);
+    bool needForceRatio = this->forceRatio() != bool(event->modifiers() & Qt::ShiftModifier);
 
     QRectF updateRect = boundingRect();
     if (!m_haveCropSelection) { //if the cropSelection is not yet set
@@ -242,7 +243,7 @@ void KisToolCrop::continuePrimaryAction(KoPointerEvent *event)
             if(!m_growCenter){ //normal don't grow outwards from center
                 if (m_mouseOnHandleType == Inside) {
                     m_rectCrop.translate(drag);
-                } else if (m_forceRatio) {
+                } else if (needForceRatio) {
                     if (!m_forceWidth && !m_forceHeight) {
                         QRect newRect = m_rectCrop;
                         switch (m_mouseOnHandleType) {
@@ -334,7 +335,7 @@ void KisToolCrop::continuePrimaryAction(KoPointerEvent *event)
                 
                 if (m_mouseOnHandleType == Inside) {
                     m_rectCrop.translate(drag);
-                } else if (m_forceRatio) {
+                } else if (needForceRatio) {
                     if (!m_forceWidth && !m_forceHeight) {
                         QRect newRect = m_rectCrop;
                         switch (m_mouseOnHandleType) {
@@ -460,7 +461,7 @@ void KisToolCrop::continuePrimaryAction(KoPointerEvent *event)
 
 void KisToolCrop::endPrimaryAction(KoPointerEvent *event)
 {
-    KIS_ASSERT_RECOVER_RETURN(mode() == KisTool::PAINT_MODE);
+    CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
     setMode(KisTool::HOVER_MODE);
 
     m_rectCrop = m_rectCrop.normalized();
@@ -766,7 +767,7 @@ void KisToolCrop::setCropWidth(int w)
         m_rectCrop.setWidth(w);
     }
 
-    if (m_forceRatio) {
+    if (forceRatio()) {
         m_rectCrop.setHeight((int)(w / m_ratio));
     }
 
@@ -815,7 +816,7 @@ void KisToolCrop::setCropHeight(int h)
         m_rectCrop.setHeight(h);
     }
 
-    if (m_forceRatio) {
+    if (forceRatio()) {
         m_rectCrop.setWidth((int)(h * m_ratio));
     }
 

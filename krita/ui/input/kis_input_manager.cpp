@@ -72,6 +72,7 @@ public:
     #endif
         , lastTabletEvent(0)
         , lastTouchEvent(0)
+        , defaultInputAction(0)
         , eventsReceiver(0)
         , moveEventCompressor(10 /* ms */, KisSignalCompressor::FIRST_ACTIVE)
         , logTabletEvents(false)
@@ -113,6 +114,8 @@ public:
     QObject *eventsReceiver;
     KisSignalCompressor moveEventCompressor;
     QScopedPointer<KisTabletEvent> compressedMoveEvent;
+
+    QSet<QObject*> priorityEventFilter;
 
     bool logTabletEvents;
     void debugMouseEvent(QEvent *event);
@@ -514,6 +517,16 @@ void KisInputManager::toggleTabletLogger()
     }
 }
 
+void KisInputManager::attachPriorityEventFilter(QObject *filter)
+{
+    d->priorityEventFilter.insert(filter);
+}
+
+void KisInputManager::detachPriorityEventFilter(QObject *filter)
+{
+    d->priorityEventFilter.remove(filter);
+}
+
 void KisInputManager::setupAsEventFilter(QObject *receiver)
 {
     if (d->eventsReceiver) {
@@ -524,10 +537,29 @@ void KisInputManager::setupAsEventFilter(QObject *receiver)
     d->eventsReceiver->installEventFilter(this);
 }
 
+void KisInputManager::stopIgnoringEvents()
+{
+	stop_ignore_cursor_events();
+}
+
 bool KisInputManager::eventFilter(QObject* object, QEvent* event)
 {
     bool retval = false;
     if (object != d->eventsReceiver) return retval;
+
+    if (!d->ignoreQtCursorEvents ||
+        (event->type() != QEvent::MouseButtonPress &&
+         event->type() != QEvent::MouseButtonDblClick &&
+         event->type() != QEvent::MouseButtonRelease &&
+         event->type() != QEvent::MouseMove &&
+         event->type() != QEvent::TabletPress &&
+         event->type() != QEvent::TabletMove &&
+         event->type() != QEvent::TabletRelease)) {
+
+        foreach (QObject *filter, d->priorityEventFilter) {
+            if (filter->eventFilter(object, event)) return true;
+        }
+    }
 
     // KoToolProxy needs to pre-process some events to ensure the
     // global shortcuts (not the input manager's ones) are not
@@ -564,7 +596,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         event->setAccepted(retval);
         break;
     }
-    case QEvent::KeyPress: {
+    case QEvent::ShortcutOverride: {
         if (d->logTabletEvents) qDebug() << "KeyPress";
         QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
         Qt::Key key = d->workaroundShiftAltMetaHell(keyEvent);
@@ -602,7 +634,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
         if (!d->matcher.mouseMoved(mouseEvent)) {
             //Update the current tool so things like the brush outline gets updated.
-            d->toolProxy->mouseMoveEvent(mouseEvent, widgetToDocument(mouseEvent->posF()));
+            d->toolProxy->forwardMouseHoverEvent(mouseEvent, lastTabletEvent(), canvas()->canvasWidget()->mapToGlobal(QPoint(0, 0)));
         }
         retval = true;
         event->setAccepted(retval);
@@ -652,8 +684,10 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         stop_ignore_cursor_events();
         break;
     case QEvent::FocusIn:
+        KisAbstractInputAction::setInputManager(this);
+
         //Clear all state so we don't have half-matched shortcuts dangling around.
-        d->matcher.reset();
+        d->matcher.reinitialize();
 
         { // Emulate pressing of the key that are already pressed
             KisExtendedModifiersMapper mapper;
@@ -748,13 +782,13 @@ bool KisInputManager::Private::handleKisTabletEvent(QObject *object, KisTabletEv
 
     QTabletEvent qte = tevent->toQTabletEvent();
     qte.ignore();
-    QApplication::sendEvent(object, &qte);
+    q->eventFilter(object, &qte);
     tevent->setAccepted(qte.isAccepted());
 
     if (!retval && !qte.isAccepted()) {
         QMouseEvent qme = tevent->toQMouseEvent();
         qme.ignore();
-        QApplication::sendEvent(object, &qme);
+        q->eventFilter(object, &qme);
         tevent->setAccepted(qme.isAccepted());
     }
 
@@ -815,7 +849,6 @@ QPointF KisInputManager::widgetToDocument(const QPointF& position)
 
 void KisInputManager::profileChanged()
 {
-    d->matcher.reset();
     d->matcher.clearShortcuts();
 
     KisInputProfile *profile = KisInputProfileManager::instance()->currentProfile();
@@ -842,7 +875,6 @@ void KisInputManager::profileChanged()
     }
     else {
         kWarning() << "No Input Profile Found: canvas interaction will be impossible";
-
     }
 }
 

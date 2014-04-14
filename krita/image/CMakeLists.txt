@@ -119,6 +119,7 @@ set(kritaimage_LIB_SRCS
    kis_config_widget.cpp
    kis_convolution_kernel.cc
    kis_convolution_painter.cc
+   kis_gaussian_kernel.cpp
    kis_cubic_curve.cpp
    kis_default_bounds.cpp
    kis_default_bounds_base.cpp
@@ -161,7 +162,6 @@ set(kritaimage_LIB_SRCS
    kis_gauss_circle_mask_generator.cpp
    kis_gauss_rect_mask_generator.cpp
    ${__per_arch_circle_mask_generator_objs}
-   kis_gtl_lock.cpp
    kis_curve_circle_mask_generator.cpp
    kis_curve_rect_mask_generator.cpp
    kis_math_toolbox.cpp

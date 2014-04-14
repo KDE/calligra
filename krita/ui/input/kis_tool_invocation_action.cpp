@@ -56,9 +56,26 @@ KisToolInvocationAction::~KisToolInvocationAction()
     delete d;
 }
 
+void KisToolInvocationAction::activate(int shortcut)
+{
+    Q_UNUSED(shortcut);
+    inputManager()->toolProxy()->activateToolAction(KisTool::Primary);
+}
+
+void KisToolInvocationAction::deactivate(int shortcut)
+{
+    Q_UNUSED(shortcut);
+    inputManager()->toolProxy()->deactivateToolAction(KisTool::Primary);
+}
+
 int KisToolInvocationAction::priority() const
 {
-    return 10;
+    return 0;
+}
+
+bool KisToolInvocationAction::canIgnoreModifiers() const
+{
+    return true;
 }
 
 void KisToolInvocationAction::begin(int shortcut, QEvent *event)

@@ -139,11 +139,12 @@ KoFilter::ConversionStatus ExportEpub2::convert(const QByteArray &from, const QB
     }
     // Extract media files
     status = extractMediaFiles(&epub);
-    // Check for cover image
     if (status != KoFilter::OK) {
         delete odfStore;
         return status;
     }
+
+    // Check for cover image
     status = extractCoverImage(odfStore, &epub);
     if (status != KoFilter::OK) {
         delete odfStore;
@@ -192,7 +193,7 @@ KoFilter::ConversionStatus ExportEpub2::extractImages(KoStore *odfStore, EpubFil
                     return KoFilter::ParsingError;
                 }
 
-                epubFile->addContentFile(("image" + QString::number(imgId)),
+                epubFile->addContentFile(("image" + QString::number(imgId++)),
                                          (epubFile->pathPrefix() + imgSrc.section('/', -1)),
                                          "image/svg+xml", output);
                 break;
@@ -207,7 +208,7 @@ KoFilter::ConversionStatus ExportEpub2::extractImages(KoStore *odfStore, EpubFil
                     return KoFilter::ParsingError;
                 }
 
-                epubFile->addContentFile(("image" + QString::number(imgId)),
+                epubFile->addContentFile(("image" + QString::number(imgId++)),
                                          (epubFile->pathPrefix() + imgSrc.section('/', -1)),
                                          "image/svg+xml", output);
                 break;
@@ -221,7 +222,7 @@ KoFilter::ConversionStatus ExportEpub2::extractImages(KoStore *odfStore, EpubFil
                     return KoFilter::ParsingError;
                 }
 
-                epubFile->addContentFile(("image" + QString::number(imgId)),
+                epubFile->addContentFile(("image" + QString::number(imgId++)),
                                          (epubFile->pathPrefix() + imgSrc.section('/', -1)),
                                          "image/svg+xml", output);
                 break;
@@ -234,7 +235,7 @@ KoFilter::ConversionStatus ExportEpub2::extractImages(KoStore *odfStore, EpubFil
         case ExportEpub2::VectorTypeOther:
             {
                 kDebug(30503) << "Other file";
-                epubFile->addContentFile(("image" + QString::number(imgId)),
+                epubFile->addContentFile(("image" + QString::number(imgId++)),
                                          (epubFile->pathPrefix() + imgSrc.section('/', -1)),
                                          m_manifest.value(imgSrc).toUtf8(), imgContent);
                 break;

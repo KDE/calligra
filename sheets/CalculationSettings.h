@@ -80,7 +80,6 @@ public:
 
     /**
      * Sets the reference year.
-     * All two-digit-year dates are stored as numbers relative to a reference year.
      *
      * \param year the new reference year
      */
@@ -88,6 +87,9 @@ public:
 
     /**
      * Returns the reference year all two-digit-year dates are stored relative to.
+     *
+     * This defines how to convert a two-digit year into a four-digit year. All
+     * two-digit year values are interpreted as a year that equals or follows this year.
      *
      * \return the reference year (default: 1930)
      */
@@ -107,6 +109,9 @@ public:
      * \return the reference date (default: 1899-12-30)
      */
     QDate referenceDate() const;
+
+    void setPrecisionAsShown(bool enable);
+    bool precisionAsShown() const;
 
     /**
      * Sets the default decimal precision.
@@ -151,6 +156,9 @@ public:
      */
     bool isAutoCalculationEnabled() const;
 
+    void setAutomaticFindLabels(bool enabled);
+    bool automaticFindLabels() const;
+
     /**
      * Sets the comparisons on this document to be case sensitive or not.
      */
@@ -160,6 +168,34 @@ public:
      * Returns whether comparisons in this document are case sensitive.
      */
     Qt::CaseSensitivity caseSensitiveComparisons() const;
+
+    void setWholeCellSearchCriteria(bool enabled);
+    bool wholeCellSearchCriteria() const;
+
+    /**
+     * If true, regular expressions are used for character string
+     * comparisons and when searching.
+     *
+     * This option is mutually exclusive with \a useWildcards but
+     * calling this method will not call \a setUseWildcards and
+     * its also not guaranteed that both are not set to true when
+     * calling \a loadOdf and the ODF defines both to be true.
+     *
+     * This is the default character string comparisons mode in ODF.
+     */
+    void setUseRegularExpressions(bool enabled);
+    bool useRegularExpressions() const;
+
+    /**
+     * If true, wildcards question mark '?' and asterisk '*' are used for
+     * character string comparisons and when searching. Wildcards may be
+     * escaped with a tilde '~' character.
+     *
+     * This is the only comparision mode supported by Excel.
+     */
+    void setUseWildcards(bool enabled);
+    bool useWildcards() const;
+
 private:
     class Private;
     Private * const d;

@@ -435,7 +435,10 @@ void KisLayerManager::layerProperties()
         KisDlgLayerProperties *dialog = new KisDlgLayerProperties(layer, m_view, m_doc);
         dialog->resize(dialog->minimumSizeHint());
         dialog->setAttribute(Qt::WA_DeleteOnClose);
+        Qt::WindowFlags flags = dialog->windowFlags();
+        dialog->setWindowFlags(flags | Qt::WindowStaysOnTopHint | Qt::Dialog);
         dialog->show();
+
     }
 }
 
@@ -874,10 +877,10 @@ void KisLayerManager::addFileLayer(KisNodeSP activeNode)
             return;
         }
 
-        bool scaleToImageResolution = dlg.scaleToImageResolution();
+        KisFileLayer::ScalingMethod scalingMethod = dlg.scaleToImageResolution();
 
         addLayerCommon(activeNode,
-                       new KisFileLayer(image, basePath, fileName, scaleToImageResolution, name, OPACITY_OPAQUE_U8));
+                       new KisFileLayer(image, basePath, fileName, scalingMethod, name, OPACITY_OPAQUE_U8));
     }
 
 }

@@ -680,17 +680,47 @@ void KisNodeManager::mirrorNodeY()
     mirrorNode(node, commandName, Qt::Vertical);
 }
 
+inline bool checkForGlobalSelection(KisNodeSP node) {
+    return dynamic_cast<KisSelectionMask*>(node.data()) && node->parent() && !node->parent()->parent();
+}
+
 void KisNodeManager::activateNextNode()
 {
-    if (activeNode() && activeNode()->nextSibling()) {
-        slotNonUiActivatedNode(activeNode()->nextSibling());
+    KisNodeSP activeNode = this->activeNode();
+    if (!activeNode) return;
+
+    KisNodeSP node = activeNode->nextSibling();
+
+    if (!node && activeNode->parent() && activeNode->parent()->parent()) {
+        node = activeNode->parent();
+    }
+
+    while(node && checkForGlobalSelection(node)) {
+        node = node->nextSibling();
+    }
+
+    if (node) {
+        slotNonUiActivatedNode(node);
     }
 }
 
 void KisNodeManager::activatePreviousNode()
 {
-    if (activeNode() && activeNode()->prevSibling()) {
-        slotNonUiActivatedNode(activeNode()->prevSibling());
+    KisNodeSP activeNode = this->activeNode();
+    if (!activeNode) return;
+
+    KisNodeSP node = activeNode->prevSibling();
+
+    if (!node && activeNode->parent()) {
+        node = activeNode->parent()->prevSibling();
+    }
+
+    while(node && checkForGlobalSelection(node)) {
+        node = node->prevSibling();
+    }
+
+    if (node) {
+        slotNonUiActivatedNode(node);
     }
 }
 

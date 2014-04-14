@@ -29,7 +29,7 @@ class AutoFillStrategy::Private
 public:
     // If we use the lower right corner of the marker to start autofilling, then this
     // rectangle conatins all cells that were already marker when the user started
-    // to mark the rectangle which he wants to become autofilled.
+    // to mark the rectangle which the user wants to become autofilled.
     QRect autoFillSource;
 };
 

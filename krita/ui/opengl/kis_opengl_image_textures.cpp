@@ -48,6 +48,7 @@ KisOpenGLImageTextures::KisOpenGLImageTextures()
     , m_monitorProfile(0)
     , m_checkerTexture(0)
     , m_allChannelsSelected(true)
+    , m_useOcio(false)
 {
     KisConfig cfg;
     m_renderingIntent = (KoColorConversionTransformation::Intent)cfg.renderIntent();
@@ -68,6 +69,8 @@ KisOpenGLImageTextures::KisOpenGLImageTextures(KisImageWSP image,
     , m_renderingIntent(renderingIntent)
     , m_conversionFlags(conversionFlags)
     , m_checkerTexture(0)
+    , m_allChannelsSelected(true)
+    , m_useOcio(false)
 {
     Q_ASSERT(renderingIntent < 4);
 
@@ -153,7 +156,7 @@ void KisOpenGLImageTextures::createImageTextureTiles()
     m_numCols = lastCol + 1;
 
     // Default color is transparent black
-    const int pixelSize = 4;
+    const int pixelSize = tilesColorSpace()->pixelSize();
     QByteArray emptyTileData((m_texturesInfo.width) * (m_texturesInfo.height) * pixelSize, 0);
 
     KisConfig config;
@@ -208,12 +211,15 @@ KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCache(const QRect& rect)
     int firstRow = yToRow(artificialRect.top());
     int lastRow = yToRow(artificialRect.bottom());
 
-
-    KisConfig cfg;
     QBitArray channelFlags; // empty by default
 
-    if (m_useOcio && !m_allChannelsSelected) {
-        channelFlags = m_channelFlags;
+    if (!m_channelFlags.size() == m_image->projection()->colorSpace()->channels().size()) {
+        setChannelFlags(QBitArray());
+    }
+    if (!m_useOcio) { // Ocio does its own channel flipping
+        if (!m_allChannelsSelected) { // and we do it only if necessary
+            channelFlags = m_channelFlags;
+        }
     }
 
     qint32 numItems = (lastColumn - firstColumn + 1) * (lastRow - firstRow + 1);
@@ -225,13 +231,14 @@ KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCache(const QRect& rect)
             QRect tileRect = calculateTileRect(col, row);
             QRect tileTextureRect = stretchRect(tileRect, m_texturesInfo.border);
 
-            KisTextureTileUpdateInfo tileInfo(col, row,
-                                              tileTextureRect,
-                                              updateRect,
-                                              m_image->bounds());
+            KisTextureTileUpdateInfoSP tileInfo(
+                new KisTextureTileUpdateInfo(col, row,
+                                             tileTextureRect,
+                                             updateRect,
+                                             m_image->bounds()));
             // Don't update empty tiles
-            if (tileInfo.valid()) {
-                tileInfo.retrieveData(m_image, channelFlags, m_onlyOneChannelSelected, m_selectedChannelIndex);
+            if (tileInfo->valid()) {
+                tileInfo->retrieveData(m_image, channelFlags, m_onlyOneChannelSelected, m_selectedChannelIndex);
                 info->tileList.append(tileInfo);
             }
             else {
@@ -242,6 +249,32 @@ KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCache(const QRect& rect)
     return info;
 }
 
+const KoColorSpace* KisOpenGLImageTextures::tilesColorSpace() const
+{
+    const KoColorSpace *dstCS = 0;
+
+    switch(m_texturesInfo.type) {
+    case GL_UNSIGNED_BYTE:
+        dstCS = KoColorSpaceRegistry::instance()->rgb8(m_monitorProfile);
+        break;
+    case GL_UNSIGNED_SHORT:
+        dstCS = KoColorSpaceRegistry::instance()->rgb16(m_monitorProfile);
+        break;
+#if defined(HAVE_OPENEXR)
+    case GL_HALF_FLOAT_ARB:
+        dstCS = KoColorSpaceRegistry::instance()->colorSpace("RGBA", "F16", 0);
+        break;
+#endif
+    case GL_FLOAT:
+        dstCS = KoColorSpaceRegistry::instance()->colorSpace("RGBA", "F32", 0);
+        break;
+    default:
+        qFatal("Unknown m_imageTextureType");
+    }
+
+    return dstCS;
+}
+
 void KisOpenGLImageTextures::recalculateCache(KisUpdateInfoSP info)
 {
     KisOpenGLUpdateInfoSP glInfo = dynamic_cast<KisOpenGLUpdateInfo*>(info.data());
@@ -250,35 +283,16 @@ void KisOpenGLImageTextures::recalculateCache(KisUpdateInfoSP info)
     KisOpenGL::makeContextCurrent();
     KIS_OPENGL_CLEAR_ERROR();
 
-    KisTextureTileUpdateInfo tileInfo;
+    const KoColorSpace *dstCS = tilesColorSpace();
+
+    KisTextureTileUpdateInfoSP tileInfo;
     foreach(tileInfo, glInfo->tileList) {
-        const KoColorSpace *dstCS = 0;
-
-        switch(m_texturesInfo.type) {
-        case GL_UNSIGNED_BYTE:
-            dstCS = KoColorSpaceRegistry::instance()->rgb8(m_monitorProfile);
-            break;
-        case GL_UNSIGNED_SHORT:
-            dstCS = KoColorSpaceRegistry::instance()->rgb16(m_monitorProfile);
-            break;
-#if defined(HAVE_OPENEXR)
-        case GL_HALF_FLOAT_ARB:
-            dstCS = KoColorSpaceRegistry::instance()->colorSpace("RGBA", "F16", 0);
-            break;
-#endif
-        case GL_FLOAT:
-            dstCS = KoColorSpaceRegistry::instance()->colorSpace("RGBA", "F32", 0);
-            break;
-        default:
-            qFatal("Unknown m_imageTextureType");
-        }
-
-        tileInfo.convertTo(dstCS, m_renderingIntent, m_conversionFlags);
-        KisTextureTile *tile = getTextureTileCR(tileInfo.tileCol(), tileInfo.tileRow());
+        tileInfo->convertTo(dstCS, m_renderingIntent, m_conversionFlags);
+        KisTextureTile *tile = getTextureTileCR(tileInfo->tileCol(), tileInfo->tileRow());
         KIS_ASSERT_RECOVER_RETURN(tile);
 
-        tile->update(tileInfo);
-        tileInfo.destroy();
+        tile->update(*tileInfo);
+        tileInfo->destroy();
 
         KIS_OPENGL_PRINT_ERROR();
     }
@@ -302,7 +316,11 @@ void KisOpenGLImageTextures::generateCheckerTexture(const QImage &checkImage)
         img = checkImage.scaled(BACKGROUND_TEXTURE_SIZE, BACKGROUND_TEXTURE_SIZE);
     }
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, BACKGROUND_TEXTURE_SIZE, BACKGROUND_TEXTURE_SIZE,
+#if QT_VERSION >= 0x040700
+                 0, GL_BGRA, GL_UNSIGNED_BYTE, img.constBits());
+#else
                  0, GL_BGRA, GL_UNSIGNED_BYTE, img.bits());
+#endif
 
 }
 
@@ -335,6 +353,11 @@ void KisOpenGLImageTextures::setChannelFlags(const QBitArray &channelFlags)
     int selectedChannels = 0;
     const KoColorSpace *projectionCs = m_image->projection()->colorSpace();
     QList<KoChannelInfo*> channelInfo = projectionCs->channels();
+
+    if (m_channelFlags.size() != channelInfo.size()) {
+        m_channelFlags = QBitArray();
+    }
+
     for (int i = 0; i < m_channelFlags.size(); ++i) {
         if (m_channelFlags.testBit(i) && channelInfo[i]->channelType() == KoChannelInfo::COLOR) {
             selectedChannels++;

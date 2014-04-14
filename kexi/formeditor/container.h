@@ -59,6 +59,8 @@ public:
     {
         m_container = container;
     }
+
+protected:
     bool eventFilter(QObject *o, QEvent *ev);
 
 private:

@@ -447,7 +447,9 @@ static double helper_eurofactor(const QString& currency)
 
     if (cur == "ATS") result = 13.7603;        // Austria
     else if (cur == "BEF") result = 40.3399;   // Belgium
+    else if (cur == "CYP") result = 0.585274;  // Cyprus
     else if (cur == "DEM") result = 1.95583;   // Germany
+    else if (cur == "EEK") result = 15.6466;   // Estonia
     else if (cur == "ESP") result = 166.386;   // Spain
     else if (cur == "EUR") result = 1.0;       // Euro
     else if (cur == "FIM") result = 5.94573;   // Finland
@@ -455,9 +457,14 @@ static double helper_eurofactor(const QString& currency)
     else if (cur == "GRD") result = 340.75;    // Greece
     else if (cur == "IEP") result = 0.787564;  // Ireland
     else if (cur == "ITL") result = 1936.27;   // Italy
-    else if (cur == "LUX") result = 40.3399;   // Luxembourg
+    else if (cur == "LUX") result = 40.3399;   // Luxembourg <-- This is the wrong code only here for compatibility with old versions
+    else if (cur == "LUF") result = 40.3399;   // Luxembourg
+    else if (cur == "LVL") result = 0.702804;  // Latvia
+    else if (cur == "MTL") result = 0.4293;    // Malta
     else if (cur == "NLG") result = 2.20371;   // Netherlands
     else if (cur == "PTE") result = 200.482;   // Portugal
+    else if (cur == "SIT") result = 239.64;    // Slovenia
+    else if (cur == "SKK") result = 30.126;    // Slovakia
 
     return result;
 }

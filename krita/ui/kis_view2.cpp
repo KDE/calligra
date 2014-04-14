@@ -447,7 +447,7 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
 #endif
 
     KoResourceServer<KisPaintOpPreset> * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
-    KisPaintOpPreset *preset = rserver->resourceByName("Basic_circle");
+    KisPaintOpPreset *preset = rserver->resourceByName("Basic_tip_default");
     if (!preset) {
         if (rserver->resources().isEmpty()) {
             KMessageBox::error(this, i18n("Krita cannot find any brush presets and will close now. Please check your installation.", i18n("Critical Error")));
@@ -464,6 +464,10 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
 
 KisView2::~KisView2()
 {
+    if (m_d->filterManager->isStrokeRunning()) {
+        m_d->filterManager->cancel();
+    }
+
     {
         KConfigGroup group(KGlobal::config(), "krita/shortcuts");
         foreach(KActionCollection *collection, KActionCollection::allCollections()) {
@@ -851,7 +855,7 @@ void KisView2::slotLoadingFinished()
      */
     //image()->compositeProgressProxy()->addProxy(m_d->statusBar->progress()->progressProxy());
 
-    m_d->canvas->connectCurrentImage();
+    m_d->canvas->initializeImage();
 
     if (m_d->controlFrame) {
         connect(image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), m_d->controlFrame->paintopBox(), SLOT(slotColorSpaceChanged(const KoColorSpace*)));

@@ -200,6 +200,7 @@ QRect KexiDBComboBox::editorGeometry() const
                 style()->subControlRect(QStyle::CC_ComboBox, 0, QStyle::SC_ComboBoxEditField, d->paintedCombo)));
 #else
     QRect r = d->paintedCombo->geometry();
+    r.setSize(size());
 #endif
 
     //if ((height()-r.bottom())<6)
@@ -225,6 +226,8 @@ void KexiDBComboBox::createEditor()
             kDebug() << "altered margins:" << l << t << r << b;
 
             subwidget()->setFocusPolicy(Qt::NoFocus);
+            setFocusProxy(0); // Subwidget is not focusable but the form requires focusable
+                              // widget in order to manage data updates so let it be this KexiDBComboBox.
             subwidget()->setCursor(QCursor(Qt::ArrowCursor)); // widgets like listedit have IbeamCursor, we don't want that
             QPalette subwidgetPalette(subwidget()->palette());
             subwidgetPalette.setColor(QColorGroup::Base, Qt::transparent);
@@ -407,7 +410,7 @@ bool KexiDBComboBox::eventFilter(QObject *o, QEvent *e)
             }
         }
     } else if (!d->isEditable && d->subWidgetsWithDisabledEvents.contains(dynamic_cast<QWidget*>(o))) {
-        kDebug() << "**********************####" << e->type() << o;
+        //kDebug() << "**********************####" << e->type() << o;
         if (e->type() == QEvent::MouseButtonPress) {
             // clicking the subwidget should mean the same as clicking the combo box (i.e. show the popup)
             if (handleMousePressEvent(static_cast<QMouseEvent*>(e)))
