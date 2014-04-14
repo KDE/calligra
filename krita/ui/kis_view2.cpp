@@ -406,26 +406,28 @@ KisView2::~KisView2()
 
 void KisView2::setCurrentView(KoView *view)
 {
+    if (d->currentImageView) {
+
+        KisDoc2* doc = qobject_cast<KisDoc2*>(d->currentImageView->document());
+        if (doc) {
+            doc->disconnect(this);
+        }
+        canvasController()->proxyObject->disconnect(d->statusBar);
+        d->nodeManager->disconnect(doc->image());
+
+        d->rotateCanvasRight->disconnect();
+        d->rotateCanvasLeft->disconnect();
+        d->resetCanvasTransformations->disconnect();
+        d->mirrorCanvas->disconnect();
+        d->wrapAroundAction->disconnect();
+        canvasControllerWidget()->disconnect(SIGNAL(toolOptionWidgetsChanged(QList<QPointer<QWidget> >)), mainWindow()->dockerManager());
+    }
+
     KisImageView *imageView = qobject_cast<KisImageView*>(view);
-    imageView->setParentView(this);
 
     if (imageView) {
-        if (d->currentImageView) {
 
-            KisDoc2* doc = qobject_cast<KisDoc2*>(d->currentImageView->document());
-            if (doc) {
-                doc->disconnect(this);
-            }
-            canvasController()->proxyObject->disconnect(d->statusBar);
-            d->nodeManager->disconnect(doc->image());
-
-            d->rotateCanvasRight->disconnect();
-            d->rotateCanvasLeft->disconnect();
-            d->resetCanvasTransformations->disconnect();
-            d->mirrorCanvas->disconnect();
-            d->wrapAroundAction->disconnect();
-            canvasControllerWidget()->disconnect(SIGNAL(toolOptionWidgetsChanged(QList<QPointer<QWidget> >)), mainWindow()->dockerManager());
-        }
+        imageView->setParentView(this);
 
         // Wait for the async image to have loaded
         KisDoc2* doc = qobject_cast<KisDoc2*>(view->document());
@@ -446,7 +448,6 @@ void KisView2::setCurrentView(KoView *view)
         imageView->canvasBase()->addDecoration(d->perspectiveGridManager);
         imageView->canvasBase()->addDecoration(d->paintingAssistantsDecoration);
 
-        canvasControllerWidget()->activate();
     }
 
     d->filterManager->setView(imageView);
@@ -458,6 +459,9 @@ void KisView2::setCurrentView(KoView *view)
     d->gridManager->setView(imageView);
     d->statusBar->setView(imageView);
 
+    if (d->currentImageView) {
+        canvasControllerWidget()->activate();
+    }
     actionManager()->updateGUI();
 }
 
