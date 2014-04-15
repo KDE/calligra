@@ -1,10 +1,15 @@
-* export: 
+* export, simple stuff:
    - spaces (tag text:s)                                                Done
-   - linebreaks (tag text:line-break)
+   - linebreaks (tag text:line-break)                                   Done
+   - indent?
+   - tabs?
    - pagebreaks?
 
+* export, bigger things:
+   - tables
+
 * Bugs
-   - missing newlines after headers (tag text:h)                        Done
+   - ...
 
 - any TODO in status.html
 - any TODO in source code

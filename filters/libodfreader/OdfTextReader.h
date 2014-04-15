@@ -87,8 +87,9 @@ class KOODFREADER_EXPORT OdfTextReader
 
     void readParagraphContents(KoXmlStreamReader &reader);
 
-    void readElementTextSpan(KoXmlStreamReader &reader);
+    void readElementTextLineBreak(KoXmlStreamReader &reader);
     void readElementTextS(KoXmlStreamReader &reader);
+    void readElementTextSpan(KoXmlStreamReader &reader);
 
     // ----------------------------------------------------------------
     // Other functions
