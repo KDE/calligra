@@ -58,6 +58,7 @@
 #include "kis_tool_freehand_helper.h"
 #include "kis_recording_adapter.h"
 #include "strokes/freehand_stroke.h"
+#include <kis_image_view.h>
 
 
 KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, const QString & /*transactionText*/)
@@ -158,6 +159,7 @@ void KisToolFreehand::initStroke(KoPointerEvent *event)
     m_helper->setSmoothness(m_smoothingOptions);
     m_helper->initPaint(event, canvas()->resourceManager(),
                         image(),
+                        static_cast<KisCanvas2*>(canvas())->imageView()->currentNode(),
                         image().data(),
                         image()->postExecutionUndoAdapter());
 }

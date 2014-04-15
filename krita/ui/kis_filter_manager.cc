@@ -247,6 +247,7 @@ void KisFilterManager::apply(KisSafeFilterConfigurationSP filterConfig)
 
     KisResourcesSnapshotSP resources =
         new KisResourcesSnapshot(image,
+                                 d->view->activeNode(),
                                  undoAdapter,
                                  resourceManager);
 

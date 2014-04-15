@@ -66,6 +66,7 @@ void KisToolRectangle::finishRect(const QRectF &rect)
         KisSystemLocker locker(currentNode());
         KisFigurePaintingToolHelper helper(i18n("Rectangle"),
                                            image(),
+                                           currentNode(),
                                            canvas()->resourceManager(),
                                            strokeStyle(),
                                            fillStyle());

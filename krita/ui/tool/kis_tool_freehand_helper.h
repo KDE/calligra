@@ -57,6 +57,7 @@ public:
     void initPaint(KoPointerEvent *event,
                    KoCanvasResourceManager *resourceManager,
                    KisImageWSP image,
+                   KisNodeSP currentNode,
                    KisStrokesFacade *strokesFacade,
                    KisPostExecutionUndoAdapter *undoAdapter,
                    KisNodeSP overrideNode = 0,

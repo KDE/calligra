@@ -530,6 +530,7 @@ void KisSelectionManager::paintSelectedShapes()
 
     KisFigurePaintingToolHelper helper(i18n("Stroke Shapes"),
                                         image,
+                                        paintLayer.data(),
                                         m_view->resourceProvider()->resourceManager(),
                                         KisPainter::StrokeStyleBrush,
                                         KisPainter::FillStyleNone);

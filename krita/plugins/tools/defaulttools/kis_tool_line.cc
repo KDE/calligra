@@ -185,6 +185,7 @@ void KisToolLine::endPrimaryAction(KoPointerEvent *event)
     if (nodeAbility == PAINT) {
         KisFigurePaintingToolHelper helper(i18nc("a straight drawn line", "Line"),
                                            image(),
+                                           currentNode(),
                                            canvas()->resourceManager(),
                                            KisPainter::StrokeStyleBrush,
                                            KisPainter::FillStyleNone);

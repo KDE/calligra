@@ -66,6 +66,7 @@ void KisToolPolyline::finishPolyline(const QVector<QPointF>& points)
         KisSystemLocker locker(currentNode());
         KisFigurePaintingToolHelper helper(i18n("Polyline"),
                                            image(),
+                                           currentNode(),
                                            canvas()->resourceManager(),
                                            strokeStyle(),
                                            fillStyle());

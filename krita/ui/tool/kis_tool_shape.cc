@@ -218,6 +218,7 @@ void KisToolShape::addPathShape(KoPathShape* pathShape, const QString& name)
 
         KisFigurePaintingToolHelper helper(name,
                                            image,
+                                           node,
                                            canvas()->resourceManager(),
                                            strokeStyle(),
                                            fillStyle());

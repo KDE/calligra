@@ -69,7 +69,7 @@ struct KisResourcesSnapshot::Private {
     bool globalAlphaLock;
 };
 
-KisResourcesSnapshot::KisResourcesSnapshot(KisImageWSP image, KisPostExecutionUndoAdapter *undoAdapter, KoCanvasResourceManager *resourceManager, KisDefaultBoundsBaseSP bounds)
+KisResourcesSnapshot::KisResourcesSnapshot(KisImageWSP image, KisNodeSP currentNode, KisPostExecutionUndoAdapter *undoAdapter, KoCanvasResourceManager *resourceManager, KisDefaultBoundsBaseSP bounds)
     : m_d(new Private())
 {
     m_d->image = image;
@@ -106,7 +106,7 @@ KisResourcesSnapshot::KisResourcesSnapshot(KisImageWSP image, KisPostExecutionUn
     m_d->opacity = quint8(normOpacity * OPACITY_OPAQUE_U8);
 
     m_d->compositeOpId = resourceManager->resource(KisCanvasResourceProvider::CurrentCompositeOp).toString();
-    setCurrentNode(resourceManager->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>());
+    setCurrentNode(currentNode);
 
     /**
      * Fill and Stroke styles are not a part of the resource manager

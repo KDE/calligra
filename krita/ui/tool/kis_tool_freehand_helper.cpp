@@ -159,6 +159,7 @@ QPainterPath KisToolFreehandHelper::paintOpOutline(const QPointF &savedCursorPos
 void KisToolFreehandHelper::initPaint(KoPointerEvent *event,
                                       KoCanvasResourceManager *resourceManager,
                                       KisImageWSP image,
+                                      KisNodeSP currentNode,
                                       KisStrokesFacade *strokesFacade,
                                       KisPostExecutionUndoAdapter *undoAdapter,
                                       KisNodeSP overrideNode,
@@ -183,6 +184,7 @@ void KisToolFreehandHelper::initPaint(KoPointerEvent *event,
                    m_d->previousPaintInformation.currentTime());
 
     m_d->resources = new KisResourcesSnapshot(image,
+                                              currentNode,
                                               undoAdapter,
                                               resourceManager,
                                               bounds);

@@ -153,7 +153,7 @@ void KisToolGradient::endPrimaryAction(KoPointerEvent *event)
         KisGradientPainter painter(device, currentSelection());
 
         KisResourcesSnapshotSP resources =
-            new KisResourcesSnapshot(image(), 0,
+            new KisResourcesSnapshot(image(), currentNode(), 0,
                                      canvas()->resourceManager());
         resources->setupPainter(&painter);
 

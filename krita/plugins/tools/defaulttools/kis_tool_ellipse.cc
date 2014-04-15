@@ -63,6 +63,7 @@ void KisToolEllipse::finishRect(const QRectF& rect)
         KisSystemLocker locker(currentNode());
         KisFigurePaintingToolHelper helper(i18n("Ellipse"),
                                            image(),
+                                           currentNode(),
                                            canvas()->resourceManager(),
                                            strokeStyle(),
                                            fillStyle());
