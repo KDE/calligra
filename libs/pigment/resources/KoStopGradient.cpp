@@ -38,7 +38,7 @@
 #include <KoColorModelStandardIds.h>
 
 KoStopGradient::KoStopGradient(const QString& filename)
-        : KoAbstractGradient(filename)
+    : KoAbstractGradient(filename)
 {
 }
 

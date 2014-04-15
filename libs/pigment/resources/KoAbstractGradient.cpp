@@ -42,6 +42,8 @@ KoAbstractGradient::KoAbstractGradient(const QString& filename)
         , d(new Private)
 {
     d->colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    d->spread = QGradient::PadSpread;
+    d->type = QGradient::NoGradient;
 }
 
 KoAbstractGradient::~KoAbstractGradient()
