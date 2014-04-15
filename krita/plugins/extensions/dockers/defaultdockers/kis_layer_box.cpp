@@ -308,7 +308,12 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
         connect(m_image, SIGNAL(sigAboutToBeDeleted()), SLOT(notifyImageDeleted()));
 
         // cold start
-        setCurrentNode(m_canvas->imageView()->currentNode());
+        if (m_nodeManager) {
+            setCurrentNode(m_nodeManager->activeNode());
+        }
+        else {
+            setCurrentNode(m_canvas->imageView()->currentNode());
+        }
 
         // Connection KisNodeManager -> KisLayerBox
         connect(m_nodeManager, SIGNAL(sigUiNeedChangeActiveNode(KisNodeSP)), this, SLOT(setCurrentNode(KisNodeSP)));
