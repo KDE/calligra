@@ -14,7 +14,7 @@ set(DocxExport_PART_SRCS
     OdfTextReaderDocxBackend.cpp
     FileCollector.cpp
     DocxFile.cpp
-
+    UnitConversions.cpp
     OpcContentTypes.cpp
     OpcRelSet.cpp
     OpcRelSetManager.cpp

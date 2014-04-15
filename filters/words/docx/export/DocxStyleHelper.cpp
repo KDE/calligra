@@ -21,6 +21,8 @@
 // Own
 #include "DocxStyleHelper.h"
 
+#include "UnitConversions.h"
+
 // Calligra
 #include <KoXmlWriter.h>
 #include <KoOdfStyleProperties.h>
@@ -31,6 +33,38 @@
 void DocxStyleHelper::handleTextStyles(KoOdfStyleProperties *properties, KoXmlWriter *writer)
 {
     if (properties != 0) {
+        QString fontSize = properties->attribute("fo:font-size");
+        if (!fontSize.isEmpty()) {
+            writer->startElement("w:sz");
+            int sizeInHalfPoints = 0;
+            QString unit = fontSize.right(2);
+            if (unit == "pt") {
+                sizeInHalfPoints = ptToHalfPt(fontSize.left(fontSize.length() - 2).toDouble());
+            }
+            else if (unit == "in") {
+                sizeInHalfPoints = inToHalfPt(fontSize.left(fontSize.length() - 2).toDouble());
+            }
+            if (sizeInHalfPoints > 0) {
+                writer->addAttribute("w:val", sizeInHalfPoints);
+            }
+            writer->endElement(); // w:sz
+        }
+        QString fontSizeC = properties->attribute("fo:font-size-complex");
+        if (!fontSizeC.isEmpty()) {
+            writer->startElement("w:szCs");
+            int sizeInHalfPoints = 0;
+            QString unit = fontSize.right(2);
+            if (unit == "pt") {
+                sizeInHalfPoints = ptToHalfPt(fontSizeC.left(fontSizeC.length() - 2).toDouble());
+            }
+            else if (unit == "in") {
+                sizeInHalfPoints = inToHalfPt(fontSizeC.left(fontSizeC.length() - 2).toDouble());
+            }
+            if (sizeInHalfPoints > 0) {
+                writer->addAttribute("w:val", sizeInHalfPoints);
+            }
+            writer->endElement(); // w:szCs
+        }
         QString fontWeight = properties->attribute("fo:font-weight");
         if (fontWeight == "bold") {
             writer->startElement("w:b");

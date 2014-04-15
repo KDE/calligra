@@ -95,6 +95,7 @@ void OdfTextReaderDocxBackend::elementTextP(KoXmlStreamReader &reader, OdfReader
         QString textStyle = attributes.value("text:style-name").toString();
         if (!textStyle.isEmpty()) {
             KoOdfStyle *style = docxContext->styleManager()->style(textStyle);
+            KoOdfStyleProperties *parProperties = style->properties("style:paragraph-properties");
             m_currentParagraphTextProperties = style->properties("style:text-properties");
             m_currentParagraphParent = style->parent();
             if (!m_currentParagraphParent.isEmpty()) {
@@ -102,6 +103,7 @@ void OdfTextReaderDocxBackend::elementTextP(KoXmlStreamReader &reader, OdfReader
                 writer->addAttribute("w:val", m_currentParagraphParent);
                 writer->endElement(); // w:pStyle
             }
+            DocxStyleHelper::handleParagraphStyles(parProperties, writer);
             writer->startElement("w:rPr");
             DocxStyleHelper::handleTextStyles(m_currentParagraphTextProperties, writer);
             writer->endElement(); // w:rPr
