@@ -21,6 +21,9 @@
 #include <QDomElement>
 #include <QFileInfo>
 #include <QImageReader>
+#include <QByteArray>
+#include <QBuffer>
+#include <QCryptographicHash>
 
 KisPngBrush::KisPngBrush(const QString& filename)
     : KisBrush(filename)

@@ -26,6 +26,7 @@
 #include <QDomElement>
 #include <QFile>
 #include <QPoint>
+#include <QFileInfo>
 #include <QCryptographicHash>
 #include <QBuffer>
 
@@ -167,7 +168,7 @@ KisBrush::~KisBrush()
 
 QImage KisBrush::brushTipImage() const
 {
-    return d->image;
+    return d->brushTipImage;
 }
 
 qint32 KisBrush::width() const
@@ -252,7 +253,7 @@ void KisBrush::setBrushTipImage(const QImage& image)
 {
     Q_ASSERT(!image.isNull());
     setImage(image);
-    d->image = image;
+    d->brushTipImage = image;
 
     setWidth(image.width());
     setHeight(image.height());
@@ -282,17 +283,14 @@ void KisBrush::predefinedBrushToXML(const QString &type, QDomElement& e) const
 
 QByteArray KisBrush::generateMD5() const
 {
-    QByteArray ba;
-//    QBuffer buf(&ba);
-//    save(&buf);
-
-//    if (!ba.isEmpty()) {
-//        QCryptographicHash md5(QCryptographicHash::Md5);
-//        md5.addData(ba);
-//        return md5.result();
-//    }
-
-    return ba;
+    if (!filename().isNull() && QFileInfo(filename()).exists()) {
+        QFile f(filename());
+        f.open(QFile::ReadOnly);
+        QCryptographicHash md5(QCryptographicHash::Md5);
+        md5.addData(f.readAll());
+        return md5.result();
+    }
+    return QByteArray();
 }
 
 void KisBrush::toXML(QDomDocument& /*document*/ , QDomElement& element) const

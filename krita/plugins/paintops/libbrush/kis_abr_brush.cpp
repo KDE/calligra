@@ -24,6 +24,9 @@
 #include <QFile>
 #include <QImage>
 #include <QPoint>
+#include <QByteArray>
+#include <QBuffer>
+#include <QCryptographicHash>
 
 #include <kis_debug.h>
 #include <klocale.h>
@@ -37,8 +40,9 @@
 
 #define DEFAULT_SPACING 0.25
 
-KisAbrBrush::KisAbrBrush(const QString& filename)
+KisAbrBrush::KisAbrBrush(const QString& filename, const QByteArray &parentMD5)
     : KisBrush(filename)
+    , m_parentMD5(parentMD5)
 {
     setBrushType(INVALID);
     setHasColor(false);
@@ -75,4 +79,23 @@ void KisAbrBrush::toXML(QDomDocument& d, QDomElement& e) const
 QString KisAbrBrush::defaultFileExtension() const
 {
     return QString();
+}
+
+QByteArray KisAbrBrush::generateMD5() const
+{
+    if (!brushTipImage().isNull()) {
+#if QT_VERSION >= 0x040700
+        QByteArray ba = QByteArray::fromRawData((const char*)brushTipImage().constBits(), brushTipImage().byteCount());
+#else
+        QByteArray ba = QByteArray::fromRawData((const char*)brushTipImage().bits(), brushTipImage().byteCount());
+#endif
+
+        QCryptographicHash md5(QCryptographicHash::Md5);
+        md5.addData(ba);
+        md5.addData(m_parentMD5);
+
+        return md5.result();
+    }
+    return QByteArray();
+
 }

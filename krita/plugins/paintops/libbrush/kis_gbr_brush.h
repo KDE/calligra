@@ -67,8 +67,7 @@ public:
     /**
      * @return a preview of the brush
      */
-    virtual QImage image() const;
-
+    virtual QImage brushTipImage() const;
     /**
      * If the brush image data are colorful (e.g. you created the brush from the canvas with custom brush)
      * and you want to paint with it as with masks, set to true.

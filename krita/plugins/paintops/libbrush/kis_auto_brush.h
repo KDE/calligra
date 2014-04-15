@@ -64,10 +64,14 @@ public:
     const KisMaskGenerator* maskGenerator() const;
     qreal randomness() const;
     qreal density() const;
-private:
-    QImage createBrushPreview();
+
+protected:
+
+    virtual QByteArray generateMD5() const;
 
 private:
+
+    QImage createBrushPreview();
 
     struct Private;
     Private* const d;
