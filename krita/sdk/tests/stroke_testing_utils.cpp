@@ -87,9 +87,6 @@ KoCanvasResourceManager* utils::createResourceManager(KisImageWSP image,
         Q_ASSERT(node && dynamic_cast<KisPaintLayer*>(node.data()));
     }
 
-    i.setValue(node);
-    manager->setResource(KisCanvasResourceProvider::CurrentKritaNode, i);
-
     KisPaintOpPresetSP preset;
 
     if (!presetFileName.isEmpty()) {

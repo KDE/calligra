@@ -28,6 +28,7 @@
 #include "kis_canvas2.h"
 #include "kis_pixel_selection.h"
 #include "kis_selection_tool_helper.h"
+#include <kis_image_view.h>
 
 
 KisToolSelectPath::KisToolSelectPath(KoCanvasBase * canvas)
@@ -82,9 +83,6 @@ void __KisToolSelectPathLocalTool::paintPath(KoPathShape &pathShape, QPainter &p
 
 void __KisToolSelectPathLocalTool::addPathShape(KoPathShape* pathShape)
 {
-    KisNodeSP currentNode =
-        canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>();
-
     pathShape->normalize();
     pathShape->close();
 

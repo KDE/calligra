@@ -68,6 +68,7 @@
 #include "kis_config.h"
 #include "kis_config_notifier.h"
 #include "kis_cursor.h"
+#include <kis_image_view.h>
 #include <recorder/kis_recorded_paint_action.h>
 #include <kis_selection_mask.h>
 
@@ -168,8 +169,7 @@ void KisTool::activate(ToolActivation, const QSet<KoShape*> &)
 
     //canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>()->settings()->activate();
 
-    d->currentNode = canvas()->resourceManager()->
-            resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>();
+    d->currentNode = static_cast<KisCanvas2*>(canvas())->imageView()->currentNode();
     d->currentExposure = static_cast<float>(canvas()->resourceManager()->
                                             resource(KisCanvasResourceProvider::HdrExposure).toDouble());
     d->currentGenerator = static_cast<KisFilterConfiguration*>(canvas()->resourceManager()->
