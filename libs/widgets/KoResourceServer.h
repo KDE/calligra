@@ -160,14 +160,10 @@ public:
                 QList<T*> resources = createResources(front);
                 foreach(T* resource, resources) {
                     Q_CHECK_PTR(resource);
-                    if (resource->load() && resource->valid()) {
+                    if (resource->load() && resource->valid() && !resource->md5().isEmpty()) {
                         QByteArray md5 = resource->md5();
-                        if (!md5.isEmpty()) {
-                            m_resourcesByMd5[md5] = resource;
-                        }
-                        else {
-                            qWarning() << "Empty MD5 for resource:" << fname;
-                        }
+                        m_resourcesByMd5[md5] = resource;
+
                         m_resourcesByFilename[resource->shortFilename()] = resource;
 
                         if ( resource->name().isEmpty() ) {
