@@ -73,8 +73,10 @@ struct KisFilterManager::Private {
     QPointer<KisDlgFilter> filterDialog;
 };
 
-KisFilterManager::KisFilterManager(KisView2 * view) : d(new Private)
+KisFilterManager::KisFilterManager(KisView2 * view)
+    : d(new Private)
 {
+    Q_ASSERT(view);
     d->view = view;
 }
 
@@ -182,6 +184,9 @@ void KisFilterManager::showFilterDialog(const QString &filterId)
      */
     d->view->image()->barrierLock();
     d->view->image()->unlock();
+
+    Q_ASSERT(d->view);
+    Q_ASSERT(d->view->activeNode());
 
     KisPaintDeviceSP dev = d->view->activeNode()->paintDevice();
     if (!dev) {

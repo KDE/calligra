@@ -132,6 +132,9 @@ KisImageView::KisImageView(KoPart *part, KisDoc2 *doc, QWidget *parent)
     if (!d->doc->isLoading() || d->doc->image()) {
         slotLoadingFinished();
     }
+
+    d->currentNode = doc->image()->root()->lastChild();
+    d->currentLayer = dynamic_cast<KisLayer*>(d->currentNode.data());
 }
 
 KisImageView::~KisImageView()
