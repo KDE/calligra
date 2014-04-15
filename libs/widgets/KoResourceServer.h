@@ -161,6 +161,7 @@ public:
                 foreach(T* resource, resources) {
                     Q_CHECK_PTR(resource);
                     if (resource->load() && resource->valid()) {
+                        m_resourcesByMd5[resource->md5()] = resource;
                         m_resourcesByFilename[resource->shortFilename()] = resource;
 
                         if ( resource->name().isEmpty() ) {
@@ -180,6 +181,8 @@ public:
                 m_loadLock.unlock();
             }
         }
+
+        Q_ASSERT((m_resourcesByFilename.size() == m_resourcesByName.size()) == m_resourcesByMd5.size());
 
         m_resources = sortedResources();
 
@@ -219,6 +222,7 @@ public:
         }
 
         m_resourcesByFilename[resource->shortFilename()] = resource;
+        m_resourcesByMd5[resource->md5()] = resource;
         m_resourcesByName[resource->name()] = resource;
         if (infront) {
             m_resources.insert(0, resource);
@@ -237,7 +241,7 @@ public:
         if ( !m_resourcesByFilename.contains( resource->shortFilename() ) ) {
             return false;
         }
-
+        m_resourcesByMd5.remove(resource->md5());
         m_resourcesByName.remove(resource->name());
         m_resourcesByFilename.remove(resource->shortFilename());
         m_resources.removeAt(m_resources.indexOf(resource));
@@ -255,7 +259,7 @@ public:
         if ( !m_resourcesByFilename.contains( resource->shortFilename() ) ) {
             return false;
         }
-
+        m_resourcesByMd5.remove(resource->md5());
         m_resourcesByName.remove(resource->name());
         m_resourcesByFilename.remove(resource->shortFilename());
         m_resources.removeAt(m_resources.indexOf(resource));
@@ -387,6 +391,11 @@ public:
     T* resourceByName( const QString& name ) const
     {
         return m_resourcesByName.value(name);
+    }
+
+    T* resourceByMD5(const QByteArray& md5) const
+    {
+        return m_resourcesByMd5.value(md5);
     }
 
     /**
@@ -591,6 +600,8 @@ private:
 
     QHash<QString, T*> m_resourcesByName;
     QHash<QString, T*> m_resourcesByFilename;
+    QHash<QByteArray, T*> m_resourcesByMd5;
+
     QList<T*> m_resourceBlackList;
     QList<T*> m_resources; ///< list of resources in order of addition
     QList<KoResourceServerObserver<T>*> m_observers;
