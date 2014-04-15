@@ -267,21 +267,39 @@ void KoResourceTagStore::readXMLFile(bool serverIdentity)
 
     QDomNodeList resourceNodesList = root.childNodes();
 
+    QString resourceName;
+    QString resourceMD5;
+
     for (int i = 0; i < resourceNodesList.count(); i++) {
-        QDomElement resourceEl = resourceNodesList.at(i).toElement();
-        if (resourceEl.tagName() == "resource") {
-            QString resourceName = resourceEl.attribute("identifier");
+        QDomElement element = resourceNodesList.at(i).toElement();
+        if (element.tagName() == "resource") {
+
+            if (element.hasAttribute("identifier")) {
+                resourceName = element.attribute("identifier");
+            }
+
+            if (element.hasAttribute("md4")) {
+                resourceMD5 = element.attribute("md5");
+            }
+
             resourceName.replace(QString("~"), QDir::homePath());
+
             if (resourceName == "dummy" || isServerResource(resourceName) || !serverIdentity) {
+
                 QDomNodeList tagNodesList = resourceNodesList.at(i).childNodes();
+
                 for (int j = 0; j < tagNodesList.count() ; j++) {
+
                     QDomElement tagEl = tagNodesList.at(j).toElement();
+
                     if (resourceName != "dummy") {
                         addTag(resourceName, tagEl.text());
                     } else {
                         addTag(0, tagEl.text());
                     }
+
                 }
+
             }
         }
     }
