@@ -202,6 +202,12 @@ void KoResourceBundle::setThumbnail(QString filename)
     save();
 }
 
+QByteArray KoResourceBundle::generateMD5() const
+{
+    Q_ASSERT("Implement this!");
+    return QByteArray();
+}
+
 QString KoResourceBundle::getAuthor()
 {
     return meta->getValue("author");
