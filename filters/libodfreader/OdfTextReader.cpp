@@ -543,7 +543,7 @@ void OdfTextReader::readParagraphContents(KoXmlStreamReader &reader)
         //          <text:image-count> 7.5.18.7
         //          <text:initial-creator> 7.5.2
         //          <text:keywords> 7.5.12
-        //          <text:line-break> 6.1.5
+        //   [done] <text:line-break> 6.1.5
         //          <text:measure> 7.7.13
         //          <text:meta> 6.1.9
         //          <text:meta-field> 7.5.19
@@ -616,6 +616,9 @@ void OdfTextReader::readParagraphContents(KoXmlStreamReader &reader)
         if (tagName == "text:a") {
             readElementTextA(reader);
         }
+        else if (tagName == "text:line-break") {
+            readElementTextLineBreak(reader);
+        }
         else if (tagName == "text:span") {
             readElementTextSpan(reader);
         }
@@ -650,6 +653,18 @@ void OdfTextReader::readElementTextA(KoXmlStreamReader &reader)
     readParagraphContents(reader);
 
     m_backend->elementTextA(reader, m_context);
+    DEBUGEND();
+}
+
+void OdfTextReader::readElementTextLineBreak(KoXmlStreamReader &reader)
+{
+    DEBUGSTART();
+    m_backend->elementTextLineBreak(reader, m_context);
+
+    // This element has no child elements in ODF 1.2.
+    reader.skipCurrentElement();
+
+    m_backend->elementTextLineBreak(reader, m_context);
     DEBUGEND();
 }
 

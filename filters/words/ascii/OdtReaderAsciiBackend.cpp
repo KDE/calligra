@@ -90,11 +90,16 @@ void OdtReaderAsciiBackend::elementTextP(KoXmlStreamReader &reader, OdfReaderCon
 // Paragraph level functions: spans, annotations, notes, text content itself, etc.
 
 
-void OdtReaderAsciiBackend::elementTextSpan(KoXmlStreamReader &reader, OdfReaderContext *context)
+void OdtReaderAsciiBackend::elementTextLineBreak(KoXmlStreamReader &reader, OdfReaderContext *context)
 {
     DEBUG_BACKEND();
-    Q_UNUSED(reader);
-    Q_UNUSED(context);
+    if (!reader.isStartElement())
+        return;
+
+    OdfReaderAsciiContext *asciiContext = dynamic_cast<OdfReaderAsciiContext*>(context);
+    Q_ASSERT(asciiContext);
+
+    asciiContext->outStream << '\n';
 }
 
 void OdtReaderAsciiBackend::elementTextS(KoXmlStreamReader &reader, OdfReaderContext *context)
@@ -116,6 +121,13 @@ void OdtReaderAsciiBackend::elementTextS(KoXmlStreamReader &reader, OdfReaderCon
     for (quint32 i = 0; i < numSpaces; ++i) {
         asciiContext->outStream << ' ';
     }
+}
+
+void OdtReaderAsciiBackend::elementTextSpan(KoXmlStreamReader &reader, OdfReaderContext *context)
+{
+    DEBUG_BACKEND();
+    Q_UNUSED(reader);
+    Q_UNUSED(context);
 }
 
 
