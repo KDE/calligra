@@ -69,13 +69,15 @@ private:
 
     /// To check whether the resource belongs to the present server or not
     bool isServerResource(const QString &resourceName) const;
-    void addTag(const QString& fileName, const QString& tag);
+    void addTagInternal(const QByteArray md5, const QString& fileName, const QString& tag);
     /// If resource filenames have no extensions, then we add "-krita.extension".
     QString adjustedFileName(const QString &fileName) const;
     /// Removes the adjustements before going to the server
     QStringList removeAdjustedFileNames(QStringList fileNamesList);
 
-    QMultiHash<QString, QString> m_tagRepo;
+    QMultiHash<QString, QString> m_fileNamesToTags;
+    QMultiHash<QByteArray, QString> m_md5ToTags;
+
     QHash<QString, int> m_tagList;
     QString m_tagsXMLFile;
     QString m_serverExtensions;

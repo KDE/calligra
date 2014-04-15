@@ -41,7 +41,7 @@ KoResourceTagStore::~KoResourceTagStore()
 
 QStringList KoResourceTagStore::assignedTagsList(KoResource* resource) const
 {
-    return m_tagRepo.values(adjustedFileName(resource->filename()));
+    return m_fileNamesToTags.values(adjustedFileName(resource->filename()));
 }
 
 QStringList KoResourceTagStore::tagNamesList() const
@@ -56,17 +56,19 @@ void KoResourceTagStore::addTag(KoResource* resource, const QString& tag)
     }
     else {
         QString fileName = adjustedFileName(resource->filename());
-        addTag(fileName, tag);
+        QByteArray md5 = resource->md5();
+        addTagInternal(md5, fileName, tag);
     }
 }
 
-void KoResourceTagStore::addTag(const QString& fileName, const QString& tag)
+void KoResourceTagStore::addTagInternal(const QByteArray md5, const QString& fileName, const QString& tag)
 {
-    if (m_tagRepo.contains(fileName, tag)) {
+    if (m_fileNamesToTags.contains(fileName, tag) || m_md5ToTags.contains(md5, tag)) {
         return;
     }
 
-    m_tagRepo.insert(fileName, tag);
+    m_fileNamesToTags.insert(fileName, tag);
+    m_md5ToTags.insert(md5, tag);
 
     if (m_tagList.contains(tag)) {
         m_tagList[tag]++;
@@ -78,16 +80,16 @@ void KoResourceTagStore::addTag(const QString& fileName, const QString& tag)
 void KoResourceTagStore::delTag(KoResource* resource, const QString& tag)
 {
     QString fileName = adjustedFileName(resource->filename());
+    QByteArray md5 = resource->md5();
 
-    if (!m_tagRepo.contains(fileName, tag)) {
-        return;
-    }
+    int res = m_fileNamesToTags.remove(fileName, tag);
+    res += m_md5ToTags.remove(md5, tag);
 
-    m_tagRepo.remove(fileName, tag);
-
-    if (m_tagList.contains(tag)) {
-        if (m_tagList[tag] > 0) {
-            m_tagList[tag]--;
+    if (res > 0) { // decrease the usecount for this tag
+        if (m_tagList.contains(tag)) {
+            if (m_tagList[tag] > 0) {
+                m_tagList[tag]--;
+            }
         }
     }
 }
@@ -104,7 +106,7 @@ QStringList KoResourceTagStore::searchTag(const QString& lineEditText)
         return QStringList();
     }
 
-    QStringList keysList = m_tagRepo.keys(tagsList.takeFirst());
+    QStringList keysList = m_fileNamesToTags.keys(tagsList.takeFirst());
 
     if (tagsList.count() >= 1) {
         QStringList resultKeysList;
@@ -112,7 +114,7 @@ QStringList KoResourceTagStore::searchTag(const QString& lineEditText)
         foreach(const QString & key, keysList) {
             tagPresence = true;
             foreach(const QString & tag, tagsList) {
-                if (!m_tagRepo.contains(key, tag)) {
+                if (!m_fileNamesToTags.contains(key, tag)) {
                     tagPresence = false;
                     break;
                 }
@@ -158,7 +160,7 @@ void KoResourceTagStore::writeXMLFile(bool serverIdentity)
         doc.appendChild(root);
 //    }
 
-    QStringList resourceNames = m_tagRepo.uniqueKeys();
+    QStringList resourceNames = m_fileNamesToTags.uniqueKeys();
 
     resourceNames.replaceInStrings(QDir::homePath(), QString("~"));
 
@@ -201,7 +203,7 @@ void KoResourceTagStore::writeXMLFile(bool serverIdentity)
         QDomElement resourceEl = doc.createElement("resource");
         resourceEl.setAttribute("identifier", resourceName);
 
-        QStringList tags = m_tagRepo.values(resourceName.replace(QString("~"), QDir::homePath()));
+        QStringList tags = m_fileNamesToTags.values(resourceName.replace(QString("~"), QDir::homePath()));
         foreach(const QString & tag, tags) {
             QDomElement tagEl = doc.createElement("tag");
             QDomText tagNameText = doc.createTextNode(tag);
@@ -293,7 +295,7 @@ void KoResourceTagStore::readXMLFile(bool serverIdentity)
                     QDomElement tagEl = tagNodesList.at(j).toElement();
 
                     if (resourceName != "dummy") {
-                        addTag(resourceName, tagEl.text());
+                        addTagInternal(resourceMD5.toAscii(), resourceName, tagEl.text());
                     } else {
                         addTag(0, tagEl.text());
                     }
