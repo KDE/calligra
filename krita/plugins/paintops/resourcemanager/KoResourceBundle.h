@@ -46,6 +46,12 @@ public:
     virtual ~KoResourceBundle();
 
     /**
+     * @brief image
+     * @return a QImage representing this resource.
+     */
+    QImage image() const;
+
+    /**
      * @brief defaultFileExtension
      * @return the default file extension which should be when saving the resource
      */
@@ -81,6 +87,13 @@ public:
     void addMeta(QString type,QString value);
 
     /**
+     * @brief addMeta : Add a Metadata to the resource
+     * @param type type of the metadata
+     * @param value value of the metadata
+     */
+    void setMeta(KoXmlResourceBundleMeta* newMeta);
+
+    /**
      * @brief addFile : Add a file to the bundle
      * @param fileType type of the resource file
      * @param filePath path of the resource file
@@ -93,12 +106,6 @@ public:
      */
     void removeFile(QString fileName);
 
-    /**
-     * @brief removeDir : Remove the chosen directory
-     * @param dirName the name of the directory to be removed
-     * @return true if succeed, false otherwise.
-     */
-    bool removeDir(const QString & dirName);
 
     /**
      * @brief addResourceDirs : Link the directories containing the resources of the bundle to the resource types
@@ -108,7 +115,7 @@ public:
     /**
      * @brief rename : Rename the bundle
      */
-    void rename(QString);
+    void rename(QString,QString);
 
     /**
      * @brief getAuthor
@@ -145,13 +152,16 @@ public:
      * @return true if the bundle is installed, false otherwise.
      */
     bool isInstalled();
-protected:
-    virtual QByteArray generateMD5() const;
+
+    void setThumbnail(QString);
+
 private:
-    KoXmlResourceBundleManifest* m_manifest;
-    KoXmlResourceBundleMeta* m_meta;
-    KoResourceBundleManager* m_manager;
-    bool m_installed;
+    QImage thumbnail;
+    KoXmlResourceBundleManifest* manifest;
+    KoResourceBundleManager* manager;
+    KoXmlResourceBundleMeta* meta;
+
+    bool installed;
 };
 
 #endif // KORESOURCEBUNDLE_H
