@@ -65,7 +65,6 @@ public:
         }
 
         delete zoomManager;
-        delete resourceProvider;
         delete canvasController;
         delete canvas;
         delete viewConverter;
@@ -73,7 +72,6 @@ public:
 
     KisCoordinatesConverter *viewConverter;
     KisCanvasController *canvasController;
-    KisCanvasResourceProvider *resourceProvider;
     KisCanvas2 *canvas;
     KisZoomManager *zoomManager;
     KisDoc2 *doc;
@@ -105,8 +103,6 @@ KisImageView::KisImageView(KoPart *part, KisDoc2 *doc, QWidget *parent)
     d->canvasController->setCanvasMode(KoCanvasController::Infinite);
     d->canvasController->setVastScrolling(cfg.vastScrolling());
 
-    d->resourceProvider = new KisCanvasResourceProvider(this);
-    d->resourceProvider->resetDisplayProfile(QApplication::desktop()->screenNumber(this));
 
     KConfigGroup grp(KGlobal::config(), "krita/crashprevention");
     if (grp.readEntry("CreatingCanvas", false)) {
@@ -120,11 +116,8 @@ KisImageView::KisImageView(KoPart *part, KisDoc2 *doc, QWidget *parent)
     d->canvas = new KisCanvas2(d->viewConverter, this, doc->shapeController());
     grp.writeEntry("CreatingCanvas", false);
     grp.sync();
-    connect(d->resourceProvider, SIGNAL(sigDisplayProfileChanged(const KoColorProfile*)), d->canvas, SLOT(slotSetDisplayProfile(const KoColorProfile*)));
 
     d->canvasController->setCanvas(d->canvas);
-
-    d->resourceProvider->setResourceManager(d->canvas->resourceManager());
 
     Q_ASSERT(d->canvasController);
     KoToolManager::instance()->addController(d->canvasController);
@@ -149,6 +142,9 @@ KisImageView::~KisImageView()
 void KisImageView::setParentView(KisView2 *view)
 {
     d->parentView = view;
+    view->resourceProvider()->resetDisplayProfile(QApplication::desktop()->screenNumber(this));
+    connect(view->resourceProvider(), SIGNAL(sigDisplayProfileChanged(const KoColorProfile*)), d->canvas, SLOT(slotSetDisplayProfile(const KoColorProfile*)));
+
 }
 
 KisView2* KisImageView::parentView() const
@@ -173,7 +169,10 @@ KoCanvasController *KisImageView::canvasController() const
 
 KisCanvasResourceProvider *KisImageView::resourceProvider() const
 {
-    return d->resourceProvider;
+    if (d->parentView) {
+        return d->parentView->resourceProvider();
+    }
+    return 0;
 }
 
 KisCanvas2 *KisImageView::canvasBase() const

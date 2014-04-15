@@ -284,7 +284,7 @@ KisView2::KisView2(QWidget *parent)
 
     setXMLFile(QString("%1.rc").arg(qAppName()));
 
-    d->canvasResourceProvider = new KisCanvasResourceProvider(0);
+    d->canvasResourceProvider = new KisCanvasResourceProvider(this);
     d->canvasResourceManager = new KoCanvasResourceManager();
     d->canvasResourceProvider->setResourceManager(d->canvasResourceManager);
 

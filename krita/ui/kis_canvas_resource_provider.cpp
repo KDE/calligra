@@ -44,7 +44,7 @@
 #include "kis_image_view.h"
 #include "canvas/kis_canvas2.h"
 
-KisCanvasResourceProvider::KisCanvasResourceProvider(KisImageView *view)
+KisCanvasResourceProvider::KisCanvasResourceProvider(KisView2 *view)
     : m_view(view)
     , m_displayProfile(0)
 {
@@ -163,7 +163,7 @@ KisImageWSP KisCanvasResourceProvider::currentImage() const
 KisNodeSP KisCanvasResourceProvider::currentNode() const
 {
     if (m_view) {
-        return m_view->currentNode();
+        return m_view->activeNode();
     }
     return 0;
 }

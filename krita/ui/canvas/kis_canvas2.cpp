@@ -27,6 +27,7 @@
 #include <QTime>
 #include <QLabel>
 #include <QMouseEvent>
+#include <QDesktopWidget>
 
 #include <kis_debug.h>
 
@@ -357,8 +358,7 @@ void KisCanvas2::createOpenGLCanvas()
 void KisCanvas2::createCanvas(bool useOpenGL)
 {
     KisConfig cfg;
-    const KoColorProfile *profile = m_d->view->resourceProvider()->currentDisplayProfile();
-    m_d->monitorProfile = const_cast<KoColorProfile*>(profile);
+    m_d->monitorProfile = const_cast<KoColorProfile*>(cfg.displayProfile(QApplication::desktop()->screenNumber(m_d->view)));
 
     m_d->conversionFlags = KoColorConversionTransformation::HighQuality;
     if (cfg.useBlackPointCompensation()) m_d->conversionFlags |= KoColorConversionTransformation::BlackpointCompensation;
