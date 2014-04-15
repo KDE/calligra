@@ -212,7 +212,7 @@ void KoResourceFiltering::setCurrentTag(const QString& tagSet)
     rebuildCurrentTagFilenames();
 }
 
-void KoResourceFiltering::setTagObject(KoResourceTagStore* tagObject)
+void KoResourceFiltering::setTagStore(KoResourceTagStore* tagStore)
 {
-    d->tagStore = tagObject;
+    d->tagStore = tagStore;
 }
