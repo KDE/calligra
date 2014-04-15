@@ -1,7 +1,10 @@
 * export: 
-   - spaces (tagS)
-   - linebreaks (tagLineBreak)
+   - spaces (tag text:s)                                                Done
+   - linebreaks (tag text:line-break)
    - pagebreaks?
+
+* Bugs
+   - missing newlines after headers (tag text:h)                        Done
 
 - any TODO in status.html
 - any TODO in source code
