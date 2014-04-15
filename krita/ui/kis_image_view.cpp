@@ -132,9 +132,6 @@ KisImageView::KisImageView(KoPart *part, KisDoc2 *doc, QWidget *parent)
     if (!d->doc->isLoading() || d->doc->image()) {
         slotLoadingFinished();
     }
-
-    d->currentNode = doc->image()->root()->lastChild();
-    d->currentLayer = dynamic_cast<KisLayer*>(d->currentNode.data());
 }
 
 KisImageView::~KisImageView()
@@ -430,11 +427,11 @@ void KisImageView::slotLoadingFinished()
     doc->setPreActivatedNode(0); // to make sure that we don't keep a reference to a layer the user can later delete.
 
     if (!activeNode) {
-        activeNode = image()->rootLayer()->firstChild();
+        activeNode = image()->rootLayer()->lastChild();
     }
 
     while (activeNode && !activeNode->inherits("KisLayer")) {
-        activeNode = activeNode->nextSibling();
+        activeNode = activeNode->prevSibling();
     }
 
     setCurrentNode(activeNode);
