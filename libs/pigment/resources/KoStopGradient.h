@@ -75,10 +75,10 @@ private:
 
     bool save(QIODevice *io) const;
 
-    void loadKarbonGradient(QFile* file);
+    void loadKarbonGradient(QIODevice *file);
     void parseKarbonGradient(const QDomElement& element);
 
-    void loadSvgGradient(QFile* file);
+    void loadSvgGradient(QIODevice *file);
     void parseSvgGradient(const QDomElement& element);
     void parseSvgColor(QColor &color, const QString &s);
 };

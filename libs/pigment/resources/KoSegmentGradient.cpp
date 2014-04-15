@@ -81,6 +81,10 @@ bool KoSegmentGradient::init()
     QByteArray m_data = file.readAll();
     file.close();
 
+    QCryptographicHash md5(QCryptographicHash::Md5);
+    md5.addData(m_data);
+    setMD5(md5.result());
+
     QTextStream fileContent(m_data, QIODevice::ReadOnly);
     fileContent.setAutoDetectUnicode(true);
 

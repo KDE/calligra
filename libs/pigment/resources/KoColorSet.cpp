@@ -70,6 +70,11 @@ bool KoColorSet::load()
     if (file.size() == 0) return false;
     file.open(QIODevice::ReadOnly);
     m_data = file.readAll();
+
+    QCryptographicHash md5(QCryptographicHash::Md5);
+    md5.addData(m_data);
+    setMD5(md5.result());
+
     file.close();
     return init();
 }
@@ -93,16 +98,12 @@ qint32 KoColorSet::nColors()
 
 QByteArray KoColorSet::generateMD5() const
 {
-    QByteArray ba;
-    QBuffer buf(&ba);
-    save(&buf);
-
-    if (!ba.isEmpty()) {
+    if (!m_data.isEmpty()) {
         QCryptographicHash md5(QCryptographicHash::Md5);
-        md5.addData(ba);
+        md5.addData(m_data);
         return md5.result();
     }
-    return ba;
+    return QByteArray();
 }
 
 void KoColorSet::save(QIODevice *io) const

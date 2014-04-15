@@ -54,16 +54,23 @@ bool KoStopGradient::load()
         strExt = filename().mid(result).toLower();
     }
     QFile f(filename());
+    f.open(QIODevice::ReadOnly);
+    QByteArray ba = f.readAll();
 
-    if (f.open(QIODevice::ReadOnly)) {
-        if (strExt == ".kgr") {
-            loadKarbonGradient(&f);
-        } else if (strExt == ".svg") {
-            loadSvgGradient(&f);
-        }
+    QCryptographicHash md5(QCryptographicHash::Md5);
+    md5.addData(ba);
+    setMD5(md5.result());
+
+    QBuffer buf(&ba);
+    if (strExt == ".kgr") {
+        loadKarbonGradient(&buf);
     }
-    if (m_stops.count() >= 2)
+    else if (strExt == ".svg") {
+        loadSvgGradient(&buf);
+    }
+    if (m_stops.count() >= 2) {
         setValid(true);
+    }
 
     updatePreview();
 
@@ -225,7 +232,7 @@ void KoStopGradient::setStops(QList< KoGradientStop > stops)
     updatePreview();
 }
 
-void KoStopGradient::loadKarbonGradient(QFile* file)
+void KoStopGradient::loadKarbonGradient(QIODevice *file)
 {
     QDomDocument doc;
 
@@ -246,7 +253,7 @@ void KoStopGradient::loadKarbonGradient(QFile* file)
     }
 }
 
-void KoStopGradient::loadSvgGradient(QFile* file)
+void KoStopGradient::loadSvgGradient(QIODevice *file)
 {
     QDomDocument doc;
 

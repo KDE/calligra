@@ -32,7 +32,7 @@
 #include <QList>
 #include <QFileInfo>
 #include <QDir>
-#include <QMultiMap>
+#include <QMultiHash>
 #include <kglobal.h>
 #include <kstandarddirs.h>
 #include <kcomponentdata.h>
@@ -161,7 +161,13 @@ public:
                 foreach(T* resource, resources) {
                     Q_CHECK_PTR(resource);
                     if (resource->load() && resource->valid()) {
-                        m_resourcesByMd5[resource->md5()] = resource;
+                        QByteArray md5 = resource->md5();
+                        if (!md5.isEmpty()) {
+                            m_resourcesByMd5[md5] = resource;
+                        }
+                        else {
+                            qWarning() << "Empty MD5 for resource:" << fname;
+                        }
                         m_resourcesByFilename[resource->shortFilename()] = resource;
 
                         if ( resource->name().isEmpty() ) {
@@ -182,7 +188,7 @@ public:
             }
         }
 
-        Q_ASSERT((m_resourcesByFilename.size() == m_resourcesByName.size()) == m_resourcesByMd5.size());
+        //qDebug() << type() << m_resourcesByFilename.size() << m_resourcesByName.size() << m_resourcesByMd5.size();
 
         m_resources = sortedResources();
 
