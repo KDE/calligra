@@ -969,6 +969,7 @@ bool KoDocument::saveNativeFormatCalligra(KoStore *store)
         KoStoreDevice dev(store);
         if (!saveToStream(&dev) || !store->close()) {
             kDebug(30003) << "saveToStream failed";
+            d->lastErrorMessage = "saveToStream failed";
             delete store;
             return false;
         }
@@ -993,11 +994,13 @@ bool KoDocument::saveNativeFormatCalligra(KoStore *store)
     }
 
     if (!completeSaving(store)) {
+        d->lastErrorMessage = "completeSaving failed";
         delete store;
         return false;
     }
     kDebug(30003) << "Saving done of url:" << url().url();
     if (!store->finalize()) {
+        d->lastErrorMessage = "store->finalize failed";
         delete store;
         return false;
     }
