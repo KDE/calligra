@@ -28,13 +28,13 @@ public:
     , isExactMatch("\"([\\w\\s]+)\"")
     , searchTokenizer("\\s*,+\\s*")
     , hasNewFilters(false)
-    , tagObject(0)
+    , tagStore(0)
     {}
     QRegExp isTag;
     QRegExp isExactMatch;
     QRegExp searchTokenizer;
     bool hasNewFilters;
-    KoResourceTagStore *tagObject;
+    KoResourceTagStore *tagStore;
     QStringList tagSetFilenames;
     QStringList includedNames;
     QStringList excludedNames;
@@ -109,9 +109,9 @@ void KoResourceFiltering::populateIncludeExcludeFilters(const QStringList& filte
 
         if(!name.isEmpty()) {
             if (name.startsWith('[')) {
-                if (d->isTag.exactMatch(name) && d->tagObject) {
+                if (d->isTag.exactMatch(name) && d->tagStore) {
                     name = d->isTag.cap(1);
-                    (*target) += d->tagObject->searchTag(name);
+                    (*target) += d->tagStore->searchTag(name);
                 }
             }
             else if (name.startsWith('"')) {
@@ -203,7 +203,7 @@ void KoResourceFiltering::setDoneFiltering()
 
 void KoResourceFiltering::rebuildCurrentTagFilenames()
 {
-    d->tagSetFilenames = d->tagObject->searchTag(d->currentTag);
+    d->tagSetFilenames = d->tagStore->searchTag(d->currentTag);
 }
 
 void KoResourceFiltering::setCurrentTag(const QString& tagSet)
@@ -214,5 +214,5 @@ void KoResourceFiltering::setCurrentTag(const QString& tagSet)
 
 void KoResourceFiltering::setTagObject(KoResourceTagStore* tagObject)
 {
-    d->tagObject = tagObject;
+    d->tagStore = tagObject;
 }
