@@ -90,7 +90,9 @@ public:
         }
         return fileNames;
     }
-
+private:
+    friend class KoResourceTagStore;
+    virtual QByteArray md5ForFileName(const QString &fileName) = 0;
 
 private:
     QString m_type;
@@ -115,7 +117,7 @@ public:
     {
         m_blackListFile = KStandardDirs::locateLocal("data", "krita/" + type + ".blacklist");
         m_blackListFileNames = readBlackListFile();
-        m_tagStore = new KoResourceTagStore(type, extensions);
+        m_tagStore = new KoResourceTagStore(this, type, extensions);
     }
 
     virtual ~KoResourceServer()
@@ -599,6 +601,14 @@ protected:
     }
 
 private:
+
+    // for converting old-sile filename based tagging stores
+    QByteArray md5ForFileName(const QString &fileName) {
+        if (m_resourcesByFilename.contains(fileName)) {
+            return m_resourcesByFilename[fileName]->md5();
+        }
+        return QByteArray();
+    }
 
     QHash<QString, T*> m_resourcesByName;
     QHash<QString, T*> m_resourcesByFilename;

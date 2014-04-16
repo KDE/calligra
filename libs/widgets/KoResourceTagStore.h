@@ -30,6 +30,7 @@
 #include <ksharedconfig.h>
 #include <KoConfig.h>
 
+class KoResourceServerBase;
 
 /**
  * KoResourceTagging allows to add and delete tags to resources and also search reources using tags
@@ -43,7 +44,7 @@ public:
     * Constructs a KoResourceTagging object
     *
     */
-    explicit KoResourceTagStore(const QString& resourceType, const QString& extensions);
+    explicit KoResourceTagStore(KoResourceServerBase *resourceServer, const QString& resourceType, const QString& extensions);
     ~KoResourceTagStore();
 
     QStringList assignedTagsList(KoResource* resource) const;
@@ -69,13 +70,12 @@ private:
 
     /// To check whether the resource belongs to the present server or not
     bool isServerResource(const QString &resourceName) const;
-    void addTagInternal(const QByteArray md5, const QString& fileName, const QString& tag);
+    void addTagInternal(const QByteArray md5, const QString& tag);
     /// If resource filenames have no extensions, then we add "-krita.extension".
     QString adjustedFileName(const QString &fileName) const;
     /// Removes the adjustements before going to the server
     QStringList removeAdjustedFileNames(QStringList fileNamesList);
 
-    QMultiHash<QString, QString> m_fileNamesToTags;
     QMultiHash<QByteArray, QString> m_md5ToTags;
 
     QHash<QString, int> m_tagList;
@@ -83,6 +83,8 @@ private:
     QString m_serverExtensions;
 
     KConfigGroup m_config;
+
+    KoResourceServerBase *m_resourceServer;
 };
 
 
