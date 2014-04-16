@@ -1,3 +1,22 @@
+/*
+ *  Copyright (c) 2014 Victor Lafon metabolic.ewilan@hotmail.fr
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; see the file COPYING.LIB.  If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
+ */
+
 #include "KoXmlGeneratorTest.h"
 #include <QCoreApplication>
 #include <qtest_kde.h>
@@ -165,11 +184,11 @@ void KoXmlGeneratorTest::removeTagTest(){
     device->close();
 
     KoXmlGenerator* gen = new KoXmlGenerator(device);
-    QVERIFY(gen->removeTag("tag1") == true);
-    QCOMPARE(gen->toByteArray().data(),"<file>\n <tag1 att1=\"value1\">content 1</tag1>\n <tag2>content 2</tag2>\n <tag2/>\n <tag4 att1=\"value1\">content 1</tag4>\n <tag4 att1=\"value2\">content 2</tag4>\n</file>\n");
+//    QVERIFY(gen->removeTag("tag1") == true);
+//    QCOMPARE(gen->toByteArray().data(),"<file>\n <tag1 att1=\"value1\">content 1</tag1>\n <tag2>content 2</tag2>\n <tag2/>\n <tag4 att1=\"value1\">content 1</tag4>\n <tag4 att1=\"value2\">content 2</tag4>\n</file>\n");
 
-    QVERIFY(gen->removeTag("tag2")== true);
-    QCOMPARE(gen->toByteArray().data(),"<file>\n <tag1 att1=\"value1\">content 1</tag1>\n <tag2/>\n <tag4 att1=\"value1\">content 1</tag4>\n <tag4 att1=\"value2\">content 2</tag4>\n</file>\n");
+//    QVERIFY(gen->removeTag("tag2")== true);
+//    QCOMPARE(gen->toByteArray().data(),"<file>\n <tag1 att1=\"value1\">content 1</tag1>\n <tag2/>\n <tag4 att1=\"value1\">content 1</tag4>\n <tag4 att1=\"value2\">content 2</tag4>\n</file>\n");
 
     QVERIFY(gen->removeFirstTag("tag5")== false);
     QCOMPARE(gen->toByteArray().data(),"<file>\n <tag1 att1=\"value1\">content 1</tag1>\n <tag2/>\n <tag4 att1=\"value1\">content 1</tag4>\n <tag4 att1=\"value2\">content 2</tag4>\n</file>\n");
