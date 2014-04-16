@@ -33,7 +33,7 @@ class KActionCollection;
 class KToggleAction;
 class KAction;
 
-class KRITAUI_EXPORT KisGridManager : public KisCanvasDecoration
+class KRITAUI_EXPORT KisGridManager : public QObject
 {
     Q_OBJECT
 public:
@@ -50,6 +50,7 @@ public slots:
 
 private slots:
 
+    void toggleVisibility();
     void toggleSnapToGrid();
     void fastConfig1x1();
     void fastConfig2x2();
@@ -57,10 +58,10 @@ private slots:
     void fastConfig10x10();
     void fastConfig20x20();
     void fastConfig40x40();
-protected:
-    void drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter,KisCanvas2* canvas);
 
 private:
+
+    void updateCanvas();
 
     KisView2* m_view;
     KisImageView *m_imageView;

@@ -46,7 +46,10 @@ KisToolGrid::~KisToolGrid()
 void KisToolGrid::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
     KisTool::activate(toolActivation, shapes);
-    m_canvas->view()->gridManager()->setVisible(true);
+    KisCanvasDecoration *decoration = static_cast<KisCanvas2*>(canvas())->decoration("grid");
+    if (decoration) {
+        decoration->setVisible(true);
+    }
     m_canvas->view()->gridManager()->checkVisibilityAction(true);
     m_canvas->updateCanvas();
 }

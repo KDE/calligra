@@ -444,7 +444,6 @@ void KisView2::setCurrentView(KoView *view)
         connect(d->wrapAroundAction, SIGNAL(toggled(bool)), dynamic_cast<KisCanvasController*>(canvasController()), SLOT(slotToggleWrapAroundMode(bool)));
         connect(canvasControllerWidget(), SIGNAL(toolOptionWidgetsChanged(QList<QPointer<QWidget> >)), mainWindow()->dockerManager(), SLOT(newOptionWidgets(QList<QPointer<QWidget> >)));
 
-        imageView->canvasBase()->addDecoration(d->gridManager);
         imageView->canvasBase()->addDecoration(d->perspectiveGridManager);
         imageView->canvasBase()->addDecoration(d->paintingAssistantsDecoration);
 

@@ -39,13 +39,13 @@
 #include "kis_coordinates_converter.h"
 #include "kis_config.h"
 #include "kis_grid_painter_configuration.h"
+#include "kis_grid_decoration.h"
 #include "kis_image.h"
 #include "kis_view2.h"
 #include "kis_doc2.h"
 #include "kis_image_view.h"
 
-KisGridManager::KisGridManager(KisView2 * parent)
-    : KisCanvasDecoration("grid", i18n("Grid"), parent)
+KisGridManager::KisGridManager(KisView2 * parent) : QObject(parent)
     , m_view(parent)
     , m_imageView(0)
 {
@@ -95,7 +95,7 @@ void KisGridManager::setup(KActionCollection * collection)
 void KisGridManager::setView(KisImageView *imageView)
 {
     if (m_imageView && m_imageView->document()) {
-        m_view->document()->gridData().gridToggleAction()->disconnect(SIGNAL(toggled(bool)), m_toggleGrid);
+        m_imageView->document()->gridData().gridToggleAction()->disconnect(SIGNAL(toggled(bool)), m_toggleGrid);
     }
 
     m_imageView = imageView;
@@ -109,6 +109,12 @@ void KisGridManager::setView(KisImageView *imageView)
 
         connect(imageView->document()->gridData().gridToggleAction(), SIGNAL(toggled(bool)), m_toggleGrid, SLOT(slotToggled(bool)));
 
+        KisCanvasDecoration *decoration = m_imageView->canvasBase()->decoration("grid");
+        if (!decoration) {
+            decoration = new KisGridDecoration();
+            m_imageView->canvasBase()->addDecoration(decoration);
+        }
+        checkVisibilityAction(decoration->visible());
     }
 }
 
@@ -121,10 +127,23 @@ void KisGridManager::checkVisibilityAction(bool check)
     m_toggleGrid->setChecked(check);
 }
 
+void KisGridManager::toggleVisibility()
+{
+    if (!m_imageView)  {
+        return;
+    }
+    KisCanvasDecoration *decoration = m_imageView->canvasBase()->decoration("grid");
+    if (decoration) {
+        decoration->toggleVisibility();
+    }
+}
+
 void KisGridManager::toggleSnapToGrid()
 {
-    m_view->document()->gridData().setSnapToGrid(m_toggleSnapToGrid->isChecked());
-    m_view->canvas()->update();
+    if (m_imageView) {
+        m_imageView->document()->gridData().setSnapToGrid(m_toggleSnapToGrid->isChecked());
+    }
+    updateCanvas();
 }
 
 void KisGridManager::fastConfig1x1()
@@ -132,7 +151,7 @@ void KisGridManager::fastConfig1x1()
     KisConfig cfg;
     cfg.setGridHSpacing(1);
     cfg.setGridVSpacing(1);
-    m_view->canvas()->update();
+    updateCanvas();
 }
 
 void KisGridManager::fastConfig2x2()
@@ -140,7 +159,7 @@ void KisGridManager::fastConfig2x2()
     KisConfig cfg;
     cfg.setGridHSpacing(2);
     cfg.setGridVSpacing(2);
-    m_view->canvas()->update();
+    updateCanvas();
 }
 
 void KisGridManager::fastConfig5x5()
@@ -148,7 +167,7 @@ void KisGridManager::fastConfig5x5()
     KisConfig cfg;
     cfg.setGridHSpacing(5);
     cfg.setGridVSpacing(5);
-    m_view->canvas()->update();
+    updateCanvas();
 }
 
 void KisGridManager::fastConfig10x10()
@@ -156,7 +175,7 @@ void KisGridManager::fastConfig10x10()
     KisConfig cfg;
     cfg.setGridHSpacing(10);
     cfg.setGridVSpacing(10);
-    m_view->canvas()->update();
+    updateCanvas();
 }
 
 void KisGridManager::fastConfig20x20()
@@ -164,7 +183,7 @@ void KisGridManager::fastConfig20x20()
     KisConfig cfg;
     cfg.setGridHSpacing(20);
     cfg.setGridVSpacing(20);
-    m_view->canvas()->update();
+    updateCanvas();
 }
 
 void KisGridManager::fastConfig40x40()
@@ -172,72 +191,14 @@ void KisGridManager::fastConfig40x40()
     KisConfig cfg;
     cfg.setGridHSpacing(40);
     cfg.setGridVSpacing(40);
-    m_view->canvas()->update();
+    updateCanvas();
 }
 
-void KisGridManager::drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter, KisCanvas2 *canvas)
+void KisGridManager::updateCanvas()
 {
-    Q_UNUSED(canvas);
-
-    KisConfig cfg;
-
-    quint32 offsetx = cfg.getGridOffsetX();
-    quint32 offsety = cfg.getGridOffsetY();
-    quint32 hspacing = cfg.getGridHSpacing();
-    quint32 vspacing = cfg.getGridVSpacing();
-    quint32 subdivision = cfg.getGridSubdivisions() - 1;
-
-    QPen mainPen = KisGridPainterConfiguration::mainPen();
-    QPen subdivisionPen = KisGridPainterConfiguration::subdivisionPen();
-
-    qreal x1, y1, x2, y2;
-    QRectF imageRect = converter->documentToImage(updateRect);
-    imageRect.getCoords(&x1, &y1, &x2, &y2);
-
-    QTransform transform = converter->imageToWidgetTransform();
-
-    gc.save();
-    gc.setTransform(transform);
-
-    quint32 i;
-
-    // Draw vertical line
-    i = subdivision - (offsetx / hspacing) % (subdivision + 1);
-    double x = offsetx % hspacing;
-    while (x <= x2) {
-        if (i == subdivision) {
-            gc.setPen(mainPen);
-            i = 0;
-        } else {
-            gc.setPen(subdivisionPen);
-            i++;
-        }
-        if (x >= x1) {
-            // Always draw the full line otherwise the line stippling varies
-            // with the location of area and we get glitchy patterns.
-            gc.drawLine(QPointF(x, y1),QPointF(x, y2));
-        }
-        x += hspacing;
+    if (m_imageView) {
+        m_imageView->canvasBase()->canvasWidget()->update();
     }
-
-    // Draw horizontal line
-    i = subdivision - (offsety / vspacing) % (subdivision + 1);
-    qreal y = offsety % vspacing;
-    while (y <= y2) {
-        if (i == subdivision) {
-            gc.setPen(mainPen);
-            i = 0;
-        } else {
-            gc.setPen(subdivisionPen);
-            i++;
-        }
-        if (y >= y1) {
-            gc.drawLine(QPointF(x1, y), QPointF(x2, y));
-        }
-        y += vspacing;
-    }
-
-    gc.restore();
 }
 
 #include "kis_grid_manager.moc"
