@@ -89,6 +89,10 @@ void DocxStyleHelper::handleTextStyles(KoOdfStyleProperties *properties, KoXmlWr
            writer->addAttribute("w:val", "1");
            writer->endElement(); // w:iCs
         }
+        QString fontName = properties->attribute("style:font-name");
+        if (!fontName.isEmpty()) {
+            // todo
+        }
         QString textPosition = properties->attribute("style:text-position");
         if (!textPosition.isEmpty()) {
            writer->startElement("w:vertAlign");
@@ -133,6 +137,23 @@ void DocxStyleHelper::handleParagraphStyles(KoOdfStyleProperties *properties, Ko
             int percentage = lineHeight.left(lineHeight.length() - 1).toDouble() * 2.4;
             writer->addAttribute("w:line", percentage);
             writer->endElement(); // w:spacing
+        }
+        QString textAlign = properties->attribute("fo:text-align");
+        if (!textAlign.isEmpty()) {
+            writer->startElement("w:jc");
+            if (textAlign == "center") {
+                writer->addAttribute("w:val", "center");
+            }
+            else if (textAlign == "start") {
+                writer->addAttribute("w:val", "left");
+            }
+            else if (textAlign == "right") {
+                writer->addAttribute("w:val", "right");
+            }
+            else if (textAlign == "justify") {
+                writer->addAttribute("w:val", "both");
+            }
+            writer->endElement(); // w:jc
         }
     }
 }
