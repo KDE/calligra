@@ -253,6 +253,7 @@ void KisSelectionManager::setView(KisImageView *imageView)
         if (decoration) {
             disconnect(SIGNAL(currentSelectionChanged()), decoration);
         }
+        m_imageView->image()->undoAdapter()->disconnect(this);
     }
 
     m_imageView = imageView;
@@ -268,7 +269,8 @@ void KisSelectionManager::setView(KisImageView *imageView)
             decoration->setVisible(true);
             m_imageView->canvasBase()->addDecoration(decoration);
         }
-        connect(this, SIGNAL(currentSelectionChanged()), decoration, SLOT(selectionChanged()));        
+        connect(this, SIGNAL(currentSelectionChanged()), decoration, SLOT(selectionChanged()));
+        connect(m_imageView->image()->undoAdapter(), SIGNAL(selectionChanged()), SLOT(selectionChanged()));
     }
 }
 
