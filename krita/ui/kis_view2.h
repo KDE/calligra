@@ -29,6 +29,7 @@
 #include <krita_export.h>
 #include <kis_types.h>
 
+class KisPaintingAssistantsManager;
 class KisAction;
 class QDragEnterEvent;
 class QDropEvent;
@@ -182,7 +183,7 @@ public:
 
     KisGridManager *gridManager();
     KisPerspectiveGridManager *perspectiveGridManager();
-    KisPaintingAssistantsDecoration *paintingAssistantsDecoration();
+    KisPaintingAssistantsManager *paintingAssistantsManager();
 
     /// disable and enable toolbar controls. used for disabling them during painting.
     void enableControls();

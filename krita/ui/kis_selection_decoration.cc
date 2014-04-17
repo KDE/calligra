@@ -35,13 +35,14 @@
 #include "kis_canvas_resource_provider.h"
 #include "kis_coordinates_converter.h"
 #include "kis_config.h"
+#include "kis_image_view.h"
 #include "krita_utils.h"
 
 static const unsigned int ANT_LENGTH = 4;
 static const unsigned int ANT_SPACE = 4;
 static const unsigned int ANT_ADVANCE_WIDTH = ANT_LENGTH + ANT_SPACE;
 
-KisSelectionDecoration::KisSelectionDecoration(KisView2* view)
+KisSelectionDecoration::KisSelectionDecoration(KisImageView* view)
     : KisCanvasDecoration("selection", i18n("Selection decoration"), view),
       m_signalCompressor(500 /*ms*/, KisSignalCompressor::FIRST_INACTIVE),
       m_offset(0),

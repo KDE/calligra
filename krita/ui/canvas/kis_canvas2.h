@@ -34,6 +34,7 @@
 #include "kis_ui_types.h"
 #include "kis_coordinates_converter.h"
 
+class KisPaintingAssistantsDecoration;
 class KoToolProxy;
 class KoColorProfile;
 
@@ -146,6 +147,8 @@ public: // KoCanvasBase implementation
 
 
     KisInputManager *inputManager() const;
+
+    KisPaintingAssistantsDecoration* paintingAssistantsDecoration();
 
 public: // KisCanvas2 methods
 

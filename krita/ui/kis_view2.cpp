@@ -130,6 +130,7 @@
 #include "kis_canvas_controls_manager.h"
 #include "kis_mainwindow_observer.h"
 #include "kis_main_window.h"
+#include "kis_painting_assistants_manager.h"
 
 class StatusBarItem
 {
@@ -218,7 +219,7 @@ public:
         , imageManager(0)
         , gridManager(0)
         , perspectiveGridManager(0)
-        , paintingAssistantsDecoration(0)
+        , paintingAssistantsManager(0)
         , actionManager(0)
         , mainWindow(0)
         , currentImageView(0)
@@ -235,7 +236,7 @@ public:
         delete imageManager;
         delete gridManager;
         delete perspectiveGridManager;
-        delete paintingAssistantsDecoration;
+        delete paintingAssistantsManager;
         delete statusBar;
         delete actionManager;
         delete canvasControlsManager;
@@ -264,7 +265,7 @@ public:
     KisGridManager *gridManager;
     KisCanvasControlsManager *canvasControlsManager;
     KisPerspectiveGridManager * perspectiveGridManager;
-    KisPaintingAssistantsDecoration *paintingAssistantsDecoration;
+    KisPaintingAssistantsManager *paintingAssistantsManager;
     BlockingUserInputEventFilter blockingEventFilter;
     KisFlipbook *flipbook;
     KisActionManager* actionManager;
@@ -444,9 +445,6 @@ void KisView2::setCurrentView(KoView *view)
         connect(d->wrapAroundAction, SIGNAL(toggled(bool)), dynamic_cast<KisCanvasController*>(canvasController()), SLOT(slotToggleWrapAroundMode(bool)));
         connect(canvasControllerWidget(), SIGNAL(toolOptionWidgetsChanged(QList<QPointer<QWidget> >)), mainWindow()->dockerManager(), SLOT(newOptionWidgets(QList<QPointer<QWidget> >)));
 
-        imageView->canvasBase()->addDecoration(d->perspectiveGridManager);
-        imageView->canvasBase()->addDecoration(d->paintingAssistantsDecoration);
-
     }
 
     d->filterManager->setView(imageView);
@@ -457,6 +455,8 @@ void KisView2::setCurrentView(KoView *view)
     d->actionManager->setView(imageView);
     d->gridManager->setView(imageView);
     d->statusBar->setView(imageView);
+    d->paintingAssistantsManager->setView(imageView);
+    d->perspectiveGridManager->setView(imageView);
 
     if (d->currentImageView) {
         canvasControllerWidget()->activate();
@@ -605,12 +605,8 @@ KisImageManager * KisView2::imageManager()
 
 KisSelectionSP KisView2::selection()
 {
-    KisLayerSP layer = activeLayer();
-    if (layer)
-        return layer->selection(); // falls through to the global
-    // selection, or 0 in the end
-    if (image()) {
-        return image()->globalSelection();
+    if (d->currentImageView) {
+        return d->currentImageView->selection();
     }
     return 0;
 }
@@ -689,10 +685,10 @@ void KisView2::slotLoadingFinished()
     }
 
     // get the assistants and push them to the manager
-    QList<KisPaintingAssistant*> paintingAssistants = document()->preLoadedAssistants();
-    foreach (KisPaintingAssistant* assistant, paintingAssistants) {
-        d->paintingAssistantsDecoration->addAssistant(assistant);
-    }
+//     QList<KisPaintingAssistant*> paintingAssistants = document()->preLoadedAssistants();
+//     foreach (KisPaintingAssistant* assistant, paintingAssistants) {
+//         d->paintingAssistantsDecoration->addAssistant(assistant);
+//     }
 
     /**
      * Dirty hack alert
@@ -703,12 +699,12 @@ void KisView2::slotLoadingFinished()
     if (d->currentImageView && d->currentImageView->viewConverter())
         d->currentImageView->viewConverter()->setZoomMode(KoZoomMode::ZOOM_PAGE);
 
-    if (d->paintingAssistantsDecoration){
-        foreach(KisPaintingAssistant* assist, document()->preLoadedAssistants()){
-            d->paintingAssistantsDecoration->addAssistant(assist);
-        }
-        d->paintingAssistantsDecoration->setVisible(true);
-    }
+//     if (d->paintingAssistantsDecoration){
+//         foreach(KisPaintingAssistant* assist, document()->preLoadedAssistants()){
+//             d->paintingAssistantsDecoration->addAssistant(assist);
+//         }
+//         d->paintingAssistantsDecoration->setVisible(true);
+//     }
     updateGUI();
 
     emit sigLoadingFinished();
@@ -831,8 +827,8 @@ void KisView2::createManagers()
     d->perspectiveGridManager = new KisPerspectiveGridManager(this);
     d->perspectiveGridManager->setup(actionCollection());
 
-    d->paintingAssistantsDecoration = new KisPaintingAssistantsDecoration(this);
-    d->paintingAssistantsDecoration->setup(actionCollection());
+    d->paintingAssistantsManager = new KisPaintingAssistantsManager(this);
+    d->paintingAssistantsManager->setup(actionCollection());
 
     d->canvasControlsManager = new KisCanvasControlsManager(this);
     d->canvasControlsManager->setup(actionCollection(), actionManager());
@@ -923,9 +919,9 @@ KisGridManager * KisView2::gridManager()
     return d->gridManager;
 }
 
-KisPaintingAssistantsDecoration* KisView2::paintingAssistantsDecoration()
+KisPaintingAssistantsManager* KisView2::paintingAssistantsManager()
 {
-    return d->paintingAssistantsDecoration;
+    return d->paintingAssistantsManager;
 }
 
 QMainWindow* KisView2::qtMainWindow() const

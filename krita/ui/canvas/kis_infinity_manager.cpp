@@ -32,9 +32,10 @@
 #include <kis_doc2.h>
 #include <kis_image.h>
 #include <kis_canvas_controller.h>
+#include <kis_image_view.h>
 
 
-KisInfinityManager::KisInfinityManager(KisView2 *view, KisCanvas2 *canvas)
+KisInfinityManager::KisInfinityManager(KisImageView *view, KisCanvas2 *canvas)
     : KisCanvasDecoration(INFINITY_DECORATION_ID, i18n("Expand into Infinity Decoration"), view),
       m_filterInstalled(false),
       m_cursorSwitched(false),
@@ -189,7 +190,7 @@ bool KisInfinityManager::eventFilter(QObject *obj, QEvent *event)
         if (retval) {
             const KisCoordinatesConverter *converter = m_canvas->coordinatesConverter();
             QRect widgetRect = converter->widgetToImage(m_canvas->canvasWidget()->rect()).toAlignedRect();
-            KisImageWSP image = view()->document()->image();
+            KisImageWSP image = view()->image();
             QRect cropRect = widgetRect | image->bounds();
             image->resizeImage(cropRect);
         }

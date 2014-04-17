@@ -504,13 +504,14 @@ vKisNodeSP KisDoc2::activeNodes() const
 QList<KisPaintingAssistant*> KisDoc2::assistants()
 {
     QList<KisPaintingAssistant*> assistants;
-    foreach(KoView *v, documentPart()->views()) {
-        KisView2 *view = qobject_cast<KisView2*>(v);
-        if (view) {
-            KisPaintingAssistantsDecoration* assistantsDecoration = view->paintingAssistantsDecoration();
-            assistants.append(assistantsDecoration->assistants());
-        }
-    }
+    // TODO
+//     foreach(KoView *v, documentPart()->views()) {
+//         KisView2 *view = qobject_cast<KisView2*>(v);
+//         if (view) {
+//             KisPaintingAssistantsDecoration* assistantsDecoration = view->paintingAssistantsDecoration();
+//             assistants.append(assistantsDecoration->assistants());
+//         }
+//     }
     return assistants;
 }
 

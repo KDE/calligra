@@ -97,6 +97,11 @@ public:
     void setCurrentMask(KisMaskSP mask);
     KisMaskSP currentMask() const;
 
+    /// Convenience method to get at the active selection (the
+    /// selection of the current layer, or, if that does not exist,
+    /// the global selection.
+    KisSelectionSP selection();
+
 protected:
 
     // QWidget overrides

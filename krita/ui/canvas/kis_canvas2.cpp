@@ -70,6 +70,7 @@
 #include <kis_popup_palette.h>
 
 #include "input/kis_input_manager.h"
+#include "kis_painting_assistants_decoration.h"
 
 class KisCanvas2::KisCanvas2Private
 {
@@ -181,9 +182,11 @@ void KisCanvas2::setCanvasWidget(QWidget * widget)
     m_d->canvasWidget = tmp;
 
     if (!m_d->canvasWidget->decoration(INFINITY_DECORATION_ID)) {
-        KisInfinityManager *manager = new KisInfinityManager(view(), this);
+        KisInfinityManager *manager = new KisInfinityManager(imageView(), this);
         m_d->canvasWidget->addDecoration(manager);
     }
+    KisPaintingAssistantsDecoration* decoration = new KisPaintingAssistantsDecoration(imageView());
+    m_d->canvasWidget->addDecoration(decoration);
 
     widget->setAutoFillBackground(false);
     widget->setAttribute(Qt::WA_OpaquePaintEvent);
@@ -850,6 +853,12 @@ void KisCanvas2::slotShowPopupPalette(const QPoint &p)
 
     m_d->popupPalette->showPopupPalette(p);
 }
+
+KisPaintingAssistantsDecoration* KisCanvas2::paintingAssistantsDecoration()
+{
+    return qobject_cast<KisPaintingAssistantsDecoration*>(decoration("paintingAssistantsDecoration"));
+}
+
 
 
 #include "kis_canvas2.moc"

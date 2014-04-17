@@ -262,10 +262,13 @@ void KisSelectionManager::setView(KisImageView *imageView)
         Q_ASSERT(selection);
         connect(selection, SIGNAL(selectionChanged()), this, SLOT(shapeSelectionChanged()));
 
-        KisSelectionDecoration* decoration = new KisSelectionDecoration(m_view);
-        connect(this, SIGNAL(currentSelectionChanged()), decoration, SLOT(selectionChanged()));
-        decoration->setVisible(true);
-        m_imageView->canvasBase()->addDecoration(decoration);
+        KisSelectionDecoration* decoration = qobject_cast<KisSelectionDecoration*>(m_imageView->canvasBase()->decoration("selection"));
+        if (!decoration) {
+            decoration = new KisSelectionDecoration(m_imageView);
+            decoration->setVisible(true);
+            m_imageView->canvasBase()->addDecoration(decoration);
+        }
+        connect(this, SIGNAL(currentSelectionChanged()), decoration, SLOT(selectionChanged()));        
     }
 }
 

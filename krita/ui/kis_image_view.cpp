@@ -31,6 +31,7 @@
 #include <kis_group_layer.h>
 #include <kis_layer.h>
 #include <kis_mask.h>
+#include <kis_selection.h>
 
 #include "kis_image_manager.h"
 #include "kis_node_manager.h"
@@ -399,6 +400,17 @@ KisMaskSP KisImageView::currentMask() const
    return d->currentMask;
 }
 
+KisSelectionSP KisImageView::selection()
+{
+    KisLayerSP layer = currentLayer();
+    if (layer)
+        return layer->selection(); // falls through to the global
+    // selection, or 0 in the end
+    if (image()) {
+        return image()->globalSelection();
+    }
+    return 0;
+}
 
 void KisImageView::slotLoadingFinished()
 {
