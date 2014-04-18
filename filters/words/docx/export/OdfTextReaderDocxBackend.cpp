@@ -55,6 +55,7 @@
 OdfTextReaderDocxBackend::OdfTextReaderDocxBackend()
     : OdfTextReaderBackend()
     , m_insideSpanLevel(0)
+    , m_currentOutlineLevel(-1)
     , m_currentParagraphTextProperties(0)
 {
 }
@@ -71,8 +72,9 @@ OdfTextReaderDocxBackend::~OdfTextReaderDocxBackend()
 void OdfTextReaderDocxBackend::elementTextH(KoXmlStreamReader &reader, OdfReaderContext *context)
 {
     DEBUG_BACKEND();
-    Q_UNUSED(reader);
-    Q_UNUSED(context);
+    KoXmlStreamAttributes attributes = reader.attributes();
+    m_currentOutlineLevel = attributes.value("text:outline-level").toString().toInt();
+    elementTextP(reader, context);
 }
 
 void OdfTextReaderDocxBackend::elementTextP(KoXmlStreamReader &reader, OdfReaderContext *context)
@@ -91,6 +93,11 @@ void OdfTextReaderDocxBackend::elementTextP(KoXmlStreamReader &reader, OdfReader
         writer->startElement("w:p");
         // FIXME: Add paragraph attributes here
         writer->startElement("w:pPr");
+        if (m_currentOutlineLevel > -1) {
+            writer->startElement("w:outlineLvl");
+            writer->addAttribute("w:val", m_currentOutlineLevel);
+            writer->endElement(); // w:outlineLvl
+        }
         KoXmlStreamAttributes attributes = reader.attributes();
         QString textStyle = attributes.value("text:style-name").toString();
         if (!textStyle.isEmpty()) {

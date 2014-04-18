@@ -63,7 +63,8 @@ class OdfTextReaderDocxBackend : public OdfTextReaderBackend
     void inheritTextStyles(KoOdfStyleProperties *destinationProperties, const QString &parent, KoOdfStyleManager *manager);
 
  private:
-    int  m_insideSpanLevel;    // Number of nexted <text:span> levels.
+    int m_insideSpanLevel;    // Number of nexted <text:span> levels.
+    int m_currentOutlineLevel;
     KoOdfStyleProperties *m_currentParagraphTextProperties;
     QString m_currentParagraphParent;
 };
