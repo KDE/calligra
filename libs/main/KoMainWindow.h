@@ -97,6 +97,8 @@ public:
      */
     KoView *activeView() const;
 
+    KoPart* part();
+
 
 private:
 

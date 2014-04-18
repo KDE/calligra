@@ -668,6 +668,11 @@ KoView *KoMainWindow::activeView() const
     return 0;
 }
 
+KoPart* KoMainWindow::part()
+{
+    return d->part;
+}
+
 bool KoMainWindow::openDocument(const KUrl & url)
 {
     if (!KIO::NetAccess::exists(url, KIO::NetAccess::SourceSide, 0)) {

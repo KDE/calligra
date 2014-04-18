@@ -276,7 +276,7 @@ void KoCanvasControllerWidget::setCanvas(KoCanvasBase *canvas)
     changeCanvasWidget(canvas->canvasWidget());
 
     proxyObject->emitCanvasSet(this);
-    QTimer::singleShot(0, this, SLOT(activate()));
+//     QTimer::singleShot(0, this, SLOT(activate()));
 
     setPreferredCenterFractionX(0);
     setPreferredCenterFractionY(0);

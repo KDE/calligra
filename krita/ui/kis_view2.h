@@ -233,6 +233,7 @@ private slots:
     void openResourcesDirectory();
     void updateIcons();
     void makeStatusBarVisible();
+    void newView();
 
 private:
     void createActions();

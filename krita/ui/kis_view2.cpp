@@ -131,6 +131,7 @@
 #include "kis_mainwindow_observer.h"
 #include "kis_main_window.h"
 #include "kis_painting_assistants_manager.h"
+#include "kis_part2.h"
 
 class StatusBarItem
 {
@@ -800,6 +801,10 @@ void KisView2::createActions()
     a = new KAction(i18n("Cleanup removed files..."), this);
     actionCollection()->addAction("edit_blacklist_cleanup", a);
     connect(a, SIGNAL(triggered()), this, SLOT(slotBlacklistCleanup()));
+
+    a = new KAction(i18n("New View"), this);
+    actionCollection()->addAction("view_newview", a);
+    connect(a, SIGNAL(triggered()), this, SLOT(newView()));
 }
 
 
@@ -900,6 +905,7 @@ KoPrintJob * KisView2::createPrintJob()
 
 KisNodeManager * KisView2::nodeManager()
 {
+
     return d->nodeManager;
 }
 
@@ -1387,5 +1393,16 @@ void KisView2::showHideScrollbars()
         dynamic_cast<KoCanvasControllerWidget*>(canvasController())->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     }
 }
+
+void KisView2::newView()
+{
+    if (d->currentImageView) {
+        KisMainWindow* mainWindow = static_cast<KisMainWindow*>(d->mainWindow);
+        KoPart* part = mainWindow->part();
+        KoView* view = static_cast<KisPart2*>(part)->createViewInstance(d->currentImageView->document(), d->mainWindow);
+        mainWindow->showView(view);
+    }
+}
+
 
 #include "kis_view2.moc"
