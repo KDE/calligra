@@ -24,6 +24,7 @@
 // Qt
 #include <QHash>
 #include <QString>
+#include <QPair>
 
 // KDE
 #include <kdebug.h>
@@ -47,7 +48,7 @@ class KoOdfStyleManager::Private
 public:
     Private() {};
 
-    QHash<QString, KoOdfStyle*> styles;         // name, style
+    QHash<QPair<QString, QString>, KoOdfStyle*> styles;         // name, style
     QHash<QString, KoOdfStyle*> defaultStyles;  // family, style
 };
 
@@ -65,14 +66,14 @@ KoOdfStyleManager::~KoOdfStyleManager()
     delete d;
 }
 
-KoOdfStyle *KoOdfStyleManager::style(const QString &name) const
+KoOdfStyle *KoOdfStyleManager::style(const QString &name, const QString &family) const
 {
-    return d->styles.value(name, 0);
+    return d->styles.value(qMakePair(name, family), 0);
 }
 
 void KoOdfStyleManager::setStyle(const QString &name, KoOdfStyle *style)
 {
-    d->styles.insert(name, style);
+    d->styles.insert(qMakePair(name, style->family()), style);
 }
 
 KoOdfStyle *KoOdfStyleManager::defaultStyle(const QString &family) const

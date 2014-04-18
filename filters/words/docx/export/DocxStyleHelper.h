@@ -23,13 +23,16 @@
 
 class KoXmlWriter;
 class KoOdfStyleProperties;
+class KoOdfStyleManager;
+
+#include <QString>
 
 class DocxStyleHelper
 {
 public:
-
     static void handleTextStyles(KoOdfStyleProperties *properties, KoXmlWriter *writer);
     static void handleParagraphStyles(KoOdfStyleProperties *properties, KoXmlWriter *writer);
+    static void inheritTextStyles(KoOdfStyleProperties *destinationProperties, const QString &parent, KoOdfStyleManager *manager);
 };
 
 

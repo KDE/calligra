@@ -26,9 +26,25 @@
 // Calligra
 #include <KoXmlWriter.h>
 #include <KoOdfStyleProperties.h>
+#include <KoOdfStyleManager.h>
+#include <KoOdfStyle.h>
 
 // ----------------------------------------------------------------
 //                     class DocxStyleHelper
+
+void DocxStyleHelper::inheritTextStyles(KoOdfStyleProperties *destinationProperties, const QString &parent, KoOdfStyleManager *manager)
+{
+    // Inherits text styles from paragraphs
+    KoOdfStyle *style = manager->style(parent, "paragraph");
+    QString ancestor = style->parent();
+    if (!ancestor.isEmpty()) {
+        inheritTextStyles(destinationProperties, ancestor, manager);
+    }
+    KoOdfStyleProperties *properties = style->properties("style:text-properties");
+    if (properties !=0) {
+        destinationProperties->copyPropertiesFrom(properties);
+    }
+}
 
 void DocxStyleHelper::handleTextStyles(KoOdfStyleProperties *properties, KoXmlWriter *writer)
 {

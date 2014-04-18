@@ -30,6 +30,7 @@
 #include <OdfReaderContext.h>
 #include <KoOdfStyleManager.h>
 #include <KoOdfStyle.h>
+#include <KoOdfStyleProperties.h>
 
 // This filter
 #include "DocxStyleHelper.h"
@@ -93,6 +94,8 @@ void DocxStyleWriter::read()
             continue;
         }
         QString family = style->family();
+        QString parent = style->parent();
+
         if (family == "paragraph") {
             m_documentWriter->startElement("w:style");
             m_documentWriter->addAttribute("w:type", "paragraph");
@@ -104,13 +107,25 @@ void DocxStyleWriter::read()
             }
             m_documentWriter->addAttribute("w:val", displayName);
             m_documentWriter->endElement(); // w:name
+            if (!parent.isEmpty()) {
+                m_documentWriter->startElement("w:basedOn");
+                m_documentWriter->addAttribute("w:val", parent);
+                m_documentWriter->endElement(); // w:basedOn
+            }
             m_documentWriter->startElement("w:pPr");
             KoOdfStyleProperties *paragraphProperties = style->properties("style:paragraph-properties");
             DocxStyleHelper::handleParagraphStyles(paragraphProperties, m_documentWriter);
             m_documentWriter->endElement(); // w:pPr
             KoOdfStyleProperties *textProperties = style->properties("style:text-properties");
             m_documentWriter->startElement("w:rPr");
-            DocxStyleHelper::handleTextStyles(textProperties, m_documentWriter);
+            KoOdfStyleProperties properties;
+            if (!parent.isEmpty()) {
+                DocxStyleHelper::inheritTextStyles(&properties, parent, manager);
+            }
+            if (textProperties != 0) {
+                properties.copyPropertiesFrom(textProperties);
+            }
+            DocxStyleHelper::handleTextStyles(&properties, m_documentWriter);
             m_documentWriter->endElement(); // w:rPr
             m_documentWriter->endElement(); // w:style
         }
@@ -125,6 +140,11 @@ void DocxStyleWriter::read()
             }
             m_documentWriter->addAttribute("w:val", displayName);
             m_documentWriter->endElement(); // w:name
+            if (!parent.isEmpty()) {
+                m_documentWriter->startElement("w:basedOn");
+                m_documentWriter->addAttribute("w:val", parent);
+                m_documentWriter->endElement(); // w:basedOn
+            }
             KoOdfStyleProperties *textProperties = style->properties("style:text-properties");
             m_documentWriter->startElement("w:rPr");
             DocxStyleHelper::handleTextStyles(textProperties, m_documentWriter);
