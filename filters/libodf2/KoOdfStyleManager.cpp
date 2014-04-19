@@ -48,7 +48,7 @@ class KoOdfStyleManager::Private
 public:
     Private() {};
 
-    QHash<QPair<QString, QString>, KoOdfStyle*> styles;         // name, style
+    QHash<QPair<QString, QString>, KoOdfStyle*> styles;         // <name, family>, style
     QHash<QString, KoOdfStyle*> defaultStyles;  // family, style
 };
 

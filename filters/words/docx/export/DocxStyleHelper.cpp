@@ -41,7 +41,7 @@ void DocxStyleHelper::inheritTextStyles(KoOdfStyleProperties *destinationPropert
         inheritTextStyles(destinationProperties, ancestor, manager);
     }
     KoOdfStyleProperties *properties = style->properties("style:text-properties");
-    if (properties !=0) {
+    if (properties) {
         destinationProperties->copyPropertiesFrom(*properties);
     }
 }

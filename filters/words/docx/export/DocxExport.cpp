@@ -97,7 +97,9 @@ KoFilter::ConversionStatus DocxExport::convert(const QByteArray& from, const QBy
     odfTextReader.setBackend(&docxTextBackend);
     odtReader.setTextReader(&odfTextReader);
 
-    odtReader.analyzeContent(&docxBackendContext);
+    if (!odtReader.analyzeContent(&docxBackendContext)) {
+        return KoFilter::ParsingError;
+    }
 
     DocxStyleWriter           styleWriter(&docxBackendContext);
     styleWriter.read();
@@ -108,7 +110,9 @@ KoFilter::ConversionStatus DocxExport::convert(const QByteArray& from, const QBy
                             styleWriter.documentContent());
 
 
-    odtReader.readContent(&docxBackend, &docxBackendContext);
+    if (!odtReader.readContent(&docxBackend, &docxBackendContext)) {
+        return KoFilter::ParsingError;
+    }
 
     // Add the newly converted document contents to the docx file.
     docxFile.addContentFile("", "/word/document.xml",

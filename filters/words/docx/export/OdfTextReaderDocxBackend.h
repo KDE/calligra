@@ -40,7 +40,7 @@ class OdfReaderDocxContext;
 class OdfTextReaderDocxBackend : public OdfTextReaderBackend
 {
  public:
-    explicit OdfTextReaderDocxBackend();
+    OdfTextReaderDocxBackend();
     virtual ~OdfTextReaderDocxBackend();
 
     // ----------------------------------------------------------------
