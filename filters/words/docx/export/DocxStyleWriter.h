@@ -38,11 +38,12 @@ public:
 
     void read();
 
+    QByteArray documentContent();
+
+private:
     OdfReaderContext *m_readerContext;
     QByteArray   m_documentContent; // m_documentWriter writes here;
     KoXmlWriter *m_documentWriter;  // XML writer for the document contents
-
-private:
     QBuffer      m_documentIO;      // IODevice for the XMl writer
 };
 

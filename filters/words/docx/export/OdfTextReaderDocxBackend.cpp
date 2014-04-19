@@ -212,7 +212,7 @@ void OdfTextReaderDocxBackend::startRun(const KoXmlStreamReader &reader, OdfRead
         DocxStyleHelper::inheritTextStyles(&properties, m_currentParagraphParent, docxContext->styleManager());
     }
     if (m_currentParagraphTextProperties != 0) {
-        properties.copyPropertiesFrom(m_currentParagraphTextProperties);
+        properties.copyPropertiesFrom(*m_currentParagraphTextProperties);
     }
 
     QString textStyle = attributes.value("text:style-name").toString();
@@ -220,7 +220,7 @@ void OdfTextReaderDocxBackend::startRun(const KoXmlStreamReader &reader, OdfRead
         KoOdfStyle *style = docxContext->styleManager()->style(textStyle, "text");
         KoOdfStyleProperties *textProperties = style->properties("style:text-properties");
         if (textProperties != 0) {
-            properties.copyPropertiesFrom(textProperties);
+            properties.copyPropertiesFrom(*textProperties);
         }
 
         QString parent = style->parent();

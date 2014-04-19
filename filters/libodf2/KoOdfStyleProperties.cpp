@@ -94,10 +94,10 @@ bool KoOdfStyleProperties::saveOdf(const QString &propertySet, KoXmlWriter *writ
     return true;
 }
 
-void KoOdfStyleProperties::copyPropertiesFrom(KoOdfStyleProperties *sourceProperties)
+void KoOdfStyleProperties::copyPropertiesFrom(const KoOdfStyleProperties &sourceProperties)
 {
-    foreach(const QString &property, sourceProperties->d->attributes.keys()) {
-        d->attributes[property] = sourceProperties->d->attributes[property];
+    foreach (const QString &property, sourceProperties.d->attributes.keys()) {
+        d->attributes[property] = sourceProperties.d->attributes[property];
     }
 }
 
@@ -116,7 +116,7 @@ bool KoOdfStyleProperties::readAttributes(KoXmlStreamReader &reader)
 
 bool KoOdfStyleProperties::saveAttributes(KoXmlWriter *writer)
 {
-    foreach(const QString &property, d->attributes.keys()) {
+    foreach (const QString &property, d->attributes.keys()) {
         writer->addAttribute(property.toLatin1(), d->attributes[property]);
     }
 
@@ -137,7 +137,7 @@ void copyAttributes(KoXmlStreamReader &reader, AttributeSet &attributes)
 
 void saveAttributes(AttributeSet &attributes, KoXmlWriter *writer)
 {
-    foreach(const QString &property, attributes.keys()) {
+    foreach (const QString &property, attributes.keys()) {
         writer->addAttribute(property.toLatin1(), attributes[property]);
     }
 }

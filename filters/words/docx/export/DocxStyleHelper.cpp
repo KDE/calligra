@@ -42,44 +42,43 @@ void DocxStyleHelper::inheritTextStyles(KoOdfStyleProperties *destinationPropert
     }
     KoOdfStyleProperties *properties = style->properties("style:text-properties");
     if (properties !=0) {
-        destinationProperties->copyPropertiesFrom(properties);
+        destinationProperties->copyPropertiesFrom(*properties);
     }
+}
+
+int getHalfPoints(const QString &fontSize)
+{
+    QString unit = fontSize.right(2);
+    int sizeInHalfPoints = 0;
+    if (unit == "pt") {
+        sizeInHalfPoints = ptToHalfPt(fontSize.left(fontSize.length() - 2).toDouble());
+    }
+    else if (unit == "in") {
+        sizeInHalfPoints = inToHalfPt(fontSize.left(fontSize.length() - 2).toDouble());
+    }
+    return sizeInHalfPoints;
 }
 
 void DocxStyleHelper::handleTextStyles(KoOdfStyleProperties *properties, KoXmlWriter *writer)
 {
-    if (properties != 0) {
+    if (properties) {
         QString fontSize = properties->attribute("fo:font-size");
         if (!fontSize.isEmpty()) {
-            writer->startElement("w:sz");
-            int sizeInHalfPoints = 0;
-            QString unit = fontSize.right(2);
-            if (unit == "pt") {
-                sizeInHalfPoints = ptToHalfPt(fontSize.left(fontSize.length() - 2).toDouble());
-            }
-            else if (unit == "in") {
-                sizeInHalfPoints = inToHalfPt(fontSize.left(fontSize.length() - 2).toDouble());
-            }
+            int sizeInHalfPoints = getHalfPoints(fontSize);
             if (sizeInHalfPoints > 0) {
+                writer->startElement("w:sz");
                 writer->addAttribute("w:val", sizeInHalfPoints);
+                writer->endElement(); // w:sz
             }
-            writer->endElement(); // w:sz
         }
         QString fontSizeC = properties->attribute("fo:font-size-complex");
         if (!fontSizeC.isEmpty()) {
-            writer->startElement("w:szCs");
-            int sizeInHalfPoints = 0;
-            QString unit = fontSize.right(2);
-            if (unit == "pt") {
-                sizeInHalfPoints = ptToHalfPt(fontSizeC.left(fontSizeC.length() - 2).toDouble());
-            }
-            else if (unit == "in") {
-                sizeInHalfPoints = inToHalfPt(fontSizeC.left(fontSizeC.length() - 2).toDouble());
-            }
+            int sizeInHalfPoints = getHalfPoints(fontSize);
             if (sizeInHalfPoints > 0) {
+                writer->startElement("w:szCs");
                 writer->addAttribute("w:val", sizeInHalfPoints);
+                writer->endElement(); // w:szCs
             }
-            writer->endElement(); // w:szCs
         }
         QString fontWeight = properties->attribute("fo:font-weight");
         if (fontWeight == "bold") {
@@ -141,7 +140,7 @@ void DocxStyleHelper::handleTextStyles(KoOdfStyleProperties *properties, KoXmlWr
 
 void DocxStyleHelper::handleParagraphStyles(KoOdfStyleProperties *properties, KoXmlWriter *writer)
 {
-    if (properties != 0) {
+    if (properties) {
         QString tabStop = properties->attribute("style:tab-stop-distance");
         if (!tabStop.isEmpty()) {
             // todo

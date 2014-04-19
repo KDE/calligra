@@ -52,7 +52,7 @@ class KOODF2_EXPORT KoOdfStyleProperties
     virtual bool readOdf(KoXmlStreamReader &reader);
     virtual bool saveOdf(const QString &propertySet, KoXmlWriter *writer);
 
-    void copyPropertiesFrom(KoOdfStyleProperties *sourceProperties);
+    void copyPropertiesFrom(const KoOdfStyleProperties &sourceProperties);
 
  protected:
     /// Read all attributes from the XML element.

@@ -51,6 +51,11 @@ DocxStyleWriter::~DocxStyleWriter()
     delete m_documentWriter;
 }
 
+QByteArray DocxStyleWriter::documentContent()
+{
+    return m_documentContent;
+}
+
 void DocxStyleWriter::read()
 {
     KoOdfStyleManager *manager = m_readerContext->styleManager();
@@ -123,7 +128,7 @@ void DocxStyleWriter::read()
                 DocxStyleHelper::inheritTextStyles(&properties, parent, manager);
             }
             if (textProperties != 0) {
-                properties.copyPropertiesFrom(textProperties);
+                properties.copyPropertiesFrom(*textProperties);
             }
             DocxStyleHelper::handleTextStyles(&properties, m_documentWriter);
             m_documentWriter->endElement(); // w:rPr

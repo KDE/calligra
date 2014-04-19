@@ -88,21 +88,12 @@ void KoOdfStyleManager::setDefaultStyle(const QString &family, KoOdfStyle *style
 
 QList<KoOdfStyle*> KoOdfStyleManager::styles() const
 {
-    QList<KoOdfStyle*> odfStyles;
-    foreach(KoOdfStyle *style, d->styles) {
-        odfStyles.append(style);
-    }
-    return odfStyles;
+    return d->styles.values();
 }
 
 QList<KoOdfStyle*> KoOdfStyleManager::defaultStyles() const
 {
-    QList<KoOdfStyle*> odfStyles;
-    foreach(KoOdfStyle *style, d->defaultStyles) {
-        odfStyles.append(style);
-    }
-
-    return odfStyles;
+    return d->defaultStyles.values();
 }
 
 void KoOdfStyleManager::clear()
