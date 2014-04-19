@@ -153,7 +153,12 @@ KoFilter::ConversionStatus FileCollector::writeFiles(KoStore *store)
 {
     // Write contents of added files.
     foreach (FileInfo *file, d->m_files) {
-        if (!store->open(file->m_fileName)) {
+        // Zip contents do not work with absolute value for lo/msoff
+        QString fileName = file->m_fileName;
+        if (fileName.at(0) == '/') {
+            fileName = fileName.mid(1);
+        }
+        if (!store->open(fileName)) {
             kDebug(30503) << "Can not create" << file->m_fileName;
             return KoFilter::CreationError;
         }
