@@ -147,8 +147,15 @@ KoFilter::ConversionStatus FileCollector::writeFiles(KoStore *store)
             kDebug(30503) << "Can not create" << file->fileName;
             return KoFilter::CreationError;
         }
-        store->write(file->fileContents);
+
+        // Write contents and check if it went well.
+        qint64 writeLen = store->write(file->fileContents);
         store->close();
+        if (writeLen != file->fileContents.size()) {
+            // FIXME: There isn't a simple KoFilter::WriteError but there should be!
+            return KoFilter::EmbeddedDocError;
+        }
+
     }
 
     return KoFilter::OK;
