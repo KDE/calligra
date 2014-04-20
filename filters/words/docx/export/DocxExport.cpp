@@ -4,7 +4,7 @@
    Copyright (C) 2001, 2002, 2004 Nicolas GOUTTE <goutte@kde.org>
    Copyright (C) 2010-2011 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2010 Christoph Cullmann <cullmann@kde.org>
-   Copyright (C) 2013 Inge Wallin <inge@lysator.liu.se>
+   Copyright (C) 2013-2014 Inge Wallin <inge@lysator.liu.se>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -50,7 +50,7 @@ K_EXPORT_PLUGIN(DocxExportFactory("wordsdocxexportng", "calligrafilters"))
 
 
 DocxExport::DocxExport(QObject *parent, const QVariantList &)
-: KoFilter(parent)
+    : KoFilter(parent)
 {
 }
 

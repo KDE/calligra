@@ -144,13 +144,15 @@ bool KoEncryptedStore::init(Mode mode, const QByteArray & appIdentification)
                 d->good = false;
                 return false;
             }
-            m_pZip->setCompression(KZip::NoCompression);
             m_pZip->setExtraField(KZip::NoExtraField);
             // Write identification
             if (d->writeMimetype) {
+                m_pZip->setCompression(KZip::NoCompression);
                 (void)m_pZip->writeFile("mimetype", "", "",
                                         appIdentification.data(), appIdentification.length());
             }
+            // FIXME: Hmm, seems to be a bug here since this is
+            //        inconsistent with the code in openWrite():
             m_pZip->setCompression(KZip::DeflateCompression);
             // We don't need the extra field in Calligra - so we leave it as "no extra field".
         }

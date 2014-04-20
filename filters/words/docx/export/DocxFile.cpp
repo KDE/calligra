@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
 
-   Copyright (C) 2012 Inge Wallin            <inge@lysator.liu.se>
+   Copyright (C) 2012-2014 Inge Wallin            <inge@lysator.liu.se>
    Copyright (C) 2012 Mojtaba Shahi Senobari <mojtaba.shahi3000@gmail.com>
 
    This library is free software; you can redistribute it and/or

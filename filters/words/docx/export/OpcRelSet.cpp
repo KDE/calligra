@@ -46,3 +46,10 @@ OpcRelSet::OpcRelSet()
 OpcRelSet::~OpcRelSet()
 {
 }
+
+
+QString OpcRelSet::addRelationship(const QString &type, const QString &target)
+{
+    //FIXME: NYI
+    return QString();
+}

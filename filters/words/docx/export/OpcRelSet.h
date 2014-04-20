@@ -63,7 +63,7 @@ public:
     //        case we should also lookup and reading.
 
     // Return the ID
-    QString addRelation(const QString &type, const QString &target);
+    QString addRelationship(const QString &type, const QString &target);
 
 private:
     // Privat functions
