@@ -82,7 +82,7 @@ FileCollector::~FileCollector()
 }
 
 
-void FileCollector::setFilePrefix(QString prefix)
+void FileCollector::setFilePrefix(const QString &prefix)
 {
     d->filePrefix = prefix;
 }
@@ -102,7 +102,7 @@ QString FileCollector::fileSuffix() const
     return d->fileSuffix;
 }
 
-void FileCollector::setPathPrefix(QString prefix)
+void FileCollector::setPathPrefix(const QString &prefix)
 {
     d->pathPrefix = prefix;
 }
@@ -115,14 +115,15 @@ QString FileCollector::pathPrefix() const
 
 // ----------------------------------------------------------------
 
-void FileCollector::addContentFile(QString id, QString fileName,
-                                   QByteArray mimetype, QByteArray fileContents)
+void FileCollector::addContentFile(const QString &id, const QString &fileName,
+                                   const QByteArray &mimetype, const QByteArray &fileContents)
 {
     addContentFile(id, fileName, mimetype, fileContents, "");
 }
 
-void FileCollector::addContentFile(QString id, QString fileName,
-                                   QByteArray mimetype, QByteArray fileContents, QString label)
+void FileCollector::addContentFile(const QString &id, const QString &fileName,
+                                   const QByteArray &mimetype, const QByteArray &fileContents,
+                                   const QString &label)
 {
     FileInfo *newFile = new FileInfo(id, fileName, mimetype, fileContents, label);
     d->m_files.append(newFile);
@@ -138,15 +139,15 @@ KoFilter::ConversionStatus FileCollector::writeFiles(KoStore *store)
     // Write contents of added files.
     foreach (FileInfo *file, d->m_files) {
         // Zip contents do not work with absolute value for lo/msoff
-        QString fileName = file->m_fileName;
+        QString fileName = file->fileName;
         if (fileName.at(0) == '/') {
             fileName = fileName.mid(1);
         }
         if (!store->open(fileName)) {
-            kDebug(30503) << "Can not create" << file->m_fileName;
+            kDebug(30503) << "Can not create" << file->fileName;
             return KoFilter::CreationError;
         }
-        store->write(file->m_fileContents);
+        store->write(file->fileContents);
         store->close();
     }
 

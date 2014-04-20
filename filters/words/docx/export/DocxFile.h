@@ -45,22 +45,24 @@ public:
     DocxFile();
     ~DocxFile();
 
-    // When you have created all the content and added it using
-    // addContentFile(), call this function once and it will write the
-    // docx to the disk.
+    /** When you have created all the content and added it using
+     * addContentFile(), call this function once and it will write the
+     * docx to the disk.
+     */
     KoFilter::ConversionStatus  writeDocx(const QString &fileName,
                                           const QByteArray &appIdentification,
                                           const OdtTraverserDocxContext &context);
 
-    // When you have created all the content and added it using
-    // addContentFile(), call this function once and it will write the
-    // docx to the disk. This function is overloaded.
+    /** When you have created all the content and added it using
+     * addContentFile(), call this function once and it will write the
+     * docx to the disk. This function is overloaded.
+     */
     KoFilter::ConversionStatus  writeDocx(const QString &fileName,
                                           const QByteArray &appIdentification,
                                           const OdfReaderDocxContext &context);
 
 private:
-    // Privat functions
+    // Private functions
     KoFilter::ConversionStatus  writeTopLevelRels(KoStore *docxStore);
     KoFilter::ConversionStatus  writeDocumentRels(KoStore *docxStore);
 

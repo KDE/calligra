@@ -27,12 +27,12 @@ class KoOdfStyleManager;
 
 #include <QString>
 
-class DocxStyleHelper
+namespace DocxStyleHelper
 {
-public:
-    static void handleTextStyles(KoOdfStyleProperties *properties, KoXmlWriter *writer);
-    static void handleParagraphStyles(KoOdfStyleProperties *properties, KoXmlWriter *writer);
-    static void inheritTextStyles(KoOdfStyleProperties *destinationProperties, const QString &parent, KoOdfStyleManager *manager);
+    void handleTextStyles(KoOdfStyleProperties *properties, KoXmlWriter *writer);
+    void handleParagraphStyles(KoOdfStyleProperties *properties, KoXmlWriter *writer);
+    void inheritTextStyles(KoOdfStyleProperties *destinationProperties,
+                           const QString &parent, KoOdfStyleManager *manager);
 };
 
 

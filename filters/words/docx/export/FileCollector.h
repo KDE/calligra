@@ -37,32 +37,39 @@ class FileCollector
 public:
     struct FileInfo
     {
-        FileInfo(QString id, QString fileName, QByteArray mimetype, QByteArray fileContents, QString label)
-            : m_id(id), m_fileName(fileName), m_mimetype(mimetype), m_fileContents(fileContents), m_label(label)
+        FileInfo(const QString &id, const QString &fileName,
+                 const QByteArray &mimetype, const QByteArray &fileContents,
+                 const QString &label)
+            : id(id)
+            , fileName(fileName)
+            , mimetype(mimetype)
+            , fileContents(fileContents)
+            , label(label)
         {}
 
-        QString     m_id;
-        QString     m_fileName;
-        QByteArray  m_mimetype;
-        QByteArray  m_fileContents;
-        QString     m_label;
+        QString     id;
+        QString     fileName;
+        QByteArray  mimetype;
+        QByteArray  fileContents;
+        QString     label;
     };
 
     FileCollector();
     virtual ~FileCollector();
 
-    void setFilePrefix(QString prefix);
+    void setFilePrefix(const QString &prefix);
     QString filePrefix() const;
     void setFileSuffix(const QString &suffix);
     QString fileSuffix() const;
-    void setPathPrefix(QString prefix);
+    void setPathPrefix(const QString &prefix);
     QString pathPrefix() const;
 
-    void addContentFile(QString id, QString fileName,
-                        QByteArray mimetype, QByteArray fileContents);
+    void addContentFile(const QString &id, const QString &fileName,
+                        const QByteArray &mimetype, const QByteArray &fileContents);
 
-    void addContentFile(QString id, QString fileName,
-                        QByteArray mimetype, QByteArray fileContents, QString label);
+    void addContentFile(const QString &id, const QString &fileName,
+                        const QByteArray &mimetype, const QByteArray &fileContents,
+                        const QString &label);
 
     QList<FileInfo*>  files() const;   // Embedded files
 

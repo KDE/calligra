@@ -50,6 +50,14 @@ class OdfReaderDocxContext : public OdfReaderContext
     OdfReaderDocxContext(KoStore *store, DocxFile *dxf);
     virtual ~OdfReaderDocxContext();
 
+    QByteArray documentContent() const { return m_documentContent; }
+
+ private:
+    // These members should be accessible to the backend but nobody else.
+    // Exception: see getter above.
+    friend class OdtReaderDocxBackend;
+    friend class OdfTextReaderDocxBackend;
+
     DocxFile    *m_docxFile;        // Collect embedded files here
     QByteArray   m_documentContent; // m_documentWriter writes here;
     KoXmlWriter *m_documentWriter;  // XML writer for the document contents

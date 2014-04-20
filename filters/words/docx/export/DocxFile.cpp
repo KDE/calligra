@@ -95,7 +95,7 @@ KoFilter::ConversionStatus DocxFile::writeDocx(const QString &fileName,
     contentTypes.addDefault("rels", "application/vnd.openxmlformats-package.relationships+xml");
     contentTypes.addDefault("xml", "application/xml");
     foreach (const FileInfo *file, files()) {
-        contentTypes.addFile(file->m_fileName, file->m_mimetype);
+        contentTypes.addFile(file->fileName, file->mimetype);
     }
     contentTypes.writeToStore(docxStore);
 
