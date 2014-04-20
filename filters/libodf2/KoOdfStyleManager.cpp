@@ -143,7 +143,7 @@ bool KoOdfStyleManager::loadStyles(KoStore *odfStore)
     // FIXME: Error handling
 
     // Collect the styles.
-    collectStyleSet(reader, true);
+    collectStyleSet(reader, true /*fromStylesXml*/);
     odfStore->close();
 
     // ----------------------------------------------------------------
@@ -170,7 +170,7 @@ bool KoOdfStyleManager::loadStyles(KoStore *odfStore)
     // FIXME: Error handling
 
     // Collect the styles.
-    collectStyleSet(reader, false);
+    collectStyleSet(reader, false /*!fromStylesXml*/);
 
     odfStore->close(); // end of parsing styles in content.xml
 

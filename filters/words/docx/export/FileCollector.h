@@ -31,6 +31,7 @@ class KoStore;
 
 class FileCollectorPrivate;
 
+
 class FileCollector
 {
 public:

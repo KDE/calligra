@@ -7,3 +7,5 @@ X-KDE-Export=application/vnd.openxmlformats-officedocument.wordprocessingml.docu
 X-KDE-Weight=1
 X-KDE-Library=docxexport
 X-KDE-ServiceTypes=Calligra/Filter
+X-KDE-LibraryMajor=0
+X-KDE-LibraryMinor=1

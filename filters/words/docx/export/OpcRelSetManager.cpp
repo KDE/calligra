@@ -35,7 +35,11 @@
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 
+// Filter libraries
 #include "KoOdfStyle.h"
+
+// This filter
+#include "OpcRelSet.h"
 
 
 // ================================================================
@@ -73,6 +77,9 @@ OpcRelSetManager::OpcRelSetManager()
 
 OpcRelSetManager::~OpcRelSetManager()
 {
+    qDeleteAll(d->relSets);
+    delete d->documentRelSet;
+
     delete d;
 }
 
@@ -100,6 +107,12 @@ void OpcRelSetManager::setDocumentRelSet(OpcRelSet *relSet)
 void OpcRelSetManager::clear()
 {
     qDeleteAll(d->relSets);
+    d->relSets.clear();
+
+    if (d->documentRelSet) {
+        delete d->documentRelSet;
+        d->documentRelSet = 0;
+    }
 }
 
 
