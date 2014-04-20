@@ -41,23 +41,6 @@
 //                     class FileCollectorPrivate
 
 
-// Struct FileInfo holds the information about a file inside the target store.
-
-#if 0
-struct FileInfo
-{
-    FileInfo(QString id, QString fileName, QByteArray mimetype, QByteArray fileContents, QString label)
-        : m_id(id), m_fileName(fileName), m_mimetype(mimetype), m_fileContents(fileContents), m_label(label)
-    {}
-
-    QString     m_id;
-    QString     m_fileName;
-    QByteArray  m_mimetype;
-    QByteArray  m_fileContents;
-    QString     m_label;
-};
-#endif
-
 class FileCollectorPrivate
 {
 public:
