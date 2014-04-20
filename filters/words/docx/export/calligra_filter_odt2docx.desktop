@@ -1,11 +1,11 @@
 [Desktop Entry]
 Type=Service
-Name=Words DOCX Export Filter
-Name[x-test]=xxWords DOCX Export Filterxx
+Name=MS Word 2007 Export Filter for Words and Author
+Name[x-test]=xxMS Word 2007 Export Filter for Words and Authorxx
 X-KDE-Import=application/vnd.oasis.opendocument.text
 X-KDE-Export=application/vnd.openxmlformats-officedocument.wordprocessingml.document
 X-KDE-Weight=1
-X-KDE-Library=docxexport
+X-KDE-Library=calligra_filter_odt2docx
 X-KDE-ServiceTypes=Calligra/Filter
 X-KDE-LibraryMajor=0
 X-KDE-LibraryMinor=1

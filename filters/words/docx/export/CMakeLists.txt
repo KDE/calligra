@@ -5,7 +5,7 @@ include_directories(
      ${KOODF2_INCLUDES}
 )
 
-set(DocxExport_PART_SRCS
+set(Odt2Docx_PART_SRCS
     DocxExport.cpp
     DocxStyleWriter.cpp
     DocxStyleHelper.cpp
@@ -19,10 +19,10 @@ set(DocxExport_PART_SRCS
     OpcRelSet.cpp
     OpcRelSetManager.cpp
 )
-kde4_add_plugin(docxexport ${DocxExport_PART_SRCS})
-target_link_libraries(docxexport koodfreader komain koodf koodf2)
-install(TARGETS docxexport DESTINATION ${PLUGIN_INSTALL_DIR})
+kde4_add_plugin(calligra_filter_odt2docx ${Odt2Docx_PART_SRCS})
+target_link_libraries(calligra_filter_odt2docx koodfreader komain koodf koodf2)
+install(TARGETS calligra_filter_odt2docx DESTINATION ${PLUGIN_INSTALL_DIR})
 
-install( FILES words_docx_export.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install(FILES calligra_filter_odt2docx.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 
 endif(SHOULD_BUILD_FILTER_ODT_TO_DOCX)
