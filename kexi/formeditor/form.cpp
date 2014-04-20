@@ -59,7 +59,6 @@
 #include <kexiutils/utils.h>
 #include <kexiutils/identifier.h>
 #include <kexiutils/styleproxy.h>
-#include <kexi_global.h>
 
 #include <db/utils.h>
 #include <koproperty/Set.h>

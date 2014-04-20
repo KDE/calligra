@@ -174,7 +174,7 @@ private:
 private:
 
     bool m_specialHoverModifier;
-    QGridLayout *m_optionWidgetLayout;
+    QGridLayout *m_optionsWidgetLayout;
 
     bool m_supportOutline;
 
@@ -187,7 +187,6 @@ private:
     bool m_isOutlineEnabled;
 
 signals:
-    void sigFavoritePaletteCalled(const QPoint&);
     void sigPaintingFinished();
 };
 

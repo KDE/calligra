@@ -46,42 +46,42 @@ KisToolBrush::~KisToolBrush()
 
 int KisToolBrush::smoothingType() const
 {
-    return m_smoothingOptions.smoothingType;
+    return m_smoothingOptions.smoothingType();
 }
 
 bool KisToolBrush::smoothPressure() const
 {
-    return m_smoothingOptions.smoothPressure;
+    return m_smoothingOptions.smoothPressure();
 }
 
 int KisToolBrush::smoothnessQuality() const
 {
-    return m_smoothingOptions.smoothnessDistance;
+    return m_smoothingOptions.smoothnessDistance();
 }
 
 qreal KisToolBrush::smoothnessFactor() const
 {
-    return m_smoothingOptions.tailAggressiveness;
+    return m_smoothingOptions.tailAggressiveness();
 }
 
 void KisToolBrush::slotSetSmoothingType(int index)
 {
     switch (index) {
     case 0:
-        m_smoothingOptions.smoothingType = KisSmoothingOptions::NO_SMOOTHING;
+        m_smoothingOptions.setSmoothingType(KisSmoothingOptions::NO_SMOOTHING);
         m_sliderSmoothnessDistance->setEnabled(false);
         m_sliderTailAggressiveness->setEnabled(false);
         m_chkSmoothPressure->setEnabled(false);
         break;
     case 1:
-        m_smoothingOptions.smoothingType = KisSmoothingOptions::SIMPLE_SMOOTHING;
+        m_smoothingOptions.setSmoothingType(KisSmoothingOptions::SIMPLE_SMOOTHING);
         m_sliderSmoothnessDistance->setEnabled(false);
         m_sliderTailAggressiveness->setEnabled(false);
         m_chkSmoothPressure->setEnabled(false);
         break;
     case 2:
     default:
-        m_smoothingOptions.smoothingType = KisSmoothingOptions::WEIGHTED_SMOOTHING;
+        m_smoothingOptions.setSmoothingType(KisSmoothingOptions::WEIGHTED_SMOOTHING);
         m_sliderSmoothnessDistance->setEnabled(true);
         m_sliderTailAggressiveness->setEnabled(true);
         m_chkSmoothPressure->setEnabled(true);
@@ -91,19 +91,19 @@ void KisToolBrush::slotSetSmoothingType(int index)
 
 void KisToolBrush::slotSetSmoothnessDistance(qreal distance)
 {
-    m_smoothingOptions.smoothnessDistance = distance;
+    m_smoothingOptions.setSmoothnessDistance(distance);
     emit smoothnessQualityChanged();
 }
 
 void KisToolBrush::slotSetTailAgressiveness(qreal argh_rhhrr)
 {
-    m_smoothingOptions.tailAggressiveness = argh_rhhrr;
+    m_smoothingOptions.setTailAggressiveness(argh_rhhrr);
     emit smoothnessFactorChanged();
 }
 
 void KisToolBrush::setSmoothPressure(bool value)
 {
-    m_smoothingOptions.smoothPressure = value;
+    m_smoothingOptions.setSmoothPressure(value);
 }
 
 void KisToolBrush::slotSetMagnetism(int magnetism)
@@ -113,42 +113,47 @@ void KisToolBrush::slotSetMagnetism(int magnetism)
 
 QWidget * KisToolBrush::createOptionWidget()
 {
-    QWidget * optionWidget = KisToolFreehand::createOptionWidget();
-    optionWidget->setObjectName(toolId() + "option widget");
+    QWidget *optionsWidget = KisToolFreehand::createOptionWidget();
+    optionsWidget->setObjectName(toolId() + "option widget");
+
+    // See https://bugs.kde.org/show_bug.cgi?id=316896
+    QWidget *specialSpacer = new QWidget(optionsWidget);
+    specialSpacer->setObjectName("SpecialSpacer");
+    specialSpacer->setFixedSize(0, 0);
+    optionsWidget->layout()->addWidget(specialSpacer);
 
     // Line smoothing configuration
-    m_cmbSmoothingType = new QComboBox(optionWidget);
+    m_cmbSmoothingType = new QComboBox(optionsWidget);
     m_cmbSmoothingType->addItems(QStringList() << i18n("No Smoothing") << i18n("Basic Smoothing") << i18n("Weighted Smoothing"));
-    m_cmbSmoothingType->setCurrentIndex(1);
     connect(m_cmbSmoothingType, SIGNAL(currentIndexChanged(int)), this, SLOT(slotSetSmoothingType(int)));
     addOptionWidgetOption(m_cmbSmoothingType);
 
-    m_sliderSmoothnessDistance = new KisDoubleSliderSpinBox(optionWidget);
+    m_sliderSmoothnessDistance = new KisDoubleSliderSpinBox(optionsWidget);
     m_sliderSmoothnessDistance->setRange(3.0, MAXIMUM_SMOOTHNESS_DISTANCE, 1);
     m_sliderSmoothnessDistance->setEnabled(true);
     connect(m_sliderSmoothnessDistance, SIGNAL(valueChanged(qreal)), SLOT(slotSetSmoothnessDistance(qreal)));
-    m_sliderSmoothnessDistance->setValue(m_smoothingOptions.smoothnessDistance);
+    m_sliderSmoothnessDistance->setValue(m_smoothingOptions.smoothnessDistance());
     addOptionWidgetOption(m_sliderSmoothnessDistance, new QLabel(i18n("Distance:")));
 
-    m_sliderTailAggressiveness = new KisDoubleSliderSpinBox(optionWidget);
+    m_sliderTailAggressiveness = new KisDoubleSliderSpinBox(optionsWidget);
     m_sliderTailAggressiveness->setRange(0.0, 1.0, 2);
     m_sliderTailAggressiveness->setEnabled(true);
     connect(m_sliderTailAggressiveness, SIGNAL(valueChanged(qreal)), SLOT(slotSetTailAgressiveness(qreal)));
-    m_sliderTailAggressiveness->setValue(m_smoothingOptions.tailAggressiveness);
+    m_sliderTailAggressiveness->setValue(m_smoothingOptions.tailAggressiveness());
     addOptionWidgetOption(m_sliderTailAggressiveness, new QLabel(i18n("Stroke Ending:")));
 
-    m_chkSmoothPressure = new QCheckBox("", optionWidget);
-    m_chkSmoothPressure->setChecked(m_smoothingOptions.smoothPressure);
+    m_chkSmoothPressure = new QCheckBox("", optionsWidget);
+    m_chkSmoothPressure->setChecked(m_smoothingOptions.smoothPressure());
     connect(m_chkSmoothPressure, SIGNAL(toggled(bool)), this, SLOT(setSmoothPressure(bool)));
     addOptionWidgetOption(m_chkSmoothPressure, new QLabel(i18n("Smooth Pressure")));
 
-    slotSetSmoothingType(1);
+    m_cmbSmoothingType->setCurrentIndex((int)m_smoothingOptions.smoothingType());
 
     // Drawing assistant configuration
-    m_chkAssistant = new QCheckBox(i18n("Assistant:"), optionWidget);
+    m_chkAssistant = new QCheckBox(i18n("Assistant:"), optionsWidget);
     m_chkAssistant->setToolTip(i18n("You need to add Ruler Assistants before this tool will work."));
     connect(m_chkAssistant, SIGNAL(toggled(bool)), this, SLOT(setAssistant(bool)));
-    m_sliderMagnetism = new KisSliderSpinBox(optionWidget);
+    m_sliderMagnetism = new KisSliderSpinBox(optionsWidget);
     m_sliderMagnetism->setToolTip(i18n("Assistant Magnetism"));
     m_sliderMagnetism->setRange(0, MAXIMUM_MAGNETISM);
     m_sliderMagnetism->setEnabled(false);
@@ -158,7 +163,7 @@ QWidget * KisToolBrush::createOptionWidget()
 
     addOptionWidgetOption(m_sliderMagnetism, m_chkAssistant);
 
-    return optionWidget;
+    return optionsWidget;
 }
 
 #include "kis_tool_brush.moc"

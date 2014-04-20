@@ -69,6 +69,7 @@ public:
         , declarativeEngine(0)
         , thumbProvider(0)
         , updateActiveLayerWithNewFilterConfigTimer(new QTimer(qq))
+        , imageChangedTimer(new QTimer(qq))
     {
         QList<KisFilterSP> tmpFilters = KisFilterRegistry::instance()->values();
         foreach(const KisFilterSP& filter, tmpFilters)
@@ -78,6 +79,10 @@ public:
         updateActiveLayerWithNewFilterConfigTimer->setInterval(0);
         updateActiveLayerWithNewFilterConfigTimer->setSingleShot(true);
         connect(updateActiveLayerWithNewFilterConfigTimer, SIGNAL(timeout()), qq, SLOT(updateActiveLayerWithNewFilterConfig()));
+
+        imageChangedTimer->setInterval(250);
+        imageChangedTimer->setSingleShot(true);
+        connect(imageChangedTimer, SIGNAL(timeout()), qq, SLOT(imageHasChanged()));
     }
 
     LayerModel* q;
@@ -97,6 +102,7 @@ public:
     KisFilterConfiguration* newConfig;
     QTimer* updateActiveLayerWithNewFilterConfigTimer;
 
+    QTimer* imageChangedTimer;
     static int counter()
     {
         static int count = 0;
@@ -346,11 +352,11 @@ QVariant LayerModel::data(const QModelIndex& index, int role) const
         {
         case IconRole:
             if (dynamic_cast<const KisGroupLayer*>(node.constData()))
-                data = QLatin1String("../images/svg/icon-layer_group-red.svg");
+                data = QLatin1String("../images/svg/icon-layer_group-black.svg");
             else if (dynamic_cast<const KisFilterMask*>(node.constData()))
-                data = QLatin1String("../images/svg/icon-layer_filter-red.svg");
+                data = QLatin1String("../images/svg/icon-layer_filter-black.svg");
             else if (dynamic_cast<const KisAdjustmentLayer*>(node.constData()))
-                data = QLatin1String("../images/svg/icon-layer_filter-red.svg");
+                data = QLatin1String("../images/svg/icon-layer_filter-black.svg");
             else
                 // We add the currentMSecsSinceEpoch to ensure we force an update (even with cache turned
                 // off, we still apparently get some caching behaviour on delegates in QML)
@@ -555,7 +561,7 @@ void LayerModel::setVisible(int index, bool newVisible)
         KoDocumentSectionModel::Property prop = props[0];
         props[0] = KoDocumentSectionModel::Property(prop.name, prop.onIcon, prop.offIcon, newVisible);
         d->nodeModel->setData( d->nodeModel->indexFromNode(d->layers[index]), QVariant::fromValue<KoDocumentSectionModel::PropertyList>(props), KoDocumentSectionModel::PropertiesRole );
-        d->layers[index]->setDirty(d->activeNode->extent());
+        d->layers[index]->setDirty(d->layers[index]->extent());
         QModelIndex idx = createIndex(index, 0);
         dataChanged(idx, idx);
     }
@@ -669,8 +675,7 @@ void LayerModel::nodeChanged(KisNodeSP node)
 
 void LayerModel::imageChanged()
 {
-    // This is needed to avoid an off-by-one timing issue
-    QTimer::singleShot(0, this, SLOT(imageHasChanged()));
+    d->imageChangedTimer->start();
 }
 
 void LayerModel::imageHasChanged()

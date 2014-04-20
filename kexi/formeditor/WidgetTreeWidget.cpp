@@ -98,7 +98,7 @@ void WidgetTreeWidgetItem::initTextAndIcon(int forcedTabPageIndex, const QString
     WidgetTreeWidget *widgetTreeWidget = qobject_cast<WidgetTreeWidget*>(treeWidget());
     ObjectTreeItem* selectable = widgetTreeWidget ? widgetTreeWidget->selectableItem(d->data) : d->data;
     if (selectable != d->data) {
-        kDebug() << "****" << (d->loadTreeFlags & LoadTreeForAddedTabPage) << selectable->widget();
+        //kDebug() << "****" << (d->loadTreeFlags & LoadTreeForAddedTabPage) << selectable->widget();
         if (qobject_cast<QTabWidget*>(selectable->widget())) {
             // tab widget's page
             const QTabWidget* tabWidget = qobject_cast<QTabWidget*>(selectable->widget());
@@ -109,7 +109,7 @@ void WidgetTreeWidgetItem::initTextAndIcon(int forcedTabPageIndex, const QString
                 else
                     tabIndex = tabWidget->count();
             }
-            kDebug() << tabIndex;
+            //kDebug() << tabIndex;
             if (tabIndex >= 0) {
                 if (forcedTabPageName.isEmpty()) {
                     itemName = tabWidget->tabText(tabIndex);
@@ -126,7 +126,7 @@ void WidgetTreeWidgetItem::initTextAndIcon(int forcedTabPageIndex, const QString
                     itemName = forcedTabPageName;
                 itemClass = i18nc("Tab widget's page", "Tab Page");
                 d->customSortingKey = QString("tab%1").arg(tabIndex);
-                kDebug() << "d->customSortingKey" << d->customSortingKey;
+                //kDebug() << "d->customSortingKey" << d->customSortingKey;
                 itemFlags |= Qt::ItemIsSelectable;
                 itemFlags ^= Qt::ItemIsSelectable;
                 itemIconName = koIconName("tabwidget_tab");
@@ -189,12 +189,6 @@ QString WidgetTreeWidgetItem::customSortingKey() const
 {
     return d->customSortingKey;
 }
-
-#ifdef __GNUC__
-#warning port WidgetTreeWidgetItem::paintCell
-#else
-#pragma WARNING( port WidgetTreeWidgetItem::paintCell )
-#endif
 
 // WidgetTreeWidget itself -----------------------------------------------------------------------------------------------
 
@@ -418,11 +412,11 @@ void WidgetTreeWidget::addItem(KFormDesigner::ObjectTreeItem *item)
 
     WidgetTreeWidgetItem::LoadTreeFlags flags;
     if (dynamic_cast<const InsertPageCommand*>(d->form->executingCommand())) {
-        kDebug() << "InsertPageCommand";
+        //kDebug() << "InsertPageCommand";
         flags |= WidgetTreeWidgetItem::LoadTreeForAddedTabPage;
     }
     if (dynamic_cast<const RemovePageCommand*>(d->form->executingCommand())) {
-        kDebug() << "undoing RemovePageCommand";
+        //kDebug() << "undoing RemovePageCommand";
         flags |= WidgetTreeWidgetItem::LoadTreeForAddedTabPage;
     }
     loadTree(item, parent, flags);
@@ -433,7 +427,7 @@ void WidgetTreeWidget::removeItem(KFormDesigner::ObjectTreeItem *item)
     if (!item)
         return;
     if (dynamic_cast<const RemovePageCommand*>(d->form->executingCommand())) {
-        kDebug() << "RemovePageCommand";
+        //kDebug() << "RemovePageCommand";
     }
     WidgetTreeWidgetItem *it = findItem(item->name());
     QTreeWidgetItem *root = invisibleRootItem();
@@ -513,7 +507,7 @@ void WidgetTreeWidget::loadTree(ObjectTreeItem *item, WidgetTreeWidgetItem *pare
     int forcedTabPageIndex;
     QString forcedTabPageName;
     if (removePageCommand) {
-        kDebug() << "undoing RemovePageCommand - fixing item name and index";
+        //kDebug() << "undoing RemovePageCommand - fixing item name and index";
         forcedTabPageIndex = removePageCommand->pageIndex();
         forcedTabPageName = removePageCommand->pageName();
     }

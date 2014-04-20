@@ -51,7 +51,7 @@ CADocumentController::CADocumentController (QObject* parent)
 
 CADocumentController::~CADocumentController()
 {
-
+    delete d;
 }
 
 QString CADocumentController::documentUri() const

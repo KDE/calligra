@@ -122,12 +122,12 @@ KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
     m_lbName = new QLabel(this);
 
     KoResourceServer<KisBrush>* rServer = KisBrushServer::instance()->brushServer();
-    KoResourceServerAdapter<KisBrush>* adapter = new KoResourceServerAdapter<KisBrush>(rServer);
+    QSharedPointer<KoResourceServerAdapter<KisBrush> > adapter(new KoResourceServerAdapter<KisBrush>(rServer));
     m_itemChooser = new KoResourceItemChooser(adapter, this);
     QString knsrcFile = "kritabrushes.knsrc";
     m_itemChooser->setKnsrcFile(knsrcFile);
     m_itemChooser->showGetHotNewStuff(true, true);
-    m_itemChooser->showTaggingBar(true,true);
+    m_itemChooser->showTaggingBar(true, true);
     m_itemChooser->setColumnCount(10);
     m_itemChooser->setRowHeight(30);
     m_itemChooser->setItemDelegate(new KisBrushDelegate(this));
@@ -243,9 +243,9 @@ void KisBrushChooser::update(KoResource * resource)
     if (brush) {
         blockSignals(true);
         QString text = QString("%1 (%2 x %3)")
-                .arg(i18n(brush->name().toUtf8().data()))
-                .arg(brush->width())
-                .arg(brush->height());
+                       .arg(i18n(brush->name().toUtf8().data()))
+                       .arg(brush->width())
+                       .arg(brush->height());
 
         m_lbName->setText(text);
         m_slSpacing->blockSignals(true);

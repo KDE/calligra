@@ -9,7 +9,8 @@ set(flowdockers_SRCS
     Plugin.cpp
     
     stencilboxdocker/StencilBoxDocker.cpp
-    stencilboxdocker/StencilBoxView.cpp
+    stencilboxdocker/StencilListView.cpp
+    stencilboxdocker/CollectionTreeWidget.cpp
     stencilboxdocker/CollectionItemModel.cpp
     stencilboxdocker/StencilShapeFactory.cpp
 )

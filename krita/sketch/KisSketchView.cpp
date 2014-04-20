@@ -44,6 +44,7 @@
 #include <KoDocumentResourceManager.h>
 #include <KoCanvasResourceManager.h>
 #include <KoShapeManager.h>
+#include <KoGridData.h>
 
 #include <kundo2stack.h>
 
@@ -105,9 +106,9 @@ public:
 
     KisSketchView* q;
 
-    KisDoc2* doc;
-    KisView2* view;
-    KisCanvas2* canvas;
+    QPointer<KisDoc2> doc;
+    QPointer<KisView2> view;
+    QPointer<KisCanvas2> canvas;
     KUndo2Stack* undoStack;
 
     QWidget *canvasWidget;
@@ -317,13 +318,17 @@ void KisSketchView::documentAboutToBeDeleted()
 void KisSketchView::documentChanged()
 {
     d->doc = DocumentManager::instance()->document();
+	if (!d->doc) return;
 
     connect(d->doc, SIGNAL(modified(bool)), SIGNAL(modifiedChanged()));
 
-    d->view = qobject_cast<KisView2*>(DocumentManager::instance()->part()->createView(d->doc, QApplication::activeWindow()));
-    connect(d->view, SIGNAL(floatingMessageRequested(QString,QString)), this, SIGNAL(floatingMessageRequested(QString,QString)));
-    emit viewChanged();
+	KisSketchPart *part = DocumentManager::instance()->part();
+	Q_ASSERT(part);
+	QPointer<KisView2> view = qobject_cast<KisView2*>(part->createView(d->doc, QApplication::activeWindow()));
+    d->view = view;
 
+    connect(d->view, SIGNAL(floatingMessageRequested(QString,QString)), this, SIGNAL(floatingMessageRequested(QString,QString)));
+    
     d->view->canvasControllerWidget()->setGeometry(x(), y(), width(), height());
     d->view->hide();
     d->canvas = d->view->canvasBase();
@@ -366,6 +371,8 @@ void KisSketchView::documentChanged()
 
     d->view->actionCollection()->action("zoom_to_100pct")->trigger();
     d->resetDocumentPosition();
+
+	emit viewChanged();
 }
 
 bool KisSketchView::event( QEvent* event )
@@ -393,6 +400,8 @@ bool KisSketchView::event( QEvent* event )
                 syncObject->rotationAngle = d->view->canvasBase()->rotationAngle();
 
                 syncObject->activeToolId = KoToolManager::instance()->activeToolId();
+
+                syncObject->gridData = &d->view->document()->gridData();
 
                 syncObject->initialized = true;
             }
@@ -424,6 +433,12 @@ bool KisSketchView::event( QEvent* event )
                 provider->setOpacity(syncObject->opacity);
                 provider->setGlobalAlphaLock(syncObject->globalAlphaLock);
                 provider->setCurrentCompositeOp(syncObject->compositeOp);
+
+                d->view->document()->gridData().setGrid(syncObject->gridData->gridX(), syncObject->gridData->gridY());
+                d->view->document()->gridData().setGridColor(syncObject->gridData->gridColor());
+                d->view->document()->gridData().setPaintGridInBackground(syncObject->gridData->paintGridInBackground());
+                d->view->document()->gridData().setShowGrid(syncObject->gridData->showGrid());
+                d->view->document()->gridData().setSnapToGrid(syncObject->gridData->snapToGrid());
 
                 zoomIn();
                 qApp->processEvents();
@@ -593,7 +608,17 @@ void KisSketchView::Private::zoomChanged()
 
 void KisSketchView::activate()
 {
+    if (d->canvasWidget != d->canvas->canvasWidget()) {
+        d->canvasWidget = d->canvas->canvasWidget();
+		SketchDeclarativeView *v = qobject_cast<SketchDeclarativeView*>(scene()->views().at(0));
+		if (v) {
+			v->setCanvasWidget(d->canvasWidget);
+			v->setDrawCanvas(true);
+		}
+    }
     d->canvasWidget->setFocus();
+	Q_ASSERT(d->view);
+	Q_ASSERT(d->view->canvasControllerWidget());
     d->view->canvasControllerWidget()->activate();
 }
 

@@ -75,7 +75,7 @@ KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
       m_isOutlineEnabled(false)
 {
     m_specialHoverModifier = false;
-    m_optionWidgetLayout = 0;
+    m_optionsWidgetLayout = 0;
 
     m_opacity = OPACITY_OPAQUE_U8;
 
@@ -101,7 +101,6 @@ KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
     addAction("decrease_brush_size", dynamic_cast<KAction*>(collection->action("decrease_brush_size")));
 
     KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas);
-    connect(this, SIGNAL(sigFavoritePaletteCalled(const QPoint&)), kiscanvas, SIGNAL(favoritePaletteCalled(const QPoint&)));
     connect(this, SIGNAL(sigPaintingFinished()), kiscanvas->view()->resourceProvider(), SLOT(slotPainting()));
 }
 
@@ -177,7 +176,7 @@ QPainterPath KisToolPaint::tryFixBrushOutline(const QPainterPath &originalOutlin
 
         outline.moveTo(center.x() - hairOffset, center.y());
         outline.lineTo(center.x() + hairOffset, center.y());
-    } else if (sum < minThresholdSize) {
+    } else if (sum < minThresholdSize && !outline.isEmpty()) {
         outline = QPainterPath();
         outline.addEllipse(center, 0.5 * minThresholdSize, 0.5 * minThresholdSize);
     }
@@ -321,7 +320,6 @@ void KisToolPaint::mouseReleaseEvent(KoPointerEvent *event)
 
 QWidget * KisToolPaint::createOptionWidget()
 {
-
     QWidget * optionWidget = new QWidget();
     optionWidget->setObjectName(toolId());
 
@@ -330,17 +328,19 @@ QWidget * KisToolPaint::createOptionWidget()
     verticalLayout->setMargin(0);
     verticalLayout->setSpacing(1);
 
-    m_optionWidgetLayout = new QGridLayout();
-    m_optionWidgetLayout->setColumnStretch(1, 1);
+    // See https://bugs.kde.org/show_bug.cgi?id=316896
+    QWidget *specialSpacer = new QWidget(optionWidget);
+    specialSpacer->setObjectName("SpecialSpacer");
+    specialSpacer->setFixedSize(0, 0);
+    verticalLayout->addWidget(specialSpacer);
+    verticalLayout->addWidget(specialSpacer);
 
-    verticalLayout->addLayout(m_optionWidgetLayout);
-    m_optionWidgetLayout->setSpacing(1);
-    m_optionWidgetLayout->setMargin(0);
+    m_optionsWidgetLayout = new QGridLayout();
+    m_optionsWidgetLayout->setColumnStretch(1, 1);
 
-    QWidget *w = new QWidget();
-    w->setObjectName("SpecialSpacer");
-
-    verticalLayout->addWidget(w);
+    verticalLayout->addLayout(m_optionsWidgetLayout);
+    m_optionsWidgetLayout->setSpacing(1);
+    m_optionsWidgetLayout->setMargin(0);
 
     if (!quickHelp().isEmpty()) {
         QPushButton* push = new QPushButton(koIcon("help-contents"), QString(), optionWidget);
@@ -358,24 +358,24 @@ QWidget * KisToolPaint::createOptionWidget()
 
 void KisToolPaint::addOptionWidgetLayout(QLayout *layout)
 {
-    Q_ASSERT(m_optionWidgetLayout != 0);
-    int rowCount = m_optionWidgetLayout->rowCount();
-    m_optionWidgetLayout->addLayout(layout, rowCount, 0, 1, 2);
+    Q_ASSERT(m_optionsWidgetLayout != 0);
+    int rowCount = m_optionsWidgetLayout->rowCount();
+    m_optionsWidgetLayout->addLayout(layout, rowCount, 0, 1, 2);
 }
 
 
 void KisToolPaint::addOptionWidgetOption(QWidget *control, QWidget *label)
 {
-    Q_ASSERT(m_optionWidgetLayout != 0);
+    Q_ASSERT(m_optionsWidgetLayout != 0);
     if (label) {
         if (QLabel *lbl = qobject_cast<QLabel*>(label)) {
             lbl->setAlignment(Qt::AlignVCenter | Qt::AlignRight);
         }
-        m_optionWidgetLayout->addWidget(label, m_optionWidgetLayout->rowCount(), 0);
-        m_optionWidgetLayout->addWidget(control, m_optionWidgetLayout->rowCount() - 1, 1);
+        m_optionsWidgetLayout->addWidget(label, m_optionsWidgetLayout->rowCount(), 0);
+        m_optionsWidgetLayout->addWidget(control, m_optionsWidgetLayout->rowCount() - 1, 1);
     }
     else {
-        m_optionWidgetLayout->addWidget(control, m_optionWidgetLayout->rowCount(), 0, 1, 2);
+        m_optionsWidgetLayout->addWidget(control, m_optionsWidgetLayout->rowCount(), 0, 1, 2);
     }
 }
 
@@ -494,6 +494,7 @@ void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint, const Ko
         (mode() == KisTool::GESTURE_MODE ||
          ((cfg.cursorStyle() == CURSOR_STYLE_OUTLINE ||
            cfg.cursorStyle() == CURSOR_STYLE_OUTLINE_CENTER_DOT ||
+           cfg.cursorStyle() == CURSOR_STYLE_OUTLINE_CENTER_CROSS ||
            cfg.cursorStyle() == CURSOR_STYLE_OUTLINE_TRIANGLE_RIGHTHANDED ||
            cfg.cursorStyle() == CURSOR_STYLE_OUTLINE_TRIANGLE_LEFTHANDED)&&
           ((mode() == HOVER_MODE) ||

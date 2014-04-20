@@ -20,3 +20,7 @@ CMakeLists.txt.user*
 *.includes
 .DS_Store
 *.kate-swap
+*.diff
+*.patch
+
+

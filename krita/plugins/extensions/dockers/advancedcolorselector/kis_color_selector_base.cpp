@@ -94,6 +94,7 @@ KisColorSelectorBase::KisColorSelectorBase(QWidget *parent) :
     m_popup(0),
     m_parent(0),
     m_colorUpdateAllowed(true),
+    m_colorUpdateSelf(false),
     m_hideTimer(new QTimer(this)),
     m_popupOnMouseOver(false),
     m_popupOnMouseClick(true),
@@ -154,9 +155,16 @@ void KisColorSelectorBase::unsetCanvas()
     m_canvas = 0;
 }
 
+
+
 void KisColorSelectorBase::mousePressEvent(QMouseEvent* event)
 {
     event->accept();
+
+
+//this boolean here is to check if the colour selector is updating the resource, so it won't update itself when the resource is updated//
+   if (m_colorUpdateSelf==false)
+   {m_colorUpdateSelf=true;}
 
     if(!m_isPopup && m_popupOnMouseClick &&
        event->button() == Qt::MidButton) {
@@ -195,8 +203,9 @@ void KisColorSelectorBase::mousePressEvent(QMouseEvent* event)
 }
 
 void KisColorSelectorBase::mouseReleaseEvent(QMouseEvent *e) {
-    Q_UNUSED(e);
-
+    
+   Q_UNUSED(e);
+   
     if (e->button() == Qt::MidButton) {
         e->accept();
     }
@@ -257,6 +266,7 @@ void KisColorSelectorBase::leaveEvent(QEvent *e)
     Q_UNUSED(e);
 
     if (m_colorPreviewPopup->isVisible()) {
+        m_colorUpdateSelf=false; //this is for allowing advanced selector to listen to outside colour-change events.
         m_colorPreviewPopup->hide();
     }
 
@@ -271,7 +281,9 @@ void KisColorSelectorBase::leaveEvent(QEvent *e)
 
 void KisColorSelectorBase::keyPressEvent(QKeyEvent *)
 {
-    hidePopup();
+    if (m_isPopup) {
+        hidePopup();
+    }
 }
 
 qreal distance(const QColor& c1, const QColor& c2)
@@ -414,6 +426,7 @@ void KisColorSelectorBase::commitColor(const KoColor& color, ColorRole role)
     if (!m_canvas)
         return;
 
+
     m_colorUpdateAllowed=false;
 
     if (role == Foreground)
@@ -434,7 +447,7 @@ void KisColorSelectorBase::canvasResourceChanged(int key, const QVariant &v)
     if (key == KoCanvasResourceManager::ForegroundColor || key == KoCanvasResourceManager::BackgroundColor) {
         QColor c = findGeneratingColor(v.value<KoColor>());
         updateColorPreview(c);
-        if (m_colorUpdateAllowed) {
+        if (m_colorUpdateAllowed && !m_colorUpdateSelf) {
             setColor(c);
         }
     }

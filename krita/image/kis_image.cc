@@ -71,6 +71,7 @@
 #include "kis_transform_worker.h"
 #include "kis_processing_applicator.h"
 #include "processing/kis_crop_processing_visitor.h"
+#include "processing/kis_crop_selections_processing_visitor.h"
 #include "processing/kis_transform_processing_visitor.h"
 #include "commands_new/kis_image_resize_command.h"
 #include "commands_new/kis_image_set_resolution_command.h"
@@ -140,7 +141,46 @@ KisImage::KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const K
     setObjectName(name);
     dbgImage << "creating" << name;
     m_d->startProjection = startProjection;
-    init(undoStore, width, height, colorSpace);
+
+    if (colorSpace == 0) {
+        colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    }
+
+    m_d->lockCount = 0;
+    m_d->perspectiveGrid = 0;
+    m_d->scheduler = 0;
+    m_d->wrapAroundModePermitted = false;
+
+    m_d->signalRouter = new KisImageSignalRouter(this);
+
+    if (!undoStore) {
+        undoStore = new KisDumbUndoStore();
+    }
+
+    m_d->undoStore = undoStore;
+    m_d->legacyUndoAdapter = new KisLegacyUndoAdapter(m_d->undoStore, this);
+    m_d->postExecutionUndoAdapter = new KisPostExecutionUndoAdapter(m_d->undoStore, this);
+
+    m_d->nserver = new KisNameServer(1);
+
+    m_d->colorSpace = colorSpace;
+
+    setRootLayer(new KisGroupLayer(this, "root", OPACITY_OPAQUE_U8));
+
+    m_d->xres = 1.0;
+    m_d->yres = 1.0;
+    m_d->width = width;
+    m_d->height = height;
+
+    m_d->recorder = new KisActionRecorder(this);
+
+    m_d->compositeProgressProxy = new KisCompositeProgressProxy();
+
+    if (m_d->startProjection) {
+        m_d->scheduler = new KisUpdateScheduler(this);
+        m_d->scheduler->setProgressProxy(m_d->compositeProgressProxy);
+    }
+
 }
 
 KisImage::~KisImage()
@@ -288,48 +328,6 @@ QString KisImage::nextLayerName() const
 void KisImage::rollBackLayerName()
 {
     m_d->nserver->rollback();
-}
-
-void KisImage::init(KisUndoStore *undoStore, qint32 width, qint32 height, const KoColorSpace *colorSpace)
-{
-    if (colorSpace == 0) {
-        colorSpace = KoColorSpaceRegistry::instance()->rgb8();
-    }
-
-    m_d->lockCount = 0;
-    m_d->perspectiveGrid = 0;
-    m_d->scheduler = 0;
-    m_d->wrapAroundModePermitted = false;
-
-    m_d->signalRouter = new KisImageSignalRouter(this);
-
-    if (!undoStore) {
-        undoStore = new KisDumbUndoStore();
-    }
-
-    m_d->undoStore = undoStore;
-    m_d->legacyUndoAdapter = new KisLegacyUndoAdapter(m_d->undoStore, this);
-    m_d->postExecutionUndoAdapter = new KisPostExecutionUndoAdapter(m_d->undoStore, this);
-
-    m_d->nserver = new KisNameServer(1);
-
-    m_d->colorSpace = colorSpace;
-
-    setRootLayer(new KisGroupLayer(this, "root", OPACITY_OPAQUE_U8));
-
-    m_d->xres = 1.0;
-    m_d->yres = 1.0;
-    m_d->width = width;
-    m_d->height = height;
-
-    m_d->recorder = new KisActionRecorder(this);
-
-    m_d->compositeProgressProxy = new KisCompositeProgressProxy();
-
-    if (m_d->startProjection) {
-        m_d->scheduler = new KisUpdateScheduler(this);
-        m_d->scheduler->setProgressProxy(m_d->compositeProgressProxy);
-    }
 }
 
 KisCompositeProgressProxy* KisImage::compositeProgressProxy()
@@ -950,6 +948,7 @@ KisLayerSP KisImage::mergeDown(KisLayerSP layer, const KisMetaData::MergeStrateg
 
         //Copy the pixels of previous layer with their actual alpha value
         prevLayer->disableAlphaChannel(false);
+
         gc.setChannelFlags(prevLayer->channelFlags());
         gc.setCompositeOp(mergedDevice->colorSpace()->compositeOp(prevLayer->compositeOpId()));
         gc.setOpacity(prevLayer->opacity());
@@ -960,7 +959,9 @@ KisLayerSP KisImage::mergeDown(KisLayerSP layer, const KisMetaData::MergeStrateg
         prevLayer->disableAlphaChannel(prevAlphaDisabled);
 
         //Paint the pixels of the current layer, using their actual alpha value
-        layer->disableAlphaChannel(false);
+        if (alphaDisabled == prevAlphaDisabled) {
+            layer->disableAlphaChannel(false);
+        }
         gc.setChannelFlags(layer->channelFlags());
         gc.setCompositeOp(mergedDevice->colorSpace()->compositeOp(layer->compositeOpId()));
         gc.setOpacity(layer->opacity());
@@ -978,7 +979,9 @@ KisLayerSP KisImage::mergeDown(KisLayerSP layer, const KisMetaData::MergeStrateg
 
         //Paint layer on the copy
         KisPainter gc(mergedDevice);
-        layer->disableAlphaChannel(false);
+        if (alphaDisabled == prevAlphaDisabled) {
+            layer->disableAlphaChannel(false);
+        }
         gc.setChannelFlags(layer->channelFlags());
         gc.setCompositeOp(mergedDevice->colorSpace()->compositeOp(layer->compositeOpId()));
         gc.setOpacity(layer->opacity());
@@ -1263,18 +1266,48 @@ KisActionRecorder* KisImage::actionRecorder() const
     return m_d->recorder;
 }
 
+void KisImage::setDefaultProjectionColor(KoColor color)
+{
+    KIS_ASSERT_RECOVER_RETURN(m_d->rootLayer);
+
+    KisPaintDeviceSP original = m_d->rootLayer->original();
+    color.convertTo(original->colorSpace());
+    original->setDefaultPixel(color.data());
+}
+
+KoColor KisImage::defaultProjectionColor() const
+{
+    KIS_ASSERT_RECOVER(m_d->rootLayer) {
+        return KoColor(Qt::transparent, m_d->colorSpace);
+    }
+
+    KisPaintDeviceSP original = m_d->rootLayer->original();
+    KoColor color(original->defaultPixel(), original->colorSpace());
+    return color;
+}
+
 void KisImage::setRootLayer(KisGroupLayerSP rootLayer)
 {
     stopIsolatedMode();
 
+    KoColor defaultProjectionColor(Qt::transparent, m_d->colorSpace);
+
     if (m_d->rootLayer) {
         m_d->rootLayer->setGraphListener(0);
         m_d->rootLayer->disconnect();
+
+        KisPaintDeviceSP original = m_d->rootLayer->original();
+        defaultProjectionColor.setColor(original->defaultPixel(), original->colorSpace());
     }
 
     m_d->rootLayer = rootLayer;
     m_d->rootLayer->disconnect();
     m_d->rootLayer->setGraphListener(this);
+
+    KisPaintDeviceSP newOriginal = m_d->rootLayer->original();
+    defaultProjectionColor.convertTo(newOriginal->colorSpace());
+    newOriginal->setDefaultPixel(defaultProjectionColor.data());
+
     setRoot(m_d->rootLayer.data());
 }
 
@@ -1581,9 +1614,47 @@ void KisImage::removeComposition(KisLayerComposition* composition)
     delete composition;
 }
 
+bool checkMasksNeedConersion(KisNodeSP root, const QRect &bounds)
+{
+    KisSelectionMask *mask = dynamic_cast<KisSelectionMask*>(root.data());
+    if (mask &&
+        (!bounds.contains(mask->paintDevice()->exactBounds()) ||
+         mask->selection()->hasShapeSelection())) {
+
+        return true;
+    }
+
+    KisNodeSP node = root->firstChild();
+
+    while (node) {
+        if (checkMasksNeedConersion(node, bounds)) {
+            return true;
+        }
+
+        node = node->nextSibling();
+    }
+
+    return false;
+}
+
 void KisImage::setWrapAroundModePermitted(bool value)
 {
     m_d->wrapAroundModePermitted = value;
+
+    if (m_d->wrapAroundModePermitted &&
+        checkMasksNeedConersion(root(), bounds())) {
+
+        KisProcessingApplicator applicator(this, root(),
+                                           KisProcessingApplicator::RECURSIVE,
+                                           KisImageSignalVector() << ModifiedSignal,
+                                           i18n("Crop Selections"));
+
+        KisProcessingVisitorSP visitor =
+            new KisCropSelectionsProcessingVisitor(bounds());
+
+        applicator.applyVisitor(visitor, KisStrokeJobData::CONCURRENT);
+        applicator.end();
+    }
 }
 
 bool KisImage::wrapAroundModePermitted() const

@@ -60,7 +60,6 @@
 #include <kdesktopfile.h>
 #include <ktoolinvocation.h>
 #include <ktoggleaction.h>
-#include <kfiledialog.h>
 #include <kparts/event.h>
 #include <kparts/partmanager.h>
 #include <kparts/componentfactory.h>

@@ -18,6 +18,8 @@
 
 #include "kis_node_manager.h"
 
+#include <QDesktopServices>
+
 #include <kactioncollection.h>
 
 #include <KoIcon.h>
@@ -26,6 +28,7 @@
 #include <KoShape.h>
 #include <KoShapeLayer.h>
 #include <KoFilterManager.h>
+#include <KoFileDialog.h>
 
 #include <kis_types.h>
 #include <kis_node.h>
@@ -125,7 +128,7 @@ bool KisNodeManager::Private::activateNodeImpl(KisNodeSP node)
 }
 
 KisNodeManager::KisNodeManager(KisView2 * view, KisDoc2 * doc)
-        : m_d(new Private())
+    : m_d(new Private())
 {
     m_d->view = view;
     m_d->doc = doc;
@@ -795,27 +798,20 @@ void KisNodeManager::saveNodeAsImage()
         return;
     }
 
-    QStringList listMimeFilter = KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Export);
-    QString mimelist = listMimeFilter.join(" ");
+    KoFileDialog dialog(m_d->view, KoFileDialog::SaveFile);
+    dialog.setCaption(i18n("Export Node"));
+    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+    dialog.setMimeTypeFilters(KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Export));
+    QString filename = dialog.url();
 
-    KFileDialog fd(KUrl(QString()), mimelist, m_d->view);
-    fd.setObjectName("Export Node");
-    fd.setCaption(i18n("Export Node"));
-    fd.setMimeFilter(listMimeFilter);
-    fd.setOperationMode(KFileDialog::Saving);
+    if (filename.isEmpty()) return;
 
-    if (!fd.exec()) return;
+    KUrl url = KUrl::fromLocalFile(filename);
 
-    KUrl url = fd.selectedUrl();
-    QString mimefilter = fd.currentMimeFilter();
+    if (url.isEmpty()) return;
 
-    if (mimefilter.isNull()) {
-        KMimeType::Ptr mime = KMimeType::findByUrl(url);
-        mimefilter = mime->name();
-    }
-
-    if (url.isEmpty())
-        return;
+    KMimeType::Ptr mime = KMimeType::findByUrl(url);
+    QString mimefilter = mime->name();
 
     KisImageWSP image = m_d->view->image();
 

@@ -86,6 +86,7 @@ KexiDBTextEdit::KexiDBTextEdit(QWidget *parent)
 //    setAutoFillBackground(true); // otherwise we get transparent background...
 //    installEventFilter(this);
     setBackgroundRole(QPalette::Base);
+    setAcceptRichText(false);
 }
 
 KexiDBTextEdit::~KexiDBTextEdit()

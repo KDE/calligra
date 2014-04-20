@@ -183,7 +183,9 @@ void KisConfig::setCursorStyle(enumCursorStyle style) const
 
 QString KisConfig::monitorProfile() const
 {
-    return m_cfg.readEntry("monitorProfile", "");
+    QString profile = m_cfg.readEntry("monitorProfile", "");
+    //qDebug() << "KisConfig::monitorProfile()" << profile;
+    return profile;
 }
 
 void KisConfig::setMonitorProfile(const QString & monitorProfile, bool override) const
@@ -220,7 +222,9 @@ const KoColorProfile *KisConfig::getScreenProfile(int screen)
         QByteArray bytes(nitems, '\0');
         bytes = QByteArray::fromRawData((char*)str, (quint32)nitems);
         // XXX: this assumes the screen is 8 bits -- which might not be true
-        return KoColorSpaceRegistry::instance()->createColorProfile(RGBAColorModelID.id(), Integer8BitsColorDepthID.id(), bytes);
+        const KoColorProfile *profile = KoColorSpaceRegistry::instance()->createColorProfile(RGBAColorModelID.id(), Integer8BitsColorDepthID.id(), bytes);
+        //qDebug() << "KisConfig::getScreenProfile for screen" << screen << profile->name();
+        return profile;
     }
     else {
         return 0;
@@ -239,23 +243,31 @@ const KoColorProfile *KisConfig::displayProfile(int screen) const
     // if the user plays with the settings, they can override the display profile, in which case
     // we don't want the X11 atom setting.
     bool override = m_cfg.readEntry("monitorProfile/OverrideX11", false);
+    //qDebug() << "KisConfig::displayProfile(). Override X11:" << override;
     const KoColorProfile *profile = 0;
-    if (!override) {
+    if (override) {
+        //qDebug() << "\tGoing to get the screen profile";
         profile = KisConfig::getScreenProfile(screen);
     }
 
     // if it fails. check the configuration
     if (!profile || !profile->isSuitableForDisplay()) {
+        //qDebug() << "\tGoing to get the monitor profile";
         QString monitorProfileName = monitorProfile();
+        //qDebug() << "\t\tmonitorProfileName:" << monitorProfileName;
         if (!monitorProfileName.isEmpty()) {
             profile = KoColorSpaceRegistry::instance()->profileByName(monitorProfileName);
         }
+        //qDebug() << "\t\tsuitable for display6" << profile->isSuitableForDisplay();
     }
     // if we still don't have a profile, or the profile isn't suitable for display,
     // we need to get a last-resort profile. the built-in sRGB is a good choice then.
     if (!profile || !profile->isSuitableForDisplay()) {
+        //qDebug() << "\tnothing worked, going to get sRGB built-in";
         profile = KoColorSpaceRegistry::instance()->profileByName("sRGB Built-in");
     }
+
+    //qDebug() << "\tKisConfig::displayProfile for screen" << screen << "is" << profile->name();
 
     return profile;
 }
@@ -394,6 +406,32 @@ void KisConfig::setUseOpenGLTextureBuffer(bool useBuffer)
 int KisConfig::openGLTextureSize() const
 {
     return m_cfg.readEntry("textureSize", 256);
+}
+
+
+bool KisConfig::disableDoubleBuffering() const
+{
+    return m_cfg.readEntry("disableDoubleBuffering", true);
+}
+
+void KisConfig::setDisableDoubleBuffering(bool disableDoubleBuffering)
+{
+    m_cfg.writeEntry("disableDoubleBuffering", disableDoubleBuffering);
+}
+
+bool KisConfig::disableVSync() const
+{
+    return m_cfg.readEntry("disableVSync", true);
+}
+
+void KisConfig::setDisableVSync(bool disableVSync)
+{
+    m_cfg.writeEntry("disableVSync", disableVSync);
+}
+
+bool KisConfig::showAdvancedOpenGLSettings() const
+{
+    return m_cfg.readEntry("showAdvancedOpenGLSettings", false);
 }
 
 int KisConfig::numMipmapLevels() const
@@ -581,6 +619,16 @@ void KisConfig::setCanvasBorderColor(const QColor& color) const
     m_cfg.writeEntry("canvasBorderColor", color);
 }
 
+bool KisConfig::hideScrollbars() const
+{
+    return m_cfg.readEntry("hideScrollbars", false);
+}
+
+void KisConfig::setHideScrollbars(bool value) const
+{
+    m_cfg.writeEntry("hideScrollbars", value);
+}
+
 
 QColor KisConfig::checkersColor1() const
 {
@@ -726,6 +774,7 @@ void KisConfig::setCanvasState(const QString& state) const
     }
     if (acceptableStates.contains(state)) {
         m_cfg.writeEntry("canvasState", state);
+        m_cfg.sync();
     }
 }
 
@@ -1011,4 +1060,64 @@ bool KisConfig::showSingleChannelAsColor() const
 void KisConfig::setShowSingleChannelAsColor(bool asColor)
 {
     m_cfg.writeEntry("showSingleChannelAsColor", asColor);
+}
+
+int KisConfig::numDefaultLayers() const
+{
+    return m_cfg.readEntry("NumberOfLayersForNewImage", 2);
+}
+
+void KisConfig::setNumDefaultLayers(int num)
+{
+    m_cfg.writeEntry("NumberOfLayersForNewImage", num);
+}
+
+int KisConfig::lineSmoothingType() const
+{
+    return m_cfg.readEntry("LineSmoothingType", 1);
+}
+
+void KisConfig::setLineSmoothingType(int value)
+{
+    m_cfg.writeEntry("LineSmoothingType", value);
+}
+
+qreal KisConfig::lineSmoothingDistance() const
+{
+    return m_cfg.readEntry("LineSmoothingDistance", 50.0);
+}
+
+void KisConfig::setLineSmoothingDistance(qreal value)
+{
+    m_cfg.writeEntry("LineSmoothingDistance", value);
+}
+
+qreal KisConfig::lineSmoothingTailAggressiveness() const
+{
+    return m_cfg.readEntry("LineSmoothingTailAggressiveness", 0.15);
+}
+
+void KisConfig::setLineSmoothingTailAggressiveness(qreal value)
+{
+    m_cfg.writeEntry("LineSmoothingTailAggressiveness", value);
+}
+
+bool KisConfig::lineSmoothingSmoothPressure() const
+{
+    return m_cfg.readEntry("LineSmoothingSmoothPressure", false);
+}
+
+void KisConfig::setLineSmoothingSmoothPressure(bool value)
+{
+    m_cfg.writeEntry("LineSmoothingSmoothPressure", value);
+}
+
+int KisConfig::paletteDockerPaletteViewSectionSize() const
+{
+    return m_cfg.readEntry("paletteDockerPaletteViewSectionSize", 12);
+}
+
+void KisConfig::setPaletteDockerPaletteViewSectionSize(int value) const
+{
+    m_cfg.writeEntry("paletteDockerPaletteViewSectionSize", value);
 }

@@ -104,6 +104,7 @@ protected:
     void showHintButton();
     void init();
     virtual void paintEvent(QPaintEvent *e);
+    void updateLineEditStyleSheet();
 
     KexiTextFormatter m_textFormatter;
     bool m_calculatedCell;

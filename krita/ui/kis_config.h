@@ -88,7 +88,7 @@ public:
     void setCursorStyle(enumCursorStyle style) const;
 
     QString monitorProfile() const;
-    void setMonitorProfile(const QString & monitorProfile, bool override = false) const;
+    void setMonitorProfile(const QString & monitorProfile, bool override) const;
     static const KoColorProfile* getScreenProfile(int screen = -1);
     const KoColorProfile *displayProfile(int screen = -1) const;
 
@@ -127,6 +127,14 @@ public:
 
     bool useOpenGLTextureBuffer() const;
     void setUseOpenGLTextureBuffer(bool useBuffer);
+
+    bool disableDoubleBuffering() const;
+    void setDisableDoubleBuffering(bool disableDoubleBuffering);
+
+    bool disableVSync() const;
+    void setDisableVSync(bool disableVSync);
+
+    bool showAdvancedOpenGLSettings() const;
 
     int numMipmapLevels() const;
     int openGLTextureSize() const;
@@ -186,6 +194,9 @@ public:
 
     QColor canvasBorderColor() const;
     void setCanvasBorderColor(const QColor &color) const;
+
+    bool hideScrollbars() const;
+    void setHideScrollbars(bool value) const;
 
     bool antialiasCurves() const;
     void setAntialiasCurves(bool v) const;
@@ -305,7 +316,24 @@ public:
     bool showSingleChannelAsColor() const;
     void setShowSingleChannelAsColor(bool asColor);
 
-    
+    int numDefaultLayers() const;
+    void setNumDefaultLayers(int num);
+
+    int lineSmoothingType() const;
+    void setLineSmoothingType(int value);
+
+    qreal lineSmoothingDistance() const;
+    void setLineSmoothingDistance(qreal value);
+
+    qreal lineSmoothingTailAggressiveness() const;
+    void setLineSmoothingTailAggressiveness(qreal value);
+
+    bool lineSmoothingSmoothPressure() const;
+    void setLineSmoothingSmoothPressure(bool value);
+
+    int paletteDockerPaletteViewSectionSize() const;
+    void setPaletteDockerPaletteViewSectionSize(int value) const;
+
     template<class T>
     void writeEntry(const QString& name, const T& value) {
         m_cfg.writeEntry(name, value);

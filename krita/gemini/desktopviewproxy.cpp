@@ -22,23 +22,26 @@
 
 #include "desktopviewproxy.h"
 
-#include "MainWindow.h"
-#include <sketch/DocumentManager.h>
-
-#include <KoMainWindow.h>
-#include <KoFilterManager.h>
-#include <KoDocumentEntry.h>
-
-#include <kactioncollection.h>
-
 #include <QProcess>
 #include <QDir>
 #include <QApplication>
-#include <KFileDialog>
-#include <KLocalizedString>
+#include <QDesktopServices>
+
+#include <klocalizedstring.h>
 #include <krecentfilesaction.h>
+#include <kactioncollection.h>
+
 #include <boost/config/posix_features.hpp>
 
+#include <KoMainWindow.h>
+#include <KoFilterManager.h>
+#include <KoFileDialog.h>
+#include <KoDocumentEntry.h>
+
+#include "MainWindow.h"
+#include <sketch/DocumentManager.h>
+#include <sketch/RecentFileManager.h>
+#include <sketch/Settings.h>
 #include <kis_doc2.h>
 
 class DesktopViewProxy::Private
@@ -104,45 +107,49 @@ void DesktopViewProxy::fileNew()
 
 void DesktopViewProxy::fileOpen()
 {
-#ifdef Q_WS_WIN
-    // "kfiledialog:///OpenDialog" forces KDE style open dialog in Windows
-    // TODO provide support for "last visited" directory
-    KFileDialog *dialog = new KFileDialog(KUrl(""), QString(), d->desktopView);
-#else
-    KFileDialog *dialog = new KFileDialog(KUrl("kfiledialog:///OpenDialog"), QString(), d->desktopView);
-#endif
-    dialog->setObjectName("file dialog");
-    dialog->setMode(KFile::File);
-    dialog->setCaption(i18n("Open Document"));
-
     KoDocumentEntry entry = KoDocumentEntry::queryByMimeType(KIS_MIME_TYPE);
     KService::Ptr service = entry.service();
     const QStringList mimeFilter = KoFilterManager::mimeFilter(KIS_MIME_TYPE,
                                                                KoFilterManager::Import,
                                                                service->property("X-KDE-ExtraNativeMimeTypes").toStringList());
 
-    dialog->setMimeFilter(mimeFilter);
-    if (dialog->exec() != QDialog::Accepted) {
-        delete dialog;
-        return;
-    }
-    KUrl url(dialog->selectedUrl());
-    delete dialog;
 
-    if (url.isEmpty())
-        return;
+    KoFileDialog dialog(d->desktopView, KoFileDialog::OpenFile, "OpenDocument");
+    dialog.setCaption(i18n("Open Document"));
+    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+    dialog.setMimeTypeFilters(mimeFilter);
+    QString filename = dialog.url();
+    if (filename.isEmpty()) return;
 
-    DocumentManager::instance()->openDocument(url.toLocalFile(), d->isImporting);
+    DocumentManager::instance()->recentFileManager()->addRecent(filename);
+
+    QProcess::startDetached(qApp->applicationFilePath(), QStringList() << filename);
 }
 
 void DesktopViewProxy::fileSave()
 {
-    DocumentManager::instance()->save();
+    if(DocumentManager::instance()->isTemporaryFile()) {
+        if(d->desktopView->saveDocument(true)) {
+            DocumentManager::instance()->recentFileManager()->addRecent(DocumentManager::instance()->document()->url().toLocalFile());
+            DocumentManager::instance()->settingsManager()->setCurrentFile(DocumentManager::instance()->document()->url().toLocalFile());
+            DocumentManager::instance()->setTemporaryFile(false);
+        }
+    } else {
+        DocumentManager::instance()->save();
+    }
 }
 
 bool DesktopViewProxy::fileSaveAs()
 {
-    return d->desktopView->saveDocument(true);
+    if(d->desktopView->saveDocument(true)) {
+        DocumentManager::instance()->recentFileManager()->addRecent(DocumentManager::instance()->document()->url().toLocalFile());
+        DocumentManager::instance()->settingsManager()->setCurrentFile(DocumentManager::instance()->document()->url().toLocalFile());
+        DocumentManager::instance()->setTemporaryFile(false);
+        return true;
+    }
+
+    DocumentManager::instance()->settingsManager()->setCurrentFile(DocumentManager::instance()->document()->url().toLocalFile());
+    return false;
 }
 
 void DesktopViewProxy::reload()
@@ -159,7 +166,7 @@ void DesktopViewProxy::loadExistingAsNew()
 
 void DesktopViewProxy::slotFileOpenRecent(const KUrl& url)
 {
-    DocumentManager::instance()->openDocument(url.toLocalFile());
+    QProcess::startDetached(qApp->applicationFilePath(), QStringList() << url.toLocalFile());
 }
 
 #include "desktopviewproxy.moc"

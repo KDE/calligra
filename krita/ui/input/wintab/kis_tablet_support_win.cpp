@@ -53,11 +53,13 @@
  */
 typedef UINT (API *PtrWTInfo)(UINT, UINT, LPVOID);
 typedef int  (API *PtrWTPacketsGet)(HCTX, int, LPVOID);
+typedef int  (API *PtrWTPacketsPeek)(HCTX, int, LPVOID);
 typedef BOOL (API *PtrWTGet)(HCTX, LPLOGCONTEXT);
 typedef BOOL (API *PtrWTOverlap)(HCTX, BOOL);
 
 static PtrWTInfo ptrWTInfo = 0;
 static PtrWTPacketsGet ptrWTPacketsGet = 0;
+static PtrWTPacketsPeek ptrWTPacketsPeek = 0;
 static PtrWTGet ptrWTGet = 0;
 static PtrWTOverlap ptrWTOverlap = 0;
 
@@ -147,6 +149,7 @@ static void initWinTabFunctions()
     ptrWTInfo = (PtrWTInfo)library.resolve("WTInfoW");
     ptrWTGet = (PtrWTGet)library.resolve("WTGetW");
     ptrWTPacketsGet = (PtrWTPacketsGet)library.resolve("WTPacketsGet");
+    ptrWTPacketsPeek = (PtrWTPacketsGet)library.resolve("WTPacketsPeek");
     ptrWTOverlap = (PtrWTOverlap)library.resolve("WTOverlap");
 }
 
@@ -236,6 +239,8 @@ static void tabletInit(const quint64 uniqueId, const UINT csr_type, HCTX hTab)
     const uint cursorTypeBitMask = 0x0F06; // bitmask to find the specific cursor type (see Wacom FAQ)
     if (((csr_type & 0x0006) == 0x0002) && ((csr_type & cursorTypeBitMask) != 0x0902)) {
         tdd.currentDevice = QTabletEvent::Stylus;
+    } else if (csr_type == 0x4020) { // Surface Pro 2 tablet device
+        tdd.currentDevice = QTabletEvent::Stylus;
     } else {
         switch (csr_type & cursorTypeBitMask) {
             case 0x0802:
@@ -279,6 +284,29 @@ static void tabletUpdateCursor(QTabletDeviceData &tdd, const UINT currentCursor)
         tdd.currentPointerType = QTabletEvent::UnknownPointer;
     }
 }
+
+class EventEater : public QObject {
+public:
+    EventEater(QObject *p) : QObject(p), m_eventType(QEvent::None) {}
+
+    bool eventFilter(QObject* object, QEvent* event ) {
+        if (event->type() == m_eventType) {
+            m_eventType = QEvent::None;
+            return true;
+        }
+
+        return QObject::eventFilter(object, event);
+    }
+
+    void pleaseEatNextEvent(QEvent::Type eventType) {
+        m_eventType = eventType;
+    }
+
+private:
+    QEvent::Type m_eventType;
+};
+
+static EventEater *globalEventEater = 0;
 
 bool translateTabletEvent(const MSG &msg, PACKET *localPacketBuf,
                                       int numPackets)
@@ -424,10 +452,24 @@ bool translateTabletEvent(const MSG &msg, PACKET *localPacketBuf,
                          tangentialPressure, rotation, z, modifiers, currentTabletPointer.llId,
                          button, buttons);
 
-        e.ignore();
-        sendEvent = qApp->sendEvent(w, &e);
+        if (button == Qt::NoButton &&
+            (t == KisTabletEvent::TabletPressEx ||
+             t == KisTabletEvent::TabletReleaseEx)) {
 
-        if (!e.isAccepted()) {
+            /**
+             * Eat events which do not correcpond to any mouse
+             * button. This can happen when the user assinged a stylus
+             * key to e.g. some keyboard key
+             */
+            e.accept();
+        } else {
+            e.ignore();
+            sendEvent = qApp->sendEvent(w, &e);
+        }
+
+        if (e.isAccepted()) {
+            globalEventEater->pleaseEatNextEvent(e.getMouseEventType());
+        } else {
             QTabletEvent t = e.toQTabletEvent();
             qApp->sendEvent(w,  &t);
         }
@@ -437,6 +479,9 @@ bool translateTabletEvent(const MSG &msg, PACKET *localPacketBuf,
 
 void KisTabletSupportWin::init()
 {
+    globalEventEater = new EventEater(qApp);
+    qApp->installEventFilter(globalEventEater);
+
     initWinTabFunctions();
 }
 
@@ -489,10 +534,10 @@ bool KisTabletSupportWin::eventFilter(void *message, long *result)
         }
         break;
     case WT_PROXIMITY:
-            if (ptrWTPacketsGet && ptrWTInfo) {
+            if (ptrWTPacketsPeek && ptrWTInfo) {
                 const bool enteredProximity = LOWORD(msg->lParam) != 0;
                 PACKET proximityBuffer[1]; // we are only interested in the first packet in this case
-                const int totalPacks = ptrWTPacketsGet(qt_tablet_context, 1, proximityBuffer);
+                const int totalPacks = ptrWTPacketsPeek(qt_tablet_context, 1, proximityBuffer);
                 if (totalPacks > 0) {
                     const UINT currentCursor = proximityBuffer[0].pkCursor;
 

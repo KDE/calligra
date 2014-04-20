@@ -32,7 +32,7 @@
 #include <kis_view2.h>
 #include <kis_image.h>
 #include <kis_canvas_resource_provider.h>
-#include <ko_favorite_resource_manager.h>
+#include <kis_favorite_resource_manager.h>
 
 #include "kis_abstract_input_action.h"
 #include "kis_tool_invocation_action.h"
@@ -182,8 +182,23 @@ void KisInputManager::Private::debugTabletEvent(QEvent *event)
         .arg(tevent->xTilt())
         .arg(tevent->yTilt());
 
+    QString msg7 =
+        tevent->device() == QTabletEvent::NoDevice ? "NoDevice" :
+        tevent->device() == QTabletEvent::Puck ? "Puck" :
+        tevent->device() == QTabletEvent::Stylus ? "Stylus" :
+        tevent->device() == QTabletEvent::Airbrush ? "Airbrush" :
+        tevent->device() == QTabletEvent::FourDMouse ? "FourDMouse" :
+        tevent->device() == QTabletEvent::RotationStylus ? "RotationStylus" :
+        "unknown";
 
-    qDebug() << msg1 << msg2 << msg3 << msg4 << msg5 << msg6;
+    QString msg8 =
+        tevent->pointerType() == QTabletEvent::UnknownPointer ? "UnknownPointer" :
+        tevent->pointerType() == QTabletEvent::Pen ? "Pen" :
+        tevent->pointerType() == QTabletEvent::Cursor ? "Cursor" :
+        tevent->pointerType() == QTabletEvent::Eraser ? "Eraser" :
+        "unknown";
+
+    qDebug() << msg1 << msg2 << msg3 << msg4 << msg5 << msg6 << msg7 << msg8;
 }
 
 #define start_ignore_cursor_events() d->ignoreQtCursorEvents = true
@@ -370,8 +385,8 @@ Qt::Key KisInputManager::Private::workaroundShiftAltMetaHell(const QKeyEvent *ke
 
 bool KisInputManager::Private::tryHidePopupPalette()
 {
-    if (canvas->favoriteResourceManager()->isPopupPaletteVisible()) {
-        canvas->favoriteResourceManager()->slotShowPopupPalette();
+    if (canvas->isPopupPaletteVisible()) {
+        canvas->slotShowPopupPalette();
         return true;
     }
     return false;
@@ -445,29 +460,16 @@ void KisInputManager::Private::saveTouchEvent( QTouchEvent* event )
     lastTouchEvent = new QTouchEvent(event->type(), event->deviceType(), event->modifiers(), event->touchPointStates(), event->touchPoints());
 }
 
-void KisInputManager::Private::resetSavedTabletEvent(QEvent::Type type)
+void KisInputManager::Private::resetSavedTabletEvent(QEvent::Type /*type*/)
 {
-    bool needResetSavedEvent = true;
-
-#ifdef Q_OS_WIN
     /**
-     * For linux platform each mouse event corresponds to a single
-     * tablet event so the saved tablet event is deleted after any
-     * mouse event.
-     *
-     * For windows platform the mouse events get compressed so one
-     * mouse event may correspond to a few tablet events, so we keep a
-     * saved tablet event till the end of the stroke, that is till
-     * mouseRelese event
+     * On both Windows and Linux each mouse event corresponds to a
+     * single tablet event, so the saved event must be reset after
+     * every mouse-related event
      */
-    needResetSavedEvent = type == QEvent::MouseButtonRelease;
-#else
-    Q_UNUSED(type);
-#endif
-    if (needResetSavedEvent) {
-        delete lastTabletEvent;
-        lastTabletEvent = 0;
-    }
+
+    delete lastTabletEvent;
+    lastTabletEvent = 0;
 }
 
 KisInputManager::KisInputManager(KisCanvas2 *canvas, KisToolProxy *proxy)
@@ -495,8 +497,10 @@ KisInputManager::KisInputManager(KisCanvas2 *canvas, KisToolProxy *proxy)
     connect(&d->moveEventCompressor, SIGNAL(timeout()), SLOT(slotCompressedMoveEvent()));
 
 
+#ifndef Q_OS_MAC
     QApplication::instance()->
         installEventFilter(new Private::ProximityNotifier(d, this));
+#endif
 }
 
 KisInputManager::~KisInputManager()
@@ -534,7 +538,10 @@ void KisInputManager::setupAsEventFilter(QObject *receiver)
     }
 
     d->eventsReceiver = receiver;
-    d->eventsReceiver->installEventFilter(this);
+
+    if (d->eventsReceiver) {
+        d->eventsReceiver->installEventFilter(this);
+    }
 }
 
 void KisInputManager::stopIgnoringEvents()
@@ -597,8 +604,9 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         break;
     }
     case QEvent::ShortcutOverride: {
-        if (d->logTabletEvents) qDebug() << "KeyPress";
         QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
+        if (d->logTabletEvents) qDebug() << "KeyPress" << keyEvent->key();
+
         Qt::Key key = d->workaroundShiftAltMetaHell(keyEvent);
 
         if (!keyEvent->isAutoRepeat()) {
@@ -619,8 +627,9 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         break;
     }
     case QEvent::KeyRelease: {
-        if (d->logTabletEvents) qDebug() << "KeyRelease";
         QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
+        if (d->logTabletEvents) qDebug() << "KeyRelease" << keyEvent->key();
+
         if (!keyEvent->isAutoRepeat()) {
             Qt::Key key = d->workaroundShiftAltMetaHell(keyEvent);
             retval = d->matcher.keyReleased(key);

@@ -30,6 +30,7 @@
 #include <QDeclarativeView>
 #include <QDeclarativeContext>
 #include <QDeclarativeEngine>
+#include <QGraphicsObject>
 #include <QDir>
 #include <QFile>
 #include <QMessageBox>
@@ -53,6 +54,11 @@
 #include <KoAbstractGradient.h>
 #include <KoZoomController.h>
 
+#include "filter/kis_filter.h"
+#include "filter/kis_filter_registry.h"
+#include "kis_paintop.h"
+#include "kis_paintop_registry.h"
+
 #include <kis_paintop_preset.h>
 #include <KoPattern.h>
 #include <kis_config.h>
@@ -66,6 +72,8 @@
 #include "sketch/RecentFileManager.h"
 #include "sketch/DocumentManager.h"
 #include "sketch/KisSketchPart.h"
+#include "sketch/QmlGlobalEngine.h"
+#include "sketch/Settings.h"
 
 #ifdef Q_OS_WIN
 // Slate mode/docked detection stuff
@@ -98,8 +106,8 @@ public:
         , switcher(0)
     {
 #ifdef Q_OS_WIN
-        slateMode = (GetSystemMetrics(SM_CONVERTIBLESLATEMODE) == 0);
-        docked = (GetSystemMetrics(SM_SYSTEMDOCKED) != 0);
+//         slateMode = (GetSystemMetrics(SM_CONVERTIBLESLATEMODE) == 0);
+//         docked = (GetSystemMetrics(SM_SYSTEMDOCKED) != 0);
 #endif
         centerer = new QTimer(q);
         centerer->setInterval(10);
@@ -133,10 +141,20 @@ public:
     void initSketchView(QObject* parent)
     {
         sketchView = new SketchDeclarativeView();
+        QmlGlobalEngine::instance()->setEngine(sketchView->engine());
         sketchView->engine()->rootContext()->setContextProperty("mainWindow", parent);
 
 #ifdef Q_OS_WIN
         QDir appdir(qApp->applicationDirPath());
+
+        // Corrects for mismatched case errors in path (qtdeclarative fails to load)
+        wchar_t buffer[1024];
+        QString absolute = appdir.absolutePath();
+        DWORD rv = ::GetShortPathName((wchar_t*)absolute.utf16(), buffer, 1024);
+        rv = ::GetLongPathName(buffer, buffer, 1024);
+        QString correctedPath((QChar *)buffer);
+        appdir.setPath(correctedPath);
+
         // for now, the app in bin/ and we still use the env.bat script
         appdir.cdUp();
 
@@ -175,12 +193,13 @@ public:
         // Initialize all Calligra directories etc.
         KoGlobal::initialize();
 
-        desktopView = new KoMainWindow(KIS_MIME_TYPE, KisFactory2::componentData());
-        if (qgetenv("KDE_FULL_SESSION").isEmpty()) {
-            // There are two themes that work for Krita, oxygen and plastique. Try to set plastique first, then oxygen
-            qobject_cast<QApplication*>(QApplication::instance())->setStyle("Plastique");
-            qobject_cast<QApplication*>(QApplication::instance())->setStyle("Oxygen");
+        // The default theme is not what we want for Gemini
+        KConfigGroup group(KGlobal::config(), "theme");
+        if(group.readEntry("Theme", "no-theme-is-set") == QLatin1String("no-theme-is-set")) {
+            group.writeEntry("Theme", "Krita-dark");
         }
+
+        desktopView = new KoMainWindow(KIS_MIME_TYPE, KisFactory2::componentData());
 
         toSketch = new KAction(desktopView);
         toSketch->setEnabled(false);
@@ -215,6 +234,11 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     qApp->setActiveWindow( this );
 
     setWindowTitle(i18n("Krita Gemini"));
+    setWindowIcon(KIcon("kritagemini"));
+
+	// Load filters and other plugins in the gui thread
+	Q_UNUSED(KisFilterRegistry::instance());
+	Q_UNUSED(KisPaintOpRegistry::instance());
 
     KisConfig cfg;
     // Store the current setting before we do "things", and heuristic our way to a reasonable
@@ -225,10 +249,12 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     cfg.setUseOpenGL(true);
 
     foreach(QString fileName, fileNames) {
-        DocumentManager::instance()->recentFileManager()->addRecent(fileName);
+        DocumentManager::instance()->recentFileManager()->addRecent( QDir::current().absoluteFilePath( fileName ) );
     }
 
     connect(DocumentManager::instance(), SIGNAL(documentChanged()), SLOT(documentChanged()));
+    connect(DocumentManager::instance(), SIGNAL(documentChanged()), SLOT(resetWindowTitle()));
+    connect(DocumentManager::instance(), SIGNAL(documentSaved()), SLOT(resetWindowTitle()));
 
     d->initSketchView(this);
 
@@ -236,6 +262,21 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     // Really, this allows us to show the pleasant welcome screen from Sketch
     switchToSketch();
     d->wasMaximized = true;
+
+    if(!fileNames.isEmpty()) {
+        //It feels a little hacky, but call a QML function to open files.
+        //This saves a lot of hassle required to change state for loading dialogs etc.
+        QMetaObject::invokeMethod(d->sketchView->rootObject(), "openFile", Q_ARG(QVariant, fileNames.at(0)));
+    }
+}
+
+void MainWindow::resetWindowTitle()
+{
+    KUrl url(DocumentManager::instance()->settingsManager()->currentFile());
+    QString fileName = url.fileName();
+    if(url.protocol() == "temp")
+        fileName = i18n("Untitled");
+    setWindowTitle(QString("%1 - %2").arg(fileName).arg(i18n("Krita Gemini")));
 }
 
 void MainWindow::switchDesktopForced()
@@ -530,7 +571,7 @@ bool MainWindow::Private::queryClose()
 
         switch (res) {
         case KMessageBox::Yes : {
-            if (temporaryFile && !desktopViewProxy->fileSaveAs())
+            if (DocumentManager::instance()->isTemporaryFile() && !desktopViewProxy->fileSaveAs())
                 return false;
             if (!DocumentManager::instance()->save())
                 return false;

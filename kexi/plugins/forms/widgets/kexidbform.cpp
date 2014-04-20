@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Lucijan Busch <lucijan@kde.org>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2005-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2014 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -74,8 +74,7 @@ public:
             indicesForDataAwareWidgets.find(item));
         if (indicesForDataAwareWidgetsIt == indicesForDataAwareWidgets.constEnd())
             return -1;
-        kDebug() << "column # for item: "
-            << indicesForDataAwareWidgetsIt.value();
+        //kDebug() << "column # for item: " << indicesForDataAwareWidgetsIt.value();
         return indicesForDataAwareWidgetsIt.value();
     }
 
@@ -85,10 +84,10 @@ public:
             return;
         orderedFocusWidgetsIterator = orderedFocusWidgets.begin();
         orderedFocusWidgetsIteratorInitialized = true;
-        foreach (QWidget *w, orderedFocusWidgets) {
+        /*foreach (QWidget *w, orderedFocusWidgets) {
             kDebug() << "orderedFocusWidget:" << w;
-        }
-        kDebug() << "widget to focus:" << widget;
+        }*/
+        //kDebug() << "widget to focus:" << widget;
         while (orderedFocusWidgetsIterator != orderedFocusWidgets.end()
                 && *orderedFocusWidgetsIterator != widget) {
             ++orderedFocusWidgetsIterator;
@@ -426,11 +425,20 @@ void KexiDBForm::updateReadOnlyFlags()
 
 bool KexiDBForm::eventFilter(QObject * watched, QEvent * e)
 {
-    //kDebug() << e->type();
+#if 0
+    if (e->type() != QEvent::Paint
+            && e->type() != QEvent::Leave
+            && e->type() != QEvent::MouseMove
+            && e->type() != QEvent::HoverMove
+            && e->type() != QEvent::HoverEnter
+            && e->type() != QEvent::HoverLeave)
+    {
+        kDebug() << e << watched;
+    }
     if (e->type() == QEvent::Resize && watched == this)
         kDebug() << "RESIZE";
-
-    if (e->type() == QEvent::KeyPress) {
+#endif
+    if (e->type() == QEvent::KeyPress || e->type() == QEvent::ShortcutOverride) {
         if (isPreviewing()) {
             QKeyEvent *ke = static_cast<QKeyEvent*>(e);
             const int key = ke->key();
@@ -541,7 +549,9 @@ bool KexiDBForm::eventFilter(QObject * watched, QEvent * e)
                     realWidget = dynamic_cast<QWidget*>(dynamic_cast<KexiDataItemInterface*>(realWidget)->parentDataItemInterface());
 
                 d->setOrderedFocusWidgetsIteratorTo(realWidget);
-                kDebug() << realWidget->objectName();
+                dynamic_cast<KexiDataItemInterface*>(realWidget)->moveCursorToEnd();
+
+                //kDebug() << realWidget->objectName();
 
                 // find next/prev widget to focus
                 //QWidget *widgetToUnfocus = realWidget;
@@ -604,17 +614,18 @@ bool KexiDBForm::eventFilter(QObject * watched, QEvent * e)
 //2.0 didn't work                        KexiUtils::unsetFocusWithReason(widgetToUnfocus, Qt::TabFocusReason);
 //2.0 didn't work                        KexiUtils::setFocusWithReason(widgetToFocus, Qt::TabFocusReason);
                         widgetToFocus->setFocus();
-                        kDebug() << "focusing " << widgetToFocus->objectName();
+                        //kDebug() << "focusing " << widgetToFocus->objectName();
                     } else {//backtab
 //2.0 didn't work                        KexiUtils::unsetFocusWithReason(widgetToUnfocus, Qt::BacktabFocusReason);
                         //set focus, see above note
 //2.0 didn't work                        KexiUtils::setFocusWithReason(*d->orderedFocusWidgetsIterator, Qt::BacktabFocusReason);
                         (*d->orderedFocusWidgetsIterator)->setFocus();
-                        kDebug() << "focusing "
-                            << (*d->orderedFocusWidgetsIterator)->objectName();
+                        //kDebug() << "focusing " << (*d->orderedFocusWidgetsIterator)->objectName();
                     }
-                    if (dynamic_cast<KexiFormDataItemInterface*>(widgetToSelectAll))
+                    if (dynamic_cast<KexiFormDataItemInterface*>(widgetToSelectAll)) {
+                        //kDebug() << "widgetToSelectAll:" << widgetToSelectAll;
                         dynamic_cast<KexiFormDataItemInterface*>(widgetToSelectAll)->selectAllOnFocusIfNeeded();
+                    }
                 }
                 return true;
             }
@@ -622,18 +633,13 @@ bool KexiDBForm::eventFilter(QObject * watched, QEvent * e)
     } else if (e->type() == QEvent::FocusIn || (e->type() == QEvent::MouseButtonPress && static_cast<QMouseEvent*>(e)->button() == Qt::LeftButton)) {
         bool focusDataWidget = isPreviewing();
         if (static_cast<QFocusEvent*>(e)->reason() == Qt::PopupFocusReason) {
-            kDebug() << "->>> focus IN, popup";
+            //kDebug() << "->>> focus IN, popup" << watched;
             focusDataWidget = !d->popupFocused;
             d->popupFocused = false;
-//   if (d->widgetFocusedBeforePopup) {
-//    watched = d->widgetFocusedBeforePopup;
-//    d->widgetFocusedBeforePopup = 0;
-//   }
         }
 
         if (focusDataWidget) {
-            kDebug() << "FocusIn: " << watched->metaObject()->className()
-                << " " << watched->objectName();
+            //kDebug() << "FocusIn: " << watched->metaObject()->className() << " " << watched->objectName();
             if (d->dataAwareObject) {
                 QWidget *dataItem = dynamic_cast<QWidget*>(watched);
                 while (dataItem) {
@@ -643,12 +649,11 @@ bool KexiDBForm::eventFilter(QObject * watched, QEvent * e)
                     if (!dataItem) {
                         break;
                     }
-                    kDebug() << "FocusIn: FOUND "
-                        << dataItem->metaObject()->className() << " " << dataItem->objectName();
+                    //kDebug() << "FocusIn: FOUND " << dataItem->metaObject()->className() << " " << dataItem->objectName();
 
                     const int index = d->indexOfDataAwareWidget(dataItem);
                     if (index >= 0) {
-                        kDebug() << "moving cursor to column #" << index;
+                        //kDebug() << "moving cursor to column #" << index;
                         editedItem = 0;
                         if ((int)index != d->dataAwareObject->currentColumn()) {
                             d->dataAwareObject->setCursorPosition(d->dataAwareObject->currentRow(), index /*column*/);

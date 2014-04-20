@@ -50,7 +50,7 @@ FilterEffectEditWidget::FilterEffectEditWidget(QWidget *parent)
 
     FilterResourceServerProvider * serverProvider = FilterResourceServerProvider::instance();
     KoResourceServer<FilterEffectResource> * server = serverProvider->filterEffectServer();
-    KoAbstractResourceServerAdapter * adapter = new KoResourceServerAdapter<FilterEffectResource>(server, this);
+    QSharedPointer<KoAbstractResourceServerAdapter> adapter(new KoResourceServerAdapter<FilterEffectResource>(server));
 
     presets->setResourceAdapter(adapter);
     presets->setDisplayMode(KoResourceSelector::TextMode);

@@ -34,7 +34,7 @@ Item {
 
     Rectangle {
         id: background;
-        color: "#000000"
+        color: Settings.theme.color("panels/menu/base");
         anchors.fill: parent;
 
         MouseArea {
@@ -53,42 +53,26 @@ Item {
         Row {
             Button {
                 id: newButton;
-                width: Constants.GridWidth;
-                height: Constants.GridHeight;
-                color: "#000000"
-                shadow: false
-                image: "../images/svg/icon-filenew.svg"
-                highlightColor: Constants.Theme.HighlightColor;
+                image: Settings.theme.icon("filenew")
+                highlightColor: Settings.theme.color("panels/menu/buttonHighlight");
                 onClicked: base.buttonClicked( "new" );
             }
             Button {
                 id: openButton;
-                width: Constants.GridWidth;
-                height: Constants.GridHeight;
-                color: "#000000"
-                shadow: false
-                image: "../images/svg/icon-fileopen.svg"
-                highlightColor: Constants.Theme.HighlightColor;
+                image: Settings.theme.icon("fileopen")
+                highlightColor: Settings.theme.color("panels/menu/buttonHighlight");
                 onClicked: base.buttonClicked( "open" );
             }
             Button {
                 id: saveButton;
-                width: Constants.GridWidth;
-                height: Constants.GridHeight;
-                color: "#000000"
-                shadow: false
-                image: "../images/svg/icon-filesave.svg"
-                highlightColor: Constants.Theme.HighlightColor;
+                image: Settings.theme.icon("filesave")
+                highlightColor: Settings.theme.color("panels/menu/buttonHighlight");
                 onClicked: base.buttonClicked( "save" );
             }
             Button {
                 id: saveAsButton;
-                width: Constants.GridWidth;
-                height: Constants.GridHeight;
-                color: "#000000"
-                shadow: false
-                image: "../images/svg/icon-filesaveas.svg"
-                highlightColor: Constants.Theme.HighlightColor;
+                image: Settings.theme.icon("filesaveas")
+                highlightColor: Settings.theme.color("panels/menu/buttonHighlight");
                 onClicked: base.buttonClicked( "saveAs" );
             }
         }
@@ -98,44 +82,28 @@ Item {
 
             Button {
                 id: undoButton;
-                width: Constants.GridWidth;
-                height: Constants.GridHeight;
-                color: "#000000"
-                shadow: false
-                image: "../images/svg/icon-undo.svg"
-                highlightColor: Constants.Theme.HighlightColor;
+                image: Settings.theme.icon("undo")
+                highlightColor: Settings.theme.color("panels/menu/buttonHighlight");
                 enabled: sketchView.canUndo;
                 onClicked: base.buttonClicked( "undo" );
             }
             Button {
                 id: redoButton;
-                width: Constants.GridWidth;
-                height: Constants.GridHeight;
-                color: "#000000"
-                shadow: false
-                image: "../images/svg/icon-redo.svg"
-                highlightColor: Constants.Theme.HighlightColor;
+                image: Settings.theme.icon("redo")
+                highlightColor: Settings.theme.color("panels/menu/buttonHighlight");
                 enabled: sketchView.canRedo;
                 onClicked: base.buttonClicked( "redo" );
             }
             Button {
                 id: zoomOutButton;
-                width: Constants.GridWidth;
-                height: Constants.GridHeight;
-                color: "#000000"
-                shadow: false
-                image: "../images/svg/icon-delete.svg"
-                highlightColor: Constants.Theme.HighlightColor;
+                image: Settings.theme.icon("delete")
+                highlightColor: Settings.theme.color("panels/menu/buttonHighlight");
                 onClicked: base.buttonClicked( "zoomOut" );
             }
             Button {
                 id: zoomInButton;
-                width: Constants.GridWidth;
-                height: Constants.GridHeight;
-                color: "#000000"
-                shadow: false
-                image: "../images/svg/icon-add.svg"
-                highlightColor: Constants.Theme.HighlightColor;
+                image: Settings.theme.icon("add")
+                highlightColor: Settings.theme.color("panels/menu/buttonHighlight");
                 onClicked: base.buttonClicked( "zoomIn" );
             }
             Item {
@@ -145,33 +113,28 @@ Item {
             Button {
                 id: switchButton;
                 width: visible ? Constants.GridWidth : 0;
-                height: Constants.GridHeight;
                 visible: (typeof switchToDesktopAction !== "undefined");
-                color: "#000000"
-                shadow: false
                 enabled: (typeof switchToDesktopAction === "undefined") ? false : switchToDesktopAction.enabled;
-                image: "../images/svg/icon-switch.svg"
-                highlightColor: Constants.Theme.HighlightColor;
-                onClicked: base.buttonClicked( "switchToDesktop" );
+                image: Settings.theme.icon("switch")
+                highlightColor: Settings.theme.color("panels/menu/buttonHighlight");
+                onClicked: {
+                    base.buttonClicked( "switchToDesktop" );
+                    base.collapsed = !base.collapsed;
+                }
             }
             Button {
                 id: minimizeButton;
-                width: Constants.GridWidth;
-                height: Constants.GridHeight;
-                color: "#000000"
-                shadow: false
-                image: "../images/svg/icon-minimize.svg"
-                highlightColor: Constants.Theme.HighlightColor;
-                onClicked: base.buttonClicked( "minimize" );
+                image: Settings.theme.icon("minimize")
+                highlightColor: Settings.theme.color("panels/menu/buttonHighlight");
+                onClicked: {
+                    base.buttonClicked( "minimize" );
+                    base.collapsed = !base.collapsed;
+                }
             }
             Button {
                 id: closeButton;
-                width: Constants.GridWidth;
-                height: Constants.GridHeight;
-                color: "#000000"
-                shadow: false
-                image: "../images/svg/icon-close.svg"
-                highlightColor: Constants.Theme.HighlightColor;
+                image: Settings.theme.icon("close")
+                highlightColor: Settings.theme.color("panels/menu/buttonHighlight");
                 onClicked: base.buttonClicked( "close" );
             }
             /*Item {
@@ -184,7 +147,7 @@ Item {
                 height: Constants.GridHeight;
                 color: "#000000"
                 shadow: false
-                image: "../images/svg/icon-help.svg"
+                image: Settings.theme.icon("help")
                 highlightColor: Constants.Theme.HighlightColor;
                 onClicked: base.buttonClicked( "help" );
             }
@@ -194,7 +157,7 @@ Item {
                 height: Constants.GridHeight;
                 color: "#000000"
                 shadow: false
-                image: "../images/svg/icon-settings.svg"
+                image: Settings.theme.icon("settings")
                 highlightColor: Constants.Theme.HighlightColor;
                 onClicked: base.buttonClicked( "settings" );
             }*/
@@ -209,7 +172,7 @@ Item {
         width: Constants.GridWidth * 1.5;
         height: Constants.GridHeight / 2 + 8;
 
-        color: "#000000"
+        color: Settings.theme.color("panels/menu/base");
         radius: 8;
 
         Label {
@@ -218,9 +181,8 @@ Item {
             anchors.centerIn: parent;
             anchors.verticalCenterOffset: -4;
 
-            font.bold: true
-            font.pixelSize: Constants.DefaultFontSize
-            color: "white";
+            font: Settings.theme.font("panelHandle");
+            color: Settings.theme.color("panels/menu/text");
         }
 
         MouseArea {

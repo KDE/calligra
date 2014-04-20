@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 Lucijan Busch <lucijan@gmx.at>
-   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -85,32 +85,18 @@ void KexiInputTableEdit::init()
     if (m_decsym.isEmpty())
         m_decsym = ".";//default
 
-    const bool align_right = displayedField()->isNumericType();
-
-    QHBoxLayout *lyr = 0;
-    if (!align_right) {
-        //create layer for internal editor
-        lyr = new QHBoxLayout(this);
-        lyr->setContentsMargins(0, 0, 0, 0);
-    }
+    //create layer for internal editor
+    QHBoxLayout *lyr =  new QHBoxLayout(this);
+    lyr->setContentsMargins(0, 0, 0, 0);
 
     //create internal editor
     m_lineedit = new MyLineEdit(this);
     m_lineedit->setObjectName("KexiInputTableEdit-MyLineEdit");
     connect(m_lineedit, SIGNAL(textEdited(QString)),
             this, SLOT(slotTextEdited(QString)));
-    KColorScheme cs(QPalette::Active);
-    QColor focus = cs.decoration(KColorScheme::FocusColor).color();
-    m_lineedit->setStyleSheet(QString("QLineEdit { \
-      border: 1px solid %1; \
-      border-radius: 0px; \
-      padding: 0px %2px 0px %3px; }")
-      .arg(focus.name())
-      .arg(align_right ? 1 : 0) // right
-      .arg(align_right ? 0 : 1) // left
-    );
-    if (lyr)
-        lyr->addWidget(m_lineedit);
+    updateLineEditStyleSheet();
+    lyr->addWidget(m_lineedit);
+    const bool align_right = displayedField()->isNumericType();
     if (align_right) {
         m_lineedit->setAlignment(Qt::AlignRight);
     }
@@ -342,6 +328,22 @@ bool KexiInputTableEdit::fixup()
         m_lineedit->setText(t.left(field()->maxLength()));
     }
     return true;
+}
+
+void KexiInputTableEdit::updateLineEditStyleSheet()
+{
+    KColorScheme cs(QPalette::Active);
+    QColor focus = cs.decoration(KColorScheme::FocusColor).color();
+    const bool align_right = displayedField()->isNumericType();
+    m_lineedit->setStyleSheet(QString("QLineEdit { \
+      border: 1px solid %1; \
+      border-radius: 0px; \
+      padding: 0px %2px 0px %3px; }")
+      .arg(focus.name())
+      .arg(m_rightMarginWhenFocused) // right
+      .arg(align_right ? 0 : 2) // left
+    );
+    kDebug() << m_rightMarginWhenFocused << m_lineedit->styleSheet();
 }
 
 KEXI_CELLEDITOR_FACTORY_ITEM_IMPL(KexiInputEditorFactoryItem, KexiInputTableEdit)

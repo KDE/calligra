@@ -121,7 +121,14 @@ public:
     virtual ~KoResourceServer()
     {
         if (m_deleteResource) {
-            qDeleteAll(m_resources);
+
+            foreach(KoResourceServerObserver<T>* observer, m_observers) {
+                observer->unsetResourceServer();
+            }
+
+            foreach(T* res, m_resources) {
+                delete res;
+            }
         }
         m_resources.clear();
         delete m_tagStore;
@@ -166,9 +173,8 @@ public:
                         notifyResourceAdded(resource);
                     }
                     else {
-                        if (m_deleteResource) {
-                            delete resource;
-                        }
+                        kWarning() << "Loading resource " << front << "failed";
+                        delete resource;
                     }
                 }
                 m_loadLock.unlock();
@@ -244,7 +250,7 @@ public:
         return true;
     }
 
-    /// Remove a resource from resourceserver and hard disk
+    /// Remove a resource from the resourceserver and blacklist it
     bool removeResource(T* resource) {
         if ( !m_resourcesByFilename.contains( resource->shortFilename() ) ) {
             return false;
@@ -445,6 +451,7 @@ public:
 
     void tagCategoryRemoved(const QString& tag)
     {
+        m_tagStore->delTag(tag);
         m_tagStore->serializeTags();
         foreach(KoResourceServerObserver<T>* observer, m_observers) {
             observer->syncTagRemoval(tag);

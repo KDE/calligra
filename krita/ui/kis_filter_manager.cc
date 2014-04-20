@@ -50,7 +50,6 @@ struct KisFilterManager::Private {
     Private()
         : reapplyAction(0)
         , actionCollection(0)
-        , filterDialog(0)
     {
     }
     KAction* reapplyAction;
@@ -65,7 +64,7 @@ struct KisFilterManager::Private {
 
     QSignalMapper actionsMapper;
 
-    KisDlgFilter *filterDialog;
+    QPointer<KisDlgFilter> filterDialog;
 };
 
 KisFilterManager::KisFilterManager(KisView2 * view, KisDoc2 * doc) : d(new Private)
@@ -205,6 +204,7 @@ void KisFilterManager::showFilterDialog(const QString &filterId)
     if (filter->showConfigurationWidget()) {
         if (!d->filterDialog) {
             d->filterDialog = new KisDlgFilter(d->view , d->view->activeNode(), this);
+            d->filterDialog->setAttribute(Qt::WA_DeleteOnClose);
         }
         d->filterDialog->setFilter(filter);
         d->filterDialog->setVisible(true);
@@ -263,7 +263,7 @@ void KisFilterManager::finish()
 
     KisFilterSP filter = KisFilterRegistry::instance()->value(d->currentlyAppliedConfiguration->name());
     if (filter->bookmarkManager()) {
-        filter->bookmarkManager()->save(KisBookmarkedConfigurationManager::ConfigLastUsed.id(),
+        filter->bookmarkManager()->save(KisBookmarkedConfigurationManager::ConfigLastUsed,
                                        d->currentlyAppliedConfiguration.data());
     }
 

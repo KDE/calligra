@@ -27,6 +27,16 @@ class KisWeakSharedPtr;
 template<class T>
 class KisSharedPtr;
 
+template <class T>
+uint qHash(KisSharedPtr<T> ptr) {
+    return qHash(ptr.data());
+}
+
+template <class T>
+uint qHash(KisWeakSharedPtr<T> ptr) {
+    return qHash(ptr.data());
+}
+
 #include "kis_shared_ptr_vector.h"
 
 /**
@@ -161,12 +171,6 @@ typedef KisSharedPtr<KisVLineIteratorNG> KisVLineIteratorSP;
 
 class KisVLineConstIteratorNG;
 typedef KisSharedPtr<KisVLineConstIteratorNG> KisVLineConstIteratorSP;
-
-class KisRectIteratorNG;
-typedef KisSharedPtr<KisRectIteratorNG> KisRectIteratorSP;
-
-class KisRectConstIteratorNG;
-typedef KisSharedPtr<KisRectConstIteratorNG> KisRectConstIteratorSP;
 
 class KisRandomConstAccessorNG;
 typedef KisSharedPtr<KisRandomConstAccessorNG> KisRandomConstAccessorSP;

@@ -41,12 +41,6 @@ KPrAnimationToolFactory::~KPrAnimationToolFactory()
 {
 }
 
-bool KPrAnimationToolFactory::canCreateTool(KoCanvasBase *canvas) const
-{
-    KoPACanvas *paCanvas =dynamic_cast<KoPACanvas *>(canvas);
-    return paCanvas!=0; // we only work in KPresenter
-}
-
 KoToolBase* KPrAnimationToolFactory::createTool(KoCanvasBase *canvas)
 {
     return new KPrAnimationTool(canvas);

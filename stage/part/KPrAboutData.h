@@ -31,7 +31,8 @@ KAboutData * newKPresenterAboutData()
 {
     KAboutData * aboutData=new KAboutData( "stage", 0, ki18nc("application name", "Stage"),
                                            version, ki18n(description), KAboutData::License_LGPL,
-                                           ki18n("(c) 1998-2013, The Stage Team"), KLocalizedString(),
+                                           ki18n("© 1998-%1, The Stage Team").subs(CALLIGRA_YEAR),
+                                           KLocalizedString(),
                                            "http://www.calligra.org/stage/");
     aboutData->setProductName("calligrastage"); // for bugs.kde.org
     aboutData->setProgramIconName(QLatin1String("calligrastage"));
