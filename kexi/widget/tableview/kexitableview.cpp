@@ -342,7 +342,8 @@ void KexiTableView::setupNavigator()
 {
     updateScrollBars();
 
-    m_navPanel = new KexiRecordNavigator(this, this, leftMargin());
+    m_navPanel = new KexiRecordNavigator(this, 0 /* todo: this*/);
+    m_navPanel->setLeftMargin(leftMargin());
     navPanelWidget()->setObjectName("navPanel");
     m_navPanel->setRecordHandler(this);
     navPanelWidget()->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
@@ -455,7 +456,7 @@ void KexiTableView::slotUpdate()
     updateContents();
     updateScrollBars();
     if (m_navPanel)
-        m_navPanel->updateGeometry(leftMargin());
+        m_navPanel->setLeftMargin(leftMargin());
 // updateNavPanelGeometry();
 
     updateWidgetContentsSize();
@@ -512,7 +513,7 @@ QSize KexiTableView::sizeHint() const
 {
     const QSize &ts = tableSize();
     int w = qMax(ts.width() + leftMargin() + verticalScrollBar()->sizeHint().width() + 2 * 2,
-                 (navPanelWidget()->isVisible() ? navPanelWidget()->width() : 0));
+                 ((navPanelWidget() && navPanelWidget()->isVisible()) ? navPanelWidget()->width() : 0));
     int h = qMax(ts.height() + topMargin() + horizontalScrollBar()->sizeHint().height(),
                  minimumSizeHint().height());
     w = qMin(w, qApp->desktop()->availableGeometry(this).width() * 3 / 4); //stretch
@@ -1669,7 +1670,7 @@ void KexiTableView::resizeEvent(QResizeEvent *e)
     //updateGeometries();
 
     if (m_navPanel)
-        m_navPanel->updateGeometry(leftMargin());
+        m_navPanel->setLeftMargin(leftMargin());
 // updateNavPanelGeometry();
 
     if ((contentsHeight() - e->size().height()) <= d->rowHeight) {
@@ -1729,7 +1730,7 @@ void KexiTableView::showEvent(QShowEvent *e)
         d->ensureCellVisibleOnShow = QPoint(-1, -1); //reset the flag
     }
     if (m_navPanel)
-        m_navPanel->updateGeometry(leftMargin());
+        m_navPanel->setLeftMargin(leftMargin());
 // updateNavPanelGeometry();
     ensureVisible(0, 0, 0, 0); // needed because for small geometries contents were moved 1/2 of row height up
 }
@@ -1873,7 +1874,7 @@ void KexiTableView::slotColumnWidthChanged(int, int, int)
     updateGeometries();
     updateScrollBars();
     if (m_navPanel)
-        m_navPanel->updateGeometry(leftMargin());
+        m_navPanel->setLeftMargin(leftMargin());
     if (d->firstTimeEnsureCellVisible) {
         d->firstTimeEnsureCellVisible = false;
         ensureCellVisible( currentRow(), currentColumn() );
@@ -1897,7 +1898,7 @@ void KexiTableView::updateGeometries()
     int frameLeftMargin = style()->pixelMetric(QStyle::PM_FocusFrameVMargin, 0, this);
     int frameTopMargin = style()->pixelMetric(QStyle::PM_FocusFrameHMargin, 0, this);
 // m_verticalHeader->setGeometry(1, topMargin() + 1, leftMargin(), visibleHeight());
-    m_horizontalHeader->setGeometry(leftMargin() + frameLeftMargin, frameTopMargin, visibleWidth(), topMargin());
+    m_horizontalHeader->setGeometry(leftMargin() + frameLeftMargin, frameTopMargin, /*Qt4: viewport()->width()*/ visibleWidth(), topMargin());
 // m_verticalHeader->setGeometry(1, topMargin() + 1, leftMargin(), visibleHeight());
     m_verticalHeader->setGeometry(frameLeftMargin, topMargin() + frameTopMargin, leftMargin(), visibleHeight());
 }

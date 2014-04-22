@@ -20,6 +20,7 @@
 */
 
 #include <QVBoxLayout>
+#include <QDomDocument>
 
 #include <kdebug.h>
 #include <kdialog.h>
@@ -53,7 +54,6 @@
 #include <koproperty/Property.h>
 #include <koproperty/Set.h>
 
-#include "kexiformview.h"
 #include "widgets/kexidbform.h"
 #include "kexiformscrollview.h"
 #include "kexiformmanager.h"
@@ -240,7 +240,7 @@ void KexiFormPart::initInstanceActions()
 KexiWindowData*
 KexiFormPart::createWindowData(KexiWindow* window)
 {
-    return new KexiFormPart::TempData(window);
+    return new KexiFormPartTempData(window);
 }
 
 KexiView* KexiFormPart::createView(QWidget *parent, KexiWindow* window,
@@ -259,6 +259,7 @@ KexiView* KexiFormPart::createView(QWidget *parent, KexiWindow* window,
     return view;
 }
 
+#ifndef NO_DSWIZARD
 void
 KexiFormPart::generateForm(KexiDB::FieldList *list, QDomDocument &domDoc)
 {
@@ -402,6 +403,7 @@ KexiFormPart::generateForm(KexiDB::FieldList *list, QDomDocument &domDoc)
 
     uiElement.appendChild(baseWidget);
 }
+#endif
 
 KLocalizedString KexiFormPart::i18nMessage(
     const QString& englishMessage, KexiWindow* window) const
@@ -495,12 +497,12 @@ void KexiFormPart::setupCustomPropertyPanelTabs(KTabWidget *tab)
 
 //----------------
 
-KexiFormPart::TempData::TempData(QObject* parent)
+KexiFormPartTempData::KexiFormPartTempData(QObject* parent)
         : KexiWindowData(parent)
 {
 }
 
-KexiFormPart::TempData::~TempData()
+KexiFormPartTempData::~KexiFormPartTempData()
 {
 }
 

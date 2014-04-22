@@ -32,12 +32,12 @@ set(kexiextendedwidgets_LIB_SRCS
     properties/KexiPropertyEditorView.cpp
     properties/KexiPropertyPaneViewBase.cpp
 
-    kexiquerydesignersqleditor.cpp 
+    kexiquerydesignersqleditor.cpp
     kexiqueryparameters.cpp
     kexisectionheader.cpp
-    kexidbdrivercombobox.cpp 
-    kexieditor.cpp 
-    KexiDataSourceComboBox.cpp 
+    kexidbdrivercombobox.cpp
+    kexieditor.cpp
+    KexiDataSourceComboBox.cpp
     KexiObjectInfoLabel.cpp
     kexicharencodingcombobox.cpp
     KexiDBTitlePage.cpp
@@ -52,8 +52,6 @@ ELSE (KEXI_MOBILE)
   LIST(APPEND kexiextendedwidgets_LIB_SRCS
     #navigator/KexiProjectListView.cpp
     #navigator/KexiProjectListViewItem.cpp
-    
-    kexiscrollview.cpp 
     kexidbconnectionwidget.cpp 
   #   pixmapcollection.cpp 
 # TODO replace use of KexiProjectListView and KexiProjectListViewList (with KexiProjectNavigator) 

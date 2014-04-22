@@ -35,7 +35,10 @@
 
 #include "kexiformpart.h"
 
+#define NO_DSWIZARD
+
 class KexiFormPart;
+class KexiFormPartTempData;
 class KexiDBForm;
 class KexiFormScrollView;
 namespace KexiDB
@@ -123,7 +126,7 @@ protected slots:
     void slotPropertySetSwitched();
 
 //2.0 changed    void slotDirty(KFormDesigner::Form *f, bool isDirty);
-    void slotModified();
+    void setFormModified();
 
     void slotFocus(bool in);
 
@@ -153,7 +156,7 @@ protected:
                                              bool &cancel);
     virtual tristate storeData(bool dontAsk = false);
 
-    KexiFormPart::TempData* tempData() const;
+    KexiFormPartTempData* tempData() const;
     KexiFormPart* formPart() const;
 
 //moved to formmanager  void disableWidgetActions();

@@ -28,6 +28,7 @@
 #include <QDropEvent>
 #include <QResizeEvent>
 #include <QApplication>
+#include <QScrollBar>
 
 #include <formeditor/form.h>
 #include <formeditor/formIO.h>
@@ -61,8 +62,6 @@
 #include "kexidatasourcepage.h"
 #include "kexiformmanager.h"
 #include "widgets/kexidbautofield.h"
-
-#define NO_DSWIZARD
 
 //! @todo #define KEXI_SHOW_SPLITTER_WIDGET
 
@@ -140,7 +139,8 @@ KexiFormView::KexiFormView(QWidget *parent, bool /*dbAware*/)
         connect(form(), SIGNAL(propertySetSwitched()), this, SLOT(slotPropertySetSwitched()));
 //        connect(KFormDesigner::FormManager::self(), SIGNAL(dirty(KFormDesigner::Form*,bool)),
 //                this, SLOT(slotDirty(KFormDesigner::Form*,bool)));
-        connect(form(), SIGNAL(modified()), this, SLOT(slotModified()));
+        connect(form(), SIGNAL(modified(bool)), this, SLOT(setDirty(bool)));
+        connect(d->scrollView, SIGNAL(resized()), this, SLOT(setFormModified()));
 
         connect(d->dbform, SIGNAL(handleDragMoveEvent(QDragMoveEvent*)),
                 this, SLOT(slotHandleDragMoveEvent(QDragMoveEvent*)));
@@ -296,19 +296,20 @@ KexiFormView::setForm(KFormDesigner::Form *f)
 void KexiFormView::initForm()
 {
 // <here moved from ctor>
-    d->dbform = new KexiDBForm(d->scrollView->viewport(), d->scrollView);
+    d->dbform = new KexiDBForm(d->scrollView->widget(), d->scrollView);
+    if (viewMode() == Kexi::DataViewMode) {
+        d->scrollView->setWidget(d->dbform);
+    }
+    else {
+        d->scrollView->setMainAreaWidget(d->dbform);
+    }
     d->dbform->setObjectName(
         i18nc("Widget name. This string will be used to name widgets of this class. "
               "It must _not_ contain white spaces and non latin1 characters.", "form"));
     QPalette pal(d->dbform->palette());
     pal.setBrush(QPalette::Window, palette().brush(QPalette::Window));
     d->dbform->setPalette(pal); // avoid inheriting QPalette::Window role
-                               // from d->scrollView->viewport()
-
-// d->dbform->resize( d->scrollView->viewport()->size() - QSize(20, 20) );
-// d->dbform->resize(QSize(400, 300));
-    d->scrollView->setWidget(d->dbform);
-    d->scrollView->setResizingEnabled(viewMode() != Kexi::DataViewMode);
+    d->scrollView->setResizingEnabled(true); //viewMode() != Kexi::DataViewMode);
 
 // initForm();
 
@@ -316,8 +317,8 @@ void KexiFormView::initForm()
         d->scrollView->recordNavigator()->setRecordHandler(d->scrollView);
         //d->scrollView->viewport()->setPaletteBackgroundColor(d->dbform->palette().active().background());
         QPalette pal(d->scrollView->viewport()->palette());
-        pal.setBrush(d->scrollView->viewport()->backgroundRole(), 
-            d->dbform->palette().brush(QPalette::Background));
+        pal.setBrush(d->scrollView->viewport()->backgroundRole(),
+            d->dbform->palette().brush(d->dbform->backgroundRole()));
         d->scrollView->viewport()->setPalette(pal);
 //moved to formmanager  connect(formPart()->manager(), SIGNAL(noFormSelected()), SLOT(slotNoFormSelected()));
     }
@@ -345,9 +346,9 @@ void KexiFormView::initForm()
     const bool newForm = window()->id() < 0;
 
     KexiDB::FieldList *fields = 0;
+#ifndef NO_DSWIZARD
     if (newForm) {
         // Show the form wizard if this is a new Form
-#ifndef NO_DSWIZARD
         KexiDataSourceWizard *w = new KexiDataSourceWizard(
             KexiMainWindowIface::global()->thisWidget());
         if (!w->exec())
@@ -355,14 +356,16 @@ void KexiFormView::initForm()
         else
             fields = w->fields();
         delete w;
-#endif
     }
+#endif
 
     if (fields) {
+#ifndef NO_DSWIZARD
         QDomDocument dom;
         formPart()->generateForm(fields, dom);
         KFormDesigner::FormIO::loadFormFromDom(form(), d->dbform, dom);
         //! @todo handle errors
+#endif
     } else
         loadForm();
 
@@ -411,6 +414,7 @@ void KexiFormView::initForm()
 //2.0 rm        d->preview.append(form);
 //2.0        form()->setDesignMode(false);
         form()->setMode(KFormDesigner::Form::DataMode);
+        d->dbform->setMinimumSize(d->dbform->size()); // make vscrollbar appear when viewport is too small
     }
     d->scrollView->setForm(form());
 
@@ -610,14 +614,14 @@ KexiFormView::beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore)
         } else {
             //remember our pos
             tempData()->scrollViewContentsPos
-                = QPoint(d->scrollView->contentsX(), d->scrollView->contentsY());
+                = QPoint(d->scrollView->horizontalScrollBar()->value(), d->scrollView->verticalScrollBar()->value());
         }
     }
 
     // we don't store on db, but in our TempData
     dontStore = true;
     if (isDirty() && (mode == Kexi::DataViewMode) && form()->objectTree()) {
-        KexiFormPart::TempData* temp = tempData();
+        KexiFormPartTempData* temp = tempData();
         if (!KFormDesigner::FormIO::saveFormToString(form(), temp->tempForm))
             return false;
 
@@ -639,16 +643,15 @@ tristate KexiFormView::afterSwitchFrom(Kexi::ViewMode mode)
 {
     if (mode == 0 || mode == Kexi::DesignViewMode) {
         if (window()->neverSaved()) {
-            d->dbform->resize(QSize(400, 300));
-            d->scrollView->refreshContentsSizeLater(true, true);
+            d->scrollView->refreshContentsSizeLater();
             //d->delayedFormContentsResizeOnShow = false;
         }
     }
 
     if (mode != 0 && mode != Kexi::DesignViewMode) {
         //preserve contents pos after switching to other view
-        d->scrollView->setContentsPos(tempData()->scrollViewContentsPos.x(),
-                                     tempData()->scrollViewContentsPos.y());
+        d->scrollView->horizontalScrollBar()->setValue(tempData()->scrollViewContentsPos.x());
+        d->scrollView->verticalScrollBar()->setValue(tempData()->scrollViewContentsPos.y());
     }
 // if (mode == Kexi::DesignViewMode) {
     //d->scrollView->move(0,0);
@@ -675,9 +678,9 @@ tristate KexiFormView::afterSwitchFrom(Kexi::ViewMode mode)
 //moved to formmanager  slotNoFormSelected();
 
         //reset position
-        d->scrollView->setContentsPos(0, 0);
+        d->scrollView->horizontalScrollBar()->setValue(0);
+        d->scrollView->verticalScrollBar()->setValue(0);
         d->dbform->move(0, 0);
-
     }
 
     //update tab stops if needed
@@ -748,10 +751,13 @@ KoProperty::Set* KexiFormView::propertySet() {
     return &d->form->propertySet(); // 2.0 m_propertySet;
 }
 
-KexiFormPart::TempData* KexiFormView::tempData() const {
-    return dynamic_cast<KexiFormPart::TempData*>(window()->data());
+KexiFormPartTempData* KexiFormView::tempData() const
+{
+    return dynamic_cast<KexiFormPartTempData*>(window()->data());
 }
-KexiFormPart* KexiFormView::formPart() const {
+
+KexiFormPart* KexiFormView::formPart() const
+{
     return dynamic_cast<KexiFormPart*>(part());
 }
 
@@ -896,9 +902,9 @@ void KexiFormView::initDataSource()
         d->scrollView->setData(0, false);
 }
 
-void KexiFormView::slotModified()
+void KexiFormView::setFormModified()
 {
-    KexiView::setDirty(form()->isModified());
+    form()->setModified(true);
 }
 
 KexiDB::SchemaData* KexiFormView::storeNewData(const KexiDB::SchemaData& sdata,
@@ -1175,10 +1181,7 @@ void
 KexiFormView::resizeEvent(QResizeEvent *e)
 {
     if (viewMode() == Kexi::DataViewMode) {
-        d->scrollView->refreshContentsSizeLater(
-            e->size().width() != e->oldSize().width(),
-            e->size().height() != e->oldSize().height()
-        );
+        d->scrollView->refreshContentsSizeLater();
     }
     KexiView::resizeEvent(e);
     d->scrollView->updateNavPanelGeometry();
@@ -1234,8 +1237,6 @@ KexiFormView::show()
     //now get resize mode settings for entire form
     // if (resizeMode() == KexiFormView::ResizeAuto)
     if (viewMode() == Kexi::DataViewMode) {
-        if (resizeMode() == KexiFormView::ResizeAuto)
-            d->scrollView->setResizePolicy(Q3ScrollView::AutoOneFit);
     }
 }
 
@@ -1440,11 +1441,7 @@ KexiFormView::insertAutoFields(const QString& sourcePartClass, const QString& so
     //enable proper REDO usage
 //2.0    group->resetAllowExecuteFlags();
 
-    d->scrollView->repaint();
-    d->scrollView->viewport()->repaint();
-    d->scrollView->repaintContents();
-    d->scrollView->updateContents();
-    d->scrollView->clipper()->repaint();
+    d->scrollView->widget()->update();
     d->scrollView->refreshContentsSize();
 
     //select all inserted widgets, if multiple

@@ -343,7 +343,7 @@ Container::eventFilter(QObject *s, QEvent *e)
         // we are inserting a widget or drawing a selection rect in the form
         if ((d->form->state() == Form::WidgetInserting) || ((s == widget()) && !d->toplevel)) {
             int tmpx, tmpy;
-            if (    !d->form->isSnapWidgetsToGridEnabled()
+            if (    !d->form->isSnapToGridEnabled()
                  || d->form->state() != Form::WidgetInserting
                  || (mev->buttons() == Qt::LeftButton && mev->modifiers() == (Qt::ControlModifier | Qt::AltModifier))
                )
@@ -401,12 +401,12 @@ Container::eventFilter(QObject *s, QEvent *e)
            )
         {
             QPoint realPos;
-            if (d->form->isSnapWidgetsToGridEnabled()) {
+            if (d->form->isSnapToGridEnabled()) {
                 const int gridX = d->form->gridSize();
                 const int gridY = d->form->gridSize();
                 realPos = QPoint(
-                    alignValueToGrid(mev->pos().x(), gridX), 
-                    alignValueToGrid(mev->pos().y(), gridY)); 
+                    alignValueToGrid(mev->pos().x(), gridX),
+                    alignValueToGrid(mev->pos().y(), gridY));
             }
             else {
                 realPos = mev->pos();
@@ -1351,7 +1351,7 @@ void Container::moveSelectedWidgetsBy(int realdx, int realdy, QMouseEvent *mev)
         }
 
         int tmpx, tmpy;
-        if (   !d->form->isSnapWidgetsToGridEnabled()
+        if (   !d->form->isSnapToGridEnabled()
             || (mev && mev->buttons() == Qt::LeftButton && mev->modifiers() == (Qt::ControlModifier | Qt::AltModifier))
            )
         {

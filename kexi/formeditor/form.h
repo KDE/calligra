@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2014 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -214,9 +214,8 @@ public:
     //! @return true if the form modification flag is set.
     bool isModified() const;
 
-    //! \return the distance between two dots in the form background.
-//! @todo make gridSize configurable at global level
-    int gridSize() const;
+    //! Sets modification flag. Always emits modified() signal.
+    void setModified(bool set);
 
     //! \return the default margin for all the layout inside this Form.
     int defaultMargin() const;
@@ -334,11 +333,18 @@ public:
         the widget specific part is added (menu from the factory and buddy selection). */
     void createContextMenu(QWidget *w, Container *container, const QPoint& menuPos, ContextMenuTarget target);
 
-    //! @return true if snapping widgets to grid is enabled.
-    bool isSnapWidgetsToGridEnabled() const;
+    //! @return true if snapping to grid is enabled. The defalt value is false.
+    bool isSnapToGridEnabled() const;
 
-    //! Sets snapping widgets to grid flag.
-    void setSnapWidgetsToGridEnabled(bool set);
+    //! Sets state of snapping to grid to @a enabled.
+    void setSnapToGridEnabled(bool enabled);
+
+    //! @return size of grid. Positive values make sense here. The defalt value is 0.
+    //! @todo make gridSize configurable at global level
+    int gridSize() const;
+
+    //! Sets size of grid to @a gridSize.
+    void setGridSize(int gridSize);
 
 #ifdef KEXI_DEBUG_GUI
     //! For debugging purposes
@@ -676,12 +682,11 @@ signals:
     /*! This signal is emitted when the property set has been switched. */
     void propertySetSwitched();
 
-    /*! This signal is emitted when any change is made to the Form \a form,
-     so it will need to be saved. */
-    void modified();
+    /*! This signal is emitted when any change is made to the 'modified' flag of the form. */
+    void modified(bool m);
 
     /*! Signal emitted when a normal widget is selected inside of the form
-     (not the form's widget). If \a multiple is true, then more than one widget is selected. 
+     (not the form's widget). If \a multiple is true, then more than one widget is selected.
      Use this to update actions state. */
     void widgetSelected(bool multiple);
 
