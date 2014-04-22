@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
 
-   Copyright (C) 2013 Inge Wallin <inge@lysator.liu.se>
+   Copyright (C) 2013-2014 Inge Wallin <inge@lysator.liu.se>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -58,12 +58,12 @@ class OdfReaderDocxContext : public OdfReaderContext
     friend class OdtReaderDocxBackend;
     friend class OdfTextReaderDocxBackend;
 
-    DocxFile    *m_docxFile;        // Collect embedded files here
-    QByteArray   m_documentContent; // m_documentWriter writes here;
-    KoXmlWriter *m_documentWriter;  // XML writer for the document contents
+    DocxFile    *m_docxFile;        //!< Collect embedded files here
+    QByteArray   m_documentContent; //!< m_documentWriter writes here;
+    KoXmlWriter *m_documentWriter;  //!< XML writer for the document contents
 
-private:
-    QBuffer      m_documentIO;      // IODevice for the XMl writer
+    // These members should not be accessed from the outside at all.
+    QBuffer      m_documentIO;      //!< IODevice for the XMl writer
 };
 
 

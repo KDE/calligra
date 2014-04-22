@@ -64,6 +64,8 @@ OpcRelSetManager::Private::Private()
 
 OpcRelSetManager::Private::~Private()
 {
+    qDeleteAll(relSets);
+    delete documentRelSet;
 }
 
 
@@ -77,9 +79,6 @@ OpcRelSetManager::OpcRelSetManager()
 
 OpcRelSetManager::~OpcRelSetManager()
 {
-    qDeleteAll(d->relSets);
-    delete d->documentRelSet;
-
     delete d;
 }
 

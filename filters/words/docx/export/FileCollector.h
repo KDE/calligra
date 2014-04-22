@@ -39,13 +39,7 @@ public:
     {
         FileInfo(const QString &id, const QString &fileName,
                  const QByteArray &mimetype, const QByteArray &fileContents,
-                 const QString &label)
-            : id(id)
-            , fileName(fileName)
-            , mimetype(mimetype)
-            , fileContents(fileContents)
-            , label(label)
-        {}
+                 const QString &label);
 
         QString     id;
         QString     fileName;

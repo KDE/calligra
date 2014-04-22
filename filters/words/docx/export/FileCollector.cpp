@@ -38,6 +38,22 @@
 
 
 // ================================================================
+//                     class FileCollector::FileInfo
+
+
+FileCollector::FileInfo::FileInfo(const QString &id, const QString &fileName,
+                                  const QByteArray &mimetype, const QByteArray &fileContents,
+                                  const QString &label)
+    : id(id)
+    , fileName(fileName)
+    , mimetype(mimetype)
+    , fileContents(fileContents)
+    , label(label)
+{
+}
+
+
+// ================================================================
 //                     class FileCollectorPrivate
 
 

@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Service
-Name=MS Word 2007 Export Filter for Words and Author
-Name[x-test]=xxMS Word 2007 Export Filter for Words and Authorxx
+Name=MS Word DOCX Export Filter
+Name[x-test]=xxMS Word DOCX Export Filterxx
 X-KDE-Import=application/vnd.oasis.opendocument.text
 X-KDE-Export=application/vnd.openxmlformats-officedocument.wordprocessingml.document
 X-KDE-Weight=1

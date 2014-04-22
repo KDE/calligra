@@ -96,9 +96,7 @@ bool KoOdfStyleProperties::saveOdf(const QString &propertySet, KoXmlWriter *writ
 
 void KoOdfStyleProperties::copyPropertiesFrom(const KoOdfStyleProperties &sourceProperties)
 {
-    foreach (const QString &property, sourceProperties.d->attributes.keys()) {
-        d->attributes[property] = sourceProperties.d->attributes[property];
-    }
+    d->attributes = sourceProperties.d->attributes;
 }
 
 // ----------------------------------------------------------------

@@ -51,7 +51,7 @@ DocxStyleWriter::~DocxStyleWriter()
     delete m_documentWriter;
 }
 
-QByteArray DocxStyleWriter::documentContent()
+QByteArray DocxStyleWriter::documentContent() const
 {
     return m_documentContent;
 }

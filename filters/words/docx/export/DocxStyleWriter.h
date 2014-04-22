@@ -38,7 +38,7 @@ public:
 
     void read();
 
-    QByteArray documentContent();
+    QByteArray documentContent() const;
 
 private:
     OdfReaderContext *m_readerContext;
