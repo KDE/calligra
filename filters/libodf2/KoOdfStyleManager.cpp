@@ -24,6 +24,7 @@
 // Qt
 #include <QHash>
 #include <QString>
+#include <QPair>
 
 // KDE
 #include <kdebug.h>
@@ -47,7 +48,7 @@ class KoOdfStyleManager::Private
 public:
     Private() {};
 
-    QHash<QString, KoOdfStyle*> styles;         // name, style
+    QHash<QPair<QString, QString>, KoOdfStyle*> styles;         // <name, family>, style
     QHash<QString, KoOdfStyle*> defaultStyles;  // family, style
 };
 
@@ -65,28 +66,35 @@ KoOdfStyleManager::~KoOdfStyleManager()
     delete d;
 }
 
-
-KoOdfStyle *KoOdfStyleManager::style(QString &name) const
+KoOdfStyle *KoOdfStyleManager::style(const QString &name, const QString &family) const
 {
-    return d->styles.value(name, 0);
+    return d->styles.value(qMakePair(name, family), 0);
 }
 
-void KoOdfStyleManager::setStyle(QString &name, KoOdfStyle *style)
+void KoOdfStyleManager::setStyle(const QString &name, KoOdfStyle *style)
 {
-    d->styles.insert(name, style);
+    d->styles.insert(qMakePair(name, style->family()), style);
 }
 
-
-KoOdfStyle *KoOdfStyleManager::defaultStyle(QString &family) const
+KoOdfStyle *KoOdfStyleManager::defaultStyle(const QString &family) const
 {
     return d->defaultStyles.value(family, 0);
 }
 
-void KoOdfStyleManager::setDefaultStyle(QString &family, KoOdfStyle *style)
+void KoOdfStyleManager::setDefaultStyle(const QString &family, KoOdfStyle *style)
 {
-    d->styles.insert(family, style);
+    d->defaultStyles.insert(family, style);
 }
 
+QList<KoOdfStyle*> KoOdfStyleManager::styles() const
+{
+    return d->styles.values();
+}
+
+QList<KoOdfStyle*> KoOdfStyleManager::defaultStyles() const
+{
+    return d->defaultStyles.values();
+}
 
 void KoOdfStyleManager::clear()
 {
@@ -135,7 +143,7 @@ bool KoOdfStyleManager::loadStyles(KoStore *odfStore)
     // FIXME: Error handling
 
     // Collect the styles.
-    collectStyleSet(reader);
+    collectStyleSet(reader, true /*fromStylesXml*/);
     odfStore->close();
 
     // ----------------------------------------------------------------
@@ -162,14 +170,14 @@ bool KoOdfStyleManager::loadStyles(KoStore *odfStore)
     // FIXME: Error handling
 
     // Collect the styles.
-    collectStyleSet(reader);
+    collectStyleSet(reader, false /*!fromStylesXml*/);
 
     odfStore->close(); // end of parsing styles in content.xml
 
     return true;
 }
 
-void KoOdfStyleManager::collectStyleSet(KoXmlStreamReader &reader)
+void KoOdfStyleManager::collectStyleSet(KoXmlStreamReader &reader, bool fromStylesXml)
 {
     kDebug() << "incoming element:" << reader.qualifiedName().toString();
 
@@ -197,6 +205,7 @@ void KoOdfStyleManager::collectStyleSet(KoXmlStreamReader &reader)
         if (family == "text" || family == "paragraph" || family == "graphic") {
             // FIXME: In the future, create style per type (family).
             KoOdfStyle *style = new KoOdfStyle;
+            style->setIsFromStylesXml(fromStylesXml);
 
             kDebug() << "This style should be loaded:" << family;
 

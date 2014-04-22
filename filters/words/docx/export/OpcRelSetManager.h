@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  *
- * Copyright (C) 2013 Inge Wallin <inge@lysator.liu.se>
+ * Copyright (C) 2013-2014 Inge Wallin <inge@lysator.liu.se>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -19,42 +19,35 @@
  */
 
 
-#ifndef KOODF_STYLE_MANAGER_H
-#define KOODF_STYLE_MANAGER_H
+#ifndef KOODF_OPC_RELSET_MANAGER_H
+#define KOODF_OPC_RELSET_MANAGER_H
 
-#include "koodf2_export.h"
+#include "koodf_export.h"
 
-#include <QList>
 
 class QString;
 class KoStore;
-class KoOdfStyle;
 class KoXmlStreamReader;
 class KoXmlWriter;
+class OpcRelSet;
 
-class KOODF2_EXPORT KoOdfStyleManager
+
+class OpcRelSetManager
 {
  public:
-    KoOdfStyleManager();
-    ~KoOdfStyleManager();
+    OpcRelSetManager();
+    ~OpcRelSetManager();
 
-    KoOdfStyle *style(const QString &name, const QString &family) const;
-    void setStyle(const QString &name, KoOdfStyle *style);
+    OpcRelSet *relSet(const QString &path) const;
+    void setRelSet(const QString &path, OpcRelSet *relSet);
 
-    KoOdfStyle *defaultStyle(const QString &family) const;
-    void setDefaultStyle(const QString &family, KoOdfStyle *style);
+    OpcRelSet *documentRelSet() const;
+    void setDocumentRelSet(OpcRelSet *relSet);
 
     void clear();
 
-    bool loadStyles(KoStore *odfStore);
-    bool saveNamedStyles(KoXmlWriter *writer);
-
-    QList<KoOdfStyle*> styles() const;
-    QList<KoOdfStyle*> defaultStyles() const;
-
- private:
-    // FIXME: Move to private class.
-    void collectStyleSet(KoXmlStreamReader &reader, bool fromStylesXml);
+    bool loadRelSets(KoStore *odfStore);
+    bool saveRelSets(KoStore *odfStore);
 
  private:
     class Private;
