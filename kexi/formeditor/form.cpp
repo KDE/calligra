@@ -408,6 +408,7 @@ void FormPrivate::initPropertiesDescription()
     propCaption["cursor"] = i18n("Cursor");
     propCaption["paletteForegroundColor"] = i18n("Foreground Color");
     propCaption["paletteBackgroundColor"] = i18n("Background Color");
+    propCaption["autoFillBackground"] = i18n("Fill Background");
     propCaption["focusPolicy"] = i18n("Focus Policy");
     propCaption["margin"] = i18n("Margin");
     propCaption["readOnly"] = i18n("Read Only");
