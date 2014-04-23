@@ -190,10 +190,10 @@ void KexiDBTextEdit::setReadOnly(bool readOnly)
 #if 0//TODO
     QPalette p = palette();
     QColor c(readOnly
-             ? KexiFormUtils::lighterGrayBackgroundColor(kapp->palette()) : p.color(QPalette::Normal, QColorGroup::Base));
+             ? KexiFormUtils::lighterGrayBackgroundColor(kapp->palette()) : p.color(QPalette::Active, QPalette::Base));
     setPaper(c);
-    p.setColor(QColorGroup::Base, c);
-    p.setColor(QColorGroup::Background, c);
+    p.setColor(QPalette::Base, c);
+    p.setColor(QPalette::Background, c);
     setPalette(p);
 #endif
 }
@@ -270,7 +270,7 @@ void KexiDBTextEdit::setDisplayDefaultValue(QWidget* widget, bool displayDefault
     KexiDisplayUtils::DisplayParameters * const params
     = displayDefaultValue ? m_displayParametersForDefaultValue : m_displayParametersForEnteredValue;
     QPalette pal(palette());
-    pal.setColor(QPalette::Active, QColorGroup::Text, params->textColor);
+    pal.setColor(QPalette::Active, QPalette::Text, params->textColor);
     setPalette(pal);
     setFont(params->font);
 //! @todo support rich text...

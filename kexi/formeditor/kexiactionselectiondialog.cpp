@@ -69,10 +69,12 @@ public:
               
   }
   
+  using QTreeWidgetItem::data;
   QVariant data(ActionRole role) {
       return QTreeWidgetItem::data(0, role);
   };
   
+  using QTreeWidgetItem::setData;
   void setData(ActionRole role, QVariant value) {
       QTreeWidgetItem::setData(0, role, value);
   }
@@ -117,7 +119,7 @@ QTreeWidgetItem *ActionsListViewBase::itemForAction(const QString& actionName, Q
 
 void ActionsListViewBase::selectAction(const QString& actionName)
 {
-  kDebug() << "Selecting action:" << actionName;
+  //kDebug() << "Selecting action:" << actionName;
   QTreeWidgetItem *itm = itemForAction(actionName);
   if (itm) {
     setCurrentItem(itm);
@@ -593,7 +595,7 @@ void KexiActionSelectionDialog::slotActionToExecuteItemExecuted(QTreeWidgetItem*
 
 void KexiActionSelectionDialog::slotActionToExecuteItemSelected(QTreeWidgetItem*)
 {
-  kDebug();
+  //kDebug();
   updateOKButtonStatus();
 }
 
@@ -731,7 +733,7 @@ KexiFormEventAction::ActionData KexiActionSelectionDialog::currentAction() const
                 }
             }
         } else {
-            kDebug() << "No current category item";
+            kWarning() << "No current category item";
         }
     }
     
@@ -743,7 +745,7 @@ void KexiActionSelectionDialog::updateOKButtonStatus()
     KPushButton *btn = button(Ok);
     ActionSelectorDialogTreeItem *itm = dynamic_cast<ActionSelectorDialogTreeItem*>(d->actionCategoriesListView->currentItem());
     
-    kDebug() << "Current Action:" << currentAction().string << ":" << currentAction().option;
+    //kDebug() << "Current Action:" << currentAction().string << ":" << currentAction().option;
     btn->setEnabled((itm && itm->data(ActionSelectorDialogTreeItem::ActionCategoryRole).toString() == "noaction") || !currentAction().isEmpty());
 }
 

@@ -418,7 +418,7 @@ void KexiDBLineEdit::setDisplayDefaultValue(QWidget *widget, bool displayDefault
         ? m_displayParametersForDefaultValue : m_displayParametersForEnteredValue;
     setFont(params->font);
     QPalette pal(palette());
-    pal.setColor(QPalette::Active, QColorGroup::Text, params->textColor);
+    pal.setColor(QPalette::Active, QPalette::Text, params->textColor);
     setPalette(pal);
 }
 

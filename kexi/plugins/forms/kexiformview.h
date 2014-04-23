@@ -76,8 +76,6 @@ public:
     explicit KexiFormView(QWidget *parent, bool dbAware = true);
     virtual ~KexiFormView();
 
-//  KexiDB::Connection* connection() { return m_conn; }
-
     virtual QSize preferredSizeHint(const QSize& otherSize);
 
     int resizeMode() const;
@@ -99,9 +97,6 @@ public:
     void setUnsavedLocalBLOB(QWidget *widget, KexiBLOBBuffer::Id_t id);
 
 public slots:
-    /*! Reimplemented to update resize policy. */
-    virtual void show();
-
     /*! Inserts autofields onto the form at \a pos position.
      \a sourcePartClass can be "org.kexi-project.table" or "org.kexi-project.query",
      \a sourceName is a name of a table or query, \a fields is a list of fields to insert (one or more)
@@ -121,15 +116,9 @@ public slots:
                           const QPoint& pos = QPoint(-1, -1));
 
 protected slots:
-//2.0 changed    void slotPropertySetSwitched(KoProperty::Set *b, bool forceReload = false,
-//2.0 changed                                 const QByteArray& propertyToSelect = QByteArray());
     void slotPropertySetSwitched();
-
-//2.0 changed    void slotDirty(KFormDesigner::Form *f, bool isDirty);
     void setFormModified();
-
     void slotFocus(bool in);
-
     void slotHandleDragMoveEvent(QDragMoveEvent* e);
 
     //! Handles field(s) dropping from the data source pane onto the form
@@ -137,35 +126,20 @@ protected slots:
     void slotHandleDropEvent(QDropEvent* e);
 
     void slotWidgetSelectionChanged(QWidget *w, KFormDesigner::Form::WidgetSelectionFlags flags);
-
-//moved to formmanager  void slotWidgetSelected(KFormDesigner::Form *form, bool multiple);
-//moved to formmanager  void slotFormWidgetSelected(KFormDesigner::Form *form);
-//moved to formmanager  void slotNoFormSelected();
-
-//moved to formmanager  void setUndoEnabled(bool enabled);
-//moved to formmanager  void setRedoEnabled(bool enabled);
     void slotWidgetNameChanged(const QByteArray& oldname, const QByteArray& newname);
 
 protected:
     virtual tristate beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore);
     virtual tristate afterSwitchFrom(Kexi::ViewMode mode);
     virtual KoProperty::Set* propertySet();
-
     virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata,
                                              KexiView::StoreNewDataOptions options,
                                              bool &cancel);
     virtual tristate storeData(bool dontAsk = false);
-
     KexiFormPartTempData* tempData() const;
     KexiFormPart* formPart() const;
-
-//moved to formmanager  void disableWidgetActions();
-//moved to formmanager  void enableFormActions();
-
     void setForm(KFormDesigner::Form *f);
-
     void initForm();
-
     void loadForm();
 
     //! Used in loadForm()
@@ -181,16 +155,7 @@ protected:
     virtual void contextMenuEvent(QContextMenuEvent *e);
 
     void initDataSource();
-
     virtual void setFocusInternal();
-
-    /*  // for navigator
-        virtual void moveToRecordRequested(uint r);
-        virtual void moveToLastRecordRequested();
-        virtual void moveToPreviousRecordRequested();
-        virtual void moveToNextRecordRequested();
-        virtual void moveToFirstRecordRequested();
-        virtual void addNewRecordRequested();*/
 
     /*! Called after loading the form contents (before showing it). */
     void updateTabStopsOrder();

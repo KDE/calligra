@@ -37,7 +37,7 @@ public:
 
     virtual QVariant value() const;
     virtual void setValue(const QVariant &value, bool emitChange = true);
-    virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r,
+    virtual void drawViewer(QPainter *p, cg, const QRect &r,
                             const QVariant &value);
 
 public slots:
