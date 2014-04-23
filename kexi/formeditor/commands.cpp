@@ -174,7 +174,6 @@ QVariant PropertyCommand::value() const
 void PropertyCommand::setValue(const QVariant &value)
 {
     d->value = value;
-//moved to Form::slotPropertyChanged():    emit d->form->modified();
 }
 
 void PropertyCommand::setUniqueId(int id)

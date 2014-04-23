@@ -108,7 +108,7 @@ Cursor* MySqlConnection::prepareQuery(QuerySchema& query, uint cursor_options)
 
 bool MySqlConnection::drv_getDatabasesList(QStringList &list)
 {
-    KexiDBDrvDbg << "MySqlConnection::drv_getDatabasesList()";
+    KexiDBDrvDbg;
     list.clear();
     MYSQL_RES *res;
 
@@ -122,7 +122,6 @@ bool MySqlConnection::drv_getDatabasesList(QStringList &list)
     }
 
     d->storeResult();
-// setError(ERR_DB_SPECIFIC,mysql_error(d->mysql));
     return false;
 }
 
@@ -145,7 +144,7 @@ bool MySqlConnection::drv_databaseExists(const QString &dbName, bool ignoreError
 bool MySqlConnection::drv_createDatabase(const QString &dbName)
 {
     const QString storedDbName(d->lowerCaseTableNames ? dbName.toLower() : dbName);
-    KexiDBDrvDbg << "MySqlConnection::drv_createDatabase: " << storedDbName;
+    KexiDBDrvDbg << storedDbName;
     // mysql_create_db deprecated, use SQL here.
     // db names are lower case in mysql
     if (drv_executeSQL(QString::fromLatin1("CREATE DATABASE %1").arg(escapeIdentifier(storedDbName))))
@@ -158,21 +157,20 @@ bool MySqlConnection::drv_useDatabase(const QString &dbName, bool *cancelled, Me
 {
     Q_UNUSED(cancelled);
     Q_UNUSED(msgHandler);
-//TODO is here escaping needed?
+//! @todo is here escaping needed?
     const QString storedDbName(d->lowerCaseTableNames ? dbName.toLower() : dbName);
     return d->useDatabase(storedDbName);
 }
 
 bool MySqlConnection::drv_closeDatabase()
 {
-//TODO free resources
-//As far as I know, mysql doesn't support that
+//! @todo free resources, as far as I know, mysql doesn't support that
     return true;
 }
 
 bool MySqlConnection::drv_dropDatabase(const QString &dbName)
 {
-//TODO is here escaping needed
+//! @todo is here escaping needed?
     const QString storedDbName(d->lowerCaseTableNames ? dbName.toLower() : dbName);
     return drv_executeSQL(QString::fromLatin1("DROP DATABASE %1").arg(escapeIdentifier(storedDbName)));
 }

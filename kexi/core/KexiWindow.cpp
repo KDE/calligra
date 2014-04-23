@@ -313,7 +313,7 @@ bool KexiWindow::close(bool force)
     QList<KexiView *> list(findChildren<KexiView*>());
     foreach(KexiView * view, list) {
         bool cancel = false;
-        emit view->closing(cancel);
+        emit view->closing(&cancel);
         if (!force && cancel) {
             return false;
         }
@@ -801,27 +801,13 @@ void KexiWindow::activate()
 {
     KexiView *v = selectedView();
     //kDebug() << "focusWidget(): " << focusWidget()->name();
-#ifdef __GNUC__
-#warning TODO KexiWindow::activate() OK instead of focusedChildWidget()?
-#else
-#pragma WARNING( TODO KexiWindow::activate() OK instead of focusedChildWidget()? )
-#endif
-    if (KexiUtils::hasParent(v, /*kde4*/ KexiMainWindowIface::global()->focusWidget()))   //QWidget::focusedChildWidget()))
-#ifdef __GNUC__
-#warning TODO  QWidget::activate();
-#else
-#pragma WARNING( TODO  QWidget::activate(); )
-#endif
-#if 0
-        else
-#endif
-        {//ah, focused widget is not in this view, move focus:
-            if (v)
-                v->setFocus();
-        }
+    if (!KexiUtils::hasParent(v, KexiMainWindowIface::global()->focusWidget())) {
+        //ah, focused widget is not in this view, move focus:
+        if (v)
+            v->setFocus();
+    }
     if (v)
         v->updateActions(true);
-    //js: not neeed?? m_parentWindow->invalidateSharedActions(this);
 }
 
 void KexiWindow::deactivate()

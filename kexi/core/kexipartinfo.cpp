@@ -30,10 +30,8 @@ Info::Private::Private(const KService::Ptr& aPtr)
         : ptr(aPtr)
         , instanceCaption(aPtr->name())
         , groupName(aPtr->genericName())
-//        , mimeType(aPtr->property("X-Kexi-TypeMime").toString())
         , itemIconName(aPtr->property("X-Kexi-ItemIcon", QVariant::String).toString())
         , objectName(aPtr->property("X-Kexi-TypeName", QVariant::String).toString())
-//        , projectPartID( aPtr->property("X-Kexi-TypeId").toInt() )
         , partClass(aPtr->property("X-Kexi-Class", QVariant::String).toString())
         , broken(false)
         , idStoredInPartDatabase(false)
@@ -75,23 +73,9 @@ Info::Private::Private(const KService::Ptr& aPtr)
     isPropertyEditorAlwaysVisibleInDesignMode = true;
     getBooleanProperty(aPtr, "X-Kexi-PropertyEditorAlwaysVisibleInDesignMode",
                        &isPropertyEditorAlwaysVisibleInDesignMode);
-
-#if 0
-    if (projectPartID == 0) {
-        if (isVisibleInNavigator) {
-            kWarning() << "Could not found project part ID! (name: '" << objectName 
-                << "'). Possible problem with installation of the .desktop files for Kexi plugins";
-            isVisibleInNavigator = false;
-        }
-        projectPartID = -1;
-    }
-#endif
 }
 
 Info::Private::Private()
-#if 0 //moved as internal to KexiProject
-        : projectPartID(-1) //OK?
-#endif
         : broken(false)
         , isVisibleInNavigator(false)
         , idStoredInPartDatabase(false)
@@ -205,18 +189,6 @@ bool Info::isVisibleInNavigator() const
 {
     return d->isVisibleInNavigator;
 }
-
-#if 0 //moved as internal to KexiProject
-int Info::projectPartID() const
-{
-    return d->projectPartID;
-}
-
-void Info::setProjectPartID(int id)
-{
-    d->projectPartID = id;
-}
-#endif
 
 void Info::setBroken(bool broken, const QString& errorMessage)
 {

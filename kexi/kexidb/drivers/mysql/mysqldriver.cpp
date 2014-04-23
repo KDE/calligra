@@ -39,9 +39,9 @@ using namespace KexiDB;
 
 K_EXPORT_KEXIDB_DRIVER(MySqlDriver, "mysql")
 
-/* TODO: Implement buffered/unbuffered, rather than buffer everything.
-   Each MYSQL connection can only handle at most one unbuffered cursor,
-   so MySqlConnection should keep count?
+/*! @todo Implement buffered/unbuffered, rather than buffer everything.
+          Each MYSQL connection can only handle at most one unbuffered cursor,
+          so MySqlConnection should keep count?
  */
 
 /*!
@@ -50,11 +50,10 @@ K_EXPORT_KEXIDB_DRIVER(MySqlDriver, "mysql")
  *
  * See: http://dev.mysql.com/doc/mysql/en/Column_types.html
  */
-MySqlDriver::MySqlDriver(QObject *parent, const QVariantList &args) :
-        Driver(parent, args)
+MySqlDriver::MySqlDriver(QObject *parent, const QVariantList &args)
+    : Driver(parent, args)
 {
-// KexiDBDrvDbg << "MySqlDriver::MySqlDriver()";
-
+// KexiDBDrvDbg;
     d->isFileDriver = false;
     d->features = IgnoreTransactions | CursorForward;
 
@@ -72,7 +71,7 @@ MySqlDriver::MySqlDriver(QObject *parent, const QVariantList &args) :
     d->properties["client_library_version"] = MYSQL_SERVER_VERSION; //nothing better
     d->properties["default_server_encoding"] = MYSQL_CHARSET; //nothing better
 #elif MYSQL_VERSION_ID < 50000
-//OK? d->properties["client_library_version"] = mysql_get_client_version();
+//! @todo ??? d->properties["client_library_version"] = mysql_get_client_version();
 #endif
 
     d->typeNames[Field::Byte] = "TINYINT";

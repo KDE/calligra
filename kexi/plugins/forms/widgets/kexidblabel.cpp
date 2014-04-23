@@ -24,7 +24,6 @@
 #include <QPainter>
 #include <qdrawutil.h>
 #include <QApplication>
-#include <QTimer>
 #include <QPaintEvent>
 #include <QLabel>
 #include <QShowEvent>
@@ -36,36 +35,16 @@
 #include <kexiutils/utils.h>
 #include <formeditor/utils.h>
 
-#define SHADOW_OFFSET_X 3
-#define SHADOW_OFFSET_Y 3
-#define SHADOW_FACTOR 16.0
-#define SHADOW_OPACITY 50.0
-#define SHADOW_AXIS_FACTOR 2.0
-#define SHADOW_DIAGONAL_FACTOR 1.0
-#define SHADOW_THICKNESS 1
-
-//=========================================================
-
 //! @internal
 class KexiDBLabel::Private
 {
 public:
     Private()
-            : timer(0)
-//  , autonumberDisplayParameters(0)
-            , pixmapDirty(true)
-            , shadowEnabled(false)
-            , resizeEvent(false) {
+            : resizeEvent(false) {
     }
     ~Private() {}
-    QPixmap shadowPixmap;
-    QPoint shadowPosition;
-//    KexiDBInternalLabel* internalLabel;
-    QTimer* timer;
     QColor frameColor;
-    bool pixmapDirty : 1;
-    bool shadowEnabled : 1;
-    bool resizeEvent : 1;
+    bool resizeEvent;
 };
 
 //=========================================================
@@ -97,26 +76,15 @@ KexiDBLabel::~KexiDBLabel()
 void KexiDBLabel::init()
 {
     KexiDataItemInterface::setHasFocusableWidget(false);
-//2.0    d->internalLabel = new KexiDBInternalLabel(this);
-//2.0    d->internalLabel->hide();
     d->frameColor = palette().color(foregroundRole());
-
-//2.0    setAlignment(d->internalLabel->alignment());
     setIndent(2);
+    setAutoFillBackground(true);
 }
 
 
 void KexiDBLabel::paintEvent(QPaintEvent* e)
 {
     QPainter p(this);
-    if (d->shadowEnabled) {
-        /*!
-        If required, update the pixmap-cache.
-        */
-        if (d->pixmapDirty) {
-//2.0            updatePixmapLater();
-        }
-    }
     KexiDBTextWidgetInterface::paint(this, &p, text().isEmpty(), alignment(), false);
     p.end();
 
@@ -201,16 +169,12 @@ void KexiDBLabel::clear()
 bool KexiDBLabel::setProperty(const char * name, const QVariant & value)
 {
     const bool ret = QLabel::setProperty(name, value);
-    if (d->shadowEnabled) {
-        if (0 == qstrcmp("indent", name) || 0 == qstrcmp("font", name) || 0 == qstrcmp("margin", name)
-                || 0 == qstrcmp("frameShadow", name) || 0 == qstrcmp("frameShape", name)
-                || 0 == qstrcmp("frameStyle", name) || 0 == qstrcmp("midLineWidth", name)
-                || 0 == qstrcmp("lineWidth", name)) {
-//2.0            d->internalLabel->setProperty(name, value);
-//2.0            updatePixmap();
-        }
-    }
     return ret;
+}
+
+const QPixmap* KexiDBLabel::pixmap() const
+{
+    return QLabel::pixmap();
 }
 
 void KexiDBLabel::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
@@ -219,91 +183,44 @@ void KexiDBLabel::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
     KexiDBTextWidgetInterface::setColumnInfo(cinfo, this);
 }
 
-void KexiDBLabel::setShadowEnabled(bool state)
-{
-    d->shadowEnabled = state;
-    d->pixmapDirty = true;
-//2.0    if (state)
-//2.0        d->internalLabel->updateFrame();
-    repaint();
-}
-
 void KexiDBLabel::resizeEvent(QResizeEvent* e)
 {
     if (isVisible())
         d->resizeEvent = true;
-    d->pixmapDirty = true;
     QLabel::resizeEvent(e);
 }
 
 void KexiDBLabel::fontChange(const QFont& font)
 {
-    d->pixmapDirty = true;
-//2.0    d->internalLabel->setFont(font);
     QLabel::fontChange(font);
 }
 
 void KexiDBLabel::styleChange(QStyle& style)
 {
-    d->pixmapDirty = true;
     QLabel::styleChange(style);
 }
 
 void KexiDBLabel::enabledChange(bool enabled)
 {
-    d->pixmapDirty = true;
-//2.0    d->internalLabel->setEnabled(enabled);
     QLabel::enabledChange(enabled);
 }
 
 void KexiDBLabel::paletteChange(const QPalette& oldPal)
 {
     Q_UNUSED(oldPal);
-    d->pixmapDirty = true;
-//2.0    d->internalLabel->setPalette(palette());
 }
-
-/*const QColor & KexiDBLabel::paletteForegroundColor () const
-{
-  return d->foregroundColor;
-}
-
-void KexiDBLabel::setPaletteForegroundColor ( const QColor& color )
-{
-  d->foregroundColor = color;
-}*/
-
-#ifdef __GNUC__
-#warning TODO
-#else
-#pragma WARNING( TODO  )
-#endif
-/*TODO
-void KexiDBLabel::frameChanged()
-{
-  d->pixmapDirty = true;
-  d->internalLabel->updateFrame();
-  QFrame::frameChanged();
-}*/
 
 void KexiDBLabel::showEvent(QShowEvent* e)
 {
-    d->pixmapDirty = true;
     QLabel::showEvent(e);
 }
 
 void KexiDBLabel::setText(const QString& text)
 {
-    d->pixmapDirty = true;
     QLabel::setText(text);
     //This is necessary for KexiFormDataItemInterface
     valueChanged();
     repaint();
-}
-
-bool KexiDBLabel::shadowEnabled() const
-{
-    return d->shadowEnabled;
 }
 
 #define ClassName KexiDBLabel

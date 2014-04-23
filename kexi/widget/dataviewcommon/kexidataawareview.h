@@ -117,7 +117,7 @@ protected slots:
     void slotUpdateRowActions(int row);
     //! Updates 'save/cancel record changes' actions
     void slotUpdateSaveCancelActions();
-    void slotClosing(bool& cancel);
+    void slotClosing(bool* cancel);
 
 protected:
     void init(QWidget* viewWidget, KexiSharedActionClient* actionClient,

@@ -95,8 +95,8 @@ KexiActionProxy::KexiActionProxy(QObject *receiver, KexiSharedActionHost *host)
         , d(new Private)
 {
     m_signal_parent.setObjectName("signal_parent");
-    //m_sharedActionChildren.setAutoDelete(false); //TODO port logic to KDE4
-    //m_alternativeActions.setAutoDelete(true); //TODO port logic to KDE4
+    //m_sharedActionChildren.setAutoDelete(false); //!< @todo port logic to KDE4
+    //m_alternativeActions.setAutoDelete(true); //!< @todo port logic to KDE4
     m_host->plugActionProxy(this);
 }
 

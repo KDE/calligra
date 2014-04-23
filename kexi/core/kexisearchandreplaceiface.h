@@ -102,7 +102,8 @@ public:
      to find or there is no data to search in or the data is read only.
      If \a replaceAll is true, all found values are replaced. */
     virtual tristate findNextAndReplace(const QVariant& valueToFind, const QVariant& replacement,
-                                        const KexiSearchAndReplaceViewInterface::Options& options, bool replaceAll) = 0;
+                                        const KexiSearchAndReplaceViewInterface::Options& options,
+                                        bool replaceAll) = 0;
 };
 
 #endif

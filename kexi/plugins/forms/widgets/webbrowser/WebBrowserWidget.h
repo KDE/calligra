@@ -54,7 +54,6 @@ class WebBrowserWidget : public QWidget,
     Q_PROPERTY(bool modified READ modified)
     //Q_PROPERTY(QString selectedText READ selectedText)                                                 //Do
     Q_PROPERTY(qreal textScale READ textScale WRITE setTextScale)
-    
      
 public:
     explicit WebBrowserWidget(QWidget *parent = 0);
@@ -103,7 +102,8 @@ public:
     virtual bool cursorAtStart();
     virtual bool cursorAtEnd();
     virtual void clear();
-    void updateToolBar();bool isReadOnly() const ;
+    void updateToolBar();
+    bool isReadOnly() const;
     virtual void setReadOnly(bool readOnly);  
     virtual void setInvalidState(const QString& displayText);
  
@@ -131,9 +131,6 @@ private:
     KPushButton* m_reload;  
     KPushButton* m_stop;  
     QHBoxLayout* h_layout;
-  
 };
 
 #endif 
-
-

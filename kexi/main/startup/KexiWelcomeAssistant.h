@@ -43,7 +43,7 @@ class KexiMainWelcomePage : public KexiAssistantPage
     Q_OBJECT
 public:
     explicit KexiMainWelcomePage(KexiWelcomeAssistant* assistant,
-                                        QWidget* parent = 0);
+                                 QWidget* parent = 0);
 
     QString selectedTemplate;
     QString selectedCategory;
