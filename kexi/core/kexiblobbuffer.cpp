@@ -147,7 +147,7 @@ KexiBLOBBuffer::Item::~Item()
 
 QPixmap KexiBLOBBuffer::Item::pixmap() const
 {
-//TODO...
+//! @todo ...
     if (!*m_pixmapLoaded && m_pixmap->isNull() && !m_data->isEmpty()) {
         const QStringList types(KImageIO::typeForMime(mimeType));
         if (   types.isEmpty()
@@ -204,7 +204,6 @@ KexiBLOBBuffer::KexiBLOBBuffer()
         : QObject()
         , d(new Private())
 {
-// Q_ASSERT(!_buffer);
 }
 
 KexiBLOBBuffer::~KexiBLOBBuffer()
@@ -232,11 +231,6 @@ KexiBLOBBuffer::Handle KexiBLOBBuffer::insertPixmap(const KUrl& url)
         //! @todo err msg
         return KexiBLOBBuffer::Handle();
     }
-/*#if 0 //sebsauer 20061122
-    QString mimeType(KImageIO::mimeType());
-#else
-    QString mimeType(KImageIO::typeForMime(fileName).at(0));
-#endif*/
     QByteArray data(f.readAll());
     if (f.error() != QFile::NoError) {
         //! @todo err msg
@@ -297,8 +291,6 @@ KexiBLOBBuffer::Handle KexiBLOBBuffer::objectForId(Id_t id, bool stored)
         if (item || !d->conn)
             return KexiBLOBBuffer::Handle(item);
         //retrieve stored BLOB:
-
-//#if 0
         assert(d->conn);
         KexiDB::TableSchema *blobsTable = d->conn->tableSchema("kexi__blobs");
         if (!blobsTable) {
@@ -321,8 +313,6 @@ KexiBLOBBuffer::Handle KexiBLOBBuffer::objectForId(Id_t id, bool stored)
         KexiDB::RecordData recordData;
         tristate res = d->conn->querySingleRecord(
                            schema,
-//   QString::fromLatin1("SELECT o_data, o_name, o_caption, o_mime FROM kexi__blobs where o_id=")
-//   +QString::number(id),
                            recordData);
         if (res != true || recordData.size() < 4) {
             //! @todo err msg
@@ -344,14 +334,13 @@ KexiBLOBBuffer::Handle KexiBLOBBuffer::objectForId(Id_t id, bool stored)
 
         insertItem(item);
         return KexiBLOBBuffer::Handle(item);
-//#endif
-    } else
-        return KexiBLOBBuffer::Handle(d->inMemoryItems.value(id));
+    }
+    return KexiBLOBBuffer::Handle(d->inMemoryItems.value(id));
 }
 
 KexiBLOBBuffer::Handle KexiBLOBBuffer::objectForId(Id_t id)
 {
-    KexiBLOBBuffer::Handle h(objectForId(id, false/*!stored*/));
+    KexiBLOBBuffer::Handle h(objectForId(id, false/* !stored */));
     if (h)
         return h;
     return objectForId(id, true/*stored*/);

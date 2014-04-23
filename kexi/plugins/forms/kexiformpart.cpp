@@ -403,14 +403,6 @@ KexiFormPart::generateForm(KexiDB::FieldList *list, QDomDocument &domDoc)
     uiElement.appendChild(baseWidget);
 }
 
-//2.0 not needed, the code from slot receiving this signal is moved to Form itself
-/*void KexiFormPart::slotAutoTabStopsSet(KFormDesigner::Form *form, bool set)
-{
-    if (form->propertySet().contains("autoTabStops")) {
-        form->propertySet().changeProperty("autoTabStops", set);
-    }
-}*/
-
 KLocalizedString KexiFormPart::i18nMessage(
     const QString& englishMessage, KexiWindow* window) const
 {

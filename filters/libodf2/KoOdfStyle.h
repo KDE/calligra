@@ -53,12 +53,15 @@ class KOODF2_EXPORT KoOdfStyle
     bool isDefaultStyle() const;
     void setIsDefaultStyle(bool isDefaultStyle);
 
+    bool isFromStylesXml() const;
+    void setIsFromStylesXml(bool isFromStylesXml);
+
     QHash<QString, KoOdfStyleProperties*> properties();
     /**
      * @brief Return the list of properties in the selected property set.
      * @param name name of the property set.  Example: "text-properties" or "paragraph-properties"
      */
-    KoOdfStyleProperties *properties(QString &name) const;
+    KoOdfStyleProperties *properties(const QString &name) const;
 
     QString property(QString &propertySet, QString &property) const;
     void    setProperty(QString &propertySet, QString &property, QString &value);

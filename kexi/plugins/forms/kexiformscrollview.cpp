@@ -58,17 +58,12 @@ KexiFormScrollView::KexiFormScrollView(QWidget *parent, bool preview)
     m_navPanel = recordNavigator(); //copy this pointer from KexiScrollView
     if (preview) {
         setRecordNavigatorVisible(true);
-//tmp
-//  recordNavigator()->setEditingIndicatorEnabled(true);
-//  recordNavigator()->showEditingIndicator(true);
     }
 
     connect(this, SIGNAL(resizingStarted()), this, SLOT(slotResizingStarted()));
 
     m_contextMenu = new KMenu(this);
     m_contextMenu->setObjectName("m_contextMenu");
-
-// setFocusPolicy(NoFocus);
 }
 
 KexiFormScrollView::~KexiFormScrollView()
@@ -293,40 +288,6 @@ KexiDataItemInterface *KexiFormScrollView::editor(int col, bool ignoreMissingEdi
         return 0;
 
     return dynamic_cast<KexiFormDataItemInterface*>(dbFormWidget()->orderedDataAwareWidgets()->at(col));
-// KexiFormDataItemInterface *item = m_dataItems.at(col);
-    //return item;
-
-    /*
-      KexiDB::TableViewColumn *tvcol = m_data->column(col);
-    // int t = tvcol->fielm_type();
-
-      //find the editor for this column
-      KexiDataItemInterface *editor = m_editors[ tvcol ];
-      if (editor)
-        return editor;
-
-      //not found: create
-    // editor = KexiCellEditorFactory::createEditor(*m_data->column(col)->field, this);
-      editor = KexiCellEditorFactory::createEditor(*m_data->column(col), this);
-      if (!editor) {//create error!
-        if (!ignoreMissingEditor) {
-          //js TODO: show error???
-          cancelRowEdit();
-        }
-        return 0;
-      }
-      editor->hide();
-      connect(editor,SIGNAL(editRequested()),this,SLOT(slotEditRequested()));
-      connect(editor,SIGNAL(cancelRequested()),this,SLOT(cancelEditor()));
-      connect(editor,SIGNAL(acceptRequested()),this,SLOT(acceptEditor()));
-
-      editor->resize(columnWidth(col)-1, rowHeight()-1);
-      editor->installEventFilter(this);
-      if (editor->widget())
-        editor->widget()->installEventFilter(this);
-      //store
-      m_editors.insert( tvcol, editor );
-      return editor;*/
 }
 
 void KexiFormScrollView::editorShowFocus(int row, int col)
@@ -417,16 +378,6 @@ int KexiFormScrollView::columns() const
     return dbFormWidget()->orderedDataAwareWidgets()->count(); //m_dataItems.count();
 }
 
-/*uint KexiFormScrollView::fieldNumberForColumn(int col)
-{
-  KexiFormDataItemInterface *item = dynamic_cast<KexiFormDataItemInterface*>(dbFormWidget()->orderedDataAwareWidgets()->at( col ));
-  if (!item)
-    return -1;
-  KexiFormDataItemInterfaceToIntMap::ConstIterator it(m_fieldNumbersForDataItems.find( item ));
-  return it!=m_fieldNumbersForDataItems.constEnd() ? it.data() : -1;
-}*/
-
-
 void KexiFormScrollView::setForm(KFormDesigner::Form *form)
 {
     d->form = form;
@@ -451,10 +402,8 @@ bool KexiFormScrollView::columnEditable(int col)
         kDebug() << widget->objectName();
     }
 
-    //int index = dbFormWidget()->indexForDataItem( item );
-// KexiFormDataItemInterface *item1 = dynamic_cast<KexiFormDataItemInterface*>(dbFormWidget()->orderedFocusWidgets()->at( col ));
-    KexiFormDataItemInterface *item
-    = dynamic_cast<KexiFormDataItemInterface*>(dbFormWidget()->orderedDataAwareWidgets()->at(col));
+    KexiFormDataItemInterface *item = dynamic_cast<KexiFormDataItemInterface*>(
+                                          dbFormWidget()->orderedDataAwareWidgets()->at(col));
 
     if (!item || item->isReadOnly())
         return false;

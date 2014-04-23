@@ -1282,10 +1282,11 @@ KexiFormView::slotHandleDropEvent(QDropEvent* e)
     KFormDesigner::ObjectTreeItem *targetContainerWidgetItem = targetContainerWidget
             ? form()->objectTree()->lookup(targetContainerWidget->objectName()) : 0;
     if (targetContainerWidgetItem && targetContainerWidgetItem->container()
-            && KexiFieldDrag::canDecode(e)) {
+        && KexiFieldDrag::canDecode(e))
+    {
         QString sourcePartClass, sourceName;
         QStringList fields;
-        if (!KexiFieldDrag::decode(e, sourcePartClass, sourceName, fields))
+        if (!KexiFieldDrag::decode(e, &sourcePartClass, &sourceName, &fields))
             return;
         insertAutoFields(sourcePartClass, sourceName, fields,
                          targetContainerWidgetItem->container(), e->pos());

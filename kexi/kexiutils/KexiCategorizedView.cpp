@@ -24,18 +24,6 @@ KexiCategoryDrawer::KexiCategoryDrawer()
 {
 }
 
-#if 0
-void KexiCategoryDrawer::mouseButtonPressed(const QModelIndex&, const QRect&, QMouseEvent *event)
-{
-    event->accept();
-}
-
-void KexiCategoryDrawer::mouseButtonReleased(const QModelIndex&, const QRect&, QMouseEvent *event)
-{
-    event->accept();
-}
-#endif
-
 // ----
 
 KexiCategorySingleSelectionModel::KexiCategorySingleSelectionModel(QAbstractItemModel* model)
@@ -61,7 +49,6 @@ void KexiCategorySingleSelectionModel::select(const QItemSelection& selection,
 KexiCategorizedView::KexiCategorizedView(QWidget *parent)
  : KCategorizedView(parent)
 {
-    //setWordWrap(true);
     setSelectionMode(QAbstractItemView::SingleSelection);
     setMouseTracking(true);
     setViewMode(QListView::IconMode);

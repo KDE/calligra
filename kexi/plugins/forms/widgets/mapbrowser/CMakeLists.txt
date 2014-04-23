@@ -31,13 +31,6 @@ target_link_libraries(
     ${QT_QTGUI_LIBRARY}
     ${QT_QTXML_LIBRARY}
     )
-#kexicore
-#kexiguiutils
-#kexidatatable
-#kexiextendedwidgets
-#kformdesigner
-#${KOPROPERTY_LIBS}
-#kexiformutils
 
 install(TARGETS kformdesigner_mapbrowser  DESTINATION ${PLUGIN_INSTALL_DIR})
 

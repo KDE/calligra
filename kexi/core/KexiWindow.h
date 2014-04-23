@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -296,7 +296,14 @@ private slots:
     tristate switchToViewModeInternal(Kexi::ViewMode newViewMode);
 
 private:
+    //! Closes the window and all views. If @a force is true, attempts to close every
+    //! view even if one of them refuses to close. If @a force is false, false is returned
+    //! as soon as first view refuses to close.
+    //! @return true on sucessfull close; forced close always returns true
+    bool close(bool force = false);
+
     void createSubwidgets();
+    void removeView(KexiView *view);
 
     class Private;
     Private *d;

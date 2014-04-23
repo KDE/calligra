@@ -60,7 +60,7 @@ public:
     }
 
     //! no effect
-    QVariant value() {
+    virtual QVariant value() {
         return QVariant();
     }
 
@@ -70,7 +70,7 @@ public:
     virtual void drawRects(const QList<QRect> &list, int type);
     virtual void initBuffer();
     virtual void clearForm();
-    virtual void highlightWidgets(QWidget *from, QWidget *to/*, const QPoint &p*/);
+    virtual void highlightWidgets(QWidget *from, QWidget *to);
 
     virtual QSize sizeHint() const;
 
@@ -93,8 +93,6 @@ public:
     virtual void clear();
 
     bool isPreviewing() const;
-
-//    virtual void setCursor(const QCursor & cursor);
 
 public slots:
     void setAutoTabStops(bool set);

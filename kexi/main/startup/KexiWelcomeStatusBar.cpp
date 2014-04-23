@@ -59,7 +59,7 @@ static const int GUI_UPDATE_INTERVAL = 60; // update interval for GUI, in minute
 static const int UPDATE_FILES_LIST_SIZE_LIMIT = 1024 * 128;
 static const int UPDATE_FILES_COUNT_LIMIT = 128;
 
-// returns x.y.0
+//! @return x.y.0
 static QString stableVersionStringDot0()
 {
     return QString::number(Kexi::stableVersionMajor()) + '.'
@@ -204,8 +204,8 @@ void KexiWelcomeStatusBarGuiUpdater::sendRequestListFilesFinished(KJob* job)
                                         KUrl("file://" + tempDir.name()),
                                         KIO::HideProgressInfo | KIO::Overwrite);
     connect(copyJob, SIGNAL(result(KJob*)), this, SLOT(filesCopyFinished(KJob*)));
-        //kDebug() << "copying from" << KUrl(uiPath(fname)) << "to"
-//            << (dir + fname);
+    //kDebug() << "copying from" << KUrl(uiPath(fname)) << "to"
+    //         << (dir + fname);
 }
 
 void KexiWelcomeStatusBarGuiUpdater::checkFile(const QByteArray &hash,

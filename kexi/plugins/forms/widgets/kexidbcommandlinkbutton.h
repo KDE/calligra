@@ -41,8 +41,8 @@ class KEXIFORMUTILS_EXPORT KexiDBCommandLinkButton : public KexiCommandLinkButto
     Q_PROPERTY(QString dataSourcePartClass READ dataSourcePartClass WRITE setDataSourcePartClass)
 
 public:
-    KexiDBCommandLinkButton ( const QString & text, const QString &description, QWidget * parent );
-    ~KexiDBCommandLinkButton();
+    KexiDBCommandLinkButton(const QString &text, const QString &description, QWidget * parent = 0);
+    virtual ~KexiDBCommandLinkButton();
 
     inline QString dataSource() const {
         return KexiFormDataItemInterface::dataSource();

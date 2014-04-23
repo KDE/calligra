@@ -46,7 +46,7 @@ public:
         const KAction *action_project_import_export_send_,
         const KAction *action_import_project_,
         QWidget* parent = 0);
-    ~KexiImportExportAssistant();
+    virtual ~KexiImportExportAssistant();
 
     const KAction *action_project_import_export_send;
     const KAction *action_import_project;

@@ -54,6 +54,7 @@ QModelIndex KexiRecentProjectsModel::index(int row, int column,
 //! @return "opened x minutes ago" string or similar
 static QString openedString(const QDateTime& _opened)
 {
+    kDebug() << _opened;
     const KDateTime cur(KDateTime::currentUtcDateTime());
     const KDateTime opened = KDateTime(_opened);
     if (!opened.isValid() || opened >= cur)
@@ -168,8 +169,6 @@ Qt::ItemFlags KexiRecentProjectsModel::flags(const QModelIndex& index) const
 {
     Qt::ItemFlags f;
     if (index.isValid()) {
-//        KexiProjectData *pdata = static_cast<KexiProjectData*>(index.internalPointer());
-//        if (pdata->enabled)
         f |= (Qt::ItemIsEnabled | Qt::ItemIsSelectable);
     }
     return f;
@@ -180,7 +179,6 @@ Qt::ItemFlags KexiRecentProjectsModel::flags(const QModelIndex& index) const
 KexiRecentProjectsProxyModel::KexiRecentProjectsProxyModel(QObject *parent)
  : KCategorizedSortFilterProxyModel(parent)
 {
-    // disable since by default we are globally sorting by date: setCategorizedModel(true);
 }
 
 bool KexiRecentProjectsProxyModel::subSortLessThan(
