@@ -639,8 +639,13 @@ void KexiDBImageBox::setDataSource(const QString &ds)
 //        KexiFrame::setLineWidth(ds.isEmpty() ? 0 : 1);
 //    }
     if (!m_paletteBackgroundColorChanged && parentWidget()) {
-        KexiFrame::setPaletteBackgroundColor(
-            dataSource().isEmpty() ? parentWidget()->paletteBackgroundColor() : palette().active().base());
+        QPalette p = palette();
+        p.setColor(backgroundRole(),
+                   dataSource().isEmpty()
+                     ? parentWidget()->palette().color(parentWidget()->backgroundRole())
+                     : palette().color(QPalette::Active, QPalette::Base)
+        );
+        KexiFrame::setPalette(p);
     }
 }
 
@@ -900,8 +905,7 @@ void KexiDBImageBox::setPalette(const QPalette &pal)
     if (m_insideSetPalette)
         return;
     m_insideSetPalette = true;
-    setPaletteBackgroundColor(pal.active().base());
-    //setPaletteForegroundColor(pal.active().foreground());
+    setPaletteBackgroundColor(pal.color(QPalette::Active, QPalette::Base));
     QPalette p(palette());
     p.setColor(foregroundRole(), pal.color(foregroundRole()));
     setPalette(p);
