@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,6 +23,7 @@
 
 #include <db/global.h>
 #include <kactioncollection.h>
+#include <KDebug>
 
 using namespace KexiPart;
 
@@ -110,15 +111,7 @@ void KexiNewObjectAction::slotTriggered()
 Info::Info(KService::Ptr ptr)
         : d(new Private(ptr))
 {
-    if (KexiMainWindowIface::global()) {
-        KexiNewObjectAction *act = new KexiNewObjectAction(
-            this,
-            KexiMainWindowIface::global()->actionCollection());
-        
-        if (KexiMainWindowIface::global()->actionCollection()) {
-            KexiMainWindowIface::global()->actionCollection()->addAction(act->objectName(), act);
-        }
-    }
+
 }
 
 Info::Info(const QString &partClass, const QString &itemIconName,
@@ -231,6 +224,20 @@ bool Info::isExecuteSupported() const
 bool Info::isPropertyEditorAlwaysVisibleInDesignMode() const
 {
     return d->isPropertyEditorAlwaysVisibleInDesignMode;
+}
+
+QAction* Info::newObjectAction()
+{
+    if (!KexiMainWindowIface::global() || !KexiMainWindowIface::global()->actionCollection()) {
+        kWarning() << "!KexiMainWindowIface::global()";
+        return 0;
+    }
+    QAction *act = KexiMainWindowIface::global()->actionCollection()->action(KexiPart::nameForCreateAction(*this));
+    if (!act) {
+        KexiNewObjectAction *act = new KexiNewObjectAction(this, KexiMainWindowIface::global()->actionCollection());
+        KexiMainWindowIface::global()->actionCollection()->addAction(act->objectName(), act);
+    }
+    return act;
 }
 
 //--------------

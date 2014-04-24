@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2009 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -74,6 +74,12 @@ Manager::~Manager()
     delete d;
 }
 
+static QString appIncorrectlyInstalledMessage()
+{
+    return i18nc("@info", "<application>%1</application> could have been incorrectly installed or started. The application will be closed.",
+                 KGlobal::mainComponent().aboutData()->programName());
+}
+
 bool Manager::lookup()
 {
 //! @todo Allow refreshing!!!! (will need calling removeClient() by Part objects)
@@ -87,9 +93,9 @@ bool Manager::lookup()
 
     if (!KServiceType::serviceType("Kexi/Handler")) {
         kWarning() << "No 'Kexi/Handler' service type installed! Aborting.";
-        setError(i18nc("@info", "No <resource>%1</resource> service type installed. "
-                       "Check your <application>%2</application> installation. The application will be closed.",
-                       QLatin1String("Kexi/Handler"), KGlobal::mainComponent().aboutData()->programName()));
+        m_serverErrorMsg = i18nc("@info", "No <resource>%1</resource> service type installed.",
+                                 QLatin1String("Kexi/Handler"));
+        setError(appIncorrectlyInstalledMessage());
         return false;
     }
     KService::List tlist = KServiceTypeTrader::self()->query("Kexi/Handler",
@@ -97,10 +103,10 @@ bool Manager::lookup()
 
     KConfigGroup cg(KGlobal::config()->group("Parts"));
     if (qApp && !cg.hasKey("Order")) {
-        setError(i18nc("@info",
-                       "Missing or invalid default <application>%1</application> configuration (no <resource>%2</resource> key). "
-                       "Check your <application>%1</application> installation. The application will be closed.",
-                       KGlobal::mainComponent().aboutData()->programName(), QLatin1String("Parts/Order")));
+        m_serverErrorMsg = i18nc("@info",
+                                 "Missing or invalid default application configuration. No <resource>%1</resource> key.",
+                                 QLatin1String("Parts/Order"));
+        setError(appIncorrectlyInstalledMessage());
         return false;
     }
     const QStringList sl_order = cg.readEntry("Order").split(',');  //we'll set parts in defined order

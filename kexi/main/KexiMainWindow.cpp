@@ -1390,7 +1390,7 @@ void KexiMainWindow::updateReadOnlyState()
     KexiPart::PartInfoList *plist = Kexi::partManager().infoList();
     if (plist) {
         foreach(KexiPart::Info *info, *plist) {
-            QAction *a = ac->action(KexiPart::nameForCreateAction(*info));
+            QAction *a = info->newObjectAction();
             if (a)
                 a->setEnabled(!readOnly);
         }
