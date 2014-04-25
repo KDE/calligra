@@ -63,6 +63,9 @@ class KOODFREADER_EXPORT OdfTextReaderBackend
     // ----------------------------------------------------------------
     // Text level functions: paragraphs, headings, sections, frames, objects, etc
 
+    virtual void elementOfficeAnnotation(KoXmlStreamReader &reader, OdfReaderContext *context);
+    virtual void elementOfficeAnnotationEnd(KoXmlStreamReader &reader, OdfReaderContext *context);
+
     virtual void elementTextH(KoXmlStreamReader &reader, OdfReaderContext *context);
     virtual void elementTextP(KoXmlStreamReader &reader, OdfReaderContext *context);
 

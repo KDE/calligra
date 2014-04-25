@@ -47,6 +47,9 @@ public:
     // after the namespace declarations are read.
     void        checkSoundness();
 
+    // Builds a prefix for the current element. Only called if the
+    // document is unsound.
+    QStringRef buildNewPrefix();
     // Builds a qualified name for the current element. Only called if
     // the document is unsound.
     QStringRef  buildQName();
@@ -63,12 +66,13 @@ public:
     // This is only used when a document is unsound, but is always created.
     QHash<QString, QString>  prefixes; // nsUri, prefix
 
-    // If the document is unsound, we need to build the qualified
-    // names from a prefix that we get from "prefixes" and the actual
-    // name.  But we return a QStringRef and not QString so we need to
-    // make sure that the stringref is valid until this
+    // If the document is unsound, we need to build the prefix and
+    // qualified names from a prefix that we get from "prefixes" and
+    // the actual name.  But we return a QStringRef and not QString so
+    // we need to make sure that the stringref is valid until this
     // KoXmlStreamReader is destructed.  So we use this QSet as a
     // cache of all constructed qualified names that we ever generate.
+    QSet<QString>  prefixCache;
     QSet<QString>  qualifiedNamesCache;
 };
 
@@ -96,6 +100,7 @@ void KoXmlStreamReader::Private::clear()
     extraNamespaces.clear();
 
     prefixes.clear();
+    prefixCache.clear();
     qualifiedNamesCache.clear();
 }
 
@@ -205,6 +210,45 @@ void KoXmlStreamReader::Private::checkSoundness()
     isChecked = true;
 }
 
+QStringRef KoXmlStreamReader::Private::buildNewPrefix()
+{
+    if (!isChecked) {
+        checkSoundness();       // Sets isChecked and isSound;
+    }
+
+    if (isSound) {
+        return q->prefix();
+    }
+
+    // FIXME: Handle undeclared prefixes.  (Is that even legal?)
+    //QString nsUri = q->QXmlStreamReader::namespaceUri().toString();
+    QString newPrefix = prefixes.value(q->QXmlStreamReader::namespaceUri().toString());
+
+    // The following code is because prefix() returns a QStringRef,
+    // not a QString.  So we need to make sure that the QString that
+    // it references stays valid until the end of the document is
+    // parsed.  We do this by storing all prefix names that are
+    // accessed in a QSet<QString> and return a QStringRef that
+    // references the copy in the set.  Ugly but effective.
+#if 1
+    if (!prefixCache.contains(newPrefix)) {
+        // FIXME: Is there a way to do this at the same time as the
+        // check without creating a double copy if it was already inserted?
+        prefixCache.insert(newPrefix);
+    }
+
+    QSet<QString>::ConstIterator  it = prefixCache.find(newPrefix);
+#else
+    // This should work too but it's unclear from the documentation
+    // what is returned if it was already in the set.  It only
+    // mentions "the inserted item"
+    QSet<QString>::ConstIterator  it = prefixCace.insert(newPrefix);
+#endif
+
+    // Will always succeed since we entered it if it didn't exist already.
+    return (*it).leftRef(-1);
+}
+
 QStringRef KoXmlStreamReader::Private::buildQName()
 {
     if (!isChecked) {
@@ -225,7 +269,7 @@ QStringRef KoXmlStreamReader::Private::buildQName()
     // QString that it references stays valid until the end of the
     // document is parsed.  We do this by storing all qualified names
     // that are accessed in a QSet<QString> and return a QStringRef
-    // that references the copy in the set.  Ugly bug effective.
+    // that references the copy in the set.  Ugly but effective.
 #if 1
     if (!qualifiedNamesCache.contains(qualifiedName)) {
         // FIXME: Is there a way to do this at the same time as the
@@ -240,7 +284,9 @@ QStringRef KoXmlStreamReader::Private::buildQName()
     // mentions "the inserted item"
     QSet<QString>::ConstIterator  it = qualifiedNamesCache.insert(qualifiedName);
 #endif
-    return (*it).leftRef(-1);  // Will always succeed since we entered it if it didn't exist already.
+
+    // Will always succeed since we entered it if it didn't exist already.
+    return (*it).leftRef(-1);
 }
 
 
@@ -313,8 +359,13 @@ void KoXmlStreamReader::addExtraNamespace(const QString &prefix, const QString &
 //                 Reimplemented from QXmlStreamReader
 
 
-// Should this be made inline?  that would make it very fast at the
+// Should these be made inline?  that would make it very fast at the
 // cost of a possibly unstable API.
+
+QStringRef KoXmlStreamReader::prefix() const
+{
+    return d->isSound ? QXmlStreamReader::prefix() : d->buildNewPrefix();
+}
 
 QStringRef KoXmlStreamReader::qualifiedName() const
 {
