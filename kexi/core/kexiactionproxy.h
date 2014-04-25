@@ -20,8 +20,6 @@
 #ifndef KEXIACTIONPROXY_H
 #define KEXIACTIONPROXY_H
 
-#include <QPointer>
-#include <QObject>
 #include <QPair>
 
 #include "kexiproject.h"
@@ -74,7 +72,6 @@ protected:
  This class is mostly used by subclassing in KexiWindow or KexiDockBase
  - you can subclass in a similar way.
 */
-
 class KEXICORE_EXPORT KexiActionProxy
 {
 public:

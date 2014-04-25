@@ -44,7 +44,7 @@ public:
     There may be error during project list retrieving - use appropriate
     KexiDB::Object::error(), and similar methods to get error message.
     \a handler can be provided to receive error messages. */
-    explicit KexiProjectSet(KexiDB::ConnectionData &conndata,
+    explicit KexiProjectSet(KexiDB::ConnectionData* conndata,
                             KexiDB::MessageHandler* handler = 0);
 
     ~KexiProjectSet();

@@ -81,6 +81,8 @@ private slots:
 
     void setMeta();
     void thumbnail();
+    void exportBundle();
+    void importBundle();
 
     void startRenaming();
     void endRenaming();
@@ -89,12 +91,14 @@ private slots:
     void filterFieldSelected(bool);
     void filterResourceTypes(int index);
 
+    void toBundleView(int installTab);
     void showHide();
     void refreshDetails(QModelIndex newIndex);
     void saveMeta();
     void refreshTaggingManager(int index=0);
     void tableViewChanged(int index);
 
+    void refresh();
     void removeTag();
 
     void status(QString text,int timeout);

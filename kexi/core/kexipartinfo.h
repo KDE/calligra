@@ -52,11 +52,6 @@ public:
      (GenericName property). */
     QString groupName() const;
 
-//  /**
-//   * @return the icon for groups
-//   */
-//  inline QString groupIcon() const { return m_groupIcon; }
-
     /**
      * @return the icon name for a item
      */
@@ -149,17 +144,6 @@ protected:
     friend class ::KexiProject;
     friend class ::KexiWindow;
 
-#if 0 //moved as internal to KexiProject
-    /**
-     * @return the project-part-id
-     */
-    int projectPartID() const;
-
-    /**
-     * Sets the project-part-id.
-     */
-    void setProjectPartID(int id);
-#endif
     /**
      * Sets the broken flag and error message.
      * Most likely to be called by @ref KexiPart::Manager

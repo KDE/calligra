@@ -44,7 +44,6 @@ class Manager::Private
 {
 public:
     Private();
-
     ~Private();
 
     PartDict parts;
@@ -57,14 +56,12 @@ public:
 Manager::Private::Private() : lookupDone(false)
                               ,lookupResult(false)
 {  
-
 }
 
 Manager::Private::~Private()
 {
     qDeleteAll(partlist);
     partlist.clear();
-
 }
 
 Manager::Manager(QObject *parent)
@@ -79,7 +76,7 @@ Manager::~Manager()
 
 bool Manager::lookup()
 {
-//js: TODO: allow refreshing!!!! (will need calling removeClient() by Part objects)
+//! @todo Allow refreshing!!!! (will need calling removeClient() by Part objects)
     if (d->lookupDone)
         return d->lookupResult;
     d->lookupDone = true;
@@ -134,7 +131,6 @@ bool Manager::lookup()
         KService::Ptr ptr = ordered[i];
         if (ptr) {
             Info *info = new Info(ptr);
-//            info->setProjectPartID(d->nextTempProjectPartID--); // temp. part id are -1, -2, and so on,
             // to avoid duplicates
             if (!info->partClass().isEmpty()) {
                 d->partsByClass.insert(info->partClass(), info);
@@ -162,8 +158,6 @@ Part* Manager::part(Info *i)
 
     Part *p = d->parts.value(i->partClass());
     if (!p) {
-//2.0        int error = 0;
-/*2.0        p = KService::createInstance<Part>(i->ptr(), this, QStringList(), &error); */
         KPluginLoader loader(i->ptr()->library());
         const uint foundMajor = (loader.pluginVersion() >> 16) & 0xff;
 //        const uint foundMinor = (loader.pluginVersion() >> 8) & 0xff;
@@ -181,15 +175,11 @@ Part* Manager::part(Info *i)
             p = factory->create<Part>(this);
 
         if (!p) {
-            kDebug() << "failed";
+            kWarning() << "failed";
             i->setBroken(true, i18n("Error while loading plugin \"%1\"", i->objectName()));
             setError(i->errorMessage());
             return 0;
         }
-/*
-        if (p->registeredPartID() > 0) {
-            i->setProjectPartID(p->registeredPartID());
-        }*/
         p->setInfo(i);
         p->setObjectName(QString("%1 plugin").arg(i->objectName()));
         d->parts.insert(i->partClass(), p);
@@ -234,7 +224,6 @@ void Manager::insertStaticPart(StaticPart* part)
         return;
     if (!lookup())
         return;
-//    part->info()->setProjectPartID(d->nextTempProjectPartID--); // temp. part id are -1, -2, and so on,
     d->partlist.append(part->info());
     if (!part->info()->partClass().isEmpty())
         d->partsByClass.insert(part->info()->partClass(), part->info());

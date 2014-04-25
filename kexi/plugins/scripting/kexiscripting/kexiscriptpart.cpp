@@ -179,7 +179,7 @@ bool KexiScriptPart::execute(KexiPart::Item* item, QObject* sender)
 
 void KexiScriptPart::initPartActions()
 {
-    kDebug() << "............. initPartActions";
+    kDebug() << ".............";
 #if 0
     if (m_mainWin) {
         // At this stage the KexiPart::Part::m_mainWin should be defined, so
@@ -219,12 +219,6 @@ void KexiScriptPart::initPartActions()
             }
         }
     }
-#else
-#ifdef __GNUC__
-#warning Port It!!!
-#else
-#pragma WARNING( Port It!!! )
-#endif
 #endif
 }
 
@@ -263,17 +257,10 @@ KexiView* KexiScriptPart::createView(QWidget *parent,
             scriptaction = new Kross::Api::ScriptAction(partname);
             collection->attach(scriptaction); //TODO remove again on unload!
         }
-#else
-#ifdef __GNUC__
-#warning Port It!!!
-#else
-#pragma WARNING( Port It!!! )
 #endif
-
         if (viewMode == Kexi::DesignViewMode) {
             return new KexiScriptDesignView(parent, action);
         }
-#endif
     }
     return 0;
 }

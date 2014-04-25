@@ -161,15 +161,19 @@ QPixmap* PixmapCachingSheetView::Private::getTile(const Sheet* sheet, int x, int
     ThreadWeaver::Weaver::instance()->enqueue(job);
     QPixmap* pm = new QPixmap(TILESIZE, TILESIZE);
     pm->fill(QColor(255, 255, 255, 0));
-    tileCache.insert(idx, pm);
-    return pm;
+    if (tileCache.insert(idx, pm)) {
+        return pm;
+    }
 #else
     TileDrawingJob job(sheet, q, canvas, lastScale, x, y);
     job.run();
     QPixmap *pm = new QPixmap(QPixmap::fromImage(job.m_image));
-    tileCache.insert(idx, pm);
-    return pm;
+    if (tileCache.insert(idx, pm)) {
+        tileCache.insert(idx, pm);
+        return pm;
+    }
 #endif
+    return 0;
 }
 
 void PixmapCachingSheetView::paintCells(QPainter& painter, const QRectF& paintRect, const QPointF& topLeft, CanvasBase* canvas, const QRect& visibleRect)
@@ -219,18 +223,22 @@ void PixmapCachingSheetView::paintCells(QPainter& painter, const QRectF& paintRe
         for (int x = qMax(0, tiles.left()); x < tiles.right(); x++) {
             for (int y = qMax(0, tiles.top()); y < tiles.bottom(); y++) {
                 QPixmap *p = d->getTile(s, x, y, canvas);
-                QPointF pt(paintRect.width() - (x+1) * TILESIZE / scale.x(), y * TILESIZE / scale.y());
-                QRectF r(pt, QSizeF(TILESIZE / sx, TILESIZE / sy));
-                painter.drawPixmap(r, *p, p->rect());
+                if (p) {
+                    QPointF pt(paintRect.width() - (x+1) * TILESIZE / scale.x(), y * TILESIZE / scale.y());
+                    QRectF r(pt, QSizeF(TILESIZE / sx, TILESIZE / sy));
+                    painter.drawPixmap(r, *p, p->rect());
+                }
             }
         }
     } else {
         for (int x = qMax(0, tiles.left()); x < tiles.right(); x++) {
             for (int y = qMax(0, tiles.top()); y < tiles.bottom(); y++) {
                 QPixmap *p = d->getTile(s, x, y, canvas);
-                QPointF pt(x * TILESIZE / scale.x(), y * TILESIZE / scale.y());
-                QRectF r(pt, QSizeF(TILESIZE / sx, TILESIZE / sy));
-                painter.drawPixmap(r, *p, p->rect());
+                if (p) {
+                    QPointF pt(x * TILESIZE / scale.x(), y * TILESIZE / scale.y());
+                    QRectF r(pt, QSizeF(TILESIZE / sx, TILESIZE / sy));
+                    painter.drawPixmap(r, *p, p->rect());
+                }
             }
         }
     }

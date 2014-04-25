@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2014 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -286,7 +286,8 @@ public:
     bool interactive : 1;
     bool isUndoing : 1;
     bool isRedoing : 1;
-    bool isSnapWidgetsToGridEnabled : 1;
+    bool snapToGrid;
+    int gridSize;
 //removed, mode is used now:    bool  design;
     QString  filename;
 
@@ -382,7 +383,8 @@ FormPrivate::FormPrivate(Form *form)
     autoTabstops = false;
     isRedoing = false;
 //! @todo get the default from globals...
-    isSnapWidgetsToGridEnabled = true;
+    snapToGrid = true;
+    gridSize = 10;
 //    tabstops.setAutoDelete(false);
 #ifdef KFD_SIGSLOTS
     connBuffer = new ConnectionBuffer();
@@ -658,9 +660,20 @@ bool Form::isModified() const
     return d->modified;
 }
 
+void Form::setModified(bool set)
+{
+    d->modified = set;
+    emit modified(set);
+}
+
 int Form::gridSize() const
 {
-    return 10;
+    return d->gridSize;
+}
+
+void Form::setGridSize(int gridSize)
+{
+    d->gridSize = gridSize;
 }
 
 int Form::defaultMargin() const
@@ -840,13 +853,16 @@ Container* Form::parentContainer(QWidget *w) const
 void Form::setMode(Mode mode)
 {
     d->mode = mode;
-    if (mode == DesignMode)
+    if (d->mode == DesignMode) {
+        d->designModeStyle = new DesignModeStyle(d->widget->style());
+        d->widget->setStyle(d->designModeStyle);
         return;
+    }
 
     ObjectTreeHash hash(*(d->topTree->hash()));
     foreach (ObjectTreeItem *item, hash) {
         m_lib->previewWidget(
-            item->widget()->metaObject()->className(), 
+            item->widget()->metaObject()->className(),
             item->widget(), d->toplevel
         );
     }
@@ -860,10 +876,6 @@ void Form::setMode(Mode mode)
     // alter the style
     delete d->designModeStyle;
     d->designModeStyle = 0;
-    if (d->mode == DesignMode) {
-        d->designModeStyle = new DesignModeStyle(d->widget->style());
-        d->widget->setStyle(d->designModeStyle);
-    }
 }
 
 
@@ -1352,8 +1364,7 @@ const Command* Form::executingCommand() const
 
 bool Form::addCommand(Command *command, AddCommandOption option)
 {
-    d->modified = true;
-    emit modified();
+    setModified(true);
     if (option == DontExecuteCommand) {
         command->blockRedoOnce();
     }
@@ -1380,8 +1391,7 @@ bool Form::addCommand(Command *command, AddCommandOption option)
 void Form::slotCommandExecuted(K3Command *command)
 {
     Q_UNUSED(command)
-    d->modified = true;
-    emit modified();
+    setModified(true);
     // because actions text is changed after the commandExecuted() signal is emitted
     QTimer::singleShot(10, this, SLOT(emitUndoEnabled()));
     QTimer::singleShot(10, this, SLOT(emitRedoEnabled()));
@@ -1416,8 +1426,7 @@ void Form::emitRedoEnabled()
 
 void Form::slotFormRestored()
 {
-    d->modified = false;
-    emit modified();
+    setModified(false);
 }
 
 
@@ -2390,14 +2399,14 @@ KoProperty::Set& Form::propertySet()
     return d->propertySet;
 }
 
-bool Form::isSnapWidgetsToGridEnabled() const
+bool Form::isSnapToGridEnabled() const
 {
-    return d->isSnapWidgetsToGridEnabled;
+    return d->snapToGrid;
 }
 
-void Form::setSnapWidgetsToGridEnabled(bool set)
+void Form::setSnapToGridEnabled(bool enabled)
 {
-    d->isSnapWidgetsToGridEnabled = set;
+    d->snapToGrid = enabled;
 }
 
 // moved from FormManager
@@ -2731,7 +2740,7 @@ void Form::editTabOrder()
 // </moved code>
 
         //force set dirty
-        emit modified();
+        setModified(true);
     }
 }
 
@@ -3398,7 +3407,7 @@ void Form::changeFont()
         widget->setFont(prevFont);
     }
 //! @todo temporary fix for dirty flag
-    emit modified();
+    setModified(true);
 }
 
 void Form::setSlotPropertyChangedEnabled(bool set)

@@ -170,16 +170,6 @@ public:
      create instance-wide actions using this client. */
     GUIClient *instanceGuiClient(Kexi::ViewMode mode = Kexi::AllViewModes) const;
 
-#if 0
-    /**
-     * @returns the datasource object of this part
-     * reeimplement it to make a part work as dataprovider ;)
-     */
-    virtual DataSource *dataSource() {
-        return 0;
-    }
-#endif
-
     /*! \return action collection for mode \a viewMode. */
     KActionCollection* actionCollectionForMode(Kexi::ViewMode viewMode) const;
 
@@ -254,29 +244,6 @@ protected:
     //! Used by StaticPart
     Part(QObject* parent, StaticPartInfo *info);
 
-#if 0
-    /*! For reimplementation. Create here all part actions (KAction or similar).
-     "Part action" is an action that is bound to given part, not for dialogs
-     created with this part, eg. "Open external project" action for Form part.
-     Default implementation does nothing.
-    */
-    virtual void initPartActions(KActionCollection *) {};
-
-    /*! For reimplementation. You should here create all instance actions (KAction or similar)
-     for \a mode (this method called for every value given by Kexi::ViewMode enum,
-     and in special cases, in the future - for user-defined part-specific modes).
-     Actions should be bound to action collection \a col.
-     "Instance action" is an action that is bound to given dialog instance (created with a part),
-     for specific view. \a mo; eg. "Filter data" action for DataViewMode of Table part.
-     By creating actions here, you can ensure that after switching to other view mode (eg. from
-     Design view to Data view), appropriate actions will be switched/hidden.
-     \a mode equal Kexi::AllViewModes means that given actions will be available for
-     all supported views.
-     Default implementation does nothing.
-    */
-    virtual void initInstanceActions(int mode, KActionCollection *col) {};
-#endif
-
     virtual void initPartActions();
     virtual void initInstanceActions();
 
@@ -340,9 +307,9 @@ private:
 /*! \return full caption for item \a item and part \a part.
  If \a part is provided, the captions will be in a form of "name : inctancetype", e.g. "Employees : Table",
  otherwise it will be in a form of "name", e.g. "Employees". */
-KEXICORE_EXPORT QString fullCaptionForItem(KexiPart::Item& item, KexiPart::Part *part);
+KEXICORE_EXPORT QString fullCaptionForItem(KexiPart::Item *item, KexiPart::Part *part);
 
-}
+} // namespace KexiPart
 
 //! Implementation of plugin's entry point
 #define K_EXPORT_KEXI_PLUGIN( class_name, internal_name ) \

@@ -53,9 +53,10 @@ public:
     bool    isDefaultStyle;
 
     bool    inUse;
+    bool    isFromStylesXml;
 
-    // 
-    QHash<QString, KoOdfStyleProperties*> properties;  // e.g. "text-properties", 
+    //
+    QHash<QString, KoOdfStyleProperties*> properties;  // e.g. "text-properties",
 };
 
 KoOdfStyle::Private::Private()
@@ -147,13 +148,22 @@ void KoOdfStyle::setInUse(bool inUse)
     d->inUse = inUse;
 }
 
+bool KoOdfStyle::isFromStylesXml() const
+{
+    return d->isFromStylesXml;
+}
+
+void KoOdfStyle::setIsFromStylesXml(bool isFromStylesXml)
+{
+    d->isFromStylesXml = isFromStylesXml;
+}
 
 QHash<QString, KoOdfStyleProperties*> KoOdfStyle::properties()
 {
     return d->properties;
 }
 
-KoOdfStyleProperties *KoOdfStyle::properties(QString &name) const
+KoOdfStyleProperties *KoOdfStyle::properties(const QString& name) const
 {
     return d->properties.value(name, 0);
 }

@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Resource Manager</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -429,16 +429,15 @@
            </spacer>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_5">
-            <property name="text">
-             <string>Configure</string>
-            </property>
-           </widget>
-          </item>
-          <item>
            <widget class="QPushButton" name="pushButton_6">
             <property name="text">
              <string>Details</string>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -583,6 +582,9 @@
          </item>
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_3">
+           <property name="sizeConstraint">
+            <enum>QLayout::SetDefaultConstraint</enum>
+           </property>
            <item>
             <spacer name="horizontalSpacer_3">
              <property name="orientation">
@@ -687,7 +689,7 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>361</width>
+              <width>310</width>
               <height>258</height>
              </rect>
             </property>
@@ -1059,28 +1061,15 @@
     <string>Name</string>
    </property>
   </action>
-  <action name="actionTag">
+  <action name="actionFile">
    <property name="checkable">
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Tag</string>
+    <string>Filename</string>
    </property>
-  </action>
-  <action name="actionAuthor">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Author</string>
-   </property>
-  </action>
-  <action name="actionLicense">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>License</string>
+   <property name="toolTip">
+    <string>Filename</string>
    </property>
   </action>
  </widget>

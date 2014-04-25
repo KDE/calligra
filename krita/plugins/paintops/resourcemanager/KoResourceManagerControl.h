@@ -47,17 +47,21 @@ public:
     void filterResourceTypes(int index);
 
 
-    void createPack(int type);
-    void install(int type);
-    void uninstall(int type);
+    bool createPack(int type);
+    bool install(int type);
+    bool uninstall(int type);
     void remove(int type);
 
+    void configureFilters(int filterType, bool enable);
 
     bool rename(QModelIndex index,QString,int type);
     void setMeta(QModelIndex index,QString metaType,QString metaValue, int type);
     void setMeta(KoResourceBundle *bundle, QString metaType,QString metaValue);
     void saveMeta(QModelIndex index,int type);
     void thumbnail(QModelIndex index,QString fileName,int type);
+    void exportBundle(int type);
+    bool importBundle();
+    void refreshTaggingManager();
 
 signals:
     void status(QString text,int timeout=0);

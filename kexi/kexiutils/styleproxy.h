@@ -55,7 +55,7 @@ public:
     /*! Creates a new style proxy object.
      No owner is set for this object, so use QObject::setParent(QObject*)
      to control the ownership. */
-    StyleProxy(QStyle* parentStyle);
+    explicit StyleProxy(QStyle* parentStyle);
 
     virtual ~StyleProxy();
 

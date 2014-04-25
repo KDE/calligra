@@ -38,13 +38,6 @@ class KEXIUTILS_EXPORT KexiCategoryDrawer : public KexiCategoryDrawerBase
 {
 public:
     KexiCategoryDrawer();
-
-protected:
-#if 0
-    void mouseButtonPressed(const QModelIndex&, const QRect&, QMouseEvent *event);
-
-    void mouseButtonReleased(const QModelIndex&, const QRect&, QMouseEvent *event);
-#endif
 };
 
 //! Single selection model for the drawer.

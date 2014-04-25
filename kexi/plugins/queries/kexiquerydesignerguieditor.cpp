@@ -1231,7 +1231,7 @@ KexiQueryDesignerGuiEditor::slotDroppedAtRow(KexiDB::RecordData * /*record*/, in
     QString srcTable;
     QStringList srcFields;
     
-    if (!KexiFieldDrag::decode(ev, sourcePartClass, srcTable, srcFields))
+    if (!KexiFieldDrag::decode(ev, &sourcePartClass, &srcTable, &srcFields))
         return;
     
     if (srcFields.count() != 1) {

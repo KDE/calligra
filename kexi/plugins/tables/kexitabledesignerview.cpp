@@ -239,7 +239,7 @@ void KexiTableDesignerView::initData()
     //add column data
 // d->data->clear();
     d->data->deleteAllRows();
-    int tableFieldCount = 0;
+    uint tableFieldCount = 0;
     d->primaryKeyExists = false;
 
     if (tempData()->table) {
@@ -247,7 +247,7 @@ void KexiTableDesignerView::initData()
 //not needed  d->sets->clear(tableFieldCount);
 
         //recreate table data rows
-        for (int i = 0; i < tableFieldCount; i++) {
+        for (uint i = 0; i < tableFieldCount; i++) {
             KexiDB::Field *field = tempData()->table->field(i);
             KexiDB::RecordData *record = d->data->createItem();
             if (field->isPrimaryKey()) {
@@ -277,7 +277,7 @@ void KexiTableDesignerView::initData()
 
     //add empty space, at least 2 times more than number of existing fields
     uint fullSize = qMax(d->sets->size(), uint(2 * tableFieldCount));
-    for (int i = tableFieldCount; i < fullSize; i++) {
+    for (uint i = tableFieldCount; i < fullSize; i++) {
 //  KexiDB::RecordData *item = new KexiDB::RecordData(columnsCount);//3 empty fields
         d->data->append(d->data->createItem());
     }
@@ -287,7 +287,7 @@ void KexiTableDesignerView::initData()
 
     //now recreate property sets
     if (tempData()->table) {
-        for (int i = 0; i < tableFieldCount; i++) {
+        for (uint i = 0; i < tableFieldCount; i++) {
             KexiDB::Field *field = tempData()->table->field(i);
             createPropertySet(i, *field);
         }
