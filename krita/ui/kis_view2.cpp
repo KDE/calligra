@@ -296,7 +296,7 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
     connect(m_d->saveIncrementalBackup, SIGNAL(triggered()), this, SLOT(slotSaveIncrementalBackup()));
 
     connect(qtMainWindow(), SIGNAL(documentSaved()), this, SLOT(slotDocumentSaved()));
-
+    connect(this, SIGNAL(sigSavingFinished()), this, SLOT(slotSavingFinished()));
 
     if (m_d->doc->localFilePath().isNull()) {
         m_d->saveIncremental->setEnabled(false);
@@ -940,6 +940,11 @@ void KisView2::slotLoadingFinished()
     emit sigLoadingFinished();
 }
 
+void KisView2::slotSavingFinished()
+{
+    if(mainWindow())
+        mainWindow()->updateCaption();
+}
 
 void KisView2::createActions()
 {
@@ -1279,10 +1284,7 @@ void KisView2::slotSaveIncremental()
     m_d->doc->saveAs(fileName);
     m_d->doc->setSaveInBatchMode(false);
 
-
-    if (mainWindow()) {
-        mainWindow()->updateCaption();
-    }
+    emit sigSavingFinished();
 }
 
 void KisView2::slotSaveIncrementalBackup()
@@ -1349,7 +1351,7 @@ void KisView2::slotSaveIncrementalBackup()
         QFile::copy(fileName, backupFileName);
         m_d->doc->saveAs(fileName);
 
-        if (mainWindow()) mainWindow()->updateCaption();
+        emit sigSavingFinished();
     }
     else { // if NOT working on a backup...
         // Navigate directory searching for latest backup version, ignore letters
@@ -1388,7 +1390,7 @@ void KisView2::slotSaveIncrementalBackup()
         m_d->doc->saveAs(fileName);
         m_d->doc->setSaveInBatchMode(false);
 
-        if (mainWindow()) mainWindow()->updateCaption();
+        emit sigSavingFinished();
     }
 }
 
