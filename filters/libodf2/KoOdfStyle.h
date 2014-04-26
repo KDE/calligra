@@ -39,13 +39,13 @@ class KOODF2_EXPORT KoOdfStyle
     ~KoOdfStyle();
 
     QString name() const;
-    void setName(QString &name);
+    void setName(const QString &name);
     QString family() const;
-    void setFamily(QString &family);
+    void setFamily(const QString &family);
     QString parent() const;
-    void setParent(QString &parent);
+    void setParent(const QString &parent);
     QString displayName() const;
-    void setDisplayName(QString &name);
+    void setDisplayName(const QString &name);
 
     bool inUse() const;
     void setInUse(bool inUse);
@@ -63,8 +63,8 @@ class KOODF2_EXPORT KoOdfStyle
      */
     KoOdfStyleProperties *properties(const QString &name) const;
 
-    QString property(QString &propertySet, QString &property) const;
-    void    setProperty(QString &propertySet, QString &property, QString &value);
+    QString property(const QString &propertySet, const QString &property) const;
+    void    setProperty(const QString &propertySet, const QString &property, const QString &value);
 
     bool readOdf(KoXmlStreamReader &reader);
     bool saveOdf(KoXmlWriter *writer);
