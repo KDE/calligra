@@ -308,19 +308,19 @@ void KexiProjectModel::slotAddItem(KexiPart::Item& item)
     KexiProjectModelItem *parent = modelItemFromName(item.partClass());
 
     if (parent) {
-        kDebug() << "Got Parent" << parent->data(0);
+        //kDebug() << "Got Parent" << parent->data(0);
         idx = indexFromItem(parent);
         beginInsertRows(idx, 0,0);
         KexiProjectModelItem *itm = new KexiProjectModelItem(*(parent->partInfo()), item, parent);
         if (itm) {
-            kDebug() << "Appending";
+            //kDebug() << "Appending";
             parent->appendChild(itm);
             parent->sortChildren();
         }
         endInsertRows();
     }
     else {
-        kDebug() << "Unable to find parent item!";
+        //kDebug() << "Unable to find parent item!";
     }
 }
 
@@ -336,10 +336,10 @@ void KexiProjectModel::slotRemoveItem(const KexiPart::Item& item)
     KexiProjectModelItem *parent =0;
     
     if (mitm) {
-        kDebug() << "Got model item from item";
+        //kDebug() << "Got model item from item";
         parent = mitm->parent();
     } else {
-        kDebug() << "Unable to get model item from item";
+        //kDebug() << "Unable to get model item from item";
     }
     
     if (parent) {
@@ -348,7 +348,7 @@ void KexiProjectModel::slotRemoveItem(const KexiPart::Item& item)
         parent->removeChild(item);
         endRemoveRows();
     } else {
-        kDebug() << "Unable to find parent item!";
+        //kDebug() << "Unable to find parent item!";
     }
 }
 
@@ -389,7 +389,7 @@ void KexiProjectModel::updateItemName(KexiPart::Item& item, bool dirty)
 QModelIndex KexiProjectModel::firstChildPartItem(const QModelIndex &parentIndex) const
 {
     int count = rowCount(parentIndex);
-    kDebug() << "parent:" << data(parentIndex) << parentIndex.isValid() << count;
+    //kDebug() << "parent:" << data(parentIndex) << parentIndex.isValid() << count;
     KexiProjectModelItem *it = static_cast<KexiProjectModelItem*>(parentIndex.internalPointer());
     if (it) {
         if (it->partItem()) {
@@ -398,7 +398,7 @@ QModelIndex KexiProjectModel::firstChildPartItem(const QModelIndex &parentIndex)
     }
     for (int i = 0; i < count; i++) {
         QModelIndex index = parentIndex.child(i, 0);
-        kDebug() << data(index);
+        //kDebug() << data(index);
         index = firstChildPartItem(index);
         if (index.isValid()) {
             return index;

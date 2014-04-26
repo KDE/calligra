@@ -61,6 +61,7 @@ public:
     virtual ~KexiMainWindowTabWidget();
 public slots:
     void closeTab();
+    tristate closeAllTabs();
 
 protected:
     //! Implemented to add context menu
@@ -74,6 +75,7 @@ protected:
 
     KexiMainWidget *m_mainWidget;
     KAction *m_closeAction;
+    KAction *m_closeAllTabsAction;
 
 private:
     int m_tabIndex;
@@ -98,68 +100,34 @@ public:
 
     virtual KActionCollection* actionCollection() const;
 
-#ifdef KEXI_IMPL_WARNINGS
-#ifdef __GNUC__
-#warning TODO virtual QWidget* focusWidget() const;
-#else
-#pragma WARNING( TODO virtual QWidget* focusWidget() const; )
-#endif
-#endif
+//! @todo virtual QWidget* focusWidget() const;
     virtual QWidget* focusWidget() const {
         return KexiMainWindowSuper::focusWidget();
     }
 
-#ifdef KEXI_IMPL_WARNINGS
-#ifdef __GNUC__
-#warning TODO  virtual void plugActionList(const QString& name,
-#else
-#pragma WARNING( TODO  virtual void plugActionList(const QString& name, )
-#endif
-#endif
+//! @todo virtual void plugActionList(const QString& name,
     virtual void plugActionList(const QString& name,
                                 const QList<KAction *>& actionList) {
         Q_UNUSED(name)
         Q_UNUSED(actionList)
     }
 
-#ifdef KEXI_IMPL_WARNINGS
-#ifdef __GNUC__
-#warning TODO KXMLGUIClient* guiClient() const;
-#else
-#pragma WARNING( TODO KXMLGUIClient* guiClient() const; )
-#endif
-#endif
+//! @todo KXMLGUIClient* guiClient() const;
     virtual KXMLGUIClient* guiClient() const;
 
-#ifdef KEXI_IMPL_WARNINGS
-#ifdef __GNUC__
-#warning TODO virtual void unplugActionList (const QString &name);
-#else
-#pragma WARNING( TODO virtual void unplugActionList (const QString &name); )
-#endif
-#endif
+//! @todo virtual void unplugActionList (const QString &name);
     virtual void unplugActionList(const QString &name) {
         Q_UNUSED(name)
     }
 
     //! Implemented by KMainWindow
-#ifdef KEXI_IMPL_WARNINGS
-#ifdef __GNUC__
-#warning TODO virtual KXMLGUIFactory * KMainWindow::guiFactory();
-#else
-#pragma WARNING( TODO virtual KXMLGUIFactory * KMainWindow::guiFactory(); )
-#endif
-#endif
+//! @todo virtual KXMLGUIFactory * KMainWindow::guiFactory();
     virtual KXMLGUIFactory* guiFactory();
-
 
     /*! Used by the main kexi routine. Creates a new Kexi main window and a new KApplication object.
      kdemain() has to destroy the latter on exit.
      \return result 1 on error and 0 on success (the result can be used as a result of kdemain()) */
     static int create(int argc, char *argv[], const KAboutData &aboutData);
-
-    //! \return KexiMainWindow singleton (if it is instantiated)
-//  static KexiMainWindow* self();
 
     //! Project data of currently opened project or NULL if no project here yet.
     virtual KexiProject *project();
@@ -186,11 +154,6 @@ public:
      as KexiPart::PartInfo::supportedUserViewModes() for \a  item. */
     bool openingAllowed(KexiPart::Item* item, Kexi::ViewMode viewMode, QString* errorMessage = 0);
 
-//TODO REMOVE?  virtual bool eventFilter( QObject *obj, QEvent * e );
-
-    //! \return popup menu for \a popupName name.
-//2.0 disabled  virtual Q3PopupMenu* findPopupMenu(const char *popupName);
-
     /*! Implemented for KexiMainWindow. */
     virtual QList<QAction*> allActions() const;
 
@@ -200,11 +163,6 @@ public:
     
     /*! @return window for tab @a tabIndex or 0 if there is no such tab. */
     KexiWindow* windowForTab(int tabIndex) const;
-
-    /*! Reimplemented */
-//  virtual void readProperties(KConfig *config);
-//  virtual void saveProperties(KConfig *config);
-//  virtual void saveGlobalProperties( KConfig* sessionConfig );
 
 //! @todo temporary solution before the tabbed toolbar framework emerges
     // see KexiMainWindowIface
@@ -427,12 +385,6 @@ protected:
      These actions only depend on project availability, not on curently active window. */
     void invalidateProjectWideActions();
 
-    /* UNUSED, see KexiToggleViewModeAction
-         Invalidates action availability for current application state.
-         These actions only depend on curently active window and currently selected view
-         (KexiView derived object) within this window.
-        void invalidateViewModeActions();*/
-
     /*! Shows dialog for creating new project, and creates one.
      The dialog is not shown if option for automatic creation
      is checked or Kexi::startupHandler().projectData() was provided from command line.
@@ -448,16 +400,6 @@ protected:
      (in case when server database project was selected). */
     KexiProjectData* createBlankProjectData(bool &cancelled, bool confirmOverwrites = true, QString *shortcutFileName = 0);
 
-#ifdef KEXI_IMPL_WARNINGS
-#ifdef __GNUC__
-#warning TODO  void setWindowMenu(Q3PopupMenu *menu);
-#else
-#pragma WARNING( TODO  void setWindowMenu(Q3PopupMenu *menu); )
-#endif
-#endif
-    /*! \return focused kexi window (KexiWindow or KexiDockBase subclass) */
-//  QWidget* focusWindow() const;
-
     /*! Reimplemented from KexiSharedActionHost:
      accepts only KexiDockBase and KexiWindow subclasses.  */
     virtual bool acceptsSharedActions(QObject *w);
@@ -469,9 +411,6 @@ protected:
 
     /*! Updates application's caption - also shows project's name. */
     void updateAppCaption();
-
-//  void restoreWindowConfiguration(KConfig *config);
-//  void storeWindowConfiguration(KConfig *config);
 
     virtual void closeEvent(QCloseEvent *ev);
 
@@ -516,7 +455,6 @@ protected:
     virtual void updatePropertyEditorInfoLabel(const QString& textToDisplayForNullSet);
 
 protected slots:
-
     tristate createNewProject(KexiProjectData* projectData);
 
     /*! Called once after timeout (after ctors are executed). */
@@ -579,13 +517,8 @@ protected slots:
      and also optionally application's caption. */
     virtual void slotObjectRenamed(const KexiPart::Item &item, const QString& oldName);
 
-#ifdef KEXI_IMPL_WARNINGS
-#ifdef __GNUC__
-#warning TODO  virtual void fillWindowMenu();
-#else
-#pragma WARNING( TODO  virtual void fillWindowMenu(); )
-#endif
-#endif
+//! @todo virtual void fillWindowMenu();
+
     void invalidateSharedActions();
     void invalidateSharedActionsLater();
 
@@ -682,13 +615,8 @@ protected slots:
 
     //! Shows "print" dialog for \a item and \a settings.
     //! \return true on success.
-#ifdef KEXI_IMPL_WARNINGS
-#ifdef __GNUC__
-#warning TODO reenable when ported  bool printItem(KexiPart::Item* item, const KexiSimplePrintingSettings& settings, const QString& titleText = QString());
-#else
-#pragma WARNING( TODO reenable when ported  bool printItem(KexiPart::Item* item, const KexiSimplePrintingSettings& settings, const QString& titleText = QString()); )
-#endif
-#endif
+    //! @todo reenable when ported  bool printItem(KexiPart::Item* item, const KexiSimplePrintingSettings& settings, const QString& titleText = QString());
+
     /*! Shows "print preview" window for \a item.
      The preview windoe is cached, so \a reload == true is sometimes needed
      if data or print settings have changed in the meantime.
@@ -697,23 +625,12 @@ protected slots:
 
     //! Shows "print preview" window.
     //! \return true on success.
-#ifdef KEXI_IMPL_WARNINGS
-#ifdef __GNUC__
-#warning TODO reenable when ported  bool printPreviewForItem(KexiPart::Item* item, const KexiSimplePrintingSettings& settings, const QString& titleText = QString(), bool reload = false);
-#else
-#pragma WARNING( TODO reenable when ported  bool printPreviewForItem(KexiPart::Item* item, const KexiSimplePrintingSettings& settings, const QString& titleText = QString(), bool reload = false); )
-#endif
-#endif
+    //! @todo reenable when ported  bool printPreviewForItem(KexiPart::Item* item, const KexiSimplePrintingSettings& settings, const QString& titleText = QString(), bool reload = false);
+
     /*! Implemented for KexiMainWindow. Helper for printItem() and printPreviewForItem().
      Also used by KexiFormEventAction.
      \return true on success and cancelled when the action was cancelled. */
-#ifdef KEXI_IMPL_WARNINGS
-#ifdef __GNUC__
-#warning TODO reenable when ported  tristate printActionForItem(KexiPart::Item* item, PrintActionType action);
-#else
-#pragma WARNING( TODO reenable when ported  tristate printActionForItem(KexiPart::Item* item, PrintActionType action); )
-#endif
-#endif
+    //! @todo reenable when ported  tristate printActionForItem(KexiPart::Item* item, PrintActionType action);
 
     void slotSetProjectNavigatorVisible(bool set);
     void slotSetPropertyEditorVisible(bool set);

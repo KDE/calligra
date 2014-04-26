@@ -30,7 +30,7 @@ class KPrPageEffect;
 class STAGE_EXPORT KPrPageEffectSetCommand : public KUndo2Command
 {
 public:
-    KPrPageEffectSetCommand( KoPAPageBase * page, KPrPageEffect * pageEffect );
+    KPrPageEffectSetCommand(KoPAPageBase * page, KPrPageEffect * pageEffect, KUndo2Command *parent = 0);
     virtual ~KPrPageEffectSetCommand();
 
     /// redo the command

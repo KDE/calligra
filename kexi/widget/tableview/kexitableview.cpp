@@ -35,13 +35,14 @@
 #include <QLayout>
 #include <QLabel>
 #include <QToolTip>
-#include <Q3WhatsThis>
+#include <QWhatsThis>
 #include <kcolorscheme.h>
 #include <QResizeEvent>
 #include <QMouseEvent>
 #include <QFocusEvent>
 #include <QShowEvent>
 #include <QKeyEvent>
+#include <QHelpEvent>
 #include <QEvent>
 #include <QDragMoveEvent>
 #include <QDragLeaveEvent>
@@ -102,38 +103,6 @@ KexiTableView::Appearance::Appearance(QWidget *widget)
     fullRecordSelection = false;
     gridEnabled = true;
 }
-
-//-----------------------------------------
-
-//! @internal A special What's This class displaying information about a given column
-//! @todo port to QWhatsThis
-class KexiTableView::WhatsThis : public Q3WhatsThis
-{
-public:
-    WhatsThis(KexiTableView* tv) : Q3WhatsThis(tv), m_tv(tv) {
-        Q_ASSERT(tv);
-    }
-    virtual ~WhatsThis() {
-    }
-    virtual QString text(const QPoint & pos) {
-        const int leftMargin = m_tv->verticalHeaderVisible() ? m_tv->verticalHeader()->width() : 0;
-        //const int topMargin = m_tv->horizontalHeaderVisible() ? m_tv->d->pTopHeader->height() : 0;
-        //const int bottomMargin = m_tv->d->appearance.navigatorEnabled ? m_tv->m_navPanel->height() : 0;
-        if (KexiUtils::hasParent(m_tv->verticalHeader(), m_tv->childAt(pos))) {
-            return i18n("Contains a pointer to the currently selected record");
-        } else if (KexiUtils::hasParent(dynamic_cast<QObject*>(m_tv->m_navPanel), m_tv->childAt(pos))) {
-            return i18n("Record navigator");
-//    return QWhatsThis::textFor(m_tv->m_navPanel, QPoint( pos.x(), pos.y() - m_tv->height() + bottomMargin ));
-        }
-        const int col = m_tv->columnAt(pos.x() - leftMargin);
-        KexiDB::Field *f = col == -1 ? 0 : m_tv->field(col);
-        if (!f)
-            return QString();
-        return f->description().isEmpty() ? f->captionOrName() : f->description();
-    }
-protected:
-    KexiTableView *m_tv;
-};
 
 //-----------------------------------------
 
@@ -206,6 +175,7 @@ KexiTableView::KexiTableView(KexiDB::TableViewData* data, QWidget* parent, const
         , d( new KexiTableViewPrivate(this) )
 {
     setAttribute(Qt::WA_StaticContents, true);
+    setAttribute(Qt::WA_CustomWhatsThis, true);
 //not needed KexiTableView::initCellEditorFactories();
 
     m_data = new KexiDB::TableViewData(); //to prevent crash because m_data==0
@@ -223,7 +193,6 @@ KexiTableView::KexiTableView(KexiDB::TableViewData* data, QWidget* parent, const
 
     //setup colors defaults
 //2.0    setBackgroundMode(Qt::PaletteBackground);
-// setEmptyAreaColor(d->appearance.baseColor);//palette().active().color(QColorGroup::Base));
 
 // d->baseColor = colorGroup().base();
 // d->textColor = colorGroup().text();
@@ -340,7 +309,6 @@ KexiTableView::KexiTableView(KexiDB::TableViewData* data, QWidget* parent, const
 #else
 #pragma WARNING( TODO d->cellToolTip = new KexiTableViewCellToolTip(this); )
 #endif
-    new WhatsThis(this);
 }
 
 KexiTableView::~KexiTableView()
@@ -373,7 +341,8 @@ void KexiTableView::setupNavigator()
 {
     updateScrollBars();
 
-    m_navPanel = new KexiRecordNavigator(this, this, leftMargin());
+    m_navPanel = new KexiRecordNavigator(this, 0 /* todo: this*/);
+    m_navPanel->setLeftMargin(leftMargin());
     navPanelWidget()->setObjectName("navPanel");
     m_navPanel->setRecordHandler(this);
     navPanelWidget()->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
@@ -486,7 +455,7 @@ void KexiTableView::slotUpdate()
     updateContents();
     updateScrollBars();
     if (m_navPanel)
-        m_navPanel->updateGeometry(leftMargin());
+        m_navPanel->setLeftMargin(leftMargin());
 // updateNavPanelGeometry();
 
     updateWidgetContentsSize();
@@ -543,7 +512,7 @@ QSize KexiTableView::sizeHint() const
 {
     const QSize &ts = tableSize();
     int w = qMax(ts.width() + leftMargin() + verticalScrollBar()->sizeHint().width() + 2 * 2,
-                 (navPanelWidget()->isVisible() ? navPanelWidget()->width() : 0));
+                 ((navPanelWidget() && navPanelWidget()->isVisible()) ? navPanelWidget()->width() : 0));
     int h = qMax(ts.height() + topMargin() + horizontalScrollBar()->sizeHint().height(),
                  minimumSizeHint().height());
     w = qMin(w, qApp->desktop()->availableGeometry(this).width() * 3 / 4); //stretch
@@ -1700,7 +1669,7 @@ void KexiTableView::resizeEvent(QResizeEvent *e)
     //updateGeometries();
 
     if (m_navPanel)
-        m_navPanel->updateGeometry(leftMargin());
+        m_navPanel->setLeftMargin(leftMargin());
 // updateNavPanelGeometry();
 
     if ((contentsHeight() - e->size().height()) <= d->rowHeight) {
@@ -1760,7 +1729,7 @@ void KexiTableView::showEvent(QShowEvent *e)
         d->ensureCellVisibleOnShow = QPoint(-1, -1); //reset the flag
     }
     if (m_navPanel)
-        m_navPanel->updateGeometry(leftMargin());
+        m_navPanel->setLeftMargin(leftMargin());
 // updateNavPanelGeometry();
     ensureVisible(0, 0, 0, 0); // needed because for small geometries contents were moved 1/2 of row height up
 }
@@ -1904,7 +1873,7 @@ void KexiTableView::slotColumnWidthChanged(int, int, int)
     updateGeometries();
     updateScrollBars();
     if (m_navPanel)
-        m_navPanel->updateGeometry(leftMargin());
+        m_navPanel->setLeftMargin(leftMargin());
     if (d->firstTimeEnsureCellVisible) {
         d->firstTimeEnsureCellVisible = false;
         ensureCellVisible( currentRow(), currentColumn() );
@@ -1928,7 +1897,7 @@ void KexiTableView::updateGeometries()
     int frameLeftMargin = style()->pixelMetric(QStyle::PM_FocusFrameVMargin, 0, this);
     int frameTopMargin = style()->pixelMetric(QStyle::PM_FocusFrameHMargin, 0, this);
 // m_verticalHeader->setGeometry(1, topMargin() + 1, leftMargin(), visibleHeight());
-    m_horizontalHeader->setGeometry(leftMargin() + frameLeftMargin, frameTopMargin, visibleWidth(), topMargin());
+    m_horizontalHeader->setGeometry(leftMargin() + frameLeftMargin, frameTopMargin, /*Qt4: viewport()->width()*/ visibleWidth(), topMargin());
 // m_verticalHeader->setGeometry(1, topMargin() + 1, leftMargin(), visibleHeight());
     m_verticalHeader->setGeometry(frameLeftMargin, topMargin() + frameTopMargin, leftMargin(), visibleHeight());
 }
@@ -2724,6 +2693,47 @@ int KexiTableView::horizontalHeaderHeight() const
 QWidget* KexiTableView::navPanelWidget() const
 {
     return dynamic_cast<QWidget*>(m_navPanel);
+}
+
+bool KexiTableView::event(QEvent *e)
+{
+    switch (e->type()) {
+    case QEvent::QueryWhatsThis:
+    case QEvent::WhatsThis: {
+        QHelpEvent *he = static_cast<QHelpEvent*>(e);
+        QString text = whatsThisText(he->pos());
+        if (!text.isEmpty()) {
+            if (e->type() == QEvent::WhatsThis) {
+                QWhatsThis::showText(mapToGlobal(he->pos()), text, this);
+            }
+            return true;
+        }
+        return false;
+    }
+    default:
+        break;
+    }
+    return Q3ScrollView::event(e);
+}
+
+//! @internal @return text information about a given column or other specific areas of the table view.
+QString KexiTableView::whatsThisText(const QPoint &pos) const
+{
+    const int leftMargin = verticalHeaderVisible() ? verticalHeader()->width() : 0;
+    QString text;
+    if (KexiUtils::hasParent(verticalHeader(), childAt(pos))) {
+        return i18n("Contains a pointer to the currently selected record.");
+    }
+    else if (KexiUtils::hasParent(navPanelWidget(), childAt(pos))) {
+        return i18n("Record navigator.");
+    }
+    const int col = columnAt(pos.x() - leftMargin);
+    KexiDB::Field *f = col == -1 ? 0 : field(col);
+    if (!f) {
+        return QString();
+    }
+    return i18nc("@info:whatsthis", "Column <resource>%1</resource>.")
+               .arg(f->description().isEmpty() ? f->captionOrName() : f->description());
 }
 
 #include "kexitableview.moc"

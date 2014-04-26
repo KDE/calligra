@@ -26,6 +26,7 @@
 #include "kexiutils_export.h"
 
 //! @short a special "flow" layout
+//! @todo Vertical KexiFlowLayout ported to Qt4 but not tested.
 class KEXIUTILS_EXPORT KexiFlowLayout : public QLayout
 {
 public:

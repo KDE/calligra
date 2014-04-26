@@ -174,7 +174,6 @@ QVariant PropertyCommand::value() const
 void PropertyCommand::setValue(const QVariant &value)
 {
     d->value = value;
-//moved to Form::slotPropertyChanged():    emit d->form->modified();
 }
 
 void PropertyCommand::setUniqueId(int id)
@@ -997,7 +996,7 @@ void InsertWidgetCommand::execute()
     }
 
     // fix widget size is align-to-grid is enabled
-    if (d->form->isSnapWidgetsToGridEnabled()) {
+    if (d->form->isSnapToGridEnabled()) {
         const int grid = d->form->gridSize();
         int v = alignValueToGrid(d->insertRect.width(), grid);
         if (v < d->insertRect.width()) // do not allow to make the widget smaller

@@ -52,6 +52,7 @@
 
 class QPrinter;
 class QPrintDialog;
+class QHelpEvent;
 
 class KAction;
 
@@ -698,12 +699,13 @@ protected:
     virtual int horizontalHeaderHeight() const;
 
     QWidget* navPanelWidget() const;
-    
+
+    virtual bool event(QEvent *e);
+
+    QString whatsThisText(const QPoint &pos) const;
+
     KexiTableViewPrivate * const d;
 
-    class WhatsThis;
-//Qt 4 friend class KexiTableItem;
-    friend class WhatsThis;
     friend class KexiTableViewCellToolTip;
 };
 

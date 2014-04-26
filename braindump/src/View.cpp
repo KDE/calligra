@@ -156,7 +156,7 @@ void View::initGUI()
     connect(m_canvasController->proxyObject, SIGNAL(canvasMousePositionChanged(QPoint)),
             this, SLOT(updateMousePosition(QPoint)));
 
-    KoToolBoxFactory toolBoxFactory(m_canvasController);
+    KoToolBoxFactory toolBoxFactory;
     m_mainWindow->createDockWidget(&toolBoxFactory);
 
     connect(m_canvasController, SIGNAL(toolOptionWidgetsChanged(QList<QWidget*>)), m_mainWindow->dockerManager(), SLOT(newOptionWidgets(QList<QWidget*>)));

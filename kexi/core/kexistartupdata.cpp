@@ -57,7 +57,6 @@ KexiStartupData::Private::~Private()
 
 KexiStartupData::KexiStartupData() : d(new Private)
 {
-
 }
 
 KexiStartupData::~KexiStartupData()

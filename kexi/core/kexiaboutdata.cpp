@@ -37,8 +37,8 @@ KexiAboutData::KexiAboutData()
         KEXI_VERSION_STRING,
         ki18n(description),
         KAboutData::License_LGPL_V2,
-        ki18n("© 2002-2013, The Kexi Team"),
-        ki18n("This software is developed by Kexi Team - an international group\n"
+        ki18n("© 2002-%1, The Kexi Team").subs(CALLIGRA_YEAR),
+        ki18n("This software is developed by Kexi Team - an international group "
               "of independent developers."),
         "http://www.calligra.org/kexi",
         "submit@bugs.kde.org"

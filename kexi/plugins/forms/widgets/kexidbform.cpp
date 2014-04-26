@@ -42,7 +42,6 @@
 //2.0 #include <formeditor/formmanager.h>
 #include <formeditor/widgetlibrary.h>
 #include <widget/dataviewcommon/kexidataawareobjectiface.h>
-#include <widget/kexiscrollview.h>
 #include <kexiutils/utils.h>
 #include <kexi_global.h>
 
@@ -304,13 +303,6 @@ KexiDBForm::highlightWidgets(QWidget *from, QWidget *to)//, const QPoint &point)
 
     p.end();
 #endif
-}
-
-QSize
-KexiDBForm::sizeHint() const
-{
-    //todo: find better size (user configured?)
-    return QSize(400, 300);
 }
 
 void KexiDBForm::setInvalidState(const QString& displayText)
@@ -727,8 +719,8 @@ void KexiDBForm::clear()
 
 bool KexiDBForm::isPreviewing() const
 {
-    return dynamic_cast<KexiScrollView*>(d->dataAwareObject)
-           ? dynamic_cast<KexiScrollView*>(d->dataAwareObject)->isPreviewing() : false;
+    return dynamic_cast<KexiFormScrollView*>(d->dataAwareObject)
+           ? dynamic_cast<KexiFormScrollView*>(d->dataAwareObject)->isPreviewing() : false;
 }
 
 void KexiDBForm::dragMoveEvent(QDragMoveEvent *e)
@@ -753,24 +745,16 @@ void KexiDBForm::dropEvent(QDropEvent *e)
     }
 }*/
 
-//! @todo: Qt4? XORed resize rectangles instead of black widgets
-/*
-void KexiDBForm::paintEvent( QPaintEvent *e )
+void KexiDBForm::paintEvent(QPaintEvent *e)
 {
-  QPainter p;
-  p.begin(this);
-  bool unclipped = testWFlags( WPaintUnclipped );
-  setWFlags( WPaintUnclipped );
-
-  p.setPen(white);
-  p.setRasterOp(XorROP);
-  p.drawLine(e->rect().topLeft(), e->rect().bottomRight());
-
-  if (!unclipped)
-    clearWFlags( WPaintUnclipped );
-  p.end();
-  QWidget::paintEvent(e);
+    QWidget::paintEvent(e);
+    if (isPreviewing()) {
+        // Force background in styles like Oxygen
+        QPainter p;
+        p.begin(this);
+        p.fillRect(e->rect(), palette().brush(backgroundRole()));
+        p.end();
+    }
 }
-*/
 
 #include "kexidbform.moc"

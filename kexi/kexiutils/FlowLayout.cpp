@@ -23,13 +23,6 @@
 
 #include <kdebug.h>
 
-#ifdef __GNUC__
-#warning vertical KexiFlowLayout ported to Qt4 but not tested
-#else
-#pragma WARNING( vertical KexiFlowLayout ported to Qt4 but not tested )
-#endif
-
-
 class KexiFlowLayout::Private
 {
 public:
@@ -166,9 +159,9 @@ QSize KexiFlowLayout::sizeHint() const
 
 QSize KexiFlowLayout::minimumSize() const
 {
-//js: do we really need to simulate layout here?
-//    I commented this out because it was impossible to stretch layout conveniently.
-//    Now, minimum size is computed automatically based on item's minimumSize...
+//! @todo Do we really need to simulate layout here?
+//!       I commented this out because it was impossible to stretch layout conveniently.
+//!       Now, minimum size is computed automatically based on item's minimumSize...
 #if 0
     if (d->cached_minSize.isEmpty()) {
         KexiFlowLayout *mthis = (KexiFlowLayout*)this;
@@ -179,8 +172,6 @@ QSize KexiFlowLayout::minimumSize() const
     return d->cached_minSize;
 }
 
-/*QSizePolicy::ExpandData
-KexiFlowLayout::expanding() const*/
 Qt::Orientations KexiFlowLayout::expandingDirections() const
 {
     if (d->orientation == Qt::Vertical)
@@ -271,7 +262,7 @@ int KexiFlowLayout::doHorizontalLayout(const QRect &r, bool testOnly)
         if (o->isEmpty()) // do not consider hidden widgets
             continue;
 
-//  kDebug() << "- doHorizontalLayout(): " << o->widget()->className() << " " << o->widget()->name();
+//  kDebug() << o->widget()->className() << " " << o->widget()->name();
         QSize oSizeHint = o->sizeHint(); // we cache these ones because it can take
         // a while to get it (eg for child layouts)
         if ((x + oSizeHint.width()) > r.right() && h > 0) {

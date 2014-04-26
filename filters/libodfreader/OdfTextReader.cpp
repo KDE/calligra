@@ -500,8 +500,8 @@ void OdfTextReader::readParagraphContents(KoXmlStreamReader &reader)
         //          <draw:polyline> 10.3.4
         //          <draw:rect> 10.3.2
         //          <draw:regular-polygon> 10.3.6
-        //          <office:annotation> 14.1
-        //          <office:annotation-end> 14.2
+        //   [done] <office:annotation> 14.1
+        //   [done] <office:annotation-end> 14.2
         //          <presentation:date-time> 10.9.3.5
         //          <presentation:footer> 10.9.3.3
         //          <presentation:header> 10.9.3.1
@@ -543,7 +543,7 @@ void OdfTextReader::readParagraphContents(KoXmlStreamReader &reader)
         //          <text:image-count> 7.5.18.7
         //          <text:initial-creator> 7.5.2
         //          <text:keywords> 7.5.12
-        //          <text:line-break> 6.1.5
+        //   [done] <text:line-break> 6.1.5
         //          <text:measure> 7.7.13
         //          <text:meta> 6.1.9
         //          <text:meta-field> 7.5.19
@@ -612,20 +612,44 @@ void OdfTextReader::readParagraphContents(KoXmlStreamReader &reader)
         //          <text:word-count> 7.5.18.4.
         //        
         // FIXME: Only very few tags are handled right now.
+
         QString tagName = reader.qualifiedName().toString();
-        if (tagName == "text:a") {
-            readElementTextA(reader);
-        }
-        else if (tagName == "text:span") {
-            readElementTextSpan(reader);
-        }
-        else if (tagName == "text:s") {
-            readElementTextS(reader);
-        }
-        else if (tagName == "text:soft-page-break") {
-            readElementTextSoftPageBreak(reader);
-        }
+        if (reader.prefix() == "office") {
+            if (tagName == "office:annotation") {
+                readElementOfficeAnnotation(reader);
+            }
+            else if (tagName == "office:annotation-end") {
+                readElementOfficeAnnotationEnd(reader);
+            }
+            else {
+                // Unknown office: element
+                readUnknownElement(reader);
+            }
+        } // office namespace
+        else if (reader.prefix() == "text") {
+
+            if (tagName == "text:a") {
+                readElementTextA(reader);
+            }
+            else if (tagName == "text:line-break") {
+                readElementTextLineBreak(reader);
+            }
+            else if (tagName == "text:span") {
+                readElementTextSpan(reader);
+            }
+            else if (tagName == "text:s") {
+                readElementTextS(reader);
+            }
+            else if (tagName == "text:soft-page-break") {
+                readElementTextSoftPageBreak(reader);
+            }
+            else {
+                // Unknown text: element
+                readUnknownElement(reader);
+            }
+        } // text namespace
         else {
+            // Unknown namespace
             readUnknownElement(reader);
         }
 
@@ -638,18 +662,82 @@ void OdfTextReader::readParagraphContents(KoXmlStreamReader &reader)
 }
 
 
+void OdfTextReader::readElementOfficeAnnotation(KoXmlStreamReader &reader)
+{
+    DEBUGSTART();
+    m_backend->elementOfficeAnnotation(reader, m_context);
+
+    // <office:annotation> has the following children in ODF 1.2:
+    //          <dc:creator> 4.3.2.7
+    //          <dc:date> 4.3.2.10
+    //          <meta:date-string> 14.3
+    //          <text:list> 5.3.1
+    //   [done] <text:p> 5.1.3
+    while (reader.readNextStartElement()) {
+        QString tagName = reader.qualifiedName().toString();
+        
+        if (tagName == "dc:creator") {
+            // FIXME: NYI
+        }
+        else if (tagName == "dc:date") {
+            // FIXME: NYI
+        }
+        else if (tagName == "meta:date-string") {
+            // FIXME: NYI
+        }
+        else if (tagName == "text:list") {
+            // FIXME: NYI
+        }
+        else if (tagName == "text:p") {
+            readElementTextP(reader);
+        }
+        else {
+            reader.skipCurrentElement();
+        }
+    }
+
+    m_backend->elementOfficeAnnotation(reader, m_context);
+    DEBUGEND();
+}
+
+void OdfTextReader::readElementOfficeAnnotationEnd(KoXmlStreamReader &reader)
+{
+    DEBUGSTART();
+    m_backend->elementOfficeAnnotationEnd(reader, m_context);
+
+    // <office:annotation-end> has no children in ODF 1.2:
+    // FIXME: Skip current element or call parseUnknownElement?
+    reader.skipCurrentElement();
+
+    m_backend->elementOfficeAnnotationEnd(reader, m_context);
+    DEBUGEND();
+}
+
+
 void OdfTextReader::readElementTextA(KoXmlStreamReader &reader)
 {
     DEBUGSTART();
     m_backend->elementTextA(reader, m_context);
 
     // readParagraphContents expect to have the reader point to the
-    // contents of the paragraph so we have to read past the text:p
+    // contents of the paragraph so we have to read past the text:a
     // start tag here.
     reader.readNext();
     readParagraphContents(reader);
 
     m_backend->elementTextA(reader, m_context);
+    DEBUGEND();
+}
+
+void OdfTextReader::readElementTextLineBreak(KoXmlStreamReader &reader)
+{
+    DEBUGSTART();
+    m_backend->elementTextLineBreak(reader, m_context);
+
+    // This element has no child elements in ODF 1.2.
+    reader.skipCurrentElement();
+
+    m_backend->elementTextLineBreak(reader, m_context);
     DEBUGEND();
 }
 

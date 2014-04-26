@@ -21,15 +21,14 @@
 #ifndef KEXIDBFORM_H
 #define KEXIDBFORM_H
 
-#include <QPixmap>
-#include <QDragMoveEvent>
-#include <QEvent>
-#include <QDropEvent>
-
 #include <formeditor/form.h>
 #include <formeditor/FormWidget.h>
 #include <formeditor/FormWidgetInterface.h>
 #include <widget/dataviewcommon/kexiformdataiteminterface.h>
+
+class QEvent;
+class QDropEvent;
+class QDragMoveEvent;
 
 class KexiDataAwareObjectInterface;
 class KexiFormScrollView;
@@ -60,7 +59,7 @@ public:
     }
 
     //! no effect
-    QVariant value() {
+    virtual QVariant value() {
         return QVariant();
     }
 
@@ -70,9 +69,7 @@ public:
     virtual void drawRects(const QList<QRect> &list, int type);
     virtual void initBuffer();
     virtual void clearForm();
-    virtual void highlightWidgets(QWidget *from, QWidget *to/*, const QPoint &p*/);
-
-    virtual QSize sizeHint() const;
+    virtual void highlightWidgets(QWidget *from, QWidget *to);
 
     bool autoTabStops() const;
 
@@ -93,8 +90,6 @@ public:
     virtual void clear();
 
     bool isPreviewing() const;
-
-//    virtual void setCursor(const QCursor & cursor);
 
 public slots:
     void setAutoTabStops(bool set);
@@ -125,6 +120,8 @@ signals:
 protected:
     virtual bool eventFilter(QObject * watched, QEvent * e);
 
+    virtual void paintEvent(QPaintEvent *e);
+
     //! no effect
     virtual void setValueInternal(const QVariant&, bool) {}
 
@@ -136,7 +133,6 @@ protected:
 
     //! called from KexiFormScrollView::initDataContents()
     void updateReadOnlyFlags();
-//  virtual void paintEvent( QPaintEvent * );
 
     //! Points to a currently edited data item.
     //! It is cleared when the focus is moved to other

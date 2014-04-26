@@ -71,6 +71,22 @@ OdfTextReaderBackend::~OdfTextReaderBackend()
 // ----------------------------------------------------------------
 // Text level functions: paragraphs, headings, sections, frames, objects, etc
 
+
+void OdfTextReaderBackend::elementOfficeAnnotation(KoXmlStreamReader &reader,
+                                                   OdfReaderContext *context)
+{
+    Q_UNUSED(reader);
+    Q_UNUSED(context);
+}
+
+void OdfTextReaderBackend::elementOfficeAnnotationEnd(KoXmlStreamReader &reader,
+                                                      OdfReaderContext *context)
+{
+    Q_UNUSED(reader);
+    Q_UNUSED(context);
+}
+
+
 void OdfTextReaderBackend::elementTextH(KoXmlStreamReader &reader, OdfReaderContext *context)
 {
     Q_UNUSED(reader);
@@ -131,6 +147,12 @@ void OdfTextReaderBackend::elementTableCoveredTableCell(KoXmlStreamReader &reade
 
 
 void OdfTextReaderBackend::elementTextA(KoXmlStreamReader &reader, OdfReaderContext *context)
+{
+    Q_UNUSED(reader);
+    Q_UNUSED(context);
+}
+
+void OdfTextReaderBackend::elementTextLineBreak(KoXmlStreamReader &reader, OdfReaderContext *context)
 {
     Q_UNUSED(reader);
     Q_UNUSED(context);

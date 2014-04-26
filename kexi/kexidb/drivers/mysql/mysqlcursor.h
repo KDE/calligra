@@ -37,9 +37,7 @@ public:
     virtual ~MySqlCursor();
     virtual bool drv_open();
     virtual bool drv_close();
-//        virtual bool drv_moveFirst();
     virtual void drv_getNextRecord();
-    //virtual bool drv_getPrevRecord();
     virtual QVariant value(uint);
 
     virtual void drv_clearServerResult();
@@ -49,7 +47,6 @@ public:
     virtual void drv_bufferMovePointerTo(qint64 to);
     virtual const char** rowData() const;
     virtual bool drv_storeCurrentRow(RecordData &data) const;
-//        virtual bool save(RecordData& data, RowEditBuffer& buf);
 
     virtual int serverResult();
     virtual QString serverResultName();
@@ -57,12 +54,6 @@ public:
 
 protected:
     QVariant pValue(uint pos) const;
-// MYSQL_RES *m_res;
-// MYSQL_ROW m_row;
-// MYSQL *my_conn;
-// unsigned long *m_lengths;
-//js: int m_numFields;
-// unsigned long m_numRows;
     MySqlCursorData *d;
 };
 

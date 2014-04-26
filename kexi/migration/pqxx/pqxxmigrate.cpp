@@ -25,7 +25,7 @@
 #include <kdebug.h>
 #include <QStringList>
 
-//I maybe should not use stl?
+//! @todo I maybe should not use stl?
 #include <string>
 #include <vector>
 
@@ -48,14 +48,6 @@ what the system might be and is a work in progress
 K_EXPORT_KEXIMIGRATE_DRIVER(PqxxMigrate, "pqxx")
 
 //==================================================================================
-//Constructor
-/*PqxxMigrate::PqxxMigrate()
- : KexiMigrate(parent, name, args)
-{
-    m_res=0;
-    m_trans=0;
-    m_conn=0;
-}*/
 
 PqxxMigrate::PqxxMigrate(QObject *parent, const QVariantList& args)
         : KexiMigrate(parent, args)
@@ -83,13 +75,8 @@ PqxxMigrate::~PqxxMigrate()
 bool PqxxMigrate::drv_readTableSchema(
     const QString& originalName, KexiDB::TableSchema& tableSchema)
 {
-//    m_table = new KexiDB::TableSchema(table);
-
-    //TODO IDEA: ask for user input for captions
-//moved    m_table->setCaption(table + " table");
-
     //Perform a query on the table to get some data
-    kDebug();
+    //kDebug();
     tableSchema.setName(originalName);
     if (!query("select * from " + drv_escapeIdentifier(originalName) + " limit 1"))
         return false;
@@ -107,16 +94,7 @@ bool PqxxMigrate::drv_readTableSchema(
         f->setUniqueKey(uniqueKey(toid, i));
         f->setAutoIncrement(autoInc(toid, i));//This should be safe for all field types
         tableSchema.addField(f);
-
-        // Do this for var/char types
-        //m_f->setLength(m_res->at(0)[i].size());
-
-        // Do this for numeric type
-        /*m_f->setScale(0);
-        m_f->setPrecision(0);*/
-
-        kDebug() << "Added field [" << f->name() << "] type [" << f->typeName()
-        << ']';
+        //kDebug() << "Added field [" << f->name() << "] type [" << f->typeName() << ']';
     }
     return true;
 }
@@ -125,10 +103,6 @@ bool PqxxMigrate::drv_readTableSchema(
 //get a list of tables and put into the supplied string list
 bool PqxxMigrate::drv_tableNames(QStringList& tableNames)
 {
-    /*
-      //pg_ = standard postgresql tables, pga_ = tables added by pgaccess, sql_ = probably information schemas, kexi__ = existing kexi tables
-      if (query("SELECT relname FROM pg_class WHERE ((relkind = 'r') AND ((relname !~ '^pg_') AND (relname !~ '^pga_') AND (relname !~ '^sql_') AND (relname !~ '^kexi__')))"))
-    */
     if (!query("SELECT relname FROM pg_class WHERE ((relkind = 'r') AND ((relname !~ '^pg_') AND (relname !~ '^pga_') AND (relname !~ '^sql_')))"))
         return false;
 
@@ -184,7 +158,7 @@ KexiDB::Field::Type PqxxMigrate::type(int t, const QString& fname)
 //Connect to the db backend
 bool PqxxMigrate::drv_connect()
 {
-    kDebug() << "drv_connect: " << data()->sourceName;
+    //kDebug() << "drv_connect: " << data()->sourceName;
 
     QString conninfo;
     QString socket;
@@ -217,9 +191,9 @@ bool PqxxMigrate::drv_connect()
         m_conn = new pqxx::connection(conninfo.toLatin1().constData());
         return true;
     } catch (const std::exception &e) {
-        kDebug() << "PqxxMigrate::drv_connect:exception - " << e.what();
+        kWarning() << "exception - " << e.what();
     } catch (...) {
-        kDebug() << "PqxxMigrate::drv_connect:exception(...)??";
+        kWarning() << "exception(...)??";
     }
     return false;
 }
@@ -239,7 +213,7 @@ bool PqxxMigrate::drv_disconnect()
 //Perform a query on the database and store result in m_res
 bool PqxxMigrate::query(const QString& statement)
 {
-    kDebug() << "query: " << statement.toLatin1();
+    //kDebug() << "query: " << statement.toLatin1();
     if (!m_conn)
         return false;
 
@@ -257,10 +231,10 @@ bool PqxxMigrate::query(const QString& statement)
         return true;
     } catch (const std::exception &e) {
         //If an error ocurred then put the error description into _dbError
-        kDebug() << "pqxxImport::query:exception - " << e.what();
+        kWarning() << "exception - " << e.what();
         return false;
     } catch (...) {
-        kDebug() << "PqxxMigrate::query:exception(...)??";
+        kWarning() << "exception(...)??";
     }
     return true;
 }
@@ -311,11 +285,11 @@ pqxx::oid PqxxMigrate::tableOid(const QString& table)
             toid = 0;
         }
     } catch (const std::exception &e) {
-        kDebug() << "pqxxSqlDB::tableOid:exception - " << e.what();
-        kDebug() << "pqxxSqlDB::tableOid:failed statement - " << statement;
+        kWarning() << "exception - " << e.what();
+        kWarning() << "failed statement - " << statement;
         toid = 0;
     } catch (...) {
-        kDebug() << "PqxxMigrate::tableOid:exception(...)??";
+        kWarning() << "exception(...)??";
     }
     delete tmpres;
     tmpres = 0;
@@ -323,13 +297,13 @@ pqxx::oid PqxxMigrate::tableOid(const QString& table)
     delete tran;
     tran = 0;
 
-    kDebug() << "OID for table [" << table << "] is [" << toid << ']';
+    //kDebug() << "OID for table [" << table << "] is [" << toid << ']';
     return toid;
 }
 
 //=========================================================================
 //Return whether or not the curent field is a primary key
-//TODO: Add result caching for speed
+//! @todo Add result caching for speed
 bool PqxxMigrate::primaryKey(pqxx::oid table_uid, int col) const
 {
     QString statement;
@@ -363,8 +337,8 @@ bool PqxxMigrate::primaryKey(pqxx::oid table_uid, int col) const
             kDebug() << "Field is NOT pkey";
         }
     } catch (const std::exception &e) {
-        kDebug() << "pqxxSqlDB::primaryKey:exception - " << e.what();
-        kDebug() << "pqxxSqlDB::primaryKey:failed statement - " << statement;
+        kWarning() << "exception - " << e.what();
+        kWarning() << "failed statement - " << statement;
         pkey = false;
     }
     delete tmpres;
@@ -399,48 +373,11 @@ tristate PqxxMigrate::drv_queryStringListFromSQL(
     } else
         return false;
     clearResultInfo();
-    /*    delete tmpres;
-        tmpres = 0;
-
-        delete tran;
-        tran = 0;*/
 
     if (i < numRecords)
         return cancelled;
 
     return true;
-    /*
-    if (d->executeSQL(sqlStatement)) {
-      MYSQL_RES *res = mysql_use_result(d->mysql);
-      if (res != NULL) {
-        MYSQL_ROW row = mysql_fetch_row(res);
-        if (!row) {
-          tristate r = mysql_errno(d->mysql) ? false : cancelled;
-          mysql_free_result(res);
-          return r;
-        }
-        uint numFields = mysql_num_fields(res);
-        if (columnNumber > (numFields-1)) {
-          kWarning() << "PqxxMigrate::drv_querySingleStringFromSQL("<<sqlStatement
-            << "): columnNumber too large ("
-            << columnNumber << "), expected 0.." << numFields;
-          mysql_free_result(res);
-          return false;
-        }
-        unsigned long *lengths = mysql_fetch_lengths(res);
-        if (!lengths) {
-          mysql_free_result(res);
-          return false;
-        }
-        string = QString::fromLatin1(row[columnNumber], lengths[columnNumber]);
-        mysql_free_result(res);
-      } else {
-        kDebug() << "PqxxMigrate::drv_querySingleStringFromSQL(): null result";
-      }
-      return true;
-    } else {
-      return false;
-    }*/
 }
 
 tristate PqxxMigrate::drv_fetchRecordFromSQL(const QString& sqlStatement,
@@ -501,16 +438,12 @@ bool PqxxMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *des
         updateProgress();
         R.clear();
     }
-
-    //This does not work in <libpqxx 2.2
-    //stream.complete();
-
     return true;
 }
 
 //=========================================================================
 //Return whether or not the curent field is a primary key
-//TODO: Add result caching for speed
+//! @todo Add result caching for speed
 bool PqxxMigrate::uniqueKey(pqxx::oid table_uid, int col) const
 {
     QString statement;
@@ -544,8 +477,8 @@ bool PqxxMigrate::uniqueKey(pqxx::oid table_uid, int col) const
             kDebug() << "Field is NOT unique";
         }
     } catch (const std::exception &e) {
-        kDebug() << "uniqueKey:exception - " << e.what();
-        kDebug() << "uniqueKey:failed statement - " << statement;
+        kWarning() << "exception - " << e.what();
+        kWarning() << "failed statement - " << statement;
         ukey = false;
     }
 
@@ -558,52 +491,29 @@ bool PqxxMigrate::uniqueKey(pqxx::oid table_uid, int col) const
 }
 
 //==================================================================================
-//TODO::Implement
+//! @todo Implement
 bool PqxxMigrate::autoInc(pqxx::oid /*table_uid*/, int /*col*/) const
 {
     return false;
 }
 
 //==================================================================================
-//TODO::Implement
+//! @todo Implement
 bool PqxxMigrate::notNull(pqxx::oid /*table_uid*/, int /*col*/) const
 {
     return false;
 }
 
 //==================================================================================
-//TODO::Implement
+//! @todo Implement
 bool PqxxMigrate::notEmpty(pqxx::oid /*table_uid*/, int /*col*/) const
 {
     return false;
 }
 
-//==================================================================================
-//Return a list of database names
-/*bool PqxxMigrate::drv_getDatabasesList( QStringList &list )
-{
-    KexiDBDrvDbg << "pqxxSqlConnection::drv_getDatabaseList";
-
-    if (executeSQL("SELECT datname FROM pg_database WHERE datallowconn = TRUE"))
-    {
-        std::string N;
-        for (pqxx::result::const_iterator c = m_res->begin(); c != m_res->end(); ++c)
-        {
-            // Read value of column 0 into a string N
-            c[0].to(N);
-            // Copy the result into the return list
-            list << QString::fromLatin1 (N.c_str());
-      KexiDBDrvDbg << N.c_str();
-        }
-        return true;
-    }
-
-    return false;
-}*/
-
 bool PqxxMigrate::drv_readFromTable(const QString & tableName)
 {
-    kDebug();
+    //kDebug();
     bool ret;
     ret = false;
     
@@ -611,12 +521,12 @@ bool PqxxMigrate::drv_readFromTable(const QString & tableName)
         ret = query(QString("SELECT * FROM %1").arg(m_conn->esc(tableName.toLocal8Bit()).c_str()));
         if (ret) {
             m_rows = m_res->size();
-            kDebug() << m_rows;
+            //kDebug() << m_rows;
         }
         
     }
     catch (const std::exception &e) {
-        kDebug();
+        kWarning();
     }
 
     return ret;

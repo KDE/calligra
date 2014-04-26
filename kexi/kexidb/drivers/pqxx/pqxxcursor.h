@@ -24,12 +24,7 @@
 #include <db/connection.h>
 #include <db/utils.h>
 
-#if 0
-#include <pqxx/all.h>
-#else
 #include <pqxx/pqxx>
-#endif
-
 #include <pqxx/binarystring>
 #include <migration/pqxx/pg_type.h>
 
@@ -45,13 +40,10 @@ public:
     virtual const char** rowData() const;
     virtual bool drv_storeCurrentRow(RecordData &data) const;
 
-//TODO  virtual const char *** bufferData()
-
-//TODO virtual int serverResult() const;
-
-//TODO virtual QString serverResultName() const;
-
-//TODO virtual QString serverErrorMsg() const;
+//! @todo virtual const char *** bufferData()
+//! @todo virtual int serverResult() const;
+//! @todo virtual QString serverResultName() const;
+//! @todo virtual QString serverErrorMsg() const;
 
 protected:
     pqxxSqlCursor(Connection* conn, const QString& statement = QString(),
@@ -69,11 +61,9 @@ protected:
 
 private:
     pqxx::result* m_res;
-// pqxx::nontransaction* m_tran;
     pqxx::connection* my_conn;
     QVariant pValue(uint pos)const;
-    bool m_implicityStarted : 1;
-    //QByteArray processBinaryData(pqxx::binarystring*) const;
+    bool m_implicityStarted;
     friend class pqxxSqlConnection;
 };
 
