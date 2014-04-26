@@ -50,8 +50,8 @@ public:
     QString family;
     QString parent;
     QString displayName;
-    bool    isDefaultStyle;
 
+    bool    isDefaultStyle;
     bool    inUse;
     bool    isFromStylesXml;
 
@@ -62,6 +62,7 @@ public:
 KoOdfStyle::Private::Private()
     : isDefaultStyle(false)
     , inUse(false)
+    , isFromStylesXml(false)
 {
 }
 
