@@ -32,9 +32,9 @@
 #include <QVBoxLayout>
 #include <QMouseEvent>
 #include <QStyleOptionFocusRect>
+#include <QScrollBar>
 
 #include <kdebug.h>
-
 #include <kconfig.h>
 #include <kglobalsettings.h>
 
@@ -96,12 +96,15 @@ KexiRelationsTableContainer::KexiRelationsTableContainer(
  //!TODO   d->fieldList->setHScrollBarMode(Q3ScrollView::AlwaysOff);
 
     d->fieldList->setMaximumSize(d->fieldList->sizeHint());
+    d->fieldList->setContextMenuPolicy(Qt::CustomContextMenu);
 
 // d->fieldList->resize( d->fieldList->sizeHint() );
     lyr->addWidget(d->fieldList);
     connect(d->fieldList, SIGNAL(tableScrolling()), this, SLOT(moved()));
-    connect(d->fieldList, SIGNAL(contextMenu(K3ListView*,Q3ListViewItem*,QPoint)),
-            this, SLOT(slotContextMenu(K3ListView*,Q3ListViewItem*,QPoint)));
+    
+    connect(d->fieldList, SIGNAL(customContextMenuRequested(QPoint)), 
+	    this, SLOT(slotContextMenu(QPoint)));
+	    
     connect(d->fieldList, SIGNAL(doubleClicked(QModelIndex)),
             this, SLOT(slotFieldsDoubleClicked(QModelIndex)));
 }
@@ -116,10 +119,8 @@ KexiDB::TableOrQuerySchema* KexiRelationsTableContainer::schema() const
     return d->fieldList->schema();
 }
 
-void KexiRelationsTableContainer::slotContextMenu(K3ListView *, Q3ListViewItem *,
-        const QPoint &p)
+void KexiRelationsTableContainer::slotContextMenu(const QPoint &p)
 {
-// d->parent->executePopup(p);
     emit contextMenuRequest(p);
 }
 

@@ -23,7 +23,6 @@
 #include <QStringList>
 #include <QLayout>
 #include <QLabel>
-#include <q3header.h>
 #include <QEvent>
 #include <QPainter>
 #include <QStyle>
@@ -31,6 +30,7 @@
 #include <QMouseEvent>
 #include <QKeyEvent>
 #include <QTimer>
+#include <QScrollBar>
 
 #include <klocale.h>
 #include <kaction.h>
