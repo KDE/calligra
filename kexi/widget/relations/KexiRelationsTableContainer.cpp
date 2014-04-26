@@ -93,8 +93,7 @@ KexiRelationsTableContainer::KexiRelationsTableContainer(
     d->fieldList->setObjectName("KexiRelationsTableFieldList");
     //d->tableHeader->setFocusProxy( d->fieldList );
     d->fieldList->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
- //!TODO   d->fieldList->setHScrollBarMode(Q3ScrollView::AlwaysOff);
-
+    d->fieldList->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     d->fieldList->setMaximumSize(d->fieldList->sizeHint());
     d->fieldList->setContextMenuPolicy(Qt::CustomContextMenu);
 
@@ -121,7 +120,8 @@ KexiDB::TableOrQuerySchema* KexiRelationsTableContainer::schema() const
 
 void KexiRelationsTableContainer::slotContextMenu(const QPoint &p)
 {
-    emit contextMenuRequest(p);
+  emit gotFocus();  
+  emit contextMenuRequest(mapToGlobal(p));
 }
 
 void KexiRelationsTableContainer::moved()

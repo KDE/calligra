@@ -116,7 +116,6 @@ KexiRelationsScrollArea::KexiRelationsScrollArea(QWidget *parent)
         : QScrollArea(parent)
         , d(new Private)
 {
-//Qt4 setFrameStyle(Q3Frame::WinPanel | Q3Frame::Sunken);
 //Qt4 setAttribute(Qt::WA_StaticContents, true);
 // connect(relation, SIGNAL(relationListUpdated(QObject*)), this, SLOT(slotListUpdate(QObject*)));
 
