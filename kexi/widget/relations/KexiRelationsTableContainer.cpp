@@ -121,7 +121,7 @@ KexiDB::TableOrQuerySchema* KexiRelationsTableContainer::schema() const
 void KexiRelationsTableContainer::slotContextMenu(const QPoint &p)
 {
   emit gotFocus();  
-  emit contextMenuRequest(mapToGlobal(p));
+  emit contextMenuRequest(d->fieldList->mapToGlobal(p));
 }
 
 void KexiRelationsTableContainer::moved()
