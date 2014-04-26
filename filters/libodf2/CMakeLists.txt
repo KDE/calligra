@@ -21,6 +21,8 @@ set(koodf2_LIB_SRCS
     KoColumnStyle.cpp
     KoCellStyle.cpp
 
+    KoOdfStyleBase.cpp
+    KoOdfStyleManager.cpp
     KoOdfStyle.cpp
     KoOdfStyleProperties.cpp
     KoOdfTextProperties.cpp
@@ -28,7 +30,6 @@ set(koodf2_LIB_SRCS
     KoOdfGraphicProperties.cpp
     KoOdfPageLayoutProperties.cpp
     KoOdfHeaderFooterProperties.cpp
-    KoOdfStyleManager.cpp
 )
 
 kde4_add_library(koodf2 SHARED ${koodf2_LIB_SRCS})
@@ -56,8 +57,9 @@ install( FILES
     KoCell.h
     KoCellStyle.h
 
-    KoOdfStyle.h
+    KoOdfStyleBase.h
     KoOdfStyleManager.h
+    KoOdfStyle.h
     KoOdfStyleProperties.h
     KoOdfTextProperties.h
     KoOdfParagraphProperties.h

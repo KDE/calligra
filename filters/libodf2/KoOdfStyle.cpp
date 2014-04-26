@@ -46,23 +46,13 @@ public:
     Private();
     ~Private();
 
-    QString name;
     QString family;
     QString parent;
-    QString displayName;
 
-    bool    isDefaultStyle;
-    bool    inUse;
-    bool    isFromStylesXml;
-
-    //
     QHash<QString, KoOdfStyleProperties*> properties;  // e.g. "text-properties",
 };
 
 KoOdfStyle::Private::Private()
-    : isDefaultStyle(false)
-    , inUse(false)
-    , isFromStylesXml(false)
 {
 }
 
@@ -76,7 +66,8 @@ KoOdfStyle::Private::~Private()
 
 
 KoOdfStyle::KoOdfStyle()
-    : d(new KoOdfStyle::Private())
+    : KoOdfStyleBase(StyleStyle)
+    , d(new KoOdfStyle::Private())
 {
 }
 
@@ -85,16 +76,6 @@ KoOdfStyle::~KoOdfStyle()
     delete d;
 }
 
-
-QString KoOdfStyle::name() const
-{
-    return d->name;
-}
-
-void KoOdfStyle::setName(const QString &name)
-{
-    d->name = name;
-}
 
 QString KoOdfStyle::family() const
 {
@@ -116,50 +97,8 @@ void KoOdfStyle::setParent(const QString &parent)
     d->parent = parent;
 }
 
-QString KoOdfStyle::displayName() const
-{
-    return d->displayName;
-}
 
-void KoOdfStyle::setDisplayName(const QString &name)
-{
-    d->displayName = name;
-}
-
-
-bool KoOdfStyle::isDefaultStyle() const
-{
-    return d->isDefaultStyle;
-}
-
-void KoOdfStyle::setIsDefaultStyle(bool isDefaultStyle)
-{
-    d->isDefaultStyle = isDefaultStyle;
-}
-
-
-
-bool KoOdfStyle::inUse() const
-{
-    return d->inUse;
-}
-
-void KoOdfStyle::setInUse(bool inUse)
-{
-    d->inUse = inUse;
-}
-
-bool KoOdfStyle::isFromStylesXml() const
-{
-    return d->isFromStylesXml;
-}
-
-void KoOdfStyle::setIsFromStylesXml(bool isFromStylesXml)
-{
-    d->isFromStylesXml = isFromStylesXml;
-}
-
-QHash<QString, KoOdfStyleProperties*> KoOdfStyle::properties()
+QHash<QString, KoOdfStyleProperties*> KoOdfStyle::properties() const
 {
     return d->properties;
 }
@@ -192,10 +131,10 @@ bool KoOdfStyle::readOdf(KoXmlStreamReader &reader)
     // Load style attributes.
     KoXmlStreamAttributes  attrs = reader.attributes();
 
-    setFamily(attrs.value("style:family").toString());
     setName(attrs.value("style:name").toString());
-    setParent(attrs.value("style:parent-style-name").toString());
     setDisplayName(attrs.value("style:display-name").toString());
+    setFamily(attrs.value("style:family").toString());
+    setParent(attrs.value("style:parent-style-name").toString());
 
     kDebug() << "Style:" << name() << family() << parent() << displayName();
 
@@ -228,21 +167,21 @@ bool KoOdfStyle::readOdf(KoXmlStreamReader &reader)
 
 bool KoOdfStyle::saveOdf(KoXmlWriter *writer)
 {
-    if (d->isDefaultStyle) {
+    if (isDefaultStyle()) {
         writer->startElement("style:default-style");
-        writer->addAttribute("style:name", d->name);
+        writer->addAttribute("style:name", name());
     }
     else {
         writer->startElement("style:style");
     }
 
     // Write style attributes
-    writer->addAttribute("style:family", d->family);
+    writer->addAttribute("style:family", family());
     if (!d->parent.isEmpty()) {
         writer->addAttribute("style:parent-style-name", d->parent);
     }
-    if (!d->displayName.isEmpty()) {
-        writer->addAttribute("style:display-name", d->displayName);
+    if (!displayName().isEmpty()) {
+        writer->addAttribute("style:display-name", displayName());
     }
 
     // Write properties
