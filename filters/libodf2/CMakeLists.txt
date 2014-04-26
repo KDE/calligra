@@ -26,6 +26,8 @@ set(koodf2_LIB_SRCS
     KoOdfTextProperties.cpp
     KoOdfParagraphProperties.cpp
     KoOdfGraphicProperties.cpp
+    KoOdfPageLayoutProperties.cpp
+    KoOdfHeaderFooterProperties.cpp
     KoOdfStyleManager.cpp
 )
 
@@ -42,21 +44,25 @@ install(TARGETS koodf2 ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 install( FILES
     koodf2_export.h
-    KoCell.h
-    KoCellStyle.h
+
+    KoStyle.h
+    KoTable.h
+    KoTblStyle.h
     KoColumn.h
     KoColumnStyle.h
-    KoOdfGraphicProperties.h
-    KoOdfParagraphProperties.h
+    KoRawCellChild.h
+    KoRow.h
+    KoRowStyle.h
+    KoCell.h
+    KoCellStyle.h
+
     KoOdfStyle.h
     KoOdfStyleManager.h
     KoOdfStyleProperties.h
     KoOdfTextProperties.h
-    KoRawCellChild.h
-    KoRow.h
-    KoRowStyle.h
-    KoStyle.h
-    KoTable.h
-    KoTblStyle.h
+    KoOdfParagraphProperties.h
+    KoOdfGraphicProperties.h
+    KoOdfPageLayoutProperties.h
+    KoOdfHeaderFooterProperties.h
 DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel)
 
