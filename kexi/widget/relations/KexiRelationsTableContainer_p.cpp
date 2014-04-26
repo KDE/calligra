@@ -31,6 +31,7 @@
 #include <QDropEvent>
 #include <QMouseEvent>
 #include <QStyleOptionFocusRect>
+#include <QScrollBar>
 
 #include <kdebug.h>
 #include <kiconloader.h>

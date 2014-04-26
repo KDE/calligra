@@ -28,8 +28,6 @@ class KComboBox;
 class KPushButton;
 class KMenu;
 class KAction;
-class Q3ListViewItem;
-
 
 namespace KexiDB
 {
