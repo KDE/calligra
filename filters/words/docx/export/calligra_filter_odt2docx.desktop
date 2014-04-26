@@ -1,10 +1,12 @@
 [Desktop Entry]
 Type=Service
 Name=MS Word DOCX Export Filter
+Name[cs]=Exportní filtr MS Word DOCX
 Name[de]=MS Word DOCX-Exportfilter
 Name[nl]=DOCX-exportfilter voor MS Word
 Name[pt]=Filtro de Exportação de DOCX do MS Word para o Words
 Name[pt_BR]=Filtro de exportação para DOCX do MS Word
+Name[sk]=MS Word DOCX exportný filter
 Name[sv]=MS Word DOCX-exportfilter
 Name[uk]=Фільтр експорту MS Word DOCX
 Name[x-test]=xxMS Word DOCX Export Filterxx
