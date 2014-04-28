@@ -193,7 +193,6 @@ KexiTableView::KexiTableView(KexiDB::TableViewData* data, QWidget* parent, const
 
     //setup colors defaults
 //2.0    setBackgroundMode(Qt::PaletteBackground);
-// setEmptyAreaColor(d->appearance.baseColor);//palette().active().color(QColorGroup::Base));
 
 // d->baseColor = colorGroup().base();
 // d->textColor = colorGroup().text();

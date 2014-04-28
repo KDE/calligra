@@ -1108,10 +1108,10 @@ void KexiTabbedToolBar::Private::debugToolbars() const
 
 void KexiTabbedToolBar::Private::showTab(const QString& name)
 {
-    kDebug() << "name:" << name;
-    kDebug() << "toolbarsForName.value(name):" << toolbarsForName.value(name);
-    kDebug() << "toolbarsIndexForName.value(name):" << toolbarsIndexForName.value(name);
-    kDebug() << "q->indexOf(toolbarsForName.value(name))" << q->indexOf(toolbarsForName.value(name));
+//    kDebug() << "name:" << name;
+//    kDebug() << "toolbarsForName.value(name):" << toolbarsForName.value(name);
+//    kDebug() << "toolbarsIndexForName.value(name):" << toolbarsIndexForName.value(name);
+//    kDebug() << "q->indexOf(toolbarsForName.value(name))" << q->indexOf(toolbarsForName.value(name));
 #ifndef NDEBUG
     //debugToolbars();
 #endif
@@ -1820,7 +1820,7 @@ public:
         }
         const bool visible = (viewMode == Kexi::DesignViewMode)
             && ((currentWindow && currentWindow->propertySet()) || (info && info->isPropertyEditorAlwaysVisibleInDesignMode()));
-        kDebug() << "visible == " << visible;
+        //kDebug() << "visible == " << visible;
         enable_slotPropertyEditorVisibilityChanged = false;
         if (visible && propertyEditorCollapsed) { // used when we're switching back to a window with propeditor available but collapsed
             propEditorDockWidget->setVisible(!visible);
@@ -1859,8 +1859,7 @@ public:
     template<class type>
     type *openedCustomObjectsForItem(KexiPart::Item* item, const char* name) {
         if (!item || !name) {
-            kWarning() <<
-            "KexiMainWindow::Private::openedCustomObjectsForItem(): !item || !name";
+            kWarning() << "!item || !name";
             return 0;
         }
         QByteArray key(QByteArray::number(item->identifier()) + name);

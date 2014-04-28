@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2013 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -118,6 +118,9 @@ protected slots:
 
 protected:
     bool getAutoopenObjects(KCmdLineArgs *args, const QByteArray &action_name);
+
+    //! No plugins: show message and try to rebuild the system configuration
+    void showNoPluginsMessageAndTryToRebuildSyCoCa();
 
     class Private;
     Private * const d;

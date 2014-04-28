@@ -27,6 +27,7 @@
 #include <KoIcon.h>
 
 #include <QToolButton>
+#include <QDomDocument>
 #include <kaction.h>
 #include <ktoggleaction.h>
 #include <kactioncollection.h>

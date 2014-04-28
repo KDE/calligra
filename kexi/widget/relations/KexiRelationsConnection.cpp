@@ -23,6 +23,7 @@
 #include <QColor>
 #include <QApplication>
 #include <QPolygon>
+#include <QScrollBar>
 
 #include <kdebug.h>
 

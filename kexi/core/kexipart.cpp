@@ -137,8 +137,7 @@ void Part::createGUIClients()//KexiMainWindow *win)
         d->guiClient = new GUIClient(this, false, "part");
 
         //default actions for part's gui client:
-        QAction* act = KexiMainWindowIface::global()->actionCollection()->action(
-                            KexiPart::nameForCreateAction(*info()));
+        QAction* act = info()->newObjectAction();
         // - update action's tooltip and "what's this"
         QString tip(toolTip());
         if (!tip.isEmpty()) {
