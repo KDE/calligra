@@ -134,7 +134,6 @@ void KexiComboBoxPopup::init()
     setAttribute(Qt::WA_WindowPropagation);
     setAttribute(Qt::WA_X11NetWmWindowTypeCombo);
 
-//    setPaletteBackgroundColor(palette().color(QPalette::Active, QColorGroup::Base));
     QPalette pal(palette());
     pal.setBrush(backgroundRole(), pal.brush(QPalette::Base));
     setPalette(pal);

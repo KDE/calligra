@@ -18,9 +18,6 @@
   */
 
 #include "KexiStartupDialog.h"
-#ifdef KEXI_PROJECT_TEMPLATES
-#include "KexiStartupDialogTemplatesPage.h"
-#endif
 #include "kexi.h"
 #include <widget/KexiProjectSelectorWidget.h>
 #include <widget/KexiConnectionSelectorWidget.h>
@@ -106,10 +103,6 @@ public:
     //widgets for template tab:
     KPageWidget* templatesWidget;
     QListView *templatesWidget_IconListView;//helper
-
-#ifdef KEXI_PROJECT_TEMPLATES
-    KexiStartupDialogTemplatesPage *viewTemplates;
-#endif
 
     int result;
 
@@ -336,30 +329,6 @@ void KexiStartupDialog::setupPageTemplates()
     lbl_blank->setMargin(0);
     tmplyr->addWidget(lbl_blank);
     tmplyr->addStretch(1);
-
-#ifdef KEXI_PROJECT_TEMPLATES
-    //- page "templates"
-    QString none;
-    templPageWidget = new QFrame(d->templatesWidget);
-    d->templPageWidgetItem_CreateFromTemplate = d->templatesWidget->addPage(templPageWidget,
-            i18n("Create From Template"));
-    d->templPageWidgetItem_CreateFromTemplate->setHeader(i18n("New Database Project From Template"));
-    d->templPageWidgetItem_CreateFromTemplate->setIcon(d->kexi_sqlite_icon);
-    tmplyr = new QVBoxLayout(templPageWidget);
-    tmplyr->setSpacing(KDialog::spacingHint());
-    QLabel *lbl_templ = new QLabel(
-        i18n("Kexi will create a new database project using selected template.\n"
-             "Select template and click \"OK\" button to proceed."), templPageWidget);
-    lbl_templ->setAlignment(Qt::AlignAuto | Qt::AlignTop);
-    lbl_templ->setWordWrap(true);
-    lbl_templ->setMargin(0);
-    tmplyr->addWidget(lbl_templ);
-
-    d->viewTemplates = new KexiStartupDialogTemplatesPage(templPageWidget);
-    tmplyr->addWidget(d->viewTemplates);
-    connect(d->viewTemplates, SIGNAL(selected(QString)),
-            this, SLOT(templateSelected(QString)));
-#endif //KEXI_PROJECT_TEMPLATES
 
     //- page "import db"
     templPageWidget = new QFrame(d->templatesWidget);

@@ -166,7 +166,7 @@ void KexiDBCheckBox::setDisplayDefaultValue(QWidget *widget, bool displayDefault
     KexiDisplayUtils::DisplayParameters * const params
         = displayDefaultValue ? m_displayParametersForDefaultValue : m_displayParametersForEnteredValue;
     QPalette pal(palette());
-    pal.setColor(QPalette::Active, QColorGroup::Foreground, params->textColor);
+    pal.setColor(QPalette::Active, QPalette::Foreground, params->textColor);
     setPalette(pal);
 }
 

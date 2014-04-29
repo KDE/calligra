@@ -54,7 +54,7 @@ QModelIndex KexiRecentProjectsModel::index(int row, int column,
 //! @return "opened x minutes ago" string or similar
 static QString openedString(const QDateTime& _opened)
 {
-    kDebug() << _opened;
+    //kDebug() << _opened;
     const KDateTime cur(KDateTime::currentUtcDateTime());
     const KDateTime opened = KDateTime(_opened);
     if (!opened.isValid() || opened >= cur)

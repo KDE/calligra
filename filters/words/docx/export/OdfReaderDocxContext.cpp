@@ -43,9 +43,12 @@ OdfReaderDocxContext::OdfReaderDocxContext(KoStore *store, DocxFile *dxf)
     : OdfReaderContext(store) // Collect metadata, manifest and styles
     , m_docxFile(dxf)
     , m_documentContent()
+    , m_commentsContent()
     , m_documentIO(&m_documentContent)
+    , m_commentsIO(&m_commentsContent)
 {
     m_documentWriter = new KoXmlWriter(&m_documentIO);
+    m_commentsWriter = new KoXmlWriter(&m_commentsIO);
 }
 
 OdfReaderDocxContext::~OdfReaderDocxContext()

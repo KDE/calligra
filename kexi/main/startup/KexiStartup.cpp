@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2013 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,6 +19,7 @@
 
 #include "KexiStartup.h"
 
+#include "kexi.h"
 #include "kexiproject.h"
 #include "kexiprojectdata.h"
 #include "kexiprojectset.h"
@@ -28,6 +29,7 @@
 #include <db/utils.h>
 #include <db/driver.h>
 #include <db/drivermanager.h>
+#include <core/kexipartmanager.h>
 #include <widget/KexiConnectionSelectorWidget.h>
 #include <widget/KexiProjectSelectorWidget.h>
 #include <kexidbconnectionwidget.h>
@@ -44,6 +46,10 @@
 #include <ktextedit.h>
 #include <kuser.h>
 #include <KProgressDialog>
+#include <KBuildSycocaProgressDialog>
+#include <KProcess>
+#include <KStandardDirs>
+#include <KSycoca>
 
 #include <unistd.h>
 
@@ -692,6 +698,12 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
 
     //------
 
+    KexiPart::PartInfoList *partInfoList = Kexi::partManager().infoList();
+    if (!partInfoList || partInfoList->isEmpty()) {
+        showNoPluginsMessageAndTryToRebuildSyCoCa();
+        return false;
+    }
+
     if (!KexiStartupData::projectData()) {
         cdata = KexiDB::ConnectionData(); //clear
 
@@ -1043,6 +1055,17 @@ void KexiStartupHandler::slotSaveShortcutFileChanges()
         KMessageBox::sorry(0, i18n("Failed saving connection data to\n\"%1\" file.",
                            QDir::convertSeparators(fileName)));
     }
+}
+
+void KexiStartupHandler::showNoPluginsMessageAndTryToRebuildSyCoCa()
+{
+    KexiGUIMessageHandler msgh;
+    msgh.showErrorMessage(&Kexi::partManager());
+    KexiStartupData::setProjectData(0);
+    KProcess* proc = new KProcess(&Kexi::partManager());
+    QObject::connect(proc, SIGNAL(finished()), proc, SLOT(deleteLater()));
+    (*proc) << KStandardDirs::findExe(KBUILDSYCOCA_EXENAME);
+    proc->start();
 }
 
 #include "KexiStartup.moc"

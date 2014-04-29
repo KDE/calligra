@@ -69,9 +69,11 @@ KoXmlStreamReader to parse their input.
  - KoOdfStyleManager
  - KoOdfStyle
  - KoOdfStyleProperties
- - KoOdfGraphicProperties
- - KoOdfParagraphProperties
  - KoOdfTextProperties
+ - KoOdfParagraphProperties
+ - KoOdfGraphicProperties
+ - KoOdfPageLayoutProperties
+ - KoOdfHeaderFooterProperties
 
  - KoXmlStreamReader
 

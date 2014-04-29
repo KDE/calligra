@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,6 +24,7 @@
 #include "kexi.h"
 #include "kexipartmanager.h"
 
+class QAction;
 class KexiProject;
 class KexiWindow;
 
@@ -130,6 +131,11 @@ public:
      * False by default. It is set to true e.g. for table part.
      */
     bool isPropertyEditorAlwaysVisibleInDesignMode() const;
+
+    /**
+     * \return "New object" action for this part.
+     */
+    QAction* newObjectAction();
 
 protected:
     /**

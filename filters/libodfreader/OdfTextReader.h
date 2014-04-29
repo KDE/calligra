@@ -71,6 +71,12 @@ class KOODFREADER_EXPORT OdfTextReader
     // ----------------------------------------------------------------
     // Text level functions: paragraphs, headings, sections, frames, objects, etc
 
+    void readElementOfficeAnnotation(KoXmlStreamReader &reader);
+    void readElementOfficeAnnotationEnd(KoXmlStreamReader &reader);
+
+    void readElementDcCreator(KoXmlStreamReader &reader);
+    void readElementDcDate(KoXmlStreamReader &reader);
+
     void readElementTextH(KoXmlStreamReader &reader);
     void readElementTextP(KoXmlStreamReader &reader);
     void readElementTextA(KoXmlStreamReader &reader);

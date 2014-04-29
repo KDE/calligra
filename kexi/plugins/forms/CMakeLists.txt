@@ -67,14 +67,15 @@ install(TARGETS kformdesigner_kexidbwidgets  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### next target ###############
 
-set(kexiformutils_LIB_SRCS 
- #  kexiformdataiteminterface.cpp 
-   kexidataawarewidgetinfo.cpp  
-   kexiformscrollview.cpp 
-   kexidbtextwidgetinterface.cpp 
-   kexiformmanager.cpp 
-   kexidatasourcepage.cpp 
-   kexiformpart.cpp 
+set(kexiformutils_LIB_SRCS
+ #  kexiformdataiteminterface.cpp
+   kexidataawarewidgetinfo.cpp
+   KexiFormScrollAreaWidget.cpp
+   kexiformscrollview.cpp
+   kexidbtextwidgetinterface.cpp
+   kexiformmanager.cpp
+   kexidatasourcepage.cpp
+   kexiformpart.cpp
    kexiformview.cpp
    kexidbfactorybase.cpp
 

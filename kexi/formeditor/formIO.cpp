@@ -1318,6 +1318,13 @@ FormIO::loadWidget(Container *container, const QDomElement &el, QWidget *parent)
         }
     }
 
+    const QVariant autoFillBackgroundValue = item->modifiedProperties()->value("autoFillBackground");
+    const QVariant paletteForegroundColorValue = item->modifiedProperties()->value("paletteForegroundColor");
+    if (!paletteForegroundColorValue.isNull() && autoFillBackgroundValue.isNull()) {
+        // Sanity: force fill background if there's color but not 'fill background' set
+        w->setAutoFillBackground(true);
+    }
+
     if (resetCurrentForm)
         m_currentForm = 0;
     m_currentItem = 0;
@@ -1450,6 +1457,9 @@ FormIO::readChildNodes(ObjectTreeItem *item, Container *container, const QDomEle
                         name == "paletteBackgroundColor" ? w->backgroundRole() : w->foregroundRole(),
                         val.value<QColor>());
                 w->setPalette(widgetPalette);
+                if (name == "paletteBackgroundColor") {
+                    w->setAutoFillBackground(val.value<QColor>().isValid());
+                }
                 item->addModifiedProperty(name.toLatin1(), val);
             }
             else if (!isQt3NameProperty && -1 == subwidget->metaObject()->indexOfProperty(name.toLatin1()))

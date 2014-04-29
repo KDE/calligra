@@ -153,7 +153,7 @@ void KexiDBComboBox::paintEvent(QPaintEvent *)
     QPainter p(this);
     p.setPen(palette().color(QPalette::Text));
     QPalette pal(palette());
-    pal.setColor(QColorGroup::Base, paletteBackgroundColor()); //update base color using (reimplemented) bg color
+    pal.setColor(QPalette::Base, paletteBackgroundColor()); //update base color using (reimplemented) bg color
 
     if (width() < 5 || height() < 5) {
         qDrawShadePanel(&p, rect(), pal, false /* !sunken */,
@@ -189,7 +189,7 @@ void KexiDBComboBox::paintEvent(QPaintEvent *)
         QRect editorGeometry(this->editorGeometry());
         if (hasFocus()) {
             if (0 == qstrcmp(style()->name(), "windows")) //a hack
-                p.fillRect(editorGeometry, cg.brush(QColorGroup::Highlight));
+                p.fillRect(editorGeometry, palette().brush(QPalette::Highlight));
             QRect r(QStyle::visualRect(style()->subRect(QStyle::SR_ComboBoxFocusRect, d->paintedCombo), this));
             r = QRect(r.left() - 1, r.top() - 1, r.width() + 2, r.height() + 2); //enlare by 1 pixel each side to avoid covering by the subwidget
             style()->drawPrimitive(QStyle::PE_FocusRect, &p,
@@ -236,7 +236,7 @@ void KexiDBComboBox::createEditor()
                               // widget in order to manage data updates so let it be this KexiDBComboBox.
             subwidget()->setCursor(QCursor(Qt::ArrowCursor)); // widgets like listedit have IbeamCursor, we don't want that
             QPalette subwidgetPalette(subwidget()->palette());
-            subwidgetPalette.setColor(QColorGroup::Base, Qt::transparent);
+            subwidgetPalette.setColor(QPalette::Base, Qt::transparent);
             subwidget()->setPalette(subwidgetPalette);
             d->subWidgetsWithDisabledEvents.clear();
             d->subWidgetsWithDisabledEvents << subwidget();
