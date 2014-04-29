@@ -86,6 +86,19 @@ void OdfTextReaderBackend::elementOfficeAnnotationEnd(KoXmlStreamReader &reader,
     Q_UNUSED(context);
 }
 
+void OdfTextReaderBackend::elementDcCreator(KoXmlStreamReader &reader,
+                                            OdfReaderContext *context)
+{
+    Q_UNUSED(reader);
+    Q_UNUSED(context);
+}
+
+void OdfTextReaderBackend::elementDcDate(KoXmlStreamReader &reader,
+                                         OdfReaderContext *context)
+{
+    Q_UNUSED(reader);
+    Q_UNUSED(context);
+}
 
 void OdfTextReaderBackend::elementTextH(KoXmlStreamReader &reader, OdfReaderContext *context)
 {

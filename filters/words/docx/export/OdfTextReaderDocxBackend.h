@@ -52,6 +52,11 @@ class OdfTextReaderDocxBackend : public OdfTextReaderBackend
     // ----------------------------------------------------------------
     // Paragraph level functions: spans, annotations, notes, text content itself, etc.
 
+    void elementOfficeAnnotation(KoXmlStreamReader &reader, OdfReaderContext *context);
+
+    void elementDcCreator(KoXmlStreamReader &reader, OdfReaderContext *context);
+    void elementDcDate(KoXmlStreamReader &reader, OdfReaderContext *context);
+
     void elementTextSpan(KoXmlStreamReader &reader, OdfReaderContext *context);
     void elementTextS(KoXmlStreamReader &reader, OdfReaderContext *context);
 
@@ -64,6 +69,11 @@ class OdfTextReaderDocxBackend : public OdfTextReaderBackend
  private:
     int m_insideSpanLevel;    // Number of nexted <text:span> levels.
     int m_currentOutlineLevel;
+    int m_commentIndex;
+    bool m_writeComment;
+    bool m_insideComment;
+    bool m_insideDcCreator;
+    bool m_insideDcDate;
     KoOdfStyleProperties *m_currentParagraphTextProperties;
     QString m_currentParagraphParent;
 };

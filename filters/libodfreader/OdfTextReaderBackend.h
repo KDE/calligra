@@ -65,6 +65,8 @@ class KOODFREADER_EXPORT OdfTextReaderBackend
 
     virtual void elementOfficeAnnotation(KoXmlStreamReader &reader, OdfReaderContext *context);
     virtual void elementOfficeAnnotationEnd(KoXmlStreamReader &reader, OdfReaderContext *context);
+    virtual void elementDcCreator(KoXmlStreamReader &reader, OdfReaderContext *context);
+    virtual void elementDcDate(KoXmlStreamReader &reader, OdfReaderContext *context);
 
     virtual void elementTextH(KoXmlStreamReader &reader, OdfReaderContext *context);
     virtual void elementTextP(KoXmlStreamReader &reader, OdfReaderContext *context);

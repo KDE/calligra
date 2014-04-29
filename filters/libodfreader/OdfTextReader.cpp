@@ -675,12 +675,12 @@ void OdfTextReader::readElementOfficeAnnotation(KoXmlStreamReader &reader)
     //   [done] <text:p> 5.1.3
     while (reader.readNextStartElement()) {
         QString tagName = reader.qualifiedName().toString();
-        
+
         if (tagName == "dc:creator") {
-            // FIXME: NYI
+            readElementDcCreator(reader);
         }
         else if (tagName == "dc:date") {
-            // FIXME: NYI
+            readElementDcDate(reader);
         }
         else if (tagName == "meta:date-string") {
             // FIXME: NYI
@@ -713,6 +713,29 @@ void OdfTextReader::readElementOfficeAnnotationEnd(KoXmlStreamReader &reader)
     DEBUGEND();
 }
 
+void OdfTextReader::readElementDcCreator(KoXmlStreamReader &reader)
+{
+    DEBUGSTART();
+    m_backend->elementDcCreator(reader, m_context);
+
+    reader.readNext();
+    readParagraphContents(reader);
+
+    m_backend->elementDcCreator(reader, m_context);
+    DEBUGEND();
+}
+
+void OdfTextReader::readElementDcDate(KoXmlStreamReader &reader)
+{
+    DEBUGSTART();
+    m_backend->elementDcDate(reader, m_context);
+
+    reader.readNext();
+    readParagraphContents(reader);
+
+    m_backend->elementDcDate(reader, m_context);
+    DEBUGEND();
+}
 
 void OdfTextReader::readElementTextA(KoXmlStreamReader &reader)
 {

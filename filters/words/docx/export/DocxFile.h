@@ -22,6 +22,7 @@
 
 // Qt
 #include <QHash>
+#include <QFlags>
 
 // Calligra
 #include <KoFilter.h>
@@ -51,7 +52,8 @@ public:
      */
     KoFilter::ConversionStatus  writeDocx(const QString &fileName,
                                           const QByteArray &appIdentification,
-                                          const OdtTraverserDocxContext &context);
+                                          const OdtTraverserDocxContext &context,
+                                          bool  commentsExist);
 
     /** When you have created all the content and added it using
      * addContentFile(), call this function once and it will write the
@@ -59,7 +61,8 @@ public:
      */
     KoFilter::ConversionStatus  writeDocx(const QString &fileName,
                                           const QByteArray &appIdentification,
-                                          const OdfReaderDocxContext &context);
+                                          const OdfReaderDocxContext &context,
+                                          bool  commentsExist);
 
 private:
     // Private functions
@@ -68,6 +71,7 @@ private:
 
 private:
     // data
+    bool m_commentsExist;
 };
 
 #endif // DOCXFILE_H

@@ -51,11 +51,13 @@ DocxFile::~DocxFile()
 {
 }
 
-
+// todo: commentsexist should be propably repalced with qlist qpair later
 KoFilter::ConversionStatus DocxFile::writeDocx(const QString &fileName,
                                                const QByteArray &appIdentification,
-                                               const OdfReaderDocxContext &context)
+                                               const OdfReaderDocxContext &context,
+                                               bool  commentsExist)
 {
+    m_commentsExist = commentsExist;
     // Create the store and check if everything went well.
     // FIXME: Should docxStore be deleted from a finalizer?
     KoStore *docxStore = KoStore::createStore(fileName, KoStore::Write,
@@ -175,14 +177,14 @@ KoFilter::ConversionStatus DocxFile::writeDocumentRels(KoStore *docxStore)
     writer.endElement();
 
     // FIXME: Enable these when we find that we need them
-#if 0
-    // Settings.xml
-    writer.startElement("Relationship");
-    writer.addAttribute("Id", "rId2");
-    writer.addAttribute("Type", "http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings");
-    writer.addAttribute("Target", "settings.xml");
-    writer.endElement();
-#endif
+    // or rather go through a list of these and add all from the list
+    if (m_commentsExist) {
+        writer.startElement("Relationship");
+        writer.addAttribute("Id", "rId2");
+        writer.addAttribute("Type", "http://schemas.openxmlformats.org/officeDocument/2006/relationships/comments");
+        writer.addAttribute("Target", "comments.xml");
+        writer.endElement();
+    }
 #if 0
     writer.startElement("Relationship");
     writer.addAttribute("Id", "rId3");

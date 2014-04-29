@@ -56,6 +56,11 @@ OdfTextReaderDocxBackend::OdfTextReaderDocxBackend()
     : OdfTextReaderBackend()
     , m_insideSpanLevel(0)
     , m_currentOutlineLevel(-1)
+    , m_commentIndex(0)
+    , m_writeComment(false)
+    , m_insideComment(false)
+    , m_insideDcCreator(false)
+    , m_insideDcDate(false)
     , m_currentParagraphTextProperties(0)
 {
 }
@@ -68,6 +73,53 @@ OdfTextReaderDocxBackend::~OdfTextReaderDocxBackend()
 // ----------------------------------------------------------------
 // Text level functions: paragraphs, headings, sections, frames, objects, etc
 
+void OdfTextReaderDocxBackend::elementOfficeAnnotation(KoXmlStreamReader &reader, OdfReaderContext *context)
+{
+    DEBUG_BACKEND();
+    OdfReaderDocxContext *docxContext = dynamic_cast<OdfReaderDocxContext*>(context);
+    if (!docxContext) {
+        return;
+    }
+    KoXmlWriter *writer = docxContext->m_commentsWriter;
+
+    if (reader.isStartElement()) {
+        m_writeComment = true;
+        m_insideComment = true;
+        writer->startElement("w:comment");
+        writer->addAttribute("w:id", m_commentIndex);
+    }
+    else {
+        writer->endElement(); // w:comment
+        m_insideComment = false;
+    }
+    Q_UNUSED(reader);
+}
+
+void OdfTextReaderDocxBackend::elementDcCreator(KoXmlStreamReader &reader, OdfReaderContext *context)
+{
+    DEBUG_BACKEND();
+    Q_UNUSED(reader);
+    Q_UNUSED(context);
+    if (reader.isStartElement()) {
+        m_insideDcCreator = true;
+    }
+    else {
+        m_insideDcCreator = false;
+    }
+}
+
+void OdfTextReaderDocxBackend::elementDcDate(KoXmlStreamReader &reader, OdfReaderContext *context)
+{
+    DEBUG_BACKEND();
+    Q_UNUSED(reader);
+    Q_UNUSED(context);
+    if (reader.isStartElement()) {
+        m_insideDcDate = true;
+    }
+    else {
+        m_insideDcDate = false;
+    }
+}
 
 void OdfTextReaderDocxBackend::elementTextH(KoXmlStreamReader &reader, OdfReaderContext *context)
 {
@@ -88,7 +140,10 @@ void OdfTextReaderDocxBackend::elementTextP(KoXmlStreamReader &reader, OdfReader
     m_currentParagraphTextProperties = 0;
     m_currentParagraphParent.clear();
 
-    KoXmlWriter  *writer = docxContext->m_documentWriter;
+    KoXmlWriter *writer = docxContext->m_documentWriter;
+    if (m_insideComment) {
+        writer = docxContext->m_commentsWriter;
+    }
     if (reader.isStartElement()) {
         writer->startElement("w:p");
         // FIXME: Add paragraph attributes here
@@ -161,7 +216,7 @@ void OdfTextReaderDocxBackend::elementTextS(KoXmlStreamReader &reader, OdfReader
     QString dummy = element.attribute("text:c", "1");
     bool ok;
     int  numSpaces = dummy.toUInt(&ok);
-    if (!ok) 
+    if (!ok)
         numSpaces = 1;
 
     // At the end of a paragraph, output two newlines.
@@ -179,20 +234,34 @@ void OdfTextReaderDocxBackend::characterData(KoXmlStreamReader &reader, OdfReade
     }
     //kDebug(30503) << reader.text().toString();
 
-    // In docx, a text always has to be inside a run (w:r). This is
-    // created when a text:span is encountered in odf but text nodes
-    // can exist also without a text:span surrounding it.
-    KoXmlWriter  *writer = docxContext->m_documentWriter;
-    if (m_insideSpanLevel == 0) {
-        startRun(reader, docxContext);
+    if (m_insideDcCreator) {
+        KoXmlWriter *commentsWriter = docxContext->m_commentsWriter;
+        commentsWriter->addAttribute("w:author", reader.text().toString());
     }
+    else if (m_insideDcDate) {
+        //KoXmlWriter *commentsWriter = docxContext->m_commentsWriter;
+        // todo, convert the date and add as attribute
+    }
+    else {
+        // In docx, a text always has to be inside a run (w:r). This is
+        // created when a text:span is encountered in odf but text nodes
+        // can exist also without a text:span surrounding it.
+        KoXmlWriter  *writer = docxContext->m_documentWriter;
+        if (m_insideComment) {
+            writer = docxContext->m_commentsWriter;
+        }
 
-    writer->startElement("w:t");
-    writer->addTextNode(reader.text().toString());
-    writer->endElement(); // w:t
+        if (m_insideSpanLevel == 0) {
+            startRun(reader, docxContext);
+        }
 
-    if (m_insideSpanLevel == 0) {
-        endRun(docxContext);
+        writer->startElement("w:t");
+        writer->addTextNode(reader.text().toString());
+        writer->endElement(); // w:t
+
+        if (m_insideSpanLevel == 0) {
+            endRun(docxContext);
+        }
     }
 }
 
@@ -204,6 +273,15 @@ void OdfTextReaderDocxBackend::characterData(KoXmlStreamReader &reader, OdfReade
 void OdfTextReaderDocxBackend::startRun(const KoXmlStreamReader &reader, OdfReaderDocxContext *docxContext)
 {
     KoXmlWriter *writer = docxContext->m_documentWriter;
+    if (m_insideComment) {
+        writer = docxContext->m_commentsWriter;
+    }
+
+    if (m_writeComment && !m_insideComment) {
+        writer->startElement("w:commentRangeStart");
+        writer->addAttribute("w:id", m_commentIndex);
+        writer->endElement(); // w:commentRangeStart
+    }
     writer->startElement("w:r");
     writer->startElement("w:rPr");
     KoXmlStreamAttributes attributes = reader.attributes();
@@ -222,7 +300,6 @@ void OdfTextReaderDocxBackend::startRun(const KoXmlStreamReader &reader, OdfRead
         if (textProperties != 0) {
             properties.copyPropertiesFrom(*textProperties);
         }
-
         QString parent = style->parent();
         if (!parent.isEmpty()) {
             writer->startElement("w:rStyle");
@@ -239,5 +316,21 @@ void OdfTextReaderDocxBackend::endRun(OdfReaderDocxContext *docxContext)
 {
     // FIXME: More here?
     KoXmlWriter  *writer = docxContext->m_documentWriter;
+    if (m_insideComment) {
+        writer = docxContext->m_commentsWriter;
+    }
     writer->endElement(); // w:r
+
+    if (m_writeComment && !m_insideComment) {
+        writer->startElement("w:commentRangeEnd");
+        writer->addAttribute("w:id", m_commentIndex);
+        writer->endElement(); // w:commentRangeEnd
+        writer->startElement("w:r");
+        writer->startElement("w:commentReference");
+        writer->addAttribute("w:id", m_commentIndex);
+        writer->endElement(); // w:commentReference
+        writer->endElement(); // w:r
+        ++m_commentIndex;
+        m_writeComment = false;
+    }
 }
