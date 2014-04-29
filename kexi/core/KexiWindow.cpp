@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -165,6 +165,7 @@ KexiWindow::KexiWindow()
 
 KexiWindow::~KexiWindow()
 {
+    close(true /*force*/);
     m_destroying = true;
     delete d;
     d = 0;
@@ -204,13 +205,19 @@ void KexiWindow::addView(KexiView *view, Kexi::ViewMode mode)
 
 void KexiWindow::removeView(Kexi::ViewMode mode)
 {
-    KexiView *view = viewForMode(mode);
-    if (view) {
-        d->stack->removeWidget(view);
-        d->views.remove(mode);
-    }
+    removeView(viewForMode(mode));
     d->openedViewModes |= mode;
     d->openedViewModes ^= mode;
+}
+
+void KexiWindow::removeView(KexiView *view)
+{
+    if (view) {
+        d->stack->removeWidget(view);
+        d->views.remove(view->viewMode());
+        d->openedViewModes |= view->viewMode();
+        d->openedViewModes ^= view->viewMode();
+    }
 }
 
 QSize KexiWindow::minimumSizeHint() const
@@ -298,24 +305,33 @@ void KexiWindow::setContextHelp(const QString& caption,
 #endif
 }
 
-void KexiWindow::closeEvent(QCloseEvent * e)
+bool KexiWindow::close(bool force)
 {
     KexiMainWindowIface::global()->acceptPropertySetEditing();
 
     //let any view send "closing" signal
-    /* QObjectList list = queryList( "KexiView", 0, false, false);
-      foreach(QObject* obj, list) {
-        KexiView *view = static_cast<KexiView*>(obj);*/
     QList<KexiView *> list(findChildren<KexiView*>());
     foreach(KexiView * view, list) {
         bool cancel = false;
         emit view->closing(cancel);
-        if (cancel) {
-            e->ignore();
-            return;
+        if (!force && cancel) {
+            return false;
         }
     }
     emit closing();
+    foreach(KexiView * view, list) {
+        removeView(view);
+        delete view;
+    }
+    return true;
+}
+
+void KexiWindow::closeEvent(QCloseEvent * e)
+{
+    if (!close(false /* !force*/)) {
+        e->ignore();
+        return;
+    }
     QWidget::closeEvent(e);
 }
 

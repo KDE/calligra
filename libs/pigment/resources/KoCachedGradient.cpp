@@ -58,6 +58,7 @@ KoCachedGradient::KoCachedGradient(const KoAbstractGradient *subject, qint32 ste
 
 KoCachedGradient::~KoCachedGradient()
 {
+    delete d;
 }
 
 QGradient* KoCachedGradient::toQGradient() const

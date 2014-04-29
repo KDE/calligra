@@ -90,8 +90,13 @@ void KoOdfStyleManager::setDefaultStyle(QString &family, KoOdfStyle *style)
 
 void KoOdfStyleManager::clear()
 {
+    // The style manager owns the styles so we should delete them, not
+    // just empty the lists.
     qDeleteAll(d->styles);
+    d->styles.clear();
+
     qDeleteAll(d->defaultStyles);
+    d->defaultStyles.clear();
 }
 
 
