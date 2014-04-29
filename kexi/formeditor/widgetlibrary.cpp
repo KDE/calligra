@@ -59,7 +59,6 @@ public:
         advancedProperties.insert("accessibleDescription");
         advancedProperties.insert("accessibleName");
         advancedProperties.insert("autoMask");
-        advancedProperties.insert("autoFillBackground");
         advancedProperties.insert("backgroundOrigin");
         advancedProperties.insert("backgroundMode");//this is rather useless
         advancedProperties.insert("baseSize");

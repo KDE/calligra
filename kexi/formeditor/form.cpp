@@ -221,20 +221,36 @@ public:
     
     //! Sets color of selected widget(s) to value of @a p. 
     //! @a roleMethod can be backgroundColor or foregroundColor.
+    //! Makes background inherited if @a roleMethod if background and value is null.
     void setColorProperty(KoProperty::Property& p,
-                          QPalette::ColorRole (QWidget::*roleMethod)() const)
+                          QPalette::ColorRole (QWidget::*roleMethod)() const,
+                          const QVariant& value)
     {
+        bool nullColor = value.isNull() || !value.value<QColor>().isValid();
         foreach(QWidget* widget, selected) {
             ObjectTreeItem *titem = q->objectTree()->lookup(widget->objectName());
+            QColor color;
+            if (nullColor && roleMethod == &QWidget::backgroundRole) {
+                color = widget->parentWidget()->palette().color((widget->*roleMethod)());
+            }
+            else {
+                color = value.value<QColor>();
+            }
             if (titem && p.isModified())
-                titem->addModifiedProperty(p.name(), p.value());
+                titem->addModifiedProperty(p.name(), color);
             QPalette widgetPalette(widget->palette());
             QColor oldColor(widgetPalette.color((widget->*roleMethod)()));
-            widgetPalette.setColor((widget->*roleMethod)(), p.value().value<QColor>());
+            widgetPalette.setColor((widget->*roleMethod)(), color);
             widget->setPalette(widgetPalette);
             if (!isRedoing) {
                 q->addPropertyCommand(widget->objectName().toLatin1(),
-                    oldColor, p.value(), p.name(), Form::DontExecuteCommand);
+                    oldColor, color, p.name(), Form::DontExecuteCommand);
+            }
+            if (roleMethod == &QWidget::backgroundRole) {
+                widget->setAutoFillBackground(!nullColor);
+                if (nullColor) { // make background inherited
+                    widget->setBackgroundRole(QPalette::NoRole);
+                }
             }
         }
     }
@@ -1683,12 +1699,17 @@ void Form::slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& p)
         // special types of properties handled separately
     }
     else if (property == "paletteBackgroundColor") {
-        d->setColorProperty(p, &QWidget::backgroundRole);
+        d->setColorProperty(p, &QWidget::backgroundRole, p.value());
         return;
     }
     else if (property == "paletteForegroundColor") {
-        d->setColorProperty(p, &QWidget::foregroundRole);
+        d->setColorProperty(p, &QWidget::foregroundRole, p.value());
         return;
+    }
+    else if (property == "autoFillBackground") {
+        if (!p.value().toBool()) { // make background inherited
+            d->setColorProperty(p, &QWidget::backgroundRole, QVariant());
+        }
     }
     else if (property == "hAlign" || property == "vAlign" || property == "wordbreak") {
         saveAlignProperty(property);
