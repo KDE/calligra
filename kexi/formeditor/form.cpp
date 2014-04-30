@@ -188,7 +188,7 @@ private:
 class FormPrivate
 {
 public:
-    FormPrivate(Form *form);
+    FormPrivate(Form *form, WidgetLibrary* _library);
     ~FormPrivate();
 
     void enableAction(const char* name, bool enable);
@@ -329,16 +329,21 @@ public:
     QPointer<Container> inlineEditorContainer;
     QByteArray editedWidgetClass;
     QString originalInlineText;
+    bool pixmapsStoredInline;
 
+    WidgetLibrary * const library;
+
+private:
     Form *q;
 };
 }
 
 using namespace KFormDesigner;
 
-FormPrivate::FormPrivate(Form *form)
+FormPrivate::FormPrivate(Form *form, WidgetLibrary* _library)
  : state(Form::WidgetSelecting)
  , internalCollection(static_cast<QObject*>(0))
+ , library(_library)
  , q(form)
 {
     toplevel = 0;
@@ -367,6 +372,7 @@ FormPrivate::FormPrivate(Form *form)
     idOfPropertyCommand = 0;
     selectWidgetEnabled = true;
     executingCommand = 0;
+    pixmapsStoredInline = false;
 }
 
 FormPrivate::~FormPrivate()
@@ -505,16 +511,16 @@ KoProperty::Property::ListData* FormPrivate::createValueList(WidgetInfo *winfo, 
 
 Form::Form(WidgetLibrary* library, Mode mode, KActionCollection &col, ActionGroup& group)
         : QObject(library)
-        , d( new FormPrivate(this) )
+        , d( new FormPrivate(this, library) )
 {
-    init(library, mode, col, group);
+    init(mode, col, group);
 }
 
 Form::Form(Form *parent)
         : QObject(parent->library())
-        , d( new FormPrivate(this) )
+        , d( new FormPrivate(this, parent->library()) )
 {
-    init(parent->library(), parent->mode(), *parent->actionCollection(), *parent->widgetActionGroup());
+    init(parent->mode(), *parent->actionCollection(), *parent->widgetActionGroup());
 }
 
 Form::~Form()
@@ -523,9 +529,8 @@ Form::~Form()
     delete d;
 }
 
-void Form::init(WidgetLibrary* library, Mode mode, KActionCollection &col, KFormDesigner::ActionGroup &group)
+void Form::init(Mode mode, KActionCollection &col, KFormDesigner::ActionGroup &group)
 {
-    m_lib = library;
     d->mode = mode;
     d->features = 0;
     d->widgetActionGroup = &group;
@@ -540,7 +545,7 @@ void Form::init(WidgetLibrary* library, Mode mode, KActionCollection &col, KForm
 
 WidgetLibrary* Form::library() const
 {
-    return m_lib;
+    return d->library;
 }
 
 KActionCollection  *Form::actionCollection() const
@@ -679,6 +684,16 @@ PixmapCollection* Form::pixmapCollection() const
     return d->pixcollection;
 }
 
+void Form::setPixmapsStoredInline(bool set)
+{
+    d->pixmapsStoredInline = set;
+}
+
+bool Form::pixmapsStoredInline() const
+{
+    return d->pixmapsStoredInline;
+}
+
 ObjectTreeList* Form::tabStops()
 {
     return &(d->tabstops);
@@ -806,7 +821,7 @@ void Form::setMode(Mode mode)
 
     ObjectTreeHash hash(*(d->topTree->hash()));
     foreach (ObjectTreeItem *item, hash) {
-        m_lib->previewWidget(
+        library()->previewWidget(
             item->widget()->metaObject()->className(),
             item->widget(), d->toplevel
         );
@@ -1888,7 +1903,7 @@ bool Form::isPropertyVisible(const QByteArray &property, bool isTopLevel,
     else
         subwidget = w;
 
-    return m_lib->isPropertyVisible(
+    return library()->isPropertyVisible(
                subwidget->metaObject()->className(), subwidget, property, multiple, isTopLevel);
 }
 
@@ -1942,7 +1957,7 @@ void Form::createPropertiesForWidget(QWidget *w)
     QHash<QString, QVariant>::ConstIterator modifiedPropertiesIt;
     bool isTopLevel = isTopLevelWidget(w);
     KoProperty::Property *newProp = 0;
-    WidgetInfo *winfo = m_lib->widgetInfoForClassName(w->metaObject()->className());
+    WidgetInfo *winfo = library()->widgetInfoForClassName(w->metaObject()->className());
     if (!winfo) {
         kWarning() << "no widget info for class" << w->metaObject()->className();
         return;
@@ -1982,7 +1997,7 @@ void Form::createPropertiesForWidget(QWidget *w)
         const char* propertyName = meta.name();
         QWidget *subwidget = subMeta.isValid()//subpropIface
                              ? subpropIface->subwidget() : w;
-        WidgetInfo *subwinfo = m_lib->widgetInfoForClassName(
+        WidgetInfo *subwinfo = library()->widgetInfoForClassName(
                                    subwidget->metaObject()->className());
 //  kDebug() << "$$$ " << subwidget->className();
 
@@ -1996,7 +2011,7 @@ void Form::createPropertiesForWidget(QWidget *w)
             QString desc(d->propCaption.value(meta.name()));
             //! \todo change i18n
             if (desc.isEmpty()) { //try to get property description from factory
-                desc = m_lib->propertyDescForName(subwinfo, propertyName);
+                desc = library()->propertyDescForName(subwinfo, propertyName);
             }
 
             modifiedPropertiesIt = modifiedProperties->find(propertyName);
@@ -2058,7 +2073,7 @@ void Form::createPropertiesForWidget(QWidget *w)
     d->propertySet["objectName"].setAutoSync(false); // name should be updated only when pressing Enter
 
     if (winfo) {
-        m_lib->setPropertyOptions(d->propertySet, *winfo, w);
+        library()->setPropertyOptions(d->propertySet, *winfo, w);
         d->propertySet.addProperty(newProp = new KoProperty::Property("this:classString", winfo->name()));
         newProp->setVisible(false);
         d->propertySet.addProperty(newProp = new KoProperty::Property("this:iconName", winfo->iconName()));
@@ -2767,8 +2782,9 @@ void Form::createAlignProperty(const QMetaProperty& meta, QWidget *widget, QWidg
                 i18n("Word Break"), i18n("Word Break"));
         d->propertySet.addProperty(p);
         updatePropertyValue(tree, "wordbreak");
-        if (!m_lib->isPropertyVisible(
-                    subwidget->metaObject()->className(), subwidget, p->name(), false/*multiple*/, isTopLevel)) {
+        if (!library()->isPropertyVisible(
+                subwidget->metaObject()->className(), subwidget, p->name(), false/*multiple*/, isTopLevel))
+        {
             p->setVisible(false);
         }
     }
@@ -2989,7 +3005,7 @@ void Form::changeFont()
     QFont font;
     bool oneFontSelected = true;
     foreach (QWidget* widget, *wlist) {
-        if (m_lib->isPropertyVisible(widget->metaObject()->className(), widget, "font")) {
+        if (library()->isPropertyVisible(widget->metaObject()->className(), widget, "font")) {
             widgetsWithFontProperty.append(widget);
             if (oneFontSelected) {
                 if (widgetsWithFontProperty.count() == 1)
@@ -3155,7 +3171,7 @@ bool Form::eventFilter(QObject *obj, QEvent *ev)
         && obj == selectedWidget() && d->inlineEditor)
     {
         // resize widget using resize handles
-        WidgetInfo *winfo = m_lib->widgetInfoForClassName(obj->metaObject()->className());
+        WidgetInfo *winfo = library()->widgetInfoForClassName(obj->metaObject()->className());
         if (winfo) {
             winfo->factory()->resizeEditor(
                 d->inlineEditor, selectedWidget(), 

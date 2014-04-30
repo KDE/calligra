@@ -114,7 +114,7 @@ public:
     Form(WidgetLibrary* library, Mode mode, KActionCollection &col, ActionGroup& group);
 
     /*! Creates Form object as a child of other form. */
-    Form(Form *parent);
+    explicit Form(Form *parent);
 
     ~Form();
 
@@ -246,6 +246,10 @@ public:
 #endif
 
     PixmapCollection* pixmapCollection() const;
+
+    void setPixmapsStoredInline(bool set);
+
+    bool pixmapsStoredInline() const;
 
     //! Options for addCommand() method.
     enum AddCommandOption {
@@ -753,11 +757,10 @@ protected:
     virtual bool eventFilter(QObject *obj, QEvent *ev);
 
 private:
-    void init(WidgetLibrary* library, Mode mode, KActionCollection &col, KFormDesigner::ActionGroup &group);
+    void init(Mode mode, KActionCollection &col, KFormDesigner::ActionGroup &group);
 
     void selectWidgetInternal(QWidget *w, WidgetSelectionFlags flags);
 
-    WidgetLibrary *m_lib;
     FormPrivate * const d;
 
     friend class FormWidget;

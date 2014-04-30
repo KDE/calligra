@@ -1509,7 +1509,7 @@ void PasteWidgetCommand::execute()
             changePos(el, d->pos);
 
         d->form->setInteractiveMode(false);
-        FormIO::loadWidget(container, el);
+        FormIO::loadWidget(container, el, 0, 0);
         d->form->setInteractiveMode(true);
     }
     else {
@@ -1556,7 +1556,7 @@ void PasteWidgetCommand::execute()
             }
 
             d->form->setInteractiveMode(false);
-            FormIO::loadWidget(container, el);
+            FormIO::loadWidget(container, el, 0, 0);
             d->form->setInteractiveMode(true);
         }
     }
@@ -1795,9 +1795,9 @@ void DeleteWidgetCommand::undo()
         ObjectTreeItem *parent = d->form->objectTree()->lookup(d->parents.value(wname));
         QDomElement widg = n.toElement();
         if (parent)
-            FormIO::loadWidget(cont, widg, parent->widget());
+            FormIO::loadWidget(cont, widg, parent->widget(), 0);
         else
-            FormIO::loadWidget(cont, widg);
+            FormIO::loadWidget(cont, widg, 0, 0);
     }
     d->form->setInteractiveMode(true);
 }
