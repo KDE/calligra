@@ -149,7 +149,10 @@ static void addAlterTableActionDebug(const QString& text, int nestingLevel)
         while (lastItem && lastItem->parent())
             lastItem = lastItem->parent();
         //kDebug() << "lastItem2: " << (lastItem ? lastItem->text(0) : QString());
-        li = new K3ListViewItem(kexiAlterTableActionDebugPage, lastItem, text);   //after
+          if (lastItem)
+              li = new K3ListViewItem(kexiAlterTableActionDebugPage, lastItem, text);
+          else
+              li = new K3ListViewItem(kexiAlterTableActionDebugPage);
     }
     li->setOpen(true);
     li->setMultiLinesEnabled(true);
