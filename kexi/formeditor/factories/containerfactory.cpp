@@ -817,7 +817,8 @@ ContainerFactory::saveSpecialProperty(const QByteArray &, const QString &name, c
 }
 
 bool
-ContainerFactory::readSpecialProperty(const QByteArray &, QDomElement &node, QWidget *w, KFormDesigner::ObjectTreeItem *item)
+ContainerFactory::readSpecialProperty(const QByteArray &, QDomElement &node, QWidget *w,
+                                      KFormDesigner::ObjectTreeItem *item)
 {
     const QString name( node.attribute("name") );
     if ((name == "title") && (item->parent()->widget()->inherits("QTabWidget"))) {
@@ -828,7 +829,8 @@ ContainerFactory::readSpecialProperty(const QByteArray &, QDomElement &node, QWi
     }
 
     if ((name == "stackIndex")
-        && (KexiUtils::objectIsA(w->parentWidget(), "QStackedWidget") || /*compat*/ KexiUtils::objectIsA(w->parentWidget(), "QWidgetStack")))
+        && (KexiUtils::objectIsA(w->parentWidget(), "QStackedWidget")
+            || /*compat*/ KexiUtils::objectIsA(w->parentWidget(), "QWidgetStack")))
     {
         QStackedWidget *stack = dynamic_cast<QStackedWidget*>(w->parentWidget());
         int index = KFormDesigner::FormIO::readPropertyValue(node.firstChild(), w, name).toInt();

@@ -47,7 +47,6 @@
 #include "form.h"
 #include "container.h"
 #include "objecttree.h"
-//unused #include "formmanager.h"
 #include "widgetlibrary.h"
 #ifndef KEXI_NO_FORM_SPRING_ELEMENT
 # include "spring.h"

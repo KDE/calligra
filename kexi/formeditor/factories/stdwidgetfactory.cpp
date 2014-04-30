@@ -906,7 +906,6 @@ StdWidgetFactory::readSpecialProperty(const QByteArray &classname,
         return true;
     }
 #endif
-
     return false;
 }
 

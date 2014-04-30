@@ -178,10 +178,10 @@ public:
     /*! Used to check whether it is possible to execute copy/cut/delete actions. */
     bool isFormWidgetSelected() const;
 
-    /*! Emits the action signals. See \a FormManager for signals description. */
+    /*! Emits the action signals. */
     void emitActionSignals();
 
-    /*! Emits the action signals for the undo/redo related signals. See \a FormManager for signals description. */
+    /*! Emits the action signals for the undo/redo related signals. */
     void emitUndoActionSignals();
 
     /*! Emits again all signal related to selection (ie Form::selectionChanged()).
@@ -359,7 +359,6 @@ public:
     void setOriginalFormatVersion(uint ver);
 
 #ifdef KFD_SIGSLOTS
-// moved from FormManager
     /*! Related to signal/slots connections.
      Resets recently selected signal/slot connection (when the user clicks
      outside of signals/slots menu). We stay in "connection creation" mode,
@@ -418,11 +417,9 @@ public slots:
     void abortWidgetInserting();
 
 #ifdef KFD_SIGSLOTS
-// moved from FormManager
      //! Enters the Connection creation state.
      void enterConnectingState();
 
-// moved from FormManager
     //! Leave the Connection creation mode.
     void abortCreatingConnection();
 #endif

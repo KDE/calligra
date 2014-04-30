@@ -35,14 +35,11 @@
 #include <klocale.h>
 #include <kglobalsettings.h>
 
-#include <cstdlib> // for abs()
-
 #include "utils.h"
 #include "container.h"
 #include "widgetlibrary.h"
 #include "objecttree.h"
 #include "form.h"
-//unused #include "formmanager.h"
 #include "commands.h"
 #include "events.h"
 #include "FormWidget.h"
@@ -70,7 +67,8 @@ EventEater::eventFilter(QObject *o, QEvent *ev)
     if (ev->type() == QEvent::MouseButtonPress && o->inherits("QTabBar")) {
         QMouseEvent *mev = static_cast<QMouseEvent*>(ev);
         if (mev->button() == Qt::RightButton) {
-            // (because of tab widget specifics) block right-click for tab widget's tab bar, otherwise form will be selected!
+            // (because of tab widget specifics) block right-click for tab widget's tab bar,
+            // otherwise form will be selected!
             return true;
         }
     }
@@ -84,13 +82,13 @@ EventEater::~EventEater()
         KexiUtils::removeRecursiveEventFilter(m_widget, this);
 }
 
+void EventEater::setContainer(QObject *container)
+{
+    m_container = container;
+}
+
 // Container itself
 
-#ifdef __GNUC__
-#warning Container::Private: move more m_* here
-#else
-#pragma WARNING( Container::Private: move more m_* here )
-#endif
 class Container::Private
 {
 public:
@@ -113,10 +111,9 @@ public:
 
     ~Private()
     {
-
     }
 
-    // for inserting/selection
+    //! for inserting/selection
     void startSelectionOrInsertingRectangle(const QPoint& begin)
     {
         insertBegin = begin;
@@ -161,8 +158,8 @@ public:
         widget = 0;
     }
 
-
     QPointer<Form> form;
+
     enum State {
       DoingNothing,
       DrawingSelectionRect,
@@ -171,9 +168,10 @@ public:
       InlineEditing
     };
     State state;
+
     uint idOfPropertyCommand;
 
-    // the watched container and it's toplevel one...
+    //! the watched container and it's toplevel one...
     QPointer<Container> toplevel;
     QPointer<QWidget> widget;
 
@@ -195,7 +193,6 @@ public:
     QPoint insertBegin;
     QRect insertRect;
 };
-
 
 //---------------------------------------------------------------------------------------------------------------------
 
@@ -313,7 +310,7 @@ Container::eventFilter(QObject *s, QEvent *e)
                 selectWidget(d->moving, flags);
             }
         }
-        else if ((d->form->selectedWidgets()->count() > 1)) { //&& (!d->form->manager()->isInserting())) // more than one widget selected
+        else if ((d->form->selectedWidgets()->count() > 1)) { // more than one widget selected
             if (!d->form->selectedWidgets()->contains(d->moving)) {
                 // widget is not selected, it becomes the only selected widget
                 Form::WidgetSelectionFlags flags
@@ -516,7 +513,8 @@ Container::eventFilter(QObject *s, QEvent *e)
             }
         }
 
-//! @todo when container's background is not solid color, find better grid color, e.g. buffer the background for pixmaps or gradients
+//! @todo when container's background is not solid color, find better grid color,
+//!       e.g. buffer the background for pixmaps or gradients
         p.setPen(KexiUtils::contrastColor(widget()->palette().background().color()));
         p.drawPoints(gridpoints);
 #ifdef DEBUG_PAINTER
@@ -545,7 +543,8 @@ Container::eventFilter(QObject *s, QEvent *e)
         return false;
     }
 
-    case QEvent::Resize: { // we are resizing a widget, so we enter MovingWidget state -> the layout will be reloaded when releasing mouse
+    case QEvent::Resize: { // we are resizing a widget, so we enter MovingWidget state
+                           // -> the layout will be reloaded when releasing mouse
         if (d->form->interactiveMode())
             d->state = Private::MovingWidget;
         break;
@@ -751,7 +750,6 @@ Container::handleMouseReleaseEvent(QObject *s, QMouseEvent *mev)
             //kDebug() << "The widget has not been moved. No copying.";
             return true;
         }
-// 2.x:
         QPoint copyToPoint;
         if (d->form->selectedWidgets()->count() > 1) {
             copyToPoint = mev->pos();
@@ -762,7 +760,6 @@ Container::handleMouseReleaseEvent(QObject *s, QMouseEvent *mev)
 
         Command *com = new DuplicateWidgetCommand(*d->form->activeContainer(), *d->form->selectedWidgets(), copyToPoint);
         d->form->addCommand(com);
-// \eof 2.x
     }
     else if (mev->button() == Qt::LeftButton && !(mev->buttons() & Qt::LeftButton) && d->state == Private::MovingWidget) {
         // one widget has been moved, so we need to update the layout
@@ -777,10 +774,6 @@ Container::handleMouseReleaseEvent(QObject *s, QMouseEvent *mev)
 
 void Container::selectWidget(QWidget *w, Form::WidgetSelectionFlags flags)
 {
-    //if (w) {
-    //    kDebug() << w;
-    //}
-
     if (!w) {
         d->form->selectWidget(widget());
         return;
@@ -1063,7 +1056,7 @@ Container::createGridLayout(bool testOnly)
                     break;
                 // If the geometries of the two widgets intersect each other,
                 // we move one of the widget to the rght or bottom of the other
-                if ((nextw->y() - w->y()) > abs(nextw->x() - w->x()))
+                if ((nextw->y() - w->y()) > qAbs(nextw->x() - w->x()))
                     nextw->move(nextw->x(), w->geometry().bottom() + 1);
                 else if (nextw->x() >= w->x())
                     nextw->move(w->geometry().right() + 1, nextw->y());

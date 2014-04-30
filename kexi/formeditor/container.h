@@ -52,13 +52,11 @@ public:
     will be redirected to \a container. \a container will be also parent of eater object,
     so you don't need to care about deleting it. */
     EventEater(QWidget *widget, QObject *container);
+
     ~EventEater();
 
     //! Sets the object which will receive the events
-    void setContainer(QObject *container)
-    {
-        m_container = container;
-    }
+    void setContainer(QObject *container);
 
 protected:
     bool eventFilter(QObject *o, QEvent *ev);
@@ -152,8 +150,6 @@ public slots:
       for exmplanation of possible combination of @a flags flags.
       \sa Form::selectWidget() */
       void selectWidget(QWidget *w, Form::WidgetSelectionFlags flags = Form::DefaultWidgetSelectionFlags);
-//    void setSelectedWidget(QWidget *selected, bool add, bool dontRaise = false,
-//                           bool moreWillBeSelected = false);
 
     /*! Deselects the widget \a w. The widget is removed from the Form's list
      and its resizeHandles are removed. */
@@ -190,10 +186,6 @@ protected:
     //! Drawing functions used by eventFilter
     void drawConnection(QMouseEvent *mev);
 #endif
-//reimplemented using QRubberBand 
-    //void drawSelectionRect(QMouseEvent *mev);
-    //void drawInsertRect(QMouseEvent *mev, QObject *s);
-    //void drawCopiedWidgetRect(QMouseEvent *mev);
 
     void moveSelectedWidgetsBy(int realdx, int realdy, QMouseEvent *mev = 0);
 

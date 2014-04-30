@@ -305,9 +305,7 @@ public:
 
 #ifdef KFD_SIGSLOTS
     //! true is slot connection is curently being painted
-// removed, use state instead    bool creatingConnection;
     Connection *connection;
-// not needed to store this one:    KMenu *m_sigSlotMenu;
 #endif
 
     //! used to update command's value when undoing
@@ -726,7 +724,7 @@ void Form::createToplevel(QWidget *container, FormWidget *formWidget, const QByt
     d->topTree->setWidget(container);
 //! @todo copy caption in Kexi from object's caption
 // d->topTree->addModifiedProperty("caption", name());
-    //m_topTree->addModifiedProperty("icon");
+//d->topTree->addModifiedProperty("icon");
 
     connect(container, SIGNAL(destroyed()), this, SLOT(formDeleted()));
     //kDebug() << "d->toplevel=" << d->toplevel;
@@ -1383,7 +1381,9 @@ void Form::autoAssignTabStops()
         QWidget *nextw = it==list.constEnd() ? 0 : *it;
         Q_UNUSED(nextw);
         QObject *page_w = 0;
-        KFormDesigner::TabWidget *tab_w = KFormDesigner::findParent<KFormDesigner::TabWidget>(w, "KFormDesigner::TabWidget", page_w);
+        KFormDesigner::TabWidget *tab_w
+                = KFormDesigner::findParent<KFormDesigner::TabWidget>(
+                    w, "KFormDesigner::TabWidget", page_w);
         
         for (; it!=list.constEnd(); ++it) {
             QWidget *nextw = *it;
@@ -1393,7 +1393,9 @@ void Form::autoAssignTabStops()
                 break;
             if (tab_w) {
                 QObject *page_nextw = 0;
-                KFormDesigner::TabWidget *tab_nextw = KFormDesigner::findParent<KFormDesigner::TabWidget>(nextw, "KFormDesigner::TabWidget", page_nextw);
+                KFormDesigner::TabWidget *tab_nextw
+                        = KFormDesigner::findParent<KFormDesigner::TabWidget>(
+                            nextw, "KFormDesigner::TabWidget", page_nextw);
                 if (tab_w == tab_nextw) {
                     if (page_w != page_nextw) // 'nextw' widget within different tab page
                         break;
@@ -2064,22 +2066,6 @@ void Form::createPropertiesForWidget(QWidget *w)
     d->propertySet.addProperty(newProp = new KoProperty::Property("this:className",
             w->metaObject()->className()));
     newProp->setVisible(false);
-
-//! @todo let's forget it for now, until we have new complete events editor
-#if 0
-    if (m_manager->lib()->advancedPropertiesVisible()) {
-      // add the signals property
-      QStrList strlist = w->metaObject()->signalNames(true);
-      QStrListIterator strIt(strlist);
-      QStringList list;
-      for(; strIt.current() != 0; ++strIt)
-        list.append(*strIt);
-      Property *prop = new Property("signals", i18n("Events")"",
-        new KexiProperty::ListData(list, descList(winfo, list)),
-        ));
-    }
-#endif
-
     if (tree->container()) { // we are a container -> layout property
         createLayoutProperty(tree);
     }
@@ -2163,7 +2149,8 @@ void Form::setSnapToGridEnabled(bool enabled)
     d->snapToGrid = enabled;
 }
 
-void Form::createContextMenu(QWidget *w, Container *container, const QPoint& menuPos, ContextMenuTarget target)
+void Form::createContextMenu(QWidget *w, Container *container, const QPoint& menuPos,
+                             ContextMenuTarget target)
 {
     if (!widget())
         return;
@@ -2775,7 +2762,8 @@ void Form::createAlignProperty(const QMetaProperty& meta, QWidget *widget, QWidg
     if (possibleValues.contains("WordBreak")) {
         // Create the wordbreak property
         KoProperty::Property *p = new KoProperty::Property("wordbreak",
-                QVariant((bool)(alignment & Qt::TextWordWrap)), i18n("Word Break"), i18n("Word Break"));
+                QVariant((bool)(alignment & Qt::TextWordWrap)),
+                i18n("Word Break"), i18n("Word Break"));
         d->propertySet.addProperty(p);
         updatePropertyValue(tree, "wordbreak");
         if (!m_lib->isPropertyVisible(
@@ -2819,7 +2807,7 @@ void Form::saveAlignProperty(const QString &property)
     }
     else {
         d->lastCommand = new PropertyCommand(*this, d->selected.first()->objectName().toLatin1(),
-                                             subwidget->property("alignment"), valueForKeys, "alignment");
+                                 subwidget->property("alignment"), valueForKeys, "alignment");
         if (!addCommand(d->lastCommand, DontExecuteCommand)) {
             d->lastCommand = 0;
         }
@@ -2956,8 +2944,10 @@ void Form::createPropertyCommandsInDesignMode(QWidget* widget,
             d->propertySet.changeProperty(it.key(), it.value());
         }
         else {
-            WidgetWithSubpropertiesInterface* subpropIface = dynamic_cast<WidgetWithSubpropertiesInterface*>(widget);
-            QWidget *subwidget = (subpropIface && subpropIface->subwidget()) ? subpropIface->subwidget() : widget;
+            WidgetWithSubpropertiesInterface* subpropIface
+                = dynamic_cast<WidgetWithSubpropertiesInterface*>(widget);
+            QWidget *subwidget
+                = (subpropIface && subpropIface->subwidget()) ? subpropIface->subwidget() : widget;
             if (subwidget && -1 != subwidget->metaObject()->indexOfProperty(it.key())
                     && subwidget->property(it.key()) != it.value()) {
                 ObjectTreeItem *tree = objectTree()->lookup(widget->objectName());
