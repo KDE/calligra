@@ -44,6 +44,7 @@ startup/KexiPasswordPage.cpp
 )
 
 kde4_add_ui_files(keximain_LIB_SRCS
+  kexifinddialog.ui
   startup/KexiProjectStorageTypeSelectionPage.ui
   startup/KexiServerDBNamePage.ui
   startup/KexiMainImportExportPage.ui
