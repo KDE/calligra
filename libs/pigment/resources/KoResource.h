@@ -21,6 +21,8 @@
 
 #include <QImage>
 #include <QString>
+#include <QHash>
+
 #include <pigment_export.h>
 
 class QDomDocument;
@@ -42,6 +44,11 @@ public:
      */
     explicit KoResource(const QString &filename);
     virtual ~KoResource();
+
+    bool operator ==(const KoResource &other) const
+    {
+        return other.md5() == md5();
+    }
 
 public:
     /**
@@ -106,6 +113,16 @@ private:
     struct Private;
     Private* const d;
 };
+
+static inline bool operator==(const KoResource &resource1, const KoResource &resource2)
+{
+    return (resource1.md5() == resource2.md5());
+}
+
+static inline uint qHash(const KoResource &resource)
+{
+    return qHash(resource.md5());
+}
 
 #endif // KORESOURCE_H_
 
