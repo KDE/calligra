@@ -29,6 +29,8 @@
 #include <kstandarddirs.h>
 
 #include "Theme.h"
+#include "PropertyContainer.h"
+#include <kis_config.h>
 
 class Settings::Private
 {
@@ -121,6 +123,19 @@ void Settings::setThemeID(const QString& id)
 
         emit themeChanged();
     }
+}
+
+QObject* Settings::customImageSettings() const
+{
+    QObject* settings = new PropertyContainer("customImageSettings", qApp);
+    KisConfig cfg;
+    settings->setProperty("Width", cfg.defImageWidth());
+    settings->setProperty("Height", cfg.defImageHeight());
+    settings->setProperty("Resolution", qRound(cfg.defImageResolution() * 72)); // otherwise we end up with silly floating point numbers
+    settings->setProperty("ColorModel", cfg.defColorModel());
+    settings->setProperty("ColorDepth", cfg.defaultColorDepth());
+    settings->setProperty("ColorProfile", cfg.defColorProfile());
+    return settings;
 }
 
 #include "Settings.moc"
