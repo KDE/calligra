@@ -90,9 +90,6 @@ public:
         }
         return fileNames;
     }
-private:
-    friend class KoResourceTagStore;
-    virtual QByteArray md5ForFileName(const QString &fileName) = 0;
 
 private:
     QString m_type;
@@ -601,14 +598,6 @@ protected:
     }
 
 private:
-
-    // for converting old-sile filename based tagging stores
-    QByteArray md5ForFileName(const QString &fileName) {
-        if (m_resourcesByFilename.contains(fileName)) {
-            return m_resourcesByFilename[fileName]->md5();
-        }
-        return QByteArray();
-    }
 
     QHash<QString, T*> m_resourcesByName;
     QHash<QString, T*> m_resourcesByFilename;
