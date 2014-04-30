@@ -60,25 +60,27 @@ public:
 
     QStringList tagNamesList() const;
 
+    /// Return a list of filenames for the given tag
     QStringList searchTag(const QString& tag);
 
     void serializeTags();
 
 private:
-    void readXMLFile(bool serverIdentity = true);
-    void writeXMLFile(bool serverIdentity = true);
+    void readXMLFile();
+    void writeXMLFile();
 
     /// To check whether the resource belongs to the present server or not
     bool isServerResource(const QString &resourceName) const;
-    void addTagInternal(const QByteArray md5, const QString& tag);
+
     /// If resource filenames have no extensions, then we add "-krita.extension".
     QString adjustedFileName(const QString &fileName) const;
+
     /// Removes the adjustements before going to the server
     QStringList removeAdjustedFileNames(QStringList fileNamesList);
 
-    QMultiHash<QByteArray, QString> m_md5ToTags;
-
+    QMultiHash<KoResource*, QString> m_resourceToTag;
     QHash<QString, int> m_tagList;
+
     QString m_tagsXMLFile;
     QString m_serverExtensions;
 

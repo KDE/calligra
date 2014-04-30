@@ -43,7 +43,7 @@ KoResourceTagStore::~KoResourceTagStore()
 
 QStringList KoResourceTagStore::assignedTagsList(KoResource* resource) const
 {
-    return m_fileNamesToTags.values(adjustedFileName(resource->filename()));
+    return m_resourceToTag.values(resource);
 }
 
 QStringList KoResourceTagStore::tagNamesList() const
@@ -55,21 +55,12 @@ void KoResourceTagStore::addTag(KoResource* resource, const QString& tag)
 {
     if (!resource) {
         m_tagList.insert(tag, 0);
-    }
-    else {
-        QByteArray md5 = resource->md5();
-        addTagInternal(md5, tag);
-    }
-}
-
-void KoResourceTagStore::addTagInternal(const QByteArray md5, const QString& tag)
-{
-    if (m_md5ToTags.contains(md5, tag)) {
         return;
     }
-
-    m_md5ToTags.insert(md5, tag);
-
+    if (m_resourceToTag.contains(resource, tag)) {
+        return;
+    }
+    m_resourceToTag.insert(resource, tag);
     if (m_tagList.contains(tag)) {
         m_tagList[tag]++;
     } else {
@@ -79,8 +70,7 @@ void KoResourceTagStore::addTagInternal(const QByteArray md5, const QString& tag
 
 void KoResourceTagStore::delTag(KoResource* resource, const QString& tag)
 {
-    QByteArray md5 = resource->md5();
-    int res = m_md5ToTags.remove(md5, tag);
+    int res = m_resourceToTag.remove(resource, tag);
 
     if (res > 0) { // decrease the usecount for this tag
         if (m_tagList.contains(tag)) {
@@ -93,6 +83,7 @@ void KoResourceTagStore::delTag(KoResource* resource, const QString& tag)
 
 void KoResourceTagStore::delTag(const QString& tag)
 {
+    Q_ASSERT(!m_resourceToTag.values().contains(tag));
     m_tagList.remove(tag);
 }
 
@@ -103,34 +94,25 @@ QStringList KoResourceTagStore::searchTag(const QString& lineEditText)
         return QStringList();
     }
 
-    QStringList keysList = m_fileNamesToTags.keys(tagsList.takeFirst());
+    QSet<KoResource*> resources;
 
-    if (tagsList.count() >= 1) {
-        QStringList resultKeysList;
-        bool tagPresence;
-        foreach(const QString & key, keysList) {
-            tagPresence = true;
-            foreach(const QString & tag, tagsList) {
-                if (!m_fileNamesToTags.contains(key, tag)) {
-                    tagPresence = false;
-                    break;
-                }
-            }
-            if (tagPresence) {
-                resultKeysList.append(key);
-            }
+    foreach (QString tag, tagList) {
+        foreach (KoResource *res, m_resourceToTag.keys(tag)) {
+            resources << res;
         }
-        return removeAdjustedFileNames(resultKeysList);
     }
-    return removeAdjustedFileNames(keysList);
+    QStringList filenames;
+    foreach (KoResource *res, resources) {
+        filesnames << adjustedFileName(res->filename());
+    }
+
+    return removeAdjustedFileNames(filenames);
 }
 
-void KoResourceTagStore::writeXMLFile(bool serverIdentity)
+void KoResourceTagStore::writeXMLFile()
 {
-    Q_UNUSED(serverIdentity);
     QFile f(m_tagsXMLFile);
     //bool fileExists = f.exists();
-
     if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) {
         kWarning() << "Cannot write meta information to '" << m_tagsXMLFile << "'.";
         return;
@@ -138,97 +120,39 @@ void KoResourceTagStore::writeXMLFile(bool serverIdentity)
     QDomDocument doc;
     QDomElement root;
 
+    QDomDocument docTemp("tags");
+    doc = docTemp;
+    doc.appendChild(doc.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""));
+    root = doc.createElement("tags");
+    doc.appendChild(root);
 
-//    if (!fileExists || !doc.setContent(&f)) {
-//        createCleanFile = true;
-//    }
-//    else {
-//        root = doc.documentElement();
-//        if (root.tagName() != "tags") {
-//            createCleanFile = true;
-//        }
-//    }
 
-//    if (createCleanFile) {
-        QDomDocument docTemp("tags");
-        doc = docTemp;
-        doc.appendChild(doc.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""));
-        root = doc.createElement("tags");
-        doc.appendChild(root);
-//    }
-
-    QStringList resourceNames = m_fileNamesToTags.uniqueKeys();
-
-    resourceNames.replaceInStrings(QDir::homePath(), QString("~"));
-
-//    if (fileExists) {
-//        QDomNodeList resourceNodesList = root.childNodes();
-//        /// resource are checked and added or removed according to need.
-//        for (int i = 0; i < resourceNodesList.count() ; i++) {
-//            QDomElement resourceEl = resourceNodesList.at(i).toElement();
-//            if (resourceEl.tagName() == "resource") {
-//                if (resourceNames.contains(resourceEl.attribute("identifier"))) {
-//                    resourceNames.removeAll(resourceEl.attribute("identifier"));
-//                    /// Tags are checked for a resource and added or removed according to need.
-//                    QDomNodeList tagNodesList = resourceNodesList.at(i).childNodes();
-//                    QStringList tags = m_tagRepo.values((resourceEl.attribute("identifier")).replace(QString("~"), QDir::homePath()));
-//                    for (int j = 0; j < tagNodesList.count() ; j++) {
-//                        QDomElement tagEl = tagNodesList.at(j).toElement();
-//                        if (tags.contains(tagEl.text())) {
-//                            tags.removeAll(tagEl.text());
-//                        } else {
-//                            resourceNodesList.at(i).removeChild(tagNodesList.at(j--));
-//                        }
-//                    }
-//                    foreach(const QString & tag, tags) {
-//                        QDomElement newTagEl = doc.createElement("tag");
-//                        QDomText tagNameText = doc.createTextNode(tag);
-//                        newTagEl.appendChild(tagNameText);
-//                        resourceNodesList.at(i).appendChild(newTagEl);
-//                    }
-//                } else {
-//                    if (isServerResource((resourceEl.attribute("identifier")).replace(QString("~"), QDir::homePath())) || !serverIdentity) {
-//                        root.removeChild(resourceNodesList.at(i--));
-//                    }
-//                }
-//            }
-//        }
-//    }
-
-    foreach(QString resourceName, resourceNames) {
-
+    foreach (KoResource *res, m_resourceToTag.uniqueKeys()) {
         QDomElement resourceEl = doc.createElement("resource");
-        resourceEl.setAttribute("identifier", resourceName);
+        resourceEl.setAttribute("identifier", res->filename().replace(QDir::homePath(), QString("~")));
+        resourceEl.setAttribute("md5", res->md5());
 
-        QStringList tags = m_fileNamesToTags.values(resourceName.replace(QString("~"), QDir::homePath()));
-        foreach(const QString & tag, tags) {
+        foreach (const QString &tag, m_resourceToTag.values(res)) {
             QDomElement tagEl = doc.createElement("tag");
-            QDomText tagNameText = doc.createTextNode(tag);
-            tagEl.appendChild(tagNameText);
+            tagEl.appendChild(doc.createTextNode(tag));
             resourceEl.appendChild(tagEl);
         }
-
         root.appendChild(resourceEl);
+
     }
 
-
     // Now write empty tags
-    foreach(const QString &tag, m_tagList.uniqueKeys())  {
+    foreach (const QString &tag, m_tagList.uniqueKeys())  {
         if (m_tagList[tag] == 0) {
             QDomElement resourceEl = doc.createElement("resource");
             resourceEl.setAttribute("identifier", "dummy");
             QDomElement tagEl = doc.createElement("tag");
-            QDomText tagNameText = doc.createTextNode(tag);
-            tagEl.appendChild(tagNameText);
+            tagEl.appendChild(doc.createTextNode(tag));
             resourceEl.appendChild(tagEl);
-            root.appendChild(resourceEl);
+             root.appendChild(resourceEl);
         }
     }
 
-//    f.remove();
-//    if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) {
-//        kWarning() << "Cannot write meta information to '" << m_tagsXMLFile << "'.";
-//    }
     QTextStream metastream(&f);
     metastream << doc.toString();
 
@@ -236,7 +160,7 @@ void KoResourceTagStore::writeXMLFile(bool serverIdentity)
 
 }
 
-void KoResourceTagStore::readXMLFile(bool serverIdentity)
+void KoResourceTagStore::readXMLFile()
 {
 
     QString inputFile;
@@ -267,28 +191,38 @@ void KoResourceTagStore::readXMLFile(bool serverIdentity)
     QDomNodeList resourceNodesList = root.childNodes();
 
     QString resourceMD5;
+    QString resourceName;
 
     for (int i = 0; i < resourceNodesList.count(); i++) {
         QDomElement element = resourceNodesList.at(i).toElement();
         if (element.tagName() == "resource") {
 
-            if (element.hasAttribute("md4")) {
+            KoResource *res = 0;
+
+            if (element.hasAttribute("md5")) {
                 resourceMD5 = element.attribute("md5");
+            }
+            if (element.hasAttribute("identifier")) {
+                resourceName = element.attribute("identifier");
             }
 
             // Old-style, filename based tag stores
-            if (resourceMD5.isEmpty()) {
-                if (element.hasAttribute("identifier")) {
-                    QString resourceName = element.attribute("identifier");
-                    resourceName.replace(QString("~"), QDir::homePath());
-                    resourceMD5 = m_resourceServer->md5ForFileName(resourceName);
-                }
-                else {
-                    continue; // No md5, no identifier, hopeless
-                }
+            if (resourceMD5.isEmpty() && !resourceName.isEmpty()) {
+                res = m_resourceServer->res(resourceName);
+            }
+            else {
+                continue; // No md5, no identifier, hopeless
             }
 
-            if (resourceMD5 == "dummy" || isServerResource(resourceMD5) || !serverIdentity) {
+            if (resourceName.isEmpty() && !resourceMD5.isEmpty()) {
+                resourceName = m_resourceServer->fileNameForMd5(resourceMD5);
+            }
+            if (resourceName.isEmpty() || resourceMD5.isEmpty()) {
+                continue; // neither -- hopeless.
+            }
+
+
+            if (resourceMD5 == "dummy" || isServerResource(resourceMD5)) {
 
                 QDomNodeList tagNodesList = resourceNodesList.at(i).childNodes();
 
@@ -297,7 +231,7 @@ void KoResourceTagStore::readXMLFile(bool serverIdentity)
                     QDomElement tagEl = tagNodesList.at(j).toElement();
 
                     if (resourceMD5  != "dummy") {
-                        addTagInternal(resourceMD5.toAscii(), resourceName, tagEl.text());
+                        addTagInternal(resourceMD5.toAscii(), tagEl.text());
                     } else {
                         addTag(0, tagEl.text());
                     }
@@ -311,7 +245,7 @@ bool KoResourceTagStore::isServerResource(const QString &resourceName) const
 {
     bool removeChild = false;
     QStringList extensionsList = m_serverExtensions.split(':');
-    foreach(QString extension, extensionsList) {
+    foreach (QString extension, extensionsList) {
         if (resourceName.contains(extension.remove('*'))) {
             removeChild = true;
             break;
@@ -330,7 +264,7 @@ QString KoResourceTagStore::adjustedFileName(const QString &fileName) const
 
 QStringList KoResourceTagStore::removeAdjustedFileNames(QStringList fileNamesList)
 {
-    foreach(const QString & fileName, fileNamesList) {
+    foreach (const QString & fileName, fileNamesList) {
         if (fileName.contains("-krita")) {
             fileNamesList.append(fileName.split("-krita").takeFirst());
             fileNamesList.removeAll(fileName);
