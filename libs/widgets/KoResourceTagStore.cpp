@@ -96,14 +96,14 @@ QStringList KoResourceTagStore::searchTag(const QString& lineEditText)
 
     QSet<KoResource*> resources;
 
-    foreach (QString tag, tagList) {
+    foreach (QString tag, tagsList) {
         foreach (KoResource *res, m_resourceToTag.keys(tag)) {
             resources << res;
         }
     }
     QStringList filenames;
     foreach (KoResource *res, resources) {
-        filesnames << adjustedFileName(res->filename());
+        filenames << adjustedFileName(res->filename());
     }
 
     return removeAdjustedFileNames(filenames);
@@ -130,7 +130,7 @@ void KoResourceTagStore::writeXMLFile()
     foreach (KoResource *res, m_resourceToTag.uniqueKeys()) {
         QDomElement resourceEl = doc.createElement("resource");
         resourceEl.setAttribute("identifier", res->filename().replace(QDir::homePath(), QString("~")));
-        resourceEl.setAttribute("md5", res->md5());
+        resourceEl.setAttribute("md5", QString(res->md5()));
 
         foreach (const QString &tag, m_resourceToTag.values(res)) {
             QDomElement tagEl = doc.createElement("tag");
@@ -191,38 +191,25 @@ void KoResourceTagStore::readXMLFile()
     QDomNodeList resourceNodesList = root.childNodes();
 
     QString resourceMD5;
-    QString resourceName;
+    QString fileName;
 
     for (int i = 0; i < resourceNodesList.count(); i++) {
         QDomElement element = resourceNodesList.at(i).toElement();
         if (element.tagName() == "resource") {
 
-            KoResource *res = 0;
+            KoResource *resByMd5 = 0;
+            KoResource *resByFileName = 0;
 
             if (element.hasAttribute("md5")) {
                 resourceMD5 = element.attribute("md5");
+                resByMd5 = m_resourceServer->byMd5(resourceMD5.toLatin1());
             }
             if (element.hasAttribute("identifier")) {
-                resourceName = element.attribute("identifier");
+                fileName = element.attribute("identifier");
+                resByFileName = m_resourceServer->byFileName(fileName);
             }
 
-            // Old-style, filename based tag stores
-            if (resourceMD5.isEmpty() && !resourceName.isEmpty()) {
-                res = m_resourceServer->res(resourceName);
-            }
-            else {
-                continue; // No md5, no identifier, hopeless
-            }
-
-            if (resourceName.isEmpty() && !resourceMD5.isEmpty()) {
-                resourceName = m_resourceServer->fileNameForMd5(resourceMD5);
-            }
-            if (resourceName.isEmpty() || resourceMD5.isEmpty()) {
-                continue; // neither -- hopeless.
-            }
-
-
-            if (resourceMD5 == "dummy" || isServerResource(resourceMD5)) {
+            if (fileName == "dummy" || isServerResource(fileName)) {
 
                 QDomNodeList tagNodesList = resourceNodesList.at(i).childNodes();
 
@@ -230,11 +217,37 @@ void KoResourceTagStore::readXMLFile()
 
                     QDomElement tagEl = tagNodesList.at(j).toElement();
 
-                    if (resourceMD5  != "dummy") {
-                        addTagInternal(resourceMD5.toAscii(), tagEl.text());
+                    if (fileName != "dummy") {
+                        addTag(m_resourceServer->byFileName(fileName), tagEl.text());
                     } else {
                         addTag(0, tagEl.text());
                     }
+                }
+            }
+            else {
+
+                if (!resByMd5 && !resByFileName) {
+                    // no resource found, hopeless...
+                    continue;
+                }
+
+                KoResource *res;
+
+                if (resByMd5 && resByFileName && (resByMd5 != resByFileName)) {
+                    kWarning() << "MD5sum and filename point to different resources -- was the resource renamed? We go with md5";
+                    res = resByMd5;
+                }
+                else if (!resByMd5 && resByFileName) {
+                    // We didn't find the resource by md5, but did find it by filename, so take that one
+                    res = resByFileName;
+                }
+                else {
+                    res = resByMd5;
+                }
+                QDomNodeList tagNodesList = resourceNodesList.at(i).childNodes();
+                for (int j = 0; j < tagNodesList.count() ; j++) {
+                    QDomElement tagEl = tagNodesList.at(j).toElement();
+                    addTag(res, tagEl.text());
                 }
             }
         }

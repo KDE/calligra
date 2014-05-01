@@ -91,6 +91,12 @@ public:
         return fileNames;
     }
 
+protected:
+
+    friend class KoResourceTagStore;
+    virtual KoResource *byMd5(const QByteArray &md5) const = 0;
+    virtual KoResource *byFileName(const QString &fileName) const = 0;
+
 private:
     QString m_type;
     QString m_extensions;
@@ -595,6 +601,15 @@ protected:
         QTextStream metastream(&f);
         metastream << doc.toByteArray();
         f.close();
+    }
+protected:
+    KoResource *byMd5(const QByteArray &md5) const
+    {
+        return static_cast<KoResource*>(resourceByMD5(md5));
+    }
+    KoResource *byFileName(const QString &fileName) const
+    {
+        return static_cast<KoResource*>(resourceByFilename(fileName));
     }
 
 private:
