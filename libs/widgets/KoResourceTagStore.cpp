@@ -239,15 +239,22 @@ void KoResourceTagStore::readXMLFile()
                 }
                 else if (!resByMd5 && resByFileName) {
                     // We didn't find the resource by md5, but did find it by filename, so take that one
+                    qDebug() << "Using filename to find resource" << resByFileName;
                     res = resByFileName;
                 }
                 else {
+                    qDebug() << "Using md5 to find resource" << resByMd5;
                     res = resByMd5;
                 }
-                QDomNodeList tagNodesList = resourceNodesList.at(i).childNodes();
-                for (int j = 0; j < tagNodesList.count() ; j++) {
-                    QDomElement tagEl = tagNodesList.at(j).toElement();
-                    addTag(res, tagEl.text());
+                if (res) {
+                    QDomNodeList tagNodesList = resourceNodesList.at(i).childNodes();
+                    for (int j = 0; j < tagNodesList.count() ; j++) {
+                        QDomElement tagEl = tagNodesList.at(j).toElement();
+                        addTag(res, tagEl.text());
+                    }
+                }
+                else {
+                    kWarning() << "Could not find resource for md5:" << resByMd5 << "or filename" << fileName;
                 }
             }
         }
