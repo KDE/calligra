@@ -120,7 +120,6 @@ QFont KexiCommandLinkButtonPrivate::titleFont() const
     // QPainters font, so we need to restore the mask
     int resolve_mask = font.resolve();
     QFont modifiedFont = q->font().resolve(font);
-    //modifiedFont.detach();
     modifiedFont.resolve(resolve_mask);
     return modifiedFont;
 }

@@ -769,9 +769,8 @@ KexiDBFactory::propertySetShouldBeReloadedAfterPropertyChange(const QByteArray& 
 {
     Q_UNUSED(classname);
     Q_UNUSED(w);
-    if (property == "fieldTypeInternal" || property == "widgetType")
-        return true;
-    return false;
+    return property == "fieldTypeInternal" || property == "widgetType"
+           || property == "paletteBackgroundColor" || property == "autoFillBackground";
 }
 
 bool KexiDBFactory::changeInlineText(KFormDesigner::Form *form, QWidget *widget,

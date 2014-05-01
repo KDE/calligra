@@ -26,18 +26,10 @@ target_link_libraries(
     ${MARBLE_LIBRARIES}
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KDEUI_LIBS}
-    ${KDE4_KDE3SUPPORT_LIBS}
     ${QT_QTCORE_LIBRARY}
     ${QT_QTGUI_LIBRARY}
     ${QT_QTXML_LIBRARY}
     )
-#kexicore
-#kexiguiutils
-#kexidatatable
-#kexiextendedwidgets
-#kformdesigner
-#${KOPROPERTY_LIBS}
-#kexiformutils
 
 install(TARGETS kformdesigner_mapbrowser  DESTINATION ${PLUGIN_INSTALL_DIR})
 

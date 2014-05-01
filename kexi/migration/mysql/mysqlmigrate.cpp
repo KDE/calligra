@@ -56,16 +56,9 @@
 using namespace KexiMigration;
 
 /* This is the implementation for the MySQL specific import routines. */
-
 K_EXPORT_KEXIMIGRATE_DRIVER(MySQLMigrate, "mysql")
 
 /* ************************************************************************** */
-//! Constructor
-/*MySQLMigrate::MySQLMigrate() :
-  d(new MySqlConnectionInternal())
-{
-}*/
-
 //! Constructor (needed for trading interface)
 MySQLMigrate::MySQLMigrate(QObject *parent, const QVariantList& args) :
         KexiMigrate(parent, args)
@@ -85,7 +78,6 @@ MySQLMigrate::~MySQLMigrate()
     delete d;
 }
 
-
 /* ************************************************************************** */
 /*! Connect to the db backend */
 bool MySQLMigrate::drv_connect()
@@ -95,23 +87,18 @@ bool MySQLMigrate::drv_connect()
     return d->useDatabase(data()->sourceName);
 }
 
-
 /*! Disconnect from the db backend */
 bool MySQLMigrate::drv_disconnect()
 {
     return d->db_disconnect();
 }
 
-
 /* ************************************************************************** */
 /*! Get the types and properties for each column. */
 bool MySQLMigrate::drv_readTableSchema(
     const QString& originalName, KexiDB::TableSchema& tableSchema)
 {
-// m_table = new KexiDB::TableSchema(table);
-
-// //TODO IDEA: ask for user input for captions
-// tableSchema.setCaption(table + " table");
+//! @todo IDEA: ask for user input for captions
 
     //Perform a query on the table to get some data
     tableSchema.setName(originalName);
@@ -120,7 +107,7 @@ bool MySQLMigrate::drv_readTableSchema(
         return false;
     MYSQL_RES *res = mysql_store_result(d->mysql);
     if (!res) {
-        kDebug() << "MySQLMigrate::drv_tableNames: null result";
+        kWarning() << "null result";
         return true;
     }
     unsigned int numFlds = mysql_num_fields(res);
@@ -154,7 +141,7 @@ bool MySQLMigrate::drv_tableNames(QStringList& tableNames)
         return false;
     MYSQL_RES *res = mysql_store_result(d->mysql);
     if (!res) {
-        kDebug() << "MySQLMigrate::drv_tableNames: null result";
+        //kWarning() << "null result";
         return true;
     }
     MYSQL_ROW row;
@@ -177,7 +164,7 @@ tristate MySQLMigrate::drv_queryStringListFromSQL(
         return false;
     MYSQL_RES *res = mysql_use_result(d->mysql);
     if (!res) {
-        kDebug() << "MySQLMigrate::drv_querySingleStringFromSQL(): null result";
+        //kWarning() << "null result";
         return true;
     }
     for (int i = 0; numRecords == -1 || i < numRecords; i++) {
@@ -194,8 +181,8 @@ tristate MySQLMigrate::drv_queryStringListFromSQL(
         uint numFields = mysql_num_fields(res);
         if (columnNumber > (numFields - 1)) {
             kWarning() << "MySQLMigrate::drv_querySingleStringFromSQL(" << sqlStatement
-            << "): columnNumber too large ("
-            << columnNumber << "), expected 0.." << numFields;
+                << "): columnNumber too large ("
+                << columnNumber << "), expected 0.." << numFields;
             mysql_free_result(res);
             return false;
         }
@@ -256,7 +243,7 @@ bool MySQLMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *de
         return false;
     MYSQL_RES *res = mysql_use_result(d->mysql);
     if (!res) {
-        kDebug() << "MySQLMigrate::drv_copyTable: null result";
+        //kWarning() << "null result";
         return true;
     }
     MYSQL_ROW row;
@@ -292,7 +279,7 @@ bool MySQLMigrate::drv_getTableSize(const QString& table, quint64& size)
         return false;
     MYSQL_RES *res = mysql_store_result(d->mysql);
     if (!res) {
-        kDebug() << "MySQLMigrate::drv_getTableSize: null result";
+        //kWarning() << "null result";
         return true;
     }
     MYSQL_ROW row;
@@ -407,16 +394,16 @@ KexiDB::Field::Type MySQLMigrate::examineBlobField(const QString& table,
     }
     MYSQL_RES *res = mysql_store_result(d->mysql);
     if (!res) {
-        kDebug() << "MySQLMigrate::examineBlobField: null result";
-    } else {
+        //kWarning() << "null result";
+    }
+    else {
         MYSQL_ROW row;
         if ((row = mysql_fetch_row(res)))
             mysqlType = QString(row[1]);
         mysql_free_result(res);
     }
 
-    kDebug() << "MySQLMigrate::examineBlobField: considering "
-    << mysqlType;
+    kDebug() << "considering" << mysqlType;
     if (mysqlType.contains("blob", Qt::CaseInsensitive)) {
         // Doesn't matter how big it is, it's binary
         return KexiDB::Field::BLOB;
@@ -448,25 +435,25 @@ QStringList MySQLMigrate::examineEnumField(const QString& table,
     MYSQL_RES *res = mysql_store_result(d->mysql);
 
     if (!res) {
-        kDebug() << "MySQLMigrate::examineEnumField: null result";
-    } else {
+        //kWarning() << "null result";
+    }
+    else {
         MYSQL_ROW row;
         if ((row = mysql_fetch_row(res)))
             vals = QString(row[1]);
         mysql_free_result(res);
     }
 
-    kDebug() << "MySQLMigrate::examineEnumField: considering "
-    << vals;
+    kDebug() << "considering" << vals;
 
     // Crash and burn if we get confused...
     if (!vals.startsWith("enum(")) {
         // Huh? We're supposed to be parsing an enum!
-        kDebug() << "MySQLMigrate::examineEnumField:1 not an enum!";
+        kWarning() << "1 not an enum!";
         return QStringList();
     }
     if (!vals.endsWith(')')) {
-        kDebug() << "MySQLMigrate::examineEnumField:2 not an enum!";
+        kWarning() << "2 not an enum!";
         return QStringList();
     }
 
@@ -481,15 +468,15 @@ QStringList MySQLMigrate::examineEnumField(const QString& table,
     while ((index = rx.indexIn(vals, index, QRegExp::CaretAtOffset)) != -1) {
         int len = rx.matchedLength();
         if (len != -1) {
-            kDebug() << "MySQLMigrate::examineEnumField:3 " << rx.cap(1);
+            //kDebug() << "3 " << rx.cap(1);
             values << rx.cap(1);
         } else {
-            kDebug() << "MySQLMigrate::examineEnumField:4 lost";
+            kDebug() << "4 lost";
         }
 
         QChar next = vals[index + len];
         if (next != QChar(',') && next != QChar(')')) {
-            kDebug() << "MySQLMigrate::examineEnumField:5 " << next;
+            kDebug() << "5 " << next;
         }
         index += len + 1;
     }
@@ -565,10 +552,10 @@ bool MySQLMigrate::drv_movePrevious()
 
 bool MySQLMigrate::drv_readFromTable(const QString& tableName)
 {
-    kDebug();
+    //kDebug();
     
     if (!d->executeSQL("SELECT * FROM `" + drv_escapeIdentifier(tableName) + '`')) {
-        kDebug() << "Unable to execute SQL";
+        kWarning() << "Unable to execute SQL";
         return false;
     }
     
@@ -578,7 +565,7 @@ bool MySQLMigrate::drv_readFromTable(const QString& tableName)
     }
     
     m_rows = mysql_num_rows(m_mysqlres);
-    kDebug() << m_rows;
+    //kDebug() << m_rows;
     
     return true;
 }
@@ -588,8 +575,9 @@ QVariant MySQLMigrate::drv_value(uint i)
     QString val;
     if (m_dataRow) {
         val = m_dataRow[i];
-    }else {
-        kDebug() << "No record";
+    }
+    else {
+        kWarning() << "No record";
     }
     
     return val;
@@ -600,14 +588,11 @@ void MySQLMigrate::getRow()
     if (m_mysqlres) {
         mysql_data_seek(m_mysqlres, m_row);
         m_dataRow = mysql_fetch_row(m_mysqlres);
-    } else {
-        kDebug() << "No result";
+    }
+    else {
+        kWarning() << "No result";
         m_dataRow = 0;   
     }
 }
-
-
-
-
 
 #include "mysqlmigrate.moc"

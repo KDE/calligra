@@ -28,8 +28,6 @@
 #include <kdebug.h>
 #include <kactioncollection.h>
 
-//unused #include "formmanager.h"
-
 using namespace KFormDesigner;
 
 class LibActionWidget::Private

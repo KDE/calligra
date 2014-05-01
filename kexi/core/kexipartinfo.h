@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,6 +24,7 @@
 #include "kexi.h"
 #include "kexipartmanager.h"
 
+class QAction;
 class KexiProject;
 class KexiWindow;
 
@@ -51,11 +52,6 @@ public:
      It is taken from the corresponding plugin (service) .desktop file
      (GenericName property). */
     QString groupName() const;
-
-//  /**
-//   * @return the icon for groups
-//   */
-//  inline QString groupIcon() const { return m_groupIcon; }
 
     /**
      * @return the icon name for a item
@@ -136,6 +132,11 @@ public:
      */
     bool isPropertyEditorAlwaysVisibleInDesignMode() const;
 
+    /**
+     * \return "New object" action for this part.
+     */
+    QAction* newObjectAction();
+
 protected:
     /**
      * Used in StaticPartInfo
@@ -149,17 +150,6 @@ protected:
     friend class ::KexiProject;
     friend class ::KexiWindow;
 
-#if 0 //moved as internal to KexiProject
-    /**
-     * @return the project-part-id
-     */
-    int projectPartID() const;
-
-    /**
-     * Sets the project-part-id.
-     */
-    void setProjectPartID(int id);
-#endif
     /**
      * Sets the broken flag and error message.
      * Most likely to be called by @ref KexiPart::Manager

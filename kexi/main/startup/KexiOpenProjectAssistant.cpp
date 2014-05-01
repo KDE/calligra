@@ -41,9 +41,9 @@
 
 KexiMainOpenProjectPage::KexiMainOpenProjectPage(QWidget* parent)
  : KexiAssistantPage(i18n("Open Project"),
-                  i18n("Select project to open. "
-                       "You can choose project stored in file or on database server."),
-                  parent)
+                     i18n("Select project to open. "
+                          "You can choose project stored in file or on database server."),
+                     parent)
  , connSelector(0)
  , m_errorMessagePopup(0)
 {
@@ -179,7 +179,7 @@ bool KexiProjectDatabaseSelectionPage::setConnection(KexiDB::ConnectionData* dat
         projectSelector->setProjectSet(0);
         conndataToShow = 0;
         if (data) {
-            m_projectSetToShow = new KexiProjectSet(*data, m_assistant);
+            m_projectSetToShow = new KexiProjectSet(data, m_assistant);
             if (m_projectSetToShow->error()) {
                 delete m_projectSetToShow;
                 m_projectSetToShow = 0;
@@ -295,7 +295,7 @@ void KexiOpenProjectAssistant::nextPageRequested(KexiAssistantPage* page)
 void KexiOpenProjectAssistant::cancelRequested(KexiAssistantPage* page)
 {
     Q_UNUSED(page);
-    //TODO?
+    //! @todo
 }
 
 void KexiOpenProjectAssistant::slotOpenProject(KexiProjectData* data)

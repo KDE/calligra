@@ -320,7 +320,7 @@ KexiProjectSelectorDialog::KexiProjectSelectorDialog(QWidget *parent,
 {
     setWindowTitle(i18n("Open Project"));
     KexiDB::ConnectionData _cdata(cdata);
-    KexiProjectSet *prj_set = new KexiProjectSet(_cdata);
+    KexiProjectSet *prj_set = new KexiProjectSet(&_cdata);
     init(prj_set, showProjectNameColumn, showConnectionColumns);
     setButtonGuiItem(Ok, KGuiItem(i18n("&Open"), koIconName("document-open"),
                                   i18n("Open Database Connection")));

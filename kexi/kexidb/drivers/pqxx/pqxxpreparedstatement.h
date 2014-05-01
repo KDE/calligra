@@ -24,6 +24,7 @@
 //
 #ifndef PQXXPREPAREDSTATEMENT_H
 #define PQXXPREPAREDSTATEMENT_H
+
 #include <db/preparedstatement.h>
 #include <db/connection_p.h>
 
@@ -36,11 +37,10 @@ class pqxxPreparedStatement : public PreparedStatement
 {
 public:
     pqxxPreparedStatement(StatementType type, ConnectionInternal& conn, FieldList& fields);
-
     virtual ~pqxxPreparedStatement();
 
     virtual bool execute();
-    bool m_resetRequired : 1;
+    bool m_resetRequired;
 
 private:
     Connection* m_conn;

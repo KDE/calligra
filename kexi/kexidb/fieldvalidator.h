@@ -42,7 +42,7 @@ class KEXI_DB_EXPORT FieldValidator : public KexiUtils::MultiValidator
 {
 public:
     //! Setups the validator for \a field. Does not keep a pointer to \a field.
-    FieldValidator(const Field &field, QWidget * parent);
+    explicit FieldValidator(const Field &field, QObject* parent = 0);
     ~FieldValidator();
 };
 

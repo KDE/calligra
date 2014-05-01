@@ -216,7 +216,7 @@ int main(int argc, char** argv)
         if (test_name == "dbcreation" || test_name == "tables")
             res = project->create(true /*force overwrite*/);
         else
-            res = project->open(incompatibleWithKexi);
+            res = project->open(&incompatibleWithKexi);
         if (res != true) {
             if (incompatibleWithKexi)
                 kDebug() << "incompatibleWithKexi";

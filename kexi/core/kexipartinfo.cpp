@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,6 +23,7 @@
 
 #include <db/global.h>
 #include <kactioncollection.h>
+#include <KDebug>
 
 using namespace KexiPart;
 
@@ -30,10 +31,8 @@ Info::Private::Private(const KService::Ptr& aPtr)
         : ptr(aPtr)
         , instanceCaption(aPtr->name())
         , groupName(aPtr->genericName())
-//        , mimeType(aPtr->property("X-Kexi-TypeMime").toString())
         , itemIconName(aPtr->property("X-Kexi-ItemIcon", QVariant::String).toString())
         , objectName(aPtr->property("X-Kexi-TypeName", QVariant::String).toString())
-//        , projectPartID( aPtr->property("X-Kexi-TypeId").toInt() )
         , partClass(aPtr->property("X-Kexi-Class", QVariant::String).toString())
         , broken(false)
         , idStoredInPartDatabase(false)
@@ -75,23 +74,9 @@ Info::Private::Private(const KService::Ptr& aPtr)
     isPropertyEditorAlwaysVisibleInDesignMode = true;
     getBooleanProperty(aPtr, "X-Kexi-PropertyEditorAlwaysVisibleInDesignMode",
                        &isPropertyEditorAlwaysVisibleInDesignMode);
-
-#if 0
-    if (projectPartID == 0) {
-        if (isVisibleInNavigator) {
-            kWarning() << "Could not found project part ID! (name: '" << objectName 
-                << "'). Possible problem with installation of the .desktop files for Kexi plugins";
-            isVisibleInNavigator = false;
-        }
-        projectPartID = -1;
-    }
-#endif
 }
 
 Info::Private::Private()
-#if 0 //moved as internal to KexiProject
-        : projectPartID(-1) //OK?
-#endif
         : broken(false)
         , isVisibleInNavigator(false)
         , idStoredInPartDatabase(false)
@@ -126,15 +111,7 @@ void KexiNewObjectAction::slotTriggered()
 Info::Info(KService::Ptr ptr)
         : d(new Private(ptr))
 {
-    if (KexiMainWindowIface::global()) {
-        KexiNewObjectAction *act = new KexiNewObjectAction(
-            this,
-            KexiMainWindowIface::global()->actionCollection());
-        
-        if (KexiMainWindowIface::global()->actionCollection()) {
-            KexiMainWindowIface::global()->actionCollection()->addAction(act->objectName(), act);
-        }
-    }
+
 }
 
 Info::Info(const QString &partClass, const QString &itemIconName,
@@ -206,18 +183,6 @@ bool Info::isVisibleInNavigator() const
     return d->isVisibleInNavigator;
 }
 
-#if 0 //moved as internal to KexiProject
-int Info::projectPartID() const
-{
-    return d->projectPartID;
-}
-
-void Info::setProjectPartID(int id)
-{
-    d->projectPartID = id;
-}
-#endif
-
 void Info::setBroken(bool broken, const QString& errorMessage)
 {
     d->broken = broken; d->errorMessage = errorMessage;
@@ -259,6 +224,20 @@ bool Info::isExecuteSupported() const
 bool Info::isPropertyEditorAlwaysVisibleInDesignMode() const
 {
     return d->isPropertyEditorAlwaysVisibleInDesignMode;
+}
+
+QAction* Info::newObjectAction()
+{
+    if (!KexiMainWindowIface::global() || !KexiMainWindowIface::global()->actionCollection()) {
+        kWarning() << "!KexiMainWindowIface::global()";
+        return 0;
+    }
+    QAction *act = KexiMainWindowIface::global()->actionCollection()->action(KexiPart::nameForCreateAction(*this));
+    if (!act) {
+        KexiNewObjectAction *act = new KexiNewObjectAction(this, KexiMainWindowIface::global()->actionCollection());
+        KexiMainWindowIface::global()->actionCollection()->addAction(act->objectName(), act);
+    }
+    return act;
 }
 
 //--------------

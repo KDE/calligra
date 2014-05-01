@@ -25,7 +25,6 @@
 #include "KexiMainWindowIface.h"
 
 #include <kdebug.h>
-//#include <klibloader.h>
 #include <klocale.h>
 #include <db/msghandler.h>
 #include <kexi_global.h>
@@ -62,7 +61,6 @@ public:
                 return 0;
             }
             
-//2.0            part = KLibLoader::createInstance<KexiInternalPart>(fullname);
             KPluginFactory *factory = loader.factory();
             if (factory)
                 part = factory->create<KexiInternalPart>(this);
@@ -79,8 +77,6 @@ public:
         return part;
     }
 
-
-
 private:
      QHash<QByteArray, KexiInternalPart*> m_parts;
 };
@@ -93,27 +89,21 @@ class KexiInternalPart::Private
 {
 public:
     Private();
-
     ~Private();
 
     //! Unique dialog - we're using guarded ptr for the dialog so can know if it has been closed
     QPointer<QWidget> uniqueWidget;
-
     bool uniqueWindow; //!< true if createWidgetInstance() should return only one window
-
     bool cancelled; //!< Used in cancelled()
-
 };
 
 KexiInternalPart::Private::Private() : uniqueWindow(true)
                                        ,cancelled(false)
 {
-
 }
 
 KexiInternalPart::Private::~Private()
 {
-
 }
 
 KexiInternalPart::KexiInternalPart(QObject *parent, const QVariantList &)
@@ -128,8 +118,7 @@ KexiInternalPart::~KexiInternalPart()
 }
 
 //static
-const KexiInternalPart *
-KexiInternalPart::part(KexiDB::MessageHandler *msgHdr, const char* partName)
+const KexiInternalPart* KexiInternalPart::part(KexiDB::MessageHandler *msgHdr, const char* partName)
 {
     return internalPartManager.findPart(msgHdr, partName);
 }
@@ -159,16 +148,19 @@ KexiWindow* KexiInternalPart::findOrCreateKexiWindow(
         d->uniqueWidget = wnd; //recall unique!
     wnd->addView(view);
     wnd->setWindowTitle(view->windowTitle());
-#ifdef __GNUC__
-#warning TODO wnd->setTabCaption( view->caption() );
-#else
-#pragma WARNING( TODO wnd->setTabCaption( view->caption() ); )
-#endif
     wnd->resize(view->sizeHint());
     wnd->setMinimumSize(view->minimumSizeHint().width(), view->minimumSizeHint().height());
     wnd->setId(KexiMainWindowIface::global()->project()->generatePrivateID());
     wnd->registerWindow();
     return wnd;
+}
+
+//static
+QWidget* KexiInternalPart::createWidgetInstance(const char* partName,
+                                                KexiDB::MessageHandler *msgHdr,
+                                                QWidget *parent, const char *objName, QMap<QString, QString>* args)
+{
+    return createWidgetInstance(partName, 0, msgHdr, parent, objName, args);
 }
 
 //static
@@ -209,6 +201,14 @@ QDialog* KexiInternalPart::createModalDialogInstance(const char* partName,
     if (!(part->uniqueWindow() && !part->d->uniqueWidget.isNull()))
         delete w;
     return 0;
+}
+
+//static
+QDialog* KexiInternalPart::createModalDialogInstance(const char* partName,
+                                                     KexiDB::MessageHandler *msgHdr, const char *objName,
+                                                     QMap<QString, QString>* args)
+{
+    return createModalDialogInstance(partName, 0, msgHdr, objName, args);
 }
 
 //static

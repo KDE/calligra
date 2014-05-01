@@ -52,7 +52,6 @@ class Item;
  */
 class KEXICORE_EXPORT KexiMainWindowIface : public KexiSharedActionHost
 {
-// Q_OBJECT
 public:
     //! Used by printActionForItem()
     enum PrintActionType {
@@ -67,9 +66,7 @@ public:
     //! \return KexiMainWindowImpl global singleton (if it is instantiated)
     static KexiMainWindowIface* global();
 
-    QWidget* thisWidget() {
-        return dynamic_cast<QWidget*>(this);
-    }
+    QWidget* thisWidget();
 
     //! Project data of currently opened project or NULL if no project here yet.
     virtual KexiProject *project() = 0;
@@ -135,15 +132,6 @@ public:
     /*! Registers window \a window for watching and adds it to the main window's stack. */
     virtual void registerChild(KexiWindow *window) = 0;
 
-//2.0 disabled  virtual QMenu* findPopupMenu(const char *popupName) = 0;
-
-    /*! Generates ID for private "document" like Relations window.
-     Private IDs are negative numbers (while ID regular part instance's IDs are >0)
-     Private means that the object is not stored as-is in the project but is somewhat
-     generated and in most cases there is at most one unique instance document of such type (part).
-     To generate this ID, just app-wide internal counter is used. */
-//moved to KexiProject  virtual int generatePrivateID() = 0;
-
     /*! \return a list of all actions defined by application.
      Not all of them are shared. Don't use plug these actions
      in your windows by hand but user methods from KexiView! */
@@ -170,7 +158,6 @@ public:
 
     //! Emitted after closing the project.
     virtual void projectClosed() = 0;
-//#endif
 
 // public slots:
     /*! Creates new object of type defined by \a info part info.
@@ -185,7 +172,8 @@ public:
 
     //! For convenience
     virtual KexiWindow* openObject(const QString& mime, const QString& name,
-                                   Kexi::ViewMode viewMode, bool &openingCancelled, QMap<QString, QVariant>* staticObjectArgs = 0) = 0;
+                                   Kexi::ViewMode viewMode, bool &openingCancelled,
+                                   QMap<QString, QVariant>* staticObjectArgs = 0) = 0;
 
     /*! Closes the object for \a item.
      \return true on success (closing can be dealyed though), false on failure and cancelled

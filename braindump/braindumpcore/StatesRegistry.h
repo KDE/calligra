@@ -29,6 +29,7 @@ class State;
 class BRAINDUMPCORE_EXPORT StatesRegistry
 {
     StatesRegistry();
+    virtual ~StatesRegistry();
 public:
     static const StatesRegistry* instance();
     QList<QString> categorieIds() const;
