@@ -85,7 +85,15 @@ void OdtReader::setTextReader(OdfTextReader *textReader)
     m_textReader = textReader;
 }
 
-
+bool OdtReader::analyzeContent(OdfReaderContext *context)
+{
+    // Extract styles, manifest, settings, etc
+    if (context->analyzeOdfFile() != KoFilter::OK) {
+        return false;
+    }
+    kDebug(30503) << "analyze ok";
+    return true;
+}
 
 bool OdtReader::readContent(OdtReaderBackend *backend, OdfReaderContext *context)
 {
@@ -97,12 +105,6 @@ bool OdtReader::readContent(OdtReaderBackend *backend, OdfReaderContext *context
     if (m_textReader) {
         m_textReader->setContext(context);
     }
-
-    // Extract styles, manifest, settings, etc
-    if (context->analyzeOdfFile() != KoFilter::OK) {
-        return false;
-    }
-    kDebug(30503) << "analyze ok";
 
     // ----------------------------------------------------------------
     // Read the body from content.xml

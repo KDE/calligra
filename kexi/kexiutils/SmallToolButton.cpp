@@ -43,8 +43,8 @@ public:
     }
 
     QPointer<QAction> action;
-    bool enableSlotButtonToggled : 1;
-    bool enableSlotActionToggled : 1;
+    bool enableSlotButtonToggled;
+    bool enableSlotActionToggled;
 };
 
 //--------------------------------
@@ -187,18 +187,18 @@ void KexiSmallToolButton::setText(const QString& text)
 
 void KexiSmallToolButton::slotActionChanged()
 {
-    kDebug() << "slotActionChanged()" << d->action->isEnabled();
     setEnabled(d->action->isEnabled());
 }
 
 void KexiSmallToolButton::slotButtonToggled(bool checked)
 {
+    Q_UNUSED(checked);
     if (!d->enableSlotButtonToggled)
         return;
-    QObject *view = KexiUtils::findParent<QObject*>(this, "KexiView");
-    kDebug() << QString("checked=%1 action=%2 view=%3")
-    .arg(checked).arg(d->action ? d->action->text() : QString())
-    .arg(view ? view->objectName() : QString("??"));
+    //QObject *view = KexiUtils::findParent<QObject*>(this, "KexiView");
+    //kDebug() << QString("checked=%1 action=%2 view=%3")
+    // .arg(checked).arg(d->action ? d->action->text() : QString())
+    // .arg(view ? view->objectName() : QString("??"));
     d->enableSlotActionToggled = false;
     d->enableSlotActionToggled = true;
 }
@@ -207,10 +207,10 @@ void KexiSmallToolButton::slotActionToggled(bool checked)
 {
     if (!d->enableSlotActionToggled)
         return;
-    QObject *view = KexiUtils::findParent<QObject*>(this, "KexiView");
-    kDebug() << QString("checked=%1 action=%2 view=%3")
-    .arg(checked).arg(d->action ? d->action->text() : QString())
-    .arg(view ? view->objectName() : QString("??"));
+    //QObject *view = KexiUtils::findParent<QObject*>(this, "KexiView");
+    //kDebug() << QString("checked=%1 action=%2 view=%3")
+    // .arg(checked).arg(d->action ? d->action->text() : QString())
+    // .arg(view ? view->objectName() : QString("??"));
     d->enableSlotButtonToggled = false;
     setChecked(checked);
     d->enableSlotButtonToggled = true;

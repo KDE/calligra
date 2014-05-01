@@ -30,6 +30,7 @@
 #include <QDropEvent>
 #include <QMouseEvent>
 #include <QStyleOptionFocusRect>
+#include <QScrollBar>
 
 #include <kdebug.h>
 #include <kiconloader.h>
@@ -227,7 +228,7 @@ void KexiRelationsTableFieldList::dragMoveEvent(QDragMoveEvent* event)
     QStringList srcFields;
     QString srcField;
     
-    if (!KexiFieldDrag::decode(event, sourceMimeType, srcTable, srcFields)) {
+    if (!KexiFieldDrag::decode(event, &sourceMimeType, &srcTable, &srcFields)) {
         event->ignore();
         return;
     }
@@ -272,7 +273,7 @@ void KexiRelationsTableFieldList::dropEvent(QDropEvent *event)
     QStringList srcFields;
     QString srcField;
     
-    if (!KexiFieldDrag::decode(event, sourceMimeType, srcTable, srcFields)) {
+    if (!KexiFieldDrag::decode(event, &sourceMimeType, &srcTable, &srcFields)) {
         return;
     }
     

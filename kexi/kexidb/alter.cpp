@@ -226,7 +226,6 @@ static AlterTableHandler::ActionDict* createActionDict(
     AlterTableHandler::ActionDictDict &fieldActions, int forFieldUID)
 {
     AlterTableHandler::ActionDict* dict = new AlterTableHandler::ActionDict();
-//Qt4 dict->setAutoDelete(true);
     fieldActions.insert(forFieldUID, dict);
     return dict;
 }
@@ -430,7 +429,7 @@ tristate AlterTableHandler::ChangeFieldPropertyAction::execute(Connection &conn,
         return result;
     }
 
-//todo
+//! @todo
     return true;
 
     //2. Harder cases, that often require special care
@@ -859,7 +858,6 @@ TableSchema* AlterTableHandler::execute(const QString& tableName, ExecutionArgum
 
     // Fields-related actions.
     ActionDictDict fieldActions;
-//Qt 4 fieldActions.setAutoDelete(true);
     ActionBase* action;
     for (int i = d->actions.count() - 1; i >= 0; i--) {
         d->actions[i]->simplifyActions(fieldActions);
@@ -925,7 +923,7 @@ TableSchema* AlterTableHandler::execute(const QString& tableName, ExecutionArgum
         args.result = true;
         return oldTable;
     }
-// @todo transaction!
+//! @todo transaction!
 
     // Create new TableSchema
     TableSchema *newTable = recreateTable ? new TableSchema(*oldTable, false/*!copy id*/) : oldTable;

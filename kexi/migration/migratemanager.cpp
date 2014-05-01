@@ -23,6 +23,8 @@
 #include "migratemanager_p.h"
 #include "keximigrate.h"
 
+#include <core/KexiMainWindowIface.h>
+
 //#include <klibloader.h>
 #include <ktrader.h>
 #include <kdebug.h>
@@ -71,8 +73,11 @@ MigrateManagerInternal::~MigrateManagerInternal()
 
 void MigrateManagerInternal::slotAppQuits()
 {
-    if (qApp->mainWidget() && qApp->mainWidget()->isVisible())
+    if (KexiMainWindowIface::global() && KexiMainWindowIface::global()->thisWidget()
+        && KexiMainWindowIface::global()->thisWidget()->isVisible())
+    {
         return; //what a hack! - we give up when app is still there
+    }
     KexiDBDbg << "let's clear drivers...";
     m_drivers.clear();
     qDeleteAll(m_drivers);

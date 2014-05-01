@@ -93,8 +93,10 @@ void KoOdfParagraphProperties::clear()
 
 bool KoOdfParagraphProperties::readOdf(KoXmlStreamReader &reader)
 {
-    // The element paragraph-properties has no children.
     bool retval = readAttributes(reader);
+    if (!retval) {
+        return false;
+    }
 
     // Load child elements.  For paragraph-properties, these are:
     //  - style:background-image

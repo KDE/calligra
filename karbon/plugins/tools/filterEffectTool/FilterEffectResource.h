@@ -44,7 +44,8 @@ public:
 
     /// Creates a new filter stack from this filter resource
     KoFilterEffectStack * toFilterStack() const;
-
+protected:
+    virtual QByteArray generateMD5() const;
 private:
     QDomDocument m_data;
 };

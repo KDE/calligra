@@ -1,0 +1,59 @@
+This is the converter between the odt and docx formats, also known as
+the docx export filter.
+
+
+
+Architecture
+------------
+
+This filter uses the ODF traversal library in filters/libodftraverse.
+It defines its own backend and context for the traversal which are
+used for the conversion
+
+The conversion process takes place in the OdtTraverserDocxBackend.
+Before it starts relevant data from the ODT file is collected into the
+OdtTraverserDocxContext.  At the time of writing this means styles
+from both styles.xml and content.xml, the manifest and the metadata
+from the ODT file. This is stored in the OdtTraverserContext class
+which is inherited by the OdtTraverserDocxContext.
+
+During the conversion, other types of information is collected into
+the context. An examples of this is images. Other data, like embedded
+files are stored into the Docx context in the DocxFile class which
+inherits FileCollector.
+
+At the end of the conversion, the function writeDocx() in the class
+DocxFile is called to actually create the output file. This function
+saves all the pieces that were collected during the conversion
+process, including the converted document.
+
+At the time of writing this functions calls many subfunctions that
+create hard coded data. The reason for this is that the conversion
+process still only supports part of docx and has to generate hardcoded
+files inside the docx store to follow the docx specification. This
+will be rectified as more of the docx standard is supported.
+
+
+Classes
+------
+
+DocxExport                      The main conversion file
+
+OdtTraverserDocxBackend         Backend for the ODT traverser
+OdtTraverserDocxContext         Context for the Docx backend to the ODT traverser
+                                This keeps relevant state during the conversion
+
+FileCollector                   Collects files to be put inside the Docx store
+                                Base class to DocxFile. Originally copied from the epub filter.
+                                Should be moved to a library
+DocxFile                        Collects files that are related to the docx structure.
+                                Also knows about the internal structure of docx.
+                                Inherits FileCollector.
+
+OpcRelSet                       Represents the set of OPC relations for one file
+OpcRelSetManager                Stores all relation sets inside a Docx store
+
+
+
+
+

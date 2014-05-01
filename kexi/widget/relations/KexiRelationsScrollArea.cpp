@@ -23,7 +23,6 @@
 #include <QStringList>
 #include <QLayout>
 #include <QLabel>
-#include <q3header.h>
 #include <QEvent>
 #include <QPainter>
 #include <QStyle>
@@ -31,6 +30,7 @@
 #include <QMouseEvent>
 #include <QKeyEvent>
 #include <QTimer>
+#include <QScrollBar>
 
 #include <klocale.h>
 #include <kaction.h>
@@ -116,7 +116,6 @@ KexiRelationsScrollArea::KexiRelationsScrollArea(QWidget *parent)
         : QScrollArea(parent)
         , d(new Private)
 {
-//Qt4 setFrameStyle(Q3Frame::WinPanel | Q3Frame::Sunken);
 //Qt4 setAttribute(Qt::WA_StaticContents, true);
 // connect(relation, SIGNAL(relationListUpdated(QObject*)), this, SLOT(slotListUpdate(QObject*)));
 

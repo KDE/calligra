@@ -26,9 +26,6 @@
 
 #include <kdebug.h>
 
-//#define ERRMSG(a1, a2)
-// { if (m_msgHandler) m_msgHandler->showErrorMessage(a1, a2); }
-
 //! @internal
 class KexiProjectSetPrivate
 {
@@ -38,14 +35,11 @@ public:
     }
     ~KexiProjectSetPrivate()
     {
-        //qDeleteAll(list);
         foreach (KexiProjectData* data, list) {
-            //kDebug() << "deleting" << data;
             delete data;
         }
     }
     KexiProjectData::List list;
-// KexiDB::MessageHandler* msgHandler;
 };
 
 KexiProjectSet::KexiProjectSet(KexiDB::MessageHandler* handler)
@@ -54,17 +48,18 @@ KexiProjectSet::KexiProjectSet(KexiDB::MessageHandler* handler)
 {
 }
 
-KexiProjectSet::KexiProjectSet(KexiDB::ConnectionData &conndata,
+KexiProjectSet::KexiProjectSet(KexiDB::ConnectionData* conndata,
                                KexiDB::MessageHandler* handler)
         : KexiDB::Object(handler)
         , d(new KexiProjectSetPrivate())
 {
-    KexiDB::Driver *drv = Kexi::driverManager().driver(conndata.driverName);
+    Q_ASSERT(conndata);
+    KexiDB::Driver *drv = Kexi::driverManager().driver(conndata->driverName);
     if (!drv) {
         setError(&Kexi::driverManager());
         return;
     }
-    KexiDB::Connection *conn = drv->createConnection(conndata);
+    KexiDB::Connection *conn = drv->createConnection(*conndata);
     if (!conn) {
         setError(drv);
         return;
@@ -75,7 +70,6 @@ KexiProjectSet::KexiProjectSet(KexiDB::ConnectionData &conndata,
         return;
     }
     QStringList dbnames = conn->databaseNames(false/*skip system*/);
-// kDebug() << dbnames.count();
     if (conn->error()) {
         setError(conn);
         delete conn;
@@ -85,12 +79,11 @@ KexiProjectSet::KexiProjectSet(KexiDB::ConnectionData &conndata,
     conn = 0;
     for (QStringList::ConstIterator it = dbnames.constBegin(); it != dbnames.constEnd(); ++it) {
         // project's caption is just the same as database name - nothing better is available
-        KexiProjectData *pdata = new KexiProjectData(conndata, *it, *it);
+        KexiProjectData *pdata = new KexiProjectData(*conndata, *it, *it);
         d->list.append(pdata);
     }
     clearError();
 }
-
 
 KexiProjectSet::~KexiProjectSet()
 {

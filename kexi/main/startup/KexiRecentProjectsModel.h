@@ -35,7 +35,7 @@ public:
     };
 
     explicit KexiRecentProjectsModel(const KexiRecentProjects& projects,
-                            QObject *parent = 0);
+                                     QObject *parent = 0);
 
     QModelIndex  index(int row, int column = 0,
                        const QModelIndex& parent = QModelIndex() ) const;

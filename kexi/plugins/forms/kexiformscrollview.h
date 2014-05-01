@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2014 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,28 +21,39 @@
 #ifndef KEXIFORMSCROLLVIEW_H
 #define KEXIFORMSCROLLVIEW_H
 
+#include <QScrollArea>
+#include <QPixmap>
+#include <QEvent>
+#include <QMargins>
+
+#include <core/KexiRecordNavigatorHandler.h>
 #include <widget/dataviewcommon/kexidataprovider.h>
 #include <formeditor/kexiformeventhandler.h>
-#include "widgets/kexidbform.h"
-#include <widget/kexiscrollview.h>
 #include <widget/utils/kexirecordnavigator.h>
 #include <widget/utils/kexisharedactionclient.h>
 #include <widget/dataviewcommon/kexidataawareobjectiface.h>
 
-//! @short KexiFormScrollView class provides a widget for displaying data in a form view
-/*! This class also implements:
-    - record navigation handling (KexiRecordNavigatorHandler)
-    - shared actions handling (KexiSharedActionClient)
-    - data-aware behaviour (KexiDataAwareObjectInterface)
-    - data provider bound to data-aware widgets (KexiFormDataProvider)
+#include <kexi_export.h>
 
-    @see KexiTableView
+class KexiRecordNavigator;
+class KexiDBForm;
+namespace KFormDesigner {
+class Form;
+}
+
+//! @short A widget for displaying a form view in a scrolled area.
+/** Users can resize the form's main widget, according to grid settings.
+ * The content is resized so the widget can be further resized.
+ * This class also implements:
+ * - record navigation handling (KexiRecordNavigatorHandler)
+ *  - shared actions handling (KexiSharedActionClient)
+ *  - data-aware behaviour (KexiDataAwareObjectInterface)
+ *  - data provider bound to data-aware widgets (KexiFormDataProvider)
+ *
+ * @see KexiTableView
 */
-
-#include <core/KexiRecordNavigatorHandler.h>
-
 class KEXIFORMUTILS_EXPORT KexiFormScrollView :
-            public KexiScrollView,
+            public QScrollArea,
             public KexiRecordNavigatorHandler,
             public KexiSharedActionClient,
             public KexiDataAwareObjectInterface,
@@ -57,6 +68,8 @@ public:
     virtual ~KexiFormScrollView();
 
     void setForm(KFormDesigner::Form *form);
+
+    KFormDesigner::Form* form() const;
 
     /*! Reimplemented from KexiDataAwareObjectInterface
      for checking 'readOnly' flag from a widget
@@ -89,9 +102,45 @@ public:
     virtual int lastVisibleRow() const;
 
     /*! \return vertical scrollbar. Implemented for KexiDataAwareObjectInterface. */
-    virtual QScrollBar* verticalScrollBar() const {
-        return KexiScrollView::verticalScrollBar();
-    }
+    virtual QScrollBar* verticalScrollBar() const;
+
+    KexiDBForm* dbFormWidget() const;
+
+    //! @return true if snapping to grid is enabled. The defalt value is false.
+    bool isSnapToGridEnabled() const;
+
+    bool isResizingEnabled() const;
+    void setResizingEnabled(bool enabled);
+    void setRecordNavigatorVisible(bool visible);
+
+    bool isOuterAreaVisible() const;
+    void setOuterAreaIndicatorVisible(bool visible);
+
+    void refreshContentsSizeLater();
+    void updateNavPanelGeometry();
+
+    KexiRecordNavigator* recordNavigator() const;
+
+    bool isPreviewing() const;
+
+    QMargins viewportMargins() const;
+
+    void setViewportMargins(const QMargins &margins);
+
+    //! @return widget displaying contents of the main area.
+    QWidget* mainAreaWidget() const;
+
+    //! Sets widget for displaying contents of the main area.
+    void setMainAreaWidget(QWidget* widget);
+
+    //! temporary
+    int leftMargin() const { return 0; }
+
+    //! temporary
+    int bottomMargin() const { return 0; }
+
+    //! temporary
+    void updateScrollBars() {}
 
 public slots:
     /*! Reimplemented to update resize policy. */
@@ -121,8 +170,8 @@ public slots:
     virtual bool cancelEditor();
 
 public slots:
-    /*! Reimplemented to also clear command history right after final resize. */
-    virtual void refreshContentsSize();
+    /*! Clear command history right after final resize. */
+    void refreshContentsSize();
 
     /*! Handles verticalScrollBar()'s valueChanged(int) signal.
      Called when vscrollbar's value has been changed. */
@@ -161,9 +210,10 @@ signals:
     void updateSaveCancelActions();
     void reloadActions();
 
-protected slots:
-    void slotResizingStarted();
+    //! Emitted when the main widget area is being interactively resized.
+    bool resized();
 
+protected slots:
     //! Handles KexiDB::TableViewData::rowRepaintRequested() signal
     virtual void slotRowRepaintRequested(KexiDB::RecordData& record);
 
@@ -262,8 +312,6 @@ protected:
      QScrollView::updateScrollbars() will be usually called here. */
     virtual void updateWidgetScrollBars();
 
-    KexiDBForm* dbFormWidget() const;
-
     //! Reimplemented from KexiFormDataProvider. Reaction for change of \a item.
     virtual void valueChanged(KexiDataItemInterface* item);
 
@@ -306,7 +354,9 @@ protected:
     /*! @internal */
     bool shouldDisplayDefaultValueForItem(KexiFormDataItemInterface* itemIface) const;
 
-    //virtual bool focusNextPrevChild( bool next );
+    virtual void setHBarGeometry(QScrollBar & hbar, int x, int y, int w, int h);
+
+    const QTimer *delayedResizeTimer() const;
 
 private:
     class Private;

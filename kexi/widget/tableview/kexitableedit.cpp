@@ -55,7 +55,6 @@ KexiTableEdit::KexiTableEdit(KexiDB::TableViewColumn &column, QWidget* parent)
         // ,m_acceptEditorAfterDeleteContents(false)   
 #endif
 {
-//    setPaletteBackgroundColor(palette().color(QPalette::Active, QColorGroup::Base));
     QPalette pal(palette());
     pal.setBrush(backgroundRole(), pal.brush(QPalette::Base));
     setPalette(pal);

@@ -81,7 +81,7 @@ OptionsDialog::OptionsDialog(const QString& databaseFile, const QString& selecte
     //read config
     KConfigGroup importExportGroup(KGlobal::config()->group("ImportExport"));
     QString defaultEncodingForMSAccessFiles
-    = importExportGroup.readEntry("DefaultEncodingForMSAccessFiles");
+        = importExportGroup.readEntry("DefaultEncodingForMSAccessFiles");
     if (!defaultEncodingForMSAccessFiles.isEmpty()) {
         m_encodingComboBox->setSelectedEncoding(defaultEncodingForMSAccessFiles);
         m_chkAlwaysUseThisEncoding->setChecked(true);

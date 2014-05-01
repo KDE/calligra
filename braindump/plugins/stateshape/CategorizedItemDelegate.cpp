@@ -45,6 +45,7 @@ CategorizedItemDelegate::CategorizedItemDelegate(QAbstractItemDelegate* _fallbac
 }
 CategorizedItemDelegate::~CategorizedItemDelegate()
 {
+    delete d;
 }
 
 QWidget * CategorizedItemDelegate::createEditor(QWidget * parent, const QStyleOptionViewItem & option, const QModelIndex & index) const

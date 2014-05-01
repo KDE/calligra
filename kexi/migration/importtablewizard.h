@@ -44,12 +44,12 @@ class MigrateManager;
 class KexiMigrate;
 class AlterSchemaWidget;
 
-class KEXIMIGR_EXPORT ImportTableWizard : public KAssistantDialog {
+class KEXIMIGR_EXPORT ImportTableWizard : public KAssistantDialog
+{
 Q_OBJECT
     public:
-        
-        ImportTableWizard ( KexiDB::Connection* curDB, QWidget* parent = 0, Qt::WFlags flags = 0 );
-        ~ImportTableWizard ( );
+        explicit ImportTableWizard( KexiDB::Connection* curDB, QWidget* parent = 0, Qt::WFlags flags = 0 );
+        virtual ~ImportTableWizard( );
 
         virtual void back();
         virtual void next();
@@ -64,7 +64,6 @@ Q_OBJECT
         KexiDB::Connection* m_currentDatabase;
         KexiConnectionSelectorWidget *m_srcConnSel;
         KexiMigration::MigrateManager *m_migrateManager;
-        //KexiMigration::KexiMigrate *m_migrateDriver;
         QPointer<KexiMigration::KexiMigrate> m_migrateDriver;
         QListWidget *m_tableListWidget;
         AlterSchemaWidget *m_alterSchemaWidget;
@@ -83,10 +82,13 @@ Q_OBJECT
         bool doImport();
         
         //Page Items
-        KPageWidgetItem *m_introPageItem, *m_srcConnPageItem, *m_srcDBPageItem, *m_tablesPageItem, *m_alterTablePageItem, *m_importingPageItem, *m_finishPageItem;
+        KPageWidgetItem *m_introPageItem, *m_srcConnPageItem, *m_srcDBPageItem,
+                        *m_tablesPageItem, *m_alterTablePageItem, *m_importingPageItem,
+                        *m_finishPageItem;
         
         //Page Widgets
-        QWidget *m_introPageWidget, *m_srcConnPageWidget, *m_srcDBPageWidget, *m_tablesPageWidget, *m_alterTablePageWidget, *m_importingPageWidget, *m_finishPageWidget;
+        QWidget *m_introPageWidget, *m_srcConnPageWidget, *m_srcDBPageWidget, *m_tablesPageWidget,
+                *m_alterTablePageWidget, *m_importingPageWidget, *m_finishPageWidget;
 
         //Page Setup
         void setupIntroPage();

@@ -28,7 +28,7 @@ using namespace KexiPart;
 //------------------------------
 
 StaticPartInfo::StaticPartInfo(const QString& partClass, const QString& itemIcon,
-                       const QString& objectName)
+                               const QString& objectName)
         : Info(partClass, itemIcon, objectName)
 {
 }

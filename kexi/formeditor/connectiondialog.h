@@ -81,8 +81,7 @@ protected slots:
      or \ref setStatusError() following the result of checks. */
     void checkConnection(KexiDB::RecordData *record);
 
-    /*! Hides the dialog and allow the user to create the Connection by drag-and-drop in the Form itself. Currently disabled in the GUI.
-     \sa FormManager::startCreatingConnection()  */
+    /*! Hides the dialog and allow the user to create the Connection by drag-and-drop in the Form itself. Currently disabled in the GUI.*/
     void newItemByDragnDrop();
     /*! Creates a new item. It just moves the cursor to the last empty row. */
     void newItem();

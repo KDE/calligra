@@ -70,7 +70,7 @@ void KexiDataAwareView::init(QWidget* viewWidget, KexiSharedActionClient* action
         d->dataAwareObject->connectCellSelectedSignal(this, SLOT(slotCellSelected(int,int)));
 
         //! before closing - we'are accepting editing
-        connect(this, SIGNAL(closing(bool&)), this, SLOT(slotClosing(bool&)));
+        connect(this, SIGNAL(closing(bool*)), this, SLOT(slotClosing(bool*)));
 
         //! updating actions on start/stop editing
         d->dataAwareObject->connectRowEditStartedSignal(
@@ -214,14 +214,7 @@ void KexiDataAwareView::slotUpdateRowActions(int row)
 void KexiDataAwareView::slotUpdateSaveCancelActions()
 {
     // 'save row' enabled when editing and there's anything to save
-    const bool editing = isDataEditingInProgress();
-    kDebug() << "editing::::::::" << editing;
-#ifdef __GNUC__
-#warning this did not work well in forms: setAvailable("data_save_row", editing);
-#else
-#pragma WARNING( this did not work well in forms: setAvailable("data_save_row", editing); )
-#endif
-
+    //const bool editing = isDataEditingInProgress();
     setAvailable("data_save_row", d->dataAwareObject->rowEditing());
     // 'cancel row changes' enabled when editing
     setAvailable("data_cancel_row_changes", d->dataAwareObject->rowEditing());
@@ -395,10 +388,10 @@ bool KexiDataAwareView::acceptRowEdit()
     return d->dataAwareObject->acceptRowEdit();
 }
 
-void KexiDataAwareView::slotClosing(bool& cancel)
+void KexiDataAwareView::slotClosing(bool* cancel)
 {
     if (!acceptRowEdit())
-        cancel = true;
+        *cancel = true;
 }
 
 bool KexiDataAwareView::cancelRowEdit()

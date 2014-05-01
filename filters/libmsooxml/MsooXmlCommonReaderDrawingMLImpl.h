@@ -4737,7 +4737,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gsLst()
         if (isStartElement()) {
             if (QUALIFIED_NAME_IS(gs)) {
                 TRY_READ(gs)
-                QString contents = QString("<svg:stop svg:offset=\"%1\" svg:stop-color=\"%2\" svg:stop-opacity=\"1\"/>").arg(m_gradPosition/100.0).arg(m_currentColor.name());
+                qreal alphaLevel = 1;
+                if (m_currentAlpha > 0) {
+                    alphaLevel = m_currentAlpha/100.0;
+                }
+                QString contents = QString("<svg:stop svg:offset=\"%1\" svg:stop-color=\"%2\" svg:stop-opacity=\"%3\"/>").arg(m_gradPosition/100.0).arg(m_currentColor.name()).arg(alphaLevel);
                 QString name = QString("%1").arg(index);
                 m_currentGradientStyle.addChildElement(name, contents);
                 ++index;

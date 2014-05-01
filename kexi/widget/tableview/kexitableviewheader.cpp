@@ -42,11 +42,8 @@ public:
     virtual ~KexiTableViewHeaderStyle() {}
 
     virtual void drawControl(ControlElement ce,
-                             const QStyleOption * option, QPainter * painter, const QWidget * widget = 0) const
-    //drawPrimitive
-    //PrimitiveElement pe,
-    //QPainter *p, const QRect &r, const QColorGroup &cg, SFlags flags = Style_Default,
-    //const QStyleOption& option = QStyleOption::Default ) const
+                             const QStyleOption * option, QPainter * painter,
+                             const QWidget * widget = 0) const
     {
         if (ce == CE_Header/*CE_HeaderSection*/ && option) {
             QStyleOptionHeader newOption(*qstyleoption_cast<const QStyleOptionHeader*>(option));

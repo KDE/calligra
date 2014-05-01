@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2009 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -44,7 +44,6 @@ class Manager::Private
 {
 public:
     Private();
-
     ~Private();
 
     PartDict parts;
@@ -57,14 +56,12 @@ public:
 Manager::Private::Private() : lookupDone(false)
                               ,lookupResult(false)
 {  
-
 }
 
 Manager::Private::~Private()
 {
     qDeleteAll(partlist);
     partlist.clear();
-
 }
 
 Manager::Manager(QObject *parent)
@@ -77,9 +74,15 @@ Manager::~Manager()
     delete d;
 }
 
+static QString appIncorrectlyInstalledMessage()
+{
+    return i18nc("@info", "<application>%1</application> could have been incorrectly installed or started. The application will be closed.",
+                 KGlobal::mainComponent().aboutData()->programName());
+}
+
 bool Manager::lookup()
 {
-//js: TODO: allow refreshing!!!! (will need calling removeClient() by Part objects)
+//! @todo Allow refreshing!!!! (will need calling removeClient() by Part objects)
     if (d->lookupDone)
         return d->lookupResult;
     d->lookupDone = true;
@@ -90,9 +93,9 @@ bool Manager::lookup()
 
     if (!KServiceType::serviceType("Kexi/Handler")) {
         kWarning() << "No 'Kexi/Handler' service type installed! Aborting.";
-        setError(i18nc("@info", "No <resource>%1</resource> service type installed. "
-                       "Check your <application>%2</application> installation. The application will be closed.",
-                       QLatin1String("Kexi/Handler"), KGlobal::mainComponent().aboutData()->programName()));
+        m_serverErrorMsg = i18nc("@info", "No <resource>%1</resource> service type installed.",
+                                 QLatin1String("Kexi/Handler"));
+        setError(appIncorrectlyInstalledMessage());
         return false;
     }
     KService::List tlist = KServiceTypeTrader::self()->query("Kexi/Handler",
@@ -100,10 +103,10 @@ bool Manager::lookup()
 
     KConfigGroup cg(KGlobal::config()->group("Parts"));
     if (qApp && !cg.hasKey("Order")) {
-        setError(i18nc("@info",
-                       "Missing or invalid default <application>%1</application> configuration (no <resource>%2</resource> key). "
-                       "Check your <application>%1</application> installation. The application will be closed.",
-                       KGlobal::mainComponent().aboutData()->programName(), QLatin1String("Parts/Order")));
+        m_serverErrorMsg = i18nc("@info",
+                                 "Missing or invalid default application configuration. No <resource>%1</resource> key.",
+                                 QLatin1String("Parts/Order"));
+        setError(appIncorrectlyInstalledMessage());
         return false;
     }
     const QStringList sl_order = cg.readEntry("Order").split(',');  //we'll set parts in defined order
@@ -134,7 +137,6 @@ bool Manager::lookup()
         KService::Ptr ptr = ordered[i];
         if (ptr) {
             Info *info = new Info(ptr);
-//            info->setProjectPartID(d->nextTempProjectPartID--); // temp. part id are -1, -2, and so on,
             // to avoid duplicates
             if (!info->partClass().isEmpty()) {
                 d->partsByClass.insert(info->partClass(), info);
@@ -162,8 +164,6 @@ Part* Manager::part(Info *i)
 
     Part *p = d->parts.value(i->partClass());
     if (!p) {
-//2.0        int error = 0;
-/*2.0        p = KService::createInstance<Part>(i->ptr(), this, QStringList(), &error); */
         KPluginLoader loader(i->ptr()->library());
         const uint foundMajor = (loader.pluginVersion() >> 16) & 0xff;
 //        const uint foundMinor = (loader.pluginVersion() >> 8) & 0xff;
@@ -181,15 +181,11 @@ Part* Manager::part(Info *i)
             p = factory->create<Part>(this);
 
         if (!p) {
-            kDebug() << "failed";
+            kWarning() << "failed";
             i->setBroken(true, i18n("Error while loading plugin \"%1\"", i->objectName()));
             setError(i->errorMessage());
             return 0;
         }
-/*
-        if (p->registeredPartID() > 0) {
-            i->setProjectPartID(p->registeredPartID());
-        }*/
         p->setInfo(i);
         p->setObjectName(QString("%1 plugin").arg(i->objectName()));
         d->parts.insert(i->partClass(), p);
@@ -234,7 +230,6 @@ void Manager::insertStaticPart(StaticPart* part)
         return;
     if (!lookup())
         return;
-//    part->info()->setProjectPartID(d->nextTempProjectPartID--); // temp. part id are -1, -2, and so on,
     d->partlist.append(part->info());
     if (!part->info()->partClass().isEmpty())
         d->partsByClass.insert(part->info()->partClass(), part->info());
