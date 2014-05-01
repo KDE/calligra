@@ -77,7 +77,6 @@
   </customwidget>
  </customwidgets>
  <includes>
-  <include location="local">k3listview.h</include>
  </includes>
  <resources/>
  <connections/>

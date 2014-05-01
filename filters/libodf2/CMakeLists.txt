@@ -24,6 +24,7 @@ set(koodf2_LIB_SRCS
     KoOdfStyleBase.cpp
     KoOdfStyleManager.cpp
     KoOdfStyle.cpp
+    KoOdfPageLayout.cpp
     KoOdfStyleProperties.cpp
     KoOdfTextProperties.cpp
     KoOdfParagraphProperties.cpp

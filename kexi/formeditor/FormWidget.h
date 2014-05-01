@@ -32,7 +32,6 @@ namespace KFormDesigner
 
 class Container;
 class WidgetLibrary;
-class FormManager;
 class FormPrivate;
 class Form;
 

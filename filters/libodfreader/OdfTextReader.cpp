@@ -668,8 +668,8 @@ void OdfTextReader::readElementOfficeAnnotation(KoXmlStreamReader &reader)
     m_backend->elementOfficeAnnotation(reader, m_context);
 
     // <office:annotation> has the following children in ODF 1.2:
-    //          <dc:creator> 4.3.2.7
-    //          <dc:date> 4.3.2.10
+    //   [done] <dc:creator> 4.3.2.7
+    //   [done] <dc:date> 4.3.2.10
     //          <meta:date-string> 14.3
     //          <text:list> 5.3.1
     //   [done] <text:p> 5.1.3

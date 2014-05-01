@@ -620,9 +620,7 @@ bool ImportWizard::fileBasedSrcSelected() const
 
 bool ImportWizard::fileBasedDstSelected() const
 {
-
-    return d->dstPrjTypeSelector->buttonGroup->selectedId() == 1;
-
+    return d->dstPrjTypeSelector->option_file->isChecked();
 }
 
 void ImportWizard::progressUpdated(int percent)

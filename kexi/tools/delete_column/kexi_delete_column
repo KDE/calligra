@@ -46,8 +46,8 @@ function check {
 	[ -n "$*" ] && exit_with_error "$*"
 }
 
-ksqlite="ksqlite -noheader"
-ksqlite_header="ksqlite -header"
+ksqlite="sqlite3 -noheader"
+ksqlite_header="sqlite3 -header"
 
 if [ $# -lt 3 ] ; then
 	usage
@@ -65,7 +65,7 @@ cp "$database_name" "$temp_db" || exit_with_error
 function prepare_new_create_table_statement {
 	# possible problems: typename ( number , number ) may contain ","
 	
-	schema=`echo ".schema '$table_name';" | $ksqlite "$database_name" | \
+	schema=`echo ".schema '$table_name'" | $ksqlite "$database_name" | \
 		grep "^CREATE TABLE $table_name " | \
 		sed -e "s/[^(]*(\(.*\));/\1/" || exit_with_error`
 	

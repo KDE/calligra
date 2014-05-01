@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2014 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -109,7 +109,7 @@ KexiDBConnectionWidget::KexiDBConnectionWidget(QWidget* parent)
     d->btnSaveChanges->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
     d->btnTestConnection = new KPushButton(
-// @todo add Test Connection icon
+//! @todo add Test Connection icon
         KGuiItem(i18n("&Test Connection"), QString(),
                  i18n("Test database connection"),
                  i18n("Tests database connection. "
@@ -120,7 +120,8 @@ KexiDBConnectionWidget::KexiDBConnectionWidget(QWidget* parent)
     setTabOrder(d->btnSaveChanges, d->btnTestConnection);
     d->btnTestConnection->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
-    connect(locationBGrp, SIGNAL(clicked(int)), this, SLOT(slotLocationBGrpClicked(int)));
+    connect(localhostRBtn, SIGNAL(clicked()), this, SLOT(slotLocationRadioClicked()));
+    connect(remotehostRBtn, SIGNAL(clicked()), this, SLOT(slotLocationRadioClicked()));
     connect(chkPortDefault, SIGNAL(toggled(bool)), this , SLOT(slotCBToggled(bool)));
     connect(btnLoadDBList, SIGNAL(clicked()), this, SIGNAL(loadDBList()));
     connect(d->btnSaveChanges, SIGNAL(clicked()), this, SIGNAL(saveChanges()));
@@ -159,8 +160,13 @@ void KexiDBConnectionWidget::setDataInternal(const KexiProjectData& data, bool c
 //! @todo what if there's no such driver name?
     d->driversCombo->setDriverName(d->data.connectionData()->driverName);
     hostEdit->setText(d->data.connectionData()->hostName);
-    locationBGrp->setButton(d->data.connectionData()->hostName.isEmpty() ? 0 : 1);
-    slotLocationBGrpClicked(locationBGrp->selectedId());
+    if (d->data.connectionData()->hostName.isEmpty()) {
+        localhostRBtn->setChecked(true);
+    }
+    else {
+        remotehostRBtn->setChecked(true);
+    }
+    slotLocationRadioClicked();
     if (d->data.connectionData()->port != 0) {
         chkPortDefault->setChecked(false);
         customPortEdit->setValue(d->data.connectionData()->port);
@@ -219,12 +225,10 @@ KexiProjectData KexiDBConnectionWidget::data()
     return d->data;
 }
 
-void KexiDBConnectionWidget::slotLocationBGrpClicked(int id)
+void KexiDBConnectionWidget::slotLocationRadioClicked()
 {
-    if (id != 0 && id != 1) //only support local/remove radio buttons
-        return;
-    hostLbl->setEnabled(id == 1);
-    hostEdit->setEnabled(id == 1);
+    hostLbl->setEnabled(remotehostRBtn->isChecked());
+    hostEdit->setEnabled(remotehostRBtn->isChecked());
 }
 
 void KexiDBConnectionWidget::slotCBToggled(bool on)
@@ -232,9 +236,6 @@ void KexiDBConnectionWidget::slotCBToggled(bool on)
     if (sender() == chkPortDefault) {
         customPortEdit->setEnabled(!on);
     }
-// else if (sender()==chkSocketDefault) {
-//  customSocketEdit->setEnabled(!on);
-// }
 }
 
 //-----------
