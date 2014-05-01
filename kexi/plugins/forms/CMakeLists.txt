@@ -31,7 +31,6 @@ target_link_libraries(
     ${KOPROPERTY_LIBS}
     kexiformutils
     ${KDE4_KDECORE_LIBS}
-    ${QT_QT3SUPPORT_LIBRARY}
     )
 
 install(TARGETS kexihandler_form  DESTINATION ${PLUGIN_INSTALL_DIR})
@@ -59,7 +58,6 @@ target_link_libraries(
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KDEUI_LIBS}
     ${QT_QTGUI_LIBRARY}
-    ${QT_QT3SUPPORT_LIBRARY}
     )
 
 install(TARGETS kformdesigner_kexidbwidgets  DESTINATION ${PLUGIN_INSTALL_DIR})
@@ -120,10 +118,8 @@ target_link_libraries(
     ${KOPROPERTY_LIBS}
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KDEUI_LIBS}
-    ${KDE4_KDE3SUPPORT_LIBS}
     ${QT_QTGUI_LIBRARY}
     ${QT_QTXML_LIBRARY}
-    ${QT_QT3SUPPORT_LIBRARY}
     )
 
 set_target_properties(kexiformutils PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )

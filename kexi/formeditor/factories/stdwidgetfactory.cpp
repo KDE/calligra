@@ -61,6 +61,7 @@
 #include "form.h"
 #include "widgetlibrary.h"
 #include "stdwidgetfactory.h"
+#include "objecttree.h"
 
 // Some widgets subclass to allow event filtering and some other things
 KexiPictureLabel::KexiPictureLabel(const QPixmap &pix, QWidget *parent)
@@ -863,14 +864,16 @@ StdWidgetFactory::saveListItem(QListWidgetItem *item,
 bool
 StdWidgetFactory::readSpecialProperty(const QByteArray &classname, 
                                       QDomElement &node, QWidget *w, 
-                                      KFormDesigner::ObjectTreeItem *)
+                                      KFormDesigner::ObjectTreeItem *item)
 {
     const QString tag( node.tagName() );
     const QString name( node.attribute("name") );
+    KFormDesigner::Form *form = item->container() ? item->container()->form() : item->parent()->container()->form();
 
     if ((tag == "item") && (classname == "KComboBox")) {
         KComboBox *combo = dynamic_cast<KComboBox*>(w);
-        QVariant val = KFormDesigner::FormIO::readPropertyValue(node.firstChild().firstChild(), w, name);
+        QVariant val = KFormDesigner::FormIO::readPropertyValue(
+                    form, node.firstChild().firstChild(), w, name);
         if (val.canConvert(QVariant::Pixmap))
             combo->addItem(val.value<QPixmap>(), QString());
         else
@@ -906,7 +909,6 @@ StdWidgetFactory::readSpecialProperty(const QByteArray &classname,
         return true;
     }
 #endif
-
     return false;
 }
 

@@ -72,7 +72,7 @@ signals:
     void loadDBList();
 
 protected slots:
-    void slotLocationBGrpClicked(int id);
+    void slotLocationRadioClicked();
     void slotCBToggled(bool on);
 
 protected:

@@ -114,7 +114,7 @@ public:
     Form(WidgetLibrary* library, Mode mode, KActionCollection &col, ActionGroup& group);
 
     /*! Creates Form object as a child of other form. */
-    Form(Form *parent);
+    explicit Form(Form *parent);
 
     ~Form();
 
@@ -178,10 +178,10 @@ public:
     /*! Used to check whether it is possible to execute copy/cut/delete actions. */
     bool isFormWidgetSelected() const;
 
-    /*! Emits the action signals. See \a FormManager for signals description. */
+    /*! Emits the action signals. */
     void emitActionSignals();
 
-    /*! Emits the action signals for the undo/redo related signals. See \a FormManager for signals description. */
+    /*! Emits the action signals for the undo/redo related signals. */
     void emitUndoActionSignals();
 
     /*! Emits again all signal related to selection (ie Form::selectionChanged()).
@@ -246,6 +246,10 @@ public:
 #endif
 
     PixmapCollection* pixmapCollection() const;
+
+    void setPixmapsStoredInline(bool set);
+
+    bool pixmapsStoredInline() const;
 
     //! Options for addCommand() method.
     enum AddCommandOption {
@@ -359,7 +363,6 @@ public:
     void setOriginalFormatVersion(uint ver);
 
 #ifdef KFD_SIGSLOTS
-// moved from FormManager
     /*! Related to signal/slots connections.
      Resets recently selected signal/slot connection (when the user clicks
      outside of signals/slots menu). We stay in "connection creation" mode,
@@ -418,11 +421,9 @@ public slots:
     void abortWidgetInserting();
 
 #ifdef KFD_SIGSLOTS
-// moved from FormManager
      //! Enters the Connection creation state.
      void enterConnectingState();
 
-// moved from FormManager
     //! Leave the Connection creation mode.
     void abortCreatingConnection();
 #endif
@@ -756,11 +757,10 @@ protected:
     virtual bool eventFilter(QObject *obj, QEvent *ev);
 
 private:
-    void init(WidgetLibrary* library, Mode mode, KActionCollection &col, KFormDesigner::ActionGroup &group);
+    void init(Mode mode, KActionCollection &col, KFormDesigner::ActionGroup &group);
 
     void selectWidgetInternal(QWidget *w, WidgetSelectionFlags flags);
 
-    WidgetLibrary *m_lib;
     FormPrivate * const d;
 
     friend class FormWidget;

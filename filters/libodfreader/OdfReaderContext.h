@@ -70,7 +70,7 @@ class KoOdfStyleManager;
 
 class KOODFREADER_EXPORT OdfReaderContext
 {
- public: 
+ public:
     explicit OdfReaderContext(KoStore *store);
     virtual ~OdfReaderContext();
 

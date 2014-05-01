@@ -133,13 +133,6 @@ bool KoOdfStyleManager::loadStyles(KoStore *odfStore)
     }
 
     reader.setDevice(odfStore->device());
-    while (!reader.atEnd()) {
-        reader.readNext();
-
-        if (reader.isStartElement() && reader.qualifiedName() == "office:styles") {
-            break;
-        }
-    }
     // FIXME: Error handling
 
     // Collect the styles.
@@ -160,13 +153,6 @@ bool KoOdfStyleManager::loadStyles(KoStore *odfStore)
              << "Loading styles from content.xml";
 
     reader.setDevice(odfStore->device());
-    while (!reader.atEnd()) {
-        reader.readNext();
-
-        if (reader.isStartElement() && reader.qualifiedName() == "office:automatic-styles") {
-            break;
-        }
-    }
     // FIXME: Error handling
 
     // Collect the styles.
@@ -181,12 +167,21 @@ void KoOdfStyleManager::collectStyleSet(KoXmlStreamReader &reader, bool fromStyl
 {
     kDebug() << "incoming element:" << reader.qualifiedName().toString();
 
-    while (reader.readNextStartElement()) {
+    while (!reader.atEnd()) {
+        reader.readNext();
+        if (!reader.isStartElement()) {
+            continue;
+        }
         kDebug() << "---------------- style element:" << reader.qualifiedName().toString();
+
+        QString tagName = reader.qualifiedName().toString();
+        if (tagName == "office:styles" || tagName == "office:automatic-styles" ||
+            tagName == "office:document-content" || tagName == "office:document-styles") {
+            continue;
+        }
 
         // For now: handle style:style and style:default-style
         // and only the text, paragraph and graphic families.
-        QString tagName = reader.qualifiedName().toString();
         if (tagName != "style:style" && tagName != "style:default-style") {
             reader.skipCurrentElement();
             continue;

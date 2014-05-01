@@ -33,6 +33,7 @@
 // Calligra
 #include <KoStore.h>
 #include <KoFilterChain.h>
+#include <KoXmlWriter.h>
 
 // Filter libraries
 #include "OdtReader.h"
@@ -114,11 +115,29 @@ KoFilter::ConversionStatus DocxExport::convert(const QByteArray& from, const QBy
         return KoFilter::ParsingError;
     }
 
+    bool commentsExist = !docxBackendContext.commentsContent().isEmpty();
+
+    if (commentsExist) {
+        // Add comments file
+        QByteArray tempArray;
+        QBuffer tempBuffer(&tempArray);
+        KoXmlWriter commentWriter(&tempBuffer);
+        commentWriter.startDocument(0);
+        commentWriter.startElement("w:comments");
+        commentWriter.addAttribute("xmlns:w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main");
+        commentWriter.addCompleteElement(docxBackendContext.commentsContent());
+        commentWriter.endElement(); // w:comments
+        commentWriter.endDocument();
+        docxFile.addContentFile("", "/word/comments.xml",
+                                "application/vnd.openxmlformats-officedocument.wordprocessingml.comments+xml",
+                                tempArray);
+    }
+
     // Add the newly converted document contents to the docx file.
     docxFile.addContentFile("", "/word/document.xml",
                             "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml",
                             docxBackendContext.documentContent());
 
     // Write the output file.
-    return docxFile.writeDocx(m_chain->outputFile(), to, docxBackendContext);
+    return docxFile.writeDocx(m_chain->outputFile(), to, docxBackendContext, commentsExist);
 }
