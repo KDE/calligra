@@ -58,16 +58,20 @@ public:
 
     void delTag(const QString& tag);
 
+    /// @return a list of all the tags in this store
     QStringList tagNamesList() const;
 
     /// Return a list of filenames for the given tag
     QStringList searchTag(const QString& tag);
 
+    void loadTags();
     void serializeTags();
 
 private:
-    void readXMLFile();
-    void writeXMLFile();
+    friend class KoResourceTaggingTest;
+
+    void readXMLFile(const QString &tagstore);
+    void writeXMLFile(const QString &tagstore);
 
     /// To check whether the resource belongs to the present server or not
     bool isServerResource(const QString &resourceName) const;

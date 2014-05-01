@@ -126,6 +126,7 @@ public:
 
     virtual ~KoResourceServer()
     {
+        delete m_tagStore;
         if (m_deleteResource) {
 
             foreach(KoResourceServerObserver<T>* observer, m_observers) {
@@ -137,7 +138,7 @@ public:
             }
         }
         m_resources.clear();
-        delete m_tagStore;
+
     }
 
     int resoureCount() const {
@@ -151,7 +152,6 @@ public:
      * @param filenames list of filenames to be loaded
      */
     void loadResources(QStringList filenames) {
-        kDebug(30009) << "loading  resources for type " << type();
         QStringList uniqueFiles;
 
         while (!filenames.empty()) {
@@ -193,8 +193,6 @@ public:
                 m_loadLock.unlock();
             }
         }
-
-        //qDebug() << type() << m_resourcesByFilename.size() << m_resourcesByName.size() << m_resourcesByMd5.size();
 
         m_resources = sortedResources();
         m_tagStore->loadTags();
@@ -395,15 +393,21 @@ public:
         m_observers.removeAt( index );
     }
 
-    T* resourceByFilename( const QString& filename ) const
+    T* resourceByFilename(const QString& filename) const
     {
-        return m_resourcesByFilename.value(filename);
+        if (m_resourcesByFilename.contains(filename)) {
+            return m_resourcesByFilename[filename];
+        }
+        return 0;
     }
 
 
     T* resourceByName( const QString& name ) const
     {
-        return m_resourcesByName.value(name);
+        if (m_resourcesByName.contains(name)) {
+            return m_resourcesByName[name];
+        }
+        return 0;
     }
 
     T* resourceByMD5(const QByteArray& md5) const
@@ -609,14 +613,15 @@ protected:
         f.close();
     }
 protected:
+
     KoResource *byMd5(const QByteArray &md5) const
     {
         return resourceByMD5(md5);
     }
+
     KoResource *byFileName(const QString &fileName) const
     {
-        QFileInfo fi(fileName);
-        return resourceByFilename(fi.baseName() + "." + fi.completeSuffix());
+        return resourceByFilename(fileName);
     }
 
 private:

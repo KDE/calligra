@@ -172,7 +172,7 @@ bool KoResourceFiltering::presetMatchesSearch(KoResource * resource) const
 {
     QList<QString> filteredList;
 
-    QString resourceFileName = resource->filename();
+    QString resourceFileName = resource->shortFilename();
     QString resourceName = resource->name();
 
     if (d->name) {
