@@ -69,6 +69,7 @@ public:
 
     virtual ~KoResourceServerBase() {}
 
+    virtual int resoureCount() const = 0;
     virtual void loadResources(QStringList filenames) = 0;
     virtual QStringList blackListedFiles() const = 0;
     QString type() const { return m_type; }
@@ -139,6 +140,10 @@ public:
         delete m_tagStore;
     }
 
+    int resoureCount() const {
+        return m_resources.size();
+    }
+
     /**
      * Loads a set of resources and adds them to the resource server.
      * If a filename appears twice the resource will only be added once. Resources that can't
@@ -192,6 +197,7 @@ public:
         //qDebug() << type() << m_resourcesByFilename.size() << m_resourcesByName.size() << m_resourcesByMd5.size();
 
         m_resources = sortedResources();
+        m_tagStore->loadTags();
 
         kDebug(30009) << "done loading  resources for type " << type();
     }
@@ -605,11 +611,12 @@ protected:
 protected:
     KoResource *byMd5(const QByteArray &md5) const
     {
-        return static_cast<KoResource*>(resourceByMD5(md5));
+        return resourceByMD5(md5);
     }
     KoResource *byFileName(const QString &fileName) const
     {
-        return static_cast<KoResource*>(resourceByFilename(fileName));
+        QFileInfo fi(fileName);
+        return resourceByFilename(fi.baseName() + "." + fi.completeSuffix());
     }
 
 private:
