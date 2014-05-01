@@ -80,6 +80,15 @@ set(wordsprivate_LIB_SRCS
     author/CoverImage.cpp
     author/CoverSelectionDialog.cpp
 )
+
+if( CMAKE_BUILD_TYPE MATCHES "Debug" )
+    set(wordsprivate_LIB_SRCS ${wordsprivate_LIB_SRCS}
+        dockers/KWDebugDocker.cpp
+        dockers/KWDebugDockerFactory.cpp
+        dockers/KWDebugWidget.cpp
+    )
+endif ( CMAKE_BUILD_TYPE MATCHES "Debug")
+
 if( SHOULD_BUILD_RDF )
     set(wordsprivate_LIB_SRCS ${wordsprivate_LIB_SRCS}
         dockers/KWRdfDocker.cpp
