@@ -1,11 +1,11 @@
 add_subdirectory( utils )
 add_subdirectory( dataviewcommon )
-
+add_subdirectory( relations )
+  
 IF(KEXI_MOBILE)
 
 ELSE(KEXI_MOBILE)
   add_subdirectory( tableview )
-  add_subdirectory( relations )
 ENDIF(KEXI_MOBILE)
 
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44023)
@@ -98,8 +98,6 @@ ELSE(KEXI_MOBILE)
   target_link_libraries(
     kexiextendedwidgets
     ${KDE4_KFILE_LIBS}
-    ${KDE4_KDE3SUPPORT_LIBS}
-    ${QT_QT3SUPPORT_LIBRARY}
     )
 ENDIF(KEXI_MOBILE)
 
