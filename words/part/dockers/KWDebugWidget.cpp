@@ -95,6 +95,8 @@ void KWDebugWidget::updateData()
         will_show += "\n";
     }
 
+    will_show += "block number is " + QString::number(editor->constCursor().block().blockNumber());
+
     m_label->setText(will_show);
 }
 
