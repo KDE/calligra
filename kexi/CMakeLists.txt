@@ -129,7 +129,7 @@ ELSE(KEXI_MOBILE)
   kde4_add_app_icon(kexi_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/hi*-app-calligrakexi.png")
   kde4_add_executable(kexi ${kexi_SRCS})
   target_link_libraries(kexi 
-    ${KDE4_KFILE_LIBS} ${QT_QT3SUPPORT_LIBRARY}
+    ${KDE4_KFILE_LIBS}
     ${CALLIGRADB_LIBS}
     keximain
     kexicore
