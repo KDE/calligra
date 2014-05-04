@@ -25,13 +25,18 @@
 #include "kis_stroke_shortcut.h"
 #include "kis_touch_shortcut.h"
 
+// @revert
+#define DEBUG_MATCHER
+// @/revert
 #ifdef DEBUG_MATCHER
 #include <QDebug>
 #define DEBUG_ACTION(action) qDebug() << __FUNCTION__ << ":" << action;
 #define DEBUG_BUTTON_ACTION(action, button) qDebug() << __FUNCTION__ << ":" << action << "button:" << button << "btns:" << m_d->buttons << "keys:" << m_d->keys;
+#define DEBUG_KEY_ACTION(action, key) qDebug() << __FUNCTION__ << ":" << action << "key:" << key;
 #else
 #define DEBUG_ACTION(action)
 #define DEBUG_BUTTON_ACTION(action, button)
+#define DEBUG_KEY_ACTION(action, key)
 #endif
 
 
@@ -102,6 +107,8 @@ bool KisShortcutMatcher::supportsHiResInputEvents()
 
 bool KisShortcutMatcher::keyPressed(Qt::Key key)
 {
+    DEBUG_KEY_ACTION("Pressed:", key);
+
     bool retval = false;
 
     if (m_d->keys.contains(key)) reset();
@@ -122,6 +129,8 @@ bool KisShortcutMatcher::keyPressed(Qt::Key key)
 
 bool KisShortcutMatcher::autoRepeatedKeyPressed(Qt::Key key)
 {
+    DEBUG_KEY_ACTION("Autorepeated:", key);
+
     bool retval = false;
 
     if (!m_d->keys.contains(key)) reset();
@@ -135,6 +144,8 @@ bool KisShortcutMatcher::autoRepeatedKeyPressed(Qt::Key key)
 
 bool KisShortcutMatcher::keyReleased(Qt::Key key)
 {
+    DEBUG_KEY_ACTION("Relesead:", key);
+
     if (!m_d->keys.contains(key)) reset();
     else m_d->keys.removeOne(key);
 
