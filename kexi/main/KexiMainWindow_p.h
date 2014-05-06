@@ -1229,8 +1229,7 @@ void KexiTabbedToolBar::setupCreateWidgetToolbar()
     KexiPart::PartInfoList *plist = Kexi::partManager().infoList(); //this list is properly sorted
     if (plist) {
         foreach(KexiPart::Info *info, *plist) {
-            QAction* a = d->ac->action(
-                            KexiPart::nameForCreateAction(*info));
+            QAction* a = info->newObjectAction();
             if (a) {
                 d->createWidgetToolBar->addAction(a);
             } else {
