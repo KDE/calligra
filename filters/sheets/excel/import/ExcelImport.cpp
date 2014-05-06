@@ -175,6 +175,8 @@ public:
     KoXmlWriter* beginMemoryXmlWriter(const char* docElement);
     KoXmlDocument endMemoryXmlWriter(KoXmlWriter* writer);
 
+    QDateTime convertDate(double timestamp) const;
+
     ExcelImport *q;
 
 };
@@ -863,9 +865,9 @@ static QString cellFormulaNamespace(const QString& formula)
     return QString();
 }
 
-static QDateTime convertDate(double timestamp)
+QDateTime ExcelImport::Private::convertDate(double timestamp) const
 {
-    QDateTime dt(QDate(1899, 12, 30));
+    QDateTime dt(workbook->baseDate());
     dt = dt.addMSecs((qint64)(timestamp * 86400 * 1000));
     return dt;
 }
