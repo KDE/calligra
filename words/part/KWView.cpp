@@ -40,6 +40,7 @@
 #include "commands/KWFrameCreateCommand.h"
 #include "commands/KWShapeCreateCommand.h"
 #include "ui_KWInsertImage.h"
+#include "../gemini/ViewModeSwitchEvent.h"
 
 // calligra libs includes
 #include <KoShapeCreateCommand.h>
@@ -908,6 +909,41 @@ void KWView::showEvent(QShowEvent *e)
 {
     KoView::showEvent(e);
     QTimer::singleShot(0, this, SLOT(updateStatusBarAction()));
+}
+
+bool KWView::event(QEvent* event)
+{
+    switch(static_cast<int>(event->type())) {
+        case ViewModeSwitchEvent::AboutToSwitchViewModeEvent: {
+            ViewModeSynchronisationObject* syncObject = static_cast<ViewModeSwitchEvent*>(event)->synchronisationObject();
+            if (m_canvas) {
+                syncObject->documentOffset = m_canvas->documentOffset();
+                syncObject->zoomLevel = zoomController()->zoomAction()->effectiveZoom();
+                syncObject->activeToolId = KoToolManager::instance()->activeToolId();
+                syncObject->initialized = true;
+            }
+
+            return true;
+        }
+        case ViewModeSwitchEvent::SwitchedToDesktopModeEvent: {
+            ViewModeSynchronisationObject* syncObject = static_cast<ViewModeSwitchEvent*>(event)->synchronisationObject();
+            if (m_canvas && syncObject->initialized) {
+                m_canvas->canvasWidget()->setFocus();
+                qApp->processEvents();
+
+                KoToolManager::instance()->switchToolRequested(syncObject->activeToolId);
+                qApp->processEvents();
+
+                zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, syncObject->zoomLevel);
+
+                qApp->processEvents();
+                m_canvas->canvasController()->setScrollBarValue(syncObject->documentOffset);
+            }
+
+            return true;
+        }
+    }
+    return QWidget::event(event);
 }
 
 void KWView::updateStatusBarAction()
