@@ -24,6 +24,7 @@ include_directories(
     ${CMAKE_BINARY_DIR}
     ${KOMAIN_INCLUDES}
     ${CMAKE_SOURCE_DIR}/words/part
+    ${CMAKE_SOURCE_DIR}/words/gemini
     ${CMAKE_SOURCE_DIR}/sheets
     ${CMAKE_SOURCE_DIR}/libs/kopageapp
 )
@@ -33,6 +34,7 @@ target_link_libraries(calligraqtquickcomponentsplugin
     ${QT_QTDECLARATIVE_LIBRARY}
     ${QT_LIBRARIES}
     komain
+    kotextlayout
     wordsprivate
     calligrasheetscommon
     kopageapp

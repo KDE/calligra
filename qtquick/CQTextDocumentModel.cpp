@@ -58,7 +58,7 @@ QVariant CQTextDocumentModel::data(const QModelIndex& index, int role) const
                 }
                 CQImageProvider::s_imageProvider->addImage(id, image);
             }
-            return QString("image://") + QString(CQImageProvider::identificationString) + "/" + id;
+            return QString("image://%1/%2").arg(CQImageProvider::identificationString).arg(id);
         }
     }
     return QVariant();

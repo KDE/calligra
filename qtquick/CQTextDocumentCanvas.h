@@ -34,6 +34,7 @@ class KoDocument;
 class KoZoomController;
 class KoCanvasController;
 class KoCanvasBase;
+class KoPart;
 class KUrl;
 class KoFindMatch;
 
@@ -64,6 +65,8 @@ public:
     virtual void render(QPainter* painter, const QRectF& target);
 
     KWDocument* document() const;
+    Q_INVOKABLE QObject* doc() const;
+    Q_INVOKABLE QObject* part() const;
 
     QObjectList linkTargets() const;
 
@@ -78,6 +81,7 @@ signals:
     void linkTargetsChanged();
 
 protected:
+    virtual bool event( QEvent* event );
     virtual void geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry);
     virtual void openFile(const QString& uri);
 

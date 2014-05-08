@@ -102,11 +102,13 @@ void CQCanvasControllerItem::setCanvas(QDeclarativeItem* canvas)
     if(canvas != d->canvas) {
         if(d->canvas) {
             disconnect(d->canvas, SIGNAL(canvasControllerChanged()), this, SLOT(canvasControllerChanged()));
+            disconnect(d->canvas, SIGNAL(positionShouldChange(QPoint)), this, SLOT(updateDocumentPosition(QPoint)));
         }
 
         d->canvas = qobject_cast<CQCanvasBase*>(canvas);
         Q_ASSERT(d->canvas);
 
+        connect(d->canvas, SIGNAL(positionShouldChange(QPoint)), this, SLOT(updateDocumentPosition(QPoint)));
         connect(d->canvas, SIGNAL(canvasControllerChanged()), SLOT(canvasControllerChanged()));
         canvasControllerChanged();
 

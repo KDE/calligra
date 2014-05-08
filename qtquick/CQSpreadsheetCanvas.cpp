@@ -176,7 +176,7 @@ void CQSpreadsheetCanvas::openFile(const QString& uri)
     d->document->setCheckAutoSaveFile(false);
     d->document->openUrl (KUrl (uri));
 
-    d->canvas = dynamic_cast<Calligra::Sheets::CanvasItem*> (part->canvasItem());
+    d->canvas = dynamic_cast<Calligra::Sheets::CanvasItem*> (part->canvasItem(part->document()));
     createAndSetCanvasControllerOn(d->canvas);
     createAndSetZoomController(d->canvas);
 

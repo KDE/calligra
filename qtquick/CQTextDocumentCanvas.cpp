@@ -26,6 +26,8 @@
 #include "CQCanvasController.h"
 #include "CQTextDocumentModel.h"
 
+#include "words/gemini/ViewModeSwitchEvent.h"
+
 #include <QStyleOptionGraphicsItem>
 
 #include <KoDocument.h>
@@ -61,6 +63,7 @@ public:
     KoFindText *findText;
     CQTextDocumentModel *documentModel;
     KWDocument* document;
+    KoPart* part;
     QSize documentSize;
     int pageNumber;
     QPoint currentPoint;
@@ -154,13 +157,14 @@ void CQTextDocumentCanvas::openFile(const QString& uri)
         return;
     }
 
-    KoPart* part = service->createInstance<KoPart>();
-    KoDocument* document = part->document();
+    d->part = service->createInstance<KoPart>();
+    KoDocument* document = d->part->document();
     document->setAutoSave(0);
     document->setCheckAutoSaveFile(false);
     document->openUrl(KUrl(uri));
+    qDebug() << uri << KUrl(uri);
 
-    d->canvas = dynamic_cast<KWCanvasItem*> (part->canvasItem());
+    d->canvas = dynamic_cast<KWCanvasItem*> (d->part->canvasItem(d->part->document()));
     createAndSetCanvasControllerOn(d->canvas);
     createAndSetZoomController(d->canvas);
     updateZoomControllerAccordingToDocument(document);
@@ -179,7 +183,7 @@ void CQTextDocumentCanvas::openFile(const QString& uri)
     KoFindText::findTextInShapes(d->canvas->shapeManager()->shapes(), texts);
     d->findText->setDocuments(texts);
 
-    d->document = static_cast<KWDocument*>(document);
+    d->document = qobject_cast<KWDocument*>(document);
     d->documentModel = new CQTextDocumentModel(this, d->document, d->canvas->shapeManager());
     emit documentModelChanged();
 
@@ -243,6 +247,55 @@ void CQTextDocumentCanvas::render(QPainter* painter, const QRectF& target)
     option.exposedRect = target;
     option.rect = target.toAlignedRect();
     d->canvas->canvasItem()->paint(painter, &option);
+}
+
+bool CQTextDocumentCanvas::event( QEvent* event )
+{
+    switch(static_cast<int>(event->type())) {
+        case ViewModeSwitchEvent::AboutToSwitchViewModeEvent: {
+            ViewModeSynchronisationObject* syncObject = static_cast<ViewModeSwitchEvent*>(event)->synchronisationObject();
+
+            if (d->canvas) {
+                syncObject->documentOffset = d->canvas->documentOffset();
+                syncObject->zoomLevel = zoomController()->zoomAction()->effectiveZoom();
+                syncObject->activeToolId = KoToolManager::instance()->activeToolId();
+                syncObject->initialized = true;
+            }
+
+            return true;
+        }
+        case ViewModeSwitchEvent::SwitchedToTouchModeEvent: {
+            ViewModeSynchronisationObject* syncObject = static_cast<ViewModeSwitchEvent*>(event)->synchronisationObject();
+
+            if (d->canvas && syncObject->initialized) {
+                KoToolManager::instance()->switchToolRequested(syncObject->activeToolId);
+                qApp->processEvents();
+
+                zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, syncObject->zoomLevel);
+
+                qApp->processEvents();
+                emit positionShouldChange(syncObject->documentOffset);
+                //d->canvas->setDocumentOffset(syncObject->documentOffset);
+            }
+
+            return true;
+        }
+//         case KisTabletEvent::TabletPressEx:
+//         case KisTabletEvent::TabletReleaseEx:
+//             emit interactionStarted();
+//             d->canvas->inputManager()->eventFilter(this, event);
+//             return true;
+//         case KisTabletEvent::TabletMoveEx:
+//             d->tabletEventCount++; //Note that this will wraparound at some point; This is intentional.
+// #ifdef Q_OS_X11
+//             if(d->tabletEventCount % 2 == 0)
+// #endif
+//                 d->canvas->inputManager()->eventFilter(this, event);
+//             return true;
+        default:
+            break;
+    }
+    return QDeclarativeItem::event( event );
 }
 
 void CQTextDocumentCanvas::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry)
@@ -335,6 +388,16 @@ QObject* CQTextDocumentCanvas::documentModel() const
 KWDocument* CQTextDocumentCanvas::document() const
 {
     return d->document;
+}
+
+QObject* CQTextDocumentCanvas::doc() const
+{
+    return d->document;
+}
+
+QObject* CQTextDocumentCanvas::part() const
+{
+    return d->part;
 }
 
 QObjectList CQTextDocumentCanvas::linkTargets() const

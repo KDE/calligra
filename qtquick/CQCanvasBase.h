@@ -44,6 +44,7 @@ public Q_SLOTS:
 Q_SIGNALS:
     void sourceChanged();
     void canvasControllerChanged();
+    void positionShouldChange(const QPoint& pos);
 
 protected:
     virtual void setCanvasController(CQCanvasController *controller);
