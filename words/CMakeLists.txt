@@ -18,4 +18,5 @@ endif (SHOULD_BUILD_WORDS_PART)
 
 if (SHOULD_BUILD_WORDS_APP)
     add_subdirectory( app )
+    add_subdirectory( gemini )
 endif (SHOULD_BUILD_WORDS_APP)

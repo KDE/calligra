@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+GenericName=Word Processing
+Name=Calligra Words Gemini
+Exec=calligrawordsgemini
+Icon=calligrawords
+MimeType=application/x-calligrawords;
+Categories=Qt;KDE;Office;
