@@ -20,7 +20,7 @@
 
 #include <QLabel>
 #include <QIntValidator>
-#include <QScrollArea>
+#include <QAbstractScrollArea>
 #include <Q3ScrollView> //tmp
 #include <QScrollBar>
 #include <QPixmap>
@@ -68,7 +68,7 @@ public:
     KLineEdit *navRecordCount; //!< readonly counter
 //    QLabel *navRecordCount; //!< readonly counter
     uint nav1DigitWidth;
-    QScrollArea *view;
+    QAbstractScrollArea *view;
 
     QLabel *editingIndicatorLabel;
     bool editingIndicatorEnabled;
@@ -78,7 +78,7 @@ public:
 
 //--------------------------------------------------
 
-KexiRecordNavigator::KexiRecordNavigator(QWidget *parent, QScrollArea* parentView)
+KexiRecordNavigator::KexiRecordNavigator(QWidget *parent, QAbstractScrollArea* parentView)
         : QWidget(parent)
         , d(new Private)
 {
@@ -332,7 +332,7 @@ uint KexiRecordNavigator::recordCount() const
     return r;
 }
 
-void KexiRecordNavigator::setParentView(QScrollArea *view)
+void KexiRecordNavigator::setParentView(QAbstractScrollArea *view)
 {
     d->view = view;
 }
@@ -546,6 +546,16 @@ void KexiRecordNavigator::paintEvent(QPaintEvent* pe)
     option.rect = QRect(option.rect.left() - 5, option.rect.top(),
                         option.rect.width() + 10, option.rect.height() + 5); // to avoid rounding
     style()->drawPrimitive(QStyle::PE_Frame, &option, &p, this);
+}
+
+void KexiRecordNavigator::insertAsideOfHorizontalScrollBar(QAbstractScrollArea *area)
+{
+    if (parentWidget() != area->horizontalScrollBar()->parentWidget()) {
+        setParent(area->horizontalScrollBar()->parentWidget());
+        qobject_cast<QBoxLayout*>(area->horizontalScrollBar()->parentWidget()->layout())
+                ->insertWidget(0, this);
+        setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
+    }
 }
 
 //------------------------------------------------

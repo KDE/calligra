@@ -756,13 +756,7 @@ void KexiFormScrollView::updateNavPanelGeometry()
 {
     if (d->scrollViewNavPanel) {
         d->scrollViewNavPanel->setLeftMargin(leftMargin());
-        if (d->scrollViewNavPanel->parentWidget() != horizontalScrollBar()->parentWidget()) {
-            // insert record navigator into horizontal
-            d->scrollViewNavPanel->setParent(horizontalScrollBar()->parentWidget());
-            qobject_cast<QBoxLayout*>(horizontalScrollBar()->parentWidget()->layout())
-                    ->insertWidget(0, d->scrollViewNavPanel);
-            d->scrollViewNavPanel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
-        }
+        d->scrollViewNavPanel->insertAsideOfHorizontalScrollBar(this);
     }
 }
 

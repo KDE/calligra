@@ -26,7 +26,7 @@
 
 class QToolButton;
 class QIntValidator;
-class QScrollArea;
+class QAbstractScrollArea;
 class QScrollBar;
 class QLabel;
 class QEvent;
@@ -63,10 +63,10 @@ public:
         ButtonNew
     };
 
-    KexiRecordNavigator(QWidget *parent, QScrollArea* parentView);
+    KexiRecordNavigator(QWidget *parent, QAbstractScrollArea* parentView);
     virtual ~KexiRecordNavigator();
 
-    void setParentView(QScrollArea *view);
+    void setParentView(QAbstractScrollArea *view);
 
     /*! Sets record navigator handler. This allows to react
      on actions performed within navigator and vice versa. */
@@ -148,6 +148,10 @@ public slots:
     void setButtonToolTipText(KexiRecordNavigator::Button btn, const QString& tooltip);
     void setButtonWhatsThisText(KexiRecordNavigator::Button btn, const QString& whatsThis);
     void setNumberFieldToolTips(const QString& numberTooltip, const QString& countTooltip);
+
+    /*! Inserts the record navigator aside of the horizontal scroll bar of the @a area scroll area.
+     Once the navigator is inserted, subsequent calls of this method will do nothing. */
+    void insertAsideOfHorizontalScrollBar(QAbstractScrollArea *area);
 
 signals:
     void prevButtonClicked();
