@@ -312,16 +312,20 @@ bool KexiWindow::close(bool force)
     //let any view send "closing" signal
     QList<KexiView *> list(findChildren<KexiView*>());
     foreach(KexiView * view, list) {
-        bool cancel = false;
-        emit view->closing(&cancel);
-        if (!force && cancel) {
-            return false;
+        if (view->parent() == d->stack) {
+            bool cancel = false;
+            emit view->closing(&cancel);
+            if (!force && cancel) {
+                     return false;
+            }
         }
     }
     emit closing();
     foreach(KexiView * view, list) {
-        removeView(view);
-        delete view;
+        if (view->parent() == d->stack) {
+            removeView(view);
+            delete view;
+        }
     }
     return true;
 }
