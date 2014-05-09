@@ -28,6 +28,7 @@
 
 #include <QFile>
 #include <QBuffer>
+#include <QCryptographicHash>
 
 double fromPercentage(QString s)
 {
@@ -166,4 +167,16 @@ KoFilterEffectStack * FilterEffectResource::toFilterStack() const
     }
 
     return filterStack;
+}
+
+QByteArray FilterEffectResource::generateMD5() const
+{
+    QByteArray ba = m_data.toByteArray();
+    if (!ba.isEmpty()) {
+        QCryptographicHash md5(QCryptographicHash::Md5);
+        md5.addData(ba);
+        return md5.result();
+    }
+    return ba;
+
 }

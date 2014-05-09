@@ -26,7 +26,6 @@ target_link_libraries(
     ${CALLIGRADB_LIBS}
     ${CALLIGRADB_LIBS}
     ${KDE4_KIO_LIBS}
-    ${QT_QT3SUPPORT_LIBRARY}
 )
 
 set_target_properties(kexidataviewcommon PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )

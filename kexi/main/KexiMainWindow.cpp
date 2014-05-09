@@ -1386,7 +1386,6 @@ void KexiMainWindow::updateReadOnlyState()
     }
     
     // update "insert ....." actions for every part
-    KActionCollection *ac = actionCollection();
     KexiPart::PartInfoList *plist = Kexi::partManager().infoList();
     if (plist) {
         foreach(KexiPart::Info *info, *plist) {
