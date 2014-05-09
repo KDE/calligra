@@ -62,6 +62,10 @@
 #include "TouchPart.h"
 #include "QmlGlobalEngine.h"
 #include "Settings.h"
+#include "Theme.h"
+#include "DocumentListModel.h"
+#include "Constants.h"
+#include "SimpleTouchArea.h"
 
 #ifdef Q_OS_WIN
 // Slate mode/docked detection stuff
@@ -133,6 +137,7 @@ public:
         Settings *settings = new Settings( q );
         DocumentManager::instance()->setSettingsManager( settings );
         touchView->engine()->rootContext()->setContextProperty("Settings", settings);
+        touchView->engine()->rootContext()->setContextProperty("Constants", new Constants( q ));
 
 #ifdef Q_OS_WIN
         QDir appdir(qApp->applicationDirPath());
@@ -223,6 +228,10 @@ public:
 MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags flags )
     : QMainWindow( parent, flags ), d( new Private(this) )
 {
+    qmlRegisterType<Theme>("org.calligra", 1, 0, "Theme");
+    qmlRegisterType<DocumentListModel>("org.calligra", 1, 0, "DocumentListModel");
+    qmlRegisterType<SimpleTouchArea>("org.calligra", 1, 0, "SimpleTouchArea");
+
     qApp->setActiveWindow( this );
 
     setWindowTitle(i18n("Calligra Words Gemini"));
@@ -255,7 +264,7 @@ void MainWindow::resetWindowTitle()
     QString fileName = url.fileName();
     if(url.protocol() == "temp")
         fileName = i18n("Untitled");
-    setWindowTitle(QString("%1 - %2").arg(fileName).arg(i18n("Krita Gemini")));
+    setWindowTitle(QString("%1 - %2").arg(fileName).arg(i18n("Calligra Words Gemini")));
 }
 
 void MainWindow::switchDesktopForced()
@@ -360,11 +369,11 @@ void MainWindow::switchToDesktop(bool justLoaded)
     QApplication::sendEvent(d->touchView, &aboutToSwitchEvent);
     qApp->processEvents();
 
-//    if (d->currentTouchPage == "MainPage")
-//    {
+    if (d->currentTouchPage == "MainPage")
+    {
         d->touchView->setParent(0);
         setCentralWidget(d->desktopView);
-//    }
+    }
 
     setWindowState(windowState() & ~Qt::WindowFullScreen);
 
