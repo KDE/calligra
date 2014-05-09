@@ -162,7 +162,6 @@ void CQTextDocumentCanvas::openFile(const QString& uri)
     document->setAutoSave(0);
     document->setCheckAutoSaveFile(false);
     document->openUrl(KUrl(uri));
-    qDebug() << uri << KUrl(uri);
 
     d->canvas = dynamic_cast<KWCanvasItem*> (d->part->canvasItem(d->part->document()));
     createAndSetCanvasControllerOn(d->canvas);
