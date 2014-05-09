@@ -23,11 +23,13 @@ import "components"
 Page {
     DocumentListModel { id: textDocumentsModel; filter: DocumentListModel.TextDocumentType; }
     ListView {
+        id: docList;
         anchors.fill: parent;
         anchors.margins: 5;
         model: textDocumentsModel;
         delegate: documentTile;
     }
+    ScrollDecorator { flickableItem: docList; }
     Component { id: mainPage; MainPage { } }
     Component {
         id: documentTile;
@@ -35,10 +37,11 @@ Page {
             width: parent.width;
             height: model.fileName ? 55 : 0;
             color: index % 2 === 1 ? "white" : "silver";
-            radius: 5;
+            radius: height / 2;
             Label {
                 id: lblName;
                 anchors.margins: 5;
+                anchors.leftMargin: parent.height / 3;
                 anchors.left: parent.left;
                 anchors.right: parent.horizontalCenter;
                 anchors.verticalCenter: parent.verticalCenter;
@@ -51,14 +54,17 @@ Page {
                 anchors.right: lblSize.left;
                 anchors.verticalCenter: parent.verticalCenter;
                 text: model.modifiedTime ? model.modifiedTime : "";
+                horizontalAlignment: Text.AlignRight;
             }
             Label {
                 id: lblSize;
                 anchors.margins: 5;
+                anchors.rightMargin: parent.height / 3;
                 anchors.right: parent.right;
                 anchors.verticalCenter: parent.verticalCenter;
                 width: parent.width / 5;
                 text: model.fileSize ? model.fileSize : "";
+                horizontalAlignment: Text.AlignRight;
             }
             MouseArea {
                 anchors.fill: parent;
