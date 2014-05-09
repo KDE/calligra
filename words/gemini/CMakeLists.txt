@@ -18,11 +18,14 @@ set(calligrawordsgemini_SRCS
     main.cpp
     MainWindow.cpp
     desktopviewproxy.cpp
+    Constants.cpp
+    DocumentListModel.cpp
     DocumentManager.cpp
     ProgressProxy.cpp
     QmlGlobalEngine.cpp
     RecentFileManager.cpp
     Settings.cpp
+    SimpleTouchArea.cpp
     TouchView.cpp
     TouchPart.cpp
     TouchDeclarativeView.cpp
@@ -36,7 +39,7 @@ else (WIN32)
     kde4_add_app_icon(calligrawordsgemini_SRCS "${KDE4_ICON_DIR}/oxygen/*/apps/calligrawordsgemini.png")
 endif (WIN32)
 
-# Krita Gemini application
+# Calligra Words Gemini application
 # =============================================================================
 
 kde4_add_executable(calligrawordsgemini ${calligrawordsgemini_SRCS})
@@ -57,5 +60,7 @@ install(PROGRAMS  calligrawordsgemini.desktop               DESTINATION ${XDG_AP
 #install(FILES     calligrawordsgeminirc calligrawordsgeminipanelsrc DESTINATION ${CONFIG_INSTALL_DIR} )
 install(FILES     calligrawordsgemini.qml                   DESTINATION ${DATA_INSTALL_DIR}/calligrawordsgemini)
 #install(FILES     calligrawordsgemini.rc                    DESTINATION ${DATA_INSTALL_DIR}/calligrawordsgemini)
+install(DIRECTORY qml                                       DESTINATION ${DATA_INSTALL_DIR}/calligrawordsgemini)
+install(DIRECTORY themes                                    DESTINATION ${DATA_INSTALL_DIR}/calligrawordsgemini)
 
 #add_subdirectory(icon)
