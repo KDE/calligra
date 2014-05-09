@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2012 Arjen Hiemstra <ahiemstra@heimr.nl>
+ * Copyright (C) 2014 Dan Leinir Turthra Jensen <admin@leinir.dk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,47 +17,27 @@
  */
 
 import QtQuick 1.1
+import "qml"
+import "qml/components"
 import org.calligra.CalligraComponents 0.1 as Calligra
 
 Item {
     id: base;
     width: 1280;
     height: 768;
+    onWidthChanged: Constants.setGridWidth( width / Constants.GridColumns );
+    onHeightChanged: Constants.setGridHeight( height / Constants.GridRows );
+    property QtObject window: mainWindow;
     function openFile(fileName) {
-        console.debug("open file: " + fileName);
+        mainPageStack.push(mainPage);
         Settings.currentFile = fileName;
     }
-    Connections {
-        target: Settings;
-        onCurrentFileChanged: wordsCanvas.source = Settings.currentFile;
-    }
-    Calligra.TextDocumentCanvas {
-        id: wordsCanvas;
+    PageStack {
+        id: mainPageStack;
         anchors.fill: parent;
-        onDocumentModelChanged: {
-            console.debug("doc and part: " + doc() + " " + part());
-            mainWindow.setDocAndPart(doc(), part());
-        }
+        onCurrentPageChanged: window.currentTouchPage = (currentPage.pageName !== undefined) ? currentPage.pageName : currentPage.toString();
+        initialPage: welcomePage;
     }
-    Flickable {
-        id: controllerFlickable;
-        anchors.fill: parent;
-        Calligra.CanvasControllerItem {
-            canvas: wordsCanvas;
-            flickable: controllerFlickable;
-        }
-    }
-    Rectangle {
-        anchors {
-            top: parent.top;
-            right: parent.right;
-        }
-        height: 64;
-        width: 64;
-        color: "blue";
-        MouseArea {
-            anchors.fill: parent;
-            onClicked: switchToDesktopAction.trigger();
-        }
-    }
+    Component { id: welcomePage; WelcomePage { } }
+    Component { id: mainPage; MainPage { } }
 }
