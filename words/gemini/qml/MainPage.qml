@@ -30,9 +30,11 @@ Page {
     Calligra.TextDocumentCanvas {
         id: wordsCanvas;
         anchors.fill: parent;
-        onDocumentModelChanged: {
+        onLoadingBegun: baseLoadingDialog.visible = true;
+        onLoadingFinished: {
             console.debug("doc and part: " + doc() + " " + part());
             mainWindow.setDocAndPart(doc(), part());
+            baseLoadingDialog.hideMe();
         }
     }
     Flickable {
@@ -48,6 +50,8 @@ Page {
             top: parent.top;
             right: parent.right;
         }
+        opacity: switchToDesktopAction.enabled ? 1 : 0;
+        Behavior on opacity { PropertyAnimation { duration: 200; } }
         width: Constants.GridWidth * 2;
         text: "Switch to Desktop";
         color: Settings.theme.color("base/base");

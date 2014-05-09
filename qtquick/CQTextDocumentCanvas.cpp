@@ -151,6 +151,7 @@ CQTextDocumentCanvas::~CQTextDocumentCanvas()
 
 void CQTextDocumentCanvas::openFile(const QString& uri)
 {
+    emit loadingBegun();
     KService::Ptr service = KService::serviceByDesktopName("wordspart");
     if(service.isNull()) {
         qWarning("Unable to load Words plugin, aborting!");
@@ -189,6 +190,7 @@ void CQTextDocumentCanvas::openFile(const QString& uri)
     d->updateLinkTargets();
     emit linkTargetsChanged();
 
+    emit loadingFinished();
 }
 
 void CQTextDocumentCanvas::gotoPage(int pageNumber, KoDocument *document)

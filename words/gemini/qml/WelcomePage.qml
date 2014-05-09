@@ -69,6 +69,7 @@ Page {
             MouseArea {
                 anchors.fill: parent;
                 onClicked: {
+                    baseLoadingDialog.visible = true;
                     openFile(model.filePath);
                 }
             }

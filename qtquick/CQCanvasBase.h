@@ -46,6 +46,9 @@ Q_SIGNALS:
     void canvasControllerChanged();
     void positionShouldChange(const QPoint& pos);
 
+    void loadingBegun();
+    void loadingFinished();
+
 protected:
     virtual void setCanvasController(CQCanvasController *controller);
     virtual void setZoomController(KoZoomController *controller);
