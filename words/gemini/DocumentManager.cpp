@@ -85,7 +85,6 @@ void DocumentManager::setSettingsManager(Settings* newManager)
 
 void DocumentManager::setDocAndPart(KWDocument* document, KoPart* part)
 {
-    qDebug() << document << part;
     d->document = document;
     d->part = part;
     d->temporaryFile = false;
