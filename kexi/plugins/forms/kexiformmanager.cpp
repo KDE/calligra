@@ -54,11 +54,11 @@
 
 class KexiFormManagerPrivate {
 public:
-    KexiFormManagerPrivate() : part(0)
-        , q(this)
+    KexiFormManagerPrivate(KexiFormManager *qq) : part(0)
+        , q(qq)
     {
         features = KFormDesigner::Form::NoFeatures;
-        widgetActionGroup = new KFormDesigner::ActionGroup(&q);
+        widgetActionGroup = new KFormDesigner::ActionGroup(q);
 #ifdef KFD_SIGSLOTS
         dragConnectionAction = 0;
 #endif
@@ -79,19 +79,19 @@ public:
 #endif
     KToggleAction *snapToGridAction;
 
-    KexiFormManager q;
+    KexiFormManager *q;
 };
 
-K_GLOBAL_STATIC(KexiFormManagerPrivate, g_private)
+K_GLOBAL_STATIC(KexiFormManager, g_manager)
 
 KexiFormManager* KexiFormManager::self()
 {
-    return &g_private->q;
+    return g_manager;
 }
 
-KexiFormManager::KexiFormManager(KexiFormManagerPrivate *p)
+KexiFormManager::KexiFormManager()
         : QObject()
-        , d( p )
+        , d(new KexiFormManagerPrivate(this))
 {
 //2.0 unused    m_emitSelectionSignalsUpdatesPropertySet = true;
     KexiCustomPropertyFactory::init();

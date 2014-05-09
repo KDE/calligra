@@ -54,6 +54,11 @@ public:
     /*! @return action group containing "insert widget" actions for each widget. */
     KFormDesigner::ActionGroup* widgetActionGroup() const;
 
+    //! @internal
+    KexiFormManager();
+
+    virtual ~KexiFormManager();
+
 public slots:
     //! Receives signal from KexiDataSourcePage about changed form's data source
     void setFormDataSource(const QString& mime, const QString& name);
@@ -88,10 +93,6 @@ protected:
     inline QString translateName(const char* name) const;
 
 private:
-    KexiFormManager(KexiFormManagerPrivate * p);
-    
-    virtual ~KexiFormManager();
-
     //! Helper: return active form's view widget or 0 if there's no active form having such widget
     KexiFormView* activeFormViewWidget() const;
 
