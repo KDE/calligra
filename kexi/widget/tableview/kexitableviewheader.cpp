@@ -36,7 +36,8 @@ class KexiTableViewHeaderStyle : public KexiUtils::StyleProxy
 {
 public:
     KexiTableViewHeaderStyle(QStyle *parentStyle, QWidget *widget)
-            : KexiUtils::StyleProxy(parentStyle) {
+            : KexiUtils::StyleProxy(parentStyle, widget)
+    {
         setBackgroundColor(widget->palette().color(widget->backgroundRole()));
     }
     virtual ~KexiTableViewHeaderStyle() {}
