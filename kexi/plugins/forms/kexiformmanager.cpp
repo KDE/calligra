@@ -99,6 +99,7 @@ KexiFormManager::KexiFormManager()
 
 KexiFormManager::~KexiFormManager()
 {
+    delete d;
 }
 
 void KexiFormManager::init(KexiFormPart *part, KFormDesigner::WidgetTreeWidget *widgetTree)
