@@ -159,7 +159,7 @@ calligra_define_product(WORDS_PART "Words engine" NEEDS CALLIGRA_LIBS PLUGIN_TEX
 calligra_define_product(WORDS_APP "Words executable (for Desktop)"  NEEDS WORDS_PART)
 calligra_define_product(STAGE_PART "Stage engine"  NEEDS CALLIGRA_LIBS LIB_KOPAGEAPP)
 calligra_define_product(STAGE_APP "Stage executable (for Desktop)"  NEEDS STAGE_PART)
-calligra_define_product(SHEETS_PART "Sheets engine"  NEEDS CALLIGRA_LIBS SCRIPTING)
+calligra_define_product(SHEETS_PART "Sheets engine"  NEEDS CALLIGRA_LIBS)# SCRIPTING)
 calligra_define_product(SHEETS_APP "Sheets executable (for Desktop)"  NEEDS SHEETS_PART)
 calligra_define_product(AUTHOR_APP "Full Author (for Desktop)"  NEEDS WORDS_PART)
 calligra_define_product(KARBON_APP "Full Karbon (for Desktop)"  NEEDS CALLIGRA_LIBS)
@@ -195,7 +195,7 @@ calligra_define_product(PLUGIN_VIDEOSHAPE "Plugin for handling videos in Calligr
 calligra_define_product(PLUGIN_VECTORSHAPE "Vectorgraphic shape plugin" NEEDS CALLIGRA_LIBS LIB_KOVECTORIMAGE)
 calligra_define_product(PLUGIN_REPORTING "Renderer plugins for libkoreport"  NEEDS LIB_KOREPORT LIB_KDCHART)
 calligra_define_product(PLUGIN_SEMANTICITEMS "Semantic items plugins"  NEEDS RDF CALLIGRA_LIBS)
-calligra_define_product(PLUGIN_QTQUICK "QtQuick Plugin that provides Calligra components" NEEDS WORDS_PART SHEETS_PART STAGE_PART)
+calligra_define_product(PLUGIN_QTQUICK "QtQuick Plugin that provides Calligra components" NEEDS WORDS_PART STAGE_PART)# SHEETS_PART)
 # staging plugins
 calligra_define_product(PLUGIN_GOOGLEDOCS "Plugin for integration with Google Docs" STAGING  NEEDS CALLIGRA_LIBS)
 calligra_define_product(PLUGIN_THREEDSHAPE "3D shape plugin"  STAGING  NEEDS CALLIGRA_LIBS)

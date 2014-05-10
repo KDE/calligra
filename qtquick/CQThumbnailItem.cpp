@@ -35,7 +35,7 @@ public:
 CQThumbnailItem::CQThumbnailItem(QDeclarativeItem* parent)
     : QDeclarativeItem(parent), d(new Private)
 {
-    setFlag(QGraphicsItem::QGraphicsItem::ItemHasNoContents, false);
+    setFlag(QGraphicsItem::ItemHasNoContents, false);
 }
 
 CQThumbnailItem::~CQThumbnailItem()

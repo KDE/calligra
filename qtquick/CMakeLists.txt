@@ -1,12 +1,14 @@
 project(calligraqtquickcomponents)
 
+include(GNUInstallDirs)
+
 set(calligraqtquickcomponents_SRCS
     CQThumbnailItem.cpp
     CQPresentationModel.cpp
-    CQSpreadsheetListModel.cpp
+#    CQSpreadsheetListModel.cpp
     CQCanvasBase.cpp
     CQCanvasControllerItem.cpp
-    CQSpreadsheetCanvas.cpp
+#    CQSpreadsheetCanvas.cpp
     CalligraQtQuickComponentsPlugin.cpp
     CQCanvasController.cpp
     CQTextDocumentCanvas.cpp
@@ -25,21 +27,22 @@ include_directories(
     ${KOMAIN_INCLUDES}
     ${CMAKE_SOURCE_DIR}/words/part
     ${CMAKE_SOURCE_DIR}/words/gemini
-    ${CMAKE_SOURCE_DIR}/sheets
+#    ${CMAKE_SOURCE_DIR}/sheets
     ${CMAKE_SOURCE_DIR}/libs/kopageapp
 )
 
-kde4_add_plugin(calligraqtquickcomponentsplugin WITH_PREFIX ${calligraqtquickcomponents_SRCS})
+automoc4_add_library(calligraqtquickcomponentsplugin MODULE ${calligraqtquickcomponents_SRCS})
+
 target_link_libraries(calligraqtquickcomponentsplugin
     ${QT_QTDECLARATIVE_LIBRARY}
     ${QT_LIBRARIES}
     komain
     kotextlayout
     wordsprivate
-    calligrasheetscommon
+#    calligrasheetscommon
     kopageapp
     calligrastageprivate)
 
 install(TARGETS calligraqtquickcomponentsplugin
-    DESTINATION ${LIB_INSTALL_DIR}/calligra/imports/org/calligra/CalligraComponents)
-install(FILES qmldir DESTINATION ${LIB_INSTALL_DIR}/calligra/imports/org/calligra/CalligraComponents)
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/calligra/imports/org/calligra/CalligraComponents)
+install(FILES qmldir DESTINATION ${CMAKE_INSTALL_LIBDIR}/calligra/imports/org/calligra/CalligraComponents)
