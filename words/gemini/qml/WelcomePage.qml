@@ -29,6 +29,11 @@ Page {
         model: textDocumentsModel;
         delegate: documentTile;
     }
+	Label {
+		anchors.centerIn: parent;
+		text: "No documents - please drop some into your Documents folder";
+		visible: docList.count === 0;
+	}
     ScrollDecorator { flickableItem: docList; }
     Component { id: mainPage; MainPage { } }
     Component {
