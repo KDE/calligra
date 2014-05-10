@@ -245,7 +245,9 @@ private:
 class KexiMenuWidgetStyle : public KexiUtils::StyleProxy
 {
 public:
-    explicit KexiMenuWidgetStyle(QStyle *style) : KexiUtils::StyleProxy(style) {
+    explicit KexiMenuWidgetStyle(QStyle *style, QObject *parent = 0)
+        : KexiUtils::StyleProxy(style, parent)
+    {
     }
     virtual ~KexiMenuWidgetStyle() {
     }
@@ -409,9 +411,8 @@ protected:
             if (KDE::version() < KDE_MAKE_VERSION(4, 8, 0) // a fix is apparently needed for glitch in KDE < 4.8
                 && m_menuWidget->style()->objectName() == QLatin1String("oxygen"))
             {
-                KexiMenuWidgetStyle *customStyle = new KexiMenuWidgetStyle(m_menuWidget->style());
+                KexiMenuWidgetStyle *customStyle = new KexiMenuWidgetStyle(m_menuWidget->style(), this);
                 m_menuWidget->setStyle(customStyle);
-                customStyle->setParent(this);
             }
             m_menuWidget->installEventFilter(this);
             m_menuWidget->setFocusPolicy(Qt::StrongFocus);
@@ -584,7 +585,9 @@ protected:
 class KexiTabbedToolBarStyle : public KexiUtils::StyleProxy
 {
 public:
-    explicit KexiTabbedToolBarStyle(QStyle *style) : KexiUtils::StyleProxy(style) {
+    explicit KexiTabbedToolBarStyle(QStyle *style, QObject *parent = 0)
+      : KexiUtils::StyleProxy(style, parent)
+    {
         updateLogo();
     }
     virtual ~KexiTabbedToolBarStyle() {
@@ -742,8 +745,7 @@ KexiTabbedToolBarTabBar::KexiTabbedToolBarTabBar(QWidget *parent)
     : KTabBar(parent)
 {
     setObjectName("tabbar");
-    customStyle = new KexiTabbedToolBarStyle(style());
-    customStyle->setParent(this);
+    customStyle = new KexiTabbedToolBarStyle(style(), this);
     setStyle(customStyle);
     installEventFilter(parent);
     QWidget *mainWindow = KexiMainWindowIface::global()->thisWidget();

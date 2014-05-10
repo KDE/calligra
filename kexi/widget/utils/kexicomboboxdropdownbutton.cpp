@@ -35,12 +35,13 @@
 class KexiComboBoxDropDownButtonStyle : public KexiUtils::StyleProxy
 {
 public:
-    KexiComboBoxDropDownButtonStyle(QStyle *parentStyle, QWidget*)
-            : KexiUtils::StyleProxy(parentStyle)
+    KexiComboBoxDropDownButtonStyle(QStyle *parentStyle, QObject *parent = 0)
+            : KexiUtils::StyleProxy(parentStyle, parent)
     {
     }
     virtual ~KexiComboBoxDropDownButtonStyle() {}
-    virtual void drawComplexControl( ComplexControl control, const QStyleOptionComplex * option, QPainter * painter, const QWidget * widget = 0 ) const
+    virtual void drawComplexControl(ComplexControl control, const QStyleOptionComplex * option,
+                                    QPainter * painter, const QWidget * widget = 0) const
     {
         QStyleOptionToolButton opt(*qstyleoption_cast<const QStyleOptionToolButton*>(option));
         opt.state |= (State_MouseOver | State_DownArrow | State_Sunken);
