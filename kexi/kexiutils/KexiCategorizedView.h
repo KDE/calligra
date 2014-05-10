@@ -37,7 +37,7 @@ typedef KCategoryDrawerV3 KexiCategoryDrawerBase;
 class KEXIUTILS_EXPORT KexiCategoryDrawer : public KexiCategoryDrawerBase
 {
 public:
-    KexiCategoryDrawer();
+    explicit KexiCategoryDrawer(KCategorizedView *view);
 
 protected:
 #if 0
