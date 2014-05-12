@@ -36,29 +36,20 @@
 KexiTableEdit::KexiTableEdit(KexiDB::TableViewColumn &column, QWidget* parent)
         : QWidget(parent)
         , m_column(&column)
-// ,m_field(&f)
-// ,m_type(f.type()) //copied because the rest of code uses m_type
         , m_usesSelectedTextColor(true)
         , m_view(0)
-// ,m_hasFocusableWidget(true)
-// ,m_acceptEditorAfterDeleteContents(false)
 #else
         KexiTableEdit::KexiTableEdit(KexiDB::TableViewColumn &column, QWidget* parent)
         : QWidget(dynamic_cast<Q3ScrollView*>(parent) ? dynamic_cast<Q3ScrollView*>(parent)->viewport() : parent)
         , m_column(&column)
-        // ,m_field(&f)
-        // ,m_type(f.type()) //copied because the rest of code uses m_type
         , m_scrollView(dynamic_cast<Q3ScrollView*>(parent))
         , m_usesSelectedTextColor(true)
         , m_view(0)
-        // ,m_hasFocusableWidget(true)
-        // ,m_acceptEditorAfterDeleteContents(false)   
 #endif
 {
     QPalette pal(palette());
     pal.setBrush(backgroundRole(), pal.brush(QPalette::Base));
     setPalette(pal);
-    //installEventFilter(this);
 
     //margins
     if (displayedField()->isFPNumericType()) {
@@ -103,7 +94,6 @@ void KexiTableEdit::setViewWidget(QWidget *v)
 {
     m_view = v;
     m_view->move(0, 0);
-    //m_view->installEventFilter(this);
     setFocusProxy(m_view);
 }
 
@@ -130,15 +120,6 @@ void KexiTableEdit::resize(int w, int h)
 bool
 KexiTableEdit::eventFilter(QObject* watched, QEvent* e)
 {
-    /* if (watched == m_view) {
-        if(e->type() == QEvent::KeyPress) {
-          QKeyEvent* ev = static_cast<QKeyEvent*>(e);
-    //   if (ev->key()==Qt::Key_Tab) {
-
-    //   }
-        }
-      }*/
-
     if (watched == this) {
         if (e->type() == QEvent::KeyPress) {
             QKeyEvent* ev = static_cast<QKeyEvent*>(e);
@@ -151,7 +132,6 @@ KexiTableEdit::eventFilter(QObject* watched, QEvent* e)
         }
     }
     return false;
-// return QWidget::eventFilter(watched, e);
 }
 #endif
 
@@ -169,10 +149,8 @@ void KexiTableEdit::setupContents(QPainter *p, bool focused, const QVariant& val
     KexiDB::Field *realField = displayedField();
 
 #ifdef Q_WS_WIN
-// x = 1;
     y_offset = -1;
 #else
-// x = 1;
     y_offset = 0;
 #endif
 
@@ -210,7 +188,7 @@ void KexiTableEdit::paintSelectionBackground(QPainter *p, bool /*focused*/,
         } else if (align & Qt::AlignRight) {
             bound.moveLeft(w - bound.width());   //move to left, if too wide
         }
-//TODO align center
+//! @todo align center
         bound.setHeight(h - 1);
         p->fillRect(bound, fillColor);
     } else if (fullRecordSelection) {

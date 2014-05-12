@@ -519,7 +519,7 @@ bool KexiProject::createInternalStructures(bool insideTransaction)
 
     //Store default part information.
     //Information for other parts (forms, reports...) are created on demand in KexiWindow::storeNewData()
-    KexiDB::InternalTableSchema *t_parts = new KexiDB::InternalTableSchema("kexi__parts"); //newKexiDBSystemTableSchema("kexi__parts");
+    KexiDB::InternalTableSchema *t_parts = new KexiDB::InternalTableSchema("kexi__parts");
     t_parts->addField(
         new KexiDB::Field("p_id", KexiDB::Field::Integer, KexiDB::Field::PrimaryKey | KexiDB::Field::AutoInc, KexiDB::Field::Unsigned)
     )

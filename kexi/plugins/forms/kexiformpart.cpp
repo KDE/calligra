@@ -48,7 +48,6 @@
 #include <kexi_global.h>
 #include <formeditor/form.h>
 #include <formeditor/formIO.h>
-//2.0 #include <formeditor/widgetpropertyset.h>
 #include <formeditor/WidgetTreeWidget.h>
 
 #include <koproperty/Property.h>
@@ -94,58 +93,13 @@ KexiFormPart::KexiFormPart(QObject *parent, const QVariantList &l)
     // Only create form manager if it's not yet created.
     // KexiReportPart could have created it already.
 
-/* 2.0 removed
-    KFormDesigner::FormManager *formManager = KFormDesigner::FormManager::self();
-    if (!formManager) {*/
     KexiFormManager::self()->init(this, d->widgetTree); // this should create KexiFormManager singleton
-//    }
-
-/* 2.0 slotPropertyChanged() code moved to Form so this connection can be removed
-    connect(KFormDesigner::FormManager::self()->propertySet(),
-            SIGNAL(widgetPropertyChanged(QWidget*,QByteArray,QVariant)),
-            this, SLOT(slotPropertyChanged(QWidget*,QByteArray,QVariant)));*/
-//2.0 not needed, the code from slot receiving this signal is moved to Form itself
-//    connect(KFormDesigner::FormManager::self(), SIGNAL(autoTabStopsSet(KFormDesigner::Form*,bool)),
-//            this, SLOT(slotAutoTabStopsSet(KFormDesigner::Form*,bool)));
 }
 
 KexiFormPart::~KexiFormPart()
 {
-//2.0    static_formsLibrary = 0;
     delete d;
 }
-
-/* moved to KexiFormManager
-KFormDesigner::WidgetLibrary* KexiFormPart::library()
-{
-    return static_formsLibrary;
-}
-*/
-
-
-#if 0
-void KexiFormPart::initPartActions(KActionCollection *collection)
-{
-//this is automatic? -no
-//create child guicilent: guiClient()->setXMLFile("kexidatatableui.rc");
-
-    kDebug() << "FormPart INIT ACTIONS***********************************************************************";
-    //TODO
-
-    //guiClient()->setXMLFile("kexiformui.rc");
-//js m_manager->createActions(collection, 0);
-}
-
-void KexiFormPart::initInstanceActions(int mode, KActionCollection *col)
-{
-    if (mode == Kexi::DesignViewMode) {
-        KFormDesigner::FormManager::self()->createActions(col, 0);
-        new KAction(i18n("Edit Tab Order..."), "tab_order", KShortcut(0), KFormDesigner::FormManager::self(), SLOT(editTabOrder()), col, "taborder");
-        new KAction(i18n("Adjust Size"), "zoom-fit-best", KShortcut(0), KFormDesigner::FormManager::self(), SLOT(adjustWidgetSize()), col, "adjust");
-    }
-    //TODO
-}
-#endif
 
 void KexiFormPart::initPartActions()
 {
@@ -153,25 +107,15 @@ void KexiFormPart::initPartActions()
 
 void KexiFormPart::initInstanceActions()
 {
-//    KActionCollection *col = actionCollectionForMode(Kexi::DesignViewMode);
-
-//moved to KexiFormManager::init()
-//KexiFormManager::self()->createActions(library(), col,
-//            (KXMLGUIClient*)col->parentGUIClient());
-
     //connect actions provided by widget factories
-//2.0 moved   connect(col->action("widget_assign_action"), SIGNAL(activated()),
-//2.0 moved            this, SLOT(slotAssignAction()));
-
     createSharedAction(Kexi::DesignViewMode, i18n("Clear Widget Contents"),
                        koIconName("edit-clear"), KShortcut(), "formpart_clear_contents");
     createSharedAction(Kexi::DesignViewMode, i18n("Edit Tab Order..."),
                        koIconName("tab_order"), KShortcut(), "formpart_taborder");
-//TODO createSharedAction(Kexi::DesignViewMode, i18n("Edit Pixmap Collection"), koIconName("icons"), 0, "formpart_pixmap_collection");
-//TODO createSharedAction(Kexi::DesignViewMode, i18n("Edit Form Connections"), koIconName("connections"), 0, "formpart_connections");
+//! @todo createSharedAction(Kexi::DesignViewMode, i18n("Edit Pixmap Collection"), koIconName("icons"), 0, "formpart_pixmap_collection");
+//! @todo createSharedAction(Kexi::DesignViewMode, i18n("Edit Form Connections"), koIconName("connections"), 0, "formpart_connections");
 
 // KFormDesigner::CreateLayoutCommand
-
     KAction *action = createSharedAction(Kexi::DesignViewMode, i18n("Layout Widgets"),
                                          QString(), KShortcut(), "formpart_layout_menu", "KActionMenu");
     KActionMenu *menu = static_cast<KActionMenu*>(action);
@@ -416,33 +360,6 @@ KLocalizedString KexiFormPart::i18nMessage(
 
     return Part::i18nMessage(englishMessage, window);
 }
-
-/*moved to Form 
-void
-KexiFormPart::slotPropertyChanged(QWidget *w, const QByteArray &name, const QVariant &value)
-{
-    Q_UNUSED(w);
-
-    if (!KFormDesigner::FormManager::self()->activeForm())
-        return;
-    if (name == "autoTabStops") {
-        //QWidget *w = KFormDesigner::FormManager::self()->activeForm()->selectedWidget();
-        //update autoTabStops setting at KFD::Form level
-        KFormDesigner::FormManager::self()->activeForm()->setAutoTabStops(value.toBool());
-    }
-    if (KFormDesigner::FormManager::self()->activeForm()->widget() && name == "geometry") {
-        //fall back to sizeInternal property....
-        if (KFormDesigner::FormManager::self()->propertySet()->contains("sizeInternal"))
-            KFormDesigner::FormManager::self()->propertySet()->property("sizeInternal").setValue(
-                value.toRect().size());
-    }
-}*/
-
-/*KFormDesigner::FormManager*
-KexiFormPart::manager() const
-{
-  return d->manager;
-}*/
 
 KexiDataSourcePage* KexiFormPart::dataSourcePage() const
 {

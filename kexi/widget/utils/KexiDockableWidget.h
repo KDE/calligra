@@ -34,7 +34,7 @@
 class KEXIGUIUTILS_EXPORT KexiDockableWidget : public QWidget
 {
 public:
-    KexiDockableWidget(QWidget* parent = 0);
+    explicit KexiDockableWidget(QWidget* parent = 0);
     virtual ~KexiDockableWidget();
 
     //! Sets child widget @a widget. 
@@ -48,7 +48,6 @@ public:
     virtual QSize sizeHint() const;
 
     void setSizeHint(const QSize& size);
-
 
 private:
     class Private;

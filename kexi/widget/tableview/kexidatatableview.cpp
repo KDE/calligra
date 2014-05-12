@@ -55,25 +55,10 @@ void
 KexiDataTableView::init()
 {
     m_cursor = 0;
-
-// m_maxRecord = 0;
-// m_records = 0;
-// m_first = false;
-
-// connect(this, SIGNAL(contentsMoving(int,int)), this, SLOT(slotMoving(int)));
-// connect(verticalScrollBar(), SIGNAL(sliderMoved(int)), this, SLOT(slotMoving(int)));
 }
-
-/*void KexiDataTableView::initActions(KActionCollection *col)
-{
-  KexiTableView::initActions(col);
-  new KAction(i18n("Filter"), "view-filter", 0, this, SLOT(filter()), col, "tablepart_filter");
-}*/
 
 bool KexiDataTableView::setData(KexiDB::Cursor *cursor)
 {
-//js if (!m_first)
-//js  clearColumns();
     if (!cursor) {
         clearColumns();
         m_cursor = 0;
@@ -97,8 +82,7 @@ bool KexiDataTableView::setData(KexiDB::Cursor *cursor)
     }
 
     if (!m_cursor->isOpened() && !m_cursor->open()) {
-        kDebug() << "WARNING: cannot open cursor\n--aborting setData(). \n" <<
-        m_cursor->serverErrorMsg();
+        kWarning() << "cannot open cursor\n--aborting setData(). \n" << m_cursor->serverErrorMsg();
         m_cursor->debug();
         clearColumns();
         return false;

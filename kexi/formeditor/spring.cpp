@@ -84,10 +84,8 @@ Spring::paintEvent(QPaintEvent *ev)
 
     QPainter p(this);
     p.setRenderHint(QPainter::Antialiasing, true);
-//2.x    if (!ev->erased())
-//2.x        p.eraseRect(0, 0, width(), height());
-//todo?    p.setPen(QPen(Qt::white, 1));
-//todo?    p.setCompositionMode(QPainter::CompositionMode_Xor);
+//! @todo p.setPen(QPen(Qt::white, 1));
+//! @todo p.setCompositionMode(QPainter::CompositionMode_Xor);
     if (m_orient == Qt::Vertical) {
         uint part = (height() + 16) / 16;
         if (part < 3)

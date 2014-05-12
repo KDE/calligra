@@ -137,7 +137,7 @@ int main(int argc, char** argv)
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
     QStringList tests;
     tests << "cursors" << "schema" << "dbcreation" << "tables"
-    << "tableview" << "parser" << "dr_prop";
+          << "tableview" << "parser" << "dr_prop";
     if (!args->isSet("test")) {
         kDebug() << "No test specified. Use --help.";
         RETURN(1);

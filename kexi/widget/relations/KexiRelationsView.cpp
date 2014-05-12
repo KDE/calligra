@@ -160,14 +160,13 @@ KexiRelationsView::KexiRelationsView(QWidget *parent)
     connect(d->scrollArea, SIGNAL(aboutConnectionRemove(KexiRelationsConnection*)),
             this, SIGNAL(aboutConnectionRemove(KexiRelationsConnection*)));
 
+    //! @todo
 #if 0
     if (!embedd) {
         /*todo  setContextHelp(i18n("Relations"), i18n("To create a relationship simply drag the source field onto the target field. "
               "An arrowhead is used to show which table is the parent (master) and which table is the child (slave) in the relationship."));*/
     }
 #endif
-// else
-//js: while embedding means read-only?  d->scrollArea->setReadOnly(true);
 
 #ifdef TESTING_KexiRelationWidget
     for (int i = 0;i < (int)d->db->tableNames().count();i++)
@@ -264,13 +263,6 @@ KexiRelationsView::addTable(const QString& t)
 
 void KexiRelationsView::tableViewGotFocus()
 {
-// if (d->scrollArea->focusedTableContainer == sender())
-//  return;
-// kDebug() << "GOT FOCUS!";
-// clearSelection();
-// if (d->focusedTableContainer)
-//  d->focusedTableContainer->unsetFocus();
-// d->focusedTableContainer = (KexiRelationsTableContainer*)sender();
     invalidateActions();
 }
 
@@ -299,7 +291,7 @@ void KexiRelationsView::connectionContextMenuRequest(const QPoint& pos)
 void KexiRelationsView::emptyAreaContextMenuRequest(const QPoint& /*pos*/)
 {
     invalidateActions();
-    //TODO
+    //! @todo
 }
 
 void KexiRelationsView::invalidateActions()

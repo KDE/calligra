@@ -202,7 +202,8 @@ void KexiDBComboBox::paintEvent(QPaintEvent *)
 
 QRect KexiDBComboBox::editorGeometry() const
 {
-#if 0 //20080316, sebsauer; crashes here with;
+//! @todo 20080316, sebsauer; crashes here with;
+#if 0
     QRect r(QStyle::visualRect(
                 qApp->layoutDirection(),
                 d->paintedCombo->geometry(),

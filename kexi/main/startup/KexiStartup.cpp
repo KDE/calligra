@@ -862,8 +862,7 @@ tristate KexiStartupHandler::detectActionForFile(
         //try this detection if "project file" mode is forced or no type is forced:
         ptr = KMimeType::findByFileContent(dbFileName);
         mimename = ptr.data() ? ptr.data()->name() : QString();
-        kDebug() << "KexiStartupHandler::detectActionForFile(): found mime is: "
-        << mimename;
+        kDebug() << "found mime is:" << mimename;
         if (mimename.isEmpty() || mimename == "application/octet-stream" || mimename == "text/plain") {
             //try by URL:
             ptr = KMimeType::findByUrl(KUrl::fromPath(dbFileName));
@@ -938,7 +937,7 @@ tristate KexiStartupHandler::detectActionForFile(
     } else {//use suggested driver
         *detectedDriverName = suggestedDriverName;
     }
-// kDebug() << "KexiStartupHandler::detectActionForFile(): driver name: " << detectedDriverName;
+// kDebug() << "driver name:" << detectedDriverName;
 //hardcoded for convenience:
     const QString newFileFormat = "SQLite3";
 

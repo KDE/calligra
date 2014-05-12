@@ -36,7 +36,6 @@
 #include <kexipartitem.h>
 #include <KoIcon.h>
 #include <kxmlguiclient.h>
-//#include <kexidialogbase.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kdebug.h>
@@ -85,8 +84,6 @@ KexiScriptPart::KexiScriptPart(QObject *parent, const QVariantList& l)
         l)
   , d(new Private(this))
 {
-    //setSupportedViewModes(Kexi::DataViewMode | Kexi::DesignViewMode);
-    //setInternalPropertyValue("newObjectsAreDirty", true);
 }
 
 KexiScriptPart::~KexiScriptPart()
@@ -98,7 +95,7 @@ bool KexiScriptPart::execute(KexiPart::Item* item, QObject* sender)
 {
     Q_UNUSED(sender);
     if (!item) {
-        kWarning() << "KexiScriptPart::execute: Invalid item.";
+        kWarning() << "Invalid item.";
         return false;
     }
 
@@ -108,7 +105,7 @@ bool KexiScriptPart::execute(KexiPart::Item* item, QObject* sender)
     KexiScriptDesignView* view = dynamic_cast<KexiScriptDesignView*>(
                                      createView(dialog, dialog, *item, Kexi::DesignViewMode));
     if (! view) {
-        kWarning() << "KexiScriptPart::execute: Failed to create a view.";
+        kWarning() << "Failed to create a view.";
         return false;
     }
 
@@ -122,7 +119,8 @@ bool KexiScriptPart::execute(KexiPart::Item* item, QObject* sender)
         bool exec = (dontask == "yes");
         if (!exec && dontask != "no") {
             exec = KMessageBox::warningContinueCancel(0,
-                    i18n("Do you want to execute the script \"%1\"?\n\nScripts obtained from unknown sources can contain dangerous code.").arg(scriptaction->text()),
+                    i18n("Do you want to execute the script \"%1\"?\n\n"
+                         "Scripts obtained from unknown sources can contain dangerous code.").arg(scriptaction->text()),
                     i18n("Execute Script?"), KGuiItem(i18n("Execute"), koIconName("system-run")),
                     dontAskAgainName, KMessageBox::Notify | KMessageBox::Dangerous
                                                      ) == KMessageBox::Continue;
@@ -133,46 +131,12 @@ bool KexiScriptPart::execute(KexiPart::Item* item, QObject* sender)
             d->scriptguiclient->executeScriptAction(scriptaction);
         }
     }
-
     view->deleteLater(); // not needed any longer.
 #else
 
-//QWidget *mainwin = KexiMainWindowIface::global()->thisWidget();
-//KexiScriptDesignView view(mainwin, );
     Kross::Action *action = d->action(item->name());
     Q_ASSERT(action);
     action->trigger();
-
-    /*
-    //QObject* obj = parent(); //KexiPart::Manager
-    //QObject* obj = KexiMainWindowIface::global()->thisWidget(); // KexiMainWindow
-    KexiWindow *mainWin = KexiMainWindowIface::global()->currentWindow();
-    if( ! mainWin ) {
-        mainWin = ;
-    };
-    //Q_ASSERT(obj);
-    //kDebug()<<"===============>"<<obj->objectName()<<obj->metaObject()->className();
-        //KexiWindow *mainWin = dynamic_cast<KexiWindow*>( obj );
-        //Q_ASSERT(mainWin);
-    //KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
-        //KexiDialogBase* dialog = new KexiDialogBase(mainWin);
-        //dialog->setId( item->identifier() );
-        QMap<QString,QVariant> staticObjectArgs;
-        staticObjectArgs.insert("identifier", QString::number(item->identifier()));
-        staticObjectArgs.insert("sender", sender ? sender->objectName() : "");
-        KexiScriptDesignView* view = dynamic_cast<KexiScriptDesignView*>(
-            createView(mainWin, mainWin, *item, Kexi::DesignViewMode, &staticObjectArgs) );
-        Q_ASSERT(view);
-
-        Kross::Action* scriptaction = view->scriptAction();
-        if(scriptaction) {
-            ////QTimer::singleShot(10, scriptaction, SLOT(activate()));
-            //d->scriptguiclient->executeScriptAction( scriptaction );
-    scriptaction->trigger();
-        }
-
-        view->deleteLater(); // not needed any longer.
-    */
 #endif
     return true;
 }
@@ -225,8 +189,8 @@ void KexiScriptPart::initPartActions()
 void KexiScriptPart::initInstanceActions()
 {
     kDebug();
-    //createSharedAction(Kexi::DesignViewMode, i18n("Execute Script"), koIconName("media-playback-start"), 0, "data_execute");
-    createSharedAction(Kexi::DesignViewMode, i18n("Configure Editor..."), koIconName("configure"), KShortcut(), "script_config_editor");
+    createSharedAction(Kexi::DesignViewMode, i18n("Configure Editor..."),
+                       koIconName("configure"), KShortcut(), "script_config_editor");
 }
 
 KexiView* KexiScriptPart::createView(QWidget *parent,
@@ -234,7 +198,6 @@ KexiView* KexiScriptPart::createView(QWidget *parent,
                                      KexiPart::Item &item,
                                      Kexi::ViewMode viewMode,
                                      QMap<QString, QVariant>* staticObjectArgs)
-//QWidget *parent, KexiDialogBase* dialog, KexiPart::Item& item, Kexi::ViewMode viewMode, QMap<QString,QVariant>*)
 {
     Q_UNUSED(window);
     Q_UNUSED(staticObjectArgs);
@@ -255,7 +218,7 @@ KexiView* KexiScriptPart::createView(QWidget *parent,
         Kross::Api::ScriptAction::Ptr scriptaction = collection->action(name);
         if (! scriptaction) {
             scriptaction = new Kross::Api::ScriptAction(partname);
-            collection->attach(scriptaction); //TODO remove again on unload!
+            collection->attach(scriptaction); //!< @todo remove again on unload!
         }
 #endif
         if (viewMode == Kexi::DesignViewMode) {

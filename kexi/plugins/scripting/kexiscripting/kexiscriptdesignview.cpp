@@ -41,7 +41,6 @@
 #include <kdebug.h>
 
 #include <KexiMainWindowIface.h>
-//#include <kexidialogbase.h>
 #include <db/connection.h>
 #include <QTextDocument>
 
@@ -475,7 +474,7 @@ tristate KexiScriptDesignView::storeData(bool /*dontAsk*/)
 
     QString language = d->scriptaction->interpreter();
     scriptelem.setAttribute("language", language);
-    //TODO move different types to their own part??
+    //! @todo move different types to their own part??
     scriptelem.setAttribute("scripttype", d->scriptType);
 
     Kross::InterpreterInfo* info = Kross::Manager::self().interpreterInfo(language);

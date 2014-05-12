@@ -83,7 +83,7 @@ void KexiToolTip::paintEvent(QPaintEvent *pev)
 
 void KexiToolTip::drawFrame(QPainter& p)
 {
-//!TODO check
+//! @todo check
     p.setPen(QPen(palette().foreground().color(), 1));
     p.drawRect(rect());
 }

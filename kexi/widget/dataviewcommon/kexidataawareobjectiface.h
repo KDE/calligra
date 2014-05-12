@@ -281,7 +281,7 @@ public:
     /*! Deletes \a record. Used by deleteCurrentRow(). Calls beforeDeleteItem() before deleting,
      to double-check if deleting is allowed.
      \return true on success. */
-    bool deleteItem(KexiDB::RecordData *record);//, bool moveCursor=true);
+    bool deleteItem(KexiDB::RecordData *record);
 
     /*! Inserts newRecord at position \a pos. -1 means current record. Used by insertEmptyRow(). */
     void insertItem(KexiDB::RecordData *newRecord, int pos = -1);
@@ -768,15 +768,6 @@ protected:
      */
     void setRowEditing(bool set);
 
-    /*! Handles sliderReleased() signal of the verticalScrollBar(). Used to hide the "record number" tooltip. */
-//replaced by QToolTip    virtual void vScrollBarSliderReleased();
-
-    /* Handles timeout() signal of the m_scrollBarTipTimer. If the tooltip is visible,
-     m_scrollBarTipTimerCnt is set to 0 and m_scrollBarTipTimerCnt is restarted;
-     else the m_scrollBarTipTimerCnt is just set to 0.*/
-/*replaced by QToolTip
-    virtual void scrollBarTipTimeout();*/
-
     /*! Shows error message box suitable for \a resultInfo. This can be "sorry" or "detailedSorry"
      message box or "queryYesNo" if resultInfo->allowToDiscardChanges is true.
      \return code of button clicked: KMessageBox::Ok in case of "sorry" or "detailedSorry" messages
@@ -822,9 +813,6 @@ protected:
 
     //! record's data for inserting
     KexiDB::RecordData *m_insertItem;
-
-    //! when (current or new) row is edited - changed field values are temporary stored here
-//  KexiDB::RowEditBuffer *m_rowEditBuffer;
 
     //! true if m_data member is owned by this object
     bool m_owner;
@@ -901,7 +889,6 @@ protected:
     KexiTableViewHeader *m_horizontalHeader;
 
     KexiDataItemInterface *m_editor;
-//  KexiTableEdit *m_editor;
 
     /*! Navigation panel, used if navigationPanelEnabled is true. */
     KexiRecordNavigatorIface *m_navPanel; //!< main navigation widget
@@ -950,11 +937,6 @@ protected:
     /*! True, if vscrollbar tooltips are enabled (true by default). */
     bool m_scrollbarToolTipsEnabled;
 
-/*replaced by QToolTip
-    QLabel* m_scrollBarTip; //!< scrollbar tooltip
-    QTimer m_scrollBarTipTimer; //!< scrollbar tooltip's timer
-    uint m_scrollBarTipTimerCnt; //!< helper for timeout counting (scrollbar tooltip)
-*/
     //! Used to mark recently found value
     class PositionOfValue
     {
@@ -978,6 +960,7 @@ protected:
 
     //! Setup by updateIndicesForVisibleValues() and used by find()
     QVector<uint> m_indicesForVisibleValues;
+
 private:
     /*! true if currently selected row is edited */
     bool m_rowEditing;

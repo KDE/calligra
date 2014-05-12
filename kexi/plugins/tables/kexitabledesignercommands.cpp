@@ -91,7 +91,6 @@ ChangeFieldPropertyCommand::ChangeFieldPropertyCommand(
             propertyName == "name" ? oldValue.toString() : set.property("name").value().toString(),
             propertyName, newValue, set["uid"].value().toInt())
         , m_oldValue(oldValue)
-// , m_fieldUID(set["uid"].value().toInt())
         , m_oldListData(oldListData ? new KoProperty::Property::ListData(*oldListData) : 0)
         , m_listData(newListData ? new KoProperty::Property::ListData(*newListData) : 0)
 {
@@ -238,8 +237,8 @@ KexiDB::AlterTableHandler::ActionBase* InsertFieldCommand::createAction() const
 
 QString InsertFieldCommand::debugString() const
 {
-    return text() + "\nAT ROW " + QString::number(m_alterTableAction->index()) //m_alterTableAction.index())
-           + ", FIELD: " + m_set["caption"].value().toString(); //m_alterTableAction.field().debugString();
+    return text() + "\nAT ROW " + QString::number(m_alterTableAction->index())
+           + ", FIELD: " + m_set["caption"].value().toString();
 }
 
 //--------------------------------------------------------
@@ -248,7 +247,6 @@ ChangePropertyVisibilityCommand::ChangePropertyVisibilityCommand(Command* parent
         const KoProperty::Set& set, const QByteArray& propertyName, bool visible)
         : Command(parent, view)
         , m_alterTableAction(set.property("name").value().toString(), propertyName, visible, set["uid"].value().toInt())
-// , m_fieldUID(set["uid"].value().toInt())
         , m_oldVisibility(set.property(propertyName).isVisible())
 {
     setText(QString("[internal] Change \"%1\" visibility from \"%2\" to \"%3\"")

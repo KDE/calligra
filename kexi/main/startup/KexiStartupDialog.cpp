@@ -227,7 +227,7 @@ void KexiStartupDialog::done(int r)
     if (d->result != -1) //already done!
         return;
 
-// kDebug() << "KexiStartupDialog::done(" << r << ")";
+// kDebug() << r;
 // updateSelectedTemplateKeyInfo();
 
     if (r == QDialog::Rejected) {

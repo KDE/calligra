@@ -53,7 +53,7 @@ class QLabel;
 class KexiTableViewCellToolTip : public QToolTip
 {
 public:
-    KexiTableViewCellToolTip(KexiTableView * tableView);
+    explicit KexiTableViewCellToolTip(KexiTableView * tableView);
     virtual ~KexiTableViewCellToolTip();
 protected:
     virtual void maybeTip(const QPoint & p);
@@ -66,8 +66,7 @@ protected:
 class KexiTableViewPrivate
 {
 public:
-
-    KexiTableViewPrivate(KexiTableView* t);
+    explicit KexiTableViewPrivate(KexiTableView* t);
     ~KexiTableViewPrivate();
 
     void clearVariables();
@@ -76,24 +75,13 @@ public:
 
     //! editors: one for each column (indexed by KexiDB::TableViewColumn)
     QHash<KexiDB::TableViewColumn*, KexiTableEdit*> editors;
-
     int rowHeight;
-
-//Qt4 QPixmap *pBufferPm;
     QTimer *pUpdateTimer;
     int menu_id_addRecord;
     int menu_id_removeRecord;
-
-#if 0//(js) doesn't work!
-    QTimer *scrollTimer;
-#endif
-
     KexiTableView::ScrollDirection scrollDirection;
-
     bool editOnDoubleClick;
-
     bool needAutoScroll;
-
     bool disableDrawContents;
 
     /*! true if the navigation panel is enabled (visible) for the view.

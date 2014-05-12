@@ -29,8 +29,6 @@
 
 #include <kexiutils/styleproxy.h>
 
-
-
 //! @internal A style that allows to alter some painting in KexiComboBoxDropDownButton.
 class KexiComboBoxDropDownButtonStyle : public KexiUtils::StyleProxy
 {

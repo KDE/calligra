@@ -33,8 +33,8 @@ public:
     ~Private() {
     }
     QColor frameColor;
+//! @todo
 #if 0
-//todo
     KexiFrame::Shape frameShape;
     KexiFrame::Shadow frameShadow;
 #endif

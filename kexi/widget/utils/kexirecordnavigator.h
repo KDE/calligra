@@ -167,7 +167,6 @@ protected slots:
     void slotLastButtonClicked();
     void slotFirstButtonClicked();
     void slotNewButtonClicked();
-    //void slotRecordNumberReturnPressed(const QString& text);
 
 protected:
     //! @internal used for keyboard handling.
