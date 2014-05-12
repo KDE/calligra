@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Service
+Name=Microsoft PowerPoint Presentation
+Comment=PPTX for Okular
+ServiceTypes=okular/Generator
+MimeType=application/vnd.openxmlformats-officedocument.presentationml.presentation;
+X-KDE-Library=okularGenerator_odp
+X-KDE-Priority=1
+X-KDE-okularAPIVersion=1
+X-KDE-okularHasInternalSettings=false
