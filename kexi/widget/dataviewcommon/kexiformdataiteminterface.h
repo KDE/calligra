@@ -165,7 +165,7 @@ protected:
     KexiDB::QueryColumnInfo* m_columnInfo;
     KexiDisplayUtils::DisplayParameters *m_displayParametersForEnteredValue; //!< used in setDisplayDefaultValue()
     KexiDisplayUtils::DisplayParameters *m_displayParametersForDefaultValue; //!< used in setDisplayDefaultValue()
-    bool m_displayDefaultValue : 1; //!< used by setDisplayDefaultValue()
+    bool m_displayDefaultValue; //!< used by setDisplayDefaultValue()
 
     friend class KexiDBAutoField;
 };

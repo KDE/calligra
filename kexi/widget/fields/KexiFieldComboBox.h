@@ -37,7 +37,7 @@ class KEXIEXTWIDGETS_EXPORT KexiFieldComboBox : public KComboBox
     Q_OBJECT
 
 public:
-    KexiFieldComboBox(QWidget *parent = 0);
+    explicit KexiFieldComboBox(QWidget *parent = 0);
     virtual ~KexiFieldComboBox();
 
 public slots:

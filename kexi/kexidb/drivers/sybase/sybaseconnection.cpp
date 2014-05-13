@@ -119,7 +119,7 @@ bool SybaseConnection::drv_useDatabase(const QString &dbName, bool *cancelled, M
     Q_UNUSED(cancelled);
     Q_UNUSED(msgHandler);
 
-//TODO is here escaping needed?
+//! @todo escaping needed?
     return d->useDatabase(dbName) ;
 }
 

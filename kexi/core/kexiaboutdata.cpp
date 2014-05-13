@@ -59,6 +59,8 @@ KexiAboutData::KexiAboutData()
     addAuthor(
         ki18n("Radosław Wicik"), ki18n("Map elements for forms and reports, map flake shape"), "radoslaw@wicik.pl");
     addAuthor(
+        ki18n("Wojciech Kosowicz"), ki18n("Bug fixes"), "pcellix@gmail.com");
+    addAuthor(
         ki18n("Shreya Pandit"), ki18n("Web elements for forms and reports"), "shreya.pandit25@gmail.com");
     addAuthor(
         ki18n("Sebastian Sauer"), ki18n("Scripting module (KROSS), Python language bindings, design"), "mail@dipe.org");

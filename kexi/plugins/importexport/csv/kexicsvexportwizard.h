@@ -48,8 +48,8 @@ class KexiCSVExportWizard : public KAssistantDialog
     Q_OBJECT
 
 public:
-    KexiCSVExportWizard(const KexiCSVExport::Options& options,
-                        QWidget * parent = 0);
+    explicit KexiCSVExportWizard(const KexiCSVExport::Options& options,
+                                 QWidget * parent = 0);
 
     virtual ~KexiCSVExportWizard();
 
@@ -92,8 +92,6 @@ protected:
     void deleteEntry(const char *key);
 
     KexiCSVExport::Options m_options;
-//  Mode m_mode;
-//  int m_itemId;
     KexiFileWidget* m_fileSaveWidget;
     QWidget* m_exportOptionsWidget;
     KPageWidgetItem *m_fileSavePage;
@@ -108,7 +106,7 @@ protected:
     QCheckBox* m_addColumnNamesCheckBox, *m_alwaysUseCheckBox;
     KexiDB::TableOrQuerySchema* m_tableOrQuery;
     KConfigGroup m_importExportGroup;
-    bool m_cancelled : 1;
+    bool m_cancelled;
 };
 
 #endif

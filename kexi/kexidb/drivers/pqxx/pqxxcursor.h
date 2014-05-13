@@ -71,7 +71,7 @@ inline QVariant pgsqlCStrToVariant(const pqxx::result::field& r)
 {
     switch (r.type()) {
     case BOOLOID:
-        return QString::fromLatin1(r.c_str(), r.size()) == "true"; //TODO check formatting
+        return QString::fromLatin1(r.c_str(), r.size()) == "true"; //!< @todo check formatting
     case INT2OID:
     case INT4OID:
     case INT8OID:
@@ -81,11 +81,11 @@ inline QVariant pgsqlCStrToVariant(const pqxx::result::field& r)
     case NUMERICOID:
         return r.as(double());
     case DATEOID:
-        return QString::fromUtf8(r.c_str(), r.size()); //TODO check formatting
+        return QString::fromUtf8(r.c_str(), r.size()); //!< @todo check formatting
     case TIMEOID:
-        return QString::fromUtf8(r.c_str(), r.size()); //TODO check formatting
+        return QString::fromUtf8(r.c_str(), r.size()); //!< @todo check formatting
     case TIMESTAMPOID:
-        return QString::fromUtf8(r.c_str(), r.size()); //TODO check formatting
+        return QString::fromUtf8(r.c_str(), r.size()); //!< @todo check formatting
     case BYTEAOID:
         return KexiDB::pgsqlByteaToByteArray(r.c_str(), r.size());
     case BPCHAROID:

@@ -296,8 +296,6 @@ Container::eventFilter(QObject *s, QEvent *e)
                     deselectWidget(d->moving);
                 else { // the widget is the only selected, so it means we want to copy it
                     d->state = Private::CopyingWidget;
-                    if (d->form->formWidget())
-                        d->form->formWidget()->initBuffer();
                 }
             }
             else {
@@ -347,11 +345,7 @@ Container::eventFilter(QObject *s, QEvent *e)
                 tmpx = alignValueToGrid(mev->x(), grid);
                 tmpy = alignValueToGrid(mev->y(), grid);
             }
-
             d->startSelectionOrInsertingRectangle( (static_cast<QWidget*>(s))->mapTo(widget(), QPoint(tmpx, tmpy)) );
-            if (d->form->formWidget())
-                d->form->formWidget()->initBuffer();
-
             if (d->form->state() != Form::WidgetInserting) {
                 d->state = Private::DrawingSelectionRect;
             }
@@ -402,7 +396,7 @@ Container::eventFilter(QObject *s, QEvent *e)
             else {
                 realPos = mev->pos();
             }
-            d->updateSelectionOrInsertingRectangle(realPos); //2.0
+            d->updateSelectionOrInsertingRectangle(realPos);
             return true;
         }
 #ifdef KFD_SIGSLOTS
@@ -436,7 +430,7 @@ Container::eventFilter(QObject *s, QEvent *e)
         }
         else if (mev->buttons() == Qt::LeftButton && mev->modifiers() == Qt::ControlModifier) {
             // draw the insert rect for the copied widget
-            if (s == widget()) {// || (d->form->selectedWidgets()->count() > 1))
+            if (s == widget()) {
                 return true;
             }
             return true;
@@ -650,8 +644,6 @@ Container::eventFilter(QObject *s, QEvent *e)
         QKeyEvent *kev = static_cast<QKeyEvent*>(e);
         if ((kev->key() == Qt::Key_Control) && (d->state == Private::CopyingWidget)) {
             // cancel copying
-            if (d->form->formWidget())
-                d->form->formWidget()->clearForm();
         }
         return true;
     }
@@ -671,8 +663,7 @@ Container::eventFilter(QObject *s, QEvent *e)
     case QEvent::ContextMenu: {
         QContextMenuEvent* cme = static_cast<QContextMenuEvent*>(e);
         d->moving = 0; // clear this otherwise mouse dragging outside
-                      // of the popup menu would drag the selected widget(s) randomly
-//kDebug() << "-----------" << s;
+                       // of the popup menu would drag the selected widget(s) randomly
         // target widget is the same as selected widget if this is context key event
         QWidget *widgetTarget = cme->reason() == QContextMenuEvent::Mouse
                 ? static_cast<QWidget*>(s) : d->form->selectedWidget();
@@ -711,9 +702,7 @@ Container::handleMouseReleaseEvent(QObject *s, QMouseEvent *mev)
 {
     if (d->form->state() == Form::WidgetInserting) {
         if (mev->button() == Qt::LeftButton) { // insert the widget at cursor pos
-            if (d->form->formWidget())
-                d->form->formWidget()->clearForm();
-            Command *com = new InsertWidgetCommand(*this/*, mev->pos()*/);
+            Command *com = new InsertWidgetCommand(*this);
             d->form->addCommand(com);
             d->stopSelectionRectangleOrInserting();
         }
@@ -737,9 +726,6 @@ Container::handleMouseReleaseEvent(QObject *s, QMouseEvent *mev)
     }
     else if (mev->button() == Qt::LeftButton && mev->modifiers() == Qt::ControlModifier) {
         // copying a widget by Ctrl+dragging
-
-        if (d->form->formWidget())
-            d->form->formWidget()->clearForm();
         if (s == widget()) // should have no effect on form
             return true;
 
@@ -1235,7 +1221,7 @@ void Container::drawConnection(QMouseEvent *mev)
         FormManager::self()->createdConnection()->setSender(d->moving->objectName());
         if (d->form->formWidget()) {
             d->form->formWidget()->initBuffer();
-            d->form->formWidget()->highlightWidgets(d->moving, 0/*, QPoint()*/);
+            d->form->formWidget()->highlightWidgets(d->moving, 0);
         }
         FormManager::self()->createSignalMenu(d->moving);
         return;
@@ -1263,8 +1249,6 @@ void Container::drawConnection(QMouseEvent *mev)
 void Container::selectionWidgetsForRectangle(const QPoint& secondPoint)
 {
     //finish drawing unclipped selection rectangle: clear the surface
-    if (d->form->formWidget())
-        d->form->formWidget()->clearForm();
     d->updateSelectionOrInsertingRectangle(secondPoint);
 
     selectWidget(0);

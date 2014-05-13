@@ -83,7 +83,7 @@ KexiDisplayUtils::DisplayParameters::DisplayParameters()
 
 KexiDisplayUtils::DisplayParameters::DisplayParameters(QWidget *w)
 {
-//!TODO check!
+//! @todo check!
     textColor = w->palette().foreground().color();
 
     selectedTextColor = w->palette().highlightedText().color();
@@ -106,7 +106,7 @@ void KexiDisplayUtils::initDisplayForAutonumberSign(DisplayParameters& par, QWid
 void KexiDisplayUtils::initDisplayForDefaultValue(DisplayParameters& par, QWidget *widget)
 {
     par.textColor = SPECIAL_TEXT_COLOR;
-//!TODO check!
+//! @todo check!
     par.selectedTextColor = widget->palette().highlightedText().color();
     par.font = widget->font();
     par.font.setItalic(true);
@@ -121,7 +121,6 @@ void KexiDisplayUtils::paintAutonumberSign(const DisplayParameters& par, QPainte
     if (!overrideColor)
         painter->setPen(par.textColor);
 
-// int text_x = x;
     if (!(alignment & Qt::AlignVertical_Mask))
         alignment |= Qt::AlignVCenter;
     if (!(alignment & Qt::AlignHorizontal_Mask))
@@ -138,7 +137,6 @@ void KexiDisplayUtils::paintAutonumberSign(const DisplayParameters& par, QPainte
     }
 
     if (alignment & (Qt::AlignLeft | Qt::AlignJustify)) {
-//  text_x = x + KexiDisplayUtils_autonum->width() + 2;
         if (!overrideColor) {
             painter->drawPixmap(x, y_pixmap_pos, *KexiDisplayUtils_autonum);
             x += (KexiDisplayUtils_autonum->width() + 4);
@@ -154,9 +152,7 @@ void KexiDisplayUtils::paintAutonumberSign(const DisplayParameters& par, QPainte
             painter->drawPixmap(x + (width - par.textWidth) / 2 - KexiDisplayUtils_autonum->width() - 4,
                                 y_pixmap_pos, *KexiDisplayUtils_autonum);
     }
-
     painter->drawText(x, y, width, height, alignment, i18n("(autonumber)"));
-
     painter->restore();
 }
 

@@ -24,7 +24,7 @@
 
 class KoXmlResourceBundleManifest;
 class KoXmlResourceBundleMeta;
-class KoResourceBundleManager;
+class KoStore;
 
 /**
  * @brief The KoResourceBundle class
@@ -35,21 +35,14 @@ class KoResourceBundle : public KoResource
 
 public:
     /**
-     * @brief KoResourceBundle : Ctor
-     * @param bundlePath the path of the bundle
+     * @brief KoResourceBundle : Ctor * @param bundlePath the path of the bundle
      */
-    KoResourceBundle(QString const& bundlePath);
+    KoResourceBundle(QString const& fileName);
 
     /**
      * @brief ~KoResourceBundle : Dtor
      */
     virtual ~KoResourceBundle();
-
-    /**
-     * @brief image
-     * @return a QImage representing this resource.
-     */
-    QImage image() const;
 
     /**
      * @brief defaultFileExtension
@@ -84,21 +77,15 @@ public:
      * @param type type of the metadata
      * @param value value of the metadata
      */
-    void addMeta(QString type,QString value);
-
-    /**
-     * @brief addMeta : Add a Metadata to the resource
-     * @param type type of the metadata
-     * @param value value of the metadata
-     */
-    void setMeta(KoXmlResourceBundleMeta* newMeta);
+    void addMeta(const QString &type, const QString &value);
+    const QString getMeta(const QString &type) const;
 
     /**
      * @brief addFile : Add a file to the bundle
      * @param fileType type of the resource file
      * @param filePath path of the resource file
      */
-    void addFile(QString fileType,QString filePath,QStringList fileTagList);
+    void addFile(QString fileType, QString filePath, QStringList fileTagList);
 
     QList<QString> getTagsList();
 
@@ -116,37 +103,7 @@ public:
     /**
      * @brief rename : Rename the bundle
      */
-    void rename(QString,QString);
-
-    /**
-     * @brief getAuthor
-     * @return the metadata associated to the field "author" or QString() if it doesn't exist
-     */
-    QString getAuthor();
-
-    /**
-     * @brief getLicense
-     * @return the metadata associated to the field "license" or QString() if it doesn't exist
-     */
-    QString getLicense();
-
-    /**
-     * @brief getWebSite
-     * @return the metadata associated to the field "website" or QString() if it doesn't exist
-     */
-    QString getWebSite();
-
-    /**
-     * @brief getCreated
-     * @return the metadata associated to the field "created" or QString() if it doesn't exist
-     */
-    QString getCreated();
-
-    /**
-     * @brief getUpdated
-     * @return the metadata associated to the field "updated" or QString() if it doesn't exist
-     */
-    QString getUpdated();
+    void rename(QString, QString);
 
     /**
      * @brief isInstalled
@@ -162,12 +119,21 @@ protected:
     virtual QByteArray generateMD5() const;
 
 private:
-    QImage thumbnail;
-    KoXmlResourceBundleManifest* manifest;
-    KoResourceBundleManager* manager;
-    KoXmlResourceBundleMeta* meta;
 
-    bool installed;
+    /**
+     * @brief removeDir : Remove the chosen directory
+     * @param dirName the name of the directory to be removed
+     * @return true if succeed, false otherwise.
+     */
+    static bool removeDir(const QString & dirName);
+
+
+private:
+    QImage m_thumbnail;
+    KoXmlResourceBundleManifest* m_manifest;
+    KoXmlResourceBundleMeta* m_meta;
+
+    bool m_installed;
 };
 
 #endif // KORESOURCEBUNDLE_H

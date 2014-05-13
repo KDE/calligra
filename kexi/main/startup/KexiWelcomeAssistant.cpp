@@ -95,7 +95,7 @@ KexiMainWelcomePage::KexiMainWelcomePage(
 void KexiMainWelcomePage::loadProjects()
 {
     m_recentProjectsProxyModel = new KexiRecentProjectsProxyModel(m_recentProjects);
-    KexiRecentProjectsModel* model = new KexiRecentProjectsModel(*m_assistant->projects());
+    KexiRecentProjectsModel* model = new KexiRecentProjectsModel(*m_assistant->projects(), this);
     m_recentProjectsProxyModel->setSourceModel(model);
     m_recentProjects->setModel(m_recentProjectsProxyModel);
     m_recentProjectsProxyModel->sort(0, Qt::DescendingOrder);

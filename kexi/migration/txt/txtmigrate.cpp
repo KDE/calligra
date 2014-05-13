@@ -142,19 +142,16 @@ QVariant TxtMigrate::drv_value(uint i)
 
 bool TxtMigrate::drv_moveFirst()
 {
-    kDebug();
+    //kDebug();
     m_Row = -1;
     return drv_moveNext();
 }
 
 bool TxtMigrate::drv_moveLast()
 {
-    kDebug();
-    
+    //kDebug();
     while(drv_moveNext()) {}
-    
     return true;
 }
-
 
 }

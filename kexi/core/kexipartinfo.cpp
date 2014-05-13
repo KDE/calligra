@@ -229,7 +229,7 @@ bool Info::isPropertyEditorAlwaysVisibleInDesignMode() const
 QAction* Info::newObjectAction()
 {
     if (!KexiMainWindowIface::global() || !KexiMainWindowIface::global()->actionCollection()) {
-        kWarning() << "!KexiMainWindowIface::global()";
+        kWarning();
         return 0;
     }
     QAction *act = KexiMainWindowIface::global()->actionCollection()->action(KexiPart::nameForCreateAction(*this));

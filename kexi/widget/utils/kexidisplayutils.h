@@ -37,7 +37,7 @@ public:
         DisplayParameters();
 
         //! Copies properties from \a w.
-        DisplayParameters(QWidget *w);
+        explicit DisplayParameters(QWidget *w);
 
         QColor textColor, selectedTextColor;
         QFont font;

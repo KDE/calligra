@@ -86,60 +86,40 @@ void KexiProjectModel::setProject(KexiProject* prj, const QString& itemsPartClas
         //load part - we need this to have GUI merged with part's actions
 //! @todo FUTURE - don't do that when DESIGN MODE is OFF
         //kDebug() << info->partClass() << info->objectName();
-// no need to load part so early:        KexiPart::Part *p = Kexi::partManager().part(info);
-// no need to load part so early:        if (p) {
-            KexiProjectModelItem *groupItem = 0;
-            if (d->itemsPartClass.isEmpty() /*|| m_itemsPartClass == info->partClass()*/) {
-                groupItem = addGroup(*info, d->rootItem);
-                if (!groupItem) {
-                    continue;
-                } else {
-                    d->rootItem->appendChild(groupItem);
-                }
-                
-            } else {
-                groupItem = d->rootItem;
-            }
-          
-            //lookup project's objects (part items)
-//! @todo FUTURE - don't do that when DESIGN MODE is OFF
-            KexiPart::ItemDict *item_dict = prj ? prj->items(info) : 0;
-            if (!item_dict) {
+        KexiProjectModelItem *groupItem = 0;
+        if (d->itemsPartClass.isEmpty() /*|| m_itemsPartClass == info->partClass()*/) {
+            groupItem = addGroup(*info, d->rootItem);
+            if (!groupItem) {
                 continue;
-            }
-            
-            foreach(KexiPart::Item *item, *item_dict) {
-                KexiProjectModelItem *itm = addItem(*item, *info, groupItem);
-                if (itm && groupItem) {
-                    groupItem->appendChild(itm);
-                }
+            } else {
+                d->rootItem->appendChild(groupItem);
             }
 
-            groupItem->sortChildren();
-            if (!d->itemsPartClass.isEmpty()) {
-                break; //the only group added, so our work is completed
-            }
-/* no need to load part so early:            
         } else {
-            //add this error to the list that will be displayed later
-            QString msg, details;
-            KexiDB::getHTMLErrorMesage(&Kexi::partManager(), msg, details);
-            if (!msg.isEmpty() && partManagerErrorMessages) {
-                if (partManagerErrorMessages->isEmpty()) {
-                    *partManagerErrorMessages = QString("<qt><p>")
-                                                + i18n("Errors encountered during loading plugins:") + "<ul>";
-                }
-                partManagerErrorMessages->append(QString("<li>") + msg);
-                if (!details.isEmpty())
-                    partManagerErrorMessages->append(QString("<br>") + details);
-                partManagerErrorMessages->append("</li>");
+            groupItem = d->rootItem;
+        }
+
+        //lookup project's objects (part items)
+//! @todo FUTURE - don't do that when DESIGN MODE is OFF
+        KexiPart::ItemDict *item_dict = prj ? prj->items(info) : 0;
+        if (!item_dict) {
+            continue;
+        }
+
+        foreach(KexiPart::Item *item, *item_dict) {
+            KexiProjectModelItem *itm = addItem(*item, *info, groupItem);
+            if (itm && groupItem) {
+                groupItem->appendChild(itm);
             }
-        }*/
+        }
+
+        groupItem->sortChildren();
+        if (!d->itemsPartClass.isEmpty()) {
+            break; //the only group added, so our work is completed
+        }
     }
     if (partManagerErrorMessages && !partManagerErrorMessages->isEmpty())
         partManagerErrorMessages->append("</ul></p>");
-
-   //d->rootItem->debugPrint();
 }
 
 KexiProjectModel::~KexiProjectModel()
@@ -355,7 +335,7 @@ void KexiProjectModel::slotRemoveItem(const KexiPart::Item& item)
 QModelIndex KexiProjectModel::indexFromItem(KexiProjectModelItem* item) const
 {
     //kDebug();
-    if (item /*&& item->parent()*/) {
+    if (item) {
         int row = item->parent() ? item->row() : 0;
         //kDebug() << row;
         return createIndex(row, 0, (void*)item);

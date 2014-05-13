@@ -171,7 +171,6 @@ KexiDBAutoField::createEditor()
     default:
         newSubwidget = 0;
         changeText(d->caption);
-        //d->label->setText( d->dataSource.isEmpty() ? "<datasource>" : d->dataSource );
         break;
     }
 

@@ -65,12 +65,6 @@ public:
 
     virtual void setInvalidState(const QString& displayText);
 
-    virtual void drawRect(const QRect& r, int type);
-    virtual void drawRects(const QList<QRect> &list, int type);
-    virtual void initBuffer();
-    virtual void clearForm();
-    virtual void highlightWidgets(QWidget *from, QWidget *to);
-
     bool autoTabStops() const;
 
     QList<QWidget*>* orderedFocusWidgets() const;

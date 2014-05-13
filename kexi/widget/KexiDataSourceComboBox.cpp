@@ -161,7 +161,6 @@ void KexiDataSourceComboBox::setProject(KexiProject *prj, bool showTables, bool 
             comp->addItem(item->name());
         }
     }
-// setCurrentText("");
     setCurrentIndex(0);
 }
 

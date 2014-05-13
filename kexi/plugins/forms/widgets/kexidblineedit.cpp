@@ -59,7 +59,8 @@ public:
 class KexiDBLineEditStyle : public KexiUtils::StyleProxy
 {
 public:
-    KexiDBLineEditStyle(QStyle* parentStyle) : KexiUtils::StyleProxy(parentStyle), indent(0)
+    explicit KexiDBLineEditStyle(QStyle* parentStyle, QObject *parent = 0)
+        : KexiUtils::StyleProxy(parentStyle, parent), indent(0)
     {
     }
     virtual ~KexiDBLineEditStyle() {
@@ -113,8 +114,7 @@ KexiDBLineEdit::KexiDBLineEdit(QWidget *parent)
     connect(this, SIGNAL(cursorPositionChanged(int,int)),
             this, SLOT(slotCursorPositionChanged(int,int)));
 
-    m_internalStyle = new KexiDBLineEditStyle(style());
-    m_internalStyle->setParent(this);
+    m_internalStyle = new KexiDBLineEditStyle(style(), this);
     m_internalStyle->setIndent(KexiFormUtils::dataSourceTagIcon().width());
     m_inStyleChangeEvent = true; // do not allow KLineEdit::event() to touch the style
     setStyle(m_internalStyle);
@@ -125,13 +125,6 @@ KexiDBLineEdit::KexiDBLineEdit(QWidget *parent)
 KexiDBLineEdit::~KexiDBLineEdit()
 {
 }
-
-/*
-void FormWidgetInterface::setDesignMode(bool design)
-{
-    FormWidgetInterface::setDesignMode(design);
-    setCursor(design ? QCursor(Qt::ArrowCursor) : QCursor());
-}*/
 
 void KexiDBLineEdit::setInvalidState(const QString& displayText)
 {
@@ -317,12 +310,6 @@ void KexiDBLineEdit::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
 
     KexiDBTextWidgetInterface::setColumnInfo(cinfo, this);
 }
-
-/*todo
-void KexiDBLineEdit::paint( QPainter *p )
-{
-  KexiDBTextWidgetInterface::paint( this, &p, text().isEmpty(), alignment(), hasFocus() );
-}*/
 
 void KexiDBLineEdit::paintEvent(QPaintEvent *pe)
 {

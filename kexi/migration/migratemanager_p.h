@@ -73,7 +73,7 @@ protected:
     int m_serverResultNum;
     QString m_serverResultName;
 
-    bool lookupDriversNeeded : 1;
+    bool lookupDriversNeeded;
 
     QStringList possibleProblems;
 
