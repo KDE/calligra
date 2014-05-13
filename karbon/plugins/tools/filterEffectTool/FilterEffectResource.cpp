@@ -71,14 +71,16 @@ bool FilterEffectResource::save()
     if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
         return false;
     }
-
-    m_data.documentElement().setAttribute("id", name());
-
-    QByteArray ba = m_data.toByteArray(2);
-    bool success = (file.write(ba) == ba.size());
-
+    bool result = saveToDevice(&file);
     file.close();
+    return result;
+}
 
+bool FilterEffectResource::saveToDevice(QIODevice *dev) const
+{
+    m_data.documentElement().setAttribute("id", name());
+    QByteArray ba = m_data.toByteArray(2);
+    bool success = (dev->write(ba) == ba.size());
     return success;
 }
 

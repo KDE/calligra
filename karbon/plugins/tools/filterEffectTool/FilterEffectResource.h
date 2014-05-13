@@ -37,6 +37,9 @@ public:
     virtual bool save();
 
     /// reimplemented from KoResource
+    virtual bool saveToDevice(QIODevice* dev) const;
+
+    /// reimplemented from KoResource
     virtual QString defaultFileExtension() const;
 
     /// Creates resource from given filter effect stack
