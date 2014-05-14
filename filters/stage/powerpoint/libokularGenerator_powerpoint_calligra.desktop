@@ -1,7 +1,19 @@
 [Desktop Entry]
 Type=Service
 Name=Microsoft PowerPoint Presentation
+Name[de]=Microsoft Powerpoint Präsentation
+Name[nl]=Microsoft Powerpoint-presentaties
+Name[pt]=Apresentação do Microsoft PowerPoint
+Name[sv]=Microsoft Powerpoint-presentation
+Name[uk]=Презентація Microsoft PowerPoint
+Name[x-test]=xxMicrosoft PowerPoint Presentationxx
 Comment=PPT for Okular
+Comment[de]=PPT für Okular
+Comment[nl]=PPT voor Okular
+Comment[pt]=PPT para o Okular
+Comment[sv]=PPT för Okular
+Comment[uk]=PPT для Okular
+Comment[x-test]=xxPPT for Okularxx
 ServiceTypes=okular/Generator
 MimeType=application/vnd.ms-powerpoint;
 X-KDE-Library=okularGenerator_odp
