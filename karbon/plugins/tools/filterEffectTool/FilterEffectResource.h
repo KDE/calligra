@@ -34,6 +34,9 @@ public:
     virtual bool load();
 
     /// reimplemented from KoResource
+    virtual bool loadFromDevice(QIODevice *dev);
+
+    /// reimplemented from KoResource
     virtual bool save();
 
     /// reimplemented from KoResource
