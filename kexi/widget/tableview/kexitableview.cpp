@@ -1762,7 +1762,10 @@ void KexiTableView::showEvent(QShowEvent *e)
     if (m_navPanel)
         m_navPanel->updateGeometry(leftMargin());
 // updateNavPanelGeometry();
-    ensureVisible(0, 0, 0, 0); // needed because for small geometries contents were moved 1/2 of row height up
+    if (d->firstShowEvent) {
+        ensureVisible(0, 0, 0, 0); // needed because for small geometries contents were moved 1/2 of row height up
+        d->firstShowEvent = false;
+    }
 }
 
 void KexiTableView::contentsDragMoveEvent(QDragMoveEvent *e)

@@ -156,6 +156,9 @@ public:
 
     /*! A rubber band for displaying drag indicator. */
     QRubberBand *dragIndicatorRubberBand;
+
+    //! true if this is the first call of showEvent()
+    bool firstShowEvent;
 };
 
 #endif
