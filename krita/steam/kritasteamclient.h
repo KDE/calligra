@@ -49,6 +49,7 @@ public:
      */
     bool initialise(uint32 appId);
     void shutdown();
+    bool restartInSteam();
 
     bool isInBigPictureMode();
     bool isInitialised();

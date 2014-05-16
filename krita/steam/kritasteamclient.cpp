@@ -31,7 +31,8 @@
 
 
 KritaSteamClient *KritaSteamClient::sm_instance = 0;
-KritaSteamClient* KritaSteamClient::instance() {
+KritaSteamClient* KritaSteamClient::instance()
+{
     if (!sm_instance) {
         sm_instance = new KritaSteamClient(QCoreApplication::instance());
     }
@@ -73,8 +74,6 @@ void KritaSteamClient::MiniDumpFunction(const QString& comment, unsigned int nEx
 #endif
 }
 
-
-
 class KritaSteamClient::Private
 {
 public:
@@ -106,27 +105,41 @@ KritaSteamClient::~KritaSteamClient()
 {
 }
 
-bool KritaSteamClient::initialise(uint32 appId)
-{
-    const char* steamLanguage = 0;
-
-    d->appId = appId;
-    if (appId != k_uAppIdInvalid) {
-        if (SteamAPI_RestartAppIfNecessary(appId))
+/**
+ * @brief Launches the Steam Client to launch the app from Steam
+ * @param appId The Steam-assigned app-id
+ * @return true if Steam will launch the app, false otherwise
+ */
+bool KritaSteamClient::restartInSteam() {
+    if (d->appId != k_uAppIdInvalid) {
+        if (SteamAPI_RestartAppIfNecessary(d->appId))
         {
             // if Steam isn't running or Krita is not launched from Steam, this
             // starts the local client and launches it again.
             qDebug("Starting the local Steam client and launching through Steam");
-            return false;
+            return true;
         }
     }
+    return false;
+}
+
+bool KritaSteamClient::initialise(uint32 appId)
+{
+    const char* steamLanguage = 0;
+    d->appId = appId;
+
+    /*
+     * This is where we used to call restartInSteam()
+     * This has been removed in order to allow Krita
+     * to continue to function without Steam running,
+     * instead it displays a warning.
+     */
 
     // Check for Big Picture mode
     QByteArray bigPictureEnvVar = qgetenv(BIGPICTURE_ENVVARNAME);
     if (!bigPictureEnvVar.isEmpty()) {
         d->bigPictureMode = (bigPictureEnvVar.toInt() == 1);
     }
-
     if (d->bigPictureMode) {
         qDebug("Steam is in BIG PICTURE mode");
     } else {
@@ -134,7 +147,7 @@ bool KritaSteamClient::initialise(uint32 appId)
     }
 
 
-   d->initialisedWithoutError = SteamAPI_Init();
+    d->initialisedWithoutError = SteamAPI_Init();
     if (d->initialisedWithoutError) {
         qDebug("Steam initialised correctly");
 
@@ -147,18 +160,6 @@ bool KritaSteamClient::initialise(uint32 appId)
         // Print Debug info
         qDebug() << QString("Steam UI language: ") << QString(steamLanguage);
 
-        /* Sample code for initialising the SteamController
-        char rgchCWD[1024];
-        getcwd( rgchCWD, sizeof( rgchCWD ) );
-        char rgchFullPath[1024];
-    #if defined(_WIN32)
-        _snprintf( rgchFullPath, sizeof( rgchFullPath ), "%s\\%s", rgchCWD, "controller.vdf" );
-    #else
-        _snprintf( rgchFullPath, sizeof( rgchFullPath ), "%s/%s", rgchCWD, "controller.vdf" );
-    #endif
-        qDebug("Initialising Steam Controller");
-        SteamController()->Init( rgchFullPath );
-        */
     } else {
         qDebug("Steam did not initialise correctly!");
     }
