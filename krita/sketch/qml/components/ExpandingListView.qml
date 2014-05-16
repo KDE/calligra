@@ -23,6 +23,7 @@ Item {
     id: base
     property alias model: listView.model;
     property alias currentIndex: listView.currentIndex;
+    property alias buttonHeight: topButton.height
     signal newIndex(int index);
     height: topButton.height;
 
@@ -32,7 +33,8 @@ Item {
             width: 1;
             color: Settings.theme.color("components/expandingListView/selection/border");
         }
-        radius: (Constants.GridHeight / 4) - 2;
+        //radius: (Constants.GridHeight / 4) - 2;
+        radius: (height / 2) - 2;
         anchors {
             top: base.expandToTop ? undefined : parent.top;
             bottom: base.expandToTop ? parent.bottom : undefined;
