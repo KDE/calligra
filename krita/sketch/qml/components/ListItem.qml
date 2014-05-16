@@ -28,6 +28,9 @@ Item {
     property alias image: image;
     property alias imageShadow: imageShadow.visible;
 
+    property real visibleHorizontalMargin: Constants.GridWidth * 0.25;
+    property real visibleVerticalMargin: Constants.GridHeight * 0.25;
+
     signal clicked();
 
     width: Constants.GridWidth > 1 ? Constants.GridWidth * 4 : 1;
@@ -38,10 +41,10 @@ Item {
 
         anchors {
             fill: parent;
-            leftMargin: Constants.GridWidth * 0.25;
-            rightMargin: Constants.GridWidth * 0.25;
-            topMargin: Constants.GridHeight * 0.25;
-            bottomMargin: Constants.GridHeight * 0.25;
+            leftMargin: base.visibleHorizontalMargin;
+            rightMargin: base.visibleHorizontalMargin;
+            topMargin: base.visibleVerticalMargin;
+            bottomMargin: base.visibleVerticalMargin;
         }
 
         gradient: Gradient {
