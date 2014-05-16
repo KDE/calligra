@@ -26,6 +26,7 @@
 #include <unistd.h>
 #include "steam/steam_api.h"
 
+#include "kis_steamcloudstorage.h"
 // Can test if SteamTenfoot=1
 #define BIGPICTURE_ENVVARNAME "SteamTenfoot"
 
@@ -82,21 +83,22 @@ public:
       , initialisedWithoutError(false)
       , bigPictureMode(false)
       , callbackTimer(0)
+      , remoteStorage(0)
     {
-
     }
 
     uint32 appId;
     bool initialisedWithoutError;
     bool bigPictureMode;
     QTimer* callbackTimer;
+    KisSteamCloudStorage* remoteStorage;
 };
 
-KritaSteamClient::KritaSteamClient(QObject *parent) :
-    QObject(parent),
-    m_gameOverlayActivatedCallback( this, &KritaSteamClient::onGameOverlayActivated ),
-    m_steamShutdownCallback( this, &KritaSteamClient::onSteamShutdown ),
-    d( new Private(this) )
+KritaSteamClient::KritaSteamClient(QObject *parent)
+    : QObject(parent)
+    , m_gameOverlayActivatedCallback( this, &KritaSteamClient::onGameOverlayActivated )
+    , m_steamShutdownCallback( this, &KritaSteamClient::onSteamShutdown )
+    , d( new Private(this) )
 {
 }
 
@@ -160,6 +162,7 @@ bool KritaSteamClient::initialise(uint32 appId)
         // Print Debug info
         qDebug() << QString("Steam UI language: ") << QString(steamLanguage);
 
+        d->remoteStorage = new KisSteamCloudStorage();
     } else {
         qDebug("Steam did not initialise correctly!");
     }
@@ -232,6 +235,11 @@ void KritaSteamClient::onSteamShutdown( SteamShutdown_t *callback )
 bool KritaSteamClient::isInitialised()
 {
     return d->initialisedWithoutError;
+}
+
+
+KisSteamCloudStorage* KritaSteamClient::remoteStorage() {
+    return d->remoteStorage;
 }
 
 #include "kritasteamclient.moc"

@@ -22,4 +22,5 @@
 
 #include "kritasteamachievements.h"
 #include "kritasteamclient.h"
+#include "kis_steamcloudstorage.h"
 #endif

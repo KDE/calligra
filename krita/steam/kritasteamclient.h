@@ -28,6 +28,7 @@
 
 // forward declaration
 class QTimer;
+class KisSteamCloudStorage;
 
 /**
  * Handles interaction with the Steam API
@@ -50,6 +51,10 @@ public:
     bool initialise(uint32 appId);
     void shutdown();
     bool restartInSteam();
+
+    // Steam Cloud Functions
+    KisSteamCloudStorage* remoteStorage();
+    bool checkCloudStorage();
 
     bool isInBigPictureMode();
     bool isInitialised();
