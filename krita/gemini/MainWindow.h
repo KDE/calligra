@@ -69,6 +69,8 @@ public Q_SLOTS:
     void resetWindowTitle();
     void resourceChanged(int key, const QVariant& v);
     void resourceChangedSketch(int key, const QVariant& v);
+    void loadFromSteamCloud();
+    void saveToSteamCloud();
 Q_SIGNALS:
     void closeRequested();
     void switchedToSketch();

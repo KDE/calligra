@@ -110,6 +110,9 @@ public:
         , toDesktop(0)
         , toSketch(0)
         , switcher(0)
+        , showSteamDialog(0)
+        , saveToSteamCloud(0)
+        , loadFromSteamCloud(0)
     {
 #ifdef Q_OS_WIN
 //         slateMode = (GetSystemMetrics(SM_CONVERTIBLESLATEMODE) == 0);
@@ -123,7 +126,7 @@ public:
         centerer->setInterval(10);
         centerer->setSingleShot(true);
         connect(centerer, SIGNAL(timeout()), q, SLOT(adjustZoomOnDocumentChangedAndStuff()));
-}
+    }
     MainWindow* q;
     bool allowClose;
     SketchDeclarativeView* sketchView;
@@ -148,7 +151,9 @@ public:
     KAction* toSketch;
     QToolButton* switcher;
 
-    KAction* crashTest;
+    KAction* showSteamDialog;
+    KAction* saveToSteamCloud;
+    KAction* loadFromSteamCloud;
 
     void initSketchView(QObject* parent)
     {
@@ -169,8 +174,14 @@ public:
             QMessageBox::warning(0, "No QML found", mainqml + " doesn't exist.");
         }
         QFileInfo fi(mainqml);
-        sketchView->setSource(QUrl::fromLocalFile(fi.canonicalFilePath()));
+
         sketchView->setResizeMode( QDeclarativeView::SizeRootObjectToView );
+        sketchView->setSource(QUrl::fromLocalFile(fi.canonicalFilePath()));
+
+        QList<QDeclarativeError> qmlErrors = sketchView->errors();
+        for (QDeclarativeError e : qmlErrors) {
+            qDebug() << "QML error: " << e.toString();
+        }
 
         toDesktop = new KAction(q);
         toDesktop->setEnabled(false);
@@ -224,6 +235,27 @@ public:
         //connect(switcher, SIGNAL(clicked(bool)), q, SLOT(switchDesktopForced()));
         connect(switcher, SIGNAL(clicked(bool)), q, SLOT(switchToSketch()));
         desktopView->menuBar()->setCornerWidget(switcher);
+
+        showSteamDialog = new KAction(q);
+        showSteamDialog->setEnabled(true);
+        showSteamDialog->setText(tr("Steam Cloud"));
+        q->addAction(showSteamDialog);
+        connect(showSteamDialog, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), KritaSteamClient::instance(), SLOT(showDialog()));
+        desktopView->actionCollection()->addAction("steam_dialog", showSteamDialog);
+
+        loadFromSteamCloud = new KAction(q);
+        loadFromSteamCloud->setEnabled(true);
+        loadFromSteamCloud->setText(tr("Load from Steam Cloud..."));
+        q->addAction(loadFromSteamCloud);
+        connect(loadFromSteamCloud, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), q, SLOT(loadFromSteamCloud()));
+        desktopView->actionCollection()->addAction("load_from_steam_cloud", loadFromSteamCloud);
+
+        saveToSteamCloud = new KAction(q);
+        saveToSteamCloud->setEnabled(true);
+        saveToSteamCloud->setText(tr("Save to Steam Cloud..."));
+        q->addAction(saveToSteamCloud);
+        connect(saveToSteamCloud, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), q, SLOT(saveToSteamCloud()));
+        desktopView->actionCollection()->addAction("save_to_steam_cloud", saveToSteamCloud);
 
         // DesktopViewProxy connects itself up to everything appropriate on construction,
         // and destroys itself again when the view is removed
@@ -743,6 +775,18 @@ void MainWindow::cloneResources(KisCanvasResourceProvider *from, KisCanvasResour
     to->setOpacity(from->opacity());
     to->setGlobalAlphaLock(from->globalAlphaLock());
 
+}
+
+void MainWindow::loadFromSteamCloud()
+{
+    KritaSteamClient::instance()->showOpenFileDialog();
+}
+
+void MainWindow::saveToSteamCloud()
+{
+    KritaSteamClient::instance()->showSaveAsFileDialog();
+    //KritaSteamClient::instance()->remoteStorage()->pushFile(DocumentManager::instance()->settingsManager()->currentFile(), "workingcopies");
+    //KritaSteamClient::instance()->remoteStorage()->checkStorage();
 }
 
 #include "MainWindow.moc"

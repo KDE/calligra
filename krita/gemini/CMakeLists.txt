@@ -17,6 +17,7 @@ set(kritagemini_SRCS
     main.cpp
     MainWindow.cpp
     desktopviewproxy.cpp
+    ${krita_kritasteammodels_SRCS}
 )
 
 if(WIN32 AND USE_BREAKPAD)

@@ -19,13 +19,26 @@
 
 #include "kritasteamclient.h"
 
+#ifdef Q_OS_WIN
+// qml requires correct-case to path, even in Windows
+#include "sketch/pathconverter.h"
+#endif
+
 #include <QCoreApplication>
 #include <QDebug>
+#include <QDeclarativeContext>
+#include <QDeclarativeEngine>
+#include <QDeclarativeView>
 #include <QMessageBox>
 #include <QTimer>
-#include <unistd.h>
-#include "steam/steam_api.h"
 
+#include <kurl.h>
+#include <kstandarddirs.h>
+#include <unistd.h>
+
+#include "DocumentManager.h"
+#include "KTemporaryFile.h"
+#include "kis_doc2.h"
 #include "kis_steamcloudstorage.h"
 // Can test if SteamTenfoot=1
 #define BIGPICTURE_ENVVARNAME "SteamTenfoot"
@@ -83,6 +96,7 @@ public:
       , initialisedWithoutError(false)
       , bigPictureMode(false)
       , callbackTimer(0)
+      , steamDialog(0)
       , remoteStorage(0)
     {
     }
@@ -91,6 +105,9 @@ public:
     bool initialisedWithoutError;
     bool bigPictureMode;
     QTimer* callbackTimer;
+
+    QDeclarativeView* steamDialog;
+
     KisSteamCloudStorage* remoteStorage;
 };
 
@@ -105,6 +122,9 @@ KritaSteamClient::KritaSteamClient(QObject *parent)
 
 KritaSteamClient::~KritaSteamClient()
 {
+    if (d->steamDialog == 0) {
+        delete d->steamDialog;
+    }
 }
 
 /**
@@ -238,8 +258,132 @@ bool KritaSteamClient::isInitialised()
 }
 
 
+void KritaSteamClient::showDialog()
+{
+    if (d->steamDialog == 0) {
+        d->steamDialog = new QDeclarativeView();
+        d->steamDialog->engine()->rootContext()->setContextProperty("mainWindow", this);
+
+        QString importPath = KGlobal::dirs()->findDirs("lib", "calligra/imports").value(0);
+        QString mainqml = KGlobal::dirs()->findResource("data", "krita/steam/steamdialog.qml");
+    #ifdef Q_OS_WIN
+        importPath = WindowsTools::correctPathForCase(importPath);
+        mainqml = WindowsTools::correctPathForCase(mainqml);
+    #endif
+        d->steamDialog->engine()->addImportPath(importPath);
+
+        Q_ASSERT(QFile::exists(mainqml));
+        if (!QFile::exists(mainqml)) {
+            QMessageBox::warning(0, "No QML found", mainqml + " doesn't exist.");
+        }
+        QFileInfo fi(mainqml);
+        d->steamDialog->setSource(QUrl::fromLocalFile(fi.canonicalFilePath()));
+        d->steamDialog->setResizeMode( QDeclarativeView::SizeRootObjectToView );
+
+        d->steamDialog->setWindowTitle("Steam");
+
+        Qt::WindowFlags flags = d->steamDialog->windowFlags();
+        d->steamDialog->setWindowFlags(flags | Qt::WindowStaysOnTopHint);
+    }
+    d->steamDialog->show();
+}
+
 KisSteamCloudStorage* KritaSteamClient::remoteStorage() {
     return d->remoteStorage;
 }
+
+void KritaSteamClient::showOpenFileDialog()
+{
+    if (!d->initialisedWithoutError) {
+        return;
+    }
+
+    if (d->steamDialog != 0) {
+        delete d->steamDialog;
+    }
+    d->steamDialog = new QDeclarativeView();
+    //d->steamDialog->engine()->rootContext()->setContextProperty("mainWindow", parent);
+
+    QString importPath = KGlobal::dirs()->findDirs("lib", "calligra/imports").value(0);
+    QString mainqml = KGlobal::dirs()->findResource("data", "krita/steam/SteamOpenFilePage.qml");
+#ifdef Q_OS_WIN
+    importPath = WindowsTools::correctPathForCase(importPath);
+    mainqml = WindowsTools::correctPathForCase(mainqml);
+#endif
+    d->steamDialog->engine()->addImportPath(importPath);
+
+    Q_ASSERT(QFile::exists(mainqml));
+    if (!QFile::exists(mainqml)) {
+        QMessageBox::warning(0, "No QML found", mainqml + " doesn't exist.");
+    }
+    QFileInfo fi(mainqml);
+    d->steamDialog->setSource(QUrl::fromLocalFile(fi.canonicalFilePath()));
+    d->steamDialog->setResizeMode( QDeclarativeView::SizeRootObjectToView );
+
+    d->steamDialog->setWindowTitle("Open File from Steam Cloud");
+
+    Qt::WindowFlags flags = d->steamDialog->windowFlags();
+    //d->steamDialog->setWindowFlags(flags | Qt::WindowStaysOnTopHint);
+    d->steamDialog->setWindowModality(Qt::ApplicationModal);
+    d->steamDialog->show();
+}
+
+void KritaSteamClient::showSaveAsFileDialog()
+{
+    if (!d->initialisedWithoutError) {
+        return;
+    }
+
+    if (d->steamDialog != 0) {
+        delete d->steamDialog;
+    }
+    d->steamDialog = new QDeclarativeView();
+
+    QString importPath = KGlobal::dirs()->findDirs("lib", "calligra/imports").value(0);
+    QString mainqml = KGlobal::dirs()->findResource("data", "krita/steam/SteamSaveAsFilePage.qml");
+#ifdef Q_OS_WIN
+    importPath = WindowsTools::correctPathForCase(importPath);
+    mainqml = WindowsTools::correctPathForCase(mainqml);
+#endif
+    d->steamDialog->engine()->addImportPath(importPath);
+
+    Q_ASSERT(QFile::exists(mainqml));
+    if (!QFile::exists(mainqml)) {
+        QMessageBox::warning(0, "No QML found", mainqml + " doesn't exist.");
+    }
+    QFileInfo fi(mainqml);
+    d->steamDialog->setSource(QUrl::fromLocalFile(fi.canonicalFilePath()));
+    d->steamDialog->setResizeMode( QDeclarativeView::SizeRootObjectToView );
+
+    d->steamDialog->setWindowTitle("Open File from Steam Cloud");
+
+    Qt::WindowFlags flags = d->steamDialog->windowFlags();
+    //d->steamDialog->setWindowFlags(flags | Qt::WindowStaysOnTopHint);
+    d->steamDialog->setWindowModality(Qt::ApplicationModal);
+
+    KTemporaryFile* tempFile=0;
+    tempFile = new KTemporaryFile();
+    tempFile->setPrefix("steamExport");
+    tempFile->setSuffix(".kra");
+    tempFile->setAutoRemove(false);
+    tempFile->open();
+    QString tempFileName = tempFile->fileName();
+    tempFile->close();
+    delete tempFile;
+
+    qDebug() << "Steam Temp Filename: " << tempFileName;
+    DocumentManager* dm = DocumentManager::instance();
+    dm->document()->saveAs(tempFileName);
+
+    QFile file(tempFileName);
+    d->steamDialog->engine()->rootContext()->setContextProperty("currentDocumentFileName", tempFileName);
+    qint64 fileSize = 0;
+    if (file.exists()) {
+        fileSize = file.size();
+    }
+    d->steamDialog->engine()->rootContext()->setContextProperty("currentDocumentFileSize", (qint32) fileSize);
+    d->steamDialog->show();
+}
+
 
 #include "kritasteamclient.moc"

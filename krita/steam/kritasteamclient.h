@@ -79,6 +79,9 @@ public slots:
     void runCallbacks();
     void mainWindowCreated();
     void mainWindowBeingDestroyed();
+    void showDialog();
+    void showOpenFileDialog();
+    void showSaveAsFileDialog();
 };
 
 #endif // KRITASTEAMCLIENT_H
