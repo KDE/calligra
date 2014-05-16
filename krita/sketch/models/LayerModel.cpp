@@ -858,7 +858,9 @@ bool getActiveChannel(KisNodeSP node, int channelIndex)
     if (layer)
     {
         QBitArray flags = layer->channelFlags();
-        flag = flags[channelIndex];
+        if (channelIndex < flags.size()) {
+            flag = flags[channelIndex];
+        }
     }
     return flag;
 }
