@@ -38,6 +38,7 @@ class Constants : public QObject
     Q_PROPERTY(qreal DefaultFontSize READ defaultFontSize NOTIFY gridSizeChanged)
     Q_PROPERTY(qreal LargeFontSize READ largeFontSize NOTIFY gridSizeChanged)
     Q_PROPERTY(qreal HugeFontSize READ hugeFontSize NOTIFY gridSizeChanged)
+    Q_PROPERTY(bool useScreenGeometry READ useScreenGeometry WRITE setUseScreenGeometry NOTIFY useScreenGeometryChanged)
 
 public:
     Constants(QObject* parent = 0);
@@ -54,17 +55,25 @@ public:
     qreal largeFontSize() const;
     qreal hugeFontSize() const;
     bool isLandscape() const;
+    bool useScreenGeometry() const;
+    void setUseScreenGeometry(const bool& newValue);
+    void updateGridSizes();
 
+    Q_INVOKABLE void setGrid(int columns, int rows);
     Q_INVOKABLE void setGridWidth(qreal width);
     Q_INVOKABLE void setGridHeight(qreal height);
 
 Q_SIGNALS:
     void gridSizeChanged();
+    void useScreenGeometryChanged();
 
 private:
+    qreal m_gridColumns;
+    qreal m_gridRows;
     qreal m_gridWidth;
     qreal m_gridHeight;
     qreal m_toolbarButtonSize;
+    bool m_useScreenGeometry;
 };
 
 #endif // CONSTANTS_H

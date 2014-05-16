@@ -30,6 +30,7 @@
 #include <QtGui/QApplication>
 #include <QtGui/QWidget>
 #include <QtDeclarative/QDeclarativeComponent>
+#include <QDesktopWidget>
 
 #include <kglobal.h>
 #include <kstandarddirs.h>
@@ -52,6 +53,7 @@ public:
         , fontsAdded(false)
         , lineCountLandscape(40)
         , lineCountPortrait(70)
+        , useScreenGeometry(false)
     { }
 
     void rebuildFontCache();
@@ -77,6 +79,8 @@ public:
     QList<int> addedFonts;
     int lineCountLandscape;
     int lineCountPortrait;
+
+    bool useScreenGeometry;
 };
 
 Theme::Theme(QObject* parent)
@@ -385,7 +389,7 @@ Theme* Theme::load(const QString& id, QObject* parent)
 
 bool Theme::eventFilter(QObject* target, QEvent* event)
 {
-    if(target && target == qApp->activeWindow() && target->inherits("QMainWindow") && event->type() == QEvent::Resize) {
+    if(!d->useScreenGeometry && target && target == qApp->activeWindow() && target->inherits("QMainWindow") && event->type() == QEvent::Resize) {
         d->rebuildFontCache();
         emit fontCacheRebuilt();
     }
@@ -408,11 +412,33 @@ void Theme::Private::rebuildFontCache()
         if(font.isCopyOf(qApp->font()))
             qWarning() << "Could not find font" << map.value("family") << "with style" << map.value("style", "Regular");
 
-        float lineCount = qApp->activeWindow()->height() > qApp->activeWindow()->width() ? lineCountPortrait : lineCountLandscape;
-        float lineHeight = qApp->activeWindow()->height() / lineCount;
+        float lineCount = 0.0f;
+        float lineHeight = 0.0f;
+        if (useScreenGeometry) {
+            QDesktopWidget *desktop = QApplication::desktop();
+            QWidget *screen = desktop->screen(desktop->primaryScreen());
+            lineCount = screen->height() > screen->width() ? lineCountPortrait : lineCountLandscape;
+            lineHeight = screen->height() / lineCount;
+        } else {
+            lineCount = qApp->activeWindow()->height() > qApp->activeWindow()->width() ? lineCountPortrait : lineCountLandscape;
+            lineHeight = qApp->activeWindow()->height() / lineCount;
+        }
         font.setPixelSize(lineHeight * map.value("size", 1).toFloat());
 
         fontMap.insert(itr.key(), font);
+    }
+}
+
+bool Theme::useScreenGeometry() const
+{
+    return d->useScreenGeometry;
+}
+
+void Theme::setUseScreenGeometry(const bool& newValue)
+{
+    if(newValue != d->useScreenGeometry) {
+        d->useScreenGeometry = newValue;
+        emit useScreenGeometryChanged();
     }
 }
 

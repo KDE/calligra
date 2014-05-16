@@ -123,6 +123,16 @@ class KRITA_SKETCH_EXPORT Theme : public QObject
      * \notify fontPathChanged()
      */
     Q_PROPERTY(QString fontPath READ fontPath WRITE setFontPath NOTIFY fontPathChanged)
+    /**
+     * \property useScreenGeometry
+     * \brief Use screen rather than mainWindow for calculation of font sizes
+     *
+     * \default "false"
+     * \get useScreenGeometry() const
+     * \set setUseScreenGeometry()
+     * \notify useScreenGeometryChanged()
+     */
+    Q_PROPERTY(bool useScreenGeometry READ useScreenGeometry WRITE setUseScreenGeometry NOTIFY useScreenGeometryChanged)
 public:
     explicit Theme(QObject* parent = 0);
     virtual ~Theme();
@@ -232,6 +242,15 @@ public:
      */
     Q_INVOKABLE QUrl image(const QString& name);
 
+    /**
+     * Getter for property #useScreenGeometry.
+     */
+    bool useScreenGeometry() const;
+    /**
+     * Setter for property #fontPath.
+     */
+    void setUseScreenGeometry(const bool& newValue);
+
     static Theme* load(const QString& id, QObject* parent = 0);
 
 Q_SIGNALS:
@@ -245,6 +264,7 @@ Q_SIGNALS:
     void imagePathChanged();
     void fontPathChanged();
     void fontCacheRebuilt();
+    void useScreenGeometryChanged();
 
 protected:
     virtual bool eventFilter(QObject*, QEvent*);

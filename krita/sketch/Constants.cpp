@@ -20,14 +20,20 @@
 #include "Constants.h"
 
 #include <QApplication>
+#include <QDesktopWidget>
 #include <QWidget>
+
+#define SKETCH_DEFAULT_COLUMNS 12
+#define SKETCH_DEFAULT_ROWS 12
+#define PORTRAIT_FACTOR 1.5
 
 Constants::Constants(QObject* parent)
     : QObject(parent)
+    , m_gridColumns(SKETCH_DEFAULT_COLUMNS)
+    , m_gridRows(SKETCH_DEFAULT_ROWS)
+    , m_useScreenGeometry(false)
 {
-    m_gridWidth = qApp->activeWindow()->width() / gridColumns();
-    m_gridHeight = qApp->activeWindow()->height() / gridHeight();
-    m_toolbarButtonSize = m_gridHeight;
+    updateGridSizes(); // based on active Window
 }
 
 int Constants::animationDuration() const
@@ -67,13 +73,13 @@ qreal Constants::toolbarButtonSize() const
 int Constants::gridRows() const
 {
     if (isLandscape())
-        return 18;
-    return 12;
+        return m_gridRows * PORTRAIT_FACTOR;
+    return m_gridRows;
 }
 
 int Constants::gridColumns() const
 {
-    return 12;
+    return m_gridColumns;
 }
 
 qreal Constants::defaultMargin() const
@@ -107,6 +113,40 @@ bool Constants::isLandscape() const
 	if(qApp->activeWindow())
 	    return qApp->activeWindow()->height() > qApp->activeWindow()->width();
 	return true;
+}
+
+void Constants::setGrid(int columns, int rows) {
+    m_gridColumns = columns;
+    m_gridRows = rows;
+    updateGridSizes();
+}
+
+bool Constants::useScreenGeometry() const
+{
+    return m_useScreenGeometry;
+}
+
+void Constants::setUseScreenGeometry(const bool& newValue)
+{
+    if(newValue != m_useScreenGeometry) {
+        m_useScreenGeometry = newValue;
+        updateGridSizes();
+        emit useScreenGeometryChanged();
+    }
+}
+
+void Constants::updateGridSizes() {
+    if (m_useScreenGeometry){
+        QDesktopWidget *desktop = QApplication::desktop();
+        QWidget *screen = desktop->screen(desktop->primaryScreen());
+        m_gridWidth = screen->width() / gridColumns();
+        m_gridHeight = screen->height() / gridHeight();
+    } else {
+        m_gridWidth = qApp->activeWindow()->width() / gridColumns();
+        m_gridHeight = qApp->activeWindow()->height() / gridHeight();
+    }
+    m_toolbarButtonSize = m_gridHeight;
+    emit gridSizeChanged();
 }
 
 #include "Constants.moc"
