@@ -161,7 +161,7 @@ QuickShapes=ArtisticText,TextShapeID,DivineProportionShapeID,EllipseShape,Rectan
 
 
 [favoriteList]
-favoriteBrushes=paintbrush,deformbrush,hairybrush,hatchingbrush,sketchbrush,smudge,spraybrush,
+favoritePresets=Basic_tip_default,Basic_circle_wet,Block_basic,Bristles_hairy,Eraser_circle,Eraser_hard,Eraser_soft,Mix_dull,Mix_smear_soft,Ink_gpen_10
 
 [advancedColorSelector]
 allowHorizontalLayout=true
