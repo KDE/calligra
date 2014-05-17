@@ -81,13 +81,13 @@ set(wordsprivate_LIB_SRCS
     author/CoverSelectionDialog.cpp
 )
 
-if( CMAKE_BUILD_TYPE MATCHES "Debug" )
+if( CMAKE_BUILD_TYPE MATCHES "^[d,D][e,E][b,B][u,U][g,G]" )
     set(wordsprivate_LIB_SRCS ${wordsprivate_LIB_SRCS}
         dockers/KWDebugDocker.cpp
         dockers/KWDebugDockerFactory.cpp
         dockers/KWDebugWidget.cpp
     )
-endif ( CMAKE_BUILD_TYPE MATCHES "Debug")
+endif ( CMAKE_BUILD_TYPE MATCHES "^[d,D][e,E][b,B][u,U][g,G]")
 
 if( SHOULD_BUILD_RDF )
     set(wordsprivate_LIB_SRCS ${wordsprivate_LIB_SRCS}

@@ -43,7 +43,7 @@
 #include "pagetool/KWPageToolFactory.h"
 #include "dockers/KWNavigationDockerFactory.h"
 
-#if CMAKE_BUILD_TYPE == debug
+#ifndef NDEBUG
 #include "dockers/KWDebugDockerFactory.h"
 #endif
 
@@ -101,7 +101,7 @@ const KComponentData &KWFactory::componentData()
         KoDockRegistry *dockRegistry = KoDockRegistry::instance();
         dockRegistry->add(new KWStatisticsDockerFactory());
         dockRegistry->add(new KWNavigationDockerFactory());
-#if CMAKE_BUILD_TYPE == debug
+#ifndef NDEBUG
         dockRegistry->add(new KWDebugDockerFactory());
 #endif
 

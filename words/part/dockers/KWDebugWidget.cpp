@@ -87,7 +87,7 @@ void KWDebugWidget::updateData()
         willShow += "This sections end here :";
         QVariant var = fmt.property(KoParagraphStyle::SectionEndings);
         QList<QVariant> closeList = var.value< QList<QVariant> >();
-        foreach (const QVariant &sv, close_list)
+        foreach (const QVariant &sv, closeList)
         {
             KoSectionEnd *sec = static_cast<KoSectionEnd *>(sv.value<void *>());
             willShow += sec->name + " ";
@@ -102,7 +102,7 @@ void KWDebugWidget::updateData()
 
 void KWDebugWidget::setCanvas(KWCanvas* canvas)
 {
-    canvas = canvas;
+    m_canvas = canvas;
 }
 
 void KWDebugWidget::unsetCanvas()
