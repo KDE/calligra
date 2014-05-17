@@ -65,44 +65,44 @@ void KWDebugWidget::updateData()
         return;
     }
 
-    QTextBlock cur_block = editor->block();
-    QTextBlockFormat fmt = cur_block.blockFormat();
+    QTextBlock curBlock = editor->block();
+    QTextBlockFormat fmt = curBlock.blockFormat();
 
-    QString will_show;
+    QString willShow;
     if (fmt.hasProperty(KoParagraphStyle::SectionStartings))
     {
-        will_show = "This sections starts here :";
+        willShow = "This sections starts here :";
         QVariant var = fmt.property(KoParagraphStyle::SectionStartings);
-        QList<QVariant> open_list = var.value< QList<QVariant> >();
-        foreach (const QVariant &sv, open_list)
+        QList<QVariant> openList = var.value< QList<QVariant> >();
+        foreach (const QVariant &sv, openList)
         {
             KoSection *sec = static_cast<KoSection *>(sv.value<void *>());
-            will_show += sec->name() + " ";
+            willShow += sec->name() + " ";
         }
-        will_show += "\n";
+        willShow += "\n";
     }
 
     if (fmt.hasProperty(KoParagraphStyle::SectionEndings))
     {
-        will_show += "This sections end here :";
+        willShow += "This sections end here :";
         QVariant var = fmt.property(KoParagraphStyle::SectionEndings);
-        QList<QVariant> close_list = var.value< QList<QVariant> >();
+        QList<QVariant> closeList = var.value< QList<QVariant> >();
         foreach (const QVariant &sv, close_list)
         {
             KoSectionEnd *sec = static_cast<KoSectionEnd *>(sv.value<void *>());
-            will_show += sec->name + " ";
+            willShow += sec->name + " ";
         }
-        will_show += "\n";
+        willShow += "\n";
     }
 
-    will_show += "block number is " + QString::number(editor->constCursor().block().blockNumber());
+    willShow += "block number is " + QString::number(editor->constCursor().block().blockNumber());
 
-    m_label->setText(will_show);
+    m_label->setText(willShow);
 }
 
 void KWDebugWidget::setCanvas(KWCanvas* canvas)
 {
-    m_canvas = canvas;
+    canvas = canvas;
 }
 
 void KWDebugWidget::unsetCanvas()
