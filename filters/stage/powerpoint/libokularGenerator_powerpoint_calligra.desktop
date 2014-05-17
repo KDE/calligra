@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=Microsoft PowerPoint Presentation
+Name[ca]=Presentacions del Microsoft PowerPoint
 Name[cs]=Prezentace Microsoft PowerPoint
 Name[de]=Microsoft Powerpoint Präsentation
 Name[nl]=Microsoft Powerpoint-presentaties
@@ -12,6 +13,7 @@ Name[sv]=Microsoft Powerpoint-presentation
 Name[uk]=Презентація Microsoft PowerPoint
 Name[x-test]=xxMicrosoft PowerPoint Presentationxx
 Comment=PPT for Okular
+Comment[ca]=PPT per a l'Okular
 Comment[cs]=PPT pro Okular
 Comment[de]=PPT für Okular
 Comment[nl]=PPT voor Okular
