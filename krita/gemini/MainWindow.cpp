@@ -30,6 +30,7 @@
 #include <QDeclarativeView>
 #include <QDeclarativeContext>
 #include <QDeclarativeEngine>
+#include <QDesktopWidget>
 #include <QGraphicsObject>
 #include <QDir>
 #include <QFile>
@@ -88,6 +89,7 @@
 #include "steam/kritasteam.h"
 #endif
 
+#define MAX_TABLET_MODE_SCREENSIZE_MM 254   // force slate mode on 10" and lower screens
 class MainWindow::Private
 {
 public:
@@ -118,6 +120,15 @@ public:
 //         slateMode = (GetSystemMetrics(SM_CONVERTIBLESLATEMODE) == 0);
 //         docked = (GetSystemMetrics(SM_SYSTEMDOCKED) != 0);
 #endif
+        // Desktop widget
+        QDesktopWidget *desktopw = QApplication::desktop();
+        QWidget *screen = desktopw->screen(desktopw->primaryScreen());
+        int heightmm = screen->heightMM();
+        int widthmm = screen->widthMM();
+        if ((heightmm*heightmm + widthmm*widthmm) <= MAX_TABLET_MODE_SCREENSIZE_MM*MAX_TABLET_MODE_SCREENSIZE_MM) {
+            slateMode = true;
+        }
+
 #ifdef HAVE_STEAMWORKS
         // Big Picture Mode should force full-screen behaviour in Sketch mode
         slateMode = KritaSteamClient::instance()->isInBigPictureMode();
