@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Preview Render Docker
+Name[en_GB]=Preset Docker
+Comment=Docker that shows a texture on your 3D model
+X-KDE-ServiceTypes=Krita/Dock
+Type=Service
+X-KDE-Library=kritapreviewrenderdocker
+X-Krita-Version=28
