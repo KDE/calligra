@@ -44,15 +44,17 @@ class KoXmlWriter;
 class DocxFile;
 
 
-class OdfReaderDocxContext : public OdfReaderContext 
+class OdfReaderDocxContext : public OdfReaderContext
 {
- public: 
+ public:
     OdfReaderDocxContext(KoStore *store, DocxFile *dxf);
     virtual ~OdfReaderDocxContext();
 
     QByteArray documentContent() const { return m_documentContent; }
+    QByteArray commentsContent() const { return m_commentsContent; }
 
  private:
+
     // These members should be accessible to the backend but nobody else.
     // Exception: see getter above.
     friend class OdtReaderDocxBackend;
@@ -60,10 +62,13 @@ class OdfReaderDocxContext : public OdfReaderContext
 
     DocxFile    *m_docxFile;        //!< Collect embedded files here
     QByteArray   m_documentContent; //!< m_documentWriter writes here;
+    QByteArray   m_commentsContent;
     KoXmlWriter *m_documentWriter;  //!< XML writer for the document contents
+    KoXmlWriter *m_commentsWriter;  //!< XML writer for the comments
 
     // These members should not be accessed from the outside at all.
-    QBuffer      m_documentIO;      //!< IODevice for the XMl writer
+    QBuffer      m_documentIO;      //!< IODevice for the XML writer
+    QBuffer      m_commentsIO;        //!< IODevice for the Comments XML Writer
 };
 
 

@@ -216,4 +216,3 @@ bool TabStopDialog::autoTabStops() const
 }
 
 #include "tabstopdialog.moc"
-

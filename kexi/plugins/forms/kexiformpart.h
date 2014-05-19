@@ -94,13 +94,6 @@ protected:
     virtual void initInstanceActions();
     virtual void setupCustomPropertyPanelTabs(KTabWidget *tab);
 
-protected slots:
-//2.0 not needed, the code from slot receiving this signal is moved to Form itself
-//    void slotAutoTabStopsSet(KFormDesigner::Form *form, bool set);
-//2.0 moved to KexiFormManager    void slotAssignAction();
-//2.0 moved to Form    void slotPropertyChanged(QWidget *widget, const QByteArray &name, const QVariant &value);
-//2.0 moved to KexiFormManager    void slotWidgetCreatedByFormsLibrary(QWidget* widget);
-
 private:
     class Private;
     Private* d;

@@ -132,7 +132,7 @@ public:
 
     QString droppedNewTable, droppedNewField;
 
-    bool slotTableAdded_enabled : 1;
+    bool slotTableAdded_enabled;
 };
 
 static bool isAsterisk(const QString& tableName, const QString& fieldName)
@@ -205,12 +205,8 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(
     connect(d->relations, SIGNAL(aboutConnectionRemove(KexiRelationsConnection*)),
             this, SLOT(slotAboutConnectionRemove(KexiRelationsConnection*)));
 
-// QVBoxLayout *l = new QVBoxLayout(this);
-// l->addWidget(d->spl);
-
     addChildView(d->relations);
     addChildView(d->dataTable);
-    //setViewWidget(d->dataTable, true);
     setViewWidget(d->spl, false/* no focus proxy*/);
     setFocusProxy(d->dataTable);
     d->relations->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -256,7 +252,7 @@ KexiQueryDesignerGuiEditor::initTableColumns()
     totalsTypes.append(i18n("Average"));
     totalsTypes.append(i18n("Min"));
     totalsTypes.append(i18n("Max"));
-    //todo: more like this
+    //! @todo more like this
     col4->field()->setEnumHints(totalsTypes);
     d->data->addColumn(col4);
 #endif
@@ -273,15 +269,11 @@ KexiQueryDesignerGuiEditor::initTableColumns()
     KexiDB::TableViewColumn *col6 = new KexiDB::TableViewColumn("criteria", KexiDB::Field::Text, i18n("Criteria"),
             i18n("Describes the criteria for a given field or expression."));
     d->data->addColumn(col6);
-
-// KexiDB::TableViewColumn *col7 = new KexiDB::TableViewColumn(i18n("Or"), KexiDB::Field::Text);
-// d->data->addColumn(col7);
 }
 
 void KexiQueryDesignerGuiEditor::initTableRows()
 {
     d->data->deleteAllRows();
-    //const int columns = d->data->columnsCount();
     for (int i = 0; i < (int)d->sets->size(); i++) {
         KexiDB::RecordData* record;
         d->data->append(record = d->data->createItem());
@@ -333,7 +325,6 @@ void KexiQueryDesignerGuiEditor::updateColumnsData()
     d->fieldColumnData->append(record);
     d->addFieldColumnIdentifier((*record)[COLUMN_ID_COLUMN].toString()); //cache
 
-// tempData()->clearQuery();
     tempData()->unregisterForTablesSchemaChanges();
     foreach(const QString& tableName, sortedTableNames) {
         //table
@@ -350,7 +341,6 @@ void KexiQueryDesignerGuiEditor::updateColumnsData()
         (*record)[COLUMN_ID_TABLE] = (*record)[COLUMN_ID_COLUMN];
         d->fieldColumnData->append(record);
         d->addFieldColumnIdentifier((*record)[COLUMN_ID_COLUMN].toString()); //cache
-//  for (KexiDB::Field::ListIterator t_it = table->fieldsIterator();t_it.current();++t_it) {
         foreach(KexiDB::Field *field, *table->fields()) {
             record = d->fieldColumnData->createItem();
             (*record)[COLUMN_ID_COLUMN] = QString(table->name() + '.' + field->name());
@@ -359,7 +349,7 @@ void KexiQueryDesignerGuiEditor::updateColumnsData()
             d->addFieldColumnIdentifier((*record)[COLUMN_ID_COLUMN].toString()); //cache
         }
     }
-//TODO
+//! @todo
 }
 
 KexiRelationsView *KexiQueryDesignerGuiEditor::relationsView() const
@@ -466,7 +456,7 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
                     if (!alias.isEmpty())
                         temp->query()->setColumnAlias(temp->query()->fieldCount() - 1, alias);
                 }
-                //TODO
+                //! @todo
             } else if (tableName == "*") {
                 //all tables asterisk
                 temp->query()->addAsterisk(new KexiDB::QueryAsterisk(temp->query(), 0), fieldVisible);
@@ -513,8 +503,7 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
         return false;
     }
     if (whereExpr)
-        kDebug() << "KexiQueryDesignerGuiEditor::buildSchema(): setting CRITERIA: "
-        << whereExpr->debugString();
+        kDebug() << "setting CRITERIA:" << whereExpr->debugString();
 
     //set always, because if whereExpr==NULL,
     //this will clear prev. expr
@@ -554,7 +543,7 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
             // Try to find a field (not mentioned after SELECT):
             currentField = temp->query()->findTableField((*set)["field"].value().toString());
             if (!currentField) {
-                kWarning() << "KexiQueryDesignerGuiEditor::buildSchema(): NO FIELD"
+                kWarning() << "NO FIELD"
                     << (*set)["field"].value().toString()
                     << "available for sorting";
                 continue;
@@ -582,14 +571,14 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
 
     temp->query()->debug();
     temp->registerTableSchemaChanges(temp->query());
-    //TODO?
+    //! @todo ?
     return true;
 }
 
 tristate
 KexiQueryDesignerGuiEditor::beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore)
 {
-    kDebug() << "KexiQueryDesignerGuiEditor::beforeSwitch()" << mode;
+    kDebug() << mode;
 
     if (!d->dataTable->dataAwareObject()->acceptRowEdit())
         return cancelled;
@@ -598,10 +587,8 @@ KexiQueryDesignerGuiEditor::beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore)
 
     if (mode == Kexi::DesignViewMode) {
         return true;
-    } else if (mode == Kexi::DataViewMode) {
-//  if (!d->dataTable->dataAwareObject()->acceptRowEdit())
-        //  return cancelled;
-
+    }
+    else if (mode == Kexi::DataViewMode) {
         if (!isDirty() && window()->neverSaved()) {
             KMessageBox::information(this, msgCannotSwitch_EmptyDesign());
             return cancelled;
@@ -616,7 +603,7 @@ KexiQueryDesignerGuiEditor::beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore)
                 return cancelled;
             }
         }
-        //TODO
+        //! @todo
         return true;
     } else if (mode == Kexi::TextViewMode) {
         dontStore = true;
@@ -630,7 +617,7 @@ KexiQueryDesignerGuiEditor::beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore)
               // otherwise SQL statement will be invalid
               tempData()->query->addAsterisk( new KexiDB::QueryAsterisk( tempData()->query ) );
             }*/
-        //todo
+        //! @todo
         return true;
     }
 
@@ -675,7 +662,7 @@ KexiQueryDesignerGuiEditor::afterSwitchFrom(Kexi::ViewMode mode)
             //previous view changed query data
             //-clear and regenerate GUI items
             initTableRows();
-            //todo
+            //! @todo
             if (tempData()->query()) {
                 //there is a query schema to show
                 showTablesForQuery(tempData()->query());
@@ -742,10 +729,8 @@ KexiQueryDesignerGuiEditor::storeNewData(const KexiDB::SchemaData& sdata,
     if (ok)
         ok = storeLayout();
 
-// temp->query = 0; //will be returned, so: don't keep it
     if (!ok) {
         temp->setQuery(0);
-//  delete query;
         return 0;
     }
     return temp->takeQuery(); //will be returned, so: don't keep it in temp
@@ -771,8 +756,6 @@ tristate KexiQueryDesignerGuiEditor::storeData(bool dontAsk)
 
 void KexiQueryDesignerGuiEditor::showTablesForQuery(KexiDB::QuerySchema *query)
 {
-//replaced by code below that preserves geometries d->relations->clear();
-
     // instead of hiding all tables and showing some tables,
     // show only these new and hide these unncecessary; the same for connections)
     d->slotTableAdded_enabled = false; //speedup
@@ -918,15 +901,10 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
         } else {
             columnAlias = query->columnAlias(row_num);
             if (field->isExpression()) {
-//    if (columnAlias.isEmpty()) {
-//     columnAlias = i18n("expression", "expr%1").arg(row_num); //TODO
-//    }
-//    if (columnAlias.isEmpty())
-//TODO: ok? perhaps do not allow to omit aliases?
+//! @todo ok? perhaps do not allow to omit aliases?
                 fieldName = field->expression()->toString();
-//    else
-//     fieldName = columnAlias + ": " + field->expression()->toString();
-            } else {
+            }
+            else {
                 tableName = field->table()->name();
                 fieldName = field->name();
                 criteriaArgument = criterias.value(fieldName);
@@ -982,9 +960,8 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
                     const int columnPosition = columnsOrder.value(column);
                     record = d->data->at(columnPosition);
                     rowPropertySet = d->sets->at(columnPosition);
-                    kDebug() << "KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal():\n\t"
-                    "Setting \"" << orderByColumn->debugString() << "\" sorting for record #"
-                    << columnPosition;
+                    kDebug() << "\tSetting \"" << orderByColumn->debugString() << "\" sorting for record #"
+                        << columnPosition;
                 }
             }
         } else if (orderByColumn->field()) {
@@ -995,9 +972,8 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
             d->dataTable->dataAwareObject()->insertItem(record, row_num);
             rowPropertySet = createPropertySet(row_num, tableName, field->name(), true /*newOne*/);
             propertySetSwitched();
-            kDebug() << "KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal():\n\t"
-            "Setting \"" << orderByColumn->debugString() << "\" sorting for invisible field "
-            << field->name() << ", table " << tableName << " -row #" << row_num;
+            kDebug() << "\tSetting \"" << orderByColumn->debugString() << "\" sorting for invisible field"
+                << field->name() << ", table " << tableName << " -row #" << row_num;
             row_num++;
         }
         //alter sorting for either existing or new row
@@ -1083,11 +1059,9 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
 bool KexiQueryDesignerGuiEditor::loadLayout()
 {
     QString xml;
-// if (!loadDataBlock( xml, "query_layout" )) {
+//! @todo if (!loadDataBlock( xml, "query_layout" )) {
     loadDataBlock(xml, "query_layout");
-    //TODO errmsg
-//  return false;
-// }
+    //! @todo errmsg
     if (xml.isEmpty()) {
         //in a case when query layout was not saved, build layout by hand
         // -- dynamic cast because of a need for handling invalid queries
@@ -1109,7 +1083,7 @@ bool KexiQueryDesignerGuiEditor::loadLayout()
     doc.setContent(xml);
     QDomElement doc_el = doc.documentElement(), el;
     if (doc_el.tagName() != "query_layout") {
-        //TODO errmsg
+        //! @todo errmsg
         return false;
     }
 
@@ -1243,7 +1217,7 @@ KexiQueryDesignerGuiEditor::slotDroppedAtRow(KexiDB::RecordData * /*record*/, in
     d->droppedNewRecord = newRecord;
     d->droppedNewTable = srcTable;
     d->droppedNewField = srcFields[0];
-    //TODO
+    //! @todo
 }
 
 void KexiQueryDesignerGuiEditor::slotNewItemAppendedForAfterDeletingInSpreadSheetMode()
@@ -1509,7 +1483,7 @@ void KexiQueryDesignerGuiEditor::slotBeforeColumnCellChanged(KexiDB::RecordData 
         }
     }
     bool saveOldValue = true;
-    KoProperty::Set *set = d->sets->findPropertySetForItem(*record); //*propertyBuffer();
+    KoProperty::Set *set = d->sets->findPropertySetForItem(*record);
     if (!set) {
         saveOldValue = false; // no old val.
         const int row = d->data->indexOf(record);
@@ -1578,7 +1552,6 @@ void KexiQueryDesignerGuiEditor::slotBeforeTableCellChanged(KexiDB::RecordData *
             //do not set table for expr. columns
             newValue = QVariant();
         }
-//   KoProperty::Set &set = *propertyBuffer();
         updatePropertiesVisibility(*set);
     }
 }
@@ -1610,8 +1583,7 @@ void KexiQueryDesignerGuiEditor::slotBeforeTotalsCellChanged(KexiDB::RecordData 
     Q_UNUSED(newValue)
     Q_UNUSED(result)
 #else
-    //TODO:
-    //unused yet
+    //! @todo unused yet
     setDirty(true);
     tempData()->setQueryChangedInPreviousView(true);
 #endif
@@ -1673,9 +1645,6 @@ void KexiQueryDesignerGuiEditor::slotBeforeCriteriaCellChanged(KexiDB::RecordDat
                                table == "*" ? table : field);
         else
             result->msg = i18n("Could not set criteria for empty record");
-        //moved to result->allowToDiscardChanges handler
-        //d->dataTable->dataAwareObject()->cancelEditor();
-        //prevents further editing of this cell
     }
     else if (str.isEmpty()
              || (e = parseExpressionString(str, token, true/*allowRelationalOperator*/)))
@@ -1793,7 +1762,7 @@ KexiQueryDesignerGuiEditor::createPropertySet(int row,
     set->addProperty(prop = new KoProperty::Property("visible", QVariant(true)));
     prop->setVisible(false);
 
-    /*TODO:
+    /*! @todo
       set->addProperty(prop = new KexiProperty("totals", QVariant(QString())) );
       prop->setVisible(false);*/
 
@@ -1825,8 +1794,7 @@ void KexiQueryDesignerGuiEditor::setFocus()
 void KexiQueryDesignerGuiEditor::slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& property)
 {
     const QByteArray pname(property.name());
-    /*
-     * TODO (js) use KexiProperty::setValidator(QString) when implemented as described in TODO #60
+    /*! @todo use KexiProperty::setValidator(QString) when implemented as described in TODO #60
      */
     if (pname == "alias" || pname == "name") {
         const QVariant& v = property.value();
@@ -1839,13 +1807,10 @@ void KexiQueryDesignerGuiEditor::slotPropertyChanged(KoProperty::Set& set, KoPro
             if (set["isExpression"].value().toBool() == true) {
                 //update value in column #1
                 d->dataTable->dataAwareObject()->acceptEditor();
-//    d->dataTable->dataAwareObject()->setCursorPosition(d->dataTable->dataAwareObject()->currentRow(),0);
-                //d->dataTable->dataAwareObject()->startEditCurrentCell();
                 d->data->updateRowEditBuffer(d->dataTable->dataAwareObject()->selectedItem(),
                                              0, QVariant(set["alias"].value().toString()
                                                          + ": " + set["field"].value().toString()));
                 d->data->saveRowChanges(*d->dataTable->dataAwareObject()->selectedItem(), true);
-//    d->dataTable->dataAwareObject()->acceptRowEdit();
             }
         }
     }

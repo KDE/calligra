@@ -28,8 +28,6 @@
 #include <kdebug.h>
 #include <kactioncollection.h>
 
-//unused #include "formmanager.h"
-
 using namespace KFormDesigner;
 
 class LibActionWidget::Private
@@ -43,12 +41,10 @@ public:
 
 LibActionWidget::Private::Private(WidgetInfo *w) : className(w->className())
 {
-
 }
 
 LibActionWidget::Private::~Private()
 {
-
 }
 
 LibActionWidget::LibActionWidget(ActionGroup *group, WidgetInfo *w)

@@ -30,7 +30,6 @@
 #include <formeditor/objecttree.h>
 #include <formeditor/utils.h>
 #include <formeditor/container.h>
-//2.0 #include <formeditor/formmanager.h>
 #include <Q3Frame>
 #include <QSet>
 
@@ -42,6 +41,7 @@ KexiDBSubForm::KexiDBSubForm(KFormDesigner::Form *parentForm, QWidget *parent)
     pal.setBrush(viewport()->backgroundRole(), pal.brush(QPalette::Mid));
     viewport()->setPalette(pal);
 }
+
 /*
 void
 KexiDBSubForm::paintEvent(QPaintEvent *ev)
@@ -66,6 +66,7 @@ KexiDBSubForm::paintEvent(QPaintEvent *ev)
   clearWFlags( WPaintUnclipped );
 }
 */
+
 void
 KexiDBSubForm::setFormName(const QString &name)
 {

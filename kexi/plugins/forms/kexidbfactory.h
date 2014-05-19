@@ -55,6 +55,7 @@ protected:
                                            const QByteArray& property, bool isTopLevel);
 
     //! Sometimes property sets should be reloaded when a given property value changed.
+    //! @todo this does not seem to work in Kexi 2.x
     virtual bool propertySetShouldBeReloadedAfterPropertyChange(const QByteArray& classname, QWidget *w,
             const QByteArray& property);
 

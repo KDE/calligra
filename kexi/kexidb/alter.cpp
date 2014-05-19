@@ -345,7 +345,7 @@ void AlterTableHandler::ChangeFieldPropertyAction::simplifyActions(ActionDictDic
             } else {
                 //just insert a copy of the rename action
                 if (!actionsLikeThis)
-                    actionsLikeThis = createActionDict(fieldActions, uid());   //fieldName() );
+                    actionsLikeThis = createActionDict(fieldActions, uid());
                 AlterTableHandler::ChangeFieldPropertyAction* newRenameAction
                     = new AlterTableHandler::ChangeFieldPropertyAction(*this);
                 KexiDBDbg << "insert into" << fieldName()
@@ -374,13 +374,13 @@ void AlterTableHandler::ChangeFieldPropertyAction::simplifyActions(ActionDictDic
     // so, e.g. [ setCaption(A, "captionA"), setCaption(A, "captionB") ]
     //  becomes: [ setCaption(A, "captionB") ]
     // because adding this action does nothing
-    ActionDict *nextActionsLikeThis = fieldActions.value(uid());   //fieldName().toLatin1() ];
+    ActionDict *nextActionsLikeThis = fieldActions.value(uid());
     if (!nextActionsLikeThis || !nextActionsLikeThis->value(m_propertyName.toLatin1())) {
         //no such action, add this
         AlterTableHandler::ChangeFieldPropertyAction* newAction
             = new AlterTableHandler::ChangeFieldPropertyAction(*this);
         if (!nextActionsLikeThis)
-            nextActionsLikeThis = createActionDict(fieldActions, uid());  //fieldName() );
+            nextActionsLikeThis = createActionDict(fieldActions, uid());
         nextActionsLikeThis->insert(m_propertyName.toLatin1(), newAction);
     }
 }
@@ -515,9 +515,9 @@ void AlterTableHandler::RemoveFieldAction::simplifyActions(ActionDictDict &field
     //! @todo not checked
     AlterTableHandler::RemoveFieldAction* newAction
         = new AlterTableHandler::RemoveFieldAction(*this);
-    ActionDict *actionsLikeThis = fieldActions.value(uid());   //fieldName().toLatin1() ];
+    ActionDict *actionsLikeThis = fieldActions.value(uid());
     if (!actionsLikeThis)
-        actionsLikeThis = createActionDict(fieldActions, uid());   //fieldName() );
+        actionsLikeThis = createActionDict(fieldActions, uid());
     actionsLikeThis->insert(":remove:", newAction);   //special
 }
 
@@ -609,7 +609,7 @@ QString AlterTableHandler::InsertFieldAction::debugString(const DebugOptions& de
 void AlterTableHandler::InsertFieldAction::simplifyActions(ActionDictDict &fieldActions)
 {
     // Try to find actions related to this action
-    ActionDict *actionsForThisField = fieldActions.value(uid());   //m_field->name().toLatin1() ];
+    ActionDict *actionsForThisField = fieldActions.value(uid());
 
     ActionBase *removeActionForThisField = actionsForThisField ? actionsForThisField->value(":remove:") : 0;
     if (removeActionForThisField) {
@@ -986,8 +986,8 @@ TableSchema* AlterTableHandler::execute(const QString& tableName, ExecutionArgum
             return 0;
         }
     }
-
-#if 0//todo
+//! @todo
+#if 0
     // Execute actions ----
     for (int i = 0; i < allActionsCount; i++) {
         action = actionsVector.at(i);

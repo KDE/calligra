@@ -137,7 +137,7 @@ KexiBLOBBuffer::Item::Item(const QByteArray& data, KexiBLOBBuffer::Id_t ident, b
 
 KexiBLOBBuffer::Item::~Item()
 {
-    kDebug() << "KexiBLOBBuffer::Item::~Item()";
+    kDebug();
     delete m_pixmap;
     m_pixmap = 0;
     delete m_data;
@@ -216,7 +216,7 @@ KexiBLOBBuffer::Handle KexiBLOBBuffer::insertPixmap(const KUrl& url)
     if (url.isEmpty())
         return KexiBLOBBuffer::Handle();
     if (!url.isValid()) {
-        kDebug() << "::insertPixmap: INVALID URL '" << url << "'";
+        kWarning() << "INVALID URL" << url;
         return KexiBLOBBuffer::Handle();
     }
 //! @todo what about searching by filename only and then compare data?

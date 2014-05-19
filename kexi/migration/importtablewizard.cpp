@@ -444,10 +444,8 @@ void ImportTableWizard::arriveImportingPage()
     m_importingPageWidget->show();
 }
 
-
 void ImportTableWizard::arriveFinishPage()
 {
-
 }
 
 bool ImportTableWizard::fileBasedSrcSelected() const

@@ -80,7 +80,6 @@ class AlterSchemaWidget : public QWidget
         void typeActivated(int typ);
         void pkeyClicked(bool pkey);
         void nameChanged(const QString& tableName);
-        
 };
 }
 #endif // ALTERSCHEMAWIDGET_H

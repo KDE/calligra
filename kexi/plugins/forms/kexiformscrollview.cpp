@@ -142,21 +142,6 @@ KexiFormScrollView::~KexiFormScrollView()
     delete d;
 }
 
-void KexiFormScrollView::show()
-{
-    QScrollArea::show();
-
-#if 0 //moved to KexiFormView, OK?
-    //now get resize mode settings for entire form
-    if (isPreviewing()) {
-        KexiFormView* fv = dynamic_cast<KexiFormView*>(parent());
-        int resizeMode = fv ? fv->resizeMode() : KexiFormView::ResizeAuto;
-        if (resizeMode == KexiFormView::ResizeAuto)
-            setResizePolicy(AutoOneFit);
-    }
-#endif
-}
-
 int KexiFormScrollView::rowsPerPage() const
 {
     //! @todo
@@ -194,11 +179,6 @@ void KexiFormScrollView::ensureCellVisible(int row, int col/*=-1*/)
     Q_UNUSED(row);
     Q_UNUSED(col);
     //! @todo
-// if (m_currentItem)
-    //fillDataItems(*m_currentItem);
-
-// if (d->form->tabStops()->first() && d->form->tabStops()->first()->widget())
-//  d->form->tabStops()->first()->widget()->setFocus();
 }
 
 void KexiFormScrollView::moveToRecordRequested(uint r)
@@ -312,17 +292,9 @@ void KexiFormScrollView::createEditor(int row, int col, const QString& addText,
             m_data->append(m_insertItem);
             //new empty insert item
             m_insertItem = m_data->createItem();
-//   updateContents();
             if (m_verticalHeader)
                 m_verticalHeader->addLabel();
-//   m_verticalHeaderAlreadyAdded = true;
             updateWidgetContentsSize();
-            //refr. current and next row
-//   updateContents(columnPos(0), rowPos(row), viewport()->width(), m_rowHeight*2);
-//js: warning this breaks behaviour (cursor is skipping, etc.): qApp->processEvents(500);
-//   ensureVisible(columnPos(m_curCol), rowPos(row+1)+m_rowHeight-1, columnWidth(m_curCol), m_rowHeight);
-
-//   m_verticalHeader->setOffset(contentsY());
         }
     }
 
@@ -332,8 +304,6 @@ void KexiFormScrollView::createEditor(int row, int col, const QString& addText,
 
     if (startRowEdit) {
         recordNavigator()->showEditingIndicator(true);
-//  recordNavigator()->updateButtons(); //refresh 'next btn'
-
         emit rowEditStarted(m_curRow);
     }
 }
@@ -353,8 +323,6 @@ void KexiFormScrollView::editorShowFocus(int row, int col)
     Q_UNUSED(row);
     Q_UNUSED(col);
     //! @todo
-// if (m_currentItem)
-//  m_provider->fillDataItems(*m_currentItem);
 }
 
 void KexiFormScrollView::updateCell(int row, int col)
@@ -394,17 +362,6 @@ void KexiFormScrollView::slotRowRepaintRequested(KexiDB::RecordData& record)
     Q_UNUSED(record);
     //! @todo
 }
-
-/*void KexiFormScrollView::slotAboutToDeleteRow(KexiTableItem& item,
-  KexiDB::ResultInfo* result, bool repaint)
-{
-  //! @todo
-}*/
-
-/*void KexiFormScrollView::slotRowDeleted()
-{
-  //! @todo
-}*/
 
 void KexiFormScrollView::slotRowInserted(KexiDB::RecordData* record, bool repaint)
 {
@@ -448,17 +405,17 @@ KFormDesigner::Form* KexiFormScrollView::form() const
 
 bool KexiFormScrollView::columnEditable(int col)
 {
-    kDebug() << "col=" << col;
+    //kDebug() << "col=" << col;
     foreach(KexiFormDataItemInterface *dataItemIface, m_dataItems) {
         kDebug() << (dynamic_cast<QWidget*>(dataItemIface)
                      ? dynamic_cast<QWidget*>(dataItemIface)->objectName() : "")
             << " " << dataItemIface->dataSource();
     }
-    kDebug() << "-- focus widgets --";
+    //kDebug() << "-- focus widgets --";
     foreach(QWidget* widget, *dbFormWidget()->orderedFocusWidgets()) {
         kDebug() << widget->objectName();
     }
-    kDebug() << "-- data-aware widgets --";
+    //kDebug() << "-- data-aware widgets --";
     foreach(QWidget *widget, *dbFormWidget()->orderedDataAwareWidgets()) {
         kDebug() << widget->objectName();
     }
@@ -469,8 +426,6 @@ bool KexiFormScrollView::columnEditable(int col)
     if (!item || item->isReadOnly())
         return false;
 
-// KexiFormDataItemInterfaceToIntMap::ConstIterator it(m_fieldNumbersForDataItems.find( item ));
-// return KexiDataAwareObjectInterface::columnEditable( it!=m_fieldNumbersForDataItems.constEnd() ? it.data() : -1 );
     return KexiDataAwareObjectInterface::columnEditable(col);
 }
 
@@ -479,12 +434,12 @@ void KexiFormScrollView::valueChanged(KexiDataItemInterface* item)
     if (!item)
         return;
     //only signal start editing when no record editing was started already
-    kDebug() << "** editedItem="
+    /*kDebug() << "** editedItem="
         << (dbFormWidget()->editedItem ? dbFormWidget()->editedItem->value().toString() : QString())
         << ", "
-        << (item ? item->value().toString() : QString());
+        << (item ? item->value().toString() : QString());*/
     if (dbFormWidget()->editedItem != item) {
-        kDebug() << "**>>> dbFormWidget()->editedItem = dynamic_cast<KexiFormDataItemInterface*>(item)";
+        //kDebug() << "**>>> dbFormWidget()->editedItem = dynamic_cast<KexiFormDataItemInterface*>(item)";
         dbFormWidget()->editedItem = dynamic_cast<KexiFormDataItemInterface*>(item);
         startEditCurrentCell();
     }
@@ -536,7 +491,6 @@ bool KexiFormScrollView::shouldDisplayDefaultValueForItem(KexiFormDataItemInterf
 {
     return cursorAtNewRow()
            && !itemIface->columnInfo()->field->defaultValue().isNull()
-//??  && (m_editor ? m_editor->value()==itemIface->columnInfo()->fielm_defaultValue() : true)
            && !itemIface->columnInfo()->field->isAutoIncrement(); // default value defined
 }
 
@@ -756,13 +710,7 @@ void KexiFormScrollView::updateNavPanelGeometry()
 {
     if (d->scrollViewNavPanel) {
         d->scrollViewNavPanel->setLeftMargin(leftMargin());
-        if (d->scrollViewNavPanel->parentWidget() != horizontalScrollBar()->parentWidget()) {
-            // insert record navigator into horizontal
-            d->scrollViewNavPanel->setParent(horizontalScrollBar()->parentWidget());
-            qobject_cast<QBoxLayout*>(horizontalScrollBar()->parentWidget()->layout())
-                    ->insertWidget(0, d->scrollViewNavPanel);
-            d->scrollViewNavPanel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
-        }
+        d->scrollViewNavPanel->insertAsideOfHorizontalScrollBar(this);
     }
 }
 

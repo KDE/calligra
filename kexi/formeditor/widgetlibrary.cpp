@@ -25,12 +25,10 @@
 
 #include <kdebug.h>
 #include <klocale.h>
-//#include <klibloader.h>
 #include <kservice.h>
 #include <kservicetypetrader.h>
 #include <kmenu.h>
 #include <kactioncollection.h>
-//2.0 #include <kxmlguiclient.h>
 
 #include <KoIcon.h>
 #include "WidgetInfo.h"
@@ -42,7 +40,7 @@
 #include "FormWidgetInterface.h"
 #include "objecttree.h"
 
-#include "../kexi_global.h"
+#include <kexi_global.h>
 
 namespace KFormDesigner
 {
@@ -59,7 +57,6 @@ public:
         advancedProperties.insert("accessibleDescription");
         advancedProperties.insert("accessibleName");
         advancedProperties.insert("autoMask");
-        advancedProperties.insert("autoFillBackground");
         advancedProperties.insert("backgroundOrigin");
         advancedProperties.insert("backgroundMode");//this is rather useless
         advancedProperties.insert("baseSize");
@@ -91,14 +88,14 @@ public:
 #endif
     }
     // dict which associates a class name with a Widget class
-    WidgetInfoHash widgets;//, alternateWidgets;
+    WidgetInfoHash widgets;
     QHash<QByteArray, KService::Ptr> services;
     QSet<QByteArray> supportedFactoryGroups;
     QHash<QByteArray, WidgetFactory*> factories;
     QSet<QByteArray> advancedProperties;
     QSet<QByteArray> hiddenClasses;
-    bool showAdvancedProperties : 1;
-    bool factoriesLoaded : 1;
+    bool showAdvancedProperties;
+    bool factoriesLoaded;
 };
 }
 
@@ -185,7 +182,7 @@ WidgetLibrary::lookupFactories()
                 << ")! skipping this one: library=" << ptr->library();
             continue;
         }
-        kDebug() << "found factory:" << ptr->name();
+        //kDebug() << "found factory:" << ptr->name();
 
         QByteArray groupName = ptr->property("X-KFormDesigner-FactoryGroup").toByteArray();
         if (!groupName.isEmpty() && !d->supportedFactoryGroups.contains(groupName.toLower())) {
@@ -322,8 +319,6 @@ WidgetLibrary::createMenuActions(const QByteArray &c, QWidget *w, QMenu *menu,
     if (!wclass)
         return false;
 
-//2.0    wclass->factory()->m_widget = w;
-//2.0    wclass->factory()->m_container = container;
     if (wclass->factory()->createMenuActions(c, w, menu, container)) {
         return true;
     }

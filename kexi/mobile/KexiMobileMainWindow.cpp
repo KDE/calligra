@@ -167,8 +167,6 @@ KexiMobileMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, 
     if (window && !alreadyOpened) {
 //  window->setParent(d->tabWidget);
 //  KexiWindow* previousWindow = currentWindow();
-//moved  d->mainWidget->tabWidget()->addTab(window, window->windowIcon(), window->windowTitle());
-//moved  d->mainWidget->tabWidget()->setCurrentWidget(window);
         // Call switchToViewMode() and propertySetSwitched() again here because
         // this is the time when then new window is the current one - previous call did nothing.
         switchToViewMode(*window, window->currentViewMode());

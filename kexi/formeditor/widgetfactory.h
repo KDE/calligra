@@ -33,7 +33,6 @@ class QDomElement;
 class QDomDocument;
 class QVariant;
 class KActionCollection;
-//2.0 class KXMLGUIClient;
 
 namespace KoProperty
 {
@@ -214,11 +213,11 @@ public:
         Container *container;
         QRect geometry;
         Qt::Alignment alignment;
-        bool useFrame : 1;
-        bool multiLine : 1;
-        bool execute : 1;
+        bool useFrame;
+        bool multiLine;
+        bool execute;
         //! true if the inline editor's bakground should be transparent (false by default)
-        bool transparentBackground : 1;
+        bool transparentBackground;
     };
 
     /*! Sets up (if necessary) aguments for the inline editor used to edit the contents 
@@ -310,9 +309,7 @@ protected:
 
     /*! This function provides a simple editing mode: it just disables event filtering
      for the widget, and it install it again when
-     the widget loose focus or Enter is pressed.
-    */
-// contents moved to Form
+     the widget loose focus or Enter is pressed. */
     void disableFilter(QWidget *w, Container *container);
 
     /*! This function creates a little dialog (a KEditListBox) to modify the contents
@@ -358,8 +355,8 @@ protected:
     bool advancedPropertiesVisible() const;
 
     void setLibrary(WidgetLibrary* library);
-public slots:
 
+public slots:
     /*! @internal. This slot is called when the editor has lost focus or the user pressed Enter.
     It destroys the editor or installs again the event filter on the widget. */
 

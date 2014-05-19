@@ -28,19 +28,13 @@ class KexiTableDesigner_DataView : public KexiDataTable
     Q_OBJECT
 
 public:
-    KexiTableDesigner_DataView(QWidget *parent);
+    explicit KexiTableDesigner_DataView(QWidget *parent);
 
     virtual ~KexiTableDesigner_DataView();
 
     KexiTablePart::TempData* tempData() const;
 
 protected:
-//  //! called just once from ctor
-//  void init();
-//  void initActions();
-//  //! called whenever data should be reloaded (on switching to this view mode)
-//  void initData();
-
     virtual tristate beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore);
     virtual tristate afterSwitchFrom(Kexi::ViewMode mode);
 

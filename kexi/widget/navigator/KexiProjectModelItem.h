@@ -39,17 +39,13 @@ class KEXIEXTWIDGETS_EXPORT KexiProjectModelItem
 public:
 
     //! Create a generic group item
-    KexiProjectModelItem(const QString& n, KexiProjectModelItem *parent = 0);
+    explicit KexiProjectModelItem(const QString& n, KexiProjectModelItem *parent = 0);
 
     //! Creates group item for part \a i
-    KexiProjectModelItem(KexiPart::Info &i, KexiProjectModelItem *parent = 0);
+    explicit KexiProjectModelItem(KexiPart::Info &i, KexiProjectModelItem *parent = 0);
 
     //! Creates item for object \a item defined by part \a i for \a parent
     KexiProjectModelItem(KexiPart::Info &i, KexiPart::Item &item, KexiProjectModelItem *parent = 0);
-
-    //! Creates item for object \a item defined by part \a i, without parent
-    //! (used in a case when KexiBrowser::itemsPartClass() is not empty)
-    //KexiProjectModelItem(KexiPart::Info *i, KexiPart::Item *item);
 
     virtual ~KexiProjectModelItem();
 

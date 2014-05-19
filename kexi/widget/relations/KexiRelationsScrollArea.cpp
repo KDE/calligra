@@ -23,7 +23,6 @@
 #include <QStringList>
 #include <QLayout>
 #include <QLabel>
-#include <q3header.h>
 #include <QEvent>
 #include <QPainter>
 #include <QStyle>
@@ -31,6 +30,7 @@
 #include <QMouseEvent>
 #include <QKeyEvent>
 #include <QTimer>
+#include <QScrollBar>
 
 #include <klocale.h>
 #include <kaction.h>
@@ -116,15 +116,9 @@ KexiRelationsScrollArea::KexiRelationsScrollArea(QWidget *parent)
         : QScrollArea(parent)
         , d(new Private)
 {
-//Qt4 setFrameStyle(Q3Frame::WinPanel | Q3Frame::Sunken);
-//Qt4 setAttribute(Qt::WA_StaticContents, true);
-// connect(relation, SIGNAL(relationListUpdated(QObject*)), this, SLOT(slotListUpdate(QObject*)));
-
     d->areaWidget = new KexiRelationsScrollAreaWidget(this);
     setWidget(d->areaWidget);
     setFocusPolicy(Qt::WheelFocus);
-//Qt4 setResizePolicy(Manual);
-// setWidgetResizable(true);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 #if 0
@@ -135,8 +129,6 @@ KexiRelationsScrollArea::KexiRelationsScrollArea(QWidget *parent)
     d->openSelectedTableQueryAction = new KAction(i18n("&Open Selected Table/Query"), "", "",
             this, SLOT(openSelectedTableQuery()), 0/*parent->actionCollection()*/, "relationsview_openSelectedTableQuery");
 #endif
-
-// invalidateActions();
 
 #if 0
     d->popup = new KMenu(this, "popup");
@@ -156,18 +148,6 @@ KexiRelationsScrollArea::~KexiRelationsScrollArea()
     delete d;
 }
 
-/*KexiRelationsTableContainer*
-KexiRelationsScrollArea::containerForTable(KexiDB::TableSchema* tableSchema)
-{
-  if (!tableSchema)
-    return 0;
-  for (TablesDictIterator it(d->tables); it.current(); ++it) {
-    if (it.current()->schema()->table()==tableSchema)
-      return it.current();
-  }
-  return 0;
-}*/
-
 KexiRelationsTableContainer *
 KexiRelationsScrollArea::tableContainer(KexiDB::TableSchema *t) const
 {
@@ -180,7 +160,7 @@ KexiRelationsScrollArea::addTableContainer(KexiDB::TableSchema *t, const QRect &
     if (!t)
         return 0;
 
-    kDebug() << t->name(); // << ", " << viewport();
+    kDebug() << t->name();
 
     KexiRelationsTableContainer* c = tableContainer(t);
     if (c) {
@@ -194,8 +174,6 @@ KexiRelationsScrollArea::addTableContainer(KexiDB::TableSchema *t, const QRect &
                                        );
     connect(c, SIGNAL(endDrag()), this, SLOT(slotTableViewEndDrag()));
     connect(c, SIGNAL(gotFocus()), this, SLOT(slotTableViewGotFocus()));
-// connect(c, SIGNAL(headerContextMenuRequest(QPoint)),
-//  this, SLOT(tableHeaderContextMenuRequest(QPoint)));
     connect(c, SIGNAL(contextMenuRequest(QPoint)),
             this, SIGNAL(tableContextMenuRequest(QPoint)));
 
@@ -207,14 +185,10 @@ KexiRelationsScrollArea::addTableContainer(KexiDB::TableSchema *t, const QRect &
         //we're doing this instead of setGeometry(rect)
         //because the geomenty might be saved on other system with bigger fonts :)
         c->resize(c->sizeHint());
-//  c->setGeometry(r);
-//TODO
-
-//  moveChild( c, rect.left(), rect.top() ); // setGeometry(rect);
-//  c->resize( finalSize );
-//  c->updateGeometry();
-    } else
+    }
+    else {
         c->move(100, 100);
+    }
     updateGeometry();
     if (!rect.isValid()) {
         c->updateGeometry();
@@ -236,9 +210,6 @@ KexiRelationsScrollArea::addTableContainer(KexiDB::TableSchema *t, const QRect &
     }
 
     y = 5;
-//Qt 4 QPoint p = viewportToContents(QPoint(x, y));
-//unused QPoint p(x, y);
-//unused recalculateSize(p.x() + c->width(), p.y() + c->height());
     if (!rect.isValid()) {
         c->move(x, y);
     }
@@ -304,12 +275,10 @@ KexiRelationsScrollArea::addConnection(const SourceConnection& _conn)
 
     KexiRelationsConnection *connView = new KexiRelationsConnection(master, details, conn, this);
     d->connectionViews.insert(connView);
-//Qt4 updateContents(connView->connectionRect());
     kDebug() << "connView->connectionRect() " << connView->connectionRect();
-    d->areaWidget->update();// connView->connectionRect() );
+    d->areaWidget->update();
 
-
-    /*js: will be moved up to relation/query part as this is only visual class
+    /*! @todo will be moved up to relation/query part as this is only visual class
       KexiDB::TableSchema *mtable = d->conn->tableSchema(conn.srcTable);
       KexiDB::TableSchema *ftable = d->conn->tableSchema(conn.rcvTable);
       KexiDB::IndexSchema *forign = new KexiDB::IndexSchema(ftable);
@@ -327,16 +296,6 @@ KexiRelationsScrollArea::addConnection(const SourceConnection& _conn)
 #endif
 }
 
-/* unused
-void
-KexiRelationsScrollArea::slotTableScrolling(const QString& table)
-{
-  KexiRelationsTableContainer *c = d->tables[table];
-
-  if(c)
-    containerMoved(c);
-}*/
-
 void
 KexiRelationsScrollArea::containerMoved(KexiRelationsTableContainer *c)
 {
@@ -351,13 +310,8 @@ KexiRelationsScrollArea::containerMoved(KexiRelationsTableContainer *c)
             r |= cview->connectionRect();
             //kDebug() << r;
         }
-//   updateContents(cview->oldRect());
-//   updateContents(cview->connectionRect());
-//  }
     }
 //! @todo optimize!
-//didn't work well: updateContents(r);
-//Qt 4 updateContents();
 
     //scroll if needed:
     if (horizontalScrollBar()->maximum() > c->geometry().right()) {
@@ -377,14 +331,6 @@ KexiRelationsScrollArea::containerMoved(KexiRelationsTableContainer *c)
         d->autoScrollTimer.stop();
 
     d->areaWidget->update();
-
-// QRect w(c->x() - 5, c->y() - 5, c->width() + 5, c->height() + 5);
-// updateContents(w);
-
-//Qt 4 QPoint p = viewportToContents(QPoint(c->x(), c->y()));
-//unused QPoint p(c->x(), c->y());
-//unused recalculateSize(p.x() + c->width(), p.y() + c->height());
-
     emit tablePositionChanged(c);
 }
 
@@ -402,22 +348,14 @@ KexiRelationsScrollArea::slotAutoScrollTimeout()
             delay = 0;
         delay = delay * delay / 100;
         kDebug() << delay;
-//  setUpdatesEnabled(false);
-//  d->movedTableContainer->setUpdatesEnabled(false);
-//  d->areaWidget->setUpdatesEnabled(false);
         int add = 16;
         if (horizontalScrollBar()->maximum() > (d->movedTableContainer->geometry().right() + add)) {
             horizontalScrollBar()->setValue(horizontalScrollBar()->value() + add);
             d->movedTableContainer->move(d->movedTableContainer->x() + add, d->movedTableContainer->y());
         }
-//  d->areaWidget->setUpdatesEnabled(true);
-//  d->movedTableContainer->setUpdatesEnabled(true);
-//  setUpdatesEnabled(true);
     }
     d->areaWidget->update();
     if (d->movedTableContainer) {
-//  if (d->autoScrollTimer.interval() > 100)
-//   d->autoScrollTimer.setInterval( d->autoScrollTimer.interval() - 1 );
         d->autoScrollTimer.setInterval(delay);
         d->autoScrollTimer.start();
     }
@@ -427,18 +365,7 @@ void
 KexiRelationsScrollArea::setReadOnly(bool b)
 {
     d->readOnly = b;
-//TODO
-// invalidateActions();
-    /* TableList::Iterator it, end( d->tables.end() );
-      for ( it=d->tables.begin(); it != end; ++it)
-      {
-    //  (*it)->setReadOnly(b);
-    #ifndef Q_WS_WIN
-    #ifdef __GNUC__
-        #warning readonly needed
-    #endif
-    #endif
-      }*/
+//! @todo
 }
 
 void
@@ -469,11 +396,9 @@ KexiRelationsScrollArea::handleMousePressEvent(QMouseEvent *ev)
         clearSelection();
         setFocus();
         cview->setSelected(true);
-//Qt 4  updateContents(cview->connectionRect());
         d->areaWidget->update(cview->connectionRect());
         d->selectedConnection = cview;
         emit connectionViewGotFocus();
-//  invalidateActions();
 
         if (ev->button() == Qt::RightButton) {//show popup
             kDebug() << "context";
@@ -483,7 +408,6 @@ KexiRelationsScrollArea::handleMousePressEvent(QMouseEvent *ev)
     }
     //connection not found
     clearSelection();
-// invalidateActions();
     if (ev->button() == Qt::RightButton) {//show popup on view background area
         emit emptyAreaContextMenuRequest(ev->globalPos());
     } else {
@@ -495,7 +419,6 @@ KexiRelationsScrollArea::handleMousePressEvent(QMouseEvent *ev)
 void KexiRelationsScrollArea::handlePaintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);
-//Qt 4 QRect clipping(cx, cy, cw, ch);
     QPainter p(d->areaWidget);
     p.setWindow(
         horizontalScrollBar() ? horizontalScrollBar()->value() : 0,
@@ -505,9 +428,7 @@ void KexiRelationsScrollArea::handlePaintEvent(QPaintEvent *event)
         horizontalScrollBar() ? horizontalScrollBar()->value() : 0,
         verticalScrollBar() ? verticalScrollBar()->value() : 0,
         width(), height());
-//  viewport()->width(), viewport()->height());
     foreach(KexiRelationsConnection *cview, d->connectionViews) {
-//TODO  if (clipping.intersects(cview->oldRect() | cview->connectionRect()))
         cview->drawConnection(&p);
     }
 }
@@ -517,15 +438,11 @@ void KexiRelationsScrollArea::clearSelection()
     if (d->focusedTableContainer) {
         d->focusedTableContainer->unsetFocus();
         d->focusedTableContainer = 0;
-//  setFocus();
-//  invalidateActions();
     }
     if (d->selectedConnection) {
         d->selectedConnection->setSelected(false);
-//Qt 4  updateContents(d->selectedConnection->connectionRect());
         d->areaWidget->update(d->selectedConnection->connectionRect());
         d->selectedConnection = 0;
-//  invalidateActions();
     }
 }
 
@@ -537,8 +454,6 @@ KexiRelationsScrollArea::contextMenuEvent(QContextMenuEvent* event)
         emit connectionContextMenuRequest(
             mapToGlobal(d->selectedConnection->connectionRect().center()));
     }
-//  d->popup->exec( mapToGlobal( d->focusedTableContainer ? d->focusedTableContainer->pos() + d->focusedTableContainer->rect().center() : rect().center() ) );
-//  executePopup();
 }
 
 void
@@ -551,48 +466,10 @@ KexiRelationsScrollArea::keyPressEvent(QKeyEvent *ev)
     }
 }
 
-/* unused, we have now one large area
-void
-KexiRelationsScrollArea::recalculateSize(int width, int height)
-{
-  kDebug() << "recalculateSize(" << width << ", " << height << ")";
-  int newW = d->areaWidget->width();
-  int newH = d->areaWidget->height();
-  kDebug() << "contentsSize(" << newW << ", " << newH << ")";
-
-  if (newW < width)
-    newW = width;
-
-  if (newH < height)
-    newH = height;
-
-  d->areaWidget->resize(newW, newH);
-}*/
-
-/* Resizes contents to size exactly enough to fit tableViews.
-  Executed on every tableView's drop event.
-*/
-/*unused
-void
-KexiRelationsScrollArea::stretchExpandSize()
-{
-  int max_x=-1, max_y=-1;
-  foreach (KexiRelationsTableContainer* container, d->tables) {
-    if (container->right() > max_x)
-      max_x = container->right();
-    if (container->bottom() > max_y)
-      max_y = container->bottom();
-  }
-  QPoint p(max_x + 3, max_y + 3);
-//Qt 4 QPoint p = viewportToContents(QPoint(max_x, max_y) + QPoint(3,3)); //3 pixels margin
-  d->areaWidget->resize(p.x(), p.y());
-}*/
-
 void KexiRelationsScrollArea::slotTableViewEndDrag()
 {
     kDebug() << "END DRAG!";
     d->autoScrollTimer.stop();
-// stretchExpandSize();
 }
 
 void
@@ -612,7 +489,6 @@ KexiRelationsScrollArea::removeSelectedObject()
                     && (*it).srcField == d->selectedConnection->connection().srcField
                     && (*it).rcvField == d->selectedConnection->connection().rcvField) {
                 kDebug() << "matching found!";
-//   l.remove(it);
             } else {
                 nl.append(*it);
             }
@@ -620,8 +496,8 @@ KexiRelationsScrollArea::removeSelectedObject()
 
         d->relation->updateRelationList(this, nl);
 #endif
-//  invalidateActions();
-    } else if (d->focusedTableContainer) {
+    }
+    else if (d->focusedTableContainer) {
         KexiRelationsTableContainer *tmp = d->focusedTableContainer;
         d->focusedTableContainer = 0;
         hideTable(tmp);
@@ -653,7 +529,6 @@ KexiRelationsScrollArea::hideTableInternal(TablesHashMutableIterator& it)
         }
     }
     it.remove();
-// d->tables.take(container->schema()->name());
     delete container;
     emit tableHidden(*ts);
 }
@@ -686,7 +561,6 @@ KexiRelationsScrollArea::removeConnectionInternal(ConnectionSetMutableIterator& 
     KexiRelationsConnection *conn = it.value();
     emit aboutConnectionRemove(conn);
     it.remove();
-//Qt 4 updateContents(conn->connectionRect());
     d->areaWidget->update(conn->connectionRect());
     delete conn;
     kDebug();
@@ -696,18 +570,15 @@ void KexiRelationsScrollArea::slotTableViewGotFocus()
 {
     if (d->focusedTableContainer == sender())
         return;
-    kDebug() << "GOT FOCUS!";
+    //kDebug() << "GOT FOCUS!";
     clearSelection();
-// if (d->focusedTableContainer)
-//  d->focusedTableContainer->unsetFocus();
     d->focusedTableContainer = (KexiRelationsTableContainer*)sender();
-// invalidateActions();
     emit tableViewGotFocus();
 }
 
 QSize KexiRelationsScrollArea::sizeHint() const
 {
-    return QSize(QScrollArea::sizeHint());//.width(), 600);
+    return QSize(QScrollArea::sizeHint());
 }
 
 void KexiRelationsScrollArea::clear()
@@ -716,7 +587,6 @@ void KexiRelationsScrollArea::clear()
     foreach(KexiRelationsTableContainer* container, d->tables)
     delete container;
     d->tables.clear();
-//Qt 4 updateContents();
     d->areaWidget->update();
 }
 
@@ -725,38 +595,8 @@ void KexiRelationsScrollArea::removeAllConnections()
     clearSelection(); //sanity
     qDeleteAll(d->connectionViews);
     d->connectionViews.clear();
-//Qt 4 updateContents();
     d->areaWidget->update();
 }
-
-/*
-
-void KexiRelationsScrollArea::tableHeaderContextMenuRequest(const QPoint& pos)
-{
-  if (d->focusedTableContainer != sender())
-    return;
-  kDebug() << "HEADER CTXT MENU!";
-  invalidateActions();
-  d->tableQueryPopup->exec(pos);
-}
-
-//! Invalidates all actions availability
-void KexiRelationsScrollArea::invalidateActions()
-{
-  setAvailable("edit_delete", d->selectedConnection || d->focusedTableContainer);
-}
-
-void KexiRelationsScrollArea::executePopup( QPoint pos )
-{
-  if (pos==QPoint(-1,-1)) {
-    pos = mapToGlobal( d->focusedTableContainer ? d->focusedTableContainer->pos() + d->focusedTableContainer->rect().center() : rect().center() );
-  }
-  if (d->focusedTableContainer)
-    d->tableQueryPopup->exec(pos);
-  else if (d->selectedConnection)
-    d->connectionPopup->exec(pos);
-}
-*/
 
 TablesHash* KexiRelationsScrollArea::tables() const
 {

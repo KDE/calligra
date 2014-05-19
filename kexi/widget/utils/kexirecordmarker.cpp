@@ -275,14 +275,14 @@ void KexiRecordMarker::setCellHeight(int cellHeight)
 void KexiRecordMarker::setEditRow(int row)
 {
     d->editRow = row;
-//TODO: update only needed area!
+//! @todo update only needed area
     update();
 }
 
 void KexiRecordMarker::showInsertRow(bool show)
 {
     d->showInsertRow = show;
-//TODO: update only needed area!
+//! @todo update only needed area
     update();
 }
 

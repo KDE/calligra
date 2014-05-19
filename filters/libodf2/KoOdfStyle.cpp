@@ -169,10 +169,10 @@ bool KoOdfStyle::saveOdf(KoXmlWriter *writer)
 {
     if (isDefaultStyle()) {
         writer->startElement("style:default-style");
-        writer->addAttribute("style:name", name());
     }
     else {
         writer->startElement("style:style");
+        writer->addAttribute("style:name", name());
     }
 
     // Write style attributes

@@ -47,7 +47,7 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget, public KexiDataItemIn
     Q_OBJECT
 
 public:
-    KexiTableEdit(KexiDB::TableViewColumn &column, QWidget* parent = 0);
+    explicit KexiTableEdit(KexiDB::TableViewColumn &column, QWidget* parent = 0);
 
     virtual ~KexiTableEdit();
 

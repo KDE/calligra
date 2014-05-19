@@ -103,9 +103,9 @@ public:
 
     QLabel *lblImportingTxt, *lblImportingErrTxt, *finishLbl;
     QCheckBox *openImportedProjectCheckBox;
-    bool fileBasedDstWasPresented : 1;
-    bool setupFileBasedSrcNeeded : 1;
-    bool importExecuted  :1; //!< used in import()
+    bool fileBasedDstWasPresented;
+    bool setupFileBasedSrcNeeded;
+    bool importExecuted; //!< used in import()
     KexiProjectSet* prjSet;
     QProgressBar *progressBar;
     KPushButton* importOptionsButton;
@@ -539,7 +539,7 @@ void ImportWizard::arriveDstTitlePage()
             d->dstNewDBNameLineEdit->setText(d->predefinedDatabaseName);
         } else {
             if (!d->srcDBName || !d->srcDBName->selectedProjectData()) {
-                back(); //todo!
+                back(); //!< @todo
                 return;
             }
             d->dstNewDBNameLineEdit->setText(d->srcDBName->selectedProjectData()->databaseName());
@@ -620,9 +620,7 @@ bool ImportWizard::fileBasedSrcSelected() const
 
 bool ImportWizard::fileBasedDstSelected() const
 {
-
-    return d->dstPrjTypeSelector->buttonGroup->selectedId() == 1;
-
+    return d->dstPrjTypeSelector->option_file->isChecked();
 }
 
 void ImportWizard::progressUpdated(int percent)
@@ -935,13 +933,13 @@ void ImportWizard::next()
         }
     }
 
-    setAppropriate(d->srcDBPageItem, !fileBasedSrcSelected() && !d->predefinedConnectionData);   //skip d->srcDBPage
+    setAppropriate(d->srcDBPageItem, !fileBasedSrcSelected() && !d->predefinedConnectionData);
     KAssistantDialog::next();
 }
 
 void ImportWizard::back()
 {
-    setAppropriate(d->srcDBPageItem, !fileBasedSrcSelected() && !d->predefinedConnectionData);   //skip d->srcDBPage
+    setAppropriate(d->srcDBPageItem, !fileBasedSrcSelected() && !d->predefinedConnectionData);
     KAssistantDialog::back();
 }
 

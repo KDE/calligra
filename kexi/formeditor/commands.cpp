@@ -24,7 +24,6 @@
 #include <QClipboard>
 #include <QApplication>
 #include <QDomDocument>
-#include <QDebug>
 #include <QStackedWidget>
 
 #include <kdebug.h>
@@ -37,12 +36,10 @@
 #include "formIO.h"
 #include "container.h"
 #include "objecttree.h"
-//unused #include "formmanager.h"
 #include "form.h"
 #include "widgetlibrary.h"
 #include "events.h"
 #include "utils.h"
-//removed 2.0 #include "widgetpropertyset.h"
 #include "widgetwithsubpropertiesinterface.h"
 #include <koproperty/Property.h>
 #include <koproperty/Set.h>
@@ -86,6 +83,11 @@ void Command::redo()
         return;
     }
     execute();
+}
+
+void Command::debug() const
+{
+    kDebug() << *this;
 }
 
 //! kDebug() stream operator. Writes command @a c to the debug output in a nicely formatted way.
@@ -161,9 +163,19 @@ void PropertyCommand::init()
     }
 }
 
+void PropertyCommand::debug() const
+{
+    kDebug() << *this;
+}
+
 Form* PropertyCommand::form() const
 {
     return d->form;
+}
+
+int PropertyCommand::id() const
+{
+    return 1;
 }
 
 QVariant PropertyCommand::value() const
@@ -201,30 +213,22 @@ void PropertyCommand::execute()
 
     if (reSelectWidgets) {
         d->form->selectWidgets(d->oldValues.keys(), Form::ReplacePreviousSelection);
-/*        foreach (const QByteArray& name, d->oldValues.keys()) {
-            ObjectTreeItem* item = d->form->objectTree()->lookup(name);
-            if (item) { //we're checking for item!=0 because the name could be of a form widget
-                d->form->selectWidget(item->widget(), Form::AddToPreviousSelection | Form::LastSelection);
-            }
-        }*/
     }
 
-//    if (d->oldValues.count() > 1) {
-        // set property for multiple widgets
-        for (QHash<QByteArray, QVariant>::ConstIterator oldValuesIt( d->oldValues.constBegin() );
-             oldValuesIt != d->oldValues.constEnd(); ++oldValuesIt)
-        {
-            ObjectTreeItem* item = d->form->objectTree()->lookup(oldValuesIt.key());
-            if (item) { //we're checking for item!=0 because the name could be of a form widget
-                QWidget *widget = item->widget();
-                WidgetWithSubpropertiesInterface* subpropIface = dynamic_cast<WidgetWithSubpropertiesInterface*>(widget);
-                QWidget *subWidget = (subpropIface && subpropIface->subwidget()) ? subpropIface->subwidget() : widget;
-                if (subWidget && -1 != subWidget->metaObject()->indexOfProperty(d->propertyName))
-                  item->widget()->setProperty(d->propertyName, d->value);
+    // set property for multiple widgets
+    for (QHash<QByteArray, QVariant>::ConstIterator oldValuesIt( d->oldValues.constBegin() );
+         oldValuesIt != d->oldValues.constEnd(); ++oldValuesIt)
+    {
+        ObjectTreeItem* item = d->form->objectTree()->lookup(oldValuesIt.key());
+        if (item) { //we're checking for item!=0 because the name could be of a form widget
+            QWidget *widget = item->widget();
+            WidgetWithSubpropertiesInterface* subpropIface = dynamic_cast<WidgetWithSubpropertiesInterface*>(widget);
+            QWidget *subWidget = (subpropIface && subpropIface->subwidget()) ? subpropIface->subwidget() : widget;
+            if (subWidget && -1 != subWidget->metaObject()->indexOfProperty(d->propertyName)) {
+                item->widget()->setProperty(d->propertyName, d->value);
             }
         }
-//    }
-
+    }
     d->form->propertySet().changeProperty(d->propertyName, d->value);
     d->form->setUndoing(false);
 }
@@ -332,6 +336,16 @@ GeometryPropertyCommand::~GeometryPropertyCommand()
     delete d;
 }
 
+int GeometryPropertyCommand::id() const
+{
+    return 2;
+}
+
+void GeometryPropertyCommand::debug() const
+{
+    kDebug() << *this;
+}
+
 void GeometryPropertyCommand::execute()
 {
     d->form->setUndoing(true);
@@ -374,7 +388,6 @@ QPoint GeometryPropertyCommand::pos() const
 void GeometryPropertyCommand::setPos(const QPoint& pos)
 {
     d->pos = pos;
-// moved    emit d->form->modified();
 }
 
 QPoint GeometryPropertyCommand::oldPos() const
@@ -389,7 +402,7 @@ KFORMEDITOR_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const GeometryPr
     return dbg.space();
 }
 
-/////////////////  AlignWidgetsCommand  ////////
+// AlignWidgetsCommand
 
 namespace KFormDesigner
 {
@@ -439,6 +452,16 @@ AlignWidgetsCommand::AlignWidgetsCommand(Form &form, Form::WidgetAlignment align
 AlignWidgetsCommand::~AlignWidgetsCommand()
 {
     delete d;
+}
+
+int AlignWidgetsCommand::id() const
+{
+    return 3;
+}
+
+void AlignWidgetsCommand::debug() const
+{
+    kDebug() << *this;
 }
 
 void AlignWidgetsCommand::execute()
@@ -545,7 +568,7 @@ KFORMEDITOR_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const AlignWidge
     return dbg.space();
 }
 
-///// AdjustSizeCommand ///////////
+// AdjustSizeCommand
 
 namespace KFormDesigner
 {
@@ -609,6 +632,16 @@ AdjustSizeCommand::~AdjustSizeCommand()
     delete d;
 }
 
+int AdjustSizeCommand::id() const
+{
+    return 4;
+}
+
+void AdjustSizeCommand::debug() const
+{
+    kDebug() << *this;
+}
+
 void AdjustSizeCommand::execute()
 {
     // To avoid creation of GeometryPropertyCommand
@@ -664,8 +697,11 @@ void AdjustSizeCommand::execute()
                 else if (type == Form::VFlow)
                     s.setHeight(s.height() + 5);
                 w->resize(s);
-            } else if (item && item->container()) // empty container
-                w->resize(item->container()->form()->gridSize() * 5, item->container()->form()->gridSize() * 5); // basic size
+            }
+            else if (item && item->container()) { // empty container
+                w->resize(item->container()->form()->gridSize() * 5,
+                          item->container()->form()->gridSize() * 5); // basic size
+            }
             else {
                 QSize sizeHint(w->sizeHint());
                 if (sizeHint.isValid())
@@ -821,6 +857,16 @@ LayoutPropertyCommand::~LayoutPropertyCommand()
     delete d;
 }
 
+int LayoutPropertyCommand::id() const
+{
+    return 5;
+}
+
+void LayoutPropertyCommand::debug() const
+{
+    kDebug() << *this;
+}
+
 void LayoutPropertyCommand::execute()
 {
     PropertyCommand::execute();
@@ -877,29 +923,29 @@ InsertWidgetCommand::InsertWidgetCommand(const Container& container, Command *pa
 {
     d->form = container.form();
     d->containerName = container.widget()->objectName();
-    kDebug() << "containerName:" << d->containerName;
+    //kDebug() << "containerName:" << d->containerName;
     d->_class = d->form->selectedClass();
     d->pos = container.selectionOrInsertingBegin();
     d->widgetName = d->form->objectTree()->generateUniqueName(
                  d->form->library()->namePrefix(d->_class).toLatin1(),
                  /* !numberSuffixRequired */false);
-    kDebug() << "widgetName:" << d->widgetName;
+    //kDebug() << "widgetName:" << d->widgetName;
     d->insertRect = container.selectionOrInsertingRectangle();
     init();
 }
 
 InsertWidgetCommand::InsertWidgetCommand(const Container& container,
-                                         const QByteArray& className, const QPoint& pos, const QByteArray& namePrefix,
-                                         Command *parent)
+                                         const QByteArray& className, const QPoint& pos,
+                                         const QByteArray& namePrefix, Command *parent)
         : Command(parent), d( new Private )
 {
     d->form = container.form();
     d->containerName = container.widget()->objectName();
-    kDebug() << "containerName:" << d->containerName;
+    //kDebug() << "containerName:" << d->containerName;
     d->_class = className;
     d->pos = pos;
     //d->insertRect is null (default)
-    kDebug() << "namePrefix:" << namePrefix;
+    //kDebug() << "namePrefix:" << namePrefix;
     if (namePrefix.isEmpty()) {
         d->widgetName = d->form->objectTree()->generateUniqueName(
                      d->form->library()->namePrefix(d->_class).toLatin1());
@@ -907,13 +953,23 @@ InsertWidgetCommand::InsertWidgetCommand(const Container& container,
         d->widgetName = d->form->objectTree()->generateUniqueName(
                      namePrefix, false /* !numberSuffixRequired */);
     }
-    kDebug() << "widgetName:" << d->widgetName;
+    //kDebug() << "widgetName:" << d->widgetName;
     init();
 }
 
 InsertWidgetCommand::~InsertWidgetCommand()
 {
     delete d;
+}
+
+int InsertWidgetCommand::id() const
+{
+    return 6;
+}
+
+void InsertWidgetCommand::debug() const
+{
+    kDebug() << *this;
 }
 
 void InsertWidgetCommand::init()
@@ -963,9 +1019,10 @@ void InsertWidgetCommand::execute()
         d->form->abortWidgetInserting();
         WidgetInfo *winfo = d->form->library()->widgetInfoForClassName(d->_class);
         KMessageBox::sorry(d->form ? d->form->widget() : 0,
-                           i18n("Could not insert widget of type \"%1\". A problem with widget's creation encountered.", 
+                           i18n("Could not insert widget of type \"%1\". "
+                                "A problem with widget's creation encountered.",
                                 winfo ? winfo->name() : QString()));
-        kWarning() << "ERROR: widget creation failed";
+        kWarning() << "widget creation failed";
         return;
     }
     Q_ASSERT(!w->objectName().isEmpty());
@@ -974,8 +1031,6 @@ void InsertWidgetCommand::execute()
         //don't generate accelerators for widgets in design mode
         KAcceleratorManager::setNoAccel(w);
     }
-
-//    w->installEventFilter(container);
 
     // if the insertRect is invalid (ie only one point), we use widget' size hint
     if (((d->insertRect.width() < 21) && (d->insertRect.height() < 21))) {
@@ -1009,10 +1064,7 @@ void InsertWidgetCommand::execute()
     }
 
     w->move(d->insertRect.x(), d->insertRect.y());
-//    w->resize(d->insertRect.width() - 1, d->insertRect.height() - 1); // -1 is not to hide dots
     w->resize(d->insertRect.size());
-//2.0??    w->setStyle(container->widget()->style());
-//2.0 not needed    w->setBackgroundOrigin(QWidget::ParentOrigin);
     w->show();
 
     d->form->abortWidgetInserting();
@@ -1021,7 +1073,7 @@ void InsertWidgetCommand::execute()
     // it's already created in Container's constructor
     ObjectTreeItem *item = d->form->objectTree()->lookup(d->widgetName);
     if (!item) { //not yet created...
-        kDebug() << "Creating ObjectTreeItem:";
+        //kDebug() << "Creating ObjectTreeItem:";
         item = new ObjectTreeItem(d->form->library()->displayName(d->_class), d->widgetName, w, container);
         d->form->objectTree()->addItem(container->objectTree(), item);
     }
@@ -1047,11 +1099,12 @@ void InsertWidgetCommand::execute()
     if (!d->form->library()->internalProperty(w->metaObject()->className(),
             "dontStartEditingOnInserting").toBool())
     {
+        // edit the widget on creation
         d->form->library()->startInlineEditing(
-            w->metaObject()->className(), w, item->container() ? item->container() : container); // we edit the widget on creation
+            w->metaObject()->className(), w, item->container() ? item->container() : container);
     }
 //! @todo update widget's width for entered text's metrics
-    kDebug() << "widget added " << this;
+    //kDebug() << "widget added " << this;
 }
 
 void InsertWidgetCommand::undo()
@@ -1078,7 +1131,7 @@ QByteArray InsertWidgetCommand::widgetName() const
     return d->widgetName;
 }
 
-/// CreateLayoutCommand ///////////////
+/// CreateLayoutCommand
 
 namespace KFormDesigner
 {
@@ -1177,6 +1230,16 @@ void CreateLayoutCommand::init()
     }
 }
 
+int CreateLayoutCommand::id() const
+{
+    return 7;
+}
+
+void CreateLayoutCommand::debug() const
+{
+    kDebug() << *this;
+}
+
 void CreateLayoutCommand::execute()
 {
     WidgetLibrary *lib = d->form->library();
@@ -1242,8 +1305,6 @@ void CreateLayoutCommand::execute()
     }
 
     container->selectWidget(w);
-//! @todo 2.0 unused?
-    //FormManager::self()->windowChanged(d->form->widget()); // to reload the ObjectTreeView
 }
 
 void CreateLayoutCommand::undo()
@@ -1273,8 +1334,6 @@ void CreateLayoutCommand::undo()
         return; //better this than a crash
     QWidget *w = titem->widget();
     parent->container()->deleteWidget(w); // delete the layout widget
-//! @todo 2.0 unused?
-//    FormManager::self()->windowChanged(d->form->widget()); // to reload ObjectTreeView
 }
 
 KFORMEDITOR_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const CreateLayoutCommand &c)
@@ -1285,7 +1344,7 @@ KFORMEDITOR_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const CreateLayo
     return dbg.space();
 }
 
-/// BreakLayoutCommand ///////////////
+// BreakLayoutCommand
 
 BreakLayoutCommand::BreakLayoutCommand(const Container &container, Command *parent)
         : CreateLayoutCommand(parent)
@@ -1307,6 +1366,16 @@ BreakLayoutCommand::BreakLayoutCommand(const Container &container, Command *pare
 
 BreakLayoutCommand::~BreakLayoutCommand()
 {
+}
+
+int BreakLayoutCommand::id() const
+{
+    return 8;
+}
+
+void BreakLayoutCommand::debug() const
+{
+    kDebug() << *this;
 }
 
 void BreakLayoutCommand::execute()
@@ -1346,8 +1415,8 @@ public:
 };
 }
 
-PasteWidgetCommand::PasteWidgetCommand(const QDomDocument &domDoc, const Container& container, const QPoint& p,
-                                       Command *parent)
+PasteWidgetCommand::PasteWidgetCommand(const QDomDocument &domDoc, const Container& container,
+                                       const QPoint& p, Command *parent)
     : Command(parent), d( new Private )
 {
     d->form = container.form();
@@ -1359,7 +1428,9 @@ PasteWidgetCommand::PasteWidgetCommand(const QDomDocument &domDoc, const Contain
         return;
 
     QRect boundingRect;
-    for (QDomNode n = domDoc.firstChildElement("UI").firstChild(); !n.isNull(); n = n.nextSibling()) { // more than one widget
+    for (QDomNode n = domDoc.firstChildElement("UI").firstChild(); !n.isNull();
+         n = n.nextSibling())
+    { // more than one widget
         const QDomElement el = n.toElement();
         if (el.tagName() != "widget")
             continue;
@@ -1369,7 +1440,6 @@ PasteWidgetCommand::PasteWidgetCommand(const QDomDocument &domDoc, const Contain
             if ((n.toElement().tagName() == "property") && (n.toElement().attribute("name") == "geometry"))
                 rect = n.firstChild().toElement();
         }
-
         QDomElement x = rect.firstChildElement("x");
         QDomElement y = rect.firstChildElement("y");
         QDomElement w = rect.firstChildElement("width");
@@ -1382,8 +1452,6 @@ PasteWidgetCommand::PasteWidgetCommand(const QDomDocument &domDoc, const Contain
         QRect r(rx, ry, rw, rh);
         boundingRect = boundingRect.unite(r);
     }
-
-    //2.0 d->pos -= boundingRect.topLeft();
     setText( i18nc("(qtundo-format)", "Paste") );
 }
 
@@ -1391,6 +1459,16 @@ PasteWidgetCommand::PasteWidgetCommand(const QDomDocument &domDoc, const Contain
 PasteWidgetCommand::~PasteWidgetCommand()
 {
     delete d;
+}
+
+int PasteWidgetCommand::id() const
+{
+    return 9;
+}
+
+void PasteWidgetCommand::debug() const
+{
+    kDebug() << *this;
 }
 
 void PasteWidgetCommand::execute()
@@ -1406,12 +1484,12 @@ void PasteWidgetCommand::execute()
     bool parsed = domDoc.setContent(d->data, false, &errMsg, &errLine, &errCol);
 
     if (!parsed) {
-        kDebug() << errMsg;
-        kDebug() << "line: " << errLine << "col: " << errCol;
+        kWarning() << errMsg;
+        kWarning() << "line: " << errLine << "col: " << errCol;
         return;
     }
 
-    kDebug() << domDoc.toString();
+    //kDebug() << domDoc.toString();
     if (!domDoc.firstChildElement("UI").hasChildNodes()) // nothing in the doc
         return;
 
@@ -1431,7 +1509,7 @@ void PasteWidgetCommand::execute()
             changePos(el, d->pos);
 
         d->form->setInteractiveMode(false);
-        FormIO::loadWidget(container, el);
+        FormIO::loadWidget(container, el, 0, 0);
         d->form->setInteractiveMode(true);
     }
     else {
@@ -1470,7 +1548,6 @@ void PasteWidgetCommand::execute()
                 fixPos(el, container);
             }
             else {
-                //container->widget()->mapTo(
                 moveWidgetBy(
                     el, container, 
                     QPoint(-minX, -minY) + d->pos // fix position by subtracting the original 
@@ -1479,12 +1556,11 @@ void PasteWidgetCommand::execute()
             }
 
             d->form->setInteractiveMode(false);
-            FormIO::loadWidget(container, el);
+            FormIO::loadWidget(container, el, 0, 0);
             d->form->setInteractiveMode(true);
         }
     }
 
-    //FormIO::setCurrentForm(0);
     d->names.clear();
     // We store the names of all the created widgets, to delete them later
     for (n = domDoc.firstChildElement("UI").firstChild(); !n.isNull(); n = n.nextSibling()) {
@@ -1528,7 +1604,6 @@ void PasteWidgetCommand::undo()
 
 void PasteWidgetCommand::changePos(QDomElement &el, const QPoint &newPos)
 {
-    //QDomElement el = widg.cloneNode(true).toElement();
     QDomElement rect;
     // Find the widget geometry if there is one
     for (QDomNode n = el.firstChild(); !n.isNull(); n = n.nextSibling()) {
@@ -1547,56 +1622,10 @@ void PasteWidgetCommand::changePos(QDomElement &el, const QPoint &newPos)
     y.removeChild(y.firstChild());
     QDomText valueY = el.ownerDocument().createTextNode(QString::number(newPos.y()));
     y.appendChild(valueY);
-
-    //return el;
 }
 
 void PasteWidgetCommand::fixPos(QDomElement &el, Container *container)
 {
-    /* QDomElement rect;
-      for(QDomNode n = el.firstChild(); !n.isNull(); n = n.nextSibling())
-      {
-        if((n.toElement().tagName() == "property") && (n.toElement().attribute("name") == "geometry"))
-          rect = n.firstChild().toElement();
-      }
-
-      QDomElement x = rect.namedItem("x").toElement();
-      QDomElement y = rect.namedItem("y").toElement();
-      QDomElement wi = rect.namedItem("width").toElement();
-      QDomElement h = rect.namedItem("height").toElement();
-
-      int rx = x.text().toInt();
-      int ry = y.text().toInt();
-      int rw = wi.text().toInt();
-      int rh = h.text().toInt();
-      QRect r(rx, ry, rw, rh);
-
-      QWidget *w = d->form->widget()->childAt(r.x() + 6, r.y() + 6, false);
-      if(!w)
-        return;
-
-      while((w->geometry() == r) && (w != 0))// there is already a widget there, with the same size
-      {
-        w = d->form->widget()->childAt(w->x() + 16, w->y() + 16, false);
-        r.moveBy(10,10);
-      }
-
-      // the pasted wigdet should stay inside container's boundaries
-      if(r.x() < 0)
-        r.moveLeft(0);
-      else if(r.right() > container->widget()->width())
-        r.moveLeft(container->widget()->width() - r.width());
-
-      if(r.y() < 0)
-        r.moveTop(0);
-      else if(r.bottom() > container->widget()->height())
-        r.moveTop(container->widget()->height() - r.height());
-
-      if(r != QRect(rx, ry, rw, rh))
-        //return el;
-      //else
-        changePos(el, QPoint(r.x(), r.y()));
-    */
     moveWidgetBy(el, container, QPoint(0, 0));
 }
 
@@ -1620,7 +1649,7 @@ void PasteWidgetCommand::moveWidgetBy(QDomElement &el, Container *container, con
     int rw = wi.text().toInt();
     int rh = h.text().toInt();
     QRect r(rx + p.x(), ry + p.y(), rw, rh);
-    kDebug() << "Moving widget by " << p << "from " << rx << ry << "to" << r.topLeft();
+    //kDebug() << "Moving widget by " << p << "from " << rx << ry << "to" << r.topLeft();
 
     QWidget *w = d->form->widget()->childAt(r.x() + 6, r.y() + 6);
 
@@ -1640,10 +1669,9 @@ void PasteWidgetCommand::moveWidgetBy(QDomElement &el, Container *container, con
     else if (r.bottom() > container->widget()->height())
         r.moveTop(container->widget()->height() - r.height());
 
-    if (r != QRect(rx, ry, rw, rh))
-        //return el;
-        //else
+    if (r != QRect(rx, ry, rw, rh)) {
         changePos(el, QPoint(r.x(), r.y()));
+    }
 }
 
 void
@@ -1711,35 +1739,6 @@ DeleteWidgetCommand::DeleteWidgetCommand(Form& form, const QWidgetList &list, Co
     KFormDesigner::widgetsToXML(d->domDoc,
         d->containers, d->parents, *d->form, list);
     setText( i18nc("(qtundo-format)", "Delete widget") );
-
-/* moved
-    d->domDoc.appendChild(d->domDoc.createElement("UI"));
-
-    QDomElement parent = d->domDoc.namedItem("UI").toElement();
-
-    QWidgetList topLevelList(list);
-    removeChildrenFromList(topLevelList);
-
-    foreach (QWidget *w, topLevelList) {
-        ObjectTreeItem *item = d->form->objectTree()->lookup(w->objectName());
-        if (!item)
-            return;
-
-        // We need to store both parentContainer and parentWidget as they may be different (eg for TabWidget page)
-        d->containers.insert(
-            item->name().toLatin1(),
-            d->form->parentContainer(item->widget())->widget()->objectName().toLatin1())
-        );
-        d->parents.insert(
-            item->name().toLatin1(),
-            item->parent()->name().toLatin1()
-        );
-        FormIO::saveWidget(item, parent, d->domDoc);
-        d->form->connectionBuffer()->saveAllConnectionsForWidget(
-            item->widget()->objectName(), d->domDoc);
-    }
-
-    FormIO::cleanClipboard(parent);*/
 }
 
 DeleteWidgetCommand::~DeleteWidgetCommand()
@@ -1747,9 +1746,18 @@ DeleteWidgetCommand::~DeleteWidgetCommand()
     delete d;
 }
 
+int DeleteWidgetCommand::id() const
+{
+    return 10;
+}
+
+void DeleteWidgetCommand::debug() const
+{
+    kDebug() << *this;
+}
+
 void DeleteWidgetCommand::execute()
 {
-//    ObjectTreeItem *containerItemToSelect = 0;
     QHash<QByteArray, QByteArray>::ConstIterator endIt = d->containers.constEnd();
     for (QHash<QByteArray, QByteArray>::ConstIterator it = d->containers.constBegin(); it != endIt; ++it) {
         ObjectTreeItem *item = d->form->objectTree()->lookup(it.key());
@@ -1757,9 +1765,6 @@ void DeleteWidgetCommand::execute()
             continue;
 
         Container *cont = d->form->parentContainer(item->widget());
-/* not needed, Container::deleteWidgets() will select
-        if (!containerItemToSelect)
-            containerItemToSelect = cont->objectTree()->selectableItem();*/
         cont->deleteWidget(item->widget());
     }
 }
@@ -1790,9 +1795,9 @@ void DeleteWidgetCommand::undo()
         ObjectTreeItem *parent = d->form->objectTree()->lookup(d->parents.value(wname));
         QDomElement widg = n.toElement();
         if (parent)
-            FormIO::loadWidget(cont, widg, parent->widget());
+            FormIO::loadWidget(cont, widg, parent->widget(), 0);
         else
-            FormIO::loadWidget(cont, widg);
+            FormIO::loadWidget(cont, widg, 0, 0);
     }
     d->form->setInteractiveMode(true);
 }
@@ -1849,6 +1854,16 @@ DuplicateWidgetCommand::~DuplicateWidgetCommand()
     delete d;
 }
 
+int DuplicateWidgetCommand::id() const
+{
+    return 11;
+}
+
+void DuplicateWidgetCommand::debug() const
+{
+    kDebug() << *this;
+}
+
 void DuplicateWidgetCommand::execute()
 {
     d->pasteCommand->execute();
@@ -1898,6 +1913,16 @@ CutWidgetCommand::~CutWidgetCommand()
     delete d2;
 }
 
+int CutWidgetCommand::id() const
+{
+    return 12;
+}
+
+void CutWidgetCommand::debug() const
+{
+    kDebug() << *this;
+}
+
 void CutWidgetCommand::execute()
 {
     DeleteWidgetCommand::execute();
@@ -1932,10 +1957,6 @@ public:
     Private()
     {
     }
-
-//    //! Used to store pointers to subcommands that shouldn't be executed
-//    //! on CommandGroup::execute()
-//    QSet<K3Command*> commandsShouldntBeExecuted;
 };
 }
 
@@ -1949,84 +1970,15 @@ PropertyCommandGroup::~PropertyCommandGroup()
     delete d;
 }
 
-#if 0
-//bool CommandGroup::copyPropertyValuesFrom(const CommandGroup &commandGroup)
-bool PropertyCommandGroup::mergeWith(const KUndo2Command * command)
+int PropertyCommandGroup::id() const
 {
-    if (id() != command->id()) {
-        return false;
-    }
-    const int thisChildCount = childCount();
-    const int otherChildCount = command->childCount();
-    if (thisChildCount != otherChildCount) {
-        kWarning() << "Cannot copy properties: number of widgets differ\n"
-            << "this command group=" << *this << "\n"
-            << "other command group=" << *command;
-        return false;
-    }
-    kDebug() << "Values to copy:" << thisChildCount;
-    for (int i = 0; i < thisChildCount; i++) {
-        const PropertyCommand *thisPropertyCommand = dynamic_cast<const PropertyCommand*>( child(i) );
-        if (!thisPropertyCommand) {
-            kWarning() << "This command is not of PropertyCommand class\n"
-                << "this command group=" << *this << "\n"
-                << "other command group=" << *command;
-            return false;
-        }
-        const PropertyCommand *otherPropertyCommand = dynamic_cast<const PropertyCommand*>( command->child(i) );
-        if (!otherPropertyCommand) {
-            kWarning() << "Other command is not of PropertyCommand class\n"
-                << "this command group=" << *this << "\n"
-                << "other command group=" << *command;
-            return false;
-        }
-        if (thisPropertyCommand->propertyName() != otherPropertyCommand->propertyName()) {
-            kWarning() << "Name of this and the other property does not match\n"
-                << "this command=" << *thisPropertyCommand << "\n"
-                << "other command=" << *otherPropertyCommand << "\n"
-                << "this command group=" << *this << "\n"
-                << "other command group=" << commandGroup;
-            return false;
-        }
-        if (thisPropertyCommand->widgetName().isEmpty()) {
-            kWarning() << "Single widget of this property command not found\n"
-                << "this command=" << *thisPropertyCommand << "\n"
-                << "other command=" << *otherPropertyCommand << "\n"
-                << "this command group=" << *this << "\n"
-                << "other command group=" << commandGroup;
-            return false;
-        }
-        if (otherPropertyCommand->widgetName().isEmpty()) {
-            kWarning() << "Single widget of other property command not found\n"
-                << "this command=" << *thisPropertyCommand << "\n"
-                << "other command=" << *otherPropertyCommand << "\n"
-                << "this command group=" << *this << "\n"
-                << "other command group=" << commandGroup;
-            return false;
-        }
-        if (thisPropertyCommand->widgetName() != otherPropertyCommand->widgetName()) {
-            kWarning() << "Name of the single widget of this property command differs "
-                          "from the name of the other property command\n"
-                << "this command=" << *thisPropertyCommand << "\n"
-                << "other command=" << *otherPropertyCommand << "\n"
-                << "this command group=" << *this << "\n"
-                << "other command group=" << commandGroup;
-            return false;
-        }
-    }
-
-    // 2. copy
-    for (int i = 0; i < thisChildCount; i++) {
-        PropertyCommand *thisPropertyCommand = dynamic_cast<PropertyCommand*>( child(i) );
-        const PropertyCommand *otherPropertyCommand = dynamic_cast<const PropertyCommand*>( command->child(i) );
-        kDebug() << "Copying value of property" << thisPropertyCommand->propertyName() << "(widget"
-            << thisPropertyCommand->widgetName() << ") from" << thisPropertyCommand->value()
-            << "to" << otherPropertyCommand->value();
-        thisPropertyCommand->setValue( otherPropertyCommand->value() );
-    }
-    return true;
+    return 13;
 }
-#endif
+
+void PropertyCommandGroup::debug() const
+{
+    kDebug() << *this;
+}
 
 void PropertyCommandGroup::execute()
 {
@@ -2057,7 +2009,7 @@ public:
     QString oldText;
     /*! Used to make sure that oldText is set only on the first execution
         of InlineTextEditingCommand::execute() */
-    bool oldTextKnown : 1;
+    bool oldTextKnown;
 };
 }
 
@@ -2077,6 +2029,16 @@ InlineTextEditingCommand::InlineTextEditingCommand(
 InlineTextEditingCommand::~InlineTextEditingCommand()
 {
     delete d;
+}
+
+int InlineTextEditingCommand::id() const
+{
+    return 14;
+}
+
+void InlineTextEditingCommand::debug() const
+{
+    kDebug() << *this;
 }
 
 void InlineTextEditingCommand::execute()
@@ -2119,13 +2081,11 @@ bool InlineTextEditingCommand::mergeWith(const KUndo2Command * command)
 {
     if (id() != command->id())
         return false;
-//    int uniqueId;
     const InlineTextEditingCommand* inlineTextEditingCommand = static_cast<const InlineTextEditingCommand*>(command);
-//    if (d->uniqueId > 0 && inlineTextEditingCommand->d->uniqueId == d->uniqueId) {
     if (   form() == inlineTextEditingCommand->form()
         && text() == inlineTextEditingCommand->oldText())
     {
-        kDebug() << "Changed from" << text() << "to" << inlineTextEditingCommand->text();
+        //kDebug() << "Changed from" << text() << "to" << inlineTextEditingCommand->text();
         d->text = inlineTextEditingCommand->text();
         return true;
     }
@@ -2153,7 +2113,7 @@ KFORMEDITOR_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const InlineText
     return dbg.space();
 }
 
-///////  Tab related commands (to allow tab creation/deletion undoing)
+//  Tab related commands (to allow tab creation/deletion undoing)
 
 namespace KFormDesigner
 {
@@ -2163,7 +2123,7 @@ public:
     Private()
     {
     }
-    KFormDesigner::Form *form;
+    Form *form;
     QString containername;
     QString name;
     QString parentname;
@@ -2183,6 +2143,16 @@ InsertPageCommand::InsertPageCommand(Container *container, QWidget *parent)
 InsertPageCommand::~InsertPageCommand()
 {
     delete d;
+}
+
+int InsertPageCommand::id() const
+{
+    return 15;
+}
+
+void InsertPageCommand::debug() const
+{
+    kDebug() << *this;
 }
 
 void InsertPageCommand::execute()
@@ -2208,7 +2178,6 @@ void InsertPageCommand::execute(const QString& pageWidgetName, const QString& pa
     QWidget *page = container->form()->library()->createWidget(
         "QWidget", parent, d->name.toLatin1(), container);
     page->setAutoFillBackground(true);
-//    page->setPaletteBackgroundColor(Qt::red);
     ObjectTreeItem *item = container->form()->objectTree()->lookup(d->name);
 
     QByteArray classname = parent->metaObject()->className();
@@ -2269,6 +2238,12 @@ void InsertPageCommand::undo(const QString& name)
     delete com;
 }
 
+KFORMEDITOR_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const InsertPageCommand &c)
+{
+    dbg.nospace() << "InsertPageCommand" << static_cast<const Command&>(c);
+    return dbg.space();
+}
+
 namespace KFormDesigner
 {
 class RemovePageCommand::Private
@@ -2277,7 +2252,7 @@ public:
     Private()
     {
     }
-    KFormDesigner::Form *form;
+    Form *form;
     QString containername;
     QString name;
     QString pageName;
@@ -2310,6 +2285,16 @@ RemovePageCommand::~RemovePageCommand()
     delete d;
 }
 
+int RemovePageCommand::id() const
+{
+    return 16;
+}
+
+void RemovePageCommand::debug() const
+{
+    kDebug() << *this;
+}
+
 void RemovePageCommand::execute()
 {
     d->insertCommand->undo(d->name);
@@ -2328,4 +2313,10 @@ int RemovePageCommand::pageIndex() const
 QString RemovePageCommand::pageName() const
 {
     return d->pageName;
+}
+
+KFORMEDITOR_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const RemovePageCommand &c)
+{
+    dbg.nospace() << "RemovePageCommand" << static_cast<const Command&>(c);
+    return dbg.space();
 }

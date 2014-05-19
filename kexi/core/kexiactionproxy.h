@@ -45,7 +45,7 @@ class KexiActionProxy;
  so the conenction can be reused many times by just allocating KTextEdit_SharedActionConnector
  object for any KTextEditor when required (not only within KexiQueryDesignerSQLEditor).
 */
-//TODO add method for setAvailable()
+//! @todo add method for setAvailable()
 class KEXICORE_EXPORT KexiSharedActionConnector
 {
 public:

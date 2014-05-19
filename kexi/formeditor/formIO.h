@@ -25,6 +25,7 @@
 #include <QPixmap>
 #include <QLabel>
 #include <QPaintEvent>
+#include <QLabel>
 
 #include <kexi_export.h>
 
@@ -146,8 +147,8 @@ public:
         If parent = 0, the Container::widget() is used as parent widget.
         This is used to copy/paste widgets.
     */
-    static void loadWidget(Container *container,
-                           const QDomElement &el, QWidget *parent = 0);
+    static void loadWidget(Container *container, const QDomElement &el,
+                           QWidget *parent, QHash<QString, QLabel*> *buddies);
 
     /*! Save an element in the \a domDoc as child of \a parentNode.
       The element will be saved like this :
@@ -162,20 +163,20 @@ public:
        \param obj    the widget whose property is being read
        \param name   the name of the property being read
     */
-    static QVariant readPropertyValue(QDomNode node, QObject *obj, const QString &name);
+    static QVariant readPropertyValue(Form *form, QDomNode node, QObject *obj, const QString &name);
 
     /*! Write an object property in the DOM doc.
+       \param item   the widget item whose property is being saved
        \param parentNode the DOM document to write to
        \param name   the name of the property being saved
        \param value  the value of this property
-       \param w      the widget whose property is being saved
-       \param lib    the widget library for which the property is being saved
 
        Properties of subwidget are saved with subwidget="true" arribute added
        to 'property' XML element.
     */
-    static void savePropertyValue(QDomElement &parentNode, QDomDocument &parent, const char *name,
-                                  const QVariant &value, QWidget *w, WidgetLibrary *lib = 0);
+    static void savePropertyValue(ObjectTreeItem *item, QDomElement &parentNode,
+                                  QDomDocument &parent, const char *name,
+                                  const QVariant &value);
 
 protected:
     /*! Saves the QVariant \a value as text to be included in an xml file, with \a parentNode.*/
@@ -202,27 +203,16 @@ protected:
 
     /*! Reads the child nodes of a "widget" element. */
     static void readChildNodes(ObjectTreeItem *tree, Container *container,
-                               const QDomElement &el, QWidget *w);
+                               const QDomElement &el, QWidget *w,
+                               QHash<QString, QLabel*> *buddies);
 
     /*! Adds an include file name to be saved in the "includehints" part of .ui file,
      which is needed by uic. */
     static void addIncludeFileName(const QString &include, QDomDocument &domDoc);
 
 private:
-    // This hash stores buddies associations until the Form is completely loaded.
+    //! This hash stores buddies associations until the Form is completely loaded.
     static QHash<QString, QLabel*> *m_buddies;
-
-    /// Instead of having to pass these for every functions, we just store them in the class
-    //static QWidgdet  *m_currentWidget;
-//! @todo remove
-#ifdef __GNUC__
-#warning "remove m_currentItem and m_currentForm.."
-#else
-#pragma WARNING( remove m_currentItem and m_currentForm.. )
-#endif
-    static ObjectTreeItem   *m_currentItem;
-    static Form *m_currentForm;
-    static bool m_savePixmapsInline;
 };
 
 }

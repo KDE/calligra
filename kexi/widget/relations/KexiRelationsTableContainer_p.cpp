@@ -30,6 +30,7 @@
 #include <QDropEvent>
 #include <QMouseEvent>
 #include <QStyleOptionFocusRect>
+#include <QScrollBar>
 
 #include <kdebug.h>
 #include <kiconloader.h>
@@ -179,7 +180,7 @@ QSize KexiRelationsTableFieldList::sizeHint() const
 
 // kdDebug() << schema()->name() << " cw=" << columnWidth(0) + fm.width("i")
 //  << ", " << fm.width(schema()->name()+"  ");
-//!TODO
+//! @todo
     return KexiFieldListView::sizeHint();
 }
 
@@ -252,7 +253,6 @@ void KexiRelationsTableFieldList::dragMoveEvent(QDragMoveEvent* event)
     QString f = model()->data(receiver, Qt::DisplayRole).toString();
     
     //kDebug() << "Source:" << srcTable << "Dest:" << schema()->name();
-    
     if (!srcField.trimmed().startsWith('*') && !f.startsWith('*'))
         event->acceptProposedAction();
 }

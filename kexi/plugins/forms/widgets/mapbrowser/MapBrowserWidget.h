@@ -76,7 +76,7 @@ protected:
 
 private:
     //! Used in slotTextChanged()
-    bool m_slotMapChanged_enabled;///TODO: do we need this to be 1 bit? As in some other widgets
+    bool m_slotMapChanged_enabled; //!< @todo do we need this to be 1 bit? As in some other widgets
     bool m_internalReadOnly;
 };
 
