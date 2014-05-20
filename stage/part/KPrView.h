@@ -140,6 +140,7 @@ public slots:
 protected:
     void initGUI();
     void initActions();
+    virtual bool event(QEvent* event);
 
 protected slots:
     void createAnimation();
