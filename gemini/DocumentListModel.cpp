@@ -134,7 +134,7 @@ void DocumentListModel::addDocument(const DocumentInfo &info)
     m_allDocumentInfos.append(info);
 
     if(m_filter == UnknownType || info.docType == m_filter) {
-        beginInsertRows(QModelIndex(), m_currentDocumentInfos.count() - 1, m_currentDocumentInfos.count() - 1);
+        beginInsertRows(QModelIndex(), m_currentDocumentInfos.count(), m_currentDocumentInfos.count());
         m_currentDocumentInfos.append(info);
         endInsertRows();
     }
