@@ -40,4 +40,40 @@ Item {
             flickable: controllerFlickable;
         }
     }
+    Button {
+        id: nextButton;
+        anchors {
+            bottom: parent.bottom;
+            right: parent.right;
+            margins: Constants.DefaultMargin;
+        }
+        width: height;
+        image: Settings.theme.icon("forward");
+        color: Settings.theme.color("base/base");
+        onClicked: {
+            var currentSlide = stageCanvas.currentSlide;
+            stageCanvas.currentSlide = stageCanvas.currentSlide + 1;
+            if(currentSlide === stageCanvas.currentSlide) {
+                stageCanvas.currentSlide = 0;
+            }
+        }
+    }
+    Button {
+        anchors {
+            bottom: parent.bottom;
+            right: nextButton.left;
+            margins: Constants.DefaultMargin;
+        }
+        image: Settings.theme.icon("back");
+        width: height;
+        color: Settings.theme.color("base/base");
+        onClicked: {
+            if(stageCanvas.currentSlide === 0) {
+                stageCanvas.currentSlide = stageCanvas.slideCount() - 1;
+            }
+            else {
+                stageCanvas.currentSlide = stageCanvas.currentSlide - 1;
+            }
+        }
+    }
 }
