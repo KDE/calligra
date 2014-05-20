@@ -189,11 +189,6 @@ public:
         sketchView->setResizeMode( QDeclarativeView::SizeRootObjectToView );
         sketchView->setSource(QUrl::fromLocalFile(fi.canonicalFilePath()));
 
-        QList<QDeclarativeError> qmlErrors = sketchView->errors();
-        for (QDeclarativeError e : qmlErrors) {
-            qDebug() << "QML error: " << e.toString();
-        }
-
         toDesktop = new KAction(q);
         toDesktop->setEnabled(false);
         toDesktop->setText(tr("Switch to Desktop"));
