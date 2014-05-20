@@ -51,15 +51,16 @@
 #include <KoGlobal.h>
 #include <KoDocumentInfo.h>
 #include <KoView.h>
-#include <part/KWView.h>
+#include <KoPart.h>
 #include <part/KWFactory.h>
+#include <stage/part/KPrDocument.h>
+#include <stage/part/KPrFactory.h>
 #include <KoAbstractGradient.h>
 #include <KoZoomController.h>
 
 #include "TouchDeclarativeView.h"
 #include "RecentFileManager.h"
 #include "DocumentManager.h"
-#include "TouchPart.h"
 #include "QmlGlobalEngine.h"
 #include "Settings.h"
 #include "Theme.h"
@@ -83,6 +84,7 @@ public:
         , touchView(0)
         , desktopView(0)
         , currentView(0)
+        , settings(0)
         , slateMode(false)
         , docked(false)
         , touchKoView(0)
@@ -110,12 +112,13 @@ public:
     TouchDeclarativeView* touchView;
     KoMainWindow* desktopView;
     QObject* currentView;
+    Settings *settings;
 
     bool slateMode;
     bool docked;
     QString currentTouchPage;
-    KWView* touchKoView;
-    KWView* desktopKoView;
+    KoView* touchKoView;
+    KoView* desktopKoView;
     DesktopViewProxy* desktopViewProxy;
 
     bool forceDesktop;
@@ -134,10 +137,12 @@ public:
         QmlGlobalEngine::instance()->setEngine(touchView->engine());
         touchView->engine()->rootContext()->setContextProperty("mainWindow", parent);
 
-        Settings *settings = new Settings( q );
+        settings = new Settings( q );
         DocumentManager::instance()->setSettingsManager( settings );
         touchView->engine()->rootContext()->setContextProperty("Settings", settings);
         touchView->engine()->rootContext()->setContextProperty("Constants", new Constants( q ));
+        touchView->engine()->rootContext()->setContextProperty("WORDS_MIME_TYPE", QString(WORDS_MIME_TYPE));
+        touchView->engine()->rootContext()->setContextProperty("STAGE_MIME_TYPE", QString(STAGE_MIME_TYPE));
 
 #ifdef Q_OS_WIN
         QDir appdir(qApp->applicationDirPath());
@@ -194,7 +199,15 @@ public:
             group.writeEntry("Theme", "Krita-dark");
         }
 
-        desktopView = new KoMainWindow(WORDS_MIME_TYPE, KWFactory::componentData());
+        if(settings->currentFileClass() == WORDS_MIME_TYPE)
+            desktopView = new KoMainWindow(WORDS_MIME_TYPE, KWFactory::componentData());
+        else if(settings->currentFileClass() == STAGE_MIME_TYPE)
+            desktopView = new KoMainWindow(STAGE_MIME_TYPE, KPrFactory::componentData());
+        else {
+            desktopView = 0;
+            qDebug() << "Big trouble, things gonna break. desktopView is not created." << settings->currentFileClass();
+            return;
+        }
 
         toTouch = new KAction(desktopView);
         toTouch->setEnabled(false);
@@ -293,10 +306,10 @@ void MainWindow::switchToTouch()
     }
 
     d->syncObject = new ViewModeSynchronisationObject;
-    KWView* view = 0;
+    KoView* view = 0;
 
     if (d->desktopView && centralWidget() == d->desktopView) {
-        view = qobject_cast<KWView*>(d->desktopView->rootView());
+        view = d->desktopView->rootView();
 
         //Notify the view we are switching away from that we are about to switch away from it
         //giving it the possibility to set up the synchronisation object.
@@ -333,7 +346,7 @@ void MainWindow::touchChange()
         //    return;
         //}
         qApp->processEvents();
-        KWView* view = qobject_cast<KWView*>(d->desktopView->rootView());
+        KoView* view = d->desktopView->rootView();
         //Notify the new view that we just switched to it, passing our synchronisation object
         //so it can use those values to sync with the old view.
         ViewModeSwitchEvent switchedEvent(ViewModeSwitchEvent::SwitchedToTouchModeEvent, view, d->touchView, d->syncObject);
@@ -358,9 +371,9 @@ void MainWindow::switchToDesktop(bool justLoaded)
 
     ViewModeSynchronisationObject* syncObject = new ViewModeSynchronisationObject;
 
-    KWView* view = 0;
+    KoView* view = 0;
     if (d->desktopView) {
-        view = qobject_cast<KWView*>(d->desktopView->rootView());
+        view = d->desktopView->rootView();
     }
 
     //Notify the view we are switching away from that we are about to switch away from it
@@ -397,7 +410,7 @@ void MainWindow::switchToDesktop(bool justLoaded)
 void MainWindow::adjustZoomOnDocumentChangedAndStuff()
 {
     if (d->desktopView && centralWidget() == d->desktopView) {
-        KWView* view = qobject_cast<KWView*>(d->desktopView->rootView());
+        KoView* view = d->desktopView->rootView();
         // We have to set the focus on the view here, otherwise the toolmanager is unaware of which
         // canvas should be handled.
         d->desktopView->rootView()->setFocus();
@@ -420,7 +433,7 @@ void MainWindow::adjustZoomOnDocumentChangedAndStuff()
 
 void MainWindow::setDocAndPart(QObject* document, QObject* part)
 {
-    DocumentManager::instance()->setDocAndPart(qobject_cast<KWDocument*>(document), qobject_cast<KoPart*>(part));
+    DocumentManager::instance()->setDocAndPart(qobject_cast<KoDocument*>(document), qobject_cast<KoPart*>(part));
 }
 
 void MainWindow::documentChanged()
@@ -432,12 +445,15 @@ void MainWindow::documentChanged()
     d->initDesktopView();
     d->desktopView->setRootDocument(DocumentManager::instance()->document(), DocumentManager::instance()->part(), false);
     qApp->processEvents();
-    d->desktopKoView = qobject_cast<KWView*>(d->desktopView->rootView());
+    d->desktopKoView = d->desktopView->rootView();
 //    d->desktopKoView->setQtMainWindow(d->desktopView);
 //    connect(d->desktopKoView, SIGNAL(sigLoadingFinished()), d->centerer, SLOT(start()));
 //    connect(d->desktopKoView, SIGNAL(sigSavingFinished()), this, SLOT(resetWindowTitle()));
-    connect(d->desktopKoView->canvasBase()->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
-                this, SLOT(resourceChanged(int, const QVariant&)));
+//    KWView* wordsview = qobject_cast<KWView*>(d->desktopView->rootView());
+//    if(wordsview) {
+//        connect(wordsview->canvasBase()->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
+//                this, SLOT(resourceChanged(int, const QVariant&)));
+//    }
     if (!d->forceTouch && !d->slateMode)
         switchToDesktop(true);
 }
