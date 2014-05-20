@@ -190,6 +190,7 @@ KexiConnectionSelectorWidget::~KexiConnectionSelectorWidget()
 void KexiConnectionSelectorWidget::showAdvancedConn()
 {
     d->prjTypeSelector->option_server->setChecked(true);
+    slotPrjTypeSelected(d->prjTypeSelector->option_server);
 }
 
 void KexiConnectionSelectorWidget::slotPrjTypeSelected(QAbstractButton *btn)
