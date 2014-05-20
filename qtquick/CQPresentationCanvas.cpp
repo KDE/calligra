@@ -47,7 +47,7 @@
 #include <KoShapeManager.h>
 
 #include "CQPresentationView.h"
-#include <ViewModeSwitchEvent.h>
+#include "gemini/ViewModeSwitchEvent.h"
 
 class CQPresentationCanvas::Private
 {

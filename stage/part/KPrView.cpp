@@ -71,7 +71,7 @@
 #include <QDesktopWidget>
 
 #include "KPrPdfPrintJob.h"
-#include <words/gemini/ViewModeSwitchEvent.h>
+#include "gemini/ViewModeSwitchEvent.h"
 
 KPrView::KPrView(KPrPart *part, KPrDocument *document, QWidget *parent)
   : KoPAView(part, document, KoPAView::ModeBox, parent)

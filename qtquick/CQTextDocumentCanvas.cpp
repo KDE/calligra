@@ -26,7 +26,7 @@
 #include "CQCanvasController.h"
 #include "CQTextDocumentModel.h"
 
-#include "words/gemini/ViewModeSwitchEvent.h"
+#include "gemini/ViewModeSwitchEvent.h"
 
 #include <QStyleOptionGraphicsItem>
 
