@@ -24,10 +24,14 @@
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
 #include <kstandarddirs.h>
+#include <KMimeType>
 
 #include "Theme.h"
 #include "PropertyContainer.h"
 #include <qtquick/CQTextDocumentCanvas.h>
+#include <KoDocumentEntry.h>
+#include <part/KWDocument.h>
+#include <stage/part/KPrDocument.h>
 
 class Settings::Private
 {
@@ -35,6 +39,7 @@ public:
     Private() : temporaryFile(false), focusItem(0) { }
 
     QString currentFile;
+    QString currentFileClass;
     bool temporaryFile;
     QDeclarativeItem *focusItem;
     Theme* theme;
@@ -58,10 +63,25 @@ QString Settings::currentFile() const
     return d->currentFile;
 }
 
+QString Settings::currentFileClass() const
+{
+    return d->currentFileClass;
+}
+
 void Settings::setCurrentFile(const QString& fileName)
 {
     qApp->processEvents();
     if (fileName != d->currentFile) {
+        KMimeType::Ptr mimeType = KMimeType::findByUrl(fileName);
+        KoDocumentEntry documentEntry = KoDocumentEntry::queryByMimeType(mimeType->name());
+        if(documentEntry.supportsMimeType(WORDS_MIME_TYPE)) {
+            d->currentFileClass = WORDS_MIME_TYPE;
+        } else if(documentEntry.supportsMimeType(STAGE_MIME_TYPE)) {
+            d->currentFileClass = STAGE_MIME_TYPE;
+        } else {
+            d->currentFileClass = QString("Unsupported document! Reported mimetype is %1").arg(mimeType->name());
+        }
+
         d->currentFile = fileName;
         emit currentFileChanged();
     }

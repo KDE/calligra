@@ -28,6 +28,7 @@ class Settings : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QString currentFile READ currentFile WRITE setCurrentFile NOTIFY currentFileChanged)
+    Q_PROPERTY(QString currentFileClass READ currentFileClass NOTIFY currentFileChanged)
     Q_PROPERTY(bool temporaryFile READ isTemporaryFile WRITE setTemporaryFile NOTIFY temporaryFileChanged)
     Q_PROPERTY(QDeclarativeItem* focusItem READ focusItem WRITE setFocusItem NOTIFY focusItemChanged)
     Q_PROPERTY(QObject* theme READ theme NOTIFY themeChanged)
@@ -40,6 +41,7 @@ public:
 public Q_SLOTS:
 
     QString currentFile() const;
+    QString currentFileClass() const;
     void setCurrentFile(const QString &fileName);
 
     bool isTemporaryFile() const;
