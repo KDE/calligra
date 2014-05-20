@@ -22,24 +22,25 @@
 #include <QObject>
 #include <QtCore/QVariantMap>
 
+#include <KWDocument.h>
+
 class RecentFileManager;
 class Settings;
 class ProgressProxy;
-class KWDocument;
 class KoPart;
 class DocumentManager : public QObject
 {
     Q_OBJECT
 public:
-    KWDocument* document() const;
-    KoPart* part();
+    KoDocument* document() const;
+    KoPart* part(const QString& type = WORDS_MIME_TYPE);
     ProgressProxy* progressProxy() const;
     Settings* settingsManager() const;
     void setSettingsManager(Settings* newManager);
     RecentFileManager* recentFileManager() const;
     bool isTemporaryFile() const;
 
-    Q_INVOKABLE void setDocAndPart(KWDocument* document, KoPart* part);
+    Q_INVOKABLE void setDocAndPart(KoDocument* document, KoPart* part);
 
 public Q_SLOTS:
     void newDocument(int width, int height, float resolution);
