@@ -12,7 +12,8 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_CURRENT_SOURCE_DIR}/..
                     ${CMAKE_CURRENT_SOURCE_DIR}/../part
                     #${CMAKE_CURRENT_SOURCE_DIR}/models
-                    ${CMAKE_CURRENT_BINARY_DIR})
+                    ${CMAKE_CURRENT_BINARY_DIR}
+                    ${CMAKE_SOURCE_DIR}/libs/kopageapp)
 
 set(calligrawordsgemini_SRCS
     main.cpp
@@ -26,8 +27,6 @@ set(calligrawordsgemini_SRCS
     RecentFileManager.cpp
     Settings.cpp
     SimpleTouchArea.cpp
-    TouchView.cpp
-    TouchPart.cpp
     TouchDeclarativeView.cpp
     Theme.cpp
 )
@@ -53,6 +52,7 @@ target_link_libraries(calligrawordsgemini
     ${GLEW_LIBRARIES}
     komain
     wordsprivate
+    calligrastageprivate
 )
 
 install(TARGETS   calligrawordsgemini ${INSTALL_TARGETS_DEFAULT_ARGS})
