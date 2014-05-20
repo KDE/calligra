@@ -104,7 +104,7 @@ void Theme::setId(const QString& newValue)
 {
     if(newValue != d->id) {
         d->id = newValue;
-        d->basePath = KUrl(KGlobal::dirs()->findResource("data", QString("calligrawordsgemini/themes/%1/theme.qml").arg(d->id))).directory();
+        d->basePath = KUrl(KGlobal::dirs()->findResource("data", QString("calligragemini/themes/%1/theme.qml").arg(d->id))).directory();
         emit idChanged();
     }
 }
@@ -361,9 +361,9 @@ Theme* Theme::load(const QString& id, QObject* parent)
 
     // for now, the app in bin/ and we still use the env.bat script
     appdir.cdUp();
-    qml = QString("%1/share/apps/calligrawordsgemini/themes/%2/theme.qml").arg(appdir.canonicalPath(), id);
+    qml = QString("%1/share/apps/calligragemini/themes/%2/theme.qml").arg(appdir.canonicalPath(), id);
 #else
-    qml = KGlobal::dirs()->findResource("data", QString("calligrawordsgemini/themes/%1/theme.qml").arg(id));
+    qml = KGlobal::dirs()->findResource("data", QString("calligragemini/themes/%1/theme.qml").arg(id));
 #endif
 
     QDeclarativeComponent themeComponent(QmlGlobalEngine::instance()->engine(), parent);
