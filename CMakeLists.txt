@@ -279,6 +279,7 @@ calligra_define_product(PLAN "Full Plan (for Desktop)"  NEEDS PLAN_APP  WANTS FI
 calligra_define_product(BRAINDUMP "Full Braindump (for Desktop)"  NEEDS BRAINDUMP_APP)
 calligra_define_product(ACTIVE "Calligra Active"  NEEDS SHEETS_PART STAGE_PART WORDS_PART)
 calligra_define_product(CALLIGRA "General Calligra program starter"  NEEDS CALLIGRA_LIBS)
+calligra_define_product(GEMINI "The Calligra Gemini application" NEEDS WORDS_PART STAGE_PART PLUGIN_QTQUICK)
 # more extras
 calligra_define_product(OKULARGENERATOR_PPT "Plugin for Okular extended with support for PPT" NEEDS OKULARODPGENERATOR FILTER_PPT_TO_ODP)
 calligra_define_product(OKULARGENERATOR_PPTX "Plugin for Okular extended with support for PPTX" NEEDS OKULARODPGENERATOR FILTER_PPTX_TO_ODP)
@@ -1116,6 +1117,10 @@ endif(SHOULD_BUILD_DOC)
 if(SHOULD_BUILD_PLUGIN_QTQUICK)
     add_subdirectory(qtquick)
 endif(SHOULD_BUILD_PLUGIN_QTQUICK)
+
+if(SHOULD_BUILD_GEMINI)
+    add_subdirectory(gemini)
+endif(SHOULD_BUILD_GEMINI)
 
 # non-app directories are moved here because they can depend on SHOULD_BUILD_{appname} variables set above
 add_subdirectory(libs)
