@@ -41,6 +41,8 @@ public:
 
     int currentSlide() const;
     KPrDocument* document() const;
+    Q_INVOKABLE QObject* doc() const;
+    Q_INVOKABLE QObject* part() const;
     QSizeF pageSize() const;
 
     QObjectList linkTargets() const;
@@ -54,8 +56,9 @@ Q_SIGNALS:
     void linkTargetsChanged();
 
 protected:
+    virtual bool event( QEvent* event );
     virtual void geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry);
-    void openFile(const QString& uri);
+    virtual void openFile(const QString& uri);
 
 private Q_SLOTS:
     void updateDocumentSize(const QSize& size);

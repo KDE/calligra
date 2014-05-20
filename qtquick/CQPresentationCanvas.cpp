@@ -47,15 +47,17 @@
 #include <KoShapeManager.h>
 
 #include "CQPresentationView.h"
+#include <ViewModeSwitchEvent.h>
 
 class CQPresentationCanvas::Private
 {
 public:
-    Private() : canvasBase(0), view(0), document(0), currentSlide(0) { }
+    Private() : canvasBase(0), view(0), document(0), part(0), currentSlide(0) { }
 
     KoCanvasBase* canvasBase;
     CQPresentationView* view;
     KPrDocument* document;
+    KoPart* part;
 
     int currentSlide;
     QSizeF pageSize;
@@ -149,6 +151,16 @@ KPrDocument* CQPresentationCanvas::document() const
     return d->document;
 }
 
+QObject* CQPresentationCanvas::doc() const
+{
+    return d->document;
+}
+
+QObject* CQPresentationCanvas::part() const
+{
+    return d->part;
+}
+
 QSizeF CQPresentationCanvas::pageSize() const
 {
     return d->pageSize;
@@ -177,19 +189,20 @@ void CQPresentationCanvas::render(QPainter* painter, const QRectF& target)
 
 void CQPresentationCanvas::openFile(const QString& uri)
 {
+    emit loadingBegun();
     KService::Ptr service = KService::serviceByDesktopName("stagepart");
     if(service.isNull()) {
         qWarning("Unable to load Stage plugin, aborting!");
         return;
     }
 
-    KoPart *part = service->createInstance<KoPart>();
-    d->document = dynamic_cast<KPrDocument*>(part->document());
+    d->part = service->createInstance<KoPart>();
+    d->document = dynamic_cast<KPrDocument*>(d->part->document());
     d->document->setAutoSave(0);
     d->document->setCheckAutoSaveFile(false);
     d->document->openUrl (KUrl (uri));
 
-    KoPACanvasItem *paCanvasItem = static_cast<KoPACanvasItem*>(part->canvasItem(part->document()));
+    KoPACanvasItem *paCanvasItem = static_cast<KoPACanvasItem*>(d->part->canvasItem(d->part->document()));
     d->canvasBase = paCanvasItem;
     createAndSetCanvasControllerOn(d->canvasBase);
 
@@ -212,6 +225,8 @@ void CQPresentationCanvas::openFile(const QString& uri)
 
     d->updateLinkTargets();
     emit linkTargetsChanged();
+
+    emit loadingFinished();
 }
 
 void CQPresentationCanvas::createAndSetCanvasControllerOn(KoCanvasBase* canvas)
@@ -244,6 +259,44 @@ void CQPresentationCanvas::createAndSetZoomController(KoCanvasBase* canvas)
 void CQPresentationCanvas::updateDocumentSize(const QSize& size)
 {
     zoomController()->setDocumentSize(d->canvasBase->viewConverter()->viewToDocument(size), false);
+}
+
+bool CQPresentationCanvas::event(QEvent* event)
+{    switch(static_cast<int>(event->type())) {
+        case ViewModeSwitchEvent::AboutToSwitchViewModeEvent: {
+            ViewModeSynchronisationObject* syncObject = static_cast<ViewModeSwitchEvent*>(event)->synchronisationObject();
+
+            // Simplest of transfer - no zoom transfer for presentations, just current slide
+            syncObject->currentSlide = d->currentSlide;
+            syncObject->initialized = true;
+
+            return true;
+        }
+        case ViewModeSwitchEvent::SwitchedToTouchModeEvent: {
+            ViewModeSynchronisationObject* syncObject = static_cast<ViewModeSwitchEvent*>(event)->synchronisationObject();
+
+            if (syncObject->initialized) {
+                setCurrentSlide(syncObject->currentSlide);
+            }
+
+            return true;
+        }
+//         case KisTabletEvent::TabletPressEx:
+//         case KisTabletEvent::TabletReleaseEx:
+//             emit interactionStarted();
+//             d->canvas->inputManager()->eventFilter(this, event);
+//             return true;
+//         case KisTabletEvent::TabletMoveEx:
+//             d->tabletEventCount++; //Note that this will wraparound at some point; This is intentional.
+// #ifdef Q_OS_X11
+//             if(d->tabletEventCount % 2 == 0)
+// #endif
+//                 d->canvas->inputManager()->eventFilter(this, event);
+//             return true;
+        default:
+            break;
+    }
+    return QDeclarativeItem::event( event );
 }
 
 void CQPresentationCanvas::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry)
