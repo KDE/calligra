@@ -21,8 +21,10 @@ import org.calligra 1.0
 import "components"
 
 Page {
+    id: base;
     DocumentListModel { id: textDocumentsModel; filter: DocumentListModel.TextDocumentType; }
     DocumentListModel { id: presentationDocumentsModel; filter: DocumentListModel.PresentationType; }
+    property string categoryUIName: (docList.model === textDocumentsModel) ? "text documents" : "presentations"
     Row {
         id: docTypeSelectorRow;
         anchors {
@@ -65,11 +67,11 @@ Page {
         model: textDocumentsModel;
         delegate: documentTile;
     }
-	Label {
-		anchors.centerIn: parent;
-		text: "No documents - please drop some into your Documents folder";
-		visible: docList.count === 0;
-	}
+    Label {
+        anchors.centerIn: parent;
+        text: "No %1 - please drop some into your Documents folder (%2)".arg(base.categoryUIName).arg(docList.model.documentsFolder);
+        visible: docList.count === 0;
+    }
     ScrollDecorator { flickableItem: docList; }
     Component { id: mainPage; MainPage { } }
     Component {
