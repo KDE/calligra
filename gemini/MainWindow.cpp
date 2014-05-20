@@ -160,10 +160,10 @@ public:
 
         touchView->engine()->addImportPath(appdir.canonicalPath() + "/lib/calligra/imports");
         touchView->engine()->addImportPath(appdir.canonicalPath() + "/lib64/calligra/imports");
-        QString mainqml = appdir.canonicalPath() + "/share/apps/calligrawordsgemini/calligrawordsgemini.qml";
+        QString mainqml = appdir.canonicalPath() + "/share/apps/calligragemini/calligragemini.qml";
 #else
         touchView->engine()->addImportPath(KGlobal::dirs()->findDirs("lib", "calligra/imports").value(0));
-        QString mainqml = KGlobal::dirs()->findResource("data", "calligrawordsgemini/calligrawordsgemini.qml");
+        QString mainqml = KGlobal::dirs()->findResource("data", "calligragemini/calligragemini.qml");
 #endif
 
         Q_ASSERT(QFile::exists(mainqml));
@@ -247,8 +247,8 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
 
     qApp->setActiveWindow( this );
 
-    setWindowTitle(i18n("Calligra Words Gemini"));
-    setWindowIcon(KIcon("calligrawords"));//gemini"));
+    setWindowTitle(i18n("Calligra Gemini"));
+    setWindowIcon(KIcon("calligragemini"));//gemini"));
 
     foreach(QString fileName, fileNames) {
         DocumentManager::instance()->recentFileManager()->addRecent( QDir::current().absoluteFilePath( fileName ) );
@@ -277,7 +277,7 @@ void MainWindow::resetWindowTitle()
     QString fileName = url.fileName();
     if(url.protocol() == "temp")
         fileName = i18n("Untitled");
-    setWindowTitle(QString("%1 - %2").arg(fileName).arg(i18n("Calligra Words Gemini")));
+    setWindowTitle(QString("%1 - %2").arg(fileName).arg(i18n("Calligra Gemini")));
 }
 
 void MainWindow::switchDesktopForced()

@@ -56,11 +56,11 @@ int main( int argc, char** argv )
 #endif
 
 
-    KAboutData aboutData("calligrawordsgemini",
+    KAboutData aboutData("calligragemini",
                          "calligrawords",
-                         ki18n("Calligra Words Gemini"),
+                         ki18n("Calligra Gemini"),
                          version.toLatin1(),
-                         ki18n("Calligra Words Gemini: Writing at Home and on the Go"),
+                         ki18n("Calligra Gemini: Writing and Presenting at Home and on the Go"),
                          KAboutData::License_GPL,
                          ki18n("(c) 1999-%1 The Calligra team and KO GmbH.\n").subs(CALLIGRA_YEAR),
                          KLocalizedString(),
@@ -86,8 +86,9 @@ int main( int argc, char** argv )
     }
 
     KApplication app;
-    app.setApplicationName("calligrawordsgemini");
+    app.setApplicationName("calligragemini");
     KIconLoader::global()->addAppDir("calligrawords");
+    KIconLoader::global()->addAppDir("calligrastage");
 
 #ifdef Q_OS_WIN
     QDir appdir(app.applicationDirPath());
