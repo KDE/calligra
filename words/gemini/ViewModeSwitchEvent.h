@@ -33,6 +33,7 @@ struct ViewModeSynchronisationObject {
 
     bool initialized;
 
+    int currentSlide;
     QPoint documentOffset;
     float zoomLevel;
     float rotationAngle;
