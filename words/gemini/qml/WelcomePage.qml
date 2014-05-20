@@ -22,10 +22,46 @@ import "components"
 
 Page {
     DocumentListModel { id: textDocumentsModel; filter: DocumentListModel.TextDocumentType; }
+    DocumentListModel { id: presentationDocumentsModel; filter: DocumentListModel.PresentationType; }
+    Row {
+        id: docTypeSelectorRow;
+        anchors {
+            top: parent.top;
+            left: parent.left;
+            right: parent.right;
+            margins: Constants.DefaultMargin;
+        }
+        height: Constants.GridHeight;
+        spacing: Constants.DefaultMargin;
+        Button {
+            width: parent.width / 2;
+            height: Constants.GridHeight - Constants.DefaultMargin * 2;
+            text: "Text Documents";
+            color: Settings.theme.color("base/base");
+            textColor: Settings.theme.color("base/text");
+            onClicked: docList.model = textDocumentsModel;
+            checked: docList.model === textDocumentsModel;
+        }
+        Button {
+            width: parent.width / 2;
+            height: Constants.GridHeight - Constants.DefaultMargin * 2;
+            text: "Presentations";
+            color: Settings.theme.color("base/base");
+            textColor: Settings.theme.color("base/text");
+            onClicked: docList.model = presentationDocumentsModel;
+            checked: docList.model === presentationDocumentsModel;
+        }
+    }
     ListView {
         id: docList;
-        anchors.fill: parent;
-        anchors.margins: 5;
+        clip: true;
+        anchors {
+            margins: Constants.DefaultMargin;
+            top: docTypeSelectorRow.bottom;
+            left: parent.left;
+            right: parent.right;
+            bottom: parent.bottom;
+        }
         model: textDocumentsModel;
         delegate: documentTile;
     }

@@ -25,26 +25,23 @@ Page {
     property string pageName: "MainPage";
     Connections {
         target: Settings;
-        onCurrentFileChanged: wordsCanvas.source = Settings.currentFile;
-    }
-    Calligra.TextDocumentCanvas {
-        id: wordsCanvas;
-        anchors.fill: parent;
-        onLoadingBegun: baseLoadingDialog.visible = true;
-        onLoadingFinished: {
-            console.debug("doc and part: " + doc() + " " + part());
-            mainWindow.setDocAndPart(doc(), part());
-            baseLoadingDialog.hideMe();
+        onCurrentFileChanged: {
+            if(Settings.currentFileClass === WORDS_MIME_TYPE) {
+                viewLoader.sourceComponent = wordsView;
+            } else if(Settings.currentFileClass === STAGE_MIME_TYPE) {
+                viewLoader.sourceComponent = stageView;
+            } else {
+                console.debug("BANG!");
+            }
+            viewLoader.item.source = Settings.currentFile;
         }
     }
-    Flickable {
-        id: controllerFlickable;
+    Loader {
+        id: viewLoader;
         anchors.fill: parent;
-        Calligra.CanvasControllerItem {
-            canvas: wordsCanvas;
-            flickable: controllerFlickable;
-        }
     }
+    Component { id: stageView; StageDocumentPage {} }
+    Component { id: wordsView; WordsDocumentPage {} }
     Button {
         anchors {
             top: parent.top;
