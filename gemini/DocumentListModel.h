@@ -11,7 +11,8 @@ class SearchThread;
 class DocumentListModel : public QAbstractListModel, public QDeclarativeParserStatus
 {
     Q_OBJECT
-    Q_PROPERTY(DocumentType filter READ filter WRITE setFilter)
+    Q_PROPERTY(DocumentType filter READ filter WRITE setFilter NOTIFY filterChanged)
+    Q_PROPERTY(QString documentsFolder READ documentsFolder CONSTANT)
     Q_ENUMS(GroupBy)
     Q_ENUMS(Filter)
     Q_ENUMS(DocumentType)
@@ -66,8 +67,12 @@ public:
     void componentComplete();
 
     DocumentType filter();
-    
+    QString documentsFolder() const;
+
     static QString prettyTime(QDateTime theTime);
+
+signals:
+    void filterChanged();
 
 public slots:
     void startSearch();

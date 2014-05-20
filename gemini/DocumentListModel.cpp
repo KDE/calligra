@@ -238,10 +238,16 @@ DocumentListModel::DocumentType DocumentListModel::filter()
     return m_filter;
 }
 
+QString DocumentListModel::documentsFolder() const
+{
+    return QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation);
+}
+
 void DocumentListModel::setFilter(DocumentListModel::DocumentType newFilter)
 {
     m_filter = newFilter;
     relayout();
+    emit filterChanged();
 }
 
 void DocumentListModel::componentComplete()
