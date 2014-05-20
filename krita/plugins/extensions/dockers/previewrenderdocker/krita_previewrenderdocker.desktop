@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=Preview Render Docker
-Name[en_GB]=Preset Docker
+Name[en_GB]=Preview Render Docker
 Comment=Docker that shows a texture on your 3D model
 X-KDE-ServiceTypes=Krita/Dock
 Type=Service

@@ -88,7 +88,6 @@ PreviewRenderDockerPlugin::PreviewRenderDockerPlugin(QObject *parent, const QVar
 
 PreviewRenderDockerPlugin::~PreviewRenderDockerPlugin()
 {
-    m_view = 0;
 }
 
 #include "previewrenderdocker.moc"

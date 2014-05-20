@@ -32,8 +32,6 @@ class PreviewRenderDockerPlugin : public QObject
     public:
         PreviewRenderDockerPlugin(QObject *parent, const QVariantList &);
         virtual ~PreviewRenderDockerPlugin();
-    private:
-        KisView2* m_view;
 };
 
 #endif
