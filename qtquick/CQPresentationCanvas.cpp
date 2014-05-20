@@ -141,6 +141,11 @@ int CQPresentationCanvas::currentSlide() const
     return d->currentSlide;
 }
 
+int CQPresentationCanvas::slideCount() const
+{
+    return d->document->pageCount();
+}
+
 QObjectList CQPresentationCanvas::linkTargets() const
 {
     return d->linkTargets;

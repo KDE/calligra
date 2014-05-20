@@ -40,6 +40,7 @@ public:
     virtual ~CQPresentationCanvas();
 
     int currentSlide() const;
+    Q_INVOKABLE int slideCount() const;
     KPrDocument* document() const;
     Q_INVOKABLE QObject* doc() const;
     Q_INVOKABLE QObject* part() const;
