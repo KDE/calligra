@@ -17,15 +17,22 @@
  */
 
 #include "DocumentManager.h"
-#include "TouchPart.h"
 #include "Settings.h"
 #include "RecentFileManager.h"
 #include "ProgressProxy.h"
-#include <KWDocument.h>
-#include <libs/pigment/KoColor.h>
 
-#include <KoColorSpaceRegistry.h>
+#include <KWPart.h>
 #include <KoDocument.h>
+#include <KoDocumentEntry.h>
+
+#include <libs/pigment/KoColor.h>
+#include <KoColorSpaceRegistry.h>
+
+#include <stage/part/KPrDocument.h>
+#include <part/KWDocument.h>
+
+#include <KMimeType>
+
 #include <qtquick/CQTextDocumentCanvas.h>
 
 class DocumentManager::Private
@@ -42,7 +49,7 @@ public:
     { }
 
     ProgressProxy* proxy;
-    QPointer<KWDocument> document;
+    QPointer<KoDocument> document;
     QPointer<KoPart> part;
     Settings* settingsManager;
     RecentFileManager* recentFileManager;
@@ -56,12 +63,12 @@ public:
 
 DocumentManager *DocumentManager::sm_instance = 0;
 
-KWDocument* DocumentManager::document() const
+KoDocument* DocumentManager::document() const
 {
     return d->document;
 }
 
-KoPart* DocumentManager::part()
+KoPart* DocumentManager::part(const QString& type)
 {
     if (!d->part)
         d->part = new KWPart(this);
@@ -83,7 +90,7 @@ void DocumentManager::setSettingsManager(Settings* newManager)
     d->settingsManager = newManager;
 }
 
-void DocumentManager::setDocAndPart(KWDocument* document, KoPart* part)
+void DocumentManager::setDocAndPart(KoDocument* document, KoPart* part)
 {
     d->document = document;
     d->part = part;
@@ -118,7 +125,15 @@ void DocumentManager::newDocument(const QVariantMap& options)
 
 void DocumentManager::delayedNewDocument()
 {
-    d->document = new KWDocument(part());
+    QString filetype;
+    if(d->newDocOptions.value("type", WORDS_MIME_TYPE).toString() == WORDS_MIME_TYPE) {
+        filetype = "odt";
+        d->document = new KWDocument(part(WORDS_MIME_TYPE));
+    }
+    else {
+        filetype = "odp";
+        d->document = new KPrDocument(part(STAGE_MIME_TYPE));
+    }
     d->document->setProgressProxy(d->proxy);
     d->document->setSaveInBatchMode(true);
     part()->setDocument(d->document);
@@ -155,7 +170,7 @@ void DocumentManager::delayedNewDocument()
         background.setAlphaF(d->newDocOptions.value("backgroundOpacity", 1.0f).toFloat());
         KoColor bg(background, profile);
 
-        d->document->setUrl(KUrl("Untitled.kra"));
+        d->document->setUrl(KUrl(QString("Untitled.").append(filetype)));
     }
 
     d->temporaryFile = true;
@@ -173,19 +188,24 @@ void DocumentManager::openDocument(const QString& document, bool import)
 
 void DocumentManager::delayedOpenDocument()
 {
-    d->document = new KWDocument(part());
-    d->document->setProgressProxy(d->proxy);
-    d->document->setSaveInBatchMode(true);
-    part()->setDocument(d->document);
+    d->document = 0;
+    KMimeType::Ptr mimeType = KMimeType::findByUrl(d->openDocumentFilename);
+    KoDocumentEntry documentEntry = KoDocumentEntry::queryByMimeType(mimeType->name());
+    d->part = documentEntry.createKoPart();
+    if (d->part) {
+        d->document = d->part->document();
+        d->document->setProgressProxy(d->proxy);
+        d->document->setSaveInBatchMode(true);
 
-    d->document->setModified(false);
-    if (d->importingDocument)
-        d->document->importDocument(QUrl::fromLocalFile(d->openDocumentFilename));
-    else
-        d->document->openUrl(QUrl::fromLocalFile(d->openDocumentFilename));
-    d->recentFileManager->addRecent(d->openDocumentFilename);
+        d->document->setModified(false);
+        if (d->importingDocument)
+            d->document->importDocument(QUrl::fromLocalFile(d->openDocumentFilename));
+        else
+            d->document->openUrl(QUrl::fromLocalFile(d->openDocumentFilename));
+        d->recentFileManager->addRecent(d->openDocumentFilename);
 
-    d->temporaryFile = false;
+        d->temporaryFile = false;
+    }
 
     emit documentChanged();
 }
