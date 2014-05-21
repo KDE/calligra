@@ -47,6 +47,7 @@
 #include <ktoolbar.h>
 #include <kmessagebox.h>
 #include <kmenubar.h>
+#include <kxmlguifactory.h>
 
 #include <KoCanvasBase.h>
 #include <KoMainWindow.h>
@@ -515,6 +516,13 @@ void MainWindow::documentChanged()
     qApp->processEvents();
     d->desktopKisView = qobject_cast<KisView2*>(d->desktopView->rootView());
     d->desktopKisView->setQtMainWindow(d->desktopView);
+
+    // Define new actions here
+
+    KXMLGUIFactory* factory = d->desktopKisView->factory();
+    factory->removeClient(d->desktopKisView);
+    factory->addClient(d->desktopKisView);
+
     connect(d->desktopKisView, SIGNAL(sigLoadingFinished()), d->centerer, SLOT(start()));
     connect(d->desktopKisView, SIGNAL(sigSavingFinished()), this, SLOT(resetWindowTitle()));
     connect(d->desktopKisView->canvasBase()->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
