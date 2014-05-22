@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2002, 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2002, 2003 Joseph Wenninger <jowenn@kde.org>
-   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,6 +23,7 @@
 #include <kexi_version.h>
 
 #include <calligraversion.h> //only for CALLIGRA_VERSION_STRING
+#include <calligragitversion.h>
 #include <KoIcon.h>
 #include <klocale.h>
 
@@ -30,11 +31,18 @@ static const char description[] =
     I18N_NOOP("Database creation for everyone\n\n"
               "This application is a part of the Calligra Suite.");
 
+static const char *FULL_VERSION
+#ifdef CALLIGRA_GIT_SHA1_STRING
+    = KEXI_VERSION_STRING " (git " CALLIGRA_GIT_SHA1_STRING " " CALLIGRA_GIT_BRANCH_STRING ")";
+#else
+    = KEXI_VERSION_STRING;
+#endif
+
 KexiAboutData::KexiAboutData()
  : KAboutData(
         "kexi", 0,
         ki18n(KEXI_APP_NAME),
-        KEXI_VERSION_STRING,
+        FULL_VERSION,
         ki18n(description),
         KAboutData::License_LGPL_V2,
         ki18n("© 2002-%1, The Kexi Team").subs(CALLIGRA_YEAR),
