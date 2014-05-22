@@ -96,7 +96,6 @@ public slots:
     void setDataSourcePartClass(const QString &partClass);
 
     virtual void setReadOnly(bool readOnly);
-//Qt4  virtual void setText( const QString & text, const QString & context );
 
     //! Reimplemented, so "undo" means the same as "cancelEditor" action
 //! @todo enable "real" undo internally so user can use ctrl+z while editing

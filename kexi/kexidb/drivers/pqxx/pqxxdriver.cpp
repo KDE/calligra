@@ -51,8 +51,8 @@ pqxxSqlDriver::pqxxSqlDriver(QObject *parent, const QVariantList &args)
     initDriverSpecificKeywords(keywords);
 
     //predefined properties
-    d->properties["client_library_version"] = "";//TODO
-    d->properties["default_server_encoding"] = ""; //TODO
+    d->properties["client_library_version"] = ""; //!< @todo
+    d->properties["default_server_encoding"] = ""; //!< @todo
 
     d->typeNames[Field::Byte] = "SMALLINT";
     d->typeNames[Field::ShortInteger] = "SMALLINT";

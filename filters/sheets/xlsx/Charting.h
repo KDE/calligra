@@ -420,7 +420,7 @@ namespace Charting
     public:
         QString m_sheetName;
         
-        /// If true then the chart is a 3d chart else teh chart is 2d.
+        /// If true then the chart is a 3d chart else the chart is 2d.
         bool m_is3d;
         /// Specifies a counter clockwise rotation of a polar coordinate in a circle, ring or polar chart.
         int m_angleOffset;

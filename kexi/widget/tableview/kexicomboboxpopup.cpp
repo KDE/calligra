@@ -96,7 +96,7 @@ public:
     }
 
     KexiComboBoxPopup_KexiTableView *tv;
-    KexiDB::Field *int_f; //TODO: remove this -temporary
+    KexiDB::Field *int_f; //!< @todo remove this -temporary
     KexiDB::QuerySchema* privateQuery;
     int max_rows;
 };
@@ -253,7 +253,7 @@ void KexiComboBoxPopup::setData(KexiDB::TableViewColumn *column, KexiDB::Field *
                 d->privateQuery->setColumnVisible(i, false);
 // </remove later>
 #endif
-//todo...
+//! @todo ...
             kDebug() << "--- Private query: ";
             d->privateQuery->debug();
             cursor = field->table()->connection()->prepareQuery(*d->privateQuery);

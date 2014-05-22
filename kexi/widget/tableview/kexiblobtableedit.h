@@ -91,12 +91,12 @@ protected:
     //! initializes this editor with \a add value
     virtual void setValueInternal(const QVariant& add, bool removeOld);
 
-    //todo QString openWithDlg(const QString& file);
-    //todo void execute(const QString& app, const QString& file);
+    //! @todo QString openWithDlg(const QString& file);
+    //! @todo void execute(const QString& app, const QString& file);
 
-//todo  QString openWithDlg(const QString& file);
+    //! @todo QString openWithDlg(const QString& file);
 
-//todo  void execute(const QString& app, const QString& file);
+    //! @todo void execute(const QString& app, const QString& file);
 
     //! @internal
     void updateFocus(const QRect& r);
@@ -110,9 +110,9 @@ protected:
 
     class Private;
     Private * const d;
-//todo  KTemporaryFile* m_tempFile;
-//todo  KProcess* m_proc;
-//todo  QTextEdit *m_content;
+    //! @todo  KTemporaryFile* m_tempFile;
+    //! @todo  KProcess* m_proc;
+    //! @todo  QTextEdit *m_content;
 };
 
 KEXI_DECLARE_CELLEDITOR_FACTORY_ITEM(KexiBlobEditorFactoryItem)
@@ -159,9 +159,6 @@ protected:
 
     void showHintButton();
     void init();
-
-    //! We've no editor widget that would store current value, so we do this here
-    //QVariant m_currentValue;
 
     class Private;
     Private * const d;

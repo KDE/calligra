@@ -90,11 +90,6 @@ public slots:
     void slotGoToNextRow();
     void slotGoToLastRow();
     void slotGoToNewRow();
-    /*  void editFind();
-        void slotFind();
-        void editFindNext();
-        void editFindPrevious();
-        void editReplace();*/
 
     /*! @return true if data editing is in progress.
      * Implemented for KexiView. */
@@ -111,7 +106,6 @@ public slots:
     virtual tristate cancelDataChanges();
 
 protected slots:
-//  void slotCellSelected(const QVariant& v); //!< @internal
     void slotCellSelected(int col, int row);
     void reloadActions();
     void slotUpdateRowActions(int row);

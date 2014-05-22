@@ -19,8 +19,8 @@
 
 #include "KexiCategorizedView.h"
  
-KexiCategoryDrawer::KexiCategoryDrawer()
-    : KexiCategoryDrawerBase(0)
+KexiCategoryDrawer::KexiCategoryDrawer(KCategorizedView *view)
+    : KexiCategoryDrawerBase(view)
 {
 }
 
@@ -53,7 +53,7 @@ KexiCategorizedView::KexiCategorizedView(QWidget *parent)
     setMouseTracking(true);
     setViewMode(QListView::IconMode);
     setResizeMode(QListView::Adjust);
-    KexiCategoryDrawer* categoryDrawer = new KexiCategoryDrawer;
+    KexiCategoryDrawer* categoryDrawer = new KexiCategoryDrawer(this);
     setCategoryDrawer(categoryDrawer);
 }
 

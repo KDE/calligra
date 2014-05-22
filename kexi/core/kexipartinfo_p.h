@@ -61,9 +61,6 @@ public:
     @see KexiPart::Info::supportedUserViewModes() */
     Kexi::ViewModes supportedUserViewModes;
     
-#if 0 //moved as internal to KexiProject
-    int projectPartID;
-#endif
     bool broken;
     bool isVisibleInNavigator;
     bool idStoredInPartDatabase;

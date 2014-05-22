@@ -274,8 +274,7 @@ int KexiMainWindow::create(int argc, char *argv[], const KAboutData &aboutData)
         }
         return (~res) ? 0 : 1;
     }
-
-    kDebug() << "startupActions OK";
+    //kDebug() << "startupActions OK";
 
     /* Exit requested, e.g. after database removing. */
     if (Kexi::startupHandler().action() == KexiStartupData::Exit) {
@@ -329,7 +328,7 @@ KexiMainWindow::KexiMainWindow(QWidget *parent)
     kexiTester() << KexiTestObject(this);
 
     if (d->userMode)
-        kDebug() << "KexiMainWindow::KexiMainWindow(): starting up in the User Mode";
+        kDebug() << "starting up in the User Mode";
 
     setAsDefaultHost(); //this is default host now.
     KIconLoader *globalIconLoader = KIconLoader::global();
@@ -1115,7 +1114,7 @@ void KexiMainWindow::invalidateActions()
 
 void KexiMainWindow::invalidateSharedActions(QObject *o)
 {
-    //TODO: enabling is more complex...
+    //! @todo enabling is more complex...
     /* d->action_edit_cut->setEnabled(true);
       d->action_edit_copy->setEnabled(true);
       d->action_edit_paste->setEnabled(true);*/
@@ -1539,7 +1538,7 @@ tristate KexiMainWindow::closeProject()
 
 #ifndef KEXI_NO_PENDING_DIALOGS
     if (d->pendingWindowsExist()) {
-        kDebug() << "KexiMainWindow::closeProject() pendingWindowsExist...";
+        kDebug() << "pendingWindowsExist...";
         d->actionToExecuteWhenPendingJobsAreFinished = Private::CloseProjectAction;
         return cancelled;
     }
@@ -1924,7 +1923,7 @@ void KexiMainWindow::slotPartLoaded(KexiPart::Part* p)
 {
     if (!p)
         return;
-    p->createGUIClients();//this);
+    p->createGUIClients();
 }
 
 void KexiMainWindow::updateAppCaption()
@@ -2156,7 +2155,7 @@ KexiMainWindow::activateWindow(int id)
 bool
 KexiMainWindow::activateWindow(KexiWindow& window)
 {
-    kDebug() << "KexiMainWindow::activateWindow(KexiWindow&)";
+    kDebug();
 
     d->focus_before_popup = &window;
     d->mainWidget->tabWidget()->setCurrentWidget(window.parentWidget()/*container*/);
@@ -2195,7 +2194,7 @@ KexiMainWindow::slotConfigureKeys()
 void
 KexiMainWindow::slotConfigureToolbars()
 {
-    KEditToolBar edit(actionCollection());//factory());
+    KEditToolBar edit(actionCollection());
     (void) edit.exec();
 }
 
@@ -2289,7 +2288,7 @@ tristate KexiMainWindow::openProject(const QString& aFileName,
     if (!fileNameForConnectionData.isEmpty()) {
         cdata = Kexi::connset().connectionDataForFileName(fileNameForConnectionData);
         if (!cdata) {
-            kWarning() << "KexiMainWindow::openProject() cdata?";
+            kWarning() << "cdata?";
             return false;
         }
     }
@@ -2325,7 +2324,7 @@ tristate KexiMainWindow::openProject(const QString& aFileName,
         }
     } else {
         if (aFileName.isEmpty()) {
-            kWarning() << "KexiMainWindow::openProject(): aFileName.isEmpty()";
+            kWarning() << "aFileName.isEmpty()";
             return false;
         }
         //file-based project
@@ -2401,7 +2400,7 @@ tristate KexiMainWindow::openProjectInExternalKexiInstance(const QString& aFileN
         }
     }
     if (fileName.isEmpty()) {
-        kWarning() << "KexiMainWindow::openProjectInExternalKexiInstance() fileName?";
+        kWarning() << "fileName?";
         return false;
     }
 //! @todo use KRun
@@ -3519,7 +3518,7 @@ KexiMainWindow::setupUserMode(KexiProjectData *projectData)
     QString startupPart;
     QString startupItem;
     while (c->moveNext()) {
-        kDebug() << "KexiMainWinImpl::setupUserMode(): property: [" << c->value(1).toString() << "] " << c->value(2).toString();
+        kDebug() << "property: [" << c->value(1).toString() << "] " << c->value(2).toString();
         if (c->value(1).toString() == "startup-part")
             startupPart = c->value(2).toString();
         else if (c->value(1).toString() == "startup-item")
@@ -3529,8 +3528,8 @@ KexiMainWindow::setupUserMode(KexiProjectData *projectData)
     }
     d->prj->dbConnection()->deleteCursor(c);
 
-    kDebug() << "KexiMainWinImpl::setupUserMode(): part: " << startupPart;
-    kDebug() << "KexiMainWinImpl::setupUserMode(): item: " << startupItem;
+    kDebug() << "part:" << startupPart;
+    kDebug() << "item:" << startupItem;
 
     setupActions();
     setupUserActions();
@@ -3730,8 +3729,7 @@ tristate KexiMainWindow::executeCustomActionForObject(KexiPart::Item* item,
     else if (actionName == "copyToClipboardAsCSV")
         return copyItemToClipboardAsDataTable(item);
 
-    kWarning() << "KexiMainWindow::executeCustomActionForObject(): no such action: "
-               << actionName;
+    kWarning() << "no such action:" << actionName;
     return false;
 }
 

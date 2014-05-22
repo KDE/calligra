@@ -312,16 +312,20 @@ bool KexiWindow::close(bool force)
     //let any view send "closing" signal
     QList<KexiView *> list(findChildren<KexiView*>());
     foreach(KexiView * view, list) {
-        bool cancel = false;
-        emit view->closing(&cancel);
-        if (!force && cancel) {
-            return false;
+        if (view->parent() == d->stack) {
+            bool cancel = false;
+            emit view->closing(&cancel);
+            if (!force && cancel) {
+                     return false;
+            }
         }
     }
     emit closing();
     foreach(KexiView * view, list) {
-        removeView(view);
-        delete view;
+        if (view->parent() == d->stack) {
+            removeView(view);
+            delete view;
+        }
     }
     return true;
 }
@@ -430,7 +434,7 @@ tristate KexiWindow::switchToViewMode(
     if (d->currentViewMode == newViewMode)
         return true;
     if (!supportsViewMode(newViewMode)) {
-        kWarning() << "! KexiWindow::supportsViewMode(" << Kexi::nameForViewMode(newViewMode) << ")";
+        kWarning() << "!" << Kexi::nameForViewMode(newViewMode);
         return false;
     }
 
@@ -510,7 +514,7 @@ tristate KexiWindow::switchToViewMode(
     }
     res = newView->beforeSwitchTo(newViewMode, dontStore);
     proposeOpeningInTextViewModeBecauseOfProblems
-    = data()->proposeOpeningInTextViewModeBecauseOfProblems;
+        = data()->proposeOpeningInTextViewModeBecauseOfProblems;
     if (!res) {
         removeView(newViewMode);
         delete newView;

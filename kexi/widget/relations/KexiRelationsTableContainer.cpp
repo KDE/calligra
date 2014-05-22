@@ -70,11 +70,6 @@ KexiRelationsTableContainer::KexiRelationsTableContainer(
     setVisible(false); // scroll area will show it later
     setAutoFillBackground(true);
     setBackgroundRole(QPalette::Window);
-
-// setFixedSize(100, 150);
-//js: resize(100, 150);
-    //setMouseTracking(true);
-
     setFrameStyle(QFrame::WinPanel | QFrame::Raised);
 
     QVBoxLayout *lyr = new QVBoxLayout(this);
@@ -91,19 +86,17 @@ KexiRelationsTableContainer::KexiRelationsTableContainer(
 
     d->fieldList = new KexiRelationsTableFieldList(schema, d->scrollArea, this);
     d->fieldList->setObjectName("KexiRelationsTableFieldList");
-    //d->tableHeader->setFocusProxy( d->fieldList );
     d->fieldList->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
     d->fieldList->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     d->fieldList->setMaximumSize(d->fieldList->sizeHint());
     d->fieldList->setContextMenuPolicy(Qt::CustomContextMenu);
 
-// d->fieldList->resize( d->fieldList->sizeHint() );
     lyr->addWidget(d->fieldList);
     connect(d->fieldList, SIGNAL(tableScrolling()), this, SLOT(moved()));
     
     connect(d->fieldList, SIGNAL(customContextMenuRequested(QPoint)), 
-	    this, SLOT(slotContextMenu(QPoint)));
-	    
+            this, SLOT(slotContextMenu(QPoint)));
+
     connect(d->fieldList, SIGNAL(doubleClicked(QModelIndex)),
             this, SLOT(slotFieldsDoubleClicked(QModelIndex)));
 }
@@ -133,28 +126,10 @@ void KexiRelationsTableContainer::moved()
 int KexiRelationsTableContainer::globalY(const QString &field)
 {
 // kDebug();
-// QPoint o = mapFromGlobal(QPoint(0, (d->fieldList->globalY(field))/*+d->parent->contentsY()*/));
-
     QPoint o(0, d->fieldList->globalY(field) + d->scrollArea->verticalScrollBar()->value()); //d->scrollArea->contentsY());
 // kDebug() << "db2";
-//Qt 4 return d->scrollArea->viewport()->mapFromGlobal(o).y();
     return d->scrollArea->widget()->mapFromGlobal(o).y();
 }
-
-#if 0//js
-QSize KexiRelationsTableContainer::sizeHint()
-{
-#ifdef Q_WS_WIN
-    QSize s = d->fieldList->sizeHint()
-              + QSize(2 * 5 , d->tableHeader->height() + 2 * 5);
-#else
-    QSize s = d->fieldList->sizeHint();
-    s.setWidth(s.width() + 4);
-    s.setHeight(d->tableHeader->height() + s.height());
-#endif
-    return s;
-}
-#endif
 
 void KexiRelationsTableContainer::focusInEvent(QFocusEvent* event)
 {
@@ -164,7 +139,7 @@ void KexiRelationsTableContainer::focusInEvent(QFocusEvent* event)
 
 void KexiRelationsTableContainer::setFocus()
 {
-    kDebug() << "SET FOCUS";
+    //kDebug() << "SET FOCUS";
     //select 1st:
 //!TODO
 #if 0
@@ -189,7 +164,7 @@ void KexiRelationsTableContainer::focusOutEvent(QFocusEvent* event)
 
 void KexiRelationsTableContainer::unsetFocus()
 {
-    kDebug() << "UNSET FOCUS";
+    //kDebug() << "UNSET FOCUS";
     d->tableHeader->unsetFocus();
     d->fieldList->clearSelection();
 

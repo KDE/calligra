@@ -97,7 +97,7 @@ protected:
 
     //! sets \a value for the line edit without setting a flag (m_userEnteredValue) that indicates that
     //! the text has been entered by hand (by a user)
-    void setValueOrTextInInternalEditor(const QVariant& value); //QString& text);
+    void setValueOrTextInInternalEditor(const QVariant& value);
 
     //! \return lookup field schema for this combo box, if present and if is valid (i.e. has defined row source)
     KexiDB::LookupFieldSchema* lookupFieldSchema() const;

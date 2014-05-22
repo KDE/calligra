@@ -295,8 +295,8 @@ KexiWindow* Part::openInstance(QWidget* parent, KexiPart::Item &item, Kexi::View
             delete window->schemaData(); //old one
             window->close();
             delete window;
-            kWarning() << "Part::openInstance() !window, cannot switch to a view mode " <<
-            Kexi::nameForViewMode(viewMode);
+            kWarning() << "!window, cannot switch to a view mode" <<
+                Kexi::nameForViewMode(viewMode);
             return 0;
         }
         //the window has an error info
@@ -309,8 +309,8 @@ KexiWindow* Part::openInstance(QWidget* parent, KexiPart::Item &item, Kexi::View
         d->status = window->status();
         window->close();
         delete window;
-        kWarning() << "Part::openInstance() !window, switching to view mode failed, " <<
-        Kexi::nameForViewMode(viewMode);
+        kWarning() << "!window, switching to view mode failed, " <<
+            Kexi::nameForViewMode(viewMode);
         return 0;
     }
     window->registerWindow(); //ok?

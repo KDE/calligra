@@ -122,7 +122,6 @@ void KexiRelationDesignTool::changeUrlPressed()
 
     if (!m_dbDialog) {
         m_dbDialog = new KexiStartupDialog(KexiStartupDialog::OpenExisting, 0, kcs, kps);
-        //connect( m_dbDialog, SIGNAL(okClicked()), this, SLOT(openDatabase()) );
     }
 
     int res = m_dbDialog->exec();

@@ -279,9 +279,9 @@ KexiSearchAndReplaceViewInterface::Options KexiFindDialog::options() const
     else
         options.columnNumber = m_lookIn->currentIndex()  - 1/*"(All fields)"*/ - 1/*"(Current field)"*/;
     options.textMatching
-    = (KexiSearchAndReplaceViewInterface::Options::TextMatching)m_match->currentIndex();
+        = (KexiSearchAndReplaceViewInterface::Options::TextMatching)m_match->currentIndex();
     options.searchDirection
-    = (KexiSearchAndReplaceViewInterface::Options::SearchDirection)m_search->currentIndex();
+        = (KexiSearchAndReplaceViewInterface::Options::SearchDirection)m_search->currentIndex();
     options.caseSensitive = m_caseSensitive->isChecked();
     options.wholeWordsOnly = m_wholeWords->isChecked();
     options.promptOnReplace = m_promptOnReplace->isChecked();

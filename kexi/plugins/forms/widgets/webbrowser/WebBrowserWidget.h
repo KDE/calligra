@@ -52,7 +52,6 @@ class WebBrowserWidget : public QWidget,
     Q_PROPERTY(QString title READ title)
     Q_PROPERTY(QIcon icon READ icon)
     Q_PROPERTY(bool modified READ modified)
-    //Q_PROPERTY(QString selectedText READ selectedText)                                                 //Do
     Q_PROPERTY(qreal textScale READ textScale WRITE setTextScale)
      
 public:
@@ -106,7 +105,7 @@ public:
     bool isReadOnly() const;
     virtual void setReadOnly(bool readOnly);  
     virtual void setInvalidState(const QString& displayText);
- 
+
 public slots:
     void setDataSource(const QString &ds);
     void setDataSourcePartClass(const QString &ds);

@@ -27,7 +27,7 @@ int main(int argc, char **argv)
     QByteArray drv_name(argv[1]);
     QByteArray db_name = QString(argv[2]).toLower().toLatin1();
 
-    KexiDB::DriverManager manager; // = KexiDB::DriverManager::self();
+    KexiDB::DriverManager manager;
     QStringList names = manager.driverNames();
     kDebug() << "DRIVERS: ";
     for (QStringList::ConstIterator it = names.constBegin(); it != names.constEnd() ; ++it)

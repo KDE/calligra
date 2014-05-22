@@ -29,7 +29,8 @@
 
 //! @todo replace QTabWidget by KTabWidget after the bug with & is fixed:
 typedef QTabWidget TabWidgetBase;
-//#define USE_KTabWidget //todo: uncomment
+//! @todo uncomment
+//!//#define USE_KTabWidget
 
 class QMimeData;
 class QDomDocument;

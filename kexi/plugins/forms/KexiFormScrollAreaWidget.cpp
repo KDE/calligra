@@ -174,5 +174,4 @@ void KexiFormScrollAreaWidget::mouseReleaseEvent(QMouseEvent *e)
 void KexiFormScrollAreaWidget::leaveEvent(QEvent *e)
 {
     QWidget::leaveEvent(e);
-    //widget()->update(); //update form elements on too fast mouse move
 }

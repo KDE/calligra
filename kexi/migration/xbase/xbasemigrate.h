@@ -54,11 +54,8 @@ class xBaseMigrate : public KexiMigrate, protected xbXBase
     virtual bool drv_copyTable(const QString& srcTable, 
       KexiDB::Connection *destConn, KexiDB::TableSchema* dstTable);
 
-//TODO: move this somewhere to low level class (MIGRATION?)
-//			virtual bool drv_getTablesList( QStringList &list );
-//TODO: move this somewhere to low level class (MIGRATION?)
-//			virtual bool drv_containsTable( const QString &tableName );
-
+//! @todo move this somewhere to low level class (MIGRATION?) virtual bool drv_getTablesList( QStringList &list );
+//! @todo move this somewhere to low level class (MIGRATION?) virtual bool drv_containsTable( const QString &tableName );
 
   private:
     KexiDB::Field::Type type(char xBaseColumnType);
@@ -70,9 +67,8 @@ class xBaseMigrate : public KexiMigrate, protected xbXBase
     QStringList getIndexFileNames(const QString& tableName, const QString& fieldName);
 
     //! Mapping tableNames to actual absoolute file name paths
-    //  XBase only deals with absolute names ( with the .dbf extension ) which is pretty cumbersome
+    //! XBase only deals with absolute names ( with the .dbf extension ) which is pretty cumbersome
     QHash<QString,QString> m_tableNamePathMap;
-    
 };
 }
 

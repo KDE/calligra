@@ -75,7 +75,8 @@ namespace KFormDesigner
 class DesignModeStyle : public KexiUtils::StyleProxy
 {
 public:
-    DesignModeStyle(QStyle* parentStyle) : KexiUtils::StyleProxy(parentStyle)
+    explicit DesignModeStyle(QStyle* parentStyle, QObject *parent = 0)
+        : KexiUtils::StyleProxy(parentStyle, parent)
     {
     }
 
@@ -382,7 +383,6 @@ FormPrivate::~FormPrivate()
     delete connBuffer;
     connBuffer = 0;
 #endif
-    delete designModeStyle;
 }
 
 void FormPrivate::enableAction(const char *name, bool enable)
@@ -749,7 +749,7 @@ void Form::createToplevel(QWidget *container, FormWidget *formWidget, const QByt
     delete d->designModeStyle;
     d->designModeStyle = 0;
     if (d->mode == DesignMode) {
-        d->designModeStyle = new DesignModeStyle(d->topTree->widget()->style());
+        d->designModeStyle = new DesignModeStyle(d->topTree->widget()->style(), this);
         d->topTree->widget()->setStyle(d->designModeStyle);
     }
 }

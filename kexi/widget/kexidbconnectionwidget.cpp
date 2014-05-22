@@ -318,20 +318,7 @@ KexiProjectData KexiDBConnectionTabWidget::currentProjectData()
         data.setDescription(detailsWidget->descriptionEdit->toPlainText());
         data.setDatabaseName(mainWidget->nameCombo->currentText());
     }
-// }
-    /* else {
-        data.setCaption( QString() );
-        data.connectionData()->connName = config.readEntry("caption");
-        data.setDescription( QString() );
-        data.connectionData()->description = config.readEntry("comment");
-        data.setDatabaseName( QString() );
-      }*/
     data.connectionData()->driverName = mainWidget->driversCombo()->selectedDriverName();
-
-    /* if (data.connectionData()->driverName.isEmpty()) {
-        //ERR: "No valid "engine" field specified for %1 section" group
-        return false;
-      }*/
     data.connectionData()->hostName =
         (mainWidget->remotehostRBtn->isChecked()/*remote*/)
         ? mainWidget->hostEdit->text() : QString();

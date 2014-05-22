@@ -20,7 +20,7 @@
 
 #include <QLabel>
 #include <QIntValidator>
-#include <QScrollArea>
+#include <QAbstractScrollArea>
 #include <Q3ScrollView> //tmp
 #include <QScrollBar>
 #include <QPixmap>
@@ -66,9 +66,8 @@ public:
     KLineEdit *navRecordNumber;
     QIntValidator *navRecordNumberValidator;
     KLineEdit *navRecordCount; //!< readonly counter
-//    QLabel *navRecordCount; //!< readonly counter
     uint nav1DigitWidth;
-    QScrollArea *view;
+    QAbstractScrollArea *view;
 
     QLabel *editingIndicatorLabel;
     bool editingIndicatorEnabled;
@@ -78,7 +77,7 @@ public:
 
 //--------------------------------------------------
 
-KexiRecordNavigator::KexiRecordNavigator(QWidget *parent, QScrollArea* parentView)
+KexiRecordNavigator::KexiRecordNavigator(QWidget *parent, QAbstractScrollArea* parentView)
         : QWidget(parent)
         , d(new Private)
 {
@@ -88,7 +87,6 @@ KexiRecordNavigator::KexiRecordNavigator(QWidget *parent, QScrollArea* parentVie
     setFocusPolicy(Qt::NoFocus);
     setParentView(parentView);
     d->lyr = new QHBoxLayout(this);
-//    const bool winStyle = style()->objectName().toLower() == "windows"; // used to fix appearance of the number field
     d->lyr->setContentsMargins(0, /*winStyle ? 1 :*/ 0, 0, 0);
     d->lyr->setSpacing(2);
 
@@ -109,8 +107,6 @@ KexiRecordNavigator::KexiRecordNavigator(QWidget *parent, QScrollArea* parentVie
     d->navRecordNumber = new KLineEdit(this);
     d->lyr->addWidget(d->navRecordNumber, 0, Qt::AlignVCenter);
     KexiUtils::WidgetMargins margins;
-//    margins.top = winStyle ? 1 : 0;
-//    margins.bottom = winStyle ? 1 : 0;
     margins.copyToWidget(d->navRecordNumber);
     d->navRecordNumber->setFrame(false);
     if (parentView) {
@@ -137,11 +133,9 @@ KexiRecordNavigator::KexiRecordNavigator(QWidget *parent, QScrollArea* parentVie
 
     d->navRecordCount = new KLineEdit(this);
     d->lyr->addWidget(d->navRecordCount, 0, Qt::AlignVCenter);
-//    d->navRecordCount->setTextInteractionFlags(Qt::TextSelectableByMouse);
     d->navRecordCount->setFrame(false);
     d->navRecordCount->setReadOnly(true);
     QPalette navRecordCountPalette(d->navRecordCount->palette());
-//    navRecordCountPalette.setBrush( QPalette::Base, navRecordCountPalette.brush(QPalette::Window) );
     navRecordCountPalette.setBrush( QPalette::Base, QBrush(Qt::transparent) );
     d->navRecordCount->setPalette(navRecordCountPalette);
     if (parentView) {
@@ -332,7 +326,7 @@ uint KexiRecordNavigator::recordCount() const
     return r;
 }
 
-void KexiRecordNavigator::setParentView(QScrollArea *view)
+void KexiRecordNavigator::setParentView(QAbstractScrollArea *view)
 {
     d->view = view;
 }
@@ -479,7 +473,6 @@ void KexiRecordNavigator::slotNewButtonClicked()
         d->handler->addNewRecordRequested();
 }
 
-
 void KexiRecordNavigator::setRecordHandler(KexiRecordNavigatorHandler *handler)
 {
     d->handler = handler;
@@ -546,6 +539,16 @@ void KexiRecordNavigator::paintEvent(QPaintEvent* pe)
     option.rect = QRect(option.rect.left() - 5, option.rect.top(),
                         option.rect.width() + 10, option.rect.height() + 5); // to avoid rounding
     style()->drawPrimitive(QStyle::PE_Frame, &option, &p, this);
+}
+
+void KexiRecordNavigator::insertAsideOfHorizontalScrollBar(QAbstractScrollArea *area)
+{
+    if (parentWidget() != area->horizontalScrollBar()->parentWidget()) {
+        setParent(area->horizontalScrollBar()->parentWidget());
+        qobject_cast<QBoxLayout*>(area->horizontalScrollBar()->parentWidget()->layout())
+                ->insertWidget(0, this);
+        setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
+    }
 }
 
 //------------------------------------------------

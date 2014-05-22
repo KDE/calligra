@@ -280,8 +280,8 @@ QSize KexiToolBarSeparator::sizeHint() const
     QStyleOption o;
     initStyleOption(&o);
     const int sepExtent = style()->pixelMetric(
-                              QStyle::PM_ToolBarSeparatorExtent, &o, 0);//parentWidget());
-    return QSize(sepExtent, sepExtent);//height());
+                              QStyle::PM_ToolBarSeparatorExtent, &o, 0);
+    return QSize(sepExtent, sepExtent);
 }
 
 void KexiToolBarSeparator::paintEvent(QPaintEvent *e)
