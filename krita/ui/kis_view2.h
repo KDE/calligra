@@ -196,6 +196,7 @@ public slots:
 
     void slotLoadingFinished();
     void slotSavingFinished();
+    void showJustTheCanvas(bool toggled);
 
 signals:
 
@@ -216,7 +217,6 @@ private slots:
     void slotSaveIncremental();
     void slotSaveIncrementalBackup();
     void showStatusBar(bool toggled);
-    void showJustTheCanvas(bool toggled);
     void showHideScrollbars();
     void toggleTabletLogger();
     void openResourcesDirectory();

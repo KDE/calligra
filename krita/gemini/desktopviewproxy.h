@@ -36,6 +36,8 @@ public:
     virtual ~DesktopViewProxy();
 
 public Q_SLOTS:
+    void documentChanged();
+
     void fileNew();
     void fileOpen();
     void fileSave();
@@ -43,7 +45,7 @@ public Q_SLOTS:
     void reload();
     void loadExistingAsNew();
     void slotFileOpenRecent(const KUrl &url);
-    void toggleShowJustTheCanvas();
+    void toggleShowJustTheCanvas(bool toggled);
 
 Q_SIGNALS:
     void documentSaved();

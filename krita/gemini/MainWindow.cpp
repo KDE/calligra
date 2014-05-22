@@ -106,6 +106,7 @@ public:
         , sketchKisView(0)
         , desktopKisView(0)
         , desktopViewProxy(0)
+        , forceFullScreen(false)
         , forceDesktop(false)
         , forceSketch(false)
         , temporaryFile(false)
@@ -133,6 +134,7 @@ public:
 #ifdef HAVE_STEAMWORKS
         // Big Picture Mode should force full-screen behaviour in Sketch mode
         slateMode = KritaSteamClient::instance()->isInBigPictureMode();
+        forceFullScreen = slateMode;
 #endif
         centerer = new QTimer(q);
         centerer->setInterval(10);
@@ -153,6 +155,7 @@ public:
     KisView2* desktopKisView;
     DesktopViewProxy* desktopViewProxy;
 
+    bool forceFullScreen;
     bool forceDesktop;
     bool forceSketch;
     bool temporaryFile;
@@ -199,7 +202,6 @@ public:
         //connect(toDesktop, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), q, SLOT(switchDesktopForced()));
         connect(toDesktop, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), q, SLOT(switchToDesktop()));
         sketchView->engine()->rootContext()->setContextProperty("switchToDesktopAction", toDesktop);
-
         // Uncomment these lines to enable a crash when the combination Ctrl+Shift+D is pressed
         /*
         crashTest = new KAction(q);
@@ -449,11 +451,14 @@ void MainWindow::switchToDesktop(bool justLoaded)
     }
 
 #ifdef HAVE_STEAMWORKS
-    if (!KritaSteamClient::instance()->isInBigPictureMode()) {
+    if (!KritaSteamClient::instance()->isInBigPictureMode()
+        && !d->forceFullScreen) {
         setWindowState(windowState() & ~Qt::WindowFullScreen);
     }
 #else
-    setWindowState(windowState() & ~Qt::WindowFullScreen);
+    if (!d->forceFullScreen) {
+        setWindowState(windowState() & ~Qt::WindowFullScreen);
+    }
 #endif
 
     if (view) {
@@ -523,6 +528,7 @@ void MainWindow::documentChanged()
     factory->removeClient(d->desktopKisView);
     factory->addClient(d->desktopKisView);
 
+    d->desktopViewProxy->documentChanged();
     connect(d->desktopKisView, SIGNAL(sigLoadingFinished()), d->centerer, SLOT(start()));
     connect(d->desktopKisView, SIGNAL(sigSavingFinished()), this, SLOT(resetWindowTitle()));
     connect(d->desktopKisView->canvasBase()->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
@@ -801,6 +807,15 @@ void MainWindow::saveToSteamCloud()
     KritaSteamClient::instance()->showSaveAsFileDialog();
     //KritaSteamClient::instance()->remoteStorage()->pushFile(DocumentManager::instance()->settingsManager()->currentFile(), "workingcopies");
     //KritaSteamClient::instance()->remoteStorage()->checkStorage();
+}
+
+bool MainWindow::forceFullScreen() {
+    return d->forceFullScreen;
+}
+
+void MainWindow::forceFullScreen(bool newValue)
+{
+    d->forceFullScreen = newValue;
 }
 
 #include "MainWindow.moc"
