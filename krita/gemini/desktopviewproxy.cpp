@@ -190,7 +190,6 @@ void DesktopViewProxy::slotFileOpenRecent(const KUrl& url)
  * true, then it switches the window between windowed and full-screen.
  * To prevent it leaving the full-screen mode, we set the mode to false
  *
- *
  * @param toggled
  */
 void DesktopViewProxy::toggleShowJustTheCanvas(bool toggled)

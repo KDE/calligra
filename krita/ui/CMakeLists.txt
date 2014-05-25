@@ -30,6 +30,7 @@ set(kritaui_LIB_SRCS
     canvas/kis_canvas2.cpp
     canvas/kis_canvas_controller.cpp
     canvas/kis_paintop_transformation_connector.cpp
+    canvas/kis_display_color_converter.cpp
     canvas/kis_display_filter.cpp
     canvas/kis_tool_proxy.cpp
     canvas/kis_canvas_decoration.cc
@@ -128,6 +129,7 @@ set(kritaui_LIB_SRCS
     kis_action_manager.cpp
     kis_view_plugin.cpp
     kis_canvas_controls_manager.cpp
+    kis_tooltip_manager.cpp
     kisexiv2/kis_exif_io.cpp
     kisexiv2/kis_exiv2.cpp
     kisexiv2/kis_iptc_io.cpp

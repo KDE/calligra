@@ -252,9 +252,7 @@ int main( int argc, char** argv )
 
     // Prepare to show window fullscreen if required
     bool showFullscreen = false;
-    // then create the pixmap from an xpm: we cannot get the
-    // location of our datadir before we've started our components,
-    // so use an xpm.
+
 #ifdef HAVE_STEAMWORKS
     if (steamClient->isInBigPictureMode()) {
         // Show main window full screen
@@ -262,6 +260,13 @@ int main( int argc, char** argv )
     }
 #endif
 
+	if (args->isSet("fullscreen")) {
+        showFullscreen = true;
+    }
+
+    // then create the pixmap from an xpm: we cannot get the
+    // location of our datadir before we've started our components,
+    // so use an xpm.
     // If fullscreen, hide splash screen
     QPixmap pm(splash_screen_xpm);
     QSplashScreen splash(pm);
@@ -281,13 +286,9 @@ int main( int argc, char** argv )
         app.setInputContext(new SketchInputContext(&app));
     }
 
-    if (args->isSet("fullscreen")) {
-        showFullscreen = true;
-        window.forceFullScreen(true);
-    }
-
     if (showFullscreen) {
         window.showFullScreen();
+        window.forceFullScreen(true);
     } else {
 #ifdef Q_OS_WIN
         window.showMaximized();

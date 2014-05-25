@@ -36,7 +36,7 @@ Item {
         }
         width: height;
         smooth: true;
-        source: Settings.theme.icon("cancel-black");
+        source: Settings.theme.icon("checkbox-unchecked");
     }
     Image {
         id: checkedImg;
@@ -49,7 +49,7 @@ Item {
         width: height;
         smooth: true;
         opacity: 0;
-        source: Settings.theme.icon("apply-black");
+        source: Settings.theme.icon("checkbox-checked");
     }
     Label {
         id: txt;
