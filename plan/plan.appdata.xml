@@ -1,0 +1,33 @@
+<?xml version="1.0" ?>
+<component type="desktop">
+  <id>plan.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0+</project_license>
+  <name>Plan</name>
+  <summary>Project Management</summary>
+  <description>
+    <p>
+      Plan is a project management application. It is intended for managing moderately large projects with multiple resources.
+    </p>
+    <p>Features:</p>
+    <ul>
+      <li>Multiple views: Gant Charts, Resource View, Accounts View</li>
+      <li>Uses standard structures: Work breakdown structure (WBS), Resource breakdown structure (RBS), Cost breakdown structure (CBS)</li>
+      <li>Configurable level of detail on Gantt Chart</li>
+      <li>Supports Summarytasks, Tasks, and milestones</li>
+      <li>Configurable Scheduling Constraints</li>
+    </ul>
+  </description>
+  <url type="homepage">http://www.calligra.org/plan/</url>
+  <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?format=guided&amp;product=calligraplan</url>
+  <url type="help">http://userbase.kde.org/Plan/Manual</url>
+  <screenshots>
+    <screenshot type="default">
+      <image>http://kde.org/images/screenshots/plan.png</image>
+    </screenshot>
+  </screenshots>
+  <project_group>KDE</project_group>
+  <provides>
+    <binary>calligraplan</binary>
+  </provides>
+</component>
