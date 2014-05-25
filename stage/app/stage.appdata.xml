@@ -1,0 +1,35 @@
+<?xml version="1.0" ?>
+<component type="desktop">
+  <id>stage.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0+</project_license>
+  <name>Stage</name>
+  <summary>Presentation</summary>
+  <description>
+    <p>
+      Calligra Stage is an easy to use yet still flexible presentation application.
+      You can easily create presentations containing a rich variety of elements, from graphics to text, from charts to images. Calligra Stage is extensible through a plugin system,
+      so it is easy to add new effects, new content elements or even new ways of managing your presentation. Because of the integration with Calligra, all the power and flexibility
+      of the Calligra content elements are available to Stage.
+    </p>
+    <p>Features:</p>
+    <ul>
+      <li>Multiple master slides</li>
+      <li>Easily switch between slides during a presentation</li>
+      <li>Add notes for your slide</li>
+      <li>Supports most ODF file transitions</li>
+    </ul>
+  </description>
+  <url type="homepage">http://www.calligra.org/stage/</url>
+  <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?format=guided&amp;product=calligrastage</url>
+  <url type="help">http://docs.kde.org/development/en/calligra/stage/index.html</url>
+  <screenshots>
+    <screenshot type="default">
+      <image>http://kde.org/images/screenshots/stage.png</image>
+    </screenshot>
+  </screenshots>
+  <project_group>KDE</project_group>
+  <provides>
+    <binary>calligrastage</binary>
+  </provides>
+</component>
