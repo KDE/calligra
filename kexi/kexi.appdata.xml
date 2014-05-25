@@ -1,0 +1,48 @@
+<?xml version="1.0" ?>
+<component type="desktop">
+  <id>kexi.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0+</project_license>
+  <name>Kexi</name>
+  <summary>Database Creator</summary>
+  <description>
+    <p>
+      Kexi is a visual database creator, part of the Calligra Suite.
+      It can be used for designing database applications, inserting and editing data, performing queries, and processing data.
+      Forms can be created to provide a custom interface to your data.
+      All database objects - tables, queries, forms, reports - are stored in the database, making it easy to share data and design.
+    </p>
+    <p>Features:</p>
+    <ul>
+      <li>Full visual designers for tables, queries, forms and reports</li>
+      <li>Running queries, support for parametrized queries</li>
+      <li>Supports SQLite, MySQL, PostgreSQL and MS SQL Server databases</li>
+      <li>The only multiplatform graphical tool importing data from MS Access databases</li>
+      <li>Supports query design in dedicated SQL view</li>
+      <li>Designing and displaying relational data using combo boxes (lookup columns)</li>
+      <li>Direct data entry or import using CSV format</li>
+      <li>Locked down User Mode, allowing you to switch off all commands related to editing your project's design</li>
+      <li>Scripting using JavaScript, Python or Ruby programming languages (experimental)</li>
+    </ul>
+  </description>
+  <url type="homepage">http://www.calligra.org/kexi/</url>
+  <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?format=guided&amp;product=kexi</url>
+  <url type="help">http://userbase.kde.org/Kexi/Handbook</url>
+  <screenshots>
+    <screenshot type="default">
+      <image>http://kde.org/images/screenshots/kexi.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Table View storing images</caption>
+      <image>http://www.calligra.org/wp-content/uploads/2011/11/kexi-2.2-rc1-tableview-images.png</image>
+    </screenshot>
+	<screenshot>
+      <caption>Form Designer</caption>
+      <image>http://www.calligra.org/wp-content/uploads/2011/11/kexi-2.3-form.png</image>
+    </screenshot>
+  </screenshots>
+  <project_group>KDE</project_group>
+  <provides>
+    <binary>calligrakexi</binary>
+  </provides>
+</component>
