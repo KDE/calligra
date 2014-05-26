@@ -62,6 +62,11 @@ macro_log_feature(OCIO_FOUND "OCIO" "The OpenColorIO Library" "http://www.openco
 macro_bool_to_01(OCIO_FOUND HAVE_OCIO)
 configure_file(config-ocio.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-ocio.h )
 
+macro_optional_find_package(AssImp)
+macro_bool_to_01(ASSIMP_FOUND HAVE_ASSIMP)
+configure_file(config-assimp.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-assimp.h )
+macro_log_feature(HAVE_ASSIMP "AssImp" "The Open Asset Import Library" "http://assimp.sourceforge.net" FALSE "" "Required by the Krita preview renderer")
+
 if(UNIX)
     set(CMAKE_REQUIRED_LIBRARIES "${CMAKE_REQUIRED_LIBRARIES};m")
 endif(UNIX)
