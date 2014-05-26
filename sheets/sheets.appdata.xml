@@ -1,0 +1,33 @@
+<?xml version="1.0" ?>
+<component type="desktop">
+  <id>sheets.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0+</project_license>
+  <name>Sheets</name>
+  <summary>Spreadsheet</summary>
+  <description>
+    <p>
+      Calligra Sheets is a fully-featured calculation and spreadsheet tool.
+      Use it to quickly create and calculate various business-related spreadsheets, such as income and expenditure, employee working hours, etc.
+    </p>
+    <p>Features:</p>
+    <ul>
+      <li>Use shapes to take notes or mind maps</li>
+      <li>Large range of pre-defined templates</li>
+      <li>Powerful and comprehensive formula list</li>
+      <li>Work in a familiar environment</li>
+    </ul>
+  </description>
+  <url type="homepage">http://www.calligra.org/sheets/</url>
+  <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?format=guided&amp;product=calligrasheets</url>
+  <url type="help">http://docs.kde.org/stable/en/calligra/sheets/index.html</url>
+  <screenshots>
+    <screenshot type="default">
+      <image>http://kde.org/images/screenshots/sheets.png</image>
+    </screenshot>
+  </screenshots>
+  <project_group>KDE</project_group>
+  <provides>
+    <binary>calligrasheets</binary>
+  </provides>
+</component>

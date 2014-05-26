@@ -179,12 +179,39 @@ bool KoSegmentGradient::loadFromDevice(QIODevice *dev)
 
 bool KoSegmentGradient::save()
 {
-    return false;
+    QFile file(filename());
+
+    if (!file.open(QIODevice::WriteOnly)) {
+        return false;
+    }
+
+    saveToDevice(&file);
+    file.close();
+
+    return true;
 }
 
-bool KoSegmentGradient::saveToDevice(QIODevice *) const
+bool KoSegmentGradient::saveToDevice(QIODevice *dev) const
 {
-    return false;
+    QTextStream fileContent(dev);
+    fileContent << "GIMP Gradient\n";
+    fileContent << "Name: " << name() << "\n";
+    fileContent << m_segments.count() << "\n";
+
+    foreach(KoGradientSegment* segment, m_segments) {
+        fileContent << QString::number(segment->startOffset(), 'f') << " " << QString::number(segment->middleOffset(), 'f') << " "
+                    << QString::number(segment->endOffset(), 'f') << " ";
+
+        QColor startColor = segment->startColor().toQColor();
+        QColor endColor = segment->endColor().toQColor();
+        fileContent << QString::number(startColor.redF(), 'f') << " " << QString::number(startColor.greenF(), 'f') << " "
+                    << QString::number(startColor.blueF(), 'f') << " " << QString::number(startColor.alphaF(), 'f') << " ";
+        fileContent << QString::number(endColor.redF(), 'f') << " " << QString::number(endColor.greenF(), 'f') << " "
+                    << QString::number(endColor.blueF(), 'f') << " " << QString::number(endColor.alphaF(), 'f') << " ";
+
+        fileContent << (int)segment->interpolation() << " " << (int)segment->colorInterpolation() << "\n";
+    }
+    return true;
 }
 
 KoGradientSegment *KoSegmentGradient::segmentAt(qreal t) const

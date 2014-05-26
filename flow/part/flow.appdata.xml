@@ -1,0 +1,31 @@
+<?xml version="1.0" ?>
+<component type="desktop">
+  <id>flow.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0+</project_license>
+  <name>Flow</name>
+  <summary>Flowchart &amp; Diagram Editing</summary>
+  <description>
+    <p>
+      Calligra Flow is an easy to use diagramming and flowcharting application with tight integration to the other Calligra applications.
+      It enables you to create network diagrams, organisation charts, flowcharts and more.
+    </p>
+    <p>Features:</p>
+    <ul>
+      <li>Create network diagrams, organisation charts, flowcharts and more</li>
+      <li>Scriptable stencil creation using Python</li>
+      <li>Support for Dia stencils.</li>
+    </ul>
+  </description>
+  <url type="homepage">http://www.calligra.org/flow/</url>
+  <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?format=guided&amp;product=calligraflow</url>
+  <screenshots>
+    <screenshot type="default">
+      <image>http://kde.org/images/screenshots/flow.png</image>
+    </screenshot>
+  </screenshots>
+  <project_group>KDE</project_group>
+  <provides>
+    <binary>calligraflow</binary>
+  </provides>
+</component>

@@ -1,0 +1,67 @@
+<?xml version="1.0" ?>
+<component type="desktop">
+  <id>karbon.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0+</project_license>
+  <name>Karbon</name>
+  <summary>Scalable Graphics</summary>
+  <description>
+    <p>
+      Karbon is a vector drawing application with an user interface that is easy to use, highly customizable and extensible.
+      That makes Karbon a great application for users starting to explore the world of vector graphics as well as for artists
+      wanting to create breathtaking vector art.
+    </p>
+    <p>Features:</p>
+    <ul>
+      <li>
+        Loading support for ODG, SVG, WPG, WMF, EPS/PS
+      </li>
+      <li>
+        Writing support for ODG, SVG, PNG, PDF, WMF
+      </li>
+      <li>
+        Customizable user interface with freely placeable toolbars and dockers2
+      </li>
+      <li>
+        Layer docker for easy handling of complex documents including preview thumbnails, support for grouping shapes via
+        drag and drop, controlling visibility of shapes or locking
+      </li>
+      <li>
+        Advanced path editing tool with great on-canvas editing capabilities
+      </li>
+      <li>
+        Various drawing tools for creating path shapes including a draw path tool, a pencil tool as well as a calligraphy drawing tool
+      </li>
+      <li>
+        Gradient and pattern tools for easy on-canvas editing of gradient and pattern styles
+      </li>
+      <li>
+        Top notch snapping facilities for guided drawing and editing (e.g. snapping to grid, guide lines, path nodes, bounding boxes,
+        orthogonal positions, intersections of path shapes or extensions of lines and paths)
+      </li>
+      <li>
+        Includes many predefined shapes including basic shapes like stars, circle/ellipse, rectangle, image2
+      </li>
+      <li>
+        Artistic text shape with support for following path outlines (i.e. text on path)
+      </li>
+      <li>
+        Complex path operations and effects like boolean set operations, path flattening, rounding and refining as well as whirl/pinch effects
+      </li>
+      <li>
+        Extensible by writing plugins for new tools, shapes and dockers
+      </li>
+    </ul>
+  </description>
+  <url type="homepage">http://www.calligra.org/karbon/</url>
+  <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?format=guided&amp;product=karbon</url>
+  <screenshots>
+    <screenshot type="default">
+      <image>http://kde.org/images/screenshots/karbon14.png</image>
+    </screenshot>
+  </screenshots>
+  <project_group>KDE</project_group>
+  <provides>
+    <binary>calligrakarbon</binary>
+  </provides>
+</component>
