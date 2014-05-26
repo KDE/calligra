@@ -378,6 +378,7 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
                 m_pageCount = m_reportDocument->pages();
 #ifndef KEXI_MOBILE
                 m_pageSelector->setRecordCount(m_pageCount);
+                m_pageSelector->setCurrentRecordNumber(1);
 #endif
             }
 
