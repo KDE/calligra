@@ -160,6 +160,7 @@ bool KritaSteamClient::initialise(uint32 appId)
     // Check for Big Picture mode
     QByteArray bigPictureEnvVar = qgetenv(BIGPICTURE_ENVVARNAME);
     if (!bigPictureEnvVar.isEmpty()) {
+        qDebug("Steam BIG PICTURE variable defined");
         d->bigPictureMode = (bigPictureEnvVar.toInt() == 1);
     }
     if (d->bigPictureMode) {
