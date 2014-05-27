@@ -84,12 +84,12 @@
       <li xml:lang="uk">Можливості використання прилипання та малювання за напрямними (прилипання до сітки, напрямні, вузли контурів, обмежувальні рамки, ортогональне розташування, перетини та розширення ліній і контурів).</li>
       <li xml:lang="x-test">xxTop notch snapping facilities for guided drawing and editing (e.g. snapping to grid, guide lines, path nodes, bounding boxes, orthogonal positions, intersections of path shapes or extensions of lines and paths)xx</li>
       <li>
-        Includes many predefined shapes including basic shapes like stars, circle/ellipse, rectangle, image2
+        Includes many predefined shapes including basic shapes like stars, circle/ellipse, rectangle, image
       </li>
-      <li xml:lang="nl">Omvat vele voorgedefinieerde vormen inclusief basisvormen als ster, cirkel/ellips, rechthoek, image2</li>
+      <li xml:lang="nl">Omvat vele voorgedefinieerde vormen inclusief basisvormen als ster, cirkel/ellips, rechthoek, image</li>
       <li xml:lang="pt">Inclui diversas formas predefinidas, incluindo formas básicas como as estrelas, círculos/elipses, rectângulos, imagens</li>
       <li xml:lang="uk">Передбачено багато готових форм, зокрема базові форми зірки, кола або еліпса, прямокутника та зображення.</li>
-      <li xml:lang="x-test">xxIncludes many predefined shapes including basic shapes like stars, circle/ellipse, rectangle, image2xx</li>
+      <li xml:lang="x-test">xxIncludes many predefined shapes including basic shapes like stars, circle/ellipse, rectangle, imagexx</li>
       <li>
         Artistic text shape with support for following path outlines (i.e. text on path)
       </li>
