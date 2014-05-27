@@ -127,7 +127,7 @@ void doResetConfig(const QString &applicationId)
     }
 }
 
-void doRestart(const QString &applicationId, bool resetConfig)
+void doRestart(MainWindow* mainWindow, const QString &applicationId, bool resetConfig)
 {
     QString applicationExecutable = MainWindow::getApplicationExeFromId(applicationId);
 
@@ -158,7 +158,7 @@ void doRestart(const QString &applicationId, bool resetConfig)
     qDebug() << "restartCommand" << restartCommand;
     QProcess restartProcess;
     if (!restartProcess.startDetached(restartCommand)) {
-        QMessageBox::warning(0, "krita",
+        QMessageBox::warning(mainWindow, "krita",
                              i18n("Could not restart Krita. Please try to restart manually."));
     }
 }
@@ -293,7 +293,7 @@ void MainWindow::restart()
         startUpload();
     }
     else {
-        doRestart(m_d->applicationId, chkRemoveSettings->isChecked());
+        doRestart(this, m_d->applicationId, chkRemoveSettings->isChecked());
         qApp->quit();
     }
 }
@@ -450,7 +450,7 @@ void MainWindow::uploadDone(QNetworkReply *reply)
         qCritical() << "uploadDone: Error uploading crash report: " << reply->errorString();
     }
     if (m_d->doRestart) {
-        doRestart(m_d->applicationId, chkRemoveSettings->isChecked());
+        doRestart(this, m_d->applicationId, chkRemoveSettings->isChecked());
     } else if (chkRemoveSettings->isChecked()) {
         doResetConfig(m_d->applicationId);
     }
