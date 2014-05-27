@@ -1,21 +1,51 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <component type="desktop">
   <id>plan.desktop</id>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0+</project_license>
   <name>Plan</name>
+  <name xml:lang="cs">Plan</name>
+  <name xml:lang="pt">Plan</name>
+  <name xml:lang="uk">Plan</name>
+  <name xml:lang="x-test">xxPlanxx</name>
   <summary>Project Management</summary>
+  <summary xml:lang="cs">Správa projektů</summary>
+  <summary xml:lang="pt">Gestão de Projectos</summary>
+  <summary xml:lang="uk">Керування проектами</summary>
+  <summary xml:lang="x-test">xxProject Managementxx</summary>
   <description>
     <p>
       Plan is a project management application. It is intended for managing moderately large projects with multiple resources.
     </p>
+    <p xml:lang="pt">O Plan é uma aplicação de gestão de projectos. Pretende ser usada para gerir projectos relativamente grandes com vários recursos.</p>
+    <p xml:lang="uk">Plan — програма для керування проектами. Її призначено для керування помірно великими проектами з декількома ресурсами або виконавцями.</p>
+    <p xml:lang="x-test">xxPlan is a project management application. It is intended for managing moderately large projects with multiple resources.xx</p>
     <p>Features:</p>
+    <p xml:lang="cs">Vlastnosti:</p>
+    <p xml:lang="pt">Características:</p>
+    <p xml:lang="uk">Можливості:</p>
+    <p xml:lang="x-test">xxFeatures:xx</p>
     <ul>
       <li>Multiple views: Gant Charts, Resource View, Accounts View</li>
+      <li xml:lang="pt">Diversas áreas: Diagramas de Gantt, Área de Recursos, Área de Contas</li>
+      <li xml:lang="uk">Декілька режимів перегляду: діаграми Ґанта, перегляд виконавців, перегляд рахунків.</li>
+      <li xml:lang="x-test">xxMultiple views: Gant Charts, Resource View, Accounts Viewxx</li>
       <li>Uses standard structures: Work breakdown structure (WBS), Resource breakdown structure (RBS), Cost breakdown structure (CBS)</li>
+      <li xml:lang="pt">Usa estruturas padrão: estruturas de divisão de trabalho (WBS), estruturas de divisão de recursos (RBS), estruturas de divisão de custos (CBS)</li>
+      <li xml:lang="uk">Використання стандартних структур: структури рознарядки робіт (СРР або WBS), структури розподілу вартості (СРВ або CBS) та структури розподілу ресурсів (СРР або RBS).</li>
+      <li xml:lang="x-test">xxUses standard structures: Work breakdown structure (WBS), Resource breakdown structure (RBS), Cost breakdown structure (CBS)xx</li>
       <li>Configurable level of detail on Gantt Chart</li>
+      <li xml:lang="pt">Nível de detalhe configurável no Diagrama de Gantt</li>
+      <li xml:lang="uk">Налаштовуваний рівень деталізації у діаграмах Ґанта.</li>
+      <li xml:lang="x-test">xxConfigurable level of detail on Gantt Chartxx</li>
       <li>Supports Summarytasks, Tasks, and milestones</li>
+      <li xml:lang="pt">Suporta tarefas-resumo, tarefas e marcos</li>
+      <li xml:lang="uk">Підтримка підсумкових завдань, завдань та етапів.</li>
+      <li xml:lang="x-test">xxSupports Summarytasks, Tasks, and milestonesxx</li>
       <li>Configurable Scheduling Constraints</li>
+      <li xml:lang="pt">Restrições de Escalonamento Configuráveis</li>
+      <li xml:lang="uk">Налаштовувані обмеження щодо планування.</li>
+      <li xml:lang="x-test">xxConfigurable Scheduling Constraintsxx</li>
     </ul>
   </description>
   <url type="homepage">http://www.calligra.org/plan/</url>

@@ -1,22 +1,52 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <component type="desktop">
   <id>words.desktop</id>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0+</project_license>
   <name>Words</name>
+  <name xml:lang="cs">Words</name>
+  <name xml:lang="pt">Words</name>
+  <name xml:lang="uk">Words</name>
+  <name xml:lang="x-test">xxWordsxx</name>
   <summary>Word Processor</summary>
+  <summary xml:lang="cs">Textový procesor</summary>
+  <summary xml:lang="pt">Processador de Texto</summary>
+  <summary xml:lang="uk">Текстовий процесор</summary>
+  <summary xml:lang="x-test">xxWord Processorxx</summary>
   <description>
     <p>
       Words is an intuitive word processor and desktop publisher application.
       With it, you can create informative and attractive documents with pleasure and ease.
     </p>
+    <p xml:lang="pt">O Words é um processador de texto intuitivo e uma aplicação de publicações no ecrã. Com ele, pode criar documentos informativos e atraentes com prazer e facilidade.</p>
+    <p xml:lang="uk">Words — інтуїтивно зрозуміла у користування програма для редагування текстів та приготування матеріалів для друку. За її допомогою ви можете створювати інформативні та візуально красиві документи із задоволенням та без напруження.</p>
+    <p xml:lang="x-test">xxWords is an intuitive word processor and desktop publisher application. With it, you can create informative and attractive documents with pleasure and ease.xx</p>
     <p>Features:</p>
+    <p xml:lang="cs">Vlastnosti:</p>
+    <p xml:lang="pt">Características:</p>
+    <p xml:lang="uk">Можливості:</p>
+    <p xml:lang="x-test">xxFeatures:xx</p>
     <ul>
       <li>Frame-based editing</li>
+      <li xml:lang="pt">Edição baseada em molduras</li>
+      <li xml:lang="uk">Редагування на основі блоків.</li>
+      <li xml:lang="x-test">xxFrame-based editingxx</li>
       <li>Allows embedding of Documents</li>
+      <li xml:lang="pt">Permite a incorporação de documentos</li>
+      <li xml:lang="uk">Вбудовування об’єктів до документів.</li>
+      <li xml:lang="x-test">xxAllows embedding of Documentsxx</li>
       <li>Customization of user interface</li>
+      <li xml:lang="pt">Personalização da interface do utilizador</li>
+      <li xml:lang="uk">Налаштовуваність інтерфейсу користувача.</li>
+      <li xml:lang="x-test">xxCustomization of user interfacexx</li>
       <li>Includes all features expected from a modern word processor</li>
+      <li xml:lang="pt">Inclui todas as funcionalidades esperadas de um processador de texto moderno</li>
+      <li xml:lang="uk">Повний спектр можливостей сучасної програми для редагування тексту.</li>
+      <li xml:lang="x-test">xxIncludes all features expected from a modern word processorxx</li>
       <li>ODT (Open Document Text) support</li>
+      <li xml:lang="pt">Suporte para o ODT (Texto do Open Document)</li>
+      <li xml:lang="uk">Підтримка стандартів ODT (Open Document Text).</li>
+      <li xml:lang="x-test">xxODT (Open Document Text) supportxx</li>
     </ul>
   </description>
   <url type="homepage">http://www.calligra.org/words/</url>
