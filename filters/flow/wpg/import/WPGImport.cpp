@@ -17,7 +17,7 @@
 #include "WPGImport.h"
 
 #include <libwpg/libwpg.h>
-#include <libodfgen/OdgGenerator.hxx>
+#include <libodfgen/libodfgen.hxx>
 
 #include "OutputFileHelper.hxx"
 #include <KoFilterChain.h>
@@ -39,7 +39,7 @@ public:
     ~OdgOutputFileHelper() {}
 
 private:
-    bool _isSupportedFormat(WPXInputStream *input, const char * /* password */)
+    bool _isSupportedFormat(librevenge::RVNGInputStream *input, const char * /* password */)
     {
         if (!libwpg::WPGraphics::isSupported(input))
         {
@@ -49,9 +49,10 @@ private:
         return true;
     }
 
-    bool _convertDocument(WPXInputStream *input, const char * /* password */, OdfDocumentHandler *handler, OdfStreamType streamType)
+    bool _convertDocument(librevenge::RVNGInputStream *input, const char * /* password */, OdfDocumentHandler *handler, OdfStreamType streamType)
     {
-        OdgGenerator exporter(handler, streamType);
+        OdgGenerator exporter;
+        exporter.addDocumentHandler(handler, streamType);
         return libwpg::WPGraphics::parse(input, &exporter);
     }
 };

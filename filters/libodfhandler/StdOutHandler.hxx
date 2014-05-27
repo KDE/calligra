@@ -23,7 +23,7 @@
 #ifndef _STDOUTHANDLER_H
 #define _STDOUTHANDLER_H
 
-#include <libodfgen/OdfDocumentHandler.hxx>
+#include <libodfgen/libodfgen.hxx>
 
 class StdOutHandler : public OdfDocumentHandler
 {
@@ -31,12 +31,12 @@ public:
 	StdOutHandler();
 	virtual void startDocument() {}
 	virtual void endDocument();
-	virtual void startElement(const char *psName, const WPXPropertyList &xPropList);
+	virtual void startElement(const char *psName, const librevenge::RVNGPropertyList &xPropList);
 	virtual void endElement(const char *psName);
-	virtual void characters(const WPXString &sCharacters);
+	virtual void characters(const librevenge::RVNGString &sCharacters);
 private:
 	bool mbIsTagOpened;
-	WPXString msOpenedTagName;
+	librevenge::RVNGString msOpenedTagName;
 };
 #endif
 

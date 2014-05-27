@@ -1,6 +1,7 @@
 include_directories(
     ../../../libodfhandler/
     ${LIBODFGEN_INCLUDE_DIRS}
+    ${LIBREVENGE_INCLUDE_DIRS}
     ${LIBWPD_INCLUDE_DIRS}
     ${LIBWPG_INCLUDE_DIRS}
     ${KOMAIN_INCLUDES}
@@ -17,7 +18,7 @@ set(wpd2odt_PART_SRCS
 kde4_add_plugin(calligra_filter_wpd2odt ${wpd2odt_PART_SRCS})
 
 target_link_libraries(calligra_filter_wpd2odt
-    komain ${LIBODFGEN_LIBRARIES} ${LIBWPD_LIBRARIES} ${LIBWPG_LIBRARIES})
+    komain ${LIBODFGEN_LIBRARIES} ${LIBREVENGE_LIBRARIES} ${LIBWPD_LIBRARIES} ${LIBWPG_LIBRARIES})
 
 install(TARGETS calligra_filter_wpd2odt DESTINATION ${PLUGIN_INSTALL_DIR})
 

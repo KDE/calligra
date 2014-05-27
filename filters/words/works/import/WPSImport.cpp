@@ -16,9 +16,9 @@
 
 #include "WPSImport.h"
 
-#include <libwpd/libwpd.h>
+#include <librevenge/librevenge.h>
 #include <libwps/libwps.h>
-#include <libodfgen/OdtGenerator.hxx>
+#include <libodfgen/libodfgen.hxx>
 
 #include "OutputFileHelper.hxx"
 #include <KoFilterChain.h>
@@ -40,10 +40,11 @@ public:
     ~OdtOutputFileHelper() {};
 
 private:
-    bool _isSupportedFormat(WPXInputStream *input, const char * /* password */)
+    bool _isSupportedFormat(librevenge::RVNGInputStream *input, const char * /* password */)
     {
-        WPSConfidence confidence = WPSDocument::isFileFormatSupported(input);
-        if (confidence == WPS_CONFIDENCE_NONE || confidence == WPS_CONFIDENCE_POOR)
+        libwps::WPSKind kind = libwps::WPS_TEXT;
+        libwps::WPSConfidence confidence = libwps::WPSDocument::isFileFormatSupported(input, kind);
+        if ((libwps::WPS_TEXT != kind) || (confidence != libwps::WPS_CONFIDENCE_EXCELLENT))
         {
             fprintf(stderr, "ERROR: We have no confidence that you are giving us a valid Microsoft Works document.\n");
             return false;
@@ -52,10 +53,11 @@ private:
         return true;
     }
 
-    bool _convertDocument(WPXInputStream *input, const char * /* password */, OdfDocumentHandler *handler, const OdfStreamType streamType)
+    bool _convertDocument(librevenge::RVNGInputStream *input, const char * /* password */, OdfDocumentHandler *handler, const OdfStreamType streamType)
     {
-        OdtGenerator collector(handler, streamType);
-        if (WPS_OK == WPSDocument::parse(input, &collector))
+        OdtGenerator collector;
+        collector.addDocumentHandler(handler, streamType);
+        if (libwps::WPS_OK == libwps::WPSDocument::parse(input, &collector))
             return true;
         return false;
     }

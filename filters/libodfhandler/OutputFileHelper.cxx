@@ -37,7 +37,7 @@
 
 #include "DiskDocumentHandler.hxx"
 #include "StdOutHandler.hxx"
-#include <libwpd-stream/WPXStreamImplementation.h>
+#include <librevenge-stream/librevenge-stream.h>
 
 struct OutputFileHelperImpl
 {
@@ -197,12 +197,12 @@ bool OutputFileHelper::writeChildFile(const char *childFileName, const char *str
 
 bool OutputFileHelper::writeConvertedContent(const char *childFileName, const char *inFileName, const OdfStreamType streamType)
 {
-	WPXFileStream input(inFileName);
+	librevenge::RVNGFileStream input(inFileName);
 
 	if (!_isSupportedFormat(&input, m_impl->mpPassword))
 		return false;
 
-	input.seek(0, WPX_SEEK_SET);
+	input.seek(0, librevenge::RVNG_SEEK_SET);
 
 	OdfDocumentHandler *pHandler;
 #ifdef USE_GSF_OUTPUT

@@ -31,7 +31,7 @@ StdOutHandler::StdOutHandler() :
 	printf("<?xml version=\"1.0\"?>\n");
 }
 
-void StdOutHandler::startElement(const char *psName, const WPXPropertyList &xPropList)
+void StdOutHandler::startElement(const char *psName, const librevenge::RVNGPropertyList &xPropList)
 {
 	if (mbIsTagOpened)
 	{
@@ -39,11 +39,11 @@ void StdOutHandler::startElement(const char *psName, const WPXPropertyList &xPro
 		mbIsTagOpened = false;
 	}
 	printf("<%s", psName);
-	WPXPropertyList::Iter i(xPropList);
+	librevenge::RVNGPropertyList::Iter i(xPropList);
 	for (i.rewind(); i.next(); )
 	{
-		// filter out libwpd elements
-		if (strncmp(i.key(), "libwpd", 6) != 0)
+		// filter out librevenge properties
+		if (strncmp(i.key(), "librevenge", 10) != 0)
 			printf(" %s=\"%s\"", i.key(), i()->getStr().cstr());
 	}
 	mbIsTagOpened = true;
@@ -73,15 +73,14 @@ void StdOutHandler::endElement(const char *psName)
 	}
 }
 
-void StdOutHandler::characters(const WPXString &sCharacters)
+void StdOutHandler::characters(const librevenge::RVNGString &sCharacters)
 {
 	if (mbIsTagOpened)
 	{
 		printf(">");
 		mbIsTagOpened = false;
 	}
-	WPXString sEscapedCharacters(sCharacters, true);
-	printf("%s", sEscapedCharacters.cstr());
+	printf("%s", librevenge::RVNGString::escapeXML(sCharacters).cstr());
 }
 
 void StdOutHandler::endDocument()

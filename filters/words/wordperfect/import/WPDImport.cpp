@@ -18,8 +18,7 @@
 
 #include <libwpd/libwpd.h>
 #include <libwpg/libwpg.h>
-#include <libodfgen/OdtGenerator.hxx>
-#include <libodfgen/OdgGenerator.hxx>
+#include <libodfgen/libodfgen.hxx>
 
 #include <OutputFileHelper.hxx>
 #include <KoFilterChain.h>
@@ -31,6 +30,7 @@
 #include <QString>
 #include <QByteArray>
 
+#include <cassert>
 #include <stdio.h>
 
 class OdtOutputFileHelper : public OutputFileHelper
@@ -41,20 +41,20 @@ public:
     ~OdtOutputFileHelper() {};
 
 private:
-    bool _isSupportedFormat(WPXInputStream *input, const char *password)
+    bool _isSupportedFormat(librevenge::RVNGInputStream *input, const char *password)
     {
-        WPDConfidence confidence = WPDocument::isFileFormatSupported(input);
-        if (WPD_CONFIDENCE_EXCELLENT != confidence && WPD_CONFIDENCE_SUPPORTED_ENCRYPTION != confidence)
+        libwpd::WPDConfidence confidence = libwpd::WPDocument::isFileFormatSupported(input);
+        if (libwpd::WPD_CONFIDENCE_EXCELLENT != confidence && libwpd::WPD_CONFIDENCE_SUPPORTED_ENCRYPTION != confidence)
         {
             fprintf(stderr, "ERROR: We have no confidence that you are giving us a valid WordPerfect document.\n");
             return false;
         }
-        if (WPD_CONFIDENCE_SUPPORTED_ENCRYPTION == confidence && !password)
+        if (libwpd::WPD_CONFIDENCE_SUPPORTED_ENCRYPTION == confidence && !password)
         {
             fprintf(stderr, "ERROR: The WordPerfect document is encrypted and you did not give us a password.\n");
             return false;
         }
-        if (confidence == WPD_CONFIDENCE_SUPPORTED_ENCRYPTION && password && (WPD_PASSWORD_MATCH_OK != WPDocument::verifyPassword(input, password)))
+        if (confidence == libwpd::WPD_CONFIDENCE_SUPPORTED_ENCRYPTION && password && (libwpd::WPD_PASSWORD_MATCH_OK != libwpd::WPDocument::verifyPassword(input, password)))
         {
             fprintf(stderr, "ERROR: The WordPerfect document is encrypted and we either\n");
             fprintf(stderr, "ERROR: don't know how to decrypt it or the given password is wrong.\n");
@@ -64,41 +64,47 @@ private:
         return true;
     }
 
-    static bool handleEmbeddedWPGObject(const WPXBinaryData &data, OdfDocumentHandler *pHandler,  const OdfStreamType streamType)
+    static bool handleEmbeddedWPGObject(const librevenge::RVNGBinaryData &data, OdfDocumentHandler *pHandler,  const OdfStreamType streamType)
     {
-        OdgGenerator exporter(pHandler, streamType);
+        OdgGenerator exporter;
+        exporter.addDocumentHandler(pHandler, streamType);
 
         libwpg::WPGFileFormat fileFormat = libwpg::WPG_AUTODETECT;
 
-        if (!libwpg::WPGraphics::isSupported(const_cast<WPXInputStream *>(data.getDataStream())))
+        if (!libwpg::WPGraphics::isSupported(const_cast<librevenge::RVNGInputStream *>(data.getDataStream())))
             fileFormat = libwpg::WPG_WPG1;
 
-        return libwpg::WPGraphics::parse(const_cast<WPXInputStream *>(data.getDataStream()), &exporter, fileFormat);
+        return libwpg::WPGraphics::parse(const_cast<librevenge::RVNGInputStream *>(data.getDataStream()), &exporter, fileFormat);
     }
 
-    static bool handleEmbeddedWPGImage(const WPXBinaryData &input, WPXBinaryData &output)
+    static bool handleEmbeddedWPGImage(const librevenge::RVNGBinaryData &input, librevenge::RVNGBinaryData &output)
     {
-        WPXString svgOutput;
         libwpg::WPGFileFormat fileFormat = libwpg::WPG_AUTODETECT;
 
-        if (!libwpg::WPGraphics::isSupported(const_cast<WPXInputStream *>(input.getDataStream())))
+        if (!libwpg::WPGraphics::isSupported(const_cast<librevenge::RVNGInputStream *>(input.getDataStream())))
             fileFormat = libwpg::WPG_WPG1;
 
-        if (!libwpg::WPGraphics::generateSVG(const_cast<WPXInputStream *>(input.getDataStream()), svgOutput, fileFormat))
+        librevenge::RVNGStringVector svgOutput;
+        librevenge::RVNGSVGDrawingGenerator generator(svgOutput, "");
+        if (!libwpg::WPGraphics::parse(const_cast<librevenge::RVNGInputStream *>(input.getDataStream()), &generator, fileFormat))
             return false;
+        assert(1 == svgOutput.size());
 
         output.clear();
-        output.append((unsigned char *)svgOutput.cstr(), strlen(svgOutput.cstr()));
+        const librevenge::RVNGString svgPrefix("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n");
+        output.append((unsigned char *)svgPrefix.cstr(), svgPrefix.size());
+        output.append((unsigned char *)svgOutput[0].cstr(), svgOutput[0].size());
 
         return true;
     }
 
-    bool _convertDocument(WPXInputStream *input, const char *password, OdfDocumentHandler *handler, const OdfStreamType streamType)
+    bool _convertDocument(librevenge::RVNGInputStream *input, const char *password, OdfDocumentHandler *handler, const OdfStreamType streamType)
     {
-        OdtGenerator collector(handler, streamType);
+        OdtGenerator collector;
+        collector.addDocumentHandler(handler, streamType);
         collector.registerEmbeddedObjectHandler("image/x-wpg", &handleEmbeddedWPGObject);
         collector.registerEmbeddedImageHandler("image/x-wpg", &handleEmbeddedWPGImage);
-        if (WPD_OK == WPDocument::parse(input, &collector, password))
+        if (libwpd::WPD_OK == libwpd::WPDocument::parse(input, &collector, password))
             return true;
         return false;
     }

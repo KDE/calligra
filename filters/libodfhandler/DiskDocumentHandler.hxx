@@ -23,7 +23,7 @@
 #ifndef _DISKDOCUMENTHANDLER_H
 #define _DISKDOCUMENTHANDLER_H
 
-#include <libodfgen/OdfDocumentHandler.hxx>
+#include <libodfgen/libodfgen.hxx>
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -45,9 +45,9 @@ public:
 #endif
 	virtual void startDocument() {}
 	virtual void endDocument();
-	virtual void startElement(const char *psName, const WPXPropertyList &xPropList);
+	virtual void startElement(const char *psName, const librevenge::RVNGPropertyList &xPropList);
 	virtual void endElement(const char *psName);
-	virtual void characters(const WPXString &sCharacters);
+	virtual void characters(const librevenge::RVNGString &sCharacters);
 
 private:
 	DiskOdfDocumentHandler(DiskOdfDocumentHandler const &);
@@ -58,7 +58,7 @@ private:
 	FemtoZip *mpOutput;
 #endif
 	bool mbIsTagOpened;
-	WPXString msOpenedTagName;
+	librevenge::RVNGString msOpenedTagName;
 };
 #endif
 
