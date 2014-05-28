@@ -23,7 +23,6 @@
 #include <QObject>
 #include <QMap>
 
-//#include <klibloader.h>
 #include <kservice.h>
 
 #include "keximigrate.h"

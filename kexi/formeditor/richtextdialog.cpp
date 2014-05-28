@@ -81,14 +81,14 @@ RichTextDialog::RichTextDialog(QWidget *parent, const QString &text)
     lyr->addWidget(d->toolbar);
 
     d->fontCombo = new KFontRequester(d->toolbar);
-    d->fontComboAction = d->toolbar->addWidget(/*js: TBFont, 40,*/ d->fontCombo);
+    d->fontComboAction = d->toolbar->addWidget(d->fontCombo);
     connect(d->fontCombo, SIGNAL(textChanged(QString)),
             this, SLOT(changeFont(QString)));
 
     d->toolbar->addSeparator();
 
     d->colorCombo = new KColorCombo(d->toolbar);
-    d->colorComboAction = d->toolbar->addWidget(/*js: TBColor, 30,*/ d->colorCombo);
+    d->colorComboAction = d->toolbar->addWidget(d->colorCombo);
     connect(d->colorCombo, SIGNAL(activated(QColor)), this, SLOT(changeColor(QColor)));
 
     d->boldTextAction = d->toolbar->addAction(koIcon("format-text-bold"), i18n("Bold"));

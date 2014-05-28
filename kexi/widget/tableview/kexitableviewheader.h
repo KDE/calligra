@@ -36,7 +36,7 @@ class KEXIDATATABLE_EXPORT KexiTableViewHeader : public Q3Header
     Q_OBJECT
 
 public:
-    KexiTableViewHeader(QWidget * parent = 0);
+    explicit KexiTableViewHeader(QWidget * parent = 0);
 
     virtual ~KexiTableViewHeader();
 
@@ -67,7 +67,6 @@ protected:
 
     int m_lastToolTipSection;
     QRect m_toolTipRect;
-
     QStringList m_toolTips;
     QColor m_selectionBackgroundColor;
     QPointer<QStyle> m_privateStyle;

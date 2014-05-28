@@ -1,6 +1,7 @@
 /*
  * Kexi Report Plugin
  * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
+   Copyright (C) 2014 Jarosław Staniek <staniek@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -32,6 +33,7 @@
 #include <QPrintDialog>
 #include <QPrinter>
 #include <QGraphicsScene>
+#include <QScrollBar>
 
 #include <kdebug.h>
 #include "krscriptfunctions.h"
@@ -58,6 +60,8 @@ KexiReportView::KexiReportView(QWidget *parent)
     setObjectName("KexiReportDesigner_DataView");
 
     m_reportView = new QGraphicsView(this);
+    // page selector should be always visible:
+    m_reportView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     layout()->addWidget(m_reportView);
 
     m_reportScene = new QGraphicsScene(this);
@@ -67,8 +71,9 @@ KexiReportView::KexiReportView(QWidget *parent)
     m_reportScene->setBackgroundBrush(palette().brush(QPalette::Dark));
 
 #ifndef KEXI_MOBILE
-    m_pageSelector = new KexiRecordNavigator(this, 0);
-    layout()->addWidget(m_pageSelector);
+    m_pageSelector = new KexiRecordNavigator(m_reportView, m_reportView);
+    m_pageSelector->setLeftMargin(0);
+    m_pageSelector->insertAsideOfHorizontalScrollBar(m_reportView);
     m_pageSelector->setRecordCount(0);
     m_pageSelector->setInsertingButtonVisible(false);
     m_pageSelector->setLabelText(i18n("Page"));
@@ -373,6 +378,7 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
                 m_pageCount = m_reportDocument->pages();
 #ifndef KEXI_MOBILE
                 m_pageSelector->setRecordCount(m_pageCount);
+                m_pageSelector->setCurrentRecordNumber(1);
 #endif
             }
 

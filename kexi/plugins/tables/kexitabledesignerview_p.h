@@ -42,7 +42,7 @@ class Command;
 class KexiTableDesignerViewPrivate
 {
 public:
-    KexiTableDesignerViewPrivate(KexiTableDesignerView* aDesignerView);
+    explicit KexiTableDesignerViewPrivate(KexiTableDesignerView* aDesignerView);
     ~KexiTableDesignerViewPrivate();
 
     int generateUniqueId();
@@ -118,31 +118,31 @@ public:
     //! internal
     int maxTypeNameTextWidth;
     //! Set to true in beforeSwitchTo() to avoid asking again in storeData()
-    bool dontAskOnStoreData : 1;
+    bool dontAskOnStoreData;
 
-    bool slotTogglePrimaryKeyCalled : 1;
+    bool slotTogglePrimaryKeyCalled;
 
-    bool primaryKeyExists : 1;
+    bool primaryKeyExists;
     //! Used in slotPropertyChanged() to avoid infinite recursion
-    bool slotPropertyChanged_primaryKey_enabled : 1;
+    bool slotPropertyChanged_primaryKey_enabled;
     //! Used in slotPropertyChanged() to avoid infinite recursion
-    bool slotPropertyChanged_subType_enabled : 1;
+    bool slotPropertyChanged_subType_enabled;
     //! used in slotPropertyChanged() to disable addHistoryCommand()
-    bool addHistoryCommand_in_slotPropertyChanged_enabled : 1;
+    bool addHistoryCommand_in_slotPropertyChanged_enabled;
     //! used in slotRowUpdated() to disable addHistoryCommand()
-    bool addHistoryCommand_in_slotRowUpdated_enabled : 1;
+    bool addHistoryCommand_in_slotRowUpdated_enabled;
     //! used in slotAboutToDeleteRow() to disable addHistoryCommand()
-    bool addHistoryCommand_in_slotAboutToDeleteRow_enabled : 1;
+    bool addHistoryCommand_in_slotAboutToDeleteRow_enabled;
     //! used in slotRowInserted() to disable addHistoryCommand()
-    bool addHistoryCommand_in_slotRowInserted_enabled : 1;
+    bool addHistoryCommand_in_slotRowInserted_enabled;
 
     //! used to disable slotBeforeCellChanged()
-    bool slotBeforeCellChanged_enabled : 1;
+    bool slotBeforeCellChanged_enabled;
 
 //! @todo temp; remove this:
     //! Temporary flag, used for testing the Alter Table machinery. Affects storeData()
     //! Used in slotExecuteRealAlterTable() to switch on real alter table for a while.
-    bool tempStoreDataUsingRealAlterTable : 1;
+    bool tempStoreDataUsingRealAlterTable;
 
     /*! Set to a recent result of calling \ref tristate KexiTableDesignerView::storeData(bool dontAsk).
      Then, it is used in \ref void KexiTableDesignerView::executeRealAlterTable()

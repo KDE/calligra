@@ -44,6 +44,7 @@ public:
     Version version;
     QMap<QByteArray, QString> pictureNames; // uid, filename
     std::map<unsigned, FormatFont> fonts; // mapping from font index to Swinder::FormatFont
+    QDateTime baseDate;
 };
 
 Workbook::Workbook(KoStore* store)
@@ -55,6 +56,7 @@ Workbook::Workbook(KoStore* store)
     d->activeTab = -1;
     d->passwd = 0; // password protection disabled
     d->dggContainer = 0;
+    d->baseDate = QDateTime(QDate(1899, 12, 30));
 
     // initialize palette
     static const char *const default_palette[64-8] = { // default palette for all but the first 8 colors
@@ -321,6 +323,16 @@ void Workbook::setPictureNames(const QMap< QByteArray, QString > pictureNames)
 QString Workbook::pictureName(const QByteArray& uid) const
 {
     return d->pictureNames.value(uid);
+}
+
+QDateTime Workbook::baseDate() const
+{
+    return d->baseDate;
+}
+
+void Workbook::setBaseDate(const QDateTime& baseDate)
+{
+    d->baseDate = baseDate;
 }
 
 

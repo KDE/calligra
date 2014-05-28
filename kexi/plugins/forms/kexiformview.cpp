@@ -71,8 +71,8 @@ public:
       , query(0)
       , queryIsOwned(false)
       , cursor(0)
-  {
-  }
+    {
+    }
 
     KexiDBForm *dbform;
     KexiFormScrollView *scrollView;
@@ -1054,7 +1054,7 @@ KexiFormView::setFocusInternal()
                 KexiUtils::setFocusWithReason(d->setFocusInternalOnce, Qt::OtherFocusReason);
                 d->setFocusInternalOnce = 0;
             } else {
-                //ok? SET_FOCUS_USING_REASON(d->dbform->focusWidget(), QFocusEvent::Other);//Tab);
+                //ok? SET_FOCUS_USING_REASON(d->dbform->focusWidget(), QFocusEvent::Other);
             }
             return;
         }
@@ -1209,7 +1209,7 @@ KexiFormView::insertAutoFields(const QString& sourcePartClass, const QString& so
     }
 
     //eventually, add entire command group to active form
-    form()->addCommand(group); //2.0 , true/*exec*/);
+    form()->addCommand(group);
     //kDebug() << *group;
     d->scrollView->widget()->update();
     d->scrollView->refreshContentsSize();

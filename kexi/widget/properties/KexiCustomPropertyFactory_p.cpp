@@ -24,6 +24,7 @@
 #include <koproperty/Property.h>
 #include <kexiutils/identifier.h>
 
+//! @todo
 #if 0 //TODO
 KexiImagePropertyEdit::KexiImagePropertyEdit(
     KoProperty::Property *property, QWidget *parent)

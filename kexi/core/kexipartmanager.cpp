@@ -18,7 +18,6 @@
  * Boston, MA 02110-1301, USA.
 */
 
-//#include <klibloader.h>
 #include <kservicetypetrader.h>
 #include <kservicetype.h>
 #include <kdebug.h>

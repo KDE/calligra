@@ -187,6 +187,7 @@ void KexiDBTextEdit::setReadOnly(bool readOnly)
 #else
 #pragma WARNING( TODO KexiDBTextEdit::setReadOnly() - bg color )
 #endif
+//! @todo
 #if 0//TODO
     QPalette p = palette();
     QColor c(readOnly
@@ -197,12 +198,6 @@ void KexiDBTextEdit::setReadOnly(bool readOnly)
     setPalette(p);
 #endif
 }
-
-/* Qt4
-void KexiDBTextEdit::setText( const QString & text, const QString & context )
-{
-  KTextEdit::setText(text, context);
-}*/
 
 QWidget* KexiDBTextEdit::widget()
 {
@@ -268,7 +263,7 @@ void KexiDBTextEdit::setDisplayDefaultValue(QWidget* widget, bool displayDefault
     KexiFormDataItemInterface::setDisplayDefaultValue(widget, displayDefaultValue);
     // initialize display parameters for default / entered value
     KexiDisplayUtils::DisplayParameters * const params
-    = displayDefaultValue ? m_displayParametersForDefaultValue : m_displayParametersForEnteredValue;
+        = displayDefaultValue ? m_displayParametersForDefaultValue : m_displayParametersForEnteredValue;
     QPalette pal(palette());
     pal.setColor(QPalette::Active, QPalette::Text, params->textColor);
     setPalette(pal);
@@ -374,8 +369,6 @@ void KexiDBTextEdit::createDataSourceLabel()
 
 void KexiDBTextEdit::selectAllOnFocusIfNeeded()
 {
-//    moveCursorToEnd();
-//    selectAll();
 }
 
 void KexiDBTextEdit::updatePalette()

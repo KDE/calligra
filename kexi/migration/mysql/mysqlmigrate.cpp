@@ -180,8 +180,8 @@ tristate MySQLMigrate::drv_queryStringListFromSQL(
         }
         uint numFields = mysql_num_fields(res);
         if (columnNumber > (numFields - 1)) {
-            kWarning() << "MySQLMigrate::drv_querySingleStringFromSQL(" << sqlStatement
-                << "): columnNumber too large ("
+            kWarning() << sqlStatement
+                << ": columnNumber too large ("
                 << columnNumber << "), expected 0.." << numFields;
             mysql_free_result(res);
             return false;

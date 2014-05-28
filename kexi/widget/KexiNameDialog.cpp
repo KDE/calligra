@@ -107,8 +107,6 @@ void KexiNameDialog::init()
     lyr->addWidget(d->widget, 0, 1);
     lyr->addItem(new QSpacerItem(25, 10, QSizePolicy::Expanding, QSizePolicy::Minimum), 0, 2);
     lyr->addItem(new QSpacerItem(5, 10, QSizePolicy::Minimum, QSizePolicy::Expanding), 1, 1);
-// d->widget->captionLineEdit()->selectAll();
-// d->widget->captionLineEdit()->setFocus();
     connect(d->widget, SIGNAL(messageChanged()), this, SLOT(updateSize()));
     updateSize();
     enableButtonOk(true);
@@ -118,11 +116,9 @@ void KexiNameDialog::init()
 
 void KexiNameDialog::updateSize()
 {
-// resize( QSize(400, 140 + (d->widget->lbl_message->isVisible()?d->widget->lbl_message->height():0) )
   resize(QSize(400, 140 + (!d->widget->messageLabel()->text().isEmpty() ?
                            d->widget->messageLabel()->height() : 0))
            .expandedTo(minimumSizeHint()));
-// updateGeometry();
 }
 
 void KexiNameDialog::slotTextChanged()

@@ -125,7 +125,6 @@ KexiProjectSelectorWidget::KexiProjectSelectorWidget(QWidget* parent,
     d->fileicon = KIcon(KexiDB::defaultFileBasedDriverIconName());
     setWindowIcon(d->fileicon);
     d->dbicon = koIcon("server-database");
-// list->setHScrollBarMode( QScrollView::AlwaysOn );
 
     QTreeWidgetItem *headerItem = list()->headerItem();
     QTreeWidgetItem *newHeaderItem = new QTreeWidgetItem;
@@ -145,8 +144,6 @@ KexiProjectSelectorWidget::KexiProjectSelectorWidget(QWidget* parent,
     setProjectSet(d->prj_set);
     connect(list(), SIGNAL(itemDoubleClicked(QTreeWidgetItem*,int)),
             this, SLOT(slotItemExecuted(QTreeWidgetItem*)));
-    //connect(list(), SIGNAL(returnPressed(QTreeWidgetItem*)),
-    //        this, SLOT(slotItemExecuted(QTreeWidgetItem*)));
     connect(list(), SIGNAL(itemSelectionChanged()),
             this, SLOT(slotItemSelected()));
 }
@@ -208,9 +205,9 @@ void KexiProjectSelectorWidget::setProjectSet(KexiProjectSet* prj_set)
     d->prj_set = prj_set;
     if (!d->prj_set)
         return;
-//TODO: what with project set's ownership?
+//! @todo what with project set's ownership?
     if (d->prj_set->error()) {
-        kDebug() << "KexiProjectSelectorWidget::setProjectSet() : d->prj_set->error() !";
+        kDebug() << "d->prj_set->error() !";
         return;
     }
     KexiDB::DriverManager manager;
@@ -230,8 +227,7 @@ void KexiProjectSelectorWidget::setProjectSet(KexiProjectSet* prj_set)
                 item->setIcon(0, d->dbicon);
         }
         else {
-            kWarning() << "KexiProjectSelector::KexiProjectSelector(): no driver found for '"
-            << data->constConnectionData()->driverName << "'!";
+            kWarning() << "no driver found for" << data->constConnectionData()->driverName;
         }
     }
     list()->setSortingEnabled(true);
@@ -276,16 +272,6 @@ QTreeWidget* KexiProjectSelectorWidget::list() const
 {
     return Ui_KexiProjectSelector::list;
 }
-
-// void KexiProjectSelectorWidget::keyPressEvent(QKeyEvent* event)
-// {
-//     if (event->key() == Qt::Key_Enter && event->modifiers() == Qt::NoModifier) {
-//         event->accept();
-//         slotItemExecuted();
-//         return;
-//     }
-//     QWidget::keyPressEvent(event);
-// }
 
 bool KexiProjectSelectorWidget::eventFilter(QObject* watched, QEvent* event)
 {

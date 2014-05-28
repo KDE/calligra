@@ -54,31 +54,11 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent)
         , m_tableOrQuerySchema(0)
 #endif
 {
-/*moved
-    Q3VBoxLayout *vlyr = new Q3VBoxLayout(this);
-    m_objectInfoLabel = new KexiObjectInfoLabel(this);
-    m_objectInfoLabel->setObjectName("KexiObjectInfoLabel");
-    vlyr->addWidget(m_objectInfoLabel);*/
-//moved    vlyr->addSpacing(8);
-
-    //Section 1: Form's/Widget's Data Source
-/*2.0    KoProperty::GroupContainer *container = new KoProperty::GroupContainer(
-        i18n("Data Source"), this);
-    layout()->addWidget(container);
-
-    QWidget *contents = new QWidget(container);
-    container->setContents(contents);*/
-//2.0    QVBoxLayout *contentsVlyr = new QVBoxLayout(this);
-//2.0    contentsVlyr->setContentsMargins(0, 0, 0, 0);
-
     infoLabel()->setContentsMargins(0, 0, 0, spacing());
 
     m_noDataSourceAvailableLabel = new QLabel(m_noDataSourceAvailableSingleText, this);
     m_noDataSourceAvailableLabel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
     m_noDataSourceAvailableLabel->setContentsMargins(0, 0, 0, spacing());
-//m_noDataSourceAvailableLabel->setAutoFillBackground(true);
-//m_noDataSourceAvailableLabel->setPaletteBackgroundColor(Qt::red);
-//2.0    m_noDataSourceAvailableLabel->setMargin(2);
     m_noDataSourceAvailableLabel->setAlignment(Qt::AlignBottom | Qt::AlignLeft);
     m_noDataSourceAvailableLabel->setWordWrap(true);
     mainLayout()->addWidget(m_noDataSourceAvailableLabel);
@@ -94,12 +74,10 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent)
         i18nc("Table Field or Query Field", "Widget's data source"), this);
 #endif
     m_widgetDSLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
-//2.0    m_widgetDSLabel->setMargin(2);
-//2.0    m_widgetDSLabel->setMinimumHeight(IconSize(KIconLoader::Small) + 4);
     m_widgetDSLabel->setAlignment(Qt::AlignLeft | Qt::AlignBottom);
     hlyr->addWidget(m_widgetDSLabel);
 
-#if 0 //2.0: clear button is available in the combobox itself
+#if 0
     m_clearWidgetDSButton = new KexiSmallToolButton(
         koIcon("edit-clear-locationbar-rtl"), QString(), this);
     m_clearWidgetDSButton->setObjectName("clearWidgetDSButton");
@@ -120,37 +98,24 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent)
     
     m_widgetDataSourceComboSpacer = addWidgetSpacer();
 
-    /* m_dataSourceSeparator = new Q3Frame(contents);
-      m_dataSourceSeparator->setFrameShape(Q3Frame::HLine);
-      m_dataSourceSeparator->setFrameShadow(Q3Frame::Sunken);
-      mainLayout()->addWidget(m_dataSourceSeparator);*/
-
-//    addSpacing();
-
     //- Form's Data Source
     hlyr = new QHBoxLayout();
     hlyr->setContentsMargins(0, 0, 0, 0);
     mainLayout()->addLayout(hlyr);
     m_dataSourceLabel = new QLabel(i18n("Form's data source"), this);
     m_dataSourceLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
-//2.0    m_dataSourceLabel->setMargin(2);
-//2.0    m_dataSourceLabel->setMinimumHeight(IconSize(KIconLoader::Small) + 4);
     m_dataSourceLabel->setAlignment(Qt::AlignLeft | Qt::AlignBottom);
     hlyr->addWidget(m_dataSourceLabel);
-
-//m_dataSourceLabel->setAutoFillBackground(true);
-//m_dataSourceLabel->setPaletteBackgroundColor(Qt::red);
 
     m_gotoButton = new KexiSmallToolButton(
         koIcon("go-jump"), QString(), this);
     m_gotoButton->setObjectName("gotoButton");
-//2.0    m_gotoButton->setMinimumHeight(m_dataSourceLabel->minimumHeight());
     m_gotoButton->setToolTip(i18n("Go to selected form's data source"));
     m_gotoButton->setWhatsThis(i18n("Goes to selected form's data source"));
     hlyr->addWidget(m_gotoButton);
     connect(m_gotoButton, SIGNAL(clicked()), this, SLOT(slotGotoSelected()));
 
-#if 0 //2.0: clear button is available in the combobox itself
+#if 0
     m_clearDSButton = new KexiSmallToolButton(
         koIcon("edit-clear-locationbar-rtl"), QString(), this);
     m_clearDSButton->setObjectName("clearDSButton");
@@ -173,30 +138,12 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent)
 #ifdef KEXI_NO_AUTOFIELD_WIDGET
     m_availableFieldsLabel = 0;
     m_addField = 0;
-// m_fieldListView = 0;
     mainLayout()->addStretch();
 #else
-//    addSpacing();
-    /* Q3Frame *separator = new QFrame(this);
-      separator->setFrameShape(Q3Frame::HLine);
-      separator->setFrameShadow(Q3Frame::Sunken);
-      vlyr->addWidget(separator);*/
-    /*
-      KPopupTitle *title = new KPopupTitle(this);
-      title->setTitle(i18n("Inserting fields"));
-      vlyr->addWidget(title);
-      vlyr->addSpacing(4);*/
-
-
     //2. Inserting fields
-/*2.0    container = new KoProperty::GroupContainer(i18n("Inserting Fields"), this);
-    static_cast<QBoxLayout*>(layout())->addWidget(container, 1);*/
 
     //helper info
 //! @todo allow to hide such helpers by adding global option
-//2.0    contents = new QWidget(container);
-//2.0    container->setContents(contents);
-//2.0    mainLayout() = new QVBoxLayout(contents);
     hlyr = new QHBoxLayout();
     hlyr->setContentsMargins(0, 0, 0, 0);
     mainLayout()->addLayout(hlyr);
@@ -213,21 +160,16 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent)
     hlyr->addWidget(m_availableFieldsDescriptionLabel);
 
     //Available Fields
-//2.0    mainLayout()->addSpacing(4);
     hlyr = new QHBoxLayout();
     hlyr->setContentsMargins(0, 0, 0, 0);
     mainLayout()->addLayout(hlyr);
     m_availableFieldsLabel = new QLabel(i18n("Available fields"), this);
     m_availableFieldsLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
-//2.0    m_availableFieldsLabel->setMargin(2);
-//2.0    m_availableFieldsLabel->setMinimumHeight(IconSize(KIconLoader::Small));
     hlyr->addWidget(m_availableFieldsLabel);
 
     m_addField = new KexiSmallToolButton(
         koIcon("add_field"), i18nc("Insert selected field into form", "Insert"), this);
     m_addField->setObjectName("addFieldButton");
-//2.0    m_addField->setMinimumHeight(m_availableFieldsLabel->minimumHeight());
-// m_addField->setTextPosition(QToolButton::Right);
     m_addField->setFocusPolicy(Qt::StrongFocus);
     m_addField->setToolTip(i18n("Insert selected fields into form"));
     m_addField->setWhatsThis(i18n("Inserts selected fields into form"));
@@ -280,12 +222,6 @@ void KexiDataSourcePage::clearFormDataSourceSelection(bool alsoClearComboBox)
     m_insideClearFormDataSourceSelection = true;
     if (alsoClearComboBox && !m_formDataSourceCombo->selectedName().isEmpty())
         m_formDataSourceCombo->setDataSource(QString(), QString());
-// if (!m_formDataSourceCombo->currentText().isEmpty()) {
-//  m_formDataSourceCombo->setCurrentText("");
-//  emit m_formDataSourceCombo->dataSourceSelected();
-// }
-/*2.0: clear button is available in the combobox itself
-    m_clearDSButton->setEnabled(false);*/
     m_gotoButton->setEnabled(false);
     m_widgetDataSourceCombo->setFieldOrExpression(QString());
 #ifndef KEXI_NO_AUTOFIELD_WIDGET
@@ -297,13 +233,8 @@ void KexiDataSourcePage::clearFormDataSourceSelection(bool alsoClearComboBox)
 
 void KexiDataSourcePage::clearWidgetDataSourceSelection()
 {
-//    if (!m_widgetDataSourceCombo->currentText().isEmpty()) {
-//2.0        m_widgetDataSourceCombo->setEditText(QString());
-        m_widgetDataSourceCombo->setFieldOrExpression(QString());
-        slotFieldSelected();
-//    }
-/*2.0: clear button is available in the combobox itself
-    m_clearWidgetDSButton->setEnabled(false);*/
+    m_widgetDataSourceCombo->setFieldOrExpression(QString());
+    slotFieldSelected();
 }
 
 void KexiDataSourcePage::slotGotoSelected()
@@ -345,16 +276,11 @@ void KexiDataSourcePage::slotFieldDoubleClicked(const QString& sourcePartClass, 
 void KexiDataSourcePage::slotFormDataSourceTextChanged(const QString & string)
 {
     Q_UNUSED(string);
-    const bool enable = m_formDataSourceCombo->isSelectionValid(); //!string.isEmpty() && m_formDataSourceCombo->selectedName() == string.toLatin1();
+    const bool enable = m_formDataSourceCombo->isSelectionValid();
     if (!enable) {
         clearFormDataSourceSelection(m_formDataSourceCombo->selectedName().isEmpty()/*alsoClearComboBox*/);
     }
     updateSourceFieldWidgetsAvailability();
-    /*#ifndef KEXI_NO_AUTOFIELD_WIDGET
-      m_fieldListView->setEnabled(enable);
-    // m_addField->setEnabled(enable);
-      m_availableFieldsLabel->setEnabled(enable);
-    #endif*/
 }
 
 void KexiDataSourcePage::slotFormDataSourceChanged()
@@ -386,10 +312,6 @@ void KexiDataSourcePage::slotFormDataSourceChanged()
     if (!dataSourceFound) {
         m_widgetDataSourceCombo->setTableOrQuery(QString(), true);
     }
-    //if (m_widgetDataSourceCombo->hasFocus())
-//  m_formDataSourceCombo->setFocus();
-/*2.0: clear button is available in the combobox itself
-    m_clearDSButton->setEnabled(dataSourceFound);*/
     m_gotoButton->setEnabled(dataSourceFound);
     if (dataSourceFound) {
         slotFieldListViewSelectionChanged();
@@ -416,9 +338,6 @@ void KexiDataSourcePage::slotFieldSelected()
     if (field)
         dataType = field->type();
 
-/*2.0: clear button is available in the combobox itself
-    m_clearWidgetDSButton->setEnabled(!m_widgetDataSourceCombo->fieldOrExpression().isEmpty());*/
-
     emit dataSourceFieldOrExpressionChanged(
         m_widgetDataSourceCombo->fieldOrExpression(),
         m_widgetDataSourceCombo->fieldOrExpressionCaption(),
@@ -442,7 +361,8 @@ void KexiDataSourcePage::assignPropertySet(KoProperty::Set* propertySet)
         return; //the same object
     m_currentObjectName = objectName;
 
-#if KexiDataSourcePage_FADE //TODO
+//! @todo
+#if KexiDataSourcePage_FADE
     KFadeWidgetEffect *animation = 0;
     if (isVisible())
         animation = new KFadeWidgetEffect(this);
@@ -454,18 +374,6 @@ void KexiDataSourcePage::assignPropertySet(KoProperty::Set* propertySet)
     updateInfoLabelForPropertySet(propertySet);
 
     const bool isForm = objectClassName == "KexiDBForm";
-// kDebug() << "objectClassName=" << objectClassName;
-// {
-    /*  //this is top level form's surface: data source means table or query
-        QCString dataSourcePartClass, dataSource;
-        if (buffer->hasProperty("dataSourcePartClass"))
-          dataSourcePartClass = (*buffer)["dataSourcePartClass"].value().toCString();
-        if (buffer->hasProperty("dataSource"))
-          dataSource = (*buffer)["dataSource"].value().toCString();
-        m_formDataSourceCombo->setDataSource(dataSourcePartClass, dataSource);*/
-// }
-// else {
-
     const bool multipleSelection = objectClassName == "special:multiple";
     const bool hasDataSourceProperty = propertySet
                                        && propertySet->contains("dataSource") && !multipleSelection;
@@ -480,21 +388,15 @@ void KexiDataSourcePage::assignPropertySet(KoProperty::Set* propertySet)
             m_noDataSourceAvailableLabel->hide();
             m_widgetDataSourceCombo->setFieldOrExpression(dataSource);
             m_widgetDataSourceCombo->setEnabled(true);
-/*2.0: clear button is available in the combobox itself
-            m_clearWidgetDSButton->setEnabled(!m_widgetDataSourceCombo->currentText().isEmpty());*/
             m_widgetDSLabel->show();
-/*2.0: clear button is available in the combobox itself
-            m_clearWidgetDSButton->show();*/
             m_widgetDataSourceCombo->show();
             m_widgetDataSourceComboSpacer->show();
-//   m_dataSourceSeparator->hide();
             updateSourceFieldWidgetsAvailability();
         }
     }
 
     if (isForm) {
         m_noDataSourceAvailableLabel->hide();
-//  m_dataSourceSeparator->hide();
     }
     else if (!hasDataSourceProperty) {
         if (multipleSelection) {
@@ -504,22 +406,17 @@ void KexiDataSourcePage::assignPropertySet(KoProperty::Set* propertySet)
             m_noDataSourceAvailableLabel->setText(m_noDataSourceAvailableSingleText);
         }
         m_noDataSourceAvailableLabel->show();
-//  m_dataSourceSeparator->show();
-        //make 'No data source could be assigned' label's height the same as the 'source field' combo+label
-//2.0        m_noDataSourceAvailableLabel->setMinimumHeight(m_widgetDSLabel->height()
-//2.0                + m_widgetDataSourceCombo->height()/*-m_dataSourceSeparator->height()*/);
         m_widgetDataSourceCombo->setEditText(QString());
     }
 
     if (isForm || !hasDataSourceProperty) {
         //no source field can be set
         m_widgetDSLabel->hide();
-/*2.0: clear button is available in the combobox itself
-        m_clearWidgetDSButton->hide();*/
         m_widgetDataSourceCombo->hide();
         m_widgetDataSourceComboSpacer->hide();
     }
-#if KexiDataSourcePage_FADE //TODO
+//! @todo
+#if KexiDataSourcePage_FADE
     if (animation)
         animation->start(100);
 #endif

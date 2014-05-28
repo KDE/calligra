@@ -21,7 +21,6 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include <db/connection.h>
 #include "oracleconnection.h"
 #include <occi.h>
-//#include <vector>
 
 namespace KexiDB {
 

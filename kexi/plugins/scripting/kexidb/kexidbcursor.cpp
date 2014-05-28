@@ -114,13 +114,13 @@ bool KexiDBCursor::setValue(uint index, QVariant value)
 {
     ::KexiDB::QuerySchema* query = m_cursor->query();
     if (! query) {
-        kDebug() << "Invalid query in KexiDBCursor::setValue index=" << index << " value=" << value;
+        kWarning() << "Invalid query, index=" << index << " value=" << value;
         return false;
     }
 
     ::KexiDB::QueryColumnInfo* column = query->fieldsExpanded().at(index);
     if (! column) {
-        kDebug() << "Invalid column in KexiDBCursor::setValue index=" << index << " value=" << value;
+        kWarning() << "Invalid column, index=" << index << " value=" << value;
         return false;
     }
 
@@ -152,7 +152,6 @@ bool KexiDBCursor::save()
             //break;
         }
     }
-    //m_cursor->close();
     clearBuffers();
     return ok;
 }

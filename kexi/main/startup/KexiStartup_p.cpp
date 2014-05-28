@@ -102,7 +102,7 @@ void SQLite2ToSQLite3Migration::processExited(KProcess* process)
 
     kDebug() << process->isRunning() << " " << process->exitStatus();
     m_dlg->close();
-    result = !process->isRunning() && 0 == process->exitStatus();//m_process->normalExit();
+    result = !process->isRunning() && 0 == process->exitStatus();
     kDebug() << result.toString();
     if (result == true) {
         if (m_restoreStat) {
@@ -116,7 +116,7 @@ void SQLite2ToSQLite3Migration::processExited(KProcess* process)
 void SQLite2ToSQLite3Migration::cancelClicked()
 {
     kDebug() << result.toString() << " cancelClicked() " << m_process->isRunning() << " "
-    << m_process->exitStatus();
+        << m_process->exitStatus();
     if (!m_process->isRunning() && 0 == m_process->exitStatus())
         return;
     result = cancelled;

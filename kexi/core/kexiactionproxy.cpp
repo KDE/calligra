@@ -144,7 +144,7 @@ void KexiActionProxy::plugSharedAction(const QString& action_name, QWidget* w)
 {
     QAction *a = sharedAction(action_name);
     if (!a) {
-        kWarning() << "KexiActionProxy::plugSharedAction(): NO SUCH ACTION: " << action_name;
+        kWarning() << "NO SUCH ACTION:" << action_name;
         return;
     }
     w->addAction(a);
@@ -154,7 +154,7 @@ void KexiActionProxy::unplugSharedAction(const QString& action_name, QWidget* w)
 {
     QAction *a = sharedAction(action_name);
     if (!a) {
-        kWarning() << "KexiActionProxy::unplugSharedAction(): NO SUCH ACTION: " << action_name;
+        kWarning() << "NO SUCH ACTION:" << action_name;
         return;
     }
     w->removeAction(a);
@@ -164,7 +164,7 @@ KAction* KexiActionProxy::plugSharedAction(const QString& action_name, const QSt
 {
     QAction *a = sharedAction(action_name);
     if (!a) {
-        kWarning() << "KexiActionProxy::plugSharedAction(): NO SUCH ACTION: " << action_name;
+        kWarning() << "NO SUCH ACTION:" << action_name;
         return 0;
     }
     QString altName = a->objectName() + "_alt";
