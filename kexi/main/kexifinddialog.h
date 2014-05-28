@@ -107,6 +107,9 @@ public slots:
 //! @todo add "Search again" hyperlink
     void updateMessage(bool found = true);
 
+    void addToFindHistory();
+    void addToReplaceHistory();
+
 signals:
     //! Emitted after clicking "Find next" button or pressing appropriate shortcut set by setActions()
     void findNext();
