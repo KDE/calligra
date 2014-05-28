@@ -5,45 +5,72 @@
   <project_license>GPL-2.0+</project_license>
   <name>Plan</name>
   <name xml:lang="cs">Plan</name>
+  <name xml:lang="nl">Plan</name>
   <name xml:lang="pt">Plan</name>
+  <name xml:lang="pt-BR">Plan</name>
+  <name xml:lang="sv">Plan</name>
   <name xml:lang="uk">Plan</name>
   <name xml:lang="x-test">xxPlanxx</name>
   <summary>Project Management</summary>
   <summary xml:lang="cs">Správa projektů</summary>
+  <summary xml:lang="nl">Projectbeheer</summary>
   <summary xml:lang="pt">Gestão de Projectos</summary>
+  <summary xml:lang="pt-BR">Gerenciamento de Projetos</summary>
+  <summary xml:lang="sv">Projekthantering</summary>
   <summary xml:lang="uk">Керування проектами</summary>
   <summary xml:lang="x-test">xxProject Managementxx</summary>
   <description>
     <p>
       Plan is a project management application. It is intended for managing moderately large projects with multiple resources.
     </p>
+    <p xml:lang="nl">Plan is een toepassing voor projectbeheer. Het is bedoeld voor het beheer van middelgrote projecten met meerdere hulpbronnen.</p>
     <p xml:lang="pt">O Plan é uma aplicação de gestão de projectos. Pretende ser usada para gerir projectos relativamente grandes com vários recursos.</p>
+    <p xml:lang="pt-BR">Plan é um aplicativo para gerenciamento de projetos. Destina-se ao gerenciamento de projetos relativamente grandes com vários recursos.</p>
+    <p xml:lang="sv">Plan är ett projekthanteringsprogram. Det är avsett för att hantera måttligt stora projekt med flera resurser.</p>
     <p xml:lang="uk">Plan — програма для керування проектами. Її призначено для керування помірно великими проектами з декількома ресурсами або виконавцями.</p>
     <p xml:lang="x-test">xxPlan is a project management application. It is intended for managing moderately large projects with multiple resources.xx</p>
     <p>Features:</p>
     <p xml:lang="cs">Vlastnosti:</p>
+    <p xml:lang="nl">Mogelijkheden:</p>
     <p xml:lang="pt">Características:</p>
+    <p xml:lang="pt-BR">Funcionalidades:</p>
+    <p xml:lang="sv">Funktioner:</p>
     <p xml:lang="uk">Можливості:</p>
     <p xml:lang="x-test">xxFeatures:xx</p>
     <ul>
       <li>Multiple views: Gant Charts, Resource View, Accounts View</li>
+      <li xml:lang="nl">Meerdere weergaven: Gant-kaarten, hulpbronweergave, accountweergave</li>
       <li xml:lang="pt">Diversas áreas: Diagramas de Gantt, Área de Recursos, Área de Contas</li>
+      <li xml:lang="pt-BR">Diversos modos de exibição: Diagramas de Gantt, Área de Recursos, Área de Contas</li>
+      <li xml:lang="sv">Flera vyer: Gant-diagram, resursvy, kontovy</li>
       <li xml:lang="uk">Декілька режимів перегляду: діаграми Ґанта, перегляд виконавців, перегляд рахунків.</li>
       <li xml:lang="x-test">xxMultiple views: Gant Charts, Resource View, Accounts Viewxx</li>
       <li>Uses standard structures: Work breakdown structure (WBS), Resource breakdown structure (RBS), Cost breakdown structure (CBS)</li>
+      <li xml:lang="nl">Gebruikt standaard structuren: Work breakdown structure (WBS), Resource breakdown structure (RBS), Cost breakdown structure (CBS)</li>
       <li xml:lang="pt">Usa estruturas padrão: estruturas de divisão de trabalho (WBS), estruturas de divisão de recursos (RBS), estruturas de divisão de custos (CBS)</li>
+      <li xml:lang="pt-BR">Usa estruturas padrão: Estruturas de divisão de trabalho (WBS), estruturas de divisão de recursos (RBS), estruturas de divisão de custos (CBS)</li>
+      <li xml:lang="sv">Använder standardstrukturer: Arbetsfördelningsstruktur (WBS), resursfördelningsstruktur (RBS), kostnadsfördelningsstruktur (CBS)</li>
       <li xml:lang="uk">Використання стандартних структур: структури рознарядки робіт (СРР або WBS), структури розподілу вартості (СРВ або CBS) та структури розподілу ресурсів (СРР або RBS).</li>
       <li xml:lang="x-test">xxUses standard structures: Work breakdown structure (WBS), Resource breakdown structure (RBS), Cost breakdown structure (CBS)xx</li>
       <li>Configurable level of detail on Gantt Chart</li>
+      <li xml:lang="nl">Instelbaar detailniveau op Gant-kaart</li>
       <li xml:lang="pt">Nível de detalhe configurável no Diagrama de Gantt</li>
+      <li xml:lang="pt-BR">Nível de detalhe configurável no Diagrama de Gantt</li>
+      <li xml:lang="sv">Anpassningsbar detaljnivå för Gantt-diagram</li>
       <li xml:lang="uk">Налаштовуваний рівень деталізації у діаграмах Ґанта.</li>
       <li xml:lang="x-test">xxConfigurable level of detail on Gantt Chartxx</li>
       <li>Supports Summarytasks, Tasks, and milestones</li>
+      <li xml:lang="nl">Ondersteunt Samenvattingstaken, taken en mijlpalen</li>
       <li xml:lang="pt">Suporta tarefas-resumo, tarefas e marcos</li>
+      <li xml:lang="pt-BR">Suporte a tarefas-resumo, tarefas e metas</li>
+      <li xml:lang="sv">Stöder sammanfattningsaktiviteter, aktiviteter och milstenar</li>
       <li xml:lang="uk">Підтримка підсумкових завдань, завдань та етапів.</li>
       <li xml:lang="x-test">xxSupports Summarytasks, Tasks, and milestonesxx</li>
       <li>Configurable Scheduling Constraints</li>
+      <li xml:lang="nl">Instelbare voorwaarden voor planning</li>
       <li xml:lang="pt">Restrições de Escalonamento Configuráveis</li>
+      <li xml:lang="pt-BR">Restrições de agendamento configuráveis</li>
+      <li xml:lang="sv">Anpassningsbara tidplanebegränsning</li>
       <li xml:lang="uk">Налаштовувані обмеження щодо планування.</li>
       <li xml:lang="x-test">xxConfigurable Scheduling Constraintsxx</li>
     </ul>

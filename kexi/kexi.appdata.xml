@@ -7,12 +7,18 @@
   <name xml:lang="cs">Kexi</name>
   <name xml:lang="nl">Kexi</name>
   <name xml:lang="pt">Kexi</name>
+  <name xml:lang="pt-BR">Kexi</name>
+  <name xml:lang="sk">Kexi</name>
+  <name xml:lang="sv">Kexi</name>
   <name xml:lang="uk">Kexi</name>
   <name xml:lang="x-test">xxKexixx</name>
   <summary>Database Creator</summary>
   <summary xml:lang="cs">Tvůrce databází</summary>
   <summary xml:lang="nl">Database aanmaken</summary>
   <summary xml:lang="pt">Criador de Bases de Dados</summary>
+  <summary xml:lang="pt-BR">Criação de bancos de dados</summary>
+  <summary xml:lang="sk">Správa databázy</summary>
+  <summary xml:lang="sv">Databasskapare</summary>
   <summary xml:lang="uk">Програма для створення баз даних</summary>
   <summary xml:lang="x-test">xxDatabase Creatorxx</summary>
   <description>
@@ -23,51 +29,74 @@
       All database objects - tables, queries, forms, reports - are stored in the database, making it easy to share data and design.
     </p>
     <p xml:lang="pt">O Kexi é um criador de bases de dados visuais, que faz parte do pacote Calligra. Pode ser usado para desenhar aplicações de bases de dados, inserir e editar dados, executar pesquisas e processar os dados. Poderá criar formulários para oferecer uma interface personalizada para os seus dados. Todos os objectos da base de dados - tabelas, pesquisas, formulários, relatórios - são guardados na base de dados, tornando simples a partilha e o desenho dos dados.</p>
+    <p xml:lang="pt-BR">Kexi é um criador visual de banco de dados, integrante do pacote Calligra. Pode ser usado para desenhar aplicativos de banco de dados, inserir e editar dados, executar pesquisas e processar dados. Podem ser criados formulários para oferecer uma interface personalizada para seus dados. Todos os objetos do banco de dados - tabelas, pesquisas, formulários, relatórios - são armazenados no próprio banco de dados, tornando simples o compartilhamento de dados e o visual.</p>
+    <p xml:lang="sv">Kexi är en visuell databasskapare, en del av Calligra-sviten. Den kan användas för att skapa databasprogram, infoga och redigera data, ställa frågor och behandla data. Formulär kan skapas för att tillhandahålla ett anpassat gränssnitt för data. Alla databasobjekt (tabeller, frågor, formulär, rapporter) lagras i databasen, vilket gör det enkelt att dela data och konstruktion.</p>
     <p xml:lang="uk">Kexi — програма для створення баз даних у візуальному режимі, частина комплексу програм Calligra. Цією програмою можна скористатися для створень мініпрограм для роботи з базами даних, додавання та редагування даних, виконання запитів та обробки даних. За допомогою створених програмою форм ви можете отримати потрібний вам режим доступу до ваших даних. Всі об’єкти баз даних — таблиці, запити, форми, звіти, — зберігаються у самій базі даних, що спрощує поширення даних та представлення даних.</p>
     <p xml:lang="x-test">xxKexi is a visual database creator, part of the Calligra Suite. It can be used for designing database applications, inserting and editing data, performing queries, and processing data. Forms can be created to provide a custom interface to your data. All database objects - tables, queries, forms, reports - are stored in the database, making it easy to share data and design.xx</p>
     <p>Features:</p>
     <p xml:lang="cs">Vlastnosti:</p>
     <p xml:lang="nl">Mogelijkheden:</p>
     <p xml:lang="pt">Características:</p>
+    <p xml:lang="pt-BR">Funcionalidades:</p>
+    <p xml:lang="sk">Funkcie:</p>
+    <p xml:lang="sv">Funktioner:</p>
     <p xml:lang="uk">Можливості:</p>
     <p xml:lang="x-test">xxFeatures:xx</p>
     <ul>
       <li>Full visual designers for tables, queries, forms and reports</li>
       <li xml:lang="pt">Desenhadores visuais completos para tabelas, pesquisas, formulários e relatórios</li>
+      <li xml:lang="pt-BR">Desenhos visuais completos para tabelas, pesquisas, formulários e relatórios</li>
+      <li xml:lang="sv">Fullständigt visuell konstruktion av tabeller, frågor, formulär och rapporter</li>
       <li xml:lang="uk">Повноцінне візуальне середовище для створення таблиць, запитів, форм та звітів.</li>
       <li xml:lang="x-test">xxFull visual designers for tables, queries, forms and reportsxx</li>
       <li>Running queries, support for parametrized queries</li>
       <li xml:lang="pt">Execução de pesquisas, suporte para pesquisas parametrizadas</li>
+      <li xml:lang="pt-BR">Execução de pesquisas, suporte para pesquisas parametrizadas</li>
+      <li xml:lang="sv">Ställa frågor, stöd för parameterbaserade frågor</li>
       <li xml:lang="uk">Виконання запитів, підтримка параметризованих запитів.</li>
       <li xml:lang="x-test">xxRunning queries, support for parametrized queriesxx</li>
       <li>Supports SQLite, MySQL, PostgreSQL and MS SQL Server databases</li>
       <li xml:lang="nl">Ondersteunt databases SQLite, MySQL, PostgreSQL en MS SQL Server</li>
       <li xml:lang="pt">Suporta bases de dados SQLite, MySQL, PostgreSQL e MS SQL Server</li>
+      <li xml:lang="pt-BR">Suporte aos banco de dados SQLite, MySQL, PostgreSQL e MS SQL Server</li>
+      <li xml:lang="sv">Stöder databaserna SQLite, MySQL, PostgreSQL och MS SQL Server</li>
       <li xml:lang="uk">Підтримка баз даних SQLite, MySQL, PostgreSQL та MS SQL.</li>
       <li xml:lang="x-test">xxSupports SQLite, MySQL, PostgreSQL and MS SQL Server databasesxx</li>
       <li>The only multiplatform graphical tool importing data from MS Access databases</li>
       <li xml:lang="nl">Het enige multiplatform grafische hulpmiddel die gegevens importeert uit MS Access databases</li>
       <li xml:lang="pt">A única ferramenta gráfica multi-plataforma que consegue importar bases de dados MS Access</li>
+      <li xml:lang="pt-BR">Única ferramenta gráfica multiplataforma que consegue importar banco de dados do MS Access</li>
+      <li xml:lang="sv">Det enda grafiska verktyget för flera plattformar som importerar data från MS Access-databaser</li>
       <li xml:lang="uk">Єдиний графічний багатоплатформовий інструмент, здатний імпортувати дані з баз даних MS Access.</li>
       <li xml:lang="x-test">xxThe only multiplatform graphical tool importing data from MS Access databasesxx</li>
       <li>Supports query design in dedicated SQL view</li>
       <li xml:lang="pt">Suporta o desenho de pesquisas numa área de SQL dedicada</li>
+      <li xml:lang="pt-BR">Suporte para desenho de pesquisas em uma área de SQL dedicada</li>
+      <li xml:lang="sv">Stöder frågekonstruktion i en dedicerad SQL-vy</li>
       <li xml:lang="uk">Підтримка створення запитів за допомогою спеціальної панелі SQL.</li>
       <li xml:lang="x-test">xxSupports query design in dedicated SQL viewxx</li>
       <li>Designing and displaying relational data using combo boxes (lookup columns)</li>
       <li xml:lang="pt">Desenho e apresentação de dados relacionais com listas (colunas de pesquisa)</li>
+      <li xml:lang="pt-BR">Desenho e apresentação de dados relacionais usando listas (colunas de pesquisa)</li>
+      <li xml:lang="sv">Konstruktion och visning av relationsdata med användning av kombinationsrutor (uppslagning av kolumner)</li>
       <li xml:lang="uk">Створення та показ пов’язаних даних за допомогою спадних списків (стовпчики пошуку).</li>
       <li xml:lang="x-test">xxDesigning and displaying relational data using combo boxes (lookup columns)xx</li>
       <li>Direct data entry or import using CSV format</li>
       <li xml:lang="pt">Introdução ou importação directa de dados com o formato CSV</li>
+      <li xml:lang="pt-BR">Entrada ou importação direta de dados usando o formato CSV</li>
+      <li xml:lang="sv">Direkt datainmatning eller import med CSV-format</li>
       <li xml:lang="uk">Безпосереднє введення даних або імпортування даних у форматі CSV.</li>
       <li xml:lang="x-test">xxDirect data entry or import using CSV formatxx</li>
       <li>Locked down User Mode, allowing you to switch off all commands related to editing your project's design</li>
       <li xml:lang="pt">Modo reduzido de utilizador, permitindo-lhe desligar todos os comandos relacionados com a edição do desenho do seu projecto</li>
+      <li xml:lang="pt-BR">Modo de usuário reduzido, permitindo-lhe desligar todos os comandos relacionados à edição do visual do seu projeto</li>
+      <li xml:lang="sv">Låsbart användarläge, som låter dig stänga av alla kommandon relaterade till redigering av projektets konstruktion</li>
       <li xml:lang="uk">Заблокований режим користувача, у якому можна вимкнути усі пов’язані з командами редагування компонування вашого проекту команди.</li>
       <li xml:lang="x-test">xxLocked down User Mode, allowing you to switch off all commands related to editing your project's designxx</li>
       <li>Scripting using JavaScript, Python or Ruby programming languages (experimental)</li>
       <li xml:lang="pt">Programável através das linguagens JavaScript, Python ou Ruby (experimental)</li>
+      <li xml:lang="pt-BR">Criação de scripts usando as linguagens de programação JavaScript, Python ou Ruby (experimental)</li>
+      <li xml:lang="sv">Skript med användning av programspråken Javascript, Python eller Ruby (experimentellt)</li>
       <li xml:lang="uk">Керування за допомогою скриптів мовами JavaScript, Python та Ruby (експериментальна можливість).</li>
       <li xml:lang="x-test">xxScripting using JavaScript, Python or Ruby programming languages (experimental)xx</li>
     </ul>
@@ -82,6 +111,8 @@
     <screenshot>
       <caption>Table View storing images</caption>
       <caption xml:lang="pt">A área da tabela permite guardar as imagens</caption>
+      <caption xml:lang="pt-BR">Área da tabela armazenando imagens</caption>
+      <caption xml:lang="sv">Tabellvy som lagrar bilder</caption>
       <caption xml:lang="uk">Збереження зображень у перегляді таблиць.</caption>
       <caption xml:lang="x-test">xxTable View storing imagesxx</caption>
       <image>http://www.calligra.org/wp-content/uploads/2011/11/kexi-2.2-rc1-tableview-images.png</image>
@@ -89,6 +120,8 @@
     <screenshot>
       <caption>Form Designer</caption>
       <caption xml:lang="pt">Desenhador de Formulários</caption>
+      <caption xml:lang="pt-BR">Ferramenta de desenho de formulários</caption>
+      <caption xml:lang="sv">Formulärkonstruktion</caption>
       <caption xml:lang="uk">Засіб для розробки форм.</caption>
       <caption xml:lang="x-test">xxForm Designerxx</caption>
       <image>http://www.calligra.org/wp-content/uploads/2011/11/kexi-2.3-form.png</image>
