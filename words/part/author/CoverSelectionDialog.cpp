@@ -72,7 +72,7 @@ void CoverSelectionDialog::open()
     KoFileDialog dialog(this, KoFileDialog::OpenFile, "OpenDocument");
     dialog.setCaption(i18n("Open Cover"));
     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
-    dialog.setNameFilter(i18n("Images (*.png *.xpm *.jpg *.jpeg *,tiff *.bmp)"));
+    dialog.setImageFilters();
 
     QString fileName = dialog.url();
 
