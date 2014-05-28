@@ -95,7 +95,10 @@ void KWDebugWidget::updateData()
         willShow += "\n";
     }
 
-    willShow += "block number is " + QString::number(editor->constCursor().block().blockNumber());
+    willShow += "block number is " + QString::number(editor->constCursor().block().blockNumber()) + "\n";
+    willShow += "cur pos " + QString::number(editor->constCursor().position()) + "\n";
+    willShow += "pos in block " + QString::number(editor->constCursor().positionInBlock()) + "\n";
+    willShow += "length of block " + QString::number(editor->constCursor().block().length()) + "\n";
 
     m_label->setText(willShow);
 }
