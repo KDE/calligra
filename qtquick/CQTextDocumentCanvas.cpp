@@ -55,8 +55,12 @@ public:
         : canvas(0),
           findText(0),
           documentModel(0),
-          document(0)
-    {}
+          document(0),
+          throttleTimer(new QTimer())
+    {
+        throttleTimer->setInterval(200);
+        throttleTimer->setSingleShot(true);
+    }
 
     KWCanvasItem *canvas;
     QString searchTerm;
@@ -68,6 +72,7 @@ public:
     int pageNumber;
     QPoint currentPoint;
     QObjectList linkTargets;
+    QTimer* throttleTimer;
 
     void updateLinkTargets()
     {
@@ -229,6 +234,13 @@ void CQTextDocumentCanvas::alignTopWith(int y)
 
 int CQTextDocumentCanvas::currentPageNumber() const
 {
+    if(d->document && !d->throttleTimer->isActive()) {
+        // Can't use this at the moment, we sort of don't have the right one, because derp :P
+        //d->canvas->resourceManager()->resource(KoCanvasResourceManager::CurrentPage).toInt();
+        d->throttleTimer->start();
+        const KWDocument *kwDoc = static_cast<const KWDocument*>(d->document);
+        d->pageNumber = kwDoc->pageManager()->page(d->canvas->documentOffset()).pageNumber();
+    }
     return d->pageNumber;
 }
 
@@ -236,10 +248,8 @@ void CQTextDocumentCanvas::setCurrentPageNumber(const int& currentPageNumber)
 {
     if(d->pageNumber != currentPageNumber)
     {
-        d->pageNumber = currentPageNumber;
-        gotoPage(d->pageNumber, d->document);
+        gotoPage(currentPageNumber, d->document);
     }
-    emit currentPageNumberChanged();
 }
 
 void CQTextDocumentCanvas::render(QPainter* painter, const QRectF& target)
@@ -327,6 +337,7 @@ void CQTextDocumentCanvas::createAndSetZoomController(KoCanvasBase* canvas)
 
     KWCanvasItem *kwCanvasItem = static_cast<KWCanvasItem*>(canvas);
     connect (kwCanvasItem, SIGNAL(documentSize(QSizeF)), zoomController(), SLOT(setDocumentSize(QSizeF)));
+    connect (canvasController()->proxyObject, SIGNAL(moveDocumentOffset(QPoint)), SIGNAL(currentPageNumberChanged()));
     connect (canvasController()->proxyObject, SIGNAL(moveDocumentOffset(QPoint)), kwCanvasItem, SLOT(setDocumentOffset(QPoint)));
     kwCanvasItem->updateSize();
 }
