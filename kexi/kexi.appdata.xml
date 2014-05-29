@@ -5,6 +5,7 @@
   <project_license>GPL-2.0+</project_license>
   <name>Kexi</name>
   <name xml:lang="cs">Kexi</name>
+  <name xml:lang="ia">Kexi</name>
   <name xml:lang="nl">Kexi</name>
   <name xml:lang="pt">Kexi</name>
   <name xml:lang="pt-BR">Kexi</name>
@@ -14,6 +15,7 @@
   <name xml:lang="x-test">xxKexixx</name>
   <summary>Database Creator</summary>
   <summary xml:lang="cs">Tvůrce databází</summary>
+  <summary xml:lang="ia">Creator de base de datos</summary>
   <summary xml:lang="nl">Database aanmaken</summary>
   <summary xml:lang="pt">Criador de Bases de Dados</summary>
   <summary xml:lang="pt-BR">Criação de bancos de dados</summary>
@@ -35,6 +37,7 @@
     <p xml:lang="x-test">xxKexi is a visual database creator, part of the Calligra Suite. It can be used for designing database applications, inserting and editing data, performing queries, and processing data. Forms can be created to provide a custom interface to your data. All database objects - tables, queries, forms, reports - are stored in the database, making it easy to share data and design.xx</p>
     <p>Features:</p>
     <p xml:lang="cs">Vlastnosti:</p>
+    <p xml:lang="ia">Characteristicas</p>
     <p xml:lang="nl">Mogelijkheden:</p>
     <p xml:lang="pt">Características:</p>
     <p xml:lang="pt-BR">Funcionalidades:</p>

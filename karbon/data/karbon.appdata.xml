@@ -5,6 +5,7 @@
   <project_license>GPL-2.0+</project_license>
   <name>Karbon</name>
   <name xml:lang="cs">Karbon</name>
+  <name xml:lang="ia">Karbon</name>
   <name xml:lang="nl">Karbon</name>
   <name xml:lang="pt">Karbon</name>
   <name xml:lang="pt-BR">Karbon</name>
@@ -14,6 +15,7 @@
   <name xml:lang="x-test">xxKarbonxx</name>
   <summary>Scalable Graphics</summary>
   <summary xml:lang="cs">Škálovatelná grafika</summary>
+  <summary xml:lang="ia">Graphicos scalabile</summary>
   <summary xml:lang="nl">Vectorafbeeldingen</summary>
   <summary xml:lang="pt">Gráficos Vectoriais</summary>
   <summary xml:lang="pt-BR">Imagens vetoriais</summary>
@@ -27,6 +29,7 @@
       That makes Karbon a great application for users starting to explore the world of vector graphics as well as for artists
       wanting to create breathtaking vector art.
     </p>
+    <p xml:lang="nl">Karbon is een toepassing voor tekenen met vectoren met een gebruikersinterface dat gemakkelijk is te gebruiken, zeer goed aan te passen en uit te breiden. Dit maakt Karbon een geweldige toepassing voor gebruikers die de wereld van grafiek met vectoren aan het verkennen zijn evenals voor kunstenaars die adembenemende vectorkunst willen maken.</p>
     <p xml:lang="pt">O Karbon é uma aplicação de desenho vectorial com uma interface simples de usar, facilmente configurável e modular. Isto torna o Karbon uma óptima aplicação para os utilizadores que começam a explorar o mundo dos gráficos vectoriais, assim como para os artistas que desejam criar arte vectorial espectacular.</p>
     <p xml:lang="pt-BR">Karbon é um aplicativo de desenho vetorial com uma interface simples de usar, facilmente configurável e expansível. Isso torna o Karbon um ótimo aplicativo para usuários que começam a explorar o mundo dos gráficos vetoriais, assim como para artistas que desejam criar arte vetorial espetacular.</p>
     <p xml:lang="sv">Karbon är ett vektorritprogram med ett användargränssnitt som är lätt att använda, ytterst anpassningsbart och utökningsbart. Det gör Karbon till ett utmärkt program för användare som börjar utforska vektorgrafikvärlden samt för konstnärer som vill skapa hänförande vektorkonst.</p>
@@ -34,6 +37,7 @@
     <p xml:lang="x-test">xxKarbon is a vector drawing application with an user interface that is easy to use, highly customizable and extensible. That makes Karbon a great application for users starting to explore the world of vector graphics as well as for artists wanting to create breathtaking vector art.xx</p>
     <p>Features:</p>
     <p xml:lang="cs">Vlastnosti:</p>
+    <p xml:lang="ia">Characteristicas</p>
     <p xml:lang="nl">Mogelijkheden:</p>
     <p xml:lang="pt">Características:</p>
     <p xml:lang="pt-BR">Funcionalidades:</p>
@@ -45,6 +49,7 @@
       <li>
         Loading support for ODG, SVG, WPG, WMF, EPS/PS
       </li>
+      <li xml:lang="ia">Cargante supporto pro ODG, SVG, WPG, WMF, EPS/PS</li>
       <li xml:lang="nl">Ondersteuning voor laden van ODG, SVG, WPG, WMF, EPS/PS</li>
       <li xml:lang="pt">Suporte do carregamento de imagens em ODG, SVG, WPG, WMF, EPS/PS</li>
       <li xml:lang="pt-BR">Suporte para carregamento de ODG, SVG, WPG, WMF, EPS/PS</li>
@@ -54,6 +59,7 @@
       <li>
         Writing support for ODG, SVG, PNG, PDF, WMF
       </li>
+      <li xml:lang="ia">Supporto de scriber pro ODG, SVG, PNG, PDF, WMF</li>
       <li xml:lang="nl">Ondersteuning voor schrijven van ODG, SVG, PNG, PDF, WMF</li>
       <li xml:lang="pt">Suporte da gravação de imagens em ODG, SVG, PNG, PDF, WMF</li>
       <li xml:lang="pt-BR">Suporte de gravação em ODG, SVG, PNG, PDF, WMF</li>
@@ -63,6 +69,8 @@
       <li>
         Customizable user interface with freely placeable toolbars and dockers2
       </li>
+      <li xml:lang="ia">Personalisa le interfacie de usator con barra de instrumentos e stivatores (dockers) liberemente positionabile</li>
+      <li xml:lang="nl">Aan te passen gebruikersinterface met vrij te plaatsen werkbalken en dockers2</li>
       <li xml:lang="pt">Interface de utilizador configurável com barras e áreas acopláveis livres</li>
       <li xml:lang="pt-BR">Interface de usuário configurável com barras e áreas acopláveis livres</li>
       <li xml:lang="sv">Anpassningsbart användargränssnitt med verktygsrader och paneler som kan placeras fritt</li>
@@ -72,6 +80,7 @@
         Layer docker for easy handling of complex documents including preview thumbnails, support for grouping shapes via
         drag and drop, controlling visibility of shapes or locking
       </li>
+      <li xml:lang="nl">Laagverankering voor gemakkelijke behandeling van complexe documenten inclusief voorbeeldminiaturen, ondersteuning voor groeperen van vormen via slepen en laten vallen, besturing van zichtbaarheid van vormen of vastzetten</li>
       <li xml:lang="pt">Área de camadas para o tratamento de documentos complexos, incluindo miniaturas da antevisão, suporte para o agrupamento de formas por arrastamento, o controlo da visibilidade das formas ou o seu bloqueio</li>
       <li xml:lang="pt-BR">Área de camadas para tratamento de documentos complexos, incluindo miniaturas, suporte a agrupamento de formas com arrastar e soltar, controle de visibilidade das formas ou seu bloqueio</li>
       <li xml:lang="sv">Lagerpanel för enkel hantering av komplexa dokument inklusive miniatyrbilder för förhandsgranskning, stöd för att gruppera former via drag och släpp, styra eller låsning synlighet av former</li>
@@ -80,6 +89,7 @@
       <li>
         Advanced path editing tool with great on-canvas editing capabilities
       </li>
+      <li xml:lang="nl">Geavanceerde padbewerkingsgereedschap met prima bewerkingsmiddelen op het werkblad</li>
       <li xml:lang="pt">Ferramenta de edição de caminhos avançada, com grandes capacidade de edição no local</li>
       <li xml:lang="pt-BR">Ferramenta de edição de caminhos avançada, com ótima capacidade de edição no local</li>
       <li xml:lang="sv">Avancerat konturredigeringsverktyg med utmärkta redigeringsmöjligheter direkt på duken</li>
@@ -88,6 +98,7 @@
       <li>
         Various drawing tools for creating path shapes including a draw path tool, a pencil tool as well as a calligraphy drawing tool
       </li>
+      <li xml:lang="nl">Verschillende tekengereedschappen voor het maken van padvormen inclusief een tekenhulpmiddel voor paden, een potloodhulpmiddel evenals een tekengereedschap voor kalligrafie</li>
       <li xml:lang="pt">Diversas ferramentas de desenho para criar formas de caminhos, incluindo uma ferramenta de desenho de caminhos, uma ferramenta de lápis e uma ferramenta de desenho caligráfico</li>
       <li xml:lang="pt-BR">Diversas ferramentas de desenho para criar formas de caminhos, incluindo uma ferramenta de desenho de caminhos, uma ferramenta de lápis e uma ferramenta de desenho caligráfico</li>
       <li xml:lang="sv">Diverse ritverktyg för att skapa konturformer som inkluderar ett konturritverktyg, ett pennverktyg samt ett kalligrafiskt ritverktyg</li>
@@ -96,6 +107,7 @@
       <li>
         Gradient and pattern tools for easy on-canvas editing of gradient and pattern styles
       </li>
+      <li xml:lang="nl">Hulpmiddelen voor gradiënten en patronen voor gemakkelijk werken op het werkblad van gradiënten en patroonstijlen</li>
       <li xml:lang="pt">Ferramentas de gradientes e padrões para uma edição simples no local dos estilos dos gradientes e dos padrões</li>
       <li xml:lang="pt-BR">Ferramentas de gradientes e padrões para fácil edição no local dos estilos dos gradientes e dos padrões</li>
       <li xml:lang="sv">Tonings- och mönsterverktyg för enkelt redigering av tonings- och mönsterstilar direkt på duken</li>
@@ -105,6 +117,7 @@
         Top notch snapping facilities for guided drawing and editing (e.g. snapping to grid, guide lines, path nodes, bounding boxes,
         orthogonal positions, intersections of path shapes or extensions of lines and paths)
       </li>
+      <li xml:lang="nl">Excellente vastklik faciliteiten voor geleid tekenen en bewerken (bijv. vastklikken aan raster, gidslijnen, padpunten, begrenzingsvakken, orthogonale posities, kruispunten van padvormen of extensies van lijnen en paden)</li>
       <li xml:lang="pt">Capacidades de ajuste óptimas para o desenho e edição guiado (p.ex., ajustes à grelha, linhas-guias, nós de caminhos, áreas envolventes, posições ortogonais, intersecções de formas de caminhos ou extensões de linhas e caminhos)</li>
       <li xml:lang="pt-BR">Capacidades de melhor ajuste para desenho e edição guiado (p.ex., ajustes à grade, linhas-guias, nós de caminhos, caixas delimitadoras, posições ortogonais, intersecções de formas de caminhos ou extensões de linhas e caminhos)</li>
       <li xml:lang="sv">Väldigt bra låsfunktioner för att rita och redigera med styrning (t.ex. låsa till rutnät, styrlinjer, konturnoder, omgivande rutor, ortogonala positioner, korsningar av konturformer eller förlängningar av linjer och konturer)</li>
@@ -113,9 +126,15 @@
       <li>
         Includes many predefined shapes including basic shapes like stars, circle/ellipse, rectangle, image
       </li>
+      <li xml:lang="nl">Omvat vele voorgedefinieerde vormen inclusief basisvormen als ster, cirkel/ellips, rechthoek, afbeelding</li>
+      <li xml:lang="pt">Inclui diversas formas predefinidas, incluindo formas básicas como as estrelas, círculos/elipses, rectângulos, imagens</li>
+      <li xml:lang="sv">Innehåller många fördefinierade former inklusive grundläggande former som stjärnor, cirkel/ellips, rektangel, bild</li>
+      <li xml:lang="uk">Передбачено багато готових форм, зокрема базові форми зірки, кола або еліпса, прямокутника та зображення.</li>
+      <li xml:lang="x-test">xxIncludes many predefined shapes including basic shapes like stars, circle/ellipse, rectangle, imagexx</li>
       <li>
         Artistic text shape with support for following path outlines (i.e. text on path)
       </li>
+      <li xml:lang="nl">Artistieke tekstvormen met ondersteuning voor het volden van paden (dwz. tekst op een pad)</li>
       <li xml:lang="pt">Forma de texto artístico com suporte para caminhos de seguimento (i.e., texto ao longo de um caminho)</li>
       <li xml:lang="pt-BR">Forma de texto artístico com suporte para caminhos de seguimento (isto é, texto no caminho)</li>
       <li xml:lang="sv">Artistisk textform med stöd för att följa konturlinjer (t.ex. text på en kontur)</li>
@@ -124,6 +143,7 @@
       <li>
         Complex path operations and effects like boolean set operations, path flattening, rounding and refining as well as whirl/pinch effects
       </li>
+      <li xml:lang="nl">Complexe bewerkingen van paden en effecten zoals booleaanse set bewerkingen, afvlakken van paden, afronding en verfijning evenals wervel/put-effecten</li>
       <li xml:lang="pt">Opções complexas com caminhos e efeitos como as operações booleanas com conjuntos, o alisamento de caminhos, o arredondamento e a afinação, para além da ondulação/embate</li>
       <li xml:lang="pt-BR">Operações complexas com caminhos e efeitos, como operações booleanas com conjuntos, o nivelamento de caminhos, o arredondamento e refinamento, assim como efeitos de ondulação/aperto</li>
       <li xml:lang="sv">Komplexa konturoperationer och effekter som Booleska mängdoperationer, konturutplattning, rundning och förfining samt virvla- och klämeffekter</li>
@@ -132,6 +152,7 @@
       <li>
         Extensible by writing plugins for new tools, shapes and dockers
       </li>
+      <li xml:lang="nl">Uit te breiden dor het schrijven van plug-ins voor nieuwe hulpmiddelen, vormen en verankering</li>
       <li xml:lang="pt">Modular, através da criação de 'plugins' para novas ferramentas, formas e áreas acopláveis</li>
       <li xml:lang="pt-BR">Expansível através da criação de plugins para novas ferramentas, formas e áreas acopláveis</li>
       <li xml:lang="sv">Utökningsbart genom att skriva insticksprogram för nya verktyg, former och paneler</li>

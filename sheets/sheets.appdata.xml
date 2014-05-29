@@ -5,6 +5,7 @@
   <project_license>GPL-2.0+</project_license>
   <name>Sheets</name>
   <name xml:lang="cs">Sheets</name>
+  <name xml:lang="ia">Sheets</name>
   <name xml:lang="nl">Werkbladen</name>
   <name xml:lang="pt">Sheets</name>
   <name xml:lang="pt-BR">Sheets</name>
@@ -14,6 +15,7 @@
   <name xml:lang="x-test">xxSheetsxx</name>
   <summary>Spreadsheet</summary>
   <summary xml:lang="cs">Sešit</summary>
+  <summary xml:lang="ia">Folio de calculo electronic</summary>
   <summary xml:lang="nl">Rekenblad</summary>
   <summary xml:lang="pt">Folha de Cálculo</summary>
   <summary xml:lang="pt-BR">Planilha</summary>
@@ -34,6 +36,7 @@
     <p xml:lang="x-test">xxCalligra Sheets is a fully-featured calculation and spreadsheet tool. Use it to quickly create and calculate various business-related spreadsheets, such as income and expenditure, employee working hours, etc.xx</p>
     <p>Features:</p>
     <p xml:lang="cs">Vlastnosti:</p>
+    <p xml:lang="ia">Characteristicas:</p>
     <p xml:lang="nl">Mogelijkheden:</p>
     <p xml:lang="pt">Características:</p>
     <p xml:lang="pt-BR">Funcionalidades:</p>
