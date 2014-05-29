@@ -41,7 +41,7 @@ CQImageProvider::~CQImageProvider()
 
 QImage CQImageProvider::requestImage(const QString& id, QSize* size, const QSize& requestedSize)
 {
-    qDebug() << "REQUEST";
+//    qDebug() << "REQUEST";
     if (m_images.contains(id)) {
         QImage image = m_images.value(id);
         *size = image.size();
