@@ -32,6 +32,7 @@ class CQCanvasControllerItem : public QDeclarativeItem
     Q_PROPERTY(qreal zoom READ zoom WRITE setZoom NOTIFY zoomChanged)
     Q_PROPERTY(qreal minimumZoom READ minimumZoom WRITE setMinimumZoom NOTIFY minimumZoomChanged)
     Q_PROPERTY(qreal maximumZoom READ maximumZoom WRITE setMaximumZoom NOTIFY maximumZoomChanged)
+    Q_PROPERTY(bool movingFast READ movingFast NOTIFY movingFastChanged)
 
 public:
     explicit CQCanvasControllerItem(QDeclarativeItem* parent = 0);
@@ -56,6 +57,8 @@ public:
     qreal maximumZoom() const;
     void setMaximumZoom(qreal newZoom);
 
+    bool movingFast() const;
+
 public Q_SLOTS:
     void beginZoomGesture();
     void endZoomGesture();
@@ -71,6 +74,7 @@ Q_SIGNALS:
     void zoomChanged();
     void minimumZoomChanged();
     void maximumZoomChanged();
+    void movingFastChanged();
 
 protected:
     virtual void geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry);
