@@ -36,8 +36,118 @@ Item {
         id: controllerFlickable;
         anchors.fill: parent;
         Calligra.CanvasControllerItem {
+            id: controllerItem;
             canvas: wordsCanvas;
             flickable: controllerFlickable;
+            onMovingFastChanged: {
+                if(movingFast === true) {
+                    d.showThings();
+                }
+                else {
+                    d.hideThings();
+                }
+            }
+        }
+    }
+    QtObject {
+        id: d;
+        function showThings() {
+            navigatorSidebar.x = 0;
+            pageNumber.opacity = 1;
+            hideTimer.stop();
+        }
+        function hideThings() {
+            hideTimer.start();
+        }
+    }
+    Timer {
+        id: hideTimer;
+        running: false;
+        repeat: false;
+        interval: 2000;
+        onTriggered: {
+            navigatorSidebar.x = -navigatorSidebar.width;
+            pageNumber.opacity = 0;
+        }
+    }
+    Item {
+        id: navigatorSidebar;
+        anchors {
+            top: parent.top;
+            bottom: parent.bottom;
+            margins: Constants.DefaultMargin;
+        }
+        x: -width;
+        Behavior on x { PropertyAnimation { duration: Constants.AnimationDuration; } }
+        width: Constants.GridWidth;
+        Rectangle {
+            anchors.fill: parent;
+            radius: Constants.DefaultMargin;
+            color: "darkslategrey";
+            opacity: 0.8;
+        }
+        ListView {
+            anchors.fill: parent;
+            clip: true;
+            model: wordsCanvas.documentModel;
+            delegate: Item {
+                width: Constants.GridWidth;
+                height: width;
+                Label {
+                    anchors {
+                        left: parent.left;
+                        leftMargin: Constants.DefaultMargin;
+                        verticalCenter: parent.verticalCenter;
+                    }
+                    text: index + 1;
+                    font.pixelSize: Constants.SmallFontSize;
+                    color: "white";
+                }
+                Image {
+                    anchors {
+                        top: parent.top;
+                        right: parent.right;
+                        bottom: parent.bottom;
+                        margins: Constants.DefaultMargin;
+                    }
+                    width: parent.width * 3 / 4;
+                    fillMode: Image.PreserveAspectFit;
+                    source: model.decoration;
+                }
+                Rectangle {
+                    anchors.fill: parent;
+                    color: "cyan"
+                    opacity: (wordsCanvas.currentPageNumber === index + 1) ? 0.3 : 0;
+                    Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+                }
+                MouseArea {
+                    anchors.fill: parent;
+//                    onClicked: wordsCanvas.currentPageNumber = index + 1;
+                }
+            }
+        }
+    }
+    Item {
+        id: pageNumber;
+        anchors {
+            right: parent.right;
+            bottom: parent.bottom;
+            margins: Constants.DefaultMargin;
+        }
+        opacity: 0;
+        Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+        height: Constants.GridHeight / 2;
+        width: Constants.GridWidth;
+        Rectangle {
+            anchors.fill: parent;
+            radius: Constants.DefaultMargin;
+            color: "darkslategrey";
+            opacity: 0.8;
+        }
+        Label {
+            anchors.centerIn: parent;
+            color: "white";
+            text: (wordsCanvas.documentModel === null) ? 0 : wordsCanvas.currentPageNumber + " of " + wordsCanvas.documentModel.rowCount();
         }
     }
 }
