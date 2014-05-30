@@ -38,21 +38,74 @@ Page {
     }
     Loader {
         id: viewLoader;
-        anchors.fill: parent;
+        anchors {
+            top: toolbar.bottom;
+            left: parent.left;
+            right: parent.right;
+            bottom: parent.bottom;
+        }
     }
     Component { id: stageView; StageDocumentPage {} }
     Component { id: wordsView; WordsDocumentPage {} }
-    Button {
+    Rectangle {
+        id: toolbar;
         anchors {
             top: parent.top;
+            left: parent.left;
             right: parent.right;
         }
-        opacity: switchToDesktopAction.enabled ? 1 : 0;
-        Behavior on opacity { PropertyAnimation { duration: 200; } }
-        width: Constants.GridWidth * 2;
-        text: "Switch to Desktop";
-        color: Settings.theme.color("base/base");
-        textColor: Settings.theme.color("base/text");
-        onClicked: switchToDesktopAction.trigger();
+        height: Constants.GridHeight * 2 / 3;
+        color: "whitesmoke";
+        Row {
+            anchors.left: parent.left;
+            height: parent.height;
+            spacing: Constants.DefaultMargin;
+            Button {
+                height: parent.height;
+                width: height * 1.5;
+                color: "dodgerblue";
+                image: Settings.theme.icon("krita_sketch");
+            }
+            Button {
+                height: parent.height;
+                width: height * 2;
+                text: "Undo";
+                textColor: "black";
+            }
+            Button {
+                height: parent.height;
+                width: height * 2;
+                text: "Redo";
+                textColor: "black";
+            }
+        }
+        Row {
+            anchors.centerIn: parent;
+            height: parent.height;
+        }
+        Row {
+            anchors.right: parent.right;
+            height: parent.height;
+            spacing: Constants.DefaultMargin;
+            Button {
+                height: parent.height; width: height;
+                image: Settings.theme.icon("add");
+                color: "gray";
+            }
+            Button {
+                height: parent.height; width: height;
+                image: Settings.theme.icon("paint");
+                color: "gray";
+            }
+            Button {
+                opacity: switchToDesktopAction.enabled ? 1 : 0.2;
+                Behavior on opacity { PropertyAnimation { duration: 200; } }
+                height: parent.height;
+                width: height;
+                image: Settings.theme.icon("switch");
+                color: "gray";
+                onClicked: switchToDesktopAction.trigger();
+            }
+        }
     }
 }
