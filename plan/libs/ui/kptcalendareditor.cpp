@@ -273,7 +273,7 @@ void CalendarDayView::slotSetVacation()
         return;
     }
     bool mod = false;
-    MacroCommand *m = new MacroCommand( i18nc( "(qtundo-format)", "Modify Weekday State" ) );
+    MacroCommand *m = new MacroCommand( kundo2_i18n( "Modify Weekday State" ) );
     foreach ( const QModelIndex &i, lst ) {
         CalendarDay *day = model()->day( i );
         if ( day == 0 || day->state() == CalendarDay::NonWorking ) {
@@ -303,7 +303,7 @@ void CalendarDayView::slotSetUndefined()
         return;
     }
     bool mod = false;
-    MacroCommand *m = new MacroCommand( i18nc( "(qtundo-format)", "Modify Weekday State" ) );
+    MacroCommand *m = new MacroCommand( kundo2_i18n( "Modify Weekday State" ) );
     foreach ( const QModelIndex &i, lst ) {
         CalendarDay *day = model()->day( i );
         if ( day == 0 || day->state() == CalendarDay::Undefined ) {
@@ -783,7 +783,7 @@ void CalendarEditor::slotSetVacation()
         return;
     }
     bool mod = false;
-    MacroCommand *m = new MacroCommand( i18nc( "(qtundo-format)", "Modify Calendar" ) );
+    MacroCommand *m = new MacroCommand( kundo2_i18n( "Modify Calendar" ) );
     foreach ( const QDate &date, m_currentMenuDateList ) {
         kDebug(planDbg())<<"handle:"<<date;
         CalendarDay *day = currentCalendar()->findDay( date );
@@ -792,13 +792,13 @@ void CalendarEditor::slotSetVacation()
             day = new CalendarDay( date, CalendarDay::NonWorking );
             m->addCommand( new CalendarAddDayCmd( currentCalendar(), day ) );
             if ( m_currentMenuDateList.count() == 1 ) {
-                m->setText( i18n( "%1: Set to Non-Working", date.toString() ) );
+                m->setText( kundo2_i18n( "%1: Set to Non-Working", date.toString() ) );
             }
         } else if ( day->state() != CalendarDay::NonWorking ) {
             mod = true;
             m->addCommand( new CalendarModifyStateCmd( currentCalendar(), day, CalendarDay::NonWorking ) );
             if ( m_currentMenuDateList.count() == 1 ) {
-                m->setText( i18n( "%1: Set to Non-Working", date.toString() ) );
+                m->setText( kundo2_i18n( "%1: Set to Non-Working", date.toString() ) );
             }
         }
     }
@@ -817,14 +817,14 @@ void CalendarEditor::slotSetUndefined()
         return;
     }
     bool mod = false;
-    MacroCommand *m = new MacroCommand( i18nc( "(qtundo-format)", "Modify Calendar" ) );
+    MacroCommand *m = new MacroCommand( kundo2_i18n( "Modify Calendar" ) );
     foreach ( const QDate &date, m_currentMenuDateList ) {
         CalendarDay *day = currentCalendar()->findDay( date );
         if ( day && day->state() != CalendarDay::Undefined ) {
             mod = true;
             m->addCommand( new CalendarRemoveDayCmd( currentCalendar(), day ) );
             if ( m_currentMenuDateList.count() == 1 ) {
-                m->setText( i18n( "Set %1 to Undefined", date.toString() ) );
+                m->setText( kundo2_i18n( "Set %1 to Undefined", date.toString() ) );
             }
         }
     }

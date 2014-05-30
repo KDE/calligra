@@ -405,7 +405,7 @@ bool TaskWorkPackageModel::setCompletion( Node *node, const QVariant &value, int
         QDate date = qMax( c.entryDate(), QDate::currentDate() );
         QDateTime dt( date, QTime::currentTime() );
         // xgettext: no-c-format
-        MacroCommand *m = new MacroCommand( i18nc( "(qtundo-format)", "Modify completion" ) );
+        MacroCommand *m = new MacroCommand( kundo2_i18n( "Modify completion" ) );
         if ( ! c.isStarted() ) {
             m->addCommand( new ModifyCompletionStartedCmd( c, true ) );
             m->addCommand( new ModifyCompletionStartTimeCmd( c, dt ) );
@@ -440,7 +440,7 @@ bool TaskWorkPackageModel::setCompletion( Node *node, const QVariant &value, int
         if ( value.toInt() > 0 ) {
             QDateTime dt = QDateTime::currentDateTime();
             QDate date = dt.date();
-            MacroCommand *m = new MacroCommand( i18nc( "(qtundo-format)", "Set finished" ) );
+            MacroCommand *m = new MacroCommand( kundo2_i18n( "Set finished" ) );
             m->addCommand( new ModifyCompletionStartedCmd( c, true ) );
             m->addCommand( new ModifyCompletionStartTimeCmd( c, dt ) );
             m->addCommand( new ModifyCompletionFinishedCmd( c, true ) );
@@ -461,7 +461,7 @@ bool TaskWorkPackageModel::setRemainingEffort( Node *node, const QVariant &value
         double d( value.toList()[0].toDouble() );
         Duration::Unit unit = static_cast<Duration::Unit>( value.toList()[1].toInt() );
         Duration dur( d, unit );
-        emit executeCommand( new ModifyCompletionRemainingEffortCmd( t->completion(), QDate::currentDate(), dur, i18nc( "(qtundo-format)", "Modify remaining effort" ) ) );
+        emit executeCommand( new ModifyCompletionRemainingEffortCmd( t->completion(), QDate::currentDate(), dur, kundo2_i18n( "Modify remaining effort" ) ) );
         return true;
     }
     return false;
@@ -474,7 +474,7 @@ bool TaskWorkPackageModel::setActualEffort( Node *node, const QVariant &value, i
         double d( value.toList()[0].toDouble() );
         Duration::Unit unit = static_cast<Duration::Unit>( value.toList()[1].toInt() );
         Duration dur( d, unit );
-        emit executeCommand( new ModifyCompletionActualEffortCmd( t->completion(), QDate::currentDate(), dur, i18nc( "(qtundo-format)", "Modify actual effort" ) ) );
+        emit executeCommand( new ModifyCompletionActualEffortCmd( t->completion(), QDate::currentDate(), dur, kundo2_i18n( "Modify actual effort" ) ) );
         return true;
     }
     return false;
@@ -488,7 +488,7 @@ bool TaskWorkPackageModel::setStartedTime( Node *node, const QVariant &value, in
             if ( t == 0 ) {
                 return false;
             }
-            MacroCommand *m = new MacroCommand( headerData( NodeModel::NodeActualStart, Qt::Horizontal, Qt::DisplayRole ).toString() ); //FIXME: proper description when string freeze is lifted
+            MacroCommand *m = new MacroCommand( kundo2_noi18n(headerData( NodeModel::NodeActualStart, Qt::Horizontal, Qt::DisplayRole ).toString()) ); //FIXME: proper description when string freeze is lifted
             if ( ! t->completion().isStarted() ) {
                 m->addCommand( new ModifyCompletionStartedCmd( t->completion(), true ) );
             }
@@ -516,7 +516,7 @@ bool TaskWorkPackageModel::setFinishedTime( Node *node, const QVariant &value, i
             if ( t == 0 ) {
                 return false;
             }
-            MacroCommand *m = new MacroCommand( headerData( NodeModel::NodeActualFinish, Qt::Horizontal, Qt::DisplayRole ).toString() ); //FIXME: proper description when string freeze is lifted
+            MacroCommand *m = new MacroCommand( kundo2_noi18n(headerData( NodeModel::NodeActualFinish, Qt::Horizontal, Qt::DisplayRole ).toString()) ); //FIXME: proper description when string freeze is lifted
             if ( ! t->completion().isFinished() ) {
                 m->addCommand( new ModifyCompletionFinishedCmd( t->completion(), true ) );
                 if ( t->completion().percentFinished() < 100 ) {

@@ -55,8 +55,8 @@ void KPrPlaceholders::setLayout( KPrPageLayout * layout, KoPADocument * document
 {
     Q_ASSERT( m_initialized );
 
-    document->beginMacro(i18n("Set Layout")); // we call applyStyle() which creates undo commands too.
-    KUndo2Command * cmd = new KUndo2Command( i18nc("(qtundo-format)", "Set Layout" ) );
+    document->beginMacro(kundo2_i18n("Set Layout")); // we call applyStyle() which creates undo commands too.
+    KUndo2Command * cmd = new KUndo2Command( kundo2_i18n("Set Layout" ) );
     new KPrPageLayoutCommand( this, layout, cmd );
 
     Q_ASSERT( !shapes.isEmpty() );

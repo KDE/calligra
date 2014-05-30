@@ -399,7 +399,7 @@ MacroCommand *ResourceDialog::buildCommand() {
 // static
 MacroCommand *ResourceDialog::buildCommand(Resource *original, Resource &resource) {
     MacroCommand *m=0;
-    QString n = i18n("Modify Resource");
+    KUndo2MagicString n = kundo2_i18n("Modify Resource");
     if (resource.parentGroup() != 0 && resource.parentGroup() != original->parentGroup()) {
         if (!m) m = new MacroCommand(n);
         m->addCommand(new MoveResourceCmd(resource.parentGroup(), original));

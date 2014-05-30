@@ -6,6 +6,6 @@ if test -n "$LIST"; then
 fi
 LIST=`find . \( \( $EXCLUDE \) -prune -o -name \*.h -o -name \*.cpp \) -type f` #| grep -v -e '/\.' -e kexidswelcome.cpp
 if test -n "$LIST"; then
-	$XGETTEXT $LIST -o $podir/kexi.pot
+	$XGETTEXT -kkundo2_i18nc:1c,2 -kkundo2_i18ncp:1c,2,3 $LIST -o $podir/kexi.pot
 fi
 

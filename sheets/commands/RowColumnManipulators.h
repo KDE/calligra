@@ -104,7 +104,7 @@ public:
     }
 
 protected:
-    QString name() const;
+    KUndo2MagicString name() const;
 
     QSizeF textSize(const QString& text, const Style& style) const;
     double adjustColumnHelper(const Cell& cell);
@@ -144,7 +144,7 @@ public:
     }
 
 protected:
-    QString name() const;
+    KUndo2MagicString name() const;
 
 private:
     bool m_manipulateColumns : 1;

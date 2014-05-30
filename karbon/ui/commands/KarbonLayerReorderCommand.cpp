@@ -34,18 +34,18 @@ KarbonLayerReorderCommand::KarbonLayerReorderCommand(KarbonDocument* document, K
     m_layers.append(layer);
 
     if (m_cmdType == RaiseLayer)
-        setText(i18nc("(qtundo-format)", "Raise Layer"));
+        setText(kundo2_i18n("Raise Layer"));
     else
-        setText(i18nc("(qtundo-format)", "Lower Layer"));
+        setText(kundo2_i18n("Lower Layer"));
 }
 
 KarbonLayerReorderCommand::KarbonLayerReorderCommand(KarbonDocument* document, QList<KoShapeLayer*> layers, ReorderType commandType, KUndo2Command* parent)
         : KUndo2Command(parent), m_document(document), m_layers(layers), m_cmdType(commandType)
 {
     if (m_cmdType == RaiseLayer)
-        setText(i18nc("(qtundo-format)", "Raise Layer"));
+        setText(kundo2_i18n("Raise Layer"));
     else
-        setText(i18nc("(qtundo-format)", "Lower Layer"));
+        setText(kundo2_i18n("Lower Layer"));
 }
 
 KarbonLayerReorderCommand::~KarbonLayerReorderCommand()

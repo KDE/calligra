@@ -49,7 +49,7 @@ void LocaleConfigMoneyDialog::slotChanged() {
 }
 
 KUndo2Command *LocaleConfigMoneyDialog::buildCommand( Project &project ) {
-    MacroCommand *m = new ModifyProjectLocaleCmd( project, i18nc( "(qtundo-format)", "Modify currency settings" ) );
+    MacroCommand *m = new ModifyProjectLocaleCmd( project, kundo2_i18n( "Modify currency settings" ) );
     MacroCommand *cmd = m_panel->buildCommand();
     if (cmd) {
         m->addCommand(cmd);

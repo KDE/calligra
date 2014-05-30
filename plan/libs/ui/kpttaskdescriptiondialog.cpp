@@ -47,13 +47,13 @@ void TaskDescriptionPanel::setStartValues( Node &node )
 
 MacroCommand *TaskDescriptionPanel::buildCommand()
 {
-    QString s = i18n("Modify task description");
+    KUndo2MagicString s = kundo2_i18n("Modify task description");
     if ( m_node.type() == Node::Type_Milestone ) {
-        s = i18n("Modify milestone description");
+        s = kundo2_i18n("Modify milestone description");
     } else if ( m_node.type() == Node::Type_Summarytask ) {
-        s = i18n("Modify summary task description");
+        s = kundo2_i18n("Modify summary task description");
     } else if ( m_node.type() == Node::Type_Project ) {
-        s = i18n("Modify project description");
+        s = kundo2_i18n("Modify project description");
     }
     MacroCommand *cmd = new MacroCommand(s);
     bool modified = false;

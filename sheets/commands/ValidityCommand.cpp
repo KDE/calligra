@@ -59,7 +59,7 @@ void ValidityCommand::setValidity(Validity validity)
 {
     m_validity = validity;
     if (m_validity.isEmpty())
-        setText(i18nc("(qtundo-format)", "Remove Validity Check"));
+        setText(kundo2_i18n("Remove Validity Check"));
     else
-        setText(i18nc("(qtundo-format)", "Add Validity Check"));
+        setText(kundo2_i18n("Add Validity Check"));
 }

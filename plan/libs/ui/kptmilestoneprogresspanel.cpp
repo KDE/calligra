@@ -49,7 +49,7 @@ MilestoneProgressPanel::MilestoneProgressPanel(Task &task, QWidget *parent, cons
 
 MacroCommand *MilestoneProgressPanel::buildCommand() {
     MacroCommand *cmd = 0;
-    QString c = i18n("Modify milestone completion");
+    KUndo2MagicString c = kundo2_i18n("Modify milestone completion");
     
     if ( m_completion.isFinished() != finished->isChecked() ) {
         if ( cmd == 0 ) cmd = new MacroCommand( c );
