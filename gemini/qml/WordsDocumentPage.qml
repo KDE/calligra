@@ -31,6 +31,7 @@ Item {
             mainWindow.setDocAndPart(doc(), part());
             baseLoadingDialog.hideMe();
         }
+        onCurrentPageNumberChanged: navigatorListView.positionViewAtIndex(currentPageNumber - 1, ListView.Contain);
     }
     Flickable {
         id: controllerFlickable;
@@ -52,11 +53,14 @@ Item {
     QtObject {
         id: d;
         function showThings() {
-            navigatorSidebar.x = 0;
+            navigatorSidebar.x = Constants.DefaultMargin;
             pageNumber.opacity = 1;
             hideTimer.stop();
         }
         function hideThings() {
+            if(navigatorSidebar.containsMouse) {
+                return;
+            }
             hideTimer.start();
         }
     }
@@ -72,6 +76,7 @@ Item {
     }
     Item {
         id: navigatorSidebar;
+        property alias containsMouse: listViewMouseArea.containsMouse;
         anchors {
             top: parent.top;
             bottom: parent.bottom;
@@ -81,15 +86,48 @@ Item {
         Behavior on x { PropertyAnimation { duration: Constants.AnimationDuration; } }
         width: Constants.GridWidth;
         Rectangle {
+            anchors {
+                left: parent.right;
+                leftMargin: -1;
+                verticalCenter: parent.verticalCenter;
+            }
+            height: Constants.GridHeight * 2;
+            width: Constants.DefaultMargin * 3;
+            color: "darkslategrey";
+            opacity: 0.8;
+            Rectangle {
+                anchors {
+                    top: parent.top;
+                    bottom: parent.bottom;
+                    margins: Constants.DefaultMargin;
+                    horizontalCenter: parent.horizontalCenter;
+                }
+                width: 4;
+                radius: 2;
+                color: "white";
+                opacity: 0.5;
+            }
+            MouseArea {
+                anchors.fill: parent;
+                onClicked: d.showThings();
+            }
+        }
+        Rectangle {
             anchors.fill: parent;
             radius: Constants.DefaultMargin;
             color: "darkslategrey";
             opacity: 0.8;
         }
         ListView {
+            id: navigatorListView;
             anchors.fill: parent;
             clip: true;
             model: wordsCanvas.documentModel;
+            MouseArea {
+                id: listViewMouseArea;
+                anchors.fill: parent;
+                hoverEnabled: true;
+            }
             delegate: Item {
                 width: Constants.GridWidth;
                 height: width;
