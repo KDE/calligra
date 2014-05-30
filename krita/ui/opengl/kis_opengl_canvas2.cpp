@@ -22,6 +22,7 @@
 
 #ifdef HAVE_OPENGL
 
+#include <QFile>
 #include <QMenu>
 #include <QWidget>
 #include <QBrush>
@@ -33,6 +34,7 @@
 #include <QDebug>
 #include <QThread>
 #include <QMessageBox>
+#include <QFile>
 
 #include <QGLShaderProgram>
 #include <QGLFramebufferObject>

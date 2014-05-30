@@ -258,6 +258,8 @@ MainWindow::MainWindow(const QString &dumpPath, const QString &id, const QString
     setupUi(this);
     progressBar->hide();
 
+    lblKiki->setPixmap(QPixmap(KGlobal::dirs()->findResource("data", "krita/pics/KikiNurse_sm.png")));
+
     setWindowFlags(Qt::WindowStaysOnTopHint | windowFlags());
 
     m_d->networkAccessManager = new QNetworkAccessManager(this);
@@ -322,7 +324,7 @@ void MainWindow::onToggleAllowUpload(int state)
         break;
     case Qt::Checked:
         bnClose->setText("Send && &Close");
-        bnRestart->setText("Send && R&estart");
+        bnRestart->setText("Send && R&estart &Krita");
         break;
     }
 }
