@@ -31,6 +31,12 @@
 #include <QFile>
 #include <QStyle>
 #include <QLayout>
+#include <KMessageBox>
+#include <QFileInfo>
+#include <KUrl>
+#include <KRun>
+#include <KToolInvocation>
+#include <KLocalizedString>
 
 #include <kdebug.h>
 #include <kcursor.h>
@@ -121,13 +127,6 @@ QObject* KexiUtils::findFirstQObjectChild(QObject *o, const char* className, con
     return 0;
 }
 
-#if 0
-int KexiUtils::indexOfPropertyWithSuperclasses(const QObject *object, const char* name)
-{
-    const int index = object->metaObject()->indexOfProperty(name);
-}
-#endif
-
 QMetaProperty KexiUtils::findPropertyWithSuperclasses(const QObject* object,
         const char* name)
 {
@@ -136,14 +135,6 @@ QMetaProperty KexiUtils::findPropertyWithSuperclasses(const QObject* object,
         return QMetaProperty();
     return object->metaObject()->property(index);
 }
-
-#if 0
-QMetaProperty KexiUtils::findPropertyWithSuperclasses(const QObject* object,
-        int index)
-{
-    return object->metaObject()->property(index);
-}
-#endif
 
 bool KexiUtils::objectIsA(QObject* object, const QList<QByteArray>& classNames)
 {
@@ -299,11 +290,6 @@ QColor KexiUtils::bleachedColor(const QColor& c, int factor)
 
 QIcon KexiUtils::colorizeIconToTextColor(const QPixmap& icon, const QPalette& palette)
 {
-#ifdef __GNUC__
-#warning KexiUtils::colorizeIconToTextColor OK?
-#else
-#pragma WARNING(port KexiUtils::colorizeIconToTextColor OK?)
-#endif
     QPixmap pm(
         KIconEffect().apply(icon, KIconEffect::Colorize, 1.0f,
                             palette.color(QPalette::Active, QPalette::ButtonText), false));
@@ -392,7 +378,7 @@ static void drawOrScalePixmapInternal(QPainter* p, const WidgetMargins& margins,
     if (pixmap.isNull())
         return;
 
-    const bool fast = false;//pixmap.width() > 1000 && pixmap.height() > 800; //fast drawing needed
+    const bool fast = false;
     const int w = rect.width() - margins.left - margins.right;
     const int h = rect.height() - margins.top - margins.bottom;
 //! @todo we can optimize painting by drawing rescaled pixmap here
@@ -403,8 +389,6 @@ static void drawOrScalePixmapInternal(QPainter* p, const WidgetMargins& margins,
 //    if (fast) {
 //       target = p;
 //    } else {
-//moved  pixmapBuffer.resize(rect.size()-QSize(lineWidth, lineWidth));
-//moved  p2.begin(&pm, p.device());
 //        target = &p2;
 //    }
 //! @todo only create buffered pixmap of the minimum size and then do not fillRect()
@@ -416,7 +400,6 @@ static void drawOrScalePixmapInternal(QPainter* p, const WidgetMargins& margins,
             QImage img(pixmap.toImage());
             img = img.scaled(w, h, Qt::KeepAspectRatio, transformMode);
             if (img.width() < w) {
-//                int hAlign = QApplication::horizontalAlignment(alignment);
                 if (alignment & Qt::AlignRight)
                     pos.setX(pos.x() + w - img.width());
                 else if (alignment & Qt::AlignHCenter)
@@ -428,14 +411,6 @@ static void drawOrScalePixmapInternal(QPainter* p, const WidgetMargins& margins,
                 else if (alignment & Qt::AlignVCenter)
                     pos.setY(pos.y() + h / 2 - img.height() / 2);
             }
-//            pixmapBuffer.fromImage(img);
-            if (!fast) {
-//                p2.begin(&pixmapBuffer);
-//                p2.initFrom(p.device());
-            }
-            else {
-//                target->drawPixmap(pos, pixmapBuffer);
-            }
             if (p) {
                 p->drawImage(pos, img);
             }
@@ -444,22 +419,14 @@ static void drawOrScalePixmapInternal(QPainter* p, const WidgetMargins& margins,
             }
         } else {
             if (!fast) {
-//                pixmapBuffer = QPixmap(rect.size() - QSize(margins.right, margins.bottom));
-//                p2.begin(&pixmapBuffer);
-                //, p.device());
-//                p2.drawPixmap(QRect(rect.x(), rect.y(), w, h), pixmap);
                 pixmap = pixmap.scaled(w, h, Qt::IgnoreAspectRatio, transformMode);
                 if (p) {
                     p->drawPixmap(pos, pixmap);
                 }
             }
-            else {
-//                target->drawPixmap(QRect(rect.x() + margins.left, rect.y() + margins.top, w, h), pixmap);
-            }
         }
     }
     else {
-//        int hAlign = QApplication::horizontalAlignment(alignment);
         if (alignment & Qt::AlignRight)
             pos.setX(pos.x() + w - pixmap.width());
         else if (alignment & Qt::AlignHCenter)
@@ -473,22 +440,11 @@ static void drawOrScalePixmapInternal(QPainter* p, const WidgetMargins& margins,
             pos.setY(pos.y() + h / 2 - pixmap.height() / 2);
         else //top, etc.
             pos.setY(pos.y());
-//  target->drawPixmap(pos, pixmap);
-//  if (!fast)
-//   p2.begin(&pixmapBuffer, p.device());
         pos += QPoint(margins.left, margins.top);
         if (p) {
             p->drawPixmap(pos, pixmap);
         }
     }
-/*    if (scaledContents && !fast && p.isActive()) {
-        p2.end();
-        p.drawPixmap(
-           (int)p.worldMatrix().dx() + rect.x() + margins.left + pos.x(),
-           (int)p.worldMatrix().dy() + rect.y() + margins.top + pos.y(),
-            pixmapBuffer,
-            rect.x(), rect.y(), w, h);
-    }*/
 }
 
 void KexiUtils::drawPixmap(QPainter& p, const WidgetMargins& margins, const QRect& rect,
@@ -541,9 +497,7 @@ void KexiUtils::setFocusWithReason(QWidget* widget, Qt::FocusReason reason)
     if (!widget)
         return;
     QFocusEvent fe(QEvent::FocusIn, reason);
-    //QFocusEvent::setReason(reason);
     QCoreApplication::sendEvent(widget, &fe);
-    //QFocusEvent::resetReason();
 }
 
 void KexiUtils::unsetFocusWithReason(QWidget* widget, Qt::FocusReason reason)
@@ -551,9 +505,7 @@ void KexiUtils::unsetFocusWithReason(QWidget* widget, Qt::FocusReason reason)
     if (!widget)
         return;
     QFocusEvent fe(QEvent::FocusOut, reason);
-    //QFocusEvent::setReason(reason);
     QCoreApplication::sendEvent(widget, &fe);
-    //QFocusEvent::resetReason();
 }
 
 //--------
@@ -744,4 +696,57 @@ bool PaintBlocker::eventFilter(QObject* watched, QEvent* event)
     return false;
 }
 
+void KexiUtils::openHyperLink(const KUrl &url, QWidget *parent, const OpenHyperlinkOptions &options)
+{
+    if (url.isLocalFile()) {
+        QFileInfo fileInfo(url.toLocalFile());
+        if (!fileInfo.exists()) {
+            KMessageBox::sorry(parent, i18nc("@info", "The file or directory <filename>%1</filename> does not exist.", fileInfo.absoluteFilePath()));
+            return;
+        }
+    }
+
+    if (!url.isValid()) {
+        KMessageBox::sorry(parent, i18nc("@info", "Invalid hyperlink <link>%1</link>.", url.pathOrUrl()));
+        return;
+    }
+
+    QString type = KMimeType::findByUrl(url)->name();
+
+    if (!options.allowExecutable && KRun::isExecutableFile(url, type)) {
+        KMessageBox::sorry(parent, i18nc("@info", "Executable <link>%1</link> not allowed.", url.pathOrUrl()));
+        return;
+    }
+
+    if (!options.allowRemote && !url.isLocalFile()) {
+        KMessageBox::sorry(parent, i18nc("@info", "Remote hyperlink <link>%1</link> not allowed.", url.pathOrUrl()));
+        return;
+    }
+
+    if (KRun::isExecutableFile(url, type)) {
+        int ret = KMessageBox::warningYesNo(parent
+                                            , i18nc("@info", "Do you want to run this file?"
+                                                    "<warning>Running executables can be dangerous.</warning>")
+                                            , QString(), KStandardGuiItem::yes(), KStandardGuiItem::no()
+                                            , "AllowRunExecutable", KMessageBox::Dangerous);
+
+        if (ret != KMessageBox::Yes) {
+            return;
+        }
+    }
+
+    switch(options.tool) {
+        case OpenHyperlinkOptions::DefaultHyperlinkTool:
+            KRun::runUrl(url, type, parent);
+            break;
+        case OpenHyperlinkOptions::BrowserHyperlinkTool:
+            KToolInvocation::invokeBrowser(url.url());
+            break;
+        case OpenHyperlinkOptions::MailerHyperlinkTool:
+            KToolInvocation::invokeMailer(url);
+            break;
+    }
+}
+
+#include "moc_utils.cpp"
 #include "utils_p.moc"

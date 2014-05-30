@@ -1695,6 +1695,7 @@ void WordsTextHandler::fieldEnd(const wvWare::FLD* fld, wvWare::SharedPtr<const 
 
     //reset
     delete m_fld;
+    m_fld = 0;
     m_fldEnd++;
 
     //nested field
@@ -2333,10 +2334,10 @@ void WordsTextHandler::fld_restoreState()
     }
 
     //warn if pointers weren't reset properly, but restore state anyway
-    if (m_fld->m_writer != 0) {
+    if (m_fld && m_fld->m_writer != 0) {
         kWarning() << "m_fld->m_writer pointer wasn't reset";
     }
-    if (m_fld->m_buffer != 0) {
+    if (m_fld && m_fld->m_buffer != 0) {
         kWarning() << "m_fld->m_buffer pointer wasn't reset";
     }
 

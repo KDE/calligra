@@ -41,6 +41,15 @@ class KisChildDoc;
 class KisUndoStore;
 class KisPaintingAssistant;
 class KisView2;
+class KisPart2;
+
+/**
+ * Mime type for this app - not same as file type, but file types
+ * can be associated with a mime type and are opened with applications
+ * associated with the same mime type
+ */
+#define KIS_MIME_TYPE "application/x-krita"
+
 
 /**
  * The class that represents a Krita document containing content and
@@ -63,9 +72,11 @@ class KRITAUI_EXPORT KisDoc2 : public KoDocument
 
 public:
     KisDoc2();
+    KisDoc2(KisPart2 *part);
     virtual ~KisDoc2();
 
 public:
+
     virtual bool completeLoading(KoStore *store);
     virtual bool completeSaving(KoStore*);
     virtual int supportedSpecialFormats() const;
@@ -75,6 +86,18 @@ public:
     /// Unused
     virtual bool saveOdf(SavingContext &documentContext);
 
+    /// reimplemented from KoDocument
+    virtual QByteArray nativeFormatMimeType() const { return KIS_MIME_TYPE; }
+    /// reimplemented from KoDocument
+    virtual QByteArray nativeOasisMimeType() const { return ""; }
+    /// reimplemented from KoDocument
+    virtual QStringList extraNativeMimeTypes() const
+    {
+        return QStringList() << KIS_MIME_TYPE
+                             << "application/x-krita-flipbook";
+    }
+
+    bool saveNativeFormat(const QString &file);
     virtual QDomDocument saveXML();
     virtual bool loadXML(const KoXmlDocument& doc, KoStore* store);
 
@@ -170,7 +193,7 @@ protected slots:
 
 private:
 
-    bool init();
+    void init();
 
 private:
     class UndoStack;

@@ -17,7 +17,7 @@
  */
 
 #ifndef KOCOLUMN_H
-#define KoCOLUMN_H
+#define KOCOLUMN_H
 
 #include "KoCellStyle.h"
 #include "KoColumnStyle.h"

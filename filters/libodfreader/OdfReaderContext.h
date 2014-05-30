@@ -70,8 +70,8 @@ class KoOdfStyleManager;
 
 class KOODFREADER_EXPORT OdfReaderContext
 {
- public: 
-    OdfReaderContext(KoStore *store);
+ public:
+    explicit OdfReaderContext(KoStore *store);
     virtual ~OdfReaderContext();
 
     /** Analyze (parse) the data in an ODF file other than the content

@@ -20,8 +20,6 @@
 #ifndef KEXIACTIONPROXY_H
 #define KEXIACTIONPROXY_H
 
-#include <QPointer>
-#include <QObject>
 #include <QPair>
 
 #include "kexiproject.h"
@@ -74,14 +72,13 @@ protected:
  This class is mostly used by subclassing in KexiWindow or KexiDockBase
  - you can subclass in a similar way.
 */
-
 class KEXICORE_EXPORT KexiActionProxy
 {
 public:
     /*! Constructs action proxy for object \a receiver, using \a host.
      If \a host is NULL, KexiSharedActionHost::defaultHost() is used.
      (you must be sure that it's true) -- it is casted to QObject and assigned as the receiver.*/
-    KexiActionProxy(QObject *receiver , KexiSharedActionHost *host = 0);
+    explicit KexiActionProxy(QObject *receiver , KexiSharedActionHost *host = 0);
     virtual ~KexiActionProxy();
 
     /*! Activates  action named \a action_name for this proxy. If the action is executed

@@ -37,8 +37,8 @@ KexiAboutData::KexiAboutData()
         KEXI_VERSION_STRING,
         ki18n(description),
         KAboutData::License_LGPL_V2,
-        ki18n("© 2002-2012, The Kexi Team"),
-        ki18n("This software is developed by Kexi Team - an international group\n"
+        ki18n("© 2002-%1, The Kexi Team").subs(CALLIGRA_YEAR),
+        ki18n("This software is developed by Kexi Team - an international group "
               "of independent developers."),
         "http://www.calligra.org/kexi",
         "submit@bugs.kde.org"
@@ -58,6 +58,8 @@ KexiAboutData::KexiAboutData()
         ki18n("Oleg Kukharchuk"), ki18n("Several form widgets, porting to Qt 4, stabilization"), "oleg.kuh@gmail.com");
     addAuthor(
         ki18n("Radosław Wicik"), ki18n("Map elements for forms and reports, map flake shape"), "radoslaw@wicik.pl");
+    addAuthor(
+        ki18n("Wojciech Kosowicz"), ki18n("Bug fixes"), "pcellix@gmail.com");
     addAuthor(
         ki18n("Shreya Pandit"), ki18n("Web elements for forms and reports"), "shreya.pandit25@gmail.com");
     addAuthor(

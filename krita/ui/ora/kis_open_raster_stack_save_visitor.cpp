@@ -18,11 +18,13 @@
 
 #include "kis_open_raster_stack_save_visitor.h"
 
+#include <math.h>
+
 #include <QDomElement>
 #include <QImage>
 
 #include <KoStore.h>
-#include <KoCompositeOp.h>
+#include <KoCompositeOpRegistry.h>
 
 #include "kis_adjustment_layer.h"
 #include "filter/kis_filter.h"
@@ -74,7 +76,7 @@ void KisOpenRasterStackSaveVisitor::saveLayerInfo(QDomElement& elt, KisLayer* la
     else if (layer->compositeOpId() == COMPOSITE_OVERLAY) compop = "svg:overlay";
     else if (layer->compositeOpId() == COMPOSITE_DARKEN) compop = "svg:darken";
     else if (layer->compositeOpId() == COMPOSITE_LIGHTEN) compop = "svg:lighten";
-    else if (layer->compositeOpId() == COMPOSITE_DODGE) compop = "color-dodge";
+    else if (layer->compositeOpId() == COMPOSITE_DODGE) compop = "svg:color-dodge";
     else if (layer->compositeOpId() == COMPOSITE_BURN) compop = "svg:color-burn";
     else if (layer->compositeOpId() == COMPOSITE_HARD_LIGHT) compop = "svg:hard-light";
     else if (layer->compositeOpId() == COMPOSITE_SOFT_LIGHT_SVG) compop = "svg:soft-light";
@@ -83,6 +85,7 @@ void KisOpenRasterStackSaveVisitor::saveLayerInfo(QDomElement& elt, KisLayer* la
     else if (layer->compositeOpId() == COMPOSITE_LUMINIZE) compop = "svg:luminosity";
     else if (layer->compositeOpId() == COMPOSITE_HUE) compop = "svg:hue";
     else if (layer->compositeOpId() == COMPOSITE_SATURATION) compop = "svg:saturation";
+    else if (layer->compositeOpId() == COMPOSITE_EXCLUSION) compop = "svg:exclusion";
     else compop = "krita:" + layer->compositeOpId();
     elt.setAttribute("composite-op", compop);
 }
@@ -114,8 +117,14 @@ bool KisOpenRasterStackSaveVisitor::visit(KisGroupLayer *layer)
         QDomElement imageElt = d->layerStack.createElement("image");
         int width = layer->image()->width();
         int height = layer->image()->height();
+        int xRes = (int)(qRound(layer->image()->xRes() * 72));
+        int yRes = (int)(qRound(layer->image()->yRes() * 72));
+
+        imageElt.setAttribute("version", "0.0.1");
         imageElt.setAttribute("w", width);
         imageElt.setAttribute("h", height);
+        imageElt.setAttribute("xres", xRes);
+        imageElt.setAttribute("yres", yRes);
         imageElt.appendChild(elt);
         d->layerStack.insertBefore(imageElt, QDomNode());
         d->currentElement = 0;

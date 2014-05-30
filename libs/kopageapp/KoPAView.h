@@ -70,12 +70,18 @@ public:
         AllActions       = 0xFF
     };
 
+    enum KoPAFlags
+    {
+        NormalMode =1,
+        ModeBox = 2
+    };
+
     /**
      * Constructor
      * @param document the document of this view
      * @param parent the parent widget
      */
-    explicit KoPAView(KoPart *part, KoPADocument *document, QWidget *parent);
+    explicit KoPAView(KoPart *part, KoPADocument *document, KoPAFlags withModeBox, QWidget *parent);
 
     virtual ~KoPAView();
 
@@ -123,6 +129,13 @@ public:
      * @param enable new state of the actions
      */
     void setActionEnabled( int actions, bool enable );
+
+    /**
+     * @brief Set the view mode
+     *
+     * @param mode the new view mode
+     */
+    void setViewMode( KoPAViewMode* mode );
 
     /**
      * Set the active page and updates the UI
@@ -193,15 +206,12 @@ signals:
 protected:
 
     /// creates the widgets (called from the constructor)
-    void initGUI();
+    void initGUI(KoPAFlags flags);
     /// creates the actions (called from the constructor)
     void initActions();
 
     /// Returns the document structure docker
     KoPADocumentStructureDocker* documentStructureDocker() const;
-
-    /// Called when receiving a PartActivateEvent
-    virtual void partActivateEvent(KParts::PartActivateEvent* event);
 
     bool isMasterUsed( KoPAPageBase * page );
     void editPaste();

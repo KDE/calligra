@@ -60,7 +60,6 @@ OdfTextReaderBackend::Private::~Private()
 OdfTextReaderBackend::OdfTextReaderBackend()
     : d(new OdfTextReaderBackend::Private)
 {
-    //Q_UNUSED(context)
 }
 
 OdfTextReaderBackend::~OdfTextReaderBackend()
@@ -71,6 +70,35 @@ OdfTextReaderBackend::~OdfTextReaderBackend()
 
 // ----------------------------------------------------------------
 // Text level functions: paragraphs, headings, sections, frames, objects, etc
+
+
+void OdfTextReaderBackend::elementOfficeAnnotation(KoXmlStreamReader &reader,
+                                                   OdfReaderContext *context)
+{
+    Q_UNUSED(reader);
+    Q_UNUSED(context);
+}
+
+void OdfTextReaderBackend::elementOfficeAnnotationEnd(KoXmlStreamReader &reader,
+                                                      OdfReaderContext *context)
+{
+    Q_UNUSED(reader);
+    Q_UNUSED(context);
+}
+
+void OdfTextReaderBackend::elementDcCreator(KoXmlStreamReader &reader,
+                                            OdfReaderContext *context)
+{
+    Q_UNUSED(reader);
+    Q_UNUSED(context);
+}
+
+void OdfTextReaderBackend::elementDcDate(KoXmlStreamReader &reader,
+                                         OdfReaderContext *context)
+{
+    Q_UNUSED(reader);
+    Q_UNUSED(context);
+}
 
 void OdfTextReaderBackend::elementTextH(KoXmlStreamReader &reader, OdfReaderContext *context)
 {
@@ -90,11 +118,59 @@ void OdfTextReaderBackend::elementTextList(KoXmlStreamReader &reader, OdfReaderC
     Q_UNUSED(context);
 }
 
+void OdfTextReaderBackend::elementTableTable(KoXmlStreamReader &reader, OdfReaderContext *context)
+{
+    Q_UNUSED(reader);
+    Q_UNUSED(context);
+}
+
+void OdfTextReaderBackend::elementTableTableColumn(KoXmlStreamReader &reader,
+                                                   OdfReaderContext *context)
+{
+    Q_UNUSED(reader);
+    Q_UNUSED(context);
+}
+
+void OdfTextReaderBackend::elementTableTableRow(KoXmlStreamReader &reader,
+                                                OdfReaderContext *context)
+{
+    Q_UNUSED(reader);
+    Q_UNUSED(context);
+}
+
+void OdfTextReaderBackend::elementTableTableHeaderRows(KoXmlStreamReader &reader,
+                                                       OdfReaderContext *context)
+{
+    Q_UNUSED(reader);
+    Q_UNUSED(context);
+}
+
+void OdfTextReaderBackend::elementTableTableCell(KoXmlStreamReader &reader,
+                                                 OdfReaderContext *context)
+{
+    Q_UNUSED(reader);
+    Q_UNUSED(context);
+}
+
+void OdfTextReaderBackend::elementTableCoveredTableCell(KoXmlStreamReader &reader,
+                                                        OdfReaderContext *context)
+{
+    Q_UNUSED(reader);
+    Q_UNUSED(context);
+}
+
+
 // ----------------------------------------------------------------
 // Paragraph level functions: spans, annotations, notes, text content itself, etc.
 
 
 void OdfTextReaderBackend::elementTextA(KoXmlStreamReader &reader, OdfReaderContext *context)
+{
+    Q_UNUSED(reader);
+    Q_UNUSED(context);
+}
+
+void OdfTextReaderBackend::elementTextLineBreak(KoXmlStreamReader &reader, OdfReaderContext *context)
 {
     Q_UNUSED(reader);
     Q_UNUSED(context);
@@ -107,6 +183,14 @@ void OdfTextReaderBackend::elementTextSpan(KoXmlStreamReader &reader, OdfReaderC
 }
 
 void OdfTextReaderBackend::elementTextS(KoXmlStreamReader &reader, OdfReaderContext *context)
+{
+    Q_UNUSED(reader);
+    Q_UNUSED(context);
+}
+
+
+void OdfTextReaderBackend::elementTextSoftPageBreak(KoXmlStreamReader &reader,
+                                                    OdfReaderContext *context)
 {
     Q_UNUSED(reader);
     Q_UNUSED(context);

@@ -27,6 +27,7 @@
 #include <KoIcon.h>
 
 #include <QToolButton>
+#include <QDomDocument>
 #include <kaction.h>
 #include <ktoggleaction.h>
 #include <kactioncollection.h>
@@ -53,11 +54,11 @@
 
 class KexiFormManagerPrivate {
 public:
-    KexiFormManagerPrivate() : part(0)
-        , q(this)
+    KexiFormManagerPrivate(KexiFormManager *qq) : part(0)
+        , q(qq)
     {
         features = KFormDesigner::Form::NoFeatures;
-        widgetActionGroup = new KFormDesigner::ActionGroup(&q);
+        widgetActionGroup = new KFormDesigner::ActionGroup(q);
 #ifdef KFD_SIGSLOTS
         dragConnectionAction = 0;
 #endif
@@ -78,19 +79,19 @@ public:
 #endif
     KToggleAction *snapToGridAction;
 
-    KexiFormManager q;
+    KexiFormManager *q;
 };
 
-K_GLOBAL_STATIC(KexiFormManagerPrivate, g_private)
+K_GLOBAL_STATIC(KexiFormManager, g_manager)
 
 KexiFormManager* KexiFormManager::self()
 {
-    return &g_private->q;
+    return g_manager;
 }
 
-KexiFormManager::KexiFormManager(KexiFormManagerPrivate *p)
+KexiFormManager::KexiFormManager()
         : QObject()
-        , d( p )
+        , d(new KexiFormManagerPrivate(this))
 {
 //2.0 unused    m_emitSelectionSignalsUpdatesPropertySet = true;
     KexiCustomPropertyFactory::init();
@@ -98,6 +99,7 @@ KexiFormManager::KexiFormManager(KexiFormManagerPrivate *p)
 
 KexiFormManager::~KexiFormManager()
 {
+    delete d;
 }
 
 void KexiFormManager::init(KexiFormPart *part, KFormDesigner::WidgetTreeWidget *widgetTree)
@@ -291,13 +293,14 @@ void KexiFormManager::createActions(KActionCollection* collection)
         }
 
         QSet<QString> iconOnlyActions;
-        iconOnlyActions << "show_form_ui";
+        //appendWidgetToToolbar doesn't work: iconOnlyActions << "show_form_ui";
         const QList<QAction*> actions( d->collection->actions() );
         foreach( QAction *a, actions ) {
             if (iconOnlyActions.contains(a->objectName())) { // icon only
                 KexiSmallToolButton *btn = new KexiSmallToolButton(a, win->toolBar("form"));
                 btn->setToolButtonStyle(Qt::ToolButtonIconOnly);
                 win->appendWidgetToToolbar("form", btn);
+                win->setWidgetVisibleInToolbar(btn, true);
             }
             else {
                 win->addToolBarAction("form", a);

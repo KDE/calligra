@@ -35,7 +35,6 @@
 #include <klocale.h>
 #include <krandom.h>
 
-#include "KoColorSpaceRegistry.h"
 
 #include "kis_global.h"
 #include "kis_paint_device.h"
@@ -68,9 +67,9 @@ class KisPipeBrushParasite
 public:
     /// Set some default values
     KisPipeBrushParasite()
-            : ncells(0)
-            , dim(0)
-            , needsMovement(false) {
+        : ncells(0)
+        , dim(0)
+        , needsMovement(false) {
         init();
     }
 

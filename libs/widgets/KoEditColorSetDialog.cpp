@@ -29,11 +29,11 @@
 #include <kcolordialog.h>
 #include <kinputdialog.h>
 #include <kmessagebox.h>
-#include <kfiledialog.h>
 
 #include <KoColorSet.h>
 #include <KoColorPatch.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoFileDialog.h>
 
 // debug
 #include <kglobal.h>
@@ -183,7 +183,10 @@ void KoEditColorSetWidget::removeColor()
 void KoEditColorSetWidget::open()
 {
     Q_ASSERT(m_activeColorSet);
-    QString fileName = KFileDialog::getOpenFileName(KUrl("file://"+m_activeColorSet->filename()), "*.gpl", this);
+    KoFileDialog dialog(this, KoFileDialog::OpenFile);
+    dialog.setDefaultDir(m_activeColorSet->filename());
+    dialog.setNameFilter("*.gpl");
+    QString fileName = dialog.url();
     KoColorSet *colorSet = new KoColorSet(fileName);
     colorSet->load();
     m_colorSets.append(colorSet);

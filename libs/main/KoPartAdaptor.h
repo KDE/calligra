@@ -79,11 +79,6 @@ public slots: // METHODS
     Q_SCRIPTABLE QString view(int idx);
 
     /**
-     * @return list of actions
-     */
-    Q_SCRIPTABLE QStringList actions();
-
-    /**
      * Saves the document under its existing filename
      */
     Q_SCRIPTABLE void save();
@@ -130,6 +125,9 @@ public slots: // METHODS
     Q_SCRIPTABLE void setDocumentInfoSubject(const QString & text);
     Q_SCRIPTABLE void setDocumentInfoAuthorPosition(const QString & text);
 
+signals:
+    
+    
 public:
 
 protected:

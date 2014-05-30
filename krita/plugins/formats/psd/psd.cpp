@@ -18,7 +18,7 @@
 #include "psd.h"
 
 #include <KoColorModelStandardIds.h>
-#include <KoCompositeOp.h>
+#include <KoCompositeOpRegistry.h>
 
 
 QPair<QString, QString> psd_colormode_to_colormodelid(PSDColorMode colormode, quint16 channelDepth)
@@ -35,6 +35,8 @@ QPair<QString, QString> psd_colormode_to_colormodelid(PSDColorMode colormode, qu
         colorSpaceId.first = CMYKAColorModelID.id();
         break;
     case(Grayscale):
+        colorSpaceId.first = GrayAColorModelID.id();
+        break;
     case(DuoTone):
         colorSpaceId.first = GrayAColorModelID.id();
         break;

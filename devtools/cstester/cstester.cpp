@@ -27,7 +27,6 @@
 #include <KoPart.h>
 #include <kmimetype.h>
 #include <kmimetypetrader.h>
-#include <kparts/componentfactory.h>
 #include <kcmdlineargs.h>
 #include <kdebug.h>
 
@@ -107,7 +106,7 @@ QString saveFile(KoDocument *document, const QString &filename, const QString &o
     KUrl url;
     url.setPath(saveAs);
     document->setOutputMimeType(mimetype, 0);
-    document->documentPart()->saveAs(url);
+    document->saveAs(url);
     kDebug(31000) << "save done";
     return saveAs;
 }

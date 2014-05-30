@@ -54,7 +54,7 @@ class UndoTextCommand;
 
 class KAction;
 class KActionMenu;
-class KFontAction;
+class KoFontFamilyAction;
 class FontSizeAction;
 
 class KUndo2Command;
@@ -149,6 +149,7 @@ public:
 
 protected:
     virtual void createActions();
+    TextShape *textShape() {return m_textShape;}
 
     friend class SimpleParagraphWidget;
     friend class ParagraphSettingsDialog;
@@ -156,6 +157,8 @@ protected:
     KoTextEditor *textEditor() { return m_textEditor.data(); }
 
 public slots:
+    /// Insert comment to document.
+     void insertAnnotation();
     /// start the textedit-plugin.
     void startTextEditingPlugin(const QString &pluginId);
     /// reimplemented from KoToolBase
@@ -330,6 +333,7 @@ private:
     TextShape *m_textShape; // where caret of m_textEditor currently is
     KoTextShapeData *m_textShapeData; // where caret of m_textEditor currently is
     QWeakPointer<KoTextEditor> m_textEditor;
+    QWeakPointer<KoTextEditor> m_oldTextEditor;
     KoChangeTracker *m_changeTracker;
     KoUnit m_unit;
     bool m_allowActions;
@@ -360,7 +364,7 @@ private:
     KActionMenu *m_variableMenu;
 
     FontSizeAction *m_actionFormatFontSize;
-    KFontAction *m_actionFormatFontFamily;
+    KoFontFamilyAction *m_actionFormatFontFamily;
     KoColorPopupAction *m_actionFormatTextColor;
     KoColorPopupAction *m_actionFormatBackgroundColor;
 

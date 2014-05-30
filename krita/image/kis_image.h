@@ -40,7 +40,6 @@
 
 class KoDocument;
 class KoColorSpace;
-class KoCompositeOp;
 class KoColor;
 
 class KisCompositeProgressProxy;
@@ -148,16 +147,6 @@ public:
     bool locked() const;
 
     /**
-     * @return the image that is used as background tile.
-     */
-    KisBackgroundSP backgroundPattern() const;
-
-    /**
-     * Set a 64x64 tile for the background of the image.
-     */
-    void setBackgroundPattern(KisBackgroundSP image);
-
-    /**
      * @return the global selection object or 0 if there is none. The
      * global selection is always read-write.
      */
@@ -204,6 +193,7 @@ public:
     void cropNode(KisNodeSP node, const QRect& newRect);
 
     void scaleImage(const QSize &size, qreal xres, qreal yres, KisFilterStrategy *filterStrategy);
+    void scaleNode(KisNodeSP node, qreal sx, qreal sy, KisFilterStrategy *filterStrategy);
 
     /**
      * Execute a rotate transform on all layers in this image.
@@ -257,8 +247,10 @@ public:
      *
      * This does not create an undo action; only call it when creating or
      * loading an image.
+     *
+     * @returns false if the profile could not be assigned
      */
-    void assignImageProfile(const KoColorProfile *profile);
+    bool assignImageProfile(const KoColorProfile *profile);
 
     /**
      * Returns the current undo adapter. You can add new commands to the
@@ -398,7 +390,7 @@ public:
      * Return the projection; that is, the complete, composited
      * representation of this image.
      */
-    KisPaintDeviceSP projection();
+    KisPaintDeviceSP projection() const;
 
     /**
      * Return the number of layers (not other nodes) that are in this
@@ -437,6 +429,17 @@ public:
 
     /// use if the layers have changed _completely_ (eg. when flattening)
     void notifyLayersChanged();
+
+    /**
+     * Sets the default color of the root layer projection. All the layers
+     * will be merged on top of this very color
+     */
+    void setDefaultProjectionColor(KoColor color);
+
+    /**
+     * \see setDefaultProjectionColor()
+     */
+    KoColor defaultProjectionColor() const;
 
     void setRootLayer(KisGroupLayerSP rootLayer);
 
@@ -489,6 +492,34 @@ public:
      * Remove the layer compostion
      */
     void removeComposition(KisLayerComposition* composition);
+
+    /**
+     * Permit or deny the wrap-around mode for all the paint devices
+     * of the image. Note that permitting the wraparound mode will not
+     * necessarily activate it right now. To be activated the wrap
+     * around mode should be 1) permitted; 2) supported by the
+     * currently running stroke.
+     */
+    void setWrapAroundModePermitted(bool value);
+
+    /**
+     * \return whether the wrap-around mode is permitted for this
+     *         image. If the wrap around mode is permitted and the
+     *         currently running stroke supports it, the mode will be
+     *         activated for all paint devices of the image.
+     *
+     * \see setWrapAroundMode
+     */
+    bool wrapAroundModePermitted() const;
+
+
+    /**
+     * \return whether the wraparound mode is activated for all the
+     *         devices of the image. The mode is activated when both
+     *         factors are true: the user permitted it and the stroke
+     *         supports it
+     */
+    bool wrapAroundModeActive() const;
 
 public:
     void startIsolatedMode(KisNodeSP node);
@@ -692,12 +723,13 @@ public slots:
 
     /**
      * This method is called by the UI (*not* by the creator of the
-     * stroke) when it thinks current stroke should undo its last
-     * action. For example, when the user presses Ctrl+Z while some
-     * stroke is active. If the creator of the stroke supports undoing
-     * of intermediate actions, it will be notified about this request
-     * and (if it decides he likes to do it) will undo its last
-     * action.
+     * stroke) when it thinks the current stroke should undo its last
+     * action, for example, when the user presses Ctrl+Z while some
+     * stroke is active.
+     *
+     * If the creator of the stroke supports undoing of intermediate
+     * actions, it will be notified about this request and can undo
+     * its last action.
      */
     void requestUndoDuringStroke();
 
@@ -722,7 +754,7 @@ private:
 
     KisImage(const KisImage& rhs);
     KisImage& operator=(const KisImage& rhs);
-    void init(KisUndoStore *undoStore, qint32 width, qint32 height, const KoColorSpace * colorSpace);
+
     void emitSizeChanged();
 
     void resizeImageImpl(const QRect& newRect, bool cropLayers);
@@ -736,6 +768,10 @@ private:
 
     void refreshHiddenArea(KisNodeSP rootNode, const QRect &preparedArea);
     static QRect realNodeExtent(KisNodeSP rootNode, QRect currentRect = QRect());
+
+    void requestProjectionUpdateImpl(KisNode *node,
+                                     const QRect& rect,
+                                     const QRect &cropRect);
 
     friend class KisImageResizeCommand;
     void setSize(const QSize& size);

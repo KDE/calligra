@@ -35,6 +35,14 @@
 #include "kis_node_graph_listener.h"
 #include "kis_iterator_ng.h"
 
+#ifndef FILES_DATA_DIR
+#define FILES_DATA_DIR "."
+#endif
+
+#ifndef FILES_DEFAULT_DATA_DIR
+#define FILES_DEFAULT_DATA_DIR "."
+#endif
+
 
 /**
  * Routines that are useful for writing efficient tests
@@ -42,6 +50,18 @@
 
 namespace TestUtil
 {
+
+inline KisNodeSP findNode(KisNodeSP root, const QString &name) {
+    if(root->name() == name) return root;
+
+    KisNodeSP child = root->firstChild();
+    while (child) {
+        if(root = findNode(child, name)) return root;
+        child = child->nextSibling();
+    }
+
+    return 0;
+}
 
 inline QString fetchDataFileLazy(const QString relativeFileName)
 {
@@ -196,6 +216,45 @@ inline bool comparePaintDevices(QPoint & pt, const KisPaintDeviceSP dev1, const 
     return true;
 }
 
+template <typename channel_type>
+inline bool comparePaintDevicesClever(const KisPaintDeviceSP dev1, const KisPaintDeviceSP dev2, channel_type alphaThreshold = 0)
+{
+    QRect rc1 = dev1->exactBounds();
+    QRect rc2 = dev2->exactBounds();
+
+    if (rc1 != rc2) {
+        qDebug() << "Devices have different size" << ppVar(rc1) << ppVar(rc2);
+        return false;
+    }
+
+    KisHLineConstIteratorSP iter1 = dev1->createHLineConstIteratorNG(0, 0, rc1.width());
+    KisHLineConstIteratorSP iter2 = dev2->createHLineConstIteratorNG(0, 0, rc1.width());
+
+    int pixelSize = dev1->pixelSize();
+
+    for (int y = 0; y < rc1.height(); ++y) {
+
+        do {
+            if (memcmp(iter1->oldRawData(), iter2->oldRawData(), pixelSize) != 0) {
+                const channel_type* p1 = reinterpret_cast<const channel_type*>(iter1->oldRawData());
+                const channel_type* p2 = reinterpret_cast<const channel_type*>(iter2->oldRawData());
+
+                if (p1[3] < alphaThreshold && p2[3] < alphaThreshold) continue;
+
+                qDebug() << "Failed compare paint devices:" << iter1->x() << iter1->y();
+                qDebug() << "src:" << p1[0] << p1[1] << p1[2] << p1[3];
+                qDebug() << "dst:" << p2[0] << p2[1] << p2[2] << p2[3];
+                return false;
+            }
+        } while (iter1->nextPixel() && iter2->nextPixel());
+
+        iter1->nextRow();
+        iter2->nextRow();
+    }
+
+    return true;
+}
+
 #ifdef FILES_OUTPUT_DIR
 
 inline bool checkQImage(const QImage &image, const QString &testName,
@@ -206,9 +265,22 @@ inline bool checkQImage(const QImage &image, const QString &testName,
     QString filename(prefix + "_" + name + ".png");
     QString dumpName(prefix + "_" + name + "_expected.png");
 
-    QImage ref(QString(FILES_DATA_DIR) + QDir::separator() +
-               testName + QDir::separator() +
-               prefix + QDir::separator() + filename);
+    QString fullPath = fetchDataFileLazy(testName + QDir::separator() +
+                                         prefix + QDir::separator() + filename);
+
+    if (fullPath.isEmpty()) {
+        // Try without the testname subdirectory
+        fullPath = fetchDataFileLazy(prefix + QDir::separator() +
+                                     filename);
+    }
+
+    if (fullPath.isEmpty()) {
+        // Try without the prefix subdirectory
+        fullPath = fetchDataFileLazy(testName + QDir::separator() +
+                                     filename);
+    }
+
+    QImage ref(fullPath);
 
     bool valid = true;
     QPoint t;
@@ -257,12 +329,6 @@ inline bool checkAlphaDeviceFilledWithPixel(KisPaintDeviceSP dev, const QRect &r
         it->nextRow();
     }
     return true;
-}
-
-
-inline QList<const KoColorSpace*> allColorSpaces()
-{
-    return KoColorSpaceRegistry::instance()->allColorSpaces(KoColorSpaceRegistry::AllColorSpaces, KoColorSpaceRegistry::OnlyDefaultProfile);
 }
 
 class TestNode : public KisNode

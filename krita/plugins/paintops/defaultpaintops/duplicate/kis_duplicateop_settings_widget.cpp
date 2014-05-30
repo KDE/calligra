@@ -34,15 +34,16 @@
 
 
 KisDuplicateOpSettingsWidget::KisDuplicateOpSettingsWidget(QWidget* parent)
-        : KisBrushBasedPaintopOptionWidget(parent)
+    : KisBrushBasedPaintopOptionWidget(parent)
 {
     setObjectName("brush option widget");
     setPrecisionEnabled(true);
 
     m_duplicateOption = new KisDuplicateOpOption;
     addPaintOpOption(new KisCompositeOpOption(true));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption()));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption()));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption()));
+    addMirrorOption();
     addPaintOpOption(m_duplicateOption);
 
     addTextureOptions();

@@ -56,14 +56,15 @@ void KisToolSelectElliptical::keyPressEvent(QKeyEvent *event)
     }
 }
 
-void KisToolSelectElliptical::finishEllipse(const QRectF &rect)
+void KisToolSelectElliptical::finishRect(const QRectF &rect)
 {
     KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     Q_ASSERT(kisCanvas);
 
     // If the user just clicks on the canvas deselect
     if (rect.isEmpty()) {
-        kisCanvas->view()->selectionManager()->deselect();
+        // Queueing this action to ensure we avoid a race condition when unlocking the node system
+        QTimer::singleShot(0, kisCanvas->view()->selectionManager(), SLOT(deselect()));
         return;
     }
 
@@ -73,7 +74,6 @@ void KisToolSelectElliptical::finishEllipse(const QRectF &rect)
         KisPixelSelectionSP tmpSel = new KisPixelSelection();
 
         KisPainter painter(tmpSel);
-        painter.setBounds(currentImage()->bounds());
         painter.setPaintColor(KoColor(Qt::black, tmpSel->colorSpace()));
         painter.setPaintOpPreset(currentPaintOpPreset(), currentImage()); // And now the painter owns the op and will destroy it.
         painter.setAntiAliasPolygonFill(m_widgetHelper.optionWidget()->antiAliasSelection());

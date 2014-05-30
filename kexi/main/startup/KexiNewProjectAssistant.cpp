@@ -53,7 +53,6 @@
 #include <kurlcombobox.h>
 #include <kmessagebox.h>
 #include <klineedit.h>
-#include <kurlcombobox.h>
 #include <ktitlewidget.h>
 #include <kcategorydrawer.h>
 #include <kpushbutton.h>
@@ -97,7 +96,6 @@ KexiTemplateSelectionPage::KexiTemplateSelectionPage(QWidget* parent)
     m_templatesList->setContentsMargins(0, 0, 0, 0);
     int margin = style()->pixelMetric(QStyle::PM_MenuPanelWidth, 0, 0)
         + KDialog::marginHint();
-    //m_templatesList->setCategorySpacing(5 + margin);
     //not needed in grid:
     m_templatesList->setSpacing(margin);
     m_templatesList->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
@@ -115,18 +113,17 @@ KexiTemplateSelectionPage::KexiTemplateSelectionPage(QWidget* parent)
     info.icon = KIcon(KexiDB::defaultFileBasedDriverIconName()); //"x-office-document");
     templateCategory.addTemplate(info);
     templateCategories.append(templateCategory);
-    
+
+#ifdef KEXI_SHOW_UNIMPLEMENTED
     templateCategory = KexiTemplateCategoryInfo();
     templateCategory.name = "office";
     templateCategory.caption = i18n("Office Templates");
-    //templateCategory.enabled = false;
     
     info = KexiTemplateInfo();
     info.name = "contacts";
     info.caption = i18n("Contacts");
     info.description = i18n("Database for collecting and managing contacts");
     info.icon = koIcon("view-pim-contacts");
-    //info.enabled = false;
     templateCategory.addTemplate(info);
     
     info = KexiTemplateInfo();
@@ -134,17 +131,16 @@ KexiTemplateSelectionPage::KexiTemplateSelectionPage(QWidget* parent)
     info.caption = i18n("Movie catalog");
     info.description = i18n("Database for collecting movies");
     info.icon = koIcon("video-x-generic");
-    //info.enabled = false;
     templateCategory.addTemplate(info);
     templateCategories.append(templateCategory);
-    
+#endif // KEXI_SHOW_UNIMPLEMENTED
+
     KexiTemplatesProxyModel* proxyModel = new KexiTemplatesProxyModel(m_templatesList);
     KexiTemplatesModel* model = new KexiTemplatesModel(templateCategories);
     proxyModel->setSourceModel(model);
     m_templatesList->setModel(proxyModel);
 
-    kDebug() << "templatesCategoryDrawer:" << m_templatesList->categoryDrawer();
-
+    //kDebug() << "templatesCategoryDrawer:" << m_templatesList->categoryDrawer();
     setContents(m_templatesList);
 }
 
@@ -251,13 +247,12 @@ void KexiProjectTitleSelectionPage::titleTextChanged(const QString & text)
 {
     Q_UNUSED(text);
     updateUrl();
-//    nextButton()->setEnabled(!text.trimmed().isEmpty());
 }
 
 void KexiProjectTitleSelectionPage::updateUrl()
 {
     KUrl url = contents->file_requester->url();
-    QString fn = KexiDB::string2FileName(contents->le_title->text());
+    QString fn = KexiUtils::stringToFileName(contents->le_title->text());
     if (!fn.isEmpty() && !fn.endsWith(".kexi"))
         fn += ".kexi";
     url.setFileName(fn);
@@ -417,7 +412,7 @@ bool KexiProjectDatabaseNameSelectionPage::setConnection(KexiDB::ConnectionData*
     m_projectSelector->setProjectSet(0);
     conndataToShow = 0;
     if (data) {
-        m_projectSetToShow = new KexiProjectSet(*data, m_assistant);
+        m_projectSetToShow = new KexiProjectSet(data, m_assistant);
         if (m_projectSetToShow->error()) {
             delete m_projectSetToShow;
             m_projectSetToShow = 0;
@@ -442,7 +437,7 @@ void KexiProjectDatabaseNameSelectionPage::slotTitleChanged(const QString &capt)
         m_dbNameAutofill = true;
     if (m_dbNameAutofill) {
         m_le_dbname_txtchanged_enabled = false;
-        QString captionAsId = KexiUtils::string2Identifier(capt).toLower();
+        QString captionAsId = KexiUtils::stringToIdentifier(capt).toLower();
         contents->le_dbname->setText(captionAsId);
         m_projectDataToOverwrite = 0;
         m_le_dbname_txtchanged_enabled = true;
@@ -657,14 +652,13 @@ void KexiNewProjectAssistant::createProject(
 void KexiNewProjectAssistant::cancelRequested(KexiAssistantPage* page)
 {
     Q_UNUSED(page);
-    //TODO?
+    //! @todo
 }
 
 void KexiNewProjectAssistant::tryAgainActionTriggered()
 {
     messageWidget()->animatedHide();
     currentPage()->next();
-    //d->m_projectConnectionSelectionPage->next();
 }
 
 void KexiNewProjectAssistant::cancelActionTriggered()

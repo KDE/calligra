@@ -24,9 +24,7 @@
 
 #include <KoDocument.h>
 #include <KoDocumentInfo.h>
-#include <KoColorSpaceRegistry.h>
 #include <KoShapeContainer.h>
-#include <KoColorSpace.h>
 #include <KoPathShape.h>
 
 #include "filter/kis_filter_registry.h"
@@ -51,6 +49,8 @@
 void KisKraSaverTest::testRoundTrip()
 {
     KisDoc2* doc = createCompleteDocument();
+    KoColor bgColor(Qt::red, doc->image()->colorSpace());
+    doc->image()->setDefaultProjectionColor(bgColor);
     doc->saveNativeFormat("roundtriptest.kra");
     QStringList list;
     KisCountVisitor cv1(list, KoProperties());
@@ -63,6 +63,9 @@ void KisKraSaverTest::testRoundTrip()
     KisCountVisitor cv2(list, KoProperties());
     doc2.image()->rootLayer()->accept(cv2);
     QCOMPARE(cv1.count(), cv2.count());
+
+    // check whether the BG color is saved correctly
+    QCOMPARE(doc2.image()->defaultProjectionColor(), bgColor);
 }
 
 void KisKraSaverTest::testSaveEmpty()

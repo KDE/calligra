@@ -24,10 +24,12 @@
 #include <QStringList>
 #include <QDir>
 
-#include <KGlobal>
-#include <KStandardDirs>
-#include <KConfig>
-#include <KConfigGroup>
+#include <kglobal.h>
+#include <kstandarddirs.h>
+#include <kconfig.h>
+#include <kconfiggroup.h>
+#include <kcomponentdata.h>
+#include <kfile.h>
 
 #include "kis_config.h"
 #include "kis_alternate_invocation_action.h"
@@ -38,6 +40,10 @@
 #include "kis_tool_invocation_action.h"
 #include "kis_zoom_action.h"
 #include "kis_shortcut_configuration.h"
+#include "kis_select_layer_action.h"
+
+#define PROFILE_VERSION 2
+
 
 class KisInputProfileManager::Private
 {
@@ -172,6 +178,13 @@ QList< KisAbstractInputAction * > KisInputProfileManager::actions()
     return d->actions;
 }
 
+
+struct ProfileEntry {
+    QString name;
+    QString fullpath;
+    int version;
+};
+
 void KisInputProfileManager::loadProfiles()
 {
     //Remove any profiles that already exist
@@ -180,23 +193,64 @@ void KisInputProfileManager::loadProfiles()
     d->profiles.clear();
 
     //Look up all profiles (this includes those installed to $prefix as well as the user's local data dir)
-    QStringList profiles = KGlobal::dirs()->findAllResources("appdata", "input/*", KStandardDirs::NoDuplicates | KStandardDirs::Recursive);
-    Q_FOREACH(const QString & p, profiles) {
-        //Open the file
-        KConfig config(p, KConfig::SimpleConfig);
+    QStringList profiles = KGlobal::mainComponent().dirs()->findAllResources("appdata", "input/*", KStandardDirs::Recursive);
 
-        if (!config.hasGroup("General") || !config.group("General").hasKey("name")) {
+
+    QMap<QString, QList<ProfileEntry> > profileEntries;
+
+    // Get only valid entries...
+    Q_FOREACH(const QString & p, profiles) {
+
+        ProfileEntry entry;
+        entry.fullpath = p;
+
+        KConfig config(p, KConfig::SimpleConfig);
+        if (!config.hasGroup("General") || !config.group("General").hasKey("name") || !config.group("General").hasKey("version")) {
             //Skip if we don't have the proper settings.
             continue;
         }
 
-        KisInputProfile *newProfile = addProfile(config.group("General").readEntry("name"));
+        // Only entries of exactly the right version can be considered
+        entry.version = config.group("General").readEntry("version", 0);
+        if (entry.version != PROFILE_VERSION) {
+            continue;
+        }
+
+        entry.name = config.group("General").readEntry("name");
+        if (!profileEntries.contains(entry.name)) {
+            profileEntries[entry.name] = QList<ProfileEntry>();
+        }
+
+        if (p.contains(".kde") || p.contains(".krita")) {
+            // It's the user define one, drop the others
+            profileEntries[entry.name].clear();
+            profileEntries[entry.name].append(entry);
+            break;
+        }
+        else {
+            profileEntries[entry.name].append(entry);
+        }
+    }
+
+    Q_FOREACH(const QString & profileName, profileEntries.keys()) {
+
+        if (profileEntries[profileName].isEmpty()) {
+            continue;
+        }
+
+        // we have one or more entries for this profile name. We'll take the first,
+        // because that's the most local one.
+        ProfileEntry entry = profileEntries[profileName].first();
+
+        KConfig config(entry.fullpath, KConfig::SimpleConfig);
+
+        KisInputProfile *newProfile = addProfile(entry.name);
         Q_FOREACH(KisAbstractInputAction * action, d->actions) {
-            if (!config.hasGroup(action->name())) {
+            if (!config.hasGroup(action->id())) {
                 continue;
             }
 
-            KConfigGroup grp = config.group(action->name());
+            KConfigGroup grp = config.group(action->id());
             //Read the settings for the action and create the appropriate shortcuts.
             Q_FOREACH(const QString & entry, grp.entryMap()) {
                 KisShortcutConfiguration *shortcut = new KisShortcutConfiguration;
@@ -214,15 +268,17 @@ void KisInputProfileManager::loadProfiles()
 
     KisConfig cfg;
     QString currentProfile = cfg.currentInputProfile();
-
-    if (currentProfile.isEmpty() || !d->profiles.contains(currentProfile)) {
-        d->currentProfile = d->profiles.begin().value();
+    if (d->profiles.size() > 0) {
+        if (currentProfile.isEmpty() || !d->profiles.contains(currentProfile)) {
+            d->currentProfile = d->profiles.begin().value();
+        }
+        else {
+            d->currentProfile = d->profiles.value(currentProfile);
+        }
     }
-    else {
-        d->currentProfile = d->profiles.value(currentProfile);
+    if (d->currentProfile) {
+        emit currentProfileChanged();
     }
-
-    emit currentProfileChanged();
 }
 
 void KisInputProfileManager::saveProfiles()
@@ -233,9 +289,10 @@ void KisInputProfileManager::saveProfiles()
         KConfig config(storagePath + fileName, KConfig::SimpleConfig);
 
         config.group("General").writeEntry("name", p->name());
+        config.group("General").writeEntry("version", PROFILE_VERSION);
 
         Q_FOREACH(KisAbstractInputAction * action, d->actions) {
-            KConfigGroup grp = config.group(action->name());
+            KConfigGroup grp = config.group(action->id());
             grp.deleteGroup(); //Clear the group of any existing shortcuts.
 
             int index = 0;
@@ -253,6 +310,24 @@ void KisInputProfileManager::saveProfiles()
 
     //Force a reload of the current profile in input manager and whatever else uses the profile.
     emit currentProfileChanged();
+}
+
+void KisInputProfileManager::resetAll()
+{
+    QString kdeHome = KGlobal::mainComponent().dirs()->localkdedir();
+    QStringList profiles = KGlobal::mainComponent().dirs()->findAllResources("appdata", "input/*", KStandardDirs::Recursive);
+
+    foreach(const QString &profile, profiles) {
+        if(profile.contains(kdeHome)) {
+            //This is a local file, remove it.
+            QFile::remove(profile);
+        }
+    }
+
+    //Load the profiles again, this should now only load those shipped with Krita.
+    loadProfiles();
+
+    emit profilesChanged();
 }
 
 KisInputProfileManager::KisInputProfileManager(QObject *parent)
@@ -279,6 +354,7 @@ void KisInputProfileManager::Private::createActions()
     actions.append(new KisRotateCanvasAction());
     actions.append(new KisZoomAction());
     actions.append(new KisShowPaletteAction());
+    actions.append(new KisSelectLayerAction());
 }
 
 QString KisInputProfileManager::Private::profileFileName(const QString &profileName)

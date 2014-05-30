@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 Peter Simonsson <psn@linux.se>
-   Copyright (C) 2003-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -45,6 +45,7 @@ KexiComboBoxBase::KexiComboBoxBase()
     m_setValueInInternalEditor_enabled = true;
     m_setVisibleValueOnSetValueInternal = false;
     m_reinstantiatePopupOnShow = false;
+    m_focusPopupBeforeShow = false;
 }
 
 KexiComboBoxBase::~KexiComboBoxBase()
@@ -347,6 +348,7 @@ void KexiComboBoxBase::createPopup(bool show)
     m_insideCreatePopup = true;
     QWidget* thisWidget = dynamic_cast<QWidget*>(this);
     QWidget *widgetToFocus = internalEditor() ? internalEditor() : thisWidget;
+    //kDebug() << "widgetToFocus:" << widgetToFocus;
 
     if (m_reinstantiatePopupOnShow) {
         QWidget *oldPopup = popup();
@@ -422,10 +424,15 @@ void KexiComboBoxBase::createPopup(bool show)
     if (show) {
         moveCursorToEndInInternalEditor();
         selectAllInInternalEditor();
-        widgetToFocus->setFocus();
+        if (m_focusPopupBeforeShow) {
+            widgetToFocus->setFocus();
+        }
         popup()->show();
         popup()->raise();
         popup()->repaint();
+        if (!m_focusPopupBeforeShow) {
+            widgetToFocus->setFocus();
+        }
     }
     m_insideCreatePopup = false;
 }
@@ -490,6 +497,8 @@ void KexiComboBoxBase::slotItemSelected(KexiDB::RecordData*)
         }
     }
     setValueOrTextInInternalEditor(valueToSet);
+    QWidget* thisWidget = dynamic_cast<QWidget*>(this);
+    thisWidget->setFocus();
     if (m_setValueOrTextInInternalEditor_enabled) {
         moveCursorToEndInInternalEditor();
         selectAllInInternalEditor();
@@ -571,9 +580,11 @@ bool KexiComboBoxBase::handleKeyPressForPopup(QKeyEvent *ke)
     case Qt::Key_Enter:
     case Qt::Key_Return: //accept
         //select row that is highlighted
-        if (popup()->tableView()->highlightedRecord() >= 0)
+        if (popup()->tableView()->highlightedRecord() >= 0) {
             popup()->tableView()->selectRow(popup()->tableView()->highlightedRecord());
-        //do not return true: allow to process event
+            acceptPopupSelection();
+            return true;
+        }
     default: ;
     }
     return false;

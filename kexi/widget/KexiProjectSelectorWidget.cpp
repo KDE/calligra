@@ -320,7 +320,7 @@ KexiProjectSelectorDialog::KexiProjectSelectorDialog(QWidget *parent,
 {
     setWindowTitle(i18n("Open Project"));
     KexiDB::ConnectionData _cdata(cdata);
-    KexiProjectSet *prj_set = new KexiProjectSet(_cdata);
+    KexiProjectSet *prj_set = new KexiProjectSet(&_cdata);
     init(prj_set, showProjectNameColumn, showConnectionColumns);
     setButtonGuiItem(Ok, KGuiItem(i18n("&Open"), koIconName("document-open"),
                                   i18n("Open Database Connection")));
@@ -340,7 +340,7 @@ void KexiProjectSelectorDialog::init(KexiProjectSet* prj_set, bool showProjectNa
     setObjectName("KexiProjectSelectorDialog");
     setModal(true);
     setButtons(
-#ifndef KEXI_NO_UNFINISHED
+#ifdef KEXI_SHOW_UNFINISHED
         //! @todo re-add Help when doc is available
         Help |
 #endif
@@ -381,4 +381,9 @@ void KexiProjectSelectorDialog::showEvent(QShowEvent * event)
 {
     KPageDialog::showEvent(event);
     KPageDialog::centerOnScreen(this);
+}
+
+KexiProjectSet* KexiProjectSelectorDialog::projectSet() const
+{
+    return d->sel->projectSet();
 }

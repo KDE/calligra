@@ -120,7 +120,6 @@ QFont KexiCommandLinkButtonPrivate::titleFont() const
     // QPainters font, so we need to restore the mask
     int resolve_mask = font.resolve();
     QFont modifiedFont = q->font().resolve(font);
-    //modifiedFont.detach();
     modifiedFont.resolve(resolve_mask);
     return modifiedFont;
 }
@@ -223,7 +222,7 @@ QSize KexiCommandLinkButton::minimumSizeHint() const
 */
 
 KexiCommandLinkButton::KexiCommandLinkButton(QWidget *parent)
-: QPushButton(parent), d(new KexiCommandLinkButtonPrivate(this))
+    : KexiPushButton(parent), d(new KexiCommandLinkButtonPrivate(this))
 {
     d->init();
 }
@@ -234,7 +233,7 @@ KexiCommandLinkButton::KexiCommandLinkButton(QWidget *parent)
 */
 
 KexiCommandLinkButton::KexiCommandLinkButton(const QString &text, QWidget *parent)
-    : QPushButton(parent), d(new KexiCommandLinkButtonPrivate(this))
+    : KexiPushButton(parent), d(new KexiCommandLinkButtonPrivate(this))
 {
     setText(text);
     d->init();
@@ -244,7 +243,7 @@ KexiCommandLinkButton::KexiCommandLinkButton(const QString &text, QWidget *paren
     Constructs a command link with a \a text, a \a description, and a \a parent.
 */
 KexiCommandLinkButton::KexiCommandLinkButton(const QString &text, const QString &description, QWidget *parent)
-    : QPushButton(parent), d(new KexiCommandLinkButtonPrivate(this))
+    : KexiPushButton(parent), d(new KexiCommandLinkButtonPrivate(this))
 {
     setText(text);
     setDescription(description);

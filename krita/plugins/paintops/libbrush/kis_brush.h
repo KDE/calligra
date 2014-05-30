@@ -33,8 +33,6 @@ typedef KisSharedPtr<KisQImagemask> KisQImagemaskSP;
 
 class QString;
 class QPoint;
-class QIODevice;
-
 class KoColor;
 class KoColorSpace;
 
@@ -89,7 +87,6 @@ public:
 
 protected:
 
-
     class PlainColoringInformation : public ColoringInformation
     {
     public:
@@ -134,19 +131,11 @@ public:
     }
 
     /**
-     * @return the horizontal spacing
+     * @brief brushImage the image the brush tip can paint with. Not all brush types have a single
+     * image.
+     * @return a valid QImage.
      */
-    double xSpacing(double scale = 1.0) const;
-
-    /**
-     * @return the vertical spacing
-     */
-    double ySpacing(double scale = 1.0) const;
-
-    /**
-     * @return a preview of the brush
-     */
-    virtual QImage image() const;
+    virtual QImage brushTipImage() const;
 
     /**
      * Change the spacing of the brush.
@@ -183,7 +172,7 @@ public:
     /**
      * @return the angle of the mask adding the given angle
      */
-    double maskAngle(double angle=0) const;
+    double maskAngle(double angle = 0) const;
 
     /**
      * @return the index of the brush
@@ -218,9 +207,9 @@ public:
      * Return a fixed paint device that contains a correctly scaled image dab.
      */
     virtual KisFixedPaintDeviceSP paintDevice(const KoColorSpace * colorSpace,
-                                              double scale, double angle,
-                                              const KisPaintInformation& info,
-                                              double subPixelX = 0, double subPixelY = 0) const;
+            double scale, double angle,
+            const KisPaintInformation& info,
+            double subPixelX = 0, double subPixelY = 0) const;
 
     /**
      * Apply the brush mask to the pixels in dst. Dst should be big enough!
@@ -272,10 +261,10 @@ public:
      * pixels in the brush.
      */
     virtual void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
-                                                     ColoringInformation* coloringInfo,
-                                                     double scaleX, double scaleY, double angle,
-                                                     const KisPaintInformation& info,
-                                                     double subPixelX = 0, double subPixelY = 0,qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const;
+            ColoringInformation* coloringInfo,
+            double scaleX, double scaleY, double angle,
+            const KisPaintInformation& info,
+            double subPixelX = 0, double subPixelY = 0, qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const;
 
 
     /**
@@ -292,6 +281,10 @@ public:
     qreal scale() const;
     virtual void setAngle(qreal _angle);
     qreal angle() const;
+
+    void prepareBrushPyramid() const;
+    void clearBrushPyramid();
+
 protected:
 
     KisBrush(const KisBrush& rhs);
@@ -306,7 +299,7 @@ protected:
      * The image is used to represent the brush in the gui, and may also, depending on the brush type
      * be used to define the actual brush instance.
      */
-    virtual void setImage(const QImage& image);
+    virtual void setBrushTipImage(const QImage& image);
 
     /**
      * XXX
@@ -314,16 +307,16 @@ protected:
     virtual void setBrushType(enumBrushType type);
 
     friend class KisBrushTest;
-    void prepareBrushPyramid() const;
-    void clearBrushPyramid();
 
     virtual void setHasColor(bool hasColor);
 
-protected:
 
-    QImage m_image;
+protected:
+    virtual QByteArray generateMD5() const;
 
     void resetBoundary();
+
+    void predefinedBrushToXML(const QString &type, QDomElement& e) const;
 
 private:
     friend class KisImagePipeBrushTest;

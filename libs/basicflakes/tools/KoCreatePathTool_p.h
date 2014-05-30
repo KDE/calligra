@@ -193,11 +193,12 @@ public:
         handleRadius(3),
         mouseOverFirstPoint(false),
         pointIsDragged(false),
+        finishAfterThisPoint(false),
         hoveredPoint(0),
         angleSnapStrategy(0),
         angleSnappingDelta(15),
-        angleSnapStatus(false)
-
+        angleSnapStatus(false),
+        strokeWidget(0)
     {}
 
     KoPathShape *shape;
@@ -206,6 +207,7 @@ public:
     int handleRadius;
     bool mouseOverFirstPoint;
     bool pointIsDragged;
+    bool finishAfterThisPoint;
     PathConnectionPoint existingStartPoint; ///< an existing path point we started a new path at
     PathConnectionPoint existingEndPoint;   ///< an existing path point we finished a new path at
     KoPathPoint *hoveredPoint; ///< an existing path end point the mouse is hovering on
@@ -213,6 +215,7 @@ public:
     AngleSnapStrategy *angleSnapStrategy;
     int angleSnappingDelta;
     bool angleSnapStatus;
+    KoStrokeConfigWidget *strokeWidget;
 
     void repaintActivePoint() const
     {
@@ -383,6 +386,8 @@ public:
 
     void addPathShape()
     {
+        if (!shape) return;
+
         if (shape->pointCount() < 2) {
             cleanUp();
             return;

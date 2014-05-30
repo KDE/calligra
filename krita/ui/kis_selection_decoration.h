@@ -20,7 +20,7 @@
 
 #include <QTimer>
 #include <QPolygon>
-#include <QBrush>
+#include <QPen>
 
 #include <kis_signal_compressor.h>
 #include "canvas/kis_canvas_decoration.h"
@@ -38,6 +38,8 @@ public:
     };
 
     void setMode(Mode mode);
+    void setVisible(bool v);
+
 protected:
     void drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter,KisCanvas2* canvas);
 
@@ -56,7 +58,8 @@ private:
     QTimer* m_antsTimer;
     int m_offset;
 
-    QList<QBrush> m_brushes;
+    QPen m_antsPen;
+    QPen m_outlinePen;
     Mode m_mode;
 };
 

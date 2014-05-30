@@ -27,6 +27,16 @@ class KisWeakSharedPtr;
 template<class T>
 class KisSharedPtr;
 
+template <class T>
+uint qHash(KisSharedPtr<T> ptr) {
+    return qHash(ptr.data());
+}
+
+template <class T>
+uint qHash(KisWeakSharedPtr<T> ptr) {
+    return qHash(ptr.data());
+}
+
 #include "kis_shared_ptr_vector.h"
 
 /**
@@ -137,22 +147,6 @@ typedef KisSharedPtrVector<KisAnnotation> vKisAnnotationSP;
 typedef vKisAnnotationSP::iterator vKisAnnotationSP_it;
 typedef vKisAnnotationSP::const_iterator vKisAnnotationSP_cit;
 
-// #include <kis_iterators_pixel.h>
-template<class T, typename TSelect> class KisLineIteratorPixelBase;
-class KisHLineConstIterator;
-typedef KisLineIteratorPixelBase<KisHLineConstIterator, const quint8*> KisHLineConstIteratorPixel;
-class KisHLineIterator;
-typedef KisLineIteratorPixelBase<KisHLineIterator, quint8*> KisHLineIteratorPixel;
-class KisVLineConstIterator;
-typedef KisLineIteratorPixelBase<KisVLineConstIterator, const quint8*> KisVLineConstIteratorPixel;
-class KisVLineIterator;
-typedef KisLineIteratorPixelBase<KisVLineIterator, quint8*> KisVLineIteratorPixel;
-template<class T, typename TSelect> class KisRectIteratorPixelBase;
-class KisRectConstIterator;
-typedef KisRectIteratorPixelBase<KisRectConstIterator, const quint8*> KisRectConstIteratorPixel;
-class KisRectIterator;
-typedef KisRectIteratorPixelBase<KisRectIterator, quint8*> KisRectIteratorPixel;
-
 // Repeat iterators
 class KisHLineIterator2;
 template<class T> class KisRepeatHLineIteratorPixelBase;
@@ -164,13 +158,6 @@ template<class T> class KisRepeatVLineIteratorPixelBase;
 typedef KisRepeatVLineIteratorPixelBase< KisVLineIterator2 > KisRepeatVLineConstIteratorNG;
 typedef KisSharedPtr<KisRepeatVLineConstIteratorNG> KisRepeatVLineConstIteratorSP;
 
-
-// Random accessor
-template<class T, typename TSelect> class KisRandomAccessorPixelBase;
-class KisRandomConstAccessor;
-typedef KisRandomAccessorPixelBase<KisRandomConstAccessor, const quint8*> KisRandomConstAccessorPixel;
-class KisRandomAccessor;
-typedef KisRandomAccessorPixelBase<KisRandomAccessor, quint8*> KisRandomAccessorPixel;
 
 // NG Iterators
 class KisHLineIteratorNG;
@@ -184,12 +171,6 @@ typedef KisSharedPtr<KisVLineIteratorNG> KisVLineIteratorSP;
 
 class KisVLineConstIteratorNG;
 typedef KisSharedPtr<KisVLineConstIteratorNG> KisVLineConstIteratorSP;
-
-class KisRectIteratorNG;
-typedef KisSharedPtr<KisRectIteratorNG> KisRectIteratorSP;
-
-class KisRectConstIteratorNG;
-typedef KisSharedPtr<KisRectConstIteratorNG> KisRectConstIteratorSP;
 
 class KisRandomConstAccessorNG;
 typedef KisSharedPtr<KisRandomConstAccessorNG> KisRandomConstAccessorSP;
@@ -228,6 +209,8 @@ template<class T> class QWeakPointer;
 
 class KUndo2Command;
 typedef QSharedPointer<KUndo2Command> KUndo2CommandSP;
+
+typedef QSharedPointer<QList <KisNodeSP> > KisNodeListSP;
 
 class KisStroke;
 typedef QSharedPointer<KisStroke> KisStrokeSP;

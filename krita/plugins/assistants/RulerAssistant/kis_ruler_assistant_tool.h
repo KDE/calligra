@@ -28,6 +28,7 @@
 class RulerDecoration;
 class KisCanvas2;
 class ConstraintSolver;
+
 class KJob;
 
 class KisRulerAssistantTool : public KisTool
@@ -46,27 +47,29 @@ public:
     virtual quint32 priority() {
         return 3;
     }
-    virtual void mousePressEvent(KoPointerEvent *event);
-    virtual void mouseMoveEvent(KoPointerEvent *event);
-    virtual void mouseReleaseEvent(KoPointerEvent *event);
+
+    void beginPrimaryAction(KoPointerEvent *event);
+    void continuePrimaryAction(KoPointerEvent *event);
+    void endPrimaryAction(KoPointerEvent *event);
+    void mouseMoveEvent(KoPointerEvent *event);
 
     virtual QWidget *createOptionWidget();
+
 private:
     void addAssistant();
     void removeAssistant(KisPaintingAssistant *assistant);
     bool mouseNear(const QPointF& mousep, const QPointF& point);
     KisPaintingAssistantHandleSP nodeNearPoint(KisPaintingAssistant* grid, QPointF point);
+
 public slots:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     void deactivate();
+
 private slots:
     void removeAllAssistants();
-
     void saveAssistants();
     void loadAssistants();
 
-    void saveFinish(KJob* job);
-    void openFinish(KJob* job);
 protected:
 
     virtual void paint(QPainter& gc, const KoViewConverter &converter);

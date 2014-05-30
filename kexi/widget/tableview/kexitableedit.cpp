@@ -55,7 +55,6 @@ KexiTableEdit::KexiTableEdit(KexiDB::TableViewColumn &column, QWidget* parent)
         // ,m_acceptEditorAfterDeleteContents(false)   
 #endif
 {
-//    setPaletteBackgroundColor(palette().color(QPalette::Active, QColorGroup::Base));
     QPalette pal(palette());
     pal.setBrush(backgroundRole(), pal.brush(QPalette::Base));
     setPalette(pal);
@@ -68,22 +67,24 @@ KexiTableEdit::KexiTableEdit(KexiDB::TableViewColumn &column, QWidget* parent)
 #else
         m_leftMargin = 0;
 #endif
+        m_rightMargin = 6;
     } else if (displayedField()->isIntegerType()) {
 #ifdef Q_WS_WIN
         m_leftMargin = 1;
 #else
         m_leftMargin = 0;
 #endif
+        m_rightMargin = 6;
     } else {//default
 #ifdef Q_WS_WIN
         m_leftMargin = 5;
 #else
         m_leftMargin = 5;
 #endif
+        m_rightMargin = 0;
     }
 
-    m_rightMargin = 0;
-    m_rightMarginWhenFocused = 0;
+    m_rightMarginWhenFocused = m_rightMargin;
 }
 
 KexiTableEdit::~KexiTableEdit()
@@ -181,11 +182,9 @@ void KexiTableEdit::setupContents(QPainter *p, bool focused, const QVariant& val
             txt = KexiDB::formatNumberForVisibleDecimalPlaces(
                       val.toDouble(), realField->visibleDecimalPlaces());
         }
-        w -= 6;
         align |= Qt::AlignRight;
     } else if (realField->isIntegerType()) {
         qint64 num = val.toLongLong();
-        w -= 6;
         align |= Qt::AlignRight;
         if (!val.isNull())
             txt = QString::number(num);
@@ -195,6 +194,7 @@ void KexiTableEdit::setupContents(QPainter *p, bool focused, const QVariant& val
         }
         align |= Qt::AlignLeft;
     }
+    w -= rightMargin(focused);
 }
 
 void KexiTableEdit::paintSelectionBackground(QPainter *p, bool /*focused*/,

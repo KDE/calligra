@@ -1,6 +1,6 @@
 
- /* This file is part of the KDE project
- *    Copyright (c) 2013 Sascha Suelzer <s_suelzer@lavabit.com>
+/* This file is part of the KDE project
+ *    Copyright (c) 2013 Sascha Suelzer <s.suelzer@gmail.com>
  *
  *    This library is free software; you can redistribute it and/or
  *    modify it under the terms of the GNU Library General Public
@@ -28,8 +28,8 @@
 #include "KoResource.h"
 
 KoLineEditAction::KoLineEditAction(QObject* parent)
-: QWidgetAction(parent)
-, m_closeParentOnTrigger(false)
+    : QWidgetAction(parent)
+    , m_closeParentOnTrigger(false)
 {
     QWidget* pWidget = new QWidget (NULL);
     QHBoxLayout* pLayout = new QHBoxLayout();
@@ -40,8 +40,8 @@ KoLineEditAction::KoLineEditAction(QObject* parent)
     pWidget->setLayout(pLayout);
     setDefaultWidget(pWidget);
 
-  connect (m_editBox, SIGNAL(returnPressed(QString)),
-           this, SLOT(onTriggered(QString)));
+    connect (m_editBox, SIGNAL(returnPressed(QString)),
+             this, SLOT(onTriggered(QString)));
 }
 
 KoLineEditAction::~KoLineEditAction()
@@ -88,10 +88,22 @@ void KoLineEditAction::setText(const QString& text)
     m_editBox->setText(text);
 }
 
+void KoLineEditAction::setVisible(bool showAction)
+{
+    QLayout* currentLayout = defaultWidget()->layout();
+
+    this->QAction::setVisible(showAction);
+
+    for(int i=0;i<currentLayout->count();i++) {
+        currentLayout->itemAt(i)->widget()->setVisible(showAction);
+    }
+    defaultWidget()->setVisible(showAction);
+}
+
 ContextMenuExistingTagAction::ContextMenuExistingTagAction(KoResource* resource, QString tag, QObject* parent)
-: QAction(parent)
-, m_resource(resource)
-, m_tag(tag)
+    : QAction(parent)
+    , m_resource(resource)
+    , m_tag(tag)
 {
     setText(tag);
     connect (this, SIGNAL(triggered()),
@@ -104,7 +116,7 @@ ContextMenuExistingTagAction::~ContextMenuExistingTagAction()
 
 void ContextMenuExistingTagAction::onTriggered()
 {
-    emit triggered(m_resource,m_tag);
+    emit triggered(m_resource, m_tag);
 }
 NewTagAction::~NewTagAction()
 {
@@ -127,13 +139,10 @@ void NewTagAction::onTriggered(const QString & tagName)
     emit triggered(m_resource,tagName);
 }
 
-KoResourceItemChooserContextMenu::KoResourceItemChooserContextMenu
-    (
-        KoResource* resource,
-        const QStringList& resourceTags,
-        const QString& currentlySelectedTag,
-        const QStringList& allTags
-    )
+KoResourceItemChooserContextMenu::KoResourceItemChooserContextMenu(KoResource* resource,
+                                                                   const QStringList& resourceTags,
+                                                                   const QString& currentlySelectedTag,
+                                                                   const QStringList& allTags)
 {
     QImage image = resource->image();
     QIcon icon(QPixmap::fromImage(image));

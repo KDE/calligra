@@ -37,7 +37,6 @@ class KexiContextMessage::Private
 public:
     Private() : defaultAction(0), contentsWidget(0) {}
     ~Private() {
-//        qDeleteAll(actions);
     }
     QString text;
     QList<QAction*> actions;
@@ -148,7 +147,9 @@ public:
     void setDisabledColorsForPage()
     {
         Palette *p = origPagesPalettes->value(page);
+#ifdef __GNUC__
 #warning TODO: remove p in page dtor
+#endif
         if (!p) {
             p = new Palette;
             p->palette = page->palette();
@@ -181,7 +182,6 @@ public:
     KexiContextMessageWidget *q;
     QPointer<QWidget> page;
     QList< QPointer<QWidget> > enabledLinks;
-    //QPalette origPagePalette;
     QPointer<QWidget> context;
     QPointer<QWidget> nextFocusWidget;
     QPointer<QWidget> contentsWidget;

@@ -44,11 +44,9 @@
 #include <kis_debug.h>
 
 #include <KoIcon.h>
-#include <KoCompositeOp.h>
+#include <KoCompositeOpRegistry.h>
 #include <KoUnitDoubleSpinBox.h>
-#include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
-#include <KoColorSpace.h>
 #include <KoID.h>
 #include <KoColor.h>
 #include <KoUnit.h>
@@ -76,7 +74,8 @@ KisImageFromClipboard::KisImageFromClipboard(QWidget* parent, KisDoc2* doc, qint
     // create clipboard preview and show it   
     createClipboardPreview();
     grpClipboard->show();
-    
+    imageGroupSpacer->changeSize(20, 40, QSizePolicy::Expanding, QSizePolicy::Expanding);
+
     connect(QApplication::clipboard(), SIGNAL(dataChanged()), this, SLOT(clipboardDataChanged()));
     connect(QApplication::clipboard(), SIGNAL(selectionChanged()), this, SLOT(clipboardDataChanged()));
     connect(QApplication::clipboard(), SIGNAL(changed(QClipboard::Mode)), this, SLOT(clipboardDataChanged()));
@@ -140,7 +139,7 @@ void KisImageFromClipboard::createClipboardPreview()
         doubleHeight->setValue(clipboardImage->height());
     } else {
         createButton->setEnabled(false);
-        clipPreview->setScene(new QGraphicsScene());
+        clipPreview->setScene(new QGraphicsScene(this));
     }
     
     

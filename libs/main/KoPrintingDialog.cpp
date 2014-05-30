@@ -111,12 +111,22 @@ void KoPrintingDialog::startPrinting(RemovePolicy removePolicy)
     d->removePolicy = removePolicy;
     d->pages = d->pageRange;
     if (d->pages.isEmpty()) { // auto-fill from min/max
-        if (d->printer->fromPage() == 0) { // all pages, no range.
+        switch (d->printer->printRange()) {
+        case QAbstractPrintDialog::AllPages:
             for (int i=documentFirstPage(); i <= documentLastPage(); i++)
                 d->pages.append(i);
-        } else {
+            break;
+        case QAbstractPrintDialog::PageRange:
             for (int i=d->printer->fromPage(); i <= d->printer->toPage(); i++)
                 d->pages.append(i);
+            break;
+#if QT_VERSION >= 0x040700
+        case QAbstractPrintDialog::CurrentPage:
+            d->pages.append(documentCurrentPage());
+            break;
+#endif
+        default:
+            return;
         }
     }
     if (d->pages.isEmpty()) {
@@ -135,7 +145,7 @@ void KoPrintingDialog::startPrinting(RemovePolicy removePolicy)
         d->zoomer.setZoom( 1.0 );
         d->zoomer.setDpi( d->printer->resolution(), d->printer->resolution() );
 
-        d->progress->start();
+        d->progress->start(100, i18n("Printing"));
 
         if (d->printer->numCopies() > 1) {
             QList<int> oldPages = d->pages;

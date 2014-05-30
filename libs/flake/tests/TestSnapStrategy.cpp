@@ -1,6 +1,5 @@
 /*
-    <one line to give the library's name and an idea of what it does.>
-    Copyright (C) <year>  <name of author>
+    Copyright (C) 2012 <hanna.et.scott@gmail.com> 
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -160,8 +159,6 @@ void TestSnapStrategy::testExtensionSnap()
     qreal paramSnapDistanceTwo = 4;
     fakeShapeOne.snapData().setSnapPoints(firstSnapPointList);
     fakeShapeOne.isVisible(true);
-
-    typedef QPair<int, int> KoPathPointIndexLocal;
 
     QPointF firstPoint(0,2);
     QPointF secondPoint(1,2);
@@ -440,8 +437,6 @@ void TestSnapStrategy::testExtensionDecoration()
     qreal paramSnapDistanceTwo = 4;
     fakeShapeOne.snapData().setSnapPoints(firstSnapPointList);
     fakeShapeOne.isVisible(true);
-
-    typedef QPair<int, int> KoPathPointIndexLocal;
 
     QPointF firstPoint(0,2);
     QPointF secondPoint(1,2);

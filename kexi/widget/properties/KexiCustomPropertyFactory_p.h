@@ -37,7 +37,7 @@ public:
 
     virtual QVariant value() const;
     virtual void setValue(const QVariant &value, bool emitChange = true);
-    virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r,
+    virtual void drawViewer(QPainter *p, cg, const QRect &r,
                             const QVariant &value);
 
 public slots:
@@ -66,7 +66,7 @@ public:
 
 public slots:
     /*! Reimplemented: sets \a value but it is converted to identifier
-     using KexiUtils::string2Identifier().
+     using KexiUtils::stringToIdentifier().
      If \a value is empty string, this method has no effect. */
     virtual void setValue(const QString &value);
 };

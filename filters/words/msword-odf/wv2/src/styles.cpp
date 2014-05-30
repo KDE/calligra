@@ -306,13 +306,8 @@ bool STD::write( U16 /*stdfSize*/, OLEStreamWriter* stream, bool preservePos ) c
     shifterU16 |= unused8_3 << 2;
     stream->write( shifterU16 );
     // Attention: I don't know how to write xstzName - XCHAR[]
-#ifdef __GNUC__
-#warning "Couldn't generate writing code for STD::xstzName"
-#endif
-    // Attention: I don't know how to write grupx - U8[]
-#ifdef __GNUC__
-#warning "Couldn't generate writing code for STD::grupx"
-#endif
+    // TODO "Couldn't generate writing code for STD::xstzName"
+    // TODO "Couldn't generate writing code for STD::grupx"
 
     if ( preservePos )
         stream->pop();

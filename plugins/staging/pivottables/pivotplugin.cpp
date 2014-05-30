@@ -26,6 +26,8 @@
 #include <kurl.h>
 #include <kpluginfactory.h>
 #include <kmessagebox.h>
+#include <kstandarddirs.h>
+#include <kaction.h>
 
 #include <sheets/part/Canvas.h>
 #include <sheets/part/View.h>
@@ -35,17 +37,17 @@
 
 using namespace Calligra::Sheets;
 
-K_PLUGIN_FACTORY(PivotPluginFactory, registerPlugin<PivotPlugin>();)
-K_EXPORT_PLUGIN(PivotPluginFactory("sheetspivottables_plugin"))
+ K_PLUGIN_FACTORY(PivotPluginFactory, registerPlugin<PivotPlugin>();)
+ K_EXPORT_PLUGIN(PivotPluginFactory("sheetspivottables_plugin"))
 
 PivotPlugin::PivotPlugin(QObject *parent, const QVariantList &)
-    : KParts::Plugin(parent)
+ : QObject(parent)
 {
     setComponentData(PivotPluginFactory::componentData());
-
-    KAction *action = new KAction(i18n("&Pivot..."), this);
+  //  setXMLFile(KStandardDirs::locate("data", "sheets/viewplugins/pivottables.rc"), true);
+    KAction *action = new KAction(i18n("&Pivot2..."), this);
     action->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_P));
-    actionCollection()->addAction("pivot", action );
+    actionCollection()->addAction("pivot table", action );
     connect(action, SIGNAL(triggered(bool)), this, SLOT(pivot()));
     action->setToolTip(i18n("Pivot Tables"));
 }
@@ -56,11 +58,12 @@ PivotPlugin::~PivotPlugin()
 
 void PivotPlugin::pivot()
 {
+  qDebug()<<"Running4";
     View *view = dynamic_cast<View *>(parent());
     if (!view) {
         return;
     }
-
+qDebug()<<"Running2";
     if ((view->selection()->lastRange().width() < 2) || (view->selection()->lastRange().height() < 2)) {
         KMessageBox::error(view->canvasWidget(), i18n("You must select multiple cells."));
         return;

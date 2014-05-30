@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2013 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,6 +19,7 @@
 
 #include "KexiStartup.h"
 
+#include "kexi.h"
 #include "kexiproject.h"
 #include "kexiprojectdata.h"
 #include "kexiprojectset.h"
@@ -28,6 +29,7 @@
 #include <db/utils.h>
 #include <db/driver.h>
 #include <db/drivermanager.h>
+#include <core/kexipartmanager.h>
 #include <widget/KexiConnectionSelectorWidget.h>
 #include <widget/KexiProjectSelectorWidget.h>
 #include <kexidbconnectionwidget.h>
@@ -44,6 +46,10 @@
 #include <ktextedit.h>
 #include <kuser.h>
 #include <KProgressDialog>
+#include <KBuildSycocaProgressDialog>
+#include <KProcess>
+#include <KStandardDirs>
+#include <KSycoca>
 
 #include <unistd.h>
 
@@ -92,7 +98,6 @@ public:
     }
 
     KexiDBPasswordDialog* passwordDialog;
-//  bool showConnectionDetailsExecuted;
     QString shortcutFileName;
     KexiDBConnShortcutFile *connShortcutFile;
     KexiDBConnectionDialog *connDialog;
@@ -121,7 +126,6 @@ void updateProgressBar(KProgressDialog *pd, char *buffer, int buflen)
         if ((i == 0 || buffer[i-1] == '\n') && buffer[i] == '%') {
             bool ok;
             int j = 0;
-//   char *q=++p;
             ++i;
             line.clear();
             for (;i<buflen && *p >= '0' && *p <= '9'; j++, i++, p++)
@@ -142,17 +146,17 @@ void updateProgressBar(KProgressDialog *pd, char *buffer, int buflen)
 class KexiDBPasswordDialog::Private
 {
  public:
-    Private(KexiDB::ConnectionData& data, bool showButton);
+    Private(KexiDB::ConnectionData* data);
     ~Private();
 
     KexiDB::ConnectionData *cdata;
     bool showConnectionDetailsRequested;
 };
 
-KexiDBPasswordDialog::Private::Private(KexiDB::ConnectionData& data, bool showButton)
+KexiDBPasswordDialog::Private::Private(KexiDB::ConnectionData* data)
+    : cdata(data)
+    , showConnectionDetailsRequested(false)
 {
-    cdata = &data;
-    showConnectionDetailsRequested = showButton;
 }
 
 KexiDBPasswordDialog::Private::~Private()
@@ -164,19 +168,13 @@ KexiDBPasswordDialog::Private::~Private()
 KexiDBPasswordDialog::KexiDBPasswordDialog(QWidget *parent, KexiDB::ConnectionData& cdata, bool showDetailsButton)
         : KPasswordDialog(parent, ShowUsernameLine | ShowDomainLine,
                           showDetailsButton ? KDialog::User1 : KDialog::None)
-        , d(new Private(cdata, showDetailsButton))
+        , d(new Private(&cdata))
 {
     setCaption(i18nc("@title:window", "Opening Database"));
     setPrompt(i18nc("@info", "Supply a password below."));
-    /*  msg += cdata.userName.isEmpty() ?
-          "<p>"+i18n("Please enter the password.")
-          : "<p>"+i18n("Please enter the password for user.").arg("<b>"+cdata.userName+"</b>");*/
 
     QString srv = cdata.serverInfoString(false);
-    if (srv.isEmpty() || srv.toLower() == "localhost")
-        srv = i18n("local database server");
-
-    QLabel *domainLabel = KexiUtils::findFirstChild<QLabel*>(this, 0, "domainLabel");
+    QLabel *domainLabel = KexiUtils::findFirstChild<QLabel*>(this, "QLabel", "domainLabel");
     if (domainLabel) {
         domainLabel->setText(i18n("Database server:"));
     }
@@ -209,15 +207,16 @@ bool KexiDBPasswordDialog::showConnectionDetailsRequested() const
     return d->showConnectionDetailsRequested;
 }
 
-void KexiDBPasswordDialog::done(int r)
+void KexiDBPasswordDialog::slotButtonClicked(int button)
 {
-    if (r == QDialog::Accepted) {
+    if (button == KDialog::Ok || button == KDialog::User1) {
         d->cdata->password = password();
+        QLineEdit *userEdit = KexiUtils::findFirstChild<QLineEdit*>(this, "QLineEdit", "userEdit");
+        if (!userEdit->isReadOnly()) {
+            d->cdata->userName = userEdit->text();
+        }
     }
-    else {
-        d->cdata->password.clear();
-    }
-    KPasswordDialog::done(r);
+    KPasswordDialog::slotButtonClicked(button);
 }
 
 void KexiDBPasswordDialog::slotShowConnectionDetails()
@@ -341,8 +340,14 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
         }
     }
 
-    if (!args->getOption("dbdriver").isEmpty())
+    // Set to true if user explicitly sets conn data options from command line.
+    // In this case display login dialog and skip the standard Welcome Wizard.
+    bool connDataOptionsSpecified = false;
+
+    if (!args->getOption("dbdriver").isEmpty()) {
         cdata.driverName = args->getOption("dbdriver");
+        connDataOptionsSpecified = true;
+    }
 
     QString fileType(args->getOption("type").toLower());
     if (args->count() > 0 && (!fileType.isEmpty() && fileType != "project" && fileType != "shortcut" && fileType != "connection")) {
@@ -352,12 +357,18 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
         return false;
     }
 
-    if (!args->getOption("host").isEmpty())
+    if (!args->getOption("host").isEmpty()) {
         cdata.hostName = args->getOption("host");
-    if (!args->getOption("local-socket").isEmpty())
+        connDataOptionsSpecified = true;
+    }
+    if (!args->getOption("local-socket").isEmpty()) {
         cdata.localSocketFileName = args->getOption("local-socket");
-    if (!args->getOption("user").isEmpty())
+        connDataOptionsSpecified = true;
+    }
+    if (!args->getOption("user").isEmpty()) {
         cdata.userName = args->getOption("user");
+        connDataOptionsSpecified = true;
+    }
     bool fileDriverSelected;
     if (cdata.driverName.isEmpty())
         fileDriverSelected = true;
@@ -378,13 +389,19 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
     if (!portStr.isEmpty()) {
         bool ok;
         const int p = portStr.toInt(&ok);
-        if (ok && p > 0)
+        if (ok && p > 0) {
             cdata.port = p;
+            connDataOptionsSpecified = true;
+        }
         else {
             KMessageBox::sorry(0,
                                i18n("You have specified invalid port number \"%1\".", portStr));
             return false;
         }
+    }
+    if (connDataOptionsSpecified && cdata.driverName.isEmpty()) {
+        KMessageBox::sorry(0, i18n("Could not open database. No database driver specified."));
+        return false;
     }
 
     KexiStartupData::setForcedUserMode(args->isSet("user-mode"));
@@ -416,22 +433,26 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
         KexiStartupData::setAction(Exit);
     }
 
-//TODO: add option for non-gui; integrate with KWallet;
-//      move to static KexiProject method
+//! @todo add option for non-gui; integrate with KWallet; move to static KexiProject method
     if (!fileDriverSelected && !cdata.driverName.isEmpty() && cdata.password.isEmpty()) {
 
         if (cdata.password.isEmpty()) {
             delete d->passwordDialog;
             d->passwordDialog = new KexiDBPasswordDialog(0, cdata, true);
-//   connect( d->passwordDialog, SIGNAL(user1Clicked()),
-//    this, SLOT(slotShowConnectionDetails()) );
+            if (connDataOptionsSpecified) {
+                if (cdata.userName.isEmpty()) {
+                    d->passwordDialog->setUsername(QString());
+                    d->passwordDialog->setUsernameReadOnly(false);
+                    QLineEdit *userEdit = KexiUtils::findFirstChild<QLineEdit*>(d->passwordDialog, "QLineEdit", "userEdit");
+                    if (userEdit) {
+                        userEdit->setFocus();
+                    }
+                }
+            }
             const int ret = d->passwordDialog->exec();
             if (d->passwordDialog->showConnectionDetailsRequested() || ret == QDialog::Accepted) {
-//    if ( ret == QDialog::Accepted ) {
-                //  if (QDialog::Accepted == KPasswordDialog::getPassword(pwd, msg)) {
-//moved    cdata.password = QString(pwd);
-//    }
-            } else {
+            }
+            else {
                 KexiStartupData::setAction(Exit);
                 return true;
             }
@@ -585,30 +606,34 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
 
                     if (cancel)
                         return cancelled;
-                } else
+                }
+                else { // !shortcut && !connection
                     KexiStartupData::setProjectData(new KexiProjectData(cdata, prjName));
-            } else
+                }
+            }
+            else { // !fileDriverSelected
                 KexiStartupData::setProjectData(new KexiProjectData(cdata, prjName));
+            }
 
         }
-//  if (!projectData)
-//   return false;
     }
     if (args->count() > 1) {
-        //TODO: KRun another Kexi instances
+        //! @todo KRun another Kexi instance
     }
 
     //let's show connection details, user asked for that in the "password dialog"
     if (d->passwordDialog && d->passwordDialog->showConnectionDetailsRequested()) {
-        d->connDialog = new KexiDBConnectionDialog(0, *KexiStartupData::projectData());
-//  connect(d->connDialog->tabWidget->mainWidget, SIGNAL(saveChanges()),
-//   this, SLOT(slotSaveShortcutFileChanges()));
+        if (KexiStartupData::projectData()) {
+            d->connDialog = new KexiDBConnectionDialog(0, *KexiStartupData::projectData());
+        }
+        else {
+            d->connDialog = new KexiDBConnectionDialog(0, cdata);
+        }
         int res = d->connDialog->exec();
 
         if (res == QDialog::Accepted) {
             //get (possibly changed) prj data
-            KexiProjectData projectData = d->connDialog->currentProjectData();
-            KexiStartupData::setProjectData(&projectData);
+            KexiStartupData::setProjectData(new KexiProjectData(d->connDialog->currentProjectData()));
         }
 
         delete d->connDialog;
@@ -618,6 +643,15 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
             delete KexiStartupData::projectData();
             KexiStartupData::setProjectData(0);
             return cancelled;
+        }
+    }
+
+    if (args->count() < 1 && connDataOptionsSpecified) {
+        bool cancel = false;
+        KexiStartupData::setProjectData(selectProject(&cdata, cancel));
+        if (!KexiStartupData::projectData() || cancel) {
+            KexiStartupData::setProjectData(0);
+            return false;
         }
     }
 
@@ -664,25 +698,26 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
 
     //------
 
+    KexiPart::PartInfoList *partInfoList = Kexi::partManager().infoList();
+    if (!partInfoList || partInfoList->isEmpty()) {
+        showNoPluginsMessageAndTryToRebuildSyCoCa();
+        return false;
+    }
+
     if (!KexiStartupData::projectData()) {
         cdata = KexiDB::ConnectionData(); //clear
 
         KexiStartupData::setAction(ShowWelcomeScreen);
         return true;
-#ifdef __GNUC__
-#warning remove startup dialog code
-#else
-#pragma WARNING( remove startup dialog code )
-#endif
+//! @todo remove startup dialog code
         if (args->isSet("skip-startup-dialog") || !KexiStartupDialog::shouldBeShown())
             return true;
 
         if (!d->startupDialog) {
-            //create d->startupDialog for reuse because it can be used again after conn err.
+            //create startup dialog for reuse because it can be used again after conn err.
             d->startupDialog = new KexiStartupDialog(
                 KexiStartupDialog::Everything, KexiStartupDialog::CheckBoxDoNotShowAgain,
-                Kexi::connset(), /*fake:*/ *(new KexiProjectSet),  /*Kexi::recentProjects()*/
-                0);
+                Kexi::connset(), /*fake:*/ *(new KexiProjectSet), 0);
         }
         if (d->startupDialog->exec() != QDialog::Accepted)
             return true;
@@ -708,7 +743,9 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
                 return false;
             cdata.driverName = detectedDriverName;
             KexiStartupData::setProjectData(new KexiProjectData(cdata, selFile));
+#ifdef KEXI_PROJECT_TEMPLATES
             KexiStartupData::projectData()->autoopenObjects = d->startupDialog->autoopenObjects();
+#endif
             KexiStartupData::setAction(CreateFromTemplate);
             return true;
         } else if (r == KexiStartupDialog::OpenExistingResult) {
@@ -752,7 +789,7 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
 //    kDebug() << "Selected project: database=" << data->databaseName()
 //     << " connection=" << data->constConnectionData()->serverInfoString();
             }
-//! @todo
+            //! @todo
             return data != 0;
         }
 
@@ -764,9 +801,6 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
         KexiStartupData::projectData()->setReadOnly(readOnly);
         KexiStartupData::setAction(OpenProject);
     }
-    //show if wasn't show yet
-// importantInfo(true);
-
     return true;
 }
 
@@ -883,7 +917,7 @@ tristate KexiStartupHandler::detectActionForFile(
 
     // "application/x-kexiproject-sqlite", etc.:
     QString tmpDriverName = Kexi::driverManager().lookupByMime(mimename).toLatin1();
-//@todo What about trying to reuse CALLIGRA FILTER CHAINS here?
+//! @todo What about trying to reuse CALLIGRA FILTER CHAINS here?
     bool useDetectedDriver = suggestedDriverName.isEmpty() || suggestedDriverName.toLower() == detectedDriverName->toLower();
     if (!useDetectedDriver) {
         int res = KMessageBox::Yes;
@@ -919,7 +953,6 @@ tristate KexiStartupHandler::detectActionForFile(
         tristate res = migr.run();
 //  kDebug() << "--- migr.run() END ---";
         if (!res) {
-            //TODO msg
             KMessageBox::sorry(parent, i18n(
                                    "Failed to convert project file \"%1\" to a new \"%2\" format.\n"
                                    "The file format remains unchanged.",
@@ -930,14 +963,13 @@ tristate KexiStartupHandler::detectActionForFile(
             detectedDriverName = newFileFormat;
     }
 #endif
-// action.driverName = detectedDriverName;
     if (detectedDriverName->isEmpty()) {
         QString possibleProblemsInfoMsg(Kexi::driverManager().possibleProblemsInfoMsg());
         if (!possibleProblemsInfoMsg.isEmpty()) {
             possibleProblemsInfoMsg.prepend(QString::fromLatin1("<p>") + i18n("Possible problems:"));
             possibleProblemsInfoMsg += QString::fromLatin1("</p>");
         }
-        if (!(options & SkipMessages))
+        if (!(options & SkipMessages)) {
             KMessageBox::detailedSorry(parent,
                                        i18n("The file \"%1\" is not recognized as being supported by Kexi.",
                                             QDir::convertSeparators(dbFileName)),
@@ -948,6 +980,7 @@ tristate KexiStartupHandler::detectActionForFile(
                                           ? QString::fromLatin1(".") : QString::fromLatin1(" (%1).").arg(ptr.data()->comment()))
                                        + QString::fromLatin1("</p>")
                                        + possibleProblemsInfoMsg);
+        }
         return false;
     }
     return true;
@@ -976,16 +1009,16 @@ KexiStartupHandler::selectProject(KexiDB::ConnectionData *cdata, bool& cancelled
     KexiProjectSelectorDialog prjdlg(parent, *cdata, true, false);
     if (!prjdlg.projectSet() || prjdlg.projectSet()->error()) {
         KexiGUIMessageHandler msgh;
-        if (prjdlg.projectSet())
+        if (prjdlg.projectSet()) {
             msgh.showErrorMessage(prjdlg.projectSet(),
                                   i18n("Could not load list of available projects for <b>%1</b> database server.",
                                        cdata->serverInfoString(true)));
-        else
+        }
+        else {
             msgh.showErrorMessage(
                 i18n("Could not load list of available projects for <b>%1</b> database server.",
                      cdata->serverInfoString(true)));
-//  setStatus(i18n("Could not load list of available projects for database server \"%1\"")
-//  .arg(cdata->serverInfoString(true)), prjdlg.projectSet()->errorMsg());
+        }
         return 0;
     }
     if (prjdlg.exec() != QDialog::Accepted) {
@@ -1024,10 +1057,15 @@ void KexiStartupHandler::slotSaveShortcutFileChanges()
     }
 }
 
-/*void KexiStartupHandler::slotShowConnectionDetails()
+void KexiStartupHandler::showNoPluginsMessageAndTryToRebuildSyCoCa()
 {
-  d->passwordDialog->close();
-  d->showConnectionDetailsExecuted = true;
-}*/
+    KexiGUIMessageHandler msgh;
+    msgh.showErrorMessage(&Kexi::partManager());
+    KexiStartupData::setProjectData(0);
+    KProcess* proc = new KProcess(&Kexi::partManager());
+    QObject::connect(proc, SIGNAL(finished()), proc, SLOT(deleteLater()));
+    (*proc) << KStandardDirs::findExe(KBUILDSYCOCA_EXENAME);
+    proc->start();
+}
 
 #include "KexiStartup.moc"

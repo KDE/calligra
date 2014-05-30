@@ -823,21 +823,8 @@ void DefaultTool::deleteSelection()
 
 bool DefaultTool::paste()
 {
-    const QMimeData * data = QApplication::clipboard()->mimeData();
-
-    bool success = false;
-    if (data->hasFormat(KoOdf::mimeType(KoOdf::Text))) {
-        KoShapeManager * shapeManager = canvas()->shapeManager();
-        KoShapePaste paste(canvas(), shapeManager->selection()->activeLayer());
-        success = paste.paste(KoOdf::Text, data);
-        if (success) {
-            shapeManager->selection()->deselectAll();
-            foreach(KoShape *shape, paste.pastedShapes()) {
-                shapeManager->selection()->select(shape);
-            }
-        }
-    }
-    return success;
+    // we no longer have to do anything as tool Proxy will do it for us
+    return false;
 }
 
 QStringList DefaultTool::supportedPasteMimeTypes() const
@@ -1140,11 +1127,6 @@ QList<QWidget *> DefaultTool::createOptionWidgets()
     shadowWidget->setWindowTitle(i18n("Shadow"));
     shadowWidget->setCanvas(canvas());
     widgets.append(shadowWidget);
-
-    KoOpacityConfigWidget *opacityWidget = new KoOpacityConfigWidget(0);
-    opacityWidget->setWindowTitle(i18n("Shape Opacity"));
-    opacityWidget->setCanvas(canvas());
-    widgets.append(opacityWidget);
 
     return widgets;
 }

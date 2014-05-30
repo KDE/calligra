@@ -20,6 +20,7 @@
 #include <KoApplication.h>
 #include <kcmdlineargs.h>
 #include <KWAboutData.h>
+#include <KWDocument.h>
 
 extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 {
@@ -27,7 +28,7 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 
 #ifdef Q_WS_X11
     // the "raster" graphicssystem is way faster then the "native" graphicssystem on x11 with Calligra Words
-    qApp->setGraphicsSystem( QLatin1String("raster") );
+    QApplication::setGraphicsSystem( QLatin1String("raster") );
 #endif
 
     KCmdLineArgs::init(argc, argv, aboutData);
@@ -36,7 +37,7 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
     options.add("+[file]", ki18n("File to open"));
     KCmdLineArgs::addCmdLineOptions(options);
 
-    KoApplication app;
+    KoApplication app(WORDS_MIME_TYPE);
 
     if (!app.start())
         return 1;

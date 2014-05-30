@@ -20,6 +20,8 @@
 #ifndef KWPRINTINGDIALOG_H
 #define KWPRINTINGDIALOG_H
 
+#include <KWView.h>
+
 #include <KoPrintingDialog.h>
 #include <KoImageData.h>
 
@@ -32,7 +34,7 @@ class KWDocument;
 class KWPrintingDialog : public KoPrintingDialog
 {
 public:
-    KWPrintingDialog(KWDocument *document, KoShapeManager *shapeManager, QWidget *parent = 0);
+    KWPrintingDialog(KWDocument *document, KoShapeManager *shapeManager, KWView *view);
     ~KWPrintingDialog();
 
     virtual QList<QWidget*> createOptionWidgets() const;
@@ -45,9 +47,11 @@ protected:
     virtual void printingDone();
     virtual int documentFirstPage() const;
     virtual int documentLastPage() const;
+    virtual int documentCurrentPage() const;
 
 private:
     KWDocument *m_document;
+    KWView *m_view;
 };
 
 #endif

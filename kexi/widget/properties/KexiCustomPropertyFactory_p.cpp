@@ -68,7 +68,7 @@ void KexiImagePropertyEdit::setValue(const QVariant &value, bool emitChange)
     PixmapEdit::setValue(KexiBLOBBuffer::self()->objectForId(m_id).pixmap(), emitChange);
 }
 
-void KexiImagePropertyEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r,
+void KexiImagePropertyEdit::drawViewer(QPainter *p, cg, const QRect &r,
                                        const QVariant &value)
 {
     KexiBLOBBuffer::Handle h(KexiBLOBBuffer::self()->objectForId(value.toInt()));
@@ -96,7 +96,7 @@ void KexiIdentifierPropertyEdit::setValue(const QString &value)
         kWarning() << "Value cannot be empty. This call has no effect.";
         return;
     }
-    const QString identifier(KexiUtils::string2Identifier(value));
+    const QString identifier(KexiUtils::stringToIdentifier(value));
     if (identifier != value)
         kDebug() << QString("String \"%1\" converted to identifier \"%2\".").arg(value).arg(identifier);
     KoProperty::StringEdit::setValue(identifier);

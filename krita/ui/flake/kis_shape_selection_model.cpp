@@ -19,8 +19,9 @@
 #include "kis_shape_selection_model.h"
 #include "kis_debug.h"
 
-#include "KoShapeContainer.h"
-#include "KoShapeManager.h"
+#include <KoShapeContainer.h>
+#include <KoShapeBackground.h>
+#include <KoShapeManager.h>
 
 #include "kis_shape_selection.h"
 #include "kis_selection.h"
@@ -32,7 +33,7 @@ KisShapeSelectionModel::KisShapeSelectionModel(KisImageWSP image, KisSelectionWS
     : m_image(image)
     , m_parentSelection(selection)
     , m_shapeSelection(shapeSelection)
-    , m_updateSignalCompressor(new KisSignalCompressor(300, false, this))
+    , m_updateSignalCompressor(new KisSignalCompressor(300, KisSignalCompressor::POSTPONE, this))
     , m_updatesEnabled(true)
 {
     connect(m_updateSignalCompressor, SIGNAL(timeout()), SLOT(startUpdateJob()));
@@ -68,7 +69,7 @@ void KisShapeSelectionModel::add(KoShape *child)
         return;
 
     child->setStroke(0);
-    child->setBackground(0);
+    child->setBackground( QSharedPointer<KoShapeBackground>(0));
     m_shapeMap.insert(child, child->boundingRect());
     m_shapeSelection->shapeManager()->addShape(child);
 

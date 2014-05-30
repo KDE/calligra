@@ -22,25 +22,25 @@
 
 #include <klocalizedstring.h>
 
-#include <KoToolProxy.h>
+#include <kis_tool_proxy.h>
 #include <kis_canvas2.h>
 #include <kis_coordinates_converter.h>
 
+#include "kis_tool.h"
 #include "kis_input_manager.h"
 #include "kis_image.h"
 
 class KisToolInvocationAction::Private
 {
 public:
-    Private(KisToolInvocationAction *qq) : q(qq), active(false) { }
-    QPointF tabletToPixel(const QPointF& globalPos);
+    Private() : active(false) { }
 
-    KisToolInvocationAction *q;
     bool active;
 };
 
 KisToolInvocationAction::KisToolInvocationAction()
-    : d(new Private(this))
+    : KisAbstractInputAction("Tool Invocation")
+    , d(new Private)
 {
     setName(i18n("Tool Invocation"));
     setDescription(i18n("The <i>Tool Invocation</i> action invokes the current tool, for example, using the brush tool, it will start painting."));
@@ -57,24 +57,39 @@ KisToolInvocationAction::~KisToolInvocationAction()
     delete d;
 }
 
+void KisToolInvocationAction::activate(int shortcut)
+{
+    Q_UNUSED(shortcut);
+    if (!inputManager()) return;
+    inputManager()->toolProxy()->activateToolAction(KisTool::Primary);
+}
+
+void KisToolInvocationAction::deactivate(int shortcut)
+{
+    Q_UNUSED(shortcut);
+    if (!inputManager()) return;
+    inputManager()->toolProxy()->deactivateToolAction(KisTool::Primary);
+}
+
 int KisToolInvocationAction::priority() const
 {
-    return 10;
+    return 0;
+}
+
+bool KisToolInvocationAction::canIgnoreModifiers() const
+{
+    return true;
 }
 
 void KisToolInvocationAction::begin(int shortcut, QEvent *event)
 {
     if (shortcut == ActivateShortcut) {
-        QTabletEvent *tabletEvent = inputManager()->lastTabletEvent();
-        QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
-
-        if (tabletEvent) {
-            inputManager()->toolProxy()->tabletEvent(tabletEvent, d->tabletToPixel(tabletEvent->hiResGlobalPos()));
-        } else if (mouseEvent) {
-            inputManager()->toolProxy()->mousePressEvent(mouseEvent, inputManager()->widgetToPixel(mouseEvent->posF()));
-        }
-
-        d->active = true;
+        QPoint workaround = inputManager()->canvas()->canvasWidget()->mapToGlobal(QPoint(0, 0));
+        d->active =
+            inputManager()->toolProxy()->forwardEvent(
+                KisToolProxy::BEGIN, KisTool::Primary, event, event,
+                inputManager()->lastTabletEvent(),
+                workaround);
     } else if (shortcut == ConfirmShortcut) {
         QKeyEvent pressEvent(QEvent::KeyPress, Qt::Key_Return, 0);
         inputManager()->toolProxy()->keyPressEvent(&pressEvent);
@@ -101,14 +116,11 @@ void KisToolInvocationAction::begin(int shortcut, QEvent *event)
 void KisToolInvocationAction::end(QEvent *event)
 {
     if (d->active) {
-        QTabletEvent *tabletEvent = inputManager()->lastTabletEvent();
-        QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
-
-        if (tabletEvent) {
-            inputManager()->toolProxy()->tabletEvent(tabletEvent, d->tabletToPixel(tabletEvent->hiResGlobalPos()));
-        } else if (mouseEvent) {
-            inputManager()->toolProxy()->mouseReleaseEvent(mouseEvent, inputManager()->widgetToPixel(mouseEvent->posF()));
-        }
+        QPoint workaround = inputManager()->canvas()->canvasWidget()->mapToGlobal(QPoint(0, 0));
+        inputManager()->toolProxy()->
+            forwardEvent(KisToolProxy::END, KisTool::Primary, event, event,
+                         inputManager()->lastTabletEvent(),
+                         workaround);
 
         d->active = false;
     }
@@ -118,37 +130,31 @@ void KisToolInvocationAction::end(QEvent *event)
 
 void KisToolInvocationAction::inputEvent(QEvent* event)
 {
-    if(event->type() == QEvent::MouseButtonPress) {
-        QMouseEvent* mevent = static_cast<QMouseEvent*>(event);
-        inputManager()->toolProxy()->mousePressEvent(mevent, inputManager()->widgetToPixel(mevent->posF()));
-    } else if(event->type() == QEvent::MouseButtonRelease) {
-        QMouseEvent* mevent = static_cast<QMouseEvent*>(event);
-        inputManager()->toolProxy()->mouseReleaseEvent(mevent, inputManager()->widgetToPixel(mevent->posF()));
-    } else if(event->type() == QEvent::MouseMove) {
-        QTabletEvent* tevent = inputManager()->lastTabletEvent();
-        QMouseEvent* mevent = static_cast<QMouseEvent*>(event);
-        if (tevent && tevent->type() == QEvent::TabletMove) {
-            inputManager()->toolProxy()->tabletEvent(tevent, d->tabletToPixel(tevent->hiResGlobalPos()));
-        } else {
-            inputManager()->toolProxy()->mouseMoveEvent(mevent, inputManager()->widgetToPixel(mevent->posF()));
-        }
-    } else if(event->type() == QEvent::KeyPress) {
-        QKeyEvent* kevent = static_cast<QKeyEvent*>(event);
-        inputManager()->toolProxy()->keyPressEvent(kevent);
-    } else if(event->type() == QEvent::KeyRelease) {
-        QKeyEvent* kevent = static_cast<QKeyEvent*>(event);
-        inputManager()->toolProxy()->keyReleaseEvent(kevent);
-    }
+    if (!d->active) return;
+
+    QPoint workaround = inputManager()->canvas()->canvasWidget()->mapToGlobal(QPoint(0, 0));
+
+    inputManager()->toolProxy()->
+        forwardEvent(KisToolProxy::CONTINUE, KisTool::Primary, event, event,
+                     inputManager()->lastTabletEvent(), workaround);
+}
+
+void KisToolInvocationAction::processUnhandledEvent(QEvent* event)
+{
+    bool savedState = d->active;
+    d->active = true;
+    inputEvent(event);
+    d->active = savedState;
 }
 
 bool KisToolInvocationAction::supportsHiResInputEvents() const
 {
+    return inputManager()->toolProxy()->primaryActionSupportsHiResEvents();
+}
+
+bool KisToolInvocationAction::isShortcutRequired(int shortcut) const
+{
+    //These really all are pretty important for basic user interaction.
+    Q_UNUSED(shortcut)
     return true;
 }
-
-QPointF KisToolInvocationAction::Private::tabletToPixel(const QPointF &globalPos)
-{
-    const QPointF pos = globalPos - q->inputManager()->canvas()->canvasWidget()->mapToGlobal(QPoint(0, 0));
-    return q->inputManager()->widgetToPixel(pos);
-}
-

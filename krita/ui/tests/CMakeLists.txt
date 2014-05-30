@@ -100,9 +100,16 @@ target_link_libraries(KisClipboardTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage $
 
 ########### next target ###############
 
-set(freehand_stroke_test_SRCS freehand_stroke_test.cpp ../../sdk/tests/stroke_testing_utils.cpp)
+set(freehand_stroke_test_SRCS freehand_stroke_test.cpp ${CMAKE_SOURCE_DIR}/krita/sdk/tests/stroke_testing_utils.cpp)
 kde4_add_unit_test(FreehandStrokeTest TESTNAME krita-ui-FreehandStrokeTest  ${freehand_stroke_test_SRCS})
 target_link_libraries(FreehandStrokeTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(fill_processing_visitor_test_SRCS fill_processing_visitor_test.cpp ${CMAKE_SOURCE_DIR}/krita/sdk/tests/stroke_testing_utils.cpp)
+kde4_add_unit_test(FillProcessingVisitorTest TESTNAME krita-ui-FillProcessingVisitorTest  ${fill_processing_visitor_test_SRCS})
+target_link_libraries(FillProcessingVisitorTest  ${KDE4_KDEUI_LIBS}  kritadefaulttools kritaui kritaimage ${QT_QTTEST_LIBRARY})
+
 
 ########### next target ###############
 
@@ -116,6 +123,12 @@ set(kis_selection_manager_test_SRCS kis_selection_manager_test.cpp)
 kde4_add_unit_test(KisSelectionManagerTest TESTNAME krita-ui-KisSelectionManagerTest  ${kis_selection_manager_test_SRCS})
 target_link_libraries(KisSelectionManagerTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage ${QT_QTTEST_LIBRARY})
 set_tests_properties(krita-ui-KisSelectionManagerTest PROPERTIES TIMEOUT 300)
+
+########### next target ###############
+
+set(kis_selection_decoration_test_SRCS kis_selection_decoration_test.cpp ../../sdk/tests/stroke_testing_utils.cpp)
+kde4_add_unit_test(KisSelectionDecorationTest TESTNAME krita-ui-KisSelectionDecorationTest  ${kis_selection_decoration_test_SRCS})
+target_link_libraries(KisSelectionDecorationTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
@@ -171,4 +184,16 @@ target_link_libraries(KisFlipbookTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage ${
 set(kis_action_manager_test_SRCS kis_action_manager_test.cpp )
 kde4_add_unit_test(KisActionManagerTest TESTNAME krita-ui-KisActionManagerTest  ${kis_action_manager_test_SRCS})
 target_link_libraries(KisActionManagerTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(kis_categories_mapper_test_SRCS kis_categories_mapper_test.cpp testing_categories_mapper.cpp)
+kde4_add_unit_test(KisCategoriesMapperTest TESTNAME krita-ui-KisCategoriesMapperTest  ${kis_categories_mapper_test_SRCS})
+target_link_libraries(KisCategoriesMapperTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(kis_categorized_list_model_test_SRCS kis_categorized_list_model_test.cpp modeltest.cpp)
+kde4_add_unit_test(KisCategorizedListModelTest TESTNAME krita-ui-KisCategorizedListModelTest  ${kis_categorized_list_model_test_SRCS})
+target_link_libraries(KisCategorizedListModelTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage ${QT_QTTEST_LIBRARY})
 

@@ -18,11 +18,10 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #include "krsectiondata.h"
+
 #include <koproperty/Property.h>
 #include <koproperty/Set.h>
-#include <KoGlobal.h>
 #include <kdebug.h>
 #include <QColor>
 
@@ -123,11 +122,7 @@ QString KRSectionData::name() const
 
 QString KRSectionData::sectionTypeString(KRSectionData::Section s)
 {
-#ifdef __GNUC__
-#warning use QMap
-#else
-#pragma WARNING( use QMap )
-#endif
+//! @todo use QMap
     QString sectiontype;
     switch (s) {
     case KRSectionData::PageHeaderAny:
@@ -184,11 +179,7 @@ QString KRSectionData::sectionTypeString(KRSectionData::Section s)
 
 KRSectionData::Section KRSectionData::sectionTypeFromString(const QString& s)
 {
-#ifdef __GNUC__
-#warning use QMap
-#else
-#pragma WARNING( use QMap )
-#endif
+//! @todo use QMap
     KRSectionData::Section sec;
     kDebug() << "Determining section type for " << s;
 

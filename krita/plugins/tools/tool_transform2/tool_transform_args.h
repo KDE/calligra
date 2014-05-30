@@ -36,7 +36,8 @@
 class ToolTransformArgs
 {
 public:
-    typedef enum TransformMode_ {FREE_TRANSFORM = 0, WARP} TransformMode;
+    enum TransformMode {FREE_TRANSFORM = 0,
+                        WARP};
 
     /**
      * Initializes the parameters for an identity transformation,
@@ -62,7 +63,8 @@ public:
                       double shearX, double shearY,
                       KisWarpTransformWorker::WarpType warpType,
                       double alpha,
-                      bool defaultPoints);
+                      bool defaultPoints,
+                      const QString &filterId);
     ~ToolTransformArgs();
     ToolTransformArgs& operator=(const ToolTransformArgs& args);
 

@@ -190,6 +190,10 @@ KisProcessingApplicator::KisProcessingApplicator(KisImageWSP image,
         new KisStrokeStrategyUndoCommandBased(name, false,
                                               m_image->postExecutionUndoAdapter());
 
+    if (m_flags.testFlag(SUPPORTS_WRAPAROUND_MODE)) {
+        strategy->setSupportsWrapAroundMode(true);
+    }
+
     m_strokeId = m_image->startStroke(strategy);
     if(!m_emitSignals.isEmpty()) {
         applyCommand(new EmitImageSignalsCommand(m_image, m_emitSignals, false), KisStrokeJobData::BARRIER);
@@ -267,3 +271,7 @@ void KisProcessingApplicator::end()
     m_image->endStroke(m_strokeId);
 }
 
+void KisProcessingApplicator::cancel()
+{
+    m_image->cancelStroke(m_strokeId);
+}

@@ -40,6 +40,8 @@
 #include <KoShape.h>
 #include <KoViewConverter.h>
 
+#include <KoAnnotationLayoutManager.h>
+
 // KDE + Qt includes
 #include <kdebug.h>
 #include <QBrush>
@@ -59,6 +61,7 @@ KWCanvasBase::KWCanvasBase(KWDocument *document, QObject *parent)
       m_toolProxy(0),
       m_viewMode(0),
       m_viewConverter(0),
+      m_showAnnotations(false),
       m_cacheEnabled(false),
       m_currentZoom(0.0),
       m_maxZoom(2.0),
@@ -164,10 +167,44 @@ void KWCanvasBase::ensureVisible(const QRectF &rect)
     canvasController()->ensureVisible(viewRect);
 }
 
+bool KWCanvasBase::showAnnotations() const
+{
+    return m_showAnnotations;
+}
+
+void KWCanvasBase::setShowAnnotations(bool doShow)
+{
+    m_showAnnotations = doShow;
+}
+
+void KWCanvasBase::paintBackgrounds(QPainter &painter, KWViewMode::ViewMap &viewMap)
+{
+    // Paint the page.
+    Q_UNUSED(viewMap);
+
+    QColor color = Qt::white;
+#ifdef DEBUG_REPAINT
+    color = QColor(random() % 255, random() % 255, random() % 255);
+#endif
+    painter.fillRect(viewMap.clipRect, QBrush(color));
+
+    // Paint the annotation area if that is turned on.
+    if (m_showAnnotations) {
+        color = Qt::cyan;
+        QRect annotationRect(m_viewMode->contentsSize().width(), 0,
+                             AnnotationAreaWidth, m_viewMode->contentsSize().height());
+        QRectF viewRect(m_viewMode->documentToView(annotationRect, m_viewConverter));
+        painter.fillRect(viewRect, QBrush(color));
+
+
+        if (m_document->annotationLayoutManager())
+            m_document->annotationLayoutManager()->paintConnections(painter);
+    }
+}
+
 void KWCanvasBase::paintPageDecorations(QPainter &painter, KWViewMode::ViewMap &viewMap)
 {
-    // We have no page shadows yet, but the annotations area will go
-    // here in the annotations branch.
+    // We have no page shadows yet.
     Q_UNUSED(painter);
     Q_UNUSED(viewMap);
 }
@@ -179,111 +216,18 @@ void KWCanvasBase::paintBorder(QPainter &painter, KWViewMode::ViewMap &viewMap)
     const QRectF       pageRect = viewMap.page.rect();
     const KoPageLayout pageLayout = viewMap.page.pageStyle().pageLayout();
 
-    // Get the coordinates of the border rect in view coordinates.
-    QPointF topLeftCorner = viewConverter()->documentToView(pageRect.topLeft()
-                                                            + QPointF(pageLayout.leftMargin,
-                                                                      pageLayout.topMargin));
-    QPointF bottomRightCorner = viewConverter()->documentToView(pageRect.bottomRight()
-                                                                + QPointF(-pageLayout.rightMargin,
-                                                                          -pageLayout.bottomMargin));
-    QRectF borderRect = QRectF(topLeftCorner, bottomRightCorner);
-
-    // Actually paint the border
-    doPaintBorder(painter, pageLayout.border, borderRect);
-
-    painter.restore();
-}
-
-void KWCanvasBase::doPaintBorder(QPainter &painter, const KoBorder &border,
-                                 const QRectF &borderRect) const
-{
-    // Get the zoom.
-    qreal zoomX;
-    qreal zoomY;
+    qreal zoomX, zoomY;
     viewConverter()->zoom(&zoomX, &zoomY);
+    painter.scale(zoomX, zoomY);
 
-    KoBorder::BorderData borderSide = border.borderData(KoBorder::LeftBorder);
-    painter.save();
-    paintBorderSide(painter, borderSide, borderRect.topLeft(), borderRect.bottomLeft(),
-                    zoomX, 1, 0);
-    borderSide = border.borderData(KoBorder::TopBorder);
+    QPointF topLeftCorner = QPointF(pageRect.topLeft() + QPointF(pageLayout.leftMargin,
+                                                                 pageLayout.topMargin));
+    QPointF bottomRightCorner = QPointF(pageRect.bottomRight() + QPointF(-pageLayout.rightMargin,
+                                                                         -pageLayout.bottomMargin));
+    QRectF borderRect = QRectF(topLeftCorner, bottomRightCorner);
+    pageLayout.border.paint(painter, borderRect);
+
     painter.restore();
-    painter.save();
-    paintBorderSide(painter, borderSide, borderRect.topLeft(), borderRect.topRight(),
-                    zoomY, 0, 1);
-
-    borderSide = border.borderData(KoBorder::RightBorder);
-    painter.restore();
-    painter.save();
-    paintBorderSide(painter, borderSide, borderRect.topRight(), borderRect.bottomRight(),
-                    zoomX, -1, 0);
-
-    borderSide = border.borderData(KoBorder::BottomBorder);
-    painter.restore();
-    painter.save();
-    paintBorderSide(painter, borderSide, borderRect.bottomLeft(), borderRect.bottomRight(),
-                    zoomY, 0, -1);
-    painter.restore();
-}
-
-void KWCanvasBase::paintBorderSide(QPainter &painter, const KoBorder::BorderData &borderData,
-                                   const QPointF &lineStart, const QPointF &lineEnd, qreal zoom,
-                                   int inwardsX, int inwardsY) const
-{
-
-    // Return if nothing to paint
-    if (borderData.style == KoBorder::BorderNone)
-        return;
-
-    // Set up the painter and inner and outer pens.
-    QPen pen = painter.pen();
-    // Line color
-    pen.setColor(borderData.outerPen.color());
-
-    // Line style
-    switch (borderData.style) {
-    case KoBorder::BorderNone: break; // No line
-    case KoBorder::BorderDotted: pen.setStyle(Qt::DotLine); break;
-    case KoBorder::BorderDashed: pen.setStyle(Qt::DashLine); break;
-    case KoBorder::BorderSolid: pen.setStyle(Qt::SolidLine); break;
-    case KoBorder::BorderDouble: pen.setStyle(Qt::SolidLine); break; // Handled separately
-    case KoBorder::BorderGroove: pen.setStyle(Qt::SolidLine); break; // FIXME
-    case KoBorder::BorderRidge: pen.setStyle(Qt::SolidLine); break; // FIXME
-    case KoBorder::BorderInset: pen.setStyle(Qt::SolidLine); break; // FIXME
-    case KoBorder::BorderOutset: pen.setStyle(Qt::SolidLine); break; // FIXME
-    case KoBorder::BorderDashDot: pen.setStyle(Qt::DashDotLine); break;
-    case KoBorder::BorderDashDotDot: pen.setStyle(Qt::DashDotDotLine); break;
-    default:
-        pen.setStyle(Qt::SolidLine);
-    }
-
-    if (borderData.style == KoBorder::BorderDouble) {
-        // outerWidth is the width of the outer line.  The offsets
-        // are the distances from the center line of the whole
-        // border to the centerlines of the outer and inner
-        // borders respectively.
-        qreal outerWidth = borderData.outerPen.widthF() - borderData.innerPen.widthF() - borderData.spacing;
-        qreal outerOffset = borderData.outerPen.widthF() / 2.0 + outerWidth / 2.0;
-        qreal innerOffset = borderData.outerPen.widthF() / 2.0 - borderData.innerPen.widthF() / 2.0;
-
-        QPointF outerOffset2D(-inwardsX * outerOffset, -inwardsY * outerOffset);
-        QPointF innerOffset2D(inwardsX * innerOffset, inwardsY * innerOffset);
-
-        // Draw the outer line.
-        pen.setWidthF(zoom * outerWidth);
-        painter.setPen(pen);
-        painter.drawLine(lineStart + outerOffset2D, lineEnd + outerOffset2D);
-
-        // Draw the inner line
-        pen.setWidthF(zoom * borderData.innerPen.widthF());
-        painter.setPen(pen);
-        painter.drawLine(lineStart + innerOffset2D, lineEnd + innerOffset2D);
-    }
-    else {
-        pen.setWidthF(zoom * borderData.outerPen.widthF());
-        painter.setPen(pen);
-        painter.drawLine(lineStart, lineEnd);
-    }
 }
 
 void KWCanvasBase::paintGrid(QPainter &painter, KWViewMode::ViewMap &vm)
@@ -316,29 +260,28 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
                 painter.save();
 
                 // Set up the painter to clip the part of the canvas that contains the rect.
+                // FIXME: The viewmap must also take into account the annotation area
                 painter.translate(vm.distance.x(), vm.distance.y());
                 vm.clipRect = vm.clipRect.adjusted(-1, -1, 1, 1);
                 painter.setClipRect(vm.clipRect);
 
-                // Paint the background of the page.
-                QColor color = Qt::white;
-#ifdef DEBUG_REPAINT
-                color = QColor(random() % 255, random() % 255, random() % 255);
-#endif
-                painter.fillRect(vm.clipRect, QBrush(color));
+                // Paint the background of the page.  This includes
+                // the annotation area if that should be shown.
+                paintBackgrounds(painter, vm);
 
-                // Paint the contents of the page.
+                // Paint the contents of the page (shapes border).
                 painter.setRenderHint(QPainter::Antialiasing);
                 m_shapeManager->paint(painter, *(viewConverter()), false); // Paint all shapes
                 paintBorder(painter, vm);
 
                 // Paint the page decorations: shadow, etc.
+                // FIXME: This will fail because the painter is clipped to the page.
                 paintPageDecorations(painter, vm);
 
                 // Paint the grid
                 paintGrid(painter, vm);
 
-                // paint whatever the tool wants to paint
+                // Paint whatever the tool wants to paint
                 m_toolProxy->paint(painter, *(viewConverter()));
                 painter.restore();
 
@@ -854,3 +797,5 @@ QPoint KWCanvasBase::documentOffset() const
 {
     return m_documentOffset;
 }
+
+const qreal KWCanvasBase::AnnotationAreaWidth = 200.0; // only static const integral data members can be initialized within a class

@@ -46,7 +46,7 @@
 #include <KoResourceServerAdapter.h>
 #include <KoResourceServerProvider.h>
 
-#include "kis_pattern.h"
+#include "KoPattern.h"
 #include "kis_resource_server_provider.h"
 #include "kis_canvas_resource_provider.h"
 
@@ -58,7 +58,7 @@
 #include "kis_paintop_box.h"
 #include "kis_custom_pattern.h"
 #include "widgets/kis_pattern_chooser.h"
-#include "ko_favorite_resource_manager.h"
+#include "kis_favorite_resource_manager.h"
 #include <kis_canvas2.h>
 
 
@@ -92,7 +92,7 @@ KisControlFrame::KisControlFrame(KisView2 * view, const char* name)
     action->setDefaultWidget(m_gradientWidget);
 
     KoResourceServer<KoAbstractGradient> * rserver = KoResourceServerProvider::instance()->gradientServer();
-    KoAbstractResourceServerAdapter* adapter = new KoResourceServerAdapter<KoAbstractGradient>(rserver);
+    QSharedPointer<KoAbstractResourceServerAdapter> adapter (new KoResourceServerAdapter<KoAbstractGradient>(rserver));
     m_gradientWidget->setResourceAdapter(adapter);
 
     KoDualColorButton * dual = new KoDualColorButton(view->resourceProvider()->fgColor(), view->resourceProvider()->bgColor(), view, view);
@@ -119,7 +119,7 @@ KisControlFrame::KisControlFrame(KisView2 * view, const char* name)
 }
 
 
-void KisControlFrame::slotSetPattern(KisPattern * pattern)
+void KisControlFrame::slotSetPattern(KoPattern * pattern)
 {
     m_patternWidget->slotSetItem(pattern);
     m_patternChooser->setCurrentPattern(pattern);
@@ -143,7 +143,7 @@ void KisControlFrame::createPatternsChooser(KisView2 * view)
     m_patternsTab->setFont(m_font);
     l2->addWidget(m_patternsTab);
 
-    m_patternChooser = new KisPatternChooser(m_patternChooserPopup);
+    m_patternChooser = new KoPatternChooser(m_patternChooserPopup);
     m_patternChooser->setFont(m_font);
     QWidget *patternChooserPage = new QWidget(m_patternChooserPopup);
     QHBoxLayout *patternChooserPageLayout  = new QHBoxLayout(patternChooserPage);
@@ -161,8 +161,8 @@ void KisControlFrame::createPatternsChooser(KisView2 * view)
     connect(customPatterns, SIGNAL(activatedResource(KoResource*)),
             view->resourceProvider(), SLOT(slotPatternActivated(KoResource*)));
 
-    connect(view->resourceProvider(), SIGNAL(sigPatternChanged(KisPattern*)),
-            this, SLOT(slotSetPattern(KisPattern*)));
+    connect(view->resourceProvider(), SIGNAL(sigPatternChanged(KoPattern*)),
+            this, SLOT(slotSetPattern(KoPattern*)));
 
     m_patternChooser->setCurrentItem(0, 0);
     if (m_patternChooser->currentResource())

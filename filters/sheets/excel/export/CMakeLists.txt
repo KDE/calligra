@@ -57,6 +57,6 @@ if(INSTALL_XLS_EXPORT_FILTER)
 
 ########### install files ###############
 
-  install( FILES  kspread_excel_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+  install( FILES  calligra_filter_sheets2xls.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 endif(INSTALL_XLS_EXPORT_FILTER)
 

@@ -68,6 +68,8 @@ public:
     
     QPoint rotate(QPointF center, qreal angle);
     QPoint mirror(QPointF center, bool mirrorXAxis, bool mirrorYAxis, bool keepOrientation=false);
+    bool xAxisMirrored() const;
+    bool yAxisMirrored() const;
     QPoint resetRotation(QPointF center);
     
     virtual void setZoom(qreal zoom);
@@ -119,7 +121,8 @@ public:
                                  QPointF *brushOrigin,
                                  QPolygonF *poligon) const;
 
-    void getOpenGLCheckersInfo(QTransform *textureTransform,
+    void getOpenGLCheckersInfo(const QRectF &viewportRect,
+                               QTransform *textureTransform,
                                QTransform *modelTransform,
                                QRectF *textureRect,
                                QRectF *modelRect) const;

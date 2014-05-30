@@ -220,14 +220,14 @@ KoPointedAt KoTextLayoutArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accu
 
     //and finally test the footnotes
     point -= QPointF(0, bottom() - d->footNotesHeight);
-    while (footNoteIndex<d->footNoteAreas.length()) {
+    while (footNoteIndex < d->footNoteAreas.length()) {
         // check if p is over foot notes area
         if (point.y() > 0 && point.y() < d->footNoteAreas[footNoteIndex]->bottom()
                                                     - d->footNoteAreas[footNoteIndex]->top()) {
             pointedAt = d->footNoteAreas[footNoteIndex]->hitTest(point, accuracy);
             return pointedAt;
         }
-        point -= QPointF(0,d->footNoteAreas[footNoteIndex]->bottom() - d->footNoteAreas[footNoteIndex]->top());
+        point -= QPointF(0, d->footNoteAreas[footNoteIndex]->bottom() - d->footNoteAreas[footNoteIndex]->top());
         ++footNoteIndex;
     }
     return pointedAt;
@@ -679,7 +679,12 @@ QTextLine KoTextLayoutArea::restartLayout(QTextLayout *layout, int lineTextStart
         line = layout->createLine();
         if (!line.isValid())
             break;
-        line.setNumColumns(lk.columns, lk.lineWidth);
+        line.setLineWidth(lk.lineWidth);
+        if (lk.columns != line.textLength()) {
+            // As setNumColumns might break differently we only use it if setLineWidth doesn't give
+            // the same textLength as we had before
+            line.setNumColumns(lk.columns, lk.lineWidth);
+        }
         line.setPosition(lk.position);
     }
     documentLayout()->allowPositionInlineObject(true);

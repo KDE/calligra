@@ -3,7 +3,7 @@
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2003 Daniel Molkentin <molkentin@kde.org>
    Copyright (C) 2003 Joseph Wenninger <jowenn@kde.org>
-   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -35,20 +35,20 @@
 #include <QLayout>
 #include <QLabel>
 #include <QToolTip>
-#include <Q3WhatsThis>
+#include <QWhatsThis>
 #include <kcolorscheme.h>
 #include <QResizeEvent>
 #include <QMouseEvent>
 #include <QFocusEvent>
 #include <QShowEvent>
 #include <QKeyEvent>
+#include <QHelpEvent>
 #include <QEvent>
 #include <QDragMoveEvent>
 #include <QDragLeaveEvent>
 #include <QDropEvent>
 #include <QPixmap>
 #include <QDesktopWidget>
-#include <QMatrix>
 #include <QScrollArea>
 
 #include <kglobal.h>
@@ -76,6 +76,8 @@
 #include <db/cursor.h>
 #include <db/validator.h>
 
+//#define KEXITABLEVIEW_DEBUG
+
 KexiTableView::Appearance::Appearance(QWidget *widget)
         : alternateBackgroundColor(
             KColorScheme(QPalette::Active, KColorScheme::View).background(KColorScheme::AlternateBackground).color())
@@ -101,38 +103,6 @@ KexiTableView::Appearance::Appearance(QWidget *widget)
     fullRecordSelection = false;
     gridEnabled = true;
 }
-
-//-----------------------------------------
-
-//! @internal A special What's This class displaying information about a given column
-//! @todo port to QWhatsThis
-class KexiTableView::WhatsThis : public Q3WhatsThis
-{
-public:
-    WhatsThis(KexiTableView* tv) : Q3WhatsThis(tv), m_tv(tv) {
-        Q_ASSERT(tv);
-    }
-    virtual ~WhatsThis() {
-    }
-    virtual QString text(const QPoint & pos) {
-        const int leftMargin = m_tv->verticalHeaderVisible() ? m_tv->verticalHeader()->width() : 0;
-        //const int topMargin = m_tv->horizontalHeaderVisible() ? m_tv->d->pTopHeader->height() : 0;
-        //const int bottomMargin = m_tv->d->appearance.navigatorEnabled ? m_tv->m_navPanel->height() : 0;
-        if (KexiUtils::hasParent(m_tv->verticalHeader(), m_tv->childAt(pos))) {
-            return i18n("Contains a pointer to the currently selected record");
-        } else if (KexiUtils::hasParent(dynamic_cast<QObject*>(m_tv->m_navPanel), m_tv->childAt(pos))) {
-            return i18n("Record navigator");
-//    return QWhatsThis::textFor(m_tv->m_navPanel, QPoint( pos.x(), pos.y() - m_tv->height() + bottomMargin ));
-        }
-        const int col = m_tv->columnAt(pos.x() - leftMargin);
-        KexiDB::Field *f = col == -1 ? 0 : m_tv->field(col);
-        if (!f)
-            return QString();
-        return f->description().isEmpty() ? f->captionOrName() : f->description();
-    }
-protected:
-    KexiTableView *m_tv;
-};
 
 //-----------------------------------------
 
@@ -205,6 +175,7 @@ KexiTableView::KexiTableView(KexiDB::TableViewData* data, QWidget* parent, const
         , d( new KexiTableViewPrivate(this) )
 {
     setAttribute(Qt::WA_StaticContents, true);
+    setAttribute(Qt::WA_CustomWhatsThis, true);
 //not needed KexiTableView::initCellEditorFactories();
 
     m_data = new KexiDB::TableViewData(); //to prevent crash because m_data==0
@@ -222,7 +193,6 @@ KexiTableView::KexiTableView(KexiDB::TableViewData* data, QWidget* parent, const
 
     //setup colors defaults
 //2.0    setBackgroundMode(Qt::PaletteBackground);
-// setEmptyAreaColor(d->appearance.baseColor);//palette().active().color(QColorGroup::Base));
 
 // d->baseColor = colorGroup().base();
 // d->textColor = colorGroup().text();
@@ -339,7 +309,6 @@ KexiTableView::KexiTableView(KexiDB::TableViewData* data, QWidget* parent, const
 #else
 #pragma WARNING( TODO d->cellToolTip = new KexiTableViewCellToolTip(this); )
 #endif
-    new WhatsThis(this);
 }
 
 KexiTableView::~KexiTableView()
@@ -372,7 +341,8 @@ void KexiTableView::setupNavigator()
 {
     updateScrollBars();
 
-    m_navPanel = new KexiRecordNavigator(this, this, leftMargin());
+    m_navPanel = new KexiRecordNavigator(this, 0 /* todo: this*/);
+    m_navPanel->setLeftMargin(leftMargin());
     navPanelWidget()->setObjectName("navPanel");
     m_navPanel->setRecordHandler(this);
     navPanelWidget()->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
@@ -441,8 +411,9 @@ void KexiTableView::updateFonts(bool repaint)
 // if(d->rowHeight < 22)
 //  d->rowHeight = 22;
     setMargins(
-        qMin(m_horizontalHeader->sizeHint().height(), d->rowHeight),
-        m_horizontalHeader->sizeHint().height(), 0, 0);
+        qMin(m_horizontalHeader->height(), d->rowHeight),
+             horizontalHeaderVisible() ? m_horizontalHeader->height() : 0,
+             0, 0);
 // setMargins(14, d->rowHeight, 0, 0);
     m_verticalHeader->setCellHeight(d->rowHeight);
 
@@ -484,7 +455,7 @@ void KexiTableView::slotUpdate()
     updateContents();
     updateScrollBars();
     if (m_navPanel)
-        m_navPanel->updateGeometry(leftMargin());
+        m_navPanel->setLeftMargin(leftMargin());
 // updateNavPanelGeometry();
 
     updateWidgetContentsSize();
@@ -541,13 +512,15 @@ QSize KexiTableView::sizeHint() const
 {
     const QSize &ts = tableSize();
     int w = qMax(ts.width() + leftMargin() + verticalScrollBar()->sizeHint().width() + 2 * 2,
-                 (navPanelWidget()->isVisible() ? navPanelWidget()->width() : 0));
+                 ((navPanelWidget() && navPanelWidget()->isVisible()) ? navPanelWidget()->width() : 0));
     int h = qMax(ts.height() + topMargin() + horizontalScrollBar()->sizeHint().height(),
                  minimumSizeHint().height());
     w = qMin(w, qApp->desktop()->availableGeometry(this).width() * 3 / 4); //stretch
     h = qMin(h, qApp->desktop()->availableGeometry(this).height() * 3 / 4); //stretch
 
-// kDebug() << w << << h;
+#ifdef KEXITABLEVIEW_DEBUG
+    kDebug() << w << h;
+#endif
 
     return QSize(w, h);
     /*QSize(
@@ -670,9 +643,9 @@ inline void KexiTableView::paintRow(KexiDB::RecordData *record,
 void KexiTableView::drawContents(QPainter *p, int cx, int cy, int cw, int ch)
 {
 #ifdef KEXITABLEVIEW_DEBUG
-    kDebug() << "disable" << d->disableDrawContents << "cx" << cx << "cy" << cy << "cw" << cw << "ch" << ch;
+    kDebug() << "disable" << d->disableDrawContents << "cx" << cx << "cy" << cy << "cw" << cw << "ch" << ch
+             << "contentsRect" << contentsRect() << "geo" << geometry();
 #endif
-
     if (d->disableDrawContents)
         return;
 
@@ -982,6 +955,11 @@ void KexiTableView::paintCell(QPainter* p, KexiDB::RecordData *record, int col, 
                     w - (x + x) - ((align & Qt::AlignLeft) ? 2 : 0)/*right space*/, h,
                     align, txt);
     }
+#ifdef KEXITABLEVIEW_DEBUG
+    p->setPen(QPen(QColor(255, 0, 0, 150), 1, Qt::DashLine));
+    p->drawRect(x, y_offset, w - 1, h - 1);
+    kDebug() << cellValue << "x:" << x << "y:" <<  y_offset << "w:" << w << "h:" << h;
+#endif
     p->restore();
 }
 
@@ -1335,6 +1313,9 @@ void KexiTableView::contextMenuEvent(QContextMenuEvent* e)
 
 void KexiTableView::keyPressEvent(QKeyEvent* e)
 {
+#ifdef KEXITABLEVIEW_DEBUG
+    kDebug() << e;
+#endif
     if (!hasData())
         return;
 // kDebug() << "key=" <<e->key() << " txt=" <<e->text();
@@ -1559,7 +1540,7 @@ KexiDataItemInterface *KexiTableView::editor(int col, bool ignoreMissingEditor)
     connect(editor, SIGNAL(cancelRequested()), this, SLOT(cancelEditor()));
     connect(editor, SIGNAL(acceptRequested()), this, SLOT(acceptEditor()));
 
-    editor->resize(columnWidth(col) - 1, rowHeight() - 1);
+    editor->resize(columnWidth(col), rowHeight());
     editor->installEventFilter(this);
     if (editor->widget())
         editor->widget()->installEventFilter(this);
@@ -1577,7 +1558,7 @@ void KexiTableView::editorShowFocus(int /*row*/, int col)
       return;
     }*/
     if (edit) {
-        kDebug() << "IN";
+        //kDebug() << "IN";
         QRect rect = cellGeometry(m_curRow, m_curCol);
 //  rect.moveBy( -contentsX(), -contentsY() );
         edit->showFocus(rect, isReadOnly() || m_data->column(col)->isReadOnly());
@@ -1646,7 +1627,7 @@ void KexiTableView::createEditor(int row, int col, const QString& addText, bool 
     if (m_editor->hasFocusableWidget()) {
         moveChild(editorWidget, columnPos(m_curCol), rowPos(m_curRow));
 
-        editorWidget->resize(columnWidth(m_curCol) - 1, rowHeight() - 1);
+        editorWidget->resize(columnWidth(m_curCol), rowHeight());
         editorWidget->show();
 
         m_editor->setFocus();
@@ -1688,7 +1669,7 @@ void KexiTableView::resizeEvent(QResizeEvent *e)
     //updateGeometries();
 
     if (m_navPanel)
-        m_navPanel->updateGeometry(leftMargin());
+        m_navPanel->setLeftMargin(leftMargin());
 // updateNavPanelGeometry();
 
     if ((contentsHeight() - e->size().height()) <= d->rowHeight) {
@@ -1748,7 +1729,7 @@ void KexiTableView::showEvent(QShowEvent *e)
         d->ensureCellVisibleOnShow = QPoint(-1, -1); //reset the flag
     }
     if (m_navPanel)
-        m_navPanel->updateGeometry(leftMargin());
+        m_navPanel->setLeftMargin(leftMargin());
 // updateNavPanelGeometry();
     ensureVisible(0, 0, 0, 0); // needed because for small geometries contents were moved 1/2 of row height up
 }
@@ -1886,13 +1867,13 @@ void KexiTableView::slotColumnWidthChanged(int, int, int)
 // updateContents(0, 0, d->pBufferPm->width(), d->pBufferPm->height());
     QWidget *editorWidget = dynamic_cast<QWidget*>(m_editor);
     if (editorWidget) {
-        editorWidget->resize(columnWidth(m_curCol) - 1, rowHeight() - 1);
+        editorWidget->resize(columnWidth(m_curCol), rowHeight());
         moveChild(editorWidget, columnPos(m_curCol), rowPos(m_curRow));
     }
     updateGeometries();
     updateScrollBars();
     if (m_navPanel)
-        m_navPanel->updateGeometry(leftMargin());
+        m_navPanel->setLeftMargin(leftMargin());
     if (d->firstTimeEnsureCellVisible) {
         d->firstTimeEnsureCellVisible = false;
         ensureCellVisible( currentRow(), currentColumn() );
@@ -1916,7 +1897,7 @@ void KexiTableView::updateGeometries()
     int frameLeftMargin = style()->pixelMetric(QStyle::PM_FocusFrameVMargin, 0, this);
     int frameTopMargin = style()->pixelMetric(QStyle::PM_FocusFrameHMargin, 0, this);
 // m_verticalHeader->setGeometry(1, topMargin() + 1, leftMargin(), visibleHeight());
-    m_horizontalHeader->setGeometry(leftMargin() + frameLeftMargin, frameTopMargin, visibleWidth(), topMargin());
+    m_horizontalHeader->setGeometry(leftMargin() + frameLeftMargin, frameTopMargin, /*Qt4: viewport()->width()*/ visibleWidth(), topMargin());
 // m_verticalHeader->setGeometry(1, topMargin() + 1, leftMargin(), visibleHeight());
     m_verticalHeader->setGeometry(frameLeftMargin, topMargin() + frameTopMargin, leftMargin(), visibleHeight());
 }
@@ -2027,7 +2008,7 @@ QSize KexiTableView::tableSize() const
 
 //  kDebug() << rows()-1 <<" "<< (isInsertingEnabled()?1:0) <<" "<< (rowEditing()?1:0) << " " <<  s;
 #ifdef KEXITABLEVIEW_DEBUG
-kDebug() << s;
+kDebug() << s << "cw(last):" << columnWidth(columns() - 1);
 #endif
         return s;
 //   +horizontalScrollBar()->sizeHint().height() + margin() );
@@ -2260,7 +2241,7 @@ void KexiTableView::adjustColumnWidthToContents(int colNum)
             maxw = qMax(maxw, wfw);
         }
         const bool focused = currentColumn() == colNum;
-        maxw += (fm.width("  ") + ed->leftMargin() + ed->rightMargin(focused));
+        maxw += (fm.width("  ") + ed->leftMargin() + ed->rightMargin(focused) + 2);
     }
     if (maxw < KEXITV_MINIMUM_COLUMN_WIDTH)
         maxw = KEXITV_MINIMUM_COLUMN_WIDTH; //not too small
@@ -2478,6 +2459,20 @@ bool KexiTableView::eventFilter(QObject *o, QEvent *e)
 {
     //don't allow to stole key my events by others:
 // kDebug() << "spontaneous " << e->spontaneous() << " type=" << e->type();
+#ifdef KEXITABLEVIEW_DEBUG
+    if (e->type() != QEvent::Paint
+        && e->type() != QEvent::Leave
+        && e->type() != QEvent::MouseMove
+        && e->type() != QEvent::HoverMove
+        && e->type() != QEvent::HoverEnter
+        && e->type() != QEvent::HoverLeave)
+    {
+        kDebug() << e << o;
+    }
+    if (e->type() == QEvent::Paint) {
+        kDebug() << "PAINT!" << static_cast<QPaintEvent*>(e) << static_cast<QPaintEvent*>(e)->rect();
+    }
+#endif
     if (e->type() == QEvent::KeyPress) {
         if (e->spontaneous() /*|| e->type()==QEvent::AccelOverride*/) {
             QKeyEvent *ke = static_cast<QKeyEvent*>(e);
@@ -2601,8 +2596,8 @@ void KexiTableView::setAppearance(const Appearance& a)
         m_verticalHeader->setCellHeight(d->rowHeight);
     if (m_horizontalHeader) {
         setMargins(
-            qMin(m_horizontalHeader->sizeHint().height(), d->rowHeight),
-            m_horizontalHeader->sizeHint().height(), 0, 0);
+            qMin(m_horizontalHeader->height(), d->rowHeight),
+                 horizontalHeaderVisible() ? m_horizontalHeader->height() : 0, 0, 0);
     }
 // }
     if (a.recordHighlightingEnabled)
@@ -2698,6 +2693,47 @@ int KexiTableView::horizontalHeaderHeight() const
 QWidget* KexiTableView::navPanelWidget() const
 {
     return dynamic_cast<QWidget*>(m_navPanel);
+}
+
+bool KexiTableView::event(QEvent *e)
+{
+    switch (e->type()) {
+    case QEvent::QueryWhatsThis:
+    case QEvent::WhatsThis: {
+        QHelpEvent *he = static_cast<QHelpEvent*>(e);
+        QString text = whatsThisText(he->pos());
+        if (!text.isEmpty()) {
+            if (e->type() == QEvent::WhatsThis) {
+                QWhatsThis::showText(mapToGlobal(he->pos()), text, this);
+            }
+            return true;
+        }
+        return false;
+    }
+    default:
+        break;
+    }
+    return Q3ScrollView::event(e);
+}
+
+//! @internal @return text information about a given column or other specific areas of the table view.
+QString KexiTableView::whatsThisText(const QPoint &pos) const
+{
+    const int leftMargin = verticalHeaderVisible() ? verticalHeader()->width() : 0;
+    QString text;
+    if (KexiUtils::hasParent(verticalHeader(), childAt(pos))) {
+        return i18n("Contains a pointer to the currently selected record.");
+    }
+    else if (KexiUtils::hasParent(navPanelWidget(), childAt(pos))) {
+        return i18n("Record navigator.");
+    }
+    const int col = columnAt(pos.x() - leftMargin);
+    KexiDB::Field *f = col == -1 ? 0 : field(col);
+    if (!f) {
+        return QString();
+    }
+    return i18nc("@info:whatsthis", "Column <resource>%1</resource>.")
+               .arg(f->description().isEmpty() ? f->captionOrName() : f->description());
 }
 
 #include "kexitableview.moc"

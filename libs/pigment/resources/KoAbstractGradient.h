@@ -20,10 +20,11 @@
 
 #include <QGradient>
 
-#include "KoColor.h"
 #include "KoColorSpace.h"
 #include "KoResource.h"
 #include <pigment_export.h>
+
+class KoColor;
 
 /**
  * KoAbstractGradient is the base class of all gradient resources
@@ -62,10 +63,11 @@ public:
     void setType(QGradient::Type repeatType);
     QGradient::Type type() const;
 
-    QImage image() const;
     void updatePreview();
 
     QImage generatePreview(int width, int height) const;
+protected:
+    virtual QByteArray generateMD5() const;
 
 private:
     struct Private;

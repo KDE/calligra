@@ -34,7 +34,6 @@
 #include <kpushbutton.h>
 #include <knuminput.h>
 
-#include <KoColorSpaceRegistry.h>
 #include <KoChannelInfo.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
@@ -107,8 +106,8 @@ KisDlgLayerProperties::KisDlgLayerProperties(KisLayerSP layer, KisView2 *view, K
 
     m_page->cmbComposite->setEnabled(d->compositeOp);
     if(d->compositeOp) {
-        m_page->cmbComposite->getModel()->validateCompositeOps(d->colorSpace);
-        m_page->cmbComposite->setCurrentIndex(m_page->cmbComposite->indexOf(KoID(d->compositeOp->id())));
+        m_page->cmbComposite->validate(d->colorSpace);
+        m_page->cmbComposite->selectCompositeOp(KoID(d->compositeOp->id()));
     }
 
     slotNameChanged(m_page->editName->text());
@@ -137,6 +136,8 @@ KisDlgLayerProperties::~KisDlgLayerProperties()
         m_doc->setModified(true);
         m_layer->setDirty();
     }
+
+    delete d;
 }
 
 bool KisDlgLayerProperties::haveChanges() const
@@ -223,12 +224,7 @@ int KisDlgLayerProperties::getOpacity() const
 
 QString KisDlgLayerProperties::getCompositeOp() const
 {
-    KoID compositeOp;
-    
-    if(m_page->cmbComposite->entryAt(compositeOp, m_page->cmbComposite->currentIndex()))
-        return compositeOp.id();
-    
-    return KoCompositeOpRegistry::instance().getDefaultCompositeOp().id();
+    return m_page->cmbComposite->selectedCompositeOp().id();
 }
 
 QBitArray KisDlgLayerProperties::getChannelFlags() const

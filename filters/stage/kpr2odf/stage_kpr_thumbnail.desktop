@@ -1,18 +1,24 @@
 [Desktop Entry]
 Type=Service
 Name=KPresenter Presentations
+Name[bs]=KPresenter prezentacije
 Name[ca]=Presentacions del KPresenter
+Name[ca@valencia]=Presentacions del KPresenter
+Name[cs]=Prezentace KPresenter
 Name[da]=KPresenter-præsentationer
 Name[de]=KPresenter-Präsentationen
 Name[el]=Παρουσιάσεις KPresenter
 Name[es]=Presentaciones KPresenter
 Name[et]=KPresenteri esitlused
+Name[eu]=KPresenter aurkezpenak
 Name[fi]=KPresenter-esitykset
 Name[fr]=Présentation KPresenter
 Name[gl]=Presentacións de KPresenter:
 Name[hu]=KPresenter bemutatók
 Name[it]=Presentazioni KPresenter
+Name[ja]=KPresenter プレゼンテーション
 Name[kk]=KPresenter презентациялары
+Name[ko]=KPresenter 프레젠테이션
 Name[lt]=KPresenter pristatymai
 Name[nb]=KPresenter presentasjoner
 Name[nl]=KPresenter-presentatie

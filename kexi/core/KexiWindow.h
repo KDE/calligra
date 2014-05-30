@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -125,9 +125,6 @@ public:
     Kexi::ViewMode currentViewMode() const;
 
     void setContextHelp(const QString& caption, const QString& text, const QString& iconName);
-
-    /*! Internal reimplementation. */
-    virtual bool eventFilter(QObject *obj, QEvent *e);
 
     //! \return true if the window is attached within the main window
     bool isAttached() const {
@@ -274,6 +271,9 @@ protected:
     //! \internal
     void removeView(Kexi::ViewMode mode);
 
+    //! \internal
+    virtual bool eventFilter(QObject *obj, QEvent *e);
+
     //! Used by \a view to inform the dialog about changing state of the "dirty" flag.
     void dirtyChanged(KexiView* view);
 
@@ -296,7 +296,14 @@ private slots:
     tristate switchToViewModeInternal(Kexi::ViewMode newViewMode);
 
 private:
+    //! Closes the window and all views. If @a force is true, attempts to close every
+    //! view even if one of them refuses to close. If @a force is false, false is returned
+    //! as soon as first view refuses to close.
+    //! @return true on sucessfull close; forced close always returns true
+    bool close(bool force = false);
+
     void createSubwidgets();
+    void removeView(KexiView *view);
 
     class Private;
     Private *d;

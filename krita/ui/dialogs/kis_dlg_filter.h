@@ -29,22 +29,18 @@ class KisFilterConfiguration;
 class KisView2;
 class KisFilterManager;
 
-class KisFilterDialog : public QDialog
+class KisDlgFilter : public QDialog
 {
 
     Q_OBJECT
 
 public:
 
-    KisFilterDialog(KisView2 *view, KisNodeSP node, KisFilterManager *filterManager);
+    KisDlgFilter(KisView2 *view, KisNodeSP node, KisFilterManager *filterManager);
 
-    ~KisFilterDialog();
+    ~KisDlgFilter();
 
     void setFilter(KisFilterSP f);
-
-public slots:
-
-    void updatePreview();
 
 protected slots:
 
@@ -56,14 +52,18 @@ protected slots:
 
     void previewCheckBoxChange(int state);
 
+    void filterSelectionChanged();
+
     virtual void resizeEvent(QResizeEvent* );
 
 private:
     void startApplyingFilter(KisSafeFilterConfigurationSP config);
+    void setDialogTitle(KisFilterSP f);
+    void updatePreview();
 
 private:
     struct Private;
-    KisFilterDialog::Private* const d;
+    KisDlgFilter::Private* const d;
 };
 
 #endif

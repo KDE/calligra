@@ -35,7 +35,7 @@ class SQLite2ToSQLite3Migration : public QObject
 {
     Q_OBJECT
 public:
-    SQLite2ToSQLite3Migration(const QString& filePath);
+    explicit SQLite2ToSQLite3Migration(const QString& filePath);
     ~SQLite2ToSQLite3Migration();
 
     tristate run();

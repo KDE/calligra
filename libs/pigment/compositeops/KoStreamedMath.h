@@ -23,16 +23,8 @@
 #include <Vc/IO>
 
 #include <stdint.h>
+#include <KoAlwaysInline.h>
 
-#ifndef ALWAYS_INLINE
-#if defined __GNUC__
-#define ALWAYS_INLINE inline __attribute__((__always_inline__))
-#elif defined _MSC_VER
-#define ALWAYS_INLINE __forceinline
-#else
-#define ALWAYS_INLINE inline
-#endif
-#endif
 
 template<Vc::Implementation _impl>
 struct KoStreamedMath {
@@ -51,6 +43,7 @@ template<bool useMask, bool useFlow, class Compositor>
     quint8*       dstRowStart  = params.dstRowStart;
     const quint8* maskRowStart = params.maskRowStart;
     const quint8* srcRowStart  = params.srcRowStart;
+    typename Compositor::OptionalParams optionalParams(params);
 
     for(quint32 r=params.rows; r>0; --r) {
         const quint8 *mask = maskRowStart;
@@ -60,7 +53,7 @@ template<bool useMask, bool useFlow, class Compositor>
         int blockRest = params.cols;
 
         for(int i = 0; i < blockRest; i++) {
-            Compositor::template compositeOnePixelScalar<useMask, _impl>(src, dst, mask, params.opacity, params.flow, params.channelFlags);
+            Compositor::template compositeOnePixelScalar<useMask, _impl>(src, dst, mask, params.opacity, optionalParams);
             src += srcLinearInc;
             dst += linearInc;
 
@@ -78,8 +71,12 @@ template<bool useMask, bool useFlow, class Compositor>
     }
 }
 
+static inline quint8 round_float_to_uint(float value) {
+    return quint8(value + float(0.5));
+}
+
 static inline quint8 lerp_mixed_u8_float(quint8 a, quint8 b, float alpha) {
-    return quint8(qint16(b - a) * alpha + a);
+    return round_float_to_uint(qint16(b - a) * alpha + a);
 }
 
 /**
@@ -168,11 +165,14 @@ static inline void write_channels_32(quint8 *data,
     const quint32 lowByteMask = 0xFF;
     Vc::uint_v mask(lowByteMask);
 
-    Vc::uint_v v1 = Vc::uint_v(Vc::int_v(alpha)) << 24;
-    Vc::uint_v v2 = (Vc::uint_v(Vc::int_v(c1)) & mask) << 16;
-    Vc::uint_v v3 = (Vc::uint_v(Vc::int_v(c2)) & mask) <<  8;
+    // FIXME: Use single-instruction rounding + conversion
+    //        The achieve that we need to implement Vc::iRound()
+
+    Vc::uint_v v1 = Vc::uint_v(Vc::int_v(Vc::round(alpha))) << 24;
+    Vc::uint_v v2 = (Vc::uint_v(Vc::int_v(Vc::round(c1))) & mask) << 16;
+    Vc::uint_v v3 = (Vc::uint_v(Vc::int_v(Vc::round(c2))) & mask) <<  8;
     v1 = v1 | v2;
-    Vc::uint_v v4 = Vc::uint_v(Vc::int_v(c3)) & mask;
+    Vc::uint_v v4 = Vc::uint_v(Vc::int_v(Vc::round(c3))) & mask;
     v3 = v3 | v4;
 
     *((Vc::uint_v*)data) = v1 | v3;
@@ -197,6 +197,7 @@ template<bool useMask, bool useFlow, class Compositor>
     quint8*       dstRowStart  = params.dstRowStart;
     const quint8* maskRowStart = params.maskRowStart;
     const quint8* srcRowStart  = params.srcRowStart;
+    typename Compositor::OptionalParams optionalParams(params);
 
     if (!params.srcRowStride) {
         quint32 *buf = Vc::malloc<quint32, Vc::AlignOnVector>(vectorSize);
@@ -244,7 +245,7 @@ template<bool useMask, bool useFlow, class Compositor>
         }
 
         for(int i = 0; i < blockAlign; i++) {
-            Compositor::template compositeOnePixelScalar<useMask, _impl>(src, dst, mask, params.opacity, params.flow, params.channelFlags);
+            Compositor::template compositeOnePixelScalar<useMask, _impl>(src, dst, mask, params.opacity, optionalParams);
             src += srcLinearInc;
             dst += linearInc;
 
@@ -254,7 +255,7 @@ template<bool useMask, bool useFlow, class Compositor>
         }
 
         for (int i = 0; i < blockAlignedVector; i++) {
-            Compositor::template compositeVector<useMask, true, _impl>(src, dst, mask, params.opacity, params.flow);
+            Compositor::template compositeVector<useMask, true, _impl>(src, dst, mask, params.opacity, optionalParams);
             src += srcVectorInc;
             dst += vectorInc;
 
@@ -264,7 +265,7 @@ template<bool useMask, bool useFlow, class Compositor>
         }
 
         for (int i = 0; i < blockUnalignedVector; i++) {
-            Compositor::template compositeVector<useMask, false, _impl>(src, dst, mask, params.opacity, params.flow);
+            Compositor::template compositeVector<useMask, false, _impl>(src, dst, mask, params.opacity, optionalParams);
             src += srcVectorInc;
             dst += vectorInc;
 
@@ -275,7 +276,7 @@ template<bool useMask, bool useFlow, class Compositor>
 
 
         for(int i = 0; i < blockRest; i++) {
-            Compositor::template compositeOnePixelScalar<useMask, _impl>(src, dst, mask, params.opacity, params.flow, params.channelFlags);
+            Compositor::template compositeOnePixelScalar<useMask, _impl>(src, dst, mask, params.opacity, optionalParams);
             src += srcLinearInc;
             dst += linearInc;
 

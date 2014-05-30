@@ -3,7 +3,7 @@
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2003 Daniel Molkentin <molkentin@kde.org>
    Copyright (C) 2003 Joseph Wenninger <jowenn@kde.org>
-   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and,or
    modify it under the terms of the GNU Library General Public
@@ -52,6 +52,7 @@
 
 class QPrinter;
 class QPrintDialog;
+class QHelpEvent;
 
 class KAction;
 
@@ -252,8 +253,6 @@ public:
         ScrollRight
     };
 
-    virtual bool eventFilter(QObject *o, QEvent *e);
-
     //! Initializes standard editor cell editor factories. This is called internally, once.
     static void initCellEditorFactories();
 
@@ -268,6 +267,8 @@ public:
     virtual QScrollBar* verticalScrollBar() const {
         return Q3ScrollView::verticalScrollBar();
     }
+
+    virtual bool eventFilter(QObject *o, QEvent *e);
 
 public slots:
     virtual void setData(KexiDB::TableViewData *data, bool owner = true) {
@@ -698,12 +699,13 @@ protected:
     virtual int horizontalHeaderHeight() const;
 
     QWidget* navPanelWidget() const;
-    
+
+    virtual bool event(QEvent *e);
+
+    QString whatsThisText(const QPoint &pos) const;
+
     KexiTableViewPrivate * const d;
 
-    class WhatsThis;
-//Qt 4 friend class KexiTableItem;
-    friend class WhatsThis;
     friend class KexiTableViewCellToolTip;
 };
 

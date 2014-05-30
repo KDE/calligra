@@ -364,7 +364,7 @@ void OdtMobiHtmlConverter::endHtmlFile()
 
 
 
-void OdtMobiHtmlConverter::createHtmlHead(KoXmlWriter *writer, QHash<QString, QString> &metaData)
+void OdtMobiHtmlConverter::createHtmlHead(KoXmlWriter *writer, QHash<QString, QString> &/*metaData*/)
 {
     writer->startElement("head", m_doIndent);
     writer->startElement("guide");
@@ -445,6 +445,7 @@ void OdtMobiHtmlConverter::handleTagTable(KoXmlElement &nodeElement, KoXmlWriter
             forEachElement (cellElement, tableElement) {
                 QString styleName = cellElement.attribute("style-name");
                 StyleInfo *styleInfo = m_styles.value(styleName);
+                Q_UNUSED(styleInfo);
                 htmlWriter->startElement("td", m_doIndent);
 //                if (styleInfo) {
 //                    styleInfo->inUse = true;
@@ -660,7 +661,7 @@ void OdtMobiHtmlConverter::handleTagA(KoXmlElement &nodeElement, KoXmlWriter *ht
     htmlWriter->startElement("a", m_doIndent);
     QString reference = nodeElement.attribute("href");
     //    QString chapter = m_linksInfo.value(reference);
-    QString mark = m_linksInfo.value(reference); // refrence without # at its begining.
+    QString mark = m_linksInfo.value(reference); // refrence without # at its beginning.
     if (!mark.isEmpty() /*&& !m_options->stylesInCssFile*/) {
 //        // This is internal link.
 //        reference.remove('|');
@@ -680,7 +681,7 @@ void OdtMobiHtmlConverter::handleTagA(KoXmlElement &nodeElement, KoXmlWriter *ht
     htmlWriter->endElement();
 }
 
-void OdtMobiHtmlConverter::handleTagTab (KoXmlWriter *htmlWriter)
+void OdtMobiHtmlConverter::handleTagTab (KoXmlWriter */*htmlWriter*/)
 {
 //    for (int i = 0; i <10; ++i)
 //        htmlWriter->addTextNode("\u00a0");
@@ -740,7 +741,7 @@ void OdtMobiHtmlConverter::handleTagBookMarkStart(KoXmlElement &nodeElement, KoX
     m_bookMarksList.insert(anchor, htmlWriter->device()->pos());
 }
 
-void OdtMobiHtmlConverter::handleTagBookMarkEnd(KoXmlWriter *htmlWriter)
+void OdtMobiHtmlConverter::handleTagBookMarkEnd(KoXmlWriter */*htmlWriter*/)
 {
 //    htmlWriter->endElement();
 }

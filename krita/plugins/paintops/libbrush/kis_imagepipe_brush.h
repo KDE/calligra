@@ -67,20 +67,17 @@ public:
     virtual bool load();
     virtual bool save();
 
-    /// Will call KisBrush's saveToDevice as well
-    virtual bool saveToDevice(QIODevice* dev) const;
-
     /**
      * @return the next image in the pipe.
     */
     virtual KisFixedPaintDeviceSP paintDevice(const KoColorSpace * colorSpace,
-                                              double scale, double angle,
-                                              const KisPaintInformation& info,
-                                              double subPixelX = 0, double subPixelY = 0) const;
+            double scale, double angle,
+            const KisPaintInformation& info,
+            double subPixelX = 0, double subPixelY = 0) const;
 
     virtual void setUseColorAsMask(bool useColorAsMask);
     virtual bool hasColor() const;
-    
+
     virtual enumBrushType brushType() const;
 
     virtual const KisBoundary* boundary() const;
@@ -103,15 +100,18 @@ public:
     void notifyCachedDabPainted();
 
     void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst, KisBrush::ColoringInformation* coloringInformation,
-                                             double scaleX, double scaleY, double angle,
-                                             const KisPaintInformation& info,
-                                             double subPixelX = 0, double subPixelY = 0, qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const;
+            double scaleX, double scaleY, double angle,
+            const KisPaintInformation& info,
+            double subPixelX = 0, double subPixelY = 0, qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const;
 
-            
+
 
 protected:
     void setBrushType(enumBrushType type);
     void setHasColor(bool hasColor);
+    /// Will call KisBrush's saveToDevice as well
+    virtual bool saveToDevice(QIODevice* dev) const;
+
 
     KisImagePipeBrush(const KisImagePipeBrush& rhs);
 

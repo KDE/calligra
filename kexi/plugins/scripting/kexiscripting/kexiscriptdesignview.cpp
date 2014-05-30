@@ -25,7 +25,6 @@
 
 #include <kross/core/manager.h>
 #include <kross/core/action.h>
-#include <kross/core/action.h>
 #include <kross/core/interpreter.h>
 
 #include <KoIcon.h>
@@ -35,7 +34,6 @@
 #include <QTimer>
 #include <QDateTime>
 #include <QDomDocument>
-#include <q3stylesheet.h>
 #include <ktextbrowser.h>
 #include <kfiledialog.h>
 #include <kmenu.h>
@@ -107,9 +105,6 @@ KexiScriptDesignView::KexiScriptDesignView(
     d->splitter->setStretchFactor(d->splitter->indexOf(d->statusbrowser), 1);
     d->statusbrowser->setObjectName("ScriptStatusBrowser");
     d->statusbrowser->setReadOnly(true);
-#if 0
-    d->statusbrowser->setTextFormat(Q3TextBrowser::RichText);
-#endif
     //d->browser->setWordWrap(QTextEdit::WidgetWidth);
     d->statusbrowser->installEventFilter(this);
 

@@ -71,18 +71,32 @@ class KOODFREADER_EXPORT OdfTextReader
     // ----------------------------------------------------------------
     // Text level functions: paragraphs, headings, sections, frames, objects, etc
 
+    void readElementOfficeAnnotation(KoXmlStreamReader &reader);
+    void readElementOfficeAnnotationEnd(KoXmlStreamReader &reader);
+
+    void readElementDcCreator(KoXmlStreamReader &reader);
+    void readElementDcDate(KoXmlStreamReader &reader);
+
     void readElementTextH(KoXmlStreamReader &reader);
     void readElementTextP(KoXmlStreamReader &reader);
     void readElementTextList(KoXmlStreamReader &reader);
     void readElementTextA(KoXmlStreamReader &reader);
+
+    void readElementTableTable(KoXmlStreamReader &reader);
+    void readElementTableTableColumn(KoXmlStreamReader &reader);
+    void readElementTableTableHeaderRows(KoXmlStreamReader &reader);
+    void readElementTableTableRow(KoXmlStreamReader &reader);
+    void readElementTableTableCell(KoXmlStreamReader &reader);
+    void readElementTableCoveredTableCell(KoXmlStreamReader &reader);
 
     // ----------------------------------------------------------------
     // Paragraph level functions: spans, annotations, notes, text content itself, etc.
 
     void readParagraphContents(KoXmlStreamReader &reader);
 
-    void readElementTextSpan(KoXmlStreamReader &reader);
+    void readElementTextLineBreak(KoXmlStreamReader &reader);
     void readElementTextS(KoXmlStreamReader &reader);
+    void readElementTextSpan(KoXmlStreamReader &reader);
 
     // ----------------------------------------------------------------
     // List level functions: list-item and list header.
@@ -95,6 +109,7 @@ class KOODFREADER_EXPORT OdfTextReader
     // ----------------------------------------------------------------
     // Other functions
 
+    void readElementTextSoftPageBreak(KoXmlStreamReader &reader);
     void readUnknownElement(KoXmlStreamReader &reader);
 
 

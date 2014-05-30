@@ -70,9 +70,7 @@ public:
     /*! For convenience. */
     static QWidget* createWidgetInstance(const char* partName,
                                          KexiDB::MessageHandler *msgHdr,
-                                         QWidget *parent, const char *objName = 0, QMap<QString, QString>* args = 0) {
-        return createWidgetInstance(partName, 0, msgHdr, parent, objName, args);
-    }
+                                         QWidget *parent, const char *objName = 0, QMap<QString, QString>* args = 0);
 
     /*! Creates a new dialog instance. If such instance already exists,
      and is unique (see uniqueDialog()) it is just returned.
@@ -104,9 +102,7 @@ public:
     /*! Adeded For convenience. */
     static QDialog* createModalDialogInstance(const char* partName,
             KexiDB::MessageHandler *msgHdr, const char *objName = 0,
-            QMap<QString, QString>* args = 0) {
-        return createModalDialogInstance(partName, 0, msgHdr, objName, args);
-    }
+            QMap<QString, QString>* args = 0);
 
     /*! Executes a command \a commandName (usually nonvisual) using part called \a partName.
      The result can be put into the \a args. \return true on successful calling. */
@@ -152,4 +148,3 @@ private:
 };
 
 #endif
-

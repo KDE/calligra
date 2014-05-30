@@ -30,7 +30,6 @@ public:
     KPrAnimationToolFactory();
     ~KPrAnimationToolFactory();
 
-    bool canCreateTool(KoCanvasBase *canvas) const;
     KoToolBase* createTool(KoCanvasBase *canvas);
 };
 #endif

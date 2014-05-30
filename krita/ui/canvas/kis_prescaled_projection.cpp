@@ -29,7 +29,6 @@
 #include <QPainter>
 
 #include <KoColorProfile.h>
-#include <KoColorSpaceRegistry.h>
 #include <KoViewConverter.h>
 
 #include "kis_config.h"
@@ -41,7 +40,6 @@
 #include "kis_coordinates_converter.h"
 #include "kis_projection_backend.h"
 #include "kis_image_pyramid.h"
-
 
 #define ceiledSize(sz) QSize(ceil((sz).width()), ceil((sz).height()))
 
@@ -158,14 +156,13 @@ void KisPrescaledProjection::viewportMoved(const QPointF &offset)
     /**
      * TODO: viewport rects should be cropped by the borders of
      * the image, because it may be requested to read/write
-     * outside QImage and copyQImage will not chatch it
+     * outside QImage and copyQImage will not catch it
      */
     QRect newViewportRect = QRect(QPoint(0,0), m_d->viewportSize);
     QRect oldViewportRect = newViewportRect.translated(alignedOffset);
 
     QRegion updateRegion = newViewportRect;
     QRect savedArea = newViewportRect & oldViewportRect;
-
     if(!savedArea.isEmpty()) {
         copyQImage(alignedOffset.x(), alignedOffset.y(), &newImage, m_d->prescaledQImage);
         updateRegion -= savedArea;
@@ -175,7 +172,6 @@ void KisPrescaledProjection::viewportMoved(const QPointF &offset)
     QVector<QRect> rects = updateRegion.rects();
 
     foreach(const QRect &rect, rects) {
-
         QRect imageRect =
             m_d->coordinatesConverter->viewportToImage(rect).toAlignedRect();
         QVector<QRect> patches =
@@ -211,8 +207,8 @@ KisUpdateInfoSP KisPrescaledProjection::updateCache(const QRect &dirtyImageRect)
     }
 
     /**
-     * We needn't this stuff ouside KisImage's area. Lets user
-     * paint there, anyway we won't show him anything =)
+     * We needn't this stuff ouside KisImage's area. We're not displaying
+     * anything painted outside the image anyway.
      */
     QRect croppedImageRect = dirtyImageRect & m_d->image->bounds();
     if (croppedImageRect.isEmpty()) return new KisPPUpdateInfo();
@@ -242,6 +238,10 @@ void KisPrescaledProjection::recalculateCache(KisUpdateInfoSP info)
 
 void KisPrescaledProjection::preScale()
 {
+    if (!m_d->image) return;
+
+    m_d->prescaledQImage.fill(0);
+
     QRect viewportRect(QPoint(0, 0), m_d->viewportSize);
     QRect imageRect =
         m_d->coordinatesConverter->viewportToImage(viewportRect).toAlignedRect();
@@ -250,31 +250,24 @@ void KisPrescaledProjection::preScale()
         KritaUtils::splitRectIntoPatches(imageRect, m_d->updatePatchSize);
 
     foreach(const QRect& rc, patches) {
-        QRect viewportPatch =
-            m_d->coordinatesConverter->imageToViewport(rc).toAlignedRect();
-        preScale(viewportPatch);
-    }
-}
-
-QRect KisPrescaledProjection::preScale(const QRect & rc)
-{
-    if (!rc.isEmpty() && m_d->image) {
+        QRect viewportPatch = m_d->coordinatesConverter->imageToViewport(rc).toAlignedRect();
         KisPPUpdateInfoSP info = getInitialUpdateInformation(QRect());
-        fillInUpdateInformation(rc, info);
-
+        fillInUpdateInformation(viewportPatch, info);
         QPainter gc(&m_d->prescaledQImage);
         gc.setCompositionMode(QPainter::CompositionMode_Source);
-        gc.fillRect(rc, QColor(0, 0, 0, 0));
         drawUsingBackend(gc, info);
-        //FIXME: leave one of those rects, probably, first.
-        return rc | info->viewportRect.toAlignedRect();
     }
-    return QRect();
+
 }
 
 void KisPrescaledProjection::setMonitorProfile(const KoColorProfile *monitorProfile, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags)
 {
     m_d->projectionBackend->setMonitorProfile(monitorProfile, renderingIntent, conversionFlags);
+}
+
+void KisPrescaledProjection::setChannelFlags(const QBitArray &channelFlags)
+{
+    m_d->projectionBackend->setChannelFlags(channelFlags);
 }
 
 void KisPrescaledProjection::setDisplayFilter(KisDisplayFilter *displayFilter)
@@ -308,10 +301,6 @@ void KisPrescaledProjection::notifyZoomChanged()
 
 void KisPrescaledProjection::notifyCanvasSizeChanged(const QSize &widgetSize)
 {
-    // FIXME: Let someone else figure out the optimization where we copy the
-    // still visible part of the image after moving the offset and then
-    // only draw the newly visible parts
-
     m_d->canvasSize = widgetSize;
     updateViewportSize();
     preScale();

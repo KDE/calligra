@@ -65,7 +65,7 @@ void CoverSelectionDialog::createActions()
 
 void CoverSelectionDialog::open()
 {
-    //Here filter could be change if new extention(s) have to be added
+    //Here filter could be change if new extension(s) have to be added
     QString fileName = QFileDialog::getOpenFileName(0, i18n("Open File"),
                                                     "~",
                                                     i18n("Images (*.png *.xpm *.jpg *.jpeg)"));

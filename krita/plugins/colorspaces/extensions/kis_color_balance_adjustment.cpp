@@ -19,6 +19,9 @@
 
 #include "kis_color_balance_adjustment.h"
 #include <KoConfig.h>
+#ifdef HAVE_OPENEXR
+#include <half.h>
+#endif
 
 #include <kis_debug.h>
 #include <klocale.h>
@@ -36,10 +39,10 @@
 #define SCALE_FROM_FLOAT( v  ) KoColorSpaceMaths< float, _channel_type_>::scaleToA( v )
 
 class KisColorBalanceMath;
-template<typename _channel_type_>
+template<typename _channel_type_, typename traits>
 class KisColorBalanceAdjustment : public KoColorTransformation
 {
-    typedef KoBgrTraits<_channel_type_> RGBTrait;
+    typedef traits RGBTrait;
     typedef typename RGBTrait::Pixel RGBPixel;
 
 public:
@@ -47,7 +50,7 @@ public:
 
 void transform(const quint8 *srcU8, quint8 *dstU8, qint32 nPixels) const
 {
-    KisColorBalanceMath *bal = new KisColorBalanceMath();
+    KisColorBalanceMath bal;
     const RGBPixel* src = reinterpret_cast<const RGBPixel*>(srcU8);
     RGBPixel* dst = reinterpret_cast<RGBPixel*>(dstU8);
     float value_red, value_green, value_blue, hue, saturation, lightness;
@@ -59,9 +62,9 @@ void transform(const quint8 *srcU8, quint8 *dstU8, qint32 nPixels) const
         float blue = SCALE_TO_FLOAT(src->blue);
         RGBToHSL(red, green, blue, &hue, &saturation, &lightness);
 
-        value_red = bal->colorBalanceTransform(red, lightness, m_cyan_shadows, m_cyan_midtones, m_cyan_highlights);
-        value_green = bal->colorBalanceTransform(green, lightness, m_magenta_shadows, m_magenta_midtones, m_magenta_highlights);
-        value_blue = bal->colorBalanceTransform(blue, lightness, m_yellow_shadows, m_yellow_midtones, m_yellow_highlights);
+        value_red = bal.colorBalanceTransform(red, lightness, m_cyan_shadows, m_cyan_midtones, m_cyan_highlights);
+        value_green = bal.colorBalanceTransform(green, lightness, m_magenta_shadows, m_magenta_midtones, m_magenta_highlights);
+        value_blue = bal.colorBalanceTransform(blue, lightness, m_yellow_shadows, m_yellow_midtones, m_yellow_highlights);
 
         if(m_preserve_luminosity)
         {
@@ -162,7 +165,7 @@ private:
 };
 
  KisColorBalanceAdjustmentFactory::KisColorBalanceAdjustmentFactory()
-    : KoColorTransformationFactory("ColorBalance", i18n("ColorBalanceMidtones Adjustment"))
+    : KoColorTransformationFactory("ColorBalance")
 {
 }
 
@@ -171,6 +174,7 @@ QList< QPair< KoID, KoID > > KisColorBalanceAdjustmentFactory::supportedModels()
     QList< QPair< KoID, KoID > > l;
     l.append(QPair< KoID, KoID >(RGBAColorModelID , Integer8BitsColorDepthID));
     l.append(QPair< KoID, KoID >(RGBAColorModelID , Integer16BitsColorDepthID));
+    l.append(QPair< KoID, KoID >(RGBAColorModelID , Float16BitsColorDepthID));
     l.append(QPair< KoID, KoID >(RGBAColorModelID , Float32BitsColorDepthID));
     return l;
 }
@@ -183,11 +187,17 @@ KoColorTransformation* KisColorBalanceAdjustmentFactory::createTransformation(co
         return 0;
     }
     if (colorSpace->colorDepthId() == Float32BitsColorDepthID) {
-        adj = new KisColorBalanceAdjustment< float >();
-    } else if (colorSpace->colorDepthId() == Integer16BitsColorDepthID) {
-        adj = new KisColorBalanceAdjustment< quint16 >();
+        adj = new KisColorBalanceAdjustment< float, KoRgbTraits < float > >();
+    }
+#ifdef HAVE_OPENEXR
+    else if (colorSpace->colorDepthId() == Float16BitsColorDepthID) {
+        adj = new KisColorBalanceAdjustment< half, KoRgbTraits < half > >();
+    }
+#endif
+    else if (colorSpace->colorDepthId() == Integer16BitsColorDepthID) {
+        adj = new KisColorBalanceAdjustment< quint16, KoBgrTraits < quint16 > >();
     } else if (colorSpace->colorDepthId() == Integer8BitsColorDepthID) {
-        adj = new KisColorBalanceAdjustment< quint8 >();
+        adj = new KisColorBalanceAdjustment< quint8, KoBgrTraits < quint8 > >();
     } else {
         kError() << "Unsupported color space " << colorSpace->id() << " in KisColorBalanceAdjustment::createTransformation";
         return 0;

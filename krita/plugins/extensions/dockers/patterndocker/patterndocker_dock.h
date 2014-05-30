@@ -15,15 +15,14 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _DIGITALMIXER_DOCK_H_
-#define _DIGITALMIXER_DOCK_H_
+#ifndef _PATTERN_DOCK_H_
+#define _PATTERN_DOCK_H_
 
 #include <QDockWidget>
-#include <KoColor.h>
 #include <KoCanvasObserverBase.h>
 
-class KisPattern;
-class KisPatternChooser;
+class KoPattern;
+class KoPatternChooser;
 class KisCanvas2;
 
 class PatternDockerDock : public QDockWidget, public KoCanvasObserverBase {
@@ -33,12 +32,12 @@ public:
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas() { m_canvas = 0; }
 public slots:
-    void patternChanged(KisPattern *pattern);
+    void patternChanged(KoPattern *pattern);
 private slots:
 
 private:
     KisCanvas2* m_canvas;
-    KisPatternChooser* m_patternChooser;
+    KoPatternChooser* m_patternChooser;
 };
 
 

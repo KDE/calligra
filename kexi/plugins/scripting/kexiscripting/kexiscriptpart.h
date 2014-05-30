@@ -73,6 +73,8 @@ protected:
      * \param item The \a KexiPart::Item this view is for.
      * \param viewMode The viewmode we like to have a view for.
      * \param staticObjectArgs Optional list of arguments.
+     *
+     * @todo Port It!!!
      */
     virtual KexiView* createView(QWidget *parent,
                                  KexiWindow *window,
@@ -93,6 +95,7 @@ protected:
 
     /**
      * Initialize the part's actions.
+     * @todo Port It!!!
      */
     virtual void initPartActions();
 

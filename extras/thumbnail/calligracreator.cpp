@@ -23,7 +23,8 @@
 #include <KoPart.h>
 #include <KoStore.h>
 #include <KoDocument.h>
-#include <kmimetypetrader.h>
+#include <KoDocumentEntry.h>
+
 #include <kmimetype.h>
 // Qt
 #include <QPainter>
@@ -83,7 +84,10 @@ bool CalligraCreator::create(const QString &path, int width, int height, QImage 
 
     // load document and render the thumbnail ourselves
     const QString mimetype = KMimeType::findByPath(path)->name();
-    m_part = KMimeTypeTrader::self()->createInstanceFromQuery<KoPart>(mimetype, QLatin1String("Calligra/Part"));
+    QString error;
+    KoDocumentEntry documentEntry = KoDocumentEntry::queryByMimeType(mimetype);
+    m_part = documentEntry.createKoPart(&error);
+
 
     if (!m_part) return false;
 
@@ -92,7 +96,7 @@ bool CalligraCreator::create(const QString &path, int width, int height, QImage 
     // prepare the document object
     m_doc->setCheckAutoSaveFile(false);
     m_doc->setAutoErrorHandlingEnabled(false); // don't show message boxes
-    connect(m_part, SIGNAL(completed()), SLOT(onLoadingCompleted()));
+    connect(m_doc, SIGNAL(completed()), SLOT(onLoadingCompleted()));
 
     // load the document content
     m_loadingCompleted = false;
@@ -120,7 +124,7 @@ bool CalligraCreator::create(const QString &path, int width, int height, QImage 
         image = m_doc->generatePreview(size).toImage();
     }
 
-    m_part->closeUrl();
+    m_doc->closeUrl();
 
     return m_loadingCompleted;
 }

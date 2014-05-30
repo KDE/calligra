@@ -26,6 +26,9 @@
 #include <QRect>
 #include <QDomElement>
 #include <QtConcurrentMap>
+#include <QByteArray>
+#include <QBuffer>
+#include <QCryptographicHash>
 
 #include <KoColor.h>
 #include <KoColorSpace.h>
@@ -41,7 +44,8 @@
 #if defined(_WIN32) || defined(_WIN64)
 #include <stdlib.h>
 #define srand48 srand
-inline double drand48() {
+inline double drand48()
+{
     return double(rand()) / RAND_MAX;
 }
 #endif
@@ -54,19 +58,20 @@ struct KisAutoBrush::Private {
 };
 
 KisAutoBrush::KisAutoBrush(KisMaskGenerator* as, qreal angle, qreal randomness, qreal density)
-        : KisBrush()
-        , d(new Private)
+    : KisBrush()
+    , d(new Private)
 {
     d->shape = as;
     d->randomness = randomness;
     d->density = density;
     d->idealThreadCountCached = QThread::idealThreadCount();
     setBrushType(MASK);
-    setWidth(d->shape->width());
-    setHeight(d->shape->height());
-    setAngle(angle);
+    setWidth(qMax(qreal(1.0), d->shape->width()));
+    setHeight(qMax(qreal(1.0), d->shape->height()));
     QImage image = createBrushPreview();
     setImage(image);
+    setBrushTipImage(image);
+    setAngle(angle);
 }
 
 KisAutoBrush::~KisAutoBrush()
@@ -97,13 +102,13 @@ inline void fillPixelOptimized_4bytes(quint8 *color, quint8 *buf, int size)
 
     for (int i = 0; i < block1; i++) {
         *dst = *src;
-        *(dst+1) = *src;
-        *(dst+2) = *src;
-        *(dst+3) = *src;
-        *(dst+4) = *src;
-        *(dst+5) = *src;
-        *(dst+6) = *src;
-        *(dst+7) = *src;
+        *(dst + 1) = *src;
+        *(dst + 2) = *src;
+        *(dst + 3) = *src;
+        *(dst + 4) = *src;
+        *(dst + 5) = *src;
+        *(dst + 6) = *src;
+        *(dst + 7) = *src;
 
         dst += 8;
     }
@@ -171,7 +176,9 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
     // mask dimension methods already includes KisBrush::angle()
     int dstWidth = maskWidth(scaleX, angle, subPixelX, subPixelY, info);
     int dstHeight = maskHeight(scaleY, angle, subPixelX, subPixelY, info);
+    QPointF hotSpot = this->hotSpot(scaleX, scaleY, angle, info);
 
+    // mask size and hotSpot function take the KisBrush rotation into account
     angle += KisBrush::angle();
 
     // if there's coloring information, we merely change the alpha: in that case,
@@ -187,11 +194,13 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
         if (dstWidth * dstHeight <= oldBounds.width() * oldBounds.height()) {
             // just clear the data in dst,
             memset(dst->data(), OPACITY_TRANSPARENT_U8, dstWidth * dstHeight * dst->pixelSize());
-        } else {
+        }
+        else {
             // enlarge the data
             dst->initialize();
         }
-    } else {
+    }
+    else {
         if (dst->data() == 0 || dst->bounds().isEmpty()) {
             qWarning() << "Creating a default black dab: no coloring info and no initialized paint device to mask";
             dst->clear(QRect(0, 0, dstWidth, dstHeight));
@@ -211,17 +220,19 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
     double invScaleX = 1.0 / scaleX;
     double invScaleY = 1.0 / scaleY;
 
-    double centerX = dstWidth  * 0.5 - 0.5 + subPixelX;
-    double centerY = dstHeight * 0.5 - 0.5 + subPixelY;
+    double centerX = hotSpot.x() - 0.5 + subPixelX;
+    double centerY = hotSpot.y() - 0.5 + subPixelY;
 
-    d->shape->setSoftness( softnessFactor );
+    d->shape->setSoftness(softnessFactor);
 
     if (coloringInformation) {
         if (color && pixelSize == 4) {
             fillPixelOptimized_4bytes(color, dabPointer, dstWidth * dstHeight);
-        } else if (color) {
+        }
+        else if (color) {
             fillPixelOptimized_general(color, dabPointer, dstWidth * dstHeight, pixelSize);
-        } else {
+        }
+        else {
             for (int y = 0; y < dstHeight; y++) {
                 for (int x = 0; x < dstWidth; x++) {
                     memcpy(dabPointer, coloringInformation->color(), pixelSize);
@@ -242,16 +253,17 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
     applicator->initializeData(&data);
 
     int jobs = d->idealThreadCountCached;
-    if(dstHeight > 100 && jobs >= 4) {
-        int splitter = dstHeight/jobs;
+    if (dstHeight > 100 && jobs >= 4) {
+        int splitter = dstHeight / jobs;
         QVector<QRect> rects;
-        for(int i = 0; i < jobs - 1; i++) {
-            rects << QRect(0, i*splitter, dstWidth, splitter);
+        for (int i = 0; i < jobs - 1; i++) {
+            rects << QRect(0, i * splitter, dstWidth, splitter);
         }
         rects << QRect(0, (jobs - 1)*splitter, dstWidth, dstHeight - (jobs - 1)*splitter);
         OperatorWrapper wrapper(applicator);
         QtConcurrent::blockingMap(rects, wrapper);
-    } else {
+    }
+    else {
         QRect rect(0, 0, dstWidth, dstHeight);
         applicator->process(rect);
     }
@@ -278,13 +290,13 @@ QImage KisAutoBrush::createBrushPreview()
     int width = maskWidth(1.0, 0.0, 0.0, 0.0, KisPaintInformation());
     int height = maskHeight(1.0, 0.0, 0.0, 0.0, KisPaintInformation());
 
-    KisPaintInformation info(QPointF(width * 0.5, height * 0.5), 0.5, 0, 0, KisVector2D::Zero(), 0, 0);
+    KisPaintInformation info(QPointF(width * 0.5, height * 0.5), 0.5, 0, 0, 0, 0);
 
-    KisFixedPaintDeviceSP fdev = new KisFixedPaintDevice( KoColorSpaceRegistry::instance()->rgb8() );
+    KisFixedPaintDeviceSP fdev = new KisFixedPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
     fdev->setRect(QRect(0, 0, width, height));
     fdev->initialize();
 
-    mask(fdev,KoColor(Qt::black, fdev->colorSpace()),1.0, 1.0, 0.0, info);
+    mask(fdev, KoColor(Qt::black, fdev->colorSpace()), 1.0, 1.0, 0.0, info);
     return fdev->convertToQImage(0);
 }
 
@@ -299,27 +311,44 @@ qreal KisAutoBrush::density() const
     return d->density;
 }
 
+QByteArray KisAutoBrush::generateMD5() const
+{
+    QByteArray ba;
+    if (!brushTipImage().isNull()) {
+#if QT_VERSION >= 0x040700
+        ba = QByteArray::fromRawData((const char*)brushTipImage().constBits(), brushTipImage().byteCount());
+#else
+        ba = QByteArray::fromRawData((const char*)brushTipImage().bits(), brushTipImage().byteCount());
+#endif
+    }
+    QCryptographicHash md5(QCryptographicHash::Md5);
+    md5.addData(ba);
+
+    QDomDocument doc;
+    QDomElement root = doc.createElement("autobrush");
+    toXML(doc, root);
+    doc.appendChild(root);
+    md5.addData(doc.toByteArray());
+
+    return md5.result();
+
+}
+
 qreal KisAutoBrush::randomness() const
 {
     return d->randomness;
 }
 
-void KisAutoBrush::setImage(const QImage& image)
-{
-    m_image = image;
-    clearBrushPyramid();
-}
-
 QPainterPath KisAutoBrush::outline() const
 {
     bool simpleOutline = (d->density < 1.0);
-    if (simpleOutline){
+    if (simpleOutline) {
         QPainterPath path;
-        QRectF brushBoundingbox(0,0,width(), height());
+        QRectF brushBoundingbox(0, 0, width(), height());
         if (maskGenerator()->type() == KisMaskGenerator::CIRCLE) {
             path.addEllipse(brushBoundingbox);
-        } else // if (maskGenerator()->type() == KisMaskGenerator::RECTANGLE)
-        {
+        }
+        else { // if (maskGenerator()->type() == KisMaskGenerator::RECTANGLE)
             path.addRect(brushBoundingbox);
         }
 

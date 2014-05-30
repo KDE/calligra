@@ -25,8 +25,9 @@
 #include "KPrPageApplicationData.h"
 #include "pageeffects/KPrPageEffect.h"
 
-KPrPageEffectSetCommand::KPrPageEffectSetCommand( KoPAPageBase * page, KPrPageEffect * pageEffect )
-: m_page( page )
+KPrPageEffectSetCommand::KPrPageEffectSetCommand(KoPAPageBase * page, KPrPageEffect * pageEffect, KUndo2Command *parent)
+: KUndo2Command(parent)
+, m_page( page )
 , m_newPageEffect( pageEffect )
 , m_oldPageEffect( KPrPage::pageData( m_page )->pageEffect() )
 , m_deleteNewPageEffect( true )

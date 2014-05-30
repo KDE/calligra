@@ -150,8 +150,8 @@ KexiConnectionSelectorWidget::KexiConnectionSelectorWidget(
 // QLabel* lbl = new QLabel(i18n("<b>Select existing Kexi project to open:</b>"), openExistingWidget);
 // openExistingWidgetLyr->addWidget( lbl );
     d->prjTypeSelector = new KexiPrjTypeSelector(d->openExistingWidget);
-    connect(d->prjTypeSelector->buttonGroup, SIGNAL(clicked(int)),
-            this, SLOT(slotPrjTypeSelected(int)));
+    connect(d->prjTypeSelector->buttonGroup, SIGNAL(buttonClicked(QAbstractButton*)),
+            this, SLOT(slotPrjTypeSelected(QAbstractButton*)));
     openExistingWidgetLyr->addWidget(d->prjTypeSelector);
     d->prjTypeSelector->setContentsMargins(0, 0, 0, KDialog::spacingHint());
     //openExistingWidgetLyr->addSpacing(KDialog::spacingHint());
@@ -196,16 +196,15 @@ KexiConnectionSelectorWidget::~KexiConnectionSelectorWidget()
 
 void KexiConnectionSelectorWidget::showAdvancedConn()
 {
-    slotPrjTypeSelected(2);
-    d->prjTypeSelector->buttonGroup->setButton(2);
+    d->prjTypeSelector->option_server->setChecked(true);
 }
 
 //void KexiConnectionSelectorWidget::showAdvancedConn()
-void KexiConnectionSelectorWidget::slotPrjTypeSelected(int id)
+void KexiConnectionSelectorWidget::slotPrjTypeSelected(QAbstractButton *btn)
 {
-    if (id == 1) {//file-based prj type
+    if (btn == d->prjTypeSelector->option_file) { //file-based prj type
         showSimpleConn();
-    } else if (id == 2) {//server-based prj type
+    } else if (btn == d->prjTypeSelector->option_server) { //server-based prj type
         if (KexiDB::hasDatabaseServerDrivers()) {
             if (!d->conn_sel_shown) {
                 d->conn_sel_shown = true;
@@ -258,7 +257,7 @@ ConnectionDataLVItem* KexiConnectionSelectorWidget::addConnectionData(KexiDB::Co
 
 void KexiConnectionSelectorWidget::showSimpleConn()
 {
-    d->prjTypeSelector->buttonGroup->setButton(1);
+    d->prjTypeSelector->option_file->setChecked(true);
     if (!d->file_sel_shown) {
         d->file_sel_shown = true;
         fileWidget = new KexiFileWidget(

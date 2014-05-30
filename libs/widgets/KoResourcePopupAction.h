@@ -23,6 +23,8 @@
 
 #include <kaction.h>
 
+#include <QSharedPointer>
+
 class KoShapeBackground;
 class KoAbstractResourceServerAdapter;
 class QModelIndex;
@@ -37,19 +39,19 @@ public:
      *
      * @param parent The parent for this action.
      */
-    explicit KoResourcePopupAction(KoAbstractResourceServerAdapter *gradientResourceAdapter, QObject *parent = 0);
+    explicit KoResourcePopupAction(QSharedPointer<KoAbstractResourceServerAdapter>gradientResourceAdapter, QObject *parent = 0);
 
     /**
      * Destructor
      */
     virtual ~KoResourcePopupAction();
 
-    KoShapeBackground *currentBackground() const;
-    void setCurrentBackground(KoShapeBackground *background);
+    QSharedPointer<KoShapeBackground> currentBackground() const;
+    void setCurrentBackground(QSharedPointer<KoShapeBackground> background);
 
 signals:
     /// Emitted when a resource was selected
-    void resourceSelected(KoShapeBackground * background);
+    void resourceSelected(QSharedPointer<KoShapeBackground>  background);
 
 public slots:
     void updateIcon();

@@ -59,7 +59,6 @@ public:
         advancedProperties.insert("accessibleDescription");
         advancedProperties.insert("accessibleName");
         advancedProperties.insert("autoMask");
-        advancedProperties.insert("autoFillBackground");
         advancedProperties.insert("backgroundOrigin");
         advancedProperties.insert("backgroundMode");//this is rather useless
         advancedProperties.insert("baseSize");
@@ -80,7 +79,7 @@ public:
         // by providing this in propeditor
         advancedProperties.insert("minimumSize");
         advancedProperties.insert("maximumSize");
-#ifdef KEXI_NO_UNFINISHED
+#ifndef KEXI_SHOW_UNFINISHED
 /*! @todo reenable */
         advancedProperties.insert("accel");
         advancedProperties.insert("icon");

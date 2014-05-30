@@ -187,7 +187,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
             pos = mystr.indexOf(')');
             QString typestr = mystr.left(pos);
 
-            // Delete typeformat infos incl. Space
+            // Delete typeformat info incl. Space
             mystr.remove(0, pos + 1);
 
             // At this point mystr looks like " A!E15: 10"

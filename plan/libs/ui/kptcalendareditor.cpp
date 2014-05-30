@@ -47,7 +47,6 @@
 #include <klocale.h>
 #include <kcalendarsystem.h>
 #include <kactioncollection.h>
-#include <kxmlguifactory.h>
 #include <ksystemtimezone.h>
 #include <ktimezone.h>
 #include <kmenu.h>

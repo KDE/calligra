@@ -26,12 +26,15 @@
 class QLabel;
 class QComboBox;
 class QDoubleSpinBox;
+class QPushButton;
 class QTimer;
 class KPrPageEffect;
 class KPrPageEffectRunner;
 class KPrPageEffectFactory;
 class KoPAViewBase;
+class KoPAPageBase;
 class KPrViewModePreviewPageEffect;
+class KUndo2Command;
 
 /**
  * This is the page effect docker widget that let's you choose a page animation.
@@ -47,12 +50,13 @@ public:
 
 public slots:
     void slotActivePageChanged();
-
+    void slotApplyToAllSlides();
     void slotEffectChanged( int index );
 
 protected:
     void updateSubTypes( const KPrPageEffectFactory * factory );
     KPrPageEffect * createPageEffect( const KPrPageEffectFactory * factory, int subType, double time );
+    KUndo2Command * applyToAllSlidesCommand();
 
 protected slots:
     void slotSubTypeChanged( int index );
@@ -66,6 +70,7 @@ private:
     KoPAViewBase* m_view;
     QComboBox* m_effectCombo;
     QComboBox* m_subTypeCombo;
+    QPushButton *m_applyToAllSlidesButton;
     QDoubleSpinBox* m_durationSpinBox;
     KPrViewModePreviewPageEffect *m_previewMode;
 };

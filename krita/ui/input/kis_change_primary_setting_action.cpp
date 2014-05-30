@@ -21,9 +21,15 @@
 #include <klocalizedstring.h>
 
 #include "kis_input_manager.h"
-#include <KoToolProxy.h>
+#include "kis_canvas2.h"
+#include "kis_tool_proxy.h"
+
+#include <QApplication>
+#include "kis_cursor.h"
+
 
 KisChangePrimarySettingAction::KisChangePrimarySettingAction()
+    : KisAbstractInputAction("Change Primary Setting")
 {
     setName(i18n("Change Primary Setting"));
     setDescription(i18n("The <i>Change Primary Setting</i> action changes a tool's \"Primary Setting\", for example the brush size for the brush tool."));
@@ -32,6 +38,18 @@ KisChangePrimarySettingAction::KisChangePrimarySettingAction()
 KisChangePrimarySettingAction::~KisChangePrimarySettingAction()
 {
 
+}
+
+void KisChangePrimarySettingAction::activate(int shortcut)
+{
+    Q_UNUSED(shortcut);
+    inputManager()->toolProxy()->activateToolAction(KisTool::AlternateChangeSize);
+}
+
+void KisChangePrimarySettingAction::deactivate(int shortcut)
+{
+    Q_UNUSED(shortcut);
+    inputManager()->toolProxy()->deactivateToolAction(KisTool::AlternateChangeSize);
 }
 
 int KisChangePrimarySettingAction::priority() const
@@ -44,23 +62,41 @@ void KisChangePrimarySettingAction::begin(int shortcut, QEvent *event)
     KisAbstractInputAction::begin(shortcut, event);
 
     QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
-    QMouseEvent targetEvent(QEvent::MouseButtonPress, mouseEvent->pos(), Qt::LeftButton, Qt::LeftButton, Qt::ShiftModifier);
-    inputManager()->toolProxy()->mousePressEvent(&targetEvent, inputManager()->widgetToPixel(mouseEvent->posF()));
+    if (mouseEvent) {
+        QMouseEvent targetEvent(QEvent::MouseButtonPress, mouseEvent->pos(), Qt::LeftButton, Qt::LeftButton, Qt::ShiftModifier);
+
+        inputManager()->toolProxy()->forwardEvent(
+            KisToolProxy::BEGIN, KisTool::AlternateChangeSize, &targetEvent, event,
+            inputManager()->lastTabletEvent(),
+            inputManager()->canvas()->canvasWidget()->mapToGlobal(QPoint(0, 0)));
+    }
 }
 
 void KisChangePrimarySettingAction::end(QEvent *event)
 {
     QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
-    QMouseEvent targetEvent(QEvent::MouseButtonRelease, mouseEvent->pos(), Qt::LeftButton, Qt::LeftButton, Qt::ShiftModifier);
-    inputManager()->toolProxy()->mouseReleaseEvent(&targetEvent, inputManager()->widgetToPixel(mouseEvent->posF()));
+    if (mouseEvent) {
+        QMouseEvent targetEvent(QEvent::MouseButtonRelease, mouseEvent->pos(), Qt::LeftButton, Qt::LeftButton, Qt::ShiftModifier);
+
+        inputManager()->toolProxy()->forwardEvent(
+            KisToolProxy::END, KisTool::AlternateChangeSize, &targetEvent, event,
+            inputManager()->lastTabletEvent(),
+            inputManager()->canvas()->canvasWidget()->mapToGlobal(QPoint(0, 0)));
+    }
 
     KisAbstractInputAction::end(event);
 }
 
-void KisChangePrimarySettingAction::mouseMoved(const QPointF &lastPos, const QPointF &pos)
+void KisChangePrimarySettingAction::inputEvent(QEvent* event)
 {
-    Q_UNUSED(lastPos);
+    if (event && event->type() == QEvent::MouseMove) {
+        QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
 
-    QMouseEvent targetEvent(QEvent::MouseButtonRelease, pos.toPoint(), Qt::NoButton, Qt::LeftButton, Qt::ShiftModifier);
-    inputManager()->toolProxy()->mouseMoveEvent(&targetEvent, inputManager()->widgetToPixel(pos));
+        QMouseEvent targetEvent(QEvent::MouseButtonRelease, mouseEvent->pos(), Qt::NoButton, Qt::LeftButton, Qt::ShiftModifier);
+
+        inputManager()->toolProxy()->forwardEvent(
+            KisToolProxy::CONTINUE, KisTool::AlternateChangeSize, &targetEvent, event,
+            inputManager()->lastTabletEvent(),
+            inputManager()->canvas()->canvasWidget()->mapToGlobal(QPoint(0, 0)));
+    }
 }

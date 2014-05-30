@@ -71,11 +71,11 @@ KWRdfDocker::~KWRdfDocker()
 void KWRdfDocker::setCanvas(KoCanvasBase *canvas)
 {
     kDebug(30015) << "canvas:" << canvas;
-    
+
     if (m_canvas) {
         m_canvas->disconnectCanvasObserver(this); // "Every connection you make emits a signal, so duplicate connections emit two signals"
     }
-    
+
     //kDebug(30015) << "canvas:" << canvas;
     m_canvas = canvas;
     KWDocument *newDoc = dynamic_cast<KWDocument*>(m_canvas->shapeController()->resourceManager()->odfDocument());
@@ -83,7 +83,7 @@ void KWRdfDocker::setCanvas(KoCanvasBase *canvas)
         if (m_document) {
             m_document->disconnect(this);  // "Every connection you make emits a signal, so duplicate connections emit two signals"
         }
-        
+
         m_document = newDoc;
         widgetDocker.semanticView->setDocumentRdf(static_cast<KoDocumentRdf*>(m_document->documentRdf()));
         connect(static_cast<KoDocumentRdf*>(m_document->documentRdf()), SIGNAL(semanticObjectAdded(hKoRdfSemanticItem)),

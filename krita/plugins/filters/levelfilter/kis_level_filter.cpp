@@ -23,6 +23,7 @@
 
 #include <klocale.h>
 
+#include <QtGlobal>
 #include <QLayout>
 #include <QPixmap>
 #include <QPainter>
@@ -48,7 +49,6 @@ KisLevelFilter::KisLevelFilter()
 {
     setShortcut(KShortcut(QKeySequence(Qt::CTRL + Qt::Key_L)));
     setSupportsPainting(false);
-    setSupportsIncrementalPainting(false);
     setColorSpaceIndependence(TO_LAB16);
 }
 
@@ -59,12 +59,6 @@ KisLevelFilter::~KisLevelFilter()
 KisConfigWidget * KisLevelFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const
 {
     return new KisLevelConfigWidget(parent, dev);
-}
-
-bool KisLevelFilter::workWith(KoColorSpace* cs) const
-{
-    Q_UNUSED(cs);
-    return true;
 }
 
 KoColorTransformation* KisLevelFilter::createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const
@@ -145,6 +139,7 @@ KisLevelConfigWidget::KisLevelConfigWidget(QWidget * parent, KisPaintDeviceSP de
     KoHistogramProducerSP producer = KoHistogramProducerSP(new KoGenericLabHistogramProducer());
     histogram = new KisHistogram(dev, dev->exactBounds(), producer, LINEAR);
     m_histlog = false;
+    m_page.histview->resize(288,100);
     slotDrawHistogram();
 
 }
@@ -156,9 +151,9 @@ KisLevelConfigWidget::~KisLevelConfigWidget()
 
 void KisLevelConfigWidget::slotDrawHistogram(bool logarithmic)
 {
-    int wHeight = height();
+    int wHeight = m_page.histview->height();
     int wHeightMinusOne = wHeight - 1;
-    int wWidth = width();
+    int wWidth = m_page.histview->width();
 
     if (m_histlog != logarithmic) {
         // Update the histogram
@@ -169,7 +164,7 @@ void KisLevelConfigWidget::slotDrawHistogram(bool logarithmic)
         m_histlog = logarithmic;
     }
 
-    QPixmap pix(wWidth, wHeight);
+    QPixmap pix(wWidth-100, wHeight);
     pix.fill();
     QPainter p(&pix);
 
@@ -182,14 +177,14 @@ void KisLevelConfigWidget::slotDrawHistogram(bool logarithmic)
     if (histogram->getHistogramType() == LINEAR) {
         double factor = (double)(wHeight - wHeight / 5.0) / highest;
         for (int i = 0; i < wWidth; i++) {
-            int binNo = (int)round((double)i / wWidth * (bins - 1));
+            int binNo = qRound((double)i / wWidth * (bins - 1));
             if ((int)histogram->getValue(binNo) != 0)
                 p.drawLine(i, wHeightMinusOne, i, wHeightMinusOne - (int)histogram->getValue(binNo) * factor);
         }
     } else {
         double factor = (double)(wHeight - wHeight / 5.0) / (double)log(highest);
         for (int i = 0; i < wWidth; i++) {
-            int binNo = (int)round((double)i / wWidth * (bins - 1)) ;
+            int binNo = qRound((double)i / wWidth * (bins - 1)) ;
             if ((int)histogram->getValue(binNo) != 0)
                 p.drawLine(i, wHeightMinusOne, i, wHeightMinusOne - log((double)histogram->getValue(binNo)) * factor);
         }

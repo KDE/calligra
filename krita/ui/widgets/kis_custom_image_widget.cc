@@ -32,8 +32,9 @@
 #include <QFile>
 #include <QGraphicsPixmapItem>
 #include <QGraphicsScene>
+#include <QSpacerItem>
 
-
+#include <kmessagebox.h>
 #include <kcolorcombo.h>
 #include <kcomponentdata.h>
 #include <kfiledialog.h>
@@ -45,7 +46,6 @@
 #include <KoIcon.h>
 #include <KoCompositeOp.h>
 #include <KoUnitDoubleSpinBox.h>
-#include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
 #include <KoColorSpace.h>
 #include <KoID.h>
@@ -60,6 +60,7 @@
 #include <kis_paint_layer.h>
 #include <kis_paint_device.h>
 #include <kis_painter.h>
+#include <kis_config.h>
 
 #include "kis_clipboard.h"
 #include "kis_doc2.h"
@@ -74,7 +75,6 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, KisDoc2* doc, qint32
     m_doc = doc;
 
     txtName->setText(imageName);
-
     m_widthUnit = KoUnit(KoUnit::Pixel, resolution);
     doubleWidth->setValue(defWidth);
     doubleWidth->setDecimals(0);
@@ -92,6 +92,7 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, KisDoc2* doc, qint32
     doubleResolution->setValue(72.0 * resolution);
     doubleResolution->setDecimals(0);
     
+    imageGroupSpacer->changeSize(0, 0, QSizePolicy::Fixed, QSizePolicy::Fixed);
     grpClipboard->hide();
 
     connect(cmbPredefined, SIGNAL(activated(int)), SLOT(predefinedClicked(int)));
@@ -109,9 +110,12 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, KisDoc2* doc, qint32
     createButton->setDefault(true);
 
     bnPortrait->setIcon(koIcon("portrait"));
-    connect(bnPortrait, SIGNAL(toggled(bool)), SLOT(switchWidthHeight()));
+    connect(bnPortrait, SIGNAL(clicked()), SLOT(switchWidthHeight()));
+    connect(bnLandscape, SIGNAL(clicked()), SLOT(switchWidthHeight()));
     bnLandscape->setIcon(koIcon("landscape"));
 
+    connect(doubleWidth, SIGNAL(valueChanged(double)), this, SLOT(switchPortraitLandscape()));
+    connect(doubleHeight, SIGNAL(valueChanged(double)), this, SLOT(switchPortraitLandscape()));
     connect(bnSaveAsPredefined, SIGNAL(clicked()), this, SLOT(saveAsPredefined()));
 
     colorSpaceSelector->setCurrentColorModel(KoID(defColorModel));
@@ -126,10 +130,16 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, KisDoc2* doc, qint32
     connect(bnScreenSize, SIGNAL(clicked()), this, SLOT(screenSizeClicked()));
     connect(colorSpaceSelector, SIGNAL(selectionChanged(bool)), createButton, SLOT(setEnabled(bool)));
 
-    fillPredefined();   
+    KisConfig cfg;
+    intNumLayers->setValue(cfg.numDefaultLayers());
+
+    fillPredefined();
+    switchPortraitLandscape();
 }
 
-void KisCustomImageWidget::showEvent(QShowEvent *){
+void KisCustomImageWidget::showEvent(QShowEvent *)
+{
+    fillPredefined();
     this->createButton->setFocus(); 
 }
 
@@ -199,14 +209,43 @@ void KisCustomImageWidget::heightChanged(double value)
 
 void KisCustomImageWidget::createImage()
 {
-    createNewImage();
-
-    emit documentSelected();
+    if (createNewImage()) {
+        emit documentSelected();
+    }
 }
 
-void KisCustomImageWidget::createNewImage()
+bool KisCustomImageWidget::createNewImage()
 {
     const KoColorSpace * cs = colorSpaceSelector->currentColorSpace();
+
+    if (cs->colorModelId() == RGBAColorModelID &&
+        cs->colorDepthId() == Integer8BitsColorDepthID) {
+
+        const KoColorProfile *profile = cs->profile();
+
+        if (profile->name().contains("linear") ||
+            profile->name().contains("scRGB") ||
+            profile->info().contains("linear") ||
+            profile->info().contains("scRGB")) {
+
+            int result =
+                KMessageBox::warningContinueCancel(this,
+                                                   "Linear gamma RGB color spaces are not supposed to be used "
+                                                   "in 8-bit integer modes. It is suggested to use 16-bit integer "
+                                                   "or any floating point colorspace for linear profiles.\n\n"
+                                                   "Press \"Continue\" to create a 8-bit integer linear RGB color space "
+                                                   "or \"Cancel\" to return to the settings dialog.",
+                                                   "Linear RGB + 8bit integer");
+
+            if (result == KMessageBox::Cancel) {
+                qDebug() << "Model RGB8" << "NOT SUPPORTED";
+                qDebug() << ppVar(cs->name());
+                qDebug() << ppVar(cs->profile()->name());
+                qDebug() << ppVar(cs->profile()->info());
+                return false;
+            }
+        }
+    }
 
     QColor qc = cmbColor->color();
 
@@ -236,7 +275,17 @@ void KisCustomImageWidget::createNewImage()
         }
        
         layer->setDirty(QRect(0, 0, width, height));
+        for(int i = 1; i < intNumLayers->value(); ++i) {
+            KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), OPACITY_OPAQUE_U8, image->colorSpace());
+            image->addNode(layer, image->root(), i);
+            layer->setDirty(QRect(0, 0, width, height));
+        }
     }
+
+    KisConfig cfg;
+    cfg.setNumDefaultLayers(intNumLayers->value());
+
+    return true;
 }
 
 quint8 KisCustomImageWidget::backgroundOpacity() const
@@ -269,10 +318,13 @@ void KisCustomImageWidget::screenSizeClicked()
 
 void KisCustomImageWidget::fillPredefined()
 {
+    cmbPredefined->clear();
+
     cmbPredefined->addItem("");
 
     QString appName = KGlobal::mainComponent().componentName();
     QStringList definitions = KGlobal::dirs()->findAllResources("data", appName + "/predefined_image_sizes/*", KStandardDirs::Recursive);
+    definitions.sort();
 
     if (!definitions.empty()) {
 
@@ -366,8 +418,32 @@ void KisCustomImageWidget::saveAsPredefined()
 void KisCustomImageWidget::switchWidthHeight()
 {
     double width = doubleWidth->value();
-    doubleWidth->setValue(doubleHeight->value());
+    double height = doubleHeight->value();
+    KoUnit widthUnit = m_widthUnit;
+    KoUnit heightUnit = m_heightUnit;
+
+    doubleHeight->blockSignals(true);
+    doubleWidth->blockSignals(true);
+    cmbWidthUnit->blockSignals(true);
+    cmbHeightUnit->blockSignals(true);
+
+    doubleWidth->setValue(height);
     doubleHeight->setValue(width);
+    cmbWidthUnit->setCurrentIndex(m_heightUnit.indexInListForUi(KoUnit::ListAll));
+    cmbHeightUnit->setCurrentIndex(m_widthUnit.indexInListForUi(KoUnit::ListAll));
+
+    doubleHeight->blockSignals(false);
+    doubleWidth->blockSignals(false);
+    cmbWidthUnit->blockSignals(false);
+    cmbHeightUnit->blockSignals(false);
+}
+
+void KisCustomImageWidget::switchPortraitLandscape()
+{
+    if(doubleWidth->value() > doubleHeight->value())
+        bnLandscape->setChecked(true);
+    else
+        bnPortrait->setChecked(true);
 }
 
 #include "kis_custom_image_widget.moc"

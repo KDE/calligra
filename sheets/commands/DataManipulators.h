@@ -133,6 +133,7 @@ protected:
     virtual bool preProcessing();
     virtual bool process(Element* element);
     virtual Value newValue(Element *element, int col, int row, bool *, Format::Type *);
+    virtual bool wantChange(Element *element, int col, int row);
 
     Value m_data;
     Format::Type m_format;

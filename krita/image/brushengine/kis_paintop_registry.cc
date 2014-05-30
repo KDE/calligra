@@ -77,15 +77,21 @@ KisPaintOpRegistry* KisPaintOpRegistry::instance()
     return s_instance;
 }
 
+#ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
+void KisPaintOpRegistry::preinitializePaintOpIfNeeded(const KisPaintOpPresetSP preset)
+{
+    if (!preset) return;
+
+    KisPaintOpFactory *f = value(preset->paintOp().id());
+    f->preinitializePaintOpIfNeeded(preset->settings());
+}
+#endif /* HAVE_THREADED_TEXT_RENDERING_WORKAROUND */
+
 KisPaintOp * KisPaintOpRegistry::paintOp(const QString & id, const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageWSP image) const
 {
     if (painter == 0) {
         warnKrita << " KisPaintOpRegistry::paintOp painter is null";
         return 0;
-    }
-
-    if (!painter->bounds().isValid() && image) {
-        painter->setBounds(image->bounds());
     }
 
     Q_ASSERT(settings);

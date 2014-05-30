@@ -23,7 +23,7 @@
 #include <klocale.h>
 #include "kis_debug.h"
 
-#include <KoCompositeOp.h>
+#include <KoCompositeOpRegistry.h>
 
 #include "kis_image.h"
 #include "kis_painter.h"
@@ -132,8 +132,7 @@ void KisSelectionBasedLayer::copyOriginalToProjection(const KisPaintDeviceSP ori
             tempSelection = new KisSelection(*tempSelection);
 
             KisPainter gc2(tempSelection->pixelSelection());
-            gc2.setOpacity(temporaryOpacity());
-            gc2.setCompositeOp(temporaryCompositeOp());
+            setupTemporaryPainter(&gc2);
             gc2.bitBlt(rect.topLeft(), temporaryTarget(), rect);
         }
 

@@ -25,6 +25,7 @@
 class KisAbstractInputAction::Private
 {
 public:
+    QString id;
     QString name;
     QString description;
     QHash<QString, int> indexes;
@@ -36,8 +37,10 @@ public:
 
 KisInputManager *KisAbstractInputAction::Private::inputManager = 0;
 
-KisAbstractInputAction::KisAbstractInputAction() : d(new Private)
+KisAbstractInputAction::KisAbstractInputAction(const QString & id)
+    : d(new Private)
 {
+    d->id = id;
     d->indexes.insert(i18n("Activate"), 0);
 }
 
@@ -46,12 +49,14 @@ KisAbstractInputAction::~KisAbstractInputAction()
     delete d;
 }
 
-void KisAbstractInputAction::activate()
+void KisAbstractInputAction::activate(int shortcut)
 {
+    Q_UNUSED(shortcut);
 }
 
-void KisAbstractInputAction::deactivate()
+void KisAbstractInputAction::deactivate(int shortcut)
 {
+    Q_UNUSED(shortcut);
 }
 
 void KisAbstractInputAction::begin(int shortcut, QEvent *event)
@@ -111,9 +116,19 @@ int KisAbstractInputAction::priority() const
     return 0;
 }
 
+bool KisAbstractInputAction::canIgnoreModifiers() const
+{
+    return false;
+}
+
 QHash< QString, int > KisAbstractInputAction::shortcutIndexes() const
 {
     return d->indexes;
+}
+
+QString KisAbstractInputAction::id() const
+{
+    return d->id;
 }
 
 void KisAbstractInputAction::setName(const QString& name)
@@ -134,4 +149,10 @@ void KisAbstractInputAction::setShortcutIndexes(const QHash< QString, int >& ind
 void KisAbstractInputAction::setInputManager(KisInputManager *manager)
 {
     Private::inputManager = manager;
+}
+
+bool KisAbstractInputAction::isShortcutRequired(int shortcut) const
+{
+    Q_UNUSED(shortcut);
+    return false;
 }

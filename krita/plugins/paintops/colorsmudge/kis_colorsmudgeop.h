@@ -20,7 +20,6 @@
 #define _KIS_COLORSMUDGEOP_H_
 
 #include <QRect>
-#include <KoColorSpace.h>
 
 #include <kis_brush_based_paintop.h>
 #include <kis_types.h>
@@ -34,7 +33,7 @@
 #include "kis_overlay_mode_option.h"
 #include "kis_rate_option.h"
 #include "kis_smudge_option.h"
-#include <kis_cross_device_color_picker.h>
+#include "kis_smudge_radius_option.h"
 
 class QPointF;
 class KoAbstractGradient;
@@ -47,10 +46,10 @@ public:
     KisColorSmudgeOp(const KisBrushBasedPaintOpSettings* settings, KisPainter* painter, KisImageWSP image);
     virtual ~KisColorSmudgeOp();
 
-    qreal paintAt(const KisPaintInformation& info);
+    KisSpacingInformation paintAt(const KisPaintInformation& info);
 
 private:
-    void updateMask(const KisPaintInformation& info, double scale, double rotation);
+    void updateMask(const KisPaintInformation& info, double scale, double rotation, const QPointF &cursorPoint);
     inline void getTopLeftAligned(const QPointF &pos, const QPointF &hotSpot, qint32 *x, qint32 *y);
 
 private:
@@ -66,13 +65,13 @@ private:
     KisPressureSpacingOption  m_spacingOption;
     KisSmudgeOption           m_smudgeRateOption;
     KisRateOption             m_colorRateOption;
+    KisSmudgeRadiusOption     m_smudgeRadiusOption;
     KisOverlayModeOption      m_overlayModeOption;
     KisPressureRotationOption m_rotationOption;
     KisPressureScatterOption  m_scatterOption;
     KisPressureGradientOption m_gradientOption;
-    QRect                     m_maskBounds;
+    QRect                     m_dstDabRect;
     KisFixedPaintDeviceSP     m_maskDab;
-    KisCrossDeviceColorPickerInt m_colorPicker;
     QPointF                   m_lastPaintPos;
 };
 

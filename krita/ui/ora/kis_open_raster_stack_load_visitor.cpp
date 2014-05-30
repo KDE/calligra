@@ -31,7 +31,7 @@
 #include <filter/kis_filter_registry.h>
 #include <kis_group_layer.h>
 #include <kis_image.h>
-#include <KoCompositeOp.h>
+#include <KoCompositeOpRegistry.h>
 
 #include <kis_paint_layer.h>
 #include <kis_png_converter.h>
@@ -44,14 +44,16 @@
 struct KisOpenRasterStackLoadVisitor::Private {
     KisImageWSP image;
     vKisNodeSP activeNodes;
-    KisDoc2* doc;
+    KisUndoStore* undoStore;
     KisOpenRasterLoadContext* loadContext;
+    double xRes;
+    double yRes;
 };
 
-KisOpenRasterStackLoadVisitor::KisOpenRasterStackLoadVisitor(KisDoc2* doc, KisOpenRasterLoadContext* orlc)
+KisOpenRasterStackLoadVisitor::KisOpenRasterStackLoadVisitor(KisUndoStore* undoStore, KisOpenRasterLoadContext* orlc)
         : d(new Private)
 {
-    d->doc = doc;
+    d->undoStore = undoStore;
     d->loadContext = orlc;
 }
 
@@ -90,9 +92,18 @@ void KisOpenRasterStackLoadVisitor::loadImage()
                 height = subelem.attribute("h").toInt();
             }
 
-            dbgFile << ppVar(width) << ppVar(height);
+            d->xRes = 75.0/72; // Setting the default value of the X Resolution = 75ppi
+            if(!subelem.attribute("xres").isNull()){
+                d->xRes = (subelem.attribute("xres").toDouble() / 72);
+            }
 
-            d->image = new KisImage(d->doc->createUndoStore(), width, height, KoColorSpaceRegistry::instance()->rgb8(), "OpenRaster Image (name)");
+            d->yRes = 75.0/72;
+            if(!subelem.attribute("yres").isNull()){
+                d->yRes = (subelem.attribute("yres").toDouble() / 72);
+            }
+
+            dbgFile << ppVar(width) << ppVar(height);
+            d->image = new KisImage(d->undoStore, width, height, KoColorSpaceRegistry::instance()->rgb8(), "OpenRaster Image (name)");
 
             for (QDomNode node2 = node.firstChild(); !node2.isNull(); node2 = node2.nextSibling()) {
                 if (node2.isElement() && node2.nodeName() == "stack") { // it's the root layer !
@@ -137,18 +148,21 @@ void KisOpenRasterStackLoadVisitor::loadLayerInfo(const QDomElement& elem, KisLa
         if (compop == "svg:hard-light") layer->setCompositeOp(COMPOSITE_HARD_LIGHT);
         if (compop == "svg:soft-light") layer->setCompositeOp(COMPOSITE_SOFT_LIGHT_SVG);
         if (compop == "svg:difference") layer->setCompositeOp(COMPOSITE_DIFF);
-        if (compop == "difference") layer->setCompositeOp(COMPOSITE_DIFF); // to fix an old bug in krita's ora export
         if (compop == "svg:color") layer->setCompositeOp(COMPOSITE_COLOR);
         if (compop == "svg:luminosity") layer->setCompositeOp(COMPOSITE_LUMINIZE);
         if (compop == "svg:hue") layer->setCompositeOp(COMPOSITE_HUE);
         if (compop == "svg:saturation") layer->setCompositeOp(COMPOSITE_SATURATION);
-
+        if (compop == "svg:exclusion") layer->setCompositeOp(COMPOSITE_EXCLUSION);
     }
     else if (compop.startsWith("krita:")) {
         compop = compop.remove(0, 6);
         layer->setCompositeOp(compop);
     }
-
+    else {
+        // to fix old bugs in krita's ora export
+        if (compop == "color-dodge") layer->setCompositeOp(COMPOSITE_DODGE);
+        if (compop == "difference") layer->setCompositeOp(COMPOSITE_DIFF);
+    }
 
 }
 
@@ -195,8 +209,8 @@ void KisOpenRasterStackLoadVisitor::loadGroupLayer(const QDomElement& elem, KisG
                     }
                     KisImageWSP pngImage = d->loadContext->loadDeviceData(filename);
                     if (pngImage) {
-                        // ORA doesn't save resolution info, except in the png images
-                        d->image->setResolution(pngImage->xRes(), pngImage->yRes());
+                        // If ORA doesn't have resolution info, load the default value(75 ppi) else fetch from stack.xml
+                        d->image->setResolution(d->xRes, d->yRes);
                         // now get the device
                         KisPaintDeviceSP device = pngImage->projection();
                         delete pngImage.data();

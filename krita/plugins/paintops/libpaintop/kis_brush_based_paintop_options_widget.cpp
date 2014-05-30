@@ -21,6 +21,7 @@
 #include "krita_export.h"
 #include "kis_texture_option.h"
 #include "kis_curve_option_widget.h"
+#include <kis_pressure_mirror_option_widget.h>
 #include "kis_pressure_texture_strength_option.h"
 
 
@@ -46,6 +47,11 @@ void KisBrushBasedPaintopOptionWidget::addTextureOptions()
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureTextureStrengthOption()));
 }
 
+void KisBrushBasedPaintopOptionWidget::addMirrorOption()
+{
+    addPaintOpOption(new KisPressureMirrorOptionWidget());
+}
+
 KisBrushSP KisBrushBasedPaintopOptionWidget::brush()
 {
     return m_brushOption->brush();
@@ -53,7 +59,7 @@ KisBrushSP KisBrushBasedPaintopOptionWidget::brush()
 
 void KisBrushBasedPaintopOptionWidget::changePaintOpSize(qreal x, qreal y)
 {
-    m_brushOption->setBrushSize(x,y);
+    m_brushOption->setBrushSize(x, y);
 }
 
 QSizeF KisBrushBasedPaintopOptionWidget::paintOpSize() const

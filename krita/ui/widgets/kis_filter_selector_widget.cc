@@ -77,6 +77,8 @@ KisFilterSelectorWidget::KisFilterSelectorWidget(QWidget* parent) : d(new Privat
     d->uiFilterSelector.setupUi(this);
 
     d->widgetLayout = new QGridLayout(d->uiFilterSelector.centralWidgetHolder);
+    d->widgetLayout->setContentsMargins(0,0,0,0);
+    d->widgetLayout->setHorizontalSpacing(0);
 
     connect(d->uiFilterSelector.filtersSelector, SIGNAL(clicked(const QModelIndex&)), SLOT(setFilterIndex(const QModelIndex &)));
     connect(d->uiFilterSelector.filtersSelector, SIGNAL(activated(const QModelIndex&)), SLOT(setFilterIndex(const QModelIndex &)));
@@ -87,8 +89,9 @@ KisFilterSelectorWidget::KisFilterSelectorWidget(QWidget* parent) : d(new Privat
 
     setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
-    d->widgetLayout->addItem(new QSpacerItem(1, 1, QSizePolicy::MinimumExpanding, QSizePolicy::Minimum), 1, 0, 0, 2);
-    d->widgetLayout->addItem(new QSpacerItem(1, 1, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 0, 1, 2, 1);
+    d->widgetLayout->addItem(new QSpacerItem(0, 0, QSizePolicy::MinimumExpanding, QSizePolicy::Minimum), 0, 0, 1, 2);
+    d->widgetLayout->addItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 0, 0, 2, 1);
+
 }
 
 KisFilterSelectorWidget::~KisFilterSelectorWidget()
@@ -105,14 +108,14 @@ void KisFilterSelectorWidget::setView(KisView2 *view)
     d->view = view;
 }
 
-void KisFilterSelectorWidget::setPaintDevice(KisPaintDeviceSP _paintDevice)
+void KisFilterSelectorWidget::setPaintDevice(bool showAll, KisPaintDeviceSP _paintDevice)
 {
     if (!_paintDevice) return;
 
     d->paintDevice = _paintDevice;
     d->thumb = d->paintDevice->createThumbnailDevice(100, 100);
     d->thumb->setDefaultBounds(new ThumbnailBounds());
-    d->filtersModel = new KisFiltersModel(d->thumb);
+    d->filtersModel = new KisFiltersModel(showAll, d->thumb);
     d->uiFilterSelector.filtersSelector->setFilterModel(d->filtersModel);
     d->uiFilterSelector.filtersSelector->header()->setVisible(false);
 }
@@ -132,6 +135,11 @@ void KisFilterSelectorWidget::showFilterGallery(bool visible)
 bool KisFilterSelectorWidget::isFilterGalleryVisible() const
 {
     return d->uiFilterSelector.splitter->sizes()[0] > 0;
+}
+
+KisFilterSP KisFilterSelectorWidget::currentFilter() const
+{
+    return d->currentFilter;
 }
 
 void KisFilterSelectorWidget::setFilter(KisFilterSP f)
@@ -162,7 +170,7 @@ void KisFilterSelectorWidget::setFilter(KisFilterSP f)
         d->currentFilterConfigurationWidget->setView(d->view);
         d->currentFilterConfigurationWidget->blockSignals(true);
         d->currentFilterConfigurationWidget->setConfiguration(
-            d->currentFilter->defaultConfiguration(d->paintDevice));
+        d->currentFilter->defaultConfiguration(d->paintDevice));
         d->currentFilterConfigurationWidget->blockSignals(false);
         connect(d->currentFilterConfigurationWidget, SIGNAL(sigConfigurationUpdated()), this, SIGNAL(configurationChanged()));
     }

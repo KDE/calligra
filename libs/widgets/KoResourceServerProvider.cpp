@@ -22,6 +22,7 @@
 
 #include "KoResourceServerProvider.h"
 
+#include <QApplication>
 #include <QFileInfo>
 #include <QStringList>
 #include <QDir>
@@ -33,6 +34,9 @@
 #include "KoSegmentGradient.h"
 #include "KoStopGradient.h"
 #include "KoColorSpaceRegistry.h"
+
+#include <iostream>
+using namespace std;
 
 class GradientResourceServer : public KoResourceServer<KoAbstractGradient> {
 
@@ -172,15 +176,17 @@ KoResourceServerProvider::KoResourceServerProvider() : d(new Private)
     d->m_patternServer = new KoResourceServer<KoPattern>("ko_patterns", "*.pat:*.jpg:*.gif:*.png:*.tif:*.xpm:*.bmp" );
     d->patternThread = new KoResourceLoaderThread(d->m_patternServer);
     d->patternThread->start();
+    if (qApp->applicationName().toLower().contains("test")) {
+        d->patternThread->wait();
+    }
 
     d->m_gradientServer = new GradientResourceServer("ko_gradients", "*.kgr:*.svg:*.ggr");
     d->gradientThread = new KoResourceLoaderThread(d->m_gradientServer);
     d->gradientThread->start();
 
-    d->m_paletteServer = new KoResourceServer<KoColorSet>("ko_palettes", "*.gpl:*.pal:*.act");
+    d->m_paletteServer = new KoResourceServer<KoColorSet>("ko_palettes", "*.gpl:*.pal:*.act:*.aco:*.css:*.colors");
     d->paletteThread = new KoResourceLoaderThread(d->m_paletteServer);
     d->paletteThread->start();
-
 }
 
 KoResourceServerProvider::~KoResourceServerProvider()
@@ -219,3 +225,4 @@ KoResourceServer<KoColorSet>* KoResourceServerProvider::paletteServer()
     d->patternThread->barrier();
     return d->m_paletteServer;
 }
+

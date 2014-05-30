@@ -25,6 +25,9 @@
 #include "spray_brush.h"
 #include "kis_spray_paintop_settings.h"
 #include "kis_brush_option.h"
+#include <kis_pressure_rotation_option.h>
+#include <kis_pressure_opacity_option.h>
+#include <kis_pressure_size_option.h>
 
 class QPointF;
 class KisPainter;
@@ -36,9 +39,9 @@ class KisSprayPaintOp : public KisPaintOp
 public:
 
     KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPainter * painter, KisImageWSP image);
-    virtual ~KisSprayPaintOp();
+    ~KisSprayPaintOp();
 
-    qreal paintAt(const KisPaintInformation& info);
+    KisSpacingInformation paintAt(const KisPaintInformation& info);
 
 private:
     KisShapeProperties m_shapeProperties;

@@ -1,4 +1,11 @@
+# To hide all the warnings from embedded 3rd party software like kdchart
+if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
+    add_definitions(-Wno-switch)
+endif (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
+
+
 add_subdirectory( tests )
+
 
 include_directories( ${CMAKE_SOURCE_DIR}/plugins/chartshape
                      ${CMAKE_SOURCE_DIR}/plugins/chartshape/dialogs
@@ -75,5 +82,5 @@ install(TARGETS calligra_shape_chart DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES chartshape.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES calligra_shape_chart.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 kde4_install_icons( ${DATA_INSTALL_DIR}/calligra/icons )

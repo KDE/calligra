@@ -28,8 +28,6 @@ class QAction;
 class KToggleAction;
 class KActionCollection;
 
-class KoCompositeOp;
-class KoColorSpace;
 
 class KisDoc2;
 class KisFilterStrategy;
@@ -73,8 +71,6 @@ private:
 
     void updateGUI();
     
-
-    void scaleLayer(double sx, double sy, KisFilterStrategy *filterStrategy);
     void rotateLayer(double radians);
     void shearLayer(double angleX, double angleY);
 
@@ -84,7 +80,6 @@ private slots:
     
     void imageResizeToActiveLayer();
 
-    void actLayerVisChanged(int show);
     void layerProperties();
 
     void layerDuplicate();
@@ -131,7 +126,6 @@ private:
     KAction *m_imageFlatten;
     KAction *m_imageMergeLayer;
     KAction *m_groupLayersSave;
-    bool m_actLayerVis;
     KisAction *m_imageResizeToLayer;
     KAction *m_flattenLayer;
     KisAction *m_rasterizeLayer;

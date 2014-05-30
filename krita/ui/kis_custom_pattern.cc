@@ -18,14 +18,16 @@
 
 #include "kis_custom_pattern.h"
 
-#include <KoImageResource.h>
-#include <kis_debug.h>
+#include <KoResourceServerProvider.h>
+#include <KoPattern.h>
+
 #include <QLabel>
 #include <QImage>
 #include <QPushButton>
 #include <QComboBox>
 #include <QPixmap>
 #include <QShowEvent>
+
 #include <kglobal.h>
 #include <kstandarddirs.h>
 #include <ktemporaryfile.h>
@@ -36,8 +38,8 @@
 #include "kis_image.h"
 #include "kis_layer.h"
 #include "kis_paint_device.h"
-#include "kis_pattern.h"
 
+#include <kis_debug.h>
 #include "kis_resource_server_provider.h"
 #include "kis_paint_layer.h"
 
@@ -51,8 +53,8 @@ KisCustomPattern::KisCustomPattern(QWidget *parent, const char* name, const QStr
 
     preview->setScaledContents(true);
 
-    KoResourceServer<KisPattern>* rServer = KisResourceServerProvider::instance()->patternServer();
-    m_rServerAdapter = new KoResourceServerAdapter<KisPattern>(rServer);
+    KoResourceServer<KoPattern>* rServer = KoResourceServerProvider::instance()->patternServer();
+    m_rServerAdapter = QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KoPattern>(rServer));
 
     connect(addButton, SIGNAL(pressed()), this, SLOT(slotAddPredefined()));
     connect(patternButton, SIGNAL(pressed()), this, SLOT(slotUsePattern()));
@@ -63,7 +65,6 @@ KisCustomPattern::KisCustomPattern(QWidget *parent, const char* name, const QStr
 KisCustomPattern::~KisCustomPattern()
 {
     delete m_pattern;
-    delete m_rServerAdapter;
 }
 
 void KisCustomPattern::slotUpdateCurrentPattern()
@@ -89,10 +90,10 @@ void KisCustomPattern::slotUpdateCurrentPattern()
                 if (scaledWidth == 0) scaledWidth++;
                 if (scaledHeight == 0) scaledHeight++;
 
-                QPixmap scaledPixmap = QPixmap::fromImage(m_pattern->image());
+                QPixmap scaledPixmap = QPixmap::fromImage(m_pattern->pattern());
                 preview->setPixmap(scaledPixmap.scaled(scaledWidth, scaledHeight));
             } else {
-                preview->setPixmap(QPixmap::fromImage(m_pattern->image()));
+                preview->setPixmap(QPixmap::fromImage(m_pattern->pattern()));
             }
         }
     }
@@ -105,7 +106,7 @@ void KisCustomPattern::slotAddPredefined()
 
     // Save in the directory that is likely to be: ~/.kde/share/apps/krita/patterns
     // a unique file with this pattern name
-    QString dir = KisResourceServerProvider::instance()->patternServer()->saveLocation();
+    QString dir = KoResourceServerProvider::instance()->patternServer()->saveLocation();
     QString extension;
 
     QString tempFileName;
@@ -130,7 +131,7 @@ void KisCustomPattern::slotUsePattern()
 {
     if (!m_pattern)
         return;
-    KisPattern* copy = m_pattern->clone();
+    KoPattern* copy = m_pattern->clone();
 
     Q_CHECK_PTR(copy);
 
@@ -169,8 +170,8 @@ void KisCustomPattern::createPattern()
         size.scale(1000, 1000, Qt::KeepAspectRatio);
     }
 
-    QString dir = KisResourceServerProvider::instance()->patternServer()->saveLocation();
-    m_pattern = new KisPattern(dev->createThumbnail(size.width(), size.height(), rc,
+    QString dir = KoResourceServerProvider::instance()->patternServer()->saveLocation();
+    m_pattern = new KoPattern(dev->createThumbnail(size.width(), size.height(), rc,
                                                     KoColorConversionTransformation::InternalRenderingIntent,
                                                     KoColorConversionTransformation::InternalConversionFlags), name, dir);
 }

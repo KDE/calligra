@@ -98,6 +98,11 @@ SET (dialogs_DIR_SRCS
     dialogs/StyleManagerDialog.cpp
     dialogs/SubtotalDialog.cpp
     dialogs/ValidityDialog.cpp
+    dialogs/pivot.cpp
+    dialogs/pivotfilters.cpp
+    dialogs/pivotoptions.cpp
+    dialogs/pivotmain.cpp
+
     )
 
 
@@ -113,17 +118,24 @@ kde4_add_ui_files(dialogs_DIR_SRCS
     dialogs/SortDetailsWidget.ui
     dialogs/SubtotalWidget.ui
     dialogs/SubtotalsDetailsWidget.ui
+    dialogs/pivot.ui
+    dialogs/pivotfilters.ui
+    dialogs/pivotoptions.ui
+    dialogs/pivotmain.ui
+
     )
 
 SET (functions_DIR_SRCS
     functions/helper.cpp
     )
 
+if(QT_QTDBUS_FOUND)
 SET (interfaces_DIR_SRCS
     interfaces/MapAdaptor.cpp
     interfaces/SheetAdaptor.cpp
     interfaces/ViewAdaptor.cpp
     )
+endif()
 
 SET (part_DIR_SRCS
     part/CanvasBase.cpp
@@ -196,10 +208,16 @@ SET (calligrasheetscommon_LIB_SRCS
     ${database_DIR_SRCS}
     ${dialogs_DIR_SRCS}
     ${functions_DIR_SRCS}
-    ${interfaces_DIR_SRCS}
     ${part_DIR_SRCS}
     ${ui_DIR_SRCS}
     )
+
+if(QT_QTDBUS_FOUND)
+set (calligrasheetscommon_LIB_SRCS
+    ${calligrasheetscommon_LIB_SRCS}
+    ${interfaces_DIR_SRCS}
+    )
+endif()
 
 set (calligrasheetsodf_LIB_SRCS
     part/Digest.cpp
@@ -280,9 +298,12 @@ target_link_libraries(calligrasheetscommon
     komain
     calligrasheetsodf
     ${QT_QTSQL_LIBRARY}
-    ${KDE4_KNOTIFYCONFIG_LIBS}
     ${KDE4_THREADWEAVER_LIBS}
 )
+if(QT_QTDBUS_FOUND)
+    target_link_libraries(calligrasheetscommon ${KDE4_KNOTIFYCONFIG_LIBS} )
+endif()
+
 if(KDE4_KCMUTILS_LIBS)
     target_link_libraries(calligrasheetscommon ${KDE4_KCMUTILS_LIBS} )
 else()
@@ -314,6 +335,7 @@ install( FILES  ui/CellToolOptionWidgets.xml DESTINATION ${DATA_INSTALL_DIR}/she
 install( FILES  sheetspart.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 install( FILES  sheets.kcfg DESTINATION ${KCFG_INSTALL_DIR} )
 install( FILES  sheets_plugin.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
+install( FILES  sheets_viewplugin.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
 install( FILES  sheetsrc DESTINATION ${CONFIG_INSTALL_DIR})
 
 
@@ -372,6 +394,11 @@ install( FILES
     commands/AbstractRegionCommand.h
     commands/DataManipulators.h
     commands/SortManipulator.h
+    dialogs/pivot.h
+    dialogs/pivotfilters.h
+    dialogs/pivotoptions.h
+    dialogs/pivotmain.h
+
 DESTINATION ${INCLUDE_INSTALL_DIR}/sheets/commands COMPONENT Devel)
 
 endif (SHOULD_BUILD_SHEETS_PART)

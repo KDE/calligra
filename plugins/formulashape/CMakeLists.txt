@@ -1,3 +1,11 @@
+# To hide all the warnings from the generated itex2MML code
+if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
+    add_definitions(-Wno-unused-label)
+    add_definitions(-Wno-sign-compare)
+    add_definitions(-Wno-unused-function)
+endif (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
+
+
 include_directories( ${CMAKE_SOURCE_DIR}/plugins/formulashape
                      ${CMAKE_SOURCE_DIR}/plugins/formulashape/elements
                      ${QT_INCLUDES}
@@ -104,7 +112,7 @@ target_link_libraries(calligra_shape_formular kformula ${M2MML_TOOL_LIBRARIES})
 
 #set_target_properties(kformula PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 install(TARGETS calligra_shape_formular  DESTINATION ${PLUGIN_INSTALL_DIR})
-install(FILES formulashape.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install(FILES calligra_shape_formular.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 
 add_subdirectory( pics ) 
 add_subdirectory( fonts ) 

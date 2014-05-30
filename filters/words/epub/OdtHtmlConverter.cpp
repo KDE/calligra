@@ -37,6 +37,7 @@
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
 #include <KoOdfReadStore.h>
+#include <KoUnit.h>
 
 // EPUB filter
 #include "FileCollector.h"
@@ -577,7 +578,9 @@ void OdtHtmlConverter::handleTagFrame(KoXmlElement &nodeElement, KoXmlWriter *ht
             }
             htmlWriter->addAttribute("alt", "(No Description)");
 
-            QString imgSrc = framePartElement.attribute("href").section('/', -1);
+            QString href = framePartElement.attribute("href");
+            QString imgSrc = href.section('/', -1);
+            //kDebug(30503) << "image source:" << href << imgSrc;
 
             if (m_options->useMobiConventions) {
                 // Mobi
@@ -665,7 +668,7 @@ void OdtHtmlConverter::copyXmlElement(const KoXmlElement &el, KoXmlWriter &write
 {
     // Start the element;
     // keep the name in a QByteArray so that it stays valid until end element is called.
-    const QByteArray name(el.nodeName().toAscii());
+    const QByteArray name(el.nodeName().toLatin1());
     kDebug(30503) << "Copying element;" << name;
     writer.startElement(name.constData());
 
@@ -675,12 +678,12 @@ void OdtHtmlConverter::copyXmlElement(const KoXmlElement &el, KoXmlWriter &write
         const QPair<QString, QString>  &attrPair(attributeNames.value(i));
         if (attrPair.first.isEmpty()) {
             kDebug(30503) << "Copying attribute;" << attrPair.second;
-            writer.addAttribute(attrPair.second.toAscii(), el.attribute(attrPair.second));
+            writer.addAttribute(attrPair.second.toLatin1(), el.attribute(attrPair.second));
         }
         else {
             // This somewhat convoluted code is because we need the
             // namespace, not the namespace URI.
-            QString nsShort = KoXmlNS::nsURI2NS(attrPair.first.toAscii());
+            QString nsShort = KoXmlNS::nsURI2NS(attrPair.first.toLatin1());
             // in case we don't find the namespace in our list create a own one and use that
             // so the document created on saving is valid.
             if (nsShort.isEmpty()) {
@@ -689,10 +692,10 @@ void OdtHtmlConverter::copyXmlElement(const KoXmlElement &el, KoXmlWriter &write
                     nsShort = QString("ns%1").arg(unknownNamespaces.size() + 1);
                     unknownNamespaces.insert(attrPair.first, nsShort);
                 }
-                writer.addAttribute("xmlns:" + nsShort.toAscii(), attrPair.first);
+                writer.addAttribute("xmlns:" + nsShort.toLatin1(), attrPair.first);
             }
             QString attr(nsShort + ':' + attrPair.second);
-            writer.addAttribute(attr.toAscii(), el.attributeNS(attrPair.first,
+            writer.addAttribute(attr.toLatin1(), el.attributeNS(attrPair.first,
                                                                attrPair.second));
         }
     }
@@ -1303,7 +1306,20 @@ void OdtHtmlConverter::collectStyleAttributes(KoXmlElement &propertiesElement, S
         QString attrVal = propertiesElement.attribute(attrName);
 
         if (!attrVal.isEmpty()) {
-            styleInfo->attributes.insert(attrName, attrVal);
+
+            // Book readers don't supprt pt unit to can zoom in document.
+            // We set em  for our font-size and margins value as unit
+            if (attrName == "font-size" || attrName == "margin" || attrName == "margin-right" ||
+                    attrName == "margin-left" || attrName == "margin-bottom" || attrName == "margin-top") {
+                qreal ptSize = KoUnit::parseValue(attrVal);
+                // Convert pt to em: pt/ 12
+                qreal emSize = ptSize / 12.0;
+                QString fontSize = QString::number(emSize,'g', 2) + "em";
+                styleInfo->attributes.insert(attrName, fontSize);
+            }
+            else {
+                styleInfo->attributes.insert(attrName, attrVal);
+            }
         }
     }
 

@@ -30,7 +30,6 @@
 #include <KoColorSpaceMaths.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoIntegerMaths.h>
-#include "KoCompositeOp.h"
 #include "KoColorTransformation.h"
 #include "KoFallBackColorTransformation.h"
 #include "KoLabDarkenColorTransformation.h"
@@ -91,11 +90,6 @@ public:
     virtual quint8 scaleToU8(const quint8 * srcPixel, qint32 channelIndex) const {
         typename _CSTrait::channels_type c = _CSTrait::nativeArray(srcPixel)[channelIndex];
         return KoColorSpaceMaths<typename _CSTrait::channels_type, quint8>::scaleToA(c);
-    }
-
-    virtual quint16 scaleToU16(const quint8 * srcPixel, qint32 channelIndex) const {
-        typename _CSTrait::channels_type c = _CSTrait::nativeArray(srcPixel)[channelIndex];
-        return KoColorSpaceMaths<typename _CSTrait::channels_type, quint16>::scaleToA(c);
     }
 
     virtual void singleChannelPixel(quint8 *dstPixel, const quint8 *srcPixel, quint32 channelIndex) const {

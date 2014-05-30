@@ -2,7 +2,7 @@
    Copyright 2009 Vera Lukman <shicmap@gmail.com>
    Copyright 2011 Sven Langkamp <sven.langkamp@gmail.com>
    Copyright 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
-   Copyright 2013 Sascha Suelzer <s_suelzer@lavabit.com>
+   Copyright 2013 Sascha Suelzer <s.suelzer@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -45,7 +45,7 @@
 #include "kis_paintop_settings.h"
 #include "kis_paintop_registry.h"
 #include "kis_shared_ptr.h"
-#include "ko_favorite_resource_manager.h"
+#include "kis_favorite_resource_manager.h"
 #include "KoResourceModel.h"
 #include "KoResourceItemView.h"
 #include "kis_resource_server_provider.h"
@@ -54,30 +54,28 @@
 #include "kis_preset_chooser.h"
 #include <kconfiggroup.h>
 
-KisPaletteManager::KisPaletteManager(KoFavoriteResourceManager *manager, KisPaintopBox *paintOpBox)
-    : QDialog(paintOpBox)
+KisPaletteManager::KisPaletteManager(KisFavoriteResourceManager *manager, QWidget *parent)
+    : KDialog(parent)
     , m_saveButton(0)
     , m_removeButton(0)
     , m_resourceManager(manager)
-    , m_paintOpBox(paintOpBox)
 {
-    setWindowTitle(i18n("Palette Manager"));
+    setWindowTitle(i18n("Select Favorite Presets"));
+    setButtons(KDialog::Close);
 
     m_allPresetsView = new KisPresetChooser(this);
     m_allPresetsView->showButtons(false);
-    m_allPresetsView->showTaggingBar(false,false);
-    m_allPresetsView->enableContextMenu(false);
+    m_allPresetsView->showTaggingBar(false, false);
 
     m_palettePresetsView = new KisPresetChooser(this);
     m_palettePresetsView->showButtons(false);
-    m_palettePresetsView->showTaggingBar(false,false);
-    m_palettePresetsView->enableContextMenu(false);
+    m_palettePresetsView->showTaggingBar(false, false);
 
     /*LEFT COMPONENTS*/
     QFrame *HSeparator = new QFrame();
     HSeparator->setFrameStyle(QFrame::HLine | QFrame::Sunken);
 
-    m_saveButton = new QPushButton (i18n("Add to Palette"));
+    m_saveButton = new QPushButton (i18n("Add to Favorites"));
     m_saveButton->setSizePolicy(QSizePolicy::Fixed , QSizePolicy::Fixed);
     m_saveButton->setEnabled(false);
 
@@ -96,7 +94,6 @@ KisPaletteManager::KisPaletteManager(KoFavoriteResourceManager *manager, KisPain
     /*RIGHT COMPONENTS*/
     m_removeButton = new QPushButton(i18n("Remove Preset"));
     m_removeButton->setSizePolicy(QSizePolicy::Fixed , QSizePolicy::Fixed);
-    m_removeButton->setEnabled(false);//set the button to center
 
     /*RIGHT LAYOUT*/
     QVBoxLayout *rightLayout = new QVBoxLayout();
@@ -140,7 +137,9 @@ KisPaletteManager::KisPaletteManager(KoFavoriteResourceManager *manager, KisPain
     mainLayout->addWidget(VSeparator);
     mainLayout->addLayout(rightLayout);
 
-    setLayout(mainLayout);
+    QWidget *mainPage = new QWidget(this);
+    mainPage->setLayout(mainLayout);
+    setMainWidget(mainPage);
 
     /*SIGNALS AND SLOTS*/
     connect(m_allPresetsView, SIGNAL(resourceSelected(KoResource*)), this, SLOT(slotUpdateAddButton()) );
@@ -154,7 +153,6 @@ KisPaletteManager::KisPaletteManager(KoFavoriteResourceManager *manager, KisPain
 KisPaletteManager::~KisPaletteManager()
 {
     m_resourceManager = 0;
-    m_paintOpBox = 0;
 }
 
 void KisPaletteManager::slotAddBrush()
@@ -187,16 +185,18 @@ void KisPaletteManager::slotUpdateAddButton()
 
 void KisPaletteManager::slotEnableRemoveButton()
 {
-    KoResource * resource = m_allPresetsView->currentResource();
+    KoResource *resource = m_palettePresetsView->currentResource();
     m_removeButton->setEnabled(resource != 0);
 }
 
 void KisPaletteManager::slotDeleteBrush()
 {
     KoResource * resource = m_palettePresetsView->currentResource();
-    m_resourceManager->removeFavoritePreset(resource->name());
-    m_removeButton->setEnabled(false);
-    updatePaletteView();
+    if (resource) {
+        m_resourceManager->removeFavoritePreset(resource->name());
+        slotEnableRemoveButton();
+        updatePaletteView();
+    }
 }
 
 void KisPaletteManager::showEvent(QShowEvent* e)
@@ -214,6 +214,7 @@ void KisPaletteManager::updatePaletteView()
         out.append(QString("\"%1\"").arg(fav));
     }
     m_palettePresetsView->filterPaletteFavorites(out);
+    slotEnableRemoveButton();
 }
 
 void KisPaletteManager::slotThumbnailMode()

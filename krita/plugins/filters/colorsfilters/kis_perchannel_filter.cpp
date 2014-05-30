@@ -58,6 +58,7 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
 
     QHBoxLayout * layout = new QHBoxLayout(this);
     Q_CHECK_PTR(layout);
+    layout->setContentsMargins(0,0,0,0);
     layout->addWidget(m_page);
 
     m_dev = dev;
@@ -78,6 +79,9 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
         QVariant pixelIndex(KoChannelInfo::displayPositionToChannelIndex(channel->displayPosition(), 
                                                                          KoChannelInfo::displayOrderSorted(dev->colorSpace()->channels())));
         m_page->cmbChannel->addItem(channel->name(), pixelIndex);
+        KisCubicCurve curve = m_curves[m_page->cmbChannel->count() - 1];
+        curve.setName(channel->name());
+        m_curves[m_page->cmbChannel->count() - 1] = curve;
     }
     connect(m_page->cmbChannel, SIGNAL(activated(int)), this, SLOT(setActiveChannel(int)));
 
@@ -100,6 +104,7 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
     m_page->curveWidget->setupInOutControls(m_page->intIn, m_page->intOut, 0, 100);
 
     m_page->curveWidget->blockSignals(true);
+    m_page->curveWidget->setCurve(m_curves[0]);
     setActiveChannel(0);
     m_page->curveWidget->blockSignals(false);
 }
@@ -246,6 +251,23 @@ void KisPerChannelConfigWidget::setConfiguration(const KisPropertiesConfiguratio
 
         KisPerChannelFilterConfiguration::initDefaultCurves(m_curves,
                 m_dev->colorSpace()->channelCount());
+
+        // Getting the names of the color channels {
+        QList<KoChannelInfo *> colorChannels;
+        foreach(KoChannelInfo *channel, m_dev->colorSpace()->channels()) {
+            if (channel->channelType() == KoChannelInfo::COLOR || channel->channelType() == KoChannelInfo::ALPHA) {
+                colorChannels.append(channel);
+            }
+        }
+        // Get the channel information, but listed in display order
+        QList<KoChannelInfo *> sortedChannels = KoChannelInfo::displayOrderSorted(colorChannels);
+        int i = 0;
+        foreach(KoChannelInfo *channel, sortedChannels) {
+            KisCubicCurve curve = m_curves[i];
+            curve.setName(channel->name());
+            m_curves[i++] = curve;
+        }
+        // } Getting the names of the color channels
     } else if (cfg->curves().size() != int(m_dev->colorSpace()->channelCount())) {
         return;
     } else {
@@ -324,15 +346,18 @@ void KisPerChannelFilterConfiguration::fromXML(const QDomElement& root)
 
     QDomElement e = root.firstChild().toElement();
     QString attributeName;
-
+    KisCubicCurve curve;
+    quint16 index;
     while (!e.isNull()) {
         if ((attributeName = e.attribute("name")) == "nTransfers") {
+            numTransfers = e.text().toUShort();
+        } else if ((attributeName = e.attribute("name")) == "nTransfersWithAlpha") {
             numTransfers = e.text().toUShort();
         } else {
             QRegExp rx("curve(\\d+)");
             if (rx.indexIn(attributeName, 0) != -1) {
-                KisCubicCurve curve;
-                quint16 index = rx.cap(1).toUShort();
+
+                index = rx.cap(1).toUShort();
                 index = qMin(index, quint16(curves.count()));
 
                 if (!e.text().isEmpty()) {
@@ -340,8 +365,23 @@ void KisPerChannelFilterConfiguration::fromXML(const QDomElement& root)
                 }
                 curves.insert(index, curve);
             }
+            QRegExp rxAlphaCurve("alphaCurve");
+            if (rxAlphaCurve.indexIn(attributeName, 0) != -1) {
+                index = curves.count() + 1;
+
+                if (!e.text().isEmpty()) {
+                    curve.fromString(e.text());
+                }
+                curves.insert(index,curve);
+            }
         }
         e = e.nextSiblingElement();
+    }
+
+    curve.fromString("0,0;1,1");
+    if(numTransfers == 3) {
+        numTransfers++;
+        curves.insert(index + 1, curve);
     }
 
     if (!numTransfers)
@@ -361,9 +401,11 @@ void KisPerChannelFilterConfiguration::toXML(QDomDocument& doc, QDomElement& roo
     /**
      * <params version=1>
      *       <param name="nTransfers">3</param>
+     *       <param name="nTransfersWithAlpha">4</param>
      *       <param name="curve0">0,0;0.5,0.5;1,1;</param>
      *       <param name="curve1">0,0;1,1;</param>
      *       <param name="curve2">0,0;1,1;</param>
+     *       <param name="alphaCurve">0,0;1,1;</param>
      *       <!-- for the future
      *       <param name="commonCurve">0,0;1,1;</param>
      *       -->
@@ -373,24 +415,47 @@ void KisPerChannelFilterConfiguration::toXML(QDomDocument& doc, QDomElement& roo
     root.setAttribute("version", version());
 
     QDomElement t = doc.createElement("param");
-    QDomText text = doc.createTextNode(QString::number(m_curves.size()));
+    QDomText text, textAlpha;
+    if(m_curves.size() == 4) {
+        text = doc.createTextNode(QString::number(m_curves.size()-1));
+        textAlpha = doc.createTextNode(QString::number(m_curves.size()));
+    }
+    else {
+        text = doc.createTextNode(QString::number(m_curves.size()));
+        textAlpha = doc.createTextNode(QString::number(m_curves.size()));
+    }
+
     t.setAttribute("name", "nTransfers");
     t.appendChild(text);
     root.appendChild(t);
 
+    t = doc.createElement("param");
+    t.setAttribute("name", "nTransfersWithAlpha");
+    t.appendChild(textAlpha);
+    root.appendChild(t);
+
+    KisCubicCurve curve;
     QString paramName;
 
-    for (int i = 0; i < m_curves.size(); ++i) {
+    for (int i = 0; i < m_curves.size() - 1; ++i) {
         paramName = QLatin1String("curve") + QString::number(i);
         t = doc.createElement("param");
         t.setAttribute("name", paramName);
 
-        KisCubicCurve curve = m_curves[i];
-
+        curve = m_curves[i];
         text = doc.createTextNode(curve.toString());
         t.appendChild(text);
         root.appendChild(t);
     }
+
+    paramName = QLatin1String("alphaCurve");
+    t = doc.createElement("param");
+    t.setAttribute("name", paramName);
+
+    curve = m_curves[m_curves.size()-1];
+    text = doc.createTextNode(curve.toString());
+    t.appendChild(text);
+    root.appendChild(t);
 }
 
 /**
@@ -402,7 +467,6 @@ void KisPerChannelFilterConfiguration::toXML(QDomDocument& doc, QDomElement& roo
 KisPerChannelFilter::KisPerChannelFilter() : KisColorTransformationFilter(id(), categoryAdjust(), i18n("&Color Adjustment curves..."))
 {
     setSupportsPainting(true);
-    setSupportsIncrementalPainting(false);
     setColorSpaceIndependence(TO_LAB16);
 }
 

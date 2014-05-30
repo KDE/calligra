@@ -1,18 +1,24 @@
 [Desktop Entry]
 Type=Service
 Name=Microsoft Powerpoint Presentations
+Name[bs]=Microsoft PowerPoint prezentacije
 Name[ca]=Presentacions del Microsoft Powerpoint
+Name[ca@valencia]=Presentacions del Microsoft Powerpoint
+Name[cs]=Prezentace Microsoft Powerpoint
 Name[da]=Microsoft Powerpoint-præsentationer
 Name[de]=Microsoft Powerpoint Präsentationen
 Name[el]=Παρουσιάσεις Microsoft PowerPoint
 Name[es]=Presentaciones Microsoft Powerpoint
 Name[et]=Microsoft PowerPointi esitlused
+Name[eu]=Microsoft Powerpoint aurkezpenak
 Name[fi]=Microsoft Powerpoint -esitykset
 Name[fr]=Présentations Microsoft PowerPoint
 Name[gl]=Presentacións de Microsoft Powerpoint
 Name[hu]=Microsoft Powerpoint bemutatók
 Name[it]=Presentazioni Microsoft PowerPoint
+Name[ja]=Microsoft Powerpoint プレゼンテーション
 Name[kk]=Microsoft PowerPoint презентациялары
+Name[ko]=Microsoft Powerpoint 프레젠테이션
 Name[lt]=„Microsoft PowerPoint“ pristatymai
 Name[nb]=Microsoft Powerpoint presentasjoner
 Name[nl]=Microsoft Powerpoint-presentaties

@@ -37,11 +37,11 @@
 
 #include <kis_types.h>
 #include <kis_image.h>
+#include <kis_paintop_settings.h>
 
-#include <kis_pattern.h>
+#include <KoPattern.h>
 
 #include "kis_tool.h"
-#include "KoCompositeOp.h"
 #include <QCheckBox>
 
 class QEvent;
@@ -50,6 +50,7 @@ class QPaintEvent;
 class QGridLayout;
 class QLabel;
 class QPoint;
+class KoCompositeOp;
 
 
 class KoCanvasBase;
@@ -77,13 +78,21 @@ protected:
 
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
 
+    virtual void activatePrimaryAction();
+    virtual void deactivatePrimaryAction();
+
+    virtual void activateAlternateAction(AlternateAction action);
+    virtual void deactivateAlternateAction(AlternateAction action);
+
+    virtual void beginAlternateAction(KoPointerEvent *event, AlternateAction action);
+    virtual void continueAlternateAction(KoPointerEvent *event, AlternateAction action);
+    virtual void endAlternateAction(KoPointerEvent *event, AlternateAction action);
+
     virtual void mousePressEvent(KoPointerEvent *event);
     virtual void mouseReleaseEvent(KoPointerEvent *event);
     virtual void mouseMoveEvent(KoPointerEvent *event);
 
-    virtual void keyPressEvent(QKeyEvent *event);
-    virtual void keyReleaseEvent(QKeyEvent* event);
-
+    virtual void requestUpdateOutline(const QPointF &outlineDocPoint, const KoPointerEvent *event);
 
     /** If the paint tool support outline like brushes, set to true.
     *   If not (e.g. gradient tool), set to false. Default is false.
@@ -92,10 +101,15 @@ protected:
         m_supportOutline = supportOutline;
     }
 
+    virtual QPainterPath getOutlinePath(const QPointF &documentPos,
+                                        const KoPointerEvent *event,
+                                        KisPaintOpSettings::OutlineMode outlineMode);
 
 protected:
-    bool specialHoverModeActive() const;
+    bool isOutlineEnabled() const;
+    void setOutlineEnabled(bool enabled);
 
+    bool pickColor(const QPointF &documentPixel, AlternateAction action);
 
     /// Add the tool-specific layout to the default option widget layout.
     void addOptionWidgetLayout(QLayout *layout);
@@ -138,14 +152,10 @@ private slots:
     void slotPopupQuickHelp();
     void slotSetOpacity(qreal opacity);
 
-    void makeColorLighter();
-    void makeColorDarker();
-
-    void increaseOpacity();
-    void decreaseOpacity();
+    void increaseBrushSize();
+    void decreaseBrushSize();
 
 protected slots:
-    virtual void resetCursorStyle();
     virtual void updateTabletPressureSamples();
 
 
@@ -153,30 +163,30 @@ protected:
     quint8 m_opacity;
     bool m_paintOutline;
     QVector<qreal> m_pressureSamples;
+    QPointF m_outlineDocPoint;
+    QPainterPath m_currentOutline;
+    QRectF m_oldOutlineRect;
+    bool m_toForegroundColor;
 
 private:
-    void pickColor(const QPointF &documentPixel, bool fromCurrentNode,
-                   bool toForegroundColor);
-
-    void transformColor(int step);
-    void stepAlpha(float step);
+    QPainterPath tryFixBrushOutline(const QPainterPath &originalOutline);
 
 private:
 
     bool m_specialHoverModifier;
-    QGridLayout *m_optionWidgetLayout;
+    QGridLayout *m_optionsWidgetLayout;
 
     bool m_supportOutline;
 
     /**
      * Used as a switch for pickColor
      */
-    bool m_toForegroundColor;
+
     // used to skip some of the tablet events and don't update the colour that often
     QTimer m_colorPickerDelayTimer;
+    bool m_isOutlineEnabled;
 
 signals:
-    void sigFavoritePaletteCalled(const QPoint&);
     void sigPaintingFinished();
 };
 

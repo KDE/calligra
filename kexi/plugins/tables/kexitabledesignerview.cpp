@@ -220,6 +220,12 @@ KexiTableDesignerView::KexiTableDesignerView(QWidget *parent)
     KexiUtils::connectPushButtonActionForDebugWindow(
         "executeRealAlterTable", this, SLOT(executeRealAlterTable()));
 #endif
+    // setup main menu actions
+    QList<QAction*> mainMenuActions;
+    a = sharedAction("edit_clear_table");
+    mainMenuActions << a;
+
+    setMainMenuActions(mainMenuActions);
 }
 
 KexiTableDesignerView::~KexiTableDesignerView()
@@ -233,7 +239,7 @@ void KexiTableDesignerView::initData()
     //add column data
 // d->data->clear();
     d->data->deleteAllRows();
-    int tableFieldCount = 0;
+    uint tableFieldCount = 0;
     d->primaryKeyExists = false;
 
     if (tempData()->table) {
@@ -241,7 +247,7 @@ void KexiTableDesignerView::initData()
 //not needed  d->sets->clear(tableFieldCount);
 
         //recreate table data rows
-        for (int i = 0; i < tableFieldCount; i++) {
+        for (uint i = 0; i < tableFieldCount; i++) {
             KexiDB::Field *field = tempData()->table->field(i);
             KexiDB::RecordData *record = d->data->createItem();
             if (field->isPrimaryKey()) {
@@ -271,7 +277,7 @@ void KexiTableDesignerView::initData()
 
     //add empty space, at least 2 times more than number of existing fields
     uint fullSize = qMax(d->sets->size(), uint(2 * tableFieldCount));
-    for (int i = tableFieldCount; i < fullSize; i++) {
+    for (uint i = tableFieldCount; i < fullSize; i++) {
 //  KexiDB::RecordData *item = new KexiDB::RecordData(columnsCount);//3 empty fields
         d->data->append(d->data->createItem());
     }
@@ -281,7 +287,7 @@ void KexiTableDesignerView::initData()
 
     //now recreate property sets
     if (tempData()->table) {
-        for (int i = 0; i < tableFieldCount; i++) {
+        for (uint i = 0; i < tableFieldCount; i++) {
             KexiDB::Field *field = tempData()->table->field(i);
             createPropertySet(i, *field);
         }
@@ -405,7 +411,7 @@ KexiTableDesignerView::createPropertySet(int row, const KexiDB::Field& field, bo
 
     set->addProperty(prop = new KoProperty::Property("precision", (int)field.precision()/*200?*/,
                                                      i18n("Precision")));
-#ifdef KEXI_NO_UNFINISHED
+#ifndef KEXI_SHOW_UNFINISHED
     prop->setVisible(false);
 #endif
     set->addProperty(prop = new KoProperty::Property("visibleDecimalPlaces",
@@ -416,7 +422,7 @@ KexiTableDesignerView::createPropertySet(int row, const KexiDB::Field& field, bo
 //! @todo set reasonable default for column width
     set->addProperty(prop = new KoProperty::Property("defaultWidth", QVariant(0) /*field.width()*//*200?*/,
                                                      i18n("Default Width")));
-#ifdef KEXI_NO_UNFINISHED
+#ifndef KEXI_SHOW_UNFINISHED
     prop->setVisible(false);
 #endif
 
@@ -709,7 +715,7 @@ void KexiTableDesignerView::slotBeforeCellChanged(
             //update field caption and name
             propertySetForRecord->changeProperty("caption", newValue);
             propertySetForRecord->changeProperty("name",
-                                                 KexiUtils::string2Identifier(newValue.toString()));
+                                                 KexiUtils::stringToIdentifier(newValue.toString()));
 
             //Child 2 is the name
             /*ChangeFieldPropertyCommand *changeNameCommand =*/
@@ -876,7 +882,7 @@ void KexiTableDesignerView::slotRowUpdated(KexiDB::RecordData *record)
         QString description(record->at(COLUMN_ID_DESC).toString());
 
 //! @todo check uniqueness:
-        QString fieldName(KexiUtils::string2Identifier(fieldCaption));
+        QString fieldName(KexiUtils::stringToIdentifier(fieldCaption));
 
         KexiDB::Field::Type fieldType = KexiDB::intToFieldType(intFieldType);
         uint maxLength = 0;     
@@ -1428,6 +1434,7 @@ KexiDB::SchemaData* KexiTableDesignerView::storeNewData(const KexiDB::SchemaData
     if (res == true) {
         //we've current schema
         tempData()->tableSchemaChangedInPreviousView = true;
+        d->history->clear();
 //not needed; KexiProject emits newItemStored signal //let project know the table is created
 //  KexiMainWindowIface::global()->project()->emitTableCreated(*tempData()->table);
     } else {

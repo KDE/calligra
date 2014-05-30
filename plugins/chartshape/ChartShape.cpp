@@ -555,7 +555,7 @@ ChartShape::ChartShape(KoDocumentResourceManager *resourceManager)
 //FIXME        doc.setResizeMethod(KoTextDocument::AutoResize);
     }
 
-    KoColorBackground *background = new KoColorBackground(Qt::white);
+    QSharedPointer<KoColorBackground> background(new KoColorBackground(Qt::white));
     setBackground(background);
 
     KoShapeStroke *stroke = new KoShapeStroke(0, Qt::black);
@@ -930,21 +930,7 @@ bool ChartShape::loadEmbeddedDocument(KoStore *store,
 
     tmpURL.clear();
 
-    // see KoDocument::insertChild for an explanation what's going on
-    // now :-)
-    /*if (parentDocument()) {
-        KoDocument *parent = parentDocument();
-
-        KParts::PartManager* manager = parent->manager();
-        if (manager && !manager->parts().isEmpty())
-        {
-            if (!manager->parts().contains(d->document)
-                && !parent->isSingleViewMode())
-                manager->addPart(d->document, false);
-        }
-    }*/
-
-    //QApplication::restoreOverrideCursor();
+   //QApplication::restoreOverrideCursor();
 
     return res;
 }
@@ -1022,7 +1008,7 @@ bool ChartShape::loadOdfChartElement(const KoXmlElement &chartElement,
     if (!background()) {
         const QColor color = KoOdfWorkaround::fixMissingFillColor(chartElement, context);
         if (color.isValid()) // invalid color means do not set KoColorBackground but be transparent instead
-            setBackground(new KoColorBackground(color));
+            setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(color)));
     }
 #endif
 

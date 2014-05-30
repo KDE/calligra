@@ -1,7 +1,7 @@
 
 /*  This file is part of the KDE project
 
-    Copyright (c) 2013 Sascha Suelzer <s_suelzer@lavabit.com>
+    Copyright (c) 2013 Sascha Suelzer <s.suelzer@gmail.com>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -28,7 +28,7 @@
 
 #include "kowidgets_export.h"
 
-class KoResourceTagging;
+class KoResourceTagStore;
 
 class KOWIDGETS_EXPORT KoResourceFiltering
 {
@@ -36,12 +36,13 @@ class KOWIDGETS_EXPORT KoResourceFiltering
 public:
     KoResourceFiltering();
     virtual ~KoResourceFiltering();
+    void configure(int filterType, bool enable);
     bool hasFilters() const;
     bool filtersHaveChanged() const;
     void setTagSetFilenames(const QStringList& filenames);
     void setCurrentTag(const QString& tagSet);
     void rebuildCurrentTagFilenames();
-    void setTagObject(KoResourceTagging* tagObject);
+    void setTagStore(KoResourceTagStore* tagObject);
     void setFilters(const QString& searchString);
     QList<KoResource*> filterResources(QList< KoResource* > resources);
     void setInclusions(const QStringList &inclusions);
@@ -52,7 +53,7 @@ private:
     bool presetMatchesSearch(KoResource * resource) const;
     void setChanged();
     bool excludeFilterIsValid(const QString &exclusion);
-    bool matchesResource(const QString &resourceName, const QString &resourceFileName,const QStringList &filterList) const;
+    bool matchesResource(const QStringList& filtered,const QStringList &filterList) const;
     void populateIncludeExcludeFilters(const QStringList& filteredNames);
     void sanitizeExclusionList();
     QStringList tokenizeSearchString(const QString& searchString) const;

@@ -220,8 +220,8 @@ tristate KexiQueryPart::rename(KexiPart::Item &item, const QString& newName)
 KexiQueryPart::TempData::TempData(KexiWindow* window, KexiDB::Connection *conn)
         : KexiWindowData(window)
         , KexiDB::Connection::TableSchemaChangeListenerInterface()
-        , queryChangedInPreviousView(false)
         , m_query(0)
+        , m_queryChangedInPreviousView(false)
 {
     this->conn = conn;
 }
@@ -276,6 +276,16 @@ void KexiQueryPart::TempData::setQuery(KexiDB::QuerySchema *query)
         delete m_query;
     }
     m_query = query;
+}
+
+bool KexiQueryPart::TempData::queryChangedInPreviousView() const
+{
+    return m_queryChangedInPreviousView;
+}
+
+void KexiQueryPart::TempData::setQueryChangedInPreviousView(bool set)
+{
+    m_queryChangedInPreviousView = set;
 }
 
 //----------------

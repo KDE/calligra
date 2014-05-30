@@ -20,9 +20,12 @@
 
 #include <KoColor.h>
 #include <KoAbstractGradient.h>
+#include <KoCompositeOpRegistry.h>
 #include "kis_paintop_preset.h"
 #include "kis_paintop_settings.h"
-#include "kis_pattern.h"
+#include "kis_paintop_registry.h"
+#include <kis_threaded_text_rendering_workaround.h>
+#include "KoPattern.h"
 #include "kis_canvas_resource_provider.h"
 #include "filter/kis_filter_configuration.h"
 #include "kis_image.h"
@@ -45,14 +48,14 @@ struct KisResourcesSnapshot::Private {
     KisPostExecutionUndoAdapter *undoAdapter;
     KoColor currentFgColor;
     KoColor currentBgColor;
-    KisPattern *currentPattern;
+    KoPattern *currentPattern;
     KoAbstractGradient *currentGradient;
     KisPaintOpPresetSP currentPaintOpPreset;
     KisNodeSP currentNode;
     qreal currentExposure;
     KisFilterConfiguration *currentGenerator;
 
-    QPointF axisCenter;
+    QPointF axesCenter;
     bool mirrorMaskHorizontal;
     bool mirrorMaskVertical;
 
@@ -78,16 +81,21 @@ KisResourcesSnapshot::KisResourcesSnapshot(KisImageWSP image, KisPostExecutionUn
 
     m_d->currentFgColor = resourceManager->resource(KoCanvasResourceManager::ForegroundColor).value<KoColor>();
     m_d->currentBgColor = resourceManager->resource(KoCanvasResourceManager::BackgroundColor).value<KoColor>();
-    m_d->currentPattern = static_cast<KisPattern*>(resourceManager->resource(KisCanvasResourceProvider::CurrentPattern).value<void*>());
+    m_d->currentPattern = static_cast<KoPattern*>(resourceManager->resource(KisCanvasResourceProvider::CurrentPattern).value<void*>());
     m_d->currentGradient = static_cast<KoAbstractGradient*>(resourceManager->resource(KisCanvasResourceProvider::CurrentGradient).value<void*>());
+
     m_d->currentPaintOpPreset = resourceManager->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
+#ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
+    KisPaintOpRegistry::instance()->preinitializePaintOpIfNeeded(m_d->currentPaintOpPreset);
+#endif /* HAVE_THREADED_TEXT_RENDERING_WORKAROUND */
+
     m_d->currentExposure = resourceManager->resource(KisCanvasResourceProvider::HdrExposure).toDouble();
     m_d->currentGenerator = static_cast<KisFilterConfiguration*>(resourceManager->resource(KisCanvasResourceProvider::CurrentGeneratorConfiguration).value<void*>());
 
-    m_d->axisCenter = resourceManager->resource(KisCanvasResourceProvider::MirrorAxisCenter).toPointF();
-    if (m_d->axisCenter.isNull()){
+    m_d->axesCenter = resourceManager->resource(KisCanvasResourceProvider::MirrorAxesCenter).toPointF();
+    if (m_d->axesCenter.isNull()){
         QRect bounds = m_d->bounds->bounds();
-        m_d->axisCenter = QPointF(0.5 * bounds.width(), 0.5 * bounds.height());
+        m_d->axesCenter = QPointF(0.5 * bounds.width(), 0.5 * bounds.height());
     }
 
     m_d->mirrorMaskHorizontal = resourceManager->resource(KisCanvasResourceProvider::MirrorHorizontal).toBool();
@@ -119,7 +127,6 @@ KisResourcesSnapshot::~KisResourcesSnapshot()
 
 void KisResourcesSnapshot::setupPainter(KisPainter* painter)
 {
-    painter->setBounds(m_d->bounds->bounds());
     painter->setPaintColor(m_d->currentFgColor);
     painter->setBackgroundColor(m_d->currentBgColor);
     painter->setGenerator(m_d->currentGenerator);
@@ -133,7 +140,7 @@ void KisResourcesSnapshot::setupPainter(KisPainter* painter)
 
     painter->setOpacity(m_d->opacity);
     painter->setCompositeOp(m_d->compositeOp);
-    painter->setMirrorInformation(m_d->axisCenter, m_d->mirrorMaskHorizontal, m_d->mirrorMaskVertical);
+    painter->setMirrorInformation(m_d->axesCenter, m_d->mirrorMaskHorizontal, m_d->mirrorMaskVertical);
 
     painter->setStrokeStyle(m_d->strokeStyle);
     painter->setFillStyle(m_d->fillStyle);
@@ -206,6 +213,11 @@ bool KisResourcesSnapshot::needsIndirectPainting() const
     return !m_d->currentPaintOpPreset->settings()->paintIncremental();
 }
 
+QString KisResourcesSnapshot::indirectPaintingCompositeOp() const
+{
+    return m_d->currentPaintOpPreset->settings()->indirectPaintingCompositeOp();
+}
+
 bool KisResourcesSnapshot::needsAirbrushing() const
 {
     return m_d->currentPaintOpPreset->settings()->isAirbrushing();
@@ -214,6 +226,11 @@ bool KisResourcesSnapshot::needsAirbrushing() const
 int KisResourcesSnapshot::airbrushingRate() const
 {
     return m_d->currentPaintOpPreset->settings()->rate();
+}
+
+void KisResourcesSnapshot::setOpacity(qreal opacity)
+{
+    m_d->opacity = opacity * OPACITY_OPAQUE_U8;
 }
 
 quint8 KisResourcesSnapshot::opacity() const
@@ -226,7 +243,7 @@ const KoCompositeOp* KisResourcesSnapshot::compositeOp() const
     return m_d->compositeOp;
 }
 
-KisPattern* KisResourcesSnapshot::currentPattern() const
+KoPattern* KisResourcesSnapshot::currentPattern() const
 {
     return m_d->currentPattern;
 }
@@ -240,6 +257,12 @@ KoColor KisResourcesSnapshot::currentBgColor() const
 {
     return m_d->currentBgColor;
 }
+
+KisPaintOpPresetSP KisResourcesSnapshot::currentPaintOpPreset() const
+{
+    return m_d->currentPaintOpPreset;
+}
+
 
 QBitArray KisResourcesSnapshot::channelLockFlags() const
 {

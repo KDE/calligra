@@ -153,7 +153,6 @@ private:
     QVBoxLayout *lyr;
 };
 
-//#include <qimageblitz/qimageblitz.h>
 #include <kfadewidgeteffect.h>
 #include <QStyleOptionMenuItem>
 #include <QGraphicsOpacityEffect>
@@ -164,7 +163,7 @@ private:
 class EmptyMenuContentWidget : public QWidget
 {
 public:
-    EmptyMenuContentWidget(QWidget* parent = 0)
+    explicit EmptyMenuContentWidget(QWidget* parent = 0)
      : QWidget(parent)
     {
         setAutoFillBackground(true);
@@ -189,7 +188,7 @@ public:
 class TopLineKexiMainMenuWidget : public QWidget
 {
 public:
-    TopLineKexiMainMenuWidget(QWidget* parent)
+    explicit TopLineKexiMainMenuWidget(QWidget* parent)
      : QWidget(parent) 
     {
         setAttribute(Qt::WA_TransparentForMouseEvents, true);
@@ -231,7 +230,7 @@ class KexiFadeWidgetEffect : public KFadeWidgetEffect
 {
     Q_OBJECT
 public:
-    KexiFadeWidgetEffect(QWidget *destWidget, int duration = 250)
+    explicit KexiFadeWidgetEffect(QWidget *destWidget, int duration = 250)
     : KFadeWidgetEffect(destWidget)
     , m_duration(duration)
     {
@@ -246,7 +245,9 @@ private:
 class KexiMenuWidgetStyle : public KexiUtils::StyleProxy
 {
 public:
-    explicit KexiMenuWidgetStyle(QStyle *style) : KexiUtils::StyleProxy(style) {
+    explicit KexiMenuWidgetStyle(QStyle *style, QObject *parent = 0)
+        : KexiUtils::StyleProxy(style, parent)
+    {
     }
     virtual ~KexiMenuWidgetStyle() {
     }
@@ -282,7 +283,7 @@ class KexiMainMenu : public QWidget
 {
     Q_OBJECT
 public:
-    KexiMainMenu(KexiTabbedToolBar *toolBar, QWidget* parent = 0) : QWidget(parent),
+    explicit KexiMainMenu(KexiTabbedToolBar *toolBar, QWidget* parent = 0) : QWidget(parent),
         m_topLineHeight(5), m_toolBar(toolBar), m_initialized(false)
     {
         //setAutoFillBackground(true); // to cover the lower layer
@@ -410,9 +411,8 @@ protected:
             if (KDE::version() < KDE_MAKE_VERSION(4, 8, 0) // a fix is apparently needed for glitch in KDE < 4.8
                 && m_menuWidget->style()->objectName() == QLatin1String("oxygen"))
             {
-                KexiMenuWidgetStyle *customStyle = new KexiMenuWidgetStyle(m_menuWidget->style());
+                KexiMenuWidgetStyle *customStyle = new KexiMenuWidgetStyle(m_menuWidget->style(), this);
                 m_menuWidget->setStyle(customStyle);
-                customStyle->setParent(this);
             }
             m_menuWidget->installEventFilter(this);
             m_menuWidget->setFocusPolicy(Qt::StrongFocus);
@@ -562,7 +562,6 @@ public:
 
 #include <ktabbar.h>
 #include <QTabBar>
-#include <QPainter>
 
 class KexiTabbedToolBarStyle;
 
@@ -586,7 +585,9 @@ protected:
 class KexiTabbedToolBarStyle : public KexiUtils::StyleProxy
 {
 public:
-    explicit KexiTabbedToolBarStyle(QStyle *style) : KexiUtils::StyleProxy(style) {
+    explicit KexiTabbedToolBarStyle(QStyle *style, QObject *parent = 0)
+      : KexiUtils::StyleProxy(style, parent)
+    {
         updateLogo();
     }
     virtual ~KexiTabbedToolBarStyle() {
@@ -744,8 +745,7 @@ KexiTabbedToolBarTabBar::KexiTabbedToolBarTabBar(QWidget *parent)
     : KTabBar(parent)
 {
     setObjectName("tabbar");
-    customStyle = new KexiTabbedToolBarStyle(style());
-    customStyle->setParent(this);
+    customStyle = new KexiTabbedToolBarStyle(style(), this);
     setStyle(customStyle);
     installEventFilter(parent);
     QWidget *mainWindow = KexiMainWindowIface::global()->thisWidget();
@@ -1110,10 +1110,10 @@ void KexiTabbedToolBar::Private::debugToolbars() const
 
 void KexiTabbedToolBar::Private::showTab(const QString& name)
 {
-    kDebug() << "name:" << name;
-    kDebug() << "toolbarsForName.value(name):" << toolbarsForName.value(name);
-    kDebug() << "toolbarsIndexForName.value(name):" << toolbarsIndexForName.value(name);
-    kDebug() << "q->indexOf(toolbarsForName.value(name))" << q->indexOf(toolbarsForName.value(name));
+//    kDebug() << "name:" << name;
+//    kDebug() << "toolbarsForName.value(name):" << toolbarsForName.value(name);
+//    kDebug() << "toolbarsIndexForName.value(name):" << toolbarsIndexForName.value(name);
+//    kDebug() << "q->indexOf(toolbarsForName.value(name))" << q->indexOf(toolbarsForName.value(name));
 #ifndef NDEBUG
     //debugToolbars();
 #endif
@@ -1822,7 +1822,7 @@ public:
         }
         const bool visible = (viewMode == Kexi::DesignViewMode)
             && ((currentWindow && currentWindow->propertySet()) || (info && info->isPropertyEditorAlwaysVisibleInDesignMode()));
-        kDebug() << "visible == " << visible;
+        //kDebug() << "visible == " << visible;
         enable_slotPropertyEditorVisibilityChanged = false;
         if (visible && propertyEditorCollapsed) { // used when we're switching back to a window with propeditor available but collapsed
             propEditorDockWidget->setVisible(!visible);
@@ -1861,8 +1861,7 @@ public:
     template<class type>
     type *openedCustomObjectsForItem(KexiPart::Item* item, const char* name) {
         if (!item || !name) {
-            kWarning() <<
-            "KexiMainWindow::Private::openedCustomObjectsForItem(): !item || !name";
+            kWarning() << "!item || !name";
             return 0;
         }
         QByteArray key(QByteArray::number(item->identifier()) + name);

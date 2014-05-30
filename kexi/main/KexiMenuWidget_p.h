@@ -50,7 +50,7 @@ class ClickableLogoArea : public QAbstractButton
 {
     Q_OBJECT
 public:
-    ClickableLogoArea(QWidget *parent = 0);
+    explicit ClickableLogoArea(QWidget *parent = 0);
 protected slots:
     void slotClicked();
 protected:

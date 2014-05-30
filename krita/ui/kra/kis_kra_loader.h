@@ -20,6 +20,7 @@
 #define KIS_KRA_LOADER_H
 
 class QString;
+class QStringList;
 
 #include "KoXmlReaderForward.h"
 class KoStore;
@@ -30,13 +31,13 @@ class KoColorSpace;
 class KisPaintingAssistant;
 
 #include <kis_types.h>
-
+#include <krita_export.h>
 /**
  * Load old-style 1.x .kra files. Updated for 2.0, let's try to stay
  * compatible. But 2.0 won't be able to save 1.x .kra files unless we
  * implement an export filter.
  */
-class KisKraLoader
+class KRITAUI_EXPORT KisKraLoader
 {
 
 public:
@@ -57,6 +58,9 @@ public:
 
     // it's neater to follow the same design as with selectedNodes, so let's have a getter here
     QList<KisPaintingAssistant*> assistants() const;
+
+    /// if empty, loading didn't fail...
+    QStringList errorMessages() const;
 
 private:
 

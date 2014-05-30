@@ -39,7 +39,7 @@ public:
 
     virtual ~KWPart();
 
-    QGraphicsItem *createCanvasItem(); ///reimplemented
+    QGraphicsItem *createCanvasItem(KoDocument *document); ///reimplemented
 
     void setDocument(KWDocument *document);
     KWDocument *document() const;
@@ -47,18 +47,18 @@ public:
     /// reimplemented from super
     QList<KoPart::CustomDocumentWidgetItem> createCustomDocumentWidgets(QWidget *parent);
 
+    /// reimplemented from super
+    virtual KoMainWindow *createMainWindow();
+
     void showStartUpWidget(KoMainWindow *parent, bool alwaysShow = false);
-
-    KoDocumentInfoDlg* createDocumentInfoDialog(QWidget *parent, KoDocumentInfo *docInfo) const;
-
 
 private slots:
      void showErrorAndDie();
 
 protected:
 
-    virtual KoView *createViewInstance(QWidget *parent); ///reimplemented
-    virtual void setupViewInstance(KWView *view);
+    virtual KoView *createViewInstance(KoDocument *document, QWidget *parent); ///reimplemented
+    virtual void setupViewInstance(KoDocument *document, KWView *view);
 
     KWDocument *m_document;
 };

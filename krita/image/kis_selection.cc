@@ -36,7 +36,7 @@ struct KisSelection::Private {
     }
 
     // used for forwarding setDirty signals only
-    KisNodeSP parentNode;
+    KisNodeWSP parentNode;
 
     bool isVisible; //false is the selection decoration should not be displayed
     KisDefaultBoundsBaseSP defaultBounds;
@@ -98,14 +98,14 @@ KisSelection::~KisSelection()
     delete m_d;
 }
 
-void KisSelection::setParentNode(KisNodeSP node)
+void KisSelection::setParentNode(KisNodeWSP node)
 {
     m_d->parentNode = node;
     m_d->pixelSelection->setParentNode(node);
 }
 
 // for testing purposes only
-KisNodeSP KisSelection::parentNode() const
+KisNodeWSP KisSelection::parentNode() const
 {
     return m_d->parentNode;
 }
@@ -165,7 +165,7 @@ void KisSelection::setShapeSelection(KisSelectionComponent* shapeSelection)
     m_d->shapeSelection = shapeSelection;
 }
 
-KisPaintDeviceSP KisSelection::projection() const
+KisPixelSelectionSP KisSelection::projection() const
 {
     return m_d->pixelSelection;
 }
@@ -189,7 +189,13 @@ void KisSelection::updateProjection()
 
 void KisSelection::setVisible(bool visible)
 {
+    bool needsNotification = visible != m_d->isVisible;
+
     m_d->isVisible = visible;
+
+    if (needsNotification) {
+        notifySelectionChanged();
+    }
 }
 
 bool KisSelection::isVisible()
@@ -272,7 +278,7 @@ KUndo2Command* KisSelection::flatten()
 
 void KisSelection::notifySelectionChanged()
 {
-    KisNodeSP parentNode;
+    KisNodeWSP parentNode;
     if (!(parentNode = this->parentNode())) return;
 
     KisNodeGraphListener *listener;

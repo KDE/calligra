@@ -41,6 +41,7 @@ class KAction;
 //! @short General Utils
 namespace KexiUtils
 {
+
 //! \return true if \a o has parent \a par.
 inline bool hasParent(QObject* par, QObject* o)
 {
@@ -89,19 +90,6 @@ inline type findParentByType(QObject* o)
     return 0;
 }
 
-/* //! Const version of findParent()
-  template<class type>
-  inline const type findParentConst(const QObject* o, const char* className = 0)
-  {
-    if (!o) // || !className || className[0]=='\0')
-      return 0;
-    while ((o=o->parent())) {
-      if (dynamic_cast< type >(o) && (!className || o->inherits(className)))
-        return dynamic_cast< type >(o);
-    }
-    return 0;
-  }*/
-
 /*! \return first found child of \a o, inheriting \a className.
  If objName is 0 (the default), all object names match.
  Returned pointer type is casted. */
@@ -116,24 +104,10 @@ inline type findFirstChild(QObject *o, const char* className, const char* objNam
     return ::qobject_cast< type >(findFirstQObjectChild(o, className, objName));
 }
 
-#if 0 //2.0: use QMetaObject::indexOfProperty()
-//! Finds property name and returns its index; otherwise returns -1.
-//! Like QMetaObject::indexOfProperty() but also looks at superclasses.
-KEXIUTILS_EXPORT int indexOfPropertyWithSuperclasses(
-    const QObject *object, const char* name);
-#endif
-
 //! Finds property for name \a name and object \a object returns it index;
 //! otherwise returns a null QMetaProperty.
 KEXIUTILS_EXPORT QMetaProperty findPropertyWithSuperclasses(const QObject* object,
         const char* name);
-
-#if 0 //2.0: use QMetaObject::property()
-//! Finds property for index \a index and object \a object returns it index;
-//! otherwise returns a null QMetaProperty.
-KEXIUTILS_EXPORT QMetaProperty findPropertyWithSuperclasses(const QObject* object,
-        int index);
-#endif
 
 //! \return true is \a object object is of class name \a className
 inline bool objectIsA(QObject* object, const char* className)
@@ -209,7 +183,7 @@ public:
     WaitCursorRemover();
     ~WaitCursorRemover();
 private:
-    bool m_reactivateCursor : 1;
+    bool m_reactivateCursor;
 };
 
 /*! \return filter string in QFileDialog format for a mime type pointed by \a mime
@@ -228,7 +202,7 @@ KEXIUTILS_EXPORT QString fileDialogFilterStrings(const QStringList& mimeStrings,
 
 /*! A global setting for minimal readable font.
  \a init is a widget that should be passed if no qApp->mainWidget() is available yet.
- The size of font is not smaller than he one returned by
+ The size of font is not smaller than the one returned by
  KGlobalSettings::smallestReadableFont(). */
 KEXIUTILS_EXPORT QFont smallFont(QWidget *init = 0);
 
@@ -303,12 +277,6 @@ KEXIUTILS_EXPORT void simpleDecrypt(QString& string);
 #ifdef KEXI_DEBUG_GUI
 //! Creates debug window for convenient debugging output
 KEXIUTILS_EXPORT QWidget *createDebugWindow(QWidget *parent);
-
-//! Adds debug line for for KexiDB database
-//KEXIUTILS_EXPORT void addKexiDBDebug(const QString& text);
-
-//! Adds debug line for for Table Designer (Alter Table actions)
-//KEXIUTILS_EXPORT void addAlterTableActionDebug(const QString& text, int nestingLevel = 0);
 
 //! Connects push button action to \a receiver and its \a slot. This allows to execute debug-related actions
 //! using buttons displayed in the debug window.
@@ -452,7 +420,7 @@ public:
         m_autoDelete = set;
     }
 private:
-    bool m_autoDelete : 1;
+    bool m_autoDelete;
 };
 
 //! Helper that sets given variable to specified value on destruction
@@ -546,10 +514,47 @@ public:
     PaintBlocker(QWidget* parent);
     void setEnabled(bool set);
     bool enabled() const;
+protected:
     virtual bool eventFilter(QObject* watched, QEvent* event);
 private:
     bool m_enabled;
 };
+
+/*!
+ * \short Options for opening of hyperlinks
+ * \sa openHyperLink()
+ */
+class KEXIUTILS_EXPORT OpenHyperlinkOptions : public QObject
+{
+    Q_OBJECT
+    Q_ENUMS(HyperlinkTool)
+
+public:
+
+    /*!
+     * A tool used for opening hyperlinks
+     */
+    enum HyperlinkTool{
+        DefaultHyperlinkTool, /*!< Default tool for a given type of the hyperlink */
+        BrowserHyperlinkTool, /*!< Opens hyperlink in a browser */
+        MailerHyperlinkTool /*!< Opens hyperlink in a default mailer */
+    };
+
+    OpenHyperlinkOptions() :
+        tool(DefaultHyperlinkTool)
+      , allowExecutable(false)
+      , allowRemote(false)
+    {}
+
+    HyperlinkTool tool;
+    bool allowExecutable;
+    bool allowRemote;
+};
+
+/*!
+ * Opens the given \a url using \a options
+*/
+KEXIUTILS_EXPORT void openHyperLink(const KUrl &url, QWidget *parent, const OpenHyperlinkOptions &options);
 
 } //namespace KexiUtils
 

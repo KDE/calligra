@@ -24,16 +24,16 @@
 class KisImageBrushesPipe : public KisBrushesPipe<KisGbrBrush>
 {
 
-/*
-   pre and post are split because:
+    /*
+       pre and post are split because:
 
-21:12:20 < dmitryK> boud: i guess it was somehow related to the fact that the maskWidth/maskHeight should
-                    correspond to the size of the mask returned by paintDevice()
-21:13:33 < dmitryK> boud: the random stuff is called once per brush->paintDevice() call, after the device is
-                    returned to the paint op, that is "preparing the randomness for the next call"
-21:14:16 < dmitryK> boud: and brushesPipe->currentBrush() always returning the same brush for any particular
-                    paintInfo.
-*/
+    21:12:20 < dmitryK> boud: i guess it was somehow related to the fact that the maskWidth/maskHeight should
+                        correspond to the size of the mask returned by paintDevice()
+    21:13:33 < dmitryK> boud: the random stuff is called once per brush->paintDevice() call, after the device is
+                        returned to the paint op, that is "preparing the randomness for the next call"
+    21:14:16 < dmitryK> boud: and brushesPipe->currentBrush() always returning the same brush for any particular
+                        paintInfo.
+    */
 protected:
     static int selectPre(KisParasite::SelectionMode mode,
                          int index, int rank,
@@ -51,12 +51,9 @@ protected:
             break;
         case KisParasite::Angular:
             // + m_d->PI_2 to be compatible with the gimp
-            angle = info.angle() + M_PI_2;
-            // We need to be in the [0..2*Pi[ interval so that we can more nicely select it
-            if (angle < 0)
-                angle += 2.0 * M_PI;
-            else if (angle > 2.0 * M_PI)
-                angle -= 2.0 * M_PI;
+            angle = info.drawingAngle() + M_PI_2;
+            angle = normalizeAngle(angle);
+
             index = static_cast<int>(angle / (2.0 * M_PI) * rank);
             break;
         case KisParasite::TiltX:
@@ -74,7 +71,7 @@ protected:
     }
 
     static int selectPost(KisParasite::SelectionMode mode,
-                      int index, int rank) {
+                          int index, int rank) {
 
         switch (mode) {
         case KisParasite::Constant: break;
@@ -132,20 +129,20 @@ public:
     }
 
     void setUseColorAsMask(bool useColorAsMask) {
-        foreach (KisGbrBrush *brush, m_brushes) {
+        foreach(KisGbrBrush * brush, m_brushes) {
             brush->setUseColorAsMask(useColorAsMask);
         }
     }
 
     void makeMaskImage() {
-        foreach (KisGbrBrush *brush, m_brushes) {
+        foreach(KisGbrBrush * brush, m_brushes) {
             brush->makeMaskImage();
         }
     }
 
     bool saveToDevice(QIODevice* dev) const {
-        foreach (KisGbrBrush *brush, m_brushes) {
-            if(!brush->saveToDevice(dev)) {
+        foreach(KisGbrBrush * brush, m_brushes) {
+            if (!brush->saveToDevice(dev)) {
                 return false;
             }
         }
@@ -157,23 +154,22 @@ private:
 };
 
 
-struct KisImagePipeBrush::Private
-{
+struct KisImagePipeBrush::Private {
 public:
     KisImageBrushesPipe brushesPipe;
 };
 
 KisImagePipeBrush::KisImagePipeBrush(const QString& filename)
-        : KisGbrBrush(filename)
-        , m_d(new Private())
+    : KisGbrBrush(filename)
+    , m_d(new Private())
 {
 }
 
 KisImagePipeBrush::KisImagePipeBrush(const QString& name, int w, int h,
                                      QVector< QVector<KisPaintDevice*> > devices,
                                      QVector<KisParasite::SelectionMode > modes)
-        : KisGbrBrush("")
-        , m_d(new Private())
+    : KisGbrBrush("")
+    , m_d(new Private())
 {
     Q_ASSERT(devices.count() == modes.count());
     Q_ASSERT(devices.count() > 0);
@@ -197,12 +193,12 @@ KisImagePipeBrush::KisImagePipeBrush(const QString& name, int w, int h,
         m_d->brushesPipe.addBrush(new KisGbrBrush(devices.at(0).at(i), 0, 0, w, h));
     }
 
-    setImage(m_d->brushesPipe.firstBrush()->image());
+    setBrushTipImage(m_d->brushesPipe.firstBrush()->brushTipImage());
 }
 
 KisImagePipeBrush::KisImagePipeBrush(const KisImagePipeBrush& rhs)
-        : KisGbrBrush(rhs),
-        m_d(new Private)
+    : KisGbrBrush(rhs),
+      m_d(new Private)
 {
     *m_d = *(rhs.m_d);
 }
@@ -224,6 +220,7 @@ bool KisImagePipeBrush::load()
 
 bool KisImagePipeBrush::initFromData(const QByteArray &data)
 {
+    if (data.size() == 0) return false;
     // XXX: this doesn't correctly load the image pipe brushes yet.
 
     // XXX: This stuff is in utf-8, too.
@@ -260,7 +257,7 @@ bool KisImagePipeBrush::initFromData(const QByteArray &data)
 
 
     for (int brushIndex = 0;
-         brushIndex < numOfBrushes && i < data.size(); brushIndex++) {
+            brushIndex < numOfBrushes && i < data.size(); brushIndex++) {
 
         KisGbrBrush* brush = new KisGbrBrush(name() + '_' + QString().setNum(brushIndex),
                                              data,
@@ -274,7 +271,7 @@ bool KisImagePipeBrush::initFromData(const QByteArray &data)
         setSpacing(m_d->brushesPipe.lastBrush()->spacing());
         setWidth(m_d->brushesPipe.firstBrush()->width());
         setHeight(m_d->brushesPipe.firstBrush()->height());
-        setImage(m_d->brushesPipe.firstBrush()->image());
+        setBrushTipImage(m_d->brushesPipe.firstBrush()->brushTipImage());
     }
 
     return true;
@@ -329,9 +326,9 @@ void KisImagePipeBrush::notifyCachedDabPainted()
 }
 
 void KisImagePipeBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst, KisBrush::ColoringInformation* coloringInformation,
-                                                            double scaleX, double scaleY, double angle, const KisPaintInformation& info,
-                                                            double subPixelX , double subPixelY,
-                                                            qreal softnessFactor) const
+        double scaleX, double scaleY, double angle, const KisPaintInformation& info,
+        double subPixelX , double subPixelY,
+        qreal softnessFactor) const
 {
     m_d->brushesPipe.generateMaskAndApplyMaskOrCreateDab(dst, coloringInformation, scaleX, scaleY, angle, info, subPixelX, subPixelY, softnessFactor);
 }
@@ -373,11 +370,8 @@ const KisBoundary* KisImagePipeBrush::boundary() const
 
 bool KisImagePipeBrush::canPaintFor(const KisPaintInformation& info)
 {
-    if (info.movement().isMuchSmallerThan(1) // FIXME the 1 here is completely arbitrary.
-            // What is the correct order of magnitude?
-            && m_d->brushesPipe.parasite().needsMovement)
-        return false;
-    return true;
+    return !m_d->brushesPipe.parasite().needsMovement ||
+           info.drawingDistance() >= 0.5;
 }
 
 KisImagePipeBrush* KisImagePipeBrush::clone() const

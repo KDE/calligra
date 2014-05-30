@@ -21,7 +21,7 @@
 #include "kis_group_layer.h"
 
 #include <KoIcon.h>
-#include <KoCompositeOp.h>
+#include <KoCompositeOpRegistry.h>
 #include <KoColorSpace.h>
 
 #include "kis_types.h"
@@ -151,7 +151,8 @@ void KisGroupLayer::resetCache(const KoColorSpace *colorSpace)
         KisPaintDeviceSP dev = new KisPaintDevice(this, colorSpace, new KisDefaultBounds(image()));
         dev->setX(m_d->x);
         dev->setY(m_d->y);
-        quint8* defaultPixel = colorSpace->allocPixelBuffer(1);
+        quint8* defaultPixel = new quint8[colorSpace->pixelSize()];
+
         colorSpace->convertPixelsTo(m_d->paintDevice->defaultPixel(), defaultPixel, colorSpace, 1,
                                     KoColorConversionTransformation::InternalRenderingIntent,
                                     KoColorConversionTransformation::InternalConversionFlags);
@@ -186,16 +187,22 @@ KisPaintDeviceSP KisGroupLayer::tryObligeChild() const
     const KisLayer *child = onlyMeaningfulChild();
 
     if (child &&
-            child->channelFlags().isEmpty() &&
-            child->projection() &&
-            child->visible() &&
-            (child->compositeOpId() == COMPOSITE_OVER ||
-             child->compositeOpId() == COMPOSITE_ALPHA_DARKEN ||
-             child->compositeOpId() == COMPOSITE_COPY) &&
-            child->opacity() == OPACITY_OPAQUE_U8 &&
-            *child->projection()->colorSpace() == *colorSpace()) {
+        child->channelFlags().isEmpty() &&
+        child->projection() &&
+        child->visible() &&
+        (child->compositeOpId() == COMPOSITE_OVER ||
+         child->compositeOpId() == COMPOSITE_ALPHA_DARKEN ||
+         child->compositeOpId() == COMPOSITE_COPY) &&
+        child->opacity() == OPACITY_OPAQUE_U8 &&
+        *child->projection()->colorSpace() == *colorSpace()) {
 
-        return child->projection();
+        quint8 defaultOpacity =
+            m_d->paintDevice->colorSpace()->opacityU8(
+                m_d->paintDevice->defaultPixel());
+
+        if(defaultOpacity == OPACITY_TRANSPARENT_U8) {
+            return child->projection();
+        }
     }
 
     return 0;

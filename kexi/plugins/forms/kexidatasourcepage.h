@@ -38,7 +38,7 @@ class KEXIFORMUTILS_EXPORT KexiDataSourcePage : public KexiPropertyPaneViewBase
     Q_OBJECT
 
 public:
-    KexiDataSourcePage(QWidget *parent);
+    explicit KexiDataSourcePage(QWidget *parent);
     virtual ~KexiDataSourcePage();
 
 /*2.0    KexiDataSourceComboBox* formDataSourceCombo() const {

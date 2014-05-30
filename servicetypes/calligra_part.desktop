@@ -12,6 +12,7 @@ Comment[de]=Calligra-Komponente
 Comment[el]=Συστατικό Calligra
 Comment[es]=Componente de Calligra
 Comment[et]=Calligra komponent
+Comment[eu]=Calligra osagaia
 Comment[fi]=Calligra-osa
 Comment[fr]=Composant gestion de projets de Calligra
 Comment[gl]=Compoñente para Calligra.
@@ -19,6 +20,7 @@ Comment[hu]=Calligra komponens
 Comment[it]=Componente di Calligra
 Comment[ja]=Calligra コンポーネント
 Comment[kk]=Calligra-ның компоненті
+Comment[ko]=Calligra 구성 요소
 Comment[mr]=कॅलिग्रा घटक
 Comment[nb]=Calligra-komponent
 Comment[nds]=Calligra-Komponent
@@ -47,5 +49,3 @@ Type=QString
 [PropertyDef::X-KDE-ExtraNativeMimeTypes]
 Type=QStringList
 
-[PropertyDef::X-KDE-NOTKoDocumentEmbeddable]
-Type=bool

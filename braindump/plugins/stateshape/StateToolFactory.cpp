@@ -27,7 +27,7 @@
 StateToolFactory::StateToolFactory()
     : KoToolFactoryBase("StateToolFactoryID")
 {
-    setToolTip(i18n("State Tool"));
+    setToolTip(i18n("State editing"));
     setToolType(dynamicToolType());
     setIconName(koIconNameCStr("statetool"));
     setPriority(1);

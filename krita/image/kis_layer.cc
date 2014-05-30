@@ -29,7 +29,7 @@
 #include <QMutexLocker>
 
 #include <KoProperties.h>
-#include <KoCompositeOp.h>
+#include <KoCompositeOpRegistry.h>
 #include <KoColorSpace.h>
 
 #include "kis_debug.h"
@@ -184,13 +184,17 @@ void KisLayer::setSectionModelProperties(const KoDocumentSectionModel::PropertyL
 
 void KisLayer::disableAlphaChannel(bool disable)
 {
-    if(m_d->channelFlags.isEmpty())
-        m_d->channelFlags = colorSpace()->channelFlags(true, true);
+    QBitArray newChannelFlags = m_d->channelFlags;
+
+    if(newChannelFlags.isEmpty())
+        newChannelFlags = colorSpace()->channelFlags(true, true);
 
     if(disable)
-        m_d->channelFlags &= colorSpace()->channelFlags(true, false);
+        newChannelFlags &= colorSpace()->channelFlags(true, false);
     else
-        m_d->channelFlags |= colorSpace()->channelFlags(false, true);
+        newChannelFlags |= colorSpace()->channelFlags(false, true);
+
+    setChannelFlags(newChannelFlags);
 }
 
 bool KisLayer::alphaChannelDisabled() const
@@ -203,7 +207,14 @@ bool KisLayer::alphaChannelDisabled() const
 void KisLayer::setChannelFlags(const QBitArray & channelFlags)
 {
     Q_ASSERT(channelFlags.isEmpty() ||((quint32)channelFlags.count() == colorSpace()->channelCount()));
-    m_d->channelFlags = channelFlags;
+
+    if (!channelFlags.isEmpty() &&
+        channelFlags == QBitArray(channelFlags.size(), true)) {
+
+        m_d->channelFlags.clear();
+    } else {
+        m_d->channelFlags = channelFlags;
+    }
 }
 
 QBitArray & KisLayer::channelFlags() const
@@ -267,12 +278,12 @@ KisSelectionMaskSP KisLayer::selectionMask() const
     KoProperties properties;
     properties.setProperty("active", true);
     QList<KisNodeSP> masks = childNodes(QStringList("KisSelectionMask"), properties);
-    Q_ASSERT(masks.size() <= 1); // only one active mask at a time
 
-    //finds the active selection mask
-    if (masks.size() == 1) {
-        KisSelectionMaskSP selectionMask = dynamic_cast<KisSelectionMask*>(masks[0].data());
-        return selectionMask;
+    // return the first visible mask
+    foreach (KisNodeSP mask, masks) {
+        if (mask->visible()) {
+            return dynamic_cast<KisSelectionMask*>(mask.data());
+        }
     }
     return 0;
 }

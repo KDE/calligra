@@ -60,10 +60,10 @@ public:
     KoResource* currentResource();
     /// Sets the visibility of tagging klineEdits
     void showTaggingBar( bool showSearchBar, bool showOpBar );
-    void enableContextMenu(bool enable);
-
 
     KoResourceItemChooser *itemChooser();
+
+    void setPresetFilter(const QString& paintOpId);
 
 signals:
     void resourceSelected(KoResource * resource);
@@ -78,7 +78,7 @@ private:
     KoResourceItemChooser *m_chooser;
     KisPresetDelegate* m_delegate;
     ViewMode m_mode;
-    KoAbstractResourceServerAdapter * m_adapter;
+    QSharedPointer<KoAbstractResourceServerAdapter> m_adapter;
 };
 
 #endif // KIS_ITEM_CHOOSER_H_

@@ -54,7 +54,7 @@
 #include <KoIcon.h>
 #include <KoDocumentSectionView.h>
 #include <KoColorSpace.h>
-#include <KoCompositeOp.h>
+#include <KoCompositeOpRegistry.h>
 
 #include <kis_types.h>
 #include <kis_image.h>
@@ -154,59 +154,63 @@ KisLayerBox::KisLayerBox()
         actions[i]->setActionGroup(group);
     }
 
-    m_wdgLayerBox->bnAdd->setIcon(koIcon("list-add"));
+    m_wdgLayerBox->bnAdd->setIcon(koIcon("addlayer"));
 
     m_wdgLayerBox->bnViewMode->setMenu(m_viewModeMenu);
     m_wdgLayerBox->bnViewMode->setPopupMode(QToolButton::InstantPopup);
     m_wdgLayerBox->bnViewMode->setIcon(koIcon("view-choose"));
     m_wdgLayerBox->bnViewMode->setText(i18n("View mode"));
 
-    m_wdgLayerBox->bnDelete->setIcon(koIcon("list-remove"));
+    m_wdgLayerBox->bnDelete->setIcon(koIcon("deletelayer"));
     m_wdgLayerBox->bnDelete->setIconSize(QSize(22, 22));
 
     m_wdgLayerBox->bnRaise->setEnabled(false);
-    m_wdgLayerBox->bnRaise->setIcon(koIcon("go-up"));
+    m_wdgLayerBox->bnRaise->setIcon(koIcon("arrowupblr"));
     m_wdgLayerBox->bnRaise->setIconSize(QSize(22, 22));
 
     m_wdgLayerBox->bnLower->setEnabled(false);
-    m_wdgLayerBox->bnLower->setIcon(koIcon("go-down"));
+    m_wdgLayerBox->bnLower->setIcon(koIcon("arrowdown"));
     m_wdgLayerBox->bnLower->setIconSize(QSize(22, 22));
 
     m_wdgLayerBox->bnLeft->setEnabled(true);
-    m_wdgLayerBox->bnLeft->setIcon(koIcon("arrow-left"));
+    m_wdgLayerBox->bnLeft->setIcon(koIcon("removefromfolder"));
     m_wdgLayerBox->bnLeft->setIconSize(QSize(22, 22));
 
     m_wdgLayerBox->bnRight->setEnabled(true);
-    m_wdgLayerBox->bnRight->setIcon(koIcon("arrow-right"));
+    m_wdgLayerBox->bnRight->setIcon(koIcon("addtofolder"));
     m_wdgLayerBox->bnRight->setIconSize(QSize(22, 22));
 
-    m_wdgLayerBox->bnProperties->setIcon(koIcon("document-properties"));
+    m_wdgLayerBox->bnProperties->setIcon(koIcon("properties"));
     m_wdgLayerBox->bnProperties->setIconSize(QSize(22, 22));
 
-    m_wdgLayerBox->bnDuplicate->setIcon(koIcon("edit-copy"));
+    m_wdgLayerBox->bnDuplicate->setIcon(koIcon("duplicatelayer"));
     m_wdgLayerBox->bnDuplicate->setIconSize(QSize(22, 22));
 
-    m_removeAction  = new ButtonAction(m_wdgLayerBox->bnDelete, koIcon("edit-delete"), i18n("&Remove Layer"), this);
+    m_removeAction  = new ButtonAction(m_wdgLayerBox->bnDelete, koIcon("deletelayer"), i18n("&Remove Layer"), this);
     m_removeAction->setActivationFlags(KisAction::ACTIVE_NODE);
     m_removeAction->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
+    m_removeAction->setObjectName("remove_layer");
     connect(m_removeAction, SIGNAL(triggered()), this, SLOT(slotRmClicked()));
     m_actions.append(m_removeAction);
 
     KisAction* action  = new ButtonAction(m_wdgLayerBox->bnLeft, this);
     action->setActivationFlags(KisAction::ACTIVE_NODE);
     action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
+    action->setObjectName("move_layer_left");
     connect(action, SIGNAL(triggered()), this, SLOT(slotLeftClicked()));
     m_actions.append(action);
 
     action  = new ButtonAction(m_wdgLayerBox->bnRight, this);
     action->setActivationFlags(KisAction::ACTIVE_NODE);
     action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
+    action->setObjectName("move_layer_right");
     connect(action, SIGNAL(triggered()), this, SLOT(slotRightClicked()));
     m_actions.append(action);
 
-    m_propertiesAction  = new ButtonAction(m_wdgLayerBox->bnProperties, koIcon("document-properties"), i18n("&Properties..."),this);
+    m_propertiesAction  = new ButtonAction(m_wdgLayerBox->bnProperties, koIcon("properties"), i18n("&Properties..."),this);
     m_propertiesAction->setActivationFlags(KisAction::ACTIVE_NODE);
     m_propertiesAction->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
+    m_propertiesAction->setObjectName("layer_properties");
     connect(m_propertiesAction, SIGNAL(triggered()), this, SLOT(slotPropertiesClicked()));
     m_actions.append(m_propertiesAction);
 
@@ -215,6 +219,7 @@ KisLayerBox::KisLayerBox()
     connect(m_wdgLayerBox->bnLower, SIGNAL(clicked()), SLOT(slotRaiseClicked()));
     // END NOTE
 
+    m_wdgLayerBox->doubleOpacity->setRange(0, 100, 0);
     connect(m_wdgLayerBox->doubleOpacity, SIGNAL(valueChanged(qreal)), SLOT(slotOpacitySliderMoved(qreal)));
     connect(&m_delayTimer, SIGNAL(timeout()), SLOT(slotOpacityChanged()));
 
@@ -222,6 +227,7 @@ KisLayerBox::KisLayerBox()
 
     m_selectOpaque = new KisAction(i18n("&Select Opaque"), this);
     m_selectOpaque->setActivationFlags(KisAction::ACTIVE_LAYER);
+    m_selectOpaque->setObjectName(""); // no name to avoid addition to the action collection
     connect(m_selectOpaque, SIGNAL(triggered(bool)), this, SLOT(slotSelectOpaque()));
     m_actions.append(m_selectOpaque);
 
@@ -323,8 +329,12 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
         expandNodesRecursively(m_image->rootLayer(), m_nodeModel, m_wdgLayerBox->listLayers);
         m_wdgLayerBox->listLayers->scrollToBottom();
 
+        KActionCollection *actionCollection = m_canvas->view()->actionCollection();
         foreach(KisAction *action, m_actions) {
-            m_canvas->view()->actionManager()->addAction(action);
+            m_canvas->view()->actionManager()->
+                addAction(action->objectName(),
+                          action,
+                          actionCollection);
         }
 
         connectActionToButton(m_wdgLayerBox->bnAdd, "add_new_paint_layer");
@@ -349,8 +359,9 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
 void KisLayerBox::unsetCanvas()
 {
     if (m_canvas) {
+        KActionCollection *actionCollection = m_canvas->view()->actionCollection();
         foreach(KisAction *action, m_actions) {
-            m_canvas->view()->actionManager()->takeAction(action);
+            m_canvas->view()->actionManager()->takeAction(action, actionCollection);
         }
         m_newLayerMenu->clear();
     }
@@ -364,32 +375,37 @@ void KisLayerBox::notifyImageDeleted()
 
 void KisLayerBox::updateUI()
 {
-    if(!m_canvas) return;
+    if (!m_canvas) return;
+    if (!m_nodeManager) return;
 
-    KisNodeSP active = m_nodeManager->activeNode();
+    KisNodeSP activeNode = m_nodeManager->activeNode();
 
-    m_wdgLayerBox->bnRaise->setEnabled(active && active->isEditable() && (active->nextSibling()
-                                       || (active->parent() && active->parent() != m_image->root())));
-    m_wdgLayerBox->bnLower->setEnabled(active && active->isEditable() && (active->prevSibling()
-                                       || (active->parent() && active->parent() != m_image->root())));
+    m_wdgLayerBox->bnRaise->setEnabled(activeNode && activeNode->isEditable() && (activeNode->nextSibling()
+                                       || (activeNode->parent() && activeNode->parent() != m_image->root())));
+    m_wdgLayerBox->bnLower->setEnabled(activeNode && activeNode->isEditable() && (activeNode->prevSibling()
+                                       || (activeNode->parent() && activeNode->parent() != m_image->root())));
 
-    m_wdgLayerBox->doubleOpacity->setEnabled(active && active->isEditable());
-    m_wdgLayerBox->doubleOpacity->setRange(0, 100, 0);
+    m_wdgLayerBox->doubleOpacity->setEnabled(activeNode && activeNode->isEditable());
 
-    m_wdgLayerBox->cmbComposite->setEnabled(active && active->isEditable());
+    m_wdgLayerBox->cmbComposite->setEnabled(activeNode && activeNode->isEditable());
 
-    if (active) {
+    if (activeNode) {
         if (m_nodeManager->activePaintDevice()) {
             slotFillCompositeOps(m_nodeManager->activeColorSpace());
         } else {
             slotFillCompositeOps(m_image->colorSpace());
         }
 
-        if (active->inherits("KisMask")) {
-            active = active->parent(); // We need a layer to set opacity and composite op, which masks don't have
+        if (activeNode->inherits("KisMask")) {
+            m_wdgLayerBox->cmbComposite->setEnabled(false);
+            m_wdgLayerBox->doubleOpacity->setEnabled(false);
         }
-        if (active->inherits("KisLayer")) {
-            KisLayerSP l = qobject_cast<KisLayer*>(active.data());
+
+        if (activeNode->inherits("KisLayer")) {
+            m_wdgLayerBox->cmbComposite->setEnabled(true);
+            m_wdgLayerBox->doubleOpacity->setEnabled(true);
+
+            KisLayerSP l = qobject_cast<KisLayer*>(activeNode.data());
             slotSetOpacity(l->opacity() * 100.0 / 255);
 
             const KoCompositeOp* compositeOp = l->compositeOp();
@@ -417,17 +433,16 @@ void KisLayerBox::setCurrentNode(KisNodeSP node)
 
 void KisLayerBox::slotSetCompositeOp(const KoCompositeOp* compositeOp)
 {
-    KoID cmpOp = KoCompositeOpRegistry::instance().getKoID(compositeOp->id());
-    int  index = m_wdgLayerBox->cmbComposite->indexOf(cmpOp);
-    
+    KoID opId = KoCompositeOpRegistry::instance().getKoID(compositeOp->id());
+
     m_wdgLayerBox->cmbComposite->blockSignals(true);
-    m_wdgLayerBox->cmbComposite->setCurrentIndex(index);
+    m_wdgLayerBox->cmbComposite->selectCompositeOp(opId);
     m_wdgLayerBox->cmbComposite->blockSignals(false);
 }
 
 void KisLayerBox::slotFillCompositeOps(const KoColorSpace* colorSpace)
 {
-    m_wdgLayerBox->cmbComposite->getModel()->validateCompositeOps(colorSpace);
+    m_wdgLayerBox->cmbComposite->validate(colorSpace);
 }
 
 // range: 0-100
@@ -580,11 +595,11 @@ void KisLayerBox::slotPropertiesClicked()
 
 void KisLayerBox::slotCompositeOpChanged(int index)
 {
+    Q_UNUSED(index);
     if(!m_canvas) return;
 
-    KoID compositeOp;
-    if(m_wdgLayerBox->cmbComposite->entryAt(compositeOp, index))
-        m_nodeManager->nodeCompositeOpChanged(m_nodeManager->activeColorSpace()->compositeOp(compositeOp.id()));
+    QString compositeOp = m_wdgLayerBox->cmbComposite->selectedCompositeOp().id();
+    m_nodeManager->nodeCompositeOpChanged(m_nodeManager->activeColorSpace()->compositeOp(compositeOp));
 }
 
 void KisLayerBox::slotOpacityChanged()

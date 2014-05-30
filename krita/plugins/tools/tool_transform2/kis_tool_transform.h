@@ -49,8 +49,12 @@
 #include "transform_transaction_properties.h"
 
 class KoID;
+
 class KisFilterStrategy;
 class KisCanvas2;
+
+class QTouchEvent;
+
 
 /**
  * Transform tool
@@ -61,18 +65,53 @@ class KisCanvas2;
  * - Warp mode allows the user to warp the selection of the canvas
  * by grabbing and moving control points placed on the image.
  *   The user can either work with default control points, like a grid
- *   whose density can be modified, or place the control points himself.
+ *   whose density can be modified, or place the control points manually.
  * The modifications made on the selected pixels are applied only when
  * the user clicks the Apply button : the semi-transparent image displayed
  * until the user click that button is only a preview.
  */
-
 class KisToolTransform : public KisTool
 {
 
     Q_OBJECT
 
+    Q_PROPERTY(bool isActive READ isActive NOTIFY isActiveChanged)
+
+    Q_PROPERTY(TransformToolMode transformMode READ transformMode WRITE setTransformMode NOTIFY transformModeChanged)
+
+    Q_PROPERTY(double translateX READ translateX WRITE setTranslateX NOTIFY freeTransformChanged)
+    Q_PROPERTY(double translateY READ translateY WRITE setTranslateY NOTIFY freeTransformChanged)
+
+    Q_PROPERTY(double rotateX READ rotateX WRITE setRotateX NOTIFY freeTransformChanged)
+    Q_PROPERTY(double rotateY READ rotateY WRITE setRotateY NOTIFY freeTransformChanged)
+    Q_PROPERTY(double rotateZ READ rotateZ WRITE setRotateZ NOTIFY freeTransformChanged)
+
+    Q_PROPERTY(double scaleX READ scaleX WRITE setScaleX NOTIFY freeTransformChanged)
+    Q_PROPERTY(double scaleY READ scaleY WRITE setScaleY NOTIFY freeTransformChanged)
+
+    Q_PROPERTY(double shearX READ shearX WRITE setShearX NOTIFY freeTransformChanged)
+    Q_PROPERTY(double shearY READ shearY WRITE setShearY NOTIFY freeTransformChanged)
+
+    Q_PROPERTY(WarpType warpType READ warpType WRITE setWarpType NOTIFY warpTransformChanged)
+    Q_PROPERTY(double warpFlexibility READ warpFlexibility WRITE setWarpFlexibility NOTIFY warpTransformChanged)
+    Q_PROPERTY(int warpPointDensity READ warpPointDensity WRITE setWarpPointDensity NOTIFY warpTransformChanged)
+
+
+
 public:
+    enum TransformToolMode {
+        FreeTransformMode,
+        WarpTransformMode
+    };
+    Q_ENUMS(TransformToolMode)
+
+    enum WarpType {
+        RigidWarpType,
+        AffineWarpType,
+        SimilitudeWarpType
+    };
+    Q_ENUMS(WarpType)
+
     KisToolTransform(KoCanvasBase * canvas);
     virtual ~KisToolTransform();
 
@@ -83,15 +122,64 @@ public:
     virtual void mouseReleaseEvent(KoPointerEvent *e);
     virtual void keyPressEvent(QKeyEvent *event);
     virtual void keyReleaseEvent(QKeyEvent *event);
+    virtual void touchEvent(QTouchEvent *event);
 
-public:
     void paint(QPainter& gc, const KoViewConverter &converter);
+
+    bool isActive() const;
+    TransformToolMode transformMode() const;
+
+    double translateX() const;
+    double translateY() const;
+
+    double rotateX() const;
+    double rotateY() const;
+    double rotateZ() const;
+
+    double scaleX() const;
+    double scaleY() const;
+
+    double shearX() const;
+    double shearY() const;
+
+    WarpType warpType() const;
+    double warpFlexibility() const;
+    int warpPointDensity() const;
+
+    bool wantsTouch() const { return true; }
 
 public slots:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     virtual void deactivate();
+    // Applies the current transformation to the original paint device and commits it to the undo stack
+    void applyTransform();
 
-protected:
+    void setTransformMode( KisToolTransform::TransformToolMode newMode );
+
+    void setTranslateX(double translateX);
+    void setTranslateY(double translateY);
+
+    void setRotateX(double rotation);
+    void setRotateY(double rotation);
+    void setRotateZ(double rotation);
+
+    void setScaleX(double scaleX);
+    void setScaleY(double scaleY);
+
+    void setShearX(double shearX);
+    void setShearY(double shearY);
+
+    void setWarpType(WarpType type);
+    void setWarpFlexibility(double flexibility);
+    void setWarpPointDensity(int density);
+
+Q_SIGNALS:
+    void transformModeChanged();
+    void isActiveChanged();
+    void freeTransformChanged();
+    void warpTransformChanged();
+
+public Q_SLOTS:
     void requestUndoDuringStroke();
     void requestStrokeEnd();
     void requestStrokeCancellation();
@@ -309,14 +397,33 @@ private:
 
     QImage m_currImg; // origImg transformed using m_transform
     KisPaintDeviceSP m_selectedPortionCache;
-    KisStrokeId m_strokeId;
+
+    struct StrokeData {
+        StrokeData() {}
+        StrokeData(KisStrokeId strokeId) : m_strokeId(strokeId) {}
+
+        void clear() {
+            m_strokeId.clear();
+            m_clearedNodes.clear();
+        }
+
+        const KisStrokeId strokeId() const { return m_strokeId; }
+        void addClearedNode(KisNodeSP node) { m_clearedNodes.append(node); }
+        const QVector<KisNodeWSP>& clearedNodes() const { return m_clearedNodes; }
+
+    private:
+        KisStrokeId m_strokeId;
+        QVector<KisNodeWSP> m_clearedNodes;
+    };
+    StrokeData m_strokeData;
+
     bool m_workRecursively;
 
     QPainterPath m_selectionPath; // original (unscaled) selection outline, used for painting decorations
 
     QSizeF m_refSize; // used in paint() to check if the view has changed (need to update m_currSelectionImg)
 
-    KisToolTransformConfigWidget *m_optWidget;
+    KisToolTransformConfigWidget *m_optionsWidget;
     KisPaintDeviceSP m_target;
     // we don't need this origDevice for now
     // but I keep it here because I might use it when adding one of enkithan's suggestion (cut the seleted pixels instead of keeping them darkened)
@@ -386,6 +493,7 @@ private:
 
     TransformTransactionProperties m_transaction;
     TransformChangesTracker m_changesTracker;
+
 
 private:
     QPointF imageToFlake(const QPointF &pt);

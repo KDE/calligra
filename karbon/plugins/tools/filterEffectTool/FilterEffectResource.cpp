@@ -28,6 +28,7 @@
 
 #include <QFile>
 #include <QBuffer>
+#include <QCryptographicHash>
 
 double fromPercentage(QString s)
 {
@@ -45,6 +46,9 @@ FilterEffectResource::FilterEffectResource(const QString &filename)
 bool FilterEffectResource::load()
 {
     QFile file(filename());
+
+    if (file.size() == 0) return false;
+
     if (!file.open(QIODevice::ReadOnly))
         return false;
 
@@ -163,4 +167,16 @@ KoFilterEffectStack * FilterEffectResource::toFilterStack() const
     }
 
     return filterStack;
+}
+
+QByteArray FilterEffectResource::generateMD5() const
+{
+    QByteArray ba = m_data.toByteArray();
+    if (!ba.isEmpty()) {
+        QCryptographicHash md5(QCryptographicHash::Md5);
+        md5.addData(ba);
+        return md5.result();
+    }
+    return ba;
+
 }

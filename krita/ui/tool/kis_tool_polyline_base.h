@@ -34,20 +34,30 @@ public:
 
     KisToolPolylineBase(KoCanvasBase * canvas, KisToolPolylineBase::ToolType type, const QCursor & cursor=KisCursor::load("tool_polygon_cursor.png", 6, 6));
 
-    virtual void mousePressEvent(KoPointerEvent *event);
-    virtual void mouseMoveEvent(KoPointerEvent *event);
-    virtual void mouseReleaseEvent(KoPointerEvent *event);
-    virtual void mouseDoubleClickEvent(KoPointerEvent *event);
-    virtual void keyPressEvent(QKeyEvent *event);
+    void beginPrimaryAction(KoPointerEvent *event);
+    void endPrimaryAction(KoPointerEvent *event);
+    void beginPrimaryDoubleClickAction(KoPointerEvent *event);
+    void mouseMoveEvent(KoPointerEvent *event);
+
+    void beginAlternateAction(KoPointerEvent *event, AlternateAction action);
+
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
+
+    void deactivate();
+    void requestStrokeEnd();
+    void requestStrokeCancellation();
 
 protected:
     virtual void finishPolyline(const QVector<QPointF>& points) = 0;
+
+private:
+    void endStroke();
+    void cancelStroke();
     void updateArea();
     QRectF dragBoundingRect();
 
-    void cancel();
-    void finish();
+private slots:
+    virtual void undoSelection();
 
 private:
 
@@ -56,6 +66,7 @@ private:
     bool m_dragging;
     vQPointF m_points;
     ToolType m_type;
+    bool m_closeSnappingActivated;
 };
 
 #endif // KIS_TOOL_POLYLINE_BASE_H

@@ -48,14 +48,11 @@
 #include <kdebug.h>
 #include <kdesktopfile.h>
 
-#include <kfiledialog.h>
-#include <kfileitem.h>
 #include <kiconloader.h>
 #include <klibloader.h>
 #include <klocale.h>
 #include <kmenu.h>
 #include <kmessagebox.h>
-#include <kmimetypetrader.h>
 #include <kparts/partmanager.h>
 #include <krecentdocument.h>
 #include <kservice.h>
@@ -63,7 +60,6 @@
 #include <kstandarddirs.h>
 #include <ktemporaryfile.h>
 #include <ktoolinvocation.h>
-#include <kxmlguifactory.h>
 
 #include "debugarea.h"
 

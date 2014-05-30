@@ -111,8 +111,6 @@ public:
 
     bool confirmOverwrites() const;
 
-    virtual bool eventFilter(QObject* watched, QEvent* event);
-    
     bool hasSelectedConnection() const;
 
 signals:
@@ -141,8 +139,11 @@ protected slots:
     void slotRemoteEditBtnClicked();
     void slotRemoteRemoveBtnClicked();
     void slotConnectionSelectionChanged();
-    void slotPrjTypeSelected(int id);
+    void slotPrjTypeSelected(QAbstractButton *btn);
     void slotConnectionSelected();
+
+protected:
+    virtual bool eventFilter(QObject* watched, QEvent* event);
 
 private:
     ConnectionDataLVItem* addConnectionData(KexiDB::ConnectionData* data);

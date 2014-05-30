@@ -39,8 +39,7 @@ void KisBrushTest::testMaskGenerationNoColor()
     Q_ASSERT(brush->valid());
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
 
-    KisVector2D v2d = KisVector2D::Zero();
-    KisPaintInformation info(QPointF(100.0, 100.0), 0.5, 0, 0, v2d, 0, 0);
+    KisPaintInformation info(QPointF(100.0, 100.0), 0.5, 0, 0, 0);
 
     // check masking an existing paint device
     KisFixedPaintDeviceSP fdev = new KisFixedPaintDevice(cs);
@@ -74,8 +73,7 @@ void KisBrushTest::testMaskGenerationSingleColor()
     Q_ASSERT(brush->valid());
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
 
-    KisVector2D v2d = KisVector2D::Zero();
-    KisPaintInformation info(QPointF(100.0, 100.0), 0.5, 0, 0, v2d, 0, 0);
+    KisPaintInformation info(QPointF(100.0, 100.0), 0.5, 0, 0, 0, 0);
 
     // check masking an existing paint device
     KisFixedPaintDeviceSP fdev = new KisFixedPaintDevice(cs);
@@ -103,8 +101,7 @@ void KisBrushTest::testMaskGenerationDevColor()
     Q_ASSERT(brush->valid());
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
 
-    KisVector2D v2d = KisVector2D::Zero();
-    KisPaintInformation info(QPointF(100.0, 100.0), 0.5, 0, 0, v2d, 0, 0);
+    KisPaintInformation info(QPointF(100.0, 100.0), 0.5, 0, 0, 0, 0);
 
     // check masking an existing paint device
     KisFixedPaintDeviceSP fdev = new KisFixedPaintDevice(cs);
@@ -137,8 +134,7 @@ void KisBrushTest::testMaskGenerationDefaultColor()
     Q_ASSERT(brush->valid());
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
 
-    KisVector2D v2d = KisVector2D::Zero();
-    KisPaintInformation info(QPointF(100.0, 100.0), 0.5, 0, 0, v2d, 0, 0);
+    KisPaintInformation info(QPointF(100.0, 100.0), 0.5, 0, 0, 0, 0);
 
     // check masking an existing paint device
     KisFixedPaintDeviceSP fdev = new KisFixedPaintDevice(cs);
@@ -165,14 +161,15 @@ void KisBrushTest::testMaskGenerationDefaultColor()
 void KisBrushTest::testImageGeneration()
 {
     KisGbrBrush* brush = new KisGbrBrush(QString(FILES_DATA_DIR) + QDir::separator() + "testing_brush_512_bars.gbr");
-    brush->load();
-    QVERIFY(!brush->image().isNull());
+    bool res = brush->load();
+    Q_UNUSED(res);
+    Q_ASSERT(res);
+    QVERIFY(!brush->brushTipImage().isNull());
     brush->prepareBrushPyramid();
     qsrand(1);
 
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
-    KisVector2D v2d = KisVector2D::Zero();
-    KisPaintInformation info(QPointF(100.0, 100.0), 0.5, 0, 0, v2d, 0, 0);
+    KisPaintInformation info(QPointF(100.0, 100.0), 0.5, 0, 0, 0, 0);
     KisFixedPaintDeviceSP dab;
 
     for (int i = 0; i < 200; i++) {
@@ -199,7 +196,7 @@ void KisBrushTest::benchmarkPyramidCreation()
 {
     KisGbrBrush* brush = new KisGbrBrush(QString(FILES_DATA_DIR) + QDir::separator() + "testing_brush_512_bars.gbr");
     brush->load();
-    QVERIFY(!brush->image().isNull());
+    QVERIFY(!brush->brushTipImage().isNull());
 
     QBENCHMARK {
         brush->prepareBrushPyramid();
@@ -211,13 +208,12 @@ void KisBrushTest::benchmarkScaling()
 {
     KisGbrBrush* brush = new KisGbrBrush(QString(FILES_DATA_DIR) + QDir::separator() + "testing_brush_512_bars.gbr");
     brush->load();
-    QVERIFY(!brush->image().isNull());
+    QVERIFY(!brush->brushTipImage().isNull());
     brush->prepareBrushPyramid();
     qsrand(1);
 
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
-    KisVector2D v2d = KisVector2D::Zero();
-    KisPaintInformation info(QPointF(100.0, 100.0), 0.5, 0, 0, v2d, 0, 0);
+    KisPaintInformation info(QPointF(100.0, 100.0), 0.5, 0, 0, 0, 0);
     KisFixedPaintDeviceSP dab;
 
     QBENCHMARK {
@@ -230,13 +226,12 @@ void KisBrushTest::benchmarkRotation()
 {
     KisGbrBrush* brush = new KisGbrBrush(QString(FILES_DATA_DIR) + QDir::separator() + "testing_brush_512_bars.gbr");
     brush->load();
-    QVERIFY(!brush->image().isNull());
+    QVERIFY(!brush->brushTipImage().isNull());
     brush->prepareBrushPyramid();
     qsrand(1);
 
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
-    KisVector2D v2d = KisVector2D::Zero();
-    KisPaintInformation info(QPointF(100.0, 100.0), 0.5, 0, 0, v2d, 0, 0);
+    KisPaintInformation info(QPointF(100.0, 100.0), 0.5, 0, 0, 0, 0);
     KisFixedPaintDeviceSP dab;
 
     QBENCHMARK {
@@ -248,13 +243,12 @@ void KisBrushTest::benchmarkMaskScaling()
 {
     KisGbrBrush* brush = new KisGbrBrush(QString(FILES_DATA_DIR) + QDir::separator() + "testing_brush_512_bars.gbr");
     brush->load();
-    QVERIFY(!brush->image().isNull());
+    QVERIFY(!brush->brushTipImage().isNull());
     brush->prepareBrushPyramid();
     qsrand(1);
 
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
-    KisVector2D v2d = KisVector2D::Zero();
-    KisPaintInformation info(QPointF(100.0, 100.0), 0.5, 0, 0, v2d, 0, 0);
+    KisPaintInformation info(QPointF(100.0, 100.0), 0.5, 0, 0, 0, 0);
     KisFixedPaintDeviceSP dab = new KisFixedPaintDevice(cs);
 
     QBENCHMARK {
@@ -298,6 +292,54 @@ void KisBrushTest::testPyramidLevelRounding()
     baseLevel = pyramid.findNearestLevel(0.25 + 1e-7, &baseScale);
     QCOMPARE(baseScale, 0.25);
     QCOMPARE(baseLevel, 5);
+}
+
+// see comment in KisQImagePyramid::appendPyramidLevel
+void KisBrushTest::testQPainterTransformationBorder()
+{
+    QImage image1(10, 10, QImage::Format_ARGB32);
+    QImage image2(12, 12, QImage::Format_ARGB32);
+
+    image1.fill(0);
+    image2.fill(0);
+
+    {
+        QPainter gc(&image1);
+        gc.fillRect(QRect(0, 0, 10, 10), Qt::black);
+    }
+
+    {
+        QPainter gc(&image2);
+        gc.fillRect(QRect(1, 1, 10, 10), Qt::black);
+    }
+
+    image1.save("src1.png");
+    image2.save("src2.png");
+
+    {
+        QImage canvas(100, 100, QImage::Format_ARGB32);
+        canvas.fill(0);
+        QPainter gc(&canvas);
+        QTransform transform;
+        transform.rotate(15);
+        gc.setTransform(transform);
+        gc.setRenderHints(QPainter::SmoothPixmapTransform);
+        gc.drawImage(QPointF(50, 50), image1);
+        gc.end();
+        canvas.save("canvas1.png");
+    }
+    {
+        QImage canvas(100, 100, QImage::Format_ARGB32);
+        canvas.fill(0);
+        QPainter gc(&canvas);
+        QTransform transform;
+        transform.rotate(15);
+        gc.setTransform(transform);
+        gc.setRenderHints(QPainter::SmoothPixmapTransform);
+        gc.drawImage(QPointF(50, 50), image2);
+        gc.end();
+        canvas.save("canvas2.png");
+    }
 }
 
 QTEST_KDEMAIN(KisBrushTest, GUI)

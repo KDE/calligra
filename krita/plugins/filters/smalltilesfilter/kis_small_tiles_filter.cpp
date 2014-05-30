@@ -49,14 +49,13 @@
 #include <kis_selection.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_processing_information.h>
-#include <KoCompositeOp.h>
+#include <KoCompositeOpRegistry.h>
 
 #include "widgets/kis_multi_integer_filter_widget.h"
 
 KisSmallTilesFilter::KisSmallTilesFilter() : KisFilter(id(), KisFilter::categoryMap(), i18n("&Small Tiles..."))
 {
     setSupportsPainting(true);
-    setSupportsIncrementalPainting(false);
     setSupportsThreading(false);
 }
 

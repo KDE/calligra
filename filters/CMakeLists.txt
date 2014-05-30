@@ -13,19 +13,11 @@ check_include_files(strings.h HAVE_STRINGS_H)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-filters.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-filters.h )
 
-set(liboofilter_SRCS 
-	${CMAKE_SOURCE_DIR}/filters/liboofilter/ooutils.cc 
-)
-
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS}")
 
 if(SHOULD_BUILD_LIB_KOODF2)
     add_subdirectory( libodf2 )
 endif(SHOULD_BUILD_LIB_KOODF2)
-
-if(SHOULD_BUILD_LIB_WRITERPERFECT)
-    add_subdirectory( writerperfect )
-endif(SHOULD_BUILD_LIB_WRITERPERFECT)
 
 if(SHOULD_BUILD_LIB_KOODFREADER)
     add_subdirectory(libodfreader)

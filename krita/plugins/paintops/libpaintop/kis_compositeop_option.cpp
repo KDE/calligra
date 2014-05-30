@@ -21,7 +21,7 @@
 #include <KoIcon.h>
 
 #include <kis_cmb_composite.h>
-#include <KoCompositeOp.h>
+#include <KoCompositeOpRegistry.h>
 #include <kis_types.h>
 #include <KoID.h>
 #include <ui_wdgCompositeOpOption.h>
@@ -34,21 +34,23 @@ KisCompositeOpOption::KisCompositeOpOption(bool createConfigWidget):
     m_checkable         = false;
     m_prevCompositeOpID = KoCompositeOpRegistry::instance().getDefaultCompositeOp().id();
     m_currCompositeOpID = m_prevCompositeOpID;
-    
-    if(createConfigWidget) {
+
+    if (createConfigWidget) {
         QWidget* widget = new QWidget();
-        
+
         Ui_wdgCompositeOpOption ui;
         ui.setupUi(widget);
         ui.bnEraser->setIcon(koIcon("draw-eraser"));
-        
+
         m_label    = ui.lbChoosenMode;
         m_list     = ui.list;
         m_bnEraser = ui.bnEraser;
-        
+
         setConfigurationPage(widget);
-        
-        connect(ui.list    , SIGNAL(activated(const QModelIndex&)), this, SLOT(slotCompositeOpChanged(const QModelIndex&)));
+
+//        connect(ui.list    , SIGNAL(pressed(const QModelIndex&)), this, SLOT(slotCompositeOpChanged(const QModelIndex&)));
+        connect(ui.list    , SIGNAL(entered(const QModelIndex&)), this, SLOT(slotCompositeOpChanged(const QModelIndex&)));
+//        connect(ui.list    , SIGNAL(clicked(const QModelIndex&)), this, SLOT(slotCompositeOpChanged(const QModelIndex&)));
         connect(ui.bnEraser, SIGNAL(toggled(bool))                , this, SLOT(slotEraserToggled(bool)));
     }
 }
@@ -71,34 +73,37 @@ void KisCompositeOpOption::readOptionSetting(const KisPropertiesConfiguration* s
 
 void KisCompositeOpOption::changeCompositeOp(const KoID& compositeOp)
 {
-    if(compositeOp.id() == m_currCompositeOpID)
+    if (compositeOp.id() == m_currCompositeOpID)
         return;
-    
+
     m_prevCompositeOpID = m_currCompositeOpID;
     m_currCompositeOpID = compositeOp.id();
-    
-    if(m_createConfigWidget) {
+
+    if (m_createConfigWidget) {
         m_label->setText(compositeOp.name());
         m_bnEraser->blockSignals(true);
         m_bnEraser->setChecked(m_currCompositeOpID == "erase");
         m_bnEraser->blockSignals(false);
     }
-    
+
     emit sigSettingChanged();
 }
 
 
 void KisCompositeOpOption::slotCompositeOpChanged(const QModelIndex& index)
 {
-    KoID compositeOp;
-    
-    if(m_list->entryAt(compositeOp, index.row()))
+    m_list->setCurrentIndex(index);
+
+    if (m_list->hasSelectedCompositeOp())
+    {
+        KoID compositeOp = m_list->selectedCompositeOp();
         changeCompositeOp(compositeOp);
+    }
 }
 
 void KisCompositeOpOption::slotEraserToggled(bool toggled)
 {
-    if(toggled)
+    if (toggled)
         changeCompositeOp(KoCompositeOpRegistry::instance().getKoID("erase"));
     else
         changeCompositeOp(KoCompositeOpRegistry::instance().getKoID(m_prevCompositeOpID));

@@ -374,7 +374,7 @@ void KMessageWidgetPrivate::createLayout()
                     contentsWidget->maximumSize() - QSize(120, 0));
                 //q->setFixedSize(
                 //    contentsWidget->maximumSize() + QSize(100, 0));
-                
+
                 kFatal() << contentsWidget->maximumSize();
             }*/
         }

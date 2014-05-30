@@ -16,8 +16,7 @@ include_directories(
     ${KOTEXT_INCLUDES}
     ${TEXTLAYOUT_INCLUDES}
     ${FLAKE_INCLUDES}
-    ${KOMAIN_INCLUDES}
-    ${KDE4_INCLUDE_DIR}/threadweaver/)
+    ${KOMAIN_INCLUDES})
 
 ########### Flake Plugin library ###############
 
@@ -30,6 +29,8 @@ SET ( textshape_SRCS
     TextToolFactory.cpp
     ShrinkToFitShapeContainer.cpp
     SimpleRootAreaProvider.cpp
+    AnnotationTextShape.cpp
+    AnnotationTextShapeFactory.cpp
 
     ChangeTracker.cpp
     ReviewTool.cpp
@@ -37,6 +38,7 @@ SET ( textshape_SRCS
     TextChanges.cpp
     TextChange.cpp
     FontSizeAction.cpp
+    FontFamilyAction.cpp
 
     ReferencesTool.cpp
     ReferencesToolFactory.cpp
@@ -104,6 +106,7 @@ SET ( textshape_SRCS
     dialogs/BibliographyTemplate.cpp
     dialogs/BibliographyPreview.cpp
     dialogs/ListLevelChooser.cpp
+    dialogs/SimpleAnnotationWidget.cpp
     dialogs/ManageBookmarkDialog.cpp
 
     commands/ChangeListLevelCommand.cpp
@@ -152,6 +155,9 @@ kde4_add_ui_files(textshape_SRCS
     dialogs/TableOfContentsConfigure.ui
     dialogs/SimpleLinksWidget.ui
     dialogs/TableOfContentsStyleConfigure.ui
+    dialogs/SimpleAnnotationWidget.ui
+
+
     dialogs/FontDecorations.ui
     dialogs/LanguageTab.ui
     dialogs/ChangeConfigureDialog.ui
@@ -174,12 +180,12 @@ install(TARGETS calligra_shape_text DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES textshape.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES calligra_shape_text.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 #kde4_install_icons( ${DATA_INSTALL_DIR}/calligra/icons )
 
 if(BUILD_TEXTDOCUMENT_INSPECTOR)
     # workaround: to avoid translations the real desktop file is only generated
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/textdocumentinspection.desktop.in ${CMAKE_CURRENT_BINARY_DIR}/textdocumentinspection.desktop)
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/calligra_docker_textdocumentinspection.desktop.in ${CMAKE_CURRENT_BINARY_DIR}/calligra_docker_textdocumentinspection.desktop)
 
-    install( FILES ${CMAKE_CURRENT_BINARY_DIR}/textdocumentinspection.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+    install( FILES ${CMAKE_CURRENT_BINARY_DIR}/calligra_docker_textdocumentinspection.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 endif(BUILD_TEXTDOCUMENT_INSPECTOR)

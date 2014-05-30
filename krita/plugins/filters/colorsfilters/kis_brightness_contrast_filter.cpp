@@ -161,7 +161,6 @@ KisBrightnessContrastFilter::KisBrightnessContrastFilter()
         : KisColorTransformationFilter(id(), categoryAdjust(), i18n("&Brightness/Contrast curve..."))
 {
     setSupportsPainting(false);
-    setSupportsIncrementalPainting(false);
     setColorSpaceIndependence(TO_LAB16);
 }
 
@@ -174,12 +173,6 @@ KisFilterConfiguration* KisBrightnessContrastFilter::factoryConfiguration(const 
 const
 {
     return new KisBrightnessContrastFilterConfiguration();
-}
-
-
-bool KisBrightnessContrastFilter::workWith(const KoColorSpace* cs) const
-{
-    return (cs->profile() != 0);
 }
 
 KoColorTransformation* KisBrightnessContrastFilter::createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const
@@ -208,7 +201,9 @@ KisBrightnessContrastConfigWidget::KisBrightnessContrastConfigWidget(QWidget * p
     m_page->textLabelBrightness->hide();
     m_page->textLabelContrast->hide();
 
-    l->addWidget(m_page, 0, Qt::AlignTop);
+    l->addWidget(m_page, 1, Qt::AlignTop);
+    l->setContentsMargins(0,0,0,0);
+    
     height = 256;
     connect(m_page->curveWidget, SIGNAL(modified()), SIGNAL(sigConfigurationItemChanged()));
 

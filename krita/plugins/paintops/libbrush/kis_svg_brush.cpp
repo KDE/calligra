@@ -24,51 +24,52 @@
 #include <QImageReader>
 #include <QSvgRenderer>
 
-struct KisSvgBrush::Private {
-};
-
-KisSvgBrush::KisSvgBrush(const QString& filename) : KisBrush(filename), d(new Private)
+KisSvgBrush::KisSvgBrush(const QString& filename)
+    : KisBrush(filename)
 {
     setBrushType(INVALID);
     setSpacing(0.25);
     setHasColor(false);
-    
+
 }
 
 bool KisSvgBrush::load()
 {
+    QFileInfo fi(filename());
+    if (fi.size() == 0) return false;
+
     QSvgRenderer renderer(filename());
-    
+
     QRect box = renderer.viewBox();
-    if(box.isEmpty()) return false;
-    
-    QImage image_(1000, (1000 * box.height()) / box.width(), QImage::Format_ARGB32 );
+    if (box.isEmpty()) return false;
+
+    QImage image_(1000, (1000 * box.height()) / box.width(), QImage::Format_ARGB32);
     {
         QPainter p(&image_);
         p.fillRect(0, 0, image_.width(), image_.height(), Qt::white);
         renderer.render(&p);
     }
-    
+
     QVector<QRgb> table;
-    for(int i = 0; i < 256; ++i) table.push_back(qRgb(i,i,i));
+    for (int i = 0; i < 256; ++i) table.push_back(qRgb(i, i, i));
     image_ = image_.convertToFormat(QImage::Format_Indexed8, table);
-    
-    setImage(image_);
-    
+
+    setBrushTipImage(image_);
+
     setValid(true);
-    
+
     // Well for now, always true
-    if(image().isGrayscale())
-    {
+    if (brushTipImage().isGrayscale()) {
         setBrushType(MASK);
         setHasColor(false);
-    } else {
+    }
+    else {
         setBrushType(IMAGE);
         setHasColor(true);
     }
-    setWidth(image().width());
-    setHeight(image().height());
-    return !image().isNull();
+    setWidth(brushTipImage().width());
+    setHeight(brushTipImage().height());
+    return !brushTipImage().isNull();
 }
 
 QString KisSvgBrush::defaultFileExtension() const
@@ -78,9 +79,6 @@ QString KisSvgBrush::defaultFileExtension() const
 
 void KisSvgBrush::toXML(QDomDocument& d, QDomElement& e) const
 {
-    Q_UNUSED(d);
-    e.setAttribute("type", "svg_brush");
-    e.setAttribute("filename", shortFilename());
-    e.setAttribute("spacing", spacing());
+    predefinedBrushToXML("svg_brush", e);
     KisBrush::toXML(d, e);
 }
