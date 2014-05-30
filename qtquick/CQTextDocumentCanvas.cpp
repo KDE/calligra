@@ -56,6 +56,7 @@ public:
           findText(0),
           documentModel(0),
           document(0),
+          pageNumber(0),
           throttleTimer(new QTimer())
     {
         throttleTimer->setInterval(200);
@@ -239,7 +240,7 @@ int CQTextDocumentCanvas::currentPageNumber() const
         //d->canvas->resourceManager()->resource(KoCanvasResourceManager::CurrentPage).toInt();
         d->throttleTimer->start();
         const KWDocument *kwDoc = static_cast<const KWDocument*>(d->document);
-        d->pageNumber = kwDoc->pageManager()->page(d->canvas->documentOffset()).pageNumber();
+        d->pageNumber = kwDoc->pageManager()->page(d->canvas->viewMode()->viewToDocument(d->canvas->documentOffset(), d->canvas->viewConverter())).pageNumber();
     }
     return d->pageNumber;
 }
