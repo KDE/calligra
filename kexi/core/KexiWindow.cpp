@@ -434,7 +434,7 @@ tristate KexiWindow::switchToViewMode(
     if (d->currentViewMode == newViewMode)
         return true;
     if (!supportsViewMode(newViewMode)) {
-        kWarning() << "! KexiWindow::supportsViewMode(" << Kexi::nameForViewMode(newViewMode) << ")";
+        kWarning() << "!" << Kexi::nameForViewMode(newViewMode);
         return false;
     }
 
@@ -514,7 +514,7 @@ tristate KexiWindow::switchToViewMode(
     }
     res = newView->beforeSwitchTo(newViewMode, dontStore);
     proposeOpeningInTextViewModeBecauseOfProblems
-    = data()->proposeOpeningInTextViewModeBecauseOfProblems;
+        = data()->proposeOpeningInTextViewModeBecauseOfProblems;
     if (!res) {
         removeView(newViewMode);
         delete newView;

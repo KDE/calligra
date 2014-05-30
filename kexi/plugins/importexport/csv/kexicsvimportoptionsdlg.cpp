@@ -71,7 +71,7 @@ KexiCSVImportOptions::KexiCSVImportOptions()
     dateFormat = dateFormatFromString(importExportGroup.readEntry("DateFormatWhenImportingCSVFiles"));
 
     trimmedInTextValuesChecked
-    = importExportGroup.readEntry("StripBlanksOffOfTextValuesWhenImportingCSVFiles", true);
+        = importExportGroup.readEntry("StripBlanksOffOfTextValuesWhenImportingCSVFiles", true);
     nullsImportedAsEmptyTextChecked = importExportGroup.readEntry("ImportNULLsAsEmptyText", true);
 }
 
@@ -187,7 +187,7 @@ void KexiCSVImportOptionsDialog::accept()
         importExportGroup.deleteEntry("DefaultEncodingForImportingCSVFiles");
 
     const KexiCSVImportOptions::DateFormat dateFormat
-    = (KexiCSVImportOptions::DateFormat)m_comboDateFormat->currentIndex();
+        = (KexiCSVImportOptions::DateFormat)m_comboDateFormat->currentIndex();
     if (dateFormat == KexiCSVImportOptions::AutoDateFormat)
         importExportGroup.deleteEntry("DateFormatWhenImportingCSVFiles");
     else

@@ -108,7 +108,6 @@ bool KexiDBDatePicker::cursorAtEnd()
     return lineEdit && lineEdit->hasFocus() && lineEdit->cursorPosition() == lineEdit->text().length();
 }
 
-
 void KexiDBDatePicker::clear()
 {
     KDatePicker::setDate(QDate());

@@ -40,7 +40,6 @@
 #include <kmimetype.h>
 #include <kservice.h>
 #include <klocale.h>
-#include <kfiledialog.h>
 #include <kio/job.h>
 #include <kglobal.h>
 #include <kiconloader.h>
@@ -81,8 +80,6 @@ KexiBlobTableEdit::KexiBlobTableEdit(KexiDB::TableViewColumn &column, QWidget *p
         : KexiTableEdit(column, parent)
         , d(new Private())
 {
-// m_proc = 0;
-// m_content = 0;
     KexiDataItemInterface::setHasFocusableWidget(false);
     d->button = new KexiDropDownButton(parentWidget() /*usually a viewport*/);
     d->button->hide();
@@ -96,12 +93,8 @@ KexiBlobTableEdit::KexiBlobTableEdit(KexiDB::TableViewColumn &column, QWidget *p
                                           "pixmaplabel");
     d->button->setMenu(d->menu);
 
-    //force edit requested to start editing... (this will call slotUpdateActionsAvailabilityRequested())
-    //connect(d->menu, SIGNAL(aboutToShow()), this, SIGNAL(editRequested()));
-
     connect(d->menu, SIGNAL(updateActionsAvailabilityRequested(bool&,bool&)),
             this, SLOT(slotUpdateActionsAvailabilityRequested(bool&,bool&)));
-
     connect(d->menu, SIGNAL(insertFromFileRequested(KUrl)),
             this, SLOT(handleInsertFromFileAction(KUrl)));
     connect(d->menu, SIGNAL(saveAsRequested(QString)),
@@ -125,7 +118,7 @@ KexiBlobTableEdit::~KexiBlobTableEdit()
     kDebug() << "Cleaning up...";
     if (m_tempFile) {
         m_tempFile->unlink();
-        //todo
+        //! @todo
     }
     delete m_proc;
     m_proc = 0;
@@ -143,6 +136,7 @@ void KexiBlobTableEdit::setValueInternal(const QVariant& add, bool removeOld)
     else //do not add "m_origValue" to "add" as this is QByteArray
         d->value = KexiDataItemInterface::originalValue().toByteArray();
 
+//! @todo
 #if 0 //todo?
     QByteArray val = m_origValue.toByteArray();
     kDebug() << "Size of BLOB: " << val.size();
@@ -163,14 +157,14 @@ void KexiBlobTableEdit::setValueInternal(const QVariant& add, bool removeOld)
 
 bool KexiBlobTableEdit::valueIsNull()
 {
-//TODO
+//! @todo
     d->value.size();
     return d->value.isEmpty();
 }
 
 bool KexiBlobTableEdit::valueIsEmpty()
 {
-//TODO
+//! @todo
     return d->value.isEmpty();
 }
 
@@ -178,10 +172,8 @@ QVariant
 KexiBlobTableEdit::value()
 {
     return d->value;
+//! @todo
 #if 0
-    //todo
-// ok = true;
-
     if (m_content && m_content->isModified()) {
         return QVariant(m_content->text());
     }
@@ -201,9 +193,6 @@ KexiBlobTableEdit::value()
 
 void KexiBlobTableEdit::paintFocusBorders(QPainter *p, QVariant &, int x, int y, int w, int h)
 {
-// d->currentEditorWidth = w;
-/*2.x    if (!d->readOnly && w > d->button->width())
-        w -= d->button->width();*/
     p->drawRect(x, y, w, h);
 }
 
@@ -347,7 +336,6 @@ void KexiBlobTableEdit::handlePasteAction()
         setValueInternal(QByteArray(), true);
     }
     signalEditRequested();
-    //emit acceptRequested();
     repaintRelatedCell();
 }
 
@@ -367,9 +355,7 @@ void KexiBlobTableEdit::handleShowPropertiesAction()
 void KexiBlobTableEdit::showFocus(const QRect& r, bool readOnly)
 {
     d->readOnly = readOnly; //cache for slotUpdateActionsAvailabilityRequested()
-// d->button->move( pos().x()+ width(), pos().y() );
     updateFocus(r);
-// d->button->setEnabled(!readOnly);
     if (d->readOnly)
         d->button->hide();
     else
@@ -387,9 +373,10 @@ void KexiBlobTableEdit::resize(int w, int h)
     QRect r(pos().x(), pos().y(), w + 1, h + 1);
     r.translate(m_scrollView->contentsX(), m_scrollView->contentsY());
     updateFocus(r);
-//todo if (d->menu) {
-//todo  d->menu->updateSize();
-//todo }
+/*! @todo
+    if (d->menu) {
+        d->menu->updateSize();
+    }*/
 }
 
 void KexiBlobTableEdit::updateFocus(const QRect& r)

@@ -194,6 +194,7 @@ KisLayerBox::KisLayerBox()
     m_actions.append(m_removeAction);
 
     KisAction* action  = new ButtonAction(m_wdgLayerBox->bnLeft, this);
+    action->setText(i18n("Move Layer Left"));
     action->setActivationFlags(KisAction::ACTIVE_NODE);
     action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
     action->setObjectName("move_layer_left");
@@ -201,6 +202,7 @@ KisLayerBox::KisLayerBox()
     m_actions.append(action);
 
     action  = new ButtonAction(m_wdgLayerBox->bnRight, this);
+    action->setText(i18n("Move Layer Right"));
     action->setActivationFlags(KisAction::ACTIVE_NODE);
     action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
     action->setObjectName("move_layer_right");
@@ -307,6 +309,7 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
         m_nodeModel->setDummiesFacade(kritaDummiesFacade, m_image, kritaShapeController);
 
         connect(m_image, SIGNAL(sigAboutToBeDeleted()), SLOT(notifyImageDeleted()));
+        connect(m_image, SIGNAL(sigNodeCollapsedChanged()), SLOT(slotNodeCollapsedChanged()));
 
         // cold start
         setCurrentNode(m_nodeManager->activeNode());
@@ -637,6 +640,12 @@ void KisLayerBox::slotSelectOpaque()
     if (action) {
         action->trigger();
     }
+}
+
+void KisLayerBox::slotNodeCollapsedChanged()
+{
+    m_wdgLayerBox->listLayers->expandAll();
+    expandNodesRecursively(m_image->rootLayer(), m_nodeModel, m_wdgLayerBox->listLayers);
 }
 
 

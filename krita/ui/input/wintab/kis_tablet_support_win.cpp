@@ -29,7 +29,7 @@
 #include <math.h>
 #define Q_PI M_PI
 
-//#define DEBUG_WINTAB_TABLET
+#include <input/kis_tablet_debugger.h>
 
 /**
  * A set of definitions to form a structure of a WinTab packet.  This
@@ -170,7 +170,6 @@ static void initWinTabFunctions()
     ptrWTOverlap = (PtrWTOverlap)library.resolve("WTOverlap");
 }
 
-#ifdef DEBUG_WINTAB_TABLET
 void printContext(const LOGCONTEXT &lc)
 {
     qDebug() << "Context data:";
@@ -189,7 +188,6 @@ void printContext(const LOGCONTEXT &lc)
     qDebug() << ppVar(lc.lcSysExtX);
     qDebug() << ppVar(lc.lcSysExtY);
 }
-#endif /* DEBUG_WINTAB_TABLET */
 
 /**
  * Initializes the QTabletDeviceData structure for \p uniqueId cursor
@@ -209,10 +207,10 @@ static void tabletInit(const quint64 uniqueId, const UINT csr_type, HCTX hTab)
     /* get the current context for its device variable. */
     ptrWTGet(hTab, &lc);
 
-#ifdef DEBUG_WINTAB_TABLET
-    qDebug() << "Getting current context:";
-    printContext(lc);
-#endif /* DEBUG_WINTAB_TABLET */
+    if (KisTabletDebugger::instance()->initializationDebugEnabled()) {
+        qDebug() << "# Getting current context:";
+        printContext(lc);
+    }
 
     /* get the size of the pressure axis. */
     QTabletDeviceData tdd;
@@ -243,15 +241,26 @@ static void tabletInit(const quint64 uniqueId, const UINT csr_type, HCTX hTab)
     tdd.minZ = int(lc.lcOutOrgZ);
     tdd.maxZ = int(qAbs(lc.lcOutExtZ)) + int(lc.lcOutOrgZ);
 
-#ifdef DEBUG_WINTAB_TABLET
-    LOGCONTEXT lcMine;
+    if (KisTabletDebugger::instance()->initializationDebugEnabled()) {
+        qDebug() << "# Axes configuration";
+        qDebug() << ppVar(tdd.minPressure) << ppVar(tdd.maxPressure);
+        qDebug() << ppVar(tdd.minTanPressure) << ppVar(tdd.maxTanPressure);
+        qDebug() << ppVar(qt_tablet_tilt_support);
+        qDebug() << ppVar(tdd.minX) << ppVar(tdd.maxX);
+        qDebug() << ppVar(tdd.minY) << ppVar(tdd.maxY);
+        qDebug() << ppVar(tdd.minZ) << ppVar(tdd.maxZ);
+        qDebug().nospace() << "# csr type: 0x" << hex << csr_type;
+    }
 
-    /* get default region */
-    ptrWTInfo(WTI_DEFCONTEXT, 0, &lcMine);
+    if (KisTabletDebugger::instance()->initializationDebugEnabled()) {
+        LOGCONTEXT lcMine;
 
-    qDebug() << "Getting default context:";
-    printContext(lcMine);
-#endif /* DEBUG_WINTAB_TABLET */
+        /* get default region */
+        ptrWTInfo(WTI_DEFCONTEXT, 0, &lcMine);
+
+        qDebug() << "# Getting default context:";
+        printContext(lcMine);
+    }
 
     const uint cursorTypeBitMask = 0x0F06; // bitmask to find the specific cursor type (see Wacom FAQ)
     if (((csr_type & 0x0006) == 0x0002) && ((csr_type & cursorTypeBitMask) != 0x0902)) {
@@ -370,12 +379,14 @@ bool translateTabletEvent(const MSG &msg, PACKET *localPacketBuf,
                                                               desktopArea.width(), desktopArea.top(),
                                                               desktopArea.height());
 
-#ifdef DEBUG_WINTAB_TABLET
-        qDebug() << "WinTab:"
-                 << "Dsk:" << desktopArea
-                 << "Raw:" << ptNew.x << ptNew.y
-                 << "Scaled:" << hiResGlobal;
-#endif
+
+        if (KisTabletDebugger::instance()->debugRawTabletValues()) {
+            qDebug() << "WinTab (RC):"
+                     << "Dsk:" << desktopArea
+                     << "Raw:" << ptNew.x << ptNew.y
+                     << "Scaled:" << hiResGlobal;
+        }
+
 
         Qt::MouseButton button = Qt::NoButton;
         Qt::MouseButtons buttons;
@@ -461,7 +472,21 @@ bool translateTabletEvent(const MSG &msg, PACKET *localPacketBuf,
             double degY = atan(cos(radAzim) / tanAlt);
             tiltX = int(degX * (180 / Q_PI));
             tiltY = int(-degY * (180 / Q_PI));
-            rotation = ort.orTwist;
+
+            // Rotation is measured in degrees. Axis inverted to fit
+            // the coordinate system of the Linux driver.
+            rotation = (360 - 1) - ort.orTwist / 10;
+        }
+
+        if (KisTabletDebugger::instance()->debugRawTabletValues()) {
+            ort = localPacketBuf[i].pkOrientation;
+
+            qDebug() << "WinTab (RS):"
+                     << "NP:" << localPacketBuf[i].pkNormalPressure
+                     << "TP:" << localPacketBuf[i].pkTangentPressure
+                     << "Az:" << ort.orAzimuth
+                     << "Alt:" << ort.orAltitude
+                     << "Twist:" << ort.orTwist;
         }
 
         KisTabletEvent e(t, localPos, globalPos, hiResGlobal, currentTabletPointer.currentDevice,

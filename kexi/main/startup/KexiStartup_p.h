@@ -23,7 +23,6 @@
 #include <QObject>
 #include <QString>
 
-//#include <sys/stat.h>
 #include <kde_file.h>
 
 #include <db/tristate.h>

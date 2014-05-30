@@ -31,12 +31,16 @@
 #include "krita_export.h"
 
 class KoColorProfile;
+class KoColorSpace;
 
 class KRITAUI_EXPORT KisConfig
 {
 public:
     KisConfig();
     ~KisConfig();
+
+    bool disableTouchOnCanvas() const;
+    void setDisableTouchOnCanvas(bool value) const;
 
     bool useProjections() const;
     void setUseProjections(bool useProj) const;
@@ -286,8 +290,15 @@ public:
     bool useOcio() const;
     void setUseOcio(bool useOCIO) const;
 
-    bool useOcioEnvironmentVariable() const;
-    void setUseOcioEnvironmentVariable(bool useOCIO) const;
+
+    enum OcioColorManagementMode {
+        INTERNAL = 0,
+        OCIO_CONFIG,
+        OCIO_ENVIRONMENT
+    };
+
+    OcioColorManagementMode ocioColorManagementMode() const;
+    void setOcioColorManagementMode(OcioColorManagementMode mode) const;
 
     QString ocioConfigurationPath() const;
     void setOcioConfigurationPath(const QString &path) const;
@@ -333,6 +344,10 @@ public:
 
     int paletteDockerPaletteViewSectionSize() const;
     void setPaletteDockerPaletteViewSectionSize(int value) const;
+
+    const KoColorSpace* customColorSelectorColorSpace() const;
+    void setCustomColorSelectorColorSpace(const KoColorSpace *cs);
+
 
     template<class T>
     void writeEntry(const QString& name, const T& value) {

@@ -221,8 +221,8 @@ private:
     //! Updates size of m_columnNames and m_changedColumnNames if needed
     void updateColumnVectorSize();
 
-    bool m_cancelled : 1;
-    bool m_adjustRows : 1;
+    bool m_cancelled;
+    bool m_adjustRows;
     int m_startline;
     QChar m_textquote;
     QString m_clipboardData;
@@ -230,10 +230,10 @@ private:
     Mode m_mode;
 
     QRegExp m_dateRegExp, m_timeRegExp1, m_timeRegExp2, m_fpNumberRegExp1, m_fpNumberRegExp2;
-    bool m_columnsAdjusted : 1; //!< to call adjustColumn() only once
-    bool m_1stRowForFieldNamesDetected : 1; //!< used to force rerun fillTable() after 1st row
-    bool m_firstFillTableCall : 1; //!< used to know whether it's 1st fillTable() call
-    bool m_blockUserEvents : 1;
+    bool m_columnsAdjusted; //!< to call adjustColumn() only once
+    bool m_1stRowForFieldNamesDetected; //!< used to force rerun fillTable() after 1st row
+    bool m_firstFillTableCall; //!< used to know whether it's 1st fillTable() call
+    bool m_blockUserEvents;
     int m_primaryKeyColumn; //!< index of column with PK assigned (-1 if none)
     int m_maximumRowsForPreview;
     int m_maximumBytesForPreview;
@@ -258,8 +258,8 @@ private:
     KexiDB::PreparedStatement::Ptr m_importingStatement;
     QList<QVariant> m_dbRowBuffer; //!< (temp) used for importing
     bool m_implicitPrimaryKeyAdded; //!< (temp) used for importing
-    bool m_allRowsLoadedInPreview : 1; //!< we need to know whether all rows were loaded or it's just a partial data preview
-    bool m_stoppedAt_MAX_BYTES_TO_PREVIEW : 1; //!< used to compute m_allRowsLoadedInPreview
+    bool m_allRowsLoadedInPreview; //!< we need to know whether all rows were loaded or it's just a partial data preview
+    bool m_stoppedAt_MAX_BYTES_TO_PREVIEW; //!< used to compute m_allRowsLoadedInPreview
     const QString m_stringNo, m_stringI18nNo, m_stringFalse, m_stringI18nFalse; //!< used for importing boolean values
     int m_prevColumnForSetText; //!< used for non-gui tracking of skipped clolumns,
                                 //!< so can be saved to the database,

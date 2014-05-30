@@ -33,7 +33,7 @@ class KexiQueryView : public KexiDataTable
     Q_OBJECT
 
 public:
-    KexiQueryView(QWidget *parent);
+    explicit KexiQueryView(QWidget *parent);
     virtual ~KexiQueryView();
 
 protected:

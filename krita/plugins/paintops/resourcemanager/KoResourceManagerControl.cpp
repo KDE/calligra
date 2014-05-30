@@ -21,15 +21,17 @@
 #include "KoXmlResourceBundleManifest.h"
 #include "KoResourceTableModel.h"
 #include "KoDlgCreateBundle.h"
-
 #include "KoResourceServerProvider.h"
+
+#include <KoFileDialog.h>
+
 #include "kis_resource_server_provider.h"
 #include "kis_workspace_resource.h"
 #include "kis_paintop_preset.h"
 #include "kis_brush_server.h"
 
-#include <QFileDialog>
 #include <QProcessEnvironment>
+#include <QDesktopServices>
 
 #include "resourcemanager.h"
 
@@ -50,17 +52,6 @@ KoResourceManagerControl::~KoResourceManagerControl()
     }
 }
 
-//Voir si on autorise la modification d'un paquet qui n'est pas installé
-//Si oui, pb peut se poser pour récupérer les fichiers si leur chemin source n'est plus valable
-//ou si la ressource pointée par le chemin a été modifiée à l'intérieur du paquet
-//(exemple : installation modif désinstallation)
-//Préférable au moins pour les fichiers de demander l'installation
-//avant tout ajout, modif, suppression de fichiers
-
-//TODO Une solution est l'extraction de tous les fichiers existants dans un dossier temporaire
-//Puis on construit l'archive a partir de ses fichiers qui sont obligatoirement les plus récents
-
-
 void KoResourceManagerControl::configureFilters(int filterType, bool enable)
 {
     if (!m_modelList.isEmpty()) {
@@ -73,7 +64,6 @@ void KoResourceManagerControl::toStatus(QString text, int timeout)
     emit status(text, timeout);
 }
 
-//TODO Design Decision : Un paquet peut il contenir un paquet
 bool KoResourceManagerControl::createPack(int type)
 {
     KoResourceTableModel *currentModel = getModel(type);
@@ -108,8 +98,8 @@ bool KoResourceManagerControl::createPack(int type)
 
             if (currentFileName.contains('/') && !currentBundle) {
                 isEmpty = false;
-                newBundle->addFile(currentFileName.section('/', currentFileName.count("/") - 1, currentFileName.count("/") - 1), currentFileName,
-                                   currentModel->assignedTagsList(currentResource));
+                newBundle->addResource(currentFileName.section('/', currentFileName.count("/") - 1, currentFileName.count("/") - 1), currentFileName,
+                                   currentModel->assignedTagsList(currentResource), currentResource->md5());
             }
         }
 
@@ -137,7 +127,6 @@ bool KoResourceManagerControl::createPack(int type)
     }
 }
 
-//TODO Trouver une solution pour que les ressources installées soient visibles
 bool KoResourceManagerControl::install(int type)
 {
     KoResourceTableModel* currentModel = getModel(type);
@@ -326,16 +315,6 @@ void KoResourceManagerControl::saveMeta(QModelIndex index, int type)
     }
 }
 
-//TODO Bug Foreground to Background
-//TODO Bug rename bouton/label
-//TODO Rafraichir réellement un bundle renommé
-//TODO Trouver pourquoi les tags sont préservés pour les fichiers mais pas pour les paquets
-//TODO Trouver un moyen pour bien différencier et renommer fichier et nom de ressource
-//TODO Bug pour les noms qui n'ont pas l'extension du fichier de base
-//TODO A tester pr tous les cas possibles
-//TODO Rajouter le cas où le nom est déjà utilisé
-//TODO Vérifier comment on supprime un tag d'un bundle <=> est ce qu'on supprime la méta donnée dans le xml
-//<=>est-ce qu'on vérifie avant de modif le xml si un fichier qu'il contient n'a pas ce tag...
 bool KoResourceManagerControl::rename(QModelIndex index, QString newName, int type)
 {
     KoResourceTableModel* currentModel = getModel(type);
@@ -373,7 +352,7 @@ bool KoResourceManagerControl::rename(QModelIndex index, QString newName, int ty
 
                 if (currentBundle) {
                     currentBundle->removeFile(oldFilename);
-                    currentBundle->addFile(fileType, newFilename, tagList);
+                    currentBundle->addResource(fileType, newFilename, tagList, currentResource->md5());
                 }
 
             }
@@ -389,7 +368,6 @@ bool KoResourceManagerControl::rename(QModelIndex index, QString newName, int ty
     return false;
 }
 
-//TODO Voir s'il est intéressant de garder la sélection
 void KoResourceManagerControl::filterResourceTypes(int index)
 {
     QList<QSharedPointer<KoAbstractResourceServerAdapter> > list;
@@ -452,10 +430,6 @@ void KoResourceManagerControl::filterResourceTypes(int index)
     }
 }
 
-
-//TODO Rajouter la mise a jour des tags
-//TODO Voir si ce traitement ne peut pas etre généraliser ou fait ailleurs
-//TODO Lors de l'ajout d'un tag à un paquet, rajouter le tag aussi dans le meta
 void KoResourceManagerControl::addFiles(QString bundleName, int type)
 {
     KoResourceTableModel* currentModel = getModel(type);
@@ -469,8 +443,8 @@ void KoResourceManagerControl::addFiles(QString bundleName, int type)
         for (int i = 0; i < selected.size(); i++) {
             QString currentSelect = selected.at(i);
             QString resourceType = currentSelect.section('/', currentSelect.count("/") - 2, currentSelect.count("/") - 2);
-
-            currentBundle->addFile(resourceType, currentSelect, currentModel->assignedTagsList(currentModel->getResourceFromFilename(currentSelect)));
+            KoResource *res = currentModel->getResourceFromFilename(currentSelect);
+            currentBundle->addResource(resourceType, currentSelect, currentModel->assignedTagsList(res), res->md5());
             QFile::copy(currentSelect, path + resourceType + QString("/") + bundleName + QString("/")
                         + currentSelect.section('/', currentSelect.count("/")));
         }
@@ -497,8 +471,16 @@ void KoResourceManagerControl::exportBundle(int type)
             if (currentBundle) {
                 if (!modified) {
                     emit status("Exporting bundle(s)...");
-                    dirPath = QFileDialog::getExistingDirectory(0, tr("Directory"), QProcessEnvironment::systemEnvironment().value("HOME").section(':', 0, 0), QFileDialog::ShowDirsOnly);
-                    dirPath.append("/");
+
+                    KoFileDialog dialog(0, KoFileDialog::OpenDirectory, "krita/resourcemanagercontrol");
+                    dialog.setCaption(i18n("Select a Directory"));
+                    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
+                    dirPath = dialog.url();
+
+                    if (!dirPath.endsWith('/')) {
+                        dirPath.append('/');
+                    }
+
                     modified = true;
                 }
                 currentBundle->save();
@@ -523,8 +505,13 @@ void KoResourceManagerControl::exportBundle(int type)
 bool KoResourceManagerControl::importBundle()
 {
     emit status("Importing...");
-    QString filePath = QFileDialog::getOpenFileName(0,
-                       tr("Import Bundle"), QProcessEnvironment::systemEnvironment().value("HOME").section(':', 0, 0), tr("Archive Files (*.bundle)"));
+
+    KoFileDialog dialog(0, KoFileDialog::OpenFiles, "krita/resourcemanagercontrol");
+    dialog.setCaption(i18n("Import Bundle"));
+    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
+    dialog.setNameFilter(i18n("Archive Files (*.bundle)"));
+
+    QString filePath = dialog.url();
 
     if (!filePath.isEmpty()) {
         QFile::copy(filePath, ResourceBundleServerProvider::instance()->resourceBundleServer()->saveLocation());
@@ -536,7 +523,6 @@ bool KoResourceManagerControl::importBundle()
     }
 }
 
-//TODO Problème nb de valeurs affichées sur le précédent onglet
 void KoResourceManagerControl::refreshTaggingManager()
 {
     for (int i = 0; i < m_modelsCount; i++) {

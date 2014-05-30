@@ -177,11 +177,6 @@ private:
     Private * const d;
 };
 
-/*! \return "create" KAction's name for part defined by \a info.
- The result is like "tablepart_create". Used in Part::createGUIClients()
- and KexiBrowser. */
-KEXICORE_EXPORT QString nameForCreateAction(const Info& info);
-
 }
 
 #endif

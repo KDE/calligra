@@ -211,7 +211,7 @@ protected:
     static void addIncludeFileName(const QString &include, QDomDocument &domDoc);
 
 private:
-    // This hash stores buddies associations until the Form is completely loaded.
+    //! This hash stores buddies associations until the Form is completely loaded.
     static QHash<QString, QLabel*> *m_buddies;
 };
 

@@ -20,7 +20,6 @@
 #ifndef KEXIFORMMANAGER_H
 #define KEXIFORMMANAGER_H
 
-#include <QObject>
 #include "kexiformpart.h"
 
 class KexiFormView;
@@ -50,7 +49,6 @@ public:
 
     KFormDesigner::WidgetLibrary* library() const;
 
-//moved from KFormDesigner::FormManager
     /*! @return action group containing "insert widget" actions for each widget. */
     KFormDesigner::ActionGroup* widgetActionGroup() const;
 
@@ -76,44 +74,29 @@ public slots:
     void insertAutoFields(const QString& sourcePartClass, const QString& sourceName,
                           const QStringList& fields);
 
-// moved from FormManager
     /*! For debugging purposes only:
      shows a text window containing contents of .ui XML definition of the current form. */
     void showFormUICode();
 
 protected slots:
     void slotHistoryCommandExecuted(KFormDesigner::Command *command);
-// 2.0 moved from KexiFormPart
     void slotWidgetCreatedByFormsLibrary(QWidget* widget);
     void slotWidgetActionToggled(const QByteArray& action);
     void slotAssignAction();
     void slotPointerClicked();
 
 protected:
-    inline QString translateName(const char* name) const;
+    QString translateName(const char* name) const;
 
 private:
     //! Helper: return active form's view widget or 0 if there's no active form having such widget
     KexiFormView* activeFormViewWidget() const;
 
-//moved from KFormDesigner::FormManager
     //! Called by init()
     void createActions(KActionCollection* collection);
 
     friend class KexiFormManagerPrivate;
     KexiFormManagerPrivate * const d;
 };
-
-QString KexiFormManager::translateName(const char* name) const
-{
-    QString n(QString::fromLatin1(name));
-    //translate to our name space:
-    if (n.startsWith("align_") || n.startsWith("adjust_") || n.startsWith("layout_")
-            || n == "format_raise" || n == "format_raise" || n == "taborder" || n == "break_layout")
-    {
-        n.prepend("formpart_");
-    }
-    return n;
-}
 
 #endif

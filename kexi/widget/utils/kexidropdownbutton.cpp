@@ -71,14 +71,7 @@ KexiDropDownButton::KexiDropDownButton(QWidget *parent)
     KexiDropDownButtonStyle *s = new KexiDropDownButtonStyle(style(), this);
     setStyle(s);
 //! @todo get this from a KStyle
-// setFixedWidth(QMAX(18, qApp->globalStrut().width()));
-//    int fixedWidth;
-    //hack
-#ifdef __GNUC__
-#warning TODO use subControlRect
-#else
-#pragma WARNING( TODO use subControlRect )
-#endif
+//! @todo use subControlRect
     /*TODO
       if (style()->objectName().toLower()=="thinkeramik")
         fixedWidth = 18; //typical width as in "windows" style
@@ -104,7 +97,6 @@ void KexiDropDownButton::paintEvent(QPaintEvent *e)
     QPainter p(this);
     QStyleOptionToolButton option;
     option.initFrom(this);
-    //option.state |= isDown() ? QStyle::State_Sunken : QStyle::State_Raised;
     style()->drawPrimitive(QStyle::PE_IndicatorButtonDropDown, &option, &p);
 
     //! @todo use tableview's appearance parameters for color

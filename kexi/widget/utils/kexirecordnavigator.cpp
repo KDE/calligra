@@ -66,7 +66,6 @@ public:
     KLineEdit *navRecordNumber;
     QIntValidator *navRecordNumberValidator;
     KLineEdit *navRecordCount; //!< readonly counter
-//    QLabel *navRecordCount; //!< readonly counter
     uint nav1DigitWidth;
     QAbstractScrollArea *view;
 
@@ -88,7 +87,6 @@ KexiRecordNavigator::KexiRecordNavigator(QWidget *parent, QAbstractScrollArea* p
     setFocusPolicy(Qt::NoFocus);
     setParentView(parentView);
     d->lyr = new QHBoxLayout(this);
-//    const bool winStyle = style()->objectName().toLower() == "windows"; // used to fix appearance of the number field
     d->lyr->setContentsMargins(0, /*winStyle ? 1 :*/ 0, 0, 0);
     d->lyr->setSpacing(2);
 
@@ -109,8 +107,6 @@ KexiRecordNavigator::KexiRecordNavigator(QWidget *parent, QAbstractScrollArea* p
     d->navRecordNumber = new KLineEdit(this);
     d->lyr->addWidget(d->navRecordNumber, 0, Qt::AlignVCenter);
     KexiUtils::WidgetMargins margins;
-//    margins.top = winStyle ? 1 : 0;
-//    margins.bottom = winStyle ? 1 : 0;
     margins.copyToWidget(d->navRecordNumber);
     d->navRecordNumber->setFrame(false);
     if (parentView) {
@@ -137,11 +133,9 @@ KexiRecordNavigator::KexiRecordNavigator(QWidget *parent, QAbstractScrollArea* p
 
     d->navRecordCount = new KLineEdit(this);
     d->lyr->addWidget(d->navRecordCount, 0, Qt::AlignVCenter);
-//    d->navRecordCount->setTextInteractionFlags(Qt::TextSelectableByMouse);
     d->navRecordCount->setFrame(false);
     d->navRecordCount->setReadOnly(true);
     QPalette navRecordCountPalette(d->navRecordCount->palette());
-//    navRecordCountPalette.setBrush( QPalette::Base, navRecordCountPalette.brush(QPalette::Window) );
     navRecordCountPalette.setBrush( QPalette::Base, QBrush(Qt::transparent) );
     d->navRecordCount->setPalette(navRecordCountPalette);
     if (parentView) {
@@ -478,7 +472,6 @@ void KexiRecordNavigator::slotNewButtonClicked()
     if (d->handler)
         d->handler->addNewRecordRequested();
 }
-
 
 void KexiRecordNavigator::setRecordHandler(KexiRecordNavigatorHandler *handler)
 {

@@ -51,8 +51,6 @@
 #include "widgets/kexidbautofield.h"
 #include "widgets/kexidbcheckbox.h"
 #include "widgets/kexidbimagebox.h"
-//#include "widgets/kexidbdoublespinbox.h"
-//#include "widgets/kexidbintspinbox.h"
 #include "widgets/kexiframe.h"
 #include "widgets/kexidblabel.h"
 #include "widgets/kexidblineedit.h"
@@ -401,8 +399,6 @@ KexiDBFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
                             KFormDesigner::Container *container,
                             CreateWidgetOptions options)
 {
-    kDebug() << this;
-
     QWidget *w = 0;
     QString text(container->form()->library()->textForWidgetName(n, c));
     const bool designMode = options & KFormDesigner::WidgetFactory::DesignViewMode;
@@ -410,9 +406,6 @@ KexiDBFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
 
     if (c == "KexiDBLineEdit") {
         w = new KexiDBLineEdit(p);
-//2.0 moved to FormWidgetInterface
-//        if (designMode)
-//            w->setCursor(QCursor(Qt::ArrowCursor));
     }
 #ifndef KEXI_NO_SUBFORM
     if (c == "KexiDBSubForm") {
@@ -421,24 +414,25 @@ KexiDBFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
 #endif
     else if (c == "KexiDBTextEdit") {
         w = new KexiDBTextEdit(p);
-//2.0 moved to FormWidgetInterface
-//        if (designMode)
-//            w->setCursor(QCursor(Qt::ArrowCursor));
-    } else if (c == "Q3Frame" || c == "QFrame" || c == "KexiFrame") {
+    }
+    else if (c == "Q3Frame" || c == "QFrame" || c == "KexiFrame") {
         w = new KexiFrame(p);
         createContainer = true;
-    } else if (c == "KexiDBLabel")
+    } else if (c == "KexiDBLabel") {
         w = new KexiDBLabel(text, p);
+    }
     else if (c == "KexiDBImageBox") {
         w = new KexiDBImageBox(designMode, p);
         connect(w, SIGNAL(idChanged(long)), this, SLOT(slotImageBoxIdChanged(long)));
     }
 #ifndef KEXI_NO_AUTOFIELD_WIDGET
-    else if (c == "KexiDBAutoField")
+    else if (c == "KexiDBAutoField") {
         w = new KexiDBAutoField(p);
+    }
 #endif
-    else if (c == "KexiDBCheckBox")
+    else if (c == "KexiDBCheckBox") {
         w = new KexiDBCheckBox(text, p);
+    }
     else if (c == "KexiDBSlider") {
         w = new KexiDBSlider(p);
     } else if (c == "KexiDBProgressBar") {
@@ -446,11 +440,12 @@ KexiDBFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
     } else if (c == "KexiDBDatePicker") {
         w = new KexiDBDatePicker(p);
     }
-
-    else if (c == "KexiDBComboBox")
+    else if (c == "KexiDBComboBox") {
         w = new KexiDBComboBox(p);
-    else if (c == "KPushButton" || c == "KexiDBPushButton" || c == "KexiPushButton")
+    }
+    else if (c == "KPushButton" || c == "KexiDBPushButton" || c == "KexiPushButton") {
         w = new KexiDBPushButton(text, p);
+    }
     else if (c == "KexiDBCommandLinkButton" || c == "KexiCommandLinkButton") {
         w = new KexiDBCommandLinkButton(text, QString(), p);
     }
@@ -501,7 +496,6 @@ KexiDBFactory::createCustomActions(KActionCollection* col)
 bool
 KexiDBFactory::startInlineEditing(InlineEditorCreationArguments& args)
 {
-//2.0    m_container = container;
     const KFormDesigner::WidgetInfo* wclass = args.container->form()->library()->widgetInfoForClassName(args.classname);
     const KexiDataAwareWidgetInfo* wDataAwareClass = dynamic_cast<const KexiDataAwareWidgetInfo*>(wclass);
     if (wDataAwareClass && !wDataAwareClass->inlineEditingEnabledWhenDataSourceSet()) {
@@ -561,10 +555,8 @@ KexiDBFactory::startInlineEditing(InlineEditorCreationArguments& args)
     }
     else if (args.classname == "KexiDBLabel") {
         KexiDBLabel *label = static_cast<KexiDBLabel*>(args.widget);
-//2.0        m_widget = w;
         if (label->textFormat() == Qt::RichText) {
             args.execute = false;
-//            QString text = label->text();
             if (wclass && wclass->inheritedClass()) {
                 const QByteArray thisClassname = args.classname; //save
                 args.classname = wclass->inheritedClass()->className();

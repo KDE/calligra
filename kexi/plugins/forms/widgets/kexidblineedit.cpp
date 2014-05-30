@@ -126,13 +126,6 @@ KexiDBLineEdit::~KexiDBLineEdit()
 {
 }
 
-/*
-void FormWidgetInterface::setDesignMode(bool design)
-{
-    FormWidgetInterface::setDesignMode(design);
-    setCursor(design ? QCursor(Qt::ArrowCursor) : QCursor());
-}*/
-
 void KexiDBLineEdit::setInvalidState(const QString& displayText)
 {
     KLineEdit::setReadOnly(true);
@@ -317,12 +310,6 @@ void KexiDBLineEdit::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
 
     KexiDBTextWidgetInterface::setColumnInfo(cinfo, this);
 }
-
-/*todo
-void KexiDBLineEdit::paint( QPainter *p )
-{
-  KexiDBTextWidgetInterface::paint( this, &p, text().isEmpty(), alignment(), hasFocus() );
-}*/
 
 void KexiDBLineEdit::paintEvent(QPaintEvent *pe)
 {

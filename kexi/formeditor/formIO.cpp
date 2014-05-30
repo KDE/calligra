@@ -137,7 +137,7 @@ FormIO::saveFormToFile(Form *form, const QString &filename)
     }
 
     if (filename.isEmpty()) {
-        KoFileDialog dlg(0, KoFileDialog::SaveFile);
+        KoFileDialog dlg(0, KoFileDialog::SaveFile, "SaveForm");
         dlg.setNameFilter(i18n("*.ui|Qt Designer UI Files"));
         _filename = dlg.url();
         if (_filename.isEmpty()) {
@@ -317,7 +317,7 @@ FormIO::loadFormFromFile(Form *form, QWidget *container, const QString &filename
     QString _filename;
 
     if (filename.isEmpty()) {
-        KoFileDialog dlg(0, KoFileDialog::OpenFile);
+        KoFileDialog dlg(0, KoFileDialog::OpenFile, "LoadForm");
         dlg.setNameFilter(i18n("*.ui|Qt Designer UI Files"));
         _filename = dlg.url();
         if (_filename.isEmpty()) {
@@ -1213,7 +1213,6 @@ void FormIO::loadWidget(Container *container, const QDomElement &el, QWidget *pa
         //don't generate accelerators for widgets in design mode
         KAcceleratorManager::setNoAccel(w);
     }
-//2.0???    w->setStyle(container->widget()->style());
     w->show();
 
     // We create and insert the ObjectTreeItem at the good place in the ObjectTree
@@ -1229,7 +1228,7 @@ void FormIO::loadWidget(Container *container, const QDomElement &el, QWidget *pa
             if (titem)
                 container->form()->objectTree()->addItem(titem, item);
             else
-                kDebug() << "FORMIO :: ERROR no parent widget ";
+                kWarning() << "ERROR no parent widget";
         } else
             container->form()->objectTree()->addItem(container->objectTree(), item);
     }
