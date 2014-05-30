@@ -1,3 +1,5 @@
 #! /bin/sh
+source ../calligra_xgettext.sh
+
 $EXTRACTRC `find . -name "*.ui" -o -name "*.rc"` >> rc.cpp || exit 11
-$XGETTEXT -kkundo2_i18nc:1c,2 -kkundo2_i18ncp:1c,2,3 `find . -name "*.h" -o -name "*.cpp"` -o $podir/stage.pot
+calligra_xgettext "`find . -name \*.h -o -name \*.cpp`" > $podir/stage.pot

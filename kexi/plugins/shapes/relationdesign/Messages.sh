@@ -1,2 +1,4 @@
 #! /bin/sh
-$XGETTEXT -kkundo2_i18nc:1c,2 -kkundo2_i18ncp:1c,2,3 *.cpp *.h -o $podir/KexiRelationDesignShapePlugin.pot
+source ../../../../calligra_xgettext.sh
+
+calligra_xgettext *.cpp *.h > $podir/KexiRelationDesignShapePlugin.pot

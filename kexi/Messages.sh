@@ -1,4 +1,6 @@
 #! /bin/sh
+source ../calligra_xgettext.sh
+
 EXCLUDE="-path ./3rdparty -o -path ./doc -o -path ./examples -o -path ./tests -o -path ./plugins/relations -o -path ./main/printing -o -path ./main/status -o -path ./mobile -o -path ./tools -o -path ./webforms -o -path ./plugins/forms/widgets/webbrowser -o -path ./plugins/forms/widgets/mapbrowser"
 LIST="`find . \( \( $EXCLUDE \) -prune -o -name \*.ui \) -type f | grep -v -e '/\.'`"
 if test -n "$LIST"; then
@@ -6,6 +8,5 @@ if test -n "$LIST"; then
 fi
 LIST=`find . \( \( $EXCLUDE \) -prune -o -name \*.h -o -name \*.cpp \) -type f` #| grep -v -e '/\.' -e kexidswelcome.cpp
 if test -n "$LIST"; then
-	$XGETTEXT -kkundo2_i18nc:1c,2 -kkundo2_i18ncp:1c,2,3 $LIST -o $podir/kexi.pot
+	calligra_xgettext $LIST > $podir/kexi.pot
 fi
-
