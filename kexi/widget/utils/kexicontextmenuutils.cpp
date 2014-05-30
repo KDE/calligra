@@ -30,7 +30,6 @@
 #include <kactioncollection.h>
 #include <kaction.h>
 
-#include <QFileDialog>
 #include <QApplication>
 
 //! @internal

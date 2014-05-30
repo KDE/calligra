@@ -45,7 +45,6 @@
 #include <kapplication.h>
 #include <kcmdlineargs.h>
 #include <knewstuff3/downloaddialog.h>
-#include <kfiledialog.h>
 #include <KIO/NetAccess>
 #include <kstandarddirs.h>
 #include <ktar.h>
