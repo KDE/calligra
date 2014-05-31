@@ -145,6 +145,9 @@ KexiRelationsScrollArea::KexiRelationsScrollArea(QWidget *parent)
 
 KexiRelationsScrollArea::~KexiRelationsScrollArea()
 {
+    clearSelection(); //sanity
+    qDeleteAll(d->connectionViews);
+    d->connectionViews.clear();
     delete d;
 }
 
