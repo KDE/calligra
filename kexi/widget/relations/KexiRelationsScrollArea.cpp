@@ -712,8 +712,7 @@ QSize KexiRelationsScrollArea::sizeHint() const
 void KexiRelationsScrollArea::clear()
 {
     removeAllConnections();
-    foreach(KexiRelationsTableContainer* container, d->tables)
-    delete container;
+    qDeleteAll(d->tables);
     d->tables.clear();
 //Qt 4 updateContents();
     d->areaWidget->update();
