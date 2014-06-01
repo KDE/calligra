@@ -45,8 +45,6 @@ class KOODF2_EXPORT KoOdfStyleManager
     KoOdfListStyle *listStyle(QString &name) const;
     void setListStyle(QString &name, KoOdfListStyle *listStyle);
 
-    KoOdfStyle *defaultStyle(QString &family) const;
-    void setDefaultStyle(QString &family, KoOdfStyle *style);
     KoOdfStyle *defaultStyle(const QString &family) const;
     void setDefaultStyle(const QString &family, KoOdfStyle *style);
 

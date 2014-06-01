@@ -200,6 +200,7 @@ void OdfTextReader::readTextLevelElement(KoXmlStreamReader &reader)
     }
     else if (tagName == "text:list") {
         readElementTextList(reader);
+    }
     else if (tagName == "table:table") {
         readElementTableTable(reader);
     }
@@ -676,9 +677,6 @@ void OdfTextReader::readParagraphContents(KoXmlStreamReader &reader)
     DEBUGEND();
 }
 
-<<<<<<< HEAD
-=======
-
 void OdfTextReader::readElementOfficeAnnotation(KoXmlStreamReader &reader)
 {
     DEBUGSTART();
@@ -754,7 +752,6 @@ void OdfTextReader::readElementDcDate(KoXmlStreamReader &reader)
     DEBUGEND();
 }
 
->>>>>>> master
 void OdfTextReader::readElementTextA(KoXmlStreamReader &reader)
 {
     DEBUGSTART();

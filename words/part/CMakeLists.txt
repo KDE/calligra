@@ -60,11 +60,7 @@ set(wordsprivate_LIB_SRCS
     dockers/KWStatisticsDocker.cpp
     dockers/KWStatisticsWidget.cpp
     dockers/StatisticsPreferencesPopup.cpp
-    dockers/wiki/WikiClientDocker.cpp
-    dockers/wiki/WikiClientFactory.cpp
-    dockers/wiki/WikiClientWidget.cpp
-    dockers/wiki/WikiApiBackend.cpp
-    dockers/wiki/WikiUserBackend.cpp
+
 
     dockers/KWNavigationDocker.cpp
     dockers/KWNavigationDockerFactory.cpp
@@ -104,7 +100,6 @@ kde4_add_ui_files(wordsprivate_LIB_SRCS
     dialogs/KWSelectBookmark.ui
     dialogs/KWInsertImage.ui
     dockers/StatisticsPreferencesPopup.ui
-    dockers/wiki/WikiClientWidget.ui
     pagetool/SimpleSetupWidget.ui
     pagetool/SimpleHeaderFooterWidget.ui
     author/CoverSelectionDialog.ui

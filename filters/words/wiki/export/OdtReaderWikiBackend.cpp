@@ -93,7 +93,7 @@ void OdtReaderWikiBackend::elementTextP(KoXmlStreamReader &reader, OdfReaderCont
     }
     if (reader.isStartElement()) {
         QString stylename = reader.attributes().value("text:style-name").toString();
-        KoOdfStyle *style = wikiContext->styleManager()->style(stylename);
+        KoOdfStyle *style = wikiContext->styleManager()->style(stylename, "text");
         //Push style to stack
         wikiContext->pushStyle(style);
 
@@ -119,7 +119,7 @@ void OdtReaderWikiBackend::elementTextSpan(KoXmlStreamReader &reader, OdfReaderC
     }
     if (reader.isStartElement()) {
         QString stylename = reader.attributes().value("text:style-name").toString();
-        KoOdfStyle *style = wikiContext->styleManager()->style(stylename);
+        KoOdfStyle *style = wikiContext->styleManager()->style(stylename, "text");
         //Push style to stack
         wikiContext->pushStyle(style);
 

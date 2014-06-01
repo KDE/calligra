@@ -40,7 +40,6 @@
 #include "dockers/KWRdfDockerFactory.h"
 #endif
 #include "dockers/KWStatisticsDocker.h"
-#include "dockers/wiki/WikiClientFactory.h"
 #include "pagetool/KWPageToolFactory.h"
 #include "dockers/KWNavigationDockerFactory.h"
 
@@ -97,7 +96,6 @@ const KComponentData &KWFactory::componentData()
 
         KoDockRegistry *dockRegistry = KoDockRegistry::instance();
         dockRegistry->add(new KWStatisticsDockerFactory());
-        dockRegistry->add(new WikiClientFactory());
         dockRegistry->add(new KWNavigationDockerFactory());
 #ifdef SHOULD_BUILD_RDF
 // TODO reenable after release

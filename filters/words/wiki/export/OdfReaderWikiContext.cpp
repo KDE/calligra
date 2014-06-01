@@ -48,7 +48,8 @@ OdfReaderWikiContext::~OdfReaderWikiContext()
 KoOdfStyle *OdfReaderWikiContext::currentStyleProperties(KoXmlStreamReader &reader) const
 {
     QString stylename = reader.attributes().value("style-name").toString();
-    KoOdfStyle *style = styleManager()->style(stylename);
+    QString styleFamily = reader.attributes().value("style-family").toString();
+    KoOdfStyle *style = styleManager()->style(stylename, styleFamily);
     return style;
 }
 void OdfReaderWikiContext::pushStyle(KoOdfStyle *style)
