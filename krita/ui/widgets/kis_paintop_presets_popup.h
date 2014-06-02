@@ -94,6 +94,7 @@ signals:
     void presetNameLineEditChanged(const QString& presetName);
     void paintopActivated(const QString& presetName);
     void signalResourceSelected(KoResource* resource);
+    void reloadPresetClicked();
 
     void sizeChanged();
 

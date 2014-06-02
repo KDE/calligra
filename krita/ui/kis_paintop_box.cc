@@ -277,6 +277,8 @@ KisPaintopBox::KisPaintopBox(KisView2 *view, QWidget *parent, const char *name)
     connect(m_presetsPopup       , SIGNAL(defaultPresetClicked())             , SLOT(slotSetupDefaultPreset()));
     connect(m_presetsPopup       , SIGNAL(presetNameLineEditChanged(QString)) , SLOT(slotWatchPresetNameLineEdit(QString)));
     connect(m_presetsPopup       , SIGNAL(signalResourceSelected(KoResource*)), SLOT(resourceSelected(KoResource*)));
+    connect(m_presetsPopup       , SIGNAL(reloadPresetClicked())              , SLOT(slotReloadPreset()));
+
     connect(m_presetsChooserPopup, SIGNAL(resourceSelected(KoResource*))      , SLOT(resourceSelected(KoResource*)));
     connect(m_resourceProvider   , SIGNAL(sigNodeChanged(const KisNodeSP))    , SLOT(slotNodeChanged(const KisNodeSP)));
     connect(m_cmbCompositeOp     , SIGNAL(currentIndexChanged(int))           , SLOT(slotSetCompositeMode(int)));
@@ -344,8 +346,9 @@ void KisPaintopBox::resourceSelected(KoResource* resource)
     if (preset) {
         if(!preset->settings()->isLoadable())
             return;
-
+        bool saveIsDirtyPreset = preset->isDirtyPreset();
         setCurrentPaintop(preset->paintOp(), preset->clone());
+        m_resourceProvider->currentPreset()->setIsDirtyPreset(saveIsDirtyPreset);
         m_presetsPopup->setPresetImage(preset->image());
         m_presetsPopup->resourceSelected(resource);
     }
@@ -881,4 +884,18 @@ void KisPaintopBox::slotToggleAlphaLockMode(bool checked)
         m_alphaLockButton->actions()[0]->setIcon(koIcon("transparency-unlocked"));
     }
     m_resourceProvider->setGlobalAlphaLock(checked);
+}
+void KisPaintopBox::slotReloadPreset()
+{
+    KoResourceServer<KisPaintOpPreset> * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
+    KisPaintOpPreset *preset = rserver->resourceByName(m_resourceProvider->currentPreset()->name());
+    if(preset)
+        {
+            preset->load();
+            preset->settings()->setNode(m_resourceProvider->currentPreset()->settings()->node());
+            preset->settings()->setOptionsWidget(m_optionWidget);
+            m_optionWidget->setConfiguration(preset->settings());
+            m_presetsPopup->setPaintOpSettingsWidget(m_optionWidget);
+            m_presetsPopup->resourceSelected(preset);
+        }
 }

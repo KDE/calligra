@@ -112,6 +112,9 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     connect(m_d->uiWdgPaintOpPresetSettings.bnSave, SIGNAL(clicked()),
             this, SIGNAL(savePresetClicked()));
 
+    connect(m_d->uiWdgPaintOpPresetSettings.reload, SIGNAL(clicked()),
+            this, SIGNAL(reloadPresetClicked()));
+
     connect(m_d->uiWdgPaintOpPresetSettings.bnDefaultPreset, SIGNAL(clicked()),
             this, SIGNAL(defaultPresetClicked()));
                         
@@ -283,7 +286,11 @@ void KisPaintOpPresetsPopup::showScratchPad()
 
 void KisPaintOpPresetsPopup::resourceSelected(KoResource* resource)
 {
-    m_d->uiWdgPaintOpPresetSettings.txtPreset->setText(resource->name());
+    KisPaintOpPreset* preset = dynamic_cast<KisPaintOpPreset*>(resource);
+    if(preset->isDirtyPreset())
+        m_d->uiWdgPaintOpPresetSettings.txtPreset->setText(resource->name()+"(Dirty)");
+    else
+        m_d->uiWdgPaintOpPresetSettings.txtPreset->setText(resource->name());
 }
 
 void KisPaintOpPresetsPopup::setPaintOpList(const QList< KisPaintOpFactory* >& list)

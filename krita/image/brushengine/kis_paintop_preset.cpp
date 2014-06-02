@@ -40,11 +40,12 @@
 
 struct KisPaintOpPreset::Private {
     Private()
-        : settings(0),originalSettings(0)
+        : settings(0)
     {}
 
     KisPaintOpSettingsSP settings;
-    KisPaintOpSettingsSP originalSettings;
+    bool isDirtyPreset;
+
 };
 
 
@@ -52,6 +53,7 @@ KisPaintOpPreset::KisPaintOpPreset()
         : KoResource(QString())
         , m_d(new Private)
 {
+    m_d->isDirtyPreset = false;
 }
 
 KisPaintOpPreset::KisPaintOpPreset(const QString & fileName)
@@ -76,8 +78,17 @@ KisPaintOpPreset* KisPaintOpPreset::clone() const
 
     preset->setPaintOp(paintOp());
     preset->setName(name());
+    preset->setIsDirtyPreset(isDirtyPreset());
 
     return preset;
+}
+void KisPaintOpPreset::setIsDirtyPreset(bool value)
+{
+    m_d->isDirtyPreset = value;
+}
+bool KisPaintOpPreset::isDirtyPreset() const
+{
+    return m_d->isDirtyPreset;
 }
 
 void KisPaintOpPreset::setPaintOp(const KoID & paintOp)
@@ -99,12 +110,14 @@ void KisPaintOpPreset::setSettings(KisPaintOpSettingsSP settings)
 
     if (settings) {
         m_d->settings = settings->clone();
+        m_d->settings->setPreset(this);
     }
     else {
         m_d->settings = 0;
+        m_d->settings->setPreset(0);
     }
 
-    m_d->settings->setPreset(this);
+
     setValid(m_d->settings);
 }
 
@@ -115,32 +128,6 @@ KisPaintOpSettingsSP KisPaintOpPreset::settings() const
 
     return m_d->settings;
 }
-
-void KisPaintOpPreset::setOriginalSettings(KisPaintOpSettingsSP originalSettings)
-{
-    Q_ASSERT(originalSettings);
-    Q_ASSERT(!originalSettings->getString("paintop", "").isEmpty());
-
-    if (originalSettings) {
-        m_d->originalSettings = originalSettings->clone();
-    }
-    else {
-        m_d->originalSettings = 0;
-    }
-    m_d->originalSettings->setPreset(this);
-
-    setValid(m_d->originalSettings);
-}
-
-KisPaintOpSettingsSP KisPaintOpPreset::originalSettings() const
-{
-    Q_ASSERT(m_d->originalSettings);
-    Q_ASSERT(!m_d->originalSettings->getString("paintop", "").isEmpty());
-
-    return m_d->originalSettings;
-}
-
-
 
 bool KisPaintOpPreset::load()
 {
@@ -155,6 +142,9 @@ bool KisPaintOpPreset::load()
     if (file.size() == 0) return false;
 
     bool res = loadFromDevice(&file);
+
+    this->setIsDirtyPreset(false);
+
 
     return true;
 }
@@ -194,12 +184,6 @@ bool KisPaintOpPreset::loadFromDevice(QIODevice *dev)
     if (!m_d->settings) {
         return false;
     }
-    if(!m_d->originalSettings){
-        return false;
-    }
-
-    m_d->originalSettings->setPreset(this);
-    m_d->settings->setPreset(this);
 
     setValid(true);
     setImage(img);
@@ -259,16 +243,11 @@ void KisPaintOpPreset::fromXML(const QDomElement& presetElt)
         qWarning() << "Could not load settings for preset" << paintopid;
         return;
     }
-    KisPaintOpSettingsSP originalSettings = KisPaintOpRegistry::instance()->settings(id, 0);
-    if (!originalSettings) {
-        setValid(false);
-        qWarning() << "Could not load settings for preset" << paintopid;
-        return;
-    }
+
     settings->fromXML(presetElt);
-    originalSettings->fromXML(presetElt);
+
     setSettings(settings);
-    setOriginalSettings(originalSettings);
+
 }
 
 QByteArray KisPaintOpPreset::generateMD5() const
@@ -308,6 +287,8 @@ bool KisPaintOpPreset::saveToDevice(QIODevice *dev) const
     else {
         img = image();
     }
+
+    m_d->isDirtyPreset = false;
 
     return writer.write(img);
 

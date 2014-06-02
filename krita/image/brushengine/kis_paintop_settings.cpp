@@ -38,6 +38,7 @@
 #include "kis_paintop_settings_widget.h"
 #include "kis_paintop_preset.h"
 #include <time.h>
+#include<kis_types.h>
 
 struct KisPaintOpSettings::Private {
     KisNodeSP node;
@@ -229,6 +230,7 @@ void KisPaintOpSettings::onPropertyChanged()
 {
     if(this->preset()!= NULL)
     {
-        qDebug(this->preset()->originalSettings()->getString("OpacityValue").toLatin1());
+        qDebug(preset()->name().toLatin1());
+        this->preset()->setIsDirtyPreset(true);
     }
 }

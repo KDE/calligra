@@ -130,6 +130,7 @@ private slots:
     void slotSwitchToPreviousPreset();
     void slotUnsetEraseMode();
     void slotToggleAlphaLockMode(bool);
+    void slotReloadPreset();
 
 private:
     KisCanvasResourceProvider*           m_resourceProvider;
