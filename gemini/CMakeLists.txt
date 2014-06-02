@@ -35,6 +35,7 @@ set(calligragemini_SRCS
     SimpleTouchArea.cpp
     TouchDeclarativeView.cpp
     Theme.cpp
+    ToolManager.cpp
 )
 
 
