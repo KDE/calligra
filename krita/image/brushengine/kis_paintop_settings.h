@@ -164,6 +164,11 @@ public:
      */
     virtual QSizeF paintOpSize() const;
 
+    void setPreset(KisPaintOpPreset* preset);
+
+    KisPaintOpPreset* preset() const;
+
+
     /**
      * @return filename of the 3D brush model, empty if no brush is set
      */

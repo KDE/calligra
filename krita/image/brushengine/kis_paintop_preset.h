@@ -52,9 +52,11 @@ public:
 
     /// replace the current settings object with the specified settings
     void setSettings(KisPaintOpSettingsSP settings);
+    void setOriginalSettings(KisPaintOpSettingsSP originalSettings);
 
     /// return the settings that define this paintop preset
     KisPaintOpSettingsSP settings() const;
+    KisPaintOpSettingsSP originalSettings() const;
 
     bool load();
     bool loadFromDevice(QIODevice *dev);

@@ -36,17 +36,20 @@
 #include "kis_paintop_registry.h"
 #include "kis_paint_information.h"
 #include "kis_paintop_settings_widget.h"
+#include "kis_paintop_preset.h"
 #include <time.h>
 
 struct KisPaintOpSettings::Private {
     KisNodeSP node;
     QPointer<KisPaintOpSettingsWidget> settingsWidget;
     QString modelName;
+    KisPaintOpPreset* preset;
 };
 
 KisPaintOpSettings::KisPaintOpSettings()
         : d(new Private)
 {
+    d->preset = NULL;
 }
 
 KisPaintOpSettings::~KisPaintOpSettings()
@@ -56,6 +59,14 @@ KisPaintOpSettings::~KisPaintOpSettings()
 void KisPaintOpSettings::setOptionsWidget(KisPaintOpSettingsWidget* widget)
 {
     d->settingsWidget = widget;
+}
+void KisPaintOpSettings::setPreset(KisPaintOpPreset* preset)
+{
+    d->preset = preset;
+}
+KisPaintOpPreset* KisPaintOpSettings::preset() const
+{
+    return d->preset;
 }
 
 bool KisPaintOpSettings::mousePressEvent(const KisPaintInformation &pos, Qt::KeyboardModifiers modifiers){
@@ -101,6 +112,7 @@ KisPaintOpSettingsSP KisPaintOpSettings::clone() const
         i.next();
         settings->setProperty(i.key(), QVariant(i.value()));
     }
+    settings->setPreset(this->preset());
     return settings;
 }
 
@@ -215,4 +227,8 @@ void KisPaintOpSettings::setProperty(const QString & name, const QVariant & valu
 
 void KisPaintOpSettings::onPropertyChanged()
 {
+    if(this->preset()!= NULL)
+    {
+        qDebug(this->preset()->originalSettings()->getString("OpacityValue").toLatin1());
+    }
 }

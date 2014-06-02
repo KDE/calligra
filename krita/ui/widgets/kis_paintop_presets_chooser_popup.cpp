@@ -33,6 +33,7 @@
 #include <kis_paintop_preset.h>
 #include <KoIcon.h>
 #include <QCompleter>
+#include "kis_paintop_settings.h"
 
 struct KisPaintOpPresetsChooserPopup::Private
 {
@@ -108,12 +109,14 @@ void KisPaintOpPresetsChooserPopup::showButtons(bool show)
     m_d->uiWdgPaintOpPresets.wdgPresetChooser->showButtons(show);
 }
 
-void KisPaintOpPresetsChooserPopup::canvasResourceChanged(KoResource* resource)
+void KisPaintOpPresetsChooserPopup::canvasResourceChanged(KoResource* resource , KisPaintOpPresetSP  preset2  )
 {
     if (resource) {
         blockSignals(true);
-        KoResourceServer<KisPaintOpPreset> * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
-        m_d->uiWdgPaintOpPresets.wdgPresetChooser->itemChooser()->setCurrentResource(rserver->resourceByName(resource->name()));
+        //KoResourceServer<KisPaintOpPreset> * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
+        KisPaintOpPreset* preset = dynamic_cast<KisPaintOpPreset*>(resource);
+        qDebug(preset2->settings()->getString("brush_definition").toLatin1());
+        m_d->uiWdgPaintOpPresets.wdgPresetChooser->itemChooser()->setCurrentResource(preset2.data());
         blockSignals(false);
     }
 }
