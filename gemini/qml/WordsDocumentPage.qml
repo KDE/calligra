@@ -118,16 +118,16 @@ Item {
             color: "darkslategrey";
             opacity: 0.8;
         }
+        MouseArea {
+            id: listViewMouseArea;
+            anchors.fill: parent;
+            hoverEnabled: true;
+        }
         ListView {
             id: navigatorListView;
             anchors.fill: parent;
             clip: true;
             model: wordsCanvas.documentModel;
-            MouseArea {
-                id: listViewMouseArea;
-                anchors.fill: parent;
-                hoverEnabled: true;
-            }
             delegate: Item {
                 width: Constants.GridWidth;
                 height: width;
@@ -160,7 +160,7 @@ Item {
                 }
                 MouseArea {
                     anchors.fill: parent;
-//                    onClicked: wordsCanvas.currentPageNumber = index + 1;
+                    onClicked: controllerFlickable.contentY = wordsCanvas.pagePosition(index + 1);
                 }
             }
         }
