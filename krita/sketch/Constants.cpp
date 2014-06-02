@@ -136,7 +136,7 @@ void Constants::setUseScreenGeometry(const bool& newValue)
 }
 
 void Constants::updateGridSizes() {
-    if (m_useScreenGeometry){
+    if (m_useScreenGeometry || !qApp->activeWindow()){
         QDesktopWidget *desktop = QApplication::desktop();
         QWidget *screen = desktop->screen(desktop->primaryScreen());
         m_gridWidth = screen->width() / gridColumns();

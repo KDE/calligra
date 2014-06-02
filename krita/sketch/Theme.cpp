@@ -414,7 +414,7 @@ void Theme::Private::rebuildFontCache()
 
         float lineCount = 0.0f;
         float lineHeight = 0.0f;
-        if (useScreenGeometry) {
+        if (useScreenGeometry || !qApp->activeWindow()) {
             QDesktopWidget *desktop = QApplication::desktop();
             QWidget *screen = desktop->screen(desktop->primaryScreen());
             lineCount = screen->height() > screen->width() ? lineCountPortrait : lineCountLandscape;
