@@ -218,6 +218,11 @@ int CQTextDocumentCanvas::cameraY() const
 qreal CQTextDocumentCanvas::pagePosition(int pageIndex)
 {
     KWPage page = d->document->pageManager()->page(pageIndex);
+    // a very silly heuristic for ensuring the page number changes if we change pages.
+    // this means we don't have to glue the canvas and controlleritem together too close,
+    // but yes, it does look a bit silly.
+    QTimer::singleShot(0, d->throttleTimer, SLOT(stop()));
+    QTimer::singleShot(0, this, SIGNAL(currentPageNumberChanged()));
     return d->canvas->viewMode()->documentToView(page.rect().topLeft(), d->canvas->viewConverter()).y();
 }
 
@@ -287,7 +292,6 @@ bool CQTextDocumentCanvas::event( QEvent* event )
 
                 qApp->processEvents();
                 emit positionShouldChange(syncObject->documentOffset);
-                //d->canvas->setDocumentOffset(syncObject->documentOffset);
             }
 
             return true;
