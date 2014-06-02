@@ -261,8 +261,8 @@ void CQTextDocumentCanvas::setCurrentPageNumber(const int& currentPageNumber)
 void CQTextDocumentCanvas::render(QPainter* painter, const QRectF& target)
 {
     QStyleOptionGraphicsItem option;
-    option.exposedRect = target;
-    option.rect = target.toAlignedRect();
+    option.exposedRect = QRect(0, 0, width(), height());
+    option.rect = option.exposedRect.toAlignedRect();
     d->canvas->canvasItem()->paint(painter, &option);
 }
 
