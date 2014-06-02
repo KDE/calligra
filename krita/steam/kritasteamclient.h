@@ -92,6 +92,7 @@ public slots:
     void showDialog();
     void showOpenFileDialog();
     void showSaveAsFileDialog();
+    void showWorkshopDialog();
 };
 
 #endif // KRITASTEAMCLIENT_H
