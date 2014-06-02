@@ -264,6 +264,10 @@ public:
         saveToSteamCloud->setIcon(koIcon("document-save-as"));
         connect(saveToSteamCloud, SIGNAL(triggered(bool)), KritaSteamClient::instance(), SLOT(showSaveAsFileDialog()));
         collection->addAction("save_to_steam_cloud", saveToSteamCloud);
+
+        KAction* shareOnWorkshop = new KAction(koIcon("folder-remote"), i18n("Share Resources on Steam Workshop..."), q);
+        connect(shareOnWorkshop, SIGNAL(triggered(bool)), KritaSteamClient::instance(), SLOT(showWorkshopDialog()));
+        collection->addAction("share_on_steam_workshop", shareOnWorkshop);
     }
 
     void notifySlateModeChange();
