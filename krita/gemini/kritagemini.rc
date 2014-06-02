@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="Krita" version="50">
+<kpartgui name="Krita" version="57">
 
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
@@ -32,6 +32,8 @@
   <Action name="revert"/>
   <Separator/>
   <Menu name="Resources"><text>&amp;Resources</text>
+   <Action name="share_on_steam_workshop"/>
+   <Separator />
    <Action name="open_resources_directory"/>
    <Separator/>
    <Action name="add_palette"/>

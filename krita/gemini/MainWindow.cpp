@@ -55,6 +55,7 @@
 #include <KoDocumentInfo.h>
 #include <KoAbstractGradient.h>
 #include <KoZoomController.h>
+#include <KoIcon.h>
 
 #include "filter/kis_filter.h"
 #include "filter/kis_filter_registry.h"
@@ -114,9 +115,6 @@ public:
         , toDesktop(0)
         , toSketch(0)
         , switcher(0)
-        , showSteamDialog(0)
-        , saveToSteamCloud(0)
-        , loadFromSteamCloud(0)
     {
 #ifdef Q_OS_WIN
 //         slateMode = (GetSystemMetrics(SM_CONVERTIBLESLATEMODE) == 0);
@@ -165,10 +163,6 @@ public:
     KAction* toDesktop;
     KAction* toSketch;
     QToolButton* switcher;
-
-    KAction* showSteamDialog;
-    KAction* saveToSteamCloud;
-    KAction* loadFromSteamCloud;
 
     void initSketchView(QObject* parent)
     {
@@ -245,32 +239,35 @@ public:
         connect(switcher, SIGNAL(clicked(bool)), q, SLOT(switchToSketch()));
         desktopView->menuBar()->setCornerWidget(switcher);
 
-        showSteamDialog = new KAction(q);
-        showSteamDialog->setEnabled(true);
-        showSteamDialog->setText(tr("Steam Cloud"));
-        q->addAction(showSteamDialog);
-        connect(showSteamDialog, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), KritaSteamClient::instance(), SLOT(showDialog()));
-        desktopView->actionCollection()->addAction("steam_dialog", showSteamDialog);
-
-        loadFromSteamCloud = new KAction(q);
-        loadFromSteamCloud->setEnabled(true);
-        loadFromSteamCloud->setText(tr("Load from Steam Cloud..."));
-        q->addAction(loadFromSteamCloud);
-        connect(loadFromSteamCloud, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), q, SLOT(loadFromSteamCloud()));
-        desktopView->actionCollection()->addAction("load_from_steam_cloud", loadFromSteamCloud);
-
-        saveToSteamCloud = new KAction(q);
-        saveToSteamCloud->setEnabled(true);
-        saveToSteamCloud->setText(tr("Save to Steam Cloud..."));
-        q->addAction(saveToSteamCloud);
-        connect(saveToSteamCloud, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), q, SLOT(saveToSteamCloud()));
-        desktopView->actionCollection()->addAction("save_to_steam_cloud", saveToSteamCloud);
-
         // DesktopViewProxy connects itself up to everything appropriate on construction,
         // and destroys itself again when the view is removed
         desktopViewProxy = new DesktopViewProxy(q, desktopView);
         connect(desktopViewProxy, SIGNAL(documentSaved()), q, SIGNAL(documentSaved()));
         connect(desktopViewProxy, SIGNAL(documentSaved()), q, SLOT(resetWindowTitle()));
+    }
+
+    void addSteamActions(KActionCollection* collection) {
+        KAction* showSteamDialog = new KAction(q);
+        showSteamDialog->setText(i18n("Steam Cloud"));
+        showSteamDialog->setIcon(koIcon("folder-remote"));
+        connect(showSteamDialog, SIGNAL(triggered(bool)), KritaSteamClient::instance(), SLOT(showDialog()));
+        collection->addAction("steam_dialog", showSteamDialog);
+
+        KAction* loadFromSteamCloud = new KAction(q);
+        loadFromSteamCloud->setText(i18n("Load from Steam Cloud..."));
+        loadFromSteamCloud->setIcon(koIcon("document-open-remote"));
+        connect(loadFromSteamCloud, SIGNAL(triggered(bool)), KritaSteamClient::instance(), SLOT(showOpenFileDialog()));
+        collection->addAction("load_from_steam_cloud", loadFromSteamCloud);
+
+        KAction* saveToSteamCloud = new KAction(q);
+        saveToSteamCloud->setText(i18n("Save to Steam Cloud..."));
+        saveToSteamCloud->setIcon(koIcon("document-save-as"));
+        connect(saveToSteamCloud, SIGNAL(triggered(bool)), KritaSteamClient::instance(), SLOT(showSaveAsFileDialog()));
+        collection->addAction("save_to_steam_cloud", saveToSteamCloud);
+
+        KAction* shareOnWorkshop = new KAction(koIcon("folder-remote"), i18n("Share Resources on Steam Workshop..."), q);
+        connect(shareOnWorkshop, SIGNAL(triggered(bool)), KritaSteamClient::instance(), SLOT(showWorkshopDialog()));
+        collection->addAction("share_on_steam_workshop", shareOnWorkshop);
     }
 
     void notifySlateModeChange();
@@ -531,6 +528,7 @@ void MainWindow::documentChanged()
     d->desktopKisView->setQtMainWindow(d->desktopView);
 
     // Define new actions here
+    d->addSteamActions(d->desktopKisView->actionCollection());
 
     KXMLGUIFactory* factory = d->desktopKisView->factory();
     factory->removeClient(d->desktopKisView);

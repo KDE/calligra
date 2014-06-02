@@ -133,5 +133,3 @@ qint64 StorageListModel::usedCapacity()
     }
     return result;
 }
-
-#include "StorageListModel.moc"

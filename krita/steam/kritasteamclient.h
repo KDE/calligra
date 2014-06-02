@@ -23,7 +23,17 @@
 #include <QObject>
 #include <QString>
 
+#ifdef Q_CC_GNU
+// The Steam API has a lot of interfaces containing default, non-virtual dtors.
+// Since we cannot fix the Steam API, disable the warning about it instead.
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wnon-virtual-dtor"
+#endif
 #include "steam/steam_api.h"
+#ifdef Q_CC_GNU
+#pragma GCC diagnostic pop
+#endif
+
 #include "sketch/krita_sketch_export.h"
 
 // forward declaration
@@ -82,6 +92,7 @@ public slots:
     void showDialog();
     void showOpenFileDialog();
     void showSaveAsFileDialog();
+    void showWorkshopDialog();
 };
 
 #endif // KRITASTEAMCLIENT_H

@@ -136,13 +136,15 @@ int main( int argc, char** argv )
 {
     int result;
 
+#ifdef Q_OS_WIN
     prepareStartupLogfile();
     qInstallMsgHandler(customDebugMessageHandler);
-#ifdef Q_OS_WIN
+
     // TODO: re-enabled Steam error reporting if Breakpad support is disabled
     //qDebug("Registering Steam Error handler");
     //_set_se_translator(MiniDumpFunction);
-#endif Q_OS_WIN
+#endif
+
 #ifdef USE_BREAKPAD
     qDebug() << "Enabling breakpad";
     qputenv("KDE_DEBUG", "1");

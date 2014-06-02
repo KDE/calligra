@@ -22,9 +22,9 @@
 
 #include "kritasteamplugin.h"
 
-#include "StorageListModel.h"
+#include "storagelistmodel.h"
 
-#include <QDeclarative.h>
+#include <QtDeclarative>
 #include <QDeclarativeEngine>
 #include <QDeclarativeContext>
 
