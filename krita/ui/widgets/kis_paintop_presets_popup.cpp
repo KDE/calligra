@@ -217,7 +217,12 @@ void KisPaintOpPresetsPopup::changeSavePresetButtonText(bool change)
 
 QString KisPaintOpPresetsPopup::getPresetName() const
 {
-    return m_d->uiWdgPaintOpPresetSettings.txtPreset->text();
+    if(!m_d->uiWdgPaintOpPresetSettings.txtPreset->text().contains("(Dirty)"))
+            return m_d->uiWdgPaintOpPresetSettings.txtPreset->text();
+        else
+            {
+            return m_d->uiWdgPaintOpPresetSettings.txtPreset->text().left(m_d->uiWdgPaintOpPresetSettings.txtPreset->text().length()-7);
+            }
 }
 
 QImage KisPaintOpPresetsPopup::cutOutOverlay()

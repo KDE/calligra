@@ -230,7 +230,10 @@ void KisPaintOpSettings::onPropertyChanged()
 {
     if(this->preset()!= NULL)
     {
-        qDebug(preset()->name().toLatin1());
+        if(this->preset()->isDirtyPreset() == false)
+        {
+
+        }
         this->preset()->setIsDirtyPreset(true);
     }
 }

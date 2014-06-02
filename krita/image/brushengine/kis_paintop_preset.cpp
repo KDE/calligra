@@ -70,15 +70,18 @@ KisPaintOpPreset::~KisPaintOpPreset()
 KisPaintOpPreset* KisPaintOpPreset::clone() const
 {
     KisPaintOpPreset * preset = new KisPaintOpPreset();
+
     if (settings()) {
         preset->setSettings(settings()->clone());
     }
+    preset->setIsDirtyPreset(isDirtyPreset());
     // only valid if we could clone the settings
     preset->setValid(settings());
 
     preset->setPaintOp(paintOp());
     preset->setName(name());
-    preset->setIsDirtyPreset(isDirtyPreset());
+    preset->settings()->setPreset(preset);
+
 
     return preset;
 }
@@ -108,6 +111,7 @@ void KisPaintOpPreset::setSettings(KisPaintOpSettingsSP settings)
     Q_ASSERT(settings);
     Q_ASSERT(!settings->getString("paintop", "").isEmpty());
 
+    bool saveIsDirtyPreset = isDirtyPreset();
     if (settings) {
         m_d->settings = settings->clone();
         m_d->settings->setPreset(this);
@@ -116,7 +120,7 @@ void KisPaintOpPreset::setSettings(KisPaintOpSettingsSP settings)
         m_d->settings = 0;
         m_d->settings->setPreset(0);
     }
-
+    setIsDirtyPreset(saveIsDirtyPreset);
 
     setValid(m_d->settings);
 }

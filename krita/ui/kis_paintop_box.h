@@ -131,6 +131,7 @@ private slots:
     void slotUnsetEraseMode();
     void slotToggleAlphaLockMode(bool);
     void slotReloadPreset();
+    void slotConfigurationItemChanged();
 
 private:
     KisCanvasResourceProvider*           m_resourceProvider;
@@ -150,6 +151,7 @@ private:
     KisWidgetChooser*                    m_sliderChooser[3];
     QMap<KoID,KisPaintOpSettingsWidget*> m_paintopOptionWidgets;
     KisFavoriteResourceManager*          m_favoriteResourceManager;
+    bool                                 m_loadOriginalPreset;
 
 //    KisPaintOpPresetSP  m_activePreset;
 //    KisPaintOpPresetSP  m_previousPreset;

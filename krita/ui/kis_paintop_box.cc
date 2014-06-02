@@ -92,6 +92,8 @@ KisPaintopBox::KisPaintopBox(KisView2 *view, QWidget *parent, const char *name)
 
     setObjectName(name);
 
+    m_loadOriginalPreset = false;
+
     KAcceleratorManager::setNoAccel(this);
 
     setWindowTitle(i18n("Painter's Toolchest"));
@@ -348,6 +350,7 @@ void KisPaintopBox::resourceSelected(KoResource* resource)
             return;
         bool saveIsDirtyPreset = preset->isDirtyPreset();
         setCurrentPaintop(preset->paintOp(), preset->clone());
+        preset->setIsDirtyPreset(saveIsDirtyPreset);
         m_resourceProvider->currentPreset()->setIsDirtyPreset(saveIsDirtyPreset);
         m_presetsPopup->setPresetImage(preset->image());
         m_presetsPopup->resourceSelected(resource);
@@ -406,6 +409,7 @@ void KisPaintopBox::setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP pr
 
     Q_ASSERT(m_optionWidget && m_presetWidget);
     connect(m_optionWidget, SIGNAL(sigConfigurationUpdated()), this, SLOT(slotUpdatePreset()));
+    connect(m_optionWidget, SIGNAL(sigConfigurationItemChanged()), this, SLOT(slotConfigurationItemChanged()));
 
     KisPaintOpFactory* paintOp = KisPaintOpRegistry::instance()->get(paintop.id());
     QString pixFilename = KisFactory2::componentData().dirs()->findResource("kis_images", paintOp->pixmap());
@@ -608,11 +612,13 @@ void KisPaintopBox::slotSaveActivePreset()
     newPreset->setName(name);
 
     m_presetsPopup->changeSavePresetButtonText(true);
-
+    newPreset->setIsDirtyPreset(false);
+    m_presetsPopup->resourceSelected(newPreset);
     rServer->addResource(newPreset);
     foreach(const QString& tag, tags) {
         rServer->addTag(newPreset, tag);
     }
+
     m_favoriteResourceManager->setBlockUpdates(false);
 }
 
@@ -620,8 +626,10 @@ void KisPaintopBox::slotUpdatePreset()
 {
     // block updates of avoid some over updating of the option widget
     m_blockUpdate = true;
-    m_optionWidget->writeConfiguration(const_cast<KisPaintOpSettings*>(m_resourceProvider->currentPreset()->settings().data()));
-    
+
+    //m_optionWidget->writeConfiguration(const_cast<KisPaintOpSettings*>(m_resourceProvider->currentPreset()->settings().data()));
+
+
     setSliderValue("size", m_resourceProvider->currentPreset()->settings()->paintOpSize().width());
 
     if(m_resourceProvider->currentPreset()->settings()->hasProperty("OpacityValue")) {
@@ -737,6 +745,7 @@ void KisPaintopBox::sliderChanged(int n)
     qreal opacity = m_sliderChooser[n]->getWidget<KisDoubleSliderSpinBox>("opacity")->value();
     qreal flow    = m_sliderChooser[n]->getWidget<KisDoubleSliderSpinBox>("flow")->value();
     qreal size    = m_sliderChooser[n]->getWidget<KisDoubleSliderSpinBox>("size")->value();
+
 
     setSliderValue("opacity", opacity);
     setSliderValue("flow"   , flow   );
@@ -886,7 +895,10 @@ void KisPaintopBox::slotToggleAlphaLockMode(bool checked)
     m_resourceProvider->setGlobalAlphaLock(checked);
 }
 void KisPaintopBox::slotReloadPreset()
-{
+{   m_optionWidget->blockSignals(true);
+    m_loadOriginalPreset = true;
+
+    //Here using the name and fetching the preset from the server was the only way the load was working. Otherwise it was not loading.
     KoResourceServer<KisPaintOpPreset> * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
     KisPaintOpPreset *preset = rserver->resourceByName(m_resourceProvider->currentPreset()->name());
     if(preset)
@@ -897,5 +909,13 @@ void KisPaintopBox::slotReloadPreset()
             m_optionWidget->setConfiguration(preset->settings());
             m_presetsPopup->setPaintOpSettingsWidget(m_optionWidget);
             m_presetsPopup->resourceSelected(preset);
+            m_optionWidget->writeConfiguration(const_cast<KisPaintOpSettings*>(m_resourceProvider->currentPreset()->settings().data()));
+            m_resourceProvider->currentPreset()->setIsDirtyPreset(false);
         }
+    m_optionWidget->blockSignals(false);
+}
+void KisPaintopBox::slotConfigurationItemChanged() // Called only when UI is changed and not when preset is changed
+{
+   m_optionWidget->writeConfiguration(const_cast<KisPaintOpSettings*>(m_resourceProvider->currentPreset()->settings().data()));
+   m_presetsPopup->resourceSelected(m_resourceProvider->currentPreset().data());
 }
