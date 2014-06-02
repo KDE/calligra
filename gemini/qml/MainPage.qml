@@ -18,6 +18,7 @@
 
 import QtQuick 1.1
 import "components"
+import org.calligra 1.0
 import org.calligra.CalligraComponents 0.1 as Calligra
 
 Page {
@@ -35,6 +36,10 @@ Page {
             }
             viewLoader.item.source = Settings.currentFile;
         }
+    }
+    ToolManager {
+        id: toolManager;
+        onCurrentToolChanged: console.debug("Current tool is now " + currentTool.toolId());
     }
     Loader {
         id: viewLoader;
@@ -80,8 +85,113 @@ Page {
             }
         }
         Row {
+            id: toolbarTextTool
             anchors.centerIn: parent;
             height: parent.height;
+            opacity: (toolManager.currentTool !== null && toolManager.currentTool.toolId() === "TextToolFactory_ID") ? 1 : 0;
+            Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+            Rectangle { height: parent.height; width: 1; }
+            Button {
+                text: "Text Style"
+                height: parent.height; width: Constants.GridWidth;
+                textColor: "black";
+            }
+            Rectangle { height: parent.height; width: 1; }
+            Button {
+                text: "(font name)"
+                height: parent.height; width: Constants.GridWidth;
+                textColor: "black";
+            }
+            Rectangle { height: parent.height; width: 1; }
+            Button {
+                text: "(size)"
+                height: parent.height; width: Constants.GridWidth / 2;
+                textColor: "black";
+            }
+            Rectangle { height: parent.height; width: 1; }
+            Button {
+                text: "(colour)"
+                height: parent.height; width: Constants.GridWidth / 2;
+                textColor: "black";
+            }
+            Rectangle { height: parent.height; width: 1; }
+            Button {
+                text: "(B)"
+                height: parent.height; width: Constants.GridWidth / 2;
+                textColor: "black";
+            }
+            Button {
+                text: "(I)"
+                height: parent.height; width: Constants.GridWidth / 2;
+                textColor: "black";
+            }
+            Button {
+                text: "(U)"
+                height: parent.height; width: Constants.GridWidth / 2;
+                textColor: "black";
+            }
+            Rectangle { height: parent.height; width: 1; }
+            Button {
+                text: "(list)"
+                height: parent.height; width: Constants.GridWidth / 2;
+                textColor: "black";
+            }
+            Rectangle { height: parent.height; width: 1; }
+            Button {
+                text: "(align)"
+                height: parent.height; width: Constants.GridWidth / 2;
+                textColor: "black";
+            }
+            Rectangle { height: parent.height; width: 1; }
+        }
+        Row {
+            id: toolbarImageTool
+            anchors.centerIn: parent;
+            height: parent.height;
+            opacity: (toolManager.currentTool !== null && toolManager.currentTool.toolId() === "InteractionTool") ? 1 : 0;
+            Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+            Rectangle { height: parent.height; width: 1; }
+            Button {
+                text: "(img)"
+                height: parent.height; width: Constants.GridWidth;
+                textColor: "black";
+            }
+            Rectangle { height: parent.height; width: 1; }
+            Button {
+                text: "(pencol)"
+                height: parent.height; width: Constants.GridWidth;
+                textColor: "black";
+            }
+            Rectangle { height: parent.height; width: 1; }
+            Button {
+                text: "(bgcol)"
+                height: parent.height; width: Constants.GridWidth;
+                textColor: "black";
+            }
+            Rectangle { height: parent.height; width: 1; }
+            Button {
+                text: "(line)"
+                height: parent.height; width: Constants.GridWidth;
+                textColor: "black";
+            }
+            Rectangle { height: parent.height; width: 1; }
+            Button {
+                text: "(shadow)"
+                height: parent.height; width: Constants.GridWidth;
+                textColor: "black";
+            }
+            Rectangle { height: parent.height; width: 1; }
+            Button {
+                text: "(?)"
+                height: parent.height; width: Constants.GridWidth;
+                textColor: "black";
+            }
+            Rectangle { height: parent.height; width: 1; }
+            Button {
+                text: "(cfg)"
+                height: parent.height; width: Constants.GridWidth;
+                textColor: "black";
+            }
         }
         Row {
             anchors.right: parent.right;
@@ -99,7 +209,7 @@ Page {
             }
             Button {
                 opacity: switchToDesktopAction.enabled ? 1 : 0.2;
-                Behavior on opacity { PropertyAnimation { duration: 200; } }
+                Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
                 height: parent.height;
                 width: height;
                 image: Settings.theme.icon("switch");
