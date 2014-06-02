@@ -22,17 +22,6 @@ import org.calligra.CalligraComponents 0.1 as Calligra
 
 Item {
     property alias source: wordsCanvas.source;
-    Calligra.TextDocumentCanvas {
-        id: wordsCanvas;
-        anchors.fill: parent;
-        onLoadingBegun: baseLoadingDialog.visible = true;
-        onLoadingFinished: {
-            console.debug("doc and part: " + doc() + " " + part());
-            mainWindow.setDocAndPart(doc(), part());
-            baseLoadingDialog.hideMe();
-        }
-        onCurrentPageNumberChanged: navigatorListView.positionViewAtIndex(currentPageNumber - 1, ListView.Contain);
-    }
     Flickable {
         id: controllerFlickable;
         anchors.fill: parent;
@@ -49,6 +38,18 @@ Item {
                 }
             }
         }
+    }
+    Calligra.TextDocumentCanvas {
+        id: wordsCanvas;
+        anchors.fill: parent;
+        onLoadingBegun: baseLoadingDialog.visible = true;
+        onLoadingFinished: {
+            console.debug("doc and part: " + doc() + " " + part());
+            mainWindow.setDocAndPart(doc(), part());
+            baseLoadingDialog.hideMe();
+        }
+        onCurrentPageNumberChanged: navigatorListView.positionViewAtIndex(currentPageNumber - 1, ListView.Contain);
+        Rectangle { anchors.fill: parent; opacity: 0.5; color: "blue"; }
     }
     QtObject {
         id: d;
