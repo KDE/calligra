@@ -18,6 +18,7 @@
 
 import QtQuick 1.1
 import "components"
+import "panels"
 import org.calligra 1.0
 import org.calligra.CalligraComponents 0.1 as Calligra
 
@@ -44,7 +45,7 @@ Page {
     Loader {
         id: viewLoader;
         anchors {
-            top: toolbar.bottom;
+            top: toolbar.top;
             left: parent.left;
             right: parent.right;
             bottom: parent.bottom;
@@ -52,169 +53,196 @@ Page {
     }
     Component { id: stageView; StageDocumentPage {} }
     Component { id: wordsView; WordsDocumentPage {} }
-    Rectangle {
+    Item {
         id: toolbar;
         anchors {
             top: parent.top;
             left: parent.left;
             right: parent.right;
         }
-        height: Constants.GridHeight * 2 / 3;
-        color: "whitesmoke";
-        Row {
-            anchors.left: parent.left;
+        height: Constants.ToolbarHeight;
+        Rectangle {
+            anchors.fill: parent;
+            color: Settings.theme.color("components/toolbar/base");
+            opacity: 0.96;
+        }
+        Button {
+            id: appButton;
             height: parent.height;
-            spacing: Constants.DefaultMargin;
+            width: Constants.ToolbarHeight * 1.2790698;
+            color: "#f2b200";
+            image: Settings.theme.icon("krita_sketch");
+        }
+        Row {
+            anchors {
+                left: appButton.right;
+                leftMargin: 20;
+                verticalCenter: parent.verticalCenter;
+            }
+            height: Constants.ToolbarHeight - 32;
+            spacing: 8;
             Button {
                 height: parent.height;
-                width: height * 1.5;
-                color: "dodgerblue";
-                image: Settings.theme.icon("krita_sketch");
+                width: height * 2;
+                text: "Save";
+                textColor: Settings.theme.color("components/toolbar/text");
             }
             Button {
                 height: parent.height;
                 width: height * 2;
                 text: "Undo";
-                textColor: "black";
+                textColor: Settings.theme.color("components/toolbar/text");
             }
+//             Button {
+//                 height: parent.height;
+//                 width: height * 2;
+//                 text: "Redo";
+//                 textColor: Settings.theme.color("components/toolbar/text");
+//             }
             Button {
                 height: parent.height;
-                width: height * 2;
-                text: "Redo";
-                textColor: "black";
+                width: height * 1.5;
+                textColor: Settings.theme.color("components/toolbar/text");
+                text: "Done"
+                visible: viewLoader.item ? !viewLoader.item.navigateMode : false;
+                onClicked: {
+                    toolManager.requestToolChange("PageToolFactory_ID");
+                    viewLoader.item.navigateMode = true;
+                }
             }
         }
         Row {
             id: toolbarTextTool
             anchors.centerIn: parent;
-            height: parent.height;
+            height: Constants.ToolbarHeight - 32;
             opacity: (toolManager.currentTool !== null && toolManager.currentTool.toolId() === "TextToolFactory_ID") ? 1 : 0;
+            spacing: 4;
             Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
-            Rectangle { height: parent.height; width: 1; }
             Button {
-                text: "Text Style"
-                height: parent.height; width: Constants.GridWidth;
-                textColor: "black";
+                image: Settings.theme.icon("SVG-Icon-TextStyle-1");
+                imageMargin: 2;
+                height: parent.height; width: height;
+                textColor: Settings.theme.color("components/toolbar/text");
+                checkable: true;
+                radius: 4;
+                TextStylePanel {}
             }
-            Rectangle { height: parent.height; width: 1; }
+            Rectangle { color: Settings.theme.color("components/toolbar/text"); height: parent.height; width: 1; }
             Button {
                 text: "(font name)"
                 height: parent.height; width: Constants.GridWidth;
-                textColor: "black";
+                textColor: Settings.theme.color("components/toolbar/text");
             }
-            Rectangle { height: parent.height; width: 1; }
             Button {
                 text: "(size)"
                 height: parent.height; width: Constants.GridWidth / 2;
-                textColor: "black";
+                textColor: Settings.theme.color("components/toolbar/text");
             }
-            Rectangle { height: parent.height; width: 1; }
+            Rectangle { color: Settings.theme.color("components/toolbar/text"); height: parent.height; width: 1; }
             Button {
-                text: "(colour)"
-                height: parent.height; width: Constants.GridWidth / 2;
-                textColor: "black";
-            }
-            Rectangle { height: parent.height; width: 1; }
-            Button {
-                text: "(B)"
-                height: parent.height; width: Constants.GridWidth / 2;
-                textColor: "black";
+                image: Settings.theme.icon("SVG-Icon-Bold-1");
+                imageMargin: 4;
+                height: parent.height; width: height;
+                textColor: Settings.theme.color("components/toolbar/text");
             }
             Button {
-                text: "(I)"
-                height: parent.height; width: Constants.GridWidth / 2;
-                textColor: "black";
+                image: Settings.theme.icon("SVG-Icon-Italic-1");
+                imageMargin: 4;
+                height: parent.height; width: height;
+                textColor: Settings.theme.color("components/toolbar/text");
             }
             Button {
-                text: "(U)"
-                height: parent.height; width: Constants.GridWidth / 2;
-                textColor: "black";
+                image: Settings.theme.icon("SVG-Icon-Underline-1");
+                imageMargin: 4;
+                height: parent.height; width: height;
+                textColor: Settings.theme.color("components/toolbar/text");
             }
-            Rectangle { height: parent.height; width: 1; }
+            Rectangle { color: Settings.theme.color("components/toolbar/text"); height: parent.height; width: 1; }
             Button {
-                text: "(list)"
-                height: parent.height; width: Constants.GridWidth / 2;
-                textColor: "black";
+                image: Settings.theme.icon("SVG-Icon-BulletList-1");
+                imageMargin: 4;
+                height: parent.height; width: height;
+                textColor: Settings.theme.color("components/toolbar/text");
             }
-            Rectangle { height: parent.height; width: 1; }
             Button {
-                text: "(align)"
-                height: parent.height; width: Constants.GridWidth / 2;
-                textColor: "black";
+                image: Settings.theme.icon("SVG-Icon-TextAlignment-1");
+                imageMargin: 4;
+                height: parent.height; width: height;
+                textColor: Settings.theme.color("components/toolbar/text");
             }
-            Rectangle { height: parent.height; width: 1; }
         }
         Row {
             id: toolbarImageTool
             anchors.centerIn: parent;
-            height: parent.height;
+            height: Constants.ToolbarHeight - 32;
             opacity: (toolManager.currentTool !== null && toolManager.currentTool.toolId() === "InteractionTool") ? 1 : 0;
             Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
-            Rectangle { height: parent.height; width: 1; }
             Button {
                 text: "(img)"
                 height: parent.height; width: Constants.GridWidth;
-                textColor: "black";
+                textColor: Settings.theme.color("components/toolbar/text");
             }
-            Rectangle { height: parent.height; width: 1; }
+            Rectangle { color: Settings.theme.color("components/toolbar/text"); height: parent.height; width: 1; }
             Button {
                 text: "(pencol)"
                 height: parent.height; width: Constants.GridWidth;
-                textColor: "black";
+                textColor: Settings.theme.color("components/toolbar/text");
             }
-            Rectangle { height: parent.height; width: 1; }
+            Rectangle { color: Settings.theme.color("components/toolbar/text"); height: parent.height; width: 1; }
             Button {
                 text: "(bgcol)"
                 height: parent.height; width: Constants.GridWidth;
-                textColor: "black";
+                textColor: Settings.theme.color("components/toolbar/text");
             }
-            Rectangle { height: parent.height; width: 1; }
+            Rectangle { color: Settings.theme.color("components/toolbar/text"); height: parent.height; width: 1; }
             Button {
                 text: "(line)"
                 height: parent.height; width: Constants.GridWidth;
-                textColor: "black";
+                textColor: Settings.theme.color("components/toolbar/text");
             }
-            Rectangle { height: parent.height; width: 1; }
+            Rectangle { color: Settings.theme.color("components/toolbar/text"); height: parent.height; width: 1; }
             Button {
                 text: "(shadow)"
                 height: parent.height; width: Constants.GridWidth;
-                textColor: "black";
+                textColor: Settings.theme.color("components/toolbar/text");
             }
-            Rectangle { height: parent.height; width: 1; }
+            Rectangle { color: Settings.theme.color("components/toolbar/text"); height: parent.height; width: 1; }
             Button {
                 text: "(?)"
                 height: parent.height; width: Constants.GridWidth;
-                textColor: "black";
+                textColor: Settings.theme.color("components/toolbar/text");
             }
-            Rectangle { height: parent.height; width: 1; }
+            Rectangle { color: Settings.theme.color("components/toolbar/text"); height: parent.height; width: 1; }
             Button {
                 text: "(cfg)"
                 height: parent.height; width: Constants.GridWidth;
-                textColor: "black";
+                textColor: Settings.theme.color("components/toolbar/text");
             }
         }
         Row {
-            anchors.right: parent.right;
-            height: parent.height;
-            spacing: Constants.DefaultMargin;
+            anchors {
+                right: parent.right;
+                verticalCenter: parent.verticalCenter;
+                rightMargin: 10
+            }
+            height: Constants.ToolbarHeight - 22;
+            spacing: 10;
             Button {
                 height: parent.height; width: height;
-                image: Settings.theme.icon("add");
-                color: "gray";
+                image: Settings.theme.icon("SVG-Icon-AddShape-1");
             }
             Button {
                 height: parent.height; width: height;
-                image: Settings.theme.icon("paint");
-                color: "gray";
+                image: Settings.theme.icon("SVG-Icon-AddNote-1");
             }
             Button {
-                opacity: switchToDesktopAction.enabled ? 1 : 0.2;
-                Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
                 height: parent.height;
                 width: height;
-                image: Settings.theme.icon("switch");
-                color: "gray";
-                onClicked: switchToDesktopAction.trigger();
+                image: Settings.theme.icon("SVG-Icon-Options-1");
+                checkable: true;
+                radius: 4;
+                checkedColor: "#3C00adf5";
+                OptionsPanel {}
             }
         }
     }
