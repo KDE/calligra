@@ -25,11 +25,19 @@ var values = {
     },
 
     components: {
+        toolbar: {
+            base: "#22282f",
+            text: "#C1CDD1"
+        },
+        overlay: {
+            base: "#22282f",
+            text: "white"
+        },
         button: {
             base: "transparent",
             text: "#ffffff",
             highlight: "transparent",
-            checked: Qt.rgba(1.0, 1.0, 1.0, 0.7),
+            checked: "#55595E", //Qt.rgba(1.0, 1.0, 1.0, 0.7),
         },
         colorSwatch: {
             border: "silver",
