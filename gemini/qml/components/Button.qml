@@ -25,6 +25,7 @@ Item {
     signal clicked();
 
     property alias image: icon.source;
+    property int imageMargin: 8;
     property color color: Settings.theme.color("components/button/base");
     property alias border: fill.border;
     property alias radius: fill.radius;
@@ -78,13 +79,16 @@ Item {
             anchors.fill: parent;
             anchors.margins: 2;
             color: base.checkedColor;
-            radius: base.height === base.width ? base.height / 2 - 1 : base.radius;
+            radius: fill.radius;//base.height === base.width ? base.height / 2 - 1 : base.radius;
         }
 
         Image {
             id: icon;
-            anchors.fill: parent;
-            anchors.margins: 8;
+            anchors.left: parent.left;
+            anchors.top: parent.top;
+            anchors.bottom: parent.bottom;
+            anchors.margins: base.imageMargin;
+            width: height;
             fillMode: Image.PreserveAspectFit;
             smooth: true;
             opacity: base.enabled ? 1 : 0.7;
@@ -103,6 +107,21 @@ Item {
             elide: Text.ElideRight;
             opacity: base.enabled ? 1 : 0.7;
             color: base.textColor;
+            visible: (icon.source == "")
+        }
+        Label {
+            id: otherLabel;
+            anchors.left: icon.right;
+            anchors.leftMargin: Constants.DefaultMargin;
+            anchors.verticalCenter: parent.verticalCenter;
+            text: label.text;
+            font: label.font;
+            height: font.pixelSize;
+            width: parent.width - icon.width;
+            elide: label.elide;
+            opacity: base.enabled ? 1 : 0.7;
+            color: base.textColor;
+            visible: (icon.source != "")
         }
 //         Rectangle {
 //             id: enabledVisualiser;
