@@ -33,11 +33,11 @@ namespace wvWare
 {
     namespace Word97
     {
-        class BRC;
-        class LSPD;
-        class SHD;
+        struct BRC;
+        struct LSPD;
+        struct SHD;
     }
-    class FLD;
+    struct FLD;
 }
 
 /**
@@ -123,10 +123,10 @@ namespace Conversion
     QString shdToColorStr(const wvWare::Word97::SHD& shd, const QString& bgColor, const QString& fontColor);
 
     /**
-     * Compute a color contrasting to the provided background color.
+     * Compute a color contrasting to @param color.
      * @return color in the format "#RRGGBB".
      */
-    QString contrastFontColor(const QString& bgColor);
+    QString contrastColor(const QString& color);
 
     /**
      * Compute a color for a COLORREF set to cvAuto.
@@ -197,9 +197,14 @@ namespace Conversion
     int fldToFieldType(const wvWare::FLD* fld);
 
     /**
-     * TODO:
+     * Convert footnote automatic numbering restart code to ODF equivalent.
      */
-    QString rncToStartNumberingAt(int rnc);
+    const char* rncToStartNumberingAt(quint16 rnc);
+
+    /**
+     * Convert footnote placement code to ODF equivalent.
+     */
+    const char* fpcToFtnPosition(quint16 fpc);
 
     /**
      * TODO:

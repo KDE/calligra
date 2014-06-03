@@ -14,13 +14,12 @@ kde4_add_plugin(kformdesigner_containers ${kformdesigner_containers_PART_SRCS})
 target_link_libraries(
     kformdesigner_containers
     kformdesigner
+    kundo2
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KDEUI_LIBS}
-    ${KDE4_KDE3SUPPORT_LIBS}
     ${QT_QTCORE_LIBRARY}
     ${QT_QTGUI_LIBRARY}
     ${QT_QTXML_LIBRARY}
-    ${QT_QT3SUPPORT_LIBRARY}
     )
 
 install(TARGETS kformdesigner_containers  DESTINATION ${PLUGIN_INSTALL_DIR})
@@ -40,10 +39,8 @@ target_link_libraries(
     ${KOPROPERTY_LIBS}
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KDEUI_LIBS}
-    ${KDE4_KDE3SUPPORT_LIBS}
     ${QT_QTGUI_LIBRARY}
     ${QT_QTXML_LIBRARY}
-    ${QT_QT3SUPPORT_LIBRARY}
     )
 
 install(TARGETS kformdesigner_stdwidgets  DESTINATION ${PLUGIN_INSTALL_DIR})

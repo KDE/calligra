@@ -26,7 +26,7 @@
 //temporary
 #define KexiStatusBar_KTEXTEDITOR_USED 0
 
-#include <KStatusBar>
+#include <kstatusbar.h>
 
 class KMenu;
 class QCheckBox;
@@ -38,18 +38,13 @@ namespace KTextEditor
     class ViewCursorInterface;
 }
 #endif
-namespace KParts
-{
-    class Part;
-}
 
 class KexiStatusBar : public KStatusBar
 {
     Q_OBJECT
 public:
-    KexiStatusBar(QWidget *parent = 0);
+    explicit KexiStatusBar(QWidget *parent = 0);
     virtual ~KexiStatusBar();
-//  virtual void addWidget( QWidget *widget, int stretch = 0, bool permanent = false);
 
 //! @todo extend to more generic API
     QAction *m_showNavigatorAction;
@@ -63,18 +58,15 @@ signals:
 
 protected slots:
     void cursorPositionChanged();
-    void activePartChanged(KParts::Part *part);
     void setCursorPosition(int line, int col);
 
 protected:
     int m_msgID, m_readOnlyID;
-//  QLabel *m_status, *m_readOnlyStatus;
 
 #if KexiStatusBar_KTEXTEDITOR_USED
     KTextEditor::ViewCursorInterface * m_cursorIface;
     KTextEditor::ViewStatusMsgInterface * m_viewmsgIface;
 #endif
-    KParts::Part *m_activePart;
     KMenu *m_viewMenu;
 };
 

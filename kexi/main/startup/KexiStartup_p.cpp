@@ -25,9 +25,9 @@
 #include <klocale.h>
 #include <kde_file.h>
 
-#include <qfileinfo.h>
-#include <qdir.h>
-#include <qapplication.h>
+#include <QFileInfo>
+#include <QDir>
+#include <QApplication>
 
 SQLite2ToSQLite3Migration::SQLite2ToSQLite3Migration(const QString& filePath)
         : m_filePath(filePath)
@@ -65,8 +65,8 @@ tristate SQLite2ToSQLite3Migration::run()
     m_process = new KProcess(this, "process");
     *m_process << ksqlite2to3_app << m_filePath;
     m_process->setWorkingDirectory(fi.dir(true).absolutePath());
-    connect(m_process, SIGNAL(receivedStderr(KProcess*, char*, int)),
-            this, SLOT(receivedStderr(KProcess*, char*, int)));
+    connect(m_process, SIGNAL(receivedStderr(KProcess*,char*,int)),
+            this, SLOT(receivedStderr(KProcess*,char*,int)));
     connect(m_process, SIGNAL(processExited(KProcess*)), this, SLOT(processExited(KProcess*)));
     if (!m_process->start(KProcess::NotifyOnExit, KProcess::Stderr))
         return false;
@@ -102,7 +102,7 @@ void SQLite2ToSQLite3Migration::processExited(KProcess* process)
 
     kDebug() << process->isRunning() << " " << process->exitStatus();
     m_dlg->close();
-    result = !process->isRunning() && 0 == process->exitStatus();//m_process->normalExit();
+    result = !process->isRunning() && 0 == process->exitStatus();
     kDebug() << result.toString();
     if (result == true) {
         if (m_restoreStat) {
@@ -116,7 +116,7 @@ void SQLite2ToSQLite3Migration::processExited(KProcess* process)
 void SQLite2ToSQLite3Migration::cancelClicked()
 {
     kDebug() << result.toString() << " cancelClicked() " << m_process->isRunning() << " "
-    << m_process->exitStatus();
+        << m_process->exitStatus();
     if (!m_process->isRunning() && 0 == m_process->exitStatus())
         return;
     result = cancelled;

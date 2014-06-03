@@ -25,7 +25,7 @@
 class KPrWaterfallWipeBottomLeftStrategy : public KPrMatrixWipeStrategy
 {
 public:
-    KPrWaterfallWipeBottomLeftStrategy(Direction direction);
+    explicit KPrWaterfallWipeBottomLeftStrategy(Direction direction);
     virtual ~KPrWaterfallWipeBottomLeftStrategy();
 protected:
     virtual int squareIndex(int x, int y, int columns, int rows);

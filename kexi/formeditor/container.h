@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2008-2010 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2008-2011 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -52,12 +52,13 @@ public:
     will be redirected to \a container. \a container will be also parent of eater object,
     so you don't need to care about deleting it. */
     EventEater(QWidget *widget, QObject *container);
+
     ~EventEater();
 
     //! Sets the object which will receive the events
-    void setContainer(QObject *container)  {
-        m_container = container;
-    }
+    void setContainer(QObject *container);
+
+protected:
     bool eventFilter(QObject *o, QEvent *ev);
 
 private:
@@ -95,38 +96,26 @@ public:
     QWidget* widget() const;
 
     //! \return The ObjectTreeItem associated with this Container's widget.
-    ObjectTreeItem* objectTree() const {
-        return m_tree;
-    }
+    ObjectTreeItem* objectTree() const;
 
     //! Sets the Form which this Container belongs to.
     void setForm(Form *form);
 
     /*! Sets the ObjectTree of this Container.\n
      * NOTE: this is needed only if we are toplevel. */
-    void setObjectTree(ObjectTreeItem *t) {
-        m_tree = t;
-    }
+    void setObjectTree(ObjectTreeItem *t);
 
     //! \return a pointer to the QLayout of this Container, or 0 if there is not.
-    QLayout* layout() const {
-        return m_layout;
-    }
+    QLayout* layout() const;
 
     //! \return the type of the layout associated to this Container's widget (see Form::LayoutType enum).
-    Form::LayoutType layoutType() const {
-        return m_layType;
-    }
+    Form::LayoutType layoutType() const;
 
     //! \return the margin of this Container.
-    int layoutMargin() const {
-        return m_margin;
-    }
+    int layoutMargin() const;
 
     //! \return the spacing of this Container.
-    int layoutSpacing() const {
-        return m_spacing;
-    }
+    int layoutSpacing() const;
 
     /*! Sets this Container to use \a type of layout. The widget are inserted
      automatically in the layout following their positions.
@@ -134,14 +123,10 @@ public:
     void setLayoutType(Form::LayoutType type);
 
     //! Sets the spacing of this Container.
-    void setLayoutSpacing(int spacing) {
-        m_spacing = spacing;
-    }
+    void setLayoutSpacing(int spacing);
 
     //! Sets the margin of this Container.
-    void setLayoutMargin(int margin) {
-        m_margin = margin;
-    }
+    void setLayoutMargin(int margin);
 
     //! \return the string representing the layoutType \a type.
     static QString layoutTypeToString(Form::LayoutType type);
@@ -165,8 +150,6 @@ public slots:
       for exmplanation of possible combination of @a flags flags.
       \sa Form::selectWidget() */
       void selectWidget(QWidget *w, Form::WidgetSelectionFlags flags = Form::DefaultWidgetSelectionFlags);
-//    void setSelectedWidget(QWidget *selected, bool add, bool dontRaise = false,
-//                           bool moreWillBeSelected = false);
 
     /*! Deselects the widget \a w. The widget is removed from the Form's list
      and its resizeHandles are removed. */
@@ -197,14 +180,12 @@ protected:
       is simulated, and only the widget's grid info aris filled. */
     void createGridLayout(bool testOnly = false);
 
+    void setLayout(QLayout *layout);
+
 #ifdef KFD_SIGSLOTS
     //! Drawing functions used by eventFilter
     void drawConnection(QMouseEvent *mev);
 #endif
-//reimplemented using QRubberBand 
-    //void drawSelectionRect(QMouseEvent *mev);
-    //void drawInsertRect(QMouseEvent *mev, QObject *s);
-    //void drawCopiedWidgetRect(QMouseEvent *mev);
 
     void moveSelectedWidgetsBy(int realdx, int realdy, QMouseEvent *mev = 0);
 
@@ -216,24 +197,6 @@ private:
     QPoint selectionOrInsertingBegin() const;
 
     void selectionWidgetsForRectangle(const QPoint& secondPoint);
-
-    // Layout
-    QLayout *m_layout;
-    Form::LayoutType m_layType;
-    int m_margin, m_spacing;
-
-    // moving etc.
-    QPoint m_grab;
-    //QPoint  m_initialPos;
-    QPointer<QWidget> m_moving;
-    //QRect  m_copyRect;
-
-    //inserting
-    ObjectTreeItem *m_tree;
-
-    bool m_mousePressEventReceived;
-    QMouseEvent m_mouseReleaseEvent;
-    QPointer<QObject> m_objectForMouseReleaseEvent;
 
     class Private;
     Private * const d;
@@ -253,12 +216,11 @@ public:
 
 protected:
     void childWidgetAdded(QWidget* w);
-    void assignItem(ObjectTreeItem* item) {
-        m_item = item;
-    }
+    void assignItem(ObjectTreeItem* item);
 
 private:
-    ObjectTreeItem* m_item;
+    class Private;
+    Private * const d;
     friend class InsertWidgetCommand;
     friend class FormIO;
 };

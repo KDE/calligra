@@ -2,7 +2,7 @@
  * localemon.cpp
  *
  * Copyright (c) 1999-2003 Hans Petter Bieker <bieker@kde.org>
- * Copyright (c) 2009 Dag Andersen <danders@get2net.dk>
+ * Copyright (c) 2009, 2012 Dag Andersen <danders@get2net.dk>
  *
  * Requires the Qt widget libraries, available at no cost at
  * http://www.troll.no/
@@ -26,16 +26,17 @@
 #include "localemon.h"
 
 #include "kptcommand.h"
+#include "kptdebug.h"
 
-#include <kdebug.h>
+#include <kdeversion.h>
 #include <QCheckBox>
 #include <QComboBox>
 
 
 
-#include <KConfig>
-#include <KConfigGroup>
-#include <KStandardDirs>
+#include <kconfig.h>
+#include <kconfiggroup.h>
+#include <kstandarddirs.h>
 
 
 namespace KPlato {
@@ -60,32 +61,32 @@ LocaleConfigMoney::LocaleConfigMoney(KLocale *locale,
   m_labMonNegMonSignPos->setObjectName( I18N_NOOP("Sign position:") );
 //  m_labMonDigSet->setObjectName( I18N_NOOP("Digit set:") );
 
-  connect( m_edMonCurSym, SIGNAL( textChanged(const QString &) ),
-           SLOT( slotMonCurSymChanged(const QString &) ) );
+  connect( m_edMonCurSym, SIGNAL(textChanged(QString)),
+           SLOT(slotMonCurSymChanged(QString)) );
 
-//   connect( m_edMonDecSym, SIGNAL( textChanged(const QString &) ),
-//            SLOT( slotMonDecSymChanged(const QString &) ) );
+//   connect( m_edMonDecSym, SIGNAL(textChanged(QString)),
+//            SLOT(slotMonDecSymChanged(QString)) );
 //
-//   connect( m_edMonThoSep, SIGNAL( textChanged(const QString &) ),
-//            SLOT( slotMonThoSepChanged(const QString &) ) );
+//   connect( m_edMonThoSep, SIGNAL(textChanged(QString)),
+//            SLOT(slotMonThoSepChanged(QString)) );
 //
-   connect( m_inMonFraDig, SIGNAL( valueChanged(int) ),
-            SLOT( slotMonFraDigChanged(int) ) );
+   connect( m_inMonFraDig, SIGNAL(valueChanged(int)),
+            SLOT(slotMonFraDigChanged(int)) );
 
-  connect( m_chMonPosPreCurSym, SIGNAL( clicked() ),
-           SLOT( slotMonPosPreCurSymChanged() ) );
+  connect( m_chMonPosPreCurSym, SIGNAL(clicked()),
+           SLOT(slotMonPosPreCurSymChanged()) );
 
-  connect( m_cmbMonPosMonSignPos, SIGNAL( activated(int) ),
-           SLOT( slotMonPosMonSignPosChanged(int) ) );
+  connect( m_cmbMonPosMonSignPos, SIGNAL(activated(int)),
+           SLOT(slotMonPosMonSignPosChanged(int)) );
 
-  connect( m_chMonNegPreCurSym, SIGNAL( clicked() ),
-           SLOT( slotMonNegPreCurSymChanged() ) );
+  connect( m_chMonNegPreCurSym, SIGNAL(clicked()),
+           SLOT(slotMonNegPreCurSymChanged()) );
 
-  connect( m_cmbMonNegMonSignPos, SIGNAL( activated(int) ),
-           SLOT( slotMonNegMonSignPosChanged(int) ) );
+  connect( m_cmbMonNegMonSignPos, SIGNAL(activated(int)),
+           SLOT(slotMonNegMonSignPosChanged(int)) );
 
-//   connect( m_cmbMonDigSet, SIGNAL( activated(int) ),
-//            SLOT( slotMonDigSetChanged(int) ) );
+//   connect( m_cmbMonDigSet, SIGNAL(activated(int)),
+//            SLOT(slotMonDigSetChanged(int)) );
 
   m_inMonFraDig->setRange(0, 10, 1);
   m_inMonFraDig->setSliderEnabled(false);
@@ -134,8 +135,8 @@ void LocaleConfigMoney::save()
 
   i = entGrp.readEntry("FracDigits", 2);
   group.deleteEntry("FracDigits", KConfig::Persistent | KConfig::Global);
-  if (i != m_locale->fracDigits())
-    group.writeEntry("FracDigits", m_locale->fracDigits(), KConfig::Persistent|KConfig::Global);
+  if (i != m_locale->monetaryDecimalPlaces())
+    group.writeEntry("FracDigits", m_locale->monetaryDecimalPlaces(), KConfig::Persistent|KConfig::Global);
 
   b = entGrp.readEntry("PositivePrefixCurrencySymbol", true);
   group.deleteEntry("PositivePrefixCurrencySymbol", KConfig::Persistent | KConfig::Global);
@@ -180,7 +181,7 @@ void LocaleConfigMoney::slotLocaleChanged()
   m_edMonCurSym->setText( m_locale->currencySymbol() );
 /*  m_edMonDecSym->setText( m_locale->monetaryDecimalSymbol() );
   m_edMonThoSep->setText( m_locale->monetaryThousandsSeparator() );*/
-  m_inMonFraDig->setValue( m_locale->fracDigits() );
+  m_inMonFraDig->setValue(m_locale->monetaryDecimalPlaces());
 
   m_chMonPosPreCurSym->setChecked( m_locale->positivePrefixCurrencySymbol() );
   m_chMonNegPreCurSym->setChecked( m_locale->negativePrefixCurrencySymbol() );
@@ -340,7 +341,7 @@ MacroCommand *LocaleConfigMoney::buildCommand()
     if ( m_locale->currencySymbol() != m_edMonCurSym->text() ) {
         m->addCommand( new ModifyCurrencySymolCmd( m_locale, m_edMonCurSym->text() ) );
     }
-    if ( m_locale->fracDigits() != m_inMonFraDig->value() ) {
+    if (m_locale->monetaryDecimalPlaces() != m_inMonFraDig->value()) {
         m->addCommand( new ModifyCurrencyFractionalDigitsCmd( m_locale, m_inMonFraDig->value() ) );
     }
     if ( m_locale->positivePrefixCurrencySymbol() != m_chMonPosPreCurSym->isChecked() ) {
@@ -355,7 +356,7 @@ MacroCommand *LocaleConfigMoney::buildCommand()
     if ( m_locale->negativeMonetarySignPosition() != m_cmbMonNegMonSignPos->currentIndex() ) {
         m->addCommand( new ModifyNegativeMonetarySignPositionCmd( m_locale, m_cmbMonNegMonSignPos->currentIndex() ) );
     }
-    qDebug()<<"buildCommand:"<<m->isEmpty();
+    kDebug(planDbg())<<"buildCommand:"<<m->isEmpty();
     if ( m->isEmpty() ) {
         delete m;
         return 0;

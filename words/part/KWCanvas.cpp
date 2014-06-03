@@ -20,8 +20,10 @@
  * Boston, MA 02110-1301, USA.
  */
 
-// words includes
+// Own
 #include "KWCanvas.h"
+
+// words includes
 #include "KWGui.h"
 #include "KWView.h"
 #include "KWViewMode.h"
@@ -29,6 +31,7 @@
 
 // calligra libs includes
 #include <KoShapeManager.h>
+#include <KoAnnotationLayoutManager.h>
 #include <KoPointerEvent.h>
 #include <KoToolManager.h>
 #include <KoCanvasController.h>
@@ -36,7 +39,8 @@
 #include <KoGridData.h>
 
 // KDE + Qt includes
-#include <KDebug>
+#include <kdebug.h>
+#include <kstatusbar.h>
 #include <QBrush>
 #include <QPainter>
 #include <QPainterPath>
@@ -67,7 +71,11 @@ void KWCanvas::pageSetupChanged()
 void KWCanvas::updateSize()
 {
     resourceManager()->setResource(Words::CurrentPageCount, m_document->pageCount());
-    emit documentSize(m_viewMode->contentsSize());
+    QSizeF  canvasSize = m_viewMode->contentsSize();
+    if (showAnnotations()) {
+        canvasSize += QSize(AnnotationAreaWidth, 0.0);
+    }
+    emit documentSize(canvasSize);
 }
 
 void KWCanvas::setDocumentOffset(const QPoint &offset)
@@ -80,8 +88,20 @@ bool KWCanvas::snapToGrid() const
     return m_view->snapToGrid();
 }
 
+QPointF KWCanvas::viewToDocument(const QPointF &viewPoint) const
+{
+    return m_viewMode->viewToDocument(viewPoint, m_viewConverter);
+}
+
+void KWCanvas::contextMenuEvent(QContextMenuEvent *e)
+{
+    m_view->popupContextMenu(e->globalPos(), m_toolProxy->popupActionList());
+    e->setAccepted(true);
+}
+
 void KWCanvas::mouseMoveEvent(QMouseEvent *e)
 {
+    m_view->viewMouseMoveEvent(e);
     m_toolProxy->mouseMoveEvent(e, m_viewMode->viewToDocument(e->pos() + m_documentOffset, m_viewConverter));
 }
 
@@ -90,8 +110,8 @@ void KWCanvas::mousePressEvent(QMouseEvent *e)
     m_toolProxy->mousePressEvent(e, m_viewMode->viewToDocument(e->pos() + m_documentOffset, m_viewConverter));
     if (!e->isAccepted() && e->button() == Qt::RightButton) {
         m_view->popupContextMenu(e->globalPos(), m_toolProxy->popupActionList());
-        e->setAccepted(true);
     }
+    e->setAccepted(true);
 }
 
 void KWCanvas::mouseReleaseEvent(QMouseEvent *e)
@@ -125,11 +145,24 @@ void KWCanvas::keyPressEvent(QKeyEvent *e)
             m_view->goToPreviousPage(e->modifiers());
         else if (e->key() == Qt::Key_PageDown)
             m_view->goToNextPage(e->modifiers());
-    }
+         }
+    if(e->key() == Qt::Key_Escape)
+        m_view->exitDistractioFreeMode();
+
 }
 
 QVariant KWCanvas::inputMethodQuery(Qt::InputMethodQuery query) const
 {
+    if (query == Qt::ImMicroFocus) {
+        QRectF rect = (m_toolProxy->inputMethodQuery(query, *(viewConverter())).toRectF()).toRect();
+        rect = m_viewMode->documentToView(viewConverter()->viewToDocument(rect), viewConverter());
+        QPointF scroll(canvasController()->scrollBarValue());
+        if (canvasWidget()->layoutDirection() == Qt::RightToLeft) {
+            scroll.setX(-scroll.x());
+        }
+        rect.translate(documentOrigin() - scroll);
+        return rect.toRect();
+    }
     return m_toolProxy->inputMethodQuery(query, *(viewConverter()));
 }
 
@@ -157,7 +190,8 @@ void KWCanvas::paintEvent(QPaintEvent *ev)
 {
     QPainter painter(this);
     painter.eraseRect(ev->rect());
-    paint(painter, ev->rect());
+    paint(painter, ev->rect()); // In KWCanvasBase
+
     painter.end();
 }
 

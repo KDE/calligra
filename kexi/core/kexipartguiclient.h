@@ -22,7 +22,7 @@
 
 #include "kexipart.h"
 
-#include <qobject.h>
+#include <QObject>
 
 #include <kxmlguiclient.h>
 

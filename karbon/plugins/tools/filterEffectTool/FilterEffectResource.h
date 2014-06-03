@@ -28,13 +28,19 @@ class KoFilterEffectStack;
 class FilterEffectResource : public KoResource
 {
 public:
-    FilterEffectResource(const QString &filename);
+    explicit FilterEffectResource(const QString &filename);
 
     /// reimplemented from KoResource
     virtual bool load();
 
     /// reimplemented from KoResource
+    virtual bool loadFromDevice(QIODevice *dev);
+
+    /// reimplemented from KoResource
     virtual bool save();
+
+    /// reimplemented from KoResource
+    virtual bool saveToDevice(QIODevice* dev) const;
 
     /// reimplemented from KoResource
     virtual QString defaultFileExtension() const;
@@ -44,7 +50,8 @@ public:
 
     /// Creates a new filter stack from this filter resource
     KoFilterEffectStack * toFilterStack() const;
-
+protected:
+    virtual QByteArray generateMD5() const;
 private:
     QDomDocument m_data;
 };

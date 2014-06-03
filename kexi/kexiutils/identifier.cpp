@@ -20,31 +20,13 @@
 
 #include "identifier.h"
 #include "transliteration_table.h"
+#include <db/utils.h>
+
+#include <KLocale>
 
 using namespace KexiUtils;
 
-bool KexiUtils::isIdentifier(const QString& s)
-{
-    uint i;
-    const uint sLength = s.length();
-    for (i = 0; i < sLength; i++) {
-        QChar c = s.at(i).toLower();
-        if (!(c == '_' || (c >= 'a' && c <= 'z') || (i > 0 && c >= '0' && c <= '9')))
-            break;
-    }
-    return i > 0 && i == sLength;
-}
-
-QString KexiUtils::string2FileName(const QString &s)
-{
-    QString fn = s.simplified();
-    fn.replace(' ', "_"); fn.replace('$', "_");
-    fn.replace('\\', "-"); fn.replace('/', "-");
-    fn.replace(':', "-"); fn.replace('*', "-");
-    return fn;
-}
-
-inline QString char2Identifier(const QChar& c)
+inline QString charToIdentifier(const QChar& c)
 {
     if (c.unicode() >= TRANSLITERATION_TABLE_SIZE)
         return QString(QChar('_'));
@@ -52,7 +34,7 @@ inline QString char2Identifier(const QChar& c)
     return s ? QString::fromLatin1(s) : QString(QChar('_'));
 }
 
-QString KexiUtils::string2Identifier(const QString &s)
+QString KexiUtils::stringToIdentifier(const QString &s)
 {
     if (s.isEmpty())
         return QString();
@@ -60,23 +42,22 @@ QString KexiUtils::string2Identifier(const QString &s)
     if (id.isEmpty())
         return QString();
     r.reserve(id.length());
-    id.replace(' ', "_");
+    id.replace(' ', '_');
     QChar c = id[0];
     QString add;
     bool wasUnderscore = false;
 
     if (c >= '0' && c <= '9') {
-        r += '_';
-        r += c;
+        r += '_' + c;
     } else {
-        add = char2Identifier(c);
+        add = charToIdentifier(c);
         r += add;
         wasUnderscore = add == "_";
     }
 
     const uint idLength = id.length();
     for (uint i = 1; i < idLength; i++) {
-        add = char2Identifier(id.at(i));
+        add = charToIdentifier(id.at(i));
         if (wasUnderscore && add == "_")
             continue;
         wasUnderscore = add == "_";
@@ -95,13 +76,21 @@ QString KexiUtils::identifierExpectedMessage(const QString &valueName, const QVa
 
 //--------------------------------------------------------------------------------
 
+class IdentifierValidator::Private
+{
+public:
+    Private() : isLowerCaseForced(false) {}
+    bool isLowerCaseForced;
+};
+
 IdentifierValidator::IdentifierValidator(QObject * parent)
-        : Validator(parent)
+ : KexiDB::Validator(parent), d(new Private)
 {
 }
 
 IdentifierValidator::~IdentifierValidator()
 {
+    delete d;
 }
 
 QValidator::State IdentifierValidator::validate(QString& input, int& pos) const
@@ -113,7 +102,7 @@ QValidator::State IdentifierValidator::validate(QString& input, int& pos) const
     if ((int)i < input.length() && input.at(i) >= '0' && input.at(i) <= '9')
         pos++; //_ will be added at the beginning
     bool addspace = (input.right(1) == " ");
-    input = string2Identifier(input);
+    input = d->isLowerCaseForced ? stringToIdentifier(input).toLower() : stringToIdentifier(input);
     if (addspace)
         input += "_";
     if (pos > input.length())
@@ -121,13 +110,22 @@ QValidator::State IdentifierValidator::validate(QString& input, int& pos) const
     return input.isEmpty() ? QValidator::Intermediate : Acceptable;
 }
 
-Validator::Result IdentifierValidator::internalCheck(
+KexiDB::Validator::Result IdentifierValidator::internalCheck(
     const QString &valueName, const QVariant& v,
     QString &message, QString & /*details*/)
 {
-    if (isIdentifier(v.toString()))
+    if (KexiDB::isIdentifier(v.toString()))
         return Validator::Ok;
     message = identifierExpectedMessage(valueName, v);
     return Validator::Error;
 }
 
+bool IdentifierValidator::isLowerCaseForced() const
+{
+    return d->isLowerCaseForced;
+}
+
+void IdentifierValidator::setLowerCaseForced(bool set)
+{
+    d->isLowerCaseForced = set;
+}

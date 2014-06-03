@@ -1,5 +1,6 @@
 /*  This file is part of the KDE project
     Copyright (C) 2007 David Faure <faure@kde.org>
+    Copyright (C) 2011 Dag Andersen <danders@get2net.dk>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -24,7 +25,7 @@
 #include <kdemacros.h>
 
 #ifndef KPLATORCPS_EXPORT
-# if defined(MAKE_KPLATOKERNEL_LIB)
+# if defined(MAKE_KPLATORCPS_LIB)
    /* We are building this library */ 
 #  define KPLATORCPS_EXPORT KDE_EXPORT
 # else
@@ -41,7 +42,7 @@
 
 #ifdef COMPILING_TESTS
 #if defined _WIN32 || defined _WIN64
-# if defined(MAKE_KPLATOKERNEL_LIB)
+# if defined(MAKE_KPLATORCPS_LIB)
 #       define KPLATORCPS_TEST_EXPORT KDE_EXPORT
 #   else
 #       define KPLATORCPS_TEST_EXPORT KDE_IMPORT

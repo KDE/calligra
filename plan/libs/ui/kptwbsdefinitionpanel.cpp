@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005-2007 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2005-2007, 2012 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,18 +21,18 @@
 #include "kptwbsdefinition.h"
 #include "kptcommand.h"
 #include "kptproject.h"
+#include "kptdebug.h"
 
-#include <KComboBox>
+#include <kcombobox.h>
 #include <klocale.h>
-#include <kdebug.h>
 
 #include <QComboBox>
 #include <QCheckBox>
 #include <QPushButton>
-#include <QComboBox>
 #include <QTableWidget>
 #include <QStringList>
 #include <kundo2command.h>
+
 
 namespace KPlato
 {
@@ -40,14 +40,14 @@ namespace KPlato
 ComboBoxDelegate::ComboBoxDelegate(QStringList &list, QObject *parent)
     : QStyledItemDelegate(parent)
 {
-    kDebug();
+    kDebug(planDbg());
     setObjectName("ComboBoxDelegate");
     m_list = list;
 }
 
 QWidget *ComboBoxDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &/* option */, const QModelIndex &/* index */) const
 {
-    kDebug();
+    kDebug(planDbg());
     QComboBox *editor = new KComboBox(parent);
     editor->installEventFilter(const_cast<ComboBoxDelegate*>(this));
     return editor;
@@ -56,7 +56,7 @@ QWidget *ComboBoxDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
 void ComboBoxDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
 {
     QString value = index.model()->data(index, Qt::DisplayRole).toString();
-    kDebug()<<value<<":"<<m_list;
+    kDebug(planDbg())<<value<<":"<<m_list;
     QComboBox *comboBox = static_cast<QComboBox*>(editor);
 
     comboBox->insertItems(0, m_list);
@@ -66,7 +66,7 @@ void ComboBoxDelegate::setEditorData(QWidget *editor, const QModelIndex &index) 
 void ComboBoxDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
 {
     QComboBox *comboBox = static_cast<QComboBox*>(editor);
-    kDebug()<<comboBox->currentText();
+    kDebug(planDbg())<<comboBox->currentText();
     model->setData(index, comboBox->currentText());
 }
 
@@ -89,7 +89,7 @@ WBSDefinitionPanel::WBSDefinitionPanel( Project &project, WBSDefinition &def, QW
     projectCode->setText( m_def.projectCode() );
     projectSeparator->setText( m_def.projectSeparator() );
     QStringList codeList = m_def.codeList();
-    kDebug()<<codeList;
+    kDebug(planDbg())<<codeList;
     defaultSeparator->setText(m_def.defaultSeparator());
     defaultCode->addItems(codeList);
     defaultCode->setCurrentIndex(m_def.defaultCodeIndex());
@@ -100,7 +100,7 @@ WBSDefinitionPanel::WBSDefinitionPanel( Project &project, WBSDefinition &def, QW
     const QMap<int, WBSDefinition::CodeDef> &lev = m_def.levelsDef();
     levelsTable->setRowCount(lev.count());
     QStringList sl;
-    kDebug()<<"Map size="<<lev.count();
+    kDebug(planDbg())<<"Map size="<<lev.count();
     QMap<int, WBSDefinition::CodeDef>::const_iterator it;
     for (it = lev.begin(); it != lev.end(); ++it) {
         sl << QString("%1").arg(it.key());
@@ -116,12 +116,12 @@ WBSDefinitionPanel::WBSDefinitionPanel( Project &project, WBSDefinition &def, QW
     //levelsTable->setColumnStretchable(0, true);
     slotLevelChanged(level->value());
     
-    connect(projectCode, SIGNAL(textChanged(const QString&)), SLOT(slotChanged()));
-    connect(projectSeparator, SIGNAL(textChanged(const QString&)), SLOT(slotChanged()));
+    connect(projectCode, SIGNAL(textChanged(QString)), SLOT(slotChanged()));
+    connect(projectSeparator, SIGNAL(textChanged(QString)), SLOT(slotChanged()));
     connect(defaultCode, SIGNAL(activated(int)), SLOT(slotChanged()));
-    connect(defaultSeparator, SIGNAL(textChanged(const QString&)), SLOT(slotChanged()));
+    connect(defaultSeparator, SIGNAL(textChanged(QString)), SLOT(slotChanged()));
     connect(levelsGroup, SIGNAL(toggled(bool)), SLOT(slotLevelsGroupToggled(bool)));
-    connect(levelsTable, SIGNAL(cellChanged(int, int)), SLOT(slotChanged()));
+    connect(levelsTable, SIGNAL(cellChanged(int,int)), SLOT(slotChanged()));
     connect(levelsTable, SIGNAL(itemSelectionChanged()), SLOT(slotSelectionChanged()));
     connect(level, SIGNAL(valueChanged(int)), SLOT(slotLevelChanged(int)));
     connect(removeBtn, SIGNAL(clicked(bool)), SLOT(slotRemoveBtnClicked()));
@@ -151,7 +151,7 @@ KUndo2Command *WBSDefinitionPanel::buildCommand() {
 }
 
 bool WBSDefinitionPanel::ok() {
-    kDebug();
+    kDebug(planDbg());
     return true;
 }
 
@@ -170,11 +170,11 @@ void WBSDefinitionPanel::slotSelectionChanged() {
         s = "None selected";
     }
     removeBtn->setEnabled(selectedRow != -1);
-    kDebug()<<s;
+    kDebug(planDbg())<<s;
 }
 
 void WBSDefinitionPanel::slotRemoveBtnClicked() {
-    kDebug()<<selectedRow;
+    kDebug(planDbg())<<selectedRow;
     if (selectedRow == -1) {
         return;
     }
@@ -184,10 +184,10 @@ void WBSDefinitionPanel::slotRemoveBtnClicked() {
 }
 
 void WBSDefinitionPanel::slotAddBtnClicked() {
-    kDebug();
+    kDebug(planDbg());
     int i=levelsTable->rowCount()-1;
     for (; i >= 0; --i) {
-        kDebug()<<"Checking row["<<i<<"]="<<levelsTable->verticalHeaderItem(i)->text()<<" with"<<level->value();
+        kDebug(planDbg())<<"Checking row["<<i<<"]="<<levelsTable->verticalHeaderItem(i)->text()<<" with"<<level->value();
         if (level->value() > levelsTable->verticalHeaderItem(i)->text().toInt()) {
             break;
         }
@@ -205,7 +205,7 @@ void WBSDefinitionPanel::slotAddBtnClicked() {
     addBtn->setEnabled(false);
     slotChanged();
     
-    kDebug()<<"Added row="<<i<<" level="<<level->value();
+    kDebug(planDbg())<<"Added row="<<i<<" level="<<level->value();
 }
 
 void WBSDefinitionPanel::slotLevelChanged(int value) {
@@ -219,7 +219,7 @@ void WBSDefinitionPanel::slotLevelChanged(int value) {
     slotChanged();
 }
 void WBSDefinitionPanel::slotLevelsGroupToggled(bool /*on*/) {
-    kDebug();
+    kDebug(planDbg());
     slotLevelChanged(level->value());
 }
 

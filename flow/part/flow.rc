@@ -1,7 +1,13 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 
-<kpartgui name="flow" version="31">
+<kpartgui name="flow" version="34">
     <MenuBar>
+        <Menu name="file">
+            <Text>&amp;File</Text>
+            <Separator/>
+            <Action name="file_encrypt_doc"/>
+            <Action name="file_uncompress_doc"/>
+        </Menu>
         <Menu name="edit">
             <Text>&amp;Edit</Text>
             <Action name="edit_undo"/>
@@ -41,6 +47,11 @@
             <Action name="insert_variable"/> <!-- menu -->
 	        <Action name="import_document" />
         </Menu>
+        <Menu name="format"><text>F&amp;ormat</text>
+            <Action name="format_masterpage"/>
+            <Separator/>
+            <Action name="format_pagelayout"/>
+        </Menu>
         <Menu name="page">
             <Text>&amp;Page</Text>
             <Action name="page_insertpage"/>
@@ -54,6 +65,7 @@
             <Action name="page_last"/>
         </Menu>
         <Menu name="settings"><text>&amp;Settings</text>
+            <Action name="settings_active_author" group="settings_configure"/>
             <Action name="configure" group="settings_configure"/>
         </Menu>
     </MenuBar>

@@ -20,10 +20,10 @@
 #ifndef SCRIPTING_KEXIDBDRIVER_H
 #define SCRIPTING_KEXIDBDRIVER_H
 
-#include <qstring.h>
-#include <qobject.h>
+#include <QString>
+#include <QObject>
 
-#include <kexidb/driver.h>
+#include <db/driver.h>
 #include <kexi_global.h>
 
 namespace Scripting
@@ -65,10 +65,6 @@ public slots:
 
     /** Returns true if this driver is valid else false is returned. */
     bool isValid();
-    /** The drivers major versionnumber. */
-//2.0    int versionMajor();
-    /** The drivers minor versionnumber. */
-//2.0    int versionMinor();
     /** Driver-specific SQL string escaping. For example the " or ' char may
     need to be escaped for values used within SQL-statements. */
     QString escapeString(const QString& s);
@@ -99,13 +95,7 @@ public slots:
     /** Returns the number of connections. */
     uint connectionCount();
     /** Return the \a KexiDBConnection specified by the index-number passed as an argument. */
-#ifdef __GNUC__
-#warning TODO QSet<Connection*> is available now
-#else
-#pragma WARNING( TODO QSet<Connection*> is available now )
-#endif
-    /* TODO
-        QObject* connection(uint index);*/
+    //! @todo QObject* connection(uint index);
 
 private:
     ::KexiDB::Driver* m_driver;

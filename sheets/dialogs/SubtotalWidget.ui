@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <author>Norbert Andres &lt;nandres@web.de&gt;</author>
+ <comment>This file is part of the KDE project
+Copyright (C) 2002 Norbert Andres &lt;nandres@web.de&gt;
+
+This library is free software; you can redistribute it and/or
+modify it under the terms of the GNU Library General Public
+License as published by the Free Software Foundation; either
+version 2 of the License, or (at your option) any later version.
+
+This library is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Library General Public License for more details.
+
+You should have received a copy of the GNU Library General Public
+License along with this library; see the file COPYING.LIB.  If not,
+write to the Free Software Foundation, Inc., 51 Franklin Street,
+Fifth Floor, Boston, MA 02110-1301, USA.</comment>
+ <class>SubtotalsWidget</class>
+ <widget class="QWidget" name="SubtotalsWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>178</width>
+    <height>132</height>
+   </rect>
+  </property>
+  <layout class="QFormLayout" name="formLayout">
+   <item row="0" column="0">
+    <widget class="QLabel" name="m_eachChangeLabel">
+     <property name="text">
+      <string>At each change in:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="KComboBox" name="m_columnBox"/>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="m_useFunctionLabel">
+     <property name="text">
+      <string>Use function:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="KComboBox" name="m_functionBox"/>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="m_addSubtotalToLabel">
+     <property name="text">
+      <string>Add Subtotal to:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="QListWidget" name="m_columnList"/>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KComboBox</class>
+   <extends>QComboBox</extends>
+   <header>kcombobox.h</header>
+  </customwidget>
+ </customwidgets>
+ <includes>
+  <include location="global">kdialog.h</include>
+ </includes>
+ <resources/>
+ <connections/>
+</ui>

@@ -17,13 +17,13 @@
 * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPLATO_DURATIONSPINBOX_H
-#define KPLATO_DURATIONSPINBOX_H
+#ifndef KPTDURATIONSPINBOX_H
+#define KPTDURATIONSPINBOX_H
 
 #include "kptduration.h"
 #include "kplatomodels_export.h"
 
-#include <QtGui/qspinbox.h>
+#include <QSpinBox>
 
 namespace KPlato
 {

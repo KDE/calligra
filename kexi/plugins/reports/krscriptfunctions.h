@@ -20,8 +20,8 @@
 #include <QScriptEngine>
 #include <QObject>
 #include <QString>
-#include <kexidb/connection.h>
-#include <kexidb/cursor.h>
+#include <db/connection.h>
+#include <db/cursor.h>
 #include <KoReportData.h>
 
 /**

@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KEXIRECORDNAVIGATORHANLDER_H
+#ifndef KEXIRECORDNAVIGATORHANDLER_H
 #define KEXIRECORDNAVIGATORHANDLER_H
 
 #include <kexi_export.h>
@@ -38,9 +38,9 @@ public:
     virtual void moveToFirstRecordRequested() = 0;
     virtual void addNewRecordRequested() = 0;
     
-    //!Allow the handler to tell the navigator about the records
-    virtual long recordCount() { return 0; }
-    virtual long currentRecord() { return 0; }
+    //! Allow the handler to tell the navigator about the records
+    virtual int recordCount() const;
+    virtual int currentRecord() const;
 };
 
 #endif

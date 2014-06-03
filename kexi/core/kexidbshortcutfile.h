@@ -20,7 +20,7 @@
 #ifndef KEXIDBSHORTCUTFILE_H
 #define KEXIDBSHORTCUTFILE_H
 
-#include <qstring.h>
+#include <QString>
 
 #include <kexi_export.h>
 
@@ -39,7 +39,7 @@ class KEXICORE_EXPORT KexiDBShortcutFile
 {
 public:
     /*! Creates a new object for \a fileName. */
-    KexiDBShortcutFile(const QString& fileName);
+    explicit KexiDBShortcutFile(const QString& fileName);
 
     ~KexiDBShortcutFile();
 
@@ -60,7 +60,7 @@ class KEXICORE_EXPORT KexiDBConnShortcutFile : protected KexiDBShortcutFile
 {
 public:
     /*! Creates a new object for \a fileName. */
-    KexiDBConnShortcutFile(const QString& fileName);
+    explicit KexiDBConnShortcutFile(const QString& fileName);
 
     ~KexiDBConnShortcutFile();
 
@@ -89,25 +89,4 @@ public:
 protected:
 };
 
-#if 0
-//! Loads and saves information for a sef of "shortcut to a connection" file containing
-//! connection information (i.e. KexiDBConnectionSet).
-//! This is implementation for handling .KEXIC files.
-//! The set is loaded from files found using
-//! KGlobal::dirs()->findAllResources("data", "kexi/connections/*.kexic").
-class KexiDBConnSetShortcutFiles
-{
-public:
-    KexiDBConnSetShortcutFiles();
-
-    /*! Loads connection data into \a set. The set is cleared before loading.
-     \retuirn true on successful loading. */
-    static bool loadConnectionDataSet(KexiDBConnectionSet& set);
-
-    /*! Saves a set of connection data \a set to a shortcut files.
-     Existing files are overwritten with a new data.
-     \retuirn true on successful saving. */
-    static bool saveConnectionDataSet(const KexiDBConnectionSet& set);
-}
-#endif
 #endif

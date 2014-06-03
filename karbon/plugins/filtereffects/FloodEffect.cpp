@@ -22,9 +22,9 @@
 #include "KoViewConverter.h"
 #include "KoXmlWriter.h"
 #include "KoXmlReader.h"
-#include <KLocale>
-#include <QtCore/QRect>
-#include <QtGui/QPainter>
+#include <klocale.h>
+#include <QRect>
+#include <QPainter>
 
 FloodEffect::FloodEffect()
         : KoFilterEffect(FloodEffectId, i18n("Flood fill"))

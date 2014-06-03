@@ -22,7 +22,7 @@
 
 #include "generated/simpleParser.h"
 #include "pole.h"
-#include <QtCore/QMap>
+#include <QMap>
 
 class ParsedPresentation
 {
@@ -30,6 +30,7 @@ public:
     MSO::CurrentUserStream currentUserStream;
     MSO::PowerPointStructs presentation;
     MSO::PicturesStream pictures;
+    MSO::SummaryInformationPropertySetStream summaryInfo;
     // map persistObjectIds to stream offsets
     QMap<quint32, quint32> persistDirectory;
     const MSO::DocumentContainer* documentContainer;

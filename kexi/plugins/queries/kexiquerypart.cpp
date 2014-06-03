@@ -20,17 +20,17 @@
 
 #include "kexiquerypart.h"
 
-#include <KDebug>
-#include <KToggleAction>
-#include <KPluginFactory>
+#include <kdebug.h>
+#include <ktoggleaction.h>
+#include <kpluginfactory.h>
 
 #include <KexiMainWindowIface.h>
 #include <KexiWindow.h>
 #include <kexiproject.h>
 #include <kexipartinfo.h>
 
-#include <kexidb/cursor.h>
-#include <kexidb/parser/parser.h>
+#include <db/cursor.h>
+#include <db/parser/parser.h>
 
 #include "kexiqueryview.h"
 #include "kexiquerydesignerguieditor.h"
@@ -59,8 +59,9 @@ KexiWindowData* KexiQueryPart::createWindowData(KexiWindow* window)
 {
     KexiQueryPart::TempData *data = new KexiQueryPart::TempData(
         window, KexiMainWindowIface::global()->project()->dbConnection());
-    data->listenerInfoString = window->part()->info()->instanceCaption() + " \""
-                               + window->partItem()->name() + "\"";
+    data->listenerInfoString = i18nc("@info Object \"objectname\"", "%1 <resource>%2</resource>")
+                               .arg(window->part()->info()->instanceCaption())
+                               .arg(window->partItem()->name());
     return data;
 }
 
@@ -69,35 +70,33 @@ KexiView* KexiQueryPart::createView(QWidget *parent, KexiWindow* window, KexiPar
 {
     Q_UNUSED(item);
     Q_UNUSED(window);
-
-    kDebug() << "KexiQueryPart::createView()";
+    //kDebug();
 
     KexiView* view = 0;
     if (viewMode == Kexi::DataViewMode) {
         view = new KexiQueryView(parent);
         view->setObjectName("dataview");
-    } else if (viewMode == Kexi::DesignViewMode) {
+    }
+    else if (viewMode == Kexi::DesignViewMode) {
         view = new KexiQueryDesignerGuiEditor(parent);
         view->setObjectName("guieditor");
         //needed for updating tables combo box:
         KexiProject *prj = KexiMainWindowIface::global()->project();
         connect(prj, SIGNAL(newItemStored(KexiPart::Item&)),
                 view, SLOT(slotNewItemStored(KexiPart::Item&)));
-        connect(prj, SIGNAL(itemRemoved(const KexiPart::Item&)),
-                view, SLOT(slotItemRemoved(const KexiPart::Item&)));
-        connect(prj, SIGNAL(itemRenamed(const KexiPart::Item&, const QString&)),
-                view, SLOT(slotItemRenamed(const KexiPart::Item&, const QString&)));
-
-//  connect(KexiMainWindowIface::global()->project(), SIGNAL(tableCreated(KexiDB::TableSchema&)),
-//   view, SLOT(slotTableCreated(KexiDB::TableSchema&)));
-    } else if (viewMode == Kexi::TextViewMode) {
+        connect(prj, SIGNAL(itemRemoved(KexiPart::Item)),
+                view, SLOT(slotItemRemoved(KexiPart::Item)));
+        connect(prj, SIGNAL(itemRenamed(KexiPart::Item,QString)),
+                view, SLOT(slotItemRenamed(KexiPart::Item,QString)));
+    }
+    else if (viewMode == Kexi::TextViewMode) {
         view = new KexiQueryDesignerSQLView(parent);
         view->setObjectName("sqldesigner");
     }
     return view;
 }
 
-bool KexiQueryPart::remove(KexiPart::Item &item)
+tristate KexiQueryPart::remove(KexiPart::Item &item)
 {
     if (!KexiMainWindowIface::global()->project()
             || !KexiMainWindowIface::global()->project()->dbConnection())
@@ -110,51 +109,12 @@ bool KexiQueryPart::remove(KexiPart::Item &item)
     return conn->removeObject(item.identifier());
 }
 
-#if 0
-KexiPart::DataSource *
-KexiQueryPart::dataSource()
-{
-    return new KexiQueryDataSource(this);
-}
-
-void KexiQueryPart::initPartActions(KActionCollection *col)
-{
-}
-
-void KexiQueryPart::initInstanceActions(int mode, KActionCollection *col)
-{
-    if (mode == Kexi::DataViewMode) {
-    } else if (mode == Kexi::DesignViewMode) {
-    } else if (mode == Kexi::TextViewMode) {
-//  new KAction(i18n("Check Query"), "test_it", 0, this, SLOT(slotCheckQuery()), col, "querypart_check_query");
-
-//TODO  new KAction(i18n("Execute Query"), "?????", 0, this, SLOT(checkQuery()), col, "querypart_execute_query");
-    }
-}
-#endif
-
 void KexiQueryPart::initPartActions()
 {
 }
 
 void KexiQueryPart::initInstanceActions()
 {
-// new KAction(i18n("Check Query"), "test_it", 0, this, SLOT(slotCheckQuery()),
-//  m_instanceGuiClients[Kexi::DesignViewMode]->actionCollection(), "querypart_check_query");
-
-    /*2.0: moved to KexiView::createViewActions()
-      KAction *a = createSharedAction(Kexi::TextViewMode, i18n("Check Query"), "test_it",
-        KShortcut(Qt::Key_F9), "querypart_check_query");
-      a->setToolTip(i18n("Check Query"));
-      a->setWhatsThis(i18n("Checks query for validity."));
-
-      a = createSharedToggleAction(
-    //! @todo other icon
-        Kexi::TextViewMode, i18n("Show SQL History"), "view_top_bottom",
-        KShortcut(), "querypart_view_toggle_history");
-      a->setWhatsThis(i18n("Shows or hides SQL editor's history."));
-    */
-// setActionAvailable("querypart_check_query", true);
 }
 
 KexiDB::SchemaData* KexiQueryPart::loadSchemaData(
@@ -180,7 +140,7 @@ KexiDB::SchemaData* KexiQueryPart::loadSchemaData(
          could be used instead of DataView or DesignView, because there are problems
          with opening object. */
         temp->proposeOpeningInTextViewModeBecauseOfProblems = true;
-        //todo
+        //! @todo
         return 0;
     }
     query->debug();
@@ -219,8 +179,8 @@ tristate KexiQueryPart::rename(KexiPart::Item &item, const QString& newName)
 KexiQueryPart::TempData::TempData(KexiWindow* window, KexiDB::Connection *conn)
         : KexiWindowData(window)
         , KexiDB::Connection::TableSchemaChangeListenerInterface()
-        , queryChangedInPreviousView(false)
         , m_query(0)
+        , m_queryChangedInPreviousView(false)
 {
     this->conn = conn;
 }
@@ -271,36 +231,22 @@ void KexiQueryPart::TempData::setQuery(KexiDB::QuerySchema *query)
         return;
     if (m_query
             /* query not owned by window */
-            && (static_cast<KexiWindow*>(parent())->schemaData() != static_cast<KexiDB::SchemaData*>(m_query))) {
+            && (static_cast<KexiWindow*>(parent())->schemaData() != static_cast<KexiDB::SchemaData*>(m_query)))
+    {
         delete m_query;
     }
     m_query = query;
 }
 
-//----------------
-
-#if 0
-KexiQueryDataSource::KexiQueryDataSource(KexiPart::Part *part)
-        : KexiPart::DataSource(part)
+bool KexiQueryPart::TempData::queryChangedInPreviousView() const
 {
+    return m_queryChangedInPreviousView;
 }
 
-KexiQueryDataSource::~KexiQueryDataSource()
+void KexiQueryPart::TempData::setQueryChangedInPreviousView(bool set)
 {
+    m_queryChangedInPreviousView = set;
 }
-
-KexiDB::FieldList *
-KexiQueryDataSource::fields(KexiProject *, const KexiPart::Item &)
-{
-    return 0;
-}
-
-KexiDB::Cursor *
-KexiQueryDataSource::cursor(KexiProject *, const KexiPart::Item &, bool)
-{
-    return 0;
-}
-#endif
 
 //----------------
 

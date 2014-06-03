@@ -22,8 +22,7 @@
 #define KEXIINPUTTABLEEDIT_H
 
 #include <klineedit.h>
-#include <qvariant.h>
-//Added by qt3to4:
+#include <QVariant>
 #include <QPaintEvent>
 
 #include "kexitableedit.h"
@@ -37,7 +36,7 @@ class KEXIDATATABLE_EXPORT KexiInputTableEdit : public KexiTableEdit
     Q_OBJECT
 
 public:
-    KexiInputTableEdit(KexiTableViewColumn &column, QWidget *parent = 0);
+    explicit KexiInputTableEdit(KexiDB::TableViewColumn &column, QWidget *parent = 0);
 
     virtual ~KexiInputTableEdit();
 
@@ -56,9 +55,6 @@ public:
     virtual bool cursorAtStart();
     virtual bool cursorAtEnd();
 
-//  virtual bool eventFilter(QObject* watched, QEvent* e);
-//js  void end(bool mark);
-//js  void backspace();
     virtual void clear();
 
     /*! \return total size of this editor, including any buttons, etc. (if present). */
@@ -93,6 +89,9 @@ public slots:
     //! Implemented for KexiDataItemInterface
     virtual void selectAll();
 
+    //! Implemented for KexiDataItemInterface
+    virtual bool fixup();
+
 protected slots:
     void setRestrictedCompletion();
     void completed(const QString &);
@@ -105,11 +104,11 @@ protected:
     void showHintButton();
     void init();
     virtual void paintEvent(QPaintEvent *e);
+    void updateLineEditStyleSheet();
 
     KexiTextFormatter m_textFormatter;
     bool m_calculatedCell;
     QString m_decsym; //! decimal symbol
-    QString m_origText; //! orig. Line Edit's text after conversion - for easy comparing
     KLineEdit *m_lineedit;
 
 signals:

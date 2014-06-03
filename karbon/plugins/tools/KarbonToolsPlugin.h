@@ -20,8 +20,8 @@
 #ifndef _KARBONTOOLSPLUGIN_H_
 #define _KARBONTOOLSPLUGIN_H_
 
-#include <QtCore/QObject>
-#include <QtCore/QVariant>
+#include <QObject>
+#include <QVariant>
 
 class KarbonToolsPlugin : public QObject
 {

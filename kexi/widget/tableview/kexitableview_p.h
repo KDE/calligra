@@ -29,7 +29,7 @@
 
 #include "kexitableview.h"
 
-#include <kexidb/roweditbuffer.h>
+#include <db/roweditbuffer.h>
 #include <widget/utils/kexidisplayutils.h>
 
 #include <QEvent>
@@ -41,9 +41,9 @@
 #include <QHash>
 #include <QRubberBand>
 
-#include <KPushButton>
-#include <KLineEdit>
-#include <KMenu>
+#include <kpushbutton.h>
+#include <klineedit.h>
+#include <kmenu.h>
 
 class KexiTableEdit;
 class QLabel;
@@ -53,7 +53,7 @@ class QLabel;
 class KexiTableViewCellToolTip : public QToolTip
 {
 public:
-    KexiTableViewCellToolTip(KexiTableView * tableView);
+    explicit KexiTableViewCellToolTip(KexiTableView * tableView);
     virtual ~KexiTableViewCellToolTip();
 protected:
     virtual void maybeTip(const QPoint & p);
@@ -66,34 +66,22 @@ protected:
 class KexiTableViewPrivate
 {
 public:
-
-    KexiTableViewPrivate(KexiTableView* t);
+    explicit KexiTableViewPrivate(KexiTableView* t);
     ~KexiTableViewPrivate();
 
     void clearVariables();
 
     KexiTableView *tv;
 
-    //! editors: one for each column (indexed by KexiTableViewColumn)
-    QHash<KexiTableViewColumn*, KexiTableEdit*> editors;
-
+    //! editors: one for each column (indexed by KexiDB::TableViewColumn)
+    QHash<KexiDB::TableViewColumn*, KexiTableEdit*> editors;
     int rowHeight;
-
-//Qt4 QPixmap *pBufferPm;
     QTimer *pUpdateTimer;
     int menu_id_addRecord;
     int menu_id_removeRecord;
-
-#if 0//(js) doesn't work!
-    QTimer *scrollTimer;
-#endif
-
     KexiTableView::ScrollDirection scrollDirection;
-
     bool editOnDoubleClick;
-
     bool needAutoScroll;
-
     bool disableDrawContents;
 
     /*! true if the navigation panel is enabled (visible) for the view.
@@ -156,6 +144,9 @@ public:
 
     /*! A rubber band for displaying drag indicator. */
     QRubberBand *dragIndicatorRubberBand;
+
+    //! true if this is the first call of showEvent()
+    bool firstShowEvent;
 };
 
 #endif

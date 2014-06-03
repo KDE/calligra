@@ -20,7 +20,7 @@
 #ifndef ODBCPREPAREDSTATEMENT_H
 #define ODBCPREPAREDSTATEMENT_H
 
-#include <kexidb/preparedstatement.h>
+#include <db/preparedstatement.h>
 #include "odbcconnection_p.h"
 
 namespace KexiDB

@@ -28,16 +28,15 @@
 #include "kpttask.h"
 #include "kptschedule.h"
 
-#include <cstdlib>
-#include <qtest_kde.h>
-#include <QtCore/QDir>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kcalendarsystem.h>
 #include <ksystemtimezone.h>
 #include <kdatetime.h>
 #include <kconfiggroup.h>
-#include <QtDBus/QtDBus>
+
+#include <QDir>
+#include <QtDBus>
 
 #include <qtest_kde.h>
 #include <kdebug.h>
@@ -78,7 +77,7 @@ void ProjectTester::initTimezone()
     KConfig config("ktimezonedrc");
     KConfigGroup group(&config, "TimeZones");
     group.writeEntry("ZoneinfoDir", m_tmp.name());
-    group.writeEntry("Zonetab", m_tmp.name() + QString::fromLatin1("zone.tab"));
+    group.writeEntry("Zonetab", QString(m_tmp.name() + QString::fromLatin1("zone.tab")));
     group.writeEntry("LocalZone", QString::fromLatin1("Europe/Berlin"));
     config.sync();
 }
@@ -136,6 +135,7 @@ void ProjectTester::initTestCase()
     m_project->setName( "P1" );
     m_project->setId( m_project->uniqueNodeId() );
     m_project->registerNodeId( m_project );
+    m_project->setConstraintStartTime( DateTime::fromString( "2012-02-01 00:00" ) );
     m_project->setConstraintEndTime( m_project->constraintStartTime().addDays( 7 ) );
     // standard worktime defines 8 hour day as default
     QVERIFY( m_project->standardWorktime() );
@@ -157,10 +157,9 @@ void ProjectTester::cleanupTestCase()
 
 void ProjectTester::oneTask()
 {
-    QDate today = QDate::currentDate();
+    QDate today = QDate::fromString( "2012-02-01", Qt::ISODate );
     QDate tomorrow = today.addDays( 1 );
     QDate yesterday = today.addDays( -1 );
-    QDate nextweek = today.addDays( 7 );
     QTime t1( 9, 0, 0 );
     QTime t2 ( 17, 0, 0 );
     int length = t1.msecsTo( t2 );
@@ -183,6 +182,7 @@ void ProjectTester::oneTask()
         KPlatoRCPSPlugin rcps( 0, QVariantList() );
         rcps.calculate( *m_project, sm, true/*nothread*/ );
     }
+    Debug::printSchedulingLog( *sm, s );
     Debug::print( m_project, s );
     Debug::print( t, s );
 
@@ -429,7 +429,7 @@ void ProjectTester::team()
     Resource *team = new Resource();
     team->setType( Resource::Type_Team );
     team->setName( "Team" );
-    team->addTeamMember( r2 );
+    team->addTeamMemberId( r2->id() );
     project.addResource( g, team );
     
     ResourceGroupRequest *gr = new ResourceGroupRequest( g );
@@ -505,7 +505,7 @@ void ProjectTester::team()
     qDebug()<<endl<<"Testing:"<<s;
     
     r1->removeRequests();
-    team->addTeamMember( r1 );
+    team->addTeamMemberId( r1->id() );
     r1->setAvailableFrom( targetstart );
     r1->setAvailableUntil( targetend );
 

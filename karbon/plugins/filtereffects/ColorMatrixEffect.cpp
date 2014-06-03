@@ -22,8 +22,8 @@
 #include <KoFilterEffectRenderContext.h>
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
-#include <KLocale>
-#include <QtCore/QRect>
+#include <klocale.h>
+#include <QRect>
 #include <math.h>
 
 const int MatrixSize = 20;
@@ -156,7 +156,11 @@ QImage ColorMatrixEffect::processImage(const QImage &image, const KoFilterEffect
 {
     QImage result = image;
 
-    QRgb *src = (QRgb*)image.bits();
+#if QT_VERSION >= 0x040700
+    const QRgb *src = (const QRgb*)image.constBits();
+#else
+    const QRgb *src = (const QRgb*)image.bits();
+#endif
     QRgb *dst = (QRgb*)result.bits();
     int w = result.width();
 

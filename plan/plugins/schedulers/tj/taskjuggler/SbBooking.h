@@ -12,7 +12,7 @@
 #ifndef _SbBooking_h_
 #define _SbBooking_h_
 
-#include <qstring.h>
+#include <QString>
 
 namespace TJ
 {
@@ -33,9 +33,9 @@ class Task;
 class SbBooking
 {
 public:
-    SbBooking(Task* t)
+    explicit SbBooking(Task* t)
         : task(t) { }
-    SbBooking(const SbBooking* b) { task = b->task; }
+    explicit SbBooking(const SbBooking* b) { task = b->task; }
     virtual ~SbBooking() { }
 
     Task* getTask() const { return task; }

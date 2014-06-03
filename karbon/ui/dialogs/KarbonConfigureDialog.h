@@ -22,20 +22,21 @@
 #define KARBONCONFIGUREDIALOG_H
 
 #include <KoUnit.h>
-#include <KPageDialog>
+#include <kpagedialog.h>
 
 class KarbonView;
 class KarbonConfigInterfacePage;
 class KoConfigMiscPage;
 class KoConfigGridPage;
 class KoConfigDocumentPage;
+class KoConfigAuthorPage;
 
 class KarbonConfigureDialog : public KPageDialog
 {
     Q_OBJECT
 
 public:
-    KarbonConfigureDialog(KarbonView* parent);
+    explicit KarbonConfigureDialog(KarbonView *parent);
 
 public slots:
     void slotApply();
@@ -46,6 +47,7 @@ private:
     KoConfigMiscPage* m_miscPage;
     KoConfigGridPage* m_gridPage;
     KoConfigDocumentPage* m_defaultDocPage;
+    KoConfigAuthorPage *m_authorPage;
 };
 
 #endif // KARBONCONFIGUREDIALOG_H

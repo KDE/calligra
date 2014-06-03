@@ -67,7 +67,7 @@ class KPLATOUI_EXPORT ResourceAllocationEditor : public ViewBase
 {
     Q_OBJECT
 public:
-    ResourceAllocationEditor( KoDocument *part, QWidget *parent );
+    ResourceAllocationEditor(KoPart *part, KoDocument *doc, QWidget *parent);
     
     void setupGui();
     Project *project() const { return m_view->project(); }
@@ -98,10 +98,10 @@ protected:
     void updateActionsEnabled(  bool on = true );
 
 private slots:
-    void slotContextMenuRequested( QModelIndex index, const QPoint& pos );
+    void slotContextMenuRequested( const QModelIndex &index, const QPoint& pos );
     void slotSplitView();
-    
-    void slotSelectionChanged( const QModelIndexList );
+
+    void slotSelectionChanged( const QModelIndexList& );
     void slotCurrentChanged( const QModelIndex& );
     void slotEnableActions( bool on );
 

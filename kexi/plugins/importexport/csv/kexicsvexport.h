@@ -20,7 +20,7 @@
 #ifndef KEXI_CSVEXPORT_H
 #define KEXI_CSVEXPORT_H
 
-#include <kexidb/utils.h>
+#include <db/utils.h>
 
 class QTextStream;
 
@@ -45,7 +45,7 @@ public:
     QString delimiter;
     QString forceDelimiter; //!< Used for "clipboard" mode
     QString textQuote;
-    bool addColumnNames : 1;
+    bool addColumnNames;
 };
 
 /*! Exports data. \return false on failure.

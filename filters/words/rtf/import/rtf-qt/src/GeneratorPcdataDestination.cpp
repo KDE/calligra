@@ -32,9 +32,10 @@ namespace RtfReader
 
     void GeneratorPcdataDestination::aboutToEndDestination()
     {
-	if ( m_pcdata.endsWith( ";" ) ) {
-	    // trim off the trailing semicolon
-	    m_output->setGeneratorInformation( m_pcdata.left( m_pcdata.length() - 1 ) );
-	}
+        if (m_pcdata.endsWith(QLatin1Char(';'))) {
+            // trim off the trailing semicolon
+            m_pcdata.chop(1);
+            m_output->setGeneratorInformation(m_pcdata);
+        }
     }
 }

@@ -21,7 +21,8 @@
 #include "KPrPageData.h"
 #include "KPrShapeAnimations.h"
 
-KPrPageData::KPrPageData()
+KPrPageData::KPrPageData(KPrDocument *document)
+    : m_animations(document)
 {
 }
 

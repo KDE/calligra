@@ -29,7 +29,7 @@
 #ifndef OOXML_POLE_H
 #define OOXML_POLE_H
 
-#include "msooxml_export.h"
+#include "komsooxml_export.h"
 
 class QIODevice;
 
@@ -43,7 +43,7 @@ class StorageIO;
 class Stream;
 class StreamIO;
 
-class MSOOXML_EXPORT Storage
+class KOMSOOXML_EXPORT Storage
 {
     friend class Stream;
     friend class StreamOut;
@@ -110,7 +110,7 @@ private:
 
 };
 
-class MSOOXML_EXPORT Stream
+class KOMSOOXML_EXPORT Stream
 {
     friend class Storage;
     friend class StorageIO;

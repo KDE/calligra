@@ -22,6 +22,8 @@
 #include "kptcommand.h"
 #include "kptproject.h"
 
+#include <KoIcon.h>
+
 #include <QPushButton>
 #include <QTreeWidget>
 #include <QList>
@@ -36,7 +38,7 @@ namespace KPlato
 IntervalEdit::IntervalEdit( CalendarDay *day, QWidget *parent)
     : IntervalEditImpl(parent)
 {
-    //kDebug();
+    //kDebug(planDbg());
     if ( day ) {
         const QList<TimeInterval*> &intervals = day->timeIntervals();
         setIntervals( intervals );
@@ -63,19 +65,19 @@ IntervalEditImpl::IntervalEditImpl(QWidget *parent)
 
     intervalList->setRootIsDecorated( false );
     intervalList->setSortingEnabled( true );
-    intervalList->sortByColumn( 0, Qt::Ascending );
-    
-    bAddInterval->setIcon( KIcon( "list-add" ) );
-    bRemoveInterval->setIcon( KIcon( "list-remove" ) );
-    bClear->setIcon( KIcon( "edit-clear-list" ) );
-    
+    intervalList->sortByColumn( 0, Qt::AscendingOrder );
+
+    bAddInterval->setIcon(koIcon("list-add"));
+    bRemoveInterval->setIcon(koIcon("list-remove"));
+    bClear->setIcon(koIcon("edit-clear-list"));
+
     connect(bClear, SIGNAL(clicked()), SLOT(slotClearClicked()));
     connect(bAddInterval, SIGNAL(clicked()), SLOT(slotAddIntervalClicked()));
     connect(bRemoveInterval, SIGNAL(clicked()), SLOT(slotRemoveIntervalClicked()));
     connect(intervalList, SIGNAL(itemSelectionChanged()), SLOT(slotIntervalSelectionChanged()));
     
-    connect( startTime, SIGNAL( timeChanged( const QTime& ) ), SLOT( enableButtons() ) );
-    connect( length, SIGNAL( valueChanged( double ) ), SLOT( enableButtons() ) );
+    connect( startTime, SIGNAL(timeChanged(QTime)), SLOT(enableButtons()) );
+    connect( length, SIGNAL(valueChanged(double)), SLOT(enableButtons()) );
     
 }
 
@@ -164,18 +166,18 @@ IntervalEditDialog::IntervalEditDialog( Calendar *calendar, const QList<Calendar
     m_calendar( calendar ),
     m_days( days )
 {
-    //kDebug();
+    //kDebug(planDbg());
     setCaption( i18n("Edit Work Intervals") );
     setButtons( Ok|Cancel );
     setDefaultButton( Ok );
     showButtonSeparator( true );
-    //kDebug()<<&p;
+    //kDebug(planDbg())<<&p;
     m_panel = new IntervalEdit( days.value( 0 ), this );
     setMainWidget( m_panel );
     enableButtonOk( false );
 
-    connect( m_panel, SIGNAL( changed() ), SLOT( slotChanged() ) );
-    connect( calendar->project(), SIGNAL( calendarRemoved( const Calendar* ) ), SLOT( slotCalendarRemoved( const Calendar* ) ) );
+    connect( m_panel, SIGNAL(changed()), SLOT(slotChanged()) );
+    connect( calendar->project(), SIGNAL(calendarRemoved(const Calendar*)), SLOT(slotCalendarRemoved(const Calendar*)) );
 }
 
 IntervalEditDialog::IntervalEditDialog( Calendar *calendar, const QList<QDate> &dates, QWidget *parent)
@@ -183,12 +185,12 @@ IntervalEditDialog::IntervalEditDialog( Calendar *calendar, const QList<QDate> &
     m_calendar( calendar ),
     m_dates( dates )
 {
-    //kDebug();
+    //kDebug(planDbg());
     setCaption( i18n("Edit Work Intervals") );
     setButtons( Ok|Cancel );
     setDefaultButton( Ok );
     showButtonSeparator( true );
-    //kDebug()<<&p;
+    //kDebug(planDbg())<<&p;
     foreach ( const QDate &d, dates ) {
         CalendarDay *day = calendar->findDay( d );
         if ( day ) {
@@ -199,8 +201,8 @@ IntervalEditDialog::IntervalEditDialog( Calendar *calendar, const QList<QDate> &
     setMainWidget( m_panel );
     enableButtonOk( false );
 
-    connect( m_panel, SIGNAL( changed() ), SLOT( slotChanged() ) );
-    connect( calendar->project(), SIGNAL( calendarRemoved( const Calendar* ) ), SLOT( slotCalendarRemoved( const Calendar* ) ) );
+    connect( m_panel, SIGNAL(changed()), SLOT(slotChanged()) );
+    connect( calendar->project(), SIGNAL(calendarRemoved(const Calendar*)), SLOT(slotCalendarRemoved(const Calendar*)) );
 }
 
 void IntervalEditDialog::slotCalendarRemoved( const Calendar *cal )
@@ -249,7 +251,7 @@ MacroCommand *IntervalEditDialog::buildCommand()
 
 MacroCommand *IntervalEditDialog::buildCommand( Calendar *calendar, CalendarDay *day )
 {
-    //kDebug();
+    //kDebug(planDbg());
     const QList<TimeInterval*> lst = m_panel->intervals();
     if ( lst == day->timeIntervals() ) {
         return 0;
@@ -259,7 +261,7 @@ MacroCommand *IntervalEditDialog::buildCommand( Calendar *calendar, CalendarDay 
     CalendarModifyStateCmd *c = new CalendarModifyStateCmd( calendar, day, CalendarDay::Undefined );
     if (cmd == 0) cmd = new MacroCommand("");
     cmd->addCommand(c);
-    //kDebug()<<"Set Undefined";
+    //kDebug(planDbg())<<"Set Undefined";
 
     foreach ( TimeInterval *i, lst ) {
         CalendarAddTimeIntervalCmd *c = new CalendarAddTimeIntervalCmd( calendar, day, i );

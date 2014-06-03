@@ -30,12 +30,11 @@
 #include "KexiMainWindowIface.h"
 #include "kexi.h"
 
-#include <kexidb/connection.h>
+#include <db/connection.h>
 #include <kexiutils/identifier.h>
 #include <kexiutils/utils.h>
 
 #include <kactioncollection.h>
-#include <kiconloader.h>
 #include <kdebug.h>
 #include <kmessagebox.h>
 #include <kxmlguifactory.h>
@@ -89,14 +88,6 @@ public:
     QMap<int, GUIClient*> instanceGuiClients;
     Kexi::ObjectStatus status;
 
-#if 0 // unused now: we use class names
-    /*! If you're implementing a new part, set this to value >0 in your ctor
-    if you have well known (ie registered ID) for your part.
-    So far, table, query, form, report and script part have defined their IDs
-    (see KexiPart::ObjectType). */
-    int registeredPartID;
-#endif
-
     bool newObjectsAreDirty;
     bool instanceActionsInitialized;
 };
@@ -115,7 +106,7 @@ Part::Part(QObject *parent,
     , d(new Private())
 {
     Q_UNUSED(list);
-    d->instanceName = KexiUtils::string2Identifier(
+    d->instanceName = KexiUtils::stringToIdentifier(
         instanceName.isEmpty()
         ? i18nc("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
                 "Use '_' character instead of spaces. First character should be a..z character. "
@@ -132,8 +123,6 @@ Part::Part(QObject* parent, StaticPartInfo *info)
 {
     setObjectName("StaticPart");
     d->info = info;
-/*    d->supportedViewModes = Kexi::DesignViewMode;
-    d->supportedUserViewModes = 0;*/
 }
 
 Part::~Part()
@@ -143,14 +132,12 @@ Part::~Part()
 
 void Part::createGUIClients()//KexiMainWindow *win)
 {
-// d->mainWin = win;
     if (!d->guiClient) {
         //create part's gui client
         d->guiClient = new GUIClient(this, false, "part");
 
         //default actions for part's gui client:
-        QAction* act = KexiMainWindowIface::global()->actionCollection()->action(
-                            KexiPart::nameForCreateAction(*info()));
+        QAction* act = info()->newObjectAction();
         // - update action's tooltip and "what's this"
         QString tip(toolTip());
         if (!tip.isEmpty()) {
@@ -160,11 +147,6 @@ void Part::createGUIClients()//KexiMainWindow *win)
         if (!what.isEmpty()) {
             act->setWhatsThis(what);
         }
-#ifdef __GNUC__
-#warning TODO  KexiMainWindowIface::global()->guiFactory()->addClient(d->guiClient); //this client is added permanently
-#else
-#pragma WARNING( TODO  KexiMainWindowIface::global()->guiFactory()->addClient(d->guiClient); )
-#endif
 
         //default actions for part instance's gui client:
         //NONE
@@ -180,9 +162,7 @@ void Part::createGUIClients()//KexiMainWindow *win)
         GUIClient *instanceGuiClient = new GUIClient(this, true, "allViews");
         d->instanceGuiClients.insert(Kexi::AllViewModes, instanceGuiClient);
 
-//todo
         initPartActions();
-//  initActions();
     }
 }
 
@@ -198,7 +178,7 @@ KAction* Part::createSharedAction(Kexi::ViewMode mode, const QString &text,
 {
     GUIClient *instanceGuiClient = d->instanceGuiClients.value((int)mode);
     if (!instanceGuiClient) {
-        kDebug() << "no gui client for mode " << mode << "!";
+        kWarning() << "no gui client for mode " << mode << "!";
         return 0;
     }
     return KexiMainWindowIface::global()->createSharedAction(text, pix_name, cut, name,
@@ -226,23 +206,6 @@ KAction* Part::createSharedPartToggleAction(const QString &text,
 {
     return createSharedPartAction(text, pix_name, cut, name, "KToggleAction");
 }
-
-/*KAction* Part::sharedAction(int mode, const char* name, const char *classname)
-{
-  GUIClient *instanceGuiClient = d->instanceGuiClients[mode];
-  if (!instanceGuiClient) {
-    kDebug() << "no gui client for mode " << mode << "!";
-    return 0;
-  }
-  return instanceGuiClient->actionCollection()->action(name, classname);
-}
-
-KAction* Part::sharedPartAction(int mode, const char* name, const char *classname)
-{
-  if (!d->guiClient)
-    return 0;
-  return d->guiClient->actionCollection()->action(name, classname);
-}*/
 
 void Part::setActionAvailable(const char *action_name, bool avail)
 {
@@ -279,17 +242,7 @@ KexiWindow* Part::openInstance(QWidget* parent, KexiPart::Item &item, Kexi::View
      - displaying item.caption() as caption, if not empty, without instanceName
      - displaying the same as above in tabCaption (or not) */
     window->setId(item.identifier()); //not needed, but we did it
-    window->setWindowIcon(SmallIcon(window->itemIcon()));
-#ifdef __GNUC__
-#warning todo
-#else
-#pragma WARNING( todo )
-#endif
-#if 0
-    if (window->mdiParent())
-        window->mdiParent()->setIcon(*window->icon());
-#endif
-// window->setWindowIcon( *window->icon() );
+    window->setWindowIcon(KIcon(window->itemIconName()));
     KexiWindowData *windowData = createWindowData(window);
     if (!windowData) {
         d->status = Kexi::ObjectStatus(KexiMainWindowIface::global()->project()->dbConnection(),
@@ -342,8 +295,8 @@ KexiWindow* Part::openInstance(QWidget* parent, KexiPart::Item &item, Kexi::View
             delete window->schemaData(); //old one
             window->close();
             delete window;
-            kWarning() << "Part::openInstance() !window, cannot switch to a view mode " <<
-            Kexi::nameForViewMode(viewMode);
+            kWarning() << "!window, cannot switch to a view mode" <<
+                Kexi::nameForViewMode(viewMode);
             return 0;
         }
         //the window has an error info
@@ -356,30 +309,20 @@ KexiWindow* Part::openInstance(QWidget* parent, KexiPart::Item &item, Kexi::View
         d->status = window->status();
         window->close();
         delete window;
-        kWarning() << "Part::openInstance() !window, switching to view mode failed, " <<
-        Kexi::nameForViewMode(viewMode);
+        kWarning() << "!window, switching to view mode failed, " <<
+            Kexi::nameForViewMode(viewMode);
         return 0;
     }
     window->registerWindow(); //ok?
     window->show();
 
-#ifdef __GNUC__
-#warning Part::openInstance(): resize window->resize(window->sizeHint()) for standalone windows
-#else
-#pragma WARNING( Part::openInstance(): resize window->resize(window->sizeHint()) for standalone windows )
-#endif
-#if 0
-    if (window->mdiParent() && window->mdiParent()->state() == KexiMdiMainFrm::Normal) //only resize the window if it is in normal state
-        window->resize(window->sizeHint());
-#endif
     window->setMinimumSize(window->minimumSizeHint().width(), window->minimumSizeHint().height());
 
     //dirty only if it's a new object
-    if (window->selectedView())
+    if (window->selectedView()) {
         window->selectedView()->setDirty(
             internalPropertyValue("newObjectsAreDirty", false).toBool() ? item.neverSaved() : false);
-
-    kDebug() << "window returned.";
+    }
     return window;
 }
 
@@ -424,7 +367,7 @@ void Part::initInstanceActions()
 {
 }
 
-bool Part::remove(KexiPart::Item &item)
+tristate Part::remove(KexiPart::Item &item)
 {
     KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
     if (!conn)
@@ -440,7 +383,7 @@ KexiWindowData* Part::createWindowData(KexiWindow* window)
 KLocalizedString Part::i18nMessage(const QString& englishMessage, KexiWindow* window) const
 {
     Q_UNUSED(window);
-    if (QString(englishMessage).startsWith(":"))
+    if (QString(englishMessage).startsWith(':'))
         return KLocalizedString();
     return ki18n(englishMessage.toLatin1());
 }
@@ -496,28 +439,19 @@ void Part::setInfo(Info *info)
     d->info = info;
 }
 
-/*
-int Part::registeredPartID() const
+KEXICORE_EXPORT QString KexiPart::fullCaptionForItem(KexiPart::Item *item, KexiPart::Part *part)
 {
-    return d->registeredPartID;
-}*/
-
-KEXICORE_EXPORT QString KexiPart::fullCaptionForItem(KexiPart::Item& item, KexiPart::Part *part)
-{
+    Q_ASSERT(item);
+    Q_ASSERT(part);
     if (part)
-        return item.name() + " : " + part->info()->instanceCaption();
-    return item.name();
+        return item->name() + " : " + part->info()->instanceCaption();
+    return item->name();
 }
 
 //-------------------------------------------------------------------------
 
 GUIClient::GUIClient(Part* part, bool partInstanceClient, const char* nameSuffix)
         : QObject(part)
-#ifdef __GNUC__
-#warning TODO , KXMLGUIClient(*KexiMainWindowIface::global()->guiClient())
-#else
-#pragma WARNING( TODO: KXMLGUIClient(*KexiMainWindowIface::global()->guiClient()) )
-#endif
 {
     setObjectName(
         part->info()->objectName()
@@ -535,14 +469,6 @@ GUIClient::GUIClient(Part* part, bool partInstanceClient, const char* nameSuffix
               setXMLFile(file);
         }
     }
-
-// new KAction(part->d->names["new"], part->info()->itemIcon(), 0, this,
-//  SLOT(create()), actionCollection(), (part->info()->objectName()+"part_create").toLatin1());
-
-// new KAction(i18nInstanceName+"...", part->info()->itemIcon(), 0, this,
-//  SLOT(create()), actionCollection(), (part->info()->objectName()+"part_create").toLatin1());
-
-// win->guiFactory()->addClient(this);
 }
 
 #include "kexipart.moc"

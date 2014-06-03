@@ -20,13 +20,13 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include <QVariant>
 #include <QFile>
 
-#include <KDebug>
+#include <kdebug.h>
 
 #include "sybasedriver.h"
 #include "sybaseconnection.h"
-#include <kexidb/field.h>
-#include <kexidb/driver_p.h>
-#include <kexidb/utils.h>
+#include <db/field.h>
+#include <db/driver_p.h>
+#include <db/utils.h>
 
 using namespace KexiDB;
 
@@ -62,8 +62,8 @@ SybaseDriver::SybaseDriver(QObject *parent, const QVariantList &args) :
 
 
     //predefined properties
-    d->properties["client_library_version"] = "";//TODO
-    d->properties["default_server_encoding"] = ""; //TODO
+    d->properties["client_library_version"] = ""; //!< @todo
+    d->properties["default_server_encoding"] = ""; //!< @todo
 
     // datatypes
     // integers

@@ -23,7 +23,7 @@
 #define KARBONSMALLSTYLEPREVIEW_H
 
 #include <KoCheckerBoardPainter.h>
-#include <QtGui/QWidget>
+#include <QWidget>
 
 class QPaintEvent;
 class KarbonFillStyleWidget;

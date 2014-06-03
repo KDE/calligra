@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,22 +21,15 @@
 #ifndef KEXIWINDOWBASE_H
 #define KEXIWINDOWBASE_H
 
-//#define KEXI_IMPL_WARNINGS
-
 #include "kexipartguiclient.h"
 #include "kexiactionproxy.h"
 #include "kexi.h"
 #include "kexipart.h"
 #include "KexiView.h"
-//#include "keximdi.h"
 
 #include <QPointer>
 #include <QEvent>
 #include <QCloseEvent>
-
-//#include <k3mdichildview.h>
-//#include <kxmlguiwindow.h>
-//#include <kxmlguiclient.h>
 
 class KexiMainWindow;
 class KexiWindowData;
@@ -87,12 +80,6 @@ public:
     /*! reimplemented: size hint is inherited from currently visible view. */
     virtual QSize sizeHint() const;
 
-#if 0 //main window moved to a singleton
-    KexiMainWindow *mainWin() const {
-        return m_parentWindow;
-    }
-#endif
-
     //js todo: maybe remove this since it's often the same as partItem()->identifier()?:
 
     /*! This method sets internal identifier for the dialog, but
@@ -120,14 +107,9 @@ public:
     //! It's obtained by querying part object for this dialog.
     KexiPart::GUIClient* guiClient() const;
 
-    /*! Tries to close the dialog. \return true if closing is accepted
-     (sometimes, user may not want to close the dialog by pressing cancel).
-     If \a dontSaveChanges if true, changes are not saved even if this dialog is dirty. */
-//js removed  bool tryClose(bool dontSaveChanges);
-
     /*! \return name of icon provided by part that created this dialog.
      The name is used by KexiMainWindow to set/reset icon for this dialog. */
-    virtual QString itemIcon();
+    virtual QString itemIconName();
 
     /*! \return true if this dialog supports switching to \a mode.
      \a mode is one of Kexi::ViewMode enum elements.
@@ -144,23 +126,7 @@ public:
 
     void setContextHelp(const QString& caption, const QString& text, const QString& iconName);
 
-    /*! Internal reimplementation. */
-    virtual bool eventFilter(QObject *obj, QEvent *e);
-
-    /*! Used by Main Window
-     \todo js: PROBABLY REMOVE THESE TWO?
-    */
-    virtual void attachToGUIClient();
-    virtual void detachFromGUIClient();
-
     //! \return true if the window is attached within the main window
-#ifdef KEXI_IMPL_WARNINGS
-#ifdef __GNUC__
-#warning TODO isAttached()
-#else
-#pragma WARNING( TODO isAttached() )
-#endif
-#endif
     bool isAttached() const {
         return true;
     }
@@ -198,9 +164,6 @@ public:
     //! @see setSchemaData(), KexiPart::loadSchemaData(), KexiPart::loadAndSetSchemaData()
     void setSchemaDataOwned(bool set);
 
-    /*! Reimplemented: "*" is added if for 'dirty' dialog's data. */
-//  QString caption() const;
-
     /*! Used by KexiView subclasses. \return temporary data shared between
      views */
     KexiWindowData *data() const;
@@ -234,7 +197,16 @@ public slots:
      form part item. On success, part item's ID is updated to new value,
      and schema data is set. \sa schemaData().
      \return true on success, false on failure and cancelled when storing has been cancelled. */
-    tristate storeNewData();
+    tristate storeNewData(KexiView::StoreNewDataOptions options = 0);
+
+    /*! Internal. Called by KexiMainWindow::saveObject().
+     Tells this dialog to create and store a copy of data of existing object to the backend.
+     Object's schema data has been never stored,
+     so it is created automatically, using information obtained
+     form the part item. On success, part item's ID is updated to new value,
+     and schema data is set. \sa schemaData().
+     \return true on success, false on failure and cancelled when storing has been cancelled. */
+    tristate storeDataAs(KexiPart::Item *item, KexiView::StoreNewDataOptions options);
 
     /*! Reimplemented - we're informing the current view about performed
      detaching by calling KexiView::parentDialogDetached(), so the view
@@ -248,6 +220,10 @@ public slots:
      (by default KexiView::parentDialogAttached() does nothing, you can
      reimplement it). */
     void sendAttachedStateToCurrentView();
+
+    /*! Saves settings for this window, for all views.
+        @see KexiView::saveSettings() */
+    bool saveSettings();
 
 signals:
     void updateContextHelp();
@@ -295,6 +271,9 @@ protected:
     //! \internal
     void removeView(Kexi::ViewMode mode);
 
+    //! \internal
+    virtual bool eventFilter(QObject *obj, QEvent *e);
+
     //! Used by \a view to inform the dialog about changing state of the "dirty" flag.
     void dirtyChanged(KexiView* view);
 
@@ -307,10 +286,6 @@ protected:
     /*! Sets temporary data shared between views. */
     void setData(KexiWindowData* data);
 
-    /*! @return action for name @a name, shared between views.
-     @since 2.0 */
-//  KAction* sharedViewAction(const char* name) const;
-
     //! Used by KexiView
     QVariant internalPropertyValue(const QByteArray& name,
                                    const QVariant& defaultValue = QVariant()) const;
@@ -321,10 +296,14 @@ private slots:
     tristate switchToViewModeInternal(Kexi::ViewMode newViewMode);
 
 private:
+    //! Closes the window and all views. If @a force is true, attempts to close every
+    //! view even if one of them refuses to close. If @a force is false, false is returned
+    //! as soon as first view refuses to close.
+    //! @return true on sucessfull close; forced close always returns true
+    bool close(bool force = false);
+
     void createSubwidgets();
-//moved to KexiView  void createViewModeToggleButtons();
-    void showSaveDesignButton(bool show);
-//moved to KexiView  void initViewActions(KexiView* view, Kexi::ViewMode mode);
+    void removeView(KexiView *view);
 
     class Private;
     Private *d;
@@ -338,4 +317,3 @@ private:
 };
 
 #endif
-

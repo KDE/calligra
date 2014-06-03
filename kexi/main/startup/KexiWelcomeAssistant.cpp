@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2011-2013 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,23 +18,24 @@
  */
 
 #include "KexiWelcomeAssistant.h"
-
 #include "KexiRecentProjectsModel.h"
+#include "KexiWelcomeStatusBar.h"
+#include "KexiPasswordPage.h"
+#include "KexiMainWindow.h"
 
 #include <core/kexi.h>
 #include <core/KexiRecentProjects.h>
 #include <core/kexiprojectdata.h>
 #include <core/kexiguimsghandler.h>
 #include <core/kexitextmsghandler.h>
-#include <kexidb/utils.h>
-#include <kexidb/object.h>
+#include <db/utils.h>
+#include <db/object.h>
 #include <kexiutils/identifier.h>
 #include <kexiutils/utils.h>
 #include <kexiutils/KexiAssistantPage.h>
 #include <kexiutils/KexiLinkWidget.h>
 
 #include <kapplication.h>
-#include <kiconloader.h>
 #include <kmimetype.h>
 #include <klocale.h>
 #include <kdebug.h>
@@ -42,13 +43,12 @@
 #include <kurlcombobox.h>
 #include <kmessagebox.h>
 #include <klineedit.h>
-#include <kurlcombobox.h>
-#include <KCategorizedView>
-#include <KTitleWidget>
-#include <KPushButton>
-#include <KAcceleratorManager>
-#include <KFileDialog>
-#include <KFileItemDelegate>
+#include <kcategorizedview.h>
+#include <ktitlewidget.h>
+#include <kpushbutton.h>
+#include <kacceleratormanager.h>
+#include <kfileitemdelegate.h>
+#include <kdialog.h>
 
 #include <QLayout>
 #include <QCheckBox>
@@ -64,10 +64,16 @@ KexiMainWelcomePage::KexiMainWelcomePage(
                   parent)
  , m_assistant(assistant)
 {
-    connect(this, SIGNAL(openProject(KexiProjectData)),
-            assistant, SIGNAL(openProject(KexiProjectData)));
+    QWidget* contents = new QWidget;
+    QHBoxLayout* contentsLyr = new QHBoxLayout(contents);
+    
     m_recentProjects = new KexiCategorizedView;
-    //m_recentProjects->setItemDelegate(new KFileItemDelegate(this));
+    // do not alter background palette
+    QPalette pal(m_recentProjects->palette());
+    pal.setColor(QPalette::Disabled, QPalette::Base,
+                    pal.color(QPalette::Normal, QPalette::Base));
+    m_recentProjects->setPalette(pal);
+    contentsLyr->addWidget(m_recentProjects, 1);
     setFocusWidget(m_recentProjects);
     m_recentProjects->setFrameShape(QFrame::NoFrame);
     m_recentProjects->setContentsMargins(0, 0, 0, 0);
@@ -77,7 +83,11 @@ KexiMainWelcomePage::KexiMainWelcomePage(
     m_recentProjects->setSpacing(margin);
     m_recentProjects->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     connect(m_recentProjects, SIGNAL(clicked(QModelIndex)), this, SLOT(slotItemClicked(QModelIndex)));
-    setContents(m_recentProjects);
+    
+    m_statusBar = new KexiWelcomeStatusBar;
+    contentsLyr->addWidget(m_statusBar);
+    
+    setContents(contents);
 
     QTimer::singleShot(100, this, SLOT(loadProjects()));
 }
@@ -85,7 +95,7 @@ KexiMainWelcomePage::KexiMainWelcomePage(
 void KexiMainWelcomePage::loadProjects()
 {
     m_recentProjectsProxyModel = new KexiRecentProjectsProxyModel(m_recentProjects);
-    KexiRecentProjectsModel* model = new KexiRecentProjectsModel(*m_assistant->projects());
+    KexiRecentProjectsModel* model = new KexiRecentProjectsModel(*m_assistant->projects(), this);
     m_recentProjectsProxyModel->setSourceModel(model);
     m_recentProjects->setModel(m_recentProjectsProxyModel);
     m_recentProjectsProxyModel->sort(0, Qt::DescendingOrder);
@@ -97,16 +107,15 @@ void KexiMainWelcomePage::slotItemClicked(const QModelIndex& index)
         return;
     QModelIndex sourceIndex = m_recentProjectsProxyModel->mapToSource(index);
     KexiProjectData *pdata = static_cast<KexiProjectData*>(sourceIndex.internalPointer());
-    kDebug() << *pdata;
-    //selectedTemplate = index.data(KexiTemplatesModel::NameRole).toString();
-    //selectedCategory = index.data(KexiTemplatesModel::CategoryRole).toString();
-    //m_templatesList->clearSelection();
-
+    //kDebug() << *pdata;
     if (pdata) {
-        emit openProject(*pdata);
-//        next();
-//        return;
+        m_assistant->openProjectOrShowPasswordPage(pdata);
     }
+}
+
+void KexiMainWelcomePage::updateRecentProjects()
+{
+    m_recentProjects->update();
 }
 
 // ----
@@ -121,12 +130,16 @@ public:
     
     ~Private()
     {
+        mainWindow->redirectMessagesTo(0);
     }
     
     KexiMainWelcomePage* mainWelcomePage() {
         return page<KexiMainWelcomePage>(&m_mainWelcomePage, q);
     }
-    
+    KexiPasswordPage* passwordPage() {
+        return page<KexiPasswordPage>(&m_passwordPage, q);
+    }
+
     template <class C>
     C* page(QPointer<C>* p, KexiWelcomeAssistant *parent = 0) {
         if (p->isNull()) {
@@ -137,23 +150,29 @@ public:
     }
 
     QPointer<KexiMainWelcomePage> m_mainWelcomePage;
-    
+    QPointer<KexiPasswordPage> m_passwordPage;
+
     QAction* messageWidgetActionNo;
     QAction* messageWidgetActionTryAgain;
     QPointer<KexiContextMessageWidget> messageWidget;
 
     KexiRecentProjects* projects;
-    
+    QPointer<KexiProjectData> projectData;
+
+    KexiMainWindow *mainWindow;
+
     KexiWelcomeAssistant *q;
 };
 
 // ----
 
 KexiWelcomeAssistant::KexiWelcomeAssistant(
-    KexiRecentProjects* projects, QWidget* parent)
+    KexiRecentProjects* projects, KexiMainWindow* parent)
  : KexiAssistantWidget(parent)
  , d(new Private(this))
 {
+    d->mainWindow = parent;
+    d->mainWindow->redirectMessagesTo(this);
     d->messageWidgetActionNo = 0;
     d->messageWidgetActionTryAgain = 0;
     d->projects = projects;
@@ -166,90 +185,77 @@ KexiWelcomeAssistant::~KexiWelcomeAssistant()
     delete d;
 }
 
-void KexiWelcomeAssistant::previousPageRequested(KexiAssistantPage* page)
-{
-    Q_UNUSED(page);
-}
-
 void KexiWelcomeAssistant::nextPageRequested(KexiAssistantPage* page)
 {
-    if (page == d->m_mainWelcomePage) {
-        /*
-        KexiDB::ConnectionData *cdata
-            = d->projectConnectionSelectionPage()->connSelector->selectedConnectionData();
-        if (cdata) {
-            if (d->projectDatabaseNameSelectionPage()->setConnection(cdata)) {
-                setCurrentPage(d->projectDatabaseNameSelectionPage());
-            }
-        }*/
+    if (page == d->m_passwordPage) {
+        if (d->projectData) {
+            d->passwordPage()->updateConnectionData(d->projectData->connectionData());
+            emitOpenProject(d->projectData);
+        }
+    }
+    else {
+        d->projectData = 0;
     }
 }
 
 void KexiWelcomeAssistant::cancelRequested(KexiAssistantPage* page)
 {
     Q_UNUSED(page);
-    //TODO?
-}
-
-void KexiWelcomeAssistant::showErrorMessage(
-    const QString &title, const QString &details)
-{
-    Q_UNUSED(title);
-    Q_UNUSED(details);
-}
-
-void KexiWelcomeAssistant::showErrorMessage(
-    KexiDB::Object *obj, const QString& msg)
-{
-    Q_UNUSED(obj);
-    Q_UNUSED(msg);
-    /*
-    QString _msg, _details;
-    if (!obj) {
-        showErrorMessage(_msg);
-        return;
-    }
-    //QString _details(details);
-    KexiTextMessageHandler textHandler(_msg, _details);
-    textHandler.showErrorMessage(obj, msg);
-    //KexiDB::getHTMLErrorMesage(obj, _msg, _details);
-    //showErrorMessage(_msg, _details);
-
-    KexiContextMessage message(_msg); 
-    //! @todo + _details
-    if (!d->messageWidgetActionTryAgain) {
-        d->messageWidgetActionTryAgain = new QAction(
-            KIcon("view-refresh"), i18n("Try Again"), this);
-        connect(d->messageWidgetActionTryAgain, SIGNAL(triggered()),
-                this, SLOT(tryAgainActionTriggered()));
-    }
-    if (!d->messageWidgetActionNo) {
-        d->messageWidgetActionNo = new QAction(KStandardGuiItem::no().text(), this);
-    }
-    d->messageWidgetActionNo->setText(KStandardGuiItem::cancel().text());
-    message.addAction(d->messageWidgetActionTryAgain);
-    message.setDefaultAction(d->messageWidgetActionNo);
-    message.addAction(d->messageWidgetActionNo);
-    delete d->messageWidget;
-    d->messageWidget = new KexiContextMessageWidget(
-        this, 0, //contents->formLayout
-        0, //contents->le_dbname
-        message);
-    //d->messageWidget->setNextFocusWidget(contents->le_title);
-    d->messageWidget->setCalloutPointerDirection(KMessageWidget::Right);
-    QWidget *b = currentPage()->nextButton();
-    d->messageWidget->setCalloutPointerPosition(
-        b->mapToGlobal(QPoint(0, b->height() / 2)));*/
-}
-
-void KexiWelcomeAssistant::tryAgainActionTriggered()
-{
-//    d->m_projectConnectionSelectionPage->next();
+    //! @todo
 }
 
 KexiRecentProjects* KexiWelcomeAssistant::projects()
 {
     return d->projects;
+}
+
+void KexiWelcomeAssistant::emitOpenProject(KexiProjectData *data)
+{
+    bool opened = false;
+    emit openProject(*data, projects()->shortcutPath(*data), &opened);
+    if (opened) { // update recent projects view
+        data->setLastOpened(QDateTime::currentDateTime());
+        d->m_mainWelcomePage->updateRecentProjects();
+    }
+}
+
+void KexiWelcomeAssistant::openProjectOrShowPasswordPage(KexiProjectData *data)
+{
+    KexiDB::ConnectionData *cdata = data->connectionData();
+    if (cdata) {
+        if (cdata->passwordNeeded()) {
+            d->projectData = data;
+            d->passwordPage()->setConnectionData(*cdata);
+            d->passwordPage()->showDatabaseName(true);
+            d->passwordPage()->setDatabaseNameReadOnly(true);
+            d->passwordPage()->setDatabaseName(data->databaseName());
+            setCurrentPage(d->passwordPage());
+            return;
+        }
+        else {
+            d->projectData = 0;
+            emitOpenProject(data);
+        }
+    }
+
+}
+
+void KexiWelcomeAssistant::tryAgainActionTriggered()
+{
+    messageWidget()->animatedHide();
+    currentPage()->next();
+}
+
+void KexiWelcomeAssistant::cancelActionTriggered()
+{
+    if (currentPage() == d->m_passwordPage) {
+        d->passwordPage()->focusWidget()->setFocus();
+    }
+}
+
+QWidget* KexiWelcomeAssistant::calloutWidget() const
+{
+    return currentPage()->nextButton();
 }
 
 #include "KexiWelcomeAssistant.moc"

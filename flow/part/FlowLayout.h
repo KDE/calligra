@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
- *  Copyright (c) 2011 Yue Liu <opuspace@gmail.com>
+ *  Copyright (c) 2011 Yue Liu <yue.liu@mail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -30,7 +30,7 @@ class KoShape;
 class FlowLayout : public QObject {
   Q_OBJECT
   public:
-    FlowLayout(const QString& _id);
+    explicit FlowLayout(const QString &_id);
     virtual ~FlowLayout();
   public:
     const QString& id() const;

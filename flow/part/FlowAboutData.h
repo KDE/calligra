@@ -24,16 +24,18 @@
 #include <klocale.h>
 #include <calligraversion.h>
 
-static const char* FLOW_DESCRIPTION = I18N_NOOP("Calligra Flowchart And Diagram Tool");
-static const char* FLOW_VERSION = CALLIGRA_VERSION_STRING;
+static const char FLOW_DESCRIPTION[] = I18N_NOOP("Calligra Flowchart And Diagram Tool");
+static const char FLOW_VERSION[] = CALLIGRA_VERSION_STRING;
 
 KAboutData* newFlowAboutData()
 {
   KAboutData* aboutData = new KAboutData("flow", 0, ki18nc("application name", "Flow"),
                                 FLOW_VERSION, ki18n(FLOW_DESCRIPTION), KAboutData::License_LGPL,
-                                ki18n("(C) 2000-2011, The Flow Team"), KLocalizedString(),
-                                "http://www.calligra-suite.org/flow/");
-  aboutData->setProductName("calligra-flow"); // for bugs.kde.org
+                                ki18n("© 2000-%1, The Flow Team").subs(CALLIGRA_YEAR),
+                                KLocalizedString(),
+                                "http://www.calligra.org/flow/");
+  aboutData->setProductName("calligraflow"); // for bugs.kde.org
+  aboutData->setProgramIconName(QLatin1String("calligraflow"));
   aboutData->addAuthor(ki18n("Yue Liu"), ki18n("Maintainer"), "yue.liu@mail.com");
   aboutData->addAuthor(ki18n("Peter Simonsson"), ki18n("Former Maintainer"), "peter.simonsson@gmail.com");
 

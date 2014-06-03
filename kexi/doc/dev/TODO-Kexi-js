@@ -1030,7 +1030,7 @@ ALTER TABLE t1_new RENAME TO t1;
 - unhide "Editor type" property for auto fields (it's hidden in 1.1 due to a crash)
 
 TODO:
-- inform Raphael about calligra-suite.org/1.5/ url, give him the php code
+- inform Raphael about calligra.org/1.5/ url, give him the php code
 
 Table Designer TODO
 - i18n("Lookup") == Odnosnik (Ks. eksperta, s. 53)

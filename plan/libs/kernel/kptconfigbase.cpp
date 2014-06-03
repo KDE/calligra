@@ -19,13 +19,14 @@
 
 #include "kptconfigbase.h"
 
-#include <KGlobal>
-#include <KLocale>
+#include <kglobal.h>
+#include <klocale.h>
 #include <kdebug.h>
 
 #include <QApplication>
 #include <QBrush>
 #include <QColor>
+#include <QFontMetrics>
 
 namespace KPlato
 {

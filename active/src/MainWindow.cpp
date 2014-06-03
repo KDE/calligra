@@ -1,7 +1,7 @@
 /*
  * This file is part of the KDE project
  *
- * Copyright (C) 2011 Shantanu Tushar <jhahoneyk@gmail.com>
+ * Copyright (C) 2011 Shantanu Tushar <shaan7in@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -20,94 +20,139 @@
  */
 
 #include "MainWindow.h"
-#include "CanvasController.h"
+#include "CACanvasController.h"
 #include "CADocumentInfo.h"
+#include "CADocumentController.h"
+#include "CACanvasItem.h"
+#include "CAPADocumentModel.h"
+#include "CATextDocumentModel.h"
+#include "CAImageProvider.h"
+#include "CAAbstractDocumentHandler.h"
 #include "calligra_active_global.h"
 
-#include <KDE/KGlobal>
-#include <KDE/KStandardDirs>
+#include <libs/main/calligraversion.h>
+
+#include <kglobal.h>
+#include <kstandarddirs.h>
+#include <kdebug.h>
 
 #include <QDeclarativeView>
 #include <QDeclarativeContext>
 #include <QDeclarativeEngine>
 #include <QSettings>
-#include <QFileDialog>
+#include <QTimer>
 #include <QDesktopServices>
 
-MainWindow::MainWindow(QWidget *parent)
-{
-    qmlRegisterType<CanvasController>("CalligraActive", 1, 0, "CanvasController");
-    qmlRegisterType<CADocumentInfo>("CalligraActive", 1, 0, "CADocumentInfo");
+#include <KoFilterManager.h>
+#include <KoFileDialog.h>
 
-    m_view = new QDeclarativeView(this);
+MainWindow::MainWindow (QWidget* parent)
+: QMainWindow(parent)
+{
+    CAImageProvider::s_imageProvider = new CAImageProvider;
+
+    qmlRegisterType<CACanvasController> ("CalligraActive", 1, 0, "CanvasController");
+    qmlRegisterType<CADocumentInfo> ("CalligraActive", 1, 0, "CADocumentInfo");
+    qmlRegisterType<CADocumentController> ("CalligraActive", 1, 0, "CADocumentController");
+    qmlRegisterType<CACanvasItem> ("CalligraActive", 1, 0, "CACanvasItem");
+    qmlRegisterUncreatableType<CAPADocumentModel> ("CalligraActive", 1, 0, "CAPADocumentModel", "Not allowed");
+    qmlRegisterUncreatableType<CATextDocumentModel> ("CalligraActive", 1, 0, "CATextDocumentModel", "Not allowed");
+    qmlRegisterInterface<KoCanvasController> ("KoCanvasController");
+    qmlRegisterUncreatableType<CAAbstractDocumentHandler>("CalligraActive", 1, 0, "CAAbstractDocumentHandler", "Not allowed");
+
+    m_view = new QDeclarativeView (this);
+
+    kdeclarative.setDeclarativeEngine(m_view->engine());
+    kdeclarative.initialize();
+    kdeclarative.setupBindings();
 
     QList<QObject*> recentFiles;
     QList<QObject*> recentTextDocs;
     QList<QObject*> recentSpreadsheets;
     QList<QObject*> recentPresentations;
     QSettings settings;
-    foreach(QString string, settings.value("recentFiles").toStringList()) {
-        CADocumentInfo *docInfo = CADocumentInfo::fromStringList(string.split(";"));
-        recentFiles.append(docInfo);
+    foreach (const QString &string, settings.value ("recentFiles").toStringList()) {
+        CADocumentInfo* docInfo = CADocumentInfo::fromStringList (string.split (QLatin1Char(';')));
+        recentFiles.append (docInfo);
         switch (docInfo->type()) {
-            case CADocumentInfo::TextDocument:
-                recentTextDocs.append(docInfo);
-                break;
-            case CADocumentInfo::Spreadsheet:
-                recentSpreadsheets.append(docInfo);
-                break;
-            case CADocumentInfo::Presentation:
-                recentPresentations.append(docInfo);
-                break;
+        case CADocumentInfo::TextDocument:
+            recentTextDocs.append (docInfo);
+            break;
+        case CADocumentInfo::Spreadsheet:
+            recentSpreadsheets.append (docInfo);
+            break;
+        case CADocumentInfo::Presentation:
+            recentPresentations.append (docInfo);
+            break;
+        default:
+            ;
         }
     }
 
-    foreach(const QString &importPath, KGlobal::dirs()->findDirs("module", "imports")) {
-        m_view->engine()->addImportPath(importPath);
+    foreach (const QString & importPath, KGlobal::dirs()->findDirs ("module", "imports")) {
+        m_view->engine()->addImportPath (importPath);
     }
 
+    m_view->rootContext()->setContextProperty("mainwindow", this);
+    m_view->rootContext()->setContextProperty("_calligra_version_string", CALLIGRA_VERSION_STRING);
+    m_view->engine()->addImageProvider(CAImageProvider::identificationString, CAImageProvider::s_imageProvider);
 
-    m_view->rootContext()->setContextProperty("recentFilesModel", QVariant::fromValue(recentFiles));
-    m_view->rootContext()->setContextProperty("recentTextDocsModel", QVariant::fromValue(recentTextDocs));
-    m_view->rootContext()->setContextProperty("recentSpreadsheetsModel", QVariant::fromValue(recentSpreadsheets));
-    m_view->rootContext()->setContextProperty("recentPresentationsModel", QVariant::fromValue(recentPresentations));
-    m_view->rootContext()->setContextProperty("mainwindow",this);
+    m_view->setSource (QUrl::fromLocalFile (CalligraActive::Global::installPrefix()
+                                            + "/share/calligraactive/qml/Doc.qml"));
+    m_view->setResizeMode (QDeclarativeView::SizeRootObjectToView);
 
-    m_view->setSource(QUrl::fromLocalFile(CalligraActive::Global::installPrefix()
-                        + "/share/calligraactive/qml/HomeScreen.qml"));
-    m_view->setResizeMode(QDeclarativeView::SizeRootObjectToView);
+    connect (m_view, SIGNAL(sceneResized(QSize)), SLOT(adjustWindowSize(QSize)));
+    resize (1024, 768);
+    setCentralWidget (m_view);
 
-    setCentralWidget(m_view);
-    connect(m_view, SIGNAL(sceneResized(QSize)), SLOT(adjustWindowSize(QSize)));
-    resize(800, 600);
+    QTimer::singleShot(0, this, SLOT(checkForAndOpenDocument()));
 }
 
-void MainWindow::openFile(const QString &path)
+void MainWindow::openFile (const QString& path)
 {
-    if (path.isEmpty())
-        return;
-
-    QObject *object = m_view->rootObject();
-    QMetaObject::invokeMethod(object, "openDocument", Q_ARG(QVariant, QVariant(path)));
+    documentPath = path;
+    QObject* object = m_view->rootObject();
+    if (object) {
+        QMetaObject::invokeMethod (object, "hideOpenButton");
+    }
 }
 
 void MainWindow::adjustWindowSize (QSize size)
 {
-    resize(size);
+    resize (size);
 }
 
-void MainWindow::openFileDialog() {
-   const QString path = QFileDialog::getOpenFileName(this,"Open File", QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
-   if(!path.isEmpty()) {
-    QObject *object = m_view->rootObject();
-    Q_ASSERT(object);
-    QMetaObject::invokeMethod(object, "openDocument", Q_ARG(QVariant, QVariant(path)));
-   }
+void MainWindow::openFileDialog()
+{
+
+    KoFileDialog dialog(m_view, KoFileDialog::OpenFiles, "OpenDocument");
+    dialog.setCaption(i18n("Open File"));
+    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
+    dialog.setMimeTypeFilters(KoFilterManager::mimeFilter("application/vnd.oasis.opendocument.text", KoFilterManager::Import)
+                              + KoFilterManager::mimeFilter("application/vnd.oasis.opendocument.presentation", KoFilterManager::Import)
+                              + KoFilterManager::mimeFilter("application/vnd.oasis.opendocument.spreadsheet", KoFilterManager::Import));
+
+    const QString path = dialog.url();
+
+    if (!path.isEmpty()) {
+        QObject* object = m_view->rootObject();
+        Q_ASSERT (object);
+        QMetaObject::invokeMethod (object, "openDocument", Q_ARG (QVariant, QVariant (path)));
+    }
 
 }
 
 MainWindow::~MainWindow()
 {
+    CAImageProvider::s_imageProvider = 0;
+}
+
+void MainWindow::checkForAndOpenDocument()
+{
+    if (!documentPath.isEmpty()) {
+        QObject* object = m_view->rootObject();
+        QMetaObject::invokeMethod (object, "openDocument", Q_ARG (QVariant, QVariant (documentPath)));
+    }
 }
 
 #include "MainWindow.moc"

@@ -1,25 +1,28 @@
+include_directories(
+    ../../../libodfhandler/
+    ${LIBODFGEN_INCLUDE_DIRS}
+    ${LIBWPD_INCLUDE_DIRS}
+    ${LIBWPG_INCLUDE_DIRS}
+    ${KOMAIN_INCLUDES}
+)
 
+set(wpd2odt_PART_SRCS
+    WPDImport.cpp
+    ../../../libodfhandler/DiskDocumentHandler.cxx
+    ../../../libodfhandler/FemtoZip.cxx
+    ../../../libodfhandler/OutputFileHelper.cxx
+    ../../../libodfhandler/StdOutHandler.cxx
+)
 
-include_directories(${WPD_INCLUDE_DIR})
+kde4_add_plugin(calligra_filter_wpd2odt ${wpd2odt_PART_SRCS})
 
+target_link_libraries(calligra_filter_wpd2odt
+    komain ${LIBODFGEN_LIBRARIES} ${LIBWPD_LIBRARIES} ${LIBWPG_LIBRARIES})
 
-########### next target ###############
+install(TARGETS calligra_filter_wpd2odt DESTINATION ${PLUGIN_INSTALL_DIR})
 
-set(wpimport_PART_SRCS wpimport.cc )
+install( FILES calligra_filter_wpd2odt.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 
-
-kde4_add_plugin(wpimport ${wpimport_PART_SRCS})
-
-
-
-target_link_libraries(wpimport komain ${WPD_LIBRARIES})
-
-install(TARGETS wpimport  DESTINATION ${PLUGIN_INSTALL_DIR})
-
-
-########### install files ###############
-
-install( FILES  words_wp_import.desktop   DESTINATION ${SERVICES_INSTALL_DIR})
-
-
-
+if(SHOULD_BUILD_EXTRA_THUMBNAIL)
+    install( FILES words_wpd_thumbnail.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+endif(SHOULD_BUILD_EXTRA_THUMBNAIL)

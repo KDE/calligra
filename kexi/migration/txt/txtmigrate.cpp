@@ -18,7 +18,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 */
 
 #include "txtmigrate.h"
-#include <KDebug>
+#include <kdebug.h>
 #include <QDir>
 
 namespace KexiMigration
@@ -42,7 +42,7 @@ bool TxtMigrate::drv_connect()
 {
   QDir d;
 
-  m_Folder = m_migrateData->source->dbPath();
+  m_Folder = data()->source->dbPath();
   return d.exists(m_Folder);
 }
 
@@ -58,7 +58,7 @@ bool TxtMigrate::drv_disconnect()
 
 bool TxtMigrate::drv_tableNames(QStringList& tablenames)
 {
-  tablenames << m_migrateData->source->dbFileName();
+  tablenames << data()->source->dbFileName();
   return true;
 }
 
@@ -93,7 +93,7 @@ bool TxtMigrate::drv_readFromTable(const QString & tableName)
          return false;
 
   m_LastLine = m_DataFile->readLine();
-  m_FieldNames = m_LastLine.split("\t");
+  m_FieldNames = m_LastLine.split('\t');
 
   return true;
 }
@@ -111,7 +111,7 @@ bool TxtMigrate::drv_moveNext()
       return false;
 
     m_LastLine = m_DataFile->readLine();
-    m_FieldValues.push_back(m_LastLine.split("\t"));
+    m_FieldValues.push_back(m_LastLine.split('\t'));
     m_Row++;
     m_FileRow++;
   }
@@ -142,19 +142,16 @@ QVariant TxtMigrate::drv_value(uint i)
 
 bool TxtMigrate::drv_moveFirst()
 {
-    kDebug();
+    //kDebug();
     m_Row = -1;
     return drv_moveNext();
 }
 
 bool TxtMigrate::drv_moveLast()
 {
-    kDebug();
-    
+    //kDebug();
     while(drv_moveNext()) {}
-    
     return true;
 }
-
 
 }

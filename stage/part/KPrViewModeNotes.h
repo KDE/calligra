@@ -48,8 +48,10 @@ public:
 
     void updateActivePage( KoPAPageBase *page );
 
-    void addShape( KoShape *shape );
-    void removeShape( KoShape *shape );
+    void addShape(KoShape *shape);
+    void removeShape(KoShape *shape);
+
+    const KoPageLayout &activePageLayout() const;
 };
 
 #endif // KPRVIEWMODENOTES_H

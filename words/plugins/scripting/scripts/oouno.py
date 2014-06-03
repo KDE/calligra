@@ -26,7 +26,7 @@ the script does not need to do it for you each time.
 (C)2007 Sebastian Sauer <mail@dipe.org>
 
 http://kross.dipe.org
-http://www.calligra-suite.org/words
+http://www.calligra.org/words
 http://udk.openoffice.org/python/python-bridge.html
 
 Dual-licensed under LGPL v2+higher and the BSD license.

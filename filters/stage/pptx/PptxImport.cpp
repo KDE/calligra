@@ -41,10 +41,10 @@
 
 #include <kde_file.h> // for WARNING
 #include <kdeversion.h>
-#include <KDebug>
-#include <KZip>
-#include <KPluginFactory>
-#include <KMessageBox>
+#include <kdebug.h>
+#include <kzip.h>
+#include <kpluginfactory.h>
+#include <kmessagebox.h>
 
 #include <KoOdfWriteStore.h>
 #include <KoEmbeddedDocumentSaver.h>
@@ -1110,8 +1110,9 @@ KoFilter::ConversionStatus PptxImport::parseParts(KoOdfWriters *writers,
         PptxXmlDocumentReader documentReader(writers);
         RETURN_IF_ERROR( loadAndParseDocument(
             d->mainDocumentContentType(), &documentReader, writers, errorMessage, &context) )
-        // We are reading twice, in the first round we ignore everything except defaultTextStyle
-        // except that we count the number of slides/slideMasters/noteMasters for progress reporting purposes
+        // Reading twice. In the 1st round everything except defaultTextStyle
+        // is ignored and the number of slides/slideMasters/noteMasters for
+        // progress reporting purposes is calculated.
         context.firstReadRound = false;
         RETURN_IF_ERROR( loadAndParseDocument(
             d->mainDocumentContentType(), &documentReader, writers, errorMessage, &context) )

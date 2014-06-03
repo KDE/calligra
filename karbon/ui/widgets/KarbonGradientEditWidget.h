@@ -24,7 +24,7 @@
 
 #include <karbonui_export.h>
 #include <KoCheckerBoardPainter.h>
-#include <QtGui/QWidget>
+#include <QWidget>
 
 class KarbonGradientWidget;
 class KoSliderCombo;

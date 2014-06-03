@@ -20,10 +20,8 @@
 #ifndef KEXISHAREDACTIONHOST_P_H
 #define KEXISHAREDACTIONHOST_P_H
 
-#include <qobject.h>
-#include <qsignalmapper.h>
-
-//#include <kxmlguiwindow.h>
+#include <QObject>
+#include <QSignalMapper>
 
 #include "kexiactionproxy.h"
 
@@ -45,7 +43,7 @@ class KexiSharedActionHostPrivate : public QObject
     Q_OBJECT
 
 public:
-    KexiSharedActionHostPrivate(KexiSharedActionHost *h);
+    explicit KexiSharedActionHostPrivate(KexiSharedActionHost *h);
 
     ~KexiSharedActionHostPrivate();
 

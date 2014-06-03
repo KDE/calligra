@@ -1,6 +1,7 @@
 /*
 * Kexi Report Plugin
-* Copyright (C) 2007-2009 by Adam Pigg (adam@piggz.co.uk)
+* Copyright (C) 2007-2009 by Adam Pigg <adam@piggz.co.uk>
+* Copyright (C) 2011 Jarosław Staniek <staniek@kde.org>
 *
 * This library is free software; you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public
@@ -44,6 +45,9 @@ public:
 
     void triggerAction(const QString &);
 
+signals:
+    void itemInserted(const QString& entity);
+
 private:
     KoReportDesigner *m_reportDesigner;
     KoProperty::Set *m_propertySet;
@@ -65,7 +69,9 @@ private:
 protected:
     virtual KoProperty::Set *propertySet();
     virtual tristate storeData(bool dontAsk = false);
-    virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata, bool &cancel);
+    virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata,
+                                             KexiView::StoreNewDataOptions options,
+                                             bool &cancel);
 
 private slots:
     void slotDesignerPropertySetChanged();

@@ -20,7 +20,7 @@
 #include <zlib.h>
 #include <cstdio>
 #include <iostream>
-#include <QtCore/QDebug>
+#include <QDebug>
 #include <QImage>
 #include <QBuffer>
 
@@ -105,8 +105,8 @@ bool saveDecompressedStream(POLE::Stream& stream, quint32 size, KoStore* out)
 const char* getMimetype(quint16 type)
 {
     switch (type) {
-    case officeArtBlipEMF: return "application/octet-stream";
-    case officeArtBlipWMF: return "application/octet-stream";
+    case officeArtBlipEMF: return "image/x-emf";
+    case officeArtBlipWMF: return "image/x-wmf";
     case officeArtBlipPICT: return "image/pict";
     case officeArtBlipJPEG: return "image/jpeg";
     case officeArtBlipPNG: return "image/png";
@@ -214,10 +214,13 @@ template<class T> void saveDecompressedPicture(PictureReference& ref, const T* a
 PictureReference savePicture(const MSO::OfficeArtBlip& a, KoStore* store)
 {
     PictureReference ref;
+    store->setCompressionEnabled(true);
     // only one of these calls will actually save a picture
     saveDecompressedPicture(ref, a.anon.get<MSO::OfficeArtBlipEMF>(), store);
     saveDecompressedPicture(ref, a.anon.get<MSO::OfficeArtBlipWMF>(), store);
     saveDecompressedPicture(ref, a.anon.get<MSO::OfficeArtBlipPICT>(), store);
+    // formats below are typically not very compressible
+    store->setCompressionEnabled(false);
     savePicture(ref, a.anon.get<MSO::OfficeArtBlipJPEG>(), store);
     savePicture(ref, a.anon.get<MSO::OfficeArtBlipPNG>(), store);
     savePicture(ref, a.anon.get<MSO::OfficeArtBlipDIB>(), store);
@@ -364,7 +367,11 @@ QMap<QByteArray, QString> createPictures(KoStore* store, KoXmlWriter* manifest, 
                 ref.uid = fbse->rgbUid;
             }
         }
-        manifest->addManifestEntry("Pictures/" + ref.name, ref.mimetype);
+
+        if (manifest) {
+            manifest->addManifestEntry("Pictures/" + ref.name, ref.mimetype);
+        }
+
         fileNames[ref.uid] = ref.name;
     }
 #ifdef DEBUG_PICTURES

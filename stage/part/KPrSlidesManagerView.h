@@ -67,13 +67,6 @@ public:
     void focusInEvent(QFocusEvent *event);
 
     /**
-     * Setter of the size with a rect
-     *
-     * @param size which is a QRect
-     */
-    void setItemSize(QRect size);
-
-    /**
      * Creates a pixmap the contains the all icons of the items
      * that are dragged.
      */
@@ -89,6 +82,9 @@ public:
      * return a QPair with 0, 0 for the first item.
      */
     QPair<int, int> cursorRowAndColumn() const;
+
+protected:
+    virtual void wheelEvent(QWheelEvent *event);
 
 signals:
 
@@ -115,8 +111,13 @@ signals:
     /** Is emitted when the view get focus */
     void focusGot();
 
-private:
+    /** Is emitted when Ctrl + Scrollwheel is used for zooming */
+    void zoomIn();
 
+    /** Is emitted when Ctrl + Scrollwheel is used for zooming */
+    void zoomOut();
+
+private:
     /**
      * The rect of an items, essentialy used to have the size of the full icon
      *
@@ -125,21 +126,21 @@ private:
     QRect itemSize() const;
 
     /**
-     * Setter for the draging flag
+     * Setter for the dragging flag
      *
      * @param flag boolean
      */
-    void setDragingFlag(bool flag = true);
+    void setDraggingFlag(bool flag = true);
 
     /**
-     * Permit to know if a slide is draging
+     * Permit to know if a slide is dragging
      *
      * @return boolean
      */
-    bool isDraging() const;
+    bool isDragging() const;
 
     QRect m_itemSize;
-    bool m_dragingFlag;
+    bool m_draggingFlag;
     int margin;
 
 };

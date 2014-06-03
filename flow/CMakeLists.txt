@@ -8,6 +8,7 @@ add_subdirectory(part)
 add_subdirectory(plugins)
 add_subdirectory(stencils)
 add_subdirectory(templates)
+add_subdirectory(pics)
 
 
 ########### install files ###############

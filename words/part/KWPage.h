@@ -53,8 +53,7 @@ public:
     /// An enum to define if this is a page that is printed to be a left or a right page
     enum PageSide {
         Left,       ///< A left page. Used for even-numbered pages
-        Right,      ///< A right page. Used for odd numbered pages
-        PageSpread  ///< A page spread which is one KWPage instance, but represents 2 pagenumbers
+        Right       ///< A right page. Used for odd numbered pages
     };
 
     /// return the width of this page (in pt)
@@ -86,6 +85,15 @@ public:
      * return a rectangle outlining this page, using the offset in the document.
      */
     QRectF rect() const;
+
+    /**
+     * return a rectangle outlining the main text on this page, using the offset in the document.
+     */
+    QRectF contentRect() const;
+
+    /* set the content rect valid on this page
+     */
+    void setContentRect(const QRectF &rect);
 
     // the y coordinate
     /**
@@ -173,7 +181,7 @@ public:
      * @param shapeManager the shape manager containing the page's shapes
      * @returns the thumbnail
      */
-    QImage thumbnail(const QSize &size, KoShapeManager *shapeManager);
+    QImage thumbnail(const QSize &size, KoShapeManager *shapeManager) const;
 
     bool operator==(const KWPage &other) const;
     inline bool operator!=(const KWPage &other) const { return ! operator==(other); }

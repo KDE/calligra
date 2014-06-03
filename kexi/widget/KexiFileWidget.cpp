@@ -20,15 +20,15 @@
 #include "KexiFileWidget.h"
 #include <kexi_global.h>
 
-#include <kexidb/driver.h>
-#include <kexidb/utils.h>
+#include <db/driver.h>
+#include <db/utils.h>
 #include <core/kexi.h>
 #include <kexiutils/utils.h>
 
-#include <qlayout.h>
-#include <qobject.h>
-#include <qpushbutton.h>
-#include <qapplication.h>
+#include <QLayout>
+#include <QObject>
+#include <QPushButton>
+#include <QApplication>
 #include <QKeyEvent>
 #include <QEvent>
 #include <QAction>
@@ -40,9 +40,10 @@
 #include <kmimetype.h>
 #include <kfile.h>
 #include <kurlcombobox.h>
-#include <KToolBar>
-#include <KActionCollection>
-#include <KFileDialog>
+#include <ktoolbar.h>
+#include <kactioncollection.h>
+#include <kfiledialog.h>
+#include <KFileFilterCombo>
 
 // added because of lack of krecentdirs.h
 namespace KRecentDirs
@@ -85,31 +86,9 @@ KexiFileWidget::KexiFileWidget(
     QAction *previewAction = actionCollection()->action("preview");
     if (previewAction)
         previewAction->setChecked(false);
-
-    //setMinimumHeight(100);
-    //setSizeGripEnabled ( false );
-
-    //dirty hack to customize filedialog view:
-    /* {
-        QList<QPushButton*> l = findChildren<QPushButton*>();
-        foreach (QPushButton* btn, l)
-          btn->hide();
-        QList<QWidget*> wl = findChildren<QWidget*>();
-        foreach (QWidget* w, wl)
-          w->installEventFilter(this);
-      } */
-
-    /* Qt4
-    #ifdef Q_WS_WIN
-      if (startDirOrVariable.startsWith(":"))
-        m_lastVisitedPathsVariable = startDirOrVariable; //store for later use
-    #else*/
-// toggleSpeedbar(false);
     setFocusProxy(locationEdit());
-//#endif
-
-    connect(this, SIGNAL(fileHighlighted(const QString&)),
-            this, SLOT(slotExistingFileHighlighted(const QString&)));
+    connect(this, SIGNAL(fileHighlighted(QString)),
+            this, SLOT(slotExistingFileHighlighted(QString)));
 }
 
 KexiFileWidget::~KexiFileWidget()
@@ -132,16 +111,12 @@ KexiFileWidget::~KexiFileWidget()
             KRecentDirs::add(d->recentDirClass, dir.url());
     }
     delete d;
-//Qt4 #ifdef Q_WS_WIN
-// saveLastVisitedPath(currentFileName());
-//#endif
 }
 
 void KexiFileWidget::slotExistingFileHighlighted(const QString& fileName)
 {
     kDebug() << fileName;
     d->highlightedUrl = KUrl(fileName);
-    //updateDialogOKButton(0);
     emit fileHighlighted();
 }
 
@@ -190,10 +165,7 @@ void KexiFileWidget::updateFilters()
     if (d->filtersUpdated)
         return;
     d->filtersUpdated = true;
-
     d->lastFileName.clear();
-// m_lastUrl = KUrl();
-
     clearFilter();
 
     QString filter;
@@ -244,13 +216,10 @@ void KexiFileWidget::updateFilters()
         allfilters += mime->patterns();
     }
 
-    if (!d->excludedMimeTypes.contains("all/allfiles"))
-        filter += KexiUtils::fileDialogFilterString("all/allfiles");
-// mime = KMimeType::mimeType("all/allfiles");
-// if (mime) {
-//  filter += QString(mime->patterns().isEmpty() ? "*" : mime->patterns().join(" "))
-//   + "|" + mime->comment()+ " (*)\n";
-// }
+    if (!d->excludedMimeTypes.contains("all/allfiles")) {
+        filter += filterWidget()->defaultFilter();
+    }
+
     //remove duplicates made because upper- and lower-case extenstions are used:
     QStringList allfiltersUnique = allfilters.toSet().toList();
     qSort(allfiltersUnique);
@@ -290,7 +259,7 @@ QString KexiFileWidget::selectedFile() const
   //js @todo
 // kDebug() << "selectedFile() == " << path << " '" << url().fileName() << "' " << m_lineEdit->text();
   QString path = dir()->absolutePath();
-  if (!path.endsWith("/") && !path.endsWith("\\"))
+  if (!path.endsWith('/') && !path.endsWith("\\"))
     path.append("/");
   path += m_lineEdit->text();
 // QString path = QFileInfo(selectedFile()).dirPath(true) + "/" + m_lineEdit->text();
@@ -313,7 +282,7 @@ QString KexiFileWidget::selectedFile() const
 
   if (!currentFilter().isEmpty()) {
     if (d->mode & SavingFileBasedDB) {
-      const QStringList filters( currentFilter().split(" ") );
+      const QStringList filters( currentFilter().split(' ') );
       kDebug()<< " filter == " << filters;
       QString ext( QFileInfo(path).suffix() );
       bool hasExtension = false;
@@ -341,14 +310,9 @@ QString KexiFileWidget::selectedFile() const
 
 bool KexiFileWidget::checkSelectedFile()
 {
-    //accept();
-
-// KUrl url = currentURL();
-// QString path = url.path().trimmed();
-// QString path = selectedFile().trimmed();
     kDebug() << "d->highlightedUrl: " << d->highlightedUrl;
 
-    if (/*d->highlightedUrl.isEmpty() &&*/ !locationEdit()->lineEdit()->text().isEmpty()) {
+    if (!locationEdit()->lineEdit()->text().isEmpty()) {
         kDebug() << locationEdit()->lineEdit()->text();
         //kDebug() << locationEdit()->urls();
         kDebug() << baseUrl();
@@ -362,7 +326,6 @@ bool KexiFileWidget::checkSelectedFile()
     }
 
     kDebug() << "d->highlightedUrl: " << d->highlightedUrl;
-// if (url.fileName().trimmed().isEmpty()) {
     if (d->highlightedUrl.isEmpty()) {
         KMessageBox::error(this, i18n("Enter a filename."));
         return false;
@@ -370,7 +333,7 @@ bool KexiFileWidget::checkSelectedFile()
 
     if (!currentFilter().isEmpty()) {
         if (d->mode & SavingFileBasedDB) {
-            const QStringList filters( currentFilter().split(" ") );
+            const QStringList filters( currentFilter().split(' ') );
             QString path = highlightedFile();
             kDebug()<< "filter:" << filters << "path:" << path;
             QString ext( QFileInfo(path).suffix() );
@@ -397,7 +360,7 @@ bool KexiFileWidget::checkSelectedFile()
 
     kDebug() << "KexiFileWidget::checkURL() path: " << d->highlightedUrl;
 // kDebug() << "KexiFileWidget::checkURL() fname: " << url.fileName();
-//todo if ( url.isLocalFile() ) {
+//! @todo if ( url.isLocalFile() ) {
     QFileInfo fi(d->highlightedUrl.toLocalFile());
     if (mode() & KFile::ExistingOnly) {
         if (!fi.exists()) {
@@ -417,7 +380,6 @@ bool KexiFileWidget::checkSelectedFile()
     } else if (d->confirmOverwrites && !askForOverwriting(d->highlightedUrl.path(), this)) {
         return false;
     }
-// }
     return true;
 }
 
@@ -475,14 +437,6 @@ void KexiFileWidget::reject()
     kDebug() << "KexiFileWidget: reject!";
     emit rejected();
 }
-
-/*#ifndef Q_WS_WIN
-KUrlComboBox *KexiFileWidget::locationWidget() const
-{
-  return locationEdit;
-}
-#endif
-*/
 
 void KexiFileWidget::setLocationText(const QString& fn)
 {

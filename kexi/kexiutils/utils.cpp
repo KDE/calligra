@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2009 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -31,15 +31,21 @@
 #include <QFile>
 #include <QStyle>
 #include <QLayout>
+#include <KMessageBox>
+#include <QFileInfo>
+#include <KUrl>
+#include <KRun>
+#include <KToolInvocation>
+#include <KLocalizedString>
 
-#include <KDebug>
-#include <KCursor>
-#include <KApplication>
-#include <KIconEffect>
-#include <KIconLoader>
-#include <KGlobalSettings>
-#include <KAction>
-#include <KDialog>
+#include <kdebug.h>
+#include <kcursor.h>
+#include <kapplication.h>
+#include <kiconeffect.h>
+#include <kglobalsettings.h>
+#include <kaction.h>
+#include <kdialog.h>
+#include <kcolorscheme.h>
 
 using namespace KexiUtils;
 
@@ -103,7 +109,7 @@ WaitCursorRemover::~WaitCursorRemover()
 
 //--------------------------------------------------------------------------------
 
-QObject* KexiUtils::findFirstQObjectChild(QObject *o, const char* className /* compat with Qt3 */, const char* objName)
+QObject* KexiUtils::findFirstQObjectChild(QObject *o, const char* className, const char* objName)
 {
     if (!o)
         return 0;
@@ -121,13 +127,6 @@ QObject* KexiUtils::findFirstQObjectChild(QObject *o, const char* className /* c
     return 0;
 }
 
-#if 0
-int KexiUtils::indexOfPropertyWithSuperclasses(const QObject *object, const char* name)
-{
-    const int index = object->metaObject()->indexOfProperty(name);
-}
-#endif
-
 QMetaProperty KexiUtils::findPropertyWithSuperclasses(const QObject* object,
         const char* name)
 {
@@ -136,14 +135,6 @@ QMetaProperty KexiUtils::findPropertyWithSuperclasses(const QObject* object,
         return QMetaProperty();
     return object->metaObject()->property(index);
 }
-
-#if 0
-QMetaProperty KexiUtils::findPropertyWithSuperclasses(const QObject* object,
-        int index)
-{
-    return object->metaObject()->property(index);
-}
-#endif
 
 bool KexiUtils::objectIsA(QObject* object, const QList<QByteArray>& classNames)
 {
@@ -291,7 +282,7 @@ QColor KexiUtils::bleachedColor(const QColor& c, int factor)
         factor = 100;
     if (s >= 250 && v >= 250) //for colors like cyan or red, make the result more white
         s = qMax(0, s - factor - 50);
-    else if (s <= 5 && s <= 5)
+    else if (s <= 5 && v <= 5)
         v += factor - 50;
     c2.setHsv(h, s, qMin(255, v + factor - 100));
     return c2;
@@ -299,11 +290,6 @@ QColor KexiUtils::bleachedColor(const QColor& c, int factor)
 
 QIcon KexiUtils::colorizeIconToTextColor(const QPixmap& icon, const QPalette& palette)
 {
-#ifdef __GNUC__
-#warning KexiUtils::colorizeIconToTextColor OK?
-#else
-#pragma WARNING(port KexiUtils::colorizeIconToTextColor OK?)
-#endif
     QPixmap pm(
         KIconEffect().apply(icon, KIconEffect::Colorize, 1.0f,
                             palette.color(QPalette::Active, QPalette::ButtonText), false));
@@ -392,7 +378,7 @@ static void drawOrScalePixmapInternal(QPainter* p, const WidgetMargins& margins,
     if (pixmap.isNull())
         return;
 
-    const bool fast = false;//pixmap.width() > 1000 && pixmap.height() > 800; //fast drawing needed
+    const bool fast = false;
     const int w = rect.width() - margins.left - margins.right;
     const int h = rect.height() - margins.top - margins.bottom;
 //! @todo we can optimize painting by drawing rescaled pixmap here
@@ -403,20 +389,17 @@ static void drawOrScalePixmapInternal(QPainter* p, const WidgetMargins& margins,
 //    if (fast) {
 //       target = p;
 //    } else {
-//moved  pixmapBuffer.resize(rect.size()-QSize(lineWidth, lineWidth));
-//moved  p2.begin(&pm, p.device());
 //        target = &p2;
 //    }
 //! @todo only create buffered pixmap of the minimum size and then do not fillRect()
 // target->fillRect(0,0,rect.width(),rect.height(), backgroundColor);
 
+    pos = rect.topLeft() + QPoint(margins.left, margins.top);
     if (scaledContents) {
         if (keepAspectRatio) {
             QImage img(pixmap.toImage());
             img = img.scaled(w, h, Qt::KeepAspectRatio, transformMode);
-            pos = rect.topLeft();
             if (img.width() < w) {
-//                int hAlign = QApplication::horizontalAlignment(alignment);
                 if (alignment & Qt::AlignRight)
                     pos.setX(pos.x() + w - img.width());
                 else if (alignment & Qt::AlignHCenter)
@@ -428,14 +411,6 @@ static void drawOrScalePixmapInternal(QPainter* p, const WidgetMargins& margins,
                 else if (alignment & Qt::AlignVCenter)
                     pos.setY(pos.y() + h / 2 - img.height() / 2);
             }
-//            pixmapBuffer.fromImage(img);
-            if (!fast) {
-//                p2.begin(&pixmapBuffer);
-//                p2.initFrom(p.device());
-            }
-            else {
-//                target->drawPixmap(pos, pixmapBuffer);
-            }
             if (p) {
                 p->drawImage(pos, img);
             }
@@ -444,23 +419,14 @@ static void drawOrScalePixmapInternal(QPainter* p, const WidgetMargins& margins,
             }
         } else {
             if (!fast) {
-//                pixmapBuffer = QPixmap(rect.size() - QSize(margins.right, margins.bottom));
-//                p2.begin(&pixmapBuffer);
-                //, p.device());
-//                p2.drawPixmap(QRect(rect.x(), rect.y(), w, h), pixmap);
-                pos = rect.topLeft();
                 pixmap = pixmap.scaled(w, h, Qt::IgnoreAspectRatio, transformMode);
                 if (p) {
                     p->drawPixmap(pos, pixmap);
                 }
             }
-            else {
-//                target->drawPixmap(QRect(rect.x() + margins.left, rect.y() + margins.top, w, h), pixmap);
-            }
         }
     }
     else {
-//        int hAlign = QApplication::horizontalAlignment(alignment);
         if (alignment & Qt::AlignRight)
             pos.setX(pos.x() + w - pixmap.width());
         else if (alignment & Qt::AlignHCenter)
@@ -474,22 +440,11 @@ static void drawOrScalePixmapInternal(QPainter* p, const WidgetMargins& margins,
             pos.setY(pos.y() + h / 2 - pixmap.height() / 2);
         else //top, etc.
             pos.setY(pos.y());
-//  target->drawPixmap(pos, pixmap);
-//  if (!fast)
-//   p2.begin(&pixmapBuffer, p.device());
         pos += QPoint(margins.left, margins.top);
         if (p) {
             p->drawPixmap(pos, pixmap);
         }
     }
-/*    if (scaledContents && !fast && p.isActive()) {
-        p2.end();
-        p.drawPixmap(
-           (int)p.worldMatrix().dx() + rect.x() + margins.left + pos.x(),
-           (int)p.worldMatrix().dy() + rect.y() + margins.top + pos.y(),
-            pixmapBuffer,
-            rect.x(), rect.y(), w, h);
-    }*/
 }
 
 void KexiUtils::drawPixmap(QPainter& p, const WidgetMargins& margins, const QRect& rect,
@@ -542,9 +497,7 @@ void KexiUtils::setFocusWithReason(QWidget* widget, Qt::FocusReason reason)
     if (!widget)
         return;
     QFocusEvent fe(QEvent::FocusIn, reason);
-    //QFocusEvent::setReason(reason);
     QCoreApplication::sendEvent(widget, &fe);
-    //QFocusEvent::resetReason();
 }
 
 void KexiUtils::unsetFocusWithReason(QWidget* widget, Qt::FocusReason reason)
@@ -552,9 +505,7 @@ void KexiUtils::unsetFocusWithReason(QWidget* widget, Qt::FocusReason reason)
     if (!widget)
         return;
     QFocusEvent fe(QEvent::FocusOut, reason);
-    //QFocusEvent::setReason(reason);
     QCoreApplication::sendEvent(widget, &fe);
-    //QFocusEvent::resetReason();
 }
 
 //--------
@@ -628,59 +579,6 @@ QFont KexiUtils::smallFont(QWidget *init)
     return *_smallFont;
 }
 
-//---------
-
-//! @internal
-class StaticSetOfStrings::Private
-{
-public:
-    Private() : array(0), set(0) {}
-    ~Private() {
-        delete set;
-    }
-    const char** array;
-    QSet<QByteArray> *set;
-};
-
-StaticSetOfStrings::StaticSetOfStrings()
-        : d(new Private)
-{
-}
-
-StaticSetOfStrings::StaticSetOfStrings(const char* array[])
-        : d(new Private)
-{
-    setStrings(array);
-}
-
-StaticSetOfStrings::~StaticSetOfStrings()
-{
-    delete d;
-}
-
-void StaticSetOfStrings::setStrings(const char* array[])
-{
-    delete d->set;
-    d->set = 0;
-    d->array = array;
-}
-
-bool StaticSetOfStrings::isEmpty() const
-{
-    return d->array == 0;
-}
-
-bool StaticSetOfStrings::contains(const QByteArray& string) const
-{
-    if (!d->set) {
-        d->set = new QSet<QByteArray>();
-        for (const char ** p = d->array;*p;p++) { 
-            d->set->insert(QByteArray::fromRawData(*p, qstrlen(*p)));
-        }
-    }
-    return d->set->contains(string);
-}
-
 //---------------------
 
 KTextEditorFrame::KTextEditorFrame(QWidget * parent, Qt::WindowFlags f)
@@ -713,17 +611,35 @@ void KexiUtils::setMargins(QLayout *layout, int value)
     layout->setContentsMargins(value, value, value, value);
 }
 
-QPixmap KexiUtils::replaceColors(const QPixmap& original, const QColor& color)
+void KexiUtils::replaceColors(QPixmap* original, const QColor& color)
 {
-    QPixmap dest(original);
-    {
-        QPainter p(&dest);
-        p.setCompositionMode(QPainter::CompositionMode_DestinationIn);
-        QPixmap colorize(original.size());
-        colorize.fill(color);
-        p.drawPixmap(0, 0, colorize);
-    }
-    return dest;
+    Q_ASSERT(original);
+    QImage dest(original->toImage());
+    replaceColors(&dest, color);
+    *original = QPixmap::fromImage(dest);
+}
+
+void KexiUtils::replaceColors(QImage* original, const QColor& color)
+{
+    Q_ASSERT(original);
+    QPainter p(original);
+    p.setCompositionMode(QPainter::CompositionMode_SourceIn);
+    p.fillRect(original->rect(), color);
+}
+
+bool KexiUtils::isLightColorScheme()
+{
+    return KColorScheme(QPalette::Active, KColorScheme::Window).background().color().lightness() >= 128;
+}
+
+QPalette KexiUtils::paletteForReadOnly(const QPalette &palette)
+{
+    QPalette p(palette);
+    p.setBrush(QPalette::Base, palette.brush(QPalette::Disabled, QPalette::Base));
+    p.setBrush(QPalette::Text, palette.brush(QPalette::Disabled, QPalette::Text));
+    p.setBrush(QPalette::Highlight, palette.brush(QPalette::Disabled, QPalette::Highlight));
+    p.setBrush(QPalette::HighlightedText, palette.brush(QPalette::Disabled, QPalette::HighlightedText));
+    return p;
 }
 
 //---------------------
@@ -780,4 +696,57 @@ bool PaintBlocker::eventFilter(QObject* watched, QEvent* event)
     return false;
 }
 
+void KexiUtils::openHyperLink(const KUrl &url, QWidget *parent, const OpenHyperlinkOptions &options)
+{
+    if (url.isLocalFile()) {
+        QFileInfo fileInfo(url.toLocalFile());
+        if (!fileInfo.exists()) {
+            KMessageBox::sorry(parent, i18nc("@info", "The file or directory <filename>%1</filename> does not exist.", fileInfo.absoluteFilePath()));
+            return;
+        }
+    }
+
+    if (!url.isValid()) {
+        KMessageBox::sorry(parent, i18nc("@info", "Invalid hyperlink <link>%1</link>.", url.pathOrUrl()));
+        return;
+    }
+
+    QString type = KMimeType::findByUrl(url)->name();
+
+    if (!options.allowExecutable && KRun::isExecutableFile(url, type)) {
+        KMessageBox::sorry(parent, i18nc("@info", "Executable <link>%1</link> not allowed.", url.pathOrUrl()));
+        return;
+    }
+
+    if (!options.allowRemote && !url.isLocalFile()) {
+        KMessageBox::sorry(parent, i18nc("@info", "Remote hyperlink <link>%1</link> not allowed.", url.pathOrUrl()));
+        return;
+    }
+
+    if (KRun::isExecutableFile(url, type)) {
+        int ret = KMessageBox::warningYesNo(parent
+                                            , i18nc("@info", "Do you want to run this file?"
+                                                    "<warning>Running executables can be dangerous.</warning>")
+                                            , QString(), KStandardGuiItem::yes(), KStandardGuiItem::no()
+                                            , "AllowRunExecutable", KMessageBox::Dangerous);
+
+        if (ret != KMessageBox::Yes) {
+            return;
+        }
+    }
+
+    switch(options.tool) {
+        case OpenHyperlinkOptions::DefaultHyperlinkTool:
+            KRun::runUrl(url, type, parent);
+            break;
+        case OpenHyperlinkOptions::BrowserHyperlinkTool:
+            KToolInvocation::invokeBrowser(url.url());
+            break;
+        case OpenHyperlinkOptions::MailerHyperlinkTool:
+            KToolInvocation::invokeMailer(url);
+            break;
+    }
+}
+
+#include "moc_utils.cpp"
 #include "utils_p.moc"

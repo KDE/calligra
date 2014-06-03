@@ -1,9 +1,8 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 
-<kpartgui name="braindump" version="0">
+<kpartgui name="braindump" version="1">
     <MenuBar>
         <Menu name="edit">
-            <Text>&amp;Edit</Text>
             <Action name="edit_undo"/>
             <Action name="edit_redo"/>
             <Separator/>
@@ -27,7 +26,6 @@
             <Action name="shapes_ungroup"/>
         </Menu>
         <Menu name="view">
-            <Text>&amp;View</Text>
             <Action name="zoom_out"/>
             <Action name="zoom_in"/>
             <Action name="view_zoom"/>

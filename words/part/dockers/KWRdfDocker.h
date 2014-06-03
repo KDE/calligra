@@ -23,7 +23,7 @@
 
 #include <QDockWidget>
 #include <ui_KWRdfDocker.h>
-#include <rdf/KoDocumentRdf.h>
+#include <KoDocumentRdf.h>
 #include <KoCanvasObserverBase.h>
 
 class QTimer;
@@ -55,19 +55,16 @@ public:
 private slots:
     void updateDataForced();
     void updateData();
-    void setAutoUpdate(int);
     void showSemanticViewContextMenu(const QPoint &);
-    void semanticObjectAdded(KoRdfSemanticItem *item);
-    void semanticObjectUpdated(KoRdfSemanticItem *item);
-    void resourceChanged(int key, const QVariant &value);
+    void semanticObjectAdded(hKoRdfSemanticItem item);
+    void semanticObjectUpdated(hKoRdfSemanticItem item);
+    void canvasResourceChanged(int key, const QVariant &value);
 
 private:
     KoCanvasBase *m_canvas;
     int m_lastCursorPosition;
-    bool m_autoUpdate;
     KWDocument *m_document;
     KoSelection *m_selection;
-    QTimer *m_timer;
     QTextDocument *m_textDocument;
     KoRdfSemanticTree m_rdfSemanticTree;
 

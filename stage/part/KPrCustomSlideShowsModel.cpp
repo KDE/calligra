@@ -30,7 +30,6 @@
 
 //KDE headers
 #include "KLocalizedString"
-#include "KIcon"
 
 //Qt headers
 #include <QIcon>
@@ -294,7 +293,7 @@ void KPrCustomSlideShowsModel::removeSlidesByIndexes(const QModelIndexList &page
     QList<KoPAPageBase *> slides;
     QList<int> indexesList;
 
-    foreach (QModelIndex index, pageIndexes) {
+    foreach (const QModelIndex &index, pageIndexes) {
         indexesList.append(index.row());
     }
 

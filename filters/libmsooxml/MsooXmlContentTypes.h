@@ -24,7 +24,7 @@
 #ifndef MSOOXMLCT_H
 #define MSOOXMLCT_H
 
-#include "msooxml_export.h"
+#include "komsooxml_export.h"
 
 #include <QString>
 #include <KoFilterChain.h>
@@ -40,7 +40,7 @@ namespace MSOOXML
 {
 
 //! Content type names for handling MSOOXML formats
-class MSOOXML_EXPORT ContentTypes
+class KOMSOOXML_EXPORT ContentTypes
 {
 public:
     // common officedocument namespaces

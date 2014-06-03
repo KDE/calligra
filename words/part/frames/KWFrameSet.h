@@ -41,7 +41,7 @@ class WORDS_EXPORT KWFrameSet : public QObject
     Q_OBJECT
 public:
     /// Constructor.
-    KWFrameSet(Words::FrameSetType type = Words::OtherFrameSet);
+    explicit KWFrameSet(Words::FrameSetType type = Words::OtherFrameSet);
     virtual ~KWFrameSet();
 
     /**
@@ -55,7 +55,7 @@ public:
      * Remove a previously added Frame
      * @param frame the frame to remove
      * @param shape the shape of the frame
-     * You shouldn't use this method in most cases but the convinience version with only a single
+     * You shouldn't use this method in most cases but the convenience version with only a single
      * parameter
      */
     void removeFrame(KWFrame *frame, KoShape *shape);
@@ -124,6 +124,8 @@ protected:
     virtual void setupFrame(KWFrame *frame) {
         Q_UNUSED(frame);
     }
+
+    void cleanupFrames();
 
 private:
     /// The list of frames that this frameset owns.

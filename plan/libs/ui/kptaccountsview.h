@@ -84,7 +84,7 @@ class KPLATOUI_EXPORT AccountsView : public ViewBase
 {
     Q_OBJECT
 public:
-    AccountsView( Project *project, KoDocument *part, QWidget *parent );
+    AccountsView(KoPart *part, Project *project, KoDocument *doc, QWidget *parent);
 
     //~AccountsView();
     void setupGui();
@@ -103,7 +103,7 @@ public slots:
     void setScheduleManager( ScheduleManager *sm );
     
 protected slots:
-    void slotContextMenuRequested( QModelIndex, const QPoint &pos );
+    void slotContextMenuRequested( const QModelIndex&, const QPoint &pos );
     void slotHeaderContextMenuRequested( const QPoint &pos );
     virtual void slotOptions();
     

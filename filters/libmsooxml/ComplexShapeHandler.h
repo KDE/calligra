@@ -24,7 +24,7 @@
 #ifndef COMPLEXSHAPEHANDLER_H
 #define COMPLEXSHAPEHANDLER_H
 
-#include "msooxml_export.h"
+#include "komsooxml_export.h"
 
 #include <QXmlStreamReader>
 #include <QString>
@@ -32,7 +32,7 @@
 // This class is meant to be used as a helper class to understand
 // drawingML elements avLst, gdLst and pathLst and to help
 // create a custom-shape from them
-class MSOOXML_EXPORT ComplexShapeHandler {
+class KOMSOOXML_EXPORT ComplexShapeHandler {
 
 public:
 
@@ -48,6 +48,9 @@ public:
 
     // Handles gdLst items and creates equations out of them
     QString handle_gdLst(QXmlStreamReader* reader);
+
+    // Handles rect item and creates cooridantes for text-areas out of them
+    QString handle_rect(QXmlStreamReader* reader);
 
     // Handles pathLst and creates a value which should be used for enhanced-path attribute
     // Note: remember to check pathEquationsCreated() after using this one

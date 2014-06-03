@@ -7,6 +7,8 @@ All other settings are unofficial and are subject to change.
 Started: 2004-08-20, js
 -----------------------------------------------------------
 
+TODO: use kconf_update to migrate old keys starting with lowercase to new keys (http://techbase.kde.org/Development/Tutorials/Updating_KConfig_Files)
+
 Group: MainWindow
 # percentage width of the Project Navigator pane
 -LeftDockPosition [integer: 0..100]
@@ -22,10 +24,6 @@ Group: MainWindow
 
 # Percentage property editor's width
 -RightDockPosition [integer: 0..100]
-
-# True if "hover close button" should be available for tabs in the main window.
-# Only affects IDEAl user unterface mode.
--HoverCloseButtonForTabs [boolean] (default: false)
 
 Group: PropertyEditor
 -FontSize [integer]
@@ -45,6 +43,12 @@ Group: General
 #default=true for advanced Kexi mode
 NOT YET IMPELMENTED: -alwaysShowDetailsInMsgBoxes [boolean]
 
+# True if internal debugger window should be displayed with Kexi.
+# The window shows database operations and enables extra actions like 'Show Form UI Code'
+# in the Form Designer.
+# Only available when KEXI_DEBUG_GUI build option is enabled.
+-ShowInternalDebugger [boolean] (default: false)
+
 Group: Recent Dirs
 -lastVisitedImagePath [stringlist] # used for open/save dialogs for image files
                                    # see KexiImageBox::slotInsertFromFile() and slotSaveAs();
@@ -62,8 +66,13 @@ Group: TableDesigner
 -autogeneratePrimaryKeysOnTableDesignSaving [boolean]
 TODO: -defaultFieldType [the list of types], default=Text
 TODO: -autoPrimaryKeyForFieldNames [stringlist]
-TODO: -defaultTextFieldLength [uint, <255] default=50
 TODO: -defaultIntegerFieldSubtype [the list of types (byte, short, etc.)] default=long
+
+# Settings related to handling of database tables
+Group: Tables
+# TODO: value of DefaultTextFieldMaxLength should be also used on other places where we create tables with Text fields, e.g. on table importing
+# Default maximum length for fields of type Text
+-DefaultMaxLengthForTextFields [uint] (0: unlimited or up to engine's limit, default=0)
 
 Group: QueryDesigner
 TODO: -autoJoinOnTableInserting [boolean]
@@ -112,6 +121,9 @@ Group: ImportExport
 
 # Default text quote character used for exporting CSV (Comma-Separated Value) files.
 -DefaultTextQuoteForExportingCSVFiles [string] (default is ")
+
+# Import missing text values in CSV files as empty text ('' not NULL). 
+ImportNULLsAsEmptyText [boolean] (default: true)
 
 # Default character encoding for exporting CSV (Comma-Separated Value) files.
 # If not provided, system default will be is assumed.

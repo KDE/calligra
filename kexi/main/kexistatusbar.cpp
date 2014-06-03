@@ -27,10 +27,9 @@
 #include <QCheckBox>
 #include <QVBoxLayout>
 
-#include <KMenu>
-#include <KDebug>
-#include <KLocale>
-#include <kparts/part.h>
+#include <kmenu.h>
+#include <kdebug.h>
+#include <klocale.h>
 
 #if KexiStatusBar_KTEXTEDITOR_USED
 #include <ktexteditor/viewcursorinterface.h>
@@ -59,7 +58,6 @@ KexiStatusBar::KexiStatusBar(QWidget *parent)
 #if KexiStatusBar_KTEXTEDITOR_USED
         , m_cursorIface(0)
 #endif
-        , m_activePart(0)
 {
     setObjectName("KexiStatusBar");
     setContentsMargins(2, 0, 2, 0);
@@ -96,36 +94,9 @@ KexiStatusBar::KexiStatusBar(QWidget *parent)
     /// @todo remove parts from the map on PartRemoved() ?
 }
 
-
 KexiStatusBar::~KexiStatusBar()
 {
 }
-
-void KexiStatusBar::activePartChanged(KParts::Part *part)
-{
-    if (m_activePart && m_activePart->widget())
-        disconnect(m_activePart->widget(), 0, this, 0);
-
-    m_activePart = part;
-#if KexiStatusBar_KTEXTEDITOR_USED
-    m_cursorIface = 0;
-    m_viewmsgIface = 0;
-// @todo
-    if (part && part->widget()) {
-        if ((m_viewmsgIface = dynamic_cast<KTextEditor::ViewStatusMsgInterface*>(part->widget()))) {
-            connect(part->widget(), SIGNAL(viewStatusMsg(const QString &)),
-                    this, SLOT(setStatus(const QString &)));
-        } else if ((m_cursorIface = dynamic_cast<KTextEditor::ViewCursorInterface*>(part->widget()))) {
-            connect(part->widget(), SIGNAL(cursorPositionChanged()), this, SLOT(cursorPositionChanged()));
-            cursorPositionChanged();
-        } else {
-            // we can't produce any status data, hide the status box
-            changeItem("", m_msgID);
-        }
-    }
-#endif
-}
-
 
 void KexiStatusBar::cursorPositionChanged()
 {
@@ -140,24 +111,14 @@ void KexiStatusBar::cursorPositionChanged()
 
 void KexiStatusBar::setStatus(const QString &str)
 {
-    kDebug() << "KexiStatusBar::setStatus(" << str << ")";
-// m_status->setText(str);
+    //kDebug() << str;
     changeItem(str, m_msgID);
 }
 
 void KexiStatusBar::setCursorPosition(int line, int col)
 {
-// m_status->setText(i18n(" Line: %1 Col: %2 ").arg(line+1).arg(col));
     changeItem(i18n(" Line: %1 Col: %2 ", line + 1, col), m_msgID);
 }
-
-/*void KexiStatusBar::addWidget ( QWidget *widget, int stretch, bool permanent)
-{
-  KStatusBar::addWidget(widget,stretch,permanent);
-
-  if(widget->sizeHint().height() + 4 > height())
-    setFixedHeight(widget->sizeHint().height() + 4);
-}*/
 
 void KexiStatusBar::setReadOnlyFlag(bool readOnly)
 {

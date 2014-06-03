@@ -2,6 +2,7 @@
  * Utility.cpp - TaskJuggler
  *
  * Copyright (c) 2001, 2002, 2003, 2004 by Chris Schlaeger <cs@kde.org>
+ * Copyright (c) 2011 by Dag Andersen <danders@get2net.dk>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of version 2 of the GNU General Public License as
@@ -19,10 +20,10 @@
 #include <string>
 #include <stdlib.h>
 
-#include <KGlobal>
-#include <KLocale>
+#include <kglobal.h>
+#include <klocale.h>
 
-#include <qmap.h>
+#include <QMap>
 
 #include "TjMessageHandler.h"
 #include "tjlib-internal.h"
@@ -178,7 +179,7 @@ void exitUtility()
 bool
 setTimezone(const char* tZone)
 {
-    UtilityError = "";
+    UtilityError.clear();
 
     if (setenv("TZ", tZone, 1) < 0)
         qFatal("Ran out of space in environment section while "
@@ -214,7 +215,7 @@ setTimezone(const char* tZone)
     return true;
 }
 
-const struct tm * const
+const struct tm *
 clocaltime(const time_t* t)
 {
     /* In some cases we haven't initialized the module yet. So we do not use
@@ -440,18 +441,30 @@ monthOfWeek(time_t t, bool beginOnMonday)
     if (tm_mday < 4)
     {
         if (dayOfWeek(t, beginOnMonday) - tm_mday >= 3)
+	{
             if (tm_mon == 0)
+	    {
                 return 12;
+	    }
             else
+	    {
                 return tm_mon;
+	    }
+	}
     }
     else if (tm_mday > lastDayOfMonth - 4)
     {
         if (tm_mday - dayOfWeek(t, beginOnMonday) > lastDayOfMonth - 4)
+	{
             if (tm_mon == 11)
+	    {
                 return 1;
+	    }
             else
+	    {
                 return tm_mon + 2;
+	    }
+	}
     }
     return tm_mon + 1;
 }
@@ -617,7 +630,7 @@ sameTimeNextDay(time_t t)
     tmc.tm_mday++;
     tmc.tm_isdst = -1;
     if (mktime(&tmc) == -1)
-        qFatal("Error at %s", time2ISO(t).latin1());
+        qFatal("Error at %s", time2ISO(t).toLatin1().constData());
     return mktime(&tmc);
 }
 
@@ -790,7 +803,7 @@ addTimeToDate(time_t day, time_t hour)
 time_t
 date2time(const QString& date)
 {
-    UtilityError = "";
+    UtilityError.clear();
 
     int y, m, d, hour, min, sec;
     char tZone[64] = "";
@@ -869,7 +882,7 @@ date2time(const QString& date)
         return 0;
     }
 
-#if defined(__CYGWIN__) || (defined(__SVR4) && defined(__sun))
+#if defined(Q_WS_WIN) || defined(__CYGWIN__) || (defined(__SVR4) && defined(__sun))
     struct tm t = { sec, min, hour, d, m - 1, y - 1900, 0, 0, -1 };
 #else
     struct tm t = { sec, min, hour, d, m - 1, y - 1900, 0, 0, -1, 0, 0 };
@@ -909,7 +922,7 @@ time2qdate(time_t t)
 time_t
 qdate2time(const QDate& d)
 {
-#if defined(__CYGWIN__) || (defined(__SVR4) && defined(__sun))
+#if defined(Q_WS_WIN) || defined(__CYGWIN__) || (defined(__SVR4) && defined(__sun))
     struct tm t = { 0, 0, 0, d.day(), d.month() - 1, d.year() - 1900,
                     0, 0, -1 };
 #else

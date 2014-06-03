@@ -21,7 +21,7 @@
 #define KPRPICTURESIMPORT_H
 
 #include <QObject>
-#include <KUrl>
+#include <kurl.h>
 
 class KoShapeFactoryBase;
 class KoPAPageBase;

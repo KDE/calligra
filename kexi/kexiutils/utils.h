@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2009 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,6 +21,7 @@
 #define KEXIUTILS_UTILS_H
 
 #include "kexiutils_export.h"
+#include "kexi_global.h"
 
 #include <QPointer>
 #include <QObject>
@@ -29,7 +30,7 @@
 #include <QFont>
 #include <QFrame>
 
-#include <KMimeType>
+#include <kmimetype.h>
 #include <kiconloader.h>
 
 class QColor;
@@ -40,6 +41,7 @@ class KAction;
 //! @short General Utils
 namespace KexiUtils
 {
+
 //! \return true if \a o has parent \a par.
 inline bool hasParent(QObject* par, QObject* o)
 {
@@ -88,51 +90,24 @@ inline type findParentByType(QObject* o)
     return 0;
 }
 
-/* //! Const version of findParent()
-  template<class type>
-  inline const type findParentConst(const QObject* o, const char* className = 0)
-  {
-    if (!o) // || !className || className[0]=='\0')
-      return 0;
-    while ((o=o->parent())) {
-      if (dynamic_cast< type >(o) && (!className || o->inherits(className)))
-        return dynamic_cast< type >(o);
-    }
-    return 0;
-  }*/
-
 /*! \return first found child of \a o, inheriting \a className.
  If objName is 0 (the default), all object names match.
  Returned pointer type is casted. */
-KEXIUTILS_EXPORT QObject* findFirstQObjectChild(QObject *o, const char* className /* compat with Qt3 */, const char* objName);
+KEXIUTILS_EXPORT QObject* findFirstQObjectChild(QObject *o, const char* className, const char* objName);
 
 /*! \return first found child of \a o, that inherit \a className.
  If \a objName is 0 (the default), all object names match.
  Returned pointer type is casted. */
 template<class type>
-inline type findFirstChild(QObject *o, const char* className /* compat with Qt3 */, const char* objName = 0)
+inline type findFirstChild(QObject *o, const char* className, const char* objName = 0)
 {
     return ::qobject_cast< type >(findFirstQObjectChild(o, className, objName));
 }
-
-#if 0 //2.0: use QMetaObject::indexOfProperty()
-//! Finds property name and returns its index; otherwise returns -1.
-//! Like QMetaObject::indexOfProperty() but also looks at superclasses.
-KEXIUTILS_EXPORT int indexOfPropertyWithSuperclasses(
-    const QObject *object, const char* name);
-#endif
 
 //! Finds property for name \a name and object \a object returns it index;
 //! otherwise returns a null QMetaProperty.
 KEXIUTILS_EXPORT QMetaProperty findPropertyWithSuperclasses(const QObject* object,
         const char* name);
-
-#if 0 //2.0: use QMetaObject::property()
-//! Finds property for index \a index and object \a object returns it index;
-//! otherwise returns a null QMetaProperty.
-KEXIUTILS_EXPORT QMetaProperty findPropertyWithSuperclasses(const QObject* object,
-        int index);
-#endif
 
 //! \return true is \a object object is of class name \a className
 inline bool objectIsA(QObject* object, const char* className)
@@ -171,15 +146,6 @@ KEXIUTILS_EXPORT QList<QMetaProperty> propertiesForMetaObjectWithInherited(
 //! \return a list of enum keys for meta property \a metaProperty.
 KEXIUTILS_EXPORT QStringList enumKeysForProperty(const QMetaProperty& metaProperty);
 
-//! QDateTime - a hack needed because QVariant(QTime) has broken isNull()
-inline QDateTime stringToHackedQTime(const QString& s)
-{
-    if (s.isEmpty())
-        return QDateTime();
-    //  kDebug() << QDateTime( QDate(0,1,2), QTime::fromString( s, Qt::ISODate ) ).toString(Qt::ISODate);
-    return QDateTime(QDate(0, 1, 2), QTime::fromString(s, Qt::ISODate));
-}
-
 /*! Sets "wait" cursor with 1 second delay (or 0 seconds if noDelay is true).
  Does nothing if the application has no GUI enabled. (see KApplication::guiEnabled()) */
 KEXIUTILS_EXPORT void setWaitCursor(bool noDelay = false);
@@ -217,7 +183,7 @@ public:
     WaitCursorRemover();
     ~WaitCursorRemover();
 private:
-    bool m_reactivateCursor : 1;
+    bool m_reactivateCursor;
 };
 
 /*! \return filter string in QFileDialog format for a mime type pointed by \a mime
@@ -236,7 +202,7 @@ KEXIUTILS_EXPORT QString fileDialogFilterStrings(const QStringList& mimeStrings,
 
 /*! A global setting for minimal readable font.
  \a init is a widget that should be passed if no qApp->mainWidget() is available yet.
- The size of font is not smaller than he one returned by
+ The size of font is not smaller than the one returned by
  KGlobalSettings::smallestReadableFont(). */
 KEXIUTILS_EXPORT QFont smallFont(QWidget *init = 0);
 
@@ -261,9 +227,20 @@ KEXIUTILS_EXPORT QColor bleachedColor(const QColor& c, int factor);
  with accessibility settings. */
 KEXIUTILS_EXPORT QIcon colorizeIconToTextColor(const QPixmap& icon, const QPalette& palette);
 
-/*! @return pixmap @a original colored using @a color color. Used for coloring bitmaps 
+/*! Replaces colors in pixmap @a original using @a color color. Used for coloring bitmaps 
  that have to reflect the foreground color. */
-KEXIUTILS_EXPORT QPixmap replaceColors(const QPixmap& original, const QColor& color);
+KEXIUTILS_EXPORT void replaceColors(QPixmap* original, const QColor& color);
+
+/*! Replaces colors in image @a original using @a color color. Used for coloring bitmaps 
+ that have to reflect the foreground color. */
+KEXIUTILS_EXPORT void replaceColors(QImage* original, const QColor& color);
+
+/*! @return true if curent color scheme is light.
+ Lightness of window background is checked to measure this. */
+KEXIUTILS_EXPORT bool isLightColorScheme();
+
+/*! @return palette altered for indicating "read only" flag. */
+KEXIUTILS_EXPORT QPalette paletteForReadOnly(const QPalette &palette);
 
 /*! \return empty (fully transparent) pixmap that can be used as a place for icon of size \a iconGroup */
 KEXIUTILS_EXPORT QPixmap emptyIcon(KIconLoader::Group iconGroup);
@@ -300,12 +277,6 @@ KEXIUTILS_EXPORT void simpleDecrypt(QString& string);
 #ifdef KEXI_DEBUG_GUI
 //! Creates debug window for convenient debugging output
 KEXIUTILS_EXPORT QWidget *createDebugWindow(QWidget *parent);
-
-//! Adds debug line for for KexiDB database
-KEXIUTILS_EXPORT void addKexiDBDebug(const QString& text);
-
-//! Adds debug line for for Table Designer (Alter Table actions)
-KEXIUTILS_EXPORT void addAlterTableActionDebug(const QString& text, int nestingLevel = 0);
 
 //! Connects push button action to \a receiver and its \a slot. This allows to execute debug-related actions
 //! using buttons displayed in the debug window.
@@ -378,7 +349,7 @@ KEXIUTILS_EXPORT QPixmap scaledPixmap(const WidgetMargins& margins, const QRect&
 
 //! A helper for automatic deleting of contents of containers.
 template <typename Container>
-class KEXIUTILS_EXPORT ContainerDeleter
+class ContainerDeleter
 {
 public:
     ContainerDeleter(Container& container) : m_container(container) {}
@@ -392,116 +363,10 @@ private:
     Container& m_container;
 };
 
-//! @short Autodeleted hash
-template <class Key, class T>
-class KEXIUTILS_EXPORT AutodeletedHash : public QHash<Key, T>
-{
-public:
-    AutodeletedHash(const AutodeletedHash& other) : QHash<Key, T>(other), m_autoDelete(false) {}
-    AutodeletedHash(bool autoDelete = true) : QHash<Key, T>(), m_autoDelete(autoDelete) {}
-    void setAutoDelete(bool set) {
-        m_autoDelete = set;
-    }
-    bool autoDelete() const {
-        return m_autoDelete;
-    }
-    ~AutodeletedHash() {
-        if (m_autoDelete) qDeleteAll(*this);
-    }
-private:
-    bool m_autoDelete : 1;
-};
-
-//! @short Autodeleted list
-template <typename T>
-class KEXIUTILS_EXPORT AutodeletedList : public QList<T>
-{
-public:
-    AutodeletedList(const AutodeletedList& other)
-            : QList<T>(other), m_autoDelete(false) {}
-    AutodeletedList(bool autoDelete = true) : QList<T>(), m_autoDelete(autoDelete) {}
-    ~AutodeletedList() {
-        if (m_autoDelete) qDeleteAll(*this);
-    }
-    void setAutoDelete(bool set) {
-        m_autoDelete = set;
-    }
-    bool autoDelete() const {
-        return m_autoDelete;
-    }
-    void removeAt(int i) {
-        T item = QList<T>::takeAt(i); if (m_autoDelete) delete item;
-    }
-    void removeFirst() {
-        T item = QList<T>::takeFirst(); if (m_autoDelete) delete item;
-    }
-    void removeLast() {
-        T item = QList<T>::takeLast(); if (m_autoDelete) delete item;
-    }
-    void replace(int i, const T& value) {
-        T item = QList<T>::takeAt(i); insert(i, value); if (m_autoDelete) delete item;
-    }
-    void insert(int i, const T& value) {
-        QList<T>::insert(i, value);
-    }
-    typename QList<T>::iterator erase(typename QList<T>::iterator pos) {
-        T item = *pos;
-        typename QList<T>::iterator res = QList<T>::erase(pos);
-        if (m_autoDelete)
-            delete item;
-        return res;
-    }
-    typename QList<T>::iterator erase(
-        typename QList<T>::iterator afirst,
-        typename QList<T>::iterator alast) {
-        if (!m_autoDelete)
-            return QList<T>::erase(afirst, alast);
-        while (afirst != alast) {
-            T item = *afirst;
-            afirst = QList<T>::erase(afirst);
-            delete item;
-        }
-        return alast;
-    }
-    void pop_back() {
-        removeLast();
-    }
-    void pop_front() {
-        removeFirst();
-    }
-    int removeAll(const T& value) {
-        if (!m_autoDelete)
-            return QList<T>::removeAll(value);
-        typename QList<T>::iterator it(QList<T>::begin());
-        int removedCount = 0;
-        while (it != QList<T>::end()) {
-            if (*it == value) {
-                T item = *it;
-                it = QList<T>::erase(it);
-                delete item;
-                removedCount++;
-            } else
-                ++it;
-        }
-        return removedCount;
-    }
-    void clear() {
-        if (!m_autoDelete)
-            return QList<T>::clear();
-        while (!QList<T>::isEmpty()) {
-            T item = QList<T>::takeFirst();
-            delete item;
-        }
-    }
-
-private:
-    bool m_autoDelete : 1;
-};
-
 //! @short Case insensitive hash container supporting QString or QByteArray keys.
 //! Keys are turned to lowercase before inserting. Also supports option for autodeletion.
 template <typename Key, typename T>
-class KEXIUTILS_EXPORT CaseInsensitiveHash : public QHash<Key, T>
+class CaseInsensitiveHash : public QHash<Key, T>
 {
 public:
     CaseInsensitiveHash() : QHash<Key, T>(), m_autoDelete(false) {}
@@ -527,7 +392,7 @@ public:
         return QHash<Key, T>::insertMulti(key.toLower(), value);
     }
     const Key key(const T& value, const Key& defaultKey) const {
-        return QHash<Key, T>::key(value, key.toLower());
+        return QHash<Key, T>::key(value, defaultKey.toLower());
     }
     int remove(const Key& key) {
         return QHash<Key, T>::remove(key.toLower());
@@ -555,28 +420,13 @@ public:
         m_autoDelete = set;
     }
 private:
-    bool m_autoDelete : 1;
-};
-
-//! A set created from static (0-terminated) array of raw null-terminated strings.
-class KEXIUTILS_EXPORT StaticSetOfStrings
-{
-public:
-    StaticSetOfStrings();
-    StaticSetOfStrings(const char* array[]);
-    ~StaticSetOfStrings();
-    void setStrings(const char* array[]);
-    bool isEmpty() const;
-    bool contains(const QByteArray& string) const;
-private:
-    class Private;
-    Private * const d;
+    bool m_autoDelete;
 };
 
 //! Helper that sets given variable to specified value on destruction
 //! Object of type Setter are supposed to be created on the stack.
 template <typename T>
-class KEXIUTILS_EXPORT Setter
+class Setter
 {
 public:
     //! Creates a new setter object for variable @a var,
@@ -664,10 +514,47 @@ public:
     PaintBlocker(QWidget* parent);
     void setEnabled(bool set);
     bool enabled() const;
+protected:
     virtual bool eventFilter(QObject* watched, QEvent* event);
 private:
     bool m_enabled;
 };
+
+/*!
+ * \short Options for opening of hyperlinks
+ * \sa openHyperLink()
+ */
+class KEXIUTILS_EXPORT OpenHyperlinkOptions : public QObject
+{
+    Q_OBJECT
+    Q_ENUMS(HyperlinkTool)
+
+public:
+
+    /*!
+     * A tool used for opening hyperlinks
+     */
+    enum HyperlinkTool{
+        DefaultHyperlinkTool, /*!< Default tool for a given type of the hyperlink */
+        BrowserHyperlinkTool, /*!< Opens hyperlink in a browser */
+        MailerHyperlinkTool /*!< Opens hyperlink in a default mailer */
+    };
+
+    OpenHyperlinkOptions() :
+        tool(DefaultHyperlinkTool)
+      , allowExecutable(false)
+      , allowRemote(false)
+    {}
+
+    HyperlinkTool tool;
+    bool allowExecutable;
+    bool allowRemote;
+};
+
+/*!
+ * Opens the given \a url using \a options
+*/
+KEXIUTILS_EXPORT void openHyperLink(const KUrl &url, QWidget *parent, const OpenHyperlinkOptions &options);
 
 } //namespace KexiUtils
 

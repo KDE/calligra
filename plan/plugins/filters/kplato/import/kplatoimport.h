@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef ICALENDAREXPORT_H
-#define ICALENDAREXPORT_H
+#ifndef KPLATOIMPORT_H
+#define KPLATOIMPORT_H
 
 
 #include <KoFilter.h>
@@ -47,4 +47,4 @@ public:
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 };
 
-#endif // ICALENDAREXPORT_H
+#endif // KPLATOIMPORT_H

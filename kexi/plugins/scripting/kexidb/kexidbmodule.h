@@ -20,11 +20,11 @@
 #ifndef SCRIPTING_KEXIDBMODULE_H
 #define SCRIPTING_KEXIDBMODULE_H
 
-#include <qstring.h>
-#include <qvariant.h>
-#include <qobject.h>
+#include <QString>
+#include <QVariant>
+#include <QObject>
 
-#include <kexidb/drivermanager.h>
+#include <db/drivermanager.h>
 
 namespace Scripting
 {
@@ -82,8 +82,7 @@ public slots:
     QObject* querySchema();
 
 private Q_SLOTS:
-
-    // Wraps a KexiDB::Connection into a KexiDBConnection
+    //! Wraps a KexiDB::Connection into a KexiDBConnection
     QObject* connectionWrapper(QObject* connection);
 
 private:

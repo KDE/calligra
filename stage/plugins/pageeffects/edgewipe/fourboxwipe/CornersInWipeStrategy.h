@@ -25,7 +25,7 @@
 class CornersInWipeStrategy : public KPrPageEffectStrategy
 {
 public:
-    CornersInWipeStrategy( bool reverse );
+    explicit CornersInWipeStrategy(bool reverse);
     virtual ~CornersInWipeStrategy();
 
     /// reimplemented from KPrPageEffectStrategy

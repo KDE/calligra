@@ -22,17 +22,17 @@
 #include "KoFilterEffect.h"
 #include "MatrixDataModel.h"
 
-#include <KLocale>
-#include <KComboBox>
-#include <KDialog>
+#include <klocale.h>
+#include <kcombobox.h>
+#include <kdialog.h>
 
-#include <QtGui/QGridLayout>
-#include <QtGui/QLabel>
-#include <QtGui/QDoubleSpinBox>
-#include <QtGui/QPushButton>
-#include <QtGui/QCheckBox>
-#include <QtGui/QTableView>
-#include <QtGui/QHeaderView>
+#include <QGridLayout>
+#include <QLabel>
+#include <QDoubleSpinBox>
+#include <QPushButton>
+#include <QCheckBox>
+#include <QTableView>
+#include <QHeaderView>
 
 ConvolveMatrixEffectConfigWidget::ConvolveMatrixEffectConfigWidget(QWidget *parent)
         : KoFilterEffectConfigWidgetBase(parent), m_effect(0)
@@ -217,20 +217,21 @@ void ConvolveMatrixEffectConfigWidget::editKernel()
     m_matrixModel->setMatrix(oldKernel, kernelSize.y(), kernelSize.x());
     connect(m_matrixModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(kernelChanged()));
 
-    KDialog dlg(this);
-    QTableView * table = new QTableView(&dlg);
+    QPointer<KDialog> dlg = new KDialog(this);
+    QTableView * table = new QTableView(dlg);
     table->setModel(m_matrixModel);
     table->horizontalHeader()->hide();
     table->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
     table->verticalHeader()->hide();
     table->verticalHeader()->setResizeMode(QHeaderView::ResizeToContents);
-    dlg.setMainWidget(table);
-    if (dlg.exec() == KDialog::Accepted) {
+    dlg->setMainWidget(table);
+    if (dlg->exec() == KDialog::Accepted) {
         m_effect->setKernel(m_matrixModel->matrix());
         emit filterChanged();
     } else {
         m_effect->setKernel(oldKernel);
     }
+    delete dlg;
 
     disconnect(m_matrixModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(kernelChanged()));
 }

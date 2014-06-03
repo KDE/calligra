@@ -22,10 +22,10 @@
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QComboBox>
-#include <KLineEdit>
-#include <KPushButton>
+#include <klineedit.h>
+#include <kpushbutton.h>
 
-#include <kexidb/connection.h>
+#include <db/connection.h>
 #include <KoReportData.h>
 #include "kexidbreportdata.h"
 #include "keximigratereportdata.h"
@@ -43,26 +43,15 @@ public:
     void setConnectionData(QDomElement);
     QDomElement connectionData();
 
-private:
-    KexiDB::Connection *m_conn;
-
-    QVBoxLayout *m_layout;
-    QComboBox *m_sourceType;
-    QComboBox *m_internalSource;
-    KLineEdit *m_externalSource;
-    KPushButton *m_setData;
-
-    KexiDBReportData *m_kexiDBData;
-
-#ifndef KEXI_MOBILE
-    KexiMigrateReportData *m_kexiMigrateData;
-#endif
+signals:
+    void setData(KoReportData*);
 
 private slots:
     void setDataClicked();
 
-signals:
-    void setData(KoReportData*);
+private:
+    class Private;
+    Private * const d;
 };
 
 #endif // KEXISOURCESELECTOR_H

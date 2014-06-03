@@ -21,7 +21,7 @@
 #ifndef LIBACTIONWIDGET_H
 #define LIBACTIONWIDGET_H
 
-#include <KToggleAction>
+#include <ktoggleaction.h>
 
 #include <kexi_export.h>
 
@@ -56,7 +56,9 @@ protected slots:
     virtual void slotToggled(bool checked);
 
 private:
-    QByteArray m_className;
+    class Private;
+
+    Private* const d;
 };
 
 }

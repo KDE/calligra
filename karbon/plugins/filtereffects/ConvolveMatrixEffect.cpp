@@ -23,10 +23,10 @@
 #include "KoViewConverter.h"
 #include "KoXmlWriter.h"
 #include "KoXmlReader.h"
-#include <KLocale>
-#include <QtCore/QRect>
-#include <QtCore/QVector>
-#include <QtGui/QPainter>
+#include <klocale.h>
+#include <QRect>
+#include <QVector>
+#include <QPainter>
 #include <cmath>
 
 ConvolveMatrixEffect::ConvolveMatrixEffect()
@@ -161,7 +161,11 @@ QImage ConvolveMatrixEffect::processImage(const QImage &image, const KoFilterEff
 
     int dstPixel, srcPixel;
     qreal sumA, sumR, sumG, sumB;
+#if QT_VERSION >= 0x040700
+    const QRgb * src = (const QRgb*)image.constBits();
+#else
     const QRgb * src = (const QRgb*)image.bits();
+#endif
     QRgb * dst = (QRgb*)result.bits();
 
     const QRect roi = context.filterRegion().toRect();

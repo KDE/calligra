@@ -30,7 +30,7 @@ class KPrPresentationHighlightWidget : public KPrPresentationToolEventForwarder
 {
     Q_OBJECT
 public:
-    KPrPresentationHighlightWidget( KoPACanvasBase * canvas );
+    explicit KPrPresentationHighlightWidget(KoPACanvasBase *canvas);
     ~KPrPresentationHighlightWidget();
 
 protected:

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2012 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -27,7 +28,13 @@ class KarbonView;
 class KarbonPrintJob : public KoPrintingDialog
 {
 public:
-    KarbonPrintJob(KarbonView *view);
+    // the available print modes
+    enum PrintMode {
+        PrintToPaper, ///< printing to to printer device
+        PrintToPdf    ///< printing to pdf file
+    };
+
+    KarbonPrintJob(KarbonView *view, PrintMode printMode);
 
 protected:
     virtual QRectF preparePage(int pageNumber);

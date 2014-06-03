@@ -17,10 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <QObject>
-#include <QVariant>
-
 #include "Calendar.h"
+
 #include "Project.h"
 
 #include "kptcalendar.h"

@@ -14,7 +14,7 @@
 
 #include "kplatotj_export.h"
 
-#include <qdom.h>
+#include <QDomDocument>
 
 #include "ShiftSelectionList.h"
 

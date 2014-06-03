@@ -21,9 +21,9 @@
 #define KexiContextMenuUtils_H
 
 #include <kexi_global.h>
-#include <kexidb/queryschema.h>
-#include <KMenu>
-#include <KUrl>
+#include <db/queryschema.h>
+#include <kmenu.h>
+#include <kurl.h>
 
 class KActionCollection;
 
@@ -52,7 +52,7 @@ class KEXIGUIUTILS_EXPORT KexiImageContextMenu : public KMenu
     Q_OBJECT
 
 public:
-    KexiImageContextMenu(QWidget *parent = 0);
+    explicit KexiImageContextMenu(QWidget *parent = 0);
     virtual ~KexiImageContextMenu();
 
     KActionCollection* actionCollection() const;

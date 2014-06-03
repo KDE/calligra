@@ -18,15 +18,15 @@
 */
 
 #include "fieldvalidator.h"
-#include "field.h"
+#include <db/field.h>
 
 #include <kexiutils/longlongvalidator.h>
 #include <knumvalidator.h>
-#include <qwidget.h>
+#include <QWidget>
 
 using namespace KexiDB;
 
-FieldValidator::FieldValidator(const Field &field, QWidget * parent)
+FieldValidator::FieldValidator(const Field &field, QObject* parent)
         : KexiUtils::MultiValidator(parent)
 {
 //! @todo merge this code with KexiTableEdit code!
@@ -72,13 +72,9 @@ FieldValidator::FieldValidator(const Field &field, QWidget * parent)
 //! @todo add validator
 //  QValidator *validator = new KDateValidator(this);
 //  setValidator( validator );
-//moved  setInputMask( dateFormatter()->inputMask() );
     } else if (t == Field::Time) {
 //! @todo add validator
-//moved  setInputMask( timeFormatter()->inputMask() );
     } else if (t == Field::DateTime) {
-//moved  setInputMask(
-//moved   dateTimeInputMask( *dateFormatter(), *timeFormatter() ) );
     } else if (t == Field::Boolean) {
 //! @todo add BooleanValidator
         addSubvalidator(new KIntValidator(0, 1));
@@ -88,4 +84,3 @@ FieldValidator::FieldValidator(const Field &field, QWidget * parent)
 FieldValidator::~FieldValidator()
 {
 }
-

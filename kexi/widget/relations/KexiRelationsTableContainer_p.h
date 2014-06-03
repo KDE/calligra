@@ -27,7 +27,6 @@
 #include <QMouseEvent>
 #include <QEvent>
 #include <QDropEvent>
-#include <k3listview.h>
 
 #include <widget/fields/KexiFieldListView.h>
 
@@ -65,7 +64,6 @@ protected:
     virtual void dragMoveEvent(QDragMoveEvent* e);
     virtual void dropEvent(QDropEvent *e);
     virtual void contentsMousePressEvent(QMouseEvent * e);
-    virtual QRect drawItemHighlighter(QPainter *painter, Q3ListViewItem *item);
     virtual bool eventFilter(QObject *o, QEvent *ev);
 
 private:
@@ -77,7 +75,7 @@ class KexiRelationViewTableContainerHeader : public QLabel
 {
     Q_OBJECT
 public:
-    KexiRelationViewTableContainerHeader(const QString& text, QWidget *parent = 0);
+    explicit KexiRelationViewTableContainerHeader(const QString& text, QWidget *parent = 0);
     virtual ~KexiRelationViewTableContainerHeader();
 
     virtual void setFocus();

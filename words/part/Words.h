@@ -97,7 +97,7 @@ namespace Words
     bool isHeaderFooter(KWTextFrameSet *fs);
     /**
      * Returns a localized name for the TextFrameSetType.
-     * @param type the framset-type for which a localized name should be returned.
+     * @param type the frameset-type for which a localized name should be returned.
      */
     QString frameSetTypeName(TextFrameSetType type);
     QString frameSetTypeName(KWFrameSet* frameset);

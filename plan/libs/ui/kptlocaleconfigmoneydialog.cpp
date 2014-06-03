@@ -41,7 +41,7 @@ LocaleConfigMoneyDialog::LocaleConfigMoneyDialog( KLocale *locale, QWidget *p)
 
     enableButtonOk(false);
 
-    connect(m_panel, SIGNAL( localeChanged() ), SLOT(slotChanged()));
+    connect(m_panel, SIGNAL(localeChanged()), SLOT(slotChanged()));
 }
 
 void LocaleConfigMoneyDialog::slotChanged() {

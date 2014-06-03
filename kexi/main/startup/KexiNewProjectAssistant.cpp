@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2013 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2012 Dimitrios T. Tanis <dimitrios.tanis@kdemail.net>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,14 +23,16 @@
 #include "ui_KexiServerDBNamePage.h"
 #include "KexiTemplatesModel.h"
 #include "KexiStartupFileHandler.h"
+#include "KexiStartup.h"
+#include "KexiPasswordPage.h"
 
 #include <kexi.h>
 #include <kexiprojectset.h>
 #include <kexiprojectdata.h>
 #include <kexiguimsghandler.h>
 #include <kexitextmsghandler.h>
-#include <kexidb/utils.h>
-#include <kexidb/object.h>
+#include <db/utils.h>
+#include <db/object.h>
 #include <kexiutils/identifier.h>
 #include <kexiutils/utils.h>
 #include <kexiutils/KexiAssistantPage.h>
@@ -38,6 +41,8 @@
 #include <widget/KexiConnectionSelectorWidget.h>
 #include <widget/KexiDBTitlePage.h>
 #include <widget/KexiProjectSelectorWidget.h>
+
+#include <KoIcon.h>
 
 #include <kapplication.h>
 #include <kiconloader.h>
@@ -48,16 +53,14 @@
 #include <kurlcombobox.h>
 #include <kmessagebox.h>
 #include <klineedit.h>
-#include <kurlcombobox.h>
-#include <KTitleWidget>
-#include <KCategoryDrawer>
-#include <KPushButton>
-#include <KAcceleratorManager>
-#include <KFileDialog>
+#include <ktitlewidget.h>
+#include <kcategorydrawer.h>
+#include <kpushbutton.h>
+#include <kacceleratormanager.h>
+#include <kfiledialog.h>
 
-#include <qpushbutton.h>
-#include <qlayout.h>
-#include <qcheckbox.h>
+#include <QLayout>
+#include <QCheckBox>
 #include <QPaintEvent>
 #include <QPainter>
 #include <QProgressBar>
@@ -93,7 +96,6 @@ KexiTemplateSelectionPage::KexiTemplateSelectionPage(QWidget* parent)
     m_templatesList->setContentsMargins(0, 0, 0, 0);
     int margin = style()->pixelMetric(QStyle::PM_MenuPanelWidth, 0, 0)
         + KDialog::marginHint();
-    //m_templatesList->setCategorySpacing(5 + margin);
     //not needed in grid:
     m_templatesList->setSpacing(margin);
     m_templatesList->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
@@ -108,39 +110,37 @@ KexiTemplateSelectionPage::KexiTemplateSelectionPage(QWidget* parent)
     info.name = "blank";
     info.caption = i18n("Blank database");
     info.description = i18n("Database project without any objects");
-    info.icon = KIcon(KexiDB::defaultFileBasedDriverIcon()); //"x-office-document");
+    info.icon = KIcon(KexiDB::defaultFileBasedDriverIconName());
     templateCategory.addTemplate(info);
     templateCategories.append(templateCategory);
-    
+
+#ifdef KEXI_SHOW_UNIMPLEMENTED
     templateCategory = KexiTemplateCategoryInfo();
     templateCategory.name = "office";
     templateCategory.caption = i18n("Office Templates");
-    //templateCategory.enabled = false;
     
     info = KexiTemplateInfo();
     info.name = "contacts";
     info.caption = i18n("Contacts");
     info.description = i18n("Database for collecting and managing contacts");
-    info.icon = KIcon("view-pim-contacts");
-    //info.enabled = false;
+    info.icon = koIcon("view-pim-contacts");
     templateCategory.addTemplate(info);
     
     info = KexiTemplateInfo();
     info.name = "movie";
     info.caption = i18n("Movie catalog");
     info.description = i18n("Database for collecting movies");
-    info.icon = KIcon("video-x-genenric");
-    //info.enabled = false;
+    info.icon = koIcon("video-x-generic");
     templateCategory.addTemplate(info);
     templateCategories.append(templateCategory);
-    
+#endif // KEXI_SHOW_UNIMPLEMENTED
+
     KexiTemplatesProxyModel* proxyModel = new KexiTemplatesProxyModel(m_templatesList);
     KexiTemplatesModel* model = new KexiTemplatesModel(templateCategories);
     proxyModel->setSourceModel(model);
     m_templatesList->setModel(proxyModel);
 
-    kDebug() << "templatesCategoryDrawer:" << m_templatesList->categoryDrawer();
-
+    //kDebug() << "templatesCategoryDrawer:" << m_templatesList->categoryDrawer();
     setContents(m_templatesList);
 }
 
@@ -171,11 +171,11 @@ KexiProjectStorageTypeSelectionPage::KexiProjectStorageTypeSelectionPage(QWidget
     setBackButtonVisible(true);
     QWidget* contents = new QWidget;
     setupUi(contents);
-    int dsize = KIconLoader::global()->currentSize(KIconLoader::Desktop);
-    btn_file->setIcon(KIcon(KexiDB::defaultFileBasedDriverIcon()));
+    const int dsize = IconSize(KIconLoader::Desktop);
+    btn_file->setIcon(KIcon(KexiDB::defaultFileBasedDriverIconName()));
     btn_file->setIconSize(QSize(dsize, dsize));
     connect(btn_file, SIGNAL(clicked()), this, SLOT(buttonClicked()));
-    btn_server->setIcon(KIcon(KEXI_ICON_DATABASE_SERVER));
+    btn_server->setIcon(KIcon(KEXI_DATABASE_SERVER_ICON_NAME));
     btn_server->setIconSize(QSize(dsize, dsize));
     connect(btn_server, SIGNAL(clicked()), this, SLOT(buttonClicked()));
     setFocusWidget(btn_file);
@@ -203,7 +203,7 @@ static QString defaultDatabaseName()
 KexiProjectTitleSelectionPage::KexiProjectTitleSelectionPage(QWidget* parent)
  : KexiAssistantPage(i18n("Project Title & Filename"),
                   i18n("Enter title for the new project. "
-                       "Filename will created automatically based on the title. "
+                       "Filename will be created automatically based on the title. "
                        "You can change the filename too."),
                   parent)
 {
@@ -247,13 +247,12 @@ void KexiProjectTitleSelectionPage::titleTextChanged(const QString & text)
 {
     Q_UNUSED(text);
     updateUrl();
-//    nextButton()->setEnabled(!text.trimmed().isEmpty());
 }
 
 void KexiProjectTitleSelectionPage::updateUrl()
 {
     KUrl url = contents->file_requester->url();
-    QString fn = KexiUtils::string2FileName(contents->le_title->text());
+    QString fn = KexiUtils::stringToFileName(contents->le_title->text());
     if (!fn.isEmpty() && !fn.endsWith(".kexi"))
         fn += ".kexi";
     url.setFileName(fn);
@@ -319,21 +318,31 @@ KexiProjectConnectionSelectionPage::KexiProjectConnectionSelectionPage(QWidget* 
 {
     setBackButtonVisible(true);
     setNextButtonVisible(true);
-
-    QVBoxLayout *lyr = new QVBoxLayout;
-    connSelector = new KexiConnectionSelectorWidget(
-        Kexi::connset(),
-        "kfiledialog:///OpenExistingOrCreateNewProject",
-        KAbstractFileWidget::Saving);
-    lyr->addWidget(connSelector);
-    connSelector->showAdvancedConn();
-    connect(connSelector, SIGNAL(connectionItemExecuted(ConnectionDataLVItem*)),
-            this, SLOT(next()));
-    connSelector->layout()->setContentsMargins(0, 0, 0, 0);
-    connSelector->hideHelpers();
-    connSelector->hideDescription();
-    setContents(lyr);
-    setFocusWidget(connSelector->connectionsList());
+    if (KexiDB::hasDatabaseServerDrivers()) {
+        QVBoxLayout *lyr = new QVBoxLayout;
+        connSelector = new KexiConnectionSelectorWidget(
+            Kexi::connset(),
+            "kfiledialog:///OpenExistingOrCreateNewProject",
+            KAbstractFileWidget::Saving);
+        lyr->addWidget(connSelector);
+        connSelector->showAdvancedConn();
+        connect(connSelector, SIGNAL(connectionItemExecuted(ConnectionDataLVItem*)),
+                this, SLOT(next()));
+        connSelector->layout()->setContentsMargins(0, 0, 0, 0);
+        connSelector->hideHelpers();
+        connSelector->hideDescription();
+        setContents(lyr);
+        setFocusWidget(connSelector->connectionsList());
+    }
+    else {
+        setDescription(QString());
+        setNextButtonVisible(false);
+        m_errorMessagePopup = new KexiServerDriverNotFoundMessage(this);
+        setContents(m_errorMessagePopup);
+        layout()->setAlignment(m_errorMessagePopup, Qt::AlignTop);
+        m_errorMessagePopup->setAutoDelete(false);
+        m_errorMessagePopup->animatedShow();
+    }
 }
 
 KexiProjectConnectionSelectionPage::~KexiProjectConnectionSelectionPage()
@@ -346,7 +355,7 @@ KexiProjectDatabaseNameSelectionPage::KexiProjectDatabaseNameSelectionPage(
     KexiNewProjectAssistant* parent)
  : KexiAssistantPage(i18n("Project Title & Database Name"),
                   i18n("Enter title for the new project. "
-                       "Database name will created automatically based on the title. "
+                       "Database name will be created automatically based on the title. "
                        "You can change the database name too."),
                   parent)
  , m_assistant(parent)
@@ -375,7 +384,9 @@ KexiProjectDatabaseNameSelectionPage::KexiProjectDatabaseNameSelectionPage(
             this, SLOT(next()));
     contents->le_title->setText(defaultDatabaseName());
     contents->le_title->selectAll();
-    contents->le_dbname->setValidator(new KexiUtils::IdentifierValidator(this));
+    KexiUtils::IdentifierValidator *idValidator = new KexiUtils::IdentifierValidator(this);
+    idValidator->setLowerCaseForced(true);
+    contents->le_dbname->setValidator(idValidator);
     m_projectSelector = new KexiProjectSelectorWidget(
         contents->frm_dblist, 0,
         true, // showProjectNameColumn
@@ -398,20 +409,18 @@ KexiProjectDatabaseNameSelectionPage::~KexiProjectDatabaseNameSelectionPage()
 
 bool KexiProjectDatabaseNameSelectionPage::setConnection(KexiDB::ConnectionData* data)
 {
-    if (conndataToShow != data) {
-        m_projectSelector->setProjectSet(0);
-        conndataToShow = 0;
-        if (data) {
-            m_projectSetToShow = new KexiProjectSet(*data, m_assistant);
-            if (m_projectSetToShow->error()) {
-                delete m_projectSetToShow;
-                m_projectSetToShow = 0;
-                return false;
-            }
-            conndataToShow = data;
-            //-refresh projects list
-            m_projectSelector->setProjectSet(m_projectSetToShow);
+    m_projectSelector->setProjectSet(0);
+    conndataToShow = 0;
+    if (data) {
+        m_projectSetToShow = new KexiProjectSet(data, m_assistant);
+        if (m_projectSetToShow->error()) {
+            delete m_projectSetToShow;
+            m_projectSetToShow = 0;
+            return false;
         }
+        conndataToShow = data;
+        //-refresh projects list
+        m_projectSelector->setProjectSet(m_projectSetToShow);
     }
     if (conndataToShow) {
         QString selectorLabel = i18n("Existing project databases on <b>%1 (%2)</b> database server:")
@@ -428,7 +437,7 @@ void KexiProjectDatabaseNameSelectionPage::slotTitleChanged(const QString &capt)
         m_dbNameAutofill = true;
     if (m_dbNameAutofill) {
         m_le_dbname_txtchanged_enabled = false;
-        QString captionAsId = KexiUtils::string2Identifier(capt);
+        QString captionAsId = KexiUtils::stringToIdentifier(capt).toLower();
         contents->le_dbname->setText(captionAsId);
         m_projectDataToOverwrite = 0;
         m_le_dbname_txtchanged_enabled = true;
@@ -488,6 +497,7 @@ bool KexiProjectDatabaseNameSelectionPage::isAcceptable()
             messageWidget = new KexiContextMessageWidget(
                 this, contents->formLayout,
                 contents->le_dbname, message);
+            messageWidget->setMessageType(KMessageWidget::Warning);
             messageWidget->setNextFocusWidget(contents->le_title);
             return false;
         }
@@ -533,7 +543,10 @@ public:
     KexiProjectDatabaseNameSelectionPage* projectDatabaseNameSelectionPage() {
         return page<KexiProjectDatabaseNameSelectionPage>(&m_projectDatabaseNameSelectionPage, q);
     }
-    
+    KexiPasswordPage* passwordPage() {
+        return page<KexiPasswordPage>(&m_passwordPage, q);
+    }
+
     template <class C>
     C* page(QPointer<C>* p, KexiNewProjectAssistant *parent = 0) {
         if (p->isNull()) {
@@ -549,10 +562,7 @@ public:
     QPointer<KexiProjectCreationPage> m_projectCreationPage;
     QPointer<KexiProjectConnectionSelectionPage> m_projectConnectionSelectionPage;
     QPointer<KexiProjectDatabaseNameSelectionPage> m_projectDatabaseNameSelectionPage;
-    
-    QAction* messageWidgetActionNo;
-    QAction* messageWidgetActionTryAgain;
-    QPointer<KexiContextMessageWidget> messageWidget;
+    QPointer<KexiPasswordPage> m_passwordPage;
 
     KexiNewProjectAssistant *q;
 };
@@ -563,8 +573,6 @@ KexiNewProjectAssistant::KexiNewProjectAssistant(QWidget* parent)
  : KexiAssistantWidget(parent)
  , d(new Private(this))
 {
-    d->messageWidgetActionNo = 0;
-    d->messageWidgetActionTryAgain = 0;
     setCurrentPage(d->templateSelectionPage());
     setFocusProxy(d->templateSelectionPage());
 }
@@ -572,19 +580,6 @@ KexiNewProjectAssistant::KexiNewProjectAssistant(QWidget* parent)
 KexiNewProjectAssistant::~KexiNewProjectAssistant()
 {
     delete d;
-}
-       
-void KexiNewProjectAssistant::previousPageRequested(KexiAssistantPage* page)
-{
-    if (page == d->m_projectStorageTypeSelectionPage) {
-        setCurrentPage(d->templateSelectionPage());
-    }
-    else if (page == d->m_titleSelectionPage || page == d->m_projectConnectionSelectionPage) {
-        setCurrentPage(d->projectStorageTypeSelectionPage());
-    }
-    else if (page == d->m_projectDatabaseNameSelectionPage) {
-        setCurrentPage(d->projectConnectionSelectionPage());
-    }
 }
 
 void KexiNewProjectAssistant::nextPageRequested(KexiAssistantPage* page)
@@ -614,9 +609,22 @@ void KexiNewProjectAssistant::nextPageRequested(KexiAssistantPage* page)
         KexiDB::ConnectionData *cdata
             = d->projectConnectionSelectionPage()->connSelector->selectedConnectionData();
         if (cdata) {
+            if (cdata->passwordNeeded()) {
+                d->passwordPage()->setConnectionData(*cdata);
+                setCurrentPage(d->passwordPage());
+                return;
+            }
             if (d->projectDatabaseNameSelectionPage()->setConnection(cdata)) {
                 setCurrentPage(d->projectDatabaseNameSelectionPage());
             }
+        }
+    }
+    else if (page == d->m_passwordPage) {
+        KexiDB::ConnectionData *cdata
+            = d->projectConnectionSelectionPage()->connSelector->selectedConnectionData();
+        d->passwordPage()->updateConnectionData(cdata);
+        if (cdata && d->projectDatabaseNameSelectionPage()->setConnection(cdata)) {
+            setCurrentPage(d->projectDatabaseNameSelectionPage());
         }
     }
     else if (page == d->m_projectDatabaseNameSelectionPage) {
@@ -644,59 +652,25 @@ void KexiNewProjectAssistant::createProject(
 void KexiNewProjectAssistant::cancelRequested(KexiAssistantPage* page)
 {
     Q_UNUSED(page);
-    //TODO?
-}
-
-void KexiNewProjectAssistant::showErrorMessage(
-    const QString &title, const QString &details)
-{
-    Q_UNUSED(title);
-    Q_UNUSED(details);
-}
-
-void KexiNewProjectAssistant::showErrorMessage(
-    KexiDB::Object *obj, const QString& msg)
-{
-    QString _msg, _details;
-    if (!obj) {
-        showErrorMessage(_msg);
-        return;
-    }
-    //QString _details(details);
-    KexiTextMessageHandler textHandler(_msg, _details);
-    textHandler.showErrorMessage(obj, msg);
-    //KexiDB::getHTMLErrorMesage(obj, _msg, _details);
-    //showErrorMessage(_msg, _details);
-
-    KexiContextMessage message(_msg); 
-    //! @todo + _details
-    if (!d->messageWidgetActionTryAgain) {
-        d->messageWidgetActionTryAgain = new QAction(
-            KIcon("view-refresh"), i18n("Try Again"), this);
-        connect(d->messageWidgetActionTryAgain, SIGNAL(triggered()),
-                this, SLOT(tryAgainActionTriggered()));
-    }
-    if (!d->messageWidgetActionNo) {
-        d->messageWidgetActionNo = new QAction(KStandardGuiItem::no().text(), this);
-    }
-    d->messageWidgetActionNo->setText(KStandardGuiItem::cancel().text());
-    message.addAction(d->messageWidgetActionTryAgain);
-    message.setDefaultAction(d->messageWidgetActionNo);
-    message.addAction(d->messageWidgetActionNo);
-    delete d->messageWidget;
-    d->messageWidget = new KexiContextMessageWidget(
-        this, 0 /*contents->formLayout*/,
-        0/*contents->le_dbname*/, message);
-    //d->messageWidget->setNextFocusWidget(contents->le_title);
-    d->messageWidget->setCalloutPointerDirection(KMessageWidget::Right);
-    QWidget *b = currentPage()->nextButton();
-    d->messageWidget->setCalloutPointerPosition(
-        b->mapToGlobal(QPoint(0, b->height() / 2)));
+    //! @todo
 }
 
 void KexiNewProjectAssistant::tryAgainActionTriggered()
 {
-    d->m_projectConnectionSelectionPage->next();
+    messageWidget()->animatedHide();
+    currentPage()->next();
+}
+
+void KexiNewProjectAssistant::cancelActionTriggered()
+{
+    if (currentPage() == d->m_passwordPage) {
+        d->passwordPage()->focusWidget()->setFocus();
+    }
+}
+
+QWidget* KexiNewProjectAssistant::calloutWidget() const
+{
+    return currentPage()->nextButton();
 }
 
 #include "KexiNewProjectAssistant.moc"

@@ -1,0 +1,7 @@
+TODO:
+filter false-positives like "okular" and "this-action"
+
+
+Command used to create the oxygen_icons_4.3.5.list file:
+
+find path_to_oxygen-icons-4.3.5 \( -name "*.png" -o -name "*.svgz" \) -printf "%f\n" | sed -e 's/\.png$//' -e 's/\.svgz$//' | sort -u > tools/iconcheck/oxygen-icons-4.3.5.list

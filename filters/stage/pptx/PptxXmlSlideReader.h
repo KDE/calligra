@@ -80,7 +80,7 @@ class PptxPlaceholder
 {
 public:
     PptxPlaceholder();
-    PptxPlaceholder(const PptxShapeProperties &other);
+    explicit PptxPlaceholder(const PptxShapeProperties &other);
     ~PptxPlaceholder();
     int x;
     int y;
@@ -148,6 +148,10 @@ public:
     QMap<QString, PptxShapeProperties*> shapesMap;
 
     QMap<QString, QString> colorMap;
+
+    // Temporary attribute providing the info that the color mapping changed
+    // compared to the slideMaster.
+    bool overrideClrMapping;
 
 private:
 };
@@ -247,9 +251,6 @@ protected:
     // Inherits correct paragraph styles to m_currentParagraphStyle
     void inheritParagraphStyle(KoGenStyle& targetStyle);
 
-    // Inherits default body properties
-    void inheritDefaultBodyProperties();
-
     // Inherit correct body properties from slideMaster/slideLayout if needed
     void inheritBodyProperties();
 
@@ -266,21 +267,12 @@ protected:
     void inheritShapeGeometry();
 
     /**
-     * MS PowerPoint specifc calculation of the paragraph margin.
+     * MS PowerPoint specific calculation of the paragraph margin.
      * @param spcAft/spcBef (paragraph spacing) as provided in pptx [%]
      * @param minimum font size detected in the paragraph [point]
      * @return paragraph margin [point]
      */
     qreal processParagraphSpacing(const qreal margin, const qreal fontSize);
-
-
-    /**
-     * NOTE: Testing inheritance of missing properties from style
-     * type=="other".
-     *
-     * @return font-size for the corresponding level from type=="other"
-     */
-    QString inheritFontSizeFromOther();
 
 private:
 
@@ -288,8 +280,11 @@ private:
     void inheritBodyPropertiesHelper(QString id, PptxSlideProperties* slideProperties);
 
     void init();
+
     class Private;
     Private* const d;
+
+    bool m_showSlideLayoutShapes;
 
 #include <MsooXmlCommonReaderMethods.h>
 #include <MsooXmlCommonReaderDrawingMLMethods.h>
@@ -337,18 +332,21 @@ public:
 
     VmlDrawingReader& vmlReader;
 
-    // Used to keep track, whether we should skip elements
-    // currently we need to read some slides twice
-    // This because some elements from the later part of the document are needed
-    // to fully understand cSld element
+    // Used to keep track, whether we should skip elements.  At the moment we
+    // need to read some slides twice because some elements from the later part
+    // of the document are needed to fully understand cSld element.
     bool firstReadingRound;
+
+    // Temporary attribute providing the info that the color mapping changed
+    // compared to the slideMaster.
+    bool overrideClrMapping;
 
     void initializeContext(const MSOOXML::DrawingMLTheme& theme, const QVector<KoGenStyle>& _defaultParagraphStyles,
         const QVector<KoGenStyle>& _defaultTextStyles, const QVector<MSOOXML::Utils::ParagraphBulletProperties>& _defaultListStyles,
         const QVector<QString>& _defaultBulletColors, const QVector<QString>& _defaultTextColors, const QVector<QString>& _defaultLatinFonts);
 
-    // These have to be in context, because each slide/layout/master may define their own colormap
-    // therefore the way default text is interpreted cannot be static
+    // Must be in context, because each slide/layout/master may overwrite the
+    // color mapping and the default text colors have to be re-interpreted.
     QVector<KoGenStyle> defaultTextStyles;
     QVector<KoGenStyle> defaultParagraphStyles;
     QVector<MSOOXML::Utils::ParagraphBulletProperties> defaultListStyles;

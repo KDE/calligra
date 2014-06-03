@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
    Copyright (C) 2003 Joseph Wenninger <jowenn@kde.org>
-   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,11 +26,11 @@
 
 class KexiDataTableView;
 class KexiTableView;
-class KexiTableViewData;
 
 namespace KexiDB
 {
 class Cursor;
+class TableViewData;
 }
 
 /*! @short Provides a data-driven (record-based) tabular view.
@@ -50,7 +50,7 @@ public:
       and KexiDataTableView is used internally.
      Otherwise, table will be not-db-aware,
       and KexiTableView is used internally. In the latter case,
-      data can be set by calling tableView()->setData(KexiTableViewData* data). */
+      data can be set by calling tableView()->setData(KexiDB::TableViewData* data). */
     KexiDataTable(QWidget *parent, bool dbAware = true);
 
     /*! CTOR2: Creates db-aware, table view initialized with \a cursor.
@@ -61,9 +61,17 @@ public:
 
     KexiTableView* tableView() const;
 
+    //! Loads settings for table into @a data model.
+    //! Used after loading data model in KexiDataTableView::setData(KexiDB::Cursor*), before calling KexiTableView::setData().
+    //! @return true on success
+    bool loadTableViewSettings(KexiDB::TableViewData* data);
+
 public slots:
     /*! Sets data. Only works for db-aware table. */
     void setData(KexiDB::Cursor *cursor);
+
+    /*! Saves settings for the view. Implemented for KexiView. */
+    virtual bool saveSettings();
 
 protected slots:
 //! @todo
@@ -71,6 +79,11 @@ protected slots:
 
 protected:
     void init();
+
+    
+
+class Private;
+    Private * const d;
 };
 
 #endif

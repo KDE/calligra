@@ -28,21 +28,22 @@
 namespace KPlatoWork
 {
 
-static const char* PLANWORK_DESCRIPTION=I18N_NOOP("PlanWork - Work Package handler for the Plan Project Planning Tool");
-static const char* PLANWORK_VERSION=CALLIGRA_VERSION_STRING;
+static const char PLANWORK_DESCRIPTION[] = I18N_NOOP("PlanWork - Work Package handler for the Plan Project Planning Tool");
+static const char PLANWORK_VERSION[] = CALLIGRA_VERSION_STRING;
 
 KAboutData * newAboutData()
 {
     KAboutData * aboutData=new KAboutData( "planwork", 0, ki18nc("application name", "Plan WorkPackage Handler"),
                                            PLANWORK_VERSION, ki18n(PLANWORK_DESCRIPTION),
                                            KAboutData::License_GPL,
-                                           ki18n("(c) 2007-2011, The Plan Team"),
+                                           ki18n("© 1998-%1, The Plan Team").subs(CALLIGRA_YEAR),
                                            KLocalizedString(),
-                                           "http://www.calligra-suite.org/plan/" );
-    
+                                           "http://www.calligra.org/plan/" );
+
     aboutData->addAuthor(ki18n("Dag Andersen"), KLocalizedString(), "danders@get2net.dk");
 
     aboutData->setProductName( "calligra-plan/work" );
+    aboutData->setProgramIconName( "calligraplanwork" );
 
     return aboutData;
 }

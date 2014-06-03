@@ -21,7 +21,7 @@
 
 #include <kdebug.h>
 #include <ktar.h>
-#include <qdir.h>
+#include <QDir>
 #include <kaction.h>
 #include <kapplication.h>
 #include <kfiledialog.h>
@@ -49,11 +49,11 @@ KexiNewStuff::~KexiNewStuff()
 bool
 KexiNewStuff::install(const QString &fileName)
 {
-    kDebug() << "KexiNewStuff::install(): " << fileName;
+    kDebug() << fileName;
 
     KTar archive(fileName);
     if (!archive.open(QIODevice::ReadOnly)) {
-        kDebug() << QString("KexiNewStuff::install: Failed to open archivefile \"%1\"").arg(fileName);
+        kDebug() << QString("Failed to open archivefile \"%1\"").arg(fileName);
         return false;
     }
     const KArchiveDirectory *archiveDir = archive.directory();
@@ -61,7 +61,7 @@ KexiNewStuff::install(const QString &fileName)
                                 "kfiledialog:///DownloadExampleDatabases", parentWidget(),
                                 i18n("Choose Directory Where to Install Example Database"));
     if (destDir.isEmpty()) {
-        kDebug() << QString("KexiNewStuff::install: Destination-directory is empty.");
+        kWarning() << "Destination-directory is empty.";
         return false;
     }
     archiveDir->copyTo(destDir);

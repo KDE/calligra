@@ -17,14 +17,15 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <klocale.h>
-
-#include <kdebug.h>
-
 #include "kptmainprojectdialog.h"
+
 #include "kptproject.h"
 #include "kptmainprojectpanel.h"
 #include "kptcommand.h"
+
+#include <klocale.h>
+
+#include <kdebug.h>
 
 namespace KPlato
 {

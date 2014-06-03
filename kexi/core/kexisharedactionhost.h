@@ -20,9 +20,9 @@
 #ifndef KEXISHAREDACTIONHOST_H
 #define KEXISHAREDACTIONHOST_H
 
-#include <qpointer.h>
-#include <qobject.h>
-#include <qpair.h>
+#include <QPointer>
+#include <QObject>
+#include <QPair>
 
 #include <kstandardaction.h>
 #include <kaction.h>
@@ -49,30 +49,15 @@ class Part;
 
  For example how all this is done, see KexiMainWindow implementation.
 
- \sa KexiActionProxy, KexiMainWindow
-*/
-
+ \sa KexiActionProxy, KexiMainWindow */
 class KEXICORE_EXPORT KexiSharedActionHost
 {
 public:
 
     /*! Constructs host for main window \a mainWin. */
-    KexiSharedActionHost(KexiMainWindowIface* mainWin);
+    explicit KexiSharedActionHost(KexiMainWindowIface* mainWin);
 
     virtual ~KexiSharedActionHost();
-
-#if 0
-    /*! \return true if \a w can accept shared actions.
-     This method is used by focusWindow() to look up widgets hierarchy
-     for widget that can accept shared actions.
-     Default implementation always returns false.
-     You can reimplement it e.g. like in KexiMainWindow::acceptsSharedActions():
-     \code
-      return o->inherits("KexiWindow") || o->inherits("KexiView");
-     \endcode
-     */
-    virtual bool acceptsSharedActions(QObject *o);
-#endif
 
     /*! Performs lookup like in KexiSharedActionHost::focusWindow()
      but starting from \a w instead of a widget returned by QWidget::focusWidget().
@@ -82,9 +67,7 @@ public:
     /*! \return window widget that is currently focused (using QWidget::focusWidget())
      and matches acceptsSharedActions(). If focused widget does not match,
      it's parent, grandparent, and so on is checked. If all this fails,
-     or no widget has focus, NULL is returned.
-     Also works if currently focused window is detached (as in KMDI).
-     */
+     or no widget has focus, 0 is returned. */
     QWidget* focusWindow();
 
     /*! Sets this host as default shared actions host. */
@@ -101,9 +84,7 @@ public:
     /*! PROTOTYPE, DO NOT USE YET */
     void setActionVolatile(KAction *a, bool set);
 
-
 protected:
-
     /*! Invalidates all shared actions declared using createSharedAction().
      Any shared action will be enabled if \a o (typically: a child window or a dock window)
      has this action plugged _and_ it is available (i.e. enabled).
@@ -114,8 +95,7 @@ protected:
      (thus part-actions are untouched when the focus is e.g. in the Property Editor.
 
      Call this method when it is known that some actions need invalidation
-     (e.g. when new window is activated). See how it is used in KexiMainWindow.
-    */
+     (e.g. when new window is activated). See how it is used in KexiMainWindow. */
     virtual void invalidateSharedActions(QObject *o);
 
     void setActionAvailable(const QString& action_name, bool avail);
@@ -136,7 +116,7 @@ protected:
      Pass desired KAction subclass with \a subclassName (e.g. "KToggleAction") to have
      that subclass allocated instead just KAction (what is the default).
      Created action's data is owned by the main window. */
-    KAction* createSharedAction(const QString &text, const QString &pix_name,
+    KAction* createSharedAction(const QString &text, const QString &iconName,
                                 const KShortcut &cut, const char *name, KActionCollection* col = 0,
                                 const char *subclassName = 0);
 

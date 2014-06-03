@@ -23,10 +23,11 @@
 
 #include <formeditor/WidgetInfo.h>
 #include <formeditor/formIO.h>
-#include <KLocalizedString>
-#include <KDebug>
-#include <KLocale>
-#include <KPluginFactory>
+#include <KoIcon.h>
+#include <klocalizedstring.h>
+#include <kdebug.h>
+#include <klocale.h>
+#include <kpluginfactory.h>
 #include <QVariant>
 #include <QVariantList>
 
@@ -35,7 +36,7 @@ MapBrowserFactory::MapBrowserFactory(QObject* parent, const QVariantList& args)
 {
     Q_UNUSED(args);
     KFormDesigner::WidgetInfo *mapBrowser = new KFormDesigner::WidgetInfo(this);
-    mapBrowser->setPixmap("map_browser");
+    mapBrowser->setIconName(koIconName("map_browser"));
     mapBrowser->setClassName("MapBrowserWidget");
     mapBrowser->setName(i18n("Map Browser"));
     mapBrowser->setNamePrefix(i18nc("This string will be used to name widgets of this class. It must _not_ contain white "
@@ -46,7 +47,6 @@ MapBrowserFactory::MapBrowserFactory(QObject* parent, const QVariantList& args)
 
 MapBrowserFactory::~MapBrowserFactory()
 {
-
 }
 
 QWidget* MapBrowserFactory::createWidget(const QByteArray& classname,
@@ -55,9 +55,9 @@ QWidget* MapBrowserFactory::createWidget(const QByteArray& classname,
                             KFormDesigner::Container* container,
                             KFormDesigner::WidgetFactory::CreateWidgetOptions options)
 {
+    Q_UNUSED(options);
     QWidget *w = 0;
     QString text(container->form()->library()->textForWidgetName(name, classname));
-//2.0    const bool designMode = options & KFormDesigner::WidgetFactory::DesignViewMode;
 
     if (classname == "MapBrowserWidget")
         w = new MapBrowserWidget(parent);
@@ -74,11 +74,16 @@ QWidget* MapBrowserFactory::createWidget(const QByteArray& classname,
 bool MapBrowserFactory::createMenuActions(const QByteArray &classname, QWidget *w,
                                     QMenu *menu, KFormDesigner::Container *container)
 {
+    Q_UNUSED(classname);
+    Q_UNUSED(w);
+    Q_UNUSED(menu);
+    Q_UNUSED(container);
     return false;
 }
 
 bool MapBrowserFactory::startInlineEditing(InlineEditorCreationArguments& args)
 {
+    Q_UNUSED(args);
     return false;
 }
 
@@ -93,3 +98,4 @@ bool MapBrowserFactory::previewWidget(const QByteArray &classname,
 K_EXPORT_KEXI_FORM_WIDGET_FACTORY_PLUGIN(MapBrowserFactory, mapbrowser)
 
 #include "MapBrowserFactory.moc"
+

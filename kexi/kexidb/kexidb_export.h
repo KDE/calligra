@@ -17,8 +17,8 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
-#ifndef _KEXIDB_EXPORT_H_
-#define _KEXIDB_EXPORT_H_
+#ifndef KEXI_DB_EXPORT_H
+#define KEXI_DB_EXPORT_H
 
 #include <kdemacros.h>
 
@@ -38,9 +38,4 @@
 # endif
 #endif
 
-/* -- compile-time settings -- */
-
-/* Might want to add GUI defines here if widgets are to be
- * distributed as part of kexidb - mart */
-
-#endif //KEXI_EXPORT_H
+#endif // KEXI_DB_EXPORT_H

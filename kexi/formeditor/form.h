@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2009 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2014 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,7 +24,7 @@
 
 #include <QMetaProperty>
 #include <QList>
-#include <kexi_export.h>
+#include <kexi_global.h>
 #include "widgetlibrary.h"
 
 class QWidget;
@@ -46,7 +46,6 @@ class PropertyCommandGroup;
 class ConnectionBuffer;
 #endif
 class Container;
-//unused class FormManager;
 class ObjectTree;
 class ObjectTreeItem;
 typedef QList<ObjectTreeItem*> ObjectTreeList;
@@ -115,14 +114,12 @@ public:
     Form(WidgetLibrary* library, Mode mode, KActionCollection &col, ActionGroup& group);
 
     /*! Creates Form object as a child of other form. */
-    Form(Form *parent);
+    explicit Form(Form *parent);
 
     ~Form();
 
     //! \return A pointer to the WidgetLibrary supporting this form.
-    WidgetLibrary* library() const {
-        return m_lib;
-    }
+    WidgetLibrary* library() const;
 
     KoProperty::Set& propertySet();
 
@@ -181,10 +178,10 @@ public:
     /*! Used to check whether it is possible to execute copy/cut/delete actions. */
     bool isFormWidgetSelected() const;
 
-    /*! Emits the action signals. See \a FormManager for signals description. */
+    /*! Emits the action signals. */
     void emitActionSignals();
 
-    /*! Emits the action signals for the undo/redo related signals. See \a FormManager for signals description. */
+    /*! Emits the action signals for the undo/redo related signals. */
     void emitUndoActionSignals();
 
     /*! Emits again all signal related to selection (ie Form::selectionChanged()).
@@ -214,9 +211,8 @@ public:
     //! @return true if the form modification flag is set.
     bool isModified() const;
 
-    //! \return the distance between two dots in the form background.
-//! @todo make gridSize configurable at global level
-    int gridSize() const;
+    //! Sets modification flag. Always emits modified() signal.
+    void setModified(bool set);
 
     //! \return the default margin for all the layout inside this Form.
     int defaultMargin() const;
@@ -239,8 +235,6 @@ public:
 //! @todo move this field out of this class
     void setFilename(const QString &file);
 
-// 2.0    K3CommandHistory* commandHistory() const;
-
     /*! Clears form's undo/redo stack. */
     void clearUndoStack();
 
@@ -252,6 +246,10 @@ public:
 #endif
 
     PixmapCollection* pixmapCollection() const;
+
+    void setPixmapsStoredInline(bool set);
+
+    bool pixmapsStoredInline() const;
 
     //! Options for addCommand() method.
     enum AddCommandOption {
@@ -292,10 +290,6 @@ public:
      (i.e. no labels, etc.) in the order of the tabs.*/
     ObjectTreeList* tabStops();
 
-/*    inline ObjectTreeListIterator tabStopsIterator() const {
-        return ObjectTreeListIterator(d->tabstops);
-    }*/
-
     /*! Called (e.g. by KexiDBForm) when certain widgets can have updated focusPolicy properties
      these having no TabFocus flags set are removed from tabStops() list. */
     void updateTabStopsOrder();
@@ -334,21 +328,23 @@ public:
         the widget specific part is added (menu from the factory and buddy selection). */
     void createContextMenu(QWidget *w, Container *container, const QPoint& menuPos, ContextMenuTarget target);
 
-    //! @return true if snapping widgets to grid is enabled.
-    bool isSnapWidgetsToGridEnabled() const;
+    //! @return true if snapping to grid is enabled. The defalt value is false.
+    bool isSnapToGridEnabled() const;
 
-    //! Sets snapping widgets to grid flag.
-    void setSnapWidgetsToGridEnabled(bool set);
+    //! Sets state of snapping to grid to @a enabled.
+    void setSnapToGridEnabled(bool enabled);
+
+    //! @return size of grid. Positive values make sense here. The defalt value is 0.
+    //! @todo make gridSize configurable at global level
+    int gridSize() const;
+
+    //! Sets size of grid to @a gridSize.
+    void setGridSize(int gridSize);
 
 #ifdef KEXI_DEBUG_GUI
     //! For debugging purposes
     QString m_recentlyLoadedUICode;
 #endif
-
-    /*! Internal: called by ResizeHandle when mouse move event causes first
-     resize handle's dragging. As a result, current widget's editing (if any)
-     is finished - see resetInlineEditor(). */
-//  void resizeHandleDraggingStarted(QWidget *draggedWidget);
 
     ResizeHandleSet* resizeHandlesForWidget(QWidget* w);
 
@@ -367,7 +363,6 @@ public:
     void setOriginalFormatVersion(uint ver);
 
 #ifdef KFD_SIGSLOTS
-// moved from FormManager
     /*! Related to signal/slots connections.
      Resets recently selected signal/slot connection (when the user clicks
      outside of signals/slots menu). We stay in "connection creation" mode,
@@ -382,9 +377,7 @@ public:
     enum WidgetSelectionFlag {
         AddToPreviousSelection = 0,   //!< add to the previous selection, for clarity, 
                                       //!< do not use with ReplacePreviousSelection
-// previously same as "!add" in setSelectedWidget()
         ReplacePreviousSelection = 1, //!< replace the actually selected widget(s)
-// previously same as "!moreWillBeSelected" in setSelectedWidget()
         MoreWillBeSelected = 0,       //!< indicates that more selections will be added
                                       //!< do not use with LastSelection
                                       //!< so the property editor can be updated (used without ReplacePreviousSelection)
@@ -404,10 +397,6 @@ public:
     /*! @return widgets list for names @a names. Form widget, if present is omitted. */
     QList<QWidget*> widgetsForNames(const QList<QByteArray>& names) const;
 
-    /*! Enables or disables actions \a name. */
-//removed, use action(name)->setEnabled(..)
-//    void enableAction(const char* name, bool enable);
-
     //! @return action from related action collection
     QAction* action(const QString& name);
 
@@ -419,7 +408,6 @@ public:
     QByteArray editedWidgetClass() const;
 
 public slots:
-// moved from FormManager::insertWidget()
     /*! Called when the user presses a widget item of the toolbox. 
       The form enters into "widget inserting" state.
       Prepares all form's widgets for creation of a new widget 
@@ -429,16 +417,13 @@ public slots:
     //! Called when the user presses 'Pointer' icon. Switches to Default mode.
     void enterWidgetSelectingState();
 
-// moved from FormManager
     /*! Aborts the current widget inserting operation (i.e. unsets the cursor ...). */
     void abortWidgetInserting();
 
 #ifdef KFD_SIGSLOTS
-// moved from FormManager
      //! Enters the Connection creation state.
      void enterConnectingState();
 
-// moved from FormManager
     //! Leave the Connection creation mode.
     void abortCreatingConnection();
 #endif
@@ -451,8 +436,6 @@ public slots:
     /*! Sets @a selected to be the selected widget of this Form.
      The form widget is always selected alone. */
     void selectWidget(QWidget *selected, WidgetSelectionFlags flags = DefaultWidgetSelectionFlags);
-//prev    void setSelectedWidget(QWidget *selected, bool add = false, bool dontRaise = false,
-//prev                           bool moreWillBeSelected = false);
 
     /*! Sets all widgets @a widgets to be the selected for this Form. 
      Form widget, if present is omitted. */
@@ -466,7 +449,6 @@ public slots:
      The widget is removed from the Container's list
      and its resize handle is removed as well. */
     void deselectWidget(QWidget *w);
-//prev    void deSelectWidget(QWidget *w);
 
     /*! Sets the form widget selected. Deselects any previously selected widgets. */
     void selectFormWidget();
@@ -480,12 +462,10 @@ public slots:
     void undo();
     void redo();
 
-//moved from WidgetPropertySet
     /*! Changes undoing state of the list. Used by Undo command to
      prevent recursion. */
     void setUndoing(bool isUndoing);
 
-// moved from WidgetPropertySet
     bool isUndoing() const;
 
     bool isTopLevelWidget(QWidget *w) const;
@@ -576,19 +556,16 @@ public slots:
 
     void sendWidgetToBack();
 
-// moved from FormManager
     /*! Executes font dialog and changes it for currently selected widget(s). */
     void changeFont();
 
     //! Sets slotPropertyChangedEnabled() enabled or disabled.
     void setSlotPropertyChangedEnabled(bool set);
 
-// moved from WidgetFactory
     /*! @internal. This slot is called when the editor has lost focus or the user pressed Enter.
     It destroys the editor or installs again the event filter on the widget. */
     void resetInlineEditor();
 
-// contents moved from WidgetFactory
     /*! This function provides a simple editing mode: it just disables event filtering
      for the widget, and it install it again when
      the widget loose focus or Enter is pressed.
@@ -604,51 +581,31 @@ protected slots:
     void emitUndoEnabled();
     void emitRedoEnabled();
 
-#if 0 //unused?
-    /*! This slot is called when a command is executed. The undo/redo signals
-      are emitted to update actions. */
-    void slotCommandExecuted(K3Command *command);
-#endif
-
     /*! This slot is called when form is restored, ie when the user has undone
       all actions. The form modified flag is updated, and
     \ref modified() is called. */
     void slotFormRestored();
 
-// moved from WidgetPropertySet
     /*!  This function is called every time a property is modifed.  It also takes
      care of saving set and enum properties. */
     void slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& property);
 
-// moved from WidgetPropertySet
     /*! This slot is called when a property is reset using the "reload" button in PropertyEditor. */
     void slotPropertyReset(KoProperty::Set& set, KoProperty::Property& property);
 
-// moved from FormManager
-    /*! Slot called when a buddy is chosen in the buddy list. Sets the label buddy. */
-//2.0: moved    void buddyChosen(QAction *action);
-
-//2.0    void slotFormCommandHistoryChanged();
-
-// moved from WidgetFactory
     /*! Default implementation changes "text" property.
     You have to reimplement this function for editing inside the Form to work if your widget's
     property you want to change isn't named "text".
     This slot is called when the line edit text changes, and you have to make
     it really change the good property of the widget using changeProperty() (text, or title, etc.).
     */
-//    virtual bool changeInlineText(const QString &newText);
-
-// moved from WidgetFactory
     void changeInlineTextInternal(const QString& text);
 
     void slotInlineTextChanged();
 
-// moved from WidgetFactory
     /*! This slot is called when the editor is destroyed.*/
     void inlineEditorDeleted();
 
-// moved from WidgetFactory
     void widgetDestroyed();
 
 signals:
@@ -657,7 +614,6 @@ signals:
      \a w is the newly selected widget.
       */
     void selectionChanged(QWidget *w, KFormDesigner::Form::WidgetSelectionFlags flags);
-//prev    void selectionChanged(QWidget *w, bool add, bool moreWillBeSelected = false);
 
     /*! This signal is emitted when a new widget is created, to update ObjectTreeView.
      \a it is the ObjectTreeItem representing this new widget.
@@ -672,16 +628,14 @@ signals:
     //! This signal emitted when Form is about to be destroyed
     void destroying();
 
-// moved from FormManager, with no args
     /*! This signal is emitted when the property set has been switched. */
     void propertySetSwitched();
 
-    /*! This signal is emitted when any change is made to the Form \a form,
-     so it will need to be saved. */
-    void modified();
+    /*! This signal is emitted when any change is made to the 'modified' flag of the form. */
+    void modified(bool m);
 
     /*! Signal emitted when a normal widget is selected inside of the form
-     (not the form's widget). If \a multiple is true, then more than one widget is selected. 
+     (not the form's widget). If \a multiple is true, then more than one widget is selected.
      Use this to update actions state. */
     void widgetSelected(bool multiple);
 
@@ -703,20 +657,10 @@ signals:
     void connectionAborted(KFormDesigner::Form *form);
 #endif
 
-//    /*! Emitted when a property was changed.
-//      @a w is the widget concerned, @a property
-//      is the name of the modified property, and @a value is the new value of this property. */
-//2.0 removed as handleWidgetPropertyChanged() is called directly
-    //void widgetPropertyChanged(QWidget *w, const QByteArray &property, const QVariant &v);
-
     /*! Emitted when the name of the widget is modified.
      @a oldname is the name of the widget before the
      change, @a newname is the name after renaming. */
     void widgetNameChanged(const QByteArray &oldname, const QByteArray &newname);
-
-//2.0 not needed, the code from slot receiving this signal is moved to Form itself
-//    /*! Emitted when "autoTabStops" is changed. */
-//    void autoTabStopsSet(KFormDesigner::Form *form, bool set);
 
 protected:
     void emitSelectionChanged(QWidget *w, WidgetSelectionFlags flags);
@@ -731,33 +675,27 @@ protected:
 
     void setFormWidget(FormWidget* w);
 
-// moved from FormManager
     void emitFormWidgetSelected();
-// moved from FormManager
+
     void emitWidgetSelected(bool multiple);
-// moved from FormManager
+
     //! @internal
     void emitNoFormSelected();
 
-// moved from FormManager
     void enableFormActions();
-// moved from FormManager
+
     void disableWidgetActions();
 
-// moved from WidgetPropertySet
     /*! Checks if the name entered by user is valid, ie that it is
      a valid identifier, and that there is no name conflict.  */
     bool isNameValid(const QString &name) const;
 
-// moved from WidgetPropertySet
     void addWidget(QWidget *w);
 
-// moved from WidgetPropertySet
     /*! Clears the current property set and fills it with properties related to the widget @a w.
      Also updates the newly created properties with previously set values. */
     void createPropertiesForWidget(QWidget *w);
 
-// moved from WidgetPropertySet
     /*! Changes \a property old value and changed state, using the value
     stored in \a tree. Optional \a meta can be specified if you need to handle enum values. */
     void updatePropertyValue(ObjectTreeItem *tree, const char *property,
@@ -793,10 +731,6 @@ protected:
         using Container::setLayoutType().*/
     void saveLayoutProperty(const QString &property, const QVariant &value);
 
-    /*! Saves 'enabled' property, and takes care of updating widget's palette. */
-//! @todo make it support undo
-    void saveEnabledProperty(bool value);
-
     /*! Function called by the "Lay out in..." menu items. It creates a layout from the
       currently selected widgets (that must have the same parent).
       Calls \ref CreateLayoutCommand. */
@@ -807,34 +741,28 @@ protected:
     //! @todo rm when the 2 libs are merged
     KFormDesigner::ActionGroup* widgetActionGroup() const;
 
-//moved from KexiFormPart::slotPropertyChanged()
     /*! Called when a property has been changed.
       @a w is the widget concerned, @a property
       is the name of the modified property, and @a value is the new value of this property. */
     void handleWidgetPropertyChanged(QWidget *w, const QByteArray &name, const QVariant &value);
 
-//moved from WidgetFactory
     /*! This function creates a KLineEdit to input some text and edit a widget's contents. */
     void createInlineEditor(const KFormDesigner::WidgetFactory::InlineEditorCreationArguments& args);
 
-// moved from WidgetFactory::editorText()
     QString inlineEditorText() const;
 
-// moved from WidgetFactory::setEditorText()
     void setInlineEditorText(const QString& text);
 
-// moved to WidgetFactory
     /*! This function destroys the editor when it loses focus or Enter is pressed. */
     virtual bool eventFilter(QObject *obj, QEvent *ev);
+
 private:
-    void init(WidgetLibrary* library, Mode mode, KActionCollection &col, KFormDesigner::ActionGroup &group);
+    void init(Mode mode, KActionCollection &col, KFormDesigner::ActionGroup &group);
 
     void selectWidgetInternal(QWidget *w, WidgetSelectionFlags flags);
 
-    WidgetLibrary *m_lib;
     FormPrivate * const d;
 
-//unused    friend class FormManager;
     friend class FormWidget;
     friend class WidgetLibrary;
 #ifdef KFD_SIGSLOTS

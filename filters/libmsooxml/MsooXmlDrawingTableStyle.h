@@ -57,7 +57,7 @@ namespace MSOOXML
 
 /// Reading and storage
 
-class MSOOXML_EXPORT DrawingTableStyle : public TableStyle
+class KOMSOOXML_EXPORT DrawingTableStyle : public TableStyle
 {
 public:
     enum Type {
@@ -80,7 +80,7 @@ public:
     DrawingTableStyle();
     virtual ~DrawingTableStyle();
 
-    ///the style takes ownership of the properties
+    //the style takes ownership of the properties
     void addProperties(Type type, TableStyleProperties* properties);
     TableStyleProperties* properties(Type type) const;
 
@@ -89,10 +89,10 @@ public:
 
 private:
     QMap<Type, TableStyleProperties*> m_properties;
-    //TODO handle the table background stored in the element TblBg
+    //TODO: handle the table background stored in the element TblBg
 };
 
-class MSOOXML_EXPORT DrawingTableStyleConverterProperties : public TableStyleConverterProperties
+class KOMSOOXML_EXPORT DrawingTableStyleConverterProperties : public TableStyleConverterProperties
 {
 public:
     DrawingTableStyleConverterProperties();
@@ -120,16 +120,16 @@ private:
     Roles m_role;
 };
 
-class MSOOXML_EXPORT DrawingTableStyleConverter : public TableStyleConverter
+class KOMSOOXML_EXPORT DrawingTableStyleConverter : public TableStyleConverter
 {
 public:
-    DrawingTableStyleConverter(DrawingTableStyleConverterProperties const& properties, DrawingTableStyle* style =0);
+    explicit DrawingTableStyleConverter(DrawingTableStyleConverterProperties const& properties, DrawingTableStyle* style =0);
     virtual ~DrawingTableStyleConverter();
 
-    KoCellStyle::Ptr style(int row, int column);
+    KoCellStyle::Ptr style(int row, int column, const QPair<int, int> &spans);
 
 private:
-    void applyStyle(MSOOXML::DrawingTableStyle::Type type, KoCellStyle::Ptr& style, int row, int column);
+    void applyStyle(MSOOXML::DrawingTableStyle::Type type, KoCellStyle::Ptr& style, int row, int column, const QPair<int, int> &spans);
 
     DrawingTableStyle * const m_style;
     DrawingTableStyleConverterProperties const& m_properties;

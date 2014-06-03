@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 Peter Simonsson <psn@linux.se>
-   Copyright (C) 2003-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,10 +18,10 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <qlayout.h>
-#include <qstyle.h>
-#include <qwindowsstyle.h>
-#include <qpainter.h>
+#include <QLayout>
+#include <QStyle>
+#include <QWindowsStyle>
+#include <QPainter>
 
 #include <kexi_global.h>
 #include "kexicomboboxbase.h"
@@ -45,6 +45,7 @@ KexiComboBoxBase::KexiComboBoxBase()
     m_setValueInInternalEditor_enabled = true;
     m_setVisibleValueOnSetValueInternal = false;
     m_reinstantiatePopupOnShow = false;
+    m_focusPopupBeforeShow = false;
 }
 
 KexiComboBoxBase::~KexiComboBoxBase()
@@ -73,10 +74,10 @@ int KexiComboBoxBase::rowToHighlightForLookupTable() const
     bool ok;
     const int rowUid = origValue().toInt();
 //! @todo for now we're assuming the id is INTEGER
-    KexiTableViewData *tvData = popup()->tableView()->data();
+    KexiDB::TableViewData *tvData = popup()->tableView()->data();
     const int boundColumn = lookupFieldSchema->boundColumn();
     int row = -1;
-    for (KexiTableViewData::Iterator it(tvData->constBegin()); it != tvData->constEnd(); ++it) {
+    for (KexiDB::TableViewData::Iterator it(tvData->constBegin()); it != tvData->constEnd(); ++it) {
         row++;
         KexiDB::RecordData* record = *it;
         if (record->at(boundColumn).toInt(&ok) == rowUid && ok)
@@ -95,7 +96,7 @@ void KexiComboBoxBase::setValueInternal(const QVariant& add_, bool removeOld)
     m_updatePopupSelectionOnShow = true;
     QString add(add_.toString());
     if (add.isEmpty()) {
-        KexiTableViewData *relData = column() ? column()->relatedData() : 0;
+        KexiDB::TableViewData *relData = column() ? column()->relatedData() : 0;
         QVariant valueToSet;
         bool hasValueToSet = true;
         int rowToHighlight = -1;
@@ -153,7 +154,7 @@ void KexiComboBoxBase::setValueInternal(const QVariant& add_, bool removeOld)
             }
         }
     } else {
-        //todo: autocompl.?
+        //! @todo autocompl.?
         if (popup())
             popup()->tableView()->clearSelection();
         /*impl.*/setValueInInternalEditor(add); //not setLineEditText(), because 'add' is entered by user!
@@ -172,11 +173,11 @@ KexiDB::RecordData* KexiComboBoxBase::selectItemForEnteredValueInLookupTable(con
 
     const bool valueIsText = v.type() == QVariant::String || v.type() == QVariant::CString; //most common case
     const QString txt(valueIsText ? v.toString().trimmed() : QString());
-    KexiTableViewData *lookupData = popup()->tableView()->data();
+    KexiDB::TableViewData *lookupData = popup()->tableView()->data();
     const int visibleColumn = lookupFieldSchema->visibleColumn(lookupData->columnsCount());
     if (-1 == visibleColumn)
         return 0;
-    KexiTableViewData::Iterator it(lookupData->constBegin());
+    KexiDB::TableViewData::Iterator it(lookupData->constBegin());
     int row;
     for (row = 0;it != lookupData->constEnd();++it, row++) {
         if (valueIsText) {
@@ -203,7 +204,8 @@ KexiDB::RecordData* KexiComboBoxBase::selectItemForEnteredValueInLookupTable(con
 QString KexiComboBoxBase::valueForString(const QString& str, int* row,
         uint lookInColumn, uint returnFromColumn, bool allowNulls)
 {
-    KexiTableViewData *relData = column() ? column()->relatedData() : 0;
+    Q_UNUSED(returnFromColumn);
+    KexiDB::TableViewData *relData = column() ? column()->relatedData() : 0;
     if (!relData)
         return QString(); //safety
     //use 'related table data' model
@@ -211,7 +213,7 @@ QString KexiComboBoxBase::valueForString(const QString& str, int* row,
     //.trimmed() is not generic!
 
     const QString txt(str.trimmed());
-    KexiTableViewData::Iterator it(relData->constBegin());
+    KexiDB::TableViewData::Iterator it(relData->constBegin());
     for (*row = 0;it != relData->constEnd();++it, (*row)++) {
         const QString s((*it)->at(lookInColumn).toString());
         if (s.trimmed().compare(txt, Qt::CaseInsensitive) == 0)
@@ -231,12 +233,12 @@ QString KexiComboBoxBase::valueForString(const QString& str, int* row,
 
 QVariant KexiComboBoxBase::value()
 {
-    KexiTableViewData *relData = column() ? column()->relatedData() : 0;
+    KexiDB::TableViewData *relData = column() ? column()->relatedData() : 0;
     KexiDB::LookupFieldSchema *lookupFieldSchema = 0;
     if (relData) {
         if (m_internalEditorValueChanged) {
             //we've user-entered text: look for id
-//TODO: make error if matching text not found?
+//! @todo make error if matching text not found?
             int rowToHighlight;
             return valueForString(m_userEnteredValue.toString(), &rowToHighlight, 1, 0, true/*allowNulls*/);
         } else {
@@ -299,7 +301,7 @@ void KexiComboBoxBase::clear()
 tristate KexiComboBoxBase::valueChangedInternal()
 {
     //avoid comparing values:
-    KexiTableViewData *relData = column() ? column()->relatedData() : 0;
+    KexiDB::TableViewData *relData = column() ? column()->relatedData() : 0;
     KexiDB::LookupFieldSchema *lookupFieldSchema = this->lookupFieldSchema();
     if (relData || lookupFieldSchema) {
         if (m_internalEditorValueChanged)
@@ -346,6 +348,7 @@ void KexiComboBoxBase::createPopup(bool show)
     m_insideCreatePopup = true;
     QWidget* thisWidget = dynamic_cast<QWidget*>(this);
     QWidget *widgetToFocus = internalEditor() ? internalEditor() : thisWidget;
+    //kDebug() << "widgetToFocus:" << widgetToFocus;
 
     if (m_reinstantiatePopupOnShow) {
         QWidget *oldPopup = popup();
@@ -356,8 +359,8 @@ void KexiComboBoxBase::createPopup(bool show)
     if (!popup()) {
         setPopup(column() ? new KexiComboBoxPopup(thisWidget, *column())
                  : new KexiComboBoxPopup(thisWidget, *field()));
-        QObject::connect(popup(), SIGNAL(rowAccepted(KexiDB::RecordData*, int)),
-                         thisWidget, SLOT(slotRowAccepted(KexiDB::RecordData*, int)));
+        QObject::connect(popup(), SIGNAL(rowAccepted(KexiDB::RecordData*,int)),
+                         thisWidget, SLOT(slotRowAccepted(KexiDB::RecordData*,int)));
         QObject::connect(popup()->tableView(), SIGNAL(itemSelected(KexiDB::RecordData*)),
                          thisWidget, SLOT(slotItemSelected(KexiDB::RecordData*)));
 
@@ -392,7 +395,7 @@ void KexiComboBoxBase::createPopup(bool show)
         if (m_updatePopupSelectionOnShow) {
             int rowToHighlight = -1;
             KexiDB::LookupFieldSchema *lookupFieldSchema = this->lookupFieldSchema();
-            KexiTableViewData *relData = column() ? column()->relatedData() : 0;
+            KexiDB::TableViewData *relData = column() ? column()->relatedData() : 0;
             if (lookupFieldSchema) {
                 rowToHighlight = rowToHighlightForLookupTable();
             } else if (relData) {
@@ -421,10 +424,15 @@ void KexiComboBoxBase::createPopup(bool show)
     if (show) {
         moveCursorToEndInInternalEditor();
         selectAllInInternalEditor();
-        widgetToFocus->setFocus();
+        if (m_focusPopupBeforeShow) {
+            widgetToFocus->setFocus();
+        }
         popup()->show();
         popup()->raise();
         popup()->repaint();
+        if (!m_focusPopupBeforeShow) {
+            widgetToFocus->setFocus();
+        }
     }
     m_insideCreatePopup = false;
 }
@@ -462,7 +470,7 @@ void KexiComboBoxBase::slotItemSelected(KexiDB::RecordData*)
     //kDebug(44010) << "m_visibleValue=" << m_visibleValue;
 
     QVariant valueToSet;
-    KexiTableViewData *relData = column() ? column()->relatedData() : 0;
+    KexiDB::TableViewData *relData = column() ? column()->relatedData() : 0;
     KexiDB::LookupFieldSchema *lookupFieldSchema = this->lookupFieldSchema();
 
     m_visibleValue = lookupFieldSchema ? visibleValueForLookupField() : QVariant();
@@ -489,6 +497,8 @@ void KexiComboBoxBase::slotItemSelected(KexiDB::RecordData*)
         }
     }
     setValueOrTextInInternalEditor(valueToSet);
+    QWidget* thisWidget = dynamic_cast<QWidget*>(this);
+    thisWidget->setFocus();
     if (m_setValueOrTextInInternalEditor_enabled) {
         moveCursorToEndInInternalEditor();
         selectAllInInternalEditor();
@@ -570,9 +580,11 @@ bool KexiComboBoxBase::handleKeyPressForPopup(QKeyEvent *ke)
     case Qt::Key_Enter:
     case Qt::Key_Return: //accept
         //select row that is highlighted
-        if (popup()->tableView()->highlightedRecord() >= 0)
+        if (popup()->tableView()->highlightedRecord() >= 0) {
             popup()->tableView()->selectRow(popup()->tableView()->highlightedRecord());
-        //do not return true: allow to process event
+            acceptPopupSelection();
+            return true;
+        }
     default: ;
     }
     return false;

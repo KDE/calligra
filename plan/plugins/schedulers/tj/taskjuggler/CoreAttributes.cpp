@@ -2,6 +2,7 @@
  * CoreAttributes.h - TaskJuggler
  *
  * Copyright (c) 2001, 2002, 2003, 2004, 2005 by Chris Schlaeger <cs@kde.org>
+ * Copyright (c) 2011 by Dag Andersen <danders@get2net.dk>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of version 2 of the GNU General Public License as
@@ -102,7 +103,7 @@ CoreAttributes::getHierarchNo() const
     do
     {
         if (!text.isEmpty())
-            text = "." + text;
+            text.prepend(QLatin1Char('.'));
         text = QString("%1").arg(ca->hierarchNo) + text;
         ca = ca->getParent();
     }
@@ -125,7 +126,7 @@ CoreAttributes::setHierarchIndex(uint no)
         return;
     }
 
-    /* Find the highest hierarchIndex of all childs of this CAs parent. */
+    /* Find the highest hierarchIndex of all children of this CAs parent. */
     uint max = 0;
     foreach (CoreAttributes *a, (*parent->sub)) {
         if (a->hierarchIndex > max)
@@ -143,7 +144,7 @@ CoreAttributes::getHierarchIndex() const
     while (ca)
     {
         if (!text.isEmpty())
-            text = "." + text;
+            text.prepend(QLatin1Char('.'));
         text = QString("%1").arg(ca->hierarchIndex) + text;
         ca = ca->getParent();
     }
@@ -159,9 +160,9 @@ CoreAttributes::getHierarchLevel() const
 void
 CoreAttributes::getFullName(QString& fullName) const
 {
-    fullName = QString::null;
+    fullName.clear();
     for (const CoreAttributes* c = this; c != 0; c = c->parent)
-        fullName = c->name + "." + fullName;
+        fullName = c->name + QLatin1Char('.') + fullName;
     // Remove trailing dot.
     fullName.remove(fullName.length() - 1, 1);
 }
@@ -171,7 +172,7 @@ CoreAttributes::getFullId() const
 {
     QString fullID = id;
     for (const CoreAttributes* c = parent; c != 0; c = c->parent)
-        fullID = c->id + "." + fullID;
+        fullID = c->id + QLatin1Char('.') + fullID;
     return fullID;
 }
 

@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPTTASKDESCRIPTIONPANEL_H
-#define KPTTASKDESCRIPTIONPANEL_H
+#ifndef KPTTASKDESCRIPTIONDIALOG_H
+#define KPTTASKDESCRIPTIONDIALOG_H
 
 #include "kplatoui_export.h"
 
@@ -26,7 +26,7 @@
 
 #include <QWidget>
 
-#include <KDialog>
+#include <kdialog.h>
 
 namespace KPlato
 {
@@ -90,4 +90,4 @@ protected:
 
 } //KPlato namespace
 
-#endif // KPTTASKDESCRIPTIONPANEL_H
+#endif // KPTTASKDESCRIPTIONDIALOG_H

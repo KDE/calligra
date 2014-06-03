@@ -22,9 +22,9 @@
 #include <QVector>
 #include <QTextDocument>
 
-#include <KDebug>
+#include <kdebug.h>
 
-#include <kexidb/queryschema.h>
+#include <db/queryschema.h>
 
 #include <pion/net/HTTPResponseWriter.hpp>
 

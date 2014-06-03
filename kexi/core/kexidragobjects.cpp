@@ -20,22 +20,24 @@
 
 #include "kexidragobjects.h"
 
-#include <qdatastream.h>
+#include <QDataStream>
 #include <QStringList>
 #include <QDragMoveEvent>
 #include <QDropEvent>
 #include <kdebug.h>
 
-bool
-KexiFieldDrag::canDecode(QMimeSource *e)
+bool KexiFieldDrag::canDecode(QMimeSource *e)
 {
     return e->provides("kexi/fields");
 }
 
-bool
-KexiFieldDrag::decode(QDropEvent* e, QString& sourceMimeType,
-                              QString& sourceName, QStringList& fields)
+bool KexiFieldDrag::decode(QDropEvent* e, QString *sourceMimeType,
+                           QString *sourceName, QStringList *fields)
 {
+    Q_ASSERT(sourceMimeType);
+    Q_ASSERT(sourceName);
+    Q_ASSERT(fields);
+
     QByteArray payload(e->encodedData("kexi/fields"));
     if (payload.isEmpty()) {//try single
         return false;
@@ -43,17 +45,17 @@ KexiFieldDrag::decode(QDropEvent* e, QString& sourceMimeType,
     e->accept();
     QDataStream stream1(&payload, QIODevice::ReadOnly);
 
-    stream1 >> sourceMimeType;
-    stream1 >> sourceName;
-    stream1 >> fields;
+    stream1 >> *sourceMimeType;
+    stream1 >> *sourceName;
+    stream1 >> *fields;
 // kDebug() << "decoded:" << sourceMimeType<<"/"<<sourceName<<"/"<<fields;
     return true;
 }
 
-/// implementation of KexiDataProviderDrag
+// ----------
 
 KexiDataProviderDrag::KexiDataProviderDrag(const QString& sourceMimeType, const QString& sourceName,
-        QWidget *parent, const char */*name*/)
+        QWidget *parent)
         : QDrag(parent)
 {
     QMimeData *mimedata = new QMimeData();
@@ -65,25 +67,28 @@ KexiDataProviderDrag::KexiDataProviderDrag(const QString& sourceMimeType, const 
     setMimeData(mimedata);
 }
 
+KexiDataProviderDrag::~KexiDataProviderDrag()
+{
+}
 
-bool
-KexiDataProviderDrag::canDecode(QDragMoveEvent *e)
+bool KexiDataProviderDrag::canDecode(QDragMoveEvent *e)
 {
     return e->provides("kexi/dataprovider");
 }
 
-bool
-KexiDataProviderDrag::decode(QDropEvent* e, QString& sourceMimeType, QString& sourceName)
+bool KexiDataProviderDrag::decode(QDropEvent* e, QString* sourceMimeType, QString *sourceName)
 {
-    QByteArray payload = e->encodedData("kexidataprovider");
-    if (payload.size()) {
-        e->accept();
-        QDataStream stream1(&payload, QIODevice::ReadOnly);
+    Q_ASSERT(sourceMimeType);
+    Q_ASSERT(sourceName);
 
-        stream1 >> sourceMimeType;
-        stream1 >> sourceName;
-//  kDebug() << "decoded:" << sourceMimeType <<"/"<<sourceName;
-        return true;
+    QByteArray payload = e->encodedData("kexidataprovider");
+    if (payload.isEmpty()) {
+        return false;
     }
-    return false;
+    e->accept();
+    QDataStream stream1(&payload, QIODevice::ReadOnly);
+    stream1 >> *sourceMimeType;
+    stream1 >> *sourceName;
+//  kDebug() << "decoded:" << sourceMimeType <<"/"<<sourceName;
+    return true;
 }

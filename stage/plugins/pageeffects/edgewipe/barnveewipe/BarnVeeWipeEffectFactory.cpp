@@ -37,7 +37,7 @@ BarnVeeWipeEffectFactory::~BarnVeeWipeEffectFactory()
 {
 }
 
-static const char* s_subTypes[] = {
+static const char* const s_subTypes[] = {
     I18N_NOOP( "From Top" ),
     I18N_NOOP( "From Right" ),
     I18N_NOOP( "From Bottom" ),

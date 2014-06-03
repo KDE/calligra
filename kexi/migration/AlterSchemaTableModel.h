@@ -21,7 +21,7 @@
 
 #include <QModelIndex>
 #include <QList>
-#include <kexidb/RecordData.h>
+#include <db/RecordData.h>
 
 namespace KexiDB {
 class TableSchema;
@@ -30,8 +30,7 @@ class TableSchema;
 class AlterSchemaTableModel : public QAbstractTableModel
 {
     public:
-
-        AlterSchemaTableModel( QObject* parent = 0 );
+        explicit AlterSchemaTableModel( QObject* parent = 0 );
         ~AlterSchemaTableModel();
 
         virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;

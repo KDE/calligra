@@ -17,11 +17,9 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "Plugin.h"
-#include "stencilboxdocker/StencilBoxDocker.h"
-//#include "stencilboxdocker/StencilShapeFactory.h"
+#include "stencilboxdocker/StencilBoxDockerFactory.h"
 
 #include <KoDockRegistry.h>
-//#include <KoShapeRegistry.h>
 
 #include <kpluginfactory.h>
 
@@ -33,6 +31,4 @@ Plugin::Plugin(QObject *parent, const QVariantList&)
 {
     Q_UNUSED(parent);
     KoDockRegistry::instance()->add(new StencilBoxDockerFactory());
-
-    //KoShapeRegistry::instance()->add(new StencilShapeFactory());
 }

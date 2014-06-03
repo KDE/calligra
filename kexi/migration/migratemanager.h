@@ -20,10 +20,9 @@
 #ifndef KEXI_MIGRATION_MNGR_H
 #define KEXI_MIGRATION_MNGR_H
 
-#include <qobject.h>
-#include <qmap.h>
+#include <QObject>
+#include <QMap>
 
-//#include <klibloader.h>
 #include <kservice.h>
 
 #include "keximigrate.h"

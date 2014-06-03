@@ -21,8 +21,8 @@
 #ifndef _IMPORT_DIALOG_H
 #define _IMPORT_DIALOG_H
 
-#include <QtGui/QWidget>
-#include <QtGui/QButtonGroup>
+#include <QWidget>
+#include <QButtonGroup>
 
 #include <kdialog.h>
 #include <ui_ImportDialogUI.h>
@@ -31,7 +31,7 @@ class AsciiImportDialog : public KDialog
 {
     Q_OBJECT
 public:
-    AsciiImportDialog(const QString &encoding, QWidget *parent = 0);
+    explicit AsciiImportDialog(const QString &encoding, QWidget *parent = 0);
     ~AsciiImportDialog();
     QTextCodec *getCodec() const;
     int getParagraphStrategy() const;

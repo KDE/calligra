@@ -114,7 +114,17 @@ bool KPrDeclarations::saveOdf(KoPASavingContext &paContext) const
 
             writer.addAttribute("presentation:name", keyIt.key());
             if (typeIt.key() == DateTime) {
-                //TODO
+                const QMap<QString, QVariant> data = keyIt.value().value<QMap<QString, QVariant> >();
+                bool fixed = data["fixed"].toBool();
+                writer.addAttribute("presentation:source", fixed ? "fixed" : "current-date");
+                QString format = data["format"].toString();
+                if (format.isEmpty()) {
+                    writer.addTextNode(data["fixed value"].toString());
+                }
+                else {
+                    QString styleName = KoOdfNumberStyles::saveOdfDateStyle(paContext.mainStyles(), format, false);
+                    writer.addAttribute("style:data-style-name", styleName);
+                }
             }
             else {
                 writer.addTextNode(keyIt.value().value<QString>());

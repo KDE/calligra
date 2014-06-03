@@ -1,3 +1,10 @@
+if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
+    add_definitions(-Wno-unused-but-set-variable)
+    add_definitions(-Wno-missing-format-attribute)
+    add_definitions(-Wno-sign-compare)
+    add_definitions(-Wno-unused-parameter)
+endif (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
+
 
 include_directories(  ${GLIB2_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/kexi ${KDE4_INCLUDES} ${CMAKE_SOURCE_DIR}/kexi/migration/mdb/src/mdbtools/include )
 
@@ -35,12 +42,12 @@ kde4_add_plugin(keximigrate_mdb ${keximigrate_mdbmigrate_PART_SRCS})
 
 
 target_link_libraries(keximigrate_mdb
-${KDE4_KPARTS_LIBS}
 ${GLIB2_LIBRARIES}
 ${ICONV_LIBRARIES}
 keximigrate
 kexidb
 kexiutils
+${CALLIGRADB_LIBS}
 )
 
 install(TARGETS keximigrate_mdb  DESTINATION ${PLUGIN_INSTALL_DIR})

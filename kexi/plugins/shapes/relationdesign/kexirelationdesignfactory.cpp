@@ -19,6 +19,7 @@
 #include "kexirelationdesignfactory.h"
 #include "kexirelationdesignshape.h"
 #include <KoShapeLoadingContext.h>
+#include <KoIcon.h>
 #include <klocale.h>
 #include <kdebug.h>
 
@@ -27,8 +28,8 @@ KexiRelationDesignFactory::KexiRelationDesignFactory()
                          i18n("Kexi Relation Design"))
 {
     setToolTip(i18n("A kexi relation design shape"));
-    setIcon("kexi");
-    setXmlElementNames("http://www.calligra-suite.org/kexirelationdesign", QStringList("shape"));
+    setIconName(koIconNameCStr("calligrakexi"));
+    setXmlElementNames("http://www.calligra.org/kexirelationdesign", QStringList("shape"));
     setLoadingPriority(1);
 }
 
@@ -44,6 +45,6 @@ bool KexiRelationDesignFactory::supports(const KoXmlElement &e, KoShapeLoadingCo
 {
     Q_UNUSED(context);
     kDebug();
-    return (e.localName() == "shape") && (e.namespaceURI() == "http://www.calligra-suite.org/kexirelationdesign");
+    return (e.localName() == "shape") && (e.namespaceURI() == "http://www.calligra.org/kexirelationdesign");
 }
 

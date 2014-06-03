@@ -205,7 +205,7 @@ class KPLATOMODELS_EXPORT DateTableDataModel : public KDateTableDataModel
 {
     Q_OBJECT
 public:
-    DateTableDataModel( QObject *parent );
+    explicit DateTableDataModel(QObject *parent);
 
     /// Fetch data for @p date, @p dataType specifies the type of data
     virtual QVariant data( const QDate &date, int role = Qt::DisplayRole,  int dataType = -1 ) const;
@@ -231,11 +231,10 @@ class KPLATOMODELS_EXPORT DateTableDateDelegate : public KDateTableDateDelegate
 {
     Q_OBJECT
 public:
-    DateTableDateDelegate( QObject *parent = 0 );
+    explicit DateTableDateDelegate(QObject *parent = 0);
     ~DateTableDateDelegate() {}
 
     virtual QRectF paint( QPainter *painter, const StyleOptionViewItem &option, const QDate &date,  KDateTableDataModel *model );
-    
 };
 
 class KPLATOMODELS_EXPORT CalendarExtendedItemModel : public CalendarItemModel

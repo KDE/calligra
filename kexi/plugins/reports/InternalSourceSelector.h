@@ -21,23 +21,23 @@
 #ifndef INTERNALSOURCESELECTOR_H
 #define INTERNALSOURCESELECTOR_H
 
-#include <QtGui/QComboBox>
-#include <kexidb/connection.h>
+#include <QComboBox>
+#include <db/connection.h>
 
 class InternalSourceSelector : public QComboBox
 {
     Q_OBJECT
-public: 
+public:
     InternalSourceSelector(QWidget *parent, KexiDB::Connection *conn);
     virtual ~InternalSourceSelector();
-    
+
 protected:
-    
+
     virtual void mousePressEvent(QMouseEvent *e);
-    
+
 private:
     QStringList queryList();
-    
+
     KexiDB::Connection *m_conn;
 };
 

@@ -26,15 +26,16 @@
 #ifndef MSOOXML_UTILS_H
 #define MSOOXML_UTILS_H
 
-#include "msooxml_export.h"
+#include "komsooxml_export.h"
 
 #include <QSize>
 #include <QColor>
 #include <QBuffer>
 #include <KoFilterChain.h>
 #include <KoXmlReader.h>
-#include <KDebug>
+#include <kdebug.h>
 #include <KoGenStyle.h>
+#include <KoGenStyles.h>
 
 class QLocale;
 class QDomElement;
@@ -66,7 +67,11 @@ enum autoFitStatus {
     autoFitUnUsed, autoFitOn, autoFitOff
 };
 
-class MSOOXML_EXPORT ParagraphBulletProperties
+enum MSOOXMLFilter {
+    DocxFilter, PptxFilter, XlsxFilter
+};
+
+class KOMSOOXML_EXPORT ParagraphBulletProperties
 {
 public:
 
@@ -74,7 +79,7 @@ public:
 
     void clear();
 
-    QString convertToListProperties(const bool fileByPowerPoint = false) const;
+    QString convertToListProperties(KoGenStyles& mainStyles, MSOOXMLFilter filter = XlsxFilter);
 
     bool isEmpty() const;
 
@@ -88,13 +93,11 @@ public:
 
     void setNumFormat(const QString& numFormat);
 
-    void setMargin(qreal margin);
+    void setMargin(const qreal margin);
 
-    void setIndent(qreal indent);
+    void setIndent(const qreal indent);
 
     void setPicturePath(const QString& picturePath);
-
-    void setBulletSize(const QSize& size);
 
     void setBulletFont(const QString& font);
 
@@ -102,11 +105,21 @@ public:
 
     void setStartValue(const QString& value);
 
-    void setBulletRelativeSize(int size);
+    void setBulletRelativeSize(const int size);
+
+    void setBulletSizePt(const qreal size);
 
     void setFollowingChar(const QString& value);
 
+    void setTextStyle(const KoGenStyle& textStyle);
+
+    void setStartOverride(const bool startOverride);
+
+    QString startValue() const;
+
     QString bulletRelativeSize() const;
+
+    QString bulletSizePt() const;
 
     QString bulletColor() const;
 
@@ -119,6 +132,10 @@ public:
     QString margin() const;
 
     QString followingChar() const;
+
+    KoGenStyle textStyle() const;
+
+    bool startOverride() const;
 
     void addInheritedValues(const ParagraphBulletProperties& properties);
 
@@ -140,9 +157,18 @@ private:
     QString m_margin;
     QString m_picturePath;
     QString m_bulletColor;
-    QString m_bulletRelativeSize;
     QString m_followingChar;
-    QSize m_bulletSize;
+    QString m_bulletRelativeSize;
+    QString m_bulletSize;
+
+    KoGenStyle m_textStyle;
+
+    // MSWord specific: Restart the numbering when this list style is
+    // used for the 1st time.  Otherwise don't restart in case any of the
+    // styles inheriting from the same abstract numbering definition was
+    // already used.  Let's ignore presence of this attribute in
+    // addInheritedValues.
+    bool m_startOverride;
 };
 
 //! Container autodeleter. Works for QList, QHash and QMap.
@@ -218,38 +244,38 @@ private:
 
 //! Decodes boolean attribute @a value. If unspecified returns @a defaultValue.
 //! @return true unless @a value is equal to "false", "off" or "0".
-MSOOXML_EXPORT bool convertBooleanAttr(const QString& value, bool defaultValue = false);
+KOMSOOXML_EXPORT bool convertBooleanAttr(const QString& value, bool defaultValue = false);
 
 //! Loads content types from "[Content_Types].xml"
 /*! Based on information from ECMA-376, Part 1: "11.2 Package Structure".
  @return status: KoFilter::OK on success or KoFilter::WrongFormat when any unexpected and critical incompatibility occurs.
 */
 //! @todo create whole class keeping the data
-MSOOXML_EXPORT KoFilter::ConversionStatus loadContentTypes(const KoXmlDocument& contentTypesXML,
+KOMSOOXML_EXPORT KoFilter::ConversionStatus loadContentTypes(const KoXmlDocument& contentTypesXML,
         QMultiHash<QByteArray, QByteArray>& contentTypes);
 
 //! Loads content types from "docProps/app.xml"
-MSOOXML_EXPORT KoFilter::ConversionStatus loadDocumentProperties(const KoXmlDocument& appXML, QMap<QString, QVariant>& properties);
+KOMSOOXML_EXPORT KoFilter::ConversionStatus loadDocumentProperties(const KoXmlDocument& appXML, QMap<QString, QVariant>& properties);
 
 //! @return device for file @a fileName of @a zip archive. Status @a status is written on error.
 //! The device is already opened for reading and should be deleted after use.
-MSOOXML_EXPORT QIODevice* openDeviceForFile(const KZip* zip,
+KOMSOOXML_EXPORT QIODevice* openDeviceForFile(const KZip* zip,
         QString& errorMessage,
         const QString& fileName,
         KoFilter::ConversionStatus& status);
 
 //! QXmlStreamReader-based generic loading/parsing into @a doc KoXmlDocument
-MSOOXML_EXPORT KoFilter::ConversionStatus loadAndParse(QIODevice* io, KoXmlDocument& doc,
+KOMSOOXML_EXPORT KoFilter::ConversionStatus loadAndParse(QIODevice* io, KoXmlDocument& doc,
         QString& errorMessage, const QString & fileName);
 
 //! @see KoOdfReadStore::loadAndParse(QIODevice* fileDevice, KoXmlDocument& doc, QString& errorMessage, const QString& fileName)
-MSOOXML_EXPORT KoFilter::ConversionStatus loadAndParse(KoXmlDocument& doc,
+KOMSOOXML_EXPORT KoFilter::ConversionStatus loadAndParse(KoXmlDocument& doc,
         const KZip* zip,
         QString& errorMessage,
         const QString& fileName);
 
 //! QXmlStreamReader-based loading/parsing for document.xml
-MSOOXML_EXPORT KoFilter::ConversionStatus loadAndParseDocument(MsooXmlReader* reader,
+KOMSOOXML_EXPORT KoFilter::ConversionStatus loadAndParseDocument(MsooXmlReader* reader,
         const KZip* zip,
         KoOdfWriters* writers,
         QString& errorMessage,
@@ -280,7 +306,7 @@ KoFilter::ConversionStatus imageSize(const KZip* zip, QString& errorMessage,
 /*! @return conversion status
     @todo Thumbnails are apparently used only by PowerPoint or templates for now.
           Implement it, for now this feature is not needed for docx. */
-MSOOXML_EXPORT KoFilter::ConversionStatus loadThumbnail(QImage& thumbnail, KZip* zip);
+KOMSOOXML_EXPORT KoFilter::ConversionStatus loadThumbnail(QImage& thumbnail, KZip* zip);
 
 // -- conversions ---
 
@@ -288,7 +314,7 @@ MSOOXML_EXPORT KoFilter::ConversionStatus loadThumbnail(QImage& thumbnail, KZip*
 /*! The value specifies that its contents contains a language identifier as defined by RFC 4646/BCP 47.
     Sets up @a language and @a country based on @a value that is of format {langugage}-{country}
     @return true on success. */
-MSOOXML_EXPORT bool ST_Lang_to_languageAndCountry(const QString& value, QString& language, QString& country);
+KOMSOOXML_EXPORT bool ST_Lang_to_languageAndCountry(const QString& value, QString& language, QString& country);
 
 //! @return QColor value for ST_HexColorRGB (Hexadecimal Color Value) (SharedML, 22.9.2.5)
 //!         or invalid QColor if @a color is not in the expected format.
@@ -307,34 +333,34 @@ inline QColor ST_HexColorRGB_to_QColor(const QString& color)
 //! The brush is built out of solid color.
 //! If colorName is not supported by the standard, QBrush() is returned.
 //! @par colorName named text highlight color like "black", "blue" (17.18.40)
-MSOOXML_EXPORT QBrush ST_HighlightColor_to_QColor(const QString& colorName);
+KOMSOOXML_EXPORT QBrush ST_HighlightColor_to_QColor(const QString& colorName);
 
 //! @return QColor value for DefaultIndexColor
-MSOOXML_EXPORT QColor defaultIndexedColor( int index );
+KOMSOOXML_EXPORT QColor defaultIndexedColor( int index );
 
 //! @return QLocale for the give language id
-MSOOXML_EXPORT QLocale localeForLangId( int langid );
+KOMSOOXML_EXPORT QLocale localeForLangId( int langid );
 
 //! Converts value for 22.9.2.9 ST_Percentage (Percentage Value with Sign) from string
 //! Sets @arg ok to true on success.
-MSOOXML_EXPORT qreal ST_Percentage_to_double(const QString& val, bool& ok);
+KOMSOOXML_EXPORT qreal ST_Percentage_to_double(const QString& val, bool& ok);
 
 //! Converts value for 22.9.2.9 ST_Percentage (Percentage Value with Sign) from string
 //! If "%" suffix is not present (MSOOXML violation of OOXML), the format is expected to be int({ST_Percentage}*1000).
 //! Sets @arg ok to true on success.
-MSOOXML_EXPORT qreal ST_Percentage_withMsooxmlFix_to_double(const QString& val, bool& ok);
+KOMSOOXML_EXPORT qreal ST_Percentage_withMsooxmlFix_to_double(const QString& val, bool& ok);
 
-struct MSOOXML_EXPORT DoubleModifier {
+struct KOMSOOXML_EXPORT DoubleModifier {
     DoubleModifier(qreal v) : value(v), valid(true) {}
     DoubleModifier() : value(0.0), valid(false) {}
     qreal value;
     bool valid;
 };
 
-MSOOXML_EXPORT QColor colorForLuminance(const QColor& color,
+KOMSOOXML_EXPORT QColor colorForLuminance(const QColor& color,
     const DoubleModifier& modulation, const DoubleModifier& offset);
 
-MSOOXML_EXPORT void modifyColor(QColor& color, qreal tint, qreal shade, qreal satMod);
+KOMSOOXML_EXPORT void modifyColor(QColor& color, qreal tint, qreal shade, qreal satMod);
 
 //! Converts shape types from ECMA-376 to ODF.
 /*! @return "Common Presentation Shape Attribute" value (ODF 1.1., 9.6.1)
@@ -347,31 +373,37 @@ MSOOXML_EXPORT void modifyColor(QColor& color, qreal tint, qreal shade, qreal sa
 */
 //! @todo or "object"?  ST_PlaceholderType docs day the default is "obj".
 //! CASE #P500
-MSOOXML_EXPORT QString ST_PlaceholderType_to_ODF(const QString& ecmaType);
+KOMSOOXML_EXPORT QString ST_PlaceholderType_to_ODF(const QString& ecmaType);
 
 //! Sets up @a textStyleProperties with underline style matching MSOOXML name @a msooxmlName.
 //! Based on 17.18.99 ST_Underline (Underline Patterns), WML ECMA-376 p.1681
 //! and on 20.1.10.82 ST_TextUnderlineType (Text Underline Types), DrawingML ECMA-376 p.3450 (merged)
-MSOOXML_EXPORT void setupUnderLineStyle(const QString& msooxmlName, KoCharacterStyle* textStyleProperties);
+KOMSOOXML_EXPORT void setupUnderLineStyle(const QString& msooxmlName, KoCharacterStyle* textStyleProperties);
 
 //! @return the symbolic name of column @a column (counted from 0)
 //! This is similar to the notation of spreadsheet's column, e.g. 0th column is "A", 1st is "B", 26th is "AA".
-MSOOXML_EXPORT QString columnName(uint column);
+KOMSOOXML_EXPORT QString columnName(uint column);
 
 //! Splits @a pathAndFile into path and file parts. Path does not end with '/'.
-MSOOXML_EXPORT void splitPathAndFile(const QString& pathAndFile, QString* path, QString* file);
+KOMSOOXML_EXPORT void splitPathAndFile(const QString& pathAndFile, QString* path, QString* file);
 
 //! Returns calculated angle and xDiff, yDiff, caller has to apply these to style
-MSOOXML_EXPORT void rotateString(const qreal rotation, const qreal width, const qreal height, qreal& angle, qreal& xDiff, qreal& yDiff,
-    bool flipH, bool flipV);
+KOMSOOXML_EXPORT void rotateString(const qreal rotation, const qreal width, const qreal height, qreal& angle, qreal& xDiff, qreal& yDiff);
+
+//! Marker related utils
+KOMSOOXML_EXPORT QString defineMarkerStyle(KoGenStyles& mainStyles, const QString& markerType);
+
+KOMSOOXML_EXPORT qreal defineMarkerWidth(const QString &markerWidth, const qreal lineWidth);
 
 //! A helper allowing to buffer xml streams and writing them back later
-/*! This class is useful when information that has to be written in advance is based
-    on XML elements parsed later. In such case the information cannot be saved in one pass.
-    Example of this is paragraphs style name: is should be written to style:name attribute but
-    relevant XML elements (that we use for building the style) are appearing later.
-    So we first output created XML to a buffer, then save the parent element with the style name
-    and use KoXmlWriter::addCompleteElement() to redirect the buffer contents as a subelement.
+/*! This class is useful when information that has to be written in advance is
+    based on XML elements parsed later.  In such case the information cannot be
+    saved in one pass.  Example of this is paragraphs style name: is should be
+    written to style:name attribute but relevant XML elements (that we use for
+    building the style) are appearing later.  So we first output created XML to
+    a buffer, then save the parent element with the style name and use
+    KoXmlWriter::addCompleteElement() to redirect the buffer contents as a
+    subelement.
 
      Example use:
      @code
@@ -386,12 +418,14 @@ MSOOXML_EXPORT void rotateString(const qreal rotation, const qreal width, const 
      body->addAttribute("text:style-name", currentTextStyleName);
      body->addTextSpan(text);
      body->endElement();
-     // We are done with the buffered body writer, now release it and restore the original body writer.
-     // This inserts all the XML buffered by buf into the original body writer
-     // (internally using KoXmlWriter::addCompleteElement()).
+
+     // We are done with the buffered body writer, now release it and restore
+     // the original body writer.  This inserts all the XML buffered by buf
+     // into the original body writer (using KoXmlWriter::addCompleteElement()).
+
      body = buf.releaseWriter();
      @endcode */
-class MSOOXML_EXPORT XmlWriteBuffer
+class KOMSOOXML_EXPORT XmlWriteBuffer
 {
 public:
     //! Constructor; no writer is set initially.
@@ -430,6 +464,12 @@ public:
 
     //! Clears this buffer without performing any output to the writer.
     void clear();
+
+    //! Returns true if the buffer is empty; otherwise returns false.
+    bool isEmpty() const {
+        return m_buffer.buffer().isEmpty();
+    }
+
 private:
     //! Internal, used in releaseWriter() and the destructor; Does not assert when there's nothing to release.
     KoXmlWriter* releaseWriterInternal();
@@ -437,6 +477,30 @@ private:
     QBuffer m_buffer;
     KoXmlWriter* m_origWriter;
     KoXmlWriter* m_newWriter;
+};
+
+//! The purpose of this class is to make sure the this->body variable is proper
+//! set back to what it was before even if one of the TRY_READ calls lead to
+//! us skipping out of this method. In that case we need to make sure to restore
+//! the body variable else things may later crash.
+//!
+//! FIXME refactor the XmlWriteBuffer and merge this hack in so we don't
+//! need to work-around at any place where it's used.
+template <typename T>
+class AutoRestore
+{
+public:
+    explicit AutoRestore(T** originalPtr)
+            : m_originalPtr(originalPtr), m_prevValue(*originalPtr) {
+    }
+    ~AutoRestore() {
+        if (m_originalPtr) {
+            *m_originalPtr = m_prevValue;
+        }
+    }
+private:
+    T** m_originalPtr;
+    T* m_prevValue;
 };
 
 } // Utils namespace

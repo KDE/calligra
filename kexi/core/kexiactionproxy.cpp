@@ -27,8 +27,8 @@
 #include <kxmlguiclient.h>
 #include <kactioncollection.h>
 
-#include <qwidget.h>
-#include <qicon.h>
+#include <QWidget>
+#include <QIcon>
 #include <kexi_global.h>
 
 KAction_setEnabled_Helper::KAction_setEnabled_Helper(KexiActionProxy* proxy)
@@ -95,8 +95,8 @@ KexiActionProxy::KexiActionProxy(QObject *receiver, KexiSharedActionHost *host)
         , d(new Private)
 {
     m_signal_parent.setObjectName("signal_parent");
-    //m_sharedActionChildren.setAutoDelete(false); //TODO port logic to KDE4
-    //m_alternativeActions.setAutoDelete(true); //TODO port logic to KDE4
+    //m_sharedActionChildren.setAutoDelete(false); //!< @todo port logic to KDE4
+    //m_alternativeActions.setAutoDelete(true); //!< @todo port logic to KDE4
     m_host->plugActionProxy(this);
 }
 
@@ -144,7 +144,7 @@ void KexiActionProxy::plugSharedAction(const QString& action_name, QWidget* w)
 {
     QAction *a = sharedAction(action_name);
     if (!a) {
-        kWarning() << "KexiActionProxy::plugSharedAction(): NO SUCH ACTION: " << action_name;
+        kWarning() << "NO SUCH ACTION:" << action_name;
         return;
     }
     w->addAction(a);
@@ -154,7 +154,7 @@ void KexiActionProxy::unplugSharedAction(const QString& action_name, QWidget* w)
 {
     QAction *a = sharedAction(action_name);
     if (!a) {
-        kWarning() << "KexiActionProxy::unplugSharedAction(): NO SUCH ACTION: " << action_name;
+        kWarning() << "NO SUCH ACTION:" << action_name;
         return;
     }
     w->removeAction(a);
@@ -164,7 +164,7 @@ KAction* KexiActionProxy::plugSharedAction(const QString& action_name, const QSt
 {
     QAction *a = sharedAction(action_name);
     if (!a) {
-        kWarning() << "KexiActionProxy::plugSharedAction(): NO SUCH ACTION: " << action_name;
+        kWarning() << "NO SUCH ACTION:" << action_name;
         return 0;
     }
     QString altName = a->objectName() + "_alt";
@@ -175,7 +175,7 @@ KAction* KexiActionProxy::plugSharedAction(const QString& action_name, const QSt
     alt_act->setObjectName(altName);
     alt_act->setText(alternativeText);
     alt_act->setParent(ka->parent());
-    alt_act->setIcon(KIcon(ka->icon()));
+    alt_act->setIcon(ka->icon());
     alt_act->setShortcut(ka->shortcut());
 
     QObject::connect(alt_act, SIGNAL(activated()), a, SLOT(trigger()));
@@ -202,7 +202,7 @@ void KexiActionProxy::plugSharedActionToExternalGUI(const QString& action_name, 
 
 void KexiActionProxy::plugSharedActionsToExternalGUI(QList<QString> action_names, KXMLGUIClient *client)
 {
-    foreach(QString n, action_names) {
+    foreach(const QString &n, action_names) {
         plugSharedActionToExternalGUI(n, client);
     }
 }

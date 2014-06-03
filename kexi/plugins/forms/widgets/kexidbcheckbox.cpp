@@ -21,7 +21,7 @@
 #include "kexidbcheckbox.h"
 
 #include <kexiutils/utils.h>
-#include <kexidb/queryschema.h>
+#include <db/queryschema.h>
 
 KexiDBCheckBox::KexiDBCheckBox(const QString &text, QWidget *parent)
         : QCheckBox(text, parent), KexiFormDataItemInterface()
@@ -69,10 +69,10 @@ void KexiDBCheckBox::setValueInternal(const QVariant &add, bool removeOld)
     Q_UNUSED(add);
     Q_UNUSED(removeOld);
     if (isTristateInternal())
-        setCheckState(m_origValue.isNull()
-                      ? Qt::PartiallyChecked : (m_origValue.toBool() ? Qt::Checked : Qt::Unchecked));
+        setCheckState(KexiDataItemInterface::originalValue().isNull()
+                      ? Qt::PartiallyChecked : (KexiDataItemInterface::originalValue().toBool() ? Qt::Checked : Qt::Unchecked));
     else
-        setCheckState(m_origValue.toBool() ? Qt::Checked : Qt::Unchecked);
+        setCheckState(KexiDataItemInterface::originalValue().toBool() ? Qt::Checked : Qt::Unchecked);
 }
 
 QVariant KexiDBCheckBox::value()
@@ -164,11 +164,9 @@ void KexiDBCheckBox::setDisplayDefaultValue(QWidget *widget, bool displayDefault
     KexiFormDataItemInterface::setDisplayDefaultValue(widget, displayDefaultValue);
     // initialize display parameters for default / entered value
     KexiDisplayUtils::DisplayParameters * const params
-    = displayDefaultValue ? m_displayParametersForDefaultValue : m_displayParametersForEnteredValue;
-// setFont(params->font);
+        = displayDefaultValue ? m_displayParametersForDefaultValue : m_displayParametersForEnteredValue;
     QPalette pal(palette());
-// pal.setColor(QPalette::Active, QColorGroup::Text, params->textColor);
-    pal.setColor(QPalette::Active, QColorGroup::Foreground, params->textColor);
+    pal.setColor(QPalette::Active, QPalette::Foreground, params->textColor);
     setPalette(pal);
 }
 

@@ -28,7 +28,7 @@
 class KPrPageSelectStrategyFixed : public KPrPageSelectStrategyBase
 {
 public:
-    KPrPageSelectStrategyFixed(const KoPAPageBase *page);
+    explicit KPrPageSelectStrategyFixed(const KoPAPageBase *page);
     virtual ~KPrPageSelectStrategyFixed();
 
     virtual const KoPAPageBase *page() const;

@@ -25,8 +25,8 @@
 
 #include <migration/keximigrate.h>
 #include <migration/keximigrate_p.h>
-#include <kexidb/field.h>
-#include <kexidb/connection.h>
+#include <db/field.h>
+#include <db/connection.h>
 #include <QByteArray>
 
 namespace KexiMigration
@@ -38,7 +38,7 @@ class MDBMigrate : public KexiMigrate
     KEXIMIGRATION_DRIVER
 
 public:
-    MDBMigrate(QObject *parent, const QVariantList& args = QVariantList());
+    explicit MDBMigrate(QObject *parent, const QVariantList& args = QVariantList());
     virtual ~MDBMigrate();
 
     //! Convert an MDB type to a KexiDB type, prompting user if necessary.

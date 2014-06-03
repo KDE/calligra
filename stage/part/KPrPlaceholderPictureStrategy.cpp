@@ -20,8 +20,8 @@
 #include "KPrPlaceholderPictureStrategy.h"
 
 #include <QString>
-#include <KFileDialog>
-#include <KUrl>
+#include <kfiledialog.h>
+#include <kurl.h>
 #include <KoImageCollection.h>
 #include <KoDocumentResourceManager.h>
 #include <KoImageData.h>

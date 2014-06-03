@@ -27,7 +27,7 @@
 class SectionShapeContainerModel: public KoShapeContainerModel
 {
 public:
-    SectionShapeContainerModel(Section* _section);
+    explicit SectionShapeContainerModel(Section* _section);
     ~SectionShapeContainerModel();
     void add(KoShape *child);
     void setClipped(const KoShape *, bool);

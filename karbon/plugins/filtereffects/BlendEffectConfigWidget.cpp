@@ -21,11 +21,11 @@
 #include "BlendEffect.h"
 #include "KoFilterEffect.h"
 
-#include <KComboBox>
-#include <KLocale>
+#include <kcombobox.h>
+#include <klocale.h>
 
-#include <QtGui/QGridLayout>
-#include <QtGui/QLabel>
+#include <QGridLayout>
+#include <QLabel>
 
 BlendEffectConfigWidget::BlendEffectConfigWidget(QWidget *parent)
         : KoFilterEffectConfigWidgetBase(parent), m_effect(0)

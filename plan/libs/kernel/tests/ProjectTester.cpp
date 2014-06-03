@@ -55,17 +55,20 @@ void ProjectTester::initTestCase()
     KConfig config("ktimezonedrc");
     KConfigGroup group(&config, "TimeZones");
     group.writeEntry("ZoneinfoDir", m_tmp.name());
-    group.writeEntry("Zonetab", m_tmp.name() + QString::fromLatin1("zone.tab"));
+    group.writeEntry("Zonetab", QString(m_tmp.name() + QString::fromLatin1("zone.tab")));
     group.writeEntry("LocalZone", QString::fromLatin1("Europe/Berlin"));
     config.sync();
 
     m_project = new Project();
     m_project->setId( m_project->uniqueNodeId() );
     m_project->registerNodeId( m_project );
+    m_project->setConstraintStartTime( DateTime::fromString( "2012-02-01T00:00", KDateTime::LocalZone ) );
+    m_project->setConstraintEndTime( DateTime::fromString( "2013-02-01T00:00", KDateTime::LocalZone ) );
     // standard worktime defines 8 hour day as default
     QVERIFY( m_project->standardWorktime() );
     QCOMPARE( m_project->standardWorktime()->day(), 8.0 );
     m_calendar = new Calendar();
+    m_calendar->setName( "C1" );
     m_calendar->setDefault( true );
     QTime t1( 9, 0, 0 );
     QTime t2 ( 17, 0, 0 );
@@ -141,7 +144,7 @@ void ProjectTester::testTaskDeleteCmd()
 
 void ProjectTester::schedule()
 {
-    QDate today = QDate::currentDate();
+    QDate today = QDate::fromString( "2012-02-01", Qt::ISODate );
     QDate tomorrow = today.addDays( 1 );
     QDate yesterday = today.addDays( -1 );
     QDate nextweek = today.addDays( 7 );
@@ -1373,7 +1376,7 @@ void ProjectTester::scheduleWithExternalAppointments()
     project.setName( "P1" );
     project.setId( project.uniqueNodeId() );
     project.registerNodeId( &project );
-    DateTime targetstart = DateTime( QDate::currentDate(), QTime(0,0,0) );
+    DateTime targetstart = DateTime( QDate::fromString( "2012-02-01", Qt::ISODate ), QTime(0,0,0) );
     DateTime targetend = DateTime( targetstart.addDays( 3 ) );
     project.setConstraintStartTime( targetstart );
     project.setConstraintEndTime( targetend);
@@ -1472,7 +1475,7 @@ void ProjectTester::reschedule()
     project.setName( "P1" );
     project.setId( project.uniqueNodeId() );
     project.registerNodeId( &project );
-    DateTime targetstart = DateTime( QDate::currentDate(), QTime(0,0,0) );
+    DateTime targetstart = DateTime( QDate::fromString( "2012-02-01", Qt::ISODate ), QTime(0,0,0) );
     DateTime targetend = DateTime( targetstart.addDays( 7 ) );
     project.setConstraintStartTime( targetstart );
     project.setConstraintEndTime( targetend);
@@ -1605,7 +1608,7 @@ void ProjectTester::materialResource()
     project.setName( "P1" );
     project.setId( project.uniqueNodeId() );
     project.registerNodeId( &project );
-    DateTime targetstart = DateTime( QDate::currentDate(), QTime(0,0,0) );
+    DateTime targetstart = DateTime( QDate::fromString( "2012-02-01", Qt::ISODate ), QTime(0,0,0) );
     DateTime targetend = DateTime( targetstart.addDays( 7 ) );
     project.setConstraintStartTime( targetstart );
     project.setConstraintEndTime( targetend);
@@ -1685,7 +1688,7 @@ void ProjectTester::requiredResource()
     project.setName( "P1" );
     project.setId( project.uniqueNodeId() );
     project.registerNodeId( &project );
-    DateTime targetstart = DateTime( QDate::currentDate(), QTime(0,0,0) );
+    DateTime targetstart = DateTime( QDate::fromString( "2012-02-01", Qt::ISODate ), QTime(0,0,0) );
     DateTime targetend = DateTime( targetstart.addDays( 7 ) );
     project.setConstraintStartTime( targetstart );
     project.setConstraintEndTime( targetend);
@@ -1995,8 +1998,8 @@ void ProjectTester::team()
     Resource *team = new Resource();
     team->setType( Resource::Type_Team );
     team->setName( "Team" );
-    team->addTeamMember( r2 );
     project.addResource( g, team );
+    team->addTeamMemberId( r2->id() );
     
     ResourceGroupRequest *gr = new ResourceGroupRequest( g );
     task1->addRequest( gr );
@@ -2051,7 +2054,7 @@ void ProjectTester::team()
 //    Debug::print( r2, s);
     Debug::print( team, s, false);
     Debug::print( &project, task1, s);
-    Debug::printSchedulingLog( *sm, s );
+//     Debug::printSchedulingLog( *sm, s );
     expectedEndTime = targetstart + Duration( 1, 16, 0 );
     QCOMPARE( task1->endTime(), expectedEndTime );
 
@@ -2059,7 +2062,7 @@ void ProjectTester::team()
     qDebug()<<endl<<"Testing:"<<s;
     
     r1->removeRequests();
-    team->addTeamMember( r1 );
+    team->addTeamMemberId( r1->id() );
     r1->setAvailableFrom( targetstart );
     r1->setAvailableUntil( targetend );
 
@@ -2072,7 +2075,7 @@ void ProjectTester::team()
 //    Debug::print( r2, s);
     Debug::print( team, s, false);
     Debug::print( &project, task1, s);
-    Debug::printSchedulingLog( *sm, s );
+//     Debug::printSchedulingLog( *sm, s );
     expectedEndTime = targetstart + Duration( 0, 16, 0 );
     QCOMPARE( task1->endTime(), expectedEndTime );
 
@@ -2091,14 +2094,14 @@ void ProjectTester::team()
 //    Debug::print( r2, s);
     Debug::print( team, s, false);
     Debug::print( &project, task1, s);
-    Debug::printSchedulingLog( *sm, s );
+//     Debug::printSchedulingLog( *sm, s );
     expectedEndTime = targetstart + Duration( 1, 16, 0 );
     QCOMPARE( task1->endTime(), expectedEndTime );
 
     gr->takeResourceRequest(tr);
     task1->takeRequest(gr);
     project.takeResource( g, team);
-    team->removeTeamMember(r2);
+    team->removeTeamMemberId( r2->id() );
 
 }
 
@@ -2108,7 +2111,7 @@ void ProjectTester::inWBSOrder()
     p.setName( "WBS Order" );
     p.setId( p.uniqueNodeId() );
     p.registerNodeId( &p );
-    DateTime st = p.constraintStartTime();
+    DateTime st = QDateTime::fromString( "2012-02-01", Qt::ISODate );
     st = DateTime( st.addDays( 1 ) );
     st.setTime( QTime ( 0, 0, 0 ) );
     p.setConstraintStartTime( st );
@@ -2207,7 +2210,7 @@ void ProjectTester::resourceConflictALAP()
     p.setName( "resourceConflictALAP" );
     p.setId( p.uniqueNodeId() );
     p.registerNodeId( &p );
-    DateTime st = p.constraintStartTime();
+    DateTime st = QDateTime::fromString( "2012-02-01", Qt::ISODate );
     st = DateTime( st.addDays( 1 ) );
     st.setTime( QTime ( 0, 0, 0 ) );
     p.setConstraintStartTime( st );
@@ -2381,7 +2384,7 @@ void ProjectTester::resourceConflictMustStartOn()
     p.setName( "resourceConflictMustStartOn" );
     p.setId( p.uniqueNodeId() );
     p.registerNodeId( &p );
-    DateTime st = p.constraintStartTime();
+    DateTime st = QDateTime::fromString( "2012-02-01T00:00:00", Qt::ISODate );
     st = DateTime( st.addDays( 1 ) );
     st.setTime( QTime ( 0, 0, 0 ) );
     p.setConstraintStartTime( st );
@@ -2465,7 +2468,7 @@ void ProjectTester::resourceConflictMustStartOn()
 //     Debug::print ( c, s );
 //     Debug::print( r1, s );
      Debug::print( &p, s, true );
-     Debug::printSchedulingLog( *sm, s );
+//     Debug::printSchedulingLog( *sm, s );
     
     QCOMPARE( p.allTasks().count(), 4 );
     QCOMPARE( p.allTasks().at( 0 )->startTime(), st + Duration( 1, 8, 0 ) );
@@ -2490,7 +2493,7 @@ void ProjectTester::resourceConflictMustStartOn()
 //     Debug::print ( c, s );
 //     Debug::print( r1, s );
      Debug::print( &p, s, true );
-     Debug::printSchedulingLog( *sm, s );
+//     Debug::printSchedulingLog( *sm, s );
     
     QCOMPARE( p.allTasks().count(), 4 );
     QCOMPARE( p.allTasks().at( 0 )->startTime(), st + Duration( 1, 8, 0 ) );
@@ -2547,7 +2550,7 @@ void ProjectTester::resourceConflictMustStartOn()
     p.calculate( *sm );
 
     Debug::print( &p, s, true );
-    Debug::printSchedulingLog( *sm, s );
+//     Debug::printSchedulingLog( *sm, s );
 
     QCOMPARE( task1->startTime(), task1->mustStartOn() );
     QCOMPARE( task2->startTime(), et - Duration( 0, 16, 0 ) );
@@ -2597,7 +2600,7 @@ void ProjectTester::resourceConflictMustFinishOn()
     p.setName( "P1" );
     p.setId( p.uniqueNodeId() );
     p.registerNodeId( &p );
-    DateTime st = p.constraintStartTime();
+    DateTime st = QDateTime::fromString( "2012-02-01", Qt::ISODate );
     st = DateTime( st.addDays( 1 ) );
     st.setTime( QTime ( 0, 0, 0 ) );
     p.setConstraintStartTime( st );
@@ -2802,7 +2805,7 @@ void ProjectTester::fixedInterval()
     p.setName( "P1" );
     p.setId( p.uniqueNodeId() );
     p.registerNodeId( &p );
-    DateTime st = DateTime::fromString( "2010-10-20 08:00" );
+    DateTime st = DateTime::fromString( "2010-10-20T08:00", KDateTime::LocalZone );
     p.setConstraintStartTime( st );
     p.setConstraintEndTime( st.addDays( 5 ) );
 
@@ -2827,8 +2830,8 @@ void ProjectTester::fixedInterval()
     Task *task1 = p.createTask();
     task1->setName( "T1" );
     task1->setConstraint( Node::FixedInterval );
-    task1->setConstraintStartTime( DateTime::fromString( "2010-10-21 08:00" ) );
-    task1->setConstraintEndTime( DateTime::fromString( "2010-10-22 08:00" ) );
+    task1->setConstraintStartTime( st );
+    task1->setConstraintEndTime( st.addDays( 1 ) );
     p.addTask( task1, &p );
 
     QString s = "Schedule T1 Fixed interval -------";
@@ -2864,7 +2867,7 @@ void ProjectTester::estimateDuration()
     p.setName( "P1" );
     p.setId( p.uniqueNodeId() );
     p.registerNodeId( &p );
-    DateTime st = DateTime::fromString( "2010-10-20 08:00" );
+    DateTime st = QDateTime::fromString( "2010-10-20 08:00" );
     p.setConstraintStartTime( st );
     p.setConstraintEndTime( st.addDays( 5 ) );
 
@@ -2919,6 +2922,238 @@ void ProjectTester::estimateDuration()
 
     QCOMPARE( task1->endTime(), p.constraintEndTime() );
     QCOMPARE( task1->startTime(), task1->endTime() - Duration( 0, 10, 0 ) );
+}
+
+void ProjectTester::startStart()
+{
+    Project p;
+    p.setName( "P1" );
+    p.setId( p.uniqueNodeId() );
+    p.registerNodeId( &p );
+    DateTime st = QDateTime::fromString( "2010-10-20 00:00:00", Qt::ISODate );
+    p.setConstraintStartTime( st );
+    p.setConstraintEndTime( st.addDays( 5 ) );
+
+    Calendar *c = new Calendar("Test");
+    QTime t1(8,0,0);
+    int length = 8*60*60*1000; // 8 hours
+
+    for ( int i = 1; i <= 7; ++i ) {
+        CalendarDay *wd1 = c->weekday(i);
+        wd1->setState(CalendarDay::Working);
+        wd1->addInterval(TimeInterval(t1, length));
+    }
+    p.addCalendar( c );
+    p.setDefaultCalendar( c );
+
+    ResourceGroup *g = new ResourceGroup();
+    p.addResourceGroup( g );
+    Resource *r1 = new Resource();
+    r1->setName( "R1" );
+    p.addResource( g, r1 );
+
+    Resource *r2 = new Resource();
+    r2->setName( "R2" );
+    p.addResource( g, r2 );
+
+    Task *task1 = p.createTask();
+    task1->setName( "T1" );
+    task1->setConstraint( Node::ASAP );
+    p.addTask( task1, &p );
+
+    task1->estimate()->setType( Estimate::Type_Duration );
+    task1->estimate()->setUnit( Duration::Unit_h );
+    task1->estimate()->setExpectedEstimate( 2 );
+
+    Task *task2 = p.createTask();
+    task2->setName( "T2" );
+    task2->setConstraint( Node::ASAP );
+    p.addTask( task2, &p );
+
+    task2->estimate()->setType( Estimate::Type_Duration );
+    task2->estimate()->setUnit( Duration::Unit_h );
+    task2->estimate()->setExpectedEstimate( 2 );
+
+    task1->addDependChildNode( task2, Relation::StartStart );
+
+    QString s = "Schedule T1 Lag = 0 -------";
+    qDebug()<<s;
+
+    ScheduleManager *sm = p.createScheduleManager( "Lag = 0" );
+    p.addScheduleManager( sm );
+    sm->createSchedules();
+    p.calculate( *sm );
+
+    Debug::print( &p, s, true );
+
+    QCOMPARE( task1->startTime(), p.constraintStartTime() );
+    QCOMPARE( task1->lateStart(), task2->lateStart() );
+    QCOMPARE( task1->startTime(), task2->startTime() );
+
+    s = "Schedule backward T1 Lag = 0 -------";
+    qDebug()<<s;
+
+    sm = p.createScheduleManager( "Backward, Lag = 0" );
+    p.addScheduleManager( sm );
+    sm->createSchedules();
+    sm->setSchedulingDirection( true );
+    p.calculate( *sm  );
+
+    Debug::printSchedulingLog(*sm, s);
+    Debug::print( &p, s, true );
+
+    qDebug()<<"predeccessors:"<<task2->dependParentNodes();
+    QCOMPARE( task2->endTime(), p.constraintEndTime() );
+    QCOMPARE( task1->lateStart(), task2->lateStart() );
+    QCOMPARE( task1->startTime(), task2->startTime() );
+
+    s = "Schedule T1 calendar -------";
+    qDebug()<<s;
+
+    task1->estimate()->setCalendar( c );
+
+    sm = p.createScheduleManager( "Lag = 0" );
+    p.addScheduleManager( sm );
+    sm->createSchedules();
+    p.calculate( *sm );
+
+    Debug::print( &p, s, true );
+
+    QCOMPARE( task1->startTime(), p.constraintStartTime() + Duration( 0, 8, 0 ) );
+    QCOMPARE( task1->lateStart(), task2->lateStart() );
+    QCOMPARE( task1->startTime(), task2->startTime() );
+
+    s = "Schedule backward T1 calendar -------";
+    qDebug()<<s;
+
+    task1->estimate()->setCalendar( 0 );
+    task2->estimate()->setCalendar( c );
+
+    sm = p.createScheduleManager( "Backward, calendar, Lag = 0" );
+    p.addScheduleManager( sm );
+    sm->createSchedules();
+    sm->setSchedulingDirection( true );
+    p.calculate( *sm );
+
+    Debug::print( &p, s, true );
+
+    QCOMPARE( task2->endTime(), p.constraintEndTime() - Duration( 0, 8, 0 ) );
+    QCOMPARE( task1->lateStart(), task2->lateStart() );
+    QCOMPARE( task1->startTime(), task2->startTime() );
+
+    s = "Schedule Lag = 1 hour -------";
+    qDebug()<<s;
+
+    task1->estimate()->setCalendar( c );
+    task2->estimate()->setCalendar( 0 );
+
+    task1->dependChildNodes().at( 0 )->setLag( Duration( 0, 1, 0 ) );
+
+    sm = p.createScheduleManager( "Lag = 1 hour" );
+    p.addScheduleManager( sm );
+    sm->createSchedules();
+    p.calculate( *sm );
+
+    Debug::print( &p, s, true );
+
+    QCOMPARE( task1->startTime(), p.constraintStartTime() + Duration( 0, 8, 0 ) );
+    QCOMPARE( task2->lateStart(), task1->lateStart() + task1->dependChildNodes().at( 0 )->lag() );
+    QCOMPARE( task2->startTime(), task1->startTime() + task1->dependChildNodes().at( 0 )->lag() );
+
+    s = "Schedule backward Lag = 1 hour -------";
+    qDebug()<<s;
+
+    task1->estimate()->setCalendar( 0 );
+    task2->estimate()->setCalendar( c );
+
+    sm = p.createScheduleManager( "Backward, Lag = 1 hour" );
+    p.addScheduleManager( sm );
+    sm->createSchedules();
+    sm->setSchedulingDirection( true );
+    p.calculate( *sm );
+
+    Debug::print( &p, s, true );
+
+    QCOMPARE( task2->endTime(), p.constraintEndTime() - Duration( 0, 8, 0 ) );
+    QCOMPARE( task2->lateStart(), task1->lateStart() + task1->dependChildNodes().at( 0 )->lag() );
+    QCOMPARE( task2->startTime(), task1->startTime() + task1->dependChildNodes().at( 0 )->lag() );
+
+    s = "Schedule resources Lag = 1 hour -------";
+    qDebug()<<s;
+
+    task1->estimate()->setCalendar( 0 );
+    task2->estimate()->setCalendar( 0 );
+
+    ResourceGroupRequest *gr1 = new ResourceGroupRequest( g );
+    task1->addRequest( gr1 );
+    ResourceRequest *rr1 = new ResourceRequest( r1, 100 );
+    gr1->addResourceRequest( rr1 );
+    task1->estimate()->setType( Estimate::Type_Effort );
+
+    ResourceGroupRequest *gr2 = new ResourceGroupRequest( g );
+    task2->addRequest( gr2 );
+    ResourceRequest *rr2 = new ResourceRequest( r2, 100 );
+    gr2->addResourceRequest( rr2 );
+    task2->estimate()->setType( Estimate::Type_Effort );
+
+    sm = p.createScheduleManager( "Resources, Lag = 1 hour" );
+    p.addScheduleManager( sm );
+    sm->createSchedules();
+    sm->setSchedulingDirection( false );
+    p.calculate( *sm );
+
+    Debug::print( &p, s, true );
+
+    QCOMPARE( task1->startTime(), p.constraintStartTime() + Duration( 0, 8, 0 ) );
+    QCOMPARE( task2->lateStart(), task1->lateStart() + task1->dependChildNodes().at( 0 )->lag() );
+    QCOMPARE( task2->startTime(), task1->startTime() + task1->dependChildNodes().at( 0 )->lag() );
+
+    s = "Schedule backward resources Lag = 1 hour -------";
+    qDebug()<<s;
+
+    sm = p.createScheduleManager( "Resources backward, Lag = 1 hour" );
+    p.addScheduleManager( sm );
+    sm->createSchedules();
+    sm->setSchedulingDirection( true );
+    p.calculate( *sm );
+
+    Debug::print( &p, s, true );
+
+    QCOMPARE( task2->endTime(), p.constraintEndTime() - Duration( 0, 8, 0 ) );
+    QCOMPARE( task2->lateStart(), task1->lateStart() + task1->dependChildNodes().at( 0 )->lag() );
+    QCOMPARE( task2->startTime(), task1->startTime() + task1->dependChildNodes().at( 0 )->lag() );
+
+    s = "Schedule resources w limited availability, Lag = 1 hour -------";
+    qDebug()<<s;
+
+    r1->setAvailableFrom( p.constraintStartTime() + Duration( 0, 9, 0 ) );
+    r1->setAvailableUntil( p.constraintEndTime() - Duration( 0, 12, 0 ) );
+
+    sm = p.createScheduleManager( "Resources, Lag = 1 hour" );
+    p.addScheduleManager( sm );
+    sm->createSchedules();
+    sm->setSchedulingDirection( false );
+    p.calculate( *sm );
+
+    Debug::print( &p, s, true );
+
+    QCOMPARE( task1->startTime(), p.constraintStartTime() + Duration( 0, 9, 0 ) );
+    QCOMPARE( task2->lateStart(), task1->lateStart() + task1->dependChildNodes().at( 0 )->lag() );
+    QCOMPARE( task2->startTime(), task1->startTime() + task1->dependChildNodes().at( 0 )->lag() );
+
+    s = "Schedule backward resources w limited availability Lag = 1 hour -------";
+    qDebug()<<s;
+
+    sm = p.createScheduleManager( "Resources backward, Lag = 1 hour" );
+    p.addScheduleManager( sm );
+    sm->createSchedules();
+    sm->setSchedulingDirection( true );
+    p.calculate( *sm );
+
+    Debug::print( &p, s, true );
+
+    QVERIFY( task2->lateStart() >= task1->lateStart() + task1->dependChildNodes().at( 0 )->lag() );
+    QVERIFY( task2->startTime() >= task1->startTime() + task1->dependChildNodes().at( 0 )->lag() );
 }
 
 } //namespace KPlato

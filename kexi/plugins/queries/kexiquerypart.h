@@ -26,8 +26,8 @@
 #include <kexipart.h>
 #include <kexipartitem.h>
 #include <KexiWindowData.h>
-#include <kexidb/queryschema.h>
-#include <kexidb/connection.h>
+#include <db/queryschema.h>
+#include <db/connection.h>
 
 namespace KexiDB
 {
@@ -45,7 +45,7 @@ public:
     KexiQueryPart(QObject *parent, const QVariantList &);
     virtual ~KexiQueryPart();
 
-    virtual bool remove(KexiPart::Item &item);
+    virtual tristate remove(KexiPart::Item &item);
 
     //! @short Temporary data kept in memory while switching between Query Window's views
     class TempData : public KexiWindowData,
@@ -79,14 +79,19 @@ public:
         //! Connection used for retrieving definition of the query
         KexiDB::Connection *conn;
 
-        /*! true, if \a query member has changed in previous view.
+        /*! @return true if \a query member has changed in previous view.
          Used on view switching. We're checking this flag to see if we should
          rebuild internal structure for DesignViewMode of regenerated sql text
          in TextViewMode after switch from other view. */
-    bool queryChangedInPreviousView : 1;
+        bool queryChangedInPreviousView() const;
 
-    protected:
+        /*! Sets the queryChangedInPreviousView flag.
+         @see queryChangedInPreviousView() */
+        void setQueryChangedInPreviousView(bool set);
+
+    private:
         KexiDB::QuerySchema *m_query;
+        bool m_queryChangedInPreviousView;
     };
 
     virtual KLocalizedString i18nMessage(const QString& englishMessage,
@@ -103,12 +108,8 @@ protected:
                                  KexiPart::Item &item, Kexi::ViewMode viewMode = Kexi::DataViewMode,
                                  QMap<QString, QVariant>* staticObjectArgs = 0);
 
-//  virtual void initPartActions( KActionCollection *col );
-//  virtual void initInstanceActions( int mode, KActionCollection *col );
-
     virtual void initPartActions();
     virtual void initInstanceActions();
-//  virtual QList<KAction*> createViewActions(Kexi::ViewMode mode);
 
     virtual KexiDB::SchemaData* loadSchemaData(KexiWindow *window,
             const KexiDB::SchemaData& sdata, Kexi::ViewMode viewMode, bool *ownedByWindow);

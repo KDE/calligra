@@ -17,10 +17,10 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <kexidb/connection.h>
-#include <kexidb/drivermanager.h>
-#include <kexidb/driver_p.h>
-#include <kexidb/utils.h>
+#include <db/connection.h>
+#include <db/drivermanager.h>
+#include <db/driver_p.h>
+#include <db/utils.h>
 #include "pqxxdriver.h"
 #include "pqxxconnection.h"
 #include <string>
@@ -51,8 +51,8 @@ pqxxSqlDriver::pqxxSqlDriver(QObject *parent, const QVariantList &args)
     initDriverSpecificKeywords(keywords);
 
     //predefined properties
-    d->properties["client_library_version"] = "";//TODO
-    d->properties["default_server_encoding"] = ""; //TODO
+    d->properties["client_library_version"] = ""; //!< @todo
+    d->properties["default_server_encoding"] = ""; //!< @todo
 
     d->typeNames[Field::Byte] = "SMALLINT";
     d->typeNames[Field::ShortInteger] = "SMALLINT";
@@ -67,8 +67,6 @@ pqxxSqlDriver::pqxxSqlDriver(QObject *parent, const QVariantList &args)
     d->typeNames[Field::Text] = "CHARACTER VARYING";
     d->typeNames[Field::LongText] = "TEXT";
     d->typeNames[Field::BLOB] = "BYTEA";
-
-    //_internalWork = new pqxx::nontransaction(_internalConn);
 }
 
 //==================================================================================
@@ -92,7 +90,6 @@ QString pqxxSqlDriver::sqlTypeName(int id_t, int p) const
 //
 pqxxSqlDriver::~pqxxSqlDriver()
 {
-// delete d;
 }
 
 //==================================================================================
@@ -131,19 +128,8 @@ QString pqxxSqlDriver::escapeString(const QString& str) const
     //Cannot use pqxx or libpq escape functions as they require a db connection
     //to escape using the char encoding of the database
     //see http://www.postgresql.org/docs/8.1/static/libpq-exec.html#LIBPQ-EXEC-ESCAPE-STRING
-/*    return QString::fromLatin1("'")
-    + QString::fromAscii(_internalWork->esc(std::string(str.toAscii().constData())).c_str())
-           + QString::fromLatin1("'");
-*/
-//TODO Optimize
-//           return QString::fromLatin1("'") + QString(str)
-           /*.replace('\\', "\\\\")*/
-//           .replace('\'', "\\''")
- //          .replace('"', "\\\"")
- //          + QString::fromLatin1("'");
-
-return QString::fromLatin1("E'") + QString(str).replace("'", "\"\"").replace("\\", "\\\\") + QString::fromLatin1("'");
-  
+//! @todo Optimize
+    return QString::fromLatin1("E'") + QString(str).replace("\\", "\\\\").replace("'", "\\\'") + QString::fromLatin1("'");
 }
 
 //==================================================================================
@@ -153,20 +139,7 @@ QByteArray pqxxSqlDriver::escapeString(const QByteArray& str) const
     //Cannot use pqxx or libpq escape functions as they require a db connection
     //to escape using the char encoding of the database
     //see http://www.postgresql.org/docs/8.1/static/libpq-exec.html#LIBPQ-EXEC-ESCAPE-STRING
-    
-    /*
-    return QByteArray("'")
-    + QByteArray(_internalWork->esc(str).c_str())
-           + QByteArray("'");*/
-
-//    return QByteArray("'") + QByteArray(str)
-           /*.replace('\\', "\\\\")*/
-//           .replace('\'', "\\''")
-//           .replace('"', "\\\"")
-//           + QByteArray("'");
-
-    return QByteArray("E'") + QByteArray(str).replace("'", "\"\"").replace("\\", "\\\\") + QByteArray("'");
-
+    return QByteArray("E'") + QByteArray(str).replace("\\", "\\\\").replace("'", "\\\'") + QByteArray("'");
 }
 
 //==================================================================================
@@ -200,6 +173,5 @@ QString pqxxSqlDriver::valueToSQL(uint ftype, const QVariant& v) const
     }
     return Driver::valueToSQL(ftype, v);
 }
-
 
 #include "pqxxdriver.moc"

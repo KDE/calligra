@@ -8,11 +8,8 @@
 #include "../frames/KWCopyShape.h"
 #include "../frames/KWTextFrameSet.h"
 #include "../frames/KWTextFrame.h"
-#include "../frames/KWCopyShape.h"
 #include "../KWDocument.h"
 #include "../Words.h"
-#include <MockShapes.h>
-#include <MockTextShape.h>
 
 #include <MockShapes.h>
 #include <MockTextShape.h>
@@ -157,7 +154,7 @@ void TestFrameLayout::testShouldHaveHeaderOrFooter()
     helper.pageManager->appendPage();
     QVERIFY(helper.pageManager->page(1).pageStyle() == helper.pageManager->page(2).pageStyle());
 
-    // append the theird page with another pagesettings
+    // append the third page with another pagesettings
     KWPageStyle pagesettings3("Page3PageStyle");
     helper.pageManager->addPageStyle(pagesettings3);
     helper.pageManager->appendPage(pagesettings3);
@@ -267,7 +264,7 @@ void TestFrameLayout::testFrameCreation()
     QVERIFY(frameSets.evenFooters == 0);
 
     KoColumns columns = style.columns();
-    columns.columns = 2;
+    columns.count = 2;
     style.setColumns(columns);
 
     removeAllFrames();
@@ -368,8 +365,8 @@ void TestFrameLayout::testCreateNewFrameForPage()
     style4.setHasMainTextFrame(true);
     style4.setFooterPolicy(Words::HFTypeEvenOdd);
     KoColumns columns;
-    columns.columns = 2;
-    columns.columnSpacing = 4;
+    columns.count = 2;
+    columns.gapWidth = 4;
     style4.setColumns(columns);
     styles.insert(style4.name(), style4);
 
@@ -691,7 +688,7 @@ void TestFrameLayout::testPageStyle()
     QCOMPARE(fsets1.oddHeaders->frameCount(), 1);
     QCOMPARE(fsets2.oddHeaders->frameCount(), 3);
 }
-#include <qdebug.h>
+#include <QDebug>
 void TestFrameLayout::testPageBackground()
 {
     // creating a page with a pagestyle that has a background set should

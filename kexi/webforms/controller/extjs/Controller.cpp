@@ -24,7 +24,7 @@
 #include <QByteArray>
 #include <QStringList>
 
-#include <KDebug>
+#include <kdebug.h>
 
 //#include <pion/net/PionUser.hpp>
 #include <pion/net/HTTPTypes.hpp>

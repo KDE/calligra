@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 - 2010 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2005 - 2010, 2012 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -31,7 +31,10 @@
 #include "kptresource.h"
 #include "kptdatetime.h"
 #include "kptitemviewsettup.h"
+#include "kptviewbase.h"
+#include "kptdebug.h"
 
+#include "KoPageLayoutWidget.h"
 #include <KoDocument.h>
 
 #include <QMenu>
@@ -39,17 +42,11 @@
 #include <QObject>
 #include <QVBoxLayout>
 #include <QHeaderView>
+#include <QTabWidget>
 
-#include <kicon.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kactioncollection.h>
-#include <kxmlguifactory.h>
-
-#include <kabc/addressee.h>
-#include <kabc/vcardconverter.h>
-
-#include <kdebug.h>
 
 namespace KPlato
 {
@@ -64,8 +61,8 @@ ResourceAppointmentsDisplayOptionsPanel::ResourceAppointmentsDisplayOptionsPanel
     setupUi( this );
     setValues( *model );
 
-    connect( ui_internalAppointments, SIGNAL(  stateChanged ( int ) ), SIGNAL( changed() ) );
-    connect( ui_externalAppointments, SIGNAL(  stateChanged ( int ) ), SIGNAL( changed() ) );
+    connect( ui_internalAppointments, SIGNAL(stateChanged(int)), SIGNAL(changed()) );
+    connect( ui_externalAppointments, SIGNAL(stateChanged(int)), SIGNAL(changed()) );
 }
 
 void ResourceAppointmentsDisplayOptionsPanel::slotOk()
@@ -87,15 +84,37 @@ void ResourceAppointmentsDisplayOptionsPanel::setDefault()
 }
 
 //----
-ResourceAppointmentsSettingsDialog::ResourceAppointmentsSettingsDialog( ResourceAppointmentsItemModel *model, QWidget *parent )
-    : KPageDialog( parent )
+ResourceAppointmentsSettingsDialog::ResourceAppointmentsSettingsDialog( ViewBase *view, ResourceAppointmentsItemModel *model, QWidget *parent )
+    : KPageDialog( parent ),
+    m_view( view )
 {
     ResourceAppointmentsDisplayOptionsPanel *panel = new ResourceAppointmentsDisplayOptionsPanel( model );
     KPageWidgetItem *page = addPage( panel, i18n( "General" ) );
     page->setHeader( i18n( "Resource Assignments View Settings" ) );
 
-    connect( this, SIGNAL( okClicked() ), panel, SLOT( slotOk() ) );
-    connect( this, SIGNAL( defaultClicked() ), panel, SLOT( setDefault() ) );
+    QTabWidget *tab = new QTabWidget();
+
+    QWidget *w = ViewBase::createPageLayoutWidget( view );
+    tab->addTab( w, w->windowTitle() );
+    m_pagelayout = w->findChild<KoPageLayoutWidget*>();
+    Q_ASSERT( m_pagelayout );
+
+    m_headerfooter = ViewBase::createHeaderFooterWidget( view );
+    m_headerfooter->setOptions( view->printingOptions() );
+    tab->addTab( m_headerfooter, m_headerfooter->windowTitle() );
+
+    page = addPage( tab, i18n( "Printing" ) );
+    page->setHeader( i18n( "Printing Options" ) );
+
+    connect( this, SIGNAL(okClicked()), this, SLOT(slotOk()));
+    connect( this, SIGNAL(okClicked()), panel, SLOT(slotOk()));
+    connect( this, SIGNAL(defaultClicked()), panel, SLOT(setDefault()));
+}
+
+void ResourceAppointmentsSettingsDialog::slotOk()
+{
+    m_view->setPageLayout( m_pagelayout->pageLayout() );
+    m_view->setPrintingOptions( m_headerfooter->options() );
 }
 
 //---------------------------------------
@@ -113,14 +132,14 @@ ResourceAppointmentsTreeView::ResourceAppointmentsTreeView( QWidget *parent )
     hideColumns( lst1, lst2 );
 
     m_leftview->resizeColumnToContents ( 1 );
-    connect( m, SIGNAL( modelReset() ), SLOT( slotRefreshed() ) );
+    connect( m, SIGNAL(modelReset()), SLOT(slotRefreshed()) );
 
     m_rightview->setObjectName( "ResourceAppointments" );
 }
 
 bool ResourceAppointmentsTreeView::loadContext( const KoXmlElement &context )
 {
-    kDebug();
+    kDebug(planDbg());
     KoXmlElement e = context.namedItem( "common" ).toElement();
     if ( ! e.isNull() ) {
         model()->setShowInternalAppointments( (bool)( e.attribute( "show-internal-appointments", "0" ).toInt() ) );
@@ -131,7 +150,7 @@ bool ResourceAppointmentsTreeView::loadContext( const KoXmlElement &context )
 
 void ResourceAppointmentsTreeView::saveContext( QDomElement &settings ) const
 {
-    kDebug();
+    kDebug(planDbg());
     QDomElement e = settings.ownerDocument().createElement( "common" );
     settings.appendChild( e );
     e.setAttribute( "show-internal-appointments", model()->showInternalAppointments() );
@@ -140,7 +159,7 @@ void ResourceAppointmentsTreeView::saveContext( QDomElement &settings ) const
 
 void ResourceAppointmentsTreeView::slotRefreshed()
 {
-    //kDebug()<<model()->columnCount()<<", "<<m_leftview->header()->count()<<", "<<m_rightview->header()->count()<<", "<<m_leftview->header()->hiddenSectionCount()<<", "<<m_rightview->header()->hiddenSectionCount();
+    //kDebug(planDbg())<<model()->columnCount()<<", "<<m_leftview->header()->count()<<", "<<m_rightview->header()->count()<<", "<<m_leftview->header()->hiddenSectionCount()<<", "<<m_rightview->header()->hiddenSectionCount();
     ResourceAppointmentsItemModel *m = model();
     setModel( 0 );
     setModel( m );
@@ -157,10 +176,10 @@ QModelIndex ResourceAppointmentsTreeView::currentIndex() const
 
 //-----------------------------------
 
-ResourceAppointmentsView::ResourceAppointmentsView( KoDocument *part, QWidget *parent )
-    : ViewBase( part, parent )
+ResourceAppointmentsView::ResourceAppointmentsView(KoPart *part, KoDocument *doc, QWidget *parent)
+    : ViewBase(part, doc, parent)
 {
-    kDebug()<<"------------------- ResourceAppointmentsView -----------------------";
+    kDebug(planDbg())<<"------------------- ResourceAppointmentsView -----------------------";
 
     setupGui();
 
@@ -171,15 +190,15 @@ ResourceAppointmentsView::ResourceAppointmentsView( KoDocument *part, QWidget *p
 
     m_view->setEditTriggers( m_view->editTriggers() | QAbstractItemView::EditKeyPressed );
 
-    connect( model(), SIGNAL( executeCommand( KUndo2Command* ) ), part, SLOT( addCommand( KUndo2Command* ) ) );
+    connect( model(), SIGNAL(executeCommand(KUndo2Command*)), doc, SLOT(addCommand(KUndo2Command*)) );
 
-    connect( m_view, SIGNAL( currentChanged( const QModelIndex &, const QModelIndex & ) ), this, SLOT( slotCurrentChanged( const QModelIndex & ) ) );
+    connect( m_view, SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(slotCurrentChanged(QModelIndex)) );
 
-    connect( m_view, SIGNAL( selectionChanged( const QModelIndexList ) ), this, SLOT( slotSelectionChanged( const QModelIndexList ) ) );
+    connect( m_view, SIGNAL(selectionChanged(QModelIndexList)), this, SLOT(slotSelectionChanged(QModelIndexList)) );
 
-    connect( m_view, SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ), this, SLOT( slotContextMenuRequested( QModelIndex, const QPoint& ) ) );
+    connect( m_view, SIGNAL(contextMenuRequested(QModelIndex,QPoint)), this, SLOT(slotContextMenuRequested(QModelIndex,QPoint)) );
 
-    connect( m_view, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
+    connect( m_view, SIGNAL(headerContextMenuRequested(QPoint)), SLOT(slotHeaderContextMenuRequested(QPoint)) );
 
 }
 
@@ -204,7 +223,7 @@ void ResourceAppointmentsView::draw()
 
 void ResourceAppointmentsView::setGuiActive( bool activate )
 {
-    kDebug()<<activate;
+    kDebug(planDbg())<<activate;
     updateActionsEnabled( true );
     ViewBase::setGuiActive( activate );
     if ( activate && !m_view->selectionModel()->currentIndex().isValid() ) {
@@ -212,9 +231,9 @@ void ResourceAppointmentsView::setGuiActive( bool activate )
     }
 }
 
-void ResourceAppointmentsView::slotContextMenuRequested( QModelIndex index, const QPoint& pos )
+void ResourceAppointmentsView::slotContextMenuRequested( const QModelIndex &index, const QPoint& pos )
 {
-    kDebug()<<index<<pos;
+    kDebug(planDbg())<<index<<pos;
     QString name;
     if ( index.isValid() ) {
         Node *n = m_view->model()->node( index );
@@ -248,13 +267,13 @@ ResourceGroup *ResourceAppointmentsView::currentResourceGroup() const
 
 void ResourceAppointmentsView::slotCurrentChanged(  const QModelIndex & )
 {
-    //kDebug()<<curr.row()<<", "<<curr.column();
+    //kDebug(planDbg())<<curr.row()<<", "<<curr.column();
 //    slotEnableActions();
 }
 
-void ResourceAppointmentsView::slotSelectionChanged( const QModelIndexList )
+void ResourceAppointmentsView::slotSelectionChanged( const QModelIndexList& )
 {
-    //kDebug()<<list.count();
+    //kDebug(planDbg())<<list.count();
     updateActionsEnabled();
 }
 
@@ -289,8 +308,8 @@ void ResourceAppointmentsView::setupGui()
 
 void ResourceAppointmentsView::slotOptions()
 {
-    kDebug();
-    ResourceAppointmentsSettingsDialog *dlg = new ResourceAppointmentsSettingsDialog( m_view->model(), this );
+    kDebug(planDbg());
+    ResourceAppointmentsSettingsDialog *dlg = new ResourceAppointmentsSettingsDialog( this, m_view->model(), this );
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
     dlg->show();
     dlg->raise();
@@ -300,7 +319,7 @@ void ResourceAppointmentsView::slotOptions()
 
 void ResourceAppointmentsView::slotAddResource()
 {
-    //kDebug();
+    //kDebug(planDbg());
 /*    QList<ResourceGroup*> gl = m_view->selectedGroups();
     if ( gl.count() > 1 ) {
         return;
@@ -329,7 +348,7 @@ void ResourceAppointmentsView::slotAddResource()
 
 void ResourceAppointmentsView::slotAddGroup()
 {
-    //kDebug();
+    //kDebug(planDbg());
 /*    ResourceGroup *g = new ResourceGroup();
     QModelIndex i = m_view->model()->insertGroup( g );
     if ( i.isValid() ) {
@@ -341,7 +360,7 @@ void ResourceAppointmentsView::slotAddGroup()
 void ResourceAppointmentsView::slotDeleteSelection()
 {
 /*    QObjectList lst = m_view->selectedObjects();
-    //kDebug()<<lst.count()<<" objects";
+    //kDebug(planDbg())<<lst.count()<<" objects";
     if ( ! lst.isEmpty() ) {
         emit deleteObjectList( lst );
     }*/
@@ -349,11 +368,13 @@ void ResourceAppointmentsView::slotDeleteSelection()
 
 bool ResourceAppointmentsView::loadContext( const KoXmlElement &context )
 {
+    ViewBase::loadContext( context );
     return m_view->loadContext( context );
 }
 
 void ResourceAppointmentsView::saveContext( QDomElement &context ) const
 {
+    ViewBase::saveContext( context );
     m_view->saveContext( context );
 }
 

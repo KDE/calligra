@@ -18,6 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "applixwordimport.h"
+
 #include <QMessageBox>
 #include <QList>
 #include <QDateTime>
@@ -25,8 +27,6 @@
 #include <QByteArray>
 #include <QColor>
 #include <QBuffer>
-#include <applixwordimport.h>
-#include <applixwordimport.moc>
 #include <kdebug.h>
 #include <KoFilterChain.h>
 #include <kpluginfactory.h>
@@ -196,8 +196,9 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert(const QByteArray& from, con
     int  pos;
     bool ok;
     QString           mystr, textstr;
-    bool inTable = false;
-    bool inTableRow = false;
+    // TODO: table implementation below is incomplete
+//     bool inTable = false;
+//     bool inTableRow = false;
 
     // We'll get the paragraph style only at the end of the paragraph,
     // so bufferize the paragraph contents
@@ -231,7 +232,7 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert(const QByteArray& from, con
                 } else {
                     if (mystr.startsWith("<color ")) {
                         mystr.remove(0, 8);
-                        pos = mystr.indexOf("\"");
+                        pos = mystr.indexOf('"');
                         coltxt = mystr.left(pos);
                         mystr.remove(0, pos + 1);
                         int c, m, y, k;
@@ -672,8 +673,6 @@ APPLIXWORDImport::readTagLine(QTextStream &stream)
 void
 APPLIXWORDImport::replaceSpecial(QString &textstr)
 {
-    int ok, pos;
-
     // 1. Replace Part for this characters: <, >, &
     textstr.replace('&', "&amp;");
     textstr.replace('<', "&lt;");
@@ -681,15 +680,15 @@ APPLIXWORDImport::replaceSpecial(QString &textstr)
 
 
     // 2. Replace part for this characters: applixwear qoutes
-    ok = true;
-    pos = 0;
+    bool ok = true;
+    int pos = 0;
     do {
         // Searching for an quote
         pos = textstr.indexOf('\"', pos);
 
         // Is it a textquote ?
         if ((pos > -1) && (textstr[pos-1] == '\\')) {
-            textstr.replace(pos - 1, 2, "\"");
+            textstr.replace(pos - 1, 2, '"');
         } else {
             ok = false;
         }
@@ -698,7 +697,7 @@ APPLIXWORDImport::replaceSpecial(QString &textstr)
 
 
     // 3. Replace part for Applix Characters
-    int   foundSpecialCharakter;
+    bool  foundSpecialCharakter;
     QChar newchar;
 
     do {
@@ -734,29 +733,34 @@ APPLIXWORDImport::replaceSpecial(QString &textstr)
 int
 APPLIXWORDImport::readHeader(QTextStream &stream)
 {
-    int     rueck;
     int     vers[3] = { 0, 0, 0 };
 
     // Read Headline
     QString mystr = readTagLine(stream);
 
-    rueck = sscanf((const char *) mystr.toLatin1() ,
+    // Example: *BEGIN WORDS VERSION=430/320 ENCODING=7BIT
+    int ret = sscanf(mystr.toLatin1(),
                    "*BEGIN WORDS VERSION=%d/%d ENCODING=%dBIT",
                    &vers[0], &vers[1], &vers[2]);
+    if (ret <= 0) {
+        // Older version. Example: *START WORDS VERSION=311 ENCODING=7BIT
+        ret = sscanf(mystr.toLatin1(),
+                   "*START WORDS VERSION=%d ENCODING=%dBIT",
+                   &vers[0], &vers[2]);
+        vers[1] = vers[0];
+    }
     printf("Versions info: %d %d %d\n", vers[0], vers[1], vers[2]);
 
     // Check the headline
-    if (rueck <= 0) {
-        printf("Header not correkt - May be it is not an applixword file\n");
-        printf("Headerline: <%s>\n", (const char *) mystr.toLatin1());
+    if (ret <= 0) {
+        printf("Incorrect header - maybe it is not an applixword file\n");
+        printf("Headerline: <%s>\n", (const char *) mystr.toLatin1().constData());
 
         QMessageBox::critical(0L, "Applixword header problem",
                               QString("The Applixword header is not correct. "
                                       "May be it is not an applixword file! <BR>"
                                       "This is the header line I did read:<BR><B>%1</B>").arg(mystr),
                               "Okay");
-
-        // i18n( "What is the separator used in this file ? First line is \n%1" ).arg(firstLine),
         return false;
     } else return true;
 }
@@ -790,3 +794,4 @@ bool APPLIXWORDImport::createMeta(KoOdfWriteStore &store)
     return true;
 }
 
+#include <applixwordimport.moc>

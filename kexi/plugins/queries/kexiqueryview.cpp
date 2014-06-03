@@ -19,9 +19,9 @@
 */
 
 #include <kexiproject.h>
-#include <kexidb/connection.h>
-#include <kexidb/parser/parser.h>
-#include <kexidb/cursor.h>
+#include <db/connection.h>
+#include <db/parser/parser.h>
+#include <db/cursor.h>
 #include <KexiMainWindowIface.h>
 #include <kexiutils/utils.h>
 #include <KexiWindow.h>
@@ -39,14 +39,12 @@ class KexiQueryView::Private
 public:
     Private()
             : cursor(0)
-//   , queryHasBeenChangedInViewMode( Kexi::NoViewMode )
     {}
     ~Private() {}
     KexiDB::Cursor *cursor;
     /*! Used in storeNewData(), storeData() to decide whether
      we should ask other view to save changes.
      Stores information about view mode. */
-//  int queryHasBeenChangedInViewMode;
 };
 
 //---------------------------------------------------------------------------------
@@ -116,13 +114,6 @@ tristate KexiQueryView::afterSwitchFrom(Kexi::ViewMode mode)
             return result;
     } else if (mode == Kexi::DesignViewMode || Kexi::TextViewMode) {
         KexiQueryPart::TempData * temp = static_cast<KexiQueryPart::TempData*>(window()->data());
-
-        //remember what view we should use to store data changes, if needed
-//  if (temp->queryChangedInPreviousView)
-//   d->queryHasBeenChangedInViewMode = mode;
-//  else
-//   d->queryHasBeenChangedInViewMode = Kexi::NoViewMode;
-
         const tristate result = executeQuery(temp->query());
         if (true != result)
             return result;
@@ -130,13 +121,15 @@ tristate KexiQueryView::afterSwitchFrom(Kexi::ViewMode mode)
     return true;
 }
 
-KexiDB::SchemaData* KexiQueryView::storeNewData(const KexiDB::SchemaData& sdata, bool &cancel)
+KexiDB::SchemaData* KexiQueryView::storeNewData(const KexiDB::SchemaData& sdata,
+                                                KexiView::StoreNewDataOptions options,
+                                                bool &cancel)
 {
     KexiView * view = window()->viewThatRecentlySetDirtyFlag();
     if (dynamic_cast<KexiQueryDesignerGuiEditor*>(view))
-        return dynamic_cast<KexiQueryDesignerGuiEditor*>(view)->storeNewData(sdata, cancel);
+        return dynamic_cast<KexiQueryDesignerGuiEditor*>(view)->storeNewData(sdata, options, cancel);
     if (dynamic_cast<KexiQueryDesignerSQLView*>(view))
-        return dynamic_cast<KexiQueryDesignerSQLView*>(view)->storeNewData(sdata, cancel);
+        return dynamic_cast<KexiQueryDesignerSQLView*>(view)->storeNewData(sdata, options, cancel);
     return 0;
 }
 
@@ -149,6 +142,5 @@ tristate KexiQueryView::storeData(bool dontAsk)
         return dynamic_cast<KexiQueryDesignerSQLView*>(view)->storeData(dontAsk);
     return false;
 }
-
 
 #include "kexiqueryview.moc"

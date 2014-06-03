@@ -3,7 +3,7 @@
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2003 Daniel Molkentin <molkentin@kde.org>
    Copyright (C) 2003 Joseph Wenninger <jowenn@kde.org>
-   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and,or
    modify it under the terms of the GNU Library General Public
@@ -42,9 +42,9 @@
 
 #include <kdebug.h>
 
-#include <widget/dataviewcommon/kexitableviewdata.h>
 #include "kexitableedit.h"
-#include <kexiutils/tristate.h>
+#include <db/tristate.h>
+#include <db/tableviewdata.h>
 #include <widget/utils/kexirecordnavigator.h>
 #include <widget/utils/kexisharedactionclient.h>
 #include <widget/dataviewcommon/kexidataawareobjectiface.h>
@@ -52,6 +52,7 @@
 
 class QPrinter;
 class QPrintDialog;
+class QHelpEvent;
 
 class KAction;
 
@@ -81,7 +82,7 @@ public:
     class KEXIDATATABLE_EXPORT Appearance
     {
     public:
-        Appearance(QWidget *widget = 0);
+        explicit Appearance(QWidget *widget = 0);
 
         /*! base color for cells, default is "Base" color for application's
          current active palette */
@@ -153,11 +154,11 @@ public:
         QColor recordMouseOverAlternateHighlightingColor;
     };
 
-    KexiTableView(KexiTableViewData* data = 0, QWidget* parent = 0, const char* name = 0);
+    explicit KexiTableView(KexiDB::TableViewData* data = 0, QWidget* parent = 0, const char* name = 0);
     virtual ~KexiTableView();
 
     //! redeclared to avoid conflict with private QWidget::data
-    inline KexiTableViewData *data() const {
+    inline KexiDB::TableViewData *data() const {
         return KexiDataAwareObjectInterface::data();
     }
 
@@ -176,12 +177,6 @@ public:
 
     /*! Reimplementation for KexiDataAwareObjectInterface */
     virtual void setSpreadSheetMode();
-
-    /*! \return true if vertical scrollbar's tooltips are enabled (true by default). */
-//moved bool scrollbarToolTipsEnabled() const;
-
-    /*! Enables or disables vertical scrollbar's. */
-//moved void setScrollbarToolTipsEnabled(bool set);
 
     /*! \return maximum number of records that can be displayed per one "page"
      for current table view's size. */
@@ -226,7 +221,7 @@ public:
 
 #ifndef KEXI_NO_PRINT
     // printing
-// void  setupPrinter(KPrinter &printer, QPrintDialog &printDialog);
+    // void  setupPrinter(KPrinter &printer, QPrintDialog &printDialog);
     void  print(QPrinter &printer, QPrintDialog &printDialog);
 #endif
 
@@ -252,8 +247,6 @@ public:
         ScrollRight
     };
 
-    virtual bool eventFilter(QObject *o, QEvent *e);
-
     //! Initializes standard editor cell editor factories. This is called internally, once.
     static void initCellEditorFactories();
 
@@ -269,8 +262,10 @@ public:
         return Q3ScrollView::verticalScrollBar();
     }
 
+    virtual bool eventFilter(QObject *o, QEvent *e);
+
 public slots:
-    virtual void setData(KexiTableViewData *data, bool owner = true) {
+    virtual void setData(KexiDB::TableViewData *data, bool owner = true) {
         KexiDataAwareObjectInterface::setData(data, owner);
     }
 
@@ -314,9 +309,6 @@ public slots:
      If \a col is -1, current column number is used. \a row and \a col (if not -1) must
      be between 0 and rows() (or cols() accordingly). */
     virtual void ensureCellVisible(int row, int col/*=-1*/);
-
-// void   gotoNext();
-//js int   findString(const QString &string);
 
     /*! Deletes currently selected record; does nothing if no record
      is currently selected. If record is in edit mode, editing
@@ -392,7 +384,7 @@ public slots:
     }
 
 signals:
-    void dataSet(KexiTableViewData *data);
+    void dataSet(KexiDB::TableViewData *data);
 
     void itemSelected(KexiDB::RecordData *);
     void cellSelected(int col, int row);
@@ -413,8 +405,6 @@ signals:
     void currentItemDeleteRequest();
     //! Emitted for spreadsheet mode when an item was deleted and a new item has been appended
     void newItemAppendedForAfterDeletingInSpreadSheetMode();
-// void addRecordRequest();
-// void contextMenuRequested(KexiDB::RecordData *,  int row, int col, const QPoint &);
     void sortedColumnChanged(int col);
 
     //! emitted when row editing is started (for updating or inserting)
@@ -449,8 +439,6 @@ protected slots:
         KexiDataAwareObjectInterface::sortColumnInternal(col, order);
     }
 
-    void slotAutoScroll();
-
     //! internal, used when top header's size changed
     void slotTopHeaderSizeChange(int section, int oldSize, int newSize);
 
@@ -458,23 +446,23 @@ protected slots:
     void slotEditRequested();
 
     /*! Reloads data for this widget.
-     Handles KexiTableViewData::reloadRequested() signal. */
+     Handles KexiDB::TableViewData::reloadRequested() signal. */
     virtual void reloadData();
 
-    //! Handles KexiTableViewData::rowRepaintRequested() signal
+    //! Handles KexiDB::TableViewData::rowRepaintRequested() signal
     virtual void slotRowRepaintRequested(KexiDB::RecordData& record);
 
-    //! Handles KexiTableViewData::aboutToDeleteRow() signal. Prepares info for slotRowDeleted().
+    //! Handles KexiDB::TableViewData::aboutToDeleteRow() signal. Prepares info for slotRowDeleted().
     virtual void slotAboutToDeleteRow(KexiDB::RecordData& record, KexiDB::ResultInfo* result, bool repaint) {
         KexiDataAwareObjectInterface::slotAboutToDeleteRow(record, result, repaint);
     }
 
-    //! Handles KexiTableViewData::rowDeleted() signal to repaint when needed.
+    //! Handles KexiDB::TableViewData::rowDeleted() signal to repaint when needed.
     virtual void slotRowDeleted() {
         KexiDataAwareObjectInterface::slotRowDeleted();
     }
 
-    //! Handles KexiTableViewData::rowInserted() signal to repaint when needed.
+    //! Handles KexiDB::TableViewData::rowInserted() signal to repaint when needed.
     virtual void slotRowInserted(KexiDB::RecordData *record, bool repaint) {
         KexiDataAwareObjectInterface::slotRowInserted(record, repaint);
     }
@@ -490,19 +478,6 @@ protected slots:
         KexiDataAwareObjectInterface::vScrollBarValueChanged(v);
     }
 
-#if 0 // 2.0
-    /*! Handles sliderReleased() signal of the verticalScrollBar(). Used to hide the "record number" tooltip. */
-/*replaced by QToolTip    virtual void vScrollBarSliderReleased() {
-        KexiDataAwareObjectInterface::vScrollBarSliderReleased();
-    }*/
-
-    /*! Handles timeout() signal of the m_scrollBarTipTimer. If the tooltip is visible,
-     m_scrollBarTipTimerCnt is set to 0 and m_scrollBarTipTimerCnt is restarted;
-     else the m_scrollBarTipTimerCnt is just set to 0.*/
-    virtual void scrollBarTipTimeout() {
-        KexiDataAwareObjectInterface::scrollBarTipTimeout();
-    }
-#endif
     //! for navigator
     virtual void moveToRecordRequested(uint r);
     virtual void moveToLastRecordRequested();
@@ -512,12 +487,12 @@ protected slots:
     virtual void addNewRecordRequested() {
         KexiDataAwareObjectInterface::addNewRecordRequested();
     }
-/* not needed after #2010-01-05 fix    void slotContentsMoving(int x, int y);*/
+
 protected:
     /*! Reimplementation for KexiDataAwareObjectInterface
      Initializes data contents (resizes it, sets cursor at 1st row).
      Called on setData(). Also called once on show event after
-     reloadRequested() signal was received from KexiTableViewData object. */
+     reloadRequested() signal was received from KexiDB::TableViewData object. */
     virtual void initDataContents();
 
     /*! Implementation for KexiDataAwareObjectInterface.
@@ -544,12 +519,6 @@ protected:
     virtual void updateWidgetScrollBars() {
         updateScrollBars();
     }
-
-// /*! Implementation for KexiDataAwareObjectInterface */
-// virtual void emitSortedColumnChanged(int col) { emit sortedColumnChanged(col); }
-
-// /*! Implementation for KexiDataAwareObjectInterface */
-// virtual void emitRowEditTerminated(int row) { emit rowEditTerminated(row); }
 
     /*! Implementation for KexiDataAwareObjectInterface.
      Adds another section within the horizontal header. */
@@ -614,12 +583,6 @@ protected:
     */
     bool shortCutPressed(QKeyEvent *e, const QString &action_name);
 
-#if 0 //we have now KexiActionProxy
-    /*! Updates visibility/accesibility of popup menu items,
-    returns false if no items are visible after update. */
-    bool updateContextMenu();
-#endif
-
     /*! Shows context menu at \a pos for selected cell
      if menu is configured,
      else: contextMenuRequested() signal is emitted.
@@ -677,10 +640,7 @@ protected:
      Used in KexiTableView::paintCell() and KexiTableViewCellToolTip::maybeTip()
      \return true is \a cellValue has been found. */
     bool getVisibleLookupValue(QVariant& cellValue, KexiTableEdit *edit,
-                               KexiDB::RecordData *record, KexiTableViewColumn *tvcol) const;
-
-// //! Called to repaint contents after a row is deleted.
-// void repaintAfterDelete();
+                               KexiDB::RecordData *record, KexiDB::TableViewColumn *tvcol) const;
 
     /*! Implementation for KexiDataItemChangesListener.
      Reaction for change of \a item. */
@@ -689,13 +649,22 @@ protected:
     /*! Implementation for KexiDataItemChangesListener. */
     virtual bool cursorAtNewRow() const;
 
+    /*! Implementation for KexiDataItemChangesListener. */
+    virtual void lengthExceeded(KexiDataItemInterface *item, bool lengthExceeded);
+
+    /*! Implementation for KexiDataItemChangesListener. */
+    virtual void updateLengthExceededMessage(KexiDataItemInterface *item);
+
+    virtual int horizontalHeaderHeight() const;
+
     QWidget* navPanelWidget() const;
-    
+
+    virtual bool event(QEvent *e);
+
+    QString whatsThisText(const QPoint &pos) const;
+
     KexiTableViewPrivate * const d;
 
-    class WhatsThis;
-//Qt 4 friend class KexiTableItem;
-    friend class WhatsThis;
     friend class KexiTableViewCellToolTip;
 };
 

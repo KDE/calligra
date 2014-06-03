@@ -22,10 +22,10 @@
 #include <QPainter>
 #include <QSvgRenderer>
 
-#include <KActionCollection>
-#include <KActionMenu>
-#include <KGenericFactory>
-#include <KStandardDirs>
+#include <kactioncollection.h>
+#include <kactionmenu.h>
+#include <kgenericfactory.h>
+#include <kstandarddirs.h>
 
 #include "State.h"
 #include "StatesRegistry.h"
@@ -36,7 +36,7 @@ typedef KGenericFactory<BraindumpQuickStatesPlugin> BraindumpQuickStatesPluginFa
 K_EXPORT_COMPONENT_FACTORY(braindumpquickstates, BraindumpQuickStatesPluginFactory("braindump"))
 
 BraindumpQuickStatesPlugin::BraindumpQuickStatesPlugin(QObject *parent, const QStringList &)
-    : KParts::Plugin(parent)
+    : QObject(parent)
 {
     setXMLFile(KStandardDirs::locate("data", "braindump/plugins/quickstates.rc"), true);
 

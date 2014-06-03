@@ -23,15 +23,15 @@
 
 #include <core/kexidataiteminterface.h>
 
-#include <qvariant.h>
+#include <db/tableviewdata.h>
+
+#include <QVariant>
 #ifndef KEXI_MOBILE
 #include <q3scrollview.h>
 #endif
-//Added by qt3to4:
+
 #include <QKeyEvent>
 #include <QEvent>
-
-#include <widget/dataviewcommon/kexitableviewdata.h>
 
 namespace KexiDB
 {
@@ -47,7 +47,7 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget, public KexiDataItemIn
     Q_OBJECT
 
 public:
-    KexiTableEdit(KexiTableViewColumn &column, QWidget* parent = 0);
+    explicit KexiTableEdit(KexiDB::TableViewColumn &column, QWidget* parent = 0);
 
     virtual ~KexiTableEdit();
 
@@ -64,12 +64,12 @@ public:
     }
 
     //! Implemented for KexiDataItemInterface.
-    //! Does nothing because instead KexiTableViewColumn is used to get field's schema.
+    //! Does nothing because instead KexiDB::TableViewColumn is used to get field's schema.
     virtual void setColumnInfo(KexiDB::QueryColumnInfo *) { }
 
     //! \return column information for this item
     //! (extended information, comparing to field()).
-    inline KexiTableViewColumn *column() const {
+    inline KexiDB::TableViewColumn *column() const {
         return m_column;
     }
 
@@ -206,8 +206,6 @@ signals:
     void acceptRequested();
 
 protected:
-    virtual bool eventFilter(QObject* watched, QEvent* e);
-
     /*! Sets \a v as view widget for this editor. The view will be assigned as focus proxy
      for the editor, its events will be filtered, it will be resized when neede, and so on. */
     void setViewWidget(QWidget *v);
@@ -220,7 +218,7 @@ protected:
      displayed by a QWidget but rather by table view cell itself, for example KexiBlobTableEdit. */
     void repaintRelatedCell();
 
-    KexiTableViewColumn *m_column;
+    KexiDB::TableViewColumn *m_column;
     int m_leftMargin;
     int m_rightMargin, m_rightMarginWhenFocused;
 #ifndef KEXI_MOBILE
@@ -241,7 +239,7 @@ private:
         virtual ~factoryclassname(); \
         \
     protected: \
-        virtual KexiTableEdit* createEditor(KexiTableViewColumn &column, QWidget* parent = 0); \
+        virtual KexiTableEdit* createEditor(KexiDB::TableViewColumn &column, QWidget* parent = 0); \
     };
 
 //! Implementation of cell editor factory
@@ -256,7 +254,7 @@ private:
     {} \
     \
     KexiTableEdit* factoryclassname::createEditor( \
-            KexiTableViewColumn &column, QWidget* parent) \
+            KexiDB::TableViewColumn &column, QWidget* parent) \
     { \
         return new itemclassname(column, parent); \
     }

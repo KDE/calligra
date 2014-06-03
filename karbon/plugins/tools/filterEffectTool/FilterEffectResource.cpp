@@ -24,10 +24,11 @@
 #include <KoFilterEffectLoadingContext.h>
 #include <KoXmlWriter.h>
 
-#include <KDebug>
+#include <kdebug.h>
 
-#include <QtCore/QFile>
-#include <QtCore/QBuffer>
+#include <QFile>
+#include <QBuffer>
+#include <QCryptographicHash>
 
 double fromPercentage(QString s)
 {
@@ -45,15 +46,21 @@ FilterEffectResource::FilterEffectResource(const QString &filename)
 bool FilterEffectResource::load()
 {
     QFile file(filename());
-    if (!file.open(QIODevice::ReadOnly))
-        return false;
 
-    if (!m_data.setContent(&file)) {
-        file.close();
-        return false;
-    }
+    if (file.size() == 0) return false;
+    if (!file.open(QIODevice::ReadOnly)) return false;
+
+    bool res = loadFromDevice(&file);
 
     file.close();
+    return res;
+}
+
+bool FilterEffectResource::loadFromDevice(QIODevice *dev)
+{
+    if (!m_data.setContent(dev)) {
+        return false;
+    }
 
     setName(m_data.documentElement().attribute("id"));
     setValid(true);
@@ -67,14 +74,16 @@ bool FilterEffectResource::save()
     if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
         return false;
     }
-
-    m_data.documentElement().setAttribute("id", name());
-
-    QByteArray ba = m_data.toByteArray(2);
-    bool success = (file.write(ba) == ba.size());
-
+    bool result = saveToDevice(&file);
     file.close();
+    return result;
+}
 
+bool FilterEffectResource::saveToDevice(QIODevice *dev) const
+{
+    m_data.documentElement().setAttribute("id", name());
+    QByteArray ba = m_data.toByteArray(2);
+    bool success = (dev->write(ba) == ba.size());
     return success;
 }
 
@@ -119,10 +128,10 @@ KoFilterEffectStack * FilterEffectResource::toFilterStack() const
 
     // only allow obect bounding box units
     if (e.hasAttribute("filterUnits") && e.attribute("filterUnits") != "objectBoundingBox")
-        return false;
+        return 0;
 
     if (e.attribute("primitiveUnits") != "objectBoundingBox")
-        return false;
+        return 0;
 
     // parse filter region rectangle
     QRectF filterRegion;
@@ -163,4 +172,16 @@ KoFilterEffectStack * FilterEffectResource::toFilterStack() const
     }
 
     return filterStack;
+}
+
+QByteArray FilterEffectResource::generateMD5() const
+{
+    QByteArray ba = m_data.toByteArray();
+    if (!ba.isEmpty()) {
+        QCryptographicHash md5(QCryptographicHash::Md5);
+        md5.addData(ba);
+        return md5.result();
+    }
+    return ba;
+
 }

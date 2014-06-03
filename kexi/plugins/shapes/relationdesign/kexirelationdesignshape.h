@@ -21,7 +21,7 @@
 
 #include <KoShape.h>
 #include <KoFrameShape.h>
-#include <KUrl>
+#include <kurl.h>
 #include "simplefield.h"
 
 namespace KexiDB
@@ -43,8 +43,8 @@ public:
     virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
 
     virtual void paint(QPainter &painter, const KoViewConverter &converter,
-                       KoShapePaintingContext &paintcontext);
-    void constPaint(QPainter &painter, const KoViewConverter &converter) const;
+                       KoShapePaintingContext &paintContext);
+    void constPaint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext) const;
 
     virtual void setSize(const QSizeF &size);
 

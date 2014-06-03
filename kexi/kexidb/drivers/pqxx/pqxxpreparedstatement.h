@@ -24,8 +24,9 @@
 //
 #ifndef PQXXPREPAREDSTATEMENT_H
 #define PQXXPREPAREDSTATEMENT_H
-#include <kexidb/preparedstatement.h>
-#include <kexidb/connection_p.h>
+
+#include <db/preparedstatement.h>
+#include <db/connection_p.h>
 
 /**
   @author Adam Pigg <adam@piggz.co.uk>
@@ -36,11 +37,10 @@ class pqxxPreparedStatement : public PreparedStatement
 {
 public:
     pqxxPreparedStatement(StatementType type, ConnectionInternal& conn, FieldList& fields);
-
     virtual ~pqxxPreparedStatement();
 
     virtual bool execute();
-    bool m_resetRequired : 1;
+    bool m_resetRequired;
 
 private:
     Connection* m_conn;

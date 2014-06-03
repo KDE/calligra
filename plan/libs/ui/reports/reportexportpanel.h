@@ -33,7 +33,7 @@ class ReportExportPanel : public QWidget, public Ui::ReportExportPanel
 {
     Q_OBJECT
 public:
-    ReportExportPanel( QWidget *parent = 0 );
+    explicit ReportExportPanel(QWidget *parent = 0);
 
     int selectedFormat() const;
 

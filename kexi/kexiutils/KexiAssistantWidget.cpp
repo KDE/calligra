@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2011-2013 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,10 +21,12 @@
 #include "KexiAssistantPage.h"
 #include "KexiAnimatedLayout.h"
 
-#include <KDialog>
-#include <KDebug>
+#include <kdialog.h>
+#include <kdebug.h>
 
 #include <QStyle>
+#include <QStack>
+#include <QPointer>
 
 class KexiAssistantWidget::Private
 {
@@ -38,14 +40,15 @@ public:
     {
     }
     
-    KexiAnimatedLayout *lyr;
-
     void addPage(KexiAssistantPage* page) {
         lyr->addWidget(page);
         connect(page, SIGNAL(back(KexiAssistantPage*)), q, SLOT(previousPageRequested(KexiAssistantPage*)));
         connect(page, SIGNAL(next(KexiAssistantPage*)), q, SLOT(nextPageRequested(KexiAssistantPage*)));
         connect(page, SIGNAL(cancelled(KexiAssistantPage*)), q, SLOT(cancelRequested(KexiAssistantPage*)));
     }
+
+    KexiAnimatedLayout *lyr;
+    QStack< QPointer<KexiAssistantPage> > stack;
 
 private:
     KexiAssistantWidget* q;
@@ -78,6 +81,12 @@ void KexiAssistantWidget::addPage(KexiAssistantPage* page)
 void KexiAssistantWidget::previousPageRequested(KexiAssistantPage* page)
 {
     Q_UNUSED(page);
+    if (d->stack.count() < 2) {
+        kWarning() << "Page stack's' count < 2";
+        return;
+    }
+    d->stack.pop();
+    setCurrentPage(d->stack.top());
 }
 
 void KexiAssistantWidget::nextPageRequested(KexiAssistantPage* page)
@@ -97,9 +106,21 @@ KexiAssistantPage* KexiAssistantWidget::currentPage() const
 
 void KexiAssistantWidget::setCurrentPage(KexiAssistantPage* page)
 {
+    if (!page) {
+        kWarning() << "!page";
+        return;
+    }
     d->lyr->setCurrentWidget(page);
-    if (page->focusWidget())
+    if (page->focusWidget()) {
         page->focusWidget()->setFocus();
+    }
+    if (d->stack.isEmpty() || d->stack.top() != page) {
+        int index = d->stack.indexOf(page);
+        if (index != -1) {
+            d->stack.remove(index);
+        }
+        d->stack.push(page);
+    }
 }
 
 #include "KexiAssistantWidget.moc"

@@ -22,7 +22,7 @@
 
 #include "kexiutils_export.h"
 
-#include <QtGui/QWidget>
+#include <QWidget>
 
 class KexiAssistantPage;
 
@@ -41,11 +41,12 @@ public:
 public slots:
     void setCurrentPage(KexiAssistantPage* page);
 
-    virtual void previousPageRequested(KexiAssistantPage* page);
-
     virtual void nextPageRequested(KexiAssistantPage* page);
 
     virtual void cancelRequested(KexiAssistantPage* page);
+
+private slots:
+    virtual void previousPageRequested(KexiAssistantPage* page);
 
 private:
     class Private;

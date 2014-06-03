@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2009, 2010 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2009, 2010, 2012 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -30,6 +30,7 @@
 #include "kptresource.h"
 #include "kptdatetime.h"
 #include "kptitemviewsettup.h"
+#include "kptdebug.h"
 
 #include <KoDocument.h>
 
@@ -40,16 +41,9 @@
 
 
 #include <kaction.h>
-#include <kicon.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kactioncollection.h>
-#include <kxmlguifactory.h>
-
-#include <kabc/addressee.h>
-#include <kabc/vcardconverter.h>
-
-#include <kdebug.h>
 
 namespace KPlato
 {
@@ -67,7 +61,7 @@ ResourceAllocationTreeView::ResourceAllocationTreeView( QWidget *parent )
 
     createItemDelegates( m );
 
-    connect( m, SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ), SIGNAL( dataChanged() ) );
+    connect( m, SIGNAL(dataChanged(QModelIndex,QModelIndex)), SIGNAL(dataChanged()) );
 }
 
 QObject *ResourceAllocationTreeView::currentObject() const
@@ -76,8 +70,8 @@ QObject *ResourceAllocationTreeView::currentObject() const
 }
 
 //-----------------------------------
-ResourceAllocationEditor::ResourceAllocationEditor( KoDocument *part, QWidget *parent )
-    : ViewBase( part, parent )
+ResourceAllocationEditor::ResourceAllocationEditor(KoPart *part, KoDocument *doc, QWidget *parent)
+    : ViewBase(part, doc, parent)
 {
     QVBoxLayout * l = new QVBoxLayout( this );
     l->setMargin( 0 );
@@ -98,15 +92,15 @@ ResourceAllocationEditor::ResourceAllocationEditor( KoDocument *part, QWidget *p
     }
     m_view->slaveView()->setDefaultColumns( show );
 
-    connect( model(), SIGNAL( executeCommand( KUndo2Command* ) ), part, SLOT( addCommand( KUndo2Command* ) ) );
+    connect( model(), SIGNAL(executeCommand(KUndo2Command*)), doc, SLOT(addCommand(KUndo2Command*)) );
 
-    connect( m_view, SIGNAL( currentChanged( const QModelIndex &, const QModelIndex & ) ), this, SLOT( slotCurrentChanged( const QModelIndex & ) ) );
+    connect( m_view, SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(slotCurrentChanged(QModelIndex)) );
 
-    connect( m_view, SIGNAL( selectionChanged( const QModelIndexList ) ), this, SLOT( slotSelectionChanged( const QModelIndexList ) ) );
+    connect( m_view, SIGNAL(selectionChanged(QModelIndexList)), this, SLOT(slotSelectionChanged(QModelIndexList)) );
 
-    connect( m_view, SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ), this, SLOT( slotContextMenuRequested( QModelIndex, const QPoint& ) ) );
+    connect( m_view, SIGNAL(contextMenuRequested(QModelIndex,QPoint)), this, SLOT(slotContextMenuRequested(QModelIndex,QPoint)) );
 
-    connect( m_view, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
+    connect( m_view, SIGNAL(headerContextMenuRequested(QPoint)), SLOT(slotHeaderContextMenuRequested(QPoint)) );
 
 }
 
@@ -117,7 +111,7 @@ void ResourceAllocationEditor::updateReadWrite( bool readwrite )
 
 void ResourceAllocationEditor::setGuiActive( bool activate )
 {
-    kDebug()<<activate;
+    kDebug(planDbg())<<activate;
     updateActionsEnabled( true );
     ViewBase::setGuiActive( activate );
     if ( activate && !m_view->selectionModel()->currentIndex().isValid() ) {
@@ -125,9 +119,9 @@ void ResourceAllocationEditor::setGuiActive( bool activate )
     }
 }
 
-void ResourceAllocationEditor::slotContextMenuRequested( QModelIndex index, const QPoint& pos )
+void ResourceAllocationEditor::slotContextMenuRequested( const QModelIndex &index, const QPoint& pos )
 {
-    //kDebug()<<index.row()<<","<<index.column()<<":"<<pos;
+    //kDebug(planDbg())<<index.row()<<","<<index.column()<<":"<<pos;
     QString name;
     if ( index.isValid() ) {
         QObject *obj = m_view->model()->object( index );
@@ -160,13 +154,13 @@ ResourceGroup *ResourceAllocationEditor::currentResourceGroup() const
 
 void ResourceAllocationEditor::slotCurrentChanged(  const QModelIndex & )
 {
-    //kDebug()<<curr.row()<<","<<curr.column();
+    //kDebug(planDbg())<<curr.row()<<","<<curr.column();
 //    slotEnableActions();
 }
 
-void ResourceAllocationEditor::slotSelectionChanged( const QModelIndexList )
+void ResourceAllocationEditor::slotSelectionChanged( const QModelIndexList& )
 {
-    //kDebug()<<list.count();
+    //kDebug(planDbg())<<list.count();
     updateActionsEnabled();
 }
 
@@ -182,7 +176,7 @@ void ResourceAllocationEditor::updateActionsEnabled(  bool /*on */)
 void ResourceAllocationEditor::setupGui()
 {
     // Add the context menu actions for the view options
-    connect(m_view->actionSplitView(), SIGNAL(triggered(bool) ), SLOT(slotSplitView()));
+    connect(m_view->actionSplitView(), SIGNAL(triggered(bool)), SLOT(slotSplitView()));
     addContextAction( m_view->actionSplitView() );
 
     createOptionAction();
@@ -190,15 +184,16 @@ void ResourceAllocationEditor::setupGui()
 
 void ResourceAllocationEditor::slotSplitView()
 {
-    kDebug();
+    kDebug(planDbg());
     m_view->setViewSplitMode( ! m_view->isViewSplit() );
     emit optionsModified();
 }
 
 void ResourceAllocationEditor::slotOptions()
 {
-    kDebug();
-    SplitItemViewSettupDialog *dlg = new SplitItemViewSettupDialog( m_view, this );
+    kDebug(planDbg());
+    SplitItemViewSettupDialog *dlg = new SplitItemViewSettupDialog( this, m_view, this );
+    dlg->addPrintingOptions();
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
     dlg->show();
     dlg->raise();
@@ -208,13 +203,15 @@ void ResourceAllocationEditor::slotOptions()
 
 bool ResourceAllocationEditor::loadContext( const KoXmlElement &context )
 {
-    kDebug()<<objectName();
+    kDebug(planDbg())<<objectName();
+    ViewBase::loadContext( context );
     return m_view->loadContext( model()->columnMap(), context );
 }
 
 void ResourceAllocationEditor::saveContext( QDomElement &context ) const
 {
-    kDebug()<<objectName();
+    kDebug(planDbg())<<objectName();
+    ViewBase::saveContext( context );
     m_view->saveContext( model()->columnMap(), context );
 }
 

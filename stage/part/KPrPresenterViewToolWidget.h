@@ -20,8 +20,8 @@
 #ifndef KPRPRESENTERVIEWTOOLWIDGET
 #define KPRPRESENTERVIEWTOOLWIDGET
 
-#include <QtCore/QTime>
-#include <QtGui/QFrame>
+#include <QTime>
+#include <QFrame>
 
 class QLabel;
 class QTimer;
@@ -36,7 +36,7 @@ class KPrPresenterViewToolWidget : public QFrame
 {
     Q_OBJECT
 public:
-    KPrPresenterViewToolWidget( QWidget *parent = 0 );
+    explicit KPrPresenterViewToolWidget(QWidget *parent = 0);
     void toggleSlideThumbnails( bool toggle );
 
 signals:

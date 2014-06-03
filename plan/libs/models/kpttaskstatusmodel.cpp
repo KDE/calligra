@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2007 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2007, 2012 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -28,6 +28,7 @@
 #include "kptproject.h"
 #include "kpttask.h"
 #include "kptnodeitemmodel.h"
+#include "kptdebug.h"
 
 #include <QAbstractItemModel>
 #include <QMimeData>
@@ -35,6 +36,7 @@
 
 #include <kglobal.h>
 #include <klocale.h>
+
 
 namespace KPlato
 {
@@ -63,8 +65,8 @@ TaskStatusItemModel::TaskStatusItemModel( QObject *parent )
     m_topTips << i18n( "Tasks that are scheduled to start next period" );
     m_top.append(&m_upcoming );
     
-/*    connect( this, SIGNAL( modelAboutToBeReset() ), SLOT( slotAboutToBeReset() ) );
-    connect( this, SIGNAL( modelReset() ), SLOT( slotReset() ) );*/
+/*    connect( this, SIGNAL(modelAboutToBeReset()), SLOT(slotAboutToBeReset()) );
+    connect( this, SIGNAL(modelReset()), SLOT(slotReset()) );*/
 }
 
 TaskStatusItemModel::~TaskStatusItemModel()
@@ -73,37 +75,52 @@ TaskStatusItemModel::~TaskStatusItemModel()
     
 void TaskStatusItemModel::slotAboutToBeReset()
 {
-    kDebug();
+    kDebug(planDbg());
     clear();
 }
 
 void TaskStatusItemModel::slotReset()
 {
-    kDebug();
+    kDebug(planDbg());
     refresh();
 }
 
 void TaskStatusItemModel::slotNodeToBeInserted( Node *, int )
 {
-    //kDebug()<<node->name();
+    //kDebug(planDbg())<<node->name();
     clear();
 }
 
 void TaskStatusItemModel::slotNodeInserted( Node * /*node*/ )
 {
-    //kDebug()<<node->getParent->name()<<"-->"<<node->name();
+    //kDebug(planDbg())<<node->getParent->name()<<"-->"<<node->name();
     refresh();
 }
 
 void TaskStatusItemModel::slotNodeToBeRemoved( Node * /*node*/ )
 {
-    //kDebug()<<node->name();
+    //kDebug(planDbg())<<node->name();
     clear();
 }
 
 void TaskStatusItemModel::slotNodeRemoved( Node * /*node*/ )
 {
-    //kDebug()<<node->name();
+    //kDebug(planDbg())<<node->name();
+    refresh();
+}
+
+void TaskStatusItemModel::slotNodeToBeMoved(Node *node, int pos, Node *newParent, int newPos)
+{
+    Q_UNUSED( node );
+    Q_UNUSED( pos );
+    Q_UNUSED( newParent );
+    Q_UNUSED( newPos );
+    clear();
+}
+
+void TaskStatusItemModel::slotNodeMoved( Node * /*node*/ )
+{
+    //kDebug(planDbg())<<node->name();
     refresh();
 }
 
@@ -111,31 +128,31 @@ void TaskStatusItemModel::setProject( Project *project )
 {
     clear();
     if ( m_project ) {
-        disconnect( m_project, SIGNAL( localeChanged() ), this, SLOT( slotLayoutChanged() ) );
-        disconnect( m_project, SIGNAL( wbsDefinitionChanged() ), this, SLOT( slotWbsDefinitionChanged() ) );
-        disconnect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
-        disconnect( m_project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SLOT( slotNodeToBeInserted(  Node*, int ) ) );
-        disconnect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeToBeRemoved( Node* ) ) );
-        disconnect( m_project, SIGNAL( nodeToBeMoved( Node* ) ), this, SLOT( slotLayoutToBeChanged() ) );
+        disconnect( m_project, SIGNAL(localeChanged()), this, SLOT(slotLayoutChanged()) );
+        disconnect( m_project, SIGNAL(wbsDefinitionChanged()), this, SLOT(slotWbsDefinitionChanged()) );
+        disconnect( m_project, SIGNAL(nodeChanged(Node*)), this, SLOT(slotNodeChanged(Node*)) );
+        disconnect( m_project, SIGNAL(nodeToBeAdded(Node*,int)), this, SLOT(slotNodeToBeInserted(Node*,int)) );
+        disconnect( m_project, SIGNAL(nodeToBeRemoved(Node*)), this, SLOT(slotNodeToBeRemoved(Node*)) );
+        disconnect(m_project, SIGNAL(nodeToBeMoved(Node*,int,Node*,int)), this, SLOT(slotNodeToBeMoved(Node*,int,Node*,int)));
     
-        disconnect( m_project, SIGNAL( nodeAdded( Node* ) ), this, SLOT( slotNodeInserted( Node* ) ) );
-        disconnect( m_project, SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeRemoved( Node* ) ) );
-        disconnect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotLayoutChanged() ) );
+        disconnect( m_project, SIGNAL(nodeAdded(Node*)), this, SLOT(slotNodeInserted(Node*)) );
+        disconnect( m_project, SIGNAL(nodeRemoved(Node*)), this, SLOT(slotNodeRemoved(Node*)) );
+        disconnect(m_project, SIGNAL(nodeMoved(Node*)), this, SLOT(slotNodeMoved(Node*)));
     }
     m_project = project;
     m_nodemodel.setProject( project );
     if ( project ) {
-        connect( m_project, SIGNAL( localeChanged() ), this, SLOT( slotLayoutChanged() ) );
-        connect( m_project, SIGNAL( wbsDefinitionChanged() ), this, SLOT( slotWbsDefinitionChanged() ) );
-        connect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
-        connect( m_project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SLOT( slotNodeToBeInserted(  Node*, int ) ) );
-        connect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeToBeRemoved( Node* ) ) );
-        connect( m_project, SIGNAL( nodeToBeMoved( Node* ) ), this, SLOT( slotLayoutToBeChanged() ) );
-    
-        connect( m_project, SIGNAL( nodeAdded( Node* ) ), this, SLOT( slotNodeInserted( Node* ) ) );
-        connect( m_project, SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeRemoved( Node* ) ) );
-        connect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotLayoutChanged() ) );
-        
+        connect( m_project, SIGNAL(localeChanged()), this, SLOT(slotLayoutChanged()) );
+        connect( m_project, SIGNAL(wbsDefinitionChanged()), this, SLOT(slotWbsDefinitionChanged()) );
+        connect( m_project, SIGNAL(nodeChanged(Node*)), this, SLOT(slotNodeChanged(Node*)) );
+        connect( m_project, SIGNAL(nodeToBeAdded(Node*,int)), this, SLOT(slotNodeToBeInserted(Node*,int)) );
+        connect( m_project, SIGNAL(nodeToBeRemoved(Node*)), this, SLOT(slotNodeToBeRemoved(Node*)) );
+        connect(m_project, SIGNAL(nodeToBeMoved(Node*,int,Node*,int)), this, SLOT(slotNodeToBeMoved(Node*,int,Node*,int)));
+
+        connect( m_project, SIGNAL(nodeAdded(Node*)), this, SLOT(slotNodeInserted(Node*)) );
+        connect( m_project, SIGNAL(nodeRemoved(Node*)), this, SLOT(slotNodeRemoved(Node*)) );
+        connect(m_project, SIGNAL(nodeMoved(Node*)), this, SLOT(slotNodeMoved(Node*)));
+
     }
     reset();
 }
@@ -146,6 +163,7 @@ void TaskStatusItemModel::setScheduleManager( ScheduleManager *sm )
     if ( m_nodemodel.manager() ) {
     }
     m_nodemodel.setManager( sm );
+    ItemModelBase::setScheduleManager( sm );
     if ( sm ) {
     }
     reset();
@@ -160,7 +178,7 @@ void TaskStatusItemModel::clear()
             //FIXME: gives error msg:
             // Can't select indexes from different model or with different parents
             QModelIndex i = index( l );
-            kDebug()<<i<<0<<c-1;
+            kDebug(planDbg())<<i<<0<<c-1;
             beginRemoveRows( i, 0, c-1 );
             l->clear();
             endRemoveRows();
@@ -198,33 +216,23 @@ void TaskStatusItemModel::refresh()
         return;
     }
     setNow();
-    QDate begin = m_nodemodel.now().addDays( -m_period );
-    QDate end = m_nodemodel.now().addDays( m_period );
-    
+    const QDate begin = m_nodemodel.now().addDays( -m_period );
+    const QDate end = m_nodemodel.now().addDays( m_period );
+
     foreach( Node* n, m_project->allNodes() ) {
         if ( n->type() != Node::Type_Task && n->type() != Node::Type_Milestone ) {
             continue;
         }
-        Task *t = static_cast<Task*>( n );
-        const Completion &c = t->completion();
-        if ( c.isFinished() ) {
-            if ( c.finishTime().date() > begin ) {
-                m_finished.insert( t->wbsCode(), t );
-            }
-        } else if ( c.isStarted() ) {
-            m_running.insert( t->wbsCode(), t );
-        } else if ( t->startTime( m_id ).date() < m_nodemodel.now() ) {
-            // should have been started
-            m_notstarted.insert( t->wbsCode(), t );
-        } else if ( t->startTime( m_id ).date() <= end ) {
-            // start next period
-            m_upcoming.insert( t->wbsCode(), t );
+        Task *task = static_cast<Task*>( n );
+        const TaskStatus status = taskStatus(task, begin, end);
+        if (status != TaskUnknownStatus) {
+            m_top.at(status)->insert(task->wbsCode(), task);
         }
     }
     foreach ( NodeMap *l, m_top ) {
         int c = l->count();
         if ( c > 0 ) {
-            kDebug()<<index(l)<<0<<c-1;
+            kDebug(planDbg())<<index(l)<<0<<c-1;
             beginInsertRows( index( l ), 0, c-1 );
             endInsertRows();
         }
@@ -281,7 +289,7 @@ QModelIndex TaskStatusItemModel::parent( const QModelIndex &index ) const
     if ( !index.isValid() ) {
         return QModelIndex();
     }
-    //kDebug()<<index.internalPointer()<<":"<<index.row()<<","<<index.column();
+    //kDebug(planDbg())<<index.internalPointer()<<":"<<index.row()<<","<<index.column();
     int row = m_top.indexOf( static_cast<NodeMap*>( index.internalPointer() ) );
     if ( row != -1 ) {
         return QModelIndex(); // top level has no parent
@@ -305,7 +313,7 @@ QModelIndex TaskStatusItemModel::parent( const QModelIndex &index ) const
 
 QModelIndex TaskStatusItemModel::index( int row, int column, const QModelIndex &parent ) const
 {
-    //kDebug()<<row<<column<<parent;
+    //kDebug(planDbg())<<row<<column<<parent;
     if ( m_project == 0 || column < 0 || column >= columnCount() || row < 0 ) {
         return QModelIndex();
     }
@@ -394,7 +402,7 @@ bool TaskStatusItemModel::setCompletion( Node *node, const QVariant &value, int 
         if ( c.entrymode() == Completion::EnterCompleted ) {
             Duration planned = static_cast<Task*>( node )->plannedEffort( m_nodemodel.id() );
             Duration actual = ( planned * value.toInt() ) / 100;
-            kDebug()<<planned.toString()<<value.toInt()<<actual.toString();
+            kDebug(planDbg())<<planned.toString()<<value.toInt()<<actual.toString();
             NamedCommand *cmd = new ModifyCompletionActualEffortCmd( c, date, actual );
             cmd->execute();
             m->addCommand( cmd );
@@ -606,15 +614,15 @@ int TaskStatusItemModel::columnCount( const QModelIndex & ) const
 int TaskStatusItemModel::rowCount( const QModelIndex &parent ) const
 {
     if ( ! parent.isValid() ) {
-        //kDebug()<<"top="<<m_top.count()<<m_top;
+        //kDebug(planDbg())<<"top="<<m_top.count()<<m_top;
         return m_top.count();
     }
     NodeMap *l = list( parent );
     if ( l ) {
-        //kDebug()<<"list"<<parent.row()<<":"<<l->count()<<l<<m_topNames.value( parent.row() );
+        //kDebug(planDbg())<<"list"<<parent.row()<<":"<<l->count()<<l<<m_topNames.value( parent.row() );
         return l->count();
     }
-    //kDebug()<<"node"<<parent.row();
+    //kDebug(planDbg())<<"node"<<parent.row();
     return 0; // nodes don't have children
 }
 
@@ -637,7 +645,7 @@ QMimeData *TaskStatusItemModel::mimeData( const QModelIndexList & indexes ) cons
     QList<int> rows;
     foreach (const QModelIndex &index, indexes) {
         if ( index.isValid() && !rows.contains( index.row() ) ) {
-            //kDebug()<<index.row();
+            //kDebug(planDbg())<<index.row();
             Node *n = node( index );
             if ( n ) {
                 rows << index.row();
@@ -683,31 +691,65 @@ Node *TaskStatusItemModel::node( const QModelIndex &index ) const
     return 0;
 }
 
+TaskStatusItemModel::TaskStatus TaskStatusItemModel::taskStatus(const Task *task,
+                                                                const QDate &begin, const QDate &end)
+{
+    TaskStatus result = TaskUnknownStatus;
+
+    const Completion &completion = task->completion();
+    if (completion.isFinished()) {
+        if (completion.finishTime().date() > begin) {
+            result = TaskFinished;
+        }
+    } else if (completion.isStarted()) {
+        result = TaskRunning;
+    } else if (task->startTime(m_id).date() < m_nodemodel.now()) {
+        // should have been started
+        result = TaskNotStarted;
+    } else if (task->startTime(m_id).date() <= end) {
+        // start next period
+        result = TaskUpcoming;
+    }
+    return result;
+}
+
 void TaskStatusItemModel::slotNodeChanged( Node *node )
 {
-    kDebug();
-    if ( node == 0 || node->type() == Node::Type_Project ) {
+    kDebug(planDbg());
+    if (node == 0 || node->type() == Node::Type_Project ||
+        (node->type() != Node::Type_Task && node->type() != Node::Type_Milestone)) {
         return;
     }
-    QString wbs = node->wbsCode();
+
+    Task *task = static_cast<Task*>(node);
+
+    const QDate begin = m_nodemodel.now().addDays( -m_period );
+    const QDate end = m_nodemodel.now().addDays( m_period );
+
+    const TaskStatus status = taskStatus(task, begin, end);
+
     int row = -1;
-    if ( m_notstarted.value( wbs ) == node ) {
-        row = m_notstarted.keys().indexOf( wbs );
-    } else if ( m_running.value( wbs ) == node ) {
-        row = m_running.keys().indexOf( wbs );
-    } else if ( m_finished.value( wbs ) == node ) {
-        row = m_finished.keys().indexOf( wbs );
-    } else if ( m_upcoming.value( wbs ) == node ) {
-        row = m_upcoming.keys().indexOf( wbs );
+    if (status != TaskUnknownStatus) {
+        // find the row of the task
+        const QString wbs = node->wbsCode();
+        // TODO: not enough to just check the result of indexOf? wbs not unique?
+        if (m_top.at(status)->value(wbs) == node ) {
+            row = m_top.at(status)->keys().indexOf(wbs);
+        }
     }
-    if ( row >= 0 ) {
-        emit dataChanged( createIndex( row, 0, node ), createIndex( row, columnCount() -1, node ) );
+
+    if (row >= 0) {
+        // task in old group, just changed values
+        emit dataChanged(createIndex(row, 0, node), createIndex(row, columnCount() - 1, node));
+    } else {
+        // task is new or changed groups
+        refresh();
     }
 }
 
 void TaskStatusItemModel::slotWbsDefinitionChanged()
 {
-    kDebug();
+    kDebug(planDbg());
     foreach ( NodeMap *l, m_top ) {
         for ( int row = 0; row < l->count(); ++row ) {
             emit dataChanged( createIndex( row, NodeModel::NodeWBSCode, l->values().value( row ) ), createIndex( row, NodeModel::NodeWBSCode, l->values().value( row ) ) );
@@ -717,9 +759,29 @@ void TaskStatusItemModel::slotWbsDefinitionChanged()
 
 void TaskStatusItemModel::slotLayoutChanged()
 {
-    //kDebug()<<node->name();
+    //kDebug(planDbg())<<node->name();
     emit layoutAboutToBeChanged();
     emit layoutChanged();
+}
+
+int TaskStatusItemModel::sortRole( int column ) const
+{
+    switch ( column ) {
+        case NodeModel::NodeStartTime:
+        case NodeModel::NodeEndTime:
+        case NodeModel::NodeActualStart:
+        case NodeModel::NodeActualFinish:
+        case NodeModel::NodeEarlyStart:
+        case NodeModel::NodeEarlyFinish:
+        case NodeModel::NodeLateStart:
+        case NodeModel::NodeLateFinish:
+        case NodeModel::NodeConstraintStart:
+        case NodeModel::NodeConstraintEnd:
+            return Qt::EditRole;
+        default:
+            break;
+    }
+    return Qt::DisplayRole;
 }
 
 } // namespace KPlato

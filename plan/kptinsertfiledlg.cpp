@@ -21,7 +21,6 @@
 #include "kptnode.h"
 #include "kptproject.h"
 
-#include <kiconloader.h>
 #include <klocale.h>
 #include <kio/netaccess.h>
 #include <kdebug.h>
@@ -30,12 +29,6 @@
 
 namespace KPlato
 {
-
-// little helper stolen from kmail/words
-static inline QPixmap loadIcon( const char * name ) {
-  return KIconLoader::global()->loadIcon( QString::fromLatin1(name), KIconLoader::NoGroup, KIconLoader::SizeMedium );
-}
-
 
 InsertFileDialog::InsertFileDialog( Project &project, Node *currentNode, QWidget *parent )
     : KDialog(parent)
@@ -51,7 +44,7 @@ InsertFileDialog::InsertFileDialog( Project &project, Node *currentNode, QWidget
     
     enableButtonOk(false);
 
-    connect( m_panel, SIGNAL( enableButtonOk( bool ) ), SLOT( enableButtonOk( bool ) ) );
+    connect( m_panel, SIGNAL(enableButtonOk(bool)), SLOT(enableButtonOk(bool)) );
 }
 
 KUrl InsertFileDialog::url() const
@@ -88,14 +81,14 @@ InsertFilePanel::InsertFilePanel( Project &project, Node *currentNode, QWidget *
 
         ui.ui_name->setText( currentNode->name() );
     }
-    connect( ui.ui_url, SIGNAL( textChanged( const QString& ) ), SLOT( changed( const QString& ) ) );
+    connect( ui.ui_url, SIGNAL(textChanged(QString)), SLOT(changed(QString)) );
 
-    connect( ui.ui_url, SIGNAL( openFileDialog( KUrlRequester* ) ), SLOT( slotOpenFileDialog( KUrlRequester* ) ) );
+    connect( ui.ui_url, SIGNAL(openFileDialog(KUrlRequester*)), SLOT(slotOpenFileDialog(KUrlRequester*)) );
 }
 
 void InsertFilePanel::slotOpenFileDialog( KUrlRequester * )
 {
-    ui.ui_url->setFilter( "*.kplato" );
+    ui.ui_url->setFilter( "*.plan" );
 }
 
 void InsertFilePanel::changed( const QString &text )

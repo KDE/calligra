@@ -21,17 +21,17 @@
 #define EDITLISTVIEW_DIALOG_H
 
 #include <QHash>
-#include <qtoolbutton.h>
-#include <KPageDialog>
+#include <QToolButton>
+#include <kpagedialog.h>
 
 #include <kexi_export.h>
 
-class Q3ListView;
-class Q3ListViewItem;
-class K3ListViewItem;
-class K3ListView;
-class K3ListBox;
-class Q3ListBoxItem;
+class QListView;
+class QListViewItem;
+class KListViewItem;
+class KListView;
+class KListBox;
+class QListBoxItem;
 
 namespace KoProperty
 {
@@ -43,12 +43,12 @@ class EditorView;
 namespace KFormDesigner
 {
 
-//! A dialog to edit the contents of a listview (K3ListView or QListView)
+//! A dialog to edit the contents of a listview (KListView or QListView)
 /*! The dialog contains two pages, one to edit columns and one to edit ist items.
  KoProperty::EditorView is used in columns to edit column properties
  (there are two properties not supported by Qt Designer: 'width' and 'resizable').
  The user can enter list contents inside the list
- using K3ListViewItem::setRenameable(). Pixmaps are not yet supported. */
+ using KListViewItem::setRenameable(). Pixmaps are not yet supported. */
 class KFORMEDITOR_EXPORT EditListViewDialog : public KPageDialog
 {
     Q_OBJECT
@@ -57,11 +57,11 @@ public:
     EditListViewDialog(QWidget *parent);
     ~EditListViewDialog() {}
 
-    int exec(Q3ListView *listview);
+    int exec(QListView *listview);
 
 public slots:
     // Columns page
-    void updateItemProperties(Q3ListBoxItem*);
+    void updateItemProperties(QListBoxItem*);
     void newItem();
     void removeItem();
     void MoveItemUp();
@@ -69,7 +69,7 @@ public slots:
     void changeProperty(KoProperty::Set& set, KoProperty::Property& property);
 
     // Contents page
-    void updateButtons(Q3ListViewItem*);
+    void updateButtons(QListViewItem*);
     void newRow();
     void newChildRow();
     void removeRow();
@@ -79,15 +79,15 @@ public slots:
 protected:
     /*! Loads all child items of \a item into \a listview (may be different from the \a items 's listview) as child of \a parent item.
     This is used to copy the contents of a listview into another listview. */
-    void loadChildNodes(Q3ListView *listview, Q3ListViewItem *item, Q3ListViewItem *parent);
+    void loadChildNodes(QListView *listview, QListViewItem *item, QListViewItem *parent);
 
 protected:
     enum Buttons { BNewRow = 10, BNewChild, BRemRow, BRowUp, BRowDown , BColAdd = 20, BColRem, BColUp, BColDown };
     KoProperty::EditorView  *m_editor;
     KoProperty::Set  *m_propSet;
     KPageWidgetItem *m_columnsPageItem, *m_contentsPageItem;
-    K3ListBox  *m_listbox;
-    K3ListView  *m_listview;
+    KListBox  *m_listbox;
+    KListView  *m_listview;
     QHash<Buttons, QToolButton*>  m_buttons;
 };
 

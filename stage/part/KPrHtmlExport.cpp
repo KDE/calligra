@@ -22,11 +22,11 @@
 
 #include <QDir>
 #include <kio/copyjob.h>
-#include <KTempDir>
-#include <KStandardDirs>
-#include <KMessageBox>
-#include <KRun>
-#include <KZip>
+#include <ktempdir.h>
+#include <kstandarddirs.h>
+#include <kmessagebox.h>
+#include <krun.h>
+#include <kzip.h>
 
 #include <KoPADocument.h>
 #include "KPrHtmlExportUiDelegate.h"
@@ -148,7 +148,7 @@ void KPrHtmlExport::copyFromTmpToDest()
     KIO::CopyJob *job = KIO::moveAs(m_tmpDirPath, m_parameters.destination);
     job->setWriteIntoExistingDirectories(true);
     job->setUiDelegate(new KPrHtmlExportUiDelegate);
-    connect(job, SIGNAL(result(KJob *)), this, SLOT(moveResult(KJob *)));
+    connect(job, SIGNAL(result(KJob*)), this, SLOT(moveResult(KJob*)));
     job->exec();
 }
 

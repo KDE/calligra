@@ -23,13 +23,13 @@
 #ifndef REFINEPATHPLUGIN_H
 #define REFINEPATHPLUGIN_H
 
-#include <kparts/plugin.h>
+#include <kxmlguiclient.h>
 #include <kdialog.h>
 #include <QVariantList>
 
 class RefinePathDlg;
 
-class RefinePathPlugin : public KParts::Plugin
+class RefinePathPlugin : public QObject, public KXMLGUIClient
 {
     Q_OBJECT
 public:

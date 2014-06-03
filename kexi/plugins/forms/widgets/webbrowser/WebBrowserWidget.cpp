@@ -21,13 +21,13 @@
 #include <QtWebKit>
 #include <QtWebKit/QWebHistory>
 #include <QWebView>
-#include <QtGui/QPushButton>
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QAction>
-#include <QtGui/QWidget>
-#include <QtGui/QApplication>
-#include <KLocale>
+#include <QPushButton>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QAction>
+#include <QWidget>
+#include <QApplication>
+#include <klocale.h>
 #include <kguiitem.h>
 #include <kstandardguiitem.h>
 
@@ -35,18 +35,18 @@
 WebBrowserWidget::WebBrowserWidget(QWidget *parent)
         : QWidget(parent),KexiFormDataItemInterface()
         ,KFormDesigner::FormWidgetInterface()
-	,m_readOnly(false)
-	,m_urlChanged_enabled(false)
+        ,m_readOnly(false)
+        ,m_urlChanged_enabled(false)
 {
     setFocusPolicy(Qt::StrongFocus);
     setMinimumHeight(sizeHint().height());
     setMinimumWidth(minimumHeight());
     QPair< KGuiItem, KGuiItem > backForward = KStandardGuiItem::backAndForward();
     m_view = new QWebView(this);
-    m_reload=new KPushButton(i18n("Reload"),this);
-    m_stop=new KPushButton(KStandardGuiItem::stop());
-    m_back= new KPushButton(backForward.first);
-    m_forward= new KPushButton(backForward.second);
+    m_reload = new KPushButton(i18n("Reload"),this);
+    m_stop = new KPushButton(KStandardGuiItem::stop());
+    m_back = new KPushButton(backForward.first);
+    m_forward = new KPushButton(backForward.second);
     h_layout = new QHBoxLayout;
     h_layout->addWidget(m_reload);
     h_layout->addWidget(m_stop);
@@ -58,12 +58,12 @@ WebBrowserWidget::WebBrowserWidget(QWidget *parent)
     v_layout->addLayout(h_layout);
     setLayout(v_layout);
   
-    if(!designMode()){
-     m_pbar=new QProgressBar();
-     h_layout->addWidget(m_pbar);
+    if (!designMode()){
+        m_pbar =new QProgressBar();
+        h_layout->addWidget(m_pbar);
     }
     else{
-      m_pbar=0;
+        m_pbar = 0;
     }
 
     connect(m_back,SIGNAL(clicked()),m_view,SLOT(back()));
@@ -72,28 +72,21 @@ WebBrowserWidget::WebBrowserWidget(QWidget *parent)
     connect(m_stop,SIGNAL(clicked()),m_view,SLOT(stop()));
     connect(m_view,SIGNAL(loadProgress(int)),m_pbar,SLOT(setValue(int)));
     connect(m_view,SIGNAL(loadFinished(bool)),SLOT(hide_bar()));
-  
-};
-  
-WebBrowserWidget::WebBrowserWidget()  
-{
 }
-
-WebBrowserWidget::~WebBrowserWidget()	
+  
+WebBrowserWidget::~WebBrowserWidget()
 {
 
 }
 
-void WebBrowserWidget::setDataSourcePartClass(const QString &ds) {
-        KexiFormDataItemInterface::setDataSourcePartClass(ds);
-    }
- 
-
+void WebBrowserWidget::setDataSourcePartClass(const QString &ds)
+{
+    KexiFormDataItemInterface::setDataSourcePartClass(ds);
+}
 
 void WebBrowserWidget::setDataSource(const QString &ds)
 {
     KexiFormDataItemInterface::setDataSource(ds);
-    
 }
 
 void WebBrowserWidget::hide_bar()
@@ -114,13 +107,12 @@ void WebBrowserWidget::setUrl(const QUrl& url)
 void WebBrowserWidget::updateToolBar()
 {
     if(m_view->history()) {
-      m_back->setEnabled(true);
+        m_back->setEnabled(true);
     }
     if(m_view->history()) {
-      m_forward->setEnabled(true);
+        m_forward->setEnabled(true);
     }
 }
-
 
 void WebBrowserWidget::setZoomFactor(qreal factor)
 {
@@ -142,22 +134,19 @@ bool WebBrowserWidget::cursorAtEnd()
     return false;
 }
 
-
 QVariant WebBrowserWidget::value()
 {
     if (dataSource().isEmpty()) {
-
-      return QVariant();
+        return QVariant();
     }
-   
     return m_view->url();
 }
 
 bool WebBrowserWidget::valueIsNull()
 {
     return m_view->url().isValid();
-
 }
+
 void WebBrowserWidget::clear()
 {
     setUrl(QUrl());
@@ -180,24 +169,21 @@ void WebBrowserWidget::setValueInternal(const QVariant &add, bool removeOld)
 
     if (isReadOnly())
         return;
-    m_urlChanged_enabled= false;		
+    m_urlChanged_enabled = false;
     
-    if (removeOld) { 			
-	setUrl(add.toString());  
+    if (removeOld) {
+        setUrl(add.toString());
     }       
-    else{
-        setUrl(m_origValue.toString() + add.toString());
-     	
+    else {
+        setUrl(KexiDataItemInterface::originalValue().toString() + add.toString());
     }
 
-    if (removeOld)
-        { 			
-	 setUrl(add.toString()); 
-	}       
-    else
-        { setUrl(m_origValue.toString() + add.toString()) ;
-     	
-        }
+    if (removeOld) {
+        setUrl(add.toString());
+    }
+    else {
+        setUrl(KexiDataItemInterface::originalValue().toString() + add.toString()) ;
+    }
 
     m_urlChanged_enabled = true;
 }
@@ -207,16 +193,14 @@ bool WebBrowserWidget::valueIsEmpty()
     return false;
 }
 
-
 bool WebBrowserWidget::isReadOnly() const
 {
     return m_readOnly;
 }
 
-
 void  WebBrowserWidget::setReadOnly(bool val)
 {
-    m_readOnly=val;
+    m_readOnly = val;
 }
 
 #include "WebBrowserWidget.moc"

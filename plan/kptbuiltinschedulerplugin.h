@@ -48,7 +48,7 @@ class KPLATO_EXPORT BuiltinSchedulerPlugin : public SchedulerPlugin
 {
     Q_OBJECT
 public:
-    BuiltinSchedulerPlugin(QObject *parent);
+    explicit BuiltinSchedulerPlugin(QObject *parent);
     virtual ~BuiltinSchedulerPlugin();
 
     virtual QString description() const;

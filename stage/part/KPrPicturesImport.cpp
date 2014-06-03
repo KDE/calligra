@@ -30,9 +30,9 @@
 #include <KoPAViewMode.h>
 #include "KPrDocument.h"
 #include "KPrView.h"
-#include <KDebug>
+#include <kdebug.h>
 #include <kio/job.h>
-#include <KFileDialog>
+#include <kfiledialog.h>
 #include <kundo2command.h>
 #include <KoDocumentResourceManager.h>
 

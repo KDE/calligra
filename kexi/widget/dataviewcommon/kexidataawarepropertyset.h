@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004-2005 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2014 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,13 +26,14 @@
 #include <QList>
 #include <QByteArray>
 #include <koproperty/Set.h>
-#include <kexidb/RecordData.h>
-
-typedef QVector<KoProperty::Set*> SetVector;
+#include <db/RecordData.h>
+#include <db/tableviewdata.h>
 
 class KexiView;
-class KexiTableViewData;
 class KexiDataAwareObjectInterface;
+namespace KexiDB {
+class TableViewData;
+}
 
 /*! This helper class handles data changes of a single
  object implementing KexiDataAwareObjectInterface (e.g. KexiTableView) inside
@@ -72,15 +73,12 @@ public:
     KoProperty::Set* currentPropertySet() const;
 
     uint currentRow() const;
-
-    inline KoProperty::Set* at(uint row) const {
-        return m_sets[row];
-    }
+    KoProperty::Set* at(uint row) const;
 
     /*! \return a pointer to property set assigned for \a record or null if \a item has no
      property set assigned or it's not owned by assigned table view or
      if assigned table view has no data set. */
-    KoProperty::Set* findPropertySetForItem(KexiDB::RecordData& record);
+    KoProperty::Set* findPropertySetForItem(const KexiDB::RecordData& record);
 
     /*! \return number of the first row containing \a propertyName property equal to \a value.
      This is used e.g. in the Table Designer to find a row by field name.
@@ -88,20 +86,23 @@ public:
     int findRowForPropertyValue(const QByteArray& propertyName, const QVariant& value);
 
 signals:
-    /*! Emmited when row is deleted.
+    /*! Emitted when row is deleted.
      KexiDataAwareObjectInterface::rowDeleted() signal is usually used but when you're using
      KexiDataAwarePropertySet, you never know if currentPropertySet() is updated.
      So use this signal instead. */
     void rowDeleted();
 
-    /*! Emmited when row is inserted.
+    /*! Emitted when row is inserted.
      Purpose of this signal is similar to rowDeleted() signal. */
     void rowInserted();
+
+    /*! Emitted when the value of @a property is changed in @a set.*/
+    void propertyChanged(KoProperty::Set& set, KoProperty::Property& property);
 
 public slots:
     void eraseCurrentPropertySet();
 
-    void clear(uint minimumSize = 0);
+    void clear();
 
     /*! Inserts \a set property set at \a row position.
      If there was a buffer at this position before, it will be destroyed.
@@ -117,12 +118,12 @@ public slots:
     */
     void set(uint row, KoProperty::Set* set, bool newOne = false);
 
-    /*! Erases a property set at \a row position. */
+    /*! Deletes a property set at \a row position without removing the row. */
     void eraseAt(uint row);
 
 protected slots:
     /*! Handles table view's data source changes. */
-    void slotDataSet(KexiTableViewData *data);
+    void slotDataSet(KexiDB::TableViewData *data);
 
     //! Called on row delete in a tableview.
     void slotRowDeleted();
@@ -140,13 +141,11 @@ protected slots:
     void slotReloadRequested();
 
 protected:
-    SetVector m_sets; //!< prop. sets vector
+    void enlargeToFitRow(uint row);
 
-    QPointer<KexiView> m_view;
-    KexiDataAwareObjectInterface* m_dataObject;
-    QPointer<KexiTableViewData> m_currentTVData;
-
-    int m_row; //!< used to know if a new row is selected in slotCellSelected()
+private:
+    class Private;
+    Private * const d;
 };
 
 #endif

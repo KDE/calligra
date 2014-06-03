@@ -24,7 +24,7 @@
 #include <KexiWindow.h>
 #include "widgets/AutoForm.h"
 
-#include <kexidb/cursor.h>
+#include <db/cursor.h>
 #include <KexiMainWindowIface.h>
 
 #ifndef KEXI_MOBILE
@@ -81,7 +81,7 @@ tristate KexiAutoFormView::afterSwitchFrom(Kexi::ViewMode mode)
         
         if (cursor) {
             kDebug() << "Opened Cursor";
-            KexiTableViewData *data = new KexiTableViewData(cursor);
+            KexiDB::TableViewData *data = new KexiDB::TableViewData(cursor);
             data->preloadAllRows();
             m_autoForm->setData(data);
             
@@ -121,12 +121,12 @@ void KexiAutoFormView::moveToRecordRequested(uint r)
 
 }
 
-long int KexiAutoFormView::currentRecord()
+int KexiAutoFormView::currentRecord() const
 {
     return m_autoForm->currentRow() + 1;
 }
 
-long int KexiAutoFormView::recordCount()
+int KexiAutoFormView::recordCount() const
 {
     return m_autoForm->rows();
 }

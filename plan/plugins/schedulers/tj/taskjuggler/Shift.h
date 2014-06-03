@@ -15,7 +15,7 @@
 
 #include <time.h>
 
-#include <qlist.h>
+#include <QList>
 
 #include "CoreAttributes.h"
 
@@ -33,7 +33,7 @@ class Shift : public CoreAttributes
 {
 public:
     Shift(Project* prj, const QString& i, const QString& n, Shift* p,
-          const QString& df = QString::null, uint dl = 0);
+          const QString& df = QString(), uint dl = 0);
     virtual ~Shift();
 
     virtual CAType getType() const { return CA_Shift; }

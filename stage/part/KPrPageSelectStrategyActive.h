@@ -32,7 +32,7 @@ class KoPACanvasBase;
 class KPrPageSelectStrategyActive : public KPrPageSelectStrategyBase
 {
 public:
-    KPrPageSelectStrategyActive(KoPACanvasBase *canvas);
+    explicit KPrPageSelectStrategyActive(KoPACanvasBase *canvas);
     ~KPrPageSelectStrategyActive();
 
     virtual const KoPAPageBase *page() const;

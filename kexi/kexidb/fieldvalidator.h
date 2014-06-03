@@ -20,8 +20,9 @@
 #ifndef KEXI_DB_FIELDVALIDATOR_H
 #define KEXI_DB_FIELDVALIDATOR_H
 
-#include <kexidb/kexidb_export.h>
-#include <kexiutils/validator.h>
+#include "kexidb_export.h"
+#include <kexiutils/multivalidator.h>
+#include <db/validator.h>
 
 class QWidget;
 
@@ -41,7 +42,7 @@ class KEXI_DB_EXPORT FieldValidator : public KexiUtils::MultiValidator
 {
 public:
     //! Setups the validator for \a field. Does not keep a pointer to \a field.
-    FieldValidator(const Field &field, QWidget * parent);
+    explicit FieldValidator(const Field &field, QObject* parent = 0);
     ~FieldValidator();
 };
 

@@ -26,7 +26,12 @@
 #include <KoPAView.h>
 
 class KPrDocument;
+class KPrPart;
+
+#ifndef QT_NO_DBUS
 class KPrViewAdaptor;
+#endif
+
 class KPrViewModeNotes;
 class KPrViewModeSlidesSorter;
 class KPrViewModePresentation;
@@ -39,7 +44,7 @@ class STAGE_EXPORT KPrView : public KoPAView
     Q_OBJECT
     friend class KPrConfigureSlideShowDialog;
 public:
-    explicit KPrView( KPrDocument * document, QWidget * parent = 0 );
+    explicit KPrView(KPrPart *part, KPrDocument *document, QWidget *parent = 0);
     ~KPrView();
 
     using KoPAViewBase::viewConverter;
@@ -50,10 +55,12 @@ public:
      */
     KPrDocument * kprDocument() const;
 
+#ifndef QT_NO_DBUS
     /**
      * Get the view's dbus adaptor
      */
     virtual KPrViewAdaptor * dbusObject() const;
+#endif
 
     /**
      * Get the presentation view mode
@@ -128,6 +135,8 @@ public slots:
     /** Change current view mode using a given index */
     void changeViewByIndex(int index);
 
+    void replaceActivePage(KoPAPageBase *page, KoPAPageBase *newActivePage);
+
 protected:
     void initGUI();
     void initActions();
@@ -149,6 +158,7 @@ protected slots:
     void zoomChanged(KoZoomMode::Mode mode, qreal zoom);
 
 private:
+    KPrPart *m_part;
     KActionMenu *m_actionStartPresentation;
     KAction *m_actionCreateAnimation;
     KAction *m_actionViewModeNormal;
@@ -166,7 +176,10 @@ private:
     KPrViewModeNotes *m_notesMode;
     KPrViewModeSlidesSorter *m_slidesSorterMode;
 
+#ifndef QT_NO_DBUS
     KPrViewAdaptor *m_dbus;
+#endif
+
     int m_zoom;
     KoZoomMode::Mode m_zoomMode;
 

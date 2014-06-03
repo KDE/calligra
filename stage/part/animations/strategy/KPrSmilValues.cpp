@@ -22,9 +22,17 @@
 #include "KoXmlWriter.h"
 #include "KPrShapeAnimations.h"
 #include "kdebug.h"
+#include "KPrFormulaParser.h"
 
-KPrSmilValues::KPrSmilValues(KPrShapeAnimation *shapeAnimation) : KPrAnimationValue(shapeAnimation)
+KPrSmilValues::KPrSmilValues(KPrShapeAnimation *shapeAnimation)
+    : KPrAnimationValue(shapeAnimation)
+    , m_formulaParser(0)
 {
+}
+
+KPrSmilValues::~KPrSmilValues()
+{
+    delete m_formulaParser;
 }
 
 qreal KPrSmilValues::value(qreal time) const
@@ -33,18 +41,24 @@ qreal KPrSmilValues::value(qreal time) const
     qreal value1 = 0.0;
     qreal value2 = 0.0;
 
-    for (int i = 0; i < m_values.size(); i++) {
-        if (time > m_times.at(i) && (m_times.at(i+1) - m_times.at(i))) {
-            value1 = m_values.at(i).eval(m_cache);
-            value2 = m_values.at(i+1).eval(m_cache);
-            value = (time - m_times.at(i)) * (value2 - value1);
-            value = value / (m_times.at(i+1) - m_times.at(i));
-            value += value1;
-        }
-        else if (time == m_times.at(i)){
-            value = m_values.at(i).eval(m_cache);;
+    if (m_formulaParser) {
+        value = m_formulaParser->eval(m_cache, time);
+    }
+    else {
+        for (int i = 0; i < m_values.size(); i++) {
+            if (time > m_times.at(i) && (m_times.at(i + 1) - m_times.at(i))) {
+                value1 = m_values.at(i).eval(m_cache);
+                value2 = m_values.at(i + 1).eval(m_cache);
+                value = (time - m_times.at(i)) * (value2 - value1);
+                value = value / (m_times.at(i + 1) - m_times.at(i));
+                value += value1;
+            }
+            else if (time == m_times.at(i)){
+                value = m_values.at(i).eval(m_cache);
+            }
         }
     }
+
     return value;
 }
 
@@ -58,17 +72,17 @@ qreal KPrSmilValues::endValue() const
     return m_values.at(m_values.size() - 1).eval(m_cache);
 }
 
-bool KPrSmilValues::loadValues(QString values, QString keyTimes, QString keySplines, SmilCalcMode calcMode)
+bool KPrSmilValues::loadValues(const QString &values, const QString &keyTimes, const QString &keySplines, SmilCalcMode calcMode)
 {
+    Q_UNUSED(keySplines);
     m_calcMode = calcMode;
-
-    QStringList valuesList = values.split(";");
+    QStringList valuesList = values.split(QLatin1Char(';'));
     if (valuesList.size() < 2) {
         return false;
     }
 
-    foreach (QString value, valuesList) {
-        KPrValueParser parser(value, m_shape, m_textBlockData);
+    foreach (const QString &value, valuesList) {
+        KPrFormulaParser parser(value, m_shape, m_textBlockData, KPrFormulaParser::Values);
         if (!parser.valid()) {
             return false;
         }
@@ -82,7 +96,7 @@ bool KPrSmilValues::loadValues(QString values, QString keyTimes, QString keySpli
         }
     }
     else {
-        QStringList keyTimesList = keyTimes.split(";");
+        QStringList keyTimesList = keyTimes.split(QLatin1Char(';'));
         if (valuesList.size() != keyTimesList.size()) {
             return false;
         }
@@ -99,9 +113,26 @@ bool KPrSmilValues::loadValues(QString values, QString keyTimes, QString keySpli
     // keySplines
     if (m_calcMode ==  KPrAnimationValue::spline) {
         kWarning(33003) << "keySpline not yes supported";
-        QStringList keySplinesList = keySplines.split(";");
+//         QStringList keySplinesList = keySplines.split(QLatin1Char(';'));
     }
     return true;
+}
+
+bool KPrSmilValues::loadFormula(const QString &values, const QString &keyTimes, const QString &keySplines, KPrAnimationValue::SmilCalcMode calcMode, const QString &formula)
+{
+    bool retval = loadValues(values, keyTimes, keySplines, calcMode);
+
+    //formula
+    if (!formula.isEmpty()) {
+        m_formulaParser = new KPrFormulaParser(formula, m_shape, m_textBlockData, KPrFormulaParser::Formula);
+        if (!m_formulaParser->valid()) {
+            m_formulaParser = 0;
+            return false;
+        }
+    } else {
+        return false;
+    }
+    return retval;
 }
 
 bool KPrSmilValues::saveOdf(KoPASavingContext &paContext) const
@@ -109,7 +140,7 @@ bool KPrSmilValues::saveOdf(KoPASavingContext &paContext) const
     KoXmlWriter &writer = paContext.xmlWriter();
     // values
     QString values;
-    foreach (KPrValueParser valueParser, m_values) {
+    foreach (const KPrFormulaParser &valueParser, m_values) {
         if (values.isEmpty()) {
             values = QString("%1").arg(valueParser.formula());
         } else {
@@ -117,6 +148,13 @@ bool KPrSmilValues::saveOdf(KoPASavingContext &paContext) const
         }
     }
     writer.addAttribute("smil:values", values);
+    //Formula
+    if (m_formulaParser) {
+        QString formula = m_formulaParser->formula();
+        if (!formula.isEmpty()) {
+            writer.addAttribute("anim:formula", formula);
+        }
+    }
     // keyTimes
     QString keyTimes;
     foreach (qreal time, m_times) {

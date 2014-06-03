@@ -20,10 +20,10 @@
 #ifndef AlterTableTester_H
 #define AlterTableTester_H
 
-#include <qurloperator.h>
-#include <qnetwork.h>
-#include <qnetworkprotocol.h>
-#include <kexiutils/tristate.h>
+#include <QUrlOperator>
+#include <QtNetwork>
+#include <QNetworkProtocol>
+#include <db/tristate.h>
 
 class KexiTableDesignerInterface;
 class KexiWindow;

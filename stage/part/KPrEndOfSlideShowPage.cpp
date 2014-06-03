@@ -34,7 +34,7 @@
 #include <kdebug.h>
 
 KPrEndOfSlideShowPage::KPrEndOfSlideShowPage( const QRectF & screenRect, KPrDocument * document )
-: KPrPage( new KPrMasterPage(), document )
+: KPrPage(new KPrMasterPage(document), document)
 {
     qreal ratio = screenRect.width() / screenRect.height();
     KoPageLayout pageLayout;
@@ -51,7 +51,7 @@ KPrEndOfSlideShowPage::KPrEndOfSlideShowPage( const QRectF & screenRect, KPrDocu
     pageLayout.format = KoPageFormat::IsoA3Size; 
 
     masterPage()->setPageLayout( pageLayout );
-    masterPage()->setBackground( new KoColorBackground( Qt::black ) );
+    masterPage()->setBackground( QSharedPointer<KoColorBackground>( new KoColorBackground( Qt::black ) ) );
 
     KoShapeLayer* layer = new KoShapeLayer;
     addShape( layer );

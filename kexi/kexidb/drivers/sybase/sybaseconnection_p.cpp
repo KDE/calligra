@@ -22,12 +22,12 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include <QApplication>
 #include <QFile>
 
-#include <KDebug>
-#include <KTemporaryFile>
+#include <kdebug.h>
+#include <ktemporaryfile.h>
 
 #include "sybaseconnection_p.h"
 
-#include <kexidb/connectiondata.h>
+#include <db/connectiondata.h>
 
 #ifdef SYBASEMIGRATE_H
 #define NAMESPACE KexiMigration

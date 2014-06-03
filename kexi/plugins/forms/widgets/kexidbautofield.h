@@ -22,10 +22,9 @@
 #ifndef KEXIDBAUTOFIELD_H
 #define KEXIDBAUTOFIELD_H
 
-#include <qwidget.h>
-//Added by qt3to4:
+#include <QWidget>
 #include <QLabel>
-#include <kexidb/field.h>
+#include <db/field.h>
 #include <formeditor/container.h>
 #include <formeditor/widgetwithsubpropertiesinterface.h>
 #include <formeditor/FormWidgetInterface.h>
@@ -45,8 +44,6 @@ class KEXIFORMUTILS_EXPORT KexiDBAutoField :
     Q_OBJECT
 //'caption' is uncovered now Q_PROPERTY(QString labelCaption READ caption WRITE setCaption)
     Q_PROPERTY(QString caption READ caption WRITE setCaption)
-//2.0    Q_PROPERTY(QColor paletteForegroundColor READ paletteForegroundColor WRITE setPaletteForegroundColor RESET unsetPalette)
-//2.0    Q_PROPERTY(QColor paletteBackgroundColor READ paletteBackgroundColor WRITE setPaletteBackgroundColor RESET unsetPalette)
     Q_PROPERTY(QColor foregroundLabelColor READ foregroundLabelColor WRITE setForegroundLabelColor RESET unsetPalette)
     Q_PROPERTY(QColor backgroundLabelColor READ backgroundLabelColor WRITE setBackgroundLabelColor RESET unsetPalette)
     Q_PROPERTY(bool autoCaption READ hasAutoCaption WRITE setAutoCaption)
@@ -68,7 +65,7 @@ public:
 
     KexiDBAutoField(const QString &text, WidgetType type, LabelPosition pos,
                     QWidget *parent = 0);
-    KexiDBAutoField(QWidget *parent = 0, LabelPosition pos = Left);
+    explicit KexiDBAutoField(QWidget *parent = 0, LabelPosition pos = Left);
 
     virtual ~KexiDBAutoField();
 
@@ -180,7 +177,6 @@ public slots:
     virtual void unsetPalette();
 
 protected slots:
-//  void slotValueChanged();
     virtual void paletteChange(const QPalette& oldPal);
 
     //! Implemented for KexiDataItemInterface
@@ -197,7 +193,6 @@ protected:
     void init(const QString &text, WidgetType type, LabelPosition pos);
     virtual void createEditor();
     void changeText(const QString &text, bool beautify = true);
-//  virtual void paintEvent( QPaintEvent* pe );
     void updateInformationAboutUnboundField();
 
     //! internal editor can be created too late, so certain properties should be copied

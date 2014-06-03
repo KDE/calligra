@@ -17,8 +17,8 @@
 * Boston, MA 02110-1301, USA.
 */
 
-#ifndef TASKEDTIOR_H
-#define TASKEDTIOR_H
+#ifndef KPTTASKEDITOR_H
+#define KPTTASKEDITOR_H
 
 #include "kplatoui_export.h"
 
@@ -67,8 +67,8 @@ class KPLATOUI_EXPORT TaskEditorTreeView : public DoubleTreeViewBase
 {
     Q_OBJECT
 public:
-    TaskEditorTreeView( QWidget *parent );
-    
+    explicit TaskEditorTreeView(QWidget *parent);
+
     //void setSelectionModel( QItemSelectionModel *selectionModel );
 
     NodeItemModel *baseModel() const;
@@ -78,8 +78,8 @@ public:
     void setProject( Project *project ) { baseModel()->setProject( project ); }
     
 signals:
-    void currentColumnChanged( QModelIndex, QModelIndex );
-    
+    void currentColumnChanged( const QModelIndex&, const QModelIndex& );
+
 protected slots:
     void slotDropAllowed( const QModelIndex &index, int dropIndicatorPosition, QDragMoveEvent *event );
 };
@@ -88,8 +88,8 @@ class KPLATOUI_EXPORT NodeTreeView : public DoubleTreeViewBase
 {
     Q_OBJECT
 public:
-    NodeTreeView( QWidget *parent );
-    
+    explicit NodeTreeView(QWidget *parent);
+
     //void setSelectionModel( QItemSelectionModel *selectionModel );
 
     NodeItemModel *baseModel() const;
@@ -99,8 +99,8 @@ public:
     void setProject( Project *project ) { baseModel()->setProject( project ); }
     
 signals:
-    void currentColumnChanged( QModelIndex, QModelIndex );
-    
+    void currentColumnChanged( const QModelIndex&, const QModelIndex& );
+
 protected slots:
     void slotDropAllowed( const QModelIndex &index, int dropIndicatorPosition, QDragMoveEvent *event );
 };
@@ -109,12 +109,12 @@ class KPLATOUI_EXPORT TaskEditor : public ViewBase
 {
     Q_OBJECT
 public:
-    TaskEditor( KoDocument *part, QWidget *parent );
+    TaskEditor(KoPart *part, KoDocument *doc, QWidget *parent);
     
     void setupGui();
+    void setProject( Project *project );
     Project *project() const { return m_view->project(); }
-    virtual void draw( Project &project );
-    virtual void draw();
+    virtual void createDockers();
 
     virtual Node *currentNode() const;
     QList<Node*> selectedNodes() const ;
@@ -132,18 +132,25 @@ public:
     virtual void saveContext( QDomElement &/*context*/ ) const;
 
     virtual KoPrintJob *createPrintJob();
-    
+
+    void setTaskModules( const QStringList &files );
+
 signals:
+    void taskSelected( Task *task );
     void openNode();
     void addTask();
     void addMilestone();
     void addSubtask();
     void addSubMilestone();
-    void deleteTaskList( QList<Node*> );
+    void deleteTaskList( const QList<Node*>& );
     void moveTaskUp();
     void moveTaskDown();
     void indentTask();
     void unindentTask();
+
+    void loadTaskModules( const QStringList &files );
+    void saveTaskModule( const KUrl &url, Project *project );
+    void removeTaskModule( const KUrl &url );
 
 public slots:
     /// Activate/deactivate the gui
@@ -160,10 +167,10 @@ protected slots:
     virtual void slotOptions();
 
 private slots:
-    void slotSelectionChanged( const QModelIndexList );
+    void slotSelectionChanged( const QModelIndexList& );
     void slotCurrentChanged( const QModelIndex&, const QModelIndex& );
     void slotContextMenuRequested( const QModelIndex &index, const QPoint& pos );
-    
+
     void slotEnableActions();
 
     void slotAddTask();
@@ -204,7 +211,7 @@ class KPLATOUI_EXPORT TaskView : public ViewBase
 {
     Q_OBJECT
 public:
-    TaskView( KoDocument *part, QWidget *parent );
+    TaskView(KoPart *part, KoDocument *doc, QWidget *parent);
 
     void setupGui();
     Project *project() const { return m_view->project(); }
@@ -244,7 +251,7 @@ protected slots:
     virtual void slotOptions();
 
 private slots:
-    void slotSelectionChanged( const QModelIndexList );
+    void slotSelectionChanged( const QModelIndexList& );
     void slotCurrentChanged( const QModelIndex&, const QModelIndex& );
     void slotContextMenuRequested( const QModelIndex &index, const QPoint& pos );
 
@@ -259,43 +266,43 @@ private:
 };
 
 //-----------------------------------
-class GeneralNodeTreeView : public DoubleTreeViewBase
+class WorkPackageTreeView : public DoubleTreeViewBase
 {
     Q_OBJECT
 public:
-    GeneralNodeTreeView( QWidget *parent );
-    
+    explicit WorkPackageTreeView(QWidget *parent);
+
     //void setSelectionModel( QItemSelectionModel *selectionModel );
 
-    GeneralNodeItemModel *baseModel() const;
-    NodeSortFilterProxyModel *proxyModel() const { return qobject_cast<NodeSortFilterProxyModel*>( model() ); }
+    NodeItemModel *baseModel() const;
+    WorkPackageProxyModel *proxyModel() const { return m; }
 
     Project *project() const { return baseModel()->project(); }
-    void setProject( Project *project ) { baseModel()->setProject( project ); }
-    void setModus( int mode );
+    void setProject( Project *project ) { m->setProject( project ); }
 
     ScheduleManager *scheduleManager() const { return baseModel()->manager(); }
 
 signals:
-    void currentColumnChanged( QModelIndex, QModelIndex );
-    
+    void currentColumnChanged( const QModelIndex&, const QModelIndex& );
+
 protected slots:
     void slotDropAllowed( const QModelIndex &index, int dropIndicatorPosition, QDragMoveEvent *event );
+protected:
+    WorkPackageProxyModel *m;
 };
-
 
 class KPLATOUI_EXPORT TaskWorkPackageView : public ViewBase
 {
     Q_OBJECT
 public:
-    TaskWorkPackageView( KoDocument *part, QWidget *parent );
+    TaskWorkPackageView(KoPart *part, KoDocument *doc, QWidget *parent);
 
     void setupGui();
     Project *project() const;
     void setProject( Project *project );
     ScheduleManager *scheduleManager() const { return m_view->scheduleManager(); }
 
-    NodeSortFilterProxyModel *proxyModel() const;
+    WorkPackageProxyModel *proxyModel() const;
 
     virtual Node *currentNode() const;
     QList<Node*> selectedNodes() const ;
@@ -312,12 +319,13 @@ public:
     
 signals:
     void mailWorkpackage( Node *n, Resource *r = 0 );
-    void mailWorkpackages( QList<Node*> &nodes, Resource *r );
+    void mailWorkpackages( const QList<Node*> &nodes, Resource *r );
+    void checkForWorkPackages();
 
 public slots:
     /// Activate/deactivate the gui
     virtual void setGuiActive( bool activate );
-
+    void slotRefreshView();
     void setScheduleManager( ScheduleManager *sm );
 
 protected:
@@ -327,10 +335,10 @@ protected:
 protected slots:
     virtual void slotOptions();
     void slotMailWorkpackage();
-    void slotWorkPackageSent( QList<Node*> &nodes, Resource *resource );
+    void slotWorkPackageSent( const QList<Node*> &nodes, Resource *resource );
 
 private slots:
-    void slotSelectionChanged( const QModelIndexList );
+    void slotSelectionChanged( const QModelIndexList& );
     void slotCurrentChanged( const QModelIndex&, const QModelIndex& );
     void slotContextMenuRequested( const QModelIndex &index, const QPoint& pos );
 
@@ -339,7 +347,7 @@ private slots:
     void slotSplitView();
 
 private:
-    GeneralNodeTreeView *m_view;
+    WorkPackageTreeView *m_view;
     MacroCommand *m_cmd;
 
     KAction *actionMailWorkpackage;

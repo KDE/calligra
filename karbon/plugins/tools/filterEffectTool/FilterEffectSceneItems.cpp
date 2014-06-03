@@ -20,9 +20,10 @@
 #include "FilterEffectSceneItems.h"
 #include "KoFilterEffect.h"
 
-#include <QtGui/QPen>
-#include <QtGui/QBrush>
-#include <QtGui/QFont>
+#include <QPen>
+#include <QBrush>
+#include <QFont>
+#include <QWidget>
 
 const QSizeF ConnectorSize = QSize(20, 20);
 const qreal ItemWidth = 15 * ConnectorSize.height();

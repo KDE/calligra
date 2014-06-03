@@ -20,14 +20,13 @@
 #include <kdebug.h>
 #include <kapplication.h>
 #include <kglobal.h>
-#include <kiconloader.h>
 
 #include <tableview/kexitableview.h>
 
-/*#include <kexidb/drivermanager.h>
-#include <kexidb/driver.h>
-#include <kexidb/connection.h>
-#include <kexidb/cursor.h>*/
+/*#include <db/drivermanager.h>
+#include <db/driver.h>
+#include <db/connection.h>
+#include <db/cursor.h>*/
 
 int main(int argc, char* argv[])
 {
@@ -36,13 +35,13 @@ int main(int argc, char* argv[])
 
     KexiTableView tv;
 
-    KexiTableViewData data;
+    KexiDB::TableViewData data;
     KexiDB::Field f1("id", KexiDB::Field::Integer),
     f2("name", KexiDB::Field::Text),
     f3("age", KexiDB::Field::Integer);
-    data.addColumn(new KexiTableViewColumn(f1));
-    data.addColumn(new KexiTableViewColumn(f2));
-    data.addColumn(new KexiTableViewColumn(f3));
+    data.addColumn(new KexiDB::TableViewColumn(f1));
+    data.addColumn(new KexiDB::TableViewColumn(f2));
+    data.addColumn(new KexiDB::TableViewColumn(f3));
 
     tv.setData(&data, false);
 

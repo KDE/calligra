@@ -21,7 +21,7 @@
 #include "FloodEffect.h"
 #include "FloodEffectConfigWidget.h"
 
-#include <KLocale>
+#include <klocale.h>
 
 FloodEffectFactory::FloodEffectFactory()
         : KoFilterEffectFactoryBase(FloodEffectId, i18n("Flood fill"))

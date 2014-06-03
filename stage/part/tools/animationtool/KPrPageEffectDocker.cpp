@@ -20,9 +20,11 @@
 
 #include "KPrPageEffectDocker.h"
 
+#include <QGridLayout>
 #include <QVBoxLayout>
 #include <QComboBox>
 #include <QDoubleSpinBox>
+#include <QPushButton>
 #include <QLabel>
 #include <QEvent>
 #include <QPainter>
@@ -65,13 +67,13 @@ KPrPageEffectDocker::KPrPageEffectDocker( QWidget* parent, Qt::WindowFlags flags
     }
     optionLayout->addWidget(m_effectCombo, 0, 0);
 
-    connect( m_effectCombo, SIGNAL( activated( int ) ),
-             this, SLOT( slotEffectChanged( int ) ) );
+    connect( m_effectCombo, SIGNAL(activated(int)),
+             this, SLOT(slotEffectChanged(int)) );
 
     m_subTypeCombo = new QComboBox( this );
 
-    connect( m_subTypeCombo, SIGNAL( activated( int ) ),
-             this, SLOT( slotSubTypeChanged( int ) ) );
+    connect( m_subTypeCombo, SIGNAL(activated(int)),
+             this, SLOT(slotSubTypeChanged(int)) );
 
     m_durationSpinBox = new QDoubleSpinBox( this );
     m_durationSpinBox->setRange( 0.1, 60);
@@ -83,14 +85,28 @@ KPrPageEffectDocker::KPrPageEffectDocker( QWidget* parent, Qt::WindowFlags flags
     m_durationSpinBox->setValue( 2.0 );
     optionLayout->addWidget(m_durationSpinBox, 0, 1);
 
-    connect( m_durationSpinBox, SIGNAL( valueChanged( double ) ),
-             this, SLOT( slotDurationChanged( double ) ) );
+    connect( m_durationSpinBox, SIGNAL(valueChanged(double)),
+             this, SLOT(slotDurationChanged(double)) );
+
+    m_applyToAllSlidesButton = new QPushButton(i18n("Apply To All Slides"));
+
+    connect(m_applyToAllSlidesButton, SIGNAL(clicked()),
+             this, SLOT(slotApplyToAllSlides()));
 
     // setup widget layout
     QVBoxLayout* layout = new QVBoxLayout;
     layout->setMargin(0);
     layout->addLayout( optionLayout);
     layout->addWidget( m_subTypeCombo );
+    layout->addWidget(m_applyToAllSlidesButton);
+
+    // The following widget activates a special feature in the
+    // ToolOptionsDocker that makes the components of the widget align
+    // to the top if there is extra space.
+    QWidget *specialSpacer = new QWidget(this);
+    specialSpacer->setObjectName("SpecialSpacer");
+    layout->addWidget(specialSpacer);
+
     setLayout( layout );
 }
 
@@ -206,6 +222,35 @@ void KPrPageEffectDocker::slotDurationChanged( double duration )
     }
 }
 
+void KPrPageEffectDocker::slotApplyToAllSlides()
+{
+    m_view->kopaCanvas()->addCommand(KPrPageEffectDocker::applyToAllSlidesCommand());
+}
+
+KUndo2Command * KPrPageEffectDocker::applyToAllSlidesCommand()
+{
+    QList<KoPAPageBase*> m_pages = m_view->kopaDocument()->pages();
+    QString m_effectId = m_effectCombo->itemData(m_effectCombo->currentIndex()).toString();
+    int m_subType = m_subTypeCombo->itemData(m_subTypeCombo->currentIndex()).toInt();
+    double m_duration = m_durationSpinBox->value();
+    KUndo2Command *cmd = new KUndo2Command(i18nc("(qtundo-format)", "Apply Slide Effect to all Slides"));
+    const KPrPageEffectFactory *factory = m_effectId != "" ? KPrPageEffectRegistry::instance()->value(m_effectId) : 0;
+
+    foreach (KoPAPageBase *page, m_pages) {
+        if (page != m_view->activePage()) {
+            if (factory) {
+                KPrPageEffect *currentPageEffect(createPageEffect(factory, m_subType, m_duration));
+                new KPrPageEffectSetCommand(page, currentPageEffect, cmd);
+            } else {
+                KPrPageEffect *currentPageEffect = 0;
+                new KPrPageEffectSetCommand(page, currentPageEffect, cmd);
+            }
+        }
+    }
+
+    return cmd;
+}
+
 KPrPageEffect * KPrPageEffectDocker::createPageEffect( const KPrPageEffectFactory * factory, int subType, double duration )
 {
     Q_ASSERT( factory );
@@ -218,10 +263,10 @@ void KPrPageEffectDocker::setView( KoPAViewBase* view )
 {
     Q_ASSERT( view );
     m_view = view;
-    connect( view->proxyObject, SIGNAL( activePageChanged() ),
-             this, SLOT( slotActivePageChanged() ) );
-    connect( view->proxyObject, SIGNAL( destroyed( QObject* ) ),
-             this, SLOT( cleanup ( QObject* ) ) );
+    connect( view->proxyObject, SIGNAL(activePageChanged()),
+             this, SLOT(slotActivePageChanged()) );
+    connect( view->proxyObject, SIGNAL(destroyed(QObject*)),
+             this, SLOT(cleanup(QObject*)) );
 
 
     if( m_view->activePage() )

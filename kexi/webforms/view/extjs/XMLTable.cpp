@@ -24,11 +24,11 @@
 
 #include <pion/net/HTTPResponseWriter.hpp>
 
-#include <KDebug>
+#include <kdebug.h>
 
-#include <kexidb/cursor.h>
-#include <kexidb/connection.h>
-#include <kexidb/indexschema.h>
+#include <db/cursor.h>
+#include <db/connection.h>
+#include <db/indexschema.h>
 
 #include "../../model/Database.h"
 #include "../../model/DataProvider.h"

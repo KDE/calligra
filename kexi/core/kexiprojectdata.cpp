@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
-   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,10 +23,11 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#include <qdom.h>
-#include <qdir.h>
-#include <qfile.h>
-#include <qregexp.h>
+#include <QDomDocument>
+#include <QDir>
+#include <QFile>
+#include <QRegExp>
+#include <QStringList>
 
 #include <kglobal.h>
 #include <kstandarddirs.h>
@@ -35,8 +36,27 @@
 #include <kurl.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <kconfig.h>
+#include <kconfiggroup.h>
 
-#include <kexidb/drivermanager.h>
+#include <db/drivermanager.h>
+#include <db/connectiondata.h>
+#include <kexiutils/utils.h>
+#include <kexi_global.h>
+
+//! Version of the KexiProjectData format.
+#define KEXIPROJECTDATA_FORMAT 3
+/* CHANGELOG:
+ v1: initial version
+ v2: "encryptedPassword" field added.
+     For backward compatibility, it is not used if the connection data has been loaded from
+     a file saved with version 1. In such cases unencrypted "password" field is used.
+ v3: "name" for shortcuts to file-based databases is a full file path.
+     If the file is within the user's home directory, the dir is replaced with $HOME,
+     e.g. name=$HOME/mydb.kexi. Not compatible with earlier versions but in these
+     versions only filename was stored so the file was generally inaccessible anyway.
+     "lastOpened" field added of type date/time (ISO format).
+*/
 
 //! @internal
 class KexiProjectDataPrivate
@@ -99,7 +119,7 @@ KexiProjectData::KexiProjectData(
 {
     setObjectName("KexiProjectData");
     d->connData = cdata;
-    setDatabaseName(dbname);
+    setDatabaseName(cdata.dbFileName().isEmpty() ? dbname : cdata.dbFileName());
     setCaption(caption);
 }
 
@@ -111,10 +131,6 @@ KexiProjectData::KexiProjectData(const KexiProjectData& pdata)
     setObjectName("KexiProjectData");
     *this = pdata;
     autoopenObjects = pdata.autoopenObjects;
-    /*
-      d->connData = *pdata.connectionData();
-      setDatabaseName(pdata.databaseName());
-      setCaption(pdata.caption());*/
 }
 
 KexiProjectData::~KexiProjectData()
@@ -124,16 +140,11 @@ KexiProjectData::~KexiProjectData()
 
 KexiProjectData& KexiProjectData::operator=(const KexiProjectData & pdata)
 {
-//    delete d; //this is old
     static_cast<KexiDB::SchemaData&>(*this) = static_cast<const KexiDB::SchemaData&>(pdata);
     //deep copy
     autoopenObjects = pdata.autoopenObjects;
     formatVersion = pdata.formatVersion;
     *d = *pdata.d;
-// d->connData = *pdata.constConnectionData();
-// setDatabaseName(pdata.databaseName());
-// setCaption(pdata.caption());
-// setDescription(pdata.description());
     return *this;
 }
 
@@ -207,58 +218,9 @@ bool KexiProjectData::isReadOnly() const
     return d->readOnly;
 }
 
-/* This file is part of the KDE project
-   Copyright (C) 2005-2011 Jarosław Staniek <staniek@kde.org>
-
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
-*/
-
-#include "kexiprojectdata.h"
-#include <kexidb/connectiondata.h>
-#include <kexiutils/utils.h>
-#include <kexi_global.h>
-
-#include <kconfig.h>
-#include <kconfiggroup.h>
-#include <kdebug.h>
-
-#include <QStringList>
-#include <QDir>
-
-//! Version of the KexiProjectData format.
-#define KEXIPROJECTDATA_FORMAT 3
-/* CHANGELOG:
- v1: initial version
- v2: "encryptedPassword" field added.
-     For backward compatibility, it is not used if the connection data has been loaded from
-     a file saved with version 1. In such cases unencrypted "password" field is used.
- v3: "name" for shortcuts to file-based databases is a full file path.
-     If the file is within the user's home directory, the dir is replaced with $HOME,
-     e.g. name=$HOME/mydb.kexi. Not compatible with earlier versions but in these
-     versions only filename was stored so the file was generally inaccessible anyway.
-     "lastOpened" field added of type date/time (ISO format).
-*/
-
 bool KexiProjectData::load(const QString& fileName, QString* _groupKey)
 {
-#ifdef __GNUC__
-#warning KexiProjectData::load: how about readOnly arg?
-#else
-#pragma WARNING( KexiProjectData::load: how about readOnly arg? )
-#endif
+    //! @todo how about readOnly arg?
     KConfig config(fileName, KConfig::SimpleConfig);
     KConfigGroup cg = config.group("File Information");
     uint _formatVersion = cg.readEntry("version", KEXIPROJECTDATA_FORMAT);
@@ -266,14 +228,14 @@ bool KexiProjectData::load(const QString& fileName, QString* _groupKey)
     QString groupKey;
     if (!_groupKey || _groupKey->isEmpty()) {
         QStringList groups(config.groupList());
-        foreach(QString s, groups) {
+        foreach(const QString &s, groups) {
             if (s.toLower() != "file information") {
                 groupKey = s;
                 break;
             }
         }
         if (groupKey.isEmpty()) {
-            //ERR: "File %1 contains no connection information"
+            //! @todo ERR: "File %1 contains no connection information"
             return false;
         }
         if (_groupKey)
@@ -293,13 +255,13 @@ bool KexiProjectData::load(const QString& fileName, QString* _groupKey)
     } else if (type == "connection") {
         isDatabaseShortcut = false;
     } else {
-        //ERR: i18n("No valid "type" field specified for section \"%1\": unknown value \"%2\".").arg(group).arg(type)
+        //! @todo ERR: i18n("No valid "type" field specified for section \"%1\": unknown value \"%2\".").arg(group).arg(type)
         return false;
     }
 
     QString driverName = cg.readEntry("engine").toLower();
     if (driverName.isEmpty()) {
-        //ERR: "No valid "engine" field specified for %1 section" group
+        //! @todo ERR: "No valid "engine" field specified for %1 section" group
         return false;
     }
     
@@ -311,7 +273,7 @@ bool KexiProjectData::load(const QString& fileName, QString* _groupKey)
         KexiDB::DriverManager driverManager;
         const KexiDB::Driver::Info dinfo = driverManager.driverInfo(d->connData.driverName);
         if (dinfo.name.isEmpty()) {
-            //ERR: "No valid driver for "engine" found
+            //! @todo ERR: "No valid driver for "engine" found
             return false;
         }
         const bool fileBased = dinfo.fileBased
@@ -332,7 +294,7 @@ bool KexiProjectData::load(const QString& fileName, QString* _groupKey)
                     fn = home + fn.mid(homeVar.length());
                 }
                 d->connData.setFileName(fn);
-                setDatabaseName(fn);
+                setDatabaseName(d->connData.dbFileName());
             }
         }
         else {
@@ -359,7 +321,6 @@ bool KexiProjectData::load(const QString& fileName, QString* _groupKey)
         //UNSAFE
         d->connData.password = cg.readEntry("password");
     }
-// data.connectionData()->savePassword = !data.connectionData()->password.isEmpty();
     d->connData.userName = cg.readEntry("user");
     QString lastOpenedStr(cg.readEntry("lastOpened"));
     if (!lastOpenedStr.isEmpty()) {
@@ -368,18 +329,14 @@ bool KexiProjectData::load(const QString& fileName, QString* _groupKey)
             setLastOpened(lastOpened);
         }
     }
-    /* @todo add "options=", eg. as string list? */
+    /*! @todo add "options=", eg. as string list? */
     return true;
 }
 
 bool KexiProjectData::save(const QString& fileName, bool savePassword,
                            QString* _groupKey, bool overwriteFirstGroup)
 {
-#ifdef __GNUC__
-#warning KexiProjectData::save: how about readOnly arg?
-#else
-#pragma WARNING( KexiProjectData::save: how about readOnly arg? )
-#endif
+    //! @todo how about readOnly arg?
     KConfig config(fileName, KConfig::SimpleConfig);
     KConfigGroup cg = config.group("File Information");
 
@@ -398,8 +355,7 @@ bool KexiProjectData::save(const QString& fileName, bool savePassword,
         QString groupPrefix;
         const QStringList groups(config.groupList());
         if (overwriteFirstGroup && !groups.isEmpty()) {
-//   groupKey = groups.first(); //found
-            foreach(QString s, groups) {
+            foreach(const QString &s, groups) {
                 if (s.toLower() != "file information") {
                     groupKey = s;
                     break;
@@ -483,9 +439,14 @@ bool KexiProjectData::save(const QString& fileName, bool savePassword,
         cg.writeEntry("lastOpened", lastOpened().toString(Qt::ISODate));
     }
 
-    /* @todo add "options=", eg. as string list? */
+    /*! @todo add "options=", eg. as string list? */
     cg.sync();
     return true;
+}
+
+QString KexiProjectData::name() const
+{
+    return KexiDB::SchemaData::name();
 }
 
 KEXICORE_EXPORT QDebug operator<<(QDebug dbg, const KexiProjectData& d)

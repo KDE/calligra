@@ -12,9 +12,6 @@ include_directories(
 
 set(karbon_tools_PART_SRCS
    KarbonToolsPlugin.cpp
-   KarbonCurveFit.cpp
-   KarbonPencilTool.cpp
-   KarbonPencilToolFactory.cpp
    CalligraphyTool/KarbonCalligraphyTool.cpp
    CalligraphyTool/KarbonCalligraphyOptionWidget.cpp
    CalligraphyTool/KarbonCalligraphyToolFactory.cpp

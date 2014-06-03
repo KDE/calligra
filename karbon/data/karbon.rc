@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <gui name="Karbon"
-     version="7"
+     version="8"
      xmlns="http://www.kde.org/standards/kxmlgui/1.0"
      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0
@@ -130,6 +130,7 @@
             <Separator group="settings_show"/>
             <Action name="page_layout" group="settings_show"/>
             <Separator group="settings_show"/>
+            <Action name="settings_active_author" group="settings_configure"/>
             <Action name="configure" group="settings_configure"/>
         </Menu>
     </MenuBar>

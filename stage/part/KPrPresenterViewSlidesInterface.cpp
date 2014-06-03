@@ -22,8 +22,8 @@
 #include <KoPAPageBase.h>
 #include <KoPAPageThumbnailModel.h>
 
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QListView>
+#include <QVBoxLayout>
+#include <QListView>
 
 KPrPresenterViewSlidesInterface::KPrPresenterViewSlidesInterface( const QList<KoPAPageBase *> &pages, QWidget *parent )
     : KPrPresenterViewBaseInterface( pages, parent )
@@ -42,10 +42,10 @@ KPrPresenterViewSlidesInterface::KPrPresenterViewSlidesInterface( const QList<Ko
     m_listView->setSelectionMode( QAbstractItemView::SingleSelection );
     m_listView->setMovement( QListView::Static );
 
-    connect( m_listView, SIGNAL( clicked( const QModelIndex & ) ), this,
-            SLOT( itemClicked( const QModelIndex & ) ) );
-    connect( m_listView, SIGNAL( doubleClicked( const QModelIndex & ) ), this,
-            SLOT( itemDoubleClicked( const QModelIndex & ) ) );
+    connect( m_listView, SIGNAL(clicked(QModelIndex)), this,
+            SLOT(itemClicked(QModelIndex)) );
+    connect( m_listView, SIGNAL(doubleClicked(QModelIndex)), this,
+            SLOT(itemDoubleClicked(QModelIndex)) );
 
     vLayout->addWidget( m_listView );
 

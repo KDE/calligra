@@ -23,11 +23,11 @@
 #ifndef KEXIMENUWIDGET_H
 #define KEXIMENUWIDGET_H
 
-#include <KStandardAction>
-#include <KAction>
-#include <QtGui/qwidget.h>
-#include <QtCore/qstring.h>
-#include <QtGui/qicon.h>
+#include <kstandardaction.h>
+#include <kaction.h>
+#include <QWidget>
+#include <QString>
+#include <QIcon>
 
 class KexiMenuWidgetPrivate;
 class KexiMenuWidgetActionPrivate;
@@ -39,7 +39,7 @@ class KexiMenuWidgetAction : public KAction
 {
     Q_OBJECT
 public:
-    KexiMenuWidgetAction(QObject *parent);
+    explicit KexiMenuWidgetAction(QObject *parent);
     KexiMenuWidgetAction(const QString &text, QObject *parent);
     KexiMenuWidgetAction(const KIcon &icon, const QString &text, QObject *parent);
     KexiMenuWidgetAction(KStandardAction::StandardAction id, QObject *parent);
@@ -164,6 +164,7 @@ protected:
 #endif
     void enterEvent(QEvent *);
     void leaveEvent(QEvent *);
+    void showEvent(QShowEvent* event);
     void hideEvent(QHideEvent *);
     void paintEvent(QPaintEvent *);
     void actionEvent(QActionEvent *);

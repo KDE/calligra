@@ -19,6 +19,8 @@
 
 #include "KWCreateBookmarkDialog.h"
 
+#include <klocale.h>
+
 KWCreateBookmark::KWCreateBookmark(const QList<QString> &nameList, const QString &suggestedName, QWidget *parent)
         : QWidget(parent)
 {

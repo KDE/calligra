@@ -42,7 +42,7 @@ class Container;
 class HBox : public QFrame, public KFormDesigner::FormWidgetInterface
 {
 public:
-    HBox(QWidget *parent);
+    explicit HBox(QWidget *parent);
     virtual ~HBox();
     virtual void paintEvent(QPaintEvent *ev);
 };
@@ -51,7 +51,7 @@ public:
 class VBox : public QFrame, public KFormDesigner::FormWidgetInterface
 {
 public:
-    VBox(QWidget *parent);
+    explicit VBox(QWidget *parent);
     virtual ~VBox();
     virtual void paintEvent(QPaintEvent *ev);
 };
@@ -60,7 +60,7 @@ public:
 class Grid : public QFrame, public KFormDesigner::FormWidgetInterface
 {
 public:
-    Grid(QWidget *parent);
+    explicit Grid(QWidget *parent);
     virtual ~Grid();
     virtual void paintEvent(QPaintEvent *ev);
 };
@@ -69,7 +69,7 @@ public:
 class HFlow : public QFrame, public KFormDesigner::FormWidgetInterface
 {
 public:
-    HFlow(QWidget *parent);
+    explicit HFlow(QWidget *parent);
     virtual ~HFlow();
     virtual void paintEvent(QPaintEvent *ev);
 };
@@ -78,7 +78,7 @@ public:
 class VFlow : public QFrame, public KFormDesigner::FormWidgetInterface
 {
 public:
-    VFlow(QWidget *parent);
+    explicit VFlow(QWidget *parent);
     virtual ~VFlow();
     virtual void paintEvent(QPaintEvent *ev);
     virtual QSize sizeHint() const;
@@ -92,7 +92,7 @@ class ContainerWidget : public QWidget
     friend class KFDTabWidget;
 
 public:
-    ContainerWidget(QWidget *parent);
+    explicit ContainerWidget(QWidget *parent);
     virtual ~ContainerWidget();
 
     virtual QSize sizeHint() const;
@@ -266,7 +266,7 @@ signals:
 //! @todo SubForm
 #if 0
 //! A form embedded as a widget inside other form
-class SubForm : public Q3ScrollView
+class SubForm : public QScrollArea
 {
     Q_OBJECT
     Q_PROPERTY(QString formName READ formName WRITE setFormName)
@@ -322,13 +322,6 @@ protected:
     virtual void resizeEditor(QWidget *editor, QWidget *widget, const QByteArray &classname);
 
 public slots:
-//moved to internal AddTabAction       void addTabPage();
-//moved to internal RenameTabAction    void renameTabPage();
-//moved to internal RemoveTabAction    void removeTabPage();
-//moved to internal AddStackPageAction void addStackPage();
-//moved to internal RemoveStackPageAction void removeStackPage();
-//moved to internal GoToStackPageAction   void prevStackPage();
-//moved to internal GoToStackPageAction   void nextStackPage();
     void reorderTabs(int oldpos, int newpos);
 };
 

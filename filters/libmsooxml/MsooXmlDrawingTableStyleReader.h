@@ -20,11 +20,10 @@
 #ifndef MSOOXMLDRAWINGTABLESTYLEREADER_H
 #define MSOOXMLDRAWINGTABLESTYLEREADER_H
 
-#include "msooxml_export.h"
+#include "komsooxml_export.h"
 
 #include "MsooXmlDrawingTableStyle.h"
 #include "MsooXmlCommonReader.h"
-#include "MsooXmlThemesReader.h"
 
 class KoGenStyles;
 
@@ -38,11 +37,16 @@ class KoGenStyles;
 namespace MSOOXML
 {
 
+class DrawingMLTheme;
 class MsooXmlImport;
-class MSOOXML_EXPORT MsooXmlDrawingTableStyleContext : public MSOOXML::MsooXmlReaderContext
+
+class KOMSOOXML_EXPORT MsooXmlDrawingTableStyleContext : public MSOOXML::MsooXmlReaderContext
 {
 public:
-    MsooXmlDrawingTableStyleContext(MSOOXML::MsooXmlImport* _import, const QString& _path, const QString& _file, MSOOXML::DrawingMLTheme* _themes, QMap< QString, MSOOXML::DrawingTableStyle* >* _styleList, QMap< QString, QString > _colorMap);
+    MsooXmlDrawingTableStyleContext(MSOOXML::MsooXmlImport* _import, const QString& _path,
+				    const QString& _file, MSOOXML::DrawingMLTheme* _themes,
+				    QMap< QString, MSOOXML::DrawingTableStyle* >* _styleList,
+				    QMap< QString, QString > _colorMap);
     virtual ~MsooXmlDrawingTableStyleContext();
 
     QMap<QString, MSOOXML::DrawingTableStyle*>* styleList;
@@ -55,10 +59,10 @@ public:
     QMap<QString, QString> colorMap;
 };
 
-class MSOOXML_EXPORT MsooXmlDrawingTableStyleReader : public MsooXmlCommonReader
+class KOMSOOXML_EXPORT MsooXmlDrawingTableStyleReader : public MsooXmlCommonReader
 {
 public:
-    MsooXmlDrawingTableStyleReader(KoOdfWriters* writers);
+    explicit MsooXmlDrawingTableStyleReader(KoOdfWriters *writers);
     virtual ~MsooXmlDrawingTableStyleReader();
 
     virtual KoFilter::ConversionStatus read(MsooXmlReaderContext* context = 0);
@@ -91,17 +95,14 @@ protected:
     KoFilter::ConversionStatus read_tl2br();
     KoFilter::ConversionStatus read_tr2bl();
     KoFilter::ConversionStatus read_tcBdr();
-    KoFilter::ConversionStatus read_Table_ln();
     KoFilter::ConversionStatus read_fill();
 
-    //get read_ln and friends, it's a shame I have to get a lot of crap alongside
-    #include <MsooXmlCommonReaderMethods.h>
-    #include <MsooXmlCommonReaderDrawingMLMethods.h>
+#include "MsooXmlDrawingMLShared.h"
+
 private:
     MsooXmlDrawingTableStyleContext* m_context;
 
     DrawingTableStyle* m_currentStyle;
-    KoBorder::BorderData m_currentBorder;
     TableStyleProperties* m_currentTableStyleProperties;
 };
 

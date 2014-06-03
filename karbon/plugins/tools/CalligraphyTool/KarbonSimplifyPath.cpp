@@ -19,10 +19,10 @@
 
 #include "KarbonSimplifyPath.h"
 
-#include <KarbonCurveFit.h>
+#include <KoCurveFit.h>
 #include <KoPathShape.h>
 #include <KoPathPoint.h>
-#include <KDebug>
+#include <kdebug.h>
 
 /*
 the algorithm proceeds as following:

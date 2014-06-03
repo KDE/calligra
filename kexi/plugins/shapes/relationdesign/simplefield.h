@@ -20,7 +20,7 @@
 #define SIMPLEFIELD_H
 
 #include <QString>
-#include <kexidb/queryschema.h>
+#include <db/queryschema.h>
 #include <KoXmlWriter.h>
 
 class SimpleField

@@ -25,7 +25,6 @@
 #include "KWTextFrameSet.h"
 #include "KWCopyShape.h"
 #include "KWOutlineShape.h"
-#include "KoTextAnchor.h"
 #include "KWPage.h"
 #include "KWRootAreaProvider.h"
 #include <KoTextShapeData.h>
@@ -34,24 +33,18 @@
 #include <KoXmlWriter.h>
 #include <kdebug.h>
 
-KWFrame::KWFrame(KoShape *shape, KWFrameSet *parent, KoTextAnchor *anchor)
+KWFrame::KWFrame(KoShape *shape, KWFrameSet *parent)
         : m_shape(shape),
         m_frameBehavior(Words::AutoExtendFrameBehavior),
         m_newFrameBehavior(Words::NoFollowupFrame),
         m_anchoredFrameOffset(0.0),
         m_frameSet(parent),
-        m_minimumFrameHeight(0.0), // no minimum height per default
-        m_anchor(anchor)
+        m_minimumFrameHeight(0.0) // no minimum height per default
 {
     Q_ASSERT(shape);
     shape->setApplicationData(this);
     if (parent)
         parent->addFrame(this);
-
-    if (!m_anchor) {
-        m_anchor = new KoTextAnchor(shape); // sets itself on the shape
-        m_anchor->setAnchorType(KoTextAnchor::AnchorPage);
-    }
 
     KWTextFrameSet* parentFrameSet = dynamic_cast<KWTextFrameSet*>(parent);
     if (parentFrameSet) {
@@ -134,17 +127,20 @@ void KWFrame::cleanupShape(KoShape* shape)
     KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(m_frameSet);
     if (tfs) {
         KWRootAreaProvider *rootAreaProvider = tfs->rootAreaProvider();
-        KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(tfs->document()->documentLayout());
-        Q_ASSERT(lay);
-        QList<KoTextLayoutRootArea *> layoutRootAreas = lay->rootAreas();
-        for(int i = 0; i < layoutRootAreas.count(); ++i) {
-            KoTextLayoutRootArea *rootArea = layoutRootAreas[i];
-            if (rootArea->associatedShape() == shape) {
-                KoTextLayoutRootArea *prevRootArea = i >= 1 ? layoutRootAreas[i - 1] : 0;
-                rootAreaProvider->releaseAllAfter(prevRootArea);
-                lay->removeRootArea(prevRootArea);
-                rootArea->setAssociatedShape(0);
-                break;
+        // it is no longer set when document is destroyed
+        if (rootAreaProvider) {
+            KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(tfs->document()->documentLayout());
+            Q_ASSERT(lay);
+            QList<KoTextLayoutRootArea *> layoutRootAreas = lay->rootAreas();
+            for(int i = 0; i < layoutRootAreas.count(); ++i) {
+                KoTextLayoutRootArea *rootArea = layoutRootAreas[i];
+                if (rootArea->associatedShape() == shape) {
+                    KoTextLayoutRootArea *prevRootArea = i >= 1 ? layoutRootAreas[i - 1] : 0;
+                    rootAreaProvider->releaseAllAfter(prevRootArea);
+                    lay->removeRootArea(prevRootArea);
+                    rootArea->setAssociatedShape(0);
+                    break;
+                }
             }
         }
     }
@@ -188,7 +184,7 @@ void KWFrame::copySettings(const KWFrame *frame)
     shape()->copySettings(frame->shape());
 }
 
-void KWFrame::saveOdf(KoShapeSavingContext &context, const KWPage &page, int pageZIndexOffset) const
+void KWFrame::saveOdf(KoShapeSavingContext &context, const KWPage &page, int /*pageZIndexOffset*/) const
 {
     QString value;
     switch (frameBehavior()) {
@@ -220,14 +216,11 @@ void KWFrame::saveOdf(KoShapeSavingContext &context, const KWPage &page, int pag
     // shape properties
     const qreal pagePos = page.offsetInDocument();
 
-    const int effectiveZIndex = m_shape->zIndex() + pageZIndexOffset;
-    m_shape->setAdditionalAttribute("draw:z-index", QString::number(effectiveZIndex));
     m_shape->setAdditionalAttribute("text:anchor-type", "page");
     m_shape->setAdditionalAttribute("text:anchor-page-number", QString::number(page.pageNumber()));
     context.addShapeOffset(m_shape, QTransform(1, 0, 0 , 1, 0, -pagePos));
     m_shape->saveOdf(context);
     context.removeShapeOffset(m_shape);
-    m_shape->removeAdditionalAttribute("draw:z-index");
     m_shape->removeAdditionalAttribute("fo:min-height");
     m_shape->removeAdditionalAttribute("text:anchor-page-number");
     m_shape->removeAdditionalAttribute("text:anchor-page-number");

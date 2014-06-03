@@ -30,7 +30,7 @@ class KEXIGUIUTILS_EXPORT KexiToolTip : public QWidget
 {
     Q_OBJECT
 public:
-    KexiToolTip(const QVariant& value, QWidget* parent);
+    explicit KexiToolTip(const QVariant& value, QWidget* parent = 0);
     virtual ~KexiToolTip();
 
     virtual QSize sizeHint() const;
@@ -43,7 +43,9 @@ protected:
     virtual void drawFrame(QPainter& p);
     virtual void drawContents(QPainter& p);
 
-    QVariant m_value;
+private:
+    class Private;
+    Private * const d;
 };
 
 #endif

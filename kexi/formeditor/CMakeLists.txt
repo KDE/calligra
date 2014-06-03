@@ -42,8 +42,7 @@ set(kformdesigner_LIBS
   kexiutils
   kexicore
   kexiextendedwidgets
-  ${KDE4_KDE3SUPPORT_LIBS}
-  ${KDE4_KPARTS_LIBS}
+  ${CALLIGRADB_LIBS}
 )
 
 # enable to add signal/slot connections
@@ -66,18 +65,6 @@ install(TARGETS kformdesigner  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
 ########### install files ###############
-
-install( FILES
-  FormWidget.h
-  FormWidgetInterface.h
-  objecttree.h
-  WidgetTreeWidget.h
-  widgetfactory.h
-  WidgetInfo.h
-  widgetlibrary.h
-  widgetwithsubpropertiesinterface.h
-  DESTINATION ${INCLUDE_INSTALL_DIR}/kexi/forms COMPONENT Devel
-)
 
 install( FILES
   widgetfactory.desktop

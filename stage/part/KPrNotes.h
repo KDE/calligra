@@ -45,7 +45,7 @@ public:
     virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
 
     /// reimplemented
-    virtual void paintComponent(QPainter& painter, const KoViewConverter& converter);
+    virtual void paintComponent(QPainter& painter, const KoViewConverter& converter, KoShapePaintingContext &paintcontext);
 
     /// Get the page layout for this presentation notes
     virtual KoPageLayout &pageLayout();
@@ -65,13 +65,12 @@ public:
     virtual void setDisplayMasterBackground( bool );
     /// reimplemented
     virtual bool displayShape(KoShape *shape) const;
+
+    virtual QImage thumbImage(const QSize& = QSize(512, 512));
     /// reimplemented
     virtual QPixmap generateThumbnail( const QSize& );
     /// reimplemented
     virtual void paintPage( QPainter & painter, KoZoomHandler & zoomHandler );
-
-private:
-    QImage createPageThumbnail() const;
 
 private:
     KoShape *m_textShape;

@@ -41,11 +41,7 @@
 #include <kptview.h>
 
 int planScriptingDebugArea() {
-#if KDE_IS_VERSION( 4, 3, 80 )
     static int s_area = KDebug::registerArea( "plan (Scripting)" );
-#else
-    static int s_area = 32010;
-#endif
     return s_area;
 }
 
@@ -74,9 +70,9 @@ KPlatoScriptingPart::KPlatoScriptingPart(QObject* parent, const QStringList& arg
     : KoScriptingPart(new Scripting::Module(parent), args)
     , d(new Private())
 {
-    setComponentData(KPlatoScriptingPart::componentData());
-    setXMLFile(KStandardDirs::locate("data","kplato/kpartplugins/scripting.rc"), true);
-    kDebug(planScriptingDebugArea()) <<"KPlatoScripting plugin. Class:" << metaObject()->className() <<", Parent:" <<(parent?parent->metaObject()->className():"0");
+    //setComponentData(ScriptingPart::componentData());
+    setXMLFile(KStandardDirs::locate("data", "plan/viewplugins/scripting.rc"), true);
+    kDebug(planScriptingDebugArea()) <<"PlanScripting plugin. Class:" << metaObject()->className() <<", Parent:" <<(parent?parent->metaObject()->className():"0");
 
 }
 

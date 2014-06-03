@@ -22,6 +22,7 @@
 #include <QModelIndex>
 #include <QStandardItemModel>
 #include <QStandardItem>
+#include <QSortFilterProxyModel>
 
 #include <qtest_kde.h>
 #include <kdebug.h>
@@ -190,6 +191,326 @@ void FlatProxyModelTester::test()
     QCOMPARE( idx.data().toString(), QVariant( "Index 1,0 -> Index 4,0" ).toString() );
     idx = m_flatmodel.index( 7, 1 );
     QCOMPARE( idx.data(), QVariant( "Index 1,0 -> Index 4,1" ) );
+}
+
+void FlatProxyModelTester::testInsertRemoveTop()
+{
+    QSortFilterProxyModel sf;
+    FlatProxyModel fm;
+    QStandardItemModel sm;
+
+    sf.setSourceModel( &fm );
+    fm.setSourceModel( &sm );
+
+    sm.setHeaderData( 0, Qt::Horizontal, "Column 0" );
+    QCOMPARE( sm.rowCount(), 0 );
+
+    // insert
+    sm.insertRow( 0, new QStandardItem( "First" ) );
+    QCOMPARE( sm.rowCount(), 1 );
+    QCOMPARE( fm.rowCount(), 1 );
+    QCOMPARE( sf.rowCount(), 1 );
+    QCOMPARE( sm.index( 0, 0 ).data(), sf.index( 0, 0 ).data() );
+    QCOMPARE( sf.index( 0, 0 ).data(), QVariant( "First" ) );
+
+    sm.insertRow( 1, new QStandardItem( "Second" ) );
+    QCOMPARE( sm.rowCount(), 2 );
+    QCOMPARE( fm.rowCount(), 2 );
+    QCOMPARE( sf.rowCount(), 2 );
+    QCOMPARE( sm.index( 0, 0 ).data(), sf.index( 0, 0 ).data() );
+    QCOMPARE( sm.index( 1, 0 ).data(), sf.index( 1, 0 ).data() );
+    QCOMPARE( sf.index( 0, 0 ).data(), QVariant( "First" ) );
+    QCOMPARE( sf.index( 1, 0 ).data(), QVariant( "Second" ) );
+
+    sm.insertRow( 1, new QStandardItem( "In between" ) );
+    QCOMPARE( sm.rowCount(), 3 );
+    QCOMPARE( fm.rowCount(), 3 );
+    QCOMPARE( sf.rowCount(), 3 );
+    QCOMPARE( sm.index( 0, 0 ).data(), sf.index( 0, 0 ).data() );
+    QCOMPARE( sm.index( 1, 0 ).data(), sf.index( 1, 0 ).data() );
+    QCOMPARE( sm.index( 2, 0 ).data(), sf.index( 2, 0 ).data() );
+    QCOMPARE( sf.index( 0, 0 ).data(), QVariant( "First" ) );
+    QCOMPARE( sf.index( 1, 0 ).data(), QVariant( "In between" ) );
+    QCOMPARE( sf.index( 2, 0 ).data(), QVariant( "Second" ) );
+
+    sm.insertRow( 0, new QStandardItem( "Before first" ) );
+    QCOMPARE( sm.rowCount(), 4 );
+    QCOMPARE( fm.rowCount(), 4 );
+    QCOMPARE( sf.rowCount(), 4 );
+    QCOMPARE( sm.index( 0, 0 ).data(), sf.index( 0, 0 ).data() );
+    QCOMPARE( sm.index( 1, 0 ).data(), sf.index( 1, 0 ).data() );
+    QCOMPARE( sm.index( 2, 0 ).data(), sf.index( 2, 0 ).data() );
+    QCOMPARE( sm.index( 3, 0 ).data(), sf.index( 3, 0 ).data() );
+    QCOMPARE( sf.index( 0, 0 ).data(), QVariant( "Before first" ) );
+    QCOMPARE( sf.index( 1, 0 ).data(), QVariant( "First" ) );
+    QCOMPARE( sf.index( 2, 0 ).data(), QVariant( "In between" ) );
+    QCOMPARE( sf.index( 3, 0 ).data(), QVariant( "Second" ) );
+
+    // remove
+    sm.removeRow( 0 );
+    QCOMPARE( sm.rowCount(), 3 );
+    QCOMPARE( fm.rowCount(), 3 );
+    QCOMPARE( sf.rowCount(), 3 );
+    QCOMPARE( sm.index( 0, 0 ).data(), sf.index( 0, 0 ).data() );
+    QCOMPARE( sm.index( 1, 0 ).data(), sf.index( 1, 0 ).data() );
+    QCOMPARE( sm.index( 2, 0 ).data(), sf.index( 2, 0 ).data() );
+    QCOMPARE( sf.index( 0, 0 ).data(), QVariant( "First" ) );
+    QCOMPARE( sf.index( 1, 0 ).data(), QVariant( "In between" ) );
+    QCOMPARE( sf.index( 2, 0 ).data(), QVariant( "Second" ) );
+
+    sm.removeRow( 1 );
+    QCOMPARE( sm.rowCount(), 2 );
+    QCOMPARE( fm.rowCount(), 2 );
+    QCOMPARE( sf.rowCount(), 2 );
+    QCOMPARE( sm.index( 0, 0 ).data(), sf.index( 0, 0 ).data() );
+    QCOMPARE( sm.index( 1, 0 ).data(), sf.index( 1, 0 ).data() );
+    QCOMPARE( sf.index( 0, 0 ).data(), QVariant( "First" ) );
+    QCOMPARE( sf.index( 1, 0 ).data(), QVariant( "Second" ) );
+
+    sm.removeRow( 1 );
+    QCOMPARE( sm.rowCount(), 1 );
+    QCOMPARE( fm.rowCount(), 1 );
+    QCOMPARE( sf.rowCount(), 1 );
+    QCOMPARE( sm.index( 0, 0 ).data(), sf.index( 0, 0 ).data() );
+    QCOMPARE( sf.index( 0, 0 ).data(), QVariant( "First" ) );
+
+    sm.removeRow( 0 );
+    QCOMPARE( sm.rowCount(), 0 );
+    QCOMPARE( fm.rowCount(), 0 );
+    QCOMPARE( sf.rowCount(), 0 );
+}
+
+void FlatProxyModelTester::testInsertRemoveChildren()
+{
+    QSortFilterProxyModel sf;
+    FlatProxyModel fm;
+    QStandardItemModel sm;
+
+    sf.setSourceModel( &fm );
+    fm.setSourceModel( &sm );
+
+    sm.setHeaderData( 0, Qt::Horizontal, "Column 0" );
+    QCOMPARE( sm.rowCount(), 0 );
+
+    QStandardItem *pitem = new QStandardItem( "Parent" );
+    sm.insertRow( 0, pitem );
+    QCOMPARE( sm.rowCount(), 1 );
+    QCOMPARE( fm.rowCount(), 1 );
+    QCOMPARE( sf.rowCount(), 1 );
+    QCOMPARE( sm.index( 0, 0 ).data(), sf.index( 0, 0 ).data() );
+    QCOMPARE( sf.index( 0, 0 ).data(), QVariant( "Parent" ) );
+
+    QModelIndex parent = sm.index( 0, 0 );
+    QVERIFY( parent.isValid() );
+
+    QStandardItem *item = new QStandardItem( "First child" );
+    pitem->insertRow( 0, item );
+    QCOMPARE( sm.rowCount( parent ), 1 );
+    QCOMPARE( fm.rowCount(), 2 );
+    QCOMPARE( sf.rowCount(), 2 );
+    QCOMPARE( sm.index( 0, 0, parent ).data(), sf.index( 1, 0 ).data() );
+    QCOMPARE( sf.index( 1, 0 ).data(), QVariant( "First child" ) );
+
+    item = new QStandardItem( "Second child" );
+    pitem->insertRow( 1, item );
+    QCOMPARE( sm.rowCount( parent ), 2 );
+    QCOMPARE( fm.rowCount(), 3 );
+    QCOMPARE( sf.rowCount(), 3 );
+    QCOMPARE( sm.index( 0, 0, parent ).data(), sf.index( 1, 0 ).data() );
+    QCOMPARE( sm.index( 1, 0, parent ).data(), sf.index( 2, 0 ).data() );
+    QCOMPARE( sf.index( 1, 0 ).data(), QVariant( "First child" ) );
+    QCOMPARE( sf.index( 2, 0 ).data(), QVariant( "Second child" ) );
+
+    item = new QStandardItem( "In between" );
+    pitem->insertRow( 1, item );
+    QCOMPARE( sm.rowCount( parent ), 3 );
+    QCOMPARE( fm.rowCount(), 4 );
+    QCOMPARE( sf.rowCount(), 4 );
+    QCOMPARE( sm.index( 0, 0, parent ).data(), sf.index( 1, 0 ).data() );
+    QCOMPARE( sm.index( 1, 0, parent ).data(), sf.index( 2, 0 ).data() );
+    QCOMPARE( sm.index( 2, 0, parent ).data(), sf.index( 3, 0 ).data() );
+    QCOMPARE( sf.index( 1, 0 ).data(), QVariant( "First child" ) );
+    QCOMPARE( sf.index( 2, 0 ).data(), QVariant( "In between" ) );
+    QCOMPARE( sf.index( 3, 0 ).data(), QVariant( "Second child" ) );
+
+    item = new QStandardItem( "Before first" );
+    pitem->insertRow( 0, item );
+    QCOMPARE( sm.rowCount( parent ), 4 );
+    QCOMPARE( fm.rowCount(), 5 );
+    QCOMPARE( sf.rowCount(), 5 );
+    QCOMPARE( sm.index( 0, 0, parent ).data(), sf.index( 1, 0 ).data() );
+    QCOMPARE( sm.index( 1, 0, parent ).data(), sf.index( 2, 0 ).data() );
+    QCOMPARE( sm.index( 2, 0, parent ).data(), sf.index( 3, 0 ).data() );
+    QCOMPARE( sm.index( 3, 0, parent ).data(), sf.index( 4, 0 ).data() );
+    QCOMPARE( sf.index( 1, 0 ).data(), QVariant( "Before first" ) );
+    QCOMPARE( sf.index( 2, 0 ).data(), QVariant( "First child" ) );
+    QCOMPARE( sf.index( 3, 0 ).data(), QVariant( "In between" ) );
+    QCOMPARE( sf.index( 4, 0 ).data(), QVariant( "Second child" ) );
+
+    sm.removeRow( 0, parent );
+    QCOMPARE( sm.rowCount( parent ), 3 );
+    QCOMPARE( fm.rowCount(), 4 );
+    QCOMPARE( sf.rowCount(), 4 );
+    QCOMPARE( sm.index( 0, 0, parent ).data(), sf.index( 1, 0 ).data() );
+    QCOMPARE( sm.index( 1, 0, parent ).data(), sf.index( 2, 0 ).data() );
+    QCOMPARE( sm.index( 2, 0, parent ).data(), sf.index( 3, 0 ).data() );
+    QCOMPARE( sf.index( 1, 0 ).data(), QVariant( "First child" ) );
+    QCOMPARE( sf.index( 2, 0 ).data(), QVariant( "In between" ) );
+    QCOMPARE( sf.index( 3, 0 ).data(), QVariant( "Second child" ) );
+
+    sm.removeRow( 1, parent );
+    QCOMPARE( sm.rowCount( parent ), 2 );
+    QCOMPARE( fm.rowCount(), 3 );
+    QCOMPARE( sf.rowCount(), 3 );
+    QCOMPARE( sm.index( 0, 0, parent ).data(), sf.index( 1, 0 ).data() );
+    QCOMPARE( sm.index( 1, 0, parent ).data(), sf.index( 2, 0 ).data() );
+    QCOMPARE( sf.index( 1, 0 ).data(), QVariant( "First child" ) );
+    QCOMPARE( sf.index( 2, 0 ).data(), QVariant( "Second child" ) );
+
+    sm.removeRow( 1, parent );
+    QCOMPARE( sm.rowCount( parent ), 1 );
+    QCOMPARE( fm.rowCount(), 2 );
+    QCOMPARE( sf.rowCount(), 2 );
+    QCOMPARE( sm.index( 0, 0, parent ).data(), sf.index( 1, 0 ).data() );
+    QCOMPARE( sf.index( 1, 0 ).data(), QVariant( "First child" ) );
+
+    sm.removeRow( 0, parent );
+    QCOMPARE( sm.rowCount( parent ), 0 );
+    QCOMPARE( fm.rowCount(), 1 );
+    QCOMPARE( sf.rowCount(), 1 );
+    QCOMPARE( sm.index( 0, 0 ).data(), sf.index( 0, 0 ).data() );
+
+    sm.removeRow( 0 );
+    QCOMPARE( sm.rowCount(), 0 );
+    QCOMPARE( fm.rowCount(), 0 );
+    QCOMPARE( sf.rowCount(), 0 );
+}
+
+void FlatProxyModelTester::testInsertRemoveGrandChildren()
+{
+    QSortFilterProxyModel sf;
+    FlatProxyModel fm;
+    QStandardItemModel sm;
+
+    sf.setSourceModel( &fm );
+    fm.setSourceModel( &sm );
+
+    sm.setHeaderData( 0, Qt::Horizontal, "Column 0" );
+    QCOMPARE( sm.rowCount(), 0 );
+
+    QStandardItem *pitem = new QStandardItem( "Parent" );
+    sm.insertRow( 0, pitem );
+    QCOMPARE( sm.rowCount(), 1 );
+    QCOMPARE( fm.rowCount(), 1 );
+    QCOMPARE( sf.rowCount(), 1 );
+    QCOMPARE( sm.index( 0, 0 ).data(), sf.index( 0, 0 ).data() );
+    QCOMPARE( sf.index( 0, 0 ).data(), QVariant( "Parent" ) );
+
+    QModelIndex grandparent = sm.index( 0, 0 );
+    QVERIFY( grandparent.isValid() );
+
+    QStandardItem *gitem = new QStandardItem( "First child" );
+    pitem->insertRow( 0, gitem );
+    QCOMPARE( sm.rowCount( grandparent ), 1 );
+    QCOMPARE( fm.rowCount(), 2 );
+    QCOMPARE( sf.rowCount(), 2 );
+    QCOMPARE( sm.index( 0, 0, grandparent ).data(), sf.index( 1, 0 ).data() );
+    QCOMPARE( sf.index( 1, 0 ).data(), QVariant( "First child" ) );
+
+    QModelIndex parent = sm.index( 0, 0, grandparent );
+    QVERIFY( parent.isValid() );
+
+    QStandardItem *item = new QStandardItem( "First grandchild" );
+    gitem->insertRow( 0, item );
+    QCOMPARE( sm.rowCount( parent ), 1 );
+    QCOMPARE( fm.rowCount(), 3 );
+    QCOMPARE( sf.rowCount(), 3 );
+    QCOMPARE( sm.index( 0, 0, parent ).data(), sf.index( 2, 0 ).data() );
+    QCOMPARE( sf.index( 2, 0 ).data(), QVariant( "First grandchild" ) );
+
+    item = new QStandardItem( "Second grandchild" );
+    gitem->insertRow( 1, item );
+    QCOMPARE( sm.rowCount( parent ), 2 );
+    QCOMPARE( fm.rowCount(), 4 );
+    QCOMPARE( sf.rowCount(), 4 );
+    QCOMPARE( sm.index( 0, 0, parent ).data(), sf.index( 2, 0 ).data() );
+    QCOMPARE( sm.index( 1, 0, parent ).data(), sf.index( 3, 0 ).data() );
+    QCOMPARE( sf.index( 2, 0 ).data(), QVariant( "First grandchild" ) );
+    QCOMPARE( sf.index( 3, 0 ).data(), QVariant( "Second grandchild" ) );
+
+    item = new QStandardItem( "In between" );
+    gitem->insertRow( 1, item );
+    QCOMPARE( sm.rowCount( parent ), 3 );
+    QCOMPARE( fm.rowCount(), 5 );
+    QCOMPARE( sf.rowCount(), 5 );
+    QCOMPARE( sm.index( 0, 0, parent ).data(), sf.index( 2, 0 ).data() );
+    QCOMPARE( sm.index( 1, 0, parent ).data(), sf.index( 3, 0 ).data() );
+    QCOMPARE( sm.index( 2, 0, parent ).data(), sf.index( 4, 0 ).data() );
+    QCOMPARE( sf.index( 2, 0 ).data(), QVariant( "First grandchild" ) );
+    QCOMPARE( sf.index( 3, 0 ).data(), QVariant( "In between" ) );
+    QCOMPARE( sf.index( 4, 0 ).data(), QVariant( "Second grandchild" ) );
+
+    item = new QStandardItem( "Before first" );
+    gitem->insertRow( 0, item );
+    QCOMPARE( sm.rowCount( parent ), 4 );
+    QCOMPARE( fm.rowCount(), 6 );
+    QCOMPARE( sf.rowCount(), 6 );
+    QCOMPARE( sm.index( 0, 0, parent ).data(), sf.index( 2, 0 ).data() );
+    QCOMPARE( sm.index( 1, 0, parent ).data(), sf.index( 3, 0 ).data() );
+    QCOMPARE( sm.index( 2, 0, parent ).data(), sf.index( 4, 0 ).data() );
+    QCOMPARE( sm.index( 3, 0, parent ).data(), sf.index( 5, 0 ).data() );
+    QCOMPARE( sf.index( 2, 0 ).data(), QVariant( "Before first" ) );
+    QCOMPARE( sf.index( 3, 0 ).data(), QVariant( "First grandchild" ) );
+    QCOMPARE( sf.index( 4, 0 ).data(), QVariant( "In between" ) );
+    QCOMPARE( sf.index( 5, 0 ).data(), QVariant( "Second grandchild" ) );
+
+    sm.removeRow( 0, parent );
+    QCOMPARE( sm.rowCount( parent ), 3 );
+    QCOMPARE( fm.rowCount(), 5 );
+    QCOMPARE( sf.rowCount(), 5 );
+    QCOMPARE( sm.index( 0, 0, parent ).data(), sf.index( 2, 0 ).data() );
+    QCOMPARE( sm.index( 1, 0, parent ).data(), sf.index( 3, 0 ).data() );
+    QCOMPARE( sm.index( 2, 0, parent ).data(), sf.index( 4, 0 ).data() );
+    QCOMPARE( sf.index( 2, 0 ).data(), QVariant( "First grandchild" ) );
+    QCOMPARE( sf.index( 3, 0 ).data(), QVariant( "In between" ) );
+    QCOMPARE( sf.index( 4, 0 ).data(), QVariant( "Second grandchild" ) );
+
+    sm.removeRow( 1, parent );
+    QCOMPARE( sm.rowCount( parent ), 2 );
+    QCOMPARE( fm.rowCount(), 4 );
+    QCOMPARE( sf.rowCount(), 4 );
+    QCOMPARE( sm.index( 0, 0, parent ).data(), sf.index( 2, 0 ).data() );
+    QCOMPARE( sm.index( 1, 0, parent ).data(), sf.index( 3, 0 ).data() );
+    QCOMPARE( sf.index( 2, 0 ).data(), QVariant( "First grandchild" ) );
+    QCOMPARE( sf.index( 3, 0 ).data(), QVariant( "Second grandchild" ) );
+
+    sm.removeRow( 1, parent );
+    QCOMPARE( sm.rowCount( parent ), 1 );
+    QCOMPARE( fm.rowCount(), 3 );
+    QCOMPARE( sf.rowCount(), 3 );
+    QCOMPARE( sm.index( 0, 0, parent ).data(), sf.index( 2, 0 ).data() );
+    QCOMPARE( sf.index( 2, 0 ).data(), QVariant( "First grandchild" ) );
+
+    sm.removeRow( 0, parent );
+    QCOMPARE( sm.rowCount( parent ), 0 );
+    QCOMPARE( fm.rowCount(), 2 );
+    QCOMPARE( sf.rowCount(), 2 );
+    QCOMPARE( sm.index( 0, 0, grandparent ).data(), sf.index( 1, 0 ).data() );
+    QCOMPARE( sf.index( 1, 0 ).data(), QVariant( "First child" ) );
+
+    QCOMPARE( sm.rowCount( grandparent ), 1 );
+    sm.removeRow( 0, grandparent );
+    QCOMPARE( sm.rowCount( grandparent ), 0 );
+    QCOMPARE( fm.rowCount(), 1 );
+    QCOMPARE( sf.rowCount(), 1 );
+    QCOMPARE( sm.index( 0, 0 ).data(), sf.index( 0, 0 ).data() );
+    QCOMPARE( sf.index( 0, 0 ).data(), QVariant( "Parent" ) );
+
+    QCOMPARE( sm.rowCount(), 1 );
+    sm.removeRow( 0 );
+    QCOMPARE( sm.rowCount(), 0 );
+    QCOMPARE( fm.rowCount(), 0 );
+    QCOMPARE( sf.rowCount(), 0 );
 }
 
 } //namespace KPlato

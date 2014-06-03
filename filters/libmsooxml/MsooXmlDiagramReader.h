@@ -28,7 +28,7 @@
 #include <MsooXmlReader.h>
 #include <MsooXmlCommonReader.h>
 
-#include "msooxml_export.h"
+#include "komsooxml_export.h"
 
 namespace MSOOXML
 {
@@ -40,22 +40,26 @@ namespace Diagram
     class LayoutNode;
 }
 
-class MSOOXML_EXPORT MsooXmlDiagramReaderContext : public MSOOXML::MsooXmlReaderContext
+class KOMSOOXML_EXPORT MsooXmlDiagramReaderContext : public MSOOXML::MsooXmlReaderContext
 {
 public:
     KoGenStyles* m_styles;
     Diagram::Context* m_context;
+
+    int shapeListSize() const;
+
     explicit MsooXmlDiagramReaderContext(KoGenStyles* styles);
     virtual ~MsooXmlDiagramReaderContext();
     void saveIndex(KoXmlWriter* xmlWriter, const QRect &rect);
 };
 
-class MSOOXML_EXPORT MsooXmlDiagramReader : public MSOOXML::MsooXmlCommonReader
+class KOMSOOXML_EXPORT MsooXmlDiagramReader : public MSOOXML::MsooXmlCommonReader
 {
 public:
-    MsooXmlDiagramReader(KoOdfWriters *writers);
+    explicit MsooXmlDiagramReader(KoOdfWriters *writers);
     virtual ~MsooXmlDiagramReader();
     virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0);
+
 protected:
     //KoFilter::ConversionStatus read_layoutNode();
     //KoFilter::ConversionStatus read_choose();

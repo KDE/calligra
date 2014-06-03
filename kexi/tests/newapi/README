@@ -20,7 +20,7 @@ Usage: run './sqltest_int' without arguments for usage details.
 3. Important documents
 ----------------------
 -Kexi API Documentation in html
-http://calligra-suite.org/developer/apidocs/kexi/html
+http://calligra.org/developer/apidocs/kexi/html
 
 -KexiDB Drivers section of KexiWiki Web Page
 http://www.kexi-project.org/wiki/wikiview/index.php@KexiDBDrivers.html

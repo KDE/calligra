@@ -43,7 +43,7 @@ class KPLATOUI_EXPORT ResourceTreeView : public DoubleTreeViewBase
 {
     Q_OBJECT
 public:
-    ResourceTreeView( QWidget *parent );
+    explicit ResourceTreeView(QWidget *parent);
 
     ResourceItemModel *model() const { return static_cast<ResourceItemModel*>( DoubleTreeViewBase::model() ); }
 
@@ -63,12 +63,11 @@ class KPLATOUI_EXPORT ResourceEditor : public ViewBase
 {
     Q_OBJECT
 public:
-    ResourceEditor( KoDocument *part, QWidget *parent );
+    ResourceEditor(KoPart *part, KoDocument *dic, QWidget *parent);
     
     void setupGui();
     Project *project() const { return m_view->project(); }
-    virtual void draw( Project &project );
-    virtual void draw();
+    virtual void setProject( Project *project );
 
     ResourceItemModel *model() const { return m_view->model(); }
     
@@ -86,8 +85,8 @@ public:
     
 signals:
     void addResource( ResourceGroup* );
-    void deleteObjectList( QObjectList );
-    
+    void deleteObjectList( const QObjectList& );
+
 public slots:
     /// Activate/deactivate the gui
     virtual void setGuiActive( bool activate );
@@ -99,10 +98,10 @@ protected:
     void updateActionsEnabled(  bool on = true );
 
 private slots:
-    void slotContextMenuRequested( QModelIndex index, const QPoint& pos );
+    void slotContextMenuRequested( const QModelIndex &index, const QPoint& pos );
     void slotSplitView();
     
-    void slotSelectionChanged( const QModelIndexList );
+    void slotSelectionChanged( const QModelIndexList& );
     void slotCurrentChanged( const QModelIndex& );
     void slotEnableActions( bool on );
 

@@ -22,15 +22,16 @@
 
 #include <KoToolRegistry.h>
 
+#include <KoIcon.h>
 #include <klocale.h>
 #include <kdebug.h>
 
 KarbonCalligraphyToolFactory::KarbonCalligraphyToolFactory()
         : KoToolFactoryBase("KarbonCalligraphyTool")
 {
-    setToolTip(i18n("Calligraphy Tool"));
+    setToolTip(i18n("Calligraphy"));
     setToolType("karbon,krita");
-    setIcon("calligraphy");
+    setIconName(koIconNameCStr("calligraphy"));
     setPriority(3);
     setActivationShapeId("flake/edit");
 }

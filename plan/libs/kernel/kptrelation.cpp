@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Thomas zander <zander@kde.org>
-   Copyright (C) 2004 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2004, 2012 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,11 +21,11 @@
 
 #include "kptnode.h"
 #include "kptproject.h"
+#include "kptdebug.h"
 
-#include <qdom.h>
+#include <QDomDocument>
 #include <QStringList>
 
-#include <kdebug.h>
 
 namespace KPlato
 {
@@ -35,7 +35,7 @@ Relation::Relation(Node *parent, Node *child, Type type, Duration lag) {
     m_child=child;
     m_type=type;
     m_lag=lag;
-    //kDebug()<<this;
+    //kDebug(planDbg())<<this;
 }
 
 Relation::Relation(Node *parent, Node *child, Type type) {
@@ -43,7 +43,7 @@ Relation::Relation(Node *parent, Node *child, Type type) {
     m_child=child;
     m_type=type;
     m_lag=Duration();
-    //kDebug()<<this;
+    //kDebug(planDbg())<<this;
 }
 
 Relation::Relation(Relation *rel) {
@@ -51,11 +51,11 @@ Relation::Relation(Relation *rel) {
     m_child=rel->child();
     m_type=rel->type();
     m_lag=rel->lag();
-    //kDebug()<<this;
+    //kDebug(planDbg())<<this;
 }
 
 Relation::~Relation() {
-    //kDebug()<<"("<<this<<") parent:"<<(m_parent ? m_parent->name():"none")<<" child:"<<(m_child ? m_child->name():"None");
+    //kDebug(planDbg())<<"("<<this<<") parent:"<<(m_parent ? m_parent->name():"none")<<" child:"<<(m_child ? m_child->name():"None");
     if (m_parent)
         m_parent->takeDependChildNode(this);
     if (m_child)
@@ -113,11 +113,11 @@ bool Relation::load(KoXmlElement &element, Project &project) {
         return false;
     }
     if (m_child == m_parent) {
-        kDebug()<<"child == parent";
+        kDebug(planDbg())<<"child == parent";
         return false;
     }
     if (m_child == m_parent) {
-        kDebug()<<"child == parent";
+        kDebug(planDbg())<<"child == parent";
         return false;
     }
     if (!m_parent->legalToLink(m_child))
@@ -137,7 +137,7 @@ bool Relation::load(KoXmlElement &element, Project &project) {
         return false;
     }
 
-    //kDebug()<<"Added relation: Child="<<m_child->name()<<" parent="<<m_parent->name();
+    //kDebug(planDbg())<<"Added relation: Child="<<m_child->name()<<" parent="<<m_parent->name();
     return true;
 }
 
@@ -170,10 +170,36 @@ void Relation::save(QDomElement &element) const {
 void Relation::printDebug(const QByteArray& _indent) { 
     QString indent = _indent;
     indent += "  ";
-    kDebug()<<indent<<"  Parent:"<<m_parent->name();
-    kDebug()<<indent<<"  Child:"<<m_child->name();
-    kDebug()<<indent<<"  Type:"<<m_type;
+    kDebug(planDbg())<<indent<<"  Parent:"<<m_parent->name();
+    kDebug(planDbg())<<indent<<"  Child:"<<m_child->name();
+    kDebug(planDbg())<<indent<<"  Type:"<<m_type;
 }
 #endif
 
+
 }  //KPlato namespace
+
+QDebug operator<<( QDebug dbg, const KPlato::Relation *r )
+{
+    return dbg<<(*r);
+}
+
+QDebug operator<<( QDebug dbg, const KPlato::Relation &r )
+{
+    KPlato::Node *parent = r.parent();
+    KPlato::Node *child = r.child();
+    QString type = "FS";
+    switch ( r.type() ) {
+    case KPlato::Relation::StartStart: type = "SS"; break;
+    case KPlato::Relation::FinishFinish: type = "FF"; break;
+    default: break;
+    }
+
+    KPlato::Duration lag = r.lag();
+    dbg<<"Relation["<<parent->name()<<"->"<<child->name()<<type;
+    if ( lag != 0 ) {
+        dbg<<lag.toString( KPlato::Duration::Format_HourFraction );
+    }
+    dbg <<']';
+    return dbg;
+}

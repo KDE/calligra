@@ -31,6 +31,7 @@
 #include "words_export.h"
 
 #include <KoDocument.h>
+#include <KoShapeManager.h>
 #include <KoShapeBasedDocumentBase.h>
 #include <KoXmlReader.h>
 
@@ -43,11 +44,21 @@ class KWView;
 class KWPage;
 class KWFrameSet;
 class KoInlineTextObjectManager;
+class KoTextRangeManager;
 class KoShapeConfigFactoryBase;
 class KoUpdater;
-
+class KoShapeAnchor;
+class KoShapeContainer;
+class KoShapeController;
+class KoPart;
 class KLocalizedString;
 class QIODevice;
+class KoAnnotationLayoutManager;
+class KoDocumentInfoDlg;
+
+
+#define WORDS_MIME_TYPE "application/vnd.oasis.opendocument.text"
+
 
 /**
  * The class that represents a Words document containing content and settings.
@@ -59,17 +70,20 @@ public:
     /**
      * Constructor, normally called by the KWFactory::createPartObject()
      */
-    explicit KWDocument(QWidget *parentWidget = 0, QObject* parent = 0, bool singleViewMode = false);
+    explicit KWDocument(KoPart *part);
     ~KWDocument();
 
     // KoShapeBasedDocumentBase interface
     /// reimplemented from KoShapeBasedDocumentBase
-    void addShape(KoShape *shape);
+    virtual void addShape(KoShape *shape);
     /// reimplemented from KoShapeBasedDocumentBase
-    void removeShape(KoShape *shape);
-
+    virtual void removeShape(KoShape *shape);
+    // reimplemented from KoShapeBasedDocumentBase
+    virtual void shapesRemoved(const QList<KoShape*> &shapes, KUndo2Command *command);
 
     // KoDocument interface
+    /// reimplemented from KoDocument
+    virtual QPixmap generatePreview(const QSize& size);
     /// reimplemented from KoDocument
     virtual void paintContent(QPainter&, const QRect&);
     /// reimplemented from KoDocument
@@ -79,15 +93,28 @@ public:
     /// reimplemented from KoOdfDocument
     virtual bool saveOdf(SavingContext &documentContext);
     /// reimplemented from KoDocument
-    virtual KoView* createViewInstance(QWidget*);
-    /// reimplemented from KoDocument
-    virtual QGraphicsItem *createCanvasItem();
-    /// reimplemented from KoDocument
     virtual int pageCount() const {
         return pageManager()->pageCount();
     }
+    /// reimplemented from KoDocument
+    virtual QByteArray nativeFormatMimeType() const { return WORDS_MIME_TYPE; }
+    /// reimplemented from KoDocument
+    virtual QByteArray nativeOasisMimeType() const { return WORDS_MIME_TYPE; }
+    /// reimplemented from KoDocument
+    virtual QStringList extraNativeMimeTypes() const
+    {
+        return QStringList() << "application/vnd.oasis.opendocument.text-master"
+                             << "application/vnd.oasis.opendocument.text-template";
+    }
+
+
+    bool isMasterDocument() const;
+    void setIsMasterDocument(bool isMasterDocument);
 
     // others
+    KoAnnotationLayoutManager *annotationLayoutManager() const {
+        return m_annotationManager;
+    }
     /**
      * Return the pageManager used in this document.
      */
@@ -115,23 +142,14 @@ public:
      * In all cases, the new page will have the number afterPageNum+1.
      * Use appendPage in WP mode, insertPage in DTP mode.
      * @param masterPageName the name of the master page to use for this new page.
-     * @param addUndoRedoCommand if true then an undo-redo action is added to the
-     * document to allow undo/redo inserting the page.
      */
-    KWPage insertPage(int afterPageNum, const QString &masterPageName = QString(), bool addUndoRedoCommand = true);
+    KWPage insertPage(int afterPageNum, const QString &masterPageName = QString());
     /**
      * Append a new page, creating followup frames (but not headers/footers),
      * and return the page number.
      * @param masterPageName the name of the master page to use for this new page.
-     * @param addUndoRedoCommand if true then an undo-redo action is added to the
-     * document to allow undo/redo appending the page.
      */
-    KWPage appendPage(const QString &masterPageName = QString(), bool addUndoRedoCommand = true);
-    /**
-     * remove a page from the document.
-     * @param pageNumber the pageNumber that should be removed.
-     */
-    void removePage(int pageNumber);
+    KWPage appendPage(const QString &masterPageName = QString());
 
     /// return the amount of framesets this document holds
     int frameSetCount() const {
@@ -153,8 +171,8 @@ public:
     /// return the inlineTextObjectManager for this document.
     KoInlineTextObjectManager *inlineTextObjectManager() const;
 
-    /// reimplemented from super
-    QList<KoDocument::CustomDocumentWidgetItem> createCustomDocumentWidgets(QWidget *parent);
+    /// return the textRangeManager for this document.
+    KoTextRangeManager *textRangeManager() const;
 
     KWApplicationConfig &config() {
         return m_config;
@@ -168,13 +186,30 @@ public:
 
     // reimplemented slot from KoDocument
     virtual void initEmpty();
-    // reimplemented slot from KoDocument
-    virtual QStringList extraNativeMimeTypes(ImportExportType importExportType) const;
 
     bool layoutFinishedAtleastOnce() const { return m_mainFramesetEverFinished; }
 
     /// request a relayout of auto-generated frames on all pages of this argument style.
     void updatePagesForStyle(const KWPageStyle &style);
+
+    /// find the frame closest to the given shape or return 0
+    KWFrame *findClosestFrame(KoShape *shape) const;
+
+    KoShapeAnchor *anchorOfShape(KoShape *shape) const;
+
+    KWFrame *frameOfShape(KoShape *shape) const;
+
+    /// returns the document's shapeController. This controller should only be used for deleting shapes.
+    //TODO: refactor the shapeController so it can be completely per document maybe? Then it can be added to the resourceManager
+    KoShapeController *shapeController() const { return m_shapeController; }
+
+    /// Set cover image data at a QPair<cover mime type, cover data>.
+    void setCoverImage(QPair<QString, QByteArray> cover);
+
+    /// return cover data.
+    QPair<QString, QByteArray> coverImage();
+
+    KoDocumentInfoDlg* createDocumentInfoDialog(QWidget *parent, KoDocumentInfo *docInfo) const;
 
 public slots:
     /**
@@ -203,13 +238,26 @@ signals:
     /// signal emitted when a page has been added
     void pageSetupChanged();
 
+    /// emitted whenever a shape is added.
+    void shapeAdded(KoShape *, KoShapeManager::Repaint);
+
+    /// emitted whenever an annotation shape is added.
+    void annotationShapeAdded(bool);
+
+    /// emitted whenever an annotation shape is removed
+    void annotationShapeRemoved(KoShape *);
+
+    /// emitted whenever a shape is removed
+    void shapeRemoved(KoShape *);
+
+    /// emitted wheneve a resources needs to be set on the canvasResourceManager
+    void resourceChanged(int key, const QVariant &value);
+
 private slots:
     /// Frame maintenance on already registered framesets
     void addFrame(KWFrame *frame);
     void removeFrame(KWFrame *frame);
-    void removeFrameFromViews(KWFrame*);
     /// Called after the constructor figures out there is an install problem.
-    void showErrorAndDie();
     void mainTextFrameSetLayoutDone();
 
     void layoutProgressChanged(int percent);
@@ -236,21 +284,24 @@ private:
      */
     void clear();
 
-    void showStartUpWidget(KoMainWindow *parent, bool alwaysShow = false);
     /**
      * emits pageSetupChanged
      */
     void saveConfig();
 
 private:
+    bool m_isMasterDocument;
     QList<KWFrameSet*> m_frameSets;
-    QString m_viewMode;
     KWPageManager m_pageManager;
     KWFrameLayout m_frameLayout;
     KWApplicationConfig m_config;
     bool m_mainFramesetEverFinished;
     QList<KoShapeConfigFactoryBase *> m_panelFactories;
     QPointer<KoUpdater> m_layoutProgressUpdater;
+    KoShapeController *m_shapeController;
+    QPair<QString, QByteArray> m_coverImage;
+    QList<KoShape*> m_loadedAnnotationShapes;
+    KoAnnotationLayoutManager *m_annotationManager;
 };
 
 #endif

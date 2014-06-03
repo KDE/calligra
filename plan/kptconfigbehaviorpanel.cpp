@@ -32,7 +32,7 @@
 #include <kstandarddirs.h>
 #include <kdebug.h>
 
-#include <qdatetime.h> 
+#include <QDateTime> 
 #include <QCheckBox> 
 
 namespace KPlato

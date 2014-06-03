@@ -24,14 +24,14 @@
 
 #include "KPrPresentationTool.h"
 
-#include <QtGui/QWidget>
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QPainter>
+#include <QWidget>
+#include <QVBoxLayout>
+#include <QPainter>
 #include <QKeyEvent>
-#include <qabstracttextdocumentlayout.h>
-#include <qcursor.h>
-#include <qdesktopservices.h>
-#include <qurl.h>
+#include <QAbstractTextDocumentLayout>
+#include <QCursor>
+#include <QDesktopServices>
+#include <QUrl>
 
 #include <KoShape.h>
 #include <KoShapeManager.h>
@@ -48,17 +48,23 @@
 #include "KPrPresentationDrawStrategy.h"
 #include "KPrPresentationBlackStrategy.h"
 #include "ui/KPrPresentationToolWidget.h"
+
+#ifndef QT_NO_DBUS
 #include "KPrPresentationToolAdaptor.h"
-#include "KPrViewModePresentation.h"
+#endif
 
 
 KPrPresentationTool::KPrPresentationTool( KPrViewModePresentation &viewMode )
 : KoToolBase( viewMode.canvas() )
 , m_viewMode( viewMode )
 , m_strategy( new KPrPresentationStrategy( this ) )
+#ifndef QT_NO_DBUS
 , m_bus ( new KPrPresentationToolAdaptor( this ) )
-{
+#endif
+{   
+#ifndef QT_NO_DBUS
     QDBusConnection::sessionBus().registerObject("/kpresenter/PresentationTools", this);
+#endif
 
     // tool box
     m_frame = new QFrame( m_viewMode.canvas()->canvasWidget() );
@@ -75,9 +81,9 @@ KPrPresentationTool::KPrPresentationTool( KPrViewModePresentation &viewMode )
     m_presentationToolWidget->installEventFilter(this);
 
     // Connections of button clicked to slots
-    connect( m_presentationToolWidget->presentationToolUi().penButton, SIGNAL( clicked() ), this, SLOT( drawOnPresentation() ) );
-    connect( m_presentationToolWidget->presentationToolUi().highLightButton, SIGNAL( clicked() ), this, SLOT( highlightPresentation() ) );
-    connect( m_presentationToolWidget->presentationToolUi().blackButton, SIGNAL( clicked() ), this, SLOT( blackPresentation() ) );
+    connect( m_presentationToolWidget->presentationToolUi().penButton, SIGNAL(clicked()), this, SLOT(drawOnPresentation()) );
+    connect( m_presentationToolWidget->presentationToolUi().highLightButton, SIGNAL(clicked()), this, SLOT(highlightPresentation()) );
+    connect( m_presentationToolWidget->presentationToolUi().blackButton, SIGNAL(clicked()), this, SLOT(blackPresentation()) );
 
 }
 

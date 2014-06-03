@@ -25,24 +25,24 @@
 #include "KPrPageApplicationData.h"
 #include "pageeffects/KPrPageEffect.h"
 
-KPrPageEffectSetCommand::KPrPageEffectSetCommand( KoPAPageBase * page, KPrPageEffect * pageEffect )
-: m_page( page )
+KPrPageEffectSetCommand::KPrPageEffectSetCommand(KoPAPageBase * page, KPrPageEffect * pageEffect, KUndo2Command *parent)
+: KUndo2Command(parent)
+, m_page( page )
 , m_newPageEffect( pageEffect )
 , m_oldPageEffect( KPrPage::pageData( m_page )->pageEffect() )
 , m_deleteNewPageEffect( true )
 {
-    // TODO 2.1 rename page to slide
     Q_ASSERT( m_newPageEffect != m_oldPageEffect );
     if ( m_newPageEffect ) {
         if ( ! m_oldPageEffect ) {
-            setText( i18nc( "(qtundo-format)", "Create page effect" ) );
+            setText( i18nc( "(qtundo-format)", "Create Slide Effect" ) );
         }
         else {
-            setText( i18nc( "(qtundo-format)", "Modify page effect" ) );
+            setText( i18nc( "(qtundo-format)", "Modify Slide Effect" ) );
         }
     }
     else {
-        setText( i18nc( "(qtundo-format)", "Delete page effect" ) );
+        setText( i18nc( "(qtundo-format)", "Delete Slide Effect" ) );
     }
 }
 

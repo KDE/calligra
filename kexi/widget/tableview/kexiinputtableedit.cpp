@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 Lucijan Busch <lucijan@gmx.at>
-   Copyright (C) 2003-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,13 +21,12 @@
 #include "kexiinputtableedit.h"
 #include <kexi_global.h>
 
-#include <qregexp.h>
-#include <qevent.h>
-#include <qtimer.h>
-#include <qpainter.h>
-#include <qapplication.h>
-#include <qclipboard.h>
-#include <qtooltip.h>
+#include <QRegExp>
+#include <QEvent>
+#include <QTimer>
+#include <QPainter>
+#include <QApplication>
+#include <QClipboard>
 #include <QHBoxLayout>
 
 #include <kglobal.h>
@@ -38,7 +37,7 @@
 #include <kcompletionbox.h>
 #include <knumvalidator.h>
 #include <kexiutils/longlongvalidator.h>
-#include <kexidb/field.h>
+#include <db/field.h>
 #include <kexidb/fieldvalidator.h>
 
 //! @internal
@@ -60,12 +59,9 @@ protected:
 
 //======================================================
 
-KexiInputTableEdit::KexiInputTableEdit(KexiTableViewColumn &column, QWidget *parent)
+KexiInputTableEdit::KexiInputTableEdit(KexiDB::TableViewColumn &column, QWidget *parent)
         : KexiTableEdit(column, parent)
 {
-// m_type = f.type(); //copied because the rest of code uses m_type
-// m_field = &f;
-// m_origValue = value;//original value
     init();
 }
 
@@ -75,9 +71,9 @@ KexiInputTableEdit::~KexiInputTableEdit()
 
 void KexiInputTableEdit::init()
 {
-// kDebug() << "KexiInputTableEdit: m_origValue.typeName()==" << m_origValue.typeName();
-// kDebug() << "KexiInputTableEdit: type== " << field()->typeName();
-// kDebug() << "KexiInputTableEdit: displayed type== " << displayedField()->typeName();
+// kDebug() << "m_origValue.typeName()==" << m_origValue.typeName();
+// kDebug() << "type== " << field()->typeName();
+// kDebug() << "displayed type== " << displayedField()->typeName();
 
     m_textFormatter.setField( field() );
 
@@ -86,32 +82,18 @@ void KexiInputTableEdit::init()
     if (m_decsym.isEmpty())
         m_decsym = ".";//default
 
-    const bool align_right = displayedField()->isNumericType();
-
-    QHBoxLayout *lyr = 0;
-    if (!align_right) {
-        //create layer for internal editor
-        lyr = new QHBoxLayout(this);
-        lyr->setContentsMargins(0, 0, 0, 0);
-    }
+    //create layer for internal editor
+    QHBoxLayout *lyr =  new QHBoxLayout(this);
+    lyr->setContentsMargins(0, 0, 0, 0);
 
     //create internal editor
     m_lineedit = new MyLineEdit(this);
     m_lineedit->setObjectName("KexiInputTableEdit-MyLineEdit");
     connect(m_lineedit, SIGNAL(textEdited(QString)),
             this, SLOT(slotTextEdited(QString)));
-    KColorScheme cs(QPalette::Active);
-    QColor focus = cs.decoration(KColorScheme::FocusColor).color();
-    m_lineedit->setStyleSheet(QString("QLineEdit { \
-      border: 1px solid %1; \
-      border-radius: 0px; \
-      padding: 0px %2px 0px %3px; }")
-      .arg(focus.name())
-      .arg(align_right ? 1 : 0) // right
-      .arg(align_right ? 0 : 1) // left
-    );
-    if (lyr)
-        lyr->addWidget(m_lineedit);
+    updateLineEditStyleSheet();
+    lyr->addWidget(m_lineedit);
+    const bool align_right = displayedField()->isNumericType();
     if (align_right) {
         m_lineedit->setAlignment(Qt::AlignRight);
     }
@@ -119,21 +101,23 @@ void KexiInputTableEdit::init()
     setViewWidget(m_lineedit);
     m_calculatedCell = false;
 
-#if 0 //js TODO
-    connect(m_cview->completionBox(), SIGNAL(activated(const QString &)),
-            this, SLOT(completed(const QString &)));
-    connect(m_cview->completionBox(), SIGNAL(highlighted(const QString &)),
-            this, SLOT(completed(const QString &)));
+//! @todo
+#if 0
+    connect(m_cview->completionBox(), SIGNAL(activated(QString)),
+            this, SLOT(completed(QString)));
+    connect(m_cview->completionBox(), SIGNAL(highlighted(QString)),
+            this, SLOT(completed(QString)));
     m_cview->completionBox()->setTabHandling(true);
 #endif
-
 }
 
 void KexiInputTableEdit::setValueInternal(const QVariant& add, bool removeOld)
 {
-    QString text(m_textFormatter.toString(removeOld ? QVariant() : m_origValue, add.toString()));
+    bool lengthExceeded;
+    QString text(m_textFormatter.toString(removeOld ? QVariant() : KexiDataItemInterface::originalValue(), add.toString(),
+                                          &lengthExceeded));
     if (text.isEmpty()) {
-        if (m_origValue.toString().isEmpty()) {
+        if (KexiDataItemInterface::originalValue().toString().isEmpty()) {
             //we have to set NULL initial value:
             m_lineedit->setText(QString());
         }
@@ -141,19 +125,18 @@ void KexiInputTableEdit::setValueInternal(const QVariant& add, bool removeOld)
         m_lineedit->setText(text);
     }
 
+//! @todo by default we're moving to the end of editor, ADD OPTION allowing "select all chars"
 #if 0
-//move to end is better by default
     m_cview->selectAll();
 #else
-//js TODO: by default we're moving to the end of editor, ADD OPTION allowing "select all chars"
     m_lineedit->end(false);
 #endif
-
     if (!m_lineedit->validator()) {
         QValidator *validator = new KexiDB::FieldValidator(*field(), m_lineedit);
         validator->setObjectName("KexiInputTableEdit-validator");
         m_lineedit->setValidator(validator);
     }
+    emitLengthExceededIfNeeded(lengthExceeded);
 }
 
 void KexiInputTableEdit::paintEvent(QPaintEvent * /*e*/)
@@ -166,14 +149,13 @@ void KexiInputTableEdit::paintEvent(QPaintEvent * /*e*/)
 void
 KexiInputTableEdit::setRestrictedCompletion()
 {
-#if 0 //js TODO
+//! @todo
+#if 0
     kDebug();
-// KLineEdit *content = static_cast<KLineEdit*>(m_view);
     if (m_cview->text().isEmpty())
         return;
 
     kDebug() << "something to do";
-
     m_cview->useGlobalKeyBindings();
 
     QStringList newC;
@@ -195,8 +177,6 @@ KexiInputTableEdit::completed(const QString &s)
 
 bool KexiInputTableEdit::valueChanged()
 {
-    //not needed? if (m_lineedit->text()!=m_origValue.toString())
-    //not needed?  return true;
     return KexiTableEdit::valueChanged();
 }
 
@@ -216,7 +196,7 @@ QVariant KexiInputTableEdit::value()
         //! js @todo PRESERVE PRECISION!
         QString txt = m_lineedit->text();
         if (m_decsym != ".")
-            txt = txt.replace(m_decsym, ".");//convert back
+            txt.replace(m_decsym, ".");//convert back
         bool ok;
         const double result = txt.toDouble(&ok);
         return ok ? QVariant(result) : QVariant();
@@ -273,7 +253,8 @@ void KexiInputTableEdit::handleCopyAction(const QVariant& value, const QVariant&
 {
     Q_UNUSED(visibleValue);
 //! @todo handle rich text?
-    qApp->clipboard()->setText(m_textFormatter.toString(value, QString()));
+    bool lengthExceeded;
+    qApp->clipboard()->setText(m_textFormatter.toString(value, QString(), &lengthExceeded));
 }
 
 void KexiInputTableEdit::handleAction(const QString& actionName)
@@ -299,8 +280,9 @@ void KexiInputTableEdit::handleAction(const QString& actionName)
 bool KexiInputTableEdit::showToolTipIfNeeded(const QVariant& value, const QRect& rect,
         const QFontMetrics& fm, bool focused)
 {
-    QString text(value.type() == QVariant::String 
-        ? value.toString() : m_textFormatter.toString(value, QString()));
+    bool lengthExceeded;
+    QString text(value.type() == QVariant::String
+        ? value.toString() : m_textFormatter.toString(value, QString(), &lengthExceeded));
 
     QRect internalRect(rect);
     internalRect.setLeft(rect.x() + leftMargin());
@@ -326,8 +308,35 @@ void KexiInputTableEdit::selectAll()
 
 void KexiInputTableEdit::slotTextEdited(const QString& text)
 {
-    Q_UNUSED(text);
     signalValueChanged();
+    bool lengthExceeded = m_textFormatter.lengthExceeded(text);
+    emitLengthExceededIfNeeded(lengthExceeded);
+}
+
+bool KexiInputTableEdit::fixup()
+{
+    const QString t(m_lineedit->text());
+    bool lengthExceeded = m_textFormatter.lengthExceeded(t);
+    if (lengthExceeded) {
+        m_lineedit->setText(t.left(field()->maxLength()));
+    }
+    return true;
+}
+
+void KexiInputTableEdit::updateLineEditStyleSheet()
+{
+    KColorScheme cs(QPalette::Active);
+    QColor focus = cs.decoration(KColorScheme::FocusColor).color();
+    const bool align_right = displayedField()->isNumericType();
+    m_lineedit->setStyleSheet(QString("QLineEdit { \
+      border: 1px solid %1; \
+      border-radius: 0px; \
+      padding: 0px %2px 0px %3px; }")
+      .arg(focus.name())
+      .arg(m_rightMarginWhenFocused) // right
+      .arg(align_right ? 0 : 2) // left
+    );
+    kDebug() << m_rightMarginWhenFocused << m_lineedit->styleSheet();
 }
 
 KEXI_CELLEDITOR_FACTORY_ITEM_IMPL(KexiInputEditorFactoryItem, KexiInputTableEdit)

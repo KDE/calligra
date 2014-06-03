@@ -20,15 +20,17 @@
 #ifndef KEXICELLEDITORFACTORY_H
 #define KEXICELLEDITORFACTORY_H
 
-#include <qvariant.h>
-#include <qwidget.h>
+#include <QVariant>
+#include <QWidget>
 
 #include <kexi_global.h>
-#include <kexidb/field.h>
+#include <db/field.h>
 
 class KexiCellEditorFactoryItem;
 class KexiTableEdit;
-class KexiTableViewColumn;
+namespace KexiDB {
+class TableViewColumn;
+}
 
 //! A singleton class providing access to cell editor factories
 class KEXIDATATABLE_EXPORT KexiCellEditorFactory
@@ -54,7 +56,7 @@ public:
 
     /*! Creates a new editor for \a column. If \a parent is of QScrollArea, the new editor
      will be created inside parent->viewport() instead. */
-    static KexiTableEdit* createEditor(KexiTableViewColumn &column, QWidget* parent = 0);
+    static KexiTableEdit* createEditor(KexiDB::TableViewColumn &column, QWidget* parent = 0);
 
 protected:
     static void init();
@@ -71,7 +73,7 @@ public:
     }
 
 protected:
-    virtual KexiTableEdit* createEditor(KexiTableViewColumn &column, QWidget* parent = 0) = 0;
+    virtual KexiTableEdit* createEditor(KexiDB::TableViewColumn &column, QWidget* parent = 0) = 0;
 
     QString m_className;
     friend class KexiCellEditorFactory;

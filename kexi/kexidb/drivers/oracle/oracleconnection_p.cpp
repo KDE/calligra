@@ -24,11 +24,11 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #define NAMESPACE KexiDB
 #endif
 
-#include <qstringlist.h>
-#include <qfile.h>
+#include <QStringList>
+#include <QFile>
 #include <kdebug.h>
 #include "oracleconnection_p.h"
-#include <kexidb/connectiondata.h>
+#include <db/connectiondata.h>
 #include <string>
 
 using namespace NAMESPACE;
@@ -185,7 +185,7 @@ bool OracleConnectionInternal::executeSQL(const QString& statement) {
     }
 }
 QString OracleConnectionInternal::escapeIdentifier(const QString& str) const {
-	return QString(str).replace('`', "'").toUpper();
+	return QString(str).replace('`', '\'').toUpper();
 }
 QString OracleConnectionInternal::getServerVersion()
 {

@@ -19,9 +19,8 @@
 
 
 #include "MapBrowserWidget.h"
-#include <MarbleWidget.h>
 #include <QPointF>
-#include <KDebug>
+#include <kdebug.h>
 
 MapBrowserWidget::MapBrowserWidget(QWidget *parent)
   : Marble::MarbleWidget(parent),
@@ -30,10 +29,12 @@ MapBrowserWidget::MapBrowserWidget(QWidget *parent)
     m_slotMapChanged_enabled(true),
     m_internalReadOnly(false)
 {
+#ifndef Q_CC_MSVC
 #warning this id could be invalid; try to use Marble::MapThemeManager::mapThemes() and get proper Marble::GeoSceneDocument::head()->mapThemeId()
+#endif
   //Marble::GeoSceneDocument::head()->mapThemeId()
   setMapThemeId("earth/srtm/srtm.dgml");
-  connect( this, SIGNAL(visibleLatLonAltBoxChanged(const GeoDataLatLonAltBox &)), this , SLOT(slotMapChanged()));
+  connect( this, SIGNAL(visibleLatLonAltBoxChanged(GeoDataLatLonAltBox)), this , SLOT(slotMapChanged()));
 }
 
 MapBrowserWidget::~MapBrowserWidget()
@@ -49,20 +50,15 @@ QVariant MapBrowserWidget::value()
     return serializeData(centerLatitude(), centerLongitude(), zoom());
 }
 
-void MapBrowserWidget::setValueInternal(const QVariant& add, bool removeOld )
+void MapBrowserWidget::setValueInternal(const QVariant& add, bool removeOld)
 {
-    
-    //if(isReadOnly())
-    //    return;
+    Q_UNUSED(add);
+    Q_UNUSED(removeOld);
     m_slotMapChanged_enabled = false;
-    //disable change editing
-    //if(removeOld);
-    kDebug() << "add:" << add;
-    kDebug() << "m_origValue:" << m_origValue;
-    //deserializeData((removeOld ? QVariant() : m_origValue));
-    deserializeData(m_origValue);
+    //kDebug() << "add:" << add;
+    //kDebug() << "originalValue():" << originalValue();
+    deserializeData(originalValue());
     m_slotMapChanged_enabled = true;
-    
 }
 
 bool MapBrowserWidget::valueIsNull()
@@ -78,15 +74,12 @@ bool MapBrowserWidget::valueIsEmpty()
 void MapBrowserWidget::setReadOnly(bool readOnly)
 {
     m_internalReadOnly = readOnly;
-    //setDisabled(readOnly);
-    //setInputEnabled(!readOnly);
 }
 
 bool MapBrowserWidget::isReadOnly() const
 {
     return m_internalReadOnly;
 }
-
 
 void MapBrowserWidget::clear()
 {
@@ -117,11 +110,11 @@ QVariant MapBrowserWidget::serializeData(qreal lat, qreal lon, int zoomLevel)
 
 void MapBrowserWidget::deserializeData(const QVariant& serialized)
 {
-    kDebug() << "seting new data";
+    //kDebug() << "seting new data";
     QString serializedData = serialized.toString();
-    kDebug() << "serializedData:" << serializedData << ";" << serialized;
-    QStringList dataList = serializedData.split(";");
-    kDebug() << "splited:" << dataList;
+    //kDebug() << "serializedData:" << serializedData << ";" << serialized;
+    QStringList dataList = serializedData.split(';');
+    //kDebug() << "splited:" << dataList;
     if (dataList.length()>=3) {
         setCenterLatitude(dataList[0].toDouble());
         setCenterLongitude(dataList[1].toDouble());
@@ -135,9 +128,5 @@ void MapBrowserWidget::slotMapChanged()
         return;
     signalValueChanged();
 }
-
-
-
-
 
 #include "MapBrowserWidget.moc"

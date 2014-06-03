@@ -31,6 +31,7 @@
 #include <string.h> // memcpy
 #include <algorithm>
 #include <functional> // std::bind2nd for gcc 2.9x
+#include <cstdlib>
 
 #include "wvlog.h"
 
@@ -205,6 +206,7 @@ typedef enum
     sprmCRgLid1 = 0x486E,
     sprmCRgLidUndocumented1 = 0x4873, // According to OOo it's equal to sprmCRgLid0
     sprmCUndocumented2 = 0x4874,
+    sprmCPbiGrf = 0x4888,
     sprmCIstd = 0x4A30,
     sprmCFtcDefault = 0x4A3D,
     sprmCLid = 0x4A41,
@@ -253,6 +255,7 @@ typedef enum
     sprmCBrc = 0x6865,
     sprmCCv = 0x6870,
     sprmCCvUl = 0x6877,
+    sprmCPbiIBullet = 0x6887,
     sprmCPicLocation = 0x6A03,
     sprmCSymbol = 0x6A09,
     sprmPicBrcTop = 0x6C02,
@@ -728,7 +731,7 @@ namespace
         {
             m_center = readS16( ptr + index * sizeof( S16 ) );
             // A negative value doesn't make sense here, right? Hmmm
-            m_plusMinus = std::abs( readS16( ptr + itbdDelMax * sizeof( S16 ) + index * sizeof( S16 ) ) );
+            m_plusMinus = std::abs( (int)( readS16( ptr + itbdDelMax * sizeof( S16 ) + index * sizeof( S16 ) ) ) );
         }
 
         bool contains( S16 position ) const { return m_center - m_plusMinus <= position && m_center + m_plusMinus >= position; }
@@ -766,7 +769,7 @@ namespace
         else
             brc = toWord97( Word95::BRC( ptr ) );
     }
-}       
+} //anonymous namespace
 
 // Returns -1 if this wasn't a PAP sprm and it returns the length
 // of the applied sprm if it was successful
@@ -1236,11 +1239,12 @@ S16 CHP::applyCHPSPRM( const U8* ptr, const Style* paragraphStyle, const StyleSh
             chse = readU16( ptr + 1 );
             break;
         case SPRM::sprmCSymbol:
-            // First the length byte...
-            ftcSym = readS16( ptr + 1 );
             if ( version == Word8 ) {
-                xchSym = readS16( ptr + 3 );
+                ftcSym = readS16( ptr );
+                xchSym = readS16( ptr + 2 );
             } else {
+                // First the length byte...
+                ftcSym = readS16( ptr + 1 );
                 xchSym = *( ptr + 3 );
             }
 #ifdef WV2_DEBUG_SPRMS
@@ -1738,6 +1742,15 @@ S16 CHP::applyCHPSPRM( const U8* ptr, const Style* paragraphStyle, const StyleSh
             fTNYCompress = ufel;
             break;
         }
+        case SPRM::sprmCPbiIBullet:
+            picBulletCP = readU16( ptr );
+            wvlog << "=> picBulletCP:" << picBulletCP;
+            break;
+        case SPRM::sprmCPbiGrf:
+            fPicBullet = (*ptr & 0x01);
+            fNoAutoSize = (*ptr & 0x02) >> 1;
+            wvlog << "=> fPicBullet:" << fPicBullet << "| fNoAutoSize:" << fNoAutoSize << "| check:" << *ptr;
+            break;
         default:
             wvlog << "Huh? None of the defined sprms matches 0x" << hex << sprm << dec << "... trying to skip anyway" << endl;
             break;

@@ -1,16 +1,16 @@
 #include <iostream>
 #include <string>
 
-#include <qfileinfo.h>
+#include <QFileInfo>
 
 #include <kdebug.h>
 #include <kcomponentdata.h>
 
-#include <kexidb/drivermanager.h>
-#include <kexidb/driver.h>
-#include <kexidb/connection.h>
-#include <kexidb/cursor.h>
-#include <kexidb/parser/parser.h>
+#include <db/drivermanager.h>
+#include <db/driver.h>
+#include <db/connection.h>
+#include <db/cursor.h>
+#include <db/parser/parser.h>
 
 using namespace std;
 QByteArray prgname;
@@ -27,7 +27,7 @@ int main(int argc, char **argv)
     QByteArray drv_name(argv[1]);
     QByteArray db_name = QString(argv[2]).toLower().toLatin1();
 
-    KexiDB::DriverManager manager; // = KexiDB::DriverManager::self();
+    KexiDB::DriverManager manager;
     QStringList names = manager.driverNames();
     kDebug() << "DRIVERS: ";
     for (QStringList::ConstIterator it = names.constBegin(); it != names.constEnd() ; ++it)

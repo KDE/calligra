@@ -38,12 +38,12 @@
 class KEXIEXTWIDGETS_EXPORT KexiObjectInfoLabel : public QWidget
 {
 public:
-    KexiObjectInfoLabel(QWidget* parent);
+    explicit KexiObjectInfoLabel(QWidget* parent);
     virtual ~KexiObjectInfoLabel();
 
-    void setObjectClassIcon(const QString& name);
+    void setObjectClassIconName(const QString &name);
 
-    QString objectClassIcon() const;
+    QString objectClassIconName() const;
 
     void setObjectClassName(const QString& name);
 

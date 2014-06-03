@@ -20,7 +20,7 @@
 */
 
 #include "KarbonCursor.h"
-#include <qbitmap.h>
+#include <QBitmap>
 #include <QSize>
 #include <QPixmap>
 

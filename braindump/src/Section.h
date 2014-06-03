@@ -21,6 +21,7 @@
 #define _SECTION_H_
 
 #include <QMetaType>
+#include <QString>
 #include "SectionGroup.h"
 
 class Layout;
@@ -31,8 +32,9 @@ class RootSection;
 class Section :  public SectionGroup
 {
 public:
-    Section(RootSection* _rootSection);
+    explicit Section(RootSection* _rootSection);
     Section(const Section& _rhs);
+    virtual ~Section();
 public:
     SectionContainer* sectionContainer();
     const QString& name() const;

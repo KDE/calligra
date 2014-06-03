@@ -37,17 +37,17 @@
         <dict>
             <key>CFBundleTypeExtensions</key>
             <array>
-                <string>kplato</string>
+                <string>plan</string>
             </array>
             <key>CFBundleTypeMIMETypes</key>
             <array>
-                <string>application/x-vnd.kde.kplato</string>
+                <string>application/x-vnd.kde.plan</string>
             </array>
             <key>CFBundleTypeOSTypes</key>
             <array>
             </array>
             <key>CFBundleTypeName</key>
-            <string>KPlato Project File</string>
+            <string>Plan Project File</string>
             <key>CFBundleTypeRole</key>
             <string>Editor</string>
         </dict>

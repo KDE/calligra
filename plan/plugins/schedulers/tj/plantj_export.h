@@ -24,7 +24,7 @@
 #include <kdemacros.h>
 
 #ifndef PLANTJ_EXPORT
-# if defined(MAKE_KPLATOKERNEL_LIB)
+# if defined(MAKE_KPLATOTJ_LIB)
    /* We are building this library */ 
 #  define PLANTJ_EXPORT KDE_EXPORT
 # else
@@ -36,21 +36,5 @@
 # ifndef PLANTJ_EXPORT_DEPRECATED
 #  define PLANTJ_EXPORT_DEPRECATED KDE_DEPRECATED PLANTJ_EXPORT
 # endif
-
-/* Now the same for KPLATO_TEST_EXPORT, if compiling with unit tests enabled */
-
-#ifdef COMPILING_TESTS
-#if defined _WIN32 || defined _WIN64
-# if defined(MAKE_KPLATOKERNEL_LIB)
-#       define PLANTJ_TEST_EXPORT KDE_EXPORT
-#   else
-#       define PLANTJ_TEST_EXPORT KDE_IMPORT
-#   endif
-# else /* not windows */
-#   define PLANTJ_TEST_EXPORT KDE_EXPORT
-# endif
-#else /* not compiling tests */
-#   define PLANTJ_TEST_EXPORT
-#endif
 
 #endif

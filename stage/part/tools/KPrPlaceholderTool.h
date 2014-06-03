@@ -26,7 +26,7 @@ class KPrPlaceholderTool : public KoToolBase
 {
     Q_OBJECT
 public:
-    KPrPlaceholderTool( KoCanvasBase *canvas );
+    explicit KPrPlaceholderTool(KoCanvasBase *canvas);
     virtual ~KPrPlaceholderTool();
 
     virtual void paint( QPainter &painter, const KoViewConverter &converter );

@@ -23,7 +23,7 @@
 
 #include <migration/keximigrate.h>
 #include <migration/keximigrate_p.h>
-#include <kexidb/drivers/mySQL/mysqlconnection_p.h>
+#include <kexidb/drivers/mysql/mysqlconnection_p.h>
 
 namespace KexiMigration
 {
@@ -78,10 +78,8 @@ protected:
 
     virtual bool drv_getTableSize(const QString& table, quint64& size);
 
-//TODO: move this somewhere to low level class (MIGRATION?)
-//   virtual bool drv_getTablesList( QStringList &list );
-//TODO: move this somewhere to low level class (MIGRATION?)
-//   virtual bool drv_containsTable( const QString &tableName );
+//! @todo move this somewhere to low level class (MIGRATION?) virtual bool drv_getTablesList( QStringList &list );
+//! @todo move this somewhere to low level class (MIGRATION?) virtual bool drv_containsTable( const QString &tableName );
     
     //Extended API
     //! Position the source dataset at the start of a table

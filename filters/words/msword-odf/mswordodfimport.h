@@ -24,7 +24,7 @@
 #define MSWORDODFIMPORT_H
 
 #include <KoFilter.h>
-//Added by qt3to4:
+
 #include <QByteArray>
 #include <QVariantList>
 

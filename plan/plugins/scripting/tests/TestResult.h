@@ -19,8 +19,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef TESTMODULE_H
-#define TESTMODULE_H
+#ifndef TESTRESULT_H
+#define TESTRESULT_H
 
 #include "kplatoscripting_export.h"
 
@@ -31,7 +31,7 @@
 #include <KoScriptingModule.h>
 
 
-class KPLATOSCRIPTING_TEST_EXPORT TestResult : public QObject
+class TestResult : public QObject
 {
     Q_OBJECT
 public:

@@ -22,19 +22,21 @@
 #include "keximigratedata.h"
 #include "AlterSchemaWidget.h"
 
+#include <KoIcon.h>
+
 #include <QSet>
 #include <QVBoxLayout>
 #include <QListWidget>
 #include <QStringList>
 #include <QProgressBar>
 
-#include <KPushButton>
-#include <KDebug>
+#include <kpushbutton.h>
+#include <kdebug.h>
 
-#include <kexidb/drivermanager.h>
-#include <kexidb/driver.h>
-#include <kexidb/connectiondata.h>
-#include <kexidb/utils.h>
+#include <db/drivermanager.h>
+#include <db/driver.h>
+#include <db/connectiondata.h>
+#include <db/utils.h>
 #include <core/kexidbconnectionset.h>
 #include <core/kexi.h>
 #include <kexiutils/utils.h>
@@ -45,7 +47,6 @@
 #include <kexiproject.h>
 #include <widget/kexicharencodingcombobox.h>
 #include <widget/kexiprjtypeselector.h>
-#include <widget/kexiprjtypeselector.h>
 #include <widget/KexiConnectionSelectorWidget.h>
 #include <widget/KexiProjectSelectorWidget.h>
 #include <widget/KexiDBTitlePage.h>
@@ -55,7 +56,9 @@ using namespace KexiMigration;
 
 #define ROWS_FOR_PREVIEW 3
 
-ImportTableWizard::ImportTableWizard ( KexiDB::Connection* curDB, QWidget* parent, Qt::WFlags flags ) : KAssistantDialog ( parent, flags ) {
+ImportTableWizard::ImportTableWizard ( KexiDB::Connection* curDB, QWidget* parent, Qt::WFlags flags )
+    : KAssistantDialog ( parent, flags )
+{
     m_currentDatabase = curDB;
     m_migrateDriver = 0;
     m_prjSet = 0;
@@ -69,9 +72,11 @@ ImportTableWizard::ImportTableWizard ( KexiDB::Connection* curDB, QWidget* paren
     setupAlterTablePage();
     setupImportingPage();
     setupFinishPage();
+    setValid(m_srcConnPageItem, false);
     
     connect(this, SIGNAL(currentPageChanged(KPageWidgetItem*,KPageWidgetItem*)), this, SLOT(slot_currentPageChanged(KPageWidgetItem*,KPageWidgetItem*)));
-    
+    //! @todo Change this to message prompt when we move to non-dialog wizard.
+    connect(m_srcConnSel, SIGNAL(connectionSelected(bool)), this, SLOT(slotConnPageItemSelected(bool)));
 }
 
 
@@ -87,14 +92,25 @@ void ImportTableWizard::back() {
 }
 
 void ImportTableWizard::next() {
-    if (currentPage() == m_importingPageItem) {
+    if (currentPage() == m_srcConnPageItem) {
+      if (fileBasedSrcSelected()) {
+          setAppropriate(m_srcDBPageItem, false);
+      } else {  
+          setAppropriate(m_srcDBPageItem, true);
+      }
+    } else if (currentPage() == m_importingPageItem) {
         if (doImport()) {
             KAssistantDialog::next();
+            return;
         }
-    }
-    else {
-        KAssistantDialog::next();
-    }
+    } else if (currentPage() == m_alterTablePageItem) {
+      if (m_currentDatabase->objectNames().contains(m_alterSchemaWidget->newSchema()->name(),Qt::CaseInsensitive)) {
+            KMessageBox::information(this, i18n("An object with this name already exists, please change the table name to continue.", i18n("Object Name Exists")));
+            return;
+      }
+    }  
+        
+    KAssistantDialog::next();
 }
 
 void ImportTableWizard::accept() {
@@ -124,7 +140,7 @@ void ImportTableWizard::setupIntroPage()
     msg = i18n("Table importing wizard allows you to import a table from an existing database into the current Kexi database.");
  
     lblIntro->setText(msg + "\n\n"
-    + i18n("Click \"Next\" button to continue or \"Cancel\" button to exit this wizard."));
+                      + i18n("Click \"Next\" button to continue or \"Cancel\" button to exit this wizard."));
     vbox->addWidget(lblIntro);
     
     m_introPageItem = new KPageWidgetItem(m_introPageWidget, i18n("Welcome to the Table Importing Wizard"));
@@ -155,7 +171,6 @@ void ImportTableWizard::setupSrcConn()
     kDebug() << m_migrateManager->supportedMimeTypes();
     m_srcConnSel->fileWidget->setAdditionalFilters(QSet<QString>::fromList(m_migrateManager->supportedMimeTypes()));
     
-    // m_srcConn->hideHelpers();
     vbox->addWidget(m_srcConnSel);
 
     m_srcConnPageItem = new KPageWidgetItem(m_srcConnPageWidget, i18n("Select Location for Source Database"));
@@ -180,6 +195,8 @@ void ImportTableWizard::setupTableSelectPage() {
 
     m_tableListWidget = new QListWidget(this);
     m_tableListWidget->setSelectionMode(QAbstractItemView::SingleSelection);
+    connect(m_tableListWidget, SIGNAL(itemSelectionChanged()),
+            this, SLOT(slotTableListWidgetSelectionChanged()));
     
     vbox->addWidget(m_tableListWidget);
     
@@ -211,12 +228,11 @@ void ImportTableWizard::setupImportingPage()
     vbox->addWidget(m_lblImportingErrTxt);
     vbox->addStretch(1);
 
-
     QWidget *options_widget = new QWidget(m_importingPageWidget);
     vbox->addWidget(options_widget);
     QVBoxLayout *options_vbox = new QVBoxLayout(options_widget);
     options_vbox->setSpacing(KDialog::spacingHint());
-    m_importOptionsButton = new KPushButton(KIcon("configure"), i18n("Advanced Options"), options_widget);
+    m_importOptionsButton = new KPushButton(koIcon("configure"), i18n("Advanced Options"), options_widget);
     connect(m_importOptionsButton, SIGNAL(clicked()),this, SLOT(slotOptionsButtonClicked()));
     options_vbox->addWidget(m_importOptionsButton);
     options_vbox->addStretch(1);
@@ -291,14 +307,13 @@ void ImportTableWizard::arriveSrcDBPage()
 {
     if (fileBasedSrcSelected()) {
         //! @todo Back button doesn't work after selecting a file to import
-        //moved showPage(m_dstTypePage);
     } else if (!m_srcDBName) {
         m_srcDBPageWidget->hide();
         kDebug() << "Looks like we need a project selector widget!";
         
         KexiDB::ConnectionData* condata = m_srcConnSel->selectedConnectionData();
         if (condata) {
-            m_prjSet = new KexiProjectSet(*condata);
+            m_prjSet = new KexiProjectSet(condata);
             QVBoxLayout *vbox = new QVBoxLayout(m_srcDBPageWidget);
             KexiUtils::setStandardMarginsAndSpacing(vbox);
             m_srcDBName = new KexiProjectSelectorWidget(m_srcDBPageWidget, m_prjSet);
@@ -313,17 +328,28 @@ void ImportTableWizard::arriveTableSelectPage()
 {
     Kexi::ObjectStatus result;
     KexiUtils::WaitCursor wait;
+    m_tableListWidget->clear();
     m_migrateDriver = prepareImport(result);
 
     if (m_migrateDriver) {
-        if (!m_migrateDriver->connectSource())
+        if (!m_migrateDriver->connectSource()) {
+            kWarning() << "unable to connect to database";
             return;
-
+        }
+        
         QStringList tableNames;
-        m_tableListWidget->clear();
         if (m_migrateDriver->tableNames(tableNames)) {
             m_tableListWidget->addItems(tableNames);
         }
+        if (m_tableListWidget->item(0)) {
+            m_tableListWidget->item(0)->setSelected(true);
+        }
+    } else {
+        kWarning() << "No driver for selected source";
+        QString errMessage =result.message.isEmpty() ? i18n("Unknown error") : result.message;
+        QString errDescription = result.description.isEmpty() ? errMessage : result.description;
+        KMessageBox::error(this, errMessage, errDescription);
+        setValid(m_tablesPageItem, false);
     }
     KexiUtils::removeWaitCursor();
 }
@@ -358,8 +384,6 @@ void ImportTableWizard::arriveAlterTablePage()
     if (!m_migrateDriver->readFromTable(m_importTableName))
         return;
     m_migrateDriver->moveFirst();
-//    if (!m_migrateDriver->moveFirst())
-//        return;
     QList<KexiDB::RecordData> data;
     for (uint i = 0; i < ROWS_FOR_PREVIEW; ++i) {
         KexiDB::RecordData row;
@@ -384,20 +408,18 @@ void ImportTableWizard::arriveImportingPage()
         //setNextEnabled(m_importingPageWidget, false);
         enableButton(KDialog::User2, false);
     }
-    #endif
+#endif
 
     QString txt;
 
     txt = i18n("All required information has now "
-    "been gathered. Click \"Next\" button to start importing.\n\n"
-    "Depending on size of the tables this may take some time.\n\n"
-    "You have chosen to import the following table:\n\n");
+               "been gathered. Click \"Next\" button to start importing.\n\n"
+               "Depending on size of the tables this may take some time.\n\n"
+               "You have chosen to import the following table:\n\n");
 
     txt += m_importTableName;
     
     m_lblImportingTxt->setText(txt);
-    
-    //todo
     
     //temp. hack for MS Access driver only
     //! @todo for other databases we will need KexiMigration::Conenction
@@ -422,10 +444,8 @@ void ImportTableWizard::arriveImportingPage()
     m_importingPageWidget->show();
 }
 
-
 void ImportTableWizard::arriveFinishPage()
 {
-
 }
 
 bool ImportTableWizard::fileBasedSrcSelected() const
@@ -442,7 +462,7 @@ KexiMigrate* ImportTableWizard::prepareImport(Kexi::ObjectStatus& result)
     if (sourceDriverName.isEmpty())
         result.setStatus(i18n("No appropriate migration driver found."),
                             m_migrateManager->possibleProblemsInfoMsg());
-
+  
     
     // Get a source (migration) driver
     KexiMigrate* sourceDriver = 0;
@@ -574,4 +594,14 @@ bool ImportTableWizard::doImport()
     project->addStoredItem(part->info(), partItemForSavedTable);
     
     return true;
+}
+
+void ImportTableWizard::slotConnPageItemSelected(bool isSelected)
+{
+    setValid(m_srcConnPageItem, isSelected);
+}
+
+void ImportTableWizard::slotTableListWidgetSelectionChanged()
+{
+    setValid(m_tablesPageItem, !m_tableListWidget->selectedItems().isEmpty());
 }

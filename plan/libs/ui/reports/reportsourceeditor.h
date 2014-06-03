@@ -23,7 +23,7 @@
 
 #include "ui_reportsourceeditor.h"
 
-#include <qwidget.h>
+#include <QWidget>
 
 class QAbstractItemModel;
 class QDomElement;
@@ -35,10 +35,10 @@ class ReportSourceEditor : public QWidget, public Ui::ReportSourceEditor
 {
     Q_OBJECT
 public:
-    ReportSourceEditor( QWidget *parent );
+    explicit ReportSourceEditor(QWidget *parent);
 
     void setModel( QAbstractItemModel *model );
-    
+
     void setSourceData( const QDomElement &element );
     void sourceData( QDomElement &element ) const;
     /// Return the tag of the selected model

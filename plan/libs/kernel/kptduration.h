@@ -23,7 +23,7 @@
 
 #include "kplatokernel_export.h"
 
-#include <qglobal.h>
+#include <QtGlobal>
 #include <QString>
 
 class KLocale;

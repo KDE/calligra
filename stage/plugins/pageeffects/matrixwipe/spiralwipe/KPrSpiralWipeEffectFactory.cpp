@@ -50,7 +50,7 @@ KPrSpiralWipeEffectFactory::~KPrSpiralWipeEffectFactory()
 {
 }
 
-static const char* s_subTypes[] = {
+static const char* const s_subTypes[] = {
     I18N_NOOP( "Clockwise Top Left In" ),
     I18N_NOOP( "Clockwise Top Left Out" ),
     I18N_NOOP( "Clockwise Top Right In" ),

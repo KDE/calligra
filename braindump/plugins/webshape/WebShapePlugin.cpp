@@ -19,19 +19,20 @@
 
 #include "WebShapePlugin.h"
 
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <KoShapeRegistry.h>
 #include <KoToolRegistry.h>
 
 #include "WebShapeFactory.h"
 #include "WebToolFactory.h"
 
-K_EXPORT_COMPONENT_FACTORY(webshape,
-                           KGenericFactory<WebShapePlugin>("WebShapePlugin"))
+K_PLUGIN_FACTORY(WebShapePluginFactory, registerPlugin<WebShapePlugin>();)
+K_EXPORT_PLUGIN(WebShapePluginFactory("WebShapePlugin"))
 
-WebShapePlugin::WebShapePlugin(QObject *parent, const QStringList&)
+WebShapePlugin::WebShapePlugin(QObject *parent, const QVariantList&)
     : QObject(parent)
 {
+    KGlobal::locale()->insertCatalog("braindump");
     // register the shape's factory
     KoShapeRegistry::instance()->add(
         new WebShapeFactory());

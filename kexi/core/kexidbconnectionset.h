@@ -22,7 +22,7 @@
 
 #include <kexi_export.h>
 
-#include <kexidb/connectiondata.h>
+#include <db/connectiondata.h>
 
 class KexiDBConnectionSetPrivate;
 
@@ -75,4 +75,3 @@ private:
 };
 
 #endif // KEXIDBCONNSET_H
-

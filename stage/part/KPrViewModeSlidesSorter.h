@@ -28,6 +28,7 @@
 class KoPAView;
 class KoPACanvas;
 class KoPAPageBase;
+class KoViewItemContextBar;
 class KPrSlidesSorterDocumentModel;
 class KPrSlidesManagerView;
 class KPrSelectionManager;
@@ -99,11 +100,6 @@ public:
 protected:
 
     /**
-     * Fills the editor with presentation slides and ordored them in the KPrSlidesSorter
-     */
-    void populate();
-
-    /**
      * Setter of the icon size
      *
      * @param size which is a QSize
@@ -148,6 +144,7 @@ private:
     QToolButton *m_buttonAddSlideToCurrentShow;
     QToolButton *m_buttonDelSlideFromCurrentShow;
     QComboBox *m_customSlideShowsList;
+    KoViewItemContextBar *m_slidesSorterItemContextBar;
 
 private slots:
     /** Changes the view active page to match the slides sorter current index*/
@@ -164,6 +161,11 @@ private slots:
 
     /** add a new slide after the current active page*/
     void addSlide();
+
+    /** Item context bar actions */
+    void contextBarDuplicateSlide();
+    void contextBarDeleteSlide();
+    void contextBarStartSlideshow();
 
     /** Rename current slide on Slides Sorter View */
     void renameCurrentSlide();

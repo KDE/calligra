@@ -20,14 +20,19 @@
 #include "PdfImport.h"
 #include "SvgOutputDev.h"
 
-#include <QtCore/QString>
-#include <QtCore/QFile>
+#include <QString>
+#include <QFile>
 
 #include <KoFilter.h>
 #include <KoFilterChain.h>
 
-#include <KPluginFactory>
-#include <KDebug>
+#include <kpluginfactory.h>
+#include <kdebug.h>
+
+// Don't show this warning: it's an issue in poppler
+#ifdef __GNUC__
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#endif
 
 #include <poppler/PDFDoc.h>
 #include <poppler/GlobalParams.h>

@@ -22,7 +22,7 @@
 #ifndef KPlatoSCRIPTINGPART_H
 #define KPlatoSCRIPTINGPART_H
 
-#include <KPluginFactory>
+#include <kpluginfactory.h>
 
 #include <KoScriptingPart.h>
 
@@ -43,7 +43,7 @@ class KPlatoScriptingPart : public KoScriptingPart
 {
         Q_OBJECT
     public:
-        KPlatoScriptingPart(QObject* parent, const QStringList& args=QStringList());
+        explicit KPlatoScriptingPart(QObject* parent, const QStringList& args=QStringList());
         virtual ~KPlatoScriptingPart();
     private:
         /// \internal d-pointer class.

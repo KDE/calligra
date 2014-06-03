@@ -25,7 +25,7 @@
 
 #include <QColor>
 
-#define USE_OFFICEARTDGG_CONTAINER
+//#define USE_OFFICEARTDGG_CONTAINER
 
 using namespace MSO;
 using namespace wvWare;
@@ -64,8 +64,12 @@ WordsGraphicsHandler::DrawClient::getRect(const MSO::OfficeArtClientAnchor& ca)
         kDebug(30513) << "MISSING plcfSpa, returning QRectF()";
         return QRectF();
     }
+
     PLCFIterator<Word97::FSPA> it(plcfSpa->at(a->clientAnchor));
     Word97::FSPA* spa = it.current();
+    if (!spa) {
+        return QRectF();
+    }
     return QRectF(spa->xaLeft, spa->yaTop, (spa->xaRight - spa->xaLeft), (spa->yaBottom - spa->yaTop));
 }
 
@@ -76,9 +80,9 @@ WordsGraphicsHandler::DrawClient::getReserveRect(void)
     //CP is provided by the GraphicsHandler.  No test files for inline shapes
     //at the moment.
     Word97::FSPA* spa = gh->m_pSpa;
-
-    //DO NOT remove the assert, please send the file to: matus.uzak@ixonos.com
-    Q_ASSERT(spa);
+    if (!spa) {
+        return QRectF();
+    }
     return QRectF(spa->xaLeft, spa->yaTop, (spa->xaRight - spa->xaLeft), (spa->yaBottom - spa->yaTop));
 }
 
@@ -127,13 +131,11 @@ WordsGraphicsHandler::DrawClient::createGraphicStyle(const MSO::OfficeArtClientT
 }
 
 void
-WordsGraphicsHandler::DrawClient::addTextStyles(const quint16 msospt,
-                                                const MSO::OfficeArtClientTextBox* clientTextbox,
+WordsGraphicsHandler::DrawClient::addTextStyles(const MSO::OfficeArtClientTextBox* clientTextbox,
                                                 const MSO::OfficeArtClientData* clientData,
                                                 KoGenStyle& style,
                                                 Writer& out)
 {
-    Q_UNUSED(msospt);
     Q_UNUSED(clientTextbox);
     Q_UNUSED(clientData);
 
@@ -183,7 +185,6 @@ WordsGraphicsHandler::DrawClient::formatPos(qreal v)
 
 //NOTE: OfficeArtClientData.clientdata (4 bytes): An integer that SHOULD be
 //ignored.  [MS-DOC] — v20100926
-
 bool
 WordsGraphicsHandler::DrawClient::processRectangleAsTextBox(const MSO::OfficeArtClientData& cd)
 {

@@ -22,7 +22,7 @@
 
 #include "kexiutils_export.h"
 
-#include <QtGui/QLabel>
+#include <QLabel>
 
 //! Link widget
 class KEXIUTILS_EXPORT KexiLinkWidget : public QLabel

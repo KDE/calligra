@@ -21,7 +21,7 @@
 #ifndef KEXIAUTOFORMDESIGNER_H
 #define KEXIAUTOFORMDESIGNER_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
 #include <QDomElement>
 
 class QComboBox;

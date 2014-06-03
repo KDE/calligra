@@ -23,7 +23,7 @@
 #include "ui_KexiProjectSelector.h"
 #include "kexiprojectset.h"
 
-#include <KPageDialog>
+#include <kpagedialog.h>
 
 #include <QTreeWidget>
 
@@ -34,8 +34,6 @@ class KEXIEXTWIDGETS_EXPORT KexiProjectSelectorWidget : public QWidget, private 
     Q_OBJECT
 
 public:
-// enum ConnType { FileBased=1, ServerBased=2 };
-
     /*! Constructs a project selector widget.
     If \a showProjectNameColumn is true (the default)
     project names' column is visible. If \a showConnectionColumns is true (the default)
@@ -58,9 +56,7 @@ public:
     void setProjectSet(KexiProjectSet* prj_set);
 
     /*! \return currently assigned project set or NULL if no project set is assigned. */
-    inline KexiProjectSet *projectSet() {
-        return m_prj_set;
-    }
+    KexiProjectSet *projectSet();
 
     /*! Sets selectable state on or off. In this state one project item can be selected
     and executed by mouse double clicking or return key pressing.
@@ -86,8 +82,6 @@ protected slots:
 protected:
     virtual bool eventFilter(QObject* watched, QEvent* event);
     
-    KexiProjectSet *m_prj_set;
-
     class Private;
     Private * const d;
 
@@ -121,9 +115,7 @@ public:
     KexiProjectData* selectedProjectData() const;
 
     /*! \return currently assigned project set or NULL if no project set is assigned. */
-    inline KexiProjectSet *projectSet() const {
-        return m_sel->projectSet();
-    }
+    KexiProjectSet *projectSet() const;
 
     virtual void showEvent(QShowEvent * event);
 
@@ -134,7 +126,8 @@ protected slots:
 protected:
     void init(KexiProjectSet* prj_set, bool showProjectNameColumn, bool showConnectionColumns);
 
-    KexiProjectSelectorWidget* m_sel;
+    class Private;
+    Private * const d;
 };
 
 #endif

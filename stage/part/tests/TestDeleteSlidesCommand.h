@@ -1,7 +1,7 @@
 #ifndef TESTDELETESLIDESCOMMAND_H
 #define TESTDELETESLIDESCOMMAND_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class TestDeleteSlidesCommand: public QObject
 {

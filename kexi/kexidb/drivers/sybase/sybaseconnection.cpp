@@ -21,14 +21,14 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include <QFile>
 #include <QRegExp>
 
-#include <KDebug>
+#include <kdebug.h>
 
 #include "sybasedriver.h"
 #include "sybaseconnection.h"
 #include "sybaseconnection_p.h"
 #include "sybasecursor.h"
 #include "sybasepreparedstatement.h"
-#include <kexidb/error.h>
+#include <db/error.h>
 
 
 using namespace KexiDB;
@@ -107,7 +107,7 @@ bool SybaseConnection::drv_createDatabase(const QString &dbName)
     if (drv_executeSQL("CREATE DATABASE " + dbName)) {
         // set allow_nulls_by_default option to true
         QString allowNullsQuery = QString("sp_dboption %1, allow_nulls_by_default, true").arg(dbName);
-        if (drv_executeSQL(allowNullsQuery.toLatin1().data()))
+        if (drv_executeSQL(allowNullsQuery))
             return true;
     }
     d->storeResult();
@@ -119,7 +119,7 @@ bool SybaseConnection::drv_useDatabase(const QString &dbName, bool *cancelled, M
     Q_UNUSED(cancelled);
     Q_UNUSED(msgHandler);
 
-//TODO is here escaping needed?
+//! @todo escaping needed?
     return d->useDatabase(dbName) ;
 }
 

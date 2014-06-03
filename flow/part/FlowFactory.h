@@ -20,7 +20,7 @@
 #ifndef FLOWFACTORY_H
 #define FLOWFACTORY_H
 
-#include <KPluginFactory>
+#include <kpluginfactory.h>
 #include "flow_export.h"
 
 class KComponentData;
@@ -31,7 +31,7 @@ class FLOW_EXPORT FlowFactory : public KPluginFactory
   Q_OBJECT
 
   public:
-    FlowFactory(QObject* parent = 0);
+    explicit FlowFactory(QObject *parent = 0);
     ~FlowFactory();
 
 

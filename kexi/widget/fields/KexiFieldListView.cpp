@@ -19,96 +19,103 @@
 
 #include "KexiFieldListView.h"
 
-#include <qlayout.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <qcursor.h>
-#include <qpoint.h>
-#include <qapplication.h>
-#include <qbitmap.h>
-#include <qstyle.h>
-//Added by qt3to4:
+#include <QLayout>
+#include <QLabel>
+#include <QPushButton>
+#include <QCursor>
+#include <QPoint>
+#include <QApplication>
+#include <QBitmap>
+#include <QStyle>
 #include <QPixmap>
 
 #include <kdebug.h>
-#include <kiconloader.h>
 
 #include <kconfig.h>
 #include <kglobalsettings.h>
 #include <klocale.h>
 
-#include <kexidb/tableschema.h>
-#include <kexidb/queryschema.h>
-#include <kexidb/utils.h>
+#include <db/tableschema.h>
+#include <db/queryschema.h>
+#include <db/utils.h>
 #include <kexidragobjects.h>
 #include <kexiutils/utils.h>
 
+class KexiFieldListView::Private
+{
+public:
+    Private(KexiFieldListOptions options_)
+      : schema(0)
+      , model(0)
+      , options(options_)
+    {
+    }
+
+    ~Private()
+    {
+        delete schema;
+    }
+
+
+    KexiDB::TableOrQuerySchema* schema;
+    KexiFieldListModel *model;
+    KexiFieldListOptions options;
+};
+
 KexiFieldListView::KexiFieldListView(QWidget *parent, KexiFieldListOptions options)
         : QListView(parent)
-        , m_schema(0)
-        , m_model(0)
-        , m_options(options)
-
+        , d(new Private(options))
 {
     setAcceptDrops(true);
     viewport()->setAcceptDrops(true);
     setDragEnabled(true);
     setDropIndicatorShown(true);
     setAlternatingRowColors(true);
-    
-/*    setDropVisualizer(false);
-    setDropHighlighter(true);
-    setAllColumnsShowFocus(true);
-    addColumn(i18n("Field Name"));
-    if (m_options & ShowDataTypes)
-        addColumn(i18n("Data Type"));
-    if (m_options & AllowMultiSelection)
-        setSelectionMode(Q3ListView::Extended);
-    setResizeMode(Q3ListView::LastColumn);
-// header()->hide();
-    setSorting(-1, true); // disable sorting
-*/
-    connect(this, SIGNAL(doubleClicked(const QModelIndex&)),
-            this, SLOT(slotDoubleClicked(const QModelIndex&)));
+    connect(this, SIGNAL(doubleClicked(QModelIndex)),
+            this, SLOT(slotDoubleClicked(QModelIndex)));
 }
 
 KexiFieldListView::~KexiFieldListView()
 {
-    delete m_schema;
+    delete d;
 }
 
 void KexiFieldListView::setSchema(KexiDB::TableOrQuerySchema* schema)
 {
-    if (schema && m_schema == schema)
+    if (schema && d->schema == schema)
         return;
 
-    delete m_schema;
-    m_schema = schema;
-    if (!m_schema)
+    delete d->schema;
+    d->schema = schema;
+    if (!d->schema)
         return;
 
     if (!schema->table() && !schema->query())
         return;
 
-    delete m_model;
-   
-    m_model = new KexiFieldListModel(this, m_options);
-    
-    m_model->setSchema(schema);
-    setModel(m_model);
+    delete d->model;
+
+    d->model = new KexiFieldListModel(this, d->options);
+
+    d->model->setSchema(schema);
+    setModel(d->model);
+}
+
+KexiDB::TableOrQuerySchema* KexiFieldListView::schema() const {
+    return d->schema;
 }
 
 QStringList KexiFieldListView::selectedFieldNames() const
 {
     if (!schema())
         return QStringList();
-    
+
     QStringList selectedFields;
     QModelIndexList idxlist = selectedIndexes();
-    
-    foreach (QModelIndex idx, idxlist) {
+
+    foreach (const QModelIndex &idx, idxlist) {
         QString field = model()->data(idx).toString();
-        if (field.startsWith("*")) {
+        if (field.startsWith('*')) {
             selectedFields.append("*");
         }
         else {

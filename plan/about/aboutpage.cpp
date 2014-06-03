@@ -20,9 +20,11 @@
 
 #include "kptproject.h"
 
-#include <QtCore/QTextCodec>
+#include <KoIcon.h>
+
+#include <QTextCodec>
 #include <QApplication>
-#include <QtCore/QDir>
+#include <QDir>
 #include <QString>
 
 #include <kaboutdata.h>
@@ -30,8 +32,8 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
-#include <KUrl>
-#include <KHTMLPart>
+#include <kurl.h>
+#include <khtml_part.h>
 
 KPlatoAboutPage::KPlatoAboutPage()
     : m_project( 0 )
@@ -49,7 +51,9 @@ QString KPlatoAboutPage::main()
     if ( res.isEmpty() ) {
         return res;
     }
-    QString continue_icon_path = iconloader->iconPath(QApplication::isRightToLeft() ? "go-previous" : "go-next", KIconLoader::Small );
+    const char *const continue_icon_id =
+        (QApplication::isRightToLeft() ? koIconNameCStr("go-previous") : koIconNameCStr("go-next"));
+    const QString continue_icon_path = iconloader->iconPath(continue_icon_id, KIconLoader::Small);
 
     QString icon_path = "<img width='16' height='16' src=\"" + continue_icon_path + "\">";
 
@@ -82,7 +86,9 @@ QString KPlatoAboutPage::intro()
     if ( res.isEmpty() ) {
         return res;
     }
-    QString continue_icon_path = iconloader->iconPath(QApplication::isRightToLeft() ? "go-previous" : "go-next", KIconLoader::Small );
+    const char *const continue_icon_id =
+        (QApplication::isRightToLeft() ? koIconNameCStr("go-previous") : koIconNameCStr("go-next"));
+    const QString continue_icon_path = iconloader->iconPath(continue_icon_id, KIconLoader::Small);
 
     res = res.arg( KStandardDirs::locate( "data", "kdeui/about/kde_infopage.css" ) );
     if ( qApp->layoutDirection() == Qt::RightToLeft )
@@ -94,7 +100,7 @@ QString KPlatoAboutPage::intro()
     .arg( i18n( 
         "Plan is intended for managing moderately large projects with multiple resources. To enable you to model your project adequately, Plan offers different types of task dependencies and timing constraints. Usually you will define your tasks, estimate the effort needed to perform each task, allocate resources and then schedule the project according to the dependency network and resource availability."
         "<p>You can find more information in the <a href=\"help:plan\">documentation</a> "
-        "or online at <a href=\"http://www.calligra-suite.org/plan\">http://www.calligra-suite.org/plan</a></p>"
+        "or online at <a href=\"http://www.calligra.org/plan\">http://www.calligra.org/plan</a></p>"
         ) )
     .arg( "<img width='16' height='16' src=\"%1\">" ).arg( continue_icon_path )
     .arg( i18n( "Next: Tips" ) )
@@ -113,20 +119,22 @@ QString KPlatoAboutPage::tips()
 
     KIconLoader *iconloader = KIconLoader::global();
     QString viewmag_icon_path =
-	    iconloader->iconPath("zoom-in", KIconLoader::Small );
+        iconloader->iconPath(koIconNameCStr("zoom-in"), KIconLoader::Small);
     QString history_icon_path =
-	    iconloader->iconPath("view-history", KIconLoader::Small );
+        iconloader->iconPath(koIconNameCStr("view-history"), KIconLoader::Small);
     QString openterm_icon_path =
-	    iconloader->iconPath("utilities-terminal", KIconLoader::Small );
+        iconloader->iconPath(koIconNameCStr("utilities-terminal"), KIconLoader::Small);
     QString locationbar_erase_rtl_icon_path =
-	    iconloader->iconPath("edit-clear-locationbar-rtl", KIconLoader::Small );
+        iconloader->iconPath(koIconNameCStr("edit-clear-locationbar-rtl"), KIconLoader::Small);
     QString locationbar_erase_icon_path =
-	    iconloader->iconPath("edit-clear-locationbar-ltr", KIconLoader::Small );
+        iconloader->iconPath(koIconNameCStr("edit-clear-locationbar-ltr"), KIconLoader::Small);
     QString window_fullscreen_icon_path =
-	    iconloader->iconPath("view-fullscreen", KIconLoader::Small );
+        iconloader->iconPath(koIconNameCStr("view-fullscreen"), KIconLoader::Small);
     QString view_left_right_icon_path =
-	    iconloader->iconPath("view-split-left-right", KIconLoader::Small );
-    QString continue_icon_path = iconloader->iconPath(QApplication::isRightToLeft() ? "go-previous" : "go-next", KIconLoader::Small );
+        iconloader->iconPath(koIconNameCStr("view-split-left-right"), KIconLoader::Small);
+    const char *const continue_icon_id =
+        (QApplication::isRightToLeft() ? koIconNameCStr("go-previous") : koIconNameCStr("go-next"));
+    const QString continue_icon_path = iconloader->iconPath(continue_icon_id, KIconLoader::Small);
 
     res = res.arg( KStandardDirs::locate( "data", "kdeui/about/kde_infopage.css" ) );
     if ( qApp->layoutDirection() == Qt::RightToLeft )
@@ -155,8 +163,8 @@ QString KPlatoAboutPage::tutorial( const QString &header, const QString &text, c
         return res;
     }
 
-    KIconLoader *iconloader = KIconLoader::global();
-    QString next_icon_path = iconloader->iconPath(QApplication::isRightToLeft() ? "go-previous" : "go-next", KIconLoader::Small );
+    const char *const nextIconName = QApplication::isRightToLeft() ? koIconNameCStr("go-previous") : koIconNameCStr("go-next");
+    const QString next_icon_path = KIconLoader::global()->iconPath(nextIconName, KIconLoader::Small );
 
     res = res.arg( KStandardDirs::locate( "data", "kdeui/about/kde_infopage.css" ) );
     if ( qApp->layoutDirection() == Qt::RightToLeft )
@@ -182,7 +190,7 @@ QString KPlatoAboutPage::tutorial1()
             "Select the task editor <em>Editors->Tasks</em>:"
             "<ul>"
             "<li>Create a task by selecting <em>Add Task</em> in the toolbar.</li>"
-            "<li>Set <em>Estimate Type</em> to <em>Duration</em>.</li>"
+            "<li>Set <em>Type</em> to <em>Duration</em>.</li>"
             "<li>Set <em>Estimate</em> to <em>8 hours</em>.</li>"
             "<li>Set <em>Constraint</em> to <em>As Soon As Possible</em>.</li>"
             "</ul>"
@@ -192,7 +200,7 @@ QString KPlatoAboutPage::tutorial1()
             "<li>Create a schedule by selecting <em>Add Schedule</em> in the toolbar.</li>"
             "<li>Calculate the schedule by selecting <em>Calculate</em> in the toolbar.</li>"
             "</ul>"
-            "The task should now have been scheduled to start %1 with a duration of 8 hours. You can check this by selecting the gantt chart <em>Views->Gantt</em>."
+            "The task should now have been scheduled to start %1 with a duration of 8 hours. You can check this by selecting the Gantt chart <em>Views->Gantt</em>."
         , KGlobal::locale()->formatDateTime( m_project->startTime(), KLocale::FancyLongDate ) ),
         "tutorial2",
         i18n( "Next: Resource allocation" )
@@ -201,9 +209,9 @@ QString KPlatoAboutPage::tutorial1()
 
 QString KPlatoAboutPage::tutorial2()
 {
-    DateTime dt = m_project->startTime();
+    DateTime dt = m_project->constraintStartTime();
     if ( m_project->defaultCalendar() ) {
-        dt = m_project->defaultCalendar()->firstAvailableAfter( dt, m_project->endTime() );
+        dt = m_project->defaultCalendar()->firstAvailableAfter( dt, m_project->constraintEndTime() );
     }
     return tutorial(
         i18n("Allocate a resource to the task."),
@@ -212,11 +220,11 @@ QString KPlatoAboutPage::tutorial2()
             "<ul>"
             "<li>Enter a name (e.g. 'John') in the <em>Allocation</em> column."
             " (Plan will automatically create a resource with name 'John' under resource group 'Resources'.</li>"
-            "<li>Set <em>Estimate Type</em> to <em>Effort</em>.</li>"
+            "<li>Set <em>Type</em> to <em>Effort</em>.</li>"
             "</ul>"
             "Now you need to schedule the project again with the new allocation:"
             "<br/>Select the schedules editor <em>Editors->Schedules</em> and calculate the schedule by selecting <em>Calculate</em> in the toolbar."
-            "<p>The task should be scheduled to start %1 with a duration of 8 hours. You can check this by selecting the gantt chart <em>Views->Gantt</em>.<p>"
+            "<p>The task should be scheduled to start %1 with a duration of 8 hours. You can check this by selecting the Gantt chart <em>Views->Gantt</em>.<p>"
         , KGlobal::locale()->formatDateTime( dt, KLocale::FancyLongDate ) ),
         "main",
         i18n( "Next: Introduction" )

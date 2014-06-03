@@ -1,0 +1,2 @@
+REVIEWBOARD_URL = "http://git.reviewboard.kde.org"
+TARGET_GROUPS = "calligra"

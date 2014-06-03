@@ -8,7 +8,7 @@ include_directories(
 
 set(kexiutils_LIB_SRCS 
   identifier.cpp 
-  validator.cpp 
+  multivalidator.cpp 
   utils.cpp 
   styleproxy.cpp 
   longlongvalidator.cpp 
@@ -21,33 +21,32 @@ set(kexiutils_LIB_SRCS
   KexiContextMessage.cpp
   KexiTitleLabel.cpp
   KexiLinkWidget.cpp
+  KexiLinkButton.cpp
   KexiAssistantPage.cpp
   KexiAssistantWidget.cpp
   KexiAnimatedLayout.cpp
   KexiCategorizedView.cpp
+  KexiTester.cpp
   
-  completer/qcompleter.cpp
+  completer/KexiCompleter.cpp
+  KexiPushButton.cpp
+
 )
 
 IF (KEXI_MOBILE)
 
 ELSE (KEXI_MOBILE)
-  LIST(APPEND kexiutils_LIB_SRCS
-    debuggui.cpp 
-  )
+  IF (KEXI_DEBUG_GUI)
+    LIST(APPEND kexiutils_LIB_SRCS
+      debuggui.cpp
+    )
+  ENDIF (KEXI_DEBUG_GUI)
 ENDIF (KEXI_MOBILE)
 
 kde4_add_library(kexiutils SHARED ${kexiutils_LIB_SRCS})
 
-target_link_libraries(kexiutils  ${KDE4_KIO_LIBS} )
+target_link_libraries(kexiutils  ${CALLIGRADB_LIBS} ${KDE4_KIO_LIBS} )
 target_link_libraries(kexiutils  LINK_INTERFACE_LIBRARIES ${KDE4_KIO_LIBS})
-
-IF (KEXI_MOBILE)
-  
-ELSE (KEXI_MOBILE)
-  target_link_libraries(kexiutils  ${KDE4_KDE3SUPPORT_LIBS} )
-  target_link_libraries(kexiutils  LINK_INTERFACE_LIBRARIES ${KDE4_KDE3SUPPORT_LIBS})
-ENDIF (KEXI_MOBILE)
 
 set_target_properties(kexiutils PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
@@ -63,3 +62,5 @@ if(FALSE) # TODO: install when we move to independent place
     KexiAssistantWidget.h KexiAnimatedLayout.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kexiutils COMPONENT Devel)
 endif(FALSE)
+
+add_subdirectory(tests)

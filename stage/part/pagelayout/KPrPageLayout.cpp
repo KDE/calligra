@@ -131,7 +131,7 @@ QList<KPrPlaceholder *> KPrPageLayout::placeholders() const
 
 QPixmap KPrPageLayout::thumbnail() const
 {
-    static KIconLoader * loader = KIconLoader::global();
+    KIconLoader * loader = KIconLoader::global();
 
     QSvgRenderer renderer;
 

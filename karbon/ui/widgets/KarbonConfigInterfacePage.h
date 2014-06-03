@@ -22,8 +22,8 @@
 #define KARBONCONFIGINTERFACEPAGE_H
 
 #include <KoUnit.h>
-#include <KVBox>
-#include <KSharedConfig>
+#include <kvbox.h>
+#include <ksharedconfig.h>
 
 class KarbonView;
 class KIntNumInput;

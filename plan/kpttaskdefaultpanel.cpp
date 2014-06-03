@@ -23,15 +23,18 @@
 #include "kptmycombobox_p.h"
 #include "plansettings.h"
 
-#include <kabc/addressee.h>
-#include <kabc/addresseedialog.h>
+#ifdef PLAN_KDEPIMLIBS_FOUND
+#include <akonadi/contact/emailaddressselectiondialog.h>
+#include <akonadi/contact/emailaddressselectionwidget.h>
+#include <akonadi/contact/emailaddressselection.h>
+#endif
 
 #include <QDateTime>
 #include <QDateTimeEdit>
 #include <QComboBox>
 
-#include <KActionCollection>
-#include <KTextEdit>
+#include <kactioncollection.h>
+#include <ktextedit.h>
 #include <kdebug.h>
 
 namespace KPlato
@@ -51,19 +54,27 @@ ConfigTaskPanelImpl::ConfigTaskPanelImpl(QWidget *p )
     kcfg_ExpectedEstimate->setMinimumUnit( (Duration::Unit)KPlatoSettings::self()->minimumDurationUnit() );
     kcfg_ExpectedEstimate->setMaximumUnit( (Duration::Unit)KPlatoSettings::self()->maximumDurationUnit() );
 
+#ifndef PLAN_KDEPIMLIBS_FOUND
+    chooseLeader->hide();
+#endif
+
+    // FIXME
+    // [Bug 311940] New: Plan crashes when typing a text in the filter textbox before the textbook is fully loaded when selecting a contact from the adressbook
+    chooseLeader->hide();
+
     initDescription();
 
     connect(chooseLeader, SIGNAL(clicked()), SLOT(changeLeader()));
     
-    connect( kcfg_ConstraintStartTime, SIGNAL( dateTimeChanged ( const QDateTime& ) ), SLOT( startDateTimeChanged( const QDateTime& ) ) );
+    connect( kcfg_ConstraintStartTime, SIGNAL(dateTimeChanged(QDateTime)), SLOT(startDateTimeChanged(QDateTime)) );
     
-    connect( kcfg_ConstraintEndTime, SIGNAL( dateTimeChanged ( const QDateTime& ) ), SLOT( endDateTimeChanged( const QDateTime& ) ) );
+    connect( kcfg_ConstraintEndTime, SIGNAL(dateTimeChanged(QDateTime)), SLOT(endDateTimeChanged(QDateTime)) );
 
     // Hack to have an interface to kcfg wo adding a custom class for this
     kcfg_Unit->addItems( Duration::unitList( true ) );
-    connect( kcfg_ExpectedEstimate, SIGNAL( unitChanged( int ) ), SLOT( unitChanged( int ) ) );
+    connect( kcfg_ExpectedEstimate, SIGNAL(unitChanged(int)), SLOT(unitChanged(int)) );
     kcfg_Unit->hide();
-    connect( kcfg_Unit, SIGNAL( currentIndexChanged( int ) ), SLOT( currentUnitChanged( int ) ) );
+    connect( kcfg_Unit, SIGNAL(currentIndexChanged(int)), SLOT(currentUnitChanged(int)) );
 }
 
 void ConfigTaskPanelImpl::initDescription()
@@ -109,11 +120,31 @@ void ConfigTaskPanelImpl::initDescription()
 
 void ConfigTaskPanelImpl::changeLeader()
 {
-    KABC::Addressee a = KABC::AddresseeDialog::getAddressee(this);
-    if (!a.isEmpty())
-    {
-        kcfg_Leader->setText(a.fullEmail());
+#ifdef PLAN_KDEPIMLIBS_FOUND
+    QPointer<Akonadi::EmailAddressSelectionDialog> dlg = new Akonadi::EmailAddressSelectionDialog( this );
+    if ( dlg->exec() && dlg ) {
+        QStringList names;
+        const Akonadi::EmailAddressSelection::List selections = dlg->selectedAddresses();
+        foreach ( const Akonadi::EmailAddressSelection &selection, selections ) {
+            QString s = selection.name();
+            if ( ! selection.email().isEmpty() ) {
+                if ( ! selection.name().isEmpty() ) {
+                    s += " <";
+                }
+                s += selection.email();
+                if ( ! selection.name().isEmpty() ) {
+                    s += '>';
+                }
+                if ( ! s.isEmpty() ) {
+                    names << s;
+                }
+            }
+        }
+        if ( ! names.isEmpty() ) {
+            kcfg_Leader->setText( names.join( ", " ) );
+        }
     }
+#endif
 }
 
 void ConfigTaskPanelImpl::startDateTimeChanged( const QDateTime &dt )

@@ -27,11 +27,10 @@
 #include <kexi.h>
 #include <kexipart.h>
 #include <kexiproject.h>
-//#include <kexidataawareview.h>
 #include <KexiMainWindowIface.h>
 #include <KexiWindow.h>
 #include <KexiView.h>
-#include <kexidb/connection.h>
+#include <db/connection.h>
 
 /**
 * Adaptor class that provides Kexi specific functionality to
@@ -293,7 +292,7 @@ private:
         return project() ? project()->itemForClass(partClass(className), name) : 0;
     }
     QString partClass(const QString& partClass) const {
-        return partClass.contains(".") ? partClass : (QString::fromLatin1("org.kexi-project.")+partClass);
+        return partClass.contains('.') ? partClass : (QString::fromLatin1("org.kexi-project.")+partClass);
     }
     QString viewModeToString(Kexi::ViewMode mode, const QString& defaultViewMode = QString()) const {
         switch (mode) {

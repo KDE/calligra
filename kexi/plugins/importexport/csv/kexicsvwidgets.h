@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2013 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,7 +20,7 @@
 #ifndef KEXI_CSVWIDGETS_H
 #define KEXI_CSVWIDGETS_H
 
-#include <KComboBox>
+#include <kcombobox.h>
 
 class KLineEdit;
 class QLabel;
@@ -41,7 +41,7 @@ QStringList csvMimeTypes();
 class KexiCSVInfoLabel : public QWidget
 {
 public:
-    /* Sets up a new info label \a labelText label with text like "Preview of data from file:".
+    /*! Sets up a new info label \a labelText label with text like "Preview of data from file:".
      setFileName() can be used to display filename and setCommentAfterFileName() to display
      additional comment.
 
@@ -50,31 +50,23 @@ public:
      \pre [icon] [labeltext] [filename] [comment]
     */
     KexiCSVInfoLabel(const QString& labelText, QWidget* parent, bool showFnameLine);
+    ~KexiCSVInfoLabel();
 
     void setFileName(const QString& fileName);
     void setLabelText(const QString& text);
     void setCommentText(const QString& text);
-//  void setIconForFileName();
 
     //! sets icon pixmap to \a iconName. Used wher setIconForFilename was false in ctor.
     void setIcon(const QString& iconName);
 
-    QLabel* leftLabel() const {
-        return m_leftLabel;
-    }
-    QLabel* fileNameLabel() const {
-        return m_fnameLbl;
-    }
-    QLabel* commentLabel() const {
-        return m_commentLbl;
-    }
-    QFrame* separator() const {
-        return m_separator;
-    }
+    QLabel* leftLabel() const;
+    QLabel* fileNameLabel() const;
+    QLabel* commentLabel() const;
+    QFrame* separator() const;
 
-protected:
-    QLabel *m_leftLabel, *m_iconLbl, *m_fnameLbl, *m_commentLbl;
-    QFrame* m_separator;
+private:
+    class Private;
+    Private * const d;
 };
 
 //! @short A combo box widget providing a list of possible delimiters
@@ -84,7 +76,7 @@ class KexiCSVDelimiterWidget : public QWidget
     Q_OBJECT
 
 public:
-    KexiCSVDelimiterWidget(bool lineEditOnBottom, QWidget * parent = 0);
+    explicit KexiCSVDelimiterWidget(bool lineEditOnBottom, QWidget * parent = 0);
     ~KexiCSVDelimiterWidget();
 
     QString delimiter() const;
@@ -110,7 +102,7 @@ protected:
 class KexiCSVTextQuoteComboBox : public KComboBox
 {
 public:
-    KexiCSVTextQuoteComboBox(QWidget * parent = 0);
+    explicit KexiCSVTextQuoteComboBox(QWidget * parent = 0);
 
     QString textQuote() const;
 

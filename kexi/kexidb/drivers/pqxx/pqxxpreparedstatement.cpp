@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2005 Adam Pigg <adam@piggz.co.uk>
+   Copyright (C) 2012 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,7 +27,7 @@ pqxxPreparedStatement::pqxxPreparedStatement(
         : KexiDB::PreparedStatement(type, conn, fields)
         , m_conn(conn.connection)
 {
-// KexiDBDrvDbg << "pqxxPreparedStatement: Construction";
+// KexiDBDrvDbg;
 }
 
 
@@ -36,12 +37,17 @@ pqxxPreparedStatement::~pqxxPreparedStatement()
 
 bool pqxxPreparedStatement::execute()
 {
-// KexiDBDrvDbg << "pqxxPreparedStatement::execute()";
+// KexiDBDrvDbg;
     m_resetRequired = true;
+    const int missingValues = m_fields->fieldCount() - m_args.count();
+    if (missingValues > 0) {
+//! @todo can be more efficient
+        for (int i = 0; i < missingValues; i++) {
+            m_args.append(QVariant());
+        }
+    }
     if (m_conn->insertRecord(*m_fields, m_args)) {
         return true;
     }
     return false;
 }
-
-

@@ -26,10 +26,10 @@
 
 #include "KoXmlReader.h"
 
-#include <KMessageBox>
-#include <KTimeZone>
-#include <KSystemTimeZones>
-#include <KDebug>
+#include <kmessagebox.h>
+#include <ktimezone.h>
+#include <ksystemtimezone.h>
+#include <kdebug.h>
 #include <kdeversion.h>
 
 #include <QDateTime>
@@ -158,7 +158,6 @@ bool KPlatoXmlLoader::loadWorkpackage( const KoXmlElement& plan )
                 }
                 package->settings.usedEffort = (bool)elem.attribute( "used-effort" ).toInt();
                 package->settings.progress = (bool)elem.attribute( "progress" ).toInt();
-                package->settings.remainingEffort = (bool)elem.attribute( "remaining-effort" ).toInt();
                 package->settings.documents = (bool)elem.attribute( "documents" ).toInt();
             }
         }

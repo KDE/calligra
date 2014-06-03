@@ -21,8 +21,8 @@
  *
  */
 
-#ifndef PPTXXMLDOCREADER_H
-#define PPTXXMLDOCREADER_H
+#ifndef PPTXXMLDOCUMENTREADER_H
+#define PPTXXMLDOCUMENTREADER_H
 
 #include <MsooXmlThemesReader.h>
 #include "PptxXmlSlideReader.h"
@@ -90,7 +90,7 @@ protected:
     QVector<QString> defaultTextColors;
     QVector<QString> defaultLatinFonts;
 
-    enum ColorReadingState {rprState, buClrState};
+    enum ColorReadingState {defRPrState, buClrState};
     ColorReadingState m_colorState;
 
 private:
@@ -104,4 +104,4 @@ private:
 #include <MsooXmlDrawingReaderTableMethods.h>
 };
 
-#endif //PPTXXMLDOCREADER_H
+#endif //PPTXXMLDOCUMENTREADER_H

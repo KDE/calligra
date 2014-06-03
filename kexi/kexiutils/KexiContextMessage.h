@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2011-2012 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -28,6 +28,8 @@ class KEXIUTILS_EXPORT KexiContextMessage
 public:
     explicit KexiContextMessage(const QString& text = QString());
 
+    explicit KexiContextMessage(QWidget *contentsWidget);
+
     explicit KexiContextMessage(const KexiContextMessage& other);
 
     ~KexiContextMessage();
@@ -36,10 +38,19 @@ public:
 
     void setText(const QString text);
 
+    //! Alignment of button corresponding to action added in addAction()
+    enum ButtonAlignment {
+        AlignLeft,
+        AlignRight
+    };
+
     //! Adds action. Does not take ownership.
-    void addAction(QAction* action);
+    void addAction(QAction* action, ButtonAlignment alignment = AlignRight);
     
     QList<QAction*> actions() const;
+
+    //! @return alignment of button for action @a action.
+    ButtonAlignment buttonAlignment(QAction* action) const;
 
     //! Sets default action, i.e. button created with this action 
     //! will be the default button of the message.
@@ -47,6 +58,8 @@ public:
     void setDefaultAction(QAction* action);
 
     QAction* defaultAction() const;
+    
+    QWidget* contentsWidget() const;
 
 private:
     class Private;
@@ -89,6 +102,28 @@ public:
     //! By default context widget passed to constructor will be focused.
     //! Useful in modal mode.
     void setNextFocusWidget(QWidget *widget);
+
+    //! Sets global position for callout pointer
+    //! @overload KMessageWidget::setCalloutPointerPosition(const QPoint&)
+    //! Also sets tracked widget @a trackedWidget.
+    //! If the widget changes its local position, the pointer position
+    //! is moved by the same delta.
+    void setCalloutPointerPosition(const QPoint& globalPos,
+                                   QWidget *trackedWidget = 0);
+
+    //! Sets tracking policy for resize of the parent widget.
+    //! When parent is resized in any way, size of the message box
+    //! can be changed in one or two orientations. It is disabled by default
+    //! and does not affect position of the callout pointer.
+    //! Works only when tracked widget is set in setCalloutPointerPosition().
+    void setResizeTrackingPolicy(Qt::Orientations orientations);
+
+    //! @return tracking policy for resize of the parent widget.
+    Qt::Orientations resizeTrackingPolicy() const;
+
+    //! Sets palette of the contents widget inheriting the message palette (background).
+    //! Calling it is needed after delayed insering of the child contents widgets.
+    void setPaletteInherited();
 
 protected:
     virtual bool eventFilter(QObject* watched, QEvent* event);

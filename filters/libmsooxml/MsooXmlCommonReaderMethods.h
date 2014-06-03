@@ -51,6 +51,8 @@ bool m_insideFtr; //!< used to indicate that we're parsing inside ftr (footer)
 
 bool m_choiceAccepted; // Whether choice provided something we implement
 
+bool m_read_t_args;
+
 // 2010 specific, meant to offer choice between paths based on what is supported
 KoFilter::ConversionStatus read_AlternateContent();
 KoFilter::ConversionStatus read_Choice();

@@ -34,7 +34,7 @@ class KPrPlaceholderShape : public KoShape
 {
 public:
     KPrPlaceholderShape();
-    KPrPlaceholderShape( const QString & presentationClass );
+    explicit KPrPlaceholderShape(const QString &presentationClass);
     virtual ~KPrPlaceholderShape();
 
     virtual void paint( QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);

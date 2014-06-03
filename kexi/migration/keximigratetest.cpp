@@ -18,9 +18,9 @@
 */
 
 #include "importwizard.h"
-#include <KAboutData>
-#include <KApplication>
-#include <KCmdLineArgs>
+#include <kaboutdata.h>
+#include <kapplication.h>
+#include <kcmdlineargs.h>
 
 /*
 This is in no way meant to compile let alone work

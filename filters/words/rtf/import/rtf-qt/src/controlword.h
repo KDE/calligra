@@ -23,7 +23,7 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "Qt/qstring.h"
+#include <QString>
 #include "rtfreader_export.h"
 namespace RtfReader
 {

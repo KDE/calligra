@@ -20,7 +20,7 @@
 #ifndef KPlato_InsertFileTester_h
 #define KPlato_InsertFileTester_h
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 namespace KPlato
 {

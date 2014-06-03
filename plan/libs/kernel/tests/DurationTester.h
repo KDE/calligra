@@ -20,7 +20,7 @@
 #ifndef KPlato_DurationTester_h
 #define KPlato_DurationTester_h
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 namespace KPlato
 {
@@ -31,7 +31,7 @@ class DurationTester : public QObject
 private slots:
     void add();
     void subtract();
-    void devide();
+    void divide();
     void equal();
     void lessThanOrEqual();
     void greaterThanOrEqual();

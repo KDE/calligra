@@ -29,11 +29,11 @@
 
 namespace wvWare
 {
-    namespace Word97 { class PHE; class BTE; }
+    namespace Word97 { struct PHE; struct BTE; }
     namespace Word95
     {
-        class PHE;
-        class BTE;
+        struct PHE;
+        struct BTE;
         Word97::PHE toWord97( const Word95::PHE& phe );  // fake, to make gcc 3.4 happy :-(
         Word97::BTE toWord97( const Word95::BTE& s );   // fake, to make gcc 3.4 happy :-(
     }
@@ -696,7 +696,7 @@ namespace wvWare
         }
 
         /**
-         * Set all the fields to the inital value (default is 0)
+         * Set all the fields to the initial value (default is 0)
          */
         void clear()
         {
@@ -771,7 +771,7 @@ namespace wvWare
         bool write( OLEStreamWriter* stream, bool preservePos = false ) const;
 
         /**
-         * Set all the fields to the inital value (default is 0)
+         * Set all the fields to the initial value (default is 0)
          */
         void clear();
 

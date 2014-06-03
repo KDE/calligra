@@ -29,7 +29,6 @@
 #include <QEvent>
 #include <QApplication>
 
-#include <KIcon>
 #include <kpushbutton.h>
 
 //! @internal
@@ -44,35 +43,6 @@ public:
     QBoxLayout *lyr;
     KHBox *lbl_b;
 };
-
-//==========================
-/*
-class KexiSectionHeader::BoxLayout : public QBoxLayout
-{
-  public:
-    BoxLayout( QBoxLayout::Direction dir, KexiSectionHeader* parent )
-     : QBoxLayout(dir, parent)
-    {
-      setContentsMargins(0,0,0,0);
-      setSpacing(0);
-    }
-
-    void addItem( QLayoutItem * item )
-    {
-      QBoxLayout::addItem( item );
-      if (item->widget()) {
-        item->widget()->installEventFilter( parentWidget() );
-        if (dynamic_cast<KexiView*>(item->widget())) {
-          view = dynamic_cast<KexiView*>(item->widget());
-          KexiSectionHeader *sh = static_cast<KexiSectionHeader*>(parentWidget());
-          connect(view,SIGNAL(focus(bool)),sh,SLOT(slotFocus(bool)));
-          sh->d->lbl->setBuddy(item->widget());
-        }
-      }
-    }
-
-    QPointer<KexiView> view;
-};*/
 
 //==========================
 
@@ -93,7 +63,6 @@ KexiSectionHeader::KexiSectionHeader(const QString &caption,
     d->lbl = new QLabel(caption, d->lbl_b);
     d->lbl->setContentsMargins(6, 0, 0, 0);
     d->lbl->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
-    //d->lbl->setFocusPolicy(Qt::StrongFocus);
     d->lbl->setAutoFillBackground(true);
     d->lbl->installEventFilter(this);
     installEventFilter(this);
@@ -112,7 +81,7 @@ void KexiSectionHeader::setWidget(QWidget * widget)
         return;
     if (item)
         d->lyr->removeItem(item);
-//todo disconnect
+//! @todo disconnect
     d->lyr->addWidget(widget);
     widget->installEventFilter(this);
     KexiView* view = dynamic_cast<KexiView*>(widget);
@@ -126,22 +95,16 @@ void KexiSectionHeader::addButton(const KIcon& icon, const QString& toolTip,
                                   const QObject * receiver, const char * member)
 {
     KexiSmallToolButton *btn = new KexiSmallToolButton(icon, QString(), d->lbl_b);
-// btn->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
     if (receiver && member) {
         connect(btn, SIGNAL(clicked()), receiver, member);
     }
-
-    /* if (!icon.isNull()) {
-        QFontMetrics fm(d->lbl->font());
-        btn->setMaximumHeight( qMax(fm.height(), 16) );
-      }*/
     if (!toolTip.isEmpty())
         btn->setToolTip(toolTip);
 }
 
 bool KexiSectionHeader::eventFilter(QObject *o, QEvent *e)
 {
-    if (o == d->lbl && e->type() == QEvent::MouseButtonRelease) {//|| e->type()==QEvent::FocusOut) {// && o->inherits("QWidget")) {
+    if (o == d->lbl && e->type() == QEvent::MouseButtonRelease) {
         QLayoutItem *item = d->lyr->itemAt(1);
         if (item && item->widget())
             item->widget()->setFocus();
@@ -151,7 +114,7 @@ bool KexiSectionHeader::eventFilter(QObject *o, QEvent *e)
 
 void KexiSectionHeader::slotFocus(bool in)
 {
-    kDebug() << "void KexiSectionHeader::slotFocus(" << in << ")";
+    kDebug() << in;
     in = in || qApp->focusWidget() == this;
     QPalette pal(d->lbl->palette());
     pal.setBrush(QPalette::Window,
@@ -179,13 +142,5 @@ QString KexiSectionHeader::caption() const
 {
     return d->lbl->text();
 }
-
-/*void KexiSectionHeader::setFocus()
-{
-  if (d->lyr->view)
-    d->lyr->view->setFocus();
-  else
-    QWidget::setFocus();
-}*/
 
 #include "kexisectionheader.moc"

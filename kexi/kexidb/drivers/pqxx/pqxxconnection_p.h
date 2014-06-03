@@ -20,7 +20,7 @@
 #ifndef PQXXSQLCONNECTIONINTERNAL_H
 #define PQXXSQLCONNECTIONINTERNAL_H
 
-#include <kexidb/connection_p.h>
+#include <db/connection_p.h>
 #include <pqxx/pqxx>
 
 /**
@@ -31,7 +31,7 @@ namespace KexiDB
 class pqxxSqlConnectionInternal : public ConnectionInternal
 {
 public:
-    pqxxSqlConnectionInternal(Connection *conn);
+    explicit pqxxSqlConnectionInternal(Connection *conn);
 
     virtual ~pqxxSqlConnectionInternal();
 

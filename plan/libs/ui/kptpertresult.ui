@@ -13,18 +13,6 @@
    <enum>Qt::NoContextMenu</enum>
   </property>
   <layout class="QVBoxLayout" >
-   <property name="leftMargin" >
-    <number>0</number>
-   </property>
-   <property name="topMargin" >
-    <number>0</number>
-   </property>
-   <property name="rightMargin" >
-    <number>0</number>
-   </property>
-   <property name="bottomMargin" >
-    <number>0</number>
-   </property>
    <item>
     <layout class="QHBoxLayout" >
      <item>
@@ -60,20 +48,8 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
-       <property name="frameShape" >
-        <enum>QFrame::NoFrame</enum>
-       </property>
-       <property name="frameShadow" >
-        <enum>QFrame::Plain</enum>
-       </property>
        <property name="text" >
         <string>...</string>
-       </property>
-       <property name="margin" >
-        <number>2</number>
-       </property>
-       <property name="indent" >
-        <number>0</number>
        </property>
       </widget>
      </item>

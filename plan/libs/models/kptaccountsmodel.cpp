@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2007 Dag Andersen <danders@get2net>
+  Copyright (C) 2007, 2012 Dag Andersen <danders@get2net>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -29,15 +29,17 @@
 #include "kptaccount.h"
 #include "kptdatetime.h"
 #include "kptschedule.h"
+#include "kptdebug.h"
+
+#include <KoIcon.h>
 
 #include <QList>
 #include <QObject>
 
-
+#include <kcalendarsystem.h>
+#include <kdeversion.h>
 #include <kglobal.h>
 #include <klocale.h>
-#include <KIcon>
-#include <kdebug.h>
 
 namespace KPlato
 {
@@ -69,7 +71,7 @@ QVariant AccountModel::data( const Account *a, int property, int role ) const
         case AccountModel::Name: result = name( a, role ); break;
         case AccountModel::Description: result = description( a, role ); break;
         default:
-            kDebug()<<"data: invalid display value column"<<property;
+            kDebug(planDbg())<<"data: invalid display value column"<<property;
             return QVariant();
     }
     return result;
@@ -77,7 +79,7 @@ QVariant AccountModel::data( const Account *a, int property, int role ) const
 
 QVariant AccountModel::name( const Account *a, int role ) const
 {
-    //kDebug()<<a->name()<<","<<role;
+    //kDebug(planDbg())<<a->name()<<","<<role;
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::EditRole:
@@ -97,7 +99,7 @@ QVariant AccountModel::name( const Account *a, int role ) const
              return  m_project && m_project->isBaselined() ? QVariant() : Qt::Unchecked;
          case Qt::DecorationRole:
              if ( a->isBaselined() ) {
-                return KIcon( "view-time-schedule-baselined" );
+                return koIcon("view-time-schedule-baselined");
              }
              break;
     }
@@ -106,7 +108,7 @@ QVariant AccountModel::name( const Account *a, int role ) const
 
 QVariant AccountModel::description( const Account *a, int role ) const
 {
-    //kDebug()<<res->name()<<","<<role;
+    //kDebug(planDbg())<<res->name()<<","<<role;
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::EditRole:
@@ -160,7 +162,7 @@ const QMetaEnum AccountItemModel::columnMap() const
 
 void AccountItemModel::slotAccountToBeInserted( const Account *parent, int row )
 {
-    //kDebug()<<parent->name();
+    //kDebug(planDbg())<<parent->name();
     Q_ASSERT( m_account == 0 );
     m_account = const_cast<Account*>(parent);
     beginInsertRows( index( parent ), row, row );
@@ -168,15 +170,15 @@ void AccountItemModel::slotAccountToBeInserted( const Account *parent, int row )
 
 void AccountItemModel::slotAccountInserted( const Account *account )
 {
-    //kDebug()<<account->name();
-    Q_ASSERT( account->parent() == m_account );
+    //kDebug(planDbg())<<account->name();
+    Q_ASSERT( account->parent() == m_account ); Q_UNUSED( account );
     endInsertRows();
     m_account = 0;
 }
 
 void AccountItemModel::slotAccountToBeRemoved( const Account *account )
 {
-    //kDebug()<<account->name();
+    //kDebug(planDbg())<<account->name();
     Q_ASSERT( m_account == 0 );
     m_account = const_cast<Account*>(account);
     int row = index( account ).row();
@@ -185,8 +187,8 @@ void AccountItemModel::slotAccountToBeRemoved( const Account *account )
 
 void AccountItemModel::slotAccountRemoved( const Account *account )
 {
-    //kDebug()<<account->name();
-    Q_ASSERT( account == m_account );
+    //kDebug(planDbg())<<account->name();
+    Q_ASSERT( account == m_account ); Q_UNUSED( account );
     endRemoveRows();
     m_account = 0;
 }
@@ -195,26 +197,26 @@ void AccountItemModel::setProject( Project *project )
 {
     if ( m_project ) {
         Accounts *acc = &( m_project->accounts() );
-        disconnect( acc , SIGNAL( changed( Account* ) ), this, SLOT( slotAccountChanged( Account* ) ) );
+        disconnect( acc , SIGNAL(changed(Account*)), this, SLOT(slotAccountChanged(Account*)) );
 
-        disconnect( acc, SIGNAL( accountAdded( const Account* ) ), this, SLOT( slotAccountInserted( const Account* ) ) );
-        disconnect( acc, SIGNAL( accountToBeAdded( const Account*, int ) ), this, SLOT( slotAccountToBeInserted( const Account*, int ) ) );
+        disconnect( acc, SIGNAL(accountAdded(const Account*)), this, SLOT(slotAccountInserted(const Account*)) );
+        disconnect( acc, SIGNAL(accountToBeAdded(const Account*,int)), this, SLOT(slotAccountToBeInserted(const Account*,int)) );
 
-        disconnect( acc, SIGNAL( accountRemoved( const Account* ) ), this, SLOT( slotAccountRemoved( const Account* ) ) );
-        disconnect( acc, SIGNAL( accountToBeRemoved( const Account* ) ), this, SLOT( slotAccountToBeRemoved( const Account* ) ) );
+        disconnect( acc, SIGNAL(accountRemoved(const Account*)), this, SLOT(slotAccountRemoved(const Account*)) );
+        disconnect( acc, SIGNAL(accountToBeRemoved(const Account*)), this, SLOT(slotAccountToBeRemoved(const Account*)) );
     }
     m_project = project;
     m_model.m_project = project;
     if ( project ) {
         Accounts *acc = &( project->accounts() );
-        kDebug()<<acc;
-        connect( acc, SIGNAL( changed( Account* ) ), this, SLOT( slotAccountChanged( Account* ) ) );
+        kDebug(planDbg())<<acc;
+        connect( acc, SIGNAL(changed(Account*)), this, SLOT(slotAccountChanged(Account*)) );
 
-        connect( acc, SIGNAL( accountAdded( const Account* ) ), this, SLOT( slotAccountInserted( const Account* ) ) );
-        connect( acc, SIGNAL( accountToBeAdded( const Account*, int ) ), this, SLOT( slotAccountToBeInserted( const Account*, int ) ) );
+        connect( acc, SIGNAL(accountAdded(const Account*)), this, SLOT(slotAccountInserted(const Account*)) );
+        connect( acc, SIGNAL(accountToBeAdded(const Account*,int)), this, SLOT(slotAccountToBeInserted(const Account*,int)) );
 
-        connect( acc, SIGNAL( accountRemoved( const Account* ) ), this, SLOT( slotAccountRemoved( const Account* ) ) );
-        connect( acc, SIGNAL( accountToBeRemoved( const Account* ) ), this, SLOT( slotAccountToBeRemoved( const Account* ) ) );
+        connect( acc, SIGNAL(accountRemoved(const Account*)), this, SLOT(slotAccountRemoved(const Account*)) );
+        connect( acc, SIGNAL(accountToBeRemoved(const Account*)), this, SLOT(slotAccountToBeRemoved(const Account*)) );
     }
 }
 
@@ -249,7 +251,7 @@ QModelIndex AccountItemModel::parent( const QModelIndex &index ) const
     if ( !index.isValid() || m_project == 0 ) {
         return QModelIndex();
     }
-    //kDebug()<<index.internalPointer()<<":"<<index.row()<<","<<index.column();
+    //kDebug(planDbg())<<index.internalPointer()<<":"<<index.row()<<","<<index.column();
     Account *a = account( index );
     if ( a == 0 ) {
         return QModelIndex();
@@ -263,7 +265,7 @@ QModelIndex AccountItemModel::parent( const QModelIndex &index ) const
         } else {
             row = m_project->accounts().accountList().indexOf( par );
         }
-        //kDebug()<<par->name()<<":"<<row;
+        //kDebug(planDbg())<<par->name()<<":"<<row;
         return createIndex( row, 0, par );
     }
     return QModelIndex();
@@ -327,7 +329,7 @@ bool AccountItemModel::setName( Account *a, const QVariant &value, int role )
     switch ( role ) {
         case Qt::EditRole:
             if ( value.toString() != a->name() ) {
-                emit executeCommand( new RenameAccountCmd( a, value.toString(), "Modify account name" ) );
+                emit executeCommand( new RenameAccountCmd( a, value.toString(), i18nc( "(qtundo-format)", "Modify account name" ) ) );
             }
             return true;
         case Qt::CheckStateRole: {
@@ -357,7 +359,7 @@ bool AccountItemModel::setDescription( Account *a, const QVariant &value, int ro
     switch ( role ) {
         case Qt::EditRole:
             if ( value.toString() != a->description() ) {
-                emit executeCommand( new ModifyAccountDescriptionCmd( a, value.toString(), "Modify account description" ) );
+                emit executeCommand( new ModifyAccountDescriptionCmd( a, value.toString(), i18nc( "(qtundo-format)", "Modify account description" ) ) );
             }
             return true;
     }
@@ -385,7 +387,7 @@ bool AccountItemModel::setData( const QModelIndex &index, const QVariant &value,
         return false;
     }
     Account *a = account( index );
-    kDebug()<<a->name()<<value<<role;
+    kDebug(planDbg())<<a->name()<<value<<role;
     switch (index.column()) {
         case AccountModel::Name: return setName( a, value, role );
         case AccountModel::Description: return setDescription( a, value, role );
@@ -423,7 +425,7 @@ void AccountItemModel::slotAccountChanged( Account *account )
 
 QModelIndex AccountItemModel::insertAccount( Account *account, Account *parent, int index )
 {
-    kDebug();
+    kDebug(planDbg());
     if ( account->name().isEmpty() || m_project->accounts().findAccount( account->name() ) ) {
         QString s = parent == 0 ? account->name() : parent->name();
         account->setName( m_project->accounts().uniqueId( s ) );
@@ -437,10 +439,10 @@ QModelIndex AccountItemModel::insertAccount( Account *account, Account *parent, 
         row = m_project->accounts().accountList().indexOf( account );
     }
     if ( row != -1 ) {
-        //kDebug()<<"Inserted:"<<account->name();
+        //kDebug(planDbg())<<"Inserted:"<<account->name();
         return createIndex( row, 0, account );
     }
-    kDebug()<<"Can't find"<<account->name();
+    kDebug(planDbg())<<"Can't find"<<account->name();
     return QModelIndex();
 }
 
@@ -485,21 +487,21 @@ CostBreakdownItemModel::~CostBreakdownItemModel()
 
 void CostBreakdownItemModel::slotAccountToBeInserted( const Account *parent, int row )
 {
-    //kDebug()<<parent->name();
+    //kDebug(planDbg())<<parent->name();
     beginInsertRows( index( parent ), row, row );
 }
 
 void CostBreakdownItemModel::slotAccountInserted( const Account *account )
 {
     Q_UNUSED(account);
-    //kDebug()<<account->name();
+    //kDebug(planDbg())<<account->name();
     endInsertRows();
 }
 
 void CostBreakdownItemModel::slotAccountToBeRemoved( const Account *account )
 {
 
-    //kDebug()<<account->name();
+    //kDebug(planDbg())<<account->name();
     int row = index( account ).row();
     beginRemoveRows( index( account->parent() ), row, row );
 }
@@ -507,7 +509,7 @@ void CostBreakdownItemModel::slotAccountToBeRemoved( const Account *account )
 void CostBreakdownItemModel::slotAccountRemoved( const Account *account )
 {
     Q_UNUSED(account);
-    //kDebug()<<account->name();
+    //kDebug(planDbg())<<account->name();
     endRemoveRows();
 }
 
@@ -517,7 +519,7 @@ void CostBreakdownItemModel::slotDataChanged()
     foreach ( Account *a, m_plannedCostMap.keys() ) {
         QModelIndex idx1 = index( a );
         QModelIndex idx2 = index( idx1.row(), columnCount() - 1, parent( idx1 ) );
-        //kDebug()<<a->name()<<idx1<<idx2;
+        //kDebug(planDbg())<<a->name()<<idx1<<idx2;
         emit dataChanged( idx1, idx2  );
     }
 }
@@ -526,47 +528,47 @@ void CostBreakdownItemModel::setProject( Project *project )
 {
     if ( m_project ) {
         Accounts *acc = &( m_project->accounts() );
-        disconnect( acc , SIGNAL( changed( Account* ) ), this, SLOT( slotAccountChanged( Account* ) ) );
+        disconnect( acc , SIGNAL(changed(Account*)), this, SLOT(slotAccountChanged(Account*)) );
 
-        disconnect( acc, SIGNAL( accountAdded( const Account* ) ), this, SLOT( slotAccountInserted( const Account* ) ) );
-        disconnect( acc, SIGNAL( accountToBeAdded( const Account*, int ) ), this, SLOT( slotAccountToBeInserted( const Account*, int ) ) );
+        disconnect( acc, SIGNAL(accountAdded(const Account*)), this, SLOT(slotAccountInserted(const Account*)) );
+        disconnect( acc, SIGNAL(accountToBeAdded(const Account*,int)), this, SLOT(slotAccountToBeInserted(const Account*,int)) );
 
-        disconnect( acc, SIGNAL( accountRemoved( const Account* ) ), this, SLOT( slotAccountRemoved( const Account* ) ) );
-        disconnect( acc, SIGNAL( accountToBeRemoved( const Account* ) ), this, SLOT( slotAccountToBeRemoved( const Account* ) ) );
+        disconnect( acc, SIGNAL(accountRemoved(const Account*)), this, SLOT(slotAccountRemoved(const Account*)) );
+        disconnect( acc, SIGNAL(accountToBeRemoved(const Account*)), this, SLOT(slotAccountToBeRemoved(const Account*)) );
 
-        disconnect( m_project , SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotDataChanged() ) );
-        disconnect( m_project , SIGNAL( nodeAdded( Node* ) ), this, SLOT( slotDataChanged() ) );
-        disconnect( m_project , SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotDataChanged() ) );
+        disconnect( m_project , SIGNAL(nodeChanged(Node*)), this, SLOT(slotDataChanged()) );
+        disconnect( m_project , SIGNAL(nodeAdded(Node*)), this, SLOT(slotDataChanged()) );
+        disconnect( m_project , SIGNAL(nodeRemoved(Node*)), this, SLOT(slotDataChanged()) );
 
-        disconnect( m_project , SIGNAL( resourceChanged( Resource* ) ), this, SLOT( slotDataChanged() ) );
-        disconnect( m_project , SIGNAL( resourceAdded( const Resource* ) ), this, SLOT( slotDataChanged() ) );
-        disconnect( m_project , SIGNAL( resourceRemoved( const Resource* ) ), this, SLOT( slotDataChanged() ) );
+        disconnect( m_project , SIGNAL(resourceChanged(Resource*)), this, SLOT(slotDataChanged()) );
+        disconnect( m_project , SIGNAL(resourceAdded(const Resource*)), this, SLOT(slotDataChanged()) );
+        disconnect( m_project , SIGNAL(resourceRemoved(const Resource*)), this, SLOT(slotDataChanged()) );
     }
     m_project = project;
     if ( project ) {
         Accounts *acc = &( project->accounts() );
-        kDebug()<<acc;
-        connect( acc, SIGNAL( changed( Account* ) ), this, SLOT( slotAccountChanged( Account* ) ) );
+        kDebug(planDbg())<<acc;
+        connect( acc, SIGNAL(changed(Account*)), this, SLOT(slotAccountChanged(Account*)) );
 
-        connect( acc, SIGNAL( accountAdded( const Account* ) ), this, SLOT( slotAccountInserted( const Account* ) ) );
-        connect( acc, SIGNAL( accountToBeAdded( const Account*, int ) ), this, SLOT( slotAccountToBeInserted( const Account*, int ) ) );
+        connect( acc, SIGNAL(accountAdded(const Account*)), this, SLOT(slotAccountInserted(const Account*)) );
+        connect( acc, SIGNAL(accountToBeAdded(const Account*,int)), this, SLOT(slotAccountToBeInserted(const Account*,int)) );
 
-        connect( acc, SIGNAL( accountRemoved( const Account* ) ), this, SLOT( slotAccountRemoved( const Account* ) ) );
-        connect( acc, SIGNAL( accountToBeRemoved( const Account* ) ), this, SLOT( slotAccountToBeRemoved( const Account* ) ) );
+        connect( acc, SIGNAL(accountRemoved(const Account*)), this, SLOT(slotAccountRemoved(const Account*)) );
+        connect( acc, SIGNAL(accountToBeRemoved(const Account*)), this, SLOT(slotAccountToBeRemoved(const Account*)) );
 
-        connect( m_project , SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotDataChanged() ) );
-        connect( m_project , SIGNAL( nodeAdded( Node* ) ), this, SLOT( slotDataChanged() ) );
-        connect( m_project , SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotDataChanged() ) );
+        connect( m_project , SIGNAL(nodeChanged(Node*)), this, SLOT(slotDataChanged()) );
+        connect( m_project , SIGNAL(nodeAdded(Node*)), this, SLOT(slotDataChanged()) );
+        connect( m_project , SIGNAL(nodeRemoved(Node*)), this, SLOT(slotDataChanged()) );
 
-        connect( m_project , SIGNAL( resourceChanged( Resource* ) ), this, SLOT( slotDataChanged() ) );
-        connect( m_project , SIGNAL( resourceAdded( const Resource* ) ), this, SLOT( slotDataChanged() ) );
-        connect( m_project , SIGNAL( resourceRemoved( const Resource* ) ), this, SLOT( slotDataChanged() ) );
+        connect( m_project , SIGNAL(resourceChanged(Resource*)), this, SLOT(slotDataChanged()) );
+        connect( m_project , SIGNAL(resourceAdded(const Resource*)), this, SLOT(slotDataChanged()) );
+        connect( m_project , SIGNAL(resourceRemoved(const Resource*)), this, SLOT(slotDataChanged()) );
     }
 }
 
 void CostBreakdownItemModel::setScheduleManager( ScheduleManager *sm )
 {
-    kDebug()<<m_project<<m_manager<<sm;
+    kDebug(planDbg())<<m_project<<m_manager<<sm;
     if ( m_manager != sm ) {
         m_manager = sm;
         fetchData();
@@ -597,7 +599,7 @@ EffortCostMap CostBreakdownItemModel::fetchPlannedCost( Account *account )
 
 EffortCostMap CostBreakdownItemModel::fetchActualCost( Account *account )
 {
-    kDebug()<<account->name();
+    kDebug(planDbg())<<account->name();
     EffortCostMap ec;
     ec = account->actualCost( id() );
     m_actualCostMap.insert( account, ec );
@@ -609,13 +611,13 @@ EffortCostMap CostBreakdownItemModel::fetchActualCost( Account *account )
     if ( ! m_actualEnd.isValid() || e > m_actualEnd ) {
         m_actualEnd = e;
     }
-    kDebug()<<account->name()<<ec.totalEffort().toDouble(Duration::Unit_h)<<ec.totalCost();
+    kDebug(planDbg())<<account->name()<<ec.totalEffort().toDouble(Duration::Unit_h)<<ec.totalCost();
     return ec;
 }
 
 void CostBreakdownItemModel::fetchData()
 {
-    //kDebug()<<m_start<<m_end;
+    //kDebug(planDbg())<<m_start<<m_end;
     m_plannedCostMap.clear();
     m_plannedStart = m_plannedEnd = QDate();
     m_actualStart = m_actualEnd = QDate();
@@ -633,7 +635,7 @@ QModelIndex CostBreakdownItemModel::parent( const QModelIndex &index ) const
     if ( !index.isValid() || m_project == 0 ) {
         return QModelIndex();
     }
-    //kDebug()<<index.internalPointer()<<":"<<index.row()<<","<<index.column();
+    //kDebug(planDbg())<<index.internalPointer()<<":"<<index.row()<<","<<index.column();
     Account *a = account( index );
     if ( a == 0 ) {
         return QModelIndex();
@@ -647,7 +649,7 @@ QModelIndex CostBreakdownItemModel::parent( const QModelIndex &index ) const
         } else {
             row = m_project->accounts().accountList().indexOf( par );
         }
-        //kDebug()<<par->name()<<":"<<row;
+        //kDebug(planDbg())<<par->name()<<":"<<row;
         return createIndex( row, 0, par );
     }
     return QModelIndex();
@@ -699,7 +701,12 @@ int CostBreakdownItemModel::columnCount( const QModelIndex & ) const
                 break;
             }
             case Period_Week: {
-                int days = KGlobal::locale()->weekStartDay() - startDate().dayOfWeek();
+                // ISO Week numbering always uses Monday as first day of week
+                const int firstWeekDay = (KGlobal::locale()->weekNumberSystem() == KLocale::IsoWeekNumber)
+                    ? Qt::Monday
+                    : KGlobal::locale()->weekStartDay();
+
+                int days = firstWeekDay - startDate().dayOfWeek();
                 if ( days > 0 ) {
                     days -= 7;
                 }
@@ -784,7 +791,12 @@ QVariant CostBreakdownItemModel::data( const QModelIndex &index, int role ) cons
                         return formatMoney( planned, actual );
                     }
                     case Period_Week: {
-                        int days = KGlobal::locale()->weekStartDay() - startDate().dayOfWeek();
+                        // ISO Week numbering always uses Monday as first day of week
+                        const int firstWeekDay = (KGlobal::locale()->weekNumberSystem() == KLocale::IsoWeekNumber)
+                            ? Qt::Monday
+                            : KGlobal::locale()->weekStartDay();
+
+                        int days = firstWeekDay - startDate().dayOfWeek();
                         if ( days > 0 ) {
                             days -= 7; ;
                         }
@@ -877,7 +889,12 @@ QVariant CostBreakdownItemModel::cost( const Account *a, int offset, int role ) 
             break;
         }
         case Period_Week: {
-            int days = KGlobal::locale()->weekStartDay() - startDate().dayOfWeek();
+            // ISO Week numbering always uses Monday as first day of week
+            const int firstWeekDay = (KGlobal::locale()->weekNumberSystem() == KLocale::IsoWeekNumber)
+                ? Qt::Monday
+                : KGlobal::locale()->weekStartDay();
+
+            int days = firstWeekDay - startDate().dayOfWeek();
             if ( days > 0 ) {
                 days -= 7; ;
             }
@@ -1040,7 +1057,12 @@ QVariant CostBreakdownItemModel::headerData( int section, Qt::Orientation orient
                     return startDate().addDays( col ).toString( Qt::ISODate );
                 }
                 case Period_Week: {
-                    return startDate().addDays( ( col ) * 7 ).weekNumber();
+                    const KCalendarSystem * calendar = KGlobal::locale()->calendar();
+#if KDE_IS_VERSION(4,7,0)
+                    return calendar->week(startDate().addDays( ( col ) * 7 ));
+#else
+                    return calendar->weekNumber(startDate().addDays( ( col ) * 7 ));
+#endif
                 }
                 case Period_Month: {
                     int days = startDate().daysInMonth() - startDate().day() + 1;
@@ -1073,7 +1095,12 @@ QVariant CostBreakdownItemModel::headerData( int section, Qt::Orientation orient
                     return startDate().addDays( col );
                 }
                 case Period_Week: {
-                    return startDate().addDays( ( col ) * 7 ).weekNumber();
+                    const KCalendarSystem * calendar = KGlobal::locale()->calendar();
+#if KDE_IS_VERSION(4,7,0)
+                    return calendar->week(startDate().addDays( ( col ) * 7 ));
+#else
+                    return calendar->weekNumber(startDate().addDays( ( col ) * 7 ));
+#endif
                 }
                 case Period_Month: {
                     int days = startDate().daysInMonth() - startDate().day() + 1;
@@ -1122,7 +1149,7 @@ void CostBreakdownItemModel::slotAccountChanged( Account *account )
     foreach ( Account *a, m_plannedCostMap.keys() ) {
         QModelIndex idx1 = index( a );
         QModelIndex idx2 = index( idx1.row(), columnCount() - 1, parent( idx1 ) );
-        //kDebug()<<a->name()<<idx1<<idx2;
+        //kDebug(planDbg())<<a->name()<<idx1<<idx2;
         emit dataChanged( idx1, idx2  );
     }
 }

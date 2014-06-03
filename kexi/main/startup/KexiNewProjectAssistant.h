@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2013 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2012 Dimitrios T. Tanis <dimitrios.tanis@kdemail.net>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,14 +21,16 @@
 #ifndef KEXINEWPROJECTASSISTANT_H
 #define KEXINEWPROJECTASSISTANT_H
 
-#include "kexidbconnectionset.h"
+#include "KexiAssistantMessageHandler.h"
 #include "ui_KexiProjectStorageTypeSelectionPage.h"
-#include <kexidb/connectiondata.h>
-#include <kexidb/msghandler.h>
+#include <core/kexidbconnectionset.h>
+#include <db/connectiondata.h>
+#include <db/msghandler.h>
 #include <kexiutils/KexiContextMessage.h>
 #include <kexiutils/KexiAssistantPage.h>
 #include <kexiutils/KexiAssistantWidget.h>
 #include <kexiutils/KexiCategorizedView.h>
+#include <widget/KexiServerDriverNotFoundMessage.h>
 
 #include <QPointer>
 
@@ -108,6 +111,8 @@ public:
     virtual ~KexiProjectConnectionSelectionPage();
 
     KexiConnectionSelectorWidget* connSelector;
+private:
+	QPointer<KexiServerDriverNotFoundMessage> m_errorMessagePopup;
 };
 
 class KexiServerDBNamePage;
@@ -153,28 +158,25 @@ private:
 class KexiProjectData;
 
 class KexiNewProjectAssistant : public KexiAssistantWidget,
-                                public KexiDB::MessageHandler
+                                public KexiAssistantMessageHandler
 {
     Q_OBJECT
 public:
     explicit KexiNewProjectAssistant(QWidget* parent = 0);
     ~KexiNewProjectAssistant();
 
-    //! Implementation for KexiDB::MessageHandler.
-    virtual void showErrorMessage(const QString &title,
-                                  const QString &details = QString());
-
-    //! Implementation for KexiDB::MessageHandler.
-    virtual void showErrorMessage(KexiDB::Object *obj, const QString& msg = QString());
-
 public slots:
-    virtual void previousPageRequested(KexiAssistantPage* page);
     virtual void nextPageRequested(KexiAssistantPage* page);
     virtual void cancelRequested(KexiAssistantPage* page);
     void tryAgainActionTriggered();
+    void cancelActionTriggered();
+
 signals:
     void createProject(KexiProjectData* data);
-    
+
+protected:
+    virtual QWidget* calloutWidget() const;
+
 private:
     void createProject(
         const KexiDB::ConnectionData& cdata, const QString& databaseName,

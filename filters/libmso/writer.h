@@ -20,7 +20,7 @@
 #ifndef MSO_WRITER_H
 #define MSO_WRITER_H
 
-#include <QtCore/QRectF>
+#include <QRectF>
 
 #include "KoGenStyles.h"
 

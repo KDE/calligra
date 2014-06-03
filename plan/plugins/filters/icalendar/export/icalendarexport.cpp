@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2009, 2011 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2009, 2011, 2012 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,16 +19,17 @@
 
 #include "icalendarexport.h"
 
-#include <kptpart.h>
+#include <kptmaindocument.h>
 #include <kpttask.h>
 #include <kptnode.h>
 #include <kptresource.h>
 #include <kptdocuments.h>
+#include "kptdebug.h"
 
-#include <kcal/attendee.h>
-#include <kcal/attachment.h>
-#include <kcal/todo.h>
-#include <kcal/icalformat.h>
+#include <kcalcore/attendee.h>
+#include <kcalcore/attachment.h>
+#include <kcalcore/icalformat.h>
+#include <kcalcore/memorycalendar.h>
 
 #include <QTextCodec>
 #include <QByteArray>
@@ -44,6 +45,7 @@
 #include <KoFilterManager.h>
 #include <KoDocument.h>
 
+
 using namespace KPlato;
 
 K_PLUGIN_FACTORY(ICalendarExportFactory, registerPlugin<ICalendarExport>();)
@@ -56,7 +58,7 @@ ICalendarExport::ICalendarExport(QObject* parent, const QVariantList &)
 
 KoFilter::ConversionStatus ICalendarExport::convert(const QByteArray& from, const QByteArray& to)
 {
-    kDebug() << from << to;
+    kDebug(planDbg()) << from << to;
     if ( ( from != "application/x-vnd.kde.plan" ) || ( to != "text/calendar" ) ) {
         return KoFilter::NotImplemented;
     }
@@ -66,12 +68,12 @@ KoFilter::ConversionStatus ICalendarExport::convert(const QByteArray& from, cons
     }
     if ( batch ) {
         //TODO
-        kDebug() << "batch";
+        kDebug(planDbg()) << "batch";
         return KoFilter::UsageError;
     }
-    kDebug()<<"online:"<<m_chain->inputDocument();
-    Part *part = dynamic_cast<Part*>( m_chain->inputDocument() );
-    if (part == 0) {
+    kDebug(planDbg())<<"online:"<<m_chain->inputDocument();
+    MainDocument *doc = dynamic_cast<MainDocument*>( m_chain->inputDocument() );
+    if (doc == 0) {
         kError() << "Cannot open Plan document";
         return KoFilter::InternalError;
     }
@@ -85,15 +87,15 @@ KoFilter::ConversionStatus ICalendarExport::convert(const QByteArray& from, cons
         return KoFilter::StorageCreationError;
     }
 
-    KoFilter::ConversionStatus status = convert(part->getProject(), file);
+    KoFilter::ConversionStatus status = convert(doc->getProject(), file);
     file.close();
-    //kDebug() << "Finished with status:"<<status;
+    //kDebug(planDbg()) << "Finished with status:"<<status;
     return status;
 }
 
 KoFilter::ConversionStatus ICalendarExport::convert(const Project &project, QFile &file)
 {
-    KCal::CalendarLocal cal("UTC");
+    KCalCore::Calendar::Ptr cal(new KCalCore::MemoryCalendar("UTC"));
 
     //TODO: schedule selection dialog
     long id = ANYSCHEDULED;
@@ -102,50 +104,54 @@ KoFilter::ConversionStatus ICalendarExport::convert(const Project &project, QFil
     foreach(const ScheduleManager *m, lst) {
         if (! baselined) {
             id = lst.last()->scheduleId();
-            //kDebug()<<"last:"<<id;
+            //kDebug(planDbg())<<"last:"<<id;
             break;
         }
         if (m->isBaselined()) {
             id = m->scheduleId();
-            //kDebug()<<"baselined:"<<id;
+            //kDebug(planDbg())<<"baselined:"<<id;
             break;
         }
     }
-    //kDebug()<<id;
+    //kDebug(planDbg())<<id;
     createTodos(cal, &project, id);
 
-    KCal::ICalFormat format;
-    qint64 n = file.write(format.toString(&cal).toUtf8());
+    KCalCore::ICalFormat format;
+    qint64 n = file.write(format.toString(cal).toUtf8());
     if (n < 0) {
         return KoFilter::InternalError;
     }
     return KoFilter::OK;
 }
 
-void ICalendarExport::createTodos(KCal::CalendarLocal &cal, const Node *node, long id, KCal::Todo *parent)
+void ICalendarExport::createTodos(KCalCore::Calendar::Ptr cal, const Node *node, long id, KCalCore::Todo::Ptr parent)
 {
-    KCal::Todo *todo = new KCal::Todo();
+    KCalCore::Todo::Ptr todo(new KCalCore::Todo());
     todo->setUid( node->id() );
     todo->setSummary(node->name());
     todo->setDescription(node->description());
-    todo->setCategories("KPlato");
+    todo->setCategories(QLatin1String("Plan"));
     if (! node->projectNode()->leader().isEmpty()) {
         todo->setOrganizer(node->projectNode()->leader());
     }
     if ( node->type() != Node::Type_Project && ! node->leader().isEmpty()) {
-        KCal::Person p = KCal::Person::fromFullName(node->leader());
-        KCal::Attendee *a = new KCal::Attendee(p.name(), p.email());
-        a->setRole(KCal::Attendee::NonParticipant);
+        KCalCore::Person::Ptr p = KCalCore::Person::fromFullName(node->leader());
+        KCalCore::Attendee::Ptr a(new KCalCore::Attendee(p->name(), p->email()));
+        a->setRole(KCalCore::Attendee::NonParticipant);
         todo->addAttendee(a);
     }
     DateTime st = node->startTime(id);
     DateTime et = node->endTime(id);
     if (st.isValid()) {
+#if PLAN_KDEPIMLIBS_HEXVERSION < KDE_MAKE_VERSION(4,11,0)
         todo->setHasStartDate(true);
+#endif
         todo->setDtStart( KDateTime( st ) );
     }
     if (et.isValid()) {
+#if PLAN_KDEPIMLIBS_HEXVERSION < KDE_MAKE_VERSION(4,11,0)
         todo->setHasDueDate(true);
+#endif
         todo->setDtDue( KDateTime( et ) );
     }
     if (node->type() == Node::Type_Task) {
@@ -156,29 +162,33 @@ void ICalendarExport::createTodos(KCal::CalendarLocal &cal, const Node *node, lo
             const QList<Resource*> lst = task->requestedResources();
             foreach(const Resource *r, lst) {
                 if (r->type() == Resource::Type_Work) {
-                    todo->addAttendee(new KCal::Attendee(r->name(), r->email()));
+                    todo->addAttendee(KCalCore::Attendee::Ptr(new KCalCore::Attendee(r->name(), r->email())));
                 }
             }
         } else {
             foreach(const Resource *r, s->resources()) {
                 if (r->type() == Resource::Type_Work) {
-                    todo->addAttendee(new KCal::Attendee(r->name(), r->email()));
+                    todo->addAttendee(KCalCore::Attendee::Ptr(new KCalCore::Attendee(r->name(), r->email())));
                 }
             }
 
         }
     } else if (node->type() == Node::Type_Milestone) {
         const Task *task = qobject_cast<Task*>(const_cast<Node*>(node));
+#if PLAN_KDEPIMLIBS_HEXVERSION < KDE_MAKE_VERSION(4,11,0)
         todo->setHasStartDate(false);
+#else
+        todo->setDtStart(KDateTime());
+#endif
         todo->setPercentComplete(task->completion().percentFinished());
     }
     foreach(const Document *doc, node->documents().documents()) {
-        todo->addAttachment(new KCal::Attachment(doc->url().url()));
+        todo->addAttachment(KCalCore::Attachment::Ptr(new KCalCore::Attachment(doc->url().url())));
     }
-    if (parent) {
-        todo->setRelatedTo(parent);
+    if (! parent.isNull()) {
+        todo->setRelatedTo(parent->uid(), KCalCore::Incidence::RelTypeParent);
     }
-    cal.addTodo(todo);
+    cal->addTodo(todo);
     foreach(const Node *n, node->childNodeIterator()) {
         createTodos(cal, n, id, todo);
     }

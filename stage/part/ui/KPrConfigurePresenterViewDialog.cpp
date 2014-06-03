@@ -19,10 +19,10 @@
 
 #include "KPrConfigurePresenterViewDialog.h"
 
-#include <QtGui/QDesktopWidget>
+#include <QDesktopWidget>
 
-#include <KLocale>
-#include <KDebug>
+#include <klocale.h>
+#include <kdebug.h>
 
 #include "KPrDocument.h"
 

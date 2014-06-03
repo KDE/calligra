@@ -61,7 +61,7 @@ doc.setHtml(
         "content or just use the cursor-functionality to deal with the content on a "
         "more abstract level.</p>"
         "<p align=\"center\"><b>Calligra 2.0 to maximize your productivity</b></p>"
-        "<p align=\"right\"><a href=\"http://www.calligra-suite.org\">http://www.calligra-suite.org</a></p>"
+        "<p align=\"right\"><a href=\"http://www.calligra.org\">http://www.calligra.org</a></p>"
         "<h2>Unsorted list (UL)</h2>"
         "<ul class=\"ulist1\">"
             "<li>First main item"

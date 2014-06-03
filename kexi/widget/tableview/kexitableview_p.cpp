@@ -27,7 +27,7 @@
 #include "kexitableview_p.h"
 #include "kexitableedit.h"
 
-#include <qlabel.h>
+#include <QLabel>
 
 #include <kglobalsettings.h>
 
@@ -38,15 +38,10 @@ KexiTableViewPrivate::KexiTableViewPrivate(KexiTableView* t)
     clearVariables();
     tv = t;
     editOnDoubleClick = true;
-//Qt4 pBufferPm = 0;
     disableDrawContents = false;
     navigatorEnabled = true;
     contextMenuEnabled = true;
     skipKeyPress = false;
-//moved vScrollBarValueChanged_enabled = true;
-//moved scrollbarToolTipsEnabled = true;
-//moved scrollBarTipTimerCnt = 0;
-//moved scrollBarTip = 0;
     ensureCellVisibleOnShow = QPoint(-1, -1);
     internal_bottomMargin = tv->horizontalScrollBar()->sizeHint().height() / 2;
     highlightedRecord = -1;
@@ -56,12 +51,11 @@ KexiTableViewPrivate::KexiTableViewPrivate(KexiTableView* t)
     dragIndicatorRubberBand = 0;
     firstTimeEnsureCellVisible = true;
     insideResizeEvent = false;
+    firstShowEvent = true;
 }
 
 KexiTableViewPrivate::~KexiTableViewPrivate()
 {
-//Qt4 delete pBufferPm;
-//moved delete scrollBarTip;
 }
 
 void KexiTableViewPrivate::clearVariables()

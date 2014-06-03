@@ -22,7 +22,7 @@
 
 #include <QPointer>
 
-#include <kexidb/connection_p.h>
+#include <db/connection_p.h>
 
 #ifdef XBASEMIGRATE_H
 #define NAMESPACE KexiMigration

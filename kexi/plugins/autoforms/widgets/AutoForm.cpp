@@ -21,8 +21,8 @@
 #include "AutoForm.h"
 #include <QGridLayout>
 #include "AutoLineEdit.h"
-#include <kexidb/cursor.h>
-#include <kexidb/RecordData.h>
+#include <db/cursor.h>
+#include <db/RecordData.h>
 
 AutoForm::AutoForm(QWidget* parent, KexiRecordNavigatorIface *nav): QWidget(parent), m_previousRecord(0)
 {
@@ -201,11 +201,11 @@ QScrollBar* AutoForm::verticalScrollBar() const
 
 void AutoForm::buildForm()
 {
-    KexiTableViewColumn::List col_list = KexiDataAwareObjectInterface::data()->columns();
+    KexiDB::TableViewColumn::List col_list = KexiDataAwareObjectInterface::data()->columns();
 
     int column = 0;
     
-    foreach(KexiTableViewColumn *col, col_list) {
+    foreach(KexiDB::TableViewColumn *col, col_list) {
         kDebug() << col->captionAliasOrName();
         AutoWidget* widget = new AutoLineEdit(this);
         widget->setDataSource(col->field()->name());

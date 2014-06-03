@@ -19,7 +19,7 @@
 
 #include "kexitemplateloader.h"
 #include "kexi.h"
-#include <kexidb/utils.h>
+#include <db/utils.h>
 
 #include <kstandarddirs.h>
 #include <kglobal.h>
@@ -27,10 +27,9 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kdebug.h>
-#include <kiconloader.h>
 #include <kapplication.h>
 
-#include <qdir.h>
+#include <QDir>
 
 KexiTemplateCategoryInfo::KexiTemplateCategoryInfo()
   : enabled(true)
@@ -62,19 +61,12 @@ void KexiTemplateCategoryInfo::addTemplate(const KexiTemplateInfo& t)
 KexiTemplateInfoList KexiTemplateLoader::loadListInfo()
 {
     KexiTemplateInfoList list;
-// const QString subdir = QString(kapp->instanceName()) + "/templates";
-#ifdef __GNUC
-#ifdef __GNUC__
-#warning KexiTemplateLoader::loadListInfo() -- OK? KGlobal::mainComponent().componentName()
-#else
-#pragma WARNING( KexiTemplateLoader::loadListInfo() -- OK? KGlobal::mainComponent().componentName() )
-#endif
-#endif
+//! @todo OK? KGlobal::mainComponent().componentName()
     const QString subdir = KGlobal::mainComponent().componentName() + "/templates";
     QString lang(KGlobal::locale()->language());
     QStringList dirs(KGlobal::dirs()->findDirs("data", subdir));
     while (true) {
-        foreach(QString dirname, dirs) {
+        foreach(const QString &dirname, dirs) {
             QDir dir(dirname + lang);
             if (!dir.exists())
                 continue;
@@ -84,7 +76,7 @@ KexiTemplateInfoList KexiTemplateLoader::loadListInfo()
             }
             const QStringList templateDirs(dir.entryList(QDir::Dirs, QDir::Name));
             const QString absDirPath(dir.absolutePath() + '/');
-            foreach(QString templateDir, templateDirs) {
+            foreach(const QString &templateDir, templateDirs) {
                 if (templateDir == "." || templateDir == "..")
                     continue;
                 KexiTemplateInfo info = KexiTemplateLoader::loadInfo(absDirPath + templateDir);
@@ -133,9 +125,9 @@ KexiTemplateInfo KexiTemplateLoader::loadInfo(const QString& directory)
     if (!iconFileName.isEmpty())
         info.icon = KIcon(QPixmap(directory + '/' + iconFileName));
     if (info.icon.isNull())
-        info.icon = KIcon(DesktopIcon(KexiDB::defaultFileBasedDriverIcon()));
+        info.icon = KIcon(KexiDB::defaultFileBasedDriverIconName());
     QStringList autoopenObjectsString = cg.readEntry("AutoOpenObjects", QStringList());
-    foreach(QString autoopenObjectString, autoopenObjectsString) {
+    foreach(const QString &autoopenObjectString, autoopenObjectsString) {
         KexiProjectData::ObjectInfo* autoopenObject = new KexiProjectData::ObjectInfo();
         QStringList autoopenObjectNameSplitted(autoopenObjectString.split(':'));
         if (autoopenObjectNameSplitted.count() > 1) {

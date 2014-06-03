@@ -21,11 +21,11 @@
 #include <QFile>
 #include <QVariant>
 
-#include <KDebug>
-#include <KAboutData>
-#include <KApplication>
-#include <KCmdLineArgs>
-#include <KUniqueApplication>
+#include <kdebug.h>
+#include <kaboutdata.h>
+#include <kapplication.h>
+#include <kcmdlineargs.h>
+#include <kuniqueapplication.h>
 
 #include <pion/PionConfig.hpp>
 #include <pion/PionPlugin.hpp>

@@ -21,24 +21,24 @@
 
 #include <unistd.h>
 
-#include <qapplication.h>
-#include <qfile.h>
-#include <qdir.h>
-#include <qregexp.h>
-#include <qclipboard.h>
+#include <QApplication>
+#include <QFile>
+#include <QDir>
+#include <QRegExp>
+#include <QClipboard>
 
 #include <kdebug.h>
+#include <kaboutdata.h>
 
 #include <main/KexiMainWindow.h>
-#include <core/kexiaboutdata.h>
 #include <core/KexiWindow.h>
 #include <core/KexiView.h>
 #include <core/kexipartitem.h>
 #include <core/kexitabledesignerinterface.h>
 #include <core/kexiinternalpart.h>
 #include <kexiutils/utils.h>
-#include <kexidb/connection.h>
-#include <kexidb/utils.h>
+#include <db/connection.h>
+#include <db/utils.h>
 
 QString testFilename;
 QFile testFile;
@@ -164,7 +164,7 @@ QVariant::Type typeNameToQVariantType(const QCString& name_)
         return QVariant::ByteArray;
     if (name == "longlong")
         return QVariant::LongLong;
-//todo more types
+//! @todo more types
     showError(QString("Invalid type '%1'").arg(name_));
     return QVariant::Invalid;
 }
@@ -271,7 +271,7 @@ bool AlterTableTester::changeFieldProperty(KexiTableDesignerInterface* designerI
 bool AlterTableTester::getSchemaDump(KexiWindow* window, QString& schemaDebugString)
 {
     KexiTableDesignerInterface* designerIface
-    = dynamic_cast<KexiTableDesignerInterface*>(window->selectedView());
+        = dynamic_cast<KexiTableDesignerInterface*>(window->selectedView());
     if (!designerIface)
         return false;
 
@@ -359,7 +359,7 @@ bool AlterTableTester::checkSchema(KexiWindow* window)
 bool AlterTableTester::getActionsDump(KexiWindow* window, QString& actionsDebugString)
 {
     KexiTableDesignerInterface* designerIface
-    = dynamic_cast<KexiTableDesignerInterface*>(window->selectedView());
+        = dynamic_cast<KexiTableDesignerInterface*>(window->selectedView());
     if (!designerIface)
         return false;
     tristate result = designerIface->simulateAlterTableExecution(&actionsDebugString);
@@ -397,7 +397,7 @@ bool AlterTableTester::checkActions(KexiWindow* window)
 bool AlterTableTester::saveTableDesign(KexiWindow* window)
 {
     KexiTableDesignerInterface* designerIface
-    = dynamic_cast<KexiTableDesignerInterface*>(window->selectedView());
+        = dynamic_cast<KexiTableDesignerInterface*>(window->selectedView());
     if (!designerIface)
         return false;
     tristate result = designerIface->executeRealAlterTable();
@@ -411,7 +411,7 @@ bool AlterTableTester::saveTableDesign(KexiWindow* window)
 bool AlterTableTester::getTableDataDump(KexiWindow* window, QString& dataString)
 {
     KexiTableDesignerInterface* designerIface
-    = dynamic_cast<KexiTableDesignerInterface*>(window->selectedView());
+        = dynamic_cast<KexiTableDesignerInterface*>(window->selectedView());
     if (!designerIface)
         return false;
 
@@ -499,7 +499,7 @@ tristate AlterTableTester::run(bool &closeAppRequested)
         return false;
     }
     KexiTableDesignerInterface* designerIface
-    = dynamic_cast<KexiTableDesignerInterface*>(window->selectedView());
+        = dynamic_cast<KexiTableDesignerInterface*>(window->selectedView());
     if (!designerIface)
         return false;
 
@@ -671,8 +671,8 @@ int main(int argc, char *argv[])
     newArgv[0] = qstrdup(argv[0]);
     newArgv[1] = qstrdup("--skip-startup-dialog");
 
-    KAboutData* aboutdata = Kexi::createAboutData();
-    aboutdata->setProgramName("Kexi Alter Table Test");
+    KAboutData aboutdata;
+    aboutdata.setProgramName("Kexi Alter Table Test");
     int result = KexiMainWindow::create(newArgc, newArgv, aboutdata);
     if (!qApp)
         return quit(result);

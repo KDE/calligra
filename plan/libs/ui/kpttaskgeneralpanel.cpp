@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 - 2007 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2004 - 2007, 2011 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -33,15 +33,19 @@
 #include <kcombobox.h>
 #include <kdatetimewidget.h>
 #include <klocale.h>
-#include <k3command.h>
-#include <kabc/addressee.h>
-#include <kabc/addresseedialog.h>
 #include <kdatewidget.h>
 
-#include <qdatetime.h>
+#include <kdeversion.h>
+#ifdef PLAN_KDEPIMLIBS_FOUND
+#include <akonadi/contact/emailaddressselectiondialog.h>
+#include <akonadi/contact/emailaddressselectionwidget.h>
+#include <akonadi/contact/emailaddressselection.h>
+#endif
+
+#include <QDateTime>
 #include <QPushButton>
 
-#include <kdebug.h>
+#include <kptdebug.h>
 
 namespace KPlato
 {
@@ -102,7 +106,7 @@ void TaskGeneralPanel::setStartValues( Task &task ) {
     } else {
         setEndDateTime(QDateTime(startDate().addDays(1), QTime()));
     }
-    //kDebug()<<"Estimate:"<<task.estimate()->expected().toString();
+    //kDebug(planDbg())<<"Estimate:"<<task.estimate()->expected().toString();
     setEstimate(task.estimate()->expectedEstimate());
     setOptimistic(task.estimate()->optimisticRatio());
     setPessimistic(task.estimate()->pessimisticRatio());
@@ -221,15 +225,23 @@ TaskGeneralPanelImpl::TaskGeneralPanelImpl(QWidget *p, const char *n)
     setObjectName(n);
     setupUi(this);
 
-    connect(namefield, SIGNAL(textChanged(const QString &)), SLOT(checkAllFieldsFilled()));
-    connect(leaderfield, SIGNAL(textChanged(const QString &)), SLOT(checkAllFieldsFilled()));
+#ifndef PLAN_KDEPIMLIBS_FOUND
+    chooseLeader->hide();
+#endif
+
+    // FIXME
+    // [Bug 311940] New: Plan crashes when typing a text in the filter textbox before the textbook is fully loaded when selecting a contact from the adressbook
+    chooseLeader->hide();
+
+    connect(namefield, SIGNAL(textChanged(QString)), SLOT(checkAllFieldsFilled()));
+    connect(leaderfield, SIGNAL(textChanged(QString)), SLOT(checkAllFieldsFilled()));
     connect(chooseLeader, SIGNAL(clicked()), SLOT(changeLeader()));
     connect(estimateType, SIGNAL(activated(int)), SLOT(estimationTypeChanged(int)));
     connect(scheduleType, SIGNAL(activated(int)), SLOT(scheduleTypeChanged(int)));
     connect(scheduleStartDate, SIGNAL(dateChanged(QDate)), SLOT(startDateChanged()));
-    connect(scheduleStartTime, SIGNAL(timeChanged(const QTime&)), SLOT(startTimeChanged(const QTime&)));
+    connect(scheduleStartTime, SIGNAL(timeChanged(QTime)), SLOT(startTimeChanged(QTime)));
     connect(scheduleEndDate, SIGNAL(dateChanged(QDate)), SLOT(endDateChanged()));
-    connect(scheduleEndTime, SIGNAL(timeChanged(const QTime&)), SLOT(endTimeChanged(const QTime&)));
+    connect(scheduleEndTime, SIGNAL(timeChanged(QTime)), SLOT(endTimeChanged(QTime)));
     connect(estimate, SIGNAL(valueChanged(double)), SLOT(checkAllFieldsFilled()));
     connect(optimisticValue, SIGNAL(valueChanged(int)), SLOT(checkAllFieldsFilled()));
     connect(pessimisticValue, SIGNAL(valueChanged(int)), SLOT(checkAllFieldsFilled()));
@@ -252,11 +264,31 @@ int TaskGeneralPanelImpl::schedulingType() const
 
 void TaskGeneralPanelImpl::changeLeader()
 {
-    KABC::Addressee a = KABC::AddresseeDialog::getAddressee(this);
-    if (!a.isEmpty())
-    {
-        leaderfield->setText(a.fullEmail());
+#ifdef PLAN_KDEPIMLIBS_FOUND
+    QPointer<Akonadi::EmailAddressSelectionDialog> dlg = new Akonadi::EmailAddressSelectionDialog( this );
+    if ( dlg->exec() && dlg ) {
+        QStringList names;
+        const Akonadi::EmailAddressSelection::List selections = dlg->selectedAddresses();
+        foreach ( const Akonadi::EmailAddressSelection &selection, selections ) {
+            QString s = selection.name();
+            if ( ! selection.email().isEmpty() ) {
+                if ( ! selection.name().isEmpty() ) {
+                    s += " <";
+                }
+                s += selection.email();
+                if ( ! selection.name().isEmpty() ) {
+                    s += '>';
+                }
+                if ( ! s.isEmpty() ) {
+                    names << s;
+                }
+            }
+        }
+        if ( ! names.isEmpty() ) {
+            leaderfield->setText( names.join( ", " ) );
+        }
     }
+#endif
 }
 
 void TaskGeneralPanelImpl::setEstimationType( int type )
@@ -471,22 +503,26 @@ QDateTime TaskGeneralPanelImpl::endDateTime()
 
 void TaskGeneralPanelImpl::setStartTime( const QTime &time )
 {
-    scheduleStartTime->setTime(time);
+    scheduleStartTime->setTime( QTime( time.hour(), time.minute(), 0 ) );
 }
 
 void TaskGeneralPanelImpl::setEndTime( const QTime &time )
 {
-    scheduleEndTime->setTime(time);
+    scheduleEndTime->setTime( QTime( time.hour(), time.minute(), 0 ) );
 }
 
 QTime TaskGeneralPanelImpl::startTime() const
 {
-    return scheduleStartTime->time();
+    QTime t = scheduleStartTime->time();
+    t.setHMS( t.hour(), t.minute(), 0 );
+    return t;
 }
 
 QTime TaskGeneralPanelImpl::endTime()
 {
-    return scheduleEndTime->time();
+    QTime t = scheduleEndTime->time();
+    t.setHMS( t.hour(), t.minute(), 0 );
+    return t;
 }
 
 QDate TaskGeneralPanelImpl::startDate()

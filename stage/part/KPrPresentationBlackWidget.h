@@ -31,7 +31,7 @@ class KPrPresentationBlackWidget : public KPrPresentationToolEventForwarder
 {
     Q_OBJECT
 public:
-    KPrPresentationBlackWidget( KoPACanvasBase * canvas );
+    explicit KPrPresentationBlackWidget(KoPACanvasBase *canvas);
     virtual ~KPrPresentationBlackWidget();
 
 protected:

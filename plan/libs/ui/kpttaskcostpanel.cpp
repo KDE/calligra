@@ -155,8 +155,8 @@ TaskCostPanelImpl::TaskCostPanelImpl(QWidget *p, const char *n)
     connect(runningAccount, SIGNAL(activated(int)), SLOT(slotChanged()));
     connect(startupAccount, SIGNAL(activated(int)), SLOT(slotChanged()));
     connect(shutdownAccount, SIGNAL(activated(int)), SLOT(slotChanged()));
-    connect(startupCost, SIGNAL(textChanged(const QString&)), SLOT(slotChanged()));
-    connect(shutdownCost, SIGNAL(textChanged(const QString&)), SLOT(slotChanged()));
+    connect(startupCost, SIGNAL(textChanged(QString)), SLOT(slotChanged()));
+    connect(shutdownCost, SIGNAL(textChanged(QString)), SLOT(slotChanged()));
 }
 
 void TaskCostPanelImpl::slotChanged() {

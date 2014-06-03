@@ -30,7 +30,7 @@ class KPrPresentationTool;
 class KPrPresentationStrategyBase
 {
 public:
-    KPrPresentationStrategyBase( KPrPresentationTool * tool );
+    explicit KPrPresentationStrategyBase(KPrPresentationTool *tool);
     virtual ~KPrPresentationStrategyBase();
 
     /**

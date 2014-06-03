@@ -24,6 +24,7 @@
 #define KWFRAMELAYOUT_H
 
 #include "../Words.h"
+#include "../KWPageStyle.h"
 
 #include "../words_export.h"
 
@@ -34,7 +35,6 @@
 class KWPageManager;
 class KWFrameSet;
 class KWTextFrameSet;
-class KWPageStyle;
 class KWPage;
 class KWFrame;
 class KWDocument;
@@ -78,6 +78,8 @@ public:
      * @param pageNumber the number of the page to re-layout.
      */
     void layoutFramesOnPage(int pageNumber);
+
+    static void proposeShapeMove(const KoShape *shape, QPointF &delta, const KWPage &page);
 
     /// Set the document to be passed to new instances of the KWTextFrameSet
     void setDocument(KWDocument *document) {

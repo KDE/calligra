@@ -2,10 +2,10 @@
 #include <kdebug.h>
 #include <kcomponentdata.h>
 
-#include <kexidb/drivermanager.h>
-#include <kexidb/driver.h>
-#include <kexidb/connection.h>
-#include <kexidb/cursor.h>
+#include <db/drivermanager.h>
+#include <db/driver.h>
+#include <db/connection.h>
+#include <db/cursor.h>
 
 int main(int argc, char * argv[])
 {

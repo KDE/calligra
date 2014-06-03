@@ -1,0 +1,3 @@
+rm -f src/plan/schema/*.java
+xjc -dtd dtd/plan.dtd -d src -p plan.schema
+

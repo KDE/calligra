@@ -34,9 +34,9 @@ Be sure to comment it out again when you are done -->
 </chapterinfo>
 <title>The Menu and Toolbar Items</title>
 
-<para>&kpresenter; presents different types of interfaces for you to interact
+<para>&stage; presents different types of interfaces for you to interact
 with the program. Perhaps the most familiar type of interface is the
-menu which appears on the top of the &kpresenter; window.</para>
+menu which appears on the top of the &stage; window.</para>
 
 <para>Clicking on the menu items gives you a list of commands from which you
 can choose the one you want. Many of the commands can also be accessed
@@ -50,100 +50,34 @@ described in brief.</para>
 <sect2 id="manipulating-toolbars">
 <title>Manipulating the Toolbars</title>
 
-<para>In addition to the menus, &kpresenter; also has a set of toolbars. Each
+<para>In addition to the menus, &stage; also has a toolbar. The 
 toolbar consists of a collection of icons. A toolbar icon often presents
 a convenient shortcut to a command that is found in one of the menus.</para>
 
-<screenshot>
-<screeninfo>The toolbars</screeninfo>
-<mediaobject>
-<imageobject>
-<imagedata fileref="barstyle1.png" format="PNG"/>
-</imageobject>
-<textobject>
-<phrase>The toolbars</phrase>
-</textobject>
-</mediaobject>
-</screenshot>
-
-<para>You can move the toolbar around by dragging the handle, shown here in red. Toolbars can
-be <quote>docked</quote> or attached to any side of the &kpresenter;
+<para>You can move the unlocked toolbar around by dragging the handle at the left. The unlocked toolbar can
+be <quote>docked</quote> or attached to any side of the &stage;
 window. If you like, you can also have the toolbar <quote>float</quote> in
-its own window, separated from the main &kpresenter; window as shown in the
-screenshot below:</para>
-
-<screenshot>
-<screeninfo>Floating toolbar</screeninfo>
-<mediaobject>
-<imageobject>
-<imagedata fileref="barstyle3.png" format="PNG"/>
-</imageobject>
-<textobject>
-<phrase>Floating toolbar</phrase>
-</textobject>
-</mediaobject>
-</screenshot>
+its own window, separated from the main &stage; window.</para>
 
 <para> If you don't like dragging toolbars around,
-<mousebutton>right</mousebutton> click on the handle and a menu pops up as shown
-in the screenshot below: </para>
-
-<screenshot>
-<screeninfo>Toolbar context menu</screeninfo>
-<mediaobject>
-<imageobject>
-<imagedata fileref="barstyle4.png" format="PNG"/>
-</imageobject>
-<textobject>
-<phrase>Toolbar context menu</phrase>
-</textobject>
-</mediaobject>
-</screenshot>
-
-<para>
-The first few items in the popup menu have to do with the placement of
-the toolbar. You can choose any of the four sides of the &kpresenter;
-window, or have the toolbar <quote>float</quote> in a separate
-window. Choosing <guimenuitem>Flat</guimenuitem> hides the toolbar.
-To unflat a hidden toolbar, &LMB; click on its handle.
-
-
+<mousebutton>right</mousebutton> click on the handle and a menu pops up.
 </para>
 
 <para>
-Choosing the next item in the menu, <guisubmenu>Text Position</guisubmenu>, leads
+Choosing the item <guisubmenu>Text Position</guisubmenu> leads
 to an additional menu which lets you control the appearance of the items
 in toolbar. This additional cascading menu is shown in the screenshot
 below:
 </para>
 
 <screenshot>
-<screeninfo>The toolbar modes menu</screeninfo>
+<screeninfo>Text Position</screeninfo>
 <mediaobject>
 <imageobject>
-<imagedata fileref="barstyle5.png" format="PNG"/>
+<imagedata fileref="barstyle1.png" format="PNG"/>
 </imageobject>
 <textobject>
-<phrase>The toolbar modes menu</phrase>
-</textobject>
-</mediaobject>
-</screenshot>
-
-<para>
-The default view of the toolbar is icons only. In this view, if you
-don't know what a particular icon means, you can hold the mouse over the
-icon, and after a second or so, a little hint pops up in a highlighted
-text box as shown in the screenshot below:
-</para>
-
-<screenshot>
-<screeninfo>Tooltips</screeninfo>
-<mediaobject>
-<imageobject>
-<imagedata fileref="barstyle6.png" format="PNG"/>
-</imageobject>
-<textobject>
-<phrase>Tooltips</phrase>
+<phrase>Text Position</phrase>
 </textobject>
 </mediaobject>
 </screenshot>
@@ -152,31 +86,32 @@ text box as shown in the screenshot below:
 You can choose to display the toolbar items as text instead of icons, or
 even to combine both icons and text. If you want both text and icons,
 the cascading menu allows you to select whether the text appears beside
-the icons or below them. All four styles of displaying toolbar items are
-shown in the screenshot below:
+the icons or below them.
 </para>
 
-<screenshot>
-<screeninfo>The toolbar styles</screeninfo>
-<mediaobject>
-<imageobject>
-<imagedata fileref="barstyle7.png" format="PNG"/>
-</imageobject>
-<textobject>
-<phrase>The toolbar styles</phrase>
-</textobject>
-</mediaobject>
-</screenshot>
+<para>
+In icons only view, if you
+don't know what a particular icon means, you can hold the mouse over the
+icon, and after a second or so, a little hint pops up in a highlighted
+text box.
+</para>
 
 <para>
-The &kpresenter; menus are discussed in the following sections.
+The <guilabel>Orientation</guilabel> item in the popup menu has to do with 
+the placement of the toolbar. You can choose any of the four sides of the &stage;
+window.
+</para>
+
+
+<para>
+The &stage; menus are discussed in the following sections.
 </para>
 
 </sect2>
 </sect1>
 
 <sect1 id="file-menu">
-<title><guimenu>File</guimenu> Menu</title>
+<title>File Menu</title>
 
 <variablelist>
 
@@ -276,6 +211,8 @@ previously saved the presentation, it will be resaved with the same name.
 </listitem>
 </varlistentry>
 
+<!-- FIXME: Versions item missing-->
+
 <varlistentry>
 <term><menuchoice>
 <guimenu>File</guimenu>
@@ -298,7 +235,7 @@ one of several common formats.</para>
 <listitem>
 <para>Export the currently open presentation to one of several common
 formats for use in another application, or for exchange with someone
-who does not have access to &kpresenter;.</para>
+who does not have access to &stage;.</para>
 </listitem>
 </varlistentry>
 
@@ -310,7 +247,7 @@ who does not have access to &kpresenter;.</para>
 </menuchoice>
 </term>
 <listitem>
-<para><action>Open</action> a new email message in your selected email client with the current &kpresenter; document attached.
+<para><action>Open</action> a new email message in your selected email client with the current &stage; document attached.
 </para>
 </listitem>
 </varlistentry>
@@ -319,7 +256,7 @@ who does not have access to &kpresenter;.</para>
 <term>
 <menuchoice>
 <guimenu>File</guimenu>
-<guimenuitem>Create HTML Slideshow...</guimenuitem>
+<guimenuitem>Export as HTML...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -330,21 +267,9 @@ section <xref linkend="html-wizard"/>.
 </listitem>
 </varlistentry>
 
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>File</guimenu>
-<guimenuitem>Create Memory Stick Slideshow...</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para>
-<action>Starts the Memory Stick dialog</action>, which is described in the
-section <xref linkend="ms-export"/>.
-</para>
-</listitem>
-</varlistentry>
+<!--FIXME Google Online Document item missing-->
 
+<!--
 <varlistentry>
 <term>
 <menuchoice>
@@ -373,7 +298,7 @@ corporate style guidelines, or if you just use a particular layout very
 often.</para>
 </listitem>
 </varlistentry>
-
+-->
 <varlistentry>
 <term>
 <menuchoice>
@@ -397,10 +322,12 @@ your presentation.</para>
 </menuchoice>
 </term>
 <listitem>
-<para><action>Displays the presentation</action> with a &PostScript; viewer,
+<para><action>Displays the presentation</action> with a viewer,
 exactly as it would look if printed.</para>
 </listitem>
 </varlistentry>
+
+<!--FIXME Export as PDF item missing-->
 
 <varlistentry>
 <term>
@@ -441,7 +368,7 @@ opportunity to save any changes first.</para>
 </menuchoice>
 </term>
 <listitem>
-<para><action>Close</action> &kpresenter;. You will be given an opportunity
+<para><action>Close</action> &stage;. You will be given an opportunity
 to save all changes in all open presentations first.</para>
 </listitem>
 </varlistentry>
@@ -450,7 +377,7 @@ to save all changes in all open presentations first.</para>
 </sect1>
 
 <sect1 id="edit-menu">
-<title><guimenu>Edit</guimenu> Menu</title>
+<title>Edit Menu</title>
 
 <variablelist>
 
@@ -534,7 +461,7 @@ presentation.</action></para>
 <term>
 <menuchoice>
 <shortcut>
-<keycombo action="simul">&Ctrl;<keycap>Delete</keycap></keycombo></shortcut>
+<keycombo action="simul">&Ctrl;<keycap>Del</keycap></keycombo></shortcut>
 <guimenu>Edit</guimenu>
 <guimenuitem>Delete</guimenuitem>
 </menuchoice>
@@ -635,18 +562,9 @@ your presentation with a different piece of text.</para>
 </listitem>
 </varlistentry>
 
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Edit</guimenu>
-<guimenuitem>Copy Slide</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para><action>Copy the current slide to the clipboard.</action></para>
-</listitem>
-</varlistentry>
+<!--FIXME Edit Custom Slide Shows item missing-->
 
+<!--
 <varlistentry>
 <term>
 <menuchoice>
@@ -656,18 +574,6 @@ your presentation with a different piece of text.</para>
 </term>
 <listitem>
 <para><action>Insert an exact copy of the current slide.</action></para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Edit</guimenu>
-<guimenuitem>Delete Slide</guimenuitem>
-</menuchoice></term>
-<listitem>
-<para><action>Delete the current page from the presentation.</action> You
-will be asked to confirm this action.</para>
 </listitem>
 </varlistentry>
 
@@ -685,13 +591,13 @@ should be rotated, or scaled, or offset to a new position on the
 slide.</para>
 </listitem>
 </varlistentry>
-
+-->
 </variablelist>
 
 </sect1>
 
 <sect1 id="view-menu">
-<title><guimenu>View</guimenu> Menu</title>
+<title>View Menu</title>
 
 <variablelist>
 
@@ -706,7 +612,7 @@ slide.</para>
 so you can work on more than one slide at a time.</para>
 </listitem>
 </varlistentry>
-
+<!--
 <varlistentry>
 <term>
 <menuchoice>
@@ -775,32 +681,47 @@ changes you have made remain unsaved.</para>
 see an overview of all the slides in your presentation.</para>
 </listitem>
 </varlistentry>
-
+-->
 <varlistentry>
 <term>
 <menuchoice>
+<shortcut><keycombo action="simul">&Ctrl;<keycap>F5</keycap></keycombo></shortcut>
 <guimenu>View</guimenu>
-<guimenuitem>Show Notebar</guimenuitem>
+<guimenuitem>Normal</guimenuitem>
+</menuchoice>
+<menuchoice>
+<shortcut><keycombo action="simul">&Ctrl;<keycap>F6</keycap></keycombo></shortcut>
+<guimenu>View</guimenu>
+<guimenuitem>Notes</guimenuitem>
+</menuchoice>
+<menuchoice>
+<shortcut><keycombo action="simul">&Ctrl;<keycap>F7</keycap></keycombo></shortcut>
+<guimenu>View</guimenu>
+<guimenuitem>Slides Sorter</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
-<para><action>Toggle the display of the notebar</action> where you can
-see an overview of all the notes in your presentation.</para>
+<para>Switch with these actions between the view modes Normal, where you edit 
+slides, Notes, which shows a slide preview with a textbox for your annotations for the
+actual slide and the Slides Sorter view, where you can rename, cut, copy and paste slides
+and arrange them for your presentation.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term>
 <menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>F8</keycap></keycombo></shortcut>
 <guimenu>View</guimenu>
-<guimenuitem>Slide Master</guimenuitem>
+<guimenuitem>Show Master Slides</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
 <para><action>Toggle the display of the slide master</action> where you can put objects that you want to appear on each slide in your presentation.</para>
 </listitem>
 </varlistentry>
-
+<!--
 <varlistentry>
 <term>
 <menuchoice>
@@ -817,56 +738,19 @@ a useful aid to precisely positioning text.</para>
 visible; if disabled, they are not.</para>
 </listitem>
 </varlistentry>
+-->
+
+<!--FIXME Show Rulers missing-->
 
 <varlistentry>
 <term>
 <menuchoice>
 <guimenu>View</guimenu>
-<guimenuitem>Guide Lines</guimenuitem>
+<guimenuitem>Show Grid</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
-<para>When working in &kpresenter; you can drag a <quote>guide
-line</quote> from either the horizontal or vertical ruler onto your
-document. This guide-line will not print or display in the finished
-presentation, it is simply to help you align objects on screen. If
-this item is enabled, these guide lines will be visible. If this is
-disabled, they will not be visible.</para>
-
-<para>Guide lines work across slides, allowing you to align objects the
-same way across multiple slides.</para>
-
-<para>Disabling (hiding) guide lines does not delete them. If you have
-created guide lines, and then disabled this item, enabling it again
-will retain the guide lines you created.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>View</guimenu>
-<guimenuitem>Add Guide Line...</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para>
-Opens a dialog to select the <guilabel>Orientation</guilabel>
-(<guilabel>Horizontal</guilabel> or <guilabel>Vertical</guilabel>)
-and choose a <guilabel>Position:</guilabel>
-</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>View</guimenu>
-<guimenuitem>Show/Hide Grid</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para>If enabled, &kpresenter; will display a grid of dots
+<para>If enabled, &stage; will display a grid of dots
 representing the intersections of imaginary horizontal and vertical
 lines. You can use these dots to precisely position objects on the
 slide.</para>
@@ -891,15 +775,56 @@ of both worlds.</para>
 <term>
 <menuchoice>
 <guimenu>View</guimenu>
+<guimenuitem>Show Guides</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>When working in &stage; you can drag a <quote>guide
+line</quote> from either the horizontal or vertical ruler onto your
+document. This guide-line will not print or display in the finished
+presentation, it is simply to help you align objects on screen. If
+this item is enabled, these guide lines will be visible. If this is
+disabled, they will not be visible.</para>
+
+<para>Guide lines work across slides, allowing you to align objects the
+same way across multiple slides.</para>
+
+<para>Disabling (hiding) guide lines does not delete them. If you have
+created guide lines, and then disabled this item, enabling it again
+will retain the guide lines you created.</para>
+</listitem>
+</varlistentry>
+<!--
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>View</guimenu>
+<guimenuitem>Add Guide Line...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+Opens a dialog to select the <guilabel>Orientation</guilabel>
+(<guilabel>Horizontal</guilabel> or <guilabel>Vertical</guilabel>)
+and choose a <guilabel>Position:</guilabel>
+</para>
+</listitem>
+</varlistentry>
+-->
+<!--FIXME Zoom In / Zoom Out-->
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>View</guimenu>
 <guisubmenu>Zoom</guisubmenu>
 </menuchoice>
 </term>
 <listitem>
 <para>This submenu allows you to zoom in or out of the
 slide. Several predefined zoom levels are available, including
-<guimenuitem>Whole Slide</guimenuitem> to scale the entire slide so as
+<guimenuitem>Fit Page</guimenuitem> to scale the entire slide so as
 to be visible in the size window you have open, and
-<guimenuitem>Width</guimenuitem> to scale the slide so it fills the
+<guimenuitem>Fit Page Width</guimenuitem> to scale the slide so it fills the
 entire width of the window, although you may now have to scroll
 vertically. There are also several other scaling choices, from
 <guimenuitem>33%</guimenuitem> up to
@@ -907,15 +832,17 @@ vertically. There are also several other scaling choices, from
 </listitem>
 </varlistentry>
 
+<!--FIXME Full Screen Mode missing-->
+
 </variablelist>
 
 </sect1>
 
 <sect1 id="insert-menu">
-<title><guimenu>Insert</guimenu> Menu</title>
+<title>Insert Menu</title>
 
 <variablelist>
-
+<!--
 <varlistentry>
 <term>
 <menuchoice>
@@ -932,7 +859,7 @@ you don't have a key for on your keyboard layout, for instance &uuml;
 on a US Keyboard.</para>
 </listitem>
 </varlistentry>
-
+-->
 <varlistentry>
 <term>
 <menuchoice>
@@ -945,7 +872,7 @@ on a US Keyboard.</para>
 value that may be updated as you update the document.</para>
 </listitem>
 </varlistentry>
-
+<!--
 <varlistentry>
 <term>
 <menuchoice>
@@ -971,7 +898,6 @@ address. This enables these locations to be linked to directly from within activ
 real presentation. You might use this to comment on a colleague's
 text, or to leave a note for yourself about something to do
 later.</para>
-<!-- FIXME: How do you display these again? -->
 </listitem>
 </varlistentry>
 
@@ -991,20 +917,35 @@ before or after the currently selected page.
 </para>
 </listitem>
 </varlistentry>
-
+-->
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Insert</guimenu><guimenuitem>File...</guimenuitem>
+<guimenu>Insert</guimenu><guimenuitem>Import Slideshow...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
 <para><action>Insert an already existing presentation.</action> A standard &kde; file
-open dialog will appear, allowing you to choose a <guilabel>&kpresenter; Document</guilabel> (.kpr) or a 
-<guilabel>OASIS OpenDocument Presentation</guilabel> (.odp), which will be inserted after the last slide in your current presentation.</para>
+open dialog will appear, allowing you to choose a 
+<guilabel>OpenDocument Presentation</guilabel> (.odp), which will be inserted after the last slide in your current presentation.</para>
 </listitem>
 </varlistentry>
 
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Insert</guimenu>
+<guimenuitem>Insert Pictures as Slides...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Use this menu item to insert one or more pictures, each 
+is inserted on a new slide. This is useful for the people who want to use 
+&stage; to make a slide show.</para>
+</listitem>
+</varlistentry>
+
+<!--
 <varlistentry>
 <term>
 <menuchoice>
@@ -1030,9 +971,6 @@ you wish the text to appear.</para>
 chart. Some default data will be displayed. Double click to edit the
 data and choose the type of chart to display, using the embedded
 &kchart; editor.</para>
-
-<!--<para>FIXME: KChart has it's own help file, but a brief overview of
-charting in this doc wouldn't go astray either.</para>-->
 </listitem>
 </varlistentry>
 
@@ -1065,8 +1003,6 @@ contents.</para>
 </menuchoice>
 </term>
 <listitem>
-<!--<para>FIXME: This needs a section of it's own</para>-->
-
 <para>An object is an embeddable file, in one of many formats.</para>
 
 <para>A common use of this action is to insert scaleable clipart in
@@ -1086,7 +1022,7 @@ vector format.</para>
 </term>
 <listitem>
 <para><action>Insert a raster image.</action> These are not as easily
-scaleable as vector images or <quote>clipart</quote>. &kpresenter;
+scaleable as vector images or <quote>clipart</quote>. &stage;
 currently understands many formats, including <literal
 role="extension">.tiff</literal>, <literal
 role="extension">.jpg</literal>, <literal
@@ -1103,7 +1039,7 @@ role="extension">.png</literal> and many more.</para>
 </term>
 <listitem>
 <para>You can insert several types of lines. Line drawing is described
-further in the drawing tools<!-- FIXME: Make a drawing tools section --> section.</para>
+further in the drawing tools section.</para>
 </listitem>
 </varlistentry>
 
@@ -1121,7 +1057,7 @@ tools is described in detail in the drawing tools
 section.</para>
 </listitem>
 </varlistentry>
-
+-->
 <varlistentry>
 <term>
 <menuchoice>
@@ -1131,19 +1067,77 @@ section.</para>
 </term>
 <listitem>
 <para><action>Scan an image with a scanner.</action> This requires you have a
-scanner installed. It opens the <guilabel>Acquire Image</guilabel> dialog to allow the use of the scanner.<!--FIXME: Document how to set up a scanner that &kpresenter; can
-use.--></para>
+scanner installed. It opens a scan dialog to allow the use of the scanner.</para>
 </listitem>
 </varlistentry>
+
 </variablelist>
 
 </sect1>
 
 <sect1 id="format-menu">
-<title><guimenu>Format</guimenu> Menu</title>
+<title>Format Menu</title>
 
 <variablelist>
+<!--FIXME Master Slide item missing--> 
 
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Format</guimenu>
+<guimenuitem>Font...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+
+<para>The <guilabel>Select Font</guilabel> dialog contains options for selected
+segments of text.</para>
+
+<para>With this dialog, you can <action>change the font, style and size of
+selected text</action>. The <interface>preview box</interface> at the bottom
+allows you to <action>approximate changes before you make them</action>. </para>
+
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut>
+<keycombo action="simul">
+&Ctrl;&Alt;<keycap>P</keycap>
+</keycombo>
+</shortcut>
+<guimenu>Format</guimenu>
+<guimenuitem>Paragraph...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+
+<para>The <guilabel>Paragraph Format</guilabel> dialog contains settings for
+larger blocks of text, such as paragraphs. Using this dialog, you can set
+indenting, line spacing, bullet/numbered list and border settings.</para>
+
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;&Alt;<keycap>S</keycap></keycombo>
+</shortcut>
+<guimenu>Format</guimenu>
+<guimenuitem>Style Manager</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>The <guilabel>Style Manager</guilabel> allows you to create an entire set of
+attributes that will be applied to selected text all at once. </para>
+</listitem>
+</varlistentry>
+
+<!--
 <varlistentry>
 <term>
 <menuchoice>
@@ -1327,7 +1321,7 @@ to see the result of your settings for all selected objects on the slide
 without leaving the dialog.</para>
 </listitem>
 </varlistentry>
-
+-->
 <varlistentry>
 <term>
 <menuchoice>
@@ -1341,7 +1335,7 @@ the orientation, either portrait (higher than wide) or Landscape
 A4, US legal.</para>
 </listitem>
 </varlistentry>
-
+<!--
 <varlistentry>
 <term>
 <menuchoice>
@@ -1388,7 +1382,7 @@ it. Gradients only work when you have chosen two colors. The picture
 option allows you to center the picture, zoom it to cover the entire
 slide (if it is smaller than the screen, this is very useful) or tile
 it. This is used when you want a small pattern to repeat across the
-page. It's probably best used with patterns rather than pictures of
+page	. It's probably best used with patterns rather than pictures of
 logos.</para>
 
 <para>You can get rid of a picture by selecting another one or
@@ -1396,11 +1390,11 @@ choosing a color/gradient.</para>
 
 </listitem>
 </varlistentry>
-
+-->
 </variablelist>
 
 </sect1>
-
+<!--FIXME this is now in Format -> Font / Paragraph etc
 <sect1 id="text-menu">
 <title><guimenu>Text</guimenu> Menu</title>
 
@@ -1421,58 +1415,6 @@ highlighted text.</para>
 <listitem>
 <para>Restores selected text to the system default font size, style and
 formatting.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Text</guimenu>
-<guimenuitem>Font...</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-
-<para>The <guilabel>Select Font</guilabel> dialog contains options for selected
-segments of text:</para>
-
-<screenshot>
-<screeninfo>The <guilabel>Select Font</guilabel> dialog</screeninfo>
-<mediaobject>
-<imageobject>
-<imagedata fileref="textmenu1.png" format="PNG"/>
-</imageobject>
-<textobject>
-<phrase>The <guilabel>Select Font</guilabel> dialog</phrase>
-</textobject>
-</mediaobject>
-</screenshot>
-
-<para>With this dialog, you can <action>change the font, style and size of
-selected text</action>. The <interface>preview box</interface> at the bottom
-allows you to <action>approximate changes before you make them</action>. </para>
-
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<shortcut>
-<keycombo action="simul">
-&Ctrl;&Alt;<keycap>P</keycap>
-</keycombo>
-</shortcut>
-<guimenu>Text</guimenu>
-<guimenuitem>Paragraph...</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-
-<para>The <guilabel>Paragraph Settings</guilabel> dialog contains settings for
-larger blocks of text, such as paragraphs. Using this dialog, you can set
-indenting, line spacing, bullet/numbered list and border settings.</para>
-
 </listitem>
 </varlistentry>
 
@@ -1518,28 +1460,12 @@ colors can be specified.</para>
 <varlistentry>
 <term>
 <menuchoice>
-<shortcut>
-<keycombo action="simul">&Ctrl;&Alt;<keycap>S</keycap></keycombo>
-</shortcut>
-<guimenu>Text</guimenu>
-<guimenuitem>Style Manager</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para>The <guilabel>Style Manager</guilabel> allows you to create an entire set of
-attributes that will be applied to selected text all at once. See Working With Styles</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
 <guimenu>Text</guimenu>
 <guimenuitem>Import Styles...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
-<para>Here you can import styles that you have defined in another &kpresenter;
+<para>Here you can import styles that you have defined in another &stage;
 document.</para>
 </listitem>
 </varlistentry>
@@ -1700,7 +1626,7 @@ versa.</para>
 </term>
 <listitem>
 <para>Use this submenu to utilize the spellcheck options. If you enable
-<guimenuitem>Autospellcheck</guimenuitem>, &kpresenter; will automatically check
+<guimenuitem>Autospellcheck</guimenuitem>, &stage; will automatically check
 text that you enter for spelling errors.</para>
 
 <para>If you prefer to check spelling explicitly, rather than automatically, you
@@ -1729,11 +1655,134 @@ it would be autocorrected to <userinput>The</userinput>.</para>
 </variablelist>
 
 </sect1>
+-->
 
-<sect1 id="slide-show-menu">
-<title><guimenu>Slide Show</guimenu> Menu</title>
+<sect1 id="slide-menu">
+<title>Slide Menu</title>
 
 <variablelist>
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Slide</guimenu>
+<guimenuitem>Insert Slide</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Insert a new slide after the current one.</action></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Slide</guimenu>
+<guimenuitem>Copy Slide</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Copy the current slide to the clipboard.</action></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Slide</guimenu>
+<guimenuitem>Delete Slide</guimenuitem>
+</menuchoice></term>
+<listitem>
+<para><action>Delete the current page from the presentation.</action> You
+will be asked to confirm this action.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut><keycap>PageUp</keycap></shortcut>
+<guimenu>Slide</guimenu>
+<guimenuitem>Previous Slide</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Go back to the previous slide in the slide show.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut><keycap>PageDown</keycap></shortcut>
+<guimenu>Slide</guimenu>
+<guimenuitem>Next Slide</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Go to the next slide in the slide show.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut><keycombo action="simul">&Ctrl;<keycap>Home</keycap></keycombo></shortcut>
+<guimenu>Slide</guimenu>
+<guimenuitem>First Slide</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Go directly to the first slide in the slide show.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut><keycombo action="simul">&Ctrl;<keycap>End</keycap></keycombo></shortcut>
+<guimenu>Slide</guimenu>
+<guimenuitem>Last Slide</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Go immediately to the final slide in the slide show.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</sect1>
+
+<sect1 id="slide-show-menu">
+<title>Slide Show Menu</title>
+
+<variablelist>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut><keycombo action="simul">&Shift;<keycap>F5</keycap></keycombo></shortcut>
+<guimenu>Slide Show</guimenu>
+<guisubmenu>Start Presentation</guisubmenu>
+<guimenuitem>From Current Slide</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Begin the slideshow from the current slide.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut><keycap>F5</keycap></shortcut>
+<guimenu>Slide Show</guimenu>
+<guisubmenu>Start Presentation</guisubmenu>
+<guimenuitem>From First Slide</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Begin the slideshow from the first slide.</para>
+</listitem>
+</varlistentry>
 
 <varlistentry>
 <term>
@@ -1743,18 +1792,13 @@ it would be autocorrected to <userinput>The</userinput>.</para>
 </menuchoice>
 </term>
 <listitem>
-<!--<para>
-FIXME: Write a working with slideshows section
-</para>-->
 <para>You can set up the properties for the entire slide show here,
 including whether to show the duration on screen, which of the slides
 in a presentation to include, and several other global settings.</para>
-
-<!--<para>This is discussed in detail in the FIXME: link to presentation
-section.</para>-->
 </listitem>
 </varlistentry>
-
+<!--FIXME Configure Presenter Wiew item mising-->
+<!--
 <varlistentry>
 <term>
 <menuchoice>
@@ -1790,31 +1834,6 @@ transition <emphasis>from</emphasis> this slide
 <varlistentry>
 <term>
 <menuchoice>
-<shortcut><keycap>F12</keycap></shortcut>
-<guimenu>Slide Show</guimenu>
-<guimenuitem>Start</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para>Begin the slideshow from the current slide.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Slide Show</guimenu>
-<guimenuitem>Start From First Slide</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para>Begin the slideshow from the first slide.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
 <guimenu>Slide Show</guimenu>
 <guimenuitem>Custom Slide Show...</guimenuitem>
 </menuchoice>
@@ -1825,68 +1844,16 @@ transition <emphasis>from</emphasis> this slide
 <guibutton>Test</guibutton> the slide show in full screen mode.</para>
 </listitem>
 </varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<shortcut><keycap>Home</keycap></shortcut>
-<guimenu>Slide Show</guimenu>
-<guimenuitem>Go to Start</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para>Go directly to the first slide in the slide show.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<shortcut><keycap>PageUp</keycap></shortcut>
-<guimenu>Slide Show</guimenu>
-<guimenuitem>Previous Slide</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para>Go back to the previous slide in the slide show.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<shortcut><keycap>PageDown</keycap></shortcut>
-<guimenu>Slide Show</guimenu>
-<guimenuitem>Next Slide</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para>Go to the next slide in the slide show.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<shortcut><keycap>End</keycap></shortcut>
-<guimenu>Slide Show</guimenu>
-<guimenuitem>Go to End</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para>Go immediately to the final slide in the slide show.</para>
-</listitem>
-</varlistentry>
-
+-->
 </variablelist>
 
 </sect1>
 
 <sect1 id="settingsmenu">
-<title><guimenu>Settings</guimenu> Menu</title>
+<title>Settings Menu</title>
 
 <para>The <guimenu>Settings</guimenu> menu allows you to customize
-&kpresenter;.</para>
+&stage;.</para>
 
 <variablelist>
 
@@ -1894,65 +1861,19 @@ transition <emphasis>from</emphasis> this slide
 <term>
 <menuchoice>
 <guimenu>Settings</guimenu>
-<guisubmenu>Toolbars</guisubmenu>
+<guisubmenu>Show Toolbar</guisubmenu>
 </menuchoice>
 </term>
 <listitem>
-<para>The items in this submenu can be toggled, that is, you can both enable and
-disable the display of specific toolbars here.</para>
+<para>In this menu you can both enable and
+disable the display of toolbar.</para>
 </listitem>
 </varlistentry>
 
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Settings</guimenu>
-<guimenuitem>Configure Autocorrection...</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para>Autocorrection is &kpresenter;'s ability to correct
-common typing errors or expand abbreviations independently of the spell
-checking function. There are several common typing errors entered for
-you by default such as replacing <userinput>teh</userinput> with
-<userinput>the</userinput> and you can add as many more as you
-like.</para>
+<!--FIXME Dockers item missing -->
 
-<para>The ability to expand abbreviations can save you a lot of typing
-time, if you often repeat text whether in the same presentation or in
-multiple presentations.</para>
-
-<para>For instance, if you work for <quote>Company with a really really
-long name Inc.</quote> then you might define an autocorrection entry so
-that whenever you type <userinput>myJob</userinput> or some other piece
-of unique text, it will be replaced with <quote>Company with a really
-really long name Inc.</quote>.</para>
-
-<para>Autocorrection can be applied automatically as you type, or only
-on demand when you choose it from the <guimenu>Text</guimenu>
-menu.</para>
-
-<para>Please see the <link
-linkend="configure-autocorrection">Configure Autocorrection</link> section for a complete explanation.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Settings</guimenu>
-<guimenuitem>Configure Completion...</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para>Autocompletion allows you to type the first few letters of a commonly used word (often technical or job specific), and tells &kpresenter; to finish typing the word for you.</para>
-
-<para>Please see the <link
-linkend="configure-completion">Configure Completion</link> section for a complete explanation.</para>
-</listitem>
-</varlistentry>
-
-
+<!--FIXME Show Status Bar item missing -->
+ 
 <varlistentry>
 <term>
 <menuchoice>
@@ -1963,7 +1884,7 @@ linkend="configure-completion">Configure Completion</link> section for a complet
 <listitem>
 
 <para><guimenuitem>Configure Shortcuts</guimenuitem> allows you to
-assign a keyboard shortcut to actions that &kpresenter; menus or icons
+assign a keyboard shortcut to actions that &stage; menus or icons
 contain.</para>
 
 <screenshot>
@@ -2009,24 +1930,22 @@ the dialog.</para>
 the toolbars.</para>
 
 <screenshot>
-<screeninfo>Configuring &kpresenter; toolbars</screeninfo>
+<screeninfo>Configuring &stage; toolbars</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="settings04.png" format="PNG"/>
 </imageobject>
 <textobject>
-<phrase>Configuring &kpresenter; toolbars</phrase>
+<phrase>Configuring &stage; toolbars</phrase>
 </textobject>
 </mediaobject>
 </screenshot>
 
-
-
 <para>At the top is a drop down box to enable you to choose which
-toolbar you want to modify. In the picture the <guilabel>Format</guilabel> toolbar is
-selected. If I want to add the <guiicon>Spelling</guiicon> icon to
+toolbar you want to modify. In the picture the <guilabel>File</guilabel> toolbar is
+selected. If I want to add the <guiicon>Dockers</guiicon> icon to
 that toolbar, I click the entry in the left window. The arrow pointing
-right becomes available, if I click the arrow the <guiicon>Spelling</guiicon> 
+right becomes available, if I click the arrow the <guiicon>Dockers</guiicon> 
 entry is added to the selected toolbar. The left arrow
 is available when you click in the right side window. It allows you to
 remove an icon from a toolbar. The up and down arrows become active
@@ -2041,15 +1960,26 @@ in the menu.
 </varlistentry>
 
 <varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Themes</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Choose the color theme for &stage; window.</action> You can choose
+one of the predefined color schemes or select <guimenuitem>Configuration...</guimenuitem> to
+open <ulink url="help:/kcontrol/colors">&systemsettings; color selection module</ulink>.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
 <term>
 <menuchoice>
 <guimenu>Settings</guimenu>
-<guimenuitem>Configure &kpresenter;...</guimenuitem>
+<guimenuitem>Configure Stage...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
 <para>See the <link
-linkend="configure-dialog">configure &kpresenter;</link> section for a complete explanation of all &kpresenter; settings.</para>
+linkend="configure-dialog">Configure &stage;</link> section for a complete explanation of all &stage; settings.</para>
 </listitem>
 </varlistentry>
 </variablelist>
@@ -2057,7 +1987,7 @@ linkend="configure-dialog">configure &kpresenter;</link> section for a complete 
 </sect1>
 
 <sect1 id="helpmenu">
-<title><guimenu>Help</guimenu> Menu</title>
+<title>Help Menu</title>
 
 &help.menu.documentation;
 

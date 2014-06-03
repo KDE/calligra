@@ -18,7 +18,6 @@
  */
 
 #include "KarbonToolsPlugin.h"
-#include "KarbonPencilToolFactory.h"
 #include "CalligraphyTool/KarbonCalligraphyToolFactory.h"
 #include "CalligraphyTool/KarbonCalligraphicShapeFactory.h"
 #include "KarbonGradientToolFactory.h"
@@ -28,8 +27,8 @@
 #include <KoToolRegistry.h>
 #include <KoShapeRegistry.h>
 
-#include <KPluginFactory>
-#include <KPluginLoader>
+#include <kpluginfactory.h>
+#include <kpluginloader.h>
 
 K_PLUGIN_FACTORY(KarbonToolsPluginFactory, registerPlugin<KarbonToolsPlugin>();)
 K_EXPORT_PLUGIN(KarbonToolsPluginFactory("KarbonTools"))
@@ -37,7 +36,6 @@ K_EXPORT_PLUGIN(KarbonToolsPluginFactory("KarbonTools"))
 KarbonToolsPlugin::KarbonToolsPlugin(QObject *parent, const QVariantList&)
         : QObject(parent)
 {
-    KoToolRegistry::instance()->add(new KarbonPencilToolFactory());
     KoToolRegistry::instance()->add(new KarbonCalligraphyToolFactory());
     KoToolRegistry::instance()->add(new KarbonGradientToolFactory());
     KoToolRegistry::instance()->add(new KarbonPatternToolFactory());

@@ -29,7 +29,7 @@ class MergeEffectConfigWidget : public KoFilterEffectConfigWidgetBase
 {
     Q_OBJECT
 public:
-    MergeEffectConfigWidget(QWidget *parent = 0);
+    explicit MergeEffectConfigWidget(QWidget *parent = 0);
 
     /// reimplemented from KoFilterEffectConfigWidgetBase
     virtual bool editFilterEffect(KoFilterEffect * filterEffect);

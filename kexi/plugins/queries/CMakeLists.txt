@@ -7,7 +7,6 @@ include_directories( ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi ${CM
 set(kexihandler_query_PART_SRCS 
    kexiquerypart.cpp 
    kexiquerydesignersql.cpp 
-   kexiquerydesignersqlhistory.cpp 
    kexiquerydesignerguieditor.cpp 
    kexiqueryview.cpp )
 
@@ -19,6 +18,7 @@ target_link_libraries(
     kexihandler_query
     kexicore
     kexidb
+    ${CALLIGRADB_LIBS}
     kexiextendedwidgets
     kexidataviewcommon
     kexidatatable
@@ -29,7 +29,6 @@ target_link_libraries(
     ${KDE4_KDEUI_LIBS}
     ${QT_QTGUI_LIBRARY}
     ${QT_QTXML_LIBRARY}
-    ${QT_QT3SUPPORT_LIBRARY}
     )
 
 install(TARGETS kexihandler_query  DESTINATION ${PLUGIN_INSTALL_DIR})

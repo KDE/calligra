@@ -4,6 +4,7 @@
 #include <KWCanvas.h>
 #include <MockShapes.h>
 #include <KWPage.h>
+#include <KoPart.h>
 
 #include <kdebug.h>
 #include <qtest_kde.h>
@@ -11,7 +12,7 @@
 
 void TestClipToPage::testClipToPage()
 {
-    KWDocument doc;
+    KWDocument doc(new MockPart);
     KWPage page1 = doc.appendPage("Standard");
     KoPageLayout layout = page1.pageStyle().pageLayout();
     layout.width = 300;

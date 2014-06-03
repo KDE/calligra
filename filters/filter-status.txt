@@ -127,21 +127,19 @@ Note: pole (p-ole) by Ariya has four copies: in the hancomword, starwriter, exce
  * native, not a filter
  * crashes 2.1
 
-== kivio ==
+== flow ==
 
 === generic image export ===
 
  * Not compiled.
  * export
 
-== flow ==
+=== visio ===
 
-=== icalendar ===
+ * compiled
+ * import
 
- * Compiled.
- * Export
-
-== KPresenter ==
+== stage ==
 
 === genericimageexport ===
 
@@ -176,7 +174,7 @@ Note: pole (p-ole) by Ariya has four copies: in the hancomword, starwriter, exce
  * Not compiled
  * import/export
 
-== kpr2odf ===
+=== kpr2odf ===
 
  * Compiled
  * import
@@ -309,7 +307,12 @@ Note: pole (p-ole) by Ariya has four copies: in the hancomword, starwriter, exce
  * import works
  * import/export
 
-== kspread ==
+=== ms works ===
+
+ * compiled
+ * import
+
+== tables ==
 
 === applixspread === 
 

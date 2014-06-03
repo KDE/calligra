@@ -61,7 +61,7 @@ public:
     void next( int currentTime );
 
     /**
-     * Finish the the page effect.
+     * Finish the page effect.
      *
      * This only set the m_finish flag to true and triggers an update of the widget.
      */

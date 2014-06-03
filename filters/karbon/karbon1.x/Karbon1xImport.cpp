@@ -27,14 +27,14 @@
 #include <KoUnit.h>
 #include <SvgUtil.h>
 
-#include <KDebug>
-#include <KPluginFactory>
+#include <kdebug.h>
+#include <kpluginfactory.h>
 
-#include <QtCore/QBuffer>
-#include <QtGui/QImage>
-#include <QtGui/QColor>
-#include <QtGui/QFont>
-#include <QtGui/QFontMetrics>
+#include <QBuffer>
+#include <QImage>
+#include <QColor>
+#include <QFont>
+#include <QFontMetrics>
 
 #include <math.h>
 
@@ -156,7 +156,7 @@ bool KarbonImport::loadXML(const KoXmlElement& doc)
                                    "\"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">\n");
 
     // add some PR.  one line is more than enough.
-    m_svgWriter->addCompleteElement("<!-- Created using Karbon, part of Calligra: http://www.calligra-suite.org/karbon -->\n");
+    m_svgWriter->addCompleteElement("<!-- Created using Karbon, part of Calligra: http://www.calligra.org/karbon -->\n");
     m_svgWriter->startElement("svg");
     m_svgWriter->addAttribute("xmlns", "http://www.w3.org/2000/svg");
     m_svgWriter->addAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
@@ -499,8 +499,8 @@ QString KarbonImport::loadStroke(const KoXmlElement &element)
     }
 
     QString lineWidth = element.attribute("lineWidth", "1.0");
-    strokeStyle += QString("stroke-width:%1;").arg(lineWidth);
-    strokeStyle += QString("stroke-miterlimit:%1;").arg(element.attribute("miterLimit", "10.0"));
+    strokeStyle += QString("stroke-width:%1;").arg(lineWidth) +
+                   QString("stroke-miterlimit:%1;").arg(element.attribute("miterLimit", "10.0"));
 
     QString strokePaint;
 
@@ -644,19 +644,19 @@ void KarbonImport::loadEllipse(const KoXmlElement &element)
     QString data;
 
     if (element.attribute("kind") == "cut") {
-        data += QString("M%1,%2 ").arg(p1.x()).arg(p1.y());
-        data += QString("A%1,%2 0 %5 0 %3,%4 ").arg(rx).arg(ry).arg(p2.x()).arg(p2.y()).arg(largeArc);
-        data += QString("L%1,%2").arg(p1.x()).arg(p1.y());
+        data += QString("M%1,%2 ").arg(p1.x()).arg(p1.y()) +
+                QString("A%1,%2 0 %5 0 %3,%4 ").arg(rx).arg(ry).arg(p2.x()).arg(p2.y()).arg(largeArc) +
+                QString("L%1,%2").arg(p1.x()).arg(p1.y());
     }
     else if (element.attribute("kind") == "section") {
-        data += QString("M%1,%2 ").arg(center.x()).arg(center.y());
-        data += QString("L%1,%2 ").arg(p1.x()).arg(p1.y());
-        data += QString("A%1,%2 0 %5 0 %3,%4 ").arg(rx).arg(ry).arg(p2.x()).arg(p2.y()).arg(largeArc);
-        data += QString("L%1,%2").arg(center.x()).arg(center.y());
+        data += QString("M%1,%2 ").arg(center.x()).arg(center.y()) +
+                QString("L%1,%2 ").arg(p1.x()).arg(p1.y()) +
+                QString("A%1,%2 0 %5 0 %3,%4 ").arg(rx).arg(ry).arg(p2.x()).arg(p2.y()).arg(largeArc) +
+                QString("L%1,%2").arg(center.x()).arg(center.y());
     }
     else if (element.attribute("kind") == "arc") {
-        data += QString("M%1,%2 ").arg(p1.x()).arg(p1.y());
-        data += QString("A%1,%2 0 %5 0 %3,%4").arg(rx).arg(ry).arg(p2.x()).arg(p2.y()).arg(largeArc);
+        data += QString("M%1,%2 ").arg(p1.x()).arg(p1.y()) +
+                QString("A%1,%2 0 %5 0 %3,%4").arg(rx).arg(ry).arg(p2.x()).arg(p2.y()).arg(largeArc);
     } else {
         const QString style = loadStyle(element);
 
@@ -849,7 +849,8 @@ void KarbonImport::loadSpiral(const KoXmlElement &element)
     enum SpiralType { round, rectangular };
 
     qreal radius  = qAbs(KoUnit::parseValue(element.attribute("radius")));
-    qreal angle = element.attribute("angle").toDouble();
+    // TODO: proper way to use "angle" value in transformation code below
+//     qreal angle = element.attribute("angle").toDouble();
     qreal fade = element.attribute("fade").toDouble();
 
     qreal cx = KoUnit::parseValue(element.attribute("cx"));
@@ -1173,7 +1174,8 @@ void KarbonImport::loadText(const KoXmlElement &element)
     enum Position { Above, On, Under };
 
     //int position = element.attribute( "position", "0" ).toInt();
-    int alignment = element.attribute("alignment", "0").toInt();
+    // TODO: apply alignment value
+//     int alignment = element.attribute("alignment", "0").toInt();
     /* TODO reactivate when we have a shadow implementation
     bool shadow = ( element.attribute( "shadow" ).toInt() == 1 );
     bool translucentShadow = ( element.attribute( "translucentshadow" ).toInt() == 1 );

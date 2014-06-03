@@ -105,7 +105,7 @@ private:
 
     QHash< int, QList<QString> > m_pageAnimations;//stores the animations, needed a hash to be able to sort them
 
-    int m_pageHeight;//needed to find out where's every object
+    double m_pageHeight;//needed to find out where's every object
     int m_currentPage;
     int m_objectIndex;//the number of the next object
     QHash<QString, QString> m_pictures;//store the <fullFilename, name> pair of the keys

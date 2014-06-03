@@ -27,7 +27,7 @@
 
 #include <QLayout>
 
-#include <KLocale>
+#include <klocale.h>
 
 //! @internal
 class KexiPropertyEditorView::Private
@@ -44,7 +44,7 @@ KexiPropertyEditorView::KexiPropertyEditorView(QWidget* parent)
 {
     setObjectName("KexiPropertyEditorView");
     setWindowTitle(i18n("Properties"));
-    //TODO: set a nice icon
+    //! @todo set a nice icon
 //    setWindowIcon(KexiMainWindowIface::global()->thisWidget()->windowIcon());
 
     d->editor = new KoProperty::EditorView(this);
@@ -66,12 +66,12 @@ KexiPropertyEditorView::~KexiPropertyEditorView()
 
 QSize KexiPropertyEditorView::sizeHint() const
 {
-    return QSize(200, 200);//m_editor->sizeHint();
+    return QSize(200, 200);
 }
 
 QSize KexiPropertyEditorView::minimumSizeHint() const
 {
-    return QSize(200, 200);//m_editor->sizeHint();
+    return QSize(200, 200);
 }
 
 KoProperty::EditorView *KexiPropertyEditorView::editor() const

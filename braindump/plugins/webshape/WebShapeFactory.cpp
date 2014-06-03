@@ -19,6 +19,7 @@
 
 #include "WebShapeFactory.h"
 
+#include <KoIcon.h>
 #include <klocale.h>
 
 #include <QWebPage>
@@ -33,7 +34,7 @@ WebShapeFactory::WebShapeFactory()
                          i18n("Web Shape"))
 {
     setToolTip(i18n("A web shape"));
-    setIcon("applications-internet");
+    setIconName(koIconNameCStr("applications-internet"));
     setXmlElementNames("http://kde.org/braindump", QStringList("web"));
 }
 

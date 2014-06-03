@@ -19,19 +19,20 @@
 #include "kexirelationdesignshape.h"
 #include <QPainter>
 #include "KoViewConverter.h"
-#include "kexidb/connection.h"
-#include <kexidb/drivermanager.h>
-#include <kexidb/utils.h>
+#include <db/connection.h>
+#include <db/drivermanager.h>
+#include <db/utils.h>
 #include <kdebug.h>
-#include <kexidb/queryschema.h>
+#include <db/queryschema.h>
 #include <KoXmlWriter.h>
 #include <KoShapeSavingContext.h>
 #include <KoXmlReader.h>
 #include <KoShapeBackground.h>
 #include <KoZoomHandler.h>
 #include <KoShapeLoadingContext.h>
+#include <KoShapePaintingContext.h>
 
-KexiRelationDesignShape::KexiRelationDesignShape() : KoFrameShape("http://www.calligra-suite.org/kexirelationdesign", "shape")
+KexiRelationDesignShape::KexiRelationDesignShape() : KoFrameShape("http://www.calligra.org/kexirelationdesign", "shape")
 {
     m_connection = 0;
     m_connectionData = 0;
@@ -54,7 +55,7 @@ void KexiRelationDesignShape::saveOdf(KoShapeSavingContext &context) const
     saveOdfAttributes(context, OdfAllAttributes);
 
     writer.startElement("kexirelationdesign:shape");
-    writer.addAttribute("xmlns:kexirelationdesign", "http://www.calligra-suite.org/kexirelationdesign");
+    writer.addAttribute("xmlns:kexirelationdesign", "http://www.calligra.org/kexirelationdesign");
     writer.startElement("kexirelationdesign:relation");
     writer.addAttribute("database", m_database);
     writer.addAttribute("relation", m_relation);
@@ -81,7 +82,8 @@ void KexiRelationDesignShape::saveOdf(KoShapeSavingContext &context) const
     converter.setZoom(1.0);
     converter.setDpi(previewDPI, previewDPI);
 
-    constPaint(painter, converter);
+    KoShapePaintingContext paintContext;
+    constPaint(painter, converter, paintContext);
     writer.startElement("draw:image");
     // In the spec, only the xlink:href attribute is marked as mandatory, cool :)
     QString name = context.imageHref(img);
@@ -105,7 +107,7 @@ bool KexiRelationDesignShape::loadOdf(const KoXmlElement &element, KoShapeLoadin
 bool KexiRelationDesignShape::loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     Q_UNUSED(context);
-    KoXmlElement relation = KoXml::namedItemNS(element, "http://www.calligra-suite.org/kexirelationdesign", "relation");
+    KoXmlElement relation = KoXml::namedItemNS(element, "http://www.calligra.org/kexirelationdesign", "relation");
     if (relation.isNull()) {
         kWarning() << "no relation element as first child";
         return false;
@@ -132,18 +134,16 @@ bool KexiRelationDesignShape::loadOdfFrameElement(const KoXmlElement &element, K
 }
 
 void KexiRelationDesignShape::paint(QPainter &painter, const KoViewConverter &converter,
-                                    KoShapePaintingContext &paintcontext)
+                                    KoShapePaintingContext &paintContext)
 {
-    Q_UNUSED(paintcontext);
-    constPaint(painter, converter);
+    constPaint(painter, converter, paintContext);
 }
 
-void KexiRelationDesignShape::constPaint(QPainter &painter, const KoViewConverter &converter) const
+void KexiRelationDesignShape::constPaint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &context) const
 {
     applyConversion(painter, converter);
 
     painter.save();
-    //painter.setRenderHint(QPainter::Antialiasing, true);
     QPainterPath pp;
     pp.addRoundedRect(QRectF(QPointF(0.0, 0.0), size()), 3.0, 3.0);
 
@@ -152,7 +152,7 @@ void KexiRelationDesignShape::constPaint(QPainter &painter, const KoViewConverte
 
     //Draw user specified background
     if (background()) {
-        background()->paint(painter, pp);
+        background()->paint(painter, converter, context, pp);
     }
     painter.setClipping(false);
     painter.drawRoundedRect(QRectF(QPointF(0.0, 0.0), (size())), 3.0, 3.0);

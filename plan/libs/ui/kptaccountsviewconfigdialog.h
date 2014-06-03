@@ -21,18 +21,22 @@
 #define KPTACCOUNTSVIEWCONFIGDIALOG_H
 
 
-#include <kdialog.h>
+#include <kpagedialog.h>
 #include "ui_kptaccountsviewconfigurepanelbase.h"
 
 class QDate;
 class QString;
 class QWidget;
 
+class KoPageLayoutWidget;
+
 namespace KPlato
 {
 
 class AccountsviewConfigPanel;
 class AccountsTreeView;
+class ViewBase;
+class PrintingHeaderFooter;
 
 class AccountsviewConfigurePanelBase : public QWidget, public Ui::AccountsviewConfigurePanelBase
 {
@@ -43,17 +47,20 @@ public:
 };
 
 
-class AccountsviewConfigDialog : public KDialog {
+class AccountsviewConfigDialog : public KPageDialog {
     Q_OBJECT
 public:
-    AccountsviewConfigDialog( AccountsTreeView *view, QWidget *parent);
+    AccountsviewConfigDialog( ViewBase *view, AccountsTreeView *treeview, QWidget *parent );
 
 public slots:
     void slotOk();
     
 private:
-    AccountsTreeView *m_view;
+    ViewBase *m_view;
+    AccountsTreeView *m_treeview;
     AccountsviewConfigPanel *m_panel;
+    KoPageLayoutWidget *m_pagelayout;
+    PrintingHeaderFooter *m_headerfooter;
 };
 
 class AccountsviewConfigPanel : public AccountsviewConfigurePanelBase {

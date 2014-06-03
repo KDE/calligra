@@ -20,12 +20,14 @@
 #ifndef KPRANIMATIONFACTORY_H
 #define KPRANIMATIONFACTORY_H
 
+#include "stage_export.h"
+
 class KoXmlElement;
 class KoShapeLoadingContext;
 class KPrAnimationBase;
 class KPrShapeAnimation;
 
-class KPrAnimationFactory
+class STAGE_EXPORT KPrAnimationFactory
 {
 public:
     static KPrAnimationBase *createAnimationFromOdf(const KoXmlElement &element, KoShapeLoadingContext &context,

@@ -22,15 +22,15 @@
 #include "KoFilterEffect.h"
 #include "MatrixDataModel.h"
 
-#include <KNumInput>
-#include <KComboBox>
-#include <KLocale>
+#include <knuminput.h>
+#include <kcombobox.h>
+#include <klocale.h>
 
-#include <QtGui/QGridLayout>
-#include <QtGui/QLabel>
-#include <QtGui/QStackedWidget>
-#include <QtGui/QTableView>
-#include <QtGui/QHeaderView>
+#include <QGridLayout>
+#include <QLabel>
+#include <QStackedWidget>
+#include <QTableView>
+#include <QHeaderView>
 
 ColorMatrixEffectConfigWidget::ColorMatrixEffectConfigWidget(QWidget *parent)
         : KoFilterEffectConfigWidgetBase(parent), m_effect(0)

@@ -207,10 +207,12 @@ public:
     virtual EffortCostMap plannedEffortCostPrDay( const QDate &start, const QDate &end, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
     virtual EffortCostMap plannedEffortCostPrDay(const Resource *resource, const QDate &start, const QDate &end, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
 
+    using Node::plannedEffort;
     /// Returns the total planned effort for this project (or subproject)
     virtual Duration plannedEffort( long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
     /// Returns the total planned effort for this project (or subproject) on date
     virtual Duration plannedEffort( const QDate &date, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All  ) const;
+    using Node::plannedEffortTo;
     /// Returns the planned effort up to and including date
     virtual Duration plannedEffortTo( const QDate &date, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All  ) const;
 
@@ -335,6 +337,9 @@ public:
     /// returns a unique resourcegroup id
     QString uniqueResourceGroupId() const;
 
+    /// Return a list of resources that will be allocated to new tasks
+    QList<Resource*> autoAllocateResources() const;
+
     Resource *findResource( const QString &id ) const
     {
         if ( resourceIdDict.contains( id ) )
@@ -398,7 +403,7 @@ public:
     /// Create a unique schedule manager identity
     QString uniqueScheduleManagerId() const;
     ScheduleManager *createScheduleManager();
-    ScheduleManager *createScheduleManager( const QString name );
+    ScheduleManager *createScheduleManager( const QString &name );
     /// Returns a list of all top level schedule managers
     QList<ScheduleManager*> scheduleManagers() const { return m_managers; }
     int numScheduleManagers() const { return m_managers.count(); }
@@ -501,6 +506,10 @@ public:
     /// return a <id, name> map of all external projects
     QMap<QString, QString> externalProjects() const;
 
+    void emitDocumentAdded( Node*, Document*, int index );
+    void emitDocumentRemoved( Node*, Document*, int index );
+    void emitDocumentChanged( Node*, Document*, int index );
+
 public slots:
     /// Sets m_progress to @p progress and emits signal sigProgress()
     /// If @p sm is not 0, progress is also set for the schedule manager
@@ -511,7 +520,7 @@ public slots:
 
 signals:
     /// Emitted when anything in the project is changed (use with care)
-    void changed();
+    void projectChanged();
     /// Emitted when the WBS code definition has changed. This may change all nodes.
     void wbsDefinitionChanged();
     /// Emitted when a schedule has been calculated
@@ -537,9 +546,16 @@ signals:
     /// This signal is emitted when the node has been removed from the project.
     void nodeRemoved( Node* );
     /// This signal is emitted when the node is to be moved up, moved down, indented or unindented.
-    void nodeToBeMoved( Node* );
+    void nodeToBeMoved( Node* node, int pos, Node* newParent, int newPos );
     /// This signal is emitted when the node has been moved up, moved down, indented or unindented.
     void nodeMoved( Node* );
+
+    /// This signal is emitted when a document is added
+    void documentAdded( Node*, Document*, int index );
+    /// This signal is emitted when a document is removed
+    void documentRemoved( Node*, Document*, int index );
+    /// This signal is emitted when a document is changed
+    void documentChanged( Node*, Document*, int index );
     
     void resourceGroupChanged( ResourceGroup *group );
     void resourceGroupAdded( const ResourceGroup *group );
@@ -576,12 +592,12 @@ signals:
     void calendarRemoved( const Calendar *cal );
 
     /**
-     * Emitted when the the default calendar pointer has changed
+     * Emitted when the default calendar pointer has changed
      * @parem cal The new default calendar. May be 0.
      */
     void defaultCalendarChanged( Calendar *cal );
     /**
-     * Emitted when the the standard worktime has been changed.
+     * Emitted when the standard worktime has been changed.
      */
     void standardWorktimeChanged( StandardWorktime* );
     
@@ -622,8 +638,8 @@ protected:
 
 protected:
     friend class KPlatoXmlLoaderBase;
-
-    virtual void changed(Node *node);
+    using Node::changed;
+    virtual void changed(Node *node, int property = -1);
     
     Accounts m_accounts;
     QList<ResourceGroup*> m_resourceGroups;
@@ -643,6 +659,11 @@ protected:
     bool legalParents( const Node *par, const Node *child ) const;
     bool legalChildren( const Node *par, const Node *child ) const;
 
+#ifndef PLAN_NLOGDEBUG
+private:
+    static bool checkParent( Node *n, QList<Node*> list, QList<Relation*> &checked );
+    static bool checkChildren( Node *n, QList<Node*> list, QList<Relation*> &checked );
+#endif
 private:
     void init();
 
@@ -671,13 +692,6 @@ private:
     QList<Task*> m_softConstraints;
     QList<Task*> m_terminalNodes;
     
-#ifndef NDEBUG
-public:
-    void printDebug( bool children, const QByteArray& indent );
-    void printCalendarDebug( const QByteArray& indent = "" );
-
-	
-#endif
 };
 
 

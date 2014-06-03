@@ -29,7 +29,7 @@ class InvalidFormatException : public std::exception
 public:
     const QString msg;
     InvalidFormatException() {}
-    InvalidFormatException(const QString& m) :msg(m) {}
+    explicit InvalidFormatException(const QString &m) :msg(m) {}
     ~InvalidFormatException() throw() {}
 };
 

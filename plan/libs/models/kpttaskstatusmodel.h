@@ -78,7 +78,6 @@ public:
     QAbstractItemDelegate *createDelegate( int column, QWidget *parent ) const;
     
     NodeMap nodeList( QDataStream &stream );
-    static NodeMap removeChildNodes( const NodeMap nodes );
     using ItemModelBase::dropAllowed;
     bool dropAllowed( Node *on, const QMimeData *data );
     
@@ -90,6 +89,9 @@ public:
     void setWeekday( int day ) { m_weekday = day; }
     int weekday() const { return m_weekday; }
     
+    /// Return the sortorder to be used for @p column
+    virtual int sortRole( int column ) const;
+
 public slots:
     virtual void setScheduleManager( ScheduleManager *sm );
     virtual void refresh();
@@ -103,14 +105,27 @@ protected slots:
     void slotNodeInserted( Node *node );
     void slotNodeToBeRemoved( Node *node );
     void slotNodeRemoved( Node *node );
+    void slotNodeToBeMoved( Node *node, int pos, Node *newParent, int newPos );
+    void slotNodeMoved( Node *node );
 
     void slotWbsDefinitionChanged();
     void slotLayoutChanged();
 
 protected:
+
+    // keep in sync with order in m_top
+    enum TaskStatus {
+        TaskUnknownStatus = -1,
+        TaskNotStarted = 0,
+        TaskRunning = 1,
+        TaskFinished = 2,
+        TaskUpcoming = 3
+    };
+
     QVariant alignment( int column ) const;
-    
+
     QVariant name( int row, int role ) const;
+    TaskStatusItemModel::TaskStatus taskStatus(const Task *task, const QDate &begin, const QDate &end);
 
     bool setCompletion( Node *node, const QVariant &value, int role );
     bool setRemainingEffort( Node *node, const QVariant &value, int role );

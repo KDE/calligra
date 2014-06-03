@@ -25,15 +25,15 @@
 #define WHIRLPINCHPLUGIN_H
 
 #include <kdialog.h>
-#include <kparts/plugin.h>
+#include <kxmlguiclient.h>
 
-#include <QtCore/QPointF>
+#include <QPointF>
 #include <QVariantList>
 
 class KarbonView;
 class WhirlPinchDlg;
 
-class WhirlPinchPlugin : public KParts::Plugin
+class WhirlPinchPlugin : public QObject, public KXMLGUIClient
 {
     Q_OBJECT
 public:

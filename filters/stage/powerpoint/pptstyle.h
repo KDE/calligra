@@ -44,7 +44,7 @@ public:
      * Only the default TextPFException is required.
      * @param d DocumentContainer address
      */
-    PptTextPFRun(const MSO::DocumentContainer* d);
+    explicit PptTextPFRun(const MSO::DocumentContainer* d);
 
     /**
      * Special purpose constructor for default list styles of masters.
@@ -147,7 +147,7 @@ private:
 
     //Hierarchies of exceptions.
     QList<const MSO::TextPFException*> pfs;
-    const MSO::TextPFException9* pf9s[6];
+    QList<const MSO::TextPFException9*> pf9s;
 };
 
 class PptTextCFRun {
@@ -157,7 +157,7 @@ public:
      * Only the default TextCFException is required.
      * @param d DocumentContainer address
      */
-    PptTextCFRun(const MSO::DocumentContainer* d);
+    explicit PptTextCFRun(const MSO::DocumentContainer* d);
 
     /**
      * Special purpose constructor for default list styles of masters.
@@ -196,6 +196,8 @@ public:
      * character formatting applies
      */
     int addCurrentCFRun(const MSO::TextContainer* tc, quint32 start, quint32& num);
+
+    void removeCurrentCFRun();
 
     bool bold() const;
     bool italic() const;

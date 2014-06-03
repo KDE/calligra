@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KEXI_MIGRATION_PART_H
-#define KEXI_MIGRATION_PART_H
+#ifndef KEXI_CSVIMPORTEXPORT_PART_H
+#define KEXI_CSVIMPORTEXPORT_PART_H
 
 #include <core/kexiinternalpart.h>
 #include "kexicsvexportwizard.h"

@@ -93,11 +93,34 @@ private:
     Delegate::EndEditHint m_lastHint;
 };
 
+class KPLATOMODELS_EXPORT CheckStateItemDelegate : public ItemDelegate
+{
+    Q_OBJECT
+public:
+    explicit CheckStateItemDelegate(QObject *parent = 0);
+
+protected:
+    bool editorEvent( QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index );
+};
+
+class KPLATOMODELS_EXPORT DateTimeCalendarDelegate : public ItemDelegate
+{
+  Q_OBJECT
+public:
+    explicit DateTimeCalendarDelegate(QObject *parent = 0);
+
+    QWidget *createEditor( QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
+    void setEditorData( QWidget *editor, const QModelIndex &index ) const;
+    void setModelData( QWidget *editor, QAbstractItemModel *model, const QModelIndex &index ) const;
+    void updateEditorGeometry( QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
+
+};
+
 class KPLATOMODELS_EXPORT ProgressBarDelegate : public ItemDelegate
 {
   Q_OBJECT
 public:
-    ProgressBarDelegate( QObject *parent = 0 );
+    explicit ProgressBarDelegate(QObject *parent = 0);
 
     ~ProgressBarDelegate();
 
@@ -126,7 +149,7 @@ class KPLATOMODELS_EXPORT SelectorDelegate : public ItemDelegate
 {
     Q_OBJECT
 public:
-    SelectorDelegate(QObject *parent = 0);
+    explicit SelectorDelegate(QObject *parent = 0);
 
     QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
@@ -140,7 +163,7 @@ class KPLATOMODELS_EXPORT EnumDelegate : public ItemDelegate
 {
     Q_OBJECT
 public:
-    EnumDelegate(QObject *parent = 0);
+    explicit EnumDelegate(QObject *parent = 0);
 
     QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
@@ -155,7 +178,7 @@ class KPLATOMODELS_EXPORT RequieredResourceDelegate : public ItemDelegate
 {
     Q_OBJECT
 public:
-    RequieredResourceDelegate(QObject *parent = 0);
+    explicit RequieredResourceDelegate(QObject *parent = 0);
 
     QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
@@ -170,7 +193,7 @@ class KPLATOMODELS_EXPORT DurationSpinBoxDelegate : public ItemDelegate
 {
     Q_OBJECT
 public:
-    DurationSpinBoxDelegate(QObject *parent = 0);
+    explicit DurationSpinBoxDelegate(QObject *parent = 0);
 
     QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
@@ -184,7 +207,7 @@ class KPLATOMODELS_EXPORT SpinBoxDelegate : public ItemDelegate
 {
     Q_OBJECT
 public:
-    SpinBoxDelegate(QObject *parent = 0);
+    explicit SpinBoxDelegate(QObject *parent = 0);
 
     QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
@@ -198,7 +221,7 @@ class KPLATOMODELS_EXPORT DoubleSpinBoxDelegate : public ItemDelegate
 {
     Q_OBJECT
 public:
-    DoubleSpinBoxDelegate(QObject *parent = 0);
+    explicit DoubleSpinBoxDelegate(QObject *parent = 0);
 
     QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
@@ -212,7 +235,7 @@ class KPLATOMODELS_EXPORT MoneyDelegate : public ItemDelegate
 {
     Q_OBJECT
 public:
-    MoneyDelegate(QObject *parent = 0);
+    explicit MoneyDelegate(QObject *parent = 0);
 
     QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
@@ -226,7 +249,7 @@ class KPLATOMODELS_EXPORT TimeDelegate : public ItemDelegate
 {
     Q_OBJECT
 public:
-    TimeDelegate(QObject *parent = 0);
+    explicit TimeDelegate(QObject *parent = 0);
 
     QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
@@ -253,9 +276,7 @@ public:
 
     virtual const QMetaEnum columnMap() const { return QMetaEnum(); }
     Project *project() const { return m_project; }
-    virtual void setProject( Project *project );
     ScheduleManager *scheduleManager() const { return m_manager; }
-    virtual void setReadWrite( bool rw ) { m_readWrite = rw; }
     bool isReadWrite() { return m_readWrite; }
     void setReadOnly( int column, bool ro ) { m_columnROMap[ column ] = ro; }
     /// Returns true if @p column has been set to ReadOnly.
@@ -277,12 +298,17 @@ public:
     bool setData( const QModelIndex &index, const QVariant &value, int role );
     QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
 
+    /// Return the sortorder to be used for @p column
+    virtual int sortRole( int /*column*/ ) const { return Qt::DisplayRole; }
+
 signals:
     /// Connect to this signal if your model modifies data using undo commands.
     void executeCommand( KUndo2Command* );
     
 public slots:
+    virtual void setProject( Project *project );
     virtual void setScheduleManager( ScheduleManager *sm );
+    virtual void setReadWrite( bool rw ) { m_readWrite = rw; }
     /// Reimplement if your model can be refreshed
     virtual void refresh() {}
 

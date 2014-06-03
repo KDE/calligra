@@ -20,10 +20,10 @@
 
 #include "KexiFieldListModel.h"
 #include "KexiFieldListModelItem.h"
-#include <KLocalizedString>
-#include <kexidb/tableschema.h>
-#include <kexidb/queryschema.h>
-#include <kexidb/utils.h>
+#include <klocalizedstring.h>
+#include <db/tableschema.h>
+#include <db/queryschema.h>
+#include <db/utils.h>
 #include <kdebug.h>
 #include <drivers/xbase/xbaseexport.h>
 #include <QMimeData>
@@ -32,6 +32,7 @@ class KexiFieldListModel::Private
 {
 public:
     Private();
+    ~Private();
     KexiDB::TableOrQuerySchema* schema;
     KexiFieldListOptions options;
     KexiFieldListModelItem *allColumnsItem;
@@ -43,15 +44,20 @@ KexiFieldListModel::Private::Private() : schema(0), allColumnsItem(0)
 
 }
 
-KexiFieldListModel::KexiFieldListModel(QObject* parent, KexiFieldListOptions /*options*/): QAbstractTableModel(parent)
+KexiFieldListModel::Private::~Private()
+{
+    qDeleteAll(items);
+}
+
+KexiFieldListModel::KexiFieldListModel(QObject* parent, KexiFieldListOptions options): QAbstractTableModel(parent)
                                       , d(new Private())
 {
-
+    d->options = options;
 }
 
 KexiFieldListModel::~KexiFieldListModel()
 {
-
+    delete d;
 }
 
 void KexiFieldListModel::setSchema(KexiDB::TableOrQuerySchema* schema)
@@ -64,6 +70,8 @@ void KexiFieldListModel::setSchema(KexiDB::TableOrQuerySchema* schema)
     if (!d->schema)
         return;
 
+    qDeleteAll(d->items);
+    d->items.clear();
     KexiFieldListModelItem *item = 0;
     KexiDB::QueryColumnInfo::Vector columns = d->schema->columns(true /*unique*/);
     const int count = columns.count();
@@ -73,7 +81,7 @@ void KexiFieldListModel::setSchema(KexiDB::TableOrQuerySchema* schema)
             if (!(d->options & ShowEmptyItem))
                 continue;
             item = new KexiFieldListModelItem(QString(), QString(), false);
-        }else if (i == -1) {
+        } else if (i == -1) {
             if (!(d->options & ShowAsterisk))
                 continue;
             item = new KexiFieldListModelItem("*", "", false);
@@ -92,7 +100,7 @@ QVariant KexiFieldListModel::data(const QModelIndex& index, int role) const
 {
     KexiFieldListModelItem *item = 0;
 
-    if (index.row() < d->items.count()) {
+    if (index.isValid() && index.row() < d->items.count()) {
         item = d->items[index.row()];
     }
 
@@ -119,15 +127,19 @@ int KexiFieldListModel::rowCount(const QModelIndex& /*parent*/) const
     return d->items.count();
 }
 
-QVariant KexiFieldListModel::headerData(int /*section*/, Qt::Orientation orientation, int role) const
+QVariant KexiFieldListModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if (role != Qt::DisplayRole)
         return QVariant();
 
-    if (orientation == Qt::Horizontal)
-        return i18n("Field Name");
-    else
-        return QVariant();
+    if (orientation == Qt::Horizontal) {
+        if (section == 0) {
+            return i18n("Field Name");
+        } else if (section == 1) {
+            return i18n("Data Type");
+        }
+    }
+    return QVariant();
 }
 
 QStringList KexiFieldListModel::mimeTypes() const
@@ -159,7 +171,7 @@ QMimeData* KexiFieldListModel::mimeData(const QModelIndexList& indexes) const
 
     sourceName = d->schema->name();
 
-    foreach (QModelIndex idx, indexes) {
+    foreach (const QModelIndex &idx, indexes) {
         fields << data(idx, Qt::DisplayRole).toString();
     }
 

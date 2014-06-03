@@ -20,11 +20,11 @@
 #ifndef SCRIPTING_KEXIDBCONNECTION_H
 #define SCRIPTING_KEXIDBCONNECTION_H
 
-#include <qstring.h>
-#include <qobject.h>
-#include <qpointer.h>
+#include <QString>
+#include <QObject>
+#include <QPointer>
 
-#include <kexidb/connection.h>
+#include <db/connection.h>
 
 namespace Scripting
 {
@@ -152,26 +152,6 @@ public slots:
     /** Set the auto commit option. This does not affect currently started transactions and can
     be changed even when connection is not established. */
     bool setAutoCommit(bool enabled);
-
-#if 0
-    /** Creates new transaction handle and starts a new transaction. */
-    KexiDBTransaction* beginTransaction();
-    /** Commits the as rgument passed KexiDBTransaction object. */
-    bool commitTransaction(KexiDBTransaction* transaction);
-    /** Rollback the as rgument passed KexiDBTransaction object. */
-    bool rollbackTransaction(KexiDBTransaction* transaction);
-    /** Return the KEXIDBTransaction object for default transaction for this connection. */
-    KexiDBTransaction* defaultTransaction();
-    /** Sets default transaction that will be used as context for operations on data in opened
-    database for this connection. */
-    void setDefaultTransaction(KexiDBTransaction* transaction);
-    /** Returns list of currently active KexiDBTransaction objects. */
-    Kross::Api::List* transactions();
-    /** Return true if the transaction is active (ie. started). */
-    //bool isTransactionActive() const { m_transaction.active(); }
-    /** Return true if the transaction is uninitialized (null). */
-    //bool isTransactionNull() const { m_transaction.isNull(); }
-#endif
 
     /** Return a \a KexiDBParser object. */
     QObject* parser();

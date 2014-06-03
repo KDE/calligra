@@ -22,7 +22,7 @@
 #include <QPainter>
 #include <QSvgRenderer>
 
-#include <KCategorizedSortFilterProxyModel>
+#include <kcategorizedsortfilterproxymodel.h>
 
 #include "State.h"
 #include "StateCategory.h"
@@ -61,7 +61,7 @@ QVariant StatesModel::data(const QModelIndex & index, int role) const
         case SortRole:
             return m_states[index.row()]->priority();
         case KCategorizedSortFilterProxyModel::CategorySortRole:
-            return QString::number(m_states[index.row()]->category()->priority()) + m_states[index.row()]->category()->id();
+            return QString(QString::number(m_states[index.row()]->category()->priority()) + m_states[index.row()]->category()->id());
         case KCategorizedSortFilterProxyModel::CategoryDisplayRole:
             return m_states[index.row()]->category()->name();
         }

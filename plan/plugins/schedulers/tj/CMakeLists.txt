@@ -34,13 +34,15 @@ SET ( TJScheduler_SRCS
     taskjuggler/Interval.cpp
 )
 
-kde4_add_plugin( plantjscheduler ${TJScheduler_SRCS} )
+kde4_add_plugin( plantjscheduler SHARED ${TJScheduler_SRCS} )
 
 target_link_libraries(
     plantjscheduler
     kplatokernel
     koodf
 )
+
+set_target_properties( plantjscheduler PROPERTIES DEFINE_SYMBOL MAKE_KPLATOTJ_LIB )
 
 install( TARGETS plantjscheduler DESTINATION ${PLUGIN_INSTALL_DIR} )
 

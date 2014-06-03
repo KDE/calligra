@@ -1,6 +1,3 @@
-
-add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
-
-add_subdirectory( export )
-add_subdirectory( import )
-
+if(SHOULD_BUILD_FILTER_RTF_TO_ODT)
+    add_subdirectory( import )
+endif(SHOULD_BUILD_FILTER_RTF_TO_ODT)

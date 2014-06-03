@@ -27,15 +27,21 @@
 
 #include <kiconloader.h>
 
+#include <KWPart.h>
 #include <KoDockRegistry.h>
 #include <KoDocumentRdfBase.h>
+#include <KoToolRegistry.h>
+#include <KoMainWindow.h>
+
 #ifdef SHOULD_BUILD_RDF
-#include <rdf/KoDocumentRdf.h>
-#include <rdf/KoSemanticStylesheetsEditor.h>
+#include <KoDocumentRdf.h>
+#include <KoSemanticStylesheetsEditor.h>
 #include "dockers/KWRdfDocker.h"
 #include "dockers/KWRdfDockerFactory.h"
 #endif
 #include "dockers/KWStatisticsDocker.h"
+#include "pagetool/KWPageToolFactory.h"
+#include "dockers/KWNavigationDockerFactory.h"
 
 KComponentData *KWFactory::s_instance = 0;
 KAboutData *KWFactory::s_aboutData = 0;
@@ -56,18 +62,16 @@ KWFactory::~KWFactory()
     s_instance = 0;
 }
 
-QObject* KWFactory::create(const char* iface, QWidget* parentWidget, QObject *parent, const QVariantList& args, const QString& keyword)
+QObject* KWFactory::create(const char* /*iface*/, QWidget* /*parentWidget*/, QObject *parent, const QVariantList& args, const QString& keyword)
 {
     Q_UNUSED(args);
     Q_UNUSED(keyword);
-    bool bWantKoDocument = (strcmp(iface, "KoDocument") == 0);
 
-    KWDocument *doc = new KWDocument(parentWidget, parent, !bWantKoDocument);
-
-    if (!bWantKoDocument)
-        doc->setReadWrite(false);
-
-    return doc;
+    KWPart *part = new KWPart(parent);
+    KWDocument *doc = new KWDocument(part);
+    part->setDocument(doc);
+    KoToolRegistry::instance()->add(new KWPageToolFactory());
+    return part;
 }
 
 KAboutData *KWFactory::aboutData()
@@ -92,7 +96,9 @@ const KComponentData &KWFactory::componentData()
 
         KoDockRegistry *dockRegistry = KoDockRegistry::instance();
         dockRegistry->add(new KWStatisticsDockerFactory());
+        dockRegistry->add(new KWNavigationDockerFactory());
 #ifdef SHOULD_BUILD_RDF
+// TODO reenable after release
         dockRegistry->add(new KWRdfDockerFactory());
 #endif
 

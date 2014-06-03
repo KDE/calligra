@@ -14,7 +14,7 @@ kde4_add_plugin(kexirelationdesignshape ${kexirelationdesignshape_PART_SRCS})
 
 target_link_libraries(
 kexirelationdesignshape
-kexidb
+${CALLIGRADB_LIBS}
 kexicore
 keximain
 komain
@@ -22,7 +22,6 @@ ${KDE4_KDECORE_LIBS}
 ${KDE4_KDEUI_LIBS}
 ${QT_QTCORE_LIBRARY}
 ${QT_QTGUI_LIBRARY}
-${QT_QT3SUPPORT_LIBRARY}
 )
 
 install(TARGETS kexirelationdesignshape  DESTINATION ${PLUGIN_INSTALL_DIR})

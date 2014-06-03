@@ -20,8 +20,8 @@
 #ifndef _ODBCCURSOR_H_
 #define _ODBCCURSOR_H_
 
-#include <kexidb/cursor.h>
-#include <kexidb/connection.h>
+#include <db/cursor.h>
+#include <db/connection.h>
 
 namespace KexiDB
 {

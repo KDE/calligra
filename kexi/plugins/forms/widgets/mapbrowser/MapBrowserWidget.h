@@ -21,7 +21,7 @@
 #ifndef MAPBROWSERWIDGET_H
 #define MAPBROWSERWIDGET_H
 
-#include <MarbleWidget.h>
+#include <marble/MarbleWidget.h>
 
 #include "widgetfactory.h"
 #include "container.h"
@@ -29,15 +29,15 @@
 #include <widget/dataviewcommon/kexiformdataiteminterface.h>
 
 class MapBrowserWidget : public Marble::MarbleWidget, 
-			 public KFormDesigner::FormWidgetInterface,
-			 public KexiFormDataItemInterface    
+                         public KFormDesigner::FormWidgetInterface,
+                         public KexiFormDataItemInterface
 {
     Q_OBJECT
     Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource)
     Q_PROPERTY(QString dataSourcePartClass READ dataSourcePartClass WRITE setDataSourcePartClass)
     Q_PROPERTY(bool readOnly READ isReadOnly WRITE setReadOnly)
 public:
-    MapBrowserWidget(QWidget *parent=0);
+    explicit MapBrowserWidget(QWidget *parent = 0);
     virtual ~MapBrowserWidget();
 
     inline QString dataSource() const {
@@ -57,6 +57,7 @@ public:
     virtual void setInvalidState(const QString&);
     
     virtual bool isReadOnly() const;
+
 public slots:
     //! Sets the datasource to \a ds
     inline void setDataSource(const QString &ds) {
@@ -72,11 +73,11 @@ protected:
     QVariant serializeData(qreal lat, qreal lon, int zoomLevel);
     void deserializeData(const QVariant& serialized);
     virtual void setValueInternal(const QVariant& add, bool removeOld);
+
 private:
     //! Used in slotTextChanged()
-    bool m_slotMapChanged_enabled;///TODO: do we need this to be 1 bit? As in some other widgets
+    bool m_slotMapChanged_enabled; //!< @todo do we need this to be 1 bit? As in some other widgets
     bool m_internalReadOnly;
-    
 };
 
 #endif // MAPBROWSERWIDGET_H

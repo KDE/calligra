@@ -21,9 +21,9 @@
 #define KEXIRECORDNAVIGATORIFACE_H
 
 #include <kexi_export.h>
-#include <QScrollBar>
 
 class KexiRecordNavigatorHandler;
+class QScrollBar;
 
 class KEXICORE_EXPORT KexiRecordNavigatorIface
 {
@@ -62,7 +62,7 @@ public:
      *  for usage examples. */
     virtual void setHBarGeometry(QScrollBar & hbar, int x, int y, int w, int h) = 0;
     
-    virtual void updateGeometry(int leftMargin) = 0;
+    virtual void setLeftMargin(int leftMargin) = 0;
     
     /*! Sets label text at the left of the for record navigator's button.
      *   By default this label contains transla*ted "Row:" text. */

@@ -9,12 +9,6 @@ target_link_libraries(braindumpcore ${QT_QTCORE_LIBRARY} ${QT_QTXML_LIBRARY} ${Q
 
 target_link_libraries(braindumpcore LINK_INTERFACE_LIBRARIES ${QT_QTCORE_LIBRARY})
 
-install(TARGETS braindumpcore ${INSTALL_TARGETS_DEFAULT_ARGS} )
+set_target_properties(braindumpcore PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION})
 
-install(
-    FILES
-    StatesRegistry.h
-    DESTINATION
-    ${INCLUDE_INSTALL_DIR} COMPONENT Devel
-)
-
+install(TARGETS braindumpcore ${INSTALL_TARGETS_DEFAULT_ARGS} LIBRARY NAMELINK_SKIP )

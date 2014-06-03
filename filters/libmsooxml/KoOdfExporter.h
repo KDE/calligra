@@ -21,7 +21,7 @@
 #ifndef KOODFEXPORTER_H
 #define KOODFEXPORTER_H
 
-#include "msooxml_export.h"
+#include "komsooxml_export.h"
 #include <KoFilter.h>
 
 class KoXmlWriter;
@@ -31,7 +31,7 @@ class KoGenStyles;
 /**
  * @brief Convenience structure encapsulating XML writers used when writing ODF document.
  */
-struct MSOOXML_EXPORT KoOdfWriters {
+struct KOMSOOXML_EXPORT KoOdfWriters {
     /**
     * Creates structure encapsulating XML writers. All members are set initially to 0.
     */
@@ -50,7 +50,7 @@ struct MSOOXML_EXPORT KoOdfWriters {
  *
  * @author Jarosław Staniek <staniek@kde.org>
  */
-class MSOOXML_EXPORT KoOdfExporter : public KoFilter
+class KOMSOOXML_EXPORT KoOdfExporter : public KoFilter
 {
     Q_OBJECT
 public:
@@ -89,7 +89,7 @@ protected:
             KoOdfWriters *writers) = 0;
 
     /**
-     * This method is called when writting the xml-settings to the ODF document.
+     * This method is called when writing the xml-settings to the ODF document.
      */
     virtual void writeConfigurationSettings(KoXmlWriter* settings) const = 0;
 

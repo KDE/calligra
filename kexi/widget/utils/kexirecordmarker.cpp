@@ -33,7 +33,7 @@
 #include <QStyle>
 #include <QStyleOptionHeader>
 
-#include <KDebug>
+#include <kdebug.h>
 
 #include <kexiutils/utils.h>
 #include <kexi_global.h>
@@ -54,8 +54,10 @@ struct KexiRecordMarkerStatic {
     {
         // color-ify the icons to match the foreground color
         QColor fc(qApp->palette().color(QPalette::Foreground));
-        pen = KexiUtils::replaceColors( QPixmap(tableview_pen_xpm), fc);
-        plus = KexiUtils::replaceColors( QPixmap(tableview_plus_xpm), fc);
+        pen = QPixmap(tableview_pen_xpm);
+        KexiUtils::replaceColors(&pen, fc);
+        plus = QPixmap(tableview_plus_xpm);
+        KexiUtils::replaceColors(&plus, fc);
     }
     QPixmap pen, plus;
 };
@@ -273,14 +275,14 @@ void KexiRecordMarker::setCellHeight(int cellHeight)
 void KexiRecordMarker::setEditRow(int row)
 {
     d->editRow = row;
-//TODO: update only needed area!
+//! @todo update only needed area
     update();
 }
 
 void KexiRecordMarker::showInsertRow(bool show)
 {
     d->showInsertRow = show;
-//TODO: update only needed area!
+//! @todo update only needed area
     update();
 }
 

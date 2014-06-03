@@ -30,7 +30,7 @@ class ColorsConfigPanel : public QWidget, public Ui_ColorsConfigPanel
 {
     Q_OBJECT
 public:
-    ColorsConfigPanel( QWidget *parent = 0 );
+    explicit ColorsConfigPanel(QWidget *parent = 0);
 
 };
 

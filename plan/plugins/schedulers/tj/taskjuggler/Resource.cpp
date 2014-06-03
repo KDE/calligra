@@ -2,6 +2,7 @@
  * Resource.cpp - TaskJuggler
  *
  * Copyright (c) 2001, 2002, 2003, 2004, 2005 by Chris Schlaeger <cs@kde.org>
+ * Copyright (c) 2011 by Dag Andersen <danders@get2net.dk>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of version 2 of the GNU General Public License as
@@ -12,7 +13,7 @@
 
 #include "Resource.h"
 
-#include <KLocale>
+#include <klocale.h>
 
 #include <assert.h>
 
@@ -87,7 +88,7 @@ Resource::Resource(Project* p, const QString& i, const QString& n,
         uint monthStart = 0;
         bool weekStartsMonday = project->getWeekStartsMonday();
         for (time_t ts = p->getStart(); i < (long) sbSize; ts +=
-             p->getScheduleGranularity(), i++)
+             p->getScheduleGranularity(), ++i)
         {
             if (ts == midnight(ts))
                 dayStart = i;
@@ -111,7 +112,7 @@ Resource::Resource(Project* p, const QString& i, const QString& n,
         uint monthEnd = i;
         // WTF does p->getEnd not return the 1st sec after the time frame!!!
         for (time_t ts = p->getEnd() + 1; i >= 0;
-             ts -= p->getScheduleGranularity(), i--)
+             ts -= p->getScheduleGranularity(), --i)
         {
             DayEndIndex[i] = dayEnd;
             if (ts - midnight(ts) < (int) p->getScheduleGranularity())
@@ -489,14 +490,14 @@ Resource::book(Booking* nb)
 {
     uint idx = sbIndex(nb->getStart());
 
-    return bookSlot(idx, nb, 0);
+    return bookSlot(idx, nb);
 }
 
 bool
-Resource::bookSlot(uint idx, SbBooking* nb, int overtime)
+Resource::bookSlot(uint idx, SbBooking* nb)
 {
     // Make sure that the time slot is still available.
-    if (scoreboard[idx] > (SbBooking*) overtime)
+    if (scoreboard[idx] > (SbBooking*) 0)
     {
         delete nb;
         return false;
@@ -523,82 +524,82 @@ Resource::bookSlot(uint idx, SbBooking* nb, int overtime)
     return true;
 }
 
-bool
-Resource::bookInterval(Booking* nb, int sc, int sloppy, int overtime)
-{
-    uint sIdx = sbIndex(nb->getStart());
-    uint eIdx = sbIndex(nb->getEnd());
+//bool
+//Resource::bookInterval(Booking* nb, int sc, int sloppy, int overtime)
+//{
+//    uint sIdx = sbIndex(nb->getStart());
+//    uint eIdx = sbIndex(nb->getEnd());
 
-    bool conflict = false;
+//    bool conflict = false;
 
-    for (uint i = sIdx; i <= eIdx; i++)
-        if (scoreboard[i] > (SbBooking*) overtime)
-        {
-            uint j;
-            for (j = i + 1 ; j <= eIdx &&
-                 scoreboard[i] == scoreboard[j]; j++)
-                ;
-            if (scoreboard[i] == (SbBooking*) 1)
-            {
-                if (sloppy > 0)
-                {
-                    i = j;
-                    continue;
-                }
-                TJMH.errorMessage(i18nc("@info/plain 1=datetime 2=task name", "Resource is unavailable at %1. It cannot be assigned to task %2.", formatTime(index2start(i)), nb->getTask()->getName()), this);
-            }
-            else if (scoreboard[i] == (SbBooking*) 2)
-            {
-                if (sloppy > 1)
-                {
-                    i = j;
-                    continue;
-                }
-                TJMH.errorMessage(i18nc("@info/plain 1=datetime 2=task name", "Resource is on vacation at %1. It cannot be assigned to task %2.", formatTime(index2start(i)), nb->getTask()->getName()), this);
-            }
-            else
-            {
-                if (sloppy > 2)
-                {
-                    i = j;
-                    continue;
-                }
-                TJMH.errorMessage(i18nc("@info/plain 1=datetime 2=task name 3=task name", "Allocation conflict at %1. Conflicting tasks are %2 and %3.", formatTime(index2start(i)), scoreboard[i]->getTask()->getName(), nb->getTask()->getName()), this);
-            }
+//    for (uint i = sIdx; i <= eIdx; i++)
+//        if (scoreboard[i] > (SbBooking*) overtime)
+//        {
+//            uint j;
+//            for (j = i + 1 ; j <= eIdx &&
+//                 scoreboard[i] == scoreboard[j]; j++)
+//                ;
+//            if (scoreboard[i] == (SbBooking*) 1)
+//            {
+//                if (sloppy > 0)
+//                {
+//                    i = j;
+//                    continue;
+//                }
+//                TJMH.errorMessage(i18nc("@info/plain 1=datetime 2=task name", "Resource is unavailable at %1. It cannot be assigned to task %2.", formatTime(index2start(i)), nb->getTask()->getName()), this);
+//            }
+//            else if (scoreboard[i] == (SbBooking*) 2)
+//            {
+//                if (sloppy > 1)
+//                {
+//                    i = j;
+//                    continue;
+//                }
+//                TJMH.errorMessage(i18nc("@info/plain 1=datetime 2=task name", "Resource is on vacation at %1. It cannot be assigned to task %2.", formatTime(index2start(i)), nb->getTask()->getName()), this);
+//            }
+//            else
+//            {
+//                if (sloppy > 2)
+//                {
+//                    i = j;
+//                    continue;
+//                }
+//                TJMH.errorMessage(i18nc("@info/plain 1=datetime 2=task name 3=task name", "Allocation conflict at %1. Conflicting tasks are %2 and %3.", formatTime(index2start(i)), scoreboard[i]->getTask()->getName(), nb->getTask()->getName()), this);
+//            }
 
-            conflict = true;
-            i = j;
-        }
+//            conflict = true;
+//            i = j;
+//        }
 
-    if (conflict)
-        return false;
+//    if (conflict)
+//        return false;
 
-    for (uint i = sIdx; i <= eIdx; i++)
-        if (scoreboard[i] <= (SbBooking*) overtime)
-            bookSlot(i, new SbBooking(*nb), overtime);
+//    for (uint i = sIdx; i <= eIdx; i++)
+//        if (scoreboard[i] <= static_cast<SbBooking*>(1))
+//            bookSlot(i, new SbBooking(*nb), overtime);
 
-    return true;
-}
+//    return true;
+//}
 
-bool
-Resource::addBooking(int sc, Booking* nb, int sloppy, int overtime)
-{
-    SbBooking** tmp = scoreboard;
+//bool
+//Resource::addBooking(int sc, Booking* nb, int sloppy, int overtime)
+//{
+//    SbBooking** tmp = scoreboard;
 
-    if (scoreboards[sc])
-        scoreboard = scoreboards[sc];
-    else
-        initScoreboard();
-    bool retVal = bookInterval(nb, sc, sloppy, overtime);
-    // Cross register booking with task.
-    if (retVal && nb->getTask())
-        nb->getTask()->addBookedResource(sc, this);
-    delete nb;
-    scoreboards[sc] = scoreboard;
-    scoreboard = tmp;
+//    if (scoreboards[sc])
+//        scoreboard = scoreboards[sc];
+//    else
+//        initScoreboard();
+//    bool retVal = bookInterval(nb, sc, sloppy, overtime);
+//    // Cross register booking with task.
+//    if (retVal && nb->getTask())
+//        nb->getTask()->addBookedResource(sc, this);
+//    delete nb;
+//    scoreboards[sc] = scoreboard;
+//    scoreboard = tmp;
 
-    return retVal;
-}
+//    return retVal;
+//}
 
 bool
 Resource::addShift(const Interval& i, Shift* s)
@@ -729,7 +730,6 @@ Resource::getCurrentWeekSlots(time_t date, const Task* t)
     {
         uint timeSlots = 0;
         for (ResourceListIterator rli(getSubListIterator()); rli.hasNext();) {
-            Resource *r = static_cast<Resource*>(rli.next());
             timeSlots += (*rli)->getCurrentWeekSlots(date, t);
         }
         return timeSlots;
@@ -766,7 +766,6 @@ Resource::getCurrentMonthSlots(time_t date, const Task* t)
     {
         uint timeSlots = 0;
         for (ResourceListIterator rli(getSubListIterator()); rli.hasNext();) {
-            Resource *r = static_cast<Resource*>(rli.next());
             timeSlots += (*rli)->getCurrentMonthSlots(date, t);
         }
         return timeSlots;
@@ -1099,7 +1098,7 @@ Resource::getPIDs(int sc, const Interval& period, const Task* task,
             continue;
         if ((!task || task == b->getTask() ||
              b->getTask()->isDescendantOf(task)) &&
-            pids.findIndex(b->getTask()->getProjectId()) == -1)
+            pids.indexOf(b->getTask()->getProjectId()) == -1)
         {
             pids.append(b->getTask()->getProjectId());
         }
@@ -1384,6 +1383,7 @@ Resource::updateSlotMarks(int sc)
 
 QDomElement Resource::xmlIDElement( QDomDocument& doc ) const
 {
+   Q_UNUSED(doc);
    QDomElement elem;/* = ReportXML::createXMLElem( doc, "Resource", getName());
    elem.setAttribute( "Id", getId() );*/
 

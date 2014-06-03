@@ -24,30 +24,23 @@
 
 #include "kptviewbase.h"
 
-#include <QTreeWidget>
-
 #include <QList>
 #include <QTreeWidget>
+#include <QVariant>
+#include <QAction>
+#include <QApplication>
+#include <QButtonGroup>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QListWidget>
+#include <QPushButton>
+#include <QTableWidget>
 #include <QVBoxLayout>
-#include <QTreeWidget>
+#include <QSpinBox>
+#include <QLineEdit>
 
-#include <QtCore/QVariant>
-#include <QtGui/QAction>
-#include <QtGui/QApplication>
-#include <QtGui/QButtonGroup>
-#include <QtGui/QDialog>
-#include <QtGui/QDialogButtonBox>
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QLabel>
-#include <QtGui/QListWidget>
-#include <QtGui/QPushButton>
-#include <QtGui/QTableWidget>
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QWidget>
-#include <QtGui/QSpinBox>
-#include <QtGui/QLineEdit>
-
-#include <qwidget.h>
 #include <kptitemmodelbase.h>
 
 #include <kactionselector.h>
@@ -57,10 +50,8 @@
 
 #include "kptcommand.h"
 
-#include <kicon.h>
 #include <kglobal.h>
 #include <klocale.h>
-#include <kxmlguifactory.h>
 #include <kactioncollection.h>
 
 #include <kdebug.h>
@@ -78,7 +69,6 @@ class QSplitter;
 class QTreeWidgetItem;
 
 
- 
 namespace KPlato
 {
 
@@ -90,7 +80,7 @@ class KPLATOUI_EXPORT ResourcesList : public QTreeWidget
     Q_OBJECT
 
 public:
-    ResourcesList( QWidget * parent = 0 );
+    explicit ResourcesList(QWidget *parent = 0);
 
 };
 
@@ -99,7 +89,7 @@ class KPLATOUI_EXPORT ResourceAssignmentView : public ViewBase
     Q_OBJECT
 
 public:
-    ResourceAssignmentView( KoDocument *part, QWidget *parent);
+    ResourceAssignmentView(KoPart *part, KoDocument *doc, QWidget *parent);
     using ViewBase::draw;
     Project *project() const { return m_project; }
     void draw( Project &project );

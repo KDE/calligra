@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,15 +20,15 @@
 #ifndef KEXI_H
 #define KEXI_H
 
-#include <qpointer.h>
+#include <QPointer>
 
 #include <kexi_version.h>
 #include "kexiprojectdata.h"
 #include "kexipartmanager.h"
 #include "kexidbconnectionset.h"
 #include "kexiprojectset.h"
-#include <kexidb/drivermanager.h>
-#include <kexidb/driver.h>
+#include <db/drivermanager.h>
+#include <db/driver.h>
 
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -39,16 +39,16 @@ class KexiRecentProjects;
 
 namespace Kexi
 {
-KEXICORE_EXPORT void initCmdLineArgs(int argc, char *argv[], KAboutData* aboutData = 0);
+KEXICORE_EXPORT void initCmdLineArgs(int argc, char *argv[], const KAboutData& aboutData);
 
 /*! Modes of view for the dialogs. Used mostly for parts and KexiWindow. */
 enum ViewMode {
     AllViewModes = 0, //!< Usable primarily in KexiPart::initInstanceActions()
-    NoViewMode = 0, //!< In KexiView::afterSwitchFrom() and KexiView::beforeSwitchTo()
-    //!< means that parent dialog of the view has not yet view defined.
+    NoViewMode = 0,   //!< In KexiView::afterSwitchFrom() and KexiView::beforeSwitchTo()
+                      //!< means that parent dialog of the view has not been defined yet.
     DataViewMode = 1,
     DesignViewMode = 2,
-    TextViewMode = 4 //!< Also known as SQL View Mode
+    TextViewMode = 4  //!< Also known as SQL View Mode
 };
 Q_DECLARE_FLAGS(ViewModes, ViewMode)
 
@@ -80,6 +80,9 @@ KEXICORE_EXPORT void deleteGlobalObjects();
 
 //! false by default, flag loaded on main window startup
 KEXICORE_EXPORT bool& tempShowMacros();
+
+//! false by default, flag loaded on main window startup
+KEXICORE_EXPORT bool& tempShowScripts();
 
 //! false by default, flag loaded on main window startup
 KEXICORE_EXPORT bool& tempShowScripts();
@@ -133,12 +136,10 @@ protected:
     KexiDB::MessageHandler* msgHandler;
 };
 
-KEXICORE_EXPORT QString msgYouCanImproveData();
-
 }//namespace Kexi
 
 //! Icon name for database servers
-#define KEXI_ICON_DATABASE_SERVER "network-server-database"
+#define KEXI_DATABASE_SERVER_ICON_NAME (koIconName("network-server-database"))
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Kexi::ViewModes)
 

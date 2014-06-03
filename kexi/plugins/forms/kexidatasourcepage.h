@@ -20,8 +20,8 @@
 #define KEXIDATASOURCEPAGE_H
 
 #include <widget/properties/KexiPropertyPaneViewBase.h>
-#include <kexidb/field.h>
-#include <kexidb/utils.h>
+#include <db/field.h>
+#include <db/utils.h>
 #include <koproperty/Set.h>
 
 class KexiObjectInfoLabel;
@@ -38,12 +38,8 @@ class KEXIFORMUTILS_EXPORT KexiDataSourcePage : public KexiPropertyPaneViewBase
     Q_OBJECT
 
 public:
-    KexiDataSourcePage(QWidget *parent);
+    explicit KexiDataSourcePage(QWidget *parent);
     virtual ~KexiDataSourcePage();
-
-/*2.0    KexiDataSourceComboBox* formDataSourceCombo() const {
-        return m_formDataSourceCombo;
-    }*/
 
 public slots:
     void setProject(KexiProject *prj);
@@ -94,15 +90,10 @@ protected:
     QLabel *m_dataSourceLabel, *m_noDataSourceAvailableLabel,
     *m_widgetDSLabel, *m_availableFieldsLabel,
     *m_mousePointerLabel, *m_availableFieldsDescriptionLabel;
-/*2.0: clear button is available in the combobox itself
-    QToolButton *m_clearWidgetDSButton;*/
-/*2.0: clear button is available in the combobox itself
-    QToolButton *m_clearDSButton;*/
     QToolButton *m_gotoButton, *m_addField;
-//  QFrame *m_dataSourceSeparator;
     QString m_noDataSourceAvailableSingleText;
     QString m_noDataSourceAvailableMultiText;
-    bool m_insideClearFormDataSourceSelection : 1;
+    bool m_insideClearFormDataSourceSelection;
 #ifdef KEXI_NO_AUTOFIELD_WIDGET
     KexiDB::TableOrQuerySchema *m_tableOrQuerySchema; //!< temp.
 #else

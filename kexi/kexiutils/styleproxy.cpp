@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006-2010 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2006-2014 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,17 +24,17 @@
 
 using namespace KexiUtils;
 
-StyleProxy::StyleProxy(QStyle* parentStyle)
-        : QStyle()
-        , m_method(new int(0))
+StyleProxy::StyleProxy(QStyle* parentStyle, QObject *parent)
+    : QStyle(), m_method(new int(0))
 {
+    setParent(parent);
     setParentStyle(parentStyle);
 }
 
 StyleProxy::~StyleProxy()
 {
-    delete m_style;
     delete m_method;
+    delete m_style;
 }
 
 void StyleProxy::setParentStyle(QStyle* style)
@@ -58,3 +58,4 @@ QStyle* StyleProxy::parentStyle(int methodIndex) const
     *m_method = methodIndex;
     return m_style;
 }
+

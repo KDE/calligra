@@ -23,8 +23,8 @@
 
 #include "kexipartinfo.h"
 
-#include <KAction>
-#include <KService>
+#include <kaction.h>
+#include <kservice.h>
 
 namespace KexiPart
 {
@@ -49,7 +49,7 @@ public:
     QString instanceCaption;
     QString groupName;
 //    QString mimeType;
-    QString itemIcon;
+    QString itemIconName;
     QString objectName;
     
     QString partClass;
@@ -61,9 +61,6 @@ public:
     @see KexiPart::Info::supportedUserViewModes() */
     Kexi::ViewModes supportedUserViewModes;
     
-#if 0 //moved as internal to KexiProject
-    int projectPartID;
-#endif
     bool broken;
     bool isVisibleInNavigator;
     bool idStoredInPartDatabase;

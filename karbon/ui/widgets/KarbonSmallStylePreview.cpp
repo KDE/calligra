@@ -29,21 +29,23 @@
 #include <KoShapeManager.h>
 #include <KoShape.h>
 #include <KoSelection.h>
-#include <KoLineBorder.h>
+#include <KoShapePaintingContext.h>
+#include <KoShapeStroke.h>
+#include <KoViewConverter.h>
 
-#include <KLocale>
-#include <KGlobalSettings>
+#include <klocale.h>
+#include <kglobalsettings.h>
 
-#include <QtGui/QColor>
-#include <QtGui/QPushButton>
-#include <QtGui/QLabel>
-#include <QtGui/QLayout>
-#include <QtGui/QPixmap>
-#include <QtGui/QGridLayout>
-#include <QtGui/QPainter>
-#include <QtGui/QPaintEvent>
-#include <QtCore/QPointF>
-#include <QtCore/QRectF>
+#include <QColor>
+#include <QPushButton>
+#include <QLabel>
+#include <QLayout>
+#include <QPixmap>
+#include <QGridLayout>
+#include <QPainter>
+#include <QPaintEvent>
+#include <QPointF>
+#include <QRectF>
 
 #define FRAMEWIDTH 75
 #define FRAMEHEIGHT 15
@@ -57,19 +59,10 @@ public:
     }
 
     virtual ~KarbonFillStyleWidget() {
-        if (m_fill && !m_fill->deref())
-            delete m_fill;
     }
 
-    void setFill(KoShapeBackground * fill) {
-        if (fill != m_fill) {
-            if (m_fill && !m_fill->deref())
-                delete m_fill;
-            m_fill = fill;
-            if (m_fill)
-                m_fill->ref();
-        }
-
+    void setFill(QSharedPointer<KoShapeBackground>  fill) {
+        m_fill = fill;
         update();
     }
 protected:
@@ -80,7 +73,7 @@ protected:
         if (m_fill) {
             m_checkerPainter.paint(painter, rect());
 
-            KoGradientBackground * gradientFill = dynamic_cast<KoGradientBackground*>(m_fill);
+            QSharedPointer<KoGradientBackground>  gradientFill = qSharedPointerDynamicCast<KoGradientBackground>(m_fill);
             if (gradientFill) {
                 const QGradient * gradient = gradientFill->gradient();
                 QGradient * defGradient = KarbonGradientHelper::defaultGradient(gradient->type(), gradient->spread(), gradient->stops());
@@ -94,7 +87,9 @@ protected:
                 painter.setPen(Qt::NoPen);
                 QPainterPath p;
                 p.addRect(rect());
-                m_fill->paint(painter, p);
+                KoViewConverter converter;
+                KoShapePaintingContext context;
+                m_fill->paint(painter, converter, context, p);
             }
         } else {
             painter.setFont(KGlobalSettings::smallestReadableFont());
@@ -109,7 +104,7 @@ protected:
     }
 
 private:
-    KoShapeBackground * m_fill; ///< the fill to preview
+    QSharedPointer<KoShapeBackground>  m_fill; ///< the fill to preview
     KoCheckerBoardPainter m_checkerPainter;
 };
 
@@ -126,7 +121,7 @@ public:
             delete m_stroke;
     }
 
-    void setStroke(KoShapeBorderModel * stroke) {
+    void setStroke(KoShapeStrokeModel * stroke) {
         if (stroke != m_stroke) {
             if (m_stroke && !m_stroke->deref())
                 delete m_stroke;
@@ -143,7 +138,7 @@ protected:
 
         if (m_stroke) {
             m_checkerPainter.paint(painter, rect());
-            const KoLineBorder * line = dynamic_cast<const KoLineBorder*>(m_stroke);
+            const KoShapeStroke * line = dynamic_cast<const KoShapeStroke*>(m_stroke);
             if (line) {
                 painter.setPen(Qt::NoPen);
                 QBrush brush = line->lineBrush();
@@ -178,7 +173,7 @@ protected:
     }
 
 private:
-    KoShapeBorderModel * m_stroke; ///< the stroke to preview
+    KoShapeStrokeModel * m_stroke; ///< the stroke to preview
     KoCheckerBoardPainter m_checkerPainter;
 };
 
@@ -188,7 +183,7 @@ KarbonSmallStylePreview::KarbonSmallStylePreview(QWidget* parent)
     setFont(KGlobalSettings::smallestReadableFont());
 
     /* Create widget layout */
-    QGridLayout *layout = new QGridLayout(this);
+    QHBoxLayout *layout = new QHBoxLayout(this);
     QLabel * strokeLabel = new QLabel(i18n("Stroke:"), this);
     strokeLabel->setMinimumHeight(FRAMEHEIGHT);
     m_strokeFrame = new KarbonStrokeStyleWidget(this);
@@ -199,12 +194,11 @@ KarbonSmallStylePreview::KarbonSmallStylePreview(QWidget* parent)
     m_fillFrame = new KarbonFillStyleWidget(this);
     m_fillFrame->setMinimumSize(QSize(FRAMEWIDTH, FRAMEHEIGHT));
 
-    layout->addWidget(strokeLabel, 0, 0);
-    layout->addWidget(m_strokeFrame, 0, 1);
-    layout->addWidget(fillLabel, 1, 0);
-    layout->addWidget(m_fillFrame, 1, 1);
-    layout->setContentsMargins(10, 0, 10, 0);
-    layout->setVerticalSpacing(0);
+    layout->addWidget(strokeLabel);
+    layout->addWidget(m_strokeFrame);
+    layout->addWidget(fillLabel);
+    layout->addWidget(m_fillFrame);
+    layout->setContentsMargins(0, 0, 0, 0);
 
     setLayout(layout);
 
@@ -233,7 +227,7 @@ void KarbonSmallStylePreview::selectionChanged()
 {
     KoCanvasController * controller = KoToolManager::instance()->activeCanvasController();
     if (! controller || ! controller->canvas()) {
-        m_fillFrame->setFill(0);
+        m_fillFrame->setFill(QSharedPointer<KoShapeBackground>(0));
         m_strokeFrame->setStroke(0);
         QWidget::update();
         return;
@@ -242,9 +236,9 @@ void KarbonSmallStylePreview::selectionChanged()
     KoShape * shape = controller->canvas()->shapeManager()->selection()->firstSelectedShape();
     if (shape) {
         m_fillFrame->setFill(shape->background());
-        m_strokeFrame->setStroke(shape->border());
+        m_strokeFrame->setStroke(shape->stroke());
     } else {
-        m_fillFrame->setFill(0);
+        m_fillFrame->setFill(QSharedPointer<KoShapeBackground>(0));
         m_strokeFrame->setStroke(0);
     }
     QWidget::update();

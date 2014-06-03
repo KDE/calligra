@@ -25,7 +25,7 @@
 #include <core/kexiproject.h>
 #include <core/kexipart.h>
 
-#include <KPluginFactory>
+#include <kpluginfactory.h>
 
 KexiMigrationPart::KexiMigrationPart(QObject *parent, const QVariantList &args)
         : KexiInternalPart(parent, args)

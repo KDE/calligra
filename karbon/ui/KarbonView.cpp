@@ -1,47 +1,47 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001-2002 Lennart Kudling <kudling@kde.org>
-   Copyright (C) 2001-2005,2007 Rob Buis <buis@kde.org>
-   Copyright (C) 2002-2003,2005 Tomislav Lukman <tomislav.lukman@ck.t-com.hr>
-   Copyright (C) 2002-2003,2006 Laurent Montel <montel@kde.org>
-   Copyright (C) 2002-2006 Stephan Binner <binner@kde.org>
-   Copyright (C) 2002,2005 David Faure <faure@kde.org>
-   Copyright (C) 2002 Benoit Vautrin <benoit.vautrin@free.fr>
-   Copyright (C) 2002,2005-2007 Thomas Zander <zander@kde.org>
-   Copyright (C) 2003 Dirk Mueller <mueller@kde.org>
-   Copyright (C) 2003,2006 Stephan Kulow <coolo@kde.org>
-   Copyright (C) 2004 Brad Hards <bradh@frogmouth.net>
-   Copyright (C) 2005-2006 Tim Beaulen <tbscope@gmail.com>
-   Copyright (C) 2005 Yann Bodson <yann.bodson@online.fr>
-   Copyright (C) 2005-2010 Boudewijn Rempt <boud@valdyas.org>
-   Copyright (C) 2005-2009,2011 Jan Hambrecht <jaham@gmx.net>
-   Copyright (C) 2005-2006 Peter Simonsson <psn@linux.se>
-   Copyright (C) 2005-2006 Sven Langkamp <sven.langkamp@gmail.com>
-   Copyright (C) 2005-2006 Inge Wallin <inge@lysator.liu.se>
-   Copyright (C) 2005-2006 Casper Boemann <cbr@boemann.dk>
-   Copyright (C) 2006 Martin Ellis <martin.ellis@kdemail.net>
-   Copyright (C) 2006 Adriaan de Groot <groot@kde.org>
-   Copyright (C) 2006 Sebastian Sauer <mail@dipe.org>
-   Copyright (C) 2006-2007 Thorsten Zachmann <t.zachmann@zagge.de>
-   Copyright (C) 2006 Andreas Hartmetz <ahartmetz@gmail.com>
-   Copyright (C) 2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
-   Copyright (C) 2006-2007 Aaron J. Seigo <aseigo@kde.org>
-   Copyright (C) 2007 Matthias Kretz <kretz@kde.org>
-
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Copyright (C) 2001-2002 Lennart Kudling <kudling@kde.org>
+ * Copyright (C) 2001-2005,2007 Rob Buis <buis@kde.org>
+ * Copyright (C) 2002-2003,2005 Tomislav Lukman <tomislav.lukman@ck.t-com.hr>
+ * Copyright (C) 2002-2003,2006 Laurent Montel <montel@kde.org>
+ * Copyright (C) 2002-2006 Stephan Binner <binner@kde.org>
+ * Copyright (C) 2002,2005 David Faure <faure@kde.org>
+ * Copyright (C) 2002 Benoit Vautrin <benoit.vautrin@free.fr>
+ * Copyright (C) 2002,2005-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2003 Dirk Mueller <mueller@kde.org>
+ * Copyright (C) 2003,2006 Stephan Kulow <coolo@kde.org>
+ * Copyright (C) 2004 Brad Hards <bradh@frogmouth.net>
+ * Copyright (C) 2005-2006 Tim Beaulen <tbscope@gmail.com>
+ * Copyright (C) 2005 Yann Bodson <yann.bodson@online.fr>
+ * Copyright (C) 2005-2010 Boudewijn Rempt <boud@valdyas.org>
+ * Copyright (C) 2005-2009,2011 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2005-2006 Peter Simonsson <psn@linux.se>
+ * Copyright (C) 2005-2006 Sven Langkamp <sven.langkamp@gmail.com>
+ * Copyright (C) 2005-2006 Inge Wallin <inge@lysator.liu.se>
+ * Copyright (C) 2005-2006 C. Boemann <cbo@boemann.dk>
+ * Copyright (C) 2006 Martin Ellis <martin.ellis@kdemail.net>
+ * Copyright (C) 2006 Adriaan de Groot <groot@kde.org>
+ * Copyright (C) 2006 Sebastian Sauer <mail@dipe.org>
+ * Copyright (C) 2006-2007 Thorsten Zachmann <t.zachmann@zagge.de>
+ * Copyright (C) 2006 Andreas Hartmetz <ahartmetz@gmail.com>
+ * Copyright (C) 2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+ * Copyright (C) 2006-2007 Aaron J. Seigo <aseigo@kde.org>
+ * Copyright (C) 2007 Matthias Kretz <kretz@kde.org>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; see the file COPYING.LIB.  If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
-*/
+ */
 
 #include "KarbonView.h"
 
@@ -64,7 +64,7 @@
 #include "KarbonPaletteBarWidget.h"
 
 #include <KoMainWindow.h>
-#include <KoLineBorder.h>
+#include <KoShapeStroke.h>
 #include <KoCanvasControllerWidget.h>
 #include <KoDocumentResourceManager.h>
 #include <KoCanvasResourceManager.h>
@@ -82,7 +82,7 @@
 #include <KoShapeCreateCommand.h>
 #include <KoShapeDeleteCommand.h>
 #include <KoShapeReorderCommand.h>
-#include <KoShapeBorderCommand.h>
+#include <KoShapeStrokeCommand.h>
 #include <KoShapeBackgroundCommand.h>
 #include <KoParameterToPathCommand.h>
 #include <KoShapeClipCommand.h>
@@ -93,10 +93,10 @@
 #include <KoPathShape.h>
 #include <KoPathPointData.h>
 #include <KoPathCombineCommand.h>
-#include <KoPathSeparateCommand.h>
 #include <KoPathReverseCommand.h>
 #include <KoPathPointMoveCommand.h>
 #include <KoShapeTransformCommand.h>
+#include <KoShapeGroupCommand.h>
 #include <KoToolBoxFactory.h>
 #include <KoParameterShape.h>
 #include <KoRulerController.h>
@@ -112,50 +112,47 @@
 #include <KoShapeRegistry.h>
 #include <KoImageCollection.h>
 #include <KoImageData.h>
-#include <KoShapeRegistry.h>
-#include <KoShapeFactoryBase.h>
 #include <KoProperties.h>
 #include <KoZoomController.h>
+#include <KoIcon.h>
+#include <KoFileDialog.h>
 
 // kde header
 #include <kaction.h>
 #include <kcolormimedata.h>
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kmessagebox.h>
 #include <kcomponentdata.h>
 #include <kactioncollection.h>
-#include <kxmlguifactory.h>
-#include <kicon.h>
 #include <kstatusbar.h>
-#include <kfiledialog.h>
 #include <kstandardaction.h>
-#include <kparts/partmanager.h>
-#include <KToggleAction>
-#include <KDebug>
+#include <ktoggleaction.h>
+#include <kdebug.h>
+#include <kservicetypetrader.h>
+#include <kmimetype.h>
 
 // qt header
-#include <QtGui/QIcon>
-#include <QtGui/QApplication>
-#include <QtGui/QClipboard>
-#include <QtGui/QPainter>
-#include <QtGui/QResizeEvent>
-#include <QtGui/QPixmap>
-#include <QtGui/QDropEvent>
-#include <QtGui/QGridLayout>
-#include <QtGui/QLabel>
-#include <QtCore/QTimer>
-#include <QtCore/QEvent>
-#include <QtGui/QPrinter>
-#include <QtGui/QImageReader>
+#include <QIcon>
+#include <QApplication>
+#include <QClipboard>
+#include <QPainter>
+#include <QResizeEvent>
+#include <QPixmap>
+#include <QDropEvent>
+#include <QGridLayout>
+#include <QLabel>
+#include <QTimer>
+#include <QEvent>
+#include <QPrinter>
+#include <QImageReader>
 
 #include <unistd.h>
 
 class KarbonView::Private
 {
 public:
-    Private(KarbonPart * p)
-            : part(p), canvas(0), canvasController(0), horizRuler(0), vertRuler(0)
+    Private(KarbonPart *part, KarbonDocument * doc)
+            : karbonPart(part), part(doc), canvas(0), canvasController(0), horizRuler(0), vertRuler(0)
             , colorBar(0), closePath(0), combinePath(0)
             , separatePath(0), reversePath(0), intersectPath(0), subtractPath(0)
             , unitePath(0), excludePath(0), pathSnapToGrid(0), configureAction(0)
@@ -166,7 +163,8 @@ public:
             , status(0), cursorCoords(0), smallPreview(0), zoomActionWidget(0)
     {}
 
-    KarbonPart * part;
+    KarbonPart * karbonPart;
+    KarbonDocument * part;
     KarbonCanvas * canvas;
     KoCanvasController * canvasController;
     KoRuler * horizRuler;
@@ -204,19 +202,16 @@ public:
     QWidget * zoomActionWidget; ///< zoom action widget
 };
 
-KarbonView::KarbonView(KarbonPart* p, QWidget* parent)
-        : KoView(p, parent), d(new Private(p))
+KarbonView::KarbonView(KarbonPart *karbonPart, KarbonDocument* doc, QWidget* parent)
+        : KoView(karbonPart, doc, parent), d(new Private(karbonPart, doc))
 {
-    setComponentData(KarbonFactory::componentData(), true);
+    setComponentData(KarbonFactory::componentData());
     setAcceptDrops(true);
 
-    if (!p->isReadWrite())
-        setXMLFile(QString::fromLatin1("karbon_readonly.rc"));
-    else
-        setXMLFile(QString::fromLatin1("karbon.rc"));
+    setXMLFile(QString::fromLatin1("karbon.rc"));
 
     const int viewMargin = 250;
-    d->canvas = new KarbonCanvas(p);
+    d->canvas = new KarbonCanvas(doc);
     d->canvas->setParent(this);
     d->canvas->setDocumentViewMargin(viewMargin);
     connect(d->canvas->shapeManager()->selection(), SIGNAL(selectionChanged()),
@@ -238,8 +233,8 @@ KarbonView::KarbonView(KarbonPart* p, QWidget* parent)
     d->status->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     d->status->setMinimumWidth(300);
     addStatusBarItem(d->status, 1);
-    connect(KoToolManager::instance(), SIGNAL(changedStatusText(const QString &)),
-            d->status, SLOT(setText(const QString &)));
+    connect(KoToolManager::instance(), SIGNAL(changedStatusText(QString)),
+            d->status, SLOT(setText(QString)));
     d->cursorCoords = new QLabel(QString(), this);
     d->cursorCoords->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     d->cursorCoords->setMinimumWidth(50);
@@ -248,7 +243,7 @@ KarbonView::KarbonView(KarbonPart* p, QWidget* parent)
     // TODO maybe the zoomHandler should be a member of the view and not the canvas.
     // set up the zoom controller
     KarbonZoomController * zoomController = new KarbonZoomController(d->canvasController, actionCollection(), this);
-    zoomController->setPageSize(d->part->document().pageSize());
+    zoomController->setPageSize(d->part->pageSize());
     d->zoomActionWidget = zoomController->zoomAction()->createWidget(statusBar());
     addStatusBarItem(d->zoomActionWidget, 0);
     zoomController->setZoomMode(KoZoomMode::ZOOM_PAGE);
@@ -265,52 +260,73 @@ KarbonView::KarbonView(KarbonPart* p, QWidget* parent)
 
     initActions();
 
+    // Load all plugins
+    KService::List offers = KServiceTypeTrader::self()->query(QString::fromLatin1("Karbon/ViewPlugin"),
+                                                              QString::fromLatin1("(Type == 'Service') and "
+                                                                                  "([X-Karbon-Version] == 28)"));
+    KService::List::ConstIterator iter;
+    for (iter = offers.constBegin(); iter != offers.constEnd(); ++iter) {
+
+        KService::Ptr service = *iter;
+
+        QString error;
+
+        KXMLGUIClient* plugin =
+                dynamic_cast<KXMLGUIClient*>(service->createInstance<QObject>(this, QVariantList(), &error));
+        if (plugin) {
+            insertChildClient(plugin);
+        } else {
+            kWarning() << "Fail to create an instance for " << service->name() << " " << error;
+        }
+    }
+
+
     unsigned int max = part()->maxRecentFiles();
     setNumberOfRecentFiles(max);
 
     // widgets:
     d->horizRuler = new KoRuler(this, Qt::Horizontal, d->canvas->viewConverter());
     d->horizRuler->setShowMousePosition(true);
-    d->horizRuler->setUnit(p->unit());
+    d->horizRuler->setUnit(doc->unit());
     d->horizRuler->setRightToLeft(false);
     d->horizRuler->setVisible(false);
     new KoRulerController(d->horizRuler, d->canvas->resourceManager());
 
-    connect(p, SIGNAL(unitChanged(const KoUnit&)), this, SLOT(updateUnit(const KoUnit&)));
+    connect(doc, SIGNAL(unitChanged(KoUnit)), this, SLOT(updateUnit(KoUnit)));
 
     d->vertRuler = new KoRuler(this, Qt::Vertical, d->canvas->viewConverter());
     d->vertRuler->setShowMousePosition(true);
-    d->vertRuler->setUnit(p->unit());
+    d->vertRuler->setUnit(doc->unit());
     d->vertRuler->setVisible(false);
 
-    connect(d->canvas, SIGNAL(documentOriginChanged(const QPoint &)), this, SLOT(pageOffsetChanged()));
+    connect(d->canvas, SIGNAL(documentOriginChanged(QPoint)), this, SLOT(pageOffsetChanged()));
     connect(d->canvasController->proxyObject, SIGNAL(canvasOffsetXChanged(int)), this, SLOT(pageOffsetChanged()));
     connect(d->canvasController->proxyObject, SIGNAL(canvasOffsetYChanged(int)), this, SLOT(pageOffsetChanged()));
-    connect(d->canvasController->proxyObject, SIGNAL(canvasMousePositionChanged(const QPoint &)),
-            this, SLOT(mousePositionChanged(const QPoint&)));
+    connect(d->canvasController->proxyObject, SIGNAL(canvasMousePositionChanged(QPoint)),
+            this, SLOT(mousePositionChanged(QPoint)));
     d->vertRuler->createGuideToolConnection(d->canvas);
     d->horizRuler->createGuideToolConnection(d->canvas);
 
     updateRuler();
 
     d->colorBar = new KarbonPaletteBarWidget(Qt::Horizontal, this);
-    connect(d->colorBar, SIGNAL(colorSelected(const KoColor&)), this, SLOT(applyPaletteColor(const KoColor&)));
+    connect(d->colorBar, SIGNAL(colorSelected(KoColor)), this, SLOT(applyPaletteColor(KoColor)));
     connect(d->canvas->shapeManager(), SIGNAL(selectionContentChanged()), d->colorBar, SLOT(updateDocumentColors()));
     connect(part(), SIGNAL(shapeCountChanged()), d->colorBar, SLOT(updateDocumentColors()));
 
-    if (shell()) {
+    if (mainWindow()) {
         // set the first layer active
-        d->canvasController->canvas()->shapeManager()->selection()->setActiveLayer(part()->document().layers().first());
+        d->canvasController->canvas()->shapeManager()->selection()->setActiveLayer(part()->layers().first());
 
         //Create Dockers
         createLayersTabDock();
 
         // set one whitespace as title to allow a one column toolbox
-        KoToolBoxFactory toolBoxFactory(d->canvasController, " ");
-        shell()->createDockWidget(&toolBoxFactory);
+        KoToolBoxFactory toolBoxFactory;
+        mainWindow()->createDockWidget(&toolBoxFactory);
 
-        connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QList<QWidget *> &)),
-                shell()->dockerManager(), SLOT(newOptionWidgets(const  QList<QWidget *> &)));
+        connect(canvasController, SIGNAL(toolOptionWidgetsChanged(QList<QWidget*>)),
+                mainWindow()->dockerManager(), SLOT(newOptionWidgets(QList<QWidget*>)));
 
         KoToolManager::instance()->requestToolActivation(d->canvasController);
 
@@ -329,6 +345,8 @@ KarbonView::KarbonView(KarbonPart* p, QWidget* parent)
     // layout:
     QGridLayout *layout = new QGridLayout();
     layout->setMargin(0);
+    layout->setSpacing(0);
+    layout->addWidget(d->horizRuler->tabChooser(), 0, 0);
     layout->addWidget(d->horizRuler, 0, 1);
     layout->addWidget(d->vertRuler, 1, 0);
     layout->addWidget(canvasController, 1, 1);
@@ -352,7 +370,7 @@ KarbonView::~KarbonView()
     delete d;
 }
 
-KarbonPart * KarbonView::part() const
+KarbonDocument * KarbonView::part() const
 {
     return d->part;
 }
@@ -401,22 +419,22 @@ void KarbonView::dropEvent(QDropEvent *e)
             return;
 
         if (d->canvas->resourceManager()->intResource(KoCanvasResourceManager::ActiveStyleType) == KoFlake::Foreground) {
-            QList<KoShapeBorderModel*> borders;
+            QList<KoShapeStrokeModel*> strokes;
             QList<KoShape*> selectedShapes = selection->selectedShapes();
             foreach(KoShape * shape, selectedShapes) {
-                KoLineBorder * border = dynamic_cast<KoLineBorder*>(shape->border());
-                KoLineBorder * newBorder = 0;
-                if (border) {
-                    newBorder = new KoLineBorder(*border);
-                    newBorder->setColor(color);
+                KoShapeStroke * stroke = dynamic_cast<KoShapeStroke*>(shape->stroke());
+                KoShapeStroke * newStroke = 0;
+                if (stroke) {
+                    newStroke = new KoShapeStroke(*stroke);
+                    newStroke->setColor(color);
                 } else {
-                    newBorder = new KoLineBorder(1.0, color);
+                    newStroke = new KoShapeStroke(1.0, color);
                 }
-                borders.append(newBorder);
+                strokes.append(newStroke);
             }
-            d->canvas->addCommand(new KoShapeBorderCommand(selectedShapes, borders, 0));
+            d->canvas->addCommand(new KoShapeStrokeCommand(selectedShapes, strokes, 0));
         } else {
-            KoColorBackground * fill = new KoColorBackground(color);
+            QSharedPointer<KoShapeBackground> fill(new KoColorBackground(color));
             d->canvas->addCommand(new KoShapeBackgroundCommand(selection->selectedShapes(), fill, 0));
         }
     }
@@ -437,14 +455,14 @@ void KarbonView::addImages(const QList<QImage> &imageList, const QPoint &insertA
         return;
     }
 
-    foreach(const QImage image, imageList) {
+    foreach(const QImage &image, imageList) {
 
         KoProperties params;
         QVariant v;
         v.setValue<QImage>(image);
         params.setProperty("qimage", v);
 
-        KoShape *shape = factory->createShape(&params, part()->document().resourceManager());
+        KoShape *shape = factory->createShape(&params, part()->resourceManager());
 
         if (!shape) {
             kWarning(30003) << "Could not create a shape from the image";
@@ -477,40 +495,37 @@ void KarbonView::fileImportGraphic()
     }
     filter.append(imageFilter);
 
-    QPointer<KFileDialog> dialog = new KFileDialog(KUrl(), "", 0);
-    dialog->setCaption(i18n("Choose Graphic to Add"));
-    dialog->setModal(true);
-    dialog->setMimeFilter(filter);
-    if (dialog->exec() != QDialog::Accepted) {
-        delete dialog;
-        return;
-    }
-    QString fname = dialog ? dialog->selectedFile() : QString();
-    QString currentMimeFilter = dialog ? dialog->currentMimeFilter() : QString();
-    delete dialog;
+    KoFileDialog dialog(0, KoFileDialog::OpenFile, "OpenDocument");
+    dialog.setCaption(i18n("Choose Graphic to Add"));
+    dialog.setMimeTypeFilters(imageFilter);
+    QString fname = dialog.url();
 
-    QMap<QString, KoDataCenterBase*> dataCenters = part()->document().dataCenterMap();
+    if (fname.isEmpty()) return;
 
-    KarbonPart importPart;
+    QMap<QString, KoDataCenterBase*> dataCenters = part()->dataCenterMap();
+
+    KarbonPart importPart(0);
+    KarbonDocument importDocument(&importPart);
+    importPart.setDocument(&importDocument);
+
     // use data centers of this document for importing
-    importPart.document().useExternalDataCenterMap(dataCenters);
+    importDocument.useExternalDataCenterMap(dataCenters);
 
     bool success = true;
 
     // check if we have an empty mime type (probably because the "All supported files"
     // filter was active)
-    if (currentMimeFilter.isEmpty()) {
-        // get mime type from file
-        KMimeType::Ptr mimeType = KMimeType::findByFileContent(fname);
-        if (mimeType) {
-            if (mimeType->is(nativeMimeType)) {
-                currentMimeFilter = nativeMimeType;
-            } else {
-                foreach(const QString &filter, imageFilter) {
-                    if (mimeType->is(filter)) {
-                        currentMimeFilter = filter;
-                        break;
-                    }
+    QString currentMimeFilter;
+    // get mime type from file
+    KMimeType::Ptr mimeType = KMimeType::findByFileContent(fname);
+    if (mimeType) {
+        if (mimeType->is(nativeMimeType)) {
+            currentMimeFilter = nativeMimeType;
+        } else {
+            foreach(const QString &filter, imageFilter) {
+                if (mimeType->is(filter)) {
+                    currentMimeFilter = filter;
+                    break;
                 }
             }
         }
@@ -529,8 +544,8 @@ void KarbonView::fileImportGraphic()
             return;
         }
 
-        KoShape *picture = factory->createDefaultShape(part()->document().resourceManager());
-        KoImageCollection *imageCollection = part()->document().resourceManager()->imageCollection();
+        KoShape *picture = factory->createDefaultShape(part()->resourceManager());
+        KoImageCollection *imageCollection = part()->resourceManager()->imageCollection();
         if (!picture || !imageCollection) {
             KMessageBox::error(0, i18n("Could not create image shape."), i18n("Import graphic"), 0);
             return;
@@ -558,22 +573,22 @@ void KarbonView::fileImportGraphic()
     // check if we are loading our native format
     if (nativeMimeType == currentMimeFilter) {
         // directly load the native format
-        success = importPart.loadNativeFormat(fname);
+        success = importDocument.loadNativeFormat(fname);
         if (!success) {
-            importPart.showLoadingErrorDialog();
+            importDocument.showLoadingErrorDialog();
         }
     } else {
         // use import filters to load the file
-        KoFilterManager man(&importPart);
+        KoFilterManager man(&importDocument);
         KoFilter::ConversionStatus status = KoFilter::OK;
         QString importedFile = man.importDocument(fname, QString(), status);
         if (status != KoFilter::OK) {
-            importPart.showLoadingErrorDialog();
+            importDocument.showLoadingErrorDialog();
             success = false;
         } else if (!importedFile.isEmpty()) {
-            success = importPart.loadNativeFormat(importedFile);
+            success = importDocument.loadNativeFormat(importedFile);
             if (!success) {
-                importPart.showLoadingErrorDialog();
+                importDocument.showLoadingErrorDialog();
             }
             // remove the temporary file created during format conversion
             unlink(QFile::encodeName(importedFile));
@@ -581,9 +596,9 @@ void KarbonView::fileImportGraphic()
     }
 
     if (success) {
-        QList<KoShape*> importedShapes = importPart.document().shapes();
+        QList<KoShape*> importedShapes = importDocument.shapes();
 
-        KarbonDocumentMergeCommand * cmd = new KarbonDocumentMergeCommand(part(), &importPart);
+        KarbonDocumentMergeCommand * cmd = new KarbonDocumentMergeCommand(part(), &importDocument);
         d->canvas->addCommand(cmd);
 
         foreach(KoShape * shape, importedShapes) {
@@ -604,7 +619,7 @@ void KarbonView::editSelectAll()
     if (! selection)
         return;
 
-    QList<KoShape*> shapes = part()->document().shapes();
+    QList<KoShape*> shapes = part()->shapes();
     kDebug(38000) << "shapes.size() =" << shapes.size();
 
     foreach(KoShape* shape, shapes) {
@@ -830,8 +845,31 @@ void KarbonView::separatePath()
         }
     }
 
-    if (paths.size())
-        d->canvas->addCommand(new KoPathSeparateCommand(part(), paths));
+    if (!paths.size()) {
+        return;
+    }
+
+    KUndo2Command *cmd = new KUndo2Command;
+    cmd->setText(i18nc("(qtundo-format)", "Separate paths"));
+
+    foreach(KoPathShape* p, paths) {
+        QList<KoPathShape*> separatedPaths;
+        QList<KoShape*> newShapes;
+        if (p->separate(separatedPaths)) {
+            foreach(KoPathShape *subPath, separatedPaths) {
+                new KoShapeCreateCommand(part(), subPath, cmd);
+                newShapes << subPath;
+            }
+            // make sure we put the new subpaths into the parent
+            // of the original path
+            KoShapeGroup *parentGroup = dynamic_cast<KoShapeGroup*>(p->parent());
+            if (parentGroup) {
+                new KoShapeGroupCommand(parentGroup, newShapes, cmd);
+            }
+            new KoShapeDeleteCommand(part(), p, cmd);
+        }
+    }
+    d->canvas->addCommand(cmd);
 }
 
 void KarbonView::reversePath()
@@ -977,7 +1015,7 @@ void KarbonView::zoomDrawing()
     if (! zoomHandler)
         return;
 
-    QRectF bbox = d->part->document().contentRect();
+    QRectF bbox = d->part->contentRect();
     if (bbox.isNull())
         return;
 
@@ -994,13 +1032,12 @@ void KarbonView::initActions()
     actionCollection()->addAction("view_mode", d->viewAction);
     connect(d->viewAction, SIGNAL(toggled(bool)), this, SLOT(viewModeChanged(bool)));
 
-    d->showPageMargins  = new KToggleAction(KIcon("view_margins"), i18n("Show Page Margins"), this);
+    d->showPageMargins  = new KToggleAction(i18n("Show Page Margins"), this);
     actionCollection()->addAction("view_show_margins", d->showPageMargins);
     connect(d->showPageMargins, SIGNAL(toggled(bool)), SLOT(togglePageMargins(bool)));
-    d->showPageMargins->setCheckedState(KGuiItem(i18n("Hide Page Margins")));
 
     // No need for the other actions in read-only (embedded) mode
-    if (!shell())
+    if (!mainWindow())
         return;
 
     // edit ----->
@@ -1017,58 +1054,57 @@ void KarbonView::initActions()
     actionCollection()->addAction("file_import", actionImportGraphic);
     connect(actionImportGraphic, SIGNAL(triggered()), this, SLOT(fileImportGraphic()));
 
-    d->deleteSelectionAction  = new KAction(KIcon("edit-delete"), i18n("D&elete"), this);
+    d->deleteSelectionAction  = new KAction(koIcon("edit-delete"), i18n("D&elete"), this);
     actionCollection()->addAction("edit_delete", d->deleteSelectionAction);
     d->deleteSelectionAction->setShortcut(QKeySequence("Del"));
     connect(d->deleteSelectionAction, SIGNAL(triggered()), this, SLOT(editDeleteSelection()));
     connect(d->canvas->toolProxy(), SIGNAL(selectionChanged(bool)), d->deleteSelectionAction, SLOT(setEnabled(bool)));
 
-    KAction *actionEditGuides = new KAction(i18n("Edit Guides"), this);
+    KAction *actionEditGuides = new KAction(koIcon("edit-guides"), i18n("Edit Guides"), this);
     actionCollection()->addAction("edit_guides", actionEditGuides);
     connect(actionEditGuides, SIGNAL(triggered()), this, SLOT(editGuides()));
     // edit <-----
 
     // object ----->
-    KAction *actionDuplicate  = new KAction(KIcon("duplicate"), i18nc("Duplicate selection", "&Duplicate"), this);
+    KAction *actionDuplicate  = new KAction(i18nc("Duplicate selection", "&Duplicate"), this);
     actionCollection()->addAction("object_duplicate", actionDuplicate);
     actionDuplicate->setShortcut(QKeySequence("Ctrl+D"));
     connect(actionDuplicate, SIGNAL(triggered()), this, SLOT(selectionDuplicate()));
 
-    KAction *actionDistributeHorizontalCenter  = new KAction(i18n("Distribute Center (Horizontal)"), this);
+    KAction *actionDistributeHorizontalCenter  = new KAction(koIcon("distribute-horizontal-center"), i18n("Distribute Center (Horizontal)"), this);
     actionCollection()->addAction("object_distribute_horizontal_center", actionDistributeHorizontalCenter);
     connect(actionDistributeHorizontalCenter, SIGNAL(triggered()), this, SLOT(selectionDistributeHorizontalCenter()));
 
-    KAction *actionDistributeHorizontalGap  = new KAction(i18n("Distribute Gaps (Horizontal)"), this);
+    KAction *actionDistributeHorizontalGap  = new KAction(koIcon("distribute-horizontal-equal"), i18n("Distribute Gaps (Horizontal)"), this);
     actionCollection()->addAction("object_distribute_horizontal_gap", actionDistributeHorizontalGap);
     connect(actionDistributeHorizontalGap, SIGNAL(triggered()), this, SLOT(selectionDistributeHorizontalGap()));
 
-    KAction *actionDistributeLeft  = new KAction(i18n("Distribute Left Borders"), this);
+    KAction *actionDistributeLeft  = new KAction(koIcon("distribute-horizontal-left"), i18n("Distribute Left Borders"), this);
     actionCollection()->addAction("object_distribute_horizontal_left", actionDistributeLeft);
     connect(actionDistributeLeft, SIGNAL(triggered()), this, SLOT(selectionDistributeHorizontalLeft()));
 
-    KAction *actionDistributeRight  = new KAction(i18n("Distribute Right Borders"), this);
+    KAction *actionDistributeRight  = new KAction(koIcon("distribute-horizontal-right"), i18n("Distribute Right Borders"), this);
     actionCollection()->addAction("object_distribute_horizontal_right", actionDistributeRight);
     connect(actionDistributeRight, SIGNAL(triggered()), this, SLOT(selectionDistributeHorizontalRight()));
 
-    KAction *actionDistributeVerticalCenter  = new KAction(i18n("Distribute Center (Vertical)"), this);
+    KAction *actionDistributeVerticalCenter  = new KAction(koIcon("distribute-vertical-center"), i18n("Distribute Center (Vertical)"), this);
     actionCollection()->addAction("object_distribute_vertical_center", actionDistributeVerticalCenter);
     connect(actionDistributeVerticalCenter, SIGNAL(triggered()), this, SLOT(selectionDistributeVerticalCenter()));
 
-    KAction *actionDistributeVerticalGap  = new KAction(i18n("Distribute Gaps (Vertical)"), this);
+    KAction *actionDistributeVerticalGap  = new KAction(koIcon("distribute-vertical-equal"), i18n("Distribute Gaps (Vertical)"), this);
     actionCollection()->addAction("object_distribute_vertical_gap", actionDistributeVerticalGap);
     connect(actionDistributeVerticalGap, SIGNAL(triggered()), this, SLOT(selectionDistributeVerticalGap()));
 
-    KAction *actionDistributeBottom  = new KAction(i18n("Distribute Bottom Borders"), this);
+    KAction *actionDistributeBottom  = new KAction(koIcon("distribute-vertical-bottom"), i18n("Distribute Bottom Borders"), this);
     actionCollection()->addAction("object_distribute_vertical_bottom", actionDistributeBottom);
     connect(actionDistributeBottom, SIGNAL(triggered()), this, SLOT(selectionDistributeVerticalBottom()));
 
-    KAction *actionDistributeTop  = new KAction(i18n("Distribute Top Borders"), this);
+    KAction *actionDistributeTop  = new KAction(koIcon("distribute-vertical-top"), i18n("Distribute Top Borders"), this);
     actionCollection()->addAction("object_distribute_vertical_top", actionDistributeTop);
     connect(actionDistributeTop, SIGNAL(triggered()), this, SLOT(selectionDistributeVerticalTop()));
 
     d->showRulerAction  = new KToggleAction(i18n("Show Rulers"), this);
     actionCollection()->addAction("view_show_ruler", d->showRulerAction);
-    d->showRulerAction->setCheckedState(KGuiItem(i18n("Hide Rulers")));
     d->showRulerAction->setToolTip(i18n("Shows or hides rulers"));
     d->showRulerAction->setChecked(false);
     connect(d->showRulerAction, SIGNAL(triggered()), this, SLOT(showRuler()));
@@ -1082,7 +1118,6 @@ void KarbonView::initActions()
 
     d->showPaletteAction = new KToggleAction(i18n("Show Color Palette"), this);
     actionCollection()->addAction("view_show_palette", d->showPaletteAction);
-    d->showPaletteAction->setCheckedState(KGuiItem(i18n("Hide Color Palette")));
     d->showPaletteAction->setToolTip(i18n("Show or hide color palette"));
     d->showPaletteAction->setChecked(true);
     connect(d->showPaletteAction, SIGNAL(triggered()), this, SLOT(showPalette()));
@@ -1101,19 +1136,19 @@ void KarbonView::initActions()
         action->setShortcut(QKeySequence("Ctrl+Shift+G"));
     }
 
-    d->clipObjects  = new KAction(KIcon("clip"), i18n("&Clip Object"), this);
+    d->clipObjects  = new KAction(i18n("&Clip Object"), this);
     actionCollection()->addAction("object_clip", d->clipObjects );
     connect(d->clipObjects, SIGNAL(triggered()), this, SLOT(clipObjects()));
 
-    d->unclipObjects  = new KAction(KIcon("unclip"), i18n("&Unclip Objects"), this);
+    d->unclipObjects  = new KAction(i18n("&Unclip Objects"), this);
     actionCollection()->addAction("object_unclip", d->unclipObjects );
     connect(d->unclipObjects, SIGNAL(triggered()), this, SLOT(unclipObjects()));
 
-    d->flipVertical = new KAction(KIcon("object-flip-vertical"), i18n("Mirror Vertically"), this);
+    d->flipVertical = new KAction(koIcon("object-flip-vertical"), i18n("Mirror Vertically"), this);
     actionCollection()->addAction("object_flip_vertical", d->flipVertical);
     connect(d->flipVertical, SIGNAL(triggered()), this, SLOT(flipVertical()));
 
-    d->flipHorizontal = new KAction(KIcon("object-flip-horizontal"), i18n("Mirror Horizontally"), this);
+    d->flipHorizontal = new KAction(koIcon("object-flip-horizontal"), i18n("Mirror Horizontally"), this);
     actionCollection()->addAction("object_flip_horizontal", d->flipHorizontal);
     connect(d->flipHorizontal, SIGNAL(triggered()), this, SLOT(flipHorizontal()));
 
@@ -1175,20 +1210,20 @@ void KarbonView::initActions()
 
     // path <-----
 
-    d->configureAction  = new KAction(KIcon("configure"), i18n("Configure Karbon..."), this);
+    d->configureAction  = new KAction(koIcon("configure"), i18n("Configure Karbon..."), this);
     actionCollection()->addAction("configure", d->configureAction);
     connect(d->configureAction, SIGNAL(triggered()), this, SLOT(configure()));
 
     KAction *actionPageLayout  = new KAction(i18n("Page &Layout..."), this);
     actionCollection()->addAction("page_layout", actionPageLayout);
-    connect(actionPageLayout, SIGNAL(triggered()), this, SLOT(pageLayout()));
+    connect(actionPageLayout, SIGNAL(triggered()), this, SLOT(configurePageLayout()));
 
     // view ---->
-    KAction * zoomSelection = new KAction(KIcon("zoom_selection"), i18n("Zoom to Selection"), this);
+    KAction * zoomSelection = new KAction(koIcon("zoom-select"), i18n("Zoom to Selection"), this);
     actionCollection()->addAction("view_zoom_selection", zoomSelection);
     connect(zoomSelection, SIGNAL(triggered()), this, SLOT(zoomSelection()));
 
-    KAction * zoomDrawing = new KAction(KIcon("zoom_drawing"), i18n("Zoom to Drawing"), this);
+    KAction * zoomDrawing = new KAction(koIcon("zoom-draw"), i18n("Zoom to Drawing"), this);
     actionCollection()->addAction("view_zoom_drawing", zoomDrawing);
     connect(zoomDrawing, SIGNAL(triggered()), this, SLOT(zoomDrawing()));
     // view <-----
@@ -1221,13 +1256,13 @@ void KarbonView::reorganizeGUI()
 
 void KarbonView::setNumberOfRecentFiles(unsigned int number)
 {
-    if (shell())     // 0L when embedded into konq !
-        shell()->setMaxRecentItems(number);
+    if (mainWindow())     // 0L when embedded into konq !
+        mainWindow()->setMaxRecentItems(number);
 }
 
 void KarbonView::showRuler()
 {
-    if(!shell())
+    if(!mainWindow())
         return;
 
     const bool showRuler = d->showRulerAction->isChecked();
@@ -1259,8 +1294,8 @@ void KarbonView::pageOffsetChanged()
 
 void KarbonView::updateRuler()
 {
-    d->horizRuler->setRulerLength(part()->document().pageSize().width());
-    d->vertRuler->setRulerLength(part()->document().pageSize().height());
+    d->horizRuler->setRulerLength(part()->pageSize().width());
+    d->vertRuler->setRulerLength(part()->pageSize().height());
 }
 
 void KarbonView::showGuides()
@@ -1282,7 +1317,7 @@ void KarbonView::snapToGrid()
 
 void KarbonView::showPalette()
 {
-    if(!shell())
+    if(!mainWindow())
         return;
 
     const bool showPalette = d->showPaletteAction->isChecked();
@@ -1305,12 +1340,13 @@ void KarbonView::configure()
     d->canvas->update();
 }
 
-void KarbonView::pageLayout()
+void KarbonView::configurePageLayout()
 {
     QPointer<KoPageLayoutDialog> dlg = new KoPageLayoutDialog(this, part()->pageLayout());
     dlg->showPageSpread(false);
     dlg->showTextDirection(false);
     dlg->setPageSpread(false);
+    dlg->setUnit(d->part->unit());
 
     if (dlg->exec() == QDialog::Accepted) {
         if (dlg) {
@@ -1322,7 +1358,7 @@ void KarbonView::pageLayout()
 
 void KarbonView::selectionChanged()
 {
-    if (!shell())
+    if (!mainWindow())
         return;
     KoSelection *selection = d->canvas->shapeManager()->selection();
     QList<KoShape*> selectedShapes = selection->selectedShapes(KoFlake::FullSelection);
@@ -1392,18 +1428,16 @@ void KarbonView::setCursor(const QCursor &c)
 
 void KarbonView::createLayersTabDock()
 {
-    if (shell())
+    if (mainWindow())
     {
         KarbonLayerDockerFactory layerFactory;
-        KarbonLayerDocker * layerDocker = qobject_cast<KarbonLayerDocker*>(shell()->createDockWidget(&layerFactory));
-        layerDocker->setPart(d->part);
+        KarbonLayerDocker * layerDocker = qobject_cast<KarbonLayerDocker*>(mainWindow()->createDockWidget(&layerFactory));
+        layerDocker->setCanvas(d->canvas);
         connect(d->canvas->shapeManager(), SIGNAL(selectionChanged()),
                 layerDocker, SLOT(updateView()));
         connect(d->canvas->shapeManager(), SIGNAL(selectionContentChanged()),
                 layerDocker, SLOT(updateView()));
         connect(d->part, SIGNAL(shapeCountChanged()), layerDocker, SLOT(updateView()));
-        connect(shell()->partManager(), SIGNAL(activePartChanged(KParts::Part *)),
-                layerDocker, SLOT(setPart(KParts::Part *)));
     }
 }
 
@@ -1441,7 +1475,12 @@ QList<KoPathShape*> KarbonView::selectedPathShapes()
 
 KoPrintJob * KarbonView::createPrintJob()
 {
-    return new KarbonPrintJob(this);
+    return new KarbonPrintJob(this, KarbonPrintJob::PrintToPaper);
+}
+
+KoPrintJob * KarbonView::createPdfPrintJob()
+{
+    return new KarbonPrintJob(this, KarbonPrintJob::PrintToPdf);
 }
 
 void KarbonView::applyFillToSelection()
@@ -1461,7 +1500,7 @@ void KarbonView::applyStrokeToSelection()
         return;
 
     KoShape * shape = selection->firstSelectedShape();
-    d->canvas->addCommand(new KoShapeBorderCommand(selection->selectedShapes(), shape->border()));
+    d->canvas->addCommand(new KoShapeStrokeCommand(selection->selectedShapes(), shape->stroke()));
 }
 
 void KarbonView::applyPaletteColor(const KoColor &color)
@@ -1472,22 +1511,22 @@ void KarbonView::applyPaletteColor(const KoColor &color)
 
     int style = d->canvas->resourceManager()->intResource(KoCanvasResourceManager::ActiveStyleType);
     if (style == KoFlake::Foreground) {
-        QList<KoShapeBorderModel*> newStrokes;
+        QList<KoShapeStrokeModel*> newStrokes;
         foreach(KoShape *shape, selection->selectedShapes()) {
-            KoLineBorder *stroke = dynamic_cast<KoLineBorder*>(shape->border());
+            KoShapeStroke *stroke = dynamic_cast<KoShapeStroke*>(shape->stroke());
             if (stroke) {
-                // preserve border properties
-                KoLineBorder *newStroke = new KoLineBorder(*stroke);
+                // preserve stroke properties
+                KoShapeStroke *newStroke = new KoShapeStroke(*stroke);
                 newStroke->setColor(color.toQColor());
                 newStrokes << newStroke;
             } else {
-                newStrokes << new KoLineBorder(1.0, color.toQColor());
+                newStrokes << new KoShapeStroke(1.0, color.toQColor());
             }
         }
-        d->canvas->addCommand(new KoShapeBorderCommand(selection->selectedShapes(), newStrokes));
+        d->canvas->addCommand(new KoShapeStrokeCommand(selection->selectedShapes(), newStrokes));
         d->canvas->resourceManager()->setForegroundColor(color);
     } else {
-        KoShapeBackground *fill = new KoColorBackground(color.toQColor());
+        QSharedPointer<KoShapeBackground> fill(new KoColorBackground(color.toQColor()));
         d->canvas->addCommand(new KoShapeBackgroundCommand(selection->selectedShapes(), fill));
         d->canvas->resourceManager()->setBackgroundColor(color);
     }

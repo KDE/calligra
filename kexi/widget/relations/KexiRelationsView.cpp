@@ -28,20 +28,21 @@
 
 #include <kcombobox.h>
 #include <klocale.h>
-#include <KDebug>
-#include <kiconloader.h>
+#include <kdebug.h>
 #include <kpushbutton.h>
-#include <KMenu>
-#include <KDialog>
+#include <kmenu.h>
+#include <kdialog.h>
 
-#include <kexidb/connection.h>
-#include <kexidb/utils.h>
+#include <db/connection.h>
+#include <db/utils.h>
+
+#include <KoIcon.h>
+
 #include <kexiutils/utils.h>
 
 #include <kexiproject.h>
 #include <KexiMainWindowIface.h>
 #include "KexiRelationsScrollArea.h"
-#include "KexiRelationsView.h"
 #include "KexiRelationsConnection.h"
 
 //! @internal
@@ -120,22 +121,22 @@ KexiRelationsView::KexiRelationsView(QWidget *parent)
     d->areaPopup = new KMenu(this);
     d->areaPopup->setObjectName("areaPopup");
 
-    d->appendSelectedFieldAction = new KAction(KIcon("add_field"), i18n("&Append Field"), this);
+    d->appendSelectedFieldAction = new KAction(koIcon("add_field"), i18n("&Append Field"), this);
     d->appendSelectedFieldAction->setObjectName("relationsview_appendField");
     connect(d->appendSelectedFieldAction, SIGNAL(triggered()),
             this, SLOT(appendSelectedFields()));
 
-    d->appendSelectedFieldsAction = new KAction(KIcon("add_field"), i18n("&Append Fields"), this);
+    d->appendSelectedFieldsAction = new KAction(koIcon("add_field"), i18n("&Append Fields"), this);
     d->appendSelectedFieldsAction->setObjectName("relationsview_appendFields");
     connect(d->appendSelectedFieldsAction, SIGNAL(triggered()),
             this, SLOT(appendSelectedFields()));
 
-    d->openSelectedTableAction = new KAction(KIcon("document-open"), i18n("&Open Table"), this);
+    d->openSelectedTableAction = new KAction(koIcon("document-open"), i18n("&Open Table"), this);
     d->openSelectedTableAction->setObjectName("relationsview_openTable");
     connect(d->openSelectedTableAction, SIGNAL(triggered()),
             this, SLOT(openSelectedTable()));
 
-    d->designSelectedTableAction = new KAction(KIcon("document-properties"), i18n("&Design Table"), this);
+    d->designSelectedTableAction = new KAction(koIcon("document-properties"), i18n("&Design Table"), this);
     connect(d->designSelectedTableAction, SIGNAL(triggered()),
             this, SLOT(designSelectedTable()));
     d->designSelectedTableAction->setObjectName("relationsview_designTable");
@@ -148,10 +149,10 @@ KexiRelationsView::KexiRelationsView(QWidget *parent)
             this, SLOT(connectionViewGotFocus()));
     connect(d->scrollArea, SIGNAL(emptyAreaGotFocus()),
             this, SLOT(emptyAreaGotFocus()));
-    connect(d->scrollArea, SIGNAL(tableContextMenuRequest(const QPoint&)),
-            this, SLOT(tableContextMenuRequest(const QPoint&)));
-    connect(d->scrollArea, SIGNAL(connectionContextMenuRequest(const QPoint&)),
-            this, SLOT(connectionContextMenuRequest(const QPoint&)));
+    connect(d->scrollArea, SIGNAL(tableContextMenuRequest(QPoint)),
+            this, SLOT(tableContextMenuRequest(QPoint)));
+    connect(d->scrollArea, SIGNAL(connectionContextMenuRequest(QPoint)),
+            this, SLOT(connectionContextMenuRequest(QPoint)));
     connect(d->scrollArea, SIGNAL(tableHidden(KexiDB::TableSchema&)),
             this, SLOT(slotTableHidden(KexiDB::TableSchema&)));
     connect(d->scrollArea, SIGNAL(tablePositionChanged(KexiRelationsTableContainer*)),
@@ -159,14 +160,13 @@ KexiRelationsView::KexiRelationsView(QWidget *parent)
     connect(d->scrollArea, SIGNAL(aboutConnectionRemove(KexiRelationsConnection*)),
             this, SIGNAL(aboutConnectionRemove(KexiRelationsConnection*)));
 
+    //! @todo
 #if 0
     if (!embedd) {
         /*todo  setContextHelp(i18n("Relations"), i18n("To create a relationship simply drag the source field onto the target field. "
               "An arrowhead is used to show which table is the parent (master) and which table is the child (slave) in the relationship."));*/
     }
 #endif
-// else
-//js: while embedding means read-only?  d->scrollArea->setReadOnly(true);
 
 #ifdef TESTING_KexiRelationWidget
     for (int i = 0;i < (int)d->db->tableNames().count();i++)
@@ -216,8 +216,8 @@ KexiRelationsView::addTable(KexiDB::TableSchema *t, const QRect &rect)
         kDebug() << "adding table" << t->name();
         if (!c)
             return;
-        connect(c, SIGNAL(fieldsDoubleClicked(KexiDB::TableOrQuerySchema&, const QStringList&)),
-                this, SIGNAL(appendFields(KexiDB::TableOrQuerySchema&, const QStringList&)));
+        connect(c, SIGNAL(fieldsDoubleClicked(KexiDB::TableOrQuerySchema&,QStringList)),
+                this, SIGNAL(appendFields(KexiDB::TableOrQuerySchema&,QStringList)));
     }
 
     const QString tname = t->name().toLower();
@@ -263,13 +263,6 @@ KexiRelationsView::addTable(const QString& t)
 
 void KexiRelationsView::tableViewGotFocus()
 {
-// if (d->scrollArea->focusedTableContainer == sender())
-//  return;
-// kDebug() << "GOT FOCUS!";
-// clearSelection();
-// if (d->focusedTableContainer)
-//  d->focusedTableContainer->unsetFocus();
-// d->focusedTableContainer = (KexiRelationsTableContainer*)sender();
     invalidateActions();
 }
 
@@ -298,7 +291,7 @@ void KexiRelationsView::connectionContextMenuRequest(const QPoint& pos)
 void KexiRelationsView::emptyAreaContextMenuRequest(const QPoint& /*pos*/)
 {
     invalidateActions();
-    //TODO
+    //! @todo
 }
 
 void KexiRelationsView::invalidateActions()
@@ -380,7 +373,7 @@ void KexiRelationsView::aboutToShowPopupMenu()
     if (currentTableContainer /*&& currentTableContainer->schema()->table()*/) {
         /*! @todo what about query? */
         d->tableQueryPopup->clear();
-        d->tableQueryPopup->addTitle(KIcon("table"),
+        d->tableQueryPopup->addTitle(koIcon("table"),
                                      QString(d->scrollArea->focusedTableContainer()->schema()->name()) + " : " + i18n("Table"));
         QStringList selectedFieldNames(currentTableContainer->selectedFieldNames());
         if (currentTableContainer && !selectedFieldNames.isEmpty()) {

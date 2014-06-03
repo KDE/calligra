@@ -23,7 +23,7 @@
 #ifndef KARBONCURSOR_H
 #define KARBONCURSOR_H
 
-#include <qcursor.h>
+#include <QCursor>
 #include <karboncommon_export.h>
 
 /**

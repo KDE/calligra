@@ -28,8 +28,16 @@
     <!--
         The "export" collection provides scripts to export content from Plan.
         //-->
-<!--    <collection name="export" text="Export" comment="Export busy info">
-    </collection>-->
+    <collection name="export" text="Export" comment="Export content">
+        <script text="To csv" comment="Export data as comma separated values"
+               name="pyexporttocsv"
+               interpreter="python"
+               file="extensions/plan2csvexport.py" />
+        <script text="To ods" comment="Export data to Open Spreadsheet document"
+               name="pyexporttoods"
+               interpreter="python"
+               file="extensions/plan2odsexport.py" />
+               </collection>
     
     <!--
         The "samples" collection provides misc example scripts to demonstrate

@@ -43,7 +43,7 @@ class KFORMEDITOR_EXPORT TabStopDialog : public KDialog
     Q_OBJECT
 
 public:
-    TabStopDialog(QWidget *parent);
+    explicit TabStopDialog(QWidget *parent);
     virtual ~TabStopDialog();
 
     bool autoTabStops() const;
@@ -59,9 +59,9 @@ protected slots:
     void slotSelectionChanged();
 
 protected:
-    WidgetTreeWidget *m_widgetTree;
-    KPushButton *m_btnUp, *m_btnDown;
-    QCheckBox *m_check;
+
+    class Private;
+    Private* const d;
 };
 
 }

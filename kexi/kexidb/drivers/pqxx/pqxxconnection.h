@@ -20,13 +20,10 @@
 #ifndef PQXXCONNECTION_H
 #define PQXXCONNECTION_H
 
-#include <qstringlist.h>
+#include <QStringList>
 
-#include <kexidb/connection.h>
+#include <db/connection.h>
 #include "pqxxcursor.h"
-
-
-
 
 namespace KexiDB
 {
@@ -72,16 +69,16 @@ protected:
     virtual bool drv_executeSQL(const QString& statement);
     virtual quint64 drv_lastInsertRowID();
 
-//TODO: move this somewhere to low level class (MIGRATION?)
+    //! @todo move this somewhere to low level class (MIGRATION?)
     virtual bool drv_getTablesList(QStringList &list);
-//TODO: move this somewhere to low level class (MIGRATION?)
+    //! @todo move this somewhere to low level class (MIGRATION?)
     virtual bool drv_containsTable(const QString &tableName);
 
     virtual TransactionData* drv_beginTransaction();
     virtual bool drv_commitTransaction(TransactionData *);
     virtual bool drv_rollbackTransaction(TransactionData *);
 
-    //Error reporting
+    //! Error reporting
     virtual int serverResult();
     virtual QString serverResultName();
     virtual void drv_clearServerResult();
@@ -90,11 +87,9 @@ protected:
     pqxxSqlConnectionInternal *d;
 private:
     QString escapeName(const QString &tn) const;
-    //   pqxx::transaction_base* m_trans;
+
     //! temporary solution for executeSQL()...
     pqxxTransactionData *m_trans;
-
-
 
     friend class pqxxSqlDriver;
     friend class pqxxSqlCursor;

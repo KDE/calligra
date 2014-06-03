@@ -20,7 +20,7 @@
 #ifndef KEXIDATASOURCECOMBOBOX_H
 #define KEXIDATASOURCECOMBOBOX_H
 
-#include <KComboBox>
+#include <kcombobox.h>
 #include <kexi_export.h>
 
 class KexiProject;
@@ -38,7 +38,7 @@ class KEXIEXTWIDGETS_EXPORT KexiDataSourceComboBox : public KComboBox
     Q_OBJECT
 
 public:
-    KexiDataSourceComboBox(QWidget *parent = 0);
+    explicit KexiDataSourceComboBox(QWidget *parent = 0);
     virtual ~KexiDataSourceComboBox();
 
     //! \return global project that is used to retrieve schema informationm for this combo box.

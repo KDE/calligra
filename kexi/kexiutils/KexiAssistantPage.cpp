@@ -19,18 +19,22 @@
 
 #include "KexiAssistantPage.h"
 
+#include "utils.h"
 #include "KexiTitleLabel.h"
 #include "KexiLinkWidget.h"
+#include "KexiLinkButton.h"
 
-#include <KAcceleratorManager>
-#include <KStandardGuiItem>
-#include <KLocale>
+#include <KoIcon.h>
+
+#include <kacceleratormanager.h>
+#include <kstandardguiitem.h>
+#include <klocale.h>
 
 #include <QGridLayout>
 #include <QPointer>
 #include <QEvent>
 
-#include <KDebug>
+#include <kdebug.h>
 
 class KexiAssistantPage::Private {
 public:    
@@ -42,10 +46,11 @@ public:
     QColor linkColor() const;
     KexiAssistantPage * const q;
     QGridLayout* mainLyr;
+    KexiTitleLabel* titleLabel;
     QLabel* descriptionLabel;
     KexiLinkWidget* backButton;
     KexiLinkWidget* nextButton;
-    KexiLinkWidget* cancelButton;
+    KexiLinkButton* cancelButton;
     QPointer<QWidget> focusWidget;
 };
 
@@ -62,7 +67,7 @@ void KexiAssistantPage::Private::setButtonVisible(KexiLinkWidget** button,
             if (back) {
                 *button = new KexiLinkWidget(
                     QLatin1String("KexiAssistantPage:back"),
-                    KStandardGuiItem::back().text().replace('&', ""), q);
+                    KStandardGuiItem::back().plainText(), q);
                 (*button)->setFormat(
                     i18nc("Back button arrow: back button in assistant (wizard)", "‹ %L"));
             }
@@ -108,30 +113,18 @@ KexiAssistantPage::KexiAssistantPage(const QString& title, const QString& descri
     d->mainLyr->setContentsMargins(0, 0, 0, 0);
     d->mainLyr->setColumnStretch(1, 1);
     d->mainLyr->setRowStretch(2, 1);
-    KexiTitleLabel* titleLabel = new KexiTitleLabel(title);
-    d->mainLyr->addWidget(titleLabel, 0, 1, Qt::AlignTop);
+    d->titleLabel = new KexiTitleLabel(title);
+    d->mainLyr->addWidget(d->titleLabel, 0, 1, Qt::AlignTop);
     d->descriptionLabel = new QLabel(description);
     int space = d->descriptionLabel->fontMetrics().height();
     d->descriptionLabel->setContentsMargins(2, 0, 0, space);
     d->descriptionLabel->setWordWrap(true);
     d->mainLyr->addWidget(d->descriptionLabel, 1, 1, Qt::AlignTop);
-    /*m_backButton = new KPushButton(KStandardGuiItem::back());
-    m_backButton->setFlat(true);
-    m_mainLyr->addWidget(m_backButton, 1, 0);*/
-    /*m_nextButton = new KPushButton(KStandardGuiItem::forward());
-    m_nextButton->setFlat(true);
-    m_nextButton->setContentsMargins(space, 0, 0, 0);
-    m_mainLyr->addWidget(m_nextButton, 1, 2);*/
-    //KAcceleratorManager::manage(this);
     
-    d->cancelButton = new KexiLinkWidget(
-        QLatin1String("KexiAssistantPage:cancel"),
-        KStandardGuiItem::cancel().text().replace('&', ""),
-        this);
-    d->cancelButton->setContentsMargins(0, 0,
-        d->cancelButton->fontMetrics().width(QString::fromUtf8(" ›")), 0);
-    connect(d->cancelButton, SIGNAL(linkActivated(QString)),
-            this, SLOT(slotLinkActivated(QString)));
+    d->cancelButton = new KexiLinkButton(koIcon("close"));
+    d->cancelButton->setToolTip(KStandardGuiItem::cancel().plainText());
+    d->cancelButton->setUsesForegroundColor(true);
+    connect(d->cancelButton, SIGNAL(clicked()), this, SLOT(slotCancel()));
     d->mainLyr->addWidget(d->cancelButton, 0, 2, Qt::AlignTop|Qt::AlignRight);
 }
 
@@ -158,7 +151,7 @@ void KexiAssistantPage::setNextButtonVisible(bool set)
 void KexiAssistantPage::setContents(QWidget* widget)
 {
     widget->setContentsMargins(0, 0, 0, 0);
-    d->mainLyr->addWidget(widget, 2, 1);
+    d->mainLyr->addWidget(widget, 2, 1, 2, 2);
 }
 
 void KexiAssistantPage::setContents(QLayout* layout)
@@ -175,10 +168,13 @@ void KexiAssistantPage::slotLinkActivated(const QString& link)
     else if (d->nextButton && link == d->nextButton->link()) {
         next();
     }
-    else if (link == d->cancelButton->link()) {
-        emit cancelled(this);
-        if (parentWidget())
-            parentWidget()->deleteLater();
+}
+
+void KexiAssistantPage::slotCancel()
+{
+    emit cancelled(this);
+    if (parentWidget()) {
+        parentWidget()->deleteLater();
     }
 }
 
@@ -218,6 +214,16 @@ QWidget* KexiAssistantPage::focusWidget() const
 void KexiAssistantPage::setFocusWidget(QWidget* widget)
 {
     d->focusWidget = widget;
+}
+
+QString KexiAssistantPage::title() const
+{
+    return d->titleLabel->text();
+}
+
+QString KexiAssistantPage::description() const
+{
+    return d->descriptionLabel->text();
 }
 
 #include "KexiAssistantPage.moc"

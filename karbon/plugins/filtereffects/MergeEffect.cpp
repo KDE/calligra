@@ -21,9 +21,9 @@
 #include "KoViewConverter.h"
 #include "KoXmlWriter.h"
 #include "KoXmlReader.h"
-#include <KLocale>
-#include <QtCore/QRect>
-#include <QtGui/QPainter>
+#include <klocale.h>
+#include <QRect>
+#include <QPainter>
 #include <limits.h>
 
 MergeEffect::MergeEffect()

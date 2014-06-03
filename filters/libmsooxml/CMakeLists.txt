@@ -7,8 +7,9 @@ endif(QCA2_FOUND)
 
 include_directories(
     ${KOMAIN_INCLUDES}
+    ${KOODF2_INCLUDES}
     ${CMAKE_CURRENT_SOURCE_DIRECTORY}
-    ${CMAKE_SOURCE_DIR}/filters/tables/xlsx # for Charting
+    ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx # for Charting
 )
 
 ########### next target ###############
@@ -32,30 +33,28 @@ set(msooxml_LIB_SRCS
     VmlDrawingReader.cpp
     PredefinedShapeHelper.cpp
     ComplexShapeHandler.cpp
-    ${CMAKE_SOURCE_DIR}/filters/tables/xlsx/ChartExport.cpp
+    ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx/ChartExport.cpp
+    ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx/NumberFormatParser.cpp
     # TODO: move back to kolibs
     KoOdfExporter.cpp
 )
 
-kde4_add_library(msooxml SHARED ${msooxml_LIB_SRCS})
+kde4_add_library(komsooxml SHARED ${msooxml_LIB_SRCS})
 
-target_link_libraries(msooxml koodf komain)
+target_link_libraries(komsooxml koodf2 koodf komain)
 if(QCA2_FOUND)
-   target_link_libraries(msooxml ${QCA2_LIBRARIES})
+   target_link_libraries(komsooxml ${QCA2_LIBRARIES})
 endif(QCA2_FOUND)
 
-set_target_properties(msooxml PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
-install(TARGETS msooxml ${INSTALL_TARGETS_DEFAULT_ARGS})
-
-find_package(SharedMimeInfo)
-macro_log_feature(SHARED_MIME_INFO_FOUND "SharedMimeInfo" "Shared Mime Info" "http://freedesktop.org/wiki/Software/shared-mime-info" TRUE "" "Required to determine MSOOXML file types.")
+set_target_properties(komsooxml PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
+install(TARGETS komsooxml ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 install(FILES msooxml-all.xml DESTINATION ${XDG_MIME_INSTALL_DIR})
 update_xdg_mimetypes(${XDG_MIME_INSTALL_DIR})
 
 if (FALSE) # these headers are private for now
 install( FILES
-    msooxml_export.h
+    komsooxml_export.h
     MsooXmlContentTypes.h
     MsooXmlReader.h
     MsooXmlReader_p.h
@@ -74,6 +73,8 @@ install( FILES
     MsooXmlDiagramReader_p.h
     MsooXmlDrawingTableStyleReader.h
     MsooXmlDrawingTableStyle.h
+    MsooXmlDrawingMLShared.h
+    MsooXmlDrawingMLSharedImpl.h
     VmlDrawingReader.h
     ComplexShapeHandler.h
     PredefinedShapeHelper.h

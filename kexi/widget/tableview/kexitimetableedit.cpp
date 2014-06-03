@@ -19,20 +19,19 @@
 
 #include "kexitimetableedit.h"
 
-#include <qapplication.h>
-#include <qpainter.h>
-#include <qvariant.h>
-#include <qrect.h>
-#include <qpalette.h>
-#include <qcolor.h>
-#include <qfontmetrics.h>
-#include <qdatetime.h>
-#include <qcursor.h>
-#include <qpoint.h>
-#include <qlayout.h>
-#include <qtoolbutton.h>
-#include <q3datetimeedit.h>
-#include <qclipboard.h>
+#include <QApplication>
+#include <QPainter>
+#include <QVariant>
+#include <QRect>
+#include <QPalette>
+#include <QColor>
+#include <QFontMetrics>
+#include <QDateTime>
+#include <QCursor>
+#include <QPoint>
+#include <QLayout>
+#include <QToolButton>
+#include <QClipboard>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -45,7 +44,7 @@
 
 #include <kexiutils/utils.h>
 
-KexiTimeTableEdit::KexiTimeTableEdit(KexiTableViewColumn &column, QWidget *parent)
+KexiTimeTableEdit::KexiTimeTableEdit(KexiDB::TableViewColumn &column, QWidget *parent)
         : KexiInputTableEdit(column, parent)
 {
     setObjectName("KexiTimeTableEdit");
@@ -78,7 +77,7 @@ void KexiTimeTableEdit::setValueInternal(const QVariant& add_, bool removeOld)
         m_lineedit->setCursorPosition(add.length());
         return;
     }
-    setValueInInternalEditor(m_origValue);
+    setValueInInternalEditor(KexiDataItemInterface::originalValue());
     m_lineedit->setCursorPosition(0); //ok?
 }
 
@@ -127,6 +126,12 @@ bool KexiTimeTableEdit::valueIsValid()
     if (m_formatter.isEmpty(m_lineedit->text()))   //empty time is valid
         return true;
     return m_formatter.fromString(m_lineedit->text()).isValid();
+}
+
+bool KexiTimeTableEdit::valueChanged()
+{
+    kDebug() << KexiDataItemInterface::originalValue().toString() << " ? " << m_lineedit->text();
+    return KexiDataItemInterface::originalValue() != m_lineedit->text();
 }
 
 void KexiTimeTableEdit::handleCopyAction(const QVariant& value, const QVariant& visibleValue)

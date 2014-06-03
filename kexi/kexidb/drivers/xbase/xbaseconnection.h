@@ -20,9 +20,9 @@
 #ifndef XBASECONNECTION_H
 #define XBASECONNECTION_H
 
-#include <qstringlist.h>
+#include <QStringList>
 
-#include <kexidb/connection.h>
+#include <db/connection.h>
 #include "xbasecursor.h"
 
 namespace KexiDB {
@@ -68,9 +68,9 @@ class xBaseConnection : public Connection
     virtual QString serverErrorMsg();
     virtual void drv_clearServerResult();
 
-//TODO: move this somewhere to low level class (MIGRATION?)
+//! @todo move this somewhere to low level class (MIGRATION?)
     virtual bool drv_getTablesList( QStringList &list );
-//TODO: move this somewhere to low level class (MIGRATION?)
+//! @todo move this somewhere to low level class (MIGRATION?)
     virtual bool drv_containsTable( const QString &tableName );
 
     xBaseConnectionInternal* d;

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2010-2011 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2010-2012 C. Boemann <cbo@boemann.dk>
  * Copyright (C) 2006,2011 Sebastian Sauer <mail@dipe.org>
  * Copyright (C) 2006-2007, 2010 Thomas Zander <zander@kde.org>
  *
@@ -39,7 +39,7 @@
 #include <KoShapeManager.h>
 #include <KoParagraphStyle.h>
 #include <KoTableStyle.h>
-#include <KoTextAnchor.h>
+#include <KoShapeAnchor.h>
 
 #include <QTimer>
 #include <kdebug.h>
@@ -154,7 +154,7 @@ KoTextLayoutRootArea* KWRootAreaProvider::provideNext(KoTextDocumentLayout *docu
     if (rootAreaPage && m_textFrameSet->textFrameSetType() == Words::MainTextFrameSet) {
         Q_ASSERT(rootAreaPage->page.isValid());
         Q_ASSERT(rootAreaPage->page.pageStyle().isValid());
-        requiredRootAreaCount = rootAreaPage->page.pageStyle().hasMainTextFrame() ? rootAreaPage->page.pageStyle().columns().columns : 0;
+        requiredRootAreaCount = rootAreaPage->page.pageStyle().columns().count;
     }
     if (rootAreaPage && rootAreaPage->rootAreas.count() < requiredRootAreaCount) {
         pageNumber = m_pages.count(); // the root-area is still on the same page
@@ -190,7 +190,7 @@ KoTextLayoutRootArea* KWRootAreaProvider::provideNext(KoTextDocumentLayout *docu
                             visiblePageNumber = num;
                     }
                 }
-                KWPage page = kwdoc->appendPage(masterPageName, false);
+                KWPage page = kwdoc->appendPage(masterPageName);
                 Q_ASSERT(page.isValid());
                 if (visiblePageNumber >= 0)
                     page.setVisiblePageNumber(visiblePageNumber);
@@ -233,11 +233,21 @@ KoTextLayoutRootArea* KWRootAreaProvider::provideNext(KoTextDocumentLayout *docu
                 if (frame->anchoredPageNumber() == pageNumber) {
                     qreal oldOffset = frame->anchoredFrameOffset();
                     qreal newOffset = rootAreaPage->page.offsetInDocument();
+                    KoShape *shape = frame->shape();
                     if (!qFuzzyCompare(1 + oldOffset, 1 + newOffset)) {
                         frame->setAnchoredFrameOffset(newOffset);
-                        QPointF pos(frame->shape()->position().x(), newOffset - oldOffset + frame->shape()->position().y());
-                        frame->shape()->setPosition(pos);
+                        QPointF pos(shape->position().x(), newOffset - oldOffset + shape->position().y());
+                        shape->setPosition(pos);
                     }
+
+                    // During load we make page anchored shapes invisible, because otherwise
+                    // they leave empty rects in the text if there is run-around
+                    // now is the time to make them visible again
+                    shape->setVisible(true);
+
+                    QPointF delta;
+                    KWFrameLayout::proposeShapeMove(shape, delta, rootAreaPage->page);
+                    shape->setPosition(shape->position() + delta);
                 }
             }
         }
@@ -251,16 +261,24 @@ KoTextLayoutRootArea* KWRootAreaProvider::provideNext(KoTextDocumentLayout *docu
     KWFrame *frame = rootAreaPage->rootAreas.count() < frames.count() ? frames[rootAreaPage->rootAreas.count()] : 0;
 
     KWTextLayoutRootArea *area = new KWTextLayoutRootArea(documentLayout, m_textFrameSet, frame, pageNumber);
-    area->setAcceptsPageBreak(true);
+    if (m_textFrameSet->textFrameSetType() == Words::MainTextFrameSet) {
+        area->setAcceptsPageBreak(true);
+    }
 
     if (frame) { // Not every KoTextLayoutRootArea has a frame that contains a KoShape for display purposes.
         KoShape *shape = frame->shape();
         Q_ASSERT(shape);
         //Q_ASSERT_X(pageNumber == pageManager->page(shape).pageNumber(), __FUNCTION__, QString("KWPageManager is out-of-sync, pageNumber=%1 vs pageNumber=%2 with offset=%3 vs offset=%4 on frameSetType=%5").arg(pageNumber).arg(pageManager->page(shape).pageNumber()).arg(shape->absolutePosition().y()).arg(pageManager->page(shape).offsetInDocument()).arg(Words::frameSetTypeName(m_textFrameSet->textFrameSetType())).toLocal8Bit());
         KoTextShapeData *data = qobject_cast<KoTextShapeData*>(shape->userData());
-        Q_ASSERT(data);
-        data->setRootArea(area);
-        area->setAssociatedShape(shape);
+        if (data) {
+            data->setRootArea(area);
+            area->setAssociatedShape(shape);
+        } else {
+            kWarning(32001) << "shape has no KoTextShapeData";
+        }
+        if ((!shape->anchor()) || shape->anchor()->anchorType() == KoShapeAnchor::AnchorPage) {
+            area->setPage(new KWPage(rootAreaPage->page));
+        }
     }
 
     if (m_textFrameSet->type() != Words::OtherFrameSet && m_textFrameSet->textFrameSetType() != Words::OtherTextFrameSet) {
@@ -312,32 +330,29 @@ void KWRootAreaProvider::releaseAllAfter(KoTextLayoutRootArea *afterThis)
 
     kDebug(32001) << "afterPageNumber=" << afterIndex+1;
 
-//     bool atLeastOnePageRemove = false;
-//     KWPageManager *pageManager = m_textFrameSet->wordsDocument()->pageManager();
+    bool atLeastOnePageRemoved = false;
+    KWPageManager *pageManager = m_textFrameSet->wordsDocument()->pageManager();
     if (afterIndex >= 0) {
         for(int i = m_pages.count() - 1; i > afterIndex; --i) {
             KWRootAreaPage *page = m_pages.takeLast();
             foreach(KoTextLayoutRootArea *area, page->rootAreas)
                 m_pageHash.remove(area);
             delete page;
-            /*
+
             if (m_textFrameSet->textFrameSetType() == Words::MainTextFrameSet) {
                 pageManager->removePage(i+1);
-                atLeastOnePageRemove = true;
+                atLeastOnePageRemoved = true;
             }
-            */
         }
 
-        /*FIXME
+        // FIXME
         for(int i = m_dependentProviders.count() - 1; i >= 0; --i) {
             QPair<KWRootAreaProvider *, int> p = m_dependentProviders[i];
             if (p.second >= afterIndex)
                 m_dependentProviders.removeAt(i);
         }
-        */
-
     } else {
-        //atLeastOnePageRemove = !m_pages.isEmpty();
+        //atLeastOnePageRemoved = !m_pages.isEmpty();
         qDeleteAll(m_pages);
         m_pages.clear();
         m_pageHash.clear();
@@ -351,8 +366,8 @@ void KWRootAreaProvider::releaseAllAfter(KoTextLayoutRootArea *afterThis)
         m_dependentProviders.clear();
         */
     }
-//     if (atLeastOnePageRemove)
-//         m_textFrameSet->wordsDocument()->firePageSetupChanged();
+     if (atLeastOnePageRemoved)
+         m_textFrameSet->wordsDocument()->firePageSetupChanged();
 }
 
 void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNewRootArea)
@@ -380,10 +395,19 @@ void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNew
 
     kDebug(32001) << "pageNumber=" << page.pageNumber() << "frameSetType=" << Words::frameSetTypeName(m_textFrameSet->textFrameSetType()) << "isNewRootArea=" << isNewRootArea << "rootArea=" << rootArea << "isDirty=" << rootArea->isDirty();
 
-    QRectF updateRect = rootArea->associatedShape()->outlineRect();
+    QRectF updateRect = shape->outlineRect();
     //rootArea->associatedShape()->update(updateRect);
 
-    QSizeF newSize = rootArea->associatedShape()->size();
+    QSizeF newSize = shape->size()
+                    - QSizeF(data->leftPadding() + data->rightPadding(),
+                             data->topPadding() + data->bottomPadding());
+
+    KoBorder *border = shape->border();
+
+    if (border) {
+        newSize -= QSizeF(border->borderWidth(KoBorder::LeftBorder) + border->borderWidth(KoBorder::RightBorder), border->borderWidth(KoBorder::TopBorder) + border->borderWidth(KoBorder::BottomBorder));
+    }
+
     if (isHeaderFooter
         ||data->resizeMethod() == KoTextShapeData::AutoGrowWidthAndHeight
         ||data->resizeMethod() == KoTextShapeData::AutoGrowHeight) {
@@ -404,7 +428,15 @@ void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNew
     }
 
     // To make sure footnotes always end up at the bottom of the main area we need to set this
-    rootArea->setBottom(rootArea->top() + newSize.height());
+    if (m_textFrameSet->textFrameSetType() == Words::MainTextFrameSet) {
+        rootArea->setBottom(rootArea->top() + newSize.height());
+    }
+
+    newSize += QSizeF(data->leftPadding() + data->rightPadding(),
+                      data->topPadding() + data->bottomPadding());
+    if (border) {
+        newSize += QSizeF(border->borderWidth(KoBorder::LeftBorder) + border->borderWidth(KoBorder::RightBorder), border->borderWidth(KoBorder::TopBorder) + border->borderWidth(KoBorder::BottomBorder));
+    }
 
     if (newSize != rootArea->associatedShape()->size()) {
         //QPointF centerpos = rootArea->associatedShape()->absolutePosition();
@@ -555,23 +587,44 @@ void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNew
 
 }
 
-QSizeF KWRootAreaProvider::suggestSize(KoTextLayoutRootArea *rootArea)
+void KWRootAreaProvider::updateAll()
+{
+    foreach (KWFrame *frame, m_textFrameSet->frames()) {
+        frame->shape()->update();
+    }
+}
+
+QRectF KWRootAreaProvider::suggestRect(KoTextLayoutRootArea *rootArea)
 {
     KoShape *shape = rootArea->associatedShape();
     if (!shape) { // no shape => nothing to draw => no space needed
-        return QSizeF(0.,0.);
+        return QRectF(0., 0., 0.,0.);
     }
 
     KoTextShapeData *data = qobject_cast<KoTextShapeData*>(shape->userData());
     Q_ASSERT(data);
 
-    if (data->resizeMethod() == KoTextShapeData::AutoGrowWidthAndHeight || data->resizeMethod() == KoTextShapeData::AutoGrowHeight) {
-        QSizeF size = shape->size();
-        size.setHeight(1E6);
-        return size;
+    QRectF rect(QPointF(), shape->size());
+    rect.adjust(data->leftPadding(), data->topPadding(), -data->rightPadding(), - data->bottomPadding());
+
+    KoBorder *border = shape->border();
+    if (border) {
+        rect.adjust(border->borderWidth(KoBorder::LeftBorder),  border->borderWidth(KoBorder::TopBorder),
+              -border->borderWidth(KoBorder::RightBorder), - border->borderWidth(KoBorder::BottomBorder));
     }
 
-    return shape->size();
+    rect.setWidth(qMax(rect.width(), qreal(1.0)));
+    rect.setHeight(qMax(rect.height(), qreal(1.0)));
+    if (data->resizeMethod() == KoTextShapeData::AutoGrowWidthAndHeight || data->resizeMethod() == KoTextShapeData::AutoGrowHeight
+        || m_textFrameSet->textFrameSetType() == Words::OtherTextFrameSet) {
+        rect.setHeight(1E6);
+    }
+    if (data->resizeMethod() == KoTextShapeData::AutoGrowWidthAndHeight
+        || data->resizeMethod() == KoTextShapeData::AutoGrowWidth) {
+        rootArea->setNoWrap(1E6);
+    }
+
+    return rect;
 }
 
 QList<KoTextLayoutObstruction *> KWRootAreaProvider::relevantObstructions(KoTextLayoutRootArea *rootArea)
@@ -605,7 +658,7 @@ QList<KoTextLayoutObstruction *> KWRootAreaProvider::relevantObstructions(KoText
                 continue;
             if (! shape->isVisible(true))
                 continue;
-            if (frame->anchor()->anchorType() != KoTextAnchor::AnchorPage)
+            if (shape->anchor() && shape->anchor()->anchorType() != KoShapeAnchor::AnchorPage)
                 continue;
             if (shape->textRunAroundSide() == KoShape::RunThrough)
                 continue;

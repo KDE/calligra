@@ -81,7 +81,7 @@ private:
 class KarbonCalligraphicShape : public KoParameterShape
 {
 public:
-    KarbonCalligraphicShape(qreal caps = 0.0);
+    explicit KarbonCalligraphicShape(qreal caps = 0.0);
     ~KarbonCalligraphicShape();
 
     void appendPoint(const QPointF &p1, qreal angle, qreal width);

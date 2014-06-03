@@ -41,13 +41,13 @@ public:
     /**
      * Constructs a TextConverter which converts to UCS-2
      */
-    TextConverter( const std::string& fromCode );
+    explicit TextConverter( const std::string& fromCode );
     /**
      * Constructs a TextConverter which converts from the proper
      * codepage for the given lid to UCS-2. This is probably what
      * you want to use.
      */
-    TextConverter( U16 lid );
+    explicit TextConverter( U16 lid );
 
     /**
      * Properly cleans up

@@ -40,7 +40,7 @@ class DrawingMLColorSchemeItem;
 class DrawingMLColorSchemeSystemItem;
 
 //! @todo add other classes inheriting DrawingMLColorSchemeItemBase
-class MSOOXML_EXPORT DrawingMLColorSchemeItemBase
+class KOMSOOXML_EXPORT DrawingMLColorSchemeItemBase
 {
 public:
     DrawingMLColorSchemeItemBase();
@@ -51,7 +51,7 @@ public:
     virtual DrawingMLColorSchemeItemBase* clone() const = 0;
 };
 
-class MSOOXML_EXPORT DrawingMLColorSchemeItem : public DrawingMLColorSchemeItemBase
+class KOMSOOXML_EXPORT DrawingMLColorSchemeItem : public DrawingMLColorSchemeItemBase
 {
 public:
     DrawingMLColorSchemeItem();
@@ -60,7 +60,7 @@ public:
     DrawingMLColorSchemeItem* clone() const { return new DrawingMLColorSchemeItem(*this); }
 };
 
-class MSOOXML_EXPORT DrawingMLColorSchemeSystemItem : public DrawingMLColorSchemeItemBase
+class KOMSOOXML_EXPORT DrawingMLColorSchemeSystemItem : public DrawingMLColorSchemeItemBase
 {
 public:
     DrawingMLColorSchemeSystemItem();
@@ -74,16 +74,19 @@ public:
 typedef QHash<QString, DrawingMLColorSchemeItemBase*> DrawingMLColorSchemeItemHash;
 
 //! Implements color scheme, based on hash. All items are owned by this object.
-class MSOOXML_EXPORT DrawingMLColorScheme : public DrawingMLColorSchemeItemHash
+class KOMSOOXML_EXPORT DrawingMLColorScheme : public DrawingMLColorSchemeItemHash
 {
 public:
     DrawingMLColorScheme();
     ~DrawingMLColorScheme();
 
-    DrawingMLColorSchemeItemBase* value(const QString& name) const { return DrawingMLColorSchemeItemHash::value(name); }
+    DrawingMLColorSchemeItemBase* value(const QString& name) const {
+        return DrawingMLColorSchemeItemHash::value(name);
+    }
 
-    /*! @return color value for index. Needed because while PPTX uses lookup by name: value(QString&),
-                XLSX uses lookup by index. When index is invalid, 0 is returned. */
+    /*! @return color value for index. Needed because while PPTX uses lookup by
+        name: value(QString&), XLSX uses lookup by index. When index is
+        invalid, 0 is returned. */
     DrawingMLColorSchemeItemBase* value(int index) const;
 
     DrawingMLColorScheme(const DrawingMLColorScheme& scheme);
@@ -94,7 +97,7 @@ public:
 
 //! Font set for majorFont and minorFont.
 //! @todo add more support for latin, ea and cs: charser, panose, pitchfamily attributes (21.1.2.3.3)
-class MSOOXML_EXPORT DrawingMLFontSet
+class KOMSOOXML_EXPORT DrawingMLFontSet
 {
 public:
     DrawingMLFontSet();
@@ -114,7 +117,7 @@ public:
 
 //! Defines the font scheme within the theme
 //! The font scheme consists of a pair of major and minor fonts for which to use in a document.s
-class MSOOXML_EXPORT DrawingMLFontScheme
+class KOMSOOXML_EXPORT DrawingMLFontScheme
 {
 public:
     DrawingMLFontScheme();
@@ -124,11 +127,11 @@ public:
 };
 
 
-class MSOOXML_EXPORT DrawingMLFillBase
+class KOMSOOXML_EXPORT DrawingMLFillBase
 {
 public:
     virtual ~DrawingMLFillBase();
-    // This function will create the fill style and fill the approriate styles
+    // This function will create the fill style and fill the appropriate styles
     // and filePath if needed.
     // Number is used to index to correct style, color is the color which should be used when making the styles
     virtual void writeStyles(KoGenStyles& styles, KoGenStyle *graphicStyle, QColor color) = 0;
@@ -136,7 +139,7 @@ public:
     virtual DrawingMLFillBase* clone() const = 0;
 };
 
-class MSOOXML_EXPORT DrawingMLSolidFill : public DrawingMLFillBase
+class KOMSOOXML_EXPORT DrawingMLSolidFill : public DrawingMLFillBase
 {
 public:
     void writeStyles(KoGenStyles& styles, KoGenStyle *graphicStyle, QColor color);
@@ -144,10 +147,10 @@ public:
     DrawingMLSolidFill* clone() const { return new DrawingMLSolidFill(*this); }
 };
 
-class MSOOXML_EXPORT DrawingMLBlipFill : public DrawingMLFillBase
+class KOMSOOXML_EXPORT DrawingMLBlipFill : public DrawingMLFillBase
 {
 public:
-    DrawingMLBlipFill(QString filePath);
+    explicit DrawingMLBlipFill(const QString &filePath);
     void writeStyles(KoGenStyles& styles, KoGenStyle *graphicStyle, QColor color);
 
     DrawingMLBlipFill* clone() const { return new DrawingMLBlipFill(*this); }
@@ -156,10 +159,10 @@ private:
     QString m_filePath;
 };
 
-class MSOOXML_EXPORT DrawingMLGradientFill : public DrawingMLFillBase
+class KOMSOOXML_EXPORT DrawingMLGradientFill : public DrawingMLFillBase
 {
 public:
-    // Simplified gradient constuctor
+    // Simplified gradient constructor
     DrawingMLGradientFill(QVector<qreal> shadeModifier, QVector<qreal> tintModifier, QVector<qreal> satModifier,
                           QVector<int> alphaModifier, QVector<int> gradPositions, QString gradAngle);
     void writeStyles(KoGenStyles& styles, KoGenStyle *graphicStyle, QColor color);
@@ -175,7 +178,7 @@ private:
     QString m_gradAngle;
 };
 
-class MSOOXML_EXPORT DrawingMLFormatScheme
+class KOMSOOXML_EXPORT DrawingMLFormatScheme
 {
 public:
 
@@ -187,13 +190,14 @@ public:
     DrawingMLFormatScheme& operator=(const DrawingMLFormatScheme& format);
 
     QMap<int, DrawingMLFillBase*> fillStyles;
-    // Stores currently only line width, should be made to store everything else too
-    QVector<QString> lineStyles;
+
+    // Stores the three line styles for use within a theme.
+    QList<KoGenStyle> lnStyleLst;
 };
 
 //! Defines a single DrawingML theme.
 //! @todo support objectDefaults and extraClrSchemeLst
-class MSOOXML_EXPORT DrawingMLTheme
+class KOMSOOXML_EXPORT DrawingMLTheme
 {
 public:
     DrawingMLTheme();
@@ -204,7 +208,7 @@ public:
 };
 
 //! Context for MsooXmlThemesReader::read()
-class MSOOXML_EXPORT MsooXmlThemesReaderContext : public MsooXmlReaderContext
+class KOMSOOXML_EXPORT MsooXmlThemesReaderContext : public MsooXmlReaderContext
 {
 public:
     MsooXmlThemesReaderContext(DrawingMLTheme& t, MSOOXML::MsooXmlRelationships* rel, MSOOXML::MsooXmlImport* imp,
@@ -219,12 +223,12 @@ public:
 //! A class reading MSOOXML themes markup - theme/theme1.xml.
 /*! @todo generalize for other MSOOXML subformats.
  */
-class MSOOXML_EXPORT MsooXmlThemesReader : public MSOOXML::MsooXmlCommonReader
+class KOMSOOXML_EXPORT MsooXmlThemesReader : public MSOOXML::MsooXmlCommonReader
 {
 public:
     //! Creates MsooXmlThemesReader object.
     //! On successful reading, @a theme will be written with theme definition.
-    MsooXmlThemesReader(KoOdfWriters *writers);
+    explicit MsooXmlThemesReader(KoOdfWriters *writers);
 
     virtual ~MsooXmlThemesReader();
 
@@ -238,14 +242,13 @@ protected:
     //! @todo no CASE
     KoFilter::ConversionStatus read_objectDefaults();
     KoFilter::ConversionStatus read_custClrLst();
-    KoFilter::ConversionStatus read_extLst();
     KoFilter::ConversionStatus read_extraClrSchemeLst();
     KoFilter::ConversionStatus read_extraClrScheme();
+
     KoFilter::ConversionStatus read_clrScheme();
     KoFilter::ConversionStatus read_color(); //!< helper
-    KoFilter::ConversionStatus read_srgbClr();
-    KoFilter::ConversionStatus read_sysClr();
-    DrawingMLColorSchemeItemBase* m_currentColor; //!< used by *Clr()
+    DrawingMLColorSchemeItemBase* m_currentColor_local; //!< used by *Clr()
+
     KoFilter::ConversionStatus read_fmtScheme();
     KoFilter::ConversionStatus read_fontScheme();
     KoFilter::ConversionStatus read_clrMap();
@@ -256,11 +259,15 @@ protected:
     KoFilter::ConversionStatus read_majorFont();
     KoFilter::ConversionStatus read_minorFont();
     KoFilter::ConversionStatus read_lnStyleLst();
-    KoFilter::ConversionStatus read_ln();
 
     //! Used for skipping a subtree - just reads and shows each element.
     //! called by BIND_READ_SKIP() macro.
     KoFilter::ConversionStatus read_SKIP();
+
+#include "MsooXmlDrawingMLShared.h"
+
+    KoFilter::ConversionStatus read_srgbClr_local();
+    KoFilter::ConversionStatus read_sysClr_local();
 
 private:
     void init();

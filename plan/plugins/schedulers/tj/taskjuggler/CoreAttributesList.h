@@ -2,6 +2,7 @@
  * CoreAttributesList.h - TaskJuggler
  *
  * Copyright (c) 2001, 2002, 2003, 2004 by Chris Schlaeger <cs@kde.org>
+ * Copyright (c) 2011 by Dag Andersen <danders@get2net.dk>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of version 2 of the GNU General Public License as
@@ -14,8 +15,8 @@
 
 #include "kplatotj_export.h"
 
-#include <qlist.h>
-#include <KDebug>
+#include <QList>
+#include <kdebug.h>
 
 #include "CoreAttributes.h"
 
@@ -98,7 +99,7 @@ protected:
 class CoreAttributesListIterator : public QListIterator<CoreAttributes*>
 {
 public:
-    CoreAttributesListIterator(const CoreAttributesList& l) :
+    explicit CoreAttributesListIterator(const CoreAttributesList& l) :
         QListIterator<CoreAttributes*>(l) { }
     virtual ~CoreAttributesListIterator() { }
     void operator++() { if (hasNext()) next(); }

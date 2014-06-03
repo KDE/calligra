@@ -20,7 +20,7 @@
 #include "OffsetEffectFactory.h"
 #include "OffsetEffect.h"
 #include "OffsetEffectConfigWidget.h"
-#include <KLocale>
+#include <klocale.h>
 
 OffsetEffectFactory::OffsetEffectFactory()
         : KoFilterEffectFactoryBase(OffsetEffectId, i18n("Offset"))

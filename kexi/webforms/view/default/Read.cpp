@@ -25,9 +25,9 @@
 
 #include <pion/net/HTTPResponseWriter.hpp>
 
-#include <KDebug>
+#include <kdebug.h>
 
-#include <kexidb/tableschema.h>
+#include <db/tableschema.h>
 
 #include "../../model/Database.h"
 #include "../../model/DataProvider.h"

@@ -22,7 +22,7 @@
 
 #include <QAbstractListModel>
 
-#include <KCategorizedSortFilterProxyModel>
+#include <kcategorizedsortfilterproxymodel.h>
 #include <core/kexitemplateloader.h>
 
 class KexiTemplatesModel : public QAbstractListModel
@@ -34,8 +34,9 @@ public:
         CategoryRole = 0xA2BEF158
     };
 
-    KexiTemplatesModel(const KexiTemplateCategoryInfoList& templateCategories,
-                       QObject *parent = 0);
+    explicit KexiTemplatesModel(const KexiTemplateCategoryInfoList& templateCategories,
+                                QObject *parent = 0);
+    ~KexiTemplatesModel();
 
     QModelIndex  index(int row, int column = 0,
                        const QModelIndex& parent = QModelIndex() ) const;
@@ -44,9 +45,8 @@ public:
     Qt::ItemFlags flags( const QModelIndex& index ) const;
 
 private:
-    KexiTemplateCategoryInfoList m_templateCategories;
-    KexiTemplateInfoList m_templates;
-    QMap<QString, int> m_categoryNameIndex;
+    class Private;
+    Private* const d;
 };
  
 class KexiTemplatesProxyModel : public KCategorizedSortFilterProxyModel

@@ -19,11 +19,11 @@
 
 #include "kexibooltableedit.h"
 
-#include <kexidb/field.h>
+#include <db/field.h>
 
-#include <qpainter.h>
-#include <qapplication.h>
-#include <qclipboard.h>
+#include <QPainter>
+#include <QApplication>
+#include <QClipboard>
 
 #include <kglobal.h>
 #include <klocale.h>
@@ -31,13 +31,13 @@
 #include <kglobalsettings.h>
 
 
-KexiBoolTableEdit::KexiBoolTableEdit(KexiTableViewColumn &column, QWidget *parent)
+KexiBoolTableEdit::KexiBoolTableEdit(KexiDB::TableViewColumn &column, QWidget *parent)
         : KexiTableEdit(column, parent)
 {
-    kDebug() << "m_origValue.typeName()==" << m_origValue.typeName();
+    kDebug() << "KexiDataItemInterface::d->origValue.typeName()==" << KexiDataItemInterface::originalValue().typeName();
     kDebug() << "type== " << field()->typeName();
-    m_hasFocusableWidget = false;
-    m_acceptEditorAfterDeleteContents = true;
+    KexiDataItemInterface::setHasFocusableWidget(false);
+    KexiDataItemInterface::setAcceptEditorAfterDeleteContents(true);
     m_usesSelectedTextColor = false;
 }
 
@@ -47,7 +47,7 @@ KexiBoolTableEdit::~KexiBoolTableEdit()
 
 void KexiBoolTableEdit::setValueInternal(const QVariant& /*add*/, bool /*removeOld*/)
 {
-    m_currentValue = m_origValue;
+    m_currentValue = KexiDataItemInterface::originalValue();
     //nothing to do more...
 }
 
@@ -127,7 +127,7 @@ void KexiBoolTableEdit::clickedOnContents()
         else
             m_currentValue = m_currentValue.toBool() ? QVariant(false) : QVariant();
     }
-    kDebug() << m_origValue << m_currentValue;
+    kDebug() << KexiDataItemInterface::originalValue() << m_currentValue;
     if (oldValue != m_currentValue) {
         signalValueChanged();
     }
@@ -153,7 +153,7 @@ void KexiBoolTableEdit::handleAction(const QString& actionName)
         m_currentValue = field()->isNotNull()
                          ? QVariant(0)/*0 instead of NULL - handle case when null is not allowed*/
                          : QVariant();
-        handleCopyAction(m_origValue, QVariant());
+        handleCopyAction(KexiDataItemInterface::originalValue(), QVariant());
         repaintRelatedCell();
     }
 }

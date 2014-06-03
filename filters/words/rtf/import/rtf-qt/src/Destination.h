@@ -18,9 +18,9 @@
 #ifndef RTFREADER_DESTINATION_H
 #define RTFREADER_DESTINATION_H
 
-#include <QtCore/QDebug>
-#include <QtCore/QString>
-#include <QtGui/QTextCharFormat>
+#include <QDebug>
+#include <QString>
+#include <QTextCharFormat>
 
 #include "AbstractRtfOutput.h"
 #include "rtfreader_export.h"

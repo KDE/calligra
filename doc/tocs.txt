@@ -84,11 +84,11 @@ More information
 
 --------------------------------------------------------------------------------
 
-KWord
+Words
 
 Introduction
     Basically a copy of the goals described in the general Calligra handbook.
-Working with KWord
+Working with Calligra Words
     Working with text
         Styles
         linespacing
@@ -111,11 +111,11 @@ Reference Guide
 
 --------------------------------------------------------------------------------
 
-KSpread
+Calligra Sheets
 
 Introduction
     Basically a copy of the goals described in the general Calligra handbook.
-Working with KSpread
+Working with Calligra Sheets
     Working with cells
     Working with formulas
     Working with sheets
@@ -125,11 +125,11 @@ Reference Guide
 
 --------------------------------------------------------------------------------
 
-KPresenter
+Stage
 
 Introduction
     Basically a copy of the goals described in the general Calligra handbook.
-Working with KPresenter
+Working with Calligra Stage
     Working with slides
     Working with master slides
     Working with animations
@@ -141,22 +141,15 @@ Reference Guide
 
 Kexi
 
-Introduction
-    Basically a copy of the goals described in the general Calligra handbook.
-Working with Kexi
-    Working with databases
-    Working with forms
-   <more technologies?>
-<usecases>
-Reference Guide
+The Handbook is at advanced stage already; see doc/kexi/README.
 
 --------------------------------------------------------------------------------
 
-Kivio
+Flow
 
 Introduction
     Basically a copy of the goals described in the general Calligra handbook.
-Working with Kivio
+Working with Calligra Flow
     Working with stencils
     Working with stencil sets
     <more technologies?>
@@ -165,7 +158,7 @@ Reference Guide
 
 --------------------------------------------------------------------------------
 
-Karbon14
+Karbon
 
 Introduction
     Basically a copy of the goals described in the general Calligra handbook.
@@ -193,11 +186,11 @@ Reference Guide
 
 --------------------------------------------------------------------------------
 
-KPlato
+Plan
 
 Introduction
     Basically a copy of the goals described in the general Calligra handbook.
-Working with KPlato
+Working with Calligra Plan
     Working with tasks
     Working with dependencies
     <more technologies?>

@@ -19,19 +19,19 @@
 
 #include "xbasemigrate.h"
 
-#include <qstring.h>
-#include <qregexp.h>
-#include <qfile.h>
-#include <qvariant.h>
-#include <qlist.h>
-#include <qdir.h>
+#include <QString>
+#include <QRegExp>
+#include <QFile>
+#include <QVariant>
+#include <QList>
+#include <QDir>
 #include <kdebug.h>
 
 #include <migration/keximigratedata.h>
-#include <kexidb/cursor.h>
-#include <kexidb/field.h>
-#include <kexidb/utils.h>
-#include <kexidb/drivermanager.h>
+#include <db/cursor.h>
+#include <db/field.h>
+#include <db/utils.h>
+#include <db/drivermanager.h>
 #include <kexiutils/identifier.h>
 
 using namespace KexiMigration;
@@ -45,7 +45,7 @@ xBaseMigrate::xBaseMigrate(QObject *parent, const QVariantList& args) :
   KexiMigrate(parent, args)
 {
   KexiDB::DriverManager manager;
-  m_kexiDBDriver = manager.driver("xbase");
+  setDriver(manager.driver("xbase"));
 }
 
 /* ************************************************************************** */
@@ -157,13 +157,16 @@ bool xBaseMigrate::drv_readTableSchema(
 
   for( xbShort i = 0; i < numFlds; ++i ) {
     QString fldName = QString::fromLatin1( tableDbf->GetFieldName( i ) );
-    QString fldID( KexiUtils::string2Identifier( fldName.toLower() ) );
+    QString fldID( KexiUtils::stringToIdentifier( fldName.toLower() ) );
 
     KexiDB::Field *fld =
         new KexiDB::Field( fldID, type( tableDbf->GetFieldType( i ) ) );
 
     if ( fld->type() == KexiDB::Field::Text ) {
-      fld->setLength( tableDbf->GetFieldLen(i) );
+      uint len = tableDbf->GetFieldLen(i);
+      if (len < 255) { // limit for small lengths only
+          fld->setMaxLength(len);
+      }
     }
 
     if ( fld->isFPNumericType() ) {

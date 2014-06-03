@@ -20,9 +20,9 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #ifndef SYBASECONNECTION_H
 #define SYBASECONNECTION_H
 
-#include <qstringlist.h>
+#include <QStringList>
 
-#include <kexidb/connection.h>
+#include <db/connection.h>
 #include "sybasecursor.h"
 
 namespace KexiDB
@@ -69,9 +69,9 @@ protected:
     virtual QString serverErrorMsg();
     virtual void drv_clearServerResult();
 
-//TODO: move this somewhere to low level class (MIGRATION?)
+//! @todo move this somewhere to low level class (MIGRATION?)
     virtual bool drv_getTablesList(QStringList &list);
-//TODO: move this somewhere to low level class (MIGRATION?)
+//! @todo move this somewhere to low level class (MIGRATION?)
     virtual bool drv_containsTable(const QString &tableName);
 
     virtual bool drv_beforeInsert(const QString& table, FieldList& fields);

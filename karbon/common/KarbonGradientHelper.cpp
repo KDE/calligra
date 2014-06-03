@@ -19,7 +19,7 @@
 
 #include "KarbonGradientHelper.h"
 
-#include <QtGui/QGradient>
+#include <QGradient>
 #include <math.h>
 
 QGradient* KarbonGradientHelper::defaultGradient(QGradient::Type type, QGradient::Spread spread, const QGradientStops &stops)

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2007 Dag Andersen <danders@get2net>
+  Copyright (C) 2007, 2012 Dag Andersen <danders@get2net>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -25,12 +25,14 @@
 #include "kpttask.h"
 #include "kptnode.h"
 #include "kptschedule.h"
+#include "kptdebug.h"
 
 #include <QStringList>
 #include <QMimeData>
 
 #include <kglobal.h>
 #include <klocale.h>
+
 
 namespace KPlato
 {
@@ -45,8 +47,8 @@ CriticalPathItemModel::CriticalPathItemModel( QObject *parent )
     : ItemModelBase( parent ),
     m_manager( 0 )
 {
-/*    connect( this, SIGNAL( modelAboutToBeReset() ), SLOT( slotAboutToBeReset() ) );
-    connect( this, SIGNAL( modelReset() ), SLOT( slotReset() ) );*/
+/*    connect( this, SIGNAL(modelAboutToBeReset()), SLOT(slotAboutToBeReset()) );
+    connect( this, SIGNAL(modelReset()), SLOT(slotReset()) );*/
 }
 
 CriticalPathItemModel::~CriticalPathItemModel()
@@ -55,18 +57,18 @@ CriticalPathItemModel::~CriticalPathItemModel()
 
 void CriticalPathItemModel::slotNodeToBeInserted( Node *, int )
 {
-    //kDebug()<<node->name();
+    //kDebug(planDbg())<<node->name();
 }
 
 void CriticalPathItemModel::slotNodeInserted( Node * /*node*/ )
 {
-    //kDebug()<<node->getParent->name()<<"-->"<<node->name();
+    //kDebug(planDbg())<<node->getParent->name()<<"-->"<<node->name();
 }
 
 void CriticalPathItemModel::slotNodeToBeRemoved( Node *node )
 {
     Q_UNUSED(node);
-    //kDebug()<<node->name();
+    //kDebug(planDbg())<<node->name();
 /*    if ( m_path.contains( node ) ) {
     }*/
 }
@@ -74,39 +76,39 @@ void CriticalPathItemModel::slotNodeToBeRemoved( Node *node )
 void CriticalPathItemModel::slotNodeRemoved( Node *node )
 {
     Q_UNUSED(node);
-    //kDebug()<<node->name();
+    //kDebug(planDbg())<<node->name();
 }
 
 void CriticalPathItemModel::setProject( Project *project )
 {
     if ( m_project ) {
-        disconnect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
-        disconnect( m_project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SLOT( slotNodeToBeInserted(  Node*, int ) ) );
-        disconnect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeToBeRemoved( Node* ) ) );
-        disconnect( m_project, SIGNAL( nodeToBeMoved( Node* ) ), this, SLOT( slotLayoutToBeChanged() ) );
+        disconnect( m_project, SIGNAL(nodeChanged(Node*)), this, SLOT(slotNodeChanged(Node*)) );
+        disconnect( m_project, SIGNAL(nodeToBeAdded(Node*,int)), this, SLOT(slotNodeToBeInserted(Node*,int)) );
+        disconnect( m_project, SIGNAL(nodeToBeRemoved(Node*)), this, SLOT(slotNodeToBeRemoved(Node*)) );
+        disconnect( m_project, SIGNAL(nodeToBeMoved(Node*,int,Node*,int)), this, SLOT(slotLayoutToBeChanged()) );
 
-        disconnect( m_project, SIGNAL( nodeAdded( Node* ) ), this, SLOT( slotNodeInserted( Node* ) ) );
-        disconnect( m_project, SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeRemoved( Node* ) ) );
-        disconnect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotLayoutChanged() ) );
+        disconnect( m_project, SIGNAL(nodeAdded(Node*)), this, SLOT(slotNodeInserted(Node*)) );
+        disconnect( m_project, SIGNAL(nodeRemoved(Node*)), this, SLOT(slotNodeRemoved(Node*)) );
+        disconnect( m_project, SIGNAL(nodeMoved(Node*)), this, SLOT(slotLayoutChanged()) );
     }
     m_project = project;
     m_nodemodel.setProject( project );
     if ( project ) {
-        connect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
-        connect( m_project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SLOT( slotNodeToBeInserted(  Node*, int ) ) );
-        connect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeToBeRemoved( Node* ) ) );
-        connect( m_project, SIGNAL( nodeToBeMoved( Node* ) ), this, SLOT( slotLayoutToBeChanged() ) );
+        connect( m_project, SIGNAL(nodeChanged(Node*)), this, SLOT(slotNodeChanged(Node*)) );
+        connect( m_project, SIGNAL(nodeToBeAdded(Node*,int)), this, SLOT(slotNodeToBeInserted(Node*,int)) );
+        connect( m_project, SIGNAL(nodeToBeRemoved(Node*)), this, SLOT(slotNodeToBeRemoved(Node*)) );
+        connect( m_project, SIGNAL(nodeToBeMoved(Node*,int,Node*,int)), this, SLOT(slotLayoutToBeChanged()) );
 
-        connect( m_project, SIGNAL( nodeAdded( Node* ) ), this, SLOT( slotNodeInserted( Node* ) ) );
-        connect( m_project, SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeRemoved( Node* ) ) );
-        connect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotLayoutChanged() ) );
+        connect( m_project, SIGNAL(nodeAdded(Node*)), this, SLOT(slotNodeInserted(Node*)) );
+        connect( m_project, SIGNAL(nodeRemoved(Node*)), this, SLOT(slotNodeRemoved(Node*)) );
+        connect( m_project, SIGNAL(nodeMoved(Node*)), this, SLOT(slotLayoutChanged()) );
     }
     reset();
 }
 
 void CriticalPathItemModel::setManager( ScheduleManager *sm )
 {
-    kDebug()<<this;
+    kDebug(planDbg())<<this;
     m_manager = sm;
     m_nodemodel.setManager( sm );
     if ( m_project == 0 || m_manager == 0 ) {
@@ -114,7 +116,7 @@ void CriticalPathItemModel::setManager( ScheduleManager *sm )
     } else {
         m_path = m_project->criticalPath( m_manager->scheduleId(), 0 );
     }
-    kDebug()<<m_path;
+    kDebug(planDbg())<<m_path;
     reset();
 }
 
@@ -164,7 +166,7 @@ QVariant CriticalPathItemModel::duration( int role ) const
         case Qt::DisplayRole:
         case Qt::ToolTipRole: {
             Duration v = m_project->duration( m_manager->scheduleId() );
-            return KGlobal::locale()->formatNumber( v.toDouble( presentationUnit( v ) ), 1 ) + Duration::unitToString( presentationUnit( v ) );
+            return QVariant(KGlobal::locale()->formatNumber( v.toDouble( presentationUnit( v ) ), 1 ) + Duration::unitToString( presentationUnit( v ) ));
         }
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
@@ -235,7 +237,7 @@ QVariant CriticalPathItemModel::data( const QModelIndex &index, int role ) const
     if ( result.isValid() ) {
         if ( role == Qt::DisplayRole && result.type() == QVariant::String && result.toString().isEmpty()) {
             // HACK to show focus in empty cells
-            result = " ";
+            result = ' ';
         }
         return result;
     }
@@ -290,7 +292,7 @@ Node *CriticalPathItemModel::node( const QModelIndex &index ) const
 
 void CriticalPathItemModel::slotNodeChanged( Node *node )
 {
-    kDebug();
+    kDebug(planDbg());
     if ( node == 0 || node->type() == Node::Type_Project || ! m_path.contains( node ) ) {
         return;
     }
@@ -304,8 +306,8 @@ PertResultItemModel::PertResultItemModel( QObject *parent )
     : ItemModelBase( parent ),
     m_manager( 0 )
 {
-/*    connect( this, SIGNAL( modelAboutToBeReset() ), SLOT( slotAboutToBeReset() ) );
-    connect( this, SIGNAL( modelReset() ), SLOT( slotReset() ) );*/
+/*    connect( this, SIGNAL(modelAboutToBeReset()), SLOT(slotAboutToBeReset()) );
+    connect( this, SIGNAL(modelReset()), SLOT(slotReset()) );*/
 }
 
 PertResultItemModel::~PertResultItemModel()
@@ -314,37 +316,37 @@ PertResultItemModel::~PertResultItemModel()
 
 void PertResultItemModel::slotAboutToBeReset()
 {
-    kDebug();
+    kDebug(planDbg());
     clear();
 }
 
 void PertResultItemModel::slotReset()
 {
-    kDebug();
+    kDebug(planDbg());
     refresh();
 }
 
 void PertResultItemModel::slotNodeToBeInserted( Node *, int )
 {
-    //kDebug()<<node->name();
+    //kDebug(planDbg())<<node->name();
     clear();
 }
 
 void PertResultItemModel::slotNodeInserted( Node * /*node*/ )
 {
-    //kDebug()<<node->getParent->name()<<"-->"<<node->name();
+    //kDebug(planDbg())<<node->getParent->name()<<"-->"<<node->name();
     refresh();
 }
 
 void PertResultItemModel::slotNodeToBeRemoved( Node * /*node*/ )
 {
-    //kDebug()<<node->name();
+    //kDebug(planDbg())<<node->name();
     clear();
 }
 
 void PertResultItemModel::slotNodeRemoved( Node * /*node*/ )
 {
-    //kDebug()<<node->name();
+    //kDebug(planDbg())<<node->name();
     refresh();
 }
 
@@ -352,26 +354,26 @@ void PertResultItemModel::setProject( Project *project )
 {
     clear();
     if ( m_project ) {
-        disconnect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
-        disconnect( m_project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SLOT( slotNodeToBeInserted(  Node*, int ) ) );
-        disconnect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeToBeRemoved( Node* ) ) );
-        disconnect( m_project, SIGNAL( nodeToBeMoved( Node* ) ), this, SLOT( slotLayoutToBeChanged() ) );
+        disconnect( m_project, SIGNAL(nodeChanged(Node*)), this, SLOT(slotNodeChanged(Node*)) );
+        disconnect( m_project, SIGNAL(nodeToBeAdded(Node*,int)), this, SLOT(slotNodeToBeInserted(Node*,int)) );
+        disconnect( m_project, SIGNAL(nodeToBeRemoved(Node*)), this, SLOT(slotNodeToBeRemoved(Node*)) );
+        disconnect( m_project, SIGNAL(nodeToBeMoved(Node*,int,Node*,int)), this, SLOT(slotLayoutToBeChanged()) );
 
-        disconnect( m_project, SIGNAL( nodeAdded( Node* ) ), this, SLOT( slotNodeInserted( Node* ) ) );
-        disconnect( m_project, SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeRemoved( Node* ) ) );
-        disconnect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotLayoutChanged() ) );
+        disconnect( m_project, SIGNAL(nodeAdded(Node*)), this, SLOT(slotNodeInserted(Node*)) );
+        disconnect( m_project, SIGNAL(nodeRemoved(Node*)), this, SLOT(slotNodeRemoved(Node*)) );
+        disconnect( m_project, SIGNAL(nodeMoved(Node*)), this, SLOT(slotLayoutChanged()) );
     }
     m_project = project;
     m_nodemodel.setProject( project );
     if ( project ) {
-        connect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
-        connect( m_project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SLOT( slotNodeToBeInserted(  Node*, int ) ) );
-        connect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeToBeRemoved( Node* ) ) );
-        connect( m_project, SIGNAL( nodeToBeMoved( Node* ) ), this, SLOT( slotLayoutToBeChanged() ) );
+        connect( m_project, SIGNAL(nodeChanged(Node*)), this, SLOT(slotNodeChanged(Node*)) );
+        connect( m_project, SIGNAL(nodeToBeAdded(Node*,int)), this, SLOT(slotNodeToBeInserted(Node*,int)) );
+        connect( m_project, SIGNAL(nodeToBeRemoved(Node*)), this, SLOT(slotNodeToBeRemoved(Node*)) );
+        connect( m_project, SIGNAL(nodeToBeMoved(Node*,int,Node*,int)), this, SLOT(slotLayoutToBeChanged()) );
 
-        connect( m_project, SIGNAL( nodeAdded( Node* ) ), this, SLOT( slotNodeInserted( Node* ) ) );
-        connect( m_project, SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeRemoved( Node* ) ) );
-        connect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotLayoutChanged() ) );
+        connect( m_project, SIGNAL(nodeAdded(Node*)), this, SLOT(slotNodeInserted(Node*)) );
+        connect( m_project, SIGNAL(nodeRemoved(Node*)), this, SLOT(slotNodeRemoved(Node*)) );
+        connect( m_project, SIGNAL(nodeMoved(Node*)), this, SLOT(slotLayoutChanged()) );
     }
     refresh();
 }
@@ -385,14 +387,14 @@ void PertResultItemModel::setManager( ScheduleManager *sm )
 
 void PertResultItemModel::clear()
 {
-    kDebug()<<this;
+    kDebug(planDbg())<<this;
     foreach ( NodeList *l, m_top ) {
         int c = l->count();
         if ( c > 0 ) {
             // FIXME: gives error msg:
             // Can't select indexes from different model or with different parents
             QModelIndex i = index( l );
-            kDebug()<<i<<": "<<c;
+            kDebug(planDbg())<<i<<": "<<c;
 //            beginRemoveRows( i, 0, c-1 );
 //            endRemoveRows();
         }
@@ -414,7 +416,7 @@ void PertResultItemModel::refresh()
         return;
     }
     long id = m_manager == 0 ? -1 : m_manager->scheduleId();
-    kDebug()<<id;
+    kDebug(planDbg())<<id;
     if ( id == -1 ) {
         return;
     }
@@ -425,9 +427,9 @@ void PertResultItemModel::refresh()
         for ( int i = 0; i < lst->count(); ++i ) {
             m_topNames << i18n( "Critical Path" );
             m_top.append( const_cast<NodeList*>( &( lst->at( i ) ) ) );
-            kDebug()<<m_topNames.last()<<lst->at( i );
+            kDebug(planDbg())<<m_topNames.last()<<lst->at( i );
         }
-        if ( lst->isEmpty() ) kDebug()<<"No critical path";
+        if ( lst->isEmpty() ) kDebug(planDbg())<<"No critical path";
     }
     foreach( Node* n, m_project->allNodes() ) {
         if ( n->type() != Node::Type_Task && n->type() != Node::Type_Milestone ) {
@@ -451,7 +453,7 @@ void PertResultItemModel::refresh()
         m_top.append(&m_noncritical );
     }
     if ( ! m_top.isEmpty() ) {
-        kDebug()<<m_top;
+        kDebug(planDbg())<<m_top;
         beginInsertRows( QModelIndex(), 0, m_top.count() -1 );
         endInsertRows();
         foreach ( NodeList *l, m_top ) {
@@ -477,7 +479,7 @@ QModelIndex PertResultItemModel::parent( const QModelIndex &index ) const
     if ( !index.isValid() ) {
         return QModelIndex();
     }
-    //kDebug()<<index.internalPointer()<<": "<<index.row()<<", "<<index.column();
+    //kDebug(planDbg())<<index.internalPointer()<<": "<<index.row()<<", "<<index.column();
     int row = index.internalId();
     if ( row < 0 ) {
         return QModelIndex(); // top level has no parent
@@ -502,7 +504,7 @@ QModelIndex PertResultItemModel::index( int row, int column, const QModelIndex &
             return QModelIndex(); // shouldn't happend
         }
         QModelIndex idx = createIndex(row, column, -1 );
-        //kDebug()<<parent<<", "<<idx;
+        //kDebug(planDbg())<<parent<<", "<<idx;
         return idx;
     }
     if ( parent.row() == 0 ) {
@@ -734,14 +736,14 @@ QVariant PertResultItemModel::data( const QModelIndex &index, int role ) const
         switch ( index.column() ) {
             case NodeModel::NodeName: result = name( NodeModel::NodeName, role ); break;
             default:
-                //kDebug()<<"data: invalid display value column "<<index.column();
+                //kDebug(planDbg())<<"data: invalid display value column "<<index.column();
                 return QVariant();
         }
     }
     if ( result.isValid() ) {
         if ( role == Qt::DisplayRole && result.type() == QVariant::String && result.toString().isEmpty()) {
             // HACK to show focus in empty cells
-            result = " ";
+            result = ' ';
         }
         return result;
     }
@@ -786,15 +788,15 @@ int PertResultItemModel::columnCount( const QModelIndex & ) const
 int PertResultItemModel::rowCount( const QModelIndex &parent ) const
 {
     if ( ! parent.isValid() ) {
-        //kDebug()<<"top="<<m_top.count();
+        //kDebug(planDbg())<<"top="<<m_top.count();
         return m_top.count();
     }
     NodeList *l = list( parent );
     if ( l ) {
-        //kDebug()<<"list "<<parent.row()<<": "<<l->count();
+        //kDebug(planDbg())<<"list "<<parent.row()<<": "<<l->count();
         return l->count();
     }
-    //kDebug()<<"node "<<parent.row();
+    //kDebug(planDbg())<<"node "<<parent.row();
     return 0; // nodes don't have children
 }
 
@@ -828,10 +830,10 @@ bool PertResultItemModel::dropMimeData( const QMimeData *, Qt::DropAction , int 
 NodeList *PertResultItemModel::list( const QModelIndex &index ) const
 {
     if ( index.isValid() && index.internalId() == -1 ) {
-        //kDebug()<<index<<"is list: "<<m_top.value( index.row() );
+        //kDebug(planDbg())<<index<<"is list: "<<m_top.value( index.row() );
         return m_top.value( index.row() );
     }
-    //kDebug()<<index<<"is not list";
+    //kDebug(planDbg())<<index<<"is not list";
     return 0;
 }
 
@@ -855,7 +857,7 @@ Node *PertResultItemModel::node( const QModelIndex &index ) const
 
 void PertResultItemModel::slotNodeChanged( Node *)
 {
-    kDebug();
+    kDebug(planDbg());
     refresh();
 /*    if ( node == 0 || node->type() == Node::Type_Project ) {
         return;

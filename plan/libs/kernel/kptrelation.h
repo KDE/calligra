@@ -123,4 +123,7 @@ public:
 
 }  //KPlato namespace
 
+KPLATOKERNEL_EXPORT QDebug operator<<( QDebug dbg, const KPlato::Relation* r );
+KPLATOKERNEL_EXPORT QDebug operator<<( QDebug dbg, const KPlato::Relation& r );
+
 #endif

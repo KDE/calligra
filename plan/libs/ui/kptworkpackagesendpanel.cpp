@@ -24,6 +24,8 @@
 #include "kpttask.h"
 #include "kptschedule.h"
 
+#include <KoIcon.h>
+
 #include <klocale.h>
 #include <kdebug.h>
 
@@ -51,12 +53,12 @@ WorkPackageSendPanel::WorkPackageSendPanel( const QList<Node*> &tasks,  Schedule
     }
     QMap<Resource*, QList<Node*> >::const_iterator it;
     for ( it = m_resMap.constBegin(); it != m_resMap.constEnd(); ++it ) {
-        QPushButton *pb = new QPushButton( KIcon( "mail-send" ), i18n( "Send To..." ), scrollArea );
+        QPushButton *pb = new QPushButton(koIcon("mail-send"), i18n("Send To..."), scrollArea);
         QLineEdit *le = new QLineEdit( it.key()->name(), scrollArea );
         le->setReadOnly( true );
         formLayout->addRow( pb, le );
 
-        connect( pb, SIGNAL( clicked(bool) ), SLOT( slotSendClicked() ) );
+        connect( pb, SIGNAL(clicked(bool)), SLOT(slotSendClicked()) );
         m_pbMap[ pb ] = it.key();
     }
 

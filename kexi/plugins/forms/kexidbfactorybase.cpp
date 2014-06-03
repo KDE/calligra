@@ -18,17 +18,15 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <q3scrollview.h>
-#include <qcursor.h>
-#include <qpainter.h>
-#include <qstyle.h>
+#include <QCursor>
+#include <QPainter>
+#include <QStyle>
 
-#include <KLocale>
-#include <KDebug>
-#include <KIconLoader>
-#include <KActionCollection>
-#include <KStandardAction>
-#include <KPluginFactory>
+#include <klocale.h>
+#include <kdebug.h>
+#include <kactioncollection.h>
+#include <kstandardaction.h>
+#include <kpluginfactory.h>
 
 #include <formeditor/container.h>
 #include <formeditor/form.h>
@@ -39,8 +37,8 @@
 #include <core/kexi.h>
 #include <core/kexipart.h>
 #include <core/KexiMainWindowIface.h>
-#include <kexidb/utils.h>
-#include <kexidb/connection.h>
+#include <db/utils.h>
+#include <db/connection.h>
 #include <kexiutils/utils.h>
 #include <widget/properties/KexiCustomPropertyFactory.h>
 #include <widget/utils/kexicontextmenuutils.h>
@@ -58,12 +56,12 @@
 KexiDBFactoryBase::KexiDBFactoryBase(QObject *parent, const char *name)
         : KFormDesigner::WidgetFactory(parent, name)
 {
-    m_propDesc["dataSource"] = i18n("Data Source");
+    setPropertyDescription("dataSource", i18n("Data Source"));
 
     //used in labels, frames...
-    m_propDesc["frameColor"] = i18n("Frame Color");
+    setPropertyDescription("frameColor", i18n("Frame Color"));
 
-    m_propDesc["readOnly"] = i18n("Read Only");
+    setPropertyDescription("readOnly", i18n("Read Only"));
 }
 
 KexiDBFactoryBase::~KexiDBFactoryBase()

@@ -29,13 +29,11 @@ pqxxSqlConnectionInternal::pqxxSqlConnectionInternal(Connection *conn)
 {
 }
 
-
 pqxxSqlConnectionInternal::~pqxxSqlConnectionInternal()
 {
-
 }
 
 void pqxxSqlConnectionInternal::storeResult()
 {
-    errmsg = "";
+    errmsg.clear();
 }

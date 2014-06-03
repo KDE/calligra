@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2009 Dag Andersen <danders@get2net.dk>
+ * Copyright (C) 2009, 2012 Dag Andersen <danders@get2net.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,6 +20,7 @@
 #include "KPlatoRCPSPlugin.h"
 
 #include "kptschedulerplugin_macros.h"
+#include "kptdebug.h"
 
 #include "KPlatoRCPSScheduler.h"
 
@@ -28,11 +29,11 @@
 
 #include <librcps.h>
 
-#include <KDebug>
 
 #include <QApplication>
-#include <KMessageBox>
+#include <kmessagebox.h>
 #include <kptschedulerplugin.h>
+
 
 KPLATO_SCHEDULERPLUGIN_EXPORT(KPlatoRCPSPlugin)
 
@@ -41,11 +42,15 @@ using namespace KPlato;
 KPlatoRCPSPlugin::KPlatoRCPSPlugin( QObject * parent, const QVariantList & )
     : KPlato::SchedulerPlugin(parent)
 {
-    kDebug()<<rcps_version();
+    kDebug(planDbg())<<rcps_version();
     KLocale *locale = KGlobal::locale();
     if ( locale ) {
         locale->insertCatalog( "planrcpsplugin" );
     }
+    m_granularities << (long unsigned int) 1 * 60 * 1000
+                    << (long unsigned int) 15 * 60 * 1000
+                    << (long unsigned int) 30 * 60 * 1000
+                    << (long unsigned int) 60 * 60 * 1000;
 }
 
 KPlatoRCPSPlugin::~KPlatoRCPSPlugin()
@@ -68,6 +73,12 @@ int KPlatoRCPSPlugin::capabilities() const
     return SchedulerPlugin::AvoidOverbooking | SchedulerPlugin::ScheduleForward | SchedulerPlugin::ScheduleBackward;
 }
 
+ulong KPlatoRCPSPlugin::currentGranularity() const
+{
+    ulong v = m_granularities.value( m_granularity );
+    return qMax( v, (ulong)60000 ); // minimum 1 min
+}
+
 void KPlatoRCPSPlugin::calculate( KPlato::Project &project, KPlato::ScheduleManager *sm, bool nothread )
 {
     foreach ( SchedulerThread *j, m_jobs ) {
@@ -77,14 +88,14 @@ void KPlatoRCPSPlugin::calculate( KPlato::Project &project, KPlato::ScheduleMana
     }
     sm->setScheduling( true );
 
-    KPlatoRCPSScheduler *job = new KPlatoRCPSScheduler( &project, sm );
+    KPlatoRCPSScheduler *job = new KPlatoRCPSScheduler( &project, sm, currentGranularity() );
     m_jobs << job;
     connect(job, SIGNAL(jobFinished(SchedulerThread*)), SLOT(slotFinished(SchedulerThread*)));
 
     project.changed( sm );
 
-//     connect(this, SIGNAL(sigCalculationStarted(Project*, ScheduleManager*)), &project, SIGNAL(sigCalculationStarted(Project*, ScheduleManager*)));
-//     connect(this, SIGNAL( sigCalculationFinished(Project*, ScheduleManager*)), &project, SIGNAL(sigCalculationFinished(Project*, ScheduleManager* )));
+//     connect(this, SIGNAL(sigCalculationStarted(Project*,ScheduleManager*)), &project, SIGNAL(sigCalculationStarted(Project*,ScheduleManager*)));
+//     connect(this, SIGNAL(sigCalculationFinished(Project*,ScheduleManager*)), &project, SIGNAL(sigCalculationFinished(Project*,ScheduleManager*)));
 
     connect(job, SIGNAL(maxProgressChanged(int)), sm, SLOT(setMaxProgress(int)));
     connect(job, SIGNAL(progressChanged(int)), sm, SLOT(setProgress(int)));
@@ -107,7 +118,7 @@ void KPlatoRCPSPlugin::stopCalculation( SchedulerThread *sch )
 {
     if ( sch ) {
          //FIXME: this should just call stopScheduling() and let the job finish "normally"
-        disconnect( sch, SIGNAL( jobFinished( KPlatoRCPSScheduler* ) ), this, SLOT( slotFinished( KPlatoRCPSScheduler* ) ) );
+        disconnect( sch, SIGNAL(jobFinished(KPlatoRCPSScheduler*)), this, SLOT(slotFinished(KPlatoRCPSScheduler*)) );
         sch->stopScheduling();
         // wait max 20 seconds.
         sch->mainManager()->setCalculationResult( ScheduleManager::CalculationStopped );
@@ -122,7 +133,7 @@ void KPlatoRCPSPlugin::stopCalculation( SchedulerThread *sch )
 
 void KPlatoRCPSPlugin::slotStarted( SchedulerThread */*job*/ )
 {
-//    qDebug()<<"KPlatoRCPSPlugin::slotStarted:";
+//    kDebug(planDbg())<<"KPlatoRCPSPlugin::slotStarted:";
 }
 
 void KPlatoRCPSPlugin::slotFinished( SchedulerThread *j )
@@ -130,7 +141,7 @@ void KPlatoRCPSPlugin::slotFinished( SchedulerThread *j )
     KPlatoRCPSScheduler *job = static_cast<KPlatoRCPSScheduler*>( j );
     Project *mp = job->mainProject();
     ScheduleManager *sm = job->mainManager();
-    //qDebug()<<"KPlatoRCPSPlugin::slotFinished:"<<mp<<sm<<job->isStopped();
+    //kDebug(planDbg())<<"KPlatoRCPSPlugin::slotFinished:"<<mp<<sm<<job->isStopped();
     if ( job->isStopped() ) {
         sm->setCalculationResult( ScheduleManager::CalculationCanceled );
     } else {
@@ -148,8 +159,8 @@ void KPlatoRCPSPlugin::slotFinished( SchedulerThread *j )
     }
     emit sigCalculationFinished( mp, sm );
 
-    disconnect(this, SIGNAL(sigCalculationStarted(Project*, ScheduleManager*)), mp, SIGNAL(sigCalculationStarted(Project*, ScheduleManager*)));
-    disconnect(this, SIGNAL(sigCalculationFinished(Project*, ScheduleManager*)), mp, SIGNAL(sigCalculationFinished(Project*, ScheduleManager* )));
+    disconnect(this, SIGNAL(sigCalculationStarted(Project*,ScheduleManager*)), mp, SIGNAL(sigCalculationStarted(Project*,ScheduleManager*)));
+    disconnect(this, SIGNAL(sigCalculationFinished(Project*,ScheduleManager*)), mp, SIGNAL(sigCalculationFinished(Project*,ScheduleManager*)));
 
     job->deleteLater();
 }

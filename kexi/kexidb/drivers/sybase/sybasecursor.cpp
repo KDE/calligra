@@ -24,8 +24,8 @@
 
 #include <QtGlobal>
 
-#include <kexidb/error.h>
-#include <kexidb/utils.h>
+#include <db/error.h>
+#include <db/utils.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <limits.h>
@@ -122,8 +122,9 @@ bool SybaseCursor::drv_close()
     return true;
 }
 
+//! @todo
 /*bool SybaseCursor::drv_moveFirst() {
-  return true; //TODO
+  return true;
 }*/
 
 void SybaseCursor::drv_getNextRecord()
@@ -146,7 +147,7 @@ QVariant SybaseCursor::value(uint pos)
     if (!d->dbProcess || pos >= m_fieldCount)
         return QVariant();
 
-    KexiDB::Field *f = (m_fieldsExpanded && pos < m_fieldsExpanded->count())
+    KexiDB::Field *f = (m_fieldsExpanded && pos < uint(m_fieldsExpanded->count()))
                        ? m_fieldsExpanded->at(pos)->field : 0;
 
     // db-library indexes its columns from 1
@@ -225,6 +226,7 @@ void SybaseCursor::drv_bufferMovePointerPrev()
 
 void SybaseCursor::drv_bufferMovePointerTo(qint64 to)
 {
+    Q_UNUSED(to);
     //dbgetrow( d->dbProcess, to );
 }
 

@@ -35,6 +35,7 @@ KWDocumentColumns::KWDocumentColumns(QWidget *parent, const KoColumns &columns)
     widget.previewPane->setLayout(layout);
     m_preview = new KoPagePreviewWidget(this);
     layout->addWidget(m_preview);
+    m_preview->setColumns(columns);
 
     connect(widget.columns, SIGNAL(valueChanged(int)), this, SLOT(optionsChanged()));
     connect(widget.spacing, SIGNAL(valueChangedPt(qreal)), this, SLOT(optionsChanged()));
@@ -44,8 +45,8 @@ KWDocumentColumns::KWDocumentColumns(QWidget *parent, const KoColumns &columns)
 void KWDocumentColumns::setColumns(const KoColumns &columns)
 {
     m_columns = columns;
-    widget.columns->setValue(columns.columns);
-    widget.spacing->changeValue(columns.columnSpacing);
+    widget.columns->setValue(columns.count);
+    widget.spacing->changeValue(columns.gapWidth);
 }
 
 void KWDocumentColumns::setTextAreaAvailable(bool available)
@@ -55,7 +56,7 @@ void KWDocumentColumns::setTextAreaAvailable(bool available)
     if (available)
         optionsChanged();
     else {
-        m_columns.columns = 1;
+        m_columns.count = 1;
         emit columnsChanged(m_columns);
     }
 }
@@ -67,8 +68,12 @@ void KWDocumentColumns::setUnit(const KoUnit &unit)
 
 void KWDocumentColumns::optionsChanged()
 {
-    m_columns.columns = widget.columns->value();
-    m_columns.columnSpacing = widget.spacing->value();
+    m_columns.count = widget.columns->value();
+    m_columns.gapWidth = widget.spacing->value();
+    // Workaround for currently incomplete support of column data:
+    // once some editing is done, drop any individual column data
+    // TODO: complete UI to set individual column data
+    m_columns.columnData.clear();
     emit columnsChanged(m_columns);
 }
 

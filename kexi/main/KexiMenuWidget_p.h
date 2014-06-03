@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
-   Copyright (C) 2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2011-2013 Jarosław Staniek <staniek@kde.org>
    
    Based on qmenu_p.h from Qt 4.7
 
@@ -9,7 +9,7 @@
    Copyright 2009-2010 Hugo Pereira Da Costa <hugo@oxygen-icons.org>
    Copyright 2008 Long Huynh Huu <long.upcase@googlemail.com>
    Copyright 2007 Matthew Woehlke <mw_triad@users.sourceforge.net>
-   Copyright 2007 Casper Boemann <cbr@boemann.dk>
+   Copyright 2007 C. Boemann <cbo@boemann.dk>
    Copyright 2007 Fredrik Höglund <fredrik@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -31,17 +31,31 @@
 #ifndef KEXIMENUWIDGET_P_H
 #define KEXIMENUWIDGET_P_H
 
-#include <KComponentData>
-#include <KSharedConfig>
-#include "QtGui/qstyleoption.h"
-#include "QtCore/qdatetime.h"
-#include "QtCore/qmap.h"
-#include "QtCore/qhash.h"
-#include "QtCore/qbasictimer.h"
-#include "QtCore/qpointer.h"
-//#include "private/qwidget_p.h"
+#include <kcomponentdata.h>
+#include <ksharedconfig.h>
+#include <QStyleOption>
+#include <QDateTime>
+#include <QCache>
+#include <QMap>
+#include <QHash>
+#include <QBasicTimer>
+#include <QPointer>
+#include <QAbstractButton>
+#include "KexiMenuWidget.h"
 
 class QEventLoop;
+
+//! Used to define transparent clickable logo area
+class ClickableLogoArea : public QAbstractButton
+{
+    Q_OBJECT
+public:
+    explicit ClickableLogoArea(QWidget *parent = 0);
+protected slots:
+    void slotClicked();
+protected:
+    virtual void paintEvent(QPaintEvent*);
+};
 
 //used to walk up the popup list
 struct KexiMenuWidgetCaused {
@@ -116,7 +130,7 @@ public:
                       currentAction(0),
                       scroll(0), eventLoop(0), /*tearoff(0),*/ /*tornoff(0),*/ /*tearoffHighlighted(0),*/
                       hasCheckableItems(0), sloppyAction(0), /* doChildEffects(false)*/
-                      hasFrame(true)
+                      hasFrame(true), clickableLogoArea(0)
     {
     }
     virtual ~KexiMenuWidgetPrivate()
@@ -132,7 +146,7 @@ public:
     KexiMenuWidget *q;
 
     //item calculations
-    mutable uint itemsDirty : 1;
+    mutable uint itemsDirty;
     mutable uint maxIconWidth, tabWidth;
     QRect actionRect(QAction *) const;
 
@@ -142,15 +156,15 @@ public:
     QRect popupGeometry(const QWidget *widget) const;
     QRect popupGeometry(int screen = -1) const;
     mutable uint ncols : 4; //4 bits is probably plenty
-    uint collapsibleSeparators : 1;
+    uint collapsibleSeparators;
 
     bool activationRecursionGuard;
 
     //selection
     static KexiMenuWidget *mouseDown;
     QPoint mousePopupPos;
-    uint hasHadMouse : 1;
-    uint aboutToHide : 1;
+    uint hasHadMouse;
+    uint aboutToHide;
     int motions;
     QAction *currentAction;
     QBasicTimer menuDelayTimer;
@@ -254,6 +268,12 @@ public:
     //bool persistentSelectionsEnabled;
 
     OxygenHelper *oxygenHelper;
+    bool bespin;
+
+    void updateLogo();
+    void updateLogoPixmap();
+    QPixmap calligraLogoPixmap;
+    ClickableLogoArea *clickableLogoArea;
 };
 
 #endif // KEXIMENUWIDGET_P_H

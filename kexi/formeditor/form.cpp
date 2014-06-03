@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2010 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2014 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -29,24 +29,24 @@
 #include <kundo2stack.h>
 
 #include <kdebug.h>
-#include <KLocale>
-#include <KAction>
-#include <KMessageBox>
-#include <KActionCollection>
-#include <KMenu>
-#include <KFontDialog>
-#include <KTextEdit>
-#include <KLineEdit>
+#include <klocale.h>
+#include <kaction.h>
+#include <kmessagebox.h>
+#include <kactioncollection.h>
+#include <kmenu.h>
+#include <kfontdialog.h>
+#include <ktextedit.h>
+#include <klineedit.h>
+
+#include <KoIcon.h>
 
 #include "WidgetInfo.h"
 #include "FormWidget.h"
 #include "resizehandle.h"
 #include "container.h"
 #include "objecttree.h"
-//unused #include "widgetpropertyset.h"
 #include "formIO.h"
 #include "FormWidgetInterface.h"
-//unused #include "formmanager.h"
 #include "widgetlibrary.h"
 #include "events.h"
 #include "utils.h"
@@ -57,17 +57,12 @@
 #include <kexiutils/utils.h>
 #include <kexiutils/identifier.h>
 #include <kexiutils/styleproxy.h>
-#include <kexi_global.h>
 
+#include <db/utils.h>
 #include <koproperty/Set.h>
 #include <koproperty/Property.h>
 
-#ifdef __GNUC__
-#warning pixmapcollection
-#else
-#pragma WARNING( pixmapcollection )
-#endif
-
+//! @todo pixmapcollection
 #define KEXI_NO_PIXMAPCOLLECTION
 #ifndef KEXI_NO_PIXMAPCOLLECTION
 #include "pixmapcollection.h"
@@ -80,7 +75,8 @@ namespace KFormDesigner
 class DesignModeStyle : public KexiUtils::StyleProxy
 {
 public:
-    DesignModeStyle(QStyle* parentStyle) : KexiUtils::StyleProxy(parentStyle)
+    explicit DesignModeStyle(QStyle* parentStyle, QObject *parent = 0)
+        : KexiUtils::StyleProxy(parentStyle, parent)
     {
     }
 
@@ -92,25 +88,7 @@ public:
         KexiUtils::StyleProxy::drawControl(element, so ? so : option, p, w);
         delete so;
     }
-/*
-    virtual void drawComplexControl(ComplexControl cc, const QStyleOptionComplex *opt,
-                                    QPainter *p, const QWidget *widget = 0) const
-    {
-        QStyleOption so( alterOption(*opt) );
-        KexiUtils::StyleProxy::drawComplexControl(cc, &so, p, widget);
-    }
-*/
-/*    virtual void drawPrimitive(PrimitiveElement element,
-                               const QStyleOption * option, QPainter * painter,
-                               const QWidget * widget = 0) const
-    {
-        if (!option) {
-            KexiUtils::StyleProxy::drawPrimitive(element, option, painter, widget);
-            return;
-        }
-        QStyleOption *so = alterOption(*opt);
-        KexiUtils::StyleProxy::drawPrimitive(element, &so, painter, widget);
-    }*/
+
 private:
     //! Used in alterOption()
     template <class StyleOptionClass>
@@ -211,7 +189,7 @@ private:
 class FormPrivate
 {
 public:
-    FormPrivate(Form *form);
+    FormPrivate(Form *form, WidgetLibrary* _library);
     ~FormPrivate();
 
     void enableAction(const char* name, bool enable);
@@ -244,51 +222,58 @@ public:
     
     //! Sets color of selected widget(s) to value of @a p. 
     //! @a roleMethod can be backgroundColor or foregroundColor.
+    //! Makes background inherited if @a roleMethod if background and value is null.
     void setColorProperty(KoProperty::Property& p,
-                          QPalette::ColorRole (QWidget::*roleMethod)() const)
+                          QPalette::ColorRole (QWidget::*roleMethod)() const,
+                          const QVariant& value)
     {
+        bool nullColor = value.isNull() || !value.value<QColor>().isValid();
         foreach(QWidget* widget, selected) {
             ObjectTreeItem *titem = q->objectTree()->lookup(widget->objectName());
+            QColor color;
+            if (nullColor && roleMethod == &QWidget::backgroundRole) {
+                color = widget->parentWidget()->palette().color((widget->*roleMethod)());
+            }
+            else {
+                color = value.value<QColor>();
+            }
             if (titem && p.isModified())
-                titem->addModifiedProperty(p.name(), p.value());
+                titem->addModifiedProperty(p.name(), color);
             QPalette widgetPalette(widget->palette());
             QColor oldColor(widgetPalette.color((widget->*roleMethod)()));
-            widgetPalette.setColor((widget->*roleMethod)(), p.value().value<QColor>());
+            widgetPalette.setColor((widget->*roleMethod)(), color);
             widget->setPalette(widgetPalette);
             if (!isRedoing) {
                 q->addPropertyCommand(widget->objectName().toLatin1(),
-                    oldColor, p.value(), p.name(), Form::DontExecuteCommand);
+                    oldColor, color, p.name(), Form::DontExecuteCommand);
             }
-            //handleWidgetPropertyChanged(widget, p.name(), value);
+            if (roleMethod == &QWidget::backgroundRole) {
+                widget->setAutoFillBackground(!nullColor);
+                if (nullColor) { // make background inherited
+                    widget->setBackgroundRole(QPalette::NoRole);
+                }
+            }
         }
     }
         
     Form::Mode mode;
     Form::State state;
     Form::Features features;
-
     QPoint insertionPoint;
-
-//  FormManager  *manager;
     QPointer<Container>  toplevel;
     ObjectTree  *topTree;
     QPointer<QWidget> widget;
-
     KoProperty::Set propertySet;
-
     QWidgetList selected;
     ResizeHandleSet::Hash resizeHandles;
     QByteArray selectedClass;
-
-    bool modified : 1;
-    bool interactive : 1;
-    bool isUndoing : 1;
-    bool isRedoing : 1;
-    bool isSnapWidgetsToGridEnabled : 1;
-//removed, mode is used now:    bool  design;
+    bool modified;
+    bool interactive;
+    bool isUndoing;
+    bool isRedoing;
+    bool snapToGrid;
+    int gridSize;
     QString  filename;
-
-//2.0    K3CommandHistory  *commandHistory;
     KUndo2Stack undoStack;
     KActionCollection internalCollection;
     KActionCollection *collection;
@@ -305,7 +290,7 @@ public:
     //! This map is used to store cursor shapes before inserting (so we can restore them later)
     QHash<QObject*, QCursor> cursors;
 
-    //!This string list is used to store the widgets which hasMouseTracking() == true (eg lineedits)
+    //! This string list is used to store the widgets which hasMouseTracking() == true (eg lineedits)
     QStringList *mouseTrackers;
 
     FormWidget  *formWidget;
@@ -319,110 +304,90 @@ public:
     //! Format version, set by FormIO's loader or on creating a new form.
     uint originalFormatVersion;
 
-// moved from FormManager
 #ifdef KFD_SIGSLOTS
     //! true is slot connection is curently being painted
-// removed, use state instead    bool creatingConnection;
     Connection *connection;
-// not needed to store this one:    KMenu *m_sigSlotMenu;
 #endif
 
-// moved from WidgetPropertySet
     //! used to update command's value when undoing
     PropertyCommand  *lastCommand;
     PropertyCommandGroup  *lastCommandGroup;
     uint idOfPropertyCommand;
     //! Command that being executed through Form::addCommand()
     const Command *executingCommand;
-//    GeometryPropertyCommand  *lastGeoCommand;
-    bool slotPropertyChangedEnabled : 1;
-    bool slotPropertyChanged_addCommandEnabled : 1;
-    bool insideAddPropertyCommand : 1;
+    bool slotPropertyChangedEnabled;
+    bool slotPropertyChanged_addCommandEnabled;
+    bool insideAddPropertyCommand;
     bool selectWidgetEnabled;
-// end of moved from WidgetPropertySet
 
     // i18n stuff
     QMap<QByteArray, QString> propCaption;
     QMap<QByteArray, QString> propValCaption;
 
-    // helper to change color palette when switching 'enabled' property
-    QColorGroup* origActiveColors;
-
     QStyle *designModeStyle;
 
-// <moved from WidgetFactory>
-//?    QPointer<QWidget> m_widget;
     QPointer<QWidget> inlineEditor;
     QPointer<Container> inlineEditorContainer;
     QByteArray editedWidgetClass;
     QString originalInlineText;
-// </moved from WidgetFactory>
+    bool pixmapsStoredInline;
 
+    WidgetLibrary * const library;
+
+private:
     Form *q;
 };
 }
 
 using namespace KFormDesigner;
 
-FormPrivate::FormPrivate(Form *form)
+FormPrivate::FormPrivate(Form *form, WidgetLibrary* _library)
  : state(Form::WidgetSelecting)
  , internalCollection(static_cast<QObject*>(0))
+ , library(_library)
  , q(form)
 {
-//2.0    commandHistory = 0;
     toplevel = 0;
     topTree = 0;
     widget = 0;
-//Qt4    resizeHandles.setAutoDelete(true);
     modified = false;
     interactive = true;
-//    design = true;
     autoTabstops = false;
     isRedoing = false;
 //! @todo get the default from globals...
-    isSnapWidgetsToGridEnabled = true;
-//    tabstops.setAutoDelete(false);
+    snapToGrid = true;
+    gridSize = 10;
 #ifdef KFD_SIGSLOTS
     connBuffer = new ConnectionBuffer();
 #endif
     formatVersion = KFormDesigner::version();
     originalFormatVersion = KFormDesigner::version();
-//    creatingConnection = false;
-
-// moved from WidgetPropertySet
     lastCommand = 0;
     lastCommandGroup = 0;
-//    lastGeoCommand = 0;
     isUndoing = false;
     slotPropertyChangedEnabled = true;
     slotPropertyChanged_addCommandEnabled = true;
     insideAddPropertyCommand = false;
     initPropertiesDescription();
-    origActiveColors = 0;
-// end of moved from WidgetPropertySet
     designModeStyle = 0;
     idOfPropertyCommand = 0;
     selectWidgetEnabled = true;
     executingCommand = 0;
+    pixmapsStoredInline = false;
 }
 
 FormPrivate::~FormPrivate()
 {
-//2.0    delete commandHistory;
     delete topTree;
 #ifdef KFD_SIGSLOTS
     delete connBuffer;
     connBuffer = 0;
 #endif
-    delete designModeStyle;
-//Qt4    resizeHandles.setAutoDelete(false);
-    // otherwise, it tries to delete widgets which doesn't exist anymore
 }
 
 void FormPrivate::enableAction(const char *name, bool enable)
 {
     QAction *a = collection->action(QLatin1String(name));
-    //Q_ASSERT(a);
     if (a) {
         a->setEnabled(enable);
     }
@@ -430,7 +395,6 @@ void FormPrivate::enableAction(const char *name, bool enable)
 
 ////////////////////////////////////////// i18n related functions ////////
 
-// moved from WidgetPropertySet
 void FormPrivate::initPropertiesDescription()
 {
 //! \todo perhaps a few of them shouldn't be translated within KFD mode,
@@ -450,6 +414,7 @@ void FormPrivate::initPropertiesDescription()
     propCaption["cursor"] = i18n("Cursor");
     propCaption["paletteForegroundColor"] = i18n("Foreground Color");
     propCaption["paletteBackgroundColor"] = i18n("Background Color");
+    propCaption["autoFillBackground"] = i18n("Fill Background");
     propCaption["focusPolicy"] = i18n("Focus Policy");
     propCaption["margin"] = i18n("Margin");
     propCaption["readOnly"] = i18n("Read Only");
@@ -465,7 +430,7 @@ void FormPrivate::initPropertiesDescription()
     propCaption["midLineWidth"] = i18n("Mid Frame Width");
     propCaption["frameShape"] = i18n("Frame Shape");
     propCaption["frameShadow"] = i18n("Frame Shadow");
-    //any QScrollbar
+    //any QScrollBar
     propCaption["vScrollBarMode"] = i18n("Vertical Scrollbar");
     propCaption["hScrollBarMode"] = i18n("Horizontal Scrollbar");
 
@@ -546,44 +511,41 @@ KoProperty::Property::ListData* FormPrivate::createValueList(WidgetInfo *winfo, 
 
 Form::Form(WidgetLibrary* library, Mode mode, KActionCollection &col, ActionGroup& group)
         : QObject(library)
-        , d( new FormPrivate(this) )
+        , d( new FormPrivate(this, library) )
 {
-    init(library, mode, col, group);
+    init(mode, col, group);
 }
 
 Form::Form(Form *parent)
         : QObject(parent->library())
-        , d( new FormPrivate(this) )
+        , d( new FormPrivate(this, parent->library()) )
 {
-    init(parent->library(), parent->mode(), *parent->actionCollection(), *parent->widgetActionGroup());
+    init(parent->mode(), *parent->actionCollection(), *parent->widgetActionGroup());
 }
 
 Form::~Form()
 {
     emit destroying();
     delete d;
-//    d = 0;
 }
 
-void Form::init(WidgetLibrary* library, Mode mode, KActionCollection &col, KFormDesigner::ActionGroup &group)
+void Form::init(Mode mode, KActionCollection &col, KFormDesigner::ActionGroup &group)
 {
-    m_lib = library;
-// d->manager = manager;
     d->mode = mode;
     d->features = 0;
     d->widgetActionGroup = &group;
 
-    connect(&d->propertySet, SIGNAL(propertyChanged(KoProperty::Set&, KoProperty::Property&)),
-            this, SLOT(slotPropertyChanged(KoProperty::Set&, KoProperty::Property&)));
-    connect(&d->propertySet, SIGNAL(propertyReset(KoProperty::Set&, KoProperty::Property&)),
-            this, SLOT(slotPropertyReset(KoProperty::Set&, KoProperty::Property&)));
+    connect(&d->propertySet, SIGNAL(propertyChanged(KoProperty::Set&,KoProperty::Property&)),
+            this, SLOT(slotPropertyChanged(KoProperty::Set&,KoProperty::Property&)));
+    connect(&d->propertySet, SIGNAL(propertyReset(KoProperty::Set&,KoProperty::Property&)),
+            this, SLOT(slotPropertyReset(KoProperty::Set&,KoProperty::Property&)));
 
-    // Init actions
-    d->collection = &col; //new KActionCollection(this);
-/*2.0    d->commandHistory = new K3CommandHistory(d->collection, true);
-    connect(d->commandHistory, SIGNAL(commandExecuted(K3Command*)), this, SLOT(slotCommandExecuted(K3Command*)));
-    connect(d->commandHistory, SIGNAL(documentRestored()), this, SLOT(slotFormRestored()));
-    */
+    d->collection = &col;
+}
+
+WidgetLibrary* Form::library() const
+{
+    return d->library;
 }
 
 KActionCollection  *Form::actionCollection() const
@@ -656,9 +618,20 @@ bool Form::isModified() const
     return d->modified;
 }
 
+void Form::setModified(bool set)
+{
+    d->modified = set;
+    emit modified(set);
+}
+
 int Form::gridSize() const
 {
-    return 10;
+    return d->gridSize;
+}
+
+void Form::setGridSize(int gridSize)
+{
+    d->gridSize = gridSize;
 }
 
 int Form::defaultMargin() const
@@ -684,12 +657,10 @@ void Form::setFilename(const QString &file)
 void Form::clearUndoStack()
 {
     d->undoStack.clear();
-//2.0    d->commandHistory->clear();
 }
 
 void Form::setUndoStackClean()
 {
-//2.0    d->commandHistory->documentSaved();
     d->undoStack.setClean();
 }
 
@@ -711,6 +682,16 @@ void Form::setConnectionBuffer(ConnectionBuffer *b)
 PixmapCollection* Form::pixmapCollection() const
 {
     return d->pixcollection;
+}
+
+void Form::setPixmapsStoredInline(bool set)
+{
+    d->pixmapsStoredInline = set;
+}
+
+bool Form::pixmapsStoredInline() const
+{
+    return d->pixmapsStoredInline;
 }
 
 ObjectTreeList* Form::tabStops()
@@ -741,8 +722,8 @@ Container* Form::toplevelContainer() const
 
 void Form::createToplevel(QWidget *container, FormWidget *formWidget, const QByteArray &)
 {
-    kDebug() << "container= " << (container ? container->objectName() : "<NULL>")
-        << " formWidget=" << formWidget;
+    //kDebug() << "container= " << (container ? container->objectName() : "<NULL>")
+    //         << " formWidget=" << formWidget;
 
     setFormWidget(formWidget);
     d->toplevel = new Container(0, container, this);
@@ -750,29 +731,25 @@ void Form::createToplevel(QWidget *container, FormWidget *formWidget, const QByt
     d->topTree = new ObjectTree(i18n("Form"), container->objectName(), container, d->toplevel);
     d->toplevel->setObjectTree(d->topTree);
     d->toplevel->setForm(this);
-#ifdef __GNUC__
-#warning pixmapcollection
-#else
-#pragma WARNING( pixmapcollection )
-#endif
+
+//! @todo pixmapcollection
 #ifndef KEXI_NO_PIXMAPCOLLECTION
     d->pixcollection = new PixmapCollection(container->objectName(), this);
 #endif
 
     d->topTree->setWidget(container);
-//! todo: copy caption in Kexi from object's caption
+//! @todo copy caption in Kexi from object's caption
 // d->topTree->addModifiedProperty("caption", name());
-    //m_topTree->addModifiedProperty("icon");
+//d->topTree->addModifiedProperty("icon");
 
     connect(container, SIGNAL(destroyed()), this, SLOT(formDeleted()));
-
-    kDebug() << "d->toplevel=" << d->toplevel;
+    //kDebug() << "d->toplevel=" << d->toplevel;
 
     // alter the style
     delete d->designModeStyle;
     d->designModeStyle = 0;
     if (d->mode == DesignMode) {
-        d->designModeStyle = new DesignModeStyle(d->topTree->widget()->style());
+        d->designModeStyle = new DesignModeStyle(d->topTree->widget()->style(), this);
         d->topTree->widget()->setStyle(d->designModeStyle);
     }
 }
@@ -823,8 +800,6 @@ Container* Form::parentContainer(QWidget *w) const
 {
     if (!w)
         return 0;
-    // it = d->topTree->lookup(d->selected.last()->name());
-    //else
     ObjectTreeItem *it = d->topTree->lookup(w->objectName());
     if (!it || !it->parent())
         return 0;
@@ -838,13 +813,16 @@ Container* Form::parentContainer(QWidget *w) const
 void Form::setMode(Mode mode)
 {
     d->mode = mode;
-    if (mode == DesignMode)
+    if (d->mode == DesignMode) {
+        d->designModeStyle = new DesignModeStyle(d->widget->style());
+        d->widget->setStyle(d->designModeStyle);
         return;
+    }
 
     ObjectTreeHash hash(*(d->topTree->hash()));
     foreach (ObjectTreeItem *item, hash) {
-        m_lib->previewWidget(
-            item->widget()->metaObject()->className(), 
+        library()->previewWidget(
+            item->widget()->metaObject()->className(),
             item->widget(), d->toplevel
         );
     }
@@ -858,10 +836,6 @@ void Form::setMode(Mode mode)
     // alter the style
     delete d->designModeStyle;
     d->designModeStyle = 0;
-    if (d->mode == DesignMode) {
-        d->designModeStyle = new DesignModeStyle(d->widget->style());
-        d->widget->setStyle(d->designModeStyle);
-    }
 }
 
 
@@ -882,11 +856,11 @@ void Form::selectWidgetInternal(QWidget *w, WidgetSelectionFlags flags)
         selectWidget(widget());
         return;
     }
-    kDebug() << "selected count=" << d->selected.count();
+    //kDebug() << "selected count=" << d->selected.count();
     if (!d->selected.isEmpty()) {
-        kDebug() << "first=" << d->selected.first();
+        //kDebug() << "first=" << d->selected.first();
     }
-    kDebug() << w;
+    //kDebug() << w;
 
     if (d->selected.count() == 1 && d->selected.first() == w) {
         return;
@@ -905,10 +879,8 @@ void Form::selectWidgetInternal(QWidget *w, WidgetSelectionFlags flags)
         wtmp = wtmp->parentWidget();
     }
 
-//kDebug() << w << wtmp << "1111111111111111111111111";
     if (wtmp)
         wtmp->setFocus();
-//kDebug() << "2222222222222222222222222";
 
     if (flags & ReplacePreviousSelection) {
         d->selected.clear();
@@ -921,11 +893,6 @@ void Form::selectWidgetInternal(QWidget *w, WidgetSelectionFlags flags)
 
     // WidgetStack and TabWidget pages widgets shouldn't have resize handles, but their parent
 //! @todo move special case to a factory?
-#ifdef __GNUC__
-#warning "Port this.."
-#else
-#pragma WARNING( Port this.. )
-#endif
 #if 0
     if (!isTopLevelWidget(w) && w->parentWidget()
             && KexiUtils::objectIsA(w->parentWidget(), "QWidgetStack")) {
@@ -979,8 +946,6 @@ bool Form::isTopLevelWidget(QWidget *w) const
         return true;
 
     return !item->parent();
-//! @todo OK?
-//    return w == formWidget();
 }
 
 ResizeHandleSet* Form::resizeHandlesForWidget(QWidget* w)
@@ -1051,22 +1016,11 @@ void Form::emitActionSignals()
     else if (selectedWidgets()) {
       emitWidgetSelected( true );
     }
-/* 2.0 replaced by the above
-    if (d->selected.count() > 1)
-        emitWidgetSelected(true);
-    else if (d->selected.first() != widget())
-        emitWidgetSelected(false);
-    else
-        emitFormWidgetSelected(); */
 }
 
 void Form::emitUndoActionSignals()
 {
-#ifdef __GNUC__
-#warning pixmapcollection
-#else
-#pragma WARNING( pixmapcollection )
-#endif
+//! @todo pixmapcollection
 #ifndef KEXI_NO_PIXMAPCOLLECTION
     KAction *undoAction = d->collection->action(QLatin1String("edit_undo"));
     if (undoAction)
@@ -1084,25 +1038,11 @@ Form::emitSelectionSignals()
     if (!selectedWidgets()->isEmpty()) {
         emitSelectionChanged(selectedWidgets()->first(), DefaultWidgetSelectionFlags);
     }
-// for(QWidget *w = selectedWidgets()->next(); w; w = selectedWidgets()->next())
-//  emit selectionChanged(selectedWidgets()->first(), true);
     foreach (QWidget *w, *selectedWidgets()) {
         emitSelectionChanged(w, LastSelection);
-//prev        emit selectionChanged(w, true);
     }
 }
 
-/* moved to FormPrivate
-void Form::enableAction(const char* name, bool enable)
-{
-#ifdef __GNUC__
-#warning "Implement this.."
-#else
-#pragma WARNING( Implement this.. )
-#endif
-}*/
-
-// moved from FormManager
 void Form::emitWidgetSelected(bool multiple)
 {
     enableFormActions();
@@ -1166,10 +1106,8 @@ void Form::emitWidgetSelected(bool multiple)
     emit widgetSelected(true);
 }
 
-// moved from FormManager
 void Form::emitFormWidgetSelected()
 {
-// disableWidgetActions();
     d->enableAction("edit_copy", false);
     d->enableAction("edit_cut", false);
     d->enableAction("edit_delete", false);
@@ -1204,15 +1142,9 @@ void Form::emitFormWidgetSelected()
     emit formWidgetSelected();
 }
 
-// moved from FormManager
 void Form::emitNoFormSelected()
 {
     disableWidgetActions();
-
-    // Disable edit actions
-// enableAction("edit_paste", false);
-// enableAction("edit_undo", false);
-// enableAction("edit_redo", false);
 
     // Disable 'Tools' actions
     d->enableAction("pixmap_collection", false);
@@ -1222,7 +1154,7 @@ void Form::emitNoFormSelected()
     }
 #endif
     d->enableAction("taborder", false);
-    d->enableAction("change_style", true); //activeForm() != 0);
+    d->enableAction("change_style", true);
 
     // Disable items in 'File'
     if (d->features & EnableFileActions) {
@@ -1234,7 +1166,6 @@ void Form::emitNoFormSelected()
     emit noFormSelected();
 }
 
-// moved from FormManager
 void Form::enableFormActions()
 {
     // Enable 'Tools' actions
@@ -1258,7 +1189,6 @@ void Form::enableFormActions()
     d->enableAction("edit_select_all", true);
 }
 
-// moved from FormManager
 void Form::disableWidgetActions()
 {
     // Disable edit actions
@@ -1289,16 +1219,8 @@ void Form::disableWidgetActions()
 ///////////////////////////  Various slots and signals /////////////////////
 void Form::formDeleted()
 {
-// clearSelection();
     d->selected.clear();
-//Qt4    d->resizeHandles.setAutoDelete(false);
     d->resizeHandles.clear();
-//Qt4    d->resizeHandles.setAutoDelete(true);
-// emit selectionChanged(0, false);
-// emitActionSignals(false);
-
-//2.0 removed...    FormManager::self()->deleteForm(this);
-    //delete this;
     deleteLater();
 }
 
@@ -1318,10 +1240,6 @@ void Form::changeName(const QByteArray &oldname, const QByteArray &newname)
         KMessageBox::sorry(widget()->topLevelWidget(),
                            i18n("Renaming widget \"%1\" to \"%2\" failed.",
                                 QString(oldname), QString(newname)));
-//moved to WidgetPropertySet::slotChangeProperty()
-//  KMessageBox::sorry(widget()->topLevelWidget(),
-//  i18n("A widget with this name already exists. "
-//   "Please choose another name or rename existing widget."));
         kWarning() << "widget" << newname << "already exists, reverting rename";
         d->propertySet.changeProperty("objectName", oldname);
     }
@@ -1350,12 +1268,10 @@ const Command* Form::executingCommand() const
 
 bool Form::addCommand(Command *command, AddCommandOption option)
 {
-    d->modified = true;
-    emit modified();
+    setModified(true);
     if (option == DontExecuteCommand) {
         command->blockRedoOnce();
     }
-    //const int count = d->undoStack.count();
     const bool saveExecutingCommand = !d->executingCommand;
     if (saveExecutingCommand)
         d->executingCommand = command;
@@ -1364,35 +1280,13 @@ bool Form::addCommand(Command *command, AddCommandOption option)
 
     if (saveExecutingCommand)
         d->executingCommand = 0;
-/*    if ((count + 1) == d->undoStack.count()) {
-        return false;
-    }*/
-    kDebug() << "ADDED:" << command;
-/*    if (option == DontExecuteCommand) { // simulate command to activate 'undo' menu
-        slotCommandExecuted(command);
-    }*/
+    //kDebug() << "ADDED:" << command;
     return true;
 }
 
-#if 0
-void Form::slotCommandExecuted(K3Command *command)
-{
-    Q_UNUSED(command)
-    d->modified = true;
-    emit modified();
-    // because actions text is changed after the commandExecuted() signal is emitted
-    QTimer::singleShot(10, this, SLOT(emitUndoEnabled()));
-    QTimer::singleShot(10, this, SLOT(emitRedoEnabled()));
-}
-#endif
-
 void Form::emitUndoEnabled()
 {
-#ifdef __GNUC__
-#warning pixmapcollection
-#else
-#pragma WARNING( pixmapcollection )
-#endif
+//! @todo pixmapcollection
 #ifndef KEXI_NO_PIXMAPCOLLECTION
     KAction *undoAction = d->collection->action(QLatin1String("edit_undo"));
     if (undoAction)
@@ -1402,9 +1296,7 @@ void Form::emitUndoEnabled()
 
 void Form::emitRedoEnabled()
 {
-#ifdef __GNUC__
-#warning pixmapcollection
-#endif
+//! @todo pixmapcollection
 #ifndef KEXI_NO_PIXMAPCOLLECTION
     KAction *redoAction = d->collection->action(QLatin1String("edit_redo"));
     if (redoAction)
@@ -1414,8 +1306,7 @@ void Form::emitRedoEnabled()
 
 void Form::slotFormRestored()
 {
-    d->modified = false;
-    emit modified();
+    setModified(false);
 }
 
 
@@ -1430,11 +1321,9 @@ void Form::addWidgetToTabStops(ObjectTreeItem *it)
         // For composed widgets, we check if one of the child can have focus
         const QObjectList list(w->children());
         foreach(const QObject *obj, list) {
-//   if(obj->isWidgetType() && (((QWidget*)obj)->focusPolicy() != QWidget::NoFocus)) {
-//   if(obj->isWidgetType() && (((QWidget*)obj)->focusPolicy() & QWidget::TabFocus)) {
             if (obj->isWidgetType()) {//QWidget::TabFocus flag will be checked later!
                 if (!d->tabstops.contains(it)) {
-                    kDebug() << "adding child of" << w << ":" << obj;
+                    //kDebug() << "adding child of" << w << ":" << obj;
                     d->tabstops.append(it);
                     return;
                 }
@@ -1442,7 +1331,7 @@ void Form::addWidgetToTabStops(ObjectTreeItem *it)
         }
     }
     else if (!d->tabstops.contains(it)) { // not yet in the list
-        kDebug() << "adding" << w;
+        //kDebug() << "adding" << w;
         d->tabstops.append(it);
     }
 }
@@ -1452,8 +1341,8 @@ void Form::updateTabStopsOrder()
     ObjectTreeList newList(d->tabstops);
     foreach (ObjectTreeItem *item, d->tabstops) {
         if (!(item->widget()->focusPolicy() & Qt::TabFocus)) {
-            kDebug() << "Widget removed because has no TabFocus:" 
-                << item->widget()->objectName();
+            //kDebug() << "Widget removed because has no TabFocus:"
+            //.        << item->widget()->objectName();
             newList.removeOne(item);
         }
     }
@@ -1466,8 +1355,8 @@ static void collectContainers(ObjectTreeItem* item, QSet<Container*>& containers
     if (!item->container())
         return;
     if (!containers.contains(item->container())) {
-        kDebug() << item->container()->objectTree()->className()
-        << " " << item->container()->objectTree()->name();
+        //kDebug() << item->container()->objectTree()->className()
+        //         << " " << item->container()->objectTree()->name();
         containers.insert(item->container());
     }
     foreach (ObjectTreeItem *child, *item->children()) {
@@ -1487,15 +1376,15 @@ void Form::autoAssignTabStops()
 
     foreach (ObjectTreeItem *item, d->tabstops) {
         if (item->widget()) {
-            kDebug() << "Widget to sort: " << item->widget();
+            //kDebug() << "Widget to sort: " << item->widget();
             list.append(item->widget());
         }
     }
 
     list.sort();
-    foreach (QWidget *w, list) {
-        kDebug() << w->metaObject()->className() << w->objectName();
-    }
+    //foreach (QWidget *w, list) {
+    //    kDebug() << w->metaObject()->className() << w->objectName();
+    //}
     d->tabstops.clear();
 
     /// We automatically sort widget from the top-left to bottom-right corner
@@ -1508,7 +1397,9 @@ void Form::autoAssignTabStops()
         QWidget *nextw = it==list.constEnd() ? 0 : *it;
         Q_UNUSED(nextw);
         QObject *page_w = 0;
-        KFormDesigner::TabWidget *tab_w = KFormDesigner::findParent<KFormDesigner::TabWidget>(w, "KFormDesigner::TabWidget", page_w);
+        KFormDesigner::TabWidget *tab_w
+                = KFormDesigner::findParent<KFormDesigner::TabWidget>(
+                    w, "KFormDesigner::TabWidget", page_w);
         
         for (; it!=list.constEnd(); ++it) {
             QWidget *nextw = *it;
@@ -1518,7 +1409,9 @@ void Form::autoAssignTabStops()
                 break;
             if (tab_w) {
                 QObject *page_nextw = 0;
-                KFormDesigner::TabWidget *tab_nextw = KFormDesigner::findParent<KFormDesigner::TabWidget>(nextw, "KFormDesigner::TabWidget", page_nextw);
+                KFormDesigner::TabWidget *tab_nextw
+                        = KFormDesigner::findParent<KFormDesigner::TabWidget>(
+                            nextw, "KFormDesigner::TabWidget", page_nextw);
                 if (tab_w == tab_nextw) {
                     if (page_w != page_nextw) // 'nextw' widget within different tab page
                         break;
@@ -1531,7 +1424,7 @@ void Form::autoAssignTabStops()
         foreach (QWidget *w, hlist) {
             ObjectTreeItem *tree = d->topTree->lookup(w->objectName());
             if (tree) {
-                kDebug() << "adding " << tree->name();
+                //kDebug() << "adding " << tree->name();
                 d->tabstops.append(tree);
             }
         }
@@ -1562,15 +1455,12 @@ void Form::setOriginalFormatVersion(uint ver)
 
 void Form::setFormWidget(FormWidget* w)
 {
-//    if (!d)
-//        return;
     d->formWidget = w;
     if (!d->formWidget)
         return;
-    d->formWidget->m_form = this;
+    d->formWidget->setForm(this);
 }
 
-// moved from FormManager
 void Form::enterWidgetInsertingState(const QByteArray &classname)
 {
     if (d->state != WidgetInserting) {
@@ -1589,7 +1479,6 @@ void Form::enterWidgetInsertingState(const QByteArray &classname)
 
     d->selectedClass = classname;
     QAction *pointer_action = d->collection->action(QLatin1String("edit_pointer"));
-    //Q_ASSERT(pointer_action);
     if (pointer_action) {
         pointer_action->setChecked(false);
     }
@@ -1600,7 +1489,6 @@ QByteArray Form::selectedClass() const
     return d->selectedClass;
 }
 
-// moved from FormManager
 void Form::abortWidgetInserting()
 {
     if (d->state != WidgetInserting)
@@ -1613,13 +1501,11 @@ void Form::abortWidgetInserting()
     }
     d->state = WidgetSelecting;
     QAction *pointer_action = d->widgetActionGroup->action(QLatin1String("edit_pointer"));
-//    Q_ASSERT(pointer_action);
     if (pointer_action) {
         pointer_action->setChecked(true);
     }
 }
 
-// moved from FormManager
 void Form::enterWidgetSelectingState()
 {
     switch (d->state) {
@@ -1637,7 +1523,6 @@ void Form::enterWidgetSelectingState()
 }
 
 #ifdef KFD_SIGSLOTS
-// moved from FormManager
 void Form::enterConnectingState()
 {
     if (!(d->features & EnableConnections))
@@ -1665,10 +1550,9 @@ void Form::enterConnectingState()
         m_dragConnection->setChecked(true);
 }
 
-// moved from FormManager
 void Form::resetSelectedConnection()
 {
-//todo
+//! @todo
     if (!(d->features & EnableConnections))
         return;
 
@@ -1683,10 +1567,9 @@ void Form::resetSelectedConnection()
     }
 }
 
-// moved from FormManager
 void Form::abortCreatingConnection()
 {
-//todo
+//! @todo
     if (!(d->features & EnableConnections))
         return;
     if (d->state != Connecting)
@@ -1714,7 +1597,6 @@ void Form::abortCreatingConnection()
     m_connection = 0;
     m_drawingSlot = false;
     QAction *pointer_action = d->widgetActionGroup->action(QLatin1String("edit_pointer"));
-//    Q_ASSERT(pointer_action);
     if (pointer_action) {
         pointer_action->setChecked(true);
     }
@@ -1733,36 +1615,14 @@ void Form::addPropertyCommand(const QByteArray &wname, const QVariant &oldValue,
     QHash<QByteArray, QVariant> oldValues;
     oldValues.insert(wname, oldValue);
     addPropertyCommand(oldValues, value, propertyName, addOption, idOfPropertyCommand);
-#if 0 //moved
-    kDebug() << d->propertySet[propertyName];
-    kDebug() << "oldValue:" << oldValue << "value:" << value;
-    kDebug() << "idOfPropertyCommand:" << idOfPropertyCommand;
-    d->insideAddPropertyCommand = true;
-    PropertyCommand *presentCommand = dynamic_cast<PropertyCommand*>( d->commandHistory->presentCommand() );
-    if (   presentCommand
-        && d->lastCommand == presentCommand
-        && idOfPropertyCommand > 0
-        && d->idOfPropertyCommand == idOfPropertyCommand)
-    {
-        d->lastCommand->setValue(value); // just change the value, 
-                                         // to avoid multiple PropertyCommands that only differ by value
-    }
-    else {
-        d->lastCommand = new PropertyCommand(*this, wname, oldValue, value, propertyName);
-        if (!addCommand(d->lastCommand, execute)) {
-            d->lastCommand = 0;
-        }
-        d->idOfPropertyCommand = idOfPropertyCommand;
-    }
-    d->insideAddPropertyCommand = false;
-#endif
 }
 
 void Form::addPropertyCommand(const QHash<QByteArray, QVariant> &oldValues,
                               const QVariant &value, const QByteArray &propertyName,
                               AddCommandOption addOption, uint idOfPropertyCommand)
 {
-#if 0 // todo add to merge in PropertyCommand...
+//! @todo add to merge in PropertyCommand...
+#if 0
     kDebug() << d->propertySet[propertyName];
     kDebug() << "oldValue:" << oldValues << "value:" << value;
     kDebug() << "idOfPropertyCommand:" << idOfPropertyCommand;
@@ -1797,7 +1657,8 @@ void Form::addPropertyCommand(const QHash<QByteArray, QVariant> &oldValues,
 void Form::addPropertyCommandGroup(PropertyCommandGroup *commandGroup,
                                    AddCommandOption addOption, uint idOfPropertyCommand)
 {
-#if 0 // todo add to merge in PropertyCommand...?
+//! @todo add to merge in PropertyCommand...?
+#if 0
     if (!commandGroup || commandGroup->commands().isEmpty())
         return;
     kDebug() << "count:" << commandGroup->commands().count();
@@ -1829,7 +1690,6 @@ void Form::addPropertyCommandGroup(PropertyCommandGroup *commandGroup,
     d->insideAddPropertyCommand = false;
 }
 
-// moved from FormManager
 void Form::slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& p)
 {
     Q_UNUSED(set);
@@ -1854,18 +1714,20 @@ void Form::slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& p)
     }
     else if (property == "paletteBackgroundPixmap") {
         // a widget with a background pixmap should have its own origin
-//2.0 obsolete        d->propertySet["backgroundOrigin"] = "WidgetOrigin";
-        //else if(property == "signals")
-        // return;
         // special types of properties handled separately
     }
     else if (property == "paletteBackgroundColor") {
-        d->setColorProperty(p, &QWidget::backgroundRole);
+        d->setColorProperty(p, &QWidget::backgroundRole, p.value());
         return;
     }
     else if (property == "paletteForegroundColor") {
-        d->setColorProperty(p, &QWidget::foregroundRole);
+        d->setColorProperty(p, &QWidget::foregroundRole, p.value());
         return;
+    }
+    else if (property == "autoFillBackground") {
+        if (!p.value().toBool()) { // make background inherited
+            d->setColorProperty(p, &QWidget::backgroundRole, QVariant());
+        }
     }
     else if (property == "hAlign" || property == "vAlign" || property == "wordbreak") {
         saveAlignProperty(property);
@@ -1875,37 +1737,25 @@ void Form::slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& p)
         saveLayoutProperty(property, value);
         return;
     }
-    else if (property == "enabled")  {
-        // we cannot really disable the widget, we just change its color palette
-        saveEnabledProperty(value.toBool());
-        return;
-    }
 
     // make sure we are not already undoing -> avoid recursion
-    if (d->isUndoing && !d->isRedoing) // && !d->insideAddPropertyCommand)
+    if (d->isUndoing && !d->isRedoing) {
         return;
-
-//    const bool alterLastCommand = d->lastCommand && d->lastCommand->propertyName() == property;
+    }
 
     if (d->selected.count() == 1) { // one widget selected
         // If the last command is the same, we just change its value
 //! @todo add to merge in PropertyCommand if needed
-/*        if (alterLastCommand && !d->isRedoing) {
-            d->lastCommand->setValue(value);
-            emit modified();
+        if (d->slotPropertyChanged_addCommandEnabled && !d->isRedoing) {
+            addPropertyCommand(d->selected.first()->objectName().toLatin1(),
+                d->selected.first()->property(property), value, property, DontExecuteCommand);
         }
-        else  {*/
-            if (d->slotPropertyChanged_addCommandEnabled && !d->isRedoing) {
-                addPropertyCommand(d->selected.first()->objectName().toLatin1(),
-                    d->selected.first()->property(property), value, property, DontExecuteCommand);
-            }
 
-            // If the property is changed, we add it in ObjectTreeItem modifProp
-            ObjectTreeItem *tree = objectTree()->lookup(d->selected.first()->objectName());
-            if (tree && p.isModified()) {
-                tree->addModifiedProperty(property, d->selected.first()->property(property));
-            }
-        /*}*/
+        // If the property is changed, we add it in ObjectTreeItem modifProp
+        ObjectTreeItem *tree = objectTree()->lookup(d->selected.first()->objectName());
+        if (tree && p.isModified()) {
+            tree->addModifiedProperty(property, d->selected.first()->property(property));
+        }
 
         if (property == "objectName") {
             changeName(d->selected.first()->objectName().toLatin1(), p.value().toByteArray());
@@ -1916,33 +1766,24 @@ void Form::slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& p)
     }
     else {
 //! @todo add to merge in PropertyCommand if needed
-/*        if (alterLastCommand && !d->isRedoing) {
-            d->lastCommand->setValue(value);
-        }
-        else {*/
-            if (d->slotPropertyChanged_addCommandEnabled && !d->isRedoing) {
-                // We store old values for each widget
-                QHash<QByteArray, QVariant> oldValues;
-                foreach(QWidget* widget, d->selected) {
-                    oldValues.insert(widget->objectName().toLatin1(), widget->property(property));
-                }
-                addPropertyCommand(oldValues, value, property, DontExecuteCommand);
+        if (d->slotPropertyChanged_addCommandEnabled && !d->isRedoing) {
+            // We store old values for each widget
+            QHash<QByteArray, QVariant> oldValues;
+            foreach(QWidget* widget, d->selected) {
+                oldValues.insert(widget->objectName().toLatin1(), widget->property(property));
             }
-/*        }*/
-
+            addPropertyCommand(oldValues, value, property, DontExecuteCommand);
+        }
         foreach(QWidget* widget, d->selected) {
-//            if (!alterLastCommand) {
-                ObjectTreeItem *titem = objectTree()->lookup(widget->objectName());
-                if (titem && p.isModified())
-                    titem->addModifiedProperty(property, widget->property(property));
-//            }
+            ObjectTreeItem *titem = objectTree()->lookup(widget->objectName());
+            if (titem && p.isModified())
+                titem->addModifiedProperty(property, widget->property(property));
             widget->setProperty(property, value);
             handleWidgetPropertyChanged(widget, property, value);
         }
     }
 }
 
-// moved from FormManager
 void Form::slotPropertyReset(KoProperty::Set& set, KoProperty::Property& property)
 {
     Q_UNUSED(set);
@@ -1959,7 +1800,6 @@ void Form::slotPropertyReset(KoProperty::Set& set, KoProperty::Property& propert
     }
 }
 
-// moved from FormManager
 bool Form::isNameValid(const QString &name) const
 {
     if (d->selected.isEmpty())
@@ -1967,7 +1807,7 @@ bool Form::isNameValid(const QString &name) const
 //! @todo add to the undo buffer
     QWidget *w = d->selected.first();
     //also update widget's name in QObject member
-    if (!KexiUtils::isIdentifier(name)) {
+    if (!KexiDB::isIdentifier(name)) {
         KMessageBox::sorry(widget(),
                            i18n("Could not rename widget \"%1\" to \"%2\" because "
                                 "\"%3\" is not a valid name (identifier) for a widget.\n",
@@ -1992,7 +1832,6 @@ bool Form::isNameValid(const QString &name) const
     return true;
 }
 
-// moved from FormManager
 void Form::undo()
 {
     if (!objectTree())
@@ -2003,12 +1842,11 @@ void Form::undo()
     }
 
     const bool saveExecutingCommand = !d->executingCommand;
-    kDebug() << "saveExecutingCommand:" << saveExecutingCommand;
+    //kDebug() << "saveExecutingCommand:" << saveExecutingCommand;
     if (saveExecutingCommand)
         d->executingCommand = dynamic_cast<const Command*>(d->undoStack.command(0));
-    kDebug() << d->undoStack.index();
-    kDebug() << d->executingCommand;
-    //dynamic_cast<const Command*>
+    //kDebug() << d->undoStack.index();
+    //kDebug() << d->executingCommand;
 
     d->undoStack.undo();
 
@@ -2016,7 +1854,6 @@ void Form::undo()
         d->executingCommand = 0;
 }
 
-// moved from FormManager
 void Form::redo()
 {
     if (!objectTree())
@@ -2027,11 +1864,11 @@ void Form::redo()
     }
     d->isRedoing = true;
     const bool saveExecutingCommand = !d->executingCommand;
-    kDebug() << "saveExecutingCommand:" << saveExecutingCommand;
+    //kDebug() << "saveExecutingCommand:" << saveExecutingCommand;
     if (saveExecutingCommand)
         d->executingCommand = dynamic_cast<const Command*>(d->undoStack.command(d->undoStack.index()));
-    kDebug() << d->undoStack.index();
-    kDebug() << *d->executingCommand;
+    //kDebug() << d->undoStack.index();
+    //kDebug() << *d->executingCommand;
 
     d->undoStack.redo();
 
@@ -2040,19 +1877,16 @@ void Form::redo()
     d->isRedoing = false;
 }
 
-// moved from WidgetPropertySet
 void Form::setUndoing(bool undoing)
 {
     d->isUndoing = undoing;
 }
 
-// moved from WidgetPropertySet
 bool Form::isUndoing() const
 {
     return d->isUndoing;
 }
 
-// moved from WidgetPropertySet
 bool Form::isPropertyVisible(const QByteArray &property, bool isTopLevel,
                              const QByteArray &classname) const
 {
@@ -2069,11 +1903,10 @@ bool Form::isPropertyVisible(const QByteArray &property, bool isTopLevel,
     else
         subwidget = w;
 
-    return m_lib->isPropertyVisible(
+    return library()->isPropertyVisible(
                subwidget->metaObject()->className(), subwidget, property, multiple, isTopLevel);
 }
 
-// moved from WidgetPropertySet
 void Form::addWidget(QWidget *w)
 {
     d->selected.append(w);
@@ -2081,8 +1914,6 @@ void Form::addWidget(QWidget *w)
     // Reset some stuff
     d->lastCommand = 0;
     d->lastCommandGroup = 0;
-    //d->lastGeoCommand = 0;
-//    d->properties.clear();
 
     QByteArray classname;
     if (d->selected.first()->metaObject()->className() == w->metaObject()->className()) {
@@ -2092,11 +1923,8 @@ void Form::addWidget(QWidget *w)
     // show only properties shared by widget (properties chosen by factory)
     bool isTopLevel = isTopLevelWidget(w);
 
-    //WidgetWithSubpropertiesInterface* subpropIface = dynamic_cast<WidgetWithSubpropertiesInterface*>(w);
-// QWidget *subwidget = isSubproperty ? subpropIface->subwidget() : w;
-
     for (KoProperty::Set::Iterator it(d->propertySet); it.current(); ++it) {
-        kDebug() << it.current();
+        //kDebug() << it.current();
         if (!isPropertyVisible(it.current()->name(), isTopLevel, classname)) {
             it.current()->setVisible(false);
         }
@@ -2113,7 +1941,6 @@ void Form::addWidget(QWidget *w)
     }
 }
 
-// moved from WidgetPropertySet
 void Form::createPropertiesForWidget(QWidget *w)
 {
     d->propertySet.clear();
@@ -2129,9 +1956,8 @@ void Form::createPropertiesForWidget(QWidget *w)
     const QHash<QString, QVariant>* modifiedProperties = tree->modifiedProperties();
     QHash<QString, QVariant>::ConstIterator modifiedPropertiesIt;
     bool isTopLevel = isTopLevelWidget(w);
-// int count = 0;
     KoProperty::Property *newProp = 0;
-    WidgetInfo *winfo = m_lib->widgetInfoForClassName(w->metaObject()->className());
+    WidgetInfo *winfo = library()->widgetInfoForClassName(w->metaObject()->className());
     if (!winfo) {
         kWarning() << "no widget info for class" << w->metaObject()->className();
         return;
@@ -2140,7 +1966,7 @@ void Form::createPropertiesForWidget(QWidget *w)
 //! @todo ineffective, get property names directly
     const QList<QMetaProperty> propList(
         KexiUtils::propertiesForMetaObjectWithInherited(w->metaObject()));
-    kDebug() << "propList.count() ==" << propList.count();
+    //kDebug() << "propList.count() ==" << propList.count();
     QSet<QByteArray> propNames;
     foreach(const QMetaProperty& mp, propList) {
         propNames.insert(mp.name());
@@ -2149,13 +1975,11 @@ void Form::createPropertiesForWidget(QWidget *w)
     // add subproperties if available
     WidgetWithSubpropertiesInterface* subpropIface
         = dynamic_cast<WidgetWithSubpropertiesInterface*>(w);
-// QStrList tmpList; //used to allocate copy of names
     if (subpropIface) {
         const QSet<QByteArray> subproperies(subpropIface->subproperies());
         foreach(const QByteArray& propName, subproperies) {
-//   tmpList.append( *it );
             propNames.insert(propName);
-            kDebug() << "Added subproperty: " << propName;
+            //kDebug() << "Added subproperty: " << propName;
         }
     }
 
@@ -2167,13 +1991,13 @@ void Form::createPropertiesForWidget(QWidget *w)
         const QMetaProperty meta = subMeta.isValid() ? subMeta
                                    : KexiUtils::findPropertyWithSuperclasses(w, propName.constData());
         if (!meta.isValid()) {
-            kDebug() << "!meta.isValid()";
+            //kDebug() << "!meta.isValid()";
             continue;
         }
         const char* propertyName = meta.name();
         QWidget *subwidget = subMeta.isValid()//subpropIface
                              ? subpropIface->subwidget() : w;
-        WidgetInfo *subwinfo = m_lib->widgetInfoForClassName(
+        WidgetInfo *subwinfo = library()->widgetInfoForClassName(
                                    subwidget->metaObject()->className());
 //  kDebug() << "$$$ " << subwidget->className();
 
@@ -2187,7 +2011,7 @@ void Form::createPropertiesForWidget(QWidget *w)
             QString desc(d->propCaption.value(meta.name()));
             //! \todo change i18n
             if (desc.isEmpty()) { //try to get property description from factory
-                desc = m_lib->propertyDescForName(subwinfo, propertyName);
+                desc = library()->propertyDescForName(subwinfo, propertyName);
             }
 
             modifiedPropertiesIt = modifiedProperties->find(propertyName);
@@ -2235,16 +2059,6 @@ void Form::createPropertiesForWidget(QWidget *w)
             d->propertySet.addProperty(newProp);
         }
 
-//  if(0==qstrcmp(propertyName, "objectName"))
-//   (*this)["objectName"].setAutoSync(0); // name should be updated only when pressing Enter
-
-        // \todo js what does this mean? why do you use WidgetInfo and not WidgetLibrary
-        //if (winfo) {
-        //  tristate autoSync = winfo->autoSyncForProperty( propertyName );
-        //  if (! ~autoSync)
-        //    d->propertySet[propertyName].setAutoSync( autoSync );
-        //}
-
         // update the Property.oldValue() and isModified() using the value stored in the ObjectTreeItem
         updatePropertyValue(tree, propertyName, meta);
     }
@@ -2257,44 +2071,30 @@ void Form::createPropertiesForWidget(QWidget *w)
     d->propertySet.addProperty(newProp);
 
     d->propertySet["objectName"].setAutoSync(false); // name should be updated only when pressing Enter
-//! @todo fix enabled property here
-//crashes:    d->propertySet["enabled"].setValue(tree->isEnabled());
 
     if (winfo) {
-        m_lib->setPropertyOptions(d->propertySet, *winfo, w);
+        library()->setPropertyOptions(d->propertySet, *winfo, w);
         d->propertySet.addProperty(newProp = new KoProperty::Property("this:classString", winfo->name()));
         newProp->setVisible(false);
-        d->propertySet.addProperty(newProp = new KoProperty::Property("this:iconName", winfo->pixmap()));
+        d->propertySet.addProperty(newProp = new KoProperty::Property("this:iconName", winfo->iconName()));
         newProp->setVisible(false);
     }
     d->propertySet.addProperty(newProp = new KoProperty::Property("this:className",
             w->metaObject()->className()));
     newProp->setVisible(false);
-
-#if 0 // let's forget it for now, until we have new complete events editor
-    if (m_manager->lib()->advancedPropertiesVisible()) {
-      // add the signals property
-      QStrList strlist = w->metaObject()->signalNames(true);
-      QStrListIterator strIt(strlist);
-      QStringList list;
-      for(; strIt.current() != 0; ++strIt)
-        list.append(*strIt);
-      Property *prop = new Property("signals", i18n("Events")"",
-        new KexiProperty::ListData(list, descList(winfo, list)),
-        ));
-    }
-#endif
-
     if (tree->container()) { // we are a container -> layout property
         createLayoutProperty(tree);
     }
 }
 
-// moved from WidgetPropertySet
 void Form::updatePropertyValue(ObjectTreeItem *tree, const char *property, const QMetaProperty &meta)
 {
-    return; //????
+    Q_UNUSED(tree);
+    Q_UNUSED(property);
+    Q_UNUSED(meta);
+    return;
 //! @todo ????
+#if 0
     const char *propertyName = meta.isValid() ? meta.name() : property;
     if (!d->propertySet.contains(propertyName))
         return;
@@ -2313,14 +2113,12 @@ void Form::updatePropertyValue(ObjectTreeItem *tree, const char *property, const
         p.setValue(p.value(), true);
         blockSignals(false);
     }
+#endif
 }
 
-// moved from WidgetPropertySet
-// original: void Form::setSelectedWidget(QWidget *w, bool add, bool forceReload, bool moreWillBeSelected)
 //! @todo what about 'forceReload' arg? It's not passed to updatePropertiesForSelection() now...
 void Form::emitSelectionChanged(QWidget *w, WidgetSelectionFlags flags)
 {
-//kDebug() << w;
     updatePropertiesForSelection(w, flags);
     emit selectionChanged(w, flags);
 }
@@ -2329,22 +2127,9 @@ void Form::updatePropertiesForSelection(QWidget *w, WidgetSelectionFlags flags)
 {
     if (!w) {
 //! @todo clearSet()?
-#ifdef __GNUC__
-#warning 2.0: clearSet()?
-#else
-#pragma WARNING( 2.0: clearSet()? )
-#endif
-//        clearSet();
         return;
     }
 
-#if 0
-    // don't add a widget twice
-    if (!forceReload && d->selected.contains(QPointer<QWidget>(w))) {
-        kWarning() << "Widget is already selected";
-        return;
-    }
-#endif
     // if our list is empty,don't use add parameter value
     if (d->selected.isEmpty() == 0) {
         flags |= ReplacePreviousSelection;
@@ -2352,26 +2137,7 @@ void Form::updatePropertiesForSelection(QWidget *w, WidgetSelectionFlags flags)
 
     QByteArray prevProperty;
     if (flags & ReplacePreviousSelection) {
-#if 0
-//! @todo
-        if (forceReload) {
-            showPropertySet(
-                0, 
-                true //force
-            );
-            prevProperty = d->propertySet.previousSelection();
-        }
-#endif
-//! @todo clearSet(true)?
-#ifdef __GNUC__
-#warning 2.0: clearSet(true)?
-#else
-#pragma WARNING( 2.0: clearSet(true)? )
-#endif
-//        clearSet(true); //clear but do not reload to avoid blinking
-// 2.0: not needed        d->selected.append(QPointer<QWidget>(w));
         createPropertiesForWidget(w);
-
         w->installEventFilter(this);
         connect(w, SIGNAL(destroyed()), this, SLOT(widgetDestroyed()));
     }
@@ -2381,13 +2147,7 @@ void Form::updatePropertiesForSelection(QWidget *w, WidgetSelectionFlags flags)
 
     if (flags & LastSelection) {
         emit propertySetSwitched();
-#if 0 // 2.0
-        KFormDesigner::FormManager::self()->showPropertySet(
-            this, true, // force
-            prevProperty
-        );
-#endif
-   }
+    }
  }
 
 KoProperty::Set& Form::propertySet()
@@ -2395,48 +2155,44 @@ KoProperty::Set& Form::propertySet()
     return d->propertySet;
 }
 
-bool Form::isSnapWidgetsToGridEnabled() const
+bool Form::isSnapToGridEnabled() const
 {
-    return d->isSnapWidgetsToGridEnabled;
+    return d->snapToGrid;
 }
 
-void Form::setSnapWidgetsToGridEnabled(bool set)
+void Form::setSnapToGridEnabled(bool enabled)
 {
-    d->isSnapWidgetsToGridEnabled = set;
+    d->snapToGrid = enabled;
 }
 
-// moved from FormManager
-void Form::createContextMenu(QWidget *w, Container *container, const QPoint& menuPos, ContextMenuTarget target)
+void Form::createContextMenu(QWidget *w, Container *container, const QPoint& menuPos,
+                             ContextMenuTarget target)
 {
     if (!widget())
         return;
-//kDebug() << w << widget();
     const bool toplevelWidgetSelected = widget() == w;
     const uint widgetsCount = container->form()->selectedWidgets()->count();
     const bool multiple = widgetsCount > 1;
-    //const bool enableRemove = w != m_active->widget();
     // We only enablelayout creation if more than one widget with the same parent are selected
     const bool enableLayout = multiple || w == container->widget();
 
-//unused...    m_menuWidget = w;
-    QString n( container->form()->library()->displayName(w->metaObject()->className()) );
-
     //set title
+    QString n( container->form()->library()->displayName(w->metaObject()->className()) );
     QIcon icon;
     QString titleText;
     if (!multiple) {
         if (w == container->form()->widget()) {
-            icon = SmallIcon("form");
+            icon = koIcon("form");
             titleText = i18n("%1 : Form", w->objectName());
         }
         else {
-            icon = SmallIcon(
+            icon = KIcon(
                        container->form()->library()->iconName(w->metaObject()->className()));
             titleText = QString(w->objectName()) + " : " + n;
         }
     }
     else {
-        icon = SmallIcon("multiple_obj");
+        icon = koIcon("multiple_obj");
         titleText = i18n("Multiple Widgets (%1)", widgetsCount);
     }
 
@@ -2512,10 +2268,6 @@ void Form::createContextMenu(QWidget *w, Container *container, const QPoint& men
             if (item->widget() == buddy)
                 action->setChecked(true);
         }
-
-// 2.0 not needed        QAction *subAction = menu.addMenu(sub);
-// 2.0 not needed        subAction->setText(i18n("Choose Buddy..."));
-// 2.0 not needed        connect(sub, SIGNAL(triggered(QAction*)), this, SLOT(buddyChosen(QAction*)));
         separatorNeeded = true;
     }
 
@@ -2552,11 +2304,6 @@ void Form::createContextMenu(QWidget *w, Container *container, const QPoint& men
         container->form()->library()
             ->createMenuActions(w->metaObject()->className(), w, &menu, container);
         if (oldIndex == uint(menu.actions().count() - 1)) {
-//   for (uint i=oldIndex; i<m_popup->count(); i++) {
-//    int id = m_popup->idAt( i );
-//    if (id!=-1)
-//     menuIds->append( id );
-//   }
             //nothing added
             if (separatorNeeded) {
                 menu.removeAction(lastAction);
@@ -2565,23 +2312,10 @@ void Form::createContextMenu(QWidget *w, Container *container, const QPoint& men
     }
 
     //show the menu at the selected widget
-    /*2.0
-    QPoint menuPos;
-    if (popupAtCursor) {
-        menuPos = QCursor::pos();
-    }
-    else {
-        QWidgetList *lst = container->form()->selectedWidgets();
-        QWidget * sel_w = lst ? lst->first() : container->form()->selectedWidget();
-        menuPos = sel_w ? sel_w->mapToGlobal(QPoint(sel_w->width() / 2, sel_w->height() / 2)) : QCursor::pos();
-    }*/
-//    QWidgetList *lst = container->form()->selectedWidgets();
-//    QWidget * sel_w = lst ? lst->first() : container->form()->selectedWidget();
-//    QPoint realMenuPos = sel_w ? sel_w->mapToGlobal(QPoint(sel_w->width() / 2, sel_w->height() / 2)) : QCursor::pos();
     QPoint pos;
     switch (target) {
     case FormContextMenuTarget: {
-        pos = container->widget()->mapToGlobal(w->pos() + menuPos);
+        pos = w->mapToGlobal(menuPos);
         d->insertionPoint = menuPos;
         break;
     }
@@ -2592,6 +2326,7 @@ void Form::createContextMenu(QWidget *w, Container *container, const QPoint& men
     }
     }
 
+    //kDebug() << w << container->widget() << "menuPos=" << menuPos << "pos=" << pos;
     QAction *result = menu.exec(pos);
     if (!result) {
         // nothing to do
@@ -2608,7 +2343,6 @@ void Form::createContextMenu(QWidget *w, Container *container, const QPoint& men
     d->insertionPoint = QPoint();
 }
 
-// moved from FormManager
 void Form::deleteWidget()
 {
     if (!objectTree()) {
@@ -2629,7 +2363,6 @@ void Form::deleteWidget()
     addCommand(com);
 }
 
-// moved from FormManager
 void Form::copyWidget()
 {
     if (!objectTree() || isFormWidgetSelected()) {
@@ -2641,32 +2374,12 @@ void Form::copyWidget()
         return;
     }
 
-/* 1.x:
-    removeChildrenFromList(*list);
-
-    // We clear the current clipboard
-    m_domDoc.setContent(QString(), true);
-    QDomElement parent = m_domDoc.createElement("UI");
-    m_domDoc.appendChild(parent);
-
-    foreach (QWidget *w, *list) {
-        ObjectTreeItem *it = objectTree()->lookup(w->objectName());
-        if (!it)
-            continue;
-
-        FormIO::saveWidget(it, parent, m_domDoc);
-    }
-
-    FormIO::cleanClipboard(parent);
-*/
-// 2.x:
     QDomDocument doc;
     QHash<QByteArray, QByteArray> containers;
     QHash<QByteArray, QByteArray> parents;
     KFormDesigner::widgetsToXML(doc,
         containers, parents, *this, *list);
     KFormDesigner::copyToClipboard(doc.toString());
-// \2.x
     emitActionSignals(); // to update 'Paste' item state
     emitUndoActionSignals();
 }
@@ -2676,7 +2389,6 @@ bool Form::isFormWidgetSelected() const
     return selectedWidget() && selectedWidget() == widget();
 }
 
-// moved from FormManager
 void Form::cutWidget()
 {
     if (!objectTree() || isFormWidgetSelected()) {
@@ -2692,7 +2404,6 @@ void Form::cutWidget()
     addCommand(com);
 }
 
-// moved from FormManager
 void Form::pasteWidget()
 {
     if (!objectTree()) {
@@ -2717,7 +2428,6 @@ void Form::pasteWidget()
     addCommand(com);
 }
 
-// moved from FormManager
 void Form::editTabOrder()
 {
     if (!objectTree()) {
@@ -2726,38 +2436,24 @@ void Form::editTabOrder()
     QWidget *topLevel = widget()->topLevelWidget();
     TabStopDialog dlg(topLevel);
     if (dlg.exec(this) == QDialog::Accepted) {
-//2.0 not needed, the code from slot receiving this signal is moved to Form itself
-//        //inform about changing "autoTabStop" property
-//        // -- this will be received eg. by Kexi, so custom "autoTabStop" property can be updated
-//        emit autoTabStopsSet(this, dlg.autoTabStops());
-// <moved code>
         d->propertySet.changePropertyIfExists("autoTabStops", dlg.autoTabStops());
-// </moved code>
-
         //force set dirty
-        emit modified();
+        setModified(true);
     }
 }
 
-// moved from FormManager
 void Form::editFormPixmapCollection()
 {
     if (!objectTree()) {
         return;
     }
-
-#ifdef __GNUC__
-#warning pixmapcollection
-#else
-#pragma WARNING( pixmapcollection )
-#endif
+//! @todo pixmapcollection
 #ifndef KEXI_NO_PIXMAPCOLLECTION
     PixmapCollectionEditor dialog(pixmapCollection(), widget()->topLevelWidget());
     dialog.exec();
 #endif
 }
 
-// moved from FormManager
 void Form::editConnections()
 {
 #ifdef KFD_SIGSLOTS
@@ -2773,7 +2469,6 @@ void Form::editConnections()
 #endif
 }
 
-// moved from FormManager
 void Form::alignWidgets(WidgetAlignment alignment)
 {
     QWidgetList* selected = selectedWidgets();
@@ -2785,7 +2480,7 @@ void Form::alignWidgets(WidgetAlignment alignment)
 
     foreach (QWidget *w, *selected) {
         if (w->parentWidget() != parentWidget) {
-            kDebug() << "alignment ==" << alignment <<  " widgets don't have the same parent widget";
+            //kDebug() << "alignment ==" << alignment <<  "widgets don't have the same parent widget";
             return;
         }
     }
@@ -2794,120 +2489,99 @@ void Form::alignWidgets(WidgetAlignment alignment)
     addCommand(com);
 }
 
-// moved from FormManager
 void Form::alignWidgetsToLeft()
 {
     alignWidgets(AlignToLeft);
 }
 
-// moved from FormManager
 void Form::alignWidgetsToRight()
 {
     alignWidgets(AlignToRight);
 }
 
-// moved from FormManager
 void Form::alignWidgetsToTop()
 {
     alignWidgets(AlignToTop);
 }
 
-// moved from FormManager
 void Form::alignWidgetsToBottom()
 {
     alignWidgets(AlignToBottom);
 }
 
-// moved from FormManager
 void Form::adjustWidgetSize()
 {
     if (!objectTree()) {
         return;
     }
-
     Command *com = new AdjustSizeCommand(*this, AdjustSizeCommand::SizeToFit, *selectedWidgets());
     addCommand(com);
 }
 
-// moved from FormManager
 void Form::alignWidgetsToGrid()
 {
     if (!objectTree()) {
         return;
     }
-
     Command *com = new AlignWidgetsCommand(*this, AlignToGrid, *selectedWidgets());
     addCommand(com);
 }
 
-// moved from FormManager
 void Form::adjustSizeToGrid()
 {
     if (!objectTree()) {
         return;
     }
-
     Command *com = new AdjustSizeCommand(*this, AdjustSizeCommand::SizeToGrid, *selectedWidgets());
     addCommand(com);
 }
 
-// moved from FormManager
 void Form::adjustWidthToSmall()
 {
     if (!objectTree()) {
         return;
     }
-
     Command *com = new AdjustSizeCommand(*this, AdjustSizeCommand::SizeToSmallWidth, *selectedWidgets());
     addCommand(com);
 }
 
-// moved from FormManager
 void Form::adjustWidthToBig()
 {
     if (!objectTree()) {
         return;
     }
-
     Command *com = new AdjustSizeCommand(*this, AdjustSizeCommand::SizeToBigWidth, *selectedWidgets());
     addCommand(com);
 }
 
-// moved from FormManager
 void Form::adjustHeightToSmall()
 {
     if (!objectTree()) {
         return;
     }
-
     Command *com = new AdjustSizeCommand(*this, AdjustSizeCommand::SizeToSmallHeight, *selectedWidgets());
     addCommand(com);
 }
 
-// moved from FormManager
 void Form::adjustHeightToBig()
 {
     if (!objectTree()) {
         return;
     }
-
     Command *com = new AdjustSizeCommand(*this, AdjustSizeCommand::SizeToBigHeight, *selectedWidgets());
     addCommand(com);
 }
 
-// moved from FormManager
 void Form::bringWidgetToFront()
 {
     if (!objectTree()) {
         return;
     }
-
     foreach (QWidget *w, *selectedWidgets()) {
         w->raise();
     }
 }
 
-// moved from FormManager
 void Form::sendWidgetToBack()
 {
     if (!objectTree()) {
@@ -2919,13 +2593,11 @@ void Form::sendWidgetToBack()
     }
 }
 
-// moved from FormManager
 void Form::selectAll()
 {
     if (!objectTree()) {
         return;
     }
-
     selectFormWidget();
     uint count = objectTree()->children()->count();
     foreach (ObjectTreeItem *titem, *objectTree()->children()) {
@@ -2937,61 +2609,51 @@ void Form::selectAll()
     }
 }
 
-// moved from FormManager
 void Form::clearWidgetContent()
 {
     if (!objectTree()) {
         return;
     }
-
     foreach (QWidget *w, *selectedWidgets()) {
         library()->clearWidgetContent(w->metaObject()->className(), w);
     }
 }
 
-// moved from FormManager
 void Form::layoutHBox()
 {
     createLayout(HBox);
 }
 
-// moved from FormManager
 void Form::layoutVBox()
 {
     createLayout(VBox);
 }
 
-// moved from FormManager
 void Form::layoutGrid()
 {
     createLayout(Grid);
 }
 
-// moved from FormManager
 void Form::layoutHSplitter()
 {
     createLayout(HSplitter);
 }
 
-// moved from FormManager
 void Form::layoutVSplitter()
 {
     createLayout(VSplitter);
 }
 
-// moved from FormManager
 void Form::layoutHFlow()
 {
     createLayout(HFlow);
 }
 
-// moved from FormManager
 void Form::layoutVFlow()
 {
     createLayout(VFlow);
 }
 
-// moved from FormManager
 void Form::createLayout(Form::LayoutType layoutType)
 {
     QWidgetList *list = selectedWidgets();
@@ -3011,29 +2673,26 @@ void Form::createLayout(Form::LayoutType layoutType)
 
     QWidget *parent = list->first()->parentWidget();
     foreach (QWidget *w, *list) {
-        kDebug() << "comparing widget" << w->objectName() 
-            << "whose parent is" << w->parentWidget()->objectName()
-            << "insteaed of" << parent->objectName();
+        //kDebug() << "comparing widget" << w->objectName()
+        //         << "whose parent is" << w->parentWidget()->objectName()
+        //         << "insteaed of" << parent->objectName();
         if (w->parentWidget() != parent) {
             KMessageBox::sorry(widget()->topLevelWidget(), 
                 i18n("<b>Cannot create the layout.</b>\n"
                      "All selected widgets must have the same parent."));
-            kDebug() << "widgets don't have the same parent widget";
+            //kDebug() << "widgets don't have the same parent widget";
             return;
         }
     }
-
     Command *com = new CreateLayoutCommand(*this, layoutType, *list);
     addCommand(com);
 }
 
-// moved from FormManager
 void Form::breakLayout()
 {
     if (!objectTree()) {
         return;
     }
-
     Container *container = activeContainer();
     QByteArray c(container->widget()->metaObject()->className());
 
@@ -3058,10 +2717,10 @@ void Form::createAlignProperty(const QMetaProperty& meta, QWidget *widget, QWidg
 
     const int alignment = subwidget->property("alignment").toInt();
     const QList<QByteArray> keys(meta.enumerator().valueToKeys(alignment).split('|'));
-    kDebug() << "keys:" << keys;
+    //kDebug() << "keys:" << keys;
 
     const QStringList possibleValues(KexiUtils::enumKeysForProperty(meta));
-    kDebug() << "possibleValues:" << possibleValues;
+    //kDebug() << "possibleValues:" << possibleValues;
     ObjectTreeItem *tree = objectTree()->lookup(widget->objectName());
     const bool isTopLevel = isTopLevelWidget(widget);
 
@@ -3116,18 +2775,16 @@ void Form::createAlignProperty(const QMetaProperty& meta, QWidget *widget, QWidg
         updatePropertyValue(tree, "vAlign");
     }
     
-    if (possibleValues.contains("WordBreak")
-//  && isPropertyVisible("wordbreak", false, subwidget->className())
-//   && !subWidget->inherits("QLineEdit") /* QLineEdit doesn't support 'word break' is this generic enough?*/
-       )
-    {
+    if (possibleValues.contains("WordBreak")) {
         // Create the wordbreak property
         KoProperty::Property *p = new KoProperty::Property("wordbreak",
-                QVariant((bool)(alignment & Qt::TextWordWrap)), i18n("Word Break"), i18n("Word Break"));
+                QVariant((bool)(alignment & Qt::TextWordWrap)),
+                i18n("Word Break"), i18n("Word Break"));
         d->propertySet.addProperty(p);
         updatePropertyValue(tree, "wordbreak");
-        if (!m_lib->isPropertyVisible(
-                    subwidget->metaObject()->className(), subwidget, p->name(), false/*multiple*/, isTopLevel)) {
+        if (!library()->isPropertyVisible(
+                subwidget->metaObject()->className(), subwidget, p->name(), false/*multiple*/, isTopLevel))
+        {
             p->setVisible(false);
         }
     }
@@ -3153,9 +2810,10 @@ void Form::saveAlignProperty(const QString &property)
     subwidget->setProperty("alignment", valueForKeys);
 
     ObjectTreeItem *tree = objectTree()->lookup(d->selected.first()->objectName());
-    if (tree && d->propertySet[ property.toLatin1()].isModified())
+    if (tree && d->propertySet[ property.toLatin1()].isModified()) {
         tree->addModifiedProperty(
             property.toLatin1(), d->propertySet[property.toLatin1()].oldValue());
+    }
 
     if (d->isUndoing) {
         return;
@@ -3166,7 +2824,7 @@ void Form::saveAlignProperty(const QString &property)
     }
     else {
         d->lastCommand = new PropertyCommand(*this, d->selected.first()->objectName().toLatin1(),
-                                             subwidget->property("alignment"), valueForKeys, "alignment");
+                                 subwidget->property("alignment"), valueForKeys, "alignment");
         if (!addCommand(d->lastCommand, DontExecuteCommand)) {
             d->lastCommand = 0;
         }
@@ -3211,7 +2869,6 @@ void Form::createLayoutProperty(ObjectTreeItem *item)
     updatePropertyValue(item, "layoutSpacing");
     if (container->layoutType() == NoLayout)
         p->setVisible(false);
-
 }
 
 void Form::saveLayoutProperty(const QString &prop, const QVariant &value)
@@ -3282,38 +2939,6 @@ void Form::saveLayoutProperty(const QString &prop, const QVariant &value)
     }
 }
 
-//! @todo make it support undo
-void Form::saveEnabledProperty(bool value)
-{
-    foreach(QWidget* widget, d->selected) {
-        ObjectTreeItem *tree = objectTree()->lookup(widget->objectName());
-        if (tree->isEnabled() == value)
-            continue;
-
-        QPalette p(widget->palette());
-        p.setCurrentColorGroup(value ? QPalette::Normal : QPalette::Disabled);
-#if 0
-        QPalette p(widget->palette());
-        if (!d->origActiveColors) {
-            d->origActiveColors = new QColorGroup(p.active());
-        }
-        if (value) {
-            p.setActive(*d->origActiveColors);   //revert
-        }
-        else {
-            QColorGroup cg = p.disabled();
-            //also make base color a bit disabled-like
-            cg.setColor(QColorGroup::Base, cg.color(QColorGroup::Background));
-            p.setActive(cg);
-        }
-#endif
-        widget->setPalette(p);
-
-        tree->setEnabled(value);
-        handleWidgetPropertyChanged(widget, "enabled", QVariant(value));
-    }
-}
-
 void Form::createPropertyCommandsInDesignMode(QWidget* widget,
         const QHash<QByteArray, QVariant> &propValues, Command *parentCommand, bool addToActiveForm)
 {
@@ -3325,22 +2950,21 @@ void Form::createPropertyCommandsInDesignMode(QWidget* widget,
 
     d->slotPropertyChanged_addCommandEnabled = false;
     QHash<QByteArray, QVariant>::ConstIterator endIt = propValues.constEnd();
-// CommandGroup *group = new CommandGroup(commandName);
     for (QHash<QByteArray, QVariant>::ConstIterator it = propValues.constBegin(); it != endIt; ++it) {
         if (!d->propertySet.contains(it.key())) {
             kWarning() << "\"" << it.key() << "\" property not found";
             continue;
         }
-        /*PropertyCommand *subCommand =*/
         (void)new PropertyCommand(*this, widget->objectName().toLatin1(),
                                   widget->property(it.key()), it.value(), it.key(), parentCommand);
-        //2.0 group->addCommand(subCommand, execFlagForSubCommands);
         if (widgetIsSelected) {
             d->propertySet.changeProperty(it.key(), it.value());
         }
         else {
-            WidgetWithSubpropertiesInterface* subpropIface = dynamic_cast<WidgetWithSubpropertiesInterface*>(widget);
-            QWidget *subwidget = (subpropIface && subpropIface->subwidget()) ? subpropIface->subwidget() : widget;
+            WidgetWithSubpropertiesInterface* subpropIface
+                = dynamic_cast<WidgetWithSubpropertiesInterface*>(widget);
+            QWidget *subwidget
+                = (subpropIface && subpropIface->subwidget()) ? subpropIface->subwidget() : widget;
             if (subwidget && -1 != subwidget->metaObject()->indexOfProperty(it.key())
                     && subwidget->property(it.key()) != it.value()) {
                 ObjectTreeItem *tree = objectTree()->lookup(widget->objectName());
@@ -3358,16 +2982,13 @@ void Form::createPropertyCommandsInDesignMode(QWidget* widget,
         addCommand(parentCommand, DontExecuteCommand);
     }
     d->slotPropertyChanged_addCommandEnabled = true;
-// }
 }
 
-//moved from KexiFormPart::slotPropertyChanged()
 void Form::handleWidgetPropertyChanged(QWidget *w, const QByteArray &name, const QVariant &value)
 {
     Q_UNUSED(w);
 
     if (name == "autoTabStops") {
-        //QWidget *w = KFormDesigner::FormManager::self()->activeForm()->selectedWidget();
         //update autoTabStops setting at KFD::Form level
         setAutoTabStops(value.toBool());
     }
@@ -3384,7 +3005,7 @@ void Form::changeFont()
     QFont font;
     bool oneFontSelected = true;
     foreach (QWidget* widget, *wlist) {
-        if (m_lib->isPropertyVisible(widget->metaObject()->className(), widget, "font")) {
+        if (library()->isPropertyVisible(widget->metaObject()->className(), widget, "font")) {
             widgetsWithFontProperty.append(widget);
             if (oneFontSelected) {
                 if (widgetsWithFontProperty.count() == 1)
@@ -3401,7 +3022,6 @@ void Form::changeFont()
 
     if (1 == widgetsWithFontProperty.count()) {
         //single widget's settings
-//?        QWidget *widget = widgetsWithFontProperty.first();
         if (QDialog::Accepted != KFontDialog::getFont(
                 font, KFontChooser::NoDisplayFlags, widget()))
         {
@@ -3434,7 +3054,7 @@ void Form::changeFont()
         widget->setFont(prevFont);
     }
 //! @todo temporary fix for dirty flag
-    emit modified();
+    setModified(true);
 }
 
 void Form::setSlotPropertyChangedEnabled(bool set)
@@ -3442,7 +3062,6 @@ void Form::setSlotPropertyChangedEnabled(bool set)
     d->slotPropertyChangedEnabled = set;
 }
 
-//moved from WidgetFactory
 void Form::createInlineEditor(const KFormDesigner::WidgetFactory::InlineEditorCreationArguments& args)
 {
     if (!args.execute)
@@ -3459,7 +3078,6 @@ void Form::createInlineEditor(const KFormDesigner::WidgetFactory::InlineEditorCr
         textedit->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
         textedit->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff); //ok?
         textedit->setFrameShape(args.useFrame ? QFrame::StyledPanel : QFrame::NoFrame);
-        //textedit->setMargin(2); //to move away from resize handle
         textedit->show();
         textedit->setFocus();
         textedit->selectAll();
@@ -3467,21 +3085,19 @@ void Form::createInlineEditor(const KFormDesigner::WidgetFactory::InlineEditorCr
 
         connect(textedit, SIGNAL(textChanged()), this, SLOT(slotInlineTextChanged()));
         connect(args.widget, SIGNAL(destroyed()), this, SLOT(widgetDestroyed()));
-        connect(textedit, SIGNAL(destroyed()), this, SLOT(editorDeleted()));
+        connect(textedit, SIGNAL(destroyed()), this, SLOT(inlineEditorDeleted()));
     } else {
         KLineEdit *editor = new KLineEdit(args.widget->parentWidget());
         d->inlineEditor = editor;
         editor->setText(args.text);
         editor->setAlignment(args.alignment);
         editor->setFrame(args.useFrame);
-
-        //editor->setContentsMargins(2,2,2,2); //to move away from resize handle
         editor->show();
         editor->setFocus();
         editor->selectAll();
-        connect(editor, SIGNAL(textChanged(const QString&)), this, SLOT(changeInlineTextInternal(const QString&)));
+        connect(editor, SIGNAL(textChanged(QString)), this, SLOT(changeInlineTextInternal(QString)));
         connect(args.widget, SIGNAL(destroyed()), this, SLOT(widgetDestroyed()));
-        connect(editor, SIGNAL(destroyed()), this, SLOT(editorDeleted()));
+        connect(editor, SIGNAL(destroyed()), this, SLOT(inlineEditorDeleted()));
     }
     d->inlineEditor->installEventFilter(this);
     d->inlineEditor->setFont(args.widget->font());
@@ -3496,7 +3112,9 @@ void Form::createInlineEditor(const KFormDesigner::WidgetFactory::InlineEditorCr
     else {
         baseBrush = pal.base();
         QColor baseColor(baseBrush.color());
-        baseColor.setAlpha(120);
+        if (!args.widget->inherits("KexiCommandLinkButton")) { //! @todo HACK! any idea??
+            baseColor.setAlpha(120);
+        }
         baseBrush.setColor(baseColor);
     }
     pal.setBrush(QPalette::Base, baseBrush);
@@ -3529,10 +3147,13 @@ void Form::createInlineEditor(const KFormDesigner::WidgetFactory::InlineEditorCr
     d->editedWidgetClass = args.classname;
     d->originalInlineText = args.text;
 
-    changeInlineTextInternal(args.text); // to update size of the widget
+    d->slotPropertyChangedEnabled = false;
+    InlineTextEditingCommand command( // to update size of the widget
+        *this, selectedWidget(), d->editedWidgetClass, args.text);
+    command.execute();
+    d->slotPropertyChangedEnabled = true;
 }
 
-//moved from WidgetFactory
 void Form::changeInlineTextInternal(const QString& text)
 {
     if (d->editedWidgetClass.isEmpty())
@@ -3541,42 +3162,16 @@ void Form::changeInlineTextInternal(const QString& text)
     InlineTextEditingCommand *command = new InlineTextEditingCommand(
         *this, selectedWidget(), d->editedWidgetClass, text);
     addCommand(command);
-
-#if 0 // 2.0: prev version
-    WidgetInfo *wi = m_lib->widgetInfoForClassName(d->editedWidgetClass);
-    if (!wi)
-        return;
-    if (!wi->factory()->changeInlineText(this, selectedWidget(), text)) {
-        if (wi && wi->inheritedClass()) {
-            wi->inheritedClass()->factory()->changeInlineText(this, selectedWidget(), text);
-        }
-    }
-#endif
-#if 0
-    bool ok = changeInlineText(text);
-    if (!ok) {
-        //try in inherited
-        if (!d->editedWidgetClass.isEmpty()) {
-            WidgetInfo *wi = m_classesByName.value( d->editedWidgetClass );
-            if (wi && wi->inheritedClass()) {
-    //   wi->inheritedClass()->factory()->m_container = m_container;
-                wi->inheritedClass()->factory()->changeInlineText(text);
-            }
-        }
-    }
-#endif
     d->slotPropertyChangedEnabled = true;
 }
 
-//moved from WidgetFactory
 bool Form::eventFilter(QObject *obj, QEvent *ev)
 {
     if (   (ev->type() == QEvent::Resize || ev->type() == QEvent::Move)
         && obj == selectedWidget() && d->inlineEditor)
     {
         // resize widget using resize handles
-//2.0        QWidget *ed = editor(m_widget);
-        WidgetInfo *winfo = m_lib->widgetInfoForClassName(obj->metaObject()->className());
+        WidgetInfo *winfo = library()->widgetInfoForClassName(obj->metaObject()->className());
         if (winfo) {
             winfo->factory()->resizeEditor(
                 d->inlineEditor, selectedWidget(), 
@@ -3593,15 +3188,12 @@ bool Form::eventFilter(QObject *obj, QEvent *ev)
              && d->inlineEditor && d->inlineEditorContainer)
     {
         // click outside editor --> cancel editing
-        //Container *cont = d->inlineEditorContainer;
         resetInlineEditor();
         return d->inlineEditorContainer->eventFilter(obj, ev);
     }
 
     if (ev->type() == QEvent::FocusOut && d->inlineEditor) {
         QWidget *w = d->inlineEditor;
-        //2.0? if (!w)
-        //2.0    w = selectedWidget();
         if (obj != w)
             return false;
 
@@ -3617,8 +3209,6 @@ bool Form::eventFilter(QObject *obj, QEvent *ev)
     }
     else if (ev->type() == QEvent::KeyPress) {
         QWidget *w = d->inlineEditor;
-//2.0        if (!w)
-//2.0            w = selectedWidget();
         if (obj != w)
             return false;
 
@@ -3635,8 +3225,6 @@ bool Form::eventFilter(QObject *obj, QEvent *ev)
     }
     else if (ev->type() == QEvent::ContextMenu) {
         QWidget *w = d->inlineEditor;
-        //2.0 if (!w)
-        //2.0    w = selectedWidget();
         if (obj != w)
             return false;
 
@@ -3645,13 +3233,11 @@ bool Form::eventFilter(QObject *obj, QEvent *ev)
     return false;
 }
 
-//moved from WidgetFactory
 void Form::slotInlineTextChanged()
 {
     changeInlineTextInternal(inlineEditorText());
 }
 
-//moved from WidgetFactory
 QString Form::inlineEditorText() const
 {
     QWidget *ed = d->inlineEditor;
@@ -3661,7 +3247,6 @@ QString Form::inlineEditorText() const
            ? dynamic_cast<KTextEdit*>(ed)->toPlainText() : dynamic_cast<KLineEdit*>(ed)->text();
 }
 
-//moved from WidgetFactory
 void Form::setInlineEditorText(const QString& text)
 {
     QWidget *ed = d->inlineEditor;
@@ -3673,7 +3258,7 @@ void Form::setInlineEditorText(const QString& text)
     else if (dynamic_cast<KLineEdit*>(ed))
         dynamic_cast<KLineEdit*>(ed)->setText(text);
     else
-        qWarning("Inline editor is neither KTextEdit nor KLineEdit");
+        kWarning() << "Inline editor is neither KTextEdit nor KLineEdit";
 }
 
 void Form::disableFilter(QWidget *w, Container *container)
@@ -3690,34 +3275,19 @@ void Form::disableFilter(QWidget *w, Container *container)
         handles->setEditingMode(true);
         handles->raise();
     }
-
-//2.0    setWidget(w, container);
     d->inlineEditor = 0;
     d->inlineEditorContainer = 0;
     d->editedWidgetClass.clear();
-//2.0    setInlineEditor(w, 0);
 
-    // widget is disabled, so we re-enable it while editing
     if (!tree->isEnabled()) {
-#ifdef __GNUC__
-#warning TODO port to Qt 4 if needed
-#else
-#pragma WARNING( TODO port to Qt 4 if needed )
-#endif
-        QPalette p = w->palette();
-        QColorGroup cg = p.active();
-        p.setActive(p.disabled());
-        p.setDisabled(cg);
-        w->setPalette(p);
+        //! @todo widget is disabled, so we re-enable it while editing
     }
-
     connect(w, SIGNAL(destroyed()), this, SLOT(widgetDestroyed()));
 }
 
 void Form::resetInlineEditor()
 {
     if (!d->inlineEditorContainer) {
-//! @todo 2.0: OK?
         return;
     }
     d->inlineEditorContainer->stopInlineEditing();
@@ -3726,10 +3296,8 @@ void Form::resetInlineEditor()
     QWidget *widget = selectedWidget();
     if (widget) {
         FormWidgetInterface* fwiface = dynamic_cast<FormWidgetInterface*>(widget);
-
         if (fwiface)
             fwiface->setEditingMode(false);
-
 
         ObjectTreeItem *tree = objectTree()->lookup(widget->objectName());
         if (!tree) {
@@ -3737,30 +3305,22 @@ void Form::resetInlineEditor()
             return;
         }
         tree->eventEater()->setContainer(d->inlineEditorContainer);
-/*2.0        if (widget) {// && !ed)
-            setRecursiveCursor(widget, this);
-            if (widget->inherits("QLineEdit") || widget->inherits("QTextEdit")) { //fix weird behaviour
-//                widget->unsetCursor();
-                widget->setCursor(Qt::ArrowCursor);
-            }
-        }*/
 
-        // disable again the widget if needed
+        // "disable" the widget if needed
         if (!ed && !tree->isEnabled()) {
-#ifdef __GNUC__
-#warning TODO port to Qt 4 if needed
-#else
-#pragma WARNING( TODO port to Qt 4 if needed )
-#endif
-            QPalette p = widget->palette();
-            QColorGroup cg = p.active();
-            p.setActive(p.disabled());
-            p.setDisabled(cg);
-            widget->setPalette(p);
+            widget->setPalette(KexiUtils::paletteForReadOnly(widget->palette()));
         }
     }
     if (ed) {
-        changeInlineTextInternal(inlineEditorText());
+        d->slotPropertyChangedEnabled = false;
+        InlineTextEditingCommand command(
+            *this, selectedWidget(), d->editedWidgetClass, inlineEditorText());
+        command.execute();
+        d->slotPropertyChangedEnabled = true;
+    }
+    d->inlineEditor = 0;
+    d->inlineEditorContainer = 0;
+    if (ed) {
         disconnect(ed, 0, this, 0);
         ed->deleteLater();
     }
@@ -3774,12 +3334,7 @@ void Form::resetInlineEditor()
     if (handles) {
         handles->setEditingMode(false);
     }
-    d->inlineEditor = 0;
-    d->inlineEditorContainer = 0;
     d->editedWidgetClass.clear();
-//2.0    setInlineEditor(widget, 0);
-//2.0    setWidget(0, 0);
-//2.0    m_handles = 0;
 }
 
 void Form::widgetDestroyed()
@@ -3789,13 +3344,10 @@ void Form::widgetDestroyed()
         d->inlineEditor = 0;
     }
 
-//js delete m_handles;
     ResizeHandleSet *handles = resizeHandlesForWidget(static_cast<QWidget*>(sender()));
     if (handles) {
         handles->setEditingMode(false);
     }
-//2.0    m_widget = 0;
-//2.0    m_handles = 0;
     d->inlineEditorContainer = 0;
     d->editedWidgetClass.clear();
 }
@@ -3809,11 +3361,6 @@ void Form::inlineEditorDeleted()
     d->inlineEditor = 0;
     d->inlineEditorContainer = 0;
     d->editedWidgetClass.clear();
-//2.0    setInlineEditor(m_widget, 0);
-//2.0    setWidget(0, 0);
-// m_widget = 0;
-//2.0    m_handles = 0;
-// m_container = 0;
 }
 
 QByteArray Form::editedWidgetClass() const

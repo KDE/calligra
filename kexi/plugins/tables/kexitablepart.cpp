@@ -21,11 +21,12 @@
 
 #include "kexitablepart.h"
 
-#include <KDebug>
-#include <KMessageBox>
-#include <KTabWidget>
-#include <KIconLoader>
-#include <KPluginFactory>
+#include <KoIcon.h>
+
+#include <kdebug.h>
+#include <kmessagebox.h>
+#include <ktabwidget.h>
+#include <kpluginfactory.h>
 
 #include <KexiMainWindowIface.h>
 #include "kexiproject.h"
@@ -36,8 +37,8 @@
 #include "kexitabledesigner_dataview.h"
 #include "kexilookupcolumnpage.h"
 
-#include <kexidb/connection.h>
-#include <kexidb/cursor.h>
+#include <db/connection.h>
+#include <db/cursor.h>
 #include <KexiWindow.h>
 
 //! @internal
@@ -77,13 +78,6 @@ void KexiTablePart::initPartActions()
 
 void KexiTablePart::initInstanceActions()
 {
-//moved to main window createSharedAction(Kexi::DataViewMode, i18n("Filter"), "view-filter", 0, "tablepart_filter");
-    /*2.0 moved to createViewActions()
-      KAction *a = createSharedToggleAction(
-        Kexi::DesignViewMode, i18n("Primary Key"), "key", KShortcut(),
-        "tablepart_toggle_pkey");
-    //  Kexi::DesignViewMode, i18n("Toggle Primary Key"), "key", KShortcut(), "tablepart_toggle_pkey");
-      a->setWhatsThis(i18n("Sets or removes primary key for currently selected field.")); */
 }
 
 KexiWindowData* KexiTablePart::createWindowData(KexiWindow* window)
@@ -100,7 +94,7 @@ KexiView* KexiTablePart::createView(QWidget *parent, KexiWindow* window,
 
 
     KexiTablePart::TempData *temp
-    = static_cast<KexiTablePart::TempData*>(window->data());
+        = static_cast<KexiTablePart::TempData*>(window->data());
     if (!temp->table) {
         temp->table = win->project()->dbConnection()->tableSchema(item.name());
         kDebug() << "schema is " << temp->table;
@@ -110,8 +104,9 @@ KexiView* KexiTablePart::createView(QWidget *parent, KexiWindow* window,
         KexiTableDesignerView *t = new KexiTableDesignerView(parent);
         return t;
     } else if (viewMode == Kexi::DataViewMode) {
-        if (!temp->table)
-            return 0; //todo: message
+        if (!temp->table) {
+            return 0; //!< @todo message
+        }
         //we're not setting table schema here -it will be forced to set
         // in KexiTableDesigner_DataView::afterSwitchFrom()
         KexiTableDesigner_DataView *t = new KexiTableDesigner_DataView(parent);
@@ -120,7 +115,7 @@ KexiView* KexiTablePart::createView(QWidget *parent, KexiWindow* window,
     return 0;
 }
 
-bool KexiTablePart::remove(KexiPart::Item &item)
+tristate KexiTablePart::remove(KexiPart::Item &item)
 {
     KexiProject *project = KexiMainWindowIface::global()->project();
     if (!project || !project->dbConnection())
@@ -130,63 +125,64 @@ bool KexiTablePart::remove(KexiPart::Item &item)
     KexiDB::TableSchema *sch = conn->tableSchema(item.identifier());
 
     if (sch) {
-        KexiTablePart::askForClosingObjectsUsingTableSchema(
-                           KexiMainWindowIface::global()->thisWidget(), *conn, *sch,
-                           i18n(
-                               "You are about to remove table \"%1\" but following objects using this table are opened:",
-                               sch->name()));
-        return true == conn->dropTable(sch);
+        tristate res = KexiTablePart::askForClosingObjectsUsingTableSchema(
+            KexiMainWindowIface::global()->thisWidget(), *conn, *sch,
+            i18n("You are about to remove table <resource>%1</resource> but following objects using this table are opened:",
+                 sch->name()));
+        if (res != true) {
+            return res;
+        }
+        return conn->dropTable(sch);
     }
     //last chance: just remove item
     return conn->removeObject(item.identifier());
 }
 
-tristate KexiTablePart::rename(KexiPart::Item & item,
-                               const QString& newName)
+tristate KexiTablePart::rename(KexiPart::Item & item, const QString& newName)
 {
-//TODO: what about objects (queries/forms) that use old name?
     KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
     KexiDB::TableSchema *sch = conn->tableSchema(item.identifier());
     if (!sch)
         return false;
+    tristate res = KexiTablePart::askForClosingObjectsUsingTableSchema(
+        KexiMainWindowIface::global()->thisWidget(), *conn, *sch,
+        i18n("You are about to rename table <resource>%1</resource> but following objects using this table are opened:",
+             sch->name()));
+    if (res != true) {
+        return res;
+    }
     return conn->alterTableName(*sch, newName);
 }
 
 KexiDB::SchemaData* KexiTablePart::loadSchemaData(KexiWindow *window, const KexiDB::SchemaData& sdata,
                               Kexi::ViewMode viewMode, bool *ownedByWindow)
 {
+    Q_UNUSED(window);
     Q_UNUSED(viewMode);
     if (ownedByWindow)
         *ownedByWindow = false;
     return KexiMainWindowIface::global()->project()->dbConnection()->tableSchema(sdata.name());
 }
 
-#if 0
-KexiPart::DataSource *
-KexiTablePart::dataSource()
-{
-    return new KexiTableDataSource(this);
-}
-#endif
-
 tristate KexiTablePart::askForClosingObjectsUsingTableSchema(
     QWidget *parent, KexiDB::Connection& conn,
     KexiDB::TableSchema& table, const QString& msg)
 {
     QSet<KexiDB::Connection::TableSchemaChangeListenerInterface*>* listeners
-    = conn.tableSchemaChangeListeners(table);
+        = conn.tableSchemaChangeListeners(table);
     if (!listeners || listeners->isEmpty())
         return true;
 
-    QString openedObjectsStr = "<ul>";
+    QString openedObjectsStr = "<list>";
     foreach(KexiDB::Connection::TableSchemaChangeListenerInterface* iface, *listeners) {
-        openedObjectsStr += QString("<li>%1</li>").arg(iface->listenerInfoString);
+        openedObjectsStr += QString("<item>%1</item>").arg(iface->listenerInfoString);
     }
-    openedObjectsStr += "</ul>";
+    openedObjectsStr += "</list>";
     int r = KMessageBox::questionYesNo(parent,
-                                       "<p>" + msg + "</p><p>" + openedObjectsStr + "</p><p>"
-                                       + i18n("Do you want to close all windows for these objects?"),
-                                       QString(), KGuiItem(i18n("Close windows"), "window-close"), KStandardGuiItem::cancel());
+                                       "<para>" + msg + "</para><para>" + openedObjectsStr + "</para><para>"
+                                       + i18n("Do you want to close all windows for these objects?")
+                                       + "</para>",
+                                       QString(), KGuiItem(i18n("Close windows"), koIconName("window-close")), KStandardGuiItem::cancel());
     tristate res;
     if (r == KMessageBox::Yes) {
         //try to close every window
@@ -221,26 +217,25 @@ void KexiTablePart::setupCustomPropertyPanelTabs(KTabWidget *tab)
     if (!d->lookupColumnPage) {
         d->lookupColumnPage = new KexiLookupColumnPage(0);
         connect(d->lookupColumnPage,
-                SIGNAL(jumpToObjectRequested(const QString&, const QString&)),
+                SIGNAL(jumpToObjectRequested(QString,QString)),
                 KexiMainWindowIface::global()->thisWidget(),
-                SLOT(highlightObject(const QString&, const QString&)));
+                SLOT(highlightObject(QString,QString)));
 
 //! @todo add "Table" tab
-
         /*
-          connect(d->dataSourcePage, SIGNAL(formDataSourceChanged(const QCString&, const QCString&)),
-            KFormDesigner::FormManager::self(), SLOT(setFormDataSource(const QCString&, const QCString&)));
-          connect(d->dataSourcePage, SIGNAL(dataSourceFieldOrExpressionChanged(const QString&, const QString&, KexiDB::Field::Type)),
-            KFormDesigner::FormManager::self(), SLOT(setDataSourceFieldOrExpression(const QString&, const QString&, KexiDB::Field::Type)));
-          connect(d->dataSourcePage, SIGNAL(insertAutoFields(const QString&, const QString&, const QStringList&)),
-            KFormDesigner::FormManager::self(), SLOT(insertAutoFields(const QString&, const QString&, const QStringList&)));*/
+          connect(d->dataSourcePage, SIGNAL(formDataSourceChanged(QCString,QCString)),
+            KFormDesigner::FormManager::self(), SLOT(setFormDataSource(QCString,QCString)));
+          connect(d->dataSourcePage, SIGNAL(dataSourceFieldOrExpressionChanged(QString,QString,KexiDB::Field::Type)),
+            KFormDesigner::FormManager::self(), SLOT(setDataSourceFieldOrExpression(QString,QString,KexiDB::Field::Type)));
+          connect(d->dataSourcePage, SIGNAL(insertAutoFields(QString,QString,QStringList)),
+            KFormDesigner::FormManager::self(), SLOT(insertAutoFields(QString,QString,QStringList)));*/
     }
 
     KexiProject *prj = KexiMainWindowIface::global()->project();
     d->lookupColumnPage->setProject(prj);
 
 //! @todo add lookup field icon
-    tab->addTab(d->lookupColumnPage, KIcon("combo"), "");
+    tab->addTab(d->lookupColumnPage, koIcon("combo"), QString());
     tab->setTabToolTip(tab->indexOf(d->lookupColumnPage), i18n("Lookup column"));
 }
 
@@ -248,33 +243,6 @@ KexiLookupColumnPage* KexiTablePart::lookupColumnPage() const
 {
     return d->lookupColumnPage;
 }
-
-//----------------
-
-#if 0
-KexiTableDataSource::KexiTableDataSource(KexiPart::Part *part)
-        : KexiPart::DataSource(part)
-{
-}
-
-KexiTableDataSource::~KexiTableDataSource()
-{
-}
-
-KexiDB::FieldList *
-KexiTableDataSource::fields(KexiProject *project, const KexiPart::Item &it)
-{
-    kDebug() << it.name();
-    return project->dbConnection()->tableSchema(it.name());
-}
-
-KexiDB::Cursor *
-KexiTableDataSource::cursor(KexiProject * /*project*/,
-                            const KexiPart::Item &/*it*/, bool /*buffer*/)
-{
-    return 0;
-}
-#endif
 
 //----------------
 
@@ -286,27 +254,6 @@ KexiTablePart::TempData::TempData(QObject* parent)
 }
 
 //----------------
-
-/**
-TODO
-*/
-/*
-AboutData( const char *programName,
-  const char *version,
-  const char *i18nShortDescription = 0,
-  int licenseType = License_Unknown,
-  const char *i18nCopyrightStatement = 0,
-  const char *i18nText = 0,
-  const char *homePageAddress = 0,
-  const char *bugsEmailAddress = "submit@bugs.kde.org"
-);
-
-#define KEXIPART_EXPORT_FACTORY( libname, partClass, aboutData ) \
-  static KexiPart::AboutData * libname ## updateAD(KexiPart::AboutData *ad) \
-  { ad->setAppName( #libname ); return ad; } \
-   K_PLUGIN_FACTORY( libname ## Factory, registerPlugin<partClass>(); )
-   K_EXPORT_PLUGIN( libname ## Factory )
-*/
 
 K_EXPORT_KEXI_PLUGIN( KexiTablePart, table )
 

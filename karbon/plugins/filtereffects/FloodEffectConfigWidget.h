@@ -30,7 +30,7 @@ class FloodEffectConfigWidget : public KoFilterEffectConfigWidgetBase
 {
     Q_OBJECT
 public:
-    FloodEffectConfigWidget(QWidget *parent = 0);
+    explicit FloodEffectConfigWidget(QWidget *parent = 0);
 
     /// reimplemented from KoFilterEffectConfigWidgetBase
     virtual bool editFilterEffect(KoFilterEffect * filterEffect);

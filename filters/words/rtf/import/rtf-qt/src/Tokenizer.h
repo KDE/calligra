@@ -20,7 +20,7 @@
 
 #include "Token.h"
 
-#include <QtCore/QFile>
+#include <QFile>
 #include "rtfreader_export.h"
 namespace RtfReader
 {

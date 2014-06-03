@@ -20,13 +20,12 @@
 #ifndef KEXI_STARTUPHANDLER_P_H
 #define KEXI_STARTUPHANDLER_P_H
 
-#include <qobject.h>
-#include <qstring.h>
+#include <QObject>
+#include <QString>
 
-//#include <sys/stat.h>
 #include <kde_file.h>
 
-#include <kexiutils/tristate.h>
+#include <db/tristate.h>
 
 class KProcess;
 class KProgressDialog;
@@ -35,7 +34,7 @@ class SQLite2ToSQLite3Migration : public QObject
 {
     Q_OBJECT
 public:
-    SQLite2ToSQLite3Migration(const QString& filePath);
+    explicit SQLite2ToSQLite3Migration(const QString& filePath);
     ~SQLite2ToSQLite3Migration();
 
     tristate run();

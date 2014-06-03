@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KEXIFINDDIALOG_H
-#define KEXIFINDDIALOG_H
+#ifndef KEXITEST_FINDDIALOG_H
+#define KEXITEST_FINDDIALOG_H
 
 #include "kexifinddialogbase.h"
 
@@ -60,7 +60,7 @@ public slots:
     void setReplaceMode(bool set);
 
 protected:
-    bool m_replaceMode : 1;
+    bool m_replaceMode;
 };
 
 #endif

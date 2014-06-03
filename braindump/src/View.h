@@ -21,7 +21,7 @@
 #define VIEW_H
 
 #include <QWidget>
-#include <KXMLGUIClient>
+#include <kxmlguiclient.h>
 
 #include <KoZoomHandler.h>
 

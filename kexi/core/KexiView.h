@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004-2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2012 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -39,24 +39,6 @@ namespace KexiDB
 class SchemaData;
 }
 
-//! @short action for toggling view mode
-class KEXICORE_EXPORT KexiToggleViewModeAction : public KAction
-{
-    //Q_OBJECT
-public:
-    //! Creates action for toggling to view mode @a mode. @a slot should have signature
-    //! matching switchedTo(Kexi::ViewMode mode) signal.
-    KexiToggleViewModeAction(Kexi::ViewMode mode, QObject* parent);//, QObject* receiver, const char* slot);
-    /* signals:
-        void switchedTo(Kexi::ViewMode mode);
-      private slots:
-        void slotToggled(bool);
-
-      private:
-        class Private;
-        Private * const d;*/
-};
-
 //! Base class for single view embeddable in KexiWindow.
 /*! This class automatically works as a proxy for shared (application-wide) actions.
  KexiView has 'dirty' flag to indicate that view's data has changed.
@@ -70,17 +52,16 @@ public:
  KexiView object can be also allocated without attaching it KexiWindow,
  especially within dock window. see KexiMainWindow::initNavigator() to see example
  how KexiBrowser does this.
-*/
+
+ @todo add some protected access methods
+ */
 class KEXICORE_EXPORT KexiView : public QWidget, public KexiActionProxy
 {
     Q_OBJECT
 
 public:
-    KexiView(QWidget *parent);
+    explicit KexiView(QWidget *parent);
     virtual ~KexiView();
-
-//  //! \return kexi main window that contain this view
-//kde4 not needed  inline KexiMainWindow *mainWin() const { return m_mainWin; }
 
     //! \return parent KexiWindow that containing this view,
     //! or 0 if no window contain this view
@@ -92,15 +73,15 @@ public:
     KexiPart::Part* part() const;
 
     /*! \return preferred size hint, that can be used to resize the view.
-     It is computed using maximum of (a) \a otherSize and (b) current KMDI dock area's size,
+     It is computed using maximum of (a) \a otherSize and (b) current dock area's size,
      so the view won't exceed this maximum size. The method is used e.g. in KexiWindow::sizeHint().
      If you reimplement this method, do not forget to return value of
      yoursize.boundedTo( KexiView::preferredSizeHint(otherSize) ). */
     virtual QSize preferredSizeHint(const QSize& otherSize);
 
-    virtual bool eventFilter(QObject *o, QEvent *e);
-
     void addChildView(KexiView* childView);
+
+    void removeView(Kexi::ViewMode mode);
 
     /*! True if contents (data) of the view is dirty and need to be saved
      This may or not be used, depending if changes in the window
@@ -154,6 +135,16 @@ public:
      If there's no such action, global shared action is enabled or disabled (if exists). */
     virtual void setAvailable(const QString& action_name, bool set);
 
+    enum StoreNewDataOption {
+        OverwriteExistingData = 1 //!< Overwerite existing object in storeNewData()
+    };
+
+    QString defaultIconName() const;
+
+    void setDefaultIconName(const QString& iconName);
+
+    Q_DECLARE_FLAGS(StoreNewDataOptions, StoreNewDataOption)
+
 public slots:
     virtual void setFocus();
 
@@ -161,6 +152,10 @@ public slots:
      (returned by propertySet()) is switched to other,
      so property editor contents need to be completely replaced. */
     virtual void propertySetSwitched();
+
+    /*! Saves settings for the view. Default implementation does nothing and returns true.
+      Implement this if there are settings to save. */
+    virtual bool saveSettings();
 
     /*! Sets dirty flag on or off. It the flag changes,
      dirty(bool) signal is emitted by the parent window (KexiWindow),
@@ -170,17 +165,17 @@ public slots:
     void setDirty(bool set);
 
     /*! Equal to setDirty(true). */
-    void setDirty() {
-        setDirty(true);
-    }
+    void setDirty();
 
 signals:
     //! emitted when the view is about to close
-    void closing(bool& cancel);
+    void closing(bool *cancel);
 
     void focus(bool in);
 
 protected:
+    virtual bool eventFilter(QObject *o, QEvent *e);
+
     /*! called by KexiWindow::switchToViewMode() right before window is switched to new mode
      By default does nothing. Reimplement this if you need to do something
      before switching to this view.
@@ -215,7 +210,7 @@ protected:
 
     /*! Tells this view to create and store data of the new object
      pointed by \a sdata on the backend.
-     Called by KexiWindow::storeNewData().
+     Called by KexiWindow::storeNewData() and KexiWindow::storeDataAs().
      Default implementation:
      - makes a deep copy of \a sdata
      - stores object schema data \a sdata in 'kexi__objects' internal table
@@ -224,15 +219,44 @@ protected:
      Requirements:
      - deep copy of \a sdata should be made
      - schema data should be created at the backend
-       (by calling KexiView::storeNewData(const KexiDB::SchemaData& sdata)),
-       or using Connection::storeObjectSchemaData() or more specialized
-       method. For example, KexiAlterTableDialog
-       uses Connection::createTable(TableSchema) for this
-       (tableschema is SchemaData subclass) to store more information than
-       just a schem adata. You should use such subclasses if needed.
+       (by calling KexiView::storeNewData(const KexiDB::SchemaData&, KexiView::StoreNewDataOptions,bool&))
+       or using Connection::storeObjectSchemaData() or more specialized method.
+       For example KexiTableDesignerView uses Connection::createTable(TableSchema) for this
+       (TableSchema inherits SchemaData) to store more information than
+       just schema data. You should use such subclasses if needed.
+
+     Should return newly created schema data object on success.
+     In this case, do not store schema object yourself (make a deep copy if needed). */
+    virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata,
+                                             KexiView::StoreNewDataOptions options,
+                                             bool &cancel);
+
+    /*! Tells this view to fully copy existing object's data pointed by \a sdata on the backend.
+     For example, for database tables it whould copy metadata, copy \a sdata, so the copy will
+     have different name, caption and description, and physically copy the table (possibly on
+     the server side).
+     Called by KexiWindow::storeDataAs().
+     Default implementation:
+     - makes a deep copy of \a sdata
+     - stores object schema data \a sdata in 'kexi__objects' internal table
+       using Connection::storeObjectSchemaData()
+     - makes a full copy of data and user data.
+     Reimplement this for your needs.
+     Requirements:
+     - deep copy of \a sdata should be made
+     - schema data should be created at the backend
+       (by calling KexiView::copyData(const KexiDB::SchemaData&, KexiView::StoreNewDataOptions,bool&))
+       or using Connection::storeObjectSchemaData() or more specialized method.
+       For example KexiTableDesignerView uses Connection::createTable(TableSchema) for this
+       (TableSchema inherits SchemaData) to store more information than
+      just schema data. Then it copies data table on the server side.
+      You should use such subclasses if needed.
+
      Should return newly created schema data object on success.
      In this case, do not store schema object yourself (make deep copy if needed). */
-    virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata, bool &cancel);
+    virtual KexiDB::SchemaData* copyData(const KexiDB::SchemaData& sdata,
+                                          KexiView::StoreNewDataOptions options,
+                                          bool &cancel);
 
     /*! Loads large string data \a dataString block (e.g. xml form's representation),
      indexed with optional \a dataID, from the database backend.
@@ -246,14 +270,13 @@ protected:
     /*! Tells this view to store data changes on the backend.
      Called by KexiWindow::storeData().
      Default implementation:
-     - makes a deep copy of \a sdata
      - stores object schema data \a sdata in 'kexi__objects' internal table
        using Connection::storeObjectSchemaData().
      If \a dontAsk is true, no question dialog will
      be shown to the user. The default is false.
 
-     Reimplement this for your needs. Should return true on success
-     or cancelled when the task should be cancelled.
+     Reimplement this for your needs. Should return true on success, false on failure
+     and cancelled when the task should be cancelled.
      \sa storeNewData() */
     virtual tristate storeData(bool dontAsk = false);
 
@@ -290,20 +313,23 @@ protected:
         QWidget::setFocus();
     }
 
-    /*! Allows to react on parent window's detaching (only for KMDI's ChildFrame mode)
-     - it is called by KexiWindow::youAreDetached().
+    /*! Allows to react on parent window's detaching.
+     @todo it should be called by KexiWindow::youAreDetached().
      Default implementation does nothing.
      Implement it if you want to perform some appropriate actions. */
     virtual void windowDetached() {}
 
-    /*! Allows to react on parent window's attaching (only for KMDI's ChildFrame mode)
-     - it is called by KexiWindow::youAreAttached().
+    /*! Allows to react on parent window's attaching.
+     @todo it should be called by KexiWindow::youAreAttached().
      Default implementation does nothing.
      Implement it if you want to perform some appropriate actions. */
     virtual void windowAttached() {}
 
     /*! Assigns a list of view-level actions. Used by KexiView ctor. */
     void setViewActions(const QList<QAction*>& actions);
+
+    /*! Assigns a list of main-menu-level actions. Used by KexiView ctor. */
+    void setMainMenuActions(const QList<QAction*>& actions);
 
     /*! @return a list of view-level actions. */
     QList<QAction*> viewActions() const;
@@ -312,44 +338,9 @@ protected:
     QAction* viewAction(const char* name) const;
 
     void initViewActions();
+    void initMainMenuActions();
 
     void toggleViewModeButtonBack();
-
-    QString m_defaultIconName;
-
-#ifdef __GNUC__
-#warning todo: add some protected access methods
-#else
-#pragma WARNING( todo: add some protected access methods )
-#endif
-    /*
-
-        KexiMainWindow *m_mainWin;
-
-        KexiWindow *m_dialog;
-
-        QWidget *m_viewWidget;
-
-        KexiView *m_parentView;
-
-        QPointer<QWidget> m_lastFocusedChildBeforeFocusOut;
-
-      private:*/
-    /*! Member set to newly assigned object's ID in storeNewData()
-     and used in storeDataBlock(). This is needed because usually,
-     storeDataBlock() can be called from storeNewData() and in this case
-     dialog has not yet assigned valid identifier (it has just negative temp. number).
-     \sa KexiWindow::id()
-     */
-    /*  int m_newlyAssignedID;
-
-        //! Mode for this view. Initialized by KexiWindow::switchToViewMode().
-        //! Can be useful when single class is used for more than one view (e.g. KexiDBForm).
-        int m_viewMode;
-
-        Q3PtrList<KexiView> m_children;
-
-        bool m_dirty; */
 
     //! Sets properties in the Property Editor to be sorted if @a set is true.
     void setSortedProperties(bool set);
@@ -367,5 +358,7 @@ private:
     Private * const d;
     friend class KexiWindow;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(KexiView::StoreNewDataOptions)
 
 #endif

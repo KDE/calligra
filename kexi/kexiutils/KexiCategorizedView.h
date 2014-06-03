@@ -22,8 +22,8 @@
 
 #include "kexiutils_export.h"
 
-#include <KCategoryDrawer>
-#include <KCategorizedView>
+#include <kcategorydrawer.h>
+#include <kcategorizedview.h>
 #include <kdeversion.h>
 
 class QModelIndex;
@@ -31,24 +31,13 @@ class QAbstractItemModel;
 class QRect;
 class QMouseEvent;
 
-#if KDE_IS_VERSION(4,5,0)
 typedef KCategoryDrawerV3 KexiCategoryDrawerBase;
-#else
-typedef KCategoryDrawerV2 KexiCategoryDrawerBase;
-#endif
 
 //! Modification of category drawer for KCategorizedView: disallows clicking on the drawer
 class KEXIUTILS_EXPORT KexiCategoryDrawer : public KexiCategoryDrawerBase
 {
 public:
-    KexiCategoryDrawer();
-
-protected:
-#if 0
-    void mouseButtonPressed(const QModelIndex&, const QRect&, QMouseEvent *event);
-
-    void mouseButtonReleased(const QModelIndex&, const QRect&, QMouseEvent *event);
-#endif
+    explicit KexiCategoryDrawer(KCategorizedView *view);
 };
 
 //! Single selection model for the drawer.

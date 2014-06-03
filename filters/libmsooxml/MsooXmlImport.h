@@ -26,12 +26,13 @@
 #ifndef MSOOXMLIMPORT_H
 #define MSOOXMLIMPORT_H
 
-#include "msooxml_export.h"
+#include "komsooxml_export.h"
 
 #include <QByteArray>
 #include <QHash>
 #include <QVariant>
 
+#include <KoBorder.h>
 #include <KoOdfExporter.h>
 #include <KoXmlReader.h>
 
@@ -52,7 +53,7 @@ class MsooXmlRelationships;
 class DrawingMLTheme;
 
 //! A base class for MSOOXML-to-ODF import filters
-class MSOOXML_EXPORT MsooXmlImport : public KoOdfExporter
+class KOMSOOXML_EXPORT MsooXmlImport : public KoOdfExporter
 {
     Q_OBJECT
 public:
@@ -72,6 +73,10 @@ public:
     KoFilter::ConversionStatus loadAndParseDocument(MsooXmlReader *reader, const QString& path,
             QString& errorMessage,
             MsooXmlReaderContext* context = 0);
+
+    //! Loads a file from a device
+    KoFilter::ConversionStatus loadAndParseFromDevice(MsooXmlReader* reader, QIODevice* device,
+            MsooXmlReaderContext* context);
 
     /*! Copies file @a sourceName from the input archive to the output document
     under @a destinationName name. @return KoFilter::OK on success.

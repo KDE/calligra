@@ -39,7 +39,7 @@ public:
     /**
      * Create an OLE stream
      */
-    OLEStream( OLEStorage* storage );
+    explicit OLEStream( OLEStorage* storage );
     virtual ~OLEStream();
 
     /**
@@ -159,7 +159,7 @@ private:
 class WV2_EXPORT OLEStreamWriter : public OLEStream
 {
 public:
-    OLEStreamWriter( OLEStorage* storage );
+    explicit OLEStreamWriter( OLEStorage* storage );
     virtual ~OLEStreamWriter();
 
     /**

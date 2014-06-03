@@ -25,7 +25,6 @@
 #include <koproperty/Property.h>
 
 #include <klocale.h>
-#include <kiconloader.h>
 
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -43,7 +42,7 @@ KexiPropertyPaneViewBase::KexiPropertyPaneViewBase(QWidget* parent)
         : QWidget(parent)
         , d(new Private())
 {
-    //TODO: set a nice icon
+    //! @todo set a nice icon
 //    setWindowIcon(KexiMainWindowIface::global()->thisWidget()->windowIcon());
 
     QVBoxLayout *lyr = new QVBoxLayout(this);
@@ -94,11 +93,11 @@ void KexiPropertyPaneViewBase::updateInfoLabelForPropertySet(
         d->infoLabel->show();
 
     if (d->infoLabel->objectClassName() == className
-            && d->infoLabel->objectClassIcon() == iconName
+            && d->infoLabel->objectClassIconName() == iconName
             && d->infoLabel->objectName() == objectName)
         return;
 
-    d->infoLabel->setObjectClassIcon(iconName);
+    d->infoLabel->setObjectClassIconName(iconName);
     d->infoLabel->setObjectClassName(className);
     d->infoLabel->setObjectName(objectName);
 }
@@ -124,7 +123,6 @@ QWidget* KexiPropertyPaneViewBase::addWidgetSpacer()
     sp->setFixedHeight(spacing());
     sp->setContentsMargins(0, 0, 0, 0);
     mainLayout()->addWidget(sp);
-
     return sp;
 }
 

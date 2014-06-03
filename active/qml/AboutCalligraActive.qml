@@ -1,6 +1,6 @@
 /*
  *   Copyright 2011 Sebastian Kügler <sebas@kde.org>
- *   Copyright 2011 Shantanu Tushar <jhahoneyk@gmail.com>
+ *   Copyright 2011 Shantanu Tushar <shaan7in@gmail.com>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License as
@@ -22,43 +22,22 @@ import QtQuick 1.0
 import org.kde.plasma.graphicswidgets 0.1 as PlasmaWidgets
 import org.kde.plasma.core 0.1 as PlasmaCore
 import org.kde.plasma.graphicslayouts 4.7 as GraphicsLayouts
+import org.kde.plasma.components 0.1 as PlasmaComponents
 
 Item {
     PlasmaCore.Theme {
         id: theme
     }
 
-    anchors.margins: 20
-
-    Button {
-        id: back
-        drawBackground: false
-        imageSource: "qrc:///images/go-previous.png"
-        anchors.left: parent.left
-        anchors.top: parent.top
-        height: 64
-        width: 64
-        z: 2
-
-        onClicked: homeScreen.state = ""
-    }
-
     Column {
         anchors.fill: parent
-        anchors.topMargin: 20
+        anchors.margins: 40
         spacing: 80
 
-//         Image {
-//             id: calligra_logo
-//             source: "qrc:///images/calligra-logo.png"
-//             anchors.horizontalCenter: parent.horizontalCenter
-//         }
-
-        Text {
+        Image {
             id: calligra_logo
-            text: "Calligra"
+            source: "qrc:///images/calligra-logo.png"
             anchors.horizontalCenter: parent.horizontalCenter
-            font.pointSize: 80
         }
 
         Text {
@@ -66,9 +45,9 @@ Item {
             width: parent.width
             anchors.horizontalCenter: parent.horizontalCenter
             wrapMode: Text.WordWrap
-            text: "<p>Calligra Active 1.0 Beta using Calligra Engine 2.4</p> \
-                   <p>Calligra Active is a office document viewer for touch based tablets especially tailored for the Plasma Active platform.</p> \
-                   <p><a href=\"http://www.calligra-suite.org/\">http://www.calligra-suite.org</a></p>"
+            text: i18n("<p>Calligra Active 1.0 Beta using Calligra Office Engine %1 </p> \
+                   <p>Calligra Active is an office document viewer for tablets especially tailored to the Plasma Active platform.</p> \
+                   <p><a href=\"http://www.calligra.org/\">http://www.calligra.org</a></p>", _calligra_version_string)
             color: theme.textColor
             styleColor: theme.backgroundColor
             font.pointSize: 20

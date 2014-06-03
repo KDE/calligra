@@ -22,7 +22,7 @@
 
 KPrAnimationValue::KPrAnimationValue(KPrShapeAnimation *shapeAnimation)
     : m_shape(shapeAnimation->shape())
-    , m_textBlockData(shapeAnimation->textBlockData())
+    , m_textBlockData(shapeAnimation->textBlockUserData())
 {
 }
 

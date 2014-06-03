@@ -21,7 +21,7 @@
 #ifndef TESTEDITCUSTOMSLIDESHOWSCOMMAND_H
 #define TESTEDITCUSTOMSLIDESHOWSCOMMAND_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class TestEditCustomSlideShowsCommand : public QObject
 {

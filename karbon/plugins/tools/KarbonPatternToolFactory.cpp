@@ -22,15 +22,16 @@
 
 #include <KoToolRegistry.h>
 
+#include <KoIcon.h>
 #include <klocale.h>
 #include <kdebug.h>
 
 KarbonPatternToolFactory::KarbonPatternToolFactory()
         : KoToolFactoryBase("KarbonPatternTool")
 {
-    setToolTip(i18n("Pattern Editing Tool"));
+    setToolTip(i18n("Pattern editing"));
     setToolType("karbon,krita");
-    setIcon("pattern");
+    setIconName(koIconNameCStr("pattern"));
     setPriority(3);
 }
 

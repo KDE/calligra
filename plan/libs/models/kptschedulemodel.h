@@ -57,6 +57,7 @@ public:
         SchedulePlannedStart,
         SchedulePlannedFinish,
         ScheduleScheduler,
+        ScheduleGranularity,
         ScheduleScheduled
     };
     const QMetaEnum columnMap() const;
@@ -146,6 +147,9 @@ protected:
     bool setScheduler( const QModelIndex &index, const QVariant &value, int role );
 
     QVariant isScheduled( const QModelIndex &index, int role ) const;
+
+    QVariant granularity( const QModelIndex &index, int role ) const;
+    bool setGranularity( const QModelIndex &index, const QVariant &value, int role );
 
 private:
     ScheduleManager *m_manager; // for sanety check

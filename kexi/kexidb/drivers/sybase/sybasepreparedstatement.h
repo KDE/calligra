@@ -20,8 +20,8 @@
 #ifndef SYBASEPREPAREDSTATEMENT_H
 #define SYBASEPREPAREDSTATEMENT_H
 
-#include <kexidb/preparedstatement.h>
-#include <kexidb/connection_p.h>
+#include <db/preparedstatement.h>
+#include <db/connection_p.h>
 
 namespace KexiDB
 {
@@ -37,7 +37,7 @@ public:
 
     QByteArray m_tempStatementString;
 
-    bool m_resetRequired : 1;
+    bool m_resetRequired;
 
 private:
     Connection* m_conn;

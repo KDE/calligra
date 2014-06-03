@@ -20,7 +20,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #ifndef SYBASEDB_H
 #define SYBASEDB_H
 
-#include <kexidb/driver.h>
+#include <db/driver.h>
 
 namespace KexiDB
 {

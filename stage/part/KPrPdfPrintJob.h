@@ -31,7 +31,7 @@ class KPrPdfPrintJob : public KoPAPrintJob
 {
     Q_OBJECT
 public:
-    KPrPdfPrintJob(KPrView *view);
+    explicit KPrPdfPrintJob(KPrView *view);
     virtual ~KPrPdfPrintJob();
 
 public slots:

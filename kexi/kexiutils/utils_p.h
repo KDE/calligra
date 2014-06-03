@@ -20,9 +20,9 @@
 #ifndef KEXIUTILS_P_H
 #define KEXIUTILS_P_H
 
-#include <qtimer.h>
-#include <qapplication.h>
-#include <qdialog.h>
+#include <QTimer>
+#include <QApplication>
+#include <QDialog>
 
 /*! @internal */
 class DelayedCursorHandler : public QObject
@@ -32,7 +32,7 @@ public:
     DelayedCursorHandler();
     void start(bool noDelay);
     void stop();
-    bool startedOrActive : 1; //! true if ounting started or the cursor is active
+    bool startedOrActive; //!< true if ounting started or the cursor is active
 protected slots:
     void show();
 protected:

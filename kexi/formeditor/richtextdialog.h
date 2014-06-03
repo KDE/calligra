@@ -49,19 +49,11 @@ public slots:
     void changeFont(const QString &);
     void changeColor(const QColor&);
     void slotActionTriggered(QAction* action);
-    //void cursorPositionChanged();
     void slotCurrentCharFormatChanged(const QTextCharFormat& f);
 
-private:
-    QAction *m_fontComboAction, *m_colorComboAction, *m_boldTextAction,
-    *m_italicTextAction, *m_underlineTextAction,
-    *m_subscriptTextAction, *m_superscriptTextAction,
-    *m_alignLeftAction, *m_alignRightAction, *m_alignCenterAction, *m_alignJustifyAction;
-    QActionGroup* m_alignActionGroup;
-    KToolBar  *m_toolbar;
-    KTextEdit  *m_edit;
-    KFontRequester  *m_fontCombo;
-    KColorCombo  *m_colorCombo;
+private:    
+    class Private;
+    Private* const d;
 };
 
 }

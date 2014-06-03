@@ -19,22 +19,10 @@
 
 #include "KexiCategorizedView.h"
  
-KexiCategoryDrawer::KexiCategoryDrawer()
-    : KexiCategoryDrawerBase(0)
+KexiCategoryDrawer::KexiCategoryDrawer(KCategorizedView *view)
+    : KexiCategoryDrawerBase(view)
 {
 }
-
-#if 0
-void KexiCategoryDrawer::mouseButtonPressed(const QModelIndex&, const QRect&, QMouseEvent *event)
-{
-    event->accept();
-}
-
-void KexiCategoryDrawer::mouseButtonReleased(const QModelIndex&, const QRect&, QMouseEvent *event)
-{
-    event->accept();
-}
-#endif
 
 // ----
 
@@ -61,11 +49,11 @@ void KexiCategorySingleSelectionModel::select(const QItemSelection& selection,
 KexiCategorizedView::KexiCategorizedView(QWidget *parent)
  : KCategorizedView(parent)
 {
-    //setWordWrap(true);
     setSelectionMode(QAbstractItemView::SingleSelection);
     setMouseTracking(true);
     setViewMode(QListView::IconMode);
-    KexiCategoryDrawer* categoryDrawer = new KexiCategoryDrawer;
+    setResizeMode(QListView::Adjust);
+    KexiCategoryDrawer* categoryDrawer = new KexiCategoryDrawer(this);
     setCategoryDrawer(categoryDrawer);
 }
 

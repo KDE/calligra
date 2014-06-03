@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2014 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,15 +24,15 @@
 #include "kexitableedit.h"
 
 #include <kexi_global.h>
-#include <kexidb/connection.h>
-#include <kexidb/lookupfieldschema.h>
-#include <kexidb/expression.h>
-#include <kexidb/parser/sqlparser.h>
+#include <db/connection.h>
+#include <db/lookupfieldschema.h>
+#include <db/expression.h>
+#include <db/parser/sqlparser.h>
 
 #include <kdebug.h>
 
-#include <qlayout.h>
-#include <qevent.h>
+#include <QLayout>
+#include <QEvent>
 #include <QKeyEvent>
 
 /*! @internal
@@ -71,7 +71,7 @@ public:
         installEventFilter(this);
         setBottomMarginInternal(- horizontalScrollBar()->sizeHint().height());
     }
-    virtual void setData(KexiTableViewData *data, bool owner = true) {
+    virtual void setData(KexiDB::TableViewData *data, bool owner = true) {
         KexiTableView::setData(data, owner);
     }
     bool setData(KexiDB::Cursor *cursor) {
@@ -96,7 +96,7 @@ public:
     }
 
     KexiComboBoxPopup_KexiTableView *tv;
-    KexiDB::Field *int_f; //TODO: remove this -temporary
+    KexiDB::Field *int_f; //!< @todo remove this -temporary
     KexiDB::QuerySchema* privateQuery;
     int max_rows;
 };
@@ -105,7 +105,7 @@ public:
 
 const int KexiComboBoxPopup::defaultMaxRows = 8;
 
-KexiComboBoxPopup::KexiComboBoxPopup(QWidget* parent, KexiTableViewColumn &column)
+KexiComboBoxPopup::KexiComboBoxPopup(QWidget* parent, KexiDB::TableViewColumn &column)
         : QFrame(parent, Qt::Popup)
         , d( new KexiComboBoxPopupPrivate )
 {
@@ -134,7 +134,6 @@ void KexiComboBoxPopup::init()
     setAttribute(Qt::WA_WindowPropagation);
     setAttribute(Qt::WA_X11NetWmWindowTypeCombo);
 
-//    setPaletteBackgroundColor(palette().color(QPalette::Active, QColorGroup::Base));
     QPalette pal(palette());
     pal.setBrush(backgroundRole(), pal.brush(QPalette::Base));
     setPalette(pal);
@@ -146,17 +145,17 @@ void KexiComboBoxPopup::init()
     d->tv->setLineWidth(0);
     installEventFilter(this);
 
-    connect(d->tv, SIGNAL(itemReturnPressed(KexiDB::RecordData*, int, int)),
-            this, SLOT(slotTVItemAccepted(KexiDB::RecordData*, int, int)));
+    connect(d->tv, SIGNAL(itemReturnPressed(KexiDB::RecordData*,int,int)),
+            this, SLOT(slotTVItemAccepted(KexiDB::RecordData*,int,int)));
 
-    connect(d->tv, SIGNAL(itemMouseReleased(KexiDB::RecordData*, int, int)),
-            this, SLOT(slotTVItemAccepted(KexiDB::RecordData*, int, int)));
+    connect(d->tv, SIGNAL(itemMouseReleased(KexiDB::RecordData*,int,int)),
+            this, SLOT(slotTVItemAccepted(KexiDB::RecordData*,int,int)));
 
-    connect(d->tv, SIGNAL(itemDblClicked(KexiDB::RecordData*, int, int)),
-            this, SLOT(slotTVItemAccepted(KexiDB::RecordData*, int, int)));
+    connect(d->tv, SIGNAL(itemDblClicked(KexiDB::RecordData*,int,int)),
+            this, SLOT(slotTVItemAccepted(KexiDB::RecordData*,int,int)));
 }
 
-void KexiComboBoxPopup::setData(KexiTableViewColumn *column, KexiDB::Field *field)
+void KexiComboBoxPopup::setData(KexiDB::TableViewColumn *column, KexiDB::Field *field)
 {
     if (column && !field)
         field = column->field();
@@ -254,7 +253,7 @@ void KexiComboBoxPopup::setData(KexiTableViewColumn *column, KexiDB::Field *fiel
                 d->privateQuery->setColumnVisible(i, false);
 // </remove later>
 #endif
-//todo...
+//! @todo ...
             kDebug() << "--- Private query: ";
             d->privateQuery->debug();
             cursor = field->table()->connection()->prepareQuery(*d->privateQuery);
@@ -279,8 +278,8 @@ void KexiComboBoxPopup::setData(KexiTableViewColumn *column, KexiDB::Field *fiel
 
 //! @todo THIS IS PRIMITIVE: we'd need to employ KexiDB::Reference here!
     d->int_f = new KexiDB::Field(field->name(), KexiDB::Field::Text);
-    KexiTableViewData *data = new KexiTableViewData();
-    data->addColumn(new KexiTableViewColumn(*d->int_f));
+    KexiDB::TableViewData *data = new KexiDB::TableViewData();
+    data->addColumn(new KexiDB::TableViewColumn(*d->int_f));
     const QVector<QString> hints(field->enumHints());
     for (int i = 0; i < hints.size(); i++) {
         KexiDB::RecordData *record = data->createItem();
@@ -291,7 +290,7 @@ void KexiComboBoxPopup::setData(KexiTableViewColumn *column, KexiDB::Field *fiel
     setDataInternal(data, true);
 }
 
-void KexiComboBoxPopup::setDataInternal(KexiTableViewData *data, bool owner)
+void KexiComboBoxPopup::setDataInternal(KexiDB::TableViewData *data, bool owner)
 {
     if (d->tv->data())
         d->tv->data()->disconnect(this);
@@ -310,9 +309,9 @@ void KexiComboBoxPopup::updateSize(int minWidth)
     KexiTableEdit *te = dynamic_cast<KexiTableEdit*>(parentWidget());
     const int width = qMax(d->tv->tableSize().width(),
                            (te ? te->totalSize().width() : (parentWidget() ? parentWidget()->width() : 0/*sanity*/)));
-    kDebug() << "size=" << size();
+    //kDebug() << "size=" << size();
     resize(qMax(minWidth, width)/*+(d->tv->columns()>1?2:0)*/ /*(d->updateSizeCalled?0:1)*/, d->tv->rowHeight() * rows + 2);
-    kDebug() << "size after=" << size();
+    //kDebug() << "size after=" << size();
 
     //stretch the last column
     d->tv->setColumnStretchEnabled(true, d->tv->columns() - 1);
@@ -352,7 +351,16 @@ void KexiComboBoxPopup::slotTVItemAccepted(KexiDB::RecordData *record, int row, 
 
 bool KexiComboBoxPopup::eventFilter(QObject *o, QEvent *e)
 {
-    if (o == this && e->type() == QEvent::Hide) {
+#if 0
+    if (e->type() == QEvent::Resize) {
+        kDebug() << "QResizeEvent"
+                 << dynamic_cast<QResizeEvent*>(e)->size()
+                 << "old=" << dynamic_cast<QResizeEvent*>(e)->oldSize()
+                 << o << qobject_cast<QWidget*>(o)->geometry()
+                 << "visible=" << qobject_cast<QWidget*>(o)->isVisible();
+    }
+#endif
+    if (o == this && (e->type() == QEvent::Hide || e->type() == QEvent::FocusOut)) {
         kDebug(44010) << "HIDE!!!";
         emit hidden();
     } else if (e->type() == QEvent::MouseButtonPress) {
@@ -366,6 +374,7 @@ bool KexiComboBoxPopup::eventFilter(QObject *o, QEvent *e)
                     || (ke->modifiers() == Qt::AltModifier && k == Qt::Key_Up)) {
                 hide();
                 emit cancelled();
+                emit hidden();
                 return true;
             }
         }

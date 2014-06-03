@@ -20,9 +20,7 @@
 #ifndef KEXIACTIONPROXY_H
 #define KEXIACTIONPROXY_H
 
-#include <qpointer.h>
-#include <qobject.h>
-#include <qpair.h>
+#include <QPair>
 
 #include "kexiproject.h"
 #include "kexisharedactionhost.h"
@@ -47,7 +45,7 @@ class KexiActionProxy;
  so the conenction can be reused many times by just allocating KTextEdit_SharedActionConnector
  object for any KTextEditor when required (not only within KexiQueryDesignerSQLEditor).
 */
-//TODO add method for setAvailable()
+//! @todo add method for setAvailable()
 class KEXICORE_EXPORT KexiSharedActionConnector
 {
 public:
@@ -74,14 +72,13 @@ protected:
  This class is mostly used by subclassing in KexiWindow or KexiDockBase
  - you can subclass in a similar way.
 */
-
 class KEXICORE_EXPORT KexiActionProxy
 {
 public:
     /*! Constructs action proxy for object \a receiver, using \a host.
      If \a host is NULL, KexiSharedActionHost::defaultHost() is used.
      (you must be sure that it's true) -- it is casted to QObject and assigned as the receiver.*/
-    KexiActionProxy(QObject *receiver , KexiSharedActionHost *host = 0);
+    explicit KexiActionProxy(QObject *receiver , KexiSharedActionHost *host = 0);
     virtual ~KexiActionProxy();
 
     /*! Activates  action named \a action_name for this proxy. If the action is executed

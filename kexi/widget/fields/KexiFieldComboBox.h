@@ -20,7 +20,7 @@
 #ifndef KEXIFIELDCOMBOBOX_H
 #define KEXIFIELDCOMBOBOX_H
 
-#include <KComboBox>
+#include <kcombobox.h>
 #include <kexi_export.h>
 
 namespace KexiDB
@@ -37,7 +37,7 @@ class KEXIEXTWIDGETS_EXPORT KexiFieldComboBox : public KComboBox
     Q_OBJECT
 
 public:
-    KexiFieldComboBox(QWidget *parent = 0);
+    explicit KexiFieldComboBox(QWidget *parent = 0);
     virtual ~KexiFieldComboBox();
 
 public slots:

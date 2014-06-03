@@ -36,7 +36,7 @@ MiscDiagonalWipeEffectFactory::~MiscDiagonalWipeEffectFactory()
 {
 }
 
-static const char* s_subTypes[] = {
+static const char* const s_subTypes[] = {
     I18N_NOOP( "Double Barn Door" ),
     I18N_NOOP( "Double Diamond" ),
 };

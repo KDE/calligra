@@ -25,8 +25,8 @@
 
 #include <kexiprojectdata.h>
 
-#include <KTabWidget>
-#include <KDialog>
+#include <ktabwidget.h>
+#include <kdialog.h>
 
 class KPushButton;
 class KexiDBDriverComboBox;
@@ -38,7 +38,7 @@ class KEXIEXTWIDGETS_EXPORT KexiDBConnectionWidget
     Q_OBJECT
 
 public:
-    KexiDBConnectionWidget(QWidget* parent = 0);
+    explicit KexiDBConnectionWidget(QWidget* parent = 0);
     virtual ~KexiDBConnectionWidget();
 
     /*! Sets project data \a data.
@@ -60,9 +60,7 @@ public:
     //! \return a pointer to 'test connection' button. You can call hide() for this to hide it.
     KPushButton* testConnectionButton() const;
 
-    KexiDBDriverComboBox *driversCombo() const {
-        return m_driversCombo;
-    }
+    KexiDBDriverComboBox *driversCombo() const;
 
     //! \return true if only connection data is managed by this widget
     bool connectionOnly() const;
@@ -74,16 +72,14 @@ signals:
     void loadDBList();
 
 protected slots:
-    void slotLocationBGrpClicked(int id);
+    void slotLocationRadioClicked();
     void slotCBToggled(bool on);
 
 protected:
     void setDataInternal(const KexiProjectData& data, bool connectionOnly,
                          const QString& shortcutFileName);
 
-    KexiProjectData m_data;
-    KexiDBDriverComboBox *m_driversCombo;
-
+private:
     class Private;
     Private * const d;
 
@@ -104,7 +100,7 @@ class KEXIEXTWIDGETS_EXPORT KexiDBConnectionTabWidget : public KTabWidget
     Q_OBJECT
 
 public:
-    KexiDBConnectionTabWidget(QWidget* parent = 0);
+    explicit KexiDBConnectionTabWidget(QWidget* parent = 0);
     virtual ~KexiDBConnectionTabWidget();
 
     /*! Sets connection data \a data.
@@ -134,6 +130,7 @@ protected:
 
     friend class KexiDBConnectionDialog;
 };
+
 
 class KEXIEXTWIDGETS_EXPORT KexiDBConnectionDialog : public KDialog
 {
@@ -184,11 +181,11 @@ signals:
 
     void loadDBList();
 
-protected:
-    KexiDBConnectionTabWidget *m_tabWidget;
-
 private:
     void init(const KGuiItem& acceptButtonGuiItem);
+
+    class Private;
+    Private * const d;
 };
 
 #endif // KEXIDBCONNECTIONWIDGET_H

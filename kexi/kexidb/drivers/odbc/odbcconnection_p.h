@@ -25,7 +25,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include <sqlext.h>
 
 // Kexi Includes
-#include <kexidb/connection_p.h>
+#include <db/connection_p.h>
 
 #ifdef ODBCMIGRATE_H
 #define NAMESPACE KexiMigration

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2008 Casper Boemann <cbr@boemann.dk>
+   Copyright (C) 2008 C. Boemann <cbo@boemann.dk>
    Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -27,7 +27,7 @@
 #include <QEvent>
 #include <klocale.h>
 
-#include <KFileDialog>
+#include <kfiledialog.h>
 
 #include <KoPACanvas.h>
 #include <KPrDocument.h>
@@ -57,17 +57,21 @@ KPrClickActionDocker::KPrClickActionDocker( QWidget* parent, Qt::WindowFlags fla
     setObjectName( "KPrClickActionDocker" );
     // setup widget layout
     QVBoxLayout* layout = new QVBoxLayout;
-    m_cbPlaySound = new QComboBox();
-    //layout->addWidget(m_cbPlaySound);
 
     QList<KoEventActionFactoryBase *> factories = KoEventActionRegistry::instance()->presentationEventActions();
     foreach ( KoEventActionFactoryBase * factory, factories ) {
         QWidget * optionWidget = factory->createOptionWidget();
         layout->addWidget( optionWidget );
         m_eventActionWidgets.insert( factory->id(), optionWidget );
-        connect( optionWidget, SIGNAL( addCommand( KUndo2Command * ) ),
-                 this, SLOT( addCommand( KUndo2Command * ) ) );
+        connect( optionWidget, SIGNAL(addCommand(KUndo2Command*)),
+                 this, SLOT(addCommand(KUndo2Command*)) );
     }
+    // The following widget activates a special feature in the
+    // ToolOptionsDocker that makes the components of the widget align
+    // to the top if there is extra space.
+    QWidget *specialSpacer = new QWidget(this);
+    specialSpacer->setObjectName("SpecialSpacer");
+    layout->addWidget(specialSpacer);
 
     setLayout( layout );
 }

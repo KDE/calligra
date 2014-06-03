@@ -28,7 +28,7 @@
 class KPrMasterPage : public KoPAMasterPage, public KPrPageData
 {
 public:
-    explicit KPrMasterPage();
+    explicit KPrMasterPage(KPrDocument *document);
     virtual ~KPrMasterPage();
 
     /**

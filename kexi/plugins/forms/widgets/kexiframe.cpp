@@ -19,7 +19,7 @@
 
 #include "kexiframe.h"
 
-#include <qpainter.h>
+#include <QPainter>
 #include <qdrawutil.h>
 #include <kexiutils/utils.h>
 #include <formeditor/utils.h>
@@ -33,8 +33,8 @@ public:
     ~Private() {
     }
     QColor frameColor;
+//! @todo
 #if 0
-//todo
     KexiFrame::Shape frameShape;
     KexiFrame::Shadow frameShadow;
 #endif

@@ -19,29 +19,29 @@
 #ifndef LEINPUTSTREAM_H
 #define LEINPUTSTREAM_H
 
-#include <QtCore/QIODevice>
-#include <QtCore/QDataStream>
-#include <QtCore/QDebug>
+#include <QIODevice>
+#include <QDataStream>
+#include <QDebug>
 #include <exception>
 
 class IOException : public std::exception {
 public:
     const QString msg;
     IOException() {}
-    IOException(const QString& m) :msg(m) {}
+    explicit IOException(const QString &m) :msg(m) {}
     ~IOException() throw() {}
 };
 
 class IncorrectValueException : public IOException {
 public:
-    IncorrectValueException(const QString& msg) :IOException(msg) {}
+    explicit IncorrectValueException(const QString &msg) :IOException(msg) {}
     IncorrectValueException(qint64 /*pos*/, const char* errMsg) :IOException(errMsg) {}
     ~IncorrectValueException() throw() {}
 };
 
 class EOFException : public IOException {
 public:
-    EOFException(const QString& msg = QString()) :IOException(msg) {}
+    explicit EOFException(const QString &msg = QString()) :IOException(msg) {}
     ~EOFException() throw() {}
 };
 
@@ -89,7 +89,7 @@ public:
     private:
         QIODevice* input;
         qint64 pos;
-        Mark(QIODevice* in) :input(in), pos((in) ?in->pos() :0) {} 
+        explicit Mark(QIODevice *in) :input(in), pos((in) ?in->pos() :0) {}
     public:
         Mark() :input(0), pos(0) {} 
     };

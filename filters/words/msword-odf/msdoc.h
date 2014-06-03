@@ -219,9 +219,9 @@ enum BrcType
  * Specifies the type of the section break that is being described.
  * [MS-DOC] — v20101219
  */
-enum SBkcOperand 
+enum SBkcOperand
 {
-    bkcContinuous = 0x00, 
+    bkcContinuous = 0x00,
     bkcNewColumn,
     bkcNewPage,
     bkcEvenPage,
@@ -396,6 +396,41 @@ enum ST_StyleType
     sgcTbl = 3,    //Table style
     sgcNmbr = 4    //Numbering style
 };
+
+/**
+ * Specifies the type of alignment which is applied to the text that
+ * is entered at the tab stop.
+ */
+enum TabJC {
+    jcLeft,      //Left justification.
+    jcCenter,    //Center justification.
+    jcRight,     //Right justification.
+    jcDecimal,   //[1]
+    jcBar,       //Specifies that the current tab is a bar tab.
+    jcList = 0x6 //Specifies that the current tab is a list tab.
+};
+
+//specifies the characters that are used to fill in the space which is created
+//by a tab that ends at a custom tab stop.
+enum TabLC {
+    tlcNone,         //No leader.
+    tlcDot,          //Dot leader.
+    tlcHyphen,       //Dashed leader.
+    tlcUnderscore,   //Underscore leader.
+    tlcHeavy,        //Same as tlcUnderscore.
+    tlcMiddleDot,    //Centered dot leader.
+    tlcDefault = 0x7 //Same as tlcNone.
+};
+
+/*
+  [1] - Specifies that the current tab stop results in a location in
+  the document at which all following text is aligned around the first
+  decimal separator in the following text runs.  If there is no
+  decimal separator, text is aligned around the implicit decimal
+  separator after the last digit of the first numeric value that
+  appears in the following text.  All text runs before the first
+  decimal character appear before the tab stop; all text runs after it
+  appear after the tab stop location. */
 
 /*
  * ---------------------------------------------------

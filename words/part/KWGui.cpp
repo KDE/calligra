@@ -35,13 +35,15 @@
 #include <KoRuler.h>
 #include <KoModeBoxFactory.h>
 #include <KoRulerController.h>
-#include <KActionCollection>
+#include <kactioncollection.h>
+#include <kapplication.h>
 
 #include <QGridLayout>
 #include <QTimer>
 #include <QAction>
 #include <QScrollBar>
 #include <KoMainWindow.h>
+#include <kdebug.h>
 
 KWGui::KWGui(const QString &viewMode, KWView *parent)
         : QWidget(parent),
@@ -50,6 +52,8 @@ KWGui::KWGui(const QString &viewMode, KWView *parent)
     QGridLayout *gridLayout = new QGridLayout(this);
     gridLayout->setMargin(0);
     gridLayout->setSpacing(0);
+
+    setMouseTracking(true);
 
     // Ruler
     m_horizontalRuler = new KoRuler(this, Qt::Horizontal, m_view->viewConverter());
@@ -62,17 +66,24 @@ KWGui::KWGui(const QString &viewMode, KWView *parent)
     m_canvas = new KWCanvas(viewMode, static_cast<KWDocument*>(m_view->koDocument()), m_view, this);
     KoCanvasControllerWidget *canvasController = new KoCanvasControllerWidget(m_view->actionCollection(), this);
     m_canvasController = canvasController;
+    // We need to set this as QDeclarativeView sets them a bit differnt from QAbstractScrollArea
+    canvasController->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
+    canvasController->setFocusPolicy(Qt::NoFocus);
+        //setScene(0);
+
+    canvasController->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     m_canvasController->setMargin(10);
     m_canvasController->setCanvas(m_canvas);
     m_canvasController->setCanvasMode(KoCanvasController::AlignTop);
     KoToolManager::instance()->addController(m_canvasController);
     KoToolManager::instance()->registerTools(m_view->actionCollection(), m_canvasController);
 
-    if (m_view->shell())
+    if (m_view->mainWindow())
     {
-        KoModeBoxFactory modeBoxFactory(canvasController, i18n("Tools"));
-        m_view->shell()->createDockWidget(&modeBoxFactory);
-        m_view->shell()->dockerManager()->removeToolOptionsDocker();
+        KoModeBoxFactory modeBoxFactory(canvasController, qApp->applicationName(), i18n("Tools"));
+        QDockWidget* modeBox = m_view->mainWindow()->createDockWidget(&modeBoxFactory);
+        m_view->mainWindow()->dockerManager()->removeToolOptionsDocker();
+        dynamic_cast<KoCanvasObserverBase*>(modeBox)->setObservedCanvas(m_canvas);
     }
 
     gridLayout->addWidget(m_horizontalRuler->tabChooser(), 0, 0);
@@ -179,3 +190,8 @@ void KWGui::setupUnitActions()
     m_horizontalRuler->setPopupActionList(unitActions);
 }
 
+
+void KWGui::mouseMoveEvent(QMouseEvent *e)
+{
+    m_view->viewMouseMoveEvent(e);
+}

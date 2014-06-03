@@ -21,7 +21,6 @@
 #include "paragraphproperties.h"
 #include "functor.h"
 #include "wvlog.h"
-#include <QList>
 
 using namespace wvWare;
 
@@ -143,8 +142,9 @@ void GraphicsHandler::handleFloatingObject(unsigned int /*globalCP*/)
 
 }
 
-void GraphicsHandler::handleInlineObject(const PictureData& /*data*/)
+QString GraphicsHandler::handleInlineObject(const PictureData& /*data*/, const bool /*isBulletPicture*/)
 {
+    return QString();
 }
 
 TextHandler::~TextHandler()

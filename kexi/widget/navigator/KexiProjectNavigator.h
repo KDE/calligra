@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002, 2003 Lucijan Busch <lucijan@gmx.at>
-   Copyright (C) 2003-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
    Copyright (C) 2010 Adam Pigg <adam@piggz.co.uk>
 
    This library is free software; you can redistribute it and/or
@@ -25,7 +25,7 @@
 #include <QHash>
 #include <QEvent>
 #include <QPointer>
-#include <KMenu>
+#include <kmenu.h>
 #include <kexi_export.h>
 #include <kexi.h>
 
@@ -94,16 +94,16 @@ class KEXIEXTWIDGETS_EXPORT KexiProjectNavigator : public QWidget
 public:
     enum Feature {
         NoFeatures = 0,
-        Writable = 1, //!< the browser supports actions that modify the project (e.g. delete, rename)
+        Writable = 1,     //!< the browser supports actions that modify the project (e.g. delete, rename)
         ContextMenus = 2, //!< the browser supports context menu
-        Toolbar = 4, //!< the browser displays
+        Toolbar = 4,      //!< the browser displays
         SingleClickOpensItemOptionEnabled = 8, //!< enables "SingleClickOpensItem" option
         DefaultFeatures = Writable | ContextMenus | Toolbar
-        | SingleClickOpensItemOptionEnabled //!< the default
+        | SingleClickOpensItemOptionEnabled    //!< the default
     };
     Q_DECLARE_FLAGS(Features, Feature)
 
-    KexiProjectNavigator(QWidget* parent, Features features = DefaultFeatures);
+    explicit KexiProjectNavigator(QWidget* parent, Features features = DefaultFeatures);
     virtual ~KexiProjectNavigator();
 
     /*! Sets project \a prj for this browser. If \a partManagerErrorMessages is not NULL
@@ -113,7 +113,7 @@ public:
      items are displayed.
      Previous items are removed. */
     void setProject(KexiProject* prj, const QString& itemsPartClass = QString(),
-                    QString* partManagerErrorMessages = 0);
+                    QString* partManagerErrorMessages = 0, bool addAsSearchableModel = true);
 
     /*! \return items' part class previously set by setProject. Returns empty string
      if setProject() was not executed yet or itemsPartClass argument of setProject() was
@@ -127,7 +127,6 @@ public:
     KexiProjectModel* model() const;
 
 public slots:
-
     virtual void setFocus();
     void updateItemName(KexiPart::Item& item, bool dirty);
     void selectItem(KexiPart::Item& item);
@@ -166,7 +165,6 @@ signals:
     void pageSetupForItem(KexiPart::Item*);
 
 protected slots:
-    //void slotContextMenu(QTreeView*, const QModelIndex &i, const QPoint &point);
     void slotExecuteItem(const QModelIndex &item);
     void slotSelectionChanged(const QModelIndex& i);
     void slotSettingsChanged(int);
@@ -193,37 +191,13 @@ protected:
                        const QString& toolTip, const QString& whatsThis, const char* slot);
 
     virtual void contextMenuEvent ( QContextMenuEvent *event );
-    Features m_features;
-    KexiProjectTreeView *m_list;
-    KActionCollection *m_actions;
 
-    KexiItemMenu *m_itemMenu;
-    KexiGroupMenu *m_partMenu;
-    KAction *m_deleteAction, *m_renameAction,
-       *m_newObjectAction, 
-    // *m_newObjectToolbarAction,
-        *m_openAction, *m_designAction, *m_editTextAction,
-        *m_executeAction,
-        *m_dataExportToClipboardAction, *m_dataExportToFileAction;
-#ifndef KEXI_NO_QUICK_PRINTING
-    KAction *m_printAction, *m_pageSetupAction;
-#endif
 
-    KActionMenu* m_exportActionMenu;
-//  KMenu* m_newObjectMenu;
-    QAction *m_itemMenuTitle, *m_partMenuTitle,
-    *m_exportActionMenu_sep, *m_pageSetupAction_sep;
-
-    KexiPart::Info *m_prevSelectedPartInfo;
-    KToolBar *m_toolbar;
-    KexiSmallToolButton /* *m_newObjectToolButton,*/ *m_deleteObjectToolButton;
-    
-    bool m_singleClick;
-    bool m_readOnly;
-    KexiProjectModel *m_model;
+private:
+    class Private;
+    Private * const d;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KexiProjectNavigator::Features)
-
 
 #endif

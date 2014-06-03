@@ -36,7 +36,7 @@ class KEXIFORMUTILS_EXPORT KexiDBIntSpinBox : public KIntSpinBox,
     Q_PROPERTY(bool readOnly READ isReadOnly WRITE setReadOnly)
 
 public:
-    KexiDBIntSpinBox(QWidget *parent);
+    explicit KexiDBIntSpinBox(QWidget *parent);
     virtual ~KexiDBIntSpinBox();
 
     inline QString dataSource() const {
@@ -84,7 +84,7 @@ protected:
     virtual void setValueInternal(const QVariant& add, bool removeOld);
 
 private:
-    bool m_invalidState : 1;
+    bool m_invalidState;
 };
 
 #endif

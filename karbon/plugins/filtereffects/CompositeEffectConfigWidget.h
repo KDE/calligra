@@ -32,7 +32,7 @@ class CompositeEffectConfigWidget : public KoFilterEffectConfigWidgetBase
 {
     Q_OBJECT
 public:
-    CompositeEffectConfigWidget(QWidget *parent = 0);
+    explicit CompositeEffectConfigWidget(QWidget *parent = 0);
 
     /// reimplemented from KoFilterEffectConfigWidgetBase
     virtual bool editFilterEffect(KoFilterEffect * filterEffect);

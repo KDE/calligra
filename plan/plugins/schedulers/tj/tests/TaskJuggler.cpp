@@ -23,7 +23,6 @@
 #include "Task.h"
 #include "Resource.h"
 #include "CoreAttributesList.h"
-#include "Interval.h"
 #include "Utility.h"
 #include "UsageLimits.h"
 #include "debug.h"
@@ -37,15 +36,14 @@
 #include "kptschedule.h"
 
 #include <cstdlib>
-#include <qtest_kde.h>
-#include <QtCore/QDir>
+#include <QDir>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kcalendarsystem.h>
 #include <ksystemtimezone.h>
 #include <kdatetime.h>
 #include <kconfiggroup.h>
-#include <QtDBus/QtDBus>
+#include <QtDBus>
 
 #include <qtest_kde.h>
 #include <kdebug.h>
@@ -86,7 +84,7 @@ void TaskJuggler::initTimezone()
     KConfig config("ktimezonedrc");
     KConfigGroup group(&config, "TimeZones");
     group.writeEntry("ZoneinfoDir", m_tmp.name());
-    group.writeEntry("Zonetab", m_tmp.name() + QString::fromLatin1("zone.tab"));
+    group.writeEntry("Zonetab", QString(m_tmp.name() + QString::fromLatin1("zone.tab")));
     group.writeEntry("LocalZone", QString::fromLatin1("Europe/Berlin"));
     config.sync();
 }

@@ -82,10 +82,12 @@ enum PlaceholderEnum
 /**
  * TextAutoNumberSchemeEnum
  * Referenced by: TextAutoNumberScheme
- * An enumeration that specifies the character sequence and delimiters to use for automatic
- * numbering.
+ *
+ * An enumeration that specifies the character sequence and delimiters
+ * to use for automatic numbering.
  */
-enum TextAutoNumberSchemeEnum{
+enum TextAutoNumberSchemeEnum
+{
     ANM_AlphaLcPeriod,     //0x0000  Example: a., b., c., ...Lowercase Latin character followed by a period.
     ANM_AlphaUcPeriod ,    //0x0001  Example: A., B., C., ...Uppercase Latin character followed by a period.
     ANM_ArabicParenRight,  //0x0002  Example: 1), 2), 3), ...Arabic numeral followed by a closing parenthesis.
@@ -103,6 +105,45 @@ enum TextAutoNumberSchemeEnum{
     ANM_RomanUcParenBoth,  //0x000E  Example: (I), (II), (III), ...Uppercase Roman numeral in parentheses.
     ANM_RomanUcParenRight, //0x000F  Example: I), II), III), ...Uppercase Roman numeral and a closing parenthesis.
     //Future
+};
+
+/**
+ * Referenced by: InteractiveInfoAtom
+ *
+ * An enumeration that specifies an action that can be performed when
+ * interacting with an object during a slide show.
+ */
+enum InteractiveInfoActionEnum
+{
+    II_NoAction,
+    II_MacroAction,
+    II_RunProgramAction,
+    II_JumpAction,
+    II_HyperlinkAction,
+    II_OLEAction,
+    II_MediaAction,
+    II_CustomShowAction
+};
+
+/**
+ * Referenced by: InteractiveInfoAtom
+ *
+ * An enumeration that specifies how the action of a hyperlink is
+ * interpreted. All locations are relative to the currently-displayed
+ * presentation slide in the slide show.
+ */
+enum LinkToEnum
+{
+    LT_NextSlide,
+    LT_PreviousSlide,
+    LT_FirstSlide,
+    LT_LastSlide,
+    LT_CustomShow = 0x06,
+    LT_SlideNumber,
+    LT_Url,
+    LT_OtherPresentation,
+    LT_OtherFile,
+    LT_Nil = 0xFF
 };
 
 #endif

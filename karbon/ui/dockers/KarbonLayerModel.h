@@ -22,6 +22,8 @@
 
 #include <KoDocumentSectionModel.h>
 
+#include <QPointer>
+
 class KarbonDocument;
 class KoShape;
 class KoShapeContainer;
@@ -34,7 +36,7 @@ class KarbonLayerModel : public KoDocumentSectionModel
 
 public:
     /// Constructs a new layer model using the specified documents data
-    KarbonLayerModel(QObject * parent = 0);
+    explicit KarbonLayerModel(QObject *parent = 0);
 
     /// Sets a new document to show contents of
     void setDocument(KarbonDocument * newDocument);
@@ -73,7 +75,7 @@ private:
     /// Recursively locks children of the specified shape container
     void lockRecursively(KoShapeContainer *container, bool lock);
 
-    KarbonDocument *m_document; ///< the underlying data structure
+    QPointer<KarbonDocument> m_document; ///< the underlying data structure
 };
 
 #endif // KARBONLAYERMODEL_H

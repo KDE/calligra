@@ -20,8 +20,8 @@
 #ifndef KEXIBLOBBUFFER_H
 #define KEXIBLOBBUFFER_H
 
-#include <qobject.h>
-#include <qpixmap.h>
+#include <QObject>
+#include <QPixmap>
 
 #include <kurl.h>
 
@@ -216,8 +216,6 @@ private:
         ~Item();
         QPixmap pixmap() const;
         QByteArray data() const;
-//    KexiBLOBBuffer* buf;
-//    KUrl url;
         QString name;
         QString caption; //!< @todo for future use within image gallery
         QString mimeType;

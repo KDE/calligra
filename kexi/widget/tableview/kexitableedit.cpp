@@ -20,12 +20,11 @@
 
 #include "kexitableedit.h"
 #include <widget/dataviewcommon/kexidataawareobjectiface.h>
-#include <kexidb/field.h>
-#include <kexidb/utils.h>
+#include <db/field.h>
+#include <db/utils.h>
 
-#include <qpalette.h>
-#include <qpainter.h>
-//Added by qt3to4:
+#include <QPalette>
+#include <QPainter>
 #include <QKeyEvent>
 #include <QEvent>
 
@@ -34,33 +33,23 @@
 #include <kdebug.h>
 
 #ifdef KEXI_MOBILE
-KexiTableEdit::KexiTableEdit(KexiTableViewColumn &column, QWidget* parent)
+KexiTableEdit::KexiTableEdit(KexiDB::TableViewColumn &column, QWidget* parent)
         : QWidget(parent)
         , m_column(&column)
-// ,m_field(&f)
-// ,m_type(f.type()) //copied because the rest of code uses m_type
         , m_usesSelectedTextColor(true)
         , m_view(0)
-// ,m_hasFocusableWidget(true)
-// ,m_acceptEditorAfterDeleteContents(false)
 #else
-        KexiTableEdit::KexiTableEdit(KexiTableViewColumn &column, QWidget* parent)
+        KexiTableEdit::KexiTableEdit(KexiDB::TableViewColumn &column, QWidget* parent)
         : QWidget(dynamic_cast<Q3ScrollView*>(parent) ? dynamic_cast<Q3ScrollView*>(parent)->viewport() : parent)
         , m_column(&column)
-        // ,m_field(&f)
-        // ,m_type(f.type()) //copied because the rest of code uses m_type
         , m_scrollView(dynamic_cast<Q3ScrollView*>(parent))
         , m_usesSelectedTextColor(true)
         , m_view(0)
-        // ,m_hasFocusableWidget(true)
-        // ,m_acceptEditorAfterDeleteContents(false)   
 #endif
 {
-//    setPaletteBackgroundColor(palette().color(QPalette::Active, QColorGroup::Base));
     QPalette pal(palette());
     pal.setBrush(backgroundRole(), pal.brush(QPalette::Base));
     setPalette(pal);
-    installEventFilter(this);
 
     //margins
     if (displayedField()->isFPNumericType()) {
@@ -69,22 +58,24 @@ KexiTableEdit::KexiTableEdit(KexiTableViewColumn &column, QWidget* parent)
 #else
         m_leftMargin = 0;
 #endif
+        m_rightMargin = 6;
     } else if (displayedField()->isIntegerType()) {
 #ifdef Q_WS_WIN
         m_leftMargin = 1;
 #else
         m_leftMargin = 0;
 #endif
+        m_rightMargin = 6;
     } else {//default
 #ifdef Q_WS_WIN
         m_leftMargin = 5;
 #else
         m_leftMargin = 5;
 #endif
+        m_rightMargin = 0;
     }
 
-    m_rightMargin = 0;
-    m_rightMarginWhenFocused = 0;
+    m_rightMarginWhenFocused = m_rightMargin;
 }
 
 KexiTableEdit::~KexiTableEdit()
@@ -103,7 +94,6 @@ void KexiTableEdit::setViewWidget(QWidget *v)
 {
     m_view = v;
     m_view->move(0, 0);
-    m_view->installEventFilter(this);
     setFocusProxy(m_view);
 }
 
@@ -126,18 +116,10 @@ void KexiTableEdit::resize(int w, int h)
     }
 }
 
+#if 0
 bool
 KexiTableEdit::eventFilter(QObject* watched, QEvent* e)
 {
-    /* if (watched == m_view) {
-        if(e->type() == QEvent::KeyPress) {
-          QKeyEvent* ev = static_cast<QKeyEvent*>(e);
-    //   if (ev->key()==Qt::Key_Tab) {
-
-    //   }
-        }
-      }*/
-
     if (watched == this) {
         if (e->type() == QEvent::KeyPress) {
             QKeyEvent* ev = static_cast<QKeyEvent*>(e);
@@ -150,8 +132,8 @@ KexiTableEdit::eventFilter(QObject* watched, QEvent* e)
         }
     }
     return false;
-// return QWidget::eventFilter(watched, e);
 }
+#endif
 
 void KexiTableEdit::paintFocusBorders(QPainter *p, QVariant &, int x, int y, int w, int h)
 {
@@ -167,10 +149,8 @@ void KexiTableEdit::setupContents(QPainter *p, bool focused, const QVariant& val
     KexiDB::Field *realField = displayedField();
 
 #ifdef Q_WS_WIN
-// x = 1;
     y_offset = -1;
 #else
-// x = 1;
     y_offset = 0;
 #endif
 
@@ -180,11 +160,9 @@ void KexiTableEdit::setupContents(QPainter *p, bool focused, const QVariant& val
             txt = KexiDB::formatNumberForVisibleDecimalPlaces(
                       val.toDouble(), realField->visibleDecimalPlaces());
         }
-        w -= 6;
         align |= Qt::AlignRight;
     } else if (realField->isIntegerType()) {
         qint64 num = val.toLongLong();
-        w -= 6;
         align |= Qt::AlignRight;
         if (!val.isNull())
             txt = QString::number(num);
@@ -194,6 +172,7 @@ void KexiTableEdit::setupContents(QPainter *p, bool focused, const QVariant& val
         }
         align |= Qt::AlignLeft;
     }
+    w -= rightMargin(focused);
 }
 
 void KexiTableEdit::paintSelectionBackground(QPainter *p, bool /*focused*/,
@@ -209,7 +188,7 @@ void KexiTableEdit::paintSelectionBackground(QPainter *p, bool /*focused*/,
         } else if (align & Qt::AlignRight) {
             bound.moveLeft(w - bound.width());   //move to left, if too wide
         }
-//TODO align center
+//! @todo align center
         bound.setHeight(h - 1);
         p->fillRect(bound, fillColor);
     } else if (fullRecordSelection) {

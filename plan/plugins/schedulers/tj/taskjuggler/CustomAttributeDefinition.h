@@ -12,7 +12,7 @@
 #ifndef _CustomAttributeDefinition_h_
 #define _CustomAttributeDefinition_h_
 
-#include <qstring.h>
+#include <QString>
 
 #include "taskjuggler.h"
 

@@ -20,49 +20,34 @@
 #include "utils.h"
 #include "utils_p.h"
 
-#include <q3header.h>
-#include <qlayout.h>
+#include <db/utils.h>
+
+#include <KoIcon.h>
+
+#include <QLayout>
 #include <QThread>
+#include <QTreeWidget>
+#include <QHeaderView>
 
 #include <ktabwidget.h>
-#include <k3listview.h>
-#include <kiconloader.h>
 #include <kpagedialog.h>
 #include <kpushbutton.h>
 #include <kguiitem.h>
-#include <KDebug>
-
-#ifdef KEXI_DEBUG_GUI
+#include <kdebug.h>
 
 static DebugWindowDialog* debugWindow = 0;
 static KTabWidget* debugWindowTab = 0;
-static K3ListView* kexiDBDebugPage = 0;
-static K3ListView* kexiAlterTableActionDebugPage = 0;
+static QTreeWidget* kexiDBDebugPage = 0;
+static QTreeWidget* kexiAlterTableActionDebugPage = 0;
 
-QWidget *KexiUtils::createDebugWindow(QWidget *parent)
-{
-    // (this is internal code - do not use i18n() here)
-    debugWindow = new DebugWindowDialog(parent);
-    debugWindow->setSizeGripEnabled(true);
-    QBoxLayout *lyr = new QVBoxLayout(debugWindow);
-    debugWindowTab = new KTabWidget(debugWindow);
-    debugWindowTab->setObjectName("debugWindowTab");
-    lyr->addWidget(debugWindowTab);
-    debugWindow->resize(900, 600);
-    debugWindow->setWindowIcon(KIcon("document-properties"));
-    debugWindow->setWindowTitle("Kexi Internal Debugger");
-    debugWindow->show();
-    return debugWindow;
-}
-
-void KexiUtils::addKexiDBDebug(const QString& text)
+static void addKexiDBDebug(const QString& text)
 {
     // (this is internal code - do not use i18n() here)
     if (!debugWindowTab)
         return;
     if (QThread::currentThread() != debugWindowTab->thread()) {
 //! @todo send debug using async. signal
-        kDebug() << "Debuging from different thread not supported.";
+        kWarning() << "Debugging from different thread not supported.";
         return;
     }
     if (!kexiDBDebugPage) {
@@ -71,32 +56,39 @@ void KexiUtils::addKexiDBDebug(const QString& text)
         QHBoxLayout *hbox = new QHBoxLayout(page);
         vbox->addLayout(hbox);
         hbox->addStretch(1);
-        KPushButton *btn_clear = new KPushButton(KGuiItem("Clear", "edit-clear-locationbar-rtl"), page);
+        KPushButton *btn_clear = new KPushButton(KGuiItem("Clear", koIconName("edit-clear-locationbar-rtl")), page);
         hbox->addWidget(btn_clear);
 
-        kexiDBDebugPage = new K3ListView(page);
+        kexiDBDebugPage = new QTreeWidget(page);
         kexiDBDebugPage->setObjectName("kexiDbDebugPage");
         kexiDBDebugPage->setFont(KexiUtils::smallFont(kexiDBDebugPage));
         QObject::connect(btn_clear, SIGNAL(clicked()), kexiDBDebugPage, SLOT(clear()));
         vbox->addWidget(kexiDBDebugPage);
-        kexiDBDebugPage->addColumn("");
+        kexiDBDebugPage->setHeaderLabel(QString());
         kexiDBDebugPage->header()->hide();
-        kexiDBDebugPage->setSorting(-1);
+        kexiDBDebugPage->setSortingEnabled(false);
         kexiDBDebugPage->setAllColumnsShowFocus(true);
-        kexiDBDebugPage->setColumnWidthMode(0, Q3ListView::Maximum);
+        kexiDBDebugPage->header()->setResizeMode(0, QHeaderView::Stretch);
         kexiDBDebugPage->setRootIsDecorated(true);
         debugWindowTab->addTab(page, "KexiDB");
         debugWindowTab->setCurrentWidget(page);
         kexiDBDebugPage->show();
     }
     //add \n after (about) every 30 characters
-//TODO QString realText
-
-    K3ListViewItem * li = new K3ListViewItem(kexiDBDebugPage, kexiDBDebugPage->lastItem(), text);
-    li->setMultiLinesEnabled(true);
+    QTreeWidgetItem * lastItem = kexiDBDebugPage->invisibleRootItem()->child(
+        kexiDBDebugPage->invisibleRootItem()->childCount()-1);
+    QTreeWidgetItem* li;
+    if (lastItem) {
+        li = new QTreeWidgetItem(kexiDBDebugPage, lastItem);
+    }
+    else {
+        li = new QTreeWidgetItem(kexiDBDebugPage->invisibleRootItem());
+    }
+    li->setText(0, text);
+    li->setExpanded(true);
 }
 
-void KexiUtils::addAlterTableActionDebug(const QString& text, int nestingLevel)
+static void addAlterTableActionDebug(const QString& text, int nestingLevel)
 {
     // (this is internal code - do not use i18n() here)
     if (!debugWindowTab)
@@ -107,25 +99,25 @@ void KexiUtils::addAlterTableActionDebug(const QString& text, int nestingLevel)
         QHBoxLayout *hbox = new QHBoxLayout(page);
         vbox->addLayout(hbox);
         hbox->addStretch(1);
-        KPushButton *btn_exec = new KPushButton(KGuiItem("Real Alter Table", "document-save"), page);
+        KPushButton *btn_exec = new KPushButton(KGuiItem("Real Alter Table", koIconName("document-save")), page);
         btn_exec->setObjectName("executeRealAlterTable");
         hbox->addWidget(btn_exec);
-        KPushButton *btn_clear = new KPushButton(KGuiItem("Clear", "edit-clear-locationbar-rtl"), page);
+        KPushButton *btn_clear = new KPushButton(KGuiItem("Clear", koIconName("edit-clear-locationbar-rtl")), page);
         hbox->addWidget(btn_clear);
-        KPushButton *btn_sim = new KPushButton(KGuiItem("Simulate Execution", "system-run"), page);
+        KPushButton *btn_sim = new KPushButton(KGuiItem("Simulate Execution", koIconName("system-run")), page);
         btn_sim->setObjectName("simulateAlterTableExecution");
         hbox->addWidget(btn_sim);
 
-        kexiAlterTableActionDebugPage = new K3ListView(page);
+        kexiAlterTableActionDebugPage = new QTreeWidget(page);
         kexiAlterTableActionDebugPage->setFont(KexiUtils::smallFont(kexiAlterTableActionDebugPage));
         kexiAlterTableActionDebugPage->setObjectName("kexiAlterTableActionDebugPage");
         QObject::connect(btn_clear, SIGNAL(clicked()), kexiAlterTableActionDebugPage, SLOT(clear()));
         vbox->addWidget(kexiAlterTableActionDebugPage);
-        kexiAlterTableActionDebugPage->addColumn("");
+        kexiAlterTableActionDebugPage->setHeaderLabel(QString());
         kexiAlterTableActionDebugPage->header()->hide();
-        kexiAlterTableActionDebugPage->setSorting(-1);
+        kexiAlterTableActionDebugPage->setSortingEnabled(false);
         kexiAlterTableActionDebugPage->setAllColumnsShowFocus(true);
-        kexiAlterTableActionDebugPage->setColumnWidthMode(0, Q3ListView::Maximum);
+        kexiAlterTableActionDebugPage->header()->setResizeMode(0, QHeaderView::Stretch);
         kexiAlterTableActionDebugPage->setRootIsDecorated(true);
         debugWindowTab->addTab(page, "AlterTable Actions");
         debugWindowTab->setCurrentWidget(page);
@@ -133,10 +125,11 @@ void KexiUtils::addAlterTableActionDebug(const QString& text, int nestingLevel)
     }
     if (text.isEmpty()) //don't move up!
         return;
-    K3ListViewItem * li;
+    QTreeWidgetItem * li;
     int availableNestingLevels = 0;
     // compute availableNestingLevels
-    Q3ListViewItem * lastItem = kexiAlterTableActionDebugPage->lastItem();
+    QTreeWidgetItem * lastItem = kexiAlterTableActionDebugPage->invisibleRootItem()->child(
+        kexiAlterTableActionDebugPage->invisibleRootItem()->childCount()-1);
     //kDebug() << "lastItem: " << (lastItem ? lastItem->text(0) : QString());
     while (lastItem) {
         lastItem = lastItem->parent();
@@ -144,7 +137,8 @@ void KexiUtils::addAlterTableActionDebug(const QString& text, int nestingLevel)
     }
     //kDebug() << "availableNestingLevels: " << availableNestingLevels;
     //go up (availableNestingLevels-levelsToGoUp) levels
-    lastItem = kexiAlterTableActionDebugPage->lastItem();
+    lastItem = kexiAlterTableActionDebugPage->invisibleRootItem()->child(
+        kexiAlterTableActionDebugPage->invisibleRootItem()->childCount()-1);
     int levelsToGoUp = availableNestingLevels - nestingLevel;
     while (levelsToGoUp > 0 && lastItem) {
         lastItem = lastItem->parent();
@@ -152,22 +146,47 @@ void KexiUtils::addAlterTableActionDebug(const QString& text, int nestingLevel)
     }
     //kDebug() << "lastItem2: " << (lastItem ? lastItem->text(0) : QString());
     if (lastItem) {
-        Q3ListViewItem *after = lastItem->firstChild(); //find last child so we can insert a new item after it
-        while (after && after->nextSibling())
-            after = after->nextSibling();
-        if (after)
-            li = new K3ListViewItem(lastItem, after, text);   //child, after
-        else
-            li = new K3ListViewItem(lastItem, text);   //1st child
+        if (lastItem->childCount() > 0) {
+               li = new QTreeWidgetItem(lastItem, lastItem->child(lastItem->childCount()-1));   //child, after
+        }
+        else {
+               li = new QTreeWidgetItem(lastItem);   //1st child
+        }
     } else {
-        lastItem = kexiAlterTableActionDebugPage->lastItem();
-        while (lastItem && lastItem->parent())
+        lastItem = kexiAlterTableActionDebugPage->invisibleRootItem()->child(
+            kexiAlterTableActionDebugPage->invisibleRootItem()->childCount()-1);
+        while (lastItem && lastItem->parent()) {
             lastItem = lastItem->parent();
+        }
         //kDebug() << "lastItem2: " << (lastItem ? lastItem->text(0) : QString());
-        li = new K3ListViewItem(kexiAlterTableActionDebugPage, lastItem, text);   //after
+        if (lastItem && lastItem->parent())
+             li = new QTreeWidgetItem(lastItem->parent(), lastItem);   //after
+        else if (!lastItem)
+             li = new QTreeWidgetItem(kexiAlterTableActionDebugPage->invisibleRootItem());
+        else if (!lastItem->parent())
+             li = new QTreeWidgetItem(kexiAlterTableActionDebugPage->invisibleRootItem(), lastItem);
     }
-    li->setOpen(true);
-    li->setMultiLinesEnabled(true);
+        li->setText(0, text);
+        li->setExpanded(true);
+}
+
+QWidget *KexiUtils::createDebugWindow(QWidget *parent)
+{
+    KexiDB::setDebugGUIHandler(addKexiDBDebug);
+    KexiDB::setAlterTableActionDebugHandler(addAlterTableActionDebug);
+
+    // (this is internal code - do not use i18n() here)
+    debugWindow = new DebugWindowDialog(parent);
+    debugWindow->setSizeGripEnabled(true);
+    QBoxLayout *lyr = new QVBoxLayout(debugWindow);
+    debugWindowTab = new KTabWidget(debugWindow);
+    debugWindowTab->setObjectName("debugWindowTab");
+    lyr->addWidget(debugWindowTab);
+    debugWindow->resize(900, 600);
+    debugWindow->setWindowIcon(koIcon("document-properties"));
+    debugWindow->setWindowTitle("Kexi Internal Debugger");
+    debugWindow->show();
+    return debugWindow;
 }
 
 void KexiUtils::connectPushButtonActionForDebugWindow(const char* actionName,
@@ -180,5 +199,3 @@ void KexiUtils::connectPushButtonActionForDebugWindow(const char* actionName,
             QObject::connect(btn, SIGNAL(clicked()), receiver, slot);
     }
 }
-
-#endif //KEXI_DEBUG_GUI

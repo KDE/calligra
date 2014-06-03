@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
- * Copyright (C) 2008 Casper Boemann <cbr@boemann.dk>
+ * Copyright (C) 2008 C. Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,7 +21,7 @@
 #ifndef KPRSOUNDDATA_H
 #define KPRSOUNDDATA_H
 
-#include <KUrl>
+#include <kurl.h>
 #include "stage_export.h"
 
 class KPrSoundCollection;
@@ -52,7 +52,7 @@ public:
      * @param collection the sound collection which will do the loading of the sound data for us.
      * @param href the url of the sound in the store.
      */
-    explicit KPrSoundData(KPrSoundCollection *collection, QString href="");
+    explicit KPrSoundData(KPrSoundCollection *collection, const QString &href = QString());
 
     /**
      * copy constructor using ref-counting.
@@ -100,9 +100,7 @@ public:
     bool isTaggedForSaving();
 
 
-    bool operator==(const KPrSoundData &other) {
-        return other.d == d;
-    }
+    bool operator==(const KPrSoundData &other) const;
 
     /**
      * Get the collection used

@@ -25,13 +25,14 @@
 #include <dialogs/KWShapeConfigFactory.h>
 
 #include <KoShapeConfigWidgetBase.h>
-#include <KoTextAnchor.h>
+#include <KoShapeAnchor.h>
 
 #include <QList>
 #include <QPointF>
 
 class KWFrame;
 class KoShape;
+class KWCanvas;
 
 /// A widget that is shown to allow the user to select the anchoring properties
 class KWAnchoringProperties : public KoShapeConfigWidgetBase
@@ -42,11 +43,14 @@ public:
     explicit KWAnchoringProperties(FrameConfigSharedState *state);
 
     /// load all info from the argument frames into this widget
-    void open(const QList<KWFrame*> &frames);
+    /// returns true if at least one frame was accepted
+    bool open(const QList<KWFrame*> &frames);
     /// reimplemented
     void open(KoShape *shape);
     /// reimplemented
     void save();
+    /// save but add to undo command if command != 0
+    void save(KUndo2Command *command, KWCanvas *canvas);
 
     /// reimplemented
     virtual bool showOnShapeCreate() {
@@ -56,7 +60,9 @@ public:
 private slots:
     void anchorTypeChanged(int anchorType);
     void vertPosChanged(int verticalAlign, QPointF offset = QPointF());
+    void vertRelChanged(int index);
     void horizPosChanged(int horizontalAlign, QPointF offset = QPointF());
+    void horizRelChanged(int index);
 
 private:
     static const int vertRels[4][20];
@@ -71,7 +77,6 @@ private:
     QButtonGroup *m_vertPosGroup;
     QButtonGroup *m_horizPosGroup;
     QList<KWFrame*> m_frames;
-    QList<KoTextAnchor *> m_anchors;
     KoShape *m_shape;
     int m_anchorType;
     int m_vertPos;

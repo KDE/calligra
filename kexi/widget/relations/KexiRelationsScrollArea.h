@@ -29,7 +29,7 @@
 #include <QMouseEvent>
 #include <QKeyEvent>
 
-#include <kexidb/tableschema.h>
+#include <db/tableschema.h>
 
 #include "KexiRelationsConnection.h"
 #include "KexiRelationsTableContainer.h"
@@ -70,7 +70,7 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationsScrollArea : public QScrollArea
     Q_OBJECT
 
 public:
-    KexiRelationsScrollArea(QWidget *parent = 0);
+    explicit KexiRelationsScrollArea(QWidget *parent = 0);
     virtual ~KexiRelationsScrollArea();
 
     //! \return a hash of added tables
@@ -87,7 +87,7 @@ public:
     KexiRelationsTableContainer * tableContainer(KexiDB::TableSchema *t) const;
 
     //! Adds a connection \a _conn to the area. This changes only visual representation.
-    void addConnection(const SourceConnection& _conn /*, bool interactive=true*/);
+    void addConnection(const SourceConnection& _conn);
 
     void setReadOnly(bool);
 
@@ -130,8 +130,6 @@ public slots:
     /*! Hides all tables except \a tables. */
     void hideAllTablesExcept(KexiDB::TableSchema::List* tables);
 
-//unused  void slotTableScrolling(const QString&);
-
     //! removes selected table or connection
     void removeSelectedObject();
 
@@ -143,15 +141,9 @@ protected slots:
     void slotAutoScrollTimeout();
 
 protected:
-    //! Reimplemented to draw connections.
-    // virtual void paintEvent( QPaintEvent *event );
-//Qt 4  void drawContents(QPainter *p, int cx, int cy, int cw, int ch);
     void contentsMousePressEvent(QMouseEvent *ev);
     virtual void keyPressEvent(QKeyEvent *ev);
     virtual void contextMenuEvent(QContextMenuEvent* event);
-
-//unused  void recalculateSize(int width, int height);
-//unused  void stretchExpandSize();
 
     void hideTable(KexiRelationsTableContainer* tableView);
     void removeConnection(KexiRelationsConnection *conn);

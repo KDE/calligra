@@ -38,7 +38,7 @@ SQLRETURN ODBCTablesQueryUnit::execute()
     QByteArray tableNameBA;
     const char* tableName = 0;
     if ( !m_tablesFilter.isEmpty() ) {
-        tableNameBA = m_tablesFilter.toAscii();
+        tableNameBA = m_tablesFilter.toLatin1();
         tableName = tableNameBA.constData();
     }
 

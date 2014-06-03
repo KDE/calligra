@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 - 2011 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2003 - 2011, 2012 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,22 +23,26 @@
 #include "kptresource.h"
 #include "kptcalendar.h"
 #include "kptresourcemodel.h"
+#include "kptdebug.h"
 
 #include <QPushButton>
 #include <QList>
-#include <qstringlist.h>
+#include <QStringList>
 #include <QSortFilterProxyModel>
 #include <QStandardItem>
 
-#include <kabc/addressee.h>
-#include <kabc/addresseedialog.h>
+#include <kdeversion.h>
+#ifdef PLAN_KDEPIMLIBS_FOUND
+#include <akonadi/contact/emailaddressselectiondialog.h>
+#include <akonadi/contact/emailaddressselectionwidget.h>
+#include <akonadi/contact/emailaddressselection.h>
+#endif
 
-#include <k3command.h>
 #include <kdatetimewidget.h>
 #include <kmessagebox.h>
 #include <klocale.h>
 #include <kglobal.h>
-#include <kdebug.h>
+
 
 namespace KPlato
 {
@@ -49,6 +53,14 @@ ResourceDialogImpl::ResourceDialogImpl( const Project &project, Resource &resour
     m_resource( resource )
 {
     setupUi(this);
+
+#ifndef PLAN_KDEPIMLIBS_FOUND
+    chooseBtn->hide();
+#endif
+
+    // FIXME
+    // [Bug 311940] New: Plan crashes when typing a text in the filter textbox before the textbook is fully loaded when selecting a contact from the adressbook
+    chooseBtn->hide();
 
     QSortFilterProxyModel *pr = new QSortFilterProxyModel( ui_teamView );
     QStandardItemModel *m = new QStandardItemModel( ui_teamView );
@@ -62,7 +74,7 @@ ResourceDialogImpl::ResourceDialogImpl( const Project &project, Resource &resour
         QList<QStandardItem *> items;
         QStandardItem *item = new QStandardItem( r->name() );
         item->setCheckable( true );
-        item->setCheckState( m_resource.teamMembers().contains( r ) ? Qt::Checked : Qt::Unchecked );
+        item->setCheckState( m_resource.teamMemberIds().contains( r->id() ) ? Qt::Checked : Qt::Unchecked );
         items << item;
         item = new QStandardItem( r->parentGroup()->name() );
         items << item;
@@ -83,26 +95,26 @@ ResourceDialogImpl::ResourceDialogImpl( const Project &project, Resource &resour
     ui_teamView->resizeColumnToContents( 0 );
     ui_teamView->sortByColumn( 0, Qt::AscendingOrder );
     slotTypeChanged( resource.type() );
-    connect( m, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)), SLOT(slotTeamChanged(const QModelIndex&)));
+    connect( m, SIGNAL(dataChanged(QModelIndex,QModelIndex)), SLOT(slotTeamChanged(QModelIndex)));
 
     connect(group, SIGNAL(activated(int)), SLOT(slotChanged()));
     connect(type, SIGNAL(activated(int)), SLOT(slotTypeChanged(int)));
     connect(units, SIGNAL(valueChanged(int)), SLOT(slotChanged()));
-    connect(nameEdit, SIGNAL(textChanged(const QString&)), SLOT(slotChanged()));
-    connect(initialsEdit, SIGNAL(textChanged(const QString&)), SLOT(slotChanged()));
-    connect(emailEdit, SIGNAL(textChanged(const QString&)), SLOT(slotChanged()));
+    connect(nameEdit, SIGNAL(textChanged(QString)), SLOT(slotChanged()));
+    connect(initialsEdit, SIGNAL(textChanged(QString)), SLOT(slotChanged()));
+    connect(emailEdit, SIGNAL(textChanged(QString)), SLOT(slotChanged()));
 
     connect(calendarList, SIGNAL(activated(int)), SLOT(slotChanged()));
 
-    connect(rateEdit, SIGNAL(textChanged(const QString&)), SLOT(slotChanged()));
-    connect(overtimeEdit, SIGNAL(textChanged(const QString&)), SLOT(slotChanged()));
+    connect(rateEdit, SIGNAL(textChanged(QString)), SLOT(slotChanged()));
+    connect(overtimeEdit, SIGNAL(textChanged(QString)), SLOT(slotChanged()));
 
     connect(chooseBtn, SIGNAL(clicked()), SLOT(slotChooseResource()));
 
-    connect(availableFrom, SIGNAL(dateTimeChanged(const QDateTime&)), SLOT(slotChanged()));
-    connect(availableUntil, SIGNAL(dateTimeChanged(const QDateTime&)), SLOT(slotChanged()));
-    connect(availableFrom, SIGNAL(dateTimeChanged(const QDateTime&)), SLOT(slotAvailableFromChanged(const QDateTime&)));
-    connect(availableUntil, SIGNAL(dateTimeChanged(const QDateTime&)), SLOT(slotAvailableUntilChanged(const QDateTime&)));
+    connect(availableFrom, SIGNAL(dateTimeChanged(QDateTime)), SLOT(slotChanged()));
+    connect(availableUntil, SIGNAL(dateTimeChanged(QDateTime)), SLOT(slotChanged()));
+    connect(availableFrom, SIGNAL(dateTimeChanged(QDateTime)), SLOT(slotAvailableFromChanged(QDateTime)));
+    connect(availableUntil, SIGNAL(dateTimeChanged(QDateTime)), SLOT(slotAvailableUntilChanged(QDateTime)));
 
     connect(ui_rbfrom, SIGNAL(toggled(bool)), SLOT(slotChanged()));
     connect(ui_rbuntil, SIGNAL(toggled(bool)), SLOT(slotChanged()));
@@ -110,7 +122,7 @@ ResourceDialogImpl::ResourceDialogImpl( const Project &project, Resource &resour
     connect(ui_rbfrom, SIGNAL(toggled(bool)), availableFrom, SLOT(setEnabled(bool)));
     connect(ui_rbuntil, SIGNAL(toggled(bool)), availableUntil, SLOT(setEnabled(bool)));
 
-    connect( useRequired, SIGNAL( stateChanged( int ) ), SLOT( slotUseRequiredChanged( int ) ) );
+    connect( useRequired, SIGNAL(stateChanged(int)), SLOT(slotUseRequiredChanged(int)) );
 
     connect(account, SIGNAL(activated(int)), SLOT(slotChanged()));
 }
@@ -122,20 +134,32 @@ void ResourceDialogImpl::slotTeamChanged( const QModelIndex &index ) {
     bool checked = (bool)(index.data( Qt::CheckStateRole ).toInt());
     int idCol = index.model()->columnCount() - 1;
     QString id = index.model()->index( index.row(), idCol ).data().toString();
-    Resource *r = m_project.findResource( id );
-    Q_ASSERT( r );
     if ( checked ) {
-        if ( ! m_resource.teamMembers().contains( r ) ) {
-            m_resource.addTeamMember( r );
+        if ( ! m_resource.teamMemberIds().contains( id ) ) {
+            m_resource.addTeamMemberId( id );
         }
     } else {
-        m_resource.removeTeamMember( r );
+        m_resource.removeTeamMemberId( id );
     }
     emit changed();
 }
 
 void ResourceDialogImpl::slotTypeChanged( int index ) {
-    ui_stackedWidget->setCurrentIndex( index == Resource::Type_Team ? 1 : 0 );
+    switch ( index ) {
+        case Resource::Type_Work:
+            ui_stackedWidget->setCurrentIndex( 0 );
+            useRequired->setEnabled( true );
+            slotUseRequiredChanged( useRequired->checkState() );
+            break;
+        case Resource::Type_Material:
+            ui_stackedWidget->setCurrentIndex( 0 );
+            useRequired->setEnabled( false );
+            slotUseRequiredChanged( false );
+            break;
+        case Resource::Type_Team:
+            ui_stackedWidget->setCurrentIndex( 1 );
+            break;
+    }
     emit changed();
 }
 
@@ -170,19 +194,19 @@ void ResourceDialogImpl::slotUseRequiredChanged( int state )
 
 void ResourceDialogImpl::slotAvailableFromChanged(const QDateTime&) {
     if (availableUntil->dateTime() < availableFrom->dateTime()) {
-        disconnect(availableUntil, SIGNAL(dateTimeChanged(const QDateTime&)), this,  SLOT(slotAvailableUntilChanged(const QDateTime&)));
-        //kDebug()<<"From:"<<availableFrom->dateTime().toString()<<" until="<<availableUntil->dateTime().toString();
+        disconnect(availableUntil, SIGNAL(dateTimeChanged(QDateTime)), this,  SLOT(slotAvailableUntilChanged(QDateTime)));
+        //kDebug(planDbg())<<"From:"<<availableFrom->dateTime().toString()<<" until="<<availableUntil->dateTime().toString();
         availableUntil->setDateTime(availableFrom->dateTime());
-        connect(availableUntil, SIGNAL(dateTimeChanged(const QDateTime&)), SLOT(slotAvailableUntilChanged(const QDateTime&)));
+        connect(availableUntil, SIGNAL(dateTimeChanged(QDateTime)), SLOT(slotAvailableUntilChanged(QDateTime)));
     }
 }
 
 void ResourceDialogImpl::slotAvailableUntilChanged(const QDateTime&) {
     if (availableFrom->dateTime() > availableUntil->dateTime()) {
-        disconnect(availableFrom, SIGNAL(dateTimeChanged(const QDateTime&)), this,  SLOT(slotAvailableFromChanged(const QDateTime&)));
-        //kDebug()<<"Until:"<<availableUntil->dateTime().toString()<<" from="<<availableFrom->dateTime().toString();
+        disconnect(availableFrom, SIGNAL(dateTimeChanged(QDateTime)), this,  SLOT(slotAvailableFromChanged(QDateTime)));
+        //kDebug(planDbg())<<"Until:"<<availableUntil->dateTime().toString()<<" from="<<availableFrom->dateTime().toString();
         availableFrom->setDateTime(availableUntil->dateTime());
-        connect(availableFrom, SIGNAL(dateTimeChanged(const QDateTime&)), SLOT(slotAvailableFromChanged(const QDateTime&)));
+        connect(availableFrom, SIGNAL(dateTimeChanged(QDateTime)), SLOT(slotAvailableFromChanged(QDateTime)));
     }
 }
 
@@ -193,18 +217,25 @@ void ResourceDialogImpl::slotCalculationNeeded(const QString&) {
 
 void ResourceDialogImpl::slotChooseResource()
 {
-    KABC::Addressee a = KABC::AddresseeDialog::getAddressee(this);
-    if (!a.isEmpty()) {
-        nameEdit->setText(a.assembledName());
-        emailEdit->setText(a.preferredEmail());
-        QStringList l = a.assembledName().split(' ');
-        QString in;
-        QStringList::Iterator it = l.begin();
-        for (/*int i = 0*/; it != l.end(); ++it) {
-            in += (*it)[0];
+#ifdef PLAN_KDEPIMLIBS_FOUND
+    QPointer<Akonadi::EmailAddressSelectionDialog> dlg = new Akonadi::EmailAddressSelectionDialog( this );
+    if ( dlg->exec() && dlg ) {
+        QStringList s;
+        const Akonadi::EmailAddressSelection::List selections = dlg->selectedAddresses();
+        if ( ! selections.isEmpty() ) {
+            const Akonadi::EmailAddressSelection s = selections.first();
+            nameEdit->setText( s.name() );
+            emailEdit->setText( s.email() );
+            QStringList l = s.name().split(' ');
+            QString in;
+            QStringList::Iterator it = l.begin();
+            for (/*int i = 0*/; it != l.end(); ++it) {
+                in += (*it)[0];
+            }
+            initialsEdit->setText(in);
         }
-        initialsEdit->setText(in);
     }
+#endif
 }
 
 //////////////////  ResourceDialog  ////////////////////////
@@ -298,7 +329,7 @@ ResourceDialog::ResourceDialog(Project &project, Resource *resource, QWidget *pa
     connect(dia, SIGNAL(calculate()), SLOT(slotCalculationNeeded()));
     connect(dia->calendarList, SIGNAL(activated(int)), SLOT(slotCalendarChanged(int)));
     connect(dia->required, SIGNAL(changed()), SLOT(enableButtonOk()));
-    connect(dia->account, SIGNAL(currentIndexChanged(const QString&)), SLOT(slotAccountChanged(const QString&)));
+    connect(dia->account, SIGNAL(currentIndexChanged(QString)), SLOT(slotAccountChanged(QString)));
     
     connect(&project, SIGNAL(resourceRemoved(const Resource*)), this, SLOT(slotResourceRemoved(const Resource*)));
 }
@@ -343,12 +374,12 @@ void ResourceDialog::slotOk() {
     m_resource.setAvailableFrom( dia->ui_rbfrom->isChecked() ? dia->availableFrom->dateTime() : QDateTime() );
     m_resource.setAvailableUntil( dia->ui_rbuntil->isChecked() ? dia->availableUntil->dateTime() : QDateTime() );
     ResourceItemSFModel *m = static_cast<ResourceItemSFModel*>( dia->required->model() );
-    QList<Resource*> lst;
+    QStringList lst;
     foreach ( const QModelIndex &i, dia->required->currentIndexes() ) {
         Resource *r = m->resource( i );
-        if ( r ) lst << r;
+        if ( r ) lst << r->id();
     }
-    m_resource.setRequiredResources( lst );
+    m_resource.setRequiredIds( lst );
     accept();
 }
 
@@ -413,28 +444,26 @@ MacroCommand *ResourceDialog::buildCommand(Resource *original, Resource &resourc
         if (!m) m = new MacroCommand(n);
         m->addCommand(new ModifyResourceCalendarCmd(original, resource.calendar(true)));
     }
-    if (resource.requiredResources() != original->requiredResources()) {
+    if (resource.requiredIds() != original->requiredIds()) {
         if (!m) m = new MacroCommand(n);
-        m->addCommand(new ModifyRequiredResourcesCmd(original, resource.requiredResources()));
+        m->addCommand(new ModifyRequiredResourcesCmd(original, resource.requiredIds()));
     }
     if (resource.account() != original->account()) {
         if (!m) m = new MacroCommand(n);
         m->addCommand(new ResourceModifyAccountCmd(*original, original->account(), resource.account()));
     }
     if ( resource.type() == Resource::Type_Team ) {
-        //kDebug()<<original->teamMembers()<<resource.teamMembers();
-        foreach ( Resource *r, resource.teamMembers() ) {
-            if ( ! original->teamMembers().contains( r ) ) {
+        //kDebug(planDbg())<<original->teamMembers()<<resource.teamMembers();
+        foreach ( const QString &id, resource.teamMemberIds() ) {
+            if ( ! original->teamMemberIds().contains( id ) ) {
                 if (!m) m = new MacroCommand(n);
-                m->addCommand( new AddResourceTeamCmd( original, r ) );
-                //kDebug()<<original->name()<<"added member"<<r->name();
+                m->addCommand( new AddResourceTeamCmd( original, id ) );
             }
         }
-        foreach ( Resource *r, original->teamMembers() ) {
-            if ( ! resource.teamMembers().contains( r ) ) {
+        foreach ( const QString &id, original->teamMemberIds() ) {
+            if ( ! resource.teamMemberIds().contains( id ) ) {
                 if (!m) m = new MacroCommand(n);
-                m->addCommand( new RemoveResourceTeamCmd( original, r ) );
-                //kDebug()<<original->name()<<"removed member"<<r->name();
+                m->addCommand( new RemoveResourceTeamCmd( original, id ) );
             }
         }
     }

@@ -18,8 +18,8 @@
 #ifndef RTFREADER_FONTTABLEDESTINATION_H
 #define RTFREADER_FONTTABLEDESTINATION_H
 
-#include <QtCore/QString>
-#include <QtGui/QColor>
+#include <QString>
+#include <QColor>
 
 #include "Destination.h"
 #include "FontTableEntry.h"

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
   Copyright (C) 1998, 1999, 2000 Torben Weis <weis@kde.org>
-  Copyright (C) 2002 - 2009 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2002 - 2009, 2011 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -23,7 +23,7 @@
 
 #include <KoView.h>
 
-#include <QMenu>
+#include <QStackedWidget>
 
 #include <kprocess.h>
 
@@ -32,6 +32,8 @@ class QTabWidget;
 class QPrinter;
 class QPrintDialog;
 class QLabel;
+class QMenu;
+class QActionGroup;
 
 class KAction;
 class KToggleAction;
@@ -76,10 +78,12 @@ namespace KPlatoWork
 
 class Part;
 class View;
+class AbstractView;
 class TaskWorkPackageView;
+class TaskWPGanttView;
 
 //-------------
-class View : public QWidget
+class View : public QStackedWidget
 {
     Q_OBJECT
 
@@ -97,15 +101,13 @@ public:
 //    virtual ViewAdaptor* dbusObject();
 
     virtual bool loadContext();
-    virtual void saveContext( QDomElement &context ) const;
+    virtual void saveContext() const;
 
     ScheduleManager *currentScheduleManager() const;
     long currentScheduleId() const;
     
     TaskWorkPackageView *createTaskWorkPackageView();
-//     ViewBase *createTaskInfoView();
-//     ViewBase *createDocumentsView();
-//     ViewBase *createTaskView();
+    TaskWPGanttView *createGanttView();
 
     KPlatoWork_MainWindow *kplatoWorkMainWindow() const;
     
@@ -132,11 +134,13 @@ public slots:
     void slotTaskCompletion();
 
 protected slots:
+    void slotCurrentChanged( int index );
     void slotProgressChanged( int value );
 
     void slotEditDocument();
     void slotEditDocument( Document *doc );
     void slotViewDocument();
+    void slotRemoveDocument();
     
     void slotSendPackage();
     void slotPackageSettings();
@@ -145,12 +149,15 @@ protected slots:
     void slotRemoveSelectedPackages();
     void slotSelectionChanged();
 
+    void slotViewList();
+    void slotViewGantt();
+
 protected:
     virtual void updateReadWrite( bool readwrite );
 
     QAction *addScheduleAction( Schedule *sch );
     void setLabel();
-    TaskWorkPackageView *currentView() const;
+    AbstractView *currentView() const;
 
 private:
     void createViews();
@@ -170,11 +177,16 @@ private:
     QAction *actionPaste;
     KAction *actionRemoveSelectedPackages;
 
+    // ------ View
+    QAction *actionViewList;
+    QAction *actionViewGantt;
+
     // ------ Settings
     KAction *actionConfigure;
 
     KAction *actionViewDocument;
     KAction *actionEditDocument;
+    KAction *actionRemoveDocument;
 
     KAction *actionSendPackage;
     KAction *actionPackageSettings;

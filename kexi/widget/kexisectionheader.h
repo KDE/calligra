@@ -43,8 +43,6 @@ public:
     void addButton(const KIcon& icon, const QString& toolTip,
                    const QObject * receiver, const char * member);
 
-    virtual bool eventFilter(QObject *o, QEvent *e);
-
     virtual QSize sizeHint() const;
 
     void setCaption(const QString& caption);
@@ -52,6 +50,9 @@ public:
 
 public slots:
     void slotFocus(bool in);
+
+protected:
+    virtual bool eventFilter(QObject *o, QEvent *e);
 
 private:
     class Private;

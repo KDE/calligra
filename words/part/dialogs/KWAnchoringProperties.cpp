@@ -21,158 +21,171 @@
 #include "KWAnchoringProperties.h"
 #include "KWFrameDialog.h"
 #include "KWDocument.h"
+#include "KWCanvas.h"
 #include "frames/KWFrame.h"
+#include "frames/KWTextFrameSet.h"
 
-#include <KoTextAnchor.h>
+#include <KoShapeAnchor.h>
 #include <KoInlineTextObjectManager.h>
+#include <KoTextShapeData.h>
+#include <KoShapeContainer.h>
+#include <commands/ChangeAnchorPropertiesCommand.h>
+#include <KoTextDocument.h>
+
+#include <kundo2command.h>
 
 #include <QComboBox>
 
 const int KWAnchoringProperties::vertRels[4][20] = {
-    { // KoTextAnchor::AnchorAsCharacter
-        KoTextAnchor::VBaseline,
-        KoTextAnchor::VChar,
-        KoTextAnchor::VLine,
+    { // KoShapeAnchor::AnchorAsCharacter
+        KoShapeAnchor::VBaseline,
+        KoShapeAnchor::VChar,
+        KoShapeAnchor::VLine,
         -1
     },
-    { // KoTextAnchor::AnchorToCharacter
-        KoTextAnchor::VChar,
-        KoTextAnchor::VLine,
-        KoTextAnchor::VParagraph,
-        KoTextAnchor::VParagraphContent,
-        KoTextAnchor::VPage,
-        KoTextAnchor::VPageContent,
+    { // KoShapeAnchor::AnchorToCharacter
+        KoShapeAnchor::VChar,
+        KoShapeAnchor::VLine,
+        KoShapeAnchor::VParagraph,
+        KoShapeAnchor::VParagraphContent,
+        KoShapeAnchor::VPage,
+        KoShapeAnchor::VPageContent,
         -1
     },
-    { // KoTextAnchor::AnchorParagraph
-        KoTextAnchor::VParagraph,
-        KoTextAnchor::VParagraphContent,
-        KoTextAnchor::VPage,
-        KoTextAnchor::VPageContent,
+    { // KoShapeAnchor::AnchorParagraph
+        KoShapeAnchor::VParagraph,
+        KoShapeAnchor::VParagraphContent,
+        KoShapeAnchor::VPage,
+        KoShapeAnchor::VPageContent,
         -1
     },
-    { // KoTextAnchor::AnchorPage
-        KoTextAnchor::VPage,
-        KoTextAnchor::VPageContent,
+    { // KoShapeAnchor::AnchorPage
+        KoShapeAnchor::VPage,
+        KoShapeAnchor::VPageContent,
         -1
     }
 };
 
 const int KWAnchoringProperties::horizRels[4][20] = {
-    { // KoTextAnchor::AnchorAsCharacter
+    { // KoShapeAnchor::AnchorAsCharacter
         -1
     },
-    { // KoTextAnchor::AnchorToCharacter
-        KoTextAnchor::HChar,
-        KoTextAnchor::HParagraph,
-        KoTextAnchor::HParagraphContent,
-        KoTextAnchor::HParagraphStartMargin,
-        KoTextAnchor::HParagraphEndMargin,
-        KoTextAnchor::HPageStartMargin,
-        KoTextAnchor::HPageEndMargin,
-        KoTextAnchor::HPage,
-        KoTextAnchor::HPageContent,
+    { // KoShapeAnchor::AnchorToCharacter
+        KoShapeAnchor::HChar,
+        KoShapeAnchor::HParagraph,
+        KoShapeAnchor::HParagraphContent,
+        KoShapeAnchor::HParagraphStartMargin,
+        KoShapeAnchor::HParagraphEndMargin,
+        KoShapeAnchor::HPageStartMargin,
+        KoShapeAnchor::HPageEndMargin,
+        KoShapeAnchor::HPage,
+        KoShapeAnchor::HPageContent,
         -1
     },
-    { // KoTextAnchor::AnchorParagraph
-        KoTextAnchor::HParagraph,
-        KoTextAnchor::HParagraphContent,
-        KoTextAnchor::HParagraphStartMargin,
-        KoTextAnchor::HParagraphEndMargin,
-        KoTextAnchor::HPageStartMargin,
-        KoTextAnchor::HPageEndMargin,
-        KoTextAnchor::HPage,
-        KoTextAnchor::HPageContent,
+    { // KoShapeAnchor::AnchorParagraph
+        KoShapeAnchor::HParagraph,
+        KoShapeAnchor::HParagraphContent,
+        KoShapeAnchor::HParagraphStartMargin,
+        KoShapeAnchor::HParagraphEndMargin,
+        KoShapeAnchor::HPageStartMargin,
+        KoShapeAnchor::HPageEndMargin,
+        KoShapeAnchor::HPage,
+        KoShapeAnchor::HPageContent,
         -1
     },
-    { // KoTextAnchor::AnchorPage
-        KoTextAnchor::HPageStartMargin,
-        KoTextAnchor::HPageEndMargin,
-        KoTextAnchor::HPage,
-        KoTextAnchor::HPageContent,
+    { // KoShapeAnchor::AnchorPage
+        KoShapeAnchor::HPageStartMargin,
+        KoShapeAnchor::HPageEndMargin,
+        KoShapeAnchor::HPage,
+        KoShapeAnchor::HPageContent,
         -1
     }
 };
 
 KWAnchoringProperties::KWAnchoringProperties(FrameConfigSharedState *state)
-        : m_state(state),
-        m_shape(0)
+    : m_state(state)
+    , m_shape(0)
 {
     widget.setupUi(this);
 
     m_anchorTypeGroup = new QButtonGroup();
     m_anchorTypeGroup->addButton(widget.rAnchorAsCharacter);
-    m_anchorTypeGroup->setId(widget.rAnchorAsCharacter, KoTextAnchor::AnchorAsCharacter);
+    m_anchorTypeGroup->setId(widget.rAnchorAsCharacter, KoShapeAnchor::AnchorAsCharacter);
     m_anchorTypeGroup->addButton(widget.rAnchorToCharacter);
-    m_anchorTypeGroup->setId(widget.rAnchorToCharacter, KoTextAnchor::AnchorToCharacter);
+    m_anchorTypeGroup->setId(widget.rAnchorToCharacter, KoShapeAnchor::AnchorToCharacter);
     m_anchorTypeGroup->addButton(widget.rAnchorParagraph);
-    m_anchorTypeGroup->setId(widget.rAnchorParagraph, KoTextAnchor::AnchorParagraph);
+    m_anchorTypeGroup->setId(widget.rAnchorParagraph, KoShapeAnchor::AnchorParagraph);
     m_anchorTypeGroup->addButton(widget.rAnchorPage);
-    m_anchorTypeGroup->setId(widget.rAnchorPage, KoTextAnchor::AnchorPage);
+    m_anchorTypeGroup->setId(widget.rAnchorPage, KoShapeAnchor::AnchorPage);
     connect(m_anchorTypeGroup, SIGNAL(buttonClicked(int)), this, SLOT(anchorTypeChanged(int)));
 
     m_vertPosGroup = new QButtonGroup();
     m_vertPosGroup->addButton(widget.rTop);
-    m_vertPosGroup->setId(widget.rTop, KoTextAnchor::VTop);
+    m_vertPosGroup->setId(widget.rTop, KoShapeAnchor::VTop);
     m_vertPosGroup->addButton(widget.rVCenter);
-    m_vertPosGroup->setId(widget.rVCenter, KoTextAnchor::VMiddle);
+    m_vertPosGroup->setId(widget.rVCenter, KoShapeAnchor::VMiddle);
     m_vertPosGroup->addButton(widget.rBottom);
-    m_vertPosGroup->setId(widget.rBottom, KoTextAnchor::VBottom);
+    m_vertPosGroup->setId(widget.rBottom, KoShapeAnchor::VBottom);
     m_vertPosGroup->addButton(widget.rVOffset);
-    m_vertPosGroup->setId(widget.rVOffset, KoTextAnchor::VFromTop);
+    m_vertPosGroup->setId(widget.rVOffset, KoShapeAnchor::VFromTop);
     connect(m_vertPosGroup, SIGNAL(buttonClicked(int)), this, SLOT(vertPosChanged(int)));
 
     m_horizPosGroup = new QButtonGroup();
     m_horizPosGroup->addButton(widget.rLeft);
-    m_horizPosGroup->setId(widget.rLeft, KoTextAnchor::HLeft);
+    m_horizPosGroup->setId(widget.rLeft, KoShapeAnchor::HLeft);
     m_horizPosGroup->addButton(widget.rHCenter);
-    m_horizPosGroup->setId(widget.rHCenter, KoTextAnchor::HCenter);
+    m_horizPosGroup->setId(widget.rHCenter, KoShapeAnchor::HCenter);
     m_horizPosGroup->addButton(widget.rRight);
-    m_horizPosGroup->setId(widget.rRight, KoTextAnchor::HRight);
+    m_horizPosGroup->setId(widget.rRight, KoShapeAnchor::HRight);
     m_horizPosGroup->addButton(widget.rHOffset);
-    m_horizPosGroup->setId(widget.rHOffset, KoTextAnchor::HFromLeft);
+    m_horizPosGroup->setId(widget.rHOffset, KoShapeAnchor::HFromLeft);
     connect(m_horizPosGroup, SIGNAL(buttonClicked(int)), this, SLOT(horizPosChanged(int)));
+
+    connect(widget.cTopArea, SIGNAL(currentIndexChanged(int)), this, SLOT(vertRelChanged(int)));
+    connect(widget.cVCenterArea, SIGNAL(currentIndexChanged(int)), this, SLOT(vertRelChanged(int)));
+    connect(widget.cBottomArea, SIGNAL(currentIndexChanged(int)), this, SLOT(vertRelChanged(int)));
+    connect(widget.cVOffsetArea, SIGNAL(currentIndexChanged(int)), this, SLOT(vertRelChanged(int)));
+
+    connect(widget.cLeftArea, SIGNAL(currentIndexChanged(int)), this, SLOT(horizRelChanged(int)));
+    connect(widget.cHCenterArea, SIGNAL(currentIndexChanged(int)), this, SLOT(horizRelChanged(int)));
+    connect(widget.cRightArea, SIGNAL(currentIndexChanged(int)), this, SLOT(horizRelChanged(int)));
+    connect(widget.cHOffsetArea, SIGNAL(currentIndexChanged(int)), this, SLOT(horizRelChanged(int)));
 }
 
-void KWAnchoringProperties::open(const QList<KWFrame*> &frames)
+bool KWAnchoringProperties::open(const QList<KWFrame*> &frames)
 {
     m_state->addUser();
     m_frames = frames;
-    KoInlineTextObjectManager *manager = m_state->document()->inlineTextObjectManager();
-
-    foreach (KWFrame *frame, frames) {
-        KoTextAnchor *anchor = 0;
-        //try and find out if targetShape is already anchored
-        foreach (KoInlineObject *inlineObject, manager->inlineTextObjects()) {
-            anchor = dynamic_cast<KoTextAnchor *>(inlineObject);
-            if (anchor && anchor->shape() == frame->shape()) {
-                break;
-            }
-        }
-        if (anchor) {
-            m_anchors.append(anchor);
-        } else {
-            m_anchors.append(0);
-        }
-    }
 
     GuiHelper::State anchorTypeHelper = GuiHelper::Unset;
     GuiHelper::State vertHelper = GuiHelper::Unset;
     GuiHelper::State horizHelper = GuiHelper::Unset;
-    KoTextAnchor::AnchorType anchorType = KoTextAnchor::AnchorPage;
+    KoShapeAnchor::AnchorType anchorType = KoShapeAnchor::AnchorPage;
+
     m_vertPos = -1;
     m_horizPos = -1;
     m_vertRel = -1;
     m_horizRel = -1;
     QPointF offset;
-    foreach (KoTextAnchor *anchor, m_anchors) {
-        KoTextAnchor::AnchorType anchorTypeOfFrame = anchor ? anchor->anchorType() :
-        KoTextAnchor::AnchorPage;
+
+    bool atLeastOne = false;
+
+    foreach (KWFrame *frame, frames) {
+        if (frame->frameSet()->type() == Words::TextFrameSet) {
+            if (static_cast<KWTextFrameSet *>(frame->frameSet())->textFrameSetType() != Words::OtherTextFrameSet) {
+                continue;
+            }
+        }
+        atLeastOne = true;
+
+        KoShapeAnchor *anchor = frame->shape()->anchor();
+        KoShapeAnchor::AnchorType anchorTypeOfFrame = anchor ? anchor->anchorType() : KoShapeAnchor::AnchorPage;
+
         // FIXME these should fetch correct values if anchor == 0
-        int vertPosOfFrame = anchor ? anchor->verticalPos() : KoTextAnchor::VFromTop;
-        int horizPosOfFrame = anchor ? anchor->horizontalPos() : KoTextAnchor::HFromLeft;
-        int vertRelOfFrame = anchor ? anchor->verticalRel() : KoTextAnchor::VPage;
-        int horizRelOfFrame = anchor ? anchor->horizontalRel() : KoTextAnchor::HPage;
+        int vertPosOfFrame = anchor ? anchor->verticalPos() : KoShapeAnchor::VFromTop;
+        int horizPosOfFrame = anchor ? anchor->horizontalPos() : KoShapeAnchor::HFromLeft;
+        int vertRelOfFrame = anchor ? anchor->verticalRel() : KoShapeAnchor::VPage;
+        int horizRelOfFrame = anchor ? anchor->horizontalRel() : KoShapeAnchor::HPage;
         QPointF offsetOfFrame = anchor ? anchor->offset() : QPointF();
 
         if (anchorTypeHelper == GuiHelper::Unset) {
@@ -187,7 +200,7 @@ void KWAnchoringProperties::open(const QList<KWFrame*> &frames)
             offset = offsetOfFrame;
             vertHelper = GuiHelper::On;
         } else if (m_vertPos != vertPosOfFrame || m_vertRel != vertRelOfFrame ||
-            (m_vertPos == KoTextAnchor::VFromTop && offset.y() != offsetOfFrame.y())) {
+            (m_vertPos == KoShapeAnchor::VFromTop && offset.y() != offsetOfFrame.y())) {
             vertHelper = GuiHelper::TriState;
             m_vertPos = vertPosOfFrame;
             m_vertRel = vertRelOfFrame;
@@ -199,11 +212,15 @@ void KWAnchoringProperties::open(const QList<KWFrame*> &frames)
             offset = offsetOfFrame;
             horizHelper = GuiHelper::On;
         } else if (m_horizPos != horizPosOfFrame || m_horizRel != horizRelOfFrame ||
-            (m_horizPos == KoTextAnchor::HFromLeft && offset.x() != offsetOfFrame.x())) {
+            (m_horizPos == KoShapeAnchor::HFromLeft && offset.x() != offsetOfFrame.x())) {
             horizHelper = GuiHelper::TriState;
             m_horizPos = -1;
             m_horizRel = -1;
         }
+    }
+
+    if (!atLeastOne) {
+        return false;
     }
 
     if (anchorTypeHelper != GuiHelper::TriState) {
@@ -229,6 +246,8 @@ void KWAnchoringProperties::open(const QList<KWFrame*> &frames)
         widget.grpVert->setEnabled(false);
         widget.grpHoriz->setEnabled(false);
     }
+
+    return true;
 }
 
 void KWAnchoringProperties::vertPosChanged(int vertPos, QPointF offset)
@@ -237,7 +256,7 @@ void KWAnchoringProperties::vertPosChanged(int vertPos, QPointF offset)
         return; //we should already be disabled
     }
     switch (vertPos) {
-    case KoTextAnchor::VTop:
+    case KoShapeAnchor::VTop:
         widget.cTopArea->setEnabled(true);
         widget.cVCenterArea->setEnabled(false);
         widget.cRightArea->setEnabled(false);
@@ -251,7 +270,7 @@ void KWAnchoringProperties::vertPosChanged(int vertPos, QPointF offset)
             }
         }
         break;
-    case KoTextAnchor::VMiddle:
+    case KoShapeAnchor::VMiddle:
         widget.cTopArea->setEnabled(false);
         widget.cVCenterArea->setEnabled(true);
         widget.cBottomArea->setEnabled(false);
@@ -265,7 +284,7 @@ void KWAnchoringProperties::vertPosChanged(int vertPos, QPointF offset)
             }
         }
         break;
-    case KoTextAnchor::VBottom:
+    case KoShapeAnchor::VBottom:
         widget.cTopArea->setEnabled(false);
         widget.cVCenterArea->setEnabled(false);
         widget.cBottomArea->setEnabled(true);
@@ -279,7 +298,7 @@ void KWAnchoringProperties::vertPosChanged(int vertPos, QPointF offset)
             }
         }
         break;
-    case KoTextAnchor::VFromTop:
+    case KoShapeAnchor::VFromTop:
         widget.cTopArea->setEnabled(false);
         widget.cVCenterArea->setEnabled(false);
         widget.cBottomArea->setEnabled(false);
@@ -310,13 +329,21 @@ void KWAnchoringProperties::vertPosChanged(int vertPos, QPointF offset)
     m_vertPos = vertPos;
 }
 
+void KWAnchoringProperties::vertRelChanged(int index)
+{
+    if (m_anchorType == -1) {
+        return; //we should already be disabled
+    }
+    m_vertRel = vertRels[m_anchorType][index];
+}
+
 void KWAnchoringProperties::horizPosChanged(int horizPos, QPointF offset)
 {
     if (m_anchorType == -1) {
         return; //we should already be disabled
     }
     switch (horizPos) {
-    case KoTextAnchor::HLeft:
+    case KoShapeAnchor::HLeft:
         widget.cLeftArea->setEnabled(true);
         widget.cHCenterArea->setEnabled(false);
         widget.cRightArea->setEnabled(false);
@@ -330,7 +357,7 @@ void KWAnchoringProperties::horizPosChanged(int horizPos, QPointF offset)
             }
         }
         break;
-    case KoTextAnchor::HCenter:
+    case KoShapeAnchor::HCenter:
         widget.cLeftArea->setEnabled(false);
         widget.cHCenterArea->setEnabled(true);
         widget.cRightArea->setEnabled(false);
@@ -344,7 +371,7 @@ void KWAnchoringProperties::horizPosChanged(int horizPos, QPointF offset)
             }
         }
         break;
-    case KoTextAnchor::HRight:
+    case KoShapeAnchor::HRight:
         widget.cLeftArea->setEnabled(false);
         widget.cHCenterArea->setEnabled(false);
         widget.cRightArea->setEnabled(true);
@@ -358,7 +385,7 @@ void KWAnchoringProperties::horizPosChanged(int horizPos, QPointF offset)
             }
         }
         break;
-    case KoTextAnchor::HFromLeft:
+    case KoShapeAnchor::HFromLeft:
         widget.cLeftArea->setEnabled(false);
         widget.cHCenterArea->setEnabled(false);
         widget.cRightArea->setEnabled(false);
@@ -389,38 +416,48 @@ void KWAnchoringProperties::horizPosChanged(int horizPos, QPointF offset)
     m_horizPos = horizPos;
 }
 
+void KWAnchoringProperties::horizRelChanged(int index)
+{
+    if (m_anchorType == -1) {
+        return; //we should already be disabled
+    }
+    m_horizRel = horizRels[m_anchorType][index];
+}
+
+
 void KWAnchoringProperties::anchorTypeChanged(int type)
 {
-    KoTextAnchor::AnchorType anchorType = KoTextAnchor::AnchorType(type);
+    KoShapeAnchor::AnchorType anchorType = KoShapeAnchor::AnchorType(type);
 
-    QString vertRelStrings[20]; //NOTE: order needs to be the same as KoTextAnchor::VerticalRel
-    vertRelStrings[0] = i18n("Baseline"); // KoTextAnchor::VBaseline
-    vertRelStrings[1] = i18n("Character"); // KoTextAnchor::VChar
-    vertRelStrings[2] = QString(); // KoTextAnchor::VFrame
-    vertRelStrings[3] = QString(); // KoTextAnchor::VFrameContent
-    vertRelStrings[4] = i18n("Row"); // KoTextAnchor::VLine
-    vertRelStrings[5] = i18n("Page (entire) area"); // KoTextAnchor::VPage
-    vertRelStrings[6] = i18n("Page text area"); // KoTextAnchor::VPageContent
-    vertRelStrings[7] = i18n("Paragraph area"); // KoTextAnchor::VParagraph
-    vertRelStrings[8] = i18n("Paragraph text area"); // KoTextAnchor::VParagraphContent
-    vertRelStrings[9] = QString(); // KoTextAnchor::VText
+    QString vertRelStrings[20]; //NOTE: order needs to be the same as KoShapeAnchor::VerticalRel
+    vertRelStrings[0] = i18n("Baseline"); // KoShapeAnchor::VBaseline
+    vertRelStrings[1] = i18n("Character"); // KoShapeAnchor::VChar
+    vertRelStrings[2].clear(); // KoShapeAnchor::VFrame
+    vertRelStrings[3].clear(); // KoShapeAnchor::VFrameContent
+    vertRelStrings[4] = i18n("Row"); // KoShapeAnchor::VLine
+    vertRelStrings[5] = i18n("Page (entire) area"); // KoShapeAnchor::VPage
+    vertRelStrings[6] = i18n("Page text area"); // KoShapeAnchor::VPageContent
+    vertRelStrings[7] = i18n("Paragraph area"); // KoShapeAnchor::VParagraph
+    vertRelStrings[8] = i18n("Paragraph text area"); // KoShapeAnchor::VParagraphContent
+    vertRelStrings[9].clear(); // KoShapeAnchor::VText
 
-    QString horizRelStrings[20]; //NOTE: order needs to be the same as KoTextAnchor::HorizontalRel
-    horizRelStrings[0] = i18n("Character"); // KoTextAnchor::HChar
-    horizRelStrings[1] = i18n("Page (entire) area"); // KoTextAnchor::HPage
-    horizRelStrings[2] = i18n("Page text area"); // KoTextAnchor::HPageContent
-    horizRelStrings[3] = i18n("Left page border"); // KoTextAnchor::HPageStartMargin
-    horizRelStrings[4] = i18n("Right page border"); // KoTextAnchor::HPageEndMargin
-    horizRelStrings[5] = QString(); // KoTextAnchor::HFrame
-    horizRelStrings[6] = QString(); // KoTextAnchor::HFrameContent
-    horizRelStrings[7] = QString(); // KoTextAnchor::HFrameEndMargin
-    horizRelStrings[8] = QString(); // KoTextAnchor::HFrameStartMargin
-    horizRelStrings[9] = i18n("Paragraph area"); // KoTextAnchor::HParagraph
-    horizRelStrings[10] = i18n("Paragraph text area"); // KoTextAnchor::HParagraphContent
-    horizRelStrings[11] = i18n("Right paragraph border"); // KoTextAnchor::HParagraphEndMargin
-    horizRelStrings[12] = i18n("Left paragraph border"); // KoTextAnchor::HParagraphStartMargin
+    QString horizRelStrings[20]; //NOTE: order needs to be the same as KoShapeAnchor::HorizontalRel
+    horizRelStrings[0] = i18n("Character"); // KoShapeAnchor::HChar
+    horizRelStrings[1] = i18n("Page (entire) area"); // KoShapeAnchor::HPage
+    horizRelStrings[2] = i18n("Page text area"); // KoShapeAnchor::HPageContent
+    horizRelStrings[3] = i18n("Left page border"); // KoShapeAnchor::HPageStartMargin
+    horizRelStrings[4] = i18n("Right page border"); // KoShapeAnchor::HPageEndMargin
+    horizRelStrings[5].clear(); // KoShapeAnchor::HFrame
+    horizRelStrings[6].clear(); // KoShapeAnchor::HFrameContent
+    horizRelStrings[7].clear(); // KoShapeAnchor::HFrameEndMargin
+    horizRelStrings[8].clear(); // KoShapeAnchor::HFrameStartMargin
+    horizRelStrings[9] = i18n("Paragraph area"); // KoShapeAnchor::HParagraph
+    horizRelStrings[10] = i18n("Paragraph text area"); // KoShapeAnchor::HParagraphContent
+    horizRelStrings[11] = i18n("Right paragraph border"); // KoShapeAnchor::HParagraphEndMargin
+    horizRelStrings[12] = i18n("Left paragraph border"); // KoShapeAnchor::HParagraphStartMargin
 
 
+    m_anchorType = -1;
     widget.cTopArea->clear();
     widget.cVCenterArea->clear();
     widget.cBottomArea->clear();
@@ -442,7 +479,7 @@ void KWAnchoringProperties::anchorTypeChanged(int type)
         widget.cRightArea->addItem(horizRelStrings[horizRels[anchorType][i]]);
         widget.cHOffsetArea->addItem(horizRelStrings[horizRels[anchorType][i]]);
     }
-    if (anchorType == KoTextAnchor::AnchorAsCharacter) {
+    if (anchorType == KoShapeAnchor::AnchorAsCharacter) {
         widget.grpHoriz->setEnabled(false);
     } else {
         widget.grpHoriz->setEnabled(true);
@@ -456,34 +493,102 @@ void KWAnchoringProperties::open(KoShape *shape)
 {
     m_state->addUser();
     m_shape = shape;
-    KoTextAnchor::AnchorType anchorTypeOfShape = KoTextAnchor::AnchorPage;
-    //TODO fetch type
+    KoShapeAnchor::AnchorType anchorTypeOfShape = KoShapeAnchor::AnchorPage;
+    // This method is only called when creating a new shape, so AnchorPage is what it is at this point
     m_anchorTypeGroup->button(anchorTypeOfShape)->setChecked(true);
 }
 
 void KWAnchoringProperties::save()
 {
-    if (m_frames.count() == 0) {
-        KWFrame *frame = m_state->frame();
-        if (frame == 0 && m_shape)
-            frame = m_state->createFrame(m_shape);
-        Q_ASSERT(frame);
-        m_state->markFrameUsed();
-        m_frames.append(frame);
-    }
-    foreach (KWFrame *frame, m_frames) {
-        bool needRelayout = false;
-        if (m_anchorTypeGroup->checkedId() != -1) {
-            KoTextAnchor::AnchorType type = static_cast<KoTextAnchor::AnchorType>(m_anchorTypeGroup->checkedId());
-            //TODO fetch anchor
-            /*
-            if (frame->shape()->textRunAroundSide() != type) {
-                frame->shape()->setTextRunAroundSide(type);
-                needRelayout = true;
-            }*/
+    save(0,0);
+}
+
+void KWAnchoringProperties::save(KUndo2Command *macro, KWCanvas *canvas)
+{
+    Q_ASSERT(macro);
+    Q_ASSERT(m_frames.count() > 0);
+
+    if (m_anchorTypeGroup->checkedId() != -1) {
+        foreach (KWFrame *frame, m_frames) {
+            if (frame->frameSet()->type() == Words::TextFrameSet) {
+                if (static_cast<KWTextFrameSet *>(frame->frameSet())->textFrameSetType() != Words::OtherTextFrameSet) {
+                    continue;
+                }
+            }
+
+            KoShapeAnchor::AnchorType type = KoShapeAnchor::AnchorType(m_anchorTypeGroup->checkedId());
+
+            KoShapeAnchor *anchor = frame->shape()->anchor();
+            if (!anchor) {
+                anchor = new KoShapeAnchor(frame->shape());
+                anchor->setAnchorType(KoShapeAnchor::AnchorPage);
+                anchor->setHorizontalPos(KoShapeAnchor::HFromLeft);
+                anchor->setVerticalPos(KoShapeAnchor::VFromTop);
+                frame->shape()->setAnchor(anchor);
+            }
+            KoShapeContainer *container = 0;
+            // we change from page anchored to text shape anchored.
+            if (type != KoShapeAnchor::AnchorPage && anchor->anchorType() == KoShapeAnchor::AnchorPage) {
+                KWFrame *targetFrame = m_state->document()->findClosestFrame(anchor->shape());
+
+                if (targetFrame != 0) {
+                    KoTextShapeData *textData = qobject_cast<KoTextShapeData*>(targetFrame->shape()->userData());
+                    if (textData) {
+                        container = static_cast<KoShapeContainer*>(targetFrame->shape());
+                    }
+                }
+            }
+            else if (type != KoShapeAnchor::AnchorPage) {
+                container = anchor->shape()->parent();
+            }
+
+            // if there was no textshape found then we have no choice but to anchor to page.
+            if (!container) {
+                type = KoShapeAnchor::AnchorPage;
+            }
+
+            QPointF offset = anchor->offset();
+            if (m_horizPos == KoShapeAnchor::HFromLeft) {
+                offset.setX(widget.sHOffset->value());
+            }
+            if (m_vertPos == KoShapeAnchor::VFromTop) {
+                offset.setY(widget.sVOffset->value());
+            }
+
+            KoShapeAnchor anchorProperties(0);
+            anchorProperties.setAnchorType(type);
+            anchorProperties.setOffset(offset);
+            anchorProperties.setHorizontalRel(KoShapeAnchor::HorizontalRel(m_horizRel));
+            anchorProperties.setVerticalRel(KoShapeAnchor::VerticalRel(m_vertRel));
+            anchorProperties.setHorizontalPos(KoShapeAnchor::HorizontalPos(m_horizPos));
+            anchorProperties.setVerticalPos(KoShapeAnchor::VerticalPos(m_vertPos));
+
+            KoTextShapeDataBase *textData = 0;
+            KoShape *oldParent = anchor->shape()->parent();
+            if (oldParent) {
+                textData = qobject_cast<KoTextShapeDataBase*>(oldParent->userData());
+            } else  if (container) {
+                textData = qobject_cast<KoTextShapeDataBase*>(container->userData());
+            }
+
+            ChangeAnchorPropertiesCommand *cmd = new ChangeAnchorPropertiesCommand(anchor, anchorProperties, container, macro);
+
+            if (textData) {
+                KoTextDocument doc(textData->document());
+                doc.textEditor()->addCommand(cmd); //will call redo too
+            } else {
+                cmd->redo();
+            }
+
+            if (type == KoShapeAnchor::AnchorPage) {
+                // new is AnchorPage so better make sure it adheres to the restrictions
+                // as no other mechanism will ensure this
+                QPointF delta;
+                canvas->clipToDocument(anchor->shape(), delta);
+                anchor->shape()->setPosition(anchor->shape()->position() + delta);
+            }
         }
-        if (needRelayout)
-            frame->shape()->notifyChanged();
     }
+
     m_state->removeUser();
 }

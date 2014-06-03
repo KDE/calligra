@@ -26,8 +26,8 @@
 #include <QByteArray>
 #include <QStringList>
 
-#include <KDebug>
-#include <KCmdLineArgs>
+#include <kdebug.h>
+#include <kcmdlineargs.h>
 
 #include <google/template.h>
 

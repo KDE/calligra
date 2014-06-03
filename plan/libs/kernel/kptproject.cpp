@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  Copyright (C) 2001 Thomas zander <zander@kde.org>
- Copyright (C) 2004 - 2010 Dag Andersen <danders@get2net.dk>
+ Copyright (C) 2004 - 2010, 2012 Dag Andersen <danders@get2net.dk>
  Copyright (C) 2007 Florian Piquemal <flotueur@yahoo.fr>
  Copyright (C) 2007 Alexis Ménard <darktears31@gmail.com>
 
@@ -29,20 +29,22 @@
 #include "kptwbsdefinition.h"
 #include "kptxmlloaderobject.h"
 #include "kptschedulerplugin.h"
+#include "kptdebug.h"
 
 #include <KoXmlReader.h>
 
-#include <qdom.h>
+#include <QDomDocument>
 #include <QString>
-#include <qdatetime.h>
-#include <qbrush.h>
+#include <QDateTime>
+#include <QBrush>
 #include <QList>
 
 #include <kdatetime.h>
-#include <kdebug.h>
 #include <ksystemtimezone.h>
 #include <ktimezone.h>
 #include <krandom.h>
+#include <kdeversion.h>
+
 
 namespace KPlato
 {
@@ -54,7 +56,7 @@ Project::Project( Node *parent )
         m_config( 0 ),
         m_schedulerPlugins()
 {
-    //kDebug()<<"("<<this<<")";
+    //kDebug(planDbg())<<"("<<this<<")";
     init();
 }
 
@@ -65,7 +67,7 @@ Project::Project( ConfigBase &config, Node *parent )
         m_config( &config ),
         m_schedulerPlugins()
 {
-    //kDebug()<<"("<<this<<")";
+    //kDebug(planDbg())<<"("<<this<<")";
     init();
 }
 
@@ -78,7 +80,7 @@ void Project::init()
     if ( !m_spec.timeZone().isValid() ) {
         m_spec.setType( KTimeZone() );
     }
-    //kDebug()<<m_spec.timeZone();
+    //kDebug(planDbg())<<m_spec.timeZone();
     if ( m_parent == 0 ) {
         // set sensible defaults for a project wo parent
         m_constraintStartTime = DateTime( QDate::currentDate() );
@@ -114,12 +116,12 @@ int Project::type() const { return Node::Type_Project; }
 void Project::generateUniqueNodeIds()
 {
     foreach ( Node *n, nodeIdDict ) {
-        kDebug()<<n->name()<<"old"<<n->id();
+        kDebug(planDbg())<<n->name()<<"old"<<n->id();
         QString uid = uniqueNodeId();
         nodeIdDict.remove( n->id() );
         n->setId( uid );
         nodeIdDict[ uid ] = n;
-        kDebug()<<n->name()<<"new"<<n->id();
+        kDebug(planDbg())<<n->name()<<"new"<<n->id();
     }
 }
 
@@ -198,7 +200,7 @@ void Project::calculate( const DateTime &dt )
         cs->notScheduled = false;
         calcFreeFloat();
         emit scheduleChanged( cs );
-        emit changed();
+        emit projectChanged();
     } else if ( type() == Type_Subproject ) {
         kWarning() << "Subprojects not implemented";
     } else {
@@ -239,7 +241,7 @@ void Project::calculate( ScheduleManager &sm )
     emit sigCalculationFinished( this, &sm );
     emit scheduleManagerChanged( &sm );
     emit projectCalculated( &sm );
-    emit changed();
+    emit projectChanged();
     sm.setScheduling( false );
 }
 
@@ -350,7 +352,7 @@ void Project::calculate()
         cs->notScheduled = false;
         calcFreeFloat();
         emit scheduleChanged( cs );
-        emit changed();
+        emit projectChanged();
     } else if ( type() == Type_Subproject ) {
         kWarning() << "Subprojects not implemented";
     } else {
@@ -366,7 +368,7 @@ void Project::finishCalculation( ScheduleManager &sm )
     cs->notScheduled = false;
     calcFreeFloat();
     emit scheduleChanged( cs );
-    emit changed();
+    emit projectChanged();
 }
 
 void Project::setProgress( int progress, ScheduleManager *sm )
@@ -399,7 +401,7 @@ void Project::emitMaxProgress( int value )
 
 bool Project::calcCriticalPath( bool fromEnd )
 {
-    //kDebug();
+    //kDebug(planDbg());
     MainSchedule *cs = static_cast<MainSchedule*>( m_currentSchedule );
     if ( cs == 0 ) {
         return false;
@@ -421,7 +423,7 @@ bool Project::calcCriticalPath( bool fromEnd )
 
 void Project::calcCriticalPathList( MainSchedule *cs )
 {
-    //kDebug()<<m_name<<", "<<cs->name();
+    //kDebug(planDbg())<<m_name<<", "<<cs->name();
     cs->clearCriticalPathList();
     foreach ( Node *n, allNodes() ) {
         if ( n->numDependParentNodes() == 0 && n->inCriticalPath( cs->id() ) ) {
@@ -431,19 +433,19 @@ void Project::calcCriticalPathList( MainSchedule *cs )
         }
     }
     cs->criticalPathListCached = true;
-    //kDebug()<<*(criticalPathList( cs->id() ));
+    //kDebug(planDbg())<<*(criticalPathList( cs->id() ));
 }
 
 void Project::calcCriticalPathList( MainSchedule *cs, Node *node )
 {
-    //kDebug()<<node->name()<<", "<<cs->id();
+    //kDebug(planDbg())<<node->name()<<", "<<cs->id();
     bool newPath = false;
     QList<Node*> lst = *( cs->currentCriticalPath() );
     foreach ( Relation *r, node->dependChildNodes() ) {
         if ( r->child()->inCriticalPath( cs->id() ) ) {
             if ( newPath ) {
                 cs->addCriticalPath( &lst );
-                //kDebug()<<node->name()<<" new path";
+                //kDebug(planDbg())<<node->name()<<" new path";
             }
             cs->addCriticalPathNode( r->child() );
             calcCriticalPathList( cs, r->child() );
@@ -456,7 +458,7 @@ const QList< QList<Node*> > *Project::criticalPathList( long id )
 {
     Schedule *s = schedule( id );
     if ( s == 0 ) {
-        //kDebug()<<"No schedule with id="<<id;
+        //kDebug(planDbg())<<"No schedule with id="<<id;
         return 0;
     }
     MainSchedule *ms = static_cast<MainSchedule*>( s );
@@ -471,7 +473,7 @@ QList<Node*> Project::criticalPath( long id, int index )
 {
     Schedule *s = schedule( id );
     if ( s == 0 ) {
-        //kDebug()<<"No schedule with id="<<id;
+        //kDebug(planDbg())<<"No schedule with id="<<id;
         return QList<Node*>();
     }
     MainSchedule *ms = static_cast<MainSchedule*>( s );
@@ -541,6 +543,83 @@ DateTime Project::checkEndConstraints( const DateTime &dt ) const
     return t;
 }
 
+#ifndef PLAN_NLOGDEBUG
+bool Project::checkParent( Node *n, QList<Node*> list, QList<Relation*> &checked )
+{
+    if ( n->isStartNode() ) {
+        kDebug(planDbg())<<n<<"start node"<<list;
+        return true;
+    }
+    kDebug(planDbg())<<"Check:"<<n<<":"<<checked.count()<<":"<<list;
+    if ( list.contains( n ) ) {
+        kDebug(planDbg())<<"Failed:"<<n<<":"<<list;
+        return false;
+    }
+    QList<Node*> lst = list;
+    lst << n;
+    foreach ( Relation *r, n->dependParentNodes() ) {
+        if ( checked.contains( r ) ) {
+            kDebug(planDbg())<<"Depend:"<<n<<":"<<r->parent()<<": checked";
+            continue;
+        }
+        checked << r;
+        if ( ! checkParent( r->parent(), lst, checked ) ) {
+            return false;
+        }
+    }
+    Task *t = static_cast<Task*>( n );
+    foreach ( Relation *r, t->parentProxyRelations() ) {
+        if ( checked.contains( r ) ) {
+            kDebug(planDbg())<<"Depend:"<<n<<":"<<r->parent()<<": checked";
+            continue;
+        }
+        checked << r;
+        kDebug(planDbg())<<"Proxy:"<<n<<":"<<r->parent()<<":"<<lst;
+        if ( ! checkParent( r->parent(), lst, checked ) ) {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool Project::checkChildren( Node *n, QList<Node*> list, QList<Relation*> &checked )
+{
+    if ( n->isEndNode() ) {
+        kDebug(planDbg())<<n<<"end node"<<list;
+        return true;
+    }
+    kDebug(planDbg())<<"Check:"<<n<<":"<<checked.count()<<":"<<list;
+    if ( list.contains( n ) ) {
+        kDebug(planDbg())<<"Failed:"<<n<<":"<<list;
+        return false;
+    }
+    QList<Node*> lst = list;
+    lst << n;
+    foreach ( Relation *r, n->dependChildNodes() ) {
+        if ( checked.contains( r ) ) {
+            kDebug(planDbg())<<"Depend:"<<n<<":"<<r->parent()<<": checked";
+            continue;
+        }
+        checked << r;
+        if ( ! checkChildren( r->child(), lst, checked ) ) {
+            return false;
+        }
+    }
+    Task *t = static_cast<Task*>( n );
+    foreach ( Relation *r, t->childProxyRelations() ) {
+        if ( checked.contains( r ) ) {
+            kDebug(planDbg())<<"Depend:"<<n<<":"<<r->parent()<<": checked";
+            continue;
+        }
+        kDebug(planDbg())<<"Proxy:"<<n<<":"<<r->parent()<<":"<<lst;
+        checked << r;
+        if ( ! checkChildren( r->child(), lst, checked ) ) {
+            return false;
+        }
+    }
+    return true;
+}
+#endif
 void Project::tasksForward()
 {
     m_hardConstraints.clear();
@@ -564,6 +643,14 @@ void Project::tasksForward()
                 break;
         }
     }
+#ifndef PLAN_NLOGDEBUG
+    kDebug(planDbg())<<"End nodes:"<<m_terminalNodes;
+    foreach ( Node* n, m_terminalNodes ) {
+        QList<Node*> lst;
+        QList<Relation*> rel;
+        Q_ASSERT( checkParent( n, lst, rel ) ); Q_UNUSED( n );
+    }
+#endif
 }
 
 void Project::tasksBackward()
@@ -583,23 +670,34 @@ void Project::tasksBackward()
                 m_softConstraints.append( t );
                 break;
             default:
-                if ( t->isEndNode() ) {
+                if ( t->isStartNode() ) {
                     m_terminalNodes.append( t );
                 }
                 break;
         }
     }
+#ifndef PLAN_NLOGDEBUG
+    kDebug(planDbg())<<"Start nodes:"<<m_terminalNodes;
+    foreach ( Node* n, m_terminalNodes ) {
+        QList<Node*> lst;
+        QList<Relation*> rel;
+        Q_ASSERT( checkChildren( n, lst, rel ) ); Q_UNUSED( n );
+    }
+#endif
 }
 
 DateTime Project::calculateForward( int use )
 {
-    //kDebug()<<m_name;
+    //kDebug(planDbg())<<m_name;
     DateTime finish;
     MainSchedule *cs = static_cast<MainSchedule*>( m_currentSchedule );
     if ( cs == 0 ) {
         return finish;
     }
     if ( type() == Node::Type_Project ) {
+        QTime timer;
+        timer.start();
+        cs->logInfo( i18n( "Start calculating forward" ) );
         m_visitedForward = true;
         if ( ! m_visitedBackward ) {
             // setup tasks
@@ -645,6 +743,7 @@ DateTime Project::calculateForward( int use )
                 }
             }
         }
+        cs->logInfo( i18n( "Finished calculating forward: %1 ms", timer.elapsed() ) );
     } else {
         //TODO: subproject
     }
@@ -653,13 +752,16 @@ DateTime Project::calculateForward( int use )
 
 DateTime Project::calculateBackward( int use )
 {
-    //kDebug()<<m_name;
+    //kDebug(planDbg())<<m_name;
     DateTime start;
     MainSchedule *cs = static_cast<MainSchedule*>( m_currentSchedule );
     if ( cs == 0 ) {
         return start;
     }
     if ( type() == Node::Type_Project ) {
+        QTime timer;
+        timer.start();
+        cs->logInfo( i18n( "Start calculating backward" ) );
         m_visitedBackward = true;
         if ( ! m_visitedForward ) {
             // setup tasks
@@ -705,6 +807,7 @@ DateTime Project::calculateBackward( int use )
                 }
             }
         }
+        cs->logInfo( i18n( "Finished calculating backward: %1 ms", timer.elapsed() ) );
     } else {
         //TODO: subproject
     }
@@ -718,6 +821,9 @@ DateTime Project::scheduleForward( const DateTime &earliest, int use )
     if ( cs == 0 || stopcalculation ) {
         return DateTime();
     }
+    QTime timer;
+    timer.start();
+    cs->logInfo( i18n( "Start scheduling forward" ) );
     resetVisited();
     // Schedule in the same order as calculated forward
     // Do all hard constrained first
@@ -737,6 +843,13 @@ DateTime Project::scheduleForward( const DateTime &earliest, int use )
     }
     // Fix summarytasks
     adjustSummarytask();
+    cs->logInfo( i18n( "Finished scheduling forward: %1 ms", timer.elapsed() ) );
+    foreach ( Node *n, allNodes() ) {
+        if ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) {
+            Q_ASSERT( n->isScheduled() );
+        }
+    }
+
     return end;
 }
 
@@ -747,6 +860,9 @@ DateTime Project::scheduleBackward( const DateTime &latest, int use )
     if ( cs == 0 || stopcalculation ) {
         return start;
     }
+    QTime timer;
+    timer.start();
+    cs->logInfo( i18n( "Start scheduling backward" ) );
     resetVisited();
     // Schedule in the same order as calculated backward
     // Do all hard constrained first
@@ -766,6 +882,12 @@ DateTime Project::scheduleBackward( const DateTime &latest, int use )
     }
     // Fix summarytasks
     adjustSummarytask();
+    cs->logInfo( i18n( "Finished scheduling backward: %1 ms", timer.elapsed() ) );
+    foreach ( Node *n, allNodes() ) {
+        if ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) {
+            Q_ASSERT( n->isScheduled() );
+        }
+    }
     return start;
 }
 
@@ -783,7 +905,7 @@ void Project::adjustSummarytask()
 
 void Project::initiateCalculation( MainSchedule &sch )
 {
-    //kDebug()<<m_name;
+    //kDebug(planDbg())<<m_name;
     // clear all resource appointments
     m_visitedForward = false;
     m_visitedBackward = false;
@@ -796,7 +918,7 @@ void Project::initiateCalculation( MainSchedule &sch )
 
 void Project::initiateCalculationLists( MainSchedule &sch )
 {
-    //kDebug()<<m_name;
+    //kDebug(planDbg())<<m_name;
     sch.clearNodes();
     if ( type() == Node::Type_Project ) {
         QListIterator<Node*> it = childNodeIterator();
@@ -810,7 +932,7 @@ void Project::initiateCalculationLists( MainSchedule &sch )
 
 bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
 {
-    //kDebug()<<"--->";
+    //kDebug(planDbg())<<"--->";
     // load locale first
     KoXmlNode n = element.firstChild();
     for ( ; ! n.isNull(); n = n.nextSibling() ) {
@@ -825,6 +947,9 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
 //            l->setMonetaryDecimalSymbol( e.attribute( "monetary-decimal-symbol", l->monetaryDecimalSymbol() ) );
 
 //            l->setMonetaryThousandsSeparator( e.attribute( "monetary-thousands-separator", l->monetaryThousandsSeparator() ) );
+            if ( e.hasAttribute( "currency-digits" ) ) {
+                l->setMonetaryDecimalPlaces(e.attribute("currency-digits").toInt());
+            }
             if ( e.hasAttribute( "positive-monetary-sign-position" ) ) {
                 l->setPositiveMonetarySignPosition( (KLocale::SignPosition)( e.attribute( "positive-monetary-sign-position" ).toInt() ) );
             }
@@ -871,9 +996,11 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
     if ( !s.isEmpty() )
         m_constraintEndTime = DateTime::fromString( s, m_spec );
 
+    status.setProgress( 10 );
+
     // Load the project children
     // Do calendars first, they only refrence other calendars
-    //kDebug()<<"Calendars--->";
+    //kDebug(planDbg())<<"Calendars--->";
     n = element.firstChild();
     for ( ; ! n.isNull(); n = n.nextSibling() ) {
         if ( ! n.isElement() ) {
@@ -914,18 +1041,18 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
             if ( c->parentId().isEmpty() ) {
                 addCalendar( c, status.baseCalendar() ); // handle pre 0.6 version
                 added = true;
-                //kDebug()<<"added to project:"<<c->name();
+                //kDebug(planDbg())<<"added to project:"<<c->name();
             } else {
                 Calendar *par = calendar( c->parentId() );
                 if ( par ) {
                     par->m_blockversion = true;
                     addCalendar( c, par );
                     added = true;
-                    //kDebug()<<"added:"<<c->name()<<" to parent:"<<par->name();
+                    //kDebug(planDbg())<<"added:"<<c->name()<<" to parent:"<<par->name();
                     par->m_blockversion = false;
                 } else {
                     lst.append( c ); // treat later
-                    //kDebug()<<"treat later:"<<c->name();
+                    //kDebug(planDbg())<<"treat later:"<<c->name();
                 }
             }
             c->m_blockversion = false;
@@ -935,7 +1062,10 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
     if ( ! cals.isEmpty() ) {
         kError()<<"All calendars not saved!";
     }
-    //kDebug()<<"Calendars<---";
+    //kDebug(planDbg())<<"Calendars<---";
+
+    status.setProgress( 15 );
+
     // Resource groups and resources, can reference calendars
     n = element.firstChild();
     for ( ; ! n.isNull(); n = n.nextSibling() ) {
@@ -955,10 +1085,9 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
             }
         }
     }
-    // resolve required resources
-    foreach ( Resource *r, resourceList() ) {
-        r->resolveRequiredResources( *this );
-    }
+
+    status.setProgress( 20 );
+
     // The main stuff
     n = element.firstChild();
     for ( ; ! n.isNull(); n = n.nextSibling() ) {
@@ -967,7 +1096,7 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
         }
         KoXmlElement e = n.toElement();
         if ( e.tagName() == "project" ) {
-            //kDebug()<<"Sub project--->";
+            //kDebug(planDbg())<<"Sub project--->";
 /*                // Load the subproject
             Project * child = new Project( this );
             if ( child->load( e ) ) {
@@ -979,7 +1108,7 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
                 delete child;
             }*/
         } else if ( e.tagName() == "task" ) {
-            //kDebug()<<"Task--->";
+            //kDebug(planDbg())<<"Task--->";
             // Load the task (and resourcerequests).
             // Depends on resources already loaded
             Task * child = new Task( this );
@@ -993,23 +1122,26 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
             }
         }
     }
+
+    status.setProgress( 70 );
+
     // These go last
     n = element.firstChild();
     for ( ; ! n.isNull(); n = n.nextSibling() ) {
-        kDebug()<<n.isElement();
+        kDebug(planDbg())<<n.isElement();
         if ( ! n.isElement() ) {
             continue;
         }
         KoXmlElement e = n.toElement();
         if ( e.tagName() == "accounts" ) {
-            //kDebug()<<"Accounts--->";
+            //kDebug(planDbg())<<"Accounts--->";
             // Load accounts
             // References tasks
             if ( !m_accounts.load( e, *this ) ) {
                 kError() << "Failed to load accounts";
             }
         } else if ( e.tagName() == "relation" ) {
-            //kDebug()<<"Relation--->";
+            //kDebug(planDbg())<<"Relation--->";
             // Load the relation
             // References tasks
             Relation * child = new Relation();
@@ -1018,9 +1150,9 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
                 kError() << "Failed to load relation";
                 delete child;
             }
-            //kDebug()<<"Relation<---";
+            //kDebug(planDbg())<<"Relation<---";
         } else if ( e.tagName() == "schedules" ) {
-            //kDebug()<<"Project schedules & task appointments--->";
+            //kDebug(planDbg())<<"Project schedules & task appointments--->";
             // References tasks and resources
             KoXmlNode sn = e.firstChild();
             for ( ; ! sn.isNull(); sn = sn.nextSibling() ) {
@@ -1028,7 +1160,7 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
                     continue;
                 }
                 KoXmlElement el = sn.toElement();
-                //kDebug()<<el.tagName()<<" Version="<<status.version();
+                //kDebug(planDbg())<<el.tagName()<<" Version="<<status.version();
                 ScheduleManager *sm = 0;
                 bool add = false;
                 if ( status.version() <= "0.5" ) {
@@ -1044,7 +1176,7 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
                     add = true;
                 }
                 if ( sm ) {
-                    kDebug()<<"load schedule manager";
+                    kDebug(planDbg())<<"load schedule manager";
                     if ( sm->loadXML( el, status ) ) {
                         if ( add )
                             addScheduleManager( sm );
@@ -1053,12 +1185,12 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
                         delete sm;
                     }
                 } else {
-                    kDebug()<<"No schedule manager ?!";
+                    kDebug(planDbg())<<"No schedule manager ?!";
                 }
             }
-            //kDebug()<<"Node schedules<---";
+            //kDebug(planDbg())<<"Node schedules<---";
         } else if ( e.tagName() == "resource-teams" ) {
-            //kDebug()<<"Resource teams--->";
+            //kDebug(planDbg())<<"Resource teams--->";
             // References other resources
             KoXmlNode tn = e.firstChild();
             for ( ; ! tn.isNull(); tn = tn.nextSibling() ) {
@@ -1077,12 +1209,12 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
                         kError()<<"resource-teams: a team cannot be a member of itself";
                         continue;
                     }
-                    r->addTeamMember( tm );
+                    r->addTeamMemberId( tm->id() );
                 } else {
                     kError()<<"resource-teams: unhandled tag"<<el.tagName();
                 }
             }
-            //kDebug()<<"Resource teams<---";
+            //kDebug(planDbg())<<"Resource teams<---";
         } else if ( e.tagName() == "wbs-definition" ) {
             m_wbsDefinition.loadXML( e, status );
         } else if ( e.tagName() == "locale" ) {
@@ -1101,7 +1233,10 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
             kWarning()<<"Unhandled tag:"<<e.tagName();
         }
     }
-    //kDebug()<<"<---";
+    //kDebug(planDbg())<<"<---";
+
+    status.setProgress( 90 );
+
     return true;
 }
 
@@ -1128,6 +1263,7 @@ void Project::save( QDomElement &element ) const
     loc.setAttribute( "currency-symbol", l->currencySymbol() );
 //    loc.setAttribute( "monetary-decimal-symbol", l->monetaryDecimalSymbol() );
 //    loc.setAttribute( "monetary-thousands-separator", l->monetaryThousandsSeparator() );
+    loc.setAttribute("currency-digits", l->monetaryDecimalPlaces());
     loc.setAttribute( "positive-monetary-sign-position", l->positiveMonetarySignPosition() );
     loc.setAttribute( "positive-prefix-currency-symbol", l->positivePrefixCurrencySymbol() );
     loc.setAttribute( "negative-monetary-sign-position", l->negativeMonetarySignPosition() );
@@ -1173,24 +1309,17 @@ void Project::save( QDomElement &element ) const
         }
     }
     // save resource teams
-    QMap<QString, QString> rmap;
+    QDomElement el = me.ownerDocument().createElement( "resource-teams" );
+    me.appendChild( el );
     foreach ( Resource *r, resourceIdDict ) {
-        if ( r->type() == Resource::Type_Team ) {
-            foreach ( Resource *tm, r->teamMembers() ) {
-                rmap.insertMulti( r->id(), tm->id() );
-            }
+        if ( r->type() != Resource::Type_Team ) {
+            continue;
         }
-    }
-    if ( ! rmap.isEmpty() ) {
-        QDomElement el = me.ownerDocument().createElement( "resource-teams" );
-        me.appendChild( el );
-        QMap<QString, QString>::const_iterator i = rmap.constBegin();
-        while ( i != rmap.constEnd() ) {
+        foreach ( const QString &id, r->teamMemberIds() ) {
             QDomElement e = el.ownerDocument().createElement( "team" );
             el.appendChild( e );
-            e.setAttribute( "team-id", i.key() );
-            e.setAttribute( "member-id", i.value() );
-            ++i;
+            e.setAttribute( "team-id", r->id() );
+            e.setAttribute( "member-id", id );
         }
     }
 }
@@ -1220,11 +1349,13 @@ void Project::saveWorkPackageXML( QDomElement &element, const Node *node, long i
     }
     node->saveWorkPackageXML( me, id );
 
-    ScheduleManager *sm = scheduleManager( id );
-    if ( sm ) {
-        QDomElement el = me.ownerDocument().createElement( "schedules" );
-        me.appendChild( el );
-        sm->saveWorkPackageXML( el, *node );
+    foreach ( ScheduleManager *sm, m_managerIdMap ) {
+        if ( sm->scheduleId() == id ) {
+            QDomElement el = me.ownerDocument().createElement( "schedules" );
+            me.appendChild( el );
+            sm->saveWorkPackageXML( el, *node );
+            break;
+        }
     }
 }
 
@@ -1248,7 +1379,7 @@ void Project::addResourceGroup( ResourceGroup *group, int index )
         r->setProject( this );
     }
     emit resourceGroupAdded( group );
-    emit changed();
+    emit projectChanged();
 }
 
 ResourceGroup *Project::takeResourceGroup( ResourceGroup *group )
@@ -1268,7 +1399,7 @@ ResourceGroup *Project::takeResourceGroup( ResourceGroup *group )
         removeResourceId( r->id() );
     }
     emit resourceGroupRemoved( g );
-    emit changed();
+    emit projectChanged();
     return g;
 }
 
@@ -1284,7 +1415,7 @@ void Project::addResource( ResourceGroup *group, Resource *resource, int index )
     group->addResource( i, resource, 0 );
     setResourceId( resource );
     emit resourceAdded( resource );
-    emit changed();
+    emit projectChanged();
 }
 
 Resource *Project::takeResource( ResourceGroup *group, Resource *resource )
@@ -1302,7 +1433,7 @@ Resource *Project::takeResource( ResourceGroup *group, Resource *resource )
         kWarning() << "Cound not take resource from group";
     }
     emit resourceRemoved( resource );
-    emit changed();
+    emit projectChanged();
     return r;
 }
 
@@ -1337,7 +1468,7 @@ bool Project::addTask( Node* task, Node* position )
     if ( 0 == position ) {
         return addSubTask( task, this );
     }
-    //kDebug()<<"Add"<<task->name()<<" after"<<position->name();
+    //kDebug(planDbg())<<"Add"<<task->name()<<" after"<<position->name();
     // in case we want to add to the main project, we make it child element
     // of the root element.
     if ( Node::Type_Project == position->type() ) {
@@ -1347,13 +1478,13 @@ bool Project::addTask( Node* task, Node* position )
     // we have to tell the parent that we want to delete one of its children
     Node* parentNode = position->parentNode();
     if ( !parentNode ) {
-        kDebug() <<"parent node not found???";
+        kDebug(planDbg()) <<"parent node not found???";
         return false;
     }
     int index = parentNode->findChildNode( position );
     if ( -1 == index ) {
         // ok, it does not exist
-        kDebug() <<"Task not found???";
+        kDebug(planDbg()) <<"Task not found???";
         return false;
     }
     return addSubTask( task, index + 1, parentNode );
@@ -1380,42 +1511,41 @@ bool Project::addSubTask( Node* task, int index, Node* parent, bool emitSignal )
     int i = index == -1 ? p->numChildren() : index;
     if ( emitSignal ) emit nodeToBeAdded( p, i );
     p->insertChildNode( i, task );
-    connect( this, SIGNAL( standardWorktimeChanged( StandardWorktime* ) ), task, SLOT( slotStandardWorktimeChanged( StandardWorktime* ) ) );
+    connect( this, SIGNAL(standardWorktimeChanged(StandardWorktime*)), task, SLOT(slotStandardWorktimeChanged(StandardWorktime*)) );
     if ( emitSignal ) {
         emit nodeAdded( task );
-        emit changed();
-    }
-    if ( p != this && p->numChildren() == 1 ) {
-        emit nodeChanged( p );
+        emit projectChanged();
+        if ( p != this && p->numChildren() == 1 ) {
+            emit nodeChanged( p );
+        }
     }
     return true;
 }
 
 void Project::takeTask( Node *node, bool emitSignal )
 {
-    //kDebug()<<node->name();
+    //kDebug(planDbg())<<node->name();
     Node * parent = node->parentNode();
     if ( parent == 0 ) {
-        kDebug() <<"Node must have a parent!";
+        kDebug(planDbg()) <<"Node must have a parent!";
         return;
     }
     removeId( node->id() );
     if ( emitSignal ) emit nodeToBeRemoved( node );
-    disconnect( this, SIGNAL( standardWorktimeChanged( StandardWorktime* ) ), node, SLOT( slotStandardWorktimeChanged( StandardWorktime* ) ) );
+    disconnect( this, SIGNAL(standardWorktimeChanged(StandardWorktime*)), node, SLOT(slotStandardWorktimeChanged(StandardWorktime*)) );
     parent->takeChildNode( node );
     if ( emitSignal ) {
         emit nodeRemoved( node );
-        emit changed();
-    }
-    //kDebug()<<node->name()<<"removed";
-    if ( parent != this && parent->type() != Node::Type_Summarytask ) {
-        emit nodeChanged( parent );
+        emit projectChanged();
+        if ( parent != this && parent->type() != Node::Type_Summarytask ) {
+            emit nodeChanged( parent );
+        }
     }
 }
 
 bool Project::canMoveTask( Node* node, Node *newParent )
 {
-    //kDebug()<<node->name()<<" to"<<newParent->name();
+    //kDebug(planDbg())<<node->name()<<" to"<<newParent->name();
     if ( node == this ) {
         return false;
     }
@@ -1431,15 +1561,20 @@ bool Project::canMoveTask( Node* node, Node *newParent )
 
 bool Project::moveTask( Node* node, Node *newParent, int newPos )
 {
-    //kDebug()<<node->name()<<" to"<<newParent->name()<<","<<newPos;
+    //kDebug(planDbg())<<node->name()<<" to"<<newParent->name()<<","<<newPos;
     if ( ! canMoveTask( node, newParent ) ) {
         return false;
     }
     Node *oldParent = node->parentNode();
-    const Node *before = newParent->childNode( newPos );
-    emit nodeToBeMoved( node );
+    int oldPos = oldParent->indexOf( node );
+    int i = newPos < 0 ? newParent->numChildren() : newPos;
+    int newRow = i;
+    if ( oldParent == newParent && newPos > oldPos ) {
+        ++newRow; // itemmodels wants new row *before* node is removed from old position
+    }
+    kDebug(planDbg())<<node->name()<<"at"<<oldParent->indexOf( node )<<"to"<<newParent->name()<<i<<newRow<<"("<<newPos<<")";
+    emit nodeToBeMoved( node, oldPos, newParent, newRow );
     takeTask( node, false );
-    int i = before == 0 ? newParent->numChildren() : newPos;
     addSubTask( node, i, newParent, false );
     emit nodeMoved( node );
     if ( oldParent != this && oldParent->numChildren() == 0 ) {
@@ -1459,7 +1594,7 @@ bool Project::canIndentTask( Node* node )
         return false;
     }
     if ( node->type() == Node::Type_Project ) {
-        //kDebug()<<"The root node cannot be indented";
+        //kDebug(planDbg())<<"The root node cannot be indented";
         return false;
     }
     // we have to find the parent of task to manipulate its list of children
@@ -1473,11 +1608,11 @@ bool Project::canIndentTask( Node* node )
     }
     Node *sib = node->siblingBefore();
     if ( !sib ) {
-        //kDebug()<<"new parent node not found";
+        //kDebug(planDbg())<<"new parent node not found";
         return false;
     }
     if ( node->findParentRelation( sib ) || node->findChildRelation( sib ) ) {
-        //kDebug()<<"Cannot have relations to parent";
+        //kDebug(planDbg())<<"Cannot have relations to parent";
         return false;
     }
     return true;
@@ -1489,7 +1624,7 @@ bool Project::indentTask( Node* node, int index )
         Node * newParent = node->siblingBefore();
         int i = index == -1 ? newParent->numChildren() : index;
         moveTask( node, newParent, i );
-        //kDebug();
+        //kDebug(planDbg());
         return true;
     }
     return false;
@@ -1503,7 +1638,7 @@ bool Project::canUnindentTask( Node* node )
         return false;
     }
     if ( Node::Type_Project == node->type() ) {
-        //kDebug()<<"The root node cannot be unindented";
+        //kDebug(planDbg())<<"The root node cannot be unindented";
         return false;
     }
     // we have to find the parent of task to manipulate its list of children
@@ -1514,7 +1649,7 @@ bool Project::canUnindentTask( Node* node )
     }
     Node* grandParentNode = parentNode->parentNode();
     if ( !grandParentNode ) {
-        //kDebug()<<"This node already is at the top level";
+        //kDebug(planDbg())<<"This node already is at the top level";
         return false;
     }
     int index = parentNode->findChildNode( node );
@@ -1535,7 +1670,7 @@ bool Project::unindentTask( Node* node )
             i = grandParentNode->numChildren();
         }
         moveTask( node, grandParentNode, i );
-        //kDebug();
+        //kDebug(planDbg());
         return true;
     }
     return false;
@@ -1548,7 +1683,7 @@ bool Project::canMoveTaskUp( Node* node )
     // we have to find the parent of task to manipulate its list of children
     Node* parentNode = node->parentNode();
     if ( !parentNode ) {
-        //kDebug()<<"No parent found";
+        //kDebug(planDbg())<<"No parent found";
         return false;
     }
     if ( parentNode->findChildNode( node ) == -1 ) {
@@ -1653,17 +1788,17 @@ QString Project::uniqueNodeId( const QList<QString> &existingIds, int seed )
 
 bool Project::removeId( const QString &id )
 {
-    //kDebug() <<"id=" << id;
+    //kDebug(planDbg()) <<"id=" << id;
     if ( m_parent ) {
         return m_parent->removeId( id );
     }
-    //kDebug() << "id=" << id<< nodeIdDict.contains(id);
+    //kDebug(planDbg()) << "id=" << id<< nodeIdDict.contains(id);
     return nodeIdDict.remove( id );
 }
 
 void Project::reserveId( const QString &id, Node *node )
 {
-    //kDebug() <<"id=" << id << node->name();
+    //kDebug(planDbg()) <<"id=" << id << node->name();
     nodeIdReserved.insert( id, node );
 }
 
@@ -1676,7 +1811,7 @@ bool Project::registerNodeId( Node *node )
     }
     Node *rn = findNode( node->id() );
     if ( rn == 0 ) {
-        //kDebug() <<"id=" << node->id() << node->name();
+        //kDebug(planDbg()) <<"id=" << node->id() << node->name();
         nodeIdDict.insert( node->id(), node );
         return true;
     }
@@ -1684,7 +1819,7 @@ bool Project::registerNodeId( Node *node )
         kError() << "Id already exists for different task: " << node->id();
         return false;
     }
-    //kDebug()<<"Already exists" <<"id=" << node->id() << node->name();
+    //kDebug(planDbg())<<"Already exists" <<"id=" << node->id() << node->name();
     return true;
 }
 
@@ -1760,6 +1895,17 @@ ResourceGroup *Project::groupByName( const QString& name ) const
     return 0;
 }
 
+QList<Resource*> Project::autoAllocateResources() const
+{
+    QList<Resource*> lst;
+    foreach ( Resource *r, resourceIdDict ) {
+        if ( r->autoAllocate() ) {
+            lst << r;
+        }
+    }
+    return lst;
+}
+
 void Project::insertResourceId( const QString &id, Resource *resource )
 {
     resourceIdDict.insert( id, resource );
@@ -1830,7 +1976,11 @@ QStringList Project::resourceNameList() const
 
 EffortCostMap Project::plannedEffortCostPrDay( const QDate & start, const QDate &end, long id, EffortCostCalculationType typ ) const
 {
-    //kDebug()<<start<<end<<id;
+    //kDebug(planDbg())<<start<<end<<id;
+    Schedule *s = schedule( id );
+    if ( s == 0 ) {
+        return EffortCostMap();
+    }
     EffortCostMap ec;
     QListIterator<Node*> it( childNodeIterator() );
     while ( it.hasNext() ) {
@@ -1841,7 +1991,7 @@ EffortCostMap Project::plannedEffortCostPrDay( const QDate & start, const QDate 
 
 EffortCostMap Project::plannedEffortCostPrDay( const Resource *resource, const QDate & start, const QDate &end, long id, EffortCostCalculationType typ ) const
 {
-    //kDebug()<<start<<end<<id;
+    //kDebug(planDbg())<<start<<end<<id;
     EffortCostMap ec;
     QListIterator<Node*> it( childNodeIterator() );
     while ( it.hasNext() ) {
@@ -1852,7 +2002,7 @@ EffortCostMap Project::plannedEffortCostPrDay( const Resource *resource, const Q
 
 EffortCostMap Project::actualEffortCostPrDay( const QDate & start, const QDate &end, long id, EffortCostCalculationType typ ) const
 {
-    //kDebug()<<start<<end<<id;
+    //kDebug(planDbg())<<start<<end<<id;
     EffortCostMap ec;
     QListIterator<Node*> it( childNodeIterator() );
     while ( it.hasNext() ) {
@@ -1863,7 +2013,7 @@ EffortCostMap Project::actualEffortCostPrDay( const QDate & start, const QDate &
 
 EffortCostMap Project::actualEffortCostPrDay( const Resource *resource, const QDate & start, const QDate &end, long id,  EffortCostCalculationType typ ) const
 {
-    //kDebug()<<start<<end<<id;
+    //kDebug(planDbg())<<start<<end<<id;
     EffortCostMap ec;
     QListIterator<Node*> it( childNodeIterator() );
     while ( it.hasNext() ) {
@@ -1875,7 +2025,7 @@ EffortCostMap Project::actualEffortCostPrDay( const Resource *resource, const QD
 // Returns the total planned effort for this project (or subproject)
 Duration Project::plannedEffort( long id, EffortCostCalculationType typ ) const
 {
-    //kDebug();
+    //kDebug(planDbg());
     Duration eff;
     QListIterator<Node*> it( childNodeIterator() );
     while ( it.hasNext() ) {
@@ -1887,7 +2037,7 @@ Duration Project::plannedEffort( long id, EffortCostCalculationType typ ) const
 // Returns the total planned effort for this project (or subproject) on date
 Duration Project::plannedEffort( const QDate &date, long id, EffortCostCalculationType typ ) const
 {
-    //kDebug();
+    //kDebug(planDbg());
     Duration eff;
     QListIterator<Node*> it( childNodeIterator() );
     while ( it.hasNext() ) {
@@ -1899,7 +2049,7 @@ Duration Project::plannedEffort( const QDate &date, long id, EffortCostCalculati
 // Returns the total planned effort for this project (or subproject) upto and including date
 Duration Project::plannedEffortTo( const QDate &date, long id, EffortCostCalculationType typ ) const
 {
-    //kDebug();
+    //kDebug(planDbg());
     Duration eff;
     QListIterator<Node*> it( childNodeIterator() );
     while ( it.hasNext() ) {
@@ -1911,7 +2061,7 @@ Duration Project::plannedEffortTo( const QDate &date, long id, EffortCostCalcula
 // Returns the total actual effort for this project (or subproject) upto and including date
 Duration Project::actualEffortTo( const QDate &date ) const
 {
-    //kDebug();
+    //kDebug(planDbg());
     Duration eff;
     QListIterator
     <Node*> it( childNodeIterator() );
@@ -1924,7 +2074,7 @@ Duration Project::actualEffortTo( const QDate &date ) const
 // Returns the total planned effort for this project (or subproject) upto and including date
 double Project::plannedCostTo( const QDate &date, long id, EffortCostCalculationType typ ) const
 {
-    //kDebug();
+    //kDebug(planDbg());
     double c = 0;
     QListIterator
     <Node*> it( childNodeIterator() );
@@ -1937,7 +2087,7 @@ double Project::plannedCostTo( const QDate &date, long id, EffortCostCalculation
 // Returns the total actual cost for this project (or subproject) upto and including date
 EffortCost Project::actualCostTo(  long int id, const QDate &date ) const
 {
-    //kDebug();
+    //kDebug(planDbg());
     EffortCost c;
     QListIterator<Node*> it( childNodeIterator() );
     while ( it.hasNext() ) {
@@ -1948,7 +2098,7 @@ EffortCost Project::actualCostTo(  long int id, const QDate &date ) const
 
 Duration Project::budgetedWorkPerformed( const QDate &date, long id ) const
 {
-    //kDebug();
+    //kDebug(planDbg());
     Duration e;
     foreach (Node *n, childNodeIterator()) {
         e += n->budgetedWorkPerformed( date, id );
@@ -1958,7 +2108,7 @@ Duration Project::budgetedWorkPerformed( const QDate &date, long id ) const
 
 double Project::budgetedCostPerformed( const QDate &date, long id ) const
 {
-    //kDebug();
+    //kDebug(planDbg());
     double c = 0.0;
     foreach (Node *n, childNodeIterator()) {
         c += n->budgetedCostPerformed( date, id );
@@ -1968,8 +2118,8 @@ double Project::budgetedCostPerformed( const QDate &date, long id ) const
 
 double Project::effortPerformanceIndex( const QDate &date, long id ) const
 {
-    //kDebug();
-    kDebug()<<date<<id;
+    //kDebug(planDbg());
+    kDebug(planDbg())<<date<<id;
     Duration b = budgetedWorkPerformed( date, id );
     if ( b == Duration::zeroDuration ) {
         return 1.0;
@@ -1983,22 +2133,22 @@ double Project::effortPerformanceIndex( const QDate &date, long id ) const
 
 double Project::schedulePerformanceIndex( const QDate &date, long id ) const
 {
-    //kDebug();
+    //kDebug(planDbg());
     double r = 1.0;
     double s = bcws( date, id );
     double p = bcwp( date, id );
     if ( s > 0.0 ) {
         r = p / s;
     }
-    kDebug()<<s<<p<<r;
+    kDebug(planDbg())<<s<<p<<r;
     return r;
 }
 
 double Project::bcws( const QDate &date, long id ) const
 {
-    //kDebug();
+    //kDebug(planDbg());
     double c = plannedCostTo( date, id, ECCT_EffortWork );
-    kDebug()<<c;
+    kDebug(planDbg())<<c;
     return c;
 }
 
@@ -2010,7 +2160,7 @@ double Project::bcwp( long id ) const
 
 double Project::bcwp( const QDate &date, long id ) const
 {
-    kDebug()<<date<<id;
+    kDebug(planDbg())<<date<<id;
     QDate start = startTime( id ).date();
     QDate end = endTime( id ).date();
     EffortCostMap plan = plannedEffortCostPrDay( start, end, id, ECCT_EffortWork );
@@ -2034,7 +2184,7 @@ double Project::bcwp( const QDate &date, long id ) const
     if ( budgetAtCompletion > 0.0 ) {
         double percentageCompletion = budgetedCompleted / budgetAtCompletion;
         c = budgetAtCompletion * percentageCompletion; //??
-        kDebug()<<percentageCompletion<<budgetAtCompletion<<budgetedCompleted<<plannedCompleted;
+        kDebug(planDbg())<<percentageCompletion<<budgetAtCompletion<<budgetedCompleted<<plannedCompleted;
     }
     return c;
 }
@@ -2042,7 +2192,7 @@ double Project::bcwp( const QDate &date, long id ) const
 void Project::addCalendar( Calendar *calendar, Calendar *parent, int index )
 {
     Q_ASSERT( calendar != 0 );
-    //kDebug()<<calendar->name()<<","<<(parent?parent->name():"No parent");
+    //kDebug(planDbg())<<calendar->name()<<","<<(parent?parent->name():"No parent");
     int row = parent == 0 ? m_calendars.count() : parent->calendars().count();
     if ( index >= 0 && index < row ) {
         row = index;
@@ -2060,7 +2210,7 @@ void Project::addCalendar( Calendar *calendar, Calendar *parent, int index )
     }
     setCalendarId( calendar );
     emit calendarAdded( calendar );
-    emit changed();
+    emit projectChanged();
 }
 
 void Project::takeCalendar( Calendar *calendar )
@@ -2080,7 +2230,7 @@ void Project::takeCalendar( Calendar *calendar )
     }
     emit calendarRemoved( calendar );
     calendar->setProject( 0 );
-    emit changed();
+    emit projectChanged();
 }
 
 int Project::indexOf( const Calendar *calendar ) const
@@ -2164,7 +2314,7 @@ void Project::setDefaultCalendar( Calendar *cal )
         cal->setDefault( true );
     }
     emit defaultCalendarChanged( cal );
-    emit changed();
+    emit projectChanged();
 }
 
 void Project::setStandardWorktime( StandardWorktime * worktime )
@@ -2175,6 +2325,21 @@ void Project::setStandardWorktime( StandardWorktime * worktime )
         m_standardWorktime->setProject( this );
         emit standardWorktimeChanged( worktime );
     }
+}
+
+void Project::emitDocumentAdded( Node *node , Document *doc , int index )
+{
+    emit documentAdded( node, doc, index );
+}
+
+void Project::emitDocumentRemoved( Node *node , Document *doc , int index )
+{
+    emit documentRemoved( node, doc, index );
+}
+
+void Project::emitDocumentChanged( Node *node , Document *doc , int index )
+{
+    emit documentChanged( node, doc, index );
 }
 
 bool Project::linkExists( const Node *par, const Node *child ) const
@@ -2192,7 +2357,7 @@ bool Project::linkExists( const Node *par, const Node *child ) const
 
 bool Project::legalToLink( const Node *par, const Node *child ) const
 {
-    //kDebug()<<par.name()<<" ("<<par.numDependParentNodes()<<" parents)"<<child.name()<<" ("<<child.numDependChildNodes()<<" children)";
+    //kDebug(planDbg())<<par.name()<<" ("<<par.numDependParentNodes()<<" parents)"<<child.name()<<" ("<<child.numDependChildNodes()<<" children)";
 
     if ( par == 0 || child == 0 || par == child || par->isDependChildOf( child ) ) {
         return false;
@@ -2223,11 +2388,11 @@ bool Project::legalToLink( const Node *par, const Node *child ) const
 bool Project::legalParents( const Node *par, const Node *child ) const
 {
     bool legal = true;
-    //kDebug()<<par->name()<<" ("<<par->numDependParentNodes()<<" parents)"<<child->name()<<" ("<<child->numDependChildNodes()<<" children)";
+    //kDebug(planDbg())<<par->name()<<" ("<<par->numDependParentNodes()<<" parents)"<<child->name()<<" ("<<child->numDependChildNodes()<<" children)";
     for ( int i = 0; i < par->numDependParentNodes() && legal; ++i ) {
         Node *pNode = par->getDependParentNode( i ) ->parent();
         if ( child->isParentOf( pNode ) || pNode->isParentOf( child ) ) {
-            //kDebug()<<"Found:"<<pNode->name()<<" is related to"<<child->name();
+            //kDebug(planDbg())<<"Found:"<<pNode->name()<<" is related to"<<child->name();
             legal = false;
         } else {
             legal = legalChildren( pNode, child );
@@ -2241,11 +2406,11 @@ bool Project::legalParents( const Node *par, const Node *child ) const
 bool Project::legalChildren( const Node *par, const Node *child ) const
 {
     bool legal = true;
-    //kDebug()<<par->name()<<" ("<<par->numDependParentNodes()<<" parents)"<<child->name()<<" ("<<child->numDependChildNodes()<<" children)";
+    //kDebug(planDbg())<<par->name()<<" ("<<par->numDependParentNodes()<<" parents)"<<child->name()<<" ("<<child->numDependChildNodes()<<" children)";
     for ( int j = 0; j < child->numDependChildNodes() && legal; ++j ) {
         Node *cNode = child->getDependChildNode( j ) ->child();
         if ( par->isParentOf( cNode ) || cNode->isParentOf( par ) ) {
-            //kDebug()<<"Found:"<<par->name()<<" is related to"<<cNode->name();
+            //kDebug(planDbg())<<"Found:"<<par->name()<<" is related to"<<cNode->name();
             legal = false;
         } else {
             legal = legalChildren( par, cNode );
@@ -2261,10 +2426,10 @@ WBSDefinition &Project::wbsDefinition()
 
 void Project::setWbsDefinition( const WBSDefinition &def )
 {
-    //kDebug();
+    //kDebug(planDbg());
     m_wbsDefinition = def;
     emit wbsDefinitionChanged();
-    emit changed();
+    emit projectChanged();
 }
 
 QString Project::generateWBSCode( QList<int> &indexes ) const
@@ -2282,13 +2447,13 @@ QString Project::generateWBSCode( QList<int> &indexes ) const
         }
         ++level;
     }
-    //kDebug()<<code;
+    //kDebug(planDbg())<<code;
     return code;
 }
 
 void Project::setCurrentSchedule( long id )
 {
-    //kDebug();
+    //kDebug(planDbg());
     setCurrentSchedulePtr( findSchedule( id ) );
     Node::setCurrentSchedule( id );
     QHash<QString, Resource*> hash = resourceIdDict;
@@ -2296,7 +2461,7 @@ void Project::setCurrentSchedule( long id )
         r->setCurrentSchedule( id );
     }
     emit currentScheduleChanged();
-    emit changed();
+    emit projectChanged();
 }
 
 ScheduleManager *Project::scheduleManager( long id ) const
@@ -2316,7 +2481,7 @@ ScheduleManager *Project::scheduleManager( const QString &id ) const
 
 ScheduleManager *Project::findScheduleManagerByName( const QString &name ) const
 {
-    //kDebug();
+    //kDebug(planDbg());
     ScheduleManager *m = 0;
     foreach( ScheduleManager *sm, m_managers ) {
         m = sm->findManager( name );
@@ -2338,7 +2503,7 @@ QList<ScheduleManager*> Project::allScheduleManagers() const
 }
 
 QString Project::uniqueScheduleName() const {
-    //kDebug();
+    //kDebug(planDbg());
     QString n = i18n( "Plan" );
     bool unique = findScheduleManagerByName( n ) == 0;
     if ( unique ) {
@@ -2375,8 +2540,8 @@ void Project::addScheduleManager( ScheduleManager *sm, ScheduleManager *parent, 
     m_managerIdMap.insert( sm->managerId(), sm );
 
     emit scheduleManagerAdded( sm );
-    emit changed();
-    //kDebug()<<"Added:"<<sm->name()<<", now"<<m_managers.count();
+    emit projectChanged();
+    //kDebug(planDbg())<<"Added:"<<sm->name()<<", now"<<m_managers.count();
 }
 
 int Project::takeScheduleManager( ScheduleManager *sm )
@@ -2395,7 +2560,7 @@ int Project::takeScheduleManager( ScheduleManager *sm )
             sm->setParentManager( 0 );
             m_managerIdMap.remove( sm->managerId() );
             emit scheduleManagerRemoved( sm );
-            emit changed();
+            emit projectChanged();
         }
     } else {
         index = indexOf( sm );
@@ -2404,7 +2569,7 @@ int Project::takeScheduleManager( ScheduleManager *sm )
             m_managers.removeAt( indexOf( sm ) );
             m_managerIdMap.remove( sm->managerId() );
             emit scheduleManagerRemoved( sm );
-            emit changed();
+            emit projectChanged();
         }
     }
     return index;
@@ -2412,7 +2577,7 @@ int Project::takeScheduleManager( ScheduleManager *sm )
 
 void Project::moveScheduleManager( ScheduleManager *sm, ScheduleManager *newparent, int newindex )
 {
-    //kDebug()<<sm->name()<<newparent<<newindex;
+    //kDebug(planDbg())<<sm->name()<<newparent<<newindex;
     emit scheduleManagerToBeMoved( sm );
     if ( ! sm->parentManager() ) {
         m_managers.removeAt( indexOf( sm ) );
@@ -2438,16 +2603,16 @@ bool Project::isScheduleManager( void *ptr ) const
     return false;
 }
 
-ScheduleManager *Project::createScheduleManager( const QString name )
+ScheduleManager *Project::createScheduleManager( const QString &name )
 {
-    //kDebug()<<name;
+    //kDebug(planDbg())<<name;
     ScheduleManager *sm = new ScheduleManager( *this, name );
     return sm;
 }
 
 ScheduleManager *Project::createScheduleManager()
 {
-    //kDebug();
+    //kDebug(planDbg());
     return createScheduleManager( uniqueScheduleName() );
 }
 
@@ -2476,7 +2641,7 @@ bool Project::isBaselined( long id ) const
 
 MainSchedule *Project::createSchedule( const QString& name, Schedule::Type type )
 {
-    //kDebug()<<"No of schedules:"<<m_schedules.count();
+    //kDebug(planDbg())<<"No of schedules:"<<m_schedules.count();
     MainSchedule *sch = new MainSchedule();
     sch->setName( name );
     sch->setType( type );
@@ -2489,7 +2654,7 @@ void Project::addMainSchedule( MainSchedule *sch )
     if ( sch == 0 ) {
         return;
     }
-    //kDebug()<<"No of schedules:"<<m_schedules.count();
+    //kDebug(planDbg())<<"No of schedules:"<<m_schedules.count();
     long i = 1; // keep this positive (negative values are special...)
     while ( m_schedules.contains( i ) ) {
         ++i;
@@ -2501,44 +2666,48 @@ void Project::addMainSchedule( MainSchedule *sch )
 
 bool Project::removeCalendarId( const QString &id )
 {
-    //kDebug() <<"id=" << id;
+    //kDebug(planDbg()) <<"id=" << id;
     return calendarIdDict.remove( id );
 }
 
 void Project::insertCalendarId( const QString &id, Calendar *calendar )
 {
-    //kDebug() <<"id=" << id <<":" << calendar->name();
+    //kDebug(planDbg()) <<"id=" << id <<":" << calendar->name();
     calendarIdDict.insert( id, calendar );
 }
 
-void Project::changed( Node *node )
+void Project::changed( Node *node, int property )
 {
     if ( m_parent == 0 ) {
-        emit nodeChanged( node );
-        emit changed();
+        Node::changed( node, property ); // reset cache
+        if ( property != Node::Type ) {
+            // add/remove node is handled elsewhere
+            emit nodeChanged( node );
+            emit projectChanged();
+        }
         return;
     }
-    Node::changed( node );
+    Node::changed( node, property );
 }
 
 void Project::changed( ResourceGroup *group )
 {
-    //kDebug();
+    //kDebug(planDbg());
     emit resourceGroupChanged( group );
-    emit changed();
+    emit projectChanged();
 }
 
 void Project::changed( ScheduleManager *sm )
 {
     emit scheduleManagerChanged( sm );
-    emit changed();
+    emit projectChanged();
 }
 
 void Project::changed( MainSchedule *sch )
 {
-    //kDebug()<<sch->id();
+    //kDebug(planDbg())<<sch->id();
     emit scheduleChanged( sch );
-    emit changed();
+    emit projectChanged();
 }
 
 void Project::sendScheduleToBeAdded( const ScheduleManager *sm, int row )
@@ -2548,40 +2717,40 @@ void Project::sendScheduleToBeAdded( const ScheduleManager *sm, int row )
 
 void Project::sendScheduleAdded( const MainSchedule *sch )
 {
-    //kDebug()<<sch->id();
+    //kDebug(planDbg())<<sch->id();
     emit scheduleAdded( sch );
-    emit changed();
+    emit projectChanged();
 }
 
 void Project::sendScheduleToBeRemoved( const MainSchedule *sch )
 {
-    //kDebug()<<sch->id();
+    //kDebug(planDbg())<<sch->id();
     emit scheduleToBeRemoved( sch );
 }
 
 void Project::sendScheduleRemoved( const MainSchedule *sch )
 {
-    //kDebug()<<sch->id();
+    //kDebug(planDbg())<<sch->id();
     emit scheduleRemoved( sch );
-    emit changed();
+    emit projectChanged();
 }
 
 void Project::changed( Resource *resource )
 {
     emit resourceChanged( resource );
-    emit changed();
+    emit projectChanged();
 }
 
 void Project::changed( Calendar *cal )
 {
     emit calendarChanged( cal );
-    emit changed();
+    emit projectChanged();
 }
 
 void Project::changed( StandardWorktime *w )
 {
     emit standardWorktimeChanged( w );
-    emit changed();
+    emit projectChanged();
 }
 
 bool Project::addRelation( Relation *rel, bool check )
@@ -2596,7 +2765,7 @@ bool Project::addRelation( Relation *rel, bool check )
     rel->parent()->addDependChildNode( rel );
     rel->child()->addDependParentNode( rel );
     emit relationAdded( rel );
-    emit changed();
+    emit projectChanged();
     return true;
 }
 
@@ -2606,7 +2775,7 @@ void Project::takeRelation( Relation *rel )
     rel->parent() ->takeDependChildNode( rel );
     rel->child() ->takeDependParentNode( rel );
     emit relationRemoved( rel );
-    emit changed();
+    emit projectChanged();
 }
 
 void Project::setRelationType( Relation *rel, Relation::Type type )
@@ -2614,7 +2783,7 @@ void Project::setRelationType( Relation *rel, Relation::Type type )
     emit relationToBeModified( rel );
     rel->setType( type );
     emit relationModified( rel );
-    emit changed();
+    emit projectChanged();
 }
 
 void Project::setRelationLag( Relation *rel, const Duration &lag )
@@ -2622,14 +2791,14 @@ void Project::setRelationLag( Relation *rel, const Duration &lag )
     emit relationToBeModified( rel );
     rel->setLag( lag );
     emit relationModified( rel );
-    emit changed();
+    emit projectChanged();
 }
 
 QList<Node*> Project::flatNodeList( Node *parent )
 {
     QList<Node*> lst;
     Node *p = parent == 0 ? this : parent;
-    //kDebug()<<p->name()<<lst.count();
+    //kDebug(planDbg())<<p->name()<<lst.count();
     foreach ( Node *n, p->childNodeIterator() ) {
         lst.append( n );
         if ( n->numChildren() > 0 ) {
@@ -2642,38 +2811,13 @@ QList<Node*> Project::flatNodeList( Node *parent )
 void Project::setSchedulerPlugins( const QMap<QString, SchedulerPlugin*> &plugins )
 {
     m_schedulerPlugins = plugins;
-    kDebug()<<m_schedulerPlugins;
+    kDebug(planDbg())<<m_schedulerPlugins;
 }
 
 void Project::emitLocaleChanged()
 {
     emit localeChanged();
 }
-
-#ifndef NDEBUG
-void Project::printDebug( bool children, const QByteArray& _indent )
-{
-    QByteArray indent = _indent;
-    qDebug() << indent <<"+ Project node:" << Node::name()<<" id="<<id();
-    indent += '!';
-    QListIterator<ResourceGroup*> it( resourceGroups() );
-    while ( it.hasNext() )
-        it.next() ->printDebug( indent );
-
-    Node::printDebug( children, indent );
-}
-void Project::printCalendarDebug( const QByteArray& _indent )
-{
-    QByteArray indent = _indent;
-    qDebug() << indent <<"-------- Calendars debug printout --------";
-    foreach ( Calendar *c, calendarIdDict ) {
-        c->printDebug( indent + "--" );
-        qDebug();
-    }
-    if ( m_standardWorktime )
-        m_standardWorktime->printDebug();
-}
-#endif
 
 
 }  //KPlato namespace

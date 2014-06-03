@@ -20,10 +20,11 @@
 #define KEXIREPORTVIEW_H
 
 #include <core/KexiView.h>
-#include <kexidb/connection.h>
-#include <qdom.h>
+#include <db/connection.h>
+#include <QDomDocument>
 #include "kexireportpart.h"
 #include <KoReportRendererBase.h>
+#include <QGraphicsView>
 
 class KoReportPreRenderer;
 class ORODocument;
@@ -45,7 +46,7 @@ class KexiReportView : public KexiView, public KexiRecordNavigatorHandler
 {
     Q_OBJECT
 public:
-    KexiReportView(QWidget *parent);
+    explicit KexiReportView(QWidget *parent);
 
     ~KexiReportView();
 
@@ -58,14 +59,16 @@ public:
     virtual void moveToNextRecordRequested();
     virtual void moveToPreviousRecordRequested();
     virtual void moveToRecordRequested(uint r);
-    virtual long int currentRecord();
-    virtual long int recordCount();
+    virtual int currentRecord() const;
+    virtual int recordCount() const;
 
 private:
     KoReportPreRenderer *m_preRenderer;
     ORODocument *m_reportDocument;
-    QScrollArea *m_scrollArea;
-    KoReportPage *m_reportWidget;
+    QGraphicsView *m_reportView;
+    QGraphicsScene *m_reportScene;
+    KoReportPage *m_reportPage;
+    
 #ifndef KEXI_MOBILE
     KexiRecordNavigator *m_pageSelector;
 #endif
@@ -77,12 +80,15 @@ private:
     KexiScriptAdaptor *m_kexi;
     KRScriptFunctions *m_functions;
     KoReportRendererFactory m_factory;
-    
+
+    KUrl getExportUrl(const QString &mimetype, const QString &caption);
+
 private slots:
     void slotPrintReport();
-    void slotRenderTables();
-    void slotExportHTML();
-    void slotRenderODT();
+    void slotExportAsSpreadsheet();
+    void slotExportAsWebPage();
+    void slotExportAsTextDocument();
+    void openExportedDocument(const KUrl& destination);
 };
 
 #endif

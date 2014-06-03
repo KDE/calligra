@@ -25,7 +25,7 @@
 #include <QDomElement>
 #include <QTimer>
 
-#include <kdebug.h>
+#include "kptdebug.h"
 
 namespace KPlato
 {
@@ -41,6 +41,7 @@ ReportSourceEditor::ReportSourceEditor( QWidget *parent )
 void ReportSourceEditor::setModel( QAbstractItemModel *model )
 {
     ui_source->setModel( model );
+    ui_source->setCurrentIndex( 0 );
 }
 
 void ReportSourceEditor::slotCurrentIndexChanged()
@@ -61,6 +62,8 @@ QString ReportSourceEditor::selectFromTag() const
 void ReportSourceEditor::setSourceData( const QDomElement &element )
 {
     if ( element.tagName() != "data-source" ) {
+        kDebug(planDbg())<<"no source element";
+        ui_source->setCurrentIndex( 0 );
         return;
     }
     QString selectfrom = element.attribute( "select-from" );
@@ -72,6 +75,8 @@ void ReportSourceEditor::setSourceData( const QDomElement &element )
             return;
         }
     }
+    kDebug(planDbg())<<"no source";
+    ui_source->setCurrentIndex( 0 );
 }
 
 void ReportSourceEditor::sourceData( QDomElement &element ) const

@@ -18,8 +18,8 @@
 
 #include "CategorizedItemDelegate.h"
 
-#include <KCategoryDrawer>
-#include <KCategorizedSortFilterProxyModel>
+#include <kcategorydrawer.h>
+#include <kcategorizedsortfilterproxymodel.h>
 #include <QPainter>
 
 struct CategorizedItemDelegate::Private {
@@ -45,6 +45,7 @@ CategorizedItemDelegate::CategorizedItemDelegate(QAbstractItemDelegate* _fallbac
 }
 CategorizedItemDelegate::~CategorizedItemDelegate()
 {
+    delete d;
 }
 
 QWidget * CategorizedItemDelegate::createEditor(QWidget * parent, const QStyleOptionViewItem & option, const QModelIndex & index) const

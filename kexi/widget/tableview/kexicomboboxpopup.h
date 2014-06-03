@@ -24,12 +24,12 @@
 
 class KexiComboBoxPopupPrivate;
 class KexiTableView;
-class KexiTableViewData;
-class KexiTableViewColumn;
 namespace KexiDB
 {
 class Field;
 class RecordData;
+class TableViewColumn;
+class TableViewData;
 }
 class QEvent;
 
@@ -43,7 +43,7 @@ public:
      If the column is lookup column, it's definition is used to display
      one or more column within the popup. Otherwise column.field() is used
      to display single-column data. */
-    KexiComboBoxPopup(QWidget* parent, KexiTableViewColumn &column);
+    KexiComboBoxPopup(QWidget* parent, KexiDB::TableViewColumn &column);
 
     /*! Alternative constructor supporting lookup fields and enum hints. */
     KexiComboBoxPopup(QWidget* parent, KexiDB::Field &field);
@@ -61,8 +61,6 @@ public:
     /*! Default maximum number of rows for KexiComboBoxPopup objects. */
     static const int defaultMaxRows;
 
-    virtual bool eventFilter(QObject *o, QEvent *e);
-
 signals:
     void rowAccepted(KexiDB::RecordData *record, int row);
     void cancelled();
@@ -78,12 +76,15 @@ protected slots:
 
 protected:
     void init();
+
+    virtual bool eventFilter(QObject *o, QEvent *e);
+
     //! The main function for setting data; data can be set either by passing \a column or \a field.
     //! The second case is used for lookup
-    void setData(KexiTableViewColumn *column, KexiDB::Field *field);
+    void setData(KexiDB::TableViewColumn *column, KexiDB::Field *field);
 
     //! used by setData()
-    void setDataInternal(KexiTableViewData *data, bool owner = true);   //!< helper
+    void setDataInternal(KexiDB::TableViewData *data, bool owner = true);   //!< helper
 
     KexiComboBoxPopupPrivate * const d;
 

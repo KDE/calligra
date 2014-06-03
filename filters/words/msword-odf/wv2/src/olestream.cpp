@@ -205,7 +205,7 @@ bool OLEStreamWriter::isValid() const
     return false;
 }
 
-bool OLEStreamWriter::seek( int offset, WV2SeekType whence )
+bool OLEStreamWriter::seek( int /*offset*/, WV2SeekType /*whence*/ )
 {
     return false;
 }
@@ -220,30 +220,30 @@ size_t OLEStreamWriter::size() const
     return 0;
 }
 
-void OLEStreamWriter::write( U8 data )
+void OLEStreamWriter::write( U8 /*data*/ )
 {
 }
 
-void OLEStreamWriter::write( S8 data )
+void OLEStreamWriter::write( S8 /*data*/ )
 {
 }
 
-void OLEStreamWriter::write( U16 data )
+void OLEStreamWriter::write( U16 /*data*/ )
 {
 }
 
-void OLEStreamWriter::write( S16 data )
+void OLEStreamWriter::write( S16 /*data*/ )
 {
 }
 
-void OLEStreamWriter::write( U32 data )
+void OLEStreamWriter::write( U32 /*data*/ )
 {
 }
 
-void OLEStreamWriter::write( S32 data )
+void OLEStreamWriter::write( S32 /*data*/ )
 {
 }
 
-void OLEStreamWriter::write( U8* data, size_t length )
+void OLEStreamWriter::write( U8* /*data*/, size_t /*length*/ )
 {
 }

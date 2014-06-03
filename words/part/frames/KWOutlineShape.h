@@ -26,7 +26,7 @@ class KWFrame;
 class KWOutlineShape : public KoPathShape
 {
 public:
-    KWOutlineShape(KWFrame *frame);
+    explicit KWOutlineShape(KWFrame *frame);
     ~KWOutlineShape();
 
     /// empty. This thing is never printable.

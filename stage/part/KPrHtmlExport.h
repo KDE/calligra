@@ -21,7 +21,7 @@
 #ifndef KPRHTMLEXPORT_H
 #define KPRHTMLEXPORT_H
 
-#include <KUrl>
+#include <kurl.h>
 #include <QStringList>
 
 class KPrView;

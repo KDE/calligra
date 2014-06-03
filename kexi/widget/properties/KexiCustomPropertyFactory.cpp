@@ -21,8 +21,6 @@
 #include "KexiCustomPropertyFactory_p.h"
 #include <kexiutils/identifier.h>
 
-//#include <koproperty/customproperty.h>
-
 using namespace KoProperty;
 
 #if 0
@@ -42,7 +40,7 @@ public:
         return m_property->value();
     }
     virtual bool handleValue() const {
-        return false; //m_property->type()==KexiCustomPropertyFactory::PixmapData;
+        return false;
     }
 };
 
@@ -57,7 +55,7 @@ public:
     virtual void setValue(const QVariant &value, bool rememberOldValue) {
         Q_UNUSED(rememberOldValue);
         if (!value.toString().isEmpty())
-            m_value = KexiUtils::string2Identifier(value.toString()).toLower();
+            m_value = KexiUtils::stringToIdentifier(value.toString()).toLower();
     }
     virtual QVariant value() const {
         return m_value;
@@ -69,6 +67,7 @@ public:
 };
 #endif
 
+//! @todo
 #if 0 //TODO
 class KexiImagePropertyEditorDelegate : public KoProperty::EditorCreatorInterface, 
                                         public KoProperty::ValuePainterInterface
@@ -101,31 +100,9 @@ public:
 KexiCustomPropertyFactory::KexiCustomPropertyFactory()
         : KoProperty::Factory()
 {
-//TODO    addEditor( KexiCustomPropertyFactory::PixmapId, new KexiImagePropertyEditorDelegate );
+//! @todo addEditor( KexiCustomPropertyFactory::PixmapId, new KexiImagePropertyEditorDelegate );
     addEditor( KexiCustomPropertyFactory::Identifier, new KexiIdentifierPropertyEditorDelegate );
 }
-
-/*
-CustomProperty* KexiCustomPropertyFactory::createCustomProperty(Property *parent)
-{
-    const int type = parent->type();
-    if (type == (int)KexiCustomPropertyFactory::PixmapId)
-        return new PixmapIdCustomProperty(parent);
-    else if (type == (int)KexiCustomPropertyFactory::Identifier)
-        return new IdentifierCustomProperty(parent);
-    return 0;
-}
-
-Widget* KexiCustomPropertyFactory::createCustomWidget(Property *prop)
-{
-    const int type = prop->type();
-    if (type == (int)KexiCustomPropertyFactory::PixmapId)
-        return new KexiImagePropertyEdit(prop);
-    else if (type == (int)KexiCustomPropertyFactory::Identifier)
-        return new KexiIdentifierPropertyEdit(prop);
-
-    return 0;
-}*/
 
 void KexiCustomPropertyFactory::init()
 {

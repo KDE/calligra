@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,8 +21,9 @@
 #include "kexipartinfo_p.h"
 #include "KexiMainWindowIface.h"
 
-#include <kexidb/global.h>
-#include <KActionCollection>
+#include <db/global.h>
+#include <kactioncollection.h>
+#include <KDebug>
 
 using namespace KexiPart;
 
@@ -30,10 +31,8 @@ Info::Private::Private(const KService::Ptr& aPtr)
         : ptr(aPtr)
         , instanceCaption(aPtr->name())
         , groupName(aPtr->genericName())
-//        , mimeType(aPtr->property("X-Kexi-TypeMime").toString())
-        , itemIcon(aPtr->property("X-Kexi-ItemIcon", QVariant::String).toString())
+        , itemIconName(aPtr->property("X-Kexi-ItemIcon", QVariant::String).toString())
         , objectName(aPtr->property("X-Kexi-TypeName", QVariant::String).toString())
-//        , projectPartID( aPtr->property("X-Kexi-TypeId").toInt() )
         , partClass(aPtr->property("X-Kexi-Class", QVariant::String).toString())
         , broken(false)
         , idStoredInPartDatabase(false)
@@ -75,23 +74,9 @@ Info::Private::Private(const KService::Ptr& aPtr)
     isPropertyEditorAlwaysVisibleInDesignMode = true;
     getBooleanProperty(aPtr, "X-Kexi-PropertyEditorAlwaysVisibleInDesignMode",
                        &isPropertyEditorAlwaysVisibleInDesignMode);
-
-#if 0
-    if (projectPartID == 0) {
-        if (isVisibleInNavigator) {
-            kWarning() << "Could not found project part ID! (name: '" << objectName 
-                << "'). Possible problem with installation of the .desktop files for Kexi plugins";
-            isVisibleInNavigator = false;
-        }
-        projectPartID = -1;
-    }
-#endif
 }
 
 Info::Private::Private()
-#if 0 //moved as internal to KexiProject
-        : projectPartID(-1) //OK?
-#endif
         : broken(false)
         , isVisibleInNavigator(false)
         , idStoredInPartDatabase(false)
@@ -101,11 +86,20 @@ Info::Private::Private()
 
 //------------------------------
 
+/*! \return "create" KAction's name for part defined by \a info.
+ The result is like "tablepart_create". */
+static QString nameForCreateAction(const Info& info)
+{
+    return info.objectName() + "part_create";
+}
+
+//------------------------------
+
 KexiNewObjectAction::KexiNewObjectAction(Info* info, QObject *parent)
-    : KAction(KIcon(info->createItemIcon()), info->instanceCaption() + "...", parent)
+    : KAction(KIcon(info->createItemIconName()), info->instanceCaption() + "...", parent)
     , m_info(info)
 {
-    setObjectName(KexiPart::nameForCreateAction(*m_info));
+    setObjectName(nameForCreateAction(*m_info));
     // default tooltip and what's this
     setToolTip(i18n("Create new object of type \"%1\"",
                 m_info->instanceCaption().toLower()));
@@ -126,21 +120,15 @@ void KexiNewObjectAction::slotTriggered()
 Info::Info(KService::Ptr ptr)
         : d(new Private(ptr))
 {
-    KexiNewObjectAction *act = new KexiNewObjectAction(
-        this,
-        KexiMainWindowIface::global()->actionCollection());
-    
-    if (KexiMainWindowIface::global()->actionCollection()) {
-        KexiMainWindowIface::global()->actionCollection()->addAction(act->objectName(), act);
-    }
+
 }
 
-Info::Info(const QString& partClass, const QString& itemIcon,
-           const QString& objectName)
+Info::Info(const QString &partClass, const QString &itemIconName,
+           const QString &objectName)
         : d(new Private)
 {                       
     d->partClass = partClass;
-    d->itemIcon = itemIcon;
+    d->itemIconName = itemIconName;
     d->objectName = objectName;
 }                       
                        
@@ -164,14 +152,14 @@ QString Info::partClass() const
     return d->partClass;
 }
 
-QString Info::itemIcon() const
+QString Info::itemIconName() const
 {
-    return d->itemIcon;
+    return d->itemIconName;
 }
 
-QString Info::createItemIcon() const
+QString Info::createItemIconName() const
 {
-    return d->itemIcon + "_newobj";
+    return d->itemIconName + QLatin1String("_newobj");
 }
 
 QString Info::objectName() const
@@ -203,18 +191,6 @@ bool Info::isVisibleInNavigator() const
 {
     return d->isVisibleInNavigator;
 }
-
-#if 0 //moved as internal to KexiProject
-int Info::projectPartID() const
-{
-    return d->projectPartID;
-}
-
-void Info::setProjectPartID(int id)
-{
-    d->projectPartID = id;
-}
-#endif
 
 void Info::setBroken(bool broken, const QString& errorMessage)
 {
@@ -259,11 +235,18 @@ bool Info::isPropertyEditorAlwaysVisibleInDesignMode() const
     return d->isPropertyEditorAlwaysVisibleInDesignMode;
 }
 
-//--------------
-
-QString KexiPart::nameForCreateAction(const Info& info)
+QAction* Info::newObjectAction()
 {
-    return info.objectName() + "part_create";
+    if (!KexiMainWindowIface::global() || !KexiMainWindowIface::global()->actionCollection()) {
+        kWarning();
+        return 0;
+    }
+    QAction *act = KexiMainWindowIface::global()->actionCollection()->action(nameForCreateAction(*this));
+    if (!act) {
+        act = new KexiNewObjectAction(this, KexiMainWindowIface::global()->actionCollection());
+        KexiMainWindowIface::global()->actionCollection()->addAction(act->objectName(), act);
+    }
+    return act;
 }
 
 #include "kexipartinfo_p.moc"

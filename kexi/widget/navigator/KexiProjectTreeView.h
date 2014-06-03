@@ -24,8 +24,8 @@
 #include <QPointer>
 #include <QTreeView>
 #include <QModelIndex>
-#include <KMenu>
-#include <KActionCollection>
+#include <kmenu.h>
+#include <kactioncollection.h>
 
 namespace KexiPart
 {
@@ -40,7 +40,7 @@ class KexiProjectTreeView : public QTreeView
 {
     Q_OBJECT
 public:
-    KexiProjectTreeView(QWidget *parent);
+    explicit KexiProjectTreeView(QWidget *parent);
     virtual ~KexiProjectTreeView();
 
     using QTreeView::setModel;

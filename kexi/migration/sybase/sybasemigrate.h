@@ -33,7 +33,7 @@ class SybaseMigrate : public KexiMigrate
     KEXIMIGRATION_DRIVER
 
 public:
-    SybaseMigrate(QObject *parent, const QVariantList& args = QVariantList());
+    explicit SybaseMigrate(QObject *parent, const QVariantList& args = QVariantList());
     virtual ~SybaseMigrate();
 
 protected:
@@ -65,19 +65,13 @@ protected:
 
     virtual bool drv_getTableSize(const QString& table, quint64& size);
 
-//TODO: move this somewhere to low level class (MIGRATION?)
-//   virtual bool drv_getTablesList( QStringList &list );
-//TODO: move this somewhere to low level class (MIGRATION?)
-//   virtual bool drv_containsTable( const QString &tableName );
-
 private:
+    bool query(const QString& sqlStatement) const;
+    bool primaryKey(const QString& tableName, const QString& fieldName) const;
+    bool uniqueKey(const QString& tableName, const QString& fieldName) const;
 
-    bool query(const QString& sqlStatement) const ;
-    bool primaryKey(const QString& tableName, const QString& fieldName) const ;
-    bool uniqueKey(const QString& tableName, const QString& fieldName) const ;
-
-    // returns value of a column at position pos as a QString
-    QString value(int pos) const ;
+    //! @return value of a column at position pos as a QString
+    QString value(int pos) const;
 
     KexiDB::Field::Type type(const QString& table, int columnType);
 

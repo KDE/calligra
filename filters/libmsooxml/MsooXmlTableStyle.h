@@ -20,7 +20,7 @@
 #ifndef MSOOXMLTABLESTYLE_H
 #define MSOOXMLTABLESTYLE_H
 
-#include "msooxml_export.h"
+#include "komsooxml_export.h"
 
 #include <KoCellStyle.h>
 #include <KoBorder.h>
@@ -34,11 +34,18 @@ namespace MSOOXML {
 
 /// Reading and storage
 
-struct MSOOXML_EXPORT TableStyleProperties
+struct KOMSOOXML_EXPORT TableStyleProperties
 {
-    TableStyleProperties() {
-        bordersToEdgesOnly = false;
-    }
+    TableStyleProperties()
+    :    target(Table)
+    {}
+
+    enum TargetLevel {
+        Table,
+        TableRow,
+        TableColumn,
+        TableCell
+    };
 
     enum Property {
         BottomBorder = 1,
@@ -58,6 +65,9 @@ struct MSOOXML_EXPORT TableStyleProperties
         GlyphOrientation = 16384,
         BackgroundOpacity = 32768
     };
+
+    TargetLevel target;
+
     Q_DECLARE_FLAGS(Properties, Property)
     Properties setProperties;
 
@@ -81,15 +91,11 @@ struct MSOOXML_EXPORT TableStyleProperties
     QString verticalAlign;
     bool glyphOrientation;
 
-    // There seems to be behavior that when ooxml defines wholetbl borders, it wants them to be
-    // applied only to the cells which are on the edges, not to every cell
-    bool bordersToEdgesOnly;
-
     KoGenStyle textStyle;
     KoGenStyle paragraphStyle;
 };
 
-class MSOOXML_EXPORT TableStyle
+class KOMSOOXML_EXPORT TableStyle
 {
 public:
 
@@ -105,7 +111,7 @@ private:
 
 /// Instantiation classes
 
-class MSOOXML_EXPORT LocalTableStyles
+class KOMSOOXML_EXPORT LocalTableStyles
 {
 public:
     LocalTableStyles();
@@ -118,7 +124,7 @@ private:
     QMap<QPair<int,int>, TableStyleProperties*> m_properties;
 };
 
-class MSOOXML_EXPORT TableStyleConverterProperties
+class KOMSOOXML_EXPORT TableStyleConverterProperties
 {
 public:
     TableStyleConverterProperties();
@@ -153,20 +159,39 @@ private:
     MSOOXML::TableStyleProperties* m_localDefaultCellStyle;
 };
 
-class MSOOXML_EXPORT TableStyleConverter
+class KOMSOOXML_EXPORT TableStyleConverter
 {
 public:
     TableStyleConverter(int row, int column);
     virtual ~TableStyleConverter();
 
-    virtual KoCellStyle::Ptr style(int row, int column) = 0;
+    virtual KoCellStyle::Ptr style(int row, int column, const QPair<int, int> &spans) = 0;
 
 protected:
-    void applyStyle(MSOOXML::TableStyleProperties* styleProperties, KoCellStyle::Ptr& style, int row, int column);
+    void applyStyle(MSOOXML::TableStyleProperties* styleProperties, KoCellStyle::Ptr& style,
+                    int row, int column, const QPair<int, int> &spans);
+
+    //NOTE: TESTING
+    void reapplyTableLevelBordersStyle(MSOOXML::TableStyleProperties* properties,
+                                       MSOOXML::TableStyleProperties* localProperties,
+                                       MSOOXML::TableStyleProperties* exceptionProperties,
+                                       KoCellStyle::Ptr& style,
+                                       int row, int column, const QPair<int, int> &spans);
 
 private:
-    void applyBordersStyle(MSOOXML::TableStyleProperties* styleProperties, KoCellStyle::Ptr& style, int row, int column);
-    void applyBackground(MSOOXML::TableStyleProperties* styleProperties, KoCellStyle::Ptr& style, int row, int column);
+    void applyTableLevelBordersStyle(MSOOXML::TableStyleProperties* properties, KoCellStyle::Ptr& style,
+                                     int row, int column, const QPair<int, int> &spans);
+
+    void applyRowLevelBordersStyle(MSOOXML::TableStyleProperties* properties, KoCellStyle::Ptr& style,
+                                   int row, int column, const QPair<int, int> &spans);
+
+    void applyColumnLevelBordersStyle(MSOOXML::TableStyleProperties* properties, KoCellStyle::Ptr& style,
+                                      int row, int column, const QPair<int, int> &spans);
+
+    void applyCellLevelBordersStyle(MSOOXML::TableStyleProperties* properties, KoCellStyle::Ptr& style);
+
+    void applyBackground(MSOOXML::TableStyleProperties* properties, KoCellStyle::Ptr& style,
+                         int row, int column);
 
     int m_row;
     int m_column;

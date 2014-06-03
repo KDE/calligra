@@ -26,7 +26,7 @@
 #include <kdebug.h>
 #include <kpluginfactory.h>
 #include <KoFilterChain.h>
-#include <KoLineBorder.h>
+#include <KoShapeStroke.h>
 #include <KoShape.h>
 #include <KoShapeContainer.h>
 #include <KoColorBackground.h>
@@ -59,7 +59,7 @@ KoFilter::ConversionStatus WmfExport::convert(const QByteArray& from, const QByt
     if (! doc)
         return KoFilter::ParsingError;
 
-    KarbonPart * karbonPart = dynamic_cast<KarbonPart*>(doc);
+    KarbonDocument * karbonPart = dynamic_cast<KarbonDocument*>(doc);
     if (! karbonPart)
         return KoFilter::WrongFormat;
 
@@ -70,7 +70,7 @@ KoFilter::ConversionStatus WmfExport::convert(const QByteArray& from, const QByt
         return KoFilter::WrongFormat;
     }
 
-    paintDocument(karbonPart->document());
+    paintDocument(karbonPart);
 
     mWmf->end();
 
@@ -79,13 +79,13 @@ KoFilter::ConversionStatus WmfExport::convert(const QByteArray& from, const QByt
     return KoFilter::OK;
 }
 
-void WmfExport::paintDocument(KarbonDocument& document)
+void WmfExport::paintDocument(KarbonDocument* document)
 {
 
     // resolution
     mDpi = 1000;
 
-    QSizeF pageSize = document.pageSize();
+    QSizeF pageSize = document->pageSize();
     int width = static_cast<int>(POINT_TO_INCH(pageSize.width()) * mDpi);
     int height = static_cast<int>(POINT_TO_INCH(pageSize.height()) * mDpi);
 
@@ -97,7 +97,7 @@ void WmfExport::paintDocument(KarbonDocument& document)
         mScaleY = static_cast<double>(height) / pageSize.height();
     }
 
-    QList<KoShape*> shapes = document.shapes();
+    QList<KoShape*> shapes = document->shapes();
     qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
 
     // Export layers.
@@ -124,21 +124,21 @@ void WmfExport::paintShape(KoShape * shape)
 
         polygons.append(p);
     }
-    mWmf->setPen(getPen(shape->border()));
+    mWmf->setPen(getPen(shape->stroke()));
 
     if (polygons.count() == 1 && ! shape->background())
         mWmf->drawPolyline(polygons.first());
     else {
         QBrush fill(Qt::NoBrush);
-        KoColorBackground * cbg = dynamic_cast<KoColorBackground*>(shape->background());
+        QSharedPointer<KoColorBackground>  cbg = qSharedPointerDynamicCast<KoColorBackground>(shape->background());
         if (cbg)
             fill = QBrush(cbg->color(), cbg->style());
-        KoGradientBackground * gbg = dynamic_cast<KoGradientBackground*>(shape->background());
+        QSharedPointer<KoGradientBackground>  gbg = qSharedPointerDynamicCast<KoGradientBackground>(shape->background());
         if (gbg) {
             fill = QBrush(*gbg->gradient());
             fill.setTransform(gbg->transform());
         }
-        KoPatternBackground * pbg = dynamic_cast<KoPatternBackground*>(shape->background());
+        QSharedPointer<KoPatternBackground>  pbg = qSharedPointerDynamicCast<KoPatternBackground>(shape->background());
         if (pbg) {
             fill.setTextureImage(pbg->pattern());
             fill.setTransform(pbg->transform());
@@ -151,21 +151,21 @@ void WmfExport::paintShape(KoShape * shape)
     }
 }
 
-QPen WmfExport::getPen(const KoShapeBorderModel * stroke)
+QPen WmfExport::getPen(const KoShapeStrokeModel * stroke)
 {
-    const KoLineBorder * lineBorder = dynamic_cast<const KoLineBorder*>(stroke);
-    if (! lineBorder)
+    const KoShapeStroke * lineStroke = dynamic_cast<const KoShapeStroke*>(stroke);
+    if (! lineStroke)
         return QPen(Qt::NoPen);
 
-    QPen pen(lineBorder->lineStyle());
+    QPen pen(lineStroke->lineStyle());
     if (pen.style() > Qt::SolidLine)
-        pen.setDashPattern(lineBorder->lineDashes());
+        pen.setDashPattern(lineStroke->lineDashes());
 
-    pen.setColor(lineBorder->color());
-    pen.setCapStyle(lineBorder->capStyle());
-    pen.setJoinStyle(lineBorder->joinStyle());
-    pen.setWidthF(coordX(lineBorder->lineWidth()));
-    pen.setMiterLimit(lineBorder->miterLimit());
+    pen.setColor(lineStroke->color());
+    pen.setCapStyle(lineStroke->capStyle());
+    pen.setJoinStyle(lineStroke->joinStyle());
+    pen.setWidthF(coordX(lineStroke->lineWidth()));
+    pen.setMiterLimit(lineStroke->miterLimit());
 
     return pen;
 }

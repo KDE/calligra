@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
- * Copyright (C) 2008 Casper Boemann <cbr@boemann.dk>
+ * Copyright (C) 2008 C. Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -25,8 +25,8 @@
 #include <KoUnit.h>
 #include <KoStore.h>
 
-#include <KTemporaryFile>
-#include <KDebug>
+#include <ktemporaryfile.h>
+#include <kdebug.h>
 #include <QIODevice>
 
 // make it a QSharedData
@@ -52,7 +52,7 @@ public:
     bool taggedForSaving;
 };
 
-KPrSoundData::KPrSoundData(KPrSoundCollection *collection, QString href)
+KPrSoundData::KPrSoundData(KPrSoundCollection *collection, const QString &href)
     : d(new Private(collection))
 {
     Q_ASSERT(collection);
@@ -76,6 +76,9 @@ KPrSoundData::~KPrSoundData() {
     }
 }
 
+bool KPrSoundData::operator==(const KPrSoundData &other) const {
+    return other.d == d;
+}
 
 QString KPrSoundData::tagForSaving() {
     d->taggedForSaving=true;

@@ -23,9 +23,9 @@
 #include "KoViewConverter.h"
 #include "KoXmlWriter.h"
 #include "KoXmlReader.h"
-#include <KLocale>
-#include <QtCore/QRect>
-#include <QtGui/QPainter>
+#include <klocale.h>
+#include <QRect>
+#include <QPainter>
 #include <cmath>
 
 MorphologyEffect::MorphologyEffect()
@@ -79,7 +79,11 @@ QImage MorphologyEffect::processImage(const QImage &image, const KoFilterEffectR
 
     int dstPixel, srcPixel;
     uchar s0, s1, s2, s3;
+#if QT_VERSION >= 0x040700
+    const uchar * src = image.constBits();
+#else
     const uchar * src = image.bits();
+#endif
     uchar * dst = result.bits();
 
     const QRect roi = context.filterRegion().toRect();

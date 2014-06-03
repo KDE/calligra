@@ -10,8 +10,6 @@ set(kexidataviewcommon_LIB_SRCS
    kexidataawarepropertyset.cpp
    kexidataawareview.cpp
    kexidataprovider.cpp
-   kexitableviewdata.cpp
-   KexiTableViewColumn.cpp
    kexiformdataiteminterface.cpp
 )
 
@@ -25,8 +23,9 @@ target_link_libraries(
     kexiguiutils
     ${KOPROPERTY_LIBS}
     kexidb
+    ${CALLIGRADB_LIBS}
+    ${CALLIGRADB_LIBS}
     ${KDE4_KIO_LIBS}
-    ${QT_QT3SUPPORT_LIBRARY}
 )
 
 set_target_properties(kexidataviewcommon PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )

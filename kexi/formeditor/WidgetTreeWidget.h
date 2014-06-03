@@ -47,6 +47,7 @@ public:
     WidgetTreeWidgetItem(WidgetTreeWidgetItem *parent, ObjectTreeItem *data,
         LoadTreeFlags loadTreeFlags = NoLoadTreeFlags, int forcedTabPageIndex = -1,
         const QString& forcedTabPageName = QString());
+
     //! For TabStopDialog
     WidgetTreeWidgetItem(QTreeWidget *tree, ObjectTreeItem *data = 0,
         LoadTreeFlags loadTreeFlags = NoLoadTreeFlags, int forcedTabPageIndex = -1,
@@ -57,11 +58,7 @@ public:
     QString name() const;
 
     //! \return the ObjectTreeItem information associated to this item.
-    ObjectTreeItem* data() const {
-        return m_data;
-    }
-
-    //2.0 virtual void setOpen(bool o);
+    ObjectTreeItem* data() const;
 
     //! Added to unhide.
     virtual QVariant data(int column, int role) const { return QTreeWidgetItem::data(column, role); }
@@ -70,27 +67,17 @@ public:
     virtual bool operator<( const QTreeWidgetItem & other ) const;
 
     //! Used to alter sorting for certain widget types, e.g. tab pages.
-    QString customSortingKey() const { return m_customSortingKey; }
+    QString customSortingKey() const;
 
 protected:
-    //! Reimplemented to draw custom contents (copied from Property Editor)
-    //virtual void paintCell(QPainter *p, const QColorGroup & cg, int column, int width, int align);
-
-    //! Reimplemented to draw custom contents (copied from Property Editor)
-    //virtual void paintBranches(QPainter *p, const QColorGroup &cg, int w, int y, int h);
-
-    //! Reimplemented to draw custom contents (copied from Property Editor)
-    //2.0 virtual void setup();
-
     //! Initializes text, icon, selectable flag, custom serting key
     void init(int forcedTabPageIndex, const QString& forcedTabPageName);
     void initTextAndIcon(int forcedTabPageIndex, const QString& forcedTabPageName);
 
 
 private:
-    ObjectTreeItem *m_data;
-    QString m_customSortingKey;
-    LoadTreeFlags m_loadTreeFlags;
+    class Private;
+    Private* const d;
 };
 
 /*! @short A graphical view of Form's ObjectTree.
@@ -117,8 +104,6 @@ public:
 
     //! @return selected tree item or 0 if there is no selection or more than one item is selected.
     WidgetTreeWidgetItem* selectedItem() const;
-
-    //2.0 virtual QSize sizeHint() const;
 
     //! \return the pixmap name for a given class, to be shown next to the widget name.
     QString iconNameForClass(const QByteArray &classname) const;
@@ -148,20 +133,11 @@ public slots:
     void renameItem(const QByteArray &oldname, const QByteArray &newname);
 
 protected slots:
-    ///*! This slot is called when the user right-click a list item.
-//     The widget context menu is shown, as inisde the Form. */
-//2.0    void displayContextMenu(K3ListView *list, Q3ListViewItem *item, const QPoint &p);
-
-    //2.0 void slotColumnSizeChanged(int);
-
     /*! The selected list item has changed. */
     void slotSelectionChanged();
 
     /*! Called before Form object is destroyed. */
     void slotBeforeFormDestroyed();
-
-//    /*! Selection on the current form has been changed. */
-//     void slotFormWidgetSelectionChanged(QWidget *w, KFormDesigner::Form::WidgetSelectionFlags flags)
 
 protected:
     //! Internal function to fill the list.
@@ -188,14 +164,9 @@ protected:
     void activateTabPageIfNeeded(QTreeWidgetItem* item);
 
 private:
-    Form *m_form;
-    //2.0 WidgetTreeWidgetItem *m_topItem;
-    Options m_options;
 
-    //! Used to temporarily disable slotSelectionChanged() when reloading contents in setForm().
-    bool m_slotSelectionChanged_enabled;
-    //! Used to temporarily disable selectWidget().
-    bool m_selectWidget_enabled;
+    class Private;
+    Private* const d;
 
     friend class TabStopDialog;
 };

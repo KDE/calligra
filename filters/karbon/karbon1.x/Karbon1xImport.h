@@ -22,9 +22,9 @@
 
 #include <KoFilter.h>
 #include <KoXmlReader.h>
-#include <QtCore/QVariant>
-#include <QtGui/QTransform>
-#include <QtCore/QStack>
+#include <QVariant>
+#include <QTransform>
+#include <QStack>
 
 class KoXmlWriter;
 

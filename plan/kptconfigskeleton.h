@@ -22,7 +22,7 @@
 
 #include "kplato_export.h"
 
-#include <KConfigSkeleton>
+#include <kconfigskeleton.h>
 #include "kptfactory.h"
 
 #include <kcomponentdata.h>

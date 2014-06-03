@@ -28,7 +28,7 @@
 class PptxXmlCommentsReader : public MSOOXML::MsooXmlCommonReader
 {
 public:
-    PptxXmlCommentsReader(KoOdfWriters *writers);
+    explicit PptxXmlCommentsReader(KoOdfWriters *writers);
     virtual ~PptxXmlCommentsReader();
     virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0);
 

@@ -21,41 +21,44 @@
 #ifndef KEXIUTILS_IDENTIFIER_H
 #define KEXIUTILS_IDENTIFIER_H
 
-#include "validator.h"
-#include <qstring.h>
+#include "kexiutils_export.h"
+
+#include <db/validator.h>
 
 namespace KexiUtils
 {
-
-/*! \return true if \a s is a valid identifier, ie. starts with a letter or '_' character
- and contains only letters, numbers and '_' character. */
-KEXIUTILS_EXPORT bool isIdentifier(const QString& s);
 
 /*! \return valid identifier based on \a s.
  Non-alphanumeric characters (or spaces) are replaced with '_'.
  If a number is at the beginning, '_' is added at start.
  Empty strings are not changed. Case remains unchanged. */
-KEXIUTILS_EXPORT QString string2Identifier(const QString &s);
+KEXIUTILS_EXPORT QString stringToIdentifier(const QString &s);
 
 /*! \return useful message "Value of "valueName" column must be an identifier.
   "v" is not a valid identifier.". It is also used by IdentifierValidator.  */
 KEXIUTILS_EXPORT QString identifierExpectedMessage(const QString &valueName,
         const QVariant& v);
 
-//! \return Valid filename based on \a s
-KEXIUTILS_EXPORT QString string2FileName(const QString &s);
-
 //! Validates input for identifier name.
-class KEXIUTILS_EXPORT IdentifierValidator : public Validator
+class KEXIUTILS_EXPORT IdentifierValidator : public KexiDB::Validator
 {
 public:
-    IdentifierValidator(QObject * parent = 0);
+    explicit IdentifierValidator(QObject * parent = 0);
     virtual ~IdentifierValidator();
     virtual State validate(QString & input, int & pos) const;
+
+    //! @return true if lower case letters are forced.
+    //! By default letters are not forced to lowercase.
+    bool isLowerCaseForced() const;
+
+    //! Sets or unsets lower case forcing.
+    void setLowerCaseForced(bool set);
 
 protected:
     virtual Validator::Result internalCheck(const QString &valueName, const QVariant& v,
                                             QString &message, QString &details);
+    class Private;
+    Private * const d;
 };
 }
 

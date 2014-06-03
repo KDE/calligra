@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2009 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2009, 2011 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -17,8 +17,8 @@
 * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPLATO_COMMONSTRINGS_H
-#define KPLATO_COMMONSTRINGS_H
+#ifndef KPTCOMMONSTRINGS_H
+#define KPTCOMMONSTRINGS_H
 
 #include "kplatomodels_export.h"
 
@@ -128,6 +128,7 @@ struct KPLATOMODELS_EXPORT ToolTip
     static QString scheduleFinish();
     static QString schedulingDirection();
     static QString scheduleScheduler();
+    static QString scheduleGranularity();
 
     static QString documentUrl();
     static QString documentType();
@@ -158,6 +159,10 @@ struct KPLATOMODELS_EXPORT WhatsThis
 
 }; //namespace WhatsThis
 
+struct KPLATOMODELS_EXPORT UndoText
+{
+    static QString removeDocument();
+}; //namespace Undo
 
 } //namespace KPlato
 

@@ -1,6 +1,3 @@
-macro_optional_find_package(DCMTK)
-macro_log_feature(DCMTK_FOUND "DCMTK" "DICOM document processing toolkit" "http://dicom.offis.de/dcmtk.php.en" FALSE "" "Required for processing DICOM structured reports")
-
 # check whether we can compile wv2
 
 macro_optional_find_package(Iconv)
@@ -49,50 +46,30 @@ IF( MODERN_ICONV_RUN GREATER 0 OR NOT MODERN_ICONV_COMPILE )
 ENDIF( MODERN_ICONV_RUN GREATER 0 OR NOT MODERN_ICONV_COMPILE )
 
 
-include_directories(${CMAKE_SOURCE_DIR}/filters/words/libexport ${KOMAIN_INCLUDES} )
+include_directories(${KOMAIN_INCLUDES} )
 
-add_subdirectory( libexport )
-
-if (NOT TINY)
-
-    macro_optional_find_package(WPD)
-    macro_log_feature(WPD_FOUND "WPD" "WordPerfect Document Library" "http://libwpd.sourceforge.net/" FALSE "" "Required by the Words WPD import filter")
-    
-    add_subdirectory( abiword )
-    add_subdirectory( amipro )
+if(SHOULD_BUILD_FILTER_APPLIXWORD_TO_ODT)
     add_subdirectory( applixword )
-    add_subdirectory( docbook )
-    add_subdirectory( html-odf )
+endif(SHOULD_BUILD_FILTER_APPLIXWORD_TO_ODT)
 
-    #html FIXME: export dialog is Qt 3 version ui file
-    if(NOT WIN32 AND NOT QT_MAC_USE_COCOA)
-        add_subdirectory( html )
-#        if (TARGET kowmf)
-#            add_subdirectory( mswrite )
-#        endif (TARGET kowmf)
-        add_subdirectory( kword1.3 )
-        add_subdirectory( hancomword )
-        message(STATUS "When latex is reactivated (if?) also port it to GraphicsMagick, to make life easy for Isaac.")
-        #add_subdirectory( latex )
-    endif(NOT WIN32 AND NOT QT_MAC_USE_COCOA)
+add_subdirectory( wordperfect )
 
-    add_subdirectory( oowriter )
-    add_subdirectory( palmdoc )
-    add_subdirectory( wml )
-
-    if(DCMTK_FOUND)
-    	add_subdirectory( dcm )
-    endif(DCMTK_FOUND)
-
-    if(WPD_FOUND)
-    	add_subdirectory( wordperfect )
-    endif(WPD_FOUND)
-    
-endif (NOT TINY)
+add_subdirectory( works )
 
 add_subdirectory( ascii )
+
 add_subdirectory( rtf )
 
-add_subdirectory(msword-odf)
+add_subdirectory( epub )
 
-add_subdirectory( docx )
+if(SHOULD_BUILD_FILTER_ODT_TO_MOBI)
+    add_subdirectory( mobi )
+endif(SHOULD_BUILD_FILTER_ODT_TO_MOBI)
+
+if(SHOULD_BUILD_FILTER_DOC_TO_ODT)
+    add_subdirectory(msword-odf)
+endif(SHOULD_BUILD_FILTER_DOC_TO_ODT)
+
+if(SHOULD_BUILD_FILTER_DOCX_TO_ODT)
+    add_subdirectory( docx )
+endif(SHOULD_BUILD_FILTER_DOCX_TO_ODT)

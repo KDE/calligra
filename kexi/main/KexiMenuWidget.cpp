@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
-   Copyright (C) 2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2011-2013 Jarosław Staniek <staniek@kde.org>
    
    Based on qmenu.cpp from Qt 4.7
 
@@ -9,7 +9,7 @@
    Copyright 2009-2010 Hugo Pereira Da Costa <hugo@oxygen-icons.org>
    Copyright 2008 Long Huynh Huu <long.upcase@googlemail.com>
    Copyright 2007 Matthew Woehlke <mw_triad@users.sourceforge.net>
-   Copyright 2007 Casper Boemann <cbr@boemann.dk>
+   Copyright 2007 C. Boemann <cbo@boemann.dk>
    Copyright 2007 Fredrik Höglund <fredrik@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -29,44 +29,42 @@
 */
 
 #include "KexiMenuWidget.h"
-#include <KColorScheme>
-#include <KColorUtils>
-#include <KGlobalSettings>
-#include <KIconLoader>
+#include <kcolorscheme.h>
+#include <kcolorutils.h>
+#include <kglobalsettings.h>
+#include <kiconloader.h>
+#include <kstandarddirs.h>
+#include <klocale.h>
+#include <kdebug.h>
+#include <kexiutils/utils.h>
+#include <kexi_version.h>
 
-#include "qdebug.h"
-#include "qcache.h"
-#include "qstyle.h"
-#include "qevent.h"
-#include "qtimer.h"
-#include "qlayout.h"
-#include "qmenu.h"
-#include "qpainter.h"
-#include "qapplication.h"
-#include "qdesktopwidget.h"
+#include <QCache>
+#include <QStyle>
+#include <QEvent>
+#include <QTimer>
+#include <QLayout>
+#include <QMenu>
+#include <QPainter>
+#include <QApplication>
+#include <QDesktopWidget>
 #ifndef QT_NO_ACCESSIBILITY
-# include "qaccessible.h"
+# include <qaccessible.h>
 #endif
-/*#ifndef QT_NO_EFFECTS
-# include <private/qeffects_p.h>
-#endif*/
 #ifndef QT_NO_WHATSTHIS
-# include <qwhatsthis.h>
+# include <QWhatsThis>
 #endif
 
 #include "KexiMenuWidget_p.h"
-//#include "qmenubar_p.h"
-#include "qwidgetaction.h"
-#include "qtoolbutton.h"
-#include "qpushbutton.h"
+#include <QWidgetAction>
+#include <QToolButton>
+#include <QPushButton>
 #include <QScopedPointer>
-//#include <private/qpushbutton_p.h>
-//#include <private/qaction_p.h>
-//#include <private/qsoftkeymanager_p.h>
+#include <QDesktopServices>
+#include <QUrl>
 
-// #ifdef Q_WS_X11
-// #   include <private/qt_x11_p.h>
-// #endif
+const int logoBottomMargin = 84 - 12;
+const char* calligraUrl = "http://www.calligra.org";
 
 // from oxygenhelper.cpp:
 OxygenHelper::OxygenHelper()
@@ -404,7 +402,7 @@ void KexiMenuWidgetAction::setPersistentlySelected(bool set)
 {
     if (set == d->persistentlySelected)
         return;
-    qDebug() << "^^^^" << objectName() << set;
+    //kDebug() << "^^^^" << objectName() << set;
     d->persistentlySelected = set;
 }
 
@@ -430,7 +428,8 @@ int KexiMenuWidgetPrivate::sloppyDelayTimer = 0;
 void KexiMenuWidgetPrivate::init()
 {
     oxygenHelper = q->style()->objectName() == "oxygen" ? new OxygenHelper : 0;
-    
+    bespin = oxygenHelper ? false : q->style()->objectName() == "bespin";
+
 #ifndef QT_NO_WHATSTHIS
     //q->setAttribute(Qt::WA_CustomWhatsThis);
 #endif
@@ -2067,6 +2066,61 @@ QAction *KexiMenuWidget::exec(QList<QAction*> actions, const QPoint &pos, QActio
 }
 #endif
 
+ClickableLogoArea::ClickableLogoArea(QWidget *parent)
+ : QAbstractButton(parent)
+{
+    connect(this, SIGNAL(clicked()), this, SLOT(slotClicked()));
+}
+
+void ClickableLogoArea::slotClicked()
+{
+    QDesktopServices::openUrl(QUrl(calligraUrl));
+}
+
+void ClickableLogoArea::paintEvent(QPaintEvent*)
+{
+}
+
+void KexiMenuWidgetPrivate::updateLogoPixmap()
+{
+    bool isLight;
+    if (bespin) {
+        isLight = q->palette().color(QPalette::Shadow).lightness() >= 128;
+    }
+    else {
+        isLight = KexiUtils::isLightColorScheme();
+    }
+    const QString calligraLogo = KStandardDirs::locate("data",
+        isLight
+         ? "kexi/pics/calligra-logo-white-glow.png"
+         : "kexi/pics/calligra-logo-black-glow.png");
+    calligraLogoPixmap = QPixmap(calligraLogo);
+}
+
+void KexiMenuWidgetPrivate::updateLogo()
+{
+    const QRect logoRect((q->width() - 2 - 100) / 2,
+                         q->height() - logoBottomMargin - 71 - 12,
+                         100, 71);
+    if (!clickableLogoArea) {
+        updateLogoPixmap();
+        clickableLogoArea = new ClickableLogoArea(q);
+        clickableLogoArea->setCursor(Qt::PointingHandCursor);
+        clickableLogoArea->setToolTip(i18n("Visit Calligra home page at %1", calligraUrl));
+    }
+    clickableLogoArea->setGeometry(logoRect);
+}
+
+/*!
+  \reimp
+*/
+void KexiMenuWidget::showEvent(QShowEvent* event)
+{
+    QWidget::showEvent(event);
+    d->updateLogo();
+    d->clickableLogoArea->show();
+}
+
 /*!
   \reimp
 */
@@ -2110,8 +2164,13 @@ void KexiMenuWidget::paintEvent(QPaintEvent *e)
     menuOpt.checkType = QStyleOptionMenuItem::NotCheckable;
     menuOpt.maxIconWidth = 0;
     menuOpt.tabWidth = 0;
-    style()->drawPrimitive(QStyle::PE_PanelMenu, &menuOpt, &p, this);
-    
+    if (d->bespin) {
+        p.fillRect(rect(), palette().shadow());
+    }
+    else {
+        style()->drawPrimitive(QStyle::PE_PanelMenu, &menuOpt, &p, this);
+    }
+
     {
         QStyleOptionFrameV3 opt;
         opt.initFrom(this);
@@ -2153,19 +2212,23 @@ void KexiMenuWidget::paintEvent(QPaintEvent *e)
         opt.rect = adjustedActionRect;
         if (d->actionPersistentlySelected(action)) {
             opt.state |= QStyle::State_Selected;
-            opt.palette.setBrush(QPalette::Window, opt.palette.brush(QPalette::Highlight));
-            opt.palette.setBrush(QPalette::WindowText, opt.palette.brush(QPalette::HighlightedText));
+            if (!d->bespin) {
+                opt.palette.setBrush(QPalette::Window, opt.palette.brush(QPalette::Highlight));
+                opt.palette.setBrush(QPalette::WindowText, opt.palette.brush(QPalette::HighlightedText));
+            }
         }
-        else if (!action->isSeparator() && (opt.state & QStyle::State_Selected)) {
-            // lighten the highlight to make it different from
-            // the persistently selected item
-            opt.palette.setColor(QPalette::Highlight,
-                                 KColorUtils::mix(
-                                    opt.palette.color(QPalette::Highlight),
-                                    opt.palette.color(QPalette::Window)));
-            opt.palette.setColor(QPalette::HighlightedText, opt.palette.color(QPalette::Text));
+        else if (!action->isSeparator()) {
+            if (!d->bespin && opt.state & QStyle::State_Selected) {
+                // lighten the highlight to make it different from
+                // the persistently selected item
+                opt.palette.setColor(QPalette::Highlight,
+                                     KColorUtils::mix(
+                                        opt.palette.color(QPalette::Highlight),
+                                        opt.palette.color(QPalette::Window)));
+                opt.palette.setColor(QPalette::HighlightedText, opt.palette.color(QPalette::Text));
+            }
         }
-        
+
         // Depending on style Button or Background brush may be used
         // to fill background of deselected items. Make it transparent.
         bool transparentBackground = !(opt.state & QStyle::State_Selected);
@@ -2174,7 +2237,9 @@ void KexiMenuWidget::paintEvent(QPaintEvent *e)
         }
         if (transparentBackground) {
             opt.palette.setBrush(QPalette::Button, QBrush(Qt::transparent));
-            opt.palette.setBrush(QPalette::Background, QBrush(Qt::transparent));
+            if (!d->bespin) {
+                opt.palette.setBrush(QPalette::Background, QBrush(Qt::transparent));
+            }
         }
 
         style()->drawControl(QStyle::CE_MenuItem, &opt, &p, this);
@@ -2242,6 +2307,26 @@ void KexiMenuWidget::paintEvent(QPaintEvent *e)
     menuOpt.rect = rect();
     menuOpt.menuRect = rect();
     style()->drawControl(QStyle::CE_MenuEmptyArea, &menuOpt, &p, this);
+
+    // version
+    p.setFont(KGlobalSettings::smallestReadableFont());
+    QColor textColor;
+    textColor = palette().color(QPalette::Base);
+    p.setPen(QPen(textColor));
+    p.drawText(0, height() - logoBottomMargin + 1, width(), logoBottomMargin - 1,
+               Qt::AlignHCenter | Qt::AlignTop,
+               QLatin1String(Kexi::versionString()));
+    textColor = palette().color(QPalette::WindowText);
+    textColor.setAlpha(180);
+    p.setPen(QPen(textColor));
+    p.drawText(0, height() - logoBottomMargin, width(), logoBottomMargin,
+               Qt::AlignHCenter | Qt::AlignTop,
+               QLatin1String(Kexi::versionString()));
+
+    // logo
+    p.drawPixmap((width() - d->calligraLogoPixmap.width()) / 2,
+                    height() - d->calligraLogoPixmap.height() - 20,
+                    d->calligraLogoPixmap);
 }
 
 #ifndef QT_NO_WHEELEVENT
@@ -2294,7 +2379,7 @@ void KexiMenuWidget::mouseReleaseEvent(QMouseEvent *e)
     d->mouseDown = 0;
     d->setSyncAction();
     QAction *action = d->actionAt(e->pos());
-qDebug() << "action:" << action << "d->currentAction:" << d->currentAction; // << action->menu();
+    //kDebug() << "action:" << action << "d->currentAction:" << d->currentAction;
     if (action && action == d->currentAction) {
         if (!action->menu()){
 #if defined(Q_WS_WIN)
@@ -2334,6 +2419,10 @@ void KexiMenuWidget::changeEvent(QEvent *e)
         }
     } else if (e->type() == QEvent::EnabledChange) {
         d->menuAction->setEnabled(isEnabled());
+    }
+    else if (e->type() == QEvent::PaletteChange) {
+        d->updateLogoPixmap();
+        d->updateLogo();
     }
     QWidget::changeEvent(e);
 }
@@ -2983,5 +3072,3 @@ void KexiMenuWidget::setSeparatorsCollapsible(bool collapse)
         update();
     }
 }
-
-#include "KexiMenuWidget.moc"

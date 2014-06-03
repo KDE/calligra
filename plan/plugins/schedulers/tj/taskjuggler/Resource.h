@@ -3,6 +3,7 @@
  *
  * Copyright (c) 2001, 2002, 2003, 2004, 2005, 2006
  * by Chris Schlaeger <cs@kde.org>
+ * Copyright (c) 2011 by Dag Andersen <danders@get2net.dk>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of version 2 of the GNU General Public License as
@@ -42,7 +43,7 @@ class KPLATOTJ_EXPORT Resource : public CoreAttributes
                                                CoreAttributes* c2, int level);
 public:
     Resource(Project* p, const QString& i, const QString& n, Resource* pr,
-             const QString& df = QString::null, uint dl = 0);
+             const QString& df = QString(), uint dl = 0);
     virtual ~Resource();
 
     static void deleteStaticData();
@@ -110,9 +111,9 @@ public:
 
     bool book(Booking* b);
 
-    bool bookSlot(uint idx, SbBooking* nb, int overtime = 0);
-    bool bookInterval(Booking* b, int sc, int sloppy = 0, int overtime = 0);
-    bool addBooking(int sc, Booking* b, int sloppy = 0, int overtime = 0);
+    bool bookSlot(uint idx, SbBooking* nb);
+//    bool bookInterval(Booking* b, int sc, int sloppy = 0, int overtime = 0);
+//    bool addBooking(int sc, Booking* b, int sloppy = 0, int overtime = 0);
     /// Return a list of booked intervals for scenario @p sc and task @p task
     QList<Interval> getBookedIntervals(int sc, const Task* task) const;
 
@@ -153,7 +154,7 @@ public:
         const;
 
     bool isAllocated(int sc, const Interval& i,
-                     const QString& prjId = QString::null) const;
+                     const QString& prjId = QString()) const;
 
     bool isAllocated(int sc, const Interval& i, const Task* t) const;
 
@@ -249,9 +250,12 @@ private:
     QList<Interval*> vacations;
 
     /**
-     * For each time slot (of length scheduling granularity) we store a
-     * pointer to a booking, a '1' if slot is off-hours, a '2' if slot is
-     * during a vacation or 0 if resource is available. */
+     * For each time slot (of length scheduling granularity) we store:
+     * A pointer to a booking, or
+     * 0 if the resource is available,
+     * 1 if slot is off-hours,
+     * 2 if slot is during a vacation.
+     */
     SbBooking** scoreboard;
     /// The number of time slots in the project.
     uint sbSize;

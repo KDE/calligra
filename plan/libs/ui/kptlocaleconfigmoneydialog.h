@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPLATO_LOCALECONFIGMONEYDIALOG_H
-#define KPLATO_LOCALECONFIGMONEYDIALOG_H
+#ifndef KPTLOCALECONFIGMONEYDIALOG_H
+#define KPTLOCALECONFIGMONEYDIALOG_H
 
 #include "kplatoui_export.h"
 
@@ -36,7 +36,7 @@ class Project;
 class KPLATOUI_EXPORT LocaleConfigMoneyDialog : public KDialog {
     Q_OBJECT
 public:
-    LocaleConfigMoneyDialog( KLocale *locale, QWidget *parent=0);
+    explicit LocaleConfigMoneyDialog( KLocale *locale, QWidget *parent=0);
 
     KUndo2Command *buildCommand( Project &project );
 

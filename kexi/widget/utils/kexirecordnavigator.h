@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,7 +26,7 @@
 
 class QToolButton;
 class QIntValidator;
-class Q3ScrollView;
+class QAbstractScrollArea;
 class QScrollBar;
 class QLabel;
 class QEvent;
@@ -34,6 +34,7 @@ class QPaintEvent;
 class KLineEdit;
 class KGuiItem;
 
+#include <core/KexiRecordNavigatorIface.h>
 
 //! @short KexiRecordNavigator class provides a record navigator.
 /*! Record navigator is usually used for data tables (e.g. KexiTableView)
@@ -49,9 +50,6 @@ class KGuiItem;
     Note that using this method 2), you can create more than one navigator widget
     connected with your data-aware object (does not matter if this is useful).
  */
-
-#include <core/KexiRecordNavigatorIface.h>
-
 class KEXIGUIUTILS_EXPORT KexiRecordNavigator : public QWidget, public KexiRecordNavigatorIface
 {
     Q_OBJECT
@@ -65,10 +63,10 @@ public:
         ButtonNew
     };
 
-    KexiRecordNavigator(QWidget *parent, Q3ScrollView* parentView, int leftMargin = 0);
+    KexiRecordNavigator(QWidget *parent, QAbstractScrollArea* parentView);
     virtual ~KexiRecordNavigator();
 
-    void setParentView(Q3ScrollView *view);
+    void setParentView(QAbstractScrollArea *view);
 
     /*! Sets record navigator handler. This allows to react
      on actions performed within navigator and vice versa. */
@@ -90,9 +88,6 @@ public:
      see KexiTableView::setHBarGeometry() and KexiFormScrollView::setHBarGeometry()
      for usage examples. */
     virtual void setHBarGeometry(QScrollBar & hbar, int x, int y, int w, int h);
-
-    /*! @internal used for keyboard handling. */
-    virtual bool eventFilter(QObject *o, QEvent *e);
 
     /*! \return true if "editing" indicator is visible for this navigator.
      @see showEditingIndicator() */
@@ -144,13 +139,20 @@ public slots:
      By default count is 0. */
     virtual void setRecordCount(uint count);
 
-    virtual void updateGeometry(int leftMargin);
+    virtual void setLeftMargin(int leftMargin);
 
     /*! Sets label text at the left of the for record navigator's button.
      By default this label contains translated "Record:" text. */
     virtual void setLabelText(const QString& text);
 
-    void setButtonToolTipText(KexiRecordNavigator::Button, const QString&);
+    void setButtonToolTipText(KexiRecordNavigator::Button btn, const QString& tooltip);
+    void setButtonWhatsThisText(KexiRecordNavigator::Button btn, const QString& whatsThis);
+    void setNumberFieldToolTips(const QString& numberTooltip, const QString& countTooltip);
+
+    /*! Inserts the record navigator aside of the horizontal scroll bar of the @a area scroll area.
+     Once the navigator is inserted, subsequent calls of this method will do nothing. */
+    void insertAsideOfHorizontalScrollBar(QAbstractScrollArea *area);
+
 signals:
     void prevButtonClicked();
     void nextButtonClicked();
@@ -165,9 +167,11 @@ protected slots:
     void slotLastButtonClicked();
     void slotFirstButtonClicked();
     void slotNewButtonClicked();
-    //void slotRecordNumberReturnPressed(const QString& text);
 
 protected:
+    //! @internal used for keyboard handling.
+    virtual bool eventFilter(QObject *o, QEvent *e);
+
     QToolButton* createAction(const KGuiItem& item);
     virtual void paintEvent(QPaintEvent* pe);
     void updateButtons(uint recCnt);

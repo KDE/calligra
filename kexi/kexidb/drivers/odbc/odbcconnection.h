@@ -22,8 +22,8 @@
 
 #include <QStringList>
 
-#include <kexidb/connection.h>
-#include <kexidb/tableschema.h>
+#include <db/connection.h>
+#include <db/tableschema.h>
 
 #include <sql.h>
 #include <sqlext.h>
@@ -99,9 +99,9 @@ protected:
 
     virtual bool drv_getDatabasesList(QStringList &list);
 
-//TODO: move this somewhere to low level class (MIGRATION?)
+//! @todo move this somewhere to low level class (MIGRATION?)
     virtual bool drv_getTablesList(QStringList &list);
-//TODO: move this somewhere to low level class (MIGRATION?)
+//! @todo move this somewhere to low level class (MIGRATION?)
     virtual bool drv_containsTable(const QString &tableName);
 
 private:

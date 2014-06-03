@@ -26,11 +26,11 @@
 #include <KoXmlWriter.h>
 
 #include <kpluginfactory.h>
-#include <KDebug>
+#include <kdebug.h>
 
 
-#include <QtCore/QString>
-#include <QtCore/QFile>
+#include <QString>
+#include <QFile>
 
 #include <libwpg/libwpg.h>
 #if LIBWPG_VERSION_MINOR<2

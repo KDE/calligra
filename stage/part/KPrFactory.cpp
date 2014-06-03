@@ -21,15 +21,14 @@
 #include "KPrFactory.h"
 #include "KPrDocument.h"
 #include "KPrAboutData.h"
+#include "KPrPart.h"
 
-#include <kiconloader.h>
 #include <kcomponentdata.h>
 #include <kstandarddirs.h>
 
 
 KComponentData* KPrFactory::s_instance = 0;
 KAboutData* KPrFactory::s_aboutData = 0;
-KIconLoader* KPrFactory::s_iconLoader = 0;
 
 KPrFactory::KPrFactory( QObject* parent, const char* /*name*/ )
     : KPluginFactory( *aboutData(), parent )
@@ -45,19 +44,15 @@ KPrFactory::~KPrFactory()
     s_instance = 0;
 }
 
-QObject* KPrFactory::create( const char* iface, QWidget* parentWidget, QObject *parent,
+QObject* KPrFactory::create( const char* /*iface*/, QWidget* /*parentWidget*/, QObject *parent,
                              const QVariantList& args, const QString& keyword )
 {
     Q_UNUSED( args );
     Q_UNUSED( keyword );
-    bool bWantKoDocument = ( strcmp( iface, "KoDocument" ) == 0 );
-
-    KPrDocument *doc = new KPrDocument( parentWidget, parent, !bWantKoDocument );
-
-    if ( !bWantKoDocument )
-        doc->setReadWrite( false );
-
-    return doc;
+    KPrPart *part = new KPrPart(parent);
+    KPrDocument *doc = new KPrDocument(part);
+    part->setDocument(doc);
+    return part;
 }
 
 KAboutData* KPrFactory::aboutData()
@@ -66,18 +61,6 @@ KAboutData* KPrFactory::aboutData()
         s_aboutData = newKPresenterAboutData();
 
     return s_aboutData;
-}
-
-KIconLoader* KPrFactory::iconLoader()
-{
-    if( !s_iconLoader )
-    {
-        s_iconLoader = new KIconLoader( componentData().componentName() );
-        // Tell the iconloader about share/apps/calligra/icons
-        s_iconLoader->addAppDir("calligra");
-    }
-
-    return s_iconLoader;
 }
 
 const KComponentData &KPrFactory::componentData()

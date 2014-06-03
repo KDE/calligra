@@ -19,8 +19,8 @@
 
 #include "DiagonalWipeStrategy.h"
 #include "DiagonalWipeEffectFactory.h"
-#include <QtGui/QWidget>
-#include <QtGui/QPainter>
+#include <QWidget>
+#include <QPainter>
 
 const int StepCount = 250;
 

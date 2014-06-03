@@ -40,7 +40,7 @@ use Class::Struct;
 #    Note: It has to be on a separate line, else it won't get
 #    picked up!
 #    Note 2: We don't check the value, we just assign it, so make
-#    sure that this is legal C++ (e.g. inital="true", initial="42+42")!
+#    sure that this is legal C++ (e.g. initial="true", initial="42+42")!
 #    Note 3: Everything else will be set to 0
 # 3) In some cases the </table> tag has to be right after the
 #    last </tr> tag, so better do that everywhere :)
@@ -528,7 +528,7 @@ sub generateHeaderStructs {
         $tmp .= $h . "     */\n";
         $tmp .= $h . "    bool write(OLEStreamWriter *stream, bool preservePos=false) const;\n\n";
         $tmp .= $h . "    /**\n";
-        $tmp .= $h . "     * Set all the fields to the inital value (default is 0)\n";
+        $tmp .= $h . "     * Set all the fields to the initial value (default is 0)\n";
         $tmp .= $h . "     */\n";
         $tmp .= $h . "    void clear();\n\n";
 

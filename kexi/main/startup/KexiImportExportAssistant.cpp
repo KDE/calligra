@@ -19,12 +19,12 @@
 
 #include "KexiImportExportAssistant.h"
 
-#include <KAction>
+#include <kaction.h>
 #include <QPointer>
 
 static QString stripText(const QString &text)
 {
-    return QString(text).replace('&', "").replace("...", "");
+    return QString(text).remove('&').remove("...");
 }
 
 KexiMainImportExportPage::KexiMainImportExportPage(
@@ -40,6 +40,9 @@ KexiMainImportExportPage::KexiMainImportExportPage(
     setupUi(contents);
     btn_import->setText(stripText(assistant->action_import_project->text()));
     btn_import->setDescription(assistant->action_import_project->toolTip());
+    const int dsize = IconSize(KIconLoader::Desktop);
+    btn_import->setIcon(assistant->action_import_project->icon());
+    btn_import->setIconSize(QSize(dsize, dsize));
     connect(btn_import, SIGNAL(clicked()), assistant, SIGNAL(importProject()));
 
     setFocusWidget(contents);
@@ -102,11 +105,6 @@ KexiImportExportAssistant::~KexiImportExportAssistant()
     delete d;
 }
        
-void KexiImportExportAssistant::previousPageRequested(KexiAssistantPage* page)
-{
-    Q_UNUSED(page);
-}
-
 void KexiImportExportAssistant::nextPageRequested(KexiAssistantPage* page)
 {
     Q_UNUSED(page);
@@ -115,5 +113,5 @@ void KexiImportExportAssistant::nextPageRequested(KexiAssistantPage* page)
 void KexiImportExportAssistant::cancelRequested(KexiAssistantPage* page)
 {
     Q_UNUSED(page);
-    //TODO?
+    //! @todo
 }

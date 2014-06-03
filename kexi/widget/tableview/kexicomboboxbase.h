@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 Peter Simonsson <psn@linux.se>
-   Copyright (C) 2003-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,13 +21,15 @@
 #ifndef _KEXICOMBOBOXBASE_H_
 #define _KEXICOMBOBOXBASE_H_
 
-#include "kexidb/field.h"
+#include <db/field.h>
 #include "kexiinputtableedit.h"
-#include <kexidb/lookupfieldschema.h>
-#include <kexiutils/tristate.h>
+#include <db/lookupfieldschema.h>
+#include <db/tristate.h>
 
 class KexiComboBoxPopup;
-class KexiTableViewColumn;
+namespace KexiDB {
+class TableViewColumn;
+}
 
 /*! @short A base class for handling data-aware combo boxes.
  This class is used by KexiComboBoxTableEdit and KexiDBComboBox.
@@ -39,7 +41,7 @@ public:
     virtual ~KexiComboBoxBase();
 
     //! \return column related to this combo; for KexiComboBoxTableEdit 0 is returned here
-    virtual KexiTableViewColumn *column() const = 0;
+    virtual KexiDB::TableViewColumn *column() const = 0;
 
     //! \return database field related to this combo
     virtual KexiDB::Field *field() const = 0;
@@ -95,7 +97,7 @@ protected:
 
     //! sets \a value for the line edit without setting a flag (m_userEnteredValue) that indicates that
     //! the text has been entered by hand (by a user)
-    void setValueOrTextInInternalEditor(const QVariant& value); //QString& text);
+    void setValueOrTextInInternalEditor(const QVariant& value);
 
     //! \return lookup field schema for this combo box, if present and if is valid (i.e. has defined row source)
     KexiDB::LookupFieldSchema* lookupFieldSchema() const;
@@ -169,6 +171,10 @@ protected:
     //! we want to set visible value on setValueInternal()
     //! - true for table view's combo box
     bool m_setVisibleValueOnSetValueInternal;
+    //! Checked in createPopup(), true for form's combo box, so the popup is focused before showing;
+    //! false for table view's combo box, so the popup is focused after showing.
+    //! False by default.
+    bool m_focusPopupBeforeShow;
 };
 
 #endif

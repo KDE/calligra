@@ -24,13 +24,12 @@
 #include "frames/KWFrame.h"
 #include "frames/KWTextFrameSet.h"
 #include "frames/KWFrameLayout.h"
-#include "commands/KWPageInsertCommand.h"
 #include "commands/KWFrameDeleteCommand.h"
 
 #include <KoShapeMoveCommand.h>
 
-#include <KLocale>
-#include <KDebug>
+#include <klocale.h>
+#include <kdebug.h>
 
 KWPageStylePropertiesCommand::KWPageStylePropertiesCommand(KWDocument *document, const KWPageStyle &styleBefore, const KWPageStyle &styleAfter, KUndo2Command *parent)
     : KUndo2Command(i18nc("(qtundo-format)", "Page Properties"), parent),

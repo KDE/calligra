@@ -20,7 +20,7 @@
 #ifndef KEXICUSTOMPROPFACTORY_P_H
 #define KEXICUSTOMPROPFACTORY_P_H
 
-//todo #include <koproperty/editors/pixmapedit.h>
+//! @todo #include <koproperty/editors/pixmapedit.h>
 #include <koproperty/editors/stringedit.h>
 #include <kexiblobbuffer.h>
 
@@ -31,13 +31,13 @@ class KexiImagePropertyEdit : public KoProperty::PixmapEdit
     Q_OBJECT
 
 public:
-    KexiImagePropertyEdit(KoProperty::Property *property,
+    explicit KexiImagePropertyEdit(KoProperty::Property *property,
                           QWidget *parent = 0);
     virtual ~KexiImagePropertyEdit();
 
     virtual QVariant value() const;
     virtual void setValue(const QVariant &value, bool emitChange = true);
-    virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r,
+    virtual void drawViewer(QPainter *p, cg, const QRect &r,
                             const QVariant &value);
 
 public slots:
@@ -61,12 +61,12 @@ class KexiIdentifierPropertyEdit : public KoProperty::StringEdit
     Q_PROPERTY(QString value READ value WRITE setValue USER true)
 
 public:
-    KexiIdentifierPropertyEdit(QWidget *parent = 0);
+    explicit KexiIdentifierPropertyEdit(QWidget *parent = 0);
     virtual ~KexiIdentifierPropertyEdit();
 
 public slots:
     /*! Reimplemented: sets \a value but it is converted to identifier
-     using KexiUtils::string2Identifier().
+     using KexiUtils::stringToIdentifier().
      If \a value is empty string, this method has no effect. */
     virtual void setValue(const QString &value);
 };

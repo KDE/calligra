@@ -55,7 +55,9 @@ QWidget* KexiProjectItemDelegate::createEditor(
 {
     QWidget *editor = QStyledItemDelegate::createEditor(parent, option, index);
     if (qobject_cast<QLineEdit*>(editor)) { // sanity check
-        qobject_cast<QLineEdit*>(editor)->setValidator(new KexiUtils::IdentifierValidator(editor));
+        KexiUtils::IdentifierValidator *validator = new KexiUtils::IdentifierValidator(editor);
+        validator->setLowerCaseForced(true);
+        qobject_cast<QLineEdit*>(editor)->setValidator(validator);
     }
     return editor;
 }

@@ -32,10 +32,10 @@
 
 #include "KoXmlReader.h"
 
-#include <KMessageBox>
-#include <KTimeZone>
-#include <KSystemTimeZones>
-#include <KDebug>
+#include <kmessagebox.h>
+#include <ktimezone.h>
+#include <ksystemtimezone.h>
+#include <kdebug.h>
 #include <kdeversion.h>
 
 #include <QDateTime>
@@ -43,11 +43,7 @@
 using namespace KPlato;
 
 KPLATOKERNEL_EXPORT int kplatoXmlDebugArea() {
-#if KDE_IS_VERSION( 4, 3, 80 )
     static int s_area = KDebug::registerArea( "plan (kplato xml)" );
-#else
-    static int s_area = 0;
-#endif
     return s_area;
 }
 
@@ -198,10 +194,6 @@ bool KPlatoXmlLoaderBase::load( Project *project, const KoXmlElement &element, X
             }
         }
     }
-    // resolve required resources
-    foreach ( Resource *r, project->resourceList() ) {
-        r->resolveRequiredResources( *project );
-    }
     // The main stuff
     n = element.firstChild();
     for ( ; ! n.isNull(); n = n.nextSibling() ) {
@@ -319,7 +311,7 @@ bool KPlatoXmlLoaderBase::load( Project *project, const KoXmlElement &element, X
                         kError()<<"resource-teams: a team cannot be a member of itself";
                         continue;
                     }
-                    r->addTeamMember( tm );
+                    r->addTeamMemberId( tm->id() );
                 } else {
                     kError()<<"resource-teams: unhandled tag"<<el.tagName();
                 }
@@ -343,6 +335,11 @@ bool KPlatoXmlLoaderBase::load( Project *project, const KoXmlElement &element, X
             kWarning()<<"Unhandled tag:"<<e.tagName();
         }
     }
+    // set schedule parent
+    foreach ( Schedule *s, project->schedules() ) {
+        project->setParentSchedule( s );
+    }
+
     kDebug(kplatoXmlDebugArea())<<"Project loaded:"<<project<<project->name()<<project->allNodes();
     return true;
 }
@@ -641,17 +638,20 @@ bool KPlatoXmlLoaderBase::load( Relation *relation, const KoXmlElement &element,
     kDebug(kplatoXmlDebugArea())<<"relation";
     relation->setParent( status.project().findNode( element.attribute( "parent-id" ) ) );
     if (relation->parent() == 0) {
+        kWarning()<<"Parent node == 0, cannot find id:"<<element.attribute( "parent-id" );
         return false;
     }
     relation->setChild( status.project().findNode( element.attribute( "child-id" ) ) );
     if ( relation->child() == 0 ) {
+        kWarning()<<"Child node == 0, cannot find id:"<<element.attribute( "child-id" );
         return false;
     }
     if ( relation->child() == relation->parent() ) {
-        kDebug(kplatoXmlDebugArea())<<"child == parent";
+        kWarning()<<"Parent node == child node";
         return false;
     }
     if ( ! relation->parent()->legalToLink( relation->child() ) ) {
+        kWarning()<<"Realation is not legal:"<<relation->parent()->name()<<"->"<<relation->child()->name();
         return false;
     }
     relation->setType( element.attribute("type") );
@@ -1154,7 +1154,6 @@ bool KPlatoXmlLoaderBase::load( ResourceGroupRequest* gr, const KoXmlElement& el
     }
     gr->group()->registerRequest( gr );
 
-    gr->setUnits( element.attribute( "units" ).toInt() );
 
     KoXmlNode n = element.firstChild();
     for ( ; ! n.isNull(); n = n.nextSibling() ) {
@@ -1172,6 +1171,10 @@ bool KPlatoXmlLoaderBase::load( ResourceGroupRequest* gr, const KoXmlElement& el
             }
         }
     }
+    // meaning of m_units changed
+    int x = element.attribute("units").toInt() -gr->count();
+    gr->setUnits( x > 0 ? x : 0 );
+
     return true;
 }
 
@@ -1223,7 +1226,7 @@ bool KPlatoXmlLoaderBase::loadWpLog( WorkPackage *wp, KoXmlElement& element, XML
 {
     kDebug(kplatoXmlDebugArea())<<"wplog";
     wp->setOwnerName( element.attribute( "owner" ) );
-    wp->setOwnerName( element.attribute( "owner-id" ) );
+    wp->setOwnerId( element.attribute( "owner-id" ) );
     wp->setTransmitionStatus( wp->transmitionStatusFromString( element.attribute( "status" ) ) );
     wp->setTransmitionTime( DateTime( KDateTime::fromString( element.attribute( "time" ) ) ) );
     return load( wp->completion(), element, status );
@@ -1299,9 +1302,9 @@ bool KPlatoXmlLoaderBase::load( Completion::UsedEffort* ue, const KoXmlElement& 
         if (e.tagName() == "actual-effort") {
             QDate date = QDate::fromString( e.attribute("date"), Qt::ISODate );
             if ( date.isValid() ) {
-                Completion::UsedEffort::ActualEffort *a = new Completion::UsedEffort::ActualEffort();
-                a->setNormalEffort( Duration::fromString( e.attribute( "normal-effort" ) ) );
-                a->setOvertimeEffort( Duration::fromString( e.attribute( "overtime-effort" ) ) );
+                Completion::UsedEffort::ActualEffort a;
+                a.setNormalEffort( Duration::fromString( e.attribute( "normal-effort" ) ) );
+                a.setOvertimeEffort( Duration::fromString( e.attribute( "overtime-effort" ) ) );
                 ue->setEffort( date, a );
             }
         }

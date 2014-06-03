@@ -32,7 +32,7 @@ class KexiProject;
 
 class KexiMobileNavigator : public QWidget
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
     explicit KexiMobileNavigator(QWidget* parent = 0, Qt::WindowFlags f = 0);
     virtual ~KexiMobileNavigator();
@@ -46,12 +46,12 @@ signals:
     void openItem(KexiPart::Item *item);
     
 private:
-	KexiProject *m_project;
-	KexiProjectModel* m_reportModel;
-	KexiProjectNavigator *m_formNavigator;
-	KexiProjectNavigator *m_reportNavigator;
-	
-	QHBoxLayout *m_layout;
+    KexiProject *m_project;
+    KexiProjectModel* m_reportModel;
+    KexiProjectNavigator *m_formNavigator;
+    KexiProjectNavigator *m_reportNavigator;
+
+    QHBoxLayout *m_layout;
 };
 
 #endif // KEXIMOBILENAVIGATOR_H

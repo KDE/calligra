@@ -23,7 +23,7 @@
 #define SCRIPTING_TOOL_H
 
 #include <QSignalMapper>
-#include <KAction>
+#include <kaction.h>
 
 #include <kdebug.h>
 #include <KoToolManager.h>

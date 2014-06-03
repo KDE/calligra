@@ -26,13 +26,12 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kdialog.h>
-#include <kiconloader.h>
-#include <KAction>
-#include <KShortcut>
+#include <kaction.h>
+#include <kshortcut.h>
 
-#include <qcheckbox.h>
-#include <qlabel.h>
-#include <qlayout.h>
+#include <QCheckBox>
+#include <QLabel>
+#include <QLayout>
 #include <QList>
 #include <QShortcut>
 #include <QPointer>
@@ -100,7 +99,7 @@ KexiFindDialog::KexiFindDialog(QWidget* parent)
     layout()->setSpacing(KDialog::spacingHint());
     KAction *a = KStandardAction::findNext(0, 0, 0);
     m_btnFind->setText(a->text());
-    m_btnFind->setIcon(KIcon(a->icon()));
+    m_btnFind->setIcon(a->icon());
     delete a;
     m_btnClose->setText(KStandardGuiItem::close().text());
     m_btnClose->setIcon(KStandardGuiItem::close().icon());
@@ -108,9 +107,14 @@ KexiFindDialog::KexiFindDialog(QWidget* parent)
     connect(m_btnClose, SIGNAL(clicked()), this, SLOT(slotCloseClicked()));
     connect(m_btnReplace, SIGNAL(clicked()), this, SIGNAL(replaceNext()));
     connect(m_btnReplaceAll, SIGNAL(clicked()), this, SIGNAL(replaceAll()));
+    connect(m_textToFind, SIGNAL(activated(const QString&)), this, SLOT(addToFindHistory()));
+    connect(m_btnFind, SIGNAL(clicked()), this, SLOT(addToFindHistory()));
+    connect(m_textToReplace, SIGNAL(activated(const QString&)), this, SLOT(addToReplaceHistory()));
+    connect(m_btnReplace, SIGNAL(clicked()), this, SLOT(addToReplaceHistory()));
+    connect(m_btnReplaceAll, SIGNAL(clicked()), this, SLOT(addToReplaceHistory()));
     // clear message after the text is changed
-    connect(m_textToFind, SIGNAL(editTextChanged(const QString&)), this, SLOT(updateMessage(const QString&)));
-    connect(m_textToReplace, SIGNAL(editTextChanged(const QString&)), this, SLOT(updateMessage(const QString&)));
+    connect(m_textToFind, SIGNAL(editTextChanged(QString)), this, SLOT(updateMessage(QString)));
+    connect(m_textToReplace, SIGNAL(editTextChanged(QString)), this, SLOT(updateMessage(QString)));
 
     d->replaceMode = true; //to force updating by setReplaceMode()
     setReplaceMode(false);
@@ -259,6 +263,17 @@ void KexiFindDialog::updateMessage(bool found)
         setMessage(i18n("The search item was not found"));
 }
 
+void KexiFindDialog::addToFindHistory()
+{
+    m_textToFind->addToHistory(m_textToFind->currentText());
+}
+
+void KexiFindDialog::addToReplaceHistory()
+{
+    m_textToReplace->addToHistory(m_textToReplace->currentText());
+}
+
+
 void KexiFindDialog::slotCloseClicked()
 {
     reject();
@@ -280,9 +295,9 @@ KexiSearchAndReplaceViewInterface::Options KexiFindDialog::options() const
     else
         options.columnNumber = m_lookIn->currentIndex()  - 1/*"(All fields)"*/ - 1/*"(Current field)"*/;
     options.textMatching
-    = (KexiSearchAndReplaceViewInterface::Options::TextMatching)m_match->currentIndex();
+        = (KexiSearchAndReplaceViewInterface::Options::TextMatching)m_match->currentIndex();
     options.searchDirection
-    = (KexiSearchAndReplaceViewInterface::Options::SearchDirection)m_search->currentIndex();
+        = (KexiSearchAndReplaceViewInterface::Options::SearchDirection)m_search->currentIndex();
     options.caseSensitive = m_caseSensitive->isChecked();
     options.wholeWordsOnly = m_wholeWords->isChecked();
     options.promptOnReplace = m_promptOnReplace->isChecked();

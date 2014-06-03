@@ -51,7 +51,7 @@ EffortCostMap &EffortCostMap::operator=( const EffortCostMap &ec )
 }
 
 EffortCostMap &EffortCostMap::operator+=(const EffortCostMap &ec) {
-    //kDebug()<<"me="<<m_days.count()<<" ec="<<ec.days().count();
+    //kDebug(planDbg())<<"me="<<m_days.count()<<" ec="<<ec.days().count();
     if (ec.isEmpty()) {
         return *this;
     }

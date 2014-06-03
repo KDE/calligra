@@ -20,7 +20,7 @@
 #ifndef KPRCONFIGURESLIDESHOWDIALOG_H
 #define KPRCONFIGURESLIDESHOWDIALOG_H
 
-#include <KDialog>
+#include <kdialog.h>
 class KPrView;
 
 #include "ui_KPrConfigureSlideShow.h"

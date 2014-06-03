@@ -20,7 +20,7 @@
 #ifndef KPRCONFIGUREPRESENTERVIEWDIALOG_H
 #define KPRCONFIGUREPRESENTERVIEWDIALOG_H
 
-#include <KDialog>
+#include <kdialog.h>
 
 #include "ui_KPrConfigurePresenterView.h"
 

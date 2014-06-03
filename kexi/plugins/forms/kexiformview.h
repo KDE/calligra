@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2010 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2011 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,7 +21,7 @@
 #ifndef KEXIFORMVIEW_H
 #define KEXIFORMVIEW_H
 
-#include <qtimer.h>
+#include <QTimer>
 #include <QDragMoveEvent>
 #include <QResizeEvent>
 #include <QDropEvent>
@@ -35,7 +35,10 @@
 
 #include "kexiformpart.h"
 
+#define NO_DSWIZARD
+
 class KexiFormPart;
+class KexiFormPartTempData;
 class KexiDBForm;
 class KexiFormScrollView;
 namespace KexiDB
@@ -70,18 +73,14 @@ public:
         NoResize = 2 /*! @todo */
     };
 
-    KexiFormView(QWidget *parent, bool dbAware = true);
+    explicit KexiFormView(QWidget *parent, bool dbAware = true);
     virtual ~KexiFormView();
-
-//  KexiDB::Connection* connection() { return m_conn; }
 
     virtual QSize preferredSizeHint(const QSize& otherSize);
 
-    int resizeMode() const {
-        return m_resizeMode;
-    }
+    int resizeMode() const;
 
-    KFormDesigner::Form* form() const { return m_form; }
+    KFormDesigner::Form* form() const;
 
     /*! Assigns \a id local (static) BLOB's identifier for \a widget widget.
      Previously assigned BLOB will be usassigned.
@@ -98,9 +97,6 @@ public:
     void setUnsavedLocalBLOB(QWidget *widget, KexiBLOBBuffer::Id_t id);
 
 public slots:
-    /*! Reimplemented to update resize policy. */
-    virtual void show();
-
     /*! Inserts autofields onto the form at \a pos position.
      \a sourcePartClass can be "org.kexi-project.table" or "org.kexi-project.query",
      \a sourceName is a name of a table or query, \a fields is a list of fields to insert (one or more)
@@ -120,15 +116,9 @@ public slots:
                           const QPoint& pos = QPoint(-1, -1));
 
 protected slots:
-//2.0 changed    void slotPropertySetSwitched(KoProperty::Set *b, bool forceReload = false,
-//2.0 changed                                 const QByteArray& propertyToSelect = QByteArray());
     void slotPropertySetSwitched();
-
-//2.0 changed    void slotDirty(KFormDesigner::Form *f, bool isDirty);
-    void slotModified();
-
+    void setFormModified();
     void slotFocus(bool in);
-
     void slotHandleDragMoveEvent(QDragMoveEvent* e);
 
     //! Handles field(s) dropping from the data source pane onto the form
@@ -136,39 +126,20 @@ protected slots:
     void slotHandleDropEvent(QDropEvent* e);
 
     void slotWidgetSelectionChanged(QWidget *w, KFormDesigner::Form::WidgetSelectionFlags flags);
-
-//moved to formmanager  void slotWidgetSelected(KFormDesigner::Form *form, bool multiple);
-//moved to formmanager  void slotFormWidgetSelected(KFormDesigner::Form *form);
-//moved to formmanager  void slotNoFormSelected();
-
-//moved to formmanager  void setUndoEnabled(bool enabled);
-//moved to formmanager  void setRedoEnabled(bool enabled);
     void slotWidgetNameChanged(const QByteArray& oldname, const QByteArray& newname);
 
 protected:
     virtual tristate beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore);
     virtual tristate afterSwitchFrom(Kexi::ViewMode mode);
-    virtual KoProperty::Set* propertySet() {
-        return &m_form->propertySet(); // 2.0 m_propertySet;
-    }
-
-    virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata, bool &cancel);
+    virtual KoProperty::Set* propertySet();
+    virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata,
+                                             KexiView::StoreNewDataOptions options,
+                                             bool &cancel);
     virtual tristate storeData(bool dontAsk = false);
-
-    KexiFormPart::TempData* tempData() const {
-        return dynamic_cast<KexiFormPart::TempData*>(window()->data());
-    }
-    KexiFormPart* formPart() const {
-        return dynamic_cast<KexiFormPart*>(part());
-    }
-
-//moved to formmanager  void disableWidgetActions();
-//moved to formmanager  void enableFormActions();
-
+    KexiFormPartTempData* tempData() const;
+    KexiFormPart* formPart() const;
     void setForm(KFormDesigner::Form *f);
-
     void initForm();
-
     void loadForm();
 
     //! Used in loadForm()
@@ -179,21 +150,14 @@ protected:
 
     virtual void resizeEvent(QResizeEvent *);
 
-    void initDataSource();
+    //! Reimplemented for context key event of top-level form widget.
+    //! Redirects to Container::eventFilter().
+    virtual void contextMenuEvent(QContextMenuEvent *e);
 
+    void initDataSource();
     virtual void setFocusInternal();
 
-    /*  // for navigator
-        virtual void moveToRecordRequested(uint r);
-        virtual void moveToLastRecordRequested();
-        virtual void moveToPreviousRecordRequested();
-        virtual void moveToNextRecordRequested();
-        virtual void moveToFirstRecordRequested();
-        virtual void addNewRecordRequested();*/
-
-    /*! Called after loading the form contents (before showing it).
-     Also called when the form window (KexiWindow) is detached
-     (in KMDI's Child Frame mode), because otherwise tabstop ordering can get broken. */
+    /*! Called after loading the form contents (before showing it). */
     void updateTabStopsOrder();
 
     /*! @internal */
@@ -210,44 +174,9 @@ protected:
     //! @todo merge with other "update" routines?
     void updateActionsInternal();
 
-    KexiDBForm *m_dbform;
-    KexiFormScrollView *m_scrollView;
-//2.0     KoProperty::Set *m_propertySet;
-
-    /*! Database cursor used for data retrieving.
-     It is shared between subsequent Data view sessions (just reopened on switch),
-     but deleted and recreated from scratch when form's "dataSource" property changed
-     since last form viewing (m_previousDataSourceString is used for that). */
-    QString m_previousDataSourceString;
-
-    int m_resizeMode;
-
-    KexiDB::QuerySchema* m_query;
-
-    /*! True, if m_query is created as temporary object within this form.
-     If user selected an existing, predefined (stored) query, m_queryIsOwned will be false,
-     so the query object will not be destroyed. */
-    bool m_queryIsOwned;
-
-    KexiDB::Cursor *m_cursor;
-
-    /*! For new (empty) forms only:
-     Our form's area will be resized more than once.
-     We will resize form widget itself later (in resizeEvent()). */
-    int m_delayedFormContentsResizeOnShow;
-
-    //! Used in setFocusInternal()
-    QPointer<QWidget> m_setFocusInternalOnce;
-
-    /*! Stores geometry of widget recently inserted using insertAutoFields() method.
-     having this information, we'r eable to compute position for a newly
-     inserted widget in insertAutoFields() is such position has not been specified.
-     (the position is specified when a widget is inserted with mouse drag & dropping
-     but not with clicking of 'Insert fields' button from Data Source pane) */
-    QRect m_widgetGeometryForRecentInsertAutoFields;
-
-    //! Cached form pointer
-    QPointer<KFormDesigner::Form> m_form;
+private:
+    class Private;
+    Private * const d;
 };
 
 #endif

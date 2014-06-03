@@ -40,7 +40,7 @@ public:
     /**
      * creates a blank widget
      */
-    KexiDataTableView(QWidget *parent = 0);
+    explicit KexiDataTableView(QWidget *parent);
 
     /*! Creates a table widget and fills it using data from \a cursor.
      Cursor will be opened (with open()) if it is not yet opened.
@@ -51,8 +51,6 @@ public:
     KexiDataTableView(QWidget *parent, KexiDB::Cursor *cursor);
 
     ~KexiDataTableView();
-
-//  virtual void initActions(KActionCollection *col);
 
     using KexiTableView::setData;
 
@@ -81,17 +79,9 @@ public:
 protected:
     void init();
 
-    /*! Reimplemented: called by deleteItem() - we are deleting data associated with \a item. */
-//  virtual bool beforeDeleteItem(KexiDB::RecordData *record);
-
-protected slots:
-//  void slotClearData();
-
 private:
     //db stuff
     KexiDB::Cursor *m_cursor;
-
-//  QMap<KexiDBUpdateRecord*,KexiDB::RecordData*> m_insertMapping;
 };
 
 #endif

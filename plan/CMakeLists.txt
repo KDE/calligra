@@ -9,6 +9,15 @@ if(KDE4_BUILD_TESTS)
     add_definitions(-DCOMPILING_TESTS)
 endif(KDE4_BUILD_TESTS)
 
+if (KdepimLibs_FOUND)
+    MATH(EXPR KDEPIMLIBS_HEXVERSION "${KDEPIMLIBS_VERSION_MAJOR}*65536 +  ${KDEPIMLIBS_VERSION_MINOR}*256  + ${KDEPIMLIBS_VERSION_PATCH}")
+    add_definitions(-DPLAN_KDEPIMLIBS_FOUND -DPLAN_KDEPIMLIBS_HEXVERSION=${KDEPIMLIBS_HEXVERSION})
+endif (KdepimLibs_FOUND)
+
+if (PLANCHARTDEBUG)
+    add_definitions(-DPLAN_CHART_DEBUG)
+endif (PLANCHARTDEBUG)
+
 set( KPLATO_INCLUDES
     ${CMAKE_SOURCE_DIR}/plan/libs/kernel
     ${CMAKE_SOURCE_DIR}/plan/libs/models
@@ -16,20 +25,15 @@ set( KPLATO_INCLUDES
     ${CMAKE_SOURCE_DIR}/plan/libs/ui
     ${CMAKE_BINARY_DIR}/plan/libs/ui
     ${CMAKE_BINARY_DIR}/plan
-    ${CMAKE_SOURCE_DIR}/kdgantt
-    ${CMAKE_BINARY_DIR}/kdgantt
-    ${CMAKE_SOURCE_DIR}/plugins/chartshape/kdchart/include
 
-    ${KOMAIN_INCLUDES}    
+    ${KDGANTT_INCLUDES}
+    ${KDCHART_INCLUDES}
+
+    ${KOMAIN_INCLUDES}
     ${KDEPIMLIBS_INCLUDE_DIR}
 
-    ${CMAKE_SOURCE_DIR}/libs/koreport
-    ${CMAKE_SOURCE_DIR}/libs/koreport/common
-    ${CMAKE_SOURCE_DIR}/libs/koreport/renderer
-    ${CMAKE_SOURCE_DIR}/libs/koreport/wrtembed
+    ${KOREPORT_INCLUDES}
 )
-
-add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
 
 add_subdirectory( libs )
 
@@ -50,7 +54,7 @@ set(planprivate_LIB_SRCS
     kptviewlistdocker.cpp
     kptviewlist.cpp
     kptviewlistdialog.cpp
-    
+
     kptschedulesdocker.cpp
 
     kptconfig.cpp
@@ -62,8 +66,9 @@ set(planprivate_LIB_SRCS
 
     kptfactory.cpp
     kptpart.cpp
+    kptmaindocument.cpp
     kptview.cpp
-    KPtViewAdaptor.cpp
+#     KPtViewAdaptor.cpp
 
     kptschedulerpluginloader.cpp
     kptbuiltinschedulerplugin.cpp
@@ -73,7 +78,6 @@ set(planprivate_LIB_SRCS
 
     about/aboutpage.cpp
 
-    kptpackage.cpp
     KPlatoXmlLoader.cpp
 )
 
@@ -93,7 +97,7 @@ kde4_add_kcfg_files(plansettings_SRCS plansettings.kcfgc)
 
 kde4_add_library(planprivate SHARED ${planprivate_LIB_SRCS} ${libkdgantt_SRCS} ${plansettings_SRCS} )
 
-target_link_libraries(planprivate ${KDE4_KABC_LIBS} kplatokernel kplatomodels kplatoui ${KDE4_KHTML_LIBS} ${KDE4_KPIMUTILS_LIBS} ${QT_QT3SUPPORT_LIBRARY} komain)
+target_link_libraries(planprivate kplatokernel kplatomodels kplatoui ${KDE4_KHTML_LIBS} ${KDEPIMLIBS_AKONADI_CONTACT_LIBS}  komain)
 
 set_target_properties(planprivate PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 
@@ -112,9 +116,13 @@ install(TARGETS planpart DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### KPlato executable ###############
 
+if(NOT RELEASE_BUILD)
+    add_definitions(-DMAINTANER_WANTED_SPLASH)
+endif(NOT RELEASE_BUILD)
+
 set(calligraplan_KDEINIT_SRCS main.cpp )
 
-kde4_add_app_icon(calligraplan_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/hi*-app-plan.png")
+kde4_add_app_icon(calligraplan_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/hi*-app-calligraplan.png")
 
 kde4_add_kdeinit_executable( calligraplan ${calligraplan_KDEINIT_SRCS})
 
@@ -138,6 +146,8 @@ install( FILES  plan.rc plan_readonly.rc DESTINATION ${DATA_INSTALL_DIR}/plan)
 install( PROGRAMS  plan.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 install( FILES  planrc DESTINATION ${CONFIG_INSTALL_DIR})
 install(FILES plansettings.kcfg DESTINATION ${KCFG_INSTALL_DIR})
+install( FILES  plan_viewplugin.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
+install(FILES plan.appdata.xml DESTINATION ${SHARE_INSTALL_PREFIX}/appdata/)
 
 install(FILES
     about/top-left-plan.png
@@ -148,4 +158,3 @@ install(FILES
     about/plan.css
     DESTINATION ${DATA_INSTALL_DIR}/plan/about
 )
-

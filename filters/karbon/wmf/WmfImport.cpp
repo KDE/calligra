@@ -26,9 +26,9 @@ DESCRIPTION
 #include <KoFilterChain.h>
 #include <KoXmlWriter.h>
 
-#include <KPluginFactory>
+#include <kpluginfactory.h>
 
-#include <QtCore/QFile>
+#include <QFile>
 
 K_PLUGIN_FACTORY(WMFImportFactory, registerPlugin<WMFImport>();)
 K_EXPORT_PLUGIN(WMFImportFactory("calligrafilters"))

@@ -25,6 +25,7 @@
 #include <kptviewbase.h>
 #include "kptaccountsmodel.h"
 
+#include <kpagedialog.h>
 
 class KoDocument;
 
@@ -36,12 +37,28 @@ namespace KPlato
 
 class Project;
 class Account;
+class AccountTreeView;
+
+class AccountseditorConfigDialog : public KPageDialog {
+    Q_OBJECT
+public:
+    AccountseditorConfigDialog( ViewBase *view, AccountTreeView *treeview, QWidget *parent );
+
+public slots:
+    void slotOk();
+
+private:
+    ViewBase *m_view;
+    AccountTreeView *m_treeview;
+    KoPageLayoutWidget *m_pagelayout;
+    PrintingHeaderFooter *m_headerfooter;
+};
 
 class KPLATOUI_EXPORT AccountTreeView : public TreeViewBase
 {
     Q_OBJECT
 public:
-    AccountTreeView( QWidget *parent );
+    explicit AccountTreeView(QWidget *parent);
 
     AccountItemModel *model() const { return static_cast<AccountItemModel*>( TreeViewBase::model() ); }
 
@@ -54,10 +71,10 @@ public:
     
 signals:
     void currentChanged( const QModelIndex& );
-    void currentColumnChanged( QModelIndex, QModelIndex );
-    void selectionChanged( const QModelIndexList );
+    void currentColumnChanged( const QModelIndex&, const QModelIndex& );
+    void selectionChanged( const QModelIndexList& );
 
-    void contextMenuRequested( QModelIndex, const QPoint& );
+    void contextMenuRequested( const QModelIndex&, const QPoint& );
     
 protected slots:
     void headerContextMenuRequested( const QPoint &pos );
@@ -73,7 +90,7 @@ class KPLATOUI_EXPORT AccountsEditor : public ViewBase
 {
     Q_OBJECT
 public:
-    AccountsEditor( KoDocument *KoDocument, QWidget *parent );
+    AccountsEditor(KoPart *part, KoDocument *document, QWidget *parent);
     
     void setupGui();
     Project *project() const { return m_view->project(); }
@@ -90,7 +107,7 @@ public:
     
 signals:
     void addAccount( Account *account );
-    void deleteAccounts( QList<Account*> );
+    void deleteAccounts( const QList<Account*>& );
     
 public slots:
     /// Activate/deactivate the gui
@@ -99,11 +116,15 @@ public slots:
 protected:
     void updateActionsEnabled( bool on );
     void insertAccount( Account *account, Account *parent, int row );
+
+protected slots:
+    virtual void slotOptions();
     
 private slots:
-    void slotContextMenuRequested( QModelIndex index, const QPoint& pos );
-    
-    void slotSelectionChanged( const QModelIndexList );
+    void slotContextMenuRequested( const QModelIndex &index, const QPoint& pos );
+    void slotHeaderContextMenuRequested( const QPoint &pos );
+
+    void slotSelectionChanged( const QModelIndexList& );
     void slotCurrentChanged( const QModelIndex& );
     void slotEnableActions( bool on );
 
