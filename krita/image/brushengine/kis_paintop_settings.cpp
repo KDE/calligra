@@ -228,7 +228,7 @@ void KisPaintOpSettings::setProperty(const QString & name, const QVariant & valu
 
 void KisPaintOpSettings::onPropertyChanged()
 {
-    if(this->preset()!= NULL)
+    if(this->preset())
     {
         this->preset()->setDirtyPreset(true);
     }

@@ -92,8 +92,6 @@ KisPaintopBox::KisPaintopBox(KisView2 *view, QWidget *parent, const char *name)
 
     setObjectName(name);
 
-    m_loadOriginalPreset = false;
-
     KAcceleratorManager::setNoAccel(this);
 
     setWindowTitle(i18n("Painter's Toolchest"));
@@ -742,6 +740,8 @@ void KisPaintopBox::slotVerticalMirrorChanged(bool value)
 
 void KisPaintopBox::sliderChanged(int n)
 {
+    m_optionWidget->blockSignals(true);
+    m_optionWidget->writeConfiguration(const_cast<KisPaintOpSettings*>(m_resourceProvider->currentPreset()->settings().data()));
     qreal opacity = m_sliderChooser[n]->getWidget<KisDoubleSliderSpinBox>("opacity")->value();
     qreal flow    = m_sliderChooser[n]->getWidget<KisDoubleSliderSpinBox>("flow")->value();
     qreal size    = m_sliderChooser[n]->getWidget<KisDoubleSliderSpinBox>("size")->value();
@@ -763,9 +763,15 @@ void KisPaintopBox::sliderChanged(int n)
         if(m_resourceProvider->currentPreset()->settings()->hasProperty("FlowValue"))
             m_resourceProvider->currentPreset()->settings()->setProperty("FlowValue", flow);
 
+
         m_optionWidget->setConfiguration(m_resourceProvider->currentPreset()->settings().data());
     }
     else m_resourceProvider->setOpacity(opacity);
+    m_optionWidget->blockSignals(false);
+    if(m_presetsEnabled)
+        m_optionWidget->setConfiguration(m_resourceProvider->currentPreset()->settings().data());
+    m_presetsPopup->resourceSelected(m_resourceProvider->currentPreset().data());
+
 }
 
 void KisPaintopBox::slotSlider1Changed()
@@ -896,7 +902,6 @@ void KisPaintopBox::slotToggleAlphaLockMode(bool checked)
 }
 void KisPaintopBox::slotReloadPreset()
 {   m_optionWidget->blockSignals(true);
-    m_loadOriginalPreset = true;
 
     //Here using the name and fetching the preset from the server was the only way the load was working. Otherwise it was not loading.
     KoResourceServer<KisPaintOpPreset> * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
@@ -912,6 +917,7 @@ void KisPaintopBox::slotReloadPreset()
             m_optionWidget->writeConfiguration(const_cast<KisPaintOpSettings*>(m_resourceProvider->currentPreset()->settings().data()));
             m_resourceProvider->currentPreset()->setDirtyPreset(false);
         }
+    slotUpdatePreset();
     m_optionWidget->blockSignals(false);
 }
 void KisPaintopBox::slotConfigurationItemChanged() // Called only when UI is changed and not when preset is changed

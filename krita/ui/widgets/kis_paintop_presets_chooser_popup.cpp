@@ -123,6 +123,7 @@ void KisPaintOpPresetsChooserPopup::canvasResourceChanged(KoResource* resource ,
                 preset->settings()->setProperty(i.key(), QVariant(i.value()));
             }
 
+
         }
 
         m_d->uiWdgPaintOpPresets.wdgPresetChooser->itemChooser()->setCurrentResource(preset);
