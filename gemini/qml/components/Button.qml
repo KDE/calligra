@@ -84,7 +84,8 @@ Item {
 
         Image {
             id: icon;
-            anchors.left: parent.left;
+            anchors.left: (label.text == "") ? undefined : parent.left;
+            anchors.horizontalCenter: (label.text == "") ? parent.horizontalCenter : undefined;
             anchors.top: parent.top;
             anchors.bottom: parent.bottom;
             anchors.margins: base.imageMargin;
