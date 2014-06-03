@@ -66,13 +66,13 @@ Page {
         }
         model: textDocumentsModel;
         delegate: documentTile;
+        ScrollDecorator { flickableItem: docList; }
     }
     Label {
         anchors.centerIn: parent;
         text: "No %1 - please drop some into your Documents folder (%2)".arg(base.categoryUIName).arg(docList.model.documentsFolder);
         visible: docList.count === 0;
     }
-    ScrollDecorator { flickableItem: docList; }
     Component { id: mainPage; MainPage { } }
     Component {
         id: documentTile;
