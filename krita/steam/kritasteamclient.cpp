@@ -321,10 +321,6 @@ void KritaSteamClient::showSaveAsFileDialog()
         return;
     }
 
-    d->setupDialog(KGlobal::dirs()->findResource("data", "krita/steam/SteamSaveAsFilePage.qml"));
-
-    d->steamDialog->setWindowTitle(i18n("Save to Steam Cloud"));
-
     KTemporaryFile* tempFile=0;
     tempFile = new KTemporaryFile();
     tempFile->setPrefix("steamExport");
@@ -337,16 +333,21 @@ void KritaSteamClient::showSaveAsFileDialog()
 
     qDebug() << "Steam Temp Filename: " << tempFileName;
     DocumentManager* dm = DocumentManager::instance();
-    dm->document()->saveAs(tempFileName);
+    dm->document()->exportDocument(tempFileName);
 
     QFile file(tempFileName);
-    d->steamDialog->engine()->rootContext()->setContextProperty("currentDocumentFileName", tempFileName);
     qint64 fileSize = 0;
     if (file.exists()) {
         fileSize = file.size();
     }
+
+    d->setupDialog(KGlobal::dirs()->findResource("data", "krita/steam/SteamSaveAsFilePage.qml"));
+    d->steamDialog->setWindowTitle(i18n("Save to Steam Cloud"));
+    d->steamDialog->engine()->rootContext()->setContextProperty("currentDocumentFileName", tempFileName);
     d->steamDialog->engine()->rootContext()->setContextProperty("currentDocumentFileSize", (qint32) fileSize);
     d->steamDialog->show();
+
+    QFile::remove(tempFileName);
 }
 
 void KritaSteamClient::showWorkshopDialog()

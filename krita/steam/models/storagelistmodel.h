@@ -9,6 +9,7 @@ class StorageListModel : public QAbstractListModel
     Q_PROPERTY(QObject* kritaSteamClient READ kritaSteamClient WRITE setKritaSteamClient NOTIFY kritaSteamClientChanged)
     Q_PROPERTY(qint64 maxCapacity READ maxCapacity NOTIFY maxCapacityChanged)
     Q_PROPERTY(qint64 usedCapacity READ usedCapacity NOTIFY usedCapacityChanged)
+    Q_PROPERTY(QString path READ path WRITE setPath NOTIFY pathChanged)
 public:
     enum PresetRoles {
         ImageRole = Qt::UserRole + 1,
@@ -29,6 +30,9 @@ public:
     qint64 maxCapacity();
     qint64 usedCapacity();
 
+    QString path();
+    void setPath(const QString &newPath);
+
     Q_INVOKABLE void requestIndexForFilename(const QString& filename);
 
 signals:
@@ -36,6 +40,7 @@ signals:
     void filenameFound(int index);
     void maxCapacityChanged();
     void usedCapacityChanged();
+    void pathChanged();
 
 public slots:
 

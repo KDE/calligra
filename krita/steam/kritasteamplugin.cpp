@@ -23,6 +23,7 @@
 #include "kritasteamplugin.h"
 
 #include "storagelistmodel.h"
+#include "KisSteamComponent.h"
 
 #include <QtDeclarative>
 #include <QDeclarativeEngine>
@@ -35,6 +36,7 @@ void KritaSteamPlugin::registerTypes(const char* uri)
     Q_UNUSED(uri)
     Q_ASSERT(uri == QLatin1String("org.krita.steam"));
     qmlRegisterType<StorageListModel>("org.krita.steam", 1, 0, "StorageListModel");
+    qmlRegisterType<KisSteamComponent>("org.krita.steam", 1, 0, "KisSteamComponent");
 }
 
 void KritaSteamPlugin::initializeEngine(QDeclarativeEngine* engine, const char* uri)
