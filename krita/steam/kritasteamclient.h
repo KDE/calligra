@@ -58,7 +58,7 @@ public:
      * @param appId
      * @return true if Krita was launched from Steam, false otherwise
      */
-    bool initialise(uint32 appId);
+    bool initialise(uint32 appId = 0);
     void shutdown();
     bool restartInSteam();
 

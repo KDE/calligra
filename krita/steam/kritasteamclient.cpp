@@ -154,6 +154,9 @@ bool KritaSteamClient::restartInSteam() {
 
 bool KritaSteamClient::initialise(uint32 appId)
 {
+    if(appId == 0)
+        return false;
+    
     const char* steamLanguage = 0;
     d->appId = appId;
 
