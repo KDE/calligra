@@ -115,7 +115,7 @@ void KisPaintOpPresetsChooserPopup::canvasResourceChanged(KoResource* resource ,
         blockSignals(true);
         KoResourceServer<KisPaintOpPreset> * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
         KisPaintOpPreset* preset = rserver->resourceByName(resource->name());
-        if(preset2->isDirtyPreset() && preset2!= NULL && preset!=NULL)
+        if(preset2->dirtyPreset() && preset2 && preset)
         {
             QMapIterator<QString, QVariant> i(preset2->settings()->getProperties());
             while (i.hasNext()) {

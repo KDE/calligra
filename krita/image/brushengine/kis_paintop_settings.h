@@ -164,9 +164,9 @@ public:
      */
     virtual QSizeF paintOpSize() const;
 
-    void setPreset(KisPaintOpPreset* preset);
+    void setPreset(KisPaintOpPresetWSP preset);
 
-    KisPaintOpPreset* preset() const;
+    KisPaintOpPresetWSP preset() const;
 
 
     /**

@@ -44,7 +44,7 @@ struct KisPaintOpPreset::Private {
     {}
 
     KisPaintOpSettingsSP settings;
-    bool isDirtyPreset;
+    bool dirtyPreset;
 
 };
 
@@ -53,7 +53,7 @@ KisPaintOpPreset::KisPaintOpPreset()
         : KoResource(QString())
         , m_d(new Private)
 {
-    m_d->isDirtyPreset = false;
+    m_d->dirtyPreset = false;
 }
 
 KisPaintOpPreset::KisPaintOpPreset(const QString & fileName)
@@ -74,24 +74,24 @@ KisPaintOpPreset* KisPaintOpPreset::clone() const
     if (settings()) {
         preset->setSettings(settings()->clone());
     }
-    preset->setIsDirtyPreset(isDirtyPreset());
+    preset->setDirtyPreset(dirtyPreset());
     // only valid if we could clone the settings
     preset->setValid(settings());
 
     preset->setPaintOp(paintOp());
     preset->setName(name());
-    preset->settings()->setPreset(preset);
+    preset->settings()->setPreset(KisPaintOpPresetWSP(preset));
 
 
     return preset;
 }
-void KisPaintOpPreset::setIsDirtyPreset(bool value)
+void KisPaintOpPreset::setDirtyPreset(bool value)
 {
-    m_d->isDirtyPreset = value;
+    m_d->dirtyPreset = value;
 }
-bool KisPaintOpPreset::isDirtyPreset() const
+bool KisPaintOpPreset::dirtyPreset() const
 {
-    return m_d->isDirtyPreset;
+    return m_d->dirtyPreset;
 }
 
 void KisPaintOpPreset::setPaintOp(const KoID & paintOp)
@@ -111,16 +111,16 @@ void KisPaintOpPreset::setSettings(KisPaintOpSettingsSP settings)
     Q_ASSERT(settings);
     Q_ASSERT(!settings->getString("paintop", "").isEmpty());
 
-    bool saveIsDirtyPreset = isDirtyPreset();
+    bool saveDirtyPreset = dirtyPreset();
     if (settings) {
         m_d->settings = settings->clone();
-        m_d->settings->setPreset(this);
+        m_d->settings->setPreset(KisPaintOpPresetWSP(this));
     }
     else {
         m_d->settings = 0;
         m_d->settings->setPreset(0);
     }
-    setIsDirtyPreset(saveIsDirtyPreset);
+    setDirtyPreset(saveDirtyPreset);
 
     setValid(m_d->settings);
 }
@@ -147,7 +147,7 @@ bool KisPaintOpPreset::load()
 
     bool res = loadFromDevice(&file);
 
-    this->setIsDirtyPreset(false);
+    this->setDirtyPreset(false);
 
 
     return true;
@@ -292,7 +292,7 @@ bool KisPaintOpPreset::saveToDevice(QIODevice *dev) const
         img = image();
     }
 
-    m_d->isDirtyPreset = false;
+    m_d->dirtyPreset = false;
 
     return writer.write(img);
 

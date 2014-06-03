@@ -75,9 +75,9 @@ public:
     QString defaultFileExtension() const {
         return ".kpp";
     }
-    void setIsDirtyPreset(bool value);
+    void setDirtyPreset(bool value);
 
-    bool isDirtyPreset() const;
+    bool dirtyPreset() const;
 
 
 protected:

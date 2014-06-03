@@ -44,7 +44,7 @@ struct KisPaintOpSettings::Private {
     KisNodeSP node;
     QPointer<KisPaintOpSettingsWidget> settingsWidget;
     QString modelName;
-    KisPaintOpPreset* preset;
+    KisPaintOpPresetWSP preset;
 };
 
 KisPaintOpSettings::KisPaintOpSettings()
@@ -61,11 +61,11 @@ void KisPaintOpSettings::setOptionsWidget(KisPaintOpSettingsWidget* widget)
 {
     d->settingsWidget = widget;
 }
-void KisPaintOpSettings::setPreset(KisPaintOpPreset* preset)
+void KisPaintOpSettings::setPreset(KisPaintOpPresetWSP preset)
 {
     d->preset = preset;
 }
-KisPaintOpPreset* KisPaintOpSettings::preset() const
+KisPaintOpPresetWSP KisPaintOpSettings::preset() const
 {
     return d->preset;
 }
@@ -230,10 +230,6 @@ void KisPaintOpSettings::onPropertyChanged()
 {
     if(this->preset()!= NULL)
     {
-        if(this->preset()->isDirtyPreset() == false)
-        {
-
-        }
-        this->preset()->setIsDirtyPreset(true);
+        this->preset()->setDirtyPreset(true);
     }
 }

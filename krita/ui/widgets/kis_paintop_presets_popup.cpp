@@ -292,10 +292,20 @@ void KisPaintOpPresetsPopup::showScratchPad()
 void KisPaintOpPresetsPopup::resourceSelected(KoResource* resource)
 {
     KisPaintOpPreset* preset = dynamic_cast<KisPaintOpPreset*>(resource);
-    if(preset->isDirtyPreset())
-        m_d->uiWdgPaintOpPresetSettings.txtPreset->setText(resource->name()+"(Dirty)");
+    QPalette palette;
+    if(preset->dirtyPreset())
+       {
+        palette.setColor(QPalette::Base, Qt::black);
+        palette.setColor(QPalette::Text, Qt::white);
+        m_d->uiWdgPaintOpPresetSettings.txtPreset->setPalette(palette);
+       }
     else
-        m_d->uiWdgPaintOpPresetSettings.txtPreset->setText(resource->name());
+    {
+     palette.setColor(QPalette::Base, QColor(255,200,200));
+     palette.setColor(QPalette::Text, Qt::black);
+     m_d->uiWdgPaintOpPresetSettings.txtPreset->setPalette(palette);
+    }
+    m_d->uiWdgPaintOpPresetSettings.txtPreset->setText(resource->name());
 }
 
 void KisPaintOpPresetsPopup::setPaintOpList(const QList< KisPaintOpFactory* >& list)
