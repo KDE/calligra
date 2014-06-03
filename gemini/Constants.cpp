@@ -26,8 +26,9 @@ Constants::Constants(QObject* parent)
     : QObject(parent)
 {
     m_gridWidth = qApp->activeWindow()->width() / gridColumns();
-    m_gridHeight = qApp->activeWindow()->height() / gridHeight();
+    m_gridHeight = qApp->activeWindow()->height() / gridRows();
     m_toolbarButtonSize = m_gridHeight;
+    m_toolbarHeight = (m_gridHeight *  gridRows()) / 12.55814; // magic number which /should/ yield a nice, solid 84 if we're running at 1080p
 }
 
 int Constants::animationDuration() const
@@ -44,6 +45,7 @@ void Constants::setGridHeight( qreal height )
 {
     m_gridHeight = height;
     m_toolbarButtonSize = m_gridHeight;
+    m_toolbarHeight = (m_gridHeight *  gridRows()) / 12.55814; // magic number which /should/ yield a nice, solid 84 if we're running at 1080p
     emit gridSizeChanged();
 }
 
@@ -56,12 +58,18 @@ void Constants::setGridWidth( qreal width )
 {
     m_gridWidth = width;
     m_toolbarButtonSize = m_gridHeight;
+    m_toolbarHeight = (m_gridHeight *  gridRows()) / 12.55814; // magic number which /should/ yield a nice, solid 84 if we're running at 1080p
     emit gridSizeChanged();
 }
 
 qreal Constants::toolbarButtonSize() const
 {
     return m_toolbarButtonSize;
+}
+
+qreal Constants::toolbarHeight() const
+{
+    return m_toolbarHeight;
 }
 
 int Constants::gridRows() const

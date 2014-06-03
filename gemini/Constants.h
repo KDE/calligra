@@ -34,6 +34,7 @@ class Constants : public QObject
     Q_PROPERTY(qreal GridHeight READ gridHeight NOTIFY gridSizeChanged)
     Q_PROPERTY(qreal GridWidth READ gridWidth NOTIFY gridSizeChanged)
     Q_PROPERTY(qreal ToolbarButtonSize READ toolbarButtonSize NOTIFY gridSizeChanged)
+    Q_PROPERTY(qreal ToolbarHeight READ toolbarHeight NOTIFY gridSizeChanged)
     Q_PROPERTY(qreal SmallFontSize READ smallFontSize NOTIFY gridSizeChanged)
     Q_PROPERTY(qreal DefaultFontSize READ defaultFontSize NOTIFY gridSizeChanged)
     Q_PROPERTY(qreal LargeFontSize READ largeFontSize NOTIFY gridSizeChanged)
@@ -46,6 +47,7 @@ public:
     qreal gridHeight() const;
     qreal gridWidth() const;
     qreal toolbarButtonSize() const;
+    qreal toolbarHeight() const;
     int gridRows() const;
     int gridColumns() const;
     qreal defaultMargin() const;
@@ -65,6 +67,7 @@ private:
     qreal m_gridWidth;
     qreal m_gridHeight;
     qreal m_toolbarButtonSize;
+    qreal m_toolbarHeight;
 };
 
 #endif // CONSTANTS_H
