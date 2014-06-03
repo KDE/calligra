@@ -522,7 +522,8 @@ void MainWindow::documentChanged()
     d->desktopKisView->setQtMainWindow(d->desktopView);
 
     // Define new actions here
-    d->addSteamActions(d->desktopKisView->actionCollection());
+    // TODO: uncomment to enable Steam related actions
+    // d->addSteamActions(d->desktopKisView->actionCollection());
 
     KXMLGUIFactory* factory = d->desktopKisView->factory();
     factory->removeClient(d->desktopKisView);
