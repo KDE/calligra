@@ -47,6 +47,7 @@
 #include <KConfigGroup>
 
 #include <KoCanvasBase.h>
+#include <KoToolManager.h>
 #include <KoMainWindow.h>
 #include <KoGlobal.h>
 #include <KoDocumentInfo.h>
@@ -431,6 +432,7 @@ void MainWindow::adjustZoomOnDocumentChangedAndStuff()
         qApp->processEvents();
         d->toDesktop->setEnabled(true);
     }
+    KoToolManager::instance()->switchToolRequested("TextToolFactory_ID");
 }
 
 void MainWindow::setDocAndPart(QObject* document, QObject* part)
