@@ -21,10 +21,29 @@ import "components"
 import org.calligra.CalligraComponents 0.1 as Calligra
 
 Item {
+    id: base;
     property alias source: wordsCanvas.source;
+    property alias navigateMode: controllerFlickable.enabled;
+    Calligra.TextDocumentCanvas {
+        id: wordsCanvas;
+        anchors.fill: parent;
+        onLoadingBegun: baseLoadingDialog.visible = true;
+        onLoadingFinished: {
+            console.debug("doc and part: " + doc() + " " + part());
+            mainWindow.setDocAndPart(doc(), part());
+            baseLoadingDialog.hideMe();
+        }
+        onCurrentPageNumberChanged: navigatorListView.positionViewAtIndex(currentPageNumber - 1, ListView.Contain);
+        Rectangle { anchors.fill: parent; opacity: 0.5; color: "blue"; }
+    }
     Flickable {
         id: controllerFlickable;
-        anchors.fill: parent;
+        anchors {
+            top: parent.top;
+            left: parent.left;
+            right: parent.right;
+            bottom: enabled ? parent.bottom : parent.top;
+        }
         Calligra.CanvasControllerItem {
             id: controllerItem;
             canvas: wordsCanvas;
@@ -38,18 +57,16 @@ Item {
                 }
             }
         }
-    }
-    Calligra.TextDocumentCanvas {
-        id: wordsCanvas;
-        anchors.fill: parent;
-        onLoadingBegun: baseLoadingDialog.visible = true;
-        onLoadingFinished: {
-            console.debug("doc and part: " + doc() + " " + part());
-            mainWindow.setDocAndPart(doc(), part());
-            baseLoadingDialog.hideMe();
+        MouseArea {
+            x: controllerFlickable.contentX;
+            y: controllerFlickable.contentY;
+            height: controllerFlickable.height;
+            width: controllerFlickable.width;
+            onDoubleClicked: {
+                toolManager.requestToolChange("TextToolFactory_ID");
+                base.navigateMode = false;
+            }
         }
-        onCurrentPageNumberChanged: navigatorListView.positionViewAtIndex(currentPageNumber - 1, ListView.Contain);
-        Rectangle { anchors.fill: parent; opacity: 0.5; color: "blue"; }
     }
     QtObject {
         id: d;
@@ -82,6 +99,7 @@ Item {
             top: parent.top;
             bottom: parent.bottom;
             margins: Constants.DefaultMargin;
+            topMargin: Constants.DefaultMargin + Constants.ToolbarHeight;
         }
         x: -width;
         Behavior on x { PropertyAnimation { duration: Constants.AnimationDuration; } }
@@ -124,9 +142,33 @@ Item {
             anchors.fill: parent;
             hoverEnabled: true;
         }
+        Button {
+            anchors {
+                top: parent.top;
+                left: parent.left;
+                right: parent.right;
+            }
+            height: Constants.GridHeight / 2;
+            image: Settings.theme.icon("up");
+            imageMargin: 2;
+        }
+        Button {
+            anchors {
+                left: parent.left;
+                right: parent.right;
+                bottom: parent.bottom;
+            }
+            height: Constants.GridHeight / 2;
+            image: Settings.theme.icon("down");
+            imageMargin: 2;
+        }
         ListView {
             id: navigatorListView;
-            anchors.fill: parent;
+            anchors {
+                fill: parent;
+                topMargin: Constants.GridHeight / 2;
+                bottomMargin: Constants.GridHeight / 2;
+            }
             clip: true;
             model: wordsCanvas.documentModel;
             delegate: Item {
@@ -140,7 +182,7 @@ Item {
                     }
                     text: index + 1;
                     font.pixelSize: Constants.SmallFontSize;
-                    color: "white";
+                    color: "#c1cdd1";
                 }
                 Image {
                     anchors {
@@ -180,12 +222,12 @@ Item {
         Rectangle {
             anchors.fill: parent;
             radius: Constants.DefaultMargin;
-            color: "darkslategrey";
-            opacity: 0.8;
+            color: Settings.theme.color("components/overlay/base");
+            opacity: 0.7;
         }
         Label {
             anchors.centerIn: parent;
-            color: "white";
+            color: Settings.theme.color("components/overlay/text");
             text: (wordsCanvas.documentModel === null) ? 0 : wordsCanvas.currentPageNumber + " of " + wordsCanvas.documentModel.rowCount();
         }
     }
