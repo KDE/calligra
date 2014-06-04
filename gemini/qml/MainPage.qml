@@ -125,7 +125,10 @@ Page {
                 textColor: Settings.theme.color("components/toolbar/text");
                 checkable: true;
                 radius: 4;
-                TextStylePanel {}
+                TextStylePanel {
+                    document: viewLoader.item ? viewLoader.item.document : null;
+                    textEditor: viewLoader.item ? viewLoader.item.textEditor : null;
+                }
             }
             Rectangle { color: Settings.theme.color("components/toolbar/text"); height: parent.height; width: 1; }
             Button {

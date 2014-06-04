@@ -22,6 +22,8 @@ import org.calligra.CalligraComponents 0.1 as Calligra
 
 Item {
     id: base;
+    property alias document: wordsCanvas.document;
+    property alias textEditor: wordsCanvas.textEditor;
     property alias source: wordsCanvas.source;
     property alias navigateMode: controllerFlickable.enabled;
     Calligra.TextDocumentCanvas {
