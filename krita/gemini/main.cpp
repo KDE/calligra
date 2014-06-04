@@ -161,11 +161,7 @@ int main( int argc, char** argv )
 
 #if defined HAVE_STEAMWORKS
     KritaSteamClient* steamClient = KritaSteamClient::instance();
-    if (!steamClient->initialise(STEAM_APP_ID_GEMINI))
-    {
-        /* Krita wasn't launched from Steam, shutdown (it should launch separately */
-        return 1;
-    }
+    steamClient->initialise(STEAM_APP_ID_GEMINI);
 #endif
 
     KAboutData aboutData("kritagemini",

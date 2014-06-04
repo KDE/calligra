@@ -198,7 +198,7 @@ bool KritaSteamClient::initialise(uint32 appId)
         qDebug("Steam did not initialise correctly!");
     }
 
-    return true;
+    return d->initialisedWithoutError;
 }
 
 void KritaSteamClient::shutdown()
