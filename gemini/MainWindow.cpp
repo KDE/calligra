@@ -69,6 +69,7 @@
 #include "Constants.h"
 #include "SimpleTouchArea.h"
 #include "ToolManager.h"
+#include "ParagraphStylesModel.h"
 
 #ifdef Q_OS_WIN
 // Slate mode/docked detection stuff
@@ -247,6 +248,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     qmlRegisterType<DocumentListModel>("org.calligra", 1, 0, "DocumentListModel");
     qmlRegisterType<SimpleTouchArea>("org.calligra", 1, 0, "SimpleTouchArea");
     qmlRegisterType<ToolManager>("org.calligra", 1, 0, "ToolManager");
+    qmlRegisterType<ParagraphStylesModel>("org.calligra", 1, 0, "ParagraphStylesModel");
 
     qApp->setActiveWindow( this );
 
