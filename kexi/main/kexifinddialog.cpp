@@ -107,6 +107,11 @@ KexiFindDialog::KexiFindDialog(QWidget* parent)
     connect(m_btnClose, SIGNAL(clicked()), this, SLOT(slotCloseClicked()));
     connect(m_btnReplace, SIGNAL(clicked()), this, SIGNAL(replaceNext()));
     connect(m_btnReplaceAll, SIGNAL(clicked()), this, SIGNAL(replaceAll()));
+    connect(m_textToFind, SIGNAL(activated(const QString&)), this, SLOT(addToFindHistory()));
+    connect(m_btnFind, SIGNAL(clicked()), this, SLOT(addToFindHistory()));
+    connect(m_textToReplace, SIGNAL(activated(const QString&)), this, SLOT(addToReplaceHistory()));
+    connect(m_btnReplace, SIGNAL(clicked()), this, SLOT(addToReplaceHistory()));
+    connect(m_btnReplaceAll, SIGNAL(clicked()), this, SLOT(addToReplaceHistory()));
     // clear message after the text is changed
     connect(m_textToFind, SIGNAL(editTextChanged(QString)), this, SLOT(updateMessage(QString)));
     connect(m_textToReplace, SIGNAL(editTextChanged(QString)), this, SLOT(updateMessage(QString)));
@@ -257,6 +262,17 @@ void KexiFindDialog::updateMessage(bool found)
     else
         setMessage(i18n("The search item was not found"));
 }
+
+void KexiFindDialog::addToFindHistory()
+{
+    m_textToFind->addToHistory(m_textToFind->currentText());
+}
+
+void KexiFindDialog::addToReplaceHistory()
+{
+    m_textToReplace->addToHistory(m_textToReplace->currentText());
+}
+
 
 void KexiFindDialog::slotCloseClicked()
 {

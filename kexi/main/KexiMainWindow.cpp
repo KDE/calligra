@@ -32,7 +32,6 @@
 
 #include <QMutex>
 #include <QWaitCondition>
-#include <QFileDialog>
 #include <QPixmap>
 #include <QFocusEvent>
 #include <QTextStream>
