@@ -43,9 +43,11 @@ class CQTextDocumentCanvas : public CQCanvasBase
     Q_OBJECT
     Q_PROPERTY(QString searchTerm READ searchTerm WRITE setSearchTerm NOTIFY searchTermChanged)
     Q_PROPERTY(QObject* documentModel READ documentModel NOTIFY documentModelChanged)
+    Q_PROPERTY(QObject* document READ doc NOTIFY documentModelChanged);
     Q_PROPERTY(QSize documentSize READ documentSize NOTIFY documentSizeChanged)
     Q_PROPERTY(int currentPageNumber READ currentPageNumber WRITE setCurrentPageNumber NOTIFY currentPageNumberChanged)
     Q_PROPERTY(QObjectList linkTargets READ linkTargets NOTIFY linkTargetsChanged)
+    Q_PROPERTY(QObject* textEditor READ textEditor NOTIFY textEditorChanged)
 
 public:
     CQTextDocumentCanvas(QDeclarativeItem* parent = 0);
@@ -72,6 +74,7 @@ public:
 
     Q_INVOKABLE qreal pagePosition( int page );
 
+    QObject* textEditor() const;
 signals:
     void searchTermChanged();
     void documentModelChanged();
@@ -79,11 +82,16 @@ signals:
     void currentPageNumberChanged();
     void cameraYChanged();
     void linkTargetsChanged();
+    void textEditorChanged();
 
 protected:
     virtual bool event( QEvent* event );
     virtual void geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry);
     virtual void openFile(const QString& uri);
+    virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *e);
+    virtual void mousePressEvent(QGraphicsSceneMouseEvent *e);
+    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *e);
+    virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *e);
 
 private slots:
     void findNoMatchFound();
@@ -92,6 +100,7 @@ private slots:
     void findPrevious();
     void findNext();
     void updateDocumentSize(const QSize &size);
+    void currentToolChanged(KoCanvasController* controller, int uniqueToolId);
 
 private:
     void createAndSetCanvasControllerOn(KoCanvasBase *canvas);

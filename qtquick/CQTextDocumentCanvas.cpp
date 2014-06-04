@@ -41,11 +41,16 @@
 #include <KWPage.h>
 #include <KWCanvasItem.h>
 #include <KoShape.h>
+#include <KoToolManager_p.h>
+#include <KoToolBase.h>
+#include <KoPointerEvent.h>
+#include <KoTextEditor.h>
 #include <KActionCollection>
 #include <QGraphicsWidget>
 #include <QTextDocument>
 #include <QTextFrame>
 #include <QTextLayout>
+#include <QGraphicsSceneMouseEvent>
 #include <KDebug>
 
 class CQTextDocumentCanvas::Private
@@ -57,7 +62,8 @@ public:
           documentModel(0),
           document(0),
           pageNumber(0),
-          throttleTimer(new QTimer())
+          throttleTimer(new QTimer()),
+          currentTool(0)
     {
         throttleTimer->setInterval(200);
         throttleTimer->setSingleShot(true);
@@ -74,6 +80,7 @@ public:
     QPoint currentPoint;
     QObjectList linkTargets;
     QTimer* throttleTimer;
+    KoToolBase* currentTool;
 
     void updateLinkTargets()
     {
@@ -143,11 +150,13 @@ public:
 CQTextDocumentCanvas::CQTextDocumentCanvas(QDeclarativeItem* parent)
     : CQCanvasBase(parent), d(new Private)
 {
+    setAcceptedMouseButtons(Qt::LeftButton);
     d->findText = new KoFindText(this);
 
     connect (d->findText, SIGNAL(updateCanvas()), SLOT(updateCanvas()));
     connect (d->findText, SIGNAL(matchFound(KoFindMatch)), SLOT(findMatchFound(KoFindMatch)));
     connect (d->findText, SIGNAL(noMatchFound()), SLOT(findNoMatchFound()));
+    connect (KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*,int)), SLOT(currentToolChanged(KoCanvasController*,int)));
 }
 
 CQTextDocumentCanvas::~CQTextDocumentCanvas()
@@ -196,6 +205,9 @@ void CQTextDocumentCanvas::openFile(const QString& uri)
     d->updateLinkTargets();
     emit linkTargetsChanged();
 
+    connect(d->canvas->shapeManager(), SIGNAL(selectionChanged()), SIGNAL(textEditorChanged()));
+
+    emit textEditorChanged();
     emit loadingFinished();
 }
 
@@ -224,6 +236,14 @@ qreal CQTextDocumentCanvas::pagePosition(int pageIndex)
     QTimer::singleShot(0, d->throttleTimer, SLOT(stop()));
     QTimer::singleShot(0, this, SIGNAL(currentPageNumberChanged()));
     return d->canvas->viewMode()->documentToView(page.rect().topLeft(), d->canvas->viewConverter()).y();
+}
+
+QObject* CQTextDocumentCanvas::textEditor() const
+{
+    if(d->canvas) {
+        return KoTextEditor::getTextEditorFromCanvas(d->canvas);
+    }
+    return 0;
 }
 
 void CQTextDocumentCanvas::setCameraY(int cameraY)
@@ -312,6 +332,47 @@ bool CQTextDocumentCanvas::event( QEvent* event )
             break;
     }
     return QDeclarativeItem::event( event );
+}
+
+void CQTextDocumentCanvas::currentToolChanged(KoCanvasController* controller, int uniqueToolId)
+{
+    d->currentTool = qobject_cast<KoToolBase*>(KoToolManager::instance()->toolById(d->canvas, KoToolManager::instance()->activeToolId()));
+}
+
+void CQTextDocumentCanvas::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* e)
+{
+    QMouseEvent me(e->type(), e->pos().toPoint(), e->button(), e->buttons(), e->modifiers());
+    KoPointerEvent pe(&me, d->canvas->viewToDocument(e->pos() + d->canvas->documentOffset()));
+    d->currentTool->mouseDoubleClickEvent(&pe);
+    updateCanvas();
+    e->setAccepted(me.isAccepted());
+}
+
+void CQTextDocumentCanvas::mouseMoveEvent(QGraphicsSceneMouseEvent* e)
+{
+    QMouseEvent me(e->type(), e->pos().toPoint(), e->button(), e->buttons(), e->modifiers());
+    KoPointerEvent pe(&me, d->canvas->viewToDocument(e->pos() + d->canvas->documentOffset()));
+    d->currentTool->mouseMoveEvent(&pe);
+    updateCanvas();
+    e->setAccepted(me.isAccepted());
+}
+
+void CQTextDocumentCanvas::mousePressEvent(QGraphicsSceneMouseEvent* e)
+{
+    QMouseEvent me(e->type(), e->pos().toPoint(), e->button(), e->buttons(), e->modifiers());
+    KoPointerEvent pe(&me, d->canvas->viewToDocument(e->pos() + d->canvas->documentOffset()));
+    d->currentTool->mousePressEvent(&pe);
+    updateCanvas();
+    e->setAccepted(me.isAccepted());
+}
+
+void CQTextDocumentCanvas::mouseReleaseEvent(QGraphicsSceneMouseEvent* e)
+{
+    QMouseEvent me(e->type(), e->pos().toPoint(), e->button(), e->buttons(), e->modifiers());
+    KoPointerEvent pe(&me, d->canvas->viewToDocument(e->pos() + d->canvas->documentOffset()));
+    d->currentTool->mouseReleaseEvent(&pe);
+    updateCanvas();
+    e->setAccepted(me.isAccepted());
 }
 
 void CQTextDocumentCanvas::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry)
