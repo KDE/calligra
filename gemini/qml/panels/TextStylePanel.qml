@@ -18,8 +18,11 @@
 
 import QtQuick 1.1
 import "../components"
+import org.calligra 1.0
 
 Item {
+    property alias document: paragraphStyles.document;
+    property alias textEditor: paragraphStyles.textEditor;
     opacity: parent.checked ? 1 : 0;
     Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
     anchors {
@@ -32,9 +35,12 @@ Item {
     Rectangle {
         anchors.fill: parent;
         color: "white";
+        border.color: "#e8e9ea";
+        border.width: 1;
         opacity: 0.96;
     }
     Rectangle {
+        id: titleBar;
         anchors {
             top: parent.top;
             left: parent.left;
@@ -52,6 +58,44 @@ Item {
             color: "#5b6573";
             font.pixelSize: Constants.SmallFontSize
             font.bold: true;
+        }
+    }
+    ParagraphStylesModel {
+        id: paragraphStyles;
+    }
+    ListView {
+        anchors {
+            top: titleBar.bottom;
+            left: parent.left;
+            right: parent.right;
+            bottom: parent.bottom;
+        }
+        clip: true;
+        model: paragraphStyles;
+        delegate: Item {
+            width: ListView.view.width;
+            height: Constants.GridHeight;
+            Rectangle {
+                anchors.fill: parent;
+                color: "#00adf5";
+                opacity: model.current ? 0.6 : 0;
+            }
+            Text {
+                anchors {
+                    fill: parent;
+                    leftMargin: Constants.DefaultMargin;
+                }
+                text: model.name;
+                verticalAlignment: Text.AlignVCenter;
+                font: model.font;
+            }
+            Rectangle {
+                anchors.bottom: parent.bottom;
+                width: parent.width;
+                height: 1;
+                color: "#e8e9ea";
+                opacity: 0.7;
+            }
         }
     }
 }
