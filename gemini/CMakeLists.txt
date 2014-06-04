@@ -36,6 +36,7 @@ set(calligragemini_SRCS
     TouchDeclarativeView.cpp
     Theme.cpp
     ToolManager.cpp
+    ParagraphStylesModel.cpp
 )
 
 
