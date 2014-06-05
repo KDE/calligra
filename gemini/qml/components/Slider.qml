@@ -17,7 +17,6 @@
  */
 
 import QtQuick 1.1
-import org.krita.sketch 1.0
 
 Item {
     id: base;
@@ -34,7 +33,13 @@ Item {
 
     Rectangle {
         id: fill;
-        anchors.fill: parent;
+        anchors {
+            //fill: parent;
+            right: parent.right;
+            left: parent.left;
+            verticalCenter: parent.verticalCenter;
+        }
+        height: 4;
         border.width: 1;
         border.color: Settings.theme.color("components/slider/background/border");
         color: Settings.theme.color("components/slider/background/fill");
