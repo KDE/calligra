@@ -239,6 +239,10 @@ Page {
             Button {
                 height: parent.height; width: height;
                 image: Settings.theme.icon("SVG-Icon-AddNote-1");
+                checkable: true;
+                radius: 4;
+                checkedColor: "#3C00adf5";
+                NotesPanel {}
             }
             Button {
                 height: parent.height;
