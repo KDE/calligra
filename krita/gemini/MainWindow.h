@@ -59,6 +59,8 @@ public:
 
     virtual void closeEvent(QCloseEvent* event);
 
+    Q_INVOKABLE QString openImage();
+
     bool forceFullScreen();
     void forceFullScreen(bool newValue);
 public Q_SLOTS:
@@ -73,6 +75,7 @@ public Q_SLOTS:
     void resourceChangedSketch(int key, const QVariant& v);
     void loadFromSteamCloud();
     void saveToSteamCloud();
+
 Q_SIGNALS:
     void closeRequested();
     void switchedToSketch();
