@@ -72,3 +72,8 @@ install( FILES
 if(SHOULD_BUILD_EXTRA_THUMBNAIL)
     install( FILES words_docx_thumbnail.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 endif(SHOULD_BUILD_EXTRA_THUMBNAIL)
+
+if(SHOULD_BUILD_OKULAR_GENERATOR_DOCX)
+    install( FILES libokularGenerator_docx_calligra.desktop okularDocx_calligra.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+    install( PROGRAMS okularApplication_docx_calligra.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
+endif(SHOULD_BUILD_OKULAR_GENERATOR_DOCX)

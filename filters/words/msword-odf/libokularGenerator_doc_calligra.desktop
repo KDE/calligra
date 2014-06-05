@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Service
+Name=Microsoft Word Documents
+Comment=DOC for Okular
+ServiceTypes=okular/Generator
+MimeType=application/msword;
+X-KDE-Library=okularGenerator_odt
+X-KDE-Priority=1
+X-KDE-okularAPIVersion=1
+X-KDE-okularHasInternalSettings=false
