@@ -128,8 +128,8 @@ var values = {
                 border: "silver",
             },
             handle: {
-                fill: "silver",
-                border: "transparent",
+                fill: "#00adf5",
+                border: "white",
             },
         },
         textField: {
