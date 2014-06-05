@@ -217,9 +217,11 @@ Page {
             }
             Rectangle { color: Settings.theme.color("components/toolbar/text"); height: parent.height; width: 1; }
             Button {
-                text: "(cfg)"
-                height: parent.height; width: Constants.GridWidth;
-                textColor: Settings.theme.color("components/toolbar/text");
+                height: parent.height; width: height;
+                image: Settings.theme.icon("SVG-Icon-Options-1");
+                checkable: true;
+                radius: 4;
+                ImageToolsPanel {}
             }
         }
         Row {
