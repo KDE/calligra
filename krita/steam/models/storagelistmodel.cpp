@@ -12,10 +12,12 @@ public:
     Private()
         : kritaSteamClient(0)
     {
-    };
+        path = "workingcopies/";
+    }
 
     QList<RemoteStorageEntry> listData;
     KritaSteamClient* kritaSteamClient;
+    QString path;
 };
 
 StorageListModel::StorageListModel(QObject *parent) :
@@ -87,7 +89,7 @@ void StorageListModel::setKritaSteamClient(QObject* kritaSteamClient)
             d->listData.clear();
 
             for(int index=0; index < completeRemoteFilesList.size(); index++) {
-                if (completeRemoteFilesList[index].filePath.startsWith("workingcopies/")) {
+                if (completeRemoteFilesList[index].filePath.startsWith(d->path)) {
                     d->listData.append(completeRemoteFilesList[index]);
                 }
             }
@@ -132,4 +134,19 @@ qint64 StorageListModel::usedCapacity()
         }
     }
     return result;
+}
+
+QString StorageListModel::path()
+{
+    return d->path;
+}
+
+void StorageListModel::setPath(const QString &newPath)
+{
+    d->path = newPath;
+
+    // TODO Update model to show files
+    // (currently only looking at workingcopies)
+
+    emit pathChanged();
 }

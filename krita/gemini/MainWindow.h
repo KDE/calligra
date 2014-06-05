@@ -63,6 +63,7 @@ public:
 
     bool forceFullScreen();
     void forceFullScreen(bool newValue);
+
 public Q_SLOTS:
     void minimize();
     void closeWindow();

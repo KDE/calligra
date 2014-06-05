@@ -27,6 +27,7 @@
 
 #include <QApplication>
 #include <QResizeEvent>
+#include <QDebug>
 #include <QDeclarativeView>
 #include <QDeclarativeContext>
 #include <QDeclarativeEngine>
@@ -48,6 +49,7 @@
 #include <ktoolbar.h>
 #include <kmessagebox.h>
 #include <kmenubar.h>
+#include <klocalizedstring.h>
 #include <kxmlguifactory.h>
 
 #include <KoCanvasBase.h>
@@ -95,7 +97,6 @@
 #include "steam/kritasteam.h"
 #endif
 
-#define MAX_TABLET_MODE_SCREENSIZE_MM 254   // force slate mode on 10" and lower screens
 class MainWindow::Private
 {
 public:
@@ -124,14 +125,6 @@ public:
 //         slateMode = (GetSystemMetrics(SM_CONVERTIBLESLATEMODE) == 0);
 //         docked = (GetSystemMetrics(SM_SYSTEMDOCKED) != 0);
 #endif
-        // Desktop widget
-        QDesktopWidget *desktopw = QApplication::desktop();
-        QWidget *screen = desktopw->screen(desktopw->primaryScreen());
-        int heightmm = screen->heightMM();
-        int widthmm = screen->widthMM();
-        if ((heightmm*heightmm + widthmm*widthmm) <= MAX_TABLET_MODE_SCREENSIZE_MM*MAX_TABLET_MODE_SCREENSIZE_MM) {
-            slateMode = true;
-        }
 
 #ifdef HAVE_STEAMWORKS
         // Big Picture Mode should force full-screen behaviour in Sketch mode
@@ -225,6 +218,7 @@ public:
         }
 
         desktopView = new KoMainWindow(KIS_MIME_TYPE, KisFactory2::componentData());
+        qDebug() << "Created KoMainWindow (desktop)";
 
         toSketch = new KAction(desktopView);
         toSketch->setEnabled(false);
@@ -522,13 +516,15 @@ void MainWindow::documentChanged()
     d->desktopKisView->setQtMainWindow(d->desktopView);
 
     // Define new actions here
-    d->addSteamActions(d->desktopKisView->actionCollection());
+    // TODO: uncomment to enable Steam related actions
+    // d->addSteamActions(d->desktopKisView->actionCollection());
 
     KXMLGUIFactory* factory = d->desktopKisView->factory();
     factory->removeClient(d->desktopKisView);
     factory->addClient(d->desktopKisView);
 
     d->desktopViewProxy->documentChanged();
+
     connect(d->desktopKisView, SIGNAL(sigLoadingFinished()), d->centerer, SLOT(start()));
     connect(d->desktopKisView, SIGNAL(sigSavingFinished()), this, SLOT(resetWindowTitle()));
     connect(d->desktopKisView->canvasBase()->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),

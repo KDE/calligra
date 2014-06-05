@@ -56,18 +56,19 @@ bool KisSteamCloudStorage::pushFile(const QString &filepath, const QString &dest
     qDebug() << "Saving to cloud: " << filepath;
     if(file.exists()) {
         if (file.open(QIODevice::ReadOnly)) {
+            QByteArray fileData = file.readAll();
+            QByteArray filePathArray = destPath.toLocal8Bit();
             qint64 fileSize = file.size();
 
             qDebug() << "pushFile: fileSize: " << fileSize;
 
-            QByteArray fileData = file.readAll();
             if (fileData.size() != 0) {
-                success = SteamRemoteStorage()->FileWrite( "workingcopies/sampleFile.kra", fileData.constData(), fileData.size() );
+                success = SteamRemoteStorage()->FileWrite( filePathArray.data(), fileData.constData(), fileData.size() );
             }
             if (success) {
                 qDebug("pushFile: file written successfully");
             } else {
-                qDebug("pushFile: file not successfully");
+                qDebug("pushFile: file not written successfully");
             }
         } else {
             qDebug("pushFile: Error opening file");

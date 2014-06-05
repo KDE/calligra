@@ -86,12 +86,7 @@ int main( int argc, char** argv )
 
 #if defined HAVE_STEAMWORKS
     KritaSteamClient* steamClient = KritaSteamClient::instance();
-    if (!steamClient->initialise(STEAM_APP_ID_SKETCH))
-    {
-        /* Krita wasn't launched from Steam, shutdown (it should launch separately */
-        qDebug("Krita didn't launch correctly, shutting down.");
-        return 1;
-    }
+    steamClient->initialise(STEAM_APP_ID_SKETCH);
 #endif
 
     KAboutData aboutData("kritasketch",
