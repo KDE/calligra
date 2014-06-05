@@ -42,7 +42,7 @@ KWDebugWidget::~KWDebugWidget()
 void KWDebugWidget::initUi()
 {
     m_label = new QLabel(this);
-    m_label->setText("Some debug info will be here."); // No i18n as it's for debug only
+    m_label->setText("Some debug info will be here."); // No i18n as it's for debug only.
 }
 
 void KWDebugWidget::initLayout()
