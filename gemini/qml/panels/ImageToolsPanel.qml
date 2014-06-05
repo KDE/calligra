@@ -28,7 +28,7 @@ Item {
         right: parent.right;
         topMargin: 4;
     }
-    height: Constants.GridHeight * 3;
+    height: Constants.GridHeight * 2 + Constants.SmallFontSize + 2 * Constants.DefaultMargin;
     width: Constants.GridWidth * 2;
     Rectangle {
         anchors.fill: parent;
