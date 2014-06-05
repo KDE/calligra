@@ -75,6 +75,7 @@ public:
     Q_INVOKABLE qreal pagePosition( int page );
 
     QObject* textEditor() const;
+    Q_INVOKABLE void deselectEverything();
 signals:
     void searchTermChanged();
     void documentModelChanged();

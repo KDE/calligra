@@ -26,6 +26,14 @@ Item {
     property alias textEditor: wordsCanvas.textEditor;
     property alias source: wordsCanvas.source;
     property alias navigateMode: controllerFlickable.enabled;
+    onNavigateModeChanged: {
+        if(navigateMode === true) {
+            // This means we've just changed back from having edited stuff.
+            // Consequently we want to deselect all selections. Tell the canvas about that.
+            wordsCanvas.deselectEverything();
+            toolManager.requestToolChange("PageToolFactory_ID");
+        }
+    }
     Calligra.TextDocumentCanvas {
         id: wordsCanvas;
         anchors.fill: parent;

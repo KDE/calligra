@@ -44,6 +44,7 @@
 #include <KoToolManager_p.h>
 #include <KoToolBase.h>
 #include <KoPointerEvent.h>
+#include <KoSelection.h>
 #include <KoTextEditor.h>
 #include <KActionCollection>
 #include <QGraphicsWidget>
@@ -244,6 +245,15 @@ QObject* CQTextDocumentCanvas::textEditor() const
         return KoTextEditor::getTextEditorFromCanvas(d->canvas);
     }
     return 0;
+}
+
+void CQTextDocumentCanvas::deselectEverything()
+{
+    KoTextEditor* editor = KoTextEditor::getTextEditorFromCanvas(d->canvas);
+    if(editor)
+        editor->clearSelection();
+    d->canvas->shapeManager()->selection()->deselectAll();
+    updateCanvas();
 }
 
 void CQTextDocumentCanvas::setCameraY(int cameraY)
