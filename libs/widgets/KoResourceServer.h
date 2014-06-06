@@ -70,7 +70,7 @@ public:
 
     virtual ~KoResourceServerBase() {}
 
-    virtual int resoureCount() const = 0;
+    virtual int resourceCount() const = 0;
     virtual void loadResources(QStringList filenames) = 0;
     virtual QStringList blackListedFiles() const = 0;
     QString type() const { return m_type; }
@@ -115,7 +115,7 @@ protected:
  * can be observed with a KoResourceServerObserver
  *
  * The \p Policy template parameter defines the way how the lifetime
- * of a resource is handled.  There are to predefined policies:
+ * of a resource is handled.  There are two predefined policies:
  *
  *   o PointerStroragePolicy --- usual pointers with ownership over
  *                               the resource.
@@ -161,7 +161,7 @@ public:
 
     }
 
-    int resoureCount() const {
+    int resourceCount() const {
         return m_resources.size();
     }
 
@@ -227,6 +227,7 @@ public:
             kWarning(30009) << "Tried to add an invalid resource!";
             return false;
         }
+
         if (save) {
             QFileInfo fileInfo(resource->filename());
 
@@ -387,6 +388,7 @@ public:
             if(notifyLoadedResources) {
                 foreach(PointerType resource, m_resourcesByFilename) {
                     observer->resourceAdded(resource);
+
                 }
             }
         }
