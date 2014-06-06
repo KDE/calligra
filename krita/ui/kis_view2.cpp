@@ -1622,7 +1622,16 @@ void KisView2::showFloatingMessage(const QString message, const QIcon& icon, int
 void KisView2::showHideScrollbars()
 {
     KisConfig cfg;
-    bool toggled = actionCollection()->action("view_show_just_the_canvas")->isChecked();
+
+    QAction* showAction = actionCollection()->action("view_show_just_the_canvas");
+
+    bool toggled = showAction->isChecked();
+
+    if(toggled) {
+        showAction->setShortcuts(QList<QKeySequence>() << showAction->shortcut() << Qt::Key_Escape);
+    } else {
+        showAction->setShortcuts(QList<QKeySequence>() << showAction->shortcut());
+    }
 
     if ( (toggled && cfg.hideScrollbarsFullscreen()) || (!toggled && cfg.hideScrollbars()) ) {
         dynamic_cast<KoCanvasControllerWidget*>(canvasController())->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
