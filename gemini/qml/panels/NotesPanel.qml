@@ -114,6 +114,10 @@ Item {
                 Item {
                     height: Constants.GridHeight / 2;
                     width: base.width;
+                    MouseArea {
+                        anchors.fill: parent;
+                        onClicked: base.canvas.addNote(model.text, colorDot.color);
+                    }
                     Rectangle {
                         width: base.width;
                         height: 1;
@@ -136,6 +140,7 @@ Item {
                             color: "#5b6573";
                         }
                         Rectangle {
+                            id: colorDot;
                             anchors.verticalCenter: parent.verticalCenter;
                             radius: parent.height / 8;
                             height: parent.height / 4;
