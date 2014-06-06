@@ -301,7 +301,50 @@ void CQTextDocumentCanvas::addSticker(QString imageUrl)
 
 void CQTextDocumentCanvas::addNote(QString text, QColor color)
 {
+   // Prepare a QImage with desired characteritisc
+    QImage image(200, 100, QImage::Format_ARGB32);
+    image.fill(Qt::transparent);
 
+    // Get QPainter that paints to the image
+    QPainter painter(&image);
+    painter.setRenderHint(QPainter::Antialiasing, true);
+    painter.setRenderHint(QPainter::TextAntialiasing, true);
+    QPen pen;
+    pen.setColor(color);
+    pen.setWidth(3);
+    painter.setPen(pen);
+    painter.drawEllipse(image.rect().adjusted(3, 3, -4, -4));
+    QFont font(painter.font());
+    font.setBold(true);
+    font.setPixelSize(font.pixelSize() * 2);
+    painter.setFont(font);
+    painter.drawText(image.rect(), Qt::AlignCenter, text);
+    painter.end();
+
+    KoProperties* params = new KoProperties();
+    params->setProperty("qimage", image);
+    KoShapeFactoryBase* factory = KoShapeRegistry::instance()->get("PictureShape");
+    if(factory)
+    {
+        KoShape* shape = factory->createShape(params, d->document->resourceManager());
+
+        QPointF pos = d->canvas->viewToDocument(d->canvas->documentOffset() + QPointF(d->canvas->size().width() / 2, d->canvas->size().height() / 2));
+        KoShapeAnchor *anchor = new KoShapeAnchor(shape);
+        anchor->setAnchorType(KoShapeAnchor::AnchorPage);
+        anchor->setHorizontalPos(KoShapeAnchor::HFromLeft);
+        anchor->setVerticalPos(KoShapeAnchor::VFromTop);
+        anchor->setHorizontalRel(KoShapeAnchor::HPage);
+        anchor->setVerticalRel(KoShapeAnchor::VPage);
+        shape->setAnchor(anchor);
+        shape->setPosition(pos);
+
+//        KWShapeCreateCommand *cmd = new KWShapeCreateCommand(d->document, shape);
+        KoSelection *selection = d->canvas->shapeManager()->selection();
+        selection->deselectAll();
+        selection->select(shape);
+//        d->canvas->addCommand(cmd);
+        d->canvas->shapeManager()->addShape(shape);
+    }
 }
 
 void CQTextDocumentCanvas::setCameraY(int cameraY)
