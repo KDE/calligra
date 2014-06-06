@@ -40,12 +40,16 @@
 #include <KWDocument.h>
 #include <KWPage.h>
 #include <KWCanvasItem.h>
+#include <commands/KWShapeCreateCommand.h>
 #include <KoShape.h>
 #include <KoToolManager_p.h>
 #include <KoToolBase.h>
 #include <KoPointerEvent.h>
 #include <KoSelection.h>
+#include <KoShapeRegistry.h>
+#include <KoShapeAnchor.h>
 #include <KoTextEditor.h>
+#include <KoProperties.h>
 #include <KActionCollection>
 #include <QGraphicsWidget>
 #include <QTextDocument>
@@ -53,6 +57,7 @@
 #include <QTextLayout>
 #include <QGraphicsSceneMouseEvent>
 #include <KDebug>
+#include <QSvgRenderer>
 
 class CQTextDocumentCanvas::Private
 {
@@ -254,6 +259,49 @@ void CQTextDocumentCanvas::deselectEverything()
         editor->clearSelection();
     d->canvas->shapeManager()->selection()->deselectAll();
     updateCanvas();
+}
+
+void CQTextDocumentCanvas::addSticker(QString imageUrl)
+{
+    QSvgRenderer renderer(QUrl(imageUrl).toLocalFile());
+   // Prepare a QImage with desired characteritisc
+    QImage image(50, 50, QImage::Format_ARGB32);
+    image.fill(Qt::transparent);
+
+    // Get QPainter that paints to the image
+    QPainter painter(&image);
+    renderer.render(&painter);
+    painter.end();
+
+    KoProperties* params = new KoProperties();
+    params->setProperty("qimage", image);
+    KoShapeFactoryBase* factory = KoShapeRegistry::instance()->get("PictureShape");
+    if(factory)
+    {
+        KoShape* shape = factory->createShape(params, d->document->resourceManager());
+
+        QPointF pos = d->canvas->viewToDocument(d->canvas->documentOffset() + QPointF(d->canvas->size().width() / 2, d->canvas->size().height() / 2));
+        KoShapeAnchor *anchor = new KoShapeAnchor(shape);
+        anchor->setAnchorType(KoShapeAnchor::AnchorPage);
+        anchor->setHorizontalPos(KoShapeAnchor::HFromLeft);
+        anchor->setVerticalPos(KoShapeAnchor::VFromTop);
+        anchor->setHorizontalRel(KoShapeAnchor::HPage);
+        anchor->setVerticalRel(KoShapeAnchor::VPage);
+        shape->setAnchor(anchor);
+        shape->setPosition(pos);
+
+//        KWShapeCreateCommand *cmd = new KWShapeCreateCommand(d->document, shape);
+        KoSelection *selection = d->canvas->shapeManager()->selection();
+        selection->deselectAll();
+        selection->select(shape);
+//        d->canvas->addCommand(cmd);
+        d->canvas->shapeManager()->addShape(shape);
+    }
+}
+
+void CQTextDocumentCanvas::addNote(QString text, QColor color)
+{
+
 }
 
 void CQTextDocumentCanvas::setCameraY(int cameraY)

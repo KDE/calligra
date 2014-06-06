@@ -75,7 +75,15 @@ public:
     Q_INVOKABLE qreal pagePosition( int page );
 
     QObject* textEditor() const;
+    // Deselects any text selection present in the document, and deselects all shapes
+    // This is highly useful, as it makes navigation prettier.
     Q_INVOKABLE void deselectEverything();
+
+    // Adds a sticker (simply an SVG) to the position indicated by the center of the viewport.
+    Q_INVOKABLE void addSticker(QString imageUrl);
+    // Adds a note to the position indicated by the center of the viewport. Color is the color
+    // the text and the background sticker should have.
+    Q_INVOKABLE void addNote(QString text, QColor color);
 signals:
     void searchTermChanged();
     void documentModelChanged();
