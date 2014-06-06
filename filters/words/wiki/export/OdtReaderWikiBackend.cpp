@@ -93,7 +93,8 @@ void OdtReaderWikiBackend::elementTextP(KoXmlStreamReader &reader, OdfReaderCont
     }
     if (reader.isStartElement()) {
         QString stylename = reader.attributes().value("text:style-name").toString();
-        KoOdfStyle *style = wikiContext->styleManager()->style(stylename, "text");
+
+        KoOdfStyle *style = wikiContext->styleManager()->style(stylename, "paragraph");
         //Push style to stack
         wikiContext->pushStyle(style);
 
@@ -214,7 +215,6 @@ void OdtReaderWikiBackend::characterData(KoXmlStreamReader &reader, OdfReaderCon
     if (!wikiContext) {
         return;
     }
-    //kDebug(30503) << reader.text().toString();
 
     wikiContext->outStream << reader.text().toString();
 }
@@ -289,7 +289,7 @@ void OdtReaderWikiBackend::checkTextIndentation(KoXmlStreamReader &reader, OdfRe
     Q_UNUSED(reader);
     KoOdfStyle *style = wikiContext->popStyle();
     // Check indenting text.
-    KoOdfStyleProperties *styleProperies = style->properties().value("style:paragraph-properties");
+    KoOdfStyleProperties *styleProperies = style->properties().value("style:text-properties");
     QString property = "fo:margin-left";
     if (!styleProperies->attribute(property).isEmpty()) {
         // FIXME: a BIG fixme i am not SURE that here i have done the right work.

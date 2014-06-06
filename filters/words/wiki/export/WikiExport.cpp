@@ -97,6 +97,10 @@ KoFilter::ConversionStatus WikiExport::convert(const QByteArray& from, const QBy
     odfTextReader.setBackend(&wikiTextBackend);
     odtReader.setTextReader(&odfTextReader);
 
+    if (!odtReader.analyzeContent(&wikiContext)) {
+        return KoFilter::ParsingError;
+    }
+
     odtReader.readContent(&odtBackend, &wikiContext);
 
     outfile.close();
