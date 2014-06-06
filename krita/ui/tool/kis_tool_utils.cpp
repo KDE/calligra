@@ -27,6 +27,7 @@ namespace KisToolUtils {
 
     KoColor pick(KisPaintDeviceSP dev, const QPoint& pos)
     {
+        KIS_ASSERT(dev);
         KoColor pickedColor;
         dev->pixel(pos.x(), pos.y(), &pickedColor);
         KisConfig cfg;
