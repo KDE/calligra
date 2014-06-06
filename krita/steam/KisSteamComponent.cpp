@@ -34,7 +34,7 @@
 #include <kstandarddirs.h>
 #include <kactioncollection.h>
 #include <kaction.h>
-#include <KTemporaryFile.h>
+#include <ktemporaryfile.h>
 
 #include "sketch/DocumentManager.h"
 
