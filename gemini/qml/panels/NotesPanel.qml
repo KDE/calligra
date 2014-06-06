@@ -22,6 +22,7 @@ import org.calligra 1.0
 
 Item {
     id: base;
+    property QtObject canvas: null;
     opacity: parent.checked ? 1 : 0;
     Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
     anchors {
@@ -79,19 +80,22 @@ Item {
                 Flow {
                     anchors.fill: parent;
                     spacing: Constants.DefaultMargin;
-                    Image {
-                        width: Constants.GridHeight - Constants.DefaultMargin * 2;
-                        height: width;
-                        source: Settings.theme.image("Sticker-ThumbsUp.svg");
-                        sourceSize.width: width > height ? height : width;
-                        sourceSize.height: width > height ? height : width;
-                    }
-                    Image {
-                        width: Constants.GridHeight - Constants.DefaultMargin * 2;
-                        height: width;
-                        source: Settings.theme.image("Sticker-Feather.svg");
-                        sourceSize.width: width > height ? height : width;
-                        sourceSize.height: width > height ? height : width;
+                    Repeater {
+                        model: ListModel {
+                            ListElement { image: "Sticker-ThumbsUp.svg"; }
+                            ListElement { image: "Sticker-Feather.svg"; }
+                        }
+                        Image {
+                            width: Constants.GridHeight - Constants.DefaultMargin * 2;
+                            height: width;
+                            source: Settings.theme.image(model.image);
+                            sourceSize.width: width > height ? height : width;
+                            sourceSize.height: width > height ? height : width;
+                            MouseArea {
+                                anchors.fill: parent;
+                                onClicked: base.canvas.addSticker(Settings.theme.image(model.image));
+                            }
+                        }
                     }
                 }
             }

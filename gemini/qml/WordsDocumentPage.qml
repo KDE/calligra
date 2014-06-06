@@ -24,6 +24,7 @@ Item {
     id: base;
     property alias document: wordsCanvas.document;
     property alias textEditor: wordsCanvas.textEditor;
+    property QtObject canvas: wordsCanvas;
     property alias source: wordsCanvas.source;
     property alias navigateMode: controllerFlickable.enabled;
     onNavigateModeChanged: {
@@ -44,7 +45,6 @@ Item {
             baseLoadingDialog.hideMe();
         }
         onCurrentPageNumberChanged: navigatorListView.positionViewAtIndex(currentPageNumber - 1, ListView.Contain);
-        Rectangle { anchors.fill: parent; opacity: 0.5; color: "blue"; }
     }
     Flickable {
         id: controllerFlickable;

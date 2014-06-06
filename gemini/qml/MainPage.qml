@@ -242,7 +242,7 @@ Page {
                 checkable: true;
                 radius: 4;
                 checkedColor: "#3C00adf5";
-                NotesPanel {}
+                NotesPanel { canvas: viewLoader.item ? viewLoader.item.canvas : null; }
             }
             Button {
                 height: parent.height;
