@@ -21,12 +21,13 @@
 #define H_KW_SHAPE_CREATE_COMMAND_H
 
 #include <kundo2command.h>
+#include <words_export.h>
 
 class KoShape;
 class KWDocument;
 
 /// The undo / redo command for creating shapes
-class KWShapeCreateCommand : public KUndo2Command
+class WORDS_EXPORT KWShapeCreateCommand : public KUndo2Command
 {
 public:
     /**
