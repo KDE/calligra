@@ -386,7 +386,7 @@ void KoResourceManagerControl::filterResourceTypes(int index)
         list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KoPattern>(KoResourceServerProvider::instance()->patternServer())));
         list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KisBrushResourceServerAdapter(KisBrushServer::instance()->brushServer())));
         list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KoColorSet>(KoResourceServerProvider::instance()->paletteServer())));
-        list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KisPaintOpPreset>(KisResourceServerProvider::instance()->paintOpPresetServer())));
+        list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KisPaintOpPresetResourceServerAdapter(KisResourceServerProvider::instance()->paintOpPresetServer())));
         list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KisWorkspaceResource>(KisResourceServerProvider::instance()->workspaceServer())));
         list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KoResourceBundle>(ResourceBundleServerProvider::instance()->resourceBundleServer())));
         m_modelList.append(new KoResourceTableModel(list, KoResourceTableModel::Available));
@@ -408,7 +408,7 @@ void KoResourceManagerControl::filterResourceTypes(int index)
         m_modelList.append(new KoResourceTableModel(list, KoResourceTableModel::Undefined));
         break;
     case 4:
-        list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KisPaintOpPreset>(KisResourceServerProvider::instance()->paintOpPresetServer())));
+        list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KisPaintOpPresetResourceServerAdapter(KisResourceServerProvider::instance()->paintOpPresetServer())));
         m_modelList.append(new KoResourceTableModel(list, KoResourceTableModel::Undefined));
         m_modelList.append(new KoResourceTableModel(list, KoResourceTableModel::Undefined));
         break;

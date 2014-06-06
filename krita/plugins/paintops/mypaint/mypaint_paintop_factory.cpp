@@ -113,7 +113,7 @@ MyPaintBrushResource* MyPaintFactory::brush(const QString& fileName) const
 
 void MyPaintFactory::processAfterLoading()
 {
-    KoResourceServer<KisPaintOpPreset>* rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
+    KisPaintOpPresetResourceServer* rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
     QStringList blackList = rserver->blackListedFiles();
 
     QMapIterator<QString, MyPaintBrushResource*> i(m_d->brushes);

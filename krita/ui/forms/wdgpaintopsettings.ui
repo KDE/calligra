@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>674</width>
+    <width>755</width>
     <height>335</height>
    </rect>
   </property>
@@ -100,7 +100,7 @@
        <item>
         <widget class="QLineEdit" name="txtPreset">
          <property name="toolTip">
-          <string>Current brush preset</string>
+          <string>Current Brush Preset. Pink in Color whenever the preset has modified settings. Stays the same if original settings are loaded.</string>
          </property>
         </widget>
        </item>

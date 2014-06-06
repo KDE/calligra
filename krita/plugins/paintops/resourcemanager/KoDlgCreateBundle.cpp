@@ -266,8 +266,8 @@ void KoDlgCreateBundle::resourceTypeSelected(int idx)
         }
     }
     else if (resourceType == "presets") {
-        KoResourceServer<KisPaintOpPreset>* server = KisResourceServerProvider::instance()->paintOpPresetServer();
-        foreach(KoResource *res, server->resources()) {
+        KisPaintOpPresetResourceServer* server = KisResourceServerProvider::instance()->paintOpPresetServer();
+        foreach(KisPaintOpPresetSP res, server->resources()) {
             QListWidgetItem *item = new QListWidgetItem(imageToIcon(res->image()), res->name());
             item->setData(Qt::UserRole, res->shortFilename());
 

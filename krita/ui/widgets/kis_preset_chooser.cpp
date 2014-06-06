@@ -45,6 +45,8 @@
 #include "kis_slider_spin_box.h"
 #include "kis_config.h"
 
+
+
 /// The resource item delegate for rendering the resource preview
 class KisPresetDelegate : public QAbstractItemDelegate
 {
@@ -113,12 +115,12 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
     painter->restore();
 }
 
-class KisPresetProxyAdapter : public KoResourceServerAdapter<KisPaintOpPreset>
+class KisPresetProxyAdapter : public KisPaintOpPresetResourceServerAdapter
 {
 
 public:
-    KisPresetProxyAdapter(KoResourceServer< KisPaintOpPreset >* resourceServer)
-        : KoResourceServerAdapter<KisPaintOpPreset>(resourceServer)
+    KisPresetProxyAdapter(KisPaintOpPresetResourceServer* resourceServer)
+        : KisPaintOpPresetResourceServerAdapter(resourceServer)
     {
     }
     virtual ~KisPresetProxyAdapter() {}
@@ -126,13 +128,13 @@ public:
     virtual QList< KoResource* > resources() {
 
         if (m_paintopID.isEmpty()) {
-            return KoResourceServerAdapter<KisPaintOpPreset>::resources();
+            return KisPaintOpPresetResourceServerAdapter::resources();
         }
-        QList<KisPaintOpPreset*> serverResources = resourceServer()->resources();
+        QList<KisPaintOpPresetSP> serverResources = resourceServer()->resources();
         QList<KoResource*> resources;
-        foreach( KisPaintOpPreset* preset, serverResources ) {
+        foreach( KisPaintOpPresetSP preset, serverResources ) {
             if( preset->paintOp().id() == m_paintopID) {
-                resources.append( preset );
+                resources.append( preset.data() );
             }
         }
         return resources;
@@ -161,7 +163,7 @@ KisPresetChooser::KisPresetChooser(QWidget *parent, const char *name)
     setObjectName(name);
     QVBoxLayout * layout = new QVBoxLayout(this);
     layout->setMargin(0);
-    KoResourceServer<KisPaintOpPreset> * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
+    KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
 
     m_adapter = QSharedPointer<KoAbstractResourceServerAdapter>(new KisPresetProxyAdapter(rserver));
 

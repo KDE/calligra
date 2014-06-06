@@ -45,7 +45,9 @@ struct KisPaintOpSettings::Private {
     QPointer<KisPaintOpSettingsWidget> settingsWidget;
     QString modelName;
     KisPaintOpPresetWSP preset;
+
 };
+
 
 KisPaintOpSettings::KisPaintOpSettings()
         : d(new Private)
@@ -222,6 +224,10 @@ void KisPaintOpSettings::setCanvasMirroring(bool xAxisMirrored, bool yAxisMirror
 
 void KisPaintOpSettings::setProperty(const QString & name, const QVariant & value)
 {
+    if(value!=getProperty(name))
+    {
+
+    }
     KisPropertiesConfiguration::setProperty(name, value);
     onPropertyChanged();
 }

@@ -73,6 +73,9 @@
 #include "widgets/kis_widget_chooser.h"
 #include "tool/kis_tool.h"
 
+typedef KoResourceServer<KisPaintOpPreset, SharedPointerStroragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServer;
+typedef KoResourceServerAdapter<KisPaintOpPreset, SharedPointerStroragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServerAdapter;
+
 KisPaintopBox::KisPaintopBox(KisView2 *view, QWidget *parent, const char *name)
     : QWidget(parent)
     , m_resourceProvider(view->resourceProvider())
@@ -347,7 +350,7 @@ void KisPaintopBox::resourceSelected(KoResource* resource)
         if(!preset->settings()->isLoadable())
             return;
         bool saveDirtyPreset = preset->dirtyPreset();
-        setCurrentPaintop(preset->paintOp(), preset->clone());
+        setCurrentPaintop(preset->paintOp(), preset);
         preset->setDirtyPreset(saveDirtyPreset);
         m_resourceProvider->currentPreset()->setDirtyPreset(saveDirtyPreset);
         m_presetsPopup->setPresetImage(preset->image());
@@ -374,16 +377,18 @@ void KisPaintopBox::setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP pr
 {
     if (m_resourceProvider->currentPreset()) {
 
-        m_resourceProvider->setPreviousPaintOpPreset(m_resourceProvider->currentPreset()->clone());
+        m_resourceProvider->setPreviousPaintOpPreset(m_resourceProvider->currentPreset());
 
         if (m_optionWidget) {
+            bool saveDirtyPreset = m_resourceProvider->currentPreset()->dirtyPreset();
             m_optionWidget->writeConfiguration(const_cast<KisPaintOpSettings*>(m_resourceProvider->currentPreset()->settings().data()));
+            m_resourceProvider->currentPreset()->setDirtyPreset(saveDirtyPreset);
             m_optionWidget->disconnect(this);
             m_optionWidget->hide();
         }
 
-        m_paintOpPresetMap[m_resourceProvider->currentPreset()->paintOp()] = m_resourceProvider->currentPreset()->clone();
-        m_tabletToolMap[m_currTabletToolID].preset    = m_resourceProvider->currentPreset()->clone();
+        m_paintOpPresetMap[m_resourceProvider->currentPreset()->paintOp()] = m_resourceProvider->currentPreset();
+        m_tabletToolMap[m_currTabletToolID].preset    = m_resourceProvider->currentPreset();
         m_tabletToolMap[m_currTabletToolID].paintOpID = m_resourceProvider->currentPreset()->paintOp();
     }
 
@@ -594,14 +599,14 @@ void KisPaintopBox::slotSaveActivePreset()
     m_favoriteResourceManager->setBlockUpdates(true);
 
     KisPaintOpPreset* newPreset = curPreset->clone();
-    KoResourceServer<KisPaintOpPreset>* rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
+    KisPaintOpPresetResourceServer * rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
     QString saveLocation = rServer->saveLocation();
     QString name = m_presetsPopup->getPresetName();
 
     QStringList tags;
-    KisPaintOpPreset* resource = rServer->resourceByName(name);
+    KisPaintOpPresetSP resource = rServer->resourceByName(name);
     if (resource) {
-        tags = rServer->assignedTagsList(resource);
+        tags = rServer->assignedTagsList(resource.data());
         rServer->removeResource(resource);
     }
 
@@ -724,7 +729,7 @@ void KisPaintopBox::slotSaveToFavouriteBrushes()
 
 void KisPaintopBox::slotWatchPresetNameLineEdit(const QString& text)
 {
-    KoResourceServer<KisPaintOpPreset>* rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
+    KisPaintOpPresetResourceServer * rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
     m_presetsPopup->changeSavePresetButtonText(rServer->resourceByName(text) != 0);
 }
 
@@ -904,8 +909,8 @@ void KisPaintopBox::slotReloadPreset()
 {   m_optionWidget->blockSignals(true);
 
     //Here using the name and fetching the preset from the server was the only way the load was working. Otherwise it was not loading.
-    KoResourceServer<KisPaintOpPreset> * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
-    KisPaintOpPreset *preset = rserver->resourceByName(m_resourceProvider->currentPreset()->name());
+    KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
+    KisPaintOpPresetSP preset = rserver->resourceByName(m_resourceProvider->currentPreset()->name());
     if(preset)
         {
             preset->load();
@@ -913,7 +918,7 @@ void KisPaintopBox::slotReloadPreset()
             preset->settings()->setOptionsWidget(m_optionWidget);
             m_optionWidget->setConfiguration(preset->settings());
             m_presetsPopup->setPaintOpSettingsWidget(m_optionWidget);
-            m_presetsPopup->resourceSelected(preset);
+            m_presetsPopup->resourceSelected(preset.data());
             m_optionWidget->writeConfiguration(const_cast<KisPaintOpSettings*>(m_resourceProvider->currentPreset()->settings().data()));
             m_resourceProvider->currentPreset()->setDirtyPreset(false);
         }

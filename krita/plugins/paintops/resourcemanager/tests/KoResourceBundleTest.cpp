@@ -129,7 +129,7 @@ void KoResourceBundleTest::testLoadSave()
         bundle.addResource(workspaceServer->type(), workspace->filename(), workspaceServer->tagObject()->assignedTagsList(workspace), workspace->md5());
     }
 
-    KoResourceServer<KisPaintOpPreset>* paintopServer = KisResourceServerProvider::instance()->paintOpPresetServer();
+    KisPaintOpPresetResourceServer * paintopServer = KisResourceServerProvider::instance()->paintOpPresetServer();
     QVERIFY(paintopServer->resoureCount() > 0);
     foreach(KisPaintOpPreset* preset, paintopServer->resources()) {
         paintopServer->addTag(preset, QString("testtag: %1").arg(tagCount));

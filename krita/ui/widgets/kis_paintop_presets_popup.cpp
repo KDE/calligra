@@ -200,29 +200,24 @@ void KisPaintOpPresetsPopup::setPaintOpSettingsWidget(QWidget * widget)
 
 void KisPaintOpPresetsPopup::changeSavePresetButtonText(bool change)
 {
-    QPalette palette;
+
 
     if (change) {
-        palette.setColor(QPalette::Base, QColor(255,200,200));
-        palette.setColor(QPalette::Text, Qt::black);
         m_d->uiWdgPaintOpPresetSettings.bnSave->setText(i18n("Overwrite Preset"));
-        m_d->uiWdgPaintOpPresetSettings.txtPreset->setPalette(palette);
+
     }
     else {
         m_d->uiWdgPaintOpPresetSettings.bnSave->setText(i18n("Save to Presets"));
-        m_d->uiWdgPaintOpPresetSettings.txtPreset->setPalette(palette);
+
     }
 }
 
 
 QString KisPaintOpPresetsPopup::getPresetName() const
 {
-    if(!m_d->uiWdgPaintOpPresetSettings.txtPreset->text().contains("(Dirty)"))
+
             return m_d->uiWdgPaintOpPresetSettings.txtPreset->text();
-        else
-            {
-            return m_d->uiWdgPaintOpPresetSettings.txtPreset->text().left(m_d->uiWdgPaintOpPresetSettings.txtPreset->text().length()-7);
-            }
+
 }
 
 QImage KisPaintOpPresetsPopup::cutOutOverlay()
@@ -295,14 +290,12 @@ void KisPaintOpPresetsPopup::resourceSelected(KoResource* resource)
     QPalette palette;
     if(preset->dirtyPreset())
        {
-        palette.setColor(QPalette::Base, Qt::black);
-        palette.setColor(QPalette::Text, Qt::white);
+        palette.setColor(QPalette::Base, QColor(255,200,200));
+        palette.setColor(QPalette::Text, Qt::black);
         m_d->uiWdgPaintOpPresetSettings.txtPreset->setPalette(palette);
        }
     else
     {
-     palette.setColor(QPalette::Base, QColor(255,200,200));
-     palette.setColor(QPalette::Text, Qt::black);
      m_d->uiWdgPaintOpPresetSettings.txtPreset->setPalette(palette);
     }
     m_d->uiWdgPaintOpPresetSettings.txtPreset->setText(resource->name());

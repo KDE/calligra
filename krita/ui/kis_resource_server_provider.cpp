@@ -33,11 +33,15 @@
 #include <KoResource.h>
 #include <KoResourceServer.h>
 #include <KoResourceServerProvider.h>
+#include <KoResourceServerAdapter.h>
 
 #include <kis_debug.h>
 #include <KoPattern.h>
 #include <kis_paintop_preset.h>
 #include <kis_workspace_resource.h>
+
+typedef KoResourceServer<KisPaintOpPreset, SharedPointerStroragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServer;
+typedef KoResourceServerAdapter<KisPaintOpPreset, SharedPointerStroragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServerAdapter;
 
 KisResourceServerProvider::KisResourceServerProvider()
 {
@@ -46,7 +50,7 @@ KisResourceServerProvider::KisResourceServerProvider()
 
     KGlobal::mainComponent().dirs()->addResourceType("kis_workspaces", "data", "krita/workspaces/");
     
-    m_paintOpPresetServer = new KoResourceServer<KisPaintOpPreset>("kis_paintoppresets", "*.kpp");
+    m_paintOpPresetServer = new KisPaintOpPresetResourceServer("kis_paintoppresets", "*.kpp");
     if (!QFileInfo(m_paintOpPresetServer->saveLocation()).exists()) {
         QDir().mkpath(m_paintOpPresetServer->saveLocation());
     }
@@ -84,7 +88,7 @@ KisResourceServerProvider* KisResourceServerProvider::instance()
 }
 
 
-KoResourceServer<KisPaintOpPreset>* KisResourceServerProvider::paintOpPresetServer()
+KisPaintOpPresetResourceServer* KisResourceServerProvider::paintOpPresetServer()
 {
     paintOpPresetThread->barrier();
     return m_paintOpPresetServer;

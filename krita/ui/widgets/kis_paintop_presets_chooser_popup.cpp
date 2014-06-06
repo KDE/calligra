@@ -113,8 +113,8 @@ void KisPaintOpPresetsChooserPopup::canvasResourceChanged(KoResource* resource ,
 {
     if (resource) {
         blockSignals(true);
-        KoResourceServer<KisPaintOpPreset> * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
-        KisPaintOpPreset* preset = rserver->resourceByName(resource->name());
+        KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
+        KisPaintOpPresetSP preset = rserver->resourceByName(resource->name());
         if(preset2->dirtyPreset() && preset2 && preset)
         {
             QMapIterator<QString, QVariant> i(preset2->settings()->getProperties());
@@ -126,7 +126,7 @@ void KisPaintOpPresetsChooserPopup::canvasResourceChanged(KoResource* resource ,
 
         }
 
-        m_d->uiWdgPaintOpPresets.wdgPresetChooser->itemChooser()->setCurrentResource(preset);
+        m_d->uiWdgPaintOpPresets.wdgPresetChooser->itemChooser()->setCurrentResource(preset.data());
         blockSignals(false);
     }
 }
