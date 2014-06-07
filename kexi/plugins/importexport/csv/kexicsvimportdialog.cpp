@@ -40,7 +40,6 @@
 #include <QItemSelectionModel>
 #include <QHeaderView>
 #include <QTableView>
-#include <QFileDialog>
 #include <QPainter>
 #include <QTextCodec>
 #include <QTimer>

@@ -27,16 +27,15 @@
 #include <QStyleOptionFrameV3>
 #include <QClipboard>
 
+#include <QFile>
 #include <QImage>
 #include <QBuffer>
-#include <QFileDialog>
 #include <QPainter>
 
 #include <kdebug.h>
 #include <kmenu.h>
 #include <klocale.h>
 #include <kiconloader.h>
-#include <kfiledialog.h>
 #include <kimageio.h>
 #include <kstandarddirs.h>
 #include <kstdaccel.h>

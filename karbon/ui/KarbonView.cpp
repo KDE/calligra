@@ -115,6 +115,7 @@
 #include <KoProperties.h>
 #include <KoZoomController.h>
 #include <KoIcon.h>
+#include <KoFileDialog.h>
 
 // kde header
 #include <kaction.h>
@@ -124,11 +125,11 @@
 #include <kcomponentdata.h>
 #include <kactioncollection.h>
 #include <kstatusbar.h>
-#include <kfiledialog.h>
 #include <kstandardaction.h>
 #include <ktoggleaction.h>
 #include <kdebug.h>
 #include <kservicetypetrader.h>
+#include <kmimetype.h>
 
 // qt header
 #include <QIcon>
@@ -494,17 +495,12 @@ void KarbonView::fileImportGraphic()
     }
     filter.append(imageFilter);
 
-    QPointer<KFileDialog> dialog = new KFileDialog(KUrl(), "", 0);
-    dialog->setCaption(i18n("Choose Graphic to Add"));
-    dialog->setModal(true);
-    dialog->setMimeFilter(filter);
-    if (dialog->exec() != QDialog::Accepted) {
-        delete dialog;
-        return;
-    }
-    QString fname = dialog ? dialog->selectedFile() : QString();
-    QString currentMimeFilter = dialog ? dialog->currentMimeFilter() : QString();
-    delete dialog;
+    KoFileDialog dialog(0, KoFileDialog::OpenFile, "OpenDocument");
+    dialog.setCaption(i18n("Choose Graphic to Add"));
+    dialog.setMimeTypeFilters(imageFilter);
+    QString fname = dialog.url();
+
+    if (fname.isEmpty()) return;
 
     QMap<QString, KoDataCenterBase*> dataCenters = part()->dataCenterMap();
 
@@ -519,18 +515,17 @@ void KarbonView::fileImportGraphic()
 
     // check if we have an empty mime type (probably because the "All supported files"
     // filter was active)
-    if (currentMimeFilter.isEmpty()) {
-        // get mime type from file
-        KMimeType::Ptr mimeType = KMimeType::findByFileContent(fname);
-        if (mimeType) {
-            if (mimeType->is(nativeMimeType)) {
-                currentMimeFilter = nativeMimeType;
-            } else {
-                foreach(const QString &filter, imageFilter) {
-                    if (mimeType->is(filter)) {
-                        currentMimeFilter = filter;
-                        break;
-                    }
+    QString currentMimeFilter;
+    // get mime type from file
+    KMimeType::Ptr mimeType = KMimeType::findByFileContent(fname);
+    if (mimeType) {
+        if (mimeType->is(nativeMimeType)) {
+            currentMimeFilter = nativeMimeType;
+        } else {
+            foreach(const QString &filter, imageFilter) {
+                if (mimeType->is(filter)) {
+                    currentMimeFilter = filter;
+                    break;
                 }
             }
         }

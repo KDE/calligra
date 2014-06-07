@@ -19,10 +19,14 @@
 
 #include "ImageEffectConfigWidget.h"
 #include "ImageEffect.h"
+
 #include "KoFilterEffect.h"
+#include <KoFileDialog.h>
+
 #include <knuminput.h>
-#include <kfiledialog.h>
 #include <klocale.h>
+#include <kmimetype.h>
+
 #include <QGridLayout>
 #include <QLabel>
 #include <QPushButton>
@@ -66,16 +70,13 @@ void ImageEffectConfigWidget::selectImage()
         imageFilter << "image/" + format;
     }
 
-    QPointer<KFileDialog> dialog = new KFileDialog(KUrl(), "", 0);
-    dialog->setCaption(i18n("Select image"));
-    dialog->setModal(true);
-    dialog->setMimeFilter(imageFilter);
-    if (dialog->exec() != QDialog::Accepted) {
-        delete dialog;
-        return;
-    }
-    QString fname = dialog ? dialog->selectedFile() : QString();
-    delete dialog;
+    KoFileDialog dialog(0, KoFileDialog::OpenFile, "OpenDocument");
+    dialog.setCaption(i18n("Select image"));
+    dialog.setImageFilters();
+
+    QString fname = dialog.url();
+
+    if (fname.isEmpty()) return;
 
     QImage newImage;
     if (!newImage.load(fname))
