@@ -127,19 +127,7 @@ void KexiSmallToolButton::setToolButtonStyle(Qt::ToolButtonStyle style)
 
 void KexiSmallToolButton::update(const QString& text, const QIcon& icon, bool tipToo)
 {
-    int width = 0;
-    const bool fixWidth = style()->inherits("QWindowsStyle") && toolButtonStyle() != Qt::ToolButtonIconOnly;
-    if (text.isEmpty() || toolButtonStyle() == Qt::ToolButtonIconOnly) {
-        if (fixWidth) {
-            width = 6;
-        }
-    } else {
-        if (fixWidth) {
-            QString text2( text + "   " );
-            if (d->action && d->action->isCheckable())
-                text2 += "  ";
-            width = fontMetrics().width(text2);
-        }
+    if (!text.isEmpty() && toolButtonStyle() != Qt::ToolButtonIconOnly) {
         if (toolButtonStyle() != Qt::ToolButtonTextOnly)
             QToolButton::setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
         QToolButton::setText(text);
@@ -149,18 +137,7 @@ void KexiSmallToolButton::update(const QString& text, const QIcon& icon, bool ti
     if (toolButtonStyle() == Qt::ToolButtonTextOnly) {
         QToolButton::setIcon(QIcon());
     } else if (!icon.isNull()) {
-        if (fixWidth) {
-            width += IconSize(KIconLoader::Small);
-        }
         QToolButton::setIcon(icon);
-    }
-    if (fixWidth) {
-        if (!text.isEmpty()) {
-            QStyleOption opt;
-            opt.initFrom(this);
-            width += style()->pixelMetric(QStyle::PM_ButtonMargin, &opt, this);
-        }
-        setFixedWidth( width );
     }
 }
 
