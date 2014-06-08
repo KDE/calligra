@@ -101,9 +101,9 @@ void KisPaintOpOptionsWidget::setConfiguration(const KisPropertiesConfiguration 
 
 void KisPaintOpOptionsWidget::writeConfiguration(KisPropertiesConfiguration *config) const
 {
-    qDebug("Hello");
+    qDebug("In Write Config");
     KisLockedPropertiesProxy* m = KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(config);
-    m->getBool("yolo",false);
+
     foreach(const KisPaintOpOption* option, m_d->paintOpOptions) {
         option->writeOptionSetting(config);
     }

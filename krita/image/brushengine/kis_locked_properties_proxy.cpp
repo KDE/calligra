@@ -14,13 +14,17 @@ KisLockedPropertiesProxy::KisLockedPropertiesProxy(const KisPropertiesConfigurat
     m_lockedProperties = l;
     m_parent = p;
 }
+QVariant KisLockedPropertiesProxy::getProperty(const QString &name) const
+{
+    qDebug("In Inherited property");
+    if(m_lockedProperties->lockedProperties()->hasProperty(name))
+    {
+        return m_lockedProperties->lockedProperties()->getProperty(name);
+    }
+    else
+    {
+        return m_parent->getProperty(name);
+    }
 
-bool KisLockedPropertiesProxy::getBool(const QString &name, bool def = false) const
-{
-    qDebug(name.toLatin1());
-    return true;
 }
-void KisLockedPropertiesProxy::sayMyName()
-{
-    qDebug("mohit");
-}
+

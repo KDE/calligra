@@ -11,7 +11,8 @@ public:
     KisLockedPropertiesProxy(KisLockedProperties* p);
     KisLockedPropertiesProxy( const KisPropertiesConfiguration *, KisLockedProperties *);
     bool getBool(const QString &name, bool def) const;
-    void sayMyName();
+    QVariant getProperty(const QString &name) const;
+
 
 
 
