@@ -9,14 +9,18 @@ KisLockedPropertiesProxy::KisLockedPropertiesProxy(KisLockedProperties* p)
 {
     m_lockedProperties = p;
 }
-KisLockedPropertiesProxy::KisLockedPropertiesProxy(KisPropertiesConfiguration *p, KisLockedProperties *l)
+KisLockedPropertiesProxy::KisLockedPropertiesProxy(const KisPropertiesConfiguration *p, KisLockedProperties *l)
 {
     m_lockedProperties = l;
     m_parent = p;
 }
 
-bool KisLockedPropertiesProxy::getBool(const QString &name, bool def) const
+bool KisLockedPropertiesProxy::getBool(const QString &name, bool def = false) const
 {
-    qDebug("Overridden Setting");
+    qDebug(name.toLatin1());
     return true;
+}
+void KisLockedPropertiesProxy::sayMyName()
+{
+    qDebug("mohit");
 }

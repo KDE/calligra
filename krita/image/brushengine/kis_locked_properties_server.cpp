@@ -4,7 +4,7 @@ KisLockedPropertiesServer::KisLockedPropertiesServer()
 {
 }
 
-KisLockedPropertiesProxy* KisLockedPropertiesServer::createLockedPropertiesProxy(KisPropertiesConfiguration* config)
+KisLockedPropertiesProxy* KisLockedPropertiesServer::createLockedPropertiesProxy(const KisPropertiesConfiguration* config)
 {
     KisLockedPropertiesProxy* m = new KisLockedPropertiesProxy(config,m_lockedProperties);
     return m;
@@ -15,7 +15,9 @@ KisLockedPropertiesServer* KisLockedPropertiesServer::instance()
     if(s_instance)
     {
         return s_instance;
+        qDebug("It is not null");
     }
+
     return NULL;
 }
 KisLockedProperties* KisLockedPropertiesServer::lockedProperties()

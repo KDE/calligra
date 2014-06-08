@@ -93,6 +93,7 @@ void KisPaintOpOptionsWidget::setConfiguration(const KisPropertiesConfiguration 
 {
     Q_ASSERT(!config->getString("paintop").isEmpty());
 
+
     foreach(KisPaintOpOption* option, m_d->paintOpOptions) {
         option->readOptionSetting(config);
     }
@@ -100,10 +101,11 @@ void KisPaintOpOptionsWidget::setConfiguration(const KisPropertiesConfiguration 
 
 void KisPaintOpOptionsWidget::writeConfiguration(KisPropertiesConfiguration *config) const
 {
+    qDebug("Hello");
     KisLockedPropertiesProxy* m = KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(config);
-
+    m->getBool("yolo",false);
     foreach(const KisPaintOpOption* option, m_d->paintOpOptions) {
-        option->writeOptionSetting(m);
+        option->writeOptionSetting(config);
     }
 }
 

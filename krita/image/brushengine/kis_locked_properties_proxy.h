@@ -9,14 +9,15 @@ class KisLockedPropertiesProxy: public KisPropertiesConfiguration
 public:
     KisLockedPropertiesProxy() ;
     KisLockedPropertiesProxy(KisLockedProperties* p);
-    KisLockedPropertiesProxy(KisPropertiesConfiguration *, KisLockedProperties *);
+    KisLockedPropertiesProxy( const KisPropertiesConfiguration *, KisLockedProperties *);
     bool getBool(const QString &name, bool def) const;
+    void sayMyName();
 
 
 
 private:
     KisLockedProperties* m_lockedProperties;
-    KisPropertiesConfiguration* m_parent;
+    const KisPropertiesConfiguration* m_parent;
 
 };
 

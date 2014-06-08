@@ -907,7 +907,7 @@ void KisPaintopBox::slotToggleAlphaLockMode(bool checked)
 }
 void KisPaintopBox::slotReloadPreset()
 {   m_optionWidget->blockSignals(true);
-
+    qDebug("Mohit");
     //Here using the name and fetching the preset from the server was the only way the load was working. Otherwise it was not loading.
     KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
     KisPaintOpPresetSP preset = rserver->resourceByName(m_resourceProvider->currentPreset()->name());
@@ -927,6 +927,8 @@ void KisPaintopBox::slotReloadPreset()
 }
 void KisPaintopBox::slotConfigurationItemChanged() // Called only when UI is changed and not when preset is changed
 {
-   m_optionWidget->writeConfiguration(const_cast<KisPaintOpSettings*>(m_resourceProvider->currentPreset()->settings().data()));
+
+    m_optionWidget->writeConfiguration(const_cast<KisPaintOpSettings*>(m_resourceProvider->currentPreset()->settings().data()));
    m_presetsPopup->resourceSelected(m_resourceProvider->currentPreset().data());
+
 }
