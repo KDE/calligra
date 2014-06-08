@@ -30,6 +30,8 @@
 #include <kis_paintop_preset.h>
 #include <kis_cmb_composite.h>
 #include <kis_categorized_item_delegate.h>
+#include <kis_locked_properties_server.h>
+#include <kis_locked_properties_proxy.h>
 
 struct KisPaintOpOptionsWidget::Private
 {
@@ -98,8 +100,10 @@ void KisPaintOpOptionsWidget::setConfiguration(const KisPropertiesConfiguration 
 
 void KisPaintOpOptionsWidget::writeConfiguration(KisPropertiesConfiguration *config) const
 {
+    KisLockedPropertiesProxy* m = KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(config);
+
     foreach(const KisPaintOpOption* option, m_d->paintOpOptions) {
-        option->writeOptionSetting(config);
+        option->writeOptionSetting(m);
     }
 }
 
