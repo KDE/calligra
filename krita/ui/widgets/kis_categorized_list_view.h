@@ -21,6 +21,7 @@
 
 #include <krita_export.h>
 #include <QListView>
+#include <QListWidget>
 
 
 class KRITAUI_EXPORT KisCategorizedListView: public QListView

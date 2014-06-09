@@ -92,20 +92,17 @@ void KisPaintOpOptionsWidget::addPaintOpOption(KisPaintOpOption * option)
 void KisPaintOpOptionsWidget::setConfiguration(const KisPropertiesConfiguration * config)
 {
     Q_ASSERT(!config->getString("paintop").isEmpty());
-
-
+    KisLockedPropertiesProxy* m = KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(config);
     foreach(KisPaintOpOption* option, m_d->paintOpOptions) {
-        option->readOptionSetting(config);
+        option->readOptionSetting(m);
     }
 }
 
 void KisPaintOpOptionsWidget::writeConfiguration(KisPropertiesConfiguration *config) const
 {
-    qDebug("In Write Config");
     KisLockedPropertiesProxy* m = KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(config);
-
     foreach(const KisPaintOpOption* option, m_d->paintOpOptions) {
-        option->writeOptionSetting(config);
+        option->writeOptionSetting(m);
     }
 }
 
@@ -119,9 +116,14 @@ void KisPaintOpOptionsWidget::setImage(KisImageWSP image)
 void KisPaintOpOptionsWidget::changePage(const QModelIndex& index)
 {
     KisOptionInfo info;
+    QPalette palette;
+    palette.setColor(QPalette::Base, QColor(255,200,200));
+    palette.setColor(QPalette::Text, Qt::black);
     
     if(m_d->model->entryAt(info, index)) {
         m_d->optionsStack->setCurrentIndex(info.index);
+
+
         emit sigConfigurationItemChanged();
     }
 }

@@ -108,7 +108,7 @@ public:
 
     float getFloat(const QString& name, float def = 0.0) const;
 
-    virtual bool getBool(const QString & name, bool def = false) const;
+    bool getBool(const QString & name, bool def = false) const;
 
     QString getString(const QString & name, const QString & def = QString()) const;
 

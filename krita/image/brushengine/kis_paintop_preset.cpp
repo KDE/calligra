@@ -148,9 +148,6 @@ bool KisPaintOpPreset::load()
     bool res = loadFromDevice(&file);
 
     this->setDirtyPreset(false);
-    qDebug("Loading");
-
-
     return true;
 }
 

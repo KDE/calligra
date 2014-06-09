@@ -4,6 +4,8 @@
 KisLockedProperties::KisLockedProperties()
 {
     m_lockedProperties = new KisPropertiesConfiguration();
+    m_lockedProperties->setProperty("OpacityValue",0.34);
+    m_lockedProperties->setProperty("FlowValue",0.56);
 }
 
 KisLockedProperties::KisLockedProperties(KisPropertiesConfiguration *p)
@@ -32,9 +34,6 @@ void KisLockedProperties::removeFromLockedProperties(KisPropertiesConfiguration 
         temp->setProperty(i.key(),i.value());
     }
     m_lockedProperties->clearProperties();
-
-
-
     for(i = temp->getProperties().begin();i!=temp->getProperties().end();i++)
     {
         if(!p->hasProperty(i.key()))
@@ -45,5 +44,11 @@ void KisLockedProperties::removeFromLockedProperties(KisPropertiesConfiguration 
 }
 KisPropertiesConfiguration *KisLockedProperties::lockedProperties()
 {
+
+    if(!m_lockedProperties)
+    {
+        m_lockedProperties = new KisPropertiesConfiguration();
+    }
+
     return m_lockedProperties;
 }

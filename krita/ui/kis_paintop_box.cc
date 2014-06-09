@@ -380,6 +380,7 @@ void KisPaintopBox::setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP pr
         m_resourceProvider->setPreviousPaintOpPreset(m_resourceProvider->currentPreset());
 
         if (m_optionWidget) {
+            m_optionWidget->setConfiguration(m_resourceProvider->currentPreset()->settings());
             bool saveDirtyPreset = m_resourceProvider->currentPreset()->dirtyPreset();
             m_optionWidget->writeConfiguration(const_cast<KisPaintOpSettings*>(m_resourceProvider->currentPreset()->settings().data()));
             m_resourceProvider->currentPreset()->setDirtyPreset(saveDirtyPreset);
@@ -928,7 +929,7 @@ void KisPaintopBox::slotReloadPreset()
 void KisPaintopBox::slotConfigurationItemChanged() // Called only when UI is changed and not when preset is changed
 {
 
-    m_optionWidget->writeConfiguration(const_cast<KisPaintOpSettings*>(m_resourceProvider->currentPreset()->settings().data()));
+   m_optionWidget->writeConfiguration(const_cast<KisPaintOpSettings*>(m_resourceProvider->currentPreset()->settings().data()));
    m_presetsPopup->resourceSelected(m_resourceProvider->currentPreset().data());
 
 }

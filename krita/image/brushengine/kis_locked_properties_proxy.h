@@ -10,8 +10,12 @@ public:
     KisLockedPropertiesProxy() ;
     KisLockedPropertiesProxy(KisLockedProperties* p);
     KisLockedPropertiesProxy( const KisPropertiesConfiguration *, KisLockedProperties *);
-    bool getBool(const QString &name, bool def) const;
+    using KisPropertiesConfiguration::getProperty;
     QVariant getProperty(const QString &name) const;
+    using KisPropertiesConfiguration::setProperty;
+    void setProperty(const QString & name, const QVariant & value);
+
+
 
 
 
