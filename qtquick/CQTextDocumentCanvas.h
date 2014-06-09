@@ -48,6 +48,7 @@ class CQTextDocumentCanvas : public CQCanvasBase
     Q_PROPERTY(int currentPageNumber READ currentPageNumber WRITE setCurrentPageNumber NOTIFY currentPageNumberChanged)
     Q_PROPERTY(QObjectList linkTargets READ linkTargets NOTIFY linkTargetsChanged)
     Q_PROPERTY(QObject* textEditor READ textEditor NOTIFY textEditorChanged)
+    Q_PROPERTY(QObject* notes READ notes NOTIFY notesChanged)
 
 public:
     CQTextDocumentCanvas(QDeclarativeItem* parent = 0);
@@ -79,6 +80,8 @@ public:
     // This is highly useful, as it makes navigation prettier.
     Q_INVOKABLE void deselectEverything();
 
+    // A list model of notes as created using addSticker(QString) and addNote(QString, QColor)
+    QObject* notes() const;
     // Adds a sticker (simply an SVG) to the position indicated by the center of the viewport.
     Q_INVOKABLE void addSticker(QString imageUrl);
     // Adds a note to the position indicated by the center of the viewport. Color is the color
@@ -92,6 +95,7 @@ signals:
     void cameraYChanged();
     void linkTargetsChanged();
     void textEditorChanged();
+    void notesChanged();
 
 protected:
     virtual bool event( QEvent* event );

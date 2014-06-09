@@ -25,6 +25,7 @@
 #include "CQTextDocumentCanvas.h"
 #include "CQCanvasController.h"
 #include "CQTextDocumentModel.h"
+#include "CQTextDocumentNotesModel.h"
 
 #include "gemini/ViewModeSwitchEvent.h"
 
@@ -69,7 +70,8 @@ public:
           document(0),
           pageNumber(0),
           throttleTimer(new QTimer()),
-          currentTool(0)
+          currentTool(0),
+          notes(0)
     {
         throttleTimer->setInterval(200);
         throttleTimer->setSingleShot(true);
@@ -87,6 +89,7 @@ public:
     QObjectList linkTargets;
     QTimer* throttleTimer;
     KoToolBase* currentTool;
+    CQTextDocumentNotesModel* notes;
 
     void updateLinkTargets()
     {
@@ -213,6 +216,9 @@ void CQTextDocumentCanvas::openFile(const QString& uri)
 
     connect(d->canvas->shapeManager(), SIGNAL(selectionChanged()), SIGNAL(textEditorChanged()));
 
+    d->notes = new CQTextDocumentNotesModel(this);
+    emit notesChanged();
+
     emit textEditorChanged();
     emit loadingFinished();
 }
@@ -261,6 +267,11 @@ void CQTextDocumentCanvas::deselectEverything()
     updateCanvas();
 }
 
+QObject* CQTextDocumentCanvas::notes() const
+{
+    return d->notes;
+}
+
 void CQTextDocumentCanvas::addSticker(QString imageUrl)
 {
     QSvgRenderer renderer(QUrl(imageUrl).toLocalFile());
@@ -296,6 +307,8 @@ void CQTextDocumentCanvas::addSticker(QString imageUrl)
         selection->select(shape);
 //        d->canvas->addCommand(cmd);
         d->canvas->shapeManager()->addShape(shape);
+
+        d->notes->addEntry("", imageUrl, Qt::blue, shape);
     }
 }
 
@@ -344,6 +357,8 @@ void CQTextDocumentCanvas::addNote(QString text, QColor color)
         selection->select(shape);
 //        d->canvas->addCommand(cmd);
         d->canvas->shapeManager()->addShape(shape);
+
+        d->notes->addEntry(text, "", color, shape);
     }
 }
 
