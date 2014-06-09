@@ -186,105 +186,146 @@ Item {
         }
     }
 
-    Rectangle {
-        id: notesSummary;
+    Item {
+        id: summaryView;
         anchors {
             top: base.top;
             right: base.left;
+            rightMargin: Constants.DefaultMargin;
             bottom: base.bottom;
-            margins: Constants.DefaultMargin;
         }
         width: Constants.GridWidth * 3;
-        ListView {
-            anchors.fill: parent;
-            model: (base.canvas !== null) ? base.canvas.notes : null;
-            clip: true;
-            delegate: Item {
-                width: notesSummary.width;
-                height: {
-                    if(model.expanded) {
-                        return model.firstOfThisColor ? Constants.GridHeight * 2: Constants.GridHeight;
-                    }
-                    else {
-                        return model.firstOfThisColor ? Constants.GridHeight : 0;
-                    }
+        opacity: notesSummaryList.count > 0 ? 1 : 0;
+        Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+        Rectangle {
+            id: summaryTitleBar;
+            anchors {
+                top: parent.top;
+                left: parent.left;
+                right: parent.right;
+            }
+            height: Constants.SmallFontSize + 2 * Constants.DefaultMargin;
+            color: "#e8e9ea";
+            Label {
+                anchors {
+                    left: parent.left;
+                    leftMargin: Constants.DefaultMargin;
+                    verticalCenter: parent.verticalCenter;
                 }
-                Behavior on height { PropertyAnimation { duration: Constants.AnimationDuration; } }
-                Rectangle {
-                    id: colorRect;
-                    anchors {
-                        left: parent.left;
-                        top: parent.top;
-                        margins: Constants.DefaultMargin;
-                    }
-                    height: model.firstOfThisColor ? Constants.GridHeight - Constants.DefaultMargin : 0;
-                    width: height;
-                    color: model.color;
-                    opacity: height > 0 ? 1 : 0;
-                    Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
-                    radius: 3;
-                    Label {
-                        anchors.centerIn: parent;
-                        width: parent.width;
-                        horizontalAlignment: Text.AlignHCenter;
-                        text: model.colorCount;
-                    }
-                    Label {
-                        anchors {
-                            left: parent.right;
-                            leftMargin: Constants.DefaultMargin;
-                            verticalCenter: parent.verticalCenter;
+                text: "NOTE SUMMARY";
+                color: "#5b6573";
+                font.pixelSize: Constants.SmallFontSize
+                font.bold: true;
+            }
+        }
+        Item {
+            id: notesSummary;
+            anchors {
+                top: summaryTitleBar.bottom;
+                left: parent.left;
+                right: parent.right;
+                bottom: parent.bottom;
+            }
+            Rectangle {
+                anchors.fill: parent;
+                color: "white";
+                border.color: "#e8e9ea";
+                border.width: 1;
+                opacity: 0.96;
+            }
+            ListView {
+                id: notesSummaryList;
+                anchors.fill: parent;
+                model: (base.canvas !== null) ? base.canvas.notes : null;
+                clip: true;
+                delegate: Item {
+                    height: {
+                        if(model.expanded) {
+                            return model.firstOfThisColor ? Constants.GridHeight * 2: Constants.GridHeight;
                         }
-                        text: "Color Notes";
+                        else {
+                            return model.firstOfThisColor ? Constants.GridHeight : 0;
+                        }
                     }
-                }
-                Label {
-                    anchors {
-                        left: parent.left;
-                        verticalCenter: colorRect.verticalCenter;
-                    }
-                    text: model.expanded ? "Collapse" : "Expand"
-                    color: "blue";
-                    width: notesSummary.width - Constants.DefaultMargin;
-                    height: font.pixelSize + Constants.DefaultMargin * 2;
-                    horizontalAlignment: Text.AlignRight;
-                    opacity: colorRect.opacity;
-                    MouseArea {
-                        anchors.fill: parent;
-                        onClicked: base.canvas.notes.toggleExpanded(index);
-                    }
-                }
-                Label {
-                    anchors {
-                        left: parent.left;
-                        right: parent.right;
-                        bottom: parent.bottom;
-                        margins: Constants.DefaultMargin;
-                    }
-                    height: font.pixelSize + Constants.DefaultMargin * 2;
-                    text: model.text;
-                    opacity: model.expanded ? 1 : 0;
-                    Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
-                }
-                Image {
-                    anchors {
-                        left: parent.left;
-                        bottom: parent.bottom;
-                        margins: Constants.DefaultMargin;
-                    }
-                    height: Constants.GridHeight - Constants.DefaultMargin;
-                    width: height;
-                    opacity: model.expanded ? 1 : 0;
-                    Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
-                    source: model.image;
-                    Label {
+                    Behavior on height { PropertyAnimation { duration: Constants.AnimationDuration; } }
+                    Rectangle {
+                        id: colorRect;
                         anchors {
-                            left: parent.right;
+                            left: parent.left;
+                            top: parent.top;
                             margins: Constants.DefaultMargin;
-                            verticalCenter: parent.verticalCenter;
                         }
-                        visible: parent.source != "";
-                        text: "Stamp note";
+                        height: model.firstOfThisColor ? Constants.GridHeight - Constants.DefaultMargin : 0;
+                        width: height;
+                        color: model.color;
+                        opacity: height > 0 ? 1 : 0;
+                        Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+                        radius: 3;
+                        Label {
+                            anchors.centerIn: parent;
+                            width: parent.width;
+                            horizontalAlignment: Text.AlignHCenter;
+                            text: model.colorCount;
+                            color: "white";
+                            font.bold: true;
+                        }
+                        Label {
+                            anchors {
+                                left: parent.right;
+                                leftMargin: Constants.DefaultMargin;
+                                verticalCenter: parent.verticalCenter;
+                            }
+                            text: "Color Notes";
+                        }
+                    }
+                    Label {
+                        anchors {
+                            left: parent.left;
+                            verticalCenter: colorRect.verticalCenter;
+                        }
+                        text: model.expanded ? "Collapse" : "Expand"
+                        color: "blue";
+                        width: notesSummary.width - Constants.DefaultMargin;
+                        height: font.pixelSize + Constants.DefaultMargin * 2;
+                        horizontalAlignment: Text.AlignRight;
+                        opacity: colorRect.opacity;
+                        MouseArea {
+                            anchors.fill: parent;
+                            onClicked: base.canvas.notes.toggleExpanded(index);
+                        }
+                    }
+                    Label {
+                        anchors {
+                            left: parent.left;
+                            right: parent.right;
+                            bottom: parent.bottom;
+                            margins: Constants.DefaultMargin;
+                        }
+                        height: font.pixelSize + Constants.DefaultMargin * 2;
+                        text: model.text;
+                        opacity: model.expanded ? 1 : 0;
+                        Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+                    }
+                    Image {
+                        anchors {
+                            left: parent.left;
+                            bottom: parent.bottom;
+                            margins: Constants.DefaultMargin;
+                        }
+                        height: Constants.GridHeight - Constants.DefaultMargin;
+                        width: height;
+                        opacity: model.expanded ? 1 : 0;
+                        Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+                        source: model.image;
+                        Label {
+                            anchors {
+                                left: parent.right;
+                                margins: Constants.DefaultMargin;
+                                verticalCenter: parent.verticalCenter;
+                            }
+                            visible: parent.source != "";
+                            text: "Stamp note";
+                        }
                     }
                 }
             }
