@@ -19,6 +19,7 @@ set(calligraqtquickcomponents_SRCS
     CQTextToCModel.cpp
     CQPluginLoaderProxy.cpp
     CQLinkArea.cpp
+    CQTextDocumentNotesModel.cpp
 )
 
 include_directories(
