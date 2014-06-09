@@ -93,7 +93,11 @@ Item {
                             sourceSize.height: width > height ? height : width;
                             MouseArea {
                                 anchors.fill: parent;
-                                onClicked: base.canvas.addSticker(Settings.theme.image(model.image));
+                                onClicked: {
+                                    base.canvas.addSticker(Settings.theme.image(model.image));
+                                    toolManager.requestToolChange("InteractionTool");
+                                    viewLoader.item.navigateMode = false;
+                                }
                             }
                         }
                     }
@@ -116,7 +120,11 @@ Item {
                     width: base.width;
                     MouseArea {
                         anchors.fill: parent;
-                        onClicked: base.canvas.addNote(model.text, colorDot.color);
+                        onClicked: {
+                            base.canvas.addNote(model.text, colorDot.color);
+                            toolManager.requestToolChange("InteractionTool");
+                            viewLoader.item.navigateMode = false;
+                        }
                     }
                     Rectangle {
                         width: base.width;
@@ -175,6 +183,111 @@ Item {
             text: "Add a custom note";
             textColor: "#00adf5";
             image: Settings.theme.icon("add-black");
+        }
+    }
+
+    Rectangle {
+        id: notesSummary;
+        anchors {
+            top: base.top;
+            right: base.left;
+            bottom: base.bottom;
+            margins: Constants.DefaultMargin;
+        }
+        width: Constants.GridWidth * 3;
+        ListView {
+            anchors.fill: parent;
+            model: (base.canvas !== null) ? base.canvas.notes : null;
+            clip: true;
+            delegate: Item {
+                width: notesSummary.width;
+                height: {
+                    if(model.expanded) {
+                        return model.firstOfThisColor ? Constants.GridHeight * 2: Constants.GridHeight;
+                    }
+                    else {
+                        return model.firstOfThisColor ? Constants.GridHeight : 0;
+                    }
+                }
+                Behavior on height { PropertyAnimation { duration: Constants.AnimationDuration; } }
+                Rectangle {
+                    id: colorRect;
+                    anchors {
+                        left: parent.left;
+                        top: parent.top;
+                        margins: Constants.DefaultMargin;
+                    }
+                    height: model.firstOfThisColor ? Constants.GridHeight - Constants.DefaultMargin : 0;
+                    width: height;
+                    color: model.color;
+                    opacity: height > 0 ? 1 : 0;
+                    Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+                    radius: 3;
+                    Label {
+                        anchors.centerIn: parent;
+                        width: parent.width;
+                        horizontalAlignment: Text.AlignHCenter;
+                        text: model.colorCount;
+                    }
+                    Label {
+                        anchors {
+                            left: parent.right;
+                            leftMargin: Constants.DefaultMargin;
+                            verticalCenter: parent.verticalCenter;
+                        }
+                        text: "Color Notes";
+                    }
+                }
+                Label {
+                    anchors {
+                        left: parent.left;
+                        verticalCenter: colorRect.verticalCenter;
+                    }
+                    text: model.expanded ? "Collapse" : "Expand"
+                    color: "blue";
+                    width: notesSummary.width - Constants.DefaultMargin;
+                    height: font.pixelSize + Constants.DefaultMargin * 2;
+                    horizontalAlignment: Text.AlignRight;
+                    opacity: colorRect.opacity;
+                    MouseArea {
+                        anchors.fill: parent;
+                        onClicked: base.canvas.notes.toggleExpanded(index);
+                    }
+                }
+                Label {
+                    anchors {
+                        left: parent.left;
+                        right: parent.right;
+                        bottom: parent.bottom;
+                        margins: Constants.DefaultMargin;
+                    }
+                    height: font.pixelSize + Constants.DefaultMargin * 2;
+                    text: model.text;
+                    opacity: model.expanded ? 1 : 0;
+                    Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+                }
+                Image {
+                    anchors {
+                        left: parent.left;
+                        bottom: parent.bottom;
+                        margins: Constants.DefaultMargin;
+                    }
+                    height: Constants.GridHeight - Constants.DefaultMargin;
+                    width: height;
+                    opacity: model.expanded ? 1 : 0;
+                    Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+                    source: model.image;
+                    Label {
+                        anchors {
+                            left: parent.right;
+                            margins: Constants.DefaultMargin;
+                            verticalCenter: parent.verticalCenter;
+                        }
+                        visible: parent.source != "";
+                        text: "Stamp note";
+                    }
+                }
+            }
         }
     }
 }
