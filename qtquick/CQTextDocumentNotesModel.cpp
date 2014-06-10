@@ -27,7 +27,8 @@ struct Entry {
     Entry() : colorCount(1), shape(0), expanded(false) {};
     QString text;
     QString image;
-    QColor color;
+    QString color;
+    QString categoryName;
     int colorCount;
     KoShape* shape;
     bool expanded;
@@ -51,6 +52,7 @@ CQTextDocumentNotesModel::CQTextDocumentNotesModel(QObject* parent = 0)
     roles[Image] = "image";
     roles[Color] = "color";
     roles[ColorCount] = "colorCount";
+    roles[CategoryName] = "categoryName";
     roles[FirstOfThisColor] = "firstOfThisColor";
     roles[Position] = "position";
     roles[Expanded] = "expanded";
@@ -80,6 +82,9 @@ QVariant CQTextDocumentNotesModel::data(const QModelIndex& index, int role) cons
             case ColorCount:
                 data = entry->colorCount;
                 break;
+            case CategoryName:
+                data = entry->categoryName;
+                break;
             case FirstOfThisColor:
                 data = true;
                 if(index.row() > 0 && d->entries.at(index.row() - 1)->color == entry->color)
@@ -106,6 +111,11 @@ int CQTextDocumentNotesModel::rowCount(const QModelIndex& parent) const
     return d->entries.count();
 }
 
+int CQTextDocumentNotesModel::count() const
+{
+    return d->entries.count();
+}
+
 void CQTextDocumentNotesModel::toggleExpanded(int index)
 {
     if(index > -1 && index < d->entries.count())
@@ -119,13 +129,20 @@ void CQTextDocumentNotesModel::toggleExpanded(int index)
     dataChanged(this->index(0), this->index(d->entries.count() - 1));
 }
 
-void CQTextDocumentNotesModel::addEntry(QString text, QString image, QColor color, KoShape* shape)
+void CQTextDocumentNotesModel::addEntry(QString text, QString image, QString color, KoShape* shape)
 {
     Entry* entry = new Entry();
     entry->text = text;
     entry->image = image;
-    entry->color = color;
     entry->shape = shape;
+    entry->color = color;
+    entry->categoryName = "Others";
+    if(color == "Red")
+        entry->categoryName = "Major Errors";
+    else if(color == "Yellow")
+        entry->categoryName = "Minor Errors";
+    else if(color == "Green")
+        entry->categoryName = "Successes";
 
     QList<Entry*>::iterator before = d->entries.begin();
     bool reachedColor = false;
@@ -155,10 +172,16 @@ void CQTextDocumentNotesModel::addEntry(QString text, QString image, QColor colo
         }
         ++position;
     }
+
+    // By default, the Neutral category is supposed to be expanded
+    if(color == "Neutral" && colorCount == 1)
+        entry->expanded = true;
+
     beginInsertRows(QModelIndex(), position, position);
     d->entries.insert(before, entry);
     endInsertRows();
     dataChanged(index(position - colorCount), index(position - 1));
+    emit countChanged();
 }
 
 #include "CQTextDocumentNotesModel.moc"

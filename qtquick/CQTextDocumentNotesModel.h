@@ -30,12 +30,14 @@
 class CQTextDocumentNotesModel : public QAbstractListModel
 {
     Q_OBJECT
+    Q_PROPERTY(int count READ count NOTIFY countChanged)
 public:
     enum NoteRoles {
         Text = Qt::UserRole + 1,
         Image,
         Color,
         ColorCount,
+        CategoryName,
         FirstOfThisColor,
         Position,
         Expanded
@@ -45,9 +47,11 @@ public:
 
     virtual QVariant data(const QModelIndex& index, int role) const;
     virtual int rowCount(const QModelIndex& parent) const;
+    int count() const;
 
     Q_INVOKABLE void toggleExpanded(int index);
-    void addEntry(QString text, QString image, QColor color, KoShape* shape);
+    void addEntry(QString text, QString image, QString color, KoShape* shape);
+    Q_SIGNAL void countChanged();
 private:
     class Private;
     Private* d;

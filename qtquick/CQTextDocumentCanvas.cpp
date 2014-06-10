@@ -308,11 +308,11 @@ void CQTextDocumentCanvas::addSticker(QString imageUrl)
 //        d->canvas->addCommand(cmd);
         d->canvas->shapeManager()->addShape(shape);
 
-        d->notes->addEntry("", imageUrl, Qt::blue, shape);
+        d->notes->addEntry("", imageUrl, "Neutral", shape);
     }
 }
 
-void CQTextDocumentCanvas::addNote(QString text, QColor color)
+void CQTextDocumentCanvas::addNote(QString text, QString color)
 {
    // Prepare a QImage with desired characteritisc
     QImage image(200, 100, QImage::Format_ARGB32);
@@ -323,7 +323,7 @@ void CQTextDocumentCanvas::addNote(QString text, QColor color)
     painter.setRenderHint(QPainter::Antialiasing, true);
     painter.setRenderHint(QPainter::TextAntialiasing, true);
     QPen pen;
-    pen.setColor(color);
+    pen.setColor(QColor(color));
     pen.setWidth(3);
     painter.setPen(pen);
     painter.drawEllipse(image.rect().adjusted(3, 3, -4, -4));
