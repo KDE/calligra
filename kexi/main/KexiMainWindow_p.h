@@ -1392,7 +1392,6 @@ public:
     }
 protected:
     virtual bool queryClose();
-    virtual bool queryExit();
 protected slots:
     void slotCurrentTabIndexChanged(int index);
 signals:
@@ -1434,11 +1433,6 @@ void KexiMainWidget::setupCentralWidget()
 bool KexiMainWidget::queryClose()
 {
     return m_mainWindow ? m_mainWindow->queryClose() : true;
-}
-
-bool KexiMainWidget::queryExit()
-{
-    return m_mainWindow ? m_mainWindow->queryExit() : true;
 }
 
 void KexiMainWidget::slotCurrentTabIndexChanged(int index)
