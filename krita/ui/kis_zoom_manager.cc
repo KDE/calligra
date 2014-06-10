@@ -224,12 +224,14 @@ void KisZoomManager::slotZoomChanged(KoZoomMode::Mode mode, qreal zoom)
 
     qreal humanZoom = zoom * 100.0;
 
-    m_view->
-        showFloatingMessage(
-            i18nc("floating message about zoom", "Zoom: %1 \%",
-                  KritaUtils::prettyFormatReal(humanZoom)),
-            QIcon(), 500, KisFloatingMessage::Low);
-
+    /* TODO: Revisit when we can disable messages on startup */
+    if (m_view->isInCanvasOnlyMode()) {
+        m_view->
+            showFloatingMessage(
+                i18nc("floating message about zoom", "Zoom: %1 \%",
+                      KritaUtils::prettyFormatReal(humanZoom)),
+                QIcon(), 500, KisFloatingMessage::Low);
+    }
 }
 
 void KisZoomManager::slotScrollAreaSizeChanged()

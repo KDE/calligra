@@ -182,6 +182,8 @@ public:
     void enableControls();
     void disableControls();
 
+    // Return whether the canvas is currently in Canvas-Only mode
+    bool isInCanvasOnlyMode();
 
     /// shows a floating message in the top right corner of the canvas
     void showFloatingMessage(const QString message, const QIcon& icon, int timeout = 4500, KisFloatingMessage::Priority priority = KisFloatingMessage::Medium);

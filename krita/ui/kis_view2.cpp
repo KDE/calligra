@@ -173,6 +173,7 @@ public:
         , mainWindow(0)
         , tooltipManager(0)
         , showFloatingMessage(true)
+        , isInCanvasOnlyMode(false)
     {
     }
 
@@ -230,6 +231,7 @@ public:
     KisTooltipManager* tooltipManager;
     QPointer<KisFloatingMessage> savedFloatingMessage;
     bool showFloatingMessage;
+    bool isInCanvasOnlyMode;
 };
 
 
@@ -489,6 +491,10 @@ KisView2::~KisView2()
     delete m_d;
 }
 
+bool KisView2::isInCanvasOnlyMode()
+{
+    return m_d->isInCanvasOnlyMode;
+}
 
 void KisView2::dragEnterEvent(QDragEnterEvent *event)
 {
@@ -1539,6 +1545,7 @@ void KisView2::showJustTheCanvas(bool toggled)
 
     showHideScrollbars();
 
+    m_d->isInCanvasOnlyMode = toggled;
     if (toggled) {
         // show a fading heads-up display about the shortcut to go back
 
