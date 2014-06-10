@@ -17,7 +17,7 @@
  */
 
 import QtQuick 1.1
-import org.krita.sketch 1.0
+import org.calligra 1.0
 
 Rectangle {
     id: base;
@@ -66,15 +66,6 @@ Rectangle {
             NumberAnimation { properties: "y"; }
             PropertyAction { property: "keyboardVisible"; }
         }
-    }
-
-    Connections {
-        target: Krita.VirtualKeyboardController;
-
-        onShowKeyboard: {
-            base.state = "visible";
-        }
-        onHideKeyboard: base.state = "";
     }
 
     Connections {
