@@ -37,6 +37,7 @@ set(calligragemini_SRCS
     Theme.cpp
     ToolManager.cpp
     ParagraphStylesModel.cpp
+    KeyboardModel.cpp
 )
 
 
