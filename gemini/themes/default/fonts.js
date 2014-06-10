@@ -24,7 +24,7 @@ var values = {
     },
     small: {
         family: "Source Sans Pro",
-        style: "Light",
+        style: "Bold",
         size: 0.75,
     },
     pageHeader: {
