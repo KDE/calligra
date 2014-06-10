@@ -125,6 +125,16 @@ Page {
                 textColor: Settings.theme.color("components/toolbar/text");
                 checkable: true;
                 radius: 4;
+                Rectangle {
+                    anchors.horizontalCenter: parent.horizontalCenter;
+                    anchors.top: parent.bottom;
+                    height: Constants.DefaultMargin;
+                    width: height;
+                    color: "#e8e9ea";
+                    rotation: 45;
+                    opacity: parent.checked ? 1 : 0;
+                    Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+                }
                 TextStylePanel {
                     document: viewLoader.item ? viewLoader.item.document : null;
                     textEditor: viewLoader.item ? viewLoader.item.textEditor : null;
@@ -242,7 +252,26 @@ Page {
                 checkable: true;
                 radius: 4;
                 checkedColor: "#3C00adf5";
-                NotesPanel { canvas: viewLoader.item ? viewLoader.item.canvas : null; }
+                Rectangle {
+                    anchors.horizontalCenter: parent.horizontalCenter;
+                    anchors.top: parent.bottom;
+                    height: Constants.DefaultMargin;
+                    width: height;
+                    color: "#e8e9ea";
+                    rotation: 45;
+                    opacity: parent.checked ? 1 : 0;
+                    Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+                }
+                NotesPanel {
+                    anchors {
+                        top: parent.bottom;
+                        right: parent.right;
+                        rightMargin: - (parent.width + 20);
+                        topMargin: 4;
+                    }
+                    opacity: parent.checked ? 1 : 0;
+                    canvas: viewLoader.item ? viewLoader.item.canvas : null;
+                }
             }
             Button {
                 height: parent.height;
