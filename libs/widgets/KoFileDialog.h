@@ -140,10 +140,12 @@ private:
     const QString getUsedDir(const QString &dialogName);
     void saveUsedDir(const QString &fileName, const QString &dialogName);
 
-    const QStringList getFilterStringListFromMime(const QStringList &mimeList,
-                                                  bool withAllSupportedEntry = false);
-
-
+    void getFilterStringListFromMime(const QStringList &mimeList
+                                     , QStringList &filterList
+                                     , QStringList &defaultExtensions
+                                     , bool withAllSupportedEntry = false);
+    
+    QString defaultSuffix(const QString& filter);
 
     class Private;
     Private * const d;
