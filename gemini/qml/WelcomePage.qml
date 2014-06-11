@@ -19,103 +19,101 @@
 import QtQuick 1.1
 import org.calligra 1.0
 import "components"
+import "welcomepages"
 
 Page {
     id: base;
-    DocumentListModel { id: textDocumentsModel; filter: DocumentListModel.TextDocumentType; }
-    DocumentListModel { id: presentationDocumentsModel; filter: DocumentListModel.PresentationType; }
-    property string categoryUIName: (docList.model === textDocumentsModel) ? "text documents" : "presentations"
-    Row {
-        id: docTypeSelectorRow;
+    Item {
+        id: sidebar;
         anchors {
             top: parent.top;
             left: parent.left;
-            right: parent.right;
-            margins: Constants.DefaultMargin;
-        }
-        height: Constants.GridHeight;
-        spacing: Constants.DefaultMargin;
-        Button {
-            width: parent.width / 2;
-            height: Constants.GridHeight - Constants.DefaultMargin * 2;
-            text: "Text Documents";
-            color: Settings.theme.color("base/base");
-            textColor: Settings.theme.color("base/text");
-            onClicked: docList.model = textDocumentsModel;
-            checked: docList.model === textDocumentsModel;
-        }
-        Button {
-            width: parent.width / 2;
-            height: Constants.GridHeight - Constants.DefaultMargin * 2;
-            text: "Presentations";
-            color: Settings.theme.color("base/base");
-            textColor: Settings.theme.color("base/text");
-            onClicked: docList.model = presentationDocumentsModel;
-            checked: docList.model === presentationDocumentsModel;
-        }
-    }
-    ListView {
-        id: docList;
-        clip: true;
-        anchors {
-            margins: Constants.DefaultMargin;
-            top: docTypeSelectorRow.bottom;
-            left: parent.left;
-            right: parent.right;
             bottom: parent.bottom;
         }
-        model: textDocumentsModel;
-        delegate: documentTile;
-        ScrollDecorator { flickableItem: docList; }
-    }
-    Label {
-        anchors.centerIn: parent;
-        text: "No %1 - please drop some into your Documents folder (%2)".arg(base.categoryUIName).arg(docList.model.documentsFolder);
-        visible: docList.count === 0;
-    }
-    Component { id: mainPage; MainPage { } }
-    Component {
-        id: documentTile;
+        width: parent.width / 5;
+        ListModel {
+            id: sidebarList;
+            ListElement { text: "File Browser"; icon: "SVG-Icon-PlayPresentation-1"; selected: true; stackComponent: "welcomePageFilebrowser"; }
+            ListElement { text: "Recent Documents"; icon: "SVG-Icon-PlayPresentation-1"; selected: false; stackComponent: "welcomePageRecent"; }
+            ListElement { text: "Presentation Templates"; icon: "SVG-Icon-PlayPresentation-1"; selected: false; stackComponent: "welcomePageStage"; }
+            ListElement { text: "Blank Presentations"; icon: "SVG-Icon-PlayPresentation-1"; selected: false; stackComponent: "welcomePageStage"; }
+            ListElement { text: "Blank Documents"; icon: "SVG-Icon-PlayPresentation-1"; selected: false; stackComponent: "welcomePageWords"; }
+            ListElement { text: "Custom Document"; icon: "SVG-Icon-PlayPresentation-1"; selected: false; stackComponent: "welcomePageWords"; }
+        }
         Rectangle {
-            width: parent.width;
-            height: model.fileName ? 55 : 0;
-            color: index % 2 === 1 ? "white" : "silver";
-            radius: height / 2;
-            Label {
-                id: lblName;
-                anchors.margins: 5;
-                anchors.leftMargin: parent.height / 3;
-                anchors.left: parent.left;
-                anchors.right: parent.horizontalCenter;
-                anchors.verticalCenter: parent.verticalCenter;
-                text: model.fileName ? model.fileName : "";
-            }
-            Label {
-                id: lblMTime;
-                anchors.margins: 5;
-                anchors.left: lblName.right;
-                anchors.right: lblSize.left;
-                anchors.verticalCenter: parent.verticalCenter;
-                text: model.modifiedTime ? model.modifiedTime : "";
-                horizontalAlignment: Text.AlignRight;
-            }
-            Label {
-                id: lblSize;
-                anchors.margins: 5;
-                anchors.rightMargin: parent.height / 3;
-                anchors.right: parent.right;
-                anchors.verticalCenter: parent.verticalCenter;
-                width: parent.width / 5;
-                text: model.fileSize ? model.fileSize : "";
-                horizontalAlignment: Text.AlignRight;
-            }
-            MouseArea {
-                anchors.fill: parent;
-                onClicked: {
-                    baseLoadingDialog.visible = true;
-                    openFile(model.filePath);
+            anchors.fill: parent;
+            color: "#e8e9ea";
+        }
+        ListView {
+            anchors.fill: parent;
+            clip: true;
+            model: sidebarList;
+            delegate: Item {
+                width: ListView.view.width;
+                height: Constants.GridHeight;
+                Rectangle {
+                    anchors.fill: parent;
+                    color: "#00adf5";
+                    opacity: model.selected ? 0.6 : 0;
+                    PropertyAnimation on opacity { duration: Constants.AnimationDuration; }
+                }
+                Image {
+                    anchors {
+                        left: parent.left;
+                        leftMargin: Constants.DefaultMargin;
+                        verticalCenter: parent.verticalCenter;
+                    }
+                    height: parent.height - Constants.DefaultMargin * 2;
+                    width: height;
+                    source: Settings.theme.icon(model.icon);
+                    sourceSize.width: width > height ? height : width;
+                    sourceSize.height: width > height ? height : width;
+                }
+                Label {
+                    anchors {
+                        left: parent.left;
+                        leftMargin: parent.height;
+                        verticalCenter: parent.verticalCenter;
+                    }
+                    text: model.text;
+                }
+                MouseArea {
+                    anchors.fill: parent;
+                    function elementFromName(name) {
+                        var elements = {
+                            "welcomePageFilebrowser": welcomePageFilebrowser,
+                            "welcomePageRecent": welcomePageRecent,
+                            "welcomePageStage": welcomePageStage,
+                            "welcomePageWords": welcomePageWords
+                        };
+                        return elements[name];
+                    }
+                    onClicked: {
+                        for(var i = 0; i < sidebarList.count; i++) {
+                            sidebarList.setProperty(i, "selected", false);
+                        }
+                        sidebarList.setProperty(index, "selected", true);
+                        welcomeStack.replace(elementFromName(model.stackComponent));
+                    }
                 }
             }
         }
     }
+    PageStack {
+        id: welcomeStack;
+        clip: true;
+        anchors {
+            top: parent.top;
+            left: sidebar.right;
+            right: parent.right;
+            bottom: parent.bottom;
+        }
+        initialPage: welcomePageFilebrowser;
+    }
+    Component { id: welcomePageFilebrowser; WelcomePageFilebrowser { } }
+    Component { id: welcomePageRecent; WelcomePageRecent { } }
+    Component { id: welcomePageStage; WelcomePageStage { } }
+    Component { id: welcomePageWords; WelcomePageWords { } }
+
+    Component { id: mainPage; MainPage { } }
 }
