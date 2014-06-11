@@ -245,6 +245,7 @@ public:
     }
 
     void addSteamActions(KActionCollection* collection) {
+#ifdef HAVE_STEAMWORKS
         KAction* showSteamDialog = new KAction(q);
         showSteamDialog->setText(i18n("Steam Cloud"));
         showSteamDialog->setIcon(koIcon("folder-remote"));
@@ -266,6 +267,7 @@ public:
         KAction* shareOnWorkshop = new KAction(koIcon("folder-remote"), i18n("Share Resources on Steam Workshop..."), q);
         connect(shareOnWorkshop, SIGNAL(triggered(bool)), KritaSteamClient::instance(), SLOT(showWorkshopDialog()));
         collection->addAction("share_on_steam_workshop", shareOnWorkshop);
+#endif
     }
 
     void notifySlateModeChange();
@@ -805,18 +807,6 @@ void MainWindow::cloneResources(KisCanvasResourceProvider *from, KisCanvasResour
     to->setOpacity(from->opacity());
     to->setGlobalAlphaLock(from->globalAlphaLock());
 
-}
-
-void MainWindow::loadFromSteamCloud()
-{
-    KritaSteamClient::instance()->showOpenFileDialog();
-}
-
-void MainWindow::saveToSteamCloud()
-{
-    KritaSteamClient::instance()->showSaveAsFileDialog();
-    //KritaSteamClient::instance()->remoteStorage()->pushFile(DocumentManager::instance()->settingsManager()->currentFile(), "workingcopies");
-    //KritaSteamClient::instance()->remoteStorage()->checkStorage();
 }
 
 bool MainWindow::forceFullScreen() {
