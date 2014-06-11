@@ -35,10 +35,9 @@ Page {
             id: sidebarList;
             ListElement { text: "File Browser"; icon: "SVG-Icon-PlayPresentation-1"; selected: true; stackComponent: "welcomePageFilebrowser"; }
             ListElement { text: "Recent Documents"; icon: "SVG-Icon-PlayPresentation-1"; selected: false; stackComponent: "welcomePageRecent"; }
-            ListElement { text: "Presentation Templates"; icon: "SVG-Icon-PlayPresentation-1"; selected: false; stackComponent: "welcomePageStage"; }
-            ListElement { text: "Blank Presentations"; icon: "SVG-Icon-PlayPresentation-1"; selected: false; stackComponent: "welcomePageStage"; }
-            ListElement { text: "Blank Documents"; icon: "SVG-Icon-PlayPresentation-1"; selected: false; stackComponent: "welcomePageWords"; }
-            ListElement { text: "Custom Document"; icon: "SVG-Icon-PlayPresentation-1"; selected: false; stackComponent: "welcomePageWords"; }
+            ListElement { text: "Stage Templates"; icon: "SVG-Icon-PlayPresentation-1"; selected: false; stackComponent: "welcomePageStage"; }
+            ListElement { text: "Words Templates"; icon: "SVG-Icon-PlayPresentation-1"; selected: false; stackComponent: "welcomePageWords"; }
+            ListElement { text: "Custom"; icon: "SVG-Icon-PlayPresentation-1"; selected: false; stackComponent: "welcomePageCustom"; }
         }
         Rectangle {
             anchors.fill: parent;
@@ -84,11 +83,15 @@ Page {
                             "welcomePageFilebrowser": welcomePageFilebrowser,
                             "welcomePageRecent": welcomePageRecent,
                             "welcomePageStage": welcomePageStage,
-                            "welcomePageWords": welcomePageWords
+                            "welcomePageWords": welcomePageWords,
+                            "welcomePageCustom": welcomePageCustom
                         };
                         return elements[name];
                     }
                     onClicked: {
+                        if(model.selected) {
+                            return;
+                        }
                         for(var i = 0; i < sidebarList.count; i++) {
                             sidebarList.setProperty(i, "selected", false);
                         }
@@ -114,6 +117,7 @@ Page {
     Component { id: welcomePageRecent; WelcomePageRecent { } }
     Component { id: welcomePageStage; WelcomePageStage { } }
     Component { id: welcomePageWords; WelcomePageWords { } }
+    Component { id: welcomePageCustom; WelcomePageCustom { } }
 
     Component { id: mainPage; MainPage { } }
 }
