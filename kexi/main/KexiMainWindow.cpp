@@ -1966,11 +1966,6 @@ bool KexiMainWindow::queryClose()
     return ! ~res;
 }
 
-bool KexiMainWindow::queryExit()
-{
-    return true;
-}
-
 void KexiMainWindow::closeEvent(QCloseEvent *ev)
 {
     d->mainWidget->closeEvent(ev);

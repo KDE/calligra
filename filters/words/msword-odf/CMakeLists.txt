@@ -34,3 +34,8 @@ install( FILES  calligra_filter_doc2odt.desktop  DESTINATION ${SERVICES_INSTALL_
 if(SHOULD_BUILD_EXTRA_THUMBNAIL)
     install( FILES  words_msword_thumbnail.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 endif(SHOULD_BUILD_EXTRA_THUMBNAIL)
+
+if(SHOULD_BUILD_OKULAR_GENERATOR_DOC)
+    install( FILES libokularGenerator_doc_calligra.desktop okularDoc_calligra.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+    install( PROGRAMS okularApplication_doc_calligra.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
+endif(SHOULD_BUILD_OKULAR_GENERATOR_DOC)
