@@ -22,4 +22,8 @@ import "../components"
 
 Page {
     id: base;
+    Label {
+        anchors.centerIn: parent;
+        text: "Words Templates";
+    }
 }
