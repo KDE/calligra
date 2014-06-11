@@ -388,6 +388,7 @@ void KexiConnectionSelectorWidget::slotRemoteAddBtnClicked()
     }
 
     ConnectionDataLVItem* item = addConnectionData(newData);
+    d->remote->list->clearSelection();
     item->setSelected(true);
     slotConnectionSelectionChanged();
 }
