@@ -85,7 +85,7 @@ if(SHOULD_BUILD_PLUGIN_REPORTING)
     add_subdirectory( reporting )
 endif(SHOULD_BUILD_PLUGIN_REPORTING)
 
-if(SHOULD_BUILD_PLUGIN_SEMANTICITEMS)
+if (SHOULD_BUILD_PLUGIN_SEMANTICITEMS)
     add_subdirectory( semanticitems )
 endif(SHOULD_BUILD_PLUGIN_SEMANTICITEMS)
 
@@ -93,3 +93,7 @@ endif(SHOULD_BUILD_PLUGIN_SEMANTICITEMS)
 #add_subdirectory( commentshape )
 
 add_subdirectory( staging )
+
+if (SHOULD_BUILD_PLUGIN_VARIABLELINESHAPE)
+    add_subdirectory( variablelineshape )
+endif (SHOULD_BUILD_PLUGIN_VARIABLELINESHAPE)
