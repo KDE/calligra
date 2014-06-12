@@ -40,6 +40,9 @@ public:
 
 public Q_SLOTS:
 
+    QString stageTemplateLocation(const QString& templateFile) const;
+    QString wordsTemplateLocation(const QString& templateFile) const;
+
     QString currentFile() const;
     QString currentFileClass() const;
     void setCurrentFile(const QString &fileName);
