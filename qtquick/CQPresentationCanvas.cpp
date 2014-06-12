@@ -36,6 +36,7 @@
 #include <KoPACanvasItem.h>
 #include <KDebug>
 #include <KActionCollection>
+#include <KMimeType>
 #include <QGraphicsWidget>
 #include <QTextDocument>
 #include <QTextFrame>
@@ -205,7 +206,28 @@ void CQPresentationCanvas::openFile(const QString& uri)
     d->document = dynamic_cast<KPrDocument*>(d->part->document());
     d->document->setAutoSave(0);
     d->document->setCheckAutoSaveFile(false);
-    d->document->openUrl (KUrl (uri));
+    if(uri.toLower().endsWith("otp")) {
+        KUrl url(uri);
+        bool ok = d->document->loadNativeFormat(url.toLocalFile());
+        d->document->setModified(false);
+        d->document->undoStack()->clear();
+
+        if (ok) {
+            QString mimeType = KMimeType::findByUrl( url, 0, true )->name();
+            // in case this is a open document template remove the -template from the end
+            mimeType.remove( QRegExp( "-template$" ) );
+            d->document->setMimeTypeAfterLoading(mimeType);
+            d->document->resetURL();
+            d->document->setEmpty();
+        } else {
+            // some kind of error reporting thing here... failed to load template, tell the user
+            // why their canvas is so terribly empty.
+            d->document->initEmpty();
+        }
+    }
+    else
+        d->document->openUrl (KUrl (uri));
+
 
     KoPACanvasItem *paCanvasItem = static_cast<KoPACanvasItem*>(d->part->canvasItem(d->part->document()));
     d->canvasBase = paCanvasItem;
