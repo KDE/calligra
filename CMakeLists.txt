@@ -190,6 +190,7 @@ calligra_define_product(PLUGIN_TEXTEDITING "Textediting plugins"  NEEDS CALLIGRA
 calligra_define_product(PLUGIN_KEXI_SPREADSHEETMIGRATION "Import from ODS plugin for Kexi"  NEEDS KEXI_APP SHEETS_PART)
 calligra_define_product(PLUGIN_DEFAULTTOOLS "Default Flake tools plugin"  NEEDS CALLIGRA_LIBS)
 calligra_define_product(PLUGIN_PATHSHAPES "Path shape plugins"  NEEDS CALLIGRA_LIBS)
+calligra_define_product(PLUGIN_VARIABLELINESHAPE "Variable line shape plugin"  NEEDS CALLIGRA_LIBS)
 calligra_define_product(PLUGIN_VARIABLES "Text variables plugin"  NEEDS CALLIGRA_LIBS)
 calligra_define_product(PLUGIN_CHARTSHAPE "Chart shape plugin" NEEDS CALLIGRA_LIBS LIB_KDCHART)
 calligra_define_product(PLUGIN_PICTURESHAPE "Picture shape plugin"  NEEDS CALLIGRA_LIBS)

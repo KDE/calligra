@@ -6,7 +6,7 @@ add_subdirectory(pics)
 
 SET (variablelineshape_SRCS
     VariableLineShape.cpp
-    VariableLineShapeShapeFactory.cpp
+    VariableLineShapeFactory.cpp
     VariableLineShape.cpp
 )
 
