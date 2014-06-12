@@ -22,28 +22,47 @@ import "../components"
 
 Page {
     id: base;
+    function activateTemplate(templateFile) {
+        var file = Settings.stageTemplateLocation(templateFile);
+        console.debug(file);
+        if(file.slice(-1) === "/" || file === "") {
+            return;
+        }
+        baseLoadingDialog.visible = true;
+        openFile(file);
+    }
     ListModel {
         id: stageTemplates;
-        ListElement { text: "Standard"; thumbnail: ""; colors: [ ] }
-        ListElement { text: "White"; thumbnail: ""; colors: [ ] }
-        ListElement { text: "Black"; thumbnail: ""; colors: [ ListElement { color: "black" }, ListElement { color: "lightblue" }, ListElement { color: "yellow" }, ListElement { color: "red" } ] }
-        ListElement { text: "Metropolitan"; thumbnail: ""; colors: [ ] }
-        ListElement { text: "Blue Orange Vector"; thumbnail: ""; colors: [ ] }
-        ListElement { text: "Burning Desire"; thumbnail: ""; colors: [ ] }
-        ListElement { text: "Business"; thumbnail: ""; colors: [ ] }
-        ListElement { text: "Flood Light"; thumbnail: ""; colors: [ ] }
-        ListElement { text: "Rounded Square"; thumbnail: ""; colors: [ ] }
-        ListElement { text: "Simple Waves"; thumbnail: ""; colors: [ ] }
-        ListElement { text: "Skyline Monotone"; thumbnail: ""; colors: [ ] }
-        ListElement { text: "Strange Far Hills"; thumbnail: ""; colors: [ ] }
-        ListElement { text: "Blue Orange Vector"; thumbnail: ""; colors: [ ] }
-        ListElement { text: "Burning Desire"; thumbnail: ""; colors: [ ] }
-        ListElement { text: "Business"; thumbnail: ""; colors: [ ] }
-        ListElement { text: "Flood Light"; thumbnail: ""; colors: [ ] }
-        ListElement { text: "Rounded Square"; thumbnail: ""; colors: [ ] }
-        ListElement { text: "Simple Waves"; thumbnail: ""; colors: [ ] }
-        ListElement { text: "Skyline Monotone"; thumbnail: ""; colors: [ ] }
-        ListElement { text: "Strange Far Hills"; thumbnail: ""; colors: [ ] }
+        ListElement { text: "Standard"; thumbnail: ""; templateFile: ""; variants: [
+            ListElement { thumbnail: ""; templateFile: "Screen/.source/emptyLandscape.otp"; color: "white" }, // wide
+            ListElement { thumbnail: ""; templateFile: "Screen/.source/emptyLandscapeWide.otp"; color: "white" }  // non-wide
+            ] }
+        ListElement { text: "White"; thumbnail: ""; templateFile: ""; variants: [ ] }
+        ListElement { text: "Black"; thumbnail: ""; templateFile: ""; variants: [
+            ListElement { thumbnail: ""; templateFile: ""; color: "black" },
+            ListElement { thumbnail: ""; templateFile: ""; color: "lightblue" },
+            ListElement { thumbnail: ""; templateFile: ""; color: "yellow" },
+            ListElement { thumbnail: ""; templateFile: ""; color: "red" },
+            ListElement { thumbnail: ""; templateFile: ""; color: "pink" },
+            ListElement { thumbnail: ""; templateFile: ""; color: "purple" }
+            ] }
+        ListElement { text: "Metropolitan"; thumbnail: ""; templateFile: ""; variants: [ ] }
+        ListElement { text: "Elegant"; thumbnail: ""; templateFile: ""; variants: [ ] }
+        ListElement { text: "Vintage"; thumbnail: ""; templateFile: ""; variants: [ ] }
+        ListElement { text: "Modernist"; thumbnail: ""; templateFile: ""; variants: [ ] }
+        ListElement { text: "Distraught"; thumbnail: ""; templateFile: ""; variants: [ ] }
+        ListElement { text: "Fabric"; thumbnail: ""; templateFile: ""; variants: [ ] }
+        ListElement { text: "Metallic"; thumbnail: ""; templateFile: ""; variants: [ ] }
+        ListElement { text: "Luna Rising"; thumbnail: ""; templateFile: ""; variants: [ ] }
+        ListElement { text: "Galactic Voyage"; thumbnail: ""; templateFile: ""; variants: [ ] }
+        ListElement { text: "Blue Orange Vector"; thumbnail: ""; templateFile: "odf/.source/blue_orange_vector.otp"; variants: [ ] }
+        ListElement { text: "Burning Desire"; thumbnail: ""; templateFile: "odf/.source/burning_desire.otp"; variants: [ ] }
+        ListElement { text: "Business"; thumbnail: ""; templateFile: "odf/.source/business.otp"; variants: [ ] }
+        ListElement { text: "Flood Light"; thumbnail: ""; templateFile: "odf/.source/flood_light.otp"; variants: [ ] }
+        ListElement { text: "Rounded Square"; thumbnail: ""; templateFile: "odf/.source/rounded_square.otp"; variants: [ ] }
+        ListElement { text: "Simple Waves"; thumbnail: ""; templateFile: "odf/.source/simple_waves.otp"; variants: [ ] }
+        ListElement { text: "Skyline Monotone"; thumbnail: ""; templateFile: "odf/.source/skyline_monotone.otp"; variants: [ ] }
+        ListElement { text: "Strange Far Hills"; thumbnail: ""; templateFile: "odf/.source/strange_far_hills.otp"; variants: [ ] }
     }
     Flickable {
         id: stageFlickable;
@@ -84,7 +103,7 @@ Page {
                             }
                             height: Constants.DefaultMargin * 2;
                             spacing: Constants.DefaultMargin;
-                            property ListModel colorModel: model.colors;
+                            property ListModel colorModel: model.variants;
                             Repeater {
                                 model: parent.colorModel;
                                 Rectangle {
@@ -92,6 +111,19 @@ Page {
                                     width: height;
                                     radius: Constants.DefaultMargin;
                                     color: model.color;
+                                }
+                            }
+                        }
+                        MouseArea {
+                            anchors.fill: parent;
+                            onClicked: {
+                                if(model.variants.count === 0) {
+                                    activateTemplate(model.templateFile);
+                                }
+                                else {
+                                    // then there are variants to choose between, let the user see!
+                                    variantSelector.model = model.variants;
+                                    variantSelector.opacity = 1;
                                 }
                             }
                         }
@@ -107,4 +139,81 @@ Page {
         }
     }
     ScrollDecorator { flickableItem: stageFlickable; anchors.fill: stageFlickable; }
+    Item {
+        id: variantSelector;
+        property alias model: variantView.model;
+        anchors {
+            fill: parent;
+            margins: Constants.DefaultMargin * 3;
+        }
+        opacity: 0;
+        Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+        MouseArea { anchors.fill: parent; onClicked: {} }
+        SimpleTouchArea { anchors.fill: parent; onTouched: {} }
+        Rectangle {
+            anchors.fill: parent;
+            color: "#22282f";
+            opacity: 0.7;
+        }
+        Label {
+            anchors {
+                top: parent.top;
+                left: parent.left;
+                right: parent.right;
+            }
+            height: Constants.GridHeight;
+            horizontalAlignment: Text.AlignHCenter;
+            verticalAlignment: Text.AlignVCenter;
+            color: "white";
+            font: Settings.theme.font("title");
+            text: "Select a Style Option";
+        }
+        Button {
+            anchors {
+                top: parent.top;
+                right: parent.right;
+                margins: Constants.DefaultMargin;
+            }
+            height: Constants.GridHeight - Constants.DefaultMargin * 2;
+            width: height;
+            textColor: "white";
+            text: "X";
+            onClicked: variantSelector.opacity = 0;
+        }
+        Flickable {
+            id: variantFlickable;
+            anchors {
+                fill: parent;
+                topMargin: Constants.GridHeight;
+            }
+            clip: true;
+            contentHeight: variantFlow.height;
+            contentWidth: variantFlow.width;
+            Flow {
+                id: variantFlow;
+                width: variantFlickable.width;
+                Repeater {
+                    id: variantView;
+                    delegate: Item {
+                        height: variantFlickable.height;
+                        width: variantFlickable.width / 4;
+                        Rectangle {
+                            anchors.centerIn: parent;
+                            height: Constants.GridHeight;
+                            width: Constants.GridWidth;
+                            color: model.color;
+                        }
+                        MouseArea {
+                            anchors.fill: parent;
+                            onClicked: {
+                                variantSelector.opacity = 0;
+                                activateTemplate(model.templateFile);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        ScrollDecorator { flickableItem: variantFlickable; anchors.fill: variantFlickable; }
+    }
 }
