@@ -54,7 +54,7 @@ Page {
                     anchors.fill: parent;
                     color: "#00adf5";
                     opacity: model.selected ? 0.6 : 0;
-                    PropertyAnimation on opacity { duration: Constants.AnimationDuration; }
+                    Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
                 }
                 Image {
                     anchors {
