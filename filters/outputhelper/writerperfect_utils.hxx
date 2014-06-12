@@ -20,24 +20,20 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-#ifndef _STDOUTHANDLER_H
-#define _STDOUTHANDLER_H
+#ifndef WRITERPERFECT_UTILS_HXX
+#define WRITERPERFECT_UTILS_HXX
 
-#include <libodfgen/libodfgen.hxx>
-
-class StdOutHandler : public OdfDocumentHandler
-{
-public:
-	StdOutHandler();
-	virtual void startDocument() {}
-	virtual void endDocument();
-	virtual void startElement(const char *psName, const librevenge::RVNGPropertyList &xPropList);
-	virtual void endElement(const char *psName);
-	virtual void characters(const librevenge::RVNGString &sCharacters);
-private:
-	bool mbIsTagOpened;
-	librevenge::RVNGString msOpenedTagName;
-};
+#if defined(SHAREDPTR_TR1)
+#include <tr1/memory>
+using std::tr1::shared_ptr;
+#elif defined(SHAREDPTR_STD)
+#include <memory>
+using std::shared_ptr;
+#else
+#include <boost/shared_ptr.hpp>
+using boost::shared_ptr;
 #endif
+
+#endif // WRITERPERFECT_UTILS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 noexpandtab: */

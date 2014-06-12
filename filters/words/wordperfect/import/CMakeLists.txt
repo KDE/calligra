@@ -1,5 +1,5 @@
 include_directories(
-    ../../../libodfhandler/
+    ../../../outputhelper/
     ${LIBODFGEN_INCLUDE_DIRS}
     ${LIBREVENGE_INCLUDE_DIRS}
     ${LIBWPD_INCLUDE_DIRS}
@@ -9,10 +9,9 @@ include_directories(
 
 set(wpd2odt_PART_SRCS
     WPDImport.cpp
-    ../../../libodfhandler/DiskDocumentHandler.cxx
-    ../../../libodfhandler/FemtoZip.cxx
-    ../../../libodfhandler/OutputFileHelper.cxx
-    ../../../libodfhandler/StdOutHandler.cxx
+    ../../../outputhelper/StringDocumentHandler.cxx
+    ../../../outputhelper/FemtoZip.cxx
+    ../../../outputhelper/OutputFileHelper.cxx
 )
 
 kde4_add_plugin(calligra_filter_wpd2odt ${wpd2odt_PART_SRCS})

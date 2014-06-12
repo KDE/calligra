@@ -22,9 +22,8 @@
 #ifndef _OUTPUTFILEHELPER_HXX
 #define _OUTPUTFILEHELPER_HXX
 
-#include <libodfgen/libodfgen.hxx>
-
 #include <librevenge-stream/librevenge-stream.h>
+#include <libodfgen/libodfgen.hxx>
 
 struct OutputFileHelperImpl;
 
@@ -36,11 +35,8 @@ public:
 
 	bool writeChildFile(const char *childFileName, const char *str);
 	bool writeChildFile(const char *childFileName, const char *str, const char compression_level);
-	bool writeConvertedContent(const char *childFileName, const char *inFileName, const OdfStreamType streamType);
 
 private:
-	virtual bool _isSupportedFormat(librevenge::RVNGInputStream *input, const char *password) = 0;
-	virtual bool _convertDocument(librevenge::RVNGInputStream *input, const char *password, OdfDocumentHandler *handler, const OdfStreamType streamType) = 0;
 	OutputFileHelperImpl *m_impl;
 
 private:

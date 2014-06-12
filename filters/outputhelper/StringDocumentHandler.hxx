@@ -20,45 +20,31 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
-#ifndef _DISKDOCUMENTHANDLER_H
-#define _DISKDOCUMENTHANDLER_H
+#ifndef _STRING_DOCUMENT_HANDLER_H
+#define _STRING_DOCUMENT_HANDLER_H
 
 #include <libodfgen/libodfgen.hxx>
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
-#ifdef USE_GSF_OUTPUT
-#include <gsf/gsf-output.h>
-#else
-#include "FemtoZip.hxx"
-#endif
-
-class DiskOdfDocumentHandler : public OdfDocumentHandler
+class StringDocumentHandler : public OdfDocumentHandler
 {
 public:
-#ifdef USE_GSF_OUTPUT
-	DiskOdfDocumentHandler(GsfOutput *pOutput);
-#else
-	DiskOdfDocumentHandler(FemtoZip *pOutput);
-#endif
+	StringDocumentHandler();
+
+	char const *cstr() const
+	{
+		return m_data.cstr();
+	}
+
 	virtual void startDocument() {}
 	virtual void endDocument();
 	virtual void startElement(const char *psName, const librevenge::RVNGPropertyList &xPropList);
 	virtual void endElement(const char *psName);
 	virtual void characters(const librevenge::RVNGString &sCharacters);
-
 private:
-	DiskOdfDocumentHandler(DiskOdfDocumentHandler const &);
-	DiskOdfDocumentHandler &operator=(DiskOdfDocumentHandler const &);
-#ifdef USE_GSF_OUTPUT
-	GsfOutput *mpOutput;
-#else
-	FemtoZip *mpOutput;
-#endif
-	bool mbIsTagOpened;
-	librevenge::RVNGString msOpenedTagName;
+private:
+	librevenge::RVNGString m_data;
+	bool m_isTagOpened;
+	librevenge::RVNGString m_openedTagName;
 };
 #endif
 
