@@ -39,6 +39,7 @@ Comment[pl]=DOCX dla Okulara
 Comment[pt]=DOCX para o Okular
 Comment[pt_BR]=DOCX para o Okular
 Comment[sk]=DOCX pre Okular
+Comment[sv]=DOCX för Okular
 Comment[uk]=DOCX для Okular
 Comment[x-test]=xxDOCX for Okularxx
 ServiceTypes=okular/Generator
