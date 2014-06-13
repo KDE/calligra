@@ -46,6 +46,8 @@
 
 #include <stage/part/KPrDocument.h>
 #include <KoShapeManager.h>
+#include <KoSelection.h>
+#include <KoTextEditor.h>
 
 #include "CQPresentationView.h"
 #include "gemini/ViewModeSwitchEvent.h"
@@ -193,6 +195,22 @@ void CQPresentationCanvas::render(QPainter* painter, const QRectF& target)
     d->canvasBase->canvasItem()->paint(painter, &option);
 }
 
+QObject* CQPresentationCanvas::textEditor() const
+{
+    if(d->canvasBase) {
+        return KoTextEditor::getTextEditorFromCanvas(d->canvasBase);
+    }
+    return 0;
+}
+
+void CQPresentationCanvas::deselectEverything()
+{
+    KoTextEditor* editor = KoTextEditor::getTextEditorFromCanvas(d->canvasBase);
+    if(editor)
+        editor->clearSelection();
+    d->canvasBase->shapeManager()->selection()->deselectAll();
+}
+
 void CQPresentationCanvas::openFile(const QString& uri)
 {
     emit loadingBegun();
@@ -253,6 +271,7 @@ void CQPresentationCanvas::openFile(const QString& uri)
     d->updateLinkTargets();
     emit linkTargetsChanged();
 
+    emit documentChanged();
     emit loadingFinished();
 }
 

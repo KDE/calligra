@@ -34,6 +34,8 @@ class CQPresentationCanvas : public CQCanvasBase
     Q_PROPERTY(int currentSlide READ currentSlide WRITE setCurrentSlide NOTIFY currentSlideChanged)
     Q_PROPERTY(QSizeF pageSize READ pageSize NOTIFY currentSlideChanged)
     Q_PROPERTY(QObjectList linkTargets READ linkTargets NOTIFY linkTargetsChanged)
+    Q_PROPERTY(QObject* document READ doc NOTIFY documentChanged);
+    Q_PROPERTY(QObject* textEditor READ textEditor NOTIFY textEditorChanged)
 
 public:
     explicit CQPresentationCanvas(QDeclarativeItem* parent = 0);
@@ -52,9 +54,16 @@ public:
 
     virtual void render(QPainter* painter, const QRectF& target);
 
+    QObject* textEditor() const;
+    // Deselects any text selection present in the document, and deselects all shapes
+    // This is highly useful, as it makes navigation prettier.
+    Q_INVOKABLE void deselectEverything();
+
 Q_SIGNALS:
     void currentSlideChanged();
     void linkTargetsChanged();
+    void documentChanged();
+    void textEditorChanged();
 
 protected:
     virtual bool event( QEvent* event );
