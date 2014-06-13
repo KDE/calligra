@@ -360,7 +360,7 @@ protected:
 
     void setupPropertyEditor();
 
-    void setupMainMenuActionShortcut(KAction* action, const char* slot);
+    void setupMainMenuActionShortcut(KAction* action);
 
     /*! Creates standard actions like new, open, save ... */
     void setupActions();
@@ -416,9 +416,6 @@ protected:
 
     //! Called by KexiMainWidget::queryClose()
     bool queryClose();
-
-    //! Called by KexiMainWidget::queryExit()
-    bool queryExit();
 
     /*! Implemented for KexiMainWindowIface.
      Switches \a window to view \a mode. Activates the window if it is not the current window. */
