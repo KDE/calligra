@@ -131,19 +131,6 @@ static unsigned long crc_table[256] =
 #endif
 
 
-// see http://www.concentric.net/~Ttwang/tech/inthash.htm
-static inline unsigned short hash(unsigned short key, unsigned short hashSize)
-{
-	key = (unsigned short) (key+~(key << 15));
-	key = (unsigned short) (key^(key >> 10));
-	key = (unsigned short) (key+(key << 3));
-	key = (unsigned short) (key^(key >> 6));
-	key = (unsigned short) (key+~(key << 11));
-	key = (unsigned short) (key^(key >> 16));
-	return key % hashSize;
-}
-
-
 // entry record is stored as linked list
 
 class FemtoZipEntry
@@ -196,7 +183,7 @@ public:
 		FZ_DEBUG(("Creating ZIP: %s\n", zipfile));
 
 		fhandle = fopen(zipfile, "wb");
-		if(!fhandle)
+		if (!fhandle)
 			errorCode = FemtoZip::ErrorCreateZip;
 	}
 
@@ -204,7 +191,7 @@ public:
 	{
 		const unsigned char *buf = (const unsigned char *) data;
 
-		for(unsigned long i = 0; i < len; i++)
+		for (unsigned long i = 0; i < len; i++)
 #ifdef FEMTOZIP_SMALLTABLE
 		{
 			crc ^= buf[i];
@@ -222,17 +209,17 @@ public:
 	void closeZip()
 	{
 		// last entry not closed
-		if(currentEntry)
+		if (currentEntry)
 		{
 			FZ_DEBUG(("automatically closing last entry %s", currentEntry->name));
 			closeEntry();
 		}
-		if(!fhandle)
+		if (!fhandle)
 			return;
 		unsigned long centralDirPos = (unsigned long) ftell(fhandle);
 		unsigned short entryCount = 0;
 		FemtoZipEntry *entry = entryList;
-		while(entry && (errorCode == FemtoZip::NoError))
+		while (entry && (errorCode == FemtoZip::NoError))
 		{
 			FZ_DEBUG(("central directory: entry for %s\n", entry->name));
 			size_t namelen = strlen(entry->name);
@@ -273,10 +260,10 @@ public:
 			buffer[9] = 0;
 			buffer[10] = (entry->compressionLevel==0) ? 0 : 8;
 			buffer[11] = 0x0;
-			buffer[12] = (unsigned char) (entry->timeStamp & 0xff);
-			buffer[13] = (unsigned char) ((entry->timeStamp>>8) & 0xff);
-			buffer[14] = (unsigned char) (entry->dateStamp & 0xff);
-			buffer[15] = (unsigned char) ((entry->dateStamp>>8) & 0xff);
+			buffer[12] = (unsigned char)(entry->timeStamp & 0xff);
+			buffer[13] = (unsigned char)((entry->timeStamp>>8) & 0xff);
+			buffer[14] = (unsigned char)(entry->dateStamp & 0xff);
+			buffer[15] = (unsigned char)((entry->dateStamp>>8) & 0xff);
 			buffer[16] = entry->crc32 & 0xff;
 			buffer[17] = (entry->crc32>>8) & 0xff;
 			buffer[18] = (entry->crc32>>16) & 0xff;
@@ -308,11 +295,11 @@ public:
 			buffer[44] = (entry->headerPos>>16) & 0xff;
 			buffer[45] = (entry->headerPos>>24) & 0xff;
 
-			if(fwrite(buffer, 1, 46, fhandle) != 46)
+			if (fwrite(buffer, 1, 46, fhandle) != 46)
 				errorCode = FemtoZip::ErrorWriteData;
 			else
 			{
-				if(fwrite(entry->name, 1, namelen, fhandle) != namelen)
+				if (fwrite(entry->name, 1, namelen, fhandle) != namelen)
 					errorCode = FemtoZip::ErrorWriteData;
 			}
 
@@ -347,10 +334,10 @@ public:
 		buffer[5] = 0x00;
 		buffer[6] = 0x00;
 		buffer[7] = 0x00;
-		buffer[8] = (unsigned char) (entryCount & 0xff);
-		buffer[9] = (unsigned char) ((entryCount >> 8) & 0xff);
-		buffer[10] = (unsigned char) (entryCount & 0xff);
-		buffer[11] = (unsigned char) ((entryCount >> 8) & 0xff);
+		buffer[8] = (unsigned char)(entryCount & 0xff);
+		buffer[9] = (unsigned char)((entryCount >> 8) & 0xff);
+		buffer[10] = (unsigned char)(entryCount & 0xff);
+		buffer[11] = (unsigned char)((entryCount >> 8) & 0xff);
 		buffer[12] = centralDirSize & 0xff;
 		buffer[13] = (centralDirSize>>8) & 0xff;
 		buffer[14] = (centralDirSize>>16) & 0xff;
@@ -361,7 +348,7 @@ public:
 		buffer[19] = (centralDirPos>>24) & 0xff;
 		buffer[20] = 0x00;
 		buffer[21] = 0x00;
-		if(fwrite(buffer, 1, 22, fhandle) != 22)
+		if (fwrite(buffer, 1, 22, fhandle) != 22)
 			errorCode = FemtoZip::ErrorWriteData;
 
 		// that's all, we're done !
@@ -371,7 +358,7 @@ public:
 
 	void writeLocalHeader(FemtoZipEntry *entry)
 	{
-		if(!entry) return;
+		if (!entry) return;
 
 		size_t namelen = strlen(entry->name);
 
@@ -404,10 +391,10 @@ public:
 		buffer[7] = 0;
 		buffer[8] = (currentEntry->compressionLevel==0) ? 0 : 8;
 		buffer[9] = 0;
-		buffer[10] = (unsigned char) (currentEntry->timeStamp & 0xff);
-		buffer[11] = (unsigned char) ((currentEntry->timeStamp>>8) & 0xff);
-		buffer[12] = (unsigned char) (currentEntry->dateStamp & 0xff);
-		buffer[13] = (unsigned char) ((currentEntry->dateStamp>>8) & 0xff);
+		buffer[10] = (unsigned char)(currentEntry->timeStamp & 0xff);
+		buffer[11] = (unsigned char)((currentEntry->timeStamp>>8) & 0xff);
+		buffer[12] = (unsigned char)(currentEntry->dateStamp & 0xff);
+		buffer[13] = (unsigned char)((currentEntry->dateStamp>>8) & 0xff);
 		buffer[14] = currentEntry->crc32 & 0xff;
 		buffer[15] = (currentEntry->crc32>>8) & 0xff;
 		buffer[16] = (currentEntry->crc32>>16) & 0xff;
@@ -425,11 +412,11 @@ public:
 		buffer[28] = 0;
 		buffer[29] = 0;
 
-		if(fwrite(buffer, 1, 30, fhandle) != 30)
+		if (fwrite(buffer, 1, 30, fhandle) != 30)
 			errorCode = FemtoZip::ErrorWriteData;
 		else
 		{
-			if(fwrite(entry->name, 1, namelen, fhandle) != namelen)
+			if (fwrite(entry->name, 1, namelen, fhandle) != namelen)
 				errorCode = FemtoZip::ErrorWriteData;
 		}
 	}
@@ -437,32 +424,32 @@ public:
 
 	void createEntry(const char *name, int compressionLevel)
 	{
-		if(errorCode != FemtoZip::NoError)
+		if (errorCode != FemtoZip::NoError)
 			return;
 
-		if(fhandle == 0)
+		if (fhandle == 0)
 		{
 			FZ_DEBUG(("createEntry error: file already closed"));
 			return;
 		}
 
 		// somebody forget to close previous entry
-		if(currentEntry != 0)
+		if (currentEntry != 0)
 		{
 			FZ_DEBUG(("createEntry warning: previous entry is not manually closed"));
 			closeEntry();
 		}
 
 		// sanity check
-		if(compressionLevel < 0)
+		if (compressionLevel < 0)
 			compressionLevel = 0;
 
 		// create new entry and append it to the linked list
 		currentEntry = new FemtoZipEntry(name, compressionLevel);
-		if(entryList != 0)
+		if (entryList != 0)
 		{
 			FemtoZipEntry *e = entryList;
-			while(e->next)
+			while (e->next)
 				e = e->next;
 			e->next = currentEntry;
 		}
@@ -479,7 +466,7 @@ public:
 		                           ((currentTime->tm_min & 63) << 5) |   // 6-bit minutes
 		                           ((currentTime->tm_sec & 31)*2));       // 5-bit seconds*2
 
-		if(currentTime->tm_year >= 80)
+		if (currentTime->tm_year >= 80)
 			// note: year is using 1980 as reference
 			currentEntry->dateStamp = (unsigned short)
 			                          ((((currentTime->tm_year-80) & 127) << 9) |  // 7-bit years
@@ -497,16 +484,16 @@ public:
 
 	void closeEntry()
 	{
-		if(errorCode != FemtoZip::NoError)
+		if (errorCode != FemtoZip::NoError)
 			return;
 
-		if(!fhandle)
+		if (!fhandle)
 		{
 			FZ_DEBUG(("closeEntry error: file already closed"));
 			return;
 		}
 
-		if(!currentEntry)
+		if (!currentEntry)
 		{
 			FZ_DEBUG(("closeEntry error: no entry is opened"));
 			return;
@@ -533,16 +520,16 @@ public:
 
 	void writeData(unsigned long len, const void *data)
 	{
-		if(errorCode != FemtoZip::NoError)
+		if (errorCode != FemtoZip::NoError)
 			return;
 
-		if(!fhandle)
+		if (!fhandle)
 		{
 			FZ_DEBUG(("writeData error: file already closed"));
 			return;
 		}
 
-		if(!currentEntry)
+		if (!currentEntry)
 		{
 			FZ_DEBUG(("writeData error: no entry is opened"));
 			return;
@@ -552,7 +539,7 @@ public:
 		currentEntry->uncompressedSize += len;
 
 		// method: Store
-		if(fwrite(data, 1, len, fhandle) != len)
+		if (fwrite(data, 1, len, fhandle) != len)
 			errorCode = FemtoZip::ErrorWriteData;
 	}
 };
