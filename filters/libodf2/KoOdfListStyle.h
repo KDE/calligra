@@ -47,9 +47,6 @@ public:
     bool inUse() const;
     void setInUse(bool inUse);
 
-    bool isDefaultStyle() const;
-    void setIsDefaultStyle(bool isDefaultStyle);
-
     QHash<QString, KoOdfStyleProperties*> properties();
     /**
       * @brief Return the list of properties in the selected property set.

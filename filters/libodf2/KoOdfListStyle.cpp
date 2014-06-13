@@ -104,18 +104,6 @@ void KoOdfListStyle::setListLevelStyleType(QString &name)
     d->listLevelType = name;
 }
 
-bool KoOdfListStyle::isDefaultStyle() const
-{
-    return d->isDefaultStyle;
-}
-
-void KoOdfListStyle::setIsDefaultStyle(bool isDefaultStyle)
-{
-    d->isDefaultStyle = isDefaultStyle;
-}
-
-
-
 bool KoOdfListStyle::inUse() const
 {
     return d->inUse;
@@ -226,14 +214,7 @@ bool KoOdfListStyle::readOdf(KoXmlStreamReader &reader)
 
 bool KoOdfListStyle::saveOdf(KoXmlWriter *writer)
 {
-    if (d->isDefaultStyle) {
-        writer->startElement("style:default-style");
-        writer->addAttribute("style:name", d->name);
-    }
-    else {
-        writer->startElement("text:list-style");
-    }
-
+     writer->startElement("text:list-style");
     // Write style attributes
     if (!d->displayName.isEmpty()) {
         writer->addAttribute("style:display-name", d->displayName);
@@ -247,6 +228,6 @@ bool KoOdfListStyle::saveOdf(KoXmlWriter *writer)
     }
     writer->endElement();
 
-    writer->endElement();  // style:{default-,}style
+    writer->endElement();
     return true;
 }

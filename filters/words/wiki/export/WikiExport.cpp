@@ -1,10 +1,7 @@
 /* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
-   Copyright (C) 2000 Michael Johnson <mikej@xnet.com>
-   Copyright (C) 2001, 2002, 2004 Nicolas GOUTTE <goutte@kde.org>
-   Copyright (C) 2010-2011 Thorsten Zachmann <zachmann@kde.org>
-   Copyright (C) 2010 Christoph Cullmann <cullmann@kde.org> 
+
    Copyright (C) 2013 Inge Wallin <inge@lysator.liu.se>
+   Copyright (C) 2013 Mojtaba Shahi Senobari <mojtaba.shahi3000@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public

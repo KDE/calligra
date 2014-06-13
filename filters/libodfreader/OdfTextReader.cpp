@@ -179,7 +179,7 @@ void OdfTextReader::readTextLevelElement(KoXmlStreamReader &reader)
     //          <text:change-start> 5.5.7.2
     //   [done] <text:h> 5.1.2
     //          <text:illustration-index> 8.4
-    //          <text:list> 5.3.1
+    //   [done] <text:list> 5.3.1
     //          <text:numbered-paragraph> 5.3.6
     //          <text:object-index> 8.6
     //   [done] <text:p> 5.1.3
@@ -191,7 +191,6 @@ void OdfTextReader::readTextLevelElement(KoXmlStreamReader &reader)
 
     QString tagName = reader.qualifiedName().toString();
         
-    // FIXME: Only paragraphs are handled right now.
     if (tagName == "text:h") {
         readElementTextH(reader);
     }

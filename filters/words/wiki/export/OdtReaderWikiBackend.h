@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
 
    Copyright (C) 2013 Inge Wallin            <inge@lysator.liu.se>
+   Copyright (C) 2013 Mojtaba Shahi Senobari <mojtaba.shahi3000@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -60,8 +61,7 @@ class OdtReaderWikiBackend : public OdfTextReaderBackend
 
 private:
     void checkTextStyle(KoXmlStreamReader &reader, OdfReaderWikiContext *wikiContext);
-    void checkheadingLevel(KoXmlStreamReader &reader, OdfReaderWikiContext *wikiContext);
-    void checkTextIndentation(KoXmlStreamReader &reader, OdfReaderWikiContext *wikiContext);
+    void setHeadingLevel(KoXmlStreamReader &reader, OdfReaderWikiContext *wikiContext);
 };
 
 

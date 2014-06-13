@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
 
    Copyright (C) 2013 Inge Wallin  <inge@lysator.liu.se>
+   Copyright (C) 2013 Mojtaba Shahi Senobari <mojtaba.shahi3000@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -45,13 +46,6 @@ OdfReaderWikiContext::~OdfReaderWikiContext()
 {
 }
 
-KoOdfStyle *OdfReaderWikiContext::currentStyleProperties(KoXmlStreamReader &reader) const
-{
-    QString stylename = reader.attributes().value("style-name").toString();
-    QString styleFamily = reader.attributes().value("style-family").toString();
-    KoOdfStyle *style = styleManager()->style(stylename, styleFamily);
-    return style;
-}
 void OdfReaderWikiContext::pushStyle(KoOdfStyle *style)
 {
     styleStack.push(style);
