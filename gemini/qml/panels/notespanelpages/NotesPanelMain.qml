@@ -81,7 +81,7 @@ Item {
                         horizontalAlignment: Text.AlignHCenter;
                         verticalAlignment: Text.AlignVCenter;
                         font: Settings.theme.font("small");
-                        text: base.canvas.notes.count;
+                        text: base.canvas ? base.canvas.notes.count : "";
                     }
                 }
             }
