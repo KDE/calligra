@@ -23,6 +23,7 @@ import org.calligra 1.0
 Item {
     property alias document: paragraphStyles.document;
     property alias textEditor: paragraphStyles.textEditor;
+    property alias cursorFont: paragraphStyles.cursorFont;
     opacity: parent.checked ? 1 : 0;
     Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
     anchors {
@@ -62,8 +63,10 @@ Item {
     }
     ParagraphStylesModel {
         id: paragraphStyles;
+        onCurrentStyleChanged: stylesList.positionViewAtIndex(currentStyle, ListView.Contain);
     }
     ListView {
+        id: stylesList;
         anchors {
             top: titleBar.bottom;
             left: parent.left;
@@ -79,6 +82,7 @@ Item {
                 anchors.fill: parent;
                 color: "#00adf5";
                 opacity: model.current ? 0.6 : 0;
+                Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
             }
             Text {
                 anchors {
@@ -95,6 +99,10 @@ Item {
                 height: 1;
                 color: "#e8e9ea";
                 opacity: 0.7;
+            }
+            MouseArea {
+                anchors.fill: parent;
+                onClicked: paragraphStyles.activate(index);
             }
         }
     }

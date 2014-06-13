@@ -136,20 +136,24 @@ Page {
                     Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
                 }
                 TextStylePanel {
+                    id: textStylePanel;
                     document: viewLoader.item ? viewLoader.item.document : null;
                     textEditor: viewLoader.item ? viewLoader.item.textEditor : null;
                 }
             }
             Rectangle { color: Settings.theme.color("components/toolbar/text"); height: parent.height; width: 1; }
-            Button {
-                text: "(font name)"
+            Label {
+                text: textStylePanel.cursorFont.family;
                 height: parent.height; width: Constants.GridWidth;
-                textColor: Settings.theme.color("components/toolbar/text");
+                color: Settings.theme.color("components/toolbar/text");
+                horizontalAlignment: Text.AlignLeft;
             }
-            Button {
-                text: "(size)"
+            Label {
+                text: textStylePanel.cursorFont.pointSize;
                 height: parent.height; width: Constants.GridWidth / 2;
-                textColor: Settings.theme.color("components/toolbar/text");
+                color: Settings.theme.color("components/toolbar/text");
+                horizontalAlignment: Text.AlignRight
+                verticalAlignment: Text.AlignVCenter;
             }
             Rectangle { color: Settings.theme.color("components/toolbar/text"); height: parent.height; width: 1; }
             Button {
@@ -157,18 +161,24 @@ Page {
                 imageMargin: 4;
                 height: parent.height; width: height;
                 textColor: Settings.theme.color("components/toolbar/text");
+                radius: 4;
+                checked: textStylePanel.cursorFont.bold;
             }
             Button {
                 image: Settings.theme.icon("SVG-Icon-Italic-1");
                 imageMargin: 4;
                 height: parent.height; width: height;
                 textColor: Settings.theme.color("components/toolbar/text");
+                radius: 4;
+                checked: textStylePanel.font.italic;
             }
             Button {
                 image: Settings.theme.icon("SVG-Icon-Underline-1");
                 imageMargin: 4;
                 height: parent.height; width: height;
                 textColor: Settings.theme.color("components/toolbar/text");
+                radius: 4;
+                checked: textStylePanel.font.underline;
             }
             Rectangle { color: Settings.theme.color("components/toolbar/text"); height: parent.height; width: 1; }
             Button {
@@ -270,7 +280,7 @@ Page {
                         topMargin: 4;
                     }
                     opacity: parent.checked ? 1 : 0;
-                    canvas: viewLoader.item ? viewLoader.item.canvas : null;
+                    canvas: viewLoader.item && viewLoader.item.canvas && viewLoader.item.canvas.notes ? viewLoader.item.canvas : null;
                 }
             }
             Button {
