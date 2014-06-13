@@ -29,6 +29,8 @@ class ParagraphStylesModel : public QAbstractListModel
     Q_OBJECT
     Q_PROPERTY(QObject* document READ document WRITE setDocument NOTIFY documentChanged)
     Q_PROPERTY(QObject* textEditor READ textEditor WRITE setTextEditor NOTIFY textEditorChanged)
+    Q_PROPERTY(QFont cursorFont READ cursorFont NOTIFY cursorFontChanged)
+    Q_PROPERTY(int currentStyle READ currentStyle NOTIFY cursorFontChanged)
 
 public:
     enum ParagraphStyleRoles {
@@ -53,9 +55,15 @@ public:
     void setTextEditor(QObject* newEditor);
 
     Q_SLOT void cursorPositionChanged();
+
+    Q_INVOKABLE void activate(int index);
+
+    QFont cursorFont() const;
+    int currentStyle() const;
 signals:
     void documentChanged();
     void textEditorChanged();
+    void cursorFontChanged();
 
 private:
     class Private;

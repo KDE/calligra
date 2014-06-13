@@ -37,6 +37,7 @@ public:
     QList<KoParagraphStyle*> styles;
     QPointer<KoTextEditor> textEditor;
     KoParagraphStyle* cursorStyle;
+    QFont cursorFont;
 
     void updateStylesList()
     {
@@ -158,6 +159,31 @@ void ParagraphStylesModel::cursorPositionChanged()
     QTextBlockFormat bf = d->textEditor->blockFormat();
     d->cursorStyle =  d->document->resourceManager()->resource(KoText::StyleManager).value<KoStyleManager*>()->paragraphStyle(bf.intProperty(KoParagraphStyle::StyleId));
     dataChanged(index(0), index(d->styles.count() - 1));
+
+    QTextCharFormat charFormat = d->textEditor->charFormat();
+    d->cursorFont = charFormat.font();
+    emit cursorFontChanged();
+}
+
+void ParagraphStylesModel::activate(int index)
+{
+    if(d->textEditor && index > -1 && index < d->styles.count()) {
+        KoParagraphStyle* style = d->styles.at(index);
+        if(style == d->cursorStyle)
+            return;
+        d->textEditor->setStyle(style);
+        cursorPositionChanged();
+    }
+}
+
+QFont ParagraphStylesModel::cursorFont() const
+{
+    return d->cursorFont;
+}
+
+int ParagraphStylesModel::currentStyle() const
+{
+    return d->styles.indexOf(d->cursorStyle);
 }
 
 #include "ParagraphStylesModel.moc"
