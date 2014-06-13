@@ -21,7 +21,20 @@ import "components"
 import org.calligra.CalligraComponents 0.1 as Calligra
 
 Item {
+    id: base;
+    property alias document: stageCanvas.document;
+    property alias textEditor: stageCanvas.textEditor;
+    property QtObject canvas: stageCanvas;
     property alias source: stageCanvas.source;
+    property alias navigateMode: controllerFlickable.enabled;
+    onNavigateModeChanged: {
+        if(navigateMode === true) {
+            // This means we've just changed back from having edited stuff.
+            // Consequently we want to deselect all selections. Tell the canvas about that.
+            stageCanvas.deselectEverything();
+            toolManager.requestToolChange("PageToolFactory_ID");
+        }
+    }
     Calligra.PresentationCanvas {
         id: stageCanvas;
         anchors.fill: parent;
@@ -34,10 +47,25 @@ Item {
     }
     Flickable {
         id: controllerFlickable;
-        anchors.fill: parent;
+        anchors {
+            top: parent.top;
+            left: parent.left;
+            right: parent.right;
+            bottom: enabled ? parent.bottom : parent.top;
+        }
         Calligra.CanvasControllerItem {
             canvas: stageCanvas;
             flickable: controllerFlickable;
+        }
+        MouseArea {
+            x: controllerFlickable.contentX;
+            y: controllerFlickable.contentY;
+            height: controllerFlickable.height;
+            width: controllerFlickable.width;
+            onDoubleClicked: {
+                toolManager.requestToolChange("TextToolFactory_ID");
+                base.navigateMode = false;
+            }
         }
     }
     Button {
