@@ -21,20 +21,21 @@
 #include "VariableLineShapeFactory.h"
 
 #include "VariableLineShape.h"
-
-#include <KoXmlNS.h>
-#include <KoShapeLoadingContext.h>
 #include "KoShapeBasedDocumentBase.h"
+#include "KoShapeStroke.h"
+#include <KoXmlNS.h>
+#include <KoGradientBackground.h>
+#include <KoShapeLoadingContext.h>
 
 #include <KoIcon.h>
 #include <klocale.h>
 #include <kdebug.h>
 
 VariableLineShapeFactory::VariableLineShapeFactory()
-    : KoShapeFactoryBase(VariableLineShapeId, i18n("Variable Line"))
+    : KoShapeFactoryBase(VariableLineShapeId, i18n("VariableLineShape"))
 {
     setToolTip(i18n("Variable width line"));
-    setIconName(koIconNameCStr("variable-width-line"));
+    setIconName(koIconNameCStr("variableline-shape"));
     setXmlElementNames(KoXmlNS::draw, QStringList("lineshape"));
     setFamily("geometric");
     setLoadingPriority(1);

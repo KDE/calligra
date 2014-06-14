@@ -18,3 +18,31 @@
  */
 
 #include "VariableLineShape.h"
+
+VariableLineShape::VariableLineShape()
+: m_widthPercentage(100)
+{
+}
+
+VariableLineShape::~VariableLineShape()
+{
+}
+
+bool VariableLineShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
+{
+    return true;
+}
+
+void VariableLineShape::saveOdf(KoShapeSavingContext & context) const
+{
+}
+
+qreal VariableLineShape::widthPercentage() const
+{
+    return m_widthPercentage;
+}
+
+QString VariableLineShape::pathShapeId() const
+{
+    return VariableLineShapeId;
+}

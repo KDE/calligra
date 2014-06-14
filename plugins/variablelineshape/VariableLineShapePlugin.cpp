@@ -24,11 +24,13 @@
 #include <KoShapeFactoryBase.h>
 #include <kpluginfactory.h>
 
-K_PLUGIN_FACTORY(PluginFactory, registerPlugin<VariableLineShapePlugin>();)
-K_EXPORT_PLUGIN(PluginFactory("VariableLineShape"))
+K_PLUGIN_FACTORY(VariableLineShapePluginFactory, registerPlugin<VariableLineShapePlugin>();)
+K_EXPORT_PLUGIN(VariableLineShapePluginFactory("VariableLineShape"))
 
 VariableLineShapePlugin::VariableLineShapePlugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
     KoShapeRegistry::instance()->add(new VariableLineShapeFactory());
 }
+
+#include <VariableLineShapePlugin.moc>
