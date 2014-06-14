@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=OpenDocument Database
+Comment=OpenDocument Database (ODB) Import Plugin for Kexi
+X-KDE-Library=keximigrate_odb
+X-KDE-ServiceTypes=Kexi/MigrationDriver
+Type=Service
+InitialPreference=8
+X-Kexi-MigrationDriverName=Odb
+X-Kexi-MigrationDriverType=File
+X-Kexi-FileDBDriverMime=application/vnd.oasis.opendocument.database
+X-Kexi-KexiMigrationVersion=1.1

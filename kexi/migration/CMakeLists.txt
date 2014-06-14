@@ -24,6 +24,10 @@ IF(XBASE_FOUND)
   add_subdirectory(xbase)
 ENDIF(XBASE_FOUND)
 
+IF(JAVA_FOUND AND JNI_FOUND)
+  add_subdirectory(odb)
+ENDIF(JAVA_FOUND AND JNI_FOUND)
+
 macro_optional_find_package(GLIB2)
 
 if (GLIB2_FOUND)

@@ -626,6 +626,24 @@ endif(POPPLER_FOUND)
 
 
 ##
+## Test for JNI
+##
+
+macro_optional_find_package(Java)
+macro_log_feature(JAVA_FOUND "Java"
+                  "Java runtime"
+                  "https://www.java.com/en/" FALSE ""
+                  "Required by the Kexi odb tables import wizard"
+)
+
+macro_optional_find_package(JNI)
+macro_log_feature(JNI_FOUND "JNI"
+                  "Java Native Interface"
+                  "http://docs.oracle.com/javase/6/docs/technotes/guides/jni/" FALSE ""
+                  "Required by the Kexi odb tables import wizard"
+)
+
+##
 ## Generate a file for prefix information
 ##
 
