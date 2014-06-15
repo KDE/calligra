@@ -270,14 +270,11 @@ int main( int argc, char** argv )
     // then create the pixmap from an xpm: we cannot get the
     // location of our datadir before we've started our components,
     // so use an xpm.
-    // If fullscreen, hide splash screen
     QPixmap pm(splash_screen_xpm);
     QSplashScreen splash(pm);
-    if (!showFullscreen) {
-        splash.show();
-        splash.showMessage(".");
-        app.processEvents();
-    }
+    splash.show();
+    splash.showMessage(".");
+    app.processEvents();
 
 #if defined Q_WS_X11 && QT_VERSION >= 0x040800
     QApplication::setAttribute(Qt::AA_X11InitThreads);
