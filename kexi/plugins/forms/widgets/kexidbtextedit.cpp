@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2005 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004-2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2014 Wojciech Kosowicz <pcellix@gmail.com>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -376,6 +377,14 @@ void KexiDBTextEdit::selectAllOnFocusIfNeeded()
 {
 //    moveCursorToEnd();
 //    selectAll();
+}
+
+void KexiDBTextEdit::focusOutEvent(QFocusEvent *e)
+{
+    KTextEdit::focusOutEvent(e);
+    if (textCursor().hasSelection()) {
+        moveCursorToEnd();
+    }
 }
 
 void KexiDBTextEdit::updatePalette()
