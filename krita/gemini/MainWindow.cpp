@@ -552,6 +552,11 @@ bool MainWindow::slateMode() const
     return d->slateMode;
 }
 
+void MainWindow::setSlateMode(bool newValue)
+{
+    d->slateMode = newValue;
+}
+
 QString MainWindow::currentSketchPage() const
 {
     return d->currentSketchPage;

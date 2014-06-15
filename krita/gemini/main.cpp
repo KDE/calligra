@@ -181,6 +181,7 @@ int main( int argc, char** argv )
     options.add( "+[files]", ki18n( "Images to open" ) );
     options.add( "vkb", ki18n( "Use the virtual keyboard" ) );
     options.add( "fullscreen", ki18n( "Use full-screen display" ) );
+    options.add( "sketch", ki18n( "Start with the Sketch interface" ) );
     KCmdLineArgs::addCmdLineOptions( options );
 
     KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
@@ -258,6 +259,10 @@ int main( int argc, char** argv )
     }
 #endif
 
+    if (args->isSet("sketch")) {
+        showFullscreen = true;
+    }
+
 	if (args->isSet("fullscreen")) {
         showFullscreen = true;
     }
@@ -282,6 +287,10 @@ int main( int argc, char** argv )
 
     if (args->isSet("vkb")) {
         app.setInputContext(new SketchInputContext(&app));
+    }
+
+    if (args->isSet("sketch")) {
+        window.setSlateMode(true);
     }
 
     if (showFullscreen) {
