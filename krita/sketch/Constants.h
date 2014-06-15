@@ -21,6 +21,7 @@
 #define CONSTANTS_H
 
 #include <QObject>
+#include <QWidget>
 #include <QColor>
 
 class Constants : public QObject
@@ -39,7 +40,8 @@ class Constants : public QObject
     Q_PROPERTY(qreal LargeFontSize READ largeFontSize NOTIFY gridSizeChanged)
     Q_PROPERTY(qreal HugeFontSize READ hugeFontSize NOTIFY gridSizeChanged)
     Q_PROPERTY(bool useScreenGeometry READ useScreenGeometry WRITE setUseScreenGeometry NOTIFY useScreenGeometryChanged)
-
+    Q_PROPERTY(int ScreenWidth READ screenWidth NOTIFY screenWidthChanged)
+    Q_PROPERTY(int ScreenHeight READ screenHeight NOTIFY screenHeightChanged)
 public:
     Constants(QObject* parent = 0);
 
@@ -59,6 +61,9 @@ public:
     void setUseScreenGeometry(const bool& newValue);
     void updateGridSizes();
 
+    int screenWidth();
+    int screenHeight();
+
     Q_INVOKABLE void setGrid(int columns, int rows);
     Q_INVOKABLE void setGridWidth(qreal width);
     Q_INVOKABLE void setGridHeight(qreal height);
@@ -66,6 +71,8 @@ public:
 Q_SIGNALS:
     void gridSizeChanged();
     void useScreenGeometryChanged();
+    void screenWidthChanged();
+    void screenHeightChanged();
 
 private:
     qreal m_gridColumns;
@@ -74,6 +81,7 @@ private:
     qreal m_gridHeight;
     qreal m_toolbarButtonSize;
     bool m_useScreenGeometry;
+    QWidget* m_screenWidget;
 };
 
 #endif // CONSTANTS_H

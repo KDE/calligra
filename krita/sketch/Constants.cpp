@@ -32,6 +32,7 @@ Constants::Constants(QObject* parent)
     , m_gridColumns(SKETCH_DEFAULT_COLUMNS)
     , m_gridRows(SKETCH_DEFAULT_ROWS)
     , m_useScreenGeometry(false)
+    , m_screenWidget(0)
 {
     updateGridSizes(); // based on active Window
 }
@@ -115,7 +116,8 @@ bool Constants::isLandscape() const
 	return true;
 }
 
-void Constants::setGrid(int columns, int rows) {
+void Constants::setGrid(int columns, int rows)
+{
     m_gridColumns = columns;
     m_gridRows = rows;
     updateGridSizes();
@@ -135,18 +137,37 @@ void Constants::setUseScreenGeometry(const bool& newValue)
     }
 }
 
-void Constants::updateGridSizes() {
+void Constants::updateGridSizes()
+{
     if (m_useScreenGeometry || !qApp->activeWindow()){
-        QDesktopWidget *desktop = QApplication::desktop();
-        QWidget *screen = desktop->screen(desktop->primaryScreen());
-        m_gridWidth = screen->width() / gridColumns();
-        m_gridHeight = screen->height() / gridHeight();
+        qreal swidth = screenWidth();
+        qreal sheight = screenHeight();
+        m_gridWidth = swidth / gridColumns();
+        m_gridHeight = sheight / gridHeight();
     } else {
         m_gridWidth = qApp->activeWindow()->width() / gridColumns();
         m_gridHeight = qApp->activeWindow()->height() / gridHeight();
     }
     m_toolbarButtonSize = m_gridHeight;
     emit gridSizeChanged();
+}
+
+int Constants::screenWidth()
+{
+    if (m_screenWidget == 0) {
+        QDesktopWidget *desktop = QApplication::desktop();
+        m_screenWidget = desktop->screen(desktop->primaryScreen());
+    }
+    return m_screenWidget->width();
+}
+
+int Constants::screenHeight()
+{
+    if (m_screenWidget == 0) {
+        QDesktopWidget *desktop = QApplication::desktop();
+        m_screenWidget = desktop->screen(desktop->primaryScreen());
+    }
+    return m_screenWidget->height();
 }
 
 #include "Constants.moc"

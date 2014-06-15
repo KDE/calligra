@@ -126,8 +126,8 @@ ListView {
                     }
                     case "screen": {
                         base.clicked({
-                            width: Krita.Window.width,
-                            height: Krita.Window.height,
+                            width: Constants.ScreenWidth,
+                            height: Constants.ScreenHeight,
                             resolution: 72.0
                         });
                     }
