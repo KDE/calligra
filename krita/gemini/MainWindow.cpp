@@ -184,6 +184,12 @@ public:
         sketchView->setResizeMode( QDeclarativeView::SizeRootObjectToView );
         sketchView->setSource(QUrl::fromLocalFile(fi.canonicalFilePath()));
 
+        if (sketchView->errors().count() > 0) {
+            foreach(const QDeclarativeError &error, sketchView->errors()) {
+                qDebug() << error.toString();
+            }
+        }
+
         toDesktop = new KAction(q);
         toDesktop->setEnabled(false);
         toDesktop->setText(tr("Switch to Desktop"));
