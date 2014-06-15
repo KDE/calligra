@@ -1,5 +1,5 @@
 /**  This file is part of the KDE project
- * 
+ *
  *  Copyright (C) 2011 Adam Pigg <adam@piggz.co.uk>
  *
  *  This library is free software; you can redistribute it and/or
@@ -48,19 +48,23 @@ KexiMobileMainWindow::KexiMobileMainWindow()
     m_mobile = new KexiMobileWidget(0);
     m_toolbar = new KexiMobileToolbar(this);
     m_layout = new QHBoxLayout(this);
-    
+
+    //! part info has to be collected at this stage
+    KexiPart::PartInfoList *partInfoList = Kexi::partManager().infoList();
+    Q_UNUSED(partInfoList)
+
     m_openFileAction = new QAction(koIcon("document-open"), "Open", this);
     connect(m_openFileAction, SIGNAL(triggered(bool)), this, SLOT(slotOpenDatabase()));
     menuBar()->addAction(m_openFileAction);
-    
+
     m_layout->addWidget(m_mobile);
     m_layout->setSpacing(2);
     setFixedSize(800,480);
-    
+
     setCentralWidget(m_mobile);
-   
+
     addToolBar(Qt::BottomToolBarArea, m_toolbar);
-    
+
     connect(m_toolbar, SIGNAL(pageNavigator()), m_mobile, SLOT(showNavigator()));
     connect(m_mobile->navigator(), SIGNAL(openItem(KexiPart::Item*)), this, SLOT(openObject(KexiPart::Item*)));
 }
@@ -84,6 +88,8 @@ void KexiMobileMainWindow::slotOpenDatabase()
         if (proj) {
             m_project = proj;
             m_mobile->databaseOpened(proj);
+        } else {
+            qWarning() << "Project not returned";
         }
     }
 }
@@ -111,7 +117,7 @@ KexiProject *KexiMobileMainWindow::openProject(const KUrl &url)
     }
 
     project_data->connectionData()->driverName = driverName;
-    KexiProject *project = new KexiProject(project_data);
+    KexiProject *project = new KexiProject(*project_data);
     return project;
 }
 
@@ -119,22 +125,22 @@ KexiWindow* KexiMobileMainWindow::openObject(KexiPart::Item* item)
 {
     bool cancelled;
     KexiWindow* win = openObject(item, Kexi::DataViewMode, cancelled);
-    
+
     if (!cancelled)
         return win;
-    
+
     return 0;
 }
 
 
 KexiWindow *
 KexiMobileMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool &openingCancelled,
-                           QMap<QString, QVariant>* staticObjectArgs, QString* errorMessage)
+                                 QMap<QString, QVariant>* staticObjectArgs, QString* errorMessage)
 {
     qDebug() << "KexiMobileMainWindow::openObject";
-    
+
     KexiWindow *window = 0;
-    
+
     if (!openingAllowed(item, viewMode, errorMessage)) {
         if (errorMessage)
             *errorMessage = i18nc(
@@ -151,8 +157,6 @@ KexiMobileMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, 
 //!TODO Move this to KexiUtils::WaitCursor
 #ifdef Q_WS_MAEMO_5
     setAttribute(Qt::WA_Maemo5ShowProgressIndicator, true);
-#else
-    KexiUtils::WaitCursor wait;
 #endif
 
     //Create the window
@@ -178,7 +182,7 @@ KexiMobileMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, 
 #ifdef Q_WS_MAEMO_5
     setAttribute(Qt::WA_Maemo5ShowProgressIndicator, false);
 #endif
-    
+
     return window;
 
 }
@@ -189,7 +193,7 @@ bool KexiMobileMainWindow::openingAllowed(KexiPart::Item* item, Kexi::ViewMode v
     //! @todo this can be more complex once we deliver ACLs...
     //1 Load the part
     //2 Return true if the part loads AND the part supports the view mode AND the viewmode is Data
-    
+
     KexiPart::Part * part = Kexi::partManager().partForClass(item->partClass());
     if (!part) {
         if (errorMessage) {
@@ -373,5 +377,35 @@ bool KexiMobileMainWindow::userMode() const
 {
     return true;
 }
+
+void KexiMobileMainWindow::addSearchableModel(KexiSearchableModel*)
+{
+
+}
+
+tristate KexiMobileMainWindow::getNewObjectInfo(KexiPart::Item*, const QString&, KexiPart::Part*, bool, bool*, const QString&)
+{
+    return false;
+}
+
+KexiWindow* KexiMobileMainWindow::openedWindowFor(const KexiPart::Item*)
+{
+    return 0;
+}
+
+tristate KexiMobileMainWindow::saveObject(KexiWindow*, const QString&, KexiMainWindowIface::SaveObjectOptions)
+{
+    return false;
+}
+
+KexiUserFeedbackAgent* KexiMobileMainWindow::userFeedbackAgent() const
+{
+    return 0;
+}
+
+
+
+
+
 
 #include "KexiMobileMainWindow.moc"

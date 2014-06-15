@@ -18,13 +18,22 @@
  *  Boston, MA 02110-1301, USA.
  */
 
-#include <QApplication>
-#include "KexiMobileMainWindow.h"
+#include <KApplication>
+#include <kcmdlineargs.h>
+#include <KAboutData>
 
+#include "KexiMobileMainWindow.h"
 
 int main(int argc, char** argv)
 {
-    QApplication app(argc, argv);
+    KAboutData aboutData( "keximobile", "keximobile",
+      ki18n("Kexi Mobile"), "0.2",
+      ki18n("A mobile optimized version of Kexi from Calligra Suite"),
+      KAboutData::License_LGPL,
+      ki18n("Copyright (c) 2014 Adam Pigg") );
+    KCmdLineArgs::init( argc, argv, &aboutData );
+  
+    KApplication app;
     KexiMobileMainWindow foo;
     foo.show();
     return app.exec();
