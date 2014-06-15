@@ -30,7 +30,6 @@
 #include <KoOdfStyle.h>
 
 
-
 // ----------------------------------------------------------------
 //                     class OdfReaderWikiContext
 
@@ -45,6 +44,7 @@ OdfReaderWikiContext::OdfReaderWikiContext(KoStore *store, QFile &file)
 OdfReaderWikiContext::~OdfReaderWikiContext()
 {
 }
+
 
 void OdfReaderWikiContext::pushStyle(KoOdfStyle *style)
 {
@@ -65,4 +65,3 @@ KoOdfListStyle *OdfReaderWikiContext::popListStyle()
 {
     return listStyleStack.pop();
 }
-

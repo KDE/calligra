@@ -67,7 +67,8 @@ OdtReaderWikiBackend::~OdtReaderWikiBackend()
 // Text level functions: paragraphs, headings, sections, frames, objects, etc
 
 
-void OdtReaderWikiBackend::elementTextH(KoXmlStreamReader &reader, OdfReaderContext *context)
+void OdtReaderWikiBackend::elementTextH(KoXmlStreamReader &reader,
+                                        OdfReaderContext *context)
 {
     DEBUG_BACKEND();
     OdfReaderWikiContext *wikiContext = dynamic_cast<OdfReaderWikiContext*>(context);
@@ -77,31 +78,36 @@ void OdtReaderWikiBackend::elementTextH(KoXmlStreamReader &reader, OdfReaderCont
 
     if (reader.isStartElement()) {
         wikiContext->outlineLevel = reader.attributes().value("text:outline-level").toString().toInt();
-        setHeadingLevel(reader, wikiContext);
+        outputHeadingLevel(wikiContext);
     }
     else {
-        setHeadingLevel(reader, wikiContext);
+        outputHeadingLevel(wikiContext);
         wikiContext->outStream << "\n";
+
+        wikiContext->outlineLevel = 0;
     }
 }
 
-void OdtReaderWikiBackend::elementTextP(KoXmlStreamReader &reader, OdfReaderContext *context)
+void OdtReaderWikiBackend::elementTextP(KoXmlStreamReader &reader,
+                                        OdfReaderContext *context)
 {
     DEBUG_BACKEND();
     OdfReaderWikiContext *wikiContext = dynamic_cast<OdfReaderWikiContext*>(context);
     if (!wikiContext) {
         return;
     }
+
     if (reader.isStartElement()) {
         QString stylename = reader.attributes().value("text:style-name").toString();
 
         KoOdfStyle *style = wikiContext->styleManager()->style(stylename, "paragraph");
         //Push style to stack
         wikiContext->pushStyle(style);
-        checkTextStyle(reader, wikiContext);
+        outputTextStyle(reader, wikiContext);
     } else {
-        checkTextStyle(reader, wikiContext);
+        outputTextStyle(reader, wikiContext);
         wikiContext->popStyle();
+
         // At the end of a paragraph, output two newlines.
         wikiContext->outStream << "\n";
     }
@@ -110,23 +116,25 @@ void OdtReaderWikiBackend::elementTextP(KoXmlStreamReader &reader, OdfReaderCont
 // ----------------------------------------------------------------
 // Paragraph level functions: spans, annotations, notes, text content itself, etc.
 
-void OdtReaderWikiBackend::elementTextSpan(KoXmlStreamReader &reader, OdfReaderContext *context)
+void OdtReaderWikiBackend::elementTextSpan(KoXmlStreamReader &reader,
+                                           OdfReaderContext *context)
 {
     DEBUG_BACKEND();
     OdfReaderWikiContext *wikiContext = dynamic_cast<OdfReaderWikiContext*>(context);
     if (!wikiContext) {
         return;
     }
+
     if (reader.isStartElement()) {
         QString stylename = reader.attributes().value("text:style-name").toString();
         KoOdfStyle *style = wikiContext->styleManager()->style(stylename, "text");
         //Push style to stack
         wikiContext->pushStyle(style);
 
-        checkTextStyle(reader, wikiContext);
+        outputTextStyle(reader, wikiContext);
     }
     else {
-        checkTextStyle(reader, wikiContext);
+        outputTextStyle(reader, wikiContext);
         wikiContext->popStyle();
     }
 }
@@ -164,31 +172,33 @@ void OdtReaderWikiBackend::elementTextS(KoXmlStreamReader &reader, OdfReaderCont
     }
 }
 
-void OdtReaderWikiBackend::elementTextListItem(KoXmlStreamReader &reader, OdfReaderContext *context)
+void OdtReaderWikiBackend::elementTextListItem(KoXmlStreamReader &reader,
+                                               OdfReaderContext *context)
 {
     DEBUG_BACKEND();
     OdfReaderWikiContext *wikiContext = dynamic_cast<OdfReaderWikiContext*>(context);
     if (!wikiContext) {
         return;
     }
+
     if (reader.isStartElement()) {
         KoOdfListStyle *listStyle = wikiContext->popListStyle();
-        QString symbol;
+        char symbol;
         if (listStyle->listLevelStyleType() == "text:list-level-style-bullet") {
-            symbol = "*";
+            symbol = '*';
         }
         else if (listStyle->listLevelStyleType() == "text:list-level-style-number") {
-            symbol = "#";
+            symbol = '#';
         }
         wikiContext->pushListStyle(listStyle);
 
-        for (int level = 0; level < wikiContext->listLevelCounter; level++) {
-            wikiContext->outStream << symbol.toUtf8();
+        for (int level = 0; level < wikiContext->listLevelCounter; ++level) {
+            wikiContext->outStream << symbol;
         }
-        wikiContext->outStream << " ";
+        wikiContext->outStream << ' ';
     }
     else {
-        wikiContext->outStream <<"\n";
+        wikiContext->outStream << '\n';
     }
 
 }
@@ -204,7 +214,13 @@ void OdtReaderWikiBackend::characterData(KoXmlStreamReader &reader, OdfReaderCon
     wikiContext->outStream << reader.text().toString();
 }
 
-void OdtReaderWikiBackend::checkTextStyle(KoXmlStreamReader &reader, OdfReaderWikiContext *wikiContext)
+
+// ----------------------------------------------------------------
+//                         private functions
+
+
+void OdtReaderWikiBackend::outputTextStyle(KoXmlStreamReader &reader,
+                                           OdfReaderWikiContext *wikiContext)
 {
     KoOdfStyle *style = wikiContext->popStyle();
     KoOdfStyleProperties *styleProperties = style->properties().value("style:text-properties");
@@ -213,11 +229,12 @@ void OdtReaderWikiBackend::checkTextStyle(KoXmlStreamReader &reader, OdfReaderWi
         return;
     }
 
-    // Check italic and bold.
+    // Output italic and bold.
     QString fontWeightProperty = "fo:font-weight";
     QString fontStyleProperty = "fo:font-style";
-    if ((styleProperties->attribute(fontWeightProperty) == "bold") &&
-            (styleProperties->attribute(fontStyleProperty) == "italic")) {
+    if ((styleProperties->attribute(fontWeightProperty) == "bold")
+        && (styleProperties->attribute(fontStyleProperty) == "italic"))
+    {
         wikiContext->outStream << "'''''";
     } else if (styleProperties->attribute(fontWeightProperty) == "bold") {
         wikiContext->outStream << "'''";
@@ -228,11 +245,11 @@ void OdtReaderWikiBackend::checkTextStyle(KoXmlStreamReader &reader, OdfReaderWi
     QString textPositionProperty = "style:text-position";
     QString textLineThroughProperty = "style:text-line-through-style";
     if (reader.isStartElement()) {
-        // Check strike text.
+        // Output strikeout text.
         if (styleProperties->attribute(textLineThroughProperty) == "solid") {
             wikiContext->outStream << "<s>";
         }
-        // Check sub and super script.
+        // Output sub and super script.
         if (styleProperties->attribute(textPositionProperty) == "sub") {
            wikiContext->outStream << "<sub>";
         }
@@ -254,9 +271,8 @@ void OdtReaderWikiBackend::checkTextStyle(KoXmlStreamReader &reader, OdfReaderWi
     wikiContext->pushStyle(style);
 }
 
-void OdtReaderWikiBackend::setHeadingLevel(KoXmlStreamReader &reader, OdfReaderWikiContext *wikiContext)
+void OdtReaderWikiBackend::outputHeadingLevel(OdfReaderWikiContext *wikiContext)
 {
-     Q_UNUSED(reader);
     int level = wikiContext->outlineLevel;
     if (level == 1) {
         wikiContext->outStream << "==";

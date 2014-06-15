@@ -44,6 +44,7 @@ class KoOdfStyleProperties;
 class KoOdfStyle;
 class KoOdfListStyle;
 
+
 class OdfReaderWikiContext : public OdfReaderContext
 {
  public:
@@ -51,16 +52,23 @@ class OdfReaderWikiContext : public OdfReaderContext
     virtual ~OdfReaderWikiContext();
 
     void pushStyle(KoOdfStyle*);
-    KoOdfStyle* popStyle();
-    void pushListStyle(KoOdfListStyle*);
-    KoOdfListStyle* popListStyle();
+    KoOdfStyle *popStyle();
+    KoOdfStyle *styleTop();
 
-    QTextStream  outStream;
+    void pushListStyle(KoOdfListStyle*);
+    KoOdfListStyle *popListStyle();
+    KoOdfListStyle *listStyleTop();
+
+ private:
+    friend class OdtReaderWikiBackend;
+
+    QTextStream outStream;
+
     QStack<KoOdfStyle*> styleStack;
     QStack<KoOdfListStyle*> listStyleStack;
 
-    int listLevelCounter;
-    int outlineLevel;
+    int listLevelCounter;       // FIXME: rename to currentListLevel
+    int outlineLevel;           // FIXME: rename to currentOutlineLevel
 };
 
 

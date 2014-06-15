@@ -60,8 +60,8 @@ class OdtReaderWikiBackend : public OdfTextReaderBackend
     void characterData(KoXmlStreamReader &reader, OdfReaderContext *context);
 
 private:
-    void checkTextStyle(KoXmlStreamReader &reader, OdfReaderWikiContext *wikiContext);
-    void setHeadingLevel(KoXmlStreamReader &reader, OdfReaderWikiContext *wikiContext);
+    void outputTextStyle(KoXmlStreamReader &reader, OdfReaderWikiContext *wikiContext);
+    void outputHeadingLevel(OdfReaderWikiContext *wikiContext);
 };
 
 
