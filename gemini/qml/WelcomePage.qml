@@ -23,101 +23,263 @@ import "welcomepages"
 
 Page {
     id: base;
+    DocumentListModel { id: textDocumentsModel; filter: DocumentListModel.TextDocumentType; }
+    DocumentListModel { id: presentationDocumentsModel; filter: DocumentListModel.PresentationType; }
     Item {
-        id: sidebar;
+        id: welcomeToolbar;
         anchors {
             top: parent.top;
             left: parent.left;
-            bottom: parent.bottom;
+            right: parent.right;
         }
-        width: parent.width / 5;
-        ListModel {
-            id: sidebarList;
-            ListElement { text: "File Browser"; icon: "SVG-Icon-PlayPresentation-1"; selected: true; stackComponent: "welcomePageFilebrowser"; }
-            ListElement { text: "Recent Documents"; icon: "SVG-Icon-PlayPresentation-1"; selected: false; stackComponent: "welcomePageRecent"; }
-            ListElement { text: "Stage Templates"; icon: "SVG-Icon-PlayPresentation-1"; selected: false; stackComponent: "welcomePageStage"; }
-            ListElement { text: "Words Templates"; icon: "SVG-Icon-PlayPresentation-1"; selected: false; stackComponent: "welcomePageWords"; }
-            ListElement { text: "Custom"; icon: "SVG-Icon-PlayPresentation-1"; selected: false; stackComponent: "welcomePageCustom"; }
-        }
+        height: Constants.ToolbarHeight;
         Rectangle {
             anchors.fill: parent;
-            color: "#e8e9ea";
+            color: "#f2b200";
         }
-        ListView {
-            anchors.fill: parent;
-            clip: true;
-            model: sidebarList;
-            delegate: Item {
-                width: ListView.view.width;
-                height: Constants.GridHeight;
-                Rectangle {
-                    anchors.fill: parent;
-                    color: "#00adf5";
-                    opacity: model.selected ? 0.6 : 0;
-                    Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
-                }
-                Image {
-                    anchors {
-                        left: parent.left;
-                        leftMargin: Constants.DefaultMargin;
-                        verticalCenter: parent.verticalCenter;
+        Button {
+            id: appButton;
+            height: parent.height;
+            width: Constants.GridWidth * 3;
+            bold: true;
+            text: "Calligra Suite";
+            image: Settings.theme.icon("Calligra-MockIcon-1");
+        }
+        Button {
+            id: settingsButton;
+            anchors.right: parent.right;
+            height: parent.height;
+            width: Constants.ToolbarHeight * 1.2790698;
+            image: Settings.theme.icon("SVG-Icon-OptionsWhite-1");
+        }
+    }
+    Item {
+        anchors {
+            top: welcomeToolbar.bottom;
+            left: parent.left;
+            right: parent.right;
+            bottom: parent.bottom;
+        }
+        Item {
+            id: sidebar;
+            anchors {
+                top: parent.top;
+                left: parent.left;
+                bottom: parent.bottom;
+            }
+            width: parent.width / 5;
+            ListModel {
+                id: sidebarList;
+                ListElement { header: " OPEN"; text: "Recent Documents"; icon: "SVG-Icon-MyDocuments-1"; selected: false; stackComponent: "welcomePageRecent"; }
+                ListElement { text: "Library"; icon: "SVG-Icon-MyDocuments-1"; selected: true; stackComponent: "welcomePageFilebrowser"; }
+                ListElement { text: "Cloud"; icon: "SVG-Icon-PlayPresentation-1"; selected: false; stackComponent: "welcomePageFilebrowser"; }
+
+                ListElement { header: " COMPOSE NEW"; text: "Document"; icon: "SVG-Icon-NewDocument-1"; selected: false; stackComponent: "welcomePageWords"; }
+                ListElement { text: "Presentation"; icon: "SVG-Icon-NewPresentation-1"; selected: false; stackComponent: "welcomePageStage"; }
+                ListElement { text: "Sketch"; icon: "SVG-Icon-NewSketch-1"; selected: false; stackComponent: "welcomePageCustom"; }
+                ListElement { text: "Spreadsheet"; icon: "SVG-Icon-NewSpreadsheet-1"; selected: false; stackComponent: "welcomePageCustom"; }
+            }
+            Rectangle {
+                anchors.fill: parent;
+                color: "#e8e9ea";
+            }
+            ListView {
+                anchors.fill: parent;
+                clip: true;
+                model: sidebarList;
+                delegate: Item {
+                    width: ListView.view.width;
+                    height: model.header ? Constants.GridHeight * 2 : Constants.GridHeight;
+                    Label {
+                        id: delegateHeader;
+                        height: model.header ? Constants.GridHeight : 0;
+                        width: parent.width;
+                        verticalAlignment: Text.AlignVCenter;
+                        horizontalAlignment: Text.AlignLeft;
+                        text: model.header ? model.header : "";
+                        color: "#f2b200";
                     }
-                    height: parent.height - Constants.DefaultMargin * 2;
-                    width: height;
-                    source: Settings.theme.icon(model.icon);
-                    sourceSize.width: width > height ? height : width;
-                    sourceSize.height: width > height ? height : width;
-                }
-                Label {
-                    anchors {
-                        left: parent.left;
-                        leftMargin: parent.height;
-                        verticalCenter: parent.verticalCenter;
-                    }
-                    text: model.text;
-                }
-                MouseArea {
-                    anchors.fill: parent;
-                    function elementFromName(name) {
-                        var elements = {
-                            "welcomePageFilebrowser": welcomePageFilebrowser,
-                            "welcomePageRecent": welcomePageRecent,
-                            "welcomePageStage": welcomePageStage,
-                            "welcomePageWords": welcomePageWords,
-                            "welcomePageCustom": welcomePageCustom
-                        };
-                        return elements[name];
-                    }
-                    onClicked: {
-                        if(model.selected) {
-                            return;
+                    Item {
+                        anchors.top: delegateHeader.bottom;
+                        width: parent.width;
+                        height: Constants.GridHeight;
+                        Rectangle {
+                            anchors.fill: parent;
+                            color: "#00adf5";
+                            opacity: model.selected ? 0.6 : 0;
+                            Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
                         }
-                        for(var i = 0; i < sidebarList.count; i++) {
-                            sidebarList.setProperty(i, "selected", false);
+                        Image {
+                            anchors {
+                                left: parent.left;
+                                leftMargin: Constants.DefaultMargin;
+                                verticalCenter: parent.verticalCenter;
+                            }
+                            height: parent.height - Constants.DefaultMargin * 2;
+                            width: height;
+                            source: Settings.theme.icon(model.icon);
+                            sourceSize.width: width > height ? height : width;
+                            sourceSize.height: width > height ? height : width;
                         }
-                        sidebarList.setProperty(index, "selected", true);
-                        welcomeStack.replace(elementFromName(model.stackComponent));
+                        Label {
+                            anchors {
+                                left: parent.left;
+                                leftMargin: parent.height;
+                                verticalCenter: parent.verticalCenter;
+                            }
+                            text: model.text;
+                        }
+                        MouseArea {
+                            anchors.fill: parent;
+                            function elementFromName(name) {
+                                var elements = {
+                                    "welcomePageFilebrowser": welcomePageFilebrowser,
+                                    "welcomePageRecent": welcomePageRecent,
+                                    "welcomePageStage": welcomePageStage,
+                                    "welcomePageWords": welcomePageWords,
+                                    "welcomePageCustom": welcomePageCustom
+                                };
+                                return elements[name];
+                            }
+                            onClicked: {
+                                if(model.selected) {
+                                    return;
+                                }
+                                for(var i = 0; i < sidebarList.count; i++) {
+                                    sidebarList.setProperty(i, "selected", false);
+                                }
+                                sidebarList.setProperty(index, "selected", true);
+                                welcomeStack.replace(elementFromName(model.stackComponent));
+                            }
+                        }
                     }
                 }
             }
         }
-    }
-    PageStack {
-        id: welcomeStack;
-        clip: true;
-        anchors {
-            top: parent.top;
-            left: sidebar.right;
-            right: parent.right;
-            bottom: parent.bottom;
+        Rectangle {
+            anchors.fill: welcomeStack;
+            color: "#e8e9ea";
         }
-        initialPage: welcomePageFilebrowser;
-    }
-    Component { id: welcomePageFilebrowser; WelcomePageFilebrowser { } }
-    Component { id: welcomePageRecent; WelcomePageRecent { } }
-    Component { id: welcomePageStage; WelcomePageStage { } }
-    Component { id: welcomePageWords; WelcomePageWords { } }
-    Component { id: welcomePageCustom; WelcomePageCustom { } }
+        PageStack {
+            id: welcomeStack;
+            clip: true;
+            anchors {
+                top: parent.top;
+                left: sidebar.right;
+                right: parent.right;
+                bottom: parent.bottom;
+            }
+            initialPage: welcomePageFilebrowser;
+        }
+        Component { id: welcomePageFilebrowser; WelcomePageFilebrowser { } }
+        Component { id: welcomePageRecent; WelcomePageRecent { } }
+        Component { id: welcomePageStage; WelcomePageStage { } }
+        Component { id: welcomePageWords; WelcomePageWords { } }
+        Component { id: welcomePageCustom; WelcomePageCustom { } }
 
-    Component { id: mainPage; MainPage { } }
+        Component { id: mainPage; MainPage { } }
+    }
+    Item {
+        id: variantSelector;
+        property alias model: variantView.model;
+        anchors.fill: parent;
+        opacity: 0;
+        Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+        MouseArea { anchors.fill: parent; onClicked: {} }
+        SimpleTouchArea { anchors.fill: parent; onTouched: {} }
+        Rectangle {
+            anchors.fill: parent;
+            color: "#e8e9ea"
+            opacity: 0.6;
+        }
+        Item {
+            anchors {
+                fill: parent;
+                topMargin: Constants.GridWidth;
+                leftMargin: Constants.GridWidth;
+                rightMargin: Constants.GridWidth;
+                bottomMargin: Constants.GridWidth * 2;
+            }
+            Rectangle {
+                anchors.fill: parent;
+                color: "#22282f";
+                opacity: 0.7;
+                radius: 8;
+            }
+            Label {
+                anchors {
+                    top: parent.top;
+                    left: parent.left;
+                    right: parent.right;
+                }
+                height: Constants.GridHeight;
+                horizontalAlignment: Text.AlignHCenter;
+                verticalAlignment: Text.AlignVCenter;
+                color: "white";
+                font: Settings.theme.font("title");
+                text: "Select a Style Option";
+            }
+            Button {
+                anchors {
+                    top: parent.top;
+                    right: parent.right;
+                    margins: Constants.DefaultMargin;
+                }
+                height: Constants.GridHeight - Constants.DefaultMargin * 2;
+                width: height;
+                image: Settings.theme.icon("SVG-Icon-SmallX");
+                onClicked: variantSelector.opacity = 0;
+            }
+            Flickable {
+                id: variantFlickable;
+                anchors {
+                    fill: parent;
+                    topMargin: Constants.GridHeight;
+                }
+                clip: true;
+                contentHeight: variantFlow.height;
+                contentWidth: variantFlow.width;
+                Flow {
+                    id: variantFlow;
+                    width: variantFlickable.width;
+                    Repeater {
+                        id: variantView;
+                        delegate: Item {
+                            height: variantFlickable.height;
+                            width: variantFlickable.width / 4;
+                            Column {
+                                anchors {
+                                    left: parent.left;
+                                    leftMargin: Constants.DefaultMargin;
+                                }
+                                width: variantFlickable.width / 4 - Constants.DefaultMargin * 2;
+                                Image {
+                                    width: variantFlickable.width / 4 - Constants.DefaultMargin * 2;
+                                    height: variantFlickable.width / 4 * 0.8;
+                                    source: Settings.theme.icon(model.thumbnail);
+                                    fillMode: Image.PreserveAspectFit
+                                    smooth: true;
+                                }
+                                Image {
+                                    width: variantFlickable.width / 4 - Constants.DefaultMargin * 2;
+                                    height: variantFlickable.width / 4 * 0.2;
+                                    source: Settings.theme.icon(model.swatch);
+                                    fillMode: Image.PreserveAspectFit
+                                    smooth: true;
+                                }
+                            }
+                            MouseArea {
+                                anchors.fill: parent;
+                                onClicked: {
+                                    variantSelector.opacity = 0;
+                                    activateTemplate(model.templateFile);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            ScrollDecorator { flickableItem: variantFlickable; anchors.fill: variantFlickable; }
+        }
+    }
 }

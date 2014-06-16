@@ -22,8 +22,6 @@ import "../components"
 
 Page {
     id: base;
-    DocumentListModel { id: textDocumentsModel; filter: DocumentListModel.TextDocumentType; }
-    DocumentListModel { id: presentationDocumentsModel; filter: DocumentListModel.PresentationType; }
     property string categoryUIName: (docList.model === textDocumentsModel) ? "text documents" : "presentations"
     Row {
         id: docTypeSelectorRow;
