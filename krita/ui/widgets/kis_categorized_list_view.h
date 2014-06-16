@@ -35,6 +35,7 @@ public:
 signals:
     void sigCategoryToggled(const QModelIndex& index, bool toggled);
     void sigEntryChecked(const QModelIndex& index);
+    void sigLockOption(const QModelIndex& index);
 
 protected slots:
     void slotIndexChanged(const QModelIndex& index);
@@ -43,6 +44,8 @@ protected slots:
     virtual void rowsAboutToBeRemoved(const QModelIndex &parent, int start, int end);
     virtual void mousePressEvent(QMouseEvent* event);
     virtual void mouseReleaseEvent(QMouseEvent* event);
+
+
 
 private:
     void updateRows(int begin, int end);

@@ -82,6 +82,7 @@ void KisCategorizedListView::mousePressEvent(QMouseEvent* event)
         QModelIndex index = QListView::indexAt(event->pos());
 
         if (index.isValid() && (event->pos().x() < 25) && (model()->flags(index) & Qt::ItemIsUserCheckable)) {
+
             QListView::mousePressEvent(event);
 
             QMouseEvent releaseEvent(QEvent::MouseButtonRelease,
@@ -96,6 +97,15 @@ void KisCategorizedListView::mousePressEvent(QMouseEvent* event)
             emit sigEntryChecked(index);
             return;
         }
+
+    }
+    QModelIndex index = QListView::indexAt(event->pos());
+    if(index.data(__CategorizedListModelBase::isLockableRole).toBool() && index.isValid())
+    {
+        if(event->pos().x()>=this->width()-20 && event->pos().x()<=this->width()-5)
+        {
+            emit sigLockOption(QListView::indexAt(event->pos()));
+        }
     }
 
     QListView::mousePressEvent(event);
@@ -105,3 +115,5 @@ void KisCategorizedListView::mouseReleaseEvent(QMouseEvent* event)
 {
     QListView::mouseReleaseEvent(event);
 }
+
+

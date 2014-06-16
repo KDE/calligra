@@ -1,6 +1,7 @@
 /*
  *  Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
  *  Copyright (c) 2011 Silvio Heinrich <plassy@web.de>
+ *  Copyright (c) 2014 Mohit Goyal <mohit.bits2011@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -25,6 +26,11 @@
 #include <QStyleOptionMenuItem>
 #include <QStyleOptionViewItemV4>
 #include <QApplication>
+#include <QPushButton>
+#include <KoIcon.h>
+#include <KPushButton>
+
+
 
 KisCategorizedItemDelegate::KisCategorizedItemDelegate(bool indicateError, QObject *parent)
     : QStyledItemDelegate(parent),
@@ -44,6 +50,26 @@ void KisCategorizedItemDelegate::paint(QPainter* painter, const QStyleOptionView
             sovi.decorationPosition = QStyleOptionViewItem::Right;
 
         QStyledItemDelegate::paint(painter, sovi, index);
+        if(index.data(__CategorizedListModelBase::isLockableRole).toBool())
+        {
+            if(index.data(__CategorizedListModelBase::isLockedRole).toBool())
+            {
+                KIcon *i = new KIcon("linked2");
+                QPixmap pixmap = i->pixmap(QSize(sovi.rect.height(),10));
+                painter->drawPixmap(sovi.rect.width()-pixmap.width(),sovi.rect.y(),pixmap);
+            }
+            else
+            {
+                KIcon *i = new KIcon("linked2");
+                painter->setOpacity(0.4);
+                QPixmap pixmap = i->pixmap(QSize(sovi.rect.height(),10));
+                painter->drawPixmap(sovi.rect.width()-pixmap.width(),sovi.rect.y(),pixmap);
+            }
+        }
+        painter->setOpacity(1);
+
+
+
     }
     else {
         QPalette palette = QApplication::palette();
@@ -78,6 +104,7 @@ QSize KisCategorizedItemDelegate::sizeHint(const QStyleOptionViewItem& option, c
     }
 
     return QSize(QStyledItemDelegate::sizeHint(option, index).width(), m_minimumItemHeight);
+
 }
 
 void KisCategorizedItemDelegate::paintTriangle(QPainter* painter, qint32 x, qint32 y, qint32 size, bool rotate) const
@@ -96,4 +123,23 @@ void KisCategorizedItemDelegate::paintTriangle(QPainter* painter, qint32 x, qint
     QPalette palette = QApplication::palette();
     painter->setBrush(palette.buttonText());
     painter->drawPolygon(triangle);
+}
+QWidget* KisCategorizedItemDelegate::createEditor(QWidget *parent,const QStyleOptionViewItem &option,const QModelIndex &index) const
+{
+    KPushButton *p = new KPushButton(parent);
+    p->setText("index.data().toString()");
+    p->setVisible(true);
+    return p;
+}
+void KisCategorizedItemDelegate::setEditorData(QWidget * editor, const QModelIndex & index) const
+{
+    static_cast<QPushButton*>(editor)->setText(index.data().toString());
+}
+void KisCategorizedItemDelegate::setModelData(QWidget * editor, QAbstractItemModel * model, const QModelIndex & index) const
+{
+    model->setData(index, static_cast<QPushButton*>(editor)->text());
+}
+void KisCategorizedItemDelegate::updateEditorGeometry(QWidget *editor,const QStyleOptionViewItem &option,const QModelIndex &index) const
+{
+    editor->setGeometry(option.rect);
 }

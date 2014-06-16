@@ -54,9 +54,12 @@ public:
     ///Reimplemented, sets image on option widgets
     virtual void setImage(KisImageWSP image);
 
+
+
 private slots:
 
     void changePage(const QModelIndex&);
+    void lockProperties(const QModelIndex& index);
 
 private:
     

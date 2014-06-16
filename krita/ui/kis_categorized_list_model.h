@@ -32,6 +32,8 @@ public:
         IsHeaderRole       = Qt::UserRole + 1,
         ExpandCategoryRole = Qt::UserRole + 2,
         SortRole           = Qt::UserRole + 3,
+        isLockedRole       = Qt::UserRole + 4,
+        isLockableRole     = Qt::UserRole + 5
     };
 
 public:
@@ -105,6 +107,10 @@ public:
             return item->isCheckable() ? item->isChecked() ? Qt::Checked : Qt::Unchecked : QVariant();
         case SortRole:
             return item->isCategory() ? item->name() : item->parentCategory()->name() + item->name();
+        case isLockedRole:
+            return item->isLocked();
+        case isLockableRole:
+            return item->isLockable();
         }
 
         return QVariant();

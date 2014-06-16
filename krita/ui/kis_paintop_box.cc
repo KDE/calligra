@@ -6,6 +6,7 @@
  *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *  Copyright (C) 2011 Silvio Heinrich <plassy@web.de>
  *  Copyright (C) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
+ *  Copyright (c) 2014 Mohit Goyal <mohit.bits2011@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -62,6 +63,9 @@
 #include "kis_resource_server_provider.h"
 #include "kis_favorite_resource_manager.h"
 #include "kis_config.h"
+
+#include "kis_locked_properties_proxy.h"
+#include "kis_locked_properties_server.h"
 
 #include "widgets/kis_popup_button.h"
 #include "widgets/kis_paintop_presets_popup.h"
@@ -380,8 +384,8 @@ void KisPaintopBox::setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP pr
         m_resourceProvider->setPreviousPaintOpPreset(m_resourceProvider->currentPreset());
 
         if (m_optionWidget) {
-            m_optionWidget->setConfiguration(m_resourceProvider->currentPreset()->settings());
             bool saveDirtyPreset = m_resourceProvider->currentPreset()->dirtyPreset();
+            m_optionWidget->setConfiguration(m_resourceProvider->currentPreset()->settings());
             m_optionWidget->writeConfiguration(const_cast<KisPaintOpSettings*>(m_resourceProvider->currentPreset()->settings().data()));
             m_resourceProvider->currentPreset()->setDirtyPreset(saveDirtyPreset);
             m_optionWidget->disconnect(this);
@@ -769,14 +773,21 @@ void KisPaintopBox::sliderChanged(int n)
         if(m_resourceProvider->currentPreset()->settings()->hasProperty("FlowValue"))
             m_resourceProvider->currentPreset()->settings()->setProperty("FlowValue", flow);
 
+        KisLockedPropertiesProxy *p = KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(m_resourceProvider->currentPreset()->settings());
+        p->setProperty("OpacityValue",opacity);
+        p->setProperty("FlowValue",flow);
 
         m_optionWidget->setConfiguration(m_resourceProvider->currentPreset()->settings().data());
     }
     else m_resourceProvider->setOpacity(opacity);
     m_optionWidget->blockSignals(false);
     if(m_presetsEnabled)
+    {
         m_optionWidget->setConfiguration(m_resourceProvider->currentPreset()->settings().data());
-    m_presetsPopup->resourceSelected(m_resourceProvider->currentPreset().data());
+        KisLockedPropertiesProxy *p = KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(m_resourceProvider->currentPreset()->settings());
+        p->setProperty("OpacityValue",opacity);
+    }
+        m_presetsPopup->resourceSelected(m_resourceProvider->currentPreset().data());
 
 }
 

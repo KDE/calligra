@@ -62,6 +62,8 @@ public:
      */
     virtual void setImage(KisImageWSP image);
 
+
+
 public slots:
 
     virtual void setChecked(bool checked);
@@ -82,6 +84,8 @@ public slots:
     virtual void readOptionSetting(const KisPropertiesConfiguration* setting) {
         Q_UNUSED(setting);
     }
+    void setLocked(bool value);
+    bool isLocked () const;
 
 signals:
 
@@ -93,6 +97,8 @@ signals:
 protected:
 
     bool m_checkable;
+    bool m_locked;
+
 
 private:
 

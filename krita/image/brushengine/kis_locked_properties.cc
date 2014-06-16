@@ -1,11 +1,27 @@
+/*
+ *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2014 Mohit Goyal <mohit.bits2011@gmail.com>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
 #include "kis_locked_properties.h"
 
 
 KisLockedProperties::KisLockedProperties()
 {
     m_lockedProperties = new KisPropertiesConfiguration();
-    m_lockedProperties->setProperty("OpacityValue",0.34);
-    m_lockedProperties->setProperty("FlowValue",0.56);
 }
 
 KisLockedProperties::KisLockedProperties(KisPropertiesConfiguration *p)
@@ -19,36 +35,36 @@ KisLockedProperties::KisLockedProperties(KisPropertiesConfiguration *p)
 }
 void KisLockedProperties::addToLockedProperties(KisPropertiesConfiguration *p)
 {
-    QMap<QString,QVariant>::Iterator i;
-    for(i = p->getProperties().begin();i!=p->getProperties().end();i++)
-    {
-        m_lockedProperties->setProperty(i.key(),i.value());
+    QMapIterator<QString, QVariant> i(p->getProperties());
+    while (i.hasNext()) {
+        i.next();
+        m_lockedProperties->setProperty(i.key(), QVariant(i.value()));
     }
 }
 void KisLockedProperties::removeFromLockedProperties(KisPropertiesConfiguration *p)
 {
     KisPropertiesConfiguration *temp = new KisPropertiesConfiguration();
-    QMap<QString,QVariant>::Iterator i;
-    for(i = m_lockedProperties->getProperties().begin();i!=m_lockedProperties->getProperties().end();i++)
+    QMapIterator<QString, QVariant> i(m_lockedProperties->getProperties());
+    while(i.hasNext())
     {
-        temp->setProperty(i.key(),i.value());
+        i.next();
+        temp->setProperty(i.key(),QVariant(i.value()));
     }
     m_lockedProperties->clearProperties();
-    for(i = temp->getProperties().begin();i!=temp->getProperties().end();i++)
+    QMapIterator<QString, QVariant> j(temp->getProperties());
+    while(j.hasNext())
     {
-        if(!p->hasProperty(i.key()))
+        j.next();
+        if(!p->hasProperty(j.key()))
         {
-            m_lockedProperties->setProperty(i.key(),i.value());
+            m_lockedProperties->setProperty(j.key(),QVariant(j.value()));
         }
+
     }
 }
 KisPropertiesConfiguration *KisLockedProperties::lockedProperties()
 {
-
-    if(!m_lockedProperties)
-    {
-        m_lockedProperties = new KisPropertiesConfiguration();
-    }
-
     return m_lockedProperties;
 }
+
+

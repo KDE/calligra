@@ -19,6 +19,7 @@ hi16-palette_library.png
 icon-kritasketch-256.png
 landscape.png
 linked.png
+linked2.png
 local_selection_active.png
 local_selection_inactive.png
 locked.png
