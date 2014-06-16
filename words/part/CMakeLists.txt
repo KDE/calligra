@@ -61,7 +61,6 @@ set(wordsprivate_LIB_SRCS
     dockers/KWStatisticsWidget.cpp
     dockers/StatisticsPreferencesPopup.cpp
 
-
     dockers/KWNavigationDocker.cpp
     dockers/KWNavigationDockerFactory.cpp
     dockers/KWNavigationWidget.cpp

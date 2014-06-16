@@ -252,11 +252,10 @@ void OdfTextReader::readElementTextList(KoXmlStreamReader &reader)
 {
     DEBUGSTART();
     m_backend->elementTextList(reader, m_context);
-    //FIXME: setIsInsideParagraph now should be more public like IsInsideElement.
 
-    //m_context->setIsInsideParagraph(true);
+    m_context->setIsInsideParagraph(true);
     readListContent(reader);
-    //m_context->setIsInsideParagraph(false);
+    m_context->setIsInsideParagraph(false);
 
     m_backend->elementTextList(reader, m_context);
     DEBUGEND();
@@ -808,9 +807,11 @@ void OdfTextReader::readElementTextSpan(KoXmlStreamReader &reader)
 void OdfTextReader::readListContent(KoXmlStreamReader &reader)
 {
     DEBUGSTART();
-    // This Function handle content of text:list that contains two child element
-    // <text:list-header> 5.3.3 and <text:list-item> 5.3.4 and their child elements
-    // are same:
+
+    // This function handles content of text:list that contains two
+    // child element <text:list-header> 5.3.3 and <text:list-item>
+    // 5.3.4 and both of their child elements are same:
+
     // <text:h> 5.1.2
     // <text:p> 5.1.3
     // <text:list> 5.3.1

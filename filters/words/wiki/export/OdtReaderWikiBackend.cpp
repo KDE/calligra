@@ -163,12 +163,25 @@ void OdtReaderWikiBackend::elementTextList(KoXmlStreamReader &reader, OdfReaderC
     }
 }
 
-void OdtReaderWikiBackend::elementTextS(KoXmlStreamReader &reader, OdfReaderContext *context)
+void OdtReaderWikiBackend::elementTextS(KoXmlStreamReader &reader,
+                                        OdfReaderContext *context)
 {
     DEBUG_BACKEND();
     OdfReaderWikiContext *wikiContext = dynamic_cast<OdfReaderWikiContext*>(context);
     if (!wikiContext) {
         return;
+    }
+
+    // Find out number of spaces.
+    QString dummy = reader.attributes().value("text:c").toString();
+    bool ok;
+    quint32  numSpaces = dummy.toUInt(&ok);
+    if (!ok) 
+        numSpaces = 1;
+
+    // Output the required number of spaces.
+    for (quint32 i = 0; i < numSpaces; ++i) {
+        wikiContext->outStream << ' ';
     }
 }
 

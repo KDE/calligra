@@ -189,8 +189,11 @@ void KoOdfStyleManager::collectStyleSet(KoXmlStreamReader &reader, bool fromStyl
         kDebug() << "---------------- style element:" << reader.qualifiedName().toString();
         QString tagName = reader.qualifiedName().toString();
 
-            if (tagName == "office:styles" || tagName == "office:automatic-styles" ||
-                    tagName == "office:document-content" || tagName == "office:document-styles") {
+            if (tagName == "office:styles"
+                || tagName == "office:automatic-styles"
+                || tagName == "office:document-content"
+                || tagName == "office:document-styles")
+            {
                 continue;
             }
 
@@ -217,7 +220,7 @@ void KoOdfStyleManager::collectStyleSet(KoXmlStreamReader &reader, bool fromStyl
                     KoOdfStyle *style = new KoOdfStyle;
 
                     style->setIsFromStylesXml(fromStylesXml);
-                    kDebug() << "This style should be loaded:" << tagName << "Family:" <<family;
+                    //kDebug() << "This style should be loaded:" << tagName << "Family:" <<family;
 
                     style->setIsDefaultStyle(tagName == "style:default-style");
                     style->readOdf(reader);
