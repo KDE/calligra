@@ -162,7 +162,7 @@ Page {
                 height: parent.height; width: height;
                 textColor: Settings.theme.color("components/toolbar/text");
                 radius: 4;
-                checked: textStylePanel.cursorFont.bold;
+                checked: textStylePanel.font ? textStylePanel.cursorFont.bold : false;
             }
             Button {
                 image: Settings.theme.icon("SVG-Icon-Italic-1");
@@ -170,7 +170,7 @@ Page {
                 height: parent.height; width: height;
                 textColor: Settings.theme.color("components/toolbar/text");
                 radius: 4;
-                checked: textStylePanel.font.italic;
+                checked: textStylePanel.font ? textStylePanel.font.italic : false;
             }
             Button {
                 image: Settings.theme.icon("SVG-Icon-Underline-1");
@@ -178,7 +178,7 @@ Page {
                 height: parent.height; width: height;
                 textColor: Settings.theme.color("components/toolbar/text");
                 radius: 4;
-                checked: textStylePanel.font.underline;
+                checked: textStylePanel.font ? textStylePanel.font.underline : false;
             }
             Rectangle { color: Settings.theme.color("components/toolbar/text"); height: parent.height; width: 1; }
             Button {
@@ -252,12 +252,51 @@ Page {
             }
             height: Constants.ToolbarHeight - 22;
             spacing: 10;
+            visible: notesPanel.canvas ? false : true;
             Button {
                 height: parent.height; width: height;
                 image: Settings.theme.icon("SVG-Icon-AddShape-1");
             }
             Button {
                 height: parent.height; width: height;
+                image: Settings.theme.icon("SVG-Icon-Animations-1");
+            }
+            Button {
+                height: parent.height; width: height;
+                image: Settings.theme.icon("SVG-Icon-PlayPresentation-1");
+                onClicked: mainPageStack.push(presentationDJMode);
+                Calligra.PresentationModel {
+                    id: presentationModel
+                    canvas: viewLoader.item ? viewLoader.item.canvas : null;
+                    thumbnailSize: Qt.size(base.width, base.height);
+                }
+                Component { id: presentationDJMode; PresentationDJMode { }}//canvas: viewLoader.item ? viewLoader.item.canvas : null; } }
+            }
+            Button {
+                height: parent.height;
+                width: height;
+                image: Settings.theme.icon("SVG-Icon-Options-1");
+                checkable: true;
+                radius: 4;
+                checkedColor: "#3C00adf5";
+                OptionsPanel {}
+            }
+        }
+        Row {
+            anchors {
+                right: parent.right;
+                verticalCenter: parent.verticalCenter;
+                rightMargin: 10
+            }
+            height: Constants.ToolbarHeight - 22;
+            spacing: 10;
+            visible: notesPanel.canvas ? true : false;
+            Button {
+                height: parent.height; width: height;
+                image: Settings.theme.icon("SVG-Icon-AddShape-1");
+            }
+            Button {
+                height: parent.height;
                 image: Settings.theme.icon("SVG-Icon-AddNote-1");
                 checkable: true;
                 radius: 4;
@@ -273,6 +312,7 @@ Page {
                     Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
                 }
                 NotesPanel {
+                    id: notesPanel;
                     anchors {
                         top: parent.bottom;
                         right: parent.right;
