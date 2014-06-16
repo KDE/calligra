@@ -76,6 +76,11 @@ QVariant CQPresentationModel::data(const QModelIndex& index, int role) const
     return QVariant();
 }
 
+QPixmap CQPresentationModel::thumbnail(int index)
+{
+    return data(this->index(index), ThumbnailRole).value<QPixmap>();
+}
+
 int CQPresentationModel::rowCount(const QModelIndex& parent) const
 {
     Q_UNUSED(parent);

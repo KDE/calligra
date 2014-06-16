@@ -21,6 +21,7 @@
 #define CQPRESENTATIONMODEL_H
 
 #include <QAbstractListModel>
+#include <QPixmap>
 
 class QDeclarativeItem;
 class CQPresentationModel : public QAbstractListModel
@@ -39,6 +40,8 @@ public:
 
     virtual QVariant data(const QModelIndex& index, int role) const;
     virtual int rowCount(const QModelIndex& parent) const;
+
+    Q_INVOKABLE QPixmap thumbnail(int index);
 
     QDeclarativeItem* canvas() const;
 
