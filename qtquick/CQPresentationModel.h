@@ -28,7 +28,7 @@ class CQPresentationModel : public QAbstractListModel
 {
     Q_OBJECT
     Q_PROPERTY(QDeclarativeItem* canvas READ canvas WRITE setCanvas NOTIFY canvasChanged)
-    Q_PROPERTY(QSize thumbnailSize READ thumbnailSize WRITE setThumbnailSize NOTIFY thumbnailSizeChanged)
+    Q_PROPERTY(QSizeF thumbnailSize READ thumbnailSize WRITE setThumbnailSize NOTIFY thumbnailSizeChanged)
 
 public:
     enum Roles {
@@ -45,11 +45,11 @@ public:
 
     QDeclarativeItem* canvas() const;
 
-    QSize thumbnailSize() const;
+    QSizeF thumbnailSize() const;
 
 public Q_SLOTS:
     void setCanvas(QDeclarativeItem* canvas);
-    void setThumbnailSize(const QSize& size);
+    void setThumbnailSize(const QSizeF& size);
     void canvasSourceChanged();
 
 Q_SIGNALS:

@@ -32,7 +32,7 @@ public:
     KPrDocument* document;
 
     QHash<int, QPixmap> thumbnails;
-    QSize thumbnailSize;
+    QSizeF thumbnailSize;
 };
 
 CQPresentationModel::CQPresentationModel(QObject* parent)
@@ -65,7 +65,7 @@ QVariant CQPresentationModel::data(const QModelIndex& index, int role) const
                 d->thumbnails.remove(index.row());
             }
 
-            QPixmap pixmap = d->document->pageThumbnail(d->document->pageByIndex(index.row(), false), d->thumbnailSize);
+            QPixmap pixmap = d->document->pageThumbnail(d->document->pageByIndex(index.row(), false), d->thumbnailSize.toSize());
             d->thumbnails.insert(index.row(), pixmap);
             return pixmap;
         }
@@ -96,7 +96,7 @@ QDeclarativeItem* CQPresentationModel::canvas() const
     return d->canvas;
 }
 
-QSize CQPresentationModel::thumbnailSize() const
+QSizeF CQPresentationModel::thumbnailSize() const
 {
     return d->thumbnailSize;
 }
@@ -112,7 +112,7 @@ void CQPresentationModel::setCanvas(QDeclarativeItem* canvas)
     }
 }
 
-void CQPresentationModel::setThumbnailSize(const QSize& size)
+void CQPresentationModel::setThumbnailSize(const QSizeF& size)
 {
     if(size != d->thumbnailSize) {
         d->thumbnailSize = size;
