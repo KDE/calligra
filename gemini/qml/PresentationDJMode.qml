@@ -18,6 +18,7 @@
 
 import QtQuick 1.1
 import "components"
+import org.calligra 1.0
 import org.calligra.CalligraComponents 0.1
 
 Rectangle {
@@ -65,6 +66,17 @@ Rectangle {
                 anchors.fill: parent;
                 enabled: parent.opacity > 0;
                 onClicked: fakePieChartTapped.opacity = 0;
+            }
+        }
+        ScribbleArea {
+            id: scribbler;
+            anchors.fill: parent;
+            opacity: 0;
+            Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+            Timer {
+                id: scribbleTimer;
+                repeat: false; interval: Constants.AnimationDuration;
+                onTriggered: scribbler.clear();
             }
         }
     }
@@ -127,25 +139,39 @@ Rectangle {
         Button {
             height: parent.height;
             width: height;
-            text: "(T)";
+            image: Settings.theme.icon("SVG-Icon-DesktopMode-1");
+            checked: fakePieChart.opacity === 1 || fakePieChartTapped.opacity === 1;
+            radius: 4;
             onClicked: {
                 if(fakePieChart.opacity === 0) {
                     fakePieChart.opacity = 1;
                 }
                 else {
                     fakePieChart.opacity = 0;
+                    fakePieChartTapped.opacity = 0;
                 }
             }
         }
         Button {
             height: parent.height;
             width: height;
-            text: "(L)";
+            image: Settings.theme.icon("SVG-Label-Red-1");
         }
         Button {
             height: parent.height;
             width: height;
-            text: "(H)";
+            image: Settings.theme.icon("edit");
+            checked: scribbler.opacity === 1;
+            radius: 4;
+            onClicked: {
+                if(scribbler.opacity === 0) {
+                    scribbler.opacity = 1;
+                }
+                else {
+                    scribbler.opacity = 0;
+                    scribbleTimer.start();
+                }
+            }
         }
     }
     Row {
