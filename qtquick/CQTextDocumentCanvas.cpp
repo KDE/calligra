@@ -215,6 +215,7 @@ void CQTextDocumentCanvas::openFile(const QString& uri)
     emit linkTargetsChanged();
 
     connect(d->canvas->shapeManager(), SIGNAL(selectionChanged()), SIGNAL(textEditorChanged()));
+    connect(d->canvas->shapeManager(), SIGNAL(selectionChanged()), SIGNAL(shapeTransparencyChanged()));
 
     d->notes = new CQTextDocumentNotesModel(this);
     emit notesChanged();
@@ -248,6 +249,26 @@ qreal CQTextDocumentCanvas::pagePosition(int pageIndex)
     QTimer::singleShot(0, d->throttleTimer, SLOT(stop()));
     QTimer::singleShot(0, this, SIGNAL(currentPageNumberChanged()));
     return d->canvas->viewMode()->documentToView(page.rect().topLeft(), d->canvas->viewConverter()).y();
+}
+
+qreal CQTextDocumentCanvas::shapeTransparency() const
+{
+    KoShape* shape = d->canvas->shapeManager()->selection()->firstSelectedShape();
+    if(shape) {
+        return shape->transparency();
+    }
+    return CQCanvasBase::shapeTransparency();
+}
+
+void CQTextDocumentCanvas::setShapeTransparency(const qreal& newTransparency)
+{
+    KoShape* shape = d->canvas->shapeManager()->selection()->firstSelectedShape();
+    if(shape) {
+        if(!qFuzzyCompare(1 + shape->transparency(), 1 + newTransparency)) {
+            shape->setTransparency(newTransparency);
+            CQCanvasBase::setShapeTransparency(newTransparency);
+        }
+    }
 }
 
 QObject* CQTextDocumentCanvas::textEditor() const

@@ -28,6 +28,7 @@ class CQCanvasBase : public QDeclarativeItem
 {
     Q_OBJECT
     Q_PROPERTY(QString source READ source WRITE setSource NOTIFY sourceChanged)
+    Q_PROPERTY(qreal shapeTransparency READ shapeTransparency WRITE setShapeTransparency NOTIFY shapeTransparencyChanged)
 
 public:
     explicit CQCanvasBase(QDeclarativeItem* parent);
@@ -37,12 +38,15 @@ public:
     KoZoomController *zoomController() const;
     QString source() const;
 
+    virtual qreal shapeTransparency() const;
+    virtual void setShapeTransparency(const qreal& newTransparency);
 public Q_SLOTS:
     virtual void setSource(const QString &source);
     virtual void render(QPainter* painter, const QRectF& target) = 0;
 
 Q_SIGNALS:
     void sourceChanged();
+    void shapeTransparencyChanged();
     void canvasControllerChanged();
     void positionShouldChange(const QPoint& pos);
 

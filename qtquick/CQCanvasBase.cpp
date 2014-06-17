@@ -64,6 +64,17 @@ void CQCanvasBase::setSource(const QString& source)
     }
 }
 
+qreal CQCanvasBase::shapeTransparency() const
+{
+    return 0;
+}
+
+void CQCanvasBase::setShapeTransparency(const qreal& newTransparency)
+{
+    Q_UNUSED(newTransparency);
+    emit shapeTransparencyChanged();
+}
+
 void CQCanvasBase::setCanvasController(CQCanvasController* controller)
 {
     if(d->canvasController != controller)
