@@ -202,5 +202,119 @@ Rectangle {
         height: Constants.GridHeight;
         width: height;
         text: "(fx)";
+        onClicked: base.state = "sidebarShown";
+    }
+    states: State {
+        name: "sidebarShown"
+        AnchorChanges { target: fxSidebar; anchors.left: undefined; anchors.right: parent.right; }
+    }
+    transitions: Transition {
+        AnchorAnimation { duration: Constants.AnimationDuration; }
+    }
+    Item {
+        id: fxSidebar;
+        anchors {
+            top: parent.top;
+            left: parent.right;
+            bottom: parent.bottom;
+        }
+        Rectangle {
+            anchors.fill: parent;
+            color: "#22282f";
+            opacity: 0.96;
+        }
+        Rectangle {
+            anchors {
+                top: parent.top;
+                left: parent.left;
+                right: parent.right;
+            }
+            height: Constants.GridHeight;
+            color: "#4e5359";
+            Label {
+                anchors.fill: parent;
+                horizontalAlignment: Text.AlignHCenter;
+                verticalAlignment: Text.AlignVCenter;
+                color: "#c1cdd1";
+                font: Settings.theme.font("small");
+                text: "SELECT A NEW\nTRANSITION EFFECT";
+            }
+            Rectangle {
+                anchors {
+                    left: parent.left;
+                    right: parent.right;
+                    bottom: parent.bottom;
+                }
+                height: 1;
+                color: "#c1cccd";
+            }
+            MouseArea {
+                anchors.fill: parent;
+                onClicked: base.state = "";
+            }
+        }
+        width: Constants.GridWidth * 2;
+        Rectangle {
+            anchors {
+                top: parent.top;
+                left: parent.left;
+                bottom: parent.bottom;
+            }
+            width: 1;
+            color: "white";
+        }
+        ListView {
+            anchors {
+                fill: parent;
+                topMargin: Constants.GridHeight;
+                leftMargin: 1;
+            }
+            clip: true;
+            model: ListModel {
+                ListElement { text: "Fade"; }
+                ListElement { text: "Dissolve"; }
+                ListElement { text: "Slide in"; }
+                ListElement { text: "Bounce"; }
+                ListElement { text: "Fan"; }
+                ListElement { text: "Snake"; }
+                ListElement { text: "Spiral"; }
+                ListElement { text: "Swap effect"; }
+            }
+            delegate: Item {
+                height: Constants.GridHeight * 2;
+                width: ListView.view.width;
+                Image {
+                    anchors.centerIn: parent;
+                    height: Constants.GridHeight * 1.5;
+                    width: height;
+                    source: Settings.theme.icon("SVG-Icon-Animations-1");
+                    sourceSize.width: width > height ? height : width;
+                    sourceSize.height: width > height ? height : width;
+                }
+                Label {
+                    anchors {
+                        left: parent.left;
+                        right: parent.right;
+                        bottom: parent.bottom;
+                        margins: Constants.DefaultMargin;
+                    }
+                    height: font.pixelSize;
+                    horizontalAlignment: Text.AlignHCenter;
+                    verticalAlignment: Text.AlignVCenter;
+                    color: "#c1cdd1";
+                    font: Settings.theme.font("small");
+                    text: model.text;
+                }
+                Rectangle {
+                    anchors {
+                        left: parent.left;
+                        right: parent.right;
+                        bottom: parent.bottom;
+                    }
+                    height: 1;
+                    color: "#c1cccd";
+                }
+            }
+        }
     }
 }
