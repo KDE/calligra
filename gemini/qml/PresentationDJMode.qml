@@ -41,6 +41,32 @@ Rectangle {
             anchors.fill: parent;
             content: presentationModel.thumbnail(0);
         }
+        Image {
+            id: fakePieChart;
+            opacity: 0;
+            Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+            anchors.fill: parent;
+            fillMode: Image.PreserveAspectFit
+            source: Settings.theme.image("intel-Stage-Slide-PieChart-Default.svg");
+            MouseArea {
+                anchors.fill: parent;
+                enabled: parent.opacity > 0;
+                onClicked: fakePieChartTapped.opacity = 1;
+            }
+        }
+        Image {
+            id: fakePieChartTapped;
+            opacity: 0;
+            Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+            anchors.fill: parent;
+            fillMode: Image.PreserveAspectFit
+            source: Settings.theme.image("intel-Stage-Slide-PieChart-PieceTappedOn.svg");
+            MouseArea {
+                anchors.fill: parent;
+                enabled: parent.opacity > 0;
+                onClicked: fakePieChartTapped.opacity = 0;
+            }
+        }
     }
     Item {
         id: nextSlideContainer;
@@ -102,6 +128,14 @@ Rectangle {
             height: parent.height;
             width: height;
             text: "(T)";
+            onClicked: {
+                if(fakePieChart.opacity === 0) {
+                    fakePieChart.opacity = 1;
+                }
+                else {
+                    fakePieChart.opacity = 0;
+                }
+            }
         }
         Button {
             height: parent.height;
