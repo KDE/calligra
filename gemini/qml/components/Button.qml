@@ -43,6 +43,7 @@ Item {
     property bool checkable: false;
     property bool checked: false;
     property color checkedColor: Settings.theme.color("components/button/checked");
+    property double checkedOpacity: 1;
 
     property bool hasFocus: false;
 
@@ -74,7 +75,7 @@ Item {
 
         Rectangle {
             id: checkedVisualiser;
-            opacity: base.checked ? 1 : 0;
+            opacity: base.checked ? base.checkedOpacity : 0;
             Behavior on opacity { NumberAnimation { duration: Constants.AnimationDuration; } }
             anchors.fill: parent;
             anchors.margins: 2;
