@@ -40,8 +40,8 @@ Item {
             verticalCenter: parent.verticalCenter;
         }
         height: 4;
-        border.width: 1;
-        border.color: Settings.theme.color("components/slider/background/border");
+        //border.width: 1;
+        //border.color: Settings.theme.color("components/slider/background/border");
         color: Settings.theme.color("components/slider/background/fill");
         radius: height / 2;
     }
@@ -120,5 +120,11 @@ Item {
         border.color: Settings.theme.color("components/slider/handle/border");
         property int minimumX: 2;
         property int maximumX: base.width - handle.width - 2;
+//         Image {
+//             anchors.fill: parent;
+//             source: Settings.theme.icon("SVG-IMGTOOLS-SliderHandle-1");
+//             sourceSize.width: width > height ? height : width;
+//             sourceSize.height: width > height ? height : width;
+//         }
     }
 }
