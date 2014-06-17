@@ -89,7 +89,7 @@ public:
     Q_INVOKABLE void addSticker(QString imageUrl);
     // Adds a note to the position indicated by the center of the viewport. Color is the color
     // the text and the background sticker should have.
-    Q_INVOKABLE void addNote(QString text, QString color);
+    Q_INVOKABLE void addNote(QString text, QString color, QString imageUrl);
 signals:
     void searchTermChanged();
     void documentModelChanged();

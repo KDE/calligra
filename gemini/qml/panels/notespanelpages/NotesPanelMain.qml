@@ -147,15 +147,15 @@ Item {
             height: childrenRect.height;
             Repeater {
                 model: ListModel {
-                    ListElement { text: "Check Spelling"; color: "Red"; }
-                    ListElement { text: "Needs more support"; color: "Red"; }
-                    ListElement { text: "Go deeper, perhaps"; color: "Yellow"; }
-                    ListElement { text: "Great point!"; color: "Green"; }
-                    ListElement { text: "Good use of vocabulary!"; color: "Green"; }
-                    ListElement { text: "Nice!"; color: "Green"; }
-                    ListElement { text: "Well done!"; color: "Green"; }
-                    ListElement { text: "Splendid!"; color: "Green"; }
-                    ListElement { text: "Smashing!"; color: "Green";  }
+                    ListElement { text: "Check Spelling"; color: "Red"; image: "intel-Words-Note-Circle-Red.svg"; }
+                    ListElement { text: "Needs more support"; color: "Red"; image: "intel-Words-Note-Circle-Red.svg"; }
+                    ListElement { text: "Go deeper, perhaps"; color: "Yellow"; image: "intel-Words-Note-Circle-Yellow.svg"; }
+                    ListElement { text: "Great point!"; color: "Green"; image: "intel-Words-Note-Circle-Green.svg"; }
+                    ListElement { text: "Good use of vocabulary!"; color: "Green"; image: "intel-Words-Note-Circle-Green.svg"; }
+                    ListElement { text: "Nice!"; color: "Green"; image: "intel-Words-Note-Circle-Green.svg"; }
+                    ListElement { text: "Well done!"; color: "Green"; image: "intel-Words-Note-Circle-Green.svg"; }
+                    ListElement { text: "Splendid!"; color: "Green"; image: "intel-Words-Note-Circle-Green.svg"; }
+                    ListElement { text: "Smashing!"; color: "Green"; image: "intel-Words-Note-Circle-Green.svg"; }
                 }
                 Item {
                     height: Constants.GridHeight;
@@ -163,7 +163,7 @@ Item {
                     MouseArea {
                         anchors.fill: parent;
                         onClicked: {
-                            base.canvas.addNote(model.text, model.color);
+                            base.canvas.addNote(model.text, model.color, Settings.theme.image(model.image));
                             toolManager.requestToolChange("InteractionTool");
                             viewLoader.item.navigateMode = false;
                         }

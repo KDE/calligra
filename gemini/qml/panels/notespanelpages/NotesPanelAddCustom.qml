@@ -54,7 +54,7 @@ Item {
             image: Settings.theme.icon("SVG-Icon-OK-1");
             enabled: noteText.text !== "";
             onClicked: {
-                base.canvas.addNote(noteText.text, colorModel.selectedColor);
+                base.canvas.addNote(noteText.text, colorModel.selectedColor, Settings.theme.image("intel-Words-Note-Circle-%1.svg".arg(colorModel.selectedColor)));
                 toolManager.requestToolChange("InteractionTool");
                 viewLoader.item.navigateMode = false;
                 notesPageStack.pop();

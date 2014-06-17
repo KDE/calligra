@@ -333,24 +333,27 @@ void CQTextDocumentCanvas::addSticker(QString imageUrl)
     }
 }
 
-void CQTextDocumentCanvas::addNote(QString text, QString color)
+void CQTextDocumentCanvas::addNote(QString text, QString color, QString imageUrl)
 {
+    QSvgRenderer renderer(QUrl(imageUrl).toLocalFile());
+
    // Prepare a QImage with desired characteritisc
-    QImage image(200, 100, QImage::Format_ARGB32);
+    QImage image(400, 200, QImage::Format_ARGB32);
     image.fill(Qt::transparent);
 
     // Get QPainter that paints to the image
     QPainter painter(&image);
     painter.setRenderHint(QPainter::Antialiasing, true);
+    painter.setRenderHint(QPainter::SmoothPixmapTransform, true);
     painter.setRenderHint(QPainter::TextAntialiasing, true);
-    QPen pen;
-    pen.setColor(QColor(color));
-    pen.setWidth(3);
-    painter.setPen(pen);
-    painter.drawEllipse(image.rect().adjusted(3, 3, -4, -4));
-    QFont font(painter.font());
-    font.setBold(true);
-    font.setPixelSize(font.pixelSize() * 2);
+
+    renderer.render(&painter, image.rect());
+
+    QFont font;
+    font.setFamily("Permanent Marker");
+    font.setStyle(QFont::StyleNormal);
+    font.setPixelSize(40);
+    painter.setPen(QColor(color));
     painter.setFont(font);
     painter.drawText(image.rect(), Qt::AlignCenter, text);
     painter.end();
@@ -371,6 +374,8 @@ void CQTextDocumentCanvas::addNote(QString text, QString color)
         anchor->setVerticalRel(KoShapeAnchor::VPage);
         shape->setAnchor(anchor);
         shape->setPosition(pos);
+        shape->rotate(-15);
+        shape->scale(0.3, 0.3);
 
 //        KWShapeCreateCommand *cmd = new KWShapeCreateCommand(d->document, shape);
         KoSelection *selection = d->canvas->shapeManager()->selection();
