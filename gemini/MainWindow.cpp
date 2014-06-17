@@ -71,6 +71,7 @@
 #include "ToolManager.h"
 #include "ParagraphStylesModel.h"
 #include "KeyboardModel.h"
+#include "ScribbleArea.h"
 
 #ifdef Q_OS_WIN
 // Slate mode/docked detection stuff
@@ -251,6 +252,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     qmlRegisterType<ToolManager>("org.calligra", 1, 0, "ToolManager");
     qmlRegisterType<ParagraphStylesModel>("org.calligra", 1, 0, "ParagraphStylesModel");
     qmlRegisterType<KeyboardModel>("org.calligra", 1, 0, "KeyboardModel");
+    qmlRegisterType<ScribbleArea>("org.calligra", 1, 0, "ScribbleArea");
 
     qApp->setActiveWindow( this );
 

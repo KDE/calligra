@@ -38,6 +38,7 @@ set(calligragemini_SRCS
     ToolManager.cpp
     ParagraphStylesModel.cpp
     KeyboardModel.cpp
+    ScribbleArea.cpp
 )
 
 
