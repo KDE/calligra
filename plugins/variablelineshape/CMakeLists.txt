@@ -7,7 +7,7 @@ add_subdirectory(pics)
 SET (variablelineshape_SRCS
     VariableLineShape.cpp
     VariableLineShapeFactory.cpp
-    VariableLineShape.cpp
+    VariableLineShapePlugin.cpp
 )
 
 kde4_add_plugin(calligra_shape_variableline ${variablelineshape_SRCS})

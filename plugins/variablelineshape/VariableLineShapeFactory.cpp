@@ -44,15 +44,13 @@ VariableLineShapeFactory::VariableLineShapeFactory()
 KoShape *VariableLineShapeFactory::createDefaultShape(KoDocumentResourceManager *documentResources) const
 {
     VariableLineShape *defaultLine = new VariableLineShape();
+    
+    defaultLine->moveTo(QPointF(0, 50));
+    defaultLine->curveTo(QPointF(0, 120), QPointF(50, 120), QPointF(50, 50));
+    defaultLine->curveTo(QPointF(50, -20), QPointF(100, -20), QPointF(100, 50));
+    defaultLine->normalize();
     defaultLine->setShapeId(VariableLineShapeId);
     defaultLine->setStroke(new KoShapeStroke(1.0));
-
-    QLinearGradient *gradient = new QLinearGradient(QPointF(0,0), QPointF(1,1));
-    gradient->setCoordinateMode(QGradient::ObjectBoundingMode);
-    gradient->setColorAt(0.0, Qt::white);
-    gradient->setColorAt(1.0, Qt::black);
-    
-    defaultLine->setBackground(QSharedPointer<KoGradientBackground>(new KoGradientBackground(gradient)));
 
     return defaultLine;
 }

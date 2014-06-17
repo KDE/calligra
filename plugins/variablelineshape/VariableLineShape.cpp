@@ -26,6 +26,7 @@ VariableLineShape::VariableLineShape()
 
 VariableLineShape::~VariableLineShape()
 {
+    clear();
 }
 
 bool VariableLineShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
