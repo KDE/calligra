@@ -215,16 +215,6 @@ private:
     QVector<QString> m_columnNames;
 };
 
-//! Helper used to temporary disable keyboard and mouse events
-void installRecursiveEventFilter(QObject *filter, QObject *object)
-{
-    object->installEventFilter(filter);
-    QList<QObject*> list(object->children());
-    foreach(QObject *obj, list) {
-        installRecursiveEventFilter(filter, obj);
-    }
-}
-
 static bool shouldSaveRow(int row, bool firstRowForFieldNames)
 {
     return row > (firstRowForFieldNames ? 1 : 0);
@@ -439,7 +429,7 @@ KexiCSVImportDialog::KexiCSVImportDialog(Mode mode, QWidget * parent)
     connect(this, SIGNAL(currentPageChanged(KPageWidgetItem*,KPageWidgetItem*)),
             this, SLOT(slotCurrentPageChanged(KPageWidgetItem*,KPageWidgetItem*)));
 
-    installRecursiveEventFilter(this, this);
+    KexiUtils::installRecursiveEventFilter(this, this);
     if ( m_mode == Clipboard )
         initLater();
 }
