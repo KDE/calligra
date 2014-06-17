@@ -99,6 +99,7 @@ void ScribbleArea::drawLineTo(const QPointF& endPoint)
     QPainter painter(&image);
     painter.setPen(QPen(myPenColor, myPenWidth, Qt::SolidLine, Qt::RoundCap,
                         Qt::RoundJoin));
+    painter.setRenderHint(QPainter::Antialiasing, true);
     painter.drawLine(lastPoint, endPoint);
     painter.end();
 
