@@ -128,7 +128,7 @@ var values = {
                 border: "silver",
             },
             handle: {
-                fill: "#00adf5",
+                fill: "white",
                 border: "white",
             },
         },
