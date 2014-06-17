@@ -201,47 +201,49 @@ Page {
             opacity: (toolManager.currentTool !== null && toolManager.currentTool.toolId() === "InteractionTool") ? 1 : 0;
             Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
             Button {
-                text: "(img)"
-                height: parent.height; width: Constants.GridWidth;
-                textColor: Settings.theme.color("components/toolbar/text");
+                image: Settings.theme.icon("SVG-Icon-Image");
+                imageMargin: 4;
+                height: parent.height; width: height;
             }
             Rectangle { color: Settings.theme.color("components/toolbar/text"); height: parent.height; width: 1; }
             Button {
-                text: "(pencol)"
-                height: parent.height; width: Constants.GridWidth;
-                textColor: Settings.theme.color("components/toolbar/text");
+                image: Settings.theme.icon("SVG-Icon-Pen");
+                imageMargin: 4;
+                height: parent.height; width: height;
             }
-            Rectangle { color: Settings.theme.color("components/toolbar/text"); height: parent.height; width: 1; }
             Button {
-                text: "(bgcol)"
-                height: parent.height; width: Constants.GridWidth;
-                textColor: Settings.theme.color("components/toolbar/text");
+                image: Settings.theme.icon("SVG-Icon-Fill");
+                imageMargin: 4;
+                height: parent.height; width: height;
             }
-            Rectangle { color: Settings.theme.color("components/toolbar/text"); height: parent.height; width: 1; }
             Button {
-                text: "(line)"
-                height: parent.height; width: Constants.GridWidth;
-                textColor: Settings.theme.color("components/toolbar/text");
+                image: Settings.theme.icon("SVG-Icon-Lines");
+                imageMargin: 4;
+                height: parent.height; width: height;
             }
-            Rectangle { color: Settings.theme.color("components/toolbar/text"); height: parent.height; width: 1; }
             Button {
-                text: "(shadow)"
-                height: parent.height; width: Constants.GridWidth;
-                textColor: Settings.theme.color("components/toolbar/text");
-            }
-            Rectangle { color: Settings.theme.color("components/toolbar/text"); height: parent.height; width: 1; }
-            Button {
-                text: "(?)"
-                height: parent.height; width: Constants.GridWidth;
-                textColor: Settings.theme.color("components/toolbar/text");
+                image: Settings.theme.icon("SVG-Icon-Shadow");
+                imageMargin: 4;
+                height: parent.height; width: height;
             }
             Rectangle { color: Settings.theme.color("components/toolbar/text"); height: parent.height; width: 1; }
             Button {
                 height: parent.height; width: height;
                 image: Settings.theme.icon("SVG-Icon-Options-1");
+                imageMargin: 4;
                 checkable: true;
                 radius: 4;
-                ImageToolsPanel {}
+                Rectangle {
+                    anchors.horizontalCenter: parent.horizontalCenter;
+                    anchors.top: parent.bottom;
+                    height: Constants.DefaultMargin;
+                    width: height;
+                    color: "#22282f";
+                    rotation: 45;
+                    opacity: parent.checked ? 0.96 : 0;
+                    Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+                }
+                ImageToolsPanel { canvas: viewLoader.item && viewLoader.item.canvas ? viewLoader.item.canvas : null; }
             }
         }
         Row {
@@ -296,7 +298,7 @@ Page {
                 image: Settings.theme.icon("SVG-Icon-AddShape-1");
             }
             Button {
-                height: parent.height;
+                height: parent.height; width: height;
                 image: Settings.theme.icon("SVG-Icon-AddNote-1");
                 checkable: true;
                 radius: 4;
