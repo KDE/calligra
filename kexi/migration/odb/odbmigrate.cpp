@@ -12,15 +12,16 @@
 #include <kexiutils/identifier.h>
 
 using namespace KexiMigration;
+//K_EXPORT_KEXIMIGRATE_DRIVER(OdbMigrate, "odb")
 
 
-odbMigrate::odbMigrate(QObject *parent, const QVariantList &args)
+OdbMigrate::OdbMigrate(QObject *parent, const QVariantList &args)
         : KexiMigrate(parent, args)
 {
 
 }
 
-odbMigrate::~odbMigrate()
+OdbMigrate::~OdbMigrate()
 {
 
 
@@ -41,38 +42,24 @@ JNIEnv* create_vm(JavaVM ** jvm) {
 
     int ret = JNI_CreateJavaVM(jvm, (void**)&env, &vm_args);
     if(ret < 0)
-        printf("\nUnable to Launch JVM\n");
+        
+        kDebug() << "\nUnable to Launch JVM\n";
     return env;
 }
 
 
-bool odbMigrate::drv_connect()
+bool OdbMigrate::drv_connect()
 {
     JNIEnv *env;
     jclass clsH = env->FindClass("OdbReader");
-    if(clsH) printf("found class\n");
+    if(clsH) 
+      kDebug() << "found class\n";
     else return 0;
     jobject object = env->NewObject(clsH, NULL);
 
-   printf("object constructed\n");
+   
+    kDebug() << "object constructed\n";
     return true;
 }
-
-bool odbMigrate::drv_disconnect()
-{
-    return true;
-}
-
-bool odbMigrate::drv_tableNames(QStringList& tablenames)
-{
-    return true;
-}
-
-bool odbMigrate::drv_readTableSchema(
-        const QString& originalName, KexiDB::TableSchema& tableSchema)
-{
-    return true;
-}
-
 
 

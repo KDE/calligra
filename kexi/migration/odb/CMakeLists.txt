@@ -10,10 +10,10 @@ include_directories(  ${GLIB2_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/kexi ${KDE4_INCLU
 
 include(UseJava)
 
-if (JNI_FOUND)
+
     message (STATUS "JNI_INCLUDE_DIRS=${JNI_INCLUDE_DIRS}")
     message (STATUS "JNI_LIBRARIES=${JNI_LIBRARIES}")
-endif()
+
 
 set(keximigrate_odbmigrate_PART_SRCS odbmigrate.cpp
 )
