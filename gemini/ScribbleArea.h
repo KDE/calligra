@@ -27,12 +27,26 @@
 class ScribbleArea : public QDeclarativeItem
 {
     Q_OBJECT
+    Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged)
+    Q_PROPERTY(int penWidth READ penWidth WRITE setPenWidth NOTIFY penWidthChanged)
 
 public:
     ScribbleArea(QDeclarativeItem* parent = 0);
     virtual ~ScribbleArea();
 
     Q_INVOKABLE void clear();
+
+    QColor color() const;
+    void setColor(const QColor& newColor);
+
+    int penWidth() const;
+    void setPenWidth(const int& newWidth);
+
+Q_SIGNALS:
+    void colorChanged();
+    void penWidthChanged();
+    void paintingStopped();
+
 protected:
     virtual bool event(QEvent* event);
     virtual bool sceneEvent(QEvent* event);

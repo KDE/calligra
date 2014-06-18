@@ -45,6 +45,28 @@ void ScribbleArea::clear()
     image.fill(Qt::transparent);
 }
 
+QColor ScribbleArea::color() const
+{
+    return myPenColor;
+}
+
+void ScribbleArea::setColor(const QColor& newColor)
+{
+    myPenColor = newColor;
+    emit colorChanged();
+}
+
+int ScribbleArea::penWidth() const
+{
+    return myPenWidth;
+}
+
+void ScribbleArea::setPenWidth(const int& newWidth)
+{
+    myPenWidth = newWidth;
+    emit penWidthChanged();
+}
+
 bool ScribbleArea::event(QEvent* event)
 {
     if(event->type() == QEvent::Resize) {
@@ -82,9 +104,10 @@ void ScribbleArea::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
     if (event->button() == Qt::LeftButton && scribbling) {
         drawLineTo(event->pos());
         scribbling = false;
+        emit paintingStopped();
     }
 }
-#include <QDebug>
+
 void ScribbleArea::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
 {
     painter->drawImage(boundingRect(), image);
