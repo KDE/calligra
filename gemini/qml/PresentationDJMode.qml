@@ -120,6 +120,14 @@ Rectangle {
             anchors.fill: parent;
             content: presentationModel.thumbnail(currentSlide + 1);
         }
+        MouseArea {
+            anchors.fill: parent;
+            onClicked: {
+                if(base.currentSlide < presentationModel.canvas.slideCount()) {
+                    base.currentSlide++;
+                }
+            }
+        }
     }
     Image {
         anchors {
