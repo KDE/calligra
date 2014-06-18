@@ -23,16 +23,16 @@ import org.calligra.CalligraComponents 0.1
 
 Rectangle {
     id: base;
-    //property alias canvas: presentationModel.canvas;
     color: "#22282f";
+    property int currentSlide: 0;
     Item {
         id: currentSlideContainer;
         anchors {
             fill: parent;
-            topMargin: Constants.GridHeight + Constants.DefaultMargin;
+            topMargin: Constants.GridHeight + Constants.DefaultMargin * 2;
             leftMargin: Constants.DefaultMargin;
             rightMargin: parent.width / 3;
-            bottomMargin: Constants.GridHeight + Constants.DefaultMargin;
+            bottomMargin: Constants.GridHeight * 2 + Constants.DefaultMargin;
         }
         Rectangle {
             anchors.fill: parent;
@@ -40,7 +40,7 @@ Rectangle {
         }
         Thumbnail {
             anchors.fill: parent;
-            content: presentationModel.thumbnail(0);
+            content: presentationModel.thumbnail(currentSlide);
         }
         Image {
             id: fakePieChart;
@@ -69,9 +69,30 @@ Rectangle {
             }
         }
         ScribbleArea {
+            id: laserScribbler;
+            anchors.fill: parent;
+            opacity: 0;
+            color: "#ff0000";
+            penWidth: 10;
+            Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+            onPaintingStopped: lasetTimer2.start();
+            Timer {
+                id: laserTimer;
+                repeat: false; interval: Constants.AnimationDuration;
+                onTriggered: laserScribbler.clear();
+            }
+            Timer {
+                id: lasetTimer2;
+                repeat: false; interval: 1000;
+                onTriggered: laserScribbler.clear();
+            }
+        }
+        ScribbleArea {
             id: scribbler;
             anchors.fill: parent;
             opacity: 0;
+            color: "#dff03c";
+            penWidth: 40;
             Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
             Timer {
                 id: scribbleTimer;
@@ -84,7 +105,7 @@ Rectangle {
         id: nextSlideContainer;
         anchors {
             top: parent.top;
-            topMargin: Constants.GridHeight + Constants.DefaultMargin;
+            topMargin: Constants.GridHeight + Constants.DefaultMargin * 2;
             left: currentSlideContainer.right;
             leftMargin: Constants.DefaultMargin;
             right: parent.right;
@@ -97,19 +118,22 @@ Rectangle {
         }
         Thumbnail {
             anchors.fill: parent;
-            content: presentationModel.thumbnail(1);
+            content: presentationModel.thumbnail(currentSlide + 1);
         }
     }
-    Button {
+    Image {
         anchors {
             top: parent.top;
             right: parent.right;
             margins: Constants.DefaultMargin;
         }
-        width: Constants.GridWidth * 2
-        text: "End Presentation"
-        textColor: "white";
-        onClicked: mainPageStack.pop();
+        height: Constants.GridHeight;
+        width: height * 1.3953488;
+        source: Settings.theme.icon("SVG-Exit-1");
+        MouseArea {
+            anchors.fill: parent;
+            onClicked: mainPageStack.pop();
+        }
     }
     Label {
         anchors {
@@ -118,8 +142,11 @@ Rectangle {
             right: parent.right;
             margins: Constants.DefaultMargin;
         }
-        font: Settings.theme.font("pageHeader");
-        color: "white";
+        horizontalAlignment: Text.AlignHCenter;
+        verticalAlignment: Text.AlignVCenter;
+        height: Constants.GridHeight;
+        font: Settings.theme.font("presentationTime");
+        color: "#c1cdd1";
         Timer {
             interval: 500;
             running: true;
@@ -134,17 +161,20 @@ Rectangle {
             bottom: parent.bottom;
             margins: Constants.DefaultMargin;
         }
-        height: Constants.GridHeight;
+        height: Constants.GridHeight * 2;
         spacing: Constants.DefaultMargin;
         Button {
             height: parent.height;
             width: height;
-            image: Settings.theme.icon("SVG-Icon-DesktopMode-1");
+            image: Settings.theme.icon("SVG-Nudge-1");
             checked: fakePieChart.opacity === 1 || fakePieChartTapped.opacity === 1;
-            radius: 4;
+            radius: 8;
             onClicked: {
                 if(fakePieChart.opacity === 0) {
                     fakePieChart.opacity = 1;
+                    laserScribbler.opacity = 0;
+                    scribbler.opacity = 0;
+                    scribbleTimer.start();
                 }
                 else {
                     fakePieChart.opacity = 0;
@@ -155,17 +185,35 @@ Rectangle {
         Button {
             height: parent.height;
             width: height;
-            image: Settings.theme.icon("SVG-Label-Red-1");
+            image: Settings.theme.icon("SVG-Pointer-1");
+            checked: laserScribbler.opacity === 1;
+            radius: 8;
+            onClicked: {
+                if(laserScribbler.opacity === 0) {
+                    fakePieChart.opacity = 0;
+                    fakePieChartTapped.opacity = 0;
+                    laserScribbler.opacity = 1;
+                    scribbler.opacity = 0;
+                    scribbleTimer.start();
+                }
+                else {
+                    laserScribbler.opacity = 0;
+                }
+            }
         }
         Button {
             height: parent.height;
             width: height;
-            image: Settings.theme.icon("edit");
-            checked: scribbler.opacity === 1;
-            radius: 4;
+            image: Settings.theme.icon("SVG-Highlighter-1");
+            checked: scribbler.opacity === 0.7;
+            radius: 8;
             onClicked: {
                 if(scribbler.opacity === 0) {
-                    scribbler.opacity = 1;
+                    fakePieChart.opacity = 0;
+                    fakePieChartTapped.opacity = 0;
+                    laserScribbler.opacity = 0;
+                    scribbler.opacity = 0.7;
+                    scribbleTimer.stop();
                 }
                 else {
                     scribbler.opacity = 0;
@@ -180,17 +228,27 @@ Rectangle {
             bottom: parent.bottom;
             margins: Constants.DefaultMargin;
         }
-        height: Constants.GridHeight;
+        height: Constants.GridHeight * 2;
         spacing: Constants.DefaultMargin;
         Button {
             height: parent.height;
             width: height;
-            image: Settings.theme.icon("back");
+            image: Settings.theme.icon("SVG-PreviousSlide-1");
+            onClicked: {
+                if(base.currentSlide > 0) {
+                    base.currentSlide--;
+                }
+            }
         }
         Button {
             height: parent.height;
             width: height;
-            image: Settings.theme.icon("forward");
+            image: Settings.theme.icon("SVG-NextSlide-1");
+            onClicked: {
+                if(base.currentSlide < presentationModel.canvas.slideCount()) {
+                    base.currentSlide++;
+                }
+            }
         }
     }
     Button {
@@ -199,9 +257,9 @@ Rectangle {
             bottom: parent.bottom;
             margins: Constants.DefaultMargin;
         }
-        height: Constants.GridHeight;
+        height: Constants.GridHeight * 2;
         width: height;
-        text: "(fx)";
+        image: Settings.theme.icon("SVG-FXTransition-1");
         onClicked: base.state = "sidebarShown";
     }
     states: State {
@@ -313,6 +371,15 @@ Rectangle {
                     }
                     height: 1;
                     color: "#c1cccd";
+                }
+                MouseArea {
+                    anchors.fill: parent;
+                    onClicked: {
+                        base.state = "";
+                        if(base.currentSlide < presentationModel.canvas.slideCount()) {
+                            base.currentSlide++;
+                        }
+                    }
                 }
             }
         }
