@@ -32,6 +32,11 @@ var values = {
         style: "Light",
         size: 2,
     },
+    presentationTime: {
+        family: "Source Sans Pro",
+        style: "Light",
+        size: 3,
+    },
     title: {
         family: "Source Sans Pro",
         style: "Regular",
