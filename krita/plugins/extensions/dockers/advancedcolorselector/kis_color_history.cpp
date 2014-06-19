@@ -49,8 +49,9 @@ void KisColorHistory::setCanvas(KisCanvas2 *canvas)
 
     m_resourceProvider = canvas->imageView()->resourceProvider();
 
+
     connect(canvas->imageView()->resourceProvider(), SIGNAL(sigFGColorUsed(KoColor)),
-            this,                               SLOT(commitColor(KoColor)), Qt::UniqueConnection);
+            this,                               SLOT(addColorToHistory(KoColor)), Qt::UniqueConnection);
 }
 
 KisColorSelectorBase* KisColorHistory::createPopup() const
@@ -62,7 +63,7 @@ KisColorSelectorBase* KisColorHistory::createPopup() const
     return ret;
 }
 
-void KisColorHistory::commitColor(const KoColor& color)
+void KisColorHistory::addColorToHistory(const KoColor& color)
 {
     // don't add color in erase mode. See https://bugs.kde.org/show_bug.cgi?id=298940
     if (m_resourceProvider && m_resourceProvider->currentCompositeOp() == COMPOSITE_ERASE) return;

@@ -233,7 +233,7 @@ QDomDocument KisDoc2::saveXML()
 
     root.appendChild(m_d->kraSaver->saveXML(doc, m_d->image));
     if (!m_d->kraSaver->errorMessages().isEmpty()) {
-        setErrorMessage(m_d->kraLoader->errorMessages().join(".\n"));
+        setErrorMessage(m_d->kraSaver->errorMessages().join(".\n"));
     }
 
     return doc;
@@ -254,7 +254,7 @@ bool KisDoc2::saveOdf(SavingContext &documentContext)
     return false;
 }
 
-bool KisDoc2::loadXML(const KoXmlDocument& doc, KoStore *store)
+bool KisDoc2::loadXML(const KoXmlDocument& doc, KoStore */*store*/)
 {
     if (m_d->image) {
         m_d->shapeController->setImage(0);
@@ -326,7 +326,7 @@ bool KisDoc2::completeSaving(KoStore *store)
 
     m_d->kraSaver->saveBinaryData(store, m_d->image, url().url(), isStoredExtern());
     if (!m_d->kraSaver->errorMessages().isEmpty()) {
-        setErrorMessage(m_d->kraLoader->errorMessages().join(".\n"));
+        setErrorMessage(m_d->kraSaver->errorMessages().join(".\n"));
         return false;
     }
 

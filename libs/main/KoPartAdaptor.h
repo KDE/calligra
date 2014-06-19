@@ -69,9 +69,6 @@ public slots: // METHODS
      */
     Q_SCRIPTABLE QString view(int idx);
 
-
-
-
 protected:
     KoPart* m_part;
 };

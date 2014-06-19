@@ -31,12 +31,10 @@ class WidgetWithSubpropertiesInterface::Private
 public:
     Private()
     {
-
     }
 
     ~Private()
     {
-
     }
 
     QPointer<QWidget> subwidget;

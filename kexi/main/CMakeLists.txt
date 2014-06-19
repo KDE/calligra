@@ -31,7 +31,6 @@ startup/KexiImportExportAssistant.cpp
 startup/KexiStartupFileHandler.cpp
 startup/KexiStartupDialog.cpp
 startup/KexiStartup.cpp
-# TODO startup/KexiStartupDialogTemplatesPage.cpp
 startup/KexiTemplatesModel.cpp
 startup/KexiRecentProjectsModel.cpp
 startup/KexiAssistantMessageHandler.cpp
@@ -47,7 +46,6 @@ startup/KexiPasswordPage.cpp
 kde4_add_ui_files(keximain_LIB_SRCS
   kexifinddialog.ui
   startup/KexiProjectStorageTypeSelectionPage.ui
-  startup/KexiOpenExistingFile.ui
   startup/KexiServerDBNamePage.ui
   startup/KexiMainImportExportPage.ui
 )
@@ -66,8 +64,6 @@ target_link_libraries(
     ${KDE4_KNEWSTUFF_LIBS}
     ${KDE4_KIO_LIBS}
     ${KDE4_KFILE_LIBS}
-    ${KDE4_KDE3SUPPORT_LIBS}
-    ${QT_QT3SUPPORT_LIBRARY}
     ${QT_QTUITOOLS_LIBRARY}
 )
 

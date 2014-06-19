@@ -139,7 +139,7 @@ bool KisNodeManager::Private::activateNodeImpl(KisNodeSP node)
 }
 
 KisNodeManager::KisNodeManager(KisView2 *view)
-        : m_d(new Private())
+    : m_d(new Private())
 {
     m_d->view = view;
     m_d->layerManager = new KisLayerManager(view);
@@ -677,6 +677,9 @@ void KisNodeManager::removeNode()
     if (scanForLastLayer(m_d->view->image(), node)) {
         m_d->commandsAdapter->beginMacro(i18n("Remove Last Layer"));
         m_d->commandsAdapter->removeNode(node);
+        // An oddity, but this is required as for some reason, we can end up in a situation
+        // where our active node is still set to one of the layers removed above.
+        m_d->activeNode.clear();
         createNode("KisPaintLayer");
         m_d->commandsAdapter->endMacro();
     } else {

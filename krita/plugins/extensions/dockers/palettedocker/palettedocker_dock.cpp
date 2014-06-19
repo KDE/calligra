@@ -39,6 +39,7 @@
 #include <kis_main_window.h>
 #include <kis_canvas_resource_provider.h>
 #include <kis_view2.h>
+#include <kis_display_color_converter.h>
 
 #include "palettemodel.h"
 #include "colorsetchooser.h"
@@ -143,7 +144,7 @@ PaletteDockerDock::PaletteDockerDock( ) : QDockWidget(i18n("Palette"))
     pal.setColor(QPalette::Base, pal.dark().color());
     m_wdgPaletteDock->paletteView->setAutoFillBackground(true);
     m_wdgPaletteDock->paletteView->setPalette(pal);
- 
+
     connect(m_wdgPaletteDock->paletteView, SIGNAL(clicked(QModelIndex)), this, SLOT(entrySelected(QModelIndex)));
     m_wdgPaletteDock->paletteView->viewport()->installEventFilter(this);
 
@@ -184,6 +185,11 @@ void PaletteDockerDock::setMainWindow(KisView2* kisview)
     m_resourceProvider = kisview->resourceProvider();
     connect(m_resourceProvider, SIGNAL(sigSavingWorkspace(KisWorkspaceResource*)), SLOT(saveToWorkspace(KisWorkspaceResource*)));
     connect(m_resourceProvider, SIGNAL(sigLoadingWorkspace(KisWorkspaceResource*)), SLOT(loadFromWorkspace(KisWorkspaceResource*)));
+
+    kisview->nodeManager()->disconnect(m_model);
+
+    m_model->setDisplayRenderer(kisview->canvas()->displayColorConverter()->displayRendererInterface());
+
 }
 
 void PaletteDockerDock::setColorSet(KoColorSet* colorSet)
@@ -213,11 +219,17 @@ void PaletteDockerDock::addColorForeground()
 void PaletteDockerDock::addColor()
 {
     if (m_currentColorSet && m_resourceProvider) {
+        const KoColorDisplayRendererInterface *displayRenderer =
+            m_canvas->displayColorConverter()->displayRendererInterface();
+
+        KoColor currentFgColor = m_canvas->resourceManager()->foregroundColor();
         QColor color;
-        int result = KColorDialog::getColor(color, m_resourceProvider->fgColor().toQColor());
+
+        int result = KColorDialog::getColor(color, displayRenderer->toQColor(currentFgColor));
+
         if (result == KColorDialog::Accepted) {
             KoColorSetEntry newEntry;
-            newEntry.color = KoColor(color, KoColorSpaceRegistry::instance()->rgb8());
+            newEntry.color = displayRenderer->approximateFromRenderedQColor(color);
             m_currentColorSet->add(newEntry);
             m_currentColorSet->save();
             setColorSet(m_currentColorSet); // update model

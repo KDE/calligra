@@ -45,7 +45,6 @@ class KexiStatusBar : public KStatusBar
 public:
     explicit KexiStatusBar(QWidget *parent = 0);
     virtual ~KexiStatusBar();
-//  virtual void addWidget( QWidget *widget, int stretch = 0, bool permanent = false);
 
 //! @todo extend to more generic API
     QAction *m_showNavigatorAction;
@@ -63,7 +62,6 @@ protected slots:
 
 protected:
     int m_msgID, m_readOnlyID;
-//  QLabel *m_status, *m_readOnlyStatus;
 
 #if KexiStatusBar_KTEXTEDITOR_USED
     KTextEditor::ViewCursorInterface * m_cursorIface;

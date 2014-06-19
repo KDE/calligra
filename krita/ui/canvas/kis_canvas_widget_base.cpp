@@ -231,7 +231,7 @@ KoToolProxy *KisCanvasWidgetBase::toolProxy() const
     return m_d->toolProxy;
 }
 
-void KisCanvasWidgetBase::setDisplayFilter(KisDisplayFilter */*displayFilter*/)
+void KisCanvasWidgetBase::setDisplayFilter(KisDisplayFilterSP /*displayFilter*/)
 {
 }
 

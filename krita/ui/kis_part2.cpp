@@ -52,7 +52,8 @@ KisPart2::KisPart2(QObject *parent)
     , m_flipbook(0)
     , m_dieOnError(false)
 {
-    setComponentData(KisFactory2::componentData());
+    KisFactory2 factory;
+    setComponentData(factory.componentData());
     setTemplateType("krita_template");
 
     // Preload all the resources in the background

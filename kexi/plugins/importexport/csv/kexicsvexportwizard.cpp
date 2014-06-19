@@ -52,8 +52,6 @@ KexiCSVExportWizard::KexiCSVExportWizard(const KexiCSVExport::Options& options,
         QWidget * parent)
         : KAssistantDialog(parent)
         , m_options(options)
-// , m_mode(mode)
-// , m_itemId(itemId)
         , m_fileSavePage(0)
         , m_defaultsBtn(0)
         , m_importExportGroup(KGlobal::config()->group("ImportExport"))
@@ -114,7 +112,6 @@ KexiCSVExportWizard::KexiCSVExportWizard(const KexiCSVExport::Options& options,
             KexiFileWidget::Custom | KexiFileWidget::SavingFileBasedDB,
             this);
         m_fileSaveWidget->setObjectName("m_fileSavePage");
-        //m_fileSavePage->setMinimumHeight(kapp->desktop()->availableGeometry().height() / 2);
         m_fileSaveWidget->setAdditionalFilters(csvMimeTypes().toSet());
         m_fileSaveWidget->setDefaultExtension("csv");
         m_fileSaveWidget->setLocationText(
@@ -158,9 +155,6 @@ KexiCSVExportWizard::KexiCSVExportWizard(const KexiCSVExport::Options& options,
 
     m_infoLblTo->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     exportOptionsLyr->addWidget(m_infoLblTo, 1, 0, 1, 2);
-
-//    QWidget *stretchWidget = new QWidget();
-//    exportOptionsLyr->addWidget(stretchWidget, 2, 0, 2, 2);
     exportOptionsLyr->setRowStretch(2, 1);
     m_showOptionsButton = new KPushButton(KGuiItem(i18n("Show Options >>"), koIconName("configure")));
     m_showOptionsButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
@@ -173,11 +167,6 @@ KexiCSVExportWizard::KexiCSVExportWizard(const KexiCSVExport::Options& options,
     m_exportOptionsSection->setAlignment(Qt::Vertical);
     m_exportOptionsSection->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     exportOptionsLyr->addWidget(m_exportOptionsSection, 4, 0, 1, 2);
-#ifdef __GNUC__
-#warning TODO    exportOptionsLyr->setRowStretch();
-#else
-#pragma WARNING( TODO exportOptionsLyr->setRowStretch(); )
-#endif
 
     QGridLayout *exportOptionsSectionLyr = new QGridLayout;
     exportOptionsLyr->setObjectName("exportOptionsLyr");
@@ -289,7 +278,6 @@ void KexiCSVExportWizard::slotCurrentPageChanged(KPageWidgetItem *page, KPageWid
         if (m_options.mode == KexiCSVExport::File)
             m_infoLblTo->setFileName(m_fileSaveWidget->highlightedFile());
     }
-
 }
 
 void KexiCSVExportWizard::next()

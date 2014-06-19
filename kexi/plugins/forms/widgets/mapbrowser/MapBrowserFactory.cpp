@@ -47,7 +47,6 @@ MapBrowserFactory::MapBrowserFactory(QObject* parent, const QVariantList& args)
 
 MapBrowserFactory::~MapBrowserFactory()
 {
-
 }
 
 QWidget* MapBrowserFactory::createWidget(const QByteArray& classname,
@@ -59,7 +58,6 @@ QWidget* MapBrowserFactory::createWidget(const QByteArray& classname,
     Q_UNUSED(options);
     QWidget *w = 0;
     QString text(container->form()->library()->textForWidgetName(name, classname));
-//2.0    const bool designMode = options & KFormDesigner::WidgetFactory::DesignViewMode;
 
     if (classname == "MapBrowserWidget")
         w = new MapBrowserWidget(parent);

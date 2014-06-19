@@ -86,13 +86,13 @@ public:
     int findRowForPropertyValue(const QByteArray& propertyName, const QVariant& value);
 
 signals:
-    /*! Emmited when row is deleted.
+    /*! Emitted when row is deleted.
      KexiDataAwareObjectInterface::rowDeleted() signal is usually used but when you're using
      KexiDataAwarePropertySet, you never know if currentPropertySet() is updated.
      So use this signal instead. */
     void rowDeleted();
 
-    /*! Emmited when row is inserted.
+    /*! Emitted when row is inserted.
      Purpose of this signal is similar to rowDeleted() signal. */
     void rowInserted();
 

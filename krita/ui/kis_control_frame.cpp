@@ -60,6 +60,7 @@
 #include "kis_custom_pattern.h"
 #include "widgets/kis_pattern_chooser.h"
 #include "kis_favorite_resource_manager.h"
+#include "kis_display_color_converter.h"
 #include <kis_canvas2.h>
 
 
@@ -96,9 +97,9 @@ KisControlFrame::KisControlFrame(KisView2 * view, QWidget *parent, const char* n
     QSharedPointer<KoAbstractResourceServerAdapter> adapter (new KoResourceServerAdapter<KoAbstractGradient>(rserver));
     m_gradientWidget->setResourceAdapter(adapter);
 
-    KoColor black(Qt::black, KoColorSpaceRegistry::instance()->rgb8());
-    KoColor white(Qt::white, KoColorSpaceRegistry::instance()->rgb8());
-    KoDualColorButton * dual = new KoDualColorButton(black, white);
+    const KoColorDisplayRendererInterface *displayRenderer = view->canvasBase()->displayColorConverter()->displayRendererInterface();
+    KoDualColorButton * dual = new KoDualColorButton(view->resourceProvider()->fgColor(), view->resourceProvider()->bgColor(), displayRenderer, view, view);
+
     dual->setPopDialog(true);
     action  = new KAction(i18n("&Color"), this);
     view->actionCollection()->addAction("dual", action);

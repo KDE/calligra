@@ -31,11 +31,11 @@ class KEXIEXTWIDGETS_EXPORT KexiPrjTypeSelector
     Q_OBJECT
 
 public:
-    KexiPrjTypeSelector(QWidget* parent = 0);
+    explicit KexiPrjTypeSelector(QWidget* parent = 0);
     ~KexiPrjTypeSelector();
 
 public slots:
-    void slotSelectionChanged(int id);
+    void slotSelectionChanged(QAbstractButton *btn);
 };
 
 #endif // KEXIPRJTYPESELECTOR_H

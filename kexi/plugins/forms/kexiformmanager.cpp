@@ -27,6 +27,7 @@
 #include <KoIcon.h>
 
 #include <QToolButton>
+#include <QDomDocument>
 #include <kaction.h>
 #include <ktoggleaction.h>
 #include <kactioncollection.h>
@@ -34,8 +35,6 @@
 #include <ktextedit.h>
 #include <ktoolbar.h>
 
-//2.0 #include <formeditor/formmanager.h>
-//2.0 #include <formeditor/widgetpropertyset.h>
 #include <formeditor/form.h>
 #include <formeditor/widgetlibrary.h>
 #include <formeditor/commands.h>
@@ -53,11 +52,11 @@
 
 class KexiFormManagerPrivate {
 public:
-    KexiFormManagerPrivate() : part(0)
-        , q(this)
+    KexiFormManagerPrivate(KexiFormManager *qq) : part(0)
+        , q(qq)
     {
         features = KFormDesigner::Form::NoFeatures;
-        widgetActionGroup = new KFormDesigner::ActionGroup(&q);
+        widgetActionGroup = new KFormDesigner::ActionGroup(q);
 #ifdef KFD_SIGSLOTS
         dragConnectionAction = 0;
 #endif
@@ -78,31 +77,31 @@ public:
 #endif
     KToggleAction *snapToGridAction;
 
-    KexiFormManager q;
+    KexiFormManager *q;
 };
 
-K_GLOBAL_STATIC(KexiFormManagerPrivate, g_private)
+K_GLOBAL_STATIC(KexiFormManager, g_manager)
 
 KexiFormManager* KexiFormManager::self()
 {
-    return &g_private->q;
+    return g_manager;
 }
 
-KexiFormManager::KexiFormManager(KexiFormManagerPrivate *p)
+KexiFormManager::KexiFormManager()
         : QObject()
-        , d( p )
+        , d(new KexiFormManagerPrivate(this))
 {
-//2.0 unused    m_emitSelectionSignalsUpdatesPropertySet = true;
     KexiCustomPropertyFactory::init();
 }
 
 KexiFormManager::~KexiFormManager()
 {
+    delete d;
 }
 
 void KexiFormManager::init(KexiFormPart *part, KFormDesigner::WidgetTreeWidget *widgetTree)
 {
-/* @todo add configuration for supported factory groups */
+/*! @todo add configuration for supported factory groups */
     QStringList supportedFactoryGroups;
     supportedFactoryGroups += "kexi";
     d->lib = new KFormDesigner::WidgetLibrary(this, supportedFactoryGroups);
@@ -114,12 +113,10 @@ void KexiFormManager::init(KexiFormPart *part, KFormDesigner::WidgetTreeWidget *
         this, SLOT(slotWidgetActionToggled(QByteArray)));
 
     d->part = part;
-    KActionCollection *col = /*tmp*/ new KActionCollection(this); // 2.0 d->part->actionCollectionForMode(Kexi::DesignViewMode);
+    KActionCollection *col = /*tmp*/ new KActionCollection(this);
     if (col) {
         createActions( col );
-
-    //connect actions provided by widget factories
-//moved from KexiFormPart
+        //connect actions provided by widget factories
         connect(col->action("widget_assign_action"), SIGNAL(activated()),
                 this, SLOT(slotAssignAction()));
     }
@@ -136,27 +133,21 @@ void KexiFormManager::init(KexiFormPart *part, KFormDesigner::WidgetTreeWidget *
 #else
 #pragma WARNING( Port code related to KFormDesigner::FormManager::m_treeview here )
 #endif
-//todo        connect(m_propSet, SIGNAL(widgetNameChanged(QByteArray,QByteArray)),
-//todo                m_treeview, SLOT(renameItem(QByteArray,QByteArray)));
+//! @todo        connect(m_propSet, SIGNAL(widgetNameChanged(QByteArray,QByteArray)),
+//! @todo                m_treeview, SLOT(renameItem(QByteArray,QByteArray)));
     }
 }
 
-//moved from KFormDesigner::FormManager
 KFormDesigner::ActionGroup* KexiFormManager::widgetActionGroup() const
 {
     return d->widgetActionGroup;
 }
 
-//moved from KFormDesigner::FormManager
 void KexiFormManager::createActions(KActionCollection* collection)
 {
     d->collection = collection;
-//    KXMLGUIClient* client = (KXMLGUIClient*)d->collection->parentGUIClient();
-
     d->lib->createWidgetActions(d->widgetActionGroup);
 //! @todo insertWidget() slot?
-//2.0    d->lib->createWidgetActions(client, d->collection,
-//2.0                                this, SLOT(insertWidget(QByteArray)));
 
 #ifdef KFD_SIGSLOTS
     if (d->features & KFormDesigner::Form::EnableConnections) {
@@ -166,7 +157,6 @@ void KexiFormManager::createActions(KActionCollection* collection)
         d->dragConnectionAction = new KToggleAction(
             koIcon("signalslot"), i18n("Connect Signals/Slots"), d->collection);
         d->dragConnectionAction->setObjectName("drag_connection");
-//        d->widgetActionGroup->addAction(d->dragConnectionAction);
         connect(d->dragConnectionAction, SIGNAL(triggered()),
                 this, SLOT(startCreatingConnection()));
         d->dragConnectionAction->setChecked(false);
@@ -184,10 +174,9 @@ void KexiFormManager::createActions(KActionCollection* collection)
     d->snapToGridAction = new KToggleAction(
         i18n("Snap to Grid"), d->collection);
     d->snapToGridAction->setObjectName("snap_to_grid");
-//    d->widgetActionGroup->addAction(d->snapToGridAction);
-//    d->snapToGridAction->setChecked(true);
 
-#if 0 // 2.0: todo
+//! @todo
+#if 0
     // Create the Style selection action (with a combo box in toolbar and submenu items)
     KSelectAction *styleAction = new KSelectAction(
         i18n("Style"), d->collection);
@@ -196,7 +185,6 @@ void KexiFormManager::createActions(KActionCollection* collection)
             this, SLOT(slotStyle()));
     styleAction->setEditable(false);
 
-//js: unused? KGlobalGroup cg = KGlobal::config()->group("General");
     QString currentStyle(kapp->style()->objectName().toLower());
     const QStringList styles = QStyleFactory::keys();
     styleAction->setItems(styles);
@@ -291,7 +279,6 @@ void KexiFormManager::createActions(KActionCollection* collection)
         }
 
         QSet<QString> iconOnlyActions;
-        //appendWidgetToToolbar doesn't work: iconOnlyActions << "show_form_ui";
         const QList<QAction*> actions( d->collection->actions() );
         foreach( QAction *a, actions ) {
             if (iconOnlyActions.contains(a->objectName())) { // icon only
@@ -307,7 +294,6 @@ void KexiFormManager::createActions(KActionCollection* collection)
     }
 }
 
-// moved from KexiFormPart
 void KexiFormManager::slotWidgetCreatedByFormsLibrary(QWidget* widget)
 {
     QList<QMetaMethod> _signals(KexiUtils::methodsForMetaObject(
@@ -412,7 +398,6 @@ void KexiFormManager::setFormDataSource(const QString& partClass, const QString&
         propValues.insert("dataSource", name);
         propValues.insert("dataSourcePartClass", partClass);
         KFormDesigner::PropertyCommandGroup *group = new KFormDesigner::PropertyCommandGroup(
-//            *formViewWidget->form(),
             i18n("Set Form's Data Source to \"%1\"", name));
         formViewWidget->form()->createPropertyCommandsInDesignMode(
             formWidget, propValues, group, true /*addToActiveForm*/);
@@ -452,7 +437,6 @@ void KexiFormManager::insertAutoFields(const QString& sourcePartClass, const QSt
 
 void KexiFormManager::slotHistoryCommandExecuted(KFormDesigner::Command *command)
 {
-//    const KFormDesigner::CommandGroup *group = dynamic_cast<const KFormDesigner::CommandGroup*>(command);
     if (command->childCount() == 2) {
         KexiFormView* formViewWidget = activeFormViewWidget();
         if (!formViewWidget)
@@ -474,7 +458,6 @@ void KexiFormManager::slotHistoryCommandExecuted(KFormDesigner::Command *command
     }
 }
 
-// moved from FormManager
 void KexiFormManager::showFormUICode()
 {
 #ifdef KEXI_DEBUG_GUI
@@ -567,5 +550,16 @@ void KexiFormManager::slotPointerClicked()
     formView->form()->enterWidgetSelectingState();
 }
 
-#include "kexiformmanager.moc"
+QString KexiFormManager::translateName(const char* name) const
+{
+    QString n(QString::fromLatin1(name));
+    // translate to our name space:
+    if (n.startsWith("align_") || n.startsWith("adjust_") || n.startsWith("layout_")
+            || n == "format_raise" || n == "format_raise" || n == "taborder" || n == "break_layout")
+    {
+        n.prepend("formpart_");
+    }
+    return n;
+}
 
+#include "kexiformmanager.moc"

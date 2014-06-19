@@ -161,7 +161,9 @@ void ResizeHandle::mouseMoveEvent(QMouseEvent *ev)
     int dummyx = ev->x() - d->x;
     int dummyy = ev->y() - d->y;
 
-    if (d->set->form()->isSnapWidgetsToGridEnabled() && ev->buttons() == Qt::LeftButton && ev->modifiers() != (Qt::ControlModifier | Qt::AltModifier)) {
+    if (   d->set->form()->isSnapToGridEnabled() && ev->buttons() == Qt::LeftButton
+        && ev->modifiers() != (Qt::ControlModifier | Qt::AltModifier))
+    {
         dummyx = alignValueToGrid(dummyx, gridX);
         dummyy = alignValueToGrid(dummyy, gridY);
     }

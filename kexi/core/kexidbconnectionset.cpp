@@ -56,10 +56,9 @@ bool KexiDBConnectionSet::addConnectionData(KexiDB::ConnectionData *data, const 
         return false;
     if (data->id < 0)
         data->id = d->maxid + 1;
-    //TODO:  check for id-duplicates
+    //! @todo check for id-duplicates
 
     d->maxid = qMax(d->maxid, data->id);
-// d->list.append(data);
 
     QString filename(_filename);
     bool generateUniqueFilename = filename.isEmpty()
@@ -148,13 +147,7 @@ void KexiDBConnectionSet::clear()
 void KexiDBConnectionSet::load()
 {
     clear();
-// QStringList dirs( KGlobal::dirs()->findDirs("data", "kexi/connections") );
-// kDebug() << dirs;
     QStringList files(KGlobal::dirs()->findAllResources("data", "kexi/connections/*.kexic"));
-// //also try for capital file extension
-// files += KGlobal::dirs()->findAllResources("data", "kexi/connections/*.KEXIC");
-// kDebug() << files;
-
     foreach(const QString& file, files) {
         KexiDB::ConnectionData *data = new KexiDB::ConnectionData();
         KexiDBConnShortcutFile shortcutFile(file);

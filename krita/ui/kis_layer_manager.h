@@ -57,9 +57,9 @@ signals:
     void sigLayerActivated(KisLayerSP layer);
 
 private:
-    
+
     friend class KisNodeManager;
-    
+
     /**
      * Activate the specified layer. The layer may be 0.
      */
@@ -67,19 +67,19 @@ private:
 
     KisLayerSP activeLayer();
     KisPaintDeviceSP activeDevice();
-    
-    
+
+
     void setup(KActionCollection * collection, KisActionManager *actionManager);
 
     void updateGUI();
-    
+
     void rotateLayer(double radians);
     void shearLayer(double angleX, double angleY);
 
 private slots:
 
     void mergeLayer();
-    
+
     void imageResizeToActiveLayer();
 
     void layerProperties();
@@ -91,7 +91,7 @@ private slots:
     void layerBack();
 
     void flattenImage();
-    
+
     void flattenLayer();
     void rasterizeLayer();
 

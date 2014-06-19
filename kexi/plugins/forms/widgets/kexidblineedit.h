@@ -55,9 +55,6 @@ public:
     explicit KexiDBLineEdit(QWidget *parent);
     virtual ~KexiDBLineEdit();
 
-//    //! Sets design mode on or off. Reimplemented to alter the cursor.
-//    virtual void setDesignMode(bool design);
-
     inline QString dataSource() const {
         return KexiFormDataItemInterface::dataSource();
     }

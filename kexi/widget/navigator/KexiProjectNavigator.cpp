@@ -88,7 +88,6 @@ public:
     KexiGroupMenu *partMenu;
     KAction *deleteAction, *renameAction,
         *newObjectAction,
-    // *newObjectToolbarAction,
         *openAction, *designAction, *editTextAction,
         *executeAction,
         *dataExportToClipboardAction, *dataExportToFileAction;
@@ -102,7 +101,7 @@ public:
 
     KexiPart::Info *prevSelectedPartInfo;
     KToolBar *toolbar;
-    KexiSmallToolButton /* *newObjectToolButton,*/ *deleteObjectToolButton;
+    KexiSmallToolButton *deleteObjectToolButton;
 
     bool singleClick;
     bool readOnly;
@@ -142,7 +141,6 @@ KexiProjectNavigator::KexiProjectNavigator(QWidget* parent, Features features)
     d->list->header()->hide();
     d->list->setAllColumnsShowFocus(true);
     d->list->setAlternatingRowColors(true);
-//    d->list->renameLineEdit()->setValidator(new KexiUtils::IdentifierValidator(this));
     
     connect(d->list, SIGNAL(pressed(QModelIndex)), this,SLOT(slotSelectionChanged(QModelIndex)));
 
@@ -151,7 +149,6 @@ KexiProjectNavigator::KexiProjectNavigator(QWidget* parent, Features features)
         connect(d->list, SIGNAL(activate(QModelIndex)), this, SLOT(slotExecuteItem(QModelIndex)));
     } else {
         connect(d->list, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(slotExecuteItem(QModelIndex)));
-//        d->list->enableExecuteArea = false;
     }
 
     // actions
@@ -159,7 +156,6 @@ KexiProjectNavigator::KexiProjectNavigator(QWidget* parent, Features features)
                              i18n("Open object"), i18n("Opens object selected in the list."),
                              SLOT(slotOpenObject()));
 
-// d->openAction->plug(d->toolbar);
     KexiSmallToolButton *btn;
     if (d->features & Toolbar) {
         btn = new KexiSmallToolButton(d->openAction, this);
@@ -185,9 +181,9 @@ KexiProjectNavigator::KexiProjectNavigator(QWidget* parent, Features features)
                                    SLOT(slotRename()));
 //! @todo enable, doesn't work now: d->renameAction->setShortcut(KShortcut(Qt::Key_F2));
 #ifdef KEXI_SHOW_UNIMPLEMENTED
-        //todo plugSharedAction("edit_cut",SLOT(slotCut()));
-        //todo plugSharedAction("edit_copy",SLOT(slotCopy()));
-        //todo plugSharedAction("edit_paste",SLOT(slotPaste()));
+        //! @todo plugSharedAction("edit_cut",SLOT(slotCut()));
+        //! @todo plugSharedAction("edit_copy",SLOT(slotCopy()));
+        //! @todo plugSharedAction("edit_paste",SLOT(slotPaste()));
 #endif
 
         d->designAction = addAction("design_object", koIcon("document-properties"), i18n("&Design"),
@@ -196,7 +192,6 @@ KexiProjectNavigator::KexiProjectNavigator(QWidget* parent, Features features)
                                    SLOT(slotDesignObject()));
         if (d->features & Toolbar) {
             btn = new KexiSmallToolButton(d->designAction, this);
-//   d->designAction->setEnabled(false);
             buttons_flyr->addWidget(btn);
         }
 
@@ -332,7 +327,7 @@ void KexiProjectNavigator::slotExecuteItem(const QModelIndex& vitem)
         kWarning() << "No internal pointer";
         return;
     }
-//TODO is this needed?
+//! @todo is this needed?
 //    if (!it->partItem() && !d->singleClick /*annoying when in single click mode*/) {
 //        vitem.
 //        d->list->setOpen(vitem, !vitem->isOpen());
@@ -356,18 +351,9 @@ void KexiProjectNavigator::slotSelectionChanged(const QModelIndex& i)
         }
         return;
     }
-    /* no need to load part so early:
-    KexiPart::Part* part = Kexi::partManager().part(it->partInfo());
-    if (!part) {
-        it = static_cast<KexiProjectModelItem*>(it->parent());
-        if (it) {
-            part = Kexi::partManager().part(it->partInfo());
-        }
-    }*/
 
     const bool gotitem = it && it->partItem();
-    //bool gotgroup = it && !it->partItem();
-//TODO: also check if the item is not read only
+//! @todo also check if the item is not read only
     if (d->deleteAction) {
         d->deleteAction->setEnabled(gotitem && !d->readOnly);
         if (d->features & Toolbar) {
@@ -375,65 +361,30 @@ void KexiProjectNavigator::slotSelectionChanged(const QModelIndex& i)
         }
     }
 #ifdef KEXI_SHOW_UNIMPLEMENTED
-//todo setAvailable("edit_cut",gotitem);
-//todo setAvailable("edit_copy",gotitem);
-//todo setAvailable("edit_edititem",gotitem);
+//! @todo setAvailable("edit_cut",gotitem);
+//! @todo setAvailable("edit_copy",gotitem);
+//! @todo setAvailable("edit_edititem",gotitem);
 #endif
 
     if ( KexiMainWindowIface::global() && !KexiMainWindowIface::global()->userMode() ) {
         d->openAction->setEnabled(gotitem && (it->partInfo()->supportedViewModes() & Kexi::DataViewMode));
         if (d->designAction) {
-    //  d->designAction->setVisible(gotitem && part && (part->supportedViewModes() & Kexi::DesignViewMode));
             d->designAction->setEnabled(gotitem && (it->partInfo()->supportedViewModes() & Kexi::DesignViewMode));
         }
         if (d->editTextAction)
             d->editTextAction->setEnabled(gotitem && (it->partInfo()->supportedViewModes() & Kexi::TextViewMode));
 
-    // if (d->features & ContextMenus) {
-    //  d->openAction->setVisible(d->openAction->isEnabled());
-    //  if (d->designAction)
-        //  d->designAction->setVisible(d->designAction->isEnabled());
-    //  if (d->editTextAction)
-    //   d->editTextAction->setVisible(part && d->editTextAction->isEnabled());
-    //  if (d->executeAction)
-    //   d->executeAction->setVisible(gotitem && it->partInfo()->isExecuteSupported());
-    //  if (d->exportActionMenu) {
-        //d->exportActionMenu->setVisible(gotitem && it->partInfo()->isDataExportSupported());
-    //  }
-    //  if (d->printAction)
-    //   d->printAction->setVisible(gotitem && it->partInfo()->isPrintingSupported());
-    //  if (d->pageSetupAction) {
-    //   d->pageSetupAction->setVisible(gotitem && it->partInfo()->isPrintingSupported());
-    //  }
-    // }
-
         if (d->prevSelectedPartInfo != it->partInfo()) {
             d->prevSelectedPartInfo = it->partInfo();
-            //if (part) {
             if (d->newObjectAction) {
                 d->newObjectAction->setText(
-                i18n("&Create Object: %1...", it->partInfo()->instanceCaption() ));
+                    i18n("&Create Object: %1...", it->partInfo()->instanceCaption() ));
                 d->newObjectAction->setIcon(KIcon(it->partInfo()->createItemIconName()));
-                if (d->features & Toolbar) {
-    /*              d->newObjectToolButton->setIcon(KIcon(part->info()->createItemIconName()));
-                d->newObjectToolButton->setToolTip(
-                    i18n("Create object: %1", part->info()->instanceCaption().toLower() ));
-                d->newObjectToolButton->setWhatsThis(
-                    i18n("Creates a new object: %1", part->info()->instanceCaption().toLower() ));*/
-                }
             }
         #if 0 
              } else {
             if (d->newObjectAction) {
                 d->newObjectAction->setText(i18n("&Create Object..."));
-        //   d->newObjectToolbarAction->setIcon( koIcon("document-new") );
-        //   d->newObjectToolbarAction->setText(d->newObjectAction->text());
-                if (d->features & Toolbar) {
-    /*              d->newObjectToolButton->setIcon( koIcon("document-new") );
-                d->newObjectToolButton->setToolTip(i18n("Create object"));
-                d->newObjectToolButton->setWhatsThis(i18n("Creates a new object"));*/
-                }
-            }
             }
         #endif
         }
@@ -493,22 +444,19 @@ void KexiProjectNavigator::slotCut()
 {
     if (!(d->features & Writable))
         return;
-// KEXI_UNFINISHED_SHARED_ACTION("edit_cut");
-    //TODO
+    //! @todo
 }
 
 void KexiProjectNavigator::slotCopy()
 {
-// KEXI_UNFINISHED_SHARED_ACTION("edit_copy");
-    //TODO
+    //! @todo
 }
 
 void KexiProjectNavigator::slotPaste()
 {
     if (!(d->features & Writable))
         return;
-// KEXI_UNFINISHED_SHARED_ACTION("edit_paste");
-    //TODO
+    //! @todo
 }
 
 void KexiProjectNavigator::slotRename()
@@ -672,8 +620,6 @@ void KexiProjectNavigator::setReadOnly(bool set)
       if (d->newObjectAction) {
         d->newObjectAction->setEnabled(!d->readOnly);
         if (d->features & Toolbar) {
-//removed          d->newObjectMenu->setEnabled(!d->readOnly);
-//removed          d->newObjectToolButton->setEnabled(!d->readOnly);
         }
       }
 }
@@ -727,9 +673,7 @@ void KexiItemMenu::update(KexiPart::Info* partInfo, KexiPart::Item* partItem)
 {
     clear();
     QString title_text(partItem->name());
-    //KexiPart::Part *part = partInfo ? Kexi::partManager().part(partInfo) : 0;
     if (partInfo && !partInfo->instanceCaption().isEmpty()) {
-        //+ type name
         title_text += (" : " + partInfo->instanceCaption());
     }
     addTitle(KIcon(partInfo->itemIconName()), title_text);
@@ -750,13 +694,11 @@ void KexiItemMenu::update(KexiPart::Info* partInfo, KexiPart::Item* partItem)
         addAction("editText_object");
     }
     addSeparator();
-//    if (addAction("new_object"))
-//        addSeparator();
 
 #ifdef KEXI_SHOW_UNIMPLEMENTED
-    //todo plugSharedAction("edit_cut", m_itemMenu);
-    //todo plugSharedAction("edit_copy", m_itemMenu);
-    //todo addSeparator();
+    //! @todo plugSharedAction("edit_cut", m_itemMenu);
+    //! @todo plugSharedAction("edit_copy", m_itemMenu);
+    //! @todo addSeparator();
 #endif
     bool addSep = false;
     if (partItem && partInfo->isExecuteSupported()) {
@@ -792,15 +734,9 @@ KexiGroupMenu::~KexiGroupMenu()
 {
 }
 
-//#if 0 //unused
 void KexiGroupMenu::update(KexiPart::Info* partInfo)
 {
     Q_UNUSED(partInfo);
     clear();
-//not needed    addTitle(KIcon(partInfo->itemIconName()), partInfo->groupName());
     addAction("new_object");
-#ifdef KEXI_SHOW_UNIMPLEMENTED
-// addSeparator();
-// qobject_cast<KexiBrowser*>(parent())->plugSharedAction("edit_paste", this);
-#endif
 }

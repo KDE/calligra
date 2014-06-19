@@ -28,6 +28,7 @@
 #include <KoToolManager.h>
 #include <krita_export.h>
 #include <kis_types.h>
+#include "kis_floating_message.h"
 
 class KisPaintingAssistantsManager;
 class KisAction;
@@ -189,8 +190,9 @@ public:
     void enableControls();
     void disableControls();
 
+
     /// shows a floating message in the top right corner of the canvas
-    void showFloatingMessage(const QString message, const QIcon& icon);
+    void showFloatingMessage(const QString message, const QIcon& icon, int timeout = 4500, KisFloatingMessage::Priority priority = KisFloatingMessage::Medium);
 
     /// @return the KoMaindow this view is in, or 0
     KoMainWindow *mainWindow() const;
@@ -209,11 +211,12 @@ public:
 public slots:
 
     void slotLoadingFinished();
-    void showHideScrollbars();
+    void slotSavingFinished();
 
 signals:
 
     void sigLoadingFinished();
+    void sigSavingFinished();
     void floatingMessageRequested(QString message, QString iconName);
 
 private slots:
@@ -222,13 +225,13 @@ private slots:
     void slotImageSizeChanged(const QPointF &oldStillPoint, const QPointF &newStillPoint);
     void slotImageResolutionChanged();
     void slotNodeChanged();
-    void slotTotalRefresh();
     void slotCreateTemplate();
     void slotDocumentSaved();
     void slotSaveIncremental();
     void slotSaveIncrementalBackup();
     void showStatusBar(bool toggled);
     void showJustTheCanvas(bool toggled);
+    void showHideScrollbars();
     void toggleTabletLogger();
     void openResourcesDirectory();
     void updateIcons();

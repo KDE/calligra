@@ -34,8 +34,6 @@ class KEXIEXTWIDGETS_EXPORT KexiProjectSelectorWidget : public QWidget, private 
     Q_OBJECT
 
 public:
-// enum ConnType { FileBased=1, ServerBased=2 };
-
     /*! Constructs a project selector widget.
     If \a showProjectNameColumn is true (the default)
     project names' column is visible. If \a showConnectionColumns is true (the default)

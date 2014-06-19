@@ -325,13 +325,10 @@ KexiCSVImportDialog::KexiCSVImportDialog(Mode mode, QWidget * parent)
         m_importCancelled(false),
         d(new Private)
 {
-   // setWindowFlags(windowFlags() | Qt::WStyle_Maximize | Qt::WStyle_SysMenu);
     setWindowTitle( mode == File
         ? i18n("Import CSV Data From File"): i18n("Paste CSV Data From Clipboard") );
     setWindowIcon(_IMPORT_ICON);
 //! @todo use "Paste CSV Data From Clipboard" caption for mode==Clipboard
-    //setButtons((mode == File ? User1 : (ButtonCode)0) | Ok | Cancel);
-    //setDefaultButton(Ok);
     setObjectName("KexiCSVImportDialog");
     setSizeGripEnabled(true);
     adjustSize();
@@ -358,9 +355,6 @@ KexiCSVImportDialog::KexiCSVImportDialog(Mode mode, QWidget * parent)
         "MinimumYearFor100YearSlidingWindow", MINIMUM_YEAR_FOR_100_YEAR_SLIDING_WINDOW);
 
     m_pkIcon = koSmallIcon("key");
-
-// m_encoding = QString::fromLatin1(KGlobal::locale()->encoding());
-// m_trimmedInTextValuesChecked = true;
 
     if (m_mode == File) {
         showButton(KDialog::Help, false);
@@ -420,21 +414,9 @@ KexiCSVImportDialog::KexiCSVImportDialog(Mode mode, QWidget * parent)
 
 
     m_loadingProgressDlg = 0;
-   /* if (m_mode == File) {
-        m_loadingProgressDlg = new KProgressDialog(
-            this, i18n("Loading CSV Data"),
-            i18n("Loading CSV Data from \"%1\"...", QDir::toNativeSeparators(m_fname)));
-        m_loadingProgressDlg->setObjectName("m_loadingProgressDlg");
-        m_loadingProgressDlg->setModal(true);
-        m_loadingProgressDlg->progressBar()->setMaximum(m_maximumRowsForPreview);
-        m_loadingProgressDlg->show();
-    }
-*/
     if (m_mode == Clipboard) {
         m_infoLbl->setIcon(koIconName("edit-paste"));
     }
-    //updateRowCountInfo();
-
     m_tableView->setSelectionMode(QAbstractItemView::NoSelection);
 
     connect(m_formatCombo, SIGNAL(activated(int)),
@@ -534,7 +516,6 @@ void KexiCSVImportDialog::next()
 
 void KexiCSVImportDialog::slotShowSchema(KexiPart::Item *item)
 {
-    kDebug()<<"after emit";
     if (!item) {
         return;
     }
@@ -663,8 +644,6 @@ void KexiCSVImportDialog::createFileOpenPage()
 void KexiCSVImportDialog::createOptionsPage()
 {
     QWidget *m_optionsWidget = new QWidget(this);
-    //setMainWidget(plainPage);
-
     QVBoxLayout *lyr = new QVBoxLayout(m_optionsWidget);
 
     m_infoLbl = new KexiCSVInfoLabel(
@@ -758,7 +737,7 @@ void KexiCSVImportDialog::createOptionsPage()
     spolicy.setVerticalStretch(1);
     m_tableView->setSizePolicy(spolicy);
 
-    m_optionsPage=new KPageWidgetItem(m_optionsWidget, i18n("Import Options"));
+    m_optionsPage = new KPageWidgetItem(m_optionsWidget, i18n("Import Options"));
     addPage(m_optionsPage);
 }
 
@@ -887,21 +866,16 @@ void KexiCSVImportDialog::initLater()
     if (!openData())
         return;
 
-// delimiterChanged(detectedDelimiter); // this will cause fillTable()
     m_columnsAdjusted = false;
     fillTable();
     delete m_loadingProgressDlg;
     m_loadingProgressDlg = 0;
     if (m_dialogCancelled) {
-//  m_loadingProgressDlg->hide();
-        // m_loadingProgressDlg->close();
         QTimer::singleShot(0, this, SLOT(reject()));
         return;
     }
 
     currentCellChanged(m_table->index(0,0), QModelIndex());
-
-// updateGeometry();
     adjustSize();
     KDialog::centerOnScreen(this);
 
@@ -977,11 +951,6 @@ void KexiCSVImportDialog::fillTable()
     m_table->setColumnCount(maxColumn);
 
     for (column = 0; column < m_table->columnCount(); ++column) {
-//  QString header = m_table->horizontalHeader()->label(column);
-//  if (header != i18n("Text") && header != i18n("Number") &&
-//   header != i18n("Date") && header != i18n("Currency"))
-//  const int detectedType = m_detectedTypes[column+1];
-//  m_table->horizontalHeader()->setLabel(column, m_typeNames[ detectedType ]); //i18n("Text"));
         updateColumnText(column);
         if (!m_columnsAdjusted)
             m_tableView->resizeColumnToContents(column);
@@ -1173,9 +1142,6 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
     int offset = 0;
     bool wasChar13 = false; // true if previous x was '\r'
     for (;; ++offset) {
-//disabled: this breaks wide spreadsheets
-// if (column >= m_maximumRowsForPreview)
-//  return true;
         if (m_importingProgressBar && (offset % 0x100) == 0
             && (m_elapsedMs + PROGRESS_STEP_MS) < m_elapsedTimer.elapsed())
         {
@@ -1392,9 +1358,6 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
 void KexiCSVImportDialog::updateColumnText(int col)
 {
     KexiDB::Field::Type detectedType = d->detectedType(col);
-//2008-05-22 if (detectedType==_FP_NUMBER_TYPE)
-//2008-05-22  detectedType=_NUMBER_TYPE; //we're simplifying that for now
-//2008-05-22 else
     if (detectedType == KexiDB::Field::InvalidType) {
         d->setDetectedType(col, KexiDB::Field::Text); //entirely empty column
         detectedType = KexiDB::Field::Text;
@@ -1696,10 +1659,7 @@ void KexiCSVImportDialog::setText(int row, int col, const QString& text, bool in
     if (row < 2) // skipped by the user
         return;
     if (m_table->rowCount() < row) {
-//  if (m_maximumRowsForPreview >= row+100)
         m_table->setRowCount(row + 100); /* We add more rows at a time to limit recalculations */
-        //else
-//   m_table->setNumRows(m_maximumRowsForPreview);
         m_adjustRows = true;
     }
 
@@ -1724,7 +1684,7 @@ bool KexiCSVImportDialog::saveRow(bool inGUI)
         msgList << tmp.toString();
     }
     bool res = m_importingStatement->execute();
-//todo: move
+//! @todo move
     int msgRes;
     if (!res) {
         msgRes = KMessageBox::warningContinueCancelList(this, i18nc("@info", "An error occurred during insert record."),
@@ -1739,7 +1699,6 @@ bool KexiCSVImportDialog::saveRow(bool inGUI)
     m_tmpValues.clear();
     m_importingStatement->clearArguments();
     return res;
-// return m_conn->insertRecord(*m_destinationTableSchema, m_dbRowBuffer);
 }
 
 void KexiCSVImportDialog::adjustRows(int iRows)
@@ -1794,7 +1753,6 @@ void KexiCSVImportDialog::fillTableLater()
 
 void KexiCSVImportDialog::startlineSelected(int startline)
 {
-// const int startline = line.toInt() - 1;
     if (m_startline == (startline - 1))
         return;
     m_startline = startline - 1;
@@ -1809,9 +1767,6 @@ void KexiCSVImportDialog::currentCellChanged(const QModelIndex &cur, const QMode
     if (prev.column() == cur.column() || !cur.isValid())
         return;
     const KexiDB::Field::Type type = d->detectedType(cur.column());
-//2008-05-22 if (type==_FP_NUMBER_TYPE)
-//2008-05-22  type=_NUMBER_TYPE; //we're simplifying that for now
-
     m_formatCombo->setCurrentIndex(kexiCSVImportStatic->indicesForTypes.value(type, -1));
     m_formatLabel->setText(i18n("Format for column %1:", cur.column() + 1));
     m_primaryKeyField->setEnabled(KexiDB::Field::Integer == type);
@@ -2069,7 +2024,7 @@ void KexiCSVImportDialog::import()
     m_importProgressLabel->setText(i18n("Data has been successfully imported to table \"%1\".",
                             m_destinationTableSchema->name()));
     m_importInProgress = false;
-    kDebug()<<"IMPORT DONE";
+    //kDebug()<<"IMPORT DONE";
     showButton(KDialog::User1, true);
     showButton(KDialog::Apply, false);
     setButtonGuiItem(KDialog::Cancel, KStandardGuiItem::close());
@@ -2080,7 +2035,7 @@ void KexiCSVImportDialog::import()
 
 void KexiCSVImportDialog::reject()
 {
-    kDebug()<<"IMP_P"<<m_importInProgress;
+    //kDebug()<<"IMP_P"<<m_importInProgress;
     if (!m_importInProgress) {
         KAssistantDialog::reject();
         return;

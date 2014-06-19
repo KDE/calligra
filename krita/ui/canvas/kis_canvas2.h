@@ -45,6 +45,7 @@ class KisFavoriteResourceManager;
 class KisDisplayFilter;
 class KisInputManager;
 class KisView2;
+class KisDisplayColorConverter;
 
 enum KisCanvasType {
     QPAINTER,
@@ -131,7 +132,7 @@ public: // KoCanvasBase implementation
 
     virtual KoToolProxy* toolProxy() const;
 
-    KoColorProfile* monitorProfile();
+    const KoColorProfile* monitorProfile();
 
     /**
      * Prescale the canvas represention of the image (if necessary, it
@@ -160,6 +161,9 @@ public: // KisCanvas2 methods
     void addDecoration(KisCanvasDecoration* deco);
     KisCanvasDecoration* decoration(const QString& id);
 
+    void setDisplayFilter(KisDisplayFilterSP displayFilter);
+    KisDisplayColorConverter* displayColorConverter() const;
+
 signals:
     void imageChanged(KisImageWSP image);
 
@@ -175,8 +179,6 @@ public slots:
 
     /// Update the entire canvas area
     void updateCanvas();
-
-    void setDisplayFilter(KisDisplayFilter *displayFilter);
 
     void startResizingImage();
     void finishResizingImage(qint32 w, qint32 h);
@@ -194,10 +196,6 @@ private slots:
     void updateCanvasProjection(KisUpdateInfoSP info);
 
     void startUpdateInPatches(QRect imageRect);
-
-    void setMonitorProfile(KoColorProfile* monitorProfile,
-                           KoColorConversionTransformation::Intent renderingIntent,
-                           KoColorConversionTransformation::ConversionFlags conversionFlags);
 
     /**
      * Called whenever the view widget needs to show a different part of

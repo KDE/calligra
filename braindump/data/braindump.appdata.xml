@@ -1,0 +1,24 @@
+<?xml version="1.0" ?>
+<component type="desktop">
+  <id>braindump.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0+</project_license>
+  <name>Braindump</name>
+  <description>
+    <p>
+      Braindump is a tool to dump and organize the content of your brain (ideas, drawings, images, texts…) to your computer.
+      It works by allowing to create and edit whiteboards, which are infinite canvas on which you can add texts, images, charts, drawings, etc.
+    </p>
+  </description>
+  <url type="homepage">http://www.calligra.org/braindump/</url>
+  <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?format=guided&amp;product=braindump</url>
+  <screenshots>
+    <screenshot type="default">
+      <image>http://www.calligra.org/wp-content/uploads/2011/03/projection-900x548.png</image>
+    </screenshot>
+  </screenshots>
+  <project_group>KDE</project_group>
+  <provides>
+    <binary>braindump</binary>
+  </provides>
+</component>

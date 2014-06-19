@@ -27,7 +27,6 @@
 #include <kexi.h>
 #include <kexipart.h>
 #include <kexiproject.h>
-//#include <kexidataawareview.h>
 #include <KexiMainWindowIface.h>
 #include <KexiWindow.h>
 #include <KexiView.h>

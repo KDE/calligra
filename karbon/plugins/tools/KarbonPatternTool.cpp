@@ -301,7 +301,7 @@ void KarbonPatternTool::patternSelected(KoResource * resource)
     if (imageCollection) {
         QList<KoShape*> selectedShapes = canvas()->shapeManager()->selection()->selectedShapes();
         QSharedPointer<KoPatternBackground> newFill(new KoPatternBackground(imageCollection));
-        newFill->setPattern(currentPattern->image());
+        newFill->setPattern(currentPattern->pattern());
         canvas()->addCommand(new KoShapeBackgroundCommand(selectedShapes, newFill));
         initialize();
     }

@@ -75,9 +75,6 @@ public:
     // KUrl currentURL();
     virtual QString highlightedFile() const;
 
-    //#ifndef Q_WS_WIN
-    // KUrlComboBox *locationWidget() const;
-    //#endif
     //! just sets locationWidget()->setCurrentText(fn)
     //! (and something similar on win32)
     void setLocationText(const QString& fn);
@@ -92,20 +89,17 @@ public:
     (i.e. exists or doesn't exist);
     shows appropriate message box if needed. */
     bool checkSelectedFile();
-    // bool checkURL();
 
     /*! If true, user will be asked to accept overwriting existing file.
     This is true by default. */
     void setConfirmOverwrites(bool set);
 
-    //virtual bool eventFilter ( QObject * watched, QEvent * e );
-
 public slots:
     virtual void showEvent(QShowEvent * event);
     virtual void focusInEvent(QFocusEvent *);
 
-    // Typing a file that doesn't exist closes the file dialog, we have to
-    // handle this case better here.
+    //! Typing a file that doesn't exist closes the file dialog, we have to
+    //! handle this case better here.
     virtual void accept();
 
 signals:

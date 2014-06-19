@@ -30,12 +30,10 @@ public:
     Private(const QString &sender_, const QString &signal_, const QString &receiver_, const QString &slot_);
     Private()
     {
-
     }
 
     ~Private()
     {
-
     }
 
     QString sender;
@@ -54,12 +52,10 @@ Connection::Private::Private(const QString &sender_, const QString &signal_, con
 Connection::Connection(const QString &sender, const QString &signal,
                        const QString &receiver, const QString &slot) : d(new Private(sender, signal, receiver, slot))
 {
-
 }
 
 Connection::Connection() : d(new Private())
 {
-
 }
 
 Connection::~Connection()
@@ -110,7 +106,10 @@ void Connection::setSlot(const QString &v)
 
 ConnectionBuffer::ConnectionBuffer()
 {
+}
 
+ConnectionBuffer::~ConnectionBuffer()
+{
 }
 
 void
@@ -128,7 +127,6 @@ ConnectionBuffer*
 ConnectionBuffer::allConnectionsForWidget(const QString &widget)
 {
     ConnectionBuffer *list = new ConnectionBuffer();
-//Qt4    list->setAutoDelete(false); // or it will delete all our connections
     foreach (Connection *c, *this) {
         if ((c->sender() == widget) || (c->receiver() == widget))
             list->append(c);
@@ -178,16 +176,14 @@ ConnectionBuffer::save(QDomNode &parentNode)
     }
 }
 
-void
-ConnectionBuffer::saveAllConnectionsForWidget(const QString &widget, QDomNode parentNode)
+void ConnectionBuffer::saveAllConnectionsForWidget(const QString &widget, QDomNode &parentNode)
 {
     ConnectionBuffer *buff = allConnectionsForWidget(widget);
     buff->save(parentNode);
     delete buff;
 }
 
-void
-ConnectionBuffer::load(QDomNode node)
+void ConnectionBuffer::load(const QDomNode &node)
 {
     for (QDomNode n = node.firstChild(); !n.isNull(); n = n.nextSibling()) {
         Connection *conn = new Connection();
@@ -213,5 +209,3 @@ ConnectionBuffer::removeAllConnectionsForWidget(const QString &widget)
     }
     qDeleteAll(toRemove);
 }
-
-//#include "events.moc"

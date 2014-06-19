@@ -147,7 +147,8 @@ KexiTableEdit* KexiCellEditorFactory::createEditor(KexiDB::TableViewColumn &colu
         item = KexiCellEditorFactory::item(realField->type(), realField->subType());
     }
 
-#if 0 //js: TODO LATER
+//! @todo later
+#if 0
     //--check if we need to create combo box because of relationship:
     //WARNING: it's assumed that indices are one-field long
     KexiDB::TableSchema *table = f.table();
@@ -166,7 +167,6 @@ KexiTableEdit* KexiCellEditorFactory::createEditor(KexiDB::TableViewColumn &colu
         }
     }
 #endif
-
     return item->createEditor(column, parent);
 }
 
@@ -174,4 +174,3 @@ KexiCellEditorFactoryItem* KexiCellEditorFactory::item(uint type, const QString&
 {
     return KexiCellEditorFactory_static->findItem(type, subType);
 }
-

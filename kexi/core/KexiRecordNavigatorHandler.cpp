@@ -29,3 +29,13 @@ KexiRecordNavigatorHandler::~KexiRecordNavigatorHandler()
 {
 
 }
+
+int KexiRecordNavigatorHandler::recordCount() const
+{
+    return 0;
+}
+
+int KexiRecordNavigatorHandler::currentRecord() const
+{
+    return 0;
+}

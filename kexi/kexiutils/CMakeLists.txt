@@ -48,13 +48,6 @@ kde4_add_library(kexiutils SHARED ${kexiutils_LIB_SRCS})
 target_link_libraries(kexiutils  ${CALLIGRADB_LIBS} ${KDE4_KIO_LIBS} )
 target_link_libraries(kexiutils  LINK_INTERFACE_LIBRARIES ${KDE4_KIO_LIBS})
 
-IF (KEXI_MOBILE)
-  
-ELSE (KEXI_MOBILE)
-  target_link_libraries(kexiutils  ${KDE4_KDE3SUPPORT_LIBS} )
-  target_link_libraries(kexiutils  LINK_INTERFACE_LIBRARIES ${KDE4_KDE3SUPPORT_LIBS})
-ENDIF (KEXI_MOBILE)
-
 set_target_properties(kexiutils PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )

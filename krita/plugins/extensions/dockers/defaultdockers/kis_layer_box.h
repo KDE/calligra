@@ -104,6 +104,7 @@ private slots:
     void slotExpanded(const QModelIndex &index);
 
     void slotSelectOpaque();
+    void slotNodeCollapsedChanged();
 
 private:
     inline void connectActionToButton(QAbstractButton *button, const QString &id);

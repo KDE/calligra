@@ -30,6 +30,7 @@ set(kritaui_LIB_SRCS
     canvas/kis_canvas2.cpp
     canvas/kis_canvas_controller.cpp
     canvas/kis_paintop_transformation_connector.cpp
+    canvas/kis_display_color_converter.cpp
     canvas/kis_display_filter.cpp
     canvas/kis_tool_proxy.cpp
     canvas/kis_canvas_decoration.cc
@@ -134,6 +135,7 @@ set(kritaui_LIB_SRCS
     kis_view_plugin.cpp
     kis_canvas_controls_manager.cpp
     kis_mainwindow_observer.cpp
+    kis_tooltip_manager.cpp
     kisexiv2/kis_exif_io.cpp
     kisexiv2/kis_exiv2.cpp
     kisexiv2/kis_iptc_io.cpp
@@ -250,6 +252,7 @@ set(kritaui_LIB_SRCS
     kis_transaction_based_command.cpp
     kis_gui_context_command.cpp
     kis_gui_context_command_p.cpp
+    input/kis_tablet_debugger.cpp
     input/kis_input_profile_manager.cpp
     input/kis_input_profile.cpp
     input/kis_shortcut_configuration.cpp
@@ -266,6 +269,7 @@ set(kritaui_LIB_SRCS
     input/config/kis_wheel_input_editor.cpp
     input/config/kis_key_input_editor.cpp
     processing/fill_processing_visitor.cpp
+    kis_mirror_axis.cpp
 )
 
 if(WIN32)

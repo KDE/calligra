@@ -99,7 +99,7 @@ public:
     /// reimplemented from KoDocument
     virtual QByteArray nativeFormatMimeType() const { return WORDS_MIME_TYPE; }
     /// reimplemented from KoDocument
-    virtual QByteArray nativeOasisMimeType() const {return WORDS_MIME_TYPE;}
+    virtual QByteArray nativeOasisMimeType() const { return WORDS_MIME_TYPE; }
     /// reimplemented from KoDocument
     virtual QStringList extraNativeMimeTypes() const
     {

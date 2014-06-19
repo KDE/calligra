@@ -74,19 +74,6 @@ WidgetInfo::WidgetInfo(WidgetFactory *f)
 {
 }
 
-/*2.0
-WidgetInfo::WidgetInfo(WidgetFactory *f, const char* parentFactoryName,
-                       const QString& inheritedClassName)
-        : m_parentFactoryName(QByteArray("kformdesigner_") + parentFactoryName)
-        , m_inheritedClassName(inheritedClassName)
-        , m_inheritedClass(0)
-        , m_overriddenAlternateNames(0)
-        , m_factory(f)
-        , m_propertiesWithDisabledAutoSync(0)
-        , m_customTypesForProperty(0)
-{
-}*/
-
 WidgetInfo::~WidgetInfo()
 {
     delete d;

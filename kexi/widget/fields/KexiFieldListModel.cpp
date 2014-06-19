@@ -81,7 +81,7 @@ void KexiFieldListModel::setSchema(KexiDB::TableOrQuerySchema* schema)
             if (!(d->options & ShowEmptyItem))
                 continue;
             item = new KexiFieldListModelItem(QString(), QString(), false);
-        }else if (i == -1) {
+        } else if (i == -1) {
             if (!(d->options & ShowAsterisk))
                 continue;
             item = new KexiFieldListModelItem("*", "", false);

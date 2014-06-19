@@ -69,10 +69,12 @@ public:
               
   }
   
+  using QTreeWidgetItem::data;
   QVariant data(ActionRole role) {
       return QTreeWidgetItem::data(0, role);
   };
   
+  using QTreeWidgetItem::setData;
   void setData(ActionRole role, QVariant value) {
       QTreeWidgetItem::setData(0, role, value);
   }
@@ -117,7 +119,7 @@ QTreeWidgetItem *ActionsListViewBase::itemForAction(const QString& actionName, Q
 
 void ActionsListViewBase::selectAction(const QString& actionName)
 {
-  kDebug() << "Selecting action:" << actionName;
+  //kDebug() << "Selecting action:" << actionName;
   QTreeWidgetItem *itm = itemForAction(actionName);
   if (itm) {
     setCurrentItem(itm);
@@ -433,7 +435,6 @@ KexiActionSelectionDialog::KexiActionSelectionDialog(
           QGridLayout *secondAnd3rdColumnGrLyr
        - kactionPageWidget contains only a QVBoxLayout and label+kactionListView
     */
-//    d->glyr = new QGridLayout(mainWidget, 2, 2, KDialog::marginHint(), KDialog::spacingHint());
     d->glyr = new QGridLayout(mainWidget); // 2x2
     KexiUtils::setStandardMarginsAndSpacing(d->glyr);
     d->glyr->setRowStretch(1, 1);
@@ -457,13 +458,10 @@ KexiActionSelectionDialog::KexiActionSelectionDialog(
     // widget stack for 2nd and 3rd column
     d->secondAnd3rdColumnStack = new QStackedWidget(mainWidget);
     d->secondAnd3rdColumnStack->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-//    d->glyr->addMultiCellWidget(d->secondAnd3rdColumnStack, 0, 1, 1, 1);
     d->glyr->addWidget(d->secondAnd3rdColumnStack, 0, 1, 2, 1);
 
     d->secondAnd3rdColumnMainWidget = new QWidget(d->secondAnd3rdColumnStack);
     d->secondAnd3rdColumnMainWidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-//    d->secondAnd3rdColumnGrLyr = new QGridLayout(
-//        d->secondAnd3rdColumnMainWidget, 2, 2, 0, KDialog::spacingHint());
     d->secondAnd3rdColumnGrLyr = new QGridLayout(d->secondAnd3rdColumnMainWidget);
     KDialog::resizeLayout(d->secondAnd3rdColumnGrLyr, 0, KDialog::spacingHint());
     d->secondAnd3rdColumnGrLyr->setRowStretch(1, 2);
@@ -593,7 +591,7 @@ void KexiActionSelectionDialog::slotActionToExecuteItemExecuted(QTreeWidgetItem*
 
 void KexiActionSelectionDialog::slotActionToExecuteItemSelected(QTreeWidgetItem*)
 {
-  kDebug();
+  //kDebug();
   updateOKButtonStatus();
 }
 
@@ -731,7 +729,7 @@ KexiFormEventAction::ActionData KexiActionSelectionDialog::currentAction() const
                 }
             }
         } else {
-            kDebug() << "No current category item";
+            kWarning() << "No current category item";
         }
     }
     
@@ -743,7 +741,7 @@ void KexiActionSelectionDialog::updateOKButtonStatus()
     KPushButton *btn = button(Ok);
     ActionSelectorDialogTreeItem *itm = dynamic_cast<ActionSelectorDialogTreeItem*>(d->actionCategoriesListView->currentItem());
     
-    kDebug() << "Current Action:" << currentAction().string << ":" << currentAction().option;
+    //kDebug() << "Current Action:" << currentAction().string << ":" << currentAction().option;
     btn->setEnabled((itm && itm->data(ActionSelectorDialogTreeItem::ActionCategoryRole).toString() == "noaction") || !currentAction().isEmpty());
 }
 

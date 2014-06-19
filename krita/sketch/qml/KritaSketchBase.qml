@@ -18,7 +18,7 @@
 
 import QtQuick 1.1
 import org.krita.sketch 1.0
-import "components"
+import org.krita.sketch.components 1.0
 
 Item {
     id: base;
@@ -47,7 +47,7 @@ Item {
             onCurrentPageChanged: window.currentSketchPage = (currentPage.pageName !== undefined) ? currentPage.pageName : currentPage.toString();
             initialPage: welcomePage;
 
-            transitionDuration: 500;
+            transitionDuration: Constants.AnimationDuration;
 
             Component { id: welcomePage; WelcomePage { } }
 

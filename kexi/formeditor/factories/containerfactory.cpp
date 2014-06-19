@@ -471,23 +471,11 @@ void GoToStackPageAction::slotTriggered()
 ContainerFactory::ContainerFactory(QObject *parent, const QVariantList &)
         : KFormDesigner::WidgetFactory(parent, "containers")
 {
-#if 0 // not needed?
-    KFormDesigner::WidgetInfo *wBtnGroup = new KFormDesigner::WidgetInfo(this);
-    wBtnGroup->setIconName(koIconName("frame"));
-    wBtnGroup->setClassName("QButtonGroup");
-    wBtnGroup->setName(i18n("Button Group"));
-    wBtnGroup->setNamePrefix(
-        i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "buttonGroup"));
-    wBtnGroup->setDescription(i18n("A simple container to group buttons"));
-    addClass(wBtnGroup);
-#endif
-
     KFormDesigner::WidgetInfo *wTabWidget = new KFormDesigner::WidgetInfo(this);
     wTabWidget->setIconName(koIconName("tabwidget"));
     wTabWidget->setClassName("KFDTabWidget");
     wTabWidget->addAlternateClassName("KTabWidget");
     wTabWidget->addAlternateClassName("QTabWidget");
-//tmp: wTabWidget->setSavingName("QTabWidget");
     wTabWidget->setSavingName("KTabWidget");
     wTabWidget->setIncludeFileName("ktabwidget.h");
     wTabWidget->setName(i18n("Tab Widget"));
@@ -591,8 +579,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const QVariantList &)
         i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "columnLayout"));
     wVFlow->setDescription(i18n("A simple container to group widgets by columns"));
     addClass(wVFlow);
-
-//todo
+//! @todo
 #if 0
     KFormDesigner::WidgetInfo *wSubForm = new KFormDesigner::WidgetInfo(this);
     wSubForm->setIconName(koIconName("form"));
@@ -692,7 +679,8 @@ ContainerFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
     } else if (c == "VFlow") {
         w = new VFlow(p);
         createContainer = true;
-#if 0 //todo
+//! @todo
+#if 0
     } else if (c == "SubForm") {
         w = new SubForm(container->form(), p);
 #endif
@@ -718,7 +706,7 @@ ContainerFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
         // if we are loading, don't add this tab
         if (container->form()->interactiveMode()) {
             TabWidgetBase *tab = dynamic_cast<TabWidgetBase*>(w);
-            AddTabAction(container, tab, 0).slotTriggered(); // addTabPage();
+            AddTabAction(container, tab, 0).slotTriggered();
         }
     }
     return w;
@@ -743,8 +731,6 @@ ContainerFactory::createMenuActions(const QByteArray &classname, QWidget *w,
                                     QMenu *menu, KFormDesigner::Container *container)
 {
     QWidget *pw = w->parentWidget();
-    //kDebug() << classname << w->metaObject()->className();
-
     if (classname == "KFDTabWidget" || pw->parentWidget()->inherits("QTabWidget")) {
 #ifdef __GNUC__
 #warning port this: setWidget(pw->parentWidget(), m_container->toplevel());
@@ -817,8 +803,10 @@ ContainerFactory::saveSpecialProperty(const QByteArray &, const QString &name, c
 }
 
 bool
-ContainerFactory::readSpecialProperty(const QByteArray &, QDomElement &node, QWidget *w, KFormDesigner::ObjectTreeItem *item)
+ContainerFactory::readSpecialProperty(const QByteArray &, QDomElement &node, QWidget *w,
+                                      KFormDesigner::ObjectTreeItem *item)
 {
+    KFormDesigner::Form *form = item->container() ? item->container()->form() : item->parent()->container()->form();
     const QString name( node.attribute("name") );
     if ((name == "title") && (item->parent()->widget()->inherits("QTabWidget"))) {
         TabWidgetBase *tab = dynamic_cast<TabWidgetBase*>(w->parentWidget());
@@ -828,10 +816,11 @@ ContainerFactory::readSpecialProperty(const QByteArray &, QDomElement &node, QWi
     }
 
     if ((name == "stackIndex")
-        && (KexiUtils::objectIsA(w->parentWidget(), "QStackedWidget") || /*compat*/ KexiUtils::objectIsA(w->parentWidget(), "QWidgetStack")))
+        && (KexiUtils::objectIsA(w->parentWidget(), "QStackedWidget")
+            || /*compat*/ KexiUtils::objectIsA(w->parentWidget(), "QWidgetStack")))
     {
         QStackedWidget *stack = dynamic_cast<QStackedWidget*>(w->parentWidget());
-        int index = KFormDesigner::FormIO::readPropertyValue(node.firstChild(), w, name).toInt();
+        int index = KFormDesigner::FormIO::readPropertyValue(form, node.firstChild(), w, name).toInt();
         stack->insertWidget(index, w);
         stack->setCurrentWidget(w);
         item->addModifiedProperty("stackIndex", index);

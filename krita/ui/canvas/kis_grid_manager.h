@@ -28,20 +28,18 @@
 #include <krita_export.h>
 
 class KisView2;
-class KisImageView;
 class KActionCollection;
 class KToggleAction;
 class KAction;
 
-class KRITAUI_EXPORT KisGridManager : public QObject
+class KRITAUI_EXPORT KisGridManager : public KisCanvasDecoration
 {
     Q_OBJECT
 public:
     KisGridManager(KisView2 * parent);
     ~KisGridManager();
-
+public:
     void setup(KActionCollection * collection);
-    void setView(KisImageView *view);
 
 public slots:
 
@@ -50,7 +48,6 @@ public slots:
 
 private slots:
 
-    void toggleVisibility();
     void toggleSnapToGrid();
     void fastConfig1x1();
     void fastConfig2x2();
@@ -58,14 +55,18 @@ private slots:
     void fastConfig10x10();
     void fastConfig20x20();
     void fastConfig40x40();
+    void fastConfig4x4();
+    void fastConfig8x8();
+    void fastConfig16x16();
+    void fastConfig32x32();
+    void fastConfig64x64();
+protected:
+    void drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter,KisCanvas2* canvas);
 
 private:
 
-    void updateCanvas();
-
     KisView2* m_view;
-    KisImageView *m_imageView;
-    KToggleAction *m_toggleGrid;
+    KToggleAction *toggleGrid;
     KToggleAction* m_toggleSnapToGrid;
     KAction* m_gridConfig;
     KAction* m_gridFastConfig1x1;
@@ -74,6 +75,11 @@ private:
     KAction* m_gridFastConfig10x10;
     KAction* m_gridFastConfig20x20;
     KAction* m_gridFastConfig40x40;
+    KAction* m_gridFastConfig4x4;
+    KAction* m_gridFastConfig8x8;
+    KAction* m_gridFastConfig16x16;
+    KAction* m_gridFastConfig32x32;
+    KAction* m_gridFastConfig64x64;
 };
 
 #endif

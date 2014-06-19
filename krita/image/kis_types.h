@@ -27,6 +27,16 @@ class KisWeakSharedPtr;
 template<class T>
 class KisSharedPtr;
 
+template <class T>
+uint qHash(KisSharedPtr<T> ptr) {
+    return qHash(ptr.data());
+}
+
+template <class T>
+uint qHash(KisWeakSharedPtr<T> ptr) {
+    return qHash(ptr.data());
+}
+
 #include "kis_shared_ptr_vector.h"
 
 /**
@@ -209,6 +219,10 @@ typedef KisStrokeWSP KisStrokeId;
 
 class KisFilterConfiguration;
 typedef QSharedPointer<KisFilterConfiguration> KisSafeFilterConfigurationSP;
+
+class KisDisplayFilter;
+typedef QSharedPointer<KisDisplayFilter> KisDisplayFilterSP;
+
 
 #include <QSharedPointer>
 #include <QWeakPointer>

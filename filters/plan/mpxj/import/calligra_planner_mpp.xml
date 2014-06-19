@@ -2,9 +2,6 @@
 <mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
   <mime-type type="application/vnd.ms-project">
     <comment>MS Project plan</comment>
-    <magic priority="50">
-      <match type="string" value="\xd0\xcf\x11\xe0\xa1\xb1\x1a\xe1\x00" offset="0"/>
-    </magic>
     <glob pattern="*.mpp"/>
     <generic-icon name="application-x-vnd.kde.plan"/>
   </mime-type>

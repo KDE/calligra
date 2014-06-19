@@ -188,17 +188,6 @@ protected:
      */
     void loadFactoryWidgets(WidgetFactory *f);
 
-#if 0 //UNIMPLEMENTED
-    /**
-     * you can restrict the loaded factories by setting the filter to a pattern
-     * like 'kexi|containers' in that case only factory containing 'kexi' or containers will be loaded.
-     * this is useful if you want to embedd formeditor and provide e.g. a LineEdit with special features
-     * but don't want to confuse the user... are you confused now?
-     * NB: not implemented yet
-     */
-    void setFilter(const QRegExp &expr);
-#endif
-
     /**
      * Lookups widget factories list (note that this function get called once in ctor)
      */

@@ -94,7 +94,6 @@ KexiStatusBar::KexiStatusBar(QWidget *parent)
     /// @todo remove parts from the map on PartRemoved() ?
 }
 
-
 KexiStatusBar::~KexiStatusBar()
 {
 }
@@ -112,24 +111,14 @@ void KexiStatusBar::cursorPositionChanged()
 
 void KexiStatusBar::setStatus(const QString &str)
 {
-    kDebug() << "KexiStatusBar::setStatus(" << str << ")";
-// m_status->setText(str);
+    //kDebug() << str;
     changeItem(str, m_msgID);
 }
 
 void KexiStatusBar::setCursorPosition(int line, int col)
 {
-// m_status->setText(i18n(" Line: %1 Col: %2 ").arg(line+1).arg(col));
     changeItem(i18n(" Line: %1 Col: %2 ", line + 1, col), m_msgID);
 }
-
-/*void KexiStatusBar::addWidget ( QWidget *widget, int stretch, bool permanent)
-{
-  KStatusBar::addWidget(widget,stretch,permanent);
-
-  if(widget->sizeHint().height() + 4 > height())
-    setFixedHeight(widget->sizeHint().height() + 4);
-}*/
 
 void KexiStatusBar::setReadOnlyFlag(bool readOnly)
 {

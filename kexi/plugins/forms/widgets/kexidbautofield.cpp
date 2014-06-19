@@ -54,7 +54,7 @@ public:
     }
 
     WidgetType widgetType; //!< internal: equal to m_widgetType_property or equal to result
-    //!< of widgetTypeForFieldType() if widgetTypeForFieldType is Auto
+                           //!< of widgetTypeForFieldType() if widgetTypeForFieldType is Auto
     WidgetType  widgetType_property; //!< provides widget type or Auto
     LabelPosition  lblPosition;
     QBoxLayout  *layout;
@@ -64,9 +64,8 @@ public:
     QString fieldCaptionInternal;
     QBrush baseBrush; //!< needed because for unbound mode editor==0
     QBrush textBrush; //!< needed because for unbound mode editor==0
-    bool autoCaption : 1;
-    bool focusPolicyChanged : 1;
-//2.0 moved to FormWidgetInterface    bool designMode : 1;
+    bool autoCaption;
+    bool focusPolicyChanged;
 };
 
 //-------------------------------------
@@ -78,7 +77,6 @@ KexiDBAutoField::KexiDBAutoField(const QString &text, WidgetType type, LabelPosi
         , KFormDesigner::DesignTimeDynamicChildWidgetHandler()
         , d(new Private())
 {
-//2.0 moved to FormWidgetInterface    d->designMode = designMode;
     init(text, type, pos);
 }
 
@@ -88,7 +86,6 @@ KexiDBAutoField::KexiDBAutoField(QWidget *parent, LabelPosition pos)
         , KFormDesigner::DesignTimeDynamicChildWidgetHandler()
         , d(new Private())
 {
-//2.0 moved to FormWidgetInterface    d->designMode = designMode;
     init(QString()/*i18n("Auto Field")*/, Auto, pos);
 }
 
@@ -108,8 +105,6 @@ KexiDBAutoField::init(const QString &text, WidgetType type, LabelPosition pos)
     setSubwidget(0);
     d->label = new QLabel(text, this);
     d->label->installEventFilter(this);
-    //QFontMetrics fm( font() );
-    //d->label->setFixedWidth( fm.width("This is a test string length") );
     d->autoCaption = true;
     d->focusPolicyChanged = false;
     d->widgetType = Auto;
@@ -145,7 +140,7 @@ KexiDBAutoField::createEditor()
     }
 
     QWidget *newSubwidget;
-    kDebug() << "widgetType:" << d->widgetType;
+    //kDebug() << "widgetType:" << d->widgetType;
     switch (d->widgetType) {
     case Text:
     case Double: //! @todo setup validator
@@ -176,20 +171,19 @@ KexiDBAutoField::createEditor()
     default:
         newSubwidget = 0;
         changeText(d->caption);
-        //d->label->setText( d->dataSource.isEmpty() ? "<datasource>" : d->dataSource );
         break;
     }
 
-    kDebug() << newSubwidget;
+    //kDebug() << newSubwidget;
     setSubwidget(newSubwidget);   //this will also allow to declare subproperties, see KFormDesigner::WidgetWithSubpropertiesInterface
     if (newSubwidget) {
         newSubwidget->setObjectName(
             QString::fromLatin1("KexiDBAutoField_") + newSubwidget->metaObject()->className());
         dynamic_cast<KexiDataItemInterface*>(newSubwidget)->setParentDataItemInterface(this);
         dynamic_cast<KexiFormDataItemInterface*>(newSubwidget)
-        ->setColumnInfo(columnInfo()); //needed at least by KexiDBImageBox
+            ->setColumnInfo(columnInfo()); //needed at least by KexiDBImageBox
         dynamic_cast<KexiFormDataItemInterface*>(newSubwidget)
-        ->setVisibleColumnInfo(visibleColumnInfo()); //needed at least by KexiDBComboBox
+            ->setVisibleColumnInfo(visibleColumnInfo()); //needed at least by KexiDBComboBox
         newSubwidget->setProperty("dataSource", dataSource()); //needed at least by KexiDBImageBox
         KFormDesigner::DesignTimeDynamicChildWidgetHandler::childWidgetAdded(this);
         newSubwidget->show();
@@ -203,8 +197,6 @@ KexiDBAutoField::createEditor()
         if (parentWidget())
             newSubwidget->setPalette(qApp->palette());
         copyPropertiesToEditor();
-//  KFormDesigner::installRecursiveEventFilter(newSubwidget, this);
-//        newSubwidget->hide();
     }
 
     setLabelPosition(labelPosition());
@@ -212,7 +204,7 @@ KexiDBAutoField::createEditor()
 
 void KexiDBAutoField::copyPropertiesToEditor()
 {
-    kDebug() << subwidget();
+    //kDebug() << subwidget();
     if (subwidget()) {
 //  kDebug() << "base col: " <<  d->baseColor.name() <<
 //   "; text col: " << d->textColor.name();
@@ -223,7 +215,6 @@ void KexiDBAutoField::copyPropertiesToEditor()
         else
             p.setBrush(QPalette::Text, d->textBrush);
         subwidget()->setPalette(p);
-        //m_subwidget->setPaletteBackgroundColor( d->baseColor );
     }
 }
 
@@ -280,8 +271,6 @@ KexiDBAutoField::setLabelPosition(LabelPosition position)
                 subwidget()->setSizePolicy(sizePolicy);
             }
         }
-//  if(m_subwidget)
-        //  m_subwidget->setSizePolicy(...);
     } else {
         d->layout = (QBoxLayout*) new QHBoxLayout(this);
         d->label->hide();
@@ -335,7 +324,6 @@ KexiDBAutoField::setValueInternal(const QVariant& add, bool removeOld)
     KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>((QWidget*)subwidget());
     if (iface)
         iface->setValue(KexiDataItemInterface::originalValue(), add, removeOld);
-//  iface->setValueInternal(add, removeOld);
 }
 
 QVariant
@@ -378,7 +366,7 @@ bool
 KexiDBAutoField::valueChanged()
 {
     KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>((QWidget*)subwidget());
-    kDebug() << KexiDataItemInterface::originalValue();
+    //kDebug() << KexiDataItemInterface::originalValue();
     if (iface)
         return iface->valueChanged();
     return false;
@@ -600,22 +588,11 @@ KexiDBAutoField::changeText(const QString &text, bool beautify)
     } else {
         d->label->setAlignment(Qt::AlignCenter);
     }
-// QWidget* widgetToAlterForegroundColor;
     if (d->widgetType == Boolean) {
         static_cast<QCheckBox*>((QWidget*)subwidget())->setText(realText);
-//  widgetToAlterForegroundColor = m_subwidget;
     } else {
         d->label->setText(realText);
-//  widgetToAlterForegroundColor = d->label;
     }
-    /*
-      if (unbound)
-        widgetToAlterForegroundColor->setPaletteForegroundColor(
-          KexiUtils::blendedColors(
-            widgetToAlterForegroundColor->paletteForegroundColor(),
-            widgetToAlterForegroundColor->paletteBackgroundColor(), 2, 1));
-      else
-        widgetToAlterForegroundColor->setPaletteForegroundColor( paletteForegroundColor() );*/
 }
 
 void
@@ -631,7 +608,6 @@ KexiDBAutoField::setAutoCaption(bool autoCaption)
 {
     d->autoCaption = autoCaption;
     if (d->autoCaption) {
-        //d->caption.clear();
         if (columnInfo()) {
             changeText(columnInfo()->captionOrAliasOrName());
         } else {
@@ -686,23 +662,6 @@ KexiDBAutoField::updateInformationAboutUnboundField()
     }
 }
 
-/*void
-KexiDBAutoField::paintEvent( QPaintEvent* pe )
-{
-  QWidget::paintEvent( pe );
-
-  if (   (d->autoCaption && (dataSource().isEmpty() || dataSourcePartClass().isEmpty()))
-    || (!d->autoCaption && d->caption.isEmpty()) )
-  {
-    QPainter p(this);
-    p.setPen( d->label->paletteForegroundColor() );
-    p.setClipRect(pe->rect());
-    p.setFont(d->label->font());
-    p.drawText(rect(), Qt::AlignLeft | Qt::TextWordWrap,
-      QString::fromLatin1(name())+" "+i18n(" (unbound)"));
-  }
-}*/
-
 void
 KexiDBAutoField::paletteChange(const QPalette& oldPal)
 {
@@ -738,7 +697,7 @@ QColor KexiDBAutoField::paletteBackgroundColor() const
 
 void KexiDBAutoField::setPaletteBackgroundColor(const QColor & color)
 {
-    kDebug();
+    //kDebug();
 //! @todo how about brush?
     d->baseBrush.setColor(color);
     copyPropertiesToEditor();
@@ -757,12 +716,9 @@ void KexiDBAutoField::setForegroundLabelColor(const QColor & color)
     if (d->widgetType == Boolean)
         setPaletteForegroundColor(color);
     else {
-//        d->label->setPaletteForegroundColor(color);
         QPalette pal(d->label->palette());
         pal.setColor(d->label->foregroundRole(), color);
         d->label->setPalette(pal);
-
-//        QWidget::setPaletteForegroundColor(color);
         pal = palette();
         pal.setColor(foregroundRole(), color);
         setPalette(pal);
@@ -782,19 +738,13 @@ void KexiDBAutoField::setBackgroundLabelColor(const QColor & color)
     if (d->widgetType == Boolean)
         setPaletteBackgroundColor(color);
     else {
-//        d->label->setPaletteBackgroundColor(color);
         QPalette pal(d->label->palette());
         pal.setColor(d->label->backgroundRole(), color);
         d->label->setPalette(pal);
-
-//        QWidget::setPaletteBackgroundColor(color);
         pal = palette();
         pal.setColor(backgroundRole(), color);
         setPalette(pal);
     }
-
-// if (m_subwidget)
-//  m_subwidget->setPalette( qApp->palette() );
 }
 
 QVariant KexiDBAutoField::property(const char * name) const
