@@ -45,7 +45,7 @@ using namespace Calligra::Sheets;
 ResizeColumnManipulator::ResizeColumnManipulator(KUndo2Command* parent)
         : AbstractRegionCommand(parent)
 {
-    setText(i18nc("(qtundo-format)", "Resize Column"));
+    setText(kundo2_i18n("Resize Column"));
 }
 
 ResizeColumnManipulator::~ResizeColumnManipulator()
@@ -80,7 +80,7 @@ bool ResizeColumnManipulator::process(Element* element)
 ResizeRowManipulator::ResizeRowManipulator(KUndo2Command* parent)
         : AbstractRegionCommand(parent)
 {
-    setText(i18nc("(qtundo-format)", "Resize Row"));
+    setText(kundo2_i18n("Resize Row"));
 }
 
 ResizeRowManipulator::~ResizeRowManipulator()
@@ -219,24 +219,23 @@ bool HideShowManipulator::postProcessing()
     return true;
 }
 
-QString HideShowManipulator::name() const
+KUndo2MagicString HideShowManipulator::name() const
 {
-    QString name;
-    if (m_reverse) {
-        name = "Show ";
-    } else {
-        name = "Hide ";
+    if (m_reverse && m_manipulateColumns && m_manipulateRows) {
+        return kundo2_i18n("Show Rows/Columns");
+    } else if (m_reverse && m_manipulateColumns) {
+        return kundo2_i18n("Show Columns");
+    } else if (m_reverse && m_manipulateRows) {
+        return kundo2_i18n("Show Rows");
+    } else if (!m_reverse && m_manipulateColumns && m_manipulateRows) {
+        return kundo2_i18n("Hide Rows/Columns");
+    } else if (!m_reverse && m_manipulateColumns) {
+        return kundo2_i18n("Hide Columns");
+    } else if (!m_reverse && m_manipulateRows) {
+        return kundo2_i18n("Hide Rows");
     }
-    if (m_manipulateColumns) {
-        name += "Columns";
-    }
-    if (m_manipulateColumns && m_manipulateRows) {
-        name += '/';
-    }
-    if (m_manipulateRows) {
-        name += "Rows";
-    }
-    return name;
+
+    return kundo2_noi18n("XXX: bug!");
 }
 
 /***************************************************************************
@@ -560,14 +559,14 @@ double AdjustColumnRowManipulator::adjustRowHelper(const Cell& cell)
         return long_max + 1.0;
 }
 
-QString AdjustColumnRowManipulator::name() const
+KUndo2MagicString AdjustColumnRowManipulator::name() const
 {
     if (m_adjustColumn && m_adjustRow) {
-        return i18n("Adjust Columns/Rows");
+        return kundo2_i18n("Adjust Columns/Rows");
     } else if (m_adjustColumn) {
-        return i18n("Adjust Columns");
+        return kundo2_i18n("Adjust Columns");
     } else {
-        return i18n("Adjust Rows");
+        return kundo2_i18n("Adjust Rows");
     }
 }
 
@@ -580,7 +579,7 @@ InsertDeleteColumnManipulator::InsertDeleteColumnManipulator(KUndo2Command *pare
         , m_mode(Insert)
         , m_template(0)
 {
-    setText(i18nc("(qtundo-format)", "Insert Columns"));
+    setText(kundo2_i18n("Insert Columns"));
 }
 
 InsertDeleteColumnManipulator::~InsertDeleteColumnManipulator()
@@ -599,9 +598,9 @@ void InsertDeleteColumnManipulator::setReverse(bool reverse)
     m_reverse = reverse;
     m_mode = reverse ? Delete : Insert;
     if (!m_reverse)
-        setText(i18nc("(qtundo-format)", "Insert Columns"));
+        setText(kundo2_i18n("Insert Columns"));
     else
-        setText(i18nc("(qtundo-format)", "Remove Columns"));
+        setText(kundo2_i18n("Remove Columns"));
 }
 
 bool InsertDeleteColumnManipulator::process(Element* element)
@@ -703,7 +702,7 @@ InsertDeleteRowManipulator::InsertDeleteRowManipulator(KUndo2Command *parent)
         , m_mode(Insert)
         , m_template(0)
 {
-    setText(i18nc("(qtundo-format)", "Insert Rows"));
+    setText(kundo2_i18n("Insert Rows"));
 }
 
 InsertDeleteRowManipulator::~InsertDeleteRowManipulator()
@@ -722,9 +721,9 @@ void InsertDeleteRowManipulator::setReverse(bool reverse)
     m_reverse = reverse;
     m_mode = reverse ? Delete : Insert;
     if (!m_reverse)
-        setText(i18nc("(qtundo-format)", "Insert Rows"));
+        setText(kundo2_i18n("Insert Rows"));
     else
-        setText(i18nc("(qtundo-format)", "Remove Rows"));
+        setText(kundo2_i18n("Remove Rows"));
 }
 
 bool InsertDeleteRowManipulator::process(Element* element)

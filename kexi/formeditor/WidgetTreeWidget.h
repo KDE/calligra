@@ -47,6 +47,7 @@ public:
     WidgetTreeWidgetItem(WidgetTreeWidgetItem *parent, ObjectTreeItem *data,
         LoadTreeFlags loadTreeFlags = NoLoadTreeFlags, int forcedTabPageIndex = -1,
         const QString& forcedTabPageName = QString());
+
     //! For TabStopDialog
     WidgetTreeWidgetItem(QTreeWidget *tree, ObjectTreeItem *data = 0,
         LoadTreeFlags loadTreeFlags = NoLoadTreeFlags, int forcedTabPageIndex = -1,
@@ -59,8 +60,6 @@ public:
     //! \return the ObjectTreeItem information associated to this item.
     ObjectTreeItem* data() const;
 
-    //2.0 virtual void setOpen(bool o);
-
     //! Added to unhide.
     virtual QVariant data(int column, int role) const { return QTreeWidgetItem::data(column, role); }
 
@@ -71,15 +70,6 @@ public:
     QString customSortingKey() const;
 
 protected:
-    //! Reimplemented to draw custom contents (copied from Property Editor)
-    //virtual void paintCell(QPainter *p, const QColorGroup & cg, int column, int width, int align);
-
-    //! Reimplemented to draw custom contents (copied from Property Editor)
-    //virtual void paintBranches(QPainter *p, const QColorGroup &cg, int w, int y, int h);
-
-    //! Reimplemented to draw custom contents (copied from Property Editor)
-    //2.0 virtual void setup();
-
     //! Initializes text, icon, selectable flag, custom serting key
     void init(int forcedTabPageIndex, const QString& forcedTabPageName);
     void initTextAndIcon(int forcedTabPageIndex, const QString& forcedTabPageName);
@@ -115,8 +105,6 @@ public:
     //! @return selected tree item or 0 if there is no selection or more than one item is selected.
     WidgetTreeWidgetItem* selectedItem() const;
 
-    //2.0 virtual QSize sizeHint() const;
-
     //! \return the pixmap name for a given class, to be shown next to the widget name.
     QString iconNameForClass(const QByteArray &classname) const;
 
@@ -145,20 +133,11 @@ public slots:
     void renameItem(const QByteArray &oldname, const QByteArray &newname);
 
 protected slots:
-    ///*! This slot is called when the user right-click a list item.
-//     The widget context menu is shown, as inisde the Form. */
-//2.0    void displayContextMenu(K3ListView *list, Q3ListViewItem *item, const QPoint &p);
-
-    //2.0 void slotColumnSizeChanged(int);
-
     /*! The selected list item has changed. */
     void slotSelectionChanged();
 
     /*! Called before Form object is destroyed. */
     void slotBeforeFormDestroyed();
-
-//    /*! Selection on the current form has been changed. */
-//     void slotFormWidgetSelectionChanged(QWidget *w, KFormDesigner::Form::WidgetSelectionFlags flags)
 
 protected:
     //! Internal function to fill the list.

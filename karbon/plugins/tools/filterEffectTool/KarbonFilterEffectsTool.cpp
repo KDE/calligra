@@ -422,7 +422,7 @@ QList<QWidget *> KarbonFilterEffectsTool::createOptionWidgets()
 
     FilterResourceServerProvider * serverProvider = FilterResourceServerProvider::instance();
     KoResourceServer<FilterEffectResource> * server = serverProvider->filterEffectServer();
-    KoAbstractResourceServerAdapter * adapter = new KoResourceServerAdapter<FilterEffectResource>(server, this);
+    QSharedPointer<KoAbstractResourceServerAdapter> adapter(new KoResourceServerAdapter<FilterEffectResource>(server));
 
     //---------------------------------------------------------------------
 

@@ -8,10 +8,6 @@ option(KEXI_MOBILE "compile a mobile Kexi" OFF)
 
 check_function_exists("uname" HAVE_UNAME)
 
-IF(EXISTS ${CMAKE_SOURCE_DIR}/kexi/CMakeSettings.txt)
-  INCLUDE(${CMAKE_SOURCE_DIR}/kexi/CMakeSettings.txt)
-ENDIF(EXISTS ${CMAKE_SOURCE_DIR}/kexi/CMakeSettings.txt)
-
 option(KEXI_DEBUG_GUI "Debugging GUI for Kexi (requires CALLIGRADB_DEBUG_GUI to be set too)" OFF)
 option(KEXI_SHOW_UNFINISHED, "Show unfinnished features in Kexi. Thus is useful for testing but may confuse end-user." OFF)
 option(KEXI_SHOW_UNIMPLEMENTED "Forces to show menu entries and dialogs just to give impression about development plans for Kexi. Only recommended for test/development versions." OFF)
@@ -22,7 +18,7 @@ option(KEXI_PROJECT_TEMPLATES "Experimental: Enable support for project template
 option(KEXI_AUTORISE_TABBED_TOOLBAR "Experimental: Autorise the main tabbed toolbar in Kexi" OFF)
 
 ADD_DEFINITIONS(
-  -DKEXI_NO_CURSOR_PROPERTY 
+  -DKEXI_NO_CURSOR_PROPERTY
   -DKEXI_NO_CTXT_HELP
   -DKEXI_NO_SUBFORM
   -DKEXI_DB_COMBOBOX_WIDGET
@@ -59,7 +55,7 @@ if(WITH_WEBFORMS)
 
   macro_optional_find_package(GoogleCtemplate)
   macro_log_feature(GOOGLE_CTEMPLATE_FOUND "Google Ctemplate" "Simple but powerful template language for C++" "http://code.google.com/p/google-ctemplate/" FALSE "" "Required by Kexi Web Forms")
-  
+
   macro_log_feature(Boost_FOUND "Boost" "Boost C++ Libraries" "http://www.boost.org" FALSE "" "Required by Kexi Web Forms")
 
   if(GOOGLE_CTEMPLATE_FOUND AND Boost_FOUND AND PionNet_FOUND)
@@ -132,8 +128,8 @@ ELSE(KEXI_MOBILE)
   set(kexi_SRCS main.cpp )
   kde4_add_app_icon(kexi_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/hi*-app-calligrakexi.png")
   kde4_add_executable(kexi ${kexi_SRCS})
-  target_link_libraries(kexi 
-    ${KDE4_KFILE_LIBS} ${QT_QT3SUPPORT_LIBRARY}
+  target_link_libraries(kexi
+    ${KDE4_KFILE_LIBS}
     ${CALLIGRADB_LIBS}
     keximain
     kexicore
@@ -144,5 +140,6 @@ ENDIF(KEXI_MOBILE)
 ########### install files ###############
 
 install(PROGRAMS kexi.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
+install(FILES kexi.appdata.xml DESTINATION ${SHARE_INSTALL_PREFIX}/appdata/)
 
 #kde4_create_doxygen_docs( EXCLUDE 3rdparty kexidb/parser/sqlparser.h kexidb/drivers/odbc  )

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2006-2014 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -59,11 +59,10 @@ public:
     KexiDB::QueryColumnInfo* visibleColumnInfo;
     //! used for collecting subwidgets and their childrens (if isEditable is false)
     QList<QWidget*> subWidgetsWithDisabledEvents;
-    bool isEditable : 1; //!< true is the combo box is editable
-    bool buttonPressed : 1;
-    bool mouseOver : 1;
-    bool dataEnteredByHand : 1;
-//2.0    bool designMode : 1;
+    bool isEditable; //!< true is the combo box is editable
+    bool buttonPressed;
+    bool mouseOver;
+    bool dataEnteredByHand;
 };
 
 //-------------------------------------
@@ -73,17 +72,13 @@ KexiDBComboBox::KexiDBComboBox(QWidget *parent)
         , KexiComboBoxBase()
         , d(new Private())
 {
-#ifdef __GNUC__
-#warning TODO fix creating popup for forms instead; remove KexiComboBoxBase::m_setReinstantiatePopupOnShow
-#else
-#pragma WARNING( fix creating popup for forms instead; remove KexiComboBoxBase::m_setReinstantiatePopupOnShow )
-#endif
+//! @todo fix creating popup for forms instead; remove KexiComboBoxBase::m_setReinstantiatePopupOnShow
     m_reinstantiatePopupOnShow = true;
+    m_focusPopupBeforeShow = true;
 
     setMouseTracking(true);
     setFocusPolicy(Qt::WheelFocus);
     installEventFilter(this);
-//2.0    d->designMode = designMode;
     d->paintedCombo = new KComboBox(this);
     d->paintedCombo->hide();
     d->paintedCombo->move(0, 0);
@@ -94,6 +89,26 @@ KexiDBComboBox::~KexiDBComboBox()
     delete d;
 }
 
+KexiDB::TableViewColumn* KexiDBComboBox::column() const
+{
+    return 0;
+}
+
+KexiDB::Field* KexiDBComboBox::field() const
+{
+    return KexiDBAutoField::field();
+}
+
+QVariant KexiDBComboBox::origValue() const
+{
+    return KexiDataItemInterface::originalValue();
+}
+
+QVariant KexiDBComboBox::value()
+{
+    return KexiComboBoxBase::value();
+}
+
 KexiComboBoxPopup *KexiDBComboBox::popup() const
 {
     return d->popup;
@@ -102,6 +117,15 @@ KexiComboBoxPopup *KexiDBComboBox::popup() const
 void KexiDBComboBox::setPopup(KexiComboBoxPopup *popup)
 {
     d->popup = popup;
+    if (popup) {
+        connect(popup, SIGNAL(hidden()), this, SLOT(slotPopupHidden()));
+    }
+}
+
+void KexiDBComboBox::slotPopupHidden()
+{
+    moveCursorToEnd();
+    selectAll();
 }
 
 void KexiDBComboBox::setEditable(bool set)
@@ -128,12 +152,8 @@ void KexiDBComboBox::paintEvent(QPaintEvent *)
 {
     QPainter p(this);
     p.setPen(palette().color(QPalette::Text));
-//    QColorGroup cg(palette().active());
-// if ( hasFocus() )
-//  cg.setColor(QColorGroup::Base, cg.highlight());
-// else
     QPalette pal(palette());
-    pal.setColor(QColorGroup::Base, paletteBackgroundColor()); //update base color using (reimplemented) bg color
+    pal.setColor(QPalette::Base, paletteBackgroundColor()); //update base color using (reimplemented) bg color
 
     if (width() < 5 || height() < 5) {
         qDrawShadePanel(&p, rect(), pal, false /* !sunken */,
@@ -141,12 +161,7 @@ void KexiDBComboBox::paintEvent(QPaintEvent *)
         return;
     }
 
-#ifdef __GNUC__
-#warning TODO KexiDBComboBox::paintEvent()
-#else
-#pragma WARNING( TODO KexiDBComboBox::paintEvent() )
-#endif
-
+    //! @todo
     QStyleOptionComboBox option;
     option.palette = pal;
     option.initFrom(d->paintedCombo);
@@ -160,8 +175,8 @@ void KexiDBComboBox::paintEvent(QPaintEvent *)
 
     style()->drawComplexControl(QStyle::CC_ComboBox, &option, &p, d->paintedCombo);
 
+    //! @todo support reverse layout
 #if 0 //TODO
-//! @todo support reverse layout
 //bool reverse = QApplication::reverseLayout();
     style()->drawComplexControl(QStyle::CC_ComboBox, &option, &p, d->paintedCombo  /*this*/
                                 flags, (uint)QStyle::SC_All,
@@ -174,7 +189,7 @@ void KexiDBComboBox::paintEvent(QPaintEvent *)
         QRect editorGeometry(this->editorGeometry());
         if (hasFocus()) {
             if (0 == qstrcmp(style()->name(), "windows")) //a hack
-                p.fillRect(editorGeometry, cg.brush(QColorGroup::Highlight));
+                p.fillRect(editorGeometry, palette().brush(QPalette::Highlight));
             QRect r(QStyle::visualRect(style()->subRect(QStyle::SR_ComboBoxFocusRect, d->paintedCombo), this));
             r = QRect(r.left() - 1, r.top() - 1, r.width() + 2, r.height() + 2); //enlare by 1 pixel each side to avoid covering by the subwidget
             style()->drawPrimitive(QStyle::PE_FocusRect, &p,
@@ -187,13 +202,8 @@ void KexiDBComboBox::paintEvent(QPaintEvent *)
 
 QRect KexiDBComboBox::editorGeometry() const
 {
-#ifdef __GNUC__
-#warning KexiDBComboBox::editorGeometry() OK?
-#else
-#pragma WARNING( KexiDBComboBox::editorGeometry() OK? )
-#endif
-
-#if 0 //20080316, sebsauer; crashes here with;
+//! @todo 20080316, sebsauer; crashes here with;
+#if 0
     QRect r(QStyle::visualRect(
                 qApp->layoutDirection(),
                 d->paintedCombo->geometry(),
@@ -202,9 +212,6 @@ QRect KexiDBComboBox::editorGeometry() const
     QRect r = d->paintedCombo->geometry();
     r.setSize(size());
 #endif
-
-    //if ((height()-r.bottom())<6)
-    // r.setBottom(height()-6);
     return r;
 }
 
@@ -218,19 +225,19 @@ void KexiDBComboBox::createEditor()
             option.initFrom(subwidget());
             const QRect comboRect = subwidget()->style()->subControlRect(
                 QStyle::CC_ComboBox, &option, QStyle::SC_ComboBoxEditField, subwidget());
-            kDebug() << "comboRect:" << comboRect;
+            //kDebug() << "comboRect:" << comboRect;
             subwidget()->setContentsMargins(comboRect.left(), comboRect.top(),
                 width() - comboRect.right(), height() - comboRect.bottom());
             int l, t, r, b;
             subwidget()->getContentsMargins(&l, &t, &r, &b);
-            kDebug() << "altered margins:" << l << t << r << b;
+            //kDebug() << "altered margins:" << l << t << r << b;
 
             subwidget()->setFocusPolicy(Qt::NoFocus);
             setFocusProxy(0); // Subwidget is not focusable but the form requires focusable
                               // widget in order to manage data updates so let it be this KexiDBComboBox.
             subwidget()->setCursor(QCursor(Qt::ArrowCursor)); // widgets like listedit have IbeamCursor, we don't want that
             QPalette subwidgetPalette(subwidget()->palette());
-            subwidgetPalette.setColor(QColorGroup::Base, Qt::transparent);
+            subwidgetPalette.setColor(QPalette::Base, Qt::transparent);
             subwidget()->setPalette(subwidgetPalette);
             d->subWidgetsWithDisabledEvents.clear();
             d->subWidgetsWithDisabledEvents << subwidget();
@@ -253,18 +260,13 @@ void KexiDBComboBox::setLabelPosition(LabelPosition position)
         }
         subwidget()->setGeometry(editorGeometry());
     }
-//  KexiSubwidgetInterface *subwidgetInterface = dynamic_cast<KexiSubwidgetInterface*>((QWidget*)m_subwidget);
     // update size policy
-//  if (subwidgetInterface && subwidgetInterface->subwidgetStretchRequired(this)) {
     QSizePolicy sizePolicy(this->sizePolicy());
     if (position == Left)
         sizePolicy.setHorizontalPolicy(QSizePolicy::Minimum);
     else
         sizePolicy.setVerticalPolicy(QSizePolicy::Minimum);
-    //m_subwidget->setSizePolicy(sizePolicy);
     setSizePolicy(sizePolicy);
-    //}
-// }
 }
 
 QRect KexiDBComboBox::buttonGeometry() const
@@ -272,11 +274,7 @@ QRect KexiDBComboBox::buttonGeometry() const
     QRect arrowRect(
         style()->subControlRect(
             QStyle::CC_ComboBox, 0, QStyle::SC_ComboBoxArrow, d->paintedCombo));
-#ifdef __GNUC__
-#warning KexiDBComboBox::buttonGeometry() OK?
-#else
-#pragma WARNING( KexiDBComboBox::buttonGeometry() OK? )
-#endif
+    //! @todo ok?
     arrowRect = QStyle::visualRect(
                     qApp->layoutDirection(), d->paintedCombo->geometry(), arrowRect);
     arrowRect.setHeight(qMax(height() - (2 * arrowRect.y()), arrowRect.height()));      // a fix for Motif style
@@ -287,26 +285,9 @@ bool KexiDBComboBox::handleMousePressEvent(QMouseEvent *e)
 {
     if (e->button() != Qt::LeftButton || designMode())
         return true;
-    /*todo if ( m_discardNextMousePress ) {
-        d->discardNextMousePress = FALSE;
-        return;
-        }*/
 
-    if (/*count() &&*/ (!isEditable() || buttonGeometry().contains(e->pos()))) {
+    if (!isEditable() || buttonGeometry().contains(e->pos())) {
         d->buttonPressed = false;
-
-        /* if ( d->usingListBox() ) {
-              listBox()->blockSignals( TRUE );
-              qApp->sendEvent( listBox(), e ); // trigger the listbox's autoscroll
-              listBox()->setCurrentItem(d->current);
-              listBox()->blockSignals( FALSE );
-              popup();
-              if ( arrowRect.contains( e->pos() ) ) {
-            d->arrowPressed = TRUE;
-            d->arrowDown    = TRUE;
-            repaint( FALSE );
-              }
-          } else {*/
         showPopup();
         return true;
     }
@@ -364,9 +345,6 @@ void KexiDBComboBox::mousePressEvent(QMouseEvent *e)
     if (handleMousePressEvent(e))
         return;
 
-// QTimer::singleShot( 200, this, SLOT(internalClickTimeout()));
-// d->shortClick = TRUE;
-//  }
     KexiDBAutoField::mousePressEvent(e);
 }
 
@@ -377,6 +355,25 @@ void KexiDBComboBox::mouseDoubleClickEvent(QMouseEvent *e)
 
 bool KexiDBComboBox::eventFilter(QObject *o, QEvent *e)
 {
+#if 0
+    if (e->type() != QEvent::Paint
+            && e->type() != QEvent::Leave
+            && e->type() != QEvent::MouseMove
+            && e->type() != QEvent::HoverMove
+            && e->type() != QEvent::HoverEnter
+            && e->type() != QEvent::HoverLeave)
+    {
+        kDebug() << e << o << subwidget();
+        kDebug() << "FOCUS WIDGET:" << focusWidget();
+    }
+#endif
+    if (o == this || o == popup() || o == subwidget()) {
+        if (e->type() == QEvent::KeyPress) {
+            // handle F2/F4
+            if (handleKeyPressEvent(static_cast<QKeyEvent*>(e)))
+                return true;
+        }
+    }
     if (o == this) {
         if (e->type() == QEvent::Resize) {
             d->paintedCombo->resize(size());
@@ -399,17 +396,20 @@ bool KexiDBComboBox::eventFilter(QObject *o, QEvent *e)
         } else if (e->type() == QEvent::Leave) {
             d->mouseOver = false;
             update();
-        } else if (e->type() == QEvent::KeyPress) {
-            // handle F2/F4
-            if (handleKeyPressEvent(static_cast<QKeyEvent*>(e)))
-                return true;
-        } else if (e->type() == QEvent::FocusOut) {
-            if (popup() && popup()->isVisible()) {
-//                popup()->hide();
-//                undoChanges();
+        } else if (e->type() == QEvent::FocusOut || e->type() == QEvent::Hide) {
+            if (!d->isEditable) {
+                moveCursorToEnd();
             }
+            if (popup()) {
+                popup()->hide();
+            }
+            if (popup() && popup()->isVisible()) {
+                undoChanges();
+            }
+            return true;
         }
-    } else if (!d->isEditable && d->subWidgetsWithDisabledEvents.contains(dynamic_cast<QWidget*>(o))) {
+    }
+    if (!d->isEditable && d->subWidgetsWithDisabledEvents.contains(dynamic_cast<QWidget*>(o))) {
         //kDebug() << "**********************####" << e->type() << o;
         if (e->type() == QEvent::MouseButtonPress) {
             // clicking the subwidget should mean the same as clicking the combo box (i.e. show the popup)
@@ -431,19 +431,20 @@ bool KexiDBComboBox::subwidgetStretchRequired(KexiDBAutoField* autoField) const
     return true;
 }
 
+QWidget* KexiDBComboBox::internalEditor() const
+{
+    return /*WidgetWithSubpropertiesInterface*/subwidget();
+}
+
 void KexiDBComboBox::setPaletteBackgroundColor(const QColor & color)
 {
     KexiDBAutoField::setPaletteBackgroundColor(color);
-/*    QPalette pal(palette());
-    QColorGroup cg(pal.active());
-    pal.setActive(cg);
-    QWidget::setPalette(pal);*/
     update();
 }
 
 bool KexiDBComboBox::valueChanged()
 {
-    kDebug() << KexiDataItemInterface::originalValue().toString() << " ? " << value().toString();
+    //kDebug() << KexiDataItemInterface::originalValue().toString() << " ? " << value().toString();
     return KexiDataItemInterface::originalValue() != value();
 }
 
@@ -465,22 +466,27 @@ KexiDB::QueryColumnInfo* KexiDBComboBox::visibleColumnInfo() const
     return d->visibleColumnInfo;
 }
 
+QColor KexiDBComboBox::paletteBackgroundColor() const
+{
+    return KexiDBAutoField::paletteBackgroundColor();
+}
+
 void KexiDBComboBox::moveCursorToEndInInternalEditor()
 {
-    if (d->isEditable && m_moveCursorToEndInInternalEditor_enabled)
+    if (m_moveCursorToEndInInternalEditor_enabled)
         moveCursorToEnd();
 }
 
 void KexiDBComboBox::selectAllInInternalEditor()
 {
-    if (d->isEditable && m_selectAllInInternalEditor_enabled)
+    if (m_selectAllInInternalEditor_enabled)
         selectAll();
 }
 
 void KexiDBComboBox::setValueInternal(const QVariant& add, bool removeOld)
 {
-    //// use KexiDBAutoField instead of KexiComboBoxBase::setValueInternal
-    //// expects existing popup(), but we want to have delayed creation
+    // use KexiDBAutoField instead of KexiComboBoxBase::setValueInternal
+    // expects existing popup(), but we want to have delayed creation
     if (popup())
         popup()->hide();
     KexiComboBoxBase::setValueInternal(add, removeOld);
@@ -514,16 +520,14 @@ QVariant KexiDBComboBox::valueFromInternalEditor()
 
 QPoint KexiDBComboBox::mapFromParentToGlobal(const QPoint& pos) const
 {
-// const KexiFormScrollView* view = KexiUtils::findParentConst<const KexiFormScrollView>(this, "KexiFormScrollView");
     if (!parentWidget())
         return QPoint(-1, -1);
     return parentWidget()->mapToGlobal(pos);
-// return view->viewport()->mapToGlobal(pos);
 }
 
 int KexiDBComboBox::popupWidthHint() const
 {
-    return width(); //popup() ? popup()->width() : 0;
+    return width();
 }
 
 void KexiDBComboBox::fontChange(const QFont & oldFont)
@@ -569,6 +573,16 @@ void KexiDBComboBox::slotRowAccepted(KexiDB::RecordData *record, int row)
     d->dataEnteredByHand = false;
     KexiComboBoxBase::slotRowAccepted(record, row);
     d->dataEnteredByHand = true;
+}
+
+void KexiDBComboBox::slotItemSelected(KexiDB::RecordData *record)
+{
+    KexiComboBoxBase::slotItemSelected(record);
+}
+
+void KexiDBComboBox::slotInternalEditorValueChanged(const QVariant& v)
+{
+    KexiComboBoxBase::slotInternalEditorValueChanged(v);
 }
 
 void KexiDBComboBox::beforeSignalValueChanged()

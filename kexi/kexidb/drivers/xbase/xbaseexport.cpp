@@ -379,7 +379,7 @@ bool xBaseExport::dest_createTable(const QString& originalName, KexiDB::TableSch
 
   uint fieldCount = tableSchema->fieldCount();
   const int arrayLength = fieldCount + 1; // and extra space for the `null`
-  xbSchema xBaseTableSchema[arrayLength];// = new xbSchema[fieldCount+1][4];
+  xbSchema xBaseTableSchema[arrayLength];
 
   uint i = 0;
   for (i = 0; i < fieldCount ; ++i) {

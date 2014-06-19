@@ -25,8 +25,9 @@
 #include "KPrPageApplicationData.h"
 #include "pageeffects/KPrPageEffect.h"
 
-KPrPageEffectSetCommand::KPrPageEffectSetCommand( KoPAPageBase * page, KPrPageEffect * pageEffect )
-: m_page( page )
+KPrPageEffectSetCommand::KPrPageEffectSetCommand(KoPAPageBase * page, KPrPageEffect * pageEffect, KUndo2Command *parent)
+: KUndo2Command(parent)
+, m_page( page )
 , m_newPageEffect( pageEffect )
 , m_oldPageEffect( KPrPage::pageData( m_page )->pageEffect() )
 , m_deleteNewPageEffect( true )
@@ -34,14 +35,14 @@ KPrPageEffectSetCommand::KPrPageEffectSetCommand( KoPAPageBase * page, KPrPageEf
     Q_ASSERT( m_newPageEffect != m_oldPageEffect );
     if ( m_newPageEffect ) {
         if ( ! m_oldPageEffect ) {
-            setText( i18nc( "(qtundo-format)", "Create Slide Effect" ) );
+            setText( kundo2_i18n( "Create Slide Effect" ) );
         }
         else {
-            setText( i18nc( "(qtundo-format)", "Modify Slide Effect" ) );
+            setText( kundo2_i18n( "Modify Slide Effect" ) );
         }
     }
     else {
-        setText( i18nc( "(qtundo-format)", "Delete Slide Effect" ) );
+        setText( kundo2_i18n( "Delete Slide Effect" ) );
     }
 }
 

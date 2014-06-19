@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2006-2014 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -36,36 +36,27 @@ class KEXIFORMUTILS_EXPORT KexiDBComboBox : public KexiDBAutoField,
 {
     Q_OBJECT
     Q_PROPERTY(bool editable READ isEditable WRITE setEditable)
-    //properties from KexiDBAutoField that should not be visible:
-//2.0    Q_PROPERTY(QColor paletteBackgroundColor READ paletteBackgroundColor WRITE setPaletteBackgroundColor RESET unsetPalette)
 
 public:
-    explicit KexiDBComboBox(QWidget *parent);
+    explicit KexiDBComboBox(QWidget *parent = 0);
     virtual ~KexiDBComboBox();
 
     //! Implemented for KexiComboBoxBase: form has no 'related data' model (only the full database model)
-    virtual KexiDB::TableViewColumn *column() const {
-        return 0;
-    }
+    virtual KexiDB::TableViewColumn *column() const;
 
     //! Implemented for KexiComboBoxBase
-    virtual KexiDB::Field *field() const {
-        return KexiDBAutoField::field();
-    }
+    virtual KexiDB::Field *field() const;
 
     //! Implemented for KexiComboBoxBase
-    virtual QVariant origValue() const {
-        return KexiDataItemInterface::originalValue();
-    }
+    virtual QVariant origValue() const;
 
     void setEditable(bool set);
+
     bool isEditable() const;
 
     virtual void setLabelPosition(LabelPosition position);
 
-    virtual QVariant value() {
-        return KexiComboBoxBase::value();
-    }
+    virtual QVariant value();
 
     virtual QVariant visibleValue();
 
@@ -86,9 +77,7 @@ public:
      Reimplemented. */
     virtual KexiDB::QueryColumnInfo* visibleColumnInfo() const;
 
-    QColor paletteBackgroundColor() const {
-        return KexiDBAutoField::paletteBackgroundColor();
-    }
+    virtual QColor paletteBackgroundColor() const;
 
     //! Reimplemented to also set 'this' widget's background color, not only subwidget's.
     virtual void setPaletteBackgroundColor(const QColor & color);
@@ -99,15 +88,12 @@ public:
     virtual void undoChanges();
 
 public slots:
-    void slotRowAccepted(KexiDB::RecordData *record, int row);
-    void slotItemSelected(KexiDB::RecordData *record) {
-        KexiComboBoxBase::slotItemSelected(record);
-    }
+    virtual void slotRowAccepted(KexiDB::RecordData *record, int row);
+    virtual void slotItemSelected(KexiDB::RecordData *record);
 
 protected slots:
-    void slotInternalEditorValueChanged(const QVariant& v) {
-        KexiComboBoxBase::slotInternalEditorValueChanged(v);
-    }
+    virtual void slotInternalEditorValueChanged(const QVariant& v);
+    void slotPopupHidden();
 
 protected:
     QRect buttonGeometry() const;
@@ -136,9 +122,7 @@ protected:
     virtual bool subwidgetStretchRequired(KexiDBAutoField* autoField) const;
 
     //! Implemented for KexiComboBoxBase
-    virtual QWidget *internalEditor() const {
-        return /*WidgetWithSubpropertiesInterface*/subwidget();
-    }
+    virtual QWidget *internalEditor() const;
 
     //! Implemented for KexiComboBoxBase. Does nothing if the widget is not editable.
     virtual void moveCursorToEndInInternalEditor();

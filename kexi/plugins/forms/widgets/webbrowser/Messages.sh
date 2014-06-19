@@ -1,2 +1,4 @@
 #! /bin/sh
-$XGETTEXT `find . -name \*.cpp ` -o $podir/kformdesigner_webbrowser.pot
+source ../../../../../calligra_xgettext.sh
+
+calligra_xgettext `find . -name \*.cpp` > $podir/kformdesigner_webbrowser.pot

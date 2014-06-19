@@ -276,7 +276,7 @@ QList<QWidget *> KarbonPatternTool::createOptionWidgets()
             this, SLOT(patternChanged()));
 
     KoResourceServer<KoPattern> * rserver = KoResourceServerProvider::instance()->patternServer();
-    KoAbstractResourceServerAdapter* adapter = new KoResourceServerAdapter<KoPattern>(rserver);
+    QSharedPointer<KoAbstractResourceServerAdapter> adapter(new KoResourceServerAdapter<KoPattern>(rserver));
     KoResourceItemChooser * chooser = new KoResourceItemChooser(adapter, m_optionsWidget);
     chooser->setObjectName("KarbonPatternChooser");
 
@@ -301,7 +301,7 @@ void KarbonPatternTool::patternSelected(KoResource * resource)
     if (imageCollection) {
         QList<KoShape*> selectedShapes = canvas()->shapeManager()->selection()->selectedShapes();
         QSharedPointer<KoPatternBackground> newFill(new KoPatternBackground(imageCollection));
-        newFill->setPattern(currentPattern->image());
+        newFill->setPattern(currentPattern->pattern());
         canvas()->addCommand(new KoShapeBackgroundCommand(selectedShapes, newFill));
         initialize();
     }

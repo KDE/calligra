@@ -96,7 +96,6 @@ KexiTemplateSelectionPage::KexiTemplateSelectionPage(QWidget* parent)
     m_templatesList->setContentsMargins(0, 0, 0, 0);
     int margin = style()->pixelMetric(QStyle::PM_MenuPanelWidth, 0, 0)
         + KDialog::marginHint();
-    //m_templatesList->setCategorySpacing(5 + margin);
     //not needed in grid:
     m_templatesList->setSpacing(margin);
     m_templatesList->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
@@ -111,7 +110,7 @@ KexiTemplateSelectionPage::KexiTemplateSelectionPage(QWidget* parent)
     info.name = "blank";
     info.caption = i18n("Blank database");
     info.description = i18n("Database project without any objects");
-    info.icon = KIcon(KexiDB::defaultFileBasedDriverIconName()); //"x-office-document");
+    info.icon = KIcon(KexiDB::defaultFileBasedDriverIconName());
     templateCategory.addTemplate(info);
     templateCategories.append(templateCategory);
 
@@ -141,8 +140,7 @@ KexiTemplateSelectionPage::KexiTemplateSelectionPage(QWidget* parent)
     proxyModel->setSourceModel(model);
     m_templatesList->setModel(proxyModel);
 
-    kDebug() << "templatesCategoryDrawer:" << m_templatesList->categoryDrawer();
-
+    //kDebug() << "templatesCategoryDrawer:" << m_templatesList->categoryDrawer();
     setContents(m_templatesList);
 }
 
@@ -249,7 +247,6 @@ void KexiProjectTitleSelectionPage::titleTextChanged(const QString & text)
 {
     Q_UNUSED(text);
     updateUrl();
-//    nextButton()->setEnabled(!text.trimmed().isEmpty());
 }
 
 void KexiProjectTitleSelectionPage::updateUrl()
@@ -415,7 +412,7 @@ bool KexiProjectDatabaseNameSelectionPage::setConnection(KexiDB::ConnectionData*
     m_projectSelector->setProjectSet(0);
     conndataToShow = 0;
     if (data) {
-        m_projectSetToShow = new KexiProjectSet(*data, m_assistant);
+        m_projectSetToShow = new KexiProjectSet(data, m_assistant);
         if (m_projectSetToShow->error()) {
             delete m_projectSetToShow;
             m_projectSetToShow = 0;
@@ -655,14 +652,13 @@ void KexiNewProjectAssistant::createProject(
 void KexiNewProjectAssistant::cancelRequested(KexiAssistantPage* page)
 {
     Q_UNUSED(page);
-    //TODO?
+    //! @todo
 }
 
 void KexiNewProjectAssistant::tryAgainActionTriggered()
 {
     messageWidget()->animatedHide();
     currentPage()->next();
-    //d->m_projectConnectionSelectionPage->next();
 }
 
 void KexiNewProjectAssistant::cancelActionTriggered()

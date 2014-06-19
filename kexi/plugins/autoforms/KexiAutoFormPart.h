@@ -43,7 +43,7 @@ public:
         
         /*! true, if \a document member has changed in previous view. Used on view switching.
          *  Check this flag to see if we should refresh data for DataViewMode. */
-        bool schemaChangedInPreviousView : 1;
+        bool schemaChangedInPreviousView;
         QString name;
     };
 private:

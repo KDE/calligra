@@ -38,7 +38,7 @@ class MDBMigrate : public KexiMigrate
     KEXIMIGRATION_DRIVER
 
 public:
-    MDBMigrate(QObject *parent, const QVariantList& args = QVariantList());
+    explicit MDBMigrate(QObject *parent, const QVariantList& args = QVariantList());
     virtual ~MDBMigrate();
 
     //! Convert an MDB type to a KexiDB type, prompting user if necessary.

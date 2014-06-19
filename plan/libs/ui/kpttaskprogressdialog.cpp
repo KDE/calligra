@@ -64,7 +64,7 @@ void TaskProgressDialog::slotChanged() {
 }
 
 MacroCommand *TaskProgressDialog::buildCommand() {
-    MacroCommand *m = new MacroCommand(i18nc("(qtundo-format)", "Modify Task Progress"));
+    MacroCommand *m = new MacroCommand(kundo2_i18n("Modify Task Progress"));
     bool modified = false;
     MacroCommand *cmd = m_panel->buildCommand();
     if (cmd) {

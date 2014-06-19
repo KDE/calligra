@@ -33,7 +33,7 @@ KPrAnimationEditNodeTypeCommand::KPrAnimationEditNodeTypeCommand(KPrShapeAnimati
     , m_oldType(oldType)
     , m_model(animationModel)
 {
-    setText(i18nc("(qtundo-format)", "Edit animation trigger event" ) );
+    setText(kundo2_i18n("Edit animation trigger event" ) );
 }
 
 KPrAnimationEditNodeTypeCommand::~KPrAnimationEditNodeTypeCommand()

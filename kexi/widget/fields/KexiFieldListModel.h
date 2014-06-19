@@ -48,8 +48,7 @@ class KEXIEXTWIDGETS_EXPORT KexiFieldListModel : public QAbstractTableModel
 {
 Q_OBJECT
 public:
-    
-    KexiFieldListModel(QObject* parent = 0, KexiFieldListOptions options = ShowDataTypes | AllowMultiSelection);
+    explicit KexiFieldListModel(QObject* parent = 0, KexiFieldListOptions options = ShowDataTypes | AllowMultiSelection);
     virtual ~KexiFieldListModel();
     
     /*! Sets table or query schema \a schema.

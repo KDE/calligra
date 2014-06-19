@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component type="desktop">
+  <id>braindump.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0+</project_license>
+  <name>Braindump</name>
+  <name xml:lang="ca">Braindump</name>
+  <name xml:lang="cs">Braindump</name>
+  <name xml:lang="hu">Braindump</name>
+  <name xml:lang="ia">Braindump</name>
+  <name xml:lang="it">Braindump</name>
+  <name xml:lang="nl">Braindump</name>
+  <name xml:lang="pl">Braindump</name>
+  <name xml:lang="pt">BrainDump</name>
+  <name xml:lang="pt-BR">Braindump</name>
+  <name xml:lang="sk">Braindump</name>
+  <name xml:lang="sv">Braindump</name>
+  <name xml:lang="uk">Braindump</name>
+  <name xml:lang="x-test">xxBraindumpxx</name>
+  <description>
+    <p>
+      Braindump is a tool to dump and organize the content of your brain (ideas, drawings, images, texts…) to your computer.
+      It works by allowing to create and edit whiteboards, which are infinite canvas on which you can add texts, images, charts, drawings, etc.
+    </p>
+    <p xml:lang="ca">El Braindump és una eina per a bolcar i organitzar el contingut del cervell (idees, dibuixos, imatges, texts…) a l'ordinador. Funciona permetent crear i editar pissarres, que tenen llenços infinits en els que es poden afegir texts, imatges, diagrames, dibuixos, etc.</p>
+    <p xml:lang="ia">Braindump es un instrumento pro discargar e organizar le contento de tu cerebro (ideas, designos, imagines, textos...) in tu computator. Illo functiona per permitter crear e modificar tabula blanc, que es telas infinite sur le qual on pote adder textos, imagines, diagrammas, designos, etc.</p>
+    <p xml:lang="it">Braindump è uno strumento per estrarre e organizzare il contenuto del tuo cervello (idee, disegni, immagini, testi...) sul tuo computer. Ti consente di creare e modificare lavagne bianche, che sono tele infinite sulle quali puoi aggiungere testi, immagini, grafici, disegni, ecc.</p>
+    <p xml:lang="nl">Braindump is een hulpmiddel om de inhoud van uw brein te dumpen en te organiseren (ideeën, tekeningen, afbeeldingen, teksten…) naar uw computer. Het werkt door u instaat te stellen whiteboards te bewerken, die oneindige werkvelden zijn waarop u teksten, afbeeldingen, grafieken, tekeningen, etc. kunt toevoegen.</p>
+    <p xml:lang="pl">Braindump jest narzędziem do zrzucania i porządkowania zawartości twojego umysłu (pomysły, rysunki, obrazy, teksty...) na komputer. Działa przez umożliwianie tworzenia i edytowania białych tablic, które są bezgranicznym płótnem, na które można dodawać teksty, obrazy, wykresy, rysunki, itp.</p>
+    <p xml:lang="pt">O Braindump é uma ferramenta para descarregar e organizar o conteúdo do seu cérebro (ideias, desenhos, imagens, textos, ...) para o seu computador. Permite criar e editar quadros, que são uma "tela" infinita onde poderá adicionar textos, imagens, gráficos, desenhos, etc.</p>
+    <p xml:lang="pt-BR">Braindump é uma ferramenta para descarregar e organizar o conteúdo do seu cérebro (ideias, desenhos, imagens, textos, ...) para o seu computador. Permite-lhe criar e editar quadros, que são uma espécie de "tela infinita" onde poderá adicionar textos, imagens, gráficos, desenhos, etc.</p>
+    <p xml:lang="sk">Braindump je nástroj na prenos a organizáciu obsahu vášho mozgu (nápady, kresby, obrázky, texty...) do vášho počítača. Umožňuje vytvárať a upravovať tabule, ktoré sú neurčitým plátnom, kam môžete pridávať texty, obrázky, grafy, kresby atď.</p>
+    <p xml:lang="sv">Braindump är ett verktyg för att hämta och organisera innehållet i din hjärna (idéer, ritningar, bilder, texter …) på datorn. Det fungerar genom att låta dig skapa och redigera skrivtavlor, som är oändliga ytor där du kan lägga till texter, bilder, diagram, ritningar, etc.</p>
+    <p xml:lang="uk">Braindump — програма для запису та упорядкування ваших думок (ідей, креслень, зображень, фрагментів тексту…) за допомогою вашого комп’ютера. У цій програмі ви можете створювати та редагувати так звані «дошки» — нескінченні полотна, на які можна додавати фрагменти тексту, зображення, діаграми, креслення тощо.</p>
+    <p xml:lang="x-test">xxBraindump is a tool to dump and organize the content of your brain (ideas, drawings, images, texts…) to your computer. It works by allowing to create and edit whiteboards, which are infinite canvas on which you can add texts, images, charts, drawings, etc.xx</p>
+  </description>
+  <url type="homepage">http://www.calligra.org/braindump/</url>
+  <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?format=guided&amp;product=braindump</url>
+  <screenshots>
+    <screenshot type="default">
+      <image>http://www.calligra.org/wp-content/uploads/2011/03/projection-900x548.png</image>
+    </screenshot>
+  </screenshots>
+  <project_group>KDE</project_group>
+  <provides>
+    <binary>braindump</binary>
+  </provides>
+</component>

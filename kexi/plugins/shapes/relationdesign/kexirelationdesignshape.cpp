@@ -144,7 +144,6 @@ void KexiRelationDesignShape::constPaint(QPainter &painter, const KoViewConverte
     applyConversion(painter, converter);
 
     painter.save();
-    //painter.setRenderHint(QPainter::Antialiasing, true);
     QPainterPath pp;
     pp.addRoundedRect(QRectF(QPointF(0.0, 0.0), size()), 3.0, 3.0);
 

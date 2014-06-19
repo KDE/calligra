@@ -60,7 +60,7 @@ protected:
 
     virtual bool postProcessing();
 
-    QString name() const;
+    KUndo2MagicString name() const;
 
     bool m_merge;
 private:

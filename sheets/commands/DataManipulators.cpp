@@ -156,7 +156,7 @@ DataManipulator::DataManipulator(KUndo2Command* parent)
         , m_expandMatrix(false)
 {
     // default name for DataManipulator, can be changed using setText
-    setText(i18nc("(qtundo-format)", "Change Value"));
+    setText(kundo2_i18n("Change Value"));
 }
 
 DataManipulator::~DataManipulator()
@@ -226,7 +226,7 @@ Value DataManipulator::newValue(Element *element, int col, int row,
 
 SeriesManipulator::SeriesManipulator()
 {
-    setText(i18nc("(qtundo-format)", "Insert Series"));
+    setText(kundo2_i18n("Insert Series"));
 
     m_type = Linear;
     m_last = -2;
@@ -304,7 +304,7 @@ FillManipulator::FillManipulator()
 {
     m_dir = Down;
     m_changeformat = true;
-    setText(i18nc("(qtundo-format)", "Fill Selection"));
+    setText(kundo2_i18n("Fill Selection"));
 }
 
 FillManipulator::~FillManipulator()
@@ -345,7 +345,7 @@ Style FillManipulator::newFormat(Element *element, int col, int row)
 CaseManipulator::CaseManipulator()
 {
     m_mode = Upper;
-    setText(i18nc("(qtundo-format)", "Change Case"));
+    setText(kundo2_i18n("Change Case"));
 }
 
 CaseManipulator::~CaseManipulator()
@@ -394,7 +394,7 @@ ShiftManipulator::ShiftManipulator(KUndo2Command *parent)
         , m_mode(Insert)
 {
     m_checkLock = true;
-    setText(i18nc("(qtundo-format)", "Insert Cells"));
+    setText(kundo2_i18n("Insert Cells"));
 }
 
 ShiftManipulator::~ShiftManipulator()
@@ -406,9 +406,9 @@ void ShiftManipulator::setReverse(bool reverse)
     m_reverse = reverse;
     m_mode = reverse ? Delete : Insert;
     if (!m_reverse)
-        setText(i18nc("(qtundo-format)", "Insert Cells"));
+        setText(kundo2_i18n("Insert Cells"));
     else
-        setText(i18nc("(qtundo-format)", "Remove Cells"));
+        setText(kundo2_i18n("Remove Cells"));
 }
 
 bool ShiftManipulator::process(Element* element)

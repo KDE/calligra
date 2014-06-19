@@ -29,6 +29,9 @@ Table Of Contents
 7. IMPORTANT On using CPU vector capabilities in Calligra Libs and Krita
 8. Plan
 8.1. Runtime dependency of Plan's import filters
+9. Okular ODP plugin
+9.1. Runtime dependency of the Okular ODP plugin
+9.2. Support for PPT, PPTX and more runtime dependency
 
 
 1. Kexi
@@ -355,3 +358,27 @@ If your distribution is not yet able to provide those dependencies, please
 disable the Plan import filters by patching the toplevel CMakeLists.txt
 in the line before calligra_drop_unbuildable_products() with
 calligra_disable_product(FILTER_MPXJ_IMPORT "missing runtime deps")
+
+
+9. Okular ODP plugin
+====================
+
+9.1. Runtime dependency of the Okular ODP plugin
+------------------------------------------------
+OKULAR_GENERATOR_ODP, the plugin for Okular, in extras/okularodpgenerator, has a
+runtime dependency on the Stage engine, PART_STAGE.
+
+9.2. Support for PPT, PPTX and more runtime dependency
+------------------------------------------------------
+The Okular ODP plugin also supports the formats PPT and PPTX, if the respective
+filters FILTER_PPT_TO_ODP and FILTER_PPTX_TO_ODP are built, by the products
+OKULAR_GENERATOR_PPT and OKULAR_GENERATOR_PPTX.
+
+In that case the files
+* libokularGenerator_{powerpoint,pptx}_calligra.desktop
+* okular{Powerpoint,Pptx}_calligra.desktop
+* okularApplication_{powerpoint,pptx}_calligra.desktop
+will be installed from the filters/stage/{powerpoint,pptx}.
+
+So with those desktop files and the Okular ODP plugin installed there is a
+runtime dependency on the Stage engine and the respective filter.

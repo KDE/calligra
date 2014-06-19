@@ -815,10 +815,10 @@ bool ResourceItemModel::setName( Resource *res, const QVariant &value, int role 
             if ( value.toString() == res->name() ) {
                 return false;
             }
-            emit executeCommand( new ModifyResourceNameCmd( res, value.toString(), i18nc( "(qtundo-format)", "Modify resource name" ) ) );
+            emit executeCommand( new ModifyResourceNameCmd( res, value.toString(), kundo2_i18n( "Modify resource name" ) ) );
             return true;
         case Qt::CheckStateRole:
-            emit executeCommand( new ModifyResourceAutoAllocateCmd( res, value.toBool(), i18nc( "(qtundo-format)", "Modify resource auto allocate" ) ) );
+            emit executeCommand( new ModifyResourceAutoAllocateCmd( res, value.toBool(), kundo2_i18n( "Modify resource auto allocate" ) ) );
             return true;
     }
     return false;
@@ -831,7 +831,7 @@ bool ResourceItemModel::setName( ResourceGroup *res, const QVariant &value, int 
             if ( value.toString() == res->name() ) {
                 return false;
             }
-            emit executeCommand( new ModifyResourceGroupNameCmd( res, value.toString(), i18nc( "(qtundo-format)", "Modify resourcegroup name" ) ) );
+            emit executeCommand( new ModifyResourceGroupNameCmd( res, value.toString(), kundo2_i18n( "Modify resourcegroup name" ) ) );
             return true;
     }
     return false;
@@ -872,7 +872,7 @@ bool ResourceItemModel::setType( Resource *res, const QVariant &value, int role 
             if ( v == res->type() ) {
                 return false;
             }
-            emit executeCommand( new ModifyResourceTypeCmd( res, v, i18nc( "(qtundo-format)", "Modify resource type" ) ) );
+            emit executeCommand( new ModifyResourceTypeCmd( res, v, kundo2_i18n( "Modify resource type" ) ) );
             return true;
         }
     }
@@ -893,7 +893,7 @@ bool ResourceItemModel::setType( ResourceGroup *res, const QVariant &value, int 
             if ( v == res->type() ) {
                 return false;
             }
-            emit executeCommand( new ModifyResourceGroupTypeCmd( res, v, i18nc( "(qtundo-format)", "Modify resourcegroup type" ) ) );
+            emit executeCommand( new ModifyResourceGroupTypeCmd( res, v, kundo2_i18n( "Modify resourcegroup type" ) ) );
             return true;
         }
     }
@@ -907,7 +907,7 @@ bool ResourceItemModel::setInitials( Resource *res, const QVariant &value, int r
             if ( value.toString() == res->initials() ) {
                 return false;
             }
-            emit executeCommand( new ModifyResourceInitialsCmd( res, value.toString(), i18nc( "(qtundo-format)", "Modify resource initials" ) ) );
+            emit executeCommand( new ModifyResourceInitialsCmd( res, value.toString(), kundo2_i18n( "Modify resource initials" ) ) );
             return true;
     }
     return false;
@@ -920,7 +920,7 @@ bool ResourceItemModel::setEmail( Resource *res, const QVariant &value, int role
             if ( value.toString() == res->email() ) {
                 return false;
             }
-            emit executeCommand( new ModifyResourceEmailCmd( res, value.toString(), i18nc( "(qtundo-format)", "Modify resource email" ) ) );
+            emit executeCommand( new ModifyResourceEmailCmd( res, value.toString(), kundo2_i18n( "Modify resource email" ) ) );
             return true;
     }
     return false;
@@ -941,7 +941,7 @@ bool ResourceItemModel::setCalendar( Resource *res, const QVariant &value, int r
             if ( c == res->calendar( true ) ) {
                 return false;
             }
-            emit executeCommand( new ModifyResourceCalendarCmd( res, c, i18nc( "(qtundo-format)", "Modify resource calendar" ) ) );
+            emit executeCommand( new ModifyResourceCalendarCmd( res, c, kundo2_i18n( "Modify resource calendar" ) ) );
             return true;
         }
     }
@@ -956,7 +956,7 @@ bool ResourceItemModel::setUnits( Resource *res, const QVariant &value, int role
             if ( value.toInt() == res->units() ) {
                 return false;
             }
-            emit executeCommand( new ModifyResourceUnitsCmd( res, value.toInt(), i18nc( "(qtundo-format)", "Modify resource available units" ) ) );
+            emit executeCommand( new ModifyResourceUnitsCmd( res, value.toInt(), kundo2_i18n( "Modify resource available units" ) ) );
             return true;
     }
     return false;
@@ -969,7 +969,7 @@ bool ResourceItemModel::setAvailableFrom( Resource *res, const QVariant &value, 
             if ( value.toDateTime() == res->availableFrom() ) {
                 return false;
             }
-            emit executeCommand( new ModifyResourceAvailableFromCmd( res, value.toDateTime(), i18nc( "(qtundo-format)", "Modify resource available from" ) ) );
+            emit executeCommand( new ModifyResourceAvailableFromCmd( res, value.toDateTime(), kundo2_i18n( "Modify resource available from" ) ) );
             return true;
     }
     return false;
@@ -982,7 +982,7 @@ bool ResourceItemModel::setAvailableUntil( Resource *res, const QVariant &value,
             if ( value.toDateTime() == res->availableUntil() ) {
                 return false;
             }
-            emit executeCommand( new ModifyResourceAvailableUntilCmd( res, value.toDateTime(), i18nc( "(qtundo-format)", "Modify resource available until" ) ) );
+            emit executeCommand( new ModifyResourceAvailableUntilCmd( res, value.toDateTime(), kundo2_i18n( "Modify resource available until" ) ) );
             return true;
     }
     return false;
@@ -995,7 +995,7 @@ bool ResourceItemModel::setNormalRate( Resource *res, const QVariant &value, int
             if ( value.toDouble() == res->normalRate() ) {
                 return false;
             }
-            emit executeCommand( new ModifyResourceNormalRateCmd( res, value.toDouble(), i18nc( "(qtundo-format)", "Modify resource normal rate" ) ) );
+            emit executeCommand( new ModifyResourceNormalRateCmd( res, value.toDouble(), kundo2_i18n( "Modify resource normal rate" ) ) );
             return true;
     }
     return false;
@@ -1008,7 +1008,7 @@ bool ResourceItemModel::setOvertimeRate( Resource *res, const QVariant &value, i
             if ( value.toDouble() == res->overtimeRate() ) {
                 return false;
             }
-            emit executeCommand( new ModifyResourceOvertimeRateCmd( res, value.toDouble(), i18nc( "(qtundo-format)", "Modify resource overtime rate" ) ) );
+            emit executeCommand( new ModifyResourceOvertimeRateCmd( res, value.toDouble(), kundo2_i18n( "Modify resource overtime rate" ) ) );
             return true;
     }
     return false;
@@ -1030,7 +1030,7 @@ bool ResourceItemModel::setAccount( Resource *res, const QVariant &value, int ro
             }
             Account *old = res->account();
             if ( old != a ) {
-                emit executeCommand( new ResourceModifyAccountCmd( *res, old, a, i18nc( "(qtundo-format)", "Modify resource account" ) ) );
+                emit executeCommand( new ResourceModifyAccountCmd( *res, old, a, kundo2_i18n( "Modify resource account" ) ) );
                 return true;
             }
         }
@@ -1262,7 +1262,7 @@ bool ResourceItemModel::createResources( ResourceGroup *group, const QByteArray 
 #ifdef PLAN_KDEPIMLIBS_FOUND
     KABC::VCardConverter vc;
     KABC::Addressee::List lst = vc.parseVCards( data );
-    MacroCommand *m = new MacroCommand( i18ncp( "(qtundo-format)", "Add resource from address book", "Add %1 resources from address book", lst.count() ) );
+    MacroCommand *m = new MacroCommand( kundo2_i18np( "Add resource from address book", "Add %1 resources from address book", lst.count() ) );
     foreach( const KABC::Addressee &a, lst ) {
         Resource *r = new Resource();
         QString uid = a.uid();
@@ -1315,12 +1315,12 @@ bool ResourceItemModel::dropMimeData( const QMimeData *data, Qt::DropAction acti
                 if ( r->parentGroup() == g ) {
                     continue;
                 }
-                if ( m == 0 ) m = new MacroCommand( "" );
+                if ( m == 0 ) m = new MacroCommand( KUndo2MagicString() );
                 m->addCommand( new MoveResourceCmd( g, r ) );
                 ++i;
             }
             if ( m ) {
-                QString msg = i18np( "Move resource", "Move %1 resources", i );
+                KUndo2MagicString msg = kundo2_i18np( "Move resource", "Move %1 resources", i );
                 MacroCommand *c = new MacroCommand( msg );
                 c->addCommand( m );
                 emit executeCommand( c );
@@ -1334,12 +1334,12 @@ bool ResourceItemModel::dropMimeData( const QMimeData *data, Qt::DropAction acti
             int i = 0;
             foreach ( Resource *r, resourceList( stream ) ) {
                 Resource *nr = new Resource( r );
-                if ( m == 0 ) m = new MacroCommand( "" );
+                if ( m == 0 ) m = new MacroCommand( KUndo2MagicString() );
                 m->addCommand( new AddResourceCmd( g, nr ) );
                 ++i;
             }
             if ( m ) {
-                QString msg = i18np( "Copy resource", "Copy %1 resources", i );
+                KUndo2MagicString msg = kundo2_i18np( "Copy resource", "Copy %1 resources", i );
                 MacroCommand *c = new MacroCommand( msg );
                 c->addCommand( m );
                 emit executeCommand( c );
@@ -1431,7 +1431,7 @@ QMimeData *ResourceItemModel::mimeData( const QModelIndexList & indexes ) const
 QModelIndex ResourceItemModel::insertGroup( ResourceGroup *g )
 {
     //kDebug(planDbg());
-    emit executeCommand( new AddResourceGroupCmd( m_project, g, i18nc( "(qtundo-format)", "Add resource group" ) ) );
+    emit executeCommand( new AddResourceGroupCmd( m_project, g, kundo2_i18n( "Add resource group" ) ) );
     int row = m_project->resourceGroups().indexOf( g );
     if ( row != -1 ) {
         return createIndex( row, 0, g );
@@ -1442,7 +1442,7 @@ QModelIndex ResourceItemModel::insertGroup( ResourceGroup *g )
 QModelIndex ResourceItemModel::insertResource( ResourceGroup *g, Resource *r, Resource * /*after*/ )
 {
     //kDebug(planDbg());
-    emit executeCommand( new AddResourceCmd( g, r, i18nc( "(qtundo-format)", "Add resource" ) ) );
+    emit executeCommand( new AddResourceCmd( g, r, kundo2_i18n( "Add resource" ) ) );
     int row = g->indexOf( r );
     if ( row != -1 ) {
         return createIndex( row, 0, r );

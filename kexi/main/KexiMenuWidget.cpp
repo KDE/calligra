@@ -39,7 +39,6 @@
 #include <kexiutils/utils.h>
 #include <kexi_version.h>
 
-#include <QDebug>
 #include <QCache>
 #include <QStyle>
 #include <QEvent>
@@ -52,28 +51,17 @@
 #ifndef QT_NO_ACCESSIBILITY
 # include <qaccessible.h>
 #endif
-/*#ifndef QT_NO_EFFECTS
-# include <private/qeffects_p.h>
-#endif*/
 #ifndef QT_NO_WHATSTHIS
 # include <QWhatsThis>
 #endif
 
 #include "KexiMenuWidget_p.h"
-//#include "qmenubar_p.h"
 #include <QWidgetAction>
 #include <QToolButton>
 #include <QPushButton>
 #include <QScopedPointer>
 #include <QDesktopServices>
 #include <QUrl>
-//#include <private/qpushbutton_p.h>
-//#include <private/qaction_p.h>
-//#include <private/qsoftkeymanager_p.h>
-
-// #ifdef Q_WS_X11
-// #   include <private/qt_x11_p.h>
-// #endif
 
 const int logoBottomMargin = 84 - 12;
 const char* calligraUrl = "http://www.calligra.org";
@@ -414,7 +402,7 @@ void KexiMenuWidgetAction::setPersistentlySelected(bool set)
 {
     if (set == d->persistentlySelected)
         return;
-    qDebug() << "^^^^" << objectName() << set;
+    //kDebug() << "^^^^" << objectName() << set;
     d->persistentlySelected = set;
 }
 
@@ -2391,7 +2379,7 @@ void KexiMenuWidget::mouseReleaseEvent(QMouseEvent *e)
     d->mouseDown = 0;
     d->setSyncAction();
     QAction *action = d->actionAt(e->pos());
-qDebug() << "action:" << action << "d->currentAction:" << d->currentAction; // << action->menu();
+    //kDebug() << "action:" << action << "d->currentAction:" << d->currentAction;
     if (action && action == d->currentAction) {
         if (!action->menu()){
 #if defined(Q_WS_WIN)

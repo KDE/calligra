@@ -91,7 +91,6 @@
 #include <KoShapeManager.h>
 #include <KoSelection.h>
 #include <KoStore.h>
-#include <KoToolBoxFactory.h>
 #include <KoDockerManager.h>
 #include <KoToolManager.h>
 #include <KoToolRegistry.h>
@@ -1748,7 +1747,7 @@ void View::paperLayoutDlg()
 void View::resetPrintRange()
 {
     DefinePrintRangeCommand* command = new DefinePrintRangeCommand();
-    command->setText(i18nc("(qtundo-format)", "Reset Print Range"));
+    command->setText(kundo2_i18n("Reset Print Range"));
     command->setSheet(activeSheet());
     command->add(Region(QRect(QPoint(1, 1), QPoint(KS_colMax, KS_rowMax)), activeSheet()));
     doc()->addCommand(command);

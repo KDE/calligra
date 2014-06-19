@@ -7,7 +7,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/interfaces
                     ${Boost_INCLUDE_DIR}
                     ${EIGEN2_INCLUDE_DIR} )
 
-if (SHOULD_BUILD_SHEETS_PART)
+if (SHOULD_BUILD_PART_SHEETS)
 
 add_subdirectory( data )
 add_subdirectory( shape )
@@ -98,6 +98,11 @@ SET (dialogs_DIR_SRCS
     dialogs/StyleManagerDialog.cpp
     dialogs/SubtotalDialog.cpp
     dialogs/ValidityDialog.cpp
+    dialogs/pivot.cpp
+    dialogs/pivotfilters.cpp
+    dialogs/pivotoptions.cpp
+    dialogs/pivotmain.cpp
+
     )
 
 
@@ -113,6 +118,11 @@ kde4_add_ui_files(dialogs_DIR_SRCS
     dialogs/SortDetailsWidget.ui
     dialogs/SubtotalWidget.ui
     dialogs/SubtotalsDetailsWidget.ui
+    dialogs/pivot.ui
+    dialogs/pivotfilters.ui
+    dialogs/pivotoptions.ui
+    dialogs/pivotmain.ui
+
     )
 
 SET (functions_DIR_SRCS
@@ -384,13 +394,18 @@ install( FILES
     commands/AbstractRegionCommand.h
     commands/DataManipulators.h
     commands/SortManipulator.h
+    dialogs/pivot.h
+    dialogs/pivotfilters.h
+    dialogs/pivotoptions.h
+    dialogs/pivotmain.h
+
 DESTINATION ${INCLUDE_INSTALL_DIR}/sheets/commands COMPONENT Devel)
 
-endif (SHOULD_BUILD_SHEETS_PART)
+endif (SHOULD_BUILD_PART_SHEETS)
 
 ########### APP ###############
 
-if (SHOULD_BUILD_SHEETS_APP)
+if (SHOULD_BUILD_APP_SHEETS)
 
 SET (calligrasheets_KDEINIT_SRCS part/Main.cpp )
 
@@ -412,5 +427,6 @@ target_link_libraries( calligrasheets kdeinit_calligrasheets )
 install(TARGETS calligrasheets  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 install( PROGRAMS  sheets.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
+install( FILES sheets.appdata.xml DESTINATION ${SHARE_INSTALL_PREFIX}/appdata/)
 
-endif (SHOULD_BUILD_SHEETS_APP)
+endif (SHOULD_BUILD_APP_SHEETS)

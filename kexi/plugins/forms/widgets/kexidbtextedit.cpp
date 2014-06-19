@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2005 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004-2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2014 Wojciech Kosowicz <pcellix@gmail.com>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -86,6 +87,7 @@ KexiDBTextEdit::KexiDBTextEdit(QWidget *parent)
 //    setAutoFillBackground(true); // otherwise we get transparent background...
 //    installEventFilter(this);
     setBackgroundRole(QPalette::Base);
+    setAcceptRichText(false);
 }
 
 KexiDBTextEdit::~KexiDBTextEdit()
@@ -186,22 +188,17 @@ void KexiDBTextEdit::setReadOnly(bool readOnly)
 #else
 #pragma WARNING( TODO KexiDBTextEdit::setReadOnly() - bg color )
 #endif
+//! @todo
 #if 0//TODO
     QPalette p = palette();
     QColor c(readOnly
-             ? KexiFormUtils::lighterGrayBackgroundColor(kapp->palette()) : p.color(QPalette::Normal, QColorGroup::Base));
+             ? KexiFormUtils::lighterGrayBackgroundColor(kapp->palette()) : p.color(QPalette::Active, QPalette::Base));
     setPaper(c);
-    p.setColor(QColorGroup::Base, c);
-    p.setColor(QColorGroup::Background, c);
+    p.setColor(QPalette::Base, c);
+    p.setColor(QPalette::Background, c);
     setPalette(p);
 #endif
 }
-
-/* Qt4
-void KexiDBTextEdit::setText( const QString & text, const QString & context )
-{
-  KTextEdit::setText(text, context);
-}*/
 
 QWidget* KexiDBTextEdit::widget()
 {
@@ -267,9 +264,9 @@ void KexiDBTextEdit::setDisplayDefaultValue(QWidget* widget, bool displayDefault
     KexiFormDataItemInterface::setDisplayDefaultValue(widget, displayDefaultValue);
     // initialize display parameters for default / entered value
     KexiDisplayUtils::DisplayParameters * const params
-    = displayDefaultValue ? m_displayParametersForDefaultValue : m_displayParametersForEnteredValue;
+        = displayDefaultValue ? m_displayParametersForDefaultValue : m_displayParametersForEnteredValue;
     QPalette pal(palette());
-    pal.setColor(QPalette::Active, QColorGroup::Text, params->textColor);
+    pal.setColor(QPalette::Active, QPalette::Text, params->textColor);
     setPalette(pal);
     setFont(params->font);
 //! @todo support rich text...
@@ -373,8 +370,14 @@ void KexiDBTextEdit::createDataSourceLabel()
 
 void KexiDBTextEdit::selectAllOnFocusIfNeeded()
 {
-//    moveCursorToEnd();
-//    selectAll();
+}
+
+void KexiDBTextEdit::focusOutEvent(QFocusEvent *e)
+{
+    KTextEdit::focusOutEvent(e);
+    if (textCursor().hasSelection()) {
+        moveCursorToEnd();
+    }
 }
 
 void KexiDBTextEdit::updatePalette()

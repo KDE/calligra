@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2013 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -34,7 +34,7 @@ namespace KexiDB
 class ConnectionData;
 }
 
-/*! */
+/*! Database password dialog. */
 class KexiDBPasswordDialog : public KPasswordDialog
 {
     Q_OBJECT
@@ -69,17 +69,6 @@ public:
 
     virtual bool init() { return KexiStartupData::init(); }
     virtual tristate init(int argc, char **argv);
-
-#if 0
-    /*! Used for opening existing projects.
-     Detects project file type by mime type and returns project data, if it can be detected,
-     otherwise - NULL. \a parent is passed as parent for potential error message boxes.
-     Also uses \a cdata connection data for server-based projects.
-     cdata.driverName is adjusted, if a file-based project has been detected.
-    */
-    static KexiProjectData* detectProjectData(
-        KexiDB::ConnectionData& cdata, const QString &dbname, QWidget *parent);
-#endif
 
     /*! Options for detectActionForFile() */
     enum DetectActionForFileOptions {
@@ -123,13 +112,15 @@ public:
 
 protected slots:
     void slotSaveShortcutFileChanges();
-//  void slotShowConnectionDetails();
 
     //! Reaction to application's quit, needed because it is safer to destroy filewidget-related GUIs before
     void slotAboutToAppQuit();
 
 protected:
     bool getAutoopenObjects(KCmdLineArgs *args, const QByteArray &action_name);
+
+    //! No plugins: show message and try to rebuild the system configuration
+    void showNoPluginsMessageAndTryToRebuildSyCoCa();
 
     class Private;
     Private * const d;
@@ -142,4 +133,3 @@ namespace Kexi
 }
 
 #endif
-

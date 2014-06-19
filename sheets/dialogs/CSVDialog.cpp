@@ -23,7 +23,7 @@
 // Local
 #include "CSVDialog.h"
 
-#include <KoFileDialogHelper.h>
+#include <KoFileDialog.h>
 
 #include <QApplication>
 #include <QByteArray>
@@ -76,8 +76,10 @@ CSVDialog::CSVDialog(QWidget* parent, Selection* selection, Mode mode)
         }
     } else if (m_mode == File) {
         //setWindowTitle(i18n("Inserting Text File"));
-        m_filename = KoFileDialogHelper::getImportFileName(parent, i18n("Import CSV Data File"),
-                                                        "", QStringList(i18n("CSV data files (*.csv)")));
+        KoFileDialog dialog(parent, KoFileDialog::ImportFile, "OpenDocument");
+        dialog.setCaption(i18n("Import CSV Data File"));
+        dialog.setNameFilter(i18n("CSV data files (*.csv)"));
+        m_filename = dialog.url();
         //cancel action !
         if (m_filename.isEmpty()) {
             enableButton(Ok, false);
@@ -174,11 +176,11 @@ void CSVDialog::accept()
 
     CSVDataCommand* command = new CSVDataCommand();
     if (m_mode == Clipboard)
-        command->setText(i18nc("(qtundo-format)", "Inserting From Clipboard"));
+        command->setText(kundo2_i18n("Inserting From Clipboard"));
     else if (m_mode == File)
-        command->setText(i18nc("(qtundo-format)", "Inserting Text File"));
+        command->setText(kundo2_i18n("Inserting Text File"));
     else
-        command->setText(i18nc("(qtundo-format)", "Text to Columns"));
+        command->setText(kundo2_i18n("Text to Columns"));
     command->setSheet(sheet);
     command->setValue(value);
     command->setColumnDataTypes(dataTypes);

@@ -23,6 +23,7 @@
 #include <QColor>
 #include <QApplication>
 #include <QPolygon>
+#include <QScrollBar>
 
 #include <kdebug.h>
 
@@ -135,10 +136,7 @@ KexiRelationsConnection::drawConnection(QPainter *p)
         p->drawLine(sx, sy + 1, sx + side1CharWidth - 1, sy + 1);
 
         side1x = sx;
-//  side1y = sy - 7;
-
         sideNx = rx - sideNCharWidth - 1;
-//  sideNy = ry - 6;
 
         QLine mainLine(sx + side1CharWidth, sy, rx - sideNCharWidth, ry);
         p->setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing, true);
@@ -166,21 +164,13 @@ KexiRelationsConnection::drawConnection(QPainter *p)
         pen.setWidth(1);
         p->setPen(pen);
 
-//  p->drawLine(lx, ry, lx + 8, ry);
-//  p->drawPoint(lx + 1, ry - 1);
-//  p->drawPoint(lx + 1, ry + 1);
-//  p->drawLine(lx + 2, ry - 2, lx + 2, ry + 2);
-
         //master side
         p->drawLine(rx - side1CharWidth + 1, sy - 1, rx, sy - 1);
         p->drawLine(rx - side1CharWidth + 1, sy + 1, rx, sy + 1);
         p->drawLine(rx - side1CharWidth + 1, sy, rx, sy);
 
         side1x = rx - side1CharWidth;
-//  side1y = sy - 7;
-
         sideNx = lx + 1;
-//  sideNy = ry - 6;
 
         QLineF mainLine(lx + sideNCharWidth, qreal(ry) + 0.5, rx - side1CharWidth, qreal(sy) + 0.5);
         p->setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing, true);
@@ -206,7 +196,7 @@ QRect
 KexiRelationsConnection::connectionRect()
 {
     int sx = d->masterTable->x() + d->scrollArea->horizontalScrollBar()->value();
-    int rx = d->detailsTable->x() + d->scrollArea->horizontalScrollBar()->value(); //Qt 4 d->scrollArea->contentsX();
+    int rx = d->detailsTable->x() + d->scrollArea->horizontalScrollBar()->value();
     int ry = d->detailsTable->globalY(d->detailsField);
     int sy = d->masterTable->globalY(d->masterField);
 
@@ -222,21 +212,13 @@ KexiRelationsConnection::connectionRect()
         width = d->detailsTable->width();
     }
 
-
     int dx = qAbs((leftX + width) - rightX);
     int dy = qAbs(sy - ry) + 2;
-
     int top = qMin(sy, ry);
     int left = leftX + width;
 
-
-// return QRect(sx - 1, sy - 1, (rx + d->detailsTable->width()) - sx + 1, ry - sy + 1);
-// QRect rect(left - 150, top - 150, dx + 150, dy + 150);
     QRect rect(left - 30, top - 30, dx + 60, dy + 60);
-// kDebug() << d->oldRect << "," << rect;
-
     d->oldRect = rect;
-
     return rect;
 }
 

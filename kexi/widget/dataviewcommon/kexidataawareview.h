@@ -45,7 +45,7 @@ class KEXIDATAVIEWCOMMON_EXPORT KexiDataAwareView : public KexiView,
     Q_OBJECT
 
 public:
-    KexiDataAwareView(QWidget *parent = 0);
+    explicit KexiDataAwareView(QWidget *parent = 0);
 
     virtual ~KexiDataAwareView();
 
@@ -90,11 +90,6 @@ public slots:
     void slotGoToNextRow();
     void slotGoToLastRow();
     void slotGoToNewRow();
-    /*  void editFind();
-        void slotFind();
-        void editFindNext();
-        void editFindPrevious();
-        void editReplace();*/
 
     /*! @return true if data editing is in progress.
      * Implemented for KexiView. */
@@ -111,13 +106,12 @@ public slots:
     virtual tristate cancelDataChanges();
 
 protected slots:
-//  void slotCellSelected(const QVariant& v); //!< @internal
     void slotCellSelected(int col, int row);
     void reloadActions();
     void slotUpdateRowActions(int row);
     //! Updates 'save/cancel record changes' actions
     void slotUpdateSaveCancelActions();
-    void slotClosing(bool& cancel);
+    void slotClosing(bool* cancel);
 
 protected:
     void init(QWidget* viewWidget, KexiSharedActionClient* actionClient,
@@ -131,6 +125,7 @@ protected:
     QWidget* internalView() const;
 
     virtual bool eventFilter(QObject *o, QEvent *e);
+    QAction* sharedActionRequested(QKeyEvent *ke, const char *actionName);
 
 private:
     class Private;

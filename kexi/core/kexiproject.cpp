@@ -96,7 +96,6 @@ public:
 
     void saveClassId(const QString& partClass, int id)
     {
-        //QString c(originalPartClass.isEmpty() ? partClass : originalPartClass);
         if (!classIds.contains(partClass) && !classNames.contains(id)) {
             classIds.insert(partClass, id);
             classNames.insert(id, partClass);
@@ -217,25 +216,6 @@ public:
 
 //---------------------------
 
-/*
- Helper for setting temporary error title.
-class KexiProject::ErrorTitle
-{
-  public:
-  ErrorTitle(KexiProject* p, const QString& msg = QString())
-    : prj(p)
-    , prev_err_title(p->m_error_title)
-  {
-    p->m_error_title = msg;
-  }
-  ~ErrorTitle()
-  {
-    prj->m_error_title = prev_err_title;
-  }
-  KexiProject* prj;
-  QString prev_err_title;
-};*/
-
 KexiProject::KexiProject(const KexiProjectData& pdata, KexiDB::MessageHandler* handler)
         : QObject(), Object(handler)
         , d(new Private(this))
@@ -284,9 +264,10 @@ int KexiProject::versionMinor() const
 }
 
 tristate
-KexiProject::open(bool &incompatibleWithKexi)
+KexiProject::open(bool *incompatibleWithKexi)
 {
-    return openInternal(&incompatibleWithKexi);
+    Q_ASSERT(incompatibleWithKexi);
+    return openInternal(incompatibleWithKexi);
 }
 
 tristate
@@ -304,7 +285,7 @@ KexiProject::openInternal(bool *incompatibleWithKexi)
     }
     if (incompatibleWithKexi)
         *incompatibleWithKexi = false;
-    kDebug() << d->data->databaseName() << d->data->connectionData()->driverName;
+    //kDebug() << d->data->databaseName() << d->data->connectionData()->driverName;
     KexiDB::MessageTitle et(this,
                             i18n("Could not open project \"%1\".", d->data->databaseName()));
 
@@ -321,7 +302,7 @@ KexiProject::openInternal(bool *incompatibleWithKexi)
     }
 
     if (!createConnection()) {
-        kDebug() << "!createConnection()";
+        kWarning() << "!createConnection()";
         return false;
     }
     bool cancel = false;
@@ -330,8 +311,8 @@ KexiProject::openInternal(bool *incompatibleWithKexi)
         if (cancel) {
             return cancelled;
         }
-        kDebug() << "!d->connection->useDatabase() "
-        << d->data->databaseName() << " " << d->data->connectionData()->driverName;
+        kWarning() << "!d->connection->useDatabase() "
+                   << d->data->databaseName() << " " << d->data->connectionData()->driverName;
 
         if (d->connection->errorNum() == ERR_NO_DB_PROPERTY) {
 //<temp>
@@ -379,22 +360,22 @@ KexiProject::create(bool forceOverwrite)
             closeConnection();
             return false;
         }
-        kDebug() << "--- DB '" << d->data->databaseName() << "' dropped ---";
+        //kDebug() << "--- DB '" << d->data->databaseName() << "' dropped ---";
     }
     if (!d->connection->createDatabase(d->data->databaseName())) {
         setError(d->connection);
         closeConnection();
         return false;
     }
-    kDebug() << "--- DB '" << d->data->databaseName() << "' created ---";
+    //kDebug() << "--- DB '" << d->data->databaseName() << "' created ---";
     // and now: open
     if (!d->connection->useDatabase(d->data->databaseName())) {
-        kDebug() << "--- DB '" << d->data->databaseName() << "' USE ERROR ---";
+        kWarning() << "--- DB '" << d->data->databaseName() << "' USE ERROR ---";
         setError(d->connection);
         closeConnection();
         return false;
     }
-    kDebug() << "--- DB '" << d->data->databaseName() << "' used ---";
+    //kDebug() << "--- DB '" << d->data->databaseName() << "' used ---";
 
     //<add some data>
     KexiDB::Transaction trans = d->connection->beginTransaction();
@@ -417,20 +398,9 @@ KexiProject::create(bool forceOverwrite)
             || !props.setCaption("project_desc", i18n("Project description")))
         return false;
 
-    /* KexiDB::TableSchema *t_db = d->connection->tableSchema("kexi__db");
-      //caption:
-      if (!t_db)
-        return false;
-
-      if (!KexiDB::replaceRow(*d->connection, t_db, "db_property", "project_caption",
-        "db_value", QVariant( d->data->caption() ), KexiDB::Field::Text)
-       || !KexiDB::replaceRow(*d->connection, t_db, "db_property", "project_desc",
-        "db_value", QVariant( d->data->description() ), KexiDB::Field::Text) )
-        return false;
-    */
     if (trans.active() && !d->connection->commitTransaction(trans))
         return false;
-    //</add some data>
+    //</add some metadata>
 
     if (!Kexi::partManager().infoList()) {
         setError(&Kexi::partManager());
@@ -539,7 +509,6 @@ bool KexiProject::createInternalStructures(bool insideTransaction)
             delete kexi__blobsCopy; //not needed - physically renamed to kexi_blobs
         }
     } else {
-//  if (!d->connection->createTable( t_blobs, false/*!replaceExisting*/ )) {
         if (!d->connection->isReadOnly()) {
             if (!d->connection->createTable(t_blobs, true/*replaceExisting*/)) {
                 delete t_blobs;
@@ -550,7 +519,7 @@ bool KexiProject::createInternalStructures(bool insideTransaction)
 
     //Store default part information.
     //Information for other parts (forms, reports...) are created on demand in KexiWindow::storeNewData()
-    KexiDB::InternalTableSchema *t_parts = new KexiDB::InternalTableSchema("kexi__parts"); //newKexiDBSystemTableSchema("kexi__parts");
+    KexiDB::InternalTableSchema *t_parts = new KexiDB::InternalTableSchema("kexi__parts");
     t_parts->addField(
         new KexiDB::Field("p_id", KexiDB::Field::Integer, KexiDB::Field::PrimaryKey | KexiDB::Field::AutoInc, KexiDB::Field::Unsigned)
     )
@@ -626,7 +595,6 @@ KexiProject::createConnection()
         return true;
 
     clearError();
-// closeConnection();//for sanity
     KexiDB::MessageTitle et(this);
 
     KexiDB::Driver *driver = Kexi::driverManager().driver(d->data->connectionData()->driverName);
@@ -640,14 +608,14 @@ KexiProject::createConnection()
         connectionOptions |= KexiDB::Driver::ReadOnlyConnection;
     d->connection = driver->createConnection(*d->data->connectionData(), connectionOptions);
     if (!d->connection) {
-        kDebug() << "uuups failed " << driver->errorMsg();
+        kWarning() << driver->errorMsg();
         setError(driver);
         return false;
     }
 
     if (!d->connection->connect()) {
         setError(d->connection);
-        kDebug() << "error connecting: " << (d->connection ? d->connection->errorMsg() : QString());
+        kWarning() << "error connecting: " << (d->connection ? d->connection->errorMsg() : QString());
         closeConnection();
         return false;
     }
@@ -678,11 +646,8 @@ KexiProject::closeConnection()
 bool
 KexiProject::initProject()
 {
-// emit dbAvailable();
-    kDebug() << "checking project parts...";
-
+    //kDebug() << "checking project parts...";
     if (!checkProject()) {
-//        setError(Kexi::partManager().error() ? (KexiDB::Object*)&Kexi::partManager() : (KexiDB::Connection*)d->connection);
         return false;
     }
 
@@ -694,12 +659,6 @@ KexiProject::initProject()
     str = props.value("project_desc").toString();
     if (!str.isEmpty())
         d->data->setDescription(str);
-    /* KexiDB::RowData data;
-      QString sql = "select db_value from kexi__db where db_property='%1'";
-      if (d->connection->querySingleRecord( sql.arg("project_caption"), data ) && !data[0].toString().isEmpty())
-        d->data->setCaption(data[0].toString());
-      if (d->connection->querySingleRecord( sql.arg("project_desc"), data) && !data[0].toString().isEmpty())
-        d->data->setDescription(data[0].toString());*/
 
     return true;
 }
@@ -736,8 +695,6 @@ bool KexiProject::retrieveItems()
     d->itemsRetrieved = true;
     KexiDB::Cursor *cursor = d->connection->executeQuery(
         QLatin1String("SELECT o_id, o_name, o_caption, o_type FROM kexi__objects ORDER BY o_type"));
-//                               "SELECT o_id, o_name, o_caption  FROM kexi__objects WHERE o_type = "
-//                                 + QString::number(i->projectPartID()));
     if (!cursor)
         return 0;
 
@@ -880,48 +837,7 @@ KexiProject::item(int identifier)
     return 0;
 }
 
-/*void KexiProject::clearMsg()
-{
-  clearError();
-// d->error_title.clear();
-}
-
-void KexiProject::setError(int code, const QString &msg )
-{
-  Object::setError(code, msg);
-  if (Object::error())
-    ERRMSG(d->error_title, this);
-//  emit error(d->error_title, this);
-}
-
-
-void KexiProject::setError( const QString &msg )
-{
-  Object::setError(msg);
-  if (Object::error())
-    ERRMSG(d->error_title, this);
-//  emit error(d->error_title, this);
-}
-
-void KexiProject::setError( KexiDB::Object *obj )
-{
-  if (!obj)
-    return;
-  Object::setError(obj);
-  if (Object::error())
-    ERRMSG(d->error_title, obj);
-//  emit error(d->error_title, obj);
-}
-
-void KexiProject::setError(const QString &msg, const QString &desc)
-{
-  Object::setError(msg); //ok?
-  ERRMSG(msg, desc); //not KexiDB-related
-// emit error(msg, desc); //not KexiDB-related
-}
-*/
-
-KexiPart::Part *KexiProject::findPartFor(KexiPart::Item& item)
+KexiPart::Part *KexiProject::findPartFor(const KexiPart::Item& item)
 {
     clearError();
     KexiDB::MessageTitle et(this);
@@ -983,7 +899,7 @@ bool KexiProject::removeObject(KexiPart::Item& item)
     if (!part)
         return false;
     if (!item.neverSaved() && !part->remove(item)) {
-        //js TODO check for errors
+        //! @todo check for errors
         return false;
     }
     if (!item.neverSaved()) {
@@ -1138,7 +1054,7 @@ KexiProject::createBlankProject(bool &cancelled, const KexiProjectData& data,
                     "Do you want to replace it with a new, blank one?",
                     prj->data()->infoString()) + "\n" + i18n(warningNoUndo) + "</qt>",
                 QString(), KGuiItem(i18n("Replace")), KStandardGuiItem::cancel()))
-//todo add serverInfoString() for server-based prj
+//! @todo add serverInfoString() for server-based prj
         {
             delete prj;
             cancelled = true;
@@ -1150,8 +1066,8 @@ KexiProject::createBlankProject(bool &cancelled, const KexiProjectData& data,
         delete prj;
         return 0;
     }
-    kDebug() << "new project created --- ";
-//todo? Kexi::recentProjects().addProjectData( data );
+    //kDebug() << "new project created --- ";
+//! @todo Kexi::recentProjects().addProjectData( data );
 
     return prj;
 }
@@ -1181,7 +1097,6 @@ tristate KexiProject::dropProject(const KexiProjectData& data,
 bool KexiProject::checkProject(const QString& singlePartClass)
 {
     clearError();
-// QString errmsg = i18n("Invalid project contents.");
 
 //! @todo catch errors!
     if (!d->connection->isDatabaseUsed()) {
@@ -1289,11 +1204,7 @@ bool KexiProject::createIdForPart(const KexiPart::Info& info)
 
     //kDebug() << "insert success!";
     d->saveClassId(info.partClass(), p_id);
-//    part()->info()->setProjectPartID(p_id);
-    //(int) project()->dbConnection()->lastInsertedAutoIncValue("p_id", "kexi__parts"));
     //kDebug() << "new id is: " << p_id;
-
-//    part()->info()->setIdStoredInPartDatabase(true);
     return true;
 }
 

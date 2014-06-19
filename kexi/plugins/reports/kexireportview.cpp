@@ -1,6 +1,7 @@
 /*
  * Kexi Report Plugin
  * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
+   Copyright (C) 2014 Jarosław Staniek <staniek@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -32,6 +33,7 @@
 #include <QPrintDialog>
 #include <QPrinter>
 #include <QGraphicsScene>
+#include <QScrollBar>
 
 #include <kdebug.h>
 #include "krscriptfunctions.h"
@@ -58,6 +60,8 @@ KexiReportView::KexiReportView(QWidget *parent)
     setObjectName("KexiReportDesigner_DataView");
 
     m_reportView = new QGraphicsView(this);
+    // page selector should be always visible:
+    m_reportView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     layout()->addWidget(m_reportView);
 
     m_reportScene = new QGraphicsScene(this);
@@ -67,8 +71,9 @@ KexiReportView::KexiReportView(QWidget *parent)
     m_reportScene->setBackgroundBrush(palette().brush(QPalette::Dark));
 
 #ifndef KEXI_MOBILE
-    m_pageSelector = new KexiRecordNavigator(this, 0);
-    layout()->addWidget(m_pageSelector);
+    m_pageSelector = new KexiRecordNavigator(m_reportView, m_reportView);
+    m_pageSelector->setLeftMargin(0);
+    m_pageSelector->insertAsideOfHorizontalScrollBar(m_reportView);
     m_pageSelector->setRecordCount(0);
     m_pageSelector->setInsertingButtonVisible(false);
     m_pageSelector->setLabelText(i18n("Page"));
@@ -213,6 +218,21 @@ KUrl KexiReportView::getExportUrl(const QString &mimetype, const QString &captio
     return result;
 }
 
+void KexiReportView::openExportedDocument(const KUrl& destination)
+{
+    const int answer =
+        KMessageBox::questionYesNo(
+            this,
+            i18n("Do you want to open exported document?"),
+            QString(),
+            KStandardGuiItem::open(),
+            KStandardGuiItem::close());
+
+    if (answer == KMessageBox::Yes) {
+        (void)new KRun(destination, this->topLevelWidget());
+    }
+}
+
 void KexiReportView::slotExportAsSpreadsheet()
 {
     KoReportRendererBase *renderer;
@@ -232,7 +252,7 @@ void KexiReportView::slotExportAsSpreadsheet()
                                i18n("Failed to export the report as spreadsheet to %1.", cxt.destinationUrl.prettyUrl()),
                                i18n("Export Failed"));
         } else {
-            (void)new KRun(cxt.destinationUrl, this->topLevelWidget());
+            openExportedDocument(cxt.destinationUrl);
         }
     }
 }
@@ -256,7 +276,7 @@ void KexiReportView::slotExportAsTextDocument()
                                i18n("Exporting the report as text document to %1 failed.", cxt.destinationUrl.prettyUrl()),
                                i18n("Export Failed"));
         } else {
-            (void)new KRun(cxt.destinationUrl, this->topLevelWidget());
+            openExportedDocument(cxt.destinationUrl);
         }
     }
 }
@@ -294,7 +314,7 @@ void KexiReportView::slotExportAsWebPage()
                            i18n("Exporting the report as web page to %1 failed.", cxt.destinationUrl.prettyUrl()),
                            i18n("Export Failed"));
     } else {
-        (void)new KRun(cxt.destinationUrl, this->topLevelWidget());
+        openExportedDocument(cxt.destinationUrl);
     }
 }
 
@@ -358,6 +378,7 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
                 m_pageCount = m_reportDocument->pages();
 #ifndef KEXI_MOBILE
                 m_pageSelector->setRecordCount(m_pageCount);
+                m_pageSelector->setCurrentRecordNumber(1);
 #endif
             }
 

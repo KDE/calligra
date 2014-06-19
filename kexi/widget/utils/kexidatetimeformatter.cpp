@@ -74,9 +74,6 @@ public:
     //! Input mask generated using the formatter settings. Can be used in QLineEdit::setInputMask().
     QString inputMask;
 
-//  //! Order of date sections
-//  QDateEdit::Order order;
-
     //! 12 or 12h
     bool is24h;
 
@@ -287,9 +284,6 @@ KexiTimeFormatter::KexiTimeFormatter()
     hourVariable = tf.mid(d->hourpos, 2);
 
     d->inputMask = tf;
-// d->inputMask.replace( hourVariable, "00" );
-// d->inputMask.replace( "%M", "00" );
-// d->inputMask.replace( "%S", "00" ); //optional
     d->inputMask.replace(hourVariable, "99");
     d->inputMask.replace("%M", "99");
     d->inputMask.replace("%S", "00");   //optional
@@ -398,7 +392,7 @@ QDateTime KexiDateTimeFormatter::fromString(
 {
     QString s(str.trimmed());
     const int timepos = s.indexOf(' ');
-    const bool emptyTime = timepos >= 0 && timeFormatter.isEmpty(s.mid(timepos + 1)); //.remove(':').trimmed().isEmpty();
+    const bool emptyTime = timepos >= 0 && timeFormatter.isEmpty(s.mid(timepos + 1));
     if (emptyTime)
         s = s.left(timepos);
     if (timepos > 0 && !emptyTime) {
@@ -429,20 +423,21 @@ bool KexiDateTimeFormatter::isEmpty(const KexiDateFormatter& dateFormatter,
                                     const QString& str)
 {
     int timepos = str.indexOf(' ');
-    const bool emptyTime = timepos >= 0 && timeFormatter.isEmpty(str.mid(timepos + 1)); //s.mid(timepos+1).remove(':').trimmed().isEmpty();
-    return (timepos >= 0 && dateFormatter.isEmpty(str.left(timepos)) //s.left(timepos).remove(d->dateFormatter.separator()).trimmed().isEmpty()
-            && emptyTime);
+    const bool emptyTime = timepos >= 0 && timeFormatter.isEmpty(str.mid(timepos + 1));
+    return timepos >= 0 && dateFormatter.isEmpty(str.left(timepos)) && emptyTime;
 }
 
 bool KexiDateTimeFormatter::isValid(const KexiDateFormatter& dateFormatter,
                                     const KexiTimeFormatter& timeFormatter, const QString& str)
 {
     int timepos = str.indexOf(' ');
-    const bool emptyTime = timepos >= 0 && timeFormatter.isEmpty(str.mid(timepos + 1)); //s.mid(timepos+1).remove(':').trimmed().isEmpty();
-    if (timepos >= 0 && dateFormatter.isEmpty(str.left(timepos)) // s.left(timepos).remove(d->dateFormatter.separator()).trimmed().isEmpty()
+    const bool emptyTime = timepos >= 0 && timeFormatter.isEmpty(str.mid(timepos + 1));
+    if (timepos >= 0 && dateFormatter.isEmpty(str.left(timepos))
             && emptyTime)
+    {
         //empty date/time is valid
         return true;
+    }
     return timepos >= 0 && dateFormatter.fromString(str.left(timepos)).isValid()
            && (emptyTime /*date without time is also valid*/ || timeFormatter.fromString(str.mid(timepos + 1)).isValid());
 }

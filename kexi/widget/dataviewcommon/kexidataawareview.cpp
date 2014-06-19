@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005-2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2014 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -70,7 +70,7 @@ void KexiDataAwareView::init(QWidget* viewWidget, KexiSharedActionClient* action
         d->dataAwareObject->connectCellSelectedSignal(this, SLOT(slotCellSelected(int,int)));
 
         //! before closing - we'are accepting editing
-        connect(this, SIGNAL(closing(bool&)), this, SLOT(slotClosing(bool&)));
+        connect(this, SIGNAL(closing(bool*)), this, SLOT(slotClosing(bool*)));
 
         //! updating actions on start/stop editing
         d->dataAwareObject->connectRowEditStartedSignal(
@@ -82,10 +82,6 @@ void KexiDataAwareView::init(QWidget* viewWidget, KexiSharedActionClient* action
         d->dataAwareObject->connectReloadActionsSignal(
             this, SLOT(reloadActions()));
     }
-
-//2.0 Q3VBoxLayout *box = new Q3VBoxLayout(this);
-//2.0 box->addWidget(d->internalView);
-
     setMinimumSize(d->internalView->minimumSizeHint().width(),
                    d->internalView->minimumSizeHint().height());
     resize(preferredSizeHint(d->internalView->sizeHint()));
@@ -111,9 +107,6 @@ void KexiDataAwareView::initActions()
     viewActions << a;
 
     if (d->dataAwareObject->isSortingEnabled()) {
-//  a = new KAction(this);
-//  a->setSeparator(true);
-//  viewActions << a;
         viewActions
         << KexiStandardAction::sortAscending(this, SLOT(sortAscending()), this)
         << KexiStandardAction::sortDescending(this, SLOT(sortDescending()), this);
@@ -136,12 +129,6 @@ void KexiDataAwareView::initActions()
 
     plugSharedAction("data_cancel_row_changes", this, SLOT(cancelRowEdit()));
     d->actionClient->plugSharedAction(sharedAction("data_cancel_row_changes")); //for proper shortcut
-
-// if (d->dataAwareObject->isSortingEnabled()) {
-//moved up  plugSharedAction("data_sort_az", this, SLOT(sortAscending()));
-//moved up  plugSharedAction("data_sort_za", this, SLOT(sortDescending()));
-// }
-
     d->actionClient->plugSharedAction(sharedAction("edit_insert_empty_row")); //for proper shortcut
 
     setAvailable("data_sort_az", d->dataAwareObject->isSortingEnabled());
@@ -214,14 +201,7 @@ void KexiDataAwareView::slotUpdateRowActions(int row)
 void KexiDataAwareView::slotUpdateSaveCancelActions()
 {
     // 'save row' enabled when editing and there's anything to save
-    const bool editing = isDataEditingInProgress();
-    kDebug() << "editing::::::::" << editing;
-#ifdef __GNUC__
-#warning this did not work well in forms: setAvailable("data_save_row", editing);
-#else
-#pragma WARNING( this did not work well in forms: setAvailable("data_save_row", editing); )
-#endif
-
+    //const bool editing = isDataEditingInProgress();
     setAvailable("data_save_row", d->dataAwareObject->rowEditing());
     // 'cancel row changes' enabled when editing
     setAvailable("data_cancel_row_changes", d->dataAwareObject->rowEditing());
@@ -234,20 +214,18 @@ QWidget* KexiDataAwareView::mainWidget() const
 
 QSize KexiDataAwareView::minimumSizeHint() const
 {
-    return d->internalView ? d->internalView->minimumSizeHint() : QSize(0, 0);//KexiView::minimumSizeHint();
+    return d->internalView ? d->internalView->minimumSizeHint() : QSize(0, 0);
 }
 
 QSize KexiDataAwareView::sizeHint() const
 {
-    return d->internalView ? d->internalView->sizeHint() : QSize(0, 0);//KexiView::sizeHint();
+    return d->internalView ? d->internalView->sizeHint() : QSize(0, 0);
 }
 
 KexiDataAwareObjectInterface* KexiDataAwareView::dataAwareObject() const
 {
     return d->dataAwareObject;
 }
-
-
 
 void KexiDataAwareView::updateActions(bool activated)
 {
@@ -261,26 +239,52 @@ QWidget* KexiDataAwareView::internalView() const
     return d->internalView;
 }
 
+QAction* KexiDataAwareView::sharedActionRequested(QKeyEvent *ke, const char *actionName)
+{
+    QAction *a = sharedAction(actionName);
+    return a && QKeySequence(ke->key() | ke->modifiers()) == a->shortcut()
+            ? a : 0;
+}
+
 bool KexiDataAwareView::eventFilter(QObject *o, QEvent *e)
 {
     // kDebug() << "***" << o << e << window()->selectedView() << this;
+    if (e->type() == QEvent::FocusIn || e->type() == QEvent::FocusOut) {
+        kDebug() << "F O C U S" << e << o;
+    }
     if (e->type() == QEvent::ShortcutOverride && o == this) {
         QKeyEvent *ke = static_cast<QKeyEvent*>(e);
-        QAction *a = sharedAction("data_cancel_row_changes");
-        if (QKeySequence(ke->key()) == a->shortcut()) {
+        QAction *a = sharedActionRequested(ke, "data_cancel_row_changes");
+        if (a) {
             KexiDataItemInterface *editor = d->dataAwareObject->editor();
             if (editor) {
                 d->dataAwareObject->cancelEditor();
+                editor->moveCursorToEnd();
+                editor->selectAll();
             }
             else {
                 a->trigger();
             }
             return true;
         }
-        a = sharedAction("data_save_row");
-        if (QKeySequence(ke->key() | ke->modifiers()) == a->shortcut()) {
+        a = sharedActionRequested(ke, "data_save_row");
+        if (a) {
             a->trigger();
+            KexiDataItemInterface *editor = d->dataAwareObject->editor();
+            if (editor) {
+                editor->moveCursorToEnd();
+                editor->selectAll();
+            }
             return true;
+        }
+        foreach (const QByteArray& actionName,
+                 QList<QByteArray>() << "edit_copy" << "edit_cut" << "edit_paste")
+        {
+            a = sharedActionRequested(ke, actionName);
+            if (a) {
+                a->trigger();
+                return true;
+            }
         }
     }
     return KexiView::eventFilter(o, e);
@@ -288,13 +292,7 @@ bool KexiDataAwareView::eventFilter(QObject *o, QEvent *e)
 
 void KexiDataAwareView::reloadActions()
 {
-// d->view->initActions(guiClient()->actionCollection());
-//warning FIXME Move this to the table part
-    /*
-      kDebug()<<"INIT ACTIONS***********************************************************************";
-      new KAction(i18n("Filter"), "view-filter", 0, this, SLOT(filter()), actionCollection(), "tablepart_filter");
-      setXMLFile("kexidatatableui.rc");
-    */
+//! @todo Move this to the table part
     d->dataAwareObject->contextMenu()->clear();
     if (!d->dataAwareObject->contextMenuTitleText().isEmpty()) {
         d->dataAwareObject->contextMenu()->addTitle(
@@ -331,10 +329,6 @@ void KexiDataAwareView::reloadActions()
         unplugSharedAction("edit_delete_row", d->dataAwareObject->contextMenu());
         unplugSharedAction("edit_delete_row", d->dataAwareObject->contextMenu());
     }
-    //if (!d->view->isSortingEnabled()) {
-//  unplugSharedAction("data_sort_az");
-//  unplugSharedAction("data_sort_za");
-    //}
     setAvailable("data_sort_az", d->dataAwareObject->isSortingEnabled());
     setAvailable("data_sort_za", d->dataAwareObject->isSortingEnabled());
 
@@ -371,10 +365,10 @@ bool KexiDataAwareView::acceptRowEdit()
     return d->dataAwareObject->acceptRowEdit();
 }
 
-void KexiDataAwareView::slotClosing(bool& cancel)
+void KexiDataAwareView::slotClosing(bool* cancel)
 {
     if (!acceptRowEdit())
-        cancel = true;
+        *cancel = true;
 }
 
 bool KexiDataAwareView::cancelRowEdit()
@@ -457,21 +451,10 @@ tristate KexiDataAwareView::find(const QVariant& valueToFind,
     if (!dataAwareObject() || !dataAwareObject()->data())
         return cancelled;
 
-// const KexiDataAwareObjectInterface::FindAndReplaceOptions options(dlg->options());
-    /* if (res == KexiFindDialog::Find) {*/
-//  QVariant valueToFind(dlg->valueToFind());
     return dataAwareObject()->find(valueToFind, options, next);
-    /*
     //! @todo result...
-
-      }
-      else if (res == KexiFindDialog::Replace) {
-    //! @todo
-      }
-      else if (res == KexiFindDialog::ReplaceAll) {
-    //! @todo
-      }
-      */
+    //! @todo else if (res == KexiFindDialog::Replace) {
+    //! @todo else if (res == KexiFindDialog::ReplaceAll) {
 }
 
 tristate KexiDataAwareView::findNextAndReplace(const QVariant& valueToFind,
@@ -506,23 +489,5 @@ tristate KexiDataAwareView::cancelDataChanges()
 {
     return cancelRowEdit();
 }
-
-/*
-void KexiDataAwareView::editFindNext()
-{
-  //! @todo reuse code from editFind()
-}
-
-void KexiDataAwareView::editFindPrevious()
-{
-  //! @todo reuse code from editFind()
-}
-
-void KexiDataAwareView::editReplace()
-{
-  //! @todo editReplace()
-  //! @todo reuse code from editFind()
-  // When ready, update KexiDataAwareView::initActions() and KexiMainWindowImpl
-}*/
 
 #include "kexidataawareview.moc"

@@ -116,6 +116,7 @@ KexiDBWidgetContextMenuExtender::KexiDBWidgetContextMenuExtender(QObject* parent
 
 KexiDBWidgetContextMenuExtender::~KexiDBWidgetContextMenuExtender()
 {
+    delete d;
 }
 
 void KexiDBWidgetContextMenuExtender::exec(QMenu *menu, const QPoint &globalPos)

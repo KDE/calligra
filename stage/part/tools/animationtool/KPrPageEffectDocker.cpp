@@ -20,9 +20,11 @@
 
 #include "KPrPageEffectDocker.h"
 
+#include <QGridLayout>
 #include <QVBoxLayout>
 #include <QComboBox>
 #include <QDoubleSpinBox>
+#include <QPushButton>
 #include <QLabel>
 #include <QEvent>
 #include <QPainter>
@@ -86,11 +88,17 @@ KPrPageEffectDocker::KPrPageEffectDocker( QWidget* parent, Qt::WindowFlags flags
     connect( m_durationSpinBox, SIGNAL(valueChanged(double)),
              this, SLOT(slotDurationChanged(double)) );
 
+    m_applyToAllSlidesButton = new QPushButton(i18n("Apply To All Slides"));
+
+    connect(m_applyToAllSlidesButton, SIGNAL(clicked()),
+             this, SLOT(slotApplyToAllSlides()));
+
     // setup widget layout
     QVBoxLayout* layout = new QVBoxLayout;
     layout->setMargin(0);
     layout->addLayout( optionLayout);
     layout->addWidget( m_subTypeCombo );
+    layout->addWidget(m_applyToAllSlidesButton);
 
     // The following widget activates a special feature in the
     // ToolOptionsDocker that makes the components of the widget align
@@ -212,6 +220,35 @@ void KPrPageEffectDocker::slotDurationChanged( double duration )
 
         m_view->kopaCanvas()->addCommand( new KPrPageEffectSetCommand( m_view->activePage(), pageEffect ) );
     }
+}
+
+void KPrPageEffectDocker::slotApplyToAllSlides()
+{
+    m_view->kopaCanvas()->addCommand(KPrPageEffectDocker::applyToAllSlidesCommand());
+}
+
+KUndo2Command * KPrPageEffectDocker::applyToAllSlidesCommand()
+{
+    QList<KoPAPageBase*> m_pages = m_view->kopaDocument()->pages();
+    QString m_effectId = m_effectCombo->itemData(m_effectCombo->currentIndex()).toString();
+    int m_subType = m_subTypeCombo->itemData(m_subTypeCombo->currentIndex()).toInt();
+    double m_duration = m_durationSpinBox->value();
+    KUndo2Command *cmd = new KUndo2Command(kundo2_i18n("Apply Slide Effect to all Slides"));
+    const KPrPageEffectFactory *factory = m_effectId != "" ? KPrPageEffectRegistry::instance()->value(m_effectId) : 0;
+
+    foreach (KoPAPageBase *page, m_pages) {
+        if (page != m_view->activePage()) {
+            if (factory) {
+                KPrPageEffect *currentPageEffect(createPageEffect(factory, m_subType, m_duration));
+                new KPrPageEffectSetCommand(page, currentPageEffect, cmd);
+            } else {
+                KPrPageEffect *currentPageEffect = 0;
+                new KPrPageEffectSetCommand(page, currentPageEffect, cmd);
+            }
+        }
+    }
+
+    return cmd;
 }
 
 KPrPageEffect * KPrPageEffectDocker::createPageEffect( const KPrPageEffectFactory * factory, int subType, double duration )

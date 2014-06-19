@@ -35,7 +35,6 @@ KexiGUIMessageHandler::~KexiGUIMessageHandler()
 {
 }
 
-/*virtual*/
 void
 KexiGUIMessageHandler::showErrorMessageInternal(KexiDB::Object *obj, const QString& msg)
 {
@@ -49,7 +48,6 @@ KexiGUIMessageHandler::showErrorMessageInternal(KexiDB::Object *obj, const QStri
     showErrorMessageInternal(_msg, details);
 }
 
-/*virtual*/
 void
 KexiGUIMessageHandler::showErrorMessageInternal(const QString &title, const QString &details)
 {
@@ -63,7 +61,7 @@ KexiGUIMessageHandler::showSorryMessage(const QString &title, const QString &det
 }
 
 void KexiGUIMessageHandler::showErrorMessage(const QString &msg, const QString &details,
-        KexiDB::Object *obj)
+                                             KexiDB::Object *obj)
 {
     QString _msg(msg);
     if (!obj) {
@@ -143,18 +141,6 @@ void KexiGUIMessageHandler::showWarningContinueMessage(const QString &title, con
 {
     if (!KMessageBox::shouldBeShownContinue(dontShowAgainName))
         return;
-#if 0 //sebsauer 20061123
-    KDialogBase *dialog = new KDialogBase(
-        i18n("Warning"), KDialogBase::Yes, KDialogBase::Yes, KDialogBase::No,
-        m_messageHandlerParentWidget, "warningContinue", true, true, KStandardGuiItem::cont());
-    bool checkboxResult = false;
-    KMessageBox::createKMessageBox(dialog, QMessageBox::Warning,
-                                   title + (details.isEmpty() ? QString() : (QString("\n") + details)), QStringList(),
-                                   dontShowAgainName.isEmpty() ? QString() : i18n("Do not show this message again"),
-                                   &checkboxResult, 0);
-    if (checkboxResult)
-        KMessageBox::saveDontShowAgainContinue(dontShowAgainName);
-#else
     KMessageBox::warningContinueCancel(m_messageHandlerParentWidget,
                                        title + (details.isEmpty() ? QString() : (QString("\n") + details)),
                                        QString(),
@@ -162,7 +148,6 @@ void KexiGUIMessageHandler::showWarningContinueMessage(const QString &title, con
                                        KStandardGuiItem::cancel(),
                                        dontShowAgainName,
                                        KMessageBox::Notify | KMessageBox::AllowLink);
-#endif
 }
 
 int KexiGUIMessageHandler::askQuestionInternal(const QString& message,

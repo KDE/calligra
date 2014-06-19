@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component type="desktop">
+  <id>sheets.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0+</project_license>
+  <name>Sheets</name>
+  <name xml:lang="ca">Sheets</name>
+  <name xml:lang="cs">Sheets</name>
+  <name xml:lang="ia">Sheets</name>
+  <name xml:lang="it">Sheets</name>
+  <name xml:lang="nl">Werkbladen</name>
+  <name xml:lang="pl">Arkusze</name>
+  <name xml:lang="pt">Sheets</name>
+  <name xml:lang="pt-BR">Sheets</name>
+  <name xml:lang="sk">Sheets</name>
+  <name xml:lang="sv">Sheets</name>
+  <name xml:lang="uk">Sheets</name>
+  <name xml:lang="x-test">xxSheetsxx</name>
+  <summary>Spreadsheet</summary>
+  <summary xml:lang="ca">Full de càlcul</summary>
+  <summary xml:lang="cs">Sešit</summary>
+  <summary xml:lang="ia">Folio de calculo electronic</summary>
+  <summary xml:lang="it">Foglio elettronico</summary>
+  <summary xml:lang="nl">Rekenblad</summary>
+  <summary xml:lang="pl">Arkusz kalkulacyjny</summary>
+  <summary xml:lang="pt">Folha de Cálculo</summary>
+  <summary xml:lang="pt-BR">Planilha</summary>
+  <summary xml:lang="sk">Zošit</summary>
+  <summary xml:lang="sv">Kalkylark</summary>
+  <summary xml:lang="uk">Електронні таблиці</summary>
+  <summary xml:lang="x-test">xxSpreadsheetxx</summary>
+  <description>
+    <p>
+      Calligra Sheets is a fully-featured calculation and spreadsheet tool.
+      Use it to quickly create and calculate various business-related spreadsheets, such as income and expenditure, employee working hours, etc.
+    </p>
+    <p xml:lang="ca">El Sheets del Calligra és una eina de full de càlcul plenament funcional. S'usa per a crear i calcular ràpidament diversos full de càlcul relacionats amb els negocis, com els ingressos i despeses, les hores de treball dels empleats, etc.</p>
+    <p xml:lang="it">Calligra Sheets è uno strumento di calcolo e un foglio elettronico completo. Usalo per calcolate e creare rapidamente vari fogli elettronici per i tuoi affari, come entrate e spese, ore lavorate dai dipendenti, ecc.</p>
+    <p xml:lang="nl">Calligra Sheets is een hulpmiddel voor rekenen en rekenblad rijk aan functies. Gebruik het om snel verschillende zakelijke rekenbladen te maken, zoals inkomsten en uitgaven, werkuren van werknemers, etc.</p>
+    <p xml:lang="pl">Arkusze Calligra jest pełnowartościowym narzędziem arkusza kalkulacyjnego i obliczeń. Użyj go do szybkiego tworzenia i obliczania rozmaitych biznesowych arkuszy kalkulacyjnych, takich jak przychód i rozchód, godziny pracy pracowników, itp.</p>
+    <p xml:lang="pt">O Calligra Sheets é uma folha de cálculo poderosa. Use-o para criar e calcular rapidamente várias folhas de cálculo relacionadas com o negócio, como receitas e despesas, horas de trabalho de empregados, etc.</p>
+    <p xml:lang="pt-BR">Calligra Sheets é uma planilha de cálculo poderosa. Use-o para criar e calcular rapidamente várias planilhas relacionadas com negócios, como receitas e despesas, horas de trabalho de empregados, etc.</p>
+    <p xml:lang="sk">Calligra Sheets je plnohodnotný tabuľkový a výpočtový nástroj. Použite ho na rýchle vytvorenie a výpočet rôznych obchodných tabuliek, ako príjmy a výdavky, pracovné hodiny zamestnancov, atď.</p>
+    <p xml:lang="sv">Calligra Sheets är ett fullfjädrat beräknings- och kalkylarksverktyg. Använd det för att snabbt skapa och beräkna diverse affärsrelaterade kalkylark, såsom inkomster och utgifter, anställdas arbetstimmar, etc.</p>
+    <p xml:lang="uk">Calligra Sheets — повноцінне середовище для обчислень та роботи з електронними таблицями. Програмою можна скористатися для швидкого створення та обчислень на різноманітних пов’язаних із бізнесом електронних таблицях, зокрема вхідних та вихідних рахунках, табелів робочого часу тощо.</p>
+    <p xml:lang="x-test">xxCalligra Sheets is a fully-featured calculation and spreadsheet tool. Use it to quickly create and calculate various business-related spreadsheets, such as income and expenditure, employee working hours, etc.xx</p>
+    <p>Features:</p>
+    <p xml:lang="ca">Característiques:</p>
+    <p xml:lang="cs">Vlastnosti:</p>
+    <p xml:lang="ia">Characteristicas:</p>
+    <p xml:lang="it">Funzionalità:</p>
+    <p xml:lang="nl">Mogelijkheden:</p>
+    <p xml:lang="pl">Cechy:</p>
+    <p xml:lang="pt">Características:</p>
+    <p xml:lang="pt-BR">Funcionalidades:</p>
+    <p xml:lang="sk">Funkcie:</p>
+    <p xml:lang="sv">Funktioner:</p>
+    <p xml:lang="uk">Можливості:</p>
+    <p xml:lang="x-test">xxFeatures:xx</p>
+    <ul>
+      <li>Use shapes to take notes or mind maps</li>
+      <li xml:lang="ca">Usa formes per prendre notes o mapes mentals</li>
+      <li xml:lang="it">Usa le forme per creare note o mappe mentali</li>
+      <li xml:lang="nl">Gebruik vormen om notities of bedenksels vast te leggen</li>
+      <li xml:lang="pl">Używa kształtów do robienia notatek i map umysłu</li>
+      <li xml:lang="pt">Usar formas para tirar notas ou mapas mentais</li>
+      <li xml:lang="pt-BR">Usa formas para fazer anotações ou mapas mentais</li>
+      <li xml:lang="sk">Použite tvary na vytváranie poznámok alebo myšlienkových máp</li>
+      <li xml:lang="sv">Använd former för att göra anteckningar eller tankekartor</li>
+      <li xml:lang="uk">Використання форм для зберігання нотаток або записів на пам’ять.</li>
+      <li xml:lang="x-test">xxUse shapes to take notes or mind mapsxx</li>
+      <li>Large range of pre-defined templates</li>
+      <li xml:lang="ca">Àmplia gamma de plantilles predefinides</li>
+      <li xml:lang="it">Ampia gamma di modelli predefiniti</li>
+      <li xml:lang="nl">Grote reeks van voorgedefinieerde sjablonen</li>
+      <li xml:lang="pl">Szeroki wybór uprzednio stworzonych szablonów</li>
+      <li xml:lang="pt">Gama alargada de modelos predefinidos</li>
+      <li xml:lang="pt-BR">Grande variedade de modelos predefinidos</li>
+      <li xml:lang="sk">Veľký rozsah preddefinovaných šablón</li>
+      <li xml:lang="sv">Stort antal fördefinierade mallar</li>
+      <li xml:lang="uk">Широкий діапазон попередньо визначених шаблонів.</li>
+      <li xml:lang="x-test">xxLarge range of pre-defined templatesxx</li>
+      <li>Powerful and comprehensive formula list</li>
+      <li xml:lang="ca">Llista de fórmules potent i extensa</li>
+      <li xml:lang="it">Elenco completo e potente di formule</li>
+      <li xml:lang="nl">Krachtige en uitgebreide lijst met formules</li>
+      <li xml:lang="pl">Przydatny i wyczerpujący spis równań</li>
+      <li xml:lang="pt">Lista de fórmulas poderosa e compreensiva</li>
+      <li xml:lang="pt-BR">Lista de fórmulas poderosa e compreensiva</li>
+      <li xml:lang="sk">Silný a úplný zoznam vzorcov</li>
+      <li xml:lang="sv">Kraftfull och omfattande formellista</li>
+      <li xml:lang="uk">Потужний і повний список функцій.</li>
+      <li xml:lang="x-test">xxPowerful and comprehensive formula listxx</li>
+      <li>Work in a familiar environment</li>
+      <li xml:lang="ca">Treball en un entorn familiar</li>
+      <li xml:lang="it">Opera in un ambiente familiare</li>
+      <li xml:lang="nl">Werk in een bekende omgeving</li>
+      <li xml:lang="pl">Praca w znajomym środowisku</li>
+      <li xml:lang="pt">Funciona num ambiente familiar</li>
+      <li xml:lang="pt-BR">Funciona em um ambiente familiar</li>
+      <li xml:lang="sk">Práca v známom prostredí</li>
+      <li xml:lang="sv">Arbeta i en välbekant omgivning</li>
+      <li xml:lang="uk">Робота у знайомому середовищі.</li>
+      <li xml:lang="x-test">xxWork in a familiar environmentxx</li>
+    </ul>
+  </description>
+  <url type="homepage">http://www.calligra.org/sheets/</url>
+  <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?format=guided&amp;product=calligrasheets</url>
+  <url type="help">http://docs.kde.org/stable/en/calligra/sheets/index.html</url>
+  <screenshots>
+    <screenshot type="default">
+      <image>http://kde.org/images/screenshots/sheets.png</image>
+    </screenshot>
+  </screenshots>
+  <project_group>KDE</project_group>
+  <provides>
+    <binary>calligrasheets</binary>
+  </provides>
+</component>

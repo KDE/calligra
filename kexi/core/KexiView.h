@@ -39,24 +39,6 @@ namespace KexiDB
 class SchemaData;
 }
 
-//! @short action for toggling view mode
-class KEXICORE_EXPORT KexiToggleViewModeAction : public KAction
-{
-    //Q_OBJECT
-public:
-    //! Creates action for toggling to view mode @a mode. @a slot should have signature
-    //! matching switchedTo(Kexi::ViewMode mode) signal.
-    KexiToggleViewModeAction(Kexi::ViewMode mode, QObject* parent);//, QObject* receiver, const char* slot);
-    /* signals:
-        void switchedTo(Kexi::ViewMode mode);
-      private slots:
-        void slotToggled(bool);
-
-      private:
-        class Private;
-        Private * const d;*/
-};
-
 //! Base class for single view embeddable in KexiWindow.
 /*! This class automatically works as a proxy for shared (application-wide) actions.
  KexiView has 'dirty' flag to indicate that view's data has changed.
@@ -80,9 +62,6 @@ class KEXICORE_EXPORT KexiView : public QWidget, public KexiActionProxy
 public:
     explicit KexiView(QWidget *parent);
     virtual ~KexiView();
-
-//  //! \return kexi main window that contain this view
-//kde4 not needed  inline KexiMainWindow *mainWin() const { return m_mainWin; }
 
     //! \return parent KexiWindow that containing this view,
     //! or 0 if no window contain this view
@@ -186,13 +165,11 @@ public slots:
     void setDirty(bool set);
 
     /*! Equal to setDirty(true). */
-    void setDirty() {
-        setDirty(true);
-    }
+    void setDirty();
 
 signals:
     //! emitted when the view is about to close
-    void closing(bool& cancel);
+    void closing(bool *cancel);
 
     void focus(bool in);
 
@@ -364,35 +341,6 @@ protected:
     void initMainMenuActions();
 
     void toggleViewModeButtonBack();
-
-    /*
-
-        KexiMainWindow *m_mainWin;
-
-        KexiWindow *m_dialog;
-
-        QWidget *m_viewWidget;
-
-        KexiView *m_parentView;
-
-        QPointer<QWidget> m_lastFocusedChildBeforeFocusOut;
-
-      private:*/
-    /*! Member set to newly assigned object's ID in storeNewData()
-     and used in storeDataBlock(). This is needed because usually,
-     storeDataBlock() can be called from storeNewData() and in this case
-     dialog has not yet assigned valid identifier (it has just negative temp. number).
-     \sa KexiWindow::id()
-     */
-    /*  int m_newlyAssignedID;
-
-        //! Mode for this view. Initialized by KexiWindow::switchToViewMode().
-        //! Can be useful when single class is used for more than one view (e.g. KexiDBForm).
-        int m_viewMode;
-
-        Q3PtrList<KexiView> m_children;
-
-        bool m_dirty; */
 
     //! Sets properties in the Property Editor to be sorted if @a set is true.
     void setSortedProperties(bool set);

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2014 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,27 +19,68 @@
 */
 
 #include "kexiformscrollview.h"
-//#include "kexiformview.h"
+#include "KexiFormScrollAreaWidget.h"
+#include "widgets/kexidbform.h"
 
 #include <formeditor/form.h>
-//2.0 #include <formeditor/formmanager.h>
 #include <formeditor/objecttree.h>
 #include <formeditor/commands.h>
 #include <widget/utils/kexirecordmarker.h>
+#include <utils/kexirecordnavigator.h>
+#include <core/kexi.h>
+#include <kexiutils/utils.h>
 #include <kexi_global.h>
 
-#include <kmenu.h>
-#include <kdebug.h>
+#include <KMenu>
+#include <KDebug>
+#include <KLocale>
+
+#include <QPalette>
+#include <QCursor>
+#include <QPainter>
+#include <QMouseEvent>
+#include <QScrollBar>
+#include <QBoxLayout>
 
 class KexiFormScrollView::Private
 {
 public:
-    Private()
-      : currentLocalSortColumn(-1) /* no column */
-      , localSortingOrder(-1) /* no sorting */
-      , previousRecord(0)
+    Private(KexiFormScrollView * view, bool preview_)
+        : q(view)
+        , resizingEnabled(true)
+        , preview(preview_)
+        , scrollBarPolicySet(false)
+        , scrollViewNavPanel(0)
+        , scrollViewNavPanelVisible(false)
+        , mainAreaWidget(0)
+        , currentLocalSortColumn(-1) /* no column */
+        , localSortingOrder(-1) /* no sorting */
+        , previousRecord(0)
     {
     }
+
+    void setHorizontalScrollBarPolicyDependingOnNavPanel() {
+        q->setHorizontalScrollBarPolicy(
+            (scrollViewNavPanel && scrollViewNavPanelVisible)
+                    ? Qt::ScrollBarAlwaysOn : Qt::ScrollBarAsNeeded);
+    }
+
+    KexiFormScrollView * const q;
+    bool resizingEnabled;
+    QFont helpFont;
+    QColor helpColor;
+    QTimer delayedResize;
+    //! for refreshContentsSizeLater()
+    Qt::ScrollBarPolicy verticalScrollBarPolicy;
+    Qt::ScrollBarPolicy horizontalScrollBarPolicy;
+    bool preview;
+    bool scrollBarPolicySet;
+    bool outerAreaVisible;
+    KexiRecordNavigator* scrollViewNavPanel;
+    bool scrollViewNavPanelVisible; //!< Needed because visibility depends on form's visibility but we want to know earlier
+    QMargins viewportMargins;
+    QWidget *mainAreaWidget;
+
     KFormDesigner::Form *form;
     int currentLocalSortColumn, localSortingOrder;
     //! Used in selectCellInternal() to avoid fetching the same record twice
@@ -47,28 +88,52 @@ public:
 };
 
 KexiFormScrollView::KexiFormScrollView(QWidget *parent, bool preview)
-        : KexiScrollView(parent, preview)
+        : QScrollArea(parent)
         , KexiRecordNavigatorHandler()
         , KexiSharedActionClient()
         , KexiDataAwareObjectInterface()
         , KexiFormDataProvider()
         , KexiFormEventHandler()
-        , d(new Private)
+        , d(new Private(this, preview))
 {
-    m_navPanel = recordNavigator(); //copy this pointer from KexiScrollView
-    if (preview) {
-        setRecordNavigatorVisible(true);
-//tmp
-//  recordNavigator()->setEditingIndicatorEnabled(true);
-//  recordNavigator()->showEditingIndicator(true);
+    setObjectName("KexiFormScrollView");
+    setAttribute(Qt::WA_StaticContents, true);
+    setFrameStyle(QFrame::StyledPanel|QFrame::Sunken);
+    if (!d->preview) {
+        QPalette pal(viewport()->palette());
+        pal.setBrush(viewport()->backgroundRole(), pal.brush(QPalette::Mid));
+        viewport()->setPalette(pal);
     }
+    const QColor fc = palette().color(QPalette::WindowText);
+    const QColor bc = viewport()->palette().color(QPalette::Window);
+    d->helpColor = KexiUtils::blendedColors(fc, bc, 1, 2);
+    d->helpFont = font();
+    d->helpFont.setPointSize(d->helpFont.pointSize() * 3);
+    setFocusPolicy(Qt::WheelFocus);
+    d->outerAreaVisible = true;
 
-    connect(this, SIGNAL(resizingStarted()), this, SLOT(slotResizingStarted()));
-
+    d->delayedResize.setSingleShot(true);
+    connect(&(d->delayedResize), SIGNAL(timeout()), this, SLOT(refreshContentsSize()));
+    if (d->preview) {
+//! @todo allow to hide navigator
+        d->scrollViewNavPanel = new KexiRecordNavigator(this, this);
+        d->scrollViewNavPanel->setLeftMargin(viewportMargins().left());
+        d->scrollViewNavPanel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
+    }
+    else {
+        KexiFormScrollAreaWidget *scrollAreaWidget = new KexiFormScrollAreaWidget(this);
+        setWidget(scrollAreaWidget);
+        connect(scrollAreaWidget, SIGNAL(resized()), this, SIGNAL(resized()));
+    }
+    m_navPanel = recordNavigator(); //copy this pointer from KexiFormScrollView
+    if (d->preview) {
+        setRecordNavigatorVisible(true);
+        refreshContentsSizeLater();
+    }
     m_contextMenu = new KMenu(this);
     m_contextMenu->setObjectName("m_contextMenu");
-
-// setFocusPolicy(NoFocus);
+//! @todo sorting temporarily disabled because not it's not implemented in forms (bug 150372)
+    setSortingEnabled(false);
 }
 
 KexiFormScrollView::~KexiFormScrollView()
@@ -77,31 +142,6 @@ KexiFormScrollView::~KexiFormScrollView()
         delete m_data;
     m_data = 0;
     delete d;
-}
-
-void
-KexiFormScrollView::show()
-{
-    KexiScrollView::show();
-
-#if 0 //moved to KexiFormView, OK?
-    //now get resize mode settings for entire form
-    if (isPreviewing()) {
-        KexiFormView* fv = dynamic_cast<KexiFormView*>(parent());
-        int resizeMode = fv ? fv->resizeMode() : KexiFormView::ResizeAuto;
-        if (resizeMode == KexiFormView::ResizeAuto)
-            setResizePolicy(AutoOneFit);
-    }
-#endif
-}
-
-void
-KexiFormScrollView::slotResizingStarted()
-{
-    if (d->form)
-        setSnapToGrid(d->form->isSnapWidgetsToGridEnabled(), d->form->gridSize());
-    else
-        setSnapToGrid(false);
 }
 
 int KexiFormScrollView::rowsPerPage() const
@@ -141,11 +181,6 @@ void KexiFormScrollView::ensureCellVisible(int row, int col/*=-1*/)
     Q_UNUSED(row);
     Q_UNUSED(col);
     //! @todo
-// if (m_currentItem)
-    //fillDataItems(*m_currentItem);
-
-// if (d->form->tabStops()->first() && d->form->tabStops()->first()->widget())
-//  d->form->tabStops()->first()->widget()->setFocus();
 }
 
 void KexiFormScrollView::moveToRecordRequested(uint r)
@@ -259,17 +294,9 @@ void KexiFormScrollView::createEditor(int row, int col, const QString& addText,
             m_data->append(m_insertItem);
             //new empty insert item
             m_insertItem = m_data->createItem();
-//   updateContents();
             if (m_verticalHeader)
                 m_verticalHeader->addLabel();
-//   m_verticalHeaderAlreadyAdded = true;
             updateWidgetContentsSize();
-            //refr. current and next row
-//   updateContents(columnPos(0), rowPos(row), viewport()->width(), m_rowHeight*2);
-//js: warning this breaks behaviour (cursor is skipping, etc.): qApp->processEvents(500);
-//   ensureVisible(columnPos(m_curCol), rowPos(row+1)+m_rowHeight-1, columnWidth(m_curCol), m_rowHeight);
-
-//   m_verticalHeader->setOffset(contentsY());
         }
     }
 
@@ -279,8 +306,6 @@ void KexiFormScrollView::createEditor(int row, int col, const QString& addText,
 
     if (startRowEdit) {
         recordNavigator()->showEditingIndicator(true);
-//  recordNavigator()->updateButtons(); //refresh 'next btn'
-
         emit rowEditStarted(m_curRow);
     }
 }
@@ -293,40 +318,6 @@ KexiDataItemInterface *KexiFormScrollView::editor(int col, bool ignoreMissingEdi
         return 0;
 
     return dynamic_cast<KexiFormDataItemInterface*>(dbFormWidget()->orderedDataAwareWidgets()->at(col));
-// KexiFormDataItemInterface *item = m_dataItems.at(col);
-    //return item;
-
-    /*
-      KexiDB::TableViewColumn *tvcol = m_data->column(col);
-    // int t = tvcol->fielm_type();
-
-      //find the editor for this column
-      KexiDataItemInterface *editor = m_editors[ tvcol ];
-      if (editor)
-        return editor;
-
-      //not found: create
-    // editor = KexiCellEditorFactory::createEditor(*m_data->column(col)->field, this);
-      editor = KexiCellEditorFactory::createEditor(*m_data->column(col), this);
-      if (!editor) {//create error!
-        if (!ignoreMissingEditor) {
-          //js TODO: show error???
-          cancelRowEdit();
-        }
-        return 0;
-      }
-      editor->hide();
-      connect(editor,SIGNAL(editRequested()),this,SLOT(slotEditRequested()));
-      connect(editor,SIGNAL(cancelRequested()),this,SLOT(cancelEditor()));
-      connect(editor,SIGNAL(acceptRequested()),this,SLOT(acceptEditor()));
-
-      editor->resize(columnWidth(col)-1, rowHeight()-1);
-      editor->installEventFilter(this);
-      if (editor->widget())
-        editor->widget()->installEventFilter(this);
-      //store
-      m_editors.insert( tvcol, editor );
-      return editor;*/
 }
 
 void KexiFormScrollView::editorShowFocus(int row, int col)
@@ -334,8 +325,6 @@ void KexiFormScrollView::editorShowFocus(int row, int col)
     Q_UNUSED(row);
     Q_UNUSED(col);
     //! @todo
-// if (m_currentItem)
-//  m_provider->fillDataItems(*m_currentItem);
 }
 
 void KexiFormScrollView::updateCell(int row, int col)
@@ -376,17 +365,6 @@ void KexiFormScrollView::slotRowRepaintRequested(KexiDB::RecordData& record)
     //! @todo
 }
 
-/*void KexiFormScrollView::slotAboutToDeleteRow(KexiTableItem& item,
-  KexiDB::ResultInfo* result, bool repaint)
-{
-  //! @todo
-}*/
-
-/*void KexiFormScrollView::slotRowDeleted()
-{
-  //! @todo
-}*/
-
 void KexiFormScrollView::slotRowInserted(KexiDB::RecordData* record, bool repaint)
 {
     Q_UNUSED(record);
@@ -409,7 +387,7 @@ void KexiFormScrollView::slotRowsDeleted(const QList<int> &)
 
 KexiDBForm* KexiFormScrollView::dbFormWidget() const
 {
-    return dynamic_cast<KexiDBForm*>(widget());
+    return qobject_cast<KexiDBForm*>(d->preview ? widget() : mainAreaWidget());
 }
 
 int KexiFormScrollView::columns() const
@@ -417,50 +395,39 @@ int KexiFormScrollView::columns() const
     return dbFormWidget()->orderedDataAwareWidgets()->count(); //m_dataItems.count();
 }
 
-/*uint KexiFormScrollView::fieldNumberForColumn(int col)
-{
-  KexiFormDataItemInterface *item = dynamic_cast<KexiFormDataItemInterface*>(dbFormWidget()->orderedDataAwareWidgets()->at( col ));
-  if (!item)
-    return -1;
-  KexiFormDataItemInterfaceToIntMap::ConstIterator it(m_fieldNumbersForDataItems.find( item ));
-  return it!=m_fieldNumbersForDataItems.constEnd() ? it.data() : -1;
-}*/
-
-
 void KexiFormScrollView::setForm(KFormDesigner::Form *form)
 {
     d->form = form;
 }
 
-
+KFormDesigner::Form* KexiFormScrollView::form() const
+{
+    return d->form;
+}
 
 bool KexiFormScrollView::columnEditable(int col)
 {
-    kDebug() << "col=" << col;
+    //kDebug() << "col=" << col;
     foreach(KexiFormDataItemInterface *dataItemIface, m_dataItems) {
         kDebug() << (dynamic_cast<QWidget*>(dataItemIface)
                      ? dynamic_cast<QWidget*>(dataItemIface)->objectName() : "")
             << " " << dataItemIface->dataSource();
     }
-    kDebug() << "-- focus widgets --";
+    //kDebug() << "-- focus widgets --";
     foreach(QWidget* widget, *dbFormWidget()->orderedFocusWidgets()) {
         kDebug() << widget->objectName();
     }
-    kDebug() << "-- data-aware widgets --";
+    //kDebug() << "-- data-aware widgets --";
     foreach(QWidget *widget, *dbFormWidget()->orderedDataAwareWidgets()) {
         kDebug() << widget->objectName();
     }
 
-    //int index = dbFormWidget()->indexForDataItem( item );
-// KexiFormDataItemInterface *item1 = dynamic_cast<KexiFormDataItemInterface*>(dbFormWidget()->orderedFocusWidgets()->at( col ));
-    KexiFormDataItemInterface *item
-    = dynamic_cast<KexiFormDataItemInterface*>(dbFormWidget()->orderedDataAwareWidgets()->at(col));
+    KexiFormDataItemInterface *item = dynamic_cast<KexiFormDataItemInterface*>(
+                                          dbFormWidget()->orderedDataAwareWidgets()->at(col));
 
     if (!item || item->isReadOnly())
         return false;
 
-// KexiFormDataItemInterfaceToIntMap::ConstIterator it(m_fieldNumbersForDataItems.find( item ));
-// return KexiDataAwareObjectInterface::columnEditable( it!=m_fieldNumbersForDataItems.constEnd() ? it.data() : -1 );
     return KexiDataAwareObjectInterface::columnEditable(col);
 }
 
@@ -469,12 +436,12 @@ void KexiFormScrollView::valueChanged(KexiDataItemInterface* item)
     if (!item)
         return;
     //only signal start editing when no record editing was started already
-    kDebug() << "** editedItem="
+    /*kDebug() << "** editedItem="
         << (dbFormWidget()->editedItem ? dbFormWidget()->editedItem->value().toString() : QString())
         << ", "
-        << (item ? item->value().toString() : QString());
+        << (item ? item->value().toString() : QString());*/
     if (dbFormWidget()->editedItem != item) {
-        kDebug() << "**>>> dbFormWidget()->editedItem = dynamic_cast<KexiFormDataItemInterface*>(item)";
+        //kDebug() << "**>>> dbFormWidget()->editedItem = dynamic_cast<KexiFormDataItemInterface*>(item)";
         dbFormWidget()->editedItem = dynamic_cast<KexiFormDataItemInterface*>(item);
         startEditCurrentCell();
     }
@@ -526,7 +493,6 @@ bool KexiFormScrollView::shouldDisplayDefaultValueForItem(KexiFormDataItemInterf
 {
     return cursorAtNewRow()
            && !itemIface->columnInfo()->field->defaultValue().isNull()
-//??  && (m_editor ? m_editor->value()==itemIface->columnInfo()->fielm_defaultValue() : true)
            && !itemIface->columnInfo()->field->isAutoIncrement(); // default value defined
 }
 
@@ -568,6 +534,10 @@ void KexiFormScrollView::updateAfterCancelRowEdit()
     }
     recordNavigator()->showEditingIndicator(false);
     dbFormWidget()->editedItem = 0;
+    KexiFormDataItemInterface *item = dynamic_cast<KexiFormDataItemInterface*>(focusWidget());
+    if (item) {
+        item->selectAllOnFocusIfNeeded();
+    }
 }
 
 void KexiFormScrollView::updateAfterAcceptRowEdit()
@@ -579,6 +549,10 @@ void KexiFormScrollView::updateAfterAcceptRowEdit()
     //update visible data because there could be auto-filled (eg. autonumber) fields
     fillDataItems(*m_currentItem, cursorAtNewRow());
     d->previousRecord = m_currentItem;
+    KexiFormDataItemInterface *item = dynamic_cast<KexiFormDataItemInterface*>(focusWidget());
+    if (item) {
+        item->selectAllOnFocusIfNeeded();
+    }
 }
 
 int KexiFormScrollView::fieldNumberForColumn(int col)
@@ -599,9 +573,54 @@ void KexiFormScrollView::beforeSwitchView()
 
 void KexiFormScrollView::refreshContentsSize()
 {
-    KexiScrollView::refreshContentsSize();
+    if (!widget())
+        return;
+    if (d->preview) {
+        setVerticalScrollBarPolicy(d->verticalScrollBarPolicy);
+        //setHorizontalScrollBarPolicy(d->horizontalScrollBarPolicy);
+        d->scrollBarPolicySet = false;
+        updateScrollBars();
+    }
+    else {
+        // Ensure there is always space to resize Form
+        int w = viewport()->width();
+        int h = viewport()->height();
+        bool change = false;
+        const int delta_x = 300;
+        const int delta_y = 300;
+        if ((widget()->width() + delta_x * 2 / 3) > w) {
+            w = widget()->width() + delta_x;
+            change = true;
+        } else if ((w - widget()->width()) > delta_x) {
+            w = widget()->width() + delta_x;
+            change = true;
+        }
+        if ((widget()->height() + delta_y * 2 / 3) > h) {
+            h = widget()->height() + delta_y;
+            change = true;
+        } else if ((h - widget()->height()) > delta_y) {
+            h = widget()->height() + delta_y;
+            change = true;
+        }
+        if (change) {
+            widget()->resize(w, h);
+        }
+        updateScrollBars();
+        setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+        d->setHorizontalScrollBarPolicyDependingOnNavPanel();
+    }
+    updateScrollBars();
+
+    kDebug() << widget()->size() << d->form->widget()->size() << dbFormWidget()->size();
+    if (!d->preview) {
+        widget()->resize(dbFormWidget()->size() + QSize(300, 300));
+    }
+    else {
+        widget()->resize(viewport()->size());
+    }
+
     //only clear cmd history when KexiScrollView::refreshContentsSizeLater() has been called
-    if (!isPreviewing() && sender() == delayedResizeTimer()) {
+    if (!d->preview && sender() == delayedResizeTimer()) {
         if (d->form)
             d->form->clearUndoStack();
     }
@@ -640,6 +659,107 @@ int KexiFormScrollView::lastVisibleRow() const
 {
 //! @todo unimplemented for now, this will be used for continuous forms
     return -1;
+}
+
+QScrollBar* KexiFormScrollView::verticalScrollBar() const
+{
+    return QScrollArea::verticalScrollBar();
+}
+
+void KexiFormScrollView::setRecordNavigatorVisible(bool visible)
+{
+    if (d->scrollViewNavPanel) {
+        d->scrollViewNavPanel->setVisible(visible);
+        d->scrollViewNavPanelVisible = visible;
+    }
+    updateNavPanelGeometry();
+}
+
+bool KexiFormScrollView::isOuterAreaVisible() const
+{
+    return d->outerAreaVisible;
+}
+
+void KexiFormScrollView::setOuterAreaIndicatorVisible(bool visible)
+{
+    d->outerAreaVisible = visible;
+}
+
+bool KexiFormScrollView::isResizingEnabled() const
+{
+    return d->resizingEnabled;
+}
+
+void KexiFormScrollView::setResizingEnabled(bool enabled)
+{
+    d->resizingEnabled = enabled;
+}
+
+void KexiFormScrollView::refreshContentsSizeLater()
+{
+    if (!d->scrollBarPolicySet) {
+        d->scrollBarPolicySet = true;
+        d->verticalScrollBarPolicy = verticalScrollBarPolicy();
+        d->horizontalScrollBarPolicy = horizontalScrollBarPolicy();
+    }
+    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    d->setHorizontalScrollBarPolicyDependingOnNavPanel();
+    updateScrollBars();
+    d->delayedResize.start(100);
+}
+
+void KexiFormScrollView::updateNavPanelGeometry()
+{
+    if (d->scrollViewNavPanel) {
+        d->scrollViewNavPanel->setLeftMargin(leftMargin());
+        d->scrollViewNavPanel->insertAsideOfHorizontalScrollBar(this);
+    }
+}
+
+void KexiFormScrollView::setHBarGeometry(QScrollBar & hbar, int x, int y, int w, int h)
+{
+    if (d->scrollViewNavPanel && d->scrollViewNavPanel->isVisible()) {
+        d->scrollViewNavPanel->setHBarGeometry(hbar, x, y, w, h);
+    } else {
+        hbar.setGeometry(x, y, w, h);
+    }
+}
+
+KexiRecordNavigator* KexiFormScrollView::recordNavigator() const
+{
+    return d->scrollViewNavPanel;
+}
+
+
+bool KexiFormScrollView::isPreviewing() const
+{
+    return d->preview;
+}
+
+const QTimer *KexiFormScrollView::delayedResizeTimer() const
+{
+  return &(d->delayedResize);
+}
+
+void KexiFormScrollView::setViewportMargins(const QMargins &margins)
+{
+    QScrollArea::setViewportMargins(margins);
+    d->viewportMargins = margins;
+}
+
+QMargins KexiFormScrollView::viewportMargins() const
+{
+    return d->viewportMargins;
+}
+
+void KexiFormScrollView::setMainAreaWidget(QWidget* widget)
+{
+    d->mainAreaWidget = widget;
+}
+
+QWidget* KexiFormScrollView::mainAreaWidget() const
+{
+    return d->mainAreaWidget;
 }
 
 #include "kexiformscrollview.moc"

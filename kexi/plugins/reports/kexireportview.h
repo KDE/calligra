@@ -46,7 +46,7 @@ class KexiReportView : public KexiView, public KexiRecordNavigatorHandler
 {
     Q_OBJECT
 public:
-    KexiReportView(QWidget *parent);
+    explicit KexiReportView(QWidget *parent);
 
     ~KexiReportView();
 
@@ -65,7 +65,6 @@ public:
 private:
     KoReportPreRenderer *m_preRenderer;
     ORODocument *m_reportDocument;
-    //QScrollArea *m_scrollArea;
     QGraphicsView *m_reportView;
     QGraphicsScene *m_reportScene;
     KoReportPage *m_reportPage;
@@ -89,6 +88,7 @@ private slots:
     void slotExportAsSpreadsheet();
     void slotExportAsWebPage();
     void slotExportAsTextDocument();
+    void openExportedDocument(const KUrl& destination);
 };
 
 #endif

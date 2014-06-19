@@ -23,20 +23,15 @@ Description: If defined, forces to show menu entries and dialogs just to give
 impression about development plans of Kexi Team. 
 Only recommended for test/development versions.
 
-* KEXI_REPORTS_SUPPORT
-Type: defined/undefined
-Default: undefined
-Description: If defined, the reports plugin will be compiled in and loaded; 
-else: it will be not loaded even if is compiled.
-
 * KEXI_SCRIPTS_SUPPORT
 Type: defined/undefined
-Like KEXI_REPORTS_SUPPORT macro, but for enabling scripts plugin.
-Default: undefined
+Description: If defined, the scripts plugin will be compiled in and loaded;
+else: it will be not loaded even if is compiled.
+Default: defined
 
 * KEXI_MACROS_SUPPORT
 Type: defined/undefined
-Like KEXI_REPORTS_SUPPORT macro, but for enabling macros plugin.
+Like KEXI_SCRIPTS_SUPPORT macro, but for enabling macros plugin.
 Default: undefined
 
 * KEXI_NO_MIGRATION

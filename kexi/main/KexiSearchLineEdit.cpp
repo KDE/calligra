@@ -49,11 +49,8 @@ public:
     explicit KexiSearchLineEditCompleterPopupModel(QObject *parent = 0);
     ~KexiSearchLineEditCompleterPopupModel();
     virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    //virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
     virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
     virtual QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
-    //virtual QModelIndex parent(const QModelIndex &index) const;
-    //virtual Qt::ItemFlags flags(const QModelIndex &index) const;
     void addSearchableModel(KexiSearchableModel *model);
 private:
     class Private;
@@ -263,10 +260,6 @@ public:
             }
             QRect textRect = v4.widget->style()->subElementRect(QStyle::SE_ItemViewItemText,
                                                                 &v4, v4.widget);
-            /*if (v4->state & QStyle::State_Editing) {
-                p->setPen(v4->palette.color(cg, QPalette::Text));
-                p->drawRect(textRect.adjusted(0, 0, -1, -1));
-            }*/
             viewItemDrawText(painter, &v4, textRect);
             painter->restore();
         }
@@ -316,15 +309,12 @@ protected:
             textLayout.setAdditionalFormats(formats);
         }
         const int lineCount = textLayout.lineCount();
-/*        const QRect layoutRect = QStyle::alignedRect(option->direction, option->displayAlignment,
-                                                    QSize(int(width), int(height)), textRect);*/
-        QPointF position = textRect.topLeft(); /*layoutRect.topLeft();*/
+        QPointF position = textRect.topLeft();
         for (int i = 0; i < lineCount; ++i) {
             const QTextLine line = textLayout.lineAt(i);
             line.draw(p, position);
             position.setY(position.y() + line.y() + line.ascent());
         }
-        //textLayout.draw(p, position, QVector<QTextLayout::FormatRange>(), textRect);
     }
 
     virtual void initStyleOption(QStyleOptionViewItem *option, const QModelIndex &index) const

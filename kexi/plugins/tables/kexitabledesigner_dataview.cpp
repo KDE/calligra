@@ -31,6 +31,13 @@ KexiTableDesigner_DataView::KexiTableDesigner_DataView(QWidget *parent)
         : KexiDataTable(parent, true/*db-aware*/)
 {
     setObjectName("KexiTableDesigner_DataView");
+
+    // setup main menu actions
+    QList<QAction*> mainMenuActions;
+    QAction *a = sharedAction("edit_clear_table");
+    mainMenuActions << a;
+
+    setMainMenuActions(mainMenuActions);
 }
 
 KexiTableDesigner_DataView::~KexiTableDesigner_DataView()
@@ -55,12 +62,10 @@ tristate KexiTableDesigner_DataView::beforeSwitchTo(Kexi::ViewMode mode, bool &d
 
     if (mode != Kexi::DataViewMode) {
         //accept editing before switching
-//  if (!m_view->acceptRowEdit()) {
         if (!acceptRowEdit()) {
             return cancelled;
         }
     }
-
     return true;
 }
 

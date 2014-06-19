@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component type="desktop">
+  <id>words.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0+</project_license>
+  <name>Words</name>
+  <name xml:lang="ca">Words</name>
+  <name xml:lang="cs">Words</name>
+  <name xml:lang="ia">Words</name>
+  <name xml:lang="it">Words</name>
+  <name xml:lang="nl">Words</name>
+  <name xml:lang="pl">Słowa</name>
+  <name xml:lang="pt">Words</name>
+  <name xml:lang="pt-BR">Words</name>
+  <name xml:lang="sk">Words</name>
+  <name xml:lang="sv">Words</name>
+  <name xml:lang="uk">Words</name>
+  <name xml:lang="x-test">xxWordsxx</name>
+  <summary>Word Processor</summary>
+  <summary xml:lang="ca">Processador de textos</summary>
+  <summary xml:lang="cs">Textový procesor</summary>
+  <summary xml:lang="ia">Processator de parolas</summary>
+  <summary xml:lang="it">Elaboratore di testi</summary>
+  <summary xml:lang="nl">Tekstverwerker</summary>
+  <summary xml:lang="pl">Edytor tekstu</summary>
+  <summary xml:lang="pt">Processador de Texto</summary>
+  <summary xml:lang="pt-BR">Processador de Texto</summary>
+  <summary xml:lang="sk">Textový procesor</summary>
+  <summary xml:lang="sv">Ordbehandlare</summary>
+  <summary xml:lang="uk">Текстовий процесор</summary>
+  <summary xml:lang="x-test">xxWord Processorxx</summary>
+  <description>
+    <p>
+      Words is an intuitive word processor and desktop publisher application.
+      With it, you can create informative and attractive documents with pleasure and ease.
+    </p>
+    <p xml:lang="ca">El Words és una aplicació intuïtiva de procés de textos i de publicació d'escriptori. Amb ella es poden crear documents informatius i atractius amb satisfacció i facilitat.</p>
+    <p xml:lang="it">Words è un elaboratore di testi intuitivo e un'applicazione di pubblicazione per desktop. Con esso, puoi creare documenti informativi e accattivanti con soddisfazione e facilità.</p>
+    <p xml:lang="nl">Words is een intuïtieve toepassing voor tekstverwerken en weergeven op het bureaublad. Hiermee kunt u informatieve en attractieve documenten met plezier en gemak maken.</p>
+    <p xml:lang="pl">Słowa jest intuicyjnym edytorem tekstu i biurkowym programem do publikowania. Dzięki niemu można tworzyć informacyjne i atrakcyjne dokumenty z łatwością użycia.</p>
+    <p xml:lang="pt">O Words é um processador de texto intuitivo e uma aplicação de publicações no ecrã. Com ele, pode criar documentos informativos e atraentes com prazer e facilidade.</p>
+    <p xml:lang="pt-BR">Words é um processador de texto intuitivo e um aplicativo de publicação no desktop. Com ele, você pode criar documentos informativos e atraentes com prazer e facilidade.</p>
+    <p xml:lang="sk">Words je intuitívny textový procesor a aplikácia na desktopové publikovanie. Môžete pomocou neho vytvoriť informatívne a atraktívne dokumenty s radosťou a jednoduchosťou.</p>
+    <p xml:lang="sv">Words är en intuitiv ordbehandlare och skrivbordspubliceringsprogram. Det gör att du kan skapa informativa och attraktiva dokument med nöje och enkelhet.</p>
+    <p xml:lang="uk">Words — інтуїтивно зрозуміла у користування програма для редагування текстів та приготування матеріалів для друку. За її допомогою ви можете створювати інформативні та візуально красиві документи із задоволенням та без напруження.</p>
+    <p xml:lang="x-test">xxWords is an intuitive word processor and desktop publisher application. With it, you can create informative and attractive documents with pleasure and ease.xx</p>
+    <p>Features:</p>
+    <p xml:lang="ca">Característiques:</p>
+    <p xml:lang="cs">Vlastnosti:</p>
+    <p xml:lang="ia">Characteristicas:</p>
+    <p xml:lang="it">Funzionalità:</p>
+    <p xml:lang="nl">Mogelijkheden:</p>
+    <p xml:lang="pl">Cechy:</p>
+    <p xml:lang="pt">Características:</p>
+    <p xml:lang="pt-BR">Funcionalidades:</p>
+    <p xml:lang="sk">Funkcie:</p>
+    <p xml:lang="sv">Funktioner:</p>
+    <p xml:lang="uk">Можливості:</p>
+    <p xml:lang="x-test">xxFeatures:xx</p>
+    <ul>
+      <li>Frame-based editing</li>
+      <li xml:lang="ca">Edició basada en marcs</li>
+      <li xml:lang="it">Modifica basata su riquadri</li>
+      <li xml:lang="nl">Bewerken op basis van frames</li>
+      <li xml:lang="pl">Edytowanie oparte na ramkach</li>
+      <li xml:lang="pt">Edição baseada em molduras</li>
+      <li xml:lang="pt-BR">Edição baseada em molduras</li>
+      <li xml:lang="sk">Rámcovo založené editovanie</li>
+      <li xml:lang="sv">Rambaserad redigering</li>
+      <li xml:lang="uk">Редагування на основі блоків.</li>
+      <li xml:lang="x-test">xxFrame-based editingxx</li>
+      <li>Allows embedding of Documents</li>
+      <li xml:lang="ca">Permet incrustar documents</li>
+      <li xml:lang="it">Consente l'integrazione di documenti</li>
+      <li xml:lang="nl">Staat inbedden van documenten toe</li>
+      <li xml:lang="pl">Umożliwia osadzanie dokumentów</li>
+      <li xml:lang="pt">Permite a incorporação de documentos</li>
+      <li xml:lang="pt-BR">Permite a incorporação de documentos</li>
+      <li xml:lang="sk">Umožňuje vkladanie dokumentov</li>
+      <li xml:lang="sv">Tillåter att dokument inbäddas</li>
+      <li xml:lang="uk">Вбудовування об’єктів до документів.</li>
+      <li xml:lang="x-test">xxAllows embedding of Documentsxx</li>
+      <li>Customization of user interface</li>
+      <li xml:lang="ca">Personalització de la interfície d'usuari</li>
+      <li xml:lang="it">Personalizzazion e dell'interfaccia utente</li>
+      <li xml:lang="nl">Aanpassen naar behoefte van het gebruikersinterface</li>
+      <li xml:lang="pl">Dostosowywanie układu sterowania</li>
+      <li xml:lang="pt">Personalização da interface do utilizador</li>
+      <li xml:lang="pt-BR">Personalização da interface do usuário</li>
+      <li xml:lang="sk">Úprava používateľského rozhrania</li>
+      <li xml:lang="sv">Anpassning av användargränssnitt</li>
+      <li xml:lang="uk">Налаштовуваність інтерфейсу користувача.</li>
+      <li xml:lang="x-test">xxCustomization of user interfacexx</li>
+      <li>Includes all features expected from a modern word processor</li>
+      <li xml:lang="ca">Inclou totes les funcionalitats esperades d'un processador de textos modern</li>
+      <li xml:lang="it">Include tutte le funzionalità attese da un elaboratore di testi moderno</li>
+      <li xml:lang="nl">Bevat alle functies die verwacht worden van een moderne tekstverwerker</li>
+      <li xml:lang="pl">Zawiera wszystkie cechy oczekiwane od nowoczesnego edytora tekstu</li>
+      <li xml:lang="pt">Inclui todas as funcionalidades esperadas de um processador de texto moderno</li>
+      <li xml:lang="pt-BR">Inclui todas as funcionalidades esperadas de um processador de texto moderno</li>
+      <li xml:lang="sk">Obsahuje všetky funkcie očakávané od moderného textového procesora</li>
+      <li xml:lang="sv">Innehåller alla funktioner som förväntas av en modern ordbehandlare</li>
+      <li xml:lang="uk">Повний спектр можливостей сучасної програми для редагування тексту.</li>
+      <li xml:lang="x-test">xxIncludes all features expected from a modern word processorxx</li>
+      <li>ODT (Open Document Text) support</li>
+      <li xml:lang="ca">Implementa ODT (Open Document Text)</li>
+      <li xml:lang="it">Supporto ODT (Open Document Text)</li>
+      <li xml:lang="nl">Ondersteuning van ODT (Open Document Text)</li>
+      <li xml:lang="pl">Obsługa ODT (Open Document Text)</li>
+      <li xml:lang="pt">Suporte para o ODT (Texto do Open Document)</li>
+      <li xml:lang="pt-BR">Suporte para ODT (Texto Open Document)</li>
+      <li xml:lang="sk">Podpora ODT (Open Document Text)</li>
+      <li xml:lang="sv">Stöd för ODT (Open Document Text)</li>
+      <li xml:lang="uk">Підтримка стандартів ODT (Open Document Text).</li>
+      <li xml:lang="x-test">xxODT (Open Document Text) supportxx</li>
+    </ul>
+  </description>
+  <url type="homepage">http://www.calligra.org/words/</url>
+  <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?format=guided&amp;product=calligrawords</url>
+  <screenshots>
+    <screenshot type="default">
+      <image>http://kde.org/images/screenshots/words.png</image>
+    </screenshot>
+  </screenshots>
+  <project_group>KDE</project_group>
+  <provides>
+    <binary>calligrawords</binary>
+  </provides>
+</component>

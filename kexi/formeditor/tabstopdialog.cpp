@@ -62,8 +62,7 @@ TabStopDialog::Private::~Private()
 
 }
 
-TabStopDialog::TabStopDialog(QWidget *parent)
-    : KDialog(parent), d(new Private())
+TabStopDialog::TabStopDialog(QWidget *parent)    : KDialog(parent), d(new Private())
 {
     setObjectName("tabstop_dialog");
     setModal(true);
@@ -86,9 +85,9 @@ TabStopDialog::TabStopDialog(QWidget *parent)
     d->widgetTree->setForm(0);
     connect(d->widgetTree, SIGNAL(itemSelectionChanged()), this, SLOT(slotSelectionChanged()));
 #ifdef __GNUC__
-#warning TODO connect(d->widgetTree, SIGNAL(moved(Q3ListViewItem*,Q3ListViewItem*,Q3ListViewItem*)), this, SLOT(updateButtons(Q3ListViewItem*)));
+#warning TODO connect(d->widgetTree, SIGNAL(moved(QListViewItem*,QListViewItem*,QListViewItem*)), this, SLOT(updateButtons(QListViewItem*)));
 #else
-#pragma WARNING( TODO connect(d->widgetTree, SIGNAL(moved(Q3ListViewItem*,Q3ListViewItem*,Q3ListViewItem*)), this, SLOT(updateButtons(Q3ListViewItem*))); )
+#pragma WARNING( TODO connect(d->widgetTree, SIGNAL(moved(QListViewItem*,QListViewItem*,QListViewItem*)), this, SLOT(updateButtons(QListViewItem*))); )
 #endif
 
     QVBoxLayout *vbox = new QVBoxLayout();
@@ -217,4 +216,3 @@ bool TabStopDialog::autoTabStops() const
 }
 
 #include "tabstopdialog.moc"
-

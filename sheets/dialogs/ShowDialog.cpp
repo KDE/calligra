@@ -84,7 +84,7 @@ void ShowDialog::accept()
 
     Map *const map = m_selection->activeSheet()->map();
     Sheet *sheet;
-    KUndo2Command* macroCommand = new KUndo2Command(i18nc("(qtundo-format)", "Show Sheet"));
+    KUndo2Command* macroCommand = new KUndo2Command(kundo2_i18n("Show Sheet"));
     for (int i = 0; i < items.count(); ++i) {
         sheet = map->findSheet(items[i]->text());
         if (!sheet)

@@ -59,7 +59,7 @@ void CommentCommand::setComment(const QString& comment)
 {
     m_comment = comment;
     if (m_comment.isEmpty())
-        setText(i18nc("(qtundo-format)", "Remove Comment"));
+        setText(kundo2_i18n("Remove Comment"));
     else
-        setText(i18nc("(qtundo-format)", "Add Comment"));
+        setText(kundo2_i18n("Add Comment"));
 }

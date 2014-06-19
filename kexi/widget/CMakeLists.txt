@@ -1,11 +1,11 @@
 add_subdirectory( utils )
 add_subdirectory( dataviewcommon )
-
+add_subdirectory( relations )
+  
 IF(KEXI_MOBILE)
 
 ELSE(KEXI_MOBILE)
   add_subdirectory( tableview )
-  add_subdirectory( relations )
 ENDIF(KEXI_MOBILE)
 
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44023)
@@ -32,12 +32,12 @@ set(kexiextendedwidgets_LIB_SRCS
     properties/KexiPropertyEditorView.cpp
     properties/KexiPropertyPaneViewBase.cpp
 
-    kexiquerydesignersqleditor.cpp 
+    kexiquerydesignersqleditor.cpp
     kexiqueryparameters.cpp
     kexisectionheader.cpp
-    kexidbdrivercombobox.cpp 
-    kexieditor.cpp 
-    KexiDataSourceComboBox.cpp 
+    kexidbdrivercombobox.cpp
+    kexieditor.cpp
+    KexiDataSourceComboBox.cpp
     KexiObjectInfoLabel.cpp
     kexicharencodingcombobox.cpp
     KexiDBTitlePage.cpp
@@ -52,8 +52,6 @@ ELSE (KEXI_MOBILE)
   LIST(APPEND kexiextendedwidgets_LIB_SRCS
     #navigator/KexiProjectListView.cpp
     #navigator/KexiProjectListViewItem.cpp
-    
-    kexiscrollview.cpp 
     kexidbconnectionwidget.cpp 
   #   pixmapcollection.cpp 
 # TODO replace use of KexiProjectListView and KexiProjectListViewList (with KexiProjectNavigator) 
@@ -100,8 +98,6 @@ ELSE(KEXI_MOBILE)
   target_link_libraries(
     kexiextendedwidgets
     ${KDE4_KFILE_LIBS}
-    ${KDE4_KDE3SUPPORT_LIBS}
-    ${QT_QT3SUPPORT_LIBRARY}
     )
 ENDIF(KEXI_MOBILE)
 

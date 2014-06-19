@@ -20,8 +20,6 @@
 #ifndef KEXIACTIONPROXY_H
 #define KEXIACTIONPROXY_H
 
-#include <QPointer>
-#include <QObject>
 #include <QPair>
 
 #include "kexiproject.h"
@@ -47,7 +45,7 @@ class KexiActionProxy;
  so the conenction can be reused many times by just allocating KTextEdit_SharedActionConnector
  object for any KTextEditor when required (not only within KexiQueryDesignerSQLEditor).
 */
-//TODO add method for setAvailable()
+//! @todo add method for setAvailable()
 class KEXICORE_EXPORT KexiSharedActionConnector
 {
 public:
@@ -74,7 +72,6 @@ protected:
  This class is mostly used by subclassing in KexiWindow or KexiDockBase
  - you can subclass in a similar way.
 */
-
 class KEXICORE_EXPORT KexiActionProxy
 {
 public:

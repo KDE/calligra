@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component type="desktop">
+  <id>plan.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0+</project_license>
+  <name>Plan</name>
+  <name xml:lang="ca">Plan</name>
+  <name xml:lang="cs">Plan</name>
+  <name xml:lang="ia">Plan</name>
+  <name xml:lang="it">Plan</name>
+  <name xml:lang="nl">Plan</name>
+  <name xml:lang="pl">Plan</name>
+  <name xml:lang="pt">Plan</name>
+  <name xml:lang="pt-BR">Plan</name>
+  <name xml:lang="sk">Plan</name>
+  <name xml:lang="sv">Plan</name>
+  <name xml:lang="uk">Plan</name>
+  <name xml:lang="x-test">xxPlanxx</name>
+  <summary>Project Management</summary>
+  <summary xml:lang="ca">Gestió de projectes</summary>
+  <summary xml:lang="cs">Správa projektů</summary>
+  <summary xml:lang="ia">Administration de projectos</summary>
+  <summary xml:lang="it">Gestione progetti</summary>
+  <summary xml:lang="nl">Projectbeheer</summary>
+  <summary xml:lang="pl">Zarządzanie projektem</summary>
+  <summary xml:lang="pt">Gestão de Projectos</summary>
+  <summary xml:lang="pt-BR">Gerenciamento de Projetos</summary>
+  <summary xml:lang="sk">Správa projektov</summary>
+  <summary xml:lang="sv">Projekthantering</summary>
+  <summary xml:lang="uk">Керування проектами</summary>
+  <summary xml:lang="x-test">xxProject Managementxx</summary>
+  <description>
+    <p>
+      Plan is a project management application. It is intended for managing moderately large projects with multiple resources.
+    </p>
+    <p xml:lang="ca">El Plan és una aplicació de gestió de projectes. Està pensat per gestionar projectes moderadament grans amb múltiples recursos.</p>
+    <p xml:lang="ia">Plan es un application pro gerer projectos. Illo es destinate pro gerer projectos moderatemente grande con ressources multiple.</p>
+    <p xml:lang="it">Plan è un'applicazione di gestione progetti. È pensato per gestire progetti abbastanza grandi con risorse multiple.</p>
+    <p xml:lang="nl">Plan is een toepassing voor projectbeheer. Het is bedoeld voor het beheer van middelgrote projecten met meerdere hulpbronnen.</p>
+    <p xml:lang="pl">Plan jest programem do zarządzania projektem. Jest przeznaczony do zarządzania umiarkowanie dużymi projektami zawierającymi wiele zasobów.</p>
+    <p xml:lang="pt">O Plan é uma aplicação de gestão de projectos. Pretende ser usada para gerir projectos relativamente grandes com vários recursos.</p>
+    <p xml:lang="pt-BR">Plan é um aplicativo para gerenciamento de projetos. Destina-se ao gerenciamento de projetos relativamente grandes com vários recursos.</p>
+    <p xml:lang="sk">Plan je aplikácia na správu projektov. Je určená na správu stredne veľkých projektov s viacerými zdrojmi.</p>
+    <p xml:lang="sv">Plan är ett projekthanteringsprogram. Det är avsett för att hantera måttligt stora projekt med flera resurser.</p>
+    <p xml:lang="uk">Plan — програма для керування проектами. Її призначено для керування помірно великими проектами з декількома ресурсами або виконавцями.</p>
+    <p xml:lang="x-test">xxPlan is a project management application. It is intended for managing moderately large projects with multiple resources.xx</p>
+    <p>Features:</p>
+    <p xml:lang="ca">Característiques:</p>
+    <p xml:lang="cs">Vlastnosti:</p>
+    <p xml:lang="ia">Characteristicas:</p>
+    <p xml:lang="it">Funzionalità:</p>
+    <p xml:lang="nl">Mogelijkheden:</p>
+    <p xml:lang="pl">Cechy:</p>
+    <p xml:lang="pt">Características:</p>
+    <p xml:lang="pt-BR">Funcionalidades:</p>
+    <p xml:lang="sk">Funkcie:</p>
+    <p xml:lang="sv">Funktioner:</p>
+    <p xml:lang="uk">Можливості:</p>
+    <p xml:lang="x-test">xxFeatures:xx</p>
+    <ul>
+      <li>Multiple views: Gant Charts, Resource View, Accounts View</li>
+      <li xml:lang="ca">Vistes múltiples: Diagrames de Gant, vista de recursos, vista de comptes</li>
+      <li xml:lang="ia">Vistas multiple: Diagrammas de Gantt, Vista de ressource, vista de contos</li>
+      <li xml:lang="it">Viste multiple: diagrammi di Gantt, vista delle risorse, vista degli account</li>
+      <li xml:lang="nl">Meerdere weergaven: Gant-kaarten, hulpbronweergave, accountweergave</li>
+      <li xml:lang="pl">Wiele widoków: wykresy Ganta, widok zasobów, widok kont</li>
+      <li xml:lang="pt">Diversas áreas: Diagramas de Gantt, Área de Recursos, Área de Contas</li>
+      <li xml:lang="pt-BR">Diversos modos de exibição: Diagramas de Gantt, Área de Recursos, Área de Contas</li>
+      <li xml:lang="sk">Mnoho pohľadov: Ganttove grafy, pohľad zdrojov, pohľad účtov</li>
+      <li xml:lang="sv">Flera vyer: Gant-diagram, resursvy, kontovy</li>
+      <li xml:lang="uk">Декілька режимів перегляду: діаграми Ґанта, перегляд виконавців, перегляд рахунків.</li>
+      <li xml:lang="x-test">xxMultiple views: Gant Charts, Resource View, Accounts Viewxx</li>
+      <li>Uses standard structures: Work breakdown structure (WBS), Resource breakdown structure (RBS), Cost breakdown structure (CBS)</li>
+      <li xml:lang="ca">Usa estructures estàndard: Estructura de descomposició de treballs (WBS), Estructura de descomposició de recursos (RBS), Estructura de descomposició de costos (CBS)</li>
+      <li xml:lang="it">Utilizza strutture standard: strutture di scomposizione del lavoro (WBS), strutture di scomposizione delle risorse (RBS), strutture di scomposizione dei costi (CBS)</li>
+      <li xml:lang="nl">Gebruikt standaard structuren: Work breakdown structure (WBS), Resource breakdown structure (RBS), Cost breakdown structure (CBS)</li>
+      <li xml:lang="pl">Używa standardowych struktur: Struktura podziału pracy (WBS),  Struktura podziału zasobów (RBS), Struktura podziału kosztów (CBS)</li>
+      <li xml:lang="pt">Usa estruturas padrão: estruturas de divisão de trabalho (WBS), estruturas de divisão de recursos (RBS), estruturas de divisão de custos (CBS)</li>
+      <li xml:lang="pt-BR">Usa estruturas padrão: Estruturas de divisão de trabalho (WBS), estruturas de divisão de recursos (RBS), estruturas de divisão de custos (CBS)</li>
+      <li xml:lang="sk">Používa štandardné štruktúry: Work breakdown structure (WBS), Resource breakdown structure (RBS), Cost breakdown structure (CBS)</li>
+      <li xml:lang="sv">Använder standardstrukturer: Arbetsfördelningsstruktur (WBS), resursfördelningsstruktur (RBS), kostnadsfördelningsstruktur (CBS)</li>
+      <li xml:lang="uk">Використання стандартних структур: структури рознарядки робіт (СРР або WBS), структури розподілу вартості (СРВ або CBS) та структури розподілу ресурсів (СРР або RBS).</li>
+      <li xml:lang="x-test">xxUses standard structures: Work breakdown structure (WBS), Resource breakdown structure (RBS), Cost breakdown structure (CBS)xx</li>
+      <li>Configurable level of detail on Gantt Chart</li>
+      <li xml:lang="ca">Es pot configurar el nivell de detall en el diagrama de Gantt</li>
+      <li xml:lang="ia">Nivello de detalios configurabile sur Diagramma de Gantt</li>
+      <li xml:lang="it">Livello di dettaglio configurabile per i diagrammi di Gantt</li>
+      <li xml:lang="nl">Instelbaar detailniveau op Gant-kaart</li>
+      <li xml:lang="pl">Ustawialny poziom szczegółów na wykresach Gantta</li>
+      <li xml:lang="pt">Nível de detalhe configurável no Diagrama de Gantt</li>
+      <li xml:lang="pt-BR">Nível de detalhe configurável no Diagrama de Gantt</li>
+      <li xml:lang="sk">Nastaviteľná úroveň detailu Ganttovho grafu</li>
+      <li xml:lang="sv">Anpassningsbar detaljnivå för Gantt-diagram</li>
+      <li xml:lang="uk">Налаштовуваний рівень деталізації у діаграмах Ґанта.</li>
+      <li xml:lang="x-test">xxConfigurable level of detail on Gantt Chartxx</li>
+      <li>Supports Summarytasks, Tasks, and milestones</li>
+      <li xml:lang="ca">Permet resums de tasques, tasques i fites</li>
+      <li xml:lang="it">Supporta attività di riepilogo, attività e pietre miliari</li>
+      <li xml:lang="nl">Ondersteunt Samenvattingstaken, taken en mijlpalen</li>
+      <li xml:lang="pl">Obsługa dla zadań podsumowujących, zadań oraz kamieni milowych</li>
+      <li xml:lang="pt">Suporta tarefas-resumo, tarefas e marcos</li>
+      <li xml:lang="pt-BR">Suporte a tarefas-resumo, tarefas e metas</li>
+      <li xml:lang="sk">Podporuje sumárne úlohy, úlohy a míľniky</li>
+      <li xml:lang="sv">Stöder sammanfattningsaktiviteter, aktiviteter och milstenar</li>
+      <li xml:lang="uk">Підтримка підсумкових завдань, завдань та етапів.</li>
+      <li xml:lang="x-test">xxSupports Summarytasks, Tasks, and milestonesxx</li>
+      <li>Configurable Scheduling Constraints</li>
+      <li xml:lang="ca">Es poden configurar restriccions de planificació</li>
+      <li xml:lang="it">Vincoli di pianificazione configurabili</li>
+      <li xml:lang="nl">Instelbare voorwaarden voor planning</li>
+      <li xml:lang="pl">Ustawialne ograniczenia w planowaniu</li>
+      <li xml:lang="pt">Restrições de Escalonamento Configuráveis</li>
+      <li xml:lang="pt-BR">Restrições de agendamento configuráveis</li>
+      <li xml:lang="sk">Nastaviteľné plánovacie obmedzenia</li>
+      <li xml:lang="sv">Anpassningsbara tidplanebegränsning</li>
+      <li xml:lang="uk">Налаштовувані обмеження щодо планування.</li>
+      <li xml:lang="x-test">xxConfigurable Scheduling Constraintsxx</li>
+    </ul>
+  </description>
+  <url type="homepage">http://www.calligra.org/plan/</url>
+  <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?format=guided&amp;product=calligraplan</url>
+  <url type="help">http://userbase.kde.org/Plan/Manual</url>
+  <screenshots>
+    <screenshot type="default">
+      <image>http://kde.org/images/screenshots/plan.png</image>
+    </screenshot>
+  </screenshots>
+  <project_group>KDE</project_group>
+  <provides>
+    <binary>calligraplan</binary>
+  </provides>
+</component>

@@ -44,3 +44,8 @@ KexiMainWindowIface* KexiMainWindowIface::global()
 {
     return kexiMainWindow;
 }
+
+QWidget* KexiMainWindowIface::thisWidget()
+{
+    return dynamic_cast<QWidget*>(this);
+}

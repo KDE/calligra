@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2004-2013 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2014 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -51,7 +51,7 @@
 
 static bool compareSQL(const QString& sql1, const QString& sql2)
 {
-    //TODO: use reformatting functions here
+    //! @todo use reformatting functions here
     return sql1.trimmed() == sql2.trimmed();
 }
 
@@ -86,9 +86,9 @@ public:
     //! needed to remember height for both modes, between switching
     int heightForStatusMode;
     //! helper for beforeSwitchTo()
-    bool justSwitchedFromNoViewMode : 1;
+    bool justSwitchedFromNoViewMode;
     //! helper for slotTextChanged()
-    bool slotTextChangedEnabled : 1;
+    bool slotTextChangedEnabled;
 };
 
 //===================
@@ -202,7 +202,7 @@ void KexiQueryDesignerSQLView::setStatusText(const QString& text)
 
 tristate KexiQueryDesignerSQLView::beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore)
 {
-//TODO
+//! @todo
     dontStore = true;
     if (mode == Kexi::DesignViewMode || mode == Kexi::DataViewMode) {
         QString sqlText = d->editor->text().trimmed();
@@ -210,19 +210,18 @@ tristate KexiQueryDesignerSQLView::beforeSwitchTo(Kexi::ViewMode mode, bool &don
         if (sqlText.isEmpty()) {
             //special case: empty SQL text
             if (temp->query()) {
-                temp->queryChangedInPreviousView = true; //query changed
+                temp->setQueryChangedInPreviousView(true); //query changed
                 temp->setQuery(0);
-//    delete temp->query; //safe?
-//    temp->query = 0;
             }
-        } else {
+        }
+        else {
             const bool designViewWasVisible = window()->viewForMode(mode) != 0;
             //should we check SQL text?
             if (designViewWasVisible
                     && !d->justSwitchedFromNoViewMode //unchanged, but we should check SQL text
                     && compareSQL(d->origStatement, d->editor->text())) {
                 //statement unchanged! - nothing to do
-                temp->queryChangedInPreviousView = false;
+                temp->setQueryChangedInPreviousView(false);
             } else {
                 //yes: parse SQL text
                 if (!slotCheckQuery()) {
@@ -233,7 +232,7 @@ tristate KexiQueryDesignerSQLView::beforeSwitchTo(Kexi::ViewMode mode, bool &don
                         return cancelled;
                     }
                     //do not change original query - it's invalid
-                    temp->queryChangedInPreviousView = false;
+                    temp->setQueryChangedInPreviousView(false);
                     //this view is no longer _just_ switched from "NoViewMode"
                     d->justSwitchedFromNoViewMode = false;
                     return true;
@@ -242,12 +241,11 @@ tristate KexiQueryDesignerSQLView::beforeSwitchTo(Kexi::ViewMode mode, bool &don
                 d->justSwitchedFromNoViewMode = false;
                 //replace old query schema with new one
                 temp->setQuery(d->parsedQuery);   //this will also delete temp->query()
-//    delete temp->query; //safe?
-//    temp->query = d->parsedQuery;
                 d->parsedQuery = 0;
-                temp->queryChangedInPreviousView = true;
+                temp->setQueryChangedInPreviousView(true);
             }
         }
+        d->origStatement = d->editor->text();
     }
 
     d->editor->setFocus();
@@ -257,8 +255,7 @@ tristate KexiQueryDesignerSQLView::beforeSwitchTo(Kexi::ViewMode mode, bool &don
 tristate
 KexiQueryDesignerSQLView::afterSwitchFrom(Kexi::ViewMode mode)
 {
-    kDebug() << "KexiQueryDesignerSQLView::afterSwitchFrom()";
-// if (mode==Kexi::DesignViewMode || mode==Kexi::DataViewMode) {
+    kDebug();
     if (mode == Kexi::NoViewMode) {
         //User opened text view _directly_.
         //This flag is set to indicate for beforeSwitchTo() that even if text has not been changed,
@@ -272,33 +269,37 @@ KexiQueryDesignerSQLView::afterSwitchFrom(Kexi::ViewMode mode)
     }
 
     if (mode != 0/*failure only if it is switching from prev. view*/ && !query) {
-        //TODO msg
+        //! @todo msg
         return false;
     }
 
-    if (!query) {
-        //no valid query schema delivered: just load sql text, no matter if it's valid
-        if (!loadDataBlock(d->origStatement, "sql", true /*canBeEmpty*/))
-            return false;
-    } else {
+    if (query) {
         // Use query with Kexi keywords (but not driver-specific keywords) escaped.
         temp->setQuery(query);
-//  temp->query = query;
-        KexiDB::Connection::SelectStatementOptions options;
-        options.identifierEscaping = KexiDB::Driver::EscapeKexi;
-        options.addVisibleLookupColumns = false;
-        d->origStatement = KexiDB::selectStatement(0, *query, options).trimmed();
+        if (temp->queryChangedInPreviousView()) {
+            KexiDB::Connection::SelectStatementOptions options;
+            options.identifierEscaping = KexiDB::Driver::EscapeKexi;
+            options.addVisibleLookupColumns = false;
+            d->origStatement = KexiDB::selectStatement(0, *query, options).trimmed();
+        }
+    }
+    if (d->origStatement.isEmpty()) {
+        //no valid query delivered or query has not been modified:
+        // just load sql text, no matter if it's valid
+        if (!loadDataBlock(d->origStatement, "sql", true /*canBeEmpty*/))
+            return false;
     }
 
-    d->slotTextChangedEnabled = false;
-    d->editor->setText(d->origStatement);
-    d->slotTextChangedEnabled = true;
+    if (!compareSQL(d->origStatement, d->editor->text())) {
+        d->slotTextChangedEnabled = false;
+        d->editor->setText(d->origStatement);
+        d->slotTextChangedEnabled = true;
+    }
     QTimer::singleShot(100, d->editor, SLOT(setFocus()));
     return true;
 }
 
-QString
-KexiQueryDesignerSQLView::sqlText() const
+QString KexiQueryDesignerSQLView::sqlText() const
 {
     return d->editor->text();
 }
@@ -353,8 +354,7 @@ void KexiQueryDesignerSQLView::updateActions(bool activated)
     KexiView::updateActions(activated);
 }
 
-KexiQueryPart::TempData *
-KexiQueryDesignerSQLView::tempData() const
+KexiQueryPart::TempData* KexiQueryDesignerSQLView::tempData() const
 {
     return dynamic_cast<KexiQueryPart::TempData*>(window()->data());
 }
@@ -424,8 +424,8 @@ tristate KexiQueryDesignerSQLView::storeData(bool dontAsk)
             res = storeDataBlock(d->editor->text(), "sql");
         } else {
             //query is not ok
-            //TODO: allow saving invalid queries
-            //TODO: just ask this question:
+            //! @todo allow saving invalid queries
+            //! @todo just ask this question:
             res = false;
         }
 #endif

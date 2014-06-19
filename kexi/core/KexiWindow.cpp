@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -165,6 +165,7 @@ KexiWindow::KexiWindow()
 
 KexiWindow::~KexiWindow()
 {
+    close(true /*force*/);
     m_destroying = true;
     delete d;
     d = 0;
@@ -199,24 +200,24 @@ void KexiWindow::addView(KexiView *view, Kexi::ViewMode mode)
 {
     d->stack->addWidget(view);
     d->views.insert(mode, view);
-
-    //set focus proxy inside this view
-    QWidget *ch = KexiUtils::findFirstChild<QWidget*>(view, "QWidget");
-    if (ch)
-        view->setFocusProxy(ch);
-
     d->openedViewModes |= mode;
 }
 
 void KexiWindow::removeView(Kexi::ViewMode mode)
 {
-    KexiView *view = viewForMode(mode);
-    if (view) {
-        d->stack->removeWidget(view);
-        d->views.remove(mode);
-    }
+    removeView(viewForMode(mode));
     d->openedViewModes |= mode;
     d->openedViewModes ^= mode;
+}
+
+void KexiWindow::removeView(KexiView *view)
+{
+    if (view) {
+        d->stack->removeWidget(view);
+        d->views.remove(view->viewMode());
+        d->openedViewModes |= view->viewMode();
+        d->openedViewModes ^= view->viewMode();
+    }
 }
 
 QSize KexiWindow::minimumSizeHint() const
@@ -304,24 +305,37 @@ void KexiWindow::setContextHelp(const QString& caption,
 #endif
 }
 
-void KexiWindow::closeEvent(QCloseEvent * e)
+bool KexiWindow::close(bool force)
 {
     KexiMainWindowIface::global()->acceptPropertySetEditing();
 
     //let any view send "closing" signal
-    /* QObjectList list = queryList( "KexiView", 0, false, false);
-      foreach(QObject* obj, list) {
-        KexiView *view = static_cast<KexiView*>(obj);*/
     QList<KexiView *> list(findChildren<KexiView*>());
     foreach(KexiView * view, list) {
-        bool cancel = false;
-        emit view->closing(cancel);
-        if (cancel) {
-            e->ignore();
-            return;
+        if (view->parent() == d->stack) {
+            bool cancel = false;
+            emit view->closing(&cancel);
+            if (!force && cancel) {
+                     return false;
+            }
         }
     }
     emit closing();
+    foreach(KexiView * view, list) {
+        if (view->parent() == d->stack) {
+            removeView(view);
+            delete view;
+        }
+    }
+    return true;
+}
+
+void KexiWindow::closeEvent(QCloseEvent * e)
+{
+    if (!close(false /* !force*/)) {
+        e->ignore();
+        return;
+    }
     QWidget::closeEvent(e);
 }
 
@@ -420,7 +434,7 @@ tristate KexiWindow::switchToViewMode(
     if (d->currentViewMode == newViewMode)
         return true;
     if (!supportsViewMode(newViewMode)) {
-        kWarning() << "! KexiWindow::supportsViewMode(" << Kexi::nameForViewMode(newViewMode) << ")";
+        kWarning() << "!" << Kexi::nameForViewMode(newViewMode);
         return false;
     }
 
@@ -500,7 +514,7 @@ tristate KexiWindow::switchToViewMode(
     }
     res = newView->beforeSwitchTo(newViewMode, dontStore);
     proposeOpeningInTextViewModeBecauseOfProblems
-    = data()->proposeOpeningInTextViewModeBecauseOfProblems;
+        = data()->proposeOpeningInTextViewModeBecauseOfProblems;
     if (!res) {
         removeView(newViewMode);
         delete newView;
@@ -791,27 +805,13 @@ void KexiWindow::activate()
 {
     KexiView *v = selectedView();
     //kDebug() << "focusWidget(): " << focusWidget()->name();
-#ifdef __GNUC__
-#warning TODO KexiWindow::activate() OK instead of focusedChildWidget()?
-#else
-#pragma WARNING( TODO KexiWindow::activate() OK instead of focusedChildWidget()? )
-#endif
-    if (KexiUtils::hasParent(v, /*kde4*/ KexiMainWindowIface::global()->focusWidget()))   //QWidget::focusedChildWidget()))
-#ifdef __GNUC__
-#warning TODO  QWidget::activate();
-#else
-#pragma WARNING( TODO  QWidget::activate(); )
-#endif
-#if 0
-        else
-#endif
-        {//ah, focused widget is not in this view, move focus:
-            if (v)
-                v->setFocus();
-        }
+    if (!KexiUtils::hasParent(v, KexiMainWindowIface::global()->focusWidget())) {
+        //ah, focused widget is not in this view, move focus:
+        if (v)
+            v->setFocus();
+    }
     if (v)
         v->updateActions(true);
-    //js: not neeed?? m_parentWindow->invalidateSharedActions(this);
 }
 
 void KexiWindow::deactivate()

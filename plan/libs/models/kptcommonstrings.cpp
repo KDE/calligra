@@ -20,6 +20,7 @@
 #include "kptcommonstrings.h"
 
 #include <klocale.h>
+#include <kundo2magicstring.h>
 
 namespace KPlato
 {
@@ -179,7 +180,7 @@ namespace KPlato
 
 
     // Work around string freeze
-    QString UndoText::removeDocument() { return i18nc( "(qtundo-format)", "Remove document" ); }
+    KUndo2MagicString UndoText::removeDocument() { return kundo2_i18n( "Remove document" ); }
 
 } //namespace KPlato
 

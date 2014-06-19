@@ -506,7 +506,7 @@ void WorkPackage::merge( Part *part, const WorkPackage *wp, KoStore *store )
     const Node *from = wp->node();
     Node *to = node();
 
-    MacroCommand *m = new MacroCommand( i18nc( "(qtundo-format)", "Merge data" ) );
+    MacroCommand *m = new MacroCommand( kundo2_i18n( "Merge data" ) );
     if ( to->name() != from->name() ) {
         m->addCommand( new NodeModifyNameCmd( *to, from->name() ) );
     }
@@ -691,7 +691,7 @@ QString WorkPackage::id() const
 }
 
 //--------------------------------
-PackageRemoveCmd::PackageRemoveCmd( Part *part, WorkPackage *value, const QString& name )
+PackageRemoveCmd::PackageRemoveCmd( Part *part, WorkPackage *value, const KUndo2MagicString& name )
     : NamedCommand( name ),
     m_part( part ),
     m_value( value ),
@@ -717,7 +717,7 @@ void PackageRemoveCmd::unexecute()
 }
 
 //---------------------
-ModifyPackageSettingsCmd::ModifyPackageSettingsCmd( WorkPackage *wp, WorkPackageSettings &value, const QString& name )
+ModifyPackageSettingsCmd::ModifyPackageSettingsCmd( WorkPackage *wp, WorkPackageSettings &value, const KUndo2MagicString& name )
     : NamedCommand( name ),
     m_wp( wp ),
     m_value( value ),
@@ -734,7 +734,7 @@ void ModifyPackageSettingsCmd::unexecute()
 }
 
 //---------------------
-CopySchedulesCmd::CopySchedulesCmd( const Project &fromProject, Project &toProject, const QString &name )
+CopySchedulesCmd::CopySchedulesCmd( const Project &fromProject, Project &toProject, const KUndo2MagicString &name )
     : NamedCommand( name ),
       m_project( toProject )
 {

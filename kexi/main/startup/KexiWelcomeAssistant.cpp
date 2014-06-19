@@ -47,8 +47,8 @@
 #include <ktitlewidget.h>
 #include <kpushbutton.h>
 #include <kacceleratormanager.h>
-#include <kfiledialog.h>
 #include <kfileitemdelegate.h>
+#include <kdialog.h>
 
 #include <QLayout>
 #include <QCheckBox>
@@ -74,7 +74,6 @@ KexiMainWelcomePage::KexiMainWelcomePage(
                     pal.color(QPalette::Normal, QPalette::Base));
     m_recentProjects->setPalette(pal);
     contentsLyr->addWidget(m_recentProjects, 1);
-    //m_recentProjects->setItemDelegate(new KFileItemDelegate(this));
     setFocusWidget(m_recentProjects);
     m_recentProjects->setFrameShape(QFrame::NoFrame);
     m_recentProjects->setContentsMargins(0, 0, 0, 0);
@@ -96,7 +95,7 @@ KexiMainWelcomePage::KexiMainWelcomePage(
 void KexiMainWelcomePage::loadProjects()
 {
     m_recentProjectsProxyModel = new KexiRecentProjectsProxyModel(m_recentProjects);
-    KexiRecentProjectsModel* model = new KexiRecentProjectsModel(*m_assistant->projects());
+    KexiRecentProjectsModel* model = new KexiRecentProjectsModel(*m_assistant->projects(), this);
     m_recentProjectsProxyModel->setSourceModel(model);
     m_recentProjects->setModel(m_recentProjectsProxyModel);
     m_recentProjectsProxyModel->sort(0, Qt::DescendingOrder);
@@ -108,11 +107,7 @@ void KexiMainWelcomePage::slotItemClicked(const QModelIndex& index)
         return;
     QModelIndex sourceIndex = m_recentProjectsProxyModel->mapToSource(index);
     KexiProjectData *pdata = static_cast<KexiProjectData*>(sourceIndex.internalPointer());
-    kDebug() << *pdata;
-    //selectedTemplate = index.data(KexiTemplatesModel::NameRole).toString();
-    //selectedCategory = index.data(KexiTemplatesModel::CategoryRole).toString();
-    //m_templatesList->clearSelection();
-
+    //kDebug() << *pdata;
     if (pdata) {
         m_assistant->openProjectOrShowPasswordPage(pdata);
     }
@@ -206,24 +201,13 @@ void KexiWelcomeAssistant::nextPageRequested(KexiAssistantPage* page)
 void KexiWelcomeAssistant::cancelRequested(KexiAssistantPage* page)
 {
     Q_UNUSED(page);
-    //TODO?
+    //! @todo
 }
 
 KexiRecentProjects* KexiWelcomeAssistant::projects()
 {
     return d->projects;
 }
-
-// void KexiWelcomeAssistant::mousePressEvent(QMouseEvent* e)
-// {
-//     if (e->buttons() == Qt::LeftButton) {
-//         QWidget *w = QApplication::widgetAt(e->globalPos());
-//         if (w) {
-//             emit widgetClicked(w);
-//         }
-//     }
-//     KexiAssistantWidget::mousePressEvent(e);
-// }
 
 void KexiWelcomeAssistant::emitOpenProject(KexiProjectData *data)
 {

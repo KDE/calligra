@@ -31,6 +31,7 @@
 #include <klocale.h>
 
 // Calligra
+#include <KoFontComboBox.h>
 
 // Calligra Sheets
 #include "CellToolBase.h"
@@ -88,7 +89,7 @@ ActionOptionWidget::ActionOptionWidget(CellToolBase* cellTool, const QDomElement
                 continue;
             }
             QWidget* w = a->requestWidget(this);
-            if (w && w->inherits("KFontComboBox")) {
+            if (w && qobject_cast<KoFontComboBox*>(w)) {
                 w->setMinimumWidth(w->minimumWidth() / 2);
             }
             if (!w) {

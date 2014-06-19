@@ -122,7 +122,7 @@ MacroCommand *TaskProgressPanel::buildCommand()
 MacroCommand *TaskProgressPanel::buildCommand( const Project &project, Completion &org, Completion &curr )
 {
     MacroCommand *cmd = 0;
-    QString c = i18n("Modify task completion");
+    KUndo2MagicString c = kundo2_i18n("Modify task completion");
     
     if ( org.entrymode() != curr.entrymode() ) {
         if ( cmd == 0 ) cmd = new MacroCommand( c );

@@ -125,7 +125,7 @@ QObject *Module::openDocument( const QString &tag, const QString &url )
     return m;
 }
 
-void Module::beginCommand( const QString &name )
+void Module::beginCommand( const KUndo2MagicString &name )
 {
     endCommand();
     d->command = new KPlato::MacroCommand( name );
@@ -134,7 +134,7 @@ void Module::beginCommand( const QString &name )
 void Module::endCommand()
 {
     if ( d->command && ! d->command->isEmpty() ) {
-        KPlato::MacroCommand *c = new KPlato::MacroCommand( "" );
+        KPlato::MacroCommand *c = new KPlato::MacroCommand( KUndo2MagicString() );
         doc()->addCommand( c );
         doc()->endMacro(); // executes c and enables undo/redo
         c->addCommand( d->command ); // this command is already exectued

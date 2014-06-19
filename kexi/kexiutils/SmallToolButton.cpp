@@ -43,8 +43,8 @@ public:
     }
 
     QPointer<QAction> action;
-    bool enableSlotButtonToggled : 1;
-    bool enableSlotActionToggled : 1;
+    bool enableSlotButtonToggled;
+    bool enableSlotActionToggled;
 };
 
 //--------------------------------
@@ -127,19 +127,7 @@ void KexiSmallToolButton::setToolButtonStyle(Qt::ToolButtonStyle style)
 
 void KexiSmallToolButton::update(const QString& text, const QIcon& icon, bool tipToo)
 {
-    int width = 0;
-    const bool fixWidth = style()->inherits("QWindowsStyle") && toolButtonStyle() != Qt::ToolButtonIconOnly;
-    if (text.isEmpty() || toolButtonStyle() == Qt::ToolButtonIconOnly) {
-        if (fixWidth) {
-            width = 6;
-        }
-    } else {
-        if (fixWidth) {
-            QString text2( text + "   " );
-            if (d->action && d->action->isCheckable())
-                text2 += "  ";
-            width = fontMetrics().width(text2);
-        }
+    if (!text.isEmpty() && toolButtonStyle() != Qt::ToolButtonIconOnly) {
         if (toolButtonStyle() != Qt::ToolButtonTextOnly)
             QToolButton::setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
         QToolButton::setText(text);
@@ -149,18 +137,7 @@ void KexiSmallToolButton::update(const QString& text, const QIcon& icon, bool ti
     if (toolButtonStyle() == Qt::ToolButtonTextOnly) {
         QToolButton::setIcon(QIcon());
     } else if (!icon.isNull()) {
-        if (fixWidth) {
-            width += IconSize(KIconLoader::Small);
-        }
         QToolButton::setIcon(icon);
-    }
-    if (fixWidth) {
-        if (!text.isEmpty()) {
-            QStyleOption opt;
-            opt.initFrom(this);
-            width += style()->pixelMetric(QStyle::PM_ButtonMargin, &opt, this);
-        }
-        setFixedWidth( width );
     }
 }
 
@@ -187,18 +164,18 @@ void KexiSmallToolButton::setText(const QString& text)
 
 void KexiSmallToolButton::slotActionChanged()
 {
-    kDebug() << "slotActionChanged()" << d->action->isEnabled();
     setEnabled(d->action->isEnabled());
 }
 
 void KexiSmallToolButton::slotButtonToggled(bool checked)
 {
+    Q_UNUSED(checked);
     if (!d->enableSlotButtonToggled)
         return;
-    QObject *view = KexiUtils::findParent<QObject*>(this, "KexiView");
-    kDebug() << QString("checked=%1 action=%2 view=%3")
-    .arg(checked).arg(d->action ? d->action->text() : QString())
-    .arg(view ? view->objectName() : QString("??"));
+    //QObject *view = KexiUtils::findParent<QObject*>(this, "KexiView");
+    //kDebug() << QString("checked=%1 action=%2 view=%3")
+    // .arg(checked).arg(d->action ? d->action->text() : QString())
+    // .arg(view ? view->objectName() : QString("??"));
     d->enableSlotActionToggled = false;
     d->enableSlotActionToggled = true;
 }
@@ -207,10 +184,10 @@ void KexiSmallToolButton::slotActionToggled(bool checked)
 {
     if (!d->enableSlotActionToggled)
         return;
-    QObject *view = KexiUtils::findParent<QObject*>(this, "KexiView");
-    kDebug() << QString("checked=%1 action=%2 view=%3")
-    .arg(checked).arg(d->action ? d->action->text() : QString())
-    .arg(view ? view->objectName() : QString("??"));
+    //QObject *view = KexiUtils::findParent<QObject*>(this, "KexiView");
+    //kDebug() << QString("checked=%1 action=%2 view=%3")
+    // .arg(checked).arg(d->action ? d->action->text() : QString())
+    // .arg(view ? view->objectName() : QString("??"));
     d->enableSlotButtonToggled = false;
     setChecked(checked);
     d->enableSlotButtonToggled = true;
@@ -280,8 +257,8 @@ QSize KexiToolBarSeparator::sizeHint() const
     QStyleOption o;
     initStyleOption(&o);
     const int sepExtent = style()->pixelMetric(
-                              QStyle::PM_ToolBarSeparatorExtent, &o, 0);//parentWidget());
-    return QSize(sepExtent, sepExtent);//height());
+                              QStyle::PM_ToolBarSeparatorExtent, &o, 0);
+    return QSize(sepExtent, sepExtent);
 }
 
 void KexiToolBarSeparator::paintEvent(QPaintEvent *e)

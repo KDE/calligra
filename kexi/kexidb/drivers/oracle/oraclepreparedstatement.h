@@ -42,7 +42,7 @@ class OraclePreparedStatement : public PreparedStatement, public OracleConnectio
 
 		QByteArray m_tempStatementString;
 
-		bool m_resetRequired : 1;
+        bool m_resetRequired;
 private:
 		Connection* m_conn;
 
