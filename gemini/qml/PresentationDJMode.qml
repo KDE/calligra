@@ -25,6 +25,15 @@ Rectangle {
     id: base;
     color: "#22282f";
     property int currentSlide: 0;
+    function changeSlide(goToSlide) {
+        fakePieChart.opacity = 0;
+        fakePieChartTapped.opacity = 0;
+        laserScribbler.opacity = 0;
+        laserScribbler.clear();
+        scribbler.opacity = 0;
+        scribbler.clear();
+        base.currentSlide = goToSlide;
+    }
     Item {
         id: currentSlideContainer;
         anchors {
@@ -124,7 +133,7 @@ Rectangle {
             anchors.fill: parent;
             onClicked: {
                 if(base.currentSlide < presentationModel.canvas.slideCount()) {
-                    base.currentSlide++;
+                    base.changeSlide(base.currentSlide + 1);
                 }
             }
         }
@@ -244,7 +253,7 @@ Rectangle {
             image: Settings.theme.icon("SVG-PreviousSlide-1");
             onClicked: {
                 if(base.currentSlide > 0) {
-                    base.currentSlide--;
+                    base.changeSlide(base.currentSlide - 1);
                 }
             }
         }
@@ -254,7 +263,7 @@ Rectangle {
             image: Settings.theme.icon("SVG-NextSlide-1");
             onClicked: {
                 if(base.currentSlide < presentationModel.canvas.slideCount()) {
-                    base.currentSlide++;
+                    base.changeSlide(base.currentSlide + 1);
                 }
             }
         }
@@ -385,7 +394,7 @@ Rectangle {
                     onClicked: {
                         base.state = "";
                         if(base.currentSlide < presentationModel.canvas.slideCount()) {
-                            base.currentSlide++;
+                            base.changeSlide(base.currentSlide + 1);
                         }
                     }
                 }
