@@ -58,8 +58,9 @@ Item {
             id: controllerItem;
             canvas: wordsCanvas;
             flickable: controllerFlickable;
+            property bool pageChanging: false;
             onMovingFastChanged: {
-                if(movingFast === true) {
+                if(movingFast === true && !pageChanging) {
                     d.showThings();
                 }
                 else {
@@ -72,7 +73,23 @@ Item {
             y: controllerFlickable.contentY;
             height: controllerFlickable.height;
             width: controllerFlickable.width;
+            onClicked: {
+                if(mouse.x < width / 6) {
+                    controllerItem.pageChanging = true;
+                    controllerFlickable.contentY = Math.max(0, controllerFlickable.contentY - controllerFlickable.height + (Constants.GridHeight * 1.5));
+                    controllerItem.pageChanging = false;
+                }
+                else if(mouse.x > width * 5 / 6) {
+                    controllerItem.pageChanging = true;
+                    controllerFlickable.contentY = Math.min(controllerFlickable.contentHeight - controllerFlickable.height, controllerFlickable.contentY + controllerFlickable.height - (Constants.GridHeight * 1.5));
+                    controllerItem.pageChanging = false;
+                }
+            }
             onDoubleClicked: {
+                if(mouse.x < width / 6 || mouse.x > width * 5 / 6) {
+                    // don't accept double-clicks in the navigation zone
+                    return;
+                }
                 toolManager.requestToolChange("TextToolFactory_ID");
                 base.navigateMode = false;
             }
