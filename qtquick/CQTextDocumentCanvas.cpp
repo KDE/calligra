@@ -182,7 +182,7 @@ void CQTextDocumentCanvas::openFile(const QString& uri)
         return;
     }
 
-    d->part = service->createInstance<KoPart>();
+    d->part = service->createInstance<KoPart>(this);
     KoDocument* document = d->part->document();
     document->setAutoSave(0);
     document->setCheckAutoSaveFile(false);
@@ -253,20 +253,24 @@ qreal CQTextDocumentCanvas::pagePosition(int pageIndex)
 
 qreal CQTextDocumentCanvas::shapeTransparency() const
 {
-    KoShape* shape = d->canvas->shapeManager()->selection()->firstSelectedShape();
-    if(shape) {
-        return shape->transparency();
+    if(d->canvas && !d->canvas->shapeManager()) {
+        KoShape* shape = d->canvas->shapeManager()->selection()->firstSelectedShape();
+        if(shape) {
+            return shape->transparency();
+        }
     }
     return CQCanvasBase::shapeTransparency();
 }
 
 void CQTextDocumentCanvas::setShapeTransparency(const qreal& newTransparency)
 {
-    KoShape* shape = d->canvas->shapeManager()->selection()->firstSelectedShape();
-    if(shape) {
-        if(!qFuzzyCompare(1 + shape->transparency(), 1 + newTransparency)) {
-            shape->setTransparency(newTransparency);
-            CQCanvasBase::setShapeTransparency(newTransparency);
+    if(d->canvas && d->canvas->shapeManager()) {
+        KoShape* shape = d->canvas->shapeManager()->selection()->firstSelectedShape();
+        if(shape) {
+            if(!qFuzzyCompare(1 + shape->transparency(), 1 + newTransparency)) {
+                shape->setTransparency(newTransparency);
+                CQCanvasBase::setShapeTransparency(newTransparency);
+            }
         }
     }
 }

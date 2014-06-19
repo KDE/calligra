@@ -220,7 +220,7 @@ void CQPresentationCanvas::openFile(const QString& uri)
         return;
     }
 
-    d->part = service->createInstance<KoPart>();
+    d->part = service->createInstance<KoPart>(this);
     d->document = dynamic_cast<KPrDocument*>(d->part->document());
     d->document->setAutoSave(0);
     d->document->setCheckAutoSaveFile(false);
