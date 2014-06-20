@@ -72,6 +72,7 @@
 #include "ParagraphStylesModel.h"
 #include "KeyboardModel.h"
 #include "ScribbleArea.h"
+#include "RecentImageImageProvider.h"
 
 #ifdef Q_OS_WIN
 // Slate mode/docked detection stuff
@@ -140,6 +141,7 @@ public:
     {
         touchView = new TouchDeclarativeView();
         QmlGlobalEngine::instance()->setEngine(touchView->engine());
+        touchView->engine()->addImageProvider(QLatin1String("recentimage"), new RecentImageImageProvider);
         touchView->engine()->rootContext()->setContextProperty("mainWindow", parent);
 
         settings = new Settings( q );
