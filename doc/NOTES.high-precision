@@ -1,0 +1,61 @@
+Number class
+============
+
+Requirements
+------------
+- Should increase the numerical precision.
+- Should fallback to (long) double and use its operators directly,
+  so that the code could be optimized by the compiler.
+- High precision support should be either:
+    - a run-time option by using plugins (preferred)
+    - a compile-time option
+
+Options
+-------
+- static polymorphism: CRTP
+- dynamic polymorphism: interface is a usual class with pure virtual methods;
+  Q_DECLARE_INTERFACE, Q_INTERFACES can be used here
+- QVariant/QMetaType allows to create objects dynamically on run-time:
+    - double can be used directly
+    - custom types actually too, but dynamic polymorphism needs pointers
+    - QMetaType::construct() returns void*
+- using QVariant in the calculation methods to carry the number and create
+  a double or the custom type at run-time is possible
+
+Advantages/Drawbacks/Conclusion
+-------------------------------
+- CRTP allows to inline the methods and using (long) double's operators becomes
+  possible
+- using virtuals does not allow to inline the methods, if pointer or references
+  to the object are used, which is necessary in the case of dynamic binding
+- inlining operators does not work with dynamic polymorphism
+- having high-precision and the (long) double fallback needs a common base
+
+Impossible solution(s)
+----------------------
+1.
+- derive the type using (long) double type from a base using CRTP approach
+- derive the interface for the dynamic binding also from this base
+- derive concrete implementations from the interface
+Reason:
+- inserting a dynamically created type as template parameter into the CRTP base
+  is not possible
+2.
+- use QVariant as data carrier/common base
+- mirror QVariant's behaviour in KSpread::Value
+Reason:
+- the QVariant::Type does not suffice, you need to know the type in order to use
+  it
+
+Possible solution(s)
+--------------------
+0.
+- the information, which type is in use, that's a QVariant::Type, should be
+  stored per document, more precisely in CalculationSettings
+
+
+union
+{
+double a;
+void* b;
+};

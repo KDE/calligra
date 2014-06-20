@@ -1,0 +1,49 @@
+KSpread column/row limits
+=========================
+
+Restrictions by sizeof(int); i <= 2^31-1:
+-----------------------------------------
+- PointStorage.h:
+    QVector<T>'s index is an int; Provides access to all cells.
+    Therefore, sizeof(col)*sizeof(row) <= sizeof(int); sizeof(col/row) = 2^16;
+    As QVector and QRect depend on (signed) int: max(col/row) = 2^15-1
+        -> Global.h: KS_colMax = 2^15-1, KS_rowMax = 2^15-1
+        -> Cell::Private: restriction by bit fields; 16 bits per column/row
+        -> Region.h:
+            uint qHash(QPoint); column coded in first 16 bits, row in the last
+            Can be extended by just considering the last 16 bits of the col/row,
+            even if bigger than 16 bits. Leads to hash collisions, but works.
+        -> Cell.h:
+            uint qHash(Cell); column coded in first 16 bits, row in the last
+            Can be extended by just considering the last 16 bits of the col/row,
+            even if bigger than 16 bits. Leads to hash collisions, but works.
+        -> Column-/RowCluster: restricted to 2^15
+            Can be extended easily by increasing one of the cluster levels,
+            preferably the first.
+    The limitation could be lifted, if a clustered array is used in PointStorage
+    and PointStorage::data(int), ::col(int), ::row(int) get ported to qint64.
+- QRect: based on int
+
+Minor issues, that would need adjustment:
+-----------------------------------------
+- Headers.h: The RowHeader's width should display all row numbers correctly.
+- Sheet: QHash<QString, QRegion> *StyleRegion; QRegion is restricted (on Windows 95/98/ME)
+
+Other restrictions:
+-------------------
+- Rect-/StyleStorage.h:
+    Based on QRectF, which is based on qreal (double or float). Numbers range
+    from 0..2^52 or 0..2^23, resp., with an exponent of 0, i.e. mantissa * 2^0.
+    Other exponents lead to "integer gaps"; step size != 1 (Actually, if a
+    number could be expressed with an other exponent without inaccurrancy, this
+    will be done, but that does not matter here. It's possible to encode it with
+    e=0.)
+
+Performance:
+------------
+- Copying cell contents is done cell-by-cell. PointStorage is arranged in rows,
+  i.e. copying of rows could be optimized, but for columns a traversal of all
+  occupied columns is necessary.
+  Go the same way as in Cluster and follow a two-levelled approach? Could be an
+  option for further optimizations for copying areas, but would give headaches
+  at the cluster boundaries.

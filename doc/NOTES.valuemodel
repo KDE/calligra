@@ -1,0 +1,6 @@
+ValueModel
+==========
+- functionality combination of Value (QVariant) and QAbstractItemModel
+- editing is restricted by Validity (cell content validation)
+- display is affected by Style (explicit formats)
+- alternative: combine those directly in CellStorage or Sheet

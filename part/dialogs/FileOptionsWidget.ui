@@ -1,0 +1,100 @@
+<ui version="4.0" >
+ <class>FileOptionsWidget</class>
+ <widget class="QWidget" name="FileOptionsWidget" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>306</width>
+    <height>112</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>File Options</string>
+  </property>
+  <layout class="QFormLayout">
+   <item row="0" column="0" >
+    <widget class="QLabel" name="label" >
+     <property name="text" >
+      <string>Number of entries in Recent Files list:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1" >
+    <widget class="KIntSpinBox" name="m_recentFilesEntries" >
+     <property name="whatsThis" >
+      <string>Controls the maximum number of filenames that are shown when you select File-> Open Recent.</string>
+     </property>
+     <property name="maximum" >
+      <number>20</number>
+     </property>
+     <property name="value" >
+      <number>10</number>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" >
+    <widget class="QLabel" name="label_2" >
+     <property name="text" >
+      <string>Autosave interval:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1" >
+    <widget class="KIntSpinBox" name="m_autoSaveDelay" >
+     <property name="whatsThis" >
+      <string>Here you can select the time between autosaves, or disable this feature altogether by choosing "No autosave" (by selecting the minimum value).</string>
+     </property>
+     <property name="specialValueText" >
+      <string>No autosave</string>
+     </property>
+     <property name="suffix" >
+      <string extracomment="unit symbol for minutes, leading space as separator"> min</string>
+     </property>
+     <property name="maximum" >
+      <number>60</number>
+     </property>
+     <property name="value" >
+      <number>10</number>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel">
+     <property name="text" >
+      <string>Create backup file:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="QCheckBox" name="m_createBackupFile" >
+     <property name="whatsThis" >
+      <string>Check this box if you want some backup files created. This is checked per default.</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0" colspan="2" >
+    <spacer name="verticalSpacer" >
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0" >
+      <size>
+       <width>278</width>
+       <height>10</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KIntSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>knuminput.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

@@ -1,0 +1,30 @@
+Author: nikolaus
+Date: 10.12.2009
+
+* Damage system                                                                 3       ----
+  Currently, the damage system has the following drawbacks:
+    - Damages are created on the heap.
+    - Each damage handler gets a list of all damages, irrespective if document
+      or view related. If an object wants only specific damages it has to
+      traverse the whole list.
+  The desired features were/are:
+    - Collect damages while processing a command and flush them at once.
+    - Do not block the UI for too long.
+    - Prevent many public methods (in Map/Sheet), which only purpose is to emit
+      a signal.
+  Thoughts/Proposed solution:
+    - Implement the following methods, that emit different signals depending on
+        the damage:
+        void Sheet::addDamage(CellDamage::Changes, const Region&);
+        void Sheet::addDamage(SheetDamage::Changes);
+        void Map::addDamage(WorkbookDamage::Changes);
+      They still collect damages though.
+    - The enums can be moved into Map/Sheet. Or a DamageHandler object can act
+      as signal emitter, so no heavy recompilation after changes on the system.
+    - Principally, provide one signal for each damage. Combine several damages
+      to one signal only where appropriate.
+    - Use Qt::QueuedConnections to prevent blocking the UI for too long. This
+      would create events behind the scenes -> heap.
+    - To prevent the View from processing damages of all sheets, even if they
+      are not the active one, connect and disconnect signals/slots on changing
+      the active sheet.

@@ -1,0 +1,239 @@
+<ui version="4.0" >
+ <author>The KSpread Team &lt;calligra-devel@kde.org></author>
+ <comment>This file is part of the KDE project
+Copyright (C) 2006 The KSpread Team &lt;calligra-devel@kde.org>
+
+This library is free software; you can redistribute it and/or
+modify it under the terms of the GNU Library General Public
+License as published by the Free Software Foundation; either
+version 2 of the License, or (at your option) any later version.
+
+This library is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Library General Public License for more details.
+
+You should have received a copy of the GNU Library General Public
+License along with this library; see the file COPYING.LIB.  If not,
+write to the Free Software Foundation, Inc., 51 Franklin Street,
+Fifth Floor, Boston, MA 02110-1301, USA.</comment>
+ <class>FontWidget</class>
+ <widget class="QWidget" name="FontWidget" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>600</width>
+    <height>486</height>
+   </rect>
+  </property>
+  <property name="whatsThis" >
+   <string>You can select here the font style, size and color, including some additional options like underlined or stroke out text for the current cell text. The lower part of the page gives a preview of the selected text format.
+The default font is set for all cells in the Format -> Style Manager menu with the currently used style.</string>
+  </property>
+  <layout class="QGridLayout" >
+   <item row="0" column="1" >
+    <layout class="QGridLayout" >
+     <item row="0" column="1" >
+      <widget class="KComboBox" name="style_combo" >
+       <property name="whatsThis" >
+        <string>Choose the style for your font for the currently selected cells. When you select several cells with different styles, the displayed style is set to Varying (No Change) and leaving it that way will keep all your current style settings for each cell. Changing to Roman for example will change all the selected cells style text to Roman.</string>
+       </property>
+       <property name="insertPolicy" >
+        <enum>QComboBox::InsertAtBottom</enum>
+       </property>
+       <item>
+        <property name="text" >
+         <string>Varying (No Change)</string>
+        </property>
+       </item>
+       <item>
+        <property name="text" >
+         <string>Roman</string>
+        </property>
+       </item>
+       <item>
+        <property name="text" >
+         <string>Italic</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="2" column="1" >
+      <widget class="KComboBox" name="weight_combo" >
+       <property name="whatsThis" >
+        <string>Choose the weight for your font for the currently selected cells. When you select several cells with different font weight, the displayed weight is set to Varying (No Change) and leaving it that way will keep all your current weight settings for each cell. Changing to Bold for example will change all the selected cells font weight to Bold.</string>
+       </property>
+       <property name="insertPolicy" >
+        <enum>QComboBox::InsertAtBottom</enum>
+       </property>
+       <item>
+        <property name="text" >
+         <string>Varying (No Change)</string>
+        </property>
+       </item>
+       <item>
+        <property name="text" >
+         <string>Normal</string>
+        </property>
+       </item>
+       <item>
+        <property name="text" >
+         <string>Bold</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="3" column="0" >
+      <widget class="QLabel" name="textLabel4" >
+       <property name="text" >
+        <string>Color:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0" colspan="2" >
+      <widget class="QCheckBox" name="underline" >
+       <property name="whatsThis" >
+        <string>If this is checked, the current cell text will be underlined.</string>
+       </property>
+       <property name="text" >
+        <string>Underline</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0" >
+      <widget class="QLabel" name="textLabel2" >
+       <property name="text" >
+        <string>Size:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0" >
+      <widget class="QLabel" name="textLabel3" >
+       <property name="text" >
+        <string>Weight:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0" >
+      <widget class="QLabel" name="textLabel1" >
+       <property name="text" >
+        <string>Style:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1" >
+      <widget class="KColorButton" name="textColorButton" >
+       <property name="whatsThis" >
+        <string>Choose the color for the current cell text. Clicking on the color bar will bring you the standard KDE Select Color dialog where you will be able to choose the new color.</string>
+       </property>
+       <property name="text" >
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0" colspan="2" >
+      <widget class="QCheckBox" name="strike" >
+       <property name="whatsThis" >
+        <string>This will strike out the current cell text if this is checked.</string>
+       </property>
+       <property name="text" >
+        <string>Strike out</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1" >
+      <widget class="KComboBox" name="size_combo" >
+       <property name="whatsThis" >
+        <string>Choose the style for your font for the currently selected cells. When you select several cells with different styles, the displayed style is set to Varying (No Change) and leaving it that way will keep all your current style settings for each cell. Changing to Roman for example will change all the selected cells style text to Roman.</string>
+       </property>
+       <property name="editable" >
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="1" column="1" >
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType" >
+      <enum>QSizePolicy::Expanding</enum>
+     </property>
+     <property name="sizeHint" >
+      <size>
+       <width>20</width>
+       <height>41</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item rowspan="2" row="0" column="0" >
+    <widget class="QListWidget" name="family_combo" >
+     <property name="whatsThis" >
+      <string>This box lists all your available font families. Click on one family to set it in the current cell.</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0" colspan="2" >
+    <widget class="QGroupBox" name="groupBox1" >
+     <property name="title" >
+      <string>Preview</string>
+     </property>
+     <layout class="QHBoxLayout" >
+      <item>
+       <widget class="KLineEdit" name="example_label" >
+        <property name="sizePolicy" >
+         <sizepolicy vsizetype="MinimumExpanding" hsizetype="Expanding" >
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="whatsThis" >
+         <string>You can see a preview of the font you are choosing for the current cell.</string>
+        </property>
+        <property name="alignment" >
+         <set>Qt::AlignHCenter</set>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+  <customwidgets>
+  <customwidget>
+   <class>KColorButton</class>
+   <extends>QPushButton</extends>
+   <header>kcolorbutton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KComboBox</class>
+   <extends>QComboBox</extends>
+   <header>kcombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>klineedit.h</header>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>family_combo</tabstop>
+  <tabstop>style_combo</tabstop>
+  <tabstop>size_combo</tabstop>
+  <tabstop>weight_combo</tabstop>
+  <tabstop>textColorButton</tabstop>
+  <tabstop>underline</tabstop>
+  <tabstop>strike</tabstop>
+  <tabstop>example_label</tabstop>
+ </tabstops>
+ <includes>
+  <include location="global" >kdialog.h</include>
+ </includes>
+ <resources/>
+ <connections/>
+</ui>

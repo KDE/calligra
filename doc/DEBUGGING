@@ -1,0 +1,21 @@
+Tips for developers
+===================
+
+KSpread has a few hidden keys (aka easter-eggs :) that help debugging it,
+without the need for menuitems to be removed before releasing.
+
+The current debug keys are:
+
+Ctrl-Shift-I : show object inspector
+
+
+Debug areas (01.01.2007)
+========================
+36001        kspread
+36002        kspread (Formula)
+36003        kspread (OpenDocument)
+36004        kspread (Painting)
+36005        kspread (UI)
+36006        kspread (Style)
+36007        kspread (Damage)
+37000        kspread

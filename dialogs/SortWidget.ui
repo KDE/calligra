@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <author>Stefan Nikolaus &lt;stefan.nikolaus@kdemail.net&gt;</author>
+ <comment>This file is part of the KDE project.
+Copyright 2010 Stefan Nikolaus &lt;stefan.nikolaus@kdemail.net&gt;
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+</comment>
+ <class>SortWidget</class>
+ <widget class="QWidget" name="SortWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>450</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="3" column="2">
+    <widget class="QPushButton" name="m_addButton">
+     <property name="text">
+      <string>Add</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="2">
+    <widget class="QPushButton" name="m_removeButton">
+     <property name="text">
+      <string>Remove</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="2">
+    <widget class="QPushButton" name="m_upButton">
+     <property name="text">
+      <string>Move Up</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0" rowspan="5" colspan="2">
+    <widget class="QTableWidget" name="m_tableWidget">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>300</width>
+       <height>100</height>
+      </size>
+     </property>
+     <property name="editTriggers">
+      <set>QAbstractItemView::EditKeyPressed|QAbstractItemView::SelectedClicked</set>
+     </property>
+     <property name="alternatingRowColors">
+      <bool>true</bool>
+     </property>
+     <property name="selectionBehavior">
+      <enum>QAbstractItemView::SelectRows</enum>
+     </property>
+     <property name="showGrid">
+      <bool>false</bool>
+     </property>
+     <property name="columnCount">
+      <number>3</number>
+     </property>
+     <attribute name="horizontalHeaderVisible">
+      <bool>true</bool>
+     </attribute>
+     <attribute name="verticalHeaderVisible">
+      <bool>false</bool>
+     </attribute>
+     <column>
+      <property name="text">
+       <string>Item</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Sort Order</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Case Sensitivity</string>
+      </property>
+     </column>
+    </widget>
+   </item>
+   <item row="6" column="2">
+    <widget class="QPushButton" name="m_downButton">
+     <property name="text">
+      <string>Move Down</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" colspan="3">
+    <widget class="QCheckBox" name="m_useHeader">
+     <property name="text">
+      <string>First row contains column headers</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0" colspan="3">
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
+      <string>Direction</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <widget class="QRadioButton" name="m_sortHorizontal">
+        <property name="toolTip">
+         <string>The data is grouped in columns and gets sorted horizontally by comparing the specified rows in the given order.</string>
+        </property>
+        <property name="whatsThis">
+         <string>The data is grouped in columns. Their rows are compared in the specified order. If the data in two rows is equal, the next given row gets compared until the two column groups differ in one of the rows. Then, the complete column is moved to it final position.</string>
+        </property>
+        <property name="text">
+         <string>Sort data grouped in columns horizontally</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="m_sortVertical">
+        <property name="toolTip">
+         <string>The data is grouped in rows and gets sorted vertically by comparing the specified columns in the given order.</string>
+        </property>
+        <property name="whatsThis">
+         <string>The data is grouped in rows. Their columns are compared in the specified order. If the data in two columns is equal, the next given column gets compared until the two row groups differ in one of the columns. Then, the complete row is moved to it final position.</string>
+        </property>
+        <property name="text">
+         <string>Sort data grouped in rows vertically</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <tabstops>
+  <tabstop>m_sortHorizontal</tabstop>
+  <tabstop>m_sortVertical</tabstop>
+  <tabstop>m_useHeader</tabstop>
+  <tabstop>m_tableWidget</tabstop>
+  <tabstop>m_addButton</tabstop>
+  <tabstop>m_removeButton</tabstop>
+  <tabstop>m_upButton</tabstop>
+  <tabstop>m_downButton</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>

@@ -1,0 +1,15 @@
+Dependencies of Function
+========================
+
+Function
+    Value
+        CalculationSettings
+        Number
+        ValueStorage (arrays)
+    ValueCalc
+        Number
+        (Value)
+        ValueConverter
+            (Value)
+            ValueParser
+                Format.h

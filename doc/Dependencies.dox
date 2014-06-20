@@ -1,0 +1,130 @@
+/**
+\page dependencies Dependency Handling
+\author Ariya Hidayat (<a href="mailto:ariya@kde.org">ariya@kde.org</a>)
+\date 2004
+
+\par Status:
+    FINISHED; NEEDS UPDATE (RecalcManager)
+
+<p>When a cell holds a formula, then it is likely that it depends on other
+cell(s) for calculating the result. For example, if cell A11 has the formula
+&quot;=SUM(A1:A10)&quot;, this means that values in cells A1, A2, A3, until
+A10 must be correctly calculated first before the sum can be obtained for
+cell A11. This is called <i>dependency</i>.</p>
+
+<p>As for now, KSpread tries to manage dependency by storing the dependent
+cells or ranges in the cell itself. This is not too efficient. If a cell
+is very simple, i.e. stored only value, not formula, such scheme will just
+waste a couple of bytes of pointers for the dependency data structure.
+It is much more wiser to simply create one <i>dependency manager</i> for each
+worksheet; it should be responsible for maintaining and handling cell
+dependencies for that sheet. Also KSpread always stores ranges which depend
+on one particular cell and ranges whose one of its dependent is that cell
+(and these are all in the cell structure itself). This is not necessary as
+that information is redundant. The dependency manager should be able to handle
+both cases.</p>
+
+<p>Let us have a look at this simple example:</p>
+
+<table cellspacing="0" cellpadding="3" border="1">
+<tr>
+  <td align="center">&nbsp;</td>
+  <td align="center">A</td>
+  <td align="center">B</td>
+  <td align="center">C</td>
+  <td align="center">D</td>
+</tr>
+<tr>
+  <td align="center">1</td>
+  <td align="right">14</td>
+  <td align="right">36</td>
+  <td align="right">&nbsp;</td>
+  <td align="right">&nbsp;</td>
+</tr>
+<tr>
+  <td align="center">2</td>
+  <td align="right">3</td>
+  <td align="right">&nbsp;</td>
+  <td align="right">&nbsp;</td>
+  <td align="right">&nbsp;</td>
+</tr>
+<tr>
+  <td align="center">3</td>
+  <td align="right">77</td>
+  <td align="right">&nbsp;</td>
+  <td align="right">&nbsp;</td>
+  <td align="right">&nbsp;</td>
+</tr>
+<tr>
+  <td align="center">4</td>
+  <td align="right">=SUM(<b>A1:A3</b>)</td>
+  <td align="right">=A4+SUM(<b>B1:B3</b>)</td>
+  <td align="right">=100*<b>B4</b></td>
+  <td align="right">&nbsp;</td>
+</tr>
+</table>
+
+<p>Such sheet should produce dependencies like:</p>
+
+<table cellspacing="0" cellpadding="3" border="1">
+<tr>
+  <td><b>Reference</b></td>
+  <td><b>Dependent(s)</b></td>
+</tr>
+<tr>
+  <td>A4</td>
+  <td>A1:A3</td>
+</tr>
+<tr>
+  <td>B4</td>
+  <td>A4 and B1:B3</td>
+</tr>
+<tr>
+  <td>C4</td>
+  <td>B4</td>
+</tr>
+</table>
+
+<p>When we want to recalculate cell B4, from the dependencies shown above we
+may know that first we need to know values of cell A4 and range B1:B3. Further on,
+cell A4 needs to know values of cells in range A1:A3. Therefore, <i>given one reference
+cell</i> (e.g. B4), the dependency manager must be able to <i>return all
+dependents, cells and/or ranges</i> (e.g. A4, B1:B3). Do we need to go
+recursively when searching for dependencies? That really depends on the
+implementation, but it is not a big problem, though.</p>
+
+<p>In another case, say the user has changed cell A3 so we need to update the
+calculation. We should not recalculate the whole sheet because it wastes time.
+We just need to recalculate cells that depend on A3, in this case A4, B4 and C4.
+So the dependency manager has another responsibility: <i>given a cell</i>
+it should <i>find all cells and/or ranges which depend on that particular
+cell</i>. It is a matter of iterating over all dependencies and checking
+whether the cell is within the dependent(s) and returning the reference cell.
+In this example, cell A3 is in the range A1:A3, a dependent range of cell A4.
+Hence, we just return A4. Recursive or not, we can either continue finding
+dependents of A4 or just stop here.</p>
+
+<p>Note also that dependency manager should not store cell pointers, but rather
+only the location of the cell (i.e. the sheet that owns the cell, row number and
+column number). This is because on some cases the dependent cell may not exist
+yet. As illustrated in the example, dependents of cell B4 are A4, B1, B2 and B3
+but here cells B2 and B3 are still empty. Of course, when we just want to
+know which cells we need to recalculate for one reference cell, the dependency
+manager is allowed to return only non-empty cells (e.g. A4 and B1 in our case)
+as empty cells have no effect and will not be recalculated anyway.</p>
+
+<p>By the same manner, dependency manager can also held responsible when
+chart comes into play. Any charts placed in the sheet (that are actually KChart
+parts) depend on some values of the cells. An action by the user to changing
+those cells, directly or indirectly, should trigger the update of the respective
+charts.</p>
+
+<p>Inter-sheet dependencies can be well handled if we store the owner of
+each dependent. This is not shown yet in the explanation above to avoid
+unnecessary complication. But let have one example now: if Sheet2!A1 is
+&quot;=SUM(Sheet1!A1:A10)&quot; then changing Sheet1!A1 (the dependent)
+means updating Sheet2!A1 (the reference). Of course during recalculation we
+must take care that all sheets in the document must be processed, even though
+only one single cell in one sheet has been changed.</p>
+
+*/
