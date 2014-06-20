@@ -23,6 +23,7 @@ import "welcomepages"
 
 Page {
     id: base;
+    DocumentListModel { id: allDocumentsModel; }
     DocumentListModel { id: textDocumentsModel; filter: DocumentListModel.TextDocumentType; }
     DocumentListModel { id: presentationDocumentsModel; filter: DocumentListModel.PresentationType; }
     Item {
@@ -43,6 +44,7 @@ Page {
             width: Constants.GridWidth * 3;
             bold: true;
             text: "Calligra Suite";
+            textSize: 30;
             image: Settings.theme.icon("Calligra-MockIcon-1");
         }
         Button {
@@ -51,6 +53,16 @@ Page {
             height: parent.height;
             width: Constants.ToolbarHeight * 1.2790698;
             image: Settings.theme.icon("SVG-Icon-OptionsWhite-1");
+        }
+        Rectangle {
+            anchors {
+                left: parent.left;
+                right: parent.right;
+                bottom: parent.bottom;
+            }
+            height: 1;
+            color: "#22282f";
+            opacity: 0.6;
         }
     }
     Item {
@@ -70,14 +82,14 @@ Page {
             width: parent.width / 5;
             ListModel {
                 id: sidebarList;
-                ListElement { header: " OPEN"; text: "Recent Documents"; icon: "SVG-Icon-MyDocuments-1"; selected: false; stackComponent: "welcomePageRecent"; }
+                ListElement { header: "OPEN"; text: "Recent Documents"; icon: "SVG-Icon-MyDocuments-1"; selected: false; stackComponent: "welcomePageRecent"; }
                 ListElement { text: "Library"; icon: "SVG-Icon-MyDocuments-1"; selected: true; stackComponent: "welcomePageFilebrowser"; }
                 ListElement { text: "Cloud"; icon: "SVG-Icon-PlayPresentation-1"; selected: false; stackComponent: "welcomePageFilebrowser"; }
 
-                ListElement { header: " COMPOSE NEW"; text: "Document"; icon: "SVG-Icon-NewDocument-1"; selected: false; stackComponent: "welcomePageWords"; }
+                ListElement { header: "COMPOSE NEW"; text: "Document"; icon: "SVG-Icon-NewDocument-1"; selected: false; stackComponent: "welcomePageWords"; }
                 ListElement { text: "Presentation"; icon: "SVG-Icon-NewPresentation-1"; selected: false; stackComponent: "welcomePageStage"; }
-                ListElement { text: "Sketch"; icon: "SVG-Icon-NewSketch-1"; selected: false; stackComponent: "welcomePageCustom"; }
                 ListElement { text: "Spreadsheet"; icon: "SVG-Icon-NewSpreadsheet-1"; selected: false; stackComponent: "welcomePageCustom"; }
+                ListElement { text: "Sketch"; icon: "SVG-Icon-NewSketch-1"; selected: false; stackComponent: "welcomePageCustom"; }
             }
             Rectangle {
                 anchors.fill: parent;
@@ -89,15 +101,22 @@ Page {
                 model: sidebarList;
                 delegate: Item {
                     width: ListView.view.width;
-                    height: model.header ? Constants.GridHeight * 2 : Constants.GridHeight;
-                    Label {
+                    height: model.header ? Constants.GridHeight * 1.5 : Constants.GridHeight;
+                    Item {
                         id: delegateHeader;
-                        height: model.header ? Constants.GridHeight : 0;
+                        height: model.header ? Constants.GridHeight / 2 : 0;
                         width: parent.width;
-                        verticalAlignment: Text.AlignVCenter;
-                        horizontalAlignment: Text.AlignLeft;
-                        text: model.header ? model.header : "";
-                        color: "#f2b200";
+                        Label {
+                            anchors {
+                                fill: parent;
+                                leftMargin: Constants.DefaultMargin;
+                            }
+                            verticalAlignment: Text.AlignBottom;
+                            horizontalAlignment: Text.AlignLeft;
+                            text: model.header ? model.header : "";
+                            font: Settings.theme.font("filelistheader");
+                            color: "#f2b200";
+                        }
                     }
                     Item {
                         anchors.top: delegateHeader.bottom;
@@ -155,9 +174,24 @@ Page {
                     }
                 }
             }
+            Rectangle {
+                anchors {
+                    top: parent.top;
+                    right: parent.right;
+                    bottom: parent.bottom;
+                }
+                width: 1;
+                color: "#22282f";
+                opacity: 0.6;
+            }
         }
         Rectangle {
-            anchors.fill: welcomeStack;
+            anchors {
+                top: parent.top;
+                left: sidebar.right;
+                right: parent.right;
+                bottom: parent.bottom;
+            }
             color: "#e8e9ea";
         }
         PageStack {
@@ -166,6 +200,7 @@ Page {
             anchors {
                 top: parent.top;
                 left: sidebar.right;
+                leftMargin: Constants.DefaultMargin * 3;
                 right: parent.right;
                 bottom: parent.bottom;
             }
