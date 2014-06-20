@@ -73,33 +73,36 @@ Page {
             left: parent.left;
             right: parent.right;
         }
+        height: Constants.GridHeight * 1.5;
         verticalAlignment: Text.AlignVCenter;
         horizontalAlignment: Text.AlignHCenter;
         font: Settings.theme.font("pageHeader");
         text: "Select a template";
+        color: "#22282f";
         Row {
             anchors {
                 right: parent.right;
+                rightMargin: 20;
                 verticalCenter: parent.verticalCenter;
             }
             height: parent.height - Constants.DefaultMargin * 2;
             spacing: 4;
-            Button {
-                height: parent.height;
+            CohereButton {
+                anchors.verticalCenter: parent.verticalCenter;
                 checked: stageTemplatesRepeater.model === stageTemplatesClassic;
                 text: "Classic";
-                textColor: "black";
+                textColor: "#5b6573";
+                textSize: 18;
                 checkedColor: "#D2D4D5";
-                radius: 4;
                 onClicked: { if(!checked) { stageTemplatesRepeater.model = stageTemplatesClassic; } }
             }
-            Button {
-                height: parent.height;
+            CohereButton {
+                anchors.verticalCenter: parent.verticalCenter;
                 checked: stageTemplatesRepeater.model === stageTemplates;
                 text: "Wide";
-                textColor: "black";
+                textColor: "#5b6573";
+                textSize: 18;
                 checkedColor: "#D2D4D5";
-                radius: 4;
                 onClicked: { if(!checked) { stageTemplatesRepeater.model = stageTemplates; } }
             }
         }
@@ -109,7 +112,8 @@ Page {
         anchors {
             fill: parent;
             margins: Constants.DefaultMargin;
-            topMargin: Constants.GridHeight;
+            topMargin: Constants.GridHeight * 1.5;
+            bottomMargin: 0;
         }
         contentWidth: templatesFlow.width;
         contentHeight: templatesFlow.height;
@@ -177,6 +181,8 @@ Page {
                         width: parent.width;
                         horizontalAlignment: Text.AlignHCenter;
                         text: model.text;
+                        font: Settings.theme.font("templateLabel");
+                        color: "#5b6573";
                     }
                 }
             }
