@@ -22,8 +22,68 @@ import "../components"
 
 Page {
     id: base;
+    GridView {
+        id: docList;
+        clip: true;
+        contentWidth: width;
+        anchors {
+            margins: Constants.DefaultMargin;
+            top: parent.top;
+            left: parent.left;
+            right: parent.right;
+            bottom: parent.bottom;
+            bottomMargin: 0;
+        }
+        cellWidth: width / 4 - Constants.DefaultMargin;
+        cellHeight: cellWidth + Settings.theme.font("templateLabel").pixelSize + Constants.DefaultMargin * 4;
+        model: allDocumentsModel;
+        delegate: documentTile;
+        ScrollDecorator { flickableItem: docList; }
+    }
     Label {
         anchors.centerIn: parent;
-        text: "Recent Documents";
+        text: "No %1 - please drop some into your Documents folder (%2)".arg(base.categoryUIName).arg(docList.model.documentsFolder);
+        visible: docList.count === 0;
+    }
+    Component {
+        id: documentTile;
+        Item {
+            width: docList.cellWidth;
+            height: docList.cellHeight
+            Image {
+                source: "image://recentimage/" + model.filePath;
+                anchors {
+                    top: parent.top;
+                    left: parent.left;
+                    right: parent.right;
+                    margins: Constants.DefaultMargin / 2;
+                }
+                height: parent.width;
+                fillMode: Image.PreserveAspectFit;
+            }
+            Label {
+                id: lblName;
+                anchors {
+                    left: parent.left;
+                    right: parent.right;
+                    bottom: parent.bottom;
+                    margins: Constants.DefaultMargin;
+                    bottomMargin: Constants.DefaultMargin * 2;
+                }
+                height: font.pixelSize + Constants.DefaultMargin * 2;
+                horizontalAlignment: Text.AlignHCenter;
+                verticalAlignment: Text.AlignVCenter;
+                text: model.fileName ? model.fileName : "";
+                font: Settings.theme.font("templateLabel");
+                color: "#5b6573";
+            }
+            MouseArea {
+                anchors.fill: parent;
+                onClicked: {
+                    baseLoadingDialog.visible = true;
+                    openFile(model.filePath);
+                }
+            }
+        }
     }
 }

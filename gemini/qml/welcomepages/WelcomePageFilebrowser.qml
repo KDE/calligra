@@ -52,16 +52,20 @@ Page {
             checked: docList.model === presentationDocumentsModel;
         }
     }
-    ListView {
+    GridView {
         id: docList;
         clip: true;
+        contentWidth: width;
         anchors {
             margins: Constants.DefaultMargin;
             top: docTypeSelectorRow.bottom;
             left: parent.left;
             right: parent.right;
             bottom: parent.bottom;
+            bottomMargin: 0;
         }
+        cellWidth: width / 4 - Constants.DefaultMargin;
+        cellHeight: cellWidth + Settings.theme.font("templateLabel").pixelSize + Constants.DefaultMargin * 4;
         model: textDocumentsModel;
         delegate: documentTile;
         ScrollDecorator { flickableItem: docList; }
@@ -73,38 +77,35 @@ Page {
     }
     Component {
         id: documentTile;
-        Rectangle {
-            width: parent.width;
-            height: model.fileName ? 55 : 0;
-            color: index % 2 === 1 ? "white" : "silver";
-            radius: height / 2;
+        Item {
+            width: docList.cellWidth;
+            height: docList.cellHeight
+            Image {
+                source: "image://recentimage/" + model.filePath;
+                anchors {
+                    top: parent.top;
+                    left: parent.left;
+                    right: parent.right;
+                    margins: Constants.DefaultMargin / 2;
+                }
+                height: parent.width;
+                fillMode: Image.PreserveAspectFit;
+            }
             Label {
                 id: lblName;
-                anchors.margins: 5;
-                anchors.leftMargin: parent.height / 3;
-                anchors.left: parent.left;
-                anchors.right: parent.horizontalCenter;
-                anchors.verticalCenter: parent.verticalCenter;
+                anchors {
+                    left: parent.left;
+                    right: parent.right;
+                    bottom: parent.bottom;
+                    margins: Constants.DefaultMargin;
+                    bottomMargin: Constants.DefaultMargin * 2;
+                }
+                height: font.pixelSize + Constants.DefaultMargin * 2;
+                horizontalAlignment: Text.AlignHCenter;
+                verticalAlignment: Text.AlignVCenter;
                 text: model.fileName ? model.fileName : "";
-            }
-            Label {
-                id: lblMTime;
-                anchors.margins: 5;
-                anchors.left: lblName.right;
-                anchors.right: lblSize.left;
-                anchors.verticalCenter: parent.verticalCenter;
-                text: model.modifiedTime ? model.modifiedTime : "";
-                horizontalAlignment: Text.AlignRight;
-            }
-            Label {
-                id: lblSize;
-                anchors.margins: 5;
-                anchors.rightMargin: parent.height / 3;
-                anchors.right: parent.right;
-                anchors.verticalCenter: parent.verticalCenter;
-                width: parent.width / 5;
-                text: model.fileSize ? model.fileSize : "";
-                horizontalAlignment: Text.AlignRight;
+                font: Settings.theme.font("templateLabel");
+                color: "#5b6573";
             }
             MouseArea {
                 anchors.fill: parent;
