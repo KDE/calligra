@@ -225,6 +225,7 @@ class ViewActions
 public:
     // sheet/workbook operations
     QAction * sheetProperties;
+    QAction *splitViewSheet;// QAction added
     QAction * insertSheet;
     QAction * duplicateSheet;
     QAction * deleteSheet;
@@ -289,6 +290,13 @@ void View::Private::initActions()
     ac->addAction("sheetProperties", actions->sheetProperties);
     connect(actions->sheetProperties, SIGNAL(triggered(bool)), view, SLOT(sheetProperties()));
     actions->sheetProperties->setToolTip(i18n("Modify current sheet's properties"));
+    
+    actions->splitViewSheet = new KAction(koIcon("split-view-sheet"), i18n("Sheet"), view);//for splitting the view
+    actions->splitViewSheet->setIconText(i18n("split-view-sheet"));
+    actions->splitViewSheet->setToolTip(i18n("Split the view"));
+    ac->addAction("splitViewSheet", actions->splitViewSheet);
+    connect(actions->splitViewSheet, SIGNAL(triggered(bool)), view, SLOT(View::splitViewSheet()));
+    
 
     actions->insertSheet = new KAction(koIcon("insert-table"), i18n("Sheet"), view);
     actions->insertSheet->setIconText(i18n("Insert Sheet"));
@@ -2214,6 +2222,12 @@ void View::slotAutoScroll()
         emit autoScroll(scrollDistance);
     }
 }
+void View::splitViewSheet()
+{
+  QSplitter *splitter = new QSplitter;
+  Canvas *obj = new Canvas;
+}
+
 
 
 
