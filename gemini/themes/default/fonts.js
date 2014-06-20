@@ -22,6 +22,11 @@ var values = {
         style: "Regular",
         size: 1,
     },
+    applicationSemi: {
+        family: "Source Sans Pro",
+        style: "Semibold",
+        size: 1,
+    },
     small: {
         family: "Source Sans Pro",
         style: "Bold",
@@ -36,6 +41,16 @@ var values = {
         family: "Source Sans Pro",
         style: "Light",
         size: 3,
+    },
+    filelistheader: {
+        family: "Source Sans Pro",
+        style: "Semibold",
+        size: 0.8,
+    },
+    templateLabel: {
+        family: "Source Sans Pro",
+        style: "Light",
+        size: 1,
     },
     title: {
         family: "Source Sans Pro",
