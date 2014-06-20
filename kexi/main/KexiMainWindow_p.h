@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2013 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -1966,6 +1966,24 @@ private:
     //! @todo QMutex dialogsMutex; //!< used for locking windows and pendingWindows dicts
 #endif
     KexiFindDialog *m_findDialog;
+};
+
+//------------------------------------------
+
+//! Action shortcut used by KexiMainWindow::setupMainMenuActionShortcut(KAction*)
+//! Activates action only if enabled.
+class KexiMainMenuActionShortcut : public QShortcut
+{
+    Q_OBJECT
+public:
+    KexiMainMenuActionShortcut(const QKeySequence& key, QWidget *parent, QAction *action);
+
+protected slots:
+    //! Triggers associated action only when this action is enabled
+    void slotActivated();
+
+private:
+    QPointer<QAction> m_action;
 };
 
 #endif
