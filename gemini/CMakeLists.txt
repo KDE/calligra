@@ -39,6 +39,7 @@ set(calligragemini_SRCS
     ParagraphStylesModel.cpp
     KeyboardModel.cpp
     ScribbleArea.cpp
+    RecentImageImageProvider.cpp
 )
 
 
