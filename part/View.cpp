@@ -2225,7 +2225,19 @@ void View::slotAutoScroll()
 void View::splitViewSheet()
 {
   QSplitter *splitter = new QSplitter;
-  Canvas *obj = new Canvas;
+  Canvas *obj = new Canvas(this);
+  CanvasBase *obj1 = new CanvasBase(CanvasBase::Doc());
+  register Sheet * const sheet = obj1->activeSheet();
+  const QRect visibleRect = obj1->visibleCells();
+  const QPointF topLeft(sheet->columnPosition(visibleRect.left()), sheet->rowPosition(visibleRect.top()));
+  sheetView(sheet)->setPaintCellRange(visibleRect);
+  sheetView(sheet)->paintCells(*painter, paintRect, topLeft, this);
+
+  splitter.addWidget(obj);
+  splitter.addWidget(obj);
+  splitter->show();
+  
+  
 }
 
 
