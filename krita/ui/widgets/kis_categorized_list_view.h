@@ -32,10 +32,14 @@ public:
     virtual ~KisCategorizedListView();
     virtual void setModel(QAbstractItemModel* model);
 
+
+
+
 signals:
     void sigCategoryToggled(const QModelIndex& index, bool toggled);
     void sigEntryChecked(const QModelIndex& index);
-    void sigLockOption(const QModelIndex& index);
+    void rightClickedMenuDropSettingsTriggered();
+    void rightClickedMenuSaveSettingsTriggered();
 
 protected slots:
     void slotIndexChanged(const QModelIndex& index);
@@ -52,6 +56,7 @@ private:
 
 private:
     bool m_useCheckBoxHack;
+
 };
 
 #endif // KIS_CATEGORIZED_LIST_VIEW_H_

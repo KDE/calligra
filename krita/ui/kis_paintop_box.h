@@ -32,6 +32,10 @@
 #include <kis_types.h>
 #include <kis_paintop_settings.h>
 
+#include "kis_locked_properties_proxy.h"
+#include "kis_locked_properties_server.h"
+#include "kis_locked_properties.h"
+
 class QToolButton;
 class QPushButton;
 class QString;
@@ -51,6 +55,7 @@ class KisPaintOpListWidget;
 class KisCompositeOpComboBox;
 class KisWidgetChooser;
 class KisFavoriteResourceManager;
+class KisLockedProperties;
 /**
  * This widget presents all paintops that a user can paint with.
  * Paintops represent real-world tools or the well-known Shoup
@@ -132,6 +137,9 @@ private slots:
     void slotToggleAlphaLockMode(bool);
     void slotReloadPreset();
     void slotConfigurationItemChanged();
+    void slotSaveLockedOptionToPreset(KisPropertiesConfiguration* p);
+    void slotDropLockedOption(KisPropertiesConfiguration* p);
+
 
 private:
     KisCanvasResourceProvider*           m_resourceProvider;

@@ -77,6 +77,10 @@ public:
 
     bool detached() const;
 
+    void setReloadEnabled(bool value);
+
+    void updateViewSettings();
+
 protected:
     void contextMenuEvent(QContextMenuEvent *);
     void hideEvent(QHideEvent *);

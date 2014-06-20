@@ -68,7 +68,7 @@ void PresetDockerDock::canvasResourceChanged(int /*key*/, const QVariant& /*v*/)
         if(preset)
             m_presetChooser->canvasResourceChanged(preset.data(),preset);
         sender()->blockSignals(false);
-
+        m_presetChooser->updateViewSettings();
     }
 }
 

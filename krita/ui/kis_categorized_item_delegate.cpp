@@ -124,22 +124,4 @@ void KisCategorizedItemDelegate::paintTriangle(QPainter* painter, qint32 x, qint
     painter->setBrush(palette.buttonText());
     painter->drawPolygon(triangle);
 }
-QWidget* KisCategorizedItemDelegate::createEditor(QWidget *parent,const QStyleOptionViewItem &option,const QModelIndex &index) const
-{
-    KPushButton *p = new KPushButton(parent);
-    p->setText("index.data().toString()");
-    p->setVisible(true);
-    return p;
-}
-void KisCategorizedItemDelegate::setEditorData(QWidget * editor, const QModelIndex & index) const
-{
-    static_cast<QPushButton*>(editor)->setText(index.data().toString());
-}
-void KisCategorizedItemDelegate::setModelData(QWidget * editor, QAbstractItemModel * model, const QModelIndex & index) const
-{
-    model->setData(index, static_cast<QPushButton*>(editor)->text());
-}
-void KisCategorizedItemDelegate::updateEditorGeometry(QWidget *editor,const QStyleOptionViewItem &option,const QModelIndex &index) const
-{
-    editor->setGeometry(option.rect);
-}
+

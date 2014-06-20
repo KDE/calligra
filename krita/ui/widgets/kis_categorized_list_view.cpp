@@ -19,6 +19,13 @@
 #include "kis_categorized_list_view.h"
 #include "kis_categorized_list_model.h"
 #include <QMouseEvent>
+#include <QMenu>
+#include <QAction>
+#include <QShowEvent>
+#include <kconfig.h>
+#include <kglobalsettings.h>
+#include <klocale.h>
+#include <KoIcon.h>
 
 
 KisCategorizedListView::KisCategorizedListView(bool useCheckBoxHack, QWidget* parent):
@@ -100,20 +107,28 @@ void KisCategorizedListView::mousePressEvent(QMouseEvent* event)
 
     }
     QModelIndex index = QListView::indexAt(event->pos());
-    if(index.data(__CategorizedListModelBase::isLockableRole).toBool() && index.isValid())
+    QListView::mousePressEvent(event);
+    if(event->button() == Qt::RightButton)
     {
-        if(event->pos().x()>=this->width()-20 && event->pos().x()<=this->width()-5)
-        {
-            emit sigLockOption(QListView::indexAt(event->pos()));
+        QMenu menu(this);
+        if(index.data(__CategorizedListModelBase::isLockableRole).toBool() && index.isValid()){
+            QAction* action1 = menu.addAction(koIcon("linked2"),index.data(__CategorizedListModelBase::isLockedRole).toBool()?i18n("Unlock Option(Revert To Previous)"):i18n("Lock Option"));
+            connect(action1, SIGNAL(triggered()), this, SIGNAL(rightClickedMenuDropSettingsTriggered()));
+            if(index.data(__CategorizedListModelBase::isLockedRole).toBool())
+            {
+                QAction* action2 = menu.addAction(koIcon("linked2"),i18n("Unlock Option(Save To Preset)"));
+                connect(action2, SIGNAL(triggered()), this, SIGNAL(rightClickedMenuSaveSettingsTriggered()));
+            }
+            menu.exec(event->globalPos());
         }
     }
 
-    QListView::mousePressEvent(event);
 }
 
 void KisCategorizedListView::mouseReleaseEvent(QMouseEvent* event)
 {
     QListView::mouseReleaseEvent(event);
 }
+
 
 

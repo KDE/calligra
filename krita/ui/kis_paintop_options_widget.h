@@ -27,6 +27,7 @@ class KisPaintOpOption;
 class KisPaintOpPreset;
 class KisPropertiesConfiguration;
 class QListWidgetItem;
+class KisPaintOpSettingsWidget;
 
 /**
  * A common widget for enabling/disabling and determining
@@ -56,15 +57,20 @@ public:
 
 
 
+
+
 private slots:
 
     void changePage(const QModelIndex&);
     void lockProperties(const QModelIndex& index);
+    void slotLockPropertiesDrop();
+    void slotLockPropertiesSave();
 
 private:
     
     struct Private;
     Private* const m_d;
+    bool m_saveLockedOption;
 
 };
 

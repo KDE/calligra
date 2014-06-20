@@ -37,7 +37,7 @@ public:
     void setPropertiesFromLocked(bool value);
     bool propertiesFromLocked();
     KisLockedPropertiesProxy* createLockedPropertiesProxy(const KisPropertiesConfiguration*);
-
+    bool hasProperty(const QString &p);
 
 
 private:

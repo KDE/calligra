@@ -62,6 +62,11 @@ void KisLockedProperties::removeFromLockedProperties(KisPropertiesConfiguration 
 
     }
 }
+bool KisLockedProperties::hasProperty(const QString &p)
+{
+    return m_lockedProperties->hasProperty(p);
+}
+
 KisPropertiesConfiguration *KisLockedProperties::lockedProperties()
 {
     return m_lockedProperties;

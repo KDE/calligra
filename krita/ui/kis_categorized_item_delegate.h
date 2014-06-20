@@ -35,10 +35,7 @@ public:
     virtual void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
     virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;
     void paintTriangle(QPainter* painter, qint32 x, qint32 y, qint32 size, bool rotate) const;
-    virtual QWidget *createEditor(QWidget *parent,const QStyleOptionViewItem &option,const QModelIndex &index) const;
-    virtual void setEditorData(QWidget * editor, const QModelIndex & index) const;
-    virtual void setModelData(QWidget * editor, QAbstractItemModel * model, const QModelIndex & index) const;
-    virtual void updateEditorGeometry(QWidget *editor,const QStyleOptionViewItem &option,const QModelIndex &index) const;
+
 private:
 
     

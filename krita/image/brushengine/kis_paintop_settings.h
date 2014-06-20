@@ -204,6 +204,7 @@ public:
      */
     void setProperty(const QString & name, const QVariant & value);
 
+
 protected:
      /**
      * @return the option widget of the paintop (can be 0 is no option widgets is set)

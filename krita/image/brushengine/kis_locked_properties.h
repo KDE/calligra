@@ -33,7 +33,7 @@ public:
 
     /**Whenever any property is unlocked**/
     void removeFromLockedProperties(KisPropertiesConfiguration *p);
-
+    bool hasProperty(const QString &p);
 
 
 
@@ -43,7 +43,7 @@ public:
 
 private:
     KisPropertiesConfiguration* m_lockedProperties;
-    QStringList                 m_lockedOptionsList;
+
 
 };
 

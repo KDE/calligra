@@ -132,6 +132,9 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     
     connect(m_d->uiWdgPaintOpPresetSettings.bnSave, SIGNAL(clicked()),
             m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser, SLOT(updateViewSettings()));
+
+    connect(m_d->uiWdgPaintOpPresetSettings.reload, SIGNAL(clicked()),
+            m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser, SLOT(updateViewSettings()));
             
     KisConfig cfg;
     m_d->detached = !cfg.paintopPopupDetached();
@@ -140,6 +143,7 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     m_d->uiWdgPaintOpPresetSettings.presetWidget->setVisible(cfg.presetStripVisible());
     m_d->uiWdgPaintOpPresetSettings.scratchpadControls->setVisible(cfg.scratchpadVisible());
     m_d->detachedGeometry = QRect(100, 100, 0, 0);
+    m_d->uiWdgPaintOpPresetSettings.reload->setEnabled(false);
 }
 
 
@@ -363,6 +367,14 @@ void KisPaintOpPresetsPopup::slotSwitchScratchpad(bool visible)
     m_d->uiWdgPaintOpPresetSettings.scratchpadControls->setVisible(visible);
     KisConfig cfg;
     cfg.setScratchpadVisible(visible);
+}
+void KisPaintOpPresetsPopup::setReloadEnabled(bool value)
+{
+    m_d->uiWdgPaintOpPresetSettings.reload->setEnabled(value);
+}
+void KisPaintOpPresetsPopup::updateViewSettings()
+{
+    m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser->updateViewSettings();
 }
 
 

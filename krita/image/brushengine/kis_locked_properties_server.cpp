@@ -61,6 +61,10 @@ bool KisLockedPropertiesServer::propertiesFromLocked()
 {
     return m_propertiesFromLocked;
 }
+bool KisLockedPropertiesServer::hasProperty(const QString &p)
+{
+    return m_lockedProperties->hasProperty(p);
+}
 
 
 

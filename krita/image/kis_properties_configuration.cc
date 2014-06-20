@@ -280,6 +280,33 @@ QMap<QString, QVariant> KisPropertiesConfiguration::getProperties() const
 {
     return d->properties;
 }
+bool KisPropertiesConfiguration::removeProperty(const QString & name)
+{
+    if(hasProperty(name)){
+        KisPropertiesConfiguration *temp = new KisPropertiesConfiguration();
+        QMapIterator<QString, QVariant> i(getProperties());
+        while(i.hasNext())
+        {
+            i.next();
+            temp->setProperty(i.key(),QVariant(i.value()));
+        }
+        clearProperties();
+        QMapIterator<QString, QVariant> j(temp->getProperties());
+        while(j.hasNext())
+        {
+            j.next();
+            if(j.key()!=name)
+            {
+                setProperty(j.key(),QVariant(j.value()));
+            }
+
+        }
+    return true;
+    }
+    else{
+        return false;
+    }
+}
 
 // --- factory ---
 
@@ -306,3 +333,4 @@ KisSerializableConfiguration* KisPropertiesConfigurationFactory::create(const QD
     pc->fromXML(e);
     return pc;
 }
+

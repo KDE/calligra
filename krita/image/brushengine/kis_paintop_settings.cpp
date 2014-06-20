@@ -224,18 +224,15 @@ void KisPaintOpSettings::setCanvasMirroring(bool xAxisMirrored, bool yAxisMirror
 
 void KisPaintOpSettings::setProperty(const QString & name, const QVariant & value)
 {
-    if(value!=getProperty(name))
-    {
-
-    }
     KisPropertiesConfiguration::setProperty(name, value);
     onPropertyChanged();
 }
 
+
 void KisPaintOpSettings::onPropertyChanged()
 {
-    if(this->preset())
-    {
+    if(this->preset()){
         this->preset()->setDirtyPreset(true);
     }
 }
+
