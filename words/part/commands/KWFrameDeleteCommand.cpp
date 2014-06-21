@@ -26,7 +26,7 @@
 #include <klocale.h>
 
 KWFrameDeleteCommand::KWFrameDeleteCommand(KoShapeBasedDocumentBase *shapeController, KWFrame *frame, KUndo2Command *parent)
-        : KUndo2Command(i18nc("(qtundo-format)", "Delete Frame"), parent),
+        : KUndo2Command(kundo2_i18n("Delete Frame"), parent),
         m_frame(frame),
         m_frameSet(frame->frameSet())
 {

@@ -56,7 +56,7 @@ KarbonDocumentMergeCommand::KarbonDocumentMergeCommand(KarbonDocument *targetPar
     foreach(KoShape * shape, d->shapes) {
         sourcePart->removeShape(shape);
     }
-    setText(i18nc("(qtundo-format)", "Insert graphics"));
+    setText(kundo2_i18n("Insert graphics"));
 }
 
 KarbonDocumentMergeCommand::~KarbonDocumentMergeCommand()

@@ -360,7 +360,7 @@ protected:
 
     void setupPropertyEditor();
 
-    void setupMainMenuActionShortcut(KAction* action, const char* slot);
+    void setupMainMenuActionShortcut(KAction* action);
 
     /*! Creates standard actions like new, open, save ... */
     void setupActions();

@@ -155,10 +155,10 @@ PropertyCommand::~PropertyCommand()
 void PropertyCommand::init()
 {
     if (d->oldValues.count() > 1) {
-        setText( i18nc("(qtundo-format)", "Change \"%1\" property for multiple widgets", QString(d->propertyName)) );
+        setText( kundo2_i18n("Change \"%1\" property for multiple widgets", QString(d->propertyName)) );
     }
     else {
-        setText( i18nc("(qtundo-format)", "Change \"%1\" property for widget \"%2\"",
+        setText( kundo2_i18n("Change \"%1\" property for widget \"%2\"",
                     QString(d->propertyName), QString(d->oldValues.constBegin().key())) );
     }
 }
@@ -328,7 +328,7 @@ GeometryPropertyCommand::GeometryPropertyCommand(Form& form,
     d->form = &form;
     d->names = names;
     d->oldPos = oldPos;
-    setText( i18nc("(qtundo-format)", "Move multiple widgets") );
+    setText( kundo2_i18n("Move multiple widgets") );
 }
 
 GeometryPropertyCommand::~GeometryPropertyCommand()
@@ -431,19 +431,19 @@ AlignWidgetsCommand::AlignWidgetsCommand(Form &form, Form::WidgetAlignment align
 
     switch (d->alignment) {
     case Form::AlignToGrid:
-        setText( i18nc("(qtundo-format)", "Align Widgets to Grid") );
+        setText( kundo2_i18n("Align Widgets to Grid") );
         break;
     case Form::AlignToLeft:
-        setText( i18nc("(qtundo-format)", "Align Widgets to Left") );
+        setText( kundo2_i18n("Align Widgets to Left") );
         break;
     case Form::AlignToRight:
-        setText( i18nc("(qtundo-format)", "Align Widgets to Right") );
+        setText( kundo2_i18n("Align Widgets to Right") );
         break;
     case Form::AlignToTop:
-        setText( i18nc("(qtundo-format)", "Align Widgets to Top") );
+        setText( kundo2_i18n("Align Widgets to Top") );
         break;
     case Form::AlignToBottom:
-        setText( i18nc("(qtundo-format)", "Align Widgets to Bottom") );
+        setText( kundo2_i18n("Align Widgets to Bottom") );
         break;
     default:;
     }
@@ -606,22 +606,22 @@ AdjustSizeCommand::AdjustSizeCommand(Form& form, Adjustment type, const QWidgetL
 
     switch (d->type) {
     case SizeToGrid:
-        setText( i18nc("(qtundo-format)", "Resize Widgets to Grid") );
+        setText( kundo2_i18n("Resize Widgets to Grid") );
         break;
     case SizeToFit:
-        setText( i18nc("(qtundo-format)", "Resize Widgets to Fit Contents") );
+        setText( kundo2_i18n("Resize Widgets to Fit Contents") );
         break;
     case SizeToSmallWidth:
-        setText( i18nc("(qtundo-format)", "Resize Widgets to Narrowest") );
+        setText( kundo2_i18n("Resize Widgets to Narrowest") );
         break;
     case SizeToBigWidth:
-        setText( i18nc("(qtundo-format)", "Resize Widgets to Widest") );
+        setText( kundo2_i18n("Resize Widgets to Widest") );
         break;
     case SizeToSmallHeight:
-        setText( i18nc("(qtundo-format)", "Resize Widgets to Shortest") );
+        setText( kundo2_i18n("Resize Widgets to Shortest") );
         break;
     case SizeToBigHeight:
-        setText( i18nc("(qtundo-format)", "Resize Widgets to Tallest") );
+        setText( kundo2_i18n("Resize Widgets to Tallest") );
         break;
     default:;
     }
@@ -849,7 +849,7 @@ LayoutPropertyCommand::LayoutPropertyCommand(Form& form, const QByteArray &wname
     foreach (ObjectTreeItem *titem, *container->objectTree()->children()) {
         d->geometries.insert(titem->name().toLatin1(), titem->widget()->geometry());
     }
-    setText( i18nc("(qtundo-format)", "Change layout of widget \"%1\"", QString(oldValues().constBegin().key())) );
+    setText( kundo2_i18n("Change layout of widget \"%1\"", QString(oldValues().constBegin().key())) );
 }
 
 LayoutPropertyCommand::~LayoutPropertyCommand()
@@ -975,10 +975,10 @@ void InsertWidgetCommand::debug() const
 void InsertWidgetCommand::init()
 {
     if (!d->widgetName.isEmpty()) {
-        setText( i18nc("(qtundo-format)", "Insert widget \"%1\"", QString(d->widgetName)) );
+        setText( kundo2_i18n("Insert widget \"%1\"", QString(d->widgetName)) );
     }
     else {
-        setText( i18nc("(qtundo-format)", "Insert widget") );
+        setText( kundo2_i18n("Insert widget") );
     }
 }
 
@@ -1204,28 +1204,28 @@ void CreateLayoutCommand::init()
 {
     switch (d->layoutType) {
     case Form::HBox:
-        setText( i18nc("(qtundo-format)", "Group Widgets Horizontally") );
+        setText( kundo2_i18n("Group Widgets Horizontally") );
         break;
     case Form::VBox:
-        setText( i18nc("(qtundo-format)", "Group Widgets Vertically") );
+        setText( kundo2_i18n("Group Widgets Vertically") );
         break;
     case Form::Grid:
-        setText( i18nc("(qtundo-format)", "Group Widgets in a Grid") );
+        setText( kundo2_i18n("Group Widgets in a Grid") );
         break;
     case Form::HSplitter:
-        setText( i18nc("(qtundo-format)", "Group Widgets Horizontally in a Splitter") );
+        setText( kundo2_i18n("Group Widgets Horizontally in a Splitter") );
         break;
     case Form::VSplitter:
-        setText( i18nc("(qtundo-format)", "Group Widgets Vertically in a Splitter") );
+        setText( kundo2_i18n("Group Widgets Vertically in a Splitter") );
         break;
     case Form::HFlow:
-        setText( i18nc("(qtundo-format)", "Group Widgets By Rows") );
+        setText( kundo2_i18n("Group Widgets By Rows") );
         break;
     case Form::VFlow:
-        setText( i18nc("(qtundo-format)", "Group Widgets Vertically By Columns") );
+        setText( kundo2_i18n("Group Widgets Vertically By Columns") );
         break;
     default:
-        setText( i18nc("(qtundo-format)", "Group widgets") );
+        setText( kundo2_i18n("Group widgets") );
         break;
     }
 }
@@ -1361,7 +1361,7 @@ BreakLayoutCommand::BreakLayoutCommand(const Container &container, Command *pare
         );
         d->pos.insert(titem->widget()->objectName().toLatin1().constData(), r);
     }
-    setText( i18nc("(qtundo-format)", "Break Layout: \"%1\"", d->name) );
+    setText( kundo2_i18n("Break Layout: \"%1\"", d->name) );
 }
 
 BreakLayoutCommand::~BreakLayoutCommand()
@@ -1452,7 +1452,7 @@ PasteWidgetCommand::PasteWidgetCommand(const QDomDocument &domDoc, const Contain
         QRect r(rx, ry, rw, rh);
         boundingRect = boundingRect.unite(r);
     }
-    setText( i18nc("(qtundo-format)", "Paste") );
+    setText( kundo2_i18n("Paste") );
 }
 
 
@@ -1738,7 +1738,7 @@ DeleteWidgetCommand::DeleteWidgetCommand(Form& form, const QWidgetList &list, Co
     d->form = &form;
     KFormDesigner::widgetsToXML(d->domDoc,
         d->containers, d->parents, *d->form, list);
-    setText( i18nc("(qtundo-format)", "Delete widget") );
+    setText( kundo2_i18n("Delete widget") );
 }
 
 DeleteWidgetCommand::~DeleteWidgetCommand()
@@ -1846,7 +1846,7 @@ DuplicateWidgetCommand::DuplicateWidgetCommand(
         d->containers, d->parents, *d->form, list);
 
     d->pasteCommand = new PasteWidgetCommand(docToCopy, container, copyToPoint);
-    setText( i18nc("(qtundo-format)", "Duplicate widget") );
+    setText( kundo2_i18n("Duplicate widget") );
 }
 
 DuplicateWidgetCommand::~DuplicateWidgetCommand()
@@ -1905,7 +1905,7 @@ public:
 CutWidgetCommand::CutWidgetCommand(Form& form, const QWidgetList &list, Command *parent)
         : DeleteWidgetCommand(form, list, parent), d2( new Private )
 {
-    setText( i18nc("(qtundo-format)", "Cut") );
+    setText( kundo2_i18n("Cut") );
 }
 
 CutWidgetCommand::~CutWidgetCommand()
@@ -2137,7 +2137,7 @@ InsertPageCommand::InsertPageCommand(Container *container, QWidget *parent)
     d->containername = container->widget()->objectName();
     d->form = container->form();
     d->parentname = parent->objectName();
-    setText( i18nc("(qtundo-format)", "Add Page") );
+    setText( kundo2_i18n("Add Page") );
 }
 
 InsertPageCommand::~InsertPageCommand()
@@ -2276,7 +2276,7 @@ RemovePageCommand::RemovePageCommand(Container *container, QWidget *parent)
     }
     d->parentname = parent->objectName();
     d->insertCommand = new InsertPageCommand(container, parent);
-    setText( i18nc("(qtundo-format)", "Remove Page") );
+    setText( kundo2_i18n("Remove Page") );
 }
 
 RemovePageCommand::~RemovePageCommand()

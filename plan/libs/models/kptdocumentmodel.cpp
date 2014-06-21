@@ -568,7 +568,7 @@ void DocumentItemModel::slotDocumentChanged( Document *doc )
 QModelIndex DocumentItemModel::insertDocument( Document *doc, Document *after )
 {
     Q_UNUSED(after);
-//    m_part->addCommand( new DocumentAddCmd( doc, after, i18nc( "(qtundo-format)", "Add Document") ) );
+//    m_part->addCommand( new DocumentAddCmd( doc, after, kundo2_i18n( "Add Document") ) );
     int row = m_documents->indexOf( doc );
     if ( row == -1 ) {
         return QModelIndex();

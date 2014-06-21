@@ -17,9 +17,12 @@
 #include "VSDXImport.h"
 
 #include <libvisio/libvisio.h>
-#include <libodfgen/OdgGenerator.hxx>
+#include <libodfgen/libodfgen.hxx>
 
-#include "OutputFileHelper.hxx"
+#include <writerperfect_utils.hxx>
+#include <OutputFileHelper.hxx>
+#include <StringDocumentHandler.hxx>
+
 #include <KoFilterChain.h>
 #include <KoGlobal.h>
 #include <KoOdf.h>
@@ -38,22 +41,63 @@ public:
         OutputFileHelper(outFileName, password) {}
     ~OdgOutputFileHelper() {}
 
-private:
-    bool _isSupportedFormat(WPXInputStream *input, const char * /* password */)
+    bool convertDocument(librevenge::RVNGInputStream &input, bool isFlat)
     {
-        if (!libvisio::VisioDocument::isSupported(input))
+        OdgGenerator collector;
+        StringDocumentHandler stylesHandler, contentHandler, manifestHandler, settingsHandler;
+        if (isFlat)
+            collector.addDocumentHandler(&contentHandler, ODF_FLAT_XML);
+        else
         {
-            fprintf(stderr, "ERROR: We have no confidence that you are giving us a valid Visio Document.\n");
+            collector.addDocumentHandler(&contentHandler, ODF_CONTENT_XML);
+            collector.addDocumentHandler(&manifestHandler, ODF_MANIFEST_XML);
+            collector.addDocumentHandler(&settingsHandler, ODF_SETTINGS_XML);
+            collector.addDocumentHandler(&stylesHandler, ODF_STYLES_XML);
+        }
+        try
+        {
+            if (!libvisio::VisioDocument::parse(&input, &collector))
+                return false;
+        }
+        catch (...)
+        {
             return false;
+        }
+        if (isFlat)
+        {
+            printf("%s\n", contentHandler.cstr());
+            return true;
+        }
+
+        const char s_mimetypeStr[] = "application/vnd.oasis.opendocument.graphics";
+        if (!writeChildFile("mimetype", s_mimetypeStr, (char)0) ||
+                !writeChildFile("META-INF/manifest.xml", manifestHandler.cstr()) ||
+                !writeChildFile("content.xml", contentHandler.cstr()) ||
+                !writeChildFile("settings.xml", settingsHandler.cstr()) ||
+                !writeChildFile("styles.xml", stylesHandler.cstr()))
+            return false;
+
+        librevenge::RVNGStringVector objects=collector.getObjectNames();
+        for (unsigned i=0; i<objects.size(); ++i)
+        {
+            StringDocumentHandler objectHandler;
+            if (collector.getObjectContent(objects[i], &objectHandler))
+                writeChildFile(objects[i].cstr(), objectHandler.cstr());
         }
         return true;
     }
-
-    bool _convertDocument(WPXInputStream *input, const char * /* password */, OdfDocumentHandler *handler, OdfStreamType streamType)
+    bool isSupportedFormat(librevenge::RVNGInputStream &input)
     {
-        OdgGenerator exporter(handler, streamType);
-        return libvisio::VisioDocument::parse(input, &exporter);
+        try
+        {
+            return libvisio::VisioDocument::isSupported(&input);
+        }
+        catch (...)
+        {
+            return false;
+        }
     }
+private:
 };
 
 K_PLUGIN_FACTORY(VSDXImportFactory, registerPlugin<VSDXImport>();)
@@ -73,48 +117,21 @@ KoFilter::ConversionStatus VSDXImport::convert(const QByteArray& from, const QBy
     if (from != "application/vnd.visio" || to != KoOdf::mimeType(KoOdf::Graphics))
         return KoFilter::NotImplemented;
 
-    const char manifestStr[] = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-            "<manifest:manifest xmlns:manifest=\"urn:oasis:names:tc:opendocument:xmlns:manifest:1.0\">"
-            " <manifest:file-entry manifest:media-type=\"application/vnd.oasis.opendocument.graphics\" manifest:version=\"1.0\" manifest:full-path=\"/\"/>"
-            " <manifest:file-entry manifest:media-type=\"text/xml\" manifest:full-path=\"content.xml\"/>"
-            " <manifest:file-entry manifest:media-type=\"text/xml\" manifest:full-path=\"settings.xml\"/>"
-            " <manifest:file-entry manifest:media-type=\"text/xml\" manifest:full-path=\"styles.xml\"/>"
-            "</manifest:manifest>";
+    QByteArray inputFile = m_chain->inputFile().toLocal8Bit();
+    QByteArray outputFile = m_chain->outputFile().toLocal8Bit();
 
-
-    QByteArray input = m_chain->inputFile().toLocal8Bit();
-    QByteArray output = m_chain->outputFile().toLocal8Bit();
-    const char *inputFile = input.data();
-    const char *outputFile = output.data();
-
-    OdgOutputFileHelper helper(outputFile, 0);
-
-    if (!helper.writeChildFile("mimetype", KoOdf::mimeType(KoOdf::Graphics), (char)0)) {
-        fprintf(stderr, "ERROR : Couldn't write mimetype\n");
-        return KoFilter::ParsingError;
-    }
-
-    if (!helper.writeChildFile("META-INF/manifest.xml", manifestStr)) {
-        fprintf(stderr, "ERROR : Couldn't write manifest\n");
-        return KoFilter::ParsingError;
-    }
-
-    if (outputFile && !helper.writeConvertedContent("settings.xml", inputFile, ODF_SETTINGS_XML))
+    OdgOutputFileHelper helper(outputFile.constData(), 0);
+    librevenge::RVNGFileStream input(inputFile.constData());
+    if (!helper.isSupportedFormat(input))
     {
-        fprintf(stderr, "ERROR : Couldn't write document settings\n");
+        fprintf(stderr, "ERROR: We have no confidence that you are giving us a valid Visio Document.\n");
         return KoFilter::ParsingError;
     }
 
-    if (outputFile && !helper.writeConvertedContent("styles.xml", inputFile, ODF_STYLES_XML))
+    if (!helper.convertDocument(input, outputFile.constData()))
     {
-        fprintf(stderr, "ERROR : Couldn't write document styles\n");
+        fprintf(stderr, "ERROR : Couldn't write convert the document\n");
         return KoFilter::ParsingError;
-    }
-
-    if (!helper.writeConvertedContent("content.xml", inputFile, ODF_CONTENT_XML))
-    {
-            fprintf(stderr, "ERROR : Couldn't write document content\n");
-            return KoFilter::ParsingError;
     }
 
     return KoFilter::OK;

@@ -45,4 +45,4 @@ Name[zh_TW]=okular
 ServiceTypes=KParts/ReadOnlyPart
 X-KDE-Library=okularpart
 Type=Service
-MimeType=application/vnd.oasis.opendocument.presentation;
+MimeType=application/vnd.oasis.opendocument.presentation;application/vnd.oasis.opendocument.presentation-template;

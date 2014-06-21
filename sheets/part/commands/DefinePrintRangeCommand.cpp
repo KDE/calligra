@@ -35,7 +35,7 @@ using namespace Calligra::Sheets;
 DefinePrintRangeCommand::DefinePrintRangeCommand()
         : AbstractRegionCommand()
 {
-    setText(i18nc("(qtundo-format)", "Define Print Range"));
+    setText(kundo2_i18n("Define Print Range"));
 }
 
 void DefinePrintRangeCommand::redo()

@@ -30,6 +30,8 @@
 #include <KWPage.h>
 #include <KWCanvasItem.h>
 #include <KoShapeManager.h>
+#include <KoDocumentInfo.h>
+#include <KoGlobal.h>
 
 #include <kaboutdata.h>
 #include <kmimetype.h>
@@ -108,12 +110,37 @@ bool OkularOdtGenerator::loadDocument( const QString &fileName, QVector<Okular::
         pages.append(page);
     }
 
+    const KoDocumentInfo *documentInfo = doc->documentInfo();
+    m_documentInfo.set( "title",       documentInfo->aboutInfo("title"),       i18nc("Document title","Title"));
+    m_documentInfo.set( "subject",     documentInfo->aboutInfo("subject"),     i18n("Subject"));
+    m_documentInfo.set( "keyword",     documentInfo->aboutInfo("keyword"),     i18n("Keywords"));
+    m_documentInfo.set( "description", documentInfo->aboutInfo("description"), i18n("Comments"));
+    m_documentInfo.set( "language",    KoGlobal::languageFromTag(documentInfo->aboutInfo("language")),  i18n("Language"));
+
+    const QString creationDate = documentInfo->aboutInfo("creation-date");
+    if (!creationDate.isEmpty()) {
+        QDateTime t = QDateTime::fromString(creationDate, Qt::ISODate);
+        m_documentInfo.set( "creation-date", KGlobal::locale()->formatDateTime(t), i18n("Creation date"));
+    }
+    m_documentInfo.set( "initial-creator",  documentInfo->aboutInfo("initial-creator"), i18n("Initial creator"));
+
+    const QString modificationDate = documentInfo->aboutInfo("date");
+    if (!modificationDate.isEmpty()) {
+        QDateTime t = QDateTime::fromString(modificationDate, Qt::ISODate);
+        m_documentInfo.set( "date", KGlobal::locale()->formatDateTime(t), i18n("Last modification date"));
+    }
+    m_documentInfo.set( "creator", documentInfo->aboutInfo("creator"), i18n("Last modifier"));
+
     return true;
 }
 
 bool OkularOdtGenerator::doCloseDocument()
 {
     delete m_doc;
+    m_doc = 0;
+
+    m_documentInfo = Okular::DocumentInfo();
+
     return true;
 }
 
@@ -157,3 +184,9 @@ void OkularOdtGenerator::generatePixmap( Okular::PixmapRequest *request )
 
     signalPixmapRequestDone( request );
 }
+
+const Okular::DocumentInfo* OkularOdtGenerator::generateDocumentInfo()
+{
+    return &m_documentInfo;
+}
+

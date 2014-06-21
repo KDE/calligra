@@ -38,7 +38,7 @@ namespace KexiTableDesignerCommands
 class Command : public KUndo2Command
 {
 public:
-    Command(const QString &text, Command *parent, KexiTableDesignerView* view);
+    Command(const KUndo2MagicString &text, Command *parent, KexiTableDesignerView* view);
     Command(Command* parent, KexiTableDesignerView* view);
     virtual ~Command();
 
@@ -49,7 +49,7 @@ public:
     }
 
     virtual QString debugString() const {
-        return text();
+        return text().toString();
     }
 
     virtual void redo();
