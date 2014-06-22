@@ -1226,11 +1226,10 @@ Value func_minverse(valVector args, ValueCalc* calc, FuncExtra*)
     if (matrix.columns() != matrix.rows() || matrix.rows() < 1)
         return Value::errorVALUE();
 
-    Eigen::MatrixXd eMatrix = convert(matrix, calc),
-                              eMatrixInverse(eMatrix.rows(), eMatrix.cols());
-    Eigen::LU<Eigen::MatrixXd> lu(eMatrix);
+    Eigen::MatrixXd eMatrix = convert(matrix, calc);
+    Eigen::FullPivLU<Eigen::MatrixXd> lu(eMatrix);
     if (lu.isInvertible()) {
-        lu.computeInverse(&eMatrixInverse);
+        Eigen::MatrixXd eMatrixInverse = lu.inverse();
         return convert(eMatrixInverse);
     } else
         return Value::errorDIV0();
