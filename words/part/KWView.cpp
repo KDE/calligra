@@ -330,6 +330,15 @@ void KWView::setupActions()
     action->setToolTip(i18n("Toggle the display of table borders"));
     action->setWhatsThis(i18n("Toggle the display of table borders.<br/><br/>When this is enabled, Words shows you any invisible table borders with a thin gray line."));
 
+    action = new KAction(i18n("Show Sections Bounds"), this);
+    action->setCheckable(true);
+    actionCollection()->addAction("view_sectionsbounds", action);
+    connect(action, SIGNAL(toggled(bool)), this, SLOT(setShowSectionsBounds(bool)));
+    m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowSectionsBounds, QVariant(false));
+    action->setChecked(m_document->config().showSectionsBounds()); // will change resource if true
+    action->setToolTip(i18n("Toggle the display of sections bounds"));
+    action->setWhatsThis(i18n("Toggle the display of sections bounds.<br/><br/>When this is enabled, Words shows you any sections bounds with a thin gray horizontal brackets."));
+
     action = new KAction(i18n("Show Rulers"), this);
     action->setCheckable(true);
     action->setToolTip(i18n("Shows or hides rulers"));
@@ -581,6 +590,13 @@ void KWView::setShowTableBorders(bool on)
     m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowTableBorders, QVariant(on));
     m_canvas->update();
     m_document->config().setShowTableBorders(on);
+}
+
+void KWView::setShowSectionsBounds(bool on)
+{
+    m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowSectionsBounds, QVariant(on));
+    m_canvas->update();
+    m_document->config().setShowSectionsBounds(on);
 }
 
 void KWView::formatPage()
