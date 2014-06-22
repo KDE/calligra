@@ -139,6 +139,7 @@ private slots:
     void slotConfigurationItemChanged();
     void slotSaveLockedOptionToPreset(KisPropertiesConfiguration* p);
     void slotDropLockedOption(KisPropertiesConfiguration* p);
+    void slotDirtyPresetToggled(bool);
 
 
 private:
@@ -159,6 +160,7 @@ private:
     KisWidgetChooser*                    m_sliderChooser[3];
     QMap<KoID,KisPaintOpSettingsWidget*> m_paintopOptionWidgets;
     KisFavoriteResourceManager*          m_favoriteResourceManager;
+    QToolButton*                         m_reloadButton;
 
 
 //    KisPaintOpPresetSP  m_activePreset;
@@ -202,6 +204,7 @@ private:
     TabletToolID     m_currTabletToolID;
     bool             m_presetsEnabled;
     bool             m_blockUpdate;
+    bool             m_dirtyPresetsEnabled;
 
 
 };

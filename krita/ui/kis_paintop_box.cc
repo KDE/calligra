@@ -91,6 +91,7 @@ KisPaintopBox::KisPaintopBox(KisView2 *view, QWidget *parent, const char *name)
     , m_currTabletToolID(KoToolManager::instance()->currentInputDevice())
     , m_presetsEnabled(true)
     , m_blockUpdate(false)
+    , m_dirtyPresetsEnabled(false)
 {
     Q_ASSERT(view != 0);
 
@@ -116,12 +117,22 @@ KisPaintopBox::KisPaintopBox(KisView2 *view, QWidget *parent, const char *name)
     m_eraseModeButton->setFixedSize(32, 32);
     m_eraseModeButton->setCheckable(true);
 
-    KAction* eraseAction = new KAction(i18n("Set eraser mode"), m_eraseModeButton);
+    KAction* eraseAction = new KAction(i18n("Set erasers mode"), m_eraseModeButton);
     eraseAction->setIcon(koIcon("eraser-toggle"));
     eraseAction->setShortcut(Qt::Key_E);
     eraseAction->setCheckable(true);
     m_eraseModeButton->setDefaultAction(eraseAction);
     m_view->actionCollection()->addAction("erase_action", eraseAction);
+
+    m_reloadButton = new QToolButton(this);
+    m_reloadButton->setFixedSize(32, 32);
+    m_reloadButton->setCheckable(true);
+
+    KAction* reloadAction = new KAction(i18n("Reload Original Preset"), m_reloadButton);
+    reloadAction->setIcon(koIcon("reload_preset"));
+    m_reloadButton->setDefaultAction(reloadAction);
+    m_view->actionCollection()->addAction("reload_preset_action", reloadAction);
+
 
     m_alphaLockButton = new QToolButton(this);
     m_alphaLockButton->setFixedSize(32, 32);
@@ -209,6 +220,7 @@ KisPaintopBox::KisPaintopBox(KisView2 *view, QWidget *parent, const char *name)
     compositeLayout->addWidget(m_cmbCompositeOp);
     compositeLayout->addWidget(m_eraseModeButton);
     compositeLayout->addWidget(m_alphaLockButton);
+    compositeLayout->addWidget(m_reloadButton);
     compositeLayout->setContentsMargins(0, 0, 0, 0);
 
     KAction* action;
@@ -284,6 +296,7 @@ KisPaintopBox::KisPaintopBox(KisView2 *view, QWidget *parent, const char *name)
     connect(m_presetsPopup       , SIGNAL(presetNameLineEditChanged(QString)) , SLOT(slotWatchPresetNameLineEdit(QString)));
     connect(m_presetsPopup       , SIGNAL(signalResourceSelected(KoResource*)), SLOT(resourceSelected(KoResource*)));
     connect(m_presetsPopup       , SIGNAL(reloadPresetClicked())              , SLOT(slotReloadPreset()));
+    connect(m_presetsPopup       , SIGNAL(dirtyPresetToggled(bool))           , SLOT(slotDirtyPresetToggled(bool)));
 
     connect(m_presetsChooserPopup, SIGNAL(resourceSelected(KoResource*))      , SLOT(resourceSelected(KoResource*)));
     connect(m_resourceProvider   , SIGNAL(sigNodeChanged(const KisNodeSP))    , SLOT(slotNodeChanged(const KisNodeSP)));
@@ -292,7 +305,8 @@ KisPaintopBox::KisPaintopBox(KisView2 *view, QWidget *parent, const char *name)
     connect(alphaLockAction      , SIGNAL(triggered(bool))                    , SLOT(slotToggleAlphaLockMode(bool)));
     connect(hMirrorAction        , SIGNAL(triggered(bool))                    , SLOT(slotHorizontalMirrorChanged(bool)));
     connect(vMirrorAction        , SIGNAL(triggered(bool))                    , SLOT(slotVerticalMirrorChanged(bool)));
-    
+    connect(reloadAction         , SIGNAL(triggered())                        , SLOT(slotReloadPreset()));
+
     connect(m_sliderChooser[0]->getWidget<KisDoubleSliderSpinBox>("opacity"), SIGNAL(valueChanged(qreal)), SLOT(slotSlider1Changed()));
     connect(m_sliderChooser[0]->getWidget<KisDoubleSliderSpinBox>("flow")   , SIGNAL(valueChanged(qreal)), SLOT(slotSlider1Changed()));
     connect(m_sliderChooser[0]->getWidget<KisDoubleSliderSpinBox>("size")   , SIGNAL(valueChanged(qreal)), SLOT(slotSlider1Changed()));
@@ -438,6 +452,11 @@ void KisPaintopBox::setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP pr
      * so just call the slot directly
      */
     slotUpdatePreset();
+    if(!m_dirtyPresetsEnabled){
+        slotReloadPreset();
+        m_presetsPopup->resourceSelected(m_resourceProvider->currentPreset().data());
+        m_presetsPopup->updateViewSettings();
+    }
 }
 
 KoID KisPaintopBox::defaultPaintOp()
@@ -787,6 +806,10 @@ void KisPaintopBox::sliderChanged(int n)
         KisLockedPropertiesProxy *p = KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(m_resourceProvider->currentPreset()->settings());
         p->setProperty("OpacityValue",opacity);
     }
+    if(!m_dirtyPresetsEnabled)
+    {
+        m_resourceProvider->currentPreset()->setDirtyPreset(false);
+    }
         m_presetsPopup->resourceSelected(m_resourceProvider->currentPreset().data());
 
 }
@@ -941,6 +964,9 @@ void KisPaintopBox::slotReloadPreset()
 void KisPaintopBox::slotConfigurationItemChanged() // Called only when UI is changed and not when preset is changed
 {
    m_optionWidget->writeConfiguration(const_cast<KisPaintOpSettings*>(m_resourceProvider->currentPreset()->settings().data()));
+   if(!m_dirtyPresetsEnabled){
+      m_resourceProvider->currentPreset()->setDirtyPreset(false);
+   }
    m_presetsPopup->resourceSelected(m_resourceProvider->currentPreset().data());
    m_presetsPopup->updateViewSettings();
 }
@@ -968,8 +994,7 @@ void KisPaintopBox::slotDropLockedOption(KisPropertiesConfiguration* p)
     QMapIterator<QString, QVariant> i(p->getProperties());
     while (i.hasNext()) {
         i.next();
-        if(m_resourceProvider->currentPreset()->settings()->hasProperty(i.key()+"_previous"))
-        {
+        if(m_resourceProvider->currentPreset()->settings()->hasProperty(i.key()+"_previous")){
             m_resourceProvider->currentPreset()->settings()->setProperty(i.key(),m_resourceProvider->currentPreset()->settings()->getProperty(i.key()+"_previous") );
             m_resourceProvider->currentPreset()->settings()->removeProperty(i.key()+"_previous");
         }
@@ -977,6 +1002,16 @@ void KisPaintopBox::slotDropLockedOption(KisPropertiesConfiguration* p)
     }
     m_optionWidget->setConfiguration(m_resourceProvider->currentPreset()->settings());
     m_resourceProvider->currentPreset()->setDirtyPreset(saveDirtyPreset);
+    slotUpdatePreset();
     m_optionWidget->blockSignals(false);
 
+}
+void KisPaintopBox::slotDirtyPresetToggled(bool value)
+{
+    if(!value){
+        slotReloadPreset();
+        m_presetsPopup->resourceSelected(m_resourceProvider->currentPreset().data());
+        m_presetsPopup->updateViewSettings();
+    }
+    m_dirtyPresetsEnabled = value;
 }

@@ -112,11 +112,11 @@ void KisCategorizedListView::mousePressEvent(QMouseEvent* event)
     {
         QMenu menu(this);
         if(index.data(__CategorizedListModelBase::isLockableRole).toBool() && index.isValid()){
-            QAction* action1 = menu.addAction(koIcon("linked2"),index.data(__CategorizedListModelBase::isLockedRole).toBool()?i18n("Unlock Option(Revert To Previous)"):i18n("Lock Option"));
+            QAction* action1 = menu.addAction(koIcon("linked2"),index.data(__CategorizedListModelBase::isLockedRole).toBool()?i18n("Unlock Option(Load Last Selected)"):i18n("Lock Option"));
             connect(action1, SIGNAL(triggered()), this, SIGNAL(rightClickedMenuDropSettingsTriggered()));
             if(index.data(__CategorizedListModelBase::isLockedRole).toBool())
             {
-                QAction* action2 = menu.addAction(koIcon("linked2"),i18n("Unlock Option(Save To Preset)"));
+                QAction* action2 = menu.addAction(koIcon("linked2"),i18n("Unlock Option(Load Current Settings)"));
                 connect(action2, SIGNAL(triggered()), this, SIGNAL(rightClickedMenuSaveSettingsTriggered()));
             }
             menu.exec(event->globalPos());

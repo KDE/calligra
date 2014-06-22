@@ -64,16 +64,19 @@ QVariant KisLockedPropertiesProxy::getProperty(const QString &name) const
 }
 void KisLockedPropertiesProxy::setProperty(const QString & name, const QVariant & value)
 {
+    KisPropertiesConfiguration* temp = const_cast<KisPropertiesConfiguration*>(m_parent);
     if(m_lockedProperties->lockedProperties())
      {
         if(m_lockedProperties->lockedProperties()->hasProperty(name))
          {
             m_lockedProperties->lockedProperties()->setProperty(name,value);
-            return;
+            if(!m_parent->hasProperty(name+"_previous")){
+             temp->setProperty(name+"_previous",m_parent->getProperty(name));
+            }
+
          }
 
      }
-    KisPropertiesConfiguration* temp = const_cast<KisPropertiesConfiguration*>(m_parent);
     temp->setProperty(name,value);
 }
 

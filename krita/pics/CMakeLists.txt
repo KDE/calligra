@@ -35,6 +35,7 @@ portrait.png
 properties.png
 ratio_icon.png
 removefromfolder.png
+reload_preset.png
 selection_add.png
 selection_exclude.png
 selection-info.png

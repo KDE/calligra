@@ -91,6 +91,7 @@ public slots:
     void hideScratchPad();
     void showScratchPad();
     void resourceSelected(KoResource* resource);
+    void slotDirtyPresetToggled(bool value);
 
 signals:
     void savePresetClicked();
@@ -99,6 +100,7 @@ signals:
     void paintopActivated(const QString& presetName);
     void signalResourceSelected(KoResource* resource);
     void reloadPresetClicked();
+    void dirtyPresetToggled(bool value);
 
     void sizeChanged();
 
