@@ -77,7 +77,7 @@ void CommentDialog::slotOk()
 {
     CommentCommand* command = new CommentCommand();
     command->setSheet(m_selection->activeSheet());
-    command->setText(i18nc("(qtundo-format)", "Add Comment"));
+    command->setText(kundo2_i18n("Add Comment"));
     command->setComment(multiLine->toPlainText().trimmed());
     command->add(*m_selection);
     command->execute(m_selection->canvas());

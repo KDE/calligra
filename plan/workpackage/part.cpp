@@ -427,7 +427,7 @@ void Part::removeWorkPackage( Node *node, MacroCommand *m )
         KMessageBox::error( 0, i18n("Remove failed. Cannot find work package") );
         return;
     }
-    PackageRemoveCmd *cmd = new PackageRemoveCmd( this, wp, i18nc( "(qtundo-format)", "Remove work package" ) );
+    PackageRemoveCmd *cmd = new PackageRemoveCmd( this, wp, kundo2_i18n( "Remove work package" ) );
     if ( m ) {
         m->addCommand( cmd );
     } else {
@@ -438,7 +438,7 @@ void Part::removeWorkPackage( Node *node, MacroCommand *m )
 void Part::removeWorkPackages( const QList<Node*> &nodes )
 {
     //kDebug(planworkDbg())<<node->name();
-    MacroCommand *m = new MacroCommand( i18ncp( "(qtundo-format)", "Remove work package", "Remove work packages", nodes.count() ) );
+    MacroCommand *m = new MacroCommand( kundo2_i18np( "Remove work package", "Remove work packages", nodes.count() ) );
     foreach ( Node *n, nodes ) {
         removeWorkPackage( n, m );
     }

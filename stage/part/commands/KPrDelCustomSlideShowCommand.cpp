@@ -30,7 +30,7 @@ KPrDelCustomSlideShowCommand::KPrDelCustomSlideShowCommand(KPrDocument *doc, KPr
     , m_name(name)
     , m_oldCustomShow(doc->customSlideShows()->getByName(name))
 {
-    setText(i18n("Delete custom slide show"));
+    setText(kundo2_i18n("Delete custom slide show"));
 }
 
 KPrDelCustomSlideShowCommand::~KPrDelCustomSlideShowCommand()

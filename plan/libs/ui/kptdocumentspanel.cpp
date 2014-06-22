@@ -115,7 +115,7 @@ void DocumentsPanel::slotAddUrl()
             KMessageBox::sorry( this, i18nc( "@info", "Document is already attached:<br/><filename>%1</filename>", dlg->selectedUrl().prettyUrl() ), i18nc( "@title:window", "Cannot Attach Document" ) );
         } else {
             Document *doc = new Document( dlg->selectedUrl() );
-            //DocumentAddCmd *cmd = new DocumentAddCmd( m_docs, doc, i18nc( "(qtundo-format)", "Add document" ) );
+            //DocumentAddCmd *cmd = new DocumentAddCmd( m_docs, doc, kundo2_i18n( "Add document" ) );
             //m_cmds.push( cmd );
             m_docs.addDocument( doc );
             m_state.insert( doc, Added );
@@ -186,7 +186,7 @@ MacroCommand *DocumentsPanel::buildCommand()
     }
     Documents &docs = m_node.documents();
     Document *d = 0;
-    QString txt = i18n( "Modify documents" );
+    KUndo2MagicString txt = kundo2_i18n( "Modify documents" );
     MacroCommand *m = 0;
     QMap<Document*, State>::const_iterator i = m_state.constBegin();
     for ( ; i != m_state.constEnd(); ++i) {
@@ -196,7 +196,7 @@ MacroCommand *DocumentsPanel::buildCommand()
             Q_ASSERT( d );
             if ( m == 0 ) m = new MacroCommand( txt );
             kDebug(planDbg())<<"remove document "<<i.key();
-            m->addCommand( new DocumentRemoveCmd( m_node.documents(), d, i18nc( "(qtundo-format)", "Remove document" ) ) );
+            m->addCommand( new DocumentRemoveCmd( m_node.documents(), d, kundo2_i18n( "Remove document" ) ) );
         } else if ( ( i.value() & Added ) == 0 && i.value() & Modified ) {
             d = docs.findDocument( m_orgurl[ i.key() ] );
             Q_ASSERT( d );
@@ -204,30 +204,30 @@ MacroCommand *DocumentsPanel::buildCommand()
             kDebug(planDbg())<<"modify document "<<d;
             if ( i.key()->url() != d->url() ) {
                 if ( m == 0 ) m = new MacroCommand( txt );
-                m->addCommand( new DocumentModifyUrlCmd( d, i.key()->url(), i18nc( "(qtundo-format)", "Modify document url" ) ) );
+                m->addCommand( new DocumentModifyUrlCmd( d, i.key()->url(), kundo2_i18n( "Modify document url" ) ) );
             }
             if ( i.key()->type() != d->type() ) {
                 if ( m == 0 ) m = new MacroCommand( txt );
-                m->addCommand( new DocumentModifyTypeCmd( d, i.key()->type(), i18nc( "(qtundo-format)", "Modify document type" ) ) );
+                m->addCommand( new DocumentModifyTypeCmd( d, i.key()->type(), kundo2_i18n( "Modify document type" ) ) );
             }
             if ( i.key()->status() != d->status() ) {
                 if ( m == 0 ) m = new MacroCommand( txt );
-                m->addCommand( new DocumentModifyStatusCmd( d, i.key()->status(), i18nc( "(qtundo-format)", "Modify document status" ) ) );
+                m->addCommand( new DocumentModifyStatusCmd( d, i.key()->status(), kundo2_i18n( "Modify document status" ) ) );
             }
             if ( i.key()->sendAs() != d->sendAs() ) {
                 if ( m == 0 ) m = new MacroCommand( txt );
-                m->addCommand( new DocumentModifySendAsCmd( d, i.key()->sendAs(), i18nc( "(qtundo-format)", "Modify document send control" ) ) );
+                m->addCommand( new DocumentModifySendAsCmd( d, i.key()->sendAs(), kundo2_i18n( "Modify document send control" ) ) );
             }
             if ( i.key()->name() != d->name() ) {
                 if ( m == 0 ) m = new MacroCommand( txt );
-                m->addCommand( new DocumentModifyNameCmd( d, i.key()->name()/*, i18nc( "(qtundo-format)", "Modify document name" )*/ ) );
+                m->addCommand( new DocumentModifyNameCmd( d, i.key()->name()/*, kundo2_i18n( "Modify document name" )*/ ) );
             }
         } else if ( i.value() & Added ) {
             if ( m == 0 ) m = new MacroCommand( txt );
             kDebug(planDbg())<<i.key()<<m_docs.documents();
             d = m_docs.takeDocument( i.key() );
             kDebug(planDbg())<<"add document "<<d;
-            m->addCommand( new DocumentAddCmd( docs, d, i18nc( "(qtundo-format)", "Add document" ) ) );
+            m->addCommand( new DocumentAddCmd( docs, d, kundo2_i18n( "Add document" ) ) );
         }
     }
     return m;

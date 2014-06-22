@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2013 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -317,6 +317,24 @@ int KexiMainWindow::create(int argc, char *argv[], const KAboutData &aboutData)
 
 //-------------------------------------------------
 
+KexiMainMenuActionShortcut::KexiMainMenuActionShortcut(const QKeySequence& key,
+                                                       QWidget *parent, QAction *action)
+    : QShortcut(key, parent)
+    , m_action(action)
+{
+    connect(this, SIGNAL(activated()), this, SLOT(slotActivated()));
+}
+
+void KexiMainMenuActionShortcut::slotActivated()
+{
+    if (!m_action->isEnabled()) {
+        return;
+    }
+    m_action->trigger();
+}
+
+//-------------------------------------------------
+
 KexiMainWindow::KexiMainWindow(QWidget *parent)
         : KexiMainWindowSuper(parent)
         , KexiMainWindowIface()
@@ -421,11 +439,15 @@ KexiWindow* KexiMainWindow::windowForTab(int tabIndex) const
     return windowContainer->window;
 }
 
-void KexiMainWindow::setupMainMenuActionShortcut(KAction* action, const char* slot)
+void KexiMainWindow::setupMainMenuActionShortcut(KAction* action)
 {
     if (!action->shortcut().isEmpty()) {
-        (void)new QShortcut(action->shortcut().primary(), this, slot);
-        (void)new QShortcut(action->shortcut().alternate(), this, slot);
+        if (!action->shortcut().primary().isEmpty()) {
+            (void)new KexiMainMenuActionShortcut(action->shortcut().primary(), this, action);
+        }
+        if (!action->shortcut().alternate().isEmpty()) {
+            (void)new KexiMainMenuActionShortcut(action->shortcut().alternate(), this, action);
+        }
     }
 }
 
@@ -467,7 +489,7 @@ void KexiMainWindow::setupActions()
     action->setWhatsThis(
         i18n("Creates a new project. Currently opened project is not affected."));
     connect(action, SIGNAL(triggered()), this, SLOT(slotProjectNew()));
-    setupMainMenuActionShortcut(action, SLOT(slotProjectNew()));
+    setupMainMenuActionShortcut(action);
 
     ac->addAction("project_open",
             action = new KexiMenuWidgetAction(KStandardAction::Open, this));
@@ -475,7 +497,7 @@ void KexiMainWindow::setupActions()
     action->setWhatsThis(
         i18n("Opens an existing project. Currently opened project is not affected."));
     connect(action, SIGNAL(triggered()), this, SLOT(slotProjectOpen()));
-    setupMainMenuActionShortcut(action, SLOT(slotProjectOpen()));
+    setupMainMenuActionShortcut(action);
 
 #ifdef HAVE_KNEWSTUFF
     action = addAction("project_download_examples", koIcon("go-down"),
@@ -491,7 +513,7 @@ void KexiMainWindow::setupActions()
                 KIcon(), i18n("Welcome"), this));
             addThreeDotsToActionText(action);
         connect(action, SIGNAL(triggered()), this, SLOT(slotProjectWelcome()));
-        setupMainMenuActionShortcut(action, SLOT(slotProjectWelcome()));
+        setupMainMenuActionShortcut(action);
         action->setToolTip(i18n("Show Welcome page"));
         action->setWhatsThis(
             i18n("Shows Welcome page with list of recently opened projects and other information. "));
@@ -501,6 +523,7 @@ void KexiMainWindow::setupActions()
                   d->action_save = KStandardAction::save(this, SLOT(slotProjectSave()), this));
     d->action_save->setToolTip(i18n("Save object changes"));
     d->action_save->setWhatsThis(i18n("Saves object changes from currently selected window."));
+    setupMainMenuActionShortcut(d->action_save);
 
     d->action_save_as = addAction("project_saveas", koIcon("document-save-as"),
                                   i18n("Save &As..."));
@@ -515,7 +538,7 @@ void KexiMainWindow::setupActions()
         action = d->action_project_properties = new KexiMenuWidgetAction(
             koIcon("document-properties"), i18n("Project Properties"), this));
     connect(action, SIGNAL(triggered()), this, SLOT(slotProjectProperties()));
-    setupMainMenuActionShortcut(action, SLOT(slotProjectProperties()));
+    setupMainMenuActionShortcut(action);
 #else
     d->action_project_properties = d->dummy_action;
 #endif
@@ -528,7 +551,7 @@ void KexiMainWindow::setupActions()
     action->setWhatsThis(
         i18n("Imports, exports or sends project."));
     connect(action, SIGNAL(triggered()), this, SLOT(slotProjectImportExportOrSend()));
-    setupMainMenuActionShortcut(action, SLOT(slotProjectImportExportOrSend()));
+    setupMainMenuActionShortcut(action);
 
     ac->addAction("project_close",
         action = d->action_close = new KexiMenuWidgetAction(
@@ -536,13 +559,13 @@ void KexiMainWindow::setupActions()
     action->setToolTip(i18n("Close the current project"));
     action->setWhatsThis(i18n("Closes the current project."));
     connect(action, SIGNAL(triggered()), this, SLOT(slotProjectClose()));
-    setupMainMenuActionShortcut(action, SLOT(slotProjectClose()));
+    setupMainMenuActionShortcut(action);
 
     ac->addAction("quit",
                   action = new KexiMenuWidgetAction(KStandardAction::Quit, this));
     connect(action, SIGNAL(triggered()), this, SLOT(slotProjectQuit()));
     action->setWhatsThis(i18n("Quits Kexi application."));
-    setupMainMenuActionShortcut(action, SLOT(slotProjectQuit()));
+    setupMainMenuActionShortcut(action);
 
 #ifdef KEXI_SHOW_UNIMPLEMENTED
     d->action_project_relations = addAction("project_relations", koIcon("relation"),
@@ -914,7 +937,7 @@ void KexiMainWindow::setupActions()
     action->setToolTip(i18n("Kexi settings"));
     action->setWhatsThis(i18n("Lets you to view and change Kexi settings."));
     connect(action, SIGNAL(triggered()), this, SLOT(slotSettings()));
-    setupMainMenuActionShortcut(action, SLOT(slotSettings()));
+    setupMainMenuActionShortcut(action);
 #else
     d->action_settings = d->dummy_action;
 #endif
@@ -1966,11 +1989,6 @@ bool KexiMainWindow::queryClose()
     return ! ~res;
 }
 
-bool KexiMainWindow::queryExit()
-{
-    return true;
-}
-
 void KexiMainWindow::closeEvent(QCloseEvent *ev)
 {
     d->mainWidget->closeEvent(ev);
@@ -2431,8 +2449,9 @@ void KexiMainWindow::slotProjectWelcome()
 void
 KexiMainWindow::slotProjectSave()
 {
-    if (!currentWindow())
+    if (!currentWindow() || currentWindow()->currentViewMode() == Kexi::DataViewMode) {
         return;
+    }
     saveObject(currentWindow());
     updateAppCaption();
     invalidateActions();
@@ -2441,8 +2460,9 @@ KexiMainWindow::slotProjectSave()
 void
 KexiMainWindow::slotProjectSaveAs()
 {
-    if (!currentWindow())
+    if (!currentWindow() || currentWindow()->currentViewMode() == Kexi::DataViewMode) {
         return;
+    }
     saveObject(currentWindow(), QString(), SaveObjectAs);
     updateAppCaption();
     invalidateActions();

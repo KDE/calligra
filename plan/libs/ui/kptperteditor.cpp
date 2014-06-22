@@ -133,7 +133,7 @@ void PertEditor::addTaskInRequiredList(QTreeWidgetItem * currentItem)
         return;
     }
     Relation *rel = new Relation ( par, child );
-    AddRelationCmd *addCmd = new AddRelationCmd( *m_project,rel,currentItem->text( 0 ) );
+    AddRelationCmd *addCmd = new AddRelationCmd( *m_project, rel, kundo2_noi18n(currentItem->text( 0 )) );
     emit executeCommand( addCmd );
 
 }
@@ -160,7 +160,7 @@ void PertEditor::removeTaskFromRequiredList()
         return;
     }
     // remove the relation
-    emit executeCommand( new DeleteRelationCmd( *m_project, r, i18nc( "(qtundo-format)", "Remove task dependency" ) ) );
+    emit executeCommand( new DeleteRelationCmd( *m_project, r, kundo2_i18n( "Remove task dependency" ) ) );
 }
 
 void PertEditor::setProject( Project *project )

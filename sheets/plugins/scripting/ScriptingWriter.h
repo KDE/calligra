@@ -243,7 +243,7 @@ public Q_SLOTS:
     bool setValues(const QVariantList& values, bool parse = true) {
         bool ok = true;
         const int prevcolumn = m_column;
-        m_module->doc()->beginMacro(i18n("Set Values"));
+        m_module->doc()->beginMacro(kundo2_i18n("Set Values"));
         foreach(QVariant v, values) {
             if (! setValue(v, parse)) ok = false;
             m_column++;

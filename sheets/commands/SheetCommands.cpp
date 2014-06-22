@@ -35,7 +35,7 @@ RenameSheetCommand::RenameSheetCommand(Sheet* s, const QString &name)
     sheet = s;
     if (s) oldName = s->sheetName();
     newName = name;
-    setText(i18nc("(qtundo-format)", "Rename Sheet"));
+    setText(kundo2_i18n("Rename Sheet"));
 }
 
 void RenameSheetCommand::redo()
@@ -56,8 +56,8 @@ HideSheetCommand::HideSheetCommand(Sheet* sheet)
 {
     map = sheet->map();
     sheetName = sheet->sheetName();
-    QString n =  i18n("Hide Sheet %1", sheetName);
-    if (n.length() > 64) n = i18n("Hide Sheet");
+    KUndo2MagicString n =  kundo2_i18n("Hide Sheet %1", sheetName);
+    if (n.toString().length() > 64) n = kundo2_i18n("Hide Sheet");
     setText(n);
 }
 
@@ -84,8 +84,8 @@ ShowSheetCommand::ShowSheetCommand(Sheet* sheet, KUndo2Command* parent)
 {
     map = sheet->map();
     sheetName = sheet->sheetName();
-    QString n =  i18n("Show Sheet %1", sheetName);
-    if (n.length() > 64) n = i18n("Show Sheet");
+    KUndo2MagicString n =  kundo2_i18n("Show Sheet %1", sheetName);
+    if (n.toString().length() > 64) n = kundo2_i18n("Show Sheet");
     setText(n);
 }
 
@@ -109,7 +109,7 @@ void ShowSheetCommand::undo()
 // ----- AddSheetCommand -----
 
 AddSheetCommand::AddSheetCommand(Sheet* sheet)
-        : KUndo2Command(i18nc("(qtundo-format)", "Add Sheet"))
+        : KUndo2Command(kundo2_i18n("Add Sheet"))
         , m_sheet(sheet)
         , m_firstrun(true)
 {
@@ -136,7 +136,7 @@ void AddSheetCommand::undo()
 // ----- DuplicateSheetCommand -----
 
 DuplicateSheetCommand::DuplicateSheetCommand()
-        : KUndo2Command(i18nc("(qtundo-format)", "Duplicate Sheet"))
+        : KUndo2Command(kundo2_i18n("Duplicate Sheet"))
         , m_oldSheet(0)
         , m_newSheet(0)
         , m_firstrun(true)
@@ -174,7 +174,7 @@ RemoveSheetCommand::RemoveSheetCommand(Sheet* s)
 {
     sheet = s;
     map = sheet->map();
-    setText(i18nc("(qtundo-format)", "Remove Sheet"));
+    setText(kundo2_i18n("Remove Sheet"));
 }
 
 void RemoveSheetCommand::redo()
@@ -204,7 +204,7 @@ SheetPropertiesCommand::SheetPropertiesCommand(Sheet* s)
     oldColumnAsNumber = newColumnAsNumber = sheet->getShowColumnNumber();
     oldLcMode = newLcMode = sheet->getLcMode();
     oldCapitalizeFirstLetter = newCapitalizeFirstLetter = sheet->getFirstLetterUpper();
-    setText(i18nc("(qtundo-format)", "Change Sheet Properties"));
+    setText(kundo2_i18n("Change Sheet Properties"));
 }
 
 void SheetPropertiesCommand::setLayoutDirection(Qt::LayoutDirection dir)

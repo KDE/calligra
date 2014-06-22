@@ -1689,7 +1689,7 @@ void View::slotCalculateSchedule( Project *project, ScheduleManager *sm )
     if ( sm == currentScheduleManager() ) {
         connect( project, SIGNAL(projectCalculated(ScheduleManager*)), this, SLOT(slotProjectCalculated(ScheduleManager*)) );
     }
-    CalculateScheduleCmd *cmd =  new CalculateScheduleCmd( *project, sm, i18nc( "(qtundo-format) @info:status 1=schedule name", "Calculate %1", sm->name() ) );
+    CalculateScheduleCmd *cmd =  new CalculateScheduleCmd( *project, sm, kundo2_i18nc("@info:status 1=schedule name", "Calculate %1", sm->name() ) );
     getPart() ->addCommand( cmd );
     slotUpdate();
 }
@@ -1717,9 +1717,9 @@ void View::slotBaselineSchedule( Project *project, ScheduleManager *sm )
         if ( res == KMessageBox::Cancel ) {
             return;
         }
-        cmd = new ResetBaselineScheduleCmd( *sm, i18nc( "(qtundo-format)", "Reset baseline %1", sm->name() ) );
+        cmd = new ResetBaselineScheduleCmd( *sm, kundo2_i18n( "Reset baseline %1", sm->name() ) );
     } else {
-        cmd = new BaselineScheduleCmd( *sm, i18nc( "(qtundo-format)", "Baseline %1", sm->name() ) );
+        cmd = new BaselineScheduleCmd( *sm, kundo2_i18n( "Baseline %1", sm->name() ) );
     }
     getPart() ->addCommand( cmd );
 }
@@ -1730,7 +1730,7 @@ void View::slotAddScheduleManager( Project *project )
         return;
     }
     ScheduleManager *sm = project->createScheduleManager();
-    AddScheduleManagerCmd *cmd =  new AddScheduleManagerCmd( *project, sm, -1, i18nc( "(qtundo-format)", "Add schedule %1", sm->name() ) );
+    AddScheduleManagerCmd *cmd =  new AddScheduleManagerCmd( *project, sm, -1, kundo2_i18n( "Add schedule %1", sm->name() ) );
     getPart() ->addCommand( cmd );
 }
 
@@ -1739,7 +1739,7 @@ void View::slotDeleteScheduleManager( Project *project, ScheduleManager *sm )
     if ( project == 0 || sm == 0) {
         return;
     }
-    DeleteScheduleManagerCmd *cmd =  new DeleteScheduleManagerCmd( *project, sm, i18nc( "(qtundo-format)", "Delete schedule %1", sm->name() ) );
+    DeleteScheduleManagerCmd *cmd =  new DeleteScheduleManagerCmd( *project, sm, kundo2_i18n( "Delete schedule %1", sm->name() ) );
     getPart() ->addCommand( cmd );
 }
 
@@ -1748,7 +1748,7 @@ void View::slotMoveScheduleManager( ScheduleManager *sm, ScheduleManager *parent
     if ( sm == 0 ) {
         return;
     }
-    MoveScheduleManagerCmd *cmd =  new MoveScheduleManagerCmd( sm, parent, index, i18nc( "(qtundo-format)", "Move schedule %1", sm->name() ) );
+    MoveScheduleManagerCmd *cmd =  new MoveScheduleManagerCmd( sm, parent, index, kundo2_i18n( "Move schedule %1", sm->name() ) );
     getPart() ->addCommand( cmd );
 }
 
@@ -1817,7 +1817,7 @@ void View::slotAddMilestoneFinished( int result )
         return;
     }
     if ( result == QDialog::Accepted) {
-        MacroCommand *c = new MacroCommand( i18nc( "(qtundo-format)", "Add milestone" ) );
+        MacroCommand *c = new MacroCommand( kundo2_i18n( "Add milestone" ) );
         c->addCommand( dia->buildCommand() );
         getPart() ->addCommand( c ); // add task to project
     }
@@ -1843,7 +1843,7 @@ void View::slotAddSubMilestoneFinished( int result )
         return;
     }
     if ( result == QDialog::Accepted) {
-        MacroCommand *c = new MacroCommand( i18nc( "(qtundo-format)", "Add sub-milestone" ) );
+        MacroCommand *c = new MacroCommand( kundo2_i18n( "Add sub-milestone" ) );
         c->addCommand( dia->buildCommand() );
         getPart() ->addCommand( c ); // add task to project
     }
@@ -2216,11 +2216,11 @@ void View::slotDeleteTask( QList<Node*> lst )
         }
     }
     if ( lst.count() == 1 ) {
-        getPart()->addCommand( new NodeDeleteCmd( lst.takeFirst(), i18nc( "(qtundo-format)", "Delete task" ) ) );
+        getPart()->addCommand( new NodeDeleteCmd( lst.takeFirst(), kundo2_i18n( "Delete task" ) ) );
         return;
     }
     int num = 0;
-    MacroCommand *cmd = new MacroCommand( i18ncp( "(qtundo-format)", "Delete task", "Delete tasks", lst.count() ) );
+    MacroCommand *cmd = new MacroCommand( kundo2_i18np( "Delete task", "Delete tasks", lst.count() ) );
     while ( !lst.isEmpty() ) {
         Node *node = lst.takeFirst();
         if ( node == 0 || node->parentNode() == 0 ) {
@@ -2236,7 +2236,7 @@ void View::slotDeleteTask( QList<Node*> lst )
         }
         if ( del ) {
             //kDebug(planDbg())<<num<<": delete:"<<node->name();
-            cmd->addCommand( new NodeDeleteCmd( node, i18nc( "(qtundo-format)", "Delete task" ) ) );
+            cmd->addCommand( new NodeDeleteCmd( node, kundo2_i18n( "Delete task" ) ) );
             num++;
         }
     }
@@ -2260,7 +2260,7 @@ void View::slotDeleteTask( Node *node )
             return;
         }
     }
-    NodeDeleteCmd *cmd = new NodeDeleteCmd( node, i18nc( "(qtundo-format)", "Delete task" ) );
+    NodeDeleteCmd *cmd = new NodeDeleteCmd( node, kundo2_i18n( "Delete task" ) );
     getPart() ->addCommand( cmd );
 }
 
@@ -2279,7 +2279,7 @@ void View::slotIndentTask()
         return ;
     }
     if ( getProject().canIndentTask( node ) ) {
-        NodeIndentCmd * cmd = new NodeIndentCmd( *node, i18nc( "(qtundo-format)", "Indent task" ) );
+        NodeIndentCmd * cmd = new NodeIndentCmd( *node, kundo2_i18n( "Indent task" ) );
         getPart() ->addCommand( cmd );
     }
 }
@@ -2293,7 +2293,7 @@ void View::slotUnindentTask()
         return ;
     }
     if ( getProject().canUnindentTask( node ) ) {
-        NodeUnindentCmd * cmd = new NodeUnindentCmd( *node, i18nc( "(qtundo-format)", "Unindent task" ) );
+        NodeUnindentCmd * cmd = new NodeUnindentCmd( *node, kundo2_i18n( "Unindent task" ) );
         getPart() ->addCommand( cmd );
     }
 }
@@ -2315,7 +2315,7 @@ void View::slotMoveTaskUp()
         return ;
     }
     if ( getProject().canMoveTaskUp( task ) ) {
-        NodeMoveUpCmd * cmd = new NodeMoveUpCmd( *task, i18nc( "(qtundo-format)", "Move task up" ) );
+        NodeMoveUpCmd * cmd = new NodeMoveUpCmd( *task, kundo2_i18n( "Move task up" ) );
         getPart() ->addCommand( cmd );
     }
 }
@@ -2336,7 +2336,7 @@ void View::slotMoveTaskDown()
         return ;
     }
     if ( getProject().canMoveTaskDown( task ) ) {
-        NodeMoveDownCmd * cmd = new NodeMoveDownCmd( *task, i18nc( "(qtundo-format)", "Move task down" ) );
+        NodeMoveDownCmd * cmd = new NodeMoveDownCmd( *task, kundo2_i18n( "Move task down" ) );
         getPart() ->addCommand( cmd );
     }
 }
@@ -2374,7 +2374,7 @@ void View::slotAddRelation( Node *par, Node *child, int linkType )
             linkType == Relation::StartStart ||
             linkType == Relation::FinishFinish ) {
         Relation * rel = new Relation( par, child, static_cast<Relation::Type>( linkType ) );
-        getPart() ->addCommand( new AddRelationCmd( getProject(), rel, i18nc( "(qtundo-format)", "Add task dependency" ) ) );
+        getPart() ->addCommand( new AddRelationCmd( getProject(), rel, kundo2_i18n( "Add task dependency" ) ) );
     } else {
         slotAddRelation( par, child );
     }
@@ -2437,7 +2437,7 @@ void View::slotDeleteRelation()
     }
     Relation *rel = v->currentRelation();
     if ( rel ) {
-        getPart()->addCommand( new DeleteRelationCmd( getProject(), rel, i18nc( "(qtundo-format)", "Delete task dependency" ) ) );
+        getPart()->addCommand( new DeleteRelationCmd( getProject(), rel, kundo2_i18n( "Delete task dependency" ) ) );
     }
 }
 
@@ -2476,12 +2476,12 @@ void View::slotEditResourceFinished( int result )
 
 void View::slotDeleteResource( Resource *resource )
 {
-    getPart()->addCommand( new RemoveResourceCmd( resource->parentGroup(), resource, i18nc( "(qtundo-format)", "Delete resource" ) ) );
+    getPart()->addCommand( new RemoveResourceCmd( resource->parentGroup(), resource, kundo2_i18n( "Delete resource" ) ) );
 }
 
 void View::slotDeleteResourceGroup( ResourceGroup *group )
 {
-    getPart()->addCommand( new RemoveResourceGroupCmd( group->project(), group, i18nc( "(qtundo-format)", "Delete resourcegroup" ) ) );
+    getPart()->addCommand( new RemoveResourceGroupCmd( group->project(), group, kundo2_i18n( "Delete resourcegroup" ) ) );
 }
 
 void View::slotDeleteResourceObjects( QObjectList lst )
@@ -2522,24 +2522,24 @@ void View::slotDeleteResourceObjects( QObjectList lst )
     foreach ( QObject *o, lst ) {
         Resource *r = qobject_cast<Resource*>( o );
         if ( r ) {
-            if ( rc == 0 )  rc = new MacroCommand( "" );
+            if ( rc == 0 )  rc = new MacroCommand( KUndo2MagicString() );
             rc->addCommand( new RemoveResourceCmd( r->parentGroup(), r ) );
             continue;
         }
         ResourceGroup *g = qobject_cast<ResourceGroup*>( o );
         if ( g ) {
-            if ( gc == 0 )  gc = new MacroCommand( "" );
+            if ( gc == 0 )  gc = new MacroCommand( KUndo2MagicString() );
             gc->addCommand( new RemoveResourceGroupCmd( g->project(), g ) );
         }
     }
     if ( rc || gc ) {
-        QString s;
+        KUndo2MagicString s;
         if ( rc && gc ) {
-            s = i18n( "Delete resourcegroups and resources" );
+            s = kundo2_i18n( "Delete resourcegroups and resources" );
         } else if ( rc ) {
-            s = i18np( "Delete resource", "Delete resources", lst.count() );
+            s = kundo2_i18np( "Delete resource", "Delete resources", lst.count() );
         } else {
-            s = i18np( "Delete resourcegroup", "Delete resourcegroups", lst.count() );
+            s = kundo2_i18np( "Delete resourcegroup", "Delete resourcegroups", lst.count() );
         }
         cmd = new MacroCommand( s );
     }
@@ -2847,12 +2847,12 @@ void View::slotRenameNode( Node *node, const QString& name )
 {
     //kDebug(planDbg())<<name;
     if ( node ) {
-        QString s = i18n( "Modify name" );
+        KUndo2MagicString s = kundo2_i18n( "Modify name" );
         switch( node->type() ) {
-            case Node::Type_Task: s = i18n( "Modify task name" ); break;
-            case Node::Type_Milestone: s = i18n( "Modify milestone name" ); break;
-            case Node::Type_Summarytask: s = i18n( "Modify summarytask name" ); break;
-            case Node::Type_Project: s = i18n( "Modify project name" ); break;
+            case Node::Type_Task: s = kundo2_i18n( "Modify task name" ); break;
+            case Node::Type_Milestone: s = kundo2_i18n( "Modify milestone name" ); break;
+            case Node::Type_Summarytask: s = kundo2_i18n( "Modify summarytask name" ); break;
+            case Node::Type_Project: s = kundo2_i18n( "Modify project name" ); break;
         }
         NodeModifyNameCmd * cmd = new NodeModifyNameCmd( *node, name, s );
         getPart() ->addCommand( cmd );

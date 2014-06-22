@@ -745,39 +745,39 @@ bool CellToolBase::Private::formatKeyPress(QKeyEvent * _ev)
 
     switch (_ev->key()) {
     case Qt::Key_Exclam:
-        command->setText(i18nc("(qtundo-format)", "Number Format"));
+        command->setText(kundo2_i18n("Number Format"));
         command->setFormatType(Format::Number);
         command->setPrecision(2);
         break;
 
     case Qt::Key_Dollar:
-        command->setText(i18nc("(qtundo-format)", "Currency Format"));
+        command->setText(kundo2_i18n("Currency Format"));
         command->setFormatType(Format::Money);
         command->setPrecision(q->selection()->activeSheet()->map()->calculationSettings()->locale()->monetaryDecimalPlaces());
         break;
 
     case Qt::Key_Percent:
-        command->setText(i18nc("(qtundo-format)", "Percentage Format"));
+        command->setText(kundo2_i18n("Percentage Format"));
         command->setFormatType(Format::Percentage);
         break;
 
     case Qt::Key_At:
-        command->setText(i18nc("(qtundo-format)", "Time Format"));
+        command->setText(kundo2_i18n("Time Format"));
         command->setFormatType(Format::SecondeTime);
         break;
 
     case Qt::Key_NumberSign:
-        command->setText(i18nc("(qtundo-format)", "Date Format"));
+        command->setText(kundo2_i18n("Date Format"));
         command->setFormatType(Format::ShortDate);
         break;
 
     case Qt::Key_AsciiCircum:
-        command->setText(i18nc("(qtundo-format)", "Scientific Format"));
+        command->setText(kundo2_i18n("Scientific Format"));
         command->setFormatType(Format::Scientific);
         break;
 
     case Qt::Key_Ampersand:
-        command->setText(i18nc("(qtundo-format)", "Change Border"));
+        command->setText(kundo2_i18n("Change Border"));
         command->setTopBorderPen(QPen(q->canvas()->resourceManager()->foregroundColor().toQColor(), 1, Qt::SolidLine));
         command->setBottomBorderPen(QPen(q->canvas()->resourceManager()->foregroundColor().toQColor(), 1, Qt::SolidLine));
         command->setLeftBorderPen(QPen(q->canvas()->resourceManager()->foregroundColor().toQColor(), 1, Qt::SolidLine));

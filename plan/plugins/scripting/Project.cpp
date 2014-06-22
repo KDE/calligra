@@ -370,10 +370,10 @@ QObject *Scripting::Project::createTask(const QObject* copy, QObject* parent, QO
     KPlato::NamedCommand *cmd;
     if ( parent ) {
         KPlato::Node *par = static_cast<Node*>( parent )->kplatoNode();
-        cmd = new SubtaskAddCmd( kplatoProject(), t, par, i18nc( "(qtundo_format)", "Add task" ) );
+        cmd = new SubtaskAddCmd( kplatoProject(), t, par, kundo2_i18n( "Add task" ) );
     } else {
         KPlato::Node *aft = after ? static_cast<Node*>( after )->kplatoNode() : 0;
-        cmd = new TaskAddCmd( kplatoProject(), t, aft, i18nc( "(qtundo_format)", "Add task" ) );
+        cmd = new TaskAddCmd( kplatoProject(), t, aft, kundo2_i18n( "Add task" ) );
     }
     m_module->addCommand( cmd );
     return node( t );
@@ -385,10 +385,10 @@ QObject *Scripting::Project::createTask( QObject* parent, QObject* after )
     KPlato::NamedCommand *cmd;
     if ( parent ) {
         KPlato::Node *par = static_cast<Node*>( parent )->kplatoNode();
-        cmd = new SubtaskAddCmd( kplatoProject(), t, par, i18nc( "(qtundo_format)", "Add task" ) );
+        cmd = new SubtaskAddCmd( kplatoProject(), t, par, kundo2_i18n( "Add task" ) );
     } else {
         KPlato::Node *aft = after ? static_cast<Node*>( after )->kplatoNode() : 0;
-        cmd = new TaskAddCmd( kplatoProject(), t, aft, i18nc( "(qtundo_format)", "Add task" ) );
+        cmd = new TaskAddCmd( kplatoProject(), t, aft, kundo2_i18n( "Add task" ) );
     }
     m_module->addCommand( cmd );
     return node( t );
@@ -428,7 +428,7 @@ QObject *Scripting::Project::createResourceGroup( QObject *group )
         return 0;
     }
     g = new KPlato::ResourceGroup( copyfrom );
-    AddResourceGroupCmd *cmd = new AddResourceGroupCmd( kplatoProject(), g, i18nc( "(qtundo_format)", "Add resource group" ) );
+    AddResourceGroupCmd *cmd = new AddResourceGroupCmd( kplatoProject(), g, kundo2_i18n( "Add resource group" ) );
     m_module->addCommand( cmd );
     return resourceGroup( g );
 }
@@ -436,7 +436,7 @@ QObject *Scripting::Project::createResourceGroup( QObject *group )
 QObject *Scripting::Project::createResourceGroup()
 {
     KPlato::ResourceGroup *g = new KPlato::ResourceGroup();
-    AddResourceGroupCmd *cmd = new AddResourceGroupCmd( kplatoProject(), g, i18nc( "(qtundo_format)", "Add resource group" ) );
+    AddResourceGroupCmd *cmd = new AddResourceGroupCmd( kplatoProject(), g, kundo2_i18n( "Add resource group" ) );
     m_module->addCommand( cmd );
     return resourceGroup( g );
 }
@@ -514,7 +514,7 @@ QObject *Scripting::Project::createResource( QObject *group, QObject *copy )
         c = kplatoProject()->calendar( c->id() );
     }
     r->setCalendar( c );
-    AddResourceCmd *cmd = new AddResourceCmd( g, r, i18nc( "(qtundo_format)", "Add resource" ) );
+    AddResourceCmd *cmd = new AddResourceCmd( g, r, kundo2_i18n( "Add resource" ) );
     m_module->addCommand( cmd );
     return resource( r );
 }
@@ -532,7 +532,7 @@ QObject *Scripting::Project::createResource( QObject *group )
         return 0;
     }
     KPlato::Resource *r = new KPlato::Resource();
-    AddResourceCmd *cmd = new AddResourceCmd( g, r, i18nc( "(qtundo_format)", "Add resource" ) );
+    AddResourceCmd *cmd = new AddResourceCmd( g, r, kundo2_i18n( "Add resource" ) );
     m_module->addCommand( cmd );
     return resource( r );
 }
@@ -635,7 +635,7 @@ void Scripting::Project::addExternalAppointment( QObject *resource, const QVaria
     if ( ! st.isValid() || ! et.isValid() ) {
         return;
     }
-    AddExternalAppointmentCmd *cmd = new AddExternalAppointmentCmd( r->kplatoResource(), id.toString(), name, st, et, load, i18nc( "(qtundofrmat)", "Add external appointment" ) );
+    AddExternalAppointmentCmd *cmd = new AddExternalAppointmentCmd( r->kplatoResource(), id.toString(), name, st, et, load, kundo2_i18n( "Add external appointment" ) );
     m_module->addCommand( cmd );
 }
 
@@ -645,21 +645,21 @@ void Scripting::Project::clearExternalAppointments( QObject *resource, const QSt
     if ( r == 0 ) {
         return;
     }
-    ClearExternalAppointmentCmd *cmd = new ClearExternalAppointmentCmd( r->kplatoResource(), id, i18nc( "(qtundofrmat)", "Clear external appointments" ) );
+    ClearExternalAppointmentCmd *cmd = new ClearExternalAppointmentCmd( r->kplatoResource(), id, kundo2_i18n( "Clear external appointments" ) );
     m_module->addCommand( cmd );
 }
 
 void Scripting::Project::clearExternalAppointments( const QString &id )
 {
     foreach ( KPlato::Resource *r, kplatoProject()->resourceList() ) {
-        ClearExternalAppointmentCmd *cmd = new ClearExternalAppointmentCmd( r, id, i18nc( "(qtundo_format)", "Clear external appointments" ) );
+        ClearExternalAppointmentCmd *cmd = new ClearExternalAppointmentCmd( r, id, kundo2_i18n( "Clear external appointments" ) );
         m_module->addCommand( cmd );
     }
 }
 
 void Scripting::Project::clearExternalAppointments()
 {
-    ClearAllExternalAppointmentsCmd *cmd = new ClearAllExternalAppointmentsCmd( kplatoProject(), i18nc( "(qtundo_format)", "Clear all external appointments" ) );
+    ClearAllExternalAppointmentsCmd *cmd = new ClearAllExternalAppointmentsCmd( kplatoProject(), kundo2_i18n( "Clear all external appointments" ) );
     m_module->addCommand( cmd );
 }
 
