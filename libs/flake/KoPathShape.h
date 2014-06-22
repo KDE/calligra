@@ -95,8 +95,8 @@ public:
     virtual QRectF boundingRect() const;
     /// reimplemented
     virtual QSizeF size() const;
-
-    QPainterPath pathStroke(const QPen &pen) const;
+    /// reimplemented
+    virtual QPainterPath pathStroke(const QPen &pen) const;
     /**
      * Resize the shape
      *

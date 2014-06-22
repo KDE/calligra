@@ -43,14 +43,11 @@ VariableLineShapeFactory::VariableLineShapeFactory()
 
 KoShape *VariableLineShapeFactory::createDefaultShape(KoDocumentResourceManager *documentResources) const
 {
+    Q_UNUSED(documentResources);
     VariableLineShape *defaultLine = new VariableLineShape();
     
-    defaultLine->moveTo(QPointF(0, 50));
-    defaultLine->curveTo(QPointF(0, 120), QPointF(50, 120), QPointF(50, 50));
-    defaultLine->curveTo(QPointF(50, -20), QPointF(100, -20), QPointF(100, 50));
-    defaultLine->normalize();
-    defaultLine->setShapeId(VariableLineShapeId);
     defaultLine->setStroke(new KoShapeStroke(1.0));
+    defaultLine->setShapeId(VariableLineShapeId);
 
     return defaultLine;
 }

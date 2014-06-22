@@ -19,14 +19,19 @@
 
 #include "VariableLineShape.h"
 
+#include <KoColorBackground.h>
+#include <QPainter>
+#include <klocale.h>
+
 VariableLineShape::VariableLineShape()
 : m_widthPercentage(100)
 {
+    setFillRule(Qt::WindingFill);
+    createPath();
 }
 
 VariableLineShape::~VariableLineShape()
 {
-    clear();
 }
 
 bool VariableLineShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
@@ -38,6 +43,33 @@ void VariableLineShape::saveOdf(KoShapeSavingContext & context) const
 {
 }
 
+void VariableLineShape::createPath()
+{
+    clear();
+    moveTo(QPointF(50, 0));
+    curveTo(QPointF(-20, 0), QPointF(-20, 50), QPointF(50, 50));
+    curveTo(QPointF(120, 50), QPointF(120, 100), QPointF(50, 100));
+    moveTo(QPointF(50, 100));
+    lineTo(QPointF(50, 150));
+    normalize();
+}
+
+void VariableLineShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
+{  
+    applyConversion(painter, converter);
+    QPainterPath path(outline());
+    normalize();
+    
+    if (background()) {
+        background()->paint(painter, converter, paintContext, path);
+    }
+}
+/*
+QPainterPath VariableLineShape::pathStroke(const QPen &pen) const
+{
+    return QPainterPath();
+}  
+*/
 qreal VariableLineShape::widthPercentage() const
 {
     return m_widthPercentage;

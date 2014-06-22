@@ -45,12 +45,21 @@ public:
 
     // reimplemented
     virtual void saveOdf(KoShapeSavingContext &context) const;
+    
+    // reimplemented
+    virtual void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext);
+    
+    // reimplemented
+    //virtual QPainterPath pathStroke(const QPen &pen) const;
 
     // reimplemented
     virtual QString pathShapeId() const;
+    
+    void createPath();
 
 private:
     qreal m_widthPercentage;
+    QString m_mimetype;
 };
 
 #endif // VARIABLELINESHAPE_H
