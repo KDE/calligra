@@ -237,7 +237,8 @@ void KisZoomManager::slotZoomChanged(KoZoomMode::Mode mode, qreal zoom)
 
     qreal scaleX, scaleY;
     m_view->canvasBase()->coordinatesConverter()->imageScale(&scaleX, &scaleY);
-    KIS_ASSERT_RECOVER_NOOP(scaleX == scaleY && "Zoom is not isotropic!");
+    // Remove assert as may cause issue with Gemini
+    // KIS_ASSERT_RECOVER_NOOP(scaleX == scaleY && "Zoom is not isotropic!");
     m_view->canvasBase()->resourceManager()->setResource(KisCanvasResourceProvider::EffectiveZoom, scaleX);
 }
 
