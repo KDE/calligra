@@ -393,6 +393,19 @@ bool Theme::eventFilter(QObject* target, QEvent* event)
     return QObject::eventFilter(target, event);
 }
 
+int Theme::adjustedPixel(const int& pixel) const
+{
+    // If we are in portrait mode, we still assume 1080p for font size purposes
+    int height = qApp->activeWindow()->height() < qApp->activeWindow()->width() ? qApp->activeWindow()->height() : qApp->activeWindow()->width();
+    // The pixel size is based on a 1080p screen, and it is accepted that the window size
+    // will vary on there, depending on whether or not we are full screened (so we accept
+    // up to 100 pixels less height)
+    float sizeAdjustment = 1;
+    if(height > 1080 || height < 980)
+        sizeAdjustment = height / 1080.f;
+    return pixel * sizeAdjustment;
+}
+
 void Theme::Private::rebuildFontCache()
 {
     fontMap.clear();
@@ -408,9 +421,22 @@ void Theme::Private::rebuildFontCache()
         if(font.isCopyOf(qApp->font()))
             qWarning() << "Could not find font" << map.value("family") << "with style" << map.value("style", "Regular");
 
-        float lineCount = qApp->activeWindow()->height() > qApp->activeWindow()->width() ? lineCountPortrait : lineCountLandscape;
-        float lineHeight = qApp->activeWindow()->height() / lineCount;
-        font.setPixelSize(lineHeight * map.value("size", 1).toFloat());
+        if(map.contains("pixelSize")) {
+            // If we are in portrait mode, we still assume 1080p for font size purposes
+            int height = qApp->activeWindow()->height() < qApp->activeWindow()->width() ? qApp->activeWindow()->height() : qApp->activeWindow()->width();
+            // The pixel size is based on a 1080p screen, and it is accepted that the window size
+            // will vary on there, depending on whether or not we are full screened (so we accept
+            // up to 100 pixels less height)
+            float sizeAdjustment = 1;
+            if(height > 1080 || height < 980)
+                sizeAdjustment = height / 1080.f;
+            font.setPixelSize(map.value("pixelSize").toInt() * sizeAdjustment);
+        }
+        else {
+            float lineCount = qApp->activeWindow()->height() > qApp->activeWindow()->width() ? lineCountPortrait : lineCountLandscape;
+            float lineHeight = qApp->activeWindow()->height() / lineCount;
+            font.setPixelSize(lineHeight * map.value("size", 1).toFloat());
+        }
 
         fontMap.insert(itr.key(), font);
     }

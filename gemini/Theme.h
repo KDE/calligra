@@ -229,6 +229,11 @@ public:
      * Get an image from the theme.
      */
     Q_INVOKABLE QUrl image(const QString& name);
+    /**
+     * Adjust a pixel size according to what it would be given that is what the pixel would
+     * be on a 1080p monitor
+     */
+    Q_INVOKABLE int adjustedPixel(const int& pixel) const;
 
     static Theme* load(const QString& id, QObject* parent = 0);
 
