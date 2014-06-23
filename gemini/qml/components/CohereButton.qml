@@ -32,6 +32,7 @@ Item {
     property alias radius: fill.radius;
     property alias text: label.text;
     property color textColor: Settings.theme.color("components/button/text");
+    property alias font: label.font;
     property alias textSize: label.font.pixelSize;
     property alias bold: label.font.bold;
     property bool shadow: false;

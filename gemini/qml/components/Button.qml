@@ -33,15 +33,18 @@ Item {
     property color textColor: Settings.theme.color("components/button/text");
     property alias textSize: label.font.pixelSize;
     property alias bold: label.font.bold;
+    property alias font: label.font;
     property bool shadow: false;
     property bool enabled: true; // XXX: visualize disabledness
     property alias asynchronous: icon.asynchronous;
 
     property bool highlight: false;
     property color highlightColor: Settings.theme.color("components/button/highlight");
+    property double highlightOpacity: 1;
 
     property bool checkable: false;
     property bool checked: false;
+    property int checkedMargin: 2;
     property color checkedColor: Settings.theme.color("components/button/checked");
     property double checkedOpacity: 1;
 
@@ -56,8 +59,15 @@ Item {
         id: fill;
         anchors.fill: parent;
         anchors.margins: 0;
-        color: base.highlight && mouse.pressed && base.enabled ? base.highlightColor : base.color;
+        color: "transparent";
         visible: true
+
+        Rectangle {
+            anchors.fill: parent;
+            radius: parent.radius;
+            opacity: base.highlightOpacity;
+            color: base.highlight && mouse.pressed && base.enabled ? base.highlightColor : base.color;
+        }
 
         Rectangle {
             anchors {
@@ -78,7 +88,7 @@ Item {
             opacity: base.checked ? base.checkedOpacity : 0;
             Behavior on opacity { NumberAnimation { duration: Constants.AnimationDuration; } }
             anchors.fill: parent;
-            anchors.margins: 2;
+            anchors.margins: base.checkedMargin;
             color: base.checkedColor;
             radius: fill.radius;//base.height === base.width ? base.height / 2 - 1 : base.radius;
         }
