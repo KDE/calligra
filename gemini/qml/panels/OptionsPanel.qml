@@ -25,10 +25,11 @@ Item {
     anchors {
         top: parent.bottom;
         right: parent.right;
+        rightMargin: -Settings.theme.adjustedPixel(10);
         topMargin: 4;
     }
-    height: Constants.ToolbarHeight * 4;
-    width: Constants.GridWidth * 3;
+    height: Settings.theme.adjustedPixel(70) * 4;
+    width: Constants.GridWidth * 2;
     Rectangle {
         anchors.fill: parent;
         color: "#4e5359";
@@ -42,28 +43,40 @@ Item {
             opacity: switchToDesktopAction.enabled ? 1 : 0.2;
             Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
             image: Settings.theme.icon("SVG-Icon-DesktopMode-1");
+            imageMargin: Settings.theme.adjustedPixel(11);
             text: "Switch to Desktop Mode";
-            height: Constants.ToolbarHeight;
+            font: Settings.theme.font("optionsMenu");
+            height: Settings.theme.adjustedPixel(70);
             width: parent.width;
             onClicked: switchToDesktopAction.trigger();
+            highlight: true; highlightOpacity: 0.6;
         }
         Button {
             image: Settings.theme.icon("SVG-Icon-Help-1");
+            imageMargin: Settings.theme.adjustedPixel(11);
             text: "Help";
-            height: Constants.ToolbarHeight;
+            font: Settings.theme.font("optionsMenu");
+            height: Settings.theme.adjustedPixel(70);
             width: parent.width;
+            highlight: true; highlightOpacity: 0.6;
         }
         Button {
             image: Settings.theme.icon("SVG-Icon-Find-1");
+            imageMargin: Settings.theme.adjustedPixel(11);
             text: "Find";
-            height: Constants.ToolbarHeight;
+            font: Settings.theme.font("optionsMenu");
+            height: Settings.theme.adjustedPixel(70);
             width: parent.width;
+            highlight: true; highlightOpacity: 0.6;
         }
         Button {
             image: Settings.theme.icon("SVG-Icon-SpellCheck-1");
+            imageMargin: Settings.theme.adjustedPixel(11);
             text: "Check Spelling";
-            height: Constants.ToolbarHeight;
+            font: Settings.theme.font("optionsMenu");
+            height: Settings.theme.adjustedPixel(70);
             width: parent.width;
+            highlight: true; highlightOpacity: 0.6;
         }
     }
 }

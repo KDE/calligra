@@ -60,18 +60,57 @@ Page {
             left: parent.left;
             right: parent.right;
         }
-        height: Constants.ToolbarHeight;
+        height: Settings.theme.adjustedPixel(86);
         Rectangle {
             anchors.fill: parent;
             color: Settings.theme.color("components/toolbar/base");
             opacity: 0.96;
         }
-        Button {
+        Rectangle {
+            anchors {
+                left: parent.left;
+                right: parent.right;
+                bottom: parent.bottom;
+            }
+            height: 1;
+            color: "black";
+            opacity: 0.1;
+        }
+        Item {
             id: appButton;
             height: parent.height;
-            width: Constants.ToolbarHeight * 1.2790698;
-            color: "#f2b200";
-            image: Settings.theme.icon("krita_sketch");
+            width: Settings.theme.adjustedPixel(110);
+            Rectangle {
+                anchors.fill: parent;
+                color: "#f2b200";
+            }
+            Image {
+                anchors {
+                    left: parent.left;
+                    verticalCenter: parent.verticalCenter;
+                }
+                height: Settings.theme.adjustedPixel(32);
+                width: height;
+                source: Settings.theme.icon("Arrow-Back-FileBrowse-1");
+                sourceSize.width: width > height ? height : width;
+                sourceSize.height: width > height ? height : width;
+            }
+            Image {
+                anchors {
+                    right: parent.right;
+                    rightMargin: Constants.DefaultMargin;
+                    verticalCenter: parent.verticalCenter;
+                }
+                height: Settings.theme.adjustedPixel(86) - Constants.DefaultMargin * 2;
+                width: height;
+                source: Settings.theme.icon("Calligra-MockIcon-1");
+                sourceSize.width: width > height ? height : width;
+                sourceSize.height: width > height ? height : width;
+            }
+            MouseArea {
+                anchors.fill: parent;
+                onClicked: mainPageStack.pop();
+            }
         }
         Row {
             anchors {
@@ -79,19 +118,19 @@ Page {
                 leftMargin: 20;
                 verticalCenter: parent.verticalCenter;
             }
-            height: Constants.ToolbarHeight - 32;
-            spacing: 8;
-            Button {
-                height: parent.height;
-                width: height * 2;
-                text: "Save";
+            height: Settings.theme.adjustedPixel(66);
+            spacing: Settings.theme.adjustedPixel(8);
+            CohereButton {
+                anchors.verticalCenter: parent.verticalCenter;
+                text: "SAVE";
                 textColor: Settings.theme.color("components/toolbar/text");
+                font: Settings.theme.font("toolbar");
             }
-            Button {
-                height: parent.height;
-                width: height * 2;
-                text: "Undo";
+            CohereButton {
+                anchors.verticalCenter: parent.verticalCenter;
+                text: "UNDO";
                 textColor: Settings.theme.color("components/toolbar/text");
+                font: Settings.theme.font("toolbar");
             }
 //             Button {
 //                 height: parent.height;
@@ -99,11 +138,11 @@ Page {
 //                 text: "Redo";
 //                 textColor: Settings.theme.color("components/toolbar/text");
 //             }
-            Button {
-                height: parent.height;
-                width: height * 1.5;
+            CohereButton {
+                anchors.verticalCenter: parent.verticalCenter;
+                text: "DONE"
                 textColor: Settings.theme.color("components/toolbar/text");
-                text: "Done"
+                font: Settings.theme.font("toolbar");
                 visible: viewLoader.item ? !viewLoader.item.navigateMode : false;
                 onClicked: {
                     toolManager.requestToolChange("PageToolFactory_ID");
@@ -114,16 +153,16 @@ Page {
         Row {
             id: toolbarTextTool
             anchors.centerIn: parent;
-            height: Constants.ToolbarHeight - 32;
+            height: Settings.theme.adjustedPixel(54);
+            spacing: Settings.theme.adjustedPixel(4);
             opacity: (toolManager.currentTool !== null && toolManager.currentTool.toolId() === "TextToolFactory_ID") ? 1 : 0;
-            spacing: 4;
             Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
             Button {
                 image: Settings.theme.icon("SVG-Icon-TextStyle-1");
                 imageMargin: 2;
                 height: parent.height; width: height;
                 textColor: Settings.theme.color("components/toolbar/text");
-                checkable: true;
+                checkable: true; checkedMargin: 0;
                 radius: 4;
                 Rectangle {
                     anchors.horizontalCenter: parent.horizontalCenter;
@@ -141,28 +180,35 @@ Page {
                     textEditor: viewLoader.item ? viewLoader.item.textEditor : null;
                 }
             }
-            Rectangle { color: Settings.theme.color("components/toolbar/text"); height: parent.height; width: 1; }
+            Item { height: parent.height; width: 1; }
+            Rectangle { color: Settings.theme.color("components/toolbar/text"); opacity: 0.3; height: parent.height; width: 1; }
+            Item { height: parent.height; width: 1; }
             Label {
                 text: textStylePanel.cursorFont.family;
                 height: parent.height; width: Constants.GridWidth;
                 color: Settings.theme.color("components/toolbar/text");
+                font: Settings.theme.font("toolbar");
                 horizontalAlignment: Text.AlignLeft;
             }
             Label {
                 text: textStylePanel.cursorFont.pointSize;
                 height: parent.height; width: Constants.GridWidth / 2;
                 color: Settings.theme.color("components/toolbar/text");
+                font: Settings.theme.font("toolbar");
                 horizontalAlignment: Text.AlignRight
                 verticalAlignment: Text.AlignVCenter;
             }
-            Rectangle { color: Settings.theme.color("components/toolbar/text"); height: parent.height; width: 1; }
+            Item { height: parent.height; width: 1; }
+            Rectangle { color: Settings.theme.color("components/toolbar/text"); opacity: 0.3; height: parent.height; width: 1; }
+            Item { height: parent.height; width: 1; }
             Button {
                 image: Settings.theme.icon("SVG-Icon-Bold-1");
                 imageMargin: 4;
                 height: parent.height; width: height;
                 textColor: Settings.theme.color("components/toolbar/text");
                 radius: 4;
-                checked: textStylePanel.font ? textStylePanel.cursorFont.bold : false;
+                checkedMargin: 0;
+                checked: textStylePanel.cursorFont ? textStylePanel.cursorFont.bold : false;
             }
             Button {
                 image: Settings.theme.icon("SVG-Icon-Italic-1");
@@ -170,7 +216,8 @@ Page {
                 height: parent.height; width: height;
                 textColor: Settings.theme.color("components/toolbar/text");
                 radius: 4;
-                checked: textStylePanel.font ? textStylePanel.font.italic : false;
+                checkedMargin: 0;
+                checked: textStylePanel.cursorFont ? textStylePanel.cursorFont.italic : false;
             }
             Button {
                 image: Settings.theme.icon("SVG-Icon-Underline-1");
@@ -178,9 +225,12 @@ Page {
                 height: parent.height; width: height;
                 textColor: Settings.theme.color("components/toolbar/text");
                 radius: 4;
-                checked: textStylePanel.font ? textStylePanel.font.underline : false;
+                checkedMargin: 0;
+                checked: textStylePanel.cursorFont ? textStylePanel.cursorFont.underline : false;
             }
-            Rectangle { color: Settings.theme.color("components/toolbar/text"); height: parent.height; width: 1; }
+            Item { height: parent.height; width: 1; }
+            Rectangle { color: Settings.theme.color("components/toolbar/text"); opacity: 0.3; height: parent.height; width: 1; }
+            Item { height: parent.height; width: 1; }
             Button {
                 image: Settings.theme.icon("SVG-Icon-BulletList-1");
                 imageMargin: 4;
@@ -197,7 +247,8 @@ Page {
         Row {
             id: toolbarImageTool
             anchors.centerIn: parent;
-            height: Constants.ToolbarHeight - 32;
+            height: Settings.theme.adjustedPixel(54);
+            spacing: Settings.theme.adjustedPixel(4);
             opacity: (toolManager.currentTool !== null && toolManager.currentTool.toolId() === "InteractionTool") ? 1 : 0;
             Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
             Button {
@@ -205,7 +256,9 @@ Page {
                 imageMargin: 4;
                 height: parent.height; width: height;
             }
-            Rectangle { color: Settings.theme.color("components/toolbar/text"); height: parent.height; width: 1; }
+            Item { height: parent.height; width: 1; }
+            Rectangle { color: Settings.theme.color("components/toolbar/text"); opacity: 0.3; height: parent.height; width: 1; }
+            Item { height: parent.height; width: 1; }
             Button {
                 image: Settings.theme.icon("SVG-Icon-Pen");
                 imageMargin: 4;
@@ -226,12 +279,14 @@ Page {
                 imageMargin: 4;
                 height: parent.height; width: height;
             }
-            Rectangle { color: Settings.theme.color("components/toolbar/text"); height: parent.height; width: 1; }
+            Item { height: parent.height; width: 1; }
+            Rectangle { color: Settings.theme.color("components/toolbar/text"); opacity: 0.3; height: parent.height; width: 1; }
+            Item { height: parent.height; width: 1; }
             Button {
                 height: parent.height; width: height;
-                image: Settings.theme.icon("SVG-Icon-Options-1");
+                image: Settings.theme.icon("SVG-Icon-ImageAdjustment-1");
                 imageMargin: 4;
-                checkable: true;
+                checkable: true; checkedMargin: 0;
                 radius: 4;
                 Rectangle {
                     anchors.horizontalCenter: parent.horizontalCenter;
@@ -250,10 +305,10 @@ Page {
             anchors {
                 right: parent.right;
                 verticalCenter: parent.verticalCenter;
-                rightMargin: 10
+                rightMargin: Settings.theme.adjustedPixel(10);
             }
-            height: Constants.ToolbarHeight - 22;
-            spacing: 10;
+            height: Settings.theme.adjustedPixel(66);
+            spacing: Settings.theme.adjustedPixel(10);
             visible: notesPanel.canvas ? false : true;
             Button {
                 height: parent.height; width: height;
@@ -280,7 +335,18 @@ Page {
                 image: Settings.theme.icon("SVG-Icon-Options-1");
                 checkable: true;
                 radius: 4;
-                checkedColor: "#3C00adf5";
+                checkedColor: "#00adf5";
+                checkedOpacity: 0.6;
+                Rectangle {
+                    anchors.horizontalCenter: parent.horizontalCenter;
+                    anchors.top: parent.bottom;
+                    height: Constants.DefaultMargin;
+                    width: height;
+                    color: "#4e5359";
+                    rotation: 45;
+                    opacity: parent.checked ? 0.96 : 0;
+                    Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+                }
                 OptionsPanel {}
             }
         }
@@ -288,10 +354,10 @@ Page {
             anchors {
                 right: parent.right;
                 verticalCenter: parent.verticalCenter;
-                rightMargin: 10
+                rightMargin: Settings.theme.adjustedPixel(10);
             }
-            height: Constants.ToolbarHeight - 22;
-            spacing: 10;
+            height: Settings.theme.adjustedPixel(66);
+            spacing: Settings.theme.adjustedPixel(10);
             visible: notesPanel.canvas ? true : false;
             Button {
                 height: parent.height; width: height;
@@ -302,7 +368,8 @@ Page {
                 image: Settings.theme.icon("SVG-Icon-AddNote-1");
                 checkable: true;
                 radius: 4;
-                checkedColor: "#3C00adf5";
+                checkedColor: "#00adf5";
+                checkedOpacity: 0.6;
                 Rectangle {
                     anchors.horizontalCenter: parent.horizontalCenter;
                     anchors.top: parent.bottom;
@@ -331,8 +398,19 @@ Page {
                 image: Settings.theme.icon("SVG-Icon-Options-1");
                 checkable: true;
                 radius: 4;
-                checkedColor: "#3C00adf5";
+                checkedColor: "#00adf5";
+                checkedOpacity: 0.6;
                 OptionsPanel {}
+                Rectangle {
+                    anchors.horizontalCenter: parent.horizontalCenter;
+                    anchors.top: parent.bottom;
+                    height: Constants.DefaultMargin + 2;
+                    width: height;
+                    color: "#4e5359";
+                    rotation: 45;
+                    opacity: parent.checked ? 0.96 : 0;
+                    Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+                }
             }
         }
     }

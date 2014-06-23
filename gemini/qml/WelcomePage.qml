@@ -33,26 +33,45 @@ Page {
             left: parent.left;
             right: parent.right;
         }
-        height: Constants.ToolbarHeight;
+        height: Settings.theme.adjustedPixel(86);
         Rectangle {
             anchors.fill: parent;
             color: "#f2b200";
         }
-        Button {
-            id: appButton;
-            height: parent.height;
-            width: Constants.GridWidth * 3;
-            bold: true;
-            text: "Calligra Suite";
-            textSize: 30;
-            image: Settings.theme.icon("Calligra-MockIcon-1");
+        Image {
+            anchors {
+                top: parent.top;
+                left: parent.left;
+                bottom: parent.bottom;
+                margins: Constants.DefaultMargin;
+            }
+            width: height;
+            source: Settings.theme.icon("Calligra-MockIcon-1");
+            sourceSize.width: width > height ? height : width;
+            sourceSize.height: width > height ? height : width;
+            Label {
+                anchors {
+                    left: parent.right;
+                    leftMargin: Constants.DefaultMargin;
+                    verticalCenter: parent.verticalCenter;
+                }
+                text: "Calligra Suite";
+                font: Settings.theme.font("welcomeHeader");
+                color: "white";
+            }
         }
-        Button {
+        Image {
             id: settingsButton;
-            anchors.right: parent.right;
-            height: parent.height;
-            width: Constants.ToolbarHeight * 1.2790698;
-            image: Settings.theme.icon("SVG-Icon-OptionsWhite-1");
+            anchors {
+                right: parent.right;
+                rightMargin: Settings.theme.adjustedPixel(19);
+                verticalCenter: parent.verticalCenter;
+            }
+            width: Settings.theme.adjustedPixel(48);
+            height: width;
+            source: Settings.theme.icon("SVG-Icon-OptionsWhite-1");
+            sourceSize.width: width > height ? height : width;
+            sourceSize.height: width > height ? height : width;
         }
         Rectangle {
             anchors {
@@ -61,8 +80,8 @@ Page {
                 bottom: parent.bottom;
             }
             height: 1;
-            color: "#22282f";
-            opacity: 0.6;
+            color: "black";
+            opacity: 0.1;
         }
     }
     Item {
@@ -147,6 +166,7 @@ Page {
                                 verticalCenter: parent.verticalCenter;
                             }
                             text: model.text;
+                            font: Settings.theme.font("welcomeSidebar");
                         }
                         MouseArea {
                             anchors.fill: parent;
@@ -181,8 +201,8 @@ Page {
                     bottom: parent.bottom;
                 }
                 width: 1;
-                color: "#22282f";
-                opacity: 0.6;
+                color: "black";
+                opacity: 0.1;
             }
         }
         Rectangle {

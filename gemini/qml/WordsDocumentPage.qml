@@ -176,7 +176,7 @@ Item {
                 right: parent.right;
             }
             height: Constants.GridHeight / 2;
-            image: Settings.theme.icon("up");
+            image: Settings.theme.icon("Arrow-ScrollUp-1");
             imageMargin: 2;
         }
         Button {
@@ -186,7 +186,7 @@ Item {
                 bottom: parent.bottom;
             }
             height: Constants.GridHeight / 2;
-            image: Settings.theme.icon("down");
+            image: Settings.theme.icon("Arrow-ScrollDown-1");
             imageMargin: 2;
         }
         ListView {
