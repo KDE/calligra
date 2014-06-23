@@ -36,7 +36,7 @@ var values = {
         button: {
             base: "transparent",
             text: "#ffffff",
-            highlight: "transparent",
+            highlight: "#00adf5",
             checked: "#55595E", //Qt.rgba(1.0, 1.0, 1.0, 0.7),
         },
         colorSwatch: {

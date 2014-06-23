@@ -16,6 +16,10 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+// font size is dependent on the line height of the application
+// pixel size is the pixel size of the font on a 1080p monitor, and adjusted for
+// other resolutions
+
 var values = {
     application: {
         family: "Source Sans Pro",
@@ -25,7 +29,12 @@ var values = {
     applicationSemi: {
         family: "Source Sans Pro",
         style: "Semibold",
-        size: 1,
+        pixelSize: 18,
+    },
+    optionsMenu: {
+        family: "Source Sans Pro",
+        style: "Semibold",
+        pixelSize: 22,
     },
     small: {
         family: "Source Sans Pro",
@@ -35,7 +44,17 @@ var values = {
     pageHeader: {
         family: "Source Sans Pro",
         style: "Light",
-        size: 2,
+        pixelSize: 38,
+    },
+    welcomeHeader: {
+        family: "Source Sans Pro",
+        style: "Semibold",
+        pixelSize: 30,
+    },
+    welcomeSidebar: {
+        family: "Source Sans Pro",
+        style: "Regular",
+        pixelSize: 24,
     },
     presentationTime: {
         family: "Source Sans Pro",
@@ -45,17 +64,17 @@ var values = {
     filelistheader: {
         family: "Source Sans Pro",
         style: "Semibold",
-        size: 0.8,
+        pixelSize: 18,
     },
     templateLabel: {
         family: "Source Sans Pro",
         style: "Light",
-        size: 1,
+        pixelSize: 24
     },
     title: {
         family: "Source Sans Pro",
-        style: "Regular",
-        size: 1.75,
+        style: "Light",
+        pixelSize: 38,
     },
     panelHandle: {
         family: "Source Sans Pro",
@@ -72,5 +91,10 @@ var values = {
         style: "Regular",
         size: 1.25,
     },
+    toolbar: {
+        family: "Source Sans Pro",
+        style: "Semibold",
+        pixelSize: 24,
+    }
 
 }
