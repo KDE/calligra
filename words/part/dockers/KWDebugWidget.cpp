@@ -69,8 +69,7 @@ void KWDebugWidget::updateData()
     QTextBlockFormat fmt = curBlock.blockFormat();
 
     QString willShow;
-    if (fmt.hasProperty(KoParagraphStyle::SectionStartings))
-    {
+    if (fmt.hasProperty(KoParagraphStyle::SectionStartings)) {
         willShow = "This sections starts here :";
         QVariant var = fmt.property(KoParagraphStyle::SectionStartings);
         QList<QVariant> openList = var.value< QList<QVariant> >();
@@ -79,11 +78,10 @@ void KWDebugWidget::updateData()
             KoSection *sec = static_cast<KoSection *>(sv.value<void *>());
             willShow += sec->name() + " ";
         }
-        willShow += "\n";
+        willShow.append("\n");
     }
 
-    if (fmt.hasProperty(KoParagraphStyle::SectionEndings))
-    {
+    if (fmt.hasProperty(KoParagraphStyle::SectionEndings)) {
         willShow += "This sections end here :";
         QVariant var = fmt.property(KoParagraphStyle::SectionEndings);
         QList<QVariant> closeList = var.value< QList<QVariant> >();
@@ -92,7 +90,7 @@ void KWDebugWidget::updateData()
             KoSectionEnd *sec = static_cast<KoSectionEnd *>(sv.value<void *>());
             willShow += sec->name() + " ";
         }
-        willShow += "\n";
+        willShow.append("\n");
     }
 
     willShow += "block number is " + QString::number(editor->constCursor().block().blockNumber()) + "\n";

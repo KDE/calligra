@@ -337,7 +337,7 @@ void KWView::setupActions()
     m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowSectionsBounds, QVariant(false));
     action->setChecked(m_document->config().showSectionsBounds()); // will change resource if true
     action->setToolTip(i18n("Toggle the display of sections bounds"));
-    action->setWhatsThis(i18n("Toggle the display of sections bounds.<br/><br/>When this is enabled, Words shows you any sections bounds with a thin gray horizontal brackets."));
+    action->setWhatsThis(i18n("Toggle the display of sections bounds.<br/><br/>When this is enabled, any sections bounds will be indicated with a thin gray horizontal brackets."));
 
     action = new KAction(i18n("Show Rulers"), this);
     action->setCheckable(true);
