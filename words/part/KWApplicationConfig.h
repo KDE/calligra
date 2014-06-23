@@ -63,16 +63,16 @@ public:
         m_showTableBorders = on;
     }
 
-    void setShowSectionsBounds(bool on) {
-        m_showSectionsBounds = on;
+    void setShowSectionBounds(bool on) {
+        m_showSectionBounds = on;
     }
 
     bool showTableBorders() const {
         return m_showTableBorders;
     }
 
-    bool showSectionsBounds() const {
-        return m_showSectionsBounds;
+    bool showSectionBounds() const {
+        return m_showSectionBounds;
     }
 
     void setViewRulers(bool on) {
@@ -191,7 +191,7 @@ private:
     bool m_viewRulers;
     bool m_showFormattingChars;
     bool m_showTableBorders;
-    bool m_showSectionsBounds;
+    bool m_showSectionBounds;
     bool m_createBackupFile;
     bool m_statusBarShowPage, m_statusBarShowPageStyle, m_statusBarShowPageSize;
     bool m_statusBarShowLineNumber, m_statusBarShowModified;

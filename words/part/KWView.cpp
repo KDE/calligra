@@ -330,14 +330,14 @@ void KWView::setupActions()
     action->setToolTip(i18n("Toggle the display of table borders"));
     action->setWhatsThis(i18n("Toggle the display of table borders.<br/><br/>When this is enabled, Words shows you any invisible table borders with a thin gray line."));
 
-    action = new KAction(i18n("Show Sections Bounds"), this);
+    action = new KAction(i18n("Show Section Bounds"), this);
     action->setCheckable(true);
-    actionCollection()->addAction("view_sectionsbounds", action);
-    connect(action, SIGNAL(toggled(bool)), this, SLOT(setShowSectionsBounds(bool)));
-    m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowSectionsBounds, QVariant(false));
-    action->setChecked(m_document->config().showSectionsBounds()); // will change resource if true
-    action->setToolTip(i18n("Toggle the display of sections bounds"));
-    action->setWhatsThis(i18n("Toggle the display of sections bounds.<br/><br/>When this is enabled, any sections bounds will be indicated with a thin gray horizontal brackets."));
+    actionCollection()->addAction("view_sectionbounds", action);
+    connect(action, SIGNAL(toggled(bool)), this, SLOT(setShowSectionBounds(bool)));
+    m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowSectionBounds, QVariant(false));
+    action->setChecked(m_document->config().showSectionBounds()); // will change resource if true
+    action->setToolTip(i18n("Toggle the display of section bounds"));
+    action->setWhatsThis(i18n("Toggle the display of section bounds.<br/><br/>When this is enabled, any section bounds will be indicated with a thin gray horizontal brackets."));
 
     action = new KAction(i18n("Show Rulers"), this);
     action->setCheckable(true);
@@ -592,11 +592,11 @@ void KWView::setShowTableBorders(bool on)
     m_document->config().setShowTableBorders(on);
 }
 
-void KWView::setShowSectionsBounds(bool on)
+void KWView::setShowSectionBounds(bool on)
 {
-    m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowSectionsBounds, QVariant(on));
+    m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowSectionBounds, QVariant(on));
     m_canvas->update();
-    m_document->config().setShowSectionsBounds(on);
+//     m_document->config().setShowSectionBounds(on);
 }
 
 void KWView::formatPage()

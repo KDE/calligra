@@ -38,7 +38,7 @@
   <Action name="view_formattingchars"/>
   <Action name="view_frameborders"/>
   <Action name="view_tableborders"/>
-  <Action name="view_sectionsbounds"/>
+  <Action name="view_sectionbounds"/>
   <Action name="view_fieldshadings"/>
   <Separator/>
   <Action name="view_toggledockers"/>

@@ -29,7 +29,7 @@ KWApplicationConfig::KWApplicationConfig()
         m_viewRulers(false),
         m_showFormattingChars(false),
         m_showTableBorders(true),
-        m_showSectionsBounds(false),
+        m_showSectionBounds(false),
         m_createBackupFile(true),
         m_statusBarShowPage(true),
         m_statusBarShowPageStyle(true),
@@ -66,7 +66,7 @@ void KWApplicationConfig::load(KWDocument *document)
     m_showFormattingChars = interface.readEntry("ViewFormattingChars", m_showFormattingChars);
     m_showInlineObjectVisualization = interface.readEntry("ViewFieldShadings", m_showInlineObjectVisualization);
     m_showTableBorders = interface.readEntry("ViewTableBorders", m_showTableBorders);
-    m_showSectionsBounds = interface.readEntry("ViewSectionsBounds", m_showSectionsBounds);
+    m_showSectionBounds = interface.readEntry("ViewSectionBounds", m_showSectionBounds);
 
     m_viewFrameBorders = interface.readEntry("ViewFrameBorders", m_viewFrameBorders);
 
@@ -136,7 +136,7 @@ void KWApplicationConfig::save()
     interface.writeEntry("ViewFormattingChars", m_showFormattingChars);
     interface.writeEntry("ViewFieldShadings", m_showInlineObjectVisualization);
     interface.writeEntry("ViewTableBorders", m_showTableBorders);
-    interface.writeEntry("ViewSectionsBounds", m_showSectionsBounds);
+    interface.writeEntry("ViewSectionBounds", m_showSectionBounds);
     interface.writeEntry("ViewFrameBorders", m_viewFrameBorders);
     interface.writeEntry("Zoom", m_zoom);
     interface.writeEntry("ZoomMode", (int)m_zoomMode);
