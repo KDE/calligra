@@ -58,6 +58,7 @@ public:
               m_checked(false),
               m_locked(false),
               m_lockable(false),
+              m_toggled(false),
               m_parent(parent)
         {
         }
@@ -71,6 +72,7 @@ public:
               m_checked(false),
               m_locked(false),
               m_lockable(false),
+              m_toggled(false),
               m_parent(parent)
         {
             Q_ASSERT(category);
@@ -129,7 +131,8 @@ public:
             return m_checked;
         }
 
-        void setChecked(bool value) {
+        void setChecked(bool value) {  
+            setToggled(value!=m_checked);
             m_checked = value;
             notifyItemChanged();
         }
@@ -144,6 +147,12 @@ public:
         }
         void setLockable(bool value){
             m_lockable = value;
+        }
+        bool isToggled() const {
+            return m_toggled;
+        }
+        void setToggled(bool value){
+            m_toggled = value;
         }
 
     private:
@@ -162,6 +171,7 @@ public:
         bool m_checked;
         bool m_locked;
         bool m_lockable;
+        bool m_toggled;
         KisCategoriesMapper *m_parent;
     };
 

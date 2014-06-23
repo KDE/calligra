@@ -41,6 +41,7 @@ signals:
     void rightClickedMenuDropSettingsTriggered();
     void rightClickedMenuSaveSettingsTriggered();
 
+
 protected slots:
     void slotIndexChanged(const QModelIndex& index);
     virtual void dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight);

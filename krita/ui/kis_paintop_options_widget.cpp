@@ -81,7 +81,7 @@ KisPaintOpOptionsWidget::KisPaintOpOptionsWidget(QWidget * parent)
     connect(m_d->optionsList, SIGNAL(doubleClicked(QModelIndex))         , this, SLOT(lockProperties(const QModelIndex&)));
     connect(m_d->optionsList, SIGNAL(rightClickedMenuDropSettingsTriggered())         , this, SLOT(slotLockPropertiesDrop()));
     connect(m_d->optionsList, SIGNAL(rightClickedMenuSaveSettingsTriggered())         , this, SLOT(slotLockPropertiesSave()));
-
+    //connect(m_d->optionsList, SIGNAL(sigEntryChecked(QModelIndex))                    , this, SLOT(slotEntryChecked(QModelIndex)));
 }
 
 
@@ -156,10 +156,6 @@ void KisPaintOpOptionsWidget::changePage(const QModelIndex& index)
     
     if(m_d->model->entryAt(info, index)) {
         m_d->optionsStack->setCurrentIndex(info.index);
-
-
-        emit sigConfigurationItemChanged();
-
     }
 }
 void KisPaintOpOptionsWidget::lockProperties(const QModelIndex& index)
@@ -202,6 +198,12 @@ void KisPaintOpOptionsWidget::slotLockPropertiesSave()
 {
     m_saveLockedOption = true;
     lockProperties(m_d->optionsList->currentIndex());
+}
+void KisPaintOpOptionsWidget::slotEntryChecked(const QModelIndex &index)
+{
+    Q_UNUSED(index);
+    qDebug("Entry Checked");
+    emit sigConfigurationItemChanged();
 }
 
 

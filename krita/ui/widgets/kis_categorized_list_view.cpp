@@ -108,6 +108,10 @@ void KisCategorizedListView::mousePressEvent(QMouseEvent* event)
     }
     QModelIndex index = QListView::indexAt(event->pos());
     QListView::mousePressEvent(event);
+    if(index.data(__CategorizedListModelBase::isToggledRole).toBool() && index.isValid())
+    {
+        emit sigEntryChecked(index);
+    }
     if(event->button() == Qt::RightButton)
     {
         QMenu menu(this);

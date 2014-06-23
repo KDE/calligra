@@ -65,6 +65,7 @@ private slots:
     void lockProperties(const QModelIndex& index);
     void slotLockPropertiesDrop();
     void slotLockPropertiesSave();
+    void slotEntryChecked(const QModelIndex &index);
 
 private:
     

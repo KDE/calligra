@@ -33,7 +33,8 @@ public:
         ExpandCategoryRole = Qt::UserRole + 2,
         SortRole           = Qt::UserRole + 3,
         isLockedRole       = Qt::UserRole + 4,
-        isLockableRole     = Qt::UserRole + 5
+        isLockableRole     = Qt::UserRole + 5,
+        isToggledRole      = Qt::UserRole + 6
     };
 
 public:
@@ -111,6 +112,9 @@ public:
             return item->isLocked();
         case isLockableRole:
             return item->isLockable();
+        case isToggledRole:
+            return item->isToggled();
+
         }
 
         return QVariant();
