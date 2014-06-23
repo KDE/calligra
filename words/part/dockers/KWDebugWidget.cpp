@@ -90,7 +90,7 @@ void KWDebugWidget::updateData()
         foreach (const QVariant &sv, closeList)
         {
             KoSectionEnd *sec = static_cast<KoSectionEnd *>(sv.value<void *>());
-            willShow += sec->name + " ";
+            willShow += sec->name() + " ";
         }
         willShow += "\n";
     }
