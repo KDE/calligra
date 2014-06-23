@@ -59,7 +59,7 @@ class StandardWorktime;
 class KPLATOKERNEL_EXPORT NamedCommand : public KUndo2Command
 {
 public:
-    explicit NamedCommand( const QString& name )
+    explicit NamedCommand( const KUndo2MagicString& name )
         : KUndo2Command( name )
     {}
     virtual void redo() { execute(); }
@@ -83,7 +83,7 @@ protected:
 class KPLATOKERNEL_EXPORT MacroCommand : public KUndo2Command
 {
 public:
-    explicit MacroCommand( const QString& name = QString() )
+    explicit MacroCommand( const KUndo2MagicString& name = KUndo2MagicString() )
         : KUndo2Command( name )
     {}
     ~MacroCommand();
@@ -106,7 +106,7 @@ protected:
 class KPLATOKERNEL_EXPORT CalendarAddCmd : public NamedCommand
 {
 public:
-    CalendarAddCmd( Project *project, Calendar *cal, int pos, Calendar *parent, const QString& name = QString() );
+    CalendarAddCmd( Project *project, Calendar *cal, int pos, Calendar *parent, const KUndo2MagicString& name = KUndo2MagicString() );
     ~CalendarAddCmd();
     void execute();
     void unexecute();
@@ -122,7 +122,7 @@ private:
 class KPLATOKERNEL_EXPORT CalendarRemoveCmd : public NamedCommand
 {
 public:
-    CalendarRemoveCmd( Project *project, Calendar *cal, const QString& name = QString() );
+    CalendarRemoveCmd( Project *project, Calendar *cal, const KUndo2MagicString& name = KUndo2MagicString() );
     ~CalendarRemoveCmd();
     void execute();
     void unexecute();
@@ -139,7 +139,7 @@ private:
 class KPLATOKERNEL_EXPORT CalendarMoveCmd : public NamedCommand
 {
 public:
-    CalendarMoveCmd( Project *project, Calendar *cal, int position, Calendar *parent, const QString& name = QString() );
+    CalendarMoveCmd( Project *project, Calendar *cal, int position, Calendar *parent, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -155,7 +155,7 @@ private:
 class KPLATOKERNEL_EXPORT CalendarModifyNameCmd : public NamedCommand
 {
 public:
-    CalendarModifyNameCmd( Calendar *cal, const QString& newvalue, const QString& name = QString() );
+    CalendarModifyNameCmd( Calendar *cal, const QString& newvalue, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -168,7 +168,7 @@ private:
 class KPLATOKERNEL_EXPORT CalendarModifyParentCmd : public NamedCommand
 {
 public:
-    CalendarModifyParentCmd( Project *project, Calendar *cal, Calendar *newvalue, const QString& name = QString() );
+    CalendarModifyParentCmd( Project *project, Calendar *cal, Calendar *newvalue, const KUndo2MagicString& name = KUndo2MagicString() );
     ~CalendarModifyParentCmd();
     void execute();
     void unexecute();
@@ -187,7 +187,7 @@ private:
 class KPLATOKERNEL_EXPORT CalendarModifyTimeZoneCmd : public NamedCommand
 {
 public:
-    CalendarModifyTimeZoneCmd( Calendar *cal, const KTimeZone &value, const QString& name = QString() );
+    CalendarModifyTimeZoneCmd( Calendar *cal, const KTimeZone &value, const KUndo2MagicString& name = KUndo2MagicString() );
     ~CalendarModifyTimeZoneCmd();
     void execute();
     void unexecute();
@@ -202,7 +202,7 @@ private:
 class KPLATOKERNEL_EXPORT CalendarAddDayCmd : public NamedCommand
 {
 public:
-    CalendarAddDayCmd( Calendar *cal, CalendarDay *newvalue, const QString& name = QString() );
+    CalendarAddDayCmd( Calendar *cal, CalendarDay *newvalue, const KUndo2MagicString& name = KUndo2MagicString() );
     ~CalendarAddDayCmd();
     void execute();
     void unexecute();
@@ -216,8 +216,8 @@ protected:
 class KPLATOKERNEL_EXPORT CalendarRemoveDayCmd : public NamedCommand
 {
 public:
-    CalendarRemoveDayCmd( Calendar *cal, CalendarDay *day, const QString& name = QString() );
-    CalendarRemoveDayCmd( Calendar *cal, const QDate &day, const QString& name = QString() );
+    CalendarRemoveDayCmd( Calendar *cal, CalendarDay *day, const KUndo2MagicString& name = KUndo2MagicString() );
+    CalendarRemoveDayCmd( Calendar *cal, const QDate &day, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -233,7 +233,7 @@ private:
 class KPLATOKERNEL_EXPORT CalendarModifyDayCmd : public NamedCommand
 {
 public:
-    CalendarModifyDayCmd( Calendar *cal, CalendarDay *value, const QString& name = QString() );
+    CalendarModifyDayCmd( Calendar *cal, CalendarDay *value, const KUndo2MagicString& name = KUndo2MagicString() );
     ~CalendarModifyDayCmd();
     void execute();
     void unexecute();
@@ -248,7 +248,7 @@ private:
 class KPLATOKERNEL_EXPORT CalendarModifyStateCmd : public NamedCommand
 {
 public:
-    CalendarModifyStateCmd( Calendar *calendar, CalendarDay *day, CalendarDay::State value, const QString& name = QString() );
+    CalendarModifyStateCmd( Calendar *calendar, CalendarDay *day, CalendarDay::State value, const KUndo2MagicString& name = KUndo2MagicString() );
     ~CalendarModifyStateCmd();
     void execute();
     void unexecute();
@@ -264,7 +264,7 @@ private:
 class KPLATOKERNEL_EXPORT CalendarModifyTimeIntervalCmd : public NamedCommand
 {
 public:
-    CalendarModifyTimeIntervalCmd( Calendar *calendar, TimeInterval &newvalue, TimeInterval *value, const QString& name = QString() );
+    CalendarModifyTimeIntervalCmd( Calendar *calendar, TimeInterval &newvalue, TimeInterval *value, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -278,7 +278,7 @@ private:
 class KPLATOKERNEL_EXPORT CalendarAddTimeIntervalCmd : public NamedCommand
 {
 public:
-    CalendarAddTimeIntervalCmd( Calendar *calendar, CalendarDay *day, TimeInterval *value, const QString& name = QString() );
+    CalendarAddTimeIntervalCmd( Calendar *calendar, CalendarDay *day, TimeInterval *value, const KUndo2MagicString& name = KUndo2MagicString() );
     ~CalendarAddTimeIntervalCmd();
     void execute();
     void unexecute();
@@ -293,7 +293,7 @@ protected:
 class KPLATOKERNEL_EXPORT CalendarRemoveTimeIntervalCmd : public CalendarAddTimeIntervalCmd
 {
 public:
-    CalendarRemoveTimeIntervalCmd( Calendar *calendar, CalendarDay *day, TimeInterval *value, const QString& name = QString() );
+    CalendarRemoveTimeIntervalCmd( Calendar *calendar, CalendarDay *day, TimeInterval *value, const KUndo2MagicString& name = KUndo2MagicString() );
     
     void execute();
     void unexecute();
@@ -302,7 +302,7 @@ public:
 class KPLATOKERNEL_EXPORT CalendarModifyWeekdayCmd : public NamedCommand
 {
 public:
-    CalendarModifyWeekdayCmd( Calendar *cal, int weekday, CalendarDay *value, const QString& name = QString() );
+    CalendarModifyWeekdayCmd( Calendar *cal, int weekday, CalendarDay *value, const KUndo2MagicString& name = KUndo2MagicString() );
     ~CalendarModifyWeekdayCmd();
     void execute();
     void unexecute();
@@ -317,7 +317,7 @@ private:
 class KPLATOKERNEL_EXPORT CalendarModifyDateCmd : public NamedCommand
 {
 public:
-    CalendarModifyDateCmd( Calendar *cal, CalendarDay *day, const QDate &value, const QString& name = QString() );
+    CalendarModifyDateCmd( Calendar *cal, CalendarDay *day, const QDate &value, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -330,7 +330,7 @@ private:
 class KPLATOKERNEL_EXPORT ProjectModifyDefaultCalendarCmd : public NamedCommand
 {
 public:
-    ProjectModifyDefaultCalendarCmd( Project *project, Calendar *cal, const QString& name = QString() );
+    ProjectModifyDefaultCalendarCmd( Project *project, Calendar *cal, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -343,7 +343,7 @@ private:
 class KPLATOKERNEL_EXPORT NodeDeleteCmd : public NamedCommand
 {
 public:
-    explicit NodeDeleteCmd( Node *node, const QString& name = QString() );
+    explicit NodeDeleteCmd( Node *node, const KUndo2MagicString& name = KUndo2MagicString() );
     ~NodeDeleteCmd();
     void execute();
     void unexecute();
@@ -362,7 +362,7 @@ private:
 class KPLATOKERNEL_EXPORT TaskAddCmd : public NamedCommand
 {
 public:
-    TaskAddCmd( Project *project, Node *node, Node *after, const QString& name = QString() );
+    TaskAddCmd( Project *project, Node *node, Node *after, const KUndo2MagicString& name = KUndo2MagicString() );
     ~TaskAddCmd();
     void execute();
     void unexecute();
@@ -377,7 +377,7 @@ private:
 class KPLATOKERNEL_EXPORT SubtaskAddCmd : public NamedCommand
 {
 public:
-    SubtaskAddCmd( Project *project, Node *node, Node *parent, const QString& name = QString() );
+    SubtaskAddCmd( Project *project, Node *node, Node *parent, const KUndo2MagicString& name = KUndo2MagicString() );
     ~SubtaskAddCmd();
     void execute();
     void unexecute();
@@ -394,7 +394,7 @@ private:
 class KPLATOKERNEL_EXPORT NodeModifyNameCmd : public NamedCommand
 {
 public:
-    NodeModifyNameCmd( Node &node, const QString& nodename, const QString& name = QString() );
+    NodeModifyNameCmd( Node &node, const QString& nodename, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -407,7 +407,7 @@ private:
 class KPLATOKERNEL_EXPORT NodeModifyLeaderCmd : public NamedCommand
 {
 public:
-    NodeModifyLeaderCmd( Node &node, const QString& leader, const QString& name = QString() );
+    NodeModifyLeaderCmd( Node &node, const QString& leader, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -420,7 +420,7 @@ private:
 class KPLATOKERNEL_EXPORT NodeModifyDescriptionCmd : public NamedCommand
 {
 public:
-    NodeModifyDescriptionCmd( Node &node, const QString& description, const QString& name = QString() );
+    NodeModifyDescriptionCmd( Node &node, const QString& description, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -433,7 +433,7 @@ private:
 class KPLATOKERNEL_EXPORT NodeModifyConstraintCmd : public NamedCommand
 {
 public:
-    NodeModifyConstraintCmd( Node &node, Node::ConstraintType c, const QString& name = QString() );
+    NodeModifyConstraintCmd( Node &node, Node::ConstraintType c, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -447,7 +447,7 @@ private:
 class KPLATOKERNEL_EXPORT NodeModifyConstraintStartTimeCmd : public NamedCommand
 {
 public:
-    NodeModifyConstraintStartTimeCmd( Node &node, const QDateTime& dt, const QString& name = QString() );
+    NodeModifyConstraintStartTimeCmd( Node &node, const QDateTime& dt, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -460,7 +460,7 @@ private:
 class KPLATOKERNEL_EXPORT NodeModifyConstraintEndTimeCmd : public NamedCommand
 {
 public:
-    NodeModifyConstraintEndTimeCmd( Node &node, const QDateTime& dt, const QString& name = QString() );
+    NodeModifyConstraintEndTimeCmd( Node &node, const QDateTime& dt, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -473,7 +473,7 @@ private:
 class KPLATOKERNEL_EXPORT NodeModifyStartTimeCmd : public NamedCommand
 {
 public:
-    NodeModifyStartTimeCmd( Node &node, const QDateTime& dt, const QString& name = QString() );
+    NodeModifyStartTimeCmd( Node &node, const QDateTime& dt, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -486,7 +486,7 @@ private:
 class KPLATOKERNEL_EXPORT NodeModifyEndTimeCmd : public NamedCommand
 {
 public:
-    NodeModifyEndTimeCmd( Node &node, const QDateTime& dt, const QString& name = QString() );
+    NodeModifyEndTimeCmd( Node &node, const QDateTime& dt, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -499,7 +499,7 @@ private:
 class KPLATOKERNEL_EXPORT NodeModifyIdCmd : public NamedCommand
 {
 public:
-    NodeModifyIdCmd( Node &node, const QString& id, const QString& name = QString() );
+    NodeModifyIdCmd( Node &node, const QString& id, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -512,7 +512,7 @@ private:
 class KPLATOKERNEL_EXPORT NodeIndentCmd : public NamedCommand
 {
 public:
-    explicit NodeIndentCmd( Node &node, const QString& name = QString() );
+    explicit NodeIndentCmd( Node &node, const KUndo2MagicString& name = KUndo2MagicString() );
     ~NodeIndentCmd();
     void execute();
     void unexecute();
@@ -527,7 +527,7 @@ private:
 class KPLATOKERNEL_EXPORT NodeUnindentCmd : public NamedCommand
 {
 public:
-    explicit NodeUnindentCmd( Node &node, const QString& name = QString() );
+    explicit NodeUnindentCmd( Node &node, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -540,7 +540,7 @@ private:
 class KPLATOKERNEL_EXPORT NodeMoveUpCmd : public NamedCommand
 {
 public:
-    explicit NodeMoveUpCmd( Node &node, const QString& name = QString() );
+    explicit NodeMoveUpCmd( Node &node, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -553,7 +553,7 @@ private:
 class KPLATOKERNEL_EXPORT NodeMoveDownCmd : public NamedCommand
 {
 public:
-    explicit NodeMoveDownCmd( Node &node, const QString& name = QString() );
+    explicit NodeMoveDownCmd( Node &node, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -566,7 +566,7 @@ private:
 class KPLATOKERNEL_EXPORT NodeMoveCmd : public NamedCommand
 {
 public:
-    NodeMoveCmd( Project *project, Node *node, Node *newParent, int newPos, const QString& name = QString() );
+    NodeMoveCmd( Project *project, Node *node, Node *newParent, int newPos, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -584,7 +584,7 @@ private:
 class KPLATOKERNEL_EXPORT AddRelationCmd : public NamedCommand
 {
 public:
-    AddRelationCmd( Project &project, Relation *rel, const QString& name = QString() );
+    AddRelationCmd( Project &project, Relation *rel, const KUndo2MagicString& name = KUndo2MagicString() );
     ~AddRelationCmd();
     void execute();
     void unexecute();
@@ -599,7 +599,7 @@ private:
 class KPLATOKERNEL_EXPORT DeleteRelationCmd : public NamedCommand
 {
 public:
-    DeleteRelationCmd( Project &project, Relation *rel, const QString& name = QString() );
+    DeleteRelationCmd( Project &project, Relation *rel, const KUndo2MagicString& name = KUndo2MagicString() );
     ~DeleteRelationCmd();
     void execute();
     void unexecute();
@@ -614,7 +614,7 @@ private:
 class KPLATOKERNEL_EXPORT ModifyRelationTypeCmd : public NamedCommand
 {
 public:
-    ModifyRelationTypeCmd( Relation *rel, Relation::Type type, const QString& name = QString() );
+    ModifyRelationTypeCmd( Relation *rel, Relation::Type type, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -629,7 +629,7 @@ private:
 class KPLATOKERNEL_EXPORT ModifyRelationLagCmd : public NamedCommand
 {
 public:
-    ModifyRelationLagCmd( Relation *rel, Duration lag, const QString& name = QString() );
+    ModifyRelationLagCmd( Relation *rel, Duration lag, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -644,7 +644,7 @@ private:
 class KPLATOKERNEL_EXPORT AddResourceRequestCmd : public NamedCommand
 {
 public:
-    AddResourceRequestCmd( ResourceGroupRequest *group, ResourceRequest *request, const QString& name = QString() );
+    AddResourceRequestCmd( ResourceGroupRequest *group, ResourceRequest *request, const KUndo2MagicString& name = KUndo2MagicString() );
     ~AddResourceRequestCmd();
     void execute();
     void unexecute();
@@ -659,7 +659,7 @@ private:
 class KPLATOKERNEL_EXPORT RemoveResourceRequestCmd : public NamedCommand
 {
 public:
-    RemoveResourceRequestCmd( ResourceGroupRequest *group, ResourceRequest *request, const QString& name = QString() );
+    RemoveResourceRequestCmd( ResourceGroupRequest *group, ResourceRequest *request, const KUndo2MagicString& name = KUndo2MagicString() );
     ~RemoveResourceRequestCmd();
     void execute();
     void unexecute();
@@ -674,7 +674,7 @@ private:
 class KPLATOKERNEL_EXPORT ModifyResourceRequestUnitsCmd : public NamedCommand
 {
 public:
-    ModifyResourceRequestUnitsCmd( ResourceRequest *request, int oldvalue, int newvalue, const QString& name = QString() );
+    ModifyResourceRequestUnitsCmd( ResourceRequest *request, int oldvalue, int newvalue, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -687,7 +687,7 @@ private:
 class KPLATOKERNEL_EXPORT ModifyResourceRequestRequiredCmd : public NamedCommand
 {
 public:
-    ModifyResourceRequestRequiredCmd( ResourceRequest *request, const QList<Resource*> &value, const QString& name = QString() );
+    ModifyResourceRequestRequiredCmd( ResourceRequest *request, const QList<Resource*> &value, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -700,7 +700,7 @@ private:
 class KPLATOKERNEL_EXPORT ModifyResourceGroupRequestUnitsCmd : public NamedCommand
 {
 public:
-    ModifyResourceGroupRequestUnitsCmd( ResourceGroupRequest *request, int oldvalue, int newvalue, const QString& name = QString() );
+    ModifyResourceGroupRequestUnitsCmd( ResourceGroupRequest *request, int oldvalue, int newvalue, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -713,7 +713,7 @@ private:
 class KPLATOKERNEL_EXPORT ModifyEstimateCmd : public NamedCommand
 {
 public:
-    ModifyEstimateCmd( Node &node, double oldvalue, double newvalue, const QString& name = QString() );
+    ModifyEstimateCmd( Node &node, double oldvalue, double newvalue, const KUndo2MagicString& name = KUndo2MagicString() );
     ~ModifyEstimateCmd();
     void execute();
     void unexecute();
@@ -729,7 +729,7 @@ private:
 class KPLATOKERNEL_EXPORT EstimateModifyOptimisticRatioCmd : public NamedCommand
 {
 public:
-    EstimateModifyOptimisticRatioCmd( Node &node, int oldvalue, int newvalue, const QString& name = QString() );
+    EstimateModifyOptimisticRatioCmd( Node &node, int oldvalue, int newvalue, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -742,7 +742,7 @@ private:
 class KPLATOKERNEL_EXPORT EstimateModifyPessimisticRatioCmd : public NamedCommand
 {
 public:
-    EstimateModifyPessimisticRatioCmd( Node &node, int oldvalue, int newvalue, const QString& name = QString() );
+    EstimateModifyPessimisticRatioCmd( Node &node, int oldvalue, int newvalue, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -755,7 +755,7 @@ private:
 class KPLATOKERNEL_EXPORT ModifyEstimateTypeCmd : public NamedCommand
 {
 public:
-    ModifyEstimateTypeCmd( Node &node, int oldvalue, int newvalue, const QString& name = QString() );
+    ModifyEstimateTypeCmd( Node &node, int oldvalue, int newvalue, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -768,7 +768,7 @@ private:
 class KPLATOKERNEL_EXPORT ModifyEstimateUnitCmd : public NamedCommand
 {
 public:
-    ModifyEstimateUnitCmd( Node &node, Duration::Unit oldvalue, Duration::Unit newvalue, const QString& name = QString() );
+    ModifyEstimateUnitCmd( Node &node, Duration::Unit oldvalue, Duration::Unit newvalue, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -780,7 +780,7 @@ private:
 class KPLATOKERNEL_EXPORT EstimateModifyRiskCmd : public NamedCommand
 {
 public:
-    EstimateModifyRiskCmd( Node &node, int oldvalue, int newvalue, const QString& name = QString() );
+    EstimateModifyRiskCmd( Node &node, int oldvalue, int newvalue, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -793,7 +793,7 @@ private:
 class KPLATOKERNEL_EXPORT ModifyEstimateCalendarCmd : public NamedCommand
 {
 public:
-    ModifyEstimateCalendarCmd( Node &node, Calendar *oldvalue, Calendar *newvalue, const QString& name = QString() );
+    ModifyEstimateCalendarCmd( Node &node, Calendar *oldvalue, Calendar *newvalue, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -807,7 +807,7 @@ private:
 class KPLATOKERNEL_EXPORT AddResourceGroupRequestCmd : public NamedCommand
 {
 public:
-    AddResourceGroupRequestCmd( Task &task, ResourceGroupRequest *request, const QString& name = QString() );
+    AddResourceGroupRequestCmd( Task &task, ResourceGroupRequest *request, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -820,8 +820,8 @@ private:
 class KPLATOKERNEL_EXPORT RemoveResourceGroupRequestCmd : public NamedCommand
 {
 public:
-    explicit RemoveResourceGroupRequestCmd( ResourceGroupRequest *request, const QString& name = QString() );
-    RemoveResourceGroupRequestCmd( Task &task, ResourceGroupRequest *request, const QString& name = QString() );
+    explicit RemoveResourceGroupRequestCmd( ResourceGroupRequest *request, const KUndo2MagicString& name = KUndo2MagicString() );
+    RemoveResourceGroupRequestCmd( Task &task, ResourceGroupRequest *request, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -834,7 +834,7 @@ private:
 class KPLATOKERNEL_EXPORT AddResourceCmd : public NamedCommand
 {
 public:
-    AddResourceCmd( ResourceGroup *group, Resource *resource, const QString& name = QString() );
+    AddResourceCmd( ResourceGroup *group, Resource *resource, const KUndo2MagicString& name = KUndo2MagicString() );
     ~AddResourceCmd();
     void execute();
     void unexecute();
@@ -850,7 +850,7 @@ protected:
 class KPLATOKERNEL_EXPORT RemoveResourceCmd : public AddResourceCmd
 {
 public:
-    RemoveResourceCmd( ResourceGroup *group, Resource *resource, const QString& name = QString() );
+    RemoveResourceCmd( ResourceGroup *group, Resource *resource, const KUndo2MagicString& name = KUndo2MagicString() );
     ~RemoveResourceCmd();
     void execute();
     void unexecute();
@@ -864,7 +864,7 @@ private:
 class KPLATOKERNEL_EXPORT MoveResourceCmd : public NamedCommand
 {
 public:
-    MoveResourceCmd( ResourceGroup *group, Resource *resource, const QString& name = QString() );
+    MoveResourceCmd( ResourceGroup *group, Resource *resource, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -878,7 +878,7 @@ private:
 class KPLATOKERNEL_EXPORT ModifyResourceNameCmd : public NamedCommand
 {
 public:
-    ModifyResourceNameCmd( Resource *resource, const QString& value, const QString& name = QString() );
+    ModifyResourceNameCmd( Resource *resource, const QString& value, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -891,7 +891,7 @@ private:
 class KPLATOKERNEL_EXPORT ModifyResourceInitialsCmd : public NamedCommand
 {
 public:
-    ModifyResourceInitialsCmd( Resource *resource, const QString& value, const QString& name = QString() );
+    ModifyResourceInitialsCmd( Resource *resource, const QString& value, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -903,7 +903,7 @@ private:
 class KPLATOKERNEL_EXPORT ModifyResourceEmailCmd : public NamedCommand
 {
 public:
-    ModifyResourceEmailCmd( Resource *resource, const QString& value, const QString& name = QString() );
+    ModifyResourceEmailCmd( Resource *resource, const QString& value, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -915,7 +915,7 @@ private:
 class KPLATOKERNEL_EXPORT ModifyResourceAutoAllocateCmd : public NamedCommand
 {
 public:
-    ModifyResourceAutoAllocateCmd( Resource *resource, bool value, const QString& name = QString() );
+    ModifyResourceAutoAllocateCmd( Resource *resource, bool value, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -927,7 +927,7 @@ private:
 class KPLATOKERNEL_EXPORT ModifyResourceTypeCmd : public NamedCommand
 {
 public:
-    ModifyResourceTypeCmd( Resource *resource, int value, const QString& name = QString() );
+    ModifyResourceTypeCmd( Resource *resource, int value, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -940,7 +940,7 @@ private:
 class KPLATOKERNEL_EXPORT ModifyResourceUnitsCmd : public NamedCommand
 {
 public:
-    ModifyResourceUnitsCmd( Resource *resource, int value, const QString& name = QString() );
+    ModifyResourceUnitsCmd( Resource *resource, int value, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -953,7 +953,7 @@ private:
 class KPLATOKERNEL_EXPORT ModifyResourceAvailableFromCmd : public NamedCommand
 {
 public:
-    ModifyResourceAvailableFromCmd( Resource *resource, const QDateTime& value, const QString& name = QString() );
+    ModifyResourceAvailableFromCmd( Resource *resource, const QDateTime& value, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -966,7 +966,7 @@ private:
 class KPLATOKERNEL_EXPORT ModifyResourceAvailableUntilCmd : public NamedCommand
 {
 public:
-    ModifyResourceAvailableUntilCmd( Resource *resource, const QDateTime& value, const QString& name = QString() );
+    ModifyResourceAvailableUntilCmd( Resource *resource, const QDateTime& value, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -980,7 +980,7 @@ private:
 class KPLATOKERNEL_EXPORT ModifyResourceNormalRateCmd : public NamedCommand
 {
 public:
-    ModifyResourceNormalRateCmd( Resource *resource, double value, const QString& name = QString() );
+    ModifyResourceNormalRateCmd( Resource *resource, double value, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -992,7 +992,7 @@ private:
 class KPLATOKERNEL_EXPORT ModifyResourceOvertimeRateCmd : public NamedCommand
 {
 public:
-    ModifyResourceOvertimeRateCmd( Resource *resource, double value, const QString& name = QString() );
+    ModifyResourceOvertimeRateCmd( Resource *resource, double value, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -1004,7 +1004,7 @@ private:
 class KPLATOKERNEL_EXPORT ModifyResourceCalendarCmd : public NamedCommand
 {
 public:
-    ModifyResourceCalendarCmd( Resource *resource, Calendar *value, const QString& name = QString() );
+    ModifyResourceCalendarCmd( Resource *resource, Calendar *value, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -1016,7 +1016,7 @@ private:
 class KPLATOKERNEL_EXPORT ModifyRequiredResourcesCmd : public NamedCommand
 {
 public:
-    ModifyRequiredResourcesCmd( Resource *resource, const QStringList &value, const QString& name = QString() );
+    ModifyRequiredResourcesCmd( Resource *resource, const QStringList &value, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -1028,7 +1028,7 @@ private:
 class KPLATOKERNEL_EXPORT ModifyResourceAccountCmd : public NamedCommand
 {
 public:
-    ModifyResourceAccountCmd( Resource *resource, Account *account, const QString& name = QString() );
+    ModifyResourceAccountCmd( Resource *resource, Account *account, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -1040,7 +1040,7 @@ private:
 class KPLATOKERNEL_EXPORT AddResourceTeamCmd : public NamedCommand
 {
 public:
-    AddResourceTeamCmd( Resource *team, const QString &member, const QString& name = QString() );
+    AddResourceTeamCmd( Resource *team, const QString &member, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -1051,7 +1051,7 @@ private:
 class KPLATOKERNEL_EXPORT RemoveResourceTeamCmd : public NamedCommand
 {
 public:
-    RemoveResourceTeamCmd( Resource *team, const QString &member, const QString& name = QString() );
+    RemoveResourceTeamCmd( Resource *team, const QString &member, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -1063,7 +1063,7 @@ private:
 class KPLATOKERNEL_EXPORT RemoveResourceGroupCmd : public NamedCommand
 {
 public:
-    RemoveResourceGroupCmd( Project *project, ResourceGroup *group, const QString& name = QString() );
+    RemoveResourceGroupCmd( Project *project, ResourceGroup *group, const KUndo2MagicString& name = KUndo2MagicString() );
     ~RemoveResourceGroupCmd();
     void execute();
     void unexecute();
@@ -1080,7 +1080,7 @@ protected:
 class KPLATOKERNEL_EXPORT AddResourceGroupCmd : public RemoveResourceGroupCmd
 {
 public:
-    AddResourceGroupCmd( Project *project, ResourceGroup *group, const QString& name = QString() );
+    AddResourceGroupCmd( Project *project, ResourceGroup *group, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 };
@@ -1088,7 +1088,7 @@ public:
 class KPLATOKERNEL_EXPORT ModifyResourceGroupNameCmd : public NamedCommand
 {
 public:
-    ModifyResourceGroupNameCmd( ResourceGroup *group, const QString& value, const QString& name = QString() );
+    ModifyResourceGroupNameCmd( ResourceGroup *group, const QString& value, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -1101,7 +1101,7 @@ private:
 class KPLATOKERNEL_EXPORT ModifyResourceGroupTypeCmd : public NamedCommand
 {
     public:
-        ModifyResourceGroupTypeCmd( ResourceGroup *group, int value, const QString& name = QString() );
+        ModifyResourceGroupTypeCmd( ResourceGroup *group, int value, const KUndo2MagicString& name = KUndo2MagicString() );
         void execute();
         void unexecute();
 
@@ -1114,7 +1114,7 @@ class KPLATOKERNEL_EXPORT ModifyResourceGroupTypeCmd : public NamedCommand
 class KPLATOKERNEL_EXPORT ModifyCompletionEntrymodeCmd : public NamedCommand
 {
 public:
-    ModifyCompletionEntrymodeCmd( Completion &completion, Completion::Entrymode value, const QString& name = QString() );
+    ModifyCompletionEntrymodeCmd( Completion &completion, Completion::Entrymode value, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -1127,7 +1127,7 @@ private:
 class KPLATOKERNEL_EXPORT ModifyCompletionStartedCmd : public NamedCommand
 {
 public:
-    ModifyCompletionStartedCmd( Completion &completion, bool value, const QString& name = QString() );
+    ModifyCompletionStartedCmd( Completion &completion, bool value, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -1140,7 +1140,7 @@ private:
 class KPLATOKERNEL_EXPORT ModifyCompletionFinishedCmd : public NamedCommand
 {
 public:
-    ModifyCompletionFinishedCmd( Completion &completion, bool value, const QString& name = QString() );
+    ModifyCompletionFinishedCmd( Completion &completion, bool value, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -1153,7 +1153,7 @@ private:
 class KPLATOKERNEL_EXPORT ModifyCompletionStartTimeCmd : public NamedCommand
 {
 public:
-    ModifyCompletionStartTimeCmd( Completion &completion, const QDateTime &value, const QString& name = QString() );
+    ModifyCompletionStartTimeCmd( Completion &completion, const QDateTime &value, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -1167,7 +1167,7 @@ private:
 class KPLATOKERNEL_EXPORT ModifyCompletionFinishTimeCmd : public NamedCommand
 {
 public:
-    ModifyCompletionFinishTimeCmd( Completion &completion, const QDateTime &value, const QString& name = QString() );
+    ModifyCompletionFinishTimeCmd( Completion &completion, const QDateTime &value, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -1181,7 +1181,7 @@ private:
 class KPLATOKERNEL_EXPORT AddCompletionEntryCmd : public NamedCommand
 {
 public:
-    AddCompletionEntryCmd( Completion &completion, const QDate &date, Completion::Entry *value, const QString& name = QString() );
+    AddCompletionEntryCmd( Completion &completion, const QDate &date, Completion::Entry *value, const KUndo2MagicString& name = KUndo2MagicString() );
     ~AddCompletionEntryCmd();
     void execute();
     void unexecute();
@@ -1196,7 +1196,7 @@ private:
 class KPLATOKERNEL_EXPORT RemoveCompletionEntryCmd : public NamedCommand
 {
 public:
-    RemoveCompletionEntryCmd( Completion &completion, const QDate& date, const QString& name = QString() );
+    RemoveCompletionEntryCmd( Completion &completion, const QDate& date, const KUndo2MagicString& name = KUndo2MagicString() );
     ~RemoveCompletionEntryCmd();
     void execute();
     void unexecute();
@@ -1211,7 +1211,7 @@ private:
 class KPLATOKERNEL_EXPORT ModifyCompletionEntryCmd : public NamedCommand
 {
 public:
-    ModifyCompletionEntryCmd( Completion &completion, const QDate &date, Completion::Entry *value, const QString& name = QString() );
+    ModifyCompletionEntryCmd( Completion &completion, const QDate &date, Completion::Entry *value, const KUndo2MagicString& name = KUndo2MagicString() );
     ~ModifyCompletionEntryCmd();
     void execute();
     void unexecute();
@@ -1223,7 +1223,7 @@ private:
 class KPLATOKERNEL_EXPORT ModifyCompletionPercentFinishedCmd : public NamedCommand
 {
 public:
-    ModifyCompletionPercentFinishedCmd( Completion &completion, const QDate &date, int value, const QString& name = QString() );
+    ModifyCompletionPercentFinishedCmd( Completion &completion, const QDate &date, int value, const KUndo2MagicString& name = KUndo2MagicString() );
     
     void execute();
     void unexecute();
@@ -1238,7 +1238,7 @@ private:
 class KPLATOKERNEL_EXPORT ModifyCompletionRemainingEffortCmd : public NamedCommand
 {
 public:
-    ModifyCompletionRemainingEffortCmd( Completion &completion, const QDate &date, const Duration &value, const QString &name = QString() );
+    ModifyCompletionRemainingEffortCmd( Completion &completion, const QDate &date, const Duration &value, const KUndo2MagicString &name = KUndo2MagicString() );
 
     void execute();
     void unexecute();
@@ -1253,7 +1253,7 @@ private:
 class KPLATOKERNEL_EXPORT ModifyCompletionActualEffortCmd : public NamedCommand
 {
 public:
-    ModifyCompletionActualEffortCmd( Completion &completion, const QDate &date, const Duration &value, const QString &name = QString() );
+    ModifyCompletionActualEffortCmd( Completion &completion, const QDate &date, const Duration &value, const KUndo2MagicString &name = KUndo2MagicString() );
 
     void execute();
     void unexecute();
@@ -1273,7 +1273,7 @@ private:
 class KPLATOKERNEL_EXPORT AddCompletionUsedEffortCmd : public NamedCommand
 {
 public:
-    AddCompletionUsedEffortCmd( Completion &completion, const Resource *resource, Completion::UsedEffort *value, const QString& name = QString() );
+    AddCompletionUsedEffortCmd( Completion &completion, const Resource *resource, Completion::UsedEffort *value, const KUndo2MagicString& name = KUndo2MagicString() );
     ~AddCompletionUsedEffortCmd();
     void execute();
     void unexecute();
@@ -1289,7 +1289,7 @@ private:
 class KPLATOKERNEL_EXPORT AddCompletionActualEffortCmd : public NamedCommand
 {
 public:
-    AddCompletionActualEffortCmd( Completion::UsedEffort &ue, const QDate &date, const Completion::UsedEffort::ActualEffort &value, const QString& name = QString() );
+    AddCompletionActualEffortCmd( Completion::UsedEffort &ue, const QDate &date, const Completion::UsedEffort::ActualEffort &value, const KUndo2MagicString& name = KUndo2MagicString() );
     ~AddCompletionActualEffortCmd();
     void execute();
     void unexecute();
@@ -1305,8 +1305,8 @@ private:
 class KPLATOKERNEL_EXPORT AddAccountCmd : public NamedCommand
 {
 public:
-    AddAccountCmd( Project &project, Account *account, Account *parent = 0, int index = -1, const QString& name = QString() );
-    AddAccountCmd( Project &project, Account *account, const QString& parent, int index = -1, const QString& name = QString() );
+    AddAccountCmd( Project &project, Account *account, Account *parent = 0, int index = -1, const KUndo2MagicString& name = KUndo2MagicString() );
+    AddAccountCmd( Project &project, Account *account, const QString& parent, int index = -1, const KUndo2MagicString& name = KUndo2MagicString() );
     ~AddAccountCmd();
     void execute();
     void unexecute();
@@ -1325,7 +1325,7 @@ private:
 class KPLATOKERNEL_EXPORT RemoveAccountCmd : public NamedCommand
 {
 public:
-    RemoveAccountCmd( Project &project, Account *account, const QString& name = QString() );
+    RemoveAccountCmd( Project &project, Account *account, const KUndo2MagicString& name = KUndo2MagicString() );
     ~RemoveAccountCmd();
     void execute();
     void unexecute();
@@ -1343,7 +1343,7 @@ private:
 class KPLATOKERNEL_EXPORT RenameAccountCmd : public NamedCommand
 {
 public:
-    RenameAccountCmd( Account *account, const QString& value, const QString& name = QString() );
+    RenameAccountCmd( Account *account, const QString& value, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -1356,7 +1356,7 @@ private:
 class KPLATOKERNEL_EXPORT ModifyAccountDescriptionCmd : public NamedCommand
 {
 public:
-    ModifyAccountDescriptionCmd( Account *account, const QString& value, const QString& name = QString() );
+    ModifyAccountDescriptionCmd( Account *account, const QString& value, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -1369,7 +1369,7 @@ private:
 class KPLATOKERNEL_EXPORT NodeModifyStartupCostCmd : public NamedCommand
 {
 public:
-    NodeModifyStartupCostCmd( Node &node, double value, const QString& name = QString() );
+    NodeModifyStartupCostCmd( Node &node, double value, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -1382,7 +1382,7 @@ private:
 class KPLATOKERNEL_EXPORT NodeModifyShutdownCostCmd : public NamedCommand
 {
 public:
-    NodeModifyShutdownCostCmd( Node &node, double value, const QString& name = QString() );
+    NodeModifyShutdownCostCmd( Node &node, double value, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -1395,7 +1395,7 @@ private:
 class KPLATOKERNEL_EXPORT NodeModifyRunningAccountCmd : public NamedCommand
 {
 public:
-    NodeModifyRunningAccountCmd( Node &node, Account *oldvalue, Account *newvalue, const QString& name = QString() );
+    NodeModifyRunningAccountCmd( Node &node, Account *oldvalue, Account *newvalue, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -1408,7 +1408,7 @@ private:
 class KPLATOKERNEL_EXPORT NodeModifyStartupAccountCmd : public NamedCommand
 {
 public:
-    NodeModifyStartupAccountCmd( Node &node, Account *oldvalue, Account *newvalue, const QString& name = QString() );
+    NodeModifyStartupAccountCmd( Node &node, Account *oldvalue, Account *newvalue, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -1421,7 +1421,7 @@ private:
 class KPLATOKERNEL_EXPORT NodeModifyShutdownAccountCmd : public NamedCommand
 {
 public:
-    NodeModifyShutdownAccountCmd( Node &node, Account *oldvalue, Account *newvalue, const QString& name = QString() );
+    NodeModifyShutdownAccountCmd( Node &node, Account *oldvalue, Account *newvalue, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -1434,7 +1434,7 @@ private:
 class KPLATOKERNEL_EXPORT ModifyDefaultAccountCmd : public NamedCommand
 {
 public:
-    ModifyDefaultAccountCmd( Accounts &acc, Account *oldvalue, Account *newvalue, const QString& name = QString() );
+    ModifyDefaultAccountCmd( Accounts &acc, Account *oldvalue, Account *newvalue, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -1447,7 +1447,7 @@ private:
 class KPLATOKERNEL_EXPORT ResourceModifyAccountCmd : public NamedCommand
 {
 public:
-    ResourceModifyAccountCmd( Resource &resource, Account *oldvalue, Account *newvalue, const QString& name = QString() );
+    ResourceModifyAccountCmd( Resource &resource, Account *oldvalue, Account *newvalue, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -1460,7 +1460,7 @@ private:
 class KPLATOKERNEL_EXPORT ProjectModifyConstraintCmd : public NamedCommand
 {
 public:
-    ProjectModifyConstraintCmd( Project &node, Node::ConstraintType c, const QString& name = QString() );
+    ProjectModifyConstraintCmd( Project &node, Node::ConstraintType c, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -1474,7 +1474,7 @@ private:
 class KPLATOKERNEL_EXPORT ProjectModifyStartTimeCmd : public NamedCommand
 {
 public:
-    ProjectModifyStartTimeCmd( Project &node, const QDateTime& dt, const QString& name = QString() );
+    ProjectModifyStartTimeCmd( Project &node, const QDateTime& dt, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -1488,7 +1488,7 @@ private:
 class KPLATOKERNEL_EXPORT ProjectModifyEndTimeCmd : public NamedCommand
 {
 public:
-    ProjectModifyEndTimeCmd( Project &project, const QDateTime& dt, const QString& name = QString() );
+    ProjectModifyEndTimeCmd( Project &project, const QDateTime& dt, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -1503,8 +1503,8 @@ private:
 class KPLATOKERNEL_EXPORT AddScheduleManagerCmd : public NamedCommand
 {
 public:
-    AddScheduleManagerCmd( Project &project, ScheduleManager *sm, int index = -1, const QString& name = QString() );
-    AddScheduleManagerCmd( ScheduleManager *parent, ScheduleManager *sm, int index = -1, const QString& name = QString() );
+    AddScheduleManagerCmd( Project &project, ScheduleManager *sm, int index = -1, const KUndo2MagicString& name = KUndo2MagicString() );
+    AddScheduleManagerCmd( ScheduleManager *parent, ScheduleManager *sm, int index = -1, const KUndo2MagicString& name = KUndo2MagicString() );
     ~AddScheduleManagerCmd();
     void execute();
     void unexecute();
@@ -1521,7 +1521,7 @@ protected:
 class KPLATOKERNEL_EXPORT DeleteScheduleManagerCmd : public AddScheduleManagerCmd
 {
 public:
-    DeleteScheduleManagerCmd( Project &project, ScheduleManager *sm, const QString& name = QString() );
+    DeleteScheduleManagerCmd( Project &project, ScheduleManager *sm, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -1532,7 +1532,7 @@ private:
 class KPLATOKERNEL_EXPORT MoveScheduleManagerCmd : public NamedCommand
 {
 public:
-    MoveScheduleManagerCmd( ScheduleManager *sm, ScheduleManager *newparent, int newindex, const QString& name = QString() );
+    MoveScheduleManagerCmd( ScheduleManager *sm, ScheduleManager *newparent, int newindex, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -1548,7 +1548,7 @@ private:
 class KPLATOKERNEL_EXPORT ModifyScheduleManagerNameCmd : public NamedCommand
 {
 public:
-    ModifyScheduleManagerNameCmd( ScheduleManager &sm, const QString& value, const QString& name = QString() );
+    ModifyScheduleManagerNameCmd( ScheduleManager &sm, const QString& value, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -1560,7 +1560,7 @@ private:
 class KPLATOKERNEL_EXPORT ModifyScheduleManagerAllowOverbookingCmd : public NamedCommand
 {
 public:
-    ModifyScheduleManagerAllowOverbookingCmd( ScheduleManager &sm, bool value, const QString& name = QString() );
+    ModifyScheduleManagerAllowOverbookingCmd( ScheduleManager &sm, bool value, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -1572,7 +1572,7 @@ private:
 class KPLATOKERNEL_EXPORT ModifyScheduleManagerDistributionCmd : public NamedCommand
 {
 public:
-    ModifyScheduleManagerDistributionCmd( ScheduleManager &sm, bool value, const QString& name = QString() );
+    ModifyScheduleManagerDistributionCmd( ScheduleManager &sm, bool value, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -1584,7 +1584,7 @@ private:
 class KPLATOKERNEL_EXPORT CalculateScheduleCmd : public NamedCommand
 {
 public:
-    CalculateScheduleCmd( Project &project, ScheduleManager *sm, const QString& name = QString() );
+    CalculateScheduleCmd( Project &project, ScheduleManager *sm, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -1599,7 +1599,7 @@ private:
 class KPLATOKERNEL_EXPORT BaselineScheduleCmd : public NamedCommand
 {
 public:
-    explicit BaselineScheduleCmd( ScheduleManager &sm, const QString& name = QString() );
+    explicit BaselineScheduleCmd( ScheduleManager &sm, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -1610,7 +1610,7 @@ private:
 class KPLATOKERNEL_EXPORT ResetBaselineScheduleCmd : public NamedCommand
 {
 public:
-    explicit ResetBaselineScheduleCmd( ScheduleManager &sm, const QString& name = QString() );
+    explicit ResetBaselineScheduleCmd( ScheduleManager &sm, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -1621,7 +1621,7 @@ private:
 class KPLATOKERNEL_EXPORT ModifyScheduleManagerSchedulingDirectionCmd : public NamedCommand
 {
 public:
-    ModifyScheduleManagerSchedulingDirectionCmd( ScheduleManager &sm, bool value, const QString& name = QString() );
+    ModifyScheduleManagerSchedulingDirectionCmd( ScheduleManager &sm, bool value, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -1633,7 +1633,7 @@ private:
 class KPLATOKERNEL_EXPORT ModifyScheduleManagerSchedulerCmd : public NamedCommand
 {
 public:
-    ModifyScheduleManagerSchedulerCmd( ScheduleManager &sm, int value, const QString& name = QString() );
+    ModifyScheduleManagerSchedulerCmd( ScheduleManager &sm, int value, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -1645,7 +1645,7 @@ private:
 class KPLATOKERNEL_EXPORT ModifyScheduleManagerSchedulingGranularityCmd : public NamedCommand
 {
 public:
-    ModifyScheduleManagerSchedulingGranularityCmd( ScheduleManager &sm, int value, const QString& name = QString() );
+    ModifyScheduleManagerSchedulingGranularityCmd( ScheduleManager &sm, int value, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -1657,7 +1657,7 @@ private:
 class KPLATOKERNEL_EXPORT ModifyStandardWorktimeYearCmd : public NamedCommand
 {
 public:
-    ModifyStandardWorktimeYearCmd( StandardWorktime *wt, double oldvalue, double newvalue, const QString& name = QString() );
+    ModifyStandardWorktimeYearCmd( StandardWorktime *wt, double oldvalue, double newvalue, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 private:
@@ -1669,7 +1669,7 @@ private:
 class KPLATOKERNEL_EXPORT ModifyStandardWorktimeMonthCmd : public NamedCommand
 {
 public:
-    ModifyStandardWorktimeMonthCmd( StandardWorktime *wt, double oldvalue, double newvalue, const QString& name = QString() );
+    ModifyStandardWorktimeMonthCmd( StandardWorktime *wt, double oldvalue, double newvalue, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 private:
@@ -1681,7 +1681,7 @@ private:
 class KPLATOKERNEL_EXPORT ModifyStandardWorktimeWeekCmd : public NamedCommand
 {
 public:
-    ModifyStandardWorktimeWeekCmd( StandardWorktime *wt, double oldvalue, double newvalue, const QString& name = QString() );
+    ModifyStandardWorktimeWeekCmd( StandardWorktime *wt, double oldvalue, double newvalue, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 private:
@@ -1693,7 +1693,7 @@ private:
 class KPLATOKERNEL_EXPORT ModifyStandardWorktimeDayCmd : public NamedCommand
 {
 public:
-    ModifyStandardWorktimeDayCmd( StandardWorktime *wt, double oldvalue, double newvalue, const QString& name = QString() );
+    ModifyStandardWorktimeDayCmd( StandardWorktime *wt, double oldvalue, double newvalue, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 private:
@@ -1705,7 +1705,7 @@ private:
 class KPLATOKERNEL_EXPORT DocumentAddCmd : public NamedCommand
 {
 public:
-    DocumentAddCmd( Documents& docs, Document *value, const QString& name = QString() );
+    DocumentAddCmd( Documents& docs, Document *value, const KUndo2MagicString& name = KUndo2MagicString() );
     ~DocumentAddCmd();
     void execute();
     void unexecute();
@@ -1718,7 +1718,7 @@ private:
 class KPLATOKERNEL_EXPORT DocumentRemoveCmd : public NamedCommand
 {
 public:
-    DocumentRemoveCmd( Documents& docs, Document *value, const QString& name = QString() );
+    DocumentRemoveCmd( Documents& docs, Document *value, const KUndo2MagicString& name = KUndo2MagicString() );
     ~DocumentRemoveCmd();
     void execute();
     void unexecute();
@@ -1731,7 +1731,7 @@ private:
 class KPLATOKERNEL_EXPORT DocumentModifyUrlCmd : public NamedCommand
 {
 public:
-    DocumentModifyUrlCmd( Document *doc, const KUrl &url, const QString& name = QString() );
+    DocumentModifyUrlCmd( Document *doc, const KUrl &url, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 private:
@@ -1743,7 +1743,7 @@ private:
 class KPLATOKERNEL_EXPORT DocumentModifyNameCmd : public NamedCommand
 {
 public:
-    DocumentModifyNameCmd( Document *doc, const QString &value, const QString& name = QString() );
+    DocumentModifyNameCmd( Document *doc, const QString &value, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 private:
@@ -1755,7 +1755,7 @@ private:
 class KPLATOKERNEL_EXPORT DocumentModifyTypeCmd : public NamedCommand
 {
 public:
-    DocumentModifyTypeCmd( Document *doc, Document::Type value, const QString& name = QString() );
+    DocumentModifyTypeCmd( Document *doc, Document::Type value, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 private:
@@ -1767,7 +1767,7 @@ private:
 class KPLATOKERNEL_EXPORT DocumentModifyStatusCmd : public NamedCommand
 {
 public:
-    DocumentModifyStatusCmd( Document *doc, const QString &value, const QString& name = QString() );
+    DocumentModifyStatusCmd( Document *doc, const QString &value, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 private:
@@ -1779,7 +1779,7 @@ private:
 class KPLATOKERNEL_EXPORT DocumentModifySendAsCmd : public NamedCommand
 {
     public:
-        DocumentModifySendAsCmd( Document *doc, const Document::SendAs value, const QString& name = QString() );
+        DocumentModifySendAsCmd( Document *doc, const Document::SendAs value, const KUndo2MagicString& name = KUndo2MagicString() );
         void execute();
         void unexecute();
     private:
@@ -1791,7 +1791,7 @@ class KPLATOKERNEL_EXPORT DocumentModifySendAsCmd : public NamedCommand
 class KPLATOKERNEL_EXPORT WBSDefinitionModifyCmd : public NamedCommand
 {
 public:
-    WBSDefinitionModifyCmd( Project &project, const WBSDefinition value, const QString& name = QString() );
+    WBSDefinitionModifyCmd( Project &project, const WBSDefinition value, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 private:
@@ -1802,7 +1802,7 @@ private:
 class KPLATOKERNEL_EXPORT InsertProjectCmd : public MacroCommand
 {
 public:
-    InsertProjectCmd( Project &project, Node *parent, Node *after, const QString& name = QString() );
+    InsertProjectCmd( Project &project, Node *parent, Node *after, const KUndo2MagicString& name = KUndo2MagicString() );
 
     void execute();
     void unexecute();
@@ -1822,7 +1822,7 @@ private:
 class KPLATOKERNEL_EXPORT WorkPackageAddCmd : public NamedCommand
 {
 public:
-    WorkPackageAddCmd( Project *project, Node *node, WorkPackage *wp, const QString& name = QString() );
+    WorkPackageAddCmd( Project *project, Node *node, WorkPackage *wp, const KUndo2MagicString& name = KUndo2MagicString() );
     ~WorkPackageAddCmd();
     void execute();
     void unexecute();
@@ -1837,7 +1837,7 @@ private:
 class KPLATOKERNEL_EXPORT ModifyProjectLocaleCmd : public MacroCommand
 {
 public:
-    ModifyProjectLocaleCmd( Project &project, const QString &name );
+    ModifyProjectLocaleCmd( Project &project, const KUndo2MagicString &name );
     void execute();
     void unexecute();
 private:
@@ -1847,7 +1847,7 @@ private:
 class KPLATOKERNEL_EXPORT ModifyCurrencySymolCmd : public NamedCommand
 {
 public:
-    ModifyCurrencySymolCmd(  KLocale *locale, const QString &value, const QString& name = QString() );
+    ModifyCurrencySymolCmd(  KLocale *locale, const QString &value, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -1860,7 +1860,7 @@ private:
 class  KPLATOKERNEL_EXPORT ModifyCurrencyFractionalDigitsCmd : public NamedCommand
 {
 public:
-    ModifyCurrencyFractionalDigitsCmd(  KLocale *locale, int value, const QString& name = QString() );
+    ModifyCurrencyFractionalDigitsCmd(  KLocale *locale, int value, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -1873,7 +1873,7 @@ private:
 class  KPLATOKERNEL_EXPORT ModifyPositivePrefixCurrencySymolCmd : public NamedCommand
 {
 public:
-    ModifyPositivePrefixCurrencySymolCmd(  KLocale *locale, bool value, const QString& name = QString() );
+    ModifyPositivePrefixCurrencySymolCmd(  KLocale *locale, bool value, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -1886,7 +1886,7 @@ private:
 class  KPLATOKERNEL_EXPORT ModifyNegativePrefixCurrencySymolCmd : public NamedCommand
 {
 public:
-    ModifyNegativePrefixCurrencySymolCmd(  KLocale *locale, bool value, const QString& name = QString() );
+    ModifyNegativePrefixCurrencySymolCmd(  KLocale *locale, bool value, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -1899,7 +1899,7 @@ private:
 class  KPLATOKERNEL_EXPORT ModifyPositiveMonetarySignPositionCmd : public NamedCommand
 {
 public:
-    ModifyPositiveMonetarySignPositionCmd( KLocale *locale, int value, const QString& name = QString() );
+    ModifyPositiveMonetarySignPositionCmd( KLocale *locale, int value, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -1912,7 +1912,7 @@ private:
 class  KPLATOKERNEL_EXPORT ModifyNegativeMonetarySignPositionCmd : public NamedCommand
 {
 public:
-    ModifyNegativeMonetarySignPositionCmd( KLocale *locale, int value, const QString& name = QString() );
+    ModifyNegativeMonetarySignPositionCmd( KLocale *locale, int value, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -1925,7 +1925,7 @@ private:
 class  KPLATOKERNEL_EXPORT AddExternalAppointmentCmd : public NamedCommand
 {
 public:
-    AddExternalAppointmentCmd( Resource *resource, const QString &pid, const QString &pname, const QDateTime &start, const QDateTime &end, double load, const QString& name = QString() );
+    AddExternalAppointmentCmd( Resource *resource, const QString &pid, const QString &pname, const QDateTime &start, const QDateTime &end, double load, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 
@@ -1941,7 +1941,7 @@ private:
 class  KPLATOKERNEL_EXPORT ClearExternalAppointmentCmd : public NamedCommand
 {
 public:
-    ClearExternalAppointmentCmd( Resource *resource, const QString &pid, const QString& name = QString() );
+    ClearExternalAppointmentCmd( Resource *resource, const QString &pid, const KUndo2MagicString& name = KUndo2MagicString() );
     ~ClearExternalAppointmentCmd();
     void execute();
     void unexecute();
@@ -1955,7 +1955,7 @@ private:
 class  KPLATOKERNEL_EXPORT ClearAllExternalAppointmentsCmd : public NamedCommand
 {
 public:
-    explicit ClearAllExternalAppointmentsCmd( Project *project, const QString& name = QString() );
+    explicit ClearAllExternalAppointmentsCmd( Project *project, const KUndo2MagicString& name = KUndo2MagicString() );
     void execute();
     void unexecute();
 

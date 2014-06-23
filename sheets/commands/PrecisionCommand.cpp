@@ -33,7 +33,7 @@ using namespace Calligra::Sheets;
 PrecisionCommand::PrecisionCommand()
         : AbstractRegionCommand()
 {
-    setText(i18nc("(qtundo-format)", "Increase Precision"));
+    setText(kundo2_i18n("Increase Precision"));
 }
 
 bool PrecisionCommand::mainProcessing()
@@ -59,7 +59,7 @@ void PrecisionCommand::setReverse(bool reverse)
 {
     AbstractRegionCommand::setReverse(reverse);
     if (!m_reverse)
-        setText(i18nc("(qtundo-format)", "Increase Precision"));
+        setText(kundo2_i18n("Increase Precision"));
     else
-        setText(i18nc("(qtundo-format)", "Decrease Precision"));
+        setText(kundo2_i18n("Decrease Precision"));
 }

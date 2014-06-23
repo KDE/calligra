@@ -54,10 +54,10 @@ target_link_libraries(TestClipToPage wordsprivate ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
-if( SHOULD_BUILD_RDF )
+if( SHOULD_BUILD_FEATURE_RDF )
 #  set(TestRdf_SRCS TestRdf.cpp )
 #  kde4_add_unit_test(TestRdf TESTNAME words-part-TestRdf ${TestRdf_SRCS})
 #  target_link_libraries(TestRdf wordsprivate ${QT_QTTEST_LIBRARY})
-endif( SHOULD_BUILD_RDF )
+endif( SHOULD_BUILD_FEATURE_RDF )
 
 

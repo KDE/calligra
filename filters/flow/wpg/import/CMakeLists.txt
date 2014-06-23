@@ -2,7 +2,7 @@ include_directories(
     ../../../outputhelper/
     ${LIBODFGEN_INCLUDE_DIRS}
     ${LIBREVENGE_INCLUDE_DIRS}
-    ${LIBVISIO_INCLUDE_DIRS}
+    ${LIBWPG_INCLUDE_DIRS}
     ${KOMAIN_INCLUDES}
 )
 
@@ -20,6 +20,6 @@ target_link_libraries(calligra_filter_wpg2odg komain ${LIBODFGEN_LIBRARIES} ${LI
 install(TARGETS calligra_filter_wpg2odg DESTINATION ${PLUGIN_INSTALL_DIR})
 install(FILES calligra_filter_wpg2odg.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 
-if(SHOULD_BUILD_EXTRA_THUMBNAIL)
+if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
     install(FILES flow_wpg_thumbnail.desktop DESTINATION ${SERVICES_INSTALL_DIR})
-endif(SHOULD_BUILD_EXTRA_THUMBNAIL)
+endif(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)

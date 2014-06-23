@@ -176,11 +176,11 @@ void CSVDialog::accept()
 
     CSVDataCommand* command = new CSVDataCommand();
     if (m_mode == Clipboard)
-        command->setText(i18nc("(qtundo-format)", "Inserting From Clipboard"));
+        command->setText(kundo2_i18n("Inserting From Clipboard"));
     else if (m_mode == File)
-        command->setText(i18nc("(qtundo-format)", "Inserting Text File"));
+        command->setText(kundo2_i18n("Inserting Text File"));
     else
-        command->setText(i18nc("(qtundo-format)", "Text to Columns"));
+        command->setText(kundo2_i18n("Text to Columns"));
     command->setSheet(sheet);
     command->setValue(value);
     command->setColumnDataTypes(dataTypes);

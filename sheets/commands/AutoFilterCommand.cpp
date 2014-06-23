@@ -34,7 +34,7 @@ using namespace Calligra::Sheets;
 AutoFilterCommand::AutoFilterCommand()
         : AbstractRegionCommand()
 {
-    setText(i18nc("(qtundo-format)", "Auto-Filter"));
+    setText(kundo2_i18n("Auto-Filter"));
 }
 
 AutoFilterCommand::~AutoFilterCommand()

@@ -1,3 +1,4 @@
 #! /bin/sh
-$XGETTEXT *.cpp -o $podir/okularGenerator_odp.pot
+source ../../calligra_xgettext.sh
 
+calligra_xgettext *.cpp > $podir/okularGenerator_odp.pot

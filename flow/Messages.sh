@@ -1,4 +1,5 @@
 #! /bin/sh
-$EXTRACTRC `find . -name \*.ui -o -name \*.rc` >> rc.cpp || exit 11
-$XGETTEXT `find . -name \*.cpp -not -name \*.moc.\*` part/FlowAboutData.h -o $podir/flow.pot
+source ../calligra_xgettext.sh
 
+$EXTRACTRC `find . -name \*.ui -o -name \*.rc` >> rc.cpp || exit 11
+calligra_xgettext `find . -name \*.cpp -not -name \*.moc.\*` part/FlowAboutData.h > $podir/flow.pot

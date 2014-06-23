@@ -80,7 +80,7 @@ void KWFrameDialog::okClicked()
     {
     public:
         MasterCommand(KWAnchoringProperties *anchoringProperties, KWCanvas *canvas)
-            : KUndo2Command(i18nc("(qtundo-format)", "Change Shape Properties"))
+            : KUndo2Command(kundo2_i18n("Change Shape Properties"))
             , m_anchoringProperties(anchoringProperties)
             , m_first(true)
             , m_canvas(canvas)

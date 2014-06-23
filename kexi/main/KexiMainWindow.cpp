@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2013 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -317,6 +317,24 @@ int KexiMainWindow::create(int argc, char *argv[], const KAboutData &aboutData)
 
 //-------------------------------------------------
 
+KexiMainMenuActionShortcut::KexiMainMenuActionShortcut(const QKeySequence& key,
+                                                       QWidget *parent, QAction *action)
+    : QShortcut(key, parent)
+    , m_action(action)
+{
+    connect(this, SIGNAL(activated()), this, SLOT(slotActivated()));
+}
+
+void KexiMainMenuActionShortcut::slotActivated()
+{
+    if (!m_action->isEnabled()) {
+        return;
+    }
+    m_action->trigger();
+}
+
+//-------------------------------------------------
+
 KexiMainWindow::KexiMainWindow(QWidget *parent)
         : KexiMainWindowSuper(parent)
         , KexiMainWindowIface()
@@ -425,12 +443,10 @@ void KexiMainWindow::setupMainMenuActionShortcut(KAction* action)
 {
     if (!action->shortcut().isEmpty()) {
         if (!action->shortcut().primary().isEmpty()) {
-            QShortcut *s = new QShortcut(action->shortcut().primary(), this);
-            connect(s, SIGNAL(activated()), action, SLOT(trigger()));
+            (void)new KexiMainMenuActionShortcut(action->shortcut().primary(), this, action);
         }
         if (!action->shortcut().alternate().isEmpty()) {
-            QShortcut *s = new QShortcut(action->shortcut().alternate(), this);
-            connect(s, SIGNAL(activated()), action, SLOT(trigger()));
+            (void)new KexiMainMenuActionShortcut(action->shortcut().alternate(), this, action);
         }
     }
 }
@@ -2433,8 +2449,9 @@ void KexiMainWindow::slotProjectWelcome()
 void
 KexiMainWindow::slotProjectSave()
 {
-    if (!currentWindow())
+    if (!currentWindow() || currentWindow()->currentViewMode() == Kexi::DataViewMode) {
         return;
+    }
     saveObject(currentWindow());
     updateAppCaption();
     invalidateActions();
@@ -2443,8 +2460,9 @@ KexiMainWindow::slotProjectSave()
 void
 KexiMainWindow::slotProjectSaveAs()
 {
-    if (!currentWindow())
+    if (!currentWindow() || currentWindow()->currentViewMode() == Kexi::DataViewMode) {
         return;
+    }
     saveObject(currentWindow(), QString(), SaveObjectAs);
     updateAppCaption();
     invalidateActions();

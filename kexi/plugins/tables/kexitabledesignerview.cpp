@@ -641,7 +641,7 @@ void KexiTableDesignerView::slotBeforeCellChanged(
             //remember this action containing 2 subactions
             //Parent command is a Command containing 2 child commands
             Command *changeCaptionAndNameCommand = new Command(
-                i18n(
+                kundo2_i18n(
                     "Change \"%1\" field's name to \"%2\" and caption from \"%3\" to \"%4\"",
                     oldName, propertySetForRecord->property("name").value().toString(),
                     oldCaption, newValue.toString()), 0, this
@@ -720,7 +720,7 @@ void KexiTableDesignerView::slotBeforeCellChanged(
 
         // *** this action contains subactions ***
         Command *changeDataTypeCommand = new Command(
-            i18n("Change data type for field \"%1\" to \"%2\"",
+            kundo2_i18n("Change data type for field \"%1\" to \"%2\"",
                  set["name"].value().toString(), KexiDB::Field::typeName(fieldType)), 0, this);
 
 //kDebug() << "++++++++++" << slist << nlist;
@@ -914,12 +914,12 @@ void KexiTableDesignerView::slotPropertyChanged(KoProperty::Set& set, KoProperty
                 //switchPrimaryKey(set, true);
                 // this will be toplevel command
                 setAutonumberCommand = new Command(
-                    i18n("Assign autonumber for field \"%1\"", set["name"].value().toString()), 0, this);
+                    kundo2_i18n("Assign autonumber for field \"%1\"", set["name"].value().toString()), 0, this);
                 toplevelCommand = setAutonumberCommand;
                 d->setPropertyValueIfNeeded(set, "autoIncrement", QVariant(true), setAutonumberCommand);
             } else {
                 setAutonumberCommand = new Command(
-                    i18n("Remove autonumber from field \"%1\"", set["name"].value().toString()),
+                    kundo2_i18n("Remove autonumber from field \"%1\"", set["name"].value().toString()),
                     0, this);
                 d->setPropertyValueIfNeeded(set, "autoIncrement", QVariant(false), setAutonumberCommand,
                                             true /*forceAddCommand*/, false/*rememberOldValue*/);
@@ -937,7 +937,7 @@ void KexiTableDesignerView::slotPropertyChanged(KoProperty::Set& set, KoProperty
         setPrimaryKey = false;
         // this will be toplevel command
         Command *unsetIndexedOrUniquOrNotNullCommand = new Command(
-            i18n("Set \"%1\" property for field \"%2\"",
+            kundo2_i18n("Set \"%1\" property for field \"%2\"",
                  property.caption(), set["name"].value().toString()), 0, this);
         toplevelCommand = unsetIndexedOrUniquOrNotNullCommand;
         d->setPropertyValueIfNeeded(set, pname, QVariant(false), unsetIndexedOrUniquOrNotNullCommand);
@@ -977,7 +977,7 @@ void KexiTableDesignerView::slotPropertyChanged(KoProperty::Set& set, KoProperty
             else {*/
         typeName = KexiDB::Field::typeName(KexiDB::Field::typeForString(property.value().toString()));
         Command* changeFieldTypeCommand = new Command(
-            i18n(
+            kundo2_i18n(
                 "Change type for field \"%1\" to \"%2\"",
                 set["name"].value().toString(), typeName), 0, this);
         d->setPropertyValueIfNeeded(set, "subType", property.value(), property.oldValue(),
@@ -1018,7 +1018,7 @@ void KexiTableDesignerView::slotPropertyChanged(KoProperty::Set& set, KoProperty
             //primary key implies some rules
             //this action contains subactions
             Command * setPrimaryKeyCommand = new Command(
-                i18n("Set primary key for field \"%1\"",
+                kundo2_i18n("Set primary key for field \"%1\"",
                      set["name"].value().toString()), toplevelCommand, this);
             if (!toplevelCommand) {
                  toplevelCommand = setPrimaryKeyCommand;
@@ -1042,7 +1042,7 @@ void KexiTableDesignerView::slotPropertyChanged(KoProperty::Set& set, KoProperty
         else { // set PK to false
             //remember this action containing 2 subactions
             Command *setPrimaryKeyCommand = new Command(
-                i18n("Unset primary key for field \"%1\"",
+                kundo2_i18n("Unset primary key for field \"%1\"",
                      set["name"].value().toString()), toplevelCommand, this);
             if (!toplevelCommand) {
                 toplevelCommand = setPrimaryKeyCommand;

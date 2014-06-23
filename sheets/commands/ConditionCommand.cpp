@@ -58,7 +58,7 @@ void CondtionCommand::setConditionList(const QLinkedList<Conditional>& list)
 {
     m_conditions.setConditionList(list);
     if (m_conditions.isEmpty())
-        setText(i18nc("(qtundo-format)", "Remove Conditional Formatting"));
+        setText(kundo2_i18n("Remove Conditional Formatting"));
     else
-        setText(i18nc("(qtundo-format)", "Add Conditional Formatting"));
+        setText(kundo2_i18n("Add Conditional Formatting"));
 }

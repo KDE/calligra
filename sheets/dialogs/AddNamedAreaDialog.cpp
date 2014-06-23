@@ -94,7 +94,7 @@ void AddNamedAreaDialog::slotOk()
             return;
 
         command = new NamedAreaCommand();
-        command->setText(i18nc("(qtundo-format)", "Replace Named Area"));
+        command->setText(kundo2_i18n("Replace Named Area"));
     } else
         command = new NamedAreaCommand();
     command->setSheet(m_selection->activeSheet());

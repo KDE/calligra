@@ -1,2 +1,4 @@
 #! /bin/sh
-$XGETTEXT *.cpp -o $podir/TableShape.pot
+source ../../calligra_xgettext.sh
+
+calligra_xgettext *.cpp > $podir/TableShape.pot

@@ -104,7 +104,7 @@ bool MainProjectPanel::ok() {
 
 MacroCommand *MainProjectPanel::buildCommand() {
     MacroCommand *m = 0;
-    QString c = i18n("Modify main project");
+    KUndo2MagicString c = kundo2_i18n("Modify main project");
     if (project.name() != namefield->text()) {
         if (!m) m = new MacroCommand(c);
         m->addCommand(new NodeModifyNameCmd(project, namefield->text()));

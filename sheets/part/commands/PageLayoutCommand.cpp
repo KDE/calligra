@@ -32,7 +32,7 @@ PageLayoutCommand::PageLayoutCommand(Sheet* sheet, const PrintSettings& settings
         , m_sheet(sheet)
         , m_settings(settings)
 {
-    setText(i18nc("(qtundo-format)", "Set Page Layout"));
+    setText(kundo2_i18n("Set Page Layout"));
 }
 
 void PageLayoutCommand::redo()
