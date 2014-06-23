@@ -35,72 +35,141 @@ Item {
             toolManager.requestToolChange("PageToolFactory_ID");
         }
     }
-    Calligra.PresentationCanvas {
-        id: stageCanvas;
-        anchors.fill: parent;
-        onLoadingBegun: baseLoadingDialog.visible = true;
-        onLoadingFinished: {
-            console.debug("doc and part: " + doc() + " " + part());
-            mainWindow.setDocAndPart(doc(), part());
-            baseLoadingDialog.hideMe();
-        }
-    }
-    Flickable {
-        id: controllerFlickable;
+    Item {
+        id: stageNavigator;
         anchors {
             top: parent.top;
             left: parent.left;
-            right: parent.right;
-            bottom: enabled ? parent.bottom : parent.top;
+            bottom: parent.bottom;
         }
-        Calligra.CanvasControllerItem {
-            canvas: stageCanvas;
-            flickable: controllerFlickable;
+        width: Settings.theme.adjustedPixel(240);
+        Rectangle {
+            anchors.fill: parent;
+            color: "#4e5359";
         }
-        MouseArea {
-            x: controllerFlickable.contentX;
-            y: controllerFlickable.contentY;
-            height: controllerFlickable.height;
-            width: controllerFlickable.width;
-            onDoubleClicked: {
-                toolManager.requestToolChange("TextToolFactory_ID");
-                base.navigateMode = false;
+        Rectangle {
+            anchors {
+                top: parent.top;
+                right: parent.right;
+                bottom: parent.bottom;
+            }
+            width: 1;
+            color: "black";
+            opacity: 0.1;
+        }
+        ListView {
+            id: navigatorListView;
+            anchors {
+                fill: parent;
+                topMargin: Settings.theme.adjustedPixel(86);
+            }
+            model: presentationModel;
+            delegate: Item {
+                height: Settings.theme.adjustedPixel(136);
+                width: ListView.view.width;
+                Rectangle {
+                    anchors.fill: parent;
+                    opacity: index === stageCanvas.currentSlide ? 0.6 : 0;
+                    Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+                    color: "#00adf5";
+                }
+                Label {
+                    anchors {
+                        top: parent.top;
+                        left: parent.left;
+                        bottom: parent.bottom;
+                    }
+                    width: Settings.theme.adjustedPixel(40);
+                    color: index === stageCanvas.currentSlide ? "white" : "#c1cdd1";
+                    text: index + 1;
+                    horizontalAlignment: Text.AlignHCenter;
+                    verticalAlignment: Text.AlignVCenter;
+                }
+                Calligra.Thumbnail {
+                    anchors {
+                        top: parent.top;
+                        right: parent.right;
+                        bottom: parent.bottom;
+                        margins: Settings.theme.adjustedPixel(16);
+                    }
+                    width: parent.width - Settings.theme.adjustedPixel(56);
+                    content: presentationModel.thumbnail(index);
+                }
+                MouseArea {
+                    anchors.fill: parent;
+                    onClicked: stageCanvas.currentSlide = index;
+                }
             }
         }
     }
-    Button {
-        id: nextButton;
+    Item {
         anchors {
-            bottom: parent.bottom;
+            top: parent.top;
+            left: stageNavigator.right;
             right: parent.right;
-            margins: Constants.DefaultMargin;
-        }
-        width: height;
-        image: Settings.theme.icon("forward");
-        color: Settings.theme.color("base/base");
-        onClicked: {
-            var currentSlide = stageCanvas.currentSlide;
-            stageCanvas.currentSlide = stageCanvas.currentSlide + 1;
-            if(currentSlide === stageCanvas.currentSlide) {
-                stageCanvas.currentSlide = 0;
-            }
-        }
-    }
-    Button {
-        anchors {
             bottom: parent.bottom;
-            right: nextButton.left;
-            margins: Constants.DefaultMargin;
+            topMargin: Settings.theme.adjustedPixel(86);
         }
-        image: Settings.theme.icon("back");
-        width: height;
-        color: Settings.theme.color("base/base");
-        onClicked: {
-            if(stageCanvas.currentSlide === 0) {
-                stageCanvas.currentSlide = stageCanvas.slideCount() - 1;
+        clip: true;
+        Rectangle {
+            anchors.fill: parent;
+            color: "#4e5359";
+        }
+        Calligra.PresentationCanvas {
+            id: stageCanvas;
+            anchors {
+                fill: parent;
             }
-            else {
-                stageCanvas.currentSlide = stageCanvas.currentSlide - 1;
+            onLoadingBegun: baseLoadingDialog.visible = true;
+            onLoadingFinished: {
+                console.debug("doc and part: " + doc() + " " + part());
+                mainWindow.setDocAndPart(doc(), part());
+                baseLoadingDialog.hideMe();
+            }
+            onCurrentSlideChanged: navigatorListView.positionViewAtIndex(currentSlide, ListView.Contain);
+        }
+        Flickable {
+            id: controllerFlickable;
+            anchors {
+                top: parent.top;
+                left: parent.left;
+                right: parent.right;
+                bottom: enabled ? parent.bottom : parent.top;
+            }
+            Calligra.CanvasControllerItem {
+                canvas: stageCanvas;
+                flickable: controllerFlickable;
+            }
+            MouseArea {
+                x: controllerFlickable.contentX;
+                y: controllerFlickable.contentY;
+                height: controllerFlickable.height;
+                width: controllerFlickable.width;
+                onClicked: {
+                    if(mouse.x < width / 6) {
+                        if(stageCanvas.currentSlide === 0) {
+                            stageCanvas.currentSlide = stageCanvas.slideCount() - 1;
+                        }
+                        else {
+                            stageCanvas.currentSlide = stageCanvas.currentSlide - 1;
+                        }
+                    }
+                    else if(mouse.x > width * 5 / 6) {
+                        var currentSlide = stageCanvas.currentSlide;
+                        stageCanvas.currentSlide = stageCanvas.currentSlide + 1;
+                        if(currentSlide === stageCanvas.currentSlide) {
+                            stageCanvas.currentSlide = 0;
+                        }
+                    }
+                }
+                onDoubleClicked: {
+                    if(mouse.x < width / 6 || mouse.x > width * 5 / 6) {
+                        // don't accept double-clicks in the navigation zone
+                        return;
+                    }
+                    toolManager.requestToolChange("TextToolFactory_ID");
+                    base.navigateMode = false;
+                }
             }
         }
     }
