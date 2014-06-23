@@ -34,8 +34,8 @@ RecentImageImageProvider::RecentImageImageProvider()
 
 QImage RecentImageImageProvider::requestImage(const QString &id, QSize *size, const QSize &requestedSize)
 {
-    int width = 128;
-    int height = 128;
+    int width = 512;
+    int height = 512;
     if(id.toLower().endsWith("odt") || id.toLower().endsWith("doc") || id.toLower().endsWith("docx"))
         width *= 0.72413793;
     else
