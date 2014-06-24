@@ -58,8 +58,8 @@ var values = {
     },
     presentationTime: {
         family: "Source Sans Pro",
-        style: "Light",
-        size: 3,
+        style: "Extralight",
+        pixelSize: 120,
     },
     filelistheader: {
         family: "Source Sans Pro",
