@@ -46,6 +46,7 @@ Q_SIGNALS:
     void colorChanged();
     void penWidthChanged();
     void paintingStopped();
+    void paintingStarted();
 
 protected:
     virtual bool event(QEvent* event);

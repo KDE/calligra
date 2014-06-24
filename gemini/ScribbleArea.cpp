@@ -90,6 +90,7 @@ void ScribbleArea::mousePressEvent(QGraphicsSceneMouseEvent* event)
     if (event->button() == Qt::LeftButton) {
         lastPoint = event->pos();
         scribbling = true;
+        emit paintingStarted();
     }
 }
 
