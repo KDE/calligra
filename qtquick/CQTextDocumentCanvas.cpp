@@ -253,7 +253,7 @@ qreal CQTextDocumentCanvas::pagePosition(int pageIndex)
 
 qreal CQTextDocumentCanvas::shapeTransparency() const
 {
-    if(d->canvas && !d->canvas->shapeManager()) {
+    if(d->canvas && d->canvas->shapeManager()) {
         KoShape* shape = d->canvas->shapeManager()->selection()->firstSelectedShape();
         if(shape) {
             return shape->transparency();
@@ -301,7 +301,7 @@ void CQTextDocumentCanvas::addSticker(QString imageUrl)
 {
     QSvgRenderer renderer(QUrl(imageUrl).toLocalFile());
    // Prepare a QImage with desired characteritisc
-    QImage image(50, 50, QImage::Format_ARGB32);
+    QImage image(200, 200, QImage::Format_ARGB32);
     image.fill(Qt::transparent);
 
     // Get QPainter that paints to the image
@@ -325,6 +325,7 @@ void CQTextDocumentCanvas::addSticker(QString imageUrl)
         anchor->setVerticalRel(KoShapeAnchor::VPage);
         shape->setAnchor(anchor);
         shape->setPosition(pos);
+        shape->scale(0.2, 0.2);
 
 //        KWShapeCreateCommand *cmd = new KWShapeCreateCommand(d->document, shape);
         KoSelection *selection = d->canvas->shapeManager()->selection();
