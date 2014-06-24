@@ -40,7 +40,7 @@ public:
           useBuiltIn(true)
     {
 #ifdef Q_OS_WIN
-        useBuiltIn = false;
+        //useBuiltIn = false;
 #endif
     }
     KeyboardMode mode;

@@ -88,7 +88,7 @@ Rectangle {
         id: keyDelegate;
 
         Item {
-            width: Settings.theme.adjustedPixel(44) * model.width;
+            width: Settings.theme.adjustedPixel(40) * model.width;
             height: (base.height - 8) / 4;
 
             Button {
