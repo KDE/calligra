@@ -509,7 +509,7 @@ void DefaultTool::paint(QPainter &painter, const KoViewConverter &converter)
         SelectionDecorator decorator(m_mouseWasInsideHandles ? m_lastHandle : KoFlake::NoHandle,
                  true, true);
         decorator.setSelection(koSelection());
-        decorator.setHandleRadius(handleRadius());
+        //decorator.setHandleRadius(handleRadius());
         decorator.setHotPosition(m_hotPosition);
         decorator.paint(painter, converter);
     }
