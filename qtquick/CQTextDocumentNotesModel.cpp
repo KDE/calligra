@@ -137,11 +137,11 @@ void CQTextDocumentNotesModel::addEntry(QString text, QString image, QString col
     entry->shape = shape;
     entry->color = color;
     entry->categoryName = "Others";
-    if(color == "Red")
+    if(color == "#fd5134")
         entry->categoryName = "Major Errors";
-    else if(color == "Yellow")
+    else if(color == "#ffb20c")
         entry->categoryName = "Minor Errors";
-    else if(color == "Green")
+    else if(color == "#29b618")
         entry->categoryName = "Successes";
 
     QList<Entry*>::iterator before = d->entries.begin();
