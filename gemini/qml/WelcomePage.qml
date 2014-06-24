@@ -101,9 +101,9 @@ Page {
             width: parent.width / 5;
             ListModel {
                 id: sidebarList;
-                ListElement { header: "OPEN"; text: "Recent Documents"; icon: "SVG-Icon-MyDocuments-1"; selected: false; stackComponent: "welcomePageRecent"; }
+                ListElement { header: "OPEN"; text: "Recent Documents"; icon: "SVG-Icon-RecentDocuments-1"; selected: false; stackComponent: "welcomePageRecent"; }
                 ListElement { text: "Library"; icon: "SVG-Icon-MyDocuments-1"; selected: true; stackComponent: "welcomePageFilebrowser"; }
-                ListElement { text: "Cloud"; icon: "SVG-Icon-PlayPresentation-1"; selected: false; stackComponent: "welcomePageFilebrowser"; }
+                ListElement { text: "Cloud"; icon: "SVG-Icon-Cloud-1"; selected: false; stackComponent: "welcomePageFilebrowser"; }
 
                 ListElement { header: "COMPOSE NEW"; text: "Document"; icon: "SVG-Icon-NewDocument-1"; selected: false; stackComponent: "welcomePageWords"; }
                 ListElement { text: "Presentation"; icon: "SVG-Icon-NewPresentation-1"; selected: false; stackComponent: "welcomePageStage"; }
