@@ -40,6 +40,16 @@ Item {
             }
             height: Constants.GridHeight;
             color: "#e8e9ea";
+            Rectangle {
+                anchors {
+                    left: parent.left;
+                    right: parent.right;
+                    bottom: parent.bottom;
+                }
+                height: 1;
+                color: "black";
+                opacity: 0.5;
+            }
             Button {
                 anchors {
                     left: parent.left;
@@ -71,13 +81,6 @@ Item {
                 left: parent.left;
                 right: parent.right;
                 bottom: parent.bottom;
-            }
-            Rectangle {
-                anchors.fill: parent;
-                color: "white";
-                border.color: "#e8e9ea";
-                border.width: 1;
-                opacity: 0.96;
             }
             ListView {
                 id: notesSummaryList;
@@ -198,7 +201,11 @@ Item {
             color: "white";
             MouseArea {
                 anchors.fill: parent;
-                onClicked: notesPageStack.push(customNoteView);
+                onClicked: {
+                    viewLoader.item.scrollToEnd();
+                    notesPageStack.customNoteTitleText = "ADD FINAL NOTE";
+                    notesPageStack.push(customNoteView);
+                }
             }
             Row {
                 anchors.centerIn: parent;

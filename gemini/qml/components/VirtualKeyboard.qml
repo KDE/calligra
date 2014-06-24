@@ -30,7 +30,7 @@ Rectangle {
 
     y: parent.height;
     height: parent.height * 0.45;
-    color: "black";
+    color: "#e8e9ea";
 
     MouseArea {
         anchors.fill: parent;
@@ -44,10 +44,7 @@ Rectangle {
    Flow {
        visible: keys.useBuiltIn;
        anchors.fill: parent;
-       anchors.topMargin: 4;
-       anchors.leftMargin: Constants.GridWidth * 1.5;
-       anchors.rightMargin: Constants.GridWidth * 1.5;
-       anchors.bottomMargin: 4;
+       //anchors.margins: 4;
 
        Repeater {
            model: keys;
@@ -91,7 +88,7 @@ Rectangle {
         id: keyDelegate;
 
         Item {
-            width: (Constants.GridWidth * 0.75) * model.width;
+            width: Settings.theme.adjustedPixel(44) * model.width;
             height: (base.height - 8) / 4;
 
             Button {
@@ -106,20 +103,22 @@ Rectangle {
 
                 border.width: model.keyType == KeyboardModel.SpacerKey ? 0 : 2;
                 border.color: "white";
-                radius: 8;
+                //radius: 8;
 
                 color: {
                     if (model.keyType == KeyboardModel.ShiftKey && keys.mode == KeyboardModel.CapitalMode) {
                         return "#666666";
                     } else if (model.keyType == KeyboardModel.NumericModeKey && keys.mode == KeyboardModel.NumericMode) {
                         return "#666666";
-                    } else {
+                    } else if(model.keyType == KeyboardModel.SpacerKey) {
                         return "transparent";
+                    } else {
+                        return "white";
                     }
                 }
 
                 text: model.text;
-                textColor: model.keyType != KeyboardModel.SpacerKey ? "white" : "#333333";
+                textColor: "black";//model.keyType != KeyboardModel.SpacerKey ? "white" : "#333333";
 
                 highlight: model.keyType != KeyboardModel.SpacerKey ? true : false;
                 highlightColor: "#666666";

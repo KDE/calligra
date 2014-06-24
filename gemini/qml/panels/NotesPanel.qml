@@ -37,10 +37,11 @@ Item {
 
     PageStack {
         id: notesPageStack;
+        property string customNoteTitleText;
         anchors.fill: parent;
         initialPage: mainView;
     }
     Component { id: mainView; NotesPanelMain { canvas: base.canvas; } }
     Component { id: summaryView; NotesPanelSummary { canvas: base.canvas; } }
-    Component { id: customNoteView; NotesPanelAddCustom { canvas: base.canvas; } }
+    Component { id: customNoteView; NotesPanelAddCustom { canvas: base.canvas; titleText: notesPageStack.customNoteTitleText; } }
 }

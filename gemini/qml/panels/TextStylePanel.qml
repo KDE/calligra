@@ -57,8 +57,17 @@ Item {
             }
             text: "PARAGRAPH STYLES";
             color: "#5b6573";
-            font.pixelSize: Constants.SmallFontSize
-            font.bold: true;
+            font: Settings.theme.font("applicationSemi");
+        }
+        Rectangle {
+            anchors {
+                left: parent.left;
+                right: parent.right;
+                bottom: parent.bottom;
+            }
+            height: 1;
+            color: "black";
+            opacity: 0.5;
         }
     }
     ParagraphStylesModel {

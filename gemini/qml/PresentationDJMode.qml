@@ -25,10 +25,15 @@ Rectangle {
     id: base;
     color: "#22282f";
     property int currentSlide: 0;
+    property int timePassed: 0;
+    Connections {
+        target: mainPageStack;
+        onCurrentPageChanged: timePassed = 0;
+    }
     function changeSlide(goToSlide) {
         fakePieChart.opacity = 0;
         fakePieChartTapped.opacity = 0;
-        laserScribbler.opacity = 0;
+        laserScribbler.opacity = 1;
         laserScribbler.clear();
         scribbler.opacity = 0;
         scribbler.clear();
@@ -38,10 +43,10 @@ Rectangle {
         id: currentSlideContainer;
         anchors {
             fill: parent;
-            topMargin: Constants.GridHeight + Constants.DefaultMargin * 2;
-            leftMargin: Constants.DefaultMargin;
+            topMargin: Settings.theme.adjustedPixel(166);
+            leftMargin: Settings.theme.adjustedPixel(10);
             rightMargin: parent.width / 3;
-            bottomMargin: Constants.GridHeight * 2 + Constants.DefaultMargin;
+            bottomMargin: Settings.theme.adjustedPixel(200);
         }
         Rectangle {
             anchors.fill: parent;
@@ -50,6 +55,7 @@ Rectangle {
         Thumbnail {
             anchors.fill: parent;
             content: presentationModel.thumbnail(currentSlide);
+            visible: fakePieChart.opacity === 0 && fakePieChartTapped.opacity === 0;
         }
         Image {
             id: fakePieChart;
@@ -80,18 +86,19 @@ Rectangle {
         ScribbleArea {
             id: laserScribbler;
             anchors.fill: parent;
-            opacity: 0;
+            opacity: 1;
             color: "#ff0000";
             penWidth: 10;
             Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
-            onPaintingStopped: lasetTimer2.start();
+            onPaintingStarted: laserTimer2.stop();
+            onPaintingStopped: laserTimer2.start();
             Timer {
                 id: laserTimer;
                 repeat: false; interval: Constants.AnimationDuration;
                 onTriggered: laserScribbler.clear();
             }
             Timer {
-                id: lasetTimer2;
+                id: laserTimer2;
                 repeat: false; interval: 1000;
                 onTriggered: laserScribbler.clear();
             }
@@ -114,11 +121,11 @@ Rectangle {
         id: nextSlideContainer;
         anchors {
             top: parent.top;
-            topMargin: Constants.GridHeight + Constants.DefaultMargin * 2;
+            topMargin: Settings.theme.adjustedPixel(166);
             left: currentSlideContainer.right;
-            leftMargin: Constants.DefaultMargin;
+            leftMargin: Settings.theme.adjustedPixel(10);
             right: parent.right;
-            rightMargin: Constants.DefaultMargin;
+            rightMargin: Settings.theme.adjustedPixel(10);
         }
         height: width * (currentSlideContainer.height / currentSlideContainer.width);
         Rectangle {
@@ -142,11 +149,12 @@ Rectangle {
         anchors {
             top: parent.top;
             right: parent.right;
-            margins: Constants.DefaultMargin;
+            rightMargin: Settings.theme.adjustedPixel(20);
         }
-        height: Constants.GridHeight;
-        width: height * 1.3953488;
+        height: Settings.theme.adjustedPixel(166);
+        width: Settings.theme.adjustedPixel(136);
         source: Settings.theme.icon("SVG-Exit-1");
+        fillMode: Image.PreserveAspectFit
         MouseArea {
             anchors.fill: parent;
             onClicked: mainPageStack.pop();
@@ -157,19 +165,22 @@ Rectangle {
             top: parent.top;
             left: parent.left;
             right: parent.right;
-            margins: Constants.DefaultMargin;
         }
         horizontalAlignment: Text.AlignHCenter;
         verticalAlignment: Text.AlignVCenter;
-        height: Constants.GridHeight;
+        height: Settings.theme.adjustedPixel(166)
         font: Settings.theme.font("presentationTime");
         color: "#c1cdd1";
         Timer {
-            interval: 500;
+            interval: 1000;
             running: true;
             repeat: true;
             triggeredOnStart: true;
-            onTriggered: parent.text = Qt.formatTime(new Date(), "hh:mm:ss");
+            function offset() {return new Date().getTimezoneOffset()*60000}
+            onTriggered: {
+                base.timePassed = base.timePassed + 1000;
+                parent.text = Qt.formatTime(new Date(base.timePassed + offset()), "hh:mm:ss");
+            }
         }
     }
     Row {
@@ -178,13 +189,14 @@ Rectangle {
             bottom: parent.bottom;
             margins: Constants.DefaultMargin;
         }
-        height: Constants.GridHeight * 2;
+        height: Settings.theme.adjustedPixel(136);
         spacing: Constants.DefaultMargin;
         Button {
             height: parent.height;
             width: height;
             image: Settings.theme.icon("SVG-Nudge-1");
             checked: fakePieChart.opacity === 1 || fakePieChartTapped.opacity === 1;
+            checkedColor: "#00adf5"; checkedOpacity: 0.6;
             radius: 8;
             onClicked: {
                 if(fakePieChart.opacity === 0) {
@@ -204,6 +216,7 @@ Rectangle {
             width: height;
             image: Settings.theme.icon("SVG-Pointer-1");
             checked: laserScribbler.opacity === 1;
+            checkedColor: "#00adf5"; checkedOpacity: 0.6;
             radius: 8;
             onClicked: {
                 if(laserScribbler.opacity === 0) {
@@ -223,6 +236,7 @@ Rectangle {
             width: height;
             image: Settings.theme.icon("SVG-Highlighter-1");
             checked: scribbler.opacity === 0.7;
+            checkedColor: "#00adf5"; checkedOpacity: 0.6;
             radius: 8;
             onClicked: {
                 if(scribbler.opacity === 0) {
@@ -245,7 +259,7 @@ Rectangle {
             bottom: parent.bottom;
             margins: Constants.DefaultMargin;
         }
-        height: Constants.GridHeight * 2;
+        height: Settings.theme.adjustedPixel(136);
         spacing: Constants.DefaultMargin;
         Button {
             height: parent.height;
@@ -274,7 +288,7 @@ Rectangle {
             bottom: parent.bottom;
             margins: Constants.DefaultMargin;
         }
-        height: Constants.GridHeight * 2;
+        height: Settings.theme.adjustedPixel(136);
         width: height;
         image: Settings.theme.icon("SVG-FXTransition-1");
         onClicked: base.state = "sidebarShown";

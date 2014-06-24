@@ -32,6 +32,16 @@ Item {
         }
         height: Constants.GridHeight;
         color: "#e8e9ea";
+        Rectangle {
+            anchors {
+                left: parent.left;
+                right: parent.right;
+                bottom: parent.bottom;
+            }
+            height: 1;
+            color: "black";
+            opacity: 0.5;
+        }
         Label {
             anchors {
                 left: parent.left;
@@ -94,28 +104,36 @@ Item {
             left: parent.left;
             right: parent.right;
         }
-        height: Constants.GridHeight * 2;
-        Flow {
+        height: Constants.GridHeight * 2.4;
+        GridView {
+            id: stickerView;
             anchors.fill: parent;
-            spacing: Constants.DefaultMargin;
-            Repeater {
-                model: ListModel {
-                    ListElement { image: "Sticker-ThumbsUp.svg"; }
-                    ListElement { image: "Sticker-Feather.svg"; }
-                    ListElement { image: "Sticker-Apple.svg"; }
-                    ListElement { image: "Sticker-ArrowTarget.svg"; }
-                    ListElement { image: "Sticker-Lightbulb.svg"; }
-                    ListElement { image: "Sticker-Ribbon.svg"; }
-                    ListElement { image: "Sticker-OK.svg"; }
-                    ListElement { image: "Sticker-A.svg"; }
-                    ListElement { image: "Sticker-B.svg"; }
-                    ListElement { image: "Sticker-C.svg"; }
-                    ListElement { image: "Sticker-D.svg"; }
-                    ListElement { image: "Sticker-F.svg"; }
-                }
+            clip: true;
+            cellWidth: width / 3;
+            cellHeight: (height / 2) - Constants.DefaultMargin;
+            snapMode: GridView.SnapToRow;
+            flow: GridView.TopToBottom;
+            model: ListModel {
+                ListElement { image: "Sticker-ThumbsUp.svg"; }
+                ListElement { image: "Sticker-Feather.svg"; }
+                ListElement { image: "Sticker-Apple.svg"; }
+                ListElement { image: "Sticker-ArrowTarget.svg"; }
+                ListElement { image: "Sticker-Lightbulb.svg"; }
+                ListElement { image: "Sticker-Ribbon.svg"; }
+                ListElement { image: "Sticker-OK.svg"; }
+                ListElement { image: "Sticker-A.svg"; }
+                ListElement { image: "Sticker-B.svg"; }
+                ListElement { image: "Sticker-C.svg"; }
+                ListElement { image: "Sticker-D.svg"; }
+                ListElement { image: "Sticker-F.svg"; }
+            }
+            delegate: Item {
+                width: stickerView.cellWidth;
+                height: stickerView.cellHeight;
                 Image {
-                    width: Constants.GridHeight - Constants.DefaultMargin;
-                    height: width;
+                    anchors.centerIn: parent;
+                    height: parent.height - Constants.DefaultMargin;
+                    width: height;
                     source: Settings.theme.image(model.image);
                     sourceSize.width: width > height ? height : width;
                     sourceSize.height: width > height ? height : width;
@@ -129,6 +147,7 @@ Item {
                     }
                 }
             }
+            ScrollDecorator { flickableItem: stickerView; }
         }
     }
     Flickable {
@@ -147,15 +166,15 @@ Item {
             height: childrenRect.height;
             Repeater {
                 model: ListModel {
-                    ListElement { text: "Check Spelling"; color: "Red"; image: "intel-Words-Note-Circle-Red.svg"; }
-                    ListElement { text: "Needs more support"; color: "Red"; image: "intel-Words-Note-Circle-Red.svg"; }
-                    ListElement { text: "Go deeper, perhaps"; color: "Yellow"; image: "intel-Words-Note-Circle-Yellow.svg"; }
-                    ListElement { text: "Great point!"; color: "Green"; image: "intel-Words-Note-Circle-Green.svg"; }
-                    ListElement { text: "Good use of vocabulary!"; color: "Green"; image: "intel-Words-Note-Circle-Green.svg"; }
-                    ListElement { text: "Nice!"; color: "Green"; image: "intel-Words-Note-Circle-Green.svg"; }
-                    ListElement { text: "Well done!"; color: "Green"; image: "intel-Words-Note-Circle-Green.svg"; }
-                    ListElement { text: "Splendid!"; color: "Green"; image: "intel-Words-Note-Circle-Green.svg"; }
-                    ListElement { text: "Smashing!"; color: "Green"; image: "intel-Words-Note-Circle-Green.svg"; }
+                    ListElement { text: "Check Spelling"; color: "#fd5134"; circleColor: "Red"; image: "intel-Words-Note-Circle-Red.svg"; }
+                    ListElement { text: "Needs more support"; color: "#fd5134"; circleColor: "Red"; image: "intel-Words-Note-Circle-Red.svg"; }
+                    ListElement { text: "Go deeper, perhaps"; color: "#ffb20c"; circleColor: "Yellow"; image: "intel-Words-Note-Circle-Yellow.svg"; }
+                    ListElement { text: "Great point!"; color: "#29b618"; circleColor: "Green"; image: "intel-Words-Note-Circle-Green.svg"; }
+                    ListElement { text: "Good use of vocabulary!"; color: "#29b618"; circleColor: "Green"; image: "intel-Words-Note-Circle-Green.svg"; }
+                    ListElement { text: "Nice!"; color: "#29b618"; circleColor: "Green"; image: "intel-Words-Note-Circle-Green.svg"; }
+                    ListElement { text: "Well done!"; color: "#29b618"; circleColor: "Green"; image: "intel-Words-Note-Circle-Green.svg"; }
+                    ListElement { text: "Splendid!"; color: "#29b618"; circleColor: "Green"; image: "intel-Words-Note-Circle-Green.svg"; }
+                    ListElement { text: "Smashing!"; color: "#29b618"; circleColor: "Green"; image: "intel-Words-Note-Circle-Green.svg"; }
                 }
                 Item {
                     height: Constants.GridHeight;
@@ -196,7 +215,7 @@ Item {
                         Image {
                             height: parent.height;
                             width: height;
-                            source: Settings.theme.icon("SVG-Label-%1-1".arg(model.color));
+                            source: Settings.theme.icon("SVG-Label-%1-1".arg(model.circleColor));
                             sourceSize.width: width > height ? height : width;
                             sourceSize.height: width > height ? height : width;
                         }
@@ -227,7 +246,10 @@ Item {
             color: "white";
             MouseArea {
                 anchors.fill: parent;
-                onClicked: notesPageStack.push(customNoteView);
+                onClicked: {
+                    notesPageStack.customNoteTitleText = "ADD CUSTOM NOTE";
+                    notesPageStack.push(customNoteView);
+                }
             }
             Row {
                 anchors.centerIn: parent;

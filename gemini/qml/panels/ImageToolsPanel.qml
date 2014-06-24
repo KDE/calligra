@@ -37,29 +37,38 @@ Item {
     width: Constants.GridWidth * 3;
     Item {
         id: titleBar;
+        clip: true;
         anchors {
             top: parent.top;
             left: parent.left;
             right: parent.right;
         }
         height: Constants.GridHeight;
-        Rectangle {
+        Item {
             anchors.fill: parent;
-            color: "#22282f";
-            opacity: 0.96
-            border.width: 1;
-            border.color: "#22282f";
+            clip: true;
+            Rectangle {
+                anchors {
+                    fill: parent;
+                    bottomMargin: -(Constants.DefaultMargin + 1);
+                    rightMargin: 1;
+                }
+                radius: Constants.DefaultMargin;
+                color: "#22282f";
+                opacity: 0.96
+                border.width: 1;
+                border.color: "#22282f";
+            }
         }
         Label {
             anchors {
                 left: parent.left;
-                leftMargin: Constants.DefaultMargin;
+                leftMargin: Constants.DefaultMargin * 2;
                 verticalCenter: parent.verticalCenter;
             }
             text: "IMAGE TOOLS";
             color: "#c1cdd1";
-            font.pixelSize: Constants.SmallFontSize
-            font.bold: true;
+            font: Settings.theme.font("applicationSemi");
         }
         Row {
             anchors {
@@ -88,15 +97,34 @@ Item {
                 checkedColor: "#00adf5";
                 checkedOpacity: 0.6;
                 radius: 4;
+                Rectangle {
+                    anchors.horizontalCenter: parent.horizontalCenter;
+                    anchors.top: parent.bottom;
+                    height: Constants.DefaultMargin * 2;
+                    width: height;
+                    color: "#4e5359";
+                    rotation: 45;
+                    opacity: parent.checked ? 0.96 : 0;
+                    Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+                }
             }
         }
     }
-    Rectangle {
+    Item {
         anchors.fill: contentsColumn;
-        color: "#4e5359";
-        border.color: "#22282f";
-        border.width: 1;
-        opacity: 0.96;
+        clip: true;
+        Rectangle {
+            anchors {
+                fill: parent;
+                topMargin: -(Constants.DefaultMargin + 1);
+                rightMargin: 1;
+            }
+            radius: Constants.DefaultMargin;
+            color: "#4e5359";
+            border.color: "#22282f";
+            border.width: 1;
+            opacity: 0.96;
+        }
     }
     Column {
         id: contentsColumn;
@@ -130,6 +158,7 @@ Item {
                     right: brightnessValue.left;
                     margins: Constants.DefaultMargin;
                 }
+                height: Constants.GridHeight - Constants.DefaultMargin * 4;
                 Component.onCompleted: value = 50;
             }
             Label {
@@ -142,9 +171,11 @@ Item {
                 height: parent.height - Constants.DefaultMargin * 2;
                 width: height;
                 color: "#c1cdd1";
+                font: Settings.theme.font("toolbar");
                 text: brightnessSlider.value - 50;
             }
         }
+        Rectangle { height: 1; width: parent.width; color: "black"; opacity: 0.5; }
         Item {
             width: parent.width;
             height: Constants.GridHeight;
@@ -169,6 +200,7 @@ Item {
                     right: contrastValue.left;
                     margins: Constants.DefaultMargin;
                 }
+                height: Constants.GridHeight - Constants.DefaultMargin * 4;
                 Component.onCompleted: value = 50;
             }
             Label {
@@ -181,9 +213,11 @@ Item {
                 height: parent.height - Constants.DefaultMargin * 2;
                 width: height;
                 color: "#c1cdd1";
+                font: Settings.theme.font("toolbar");
                 text: contrastSlider.value - 50;
             }
         }
+        Rectangle { height: 1; width: parent.width; color: "black"; opacity: 0.5; }
         Item {
             width: parent.width;
             height: Constants.GridHeight;
@@ -208,6 +242,7 @@ Item {
                     right: transparencyValue.left;
                     margins: Constants.DefaultMargin;
                 }
+                height: Constants.GridHeight - Constants.DefaultMargin * 4;
                 highPrecision: false;
                 Component.onCompleted: value = 100;
                 onValueChanged: { if(canvas) { canvas.shapeTransparency = (100 - value) / 100; } }
@@ -222,6 +257,7 @@ Item {
                 height: parent.height - Constants.DefaultMargin * 2;
                 width: height;
                 color: "#c1cdd1";
+                font: Settings.theme.font("toolbar");
                 text: transparencySlider.value + "%";
             }
         }

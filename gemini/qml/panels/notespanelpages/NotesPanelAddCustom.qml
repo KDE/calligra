@@ -23,6 +23,7 @@ import org.calligra 1.0
 Item {
     id: base;
     property QtObject canvas: null;
+    property string titleText;
     Rectangle {
         id: titleBar;
         anchors {
@@ -32,6 +33,16 @@ Item {
         }
         height: Constants.GridHeight;
         color: "#e8e9ea";
+        Rectangle {
+            anchors {
+                left: parent.left;
+                right: parent.right;
+                bottom: parent.bottom;
+            }
+            height: 1;
+            color: "black";
+            opacity: 0.5;
+        }
         Button {
             anchors {
                 left: parent.left;
@@ -54,7 +65,7 @@ Item {
             image: Settings.theme.icon("SVG-Icon-OK-1");
             enabled: noteText.text !== "";
             onClicked: {
-                base.canvas.addNote(noteText.text, colorModel.selectedColor, Settings.theme.image("intel-Words-Note-Circle-%1.svg".arg(colorModel.selectedColor)));
+                base.canvas.addNote(noteText.text, colorModel.actualSelectedColor, Settings.theme.image("intel-Words-Note-Circle-%1.svg".arg(colorModel.selectedColor)));
                 toolManager.requestToolChange("InteractionTool");
                 viewLoader.item.navigateMode = false;
                 notesPageStack.pop();
@@ -66,7 +77,7 @@ Item {
                 right: parent.right;
                 verticalCenter: parent.verticalCenter;
             }
-            text: "ADD CUSTOM NOTE";
+            text: base.titleText;
             color: "#5b6573";
             font.pixelSize: Constants.SmallFontSize
             font.bold: true;
@@ -80,7 +91,8 @@ Item {
             left: parent.left;
             right: parent.right;
         }
-        height: Constants.GridHeight;
+        height: titleText === "ADD CUSTOM NOTE" ? Constants.GridHeight : 0;
+        clip: true;
         Label {
             anchors {
                 verticalCenter: parent.verticalCenter;
@@ -93,15 +105,17 @@ Item {
         Row {
             anchors {
                 right: parent.right;
+                rightMargin: Constants.DefaultMargin;
                 verticalCenter: parent.verticalCenter;
             }
             spacing: Constants.DefaultMargin;
             ListModel {
                 id: colorModel;
-                property string selectedColor: "Yellow";
-                ListElement { color: "Red"; selected: false; }
-                ListElement { color: "Yellow"; selected: true; }
-                ListElement { color: "Green"; selected: false; }
+                property string selectedColor: "Green";
+                property string actualSelectedColor: "#29b618";
+                ListElement { color: "Red"; actualColor: "#fd5134"; selected: false; }
+                ListElement { color: "Yellow"; actualColor: "#ffb20c"; selected: true; }
+                ListElement { color: "Green"; actualColor: "#29b618"; selected: false; }
             }
             Repeater {
                 model: colorModel;
@@ -126,6 +140,7 @@ Item {
                             colorModel.setProperty(1, "selected", index === 1);
                             colorModel.setProperty(2, "selected", index === 2);
                             colorModel.selectedColor = model.color;
+                            colorModel.actualSelectedColor = model.actualColor;
                         }
                     }
                 }
@@ -168,9 +183,9 @@ Item {
             bottom: parent.bottom;
         }
         height: Constants.GridHeight * 4;
-//         VirtualKeyboard {
-//             anchors.fill: parent;
-//             state: "visible";
-//         }
+        VirtualKeyboard {
+            anchors.fill: parent;
+            state: "visible";
+        }
     }
 }

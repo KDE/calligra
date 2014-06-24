@@ -39,11 +39,13 @@ Item {
             left: parent.left;
             verticalCenter: parent.verticalCenter;
         }
-        height: 4;
-        //border.width: 1;
-        //border.color: Settings.theme.color("components/slider/background/border");
+        height: 6;
         color: Settings.theme.color("components/slider/background/fill");
-        radius: height / 2;
+        radius: 3;
+        smooth: true;
+        border.width: 1;
+        border.color: "#CCCCCC";
+        opacity: 0.6;
     }
     MouseArea {
         anchors.fill: parent;
@@ -79,7 +81,7 @@ Item {
                 settingExp = false;
             }
         }
-        y: 2
+        y: 0
         x: 2
         function calculateWidth(x)
         {
@@ -112,19 +114,21 @@ Item {
             }
             settingSelf = false;
         }
-        height: parent.height - 4;
+        height: parent.height;
         width: height;
-        radius: (height / 2) + 1;
-        color: Settings.theme.color("components/slider/handle/fill");
-        border.width: 1;
-        border.color: Settings.theme.color("components/slider/handle/border");
+        //radius: (height / 2) + 1;
+        //color: Settings.theme.color("components/slider/handle/fill");
+        //border.width: 1;
+        //border.color: Settings.theme.color("components/slider/handle/border");
+        //smooth: true;
+        color: "transparent";
         property int minimumX: 2;
         property int maximumX: base.width - handle.width - 2;
-//         Image {
-//             anchors.fill: parent;
-//             source: Settings.theme.icon("SVG-IMGTOOLS-SliderHandle-1");
-//             sourceSize.width: width > height ? height : width;
-//             sourceSize.height: width > height ? height : width;
-//         }
+        Image {
+            anchors.fill: parent;
+            source: Settings.theme.icon("SVG-IMGTOOLS-SliderHandle-1");
+            sourceSize.width: width > height ? height : width;
+            sourceSize.height: width > height ? height : width;
+        }
     }
 }

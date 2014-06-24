@@ -35,6 +35,9 @@ Item {
             toolManager.requestToolChange("PageToolFactory_ID");
         }
     }
+    function scrollToEnd() {
+        controllerFlickable.contentY = controllerFlickable.contentHeight - controllerFlickable.height;
+    }
     Calligra.TextDocumentCanvas {
         id: wordsCanvas;
         anchors.fill: parent;
@@ -98,7 +101,7 @@ Item {
     QtObject {
         id: d;
         function showThings() {
-            navigatorSidebar.x = Constants.DefaultMargin;
+            navigatorSidebar.x = 0;
             pageNumber.opacity = 1;
             hideTimer.stop();
         }
@@ -125,22 +128,29 @@ Item {
         anchors {
             top: parent.top;
             bottom: parent.bottom;
-            margins: Constants.DefaultMargin;
-            topMargin: Constants.DefaultMargin + Constants.ToolbarHeight;
+            topMargin: Settings.theme.adjustedPixel(40) + Constants.ToolbarHeight;
+            bottomMargin: Settings.theme.adjustedPixel(40);
         }
         x: -width;
         Behavior on x { PropertyAnimation { duration: Constants.AnimationDuration; } }
-        width: Constants.GridWidth;
-        Rectangle {
+        width: Settings.theme.adjustedPixel(190);
+        Item {
             anchors {
                 left: parent.right;
-                leftMargin: -1;
                 verticalCenter: parent.verticalCenter;
             }
             height: Constants.GridHeight * 2;
             width: Constants.DefaultMargin * 3;
-            color: "darkslategrey";
-            opacity: 0.8;
+            clip: true;
+            Rectangle {
+                anchors {
+                    fill: parent;
+                    leftMargin: -(radius + 1);
+                }
+                radius: Constants.DefaultMargin;
+                color: "#55595e";
+                opacity: 0.5;
+            }
             Rectangle {
                 anchors {
                     top: parent.top;
@@ -155,14 +165,33 @@ Item {
             }
             MouseArea {
                 anchors.fill: parent;
-                onClicked: d.showThings();
+                onClicked: {
+                    if(navigatorSidebar.x === 0) {
+                        navigatorSidebar.x = -navigatorSidebar.width;
+                        pageNumber.opacity = 0;
+                    }
+                    else {
+                        d.showThings();
+                    }
+                }
             }
         }
         Rectangle {
-            anchors.fill: parent;
+            anchors {
+                fill: parent;
+                leftMargin: -Constants.DefaultMargin + 1;
+            }
             radius: Constants.DefaultMargin;
-            color: "darkslategrey";
-            opacity: 0.8;
+            color: "#55595e";
+            opacity: 0.5;
+            Rectangle {
+                anchors.fill: parent;
+                radius: parent.radius;
+                color: "transparent";
+                border.width: 1;
+                border.color: "black";
+                opacity: 0.6;
+            }
         }
         MouseArea {
             id: listViewMouseArea;
@@ -178,6 +207,17 @@ Item {
             height: Constants.GridHeight / 2;
             image: Settings.theme.icon("Arrow-ScrollUp-1");
             imageMargin: 2;
+            Rectangle {
+                anchors {
+                    left: parent.left;
+                    right: parent.right;
+                    rightMargin: 1;
+                    bottom: parent.bottom;
+                }
+                height: 1;
+                color: "black";
+                opacity: 0.3;
+            }
         }
         Button {
             anchors {
@@ -188,6 +228,17 @@ Item {
             height: Constants.GridHeight / 2;
             image: Settings.theme.icon("Arrow-ScrollDown-1");
             imageMargin: 2;
+            Rectangle {
+                anchors {
+                    top: parent.top;
+                    left: parent.left;
+                    right: parent.right;
+                    rightMargin: 1;
+                }
+                height: 1;
+                color: "black";
+                opacity: 0.3;
+            }
         }
         ListView {
             id: navigatorListView;
@@ -195,12 +246,37 @@ Item {
                 fill: parent;
                 topMargin: Constants.GridHeight / 2;
                 bottomMargin: Constants.GridHeight / 2;
+                rightMargin: 1;
             }
             clip: true;
             model: wordsCanvas.documentModel;
             delegate: Item {
-                width: Constants.GridWidth;
-                height: width;
+                width: Settings.theme.adjustedPixel(190);
+                height: Settings.theme.adjustedPixel(190);
+                Image {
+                    anchors {
+                        top: parent.top;
+                        right: parent.right;
+                        bottom: parent.bottom;
+                        margins: Settings.theme.adjustedPixel(5);
+                    }
+                    width: Settings.theme.adjustedPixel(140);
+                    fillMode: Image.PreserveAspectFit;
+                    source: model.decoration;
+                    Rectangle {
+                        anchors.fill: parent;
+                        color: "transparent";
+                        border.width: 1;
+                        border.color: "black";
+                        opacity: 0.1;
+                    }
+                }
+                Rectangle {
+                    anchors.fill: parent;
+                    color: "#00adf5"
+                    opacity: (wordsCanvas.currentPageNumber === index + 1) ? 0.4 : 0;
+                    Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+                }
                 Label {
                     anchors {
                         left: parent.left;
@@ -208,25 +284,8 @@ Item {
                         verticalCenter: parent.verticalCenter;
                     }
                     text: index + 1;
-                    font.pixelSize: Constants.SmallFontSize;
+                    font: Settings.theme.font("applicationSemi");
                     color: "#c1cdd1";
-                }
-                Image {
-                    anchors {
-                        top: parent.top;
-                        right: parent.right;
-                        bottom: parent.bottom;
-                        margins: Constants.DefaultMargin;
-                    }
-                    width: parent.width * 3 / 4;
-                    fillMode: Image.PreserveAspectFit;
-                    source: model.decoration;
-                }
-                Rectangle {
-                    anchors.fill: parent;
-                    color: "cyan"
-                    opacity: (wordsCanvas.currentPageNumber === index + 1) ? 0.3 : 0;
-                    Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
                 }
                 MouseArea {
                     anchors.fill: parent;
