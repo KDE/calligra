@@ -28,15 +28,13 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 namespace KexiMigration
 {
 
-/**
-@author Adam Pigg
-*/
+//! "Tab Separated Values" document import plugin
 class TxtMigrate : public KexiMigrate
 {
     Q_OBJECT
     KEXIMIGRATION_DRIVER
 public:
-    TxtMigrate(QObject *parent, const QVariantList &args = QVariantList());
+    explicit TxtMigrate(QObject *parent, const QVariantList &args = QVariantList());
 
     virtual ~TxtMigrate();
 
@@ -50,27 +48,29 @@ public:
     //! Get table names in source
     virtual bool drv_tableNames(QStringList& tablenames);
 
-    virtual bool drv_copyTable(const QString&, KexiDB::Connection*, KexiDB::TableSchema*){return false;};
+    virtual bool drv_copyTable(const QString&, KexiDB::Connection*, KexiDB::TableSchema*)
+    {
+        return false;
+    }
 
     //! Read schema for a given table
     virtual bool drv_readTableSchema(const QString& originalName, KexiDB::TableSchema& tableSchema);
 
-    //!Position the source dataset at the start of a table
+    //! Position the source dataset at the start of a table
     virtual bool drv_readFromTable(const QString & tableName);
 
-    //!Move to the next row
+    //! Move to the next row
     virtual bool drv_moveNext();
 
-    //!Move to the previous row
+    //! Move to the previous row
     virtual bool drv_movePrevious();
 
-    //!Read the data at the given row/field
+    //! Read the data at the given row/field
     virtual QVariant drv_value(uint i);
     
     virtual bool drv_moveFirst();
     
     virtual bool drv_moveLast();
-     
 
   private:
     QString m_Folder;
@@ -87,7 +87,6 @@ public:
     long m_Row;
     
     long m_FileRow;
-
 };
 
 }
