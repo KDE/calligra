@@ -87,7 +87,7 @@ void KeyboardModel::componentComplete()
     d->normalKeys.append(Key("i"));
     d->normalKeys.append(Key("o"));
     d->normalKeys.append(Key("p"));
-    d->normalKeys.append(Key(QChar(0x2190), BackspaceKey, 2.0f));
+    d->normalKeys.append(Key(QChar(0x232B), BackspaceKey, 2.0f));
     //Second row
     d->normalKeys.append(Key("", SpacerKey, 0.5f));
     d->normalKeys.append(Key("a"));
@@ -100,9 +100,9 @@ void KeyboardModel::componentComplete()
     d->normalKeys.append(Key("k"));
     d->normalKeys.append(Key("l"));
     d->normalKeys.append(Key("'"));
-    d->normalKeys.append(Key("Enter", EnterKey, 1.5f));
+    d->normalKeys.append(Key(QChar(0x23CE), EnterKey, 1.5f));
     //Third row
-    d->normalKeys.append(Key(QChar(0x2191), ShiftKey));
+    d->normalKeys.append(Key(QChar(0x21E7), ShiftKey));
     d->normalKeys.append(Key("z"));
     d->normalKeys.append(Key("x"));
     d->normalKeys.append(Key("c"));
@@ -113,15 +113,15 @@ void KeyboardModel::componentComplete()
     d->normalKeys.append(Key(","));
     d->normalKeys.append(Key("."));
     d->normalKeys.append(Key("?"));
-    d->normalKeys.append(Key(QChar(0x2191), ShiftKey));
+    d->normalKeys.append(Key(QChar(0x21E7), ShiftKey));
     //Fourth row
-    d->normalKeys.append(Key("&123", NumericModeKey));
-    d->normalKeys.append(Key("Ctrl", SpacerKey));
-    d->normalKeys.append(Key(QChar(0x263A), SpacerKey));
+    d->normalKeys.append(Key("&123", NumericModeKey, 2.f));
+    //d->normalKeys.append(Key("Ctrl", SpacerKey));
+    //d->normalKeys.append(Key(QChar(0x263A), SpacerKey));
     d->normalKeys.append(Key(" ", NormalKey, 6.f));
-    d->normalKeys.append(Key("<", LeftArrowKey));
-    d->normalKeys.append(Key(">", RightArrowKey));
-    d->normalKeys.append(Key("Close", CloseKey));
+    d->normalKeys.append(Key(QChar(0x2190), LeftArrowKey, 2.f));
+    d->normalKeys.append(Key(QChar(0x2192), RightArrowKey, 2.f));
+    //d->normalKeys.append(Key("Close", CloseKey));
 
     //Capital mode
     //First row
@@ -135,7 +135,7 @@ void KeyboardModel::componentComplete()
     d->capitalKeys.append(Key("I"));
     d->capitalKeys.append(Key("O"));
     d->capitalKeys.append(Key("P"));
-    d->capitalKeys.append(Key(QChar(0x2190), BackspaceKey, 2.0f));
+    d->capitalKeys.append(Key(QChar(0x232B), BackspaceKey, 2.0f));
     //Second row
     d->capitalKeys.append(Key("", SpacerKey, 0.5f));
     d->capitalKeys.append(Key("A"));
@@ -148,9 +148,9 @@ void KeyboardModel::componentComplete()
     d->capitalKeys.append(Key("K"));
     d->capitalKeys.append(Key("L"));
     d->capitalKeys.append(Key("\""));
-    d->capitalKeys.append(Key("Enter", EnterKey, 1.5f));
+    d->capitalKeys.append(Key(QChar(0x23CE), EnterKey, 1.5f));
     //Third row
-    d->capitalKeys.append(Key(QChar(0x2191), ShiftKey));
+    d->capitalKeys.append(Key(QChar(0x21E7), ShiftKey));
     d->capitalKeys.append(Key("Z"));
     d->capitalKeys.append(Key("X"));
     d->capitalKeys.append(Key("C"));
@@ -161,19 +161,19 @@ void KeyboardModel::componentComplete()
     d->capitalKeys.append(Key(";"));
     d->capitalKeys.append(Key(":"));
     d->capitalKeys.append(Key("!"));
-    d->capitalKeys.append(Key(QChar(0x2191), ShiftKey));
+    d->capitalKeys.append(Key(QChar(0x21E7), ShiftKey));
     //Fourth row
-    d->capitalKeys.append(Key("&123", NumericModeKey));
-    d->capitalKeys.append(Key("Ctrl", SpacerKey));
-    d->capitalKeys.append(Key(QChar(0x263A), SpacerKey));
+    d->capitalKeys.append(Key("&123", NumericModeKey, 2.f));
+    //d->capitalKeys.append(Key("Ctrl", SpacerKey));
+    //d->capitalKeys.append(Key(QChar(0x263A), SpacerKey));
     d->capitalKeys.append(Key(" ", NormalKey, 6.f));
-    d->capitalKeys.append(Key("<", LeftArrowKey));
-    d->capitalKeys.append(Key(">", RightArrowKey));
-    d->capitalKeys.append(Key("Close", CloseKey));
+    d->capitalKeys.append(Key(QChar(0x2190), LeftArrowKey, 2.f));
+    d->capitalKeys.append(Key(QChar(0x2192), RightArrowKey, 2.f));
+    //d->capitalKeys.append(Key("Close", CloseKey));
 
     //Capital mode
     //First row
-    d->numericKeys.append(Key("Tab", SpacerKey));
+    //d->numericKeys.append(Key(QChar(0x21B9), SpacerKey));
     d->numericKeys.append(Key("!"));
     d->numericKeys.append(Key("@"));
     d->numericKeys.append(Key("#"));
@@ -184,10 +184,10 @@ void KeyboardModel::componentComplete()
     d->numericKeys.append(Key("1"));
     d->numericKeys.append(Key("2"));
     d->numericKeys.append(Key("3"));
-    d->numericKeys.append(Key("", SpacerKey, 0.5f));
-    d->numericKeys.append(Key(QChar(0x2190), BackspaceKey));
+    //d->numericKeys.append(Key("", SpacerKey, 0.5f));
+    d->numericKeys.append(Key(QChar(0x232B), BackspaceKey, 2.f));
     //Second row
-    d->numericKeys.append(Key("<", SpacerKey));
+    //d->numericKeys.append(Key("", SpacerKey));
     d->numericKeys.append(Key("("));
     d->numericKeys.append(Key(")"));
     d->numericKeys.append(Key("-"));
@@ -198,10 +198,10 @@ void KeyboardModel::componentComplete()
     d->numericKeys.append(Key("4"));
     d->numericKeys.append(Key("5"));
     d->numericKeys.append(Key("6"));
-    d->numericKeys.append(Key("", SpacerKey, 0.5f));
-    d->numericKeys.append(Key("Enter", EnterKey));
+    //d->numericKeys.append(Key("", SpacerKey, 0.5f));
+    d->numericKeys.append(Key(QChar(0x23CE), EnterKey, 2.f));
     //Third row
-    d->numericKeys.append(Key(">", SpacerKey));
+    //d->numericKeys.append(Key("", SpacerKey));
     d->numericKeys.append(Key("\\"));
     d->numericKeys.append(Key(";"));
     d->numericKeys.append(Key(":"));
@@ -210,21 +210,21 @@ void KeyboardModel::componentComplete()
     d->numericKeys.append(Key("/"));
     d->numericKeys.append(Key("", SpacerKey, 0.5f));
     d->numericKeys.append(Key("7"));
+    d->numericKeys.append(Key("8"));
     d->numericKeys.append(Key("9"));
-    d->numericKeys.append(Key("9"));
-    d->numericKeys.append(Key("", SpacerKey, 1.5f));
+    d->numericKeys.append(Key("", SpacerKey, 1.f));
     //Fourth row
-    d->numericKeys.append(Key("&123", NumericModeKey));
-    d->numericKeys.append(Key("Ctrl", SpacerKey));
-    d->numericKeys.append(Key(QChar(0x263A), SpacerKey));
-    d->numericKeys.append(Key("<", LeftArrowKey));
-    d->numericKeys.append(Key(">", RightArrowKey));
-    d->numericKeys.append(Key(" ", NormalKey, 2.f));
+    d->numericKeys.append(Key("&123", NumericModeKey, 2.f));
+    //d->numericKeys.append(Key("Ctrl", SpacerKey));
+    //d->numericKeys.append(Key(QChar(0x263A), SpacerKey));
+    d->numericKeys.append(Key(QChar(0x2190), LeftArrowKey, 1.5f));
+    d->numericKeys.append(Key(" ", NormalKey, 2.5f));
     d->numericKeys.append(Key("", SpacerKey, 0.5f));
     d->numericKeys.append(Key("0", NormalKey, 2.f));
     d->numericKeys.append(Key("."));
-    d->numericKeys.append(Key("", SpacerKey, 0.5f));
-    d->numericKeys.append(Key("Close", CloseKey));
+    d->numericKeys.append(Key("", SpacerKey, .5f));
+    d->numericKeys.append(Key(QChar(0x2192), RightArrowKey, 1.5f));
+    //d->numericKeys.append(Key("Close", CloseKey));
 }
 
 QVariant KeyboardModel::data(const QModelIndex& index, int role) const
