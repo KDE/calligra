@@ -249,12 +249,11 @@ Page {
         }
         Item {
             anchors {
-                fill: parent;
-                topMargin: Constants.GridWidth;
-                leftMargin: Constants.GridWidth;
-                rightMargin: Constants.GridWidth;
-                bottomMargin: Constants.GridWidth * 2;
+                centerIn: parent;
+                topMargin: -(height/2);
             }
+            height: Settings.theme.adjustedPixel(475);
+            width: Settings.theme.adjustedPixel(1600);
             Rectangle {
                 anchors.fill: parent;
                 color: "#22282f";
@@ -267,7 +266,7 @@ Page {
                     left: parent.left;
                     right: parent.right;
                 }
-                height: Constants.GridHeight;
+                height: Settings.theme.adjustedPixel(120);
                 horizontalAlignment: Text.AlignHCenter;
                 verticalAlignment: Text.AlignVCenter;
                 color: "white";
@@ -278,9 +277,9 @@ Page {
                 anchors {
                     top: parent.top;
                     right: parent.right;
-                    margins: Constants.DefaultMargin;
+                    margins: Settings.theme.adjustedPixel(20);
                 }
-                height: Constants.GridHeight - Constants.DefaultMargin * 2;
+                height: Settings.theme.adjustedPixel(40);
                 width: height;
                 image: Settings.theme.icon("SVG-Icon-SmallX");
                 onClicked: variantSelector.opacity = 0;
@@ -289,7 +288,10 @@ Page {
                 id: variantFlickable;
                 anchors {
                     fill: parent;
-                    topMargin: Constants.GridHeight;
+                    topMargin: Settings.theme.adjustedPixel(120);
+                    leftMargin: Settings.theme.adjustedPixel(50);
+                    rightMargin: Settings.theme.adjustedPixel(50);
+                    bottomMargin: Settings.theme.adjustedPixel(40);
                 }
                 clip: true;
                 contentHeight: variantFlow.height;
@@ -300,35 +302,50 @@ Page {
                     Repeater {
                         id: variantView;
                         delegate: Item {
-                            height: variantFlickable.height;
-                            width: variantFlickable.width / 4;
-                            Column {
-                                anchors {
-                                    left: parent.left;
-                                    leftMargin: Constants.DefaultMargin;
-                                }
-                                width: variantFlickable.width / 4 - Constants.DefaultMargin * 2;
-                                Image {
-                                    width: variantFlickable.width / 4 - Constants.DefaultMargin * 2;
-                                    height: variantFlickable.width / 4 * 0.8;
-                                    source: Settings.theme.icon(model.thumbnail);
-                                    fillMode: Image.PreserveAspectFit
-                                    smooth: true;
-                                }
-                                Image {
-                                    width: variantFlickable.width / 4 - Constants.DefaultMargin * 2;
-                                    height: variantFlickable.width / 4 * 0.2;
-                                    source: Settings.theme.icon(model.swatch);
-                                    fillMode: Image.PreserveAspectFit
-                                    smooth: true;
-                                }
-                            }
+                            height: Settings.theme.adjustedPixel(310);
+                            width: Settings.theme.adjustedPixel(375);
                             MouseArea {
                                 anchors.fill: parent;
                                 onClicked: {
                                     variantSelector.opacity = 0;
-                                    activateTemplate(model.templateFile);
+                                    var file = Settings.stageTemplateLocation(model.templateFile);
+                                    if(file.slice(-1) === "/" || file === "") {
+                                        return;
+                                    }
+                                    baseLoadingDialog.visible = true;
+                                    openFile(file);
                                 }
+                                Rectangle {
+                                    anchors.fill: parent;
+                                    opacity: parent.pressed ? 0.6 : 0;
+                                    Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+                                    radius: Settings.theme.adjustedPixel(8);
+                                    color: "#00adf5";
+                                }
+                            }
+                            Image {
+                                anchors {
+                                    top: parent.top;
+                                    left: parent.left;
+                                    right: parent.right;
+                                    margins: Settings.theme.adjustedPixel(16);
+                                }
+                                height: Settings.theme.adjustedPixel(192);
+                                source: Settings.theme.icon(model.thumbnail);
+                                fillMode: Image.PreserveAspectFit
+                                smooth: true;
+                            }
+                            Image {
+                                anchors {
+                                    horizontalCenter: parent.horizontalCenter;
+                                    bottom: parent.bottom;
+                                    margins: Settings.theme.adjustedPixel(16);
+                                }
+                                height: Settings.theme.adjustedPixel(64);
+                                width: Settings.theme.adjustedPixel(190);
+                                source: Settings.theme.icon(model.swatch);
+                                fillMode: Image.PreserveAspectFit
+                                smooth: true;
                             }
                         }
                     }
