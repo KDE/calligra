@@ -53,6 +53,13 @@ Page {
     }
     Component { id: stageView; StageDocumentPage {} }
     Component { id: wordsView; WordsDocumentPage {} }
+    function closeToolbarMenus(sender) {
+        if(sender !== textStyleButton) { textStyleButton.checked = false; }
+        if(sender !== imageToolsButton) { imageToolsButton.checked = false; }
+        if(sender !== optionsButton1) { optionsButton1.checked = false; }
+        if(sender !== notesButton) { notesButton.checked = false; }
+        if(sender !== optionsButton2) { optionsButton2.checked = false; }
+    }
     Item {
         id: toolbar;
         anchors {
@@ -109,7 +116,10 @@ Page {
             }
             MouseArea {
                 anchors.fill: parent;
-                onClicked: mainPageStack.pop();
+                onClicked: {
+                    closeToolbarMenus();
+                    mainPageStack.pop();
+                }
             }
         }
         Row {
@@ -125,12 +135,14 @@ Page {
                 text: "SAVE";
                 textColor: Settings.theme.color("components/toolbar/text");
                 font: Settings.theme.font("toolbar");
+                onClicked: closeToolbarMenus();
             }
             CohereButton {
                 anchors.verticalCenter: parent.verticalCenter;
                 text: "UNDO";
                 textColor: Settings.theme.color("components/toolbar/text");
                 font: Settings.theme.font("toolbar");
+                onClicked: closeToolbarMenus();
             }
 //             Button {
 //                 height: parent.height;
@@ -145,6 +157,7 @@ Page {
                 font: Settings.theme.font("toolbar");
                 visible: viewLoader.item ? !viewLoader.item.navigateMode : false;
                 onClicked: {
+                    closeToolbarMenus();
                     toolManager.requestToolChange("PageToolFactory_ID");
                     viewLoader.item.navigateMode = true;
                 }
@@ -158,12 +171,14 @@ Page {
             opacity: (toolManager.currentTool !== null && toolManager.currentTool.toolId() === "TextToolFactory_ID") ? 1 : 0;
             Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
             Button {
+                id: textStyleButton;
                 image: Settings.theme.icon("SVG-Icon-TextStyle-1");
                 imageMargin: 2;
                 height: parent.height; width: height;
                 textColor: Settings.theme.color("components/toolbar/text");
                 checkable: true; checkedMargin: 0;
                 radius: 4;
+                onClicked: closeToolbarMenus(textStyleButton);
                 Rectangle {
                     anchors.horizontalCenter: parent.horizontalCenter;
                     anchors.top: parent.bottom;
@@ -209,6 +224,7 @@ Page {
                 radius: 4;
                 checkedMargin: 0;
                 checked: textStylePanel.cursorFont ? textStylePanel.cursorFont.bold : false;
+                onClicked: closeToolbarMenus();
             }
             Button {
                 image: Settings.theme.icon("SVG-Icon-Italic-1");
@@ -218,6 +234,7 @@ Page {
                 radius: 4;
                 checkedMargin: 0;
                 checked: textStylePanel.cursorFont ? textStylePanel.cursorFont.italic : false;
+                onClicked: closeToolbarMenus();
             }
             Button {
                 image: Settings.theme.icon("SVG-Icon-Underline-1");
@@ -227,6 +244,7 @@ Page {
                 radius: 4;
                 checkedMargin: 0;
                 checked: textStylePanel.cursorFont ? textStylePanel.cursorFont.underline : false;
+                onClicked: closeToolbarMenus();
             }
             Item { height: parent.height; width: 1; }
             Rectangle { color: Settings.theme.color("components/toolbar/text"); opacity: 0.3; height: parent.height; width: 1; }
@@ -236,12 +254,14 @@ Page {
                 imageMargin: 4;
                 height: parent.height; width: height;
                 textColor: Settings.theme.color("components/toolbar/text");
+                onClicked: closeToolbarMenus();
             }
             Button {
                 image: Settings.theme.icon("SVG-Icon-TextAlignment-1");
                 imageMargin: 4;
                 height: parent.height; width: height;
                 textColor: Settings.theme.color("components/toolbar/text");
+                onClicked: closeToolbarMenus();
             }
         }
         Row {
@@ -255,6 +275,7 @@ Page {
                 image: Settings.theme.icon("SVG-Icon-Image");
                 imageMargin: 4;
                 height: parent.height; width: height;
+                onClicked: closeToolbarMenus();
             }
             Item { height: parent.height; width: 1; }
             Rectangle { color: Settings.theme.color("components/toolbar/text"); opacity: 0.3; height: parent.height; width: 1; }
@@ -263,31 +284,37 @@ Page {
                 image: Settings.theme.icon("SVG-Icon-Pen");
                 imageMargin: 4;
                 height: parent.height; width: height;
+                onClicked: closeToolbarMenus();
             }
             Button {
                 image: Settings.theme.icon("SVG-Icon-Fill");
                 imageMargin: 4;
                 height: parent.height; width: height;
+                onClicked: closeToolbarMenus();
             }
             Button {
                 image: Settings.theme.icon("SVG-Icon-Lines");
                 imageMargin: 4;
                 height: parent.height; width: height;
+                onClicked: closeToolbarMenus();
             }
             Button {
                 image: Settings.theme.icon("SVG-Icon-Shadow");
                 imageMargin: 4;
                 height: parent.height; width: height;
+                onClicked: closeToolbarMenus();
             }
             Item { height: parent.height; width: 1; }
             Rectangle { color: Settings.theme.color("components/toolbar/text"); opacity: 0.3; height: parent.height; width: 1; }
             Item { height: parent.height; width: 1; }
             Button {
+                id: imageToolsButton;
                 height: parent.height; width: height;
                 image: Settings.theme.icon("SVG-Icon-ImageAdjustment-1");
                 imageMargin: 4;
                 checkable: true; checkedMargin: 0;
                 radius: 4;
+                onClicked: closeToolbarMenus(imageToolsButton);
                 Rectangle {
                     anchors.horizontalCenter: parent.horizontalCenter;
                     anchors.top: parent.bottom;
@@ -313,15 +340,20 @@ Page {
             Button {
                 height: parent.height; width: height;
                 image: Settings.theme.icon("SVG-Icon-AddShape-1");
+                onClicked: closeToolbarMenus();
             }
             Button {
                 height: parent.height; width: height;
                 image: Settings.theme.icon("SVG-Icon-Animations-1");
+                onClicked: closeToolbarMenus();
             }
             Button {
                 height: parent.height; width: height;
                 image: Settings.theme.icon("SVG-Icon-PlayPresentation-1");
-                onClicked: mainPageStack.push(presentationDJMode);
+                onClicked: {
+                    mainPageStack.push(presentationDJMode);
+                    closeToolbarMenus();
+                }
                 Calligra.PresentationModel {
                     id: presentationModel
                     canvas: viewLoader.item ? viewLoader.item.canvas : null;
@@ -330,6 +362,7 @@ Page {
                 Component { id: presentationDJMode; PresentationDJMode { }}//canvas: viewLoader.item ? viewLoader.item.canvas : null; } }
             }
             Button {
+                id: optionsButton1;
                 height: parent.height;
                 width: height;
                 image: Settings.theme.icon("SVG-Icon-Options-1");
@@ -337,6 +370,7 @@ Page {
                 radius: 4;
                 checkedColor: "#00adf5";
                 checkedOpacity: 0.6;
+                onClicked: closeToolbarMenus(optionsButton1);
                 Rectangle {
                     anchors.horizontalCenter: parent.horizontalCenter;
                     anchors.top: parent.bottom;
@@ -362,14 +396,17 @@ Page {
             Button {
                 height: parent.height; width: height;
                 image: Settings.theme.icon("SVG-Icon-AddShape-1");
+                onClicked: closeToolbarMenus();
             }
             Button {
+                id: notesButton;
                 height: parent.height; width: height;
                 image: Settings.theme.icon("SVG-Icon-AddNote-1");
                 checkable: true;
                 radius: 4;
                 checkedColor: "#00adf5";
                 checkedOpacity: 0.6;
+                onClicked: closeToolbarMenus(notesButton);
                 Rectangle {
                     anchors.horizontalCenter: parent.horizontalCenter;
                     anchors.top: parent.bottom;
@@ -393,6 +430,7 @@ Page {
                 }
             }
             Button {
+                id: optionsButton2;
                 height: parent.height;
                 width: height;
                 image: Settings.theme.icon("SVG-Icon-Options-1");
@@ -400,6 +438,7 @@ Page {
                 radius: 4;
                 checkedColor: "#00adf5";
                 checkedOpacity: 0.6;
+                onClicked: closeToolbarMenus(optionsButton2);
                 OptionsPanel {}
                 Rectangle {
                     anchors.horizontalCenter: parent.horizontalCenter;
