@@ -22,7 +22,7 @@
 
 #include <QNetworkReply>
 #include <QNetworkAccessManager>
-#include <qsslerror.h>
+//#include <qsslerror.h>
 #include <QList>
 
 class KisGmicUpdater : public QObject
@@ -41,7 +41,7 @@ private slots:
     void finishedDownload(QNetworkReply *);
     void reportProgress(qint64 arrived,qint64 total);
     void slotError(QNetworkReply::NetworkError error);
-    void slotSslErrors(QList<QSslError> error);
+//    void slotSslErrors(QList<QSslError> error);
 
 private:
     QNetworkAccessManager m_manager;

@@ -21,7 +21,7 @@
 #include <QUrl>
 #include <QFile>
 #include <QNetworkRequest>
-#include <qsslerror.h>
+//#include <qsslerror.h>
 #include <QDebug>
 #include <QTimer>
 #include <kis_debug.h>
@@ -61,7 +61,7 @@ void KisGmicUpdater::start()
 
     connect(getReply, SIGNAL(downloadProgress(qint64,qint64)), this, SLOT(reportProgress(qint64,qint64)));
     connect(getReply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(slotError(QNetworkReply::NetworkError)));
-    connect(getReply, SIGNAL(sslErrors(QList<QSslError>)), this, SLOT(slotSslErrors(QList<QSslError>)));
+    //connect(getReply, SIGNAL(sslErrors(QList<QSslError>)), this, SLOT(slotSslErrors(QList<QSslError>)));
 }
 
 
@@ -129,6 +129,7 @@ void KisGmicUpdater::slotError(QNetworkReply::NetworkError error)
     dbgPlugins << "NetworkError" << error;
 }
 
+#if 0
 void KisGmicUpdater::slotSslErrors(QList< QSslError > error)
 {
     dbgPlugins << "SSL Errors";
@@ -137,3 +138,4 @@ void KisGmicUpdater::slotSslErrors(QList< QSslError > error)
         dbgPlugins << er.errorString();
     }
 }
+#endif
