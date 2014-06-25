@@ -82,17 +82,17 @@ Page {
         Row {
             anchors {
                 right: parent.right;
-                rightMargin: 20;
+                rightMargin: Settings.theme.adjustedPixel(20);
                 verticalCenter: parent.verticalCenter;
             }
             height: parent.height - Constants.DefaultMargin * 2;
-            spacing: 4;
+            spacing: Settings.theme.adjustedPixel(4);
             CohereButton {
                 anchors.verticalCenter: parent.verticalCenter;
                 checked: stageTemplatesRepeater.model === stageTemplatesClassic;
                 text: "Classic";
                 textColor: "#5b6573";
-                textSize: 18;
+                textSize: Settings.theme.adjustedPixel(18);
                 checkedColor: "#D2D4D5";
                 onClicked: { if(!checked) { stageTemplatesRepeater.model = stageTemplatesClassic; } }
             }
@@ -101,7 +101,7 @@ Page {
                 checked: stageTemplatesRepeater.model === stageTemplates;
                 text: "Wide";
                 textColor: "#5b6573";
-                textSize: 18;
+                textSize: Settings.theme.adjustedPixel(18);
                 checkedColor: "#D2D4D5";
                 onClicked: { if(!checked) { stageTemplatesRepeater.model = stageTemplates; } }
             }

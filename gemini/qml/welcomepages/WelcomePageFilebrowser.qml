@@ -23,33 +23,45 @@ import "../components"
 Page {
     id: base;
     property string categoryUIName: (docList.model === textDocumentsModel) ? "text documents" : "presentations"
-    Row {
+    Label {
         id: docTypeSelectorRow;
         anchors {
             top: parent.top;
             left: parent.left;
             right: parent.right;
-            margins: Constants.DefaultMargin;
         }
-        height: Constants.GridHeight;
-        spacing: Constants.DefaultMargin;
-        Button {
-            width: parent.width / 2;
-            height: Constants.GridHeight - Constants.DefaultMargin * 2;
-            text: "Text Documents";
-            color: Settings.theme.color("base/base");
-            textColor: Settings.theme.color("base/text");
-            onClicked: docList.model = textDocumentsModel;
-            checked: docList.model === textDocumentsModel;
-        }
-        Button {
-            width: parent.width / 2;
-            height: Constants.GridHeight - Constants.DefaultMargin * 2;
-            text: "Presentations";
-            color: Settings.theme.color("base/base");
-            textColor: Settings.theme.color("base/text");
-            onClicked: docList.model = presentationDocumentsModel;
-            checked: docList.model === presentationDocumentsModel;
+        height: Constants.GridHeight * 1.5;
+        verticalAlignment: Text.AlignVCenter;
+        horizontalAlignment: Text.AlignHCenter;
+        font: Settings.theme.font("pageHeader");
+        text: "Open From Your Library";
+        color: "#22282f";
+        Row {
+            anchors {
+                right: parent.right;
+                rightMargin: 20;
+                verticalCenter: parent.verticalCenter;
+            }
+            height: parent.height - Constants.DefaultMargin * 2;
+            spacing: 4;
+            CohereButton {
+                anchors.verticalCenter: parent.verticalCenter;
+                text: "Text Documents";
+                textColor: "#5b6573";
+                textSize: Settings.theme.adjustedPixel(18);
+                checkedColor: "#D2D4D5";
+                onClicked: { if(!checked) { docList.model = textDocumentsModel; } }
+                checked: docList.model === textDocumentsModel;
+            }
+            CohereButton {
+                anchors.verticalCenter: parent.verticalCenter;
+                text: "Presentations";
+                textColor: "#5b6573";
+                textSize: Settings.theme.adjustedPixel(18);
+                checkedColor: "#D2D4D5";
+                onClicked: { if(!checked) { docList.model = presentationDocumentsModel; } }
+                checked: docList.model === presentationDocumentsModel;
+            }
         }
     }
     GridView {
