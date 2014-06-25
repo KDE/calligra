@@ -360,7 +360,7 @@ void CQTextDocumentCanvas::addNote(QString text, QString color, QString imageUrl
     font.setPixelSize(40);
     painter.setPen(QColor(color));
     painter.setFont(font);
-    painter.drawText(image.rect(), Qt::AlignCenter, text);
+    painter.drawText(image.rect().adjusted(10, 10, -20, -20), Qt::AlignCenter | Qt::TextWordWrap, text);
     painter.end();
 
     KoProperties* params = new KoProperties();
