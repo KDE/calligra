@@ -57,18 +57,40 @@ Item {
             right: parent.right;
             bottom: enabled ? parent.bottom : parent.top;
         }
-        Calligra.CanvasControllerItem {
-            id: controllerItem;
-            canvas: wordsCanvas;
-            flickable: controllerFlickable;
-            property bool pageChanging: false;
-            onMovingFastChanged: {
-                if(movingFast === true && !pageChanging) {
-                    d.showThings();
+        Image {
+            height: Settings.theme.adjustedPixel(40);
+            width: Settings.theme.adjustedPixel(40);
+            source: Settings.theme.icon("intel-Words-Handle-cursor");
+            opacity: wordsCanvas.hasSelection ? 1 : 0;
+            Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+            x: wordsCanvas.selectionStartPos.x - width / 2;
+            y: wordsCanvas.selectionStartPos.y - (height - 4);
+            Rectangle {
+                anchors {
+                    top: parent.bottom;
+                    horizontalCenter: parent.horizontalCenter;
                 }
-                else {
-                    d.hideThings();
+                height: wordsCanvas.selectionStartPos.height - 4;
+                width: 4;
+                color: "#009bcd";
+            }
+        }
+        Image {
+            height: Settings.theme.adjustedPixel(40);
+            width: Settings.theme.adjustedPixel(40);
+            source: Settings.theme.icon("intel-Words-Handle-cursor");
+            opacity: wordsCanvas.hasSelection ? 1 : 0;
+            Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+            x: wordsCanvas.selectionEndPos.x - width / 2;
+            y: wordsCanvas.selectionEndPos.y + (wordsCanvas.selectionEndPos.height - 4);
+            Rectangle {
+                anchors {
+                    bottom: parent.top;
+                    horizontalCenter: parent.horizontalCenter;
                 }
+                height: wordsCanvas.selectionEndPos.height - 4;
+                width: 4;
+                color: "#009bcd";
             }
         }
         MouseArea {
@@ -95,6 +117,20 @@ Item {
                 }
                 toolManager.requestToolChange("TextToolFactory_ID");
                 base.navigateMode = false;
+            }
+        }
+        Calligra.CanvasControllerItem {
+            id: controllerItem;
+            canvas: wordsCanvas;
+            flickable: controllerFlickable;
+            property bool pageChanging: false;
+            onMovingFastChanged: {
+                if(movingFast === true && !pageChanging) {
+                    d.showThings();
+                }
+                else {
+                    d.hideThings();
+                }
             }
         }
     }
