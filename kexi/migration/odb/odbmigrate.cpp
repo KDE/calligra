@@ -18,6 +18,7 @@ using namespace KexiMigration;
 K_EXPORT_KEXIMIGRATE_DRIVER(OdbMigrate, "odb")
 JNIEnv *env;
 
+
 OdbMigrate::OdbMigrate(QObject *parent, const QVariantList &args)
         : KexiMigrate(parent, args)
 {
