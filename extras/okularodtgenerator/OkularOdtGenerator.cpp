@@ -126,11 +126,11 @@ bool OkularOdtGenerator::loadDocument( const QString &fileName, QVector<Okular::
 
     KWPageManager *pageManager = m_doc->pageManager();
     int pageCount = pageManager->pages().count();
-    for(int i = 0; i < pageCount; ++i) {
+    for(int i = 1; i <= pageCount; ++i) {
 
-        KWPage kwpage = pageManager->pages().at(i);
+        KWPage kwpage = pageManager->page(i);
 
-        Okular::Page * page = new Okular::Page( i, kwpage.width(), kwpage.height(), Okular::Rotation0 );
+        Okular::Page * page = new Okular::Page( i-1, kwpage.width(), kwpage.height(), Okular::Rotation0 );
         pages.append(page);
     }
 
@@ -239,7 +239,8 @@ void OkularOdtGenerator::generatePixmap( Okular::PixmapRequest *request )
 
         KWPageManager *pageManager = m_doc->pageManager();
 
-        KWPage page = pageManager->pages().at(request->pageNumber());
+        KWPage page = pageManager->page(request->pageNumber()+1);
+
         pix = new QPixmap(request->width(), request->height());
         QPainter painter(pix);
 
