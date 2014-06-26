@@ -50,6 +50,9 @@ class CQTextDocumentCanvas : public CQCanvasBase
     Q_PROPERTY(QObject* textEditor READ textEditor NOTIFY textEditorChanged)
     Q_PROPERTY(QObject* notes READ notes NOTIFY notesChanged)
 
+    Q_PROPERTY(bool hasSelection READ hasSelection NOTIFY selectionChanged)
+    Q_PROPERTY(QRectF selectionStartPos READ selectionStartPos NOTIFY selectionChanged)
+    Q_PROPERTY(QRectF selectionEndPos READ selectionEndPos NOTIFY selectionChanged)
 public:
     CQTextDocumentCanvas(QDeclarativeItem* parent = 0);
     ~CQTextDocumentCanvas();
@@ -78,7 +81,7 @@ public:
     virtual qreal shapeTransparency() const;
     virtual void setShapeTransparency(const qreal& newTransparency);
 
-    QObject* textEditor() const;
+    QObject* textEditor();
     // Deselects any text selection present in the document, and deselects all shapes
     // This is highly useful, as it makes navigation prettier.
     Q_INVOKABLE void deselectEverything();
@@ -90,6 +93,10 @@ public:
     // Adds a note to the position indicated by the center of the viewport. Color is the color
     // the text and the background sticker should have.
     Q_INVOKABLE void addNote(QString text, QString color, QString imageUrl);
+
+    bool hasSelection() const;
+    QRectF selectionStartPos() const;
+    QRectF selectionEndPos() const;
 signals:
     void searchTermChanged();
     void documentModelChanged();
@@ -99,6 +106,7 @@ signals:
     void linkTargetsChanged();
     void textEditorChanged();
     void notesChanged();
+    void selectionChanged();
 
 protected:
     virtual bool event( QEvent* event );

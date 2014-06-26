@@ -49,6 +49,7 @@
 #include <KoSelection.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeAnchor.h>
+#include <KoShapeContainer.h>
 #include <KoTextEditor.h>
 #include <KoProperties.h>
 #include <KActionCollection>
@@ -57,6 +58,7 @@
 #include <QTextFrame>
 #include <QTextLayout>
 #include <QGraphicsSceneMouseEvent>
+#include <QTextDocumentFragment>
 #include <KDebug>
 #include <QSvgRenderer>
 
@@ -71,7 +73,8 @@ public:
           pageNumber(0),
           throttleTimer(new QTimer()),
           currentTool(0),
-          notes(0)
+          notes(0),
+          textEditor(0)
     {
         throttleTimer->setInterval(200);
         throttleTimer->setSingleShot(true);
@@ -90,6 +93,7 @@ public:
     QTimer* throttleTimer;
     KoToolBase* currentTool;
     CQTextDocumentNotesModel* notes;
+    KoTextEditor* textEditor;
 
     void updateLinkTargets()
     {
@@ -153,6 +157,50 @@ public:
         qreal right = line.cursorToX((fragment.position() - block.position()) + fragment.length());
         QRectF fragmentPosition(QPointF(top, left), QPointF(bottom, right));
         return fragmentPosition.adjusted(layout->position().x(), layout->position().y(), 0, 0);
+    }
+
+    QList<KoShape*> deepShapeFind(QList<KoShape*> shapes)
+    {
+        QList<KoShape*> allShapes;
+        foreach(KoShape* shape, shapes) {
+            allShapes.append(shape);
+            KoShapeContainer *container = dynamic_cast<KoShapeContainer*>(shape);
+            if(container) {
+                allShapes.append(deepShapeFind(container->shapes()));
+            }
+        }
+        return allShapes;
+    }
+    QRectF getCursorPosition(int position)
+    {
+        QPointF point;
+        QTextBlock block = textEditor->document()->findBlock(position);
+        QTextLayout* layout = block.layout();
+        QTextLine line = layout->lineForTextPosition(position - block.position());
+        if(!line.isValid())
+        {
+            // fragment has no valid position and consequently no line...
+            return QRectF();
+        }
+        qreal top = line.position().y();
+        qreal left = line.cursorToX(position - block.position());
+        point = QPointF(left + layout->position().y(), top + layout->position().x());
+
+        KoShape* shape = canvas->shapeManager()->selection()->firstSelectedShape();
+        point += shape->position();
+        while(KoShapeContainer* parent = shape->parent()) {
+            point += parent->position();
+        }
+
+        KWPage page = document->pageManager()->page(point.y());
+//         point += QPointF(page.rightMargin(), page.pageNumber() * page.topMargin()
+//                                            + (page.pageNumber() - 1) * page.bottomMargin());
+//         if(page.pageNumber() > 1)
+//             point += QPointF(0, 20);
+        point += QPointF(0, (page.pageNumber() - 1) * (page.topMargin() + 20));
+//        point = canvas->viewConverter()->documentToView(point);
+
+        return canvas->viewConverter()->documentToView(QRectF(point, QSizeF(0, line.height())));
     }
 };
 
@@ -275,12 +323,41 @@ void CQTextDocumentCanvas::setShapeTransparency(const qreal& newTransparency)
     }
 }
 
-QObject* CQTextDocumentCanvas::textEditor() const
+QObject* CQTextDocumentCanvas::textEditor()
 {
     if(d->canvas) {
-        return KoTextEditor::getTextEditorFromCanvas(d->canvas);
+        if(d->textEditor)
+            disconnect(d->textEditor, SIGNAL(cursorPositionChanged()), this, SIGNAL(selectionChanged()));
+        d->textEditor = KoTextEditor::getTextEditorFromCanvas(d->canvas);
+        if(d->textEditor)
+            disconnect(d->textEditor, SIGNAL(cursorPositionChanged()), this, SIGNAL(selectionChanged()));
+        emit selectionChanged();
+        return d->textEditor;
     }
     return 0;
+}
+
+bool CQTextDocumentCanvas::hasSelection() const
+{
+    if(d->textEditor) {
+//         qDebug() << d->textEditor->hasSelection() << selectionStartPos() << selectionEndPos();
+        return d->textEditor->hasSelection();
+    }
+    return false;
+}
+
+QRectF CQTextDocumentCanvas::selectionStartPos() const
+{
+    if(d->textEditor)
+        return d->getCursorPosition(d->textEditor->selectionStart());
+    return QRectF(0,0,0,0);
+}
+
+QRectF CQTextDocumentCanvas::selectionEndPos() const
+{
+    if(d->textEditor)
+        return d->getCursorPosition(d->textEditor->selectionEnd());
+    return QRectF(0,0,0,0);
 }
 
 void CQTextDocumentCanvas::deselectEverything()
@@ -492,6 +569,7 @@ void CQTextDocumentCanvas::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* e)
     KoPointerEvent pe(&me, d->canvas->viewToDocument(e->pos() + d->canvas->documentOffset()));
     d->currentTool->mouseDoubleClickEvent(&pe);
     updateCanvas();
+    emit selectionChanged();
     e->setAccepted(me.isAccepted());
 }
 
@@ -501,6 +579,7 @@ void CQTextDocumentCanvas::mouseMoveEvent(QGraphicsSceneMouseEvent* e)
     KoPointerEvent pe(&me, d->canvas->viewToDocument(e->pos() + d->canvas->documentOffset()));
     d->currentTool->mouseMoveEvent(&pe);
     updateCanvas();
+    emit selectionChanged();
     e->setAccepted(me.isAccepted());
 }
 
@@ -510,6 +589,7 @@ void CQTextDocumentCanvas::mousePressEvent(QGraphicsSceneMouseEvent* e)
     KoPointerEvent pe(&me, d->canvas->viewToDocument(e->pos() + d->canvas->documentOffset()));
     d->currentTool->mousePressEvent(&pe);
     updateCanvas();
+    emit selectionChanged();
     e->setAccepted(me.isAccepted());
 }
 
@@ -519,6 +599,7 @@ void CQTextDocumentCanvas::mouseReleaseEvent(QGraphicsSceneMouseEvent* e)
     KoPointerEvent pe(&me, d->canvas->viewToDocument(e->pos() + d->canvas->documentOffset()));
     d->currentTool->mouseReleaseEvent(&pe);
     updateCanvas();
+    emit selectionChanged();
     e->setAccepted(me.isAccepted());
 }
 
