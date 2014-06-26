@@ -153,8 +153,12 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
     KoTextEditor *textEditor = KoTextDocument(m_textShapeData->document()).textEditor();
     selection.cursor = *(textEditor->cursor());
     QPalette palette = pc.textContext.palette;
-    selection.format.setBackground(palette.brush(QPalette::Highlight));
-    selection.format.setForeground(palette.brush(QPalette::HighlightedText));
+    //selection.format.setBackground(palette.brush(QPalette::Highlight));
+    QColor selectionBackground("#009bcd");
+    selectionBackground.setAlphaF(0.4);
+    selection.format.setBackground(selectionBackground);
+    selection.format.setForeground(Qt::black);
+    //selection.format.setForeground(palette.brush(QPalette::HighlightedText));
     pc.textContext.selections.append(selection);
 
     pc.textContext.selections += KoTextDocument(doc).selections();
