@@ -360,6 +360,13 @@ QRectF CQTextDocumentCanvas::selectionEndPos() const
     return QRectF(0,0,0,0);
 }
 
+QObject* CQTextDocumentCanvas::zoomAction() const
+{
+    if(zoomController() && zoomController()->zoomAction())
+        return zoomController()->zoomAction();
+    return 0;
+}
+
 void CQTextDocumentCanvas::deselectEverything()
 {
     KoTextEditor* editor = KoTextEditor::getTextEditorFromCanvas(d->canvas);
@@ -633,6 +640,7 @@ void CQTextDocumentCanvas::createAndSetZoomController(KoCanvasBase* canvas)
     connect (kwCanvasItem, SIGNAL(documentSize(QSizeF)), zoomController(), SLOT(setDocumentSize(QSizeF)));
     connect (canvasController()->proxyObject, SIGNAL(moveDocumentOffset(QPoint)), SIGNAL(currentPageNumberChanged()));
     connect (canvasController()->proxyObject, SIGNAL(moveDocumentOffset(QPoint)), kwCanvasItem, SLOT(setDocumentOffset(QPoint)));
+    connect (zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)), SIGNAL(zoomActionChanged()));
     kwCanvasItem->updateSize();
 }
 
