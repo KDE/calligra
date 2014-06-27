@@ -372,9 +372,25 @@ Rectangle {
             delegate: Item {
                 height: Constants.GridHeight * 2;
                 width: ListView.view.width;
+                MouseArea {
+                    anchors.fill: parent;
+                    onClicked: {
+                        base.state = "";
+                        if(base.currentSlide < presentationModel.canvas.slideCount()) {
+                            base.changeSlide(base.currentSlide + 1);
+                        }
+                    }
+                    Rectangle {
+                        anchors.fill: parent;
+                        opacity: parent.pressed ? 0.6 : 0;
+                        Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+                        radius: Settings.theme.adjustedPixel(8);
+                        color: "#00adf5";
+                    }
+                }
                 Image {
                     anchors.centerIn: parent;
-                    height: Constants.GridHeight * 1.5;
+                    height: Constants.GridHeight * 1.3;
                     width: height;
                     source: Settings.theme.icon("SVG-Icon-Animations-1");
                     sourceSize.width: width > height ? height : width;
@@ -391,7 +407,7 @@ Rectangle {
                     horizontalAlignment: Text.AlignHCenter;
                     verticalAlignment: Text.AlignVCenter;
                     color: "#c1cdd1";
-                    font: Settings.theme.font("small");
+                    font: Settings.theme.font("presentationFx");
                     text: model.text;
                 }
                 Rectangle {
@@ -402,15 +418,6 @@ Rectangle {
                     }
                     height: 1;
                     color: "#c1cccd";
-                }
-                MouseArea {
-                    anchors.fill: parent;
-                    onClicked: {
-                        base.state = "";
-                        if(base.currentSlide < presentationModel.canvas.slideCount()) {
-                            base.changeSlide(base.currentSlide + 1);
-                        }
-                    }
                 }
             }
         }

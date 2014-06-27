@@ -61,6 +61,11 @@ var values = {
         style: "Extralight",
         pixelSize: 120,
     },
+    presentationFx: {
+        family: "Source Sans Pro",
+        style: "Regular",
+        pixelSize: 24,
+    },
     filelistheader: {
         family: "Source Sans Pro",
         style: "Semibold",
