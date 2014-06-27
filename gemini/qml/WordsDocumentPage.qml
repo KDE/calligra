@@ -181,6 +181,19 @@ Item {
             source: Settings.theme.image("drop-shadows.png");
             opacity: (parent.x > -parent.width) ? 1 : 0;
             Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+            BorderImage {
+                anchors {
+                    fill: parent;
+                    topMargin: 28;
+                    leftMargin: 36;
+                    rightMargin: 36;
+                    bottomMargin: 44;
+                }
+                border { left: 8; top: 8; right: 8; bottom: 8; }
+                horizontalTileMode: BorderImage.Stretch;
+                verticalTileMode: BorderImage.Stretch;
+                source: Settings.theme.image("drop-corners.png");
+            }
         }
         x: -width;
         Behavior on x { PropertyAnimation { duration: Constants.AnimationDuration; } }
