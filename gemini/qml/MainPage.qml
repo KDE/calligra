@@ -193,6 +193,7 @@ Page {
                     id: textStylePanel;
                     document: viewLoader.item ? viewLoader.item.document : null;
                     textEditor: viewLoader.item ? viewLoader.item.textEditor : null;
+                    zoomLevel: viewLoader.item && viewLoader.item.canvas && viewLoader.item.canvas.zoomAction ? viewLoader.item.canvas.zoomAction.effectiveZoom : 1;
                 }
             }
             Item { height: parent.height; width: 1; }

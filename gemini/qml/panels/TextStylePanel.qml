@@ -21,6 +21,7 @@ import "../components"
 import org.calligra 1.0
 
 Item {
+    property alias zoomLevel: paragraphStyles.zoomLevel;
     property alias document: paragraphStyles.document;
     property alias textEditor: paragraphStyles.textEditor;
     property alias cursorFont: paragraphStyles.cursorFont;
