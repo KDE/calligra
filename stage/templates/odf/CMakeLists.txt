@@ -35,6 +35,10 @@ set(otp_FILES
     skyline_night.otp
     skyline_night_wide.otp
     strange_far_hills.otp
+    cohere-blue.otp
+    cohere-gold.otp
+    cohere-magenta.otp
+    cohere-red.otp
    )
 #file(GLOB desktop_FILES *.desktop)
 #file(GLOB otp_FILES *.otp)

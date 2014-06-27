@@ -44,10 +44,10 @@ Page {
             ListElement { thumbnail: ""; swatch: "ColorPalettes-1-04"; templateFile: "Screen/.source/emptyLandscapeWide.otp"; color: "crimson" }
         ] }
         ListElement { text: "Black"; thumbnail: "Presentaton-Magenta"; color: "white"; templateFile: ""; variants: [
-            ListElement { thumbnail: "Presentaton-Magenta"; swatch: "ColorPalettes-Magenta-1"; templateFile: ""; color: "magenta" },
-            ListElement { thumbnail: "Presentaton-Blue"; swatch: "ColorPalettes-Blue-1"; templateFile: ""; color: "blue" },
-            ListElement { thumbnail: "Presentaton-Gold"; swatch: "ColorPalettes-gold-1"; templateFile: ""; color: "gold" },
-            ListElement { thumbnail: "Presentaton-Red"; swatch: "ColorPalettes-Red-1"; templateFile: ""; color: "red" }
+            ListElement { thumbnail: "Presentaton-Magenta"; swatch: "ColorPalettes-Magenta-1"; templateFile: "odf/.source/cohere-magenta.otp"; color: "magenta" },
+            ListElement { thumbnail: "Presentaton-Blue"; swatch: "ColorPalettes-Blue-1"; templateFile: "odf/.source/cohere-blue.otp"; color: "blue" },
+            ListElement { thumbnail: "Presentaton-Gold"; swatch: "ColorPalettes-gold-1"; templateFile: "odf/.source/cohere-gold.otp"; color: "gold" },
+            ListElement { thumbnail: "Presentaton-Red"; swatch: "ColorPalettes-Red-1"; templateFile: "odf/.source/cohere-red.otp"; color: "red" }
             ] }
         ListElement { text: "Metropolitan"; thumbnail: ""; color: "#E8EFF1"; templateFile: ""; variants: [ ] }
         ListElement { text: "Elegant"; thumbnail: ""; color: "#A9B3B6"; templateFile: ""; variants: [ ] }
