@@ -140,12 +140,23 @@ Item {
             navigatorSidebar.x = 0;
             pageNumber.opacity = 1;
             hideTimer.stop();
+            hidePageNumTimer.stop();
         }
         function hideThings() {
             if(navigatorSidebar.containsMouse) {
                 return;
             }
             hideTimer.start();
+            hidePageNumTimer.start();
+        }
+    }
+    Timer {
+        id: hidePageNumTimer;
+        running: false;
+        repeat: false;
+        interval: 500;
+        onTriggered: {
+            pageNumber.opacity = 0;
         }
     }
     Timer {
@@ -155,7 +166,6 @@ Item {
         interval: 2000;
         onTriggered: {
             navigatorSidebar.x = -navigatorSidebar.width;
-            pageNumber.opacity = 0;
         }
     }
     Item {

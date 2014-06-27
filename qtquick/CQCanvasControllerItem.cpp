@@ -291,7 +291,7 @@ QVariant CQCanvasControllerItem::itemChange(QGraphicsItem::GraphicsItemChange ch
         d->canvasController->blockSignals(false);
         d->lastX = pos.x();
         d->lastY = pos.y();
-        d->movingFast = QPoint(xDiff, yDiff).manhattanLength() > 15;
+        d->movingFast = QPoint(xDiff, yDiff).manhattanLength() > 25;
         emit movingFastChanged();
     }
 
