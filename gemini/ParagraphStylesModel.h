@@ -31,6 +31,7 @@ class ParagraphStylesModel : public QAbstractListModel
     Q_PROPERTY(QObject* textEditor READ textEditor WRITE setTextEditor NOTIFY textEditorChanged)
     Q_PROPERTY(QFont cursorFont READ cursorFont NOTIFY cursorFontChanged)
     Q_PROPERTY(int currentStyle READ currentStyle NOTIFY cursorFontChanged)
+    Q_PROPERTY(qreal zoomLevel READ zoomLevel WRITE setZoomLevel NOTIFY zoomLevelChanged)
 
 public:
     enum ParagraphStyleRoles {
@@ -60,10 +61,14 @@ public:
 
     QFont cursorFont() const;
     int currentStyle() const;
+
+    qreal zoomLevel() const;
+    void setZoomLevel(const qreal& newZoom);
 signals:
     void documentChanged();
     void textEditorChanged();
     void cursorFontChanged();
+    void zoomLevelChanged();
 
 private:
     class Private;

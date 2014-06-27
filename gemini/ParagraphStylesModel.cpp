@@ -38,6 +38,7 @@ public:
     QPointer<KoTextEditor> textEditor;
     KoParagraphStyle* cursorStyle;
     QFont cursorFont;
+    qreal zoomLevel;
 
     void updateStylesList()
     {
@@ -95,13 +96,14 @@ QVariant ParagraphStylesModel::data(const QModelIndex& index, int role) const
                 break;
             case Font:
                 font.setUnderline((style->underlineStyle() != KoCharacterStyle::NoLineStyle));
+                font.setPointSize(font.pointSize() * d->zoomLevel);
                 data.setValue(font);
                 break;
             case FontFamily:
                 data.setValue(style->fontFamily());
                 break;
             case FontPointSize:
-                data.setValue(style->fontPointSize());
+                data.setValue(style->fontPointSize() * d->zoomLevel);
                 break;
             case FontItalic:
                 data.setValue(style->fontItalic());
@@ -184,6 +186,18 @@ QFont ParagraphStylesModel::cursorFont() const
 int ParagraphStylesModel::currentStyle() const
 {
     return d->styles.indexOf(d->cursorStyle);
+}
+
+qreal ParagraphStylesModel::zoomLevel() const
+{
+    return d->zoomLevel;
+}
+
+void ParagraphStylesModel::setZoomLevel(const qreal& newZoom)
+{
+    d->zoomLevel = newZoom;
+    qDebug() << Q_FUNC_INFO << d->zoomLevel;
+    emit zoomLevelChanged();
 }
 
 #include "ParagraphStylesModel.moc"
