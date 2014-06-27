@@ -32,7 +32,6 @@
 
 class QPaintEvent;
 class KexiProjectData;
-//2.x class KexiSimplePrintingSettings;
 
 namespace KexiDB
 {
@@ -45,10 +44,7 @@ class Info;
 class Part;
 }
 
-class KXMLGUIClient;
-class KXMLGUIFactory;
 class KexiMainWidget;
-class KexiUserFeedbackAgent;
 
 #include <ktabwidget.h>
 
