@@ -196,7 +196,8 @@ qreal ParagraphStylesModel::zoomLevel() const
 void ParagraphStylesModel::setZoomLevel(const qreal& newZoom)
 {
     d->zoomLevel = newZoom;
-    qDebug() << Q_FUNC_INFO << d->zoomLevel;
+    if(d->styles.count() > 0)
+        dataChanged(index(0), index(d->styles.count() - 1));
     emit zoomLevelChanged();
 }
 

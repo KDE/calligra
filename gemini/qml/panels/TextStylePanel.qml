@@ -101,6 +101,7 @@ Item {
         delegate: Item {
             width: ListView.view.width;
             height: Constants.GridHeight;
+            clip: true;
             Rectangle {
                 anchors.fill: parent;
                 color: "#00adf5";
