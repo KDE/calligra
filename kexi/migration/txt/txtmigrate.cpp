@@ -24,7 +24,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 namespace KexiMigration
 {
 
-K_EXPORT_KEXIMIGRATE_DRIVER(TxtMigrate, "tsv")
+K_EXPORT_KEXIMIGRATE_DRIVER(TxtMigrate, tsv)
 
 
 TxtMigrate::TxtMigrate(QObject *parent, const QVariantList& args)
