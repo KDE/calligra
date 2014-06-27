@@ -29,6 +29,7 @@
 #include <kmainwindow.h>
 #include <db/tristate.h>
 
+#include "KexiMigrateManagerInterface.h"
 #include "kexisharedactionhost.h"
 #include "kexi.h"
 
@@ -39,6 +40,7 @@ class KXMLGUIClient;
 class KXMLGUIFactory;
 class KexiSearchableModel;
 class KexiUserFeedbackAgent;
+class KexiMigrateManagerInterface;
 namespace KexiPart
 {
 class Item;
@@ -299,6 +301,9 @@ public:
     virtual void addSearchableModel(KexiSearchableModel *model) = 0;
     
     virtual KexiUserFeedbackAgent* userFeedbackAgent() const = 0;
+
+    //! Interface to the migrate manager
+    virtual KexiMigrateManagerInterface* migrateManager() = 0;
 
 protected: // slots:
     virtual void slotObjectRenamed(const KexiPart::Item &item, const QString& oldName) = 0;
