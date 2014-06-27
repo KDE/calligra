@@ -48,6 +48,12 @@ KoShape *VariableLineShapeFactory::createDefaultShape(KoDocumentResourceManager 
     
     defaultLine->setStroke(new KoShapeStroke(1.0));
     defaultLine->setShapeId(VariableLineShapeId);
+    defaultLine->moveTo(QPointF(0, 0));
+    defaultLine->lineTo(QPointF(50, 50));
+    defaultLine->lineTo(QPointF(0, 100));
+    defaultLine->lineTo(QPointF(50, 150));
+    defaultLine->normalize();
+    defaultLine->initDefaultPointWidth();
 
     return defaultLine;
 }

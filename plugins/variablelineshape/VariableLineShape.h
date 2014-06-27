@@ -24,6 +24,8 @@
 
 #define VariableLineShapeId "VariableLineShape"
 
+typedef QMap<KoPathPoint *, qreal> pointsWidth;
+
 /**
  * The VariableLineShape is a shape that represents a variable line.
  * The variable line can have nodes to set width in percentage.
@@ -39,7 +41,14 @@ public:
     
     // Sets the percentage of current width
     void setWidthePercentage(qreal percentage);
-
+    
+    void initDefaultPointWidth();
+    
+    qreal getPointStokeWidth(KoPathPoint *pathPoint);
+    
+    // creates outline of variable width
+    QPainterPath createVariableWidthOutline() const;
+    
     // reimplemented
     virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
 
@@ -47,19 +56,15 @@ public:
     virtual void saveOdf(KoShapeSavingContext &context) const;
     
     // reimplemented
-    virtual void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext);
-    
-    // reimplemented
-    //virtual QPainterPath pathStroke(const QPen &pen) const;
+    virtual QPainterPath pathStroke(const QPen &pen) const;
 
     // reimplemented
     virtual QString pathShapeId() const;
-    
-    void createPath();
 
 private:
     qreal m_widthPercentage;
     QString m_mimetype;
+    pointsWidth m_pointsWidth;
 };
 
 #endif // VARIABLELINESHAPE_H
