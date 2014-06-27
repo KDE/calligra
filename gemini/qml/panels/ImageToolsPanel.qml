@@ -33,6 +33,19 @@ Item {
         right: parent.right;
         topMargin: 4;
     }
+    BorderImage {
+        anchors {
+            fill: parent;
+            topMargin: -28;
+            leftMargin: -36;
+            rightMargin: -36;
+            bottomMargin: -44;
+        }
+        border { left: 36; top: 28; right: 36; bottom: 44; }
+        horizontalTileMode: BorderImage.Stretch;
+        verticalTileMode: BorderImage.Stretch;
+        source: Settings.theme.image("drop-shadows.png");
+    }
     height: Constants.GridHeight * 4 + 2 * Constants.DefaultMargin;
     width: Constants.GridWidth * 3;
     Item {

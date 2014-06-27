@@ -167,6 +167,21 @@ Item {
             topMargin: Settings.theme.adjustedPixel(40) + Constants.ToolbarHeight;
             bottomMargin: Settings.theme.adjustedPixel(40);
         }
+        BorderImage {
+            anchors {
+                fill: parent;
+                topMargin: -28;
+                leftMargin: -36;
+                rightMargin: -36;
+                bottomMargin: -44;
+            }
+            border { left: 36; top: 28; right: 36; bottom: 44; }
+            horizontalTileMode: BorderImage.Stretch;
+            verticalTileMode: BorderImage.Stretch;
+            source: Settings.theme.image("drop-shadows.png");
+            opacity: (parent.x > -parent.width) ? 1 : 0;
+            Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+        }
         x: -width;
         Behavior on x { PropertyAnimation { duration: Constants.AnimationDuration; } }
         width: Settings.theme.adjustedPixel(190);
