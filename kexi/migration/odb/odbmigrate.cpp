@@ -16,7 +16,7 @@
 
 using namespace KexiMigration;
 K_EXPORT_KEXIMIGRATE_DRIVER(OdbMigrate, "odb")
-JNIEnv *env;
+
 
 
 OdbMigrate::OdbMigrate(QObject *parent, const QVariantList &args)
@@ -32,7 +32,7 @@ OdbMigrate::~OdbMigrate()
 }
 
 
-JNIEnv* create_vm(JavaVM ** jvm) {
+JNIEnv* OdbMigrate::create_vm(JavaVM ** jvm) {
 
     JavaVMInitArgs vm_args;
     JavaVMOption options;
@@ -58,13 +58,13 @@ JNIEnv* create_vm(JavaVM ** jvm) {
 bool OdbMigrate::drv_connect()
 {
     jclass clsH = env->FindClass("OdbReader");
-    if(clsH) 
+    if(clsH)
         kDebug() << "found class";
-    else 
+    else
         return 0;
     jobject object = env->NewObject(clsH, NULL);
 
-   
+
     kDebug() << "object constructed";
     return true;
 }
@@ -77,7 +77,9 @@ bool OdbMigrate::drv_readTableSchema(
 
 bool OdbMigrate::drv_disconnect()
 {
-    return false;
+    jvm->DestroyJavaVM();
+    kDebug() << "jvm destroyed";
+    return true;
 }
 
 bool OdbMigrate::drv_tableNames(QStringList& tableNames)
