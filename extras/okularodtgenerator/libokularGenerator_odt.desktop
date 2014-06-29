@@ -2,6 +2,7 @@
 Type=Service
 Name=OpenDocument Text Document
 Name[ca]=Document de text OpenDocument
+Name[cs]=Textový dokument OpenDocument
 Name[nl]=OpenDocument tekstdocument
 Name[pl]=Dokument tekstowy OpenDocument
 Name[pt]=Documento de Texto em OpenDocument
@@ -12,6 +13,7 @@ Name[uk]=Текстовий документ OpenDocument
 Name[x-test]=xxOpenDocument Text Documentxx
 Comment=Odt for okular
 Comment[ca]=ODT per a l'Okular
+Comment[cs]=Odt pro Okular
 Comment[nl]=Odt voor okular
 Comment[pl]=Odt dla okular
 Comment[pt]=ODT para o Okular

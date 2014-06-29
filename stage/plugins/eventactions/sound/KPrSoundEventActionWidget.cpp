@@ -91,7 +91,7 @@ void KPrSoundEventActionWidget::soundComboChanged()
     }
 
     // TODO better name e.g. on new or remove sound
-    KUndo2Command * cmd = new KUndo2Command( i18nc("(qtundo-format)", "Change sound action" ) );
+    KUndo2Command * cmd = new KUndo2Command( kundo2_i18n("Change sound action" ) );
     if ( m_eventAction ) {
         new KoEventActionRemoveCommand( m_shape, m_eventAction, cmd );
         m_eventAction = 0;

@@ -104,7 +104,7 @@ void TaskDialog::slotTaskRemoved( Node *node )
 }
 
 MacroCommand *TaskDialog::buildCommand() {
-    MacroCommand *m = new MacroCommand(i18nc("(qtundo-format)", "Modify task"));
+    MacroCommand *m = new MacroCommand(kundo2_i18n("Modify task"));
     bool modified = false;
     MacroCommand *cmd = m_generalTab->buildCommand();
     if (cmd) {
@@ -177,7 +177,7 @@ void TaskAddDialog::slotNodeRemoved( Node *node )
 
 MacroCommand *TaskAddDialog::buildCommand()
 {
-    MacroCommand *c = new MacroCommand( i18nc( "(qtundo-format)", "Add task" ) );
+    MacroCommand *c = new MacroCommand( kundo2_i18n( "Add task" ) );
     c->addCommand( new TaskAddCmd( &m_project, m_node, m_currentnode ) );
     MacroCommand *m = TaskDialog::buildCommand();
     if ( m ) {
@@ -212,9 +212,9 @@ void SubTaskAddDialog::slotNodeRemoved( Node *node )
 
 MacroCommand *SubTaskAddDialog::buildCommand()
 {
-    QString s = i18n( "Add sub-task" );
+    KUndo2MagicString s = kundo2_i18n( "Add sub-task" );
     if ( m_currentnode == 0 ) {
-        s = i18n( "Add task" ); // it will be added to project
+        s = kundo2_i18n( "Add task" ); // it will be added to project
     }
     MacroCommand *c = new MacroCommand( s );
     c->addCommand( new SubtaskAddCmd( &m_project, m_node, m_currentnode ) );

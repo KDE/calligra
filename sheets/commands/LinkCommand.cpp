@@ -36,7 +36,7 @@ LinkCommand::LinkCommand(const Cell& c, const QString& text, const QString& link
     newText = text;
     newLink = link;
 
-    setText(newLink.isEmpty() ? i18n("Remove Link") : i18n("Set Link"));
+    setText(newLink.isEmpty() ? kundo2_i18n("Remove Link") : kundo2_i18n("Set Link"));
 }
 
 void LinkCommand::redo()

@@ -365,14 +365,14 @@ calligra_disable_product(FILTER_MPXJ_IMPORT "missing runtime deps")
 
 9.1. Runtime dependency of the Okular ODP plugin
 ------------------------------------------------
-OKULARODPGENERATOR, the plugin for Okular, in extras/okularodpgenerator, has a
-runtime dependency on the Stage engine, STAGE_PART.
+OKULAR_GENERATOR_ODP, the plugin for Okular, in extras/okularodpgenerator, has a
+runtime dependency on the Stage engine, PART_STAGE.
 
 9.2. Support for PPT, PPTX and more runtime dependency
 ------------------------------------------------------
 The Okular ODP plugin also supports the formats PPT and PPTX, if the respective
 filters FILTER_PPT_TO_ODP and FILTER_PPTX_TO_ODP are built, by the products
-OKULARGENERATOR_PPT and OKULARGENERATOR_PPTX.
+OKULAR_GENERATOR_PPT and OKULAR_GENERATOR_PPTX.
 
 In that case the files
 * libokularGenerator_{powerpoint,pptx}_calligra.desktop

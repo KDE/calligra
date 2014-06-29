@@ -80,13 +80,13 @@ set(wordsprivate_LIB_SRCS
     author/CoverImage.cpp
     author/CoverSelectionDialog.cpp
 )
-if( SHOULD_BUILD_RDF )
+if( SHOULD_BUILD_FEATURE_RDF )
     set(wordsprivate_LIB_SRCS ${wordsprivate_LIB_SRCS}
         dockers/KWRdfDocker.cpp
         dockers/KWRdfDockerFactory.cpp
         dockers/KWRdfDockerTree.cpp
     )
-endif( SHOULD_BUILD_RDF )
+endif( SHOULD_BUILD_FEATURE_RDF )
 
 kde4_add_ui_files(wordsprivate_LIB_SRCS
     dialogs/KWFrameConnectSelector.ui
@@ -103,19 +103,19 @@ kde4_add_ui_files(wordsprivate_LIB_SRCS
     pagetool/SimpleHeaderFooterWidget.ui
     author/CoverSelectionDialog.ui
 )
-if( SHOULD_BUILD_RDF )
+if( SHOULD_BUILD_FEATURE_RDF )
     kde4_add_ui_files(wordsprivate_LIB_SRCS
         dockers/KWRdfDocker.ui
     )
-endif( SHOULD_BUILD_RDF )
+endif( SHOULD_BUILD_FEATURE_RDF )
 
 
 kde4_add_library(wordsprivate SHARED ${wordsprivate_LIB_SRCS})
 
 target_link_libraries(wordsprivate komain kotextlayout)
-if( SHOULD_BUILD_RDF )
+if( SHOULD_BUILD_FEATURE_RDF )
     target_link_libraries(wordsprivate kordf)
-endif( SHOULD_BUILD_RDF )
+endif( SHOULD_BUILD_FEATURE_RDF )
 target_link_libraries(wordsprivate LINK_INTERFACE_LIBRARIES komain)
 
 set_target_properties(wordsprivate
@@ -169,7 +169,7 @@ DESTINATION ${INCLUDE_INSTALL_DIR}/words/part/frames COMPONENT Devel)
 
 ###What follows is calligraauthor section###
 
-if (SHOULD_BUILD_AUTHOR)
+if (SHOULD_BUILD_APP_AUTHOR)
 
 ########### AuthorPart Library ###############
 
@@ -210,4 +210,4 @@ install( FILES author/authorpart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 install( PROGRAMS author/author.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 install( FILES author/authorrc DESTINATION ${CONFIG_INSTALL_DIR} )
 
-endif (SHOULD_BUILD_AUTHOR)
+endif (SHOULD_BUILD_APP_AUTHOR)

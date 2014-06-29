@@ -31,6 +31,7 @@ class KActionCollection;
 
 class KoCompositeOp;
 class KoColorSpace;
+class KUndo2MagicString;
 
 class KisDoc2;
 class KisFilterStrategy;
@@ -97,6 +98,13 @@ public:
      */
     void setNodeCompositeOp(KisNodeSP node, const KoCompositeOp* compositeOp);
 
+    /**
+     * @brief setSelectedNodes set the list of nodes selected in the layerbox. Selected nodes are not necessarily active nodes.
+     * @param nodes the selected nodes
+     */
+    void setSelectedNodes(QList<KisNodeSP> nodes);
+    QList<KisNodeSP> selectedNodes();
+
 public slots:
 
     /**
@@ -154,7 +162,7 @@ public slots:
     void removeNode();
     void mirrorNodeX();
     void mirrorNodeY();
-    void mirrorNode(KisNodeSP node, const QString & commandName, Qt::Orientation orientation);
+    void mirrorNode(KisNodeSP node, const KUndo2MagicString& commandName, Qt::Orientation orientation);
     void activateNextNode();
     void activatePreviousNode();
 
@@ -188,10 +196,12 @@ public slots:
     void rotateRight90();
 
     void saveNodeAsImage();
-public:
 
     // merges the active layer with the layer below it.
     void mergeLayerDown();
+
+public:
+
     
     void shear(double angleX, double angleY);
 
@@ -203,6 +213,8 @@ private:
      * to the integer range 0...255
      */
     qint32 convertOpacityToInt(qreal opacity);
+    void removeSelectedNodes(QList<KisNodeSP> selectedNodes, bool removeActive = true);
+    void removeSingleNode(KisNodeSP node);
 
     struct Private;
     Private * const m_d;

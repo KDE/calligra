@@ -693,6 +693,16 @@ void KisConfig::setShowRootLayer(bool showRootLayer) const
     m_cfg.writeEntry("ShowRootLayer", showRootLayer);
 }
 
+bool KisConfig::showGlobalSelection() const
+{
+    return m_cfg.readEntry("ShowGlobalSelection", false);
+}
+
+void KisConfig::setShowGlobalSelection(bool showGlobalSelection) const
+{
+    m_cfg.writeEntry("ShowGlobalSelection", showGlobalSelection);
+}
+
 bool KisConfig::showOutlineWhilePainting() const
 {
     return m_cfg.readEntry("ShowOutlineWhilePainting", true);
@@ -1133,6 +1143,36 @@ bool KisConfig::lineSmoothingScalableDistance() const
 void KisConfig::setLineSmoothingScalableDistance(bool value)
 {
     m_cfg.writeEntry("LineSmoothingScalableDistance", value);
+}
+
+qreal KisConfig::lineSmoothingDelayDistance() const
+{
+    return m_cfg.readEntry("LineSmoothingDelayDistance", 50.0);
+}
+
+void KisConfig::setLineSmoothingDelayDistance(qreal value)
+{
+    m_cfg.writeEntry("LineSmoothingDelayDistance", value);
+}
+
+bool KisConfig::lineSmoothingUseDelayDistance() const
+{
+    return m_cfg.readEntry("LineSmoothingUseDelayDistance", true);
+}
+
+void KisConfig::setLineSmoothingUseDelayDistance(bool value)
+{
+    m_cfg.writeEntry("LineSmoothingUseDelayDistance", value);
+}
+
+bool KisConfig::lineSmoothingFinishStabilizedCurve() const
+{
+    return m_cfg.readEntry("LineSmoothingFinishStabilizedCurve", true);
+}
+
+void KisConfig::setLineSmoothingFinishStabilizedCurve(bool value)
+{
+    m_cfg.writeEntry("LineSmoothingFinishStabilizedCurve", value);
 }
 
 int KisConfig::paletteDockerPaletteViewSectionSize() const

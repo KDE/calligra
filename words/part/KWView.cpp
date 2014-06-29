@@ -628,7 +628,7 @@ void KWView::createLinkedFrame()
         return;
     selection->deselectAll();
 
-    KUndo2Command *cmd = new KUndo2Command(i18nc("(qtundo-format)", "Create Linked Copy"));
+    KUndo2Command *cmd = new KUndo2Command(kundo2_i18n("Create Linked Copy"));
     foreach (KoShape *shape, oldSelection) {
         KWFrame *frame = dynamic_cast<KWFrame*>(shape->applicationData());
         Q_ASSERT(frame);

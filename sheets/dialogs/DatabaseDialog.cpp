@@ -558,7 +558,7 @@ void DatabaseDialog::accept()
         }
     }
 
-    KUndo2Command* macroCommand = new KUndo2Command(i18nc("(qtundo-format)", "Insert Data From Database"));
+    KUndo2Command* macroCommand = new KUndo2Command(kundo2_i18n("Insert Data From Database"));
 
     if (query.first()) {
         if (query.isValid()) {

@@ -5,9 +5,9 @@ include_directories( ${CMAKE_SOURCE_DIR}/interfaces
                     ${KOTEXT_INCLUDES}
                     ${TEXTLAYOUT_INCLUDES}
                     ${Boost_INCLUDE_DIR}
-                    ${EIGEN2_INCLUDE_DIR} )
+                    ${EIGEN3_INCLUDE_DIR} )
 
-if (SHOULD_BUILD_SHEETS_PART)
+if (SHOULD_BUILD_PART_SHEETS)
 
 add_subdirectory( data )
 add_subdirectory( shape )
@@ -401,11 +401,11 @@ install( FILES
 
 DESTINATION ${INCLUDE_INSTALL_DIR}/sheets/commands COMPONENT Devel)
 
-endif (SHOULD_BUILD_SHEETS_PART)
+endif (SHOULD_BUILD_PART_SHEETS)
 
 ########### APP ###############
 
-if (SHOULD_BUILD_SHEETS_APP)
+if (SHOULD_BUILD_APP_SHEETS)
 
 SET (calligrasheets_KDEINIT_SRCS part/Main.cpp )
 
@@ -429,4 +429,4 @@ install(TARGETS calligrasheets  ${INSTALL_TARGETS_DEFAULT_ARGS})
 install( PROGRAMS  sheets.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
 install( FILES sheets.appdata.xml DESTINATION ${SHARE_INSTALL_PREFIX}/appdata/)
 
-endif (SHOULD_BUILD_SHEETS_APP)
+endif (SHOULD_BUILD_APP_SHEETS)

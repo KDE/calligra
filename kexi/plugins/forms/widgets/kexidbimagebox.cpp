@@ -27,6 +27,7 @@
 #include <QStyleOptionFrameV3>
 #include <QClipboard>
 
+#include <QFile>
 #include <QImage>
 #include <QBuffer>
 #include <QPainter>

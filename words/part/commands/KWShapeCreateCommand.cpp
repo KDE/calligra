@@ -54,7 +54,7 @@ KWShapeCreateCommand::KWShapeCreateCommand(KWDocument *doc, KoShape *shape, KUnd
     m_shape(shape),
     m_deleteShape(true)
 {
-    setText(i18nc("(qtundo-format)", "Create shape"));
+    setText(kundo2_i18n("Create shape"));
 }
 
 KWShapeCreateCommand::~KWShapeCreateCommand()

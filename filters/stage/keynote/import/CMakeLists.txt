@@ -20,9 +20,9 @@ target_link_libraries(calligra_filter_key2odp komain ${LIBREVENGE_LIBRARIES} ${L
 install(TARGETS calligra_filter_key2odp DESTINATION ${PLUGIN_INSTALL_DIR})
 install(FILES calligra_filter_key2odp.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 
-if(SHOULD_BUILD_EXTRA_THUMBNAIL)
+if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
     install(FILES stage_key_thumbnail.desktop DESTINATION ${SERVICES_INSTALL_DIR})
-endif(SHOULD_BUILD_EXTRA_THUMBNAIL)
+endif(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
 
 if (SHARED_MIME_INFO_FOUND)
     install(FILES x-iwork-keynote-sffkey.xml DESTINATION ${XDG_MIME_INSTALL_DIR})

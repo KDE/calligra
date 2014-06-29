@@ -50,7 +50,7 @@ class KRITAUI_EXPORT KisToolFreehand : public KisToolPaint
 public:
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
-    KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, const QString & transactionText);
+    KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, const KUndo2MagicString &transactionText);
     virtual ~KisToolFreehand();
     virtual int flags() const;
 
@@ -72,7 +72,6 @@ protected:
     virtual bool wantsAutoScroll() const;
     void activate(ToolActivation activation, const QSet<KoShape*> &shapes);
     void deactivate();
-    void resetCursorStyle();
 
     virtual void initStroke(KoPointerEvent *event);
     virtual void doStroke(KoPointerEvent *event);
@@ -89,6 +88,8 @@ protected:
 
 protected slots:
 
+    void explicitUpdateOutline();
+    virtual void resetCursorStyle();
     void setAssistant(bool assistant);
 
 private:
@@ -108,7 +109,7 @@ private:
 
 protected:
 
-    KisSmoothingOptions m_smoothingOptions;
+    KisSmoothingOptionsSP smoothingOptions() const;
     bool m_assistant;
     double m_magnetism;
 

@@ -75,7 +75,7 @@ namespace Scripting {
             /// Open another Plan document in a sub-module with name @p tag
             QObject *openDocument( const QString &tag, const QString &url );
             /// Start a command with @p name
-            void beginCommand( const QString &name );
+            void beginCommand( const KUndo2MagicString &name );
             /// End a command started with beginCommand()
             void endCommand();
             /// Revert a command started with beginCommand(), bit not ended with endCommand()

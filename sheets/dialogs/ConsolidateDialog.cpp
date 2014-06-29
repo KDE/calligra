@@ -209,7 +209,7 @@ void ConsolidateDialog::accept()
     }
 
     // Create the cumulating parent command.
-    KUndo2Command *const command = new KUndo2Command(i18nc("(qtundo-format)", "Consolidate"));
+    KUndo2Command *const command = new KUndo2Command(kundo2_i18n("Consolidate"));
 
     // Create the destination cell range
     if (desc == D_NONE) {

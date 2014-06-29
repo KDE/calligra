@@ -99,7 +99,7 @@ void Scripting::Resource::setChildren( const QList<QObject*> &children )
     if ( team->type() != KPlato::Resource::Type_Team ) {
         return;
     }
-    KPlato::MacroCommand *cmd = new KPlato::MacroCommand( i18nc( "(qtundo_format)", "Set resource team members" ) );
+    KPlato::MacroCommand *cmd = new KPlato::MacroCommand( kundo2_i18n( "Set resource team members" ) );
     foreach ( const QString &id, team->teamMemberIds() ) {
        cmd->addCommand( new KPlato::RemoveResourceTeamCmd( team, id ) );
     }

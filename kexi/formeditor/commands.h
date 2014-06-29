@@ -27,6 +27,7 @@
 
 #include <kdebug.h>
 #include "utils.h"
+#include "objecttree.h"
 #include "form.h"
 
 class QRect;

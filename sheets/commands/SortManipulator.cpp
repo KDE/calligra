@@ -38,7 +38,7 @@ SortManipulator::SortManipulator()
     m_skipfirst = false;
     m_usecustomlist = false;
 
-    setText(i18nc("(qtundo-format)", "Sort Data"));
+    setText(kundo2_i18n("Sort Data"));
 }
 
 SortManipulator::~SortManipulator()

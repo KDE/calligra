@@ -23,7 +23,7 @@
 #define KFORMDESIGNERFORM_H
 
 #include <QMetaProperty>
-#include <QList>
+#include <QAction>
 #include <kexi_global.h>
 #include "widgetlibrary.h"
 

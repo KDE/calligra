@@ -27,6 +27,7 @@
 #include "strokes/freehand_stroke.h"
 #include "kis_default_bounds.h"
 #include "kis_paintop_settings.h"
+#include "kis_smoothing_options.h"
 
 class KoPointerEvent;
 class KoCanvasResourceManager;
@@ -36,7 +37,7 @@ class KisStrokesFacade;
 class KisPostExecutionUndoAdapter;
 class KisPaintOp;
 class KisPainter;
-struct KisSmoothingOptions;
+
 
 class KRITAUI_EXPORT KisToolFreehandHelper : public QObject
 {
@@ -49,10 +50,12 @@ protected:
 public:
 
     KisToolFreehandHelper(KisPaintingInformationBuilder *infoBuilder,
+                          const KUndo2MagicString &transactionText = KUndo2MagicString(),
                           KisRecordingAdapter *recordingAdapter = 0);
     ~KisToolFreehandHelper();
 
-    void setSmoothness(const KisSmoothingOptions &smoothingOptions);
+    void setSmoothness(KisSmoothingOptionsSP smoothingOptions);
+    KisSmoothingOptionsSP smoothingOptions() const;
 
     void initPaint(KoPointerEvent *event,
                    KoCanvasResourceManager *resourceManager,
@@ -69,6 +72,15 @@ public:
                                 const KoPointerEvent *event,
                                 const KisPaintOpSettings *globalSettings,
                                 KisPaintOpSettings::OutlineMode mode) const;
+
+signals:
+    /**
+     * The signal is emitted when the outline should be updated
+     * explicitly by the tool. Used by Stabilizer option, because it
+     * paints on internal timer events instead of the on every paint()
+     * event
+     */
+    void requestExplicitUpdateOutline();
 
 protected:
 
@@ -106,10 +118,14 @@ private:
     void paintBezierSegment(KisPaintInformation pi1, KisPaintInformation pi2,
                                                    QPointF tangent1, QPointF tangent2);
 
+    void stabilizerStart(KisPaintInformation firstPaintInfo);
+    void stabilizerEnd();
+
 private slots:
 
     void finishStroke();
     void doAirbrushing();
+    void stabilizerPollAndPaint();
 
 private:
     struct Private;
