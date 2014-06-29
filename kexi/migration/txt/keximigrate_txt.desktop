@@ -2,6 +2,7 @@
 Name=TSV
 Name[nl]=TSV
 Name[pt]=TSV
+Name[pt_BR]=VST
 Name[sk]=TSV
 Name[sv]=TSV
 Name[uk]=TSV
@@ -9,6 +10,7 @@ Name[x-test]=xxTSVxx
 Comment="Tab Separated Values" Document Import Plugin for Kexi
 Comment[nl]="Tab Separated Values" Import-plug-in van document voor Kexi
 Comment[pt]='Plugin' de Importação de Documentos Separados por Tabulações para o Kexi
+Comment[pt_BR]=Plugin de importação de documento com "Valores Separados por Tabulação" para o Kexi
 Comment[sk]=Importný plugin dokumentov pre Kexi na "Hodnoty oddelené tabulátorom"
 Comment[sv]=Importinsticksprogram av dokument med "värden åtskilda av tabulatortecken" för Kexi
 Comment[uk]=Додаток імпортування даних, відокремлених символами табуляції, для Kexi
