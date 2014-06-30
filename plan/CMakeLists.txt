@@ -141,7 +141,7 @@ install(TARGETS calligraplan  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 
-install( FILES  planpart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  planpart.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 install( FILES  plan.rc plan_readonly.rc DESTINATION ${DATA_INSTALL_DIR}/plan)
 install( PROGRAMS  plan.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 install( FILES  planrc DESTINATION ${CONFIG_INSTALL_DIR})

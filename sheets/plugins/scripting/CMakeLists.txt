@@ -22,8 +22,8 @@ install(TARGETS krossmodulesheets DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES krossmodulesheets.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES krossmodulesheets.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 install( FILES scripting.rc  DESTINATION ${DATA_INSTALL_DIR}/sheets/viewplugins)
-install( FILES sheetsscripting.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES sheetsscripting.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 
 

@@ -13,4 +13,4 @@ install(TARGETS braindumpquickstates  DESTINATION ${PLUGIN_INSTALL_DIR})
 ########### install files ###############
 
 install( FILES  quickstates.rc  DESTINATION ${DATA_INSTALL_DIR}/braindump/plugins)
-install( FILES  braindumpquickstates.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  braindumpquickstates.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
