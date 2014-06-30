@@ -18,8 +18,8 @@ kde4_add_plugin(calligra_filter_wps2odt ${wps2odt_PART_SRCS})
 target_link_libraries(calligra_filter_wps2odt komain ${LIBODFGEN_LIBRARIES} ${LIBREVENGE_LIBRARIES} ${LIBWPS_LIBRARIES})
 
 install(TARGETS calligra_filter_wps2odt DESTINATION ${PLUGIN_INSTALL_DIR})
-install(FILES calligra_filter_wps2odt.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install(FILES calligra_filter_wps2odt.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 
 if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
-    install(FILES words_wps_thumbnail.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+    install(FILES words_wps_thumbnail.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 endif(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)

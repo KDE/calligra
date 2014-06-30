@@ -36,7 +36,7 @@ install(TARGETS calligrastagetoolanimation  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  calligrastagetoolanimation.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  calligrastagetoolanimation.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 
 kde4_install_icons( ${DATA_INSTALL_DIR}/calligra/icons  )
 

@@ -20,4 +20,4 @@ install(TARGETS plankplatoimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  plan_kplato_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  plan_kplato_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)

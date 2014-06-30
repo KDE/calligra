@@ -10,4 +10,4 @@ target_link_libraries(calligradocinfopropspage  ${KDE4_KIO_LIBS} komain)
 
 install(TARGETS calligradocinfopropspage DESTINATION ${PLUGIN_INSTALL_DIR})
 
-install(FILES calligradocinfopropspage.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install(FILES calligradocinfopropspage.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)

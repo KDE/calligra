@@ -28,4 +28,4 @@ install(TARGETS kexidb_pqxxsqldriver  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  kexidb_pqxxsqldriver.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  kexidb_pqxxsqldriver.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
