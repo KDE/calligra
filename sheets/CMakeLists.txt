@@ -426,7 +426,7 @@ install(TARGETS kdeinit_calligrasheets  ${INSTALL_TARGETS_DEFAULT_ARGS})
 target_link_libraries( calligrasheets kdeinit_calligrasheets )
 install(TARGETS calligrasheets  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-install( PROGRAMS  sheets.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
+install( PROGRAMS  sheets.desktop DESTINATION ${XDG_APPS_INSTALL_DIR}/calligra)
 install( FILES sheets.appdata.xml DESTINATION ${SHARE_INSTALL_PREFIX}/appdata/)
 
 endif (SHOULD_BUILD_APP_SHEETS)
