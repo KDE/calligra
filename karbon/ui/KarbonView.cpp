@@ -128,7 +128,7 @@
 #include <kstandardaction.h>
 #include <ktoggleaction.h>
 #include <kdebug.h>
-#include <kservicetypetrader.h>
+#include <KoServiceLocator.h>
 #include <kmimetype.h>
 
 // qt header
@@ -261,9 +261,7 @@ KarbonView::KarbonView(KarbonPart *karbonPart, KarbonDocument* doc, QWidget* par
     initActions();
 
     // Load all plugins
-    KService::List offers = KServiceTypeTrader::self()->query(QString::fromLatin1("Karbon/ViewPlugin"),
-                                                              QString::fromLatin1("(Type == 'Service') and "
-                                                                                  "([X-Karbon-Version] == 28)"));
+    const KService::List offers = KoServiceLocator::instance()->entries("Karbon/ViewPlugin");
     KService::List::ConstIterator iter;
     for (iter = offers.constBegin(); iter != offers.constEnd(); ++iter) {
 
