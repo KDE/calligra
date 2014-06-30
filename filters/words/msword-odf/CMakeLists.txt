@@ -29,13 +29,13 @@ target_link_libraries(calligra_filter_doc2odt kowv2 komain mso komsooxml ${ZLIB_
 
 install(TARGETS calligra_filter_doc2odt  DESTINATION ${PLUGIN_INSTALL_DIR})
 
-install( FILES  calligra_filter_doc2odt.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  calligra_filter_doc2odt.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 
 if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
-    install( FILES  words_msword_thumbnail.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+    install( FILES  words_msword_thumbnail.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 endif(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
 
 if(SHOULD_BUILD_OKULAR_GENERATOR_DOC)
-    install( FILES libokularGenerator_doc_calligra.desktop okularDoc_calligra.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
-    install( PROGRAMS okularApplication_doc_calligra.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
+    install( FILES libokularGenerator_doc_calligra.desktop okularDoc_calligra.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra )
+    install( PROGRAMS okularApplication_doc_calligra.desktop DESTINATION ${XDG_APPS_INSTALL_DIR}/calligra )
 endif(SHOULD_BUILD_OKULAR_GENERATOR_DOC)

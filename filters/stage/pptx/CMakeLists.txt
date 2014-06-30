@@ -36,14 +36,14 @@ install(TARGETS calligra_filter_pptx2odp DESTINATION ${PLUGIN_INSTALL_DIR})
 
 install( FILES
   calligra_filter_pptx2odp.desktop
-  DESTINATION ${SERVICES_INSTALL_DIR}
+  DESTINATION ${SERVICES_INSTALL_DIR}/calligra
 )
 
 if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
-    install( FILES stage_pptx_thumbnail.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+    install( FILES stage_pptx_thumbnail.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 endif(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
 
 if(SHOULD_BUILD_OKULARGENERATOR_PPTX)
-    install( FILES libokularGenerator_pptx_calligra.desktop okularPptx_calligra.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
-    install( PROGRAMS okularApplication_pptx_calligra.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
+    install( FILES libokularGenerator_pptx_calligra.desktop okularPptx_calligra.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra )
+    install( PROGRAMS okularApplication_pptx_calligra.desktop DESTINATION ${XDG_APPS_INSTALL_DIR}/calligra )
 endif(SHOULD_BUILD_OKULARGENERATOR_PPTX)
