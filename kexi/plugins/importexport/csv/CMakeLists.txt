@@ -4,6 +4,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi ${CM
 
 set(kexihandler_csv_importexport_PART_SRCS 
    kexicsv_importexportpart.cpp 
+   KexiCSVImportDialogModel.cpp
    kexicsvimportdialog.cpp 
    kexicsvimportoptionsdlg.cpp 
    kexicsvwidgets.cpp 

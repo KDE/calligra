@@ -27,6 +27,7 @@
 */
 
 #include "kexicsvimportdialog.h"
+#include "KexiCSVImportDialogModel.h"
 
 #include <QButtonGroup>
 #include <QCheckBox>
@@ -36,7 +37,6 @@
 #include <QMimeSource>
 #include <QPushButton>
 #include <QRadioButton>
-#include <QStandardItemModel>
 #include <QItemSelectionModel>
 #include <QHeaderView>
 #include <QTableView>
@@ -135,95 +135,6 @@ K_GLOBAL_STATIC(KexiCSVImportStatic, kexiCSVImportStatic)
 #define MAX_CHARS_TO_SCAN_WHILE_DETECTING_DELIMITER 4096
 #define MINIMUM_YEAR_FOR_100_YEAR_SLIDING_WINDOW 1930
 #define PROGRESS_STEP_MS (1000/5) // 5 updates per second
-
-class KexiCSVImportDialogModel : public QStandardItemModel
-{
-public:
-    KexiCSVImportDialogModel(QObject *parent)
-        : QStandardItemModel(parent)
-        , m_1stRowForFieldNames(true)
-    {
-    }
-
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const
-    {
-
-        QVariant value = QStandardItemModel::data(index, role);
-
-        switch (role) {
-        case Qt::FontRole:
-            if (index.row() == 0) {
-                QFont f(value.value<QFont>());
-                f.setBold(true);
-                return qVariantFromValue(f);
-            }
-        case Qt::EditRole:
-        case Qt::DisplayRole:
-            if (index.row() == 0) {
-                if (!m_columnNames[index.column()].isEmpty() && m_1stRowForFieldNames) {
-                    return m_columnNames[index.column()];
-                } else {
-                    return i18n("Column %1", index.column() + 1);
-                }
-            }
-        }
-        return value;
-    }
-
-    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const
-    {
-        QVariant value = QStandardItemModel::headerData(section, orientation, role);
-        if (orientation == Qt::Vertical && role == Qt::DisplayRole) {
-            if (section == 0) {
-                return QString(i18nc("@title:row", "Column name") + "  ");
-            } else {
-                return QString::number(section);
-            }
-        }
-        return value;
-    }
-
-    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole)
-    {
-        if (index.row() == 0 && m_1stRowForFieldNames && role == Qt::EditRole) {
-            m_columnNames[index.column()] = value.toString();
-            return true;
-        }
-        return QStandardItemModel::setData(index, value, role);
-    }
-
-    void setColumnCount(int col)
-    {
-        if (m_columnNames.size()<col) {
-            m_columnNames.resize(col);
-        }
-        QStandardItemModel::setColumnCount(col);
-    }
-
-    bool firstRowForFieldNames() const
-    {
-        return m_1stRowForFieldNames;
-    }
-
-    void setFirstRowForFieldNames(bool flag)
-    {
-        m_1stRowForFieldNames = flag;
-    }
-
-private:
-    bool m_1stRowForFieldNames;
-    QVector<QString> m_columnNames;
-};
-
-//! Helper used to temporary disable keyboard and mouse events
-void installRecursiveEventFilter(QObject *filter, QObject *object)
-{
-    object->installEventFilter(filter);
-    QList<QObject*> list(object->children());
-    foreach(QObject *obj, list) {
-        installRecursiveEventFilter(filter, obj);
-    }
-}
 
 static bool shouldSaveRow(int row, bool firstRowForFieldNames)
 {
@@ -439,7 +350,7 @@ KexiCSVImportDialog::KexiCSVImportDialog(Mode mode, QWidget * parent)
     connect(this, SIGNAL(currentPageChanged(KPageWidgetItem*,KPageWidgetItem*)),
             this, SLOT(slotCurrentPageChanged(KPageWidgetItem*,KPageWidgetItem*)));
 
-    installRecursiveEventFilter(this, this);
+    KexiUtils::installRecursiveEventFilter(this, this);
     if ( m_mode == Clipboard )
         initLater();
 }

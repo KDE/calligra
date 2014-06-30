@@ -37,6 +37,7 @@ public:
     void generatePixmap( Okular::PixmapRequest *request );
 
     const Okular::DocumentInfo* generateDocumentInfo();
+    const Okular::DocumentSynopsis* generateDocumentSynopsis();
 
 protected:
     bool doCloseDocument();
@@ -45,6 +46,8 @@ private:
     KWDocument* m_doc;
 
     Okular::DocumentInfo m_documentInfo;
+    Okular::DocumentSynopsis m_documentSynopsis;
+
 };
 
 #endif

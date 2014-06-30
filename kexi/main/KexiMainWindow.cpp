@@ -104,6 +104,7 @@
 #include <widget/KexiFileWidget.h>
 #include <widget/KexiNameDialog.h>
 #include <widget/KexiNameWidget.h>
+#include <migration/migratemanager.h>
 #include <koproperty/EditorView.h>
 #include <koproperty/Set.h>
 
@@ -4176,6 +4177,14 @@ void KexiMainWindow::showTabIfNeeded()
 KexiUserFeedbackAgent* KexiMainWindow::userFeedbackAgent() const
 {
     return &d->userFeedback;
+}
+
+KexiMigrateManagerInterface* KexiMainWindow::migrateManager()
+{
+    if (d->migrateManager.isNull()) {
+        d->migrateManager.reset(new KexiMigration::MigrateManager());
+    }
+    return d->migrateManager.data();
 }
 
 void KexiMainWindow::toggleFullScreen(bool isFullScreen)

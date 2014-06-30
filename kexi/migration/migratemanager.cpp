@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Daniel Molkentin <molkentin@kde.org>
    Joseph Wenninger <jowenn@kde.org>
-   Copyright (C) 2003-2004 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -174,8 +174,10 @@ bool MigrateManagerInternal::lookupDrivers()
 
 KexiMigrate* MigrateManagerInternal::driver(const QString& name)
 {
-    if (!lookupDrivers())
+    if (!lookupDrivers()) {
+        kWarning() << "lookupDrivers failed";
         return 0;
+    }
 
     clearError();
     KexiDBDbg << "loading" << name;
@@ -264,6 +266,7 @@ MigrateManager::~MigrateManager()
 
 const QStringList MigrateManager::driverNames()
 {
+    clearError();
     if (!d_int->lookupDrivers()) {
         kWarning() << "lookupDrivers failed";
         return QStringList();
@@ -281,8 +284,9 @@ const QStringList MigrateManager::driverNames()
 
 QString MigrateManager::driverForMimeType(const QString &mimeType)
 {
+    clearError();
     if (!d_int->lookupDrivers()) {
-        kDebug() << "lookupDrivers() failed";
+        kWarning() << "lookupDrivers failed";
         setError(d_int);
         return 0;
     }
@@ -298,6 +302,7 @@ QString MigrateManager::driverForMimeType(const QString &mimeType)
 
 KexiMigrate* MigrateManager::driver(const QString& name)
 {
+    clearError();
     KexiMigrate *drv = d_int->driver(name);
     if (d_int->error()) {
         kWarning() << "Error:" << name << d_int->errorMsg();
@@ -343,10 +348,11 @@ QString MigrateManager::possibleProblemsInfoMsg() const
     return str;
 }
 
-QList<QString> MigrateManager::supportedMimeTypes() const
+QList<QString> MigrateManager::supportedFileMimeTypes()
 {
+    clearError();
     if (!d_int->lookupDrivers()) {
-        kDebug() << "lookupDrivers failed";
+        kWarning() << "lookupDrivers failed";
         return QStringList();
     }
     return d_int->m_services_by_mimetype.keys();
