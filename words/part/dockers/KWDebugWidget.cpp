@@ -21,6 +21,7 @@
 #include <KoTextEditor.h>
 #include <KoParagraphStyle.h>
 #include <KoSection.h>
+#include <KoSectionEnd.h>
 
 #include <QHBoxLayout>
 #include <QTimer>

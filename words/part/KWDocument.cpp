@@ -94,10 +94,10 @@
 #include <QTime>
 
 KWDocument::KWDocument(KoPart *part)
-        : KoDocument(part),
-        m_isMasterDocument(false),
-        m_frameLayout(&m_pageManager, m_frameSets),
-        m_mainFramesetEverFinished(false)
+        : KoDocument(part)
+        , m_isMasterDocument(false)
+        , m_frameLayout(&m_pageManager, m_frameSets)
+        , m_mainFramesetEverFinished(false)
         , m_annotationManager(0)
 {
     m_frameLayout.setDocument(this);
@@ -246,7 +246,7 @@ void KWDocument::shapesRemoved(const QList<KoShape*> &shapes, KUndo2Command *com
     for (; anchorIter != anchors.constEnd(); ++anchorIter) {
         anchorIter.key()->removeAnchors(anchorIter.value(), command);
     }
- 
+
     QMap<KoTextEditor *, QList<KoAnnotation *> >::const_iterator annotationIter(annotations.constBegin());
     for (; annotationIter != annotations.constEnd(); ++annotationIter) {
         annotationIter.key()->removeAnnotations(annotationIter.value(), command);
@@ -815,6 +815,4 @@ KoDocumentInfoDlg *KWDocument::createDocumentInfoDialog(QWidget *parent, KoDocum
     dlg->addPageItem(rdfEditWidget);
 #endif
     return dlg;
-
 }
-
