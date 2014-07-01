@@ -147,7 +147,7 @@ FormPrivate::FormPrivate(Form *form, WidgetLibrary* _library)
     widget = 0;
     modified = false;
     interactive = true;
-    autoTabstops = false;
+    autoTabstops = true;
     isRedoing = false;
 //! @todo get the default from globals...
     snapToGrid = true;
