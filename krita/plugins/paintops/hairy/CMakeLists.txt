@@ -1,3 +1,5 @@
+include_directories( ${CMAKE_CURRENT_BINARY_DIR} )
+
 set(kritahairypaintop_PART_SRCS
     hairy_paintop_plugin.cpp
     kis_hairy_paintop.cpp
