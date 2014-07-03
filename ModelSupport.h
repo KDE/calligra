@@ -68,7 +68,9 @@ enum CellDataRole {
     NamedAreaRole       = 0x00080000,   ///< a named area; QString
     SourceRangeRole     = 0x00100000,   ///< a source cell range; Binding
     TargetRangeRole     = 0x00200000,   ///< a target cell range; Database
-    AllCellDataRoles    = 0x00FFFF00    ///< used for iterating over the non-default data only
+    AllCellDataRoles    = 0x00FFFF00,   ///< used for iterating over the non-default data only
+    ChangedDataRole     = 0x00400000    ///< check for changes in the Cell  
+    
 };
 Q_DECLARE_FLAGS(CellDataRoles, CellDataRole)
 
