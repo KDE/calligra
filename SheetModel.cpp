@@ -139,6 +139,12 @@ QVariant SheetModel::data(const QModelIndex& index, int role) const
     case LinkRole:
         return storage->link(column, row);
     }
+    case ChangedDataRole:{//functionality for ChangedDataRole
+           CellDamage::Changes changes = CellDamage:: Binding | CellDamage::Formula | CellDamage::Value;
+	   if(changes!=null)
+	     return true;
+	     
+    }
     return QVariant();
 }
 
@@ -237,6 +243,20 @@ bool SheetModel::setData(const QModelIndex& index, const QVariant& value, int ro
     case LinkRole:
         storage->setLink(column, row, value.toString());
         break;
+    case ChangedDataRole:
+       QFont editorFont = document()->defaultFont();
+    QFont font;
+    for (int i = 0; i < d->tokens.count(); ++i) {//parsing each token and highlighting it
+        Token token = d->tokens[i];
+        
+
+
+     font = QFont(editorFont);
+     font.setBold(true);
+     setFormat(token.pos() + 1, token.text().length(), font);
+    }
+    break;
+        
     default:
         return false;
     }
