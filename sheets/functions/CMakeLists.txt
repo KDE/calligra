@@ -1,4 +1,4 @@
-include_directories(${CMAKE_SOURCE_DIR}/sheets ${KOMAIN_INCLUDES} ${FLAKE_INCLUDES} ${EIGEN2_INCLUDE_DIR})
+include_directories(${CMAKE_SOURCE_DIR}/sheets ${KOMAIN_INCLUDES} ${FLAKE_INCLUDES} ${EIGEN3_INCLUDE_DIR})
 
 
 ########### next target ###############

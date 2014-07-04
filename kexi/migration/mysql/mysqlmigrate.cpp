@@ -56,7 +56,7 @@
 using namespace KexiMigration;
 
 /* This is the implementation for the MySQL specific import routines. */
-K_EXPORT_KEXIMIGRATE_DRIVER(MySQLMigrate, "mysql")
+K_EXPORT_KEXIMIGRATE_DRIVER(MySQLMigrate, mysql)
 
 /* ************************************************************************** */
 //! Constructor (needed for trading interface)

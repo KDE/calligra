@@ -3045,7 +3045,7 @@ void View::saveTaskModule( const KUrl &url, Project *project )
     QString dir = Factory::global().dirs()->saveLocation( "plan_taskmodules" );
     kDebug(planDbg())<<"dir="<<dir;
     if ( ! dir.isEmpty() ) {
-        MainDocument part;
+        MainDocument part(getKoPart());
         part.insertProject( *project, 0, 0 );
         part.getProject().setName( project->name() );
         part.getProject().setLeader( project->leader() );

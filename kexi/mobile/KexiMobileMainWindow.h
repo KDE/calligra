@@ -23,6 +23,7 @@
 
 #include <QMainWindow>
 #include <core/KexiMainWindowIface.h>
+#include <kurl.h>
 
 class KexiMobileToolbar;
 class QHBoxLayout;
@@ -43,6 +44,7 @@ public slots:
     virtual void acceptProjectClosingRequested(bool& cancel);
     virtual void acceptPropertySetEditing();
     virtual KActionCollection* actionCollection() const;
+    virtual void addSearchableModel(KexiSearchableModel*);
     virtual void addToolBarAction(const QString& toolBarName, QAction* action);
     virtual QList< QAction* > allActions() const;
     virtual void appendWidgetToToolbar(const QString& name, QWidget* widget);
@@ -53,12 +55,14 @@ public slots:
     virtual tristate executeCustomActionForObject(KexiPart::Item* item, const QString& actionName);
     virtual QWidget* focusWidget() const;
     virtual tristate getNewObjectInfo(KexiPart::Item* partItem, KexiPart::Part* part, bool& allowOverwriting, const QString& messageWhenAskingForName = QString());
+    virtual tristate getNewObjectInfo(KexiPart::Item*, const QString&, KexiPart::Part*, bool, bool*, const QString&);
     virtual KXMLGUIClient* guiClient() const;
     virtual KXMLGUIFactory* guiFactory();
     virtual void highlightObject(const QString& mime, const QString& name);
     virtual bool newObject(KexiPart::Info* info, bool& openingCancelled);
     virtual KexiWindow* openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool& openingCancelled, QMap< QString, QVariant >* staticObjectArgs = 0, QString* errorMessage = 0);
     virtual KexiWindow* openObject(const QString& mime, const QString& name, Kexi::ViewMode viewMode, bool& openingCancelled, QMap< QString, QVariant >* staticObjectArgs = 0);
+    virtual KexiWindow* openedWindowFor(const KexiPart::Item*);
     virtual void plugActionList(const QString& name, const QList< KAction* >& actionList);
     virtual tristate printItem(KexiPart::Item* item);
     virtual tristate printPreviewForItem(KexiPart::Item* item);
@@ -67,6 +71,7 @@ public slots:
     virtual void propertySetSwitched(KexiWindow* window, bool force = false, bool preservePrevSelection = true, bool sortedProperties = false, const QByteArray& propertyToSelect = QByteArray());
     virtual void registerChild(KexiWindow* window);
     virtual tristate saveObject(KexiWindow* window, const QString& messageWhenAskingForName = QString(), bool dontAsk = false);
+    virtual tristate saveObject(KexiWindow*, const QString&, KexiMainWindowIface::SaveObjectOptions);
     virtual void setWidgetVisibleInToolbar(QWidget* widget, bool visible);
     virtual tristate showPageSetupForItem(KexiPart::Item* item);
     virtual void slotObjectRenamed(const KexiPart::Item& item, const QString& oldName);
@@ -74,6 +79,7 @@ public slots:
     virtual KToolBar* toolBar(const QString& name) const;
     virtual void unplugActionList(const QString& name);
     virtual void updatePropertyEditorInfoLabel(const QString& textToDisplayForNullSet = QString());
+    virtual KexiUserFeedbackAgent* userFeedbackAgent() const;
     virtual bool userMode() const;
     
     

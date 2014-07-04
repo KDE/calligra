@@ -104,6 +104,7 @@
 #include <widget/KexiFileWidget.h>
 #include <widget/KexiNameDialog.h>
 #include <widget/KexiNameWidget.h>
+#include <migration/migratemanager.h>
 #include <koproperty/EditorView.h>
 #include <koproperty/Set.h>
 
@@ -3049,6 +3050,10 @@ KexiWindow *
 KexiMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool &openingCancelled,
                            QMap<QString, QVariant>* staticObjectArgs, QString* errorMessage)
 {
+    if (!d->prj || !item) {
+        return 0;
+    }
+
     if (!openingAllowed(item, viewMode, errorMessage)) {
         if (errorMessage)
             *errorMessage = i18nc(
@@ -3059,8 +3064,6 @@ KexiMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool &
     }
     kDebug() << d->prj << item;
 
-    if (!d->prj || !item)
-        return 0;
     KexiUtils::WaitCursor wait;
 #ifndef KEXI_NO_PENDING_DIALOGS
     Private::PendingJobType pendingType;
@@ -4176,6 +4179,14 @@ void KexiMainWindow::showTabIfNeeded()
 KexiUserFeedbackAgent* KexiMainWindow::userFeedbackAgent() const
 {
     return &d->userFeedback;
+}
+
+KexiMigrateManagerInterface* KexiMainWindow::migrateManager()
+{
+    if (d->migrateManager.isNull()) {
+        d->migrateManager.reset(new KexiMigration::MigrateManager());
+    }
+    return d->migrateManager.data();
 }
 
 void KexiMainWindow::toggleFullScreen(bool isFullScreen)

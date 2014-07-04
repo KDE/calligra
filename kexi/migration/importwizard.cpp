@@ -637,7 +637,9 @@ QString ImportWizard::driverNameForSelectedSource()
         KMimeType::Ptr ptr = KMimeType::findByFileContent(selectedSourceFileName());
         if (!ptr
                 || ptr.data()->name() == "application/octet-stream"
-                || ptr.data()->name() == "text/plain") {
+                || ptr.data()->name() == "text/plain"
+                || ptr.data()->name() == "application/zip")
+        {
             //try by URL:
             ptr = KMimeType::findByUrl(selectedSourceFileName());
         }

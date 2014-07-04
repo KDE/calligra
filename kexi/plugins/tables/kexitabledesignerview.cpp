@@ -1538,7 +1538,7 @@ void KexiTableDesignerView::debugCommand(const KUndo2Command* command, int nesti
             dynamic_cast<const Command*>(command)->debugString(), nestingLevel);
     }
     else {
-        KexiDB::alterTableActionDebugGUI(command->text(), nestingLevel);
+        KexiDB::alterTableActionDebugGUI(command->text().toString(), nestingLevel);
     }
     //show subcommands
     for (int i = 0; i < command->childCount(); ++i) {
