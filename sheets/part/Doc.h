@@ -80,11 +80,9 @@ class CALLIGRA_SHEETS_COMMON_EXPORT Doc : public DocBase
 public:
     /**
      * Creates a new document.
-     * @param parentWidget the parent widget
-     * @param parent the parent object
-     * @param singleViewMode enables single view mode, if @c true
+     * @param part The KoPart that owns the document. XXX: should be removed!
      */
-    explicit Doc(KoPart *part = 0);
+    explicit Doc(KoPart *part);
 
     /**
      * Destroys the document.

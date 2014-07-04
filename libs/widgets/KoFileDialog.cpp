@@ -89,7 +89,7 @@ public:
 
 KoFileDialog::KoFileDialog(QWidget *parent,
                            KoFileDialog::DialogType type,
-                           const QString dialogName)
+                           const QString &dialogName)
     : d(new Private(parent, type, "", getUsedDir(dialogName), dialogName))
 {
 }
@@ -441,7 +441,7 @@ void KoFileDialog::getFilterStringListFromMime(const QStringList &mimeList
     }
 }
 
-const QString KoFileDialog::getUsedDir(const QString &dialogName)
+QString KoFileDialog::getUsedDir(const QString &dialogName)
 {
     if (dialogName.isEmpty()) return "";
 

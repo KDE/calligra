@@ -168,9 +168,6 @@ void ImportTableWizard::setupSrcConn()
         << "application/x-kexi-connectiondata";
     m_srcConnSel->fileWidget->setExcludedFilters(excludedFilters);
 
-    kDebug() << m_migrateManager->supportedMimeTypes();
-    m_srcConnSel->fileWidget->setAdditionalFilters(QSet<QString>::fromList(m_migrateManager->supportedMimeTypes()));
-    
     vbox->addWidget(m_srcConnSel);
 
     m_srcConnPageItem = new KPageWidgetItem(m_srcConnPageWidget, i18n("Select Location for Source Database"));

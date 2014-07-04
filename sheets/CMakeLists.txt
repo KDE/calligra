@@ -5,7 +5,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/interfaces
                     ${KOTEXT_INCLUDES}
                     ${TEXTLAYOUT_INCLUDES}
                     ${Boost_INCLUDE_DIR}
-                    ${EIGEN2_INCLUDE_DIR} )
+                    ${EIGEN3_INCLUDE_DIR} )
 
 if (SHOULD_BUILD_PART_SHEETS)
 

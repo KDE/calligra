@@ -79,6 +79,7 @@ MainDocument::MainDocument(KoPart *part)
         m_viewlistModified( false ),
         m_checkingForWorkPackages( false )
 {
+    Q_ASSERT(part);
     m_config.setReadWrite( true );
     // Add library translation files
     KLocale *locale = KGlobal::locale();

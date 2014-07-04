@@ -38,7 +38,7 @@ using namespace KexiMigration;
 
 /* This is the implementation for the xBase specific import routines. */
 
-K_EXPORT_KEXIMIGRATE_DRIVER(xBaseMigrate, "xbase")
+K_EXPORT_KEXIMIGRATE_DRIVER(xBaseMigrate, xbase)
 
 //! Constructor (needed for trading interface)
 xBaseMigrate::xBaseMigrate(QObject *parent, const QVariantList& args) :

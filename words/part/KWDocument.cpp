@@ -100,6 +100,7 @@ KWDocument::KWDocument(KoPart *part)
         m_mainFramesetEverFinished(false)
         , m_annotationManager(0)
 {
+    Q_ASSERT(part);
     m_frameLayout.setDocument(this);
     resourceManager()->setOdfDocument(this);
 
