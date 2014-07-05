@@ -75,6 +75,7 @@
 #include <db/utils.h>
 #include <db/cursor.h>
 #include <db/admin.h>
+#include <db/drivermanager.h>
 #include <kexidb/dbobjectnamevalidator.h>
 #include <kexiutils/utils.h>
 
@@ -2537,7 +2538,7 @@ void KexiMainWindow::slotProjectRelations()
 {
     if (!d->prj)
         return;
-    KexiWindow *w = KexiInternalPart::createKexiWindowInstance("relation", this);
+    KexiWindow *w = KexiInternalPart::createKexiWindowInstance("org.kexi-project.relations", this);
     activateWindow(*w);
 }
 
@@ -3595,7 +3596,7 @@ void KexiMainWindow::slotToolsImportProject()
 void KexiMainWindow::slotToolsImportTables()
 {
     if (project()) {
-        QDialog *dlg = KexiInternalPart::createModalDialogInstance("migration", "importtable", this, 0);
+        QDialog *dlg = KexiInternalPart::createModalDialogInstance("org.kexi-project.migration", "importtable", this, 0);
         if (!dlg)
             return; //error msg has been shown by KexiInternalPart
             
@@ -3688,7 +3689,7 @@ tristate KexiMainWindow::showProjectMigrationWizard(
         args.insert("connectionData", str);
     }
 
-    QDialog *dlg = KexiInternalPart::createModalDialogInstance("migration", "migration", this, 0, &args);
+    QDialog *dlg = KexiInternalPart::createModalDialogInstance("org.kexi-project.migration", "migration", this, 0, &args);
     if (!dlg)
         return false; //error msg has been shown by KexiInternalPart
 
@@ -3736,7 +3737,7 @@ void KexiMainWindow::slotProjectImportDataTable()
     QMap<QString, QString> args;
     args.insert("sourceType", "file");
     QDialog *dlg = KexiInternalPart::createModalDialogInstance(
-                       "csv_importexport", "KexiCSVImportDialog", this, 0, &args);
+                       "org.kexi-project.importexport.csv", "KexiCSVImportDialog", this, 0, &args);
     if (!dlg)
         return; //error msg has been shown by KexiInternalPart
     dlg->exec();
@@ -3766,7 +3767,7 @@ tristate KexiMainWindow::exportItemAsDataTable(KexiPart::Item* item)
     args.insert("destinationType", "file");
     args.insert("itemId", QString::number(item->identifier()));
     QDialog *dlg = KexiInternalPart::createModalDialogInstance(
-                       "csv_importexport", "KexiCSVExportWizard", this, 0, &args);
+                       "org.kexi-project.importexport.csv", "KexiCSVExportWizard", this, 0, &args);
     if (!dlg)
         return false; //error msg has been shown by KexiInternalPart
     int result = dlg->exec();
@@ -3965,7 +3966,7 @@ tristate KexiMainWindow::copyItemToClipboardAsDataTable(KexiPart::Item* item)
     args.insert("destinationType", "clipboard");
     args.insert("itemId", QString::number(item->identifier()));
     QDialog *dlg = KexiInternalPart::createModalDialogInstance(
-                       "csv_importexport", "KexiCSVExportWizard", this, 0, &args);
+                       "org.kexi-project.importexport.csv", "KexiCSVExportWizard", this, 0, &args);
     if (!dlg)
         return false; //error msg has been shown by KexiInternalPart
     const int result = dlg->exec();
@@ -3981,7 +3982,7 @@ void KexiMainWindow::slotEditPasteSpecialDataTable()
     QMap<QString, QString> args;
     args.insert("sourceType", "clipboard");
     QDialog *dlg = KexiInternalPart::createModalDialogInstance(
-                       "csv_importexport", "KexiCSVImportDialog", this, 0, &args);
+                       "org.kexi-project.importexport.csv", "KexiCSVImportDialog", this, 0, &args);
     if (!dlg)
         return; //error msg has been shown by KexiInternalPart
     dlg->exec();

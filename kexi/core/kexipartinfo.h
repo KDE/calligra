@@ -21,8 +21,8 @@
 #ifndef KEXIPARTINFO_H
 #define KEXIPARTINFO_H
 
+#include <KService>
 #include "kexi.h"
-#include "kexipartmanager.h"
 
 class QAction;
 class KexiProject;
@@ -64,7 +64,7 @@ public:
     QString createItemIconName() const;
 
     /**
-     * @return the object name associated with this part (e.g. "table")
+     * @return The object name associated with this part (e.g. "table"). Can be empty.
      */
     QString objectName() const;
 

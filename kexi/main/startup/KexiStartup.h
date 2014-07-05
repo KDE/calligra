@@ -119,9 +119,6 @@ protected slots:
 protected:
     bool getAutoopenObjects(KCmdLineArgs *args, const QByteArray &action_name);
 
-    //! No plugins: show message and try to rebuild the system configuration
-    void showNoPluginsMessageAndTryToRebuildSyCoCa();
-
     class Private;
     Private * const d;
 };

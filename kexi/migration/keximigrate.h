@@ -37,6 +37,9 @@ namespace Kexi
 class ObjectStatus;
 }
 
+//! Empty for now
+#define KEXIMIGRATION_DRIVER
+
 /*! KexiMigration implementation version.
  It is altered after every change:
  - major number is increased after every major Kexi release,
