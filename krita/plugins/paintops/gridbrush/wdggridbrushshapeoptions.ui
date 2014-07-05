@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>WdgGridBrushShapeOptions</class>
+ <widget class="QWidget" name="WdgGridBrushShapeOptions">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>425</width>
+    <height>269</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+    <horstretch>255</horstretch>
+    <verstretch>255</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>425</width>
+    <height>200</height>
+   </size>
+  </property>
+  <widget class="QComboBox" name="shapeCBox">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>121</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <item>
+    <property name="text">
+     <string>Ellipse</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Rectangle</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Line</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Pixel</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Anti-aliased pixel</string>
+    </property>
+   </item>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

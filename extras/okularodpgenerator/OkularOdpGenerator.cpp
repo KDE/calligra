@@ -28,6 +28,8 @@
 #include <KoPart.h>
 #include <KoPADocument.h>
 #include <KoPAPageBase.h>
+#include <KoDocumentInfo.h>
+#include <KoGlobal.h>
 
 #include <kaboutdata.h>
 #include <kpluginfactory.h>
@@ -107,12 +109,39 @@ bool OkularOdpGenerator::loadDocument( const QString &fileName, QVector<Okular::
         pages.append(page);
     }
 
+    const KoDocumentInfo *documentInfo = m_doc->documentInfo();
+    m_documentInfo.set( Okular::DocumentInfo::MimeType, mimetype );
+    m_documentInfo.set( Okular::DocumentInfo::Producer, documentInfo->originalGenerator() );
+    m_documentInfo.set( Okular::DocumentInfo::Title,       documentInfo->aboutInfo("title") );
+    m_documentInfo.set( Okular::DocumentInfo::Subject,     documentInfo->aboutInfo("subject") );
+    m_documentInfo.set( Okular::DocumentInfo::Keywords,     documentInfo->aboutInfo("keyword") );
+    m_documentInfo.set( Okular::DocumentInfo::Description, documentInfo->aboutInfo("description") );
+    m_documentInfo.set( "language",    KoGlobal::languageFromTag(documentInfo->aboutInfo("language")),  i18n("Language"));
+
+    const QString creationDate = documentInfo->aboutInfo("creation-date");
+    if (!creationDate.isEmpty()) {
+        QDateTime t = QDateTime::fromString(creationDate, Qt::ISODate);
+        m_documentInfo.set( Okular::DocumentInfo::CreationDate, KGlobal::locale()->formatDateTime(t) );
+    }
+    m_documentInfo.set( Okular::DocumentInfo::Creator,  documentInfo->aboutInfo("initial-creator") );
+
+    const QString modificationDate = documentInfo->aboutInfo("date");
+    if (!modificationDate.isEmpty()) {
+        QDateTime t = QDateTime::fromString(modificationDate, Qt::ISODate);
+        m_documentInfo.set( Okular::DocumentInfo::ModificationDate, KGlobal::locale()->formatDateTime(t) );
+    }
+    m_documentInfo.set( Okular::DocumentInfo::Author, documentInfo->aboutInfo("creator") );
+
     return true;
 }
 
 bool OkularOdpGenerator::doCloseDocument()
 {
     delete m_doc;
+    m_doc = 0;
+
+    m_documentInfo = Okular::DocumentInfo();
+
     return true;
 }
 
@@ -142,4 +171,9 @@ void OkularOdpGenerator::generatePixmap( Okular::PixmapRequest *request )
 
 
     signalPixmapRequestDone( request );
+}
+
+const Okular::DocumentInfo* OkularOdpGenerator::generateDocumentInfo()
+{
+    return &m_documentInfo;
 }

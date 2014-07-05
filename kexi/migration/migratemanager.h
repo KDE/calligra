@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -25,6 +25,8 @@
 
 #include <kservice.h>
 
+#include <core/KexiMigrateManagerInterface.h>
+
 #include "keximigrate.h"
 
 namespace KexiMigration
@@ -32,8 +34,9 @@ namespace KexiMigration
 
 class MigrateManagerInternal;
 
-//! @short Migration library management, for finding and loading mogration drivers.
-class KEXIMIGR_EXPORT MigrateManager : public QObject, public KexiDB::Object
+//! @short Migration library management, for finding and loading migration drivers.
+class KEXIMIGR_EXPORT MigrateManager : public QObject, public KexiDB::Object,
+                                       public KexiMigrateManagerInterface
 {
 public:
     typedef QMap<QString, KService::Ptr> ServicesMap;
@@ -68,8 +71,9 @@ public:
      Currently it contains a list of incompatible migration drivers. */
     QString possibleProblemsInfoMsg() const;
 
-    //!Return the list of mime types that are supported by the drivers
-    QList<QString> supportedMimeTypes() const;
+    //! @return the list of file MIME types that are supported by migration drivers.
+    //! Implements MigrateManagerInterface
+    virtual QList<QString> supportedFileMimeTypes();
 
 protected:
     virtual void drv_clearServerResult();

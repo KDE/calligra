@@ -100,7 +100,7 @@ public:
     enum Header { TEXT, NUMBER, DATE, CURRENCY };
 
     //! @todo what about making it kexidb-independent?
-    KexiCSVImportDialog(Mode mode, QWidget * parent);
+    explicit KexiCSVImportDialog(Mode mode, QWidget *parent = 0);
 
     virtual ~KexiCSVImportDialog();
 
@@ -125,7 +125,7 @@ private:
     QTableView *m_tableView;
     KexiCSVDelimiterWidget* m_delimiterWidget;
     bool m_detectDelimiter; //!< true if delimiter should be detected
-    //!< (true by default, set to false if user sets delimiter)
+                            //!< (true by default, set to false if user sets delimiter)
     QLabel* m_formatLabel;
     KComboBox* m_formatCombo;
     KIntSpinBox *m_startAtLineSpinBox;

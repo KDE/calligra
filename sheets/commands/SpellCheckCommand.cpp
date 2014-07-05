@@ -128,7 +128,7 @@ void SpellCheckCommand::finishedCurrentFeed()
     }
     // TODO Stefan: KUndo2Command-based undo recording for CellStorage.
     if (!d->command) {
-        d->command = new KUndo2Command(i18nc("(qtundo-format)", "Correct Misspelled Words"));
+        d->command = new KUndo2Command(kundo2_i18n("Correct Misspelled Words"));
     }
     DataManipulator* command = new DataManipulator(d->command);
     command->setSheet(d->currentSheet);

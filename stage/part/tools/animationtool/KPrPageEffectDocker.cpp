@@ -233,7 +233,7 @@ KUndo2Command * KPrPageEffectDocker::applyToAllSlidesCommand()
     QString m_effectId = m_effectCombo->itemData(m_effectCombo->currentIndex()).toString();
     int m_subType = m_subTypeCombo->itemData(m_subTypeCombo->currentIndex()).toInt();
     double m_duration = m_durationSpinBox->value();
-    KUndo2Command *cmd = new KUndo2Command(i18nc("(qtundo-format)", "Apply Slide Effect to all Slides"));
+    KUndo2Command *cmd = new KUndo2Command(kundo2_i18n("Apply Slide Effect to all Slides"));
     const KPrPageEffectFactory *factory = m_effectId != "" ? KPrPageEffectRegistry::instance()->value(m_effectId) : 0;
 
     foreach (KoPAPageBase *page, m_pages) {

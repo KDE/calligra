@@ -109,6 +109,8 @@ KexiEditor::KexiEditor(QWidget *parent)
     if (!d->doc)
         return;
     d->view = d->doc->createView(fr);
+    // suppresing default saving mechanism of KTextEditor
+    d->view->action("file_save")->setEnabled(false);
     // set word wrap by default
     KTextEditor::ConfigInterface *configIface
         =

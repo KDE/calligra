@@ -1,4 +1,5 @@
 #! /bin/sh
-$EXTRACTRC *.ui *.kcfg >> rc.cpp
-$XGETTEXT *.cpp -o $podir/plantjplugin.pot
+source ../../../../calligra_xgettext.sh
 
+$EXTRACTRC *.ui *.kcfg >> rc.cpp
+calligra_xgettext *.cpp > $podir/plantjplugin.pot

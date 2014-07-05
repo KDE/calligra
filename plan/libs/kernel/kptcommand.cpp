@@ -102,7 +102,7 @@ void MacroCommand::unexecute()
 }
 
 //-------------------------------------------------
-CalendarAddCmd::CalendarAddCmd( Project *project, Calendar *cal, int pos, Calendar *parent, const QString& name )
+CalendarAddCmd::CalendarAddCmd( Project *project, Calendar *cal, int pos, Calendar *parent, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_project( project ),
         m_cal( cal ),
@@ -138,14 +138,14 @@ void CalendarAddCmd::unexecute()
     //kDebug(planDbg())<<m_cal->name();
 }
 
-CalendarRemoveCmd::CalendarRemoveCmd( Project *project, Calendar *cal, const QString& name )
+CalendarRemoveCmd::CalendarRemoveCmd( Project *project, Calendar *cal, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_project( project ),
         m_parent( cal->parentCal() ),
         m_cal( cal ),
         m_index( -1 ),
         m_mine( false ),
-        m_cmd( new MacroCommand("") )
+        m_cmd( new MacroCommand(KUndo2MagicString()) )
 {
     Q_ASSERT( project != 0 );
 
@@ -185,7 +185,7 @@ void CalendarRemoveCmd::unexecute()
 
 }
 
-CalendarMoveCmd::CalendarMoveCmd( Project *project, Calendar *cal, int position, Calendar *parent, const QString& name )
+CalendarMoveCmd::CalendarMoveCmd( Project *project, Calendar *cal, int position, Calendar *parent, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_project( project ),
         m_cal( cal ),
@@ -210,7 +210,7 @@ void CalendarMoveCmd::unexecute()
     m_project->addCalendar( m_cal, m_oldparent, m_oldpos );
 }
 
-CalendarModifyNameCmd::CalendarModifyNameCmd( Calendar *cal, const QString& newvalue, const QString& name )
+CalendarModifyNameCmd::CalendarModifyNameCmd( Calendar *cal, const QString& newvalue, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_cal( cal )
 {
@@ -232,11 +232,11 @@ void CalendarModifyNameCmd::unexecute()
     //kDebug(planDbg())<<m_cal->name();
 }
 
-CalendarModifyParentCmd::CalendarModifyParentCmd( Project *project, Calendar *cal, Calendar *newvalue, const QString& name )
+CalendarModifyParentCmd::CalendarModifyParentCmd( Project *project, Calendar *cal, Calendar *newvalue, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_project( project ),
         m_cal( cal ),
-        m_cmd( new MacroCommand( "" ) ),
+        m_cmd( new MacroCommand( KUndo2MagicString() ) ),
         m_oldindex( -1 ),
         m_newindex( -1 )
 {
@@ -266,11 +266,11 @@ void CalendarModifyParentCmd::unexecute()
     m_project->addCalendar( m_cal, m_oldvalue, m_oldindex );
 }
 
-CalendarModifyTimeZoneCmd::CalendarModifyTimeZoneCmd( Calendar *cal, const KTimeZone &value, const QString& name )
+CalendarModifyTimeZoneCmd::CalendarModifyTimeZoneCmd( Calendar *cal, const KTimeZone &value, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_cal( cal ),
         m_newvalue( value ),
-        m_cmd( new MacroCommand( "" ) )
+        m_cmd( new MacroCommand( KUndo2MagicString() ) )
 {
     m_oldvalue = cal->timeZone();
     foreach ( Calendar *c, cal->calendars() ) {
@@ -293,7 +293,7 @@ void CalendarModifyTimeZoneCmd::unexecute()
     m_cmd->unexecute();
 }
 
-CalendarAddDayCmd::CalendarAddDayCmd( Calendar *cal, CalendarDay *newvalue, const QString& name )
+CalendarAddDayCmd::CalendarAddDayCmd( Calendar *cal, CalendarDay *newvalue, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_cal( cal ),
         m_mine( true )
@@ -321,7 +321,7 @@ void CalendarAddDayCmd::unexecute()
     m_mine = true;
 }
 
-CalendarRemoveDayCmd::CalendarRemoveDayCmd( Calendar *cal,CalendarDay *day, const QString& name )
+CalendarRemoveDayCmd::CalendarRemoveDayCmd( Calendar *cal,CalendarDay *day, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_cal( cal ),
         m_value( day ),
@@ -331,7 +331,7 @@ CalendarRemoveDayCmd::CalendarRemoveDayCmd( Calendar *cal,CalendarDay *day, cons
     // TODO check if any resources uses this calendar
     init();
 }
-CalendarRemoveDayCmd::CalendarRemoveDayCmd( Calendar *cal, const QDate &day, const QString& name )
+CalendarRemoveDayCmd::CalendarRemoveDayCmd( Calendar *cal, const QDate &day, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_cal( cal ),
         m_mine( false )
@@ -358,7 +358,7 @@ void CalendarRemoveDayCmd::unexecute()
     m_mine = false;
 }
 
-CalendarModifyDayCmd::CalendarModifyDayCmd( Calendar *cal, CalendarDay *value, const QString& name )
+CalendarModifyDayCmd::CalendarModifyDayCmd( Calendar *cal, CalendarDay *value, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_cal( cal ),
         m_mine( true )
@@ -396,11 +396,11 @@ void CalendarModifyDayCmd::unexecute()
     m_mine = true;
 }
 
-CalendarModifyStateCmd::CalendarModifyStateCmd( Calendar *calendar, CalendarDay *day, CalendarDay::State value, const QString& name )
+CalendarModifyStateCmd::CalendarModifyStateCmd( Calendar *calendar, CalendarDay *day, CalendarDay::State value, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_calendar( calendar ),
         m_day( day ),
-        m_cmd( new MacroCommand( "" ) )
+        m_cmd( new MacroCommand( KUndo2MagicString() ) )
 {
 
     m_newvalue = value;
@@ -430,7 +430,7 @@ void CalendarModifyStateCmd::unexecute()
 
 }
 
-CalendarModifyTimeIntervalCmd::CalendarModifyTimeIntervalCmd( Calendar *calendar, TimeInterval &newvalue, TimeInterval *value, const QString& name )
+CalendarModifyTimeIntervalCmd::CalendarModifyTimeIntervalCmd( Calendar *calendar, TimeInterval &newvalue, TimeInterval *value, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_calendar( calendar )
 {
@@ -452,7 +452,7 @@ void CalendarModifyTimeIntervalCmd::unexecute()
 
 }
 
-CalendarAddTimeIntervalCmd::CalendarAddTimeIntervalCmd( Calendar *calendar, CalendarDay *day, TimeInterval *value, const QString& name )
+CalendarAddTimeIntervalCmd::CalendarAddTimeIntervalCmd( Calendar *calendar, CalendarDay *day, TimeInterval *value, const KUndo2MagicString& name )
     : NamedCommand( name ),
     m_calendar( calendar ),
     m_day( day ),
@@ -480,7 +480,7 @@ void CalendarAddTimeIntervalCmd::unexecute()
 
 }
 
-CalendarRemoveTimeIntervalCmd::CalendarRemoveTimeIntervalCmd( Calendar *calendar, CalendarDay *day, TimeInterval *value, const QString& name )
+CalendarRemoveTimeIntervalCmd::CalendarRemoveTimeIntervalCmd( Calendar *calendar, CalendarDay *day, TimeInterval *value, const KUndo2MagicString& name )
     : CalendarAddTimeIntervalCmd( calendar, day, value, name )
 {
     m_mine = false ;
@@ -494,7 +494,7 @@ void CalendarRemoveTimeIntervalCmd::unexecute()
     CalendarAddTimeIntervalCmd::execute();
 }
 
-CalendarModifyWeekdayCmd::CalendarModifyWeekdayCmd( Calendar *cal, int weekday, CalendarDay *value, const QString& name )
+CalendarModifyWeekdayCmd::CalendarModifyWeekdayCmd( Calendar *cal, int weekday, CalendarDay *value, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_weekday( weekday ),
         m_cal( cal ),
@@ -519,7 +519,7 @@ void CalendarModifyWeekdayCmd::unexecute()
     m_cal->setWeekday( m_weekday, m_orig );
 }
 
-CalendarModifyDateCmd::CalendarModifyDateCmd( Calendar *cal, CalendarDay *day, const QDate &value, const QString& name )
+CalendarModifyDateCmd::CalendarModifyDateCmd( Calendar *cal, CalendarDay *day, const QDate &value, const KUndo2MagicString& name )
     : NamedCommand( name ),
     m_cal( cal ),
     m_day( day ),
@@ -537,7 +537,7 @@ void CalendarModifyDateCmd::unexecute()
     m_cal->setDate( m_day, m_oldvalue );
 }
 
-ProjectModifyDefaultCalendarCmd::ProjectModifyDefaultCalendarCmd( Project *project, Calendar *cal, const QString& name )
+ProjectModifyDefaultCalendarCmd::ProjectModifyDefaultCalendarCmd( Project *project, Calendar *cal, const KUndo2MagicString& name )
     : NamedCommand( name ),
     m_project( project ),
     m_newvalue( cal ),
@@ -556,7 +556,7 @@ void ProjectModifyDefaultCalendarCmd::unexecute()
 
 }
 
-NodeDeleteCmd::NodeDeleteCmd( Node *node, const QString& name )
+NodeDeleteCmd::NodeDeleteCmd( Node *node, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_node( node ),
         m_index( -1 )
@@ -577,7 +577,7 @@ NodeDeleteCmd::NodeDeleteCmd( Node *node, const QString& name )
             }
         }
     }
-    m_cmd = new MacroCommand( "" );
+    m_cmd = new MacroCommand( KUndo2MagicString() );
     QList<Node*> lst = node->childNodeIterator();
     for ( int i = lst.count(); i > 0; --i ) {
         m_cmd->addCommand( new NodeDeleteCmd( lst[ i - 1 ] ) );
@@ -639,7 +639,7 @@ void NodeDeleteCmd::unexecute()
     }
 }
 
-TaskAddCmd::TaskAddCmd( Project *project, Node *node, Node *after, const QString& name )
+TaskAddCmd::TaskAddCmd( Project *project, Node *node, Node *after, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_project( project ),
         m_node( node ),
@@ -686,7 +686,7 @@ void TaskAddCmd::unexecute()
 
 }
 
-SubtaskAddCmd::SubtaskAddCmd( Project *project, Node *node, Node *parent, const QString& name )
+SubtaskAddCmd::SubtaskAddCmd( Project *project, Node *node, Node *parent, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_project( project ),
         m_node( node ),
@@ -705,20 +705,20 @@ SubtaskAddCmd::SubtaskAddCmd( Project *project, Node *node, Node *parent, const 
 
     // Summarytasks can't have resources, so remove resource requests from the new parent
     foreach ( ResourceGroupRequest *r, parent->requests().requests() ) {
-        if ( m_cmd == 0 ) m_cmd = new MacroCommand( "" );
+        if ( m_cmd == 0 ) m_cmd = new MacroCommand( KUndo2MagicString() );
         m_cmd->addCommand( new RemoveResourceGroupRequestCmd( r ) );
     }
     // Also remove accounts
     if ( parent->runningAccount() ) {
-        if ( m_cmd == 0 ) m_cmd = new MacroCommand( "" );
+        if ( m_cmd == 0 ) m_cmd = new MacroCommand( KUndo2MagicString() );
         m_cmd->addCommand( new NodeModifyRunningAccountCmd( *parent, parent->runningAccount(), 0 ) );
     }
     if ( parent->startupAccount() ) {
-        if ( m_cmd == 0 ) m_cmd = new MacroCommand( "" );
+        if ( m_cmd == 0 ) m_cmd = new MacroCommand( KUndo2MagicString() );
         m_cmd->addCommand( new NodeModifyStartupAccountCmd( *parent, parent->startupAccount(), 0 ) );
     }
     if ( parent->shutdownAccount() ) {
-        if ( m_cmd == 0 ) m_cmd = new MacroCommand( "" );
+        if ( m_cmd == 0 ) m_cmd = new MacroCommand( KUndo2MagicString() );
         m_cmd->addCommand( new NodeModifyShutdownAccountCmd( *parent, parent->shutdownAccount(), 0 ) );
     }
 }
@@ -749,7 +749,7 @@ void SubtaskAddCmd::unexecute()
 
 }
 
-NodeModifyNameCmd::NodeModifyNameCmd( Node &node, const QString& nodename, const QString& name )
+NodeModifyNameCmd::NodeModifyNameCmd( Node &node, const QString& nodename, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_node( node ),
         newName( nodename ),
@@ -769,7 +769,7 @@ void NodeModifyNameCmd::unexecute()
 
 }
 
-NodeModifyLeaderCmd::NodeModifyLeaderCmd( Node &node, const QString& leader, const QString& name )
+NodeModifyLeaderCmd::NodeModifyLeaderCmd( Node &node, const QString& leader, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_node( node ),
         newLeader( leader ),
@@ -789,7 +789,7 @@ void NodeModifyLeaderCmd::unexecute()
 
 }
 
-NodeModifyDescriptionCmd::NodeModifyDescriptionCmd( Node &node, const QString& description, const QString& name )
+NodeModifyDescriptionCmd::NodeModifyDescriptionCmd( Node &node, const QString& description, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_node( node ),
         newDescription( description ),
@@ -809,7 +809,7 @@ void NodeModifyDescriptionCmd::unexecute()
 
 }
 
-NodeModifyConstraintCmd::NodeModifyConstraintCmd( Node &node, Node::ConstraintType c, const QString& name )
+NodeModifyConstraintCmd::NodeModifyConstraintCmd( Node &node, Node::ConstraintType c, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_node( node ),
         newConstraint( c ),
@@ -825,7 +825,7 @@ void NodeModifyConstraintCmd::unexecute()
     m_node.setConstraint( oldConstraint );
 }
 
-NodeModifyConstraintStartTimeCmd::NodeModifyConstraintStartTimeCmd( Node &node, const QDateTime& dt, const QString& name )
+NodeModifyConstraintStartTimeCmd::NodeModifyConstraintStartTimeCmd( Node &node, const QDateTime& dt, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_node( node ),
         newTime( dt ),
@@ -846,7 +846,7 @@ void NodeModifyConstraintStartTimeCmd::unexecute()
 
 }
 
-NodeModifyConstraintEndTimeCmd::NodeModifyConstraintEndTimeCmd( Node &node, const QDateTime& dt, const QString& name )
+NodeModifyConstraintEndTimeCmd::NodeModifyConstraintEndTimeCmd( Node &node, const QDateTime& dt, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_node( node ),
         newTime( dt ),
@@ -865,7 +865,7 @@ void NodeModifyConstraintEndTimeCmd::unexecute()
     m_node.setConstraintEndTime( oldTime );
 }
 
-NodeModifyStartTimeCmd::NodeModifyStartTimeCmd( Node &node, const QDateTime& dt, const QString& name )
+NodeModifyStartTimeCmd::NodeModifyStartTimeCmd( Node &node, const QDateTime& dt, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_node( node ),
         newTime( dt ),
@@ -886,7 +886,7 @@ void NodeModifyStartTimeCmd::unexecute()
 
 }
 
-NodeModifyEndTimeCmd::NodeModifyEndTimeCmd( Node &node, const QDateTime& dt, const QString& name )
+NodeModifyEndTimeCmd::NodeModifyEndTimeCmd( Node &node, const QDateTime& dt, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_node( node ),
         newTime( dt ),
@@ -907,7 +907,7 @@ void NodeModifyEndTimeCmd::unexecute()
 
 }
 
-NodeModifyIdCmd::NodeModifyIdCmd( Node &node, const QString& id, const QString& name )
+NodeModifyIdCmd::NodeModifyIdCmd( Node &node, const QString& id, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_node( node ),
         newId( id ),
@@ -927,7 +927,7 @@ void NodeModifyIdCmd::unexecute()
 
 }
 
-NodeIndentCmd::NodeIndentCmd( Node &node, const QString& name )
+NodeIndentCmd::NodeIndentCmd( Node &node, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_node( node ),
         m_newparent( 0 ),
@@ -950,20 +950,20 @@ void NodeIndentCmd::execute()
         // Summarytasks can't have resources, so remove resource requests from the new parent
         if ( m_cmd == 0 ) {
             foreach ( ResourceGroupRequest *r, m_newparent->requests().requests() ) {
-                if ( m_cmd == 0 ) m_cmd = new MacroCommand( "" );
+                if ( m_cmd == 0 ) m_cmd = new MacroCommand( KUndo2MagicString() );
                 m_cmd->addCommand( new RemoveResourceGroupRequestCmd( r ) );
             }
             // Also remove accounts
             if ( m_newparent->runningAccount() ) {
-                if ( m_cmd == 0 ) m_cmd = new MacroCommand( "" );
+                if ( m_cmd == 0 ) m_cmd = new MacroCommand( KUndo2MagicString() );
                 m_cmd->addCommand( new NodeModifyRunningAccountCmd( *m_newparent, m_newparent->runningAccount(), 0 ) );
             }
             if ( m_newparent->startupAccount() ) {
-                if ( m_cmd == 0 ) m_cmd = new MacroCommand( "" );
+                if ( m_cmd == 0 ) m_cmd = new MacroCommand( KUndo2MagicString() );
                 m_cmd->addCommand( new NodeModifyStartupAccountCmd( *m_newparent, m_newparent->startupAccount(), 0 ) );
             }
             if ( m_newparent->shutdownAccount() ) {
-                if ( m_cmd == 0 ) m_cmd = new MacroCommand( "" );
+                if ( m_cmd == 0 ) m_cmd = new MacroCommand( KUndo2MagicString() );
                 m_cmd->addCommand( new NodeModifyShutdownAccountCmd( *m_newparent, m_newparent->shutdownAccount(), 0 ) );
             }
        }
@@ -985,7 +985,7 @@ void NodeIndentCmd::unexecute()
 
 }
 
-NodeUnindentCmd::NodeUnindentCmd( Node &node, const QString& name )
+NodeUnindentCmd::NodeUnindentCmd( Node &node, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_node( node ),
         m_newparent( 0 ),
@@ -1013,7 +1013,7 @@ void NodeUnindentCmd::unexecute()
 
 }
 
-NodeMoveUpCmd::NodeMoveUpCmd( Node &node, const QString& name )
+NodeMoveUpCmd::NodeMoveUpCmd( Node &node, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_node( node ),
         m_moved( false )
@@ -1038,7 +1038,7 @@ void NodeMoveUpCmd::unexecute()
 
 }
 
-NodeMoveDownCmd::NodeMoveDownCmd( Node &node, const QString& name )
+NodeMoveDownCmd::NodeMoveDownCmd( Node &node, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_node( node ),
         m_moved( false )
@@ -1062,7 +1062,7 @@ void NodeMoveDownCmd::unexecute()
 
 }
 
-NodeMoveCmd::NodeMoveCmd( Project *project, Node *node, Node *newParent, int newPos, const QString& name )
+NodeMoveCmd::NodeMoveCmd( Project *project, Node *node, Node *newParent, int newPos, const KUndo2MagicString& name )
     : NamedCommand( name ),
     m_project( project ),
     m_node( node ),
@@ -1099,7 +1099,7 @@ void NodeMoveCmd::unexecute()
     m_moved = false;
 }
 
-AddRelationCmd::AddRelationCmd( Project &project, Relation *rel, const QString& name )
+AddRelationCmd::AddRelationCmd( Project &project, Relation *rel, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_rel( rel ),
         m_project( project )
@@ -1123,7 +1123,7 @@ void AddRelationCmd::unexecute()
     m_project.takeRelation( m_rel );
 }
 
-DeleteRelationCmd::DeleteRelationCmd( Project &project, Relation *rel, const QString& name )
+DeleteRelationCmd::DeleteRelationCmd( Project &project, Relation *rel, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_rel( rel ),
         m_project( project )
@@ -1147,7 +1147,7 @@ void DeleteRelationCmd::unexecute()
     m_project.addRelation( m_rel, false );
 }
 
-ModifyRelationTypeCmd::ModifyRelationTypeCmd( Relation *rel, Relation::Type type, const QString& name )
+ModifyRelationTypeCmd::ModifyRelationTypeCmd( Relation *rel, Relation::Type type, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_rel( rel ),
         m_newtype( type )
@@ -1169,7 +1169,7 @@ void ModifyRelationTypeCmd::unexecute()
     }
 }
 
-ModifyRelationLagCmd::ModifyRelationLagCmd( Relation *rel, Duration lag, const QString& name )
+ModifyRelationLagCmd::ModifyRelationLagCmd( Relation *rel, Duration lag, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_rel( rel ),
         m_newlag( lag )
@@ -1191,7 +1191,7 @@ void ModifyRelationLagCmd::unexecute()
     }
 }
 
-AddResourceRequestCmd::AddResourceRequestCmd( ResourceGroupRequest *group, ResourceRequest *request, const QString& name )
+AddResourceRequestCmd::AddResourceRequestCmd( ResourceGroupRequest *group, ResourceRequest *request, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_group( group ),
         m_request( request )
@@ -1217,7 +1217,7 @@ void AddResourceRequestCmd::unexecute()
     m_mine = true;
 }
 
-RemoveResourceRequestCmd::RemoveResourceRequestCmd( ResourceGroupRequest *group, ResourceRequest *request, const QString& name )
+RemoveResourceRequestCmd::RemoveResourceRequestCmd( ResourceGroupRequest *group, ResourceRequest *request, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_group( group ),
         m_request( request )
@@ -1242,7 +1242,7 @@ void RemoveResourceRequestCmd::unexecute()
     m_mine = false;
 }
 
-ModifyResourceRequestUnitsCmd::ModifyResourceRequestUnitsCmd( ResourceRequest *request, int oldvalue, int newvalue, const QString& name )
+ModifyResourceRequestUnitsCmd::ModifyResourceRequestUnitsCmd( ResourceRequest *request, int oldvalue, int newvalue, const KUndo2MagicString& name )
     : NamedCommand( name ),
     m_request( request ),
     m_oldvalue( oldvalue ),
@@ -1258,7 +1258,7 @@ void ModifyResourceRequestUnitsCmd::unexecute()
     m_request->setUnits( m_oldvalue );
 }
 
-ModifyResourceRequestRequiredCmd::ModifyResourceRequestRequiredCmd( ResourceRequest *request, const QList<Resource*> &value, const QString& name )
+ModifyResourceRequestRequiredCmd::ModifyResourceRequestRequiredCmd( ResourceRequest *request, const QList<Resource*> &value, const KUndo2MagicString& name )
     : NamedCommand( name ),
     m_request( request ),
     m_newvalue( value )
@@ -1274,7 +1274,7 @@ void ModifyResourceRequestRequiredCmd::unexecute()
     m_request->setRequiredResources( m_oldvalue );
 }
 
-ModifyResourceGroupRequestUnitsCmd::ModifyResourceGroupRequestUnitsCmd( ResourceGroupRequest *request, int oldvalue, int newvalue, const QString& name )
+ModifyResourceGroupRequestUnitsCmd::ModifyResourceGroupRequestUnitsCmd( ResourceGroupRequest *request, int oldvalue, int newvalue, const KUndo2MagicString& name )
     : NamedCommand( name ),
     m_request( request ),
     m_oldvalue( oldvalue ),
@@ -1291,7 +1291,7 @@ void ModifyResourceGroupRequestUnitsCmd::unexecute()
 }
 
 
-ModifyEstimateCmd::ModifyEstimateCmd( Node &node, double oldvalue, double newvalue, const QString& name )
+ModifyEstimateCmd::ModifyEstimateCmd( Node &node, double oldvalue, double newvalue, const KUndo2MagicString& name )
     : NamedCommand( name ),
     m_estimate( node.estimate() ),
     m_oldvalue( oldvalue ),
@@ -1303,7 +1303,7 @@ ModifyEstimateCmd::ModifyEstimateCmd( Node &node, double oldvalue, double newval
     if ( newvalue == 0.0 ) {
         // Milestones can't have resources, so remove resource requests
         foreach ( ResourceGroupRequest *r, node.requests().requests() ) {
-            if ( m_cmd == 0 ) m_cmd = new MacroCommand( "" );
+            if ( m_cmd == 0 ) m_cmd = new MacroCommand( KUndo2MagicString() );
             m_cmd->addCommand( new RemoveResourceGroupRequestCmd( r ) );
         }
     }
@@ -1331,7 +1331,7 @@ void ModifyEstimateCmd::unexecute()
     m_estimate->setOptimisticRatio( m_optimistic );
 }
 
-EstimateModifyOptimisticRatioCmd::EstimateModifyOptimisticRatioCmd( Node &node, int oldvalue, int newvalue, const QString& name )
+EstimateModifyOptimisticRatioCmd::EstimateModifyOptimisticRatioCmd( Node &node, int oldvalue, int newvalue, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_estimate( node.estimate() ),
         m_oldvalue( oldvalue ),
@@ -1347,7 +1347,7 @@ void EstimateModifyOptimisticRatioCmd::unexecute()
     m_estimate->setOptimisticRatio( m_oldvalue );
 }
 
-EstimateModifyPessimisticRatioCmd::EstimateModifyPessimisticRatioCmd( Node &node, int oldvalue, int newvalue, const QString& name )
+EstimateModifyPessimisticRatioCmd::EstimateModifyPessimisticRatioCmd( Node &node, int oldvalue, int newvalue, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_estimate( node.estimate() ),
         m_oldvalue( oldvalue ),
@@ -1363,7 +1363,7 @@ void EstimateModifyPessimisticRatioCmd::unexecute()
     m_estimate->setPessimisticRatio( m_oldvalue );
 }
 
-ModifyEstimateTypeCmd::ModifyEstimateTypeCmd( Node &node, int oldvalue, int newvalue, const QString& name )
+ModifyEstimateTypeCmd::ModifyEstimateTypeCmd( Node &node, int oldvalue, int newvalue, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_estimate( node.estimate() ),
         m_oldvalue( oldvalue ),
@@ -1379,7 +1379,7 @@ void ModifyEstimateTypeCmd::unexecute()
     m_estimate->setType( static_cast<Estimate::Type>( m_oldvalue ) );
 }
 
-ModifyEstimateCalendarCmd::ModifyEstimateCalendarCmd( Node &node, Calendar *oldvalue, Calendar *newvalue, const QString& name )
+ModifyEstimateCalendarCmd::ModifyEstimateCalendarCmd( Node &node, Calendar *oldvalue, Calendar *newvalue, const KUndo2MagicString& name )
     : NamedCommand( name ),
         m_estimate( node.estimate() ),
         m_oldvalue( oldvalue ),
@@ -1395,7 +1395,7 @@ void ModifyEstimateCalendarCmd::unexecute()
     m_estimate->setCalendar( m_oldvalue );
 }
 
-ModifyEstimateUnitCmd::ModifyEstimateUnitCmd( Node &node, Duration::Unit oldvalue, Duration::Unit newvalue, const QString& name )
+ModifyEstimateUnitCmd::ModifyEstimateUnitCmd( Node &node, Duration::Unit oldvalue, Duration::Unit newvalue, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_estimate( node.estimate() ),
         m_oldvalue( oldvalue ),
@@ -1412,7 +1412,7 @@ void ModifyEstimateUnitCmd::unexecute()
     m_estimate->setUnit( m_oldvalue );
 }
 
-EstimateModifyRiskCmd::EstimateModifyRiskCmd( Node &node, int oldvalue, int newvalue, const QString& name )
+EstimateModifyRiskCmd::EstimateModifyRiskCmd( Node &node, int oldvalue, int newvalue, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_estimate( node.estimate() ),
         m_oldvalue( oldvalue ),
@@ -1428,7 +1428,7 @@ void EstimateModifyRiskCmd::unexecute()
     m_estimate->setRisktype( static_cast<Estimate::Risktype>( m_oldvalue ) );
 }
 
-AddResourceGroupRequestCmd::AddResourceGroupRequestCmd( Task &task, ResourceGroupRequest *request, const QString& name )
+AddResourceGroupRequestCmd::AddResourceGroupRequestCmd( Task &task, ResourceGroupRequest *request, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_task( task ),
         m_request( request )
@@ -1452,7 +1452,7 @@ void AddResourceGroupRequestCmd::unexecute()
 
 }
 
-RemoveResourceGroupRequestCmd::RemoveResourceGroupRequestCmd( ResourceGroupRequest *request, const QString& name )
+RemoveResourceGroupRequestCmd::RemoveResourceGroupRequestCmd( ResourceGroupRequest *request, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_task( *(request->parent() ->task()) ),
         m_request( request )
@@ -1461,7 +1461,7 @@ RemoveResourceGroupRequestCmd::RemoveResourceGroupRequestCmd( ResourceGroupReque
     m_mine = false;
 }
 
-RemoveResourceGroupRequestCmd::RemoveResourceGroupRequestCmd( Task &task, ResourceGroupRequest *request, const QString& name )
+RemoveResourceGroupRequestCmd::RemoveResourceGroupRequestCmd( Task &task, ResourceGroupRequest *request, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_task( task ),
         m_request( request )
@@ -1486,7 +1486,7 @@ void RemoveResourceGroupRequestCmd::unexecute()
 
 }
 
-AddResourceCmd::AddResourceCmd( ResourceGroup *group, Resource *resource, const QString& name )
+AddResourceCmd::AddResourceCmd( ResourceGroup *group, Resource *resource, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_group( group ),
         m_resource( resource )
@@ -1523,7 +1523,7 @@ void AddResourceCmd::unexecute()
     Q_ASSERT( m_group->project() );
 }
 
-RemoveResourceCmd::RemoveResourceCmd( ResourceGroup *group, Resource *resource, const QString& name )
+RemoveResourceCmd::RemoveResourceCmd( ResourceGroup *group, Resource *resource, const KUndo2MagicString& name )
         : AddResourceCmd( group, resource, name )
 {
     //kDebug(planDbg())<<resource;
@@ -1569,7 +1569,7 @@ void RemoveResourceCmd::unexecute()
     setSchScheduled();
 }
 
-MoveResourceCmd::MoveResourceCmd( ResourceGroup *group, Resource *resource, const QString& name )
+MoveResourceCmd::MoveResourceCmd( ResourceGroup *group, Resource *resource, const KUndo2MagicString& name )
     : NamedCommand( name ),
     m_project( *(group->project()) ),
     m_resource( resource ),
@@ -1591,7 +1591,7 @@ void MoveResourceCmd::unexecute()
     cmd.unexecute();
 }
 
-ModifyResourceNameCmd::ModifyResourceNameCmd( Resource *resource, const QString& value, const QString& name )
+ModifyResourceNameCmd::ModifyResourceNameCmd( Resource *resource, const QString& value, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_resource( resource ),
         m_newvalue( value )
@@ -1608,7 +1608,7 @@ void ModifyResourceNameCmd::unexecute()
 {
     m_resource->setName( m_oldvalue );
 }
-ModifyResourceInitialsCmd::ModifyResourceInitialsCmd( Resource *resource, const QString& value, const QString& name )
+ModifyResourceInitialsCmd::ModifyResourceInitialsCmd( Resource *resource, const QString& value, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_resource( resource ),
         m_newvalue( value )
@@ -1627,7 +1627,7 @@ void ModifyResourceInitialsCmd::unexecute()
 
 
 }
-ModifyResourceEmailCmd::ModifyResourceEmailCmd( Resource *resource, const QString& value, const QString& name )
+ModifyResourceEmailCmd::ModifyResourceEmailCmd( Resource *resource, const QString& value, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_resource( resource ),
         m_newvalue( value )
@@ -1642,7 +1642,7 @@ void ModifyResourceEmailCmd::unexecute()
 {
     m_resource->setEmail( m_oldvalue );
 }
-ModifyResourceAutoAllocateCmd::ModifyResourceAutoAllocateCmd( Resource *resource,bool value, const QString& name )
+ModifyResourceAutoAllocateCmd::ModifyResourceAutoAllocateCmd( Resource *resource,bool value, const KUndo2MagicString& name )
     : NamedCommand( name ),
     m_resource( resource ),
     m_newvalue( value )
@@ -1657,7 +1657,7 @@ void ModifyResourceAutoAllocateCmd::unexecute()
 {
     m_resource->setAutoAllocate( m_oldvalue );
 }
-ModifyResourceTypeCmd::ModifyResourceTypeCmd( Resource *resource, int value, const QString& name )
+ModifyResourceTypeCmd::ModifyResourceTypeCmd( Resource *resource, int value, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_resource( resource ),
         m_newvalue( value )
@@ -1672,7 +1672,7 @@ void ModifyResourceTypeCmd::unexecute()
 {
     m_resource->setType( ( Resource::Type ) m_oldvalue );
 }
-ModifyResourceUnitsCmd::ModifyResourceUnitsCmd( Resource *resource, int value, const QString& name )
+ModifyResourceUnitsCmd::ModifyResourceUnitsCmd( Resource *resource, int value, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_resource( resource ),
         m_newvalue( value )
@@ -1688,7 +1688,7 @@ void ModifyResourceUnitsCmd::unexecute()
     m_resource->setUnits( m_oldvalue );
 }
 
-ModifyResourceAvailableFromCmd::ModifyResourceAvailableFromCmd( Resource *resource, const QDateTime& value, const QString& name )
+ModifyResourceAvailableFromCmd::ModifyResourceAvailableFromCmd( Resource *resource, const QDateTime& value, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_resource( resource ),
         m_newvalue( value )
@@ -1705,7 +1705,7 @@ void ModifyResourceAvailableFromCmd::unexecute()
     m_resource->setAvailableFrom( m_oldvalue );
 }
 
-ModifyResourceAvailableUntilCmd::ModifyResourceAvailableUntilCmd( Resource *resource, const QDateTime& value, const QString& name )
+ModifyResourceAvailableUntilCmd::ModifyResourceAvailableUntilCmd( Resource *resource, const QDateTime& value, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_resource( resource ),
         m_newvalue( value )
@@ -1722,7 +1722,7 @@ void ModifyResourceAvailableUntilCmd::unexecute()
     m_resource->setAvailableUntil( m_oldvalue );
 }
 
-ModifyResourceNormalRateCmd::ModifyResourceNormalRateCmd( Resource *resource, double value, const QString& name )
+ModifyResourceNormalRateCmd::ModifyResourceNormalRateCmd( Resource *resource, double value, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_resource( resource ),
         m_newvalue( value )
@@ -1741,7 +1741,7 @@ void ModifyResourceNormalRateCmd::unexecute()
 
 
 }
-ModifyResourceOvertimeRateCmd::ModifyResourceOvertimeRateCmd( Resource *resource, double value, const QString& name )
+ModifyResourceOvertimeRateCmd::ModifyResourceOvertimeRateCmd( Resource *resource, double value, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_resource( resource ),
         m_newvalue( value )
@@ -1761,7 +1761,7 @@ void ModifyResourceOvertimeRateCmd::unexecute()
 
 }
 
-ModifyResourceCalendarCmd::ModifyResourceCalendarCmd( Resource *resource, Calendar *value, const QString& name )
+ModifyResourceCalendarCmd::ModifyResourceCalendarCmd( Resource *resource, Calendar *value, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_resource( resource ),
         m_newvalue( value )
@@ -1777,7 +1777,7 @@ void ModifyResourceCalendarCmd::unexecute()
     m_resource->setCalendar( m_oldvalue );
 }
 
-ModifyRequiredResourcesCmd::ModifyRequiredResourcesCmd( Resource *resource, const QStringList &value, const QString& name )
+ModifyRequiredResourcesCmd::ModifyRequiredResourcesCmd( Resource *resource, const QStringList &value, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_resource( resource ),
         m_newvalue( value )
@@ -1793,7 +1793,7 @@ void ModifyRequiredResourcesCmd::unexecute()
     m_resource->setRequiredIds( m_oldvalue );
 }
 
-AddResourceTeamCmd::AddResourceTeamCmd( Resource *team, const QString &member, const QString& name )
+AddResourceTeamCmd::AddResourceTeamCmd( Resource *team, const QString &member, const KUndo2MagicString& name )
     : NamedCommand( name ),
     m_team( team ),
     m_member( member )
@@ -1808,7 +1808,7 @@ void AddResourceTeamCmd::unexecute()
     m_team->removeTeamMemberId( m_member );
 }
 
-RemoveResourceTeamCmd::RemoveResourceTeamCmd( Resource *team, const QString &member, const QString& name )
+RemoveResourceTeamCmd::RemoveResourceTeamCmd( Resource *team, const QString &member, const KUndo2MagicString& name )
     : NamedCommand( name ),
     m_team( team ),
     m_member( member )
@@ -1823,7 +1823,7 @@ void RemoveResourceTeamCmd::unexecute()
     m_team->addTeamMemberId( m_member );
 }
 
-RemoveResourceGroupCmd::RemoveResourceGroupCmd( Project *project, ResourceGroup *group, const QString& name )
+RemoveResourceGroupCmd::RemoveResourceGroupCmd( Project *project, ResourceGroup *group, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_group( group ),
         m_project( project ),
@@ -1832,7 +1832,7 @@ RemoveResourceGroupCmd::RemoveResourceGroupCmd( Project *project, ResourceGroup 
     m_index = project->indexOf( group );
     m_mine = false;
     if ( !m_group->requests().isEmpty() ) {
-        m_cmd = new MacroCommand("");
+        m_cmd = new MacroCommand(KUndo2MagicString());
         foreach( ResourceGroupRequest * r, m_group->requests() ) {
             m_cmd->addCommand( new RemoveResourceGroupRequestCmd( r ) );
         }
@@ -1869,7 +1869,7 @@ void RemoveResourceGroupCmd::unexecute()
 
 }
 
-AddResourceGroupCmd::AddResourceGroupCmd( Project *project, ResourceGroup *group, const QString& name )
+AddResourceGroupCmd::AddResourceGroupCmd( Project *project, ResourceGroup *group, const KUndo2MagicString& name )
         : RemoveResourceGroupCmd( project, group, name )
 {
     m_mine = true;
@@ -1883,7 +1883,7 @@ void AddResourceGroupCmd::unexecute()
     RemoveResourceGroupCmd::execute();
 }
 
-ModifyResourceGroupNameCmd::ModifyResourceGroupNameCmd( ResourceGroup *group, const QString& value, const QString& name )
+ModifyResourceGroupNameCmd::ModifyResourceGroupNameCmd( ResourceGroup *group, const QString& value, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_group( group ),
         m_newvalue( value )
@@ -1903,7 +1903,7 @@ void ModifyResourceGroupNameCmd::unexecute()
 
 }
 
-ModifyResourceGroupTypeCmd::ModifyResourceGroupTypeCmd( ResourceGroup *group, int value, const QString& name )
+ModifyResourceGroupTypeCmd::ModifyResourceGroupTypeCmd( ResourceGroup *group, int value, const KUndo2MagicString& name )
     : NamedCommand( name ),
         m_group( group ),
         m_newvalue( value )
@@ -1923,7 +1923,7 @@ void ModifyResourceGroupTypeCmd::unexecute()
 
 }
 
-ModifyCompletionEntrymodeCmd::ModifyCompletionEntrymodeCmd( Completion &completion, Completion::Entrymode value, const QString& name )
+ModifyCompletionEntrymodeCmd::ModifyCompletionEntrymodeCmd( Completion &completion, Completion::Entrymode value, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_completion( completion ),
         oldvalue( m_completion.entrymode() ),
@@ -1939,7 +1939,7 @@ void ModifyCompletionEntrymodeCmd::unexecute()
     m_completion.setEntrymode( oldvalue );
 }
 
-ModifyCompletionPercentFinishedCmd::ModifyCompletionPercentFinishedCmd( Completion &completion, const QDate &date, int value, const QString& name )
+ModifyCompletionPercentFinishedCmd::ModifyCompletionPercentFinishedCmd( Completion &completion, const QDate &date, int value, const KUndo2MagicString& name )
     : NamedCommand( name ),
     m_completion( completion ),
     m_date( date ),
@@ -1967,7 +1967,7 @@ void ModifyCompletionPercentFinishedCmd::unexecute()
     cmd.unexecute();
 }
 
-ModifyCompletionRemainingEffortCmd::ModifyCompletionRemainingEffortCmd( Completion &completion, const QDate &date, const Duration &value, const QString &name )
+ModifyCompletionRemainingEffortCmd::ModifyCompletionRemainingEffortCmd( Completion &completion, const QDate &date, const Duration &value, const KUndo2MagicString &name )
     : NamedCommand( name ),
     m_completion( completion ),
     m_date( date ),
@@ -1995,7 +1995,7 @@ void ModifyCompletionRemainingEffortCmd::unexecute()
     cmd.unexecute();
 }
 
-ModifyCompletionActualEffortCmd::ModifyCompletionActualEffortCmd( Completion &completion, const QDate &date, const Duration &value, const QString &name )
+ModifyCompletionActualEffortCmd::ModifyCompletionActualEffortCmd( Completion &completion, const QDate &date, const Duration &value, const KUndo2MagicString &name )
     : NamedCommand( name ),
     m_completion( completion ),
     m_date( date ),
@@ -2023,7 +2023,7 @@ void ModifyCompletionActualEffortCmd::unexecute()
     cmd.unexecute();
 }
 
-ModifyCompletionStartedCmd::ModifyCompletionStartedCmd( Completion &completion, bool value, const QString& name )
+ModifyCompletionStartedCmd::ModifyCompletionStartedCmd( Completion &completion, bool value, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_completion( completion ),
         oldvalue( m_completion.isStarted() ),
@@ -2043,7 +2043,7 @@ void ModifyCompletionStartedCmd::unexecute()
 
 }
 
-ModifyCompletionFinishedCmd::ModifyCompletionFinishedCmd( Completion &completion, bool value, const QString& name )
+ModifyCompletionFinishedCmd::ModifyCompletionFinishedCmd( Completion &completion, bool value, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_completion( completion ),
         oldvalue( m_completion.isFinished() ),
@@ -2063,7 +2063,7 @@ void ModifyCompletionFinishedCmd::unexecute()
 
 }
 
-ModifyCompletionStartTimeCmd::ModifyCompletionStartTimeCmd( Completion &completion, const QDateTime &value, const QString& name )
+ModifyCompletionStartTimeCmd::ModifyCompletionStartTimeCmd( Completion &completion, const QDateTime &value, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_completion( completion ),
         oldvalue( m_completion.startTime() ),
@@ -2084,7 +2084,7 @@ void ModifyCompletionStartTimeCmd::unexecute()
 
 }
 
-ModifyCompletionFinishTimeCmd::ModifyCompletionFinishTimeCmd( Completion &completion, const QDateTime &value, const QString& name )
+ModifyCompletionFinishTimeCmd::ModifyCompletionFinishTimeCmd( Completion &completion, const QDateTime &value, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_completion( completion ),
         oldvalue( m_completion.finishTime() ),
@@ -2105,7 +2105,7 @@ void ModifyCompletionFinishTimeCmd::unexecute()
 
 }
 
-AddCompletionEntryCmd::AddCompletionEntryCmd( Completion &completion, const QDate &date, Completion::Entry *value, const QString& name )
+AddCompletionEntryCmd::AddCompletionEntryCmd( Completion &completion, const QDate &date, Completion::Entry *value, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_completion( completion ),
         m_date( date ),
@@ -2132,7 +2132,7 @@ void AddCompletionEntryCmd::unexecute()
 
 }
 
-RemoveCompletionEntryCmd::RemoveCompletionEntryCmd( Completion &completion, const QDate &date, const QString& name )
+RemoveCompletionEntryCmd::RemoveCompletionEntryCmd( Completion &completion, const QDate &date, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_completion( completion ),
         m_date( date ),
@@ -2167,10 +2167,10 @@ void RemoveCompletionEntryCmd::unexecute()
 }
 
 
-ModifyCompletionEntryCmd::ModifyCompletionEntryCmd( Completion &completion, const QDate &date, Completion::Entry *value, const QString& name )
+ModifyCompletionEntryCmd::ModifyCompletionEntryCmd( Completion &completion, const QDate &date, Completion::Entry *value, const KUndo2MagicString& name )
         : NamedCommand( name )
 {
-    cmd = new MacroCommand("");
+    cmd = new MacroCommand(KUndo2MagicString());
     cmd->addCommand( new RemoveCompletionEntryCmd( completion, date ) );
     cmd->addCommand( new AddCompletionEntryCmd( completion, date, value ) );
 }
@@ -2187,7 +2187,7 @@ void ModifyCompletionEntryCmd::unexecute()
     cmd->unexecute();
 }
 
-AddCompletionUsedEffortCmd::AddCompletionUsedEffortCmd( Completion &completion, const Resource *resource, Completion::UsedEffort *value, const QString& name )
+AddCompletionUsedEffortCmd::AddCompletionUsedEffortCmd( Completion &completion, const Resource *resource, Completion::UsedEffort *value, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_completion( completion ),
         m_resource( resource ),
@@ -2225,7 +2225,7 @@ void AddCompletionUsedEffortCmd::unexecute()
 
 }
 
-AddCompletionActualEffortCmd::AddCompletionActualEffortCmd( Completion::UsedEffort &ue, const QDate &date, const Completion::UsedEffort::ActualEffort &value, const QString& name )
+AddCompletionActualEffortCmd::AddCompletionActualEffortCmd( Completion::UsedEffort &ue, const QDate &date, const Completion::UsedEffort::ActualEffort &value, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_usedEffort( ue ),
         m_date( date ),
@@ -2252,7 +2252,7 @@ void AddCompletionActualEffortCmd::unexecute()
     }
 }
 
-AddAccountCmd::AddAccountCmd( Project &project, Account *account, const QString& parent, int index, const QString& name )
+AddAccountCmd::AddAccountCmd( Project &project, Account *account, const QString& parent, int index, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_project( project ),
         m_account( account ),
@@ -2263,7 +2263,7 @@ AddAccountCmd::AddAccountCmd( Project &project, Account *account, const QString&
     m_mine = true;
 }
 
-AddAccountCmd::AddAccountCmd( Project &project, Account *account, Account *parent, int index, const QString& name )
+AddAccountCmd::AddAccountCmd( Project &project, Account *account, Account *parent, int index, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_project( project ),
         m_account( account ),
@@ -2297,7 +2297,7 @@ void AddAccountCmd::unexecute()
     m_mine = true;
 }
 
-RemoveAccountCmd::RemoveAccountCmd( Project &project, Account *account, const QString& name )
+RemoveAccountCmd::RemoveAccountCmd( Project &project, Account *account, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_project( project ),
         m_account( account ),
@@ -2338,7 +2338,7 @@ void RemoveAccountCmd::unexecute()
     m_mine = false;
 }
 
-RenameAccountCmd::RenameAccountCmd( Account *account, const QString& value, const QString& name )
+RenameAccountCmd::RenameAccountCmd( Account *account, const QString& value, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_account( account )
 {
@@ -2357,7 +2357,7 @@ void RenameAccountCmd::unexecute()
 
 }
 
-ModifyAccountDescriptionCmd::ModifyAccountDescriptionCmd( Account *account, const QString& value, const QString& name )
+ModifyAccountDescriptionCmd::ModifyAccountDescriptionCmd( Account *account, const QString& value, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_account( account )
 {
@@ -2377,7 +2377,7 @@ void ModifyAccountDescriptionCmd::unexecute()
 }
 
 
-NodeModifyStartupCostCmd::NodeModifyStartupCostCmd( Node &node, double value, const QString& name )
+NodeModifyStartupCostCmd::NodeModifyStartupCostCmd( Node &node, double value, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_node( node )
 {
@@ -2396,7 +2396,7 @@ void NodeModifyStartupCostCmd::unexecute()
 
 }
 
-NodeModifyShutdownCostCmd::NodeModifyShutdownCostCmd( Node &node, double value, const QString& name )
+NodeModifyShutdownCostCmd::NodeModifyShutdownCostCmd( Node &node, double value, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_node( node )
 {
@@ -2415,7 +2415,7 @@ void NodeModifyShutdownCostCmd::unexecute()
 
 }
 
-NodeModifyRunningAccountCmd::NodeModifyRunningAccountCmd( Node &node, Account *oldvalue, Account *newvalue, const QString& name )
+NodeModifyRunningAccountCmd::NodeModifyRunningAccountCmd( Node &node, Account *oldvalue, Account *newvalue, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_node( node )
 {
@@ -2446,7 +2446,7 @@ void NodeModifyRunningAccountCmd::unexecute()
 
 }
 
-NodeModifyStartupAccountCmd::NodeModifyStartupAccountCmd( Node &node, Account *oldvalue, Account *newvalue, const QString& name )
+NodeModifyStartupAccountCmd::NodeModifyStartupAccountCmd( Node &node, Account *oldvalue, Account *newvalue, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_node( node )
 {
@@ -2478,7 +2478,7 @@ void NodeModifyStartupAccountCmd::unexecute()
 
 }
 
-NodeModifyShutdownAccountCmd::NodeModifyShutdownAccountCmd( Node &node, Account *oldvalue, Account *newvalue, const QString& name )
+NodeModifyShutdownAccountCmd::NodeModifyShutdownAccountCmd( Node &node, Account *oldvalue, Account *newvalue, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_node( node )
 {
@@ -2510,7 +2510,7 @@ void NodeModifyShutdownAccountCmd::unexecute()
 
 }
 
-ModifyDefaultAccountCmd::ModifyDefaultAccountCmd( Accounts &acc, Account *oldvalue, Account *newvalue, const QString& name )
+ModifyDefaultAccountCmd::ModifyDefaultAccountCmd( Accounts &acc, Account *oldvalue, Account *newvalue, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_accounts( acc )
 {
@@ -2532,7 +2532,7 @@ void ModifyDefaultAccountCmd::unexecute()
 
 }
 
-ResourceModifyAccountCmd::ResourceModifyAccountCmd( Resource &resource,  Account *oldvalue, Account *newvalue, const QString& name )
+ResourceModifyAccountCmd::ResourceModifyAccountCmd( Resource &resource,  Account *oldvalue, Account *newvalue, const KUndo2MagicString& name )
     : NamedCommand( name ),
     m_resource( resource )
 {
@@ -2560,7 +2560,7 @@ void ResourceModifyAccountCmd::unexecute()
     }
 }
 
-ProjectModifyConstraintCmd::ProjectModifyConstraintCmd( Project &node, Node::ConstraintType c, const QString& name )
+ProjectModifyConstraintCmd::ProjectModifyConstraintCmd( Project &node, Node::ConstraintType c, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_node( node ),
         newConstraint( c ),
@@ -2576,7 +2576,7 @@ void ProjectModifyConstraintCmd::unexecute()
     m_node.setConstraint( oldConstraint );
 }
 
-ProjectModifyStartTimeCmd::ProjectModifyStartTimeCmd( Project &node, const QDateTime& dt, const QString& name )
+ProjectModifyStartTimeCmd::ProjectModifyStartTimeCmd( Project &node, const QDateTime& dt, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_node( node ),
         newTime( dt ),
@@ -2594,7 +2594,7 @@ void ProjectModifyStartTimeCmd::unexecute()
     m_node.setConstraintStartTime( oldTime );
 }
 
-ProjectModifyEndTimeCmd::ProjectModifyEndTimeCmd( Project &node, const QDateTime& dt, const QString& name )
+ProjectModifyEndTimeCmd::ProjectModifyEndTimeCmd( Project &node, const QDateTime& dt, const KUndo2MagicString& name )
         : NamedCommand( name ),
         m_node( node ),
         newTime( dt ),
@@ -2613,7 +2613,7 @@ void ProjectModifyEndTimeCmd::unexecute()
 }
 
 //----------------------------
-AddScheduleManagerCmd::AddScheduleManagerCmd( Project &node, ScheduleManager *sm, int index, const QString& name )
+AddScheduleManagerCmd::AddScheduleManagerCmd( Project &node, ScheduleManager *sm, int index, const KUndo2MagicString& name )
     : NamedCommand( name ),
     m_node( node ),
     m_parent( sm->parentManager() ),
@@ -2624,7 +2624,7 @@ AddScheduleManagerCmd::AddScheduleManagerCmd( Project &node, ScheduleManager *sm
 {
 }
 
-AddScheduleManagerCmd::AddScheduleManagerCmd( ScheduleManager *parent, ScheduleManager *sm, int index, const QString& name )
+AddScheduleManagerCmd::AddScheduleManagerCmd( ScheduleManager *parent, ScheduleManager *sm, int index, const KUndo2MagicString& name )
     : NamedCommand( name ),
     m_node( parent->project() ),
     m_parent( parent ),
@@ -2657,7 +2657,7 @@ void AddScheduleManagerCmd::unexecute()
     m_mine = true;
 }
 
-DeleteScheduleManagerCmd::DeleteScheduleManagerCmd( Project &node, ScheduleManager *sm, const QString& name )
+DeleteScheduleManagerCmd::DeleteScheduleManagerCmd( Project &node, ScheduleManager *sm, const KUndo2MagicString& name )
     : AddScheduleManagerCmd( node, sm, -1, name )
 {
     m_mine = false;
@@ -2679,7 +2679,7 @@ void DeleteScheduleManagerCmd::unexecute()
     cmd.unexecute();
 }
 
-MoveScheduleManagerCmd::MoveScheduleManagerCmd( ScheduleManager *sm, ScheduleManager *newparent, int newindex, const QString& name )
+MoveScheduleManagerCmd::MoveScheduleManagerCmd( ScheduleManager *sm, ScheduleManager *newparent, int newindex, const KUndo2MagicString& name )
     : NamedCommand( name ),
     m_sm( sm ),
     m_oldparent( sm->parentManager() ),
@@ -2699,7 +2699,7 @@ void MoveScheduleManagerCmd::unexecute()
     m_sm->project().moveScheduleManager( m_sm, m_oldparent, m_oldindex );
 }
 
-ModifyScheduleManagerNameCmd::ModifyScheduleManagerNameCmd( ScheduleManager &sm, const QString& value, const QString& name )
+ModifyScheduleManagerNameCmd::ModifyScheduleManagerNameCmd( ScheduleManager &sm, const QString& value, const KUndo2MagicString& name )
     : NamedCommand( name ),
     m_sm( sm ),
     oldvalue( sm.name() ),
@@ -2717,7 +2717,7 @@ void ModifyScheduleManagerNameCmd::unexecute()
     m_sm.setName( oldvalue );
 }
 
-ModifyScheduleManagerAllowOverbookingCmd::ModifyScheduleManagerAllowOverbookingCmd( ScheduleManager &sm, bool value, const QString& name )
+ModifyScheduleManagerAllowOverbookingCmd::ModifyScheduleManagerAllowOverbookingCmd( ScheduleManager &sm, bool value, const KUndo2MagicString& name )
     : NamedCommand( name ),
     m_sm( sm ),
     oldvalue( sm.allowOverbooking() ),
@@ -2735,7 +2735,7 @@ void ModifyScheduleManagerAllowOverbookingCmd::unexecute()
     m_sm.setAllowOverbooking( oldvalue );
 }
 
-ModifyScheduleManagerDistributionCmd::ModifyScheduleManagerDistributionCmd( ScheduleManager &sm, bool value, const QString& name )
+ModifyScheduleManagerDistributionCmd::ModifyScheduleManagerDistributionCmd( ScheduleManager &sm, bool value, const KUndo2MagicString& name )
     : NamedCommand( name ),
     m_sm( sm ),
     oldvalue( sm.usePert() ),
@@ -2753,7 +2753,7 @@ void ModifyScheduleManagerDistributionCmd::unexecute()
     m_sm.setUsePert( oldvalue );
 }
 
-ModifyScheduleManagerSchedulingDirectionCmd::ModifyScheduleManagerSchedulingDirectionCmd( ScheduleManager &sm, bool value, const QString& name )
+ModifyScheduleManagerSchedulingDirectionCmd::ModifyScheduleManagerSchedulingDirectionCmd( ScheduleManager &sm, bool value, const KUndo2MagicString& name )
     : NamedCommand( name ),
     m_sm( sm ),
     oldvalue( sm.schedulingDirection() ),
@@ -2771,7 +2771,7 @@ void ModifyScheduleManagerSchedulingDirectionCmd::unexecute()
     m_sm.setSchedulingDirection( oldvalue );
 }
 
-ModifyScheduleManagerSchedulerCmd::ModifyScheduleManagerSchedulerCmd( ScheduleManager &sm, int value, const QString& name )
+ModifyScheduleManagerSchedulerCmd::ModifyScheduleManagerSchedulerCmd( ScheduleManager &sm, int value, const KUndo2MagicString& name )
     : NamedCommand( name ),
     m_sm( sm ),
     oldvalue( sm.schedulerPluginIndex() ),
@@ -2789,7 +2789,7 @@ void ModifyScheduleManagerSchedulerCmd::unexecute()
     m_sm.setSchedulerPlugin( oldvalue );
 }
 
-ModifyScheduleManagerSchedulingGranularityCmd::ModifyScheduleManagerSchedulingGranularityCmd( ScheduleManager &sm, int value, const QString& name )
+ModifyScheduleManagerSchedulingGranularityCmd::ModifyScheduleManagerSchedulingGranularityCmd( ScheduleManager &sm, int value, const KUndo2MagicString& name )
     : NamedCommand( name ),
     m_sm( sm ),
     oldvalue( sm.granularity() ),
@@ -2807,7 +2807,7 @@ void ModifyScheduleManagerSchedulingGranularityCmd::unexecute()
     m_sm.setGranularity( oldvalue );
 }
 
-CalculateScheduleCmd::CalculateScheduleCmd( Project &node, ScheduleManager *sm, const QString& name )
+CalculateScheduleCmd::CalculateScheduleCmd( Project &node, ScheduleManager *sm, const KUndo2MagicString& name )
     : NamedCommand( name ),
     m_node( node ),
     m_sm( sm ),
@@ -2845,7 +2845,7 @@ void CalculateScheduleCmd::unexecute()
 }
 
 //------------------------
-BaselineScheduleCmd::BaselineScheduleCmd( ScheduleManager &sm, const QString& name )
+BaselineScheduleCmd::BaselineScheduleCmd( ScheduleManager &sm, const KUndo2MagicString& name )
     : NamedCommand( name ),
     m_sm( sm )
 {
@@ -2861,7 +2861,7 @@ void BaselineScheduleCmd::unexecute()
     m_sm.setBaselined( false );
 }
 
-ResetBaselineScheduleCmd::ResetBaselineScheduleCmd( ScheduleManager &sm, const QString& name )
+ResetBaselineScheduleCmd::ResetBaselineScheduleCmd( ScheduleManager &sm, const KUndo2MagicString& name )
     : NamedCommand( name ),
     m_sm( sm )
 {
@@ -2878,7 +2878,7 @@ void ResetBaselineScheduleCmd::unexecute()
 }
 
 //------------------------
-ModifyStandardWorktimeYearCmd::ModifyStandardWorktimeYearCmd( StandardWorktime *wt, double oldvalue, double newvalue, const QString& name )
+ModifyStandardWorktimeYearCmd::ModifyStandardWorktimeYearCmd( StandardWorktime *wt, double oldvalue, double newvalue, const KUndo2MagicString& name )
         : NamedCommand( name ),
         swt( wt ),
         m_oldvalue( oldvalue ),
@@ -2896,7 +2896,7 @@ void ModifyStandardWorktimeYearCmd::unexecute()
 
 }
 
-ModifyStandardWorktimeMonthCmd::ModifyStandardWorktimeMonthCmd( StandardWorktime *wt, double oldvalue, double newvalue, const QString& name )
+ModifyStandardWorktimeMonthCmd::ModifyStandardWorktimeMonthCmd( StandardWorktime *wt, double oldvalue, double newvalue, const KUndo2MagicString& name )
         : NamedCommand( name ),
         swt( wt ),
         m_oldvalue( oldvalue ),
@@ -2914,7 +2914,7 @@ void ModifyStandardWorktimeMonthCmd::unexecute()
 
 }
 
-ModifyStandardWorktimeWeekCmd::ModifyStandardWorktimeWeekCmd( StandardWorktime *wt, double oldvalue, double newvalue, const QString& name )
+ModifyStandardWorktimeWeekCmd::ModifyStandardWorktimeWeekCmd( StandardWorktime *wt, double oldvalue, double newvalue, const KUndo2MagicString& name )
         : NamedCommand( name ),
         swt( wt ),
         m_oldvalue( oldvalue ),
@@ -2932,7 +2932,7 @@ void ModifyStandardWorktimeWeekCmd::unexecute()
 
 }
 
-ModifyStandardWorktimeDayCmd::ModifyStandardWorktimeDayCmd( StandardWorktime *wt, double oldvalue, double newvalue, const QString& name )
+ModifyStandardWorktimeDayCmd::ModifyStandardWorktimeDayCmd( StandardWorktime *wt, double oldvalue, double newvalue, const KUndo2MagicString& name )
         : NamedCommand( name ),
         swt( wt ),
         m_oldvalue( oldvalue ),
@@ -2952,7 +2952,7 @@ void ModifyStandardWorktimeDayCmd::unexecute()
 }
 
 //----------------
-DocumentAddCmd::DocumentAddCmd( Documents &docs, Document *value, const QString& name )
+DocumentAddCmd::DocumentAddCmd( Documents &docs, Document *value, const KUndo2MagicString& name )
     : NamedCommand( name ),
     m_docs( docs ),
     m_mine( true )
@@ -2978,7 +2978,7 @@ void DocumentAddCmd::unexecute()
 }
 
 //----------------
-DocumentRemoveCmd::DocumentRemoveCmd( Documents &docs, Document *value, const QString& name )
+DocumentRemoveCmd::DocumentRemoveCmd( Documents &docs, Document *value, const KUndo2MagicString& name )
     : NamedCommand( name ),
     m_docs( docs ),
     m_mine( false )
@@ -3004,7 +3004,7 @@ void DocumentRemoveCmd::unexecute()
 }
 
 //----------------
-DocumentModifyUrlCmd::DocumentModifyUrlCmd( Document *doc, const KUrl &value, const QString& name )
+DocumentModifyUrlCmd::DocumentModifyUrlCmd( Document *doc, const KUrl &value, const KUndo2MagicString& name )
     : NamedCommand( name ),
     m_doc( doc )
 {
@@ -3022,7 +3022,7 @@ void DocumentModifyUrlCmd::unexecute()
 }
 
 //----------------
-DocumentModifyNameCmd::DocumentModifyNameCmd( Document *doc, const QString &value, const QString& name )
+DocumentModifyNameCmd::DocumentModifyNameCmd( Document *doc, const QString &value, const KUndo2MagicString& name )
     : NamedCommand( name ),
     m_doc( doc )
 {
@@ -3040,7 +3040,7 @@ void DocumentModifyNameCmd::unexecute()
 }
 
 //----------------
-DocumentModifyTypeCmd::DocumentModifyTypeCmd( Document *doc, Document::Type value, const QString& name )
+DocumentModifyTypeCmd::DocumentModifyTypeCmd( Document *doc, Document::Type value, const KUndo2MagicString& name )
     : NamedCommand( name ),
     m_doc( doc )
 {
@@ -3058,7 +3058,7 @@ void DocumentModifyTypeCmd::unexecute()
 }
 
 //----------------
-DocumentModifyStatusCmd::DocumentModifyStatusCmd( Document *doc, const QString &value, const QString& name )
+DocumentModifyStatusCmd::DocumentModifyStatusCmd( Document *doc, const QString &value, const KUndo2MagicString& name )
     : NamedCommand( name ),
     m_doc( doc )
 {
@@ -3076,7 +3076,7 @@ void DocumentModifyStatusCmd::unexecute()
 }
 
 //----------------
-DocumentModifySendAsCmd::DocumentModifySendAsCmd( Document *doc, const Document::SendAs value, const QString& name )
+DocumentModifySendAsCmd::DocumentModifySendAsCmd( Document *doc, const Document::SendAs value, const KUndo2MagicString& name )
     : NamedCommand( name ),
     m_doc( doc )
 {
@@ -3094,7 +3094,7 @@ void DocumentModifySendAsCmd::unexecute()
 }
 
 //----------------
-WBSDefinitionModifyCmd::WBSDefinitionModifyCmd( Project &project, const WBSDefinition value, const QString& name )
+WBSDefinitionModifyCmd::WBSDefinitionModifyCmd( Project &project, const WBSDefinition value, const KUndo2MagicString& name )
     : NamedCommand( name ),
     m_project( project )
 {
@@ -3111,7 +3111,7 @@ void WBSDefinitionModifyCmd::unexecute()
 }
 
 //----------------
-InsertProjectCmd::InsertProjectCmd( Project &project, Node *parent, Node *after, const QString& name )
+InsertProjectCmd::InsertProjectCmd( Project &project, Node *parent, Node *after, const KUndo2MagicString& name )
     : MacroCommand( name ),
     m_project( static_cast<Project*>( parent->projectNode() ) ),
     m_parent( parent )
@@ -3224,7 +3224,7 @@ InsertProjectCmd::InsertProjectCmd( Project &project, Node *parent, Node *after,
     foreach ( ResourceGroup *g, project.resourceGroups() ) {
         ResourceGroup *gr = m_project->findResourceGroup( g->id() );
         if ( gr == 0 ) {
-            addCommand( new AddResourceGroupCmd( m_project, g, QString("ResourceGroup") ) );
+            addCommand( new AddResourceGroupCmd( m_project, g, kundo2_noi18n("ResourceGroup") ) );
             gr = g;
             kDebug(insertProjectCmdDba())<<"AddResourceGroupCmd:"<<gr->name();
         } else {
@@ -3237,7 +3237,7 @@ InsertProjectCmd::InsertProjectCmd( Project &project, Node *parent, Node *after,
             }
             Resource *res = m_project->findResource( r->id() );
             if ( res == 0 ) {
-                addCommand( new AddResourceCmd( gr, r, "Resource" ) );
+                addCommand( new AddResourceCmd( gr, r, kundo2_noi18n("Resource") ) );
                 allResources << r;
                 newResources << r;
                 kDebug(insertProjectCmdDba())<<"AddResourceCmd:"<<gr->name()<<r->name();
@@ -3279,7 +3279,7 @@ InsertProjectCmd::InsertProjectCmd( Project &project, Node *parent, Node *after,
         }
         Q_ASSERT( allGroups.contains( newGroup ) );
         gr->setGroup( newGroup );
-        addCommand( new AddResourceGroupRequestCmd( static_cast<Task&>( *n ), gr, QString("Group %1").arg( ++gi ) ) );
+        addCommand( new AddResourceGroupRequestCmd( static_cast<Task&>( *n ), gr, kundo2_noi18n("Group %1", ++gi)  ) );
         kDebug(insertProjectCmdDba())<<"Add resource group request:"<<n->name()<<":"<<newGroup->name();
         QMap<ResourceGroupRequest*, QPair<ResourceRequest*, Resource*> >::const_iterator i = rreqs.constFind( gr );
         for ( ; i != rreqs.constEnd() && i.key() == gr; ++i ) {
@@ -3310,7 +3310,7 @@ InsertProjectCmd::InsertProjectCmd( Project &project, Node *parent, Node *after,
             Q_ASSERT( allResources.contains( newRes ) );
             // all resource requests shall be reinserted
             rr->setResource( newRes );
-            addCommand( new AddResourceRequestCmd( gr, rr, QString("Resource %1").arg( ++ri ) ) );
+            addCommand( new AddResourceRequestCmd( gr, rr, kundo2_noi18n("Resource %1", ++ri) ) );
         }
     }
     // Add nodes ( ids are unique, no need to check )
@@ -3324,10 +3324,10 @@ InsertProjectCmd::InsertProjectCmd( Project &project, Node *parent, Node *after,
         }
         n->setParentNode( 0 );
         if ( node_after ) {
-            addCommand( new TaskAddCmd( m_project, n, node_after, "Task" ) );
+            addCommand( new TaskAddCmd( m_project, n, node_after, kundo2_noi18n("Task") ) );
             node_after = n;
         } else {
-            addCommand( new SubtaskAddCmd( m_project, n, parent, "Subtask" ) );
+            addCommand( new SubtaskAddCmd( m_project, n, parent, kundo2_noi18n("Subtask") ) );
         }
         addChildNodes( n );
     }
@@ -3435,7 +3435,7 @@ void InsertProjectCmd::addAccounts( Account *account, Account *parent, QList<Acc
     if ( acc == 0 ) {
         kDebug(insertProjectCmdDba())<<"Move to new project:"<<account<<account->name();
         accountsmap.insert( account->name(), account );
-        addCommand( new AddAccountCmd( *m_project, account, par, -1, QString( "Add account %1" ).arg( account->name() ) ) );
+        addCommand( new AddAccountCmd( *m_project, account, par, -1, kundo2_noi18n( "Add account %1", account->name() ) ) );
     } else {
         kDebug(insertProjectCmdDba())<<"Already exists:"<<account<<account->name();
         unused << account;
@@ -3455,7 +3455,7 @@ void InsertProjectCmd::addChildNodes( Node *node ) {
     }
     foreach ( Node *n, node->childNodeIterator() ) {
         n->setParentNode( 0 );
-        addCommand( new SubtaskAddCmd( m_project, n, node, "Subtask" ) );
+        addCommand( new SubtaskAddCmd( m_project, n, node, kundo2_noi18n("Subtask") ) );
         addChildNodes( n );
     }
     // Remove child nodes so they are not added twice
@@ -3477,7 +3477,7 @@ void InsertProjectCmd::unexecute()
     QApplication::restoreOverrideCursor();
 }
 
-WorkPackageAddCmd::WorkPackageAddCmd( Project *project, Node *node, WorkPackage *value, const QString& name )
+WorkPackageAddCmd::WorkPackageAddCmd( Project *project, Node *node, WorkPackage *value, const KUndo2MagicString& name )
     : NamedCommand( name ),
     m_project( project ),
     m_node( node ),
@@ -3504,7 +3504,7 @@ void WorkPackageAddCmd::unexecute()
     static_cast<Task*>( m_node )->removeWorkPackage( m_wp );
 }
 
-ModifyProjectLocaleCmd::ModifyProjectLocaleCmd(  Project &project, const QString& name )
+ModifyProjectLocaleCmd::ModifyProjectLocaleCmd(  Project &project, const KUndo2MagicString& name )
     : MacroCommand( name ),
     m_project( project )
 {
@@ -3520,7 +3520,7 @@ void ModifyProjectLocaleCmd::unexecute()
     m_project.emitLocaleChanged();
 }
 
-ModifyCurrencySymolCmd::ModifyCurrencySymolCmd(  KLocale *locale, const QString &value, const QString& name )
+ModifyCurrencySymolCmd::ModifyCurrencySymolCmd(  KLocale *locale, const QString &value, const KUndo2MagicString& name )
     : NamedCommand( name ),
     m_locale( locale ),
     m_newvalue( value ),
@@ -3536,7 +3536,7 @@ void ModifyCurrencySymolCmd::unexecute()
     m_locale->setCurrencySymbol( m_oldvalue );
 }
 
-ModifyCurrencyFractionalDigitsCmd::ModifyCurrencyFractionalDigitsCmd(  KLocale *locale, int value, const QString& name )
+ModifyCurrencyFractionalDigitsCmd::ModifyCurrencyFractionalDigitsCmd(  KLocale *locale, int value, const KUndo2MagicString& name )
     : NamedCommand( name ),
     m_locale( locale ),
     m_newvalue( value ),
@@ -3552,7 +3552,7 @@ void ModifyCurrencyFractionalDigitsCmd::unexecute()
     m_locale->setMonetaryDecimalPlaces(m_oldvalue);
 }
 
-ModifyPositivePrefixCurrencySymolCmd::ModifyPositivePrefixCurrencySymolCmd(  KLocale *locale, bool value, const QString& name )
+ModifyPositivePrefixCurrencySymolCmd::ModifyPositivePrefixCurrencySymolCmd(  KLocale *locale, bool value, const KUndo2MagicString& name )
     : NamedCommand( name ),
     m_locale( locale ),
     m_newvalue( value ),
@@ -3568,7 +3568,7 @@ void ModifyPositivePrefixCurrencySymolCmd::unexecute()
     m_locale->setPositivePrefixCurrencySymbol( m_oldvalue );
 }
 
-ModifyNegativePrefixCurrencySymolCmd::ModifyNegativePrefixCurrencySymolCmd(  KLocale *locale, bool value, const QString& name )
+ModifyNegativePrefixCurrencySymolCmd::ModifyNegativePrefixCurrencySymolCmd(  KLocale *locale, bool value, const KUndo2MagicString& name )
     : NamedCommand( name ),
     m_locale( locale ),
     m_newvalue( value ),
@@ -3584,7 +3584,7 @@ void ModifyNegativePrefixCurrencySymolCmd::unexecute()
     m_locale->setNegativePrefixCurrencySymbol( m_oldvalue );
 }
 
-ModifyPositiveMonetarySignPositionCmd ::ModifyPositiveMonetarySignPositionCmd (  KLocale *locale, int value, const QString& name )
+ModifyPositiveMonetarySignPositionCmd ::ModifyPositiveMonetarySignPositionCmd (  KLocale *locale, int value, const KUndo2MagicString& name )
     : NamedCommand( name ),
     m_locale( locale ),
     m_newvalue( value ),
@@ -3600,7 +3600,7 @@ void ModifyPositiveMonetarySignPositionCmd ::unexecute()
     m_locale->setPositiveMonetarySignPosition( (KLocale::SignPosition)m_oldvalue );
 }
 
-ModifyNegativeMonetarySignPositionCmd ::ModifyNegativeMonetarySignPositionCmd (  KLocale *locale, int value, const QString& name )
+ModifyNegativeMonetarySignPositionCmd ::ModifyNegativeMonetarySignPositionCmd (  KLocale *locale, int value, const KUndo2MagicString& name )
     : NamedCommand( name ),
     m_locale( locale ),
     m_newvalue( value ),
@@ -3616,7 +3616,7 @@ void ModifyNegativeMonetarySignPositionCmd ::unexecute()
     m_locale->setNegativeMonetarySignPosition( (KLocale::SignPosition)m_oldvalue );
 }
 
-AddExternalAppointmentCmd::AddExternalAppointmentCmd( Resource *resource, const QString &pid, const QString &pname, const QDateTime &start, const QDateTime &end, double load, const QString& name )
+AddExternalAppointmentCmd::AddExternalAppointmentCmd( Resource *resource, const QString &pid, const QString &pname, const QDateTime &start, const QDateTime &end, double load, const KUndo2MagicString& name )
     : NamedCommand( name ),
     m_resource( resource ),
     m_pid( pid ),
@@ -3641,7 +3641,7 @@ void AddExternalAppointmentCmd::unexecute()
     }
 }
 
-ClearExternalAppointmentCmd::ClearExternalAppointmentCmd( Resource *resource, const QString &pid, const QString &name )
+ClearExternalAppointmentCmd::ClearExternalAppointmentCmd( Resource *resource, const QString &pid, const KUndo2MagicString &name )
     : NamedCommand( name ),
     m_resource( resource ),
     m_pid( pid ),
@@ -3669,7 +3669,7 @@ void ClearExternalAppointmentCmd::unexecute()
     m_appointments = 0;
 }
 
-ClearAllExternalAppointmentsCmd::ClearAllExternalAppointmentsCmd( Project *project, const QString &name )
+ClearAllExternalAppointmentsCmd::ClearAllExternalAppointmentsCmd( Project *project, const KUndo2MagicString &name )
     : NamedCommand( name ),
     m_project( project )
 {

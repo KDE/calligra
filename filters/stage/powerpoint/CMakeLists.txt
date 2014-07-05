@@ -25,9 +25,9 @@ target_link_libraries(calligra_filter_ppt2odp ppttoodplib komain)
 install(TARGETS calligra_filter_ppt2odp  DESTINATION ${PLUGIN_INSTALL_DIR})
 install( FILES  calligra_filter_ppt2odp.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
-if(SHOULD_BUILD_EXTRA_THUMBNAIL)
+if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
     install( FILES  stage_powerpoint_thumbnail.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
-endif(SHOULD_BUILD_EXTRA_THUMBNAIL)
+endif(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
 
 if(SHOULD_BUILD_OKULARGENERATOR_PPT)
     install( FILES libokularGenerator_powerpoint_calligra.desktop okularPowerpoint_calligra.desktop DESTINATION ${SERVICES_INSTALL_DIR} )

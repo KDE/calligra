@@ -7,6 +7,7 @@
   <name xml:lang="ca">Karbon</name>
   <name xml:lang="cs">Karbon</name>
   <name xml:lang="ia">Karbon</name>
+  <name xml:lang="it">Karbon</name>
   <name xml:lang="nl">Karbon</name>
   <name xml:lang="pl">Karbon</name>
   <name xml:lang="pt">Karbon</name>
@@ -19,6 +20,7 @@
   <summary xml:lang="ca">Gràfics escalables</summary>
   <summary xml:lang="cs">Škálovatelná grafika</summary>
   <summary xml:lang="ia">Graphicos scalabile</summary>
+  <summary xml:lang="it">Grafica scalabile</summary>
   <summary xml:lang="nl">Vectorafbeeldingen</summary>
   <summary xml:lang="pl">Skalowalna grafika</summary>
   <summary xml:lang="pt">Gráficos Vectoriais</summary>
@@ -34,6 +36,7 @@
       wanting to create breathtaking vector art.
     </p>
     <p xml:lang="ca">El Karbon és una aplicació de dibuix vectorial amb una interfície d'usuari senzilla d'utilitzar, que es pot personalitzar i ampliar molt. Això converteix el Karbon en una gran aplicació per usuaris que comencin a explorar el món dels gràfics vectorial i també pels artistes que volen crear art vectorial que deixi bocabadat.</p>
+    <p xml:lang="it">Karbon è un'applicazione di disegno vettoriale con un'interfaccia utente facile da utilizzare, altamente personalizzabile ed estendibile. Ciò rende Karbon una grande applicazione per gli utenti che iniziano a esplorare il mondo della grafica vettoriale così come per gli artisti che vogliono creare staordinare opere vettoriali. </p>
     <p xml:lang="nl">Karbon is een toepassing voor tekenen met vectoren met een gebruikersinterface dat gemakkelijk is te gebruiken, zeer goed aan te passen en uit te breiden. Dit maakt Karbon een geweldige toepassing voor gebruikers die de wereld van grafiek met vectoren aan het verkennen zijn evenals voor kunstenaars die adembenemende vectorkunst willen maken.</p>
     <p xml:lang="pl">Karbon jest programem do rysowania wektorowego z układem sterowania, który jest łatwy w użyciu, wysoce dostosowywalny i rozszerzalny. To czyni Karbon wspaniałym programem dla użytkowników zaczynających poznawanie świata grafiki wektorowej, a artystów zachęca do tworzenie sztuki wektorowej zapierającej dech w piersiach.</p>
     <p xml:lang="pt">O Karbon é uma aplicação de desenho vectorial com uma interface simples de usar, facilmente configurável e modular. Isto torna o Karbon uma óptima aplicação para os utilizadores que começam a explorar o mundo dos gráficos vectoriais, assim como para os artistas que desejam criar arte vectorial espectacular.</p>
@@ -46,6 +49,7 @@
     <p xml:lang="ca">Característiques:</p>
     <p xml:lang="cs">Vlastnosti:</p>
     <p xml:lang="ia">Characteristicas</p>
+    <p xml:lang="it">Funzionalità:</p>
     <p xml:lang="nl">Mogelijkheden:</p>
     <p xml:lang="pl">Cechy:</p>
     <p xml:lang="pt">Características:</p>
@@ -60,6 +64,7 @@
       </li>
       <li xml:lang="ca">Permet llegir ODG, SVG, WPG, WMF, EPS/PS</li>
       <li xml:lang="ia">Cargante supporto pro ODG, SVG, WPG, WMF, EPS/PS</li>
+      <li xml:lang="it">Supporto per il caricamento di ODG, SVG, WPG, WMF, EPS/PS</li>
       <li xml:lang="nl">Ondersteuning voor laden van ODG, SVG, WPG, WMF, EPS/PS</li>
       <li xml:lang="pl">Obsługa wczytywania dla ODG, SVG, WPG, WMF, EPS/PS</li>
       <li xml:lang="pt">Suporte do carregamento de imagens em ODG, SVG, WPG, WMF, EPS/PS</li>
@@ -73,6 +78,7 @@
       </li>
       <li xml:lang="ca">Permet gravar ODG, SVG, PNG, PDF, WMF</li>
       <li xml:lang="ia">Supporto de scriber pro ODG, SVG, PNG, PDF, WMF</li>
+      <li xml:lang="it">Supporto per la scrittura di ODG, SVG, PNG, PDF, WMF</li>
       <li xml:lang="nl">Ondersteuning voor schrijven van ODG, SVG, PNG, PDF, WMF</li>
       <li xml:lang="pl">Obsługa zapisywania dla ODG, SVG, PNG, PDF, WMF</li>
       <li xml:lang="pt">Suporte da gravação de imagens em ODG, SVG, PNG, PDF, WMF</li>
@@ -86,6 +92,7 @@
       </li>
       <li xml:lang="ca">Interfície d'usuari que es pot personalitzar que permet situar lliurement barres d'eines i acobladors</li>
       <li xml:lang="ia">Personalisa le interfacie de usator con barra de instrumentos e stivatores (dockers) liberemente positionabile</li>
+      <li xml:lang="it">Interfaccia utente personalizzabile con barre degli strumenti posizionabili liberamente e aree di aggancio</li>
       <li xml:lang="nl">Aan te passen gebruikersinterface met vrij te plaatsen werkbalken en dockers2</li>
       <li xml:lang="pl">Układ sterowania z dowolnie umieszczanymi paskami narzędzi i dokowaniami</li>
       <li xml:lang="pt">Interface de utilizador configurável com barras e áreas acopláveis livres</li>
@@ -123,6 +130,7 @@
         Various drawing tools for creating path shapes including a draw path tool, a pencil tool as well as a calligraphy drawing tool
       </li>
       <li xml:lang="ca">Diverses eines de dibuix per crear formes de camí incloent una eina de dibuix de camins, una eina de llapis i també una eina de dibuix de cal·ligrafia.</li>
+      <li xml:lang="it">Vari strumenti di disegno per creare percorsi e forme che include uno strumento di tracciati, un matita e uno strumento calligrafico</li>
       <li xml:lang="nl">Verschillende tekengereedschappen voor het maken van padvormen inclusief een tekenhulpmiddel voor paden, een potloodhulpmiddel evenals een tekengereedschap voor kalligrafie</li>
       <li xml:lang="pl">Różne narzędzia rysownicze do tworzenia kształtów ścieżek uwzględniając w tym: narzędzie rysowania ścieżki, narzędzie ołówka, a także kaligraficzne narzędzia rysownicze </li>
       <li xml:lang="pt">Diversas ferramentas de desenho para criar formas de caminhos, incluindo uma ferramenta de desenho de caminhos, uma ferramenta de lápis e uma ferramenta de desenho caligráfico</li>
@@ -160,6 +168,7 @@
         Includes many predefined shapes including basic shapes like stars, circle/ellipse, rectangle, image
       </li>
       <li xml:lang="ca">Inclou moltes formes predefinides bàsiques com estels, cercles/el·lipses, rectangles, imatges</li>
+      <li xml:lang="it">Include molte forme predefinite tra cui forme base come stelle, cerchi/ellissi, rettangoli e immagini</li>
       <li xml:lang="nl">Omvat vele voorgedefinieerde vormen inclusief basisvormen als ster, cirkel/ellips, rechthoek, afbeelding</li>
       <li xml:lang="pl">Zawiera wiele uprzednio stworzonych kształtów, do których można zaliczyć gwiazdy, okręgi, elipsy, prostokąty, obrazy</li>
       <li xml:lang="pt">Inclui diversas formas predefinidas, incluindo formas básicas como as estrelas, círculos/elipses, rectângulos, imagens</li>
@@ -172,6 +181,7 @@
         Artistic text shape with support for following path outlines (i.e. text on path)
       </li>
       <li xml:lang="ca">Formes de text artístic que permeten camins de contorns de seguiment (p.e. text en camins)</li>
+      <li xml:lang="it">Forme di testo artistico con supporto per le bordature che seguono il tracciato (ad es. testo su tracciato)</li>
       <li xml:lang="nl">Artistieke tekstvormen met ondersteuning voor het volden van paden (dwz. tekst op een pad)</li>
       <li xml:lang="pl">Kształty artystycznego tekstu z obsługą dla następujących zarysów ścieżek (tj. tekst na ścieżce)</li>
       <li xml:lang="pt">Forma de texto artístico com suporte para caminhos de seguimento (i.e., texto ao longo de um caminho)</li>
@@ -196,6 +206,7 @@
         Extensible by writing plugins for new tools, shapes and dockers
       </li>
       <li xml:lang="ca">Ampliable mitjançant l'escriptura de connectors per eines noves, formes i acobladors</li>
+      <li xml:lang="it">Espandibile tramite la scrittura di estensioni per nuovi strumenti, forme e aree di aggancio</li>
       <li xml:lang="nl">Uit te breiden dor het schrijven van plug-ins voor nieuwe hulpmiddelen, vormen en verankering</li>
       <li xml:lang="pl">Rozszerzalne wtyczki zapisu dla nowych narzędzi, kształtów i dokowań</li>
       <li xml:lang="pt">Modular, através da criação de 'plugins' para novas ferramentas, formas e áreas acopláveis</li>

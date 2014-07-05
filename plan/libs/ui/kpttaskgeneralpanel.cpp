@@ -116,7 +116,7 @@ void TaskGeneralPanel::setStartValues( Task &task ) {
 }
 
 MacroCommand *TaskGeneralPanel::buildCommand() {
-    MacroCommand *cmd = new MacroCommand(i18nc("(qtundo-format)", "Modify Task"));
+    MacroCommand *cmd = new MacroCommand(kundo2_i18n("Modify Task"));
     bool modified = false;
 
     if (!namefield->isHidden() && m_task.name() != namefield->text()) {

@@ -34,7 +34,7 @@ DeleteCommand::DeleteCommand(KUndo2Command *parent)
         : AbstractDataManipulator(parent)
         , m_mode(Everything)
 {
-    setText(i18nc("(qtundo-format)", "Delete"));
+    setText(kundo2_i18n("Delete"));
     m_checkLock = true;
 }
 

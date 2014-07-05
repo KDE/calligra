@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2013 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -1392,7 +1392,6 @@ public:
     }
 protected:
     virtual bool queryClose();
-    virtual bool queryExit();
 protected slots:
     void slotCurrentTabIndexChanged(int index);
 signals:
@@ -1434,11 +1433,6 @@ void KexiMainWidget::setupCentralWidget()
 bool KexiMainWidget::queryClose()
 {
     return m_mainWindow ? m_mainWindow->queryClose() : true;
-}
-
-bool KexiMainWidget::queryExit()
-{
-    return m_mainWindow ? m_mainWindow->queryExit() : true;
 }
 
 void KexiMainWidget::slotCurrentTabIndexChanged(int index)
@@ -1964,6 +1958,8 @@ public:
 
     KexiUserFeedbackAgent userFeedback;
 
+    QScopedPointer<KexiMigration::MigrateManager> migrateManager;
+
 private:
     //! @todo move to KexiProject
     KexiWindowDict windows;
@@ -1972,6 +1968,24 @@ private:
     //! @todo QMutex dialogsMutex; //!< used for locking windows and pendingWindows dicts
 #endif
     KexiFindDialog *m_findDialog;
+};
+
+//------------------------------------------
+
+//! Action shortcut used by KexiMainWindow::setupMainMenuActionShortcut(KAction*)
+//! Activates action only if enabled.
+class KexiMainMenuActionShortcut : public QShortcut
+{
+    Q_OBJECT
+public:
+    KexiMainMenuActionShortcut(const QKeySequence& key, QWidget *parent, QAction *action);
+
+protected slots:
+    //! Triggers associated action only when this action is enabled
+    void slotActivated();
+
+private:
+    QPointer<QAction> m_action;
 };
 
 #endif

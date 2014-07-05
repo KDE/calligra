@@ -148,6 +148,7 @@ KarbonDocument::KarbonDocument(KarbonPart* part)
         : KoDocument(part)
         , d(new Private())
 {
+    Q_ASSERT(part);
     resourceManager()->setUndoStack(undoStack());
 
     initConfig();

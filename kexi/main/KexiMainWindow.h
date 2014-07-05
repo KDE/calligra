@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -32,7 +32,6 @@
 
 class QPaintEvent;
 class KexiProjectData;
-//2.x class KexiSimplePrintingSettings;
 
 namespace KexiDB
 {
@@ -45,10 +44,7 @@ class Info;
 class Part;
 }
 
-class KXMLGUIClient;
-class KXMLGUIFactory;
 class KexiMainWidget;
-class KexiUserFeedbackAgent;
 
 #include <ktabwidget.h>
 
@@ -190,6 +186,9 @@ public:
 
     /*! Implemented for KexiMainWindow */
     virtual KexiUserFeedbackAgent* userFeedbackAgent() const;
+
+    /*! Implemented for KexiMainWindow */
+    virtual KexiMigrateManagerInterface* migrateManager();
 
 public slots:
     /*! Implemented for KexiMainWindow */
@@ -360,7 +359,7 @@ protected:
 
     void setupPropertyEditor();
 
-    void setupMainMenuActionShortcut(KAction* action, const char* slot);
+    void setupMainMenuActionShortcut(KAction* action);
 
     /*! Creates standard actions like new, open, save ... */
     void setupActions();
@@ -416,9 +415,6 @@ protected:
 
     //! Called by KexiMainWidget::queryClose()
     bool queryClose();
-
-    //! Called by KexiMainWidget::queryExit()
-    bool queryExit();
 
     /*! Implemented for KexiMainWindowIface.
      Switches \a window to view \a mode. Activates the window if it is not the current window. */

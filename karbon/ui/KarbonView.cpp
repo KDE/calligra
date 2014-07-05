@@ -564,7 +564,7 @@ void KarbonView::fileImportGraphic()
         picture->setKeepAspectRatio(true);
 
         KUndo2Command * cmd = d->canvas->shapeController()->addShapeDirect(picture);
-        cmd->setText(i18nc("(qtundo-format)", "Insert graphics"));
+        cmd->setText(kundo2_i18n("Insert graphics"));
         d->canvas->addCommand(cmd);
         d->canvas->shapeManager()->selection()->select(picture);
         return;
@@ -791,11 +791,11 @@ void KarbonView::selectionFlip(bool horizontally, bool vertically)
 
     KUndo2Command *cmd = new KoShapeTransformCommand(selectedShapes, oldState, newState);
     if (horizontally && !vertically)
-        cmd->setText(i18nc("(qtundo-format)", "Mirror Horizontally"));
+        cmd->setText(kundo2_i18n("Mirror Horizontally"));
     else if (!horizontally && vertically)
-        cmd->setText(i18nc("(qtundo-format)", "Mirror Vertically"));
+        cmd->setText(kundo2_i18n("Mirror Vertically"));
     else
-        cmd->setText(i18nc("(qtundo-format)", "Mirror Horizontally and Vertically"));
+        cmd->setText(kundo2_i18n("Mirror Horizontally and Vertically"));
     d->canvas->addCommand(cmd);
 }
 
@@ -850,7 +850,7 @@ void KarbonView::separatePath()
     }
 
     KUndo2Command *cmd = new KUndo2Command;
-    cmd->setText(i18nc("(qtundo-format)", "Separate paths"));
+    cmd->setText(kundo2_i18n("Separate paths"));
 
     foreach(KoPathShape* p, paths) {
         QList<KoPathShape*> separatedPaths;
@@ -917,7 +917,7 @@ void KarbonView::booleanOperation(KarbonBooleanCommand::BooleanOperation operati
     }
 
     if (paths.size() == 2) {
-        KUndo2Command * macro = new KUndo2Command(i18nc("(qtundo-format)", "Boolean Operation"));
+        KUndo2Command * macro = new KUndo2Command(kundo2_i18n("Boolean Operation"));
         KoParameterShape * paramShape = dynamic_cast<KoParameterShape*>(paths[0]);
         if (paramShape && paramShape->isParametricShape())
             new KoParameterToPathCommand(paramShape, macro);

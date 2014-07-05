@@ -29,7 +29,7 @@ KPrAddCustomSlideShowCommand::KPrAddCustomSlideShowCommand(KPrDocument *doc, KPr
     , m_model(model)
     , m_name(name)
 {
-    setText(i18n("Add custom slide show"));
+    setText(kundo2_i18n("Add custom slide show"));
 }
 
 KPrAddCustomSlideShowCommand::~KPrAddCustomSlideShowCommand()

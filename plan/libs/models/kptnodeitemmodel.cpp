@@ -2583,12 +2583,12 @@ KUndo2Command *NodeModel::setName( Node *node, const QVariant &value, int role )
             if ( value.toString() == node->name() ) {
                 return 0;
             }
-            QString s = i18nc( "(qtundo-format)", "Modify name" );
+            KUndo2MagicString s = kundo2_i18n( "Modify name" );
             switch ( node->type() ) {
-                case Node::Type_Task: s = i18nc( "(qtundo-format)", "Modify task name" ); break;
-                case Node::Type_Milestone: s = i18nc( "(qtundo-format)", "Modify milestone name" ); break;
-                case Node::Type_Summarytask: s = i18nc( "(qtundo-format)", "Modify summarytask name" ); break;
-                case Node::Type_Project: s = i18nc( "(qtundo-format)", "Modify project name" ); break;
+                case Node::Type_Task: s = kundo2_i18n( "Modify task name" ); break;
+                case Node::Type_Milestone: s = kundo2_i18n( "Modify milestone name" ); break;
+                case Node::Type_Summarytask: s = kundo2_i18n( "Modify summarytask name" ); break;
+                case Node::Type_Project: s = kundo2_i18n( "Modify project name" ); break;
             }
             return new NodeModifyNameCmd( *node, value.toString(), s );
         }
@@ -2601,7 +2601,7 @@ KUndo2Command *NodeModel::setLeader( Node *node, const QVariant &value, int role
     switch ( role ) {
         case Qt::EditRole: {
             if ( value.toString() != node->leader() ) {
-                return new NodeModifyLeaderCmd( *node, value.toString(), i18nc( "(qtundo-format)", "Modify responsible" ) );
+                return new NodeModifyLeaderCmd( *node, value.toString(), kundo2_i18n( "Modify responsible" ) );
             }
             break;
         }
@@ -2623,7 +2623,7 @@ KUndo2Command *NodeModel::setDescription( Node *node, const QVariant &value, int
             if ( value.toString() == node->description() ) {
                 return 0;
             }
-            return new NodeModifyDescriptionCmd( *node, value.toString(), i18nc( "(qtundo-format)", "Modify task description" ) );
+            return new NodeModifyDescriptionCmd( *node, value.toString(), kundo2_i18n( "Modify task description" ) );
     }
     return 0;
 }
@@ -2646,7 +2646,7 @@ KUndo2Command *NodeModel::setConstraint( Node *node, const QVariant &value, int 
             }
             //kDebug(planDbg())<<v;
             if ( v != node->constraint() ) {
-                return new NodeModifyConstraintCmd( *node, v, i18nc( "(qtundo-format)", "Modify constraint type" ) );
+                return new NodeModifyConstraintCmd( *node, v, kundo2_i18n( "Modify constraint type" ) );
             }
             break;
         }
@@ -2663,7 +2663,7 @@ KUndo2Command *NodeModel::setConstraintStartTime( Node *node, const QVariant &va
             QDateTime dt = value.toDateTime();
             dt.setTime( QTime( dt.time().hour(), dt.time().minute() ) ); // reset possible secs/msecs
             if ( dt != node->constraintStartTime() ) {
-                return new NodeModifyConstraintStartTimeCmd( *node, dt, i18nc( "(qtundo-format)", "Modify constraint start time" ) );
+                return new NodeModifyConstraintStartTimeCmd( *node, dt, kundo2_i18n( "Modify constraint start time" ) );
             }
             break;
         }
@@ -2680,7 +2680,7 @@ KUndo2Command *NodeModel::setConstraintEndTime( Node *node, const QVariant &valu
             QDateTime dt = value.toDateTime();
             dt.setTime( QTime( dt.time().hour(), dt.time().minute() ) ); // reset possible secs/msecs
             if ( dt != node->constraintEndTime() ) {
-                return new NodeModifyConstraintEndTimeCmd( *node, dt, i18nc( "(qtundo-format)", "Modify constraint end time" ) );
+                return new NodeModifyConstraintEndTimeCmd( *node, dt, kundo2_i18n( "Modify constraint end time" ) );
             }
             break;
         }
@@ -2705,7 +2705,7 @@ KUndo2Command *NodeModel::setEstimateType( Node *node, const QVariant &value, in
                 v = Estimate::Type( value.toInt() );
             }
             if ( v != node->estimate()->type() ) {
-                return new ModifyEstimateTypeCmd( *node, node->estimate()->type(), v, i18nc( "(qtundo-format)", "Modify estimate type" ) );
+                return new ModifyEstimateTypeCmd( *node, node->estimate()->type(), v, kundo2_i18n( "Modify estimate type" ) );
             }
             break;
         }
@@ -2731,7 +2731,7 @@ KUndo2Command *NodeModel::setEstimateCalendar( Node *node, const QVariant &value
                 }
             }
             if ( c != old ) {
-                return new ModifyEstimateCalendarCmd( *node, old, c, i18nc( "(qtundo-format)", "Modify estimate calendar" ) );
+                return new ModifyEstimateCalendarCmd( *node, old, c, kundo2_i18n( "Modify estimate calendar" ) );
             }
             break;
         }
@@ -2764,11 +2764,11 @@ KUndo2Command *NodeModel::setEstimate( Node *node, const QVariant &value, int ro
             //kDebug(planDbg())<<d<<","<<unit<<" ->"<<value.toList()[1].toInt();
             MacroCommand *cmd = 0;
             if ( d != node->estimate()->expectedEstimate() ) {
-                if ( cmd == 0 ) cmd = new MacroCommand( i18nc( "(qtundo-format)", "Modify estimate" ) );
+                if ( cmd == 0 ) cmd = new MacroCommand( kundo2_i18n( "Modify estimate" ) );
                 cmd->addCommand( new ModifyEstimateCmd( *node, node->estimate()->expectedEstimate(), d ) );
             }
             if ( unit != node->estimate()->unit() ) {
-                if ( cmd == 0 ) cmd = new MacroCommand( i18nc( "(qtundo-format)", "Modify estimate" ) );
+                if ( cmd == 0 ) cmd = new MacroCommand( kundo2_i18n( "Modify estimate" ) );
                 cmd->addCommand( new ModifyEstimateUnitCmd( *node, node->estimate()->unit(), unit ) );
             }
             if ( cmd ) {
@@ -2790,7 +2790,7 @@ KUndo2Command *NodeModel::setOptimisticRatio( Node *node, const QVariant &value,
     switch ( role ) {
         case Qt::EditRole:
             if ( value.toInt() != node->estimate()->optimisticRatio() ) {
-                return new EstimateModifyOptimisticRatioCmd( *node, node->estimate()->optimisticRatio(), value.toInt(), i18nc( "(qtundo-format)", "Modify optimistic estimate" ) );
+                return new EstimateModifyOptimisticRatioCmd( *node, node->estimate()->optimisticRatio(), value.toInt(), kundo2_i18n( "Modify optimistic estimate" ) );
             }
             break;
         default:
@@ -2807,7 +2807,7 @@ KUndo2Command *NodeModel::setPessimisticRatio( Node *node, const QVariant &value
     switch ( role ) {
         case Qt::EditRole:
             if ( value.toInt() != node->estimate()->pessimisticRatio() ) {
-                return new EstimateModifyPessimisticRatioCmd( *node, node->estimate()->pessimisticRatio(), value.toInt(), i18nc( "(qtundo-format)", "Modify pessimistic estimate" ) );
+                return new EstimateModifyPessimisticRatioCmd( *node, node->estimate()->pessimisticRatio(), value.toInt(), kundo2_i18n( "Modify pessimistic estimate" ) );
             }
         default:
             break;
@@ -2831,7 +2831,7 @@ KUndo2Command *NodeModel::setRiskType( Node *node, const QVariant &value, int ro
             }
             if ( val != node->estimate()->risktype() ) {
                 Estimate::Risktype v = Estimate::Risktype( val );
-                return new EstimateModifyRiskCmd( *node, node->estimate()->risktype(), v, i18nc( "(qtundo-format)", "Modify risk type" ) );
+                return new EstimateModifyRiskCmd( *node, node->estimate()->risktype(), v, kundo2_i18n( "Modify risk type" ) );
             }
             break;
         }
@@ -2851,7 +2851,7 @@ KUndo2Command *NodeModel::setRunningAccount( Node *node, const QVariant &value, 
                 Account *a = m_project->accounts().findAccount( lst.at( value.toInt() ) );
                 Account *old = node->runningAccount();
                 if ( old != a ) {
-                    return new NodeModifyRunningAccountCmd( *node, old, a, i18nc( "(qtundo-format)", "Modify running account" ) );
+                    return new NodeModifyRunningAccountCmd( *node, old, a, kundo2_i18n( "Modify running account" ) );
                 }
             }
             break;
@@ -2873,7 +2873,7 @@ KUndo2Command *NodeModel::setStartupAccount( Node *node, const QVariant &value, 
                 Account *old = node->startupAccount();
                 //kDebug(planDbg())<<(value.toInt())<<";"<<(lst.at( value.toInt()))<<":"<<a;
                 if ( old != a ) {
-                    return new NodeModifyStartupAccountCmd( *node, old, a, i18nc( "(qtundo-format)", "Modify startup account" ) );
+                    return new NodeModifyStartupAccountCmd( *node, old, a, kundo2_i18n( "Modify startup account" ) );
                 }
             }
             break;
@@ -2890,7 +2890,7 @@ KUndo2Command *NodeModel::setStartupCost( Node *node, const QVariant &value, int
         case Qt::EditRole: {
             double v = KGlobal::locale()->readMoney( value.toString() );
             if ( v != node->startupCost() ) {
-                return new NodeModifyStartupCostCmd( *node, v, i18nc( "(qtundo-format)", "Modify startup cost" ) );
+                return new NodeModifyStartupCostCmd( *node, v, kundo2_i18n( "Modify startup cost" ) );
             }
             break;
         }
@@ -2910,7 +2910,7 @@ KUndo2Command *NodeModel::setShutdownAccount( Node *node, const QVariant &value,
                 Account *a = m_project->accounts().findAccount( lst.at( value.toInt() ) );
                 Account *old = node->shutdownAccount();
                 if ( old != a ) {
-                    return new NodeModifyShutdownAccountCmd( *node, old, a, i18nc( "(qtundo-format)", "Modify shutdown account" ) );
+                    return new NodeModifyShutdownAccountCmd( *node, old, a, kundo2_i18n( "Modify shutdown account" ) );
                 }
             }
             break;
@@ -2927,7 +2927,7 @@ KUndo2Command *NodeModel::setShutdownCost( Node *node, const QVariant &value, in
         case Qt::EditRole: {
             double v = KGlobal::locale()->readMoney( value.toString() );
             if ( v != node->shutdownCost() ) {
-                return new NodeModifyShutdownCostCmd( *node, v, i18nc( "(qtundo-format)", "Modify shutdown cost" ) );
+                return new NodeModifyShutdownCostCmd( *node, v, kundo2_i18n( "Modify shutdown cost" ) );
             }
             break;
         }
@@ -2949,7 +2949,7 @@ KUndo2Command *NodeModel::setRemainingEffort( Node *node, const QVariant &value,
         double d( value.toList()[0].toDouble() );
         Duration::Unit unit = static_cast<Duration::Unit>( value.toList()[1].toInt() );
         Duration dur( d, unit );
-        return new ModifyCompletionRemainingEffortCmd( t->completion(), QDate::currentDate(), dur, i18nc( "(qtundo-format)", "Modify remaining effort" ) );
+        return new ModifyCompletionRemainingEffortCmd( t->completion(), QDate::currentDate(), dur, kundo2_i18n( "Modify remaining effort" ) );
     }
     return 0;
 }
@@ -2961,7 +2961,7 @@ KUndo2Command *NodeModel::setActualEffort( Node *node, const QVariant &value, in
         double d( value.toList()[0].toDouble() );
         Duration::Unit unit = static_cast<Duration::Unit>( value.toList()[1].toInt() );
         Duration dur( d, unit );
-        return new ModifyCompletionActualEffortCmd( t->completion(), QDate::currentDate(), dur, i18nc( "(qtundo-format)", "Modify actual effort" ) );
+        return new ModifyCompletionActualEffortCmd( t->completion(), QDate::currentDate(), dur, kundo2_i18n( "Modify actual effort" ) );
     }
     return 0;
 }
@@ -2974,7 +2974,7 @@ KUndo2Command *NodeModel::setStartedTime( Node *node, const QVariant &value, int
             if ( t == 0 ) {
                 return 0;
             }
-            MacroCommand *m = new MacroCommand( i18nc( "(qtundo-format)", "Modify actual start time" ) );
+            MacroCommand *m = new MacroCommand( kundo2_i18n( "Modify actual start time" ) );
             if ( ! t->completion().isStarted() ) {
                 m->addCommand( new ModifyCompletionStartedCmd( t->completion(), true ) );
             }
@@ -3003,7 +3003,7 @@ KUndo2Command *NodeModel::setFinishedTime( Node *node, const QVariant &value, in
             if ( t == 0 ) {
                 return 0;
             }
-            MacroCommand *m = new MacroCommand( i18nc( "(qtundo-format)", "Modify actual finish time" ) );
+            MacroCommand *m = new MacroCommand( kundo2_i18n( "Modify actual finish time" ) );
             if ( ! t->completion().isFinished() ) {
                 m->addCommand( new ModifyCompletionFinishedCmd( t->completion(), true ) );
                 if ( t->completion().percentFinished() < 100 ) {
@@ -3420,7 +3420,7 @@ bool NodeItemModel::setAllocation( Node *node, const QVariant &value, int role )
                 if ( r != 0 ) {
                     continue;
                 }
-                if ( cmd == 0 ) cmd = new MacroCommand( i18nc( "(qtundo-format)", "Add resource" ) );
+                if ( cmd == 0 ) cmd = new MacroCommand( kundo2_i18n( "Add resource" ) );
                 if ( pargr == 0 ) {
                     pargr = new ResourceGroup();
                     pargr->setName( i18n( "Resources" ) );
@@ -3435,7 +3435,7 @@ bool NodeItemModel::setAllocation( Node *node, const QVariant &value, int role )
                 cmd = 0;
             }
 
-            QString c = i18nc( "(qtundo-format)", "Modify resource allocations" );
+            KUndo2MagicString c = kundo2_i18n( "Modify resource allocations" );
             // Handle deleted requests
             foreach ( const QString &s, req ) {
                 // if a request is not in alloc, it must have been be removed by the user
@@ -3512,7 +3512,7 @@ bool NodeItemModel::setCompletion( Node *node, const QVariant &value, int role )
         Completion &c = static_cast<Task*>( node )->completion();
         QDateTime dt = QDateTime::currentDateTime();
         QDate date = dt.date();
-        MacroCommand *m = new MacroCommand( i18nc( "(qtundo-format)", "Modify completion" ) );
+        MacroCommand *m = new MacroCommand( kundo2_i18n( "Modify completion" ) );
         if ( ! c.isStarted() ) {
             m->addCommand( new ModifyCompletionStartTimeCmd( c, dt ) );
             m->addCommand( new ModifyCompletionStartedCmd( c, true ) );
@@ -3541,7 +3541,7 @@ bool NodeItemModel::setCompletion( Node *node, const QVariant &value, int role )
         if ( value.toInt() > 0 ) {
             QDateTime dt = QDateTime::currentDateTime();
             QDate date = dt.date();
-            MacroCommand *m = new MacroCommand( i18nc( "(qtundo-format)", "Set finished" ) );
+            MacroCommand *m = new MacroCommand( kundo2_i18n( "Set finished" ) );
             m->addCommand( new ModifyCompletionStartTimeCmd( c, dt ) );
             m->addCommand( new ModifyCompletionStartedCmd( c, true ) );
             m->addCommand( new ModifyCompletionFinishTimeCmd( c, dt ) );
@@ -3899,7 +3899,7 @@ bool NodeItemModel::dropProjectMimeData( const QMimeData *data, Qt::DropAction a
         return false;
     }
     project.generateUniqueNodeIds();
-    KUndo2Command *cmd = new InsertProjectCmd( project, n, n->childNode( row - 1 ), i18nc( "(qtundo-format) 1=project or task name", "Insert %1", project.name() ) );
+    KUndo2Command *cmd = new InsertProjectCmd( project, n, n->childNode( row - 1 ), kundo2_i18nc("1=project or task name", "Insert %1", project.name() ) );
     emit executeCommand( cmd );
     return true;
 }
@@ -3957,14 +3957,14 @@ bool NodeItemModel::importProjectFile( const KUrl &url, Qt::DropAction /*action*
     if ( n == 0 ) {
         n = m_project;
     }
-    KUndo2Command *cmd = new InsertProjectCmd( project, n, n->childNode( row - 1 ), i18nc( "(qtundo-format)", "Insert %1", url.fileName() ) );
+    KUndo2Command *cmd = new InsertProjectCmd( project, n, n->childNode( row - 1 ), kundo2_i18n( "Insert %1", url.fileName() ) );
     emit executeCommand( cmd );
     return true;
 }
 
 KUndo2Command *NodeItemModel::createAllocationCommand( Task &task, const QList<Resource*> &lst )
 {
-    MacroCommand *cmd = new MacroCommand( i18nc( "(qtundo-format)", "Modify resource allocations" ) );
+    MacroCommand *cmd = new MacroCommand( kundo2_i18n( "Modify resource allocations" ) );
     QMap<ResourceGroup*, ResourceGroupRequest*> groups;
     foreach ( Resource *r, lst ) {
         if ( ! groups.contains( r->parentGroup() ) && task.resourceGroupRequest( r->parentGroup() ) == 0 ) {
@@ -4036,7 +4036,7 @@ bool NodeItemModel::dropMimeData( const QMimeData *data, Qt::DropAction action, 
             int offset = 0;
             MacroCommand *cmd = 0;
             foreach ( Node *n, nodes ) {
-                if ( cmd == 0 ) cmd = new MacroCommand( i18nc( "(qtundo-format)", "Move tasks" ) );
+                if ( cmd == 0 ) cmd = new MacroCommand( kundo2_i18n( "Move tasks" ) );
                 // append nodes if dropped *on* another node, insert if dropped *after*
                 int pos = row == -1 ? -1 : row + offset;
                 if ( pos >= 0 && n->parentNode() == par && par->indexOf( n ) < pos ) {
@@ -4090,7 +4090,7 @@ void NodeItemModel::slotNodeChanged( Node *node )
 
 QModelIndex NodeItemModel::insertTask( Node *node, Node *after )
 {
-    MacroCommand *cmd = new MacroCommand( i18nc( "(qtundo-format)", "Add task" ) );
+    MacroCommand *cmd = new MacroCommand( kundo2_i18n( "Add task" ) );
     cmd->addCommand( new TaskAddCmd( m_project, node, after ) );
     if ( m_project && node->type() == Node::Type_Task ) {
         QMap<ResourceGroup*, ResourceGroupRequest*> groups;
@@ -4119,7 +4119,7 @@ QModelIndex NodeItemModel::insertTask( Node *node, Node *after )
 
 QModelIndex NodeItemModel::insertSubtask( Node *node, Node *parent )
 {
-    emit executeCommand( new SubtaskAddCmd( m_project, node, parent, i18nc( "(qtundo-format)", "Add sub-task" ) ) );
+    emit executeCommand( new SubtaskAddCmd( m_project, node, parent, kundo2_i18n( "Add sub-task" ) ) );
     int row = -1;
     if ( node->parentNode() ) {
         row = node->parentNode()->indexOf( node );
@@ -4783,7 +4783,7 @@ bool MilestoneItemModel::dropMimeData( const QMimeData *data, Qt::DropAction act
         int offset = 0;
         MacroCommand *cmd = 0;
         foreach ( Node *n, nodes ) {
-            if ( cmd == 0 ) cmd = new MacroCommand( i18nc( "(qtundo-format)", "Move tasks" ) );
+            if ( cmd == 0 ) cmd = new MacroCommand( kundo2_i18n( "Move tasks" ) );
             // append nodes if dropped *on* another node, insert if dropped *after*
             int pos = row == -1 ? -1 : row + offset;
             cmd->addCommand( new NodeMoveCmd( m_project, n, par, pos ) );

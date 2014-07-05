@@ -74,6 +74,9 @@
        <height>60</height>
       </size>
      </property>
+     <property name="alternatingRowColors">
+      <bool>true</bool>
+     </property>
      <property name="rootIsDecorated">
       <bool>false</bool>
      </property>

@@ -23,7 +23,10 @@
 #include <db/driver.h>
 #include <db/utils.h>
 #include <core/kexi.h>
+#include <core/KexiMainWindowIface.h>
+#include <core/KexiMigrateManagerInterface.h>
 #include <kexiutils/utils.h>
+#include <migration/migratemanager.h>
 
 #include <QLayout>
 #include <QObject>
@@ -58,6 +61,19 @@ public:
     Private()
             : confirmOverwrites(true)
             , filtersUpdated(false) {
+    }
+
+    /*! Adds file dialog-compatible filter to @a filter and patterns to @allfilters based on
+        @a mimeName mime type name. Does nothing is excludedMimeTypes contains this mime name. */
+    bool addFilterForType(QString *filter, QStringList *allfilters, const QString &mimeName) const
+    {
+        const KMimeType::Ptr mime = KMimeType::mimeType(mimeName);
+        if (mime && !excludedMimeTypes.contains(mime->name().toLower())) {
+            *filter += KexiUtils::fileDialogFilterString(mime);
+            *allfilters += mime->patterns();
+            return true;
+        }
+        return false;
     }
 
     QString lastFileName;
@@ -176,44 +192,27 @@ void KexiFileWidget::updateFilters()
     const bool normalSavingMode = d->mode & SavingFileBasedDB && !(d->mode & Custom);
 
     if (normalOpeningMode || normalSavingMode) {
-        mime = KMimeType::mimeType(KexiDB::defaultFileBasedDriverMimeType());
-        if (mime && !d->excludedMimeTypes.contains(mime->name().toLower())) {
-            filter += KexiUtils::fileDialogFilterString(mime);
-            allfilters += mime->patterns();
-        }
+        d->addFilterForType(&filter, &allfilters, KexiDB::defaultFileBasedDriverMimeType());
     }
     if (normalOpeningMode || d->mode & SavingServerBasedDB) {
-        mime = KMimeType::mimeType("application/x-kexiproject-shortcut");
-        if (mime && !d->excludedMimeTypes.contains(mime->name().toLower())) {
-            filter += KexiUtils::fileDialogFilterString(mime);
-            allfilters += mime->patterns();
-        }
+        d->addFilterForType(&filter, &allfilters, "application/x-kexiproject-shortcut");
     }
     if (normalOpeningMode || d->mode & SavingServerBasedDB) {
-        mime = KMimeType::mimeType("application/x-kexi-connectiondata");
-        if (mime && !d->excludedMimeTypes.contains(mime->name().toLower())) {
-            filter += KexiUtils::fileDialogFilterString(mime);
-            allfilters += mime->patterns();
-        }
+        d->addFilterForType(&filter, &allfilters, "application/x-kexi-connectiondata");
     }
 
-//! @todo hardcoded for MSA:
     if (normalOpeningMode) {
-        mime = KMimeType::mimeType("application/vnd.ms-access");
-        if (mime && !d->excludedMimeTypes.contains(mime->name().toLower())) {
-            filter += KexiUtils::fileDialogFilterString(mime);
-            allfilters += mime->patterns();
+        const QList<QString> supportedFileMimeTypes = KexiMainWindowIface::global()->migrateManager()->supportedFileMimeTypes();
+        kDebug() << supportedFileMimeTypes;
+        foreach (const QString& supportedFileMimeType, supportedFileMimeTypes) {
+            d->addFilterForType(&filter, &allfilters, supportedFileMimeType);
         }
     }
 
     foreach(const QString& mimeName, d->additionalMimeTypes) {
         if (mimeName == "all/allfiles")
             continue;
-        if (d->excludedMimeTypes.contains(mimeName.toLower()))
-            continue;
-        filter += KexiUtils::fileDialogFilterString(mimeName);
-        mime = KMimeType::mimeType(mimeName);
-        allfilters += mime->patterns();
+        d->addFilterForType(&filter, &allfilters, mimeName);
     }
 
     if (!d->excludedMimeTypes.contains("all/allfiles")) {

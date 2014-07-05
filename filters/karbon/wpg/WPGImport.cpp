@@ -32,14 +32,12 @@
 #include <QString>
 #include <QFile>
 
-#include <libwpg/libwpg.h>
-#if LIBWPG_VERSION_MINOR<2
-#include <libwpg/WPGStreamImplementation.h>
-#else
-#include <libwpd-stream/libwpd-stream.h>
-#include <libwpd/libwpd.h>
-#endif
+#include <librevenge/librevenge.h>
+#include <librevenge-stream/librevenge-stream.h>
 
+#include <libwpg/libwpg.h>
+
+#include <cassert>
 #include <iostream>
 
 K_PLUGIN_FACTORY(WPGImportFactory, registerPlugin<WPGImport>();)
@@ -63,39 +61,29 @@ KoFilter::ConversionStatus WPGImport::convert(const QByteArray& from, const QByt
     if (to != "image/svg+xml")
         return KoFilter::NotImplemented;
 
-#if LIBWPG_VERSION_MINOR<2
-    WPXInputStream* input = new libwpg::WPGFileStream(m_chain->inputFile().toLocal8Bit());
-    if (input->isOLEStream()) {
-        WPXInputStream* olestream = input->getDocumentOLEStream();
-        if (olestream) {
-            delete input;
-            input = olestream;
-        }
-    }
-    libwpg::WPGString output;
-#else
-    WPXInputStream* input = new WPXFileStream(m_chain->inputFile().toLocal8Bit());
-    if (input->isOLEStream()) {
-        WPXInputStream* olestream = input->getDocumentOLEStream("Anything");
+    librevenge::RVNGInputStream* input = new librevenge::RVNGFileStream(m_chain->inputFile().toLocal8Bit());
+    if (input->isStructured()) {
+        librevenge::RVNGInputStream* olestream = input->getSubStreamByName("Anything");
         if (olestream) {
             delete input;
             input = olestream;
         }
      }
-     ::WPXString output;
-#endif
-
     if (!libwpg::WPGraphics::isSupported(input)) {
         kWarning() << "ERROR: Unsupported file format (unsupported version) or file is encrypted!";
         delete input;
         return KoFilter::NotImplemented;
     }
 
-    if (!libwpg::WPGraphics::generateSVG(input, output)) {
+     ::librevenge::RVNGStringVector output;
+     librevenge::RVNGSVGDrawingGenerator generator(output, "");
+
+    if (!libwpg::WPGraphics::parse(input, &generator)) {
         kWarning() << "ERROR: SVG Generation failed!";
         delete input;
         return KoFilter::ParsingError;
     }
+    assert(1 == output.size());
 
     delete input;
 
@@ -104,7 +92,8 @@ KoFilter::ConversionStatus WPGImport::convert(const QByteArray& from, const QByt
         kWarning() << "ERROR: Could not open output file" << m_chain->outputFile();
         return KoFilter::InternalError;
     }
-    outputFile.write(output.cstr());
+    outputFile.write("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n");
+    outputFile.write(output[0].cstr());
     outputFile.close();
 
     return KoFilter::OK;

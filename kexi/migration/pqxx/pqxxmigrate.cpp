@@ -45,7 +45,7 @@ to compile, let alone work.  This is meant as an example of
 what the system might be and is a work in progress
 */
 
-K_EXPORT_KEXIMIGRATE_DRIVER(PqxxMigrate, "pqxx")
+K_EXPORT_KEXIMIGRATE_DRIVER(PqxxMigrate, pqxx)
 
 //==================================================================================
 

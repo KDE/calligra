@@ -123,18 +123,18 @@ bool MergeCommand::process(Element* element)
     return true;
 }
 
-QString MergeCommand::name() const
+KUndo2MagicString MergeCommand::name() const
 {
     if (m_merge) { // MergeCommand
         if (m_mergeHorizontal) {
-            return i18n("Merge Cells Horizontally");
+            return kundo2_i18n("Merge Cells Horizontally");
         } else if (m_mergeVertical) {
-            return i18n("Merge Cells Vertically");
+            return kundo2_i18n("Merge Cells Vertically");
         } else {
-            return i18n("Merge Cells");
+            return kundo2_i18n("Merge Cells");
         }
     }
-    return i18n("Dissociate Cells");
+    return kundo2_i18n("Dissociate Cells");
 }
 
 bool MergeCommand::preProcessing()

@@ -104,7 +104,7 @@ StandardWorktimeDialog::StandardWorktimeDialog(Project &p, QWidget *parent)
 
 MacroCommand *StandardWorktimeDialog::buildCommand() {
     //kDebug(planDbg());
-    QString n = i18n("Modify Estimate Conversions");
+    KUndo2MagicString n = kundo2_i18n("Modify Estimate Conversions");
     MacroCommand *cmd = 0;
     if (m_original->year() != dia->inYear()) {
         if (cmd == 0) cmd = new MacroCommand(n);

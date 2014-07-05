@@ -65,7 +65,6 @@
 #include <kexiutils/FlowLayout.h>
 #endif
 
-#define KEXI_NO_PIXMAPCOLLECTION
 #ifdef __GNUC__
 #warning pixmapcollection
 #else

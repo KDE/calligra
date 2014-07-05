@@ -31,7 +31,7 @@ KPrReorderAnimationCommand::KPrReorderAnimationCommand(KPrShapeAnimations *shape
     , m_oldAnimation(oldAnimation)
     , m_newAnimation(newAnimation)
 {
-    setText(i18nc("(qtundo-format)", "Reorder animations"));
+    setText(kundo2_i18n("Reorder animations"));
 }
 
 KPrReorderAnimationCommand::~KPrReorderAnimationCommand()

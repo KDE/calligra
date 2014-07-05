@@ -35,14 +35,14 @@ KPrPageEffectSetCommand::KPrPageEffectSetCommand(KoPAPageBase * page, KPrPageEff
     Q_ASSERT( m_newPageEffect != m_oldPageEffect );
     if ( m_newPageEffect ) {
         if ( ! m_oldPageEffect ) {
-            setText( i18nc( "(qtundo-format)", "Create Slide Effect" ) );
+            setText( kundo2_i18n( "Create Slide Effect" ) );
         }
         else {
-            setText( i18nc( "(qtundo-format)", "Modify Slide Effect" ) );
+            setText( kundo2_i18n( "Modify Slide Effect" ) );
         }
     }
     else {
-        setText( i18nc( "(qtundo-format)", "Delete Slide Effect" ) );
+        setText( kundo2_i18n( "Delete Slide Effect" ) );
     }
 }
 

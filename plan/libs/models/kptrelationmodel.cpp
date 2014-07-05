@@ -334,7 +334,7 @@ bool RelationItemModel::setType( Relation *r, const QVariant &value, int role )
             if ( v == r->type() ) {
                 return false;
             }
-            emit executeCommand( new ModifyRelationTypeCmd( r, v, "Modify relation type" ) );
+            emit executeCommand( new ModifyRelationTypeCmd( r, v, kundo2_i18n("Modify relation type") ) );
             return true;
     }
     return false;
@@ -350,7 +350,7 @@ bool RelationItemModel::setLag( Relation *r, const QVariant &value, int role )
             if ( d == r->lag() ) {
                 return false;
             }
-            emit executeCommand( new ModifyRelationLagCmd( r, d, i18nc( "(qtundo-format)", "Modify relation time lag" ) ) );
+            emit executeCommand( new ModifyRelationLagCmd( r, d, kundo2_i18n( "Modify relation time lag" ) ) );
             return true;
         }
         default:
