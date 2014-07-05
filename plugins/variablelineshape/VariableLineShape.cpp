@@ -27,6 +27,13 @@
 #include <klocale.h>
 #include <kdebug.h>
 
+#ifndef QT_NO_DEBUG
+#include <qnumeric.h> // for qIsNaN
+static bool qIsNaNPoint(const QPointF &p) {
+        return qIsNaN(p.x()) || qIsNaN(p.y());
+}
+#endif
+
 VariableLineShape::VariableLineShape()
 : m_widthPercentage(100)
 {
