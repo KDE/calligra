@@ -21,12 +21,9 @@
 #ifndef KEXIPARTMANAGER_H
 #define KEXIPARTMANAGER_H
 
-#include <QObject>
-
-#include <kservice.h>
-
 #include <db/object.h>
-#include <kexi_export.h>
+#include "kexistaticpart.h"
+#include "kexiinternalpart.h"
 
 namespace KexiDB
 {
@@ -37,7 +34,6 @@ namespace KexiPart
 {
 class Info;
 class Part;
-class StaticPart;
 
 typedef QHash<QString, Info*> PartInfoDict;
 typedef QHash<QString, Info*>::iterator PartInfoDictIterator;
@@ -96,6 +92,9 @@ protected:
     //! Used by StaticPart
     void insertStaticPart(KexiPart::StaticPart* part);
 
+    //! Used by KexiInternalPart
+    KexiInternalPart* internalPartForClass(const QString& className);
+
 private:
     /**
      * Queries the plugin system and creates a list of available parts.
@@ -109,7 +108,8 @@ private:
 
     Private* const d;
 
-    friend class StaticPart;
+    friend KexiPart::StaticPart::StaticPart(const QString&, const QString&, const QString&);
+    friend KexiInternalPart* KexiInternalPart::part(KexiDB::MessageHandler*, const QString&);
 };
 
 }

@@ -21,8 +21,11 @@
 #include "kexicmdlineargs.h"
 #include "KexiRecentProjects.h"
 #include "KexiMainWindowIface.h"
+#include "kexipartmanager.h"
 #include <kexiutils/identifier.h>
 #include <db/msghandler.h>
+#include <db/drivermanager.h>
+
 #include <KoIcon.h>
 
 #include <QTimer>

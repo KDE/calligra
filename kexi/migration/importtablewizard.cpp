@@ -37,8 +37,10 @@
 #include <db/driver.h>
 #include <db/connectiondata.h>
 #include <db/utils.h>
+#include <db/drivermanager.h>
 #include <core/kexidbconnectionset.h>
 #include <core/kexi.h>
+#include <core/kexipartmanager.h>
 #include <kexiutils/utils.h>
 #include <kexidbdrivercombobox.h>
 #include <kexitextmsghandler.h>

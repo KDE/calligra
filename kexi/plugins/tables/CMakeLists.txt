@@ -34,4 +34,4 @@ install(TARGETS kexihandler_table  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  kexitablehandler.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra/kexi)
+install( FILES  kexitablehandler.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)

@@ -39,7 +39,6 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kdebug.h>
-#include <kpluginfactory.h>
 
 #include <QMetaObject>
 #include <QMenu>
@@ -238,6 +237,6 @@ KLocalizedString KexiScriptPart::i18nMessage(
     return Part::i18nMessage(englishMessage, window);
 }
 
-K_EXPORT_KEXI_PLUGIN( KexiScriptPart, script )
+K_EXPORT_KEXIPART_PLUGIN( KexiScriptPart, script )
 
 #include "kexiscriptpart.moc"

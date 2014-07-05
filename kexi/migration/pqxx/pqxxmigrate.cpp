@@ -19,6 +19,8 @@
 */
 
 #include "pqxxmigrate.h"
+#include <migration/keximigrate_p.h>
+
 #include "pg_type.h"
 
 #include <QString>
