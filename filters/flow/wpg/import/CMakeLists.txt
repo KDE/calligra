@@ -2,6 +2,7 @@ include_directories(
     ../../../libodfhandler/
     ${LIBODFGEN_INCLUDE_DIRS}
     ${LIBVISIO_INCLUDE_DIRS}
+    ${LIBWPG_INCLUDE_DIRS}
     ${KOMAIN_INCLUDES}
 )
 
