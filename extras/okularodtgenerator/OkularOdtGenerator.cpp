@@ -136,25 +136,27 @@ bool OkularOdtGenerator::loadDocument( const QString &fileName, QVector<Okular::
 
     // meta data
     const KoDocumentInfo *documentInfo = m_doc->documentInfo();
-    m_documentInfo.set( "title",       documentInfo->aboutInfo("title"),       i18nc("Document title","Title"));
-    m_documentInfo.set( "subject",     documentInfo->aboutInfo("subject"),     i18n("Subject"));
-    m_documentInfo.set( "keyword",     documentInfo->aboutInfo("keyword"),     i18n("Keywords"));
-    m_documentInfo.set( "description", documentInfo->aboutInfo("description"), i18n("Comments"));
+    m_documentInfo.set( Okular::DocumentInfo::MimeType, mimetype );
+    m_documentInfo.set( Okular::DocumentInfo::Producer, documentInfo->originalGenerator() );
+    m_documentInfo.set( Okular::DocumentInfo::Title,       documentInfo->aboutInfo("title") );
+    m_documentInfo.set( Okular::DocumentInfo::Subject,     documentInfo->aboutInfo("subject") );
+    m_documentInfo.set( Okular::DocumentInfo::Keywords,     documentInfo->aboutInfo("keyword") );
+    m_documentInfo.set( Okular::DocumentInfo::Description, documentInfo->aboutInfo("description") );
     m_documentInfo.set( "language",    KoGlobal::languageFromTag(documentInfo->aboutInfo("language")),  i18n("Language"));
 
     const QString creationDate = documentInfo->aboutInfo("creation-date");
     if (!creationDate.isEmpty()) {
         QDateTime t = QDateTime::fromString(creationDate, Qt::ISODate);
-        m_documentInfo.set( "creation-date", KGlobal::locale()->formatDateTime(t), i18n("Creation date"));
+        m_documentInfo.set( Okular::DocumentInfo::CreationDate, KGlobal::locale()->formatDateTime(t) );
     }
-    m_documentInfo.set( "initial-creator",  documentInfo->aboutInfo("initial-creator"), i18n("Initial creator"));
+    m_documentInfo.set( Okular::DocumentInfo::Creator,  documentInfo->aboutInfo("initial-creator") );
 
     const QString modificationDate = documentInfo->aboutInfo("date");
     if (!modificationDate.isEmpty()) {
         QDateTime t = QDateTime::fromString(modificationDate, Qt::ISODate);
-        m_documentInfo.set( "date", KGlobal::locale()->formatDateTime(t), i18n("Last modification date"));
+        m_documentInfo.set( Okular::DocumentInfo::ModificationDate, KGlobal::locale()->formatDateTime(t) );
     }
-    m_documentInfo.set( "creator", documentInfo->aboutInfo("creator"), i18n("Last modifier"));
+    m_documentInfo.set( Okular::DocumentInfo::Author, documentInfo->aboutInfo("creator") );
 
     // ToC
     QDomNode parentNode = m_documentSynopsis;

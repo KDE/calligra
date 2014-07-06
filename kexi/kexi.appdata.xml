@@ -171,6 +171,7 @@
     <screenshot>
       <caption>Table View storing images</caption>
       <caption xml:lang="ca">Vista de taula emmagatzemant imatges</caption>
+      <caption xml:lang="it">Vista tabella per archiviare immagini</caption>
       <caption xml:lang="nl">Tabelweergave bij opslaan van afbeeldingen</caption>
       <caption xml:lang="pl">Przechowywanie obrazów w widoku tabeli</caption>
       <caption xml:lang="pt">A área da tabela permite guardar as imagens</caption>

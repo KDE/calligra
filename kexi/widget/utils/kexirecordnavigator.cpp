@@ -277,7 +277,7 @@ void KexiRecordNavigator::updateButtons(uint recCnt)
         d->navBtnPrev->setEnabled(r > 1);
         d->navBtnFirst->setEnabled(r > 1);
         d->navBtnNext->setEnabled(r > 0
-                                  && r < (recCnt + (d->isInsertingEnabled ? (1 + d->editingIndicatorVisible/*if we're editing, next btn is avail.*/) : 0)));
+                                  && r < (recCnt + (d->isInsertingEnabled ? (1 + (d->editingIndicatorVisible ? 1 : 0)/*if we're editing, next btn is avail.*/) : 0)));
         d->navBtnLast->setEnabled(r != (recCnt + (d->isInsertingEnabled ? 1 : 0)) && (d->isInsertingEnabled || recCnt > 0));
     }
 }

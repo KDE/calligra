@@ -4,7 +4,7 @@ include_directories(  ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/core
 ${CMAKE_SOURCE_DIR}/kexi/kexiutils
 ${CMAKE_SOURCE_DIR}/kexi/main ${CMAKE_SOURCE_DIR}/kexi/main/startup
 ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_BINARY_DIR}/kexi/widget
-${CMAKE_SOURCE_DIR}/kexi/migration ${CMAKE_SOURCE_DIR}/libs ${KOMAIN_INCLUDES} ${KDE4_INCLUDES}  )
+${CMAKE_SOURCE_DIR}/libs ${KOMAIN_INCLUDES} ${KDE4_INCLUDES}  )
 
 ADD_DEFINITIONS(
 -DKEXI_NO_CTXT_HELP=1
@@ -61,6 +61,7 @@ target_link_libraries(
     ${CALLIGRADB_LIBS}
     kexiextendedwidgets
     kexiguiutils
+    keximigrate
     ${KDE4_KNEWSTUFF_LIBS}
     ${KDE4_KIO_LIBS}
     ${KDE4_KFILE_LIBS}

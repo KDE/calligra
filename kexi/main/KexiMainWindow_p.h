@@ -1958,6 +1958,8 @@ public:
 
     KexiUserFeedbackAgent userFeedback;
 
+    QScopedPointer<KexiMigration::MigrateManager> migrateManager;
+
 private:
     //! @todo move to KexiProject
     KexiWindowDict windows;
