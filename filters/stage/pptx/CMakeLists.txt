@@ -40,7 +40,7 @@ install( FILES
 )
 
 if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
-    install( FILES stage_pptx_thumbnail.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
+    install( FILES stage_pptx_thumbnail.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 endif(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
 
 if(SHOULD_BUILD_OKULARGENERATOR_PPTX)

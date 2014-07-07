@@ -32,7 +32,7 @@ install(TARGETS calligra_filter_doc2odt  DESTINATION ${PLUGIN_INSTALL_DIR})
 install( FILES  calligra_filter_doc2odt.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 
 if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
-    install( FILES  words_msword_thumbnail.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
+    install( FILES  words_msword_thumbnail.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 endif(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
 
 if(SHOULD_BUILD_OKULAR_GENERATOR_DOC)

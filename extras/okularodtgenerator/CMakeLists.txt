@@ -13,5 +13,5 @@ install( TARGETS okularGenerator_odt DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 ########### install files ###############
 
-install( FILES libokularGenerator_odt.desktop okularOdt.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra )
-install( PROGRAMS okularApplication_odt.desktop DESTINATION ${XDG_APPS_INSTALL_DIR}/calligra )
+install( FILES libokularGenerator_odt.desktop okularOdt.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+install( PROGRAMS okularApplication_odt.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
