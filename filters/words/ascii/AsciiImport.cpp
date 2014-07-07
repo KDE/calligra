@@ -153,7 +153,7 @@ KoFilter::ConversionStatus AsciiImport::convert(const QByteArray& from, const QB
         delete store;
         return KoFilter::FileNotFound;
     }
-    store->disallowNameExpansion();
+    
     kDebug(30502) << "created store.";
     KoOdfWriteStore odfStore(store);
     odfStore.manifestWriter(to);
