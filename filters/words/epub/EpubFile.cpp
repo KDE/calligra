@@ -61,7 +61,6 @@ KoFilter::ConversionStatus EpubFile::writeEpub(const QString &fileName,
         delete epubStore;
         return KoFilter::FileNotFound;
     }
-    epubStore->disallowNameExpansion();
 
     KoFilter::ConversionStatus  status;
 
