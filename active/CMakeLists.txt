@@ -68,5 +68,5 @@ endif( SHOULD_BUILD_FEATURE_RDF )
 
 
 install(TARGETS calligraactive RUNTIME DESTINATION bin)
-install(FILES calligraactive.desktop DESTINATION share/applications)
+install(FILES calligraactive.desktop DESTINATION ${XDG_APPS_INSTALL_DIR}/calligra)
 install(DIRECTORY qml DESTINATION share/calligraactive)

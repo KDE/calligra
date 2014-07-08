@@ -48,5 +48,5 @@ install(TARGETS kformdesigner_stdwidgets  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  kformdesigner_containers.desktop kformdesigner_stdwidgets.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/kformdesigner)
+install( FILES  kformdesigner_containers.desktop kformdesigner_stdwidgets.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra/kformdesigner)
 

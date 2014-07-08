@@ -24,4 +24,4 @@ install(TARGETS keximigrate_txt  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  keximigrate_txt.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  keximigrate_txt.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)

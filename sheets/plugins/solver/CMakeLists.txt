@@ -36,7 +36,7 @@ install(TARGETS sheetssolver  DESTINATION ${PLUGIN_INSTALL_DIR})
 ########### install files ###############
 
 install( FILES solver.rc  DESTINATION ${DATA_INSTALL_DIR}/sheets/viewplugins)
-install( FILES sheetssolver.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES sheetssolver.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 
 
 endif(GSL_FOUND)
