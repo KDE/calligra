@@ -165,11 +165,11 @@ void KisCanvasController::Private::showMirrorStateOnCanvas()
 {
     bool isXMirrored = coordinatesConverter->xAxisMirrored();
 
-    view->
-        showFloatingMessage(
-            i18nc("floating message about mirroring",
-                  "Horizontal mirroring: %1 ", isXMirrored ? i18n("ON") : i18n("OFF")),
-            QIcon(), 500, KisFloatingMessage::Low);
+//    view->
+//        showFloatingMessage(
+//            i18nc("floating message about mirroring",
+//                  "Horizontal mirroring: %1 ", isXMirrored ? i18n("ON") : i18n("OFF")),
+//            QIcon(), 500, KisFloatingMessage::Low);
 }
 
 void KisCanvasController::mirrorCanvas(bool enable)
@@ -185,11 +185,11 @@ void KisCanvasController::Private::showRotationValueOnCanvas()
 {
     qreal rotationAngle = coordinatesConverter->rotationAngle();
 
-    view->
-        showFloatingMessage(
-            i18nc("floating message about rotation", "Rotation: %1° ",
-                  KritaUtils::prettyFormatReal(rotationAngle)),
-            QIcon(), 500, KisFloatingMessage::Low);
+//    view->
+//        showFloatingMessage(
+//            i18nc("floating message about rotation", "Rotation: %1° ",
+//                  KritaUtils::prettyFormatReal(rotationAngle)),
+//            QIcon(), 500, KisFloatingMessage::Low);
 }
 
 void KisCanvasController::rotateCanvas(qreal angle)
