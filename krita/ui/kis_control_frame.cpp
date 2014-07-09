@@ -98,7 +98,7 @@ KisControlFrame::KisControlFrame(KisView2 * view, QWidget *parent, const char* n
     m_gradientWidget->setResourceAdapter(adapter);
 
     const KoColorDisplayRendererInterface *displayRenderer = view->canvasBase()->displayColorConverter()->displayRendererInterface();
-    KoDualColorButton * dual = new KoDualColorButton(view->resourceProvider()->fgColor(), view->resourceProvider()->bgColor(), displayRenderer, view, view);
+    KoDualColorButton * dual = new KoDualColorButton(view->resourceProvider()->fgColor(), view->resourceProvider()->bgColor(), displayRenderer);
 
     dual->setPopDialog(true);
     action  = new KAction(i18n("&Color"), this);
