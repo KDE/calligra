@@ -76,22 +76,21 @@ KoFilter::ConversionStatus HTMLImport::convert(const QByteArray& from, const QBy
     m_inputDir = QFileInfo(m_chain->inputFile()).dir();
     if(!m_inputDir.exists())
         return KoFilter::StupidError;
-    
+
     // create output store
     KoStore* storeout = KoStore::createStore(outputFile, KoStore::Write, "application/vnd.oasis.opendocument.spreadsheet", KoStore::Zip);
     if (!storeout)
         return KoFilter::FileNotFound;
-    storeout->disallowNameExpansion(); // Tell KoStore not to touch the file names
-    
+
     KoOdfWriteStore oasisStore(storeout);
     m_manifestWriter = oasisStore.manifestWriter("application/vnd.oasis.opendocument.spreadsheet");
     m_store = &oasisStore;
 
     m_mainStyles = new KoGenStyles();
-    
+
     KoXmlWriter* bodyWriter = m_store->bodyWriter();
     m_store->contentWriter(); // we need to create the instance even if the contentWriter is not used
-    
+
     bodyWriter->startElement("office:body");
     KoFilter::ConversionStatus result = loadUrl(m_chain->inputFile());
     if(result != KoFilter::OK)
@@ -177,7 +176,7 @@ bool HTMLImport::createMeta()
 KoFilter::ConversionStatus HTMLImport::loadUrl(const KUrl &url)
 {
     kDebug() << url;
-    
+
     KoXmlWriter* bodyWriter = m_store->bodyWriter();
     //KoXmlWriter* contentWriter = m_store->contentWriter();
 
@@ -190,7 +189,7 @@ KoFilter::ConversionStatus HTMLImport::loadUrl(const KUrl &url)
         html.setPluginsEnabled(false);
         html.setJavaEnabled(false);
         html.setMetaRefreshEnabled(false);
-        
+
         QEventLoop loop;
         connect(&html, SIGNAL(completed()), &loop, SLOT(quit()));
         QMetaObject::invokeMethod(&html,"openUrl", Qt::QueuedConnection, Q_ARG(KUrl,url));
@@ -208,7 +207,7 @@ KoFilter::ConversionStatus HTMLImport::loadUrl(const KUrl &url)
             bodyWriter->endElement(); // office:spreadsheet
             m_states.pop();
         }
-        
+
         // frames
         DOM::NodeList frameset = doc.getElementsByTagName("frameset");
         DOM::Node frame = frameset.item(0);
@@ -277,7 +276,7 @@ void HTMLImport::parseNode(DOM::Node node)
     } else {
         m_states.push(InNone);
     }
-    
+
     //kDebug()<<"...START nodeName="<<node.nodeName();
 
     DOM::Element e = node;
@@ -291,7 +290,7 @@ void HTMLImport::parseNode(DOM::Node node)
             parseNode(n);
         }
     }
-    
+
     State state = m_states.pop();
     if(state == InTable || state == InRow || state == InCell) {
         bodyWriter->endElement();

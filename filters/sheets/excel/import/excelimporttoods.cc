@@ -215,9 +215,6 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
 
     emit sigProgress(0);
 
-    // Tell KoStore not to touch the file names
-    d->storeout->disallowNameExpansion();
-
     // open inputFile
     d->workbook = new Swinder::Workbook(d->storeout);
     connect(d->workbook, SIGNAL(sigProgress(int)), this, SIGNAL(sigProgress(int)));

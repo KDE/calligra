@@ -53,4 +53,4 @@ kde4_install_icons( ${DATA_INSTALL_DIR}/calligra/icons  )
 
 ########### install files ###############
 
-install( FILES karbontools.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES karbontools.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)

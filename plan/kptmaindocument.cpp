@@ -385,7 +385,7 @@ bool MainDocument::saveWorkPackageFormat( const QString &file, const Node *node,
         return false;
     }
     // Tell KoStore not to touch the file names
-    store->disallowNameExpansion();
+
 
     if ( ! store->open( "root" ) ) {
         setErrorMessage( i18n( "Not able to write '%1'. Partition full?", QString( "maindoc.xml") ) );

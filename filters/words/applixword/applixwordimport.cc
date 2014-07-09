@@ -171,7 +171,6 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert(const QByteArray& from, con
         delete store;
         return KoFilter::FileNotFound;
     }
-    store->disallowNameExpansion();
     KoOdfWriteStore odfStore(store);
     odfStore.manifestWriter(to);
 

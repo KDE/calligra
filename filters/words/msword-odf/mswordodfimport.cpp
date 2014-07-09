@@ -173,7 +173,6 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
         return KoFilter::FileNotFound;
     }
     finalizer.m_store = storeout;
-    storeout->disallowNameExpansion();
     kDebug(30513) << "created storeout.";
     KoOdfWriteStore oasisStore(storeout);
 

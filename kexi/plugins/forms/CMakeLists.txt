@@ -128,5 +128,5 @@ install(TARGETS kexiformutils  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 
-install( FILES  kformdesigner_kexidbfactory.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/kformdesigner)
-install( FILES  kexiformhandler.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/kexi)
+install( FILES  kformdesigner_kexidbfactory.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra/kformdesigner)
+install( FILES  kexiformhandler.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra/kexi)

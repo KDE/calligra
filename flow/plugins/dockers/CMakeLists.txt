@@ -21,5 +21,5 @@ target_link_libraries(flowdockersplugin komain kowidgets ${KDE4_KNEWSTUFF3_LIBS}
 
 install(TARGETS flowdockersplugin DESTINATION ${PLUGIN_INSTALL_DIR})
 
-install(FILES flowdockersplugin.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install(FILES flowdockersplugin.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 install(FILES stencilboxdocker/flow_stencils.knsrc DESTINATION ${CONFIG_INSTALL_DIR})
