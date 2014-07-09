@@ -369,8 +369,8 @@ void KisCanvas2::createOpenGLCanvas()
 
 void KisCanvas2::createCanvas(bool useOpenGL)
 {
-    const KoColorProfile *profile = m_d->view->resourceProvider()->currentDisplayProfile();
-    m_d->displayColorConverter->setMonitorProfile(profile);
+//    const KoColorProfile *profile = m_d->view->resourceProvider()->currentDisplayProfile();
+//    m_d->displayColorConverter->setMonitorProfile(profile);
 
     if (useOpenGL) {
 #ifdef HAVE_OPENGL
