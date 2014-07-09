@@ -54,11 +54,6 @@ KisGridManager::~KisGridManager()
 
 }
 
-void KisGridManager::setView(KisImageView* imageView)
-{
-    m_imageView = imageView;
-}
-
 void KisGridManager::setup(KActionCollection * collection)
 {
     //there is no grid by default

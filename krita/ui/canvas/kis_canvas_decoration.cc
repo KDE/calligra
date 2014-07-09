@@ -41,6 +41,11 @@ KisCanvasDecoration::~KisCanvasDecoration()
     delete d;
 }
 
+void KisCanvasDecoration::setView(KisImageView *imageView)
+{
+    d->view = imageView;
+}
+
 const QString& KisCanvasDecoration::id() const
 {
     return d->id;

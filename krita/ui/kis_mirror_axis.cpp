@@ -41,6 +41,7 @@
 #include "kis_image.h"
 #include "canvas/kis_canvas_controller.h"
 #include "input/kis_input_manager.h"
+#include "kis_image_view.h"
 
 class KisMirrorAxis::Private
 {
@@ -80,7 +81,7 @@ public:
 };
 
 KisMirrorAxis::KisMirrorAxis(KisCanvasResourceProvider* provider, KisView2* parent)
-    : KisCanvasDecoration("mirror_axis", i18n("Mirror Axis"), parent), d(new Private(this))
+    : KisCanvasDecoration("mirror_axis", i18n("Mirror Axis")), d(new Private(this))
 {
     d->resourceProvider = provider;
     connect(d->resourceProvider, SIGNAL(mirrorModeChanged()), SLOT(mirrorModeChanged()));

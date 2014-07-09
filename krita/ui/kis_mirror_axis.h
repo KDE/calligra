@@ -22,7 +22,9 @@
 
 #include "kis_canvas_decoration.h"
 
+class KisImageView;
 class KisCanvasResourceProvider;
+
 class KisMirrorAxis : public KisCanvasDecoration
 {
     Q_OBJECT

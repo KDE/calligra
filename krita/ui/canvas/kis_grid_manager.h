@@ -38,9 +38,8 @@ class KRITAUI_EXPORT KisGridManager : public KisCanvasDecoration
 public:
     KisGridManager(KisView2 * parent);
     ~KisGridManager();
-public:
 
-    void setView(KisImageView* imageView);
+public:
 
     void setup(KActionCollection * collection);
 
@@ -69,7 +68,6 @@ protected:
 private:
 
     KisView2* m_view;
-    KisImageView* m_imageView;
     KToggleAction *toggleGrid;
     KToggleAction* m_toggleSnapToGrid;
     KAction* m_gridConfig;
