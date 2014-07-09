@@ -74,6 +74,11 @@ void KisCanvasDecoration::toggleVisibility()
     setVisible(!visible());
 }
 
+KisImageView *KisCanvasDecoration::imageView()
+{
+    return d->view;
+}
+
 void KisCanvasDecoration::paint(QPainter& gc, const QRectF& updateArea, const KisCoordinatesConverter *converter, KisCanvas2 *canvas = 0)
 {
     if (visible())

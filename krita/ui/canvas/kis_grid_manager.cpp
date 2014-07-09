@@ -42,6 +42,7 @@
 #include "kis_image.h"
 #include "kis_view2.h"
 #include "kis_doc2.h"
+#include "kis_image_view.h"
 
 KisGridManager::KisGridManager(KisView2 * parent)
         : KisCanvasDecoration("grid", i18n("Grid"), 0), m_view(parent)
@@ -54,8 +55,14 @@ KisGridManager::~KisGridManager()
 
 }
 
+
 void KisGridManager::setup(KActionCollection * collection)
 {
+    if (imageView() && imageView()->parentView()) {
+        m_view = imageView()->parentView();
+    }
+    if (m_view == 0 || m_view->document() == 0)  return;
+
     //there is no grid by default
     m_view->document()->gridData().setShowGrid(false);
 

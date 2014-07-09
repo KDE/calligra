@@ -38,7 +38,6 @@ class KRITAUI_EXPORT KisGridManager : public KisCanvasDecoration
 public:
     KisGridManager(KisView2 * parent);
     ~KisGridManager();
-
 public:
 
     void setup(KActionCollection * collection);

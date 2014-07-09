@@ -97,18 +97,19 @@ KisControlFrame::KisControlFrame(KisView2 * view, QWidget *parent, const char* n
     QSharedPointer<KoAbstractResourceServerAdapter> adapter (new KoResourceServerAdapter<KoAbstractGradient>(rserver));
     m_gradientWidget->setResourceAdapter(adapter);
 
-    const KoColorDisplayRendererInterface *displayRenderer = view->canvasBase()->displayColorConverter()->displayRendererInterface();
-    KoDualColorButton * dual = new KoDualColorButton(view->resourceProvider()->fgColor(), view->resourceProvider()->bgColor(), displayRenderer);
+// XXX: we don't have a canvas here! -- needs a setImageView
+//    const KoColorDisplayRendererInterface *displayRenderer = view->canvasBase()->displayColorConverter()->displayRendererInterface();
+//    KoDualColorButton * dual = new KoDualColorButton(view->resourceProvider()->fgColor(), view->resourceProvider()->bgColor(), displayRenderer);
 
-    dual->setPopDialog(true);
-    action  = new KAction(i18n("&Color"), this);
-    view->actionCollection()->addAction("dual", action);
-    action->setDefaultWidget(dual);
-    connect(dual, SIGNAL(foregroundColorChanged(KoColor)), view->resourceProvider(), SLOT(slotSetFGColor(KoColor)));
-    connect(dual, SIGNAL(backgroundColorChanged(KoColor)), view->resourceProvider(), SLOT(slotSetBGColor(KoColor)));
-    connect(view->resourceProvider(), SIGNAL(sigFGColorChanged(KoColor)), dual, SLOT(setForegroundColor(KoColor)));
-    connect(view->resourceProvider(), SIGNAL(sigBGColorChanged(KoColor)), dual, SLOT(setBackgroundColor(KoColor)));
-    dual->setFixedSize(26, 26);
+//    dual->setPopDialog(true);
+//    action  = new KAction(i18n("&Color"), this);
+//    view->actionCollection()->addAction("dual", action);
+//    action->setDefaultWidget(dual);
+//    connect(dual, SIGNAL(foregroundColorChanged(KoColor)), view->resourceProvider(), SLOT(slotSetFGColor(KoColor)));
+//    connect(dual, SIGNAL(backgroundColorChanged(KoColor)), view->resourceProvider(), SLOT(slotSetBGColor(KoColor)));
+//    connect(view->resourceProvider(), SIGNAL(sigFGColorChanged(KoColor)), dual, SLOT(setForegroundColor(KoColor)));
+//    connect(view->resourceProvider(), SIGNAL(sigBGColorChanged(KoColor)), dual, SLOT(setBackgroundColor(KoColor)));
+//    dual->setFixedSize(26, 26);
 
     createPatternsChooser(m_view);
     createGradientsChooser(m_view);

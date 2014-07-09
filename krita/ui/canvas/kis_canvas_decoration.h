@@ -71,7 +71,7 @@ public slots:
     void toggleVisibility();
 protected:
     virtual void drawDecoration(QPainter& gc, const QRectF& updateArea, const KisCoordinatesConverter *converter,KisCanvas2* canvas) = 0;
-
+    KisImageView *imageView();
     /**
      * @return the parent KisImageView
      */
