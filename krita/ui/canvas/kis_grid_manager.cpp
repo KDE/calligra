@@ -44,7 +44,7 @@
 #include "kis_doc2.h"
 
 KisGridManager::KisGridManager(KisView2 * parent)
-        : KisCanvasDecoration("grid", i18n("Grid"), parent), m_view(parent)
+        : KisCanvasDecoration("grid", i18n("Grid"), 0), m_view(parent)
 {
 
 }
@@ -52,6 +52,11 @@ KisGridManager::KisGridManager(KisView2 * parent)
 KisGridManager::~KisGridManager()
 {
 
+}
+
+void KisGridManager::setView(KisImageView* imageView)
+{
+    m_imageView = imageView;
 }
 
 void KisGridManager::setup(KActionCollection * collection)

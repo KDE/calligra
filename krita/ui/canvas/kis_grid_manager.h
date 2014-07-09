@@ -39,6 +39,9 @@ public:
     KisGridManager(KisView2 * parent);
     ~KisGridManager();
 public:
+
+    void setView(KisImageView* imageView);
+
     void setup(KActionCollection * collection);
 
 public slots:
@@ -66,6 +69,7 @@ protected:
 private:
 
     KisView2* m_view;
+    KisImageView* m_imageView;
     KToggleAction *toggleGrid;
     KToggleAction* m_toggleSnapToGrid;
     KAction* m_gridConfig;
