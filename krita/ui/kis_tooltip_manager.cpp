@@ -65,9 +65,9 @@ void KisTooltipManager::record()
 {
     m_recording = true;
     QList<QAction*> actions =  m_view->actionCollection()->actions();
-    foreach(KXMLGUIClient* client, m_view->childClients() ) {
-        actions.append(client->actionCollection()->actions());
-    }
+//    foreach(KXMLGUIClient* client, m_view->childClients() ) {
+//        actions.append(client->actionCollection()->actions());
+//    }
 
     foreach(QAction* action, actions) {
         action->disconnect();
@@ -85,7 +85,7 @@ void KisTooltipManager::captureToolip()
     }
 
     bool ok;
-    QString tooltip = QInputDialog::getText(m_view, "Add Tooltip",
+    QString tooltip = QInputDialog::getText(0, "Add Tooltip",
                                             "New Tooltip:", QLineEdit::Normal,
                                             oldTooltip, &ok);
     if (ok && !tooltip.isEmpty()) {
