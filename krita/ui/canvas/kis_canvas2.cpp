@@ -88,7 +88,6 @@ public:
         , toolProxy(new KisToolProxy(parent))
         , vastScrolling(true)
         , popupPalette(0)
-        , displayColorConverter(new KisDisplayColorConverter(parent))
     {
     }
 
@@ -127,6 +126,8 @@ KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KisImageView *vi
     : KoCanvasBase(sc)
     , m_d(new KisCanvas2Private(this, coordConverter, view))
 {
+    m_d->displayColorConverter = new KisDisplayColorConverter(this);
+
     // a bit of duplication from slotConfigChanged()
     KisConfig cfg;
     m_d->vastScrolling = cfg.vastScrolling();
