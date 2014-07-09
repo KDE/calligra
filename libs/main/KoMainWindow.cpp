@@ -1760,11 +1760,9 @@ QDockWidget* KoMainWindow::createDockWidget(KoDockFactoryBase* factory)
         bool collapsed = factory->defaultCollapsed();
 
         bool locked = false;
-        if (rootDocument()) {
-            KConfigGroup group = KGlobal::config()->group(d->rootPart->componentData().componentName()).group("DockWidget " + factory->id());
-            collapsed = group.readEntry("Collapsed", collapsed);
-            locked = group.readEntry("Locked", locked);
-        }
+        KConfigGroup group = KGlobal::config()->group(d->rootPart->componentData().componentName()).group("DockWidget " + factory->id());
+        collapsed = group.readEntry("Collapsed", collapsed);
+        locked = group.readEntry("Locked", locked);
 
         if (titleBar && collapsed)
             titleBar->setCollapsed(true);
