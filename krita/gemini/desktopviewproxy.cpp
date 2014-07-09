@@ -190,35 +190,35 @@ void DesktopViewProxy::slotFileOpenRecent(const KUrl& url)
  */
 void DesktopViewProxy::toggleShowJustTheCanvas(bool toggled)
 {
-    KisView2* kisView = qobject_cast<KisView2*>(d->desktopView->rootView());
-    if(toggled) {
-        kisView->showJustTheCanvas(toggled);
-    }
-    else {
-        KisConfig cfg;
-        bool fullScreen = d->mainWindow->forceFullScreen();
-        bool hideTitlebar = cfg.hideTitlebarFullscreen();
+//    KisView2* kisView = qobject_cast<KisView2*>(d->desktopView->activeView());
+//    if(toggled) {
+//        kisView->showJustTheCanvas(toggled);
+//    }
+//    else {
+//        KisConfig cfg;
+//        bool fullScreen = d->mainWindow->forceFullScreen();
+//        bool hideTitlebar = cfg.hideTitlebarFullscreen();
 		
-        if (fullScreen) {
-            cfg.setHideTitlebarFullscreen(false);
-        }
+//        if (fullScreen) {
+//            cfg.setHideTitlebarFullscreen(false);
+//        }
 
-        kisView->showJustTheCanvas(toggled);
+//        kisView->showJustTheCanvas(toggled);
 
-        if (fullScreen) {
-            cfg.setHideTitlebarFullscreen(hideTitlebar);
-        }
-    }
+//        if (fullScreen) {
+//            cfg.setHideTitlebarFullscreen(hideTitlebar);
+//        }
+//    }
 }
 
 void DesktopViewProxy::documentChanged()
 {
     // Remove existing linking for toggling canvas, in order
     // to over-ride the window state behaviour
-    KisView2* view = qobject_cast<KisView2*>(d->desktopView->rootView());
-    QAction* toggleJustTheCanvasAction = view->actionCollection()->action("view_show_just_the_canvas");
-    toggleJustTheCanvasAction->disconnect(view);
-    connect(toggleJustTheCanvasAction, SIGNAL(toggled(bool)), this, SLOT(toggleShowJustTheCanvas(bool)));
+//    KisView2* view = qobject_cast<KisView2*>(d->desktopView->rootView());
+//    QAction* toggleJustTheCanvasAction = view->actionCollection()->action("view_show_just_the_canvas");
+//    toggleJustTheCanvasAction->disconnect(view);
+//    connect(toggleJustTheCanvasAction, SIGNAL(toggled(bool)), this, SLOT(toggleShowJustTheCanvas(bool)));
 }
 
 #include "desktopviewproxy.moc"

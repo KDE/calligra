@@ -54,6 +54,7 @@
 #include <KoDocumentInfo.h>
 #include <KoAbstractGradient.h>
 #include <KoZoomController.h>
+#include <KoXMLGUIFactory.h>
 
 #include "filter/kis_filter.h"
 #include "filter/kis_filter_registry.h"
@@ -421,12 +422,12 @@ void MainWindow::adjustZoomOnDocumentChangedAndStuff()
 {
     if (d->desktopView && centralWidget() == d->desktopView) {
 
-        KisView2* view = qobject_cast<KisView2*>(d->desktopView->rootView());
+        KisView2* view = qobject_cast<KisView2*>(d->desktopView->activeView());
         // We have to set the focus on the view here, otherwise the toolmanager is unaware of which
         // canvas should be handled.
         view->canvasControllerWidget()->setFocus();
-        view->setFocus();
-        QPoint center = view->rect().center();
+        view->canvasControllerWidget()->setFocus();
+        QPoint center = view->canvasControllerWidget()->rect().center();
         view->canvasControllerWidget()->zoomRelativeToPoint(center, 0.9);
         qApp->processEvents();
 
@@ -462,12 +463,12 @@ void MainWindow::documentChanged()
     qApp->processEvents();
 
 
-    d->desktopKisView = qobject_cast<KisView2*>(d->desktopView->rootView());
+    d->desktopKisView = qobject_cast<KisView2*>(d->desktopView->activeView());
 //    d->desktopKisView->setQtMainWindow(d->desktopView);
 
     // Define new actions here
 
-    KXMLGUIFactory* factory = d->desktopKisView->factory();
+    KoXMLGUIFactory* factory = d->desktopKisView->factory();
     factory->removeClient(d->desktopKisView);
     factory->addClient(d->desktopKisView);
 
