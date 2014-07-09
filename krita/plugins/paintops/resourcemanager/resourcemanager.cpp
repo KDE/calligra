@@ -148,7 +148,7 @@ void ResourceManager::slotResourceManager()
 
 void ResourceManager::slotImport()
 {
-    KoFileDialog dlg(m_view, KoFileDialog::OpenFiles, "krita_resources");
+    KoFileDialog dlg(0, KoFileDialog::OpenFiles, "krita_resources");
     dlg.setCaption(i18n("Add Resources"));
 
     QStringList nameFilters;
@@ -281,7 +281,7 @@ void ResourceManager::slotCreateBundle()
     newBundle->setThumbnail(dlgCreateBundle.previewImage());
 
     if (!newBundle->save()) {
-        KMessageBox::error(m_view, i18n("Could not create the new bundle."), i18n("Error"));
+        KMessageBox::error(0, i18n("Could not create the new bundle."), i18n("Error"));
     }
 
 
