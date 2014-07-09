@@ -46,6 +46,8 @@
 #include <QString>
 #include <QList>
 #include <QAction>
+#include <QTime>
+#include <QVector>
 
 #include "kundo2_export.h"
 
@@ -73,18 +75,28 @@ public:
     void setText(const QString &text);
 
     virtual int id() const;
+    virtual int timedId() const;
     virtual bool mergeWith(const KUndo2Command *other);
+    virtual bool timedMergeWith(KUndo2Command *other);
 
     int childCount() const;
     const KUndo2Command *child(int index) const;
 
     bool hasParent();
+    void setTime();
+    QTime time();
+    virtual void undoMergedCommands();
+    virtual void redoMergedCommands();
+    QVector<KUndo2Command*> mergeCommandsVector();
+
 
 private:
     Q_DISABLE_COPY(KUndo2Command)
     friend class KUndo2QStack;
 
     bool m_hasParent;
+    QTime m_timeOfCreation;
+    QVector<KUndo2Command*> m_mergeCommandsVector;
 };
 
 #endif // QT_NO_UNDOCOMMAND

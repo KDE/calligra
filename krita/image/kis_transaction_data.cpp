@@ -50,7 +50,7 @@ public:
 };
 
 KisTransactionData::KisTransactionData(const QString& name, KisPaintDeviceSP device, bool resetSelectionOutlineCache, KUndo2Command* parent)
-    : KUndo2Command(name, parent)
+    : KisUndo2Command(name, parent)
     , m_d(new Private())
 {
     m_d->resetSelectionOutlineCache = resetSelectionOutlineCache;

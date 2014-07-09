@@ -61,42 +61,11 @@
 #include "kisundo2stack.h"
 #include <QItemSelectionModel>
 #include <QIcon>
+#include <kundo2model.h>
 
-class KisUndo2Model : public QAbstractItemModel
+class KisUndo2Model : public KUndo2Model
 {
     Q_OBJECT
 public:
     explicit KisUndo2Model(QObject *parent = 0);
-
-    KisUndo2QStack *stack() const;
-
-    virtual QModelIndex index(int row, int column,
-    const QModelIndex &parent = QModelIndex()) const;
-    virtual QModelIndex parent(const QModelIndex &child) const;
-    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
-    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-
-    QModelIndex selectedIndex() const;
-    QItemSelectionModel *selectionModel() const;
-
-    QString emptyLabel() const;
-    void setEmptyLabel(const QString &label);
-
-    void setCleanIcon(const QIcon &icon);
-    QIcon cleanIcon() const;
-
-public slots:
-    void setStack(KisUndo2QStack *stack);
-
-private slots:
-    void stackChanged();
-    void stackDestroyed(QObject *obj);
-    void setStackCurrentIndex(const QModelIndex &index);
-
-private:
-    KisUndo2QStack *m_stack;
-    QItemSelectionModel *m_sel_model;
-    QString m_emty_label;
-    QIcon m_clean_icon;
 };

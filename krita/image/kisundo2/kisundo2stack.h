@@ -48,6 +48,8 @@
 #include <QAction>
 #include <QTime>
 #include <QVector>
+#include <kundo2command.h>
+#include <kundo2stack.h>
 
 #include "kisundo2_export.h"
 
@@ -58,134 +60,28 @@ class KActionCollection;
 
 #ifndef QT_NO_UNDOCOMMAND
 
-class KISUNDO2_EXPORT KisUndo2Command
+class KISUNDO2_EXPORT KisUndo2Command :public KUndo2Command
 {
-    KisUndo2CommandPrivate *d;
-
 public:
-    explicit KisUndo2Command(KisUndo2Command *parent = 0);
-    explicit KisUndo2Command(const QString &text, KisUndo2Command *parent = 0);
+    explicit KisUndo2Command(KUndo2Command *parent = 0);
+    explicit KisUndo2Command(const QString &text, KUndo2Command *parent = 0);
     virtual ~KisUndo2Command();
 
-    virtual void undo();
-    void undoMergedCommands();
-    virtual void redo();
-    void redoMergedCommands();
+    virtual void undoMergedCommands();
+    virtual void redoMergedCommands();
 
-    QString actionText() const;
-    QString text() const;
-    void setText(const QString &text);
 
-    virtual int id() const;
-    virtual bool mergeWith(const KisUndo2Command *other);
-
-    int childCount() const;
-    const KisUndo2Command *child(int index) const;
-
-    bool hasParent();
-    void setTime();
-    QTime time();
-    void addToMergedCommands(KisUndo2Command* cmd);
-    QVector<KisUndo2Command*> mergeCommandsVector();
+    using KUndo2Command::timedId;
+    virtual int timedId();
+    using KUndo2Command::timedMergeWith;
+    virtual bool timedMergeWith(KUndo2Command *other);
 
 private:
     Q_DISABLE_COPY(KisUndo2Command)
-    friend class KisUndo2QStack;
 
-    bool m_hasParent;
-    QTime m_timeOfCreation;
-    QVector<KisUndo2Command*> m_mergeCommandsVector;
+
 };
 
 #endif // QT_NO_UNDOCOMMAND
+#endif
 
-#ifndef QT_NO_UNDOSTACK
-
-class KISUNDO2_EXPORT KisUndo2QStack : public QObject
-{
-    Q_OBJECT
-//    Q_DECLARE_PRIVATE(KisUndo2QStack)
-    Q_PROPERTY(bool active READ isActive WRITE setActive)
-    Q_PROPERTY(int undoLimit READ undoLimit WRITE setUndoLimit)
-
-public:
-    explicit KisUndo2QStack(QObject *parent = 0);
-    virtual ~KisUndo2QStack();
-    void clear();
-
-    void push(KisUndo2Command *cmd);
-
-    bool canUndo() const;
-    bool canRedo() const;
-    QString undoText() const;
-    QString redoText() const;
-
-    int count() const;
-    int index() const;
-    QString actionText(int idx) const;
-    QString text(int idx) const;
-
-#ifndef QT_NO_ACTION
-    QAction *createUndoAction(QObject *parent) const;
-    QAction *createRedoAction(QObject *parent) const;
-#endif // QT_NO_ACTION
-
-    bool isActive() const;
-    bool isClean() const;
-    int cleanIndex() const;
-
-    void beginMacro(const QString &text);
-    void endMacro();
-
-    void setUndoLimit(int limit);
-    int undoLimit() const;
-
-    const KisUndo2Command *command(int index) const;
-
-public Q_SLOTS:
-    void setClean();
-    virtual void setIndex(int idx);
-    virtual void undo();
-    virtual void redo();
-    void setActive(bool active = true);
-
-
-Q_SIGNALS:
-    void indexChanged(int idx);
-    void cleanChanged(bool clean);
-    void canUndoChanged(bool canUndo);
-    void canRedoChanged(bool canRedo);
-    void undoTextChanged(const QString &undoActionText);
-    void redoTextChanged(const QString &redoActionText);
-
-private:
-    // from QUndoStackPrivate
-    QList<KisUndo2Command*> m_command_list;
-    QList<KisUndo2Command*> m_macro_stack;
-    int m_index;
-    int m_clean_index;
-    KisUndo2Group *m_group;
-    int m_undo_limit;
-
-    // also from QUndoStackPrivate
-    void setIndex(int idx, bool clean);
-    bool checkUndoLimit();
-
-    Q_DISABLE_COPY(KisUndo2QStack)
-    friend class KisUndo2Group;
-};
-
-class KISUNDO2_EXPORT KisUndo2Stack : public KisUndo2QStack
-{
-public:
-    explicit KisUndo2Stack(QObject *parent = 0);
-
-    // functions from KUndoStack
-    QAction* createRedoAction(KActionCollection* actionCollection, const QString& actionName = QString());
-    QAction* createUndoAction(KActionCollection* actionCollection, const QString& actionName = QString());
-
-};
-
-#endif // QT_NO_UNDOSTACK
-
-#endif // KISUNDO2STACK_H

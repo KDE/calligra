@@ -201,6 +201,7 @@ set(kritaimage_LIB_SRCS
    kis_perspectivetransform_worker.cpp
    kis_warptransform_worker.cc
    kis_transparency_mask.cc
+   kisundo2/kisundo2stack.cpp
    kis_undo_store.cpp
    kis_undo_stores.cpp
    kis_undo_adapter.cpp
@@ -324,4 +325,7 @@ install( FILES
     brushengine/kis_locked_properties.h
     brushengine/kis_locked_properties_proxy.h
     brushengine/kis_locked_properties_server.h
+    kisundo2/kisundo2stack.h
+    kisundo2/kisundo2qstack.h
+    kisundo2/kisundo2command.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/krita)

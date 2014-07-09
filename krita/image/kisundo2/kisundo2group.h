@@ -44,6 +44,7 @@
 
 #include <QObject>
 #include <QString>
+#include <kundo2group.h>
 
 #include "kisundo2_export.h"
 
@@ -53,50 +54,14 @@ class QAction;
 
 #ifndef QT_NO_UNDOGROUP
 
-class KISUNDO2_EXPORT KisUndo2Group : public QObject
+class KISUNDO2_EXPORT KisUndo2Group : public KUndo2Group
 {
-    Q_OBJECT
-    Q_DECLARE_PRIVATE(KisUndo2Group)
 
 public:
     explicit KisUndo2Group(QObject *parent = 0);
     ~KisUndo2Group();
 
-    void addStack(KisUndo2QStack *stack);
-    void removeStack(KisUndo2QStack *stack);
-    QList<KisUndo2QStack*> stacks() const;
-    KisUndo2QStack *activeStack() const;
 
-#ifndef QT_NO_ACTION
-    QAction *createUndoAction(QObject *parent) const;
-    QAction *createRedoAction(QObject *parent) const;
-#endif // QT_NO_ACTION
-    bool canUndo() const;
-    bool canRedo() const;
-    QString undoText() const;
-    QString redoText() const;
-    bool isClean() const;
-
-public Q_SLOTS:
-    void undo();
-    void redo();
-    void setActiveStack(KisUndo2QStack *stack);
-
-Q_SIGNALS:
-    void activeStackChanged(KisUndo2QStack *stack);
-    void indexChanged(int idx);
-    void cleanChanged(bool clean);
-    void canUndoChanged(bool canUndo);
-    void canRedoChanged(bool canRedo);
-    void undoTextChanged(const QString &undoActionText);
-    void redoTextChanged(const QString &redoActionText);
-
-private:
-    // from QUndoGroupPrivate
-    KisUndo2QStack *m_active;
-    QList<KisUndo2QStack*> m_stack_list;
-
-    Q_DISABLE_COPY(KisUndo2Group)
 };
 
 #endif // QT_NO_UNDOGROUP

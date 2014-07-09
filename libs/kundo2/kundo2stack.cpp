@@ -119,6 +119,7 @@ KUndo2Command::KUndo2Command(const QString &text, KUndo2Command *parent):
         parent->d->child_list.append(this);
     }
     setText(text);
+     setTime();
 }
 
 /*!
@@ -137,6 +138,7 @@ KUndo2Command::KUndo2Command(KUndo2Command *parent):
     d = new KUndo2CommandPrivate;
     if (parent != 0)
         parent->d->child_list.append(this);
+     setTime();
 }
 
 /*!
@@ -317,6 +319,36 @@ bool KUndo2Command::hasParent()
 {
     return m_hasParent;
 }
+int KUndo2Command::timedId() const
+{
+    return 0;
+}
+bool KUndo2Command::timedMergeWith(KUndo2Command *other)
+{
+    return false;
+}
+void KUndo2Command::setTime()
+{
+    m_timeOfCreation = QTime::currentTime();
+}
+QTime KUndo2Command::time()
+{
+    return m_timeOfCreation;
+}
+void KUndo2Command::undoMergedCommands()
+{
+    undo();
+}
+
+void KUndo2Command::redoMergedCommands()
+{
+    redo();
+}
+QVector<KUndo2Command*> KUndo2Command::mergeCommandsVector()
+{
+    return m_mergeCommandsVector;
+}
+
 
 #endif // QT_NO_UNDOCOMMAND
 
@@ -590,6 +622,60 @@ void KUndo2QStack::push(KUndo2Command *cmd)
                         && cur->id() == cmd->id()
                         && (macro || m_index != m_clean_index);
 
+    /**Here we are going to try to merge several commands together using the Qvector field in the commands using
+     *3 parameters. N : Number of slots filled. T1 : Time lapsed between current command and previous command -- signal to
+     *merge throughout the stack. T2 : Time lapsed between two commands signalling both commands belong to the same set **/
+
+    if(!macro && !m_command_list.isEmpty() && cmd->timedId() == 1){
+        if(m_command_list.size()>=undoLimit()){
+            KUndo2Command* lastcmd = m_command_list.last();
+            qDebug("inside code");
+            QListIterator<KUndo2Command*> it(m_command_list);
+            it.toBack();
+            while(it.hasPrevious()){
+                KUndo2Command* curr = it.previous();
+                if(lastcmd == curr){
+                    curr = it.previous();
+                }
+                m_command_list.removeOne(curr);
+                lastcmd->timedMergeWith(curr);
+            }
+        }
+        else{
+            if(cmd->time().msecsTo(m_command_list.last()->time())<-5000){       //T1 time elapsed
+                KUndo2Command* lastcmd = m_command_list.last();
+                QListIterator<KUndo2Command*> it(m_command_list);
+                it.toBack();
+                while(it.hasPrevious())
+                {
+                    KUndo2Command* curr = it.previous();
+
+                    if(!lastcmd->mergeCommandsVector().isEmpty()){
+                        if(lastcmd->mergeCommandsVector().last()->time().msecsTo(curr->time())>-1000 && lastcmd!=curr){
+                            m_command_list.removeOne(curr);
+                            lastcmd->timedMergeWith(curr);
+                        }
+                        else{
+                            lastcmd = curr; //end of a merge set
+                        }
+
+                    }
+                    else{
+                        if(lastcmd->time().msecsTo(curr->time())>-1000 && lastcmd!=curr){
+                            m_command_list.removeOne(curr);
+                            lastcmd->timedMergeWith(curr);
+                        }
+                        else{
+                            lastcmd = curr; //end of a merge set
+                        }
+                    }
+                }
+
+            }
+        }
+    }
+    setIndex(m_command_list.size());
+
     if (try_merge && cur->mergeWith(cmd)) {
         delete cmd;
         if (!macro) {
@@ -681,7 +767,7 @@ void KUndo2QStack::undo()
     }
 
     int idx = m_index - 1;
-    m_command_list.at(idx)->undo();
+    m_command_list.at(idx)->undoMergedCommands();
     setIndex(idx, false);
 }
 
@@ -705,7 +791,7 @@ void KUndo2QStack::redo()
         return;
     }
 
-    m_command_list.at(m_index)->redo();
+    m_command_list.at(m_index)->redoMergedCommands();
     setIndex(m_index + 1, false);
 }
 
@@ -756,9 +842,9 @@ void KUndo2QStack::setIndex(int idx)
 
     int i = m_index;
     while (i < idx)
-        m_command_list.at(i++)->redo();
+        m_command_list.at(i++)->redoMergedCommands();
     while (i > idx)
-        m_command_list.at(--i)->undo();
+        m_command_list.at(--i)->undoMergedCommands();
 
     setIndex(idx, false);
 }

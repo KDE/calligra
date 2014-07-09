@@ -61,6 +61,7 @@
 
 #include <QListView>
 #include <QString>
+#include <kundo2view.h>
 
 #include "kisundo2_export.h"
 
@@ -71,12 +72,8 @@ class KisUndo2QStack;
 class KisUndo2Group;
 class QIcon;
 
-class KISUNDO2_EXPORT KisUndo2View : public QListView
+class KISUNDO2_EXPORT KisUndo2View : public KUndo2View
 {
-    Q_OBJECT
-    Q_PROPERTY(QString emptyLabel READ emptyLabel WRITE setEmptyLabel)
-    Q_PROPERTY(QIcon cleanIcon READ cleanIcon WRITE setCleanIcon)
-
 public:
     explicit KisUndo2View(QWidget *parent = 0);
     explicit KisUndo2View(KisUndo2QStack *stack, QWidget *parent = 0);
@@ -85,26 +82,6 @@ public:
 #endif
     ~KisUndo2View();
 
-    KisUndo2QStack *stack() const;
-#ifndef QT_NO_UNDOGROUP
-    KisUndo2Group *group() const;
-#endif
-
-    void setEmptyLabel(const QString &label);
-    QString emptyLabel() const;
-
-    void setCleanIcon(const QIcon &icon);
-    QIcon cleanIcon() const;
-
-public Q_SLOTS:
-    void setStack(KisUndo2QStack *stack);
-#ifndef QT_NO_UNDOGROUP
-    void setGroup(KisUndo2Group *group);
-#endif
-
-private:
-    KisUndo2ViewPrivate* const d;
-    Q_DISABLE_COPY(KisUndo2View)
 };
 
 #endif // QT_NO_UNDOVIEW
