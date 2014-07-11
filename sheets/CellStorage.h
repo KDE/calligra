@@ -57,6 +57,8 @@ class Validity;
 class ValidityStorage;
 class Value;
 class ValueStorage;
+class ChangedData;
+class ChangedDataStorage;
 
 /**
  * \ingroup Storage
@@ -377,6 +379,7 @@ public:
 
     const BindingStorage* bindingStorage() const;
     const CommentStorage* commentStorage() const;
+    const ChangedDataStorage* changedDataStorage() const;
     const ConditionsStorage* conditionsStorage() const;
     const FormulaStorage* formulaStorage() const;
     const FusionStorage* fusionStorage() const;
@@ -444,6 +447,15 @@ public:
         PointStorage<QSharedPointer<QTextDocument> >::operator=(o);
         return *this;
     }
+};
+
+class ChangedDataStorage : public PointStorage<QSharedPointer<bool>
+{
+public:
+  PointStorage& operator=(const PointStorage<bool>& o){
+    PointStorage<bool>::operator=(o);
+    return *this;
+  }
 };
 
 } // namespace Sheets

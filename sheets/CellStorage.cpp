@@ -361,6 +361,37 @@ void CellStorage::setComment(const Region& region, const QString& comment)
     }
 }
 
+bool CellStorage::changedData(int column, int row) const
+{
+#ifdef CALLIGRA_SHEETS_MT
+  QREADLOCKER rl(&d->bigUglyLock);
+#endif
+  return d->ChangedDataStorage->lookup(column, row);
+}
+
+bool CellStorage::setChangedData(int column, int row, const bool changedData )
+{
+#ifdef CALLIGRA_SHEETS_MT
+  QWriteLocker(&d->bigUglyLock);
+#endif
+ if(!d->sheet->map()->isLoading()){
+   CellDamage::Changes = CellDamage::Binding|CellDamage::Formula|CellDamage::Value;// if there is a change then Changes will contain something
+   if(changedData == null)
+   {
+     if (Changes != null)
+       changedData = true;
+       
+     
+     
+     
+     else
+       changedData = false;
+   }
+ }
+ return changedData;
+}
+
+
 Conditions CellStorage::conditions(int column, int row) const
 {
 #ifdef CALLIGRA_SHEETS_MT
@@ -1638,6 +1669,12 @@ const CommentStorage* CellStorage::commentStorage() const
 {
     return d->commentStorage;
 }
+
+const ChangedDataStorage* CellStorage::ChangedDataStorage() const
+{
+    return d->changedDataStorage;
+}
+
 
 const ConditionsStorage* CellStorage::conditionsStorage() const
 {
