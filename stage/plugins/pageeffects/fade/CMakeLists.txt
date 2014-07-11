@@ -20,6 +20,6 @@ target_link_libraries(
 
 install(TARGETS kpr_pageeffect_fade  DESTINATION ${PLUGIN_INSTALL_DIR})
 
-install( FILES kpr_pageeffect_fade.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES kpr_pageeffect_fade.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 
 

@@ -300,11 +300,10 @@ public:
     /*! \return True if the Form automatically handles tab stops. */
     bool autoTabStops() const;
 
-    /*! If \a autoTab is true, then the Form will automatically handle tab stops,
+    /*! If \a autoTab is true (the default), then the Form will automatically handle tab stops,
        and the "Edit Tab Order" dialog will be disabled.
        The tab widget will be set from the top-left to the bottom-right corner.\n
-        If \ autoTab is false, then it's up to the user to change tab stops
-        (which are by default in order of creation).*/
+        If \a autoTab is false, it's up to the user to change tab stops.*/
     void setAutoTabStops(bool autoTab);
 
     /*! Tells the Form to reassign the tab stops because the widget layout has changed

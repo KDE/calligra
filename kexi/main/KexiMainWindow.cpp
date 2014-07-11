@@ -3050,6 +3050,10 @@ KexiWindow *
 KexiMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool &openingCancelled,
                            QMap<QString, QVariant>* staticObjectArgs, QString* errorMessage)
 {
+    if (!d->prj || !item) {
+        return 0;
+    }
+
     if (!openingAllowed(item, viewMode, errorMessage)) {
         if (errorMessage)
             *errorMessage = i18nc(
@@ -3060,8 +3064,6 @@ KexiMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool &
     }
     kDebug() << d->prj << item;
 
-    if (!d->prj || !item)
-        return 0;
     KexiUtils::WaitCursor wait;
 #ifndef KEXI_NO_PENDING_DIALOGS
     Private::PendingJobType pendingType;

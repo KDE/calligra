@@ -28,4 +28,4 @@ install(TARGETS kexidb_mysqldriver  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  kexidb_mysqldriver.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  kexidb_mysqldriver.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)

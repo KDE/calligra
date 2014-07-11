@@ -79,6 +79,7 @@ MainDocument::MainDocument(KoPart *part)
         m_viewlistModified( false ),
         m_checkingForWorkPackages( false )
 {
+    Q_ASSERT(part);
     m_config.setReadWrite( true );
     // Add library translation files
     KLocale *locale = KGlobal::locale();
@@ -384,7 +385,7 @@ bool MainDocument::saveWorkPackageFormat( const QString &file, const Node *node,
         return false;
     }
     // Tell KoStore not to touch the file names
-    store->disallowNameExpansion();
+
 
     if ( ! store->open( "root" ) ) {
         setErrorMessage( i18n( "Not able to write '%1'. Partition full?", QString( "maindoc.xml") ) );

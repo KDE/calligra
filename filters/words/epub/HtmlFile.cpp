@@ -58,7 +58,6 @@ KoFilter::ConversionStatus HtmlFile::writeHtml(const QString &fileName)
         delete htmlStore;
         return KoFilter::FileNotFound;
     }
-    htmlStore->disallowNameExpansion();
 
     KoFilter::ConversionStatus  status;
 

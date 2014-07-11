@@ -33,4 +33,4 @@ install(TARGETS kexidb_xbasedriver  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  kexidb_xbasedriver.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  kexidb_xbasedriver.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)

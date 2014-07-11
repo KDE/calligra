@@ -60,7 +60,7 @@
 #include <kactioncollection.h>
 #include <kstandarddirs.h>
 #include <kstatusbar.h>
-#include <kservicetypetrader.h>
+#include <KoServiceLocator.h>
 
 #include "KoOdf.h"
 #include "KoShapeGroup.h"
@@ -209,9 +209,8 @@ void View::initActions()
 
 void View::loadExtensions()
 {
-    KService::List offers = KServiceTypeTrader::self()->query(QString::fromLatin1("Braindump/Extensions"),
-                            QString::fromLatin1("(Type == 'Service') && "
-                                    "([X-Braindump-Version] == 28)"));
+    const KService::List offers = KoServiceLocator::instance()->entries("Braindump/Extensions");
+
     KService::List::ConstIterator iter;
     for(iter = offers.constBegin(); iter != offers.constEnd(); ++iter) {
 

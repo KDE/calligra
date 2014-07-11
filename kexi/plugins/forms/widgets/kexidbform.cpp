@@ -50,7 +50,7 @@ class KexiDBForm::Private
 public:
     Private()
             : dataAwareObject(0)
-            , autoTabStops(false)
+            , autoTabStops(true)
             , popupFocused(false)
             , orderedFocusWidgetsIteratorInitialized(false)
     {

@@ -23,7 +23,7 @@ install(FILES
     calligra_filter_mpp2plan.desktop
     calligra_filter_mpx2plan.desktop
     calligra_filter_planner2plan.desktop
-  DESTINATION ${SERVICES_INSTALL_DIR})
+  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 
 install(FILES calligra_planner_mpp.xml DESTINATION ${XDG_MIME_INSTALL_DIR})
 update_xdg_mimetypes(${XDG_MIME_INSTALL_DIR})

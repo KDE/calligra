@@ -13,6 +13,6 @@ target_link_libraries(
 
 install(TARGETS kpr_shapeanimation_example  DESTINATION ${PLUGIN_INSTALL_DIR})
 
-install( FILES kpr_shapeanimation_example.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES kpr_shapeanimation_example.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 
 

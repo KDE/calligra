@@ -76,7 +76,7 @@ class CustomSortableWidgetList : public QWidgetList
 public:
     CustomSortableWidgetList() : QWidgetList() {}
     //! Copy constructor needed required by foreach()
-    CustomSortableWidgetList(const CustomSortableWidgetList&) : QWidgetList() {}
+    CustomSortableWidgetList(const CustomSortableWidgetList& list) : QWidgetList(list) {}
     virtual ~CustomSortableWidgetList() {}
     virtual void sort() {}
 };
