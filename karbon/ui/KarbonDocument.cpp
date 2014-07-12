@@ -62,6 +62,7 @@
 #include <KoPageLayout.h>
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
+#include <KoGenStyles.h>
 #include <KoOasisSettings.h>
 #include <KoMainWindow.h>
 #include <KoCanvasController.h>

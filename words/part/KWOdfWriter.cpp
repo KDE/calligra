@@ -29,6 +29,7 @@
 #include <KoXmlWriter.h>
 #include <KoOdfWriteStore.h>
 #include <KoShapeSavingContext.h>
+#include <KoGenStyles.h>
 
 #include <KoTextDocument.h>
 #include <KoTextShapeData.h>

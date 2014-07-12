@@ -23,6 +23,7 @@
 
 #include <KoUnit.h>
 #include <KoPageLayout.h>
+#include <KoColumns.h>
 
 #include <QWidget>
 

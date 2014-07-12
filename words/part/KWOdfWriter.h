@@ -37,6 +37,7 @@ class KWTextFrameSet;
 class KWPage;
 
 class KoGenChanges;
+class KoStore;
 
 /**
  * Class that has a lot of the OpenDocument (ODF) saving code for Words.
