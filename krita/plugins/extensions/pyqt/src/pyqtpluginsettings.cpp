@@ -31,8 +31,8 @@
 
 
 PyQtPluginSettings::PyQtPluginSettings(QWidget *parent) :
-    KisPreferenceSet(parent),
-    ui(new Ui::ManagerPage)
+        KisPreferenceSet(parent),
+        ui(new Ui::ManagerPage)
 {
     ui->setupUi(this);
 }

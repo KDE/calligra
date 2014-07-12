@@ -20,7 +20,10 @@
 
 #include <QObject>
 
+#include <Python.h>
+
 #include <kis_view_plugin.h>
+#include "engine.h"
 
 class KritaPyQtPlugin : public KisViewPlugin
 {
@@ -28,6 +31,10 @@ class KritaPyQtPlugin : public KisViewPlugin
 public:
     KritaPyQtPlugin(QObject *parent, const QVariantList &);
     virtual ~KritaPyQtPlugin();
+private:
+    PyKrita::Engine m_engine;
+    QString m_engineFailureReason;
+    bool m_autoReload;
 };
 
 #endif

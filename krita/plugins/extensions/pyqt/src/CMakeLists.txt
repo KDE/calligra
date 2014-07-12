@@ -4,7 +4,10 @@
 configure_file(config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 
 set(SOURCES 
-    plugin.cpp pyqtpluginsettings.cpp
+    plugin.cpp 
+    pyqtpluginsettings.cpp
+    utilities.cpp
+    engine.cpp
 )
 
 kde4_add_ui_files(SOURCES 
@@ -36,4 +39,5 @@ install(
 
 # Dive into plugins crowd
 #add_subdirectory(plugins)
+add_subdirectory(test)
 

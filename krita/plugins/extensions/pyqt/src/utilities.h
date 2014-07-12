@@ -1,26 +1,29 @@
-// This file is part of Pate, Kate' Python scripting plugin.
+// This file is part of PyKrita, Krita' Python scripting plugin.
 //
-// A couple of useful macros and functions used inside of pate_engine.cpp and pate_plugin.cpp.
+// A couple of useful macros and functions used inside of pykrita_engine.cpp and pykrita_plugin.cpp.
 //
 // Copyright (C) 2006 Paul Giannaros <paul@giannaros.org>
+// Copyright (C) 2012, 2013 Shaheed Haque <srhaque@theiet.org>
 //
 // This library is free software; you can redistribute it and/or
-// modify it under the terms of the GNU Library General Public
+// modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
-// version 2 of the License, or (at your option) version 3.
+// version 2.1 of the License, or (at your option) version 3, or any
+// later version accepted by the membership of KDE e.V. (or its
+// successor approved by the membership of KDE e.V.), which shall
+// act as a proxy defined in Section 6 of version 3 of the license.
 //
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-// Library General Public License for more details.
+// Lesser General Public License for more details.
 //
-// You should have received a copy of the GNU Library General Public License
-// along with this library; see the file COPYING.LIB.  If not, write to
-// the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-// Boston, MA 02110-1301, USA.
+// You should have received a copy of the GNU Lesser General Public
+// License along with this library.  If not, see <http://www.gnu.org/licenses/>.
+//
 
-#ifndef __PATE_UTILITIES_H__
-# define  __PATE_UTILITIES_H__
+#ifndef __PYKRITA_UTILITIES_H__
+# define  __PYKRITA_UTILITIES_H__
 
 # include <Python.h>
 # include <QString>
@@ -30,7 +33,7 @@ class KConfigBase;
 /// Save us some ruddy time when printing out QStrings with UTF-8
 # define PQ(x) x.toUtf8().constData()
 
-namespace Pate {
+namespace PyKrita {
 
 /**
  * Instantiate this class on the stack to automatically get and release the
@@ -80,7 +83,7 @@ public:
      * form approximating what Python would print:
      *
      * Traceback (most recent call last):
-     *   File "/home/shahhaqu/.kde/share/apps/kate/pate/pluginmgr.py", line 13, in <module>
+     *   File "/home/shahhaqu/.kde/share/apps/krita/pykrita/pluginmgr.py", line 13, in <module>
      *     import kdeui
      * ImportError: No module named kdeui
      * Could not import pluginmgr.
@@ -107,19 +110,20 @@ public:
     /**
      * Call the named module's named entry point.
      */
-    bool functionCall(const char* functionName, const char* moduleName = PATE_ENGINE);
+    bool functionCall(const char* functionName, const char* moduleName = PYKRITA_ENGINE);
+    PyObject* functionCall(const char* functionName, const char* moduleName, PyObject* arguments);
 
     /**
      * Delete the item from the named module's dictionary.
      */
-    bool itemStringDel(const char* item, const char* moduleName = PATE_ENGINE);
+    bool itemStringDel(const char* item, const char* moduleName = PYKRITA_ENGINE);
 
     /**
      * Get the item from the named module's dictionary.
      *
      * @return 0 or a borrowed reference to the item.
      */
-    PyObject* itemString(const char* item, const char* moduleName = PATE_ENGINE);
+    PyObject* itemString(const char* item, const char* moduleName = PYKRITA_ENGINE);
 
     /**
      * Get the item from the given dictionary.
@@ -131,7 +135,7 @@ public:
     /**
      * Set the item in the named module's dictionary.
      */
-    bool itemStringSet(const char* item, PyObject* value, const char* moduleName = PATE_ENGINE);
+    bool itemStringSet(const char* item, PyObject* value, const char* moduleName = PYKRITA_ENGINE);
 
     /**
      * Get the Actions defined by a module. The returned object is
@@ -156,7 +160,7 @@ public:
      *
      * @return 0 or a borrowed reference to the dictionary.
      */
-    PyObject* moduleDict(const char* moduleName = PATE_ENGINE);
+    PyObject* moduleDict(const char* moduleName = PYKRITA_ENGINE);
 
     /**
      * Get the help text defined by a module.
@@ -202,7 +206,7 @@ public:
      */
     bool prependPythonPaths(const QStringList& paths);
 
-    static const char* PATE_ENGINE;
+    static const char* PYKRITA_ENGINE;
 
 private:
     /// @internal Helper function for @c prependPythonPaths overloads
@@ -211,14 +215,13 @@ private:
     mutable QString m_traceback;
 
     /**
-     * Run a handler function supplied by the kate module on another module.
+     * Run a handler function supplied by the krita module on another module.
      *
      * @return 0 or a new reference to the result.
      */
-    PyObject* kateHandler(const char* moduleName, const char* handler);
-    PyObject* functionCall(const char* functionName, const char* moduleName, PyObject* arguments);
+    PyObject* kritaHandler(const char* moduleName, const char* handler);
 };
 
-}                                                           // namespace Pate
-#endif                                                      //  __PATE_UTILITIES_H__
-// kate: indent-width 4;
+}                                                           // namespace PyKrita
+#endif                                                      //  __PYKRITA_UTILITIES_H__
+// krita: indent-width 4;

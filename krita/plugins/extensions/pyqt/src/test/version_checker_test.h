@@ -1,6 +1,6 @@
 // This file is part of PyKrita, Krita' Python scripting plugin.
 //
-// Copyright (C) 2006 Paul Giannaros <paul@giannaros.org>
+// Copyright (C) 2013 Alex Turbov <i.zaufi@gmail.com>
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -17,5 +17,22 @@
 // the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 // Boston, MA 02110-1301, USA.
 
-#define PYKRITA_PYTHON_LIBRARY "${PYTHON_LIBRARY}"
-#define PYKRITA_PYTHON_SITE_PACKAGES_INSTALL_DIR "${PYTHON_SITE_PACKAGES_INSTALL_DIR}"
+#ifndef __VERSION_CHECKER_TEST_H__
+# define  __VERSION_CHECKER_TEST_H__
+
+#include <QtTest/QtTest>
+
+class version_checker_tests : public QObject
+{
+    Q_OBJECT
+
+private Q_SLOTS:
+    void version_ctor_test();
+    void version_ops_test();
+    void version_string_test();
+
+    void version_checker_test();
+    void version_checker_string_test();
+};
+
+#endif                                                      //  __VERSION_CHECKER_TEST_H__

@@ -1,23 +1,26 @@
-// This file is part of Pate, Kate' Python scripting plugin.
+// This file is part of PyKrita, Krita' Python scripting plugin.
 //
 // Copyright (C) 2006 Paul Giannaros <paul@giannaros.org>
+// Copyright (C) 2012, 2013 Shaheed Haque <srhaque@theiet.org>
 //
 // This library is free software; you can redistribute it and/or
-// modify it under the terms of the GNU Library General Public
+// modify it under the terms of the GNU Lesser General Public
 // License as published by the Free Software Foundation; either
-// version 2 of the License, or (at your option) version 3.
+// version 2.1 of the License, or (at your option) version 3, or any
+// later version accepted by the membership of KDE e.V. (or its
+// successor approved by the membership of KDE e.V.), which shall
+// act as a proxy defined in Section 6 of version 3 of the license.
 //
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-// Library General Public License for more details.
+// Lesser General Public License for more details.
 //
-// You should have received a copy of the GNU Library General Public License
-// along with this library; see the file COPYING.LIB.  If not, write to
-// the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-// Boston, MA 02110-1301, USA.
+// You should have received a copy of the GNU Lesser General Public
+// License along with this library.  If not, see <http://www.gnu.org/licenses/>.
+//
 
-// config.h defines PATE_PYTHON_LIBRARY, the path to libpython.so
+// config.h defines PYKRITA_PYTHON_LIBRARY, the path to libpython.so
 // on the build system
 
 #include "config.h"
@@ -33,17 +36,18 @@
 
 #include <kconfigbase.h>
 #include <kconfiggroup.h>
-#include <kdebug.h>
-#include <KLocale>
+#include <klocale.h>
+
+#include <kis_debug.h>
 
 #define THREADED 1
 
-namespace Pate { namespace {
+namespace PyKrita { namespace {
 QLibrary* s_pythonLibrary = 0;
 PyThreadState* s_pythonThreadState = 0;
 }                                                           // anonymous namespace
 
-const char* Python::PATE_ENGINE = "pate";
+const char* Python::PYKRITA_ENGINE = "pykrita";
 
 Python::Python()
 {
@@ -85,13 +89,13 @@ PyObject* Python::functionCall(
 {
     if (!arguments)
     {
-        kError() << "Missing arguments for" << moduleName << functionName;
+        errScript << "Missing arguments for" << moduleName << functionName;
         return 0;
     }
     PyObject* const func = itemString(functionName, moduleName);
     if (!func)
     {
-        kError() << "Failed to resolve" << moduleName << functionName;
+        errScript << "Failed to resolve" << moduleName << functionName;
         return 0;
     }
     if (!PyCallable_Check(func))
@@ -121,7 +125,7 @@ PyObject* Python::itemString(const char* const item, const char* const moduleNam
     if (PyObject* const value = itemString(item, moduleDict(moduleName)))
         return value;
 
-    kError() << "Could not get item string" << moduleName << item;
+    errScript << "Could not get item string" << moduleName << item;
     return 0;
 }
 
@@ -143,10 +147,10 @@ bool Python::itemStringSet(const char* const item, PyObject* const value, const 
     return result;
 }
 
-PyObject* Python::kateHandler(const char* const moduleName, const char* const handler)
+PyObject* Python::kritaHandler(const char* const moduleName, const char* const handler)
 {
     if (PyObject* const module = moduleImport(moduleName))
-        return functionCall(handler, "kate", Py_BuildValue("(O)", module));
+        return functionCall(handler, "krita", Py_BuildValue("(O)", module));
     return 0;
 }
 
@@ -162,17 +166,17 @@ void Python::libraryLoad()
     if (!s_pythonLibrary)
     {
         kDebug() << "Creating s_pythonLibrary";
-        s_pythonLibrary = new QLibrary(PATE_PYTHON_LIBRARY);
+        s_pythonLibrary = new QLibrary(PYKRITA_PYTHON_LIBRARY);
         if (!s_pythonLibrary)
-            kError() << "Could not create" << PATE_PYTHON_LIBRARY;
+            errScript << "Could not create" << PYKRITA_PYTHON_LIBRARY;
 
         s_pythonLibrary->setLoadHints(QLibrary::ExportExternalSymbolsHint);
         if (!s_pythonLibrary->load())
-            kError() << "Could not load" << PATE_PYTHON_LIBRARY;
+            errScript << "Could not load" << PYKRITA_PYTHON_LIBRARY;
 
         Py_InitializeEx(0);
         if (!Py_IsInitialized())
-            kError() << "Could not initialise" << PATE_PYTHON_LIBRARY;
+            errScript << "Could not initialise" << PYKRITA_PYTHON_LIBRARY;
 #if THREADED
         PyEval_InitThreads();
         s_pythonThreadState = PyGILState_GetThisThreadState();
@@ -204,18 +208,18 @@ void Python::libraryUnload()
 
 PyObject* Python::moduleActions(const char* moduleName)
 {
-    return kateHandler(moduleName, "moduleGetActions");
+    return kritaHandler(moduleName, "moduleGetActions");
 }
 
 PyObject* Python::moduleConfigPages(const char* const moduleName)
 {
-    return kateHandler(moduleName, "moduleGetConfigPages");
+    return kritaHandler(moduleName, "moduleGetConfigPages");
 }
 
 QString Python::moduleHelp(const char* moduleName)
 {
     QString r;
-    PyObject* const result = kateHandler(moduleName, "moduleGetHelp");
+    PyObject* const result = kritaHandler(moduleName, "moduleGetHelp");
     if (result)
     {
         r = unicode(result);
@@ -332,7 +336,7 @@ void Python::traceback(const QString& description)
         Py_DECREF(exc_val);
     }
     m_traceback += description;
-    kError() << m_traceback;
+    errScript << m_traceback;
     /// \todo How about to show it somewhere else than "console output"?
 }
 
@@ -468,7 +472,7 @@ void Python::updateConfigurationFromDictionary(KConfigBase* const config, PyObje
             }
             else
             {
-                kError() << "Cannot write" << groupName << unicode(key) << unicode(PyObject_Str(value));
+                errScript << "Cannot write" << groupName << unicode(key) << unicode(PyObject_Str(value));
             }
         }
     }
@@ -498,7 +502,7 @@ void Python::updateDictionaryFromConfiguration(PyObject* const dictionary, const
             }
             else
             {
-                kError() << "Cannot read" << groupName << key << pickled;
+                errScript << "Cannot read" << groupName << key << pickled;
             }
         }
         Py_DECREF(groupDictionary);
@@ -538,6 +542,6 @@ bool Python::prependPythonPaths(const QString& path, PyObject* sys_path)
     return bool(prependStringToList(sys_path, path));
 }
 
-}                                                           // namespace Pate
+}                                                           // namespace PyKrita
 
-// kate: indent-width 4;
+// krita: indent-width 4;

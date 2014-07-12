@@ -19,13 +19,15 @@
 
 #include "kis_preference_set_registry.h"
 
-namespace Ui {
-    class ManagerPage;
+namespace Ui
+{
+class ManagerPage;
 }
 
 class KIcon;
 
-class PyQtPluginSettings : public KisPreferenceSet {
+class PyQtPluginSettings : public KisPreferenceSet
+{
     Q_OBJECT
 public:
 
@@ -50,7 +52,8 @@ private:
 };
 
 
-class PyQtPluginSettingsUpdateRepeater : public QObject {
+class PyQtPluginSettingsUpdateRepeater : public QObject
+{
     Q_OBJECT
 
 Q_SIGNALS:
@@ -63,14 +66,17 @@ public Q_SLOTS:
 };
 
 
-class PyQtPluginSettingsFactory : public KisAbstractPreferenceSetFactory {
+class PyQtPluginSettingsFactory : public KisAbstractPreferenceSetFactory
+{
 public:
     KisPreferenceSet* createPreferenceSet() {
         PyQtPluginSettings* ps = new PyQtPluginSettings();
         QObject::connect(ps, SIGNAL(settingsChanged()), &repeater, SLOT(updateSettings()), Qt::UniqueConnection);
         return ps;
     }
-    virtual QString id() const { return "ColorSelectorSettings"; }
+    virtual QString id() const {
+        return "ColorSelectorSettings";
+    }
     PyQtPluginSettingsUpdateRepeater repeater;
 };
 

@@ -16,6 +16,8 @@
  */
 
 #include "plugin.h"
+#include "engine.h"
+#include "utilities.h"
 
 #include <klocale.h>
 #include <kis_debug.h>
@@ -29,7 +31,9 @@ K_PLUGIN_FACTORY(KritaPyQtPluginFactory, registerPlugin<KritaPyQtPlugin>();)
 K_EXPORT_PLUGIN(KritaPyQtPluginFactory("krita"))
 
 KritaPyQtPlugin::KritaPyQtPlugin(QObject *parent, const QVariantList &)
-    : KisViewPlugin(parent, "kritaplugins/kritapyqtplugin.rc")
+        : KisViewPlugin(parent, "kritaplugins/kritapyqtplugin.rc")
+        , m_engineFailureReason(m_engine.tryInitializeGetFailureReason())
+        , m_autoReload(false)
 {
     KisPreferenceSetRegistry *preferenceSetRegistry = KisPreferenceSetRegistry::instance();
 
