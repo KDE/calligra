@@ -31,13 +31,13 @@ K_PLUGIN_FACTORY(KritaPyQtPluginFactory, registerPlugin<KritaPyQtPlugin>();)
 K_EXPORT_PLUGIN(KritaPyQtPluginFactory("krita"))
 
 KritaPyQtPlugin::KritaPyQtPlugin(QObject *parent, const QVariantList &)
-        : KisViewPlugin(parent, "kritaplugins/kritapyqtplugin.rc")
-        , m_engineFailureReason(m_engine.tryInitializeGetFailureReason())
-        , m_autoReload(false)
+    : KisViewPlugin(parent, "kritaplugins/kritapyqtplugin.rc")
+    , m_engineFailureReason(m_engine.tryInitializeGetFailureReason())
+    , m_autoReload(false)
 {
     KisPreferenceSetRegistry *preferenceSetRegistry = KisPreferenceSetRegistry::instance();
 
-    PyQtPluginSettingsFactory* settingsFactory = new PyQtPluginSettingsFactory();
+    PyQtPluginSettingsFactory* settingsFactory = new PyQtPluginSettingsFactory(&m_engine);
 
     //load and save preferences
     //if something in kritarc is missing, then the default from this load function will be used and saved back to kconfig.

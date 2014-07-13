@@ -57,7 +57,8 @@ PyMODINIT_FUNC PYKRITA_INIT();                                 // fwd decl
 
 /// \note Namespace name written in uppercase intentionally!
 /// It will appear in debug output from Python plugins...
-namespace PYKRITA {
+namespace PYKRITA
+{
 PyObject* debug(PyObject* /*self*/, PyObject* args)
 {
     const char* text;
@@ -69,7 +70,8 @@ PyObject* debug(PyObject* /*self*/, PyObject* args)
 }
 }                                                           // namespace PYKRITA
 
-namespace {
+namespace
+{
 PyObject* s_pykrita;
 /**
  * \attention Krita has embedded Python, so init function \b never will be called
@@ -108,21 +110,20 @@ PyObject* pykritaSaveConfiguration(PyObject* /*self*/, PyObject* /*unused*/)
     return Py_None;
 }
 
-PyMethodDef pykritaMethods[] =
-{
+PyMethodDef pykritaMethods[] = {
     {
         "saveConfiguration"
-      , &pykritaSaveConfiguration
-      , METH_NOARGS
-      , "Save the configuration of the plugin into " CONFIG_FILE
+        , &pykritaSaveConfiguration
+        , METH_NOARGS
+        , "Save the configuration of the plugin into " CONFIG_FILE
     }
-  , {
+    , {
         "kDebug"
-      , &PYKRITA::debug
-      , METH_VARARGS
-      , "True KDE way to show debug info"
+        , &PYKRITA::debug
+        , METH_VARARGS
+        , "True KDE way to show debug info"
     }
-  , { 0, 0, 0, 0 }
+    , { 0, 0, 0, 0 }
 };
 
 }                                                           // anonymous namespace
@@ -134,17 +135,16 @@ PyMODINIT_FUNC PYKRITA_INIT()
     s_pykrita = Py_InitModule3("pykrita", pykritaMethods, "The pykrita module");
     PyModule_AddStringConstant(s_pykrita, "__file__", __FILE__);
 #else
-    static struct PyModuleDef moduledef =
-    {
+    static struct PyModuleDef moduledef = {
         PyModuleDef_HEAD_INIT
-      , "pykrita"
-      , "The pykrita module"
-      , -1
-      , pykritaMethods
-      , 0
-      , 0
-      , 0
-      , 0
+        , "pykrita"
+        , "The pykrita module"
+        , -1
+        , pykritaMethods
+        , 0
+        , 0
+        , 0
+        , 0
     };
     s_pykrita = PyModule_Create(&moduledef);
     PyModule_AddStringConstant(s_pykrita, "__file__", __FILE__);
@@ -156,10 +156,10 @@ PyMODINIT_FUNC PYKRITA_INIT()
 
 //BEGIN PyKrita::Engine::PluginState
 PyKrita::Engine::PluginState::PluginState()
-  : m_enabled(false)
-  , m_broken(false)
-  , m_unstable(false)
-  , m_isDir(false)
+    : m_enabled(false)
+    , m_broken(false)
+    , m_unstable(false)
+    , m_isDir(false)
 {
 }
 //END PyKrita::Engine::PluginState
@@ -171,9 +171,9 @@ PyKrita::Engine::PluginState::PluginState()
  * W/o that call instance is invalid and using it lead to UB!
  */
 PyKrita::Engine::Engine()
-  : m_configuration(0)
-  , m_sessionConfiguration(0)
-  , m_engineIsUsable(false)
+    : m_configuration(0)
+    , m_sessionConfiguration(0)
+    , m_engineIsUsable(false)
 {
 }
 
@@ -229,9 +229,9 @@ QString PyKrita::Engine::tryInitializeGetFailureReason()
     // 2) w/ site_packages/ dir of the Python
     QStringList pluginDirectories = KGlobal::dirs()->findDirs("appdata", "pykrita/");
     pluginDirectories
-      << KStandardDirs::locate("appdata", "plugins/pykrita/")
-      << QLatin1String(PYKRITA_PYTHON_SITE_PACKAGES_INSTALL_DIR)
-      ;
+            << KStandardDirs::locate("appdata", "plugins/pykrita/")
+            << QLatin1String(PYKRITA_PYTHON_SITE_PACKAGES_INSTALL_DIR)
+            ;
     dbgScript << "Plugin Directories: " << pluginDirectories;
     if (!py.prependPythonPaths(pluginDirectories))
         return i18nc("@info:tooltip ", "Cannot update Python paths");
@@ -297,20 +297,18 @@ QModelIndex PyKrita::Engine::parent(const QModelIndex&) const
 
 QVariant PyKrita::Engine::headerData(
     const int section
-  , const Qt::Orientation orientation
-  , const int role
-  ) const
+    , const Qt::Orientation orientation
+    , const int role
+) const
 {
-    if (role == Qt::DisplayRole && orientation == Qt::Horizontal)
-    {
-        switch (section)
-        {
-            case Column::NAME:
-                return i18nc("@title:column", "Name");
-            case Column::COMMENT:
-                return i18nc("@title:column", "Comment");
-            default:
-                break;
+    if (role == Qt::DisplayRole && orientation == Qt::Horizontal) {
+        switch (section) {
+        case Column::NAME:
+            return i18nc("@title:column", "Name");
+        case Column::COMMENT:
+            return i18nc("@title:column", "Comment");
+        default:
+            break;
         }
     }
     return QVariant();
@@ -320,40 +318,35 @@ QVariant PyKrita::Engine::data(const QModelIndex& index, const int role) const
 {
     Q_ASSERT("Sanity check" && index.row() < m_plugins.size());
     Q_ASSERT("Sanity check" && index.column() < Column::LAST__);
-    switch (role)
-    {
-        case Qt::DisplayRole:
-            switch (index.column())
-            {
-                case Column::NAME:
-                    return m_plugins[index.row()].m_service->name();
-                case Column::COMMENT:
-                    return m_plugins[index.row()].m_service->comment();
-                default:
-                    break;
-            }
-            break;
-        case Qt::CheckStateRole:
-        {
-            if (index.column() == Column::NAME)
-            {
-                const bool checked = m_plugins[index.row()].isEnabled();
-                return checked ? Qt::Checked : Qt::Unchecked;
-            }
-            break;
-        }
-        case Qt::ToolTipRole:
-            if (!m_plugins[index.row()].m_errorReason.isEmpty())
-                return m_plugins[index.row()].m_errorReason;
-            break;
-        case Qt::ForegroundRole:
-            if (m_plugins[index.row()].isUnstable())
-            {
-                KColorScheme scheme(QPalette::Inactive, KColorScheme::View);
-                return scheme.foreground(KColorScheme::NegativeText).color();
-            }
+    switch (role) {
+    case Qt::DisplayRole:
+        switch (index.column()) {
+        case Column::NAME:
+            return m_plugins[index.row()].m_service->name();
+        case Column::COMMENT:
+            return m_plugins[index.row()].m_service->comment();
         default:
             break;
+        }
+        break;
+    case Qt::CheckStateRole: {
+        if (index.column() == Column::NAME) {
+            const bool checked = m_plugins[index.row()].isEnabled();
+            return checked ? Qt::Checked : Qt::Unchecked;
+        }
+        break;
+    }
+    case Qt::ToolTipRole:
+        if (!m_plugins[index.row()].m_errorReason.isEmpty())
+            return m_plugins[index.row()].m_errorReason;
+        break;
+    case Qt::ForegroundRole:
+        if (m_plugins[index.row()].isUnstable()) {
+            KColorScheme scheme(QPalette::Inactive, KColorScheme::View);
+            return scheme.foreground(KColorScheme::NegativeText).color();
+        }
+    default:
+        break;
     }
     return QVariant();
 }
@@ -376,8 +369,7 @@ bool PyKrita::Engine::setData(const QModelIndex& index, const QVariant& value, c
 {
     Q_ASSERT("Sanity check" && index.row() < m_plugins.size());
 
-    if (role == Qt::CheckStateRole)
-    {
+    if (role == Qt::CheckStateRole) {
         Q_ASSERT("Sanity check" && !m_plugins[index.row()].isBroken());
 
         const bool enabled = value.toBool();
@@ -395,9 +387,9 @@ QStringList PyKrita::Engine::enabledPlugins() const
     /// \todo \c std::transform + lambda or even better to use
     /// filtered and transformed view from boost
     QStringList result;
-    Q_FOREACH(const PluginState& plugin, m_plugins)
-        if (plugin.isEnabled())
-            result.append(plugin.m_service->name());
+    Q_FOREACH(const PluginState & plugin, m_plugins)
+    if (plugin.isEnabled())
+        result.append(plugin.m_service->name());
     return result;
 }
 
@@ -432,16 +424,14 @@ void PyKrita::Engine::writeSessionPluginsConfiguration(KConfigBase* const config
 bool PyKrita::Engine::isServiceUsable(const KService::Ptr& service)
 {
     dbgScript << "Got Krita/PythonPlugin: " << service->name()
-        << ", module-path=" << service->library()
-        ;
+              << ", module-path=" << service->library()
+              ;
     // Make sure mandatory properties are here
-    if (service->name().isEmpty())
-    {
+    if (service->name().isEmpty()) {
         dbgScript << "Ignore desktop file w/o a name";
         return false;
     }
-    if (service->library().isEmpty())
-    {
+    if (service->library().isEmpty()) {
         dbgScript << "Ignore desktop file w/o a module to import";
         return false;
     }
@@ -451,8 +441,7 @@ bool PyKrita::Engine::isServiceUsable(const KService::Ptr& service)
     // So, Python 2 modules must be marked explicitly!
 #if PY_MAJOR_VERSION < 3
     const QVariant is_compatible = service->property("X-Python-2-Compatible", QVariant::Bool);
-    if (!(is_compatible.isValid() && is_compatible.toBool()))
-    {
+    if (!(is_compatible.isValid() && is_compatible.toBool())) {
         dbgScript << service->name() << "is incompatible w/ embedded Python version";
         // Do not even show incompatible modules in the manager...
         return false;
@@ -461,12 +450,12 @@ bool PyKrita::Engine::isServiceUsable(const KService::Ptr& service)
     // ATTENTION If some module is Python 2 only, it must be marked w/
     // the property 'X-Python-2-Only' of type bool and ANY (valid) value...
     const QVariant is_py2_only = service->property("X-Python-2-Only", QVariant::Bool);
-    if (is_py2_only.isValid())
-    {
+    if (is_py2_only.isValid()) {
         dbgScript << service->name() << "is marked as Python 2 ONLY... >/dev/null";
         // Do not even show incompatible modules in the manager...
         return false;
     }
+
     return true;
 }
 
@@ -475,27 +464,33 @@ bool PyKrita::Engine::setModuleProperties(PluginState& plugin)
     // Find the module:
     // 0) try to locate directory based plugin first
     KUrl rel_path = QString(Python::PYKRITA_ENGINE);
+    qDebug() << rel_path;
     rel_path.addPath(plugin.moduleFilePathPart());
+    qDebug() << rel_path;
     rel_path.addPath("__init__.py");
+    qDebug() << rel_path;
+
     QString module_path = KGlobal::dirs()->findResource("appdata", rel_path.toLocalFile());
-    if (module_path.isEmpty())
-    {
+
+    qDebug() << module_path;
+
+    if (module_path.isEmpty()) {
         // 1) Nothing found, then try file based plugin
         rel_path = QString(Python::PYKRITA_ENGINE);
         rel_path.addPath(plugin.moduleFilePathPart() + ".py");
         module_path = KGlobal::dirs()->findResource("appdata", rel_path.toLocalFile());
+    } else {
+        plugin.m_isDir = true;
     }
-    else plugin.m_isDir = true;
 
     // Is anything found at all?
-    if (module_path.isEmpty())
-    {
+    if (module_path.isEmpty()) {
         plugin.m_broken = true;
         plugin.m_errorReason = i18nc(
-            "@info:tooltip"
-            , "Unable to find the module specified <application>%1</application>"
-            , plugin.m_service->library()
-            );
+                                   "@info:tooltip"
+                                   , "Unable to find the module specified <application>%1</application>"
+                                   , plugin.m_service->library()
+                               );
         return false;
     }
     dbgScript << "Found module path:" << module_path;
@@ -506,22 +501,20 @@ QPair<QString, PyKrita::version_checker> PyKrita::Engine::parseDependency(const 
 {
     // Check if dependency has package info attached
     const int pnfo = d.indexOf('(');
-    if (pnfo != -1)
-    {
+    if (pnfo != -1) {
         QString dependency = d.mid(0, pnfo);
         QString version_str = d.mid(pnfo + 1, d.size() - pnfo - 2).trimmed();
         dbgScript << "Desired version spec [" << dependency << "]:" << version_str;
         version_checker checker = version_checker::fromString(version_str);
-        if (!(checker.isValid() && d.endsWith(')')))
-        {
+        if (!(checker.isValid() && d.endsWith(')'))) {
             dbgScript << "Invalid version spec " << d;
             QString reason = i18nc(
-                "@info:tooltip"
-                , "<p>Specified version has invalid format for dependency <application>%1</application>: "
-                "<icode>%2</icode>. Skipped</p>"
-                , dependency
-                , version_str
-                );
+                                 "@info:tooltip"
+                                 , "<p>Specified version has invalid format for dependency <application>%1</application>: "
+                                 "<icode>%2</icode>. Skipped</p>"
+                                 , dependency
+                                 , version_str
+                             );
             return qMakePair(reason, version_checker());
         }
         return qMakePair(dependency, checker);
@@ -537,8 +530,7 @@ PyKrita::version PyKrita::Engine::tryObtainVersionFromTuple(PyObject* version_ob
         return version::invalid();
 
     int version_info[3] = {0, 0, 0};
-    for (unsigned i = 0; i < PyTuple_Size(version_obj); ++i)
-    {
+    for (unsigned i = 0; i < PyTuple_Size(version_obj); ++i) {
         PyObject* v = PyTuple_GetItem(version_obj, i);
         if (v && PyLong_Check(v))
             version_info[i] = PyLong_AsLong(v);
@@ -584,26 +576,24 @@ PyKrita::version PyKrita::Engine::tryObtainVersionFromString(PyObject* version_o
 void PyKrita::Engine::verifyDependenciesSetStatus(PluginState& plugin)
 {
     QStringList dependencies = plugin.m_service
-      ->property("X-Python-Dependencies", QVariant::StringList)
-      .toStringList();
+                               ->property("X-Python-Dependencies", QVariant::StringList)
+                               .toStringList();
 #if PY_MAJOR_VERSION < 3
     {
         // Try to get Py2 only dependencies
         QStringList py2_dependencies = plugin.m_service
-          ->property("X-Python-2-Dependencies", QVariant::StringList)
-          .toStringList();
+                                       ->property("X-Python-2-Dependencies", QVariant::StringList)
+                                       .toStringList();
         dependencies.append(py2_dependencies);
     }
 #endif
 
     Python py = Python();
     QString reason = i18nc("@info:tooltip", "<title>Dependency check</title>");
-    Q_FOREACH(const QString& d, dependencies)
-    {
+    Q_FOREACH(const QString & d, dependencies) {
         QPair<QString, version_checker> info_pair = parseDependency(d);
         version_checker& checker = info_pair.second;
-        if (!checker.isValid())
-        {
+        if (!checker.isValid()) {
             plugin.m_broken = true;
             reason += info_pair.first;
             continue;
@@ -614,10 +604,8 @@ void PyKrita::Engine::verifyDependenciesSetStatus(PluginState& plugin)
         // Try to import a module
         const QString& dependency = info_pair.first;
         PyObject* module = py.moduleImport(PQ(dependency));
-        if (module)
-        {
-            if (checker.isEmpty())                          // Need to check smth?
-            {
+        if (module) {
+            if (checker.isEmpty()) {                        // Need to check smth?
                 dbgScript << "No version to check, just make sure it's loaded:" << dependency;
                 Py_DECREF(module);
                 continue;
@@ -625,19 +613,18 @@ void PyKrita::Engine::verifyDependenciesSetStatus(PluginState& plugin)
             // Try to get __version__ from module
             // See PEP396: http://www.python.org/dev/peps/pep-0396/
             PyObject* version_obj = py.itemString("__version__", PQ(dependency));
-            if (!version_obj)
-            {
+            if (!version_obj) {
                 dbgScript << "No __version__ for " << dependency
-                  << "[" << plugin.m_service->name() << "]:\n" << py.lastTraceback()
-                  ;
+                          << "[" << plugin.m_service->name() << "]:\n" << py.lastTraceback()
+                          ;
                 plugin.m_unstable = true;
                 reason += i18nc(
-                    "@info:tooltip"
-                  , "<p>Failed to check version of dependency <application>%1</application>: "
-                    "Module do not have PEP396 <code>__version__</code> attribute. "
-                    "It is not disabled, but behaviour is unpredictable...</p>"
-                  , dependency
-                  );
+                              "@info:tooltip"
+                              , "<p>Failed to check version of dependency <application>%1</application>: "
+                              "Module do not have PEP396 <code>__version__</code> attribute. "
+                              "It is not disabled, but behaviour is unpredictable...</p>"
+                              , dependency
+                          );
             }
             // PEP396 require __version__ to tuple of integers... try it!
             version dep_version = tryObtainVersionFromTuple(version_obj);
@@ -646,49 +633,44 @@ void PyKrita::Engine::verifyDependenciesSetStatus(PluginState& plugin)
                 dep_version = tryObtainVersionFromString(version_obj);
 
             // Did we get it?
-            if (!dep_version.isValid())
-            {
+            if (!dep_version.isValid()) {
                 // Dunno what is this... Giving up!
                 dbgScript << "***: Can't parse module version for" << dependency;
                 plugin.m_unstable = true;
                 reason += i18nc(
-                    "@info:tooltip"
-                  , "<p><application>%1</application>: Unexpected module's version format"
-                  , dependency
-                  );
-            }
-            else if (!checker(dep_version))
-            {
+                              "@info:tooltip"
+                              , "<p><application>%1</application>: Unexpected module's version format"
+                              , dependency
+                          );
+            } else if (!checker(dep_version)) {
                 dbgScript << "Version requerement check failed ["
-                  << plugin.m_service->name() << "] for "
-                  << dependency << ": wanted " << checker.operationToString()
-                  << QString(checker.required())
-                  << ", but found" << QString(dep_version)
-                  ;
+                          << plugin.m_service->name() << "] for "
+                          << dependency << ": wanted " << checker.operationToString()
+                          << QString(checker.required())
+                          << ", but found" << QString(dep_version)
+                          ;
                 plugin.m_broken = true;
                 reason += i18nc(
-                    "@info:tooltip"
-                  , "<p><application>%1</application>: No suitable version found. "
-                    "Required version %2 %3, but found %4</p>"
-                  , dependency
-                  , checker.operationToString()
-                  , QString(checker.required())
-                  , QString(dep_version)
-                  );
+                              "@info:tooltip"
+                              , "<p><application>%1</application>: No suitable version found. "
+                              "Required version %2 %3, but found %4</p>"
+                              , dependency
+                              , checker.operationToString()
+                              , QString(checker.required())
+                              , QString(dep_version)
+                          );
             }
             // Do not need this module anymore...
             Py_DECREF(module);
-        }
-        else
-        {
+        } else {
             dbgScript << "Load failure [" << plugin.m_service->name() << "]:\n" << py.lastTraceback();
             plugin.m_broken = true;
             reason += i18nc(
-                "@info:tooltip"
-              , "<p>Failure on module load <application>%1</application>:</p><pre>%2</pre>"
-              , dependency
-              , py.lastTraceback()
-              );
+                          "@info:tooltip"
+                          , "<p>Failure on module load <application>%1</application>:</p><pre>%2</pre>"
+                          , dependency
+                          , py.lastTraceback()
+                      );
         }
     }
 
@@ -702,8 +684,7 @@ void PyKrita::Engine::scanPlugins()
 
     dbgScript << "Seeking for installed plugins...";
     KService::List services = KoServiceLocator::instance()->entries("Krita/PythonPlugin");
-    Q_FOREACH(KService::Ptr service, services)
-    {
+    Q_FOREACH(KService::Ptr service, services) {
         if (!isServiceUsable(service))
             continue;
 
@@ -711,8 +692,10 @@ void PyKrita::Engine::scanPlugins()
         PluginState plugin;
         plugin.m_service = service;
 
-        if (!setModuleProperties(plugin))
+        if (!setModuleProperties(plugin)) {
+            qDebug() << "Cannot load" << service->name() << ": broken"<< plugin.isBroken() << "because:" << plugin.errorReason();
             continue;
+        }
 
         verifyDependenciesSetStatus(plugin);
         m_plugins.append(plugin);
@@ -738,9 +721,9 @@ void PyKrita::Engine::loadModule(const int idx)
     PluginState& plugin = m_plugins[idx];
     Q_ASSERT(
         "Why to call loadModule() for disabled/broken plugin?"
-      && plugin.isEnabled()
-      && !plugin.isBroken()
-      );
+        && plugin.isEnabled()
+        && !plugin.isBroken()
+    );
 
     QString module_name = plugin.pythonModuleName();
     dbgScript << "Loading module: " << module_name;
@@ -752,19 +735,17 @@ void PyKrita::Engine::loadModule(const int idx)
     PyObject* plugins = py.itemString("plugins");
     Q_ASSERT(
         "'plugins' dict expected to be alive, otherwise code review required!"
-      && plugins
-      );
+        && plugins
+    );
 
     PyObject* module = py.moduleImport(PQ(module_name));
-    if (module)
-    {
+    if (module) {
         // Move just loaded module to the dict
         const int ins_result = PyDict_SetItemString(plugins, PQ(module_name), module);
         Q_ASSERT("expected successful insertion" && ins_result == 0);
         Py_DECREF(module);
         // Handle failure in release mode.
-        if (ins_result == 0)
-        {
+        if (ins_result == 0) {
             // Initialize the module from Python's side
             PyObject* const args = Py_BuildValue("(s)", PQ(module_name));
             PyObject* result = py.functionCall("_pluginLoaded", Python::PYKRITA_ENGINE, args);
@@ -773,14 +754,12 @@ void PyKrita::Engine::loadModule(const int idx)
                 return;                                     // Success!
         }
         plugin.m_errorReason = i18nc("@info:tooltip", "Internal engine failure");
-    }
-    else
-    {
+    } else {
         plugin.m_errorReason = i18nc(
-            "@info:tooltip"
-            , "Module not loaded:<nl/>%1"
-            , py.lastTraceback()
-            );
+                                   "@info:tooltip"
+                                   , "Module not loaded:<nl/>%1"
+                                   , py.lastTraceback()
+                               );
     }
     plugin.m_broken = true;
 }
@@ -799,8 +778,8 @@ void PyKrita::Engine::unloadModule(int idx)
     PyObject* plugins = py.itemString("plugins");
     Q_ASSERT(
         "'plugins' dict expected to be alive, otherwise code review required!"
-      && plugins
-      );
+        && plugins
+    );
 
     PyObject* const args = Py_BuildValue("(s)", PQ(plugin.pythonModuleName()));
     py.functionCall("_pluginUnloading", Python::PYKRITA_ENGINE, args);

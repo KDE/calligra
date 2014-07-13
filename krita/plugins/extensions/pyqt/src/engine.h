@@ -35,7 +35,8 @@
 # include <QList>
 # include <QStringList>
 
-namespace PyKrita {
+namespace PyKrita
+{
 class Python;                                               // fwd decl
 
 /**
@@ -129,13 +130,11 @@ protected:
 
 private:
     // Simulate strong typed enums from C++11
-    struct Column
-    {
-        enum type
-        {
+    struct Column {
+        enum type {
             NAME
-          , COMMENT
-          , LAST__
+            , COMMENT
+            , LAST__
         };
     };
 

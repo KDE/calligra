@@ -37,7 +37,6 @@ install(
     FILES_MATCHING PATTERN "*.py"
 )
 
-# Dive into plugins crowd
-#add_subdirectory(plugins)
+add_subdirectory(plugins)
 add_subdirectory(test)
 

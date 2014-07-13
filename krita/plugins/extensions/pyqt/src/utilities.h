@@ -33,7 +33,8 @@ class KConfigBase;
 /// Save us some ruddy time when printing out QStrings with UTF-8
 # define PQ(x) x.toUtf8().constData()
 
-namespace PyKrita {
+namespace PyKrita
+{
 
 /**
  * Instantiate this class on the stack to automatically get and release the

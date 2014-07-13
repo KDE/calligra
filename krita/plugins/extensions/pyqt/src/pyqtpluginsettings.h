@@ -18,6 +18,7 @@
 #define PYQTPLUGINSETTINGS_H
 
 #include "kis_preference_set_registry.h"
+#include "engine.h"
 
 namespace Ui
 {
@@ -31,7 +32,7 @@ class PyQtPluginSettings : public KisPreferenceSet
     Q_OBJECT
 public:
 
-    PyQtPluginSettings(QWidget *parent = 0);
+    PyQtPluginSettings(PyKrita::Engine *engine, QWidget *parent = 0);
     ~PyQtPluginSettings();
 
     virtual QString id();
@@ -48,7 +49,7 @@ Q_SIGNALS:
     void settingsChanged() const;
 
 private:
-    Ui::ManagerPage *ui;
+    Ui::ManagerPage *m_manager;
 };
 
 
@@ -69,8 +70,13 @@ public Q_SLOTS:
 class PyQtPluginSettingsFactory : public KisAbstractPreferenceSetFactory
 {
 public:
+
+    PyQtPluginSettingsFactory(PyKrita::Engine *engine) {
+        m_engine = engine;
+    }
+
     KisPreferenceSet* createPreferenceSet() {
-        PyQtPluginSettings* ps = new PyQtPluginSettings();
+        PyQtPluginSettings* ps = new PyQtPluginSettings(m_engine);
         QObject::connect(ps, SIGNAL(settingsChanged()), &repeater, SLOT(updateSettings()), Qt::UniqueConnection);
         return ps;
     }
@@ -78,6 +84,7 @@ public:
         return "ColorSelectorSettings";
     }
     PyQtPluginSettingsUpdateRepeater repeater;
+    PyKrita::Engine *m_engine;
 };
 
 

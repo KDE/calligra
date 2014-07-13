@@ -21,7 +21,7 @@
 #include <QVBoxLayout>
 #include <QDialogButtonBox>
 #include <QPushButton>
-
+#include <QSortFilterProxyModel>
 #include <kconfiggroup.h>
 
 #include <KoIcon.h>
@@ -30,16 +30,28 @@
 #include "kis_config.h"
 
 
-PyQtPluginSettings::PyQtPluginSettings(QWidget *parent) :
-        KisPreferenceSet(parent),
-        ui(new Ui::ManagerPage)
+PyQtPluginSettings::PyQtPluginSettings(PyKrita::Engine *engine, QWidget *parent) :
+    KisPreferenceSet(parent),
+    m_manager(new Ui::ManagerPage)
 {
-    ui->setupUi(this);
+    m_manager->setupUi(this);
+
+    QSortFilterProxyModel* const proxy_model = new QSortFilterProxyModel(this);
+    proxy_model->setSourceModel(engine);
+    m_manager->pluginsList->setModel(proxy_model);
+    m_manager->pluginsList->resizeColumnToContents(0);
+    m_manager->pluginsList->sortByColumn(0, Qt::AscendingOrder);
+
+    const bool is_enabled = bool(engine);
+    const bool is_visible = !is_enabled;
+    m_manager->errorLabel->setVisible(is_visible);
+    m_manager->pluginsList->setEnabled(is_enabled);
+
 }
 
 PyQtPluginSettings::~PyQtPluginSettings()
 {
-    delete ui;
+    delete m_manager;
 }
 
 QString PyQtPluginSettings::id()
