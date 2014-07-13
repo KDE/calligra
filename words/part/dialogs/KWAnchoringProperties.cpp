@@ -25,6 +25,7 @@
 #include "frames/KWFrame.h"
 #include "frames/KWTextFrameSet.h"
 
+#include <KoTextEditor.h>
 #include <KoShapeAnchor.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoTextShapeData.h>

@@ -41,6 +41,7 @@
 #include <QComboBox>
 #include <QTimeEdit>
 #include <QTime>
+#include <QTimer>
 #include <QActionGroup>
 
 //KDE Headers

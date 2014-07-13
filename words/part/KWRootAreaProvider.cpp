@@ -40,7 +40,9 @@
 #include <KoParagraphStyle.h>
 #include <KoTableStyle.h>
 #include <KoShapeAnchor.h>
+#include <KoColumns.h>
 
+#include <QTextTable>
 #include <QTimer>
 #include <kdebug.h>
 
