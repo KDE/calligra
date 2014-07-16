@@ -91,6 +91,7 @@ public:
     virtual void undoMergedCommands();
     virtual void redoMergedCommands();
     virtual QVector<KUndo2Command*> mergeCommandsVector();
+    virtual bool isMerged();
 
 
 

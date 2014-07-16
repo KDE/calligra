@@ -360,6 +360,10 @@ QVector<KUndo2Command*> KUndo2Command::mergeCommandsVector()
 {
     return m_mergeCommandsVector;
 }
+bool KUndo2Command::isMerged()
+{
+    return !m_mergeCommandsVector.isEmpty();
+}
 
 
 #endif // QT_NO_UNDOCOMMAND

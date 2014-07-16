@@ -128,6 +128,10 @@ QTime KisSavedCommand::endTime()
 {
     return m_command->endTime();
 }
+bool KisSavedCommand::isMerged()
+{
+    return m_command->isMerged();
+}
 
 
 

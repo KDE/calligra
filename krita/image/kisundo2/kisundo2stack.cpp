@@ -77,7 +77,7 @@ KisUndo2Command::~KisUndo2Command()
 
 void KisUndo2Command::redoMergedCommands()
 {
-    qDebug("in kisundo2command");
+
     if(!mergeCommandsVector().isEmpty()){
 
         QVectorIterator<KUndo2Command*> it(mergeCommandsVector());

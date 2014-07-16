@@ -66,6 +66,7 @@ public:
     virtual QTime time();
     virtual void setEndTime();
     virtual QTime endTime();
+    virtual bool isMerged();
 
 protected:
     void addCommands(KisStrokeId id, bool undo);
