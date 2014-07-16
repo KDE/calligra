@@ -48,6 +48,7 @@
 #include <QAction>
 #include <QTime>
 #include <QVector>
+//#include <kundo2commandmergeable.h>
 
 #include "kundo2_export.h"
 
@@ -75,7 +76,7 @@ public:
     void setText(const QString &text);
 
     virtual int id() const;
-    virtual int timedId() const;
+    virtual int timedId();
     virtual bool mergeWith(const KUndo2Command *other);
     virtual bool timedMergeWith(KUndo2Command *other);
 
@@ -83,11 +84,14 @@ public:
     const KUndo2Command *child(int index) const;
 
     bool hasParent();
-    void setTime();
-    QTime time();
+    virtual void setTime();
+    virtual QTime time();
+    virtual void setEndTime();
+    virtual QTime endTime();
     virtual void undoMergedCommands();
     virtual void redoMergedCommands();
-    QVector<KUndo2Command*> mergeCommandsVector();
+    virtual QVector<KUndo2Command*> mergeCommandsVector();
+
 
 
 private:
@@ -95,7 +99,9 @@ private:
     friend class KUndo2QStack;
 
     bool m_hasParent;
+
     QTime m_timeOfCreation;
+    QTime m_endOfCommand;
     QVector<KUndo2Command*> m_mergeCommandsVector;
 };
 
@@ -144,6 +150,13 @@ public:
 
     const KUndo2Command *command(int index) const;
 
+    void setUseCumulativeUndoRedo(bool value);
+    bool useCumulativeUndoRedo();
+    void setTimeT1(double value);
+    double timeT1();
+    void setTimeT2(double value);
+    double timeT2();
+
 public Q_SLOTS:
     void setClean();
     virtual void setIndex(int idx);
@@ -167,6 +180,9 @@ private:
     int m_clean_index;
     KUndo2Group *m_group;
     int m_undo_limit;
+    bool m_useCumulativeUndoRedo;
+    double m_timeT1;
+    double m_timeT2;
 
     // also from QUndoStackPrivate
     void setIndex(int idx, bool clean);

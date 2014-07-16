@@ -135,10 +135,12 @@ void KisTransactionData::redo()
     if (m_d->firstRedo) {
         m_d->firstRedo = false;
 
+
         possiblyResetOutlineCache();
         possiblyNotifySelectionChanged();
         return;
     }
+
 
     restoreSelectionOutlineCache(false);
 
@@ -158,7 +160,6 @@ void KisTransactionData::redo()
 void KisTransactionData::undo()
 {
     DEBUG_ACTION("Undo()");
-
     Q_ASSERT(m_d->memento);
     m_d->device->dataManager()->rollback(m_d->memento);
 

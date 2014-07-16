@@ -60,7 +60,7 @@ class KActionCollection;
 
 #ifndef QT_NO_UNDOCOMMAND
 
-class KISUNDO2_EXPORT KisUndo2Command :public KUndo2Command
+class KisUndo2Command :public KUndo2Command
 {
 public:
     explicit KisUndo2Command(KUndo2Command *parent = 0);
@@ -71,9 +71,9 @@ public:
     virtual void redoMergedCommands();
 
 
-    using KUndo2Command::timedId;
+    //using KUndo2Command::timedId;
     virtual int timedId();
-    using KUndo2Command::timedMergeWith;
+    //using KUndo2Command::timedMergeWith;
     virtual bool timedMergeWith(KUndo2Command *other);
 
 private:

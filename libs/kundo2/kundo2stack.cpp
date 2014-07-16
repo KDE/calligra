@@ -48,6 +48,7 @@
 #include "kundo2group.h"
 #include <KoIcon.h>
 
+
 #ifndef QT_NO_UNDOCOMMAND
 
 /*!
@@ -319,13 +320,14 @@ bool KUndo2Command::hasParent()
 {
     return m_hasParent;
 }
-int KUndo2Command::timedId() const
+int KUndo2Command::timedId()
 {
     return 0;
 }
 bool KUndo2Command::timedMergeWith(KUndo2Command *other)
 {
-    return false;
+    m_mergeCommandsVector.append(other);
+    return true;
 }
 void KUndo2Command::setTime()
 {
@@ -335,8 +337,18 @@ QTime KUndo2Command::time()
 {
     return m_timeOfCreation;
 }
+void KUndo2Command::setEndTime()
+{
+    m_endOfCommand  = QTime::currentTime();
+}
+QTime KUndo2Command::endTime()
+{
+    return m_endOfCommand;
+}
+
 void KUndo2Command::undoMergedCommands()
 {
+
     undo();
 }
 
@@ -438,6 +450,7 @@ KUndo2Action::KUndo2Action(const QString &textTemplate, const QString &defaultTe
 {
     m_textTemplate = textTemplate;
     m_defaultText = defaultText;
+
 }
 
 void KUndo2Action::setPrefixedText(const QString &text)
@@ -513,8 +526,10 @@ bool KUndo2QStack::checkUndoLimit()
 */
 
 KUndo2QStack::KUndo2QStack(QObject *parent)
-    : QObject(parent), m_index(0), m_clean_index(0), m_group(0), m_undo_limit(0)
+    : QObject(parent), m_index(0), m_clean_index(0), m_group(0), m_undo_limit(0),m_useCumulativeUndoRedo(false)
 {
+   setTimeT1(5);
+   setTimeT2(1);
 #ifndef QT_NO_UNDOGROUP
     if (KUndo2Group *group = qobject_cast<KUndo2Group*>(parent))
         group->addStack(this);
@@ -599,7 +614,8 @@ void KUndo2QStack::clear()
 
 void KUndo2QStack::push(KUndo2Command *cmd)
 {
-    cmd->redo();
+    cmd->redoMergedCommands();
+    cmd->setEndTime();
 
     bool macro = !m_macro_stack.isEmpty();
 
@@ -625,11 +641,9 @@ void KUndo2QStack::push(KUndo2Command *cmd)
     /**Here we are going to try to merge several commands together using the Qvector field in the commands using
      *3 parameters. N : Number of slots filled. T1 : Time lapsed between current command and previous command -- signal to
      *merge throughout the stack. T2 : Time lapsed between two commands signalling both commands belong to the same set **/
-
-    if(!macro && !m_command_list.isEmpty() && cmd->timedId() == 1){
+    if(!macro && !m_command_list.isEmpty() && cmd->timedId() == 1 && m_useCumulativeUndoRedo){
         if(m_command_list.size()>=undoLimit()){
             KUndo2Command* lastcmd = m_command_list.last();
-            qDebug("inside code");
             QListIterator<KUndo2Command*> it(m_command_list);
             it.toBack();
             while(it.hasPrevious()){
@@ -642,18 +656,21 @@ void KUndo2QStack::push(KUndo2Command *cmd)
             }
         }
         else{
-            if(cmd->time().msecsTo(m_command_list.last()->time())<-5000){       //T1 time elapsed
+            if(cmd->time().msecsTo(m_command_list.last()->endTime())<-m_timeT1*1000){       //T1 time elapsed
                 KUndo2Command* lastcmd = m_command_list.last();
                 QListIterator<KUndo2Command*> it(m_command_list);
                 it.toBack();
                 while(it.hasPrevious())
                 {
                     KUndo2Command* curr = it.previous();
+                    if(!lastcmd->mergeCommandsVector().isEmpty()){ 
+                        if(lastcmd->mergeCommandsVector().last()->time().msecsTo(curr->endTime())>-m_timeT2*1000 && lastcmd!=curr){
+                             lastcmd->timedMergeWith(curr);
+                             if(m_command_list.contains(curr))
+                             {
+                                 m_command_list.removeOne(curr);
 
-                    if(!lastcmd->mergeCommandsVector().isEmpty()){
-                        if(lastcmd->mergeCommandsVector().last()->time().msecsTo(curr->time())>-1000 && lastcmd!=curr){
-                            m_command_list.removeOne(curr);
-                            lastcmd->timedMergeWith(curr);
+                             }
                         }
                         else{
                             lastcmd = curr; //end of a merge set
@@ -661,20 +678,26 @@ void KUndo2QStack::push(KUndo2Command *cmd)
 
                     }
                     else{
-                        if(lastcmd->time().msecsTo(curr->time())>-1000 && lastcmd!=curr){
-                            m_command_list.removeOne(curr);
-                            lastcmd->timedMergeWith(curr);
+                        if(lastcmd->time().msecsTo(curr->endTime())>-m_timeT2*1000 && lastcmd!=curr){
+
+                            if(lastcmd->timedMergeWith(curr))
+
+                            if(m_command_list.contains(curr))
+                            {
+
+                               m_command_list.removeOne(curr);
+                            }
                         }
                         else{
-                            lastcmd = curr; //end of a merge set
+                                lastcmd = curr; //end of a merge set
+                            }
                         }
                     }
-                }
 
             }
         }
     }
-    setIndex(m_command_list.size());
+    m_index = m_command_list.size();
 
     if (try_merge && cur->mergeWith(cmd)) {
         delete cmd;
@@ -1088,7 +1111,10 @@ QString KUndo2QStack::text(int idx) const
 
     When the number of commands on a stack exceedes the stack's undoLimit, commands are
     deleted from the bottom of the stack. Macro commands (commands with child commands)
-    are treated as one command. The default value is 0, which means that there is no
+    are treated as one command. The default value void setTimeT1();
+    double timeT1();
+    void setTimeT2();
+    double timeT2();is 0, which means that there is no
     limit.
 
     This property may only be set when the undo stack is empty, since setting it on a
@@ -1152,6 +1178,34 @@ bool KUndo2QStack::isActive() const
 #else
     return m_group == 0 || m_group->activeStack() == this;
 #endif
+}
+void KUndo2QStack::setUseCumulativeUndoRedo(bool value)
+{
+    m_useCumulativeUndoRedo = value;
+}
+
+bool KUndo2QStack::useCumulativeUndoRedo()
+{
+    return m_useCumulativeUndoRedo;
+}
+void KUndo2QStack::setTimeT1(double value)
+{
+    m_timeT1 = value;
+}
+
+double KUndo2QStack::timeT1()
+{
+    return m_timeT1;
+}
+
+void KUndo2QStack::setTimeT2(double value)
+{
+    m_timeT2 = value;
+}
+
+double KUndo2QStack::timeT2()
+{
+    return m_timeT2;
 }
 
 QAction* KUndo2Stack::createRedoAction(KActionCollection* actionCollection, const QString& actionName)

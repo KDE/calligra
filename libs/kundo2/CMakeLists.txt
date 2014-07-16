@@ -5,6 +5,7 @@ set(kundo2_LIB_SRCS
 	kundo2group.cpp
 	kundo2view.cpp
 	kundo2model.cpp
+
 )
 
 kde4_add_library(kundo2 SHARED ${kundo2_LIB_SRCS})
