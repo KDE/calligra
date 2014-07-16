@@ -34,6 +34,36 @@ Image {
     source: Settings.theme.image("header_krita_sketch.png");
     smooth: true;
 
+    property alias leftImageSource: leftImage.source;
+    property alias rightImageSource: rightImage.source;
+
+    Image {
+        id: leftImage;
+
+        anchors {
+            left: parent.left;
+            top: parent.top;
+            bottom:parent.bottom;
+        }
+        fillMode: Image.PreserveAspectFit;
+        source: Settings.theme.image("header_krita_sketch_left.png");
+        smooth: true;
+        sourceSize.height: 256;
+    }
+
+    Image {
+        id: rightImage;
+
+        anchors {
+            right: parent.right;
+            top: parent.top;
+            bottom:parent.bottom;
+        }
+        fillMode: Image.PreserveAspectFit;
+        smooth: true;
+        source: Settings.theme.image("header_krita_sketch_right.png");
+    }
+
     Row {
         id: left;
 
