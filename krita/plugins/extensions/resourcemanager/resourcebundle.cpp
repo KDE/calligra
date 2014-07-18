@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoResourceBundle.h"
-#include "KoXmlResourceBundleManifest.h"
+#include "resourcebundle.h"
+#include "resourcebundle_manifest.h"
 
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
@@ -41,9 +41,10 @@
 #include <QPainter>
 
 #include <kis_resource_server_provider.h>
-#include "kis_workspace_resource.h"
-#include "kis_paintop_preset.h"
-#include "kis_brush_server.h"
+#include <kis_workspace_resource.h>
+#include <kis_paintop_preset.h>
+#include <kis_brush_server.h>
+#include <kis_debug.h>
 
 #include <calligraversion.h>
 #include <calligragitversion.h>
@@ -51,8 +52,8 @@
 #include <resourcemanager.h>
 
 
-KoResourceBundle::KoResourceBundle(QString const& fileName)
-    : KoResource(fileName)\
+ResourceBundle::ResourceBundle(QString const& fileName)
+    : KoResource(fileName)
 {
     setName(QFileInfo(fileName).baseName());
 
@@ -69,21 +70,22 @@ KoResourceBundle::KoResourceBundle(QString const& fileName)
     m_metadata["generator"] = "Krita (" + version + ")";
 }
 
-KoResourceBundle::~KoResourceBundle()
+ResourceBundle::~ResourceBundle()
 {
 }
 
-QString KoResourceBundle::defaultFileExtension() const
+QString ResourceBundle::defaultFileExtension() const
 {
     return QString(".bundle");
 }
 
-bool KoResourceBundle::load()
+bool ResourceBundle::load()
 {
     if (filename().isEmpty()) return false;
     QScopedPointer<KoStore> resourceStore(KoStore::createStore(filename(), KoStore::Read, "application/x-krita-resourcebundle", KoStore::Zip));
 
-    if (resourceStore->bad()) {
+    if (!resourceStore || resourceStore->bad()) {
+        qWarning() << "Could not open store on bundle" << filename();
         m_installed = false;
         setValid(false);
         return false;
@@ -94,11 +96,12 @@ bool KoResourceBundle::load()
 
         if (resourceStore->open("META-INF/manifest.xml")) {
             if (!m_manifest.load(resourceStore->device())) {
+                qWarning() << "Could not open manifest for bundle" << filename();
                 return false;
             }
             resourceStore->close();
 
-            foreach(KoXmlResourceBundleManifest::ResourceReference ref, m_manifest.files()) {
+            foreach(ResourceBundleManifest::ResourceReference ref, m_manifest.files()) {
                 if (!resourceStore->open(ref.resourcePath)) {
                     qWarning() << "Bundle is broken. File" << ref.resourcePath << "is missing";
                     return false;
@@ -106,12 +109,14 @@ bool KoResourceBundle::load()
                 resourceStore->close();
             }
         } else {
+            qWarning() << "Could not load META-INF/manifest.xml";
             return false;
         }
 
         if (resourceStore->open("meta.xml")) {
             KoXmlDocument doc;
             if (!doc.setContent(resourceStore->device())) {
+                qWarning() << "Could not parse meta.xml for" << filename();
                 return false;
             }
             // First find the manifest:manifest node.
@@ -126,6 +131,7 @@ bool KoResourceBundle::load()
             }
 
             if (n.isNull()) {
+                qWarning() << "Could not find manifest node for bundle" << filename();
                 return false;
             }
 
@@ -170,12 +176,16 @@ bool KoResourceBundle::load()
             resourceStore->close();
         }
         else {
+            qWarning() << "Could not load meta.xml";
             return false;
         }
 
         if (resourceStore->open("preview.png")) {
             m_thumbnail.load(resourceStore->device(), "PNG");
             resourceStore->close();
+        }
+        else {
+            qWarning() << "Could not open preview.png";
         }
 
         m_installed = m_manifest.isInstalled();
@@ -186,45 +196,76 @@ bool KoResourceBundle::load()
     return true;
 }
 
-bool KoResourceBundle::loadFromDevice(QIODevice *)
+bool ResourceBundle::loadFromDevice(QIODevice *)
 {
     return false;
 }
 
 bool saveResourceToStore(KoResource *resource, KoStore *store, const QString &resType)
 {
-    if (!resource) return false;
-    if (!store || store->bad()) return false;
+    if (!resource) {
+        qWarning() << "No Resource";
+        return false;
+    }
+
+    if (!resource->valid()) {
+        qWarning() << "Resource is not valid";
+        return false;
+    }
+    if (!store || store->bad()) {
+        qWarning() << "No Store or Store is Bad";
+        return false;
+    }
 
     QByteArray ba;
     QBuffer buf;
 
+    QFileInfo fi(resource->filename());
+    if (fi.exists() && fi.isReadable() && !fi.isWritable()) {
 
-    if (QFileInfo(resource->filename()).exists()) {
-        resource->save();
         QFile f(resource->filename());
-        if (!f.open(QFile::ReadOnly)) return false;
+        if (!f.open(QFile::ReadOnly)) {
+            qWarning() << "Could not open resource" << resource->filename();
+            return false;
+        }
         ba = f.readAll();
-        if (ba.size() == 0) return false;
+        if (ba.size() == 0) {
+            qWarning() << "Resource is empty" << resource->filename();
+            return false;
+        }
         f.close();
         buf.setBuffer(&ba);
     }
     else {
-        if (!buf.open(QBuffer::WriteOnly)) return false;
-        if (!resource->saveToDevice(&buf)) return false;
+
+        if (!buf.open(QBuffer::WriteOnly)) {
+            qWarning() << "Could not open buffer";
+            return false;
+        }
+        if (!resource->saveToDevice(&buf)) {
+            qWarning() << "Could not save resource to buffer";
+            return false;
+        }
         buf.close();
     }
-    if (!buf.open(QBuffer::ReadOnly)) return false;
-    Q_ASSERT(!store->hasFile(resType + "/" + resource->shortFilename()));
-    if (!store->open(resType + "/" + resource->shortFilename())) return false;
 
-    bool res = (store->write(buf.data()) != buf.size());
+    if (!buf.open(QBuffer::ReadOnly)) {
+        qWarning() << "Could not open buffer";
+        return false;
+    }
+    Q_ASSERT(!store->hasFile(resType + "/" + resource->shortFilename()));
+    if (!store->open(resType + "/" + resource->shortFilename())) {
+        qWarning() << "Could not open file in store for resource";
+        return false;
+    }
+
+    bool res = (store->write(buf.data()) == buf.size());
     store->close();
     return res;
 
 }
 
-bool KoResourceBundle::save()
+bool ResourceBundle::save()
 {
     if (filename().isEmpty()) return false;
 
@@ -234,57 +275,100 @@ bool KoResourceBundle::save()
     bundleDir.cdUp();
 
     QScopedPointer<KoStore> store(KoStore::createStore(filename(), KoStore::Write, "application/x-krita-resourcebundle", KoStore::Zip));
-    
+
     if (!store || store->bad()) return false;
 
     foreach(const QString &resType, m_manifest.types()) {
+
         if (resType == "ko_gradients") {
             KoResourceServer<KoAbstractGradient>* gradientServer = KoResourceServerProvider::instance()->gradientServer();
-            foreach(const KoXmlResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
+            foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
                 KoResource *res = gradientServer->resourceByMD5(ref.md5sum);
-                if (!res) res = gradientServer->resourceByFilename(QFileInfo(ref.resourcePath).completeBaseName());
-                saveResourceToStore(res, store.data(), "gradients");
+                if (!res) res = gradientServer->resourceByFilename(QFileInfo(ref.resourcePath).fileName());
+                if (!saveResourceToStore(res, store.data(), "gradients")) {
+                    if (res) {
+                        qWarning() << "Could not save resource" << resType << res->name();
+                    }
+                    else {
+                        qWarning() << "could not find resource for" << QFileInfo(ref.resourcePath).fileName();
+                    }
+                }
             }
         }
         else if (resType  == "ko_patterns") {
             KoResourceServer<KoPattern>* patternServer = KoResourceServerProvider::instance()->patternServer();
-            foreach(const KoXmlResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
+            foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
                 KoResource *res = patternServer->resourceByMD5(ref.md5sum);
-                if (!res) res = patternServer->resourceByFilename(QFileInfo(ref.resourcePath).completeBaseName());
-                saveResourceToStore(res, store.data(), "patterns");
+                if (!res) res = patternServer->resourceByFilename(QFileInfo(ref.resourcePath).fileName());
+                if (!saveResourceToStore(res, store.data(), "patterns")) {
+                    if (res) {
+                        qWarning() << "Could not save resource" << resType << res->name();
+                    }
+                    else {
+                        qWarning() << "could not find resource for" << QFileInfo(ref.resourcePath).fileName();
+                    }
+                }
             }
         }
         else if (resType  == "kis_brushes") {
             KisBrushResourceServer* brushServer = KisBrushServer::instance()->brushServer();
-            foreach(const KoXmlResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
+            foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
                 KisBrushSP brush = brushServer->resourceByMD5(ref.md5sum);
-                if (!brush) brush = brushServer->resourceByFilename(QFileInfo(ref.resourcePath).completeBaseName());
+                if (!brush) brush = brushServer->resourceByFilename(QFileInfo(ref.resourcePath).fileName());
                 KoResource *res = brush.data();
-                saveResourceToStore(res, store.data(), "brushes");
+                if (!saveResourceToStore(res, store.data(), "brushes")) {
+                    if (res) {
+                        qWarning() << "Could not save resource" << resType << res->name();
+                    }
+                    else {
+                        qWarning() << "could not find resource for" << QFileInfo(ref.resourcePath).fileName();
+                    }
+                }
             }
         }
         else if (resType  == "ko_palettes") {
             KoResourceServer<KoColorSet>* paletteServer = KoResourceServerProvider::instance()->paletteServer();
-            foreach(const KoXmlResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
+            foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
                 KoResource *res = paletteServer->resourceByMD5(ref.md5sum);
-                if (!res) res = paletteServer->resourceByFilename(QFileInfo(ref.resourcePath).completeBaseName());
-                saveResourceToStore(res, store.data(), "palettes");
+                if (!res) res = paletteServer->resourceByFilename(QFileInfo(ref.resourcePath).fileName());
+                if (!saveResourceToStore(res, store.data(), "palettes")) {
+                    if (res) {
+                        qWarning() << "Could not save resource" << resType << res->name();
+                    }
+                    else {
+                        qWarning() << "could not find resource for" << QFileInfo(ref.resourcePath).fileName();
+                    }
+                }
             }
         }
         else if (resType  == "kis_workspaces") {
             KoResourceServer< KisWorkspaceResource >* workspaceServer = KisResourceServerProvider::instance()->workspaceServer();
-            foreach(const KoXmlResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
+            foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
                 KoResource *res = workspaceServer->resourceByMD5(ref.md5sum);
-                if (!res) res = workspaceServer->resourceByFilename(QFileInfo(ref.resourcePath).completeBaseName());
-                saveResourceToStore(res, store.data(), "workspaces");
+                if (!res) res = workspaceServer->resourceByFilename(QFileInfo(ref.resourcePath).fileName());
+                if (!saveResourceToStore(res, store.data(), "workspaces")) {
+                    if (res) {
+                        qWarning() << "Could not save resource" << resType << res->name();
+                    }
+                    else {
+                        qWarning() << "could not find resource for" << QFileInfo(ref.resourcePath).fileName();
+                    }
+                }
             }
         }
         else if (resType  == "kis_paintoppresets") {
             KoResourceServer<KisPaintOpPreset>* paintoppresetServer = KisResourceServerProvider::instance()->paintOpPresetServer();
-            foreach(const KoXmlResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
+            foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
                 KoResource *res = paintoppresetServer->resourceByMD5(ref.md5sum);
-                if (!res) res = paintoppresetServer->resourceByFilename(QFileInfo(ref.resourcePath).completeBaseName());
-                saveResourceToStore(res, store.data(), "paintoppresets");
+                if (!res) res = paintoppresetServer->resourceByFilename(QFileInfo(ref.resourcePath).fileName());
+                if (!saveResourceToStore(res, store.data(), "paintoppresets")) {
+                    if (res) {
+                        qWarning() << "Could not save resource" << resType << res->name();
+                    }
+                    else {
+                        qWarning() << "could not find resource for" << QFileInfo(ref.resourcePath).fileName();
+                    }
+                }
             }
         }
     }
@@ -294,7 +378,7 @@ bool KoResourceBundle::save()
         QBuffer buffer(&byteArray);
         m_thumbnail.save(&buffer, "PNG");
         if (!store->open("preview.png")) qWarning() << "Could not open preview.png";
-        if (!store->write(byteArray) == buffer.size()) qWarning() << "Could not write preview.png";
+        if (store->write(byteArray) != buffer.size()) qWarning() << "Could not write preview.png";
         store->close();
     }
 
@@ -348,28 +432,47 @@ bool KoResourceBundle::save()
     return true;
 }
 
-bool KoResourceBundle::saveToDevice(QIODevice */*dev*/) const
+bool ResourceBundle::saveToDevice(QIODevice */*dev*/) const
 {
     return false;
 }
 
-void KoResourceBundle::install()
+bool ResourceBundle::install()
 {
-    if (filename().isEmpty()) return;
+    if (filename().isEmpty())  {
+        qWarning() << "Cannot install bundle: no file name" << this;
+        return false;
+    }
     QScopedPointer<KoStore> resourceStore(KoStore::createStore(filename(), KoStore::Read, "application/x-krita-resourcebundle", KoStore::Zip));
-    if (!resourceStore || resourceStore->bad()) return;
+
+    if (!resourceStore || resourceStore->bad()) {
+        qWarning() << "Cannot open the resource bundle: invalid zip file?";
+        return false;
+    }
 
     foreach(const QString &resType, m_manifest.types()) {
-        if (resType == "ko_gradients") {
+        dbgResources << "Installing resource type" << resType;
+        if (resType == "gradients") {
             KoResourceServer<KoAbstractGradient>* gradientServer = KoResourceServerProvider::instance()->gradientServer();
-            foreach(const KoXmlResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
+            foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
+
+                if (resourceStore->isOpen()) resourceStore->close();
+
+                dbgResources << "\tInstalling" << ref.resourcePath;
                 KoAbstractGradient *res = gradientServer->createResource(ref.resourcePath);
+                if (!res) {
+                    qWarning() << "Could not create resource for" << ref.resourcePath;
+                    continue;
+                }
                 if (!resourceStore->open(ref.resourcePath)) {
                     qWarning() << "Failed to open" << ref.resourcePath << "from bundle" << filename();
+                    continue;
                 }
                 if (!res->loadFromDevice(resourceStore->device())) {
                     qWarning() << "Failed to load" << ref.resourcePath << "from bundle" << filename();
+                    continue;
                 }
+                dbgResources << "\t\tresource:" << res->name();
                 gradientServer->addResource(res, false);
                 foreach(const QString &tag, ref.tagList) {
                     gradientServer->addTag(res, tag);
@@ -377,15 +480,25 @@ void KoResourceBundle::install()
                 gradientServer->addTag(res, name());
             }
         }
-        else if (resType  == "ko_patterns") {
+        else if (resType  == "patterns") {
             KoResourceServer<KoPattern>* patternServer = KoResourceServerProvider::instance()->patternServer();
-            foreach(const KoXmlResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
+            foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
+
+                if (resourceStore->isOpen()) resourceStore->close();
+
+                dbgResources << "\tInstalling" << ref.resourcePath;
                 KoPattern *res = patternServer->createResource(ref.resourcePath);
+                if (!res) {
+                    qWarning() << "Could not create resource for" << ref.resourcePath;
+                    continue;
+                }
                 if (!resourceStore->open(ref.resourcePath)) {
                     qWarning() << "Failed to open" << ref.resourcePath << "from bundle" << filename();
+                    continue;
                 }
                 if (!res->loadFromDevice(resourceStore->device())) {
                     qWarning() << "Failed to load" << ref.resourcePath << "from bundle" << filename();
+                    continue;
                 }
                 patternServer->addResource(res, false);
                 foreach(const QString &tag, ref.tagList) {
@@ -394,16 +507,27 @@ void KoResourceBundle::install()
                 patternServer->addTag(res, name());
             }
         }
-        else if (resType  == "kis_brushes") {
+        else if (resType  == "brushes") {
             KisBrushResourceServer *brushServer = KisBrushServer::instance()->brushServer();
-            foreach(const KoXmlResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
+            foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
+
+                if (resourceStore->isOpen()) resourceStore->close();
+
+                dbgResources << "\tInstalling" << ref.resourcePath;
                 KisBrushSP res = brushServer->createResource(ref.resourcePath);
+                if (!res) {
+                    qWarning() << "Could not create resource for" << ref.resourcePath;
+                    continue;
+                }
                 if (!resourceStore->open(ref.resourcePath)) {
                     qWarning() << "Failed to open" << ref.resourcePath << "from bundle" << filename();
+                    continue;
                 }
                 if (!res->loadFromDevice(resourceStore->device())) {
                     qWarning() << "Failed to load" << ref.resourcePath << "from bundle" << filename();
+                    continue;
                 }
+                dbgResources << "\t\tresource:" << res->name();
                 brushServer->addResource(res, false);
                 foreach(const QString &tag, ref.tagList) {
                     brushServer->addTag(res.data(), tag);
@@ -411,16 +535,28 @@ void KoResourceBundle::install()
                 brushServer->addTag(res.data(), name());
             }
         }
-        else if (resType  == "ko_palettes") {
+        else if (resType  == "palettes") {
             KoResourceServer<KoColorSet>* paletteServer = KoResourceServerProvider::instance()->paletteServer();
-            foreach(const KoXmlResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
+            foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
+
+                if (resourceStore->isOpen()) resourceStore->close();
+
+                dbgResources << "\tInstalling" << ref.resourcePath;
                 KoColorSet *res = paletteServer->createResource(ref.resourcePath);
+
+                if (!res) {
+                    qWarning() << "Could not create resource for" << ref.resourcePath;
+                    continue;
+                }
                 if (!resourceStore->open(ref.resourcePath)) {
                     qWarning() << "Failed to open" << ref.resourcePath << "from bundle" << filename();
+                    continue;
                 }
                 if (!res->loadFromDevice(resourceStore->device())) {
                     qWarning() << "Failed to load" << ref.resourcePath << "from bundle" << filename();
+                    continue;
                 }
+                dbgResources << "\t\tresource:" << res->name();
                 paletteServer->addResource(res, false);
                 foreach(const QString &tag, ref.tagList) {
                     paletteServer->addTag(res, tag);
@@ -428,16 +564,27 @@ void KoResourceBundle::install()
                 paletteServer->addTag(res, name());
             }
         }
-        else if (resType  == "kis_workspaces") {
+        else if (resType  == "workspaces") {
             KoResourceServer< KisWorkspaceResource >* workspaceServer = KisResourceServerProvider::instance()->workspaceServer();
-            foreach(const KoXmlResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
+            foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
+
+                if (resourceStore->isOpen()) resourceStore->close();
+
+                dbgResources << "\tInstalling" << ref.resourcePath;
                 KisWorkspaceResource *res = workspaceServer->createResource(ref.resourcePath);
+                if (!res) {
+                    qWarning() << "Could not create resource for" << ref.resourcePath;
+                    continue;
+                }
                 if (!resourceStore->open(ref.resourcePath)) {
                     qWarning() << "Failed to open" << ref.resourcePath << "from bundle" << filename();
+                    continue;
                 }
                 if (!res->loadFromDevice(resourceStore->device())) {
                     qWarning() << "Failed to load" << ref.resourcePath << "from bundle" << filename();
+                    continue;
                 }
+                dbgResources << "\t\tresource:" << res->name();
                 workspaceServer->addResource(res, false);
                 foreach(const QString &tag, ref.tagList) {
                     workspaceServer->addTag(res, tag);
@@ -445,16 +592,27 @@ void KoResourceBundle::install()
                 workspaceServer->addTag(res, name());
             }
         }
-        else if (resType  == "kis_paintoppresets") {
+        else if (resType  == "paintoppresets") {
             KoResourceServer<KisPaintOpPreset>* paintoppresetServer = KisResourceServerProvider::instance()->paintOpPresetServer();
-            foreach(const KoXmlResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
+            foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
+
+                if (resourceStore->isOpen()) resourceStore->close();
+
+                dbgResources << "\tInstalling" << ref.resourcePath;
                 KisPaintOpPreset *res = paintoppresetServer->createResource(ref.resourcePath);
+                if (!res) {
+                    qWarning() << "Could not create resource for" << ref.resourcePath;
+                    continue;
+                }
                 if (!resourceStore->open(ref.resourcePath)) {
                     qWarning() << "Failed to open" << ref.resourcePath << "from bundle" << filename();
+                    continue;
                 }
                 if (!res->loadFromDevice(resourceStore->device())) {
                     qWarning() << "Failed to load" << ref.resourcePath << "from bundle" << filename();
+                    continue;
                 }
+                dbgResources << "\t\tresource:" << res->name();
                 paintoppresetServer->addResource(res, false);
                 foreach(const QString &tag, ref.tagList) {
                     paintoppresetServer->addTag(res, tag);
@@ -464,9 +622,10 @@ void KoResourceBundle::install()
         }
     }
     m_installed = true;
+    return true;
 }
 
-void KoResourceBundle::uninstall()
+bool ResourceBundle::uninstall()
 {
 //    if (!m_installed)
 //        return;
@@ -486,14 +645,15 @@ void KoResourceBundle::uninstall()
 //    m_installed = false;
 //    m_manifest.uninstall();
 //    save();
+    return false;
 }
 
-void KoResourceBundle::addMeta(const QString &type, const QString &value)
+void ResourceBundle::addMeta(const QString &type, const QString &value)
 {
     m_metadata.insert(type, value);
 }
 
-const QString KoResourceBundle::getMeta(const QString &type, const QString &defaultValue) const
+const QString ResourceBundle::getMeta(const QString &type, const QString &defaultValue) const
 {
     if (m_metadata.contains(type)) {
         return m_metadata[type];
@@ -504,23 +664,23 @@ const QString KoResourceBundle::getMeta(const QString &type, const QString &defa
 }
 
 
-void KoResourceBundle::addResource(QString fileType, QString filePath, QStringList fileTagList, const QByteArray md5sum)
+void ResourceBundle::addResource(QString fileType, QString filePath, QStringList fileTagList, const QByteArray md5sum)
 {
     m_manifest.addResource(fileType, filePath, fileTagList, md5sum);
 }
 
-QList<QString> KoResourceBundle::getTagsList()
+QList<QString> ResourceBundle::getTagsList()
 {
     return QList<QString>::fromSet(m_bundletags);
 }
 
 
-void KoResourceBundle::removeFile(QString fileName)
+void ResourceBundle::removeFile(QString fileName)
 {
     m_manifest.removeFile(fileName);
 }
 
-void KoResourceBundle::addResourceDirs()
+void ResourceBundle::addResourceDirs()
 {
     QDir bundleDir = KGlobal::dirs()->saveLocation("appdata", "bundles");
     bundleDir.cdUp();
@@ -530,12 +690,12 @@ void KoResourceBundle::addResourceDirs()
     }
 }
 
-bool KoResourceBundle::isInstalled()
+bool ResourceBundle::isInstalled()
 {
     return m_installed;
 }
 
-void KoResourceBundle::rename(QString filename, QString name)
+void ResourceBundle::rename(QString filename, QString name)
 {
     QString oldName = shortFilename();
     QString shortName = name.section('.', 0, 0);
@@ -561,12 +721,12 @@ void KoResourceBundle::rename(QString filename, QString name)
     save();
 }
 
-void KoResourceBundle::removeTag(QString tagName)
+void ResourceBundle::removeTag(QString tagName)
 {
     m_bundletags.remove(tagName);
 }
 
-void KoResourceBundle::setThumbnail(QString filename)
+void ResourceBundle::setThumbnail(QString filename)
 {
     if (QFileInfo(filename).exists()) {
         m_thumbnail = QImage(filename);
@@ -581,12 +741,12 @@ void KoResourceBundle::setThumbnail(QString filename)
     }
 }
 
-void KoResourceBundle::addTag(const QString &tagName)
+void ResourceBundle::addTag(const QString &tagName)
 {
     m_bundletags << tagName;
 }
 
-QByteArray KoResourceBundle::generateMD5() const
+QByteArray ResourceBundle::generateMD5() const
 {
     QFile f(filename());
     if (f.exists()) {
@@ -599,7 +759,7 @@ QByteArray KoResourceBundle::generateMD5() const
     return QByteArray();
 }
 
-void KoResourceBundle::writeMeta(const char *metaTag, const QString &metaKey, KoXmlWriter *writer)
+void ResourceBundle::writeMeta(const char *metaTag, const QString &metaKey, KoXmlWriter *writer)
 {
     if (m_metadata.contains(metaKey)) {
         writer->startElement(metaTag);
@@ -608,7 +768,7 @@ void KoResourceBundle::writeMeta(const char *metaTag, const QString &metaKey, Ko
     }
 }
 
-void KoResourceBundle::writeUserDefinedMeta(const QString &metaKey, KoXmlWriter *writer)
+void ResourceBundle::writeUserDefinedMeta(const QString &metaKey, KoXmlWriter *writer)
 {
     if (m_metadata.contains(metaKey)) {
         writer->startElement("meta:meta-userdefined");

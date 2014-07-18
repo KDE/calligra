@@ -22,6 +22,7 @@
 #include <QSharedData>
 #include <KoText.h>
 #include <KoShapeBackground.h>
+#include <KoColumns.h>
 
 class KWPageStylePrivate : public QSharedData
 {

@@ -25,25 +25,25 @@
 #include <KoXmlWriter.h>
 
 #include "KoResource.h"
-#include "KoXmlResourceBundleManifest.h"
+#include "resourcebundle_manifest.h"
 
 /**
- * @brief The KoResourceBundle class
+ * @brief The ResourceBundle class
  * @details Describe the resource bundles as KoResources
  */
-class KoResourceBundle : public KoResource
+class ResourceBundle : public KoResource
 {
 
 public:
     /**
-     * @brief KoResourceBundle : Ctor * @param bundlePath the path of the bundle
+     * @brief ResourceBundle : Ctor * @param bundlePath the path of the bundle
      */
-    KoResourceBundle(QString const& fileName);
+    ResourceBundle(QString const& fileName);
 
     /**
-     * @brief ~KoResourceBundle : Dtor
+     * @brief ~ResourceBundle : Dtor
      */
-    virtual ~KoResourceBundle();
+    virtual ~ResourceBundle();
 
     /**
      * @brief defaultFileExtension
@@ -67,14 +67,14 @@ public:
     virtual bool saveToDevice(QIODevice* dev) const;
 
     /**
-     * @brief install : Install the resource bundle.
+     * @brief install : Install the contents of the resource bundle.
      */
-    void install();
+    bool install();
 
     /**
      * @brief uninstall : Uninstall the resource bundle.
      */
-    void uninstall();
+    bool uninstall();
 
     /**
      * @brief addMeta : Add a Metadata to the resource
@@ -131,7 +131,7 @@ private:
 
 private:
     QImage m_thumbnail;
-    KoXmlResourceBundleManifest m_manifest;
+    ResourceBundleManifest m_manifest;
     QMap<QString, QString> m_metadata;
     QSet<QString> m_bundletags;
     bool m_installed;

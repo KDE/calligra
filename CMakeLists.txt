@@ -227,7 +227,9 @@ if (APPLE)
     # this is not added correctly on OSX -- see http://forum.kde.org/viewtopic.php?f=139&t=101867&p=221242#p221242
     include_directories(${PNG_INCLUDE_DIR})
 endif(APPLE)
-find_package(Boost REQUIRED) # for pigment and stage
+
+add_definitions(-DBOOST_ALL_NO_LIB)
+find_package(Boost REQUIRED COMPONENTS system) # for pigment and stage
 if (NOT Boost_FOUND)
     MESSAGE(FATAL_ERROR "Did not find Boost. Boost is required for the core libraries, stage, sheets and krita.")
 endif (NOT Boost_FOUND)
@@ -666,6 +668,7 @@ set(PIGMENT_INCLUDES ${KOPLUGIN_INCLUDES}
                    ${CMAKE_SOURCE_DIR}/libs/pigment
                    ${CMAKE_SOURCE_DIR}/libs/pigment/compositeops
                    ${CMAKE_SOURCE_DIR}/libs/pigment/resources
+                   ${Boost_INCLUDE_DIRS} 
                    ${QT_INCLUDES}
                    ${KDE4_INCLUDES})
 
@@ -805,9 +808,9 @@ if(NOT EIGEN3_FOUND)
     calligra_disable_product(PART_SHEETS "Eigen devel not found")
 endif(NOT EIGEN3_FOUND)
 
-if(NOT EIGEN3_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION OR NOT SHARED_MIME_INFO_FOUND)
-    calligra_disable_product(APP_KRITA "SharedMimeInfo|libeigen3|libexiv2|lcms devel not found ")
-endif(NOT EIGEN3_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION OR NOT SHARED_MIME_INFO_FOUND)
+if(NOT EIGEN3_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION OR NOT SHARED_MIME_INFO_FOUND OR NOT Boost_SYSTEM_FOUND)
+    calligra_disable_product(APP_KRITA "SharedMimeInfo|libeigen3|libexiv2|lcms|boost-system devel not found ")
+endif(NOT EIGEN3_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION OR NOT SHARED_MIME_INFO_FOUND OR NOT Boost_SYSTEM_FOUND)
 
 if(NOT APPLE AND NOT REQUIRED_Xinput_FOUND)
     calligra_disable_product(APP_KRITA "Xinput devel not found ")

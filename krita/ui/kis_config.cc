@@ -241,6 +241,7 @@ const KoColorProfile *KisConfig::getScreenProfile(int screen)
         return 0;
     }
 #else
+    Q_UNUSED(screen)
     return 0;
 
 #endif
@@ -1184,6 +1185,16 @@ bool KisConfig::lineSmoothingFinishStabilizedCurve() const
 void KisConfig::setLineSmoothingFinishStabilizedCurve(bool value)
 {
     m_cfg.writeEntry("LineSmoothingFinishStabilizedCurve", value);
+}
+
+bool KisConfig::lineSmoothingStabilizeSensors() const
+{
+    return m_cfg.readEntry("LineSmoothingStabilizeSensors", true);
+}
+
+void KisConfig::setLineSmoothingStabilizeSensors(bool value)
+{
+    m_cfg.writeEntry("LineSmoothingStabilizeSensors", value);
 }
 
 int KisConfig::paletteDockerPaletteViewSectionSize() const

@@ -35,6 +35,7 @@
 #include <KoShapeFactoryBase.h>
 #include <KoDocumentResourceManager.h>
 #include <KoShapeBackground.h>
+#include <KoColumns.h>
 
 #include <QTextLayout>
 #include <QTextDocument>

@@ -28,6 +28,7 @@
 #include "Region.h"
 
 // Calligra
+#include <KoGenStyles.h>
 #include <KoPageLayout.h>
 #include <KoUnit.h>
 

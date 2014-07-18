@@ -200,10 +200,15 @@ public:
         delete actionManager;
         delete canvasControlsManager;
         delete tooltipManager;
+
+        /**
+         * Push a timebomb, which will try to release the memory after
+         * the document has been deleted
+         */
+        KisPaintDevice::createMemoryReleaseObject()->deleteLater();
     }
 
 public:
-
     KisCanvas2 *canvas;
     KisDoc2 *doc;
     KisCoordinatesConverter *viewConverter;
@@ -773,6 +778,7 @@ bool KisView2::event( QEvent* event )
                     tool->smoothingOptions()->setUseDelayDistance(syncObject->smoothingOptions->useDelayDistance());
                     tool->smoothingOptions()->setDelayDistance(syncObject->smoothingOptions->delayDistance());
                     tool->smoothingOptions()->setFinishStabilizedCurve(syncObject->smoothingOptions->finishStabilizedCurve());
+                    tool->smoothingOptions()->setStabilizeSensors(syncObject->smoothingOptions->stabilizeSensors());
                     tool->updateSettingsViews();
                 }
             }

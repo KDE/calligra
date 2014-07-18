@@ -36,6 +36,7 @@
 #include <QString>
 #include <QDomDocument>
 #include <QObject>
+#include <QStack>
 #include <QStringList>
 #include <QRectF>
 #include <queue>

@@ -28,6 +28,7 @@
 #include <KoParagraphStyle.h>
 #include <KoTextDocument.h>
 #include <KoTextLayoutRootArea.h>
+#include <KoTextEditor.h>
 
 #include <QStack>
 #include <QTextDocument>
