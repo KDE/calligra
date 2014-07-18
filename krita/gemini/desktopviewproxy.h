@@ -46,7 +46,9 @@ public Q_SLOTS:
     void loadExistingAsNew();
     void slotFileOpenRecent(const KUrl &url);
     void toggleShowJustTheCanvas(bool toggled);
-	
+
+    void updateKeyBindings();
+
 Q_SIGNALS:
     void documentSaved();
 
