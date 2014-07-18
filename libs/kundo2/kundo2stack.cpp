@@ -534,6 +534,7 @@ KUndo2QStack::KUndo2QStack(QObject *parent)
 {
    setTimeT1(5);
    setTimeT2(1);
+   setStrokesN(2);
 #ifndef QT_NO_UNDOGROUP
     if (KUndo2Group *group = qobject_cast<KUndo2Group*>(parent))
         group->addStack(this);
@@ -558,7 +559,9 @@ KUndo2QStack::~KUndo2QStack()
 
 /*!
     Clears the command stack by deleting all commands on it, and returns the stack
-    to the clean state.
+    to the clean state.{
+
+            }
 
     Commands are not undone or redone; the state of the edited object remains
     unchanged.
@@ -646,60 +649,59 @@ void KUndo2QStack::push(KUndo2Command *cmd)
      *3 parameters. N : Number of slots filled. T1 : Time lapsed between current command and previous command -- signal to
      *merge throughout the stack. T2 : Time lapsed between two commands signalling both commands belong to the same set **/
     if(!macro && !m_command_list.isEmpty() && cmd->timedId() == 1 && m_useCumulativeUndoRedo){
-        if(m_command_list.size()>=undoLimit()){
-            KUndo2Command* lastcmd = m_command_list.last();
+        KUndo2Command* lastcmd = m_command_list.last();
+        QListIterator<KUndo2Command*> i(m_command_list);
+        i.toBack();
+        int iterationCount = 0;
+        while(i.hasPrevious() && iterationCount<m_strokesN){
+
+            lastcmd = i.previous();
+            if(lastcmd->isMerged()){
+                break;
+            }
+            iterationCount++;
+        }
+
+
+        if(cmd->time().msecsTo(m_command_list.last()->endTime())<-m_timeT1*1000){      //T1 time elapsed
             QListIterator<KUndo2Command*> it(m_command_list);
             it.toBack();
-            while(it.hasPrevious()){
+            while(it.hasPrevious() && it.previous() != lastcmd);
+
+            while(it.hasPrevious())
+            {
                 KUndo2Command* curr = it.previous();
-                if(lastcmd == curr){
-                    curr = it.previous();
-                }
-                m_command_list.removeOne(curr);
-                lastcmd->timedMergeWith(curr);
-            }
-        }
-        else{
-            if(cmd->time().msecsTo(m_command_list.last()->endTime())<-m_timeT1*1000){       //T1 time elapsed
-                KUndo2Command* lastcmd = m_command_list.last();
-                QListIterator<KUndo2Command*> it(m_command_list);
-                it.toBack();
-                while(it.hasPrevious())
-                {
-                    KUndo2Command* curr = it.previous();
-                    if(!lastcmd->mergeCommandsVector().isEmpty()){ 
-                        if(lastcmd->mergeCommandsVector().last()->time().msecsTo(curr->endTime())>-m_timeT2*1000 && lastcmd!=curr){
-                             lastcmd->timedMergeWith(curr);
-                             if(m_command_list.contains(curr))
-                             {
-                                 m_command_list.removeOne(curr);
-
-                             }
-                        }
-                        else{
-                            lastcmd = curr; //end of a merge set
-                        }
-
+                if(!lastcmd->mergeCommandsVector().isEmpty()){
+                    if(lastcmd->mergeCommandsVector().last()->time().msecsTo(curr->endTime())>-m_timeT2*1000 && lastcmd!=curr){
+                         lastcmd->timedMergeWith(curr);
+                         if(m_command_list.contains(curr))
+                         {
+                             m_command_list.removeOne(curr);
+                         }
                     }
                     else{
-                        if(lastcmd->time().msecsTo(curr->endTime())>-m_timeT2*1000 && lastcmd!=curr){
-
-                            if(lastcmd->timedMergeWith(curr))
-
-                            if(m_command_list.contains(curr))
-                            {
-
-                               m_command_list.removeOne(curr);
-                            }
-                        }
-                        else{
-                                lastcmd = curr; //end of a merge set
-                            }
-                        }
+                        lastcmd = curr; //end of a merge set
                     }
 
-            }
+                }
+                else{
+                    if(lastcmd->time().msecsTo(curr->endTime())>-m_timeT2*1000 && lastcmd!=curr){
+
+                        if(lastcmd->timedMergeWith(curr))
+
+                        if(m_command_list.contains(curr))
+                        {
+                           m_command_list.removeOne(curr);
+                        }
+                    }
+                    else{
+                            lastcmd = curr; //end of a merge set
+                        }
+                    }
+                }
+
         }
+
     }
     m_index = m_command_list.size();
 
@@ -1211,6 +1213,16 @@ double KUndo2QStack::timeT2()
 {
     return m_timeT2;
 }
+int KUndo2QStack::strokesN()
+{
+    return m_strokesN;
+}
+void KUndo2QStack::setStrokesN(int value)
+{
+    m_strokesN  = value;
+}
+
+
 
 QAction* KUndo2Stack::createRedoAction(KActionCollection* actionCollection, const QString& actionName)
 {

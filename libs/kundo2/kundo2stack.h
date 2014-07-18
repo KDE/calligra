@@ -157,6 +157,9 @@ public:
     double timeT1();
     void setTimeT2(double value);
     double timeT2();
+    int strokesN();
+    void setStrokesN(int value);
+
 
 public Q_SLOTS:
     void setClean();
@@ -184,6 +187,7 @@ private:
     bool m_useCumulativeUndoRedo;
     double m_timeT1;
     double m_timeT2;
+    int m_strokesN;
 
     // also from QUndoStackPrivate
     void setIndex(int idx, bool clean);

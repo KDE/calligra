@@ -110,6 +110,7 @@ public Q_SLOTS:
     void toggleCumulativeUndoRedo();
     void setStackT1(double value);
     void setStackT2(double value);
+    void setStackN(int value);
 #ifndef QT_NO_UNDOGROUP
     void setGroup(KUndo2Group *group);
 #endif

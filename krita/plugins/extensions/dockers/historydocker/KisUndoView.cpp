@@ -321,24 +321,35 @@ void KisUndoView::mousePressEvent(QMouseEvent *event)
 
         QLabel *l1 = new QLabel("Time between Strokes to merge together");
         QDoubleSpinBox *s1 = new QDoubleSpinBox();
-
         s1->setRange(0.3,s->value());
         s1->setValue(stack()->timeT2());
         QGridLayout *g1 = new QGridLayout();
-
         g1->addWidget(l1);
         g1->addWidget(s1);
         QWidget *w1 = new QWidget();
         w1->setLayout(g1);
         w1->setVisible(stack()->useCumulativeUndoRedo());
-
-
         QWidgetAction* action3 = new QWidgetAction(s1);
         action3->setDefaultWidget(w1);
         connect(s1,SIGNAL(valueChanged(double)),SLOT(setStackT2(double)));
 
+        QLabel *l2 = new QLabel("Last number of strokes to keep single");
+        QSpinBox *s2 = new QSpinBox();
+        s2->setRange(1,stack()->undoLimit());
+        s2->setValue(stack()->strokesN());
+        QGridLayout *g2 = new QGridLayout();
+        g1->addWidget(l2);
+        g1->addWidget(s2);
+        QWidget *w2 = new QWidget();
+        w2->setLayout(g2);
+        w2->setVisible(stack()->useCumulativeUndoRedo());
+        QWidgetAction* action4 = new QWidgetAction(s2);
+        action4->setDefaultWidget(w2);
+        connect(s2,SIGNAL(valueChanged(int)),SLOT(setStackN(int)));
+
         menu.addAction(action2);
         menu.addAction(action3);
+        menu.addAction(action4);
 
         menu.exec(event->globalPos());
 
@@ -358,6 +369,10 @@ void KisUndoView::setStackT1(double value)
 void KisUndoView::setStackT2(double value)
 {
     stack()->setTimeT2(value);
+}
+void KisUndoView::setStackN(int value)
+{
+    stack()->setStrokesN(value);
 }
 
 #include "KisUndoView.moc"
