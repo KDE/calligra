@@ -112,7 +112,7 @@ static KoDocumentRdf *loadDocument(const QString &odt)
 void TestRdf::basicload()
 {
     RDEBUG;
-    
+
     QString odt = QString(FILES_DATA_DIR) + "/weekend-hike.odt";
     KoDocumentRdf *rdf = loadDocument(odt);
     QVERIFY(rdf);
@@ -430,7 +430,6 @@ void TestRdf::addAndSave()
     QVERIFY(file.open());
     QString todt = file.fileName();
     KoStore *store = KoStore::createStore(todt, KoStore::Write, mimeType, KoStore::Zip);
-    store->disallowNameExpansion();
     KoOdfWriteStore odfStore (store);
     KoXmlWriter *manifestWriter = odfStore.manifestWriter(mimeType);
     QVERIFY (manifestWriter);
@@ -869,7 +868,7 @@ void TestRdf::testRoundtrip()
         QCOMPARE(cursor.position(), lorem.length() + 1);
         KoBookmark *mark = new KoBookmark(cursor);
         mark->setPositionOnlyMode(false);
-        
+
         KoTextInlineRdf *inlineRdf(new KoTextInlineRdf(editor->document(), mark));
         QString newId = inlineRdf->createXmlId();
         inlineRdf->setXmlId(newId);

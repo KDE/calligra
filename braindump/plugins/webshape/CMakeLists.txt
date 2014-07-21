@@ -27,6 +27,6 @@ install(TARGETS braindump_shape_web DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES braindump_shape_web.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES braindump_shape_web.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 kde4_install_icons( ${DATA_INSTALL_DIR}/calligra/icons )
 

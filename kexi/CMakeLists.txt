@@ -139,7 +139,7 @@ ENDIF(KEXI_MOBILE)
 
 ########### install files ###############
 
-install(PROGRAMS kexi.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
+install(PROGRAMS kexi.desktop DESTINATION ${XDG_APPS_INSTALL_DIR}/calligra)
 install(FILES kexi.appdata.xml DESTINATION ${SHARE_INSTALL_PREFIX}/appdata/)
 
 #kde4_create_doxygen_docs( EXCLUDE 3rdparty kexidb/parser/sqlparser.h kexidb/drivers/odbc  )

@@ -20,9 +20,13 @@
 #define PICTURES_H
 
 #include <pole.h>
-#include <KoStore.h>
-#include <KoXmlWriter.h>
 #include "generated/simpleParser.h"
+
+#include <QMap>
+
+class KoStore;
+class KoXmlWriter;
+class QImage;
 
 struct PictureReference {
     QString name;

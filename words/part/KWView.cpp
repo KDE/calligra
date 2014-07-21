@@ -61,6 +61,7 @@
 #include <KoShapeContainer.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
+#include <KoPointedAt.h>
 #include <KoToolManager.h>
 #include <KoTextRangeManager.h>
 #include <KoAnnotationManager.h>
@@ -94,6 +95,7 @@
 #include <QTimer>
 #include <QScrollBar>
 #include <QPushButton>
+#include <QClipboard>
 #include <klocale.h>
 #include <kdebug.h>
 #include <ktoggleaction.h>

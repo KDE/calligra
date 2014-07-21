@@ -21,7 +21,7 @@ target_link_libraries(calligra_filter_wpd2odt
 
 install(TARGETS calligra_filter_wpd2odt DESTINATION ${PLUGIN_INSTALL_DIR})
 
-install( FILES calligra_filter_wpd2odt.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES calligra_filter_wpd2odt.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 
 if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
     install( FILES words_wpd_thumbnail.desktop DESTINATION ${SERVICES_INSTALL_DIR})

@@ -24,7 +24,7 @@
 #include <klocale.h>
 #include <kglobal.h>
 #include <kmimetype.h>
-#include <kservicetypetrader.h>
+#include <KoServiceLocator.h>
 #include <kmimetypetrader.h>
 #include <kapplication.h>
 #include <kdebug.h>
@@ -37,8 +37,7 @@
 
 static void listApplicationNames()
 {
-    KServiceTypeTrader* trader = KServiceTypeTrader::self();
-    KService::List services = trader->query("Calligra/Application", "exist [X-KDE-NativeMimeType]");
+    const KService::List services = KoServiceLocator::instance()->entries("Calligra/Application");
     QTextStream out(stdout, QIODevice::WriteOnly);
     QStringList names;
     foreach (KService::Ptr service, services) {
@@ -71,7 +70,6 @@ static bool startService(KService::Ptr service, const KUrl& url)
 
 static int handleUrls(const KCmdLineArgs *args)
 {
-    KServiceTypeTrader* trader = KServiceTypeTrader::self();
     KMimeTypeTrader* mimeTrader = KMimeTypeTrader::self();
     KUrl::List notHandledUrls;
     for (int i = 0; i < args->count(); i++) {
@@ -96,7 +94,15 @@ static int handleUrls(const KCmdLineArgs *args)
         */
         const QString constraint = QString("'%1' in [X-Calligra-DefaultMimeTypes]").arg(mimetype->name());
         kDebug() << constraint;
-        KService::List services = trader->query("Calligra/Application", constraint);
+        KService::List services;
+        KService::List offers = KoServiceLocator::instance()->entries("Calligra/Application");
+        foreach(KService::Ptr offer, offers) {
+            QStringList defaultMimeTypes = offer->property("X-Calligra-DefaultMimeTypes").toStringList();
+            if (defaultMimeTypes.contains(mimetype->name())) {
+                services << offer;
+            }
+        }
+
         KService::Ptr service;
         //bool ok = false;
         if (!services.isEmpty()) {

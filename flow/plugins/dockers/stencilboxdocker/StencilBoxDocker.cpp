@@ -44,8 +44,12 @@
 #include <klineedit.h>
 #include <kapplication.h>
 #include <kcmdlineargs.h>
+
+#ifdef GHNS
 #include <knewstuff3/downloaddialog.h>
 #include <KIO/NetAccess>
+#endif
+
 #include <kstandarddirs.h>
 #include <ktar.h>
 
@@ -75,10 +79,11 @@ StencilBoxDocker::StencilBoxDocker(QWidget* parent)
     setWidget(mainWidget);
 
     m_menu = new QMenu();
+#ifdef GHNS
     QAction *ghnsAction = m_menu->addAction(koIcon("get-hot-new-stuff"), i18n("Stencils Online"));
-    QAction *installAction = m_menu->addAction(koIcon("document-open-folder"), i18n("Add/Remove Stencil"));
-
     connect(ghnsAction, SIGNAL(triggered()), this, SLOT(getHotNewStuff()));
+#endif
+    QAction *installAction = m_menu->addAction(koIcon("document-open-folder"), i18n("Add/Remove Stencil"));
     connect(installAction, SIGNAL(triggered()), this, SLOT(manageStencilsFolder()));
 
     m_button = new QToolButton;
@@ -128,6 +133,7 @@ StencilBoxDocker::StencilBoxDocker(QWidget* parent)
     connect(m_filterLineEdit, SIGNAL(textEdited(QString)), this, SLOT(reapplyFilter()));
 }
 
+#ifdef GHNS
 void StencilBoxDocker::getHotNewStuff()
 {
     KNS3::DownloadDialog dialog("flow_stencils.knsrc", this);
@@ -139,6 +145,7 @@ void StencilBoxDocker::getHotNewStuff()
         KMessageBox::information(0, i18n("Stencils successfully uninstalled."));
     }
 }
+#endif
 
 void StencilBoxDocker::manageStencilsFolder()
 {

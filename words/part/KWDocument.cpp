@@ -67,6 +67,7 @@
 #include <KoSelection.h>
 #include <KoTextDocumentLayout.h>
 #include <KoTextLayoutRootArea.h>
+#include <KoTextEditor.h>
 #include <KoPart.h>
 #include <KoDocumentInfoDlg.h>
 #include <KoDocumentRdfBase.h>

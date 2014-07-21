@@ -29,6 +29,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <kurl.h>
 
 #include <KoDocumentInfo.h>
 
