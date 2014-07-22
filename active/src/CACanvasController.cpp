@@ -264,7 +264,7 @@ int CACanvasController::cameraY() const
 
 void CACanvasController::setCameraX (int cameraX)
 {
-    cameraX -= std::min(m_caCanvasItem->width()/2, width()/2);
+    cameraX -= qMin(m_caCanvasItem->width()/2, width()/2);
     if (m_caDocumentHandler && m_caDocumentHandler->preferredZoomMode() == KoZoomMode::ZOOM_WIDTH) {
         cameraX = 0;
     }
@@ -274,7 +274,7 @@ void CACanvasController::setCameraX (int cameraX)
 
 void CACanvasController::setCameraY (int cameraY)
 {
-    cameraY -= std::min(m_caCanvasItem->height()/2, height()/2);
+    cameraY -= qMin(m_caCanvasItem->height()/2, height()/2);
     if (m_caDocumentHandler && m_caDocumentHandler->preferredZoomMode() == KoZoomMode::ZOOM_PAGE) {
         cameraY = 0;
     }
