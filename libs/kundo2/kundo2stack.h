@@ -188,6 +188,7 @@ private:
     double m_timeT1;
     double m_timeT2;
     int m_strokesN;
+    int m_lastMergedSetCount;
 
     // also from QUndoStackPrivate
     void setIndex(int idx, bool clean);
