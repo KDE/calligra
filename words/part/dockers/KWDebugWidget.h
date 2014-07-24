@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
- *
- * Copyright (c) 2011 Boudewijn Rempt <boud@kogmbh.com>
+ * Copyright (C) 2014 Denis Kupluakov <dener.kup@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,35 +16,45 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef TEST_KO_TEXT_EDITOR_H
-#define TEST_KO_TEXT_EDITOR_H
 
-#include <QObject>
+#ifndef KWDEBUGWIDGET_H
+#define KWDEBUGWIDGET_H
 
-class QTextDocument;
-class KoTextEditor;
-class KoSection;
-class KoSectionEnd;
-class KoDocumentRdf;
-class QString;
+#include <QWidget>
+#include <KWCanvas.h>
 
-class TestKoTextEditor : public QObject
+#include <QLabel>
+
+/** KWDebugWidget shows some debug info.
+ */
+
+class KWDebugWidget : public QWidget
 {
     Q_OBJECT
 
+public:
+    explicit KWDebugWidget(QWidget *parent = 0);
+    virtual ~KWDebugWidget();
+
+    friend class KWDebugDocker;
+
+    void setCanvas(KWCanvas* canvas);
+
+    void unsetCanvas();
+
 private slots:
+    void updateData();
 
-    void testInsertInlineObject();
-    void testRemoveSelectedText();
+private:
+    void initUi();
+    void initLayout();
 
-    bool checkEndings(const QVector<int> &needEndings, KoSectionEnd **secEnd, KoTextEditor &editor);
-    bool checkStartings(const QVector<int> &needStartings, KoSection **sec, KoTextEditor &editor);
+    void updateDataUi();
 
-    void pushSectionStart(int num, KoSection *sec, KoTextEditor &editor);
-    void pushSectionEnd(int num, KoSectionEnd *secEnd, KoTextEditor &editor);
+private:
+    QLabel *m_label;
 
-    void testDeleteSectionHandling_data();
-    void testDeleteSectionHandling();
+    KWCanvas *m_canvas;
 };
 
-#endif // TEST_KO_TEXT_EDITOR_H
+#endif // KWDEBUGWIDGET_H

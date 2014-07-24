@@ -141,6 +141,8 @@ public slots:
     void setShowInlineObjectVisualization(bool on);
     /// toggle the display of table borders
     void setShowTableBorders(bool on);
+    /// toggle the display of section bounds
+    void setShowSectionBounds(bool on);
     /// go to previous page
     void goToPreviousPage(Qt::KeyboardModifiers modifiers = Qt::NoModifier);
     /// go to next page
