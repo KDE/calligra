@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
   <id type="desktop">krita.desktop</id>
+  <id type="desktop" xml:lang="da">krita.desktop</id>
   <id type="desktop" xml:lang="en-GB">krita.desktop</id>
   <id type="desktop" xml:lang="et">krita.desktop</id>
   <id type="desktop" xml:lang="nl">krita.desktop</id>
@@ -10,6 +11,7 @@
   <id type="desktop" xml:lang="uk">krita.desktop</id>
   <id type="desktop" xml:lang="x-test">xxkrita.desktopxx</id>
   <licence>CC0</licence>
+  <licence xml:lang="da">CC0</licence>
   <licence xml:lang="en-GB">CC0</licence>
   <licence xml:lang="et">CC0</licence>
   <licence xml:lang="nl">CC0</licence>
@@ -19,6 +21,8 @@
   <licence xml:lang="uk">CC0</licence>
   <licence xml:lang="x-test">xxCC0xx</licence>
   <summary>Digital Painting, Creative Freedom</summary>
+  <summary xml:lang="ca">Dibuix digital, Llibertat creativa</summary>
+  <summary xml:lang="da">Digital tegning, Kreativ frihed</summary>
   <summary xml:lang="en-GB">Digital Painting, Creative Freedom</summary>
   <summary xml:lang="et">Digitaalne joonistamine, loominguline vabadus</summary>
   <summary xml:lang="nl">Digital Painting, Creative Freedom</summary>
@@ -29,6 +33,8 @@
   <summary xml:lang="x-test">xxDigital Painting, Creative Freedomxx</summary>
   <description>
     <p>Krita is the full-featured digital art studio.</p>
+    <p xml:lang="ca">Krita és l'estudi d'art digital ple de funcionalitats.</p>
+    <p xml:lang="da">Krita er et digitals kunststudie med fuld funktionalitet.</p>
     <p xml:lang="en-GB">Krita is the full-featured digital art studio.</p>
     <p xml:lang="et">Krita on rohkete võimalustega digitaalkunstistuudio.</p>
     <p xml:lang="ja">Krita は、フル機能を備えたデジタルなアートスタジオです。</p>
@@ -39,6 +45,7 @@
     <p xml:lang="uk">Krita — повноцінний комплекс для створення цифрових художніх творів.</p>
     <p xml:lang="x-test">xxKrita is the full-featured digital art studio.xx</p>
     <p> It is perfect for sketching and painting, and presets an end–to–end solution for creating digital painting files from scratch by masters.</p>
+    <p xml:lang="da">Det er perfekt til skitser og tegning, og forudstillinger som giver en start til slut-løsning til at skabe digitale tegningsfiler fra bunden af store mestre.</p>
     <p xml:lang="en-GB">It is perfect for sketching and painting, and presets an end–to–end solution for creating digital painting files from scratch by masters.</p>
     <p xml:lang="et">See on suurepärane töövahend visandite ja joonistuste valmistamiseks ning annab andekatele kunstnikele võimaluse luua digitaalpilt algusest lõpuni just oma käe järgi.</p>
     <p xml:lang="ja">スケッチやペインティングに最適です。熟練者のみなさまに、デジタルペインティングをゼロから制作するための一貫した環境をご提供します。</p>
@@ -49,6 +56,7 @@
     <p xml:lang="uk">Цей комплекс чудово пасує для створення ескізів та художніх зображень і є самодостатнім набором для створення файлів цифрових полотен «з нуля» для справжніх художників.</p>
     <p xml:lang="x-test">xxIt is perfect for sketching and painting, and presets an end–to–end solution for creating digital painting files from scratch by masters.xx</p>
     <p>Krita is a great choice for creating concept art, comics, textures for rendering and matte paintings. Krita supports many colorspaces like RGB and CMYK at 8 and 16 bits integer channels, as well as 16 and 32 bits floating point channels.</p>
+    <p xml:lang="ca">El Krita és una gran elecció per crear art conceptual, còmics, textures per renderitzar i pintures mates. El Krita permet molts espais de color com el RGB i el CMYK a 8 i 16 bits de canals sencers, així com 16 i 32 bits de canals de coma flotant.</p>
     <p xml:lang="en-GB">Krita is a great choice for creating concept art, comics, textures for rendering and matte paintings. Krita supports many colour spaces like RGB and CMYK at 8 and 16 bit integer channels, as well as 16 and 32 bit floating point channels.</p>
     <p xml:lang="et">Krita on üks paremaid valikuid kontseptuaalkunsti, koomiksite, tekstuuride ja digitaalmaalide loomiseks. Krita toetab paljusid värviruume, näiteks RGB ja CMYK 8 ja 16 täisarvulise bitiga kanali kohta, samuti 16 ja 32 ujukomabitiga kanali kohta.</p>
     <p xml:lang="ja">コンセプトアート、コミック、3DCG 用テクスチャ、マットペイントを制作する方にとって、Krita は最適な選択です。Krita は、8/16 ビット整数/チャンネル、および 16/32 ビット浮動小数点/チャンネルの RGB や CMYK をはじめ、さまざまな色空間をサポートしています。</p>
@@ -59,6 +67,7 @@
     <p xml:lang="uk">Krita — чудовий інструмент для створення концептуального живопису, коміксів, текстур для моделей та декорацій. У Krita передбачено підтримку багатьох просторів кольорів, зокрема RGB та CMYK з 8-бітовими та 16-бітовими цілими значеннями, а також 16-бітовими та 32-бітовими значеннями з рухомою крапкою для каналів кольорів.</p>
     <p xml:lang="x-test">xxKrita is a great choice for creating concept art, comics, textures for rendering and matte paintings. Krita supports many colorspaces like RGB and CMYK at 8 and 16 bits integer channels, as well as 16 and 32 bits floating point channels.xx</p>
     <p>Have fun painting with the advanced brush engines, amazing filters and many handy features that make Krita enormously productive.</p>
+    <p xml:lang="ca">Gaudiu pintant amb els motors de pinzells avançats, els filtres impressionants i moltes funcionalitats útils que fan el Krita molt productiu.</p>
     <p xml:lang="en-GB">Have fun painting with the advanced brush engines, amazing filters and many handy features that make Krita enormously productive.</p>
     <p xml:lang="et">Joonistamise muudavad tunduvalt lõbusamaks võimsad pintslimootorid, imetabased filtrid ja veel paljud käepärased võimalused, mis muudavad Krita kasutaja tohutult tootlikuks.</p>
     <p xml:lang="ja">Krita のソフトウェアとしての生産性を高めている先進的なブラシエンジンや素晴らしいフィルタのほか、便利な機能の数々をお楽しみください。</p>
