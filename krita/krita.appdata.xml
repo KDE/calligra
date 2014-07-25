@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
   <id type="desktop">krita.desktop</id>
+  <id type="desktop" xml:lang="ca">krita.desktop</id>
   <id type="desktop" xml:lang="da">krita.desktop</id>
   <id type="desktop" xml:lang="en-GB">krita.desktop</id>
   <id type="desktop" xml:lang="et">krita.desktop</id>
@@ -11,6 +12,7 @@
   <id type="desktop" xml:lang="uk">krita.desktop</id>
   <id type="desktop" xml:lang="x-test">xxkrita.desktopxx</id>
   <licence>CC0</licence>
+  <licence xml:lang="ca">CC0</licence>
   <licence xml:lang="da">CC0</licence>
   <licence xml:lang="en-GB">CC0</licence>
   <licence xml:lang="et">CC0</licence>
@@ -45,6 +47,7 @@
     <p xml:lang="uk">Krita — повноцінний комплекс для створення цифрових художніх творів.</p>
     <p xml:lang="x-test">xxKrita is the full-featured digital art studio.xx</p>
     <p> It is perfect for sketching and painting, and presets an end–to–end solution for creating digital painting files from scratch by masters.</p>
+    <p xml:lang="ca">És perfecte per fer esbossos i pintar, i predefineix una solució final per crear fitxers de dibuix digital des de zero per a mestres.</p>
     <p xml:lang="da">Det er perfekt til skitser og tegning, og forudstillinger som giver en start til slut-løsning til at skabe digitale tegningsfiler fra bunden af store mestre.</p>
     <p xml:lang="en-GB">It is perfect for sketching and painting, and presets an end–to–end solution for creating digital painting files from scratch by masters.</p>
     <p xml:lang="et">See on suurepärane töövahend visandite ja joonistuste valmistamiseks ning annab andekatele kunstnikele võimaluse luua digitaalpilt algusest lõpuni just oma käe järgi.</p>
@@ -79,6 +82,7 @@
     <p xml:lang="x-test">xxHave fun painting with the advanced brush engines, amazing filters and many handy features that make Krita enormously productive.xx</p>
   </description>
   <url type="homepage">http://www.krita.org/</url>
+  <url type="homepage" xml:lang="ca">http://www.krita.org/</url>
   <url type="homepage" xml:lang="en-GB">http://www.krita.org/</url>
   <url type="homepage" xml:lang="et">http://www.krita.org/</url>
   <url type="homepage" xml:lang="nl">http://www.krita.org/</url>
@@ -89,6 +93,7 @@
   <url type="homepage" xml:lang="x-test">xxhttp://www.krita.org/xx</url>
   <screenshots>
     <screenshot type="default">http://heap.kogmbh.net/downloads/krita_appdata_1.png</screenshot>
+    <screenshot type="default" xml:lang="ca">http://heap.kogmbh.net/downloads/krita_appdata_1.png</screenshot>
     <screenshot type="default" xml:lang="en-GB">http://heap.kogmbh.net/downloads/krita_appdata_1.png</screenshot>
     <screenshot type="default" xml:lang="et">http://heap.kogmbh.net/downloads/krita_appdata_1.png</screenshot>
     <screenshot type="default" xml:lang="nl">http://heap.kogmbh.net/downloads/krita_appdata_1.png</screenshot>
@@ -98,6 +103,7 @@
     <screenshot type="default" xml:lang="uk">http://heap.kogmbh.net/downloads/krita_appdata_1.png</screenshot>
     <screenshot type="default" xml:lang="x-test">xxhttp://heap.kogmbh.net/downloads/krita_appdata_1.pngxx</screenshot>
     <screenshot>http://heap.kogmbh.net/downloads/krita_appdata_2.png</screenshot>
+    <screenshot xml:lang="ca">http://heap.kogmbh.net/downloads/krita_appdata_2.png</screenshot>
     <screenshot xml:lang="en-GB">http://heap.kogmbh.net/downloads/krita_appdata_2.png</screenshot>
     <screenshot xml:lang="et">http://heap.kogmbh.net/downloads/krita_appdata_2.png</screenshot>
     <screenshot xml:lang="nl">http://heap.kogmbh.net/downloads/krita_appdata_2.png</screenshot>
@@ -109,6 +115,7 @@
     <screenshot/>
   </screenshots>
   <updatecontact>foundation@krita.org</updatecontact>
+  <updatecontact xml:lang="ca">foundation@krita.org</updatecontact>
   <updatecontact xml:lang="en-GB">foundation@krita.org</updatecontact>
   <updatecontact xml:lang="et">foundation@krita.org</updatecontact>
   <updatecontact xml:lang="nl">foundation@krita.org</updatecontact>
@@ -118,6 +125,7 @@
   <updatecontact xml:lang="uk">foundation@krita.org</updatecontact>
   <updatecontact xml:lang="x-test">xxfoundation@krita.orgxx</updatecontact>
   <project_group>KDE</project_group>
+  <project_group xml:lang="ca">KDE</project_group>
   <project_group xml:lang="en-GB">KDE</project_group>
   <project_group xml:lang="et">KDE</project_group>
   <project_group xml:lang="nl">KDE</project_group>
