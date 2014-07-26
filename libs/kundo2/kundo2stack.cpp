@@ -1,3 +1,21 @@
+/*
+ *  Copyright (c) 2014 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2014 Mohit Goyal <mohit.bits2011@gmail.com>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
 /****************************************************************************
 **
 ** Copyright (C) 2011 Nokia Corporation and/or its subsidiary(-ies).
@@ -475,6 +493,16 @@ void KUndo2Action::setPrefixedText(const QString &text)
 void KUndo2QStack::setIndex(int idx, bool clean)
 {
     bool was_clean = m_index == m_clean_index;
+    if(m_lastMergedIndex<=idx)
+    {
+        m_lastMergedSetCount = idx - m_lastMergedIndex;
+    }
+    else
+    {
+        m_lastMergedSetCount = 0;
+        m_lastMergedIndex = idx;
+    }
+
 
     if (idx != m_index) {
         m_index = idx;
@@ -530,7 +558,7 @@ bool KUndo2QStack::checkUndoLimit()
 */
 
 KUndo2QStack::KUndo2QStack(QObject *parent)
-    : QObject(parent), m_index(0), m_clean_index(0), m_group(0), m_undo_limit(0),m_useCumulativeUndoRedo(false),m_lastMergedSetCount(0)
+    : QObject(parent), m_index(0), m_clean_index(0), m_group(0), m_undo_limit(0),m_useCumulativeUndoRedo(false),m_lastMergedSetCount(0),m_lastMergedIndex(0)
 {
    setTimeT1(5);
    setTimeT2(1);
@@ -649,52 +677,33 @@ void KUndo2QStack::push(KUndo2Command *cmd)
      *3 parameters. N : Number of slots filled. T1 : Time lapsed between current command and previous command -- signal to
      *merge throughout the stack. T2 : Time lapsed between two commands signalling both commands belong to the same set **/
 
-    if(!macro && !m_command_list.isEmpty() && cmd->timedId() == 1 && m_useCumulativeUndoRedo){
-            KUndo2Command* lastcmd = m_command_list.last();
-            QListIterator<KUndo2Command*> i(m_command_list);
+    if(!macro && m_command_list.size()>1 && cmd->timedId() == 1 && m_useCumulativeUndoRedo){
+            KUndo2Command* lastcmd = m_command_list.last();         
             if(cmd->time().msecsTo(lastcmd->endTime())>-m_timeT2*1000){
                 m_lastMergedSetCount++;
             }
             else
             {
                 m_lastMergedSetCount = 0;
+                m_lastMergedIndex = m_index;
             }
-            qDebug(QString::number(m_lastMergedSetCount).toLatin1());
-            i.toBack();
-            /*int iterationCount = 0;
-            while(i.hasPrevious() && iterationCount<m_strokesN){
 
-                lastcmd = i.previous();
-                if(lastcmd->isMerged()){
-                    break;
-                }
-                iterationCount++;
-            }*/
-            if(m_lastMergedSetCount>m_strokesN){
-                while(i.hasPrevious() && m_lastMergedSetCount>0)
-                {
-                    KUndo2Command* curr = i.previous();
-                    if(curr == lastcmd)\
-                    {
-                        continue;
-                    }
-                    if(!curr->isMerged()){
-                        lastcmd->timedMergeWith(curr);
-                        if(m_command_list.contains(curr))
-                        {
-                            m_command_list.removeOne(curr);
-                        }
-                     }
-                     m_lastMergedSetCount--;
 
-                }
+             if(m_lastMergedSetCount>m_strokesN){
+               KUndo2Command* toMerge = m_command_list.at(m_lastMergedIndex);
+               if(toMerge && m_command_list.at(m_lastMergedIndex+1)){
+                   toMerge->timedMergeWith(m_command_list.at(m_lastMergedIndex+1));
+                   m_command_list.removeAt(m_lastMergedIndex+1);
+                   m_lastMergedSetCount--;
+                   m_lastMergedIndex = m_command_list.indexOf(toMerge);
+               }
 
             }
             m_index = m_command_list.size();
             if(cmd->time().msecsTo(m_command_list.last()->endTime())<-m_timeT1*1000){      //T1 time elapsed
                 QListIterator<KUndo2Command*> it(m_command_list);
                 it.toBack();
-                while(it.hasPrevious() && it.previous() != lastcmd);
+                m_lastMergedSetCount=0;
 
                 while(it.hasPrevious())
                 {
@@ -895,10 +904,12 @@ void KUndo2QStack::setIndex(int idx)
         idx = m_command_list.size();
 
     int i = m_index;
-    while (i < idx)
+    while (i < idx){
         m_command_list.at(i++)->redoMergedCommands();
-    while (i > idx)
+    }
+    while (i > idx){
         m_command_list.at(--i)->undoMergedCommands();
+     }
 
     setIndex(idx, false);
 }
