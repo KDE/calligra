@@ -6,6 +6,7 @@
   <id type="desktop" xml:lang="en-GB">krita.desktop</id>
   <id type="desktop" xml:lang="et">krita.desktop</id>
   <id type="desktop" xml:lang="nl">krita.desktop</id>
+  <id type="desktop" xml:lang="pl">krita.desktop</id>
   <id type="desktop" xml:lang="pt">krita.desktop</id>
   <id type="desktop" xml:lang="pt-BR">krita.desktop</id>
   <id type="desktop" xml:lang="sv">krita.desktop</id>
@@ -17,6 +18,7 @@
   <licence xml:lang="en-GB">CC0</licence>
   <licence xml:lang="et">CC0</licence>
   <licence xml:lang="nl">CC0</licence>
+  <licence xml:lang="pl">CC0</licence>
   <licence xml:lang="pt">CC0</licence>
   <licence xml:lang="pt-BR">CC0</licence>
   <licence xml:lang="sv">CC0</licence>
@@ -28,6 +30,7 @@
   <summary xml:lang="en-GB">Digital Painting, Creative Freedom</summary>
   <summary xml:lang="et">Digitaalne joonistamine, loominguline vabadus</summary>
   <summary xml:lang="nl">Digital Painting, Creative Freedom</summary>
+  <summary xml:lang="pl">Cyfrowe malowanie, Wolność Twórcza</summary>
   <summary xml:lang="pt">Pintura Digital, Liberdade Criativa</summary>
   <summary xml:lang="pt-BR">Pintura Digital, Liberdade Criativa</summary>
   <summary xml:lang="sv">Digital målning, kreativ frihet</summary>
@@ -41,6 +44,7 @@
     <p xml:lang="et">Krita on rohkete võimalustega digitaalkunstistuudio.</p>
     <p xml:lang="ja">Krita は、フル機能を備えたデジタルなアートスタジオです。</p>
     <p xml:lang="nl">Krita is de digitale kunststudio vol mogelijkheden.</p>
+    <p xml:lang="pl">Krita jest pełnowymiarowym, cyfrowym studiem artystycznym</p>
     <p xml:lang="pt">O Krita é o estúdio de arte digital completo.</p>
     <p xml:lang="pt-BR">O Krita é o estúdio de arte digital completo.</p>
     <p xml:lang="sv">Krita är den fullfjädrade digitala konststudion.</p>
@@ -53,6 +57,7 @@
     <p xml:lang="et">See on suurepärane töövahend visandite ja joonistuste valmistamiseks ning annab andekatele kunstnikele võimaluse luua digitaalpilt algusest lõpuni just oma käe järgi.</p>
     <p xml:lang="ja">スケッチやペインティングに最適です。熟練者のみなさまに、デジタルペインティングをゼロから制作するための一貫した環境をご提供します。</p>
     <p xml:lang="nl">Het is perfect voor schetsen en schilderen en zet een end–to–end oplossing voor het maken van digitale bestanden voor schilderingen vanuit het niets door meesters.</p>
+    <p xml:lang="pl">Nadaje się perfekcyjnie do szkicowania i malowania i dostarcza zupełnego rozwiązania dla tworzenia plików malowideł cyfrowych od zalążka.</p>
     <p xml:lang="pt">É perfeito para desenhos e pinturas, oferecendo uma solução final para criar ficheiros de pintura digital do zero por mestres.</p>
     <p xml:lang="pt-BR">É perfeito para desenhos e pinturas, oferecendo uma solução final para criar arquivos de desenho digital feitos a partir do zero por mestres.</p>
     <p xml:lang="sv">Den är perfekt för att skissa och måla, samt erbjuder en helomfattande lösning för att skapa digitala målningsfiler från grunden av mästare.</p>
@@ -64,6 +69,7 @@
     <p xml:lang="et">Krita on üks paremaid valikuid kontseptuaalkunsti, koomiksite, tekstuuride ja digitaalmaalide loomiseks. Krita toetab paljusid värviruume, näiteks RGB ja CMYK 8 ja 16 täisarvulise bitiga kanali kohta, samuti 16 ja 32 ujukomabitiga kanali kohta.</p>
     <p xml:lang="ja">コンセプトアート、コミック、3DCG 用テクスチャ、マットペイントを制作する方にとって、Krita は最適な選択です。Krita は、8/16 ビット整数/チャンネル、および 16/32 ビット浮動小数点/チャンネルの RGB や CMYK をはじめ、さまざまな色空間をサポートしています。</p>
     <p xml:lang="nl">Krita is een goede keuze voor het maken van kunstconcepten, strips, textuur voor weergeven en matte schilderijen. Krita ondersteunt vele kleurruimten zoals RGB en CMYK in 8 en 16 bits kanalen met gehele getallen, evenals 16 en 32 bits kanalen met drijvende komma.</p>
+    <p xml:lang="pl">Krita jest świetnym wyborem przy tworzeniu koncepcyjnej sztuki, komiksów, tekstur do wyświetlania i kaszet. Krita obsługuje wiele przestrzeni barw takich jak RGB oraz CMYK dla kanałów 8 oraz 16 bitowych wyrażonych w l. całkowitych, a także  16 oraz 32 bitowych wyrażonych w l. zmiennoprzecinkowych.</p>
     <p xml:lang="pt">O Krita é uma óptima escolha para criar arte conceptual, banda desenhada, texturas para desenho e pinturas. O Krita suporta diversos espaços de cores como o RGB e o CMYK com canais de cores inteiros a 8 e 16 bits, assim como canais de vírgula flutuante a 16 e a 32 bits.</p>
     <p xml:lang="pt-BR">O Krita é uma ótima escolha para criação de arte conceitual, histórias em quadrinhos, texturas para desenhos e pinturas. O Krita tem suporte a diversos espaços de cores como RGB e CMYK com canais de cores inteiros de 8 e 16 bits, assim como canais de ponto flutuante de 16 e 32 bits.</p>
     <p xml:lang="sv">Krita är ett utmärkt val för att skapa concept art, serier, strukturer för återgivning och bakgrundsmålningar. Krita stöder många färgrymder som RGB och CMYK med 8- och 16-bitars heltal, samt 16- och 32-bitars flyttal.</p>
@@ -75,6 +81,7 @@
     <p xml:lang="et">Joonistamise muudavad tunduvalt lõbusamaks võimsad pintslimootorid, imetabased filtrid ja veel paljud käepärased võimalused, mis muudavad Krita kasutaja tohutult tootlikuks.</p>
     <p xml:lang="ja">Krita のソフトウェアとしての生産性を高めている先進的なブラシエンジンや素晴らしいフィルタのほか、便利な機能の数々をお楽しみください。</p>
     <p xml:lang="nl">Veel plezier met schilderen met the geavanceerde penseel-engines, filters vol verbazing en vele handige mogelijkheden die maken dat Krita enorm productief is.</p>
+    <p xml:lang="pl">Baw się przy malowaniu przy użyciu zaawansowanych silników pędzli, zadziwiających filtrów i wielu innych przydatnych cech, które czynią z Krity bardzo produktywną.</p>
     <p xml:lang="pt">Divirta-se a pintar com os motores de pincéis avançados, os filtros espantosos e muitas outras funcionalidades úteis que tornam o Krita altamente produtivo.</p>
     <p xml:lang="pt-BR">Divirta-se pintando com os mecanismos de pincéis avançados, filtros maravilhosos e muitas outras funcionalidades úteis que tornam o Krita altamente produtivo.</p>
     <p xml:lang="sv">Ha det så kul vid målning med de avancerade penselfunktionerna, fantastiska filtren och många praktiska funktioner som gör Krita så enormt produktiv.</p>
@@ -86,6 +93,7 @@
   <url type="homepage" xml:lang="en-GB">http://www.krita.org/</url>
   <url type="homepage" xml:lang="et">http://www.krita.org/</url>
   <url type="homepage" xml:lang="nl">http://www.krita.org/</url>
+  <url type="homepage" xml:lang="pl">http://www.krita.org/</url>
   <url type="homepage" xml:lang="pt">http://www.krita.org/</url>
   <url type="homepage" xml:lang="pt-BR">http://www.krita.org/</url>
   <url type="homepage" xml:lang="sv">http://www.krita.org/</url>
@@ -97,6 +105,7 @@
     <screenshot type="default" xml:lang="en-GB">http://heap.kogmbh.net/downloads/krita_appdata_1.png</screenshot>
     <screenshot type="default" xml:lang="et">http://heap.kogmbh.net/downloads/krita_appdata_1.png</screenshot>
     <screenshot type="default" xml:lang="nl">http://heap.kogmbh.net/downloads/krita_appdata_1.png</screenshot>
+    <screenshot type="default" xml:lang="pl">http://heap.kogmbh.net/downloads/krita_appdata_1.png</screenshot>
     <screenshot type="default" xml:lang="pt">http://heap.kogmbh.net/downloads/krita_appdata_1.png</screenshot>
     <screenshot type="default" xml:lang="pt-BR">http://heap.kogmbh.net/downloads/krita_appdata_1.png</screenshot>
     <screenshot type="default" xml:lang="sv">http://heap.kogmbh.net/downloads/krita_appdata_1.png</screenshot>
@@ -107,6 +116,7 @@
     <screenshot xml:lang="en-GB">http://heap.kogmbh.net/downloads/krita_appdata_2.png</screenshot>
     <screenshot xml:lang="et">http://heap.kogmbh.net/downloads/krita_appdata_2.png</screenshot>
     <screenshot xml:lang="nl">http://heap.kogmbh.net/downloads/krita_appdata_2.png</screenshot>
+    <screenshot xml:lang="pl">http://heap.kogmbh.net/downloads/krita_appdata_2.png</screenshot>
     <screenshot xml:lang="pt">http://heap.kogmbh.net/downloads/krita_appdata_2.png</screenshot>
     <screenshot xml:lang="pt-BR">http://heap.kogmbh.net/downloads/krita_appdata_2.png</screenshot>
     <screenshot xml:lang="sv">http://heap.kogmbh.net/downloads/krita_appdata_2.png</screenshot>
@@ -119,6 +129,7 @@
   <updatecontact xml:lang="en-GB">foundation@krita.org</updatecontact>
   <updatecontact xml:lang="et">foundation@krita.org</updatecontact>
   <updatecontact xml:lang="nl">foundation@krita.org</updatecontact>
+  <updatecontact xml:lang="pl">foundation@krita.org</updatecontact>
   <updatecontact xml:lang="pt">foundation@krita.org</updatecontact>
   <updatecontact xml:lang="pt-BR">foundation@krita.org</updatecontact>
   <updatecontact xml:lang="sv">foundation@krita.org</updatecontact>
@@ -129,6 +140,7 @@
   <project_group xml:lang="en-GB">KDE</project_group>
   <project_group xml:lang="et">KDE</project_group>
   <project_group xml:lang="nl">KDE</project_group>
+  <project_group xml:lang="pl">KDE</project_group>
   <project_group xml:lang="pt">KDE</project_group>
   <project_group xml:lang="pt-BR">KDE</project_group>
   <project_group xml:lang="sv">KDE</project_group>
