@@ -666,7 +666,6 @@ set(PIGMENT_INCLUDES ${KOPLUGIN_INCLUDES}
                    ${CMAKE_SOURCE_DIR}/libs/pigment
                    ${CMAKE_SOURCE_DIR}/libs/pigment/compositeops
                    ${CMAKE_SOURCE_DIR}/libs/pigment/resources
-                   ${Boost_INCLUDE_DIRS} 
                    ${QT_INCLUDES}
                    ${KDE4_INCLUDES})
 
