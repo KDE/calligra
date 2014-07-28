@@ -164,6 +164,11 @@ public:
      */
     virtual QSizeF paintOpSize() const;
 
+    void setPreset(KisPaintOpPresetWSP preset);
+
+    KisPaintOpPresetWSP preset() const;
+
+
     /**
      * @return filename of the 3D brush model, empty if no brush is set
      */
@@ -198,6 +203,7 @@ public:
      * onPropertyChanged() callback
      */
     void setProperty(const QString & name, const QVariant & value);
+
 
 protected:
      /**

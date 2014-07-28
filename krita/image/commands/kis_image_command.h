@@ -23,6 +23,7 @@
 #include <krita_export.h>
 
 #include <kundo2command.h>
+#include <kisundo2stack.h>
 #include <QSize>
 #include <QRect>
 #include "kis_types.h"
@@ -30,7 +31,7 @@
 
 
 /// the base command for commands altering a KisImage
-class KRITAIMAGE_EXPORT KisImageCommand : public KUndo2Command
+class KRITAIMAGE_EXPORT KisImageCommand : public KisUndo2Command
 {
 
 public:

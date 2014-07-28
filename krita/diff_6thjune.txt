@@ -1,0 +1,720 @@
+diff --git a/krita/image/brushengine/kis_paintop_settings.cpp b/krita/image/brushengine/kis_paintop_settings.cpp
+index 968658a..ba1aed3 100644
+--- a/krita/image/brushengine/kis_paintop_settings.cpp
++++ b/krita/image/brushengine/kis_paintop_settings.cpp
+@@ -45,8 +45,10 @@ struct KisPaintOpSettings::Private {
+     QPointer<KisPaintOpSettingsWidget> settingsWidget;
+     QString modelName;
+     KisPaintOpPresetWSP preset;
++
+ };
+ 
++
+ KisPaintOpSettings::KisPaintOpSettings()
+         : d(new Private)
+ {
+@@ -222,6 +224,10 @@ void KisPaintOpSettings::setCanvasMirroring(bool xAxisMirrored, bool yAxisMirror
+ 
+ void KisPaintOpSettings::setProperty(const QString & name, const QVariant & value)
+ {
++    if(value!=getProperty(name))
++    {
++
++    }
+     KisPropertiesConfiguration::setProperty(name, value);
+     onPropertyChanged();
+ }
+diff --git a/krita/plugins/paintops/mypaint/mypaint_paintop_factory.cpp b/krita/plugins/paintops/mypaint/mypaint_paintop_factory.cpp
+index 94f0752..f0ccac3 100644
+--- a/krita/plugins/paintops/mypaint/mypaint_paintop_factory.cpp
++++ b/krita/plugins/paintops/mypaint/mypaint_paintop_factory.cpp
+@@ -113,7 +113,7 @@ MyPaintBrushResource* MyPaintFactory::brush(const QString& fileName) const
+ 
+ void MyPaintFactory::processAfterLoading()
+ {
+-    KoResourceServer<KisPaintOpPreset>* rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
++    KisPaintOpPresetResourceServer* rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
+     QStringList blackList = rserver->blackListedFiles();
+ 
+     QMapIterator<QString, MyPaintBrushResource*> i(m_d->brushes);
+diff --git a/krita/plugins/paintops/resourcemanager/KoDlgCreateBundle.cpp b/krita/plugins/paintops/resourcemanager/KoDlgCreateBundle.cpp
+index 38c536c..514b659 100644
+--- a/krita/plugins/paintops/resourcemanager/KoDlgCreateBundle.cpp
++++ b/krita/plugins/paintops/resourcemanager/KoDlgCreateBundle.cpp
+@@ -266,7 +266,7 @@ void KoDlgCreateBundle::resourceTypeSelected(int idx)
+         }
+     }
+     else if (resourceType == "presets") {
+-        KoResourceServer<KisPaintOpPreset>* server = KisResourceServerProvider::instance()->paintOpPresetServer();
++        KisPaintOpPresetResourceServer* server = KisResourceServerProvider::instance()->paintOpPresetServer();
+         foreach(KoResource *res, server->resources()) {
+             QListWidgetItem *item = new QListWidgetItem(imageToIcon(res->image()), res->name());
+             item->setData(Qt::UserRole, res->shortFilename());
+diff --git a/krita/plugins/paintops/resourcemanager/KoResourceBundle.cpp b/krita/plugins/paintops/resourcemanager/KoResourceBundle.cpp
+index 78edb59..592114c 100644
+--- a/krita/plugins/paintops/resourcemanager/KoResourceBundle.cpp
++++ b/krita/plugins/paintops/resourcemanager/KoResourceBundle.cpp
+@@ -280,11 +280,12 @@ bool KoResourceBundle::save()
+             }
+         }
+         else if (resType  == "kis_paintoppresets") {
+-            KoResourceServer<KisPaintOpPreset>* paintoppresetServer = KisResourceServerProvider::instance()->paintOpPresetServer();
++            KisPaintOpPresetResourceServer* paintoppresetServer = KisResourceServerProvider::instance()->paintOpPresetServer();
+             foreach(const KoXmlResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
+-                KoResource *res = paintoppresetServer->resourceByMD5(ref.md5sum);
+-                if (!res) res = paintoppresetServer->resourceByFilename(QFileInfo(ref.resourcePath).completeBaseName());
+-                saveResourceToStore(res, store.data(), "paintoppresets");
++                KisPaintOpPresetSP preset = paintoppresetServer->resourceByMD5(ref.md5sum);
++                KoResource *res = preset.data();
++                if (!res) preset = paintoppresetServer->resourceByFilename(QFileInfo(ref.resourcePath).completeBaseName());
++                saveResourceToStore(preset.data(), store.data(), "paintoppresets");
+             }
+         }
+     }
+@@ -446,20 +447,21 @@ void KoResourceBundle::install()
+             }
+         }
+         else if (resType  == "kis_paintoppresets") {
+-            KoResourceServer<KisPaintOpPreset>* paintoppresetServer = KisResourceServerProvider::instance()->paintOpPresetServer();
++            KisPaintOpPresetResourceServer* paintoppresetServer = KisResourceServerProvider::instance()->paintOpPresetServer();
+             foreach(const KoXmlResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
+-                KisPaintOpPreset *res = paintoppresetServer->createResource(ref.resourcePath);
++                KisPaintOpPresetSP preset = paintoppresetServer->createResource(ref.resourcePath);
++
+                 if (!resourceStore->open(ref.resourcePath)) {
+                     qWarning() << "Failed to open" << ref.resourcePath << "from bundle" << filename();
+                 }
+-                if (!res->loadFromDevice(resourceStore->device())) {
++                if (!preset->loadFromDevice(resourceStore->device())) {
+                     qWarning() << "Failed to load" << ref.resourcePath << "from bundle" << filename();
+                 }
+-                paintoppresetServer->addResource(res, false);
++                paintoppresetServer->addResource(preset, false);
+                 foreach(const QString &tag, ref.tagList) {
+-                    paintoppresetServer->addTag(res, tag);
++                    paintoppresetServer->addTag(preset, tag);
+                 }
+-                paintoppresetServer->addTag(res, name());
++                paintoppresetServer->addTag(preset, name());
+             }
+         }
+     }
+diff --git a/krita/plugins/paintops/resourcemanager/KoResourceManagerControl.cpp b/krita/plugins/paintops/resourcemanager/KoResourceManagerControl.cpp
+index 12cc434..f346d4b 100644
+--- a/krita/plugins/paintops/resourcemanager/KoResourceManagerControl.cpp
++++ b/krita/plugins/paintops/resourcemanager/KoResourceManagerControl.cpp
+@@ -386,7 +386,7 @@ void KoResourceManagerControl::filterResourceTypes(int index)
+         list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KoPattern>(KoResourceServerProvider::instance()->patternServer())));
+         list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KisBrushResourceServerAdapter(KisBrushServer::instance()->brushServer())));
+         list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KoColorSet>(KoResourceServerProvider::instance()->paletteServer())));
+-        list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KisPaintOpPreset>(KisResourceServerProvider::instance()->paintOpPresetServer())));
++        list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KisPaintOpPresetResourceServerAdapter(KisResourceServerProvider::instance()->paintOpPresetServer())));
+         list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KisWorkspaceResource>(KisResourceServerProvider::instance()->workspaceServer())));
+         list.append(QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KoResourceBundle>(ResourceBundleServerProvider::instance()->resourceBundleServer())));
+         m_modelList.append(new KoResourceTableModel(list, KoResourceTableModel::Available));
+diff --git a/krita/plugins/paintops/resourcemanager/resourcemanager.cpp b/krita/plugins/paintops/resourcemanager/resourcemanager.cpp
+index a111efe..f7b76b7 100644
+--- a/krita/plugins/paintops/resourcemanager/resourcemanager.cpp
++++ b/krita/plugins/paintops/resourcemanager/resourcemanager.cpp
+@@ -98,7 +98,7 @@ public:
+     }
+ 
+     KisBrushResourceServer* brushServer;
+-    KoResourceServer<KisPaintOpPreset>* paintopServer;
++    KisPaintOpPresetResourceServer * paintopServer;
+     KoResourceServer<KoAbstractGradient>* gradientServer;
+     KoResourceServer<KoResourceBundle> *bundleServer;
+     KoResourceServer<KoPattern>* patternServer;
+@@ -286,7 +286,8 @@ void ResourceManager::slotCreateBundle()
+ 
+     res = dlgCreateBundle.selectedPresets();
+     foreach(const QString &r, res) {
+-        KoResource *res = d->paintopServer->resourceByFilename(r);
++        KisPaintOpPresetSP preset = d->paintopServer->resourceByFilename(r);
++        KoResource *res = preset.data();
+         newBundle->addResource("kis_paintoppresets", res->filename(), d->paintopServer->tagObject()->assignedTagsList(res), res->md5());
+     }
+ 
+diff --git a/krita/plugins/paintops/resourcemanager/tests/KoResourceBundleTest.cpp b/krita/plugins/paintops/resourcemanager/tests/KoResourceBundleTest.cpp
+index 57d57bd..551d308 100644
+--- a/krita/plugins/paintops/resourcemanager/tests/KoResourceBundleTest.cpp
++++ b/krita/plugins/paintops/resourcemanager/tests/KoResourceBundleTest.cpp
+@@ -129,7 +129,7 @@ void KoResourceBundleTest::testLoadSave()
+         bundle.addResource(workspaceServer->type(), workspace->filename(), workspaceServer->tagObject()->assignedTagsList(workspace), workspace->md5());
+     }
+ 
+-    KoResourceServer<KisPaintOpPreset>* paintopServer = KisResourceServerProvider::instance()->paintOpPresetServer();
++    KisPaintOpPresetResourceServer * paintopServer = KisResourceServerProvider::instance()->paintOpPresetServer();
+     QVERIFY(paintopServer->resoureCount() > 0);
+     foreach(KisPaintOpPreset* preset, paintopServer->resources()) {
+         paintopServer->addTag(preset, QString("testtag: %1").arg(tagCount));
+diff --git a/krita/sketch/models/PresetImageProvider.cpp b/krita/sketch/models/PresetImageProvider.cpp
+index d31cdad..67201c7 100644
+--- a/krita/sketch/models/PresetImageProvider.cpp
++++ b/krita/sketch/models/PresetImageProvider.cpp
+@@ -29,7 +29,7 @@ public:
+         rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
+     }
+ 
+-    KoResourceServer<KisPaintOpPreset> * rserver;
++    KisPaintOpPresetResourceServer * rserver ;
+ };
+ 
+ PresetImageProvider::PresetImageProvider()
+diff --git a/krita/sketch/models/PresetModel.cpp b/krita/sketch/models/PresetModel.cpp
+index 8f6452e..2f5b619 100644
+--- a/krita/sketch/models/PresetModel.cpp
++++ b/krita/sketch/models/PresetModel.cpp
+@@ -36,10 +36,10 @@ public:
+     Private()
+         : view(0)
+     {
+-        rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
++         rserver = KisResourceServerProvider::instance()->paintOpPresetServer();;
+     }
+ 
+-    KoResourceServer<KisPaintOpPreset> * rserver;
++    KisPaintOpPresetResourceServer * rserver;
+     QString currentPreset;
+     KisView2* view;
+ 
+diff --git a/krita/ui/kis_favorite_resource_manager.cpp b/krita/ui/kis_favorite_resource_manager.cpp
+index 37c16f2..2d684ff 100644
+--- a/krita/ui/kis_favorite_resource_manager.cpp
++++ b/krita/ui/kis_favorite_resource_manager.cpp
+@@ -178,13 +178,13 @@ KisFavoriteResourceManager::KisFavoriteResourceManager(KisPaintopBox *paintopBox
+ 
+     m_colorList = new ColorDataList();
+ 
+-    KoResourceServer<KisPaintOpPreset>* rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
++    KisPaintOpPresetResourceServer * rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
+     rServer->addObserver(this);
+ }
+ 
+ KisFavoriteResourceManager::~KisFavoriteResourceManager()
+ {
+-    KoResourceServer<KisPaintOpPreset>* rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
++    KisPaintOpPresetResourceServer * rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
+     rServer->removeObserver(this);
+     delete m_favoriteBrushManager;
+     delete m_colorList;
+@@ -203,9 +203,9 @@ QStringList KisFavoriteResourceManager::favoritePresetList()
+ QList<QImage> KisFavoriteResourceManager::favoritePresetImages()
+ {
+     QList<QImage> images;
+-    KoResourceServer<KisPaintOpPreset>* rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
++    KisPaintOpPresetResourceServer * rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
+     foreach(const QString & name, m_favoritePresetsList) {
+-        KoResource* resource = rServer->resourceByName(name);
++        KisPaintOpPresetSP resource = rServer->resourceByName(name);
+         if (!resource) {
+             removeFavoritePreset(name);
+         } else {
+@@ -219,9 +219,9 @@ void KisFavoriteResourceManager::slotChangeActivePaintop(int pos)
+ {
+     if (pos < 0 || pos >= m_favoritePresetsList.size()) return;
+ 
+-    KoResourceServer<KisPaintOpPreset>* rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
+-    KoResource* resource = rServer->resourceByName(m_favoritePresetsList.at(pos));
+-    m_paintopBox->resourceSelected(resource);
++    KisPaintOpPresetResourceServer * rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
++    KisPaintOpPresetSP resource = rServer->resourceByName(m_favoritePresetsList.at(pos));
++    m_paintopBox->resourceSelected(resource.data());
+     emit hidePalettes();
+ }
+ 
+@@ -325,7 +325,7 @@ void KisFavoriteResourceManager::slotChangeFGColorSelector(KoColor c)
+     emit sigChangeFGColorSelector(c);
+ }
+ 
+-void KisFavoriteResourceManager::removingResource(KisPaintOpPreset* resource)
++void KisFavoriteResourceManager::removingResource(PointerType resource)
+ {
+     if (m_blockUpdates) {
+         return;
+@@ -333,11 +333,11 @@ void KisFavoriteResourceManager::removingResource(KisPaintOpPreset* resource)
+     removeFavoritePreset(resource->name());
+ }
+ 
+-void KisFavoriteResourceManager::resourceAdded(KisPaintOpPreset* /*resource*/)
++void KisFavoriteResourceManager::resourceAdded(PointerType /*resource*/)
+ {
+ }
+ 
+-void KisFavoriteResourceManager::resourceChanged(KisPaintOpPreset* /*resource*/)
++void KisFavoriteResourceManager::resourceChanged(PointerType /*resource*/)
+ {
+ }
+ 
+diff --git a/krita/ui/kis_favorite_resource_manager.h b/krita/ui/kis_favorite_resource_manager.h
+index a1010f4..7a15e87 100644
+--- a/krita/ui/kis_favorite_resource_manager.h
++++ b/krita/ui/kis_favorite_resource_manager.h
+@@ -36,7 +36,7 @@ class KisPaintopBox;
+ class KisPaletteManager;
+ class KisView2;
+ 
+-class KisFavoriteResourceManager : public QObject, public KoResourceServerObserver<KisPaintOpPreset>
++class KisFavoriteResourceManager : public QObject, public KoResourceServerObserver<KisPaintOpPreset, SharedPointerStroragePolicy<KisPaintOpPresetSP> >
+ {
+     Q_OBJECT
+ 
+@@ -73,9 +73,9 @@ public:
+     const KoColor& recentColorAt(int pos);
+ 
+     // Reimplemented from KoResourceServerObserver
+-    virtual void removingResource(KisPaintOpPreset* resource);
+-    virtual void resourceAdded(KisPaintOpPreset* resource);
+-    virtual void resourceChanged(KisPaintOpPreset* resource);
++    virtual void removingResource(PointerType resource);
++    virtual void resourceAdded(PointerType resource);
++    virtual void resourceChanged(PointerType resource);
+     virtual void syncTaggedResourceView();
+     virtual void syncTagAddition(const QString& tag);
+     virtual void syncTagRemoval(const QString& tag);
+diff --git a/krita/ui/kis_paintop_box.cc b/krita/ui/kis_paintop_box.cc
+index 3181699..aa0d99c 100644
+--- a/krita/ui/kis_paintop_box.cc
++++ b/krita/ui/kis_paintop_box.cc
+@@ -73,6 +73,9 @@
+ #include "widgets/kis_widget_chooser.h"
+ #include "tool/kis_tool.h"
+ 
++typedef KoResourceServer<KisPaintOpPreset, SharedPointerStroragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServer;
++typedef KoResourceServerAdapter<KisPaintOpPreset, SharedPointerStroragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServerAdapter;
++
+ KisPaintopBox::KisPaintopBox(KisView2 *view, QWidget *parent, const char *name)
+     : QWidget(parent)
+     , m_resourceProvider(view->resourceProvider())
+@@ -350,6 +353,10 @@ void KisPaintopBox::resourceSelected(KoResource* resource)
+         setCurrentPaintop(preset->paintOp(), preset->clone());
+         preset->setDirtyPreset(saveDirtyPreset);
+         m_resourceProvider->currentPreset()->setDirtyPreset(saveDirtyPreset);
++        if(m_resourceProvider->currentPreset()->dirtyPreset())
++        {
++            qDebug(preset->name().toLatin1()+"dirty preset");
++        }
+         m_presetsPopup->setPresetImage(preset->image());
+         m_presetsPopup->resourceSelected(resource);
+     }
+@@ -594,14 +601,14 @@ void KisPaintopBox::slotSaveActivePreset()
+     m_favoriteResourceManager->setBlockUpdates(true);
+ 
+     KisPaintOpPreset* newPreset = curPreset->clone();
+-    KoResourceServer<KisPaintOpPreset>* rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
++    KisPaintOpPresetResourceServer * rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
+     QString saveLocation = rServer->saveLocation();
+     QString name = m_presetsPopup->getPresetName();
+ 
+     QStringList tags;
+-    KisPaintOpPreset* resource = rServer->resourceByName(name);
++    KisPaintOpPresetSP resource = rServer->resourceByName(name);
+     if (resource) {
+-        tags = rServer->assignedTagsList(resource);
++        tags = rServer->assignedTagsList(resource.data());
+         rServer->removeResource(resource);
+     }
+ 
+@@ -724,7 +731,7 @@ void KisPaintopBox::slotSaveToFavouriteBrushes()
+ 
+ void KisPaintopBox::slotWatchPresetNameLineEdit(const QString& text)
+ {
+-    KoResourceServer<KisPaintOpPreset>* rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
++    KisPaintOpPresetResourceServer * rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
+     m_presetsPopup->changeSavePresetButtonText(rServer->resourceByName(text) != 0);
+ }
+ 
+@@ -904,8 +911,8 @@ void KisPaintopBox::slotReloadPreset()
+ {   m_optionWidget->blockSignals(true);
+ 
+     //Here using the name and fetching the preset from the server was the only way the load was working. Otherwise it was not loading.
+-    KoResourceServer<KisPaintOpPreset> * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
+-    KisPaintOpPreset *preset = rserver->resourceByName(m_resourceProvider->currentPreset()->name());
++    KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
++    KisPaintOpPresetSP preset = rserver->resourceByName(m_resourceProvider->currentPreset()->name());
+     if(preset)
+         {
+             preset->load();
+@@ -913,7 +920,7 @@ void KisPaintopBox::slotReloadPreset()
+             preset->settings()->setOptionsWidget(m_optionWidget);
+             m_optionWidget->setConfiguration(preset->settings());
+             m_presetsPopup->setPaintOpSettingsWidget(m_optionWidget);
+-            m_presetsPopup->resourceSelected(preset);
++            m_presetsPopup->resourceSelected(preset.data());
+             m_optionWidget->writeConfiguration(const_cast<KisPaintOpSettings*>(m_resourceProvider->currentPreset()->settings().data()));
+             m_resourceProvider->currentPreset()->setDirtyPreset(false);
+         }
+diff --git a/krita/ui/kis_resource_server_provider.cpp b/krita/ui/kis_resource_server_provider.cpp
+index f772f30..33b03ae 100644
+--- a/krita/ui/kis_resource_server_provider.cpp
++++ b/krita/ui/kis_resource_server_provider.cpp
+@@ -33,12 +33,16 @@
+ #include <KoResource.h>
+ #include <KoResourceServer.h>
+ #include <KoResourceServerProvider.h>
++#include <KoResourceServerAdapter.h>
+ 
+ #include <kis_debug.h>
+ #include <KoPattern.h>
+ #include <kis_paintop_preset.h>
+ #include <kis_workspace_resource.h>
+ 
++typedef KoResourceServer<KisPaintOpPreset, SharedPointerStroragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServer;
++typedef KoResourceServerAdapter<KisPaintOpPreset, SharedPointerStroragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServerAdapter;
++
+ KisResourceServerProvider::KisResourceServerProvider()
+ {
+     KGlobal::mainComponent().dirs()->addResourceType("kis_paintoppresets", "data", "krita/paintoppresets/");
+@@ -46,7 +50,7 @@ KisResourceServerProvider::KisResourceServerProvider()
+ 
+     KGlobal::mainComponent().dirs()->addResourceType("kis_workspaces", "data", "krita/workspaces/");
+     
+-    m_paintOpPresetServer = new KoResourceServer<KisPaintOpPreset>("kis_paintoppresets", "*.kpp");
++    m_paintOpPresetServer = new KisPaintOpPresetResourceServer("kis_paintoppresets", "*.kpp");
+     if (!QFileInfo(m_paintOpPresetServer->saveLocation()).exists()) {
+         QDir().mkpath(m_paintOpPresetServer->saveLocation());
+     }
+@@ -84,7 +88,7 @@ KisResourceServerProvider* KisResourceServerProvider::instance()
+ }
+ 
+ 
+-KoResourceServer<KisPaintOpPreset>* KisResourceServerProvider::paintOpPresetServer()
++KisPaintOpPresetResourceServer* KisResourceServerProvider::paintOpPresetServer()
+ {
+     paintOpPresetThread->barrier();
+     return m_paintOpPresetServer;
+diff --git a/krita/ui/kis_resource_server_provider.h b/krita/ui/kis_resource_server_provider.h
+index b5fef28..9e69d15 100644
+--- a/krita/ui/kis_resource_server_provider.h
++++ b/krita/ui/kis_resource_server_provider.h
+@@ -27,7 +27,13 @@
+ #include <QStringList>
+ #include <QList>
+ 
++
++#include <KoResource.h>
+ #include <KoResourceServer.h>
++#include <KoResourceServerProvider.h>
++#include <KoResourceServerAdapter.h>
++
++#include <kis_paintop_preset.h>
+ 
+ #include <krita_export.h>
+ 
+@@ -36,6 +42,10 @@ class KoResourceLoaderThread;
+ class KisPaintOpPreset;
+ class KisWorkspaceResource;
+ 
++typedef KoResourceServer<KisPaintOpPreset, SharedPointerStroragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServer;
++typedef KoResourceServerAdapter<KisPaintOpPreset, SharedPointerStroragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServerAdapter;
++
++
+ class KRITAUI_EXPORT KisResourceServerProvider : public QObject
+ {
+     Q_OBJECT
+@@ -45,7 +55,7 @@ public:
+ 
+     static KisResourceServerProvider* instance();
+ 
+-    KoResourceServer<KisPaintOpPreset>* paintOpPresetServer();
++    KisPaintOpPresetResourceServer* paintOpPresetServer();
+     KoResourceServer<KisWorkspaceResource>* workspaceServer();
+ 
+     void brushBlacklistCleanup();
+@@ -58,7 +68,7 @@ private:
+     KisResourceServerProvider(const KisResourceServerProvider&);
+     KisResourceServerProvider operator=(const KisResourceServerProvider&);
+ 
+-    KoResourceServer<KisPaintOpPreset>* m_paintOpPresetServer;
++    KisPaintOpPresetResourceServer* m_paintOpPresetServer;
+     KoResourceServer<KisWorkspaceResource>* m_workspaceServer;
+ 
+ private:
+diff --git a/krita/ui/kis_view2.cpp b/krita/ui/kis_view2.cpp
+index 7618808..51982ff 100644
+--- a/krita/ui/kis_view2.cpp
++++ b/krita/ui/kis_view2.cpp
+@@ -440,8 +440,8 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
+ #endif
+ 
+     QString lastPreset = cfg.readEntry("LastPreset", QString("Basic_tip_default"));
+-    KoResourceServer<KisPaintOpPreset> * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
+-    KisPaintOpPreset *preset = rserver->resourceByName(lastPreset);
++    KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
++    KisPaintOpPresetSP preset = rserver->resourceByName(lastPreset);
+     if (!preset) {
+         preset = rserver->resourceByName("Basic_tip_default");
+     }
+@@ -453,7 +453,7 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
+         preset = rserver->resources().first();
+     }
+     if (preset) {
+-        paintOpBox()->resourceSelected(preset);
++        paintOpBox()->resourceSelected(preset.data());
+     }
+     connect(mainWindow(), SIGNAL(themeChanged()), this, SLOT(updateIcons()));
+     updateIcons();
+diff --git a/krita/ui/tests/kis_resource_server_provider_test.cpp b/krita/ui/tests/kis_resource_server_provider_test.cpp
+index c45cf9e..80b33a4 100644
+--- a/krita/ui/tests/kis_resource_server_provider_test.cpp
++++ b/krita/ui/tests/kis_resource_server_provider_test.cpp
+@@ -23,7 +23,7 @@
+ 
+ void KisResourceServerProviderTest::testFetchResource()
+ {
+-    KoResourceServer<KisPaintOpPreset> * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
++    KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
+     // get a known preset by name
+     // modify it
+     // get it a second time
+diff --git a/krita/ui/widgets/kis_paintop_presets_chooser_popup.cpp b/krita/ui/widgets/kis_paintop_presets_chooser_popup.cpp
+index cfb7669..ec0f619 100644
+--- a/krita/ui/widgets/kis_paintop_presets_chooser_popup.cpp
++++ b/krita/ui/widgets/kis_paintop_presets_chooser_popup.cpp
+@@ -113,8 +113,8 @@ void KisPaintOpPresetsChooserPopup::canvasResourceChanged(KoResource* resource ,
+ {
+     if (resource) {
+         blockSignals(true);
+-        KoResourceServer<KisPaintOpPreset> * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
+-        KisPaintOpPreset* preset = rserver->resourceByName(resource->name());
++        KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
++        KisPaintOpPresetSP preset = rserver->resourceByName(resource->name());
+         if(preset2->dirtyPreset() && preset2 && preset)
+         {
+             QMapIterator<QString, QVariant> i(preset2->settings()->getProperties());
+@@ -126,7 +126,7 @@ void KisPaintOpPresetsChooserPopup::canvasResourceChanged(KoResource* resource ,
+ 
+         }
+ 
+-        m_d->uiWdgPaintOpPresets.wdgPresetChooser->itemChooser()->setCurrentResource(preset);
++        m_d->uiWdgPaintOpPresets.wdgPresetChooser->itemChooser()->setCurrentResource(preset.data());
+         blockSignals(false);
+     }
+ }
+diff --git a/krita/ui/widgets/kis_paintop_presets_popup.cpp b/krita/ui/widgets/kis_paintop_presets_popup.cpp
+index 6b3a93c..8d24d19 100644
+--- a/krita/ui/widgets/kis_paintop_presets_popup.cpp
++++ b/krita/ui/widgets/kis_paintop_presets_popup.cpp
+@@ -200,29 +200,24 @@ void KisPaintOpPresetsPopup::setPaintOpSettingsWidget(QWidget * widget)
+ 
+ void KisPaintOpPresetsPopup::changeSavePresetButtonText(bool change)
+ {
+-    QPalette palette;
++
+ 
+     if (change) {
+-        palette.setColor(QPalette::Base, QColor(255,200,200));
+-        palette.setColor(QPalette::Text, Qt::black);
+         m_d->uiWdgPaintOpPresetSettings.bnSave->setText(i18n("Overwrite Preset"));
+-        m_d->uiWdgPaintOpPresetSettings.txtPreset->setPalette(palette);
++
+     }
+     else {
+         m_d->uiWdgPaintOpPresetSettings.bnSave->setText(i18n("Save to Presets"));
+-        m_d->uiWdgPaintOpPresetSettings.txtPreset->setPalette(palette);
++
+     }
+ }
+ 
+ 
+ QString KisPaintOpPresetsPopup::getPresetName() const
+ {
+-    if(!m_d->uiWdgPaintOpPresetSettings.txtPreset->text().contains("(Dirty)"))
++
+             return m_d->uiWdgPaintOpPresetSettings.txtPreset->text();
+-        else
+-            {
+-            return m_d->uiWdgPaintOpPresetSettings.txtPreset->text().left(m_d->uiWdgPaintOpPresetSettings.txtPreset->text().length()-7);
+-            }
++
+ }
+ 
+ QImage KisPaintOpPresetsPopup::cutOutOverlay()
+@@ -298,12 +293,14 @@ void KisPaintOpPresetsPopup::resourceSelected(KoResource* resource)
+         palette.setColor(QPalette::Base, Qt::black);
+         palette.setColor(QPalette::Text, Qt::white);
+         m_d->uiWdgPaintOpPresetSettings.txtPreset->setPalette(palette);
++
+        }
+     else
+     {
+      palette.setColor(QPalette::Base, QColor(255,200,200));
+      palette.setColor(QPalette::Text, Qt::black);
+      m_d->uiWdgPaintOpPresetSettings.txtPreset->setPalette(palette);
++
+     }
+     m_d->uiWdgPaintOpPresetSettings.txtPreset->setText(resource->name());
+ }
+diff --git a/krita/ui/widgets/kis_preset_chooser.cpp b/krita/ui/widgets/kis_preset_chooser.cpp
+index 6a1abb1..1041e7f 100644
+--- a/krita/ui/widgets/kis_preset_chooser.cpp
++++ b/krita/ui/widgets/kis_preset_chooser.cpp
+@@ -45,6 +45,8 @@
+ #include "kis_slider_spin_box.h"
+ #include "kis_config.h"
+ 
++
++
+ /// The resource item delegate for rendering the resource preview
+ class KisPresetDelegate : public QAbstractItemDelegate
+ {
+@@ -113,12 +115,12 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
+     painter->restore();
+ }
+ 
+-class KisPresetProxyAdapter : public KoResourceServerAdapter<KisPaintOpPreset>
++class KisPresetProxyAdapter : public KisPaintOpPresetResourceServerAdapter
+ {
+ 
+ public:
+-    KisPresetProxyAdapter(KoResourceServer< KisPaintOpPreset >* resourceServer)
+-        : KoResourceServerAdapter<KisPaintOpPreset>(resourceServer)
++    KisPresetProxyAdapter(KisPaintOpPresetResourceServer* resourceServer)
++        : KisPaintOpPresetResourceServerAdapter(resourceServer)
+     {
+     }
+     virtual ~KisPresetProxyAdapter() {}
+@@ -126,13 +128,13 @@ public:
+     virtual QList< KoResource* > resources() {
+ 
+         if (m_paintopID.isEmpty()) {
+-            return KoResourceServerAdapter<KisPaintOpPreset>::resources();
++            return KisPaintOpPresetResourceServerAdapter::resources();
+         }
+-        QList<KisPaintOpPreset*> serverResources = resourceServer()->resources();
++        QList<KisPaintOpPresetSP> serverResources = resourceServer()->resources();
+         QList<KoResource*> resources;
+-        foreach( KisPaintOpPreset* preset, serverResources ) {
++        foreach( KisPaintOpPresetSP preset, serverResources ) {
+             if( preset->paintOp().id() == m_paintopID) {
+-                resources.append( preset );
++                resources.append( preset.data() );
+             }
+         }
+         return resources;
+@@ -161,7 +163,7 @@ KisPresetChooser::KisPresetChooser(QWidget *parent, const char *name)
+     setObjectName(name);
+     QVBoxLayout * layout = new QVBoxLayout(this);
+     layout->setMargin(0);
+-    KoResourceServer<KisPaintOpPreset> * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
++    KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
+ 
+     m_adapter = QSharedPointer<KoAbstractResourceServerAdapter>(new KisPresetProxyAdapter(rserver));
+ 
+diff --git a/libs/widgets/KoResourceServer.h b/libs/widgets/KoResourceServer.h
+index 0a8e1a9..e363b1b 100644
+--- a/libs/widgets/KoResourceServer.h
++++ b/libs/widgets/KoResourceServer.h
+@@ -70,7 +70,7 @@ public:
+ 
+     virtual ~KoResourceServerBase() {}
+ 
+-    virtual int resoureCount() const = 0;
++    virtual int resourceCount() const = 0;
+     virtual void loadResources(QStringList filenames) = 0;
+     virtual QStringList blackListedFiles() const = 0;
+     QString type() const { return m_type; }
+@@ -115,7 +115,7 @@ protected:
+  * can be observed with a KoResourceServerObserver
+  *
+  * The \p Policy template parameter defines the way how the lifetime
+- * of a resource is handled.  There are to predefined policies:
++ * of a resource is handled.  There are two predefined policies:
+  *
+  *   o PointerStroragePolicy --- usual pointers with ownership over
+  *                               the resource.
+@@ -161,7 +161,7 @@ public:
+ 
+     }
+ 
+-    int resoureCount() const {
++    int resourceCount() const {
+         return m_resources.size();
+     }
+ 
+@@ -227,6 +227,7 @@ public:
+             kWarning(30009) << "Tried to add an invalid resource!";
+             return false;
+         }
++
+         if (save) {
+             QFileInfo fileInfo(resource->filename());
+ 
+@@ -387,6 +388,7 @@ public:
+             if(notifyLoadedResources) {
+                 foreach(PointerType resource, m_resourcesByFilename) {
+                     observer->resourceAdded(resource);
++
+                 }
+             }
+         }
+@@ -455,7 +457,7 @@ public:
+     }
+ 
+     /// the below functions helps to access tagObject functions
+-    QStringList assignedTagsList( KoResource* resource ) const
++    QStringList assignedTagsList( PointerType resource ) const
+     {
+         return m_tagStore->assignedTagsList(resource);
+     }
+@@ -465,12 +467,12 @@ public:
+         return m_tagStore->tagNamesList();
+     }
+ 
+-    void addTag( KoResource* resource,const QString& tag)
++    void addTag( PointerType resource,const QString& tag)
+     {
+         m_tagStore->addTag(resource,tag);
+     }
+ 
+-    void delTag( KoResource* resource,const QString& tag)
++    void delTag( PointerType resource,const QString& tag)
+     {
+         m_tagStore->delTag(resource,tag);
+     }
+diff --git a/libs/widgets/KoResourceServerAdapter.h b/libs/widgets/KoResourceServerAdapter.h
+index fc41a0f..1241304 100644
+--- a/libs/widgets/KoResourceServerAdapter.h
++++ b/libs/widgets/KoResourceServerAdapter.h
+@@ -237,7 +237,7 @@ public:
+         emitRemovingResource(0);
+     }
+ 
+-    QStringList assignedTagsList(KoResource* resource) {
++    QStringList assignedTagsList(PointerType resource) {
+         return m_resourceServer->assignedTagsList(resource);
+     }
+ 
+@@ -249,11 +249,11 @@ public:
+         m_resourceServer->addTag(0, tag);
+     }
+ 
+-    void addTag(KoResource* resource, const QString& tag) {
++    void addTag(PointerType resource, const QString& tag) {
+         m_resourceServer->addTag(resource, tag);
+     }
+ 
+-    void deleteTag(KoResource* resource, const QString& tag) {
++    void deleteTag(PointerType resource, const QString& tag) {
+         m_resourceServer->delTag(resource, tag);
+     }
+ 
+diff --git a/libs/widgets/KoResourceServerObserver.h b/libs/widgets/KoResourceServerObserver.h
+index 8372105..0600fd3 100644
+--- a/libs/widgets/KoResourceServerObserver.h
++++ b/libs/widgets/KoResourceServerObserver.h
+@@ -32,11 +32,13 @@
+ template <class T, class Policy = PointerStroragePolicy<T> >
+ class KoResourceServerObserver
+ {
+-    typedef typename Policy::PointerType PointerType;
++
+ 
+ public:
+     virtual ~KoResourceServerObserver() {}
+ 
++    typedef typename Policy::PointerType PointerType;
++
+     virtual void unsetResourceServer() = 0;
+ 
+     /**

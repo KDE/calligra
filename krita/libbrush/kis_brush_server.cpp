@@ -65,7 +65,11 @@ public:
             }
         }
         else {
+<<<<<<< HEAD:krita/libbrush/kis_brush_server.cpp
             return KisBrushResourceServer::importResourceFile(filename, fileCreation);
+=======
+            KisBrushResourceServer::importResourceFile(filename, fileCreation);
+>>>>>>> krita-mohit-testing:krita/plugins/paintops/libbrush/kis_brush_server.cpp
         }
         qApp->processEvents(QEventLoop::AllEvents);
         return true;

@@ -36,17 +36,23 @@
 #include "kis_paintop_registry.h"
 #include "kis_paint_information.h"
 #include "kis_paintop_settings_widget.h"
+#include "kis_paintop_preset.h"
 #include <time.h>
+#include<kis_types.h>
 
 struct KisPaintOpSettings::Private {
     KisNodeSP node;
     QPointer<KisPaintOpSettingsWidget> settingsWidget;
     QString modelName;
+    KisPaintOpPresetWSP preset;
+
 };
+
 
 KisPaintOpSettings::KisPaintOpSettings()
         : d(new Private)
 {
+    d->preset = NULL;
 }
 
 KisPaintOpSettings::~KisPaintOpSettings()
@@ -56,6 +62,14 @@ KisPaintOpSettings::~KisPaintOpSettings()
 void KisPaintOpSettings::setOptionsWidget(KisPaintOpSettingsWidget* widget)
 {
     d->settingsWidget = widget;
+}
+void KisPaintOpSettings::setPreset(KisPaintOpPresetWSP preset)
+{
+    d->preset = preset;
+}
+KisPaintOpPresetWSP KisPaintOpSettings::preset() const
+{
+    return d->preset;
 }
 
 bool KisPaintOpSettings::mousePressEvent(const KisPaintInformation &pos, Qt::KeyboardModifiers modifiers){
@@ -101,6 +115,7 @@ KisPaintOpSettingsSP KisPaintOpSettings::clone() const
         i.next();
         settings->setProperty(i.key(), QVariant(i.value()));
     }
+    settings->setPreset(this->preset());
     return settings;
 }
 
@@ -196,6 +211,9 @@ void KisPaintOpSettings::setCanvasRotation(qreal angle)
 {
     setProperty("runtimeCanvasRotation", angle);
     setPropertyNotSaved("runtimeCanvasRotation");
+    if(this->preset()){
+        this->preset()->setDirtyPreset(false);
+    }
 }
 
 void KisPaintOpSettings::setCanvasMirroring(bool xAxisMirrored, bool yAxisMirrored)
@@ -205,14 +223,27 @@ void KisPaintOpSettings::setCanvasMirroring(bool xAxisMirrored, bool yAxisMirror
 
     setProperty("runtimeCanvasMirroredY", yAxisMirrored);
     setPropertyNotSaved("runtimeCanvasMirroredY");
+
+    if(this->preset()){
+        this->preset()->setDirtyPreset(false);
+    }
 }
 
 void KisPaintOpSettings::setProperty(const QString & name, const QVariant & value)
 {
+    if(value != KisPropertiesConfiguration::getProperty(name)){
+        if(this->preset()){
+            this->preset()->setDirtyPreset(true);
+        }
+    }
+
     KisPropertiesConfiguration::setProperty(name, value);
     onPropertyChanged();
 }
 
+
 void KisPaintOpSettings::onPropertyChanged()
 {
+
 }
+

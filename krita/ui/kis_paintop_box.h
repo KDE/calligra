@@ -32,6 +32,10 @@
 #include <kis_types.h>
 #include <kis_paintop_settings.h>
 
+#include "kis_locked_properties_proxy.h"
+#include "kis_locked_properties_server.h"
+#include "kis_locked_properties.h"
+
 class QToolButton;
 class QPushButton;
 class QString;
@@ -51,6 +55,7 @@ class KisPaintOpListWidget;
 class KisCompositeOpComboBox;
 class KisWidgetChooser;
 class KisFavoriteResourceManager;
+class KisLockedProperties;
 /**
  * This widget presents all paintops that a user can paint with.
  * Paintops represent real-world tools or the well-known Shoup
@@ -130,7 +135,16 @@ private slots:
     void slotSwitchToPreviousPreset();
     void slotUnsetEraseMode();
     void slotToggleAlphaLockMode(bool);
+
     void toggleHighlightedButton(QToolButton* m_tool);
+
+    void slotReloadPreset();
+    void slotConfigurationItemChanged();
+    void slotSaveLockedOptionToPreset(KisPropertiesConfiguration* p);
+    void slotDropLockedOption(KisPropertiesConfiguration* p);
+    void slotDirtyPresetToggled(bool);
+
+
 
 private:
     KisCanvasResourceProvider*           m_resourceProvider;
@@ -152,6 +166,8 @@ private:
     KisWidgetChooser*                    m_sliderChooser[3];
     QMap<KoID,KisPaintOpSettingsWidget*> m_paintopOptionWidgets;
     KisFavoriteResourceManager*          m_favoriteResourceManager;
+    QToolButton*                         m_reloadButton;
+
 
     QString             m_prevCompositeOpID;
     QString             m_currCompositeOpID;
@@ -195,6 +211,7 @@ private:
     TabletToolID     m_currTabletToolID;
     bool             m_presetsEnabled;
     bool             m_blockUpdate;
+    bool             m_dirtyPresetsEnabled;
 
 
 };

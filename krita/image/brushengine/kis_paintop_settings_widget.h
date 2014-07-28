@@ -86,6 +86,10 @@ protected:
 
     KisImageWSP m_image;
 
+signals:
+
+
+
 };
 
 #endif

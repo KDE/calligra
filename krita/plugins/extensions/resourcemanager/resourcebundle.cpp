@@ -324,6 +324,7 @@ bool ResourceBundle::save()
                         qWarning() << "could not find resource for" << QFileInfo(ref.resourcePath).fileName();
                     }
                 }
+
             }
         }
         else if (resType  == "ko_palettes") {
@@ -357,6 +358,7 @@ bool ResourceBundle::save()
             }
         }
         else if (resType  == "kis_paintoppresets") {
+<<<<<<< HEAD:krita/plugins/extensions/resourcemanager/resourcebundle.cpp
             KoResourceServer<KisPaintOpPreset>* paintoppresetServer = KisResourceServerProvider::instance()->paintOpPresetServer();
             foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
                 KoResource *res = paintoppresetServer->resourceByMD5(ref.md5sum);
@@ -369,6 +371,14 @@ bool ResourceBundle::save()
                         qWarning() << "could not find resource for" << QFileInfo(ref.resourcePath).fileName();
                     }
                 }
+=======
+            KisPaintOpPresetResourceServer* paintoppresetServer = KisResourceServerProvider::instance()->paintOpPresetServer();
+            foreach(const KoXmlResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
+                KisPaintOpPresetSP preset = paintoppresetServer->resourceByMD5(ref.md5sum);
+                KoResource *res = preset.data();
+                if (!res) preset = paintoppresetServer->resourceByFilename(QFileInfo(ref.resourcePath).completeBaseName());
+                saveResourceToStore(preset.data(), store.data(), "paintoppresets");
+>>>>>>> krita-mohit-testing:krita/plugins/paintops/resourcemanager/KoResourceBundle.cpp
             }
         }
     }
@@ -507,6 +517,7 @@ bool ResourceBundle::install()
                 patternServer->addTag(res, name());
             }
         }
+<<<<<<< HEAD:krita/plugins/extensions/resourcemanager/resourcebundle.cpp
         else if (resType  == "brushes") {
             KisBrushResourceServer *brushServer = KisBrushServer::instance()->brushServer();
             foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
@@ -519,6 +530,12 @@ bool ResourceBundle::install()
                     qWarning() << "Could not create resource for" << ref.resourcePath;
                     continue;
                 }
+=======
+        else if (resType  == "kis_brushes") {
+            KisBrushResourceServer *brushServer = KisBrushServer::instance()->brushServer();
+            foreach(const KoXmlResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
+                KisBrushSP res = brushServer->createResource(ref.resourcePath);
+>>>>>>> krita-mohit-testing:krita/plugins/paintops/resourcemanager/KoResourceBundle.cpp
                 if (!resourceStore->open(ref.resourcePath)) {
                     qWarning() << "Failed to open" << ref.resourcePath << "from bundle" << filename();
                     continue;
@@ -592,6 +609,7 @@ bool ResourceBundle::install()
                 workspaceServer->addTag(res, name());
             }
         }
+<<<<<<< HEAD:krita/plugins/extensions/resourcemanager/resourcebundle.cpp
         else if (resType  == "paintoppresets") {
             KoResourceServer<KisPaintOpPreset>* paintoppresetServer = KisResourceServerProvider::instance()->paintOpPresetServer();
             foreach(const ResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
@@ -604,20 +622,31 @@ bool ResourceBundle::install()
                     qWarning() << "Could not create resource for" << ref.resourcePath;
                     continue;
                 }
+=======
+        else if (resType  == "kis_paintoppresets") {
+            KisPaintOpPresetResourceServer* paintoppresetServer = KisResourceServerProvider::instance()->paintOpPresetServer();
+            foreach(const KoXmlResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
+                KisPaintOpPresetSP preset = paintoppresetServer->createResource(ref.resourcePath);
+
+>>>>>>> krita-mohit-testing:krita/plugins/paintops/resourcemanager/KoResourceBundle.cpp
                 if (!resourceStore->open(ref.resourcePath)) {
                     qWarning() << "Failed to open" << ref.resourcePath << "from bundle" << filename();
                     continue;
                 }
-                if (!res->loadFromDevice(resourceStore->device())) {
+                if (!preset->loadFromDevice(resourceStore->device())) {
                     qWarning() << "Failed to load" << ref.resourcePath << "from bundle" << filename();
                     continue;
                 }
+<<<<<<< HEAD:krita/plugins/extensions/resourcemanager/resourcebundle.cpp
                 dbgResources << "\t\tresource:" << res->name();
                 paintoppresetServer->addResource(res, false);
+=======
+                paintoppresetServer->addResource(preset, false);
+>>>>>>> krita-mohit-testing:krita/plugins/paintops/resourcemanager/KoResourceBundle.cpp
                 foreach(const QString &tag, ref.tagList) {
-                    paintoppresetServer->addTag(res, tag);
+                    paintoppresetServer->addTag(preset.data(), tag);
                 }
-                paintoppresetServer->addTag(res, name());
+                paintoppresetServer->addTag(preset.data(), name());
             }
         }
     }
