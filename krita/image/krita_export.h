@@ -67,6 +67,14 @@
 # endif
 #endif
 
+#ifndef LIBKIS_EXPORT
+# ifdef MAKE_KRITALIBKIS_LIB
+#  define LIBKIS_EXPORT KDE_EXPORT
+# else
+#  define LIBKIS_EXPORT KDE_IMPORT
+# endif
+#endif
+
 #else // not windows
 
 #define KRITASKETCH_EXPORT KDE_EXPORT
@@ -74,6 +82,7 @@
 #define KRITAIMAGE_EXPORT KDE_EXPORT
 #define PAINTOP_EXPORT KDE_EXPORT
 #define BRUSH_EXPORT KDE_EXPORT
+#define LIBKIS_EXPORT KDE_EXPORT
 
 #endif /* not windows */
 

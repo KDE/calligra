@@ -82,7 +82,7 @@ PyObject* s_pykrita;
 PyKrita::Engine* s_engine_instance = 0;
 
 /**
- * Wrapper function, called exolicitly from \c Engine::Engine
+ * Wrapper function, called explicitly from \c Engine::Engine
  * to initialize pointer to the only (by design) instance of the engine,
  * so exported (to Python) functions get know it... Then invoke
  * a real initialization sequence...

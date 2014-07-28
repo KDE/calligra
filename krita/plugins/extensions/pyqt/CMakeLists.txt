@@ -21,7 +21,9 @@ endif()
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${SIP_INCLUDE_DIR} ${PYTHON_INCLUDE_PATH})
     
+add_subdirectory(libkis)
 add_subdirectory(sip)
 add_subdirectory(src)
+
 
 endif (HAVE_PYQT4 AND HAVE_SIP AND HAVE_PYTHONLIBS)
