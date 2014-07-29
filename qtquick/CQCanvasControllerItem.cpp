@@ -311,7 +311,7 @@ void CQCanvasControllerItem::updateDocumentSize(const QSize &size)
         //do not try to set it when we're dealing with a nearly-infinite document. (E.g. Sheets)
         if( d->minimumZoom < 0 && d->documentSize.width() > 0 && d->documentSize.width() < 2e6 )
         {
-            qreal minZoom = d->flickable->width() / ( d->documentSize.width() / ( d->zoom > 0.f ? d->zoom : 1.0 ) );
+            qreal minZoom = d->flickable->width() / ( d->documentSize.width() / ( d->zoom > 0.f ? d->zoom : 0.5 ) );
 
             if( KoZoomMode::minimumZoom() != minZoom )
             {

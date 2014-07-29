@@ -124,6 +124,7 @@ Item {
             canvas: wordsCanvas;
             flickable: controllerFlickable;
             property bool pageChanging: false;
+            minimumZoom: 0.5;
             onMovingFastChanged: {
                 if(movingFast === true && !pageChanging) {
                     d.showThings();

@@ -139,6 +139,7 @@ Item {
             Calligra.CanvasControllerItem {
                 canvas: stageCanvas;
                 flickable: controllerFlickable;
+                minimumZoom: 0.5;
             }
             MouseArea {
                 x: controllerFlickable.contentX;
