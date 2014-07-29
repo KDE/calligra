@@ -56,9 +56,7 @@ class QIODevice;
 class KoAnnotationLayoutManager;
 class KoDocumentInfoDlg;
 
-
 #define WORDS_MIME_TYPE "application/vnd.oasis.opendocument.text"
-
 
 /**
  * The class that represents a Words document containing content and settings.

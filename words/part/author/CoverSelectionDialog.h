@@ -32,7 +32,7 @@ class CoverSelectionDialog;
 class CoverSelectionDialog : public QDialog
 {
     Q_OBJECT
-    
+
 public:
     explicit CoverSelectionDialog(CAuView *au, QWidget *parent = 0);
     ~CoverSelectionDialog();

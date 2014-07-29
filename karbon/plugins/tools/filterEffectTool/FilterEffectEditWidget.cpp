@@ -397,7 +397,7 @@ void FilterEffectEditWidget::removeFromPresets()
         return;
     }
 
-    server->removeResource(resource);
+    server->removeResourceAndBlacklist(resource);
 }
 
 void FilterEffectEditWidget::presetSelected(KoResource *resource)
