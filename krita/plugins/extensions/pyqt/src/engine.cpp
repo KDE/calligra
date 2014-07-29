@@ -217,8 +217,9 @@ void PyKrita::Engine::unloadAllModules()
 QString PyKrita::Engine::tryInitializeGetFailureReason()
 {
     dbgScript << "Construct the Python engine for Python" << PY_MAJOR_VERSION << PY_MINOR_VERSION;
-    if (0 != PyImport_AppendInittab(Python::PYKRITA_ENGINE, PYKRITA_INIT))
+    if (0 != PyImport_AppendInittab(Python::PYKRITA_ENGINE, PYKRITA_INIT)) {
         return i18nc("@info:tooltip ", "Cannot load built-in <icode>pykrita</icode> module");
+    }
 
     Python::libraryLoad();
     Python py = Python();
@@ -249,8 +250,9 @@ QString PyKrita::Engine::tryInitializeGetFailureReason()
 
     // Initialize our built-in module.
     pythonInitwrapper(this);
-    if (!s_pykrita)
+    if (!s_pykrita) {
         return i18nc("@info:tooltip ", "No <icode>pykrita</icode> built-in module");
+    }
 
     // Setup global configuration
     m_configuration = PyDict_New();

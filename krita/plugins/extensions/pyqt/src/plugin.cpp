@@ -49,6 +49,24 @@ KritaPyQtPlugin::KritaPyQtPlugin(QObject *parent, const QVariantList &)
     delete settings;
 
     preferenceSetRegistry->add("PyQtPluginSettingsFactory", settingsFactory);
+
+    // Try to import the `pykrita` module
+    PyKrita::Python py = PyKrita::Python();
+    PyObject* pykritaPackage = py.moduleImport("pykrita");
+    if (pykritaPackage)
+    {
+        dbgKrita << "Loaded pykrita, now load plugins";
+        m_engine.tryLoadEnabledPlugins();
+        py.functionCall("_pykritaLoaded");
+    }
+    else
+    {
+        dbgScript << "Cannot load pykrita module";
+        m_engine.setBroken();
+    }
+
+
+
 }
 
 KritaPyQtPlugin::~KritaPyQtPlugin()
