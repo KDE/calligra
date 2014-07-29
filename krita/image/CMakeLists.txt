@@ -91,6 +91,7 @@ set(kritaimage_LIB_SRCS
    commands_new/kis_processing_command.cpp
    commands_new/kis_image_resize_command.cpp
    commands_new/kis_image_set_resolution_command.cpp
+   commands_new/kis_node_move_command2.cpp
    commands_new/kis_selection_move_command2.cpp
    commands_new/kis_update_command.cpp
    processing/kis_do_nothing_processing_visitor.cpp
@@ -156,6 +157,8 @@ set(kritaimage_LIB_SRCS
    kis_image_signal_router.cpp
    kis_image_config.cpp
    kis_signal_compressor.cpp
+   kis_signal_compressor_with_param.cpp
+   kis_thread_safe_signal_compressor.cpp
    kis_layer.cc
    kis_indirect_painting_support.cpp
    kis_mask.cc
@@ -247,6 +250,11 @@ kde4_add_library(kritaimage SHARED ${kritaimage_LIB_SRCS})
 
 target_link_libraries(kritaimage ${KDE4_KDEUI_LIBS} pigmentcms kundo2 kowidgetutils)
 target_link_libraries(kritaimage LINK_INTERFACE_LIBRARIES pigmentcms kundo2 kowidgetutils)
+
+target_link_libraries(kritaimage ${Boost_SYSTEM_LIBRARY})
+message("DEBUG_BOOST_LIBRARIES = " ${Boost_LIBRARIES})
+message("DEBUG_BOOST_SYSTEM_FOUND = " ${Boost_SYSTEM_FOUND})
+message("DEBUG_BOOST_SYSTEM_LIBRARY = " ${Boost_SYSTEM_LIBRARY})
 
 if(OPENEXR_FOUND)
   target_link_libraries(kritaimage  ${OPENEXR_LIBRARIES})

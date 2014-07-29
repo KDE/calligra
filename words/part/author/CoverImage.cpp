@@ -27,7 +27,6 @@
 #include <kmimetype.h>
 #include <klocale.h>
 #include <QFile>
-#include <QFileDialog>
 #include <QPair>
 
 #define coverPath "Pictures/coverImage."

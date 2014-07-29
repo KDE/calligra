@@ -150,6 +150,7 @@ Doc::Doc(KoPart *part)
         : DocBase(part)
         , dd(new Private)
 {
+    Q_ASSERT(part);
     connect(d->map, SIGNAL(sheetAdded(Sheet*)), this, SLOT(sheetAdded(Sheet*)));
 
 #ifndef QT_NO_DBUS

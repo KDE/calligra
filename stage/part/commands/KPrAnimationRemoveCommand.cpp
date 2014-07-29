@@ -27,7 +27,7 @@ KPrAnimationRemoveCommand::KPrAnimationRemoveCommand(KPrDocument *doc, KPrShapeA
     , m_animation(animation)
     , m_deleteAnimation(true)
 {
-    setText(i18nc("(qtundo-format)", "Remove shape animation"));
+    setText(kundo2_i18n("Remove shape animation"));
 }
 
 KPrAnimationRemoveCommand::~KPrAnimationRemoveCommand()

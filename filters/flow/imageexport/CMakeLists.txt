@@ -21,4 +21,4 @@ install(TARGETS flowimageexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  flow_image_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  flow_image_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)

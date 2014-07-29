@@ -521,6 +521,11 @@ public:
      */
     bool wrapAroundModeActive() const;
 
+    /**
+     * Notifies that the node collapsed state has changed
+     */
+    void notifyNodeCollpasedChanged();
+
 public:
     void startIsolatedMode(KisNodeSP node);
     void stopIsolatedMode();
@@ -654,6 +659,12 @@ signals:
      */
     void sigIsolatedModeChanged();
 
+    /**
+     * Emitted when one or more nodes changed the collapsed state
+     *
+     */
+    void sigNodeCollapsedChanged();
+
 public slots:
     KisCompositeProgressProxy* compositeProgressProxy();
 
@@ -734,11 +745,13 @@ public slots:
     void requestUndoDuringStroke();
 
     /**
-     * This method is called by the UI (*not* by the creator
-     * of the stroke) when it thinks current stroke should be
-     * cancelled. If the creator of the stroke supports cancelling
-     * of the stroke, it will be notified about the request and
-     * the stroke will be cancelled
+     * This method is called by the UI (*not* by the creator of the
+     * stroke) when it thinks current stroke should be cancelled. If
+     * there is a running stroke that has already been detached from
+     * its creator (ended or cancelled), it will be forcefully
+     * cancelled and reverted. If there is an open stroke present, and
+     * if its creator supports cancelling, it will be notified about
+     * the request and the stroke will be cancelled
      */
     void requestStrokeCancellation();
 
@@ -758,9 +771,9 @@ private:
     void emitSizeChanged();
 
     void resizeImageImpl(const QRect& newRect, bool cropLayers);
-    void rotateImpl(const QString &actionName, KisNodeSP rootNode,
+    void rotateImpl(const KUndo2MagicString &actionName, KisNodeSP rootNode,
                     bool resizeImage, double radians);
-    void shearImpl(const QString &actionName, KisNodeSP rootNode,
+    void shearImpl(const KUndo2MagicString &actionName, KisNodeSP rootNode,
                    bool resizeImage, double angleX, double angleY,
                    const QPointF &origin);
 

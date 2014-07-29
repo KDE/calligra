@@ -39,6 +39,9 @@ set(kotext_LIB_SRCS
     KoVariableManager.cpp
     KoNamedVariable.cpp
     KoSection.cpp
+    KoSectionEnd.cpp
+    KoSectionUtils.cpp
+    KoSectionManager.cpp
     KoTextLocator.cpp
     KoTextReference.cpp
     KoAnchorInlineObject.cpp
@@ -114,23 +117,25 @@ set(kotext_LIB_SRCS
     commands/AddTextRangeCommand.cpp
     commands/AddAnnotationCommand.cpp
     commands/ParagraphFormattingCommand.cpp
+    commands/RenameSectionCommand.cpp
+    commands/NewSectionCommand.cpp
 
     KoTextDrag.cpp
     KoTextCommandBase.cpp
 )
 
-if( SHOULD_BUILD_RDF )
+if( SHOULD_BUILD_FEATURE_RDF )
     set(kotext_LIB_SRCS ${kotext_LIB_SRCS}
         KoTextRdfCore.cpp
     )
-endif( SHOULD_BUILD_RDF )
+endif( SHOULD_BUILD_FEATURE_RDF )
 
 kde4_add_library(kotext SHARED ${kotext_LIB_SRCS})
 
 target_link_libraries(kotext flake)
-if( SHOULD_BUILD_RDF )
+if( SHOULD_BUILD_FEATURE_RDF )
     target_link_libraries(kotext ${SOPRANO_LIBRARIES})
-endif( SHOULD_BUILD_RDF )
+endif( SHOULD_BUILD_FEATURE_RDF )
 target_link_libraries(kotext LINK_INTERFACE_LIBRARIES flake)
 
 if( FONTCONFIG_FOUND )
@@ -185,6 +190,9 @@ install(
     KoTextMeta.h
     KoTextSoftPageBreak.cpp
     KoSection.h
+    KoSectionEnd.h
+    KoSectionUtils.h
+    KoSectionManager.h
     KoTextCommandBase.h
     KoTextTableTemplate.h
 

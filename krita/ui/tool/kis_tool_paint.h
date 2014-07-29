@@ -19,6 +19,8 @@
 #ifndef KIS_TOOL_PAINT_H_
 #define KIS_TOOL_PAINT_H_
 
+#include <vector>
+
 #include <QCursor>
 #include <QLayout>
 #include <QLabel>
@@ -117,6 +119,9 @@ protected:
     /// Add a widget and a label to the current option widget layout.
     virtual void addOptionWidgetOption(QWidget *control, QWidget *label = 0);
 
+    void showControl(QWidget *control, bool value);
+    void enableControl(QWidget *control, bool value);
+
     virtual QWidget * createOptionWidget();
 
     /**
@@ -185,6 +190,7 @@ private:
     // used to skip some of the tablet events and don't update the colour that often
     QTimer m_colorPickerDelayTimer;
     bool m_isOutlineEnabled;
+    std::vector<int> m_standardBrushSizes;
 
 signals:
     void sigPaintingFinished();

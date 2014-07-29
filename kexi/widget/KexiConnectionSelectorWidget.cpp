@@ -190,6 +190,7 @@ KexiConnectionSelectorWidget::~KexiConnectionSelectorWidget()
 void KexiConnectionSelectorWidget::showAdvancedConn()
 {
     d->prjTypeSelector->option_server->setChecked(true);
+    slotPrjTypeSelected(d->prjTypeSelector->option_server);
 }
 
 void KexiConnectionSelectorWidget::slotPrjTypeSelected(QAbstractButton *btn)
@@ -387,6 +388,7 @@ void KexiConnectionSelectorWidget::slotRemoteAddBtnClicked()
     }
 
     ConnectionDataLVItem* item = addConnectionData(newData);
+    d->remote->list->clearSelection();
     item->setSelected(true);
     slotConnectionSelectionChanged();
 }
@@ -442,10 +444,11 @@ void KexiConnectionSelectorWidget::slotRemoteRemoveBtnClicked()
     if (!d->conn_set->removeConnectionData(item->data()))
         return;
 
-    item->parent()->removeChild(item);
-    delete item;
     if (nextItem)
         nextItem->setSelected(true);
+
+    delete item;
+
     slotConnectionSelectionChanged();
 }
 

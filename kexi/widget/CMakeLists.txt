@@ -44,6 +44,8 @@ set(kexiextendedwidgets_LIB_SRCS
     KexiProjectSelectorWidget.cpp
     kexislider.cpp
     KexiServerDriverNotFoundMessage.cpp
+    KexiNameWidget.cpp
+    KexiNameDialog.cpp
   )
 
 IF (KEXI_MOBILE)
@@ -59,8 +61,6 @@ ELSE (KEXI_MOBILE)
     kexiprjtypeselector.cpp
     KexiConnectionSelectorWidget.cpp
     KexiFileWidget.cpp
-    KexiNameWidget.cpp
-    KexiNameDialog.cpp
     KexiPasswordWidget.cpp
   )
   kde4_add_ui_files(kexiextendedwidgets_LIB_SRCS

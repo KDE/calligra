@@ -31,6 +31,7 @@
 #include <ktemporaryfile.h>
 
 #include <KoGenStyles.h>
+#include <KoStyleStack.h>
 #include <KoGlobal.h>
 #include <KoOasisSettings.h>
 #include <KoOdfLoadingContext.h>

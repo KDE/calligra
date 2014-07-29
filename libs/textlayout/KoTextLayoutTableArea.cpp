@@ -22,7 +22,6 @@
 
 #include "KoTextLayoutCellHelper.h"
 #include "TableIterator.h"
-#include "KoTextLayoutArea.h"
 #include "KoPointedAt.h"
 
 #include <KoTableColumnAndRowStyleManager.h>
@@ -33,13 +32,10 @@
 #include <KoStyleManager.h>
 #include <KoTextTableTemplate.h>
 
-#include <QtAlgorithms>
-#include <QtGlobal>
 #include <QTextTable>
 #include <QTextTableFormat>
 #include <QPainter>
 #include <QRectF>
-#include <QVector>
 #include <QPair>
 
 #include "FrameIterator.h"
@@ -957,7 +953,7 @@ void KoTextLayoutTableArea::paint(QPainter *painter, const KoTextDocumentLayout:
     }
 }
 
-void KoTextLayoutTableArea::paintCell(QPainter *painter, const KoTextDocumentLayout::PaintContext &context, QTextTableCell tableCell, KoTextLayoutArea *frameArea)
+void KoTextLayoutTableArea::paintCell(QPainter *painter, const KoTextDocumentLayout::PaintContext &context, const QTextTableCell &tableCell, KoTextLayoutArea *frameArea)
 {
     int row = tableCell.row();
     int column = tableCell.column();
@@ -975,24 +971,26 @@ void KoTextLayoutTableArea::paintCell(QPainter *painter, const KoTextDocumentLay
     }
 
     // Possibly paint the selection of the entire cell
-    foreach(const QAbstractTextDocumentLayout::Selection & selection,   context.textContext.selections) {
-        QTextTableCell startTableCell = d->table->cellAt(selection.cursor.selectionStart());
-        QTextTableCell endTableCell = d->table->cellAt(selection.cursor.selectionEnd());
+    if (context.showSelections) {
+        foreach(const QAbstractTextDocumentLayout::Selection & selection,   context.textContext.selections) {
+            QTextTableCell startTableCell = d->table->cellAt(selection.cursor.selectionStart());
+            QTextTableCell endTableCell = d->table->cellAt(selection.cursor.selectionEnd());
 
-        if (startTableCell.isValid() && startTableCell != endTableCell) {
-            int selectionRow;
-            int selectionColumn;
-            int selectionRowSpan;
-            int selectionColumnSpan;
-            selection.cursor.selectedTableCells(&selectionRow, &selectionRowSpan, &selectionColumn, &selectionColumnSpan);
-            if (row >= selectionRow && column>=selectionColumn
-                && row < selectionRow + selectionRowSpan
-                && column < selectionColumn + selectionColumnSpan) {
+            if (startTableCell.isValid() && startTableCell != endTableCell) {
+                int selectionRow;
+                int selectionColumn;
+                int selectionRowSpan;
+                int selectionColumnSpan;
+                selection.cursor.selectedTableCells(&selectionRow, &selectionRowSpan, &selectionColumn, &selectionColumnSpan);
+                if (row >= selectionRow && column>=selectionColumn
+                    && row < selectionRow + selectionRowSpan
+                    && column < selectionColumn + selectionColumnSpan) {
+                    painter->fillRect(bRect, selection.format.background());
+                }
+            } else if (selection.cursor.selectionStart()  < d->table->firstPosition()
+                && selection.cursor.selectionEnd() > d->table->lastPosition()) {
                 painter->fillRect(bRect, selection.format.background());
             }
-        } else if (selection.cursor.selectionStart()  < d->table->firstPosition()
-            && selection.cursor.selectionEnd() > d->table->lastPosition()) {
-            painter->fillRect(bRect, selection.format.background());
         }
     }
 
@@ -1006,7 +1004,7 @@ void KoTextLayoutTableArea::paintCell(QPainter *painter, const KoTextDocumentLay
     painter->restore();
 }
 
-void KoTextLayoutTableArea::paintCellBorders(QPainter *painter, const KoTextDocumentLayout::PaintContext &context, QTextTableCell tableCell, bool topRow, int lastRow, QVector<QLineF> *accuBlankBorders)
+void KoTextLayoutTableArea::paintCellBorders(QPainter *painter, const KoTextDocumentLayout::PaintContext &context, const QTextTableCell &tableCell, bool topRow, int lastRow, QVector<QLineF> *accuBlankBorders)
 {
     Q_UNUSED(context);
 

@@ -76,6 +76,7 @@ KexiReportView::KexiReportView(QWidget *parent)
     m_pageSelector->insertAsideOfHorizontalScrollBar(m_reportView);
     m_pageSelector->setRecordCount(0);
     m_pageSelector->setInsertingButtonVisible(false);
+    m_pageSelector->setInsertingEnabled(false);
     m_pageSelector->setLabelText(i18n("Page"));
     m_pageSelector->setButtonToolTipText(KexiRecordNavigator::ButtonFirst, i18n("Go to first page"));
     m_pageSelector->setButtonWhatsThisText(KexiRecordNavigator::ButtonFirst, i18n("Goes to first page"));
@@ -107,7 +108,7 @@ KexiReportView::KexiReportView(QWidget *parent)
 
 #ifdef KEXI_MOBILE
     viewActions << (a = new KAction(i18n("Export:"), this));
-    a->setEnabled(false); //!TODO this is a bit of a dirty way to add what looks like a label to the toolbar! 
+    a->setEnabled(false); //!TODO this is a bit of a dirty way to add what looks like a label to the toolbar!
     // " ", not "", is said to be needed in maemo, the icon didn't display properly without it
     viewActions << (a = new KAction(koIcon("application-vnd.oasis.opendocument.text"), QLatin1String(" "), this));
 #else
@@ -119,6 +120,18 @@ KexiReportView::KexiReportView(QWidget *parent)
     a->setWhatsThis(i18n("Exports the report as a text document (in OpenDocument Text format)."));
     a->setEnabled(true);
     connect(a, SIGNAL(triggered()), this, SLOT(slotExportAsTextDocument()));
+
+#ifdef KEXI_MOBILE
+    viewActions << (a = new KAction(koIcon("application-pdf"), QLatin1String(" "), this));
+#else
+    exportMenu->addAction(a = new KAction(koIcon("application-pdf"),
+                                          i18nc("Portable Document Format...", "PDF..."), this));
+#endif
+    a->setObjectName("export_as_pdf");
+    a->setToolTip(i18n("Export as PDF"));
+    a->setWhatsThis(i18n("Exports the current report as PDF."));
+    a->setEnabled(true);
+    connect(a, SIGNAL(triggered()), this, SLOT(slotExportAsPdf()));
 
 #ifdef KEXI_MOBILE
     viewActions << (a = new KAction(koIcon("application-vnd.oasis.opendocument.spreadsheet"), QLatin1String(" "), this));
@@ -189,13 +202,53 @@ void KexiReportView::slotPrintReport()
     delete renderer;
 }
 
-KUrl KexiReportView::getExportUrl(const QString &mimetype, const QString &caption)
+void KexiReportView::slotExportAsPdf()
+{
+    QScopedPointer<KoReportRendererBase> renderer(m_factory.createInstance("print"));
+    if (renderer) {
+        KoReportRendererContext cxt;
+
+        cxt.destinationUrl = getExportUrl(QLatin1String("application/pdf"),
+                                          i18n("Export Report as PDF"),
+                                          "kfiledialog:///LastVisitedPDFExportPath/",
+                                          "pdf");
+        if (!cxt.destinationUrl.isValid()) {
+            return;
+        }
+
+        QPrinter printer;
+        QPainter painter;
+
+        printer.setOutputFileName(cxt.destinationUrl.path());
+        printer.setOutputFormat(QPrinter::PdfFormat);
+        printer.setColorMode(QPrinter::Color);
+
+        painter.begin(&printer);
+        cxt.printer = &printer;
+        cxt.painter = &painter;
+        if (!renderer->render(cxt, m_reportDocument)) {
+            KMessageBox::error(this,
+                               i18n("Exporting the report as PDF to %1 failed.", cxt.destinationUrl.prettyUrl()),
+                               i18n("Export Failed"));
+        } else {
+            openExportedDocument(cxt.destinationUrl);
+        }
+   }
+}
+
+KUrl KexiReportView::getExportUrl(const QString &mimetype, const QString &caption,
+                                  const QString &lastExportPath, const QString &extension)
 {
     KUrl result;
+    QString defaultSavePath;
+
+    if (lastExportPath.startsWith("kfiledialog:///")) {
+        defaultSavePath = lastExportPath + window()->partItem()->captionOrName() + "." + extension;
+    }
 
     // loop until an url has been chosen or the file selection has been cancelled
     while (true) {
-        result = KFileDialog::getSaveUrl(KUrl(), mimetype, this, caption);
+        result = KFileDialog::getSaveUrl(KUrl(defaultSavePath), mimetype, this, caption);
 
         // not cancelled?
         if (result.isValid()) {
@@ -242,7 +295,9 @@ void KexiReportView::slotExportAsSpreadsheet()
 
     if (renderer) {
         cxt.destinationUrl = getExportUrl(QLatin1String("application/vnd.oasis.opendocument.spreadsheet"),
-                                          i18n("Export Report as Spreadsheet"));
+                                          i18n("Export Report as Spreadsheet"),
+                                          "kfiledialog:///LastVisitedODSExportPath/",
+                                          "ods");
         if (!cxt.destinationUrl.isValid()) {
             return;
         }
@@ -266,7 +321,9 @@ void KexiReportView::slotExportAsTextDocument()
 
     if (renderer) {
         cxt.destinationUrl = getExportUrl(QLatin1String("application/vnd.oasis.opendocument.text"),
-                                          i18n("Export Report as Text Document"));
+                                          i18n("Export Report as Text Document"),
+                                          "kfiledialog:///LastVisitedODTExportPath/",
+                                          "odt");
         if (!cxt.destinationUrl.isValid()) {
             return;
         }
@@ -287,7 +344,10 @@ void KexiReportView::slotExportAsWebPage()
     KoReportRendererBase *renderer;
 
     const QString dialogTitle = i18n("Export Report as Web Page");
-    cxt.destinationUrl = getExportUrl(QLatin1String("text/html"), dialogTitle);
+    cxt.destinationUrl = getExportUrl(QLatin1String("text/html"),
+                                      dialogTitle,
+                                      "kfiledialog:///LastVisitedHTMLExportPath/",
+                                      "html");
     if (!cxt.destinationUrl.isValid()) {
         return;
     }
@@ -378,6 +438,7 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
                 m_pageCount = m_reportDocument->pages();
 #ifndef KEXI_MOBILE
                 m_pageSelector->setRecordCount(m_pageCount);
+                m_pageSelector->setCurrentRecordNumber(1);
 #endif
             }
 

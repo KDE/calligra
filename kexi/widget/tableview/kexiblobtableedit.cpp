@@ -40,7 +40,6 @@
 #include <kmimetype.h>
 #include <kservice.h>
 #include <klocale.h>
-#include <kfiledialog.h>
 #include <kio/job.h>
 #include <kglobal.h>
 #include <kiconloader.h>

@@ -34,6 +34,7 @@
 #include <kis_filter_mask.h>
 #include <kis_shape_controller.h>
 #include <kis_adjustment_layer.h>
+#include <kis_selection_manager.h>
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_configuration.h>
 #include <filter/kis_filter_registry.h>
@@ -535,6 +536,16 @@ void LayerModel::moveRight()
     }
 }
 
+void LayerModel::clear()
+{
+    d->canvas->view()->selectionManager()->clear();
+}
+
+void LayerModel::clone()
+{
+    d->nodeManager->duplicateActiveNode();
+}
+
 void LayerModel::setLocked(int index, bool newLocked)
 {
     if (index > -1 && index < d->layers.count()) {
@@ -847,7 +858,9 @@ bool getActiveChannel(KisNodeSP node, int channelIndex)
     if (layer)
     {
         QBitArray flags = layer->channelFlags();
-        flag = flags[channelIndex];
+        if (channelIndex < flags.size()) {
+            flag = flags[channelIndex];
+        }
     }
     return flag;
 }

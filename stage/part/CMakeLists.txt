@@ -172,7 +172,7 @@ target_link_libraries(calligrastagepart calligrastageprivate )
 install(TARGETS calligrastagepart DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ### desktop files ###
-install( FILES stagepart.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES stagepart.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 
 ### GUI files ###
 install( FILES stage.rc stage_readonly.rc DESTINATION ${DATA_INSTALL_DIR}/stage)

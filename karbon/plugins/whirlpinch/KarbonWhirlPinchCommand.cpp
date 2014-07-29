@@ -105,7 +105,7 @@ public:
 KarbonWhirlPinchCommand::KarbonWhirlPinchCommand(KoPathShape * path, qreal angle, qreal pinch, qreal radius, KUndo2Command *parent)
         : KUndo2Command(parent), d(new Private(path, angle, pinch, radius))
 {
-    setText(i18nc("(qtundo-format)", "Whirl & pinch"));
+    setText(kundo2_i18n("Whirl & pinch"));
 
     // save the path point data used for undo
     uint subpathCount = d->pathShape->subpathCount();

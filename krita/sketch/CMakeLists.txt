@@ -53,6 +53,7 @@ set(kritasketchplugin_SRCS
 )
 
 set(kritasketch_kritaintegrationmodels_SRCS
+    models/TemplatesModel.cpp
     models/KeyboardModel.cpp
     models/ColorImageProvider.cpp
     models/CompositeOpModel.cpp
@@ -83,6 +84,7 @@ set(KRITA_COLORSELECTORNG_PART_SRCS
 ../plugins/extensions/dockers/advancedcolorselector/kis_common_colors.cpp
 ../plugins/extensions/dockers/advancedcolorselector/kis_common_colors_recalculation_runner.cpp
 ../plugins/extensions/dockers/advancedcolorselector/kis_minimal_shade_selector.cpp
+../plugins/extensions/dockers/advancedcolorselector/kis_color_selector_base_proxy.cpp
 ../plugins/extensions/dockers/advancedcolorselector/kis_shade_selector_line.cpp
 ../plugins/extensions/dockers/advancedcolorselector/kis_shade_selector_line_editor.cpp
 ../plugins/extensions/dockers/advancedcolorselector/kis_shade_selector_line_combo_box.cpp
@@ -149,7 +151,7 @@ target_link_libraries(kritasketch
 )
 
 install(TARGETS   kritasketch ${INSTALL_TARGETS_DEFAULT_ARGS})
-install(PROGRAMS  kritasketch.desktop               DESTINATION ${XDG_APPS_INSTALL_DIR})
+install(PROGRAMS  kritasketch.desktop               DESTINATION ${XDG_APPS_INSTALL_DIR}/calligra)
 install(FILES     kritasketchrc kritasketchpanelsrc DESTINATION ${CONFIG_INSTALL_DIR} )
 install(FILES     kritasketch.qml                   DESTINATION ${DATA_INSTALL_DIR}/kritasketch)
 install(FILES     kritasketch.rc                    DESTINATION ${DATA_INSTALL_DIR}/kritasketch)

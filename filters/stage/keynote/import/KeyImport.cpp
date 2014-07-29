@@ -19,7 +19,10 @@
 #include <libetonyek/libetonyek.h>
 #include <libodfgen/OdpGenerator.hxx>
 
-#include "OutputFileHelper.hxx"
+#include <writerperfect_utils.hxx>
+#include <OutputFileHelper.hxx>
+#include <StringDocumentHandler.hxx>
+
 #include <KoFilterChain.h>
 #include <KoGlobal.h>
 #include <KoOdf.h>
@@ -31,6 +34,8 @@
 
 #include <stdio.h>
 
+using libetonyek::EtonyekDocument;
+
 class OdpOutputFileHelper : public OutputFileHelper
 {
 public:
@@ -38,21 +43,55 @@ public:
         OutputFileHelper(outFileName, password) {}
     ~OdpOutputFileHelper() {}
 
-private:
-    bool _isSupportedFormat(WPXInputStream *input, const char * /* password */)
+    bool convertDocument(librevenge::RVNGInputStream &input, bool isFlat)
     {
-        if (!libetonyek::KEYDocument::isSupported(input))
+        OdpGenerator collector;
+        StringDocumentHandler stylesHandler, contentHandler, manifestHandler, settingsHandler;
+        if (isFlat)
+            collector.addDocumentHandler(&contentHandler, ODF_FLAT_XML);
+        else
         {
-            fprintf(stderr, "ERROR: We have no confidence that you are giving us a valid Keynote Document.\n");
+            collector.addDocumentHandler(&contentHandler, ODF_CONTENT_XML);
+            collector.addDocumentHandler(&manifestHandler, ODF_MANIFEST_XML);
+            collector.addDocumentHandler(&settingsHandler, ODF_SETTINGS_XML);
+            collector.addDocumentHandler(&stylesHandler, ODF_STYLES_XML);
+        }
+        try
+        {
+            if (!EtonyekDocument::parse(&input, &collector))
+                return false;
+        }
+        catch (...)
+        {
             return false;
+        }
+        if (isFlat)
+        {
+            printf("%s\n", contentHandler.cstr());
+            return true;
+        }
+
+        const char s_mimetypeStr[] = "application/vnd.oasis.opendocument.presentation";
+        if (!writeChildFile("mimetype", s_mimetypeStr, (char)0) ||
+                !writeChildFile("META-INF/manifest.xml", manifestHandler.cstr()) ||
+                !writeChildFile("content.xml", contentHandler.cstr()) ||
+                !writeChildFile("settings.xml", settingsHandler.cstr()) ||
+                !writeChildFile("styles.xml", stylesHandler.cstr()))
+            return false;
+
+        librevenge::RVNGStringVector objects=collector.getObjectNames();
+        for (unsigned i=0; i<objects.size(); ++i)
+        {
+            StringDocumentHandler objectHandler;
+            if (collector.getObjectContent(objects[i], &objectHandler))
+                writeChildFile(objects[i].cstr(), objectHandler.cstr());
         }
         return true;
     }
 
-    bool _convertDocument(WPXInputStream *input, const char * /* password */, OdfDocumentHandler *handler, OdfStreamType streamType)
+    static EtonyekDocument::Confidence isSupportedFormat(librevenge::RVNGInputStream &input, EtonyekDocument::Type *type = 0)
     {
-        OdpGenerator exporter(handler, streamType);
-        return libetonyek::KEYDocument::parse(input, &exporter);
+        return EtonyekDocument::isSupported(&input, type);
     }
 };
 
@@ -74,48 +113,40 @@ KoFilter::ConversionStatus KeyImport::convert(const QByteArray& from, const QByt
     if (from != "application/x-iwork-keynote-sffkey" || to != KoOdf::mimeType(KoOdf::Presentation))
         return KoFilter::NotImplemented;
 
-    const char manifestStr[] = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-                               "<manifest:manifest xmlns:manifest=\"urn:oasis:names:tc:opendocument:xmlns:manifest:1.0\">"
-                               " <manifest:file-entry manifest:media-type=\"application/vnd.oasis.opendocument.presentation\" manifest:version=\"1.0\" manifest:full-path=\"/\"/>"
-                               " <manifest:file-entry manifest:media-type=\"text/xml\" manifest:full-path=\"content.xml\"/>"
-                               " <manifest:file-entry manifest:media-type=\"text/xml\" manifest:full-path=\"settings.xml\"/>"
-                               " <manifest:file-entry manifest:media-type=\"text/xml\" manifest:full-path=\"styles.xml\"/>"
-                               "</manifest:manifest>";
+    QByteArray inputFile = m_chain->inputFile().toLocal8Bit();
+    QByteArray outputFile = m_chain->outputFile().toLocal8Bit();
 
+    OdpOutputFileHelper helper(outputFile.constData(), 0);
 
-    QByteArray input = m_chain->inputFile().toLocal8Bit();
-    QByteArray output = m_chain->outputFile().toLocal8Bit();
-    const char *inputFile = input.data();
-    const char *outputFile = output.data();
+    shared_ptr<librevenge::RVNGInputStream> input;
+    if (librevenge::RVNGDirectoryStream::isDirectory(inputFile.constData()))
+        input.reset(new librevenge::RVNGDirectoryStream(inputFile.constData()));
+    else
+        input.reset(new librevenge::RVNGFileStream(inputFile.constData()));
 
-    OdpOutputFileHelper helper(outputFile, 0);
-
-    if (!helper.writeChildFile("mimetype", KoOdf::mimeType(KoOdf::Presentation), (char)0)) {
-        fprintf(stderr, "ERROR : Couldn't write mimetype\n");
-        return KoFilter::ParsingError;
-    }
-
-    if (!helper.writeChildFile("META-INF/manifest.xml", manifestStr)) {
-        fprintf(stderr, "ERROR : Couldn't write manifest\n");
-        return KoFilter::ParsingError;
-    }
-
-    if (outputFile && !helper.writeConvertedContent("settings.xml", inputFile, ODF_SETTINGS_XML))
+    EtonyekDocument::Type type = EtonyekDocument::TYPE_UNKNOWN;
+    const EtonyekDocument::Confidence confidence = helper.isSupportedFormat(*input, &type);
+    if ((EtonyekDocument::CONFIDENCE_NONE == confidence) || (EtonyekDocument::TYPE_KEYNOTE != type))
     {
-        fprintf(stderr, "ERROR : Couldn't write document settings\n");
+        fprintf(stderr, "ERROR: We have no confidence that you are giving us a valid Keynote Document.\n");
         return KoFilter::ParsingError;
     }
 
-    if (outputFile && !helper.writeConvertedContent("styles.xml", inputFile, ODF_STYLES_XML))
+    if (EtonyekDocument::CONFIDENCE_SUPPORTED_PART == confidence)
     {
-        fprintf(stderr, "ERROR : Couldn't write document styles\n");
-        return KoFilter::ParsingError;
-    }
+        input.reset(librevenge::RVNGDirectoryStream::createForParent(inputFile.constData()));
 
-    if (!helper.writeConvertedContent("content.xml", inputFile, ODF_CONTENT_XML))
-    {
-            fprintf(stderr, "ERROR : Couldn't write document content\n");
+        if (EtonyekDocument::CONFIDENCE_EXCELLENT != helper.isSupportedFormat(*input))
+        {
+            fprintf(stderr, "ERROR: We have no confidence that you are giving us a valid Keynote Document.\n");
             return KoFilter::ParsingError;
+        }
+    }
+
+    if (!helper.convertDocument(*input, outputFile.constData()))
+    {
+        fprintf(stderr, "ERROR : Couldn't convert the document\n");
+        return KoFilter::ParsingError;
     }
 
     return KoFilter::OK;

@@ -40,6 +40,9 @@ FilterResourceServerProvider::FilterResourceServerProvider()
     KGlobal::mainComponent().dirs()->addResourceType("ko_effects", "data", "karbon/effects/");
 
     m_filterEffectServer = new KoResourceServer<FilterEffectResource>("ko_effects", "*.svg");
+    if (!QFileInfo(m_filterEffectServer->saveLocation()).exists()) {
+        QDir().mkpath(m_filterEffectServer->saveLocation());
+    }
     m_filterEffectThread = new KoResourceLoaderThread(m_filterEffectServer);
     m_filterEffectThread->start();
 }

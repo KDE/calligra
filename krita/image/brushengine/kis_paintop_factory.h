@@ -57,7 +57,6 @@ public:
     virtual ~KisPaintOpFactory() {}
 
     static QString categoryStable();
-    static QString categoryExperimental();
 
 #ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
     virtual void preinitializePaintOpIfNeeded(const KisPaintOpSettingsSP settings);
@@ -96,7 +95,7 @@ public:
     /**
      * Create and return an settings object for this paintop.
      */
-    virtual KisPaintOpSettingsSP settings(KisImageWSP image) = 0;
+    virtual KisPaintOpSettingsSP settings() = 0;
 
     /**
      * create a widget that can display paintop settings

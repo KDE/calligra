@@ -18,7 +18,7 @@
 
 import QtQuick 1.1
 import org.krita.sketch 1.0
-import "../components"
+import org.krita.sketch.components 1.0
 
 Panel {
     id: base;
@@ -218,6 +218,7 @@ Panel {
                     margins: Constants.DefaultMargin;
                 }
                 source: model.image;
+                asynchronous: true;
                 MouseArea {
                     anchors.fill: parent;
                     onClicked: {

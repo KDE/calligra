@@ -12,4 +12,5 @@ install( FILES braindumpui.rc braindumpview.rc DESTINATION ${DATA_INSTALL_DIR}/b
 install( FILES import/zoom-pixels.png DESTINATION ${DATA_INSTALL_DIR}/braindump/icons/hicolor/22x22/actions)
 
 ### desktop files ###
-install( PROGRAMS braindump.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
+install( PROGRAMS braindump.desktop DESTINATION ${XDG_APPS_INSTALL_DIR}/calligra)
+install( FILES braindump.appdata.xml DESTINATION ${SHARE_INSTALL_PREFIX}/appdata/)

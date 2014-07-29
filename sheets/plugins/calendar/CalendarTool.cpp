@@ -112,7 +112,7 @@ void CalendarTool::insertCalendar(const QDate &start, const QDate &end)
 
     Q_ASSERT(cs);
 
-    sheet->doc()->beginMacro(i18n("Insert Calendar"));
+    sheet->doc()->beginMacro(kundo2_i18n("Insert Calendar"));
 
     int row = marker.y();
     int col = marker.x();

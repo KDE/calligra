@@ -23,14 +23,14 @@ add_subdirectory( tests )
 
 configure_file(config-processor.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-processor.h )
 
-include(kdefx.cmake)
-
 set(kritaui_LIB_SRCS
     canvas/kis_canvas_widget_base.cpp
     canvas/kis_canvas2.cpp
     canvas/kis_canvas_controller.cpp
     canvas/kis_paintop_transformation_connector.cpp
+    canvas/kis_display_color_converter.cpp
     canvas/kis_display_filter.cpp
+    canvas/kis_exposure_gamma_correction_interface.cpp
     canvas/kis_tool_proxy.cpp
     canvas/kis_canvas_decoration.cc
     canvas/kis_coordinates_converter.cpp
@@ -67,7 +67,6 @@ set(kritaui_LIB_SRCS
     flake/kis_shape_selection_model.cpp
     flake/kis_take_all_shapes_command.cpp
     kis_autogradient.cc
-    kis_autogradient_resource.cc
     kis_bookmarked_configurations_editor.cc
     kis_bookmarked_configurations_model.cc
     kis_bookmarked_filter_configurations_model.cc
@@ -128,6 +127,7 @@ set(kritaui_LIB_SRCS
     kis_action_manager.cpp
     kis_view_plugin.cpp
     kis_canvas_controls_manager.cpp
+    kis_tooltip_manager.cpp
     kisexiv2/kis_exif_io.cpp
     kisexiv2/kis_exiv2.cpp
     kisexiv2/kis_iptc_io.cpp
@@ -225,6 +225,7 @@ set(kritaui_LIB_SRCS
     input/kis_alternate_invocation_action.cpp
     input/kis_rotate_canvas_action.cpp
     input/kis_zoom_action.cpp
+    input/kis_gamma_exposure_action.cpp
     input/kis_show_palette_action.cpp
     input/kis_change_primary_setting_action.cpp
     input/kis_abstract_shortcut.cpp
@@ -261,6 +262,7 @@ set(kritaui_LIB_SRCS
     input/config/kis_wheel_input_editor.cpp
     input/config/kis_key_input_editor.cpp
     processing/fill_processing_visitor.cpp
+    kis_mirror_axis.cpp
 )
 
 if(WIN32)
@@ -306,7 +308,7 @@ kde4_add_ui_files(kritaui_LIB_SRCS
     forms/kis_previewwidgetbase.ui
     forms/kis_matrix_widget.ui
     forms/wdgselectionoptions.ui
-    forms/wdgshapeoptions.ui
+    forms/wdggeometryoptions.ui
     forms/wdgnewimage.ui
     forms/wdgimageproperties.ui
     forms/wdgmaskfromselection.ui
@@ -342,9 +344,9 @@ target_link_libraries(kritaui ${QT_QTDECLARATIVE_LIBRARY}
 target_link_libraries(kritaui ${GLEW_LIBRARIES})
 
 if(GHNS)
-    target_link_libraries(kritaui ${KDE4_KFILE_LIBRARY} kritaimage komain kowidgets kowidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES} ${KDE4_KNEWSTUFF3_LIBS})
+    target_link_libraries(kritaui ${KDE4_KFILE_LIBRARY} kritaimage kritalibbrush komain kowidgets kowidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES} ${KDE4_KNEWSTUFF3_LIBS})
 else(GHNS)
-    target_link_libraries(kritaui ${KDE4_KFILE_LIBRARY} kritaimage komain kowidgets kowidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES})
+    target_link_libraries(kritaui ${KDE4_KFILE_LIBRARY} kritaimage kritalibbrush komain kowidgets kowidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES})
 endif (GHNS)
 
 if(HAVE_OPENGL)
@@ -362,7 +364,7 @@ if(HAVE_OPENGL)
 
 endif(HAVE_OPENGL)
 
-target_link_libraries(kritaui LINK_INTERFACE_LIBRARIES kritaimage komain ${GL_INTERFACE_LIBRARIES} )
+target_link_libraries(kritaui LINK_INTERFACE_LIBRARIES kritaimage kritalibbrush komain ${GL_INTERFACE_LIBRARIES} )
 
 set_target_properties(kritaui
     PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}

@@ -37,6 +37,7 @@
 #include <QToolButton>
 #include <QFileInfo>
 #include <QGLWidget>
+#include <QDesktopServices>
 
 #include <kcmdlineargs.h>
 #include <kurl.h>
@@ -46,6 +47,7 @@
 #include <ktoolbar.h>
 #include <kmessagebox.h>
 #include <kmenubar.h>
+#include <kxmlguifactory.h>
 
 #include <KoCanvasBase.h>
 #include <KoMainWindow.h>
@@ -53,6 +55,9 @@
 #include <KoDocumentInfo.h>
 #include <KoAbstractGradient.h>
 #include <KoZoomController.h>
+#include <KoFileDialog.h>
+#include <KoDocumentEntry.h>
+#include <KoFilterManager.h>
 
 #include "filter/kis_filter.h"
 #include "filter/kis_filter_registry.h"
@@ -97,6 +102,7 @@ public:
         , sketchKisView(0)
         , desktopKisView(0)
         , desktopViewProxy(0)
+        , forceFullScreen(false)
         , forceDesktop(false)
         , forceSketch(false)
         , temporaryFile(false)
@@ -128,6 +134,7 @@ public:
     KisView2* desktopKisView;
     DesktopViewProxy* desktopViewProxy;
 
+    bool forceFullScreen;
     bool forceDesktop;
     bool forceSketch;
     bool temporaryFile;
@@ -174,6 +181,12 @@ public:
 
         sketchView->setSource(QUrl::fromLocalFile(fi.canonicalFilePath()));
         sketchView->setResizeMode( QDeclarativeView::SizeRootObjectToView );
+
+        if (sketchView->errors().count() > 0) {
+            foreach(const QDeclarativeError &error, sketchView->errors()) {
+                qDebug() << error.toString();
+            }
+        }
 
         toDesktop = new KAction(q);
         toDesktop->setEnabled(false);
@@ -296,9 +309,6 @@ void MainWindow::switchSketchForced()
 
 void MainWindow::switchToSketch()
 {
-    QTime timer;
-    timer.start();
-
     if (d->toSketch)
     {
         d->toSketch->setEnabled(false);
@@ -322,7 +332,6 @@ void MainWindow::switchToSketch()
     }
 
     setCentralWidget(d->sketchView);
-    emit switchedToSketch();
 
     if (d->slateMode) {
         setWindowState(windowState() | Qt::WindowFullScreen);
@@ -332,7 +341,9 @@ void MainWindow::switchToSketch()
     else
         QTimer::singleShot(50, this, SLOT(sketchChange()));
 
-    //qDebug() << "milliseconds to switch to sketch:" << timer.elapsed();
+    if (view && view->document()) {
+        view->document()->setSaveInBatchMode(true);
+    }
 }
 
 void MainWindow::sketchChange()
@@ -357,6 +368,7 @@ void MainWindow::sketchChange()
         qApp->processEvents();
         KisConfig cfg;
         cfg.setCursorStyle(CURSOR_STYLE_NO_CURSOR);
+        emit switchedToSketch();
     }
     if (d->toDesktop)
     {
@@ -367,9 +379,6 @@ void MainWindow::sketchChange()
 
 void MainWindow::switchToDesktop(bool justLoaded)
 {
-    QTime timer;
-    timer.start();
-
     if (d->toDesktop)
         d->toDesktop->setEnabled(false);
 
@@ -392,7 +401,9 @@ void MainWindow::switchToDesktop(bool justLoaded)
         setCentralWidget(d->desktopView);
     }
 
-    setWindowState(windowState() & ~Qt::WindowFullScreen);
+    if (!d->forceFullScreen) {
+        setWindowState(windowState() & ~Qt::WindowFullScreen);
+    }
 
     if (view) {
         //Notify the new view that we just switched to it, passing our synchronisation object
@@ -410,7 +421,9 @@ void MainWindow::switchToDesktop(bool justLoaded)
         d->switcher->setEnabled(true);
     }
 
-    //qDebug() << "milliseconds to switch to desktop:" << timer.elapsed();
+    if (view && view->document()) {
+        view->document()->setSaveInBatchMode(false);
+    }
 }
 
 void MainWindow::adjustZoomOnDocumentChangedAndStuff()
@@ -419,7 +432,8 @@ void MainWindow::adjustZoomOnDocumentChangedAndStuff()
         KisView2* view = qobject_cast<KisView2*>(d->desktopView->rootView());
         // We have to set the focus on the view here, otherwise the toolmanager is unaware of which
         // canvas should be handled.
-        d->desktopView->rootView()->setFocus();
+        view->canvasControllerWidget()->setFocus();
+        view->setFocus();
         QPoint center = view->rect().center();
         view->canvasControllerWidget()->zoomRelativeToPoint(center, 0.9);
         qApp->processEvents();
@@ -435,6 +449,10 @@ void MainWindow::adjustZoomOnDocumentChangedAndStuff()
         qApp->processEvents();
         d->toDesktop->setEnabled(true);
     }
+    // Ensure that we do, in fact, have the brush tool selected on the currently active canvas
+    KoToolManager::instance()->switchToolRequested( "InteractionTool" );
+    qApp->processEvents();
+    KoToolManager::instance()->switchToolRequested( "KritaShape/KisToolBrush" );
 }
 
 void MainWindow::documentChanged()
@@ -449,12 +467,18 @@ void MainWindow::documentChanged()
     qApp->processEvents();
     d->desktopKisView = qobject_cast<KisView2*>(d->desktopView->rootView());
     d->desktopKisView->setQtMainWindow(d->desktopView);
+
+    // Define new actions here
+
+    KXMLGUIFactory* factory = d->desktopKisView->factory();
+    factory->removeClient(d->desktopKisView);
+    factory->addClient(d->desktopKisView);
+
+    d->desktopViewProxy->documentChanged();
     connect(d->desktopKisView, SIGNAL(sigLoadingFinished()), d->centerer, SLOT(start()));
     connect(d->desktopKisView, SIGNAL(sigSavingFinished()), this, SLOT(resetWindowTitle()));
     connect(d->desktopKisView->canvasBase()->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
                 this, SLOT(resourceChanged(int, const QVariant&)));
-    if (d->sketchKisView)
-        d->sketchKisView->setQtMainWindow(this);
     if (!d->forceSketch && !d->slateMode)
         switchToDesktop(true);
 }
@@ -472,6 +496,11 @@ void MainWindow::setAllowClose(bool allow)
 bool MainWindow::slateMode() const
 {
     return d->slateMode;
+}
+
+void MainWindow::setSlateMode(bool newValue)
+{
+    d->slateMode = newValue;
 }
 
 QString MainWindow::currentSketchPage() const
@@ -508,12 +537,26 @@ void MainWindow::setTemporaryFile(bool newValue)
     emit temporaryFileChanged();
 }
 
+QString MainWindow::openImage()
+{
+    KoFileDialog dialog(this, KoFileDialog::OpenFile, "OpenDocument");
+    dialog.setCaption(i18n("Open Document"));
+    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+
+    KoDocumentEntry entry = KoDocumentEntry::queryByMimeType("application/x-krita");
+    KService::Ptr service = entry.service();
+    dialog.setMimeTypeFilters(KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Import, service->property("X-KDE-ExtraNativeMimeTypes").toStringList()));
+
+    dialog.setHideNameFilterDetailsOption();
+    return dialog.url();
+}
+
 void MainWindow::resourceChanged(int key, const QVariant& v)
 {
     if(centralWidget() == d->sketchView)
         return;
     KisPaintOpPresetSP preset = v.value<KisPaintOpPresetSP>();
-    if(preset) {
+    if(preset && d->sketchKisView != 0) {
         KisPaintOpPresetSP clone = preset->clone();
         clone->settings()->setNode(d->sketchKisView->resourceProvider()->currentNode());
         d->sketchKisView->resourceProvider()->setPaintOpPreset(clone);
@@ -525,7 +568,7 @@ void MainWindow::resourceChangedSketch(int key, const QVariant& v)
     if(centralWidget() == d->desktopView)
         return;
     KisPaintOpPresetSP preset = v.value<KisPaintOpPresetSP>();
-    if(preset) {
+    if(preset && d->desktopKisView != 0) {
         KisPaintOpPresetSP clone = preset->clone();
         clone->settings()->setNode(d->desktopKisView->resourceProvider()->currentNode());
         d->desktopKisView->resourceProvider()->setPaintOpPreset(clone);
@@ -547,6 +590,8 @@ void MainWindow::setSketchKisView(QObject* newView)
     {
         d->sketchKisView = qobject_cast<KisView2*>(newView);
         if(d->sketchKisView) {
+            d->sketchView->addActions(d->sketchKisView->actions());
+            d->sketchKisView->setQtMainWindow(this);
             connect(d->sketchKisView, SIGNAL(sigLoadingFinished()), d->centerer, SLOT(start()));
             connect(d->sketchKisView->canvasBase()->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
                 this, SLOT(resourceChangedSketch(int, const QVariant&)));
@@ -563,7 +608,11 @@ void MainWindow::minimize()
 
 void MainWindow::closeWindow()
 {
-    d->desktopView->setNoCleanup(true);
+    if (d->desktopView) {
+        // This situation shouldn't occur, but protecting potentially dangerous call
+        d->desktopView->setNoCleanup(true);
+    }
+
     //For some reason, close() does not work even if setAllowClose(true) was called just before this method.
     //So instead just completely quit the application, since we are using a single window anyway.
     DocumentManager::instance()->closeDocument();
@@ -574,7 +623,10 @@ void MainWindow::closeWindow()
 
 bool MainWindow::Private::queryClose()
 {
-    desktopView->setNoCleanup(true);
+    if (desktopView) {
+        // This situation shouldn't occur, but protecting potentially dangerous call
+        desktopView->setNoCleanup(true);
+    }
     if (DocumentManager::instance()->document() == 0)
         return true;
 
@@ -598,10 +650,13 @@ bool MainWindow::Private::queryClose()
 
         switch (res) {
         case KMessageBox::Yes : {
-            if (DocumentManager::instance()->isTemporaryFile() && !desktopViewProxy->fileSaveAs())
+            if (DocumentManager::instance()->isTemporaryFile()) {
+                if(!desktopViewProxy->fileSaveAs())
+                    return false;
+            }
+            else if (!DocumentManager::instance()->save()) {
                 return false;
-            if (!DocumentManager::instance()->save())
-                return false;
+            }
             break;
         }
         case KMessageBox::No :
@@ -715,6 +770,15 @@ void MainWindow::cloneResources(KisCanvasResourceProvider *from, KisCanvasResour
     to->setOpacity(from->opacity());
     to->setGlobalAlphaLock(from->globalAlphaLock());
 
+}
+
+bool MainWindow::forceFullScreen() {
+    return d->forceFullScreen;
+}
+
+void MainWindow::forceFullScreen(bool newValue)
+{
+    d->forceFullScreen = newValue;
 }
 
 #include "MainWindow.moc"

@@ -66,7 +66,8 @@ public:
         Opacity,
         HdrGamma,
         GlobalAlphaLock,
-        PreviousPaintOpPreset
+        PreviousPaintOpPreset,
+        EffectiveZoom ///<-Used only by painting tools for non-displaying purposes
     };
 
 
@@ -180,6 +181,8 @@ signals:
     void sigOpacityChanged(qreal);
     void sigSavingWorkspace(KisWorkspaceResource* workspace);
     void sigLoadingWorkspace(KisWorkspaceResource* workspace);
+
+    void mirrorModeChanged();
 
 private:
 

@@ -107,8 +107,6 @@ private:
     KisDoubleSliderSpinBox * m_massSPBox;
     KisDoubleSliderSpinBox * m_dragSPBox;
     KisDoubleSliderSpinBox * m_angleDSSBox;
-    QDoubleSpinBox * m_initWidthSPBox;
-    QDoubleSpinBox * m_widthRangeSPBox;
 
     // dyna algorithm
     QVector<QPointF> m_prevPosition;
@@ -152,7 +150,7 @@ public:
     KisToolDynaFactory(const QStringList&)
             : KoToolFactoryBase("KritaShape/KisToolDyna") {
 
-        setToolTip(i18n("Paint with brushes using dynamic movements"));
+        setToolTip(i18n("Dynamic Brush Tool"));
 
         // Temporarily
         setToolType(TOOL_TYPE_SHAPE);

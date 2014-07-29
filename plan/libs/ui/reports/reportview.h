@@ -264,7 +264,7 @@ private:
 class  KPLATOUI_EXPORT ModifyReportDefinitionCmd : public NamedCommand
 {
 public:
-    ModifyReportDefinitionCmd( ReportView *view, const QDomDocument &value, const QString &name = QString() );
+    ModifyReportDefinitionCmd( ReportView *view, const QDomDocument &value, const KUndo2MagicString &name = KUndo2MagicString() );
     void execute();
     void unexecute();
 

@@ -18,20 +18,15 @@
  */
 
 #include "ChangeStylesCommand.h"
-#include "KoStyleManager.h"
+
 #include "ChangeFollower.h"
-
-#include <KoTextDocument.h>
-#include <KoTextEditor.h>
-
-#include <QTextDocument>
 
 ChangeStylesCommand::ChangeStylesCommand(ChangeFollower *changeFollower
         , const QList<KoCharacterStyle *> &origCharacterStyles
         , const QList<KoParagraphStyle *> &origParagraphStyles
         , const QSet<int> &changedStyles
         , KUndo2Command *parent)
-    : KUndo2Command("stylechangecommand",parent) //Don't translate
+    : KUndo2Command(kundo2_noi18n("stylechangecommand"),parent)
     , m_changeFollower(changeFollower)
     , m_origCharacterStyles(origCharacterStyles)
     , m_origParagraphStyles(origParagraphStyles)

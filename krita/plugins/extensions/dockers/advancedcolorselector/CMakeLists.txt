@@ -24,6 +24,7 @@ kis_color_selector_triangle.cpp
 kis_color_selector_simple.cpp
 kis_color_selector_wheel.cpp
 kis_color_selector_combo_box.cpp
+kis_color_selector_base_proxy.cpp
 )
 
 kde4_add_ui_files(KRITA_COLORSELECTORNG_PART_SRCS
@@ -44,5 +45,5 @@ install( FILES  kis_colselng_color_patches.png
                 extended_color_selector.png
                 DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
 
-install( FILES  krita_colorselectorng.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  krita_colorselectorng.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 

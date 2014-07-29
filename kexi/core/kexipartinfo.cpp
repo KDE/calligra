@@ -86,11 +86,20 @@ Info::Private::Private()
 
 //------------------------------
 
+/*! \return "create" KAction's name for part defined by \a info.
+ The result is like "tablepart_create". */
+static QString nameForCreateAction(const Info& info)
+{
+    return info.objectName() + "part_create";
+}
+
+//------------------------------
+
 KexiNewObjectAction::KexiNewObjectAction(Info* info, QObject *parent)
     : KAction(KIcon(info->createItemIconName()), info->instanceCaption() + "...", parent)
     , m_info(info)
 {
-    setObjectName(KexiPart::nameForCreateAction(*m_info));
+    setObjectName(nameForCreateAction(*m_info));
     // default tooltip and what's this
     setToolTip(i18n("Create new object of type \"%1\"",
                 m_info->instanceCaption().toLower()));
@@ -232,19 +241,12 @@ QAction* Info::newObjectAction()
         kWarning();
         return 0;
     }
-    QAction *act = KexiMainWindowIface::global()->actionCollection()->action(KexiPart::nameForCreateAction(*this));
+    QAction *act = KexiMainWindowIface::global()->actionCollection()->action(nameForCreateAction(*this));
     if (!act) {
-        KexiNewObjectAction *act = new KexiNewObjectAction(this, KexiMainWindowIface::global()->actionCollection());
+        act = new KexiNewObjectAction(this, KexiMainWindowIface::global()->actionCollection());
         KexiMainWindowIface::global()->actionCollection()->addAction(act->objectName(), act);
     }
     return act;
-}
-
-//--------------
-
-QString KexiPart::nameForCreateAction(const Info& info)
-{
-    return info.objectName() + "part_create";
 }
 
 #include "kexipartinfo_p.moc"

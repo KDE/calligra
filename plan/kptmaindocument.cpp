@@ -79,6 +79,7 @@ MainDocument::MainDocument(KoPart *part)
         m_viewlistModified( false ),
         m_checkingForWorkPackages( false )
 {
+    Q_ASSERT(part);
     m_config.setReadWrite( true );
     // Add library translation files
     KLocale *locale = KGlobal::locale();
@@ -384,7 +385,7 @@ bool MainDocument::saveWorkPackageFormat( const QString &file, const Node *node,
         return false;
     }
     // Tell KoStore not to touch the file names
-    store->disallowNameExpansion();
+
 
     if ( ! store->open( "root" ) ) {
         setErrorMessage( i18n( "Not able to write '%1'. Partition full?", QString( "maindoc.xml") ) );
@@ -766,7 +767,7 @@ void MainDocument::mergeWorkPackage( Task *to, const Task *from, const Package *
         return;
     }
 
-    MacroCommand *cmd = new MacroCommand( "Merge workpackage" );
+    MacroCommand *cmd = new MacroCommand( kundo2_noi18n("Merge workpackage") );
     Completion &org = to->completion();
     const Completion &curr = from->completion();
 
@@ -1003,7 +1004,7 @@ bool MainDocument::insertProject( Project &project, Node *parent, Node *after )
         project.removeId( oldid ); // remove old id
         project.registerNodeId( n ); // register new id
     }
-    MacroCommand *m = new InsertProjectCmd( project, parent==0?m_project:parent, after, i18nc( "(qtundo-format)", "Insert project" ) );
+    MacroCommand *m = new InsertProjectCmd( project, parent==0?m_project:parent, after, kundo2_i18n( "Insert project" ) );
     if ( m->isEmpty() ) {
         delete m;
     } else {

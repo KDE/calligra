@@ -79,7 +79,6 @@
 
 // for the performance update
 #include <kis_cubic_curve.h>
-#include <config-ocio.h>
 
 #include "input/config/kis_input_configuration_page.h"
 
@@ -215,23 +214,12 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
 
     connect(m_page->cmbPrintingColorSpace, SIGNAL(activated(const KoID &)),
             this, SLOT(refillPrintProfiles(const KoID &)));
-
-#ifndef HAVE_OCIO
-    m_page->grpOcio->hide();
-#endif
-    m_page->grpOcio->setChecked(cfg.useOcio());
-    m_page->chkOcioUseEnvironment->setChecked(cfg.useOcioEnvironmentVariable());
-    enableOcioConfigPath(cfg.useOcioEnvironmentVariable());
-    m_page->txtOcioConfigPath->setText(cfg.ocioConfigurationPath());
-    connect(m_page->bnSelectOcioConfigPath, SIGNAL(clicked()), this, SLOT(selectOcioConfigPath()));
-    connect(m_page->chkOcioUseEnvironment, SIGNAL(toggled(bool)), this, SLOT(enableOcioConfigPath(bool)));
-
 }
 
 void ColorSettingsTab::installProfile()
 {
     QStringList mime;
-    mime << "*.icm" <<  "*.icc";
+    mime << "ICM Profile (*.icm(" <<  "ICC Profile (*.icc)";
     KoFileDialog dialog(this, KoFileDialog::OpenFiles, "OpenDocumentICC");
     dialog.setCaption(i18n("Install Color Profiles"));
     dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
@@ -298,9 +286,6 @@ void ColorSettingsTab::setDefault()
     m_page->chkAllowLCMSOptimization->setChecked(true);
     m_page->cmbMonitorIntent->setCurrentIndex(INTENT_PERCEPTUAL);
 
-    m_page->chkOcioUseEnvironment->setChecked(true);
-    m_page->txtOcioConfigPath->setText(QString());
-
     QAbstractButton *button = m_pasteBehaviourGroup.button(PASTE_ASK);
     Q_ASSERT(button);
 
@@ -346,28 +331,6 @@ void ColorSettingsTab::refillPrintProfiles(const KoID & s)
     }
 
     m_page->cmbPrintProfile->setCurrent(csf->defaultProfile());
-}
-
-void ColorSettingsTab::selectOcioConfigPath()
-{
-    QString filename = m_page->txtOcioConfigPath->text();
-
-    KoFileDialog dialog(m_page, KoFileDialog::OpenFile, "OpenDocument");
-    dialog.setCaption(i18n("Select OpenColorIO Configuration"));
-    dialog.setDefaultDir(QDir::cleanPath(filename));
-    dialog.setNameFilter("OpenColorIO configuration (*.ocio)");
-    filename = dialog.url();
-    QFile f(filename);
-    if (f.exists()) {
-        m_page->txtOcioConfigPath->setText(filename);
-    }
-}
-
-void ColorSettingsTab::enableOcioConfigPath(bool enable)
-{
-    m_page->lblOcioConfig->setEnabled(!enable);
-    m_page->txtOcioConfigPath->setEnabled(!enable);
-    m_page->bnSelectOcioConfigPath->setEnabled(!enable);
 }
 
 //---------------------------------------------------------------------------------------------------
@@ -416,6 +379,9 @@ void PerformanceTab::setDefault()
 
 //---------------------------------------------------------------------------------------------------
 
+#include "KoColor.h"
+#include "KoColorPopupAction.h"
+
 DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
     : WdgDisplaySettings(parent, name)
 {
@@ -452,6 +418,15 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
 #else
     grpOpenGL->setEnabled(false);
 #endif
+
+    KoColor c;
+    c.fromQColor(cfg.selectionOverlayMaskColor());
+    m_selectionOverlayColorAction = new KoColorPopupAction(this);
+    m_selectionOverlayColorAction->setCurrentColor(c);
+    m_selectionOverlayColorAction->setIcon(koIcon("format-stroke-color"));
+    m_selectionOverlayColorAction->setToolTip(i18n("Change the background color of the image"));
+    btnSelectionOverlayColor->setDefaultAction(m_selectionOverlayColorAction);
+
 
     intCheckSize->setValue(cfg.checkSize());
     chkMoving->setChecked(cfg.scrollCheckers());
@@ -766,10 +741,14 @@ bool KisDlgPreferences::editPreferences()
         KoApplication *app = qobject_cast<KoApplication*>(qApp);
         if (app) {
             foreach(KoPart* part, app->partList()) {
-                KoDocument *doc = part->document();
-                doc->setAutoSave(dialog->m_general->autoSaveInterval());
-                doc->setBackupFile(dialog->m_general->m_backupFileCheckBox->isChecked());
-                doc->undoStack()->setUndoLimit(dialog->m_general->undoStackSize());
+                if (part) {
+                    KoDocument *doc = part->document();
+                    if (doc) {
+                        doc->setAutoSave(dialog->m_general->autoSaveInterval());
+                        doc->setBackupFile(dialog->m_general->m_backupFileCheckBox->isChecked());
+                        doc->undoStack()->setUndoLimit(dialog->m_general->undoStackSize());
+                    }
+                }
             }
         }
         cfg.setUndoStackLimit(dialog->m_general->undoStackSize());
@@ -787,10 +766,6 @@ bool KisDlgPreferences::editPreferences()
         cfg.setPasteBehaviour(dialog->m_colorSettings->m_pasteBehaviourGroup.checkedId());
         cfg.setRenderIntent(dialog->m_colorSettings->m_page->cmbMonitorIntent->currentIndex());
 
-        cfg.setUseOcio(dialog->m_colorSettings->m_page->grpOcio->isChecked());
-        cfg.setUseOcioEnvironmentVariable(dialog->m_colorSettings->m_page->chkOcioUseEnvironment->isChecked());
-        cfg.setOcioConfigurationPath(dialog->m_colorSettings->m_page->txtOcioConfigPath->text());
-
         // Tablet settings
         cfg.setPressureTabletCurve( dialog->m_tabletSettings->m_page->pressureCurve->curve().toString() );
 
@@ -801,18 +776,6 @@ bool KisDlgPreferences::editPreferences()
 #endif
 
 #ifdef HAVE_OPENGL
-        if (dialog->m_displaySettings->cbUseOpenGL->isChecked() && cfg.canvasState() == "OPENGL_NOT_TRIED") {
-            cfg.setCanvasState("TRY_OPENGL");
-        }
-        if (dialog->m_displaySettings->cbUseOpenGL->isChecked() && cfg.canvasState() == "OPENGL_FAILED") {
-            if (KMessageBox::warningYesNo(0, i18n("You are trying to enable OpenGL\n\n"
-                                                  "But Krita might have had problems with the OpenGL canvas before,\n"
-                                                  "either because of driver issues, or because of issues with window effects.\n\n"
-                                                  "Are you sure you want to enable OpenGL?\n"), i18n("Krita")) == KMessageBox::Yes) {
-                cfg.setCanvasState("TRY_OPENGL");
-            }
-        }
-
         cfg.setUseOpenGL(dialog->m_displaySettings->cbUseOpenGL->isChecked());
         cfg.setUseOpenGLTextureBuffer(dialog->m_displaySettings->chkUseTextureBuffer->isChecked());
         cfg.setOpenGLFilteringMode(dialog->m_displaySettings->cmbFilterMode->currentIndex());
@@ -826,6 +789,7 @@ bool KisDlgPreferences::editPreferences()
         cfg.setCheckersColor2(dialog->m_displaySettings->colorChecks2->color());
         cfg.setCanvasBorderColor(dialog->m_displaySettings->canvasBorder->color());
         cfg.setHideScrollbars(dialog->m_displaySettings->hideScrollbars->isChecked());
+        cfg.setSelectionOverlayMaskColor(dialog->m_displaySettings->m_selectionOverlayColorAction->currentKoColor().toQColor());
         cfg.setAntialiasCurves(dialog->m_displaySettings->chkCurveAntialiasing->isChecked());
         cfg.setAntialiasSelectionOutline(dialog->m_displaySettings->chkSelectionOutlineAntialiasing->isChecked());
         cfg.setShowSingleChannelAsColor(dialog->m_displaySettings->chkChannelsAsColor->isChecked());

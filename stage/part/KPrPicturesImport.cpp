@@ -55,7 +55,7 @@ void KPrPicturesImport::import(KPrView *view)
             m_masterPage = activePage->masterPage();
 
             m_doc = view->kprDocument();
-            m_cmd = new KUndo2Command(i18nc("(qtundo-format)", "Insert Pictures"));
+            m_cmd = new KUndo2Command(kundo2_i18n("Insert Pictures"));
             import();
         }
     }

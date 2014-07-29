@@ -750,7 +750,7 @@ void ReportDesignDialog::saveToView()
     if ( m_view == 0 ) {
         return;
     }
-    KUndo2Command *cmd = new ModifyReportDefinitionCmd( m_view, document(), i18nc( "(qtundo-format)", "Modify report definition" ) );
+    KUndo2Command *cmd = new ModifyReportDefinitionCmd( m_view, document(), kundo2_i18n( "Modify report definition" ) );
     emit modifyReportDefinition( cmd );
     m_panel->m_modified = false;
 }
@@ -1004,7 +1004,7 @@ QStandardItemModel *ReportDesignPanel::createSourceModel( QObject *parent ) cons
 
 
 //-------------------
-ModifyReportDefinitionCmd ::ModifyReportDefinitionCmd( ReportView *view, const QDomDocument &value, const QString& name )
+ModifyReportDefinitionCmd ::ModifyReportDefinitionCmd( ReportView *view, const QDomDocument &value, const KUndo2MagicString& name )
     : NamedCommand( name ),
     m_view( view ),
     m_newvalue( value.cloneNode().toDocument() ),

@@ -81,7 +81,6 @@ KoFilter::ConversionStatus KoOdfExporter::convert(const QByteArray& from, const 
         delete outputStore;
         return KoFilter::FileNotFound;
     }
-    outputStore->disallowNameExpansion();
     kDebug(30003) << "created outputStore.";
     KoOdfWriteStore oasisStore(outputStore);
 

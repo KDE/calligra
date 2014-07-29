@@ -16,4 +16,4 @@ install(TARGETS keximigrate_sybase  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  keximigrate_sybase.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  keximigrate_sybase.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)

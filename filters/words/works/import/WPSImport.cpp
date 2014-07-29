@@ -16,11 +16,14 @@
 
 #include "WPSImport.h"
 
-#include <libwpd/libwpd.h>
+#include <librevenge/librevenge.h>
 #include <libwps/libwps.h>
-#include <libodfgen/OdtGenerator.hxx>
+#include <libodfgen/libodfgen.hxx>
 
-#include "OutputFileHelper.hxx"
+#include <writerperfect_utils.hxx>
+#include <OutputFileHelper.hxx>
+#include <StringDocumentHandler.hxx>
+
 #include <KoFilterChain.h>
 #include <KoGlobal.h>
 #include <KoOdf.h>
@@ -32,32 +35,77 @@
 
 #include <stdio.h>
 
+using namespace libwps;
+
 class OdtOutputFileHelper : public OutputFileHelper
 {
 public:
     OdtOutputFileHelper(const char *outFileName,const char *password) :
         OutputFileHelper(outFileName, password) {};
     ~OdtOutputFileHelper() {};
-
-private:
-    bool _isSupportedFormat(WPXInputStream *input, const char * /* password */)
+    bool convertDocument(librevenge::RVNGInputStream &input, bool isFlat)
     {
-        WPSConfidence confidence = WPSDocument::isFileFormatSupported(input);
-        if (confidence == WPS_CONFIDENCE_NONE || confidence == WPS_CONFIDENCE_POOR)
+        OdtGenerator collector;
+        collector.registerEmbeddedObjectHandler("image/wks-ods", &handleEmbeddedWKSObject);
+        StringDocumentHandler stylesHandler, contentHandler, manifestHandler, metaHandler;
+        if (isFlat)
+            collector.addDocumentHandler(&contentHandler, ODF_FLAT_XML);
+        else
         {
-            fprintf(stderr, "ERROR: We have no confidence that you are giving us a valid Microsoft Works document.\n");
+            collector.addDocumentHandler(&contentHandler, ODF_CONTENT_XML);
+            collector.addDocumentHandler(&manifestHandler, ODF_MANIFEST_XML);
+            collector.addDocumentHandler(&metaHandler, ODF_META_XML);
+            collector.addDocumentHandler(&stylesHandler, ODF_STYLES_XML);
+        }
+        try
+        {
+            if (WPS_OK != WPSDocument::parse(&input, &collector))
+                return false;
+        }
+        catch (...)
+        {
             return false;
         }
+        if (isFlat)
+        {
+            printf("%s\n", contentHandler.cstr());
+            return true;
+        }
 
+        static const char s_mimetypeStr[] = "application/vnd.oasis.opendocument.text";
+        if (!writeChildFile("mimetype", s_mimetypeStr, (char)0) ||
+                !writeChildFile("META-INF/manifest.xml", manifestHandler.cstr()) ||
+                !writeChildFile("content.xml", contentHandler.cstr()) ||
+                !writeChildFile("meta.xml", metaHandler.cstr()) ||
+                !writeChildFile("styles.xml", stylesHandler.cstr()))
+            return false;
+
+        librevenge::RVNGStringVector objects=collector.getObjectNames();
+        for (unsigned i=0; i<objects.size(); ++i)
+        {
+            StringDocumentHandler objectHandler;
+            if (collector.getObjectContent(objects[i], &objectHandler))
+                writeChildFile(objects[i].cstr(), objectHandler.cstr());
+        }
+        return true;
+    }
+    bool isSupportedFormat(librevenge::RVNGInputStream &input)
+    {
+        WPSKind kind = WPS_TEXT;
+        WPSConfidence confidence = WPSDocument::isFileFormatSupported(&input, kind);
+        if (confidence == WPS_CONFIDENCE_NONE || kind != WPS_TEXT)
+            return false;
         return true;
     }
 
-    bool _convertDocument(WPXInputStream *input, const char * /* password */, OdfDocumentHandler *handler, const OdfStreamType streamType)
+private:
+
+    static bool handleEmbeddedWKSObject(const librevenge::RVNGBinaryData &data, OdfDocumentHandler *pHandler,  const OdfStreamType streamType)
     {
-        OdtGenerator collector(handler, streamType);
-        if (WPS_OK == WPSDocument::parse(input, &collector))
-            return true;
-        return false;
+        if (!data.size()) return false;
+        OdsGenerator exporter;
+        exporter.addDocumentHandler(pHandler, streamType);
+        return WPSDocument::parse(const_cast<librevenge::RVNGInputStream *>(data.getDataStream()), &exporter)==WPS_OK;
     }
 };
 
@@ -78,113 +126,21 @@ KoFilter::ConversionStatus WPSImport::convert(const QByteArray& from, const QByt
     if (from != "application/vnd.ms-works" || to != KoOdf::mimeType(KoOdf::Text))
         return KoFilter::NotImplemented;
 
-    const char manifestStr[] = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-                               "<manifest:manifest xmlns:manifest=\"urn:oasis:names:tc:opendocument:xmlns:manifest:1.0\">"
-                               " <manifest:file-entry manifest:media-type=\"application/vnd.oasis.opendocument.text\" manifest:full-path=\"/\"/>"
-                               " <manifest:file-entry manifest:media-type=\"text/xml\" manifest:full-path=\"content.xml\"/>"
-                               " <manifest:file-entry manifest:media-type=\"text/xml\" manifest:full-path=\"styles.xml\"/>"
-                               "</manifest:manifest>";
+    QByteArray inputFile = m_chain->inputFile().toLocal8Bit();
+    QByteArray outputFile = m_chain->outputFile().toLocal8Bit();
 
-    const char stylesStr[] = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-                             "<office:document-styles xmlns:office=\"urn:oasis:names:tc:opendocument:xmlns:office:1.0\" "
-                             "xmlns:style=\"urn:oasis:names:tc:opendocument:xmlns:style:1.0\" xmlns:text=\"urn:oasis:names:tc:opendocument:xmlns:text:1.0\" "
-                             "xmlns:table=\"urn:oasis:names:tc:opendocument:xmlns:table:1.0\" xmlns:draw=\"urn:oasis:names:tc:opendocument:xmlns:drawing:1.0\" "
-                             "xmlns:fo=\"urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" "
-                             "xmlns:number=\"urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0\" "
-                             "xmlns:svg=\"urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0\" "
-                             "xmlns:chart=\"urn:oasis:names:tc:opendocument:xmlns:chart:1.0\" xmlns:dr3d=\"urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0\" "
-                             "xmlns:form=\"urn:oasis:names:tc:opendocument:xmlns:form:1.0\" xmlns:script=\"urn:oasis:names:tc:opendocument:xmlns:script:1.0\">"
-                             "<office:styles>"
-                             "<style:default-style style:family=\"paragraph\">"
-                             "<style:paragraph-properties style:use-window-font-color=\"true\" style:text-autospace=\"ideograph-alpha\" "
-                             "style:punctuation-wrap=\"hanging\" style:line-break=\"strict\" style:writing-mode=\"page\"/>"
-                             "</style:default-style>"
-                             "<style:default-style style:family=\"table\"/>"
-                             "<style:default-style style:family=\"table-row\">"
-                             "<style:table-row-properties fo:keep-together=\"auto\"/>"
-                             "</style:default-style>"
-                             "<style:default-style style:family=\"table-column\"/>"
-                             "<style:style style:name=\"Standard\" style:family=\"paragraph\" style:class=\"text\"/>"
-                             "<style:style style:name=\"Text_body\" style:display-name=\"Text body\" style:family=\"paragraph\" "
-                             "style:parent-style-name=\"Standard\" style:class=\"text\"/>"
-                             "<style:style style:name=\"List\" style:family=\"paragraph\" style:parent-style-name=\"Text_body\" style:class=\"list\"/>"
-                             "<style:style style:name=\"Header\" style:family=\"paragraph\" style:parent-style-name=\"Standard\" style:class=\"extra\"/>"
-                             "<style:style style:name=\"Footer\" style:family=\"paragraph\" style:parent-style-name=\"Standard\" style:class=\"extra\"/>"
-                             "<style:style style:name=\"Caption\" style:family=\"paragraph\" style:parent-style-name=\"Standard\" style:class=\"extra\"/>"
-                             "<style:style style:name=\"Footnote\" style:family=\"paragraph\" style:parent-style-name=\"Standard\" style:class=\"extra\"/>"
-                             "<style:style style:name=\"Endnote\" style:family=\"paragraph\" style:parent-style-name=\"Standard\" style:class=\"extra\"/>"
-                             "<style:style style:name=\"Index\" style:family=\"paragraph\" style:parent-style-name=\"Standard\" style:class=\"index\"/>"
-                             "<style:style style:name=\"Footnote_Symbol\" style:display-name=\"Footnote Symbol\" style:family=\"text\">"
-                             "<style:text-properties style:text-position=\"super 58%\"/>"
-                             "</style:style>"
-                             "<style:style style:name=\"Endnote_Symbol\" style:display-name=\"Endnote Symbol\" style:family=\"text\">"
-                             "<style:text-properties style:text-position=\"super 58%\"/>"
-                             "</style:style>"
-                             "<style:style style:name=\"Footnote_anchor\" style:display-name=\"Footnote anchor\" style:family=\"text\">"
-                             "<style:text-properties style:text-position=\"super 58%\"/>"
-                             "</style:style>"
-                             "<style:style style:name=\"Endnote_anchor\" style:display-name=\"Endnote anchor\" style:family=\"text\">"
-                             "<style:text-properties style:text-position=\"super 58%\"/>"
-                             "</style:style>"
-                             "<text:notes-configuration text:note-class=\"footnote\" text:citation-style-name=\"Footnote_Symbol\" "
-                             "text:citation-body-style-name=\"Footnote_anchor\" style:num-format=\"1\" text:start-value=\"0\" "
-                             "text:footnotes-position=\"page\" text:start-numbering-at=\"document\"/>"
-                             "<text:notes-configuration text:note-class=\"endnote\" text:citation-style-name=\"Endnote_Symbol\" "
-                             "text:citation-body-style-name=\"Endnote_anchor\" text:master-page-name=\"Endnote\" "
-                             "style:num-format=\"i\" text:start-value=\"0\"/>"
-                             "<text:linenumbering-configuration text:number-lines=\"false\" text:offset=\"0.1965in\" "
-                             "style:num-format=\"1\" text:number-position=\"left\" text:increment=\"5\"/>"
-                             "</office:styles>"
-                             "<office:automatic-styles>"
-                             "<style:page-layout style:name=\"PM0\">"
-                             "<style:page-layout-properties fo:margin-bottom=\"1.0000in\" fo:margin-left=\"1.0000in\" "
-                             "fo:margin-right=\"1.0000in\" fo:margin-top=\"1.0000in\" fo:page-height=\"11.0000in\" "
-                             "fo:page-width=\"8.5000in\" style:print-orientation=\"portrait\">"
-                             "<style:footnote-sep style:adjustment=\"left\" style:color=\"#000000\" style:distance-after-sep=\"0.0398in\" "
-                             "style:distance-before-sep=\"0.0398in\" style:rel-width=\"25%\" style:width=\"0.0071in\"/>"
-                             "</style:page-layout-properties>"
-                             "</style:page-layout>"
-                             "<style:page-layout style:name=\"PM1\">"
-                             "<style:page-layout-properties fo:margin-bottom=\"1.0000in\" fo:margin-left=\"1.0000in\" "
-                             "fo:margin-right=\"1.0000in\" fo:margin-top=\"1.0000in\" fo:page-height=\"11.0000in\" "
-                             "fo:page-width=\"8.5000in\" style:print-orientation=\"portrait\">"
-                             "<style:footnote-sep style:adjustment=\"left\" style:color=\"#000000\" style:rel-width=\"25%\"/>"
-                             "</style:page-layout-properties>"
-                             "</style:page-layout>"
-                             "</office:automatic-styles>"
-                             "<office:master-styles>"
-                             "<style:master-page style:name=\"Standard\" style:page-layout-name=\"PM0\"/>"
-                             "<style:master-page style:name=\"Endnote\" style:page-layout-name=\"PM1\"/>"
-                             "</office:master-styles>"
-                             "</office:document-styles>";
-
-    QByteArray input = m_chain->inputFile().toLocal8Bit();
-    QByteArray output = m_chain->outputFile().toLocal8Bit();
-    const char *inputFile = input.data();
-    const char *outputFile = output.data();
-
-    OdtOutputFileHelper helper(outputFile, 0);
-
-    if (!helper.writeChildFile("mimetype", KoOdf::mimeType(KoOdf::Text), (char)0)) {
-        fprintf(stderr, "ERROR : Couldn't write mimetype\n");
-        return KoFilter::ParsingError;
-    }
-
-    if (!helper.writeChildFile("META-INF/manifest.xml", manifestStr)) {
-        fprintf(stderr, "ERROR : Couldn't write manifest\n");
-        return KoFilter::ParsingError;
-    }
-
-    if (!helper.writeChildFile("styles.xml", stylesStr))
+    OdtOutputFileHelper helper(outputFile.constData(), 0);
+    librevenge::RVNGFileStream input(inputFile.constData());
+    if (!helper.isSupportedFormat(input))
     {
-        fprintf(stderr, "ERROR : Couldn't write document styles\n");
+        fprintf(stderr, "ERROR: We have no confidence that you are giving us a valid Microsoft Works document.\n");
         return KoFilter::ParsingError;
     }
 
-    if (!helper.writeConvertedContent("content.xml", inputFile, ODF_CONTENT_XML))
+    if (!helper.convertDocument(input, outputFile.constData()))
     {
-            fprintf(stderr, "ERROR : Couldn't write document content\n");
-            return KoFilter::ParsingError;
+        fprintf(stderr, "ERROR : Couldn't convert the document\n");
+        return KoFilter::ParsingError;
     }
 
     return KoFilter::OK;

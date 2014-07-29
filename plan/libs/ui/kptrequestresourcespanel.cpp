@@ -63,7 +63,7 @@ MacroCommand *RequestResourcesPanel::buildCommand()
     if ( t == 0 ) {
         return 0;
     }
-    MacroCommand *cmd = new MacroCommand( i18nc( "(qtundo-format)", "Modify resource allocations" ) );
+    MacroCommand *cmd = new MacroCommand( kundo2_i18n( "Modify resource allocations" ) );
     /*Project *p = */m_view->project();
     const QMap<const Resource*, ResourceRequest*> &rmap = m_view->resourceCache();
 

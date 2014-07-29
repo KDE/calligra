@@ -83,6 +83,9 @@ void KisBrushDelegate::paint(QPainter * painter, const QStyleOptionViewItem & op
     if (option.state & QStyle::State_Selected) {
         painter->setPen(QPen(option.palette.highlight(), 2.0));
         painter->drawRect(option.rect);
+        painter->setCompositionMode(QPainter::CompositionMode_HardLight);
+        painter->setOpacity(0.65);
+        painter->fillRect(option.rect, option.palette.highlight());
     }
 
     painter->restore();
@@ -121,8 +124,8 @@ KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
 
     m_lbName = new QLabel(this);
 
-    KoResourceServer<KisBrush>* rServer = KisBrushServer::instance()->brushServer();
-    QSharedPointer<KoResourceServerAdapter<KisBrush> > adapter(new KoResourceServerAdapter<KisBrush>(rServer));
+    KisBrushResourceServer* rServer = KisBrushServer::instance()->brushServer();
+    QSharedPointer<KisBrushResourceServerAdapter> adapter(new KisBrushResourceServerAdapter(rServer));
     m_itemChooser = new KoResourceItemChooser(adapter, this);
     QString knsrcFile = "kritabrushes.knsrc";
     m_itemChooser->setKnsrcFile(knsrcFile);
@@ -153,7 +156,7 @@ KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
     spacingLayout->addWidget(m_slSpacing, 3, 1);
     spacingLayout->setColumnStretch(1, 3);
 
-    QPushButton *resetBrushButton = new QPushButton(i18n("Reset Brush"), this);
+    QPushButton *resetBrushButton = new QPushButton(i18n("Reset Predefined Tip"), this);
     resetBrushButton->setToolTip(i18n("Reloads Spacing from file\nSets Scale to 1.0\nSets Rotation to 0.0"));
     connect(resetBrushButton, SIGNAL(clicked()), SLOT(slotResetBrush()));
 

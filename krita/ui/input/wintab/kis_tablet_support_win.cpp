@@ -187,6 +187,8 @@ void printContext(const LOGCONTEXT &lc)
     qDebug() << ppVar(lc.lcSysOrgY);
     qDebug() << ppVar(lc.lcSysExtX);
     qDebug() << ppVar(lc.lcSysExtY);
+
+    qDebug() << "Qt Desktop Geometry" << QApplication::desktop()->geometry();
 }
 
 /**
@@ -232,9 +234,6 @@ static void tabletInit(const quint64 uniqueId, const UINT csr_type, HCTX hTab)
         qt_tablet_tilt_support = tpOri[0].axResolution && tpOri[1].axResolution;
     }
 
-    tdd.minRotation = 0;
-    tdd.maxRotation = int(tpOri[2].axResolution);
-
     tdd.minX = int(lc.lcOutOrgX);
     tdd.maxX = int(qAbs(lc.lcOutExtX)) + int(lc.lcOutOrgX);
 
@@ -244,12 +243,16 @@ static void tabletInit(const quint64 uniqueId, const UINT csr_type, HCTX hTab)
     tdd.minZ = int(lc.lcOutOrgZ);
     tdd.maxZ = int(qAbs(lc.lcOutExtZ)) + int(lc.lcOutOrgZ);
 
+    tdd.sysOrgX = int(lc.lcSysOrgX);
+    tdd.sysOrgY = int(lc.lcSysOrgY);
+    tdd.sysExtX = int(lc.lcSysExtX);
+    tdd.sysExtY = int(lc.lcSysExtY);
+
     if (KisTabletDebugger::instance()->initializationDebugEnabled()) {
         qDebug() << "# Axes configuration";
         qDebug() << ppVar(tdd.minPressure) << ppVar(tdd.maxPressure);
         qDebug() << ppVar(tdd.minTanPressure) << ppVar(tdd.maxTanPressure);
         qDebug() << ppVar(qt_tablet_tilt_support);
-        qDebug() << ppVar(tdd.minRotation) << ppVar(tdd.maxRotation);
         qDebug() << ppVar(tdd.minX) << ppVar(tdd.maxX);
         qDebug() << ppVar(tdd.minY) << ppVar(tdd.maxY);
         qDebug() << ppVar(tdd.minZ) << ppVar(tdd.maxZ);
@@ -378,15 +381,15 @@ bool translateTabletEvent(const MSG &msg, PACKET *localPacketBuf,
         z = UINT(localPacketBuf[i].pkZ);
 
         prsNew = 0.0;
-        QRect desktopArea = QApplication::desktop()->geometry();
-        QPointF hiResGlobal = currentTabletPointer.scaleCoord(ptNew.x, ptNew.y, desktopArea.left(),
-                                                              desktopArea.width(), desktopArea.top(),
-                                                              desktopArea.height());
+
+        QPointF hiResGlobal = currentTabletPointer.scaleCoord(ptNew.x, ptNew.y,
+                                                              currentTabletPointer.sysOrgX, currentTabletPointer.sysExtX,
+                                                              currentTabletPointer.sysOrgY, currentTabletPointer.sysExtY);
 
 
         if (KisTabletDebugger::instance()->debugRawTabletValues()) {
             qDebug() << "WinTab (RC):"
-                     << "Dsk:" << desktopArea
+                     << "Dsk:"  << QRect(currentTabletPointer.sysOrgX, currentTabletPointer.sysOrgY, currentTabletPointer.sysExtX,  currentTabletPointer.sysExtY)
                      << "Raw:" << ptNew.x << ptNew.y
                      << "Scaled:" << hiResGlobal;
         }
@@ -477,9 +480,9 @@ bool translateTabletEvent(const MSG &msg, PACKET *localPacketBuf,
             tiltX = int(degX * (180 / Q_PI));
             tiltY = int(-degY * (180 / Q_PI));
 
-            // FIXME: rotation support is not finished yet!
-            rotation = qreal(ort.orTwist - currentTabletPointer.minRotation) /
-                (currentTabletPointer.maxRotation - currentTabletPointer.minRotation) * 360.0;
+            // Rotation is measured in degrees. Axis inverted to fit
+            // the coordinate system of the Linux driver.
+            rotation = (360 - 1) - ort.orTwist / 10;
         }
 
         if (KisTabletDebugger::instance()->debugRawTabletValues()) {
@@ -636,3 +639,4 @@ bool KisTabletSupportWin::eventFilter(void *message, long *result)
 
     return false;
 }
+

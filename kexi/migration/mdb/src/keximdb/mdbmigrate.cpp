@@ -34,7 +34,7 @@
 using namespace KexiMigration;
 
 /* This is the implementation for the MDB file import routines. */
-K_EXPORT_KEXIMIGRATE_DRIVER(MDBMigrate, "mdb")
+K_EXPORT_KEXIMIGRATE_DRIVER(MDBMigrate, mdb)
 
 static QByteArray isNonUnicodePropId("source_database_has_nonunicode_encoding");
 static QByteArray nonUnicodePropId("source_database_nonunicode_encoding");

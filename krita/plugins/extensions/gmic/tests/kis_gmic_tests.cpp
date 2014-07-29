@@ -70,7 +70,9 @@ void KisGmicTests::initTestCase()
     QString definitionFilePath = KGlobal::mainComponent().dirs()->findResource("gmic_definitions", standardSettings);
     m_blacklistFilePath = KGlobal::mainComponent().dirs()->findResource("gmic_definitions", standardSettings + ".blacklist");
 
-    KisGmicParser parser(definitionFilePath);
+    QStringList filePaths;
+    filePaths << definitionFilePath;
+    KisGmicParser parser(filePaths);
     m_root = parser.createFilterTree();
 
     m_blacklister = new KisGmicBlacklister(m_blacklistFilePath);
@@ -295,6 +297,11 @@ void KisGmicTests::testAllFilters()
         case 1584:
         {
             GMIC_FILTER_COUNT = 288;
+            break;
+        }
+        case 1590:
+        {
+            GMIC_FILTER_COUNT = 298;
             break;
         }
         default:
@@ -578,7 +585,7 @@ void KisGmicTests::testFilterOnlySelection()
     QString gmicCommand = filterSettings.gmicCommand();
 
     KisGmicApplicator applicator;
-    applicator.setProperties(image, image->root(), "Gmic filter", kritaNodes, gmicCommand);
+    applicator.setProperties(image, image->root(), kundo2_noi18n("Gmic filter"), kritaNodes, gmicCommand);
     applicator.start();
     applicator.wait();
     image->waitForDone();
@@ -586,6 +593,14 @@ void KisGmicTests::testFilterOnlySelection()
     //image->convertToQImage(image->bounds(), 0).save("filteredSelection.png");
     //TODO: check with expected image!
 
+}
+
+
+void KisGmicTests::testLoadingGmicCommands()
+{
+    QString definitionFilePath = KGlobal::mainComponent().dirs()->findResource("gmic_definitions", "gmic_def.gmic");
+    QByteArray data = KisGmicParser::extractGmicCommandsOnly(definitionFilePath);
+    QVERIFY(data.size() > 0);
 }
 
 

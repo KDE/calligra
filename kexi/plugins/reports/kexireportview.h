@@ -81,10 +81,12 @@ private:
     KRScriptFunctions *m_functions;
     KoReportRendererFactory m_factory;
 
-    KUrl getExportUrl(const QString &mimetype, const QString &caption);
+    KUrl getExportUrl(const QString &mimetype, const QString &caption,
+                      const QString &lastExportPath, const QString &extension);
 
 private slots:
     void slotPrintReport();
+    void slotExportAsPdf();
     void slotExportAsSpreadsheet();
     void slotExportAsWebPage();
     void slotExportAsTextDocument();

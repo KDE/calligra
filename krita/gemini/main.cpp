@@ -81,6 +81,8 @@ int main( int argc, char** argv )
     KCmdLineOptions options;
     options.add( "+[files]", ki18n( "Images to open" ) );
     options.add( "vkb", ki18n( "Use the virtual keyboard" ) );
+    options.add( "fullscreen", ki18n( "Use full-screen display" ) );
+    options.add( "sketch", ki18n( "Start with the Sketch interface" ) );
     KCmdLineArgs::addCmdLineOptions( options );
 
     KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
@@ -146,14 +148,35 @@ int main( int argc, char** argv )
 		qobject_cast<QApplication*>(QApplication::instance())->setStyle("Oxygen");
     }
 
+    // Prepare to show window fullscreen if required
+    bool showFullscreen = false;
+
+#ifdef HAVE_STEAMWORKS
+    if (steamClient->isInBigPictureMode()) {
+        // Show main window full screen
+        showFullscreen = true;
+    }
+#endif
+
+    if (args->isSet("sketch")) {
+        showFullscreen = true;
+    }
+
+	if (args->isSet("fullscreen")) {
+        showFullscreen = true;
+    }
+
     // then create the pixmap from an xpm: we cannot get the
     // location of our datadir before we've started our components,
     // so use an xpm.
+    // If fullscreen, hide splash screen
     QPixmap pm(splash_screen_xpm);
     QSplashScreen splash(pm);
-    splash.show();
-    splash.showMessage(".");
-    app.processEvents();
+    if (!showFullscreen) {
+        splash.show();
+        splash.showMessage(".");
+        app.processEvents();
+    }
 
 #if defined Q_WS_X11 && QT_VERSION >= 0x040800
     QApplication::setAttribute(Qt::AA_X11InitThreads);
@@ -165,11 +188,19 @@ int main( int argc, char** argv )
         app.setInputContext(new SketchInputContext(&app));
     }
 
+    if (args->isSet("sketch")) {
+        window.setSlateMode(true);
+    }
+
+    if (showFullscreen) {
+        window.showFullScreen();
+    } else {
 #ifdef Q_OS_WIN
-    window.showMaximized();
+		window.showMaximized();
 #else
-    window.show();
+		window.show();
 #endif
+	}
     splash.finish(&window);
 
     return app.exec();

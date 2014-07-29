@@ -60,7 +60,6 @@ protected:
 
 private:
     qreal m_brushRadius;
-    bool m_dragging;
     QPainterPath m_selection;
     QPointF m_lastPoint;
     QPoint m_lastMousePosition;
@@ -73,7 +72,7 @@ class KisToolSelectBrushFactory : public KoToolFactoryBase
 public:
     KisToolSelectBrushFactory(const QStringList&)
             : KoToolFactoryBase("KisToolSelectBrush") {
-        setToolTip(i18n("Select by brush"));
+        setToolTip(i18n("Brush Selection Tool"));
         setToolType(TOOL_TYPE_SELECTED);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setIconName(koIconNameCStr("tool_brush_selection"));

@@ -18,7 +18,7 @@
 
 import QtQuick 1.1
 import org.krita.sketch 1.0
-import "../components"
+import org.krita.sketch.components 1.0
 
 Panel {
     id: base;
@@ -134,6 +134,7 @@ Panel {
                 }
                 source: model.image
                 fillMode: Image.PreserveAspectFit;
+                asynchronous: true;
             }
             Label {
                     id: peekLabel
@@ -197,6 +198,7 @@ Panel {
                         width: parent.width * 0.8;
                         height: parent.height * 0.8;
                         fillMode: Image.PreserveAspectFit;
+                        asynchronous: true;
                     }
                 }
                 Label {

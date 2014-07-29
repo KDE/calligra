@@ -37,7 +37,6 @@
 #include <kmessagebox.h>
 #include <kcolorcombo.h>
 #include <kcomponentdata.h>
-#include <kfiledialog.h>
 #include <kstandarddirs.h>
 #include <kglobal.h>
 
@@ -91,7 +90,7 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, KisDoc2* doc, qint32
 
     doubleResolution->setValue(72.0 * resolution);
     doubleResolution->setDecimals(0);
-    
+
     imageGroupSpacer->changeSize(0, 0, QSizePolicy::Fixed, QSizePolicy::Fixed);
     grpClipboard->hide();
 
@@ -140,7 +139,7 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, KisDoc2* doc, qint32
 void KisCustomImageWidget::showEvent(QShowEvent *)
 {
     fillPredefined();
-    this->createButton->setFocus(); 
+    this->createButton->setFocus();
 }
 
 KisCustomImageWidget::~KisCustomImageWidget()
@@ -273,7 +272,7 @@ bool KisCustomImageWidget::createNewImage()
             painter.fillRect(0, 0, width, height, bgColor, backgroundOpacity());
 
         }
-       
+
         layer->setDirty(QRect(0, 0, width, height));
         for(int i = 1; i < intNumLayers->value(); ++i) {
             KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), OPACITY_OPAQUE_U8, image->colorSpace());
@@ -286,6 +285,11 @@ bool KisCustomImageWidget::createNewImage()
     cfg.setNumDefaultLayers(intNumLayers->value());
 
     return true;
+}
+
+void KisCustomImageWidget::setNumberOfLayers(int layers)
+{
+    intNumLayers->setValue(layers);
 }
 
 quint8 KisCustomImageWidget::backgroundOpacity() const
@@ -419,8 +423,6 @@ void KisCustomImageWidget::switchWidthHeight()
 {
     double width = doubleWidth->value();
     double height = doubleHeight->value();
-    KoUnit widthUnit = m_widthUnit;
-    KoUnit heightUnit = m_heightUnit;
 
     doubleHeight->blockSignals(true);
     doubleWidth->blockSignals(true);

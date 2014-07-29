@@ -30,7 +30,7 @@ KPrRenameCustomSlideShowCommand::KPrRenameCustomSlideShowCommand(KPrDocument *do
     , m_oldName(oldName)
     , m_newName(newName)
 {
-    setText(i18n("Rename custom slide show"));
+    setText(kundo2_i18n("Rename custom slide show"));
 }
 
 KPrRenameCustomSlideShowCommand::~KPrRenameCustomSlideShowCommand()

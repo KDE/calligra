@@ -201,14 +201,14 @@ void KexiDataSourceComboBox::slotNewItemStored(KexiPart::Item& item)
 #endif
         for (; i < d->firstQueryIndex() && name >= itemText(i); i++)
             ;
-        addItem(d->tableIcon, name, i);
+        insertItem(i, d->tableIcon, name);
         completionObject()->addItem(name);
         d->tablesCount++;
     } else if (item.partClass() == "org.kexi-project.query") {
         int i;
         for (i = d->firstQueryIndex(); i < count() && name >= itemText(i); i++)
             ;
-        addItem(d->queryIcon, name, i);
+        insertItem(i, d->queryIcon, name);
         completionObject()->addItem(name);
     }
 }

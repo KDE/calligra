@@ -44,6 +44,7 @@
 #include "ColorModelModel.h"
 #include "ColorDepthModel.h"
 #include "ColorProfileModel.h"
+#include <TemplatesModel.h>
 #include "Theme.h"
 
 #include "Constants.h"
@@ -85,6 +86,7 @@ void KritaSketchPlugin::registerTypes(const char* uri)
     qmlRegisterType<ColorDepthModel>("org.krita.sketch", 1, 0, "ColorDepthModel");
     qmlRegisterType<ColorProfileModel>("org.krita.sketch", 1, 0, "ColorProfileModel");
     qmlRegisterType<Theme>("org.krita.sketch", 1, 0, "Theme");
+    qmlRegisterType<TemplatesModel>("org.krita.sketch", 1, 0, "TemplatesModel");
 
     qmlRegisterUncreatableType<LayerCompositeDetails>("org.krita.sketch", 1, 0, "LayerCompositeDetails", "This type is returned by the LayerModel class");
 }
@@ -115,7 +117,7 @@ void KritaSketchPlugin::initializeEngine(QDeclarativeEngine* engine, const char*
 //    engine->rootContext()->setContextProperty("View", d->view);
 
     Welcome::MultiFeedRssModel *rssModel = new Welcome::MultiFeedRssModel(this);
-    rssModel->addFeed(QLatin1String("http://feeds.feedburner.com/krita/news"));
+    rssModel->addFeed(QLatin1String("https://krita.org/?format=feed"));
     engine->rootContext()->setContextProperty("aggregatedFeedsModel", rssModel);
 }
 

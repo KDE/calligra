@@ -23,17 +23,15 @@
 #include "AddTextRangeCommand.h"
 
 #include <klocale.h>
-#include <kundo2command.h>
 #include <kdebug.h>
 
 #include <KoTextRangeManager.h>
 #include <KoTextRange.h>
 
 AddTextRangeCommand::AddTextRangeCommand(KoTextRange * range, KUndo2Command *parent)
-    : KUndo2Command(parent)
+    : KUndo2Command(kundo2_noi18n("internal step"), parent)
     , m_range(range)
 {
-    setText("internal step");
 }
 
 void AddTextRangeCommand::undo()

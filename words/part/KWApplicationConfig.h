@@ -62,8 +62,17 @@ public:
     void setShowTableBorders(bool on) {
         m_showTableBorders = on;
     }
+
+    void setShowSectionBounds(bool on) {
+        m_showSectionBounds = on;
+    }
+
     bool showTableBorders() const {
         return m_showTableBorders;
+    }
+
+    bool showSectionBounds() const {
+        return m_showSectionBounds;
     }
 
     void setViewRulers(bool on) {
@@ -178,9 +187,11 @@ public:
     void setUnit(const KoUnit &unit);
 
 private:
-    bool m_viewFrameBorders, m_viewRulers;
+    bool m_viewFrameBorders;
+    bool m_viewRulers;
     bool m_showFormattingChars;
     bool m_showTableBorders;
+    bool m_showSectionBounds;
     bool m_createBackupFile;
     bool m_statusBarShowPage, m_statusBarShowPageStyle, m_statusBarShowPageSize;
     bool m_statusBarShowLineNumber, m_statusBarShowModified;

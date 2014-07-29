@@ -35,6 +35,7 @@
 #include <kis_debug.h>
 #include <kpluginfactory.h>
 #include <knuminput.h>
+#include <kmimetype.h>
 
 #include <KoFilterManager.h>
 #include <KoProgressUpdater.h>
@@ -210,7 +211,7 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
 
         KisUndoAdapter * undo = image->undoAdapter();
         if (outputOps == TO_LAYERS) {
-            undo->beginMacro(i18n("Separate Image"));
+            undo->beginMacro(kundo2_i18n("Separate Image"));
         }
 
         // Flatten the image if required

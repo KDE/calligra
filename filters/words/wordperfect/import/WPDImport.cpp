@@ -18,10 +18,12 @@
 
 #include <libwpd/libwpd.h>
 #include <libwpg/libwpg.h>
-#include <libodfgen/OdtGenerator.hxx>
-#include <libodfgen/OdgGenerator.hxx>
+#include <libodfgen/libodfgen.hxx>
 
+#include <writerperfect_utils.hxx>
 #include <OutputFileHelper.hxx>
+#include <StringDocumentHandler.hxx>
+
 #include <KoFilterChain.h>
 #include <KoGlobal.h>
 #include <KoOdf.h>
@@ -31,7 +33,10 @@
 #include <QString>
 #include <QByteArray>
 
+#include <cassert>
 #include <stdio.h>
+
+using namespace libwpd;
 
 class OdtOutputFileHelper : public OutputFileHelper
 {
@@ -40,67 +45,123 @@ public:
         OutputFileHelper(outFileName, password) {};
     ~OdtOutputFileHelper() {};
 
-private:
-    bool _isSupportedFormat(WPXInputStream *input, const char *password)
+    bool convertDocument(librevenge::RVNGInputStream &input, const char *password, bool isFlat)
     {
-        WPDConfidence confidence = WPDocument::isFileFormatSupported(input);
-        if (WPD_CONFIDENCE_EXCELLENT != confidence && WPD_CONFIDENCE_SUPPORTED_ENCRYPTION != confidence)
+        OdtGenerator collector;
+        collector.registerEmbeddedObjectHandler("image/x-wpg", &handleEmbeddedWPGObject);
+        collector.registerEmbeddedImageHandler("image/x-wpg", &handleEmbeddedWPGImage);
+        StringDocumentHandler stylesHandler, contentHandler, manifestHandler, metaHandler;
+        if (isFlat)
+            collector.addDocumentHandler(&contentHandler, ODF_FLAT_XML);
+        else
+        {
+            collector.addDocumentHandler(&contentHandler, ODF_CONTENT_XML);
+            collector.addDocumentHandler(&manifestHandler, ODF_MANIFEST_XML);
+            collector.addDocumentHandler(&metaHandler, ODF_META_XML);
+            collector.addDocumentHandler(&stylesHandler, ODF_STYLES_XML);
+        }
+        try
+        {
+            if (WPD_OK != WPDocument::parse(&input, &collector, password))
+                return false;
+        }
+        catch (...)
+        {
+            return false;
+        }
+        if (isFlat)
+        {
+            printf("%s\n", contentHandler.cstr());
+            return true;
+        }
+
+        static const char s_mimetypeStr[] = "application/vnd.oasis.opendocument.text";
+        if (!writeChildFile("mimetype", s_mimetypeStr, (char)0) ||
+                !writeChildFile("META-INF/manifest.xml", manifestHandler.cstr()) ||
+                !writeChildFile("content.xml", contentHandler.cstr()) ||
+                !writeChildFile("meta.xml", metaHandler.cstr()) ||
+                !writeChildFile("styles.xml", stylesHandler.cstr()))
+            return false;
+
+        librevenge::RVNGStringVector objects=collector.getObjectNames();
+        for (unsigned i=0; i<objects.size(); ++i)
+        {
+            StringDocumentHandler objectHandler;
+            if (collector.getObjectContent(objects[i], &objectHandler))
+                writeChildFile(objects[i].cstr(), objectHandler.cstr());
+        }
+        return true;
+    }
+
+
+    bool isSupportedFormat(librevenge::RVNGInputStream &input, const char *password)
+    {
+        try
+        {
+            WPDConfidence confidence = WPDocument::isFileFormatSupported(&input);
+            if (WPD_CONFIDENCE_EXCELLENT != confidence && WPD_CONFIDENCE_SUPPORTED_ENCRYPTION != confidence)
+            {
+                fprintf(stderr, "ERROR: We have no confidence that you are giving us a valid WordPerfect document.\n");
+                return false;
+            }
+            if (WPD_CONFIDENCE_SUPPORTED_ENCRYPTION == confidence && !password)
+            {
+                fprintf(stderr, "ERROR: The WordPerfect document is encrypted and you did not give us a password.\n");
+                return false;
+            }
+            if (confidence == WPD_CONFIDENCE_SUPPORTED_ENCRYPTION && password &&
+                    (WPD_PASSWORD_MATCH_OK != WPDocument::verifyPassword(&input, password)))
+            {
+                fprintf(stderr, "ERROR: The WordPerfect document is encrypted and we either\n");
+                fprintf(stderr, "ERROR: don't know how to decrypt it or the given password is wrong.\n");
+                return false;
+            }
+        }
+        catch (...)
         {
             fprintf(stderr, "ERROR: We have no confidence that you are giving us a valid WordPerfect document.\n");
             return false;
         }
-        if (WPD_CONFIDENCE_SUPPORTED_ENCRYPTION == confidence && !password)
-        {
-            fprintf(stderr, "ERROR: The WordPerfect document is encrypted and you did not give us a password.\n");
-            return false;
-        }
-        if (confidence == WPD_CONFIDENCE_SUPPORTED_ENCRYPTION && password && (WPD_PASSWORD_MATCH_OK != WPDocument::verifyPassword(input, password)))
-        {
-            fprintf(stderr, "ERROR: The WordPerfect document is encrypted and we either\n");
-            fprintf(stderr, "ERROR: don't know how to decrypt it or the given password is wrong.\n");
-            return false;
-        }
 
         return true;
     }
 
-    static bool handleEmbeddedWPGObject(const WPXBinaryData &data, OdfDocumentHandler *pHandler,  const OdfStreamType streamType)
+private:
+
+    static bool handleEmbeddedWPGObject(const librevenge::RVNGBinaryData &data, OdfDocumentHandler *pHandler,  const OdfStreamType streamType)
     {
-        OdgGenerator exporter(pHandler, streamType);
+        OdgGenerator exporter;
+        exporter.addDocumentHandler(pHandler, streamType);
 
         libwpg::WPGFileFormat fileFormat = libwpg::WPG_AUTODETECT;
 
-        if (!libwpg::WPGraphics::isSupported(const_cast<WPXInputStream *>(data.getDataStream())))
+        if (!libwpg::WPGraphics::isSupported(const_cast<librevenge::RVNGInputStream *>(data.getDataStream())))
             fileFormat = libwpg::WPG_WPG1;
 
-        return libwpg::WPGraphics::parse(const_cast<WPXInputStream *>(data.getDataStream()), &exporter, fileFormat);
+        return libwpg::WPGraphics::parse(const_cast<librevenge::RVNGInputStream *>(data.getDataStream()), &exporter, fileFormat);
     }
 
-    static bool handleEmbeddedWPGImage(const WPXBinaryData &input, WPXBinaryData &output)
+    static bool handleEmbeddedWPGImage(const librevenge::RVNGBinaryData &input, librevenge::RVNGBinaryData &output)
     {
-        WPXString svgOutput;
         libwpg::WPGFileFormat fileFormat = libwpg::WPG_AUTODETECT;
 
-        if (!libwpg::WPGraphics::isSupported(const_cast<WPXInputStream *>(input.getDataStream())))
+        if (!libwpg::WPGraphics::isSupported(const_cast<librevenge::RVNGInputStream *>(input.getDataStream())))
             fileFormat = libwpg::WPG_WPG1;
 
-        if (!libwpg::WPGraphics::generateSVG(const_cast<WPXInputStream *>(input.getDataStream()), svgOutput, fileFormat))
+        librevenge::RVNGStringVector svgOutput;
+        librevenge::RVNGSVGDrawingGenerator generator(svgOutput, "");
+        bool result = libwpg::WPGraphics::parse(const_cast<librevenge::RVNGInputStream *>(input.getDataStream()), &generator, fileFormat);
+        if (!result || svgOutput.empty() || svgOutput[0].empty())
             return false;
 
         output.clear();
-        output.append((unsigned char *)svgOutput.cstr(), strlen(svgOutput.cstr()));
+        const char *svgHeader = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
+                                "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\""
+                                " \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n";
+        output.append((unsigned char *)svgHeader, strlen(svgHeader));
+        output.append((unsigned char *)svgOutput[0].cstr(), strlen(svgOutput[0].cstr()));
 
         return true;
-    }
-
-    bool _convertDocument(WPXInputStream *input, const char *password, OdfDocumentHandler *handler, const OdfStreamType streamType)
-    {
-        OdtGenerator collector(handler, streamType);
-        collector.registerEmbeddedObjectHandler("image/x-wpg", &handleEmbeddedWPGObject);
-        collector.registerEmbeddedImageHandler("image/x-wpg", &handleEmbeddedWPGImage);
-        if (WPD_OK == WPDocument::parse(input, &collector, password))
-            return true;
-        return false;
     }
 };
 
@@ -121,113 +182,19 @@ KoFilter::ConversionStatus WPDImport::convert(const QByteArray& from, const QByt
     if (from != "application/vnd.wordperfect" || to != KoOdf::mimeType(KoOdf::Text))
         return KoFilter::NotImplemented;
 
-    const char manifestStr[] = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-                               "<manifest:manifest xmlns:manifest=\"urn:oasis:names:tc:opendocument:xmlns:manifest:1.0\">"
-                               " <manifest:file-entry manifest:media-type=\"application/vnd.oasis.opendocument.text\" manifest:full-path=\"/\"/>"
-                               " <manifest:file-entry manifest:media-type=\"text/xml\" manifest:full-path=\"content.xml\"/>"
-                               " <manifest:file-entry manifest:media-type=\"text/xml\" manifest:full-path=\"styles.xml\"/>"
-                               "</manifest:manifest>";
+    QByteArray inputFile = m_chain->inputFile().toLocal8Bit();
+    QByteArray outputFile = m_chain->outputFile().toLocal8Bit();
+    const char* password = 0;
 
-    const char stylesStr[] = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-                             "<office:document-styles xmlns:office=\"urn:oasis:names:tc:opendocument:xmlns:office:1.0\" "
-                             "xmlns:style=\"urn:oasis:names:tc:opendocument:xmlns:style:1.0\" xmlns:text=\"urn:oasis:names:tc:opendocument:xmlns:text:1.0\" "
-                             "xmlns:table=\"urn:oasis:names:tc:opendocument:xmlns:table:1.0\" xmlns:draw=\"urn:oasis:names:tc:opendocument:xmlns:drawing:1.0\" "
-                             "xmlns:fo=\"urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" "
-                             "xmlns:number=\"urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0\" "
-                             "xmlns:svg=\"urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0\" "
-                             "xmlns:chart=\"urn:oasis:names:tc:opendocument:xmlns:chart:1.0\" xmlns:dr3d=\"urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0\" "
-                             "xmlns:form=\"urn:oasis:names:tc:opendocument:xmlns:form:1.0\" xmlns:script=\"urn:oasis:names:tc:opendocument:xmlns:script:1.0\">"
-                             "<office:styles>"
-                             "<style:default-style style:family=\"paragraph\">"
-                             "<style:paragraph-properties style:use-window-font-color=\"true\" style:text-autospace=\"ideograph-alpha\" "
-                             "style:punctuation-wrap=\"hanging\" style:line-break=\"strict\" style:writing-mode=\"page\"/>"
-                             "</style:default-style>"
-                             "<style:default-style style:family=\"table\"/>"
-                             "<style:default-style style:family=\"table-row\">"
-                             "<style:table-row-properties fo:keep-together=\"auto\"/>"
-                             "</style:default-style>"
-                             "<style:default-style style:family=\"table-column\"/>"
-                             "<style:style style:name=\"Standard\" style:family=\"paragraph\" style:class=\"text\"/>"
-                             "<style:style style:name=\"Text_body\" style:display-name=\"Text body\" style:family=\"paragraph\" "
-                             "style:parent-style-name=\"Standard\" style:class=\"text\"/>"
-                             "<style:style style:name=\"List\" style:family=\"paragraph\" style:parent-style-name=\"Text_body\" style:class=\"list\"/>"
-                             "<style:style style:name=\"Header\" style:family=\"paragraph\" style:parent-style-name=\"Standard\" style:class=\"extra\"/>"
-                             "<style:style style:name=\"Footer\" style:family=\"paragraph\" style:parent-style-name=\"Standard\" style:class=\"extra\"/>"
-                             "<style:style style:name=\"Caption\" style:family=\"paragraph\" style:parent-style-name=\"Standard\" style:class=\"extra\"/>"
-                             "<style:style style:name=\"Footnote\" style:family=\"paragraph\" style:parent-style-name=\"Standard\" style:class=\"extra\"/>"
-                             "<style:style style:name=\"Endnote\" style:family=\"paragraph\" style:parent-style-name=\"Standard\" style:class=\"extra\"/>"
-                             "<style:style style:name=\"Index\" style:family=\"paragraph\" style:parent-style-name=\"Standard\" style:class=\"index\"/>"
-                             "<style:style style:name=\"Footnote_Symbol\" style:display-name=\"Footnote Symbol\" style:family=\"text\">"
-                             "<style:text-properties style:text-position=\"super 58%\"/>"
-                             "</style:style>"
-                             "<style:style style:name=\"Endnote_Symbol\" style:display-name=\"Endnote Symbol\" style:family=\"text\">"
-                             "<style:text-properties style:text-position=\"super 58%\"/>"
-                             "</style:style>"
-                             "<style:style style:name=\"Footnote_anchor\" style:display-name=\"Footnote anchor\" style:family=\"text\">"
-                             "<style:text-properties style:text-position=\"super 58%\"/>"
-                             "</style:style>"
-                             "<style:style style:name=\"Endnote_anchor\" style:display-name=\"Endnote anchor\" style:family=\"text\">"
-                             "<style:text-properties style:text-position=\"super 58%\"/>"
-                             "</style:style>"
-                             "<text:notes-configuration text:note-class=\"footnote\" text:citation-style-name=\"Footnote_Symbol\" "
-                             "text:citation-body-style-name=\"Footnote_anchor\" style:num-format=\"1\" text:start-value=\"0\" "
-                             "text:footnotes-position=\"page\" text:start-numbering-at=\"document\"/>"
-                             "<text:notes-configuration text:note-class=\"endnote\" text:citation-style-name=\"Endnote_Symbol\" "
-                             "text:citation-body-style-name=\"Endnote_anchor\" text:master-page-name=\"Endnote\" "
-                             "style:num-format=\"i\" text:start-value=\"0\"/>"
-                             "<text:linenumbering-configuration text:number-lines=\"false\" text:offset=\"0.1965in\" "
-                             "style:num-format=\"1\" text:number-position=\"left\" text:increment=\"5\"/>"
-                             "</office:styles>"
-                             "<office:automatic-styles>"
-                             "<style:page-layout style:name=\"PM0\">"
-                             "<style:page-layout-properties fo:margin-bottom=\"1.0000in\" fo:margin-left=\"1.0000in\" "
-                             "fo:margin-right=\"1.0000in\" fo:margin-top=\"1.0000in\" fo:page-height=\"11.0000in\" "
-                             "fo:page-width=\"8.5000in\" style:print-orientation=\"portrait\">"
-                             "<style:footnote-sep style:adjustment=\"left\" style:color=\"#000000\" style:distance-after-sep=\"0.0398in\" "
-                             "style:distance-before-sep=\"0.0398in\" style:rel-width=\"25%\" style:width=\"0.0071in\"/>"
-                             "</style:page-layout-properties>"
-                             "</style:page-layout>"
-                             "<style:page-layout style:name=\"PM1\">"
-                             "<style:page-layout-properties fo:margin-bottom=\"1.0000in\" fo:margin-left=\"1.0000in\" "
-                             "fo:margin-right=\"1.0000in\" fo:margin-top=\"1.0000in\" fo:page-height=\"11.0000in\" "
-                             "fo:page-width=\"8.5000in\" style:print-orientation=\"portrait\">"
-                             "<style:footnote-sep style:adjustment=\"left\" style:color=\"#000000\" style:rel-width=\"25%\"/>"
-                             "</style:page-layout-properties>"
-                             "</style:page-layout>"
-                             "</office:automatic-styles>"
-                             "<office:master-styles>"
-                             "<style:master-page style:name=\"Standard\" style:page-layout-name=\"PM0\"/>"
-                             "<style:master-page style:name=\"Endnote\" style:page-layout-name=\"PM1\"/>"
-                             "</office:master-styles>"
-                             "</office:document-styles>";
-
-    QByteArray input = m_chain->inputFile().toLocal8Bit();
-    QByteArray output = m_chain->outputFile().toLocal8Bit();
-    const char *inputFile = input.data();
-    const char *outputFile = output.data();
-
-    OdtOutputFileHelper helper(outputFile, 0); // TODO: password interface?
-
-    if (!helper.writeChildFile("mimetype", KoOdf::mimeType(KoOdf::Text), (char)0)) {
-        fprintf(stderr, "ERROR : Couldn't write mimetype\n");
+    OdtOutputFileHelper helper(outputFile.constData(), 0);
+    librevenge::RVNGFileStream input(inputFile.constData());
+    if (!helper.isSupportedFormat(input, password))
         return KoFilter::ParsingError;
-    }
 
-    if (!helper.writeChildFile("META-INF/manifest.xml", manifestStr)) {
-        fprintf(stderr, "ERROR : Couldn't write manifest\n");
-        return KoFilter::ParsingError;
-    }
-
-    if (!helper.writeChildFile("styles.xml", stylesStr))
+    if (!helper.convertDocument(input, password, outputFile.constData()))
     {
-        fprintf(stderr, "ERROR : Couldn't write document styles\n");
+        fprintf(stderr, "ERROR : Couldn't convert the document\n");
         return KoFilter::ParsingError;
-    }
-
-    if (!helper.writeConvertedContent("content.xml", inputFile, ODF_CONTENT_XML))
-    {
-            fprintf(stderr, "ERROR : Couldn't write document content\n");
-            return KoFilter::ParsingError;
     }
 
     return KoFilter::OK;

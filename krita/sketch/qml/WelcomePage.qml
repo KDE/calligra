@@ -17,7 +17,7 @@
  */
 
 import QtQuick 1.1
-import "components"
+import org.krita.sketch.components 1.0
 import "panels"
 
 Page {
@@ -217,7 +217,10 @@ Page {
         function createNewImage(options) {
             if(options !== undefined) {
                 baseLoadingDialog.visible = true;
-                if(options.source === undefined) {
+                if(options.template !== undefined) {
+                    Settings.currentFile = Krita.ImageBuilder.createImageFromTemplate(options);
+                    Settings.temporaryFile = true;
+                } else if(options.source === undefined) {
                     Settings.currentFile = Krita.ImageBuilder.createBlankImage(options);
                     Settings.temporaryFile = true;
                 } else if(options.source == "clipboard") {
@@ -234,7 +237,14 @@ Page {
                 baseLoadingDialog.visible = true;
                 Settings.currentFile = file;
             } else {
-                pageStack.push(openImagePage);
+                if(Krita.Window.slateMode) {
+                    pageStack.push(openImagePage);
+                } else {
+                    var path = Krita.Window.openImage();
+                    if(path !== "") {
+                        openImage(path);
+                    }
+                }
             }
         }
     }

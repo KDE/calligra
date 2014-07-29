@@ -132,6 +132,8 @@ KexiFormScrollView::KexiFormScrollView(QWidget *parent, bool preview)
     }
     m_contextMenu = new KMenu(this);
     m_contextMenu->setObjectName("m_contextMenu");
+//! @todo sorting temporarily disabled because not it's not implemented in forms (bug 150372)
+    setSortingEnabled(false);
 }
 
 KexiFormScrollView::~KexiFormScrollView()

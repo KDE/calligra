@@ -89,7 +89,7 @@ void KPrPlaceholderTool::activate(ToolActivation toolActivation, const QSet<KoSh
         newShape->setPosition( shape->position() );
         newShape->setAdditionalAttribute( "presentation:class", shape->additionalAttribute( "presentation:class" ) );
 
-        KUndo2Command *cmd = new KUndo2Command( i18nc("(qtundo-format)", "Edit Shape" ) );
+        KUndo2Command *cmd = new KUndo2Command( kundo2_i18n("Edit Shape" ) );
 
         // replace placeholder by shape
         canvas()->shapeController()->removeShape( shape, cmd );

@@ -461,7 +461,7 @@ bool KarbonLayerModel::dropMimeData(const QMimeData * data, Qt::DropAction actio
             beginInsertRows(parent, container->shapeCount(), container->shapeCount() + toplevelShapes.count());
 
             KUndo2Command * cmd = new KUndo2Command();
-            cmd->setText(i18nc("(qtundo-format)", "Reparent shapes"));
+            cmd->setText(kundo2_i18n("Reparent shapes"));
 
             QList<bool> clipped, inheritTransform;
             foreach(KoShape * shape, toplevelShapes) {

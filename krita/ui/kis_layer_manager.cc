@@ -32,7 +32,6 @@
 #include <klocale.h>
 #include <kstandardaction.h>
 #include <kmessagebox.h>
-#include <kfiledialog.h>
 #include <kstandarddirs.h>
 #include <kfilewidget.h>
 #include <kurl.h>
@@ -101,16 +100,14 @@
 class KisSaveGroupVisitor : public KisNodeVisitor
 {
 public:
-    KisSaveGroupVisitor(KisView2 *view,
-                        KisImageWSP image,
+    KisSaveGroupVisitor(KisImageWSP image,
                         bool saveInvisible,
                         bool saveTopLevelOnly,
                         const KUrl &url,
                         const QString &baseName,
                         const QString &extension,
                         const QString &mimeFilter)
-        : m_view(view)
-        , m_image(image)
+        : m_image(image)
         , m_saveInvisible(saveInvisible)
         , m_saveTopLevelOnly(saveTopLevelOnly)
         , m_url(url)
@@ -219,7 +216,6 @@ public:
 
 private:
 
-    KisView2 *m_view;
     KisImageWSP m_image;
     bool m_saveInvisible;
     bool m_saveTopLevelOnly;
@@ -401,7 +397,7 @@ void KisLayerManager::layerProperties()
     else if (KisGeneratorLayerSP alayer = KisGeneratorLayerSP(dynamic_cast<KisGeneratorLayer*>(layer.data()))) {
 
         KisDlgGeneratorLayer dlg(alayer->name(), m_view);
-        dlg.setCaption(i18n("Generator Layer Properties"));
+        dlg.setCaption(i18n("Fill Layer Properties"));
 
         KisSafeFilterConfigurationSP configBefore(alayer->filter());
         Q_ASSERT(configBefore);
@@ -448,7 +444,7 @@ void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)
     if (!image) return;
 
     KisPaintDeviceSP srcDevice =
-        source->paintDevice() ? source->paintDevice() : source->original();
+        source->paintDevice() ? source->paintDevice() : source->projection();
 
     if (!srcDevice) return;
 
@@ -469,7 +465,7 @@ void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)
     }
 
     KisLayerSP layer = new KisPaintLayer(image,
-                                         image->nextLayerName(),
+                                         source->name(),
                                          source->opacity(),
                                          clone);
     layer->setCompositeOp(source->compositeOpId());
@@ -482,7 +478,7 @@ void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)
         parent = above ? above->parent() : 0;
     }
 
-    m_commandsAdapter->beginMacro(i18n("Convert to a Paint Layer"));
+    m_commandsAdapter->beginMacro(kundo2_i18n("Convert to a Paint Layer"));
     m_commandsAdapter->addNode(layer, parent, above);
     m_commandsAdapter->removeNode(source);
     m_commandsAdapter->endMacro();
@@ -743,8 +739,6 @@ void KisLayerManager::mergeLayer()
         image->mergeDown(layer, strategy);
 
     }
-
-
     m_view->updateGUI();
 }
 
@@ -776,7 +770,7 @@ void KisLayerManager::rasterizeLayer()
     QRect rc = layer->projection()->exactBounds();
     gc.bitBlt(rc.topLeft(), layer->projection(), rc);
 
-    m_commandsAdapter->beginMacro(i18n("Rasterize Layer"));
+    m_commandsAdapter->beginMacro(kundo2_i18n("Rasterize Layer"));
     m_commandsAdapter->addNode(paintLayer.data(), layer->parent().data(), layer.data());
 
     int childCount = layer->childCount();
@@ -844,7 +838,7 @@ void KisLayerManager::saveGroupLayers()
     KisImageWSP image = m_view->image();
     if (!image) return;
 
-    KisSaveGroupVisitor v(m_view, image, chkInvisible->isChecked(), chkDepth->isChecked(), url, basename, extension, mimefilter);
+    KisSaveGroupVisitor v(image, chkInvisible->isChecked(), chkDepth->isChecked(), url, basename, extension, mimefilter);
     image->rootLayer()->accept(v);
 
 }
@@ -859,7 +853,6 @@ void KisLayerManager::addFileLayer(KisNodeSP activeNode)
 
     QString basePath;
     KUrl url = m_view->document()->url();
-    qDebug() << "url" << url << url.isEmpty();
     if (url.isLocalFile()) {
         basePath = QFileInfo(url.toLocalFile()).absolutePath();
     }

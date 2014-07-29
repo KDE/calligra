@@ -20,20 +20,20 @@
 
 #include "kis_color_selector_base.h"
 
-#include <QColor>
 class KisColorSelectorTriangle;
 class KisColorSelectorRing;
 class KisColorSelectorComponent;
 class KisColorSelectorSimple;
 class KisColorSelectorWheel;
 class QPushButton;
+class KisSignalCompressor;
 
 class KisColorSelector : public KisColorSelectorBase
 {
     Q_OBJECT
 public:
     enum Type {Ring, Square, Wheel, Triangle, Slider};
-    enum Parameters {H, hsvS, V, hslS, L, SL, SV, SV2, hsvSH, hslSH, VH, LH};
+    enum Parameters {H, hsvS, V, hslS, L, SL, SV, SV2, hsvSH, hslSH, VH, LH, SI, SY, hsiSH, hsySH, I, Y, IH, YH, hsiS, hsyS};
     struct Configuration {
         Type mainType;
         Type subType;
@@ -67,7 +67,7 @@ public:
             int imtp=strili.at(2).toInt();
             int istp=strili.at(3).toInt();
 
-            if(imt>Slider || ist>Slider || imtp>LH || istp>LH)
+            if(imt>Slider || ist>Slider || imtp>hsyS || istp>hsyS)//this was LH before
                 return;
 
             mainType = Type(imt);
@@ -85,8 +85,8 @@ public:
 
 //    enum MainType {Ring, Square, Wheel};
 //    enum SubType {Triangle, Square, Slider};
-//    enum MainTypeParameter {SL, SV, SH, VH, LH, VSV/*experimental*/};
-//    enum SubTypeParameter {H, S, V, L};
+//    enum MainTypeParameter {SL, SV, SH, VH, LH, VSV/*experimental*/, SI, SY, YH, IH};
+//    enum SubTypeParameter {H, S, V, L, I, Y, hsiS, hsyS};
 
     KisColorSelector(Configuration conf, QWidget* parent = 0);
     KisColorSelector(QWidget* parent=0);
@@ -94,9 +94,10 @@ public:
 
     void setConfiguration(Configuration conf);
     Configuration configuration() const;
-    void setColor(const QColor& color);
+    void setColor(const KoColor &color);
 
 public slots:
+    void reset();
     void updateSettings();
 
 signals:
@@ -125,14 +126,14 @@ private:
     KisColorSelectorComponent* m_subComponent;
     KisColorSelectorComponent* m_grabbingComponent;
 
-    QTimer* m_updateTimer;
+    KisSignalCompressor *m_signalCompressor;
 
     Configuration m_configuration;
 
-    QColor m_lastColor;
-    QColor m_currentColor;
+    KoColor m_lastRealColor;
+    KoColor m_currentRealColor;
     bool m_blipDisplay;
-    ColorRole m_lastColorRole;
+    Acs::ColorRole m_lastColorRole;
 
 
 public:

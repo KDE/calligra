@@ -97,8 +97,6 @@ private slots:
 
     void refillMonitorProfiles(const KoID & s);
     void refillPrintProfiles(const KoID & s);
-    void selectOcioConfigPath();
-    void enableOcioConfigPath(bool);
     void installProfile();
     void toggleAllowMonitorProfileSelection(bool useSystemProfile);
 
@@ -175,6 +173,9 @@ public:
 /**
  *  Display settings tab for preferences dialog
  */
+
+class KoColorPopupAction;
+
 class DisplaySettingsTab : public WdgDisplaySettings
 {
     Q_OBJECT
@@ -186,6 +187,9 @@ public:
     void setDefault();
 protected slots:
     void slotUseOpenGLToggled(bool isChecked);
+
+public:
+    KoColorPopupAction *m_selectionOverlayColorAction;
 };
 
 //=======================

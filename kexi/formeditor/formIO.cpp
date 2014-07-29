@@ -65,7 +65,6 @@
 #include <kexiutils/FlowLayout.h>
 #endif
 
-#define KEXI_NO_PIXMAPCOLLECTION
 #ifdef __GNUC__
 #warning pixmapcollection
 #else
@@ -137,7 +136,7 @@ FormIO::saveFormToFile(Form *form, const QString &filename)
     }
 
     if (filename.isEmpty()) {
-        KoFileDialog dlg(0, KoFileDialog::SaveFile);
+        KoFileDialog dlg(0, KoFileDialog::SaveFile, "SaveForm");
         dlg.setNameFilter(i18n("*.ui|Qt Designer UI Files"));
         _filename = dlg.url();
         if (_filename.isEmpty()) {
@@ -317,7 +316,7 @@ FormIO::loadFormFromFile(Form *form, QWidget *container, const QString &filename
     QString _filename;
 
     if (filename.isEmpty()) {
-        KoFileDialog dlg(0, KoFileDialog::OpenFile);
+        KoFileDialog dlg(0, KoFileDialog::OpenFile, "LoadForm");
         dlg.setNameFilter(i18n("*.ui|Qt Designer UI Files"));
         _filename = dlg.url();
         if (_filename.isEmpty()) {

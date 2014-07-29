@@ -20,14 +20,12 @@
 #include "InsertNoteCommand.h"
 
 #include <klocale.h>
-#include <kundo2command.h>
 
 #include <KoTextEditor.h>
 #include <KoTextDocument.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoInlineNote.h>
 
-#include <QWeakPointer>
 
 InsertNoteCommand::InsertNoteCommand(KoInlineNote::Type type, QTextDocument *document)
     : KUndo2Command ()
@@ -35,9 +33,9 @@ InsertNoteCommand::InsertNoteCommand(KoInlineNote::Type type, QTextDocument *doc
     , m_first(true)
 {
     if (type == KoInlineNote::Footnote) {
-        setText(i18nc("(qtundo-format)", "Insert Footnote"));
+        setText(kundo2_i18n("Insert Footnote"));
     } else if (type == KoInlineNote::Endnote) {
-        setText(i18nc("(qtundo-format)", "Insert Endnote"));
+        setText(kundo2_i18n("Insert Endnote"));
     }
     m_inlineNote = new KoInlineNote(type);
 }

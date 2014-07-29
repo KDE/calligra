@@ -36,7 +36,7 @@ using namespace Calligra::Sheets;
 ApplyFilterCommand::ApplyFilterCommand()
         : AbstractRegionCommand()
 {
-    setText(i18nc("(qtundo-format)", "Apply Filter"));
+    setText(kundo2_i18n("Apply Filter"));
 }
 
 ApplyFilterCommand::~ApplyFilterCommand()

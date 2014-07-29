@@ -98,7 +98,7 @@ void AddRelationDialog::slotNodeRemoved( Node *node )
 }
 
 MacroCommand *AddRelationDialog::buildCommand() {
-    MacroCommand *c = new MacroCommand( i18nc("(qtundo-format)", "Add task dependency") );
+    MacroCommand *c = new MacroCommand( kundo2_i18n("Add task dependency") );
     c->addCommand( new AddRelationCmd(m_project, m_relation ) );
     m_deleterelation = false; // don't delete
     return c;
@@ -173,11 +173,11 @@ void ModifyRelationDialog::slotUser1() {
 MacroCommand *ModifyRelationDialog::buildCommand() {
     MacroCommand *cmd=0;
     if ( m_deleted ) {
-        cmd = new MacroCommand( i18nc( "(qtundo-format)", "Delete task dependency" ) );
+        cmd = new MacroCommand( kundo2_i18n( "Delete task dependency" ) );
         cmd ->addCommand( new DeleteRelationCmd( m_project, m_relation ) );
         return cmd;
     }
-    QString s = i18nc( "(qtundo-format)", "Modify task dependency" );
+    KUndo2MagicString s = kundo2_i18n( "Modify task dependency" );
     if (selectedRelationType() != m_relation->type()) {
         if (cmd == 0)
             cmd = new MacroCommand( s );

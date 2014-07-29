@@ -47,7 +47,7 @@ public:
     }
 
     virtual QString name() const {
-        return i18nc("duplicate paintbrush", "Duplicate");
+        return i18nc("clone paintbrush (previously \"Duplicate\")", "Clone");
     }
 
     virtual QString pixmap() {
@@ -58,7 +58,7 @@ public:
         return KisPaintOpFactory::categoryStable();
     }
 
-    virtual KisPaintOpSettingsSP settings(KisImageWSP image);
+    virtual KisPaintOpSettingsSP settings();
     virtual KisPaintOpSettingsWidget* createSettingsWidget(QWidget* parent);
 };
 

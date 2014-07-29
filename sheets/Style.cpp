@@ -1499,7 +1499,7 @@ void Style::saveXML(QDomDocument& doc, QDomElement& format, const StyleManager* 
     if (keysToStore.contains(HorizontalAlignment) && halign() != HAlignUndefined)
         format.setAttribute(type() == AUTO ? "align" : "alignX", (int) halign());
 
-    if (keysToStore.contains(VerticalAlignment) && valign() != Middle)
+    if (keysToStore.contains(VerticalAlignment) && valign() != VAlignUndefined)
         format.setAttribute("alignY", (int) valign());
 
     if (keysToStore.contains(BackgroundColor) && backgroundColor().isValid())

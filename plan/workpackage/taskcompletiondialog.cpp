@@ -163,7 +163,7 @@ QSize TaskCompletionPanel::sizeHint() const
 
 KUndo2Command *TaskCompletionPanel::buildCommand()
 {
-    MacroCommand *cmd = new MacroCommand( i18nc("(qtundo-format)", "Modify task completion") );
+    MacroCommand *cmd = new MacroCommand( kundo2_i18n("Modify task completion") );
     Completion &org = m_package->task()->completion();
     if ( org.entrymode() != m_completion.entrymode() ) {
         cmd->addCommand( new ModifyCompletionEntrymodeCmd(org, m_completion.entrymode() ) );

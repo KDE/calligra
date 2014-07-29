@@ -30,7 +30,6 @@
 
 #include <kcombobox.h>
 #include <klocale.h>
-#include <kfiledialog.h>
 #include <kurl.h>
 #include <knuminput.h>
 

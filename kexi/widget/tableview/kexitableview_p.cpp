@@ -51,6 +51,7 @@ KexiTableViewPrivate::KexiTableViewPrivate(KexiTableView* t)
     dragIndicatorRubberBand = 0;
     firstTimeEnsureCellVisible = true;
     insideResizeEvent = false;
+    firstShowEvent = true;
 }
 
 KexiTableViewPrivate::~KexiTableViewPrivate()

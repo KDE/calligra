@@ -40,6 +40,7 @@
 #include <kis_config.h>
 #include <kis_workspace_resource.h>
 #include <kis_canvas_resource_provider.h>
+#include <kis_display_color_converter.h>
 
 #include "palettemodel.h"
 #include "colorsetchooser.h"
@@ -112,7 +113,8 @@ bool PaletteDockerDock::eventFilter(QObject* object, QEvent* event)
     }
 }
 
-PaletteDockerDock::PaletteDockerDock( ) : QDockWidget(i18n("Palette"))
+PaletteDockerDock::PaletteDockerDock( )
+    : QDockWidget(i18n("Palette"))
     , m_canvas(0)
     , m_wdgPaletteDock(new Ui_WdgPaletteDock())
     , m_currentColorSet(0)
@@ -151,6 +153,7 @@ PaletteDockerDock::PaletteDockerDock( ) : QDockWidget(i18n("Palette"))
     KoResourceServer<KoColorSet>* rServer = KoResourceServerProvider::instance()->paletteServer();
     m_serverAdapter = QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KoColorSet>(rServer));
     m_serverAdapter->connectToResourceServer();
+    rServer->addObserver(this);
 
     m_colorSetChooser = new ColorSetChooser();
     connect(m_colorSetChooser, SIGNAL(paletteSelected(KoColorSet*)), this, SLOT(setColorSet(KoColorSet*)));
@@ -174,6 +177,9 @@ PaletteDockerDock::PaletteDockerDock( ) : QDockWidget(i18n("Palette"))
 
 PaletteDockerDock::~PaletteDockerDock()
 {
+    KoResourceServer<KoColorSet>* rServer = KoResourceServerProvider::instance()->paletteServer();
+    rServer->removeObserver(this);
+
     if (m_currentColorSet) {
         KisConfig cfg;
         cfg.setDefaultPalette(m_currentColorSet->name());
@@ -189,12 +195,38 @@ void PaletteDockerDock::setCanvas(KoCanvasBase * canvas)
     KisView2* view = m_canvas->view();
     connect(view->resourceProvider(), SIGNAL(sigSavingWorkspace(KisWorkspaceResource*)), SLOT(saveToWorkspace(KisWorkspaceResource*)));
     connect(view->resourceProvider(), SIGNAL(sigLoadingWorkspace(KisWorkspaceResource*)), SLOT(loadFromWorkspace(KisWorkspaceResource*)));
+    m_model->setDisplayRenderer(m_canvas->displayColorConverter()->displayRendererInterface());
 }
+
+void PaletteDockerDock::unsetCanvas()
+{
+    m_model->setDisplayRenderer(0);
+    m_canvas = 0;
+}
+
+void PaletteDockerDock::unsetResourceServer()
+{
+    KoResourceServer<KoColorSet>* rServer = KoResourceServerProvider::instance()->paletteServer();
+    rServer->removeObserver(this);
+}
+
+void PaletteDockerDock::removingResource(KoColorSet *resource)
+{
+    if (resource == m_currentColorSet) {
+        setColorSet(0);
+    }
+}
+
+void PaletteDockerDock::resourceChanged(KoColorSet *resource)
+{
+    setColorSet(resource);
+}
+
 
 void PaletteDockerDock::setColorSet(KoColorSet* colorSet)
 {
     m_model->setColorSet(colorSet);
-    if (colorSet->removable()) {
+    if (colorSet && colorSet->removable()) {
         m_wdgPaletteDock->bnAdd->setEnabled(true);
         m_wdgPaletteDock->bnRemove->setEnabled(false);
     } else {
@@ -216,11 +248,16 @@ void PaletteDockerDock::addColorForeground()
 void PaletteDockerDock::addColor()
 {
     if (m_currentColorSet) {
+        const KoColorDisplayRendererInterface *displayRenderer =
+            m_canvas->displayColorConverter()->displayRendererInterface();
+
+        KoColor currentFgColor = m_canvas->resourceManager()->foregroundColor();
         QColor color;
-        int result = KColorDialog::getColor(color, m_canvas->resourceManager()->foregroundColor().toQColor());
+
+        int result = KColorDialog::getColor(color, displayRenderer->toQColor(currentFgColor));
         if (result == KColorDialog::Accepted) {
             KoColorSetEntry newEntry;
-            newEntry.color = KoColor(color, KoColorSpaceRegistry::instance()->rgb8());
+            newEntry.color = displayRenderer->approximateFromRenderedQColor(color);
             m_currentColorSet->add(newEntry);
             m_currentColorSet->save();
             setColorSet(m_currentColorSet); // update model

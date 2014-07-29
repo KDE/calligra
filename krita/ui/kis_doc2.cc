@@ -41,7 +41,6 @@
 // KDE
 #include <krun.h>
 #include <kimageio.h>
-#include <kfiledialog.h>
 #include <kglobal.h>
 #include <kmimetype.h>
 #include <klocale.h>
@@ -156,6 +155,7 @@ KisDoc2::KisDoc2(KisPart2 *part)
     : KoDocument(part, new UndoStack(this))
     , m_d(new KisDocPrivate())
 {
+    Q_ASSERT(part);
     qobject_cast<KisPart2*>(documentPart())->setDocument(this);
     // preload the krita resources
     KisResourceServerProvider::instance();
@@ -344,7 +344,7 @@ bool KisDoc2::completeSaving(KoStore *store)
 
     m_d->kraSaver->saveBinaryData(store, m_d->image, url().url(), isStoredExtern());
     if (!m_d->kraSaver->errorMessages().isEmpty()) {
-        setErrorMessage(m_d->kraLoader->errorMessages().join(".\n"));
+        setErrorMessage(m_d->kraSaver->errorMessages().join(".\n"));
         return false;
     }
 

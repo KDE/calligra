@@ -10,7 +10,7 @@ set(kritaspraypaintop_PART_SRCS
     random_gauss.cpp
     )
 
-kde4_add_ui_files(kritaspraypaintop_PART_SRCS wdgsprayoptions.ui wdgshapeoptions.ui wdgshapedynamicsoptions.ui )
+kde4_add_ui_files(kritaspraypaintop_PART_SRCS wdgsprayoptions.ui wdgsprayshapeoptions.ui wdgshapedynamicsoptions.ui )
 
 kde4_add_plugin(kritaspraypaintop ${kritaspraypaintop_PART_SRCS})
 
@@ -22,7 +22,7 @@ install(TARGETS kritaspraypaintop  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  kritaspraypaintop.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  kritaspraypaintop.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 install( FILES
     krita-spray.png DESTINATION ${DATA_INSTALL_DIR}/krita/images)
 

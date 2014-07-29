@@ -115,6 +115,7 @@
 #include <KoProperties.h>
 #include <KoZoomController.h>
 #include <KoIcon.h>
+#include <KoFileDialog.h>
 
 // kde header
 #include <kaction.h>
@@ -124,11 +125,11 @@
 #include <kcomponentdata.h>
 #include <kactioncollection.h>
 #include <kstatusbar.h>
-#include <kfiledialog.h>
 #include <kstandardaction.h>
 #include <ktoggleaction.h>
 #include <kdebug.h>
-#include <kservicetypetrader.h>
+#include <KoServiceLocator.h>
+#include <kmimetype.h>
 
 // qt header
 #include <QIcon>
@@ -260,9 +261,7 @@ KarbonView::KarbonView(KarbonPart *karbonPart, KarbonDocument* doc, QWidget* par
     initActions();
 
     // Load all plugins
-    KService::List offers = KServiceTypeTrader::self()->query(QString::fromLatin1("Karbon/ViewPlugin"),
-                                                              QString::fromLatin1("(Type == 'Service') and "
-                                                                                  "([X-Karbon-Version] == 28)"));
+    const KService::List offers = KoServiceLocator::instance()->entries("Karbon/ViewPlugin");
     KService::List::ConstIterator iter;
     for (iter = offers.constBegin(); iter != offers.constEnd(); ++iter) {
 
@@ -494,17 +493,12 @@ void KarbonView::fileImportGraphic()
     }
     filter.append(imageFilter);
 
-    QPointer<KFileDialog> dialog = new KFileDialog(KUrl(), "", 0);
-    dialog->setCaption(i18n("Choose Graphic to Add"));
-    dialog->setModal(true);
-    dialog->setMimeFilter(filter);
-    if (dialog->exec() != QDialog::Accepted) {
-        delete dialog;
-        return;
-    }
-    QString fname = dialog ? dialog->selectedFile() : QString();
-    QString currentMimeFilter = dialog ? dialog->currentMimeFilter() : QString();
-    delete dialog;
+    KoFileDialog dialog(0, KoFileDialog::OpenFile, "OpenDocument");
+    dialog.setCaption(i18n("Choose Graphic to Add"));
+    dialog.setMimeTypeFilters(imageFilter);
+    QString fname = dialog.url();
+
+    if (fname.isEmpty()) return;
 
     QMap<QString, KoDataCenterBase*> dataCenters = part()->dataCenterMap();
 
@@ -519,18 +513,17 @@ void KarbonView::fileImportGraphic()
 
     // check if we have an empty mime type (probably because the "All supported files"
     // filter was active)
-    if (currentMimeFilter.isEmpty()) {
-        // get mime type from file
-        KMimeType::Ptr mimeType = KMimeType::findByFileContent(fname);
-        if (mimeType) {
-            if (mimeType->is(nativeMimeType)) {
-                currentMimeFilter = nativeMimeType;
-            } else {
-                foreach(const QString &filter, imageFilter) {
-                    if (mimeType->is(filter)) {
-                        currentMimeFilter = filter;
-                        break;
-                    }
+    QString currentMimeFilter;
+    // get mime type from file
+    KMimeType::Ptr mimeType = KMimeType::findByFileContent(fname);
+    if (mimeType) {
+        if (mimeType->is(nativeMimeType)) {
+            currentMimeFilter = nativeMimeType;
+        } else {
+            foreach(const QString &filter, imageFilter) {
+                if (mimeType->is(filter)) {
+                    currentMimeFilter = filter;
+                    break;
                 }
             }
         }
@@ -569,7 +562,7 @@ void KarbonView::fileImportGraphic()
         picture->setKeepAspectRatio(true);
 
         KUndo2Command * cmd = d->canvas->shapeController()->addShapeDirect(picture);
-        cmd->setText(i18nc("(qtundo-format)", "Insert graphics"));
+        cmd->setText(kundo2_i18n("Insert graphics"));
         d->canvas->addCommand(cmd);
         d->canvas->shapeManager()->selection()->select(picture);
         return;
@@ -796,11 +789,11 @@ void KarbonView::selectionFlip(bool horizontally, bool vertically)
 
     KUndo2Command *cmd = new KoShapeTransformCommand(selectedShapes, oldState, newState);
     if (horizontally && !vertically)
-        cmd->setText(i18nc("(qtundo-format)", "Mirror Horizontally"));
+        cmd->setText(kundo2_i18n("Mirror Horizontally"));
     else if (!horizontally && vertically)
-        cmd->setText(i18nc("(qtundo-format)", "Mirror Vertically"));
+        cmd->setText(kundo2_i18n("Mirror Vertically"));
     else
-        cmd->setText(i18nc("(qtundo-format)", "Mirror Horizontally and Vertically"));
+        cmd->setText(kundo2_i18n("Mirror Horizontally and Vertically"));
     d->canvas->addCommand(cmd);
 }
 
@@ -855,7 +848,7 @@ void KarbonView::separatePath()
     }
 
     KUndo2Command *cmd = new KUndo2Command;
-    cmd->setText(i18nc("(qtundo-format)", "Separate paths"));
+    cmd->setText(kundo2_i18n("Separate paths"));
 
     foreach(KoPathShape* p, paths) {
         QList<KoPathShape*> separatedPaths;
@@ -922,7 +915,7 @@ void KarbonView::booleanOperation(KarbonBooleanCommand::BooleanOperation operati
     }
 
     if (paths.size() == 2) {
-        KUndo2Command * macro = new KUndo2Command(i18nc("(qtundo-format)", "Boolean Operation"));
+        KUndo2Command * macro = new KUndo2Command(kundo2_i18n("Boolean Operation"));
         KoParameterShape * paramShape = dynamic_cast<KoParameterShape*>(paths[0]);
         if (paramShape && paramShape->isParametricShape())
             new KoParameterToPathCommand(paramShape, macro);

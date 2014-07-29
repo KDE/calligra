@@ -24,15 +24,6 @@
 #include "KoInlineObject.h"
 #include "kotext_export.h"
 
-// Qt + kde
-#include <QHash>
-#include <QString>
-
-class QTextInlineObject;
-class QTextDocument;
-#include "KoXmlReaderForward.h"
-class KoShape;
-class KoShapeLoadingContext;
 class KoProperties;
 class QWidget;
 class KoVariableManager;
@@ -108,6 +99,9 @@ private:
                         int posInDocument, const QTextCharFormat &format);
     void paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document,
                const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format);
+
+private slots:
+    void documentDestroyed();
 
 private:
     Q_DECLARE_PRIVATE(KoVariable)

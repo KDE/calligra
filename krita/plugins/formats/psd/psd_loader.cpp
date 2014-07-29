@@ -156,7 +156,6 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
         dbgFile << "Position" << f.pos() << "Going to read the projection into the first layer, which Photoshop calls 'Background'";
 
         KisPaintLayerSP layer = new KisPaintLayer(m_image, i18n("Background"), OPACITY_OPAQUE_U8);
-        KisTransaction("", layer -> paintDevice());
 
         PSDImageData imageData(&header);
         imageData.read(&f, layer->paintDevice());
@@ -194,7 +193,7 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
                 if (!psdread(&buffer, &type)) {
                     return KisImageBuilder_RESULT_FAILURE;
                 }
-                if (type == BOUNDING_DIVIDER) {
+                if (type == BOUNDING_DIVIDER && !groupStack.isEmpty()) {
                     KisGroupLayerSP groupLayer = new KisGroupLayer(m_image, "temp", OPACITY_OPAQUE_U8);
                     m_image->addNode(groupLayer, groupStack.top());
                     groupStack.push(groupLayer);
@@ -210,8 +209,14 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
                     dbgFile << "failed reading channels for layer: " << layerRecord->layerName << layerRecord->error;
                     return KisImageBuilder_RESULT_FAILURE;
                 }
-                m_image->addNode(layer, groupStack.top());
+                if (!groupStack.isEmpty()) {
+                    m_image->addNode(layer, groupStack.top());
+                }
+                else {
+                    m_image->addNode(layer, m_image->root());
+                }
                 layer->setVisible(layerRecord->visible);
+
             }
         }
     }

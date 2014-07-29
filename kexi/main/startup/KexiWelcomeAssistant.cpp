@@ -47,8 +47,8 @@
 #include <ktitlewidget.h>
 #include <kpushbutton.h>
 #include <kacceleratormanager.h>
-#include <kfiledialog.h>
 #include <kfileitemdelegate.h>
+#include <kdialog.h>
 
 #include <QLayout>
 #include <QCheckBox>

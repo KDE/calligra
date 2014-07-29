@@ -91,6 +91,7 @@ set(KRITA_INCLUDES
     ${CMAKE_SOURCE_DIR}/krita/image
     ${CMAKE_SOURCE_DIR}/krita/image/brushengine
     ${CMAKE_SOURCE_DIR}/krita/image/tiles
+    ${CMAKE_SOURCE_DIR}/krita/libbrush
     ${CMAKE_SOURCE_DIR}/krita/ui
     ${CMAKE_SOURCE_DIR}/krita/ui/canvas
     ${CMAKE_SOURCE_DIR}/krita/ui/tool
@@ -108,7 +109,7 @@ set(KRITA_INCLUDES
     ${CMAKE_SOURCE_DIR}/libs/widgets/colorwidgets
     ${CMAKE_SOURCE_DIR}/libs/widgetutils
 
-    ${EIGEN2_INCLUDE_DIR}
+    ${EIGEN3_INCLUDE_DIR}
     ${Vc_INCLUDE_DIR}
 
     # 'Export' this for use by filters
@@ -125,6 +126,7 @@ if(HAVE_OPENGL)
 endif(HAVE_OPENGL)
 
 add_subdirectory( image )
+add_subdirectory( libbrush )
 add_subdirectory( ui )
 add_subdirectory( dtd )
 add_subdirectory( plugins )
@@ -159,8 +161,8 @@ kde4_add_kdeinit_executable(krita ${krita_KDEINIT_SRCS})
 
 if (Q_WS_MAC)
     set_target_properties(krita PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
-    set_target_properties(krita PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.calligra.krita")
-    set_target_properties(krita PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Krita 2")
+    set_target_properties(krita PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.krita")
+    set_target_properties(krita PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Krita")
 endif (Q_WS_MAC)
 
 target_link_libraries(kdeinit_krita kritaui ${BREAKPAD_LIBS})
@@ -168,8 +170,8 @@ target_link_libraries(krita kdeinit_krita)
 
 install(TARGETS krita ${INSTALL_TARGETS_DEFAULT_ARGS})
 install(TARGETS kdeinit_krita ${INSTALL_TARGETS_DEFAULT_ARGS})
-install(PROGRAMS krita.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
-install(FILES  kritapart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install(PROGRAMS krita.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR}/calligra)
+install(FILES  kritapart.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 install(FILES  krita.rc DESTINATION ${DATA_INSTALL_DIR}/krita)
 install(FILES  krita.appdata.xml DESTINATION ${SHARE_INSTALL_PREFIX}/appdata/ )
 
