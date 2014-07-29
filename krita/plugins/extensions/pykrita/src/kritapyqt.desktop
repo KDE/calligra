@@ -2,6 +2,6 @@
 Name=Python Plugin Manager
 X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
-X-KDE-Library=kritapyqt
+X-KDE-Library=kritapykrita
 X-Krita-Version=28
 

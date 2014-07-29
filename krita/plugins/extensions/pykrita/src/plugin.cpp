@@ -31,10 +31,12 @@ K_PLUGIN_FACTORY(KritaPyQtPluginFactory, registerPlugin<KritaPyQtPlugin>();)
 K_EXPORT_PLUGIN(KritaPyQtPluginFactory("krita"))
 
 KritaPyQtPlugin::KritaPyQtPlugin(QObject *parent, const QVariantList &)
-    : KisViewPlugin(parent, "kritaplugins/kritapyqtplugin.rc")
+    : KisViewPlugin(parent, "kritaplugins/kritapykritaplugin.rc")
     , m_engineFailureReason(m_engine.tryInitializeGetFailureReason())
     , m_autoReload(false)
 {
+    qDebug() << ">>>>>>>>>>>>>>>" << m_engineFailureReason;
+
     KisPreferenceSetRegistry *preferenceSetRegistry = KisPreferenceSetRegistry::instance();
 
     PyQtPluginSettingsFactory* settingsFactory = new PyQtPluginSettingsFactory(&m_engine);
@@ -53,11 +55,12 @@ KritaPyQtPlugin::KritaPyQtPlugin(QObject *parent, const QVariantList &)
     // Try to import the `pykrita` module
     PyKrita::Python py = PyKrita::Python();
     PyObject* pykritaPackage = py.moduleImport("pykrita");
+    pykritaPackage = py.moduleImport("krita");
     if (pykritaPackage)
     {
         dbgKrita << "Loaded pykrita, now load plugins";
         m_engine.tryLoadEnabledPlugins();
-        py.functionCall("_pykritaLoaded");
+        py.functionCall("_pykritaLoaded", "krita");
     }
     else
     {

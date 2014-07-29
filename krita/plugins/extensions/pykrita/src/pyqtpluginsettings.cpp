@@ -56,7 +56,7 @@ PyQtPluginSettings::~PyQtPluginSettings()
 
 QString PyQtPluginSettings::id()
 {
-    return QString("pyqtpluginmanager");
+    return QString("pykritapluginmanager");
 }
 
 QString PyQtPluginSettings::name()

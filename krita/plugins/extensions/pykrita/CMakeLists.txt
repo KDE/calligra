@@ -13,7 +13,7 @@ macro_bool_to_01(PYQT4_FOUND HAVE_PYQT4)
 if (HAVE_PYQT4 AND HAVE_SIP AND HAVE_PYTHONLIBS)
 
 if (NOT EXISTS ${PYQT4_SIP_DIR}/QtCore/QtCoremod.sip)
-    message(WARNING "krita-pyqt plugin needs the PyQt4 development sip file QtCoremod.sip")
+    message(WARNING "krita-pykrita plugin needs the PyQt4 development sip file QtCoremod.sip")
     return()
 endif()
 

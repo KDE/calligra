@@ -14,7 +14,7 @@ add_subdirectory( separate_channels )
 add_subdirectory( shearimage )
 add_subdirectory( dockers )
 add_subdirectory( layergroupswitcher )
-add_subdirectory( pyqt )
+add_subdirectory( pykrita )
 
 option(WITH_RESOURCE_MANAGER "Build the experimental resource manager" OFF)
 if (WITH_RESOURCE_MANAGER)

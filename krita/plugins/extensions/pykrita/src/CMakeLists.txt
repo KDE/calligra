@@ -15,16 +15,16 @@ kde4_add_ui_files(SOURCES
     manager.ui
 )
 
-kde4_add_plugin(kritapyqt ${SOURCES})
+kde4_add_plugin(kritapykrita ${SOURCES})
 
 target_link_libraries(
-    kritapyqt
+    kritapykrita
     ${PYTHON_LIBRARY}
     kritaui
     kritalibbrush
   )
 
-install(TARGETS kritapyqt DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kritapykrita DESTINATION ${PLUGIN_INSTALL_DIR})
 install(FILES kritapyqt.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 install(FILES kritapyqtplugin.rc DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)
 
@@ -33,7 +33,7 @@ install(FILES kritapyqtplugin.desktop  DESTINATION  ${SERVICETYPES_INSTALL_DIR})
 # Install "built-in" plugins
 install(
     DIRECTORY krita
-    DESTINATION ${DATA_INSTALL_DIR}/krita/plugins/pyqt
+    DESTINATION ${DATA_INSTALL_DIR}/krita/plugins/pykrita
     FILES_MATCHING PATTERN "*.py"
 )
 

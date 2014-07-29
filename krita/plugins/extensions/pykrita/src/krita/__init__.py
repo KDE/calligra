@@ -1,6 +1,14 @@
 import pykrita
 
-@pateEventHandler('_pluginLoaded')
+def pykritaEventHandler(event):
+    def _decorator(func):
+        setattr(pykrita, event, func)
+        del func
+    return _decorator
+
+
+
+@pykritaEventHandler('_pluginLoaded')
 def on_load(plugin):
     if plugin in init.functions:
         # Call registered init functions for the plugin
@@ -9,7 +17,7 @@ def on_load(plugin):
     return True
 
 
-@pateEventHandler('_pluginUnloading')
+@pykritaEventHandler('_pluginUnloading')
 def on_unload(plugin):
     if plugin in unload.functions:
         # Deinitialize plugin
@@ -18,14 +26,14 @@ def on_unload(plugin):
     return True
 
 
-@pateEventHandler('_pykritaLoaded')
-def on_pate_loaded():
+@pykritaEventHandler('_pykritaLoaded')
+def on_pykrita_loaded():
     kDebug('PYKRITA LOADED')
     return True
 
 
-@pateEventHandler('_pykritaUnloading')
-def on_pate_unloading():
+@pykritaEventHandler('_pykritaUnloading')
+def on_pykrita_unloading():
     kDebug('UNLOADING PYKRITA')
     return True
 

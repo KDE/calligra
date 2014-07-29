@@ -234,8 +234,9 @@ QString PyKrita::Engine::tryInitializeGetFailureReason()
             << QLatin1String(PYKRITA_PYTHON_SITE_PACKAGES_INSTALL_DIR)
             ;
     dbgScript << "Plugin Directories: " << pluginDirectories;
-    if (!py.prependPythonPaths(pluginDirectories))
+    if (!py.prependPythonPaths(pluginDirectories)) {
         return i18nc("@info:tooltip ", "Cannot update Python paths");
+    }
 
     PyRun_SimpleString(
         "import sip\n"
@@ -466,15 +467,15 @@ bool PyKrita::Engine::setModuleProperties(PluginState& plugin)
     // Find the module:
     // 0) try to locate directory based plugin first
     KUrl rel_path = QString(Python::PYKRITA_ENGINE);
-    qDebug() << rel_path;
+    dbgScript << rel_path;
     rel_path.addPath(plugin.moduleFilePathPart());
-    qDebug() << rel_path;
+    dbgScript << rel_path;
     rel_path.addPath("__init__.py");
-    qDebug() << rel_path;
+    dbgScript << rel_path;
 
     QString module_path = KGlobal::dirs()->findResource("appdata", rel_path.toLocalFile());
 
-    qDebug() << module_path;
+    dbgScript << module_path;
 
     if (module_path.isEmpty()) {
         // 1) Nothing found, then try file based plugin
@@ -493,6 +494,7 @@ bool PyKrita::Engine::setModuleProperties(PluginState& plugin)
                                    , "Unable to find the module specified <application>%1</application>"
                                    , plugin.m_service->library()
                                );
+        dbgScript << "Plugin is " << plugin.m_errorReason;
         return false;
     }
     dbgScript << "Found module path:" << module_path;
@@ -687,15 +689,18 @@ void PyKrita::Engine::scanPlugins()
     dbgScript << "Seeking for installed plugins...";
     KService::List services = KoServiceLocator::instance()->entries("Krita/PythonPlugin");
     Q_FOREACH(KService::Ptr service, services) {
-        if (!isServiceUsable(service))
+
+        if (!isServiceUsable(service)) {
+            dbgScript << service->name() << "is not usable";
             continue;
+        }
 
         // Make a new state
         PluginState plugin;
         plugin.m_service = service;
 
         if (!setModuleProperties(plugin)) {
-            qDebug() << "Cannot load" << service->name() << ": broken"<< plugin.isBroken() << "because:" << plugin.errorReason();
+            dbgScript << "Cannot load" << service->name() << ": broken"<< plugin.isBroken() << "because:" << plugin.errorReason();
             continue;
         }
 
@@ -750,7 +755,7 @@ void PyKrita::Engine::loadModule(const int idx)
         if (ins_result == 0) {
             // Initialize the module from Python's side
             PyObject* const args = Py_BuildValue("(s)", PQ(module_name));
-            PyObject* result = py.functionCall("_pluginLoaded", Python::PYKRITA_ENGINE, args);
+            PyObject* result = py.functionCall("_pluginLoaded", "Python::PYKRITA_ENGINE", args);
             Py_DECREF(args);
             if (result)
                 return;                                     // Success!

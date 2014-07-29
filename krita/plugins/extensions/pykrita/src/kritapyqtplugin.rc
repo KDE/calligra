@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui library="kritapyqtplugin" version="7">
+<kpartgui library="kritapykritaplugin" version="7">
 <MenuBar>
 </MenuBar>
 </kpartgui>
