@@ -28,6 +28,7 @@
 #include <QVector>
 #include <kundo2command.h>
 #include <kundo2stack.h>
+#include <kundo2magicstring.h>
 
 #include "kisundo2_export.h"
 
@@ -42,7 +43,7 @@ class KisUndo2Command :public KUndo2Command
 {
 public:
     explicit KisUndo2Command(KUndo2Command *parent = 0);
-    explicit KisUndo2Command(const QString &text, KUndo2Command *parent = 0);
+    explicit KisUndo2Command(const KUndo2MagicString &text, KUndo2Command *parent = 0);
     virtual ~KisUndo2Command();
 
     virtual void undoMergedCommands();

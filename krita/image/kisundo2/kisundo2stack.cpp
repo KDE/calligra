@@ -31,7 +31,7 @@
 
 
 
-KisUndo2Command::KisUndo2Command(const QString &text, KUndo2Command *parent):KUndo2Command(text,parent)
+KisUndo2Command::KisUndo2Command(const KUndo2MagicString &text, KUndo2Command *parent):KUndo2Command(text,parent)
 {
 
 }

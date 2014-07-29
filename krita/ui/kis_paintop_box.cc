@@ -639,7 +639,7 @@ void KisPaintopBox::slotSaveActivePreset()
     KisPaintOpPresetSP resource = rServer->resourceByName(name);
     if (resource) {
 
-        tags = rServer->assignedTagsList(resource);
+        tags = rServer->assignedTagsList(resource.data());
         rServer->removeResourceAndBlacklist(resource);
 
     }
