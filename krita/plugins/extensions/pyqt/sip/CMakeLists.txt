@@ -11,7 +11,7 @@ else (PYQT4_VERSION STRLESS "040905")
     set(SIP_EXTRA_OPTIONS -g -x PyKDE_QVector)
 endif(PYQT4_VERSION STRLESS "040905")
 
-add_sip_python_module(PyKrita4.krita ./krita/kritamod.sip kritaui kritaimage kritalibbrush)
+add_sip_python_module(PyKrita4.krita ./krita/kritamod.sip kritalibkis kritaui kritaimage kritalibbrush)
 
 install(FILES
     ./__init__.py
