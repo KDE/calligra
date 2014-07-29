@@ -42,6 +42,7 @@
 #include "dockers/KWRdfDocker.h"
 #include "dockers/KWRdfDockerFactory.h"
 #endif
+
 #include "dockers/KWStatisticsDocker.h"
 #include "pagetool/KWPageToolFactory.h"
 
