@@ -101,6 +101,7 @@ calligra_define_product(APP_KEXI "Kexi app (for Desktop)"  REQUIRES LIB_CALLIGRA
 calligra_define_product(APP_FLOW "Flow app (for Desktop)"  REQUIRES LIB_CALLIGRA LIB_KOPAGEAPP)
 calligra_define_product(APP_PLAN "Plan app (for Desktop)"  REQUIRES LIB_CALLIGRA LIB_KOREPORT LIB_KDCHART LIB_KDGANTT)
 calligra_define_product(APP_BRAINDUMP "Braindump app (for Desktop)"  REQUIRES LIB_CALLIGRA)
+calligra_define_product(GEMINI "The Calligra Gemini application" NEEDS WORDS_PART STAGE_PART PLUGIN_QTQUICK)
 # TODO: this needs to be split up by app products
 calligra_define_product(DOC "Calligra Documentations")
 
@@ -132,6 +133,7 @@ calligra_define_product(PLUGIN_VIDEOSHAPE "Plugin for handling videos in Calligr
 calligra_define_product(PLUGIN_VECTORSHAPE "Vectorgraphic shape plugin"  REQUIRES LIB_CALLIGRA LIB_KOVECTORIMAGE)
 calligra_define_product(PLUGIN_REPORTING "Renderer plugins for libkoreport"  REQUIRES LIB_KOREPORT LIB_KDCHART)
 calligra_define_product(PLUGIN_SEMANTICITEMS "Semantic items plugins"  REQUIRES FEATURE_RDF LIB_CALLIGRA)
+calligra_define_product(PLUGIN_QTQUICK "QtQuick Plugin that provides Calligra components" NEEDS WORDS_PART STAGE_PART)# SHEETS_PART)
 
 # staging plugins
 calligra_define_product(PLUGIN_GOOGLEDOCS "Plugin for integration with Google Docs" STAGING  REQUIRES LIB_CALLIGRA)

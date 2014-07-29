@@ -1,4 +1,8 @@
-set( CALLIGRA_SHOULD_BUILD_PRODUCTS
+# defines a set of products required when only Words and Stage are wanted. Used for the Gemini project
+
+calligra_define_productset(WORDS+STAGE "Builds the Stage and Words components, and Calligra for 2:1 devices"
+    OPTIONAL
+# apps
     WORDS
     STAGE 
 # plugins
