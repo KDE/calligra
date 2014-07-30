@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="Krita" version="52">
+<kpartgui name="Krita" version="53">
 
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
@@ -158,6 +158,8 @@
 
 <Menu name="Tools"><text>&amp;Tools</text>
 </Menu>
+
+<Action name="scripts"/>
 
 <Menu name="settings"><text>Settings</text>
   <!--Action name="view_fullscreen" group="settings_show"/-->

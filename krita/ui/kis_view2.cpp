@@ -134,6 +134,8 @@
 #include "kis_tooltip_manager.h"
 #include <kis_tool_freehand.h>
 
+#include "kis_script_manager.h"
+
 class BlockingUserInputEventFilter : public QObject
 {
     bool eventFilter(QObject *watched, QEvent *event)
@@ -175,6 +177,7 @@ public:
         , mainWindow(0)
         , tooltipManager(0)
         , showFloatingMessage(true)
+        , scriptManager(0)
     {
     }
 
@@ -199,7 +202,7 @@ public:
         delete actionManager;
         delete canvasControlsManager;
         delete tooltipManager;
-
+        delete scriptManager;
         /**
          * Push a timebomb, which will try to release the memory after
          * the document has been deleted
@@ -237,6 +240,7 @@ public:
     KisTooltipManager* tooltipManager;
     QPointer<KisFloatingMessage> savedFloatingMessage;
     bool showFloatingMessage;
+    KisScriptManager *scriptManager;
 };
 
 
@@ -1071,6 +1075,9 @@ void KisView2::createManagers()
 
     m_d->mirrorAxis = new KisMirrorAxis(m_d->resourceProvider, this);
     m_d->canvas->addDecoration(m_d->mirrorAxis);
+
+    m_d->scriptManager = new KisScriptManager(this);
+    m_d->scriptManager->setup(actionCollection());
 }
 
 void KisView2::updateGUI()
@@ -1203,6 +1210,11 @@ void KisView2::loadPlugins()
 KisDoc2 * KisView2::document() const
 {
     return m_d->doc;
+}
+
+KisScriptManager *KisView2::scriptManager() const
+{
+    return m_d->scriptManager;
 }
 
 KoPrintJob * KisView2::createPrintJob()

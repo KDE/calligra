@@ -15,12 +15,34 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include "view.h"
 
-#include <kis_view2.h>
+#ifndef KIS_SCRIPT_MANAGER_H
+#define KIS_SCRIPT_MANAGER_H
 
-View::View(QObject *view, QObject *parent)
-    : QObject(parent)
-    , m_view(qobject_cast<KisView2*>(view))
+#include <QObject>
+
+#include <krita_export.h>
+
+class QAction;
+
+class KisView2;
+class KActionCollection;
+
+class KRITAUI_EXPORT KisScriptManager : public QObject
 {
-}
+    Q_OBJECT
+public:
+    explicit KisScriptManager(KisView2 * view);
+    ~KisScriptManager();
+
+    void setup(KActionCollection * ac);
+    void updateGUI();
+
+    void addAction(QAction *action);
+
+private:
+    struct Private;
+    Private * const d;
+};
+
+#endif // KIS_SCRIPT_MANAGER_H

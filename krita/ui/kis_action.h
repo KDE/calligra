@@ -67,14 +67,9 @@ public:
 
     virtual void setActionEnabled(bool enabled);
 
-   /**
-    * Set the action manager. Only used by KisActionManager
-    */
-    void setActionManager(KisActionManager* actionManager);
-
-   /**
-    * Set operation id. This will used to run an operation in the KisActionManager
-    */
+    /**
+     * Set operation id. This will used to run an operation in the KisActionManager
+     */
     void setOperationID(const QString& id);
 
 signals:
@@ -83,6 +78,15 @@ signals:
 private slots:
     void slotTriggered();
     void slotChanged();
+
+private:
+
+    friend class KisActionManager;
+    /**
+     * Set the action manager. Only used by KisActionManager
+     */
+    void setActionManager(KisActionManager* actionManager);
+
 
 private:
     class Private;

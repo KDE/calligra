@@ -57,6 +57,7 @@ class KisPaintopBox;
 class KisCanvasController;
 class KisFlipbook;
 class KisActionManager;
+class KisScriptManager;
 
 /**
  * Krita view class
@@ -169,6 +170,8 @@ public:  // Krita specific interfaces
     void updateGUI();
 
     KisDoc2* document() const;
+
+    KisScriptManager *scriptManager() const;
 
 public:
 
