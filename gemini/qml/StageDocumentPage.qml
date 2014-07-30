@@ -115,84 +115,85 @@ Item {
             anchors.fill: parent;
             color: "#4e5359";
         }
-        Calligra.PresentationCanvas {
-            id: stageCanvas;
-
-            x: Math.max((parent.width - controllerItem.documentSize.width) / 4, 0);
-            y: Math.max((parent.height - controllerItem.documentSize.height) / 4, 0);
-
-            width: {
-                console.log(parent.width);
-                console.log(controllerItem.documentSize.width);
-                return Math.min(controllerItem.documentSize.width, parent.width);
-            }
+        
+        Item {
+            anchors.centerIn: parent;
+            
+            width: Math.min(controllerItem.documentSize.width, parent.width);
             height: Math.min(controllerItem.documentSize.height, parent.height);
+        
+            Calligra.PresentationCanvas {
+                id: stageCanvas;
+                
+                anchors.fill: parent;
 
-            onLoadingBegun: baseLoadingDialog.visible = true;
-            onLoadingFinished: {
-                console.debug("doc and part: " + doc() + " " + part());
-                mainWindow.setDocAndPart(doc(), part());
-                baseLoadingDialog.hideMe();
-            }
-            onCurrentSlideChanged: navigatorListView.positionViewAtIndex(currentSlide, ListView.Contain);
-        }
-        Flickable {
-            id: controllerFlickable;
-            anchors {
-                top: parent.top;
-                left: parent.left;
-                right: parent.right;
-                bottom: enabled ? parent.bottom : parent.top;
-            }
-
-            boundsBehavior: controllerItem.documentSize.width < base.width ? Flickable.StopAtBounds : Flickable.DragAndOvershootBounds;
-
-            Calligra.CanvasControllerItem {
-                id: controllerItem;
-                canvas: stageCanvas;
-                flickable: controllerFlickable;
-                minimumZoom: 0.5;
-            }
-
-            PinchArea {
-                x: controllerFlickable.contentX;
-                y: controllerFlickable.contentY;
-                height: controllerFlickable.height;
-                width: controllerFlickable.width;
-
-                onPinchStarted: controllerItem.beginZoomGesture();
-                onPinchUpdated: {
-                    var newCenter = mapToItem( controllerFlickable, pinch.center.x, pinch.center.y );
-                    controllerItem.zoomBy(pinch.scale - pinch.previousScale, Qt.point( newCenter.x, newCenter.y ) );
+                onLoadingBegun: baseLoadingDialog.visible = true;
+                onLoadingFinished: {
+                    console.debug("doc and part: " + doc() + " " + part());
+                    mainWindow.setDocAndPart(doc(), part());
+                    baseLoadingDialog.hideMe();
                 }
-                onPinchFinished: { canvasController.endZoomGesture(); controllerFlickable.returnToBounds(); }
+                onCurrentSlideChanged: navigatorListView.positionViewAtIndex(currentSlide, ListView.Contain);
+            }
+            
+            Flickable {
+                id: controllerFlickable;
+                anchors {
+                    top: parent.top;
+                    left: parent.left;
+                    right: parent.right;
+                    bottom: enabled ? parent.bottom : parent.top;
+                }
 
-                MouseArea {
-                    anchors.fill: parent;
-                    onClicked: {
-                        if(mouse.x < width / 6) {
-                            if(stageCanvas.currentSlide === 0) {
-                                stageCanvas.currentSlide = stageCanvas.slideCount() - 1;
-                            }
-                            else {
-                                stageCanvas.currentSlide = stageCanvas.currentSlide - 1;
-                            }
-                        }
-                        else if(mouse.x > width * 5 / 6) {
-                            var currentSlide = stageCanvas.currentSlide;
-                            stageCanvas.currentSlide = stageCanvas.currentSlide + 1;
-                            if(currentSlide === stageCanvas.currentSlide) {
-                                stageCanvas.currentSlide = 0;
-                            }
-                        }
+                boundsBehavior: controllerItem.documentSize.width < base.width ? Flickable.StopAtBounds : Flickable.DragAndOvershootBounds;
+
+                Calligra.CanvasControllerItem {
+                    id: controllerItem;
+                    canvas: stageCanvas;
+                    flickable: controllerFlickable;
+                    minimumZoom: 0.5;
+                }
+
+                PinchArea {
+                    x: controllerFlickable.contentX;
+                    y: controllerFlickable.contentY;
+                    height: controllerFlickable.height;
+                    width: controllerFlickable.width;
+
+                    onPinchStarted: controllerItem.beginZoomGesture();
+                    onPinchUpdated: {
+                        var newCenter = mapToItem( controllerFlickable, pinch.center.x, pinch.center.y );
+                        controllerItem.zoomBy(pinch.scale - pinch.previousScale, Qt.point( newCenter.x, newCenter.y ) );
                     }
-                    onDoubleClicked: {
-                        if(mouse.x < width / 6 || mouse.x > width * 5 / 6) {
-                            // don't accept double-clicks in the navigation zone
-                            return;
+                    onPinchFinished: { controllerItem.endZoomGesture(); controllerFlickable.returnToBounds(); }
+
+                    MouseArea {
+                        anchors.fill: parent;
+                        onClicked: {
+                            if(mouse.x < width / 6) {
+                                if(stageCanvas.currentSlide === 0) {
+                                    stageCanvas.currentSlide = stageCanvas.slideCount() - 1;
+                                }
+                                else {
+                                    stageCanvas.currentSlide = stageCanvas.currentSlide - 1;
+                                }
+                            }
+                            else if(mouse.x > width * 5 / 6) {
+                                var currentSlide = stageCanvas.currentSlide;
+                                stageCanvas.currentSlide = stageCanvas.currentSlide + 1;
+                                if(currentSlide === stageCanvas.currentSlide) {
+                                    stageCanvas.currentSlide = 0;
+                                }
+                            }
                         }
-                        toolManager.requestToolChange("TextToolFactory_ID");
-                        base.navigateMode = false;
+                        onDoubleClicked: {
+                            if(mouse.x < width / 6 || mouse.x > width * 5 / 6) {
+                                // don't accept double-clicks in the navigation zone
+                                return;
+                            }
+                            toolManager.requestToolChange("TextToolFactory_ID");
+                            base.navigateMode = false;
+                        }
                     }
                 }
             }

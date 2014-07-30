@@ -41,16 +41,21 @@ Item {
     Rectangle {
         anchors.fill: parent;
         color: "#e8e9ea";
+    }
+        
+    Item {
+        anchors {
+            top: parent.top;
+            bottom: parent.bottom;
+            horizontalCenter: parent.horizontalCenter;
+        }
+        
+        width: Math.min(controllerItem.documentSize.width, base.width);
 
         Calligra.TextDocumentCanvas {
             id: wordsCanvas;
-            anchors {
-                top: parent.top;
-                bottom: parent.bottom;
-            }
-            width: Math.min(controllerItem.documentSize.width, base.width);
-            x: Math.max((base.width - controllerItem.documentSize.width) / 4, 0);
-
+            anchors.fill: parent;
+        
             onLoadingBegun: baseLoadingDialog.visible = true;
             onLoadingFinished: {
                 console.debug("doc and part: " + doc() + " " + part());
@@ -59,109 +64,111 @@ Item {
             }
             onCurrentPageNumberChanged: navigatorListView.positionViewAtIndex(currentPageNumber - 1, ListView.Contain);
         }
+
+        Flickable {
+            id: controllerFlickable;
+            anchors {
+                top: parent.top;
+                left: parent.left;
+                right: parent.right;
+                bottom: enabled ? parent.bottom : parent.top;
+            }
+
+            boundsBehavior: controllerItem.documentSize.width < base.width ? Flickable.StopAtBounds : Flickable.DragAndOvershootBounds;
+
+            Image {
+                height: Settings.theme.adjustedPixel(40);
+                width: Settings.theme.adjustedPixel(40);
+                source: Settings.theme.icon("intel-Words-Handle-cursor");
+                opacity: wordsCanvas.hasSelection ? 1 : 0;
+                Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+                x: wordsCanvas.selectionStartPos.x - width / 2;
+                y: wordsCanvas.selectionStartPos.y - (height - 4);
+                Rectangle {
+                    anchors {
+                        top: parent.bottom;
+                        horizontalCenter: parent.horizontalCenter;
+                    }
+                    height: wordsCanvas.selectionStartPos.height - 4;
+                    width: 4;
+                    color: "#009bcd";
+                }
+            }
+            Image {
+                height: Settings.theme.adjustedPixel(40);
+                width: Settings.theme.adjustedPixel(40);
+                source: Settings.theme.icon("intel-Words-Handle-cursor");
+                opacity: wordsCanvas.hasSelection ? 1 : 0;
+                Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+                x: wordsCanvas.selectionEndPos.x - width / 2;
+                y: wordsCanvas.selectionEndPos.y + (wordsCanvas.selectionEndPos.height - 4);
+                Rectangle {
+                    anchors {
+                        bottom: parent.top;
+                        horizontalCenter: parent.horizontalCenter;
+                    }
+                    height: wordsCanvas.selectionEndPos.height - 4;
+                    width: 4;
+                    color: "#009bcd";
+                }
+            }
+
+            PinchArea {
+                x: controllerFlickable.contentX;
+                y: controllerFlickable.contentY;
+                height: controllerFlickable.height;
+                width: controllerFlickable.width;
+
+                onPinchStarted: controllerItem.beginZoomGesture();
+                onPinchUpdated: {
+                    var newCenter = mapToItem( controllerFlickable, pinch.center.x, pinch.center.y );
+                    controllerItem.zoomBy(pinch.scale - pinch.previousScale, Qt.point( newCenter.x, newCenter.y ) );
+                }
+                onPinchFinished: { controllerItem.endZoomGesture(); controllerFlickable.returnToBounds(); }
+
+                MouseArea {
+                    anchors.fill: parent;
+                    onClicked: {
+                        if(mouse.x < width / 6) {
+                            controllerItem.pageChanging = true;
+                            controllerFlickable.contentY = Math.max(0, controllerFlickable.contentY - controllerFlickable.height + (Constants.GridHeight * 1.5));
+                            controllerItem.pageChanging = false;
+                        }
+                        else if(mouse.x > width * 5 / 6) {
+                            controllerItem.pageChanging = true;
+                            controllerFlickable.contentY = Math.min(controllerFlickable.contentHeight - controllerFlickable.height, controllerFlickable.contentY + controllerFlickable.height - (Constants.GridHeight * 1.5));
+                            controllerItem.pageChanging = false;
+                        }
+                    }
+                    onDoubleClicked: {
+                        if(mouse.x < width / 6 || mouse.x > width * 5 / 6) {
+                            // don't accept double-clicks in the navigation zone
+                            return;
+                        }
+                        toolManager.requestToolChange("TextToolFactory_ID");
+                        base.navigateMode = false;
+                    }
+                }
+            }
+
+            Calligra.CanvasControllerItem {
+                id: controllerItem;
+                canvas: wordsCanvas;
+                flickable: controllerFlickable;
+                property bool pageChanging: false;
+                minimumZoom: 0.5;
+                onMovingFastChanged: {
+                    if(movingFast === true && !pageChanging) {
+                        d.showThings();
+                    }
+                    else {
+                        d.hideThings();
+                    }
+                }
+            }
+        }
     }
-    Flickable {
-        id: controllerFlickable;
-        anchors {
-            top: parent.top;
-            left: parent.left;
-            right: parent.right;
-            bottom: enabled ? parent.bottom : parent.top;
-        }
 
-        boundsBehavior: controllerItem.documentSize.width < base.width ? Flickable.StopAtBounds : Flickable.DragAndOvershootBounds;
-
-        Image {
-            height: Settings.theme.adjustedPixel(40);
-            width: Settings.theme.adjustedPixel(40);
-            source: Settings.theme.icon("intel-Words-Handle-cursor");
-            opacity: wordsCanvas.hasSelection ? 1 : 0;
-            Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
-            x: wordsCanvas.selectionStartPos.x - width / 2;
-            y: wordsCanvas.selectionStartPos.y - (height - 4);
-            Rectangle {
-                anchors {
-                    top: parent.bottom;
-                    horizontalCenter: parent.horizontalCenter;
-                }
-                height: wordsCanvas.selectionStartPos.height - 4;
-                width: 4;
-                color: "#009bcd";
-            }
-        }
-        Image {
-            height: Settings.theme.adjustedPixel(40);
-            width: Settings.theme.adjustedPixel(40);
-            source: Settings.theme.icon("intel-Words-Handle-cursor");
-            opacity: wordsCanvas.hasSelection ? 1 : 0;
-            Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
-            x: wordsCanvas.selectionEndPos.x - width / 2;
-            y: wordsCanvas.selectionEndPos.y + (wordsCanvas.selectionEndPos.height - 4);
-            Rectangle {
-                anchors {
-                    bottom: parent.top;
-                    horizontalCenter: parent.horizontalCenter;
-                }
-                height: wordsCanvas.selectionEndPos.height - 4;
-                width: 4;
-                color: "#009bcd";
-            }
-        }
-
-        PinchArea {
-            x: controllerFlickable.contentX;
-            y: controllerFlickable.contentY;
-            height: controllerFlickable.height;
-            width: controllerFlickable.width;
-
-            onPinchStarted: controllerItem.beginZoomGesture();
-            onPinchUpdated: {
-                var newCenter = mapToItem( controllerFlickable, pinch.center.x, pinch.center.y );
-                controllerItem.zoomBy(pinch.scale - pinch.previousScale, Qt.point( newCenter.x, newCenter.y ) );
-            }
-            onPinchFinished: { canvasController.endZoomGesture(); controllerFlickable.returnToBounds(); }
-
-            MouseArea {
-                anchors.fill: parent;
-                onClicked: {
-                    if(mouse.x < width / 6) {
-                        controllerItem.pageChanging = true;
-                        controllerFlickable.contentY = Math.max(0, controllerFlickable.contentY - controllerFlickable.height + (Constants.GridHeight * 1.5));
-                        controllerItem.pageChanging = false;
-                    }
-                    else if(mouse.x > width * 5 / 6) {
-                        controllerItem.pageChanging = true;
-                        controllerFlickable.contentY = Math.min(controllerFlickable.contentHeight - controllerFlickable.height, controllerFlickable.contentY + controllerFlickable.height - (Constants.GridHeight * 1.5));
-                        controllerItem.pageChanging = false;
-                    }
-                }
-                onDoubleClicked: {
-                    if(mouse.x < width / 6 || mouse.x > width * 5 / 6) {
-                        // don't accept double-clicks in the navigation zone
-                        return;
-                    }
-                    toolManager.requestToolChange("TextToolFactory_ID");
-                    base.navigateMode = false;
-                }
-            }
-        }
-
-        Calligra.CanvasControllerItem {
-            id: controllerItem;
-            canvas: wordsCanvas;
-            flickable: controllerFlickable;
-            property bool pageChanging: false;
-            minimumZoom: 0.5;
-            onMovingFastChanged: {
-                if(movingFast === true && !pageChanging) {
-                    d.showThings();
-                }
-                else {
-                    d.hideThings();
-                }
-            }
-        }
-    }
     QtObject {
         id: d;
         function showThings() {
