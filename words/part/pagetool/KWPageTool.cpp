@@ -35,6 +35,7 @@
 #include <KoPointerEvent.h>
 #include <KoTextDocument.h>
 #include <KoCanvasBase.h>
+#include <KoViewConverter.h>
 
 KWPageTool::KWPageTool(KoCanvasBase *canvas)
     : KoToolBase(canvas)
