@@ -218,6 +218,8 @@ CQTextDocumentCanvas::CQTextDocumentCanvas(QDeclarativeItem* parent)
 
 CQTextDocumentCanvas::~CQTextDocumentCanvas()
 {
+    d->part->removeMainWindow(d->part->currentMainwindow());
+    KoToolManager::instance()->removeCanvasController(d->canvas->canvasController());
     delete d;
 }
 

@@ -136,6 +136,8 @@ CQPresentationCanvas::CQPresentationCanvas(QDeclarativeItem* parent)
 
 CQPresentationCanvas::~CQPresentationCanvas()
 {
+    d->part->removeMainWindow(d->part->currentMainwindow());
+    KoToolManager::instance()->removeCanvasController(d->canvasBase->canvasController());
     delete d;
 }
 
