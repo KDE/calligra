@@ -1622,9 +1622,9 @@ void KoMainWindow::showToolbar(const char * tbName, bool shown)
 void KoMainWindow::viewFullscreen(bool fullScreen)
 {
     if (fullScreen) {
-        setWindowState(windowState() | Qt::WindowFullScreen);   // set
+        window()->setWindowState(windowState() | Qt::WindowFullScreen);   // set
     } else {
-        setWindowState(windowState() & ~Qt::WindowFullScreen);   // reset
+        window()->setWindowState(windowState() & ~Qt::WindowFullScreen);   // reset
     }
 }
 
