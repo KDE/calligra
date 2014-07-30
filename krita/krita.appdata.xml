@@ -2,6 +2,7 @@
 <application>
   <id type="desktop">krita.desktop</id>
   <id type="desktop" xml:lang="ca">krita.desktop</id>
+  <id type="desktop" xml:lang="cs">krita.desktop</id>
   <id type="desktop" xml:lang="da">krita.desktop</id>
   <id type="desktop" xml:lang="en-GB">krita.desktop</id>
   <id type="desktop" xml:lang="et">krita.desktop</id>
@@ -16,6 +17,7 @@
   <id type="desktop" xml:lang="x-test">xxkrita.desktopxx</id>
   <licence>CC0</licence>
   <licence xml:lang="ca">CC0</licence>
+  <licence xml:lang="cs">CC0</licence>
   <licence xml:lang="da">CC0</licence>
   <licence xml:lang="en-GB">CC0</licence>
   <licence xml:lang="et">CC0</licence>
@@ -101,6 +103,7 @@
   </description>
   <url type="homepage">http://www.krita.org/</url>
   <url type="homepage" xml:lang="ca">http://www.krita.org/</url>
+  <url type="homepage" xml:lang="cs">http://www.krita.org/</url>
   <url type="homepage" xml:lang="en-GB">http://www.krita.org/</url>
   <url type="homepage" xml:lang="et">http://www.krita.org/</url>
   <url type="homepage" xml:lang="fi">http://www.krita.org/</url>
@@ -115,6 +118,7 @@
   <screenshots>
     <screenshot type="default">http://heap.kogmbh.net/downloads/krita_appdata_1.png</screenshot>
     <screenshot type="default" xml:lang="ca">http://heap.kogmbh.net/downloads/krita_appdata_1.png</screenshot>
+    <screenshot type="default" xml:lang="cs">http://heap.kogmbh.net/downloads/krita_appdata_1.png</screenshot>
     <screenshot type="default" xml:lang="en-GB">http://heap.kogmbh.net/downloads/krita_appdata_1.png</screenshot>
     <screenshot type="default" xml:lang="et">http://heap.kogmbh.net/downloads/krita_appdata_1.png</screenshot>
     <screenshot type="default" xml:lang="fi">http://heap.kogmbh.net/downloads/krita_appdata_1.png</screenshot>
@@ -128,6 +132,7 @@
     <screenshot type="default" xml:lang="x-test">xxhttp://heap.kogmbh.net/downloads/krita_appdata_1.pngxx</screenshot>
     <screenshot>http://heap.kogmbh.net/downloads/krita_appdata_2.png</screenshot>
     <screenshot xml:lang="ca">http://heap.kogmbh.net/downloads/krita_appdata_2.png</screenshot>
+    <screenshot xml:lang="cs">http://heap.kogmbh.net/downloads/krita_appdata_2.png</screenshot>
     <screenshot xml:lang="en-GB">http://heap.kogmbh.net/downloads/krita_appdata_2.png</screenshot>
     <screenshot xml:lang="et">http://heap.kogmbh.net/downloads/krita_appdata_2.png</screenshot>
     <screenshot xml:lang="fi">http://heap.kogmbh.net/downloads/krita_appdata_2.png</screenshot>
@@ -143,6 +148,7 @@
   </screenshots>
   <updatecontact>foundation@krita.org</updatecontact>
   <updatecontact xml:lang="ca">foundation@krita.org</updatecontact>
+  <updatecontact xml:lang="cs">foundation@krita.org</updatecontact>
   <updatecontact xml:lang="en-GB">foundation@krita.org</updatecontact>
   <updatecontact xml:lang="et">foundation@krita.org</updatecontact>
   <updatecontact xml:lang="fi">foundation@krita.org</updatecontact>
@@ -156,6 +162,7 @@
   <updatecontact xml:lang="x-test">xxfoundation@krita.orgxx</updatecontact>
   <project_group>KDE</project_group>
   <project_group xml:lang="ca">KDE</project_group>
+  <project_group xml:lang="cs">KDE</project_group>
   <project_group xml:lang="en-GB">KDE</project_group>
   <project_group xml:lang="et">KDE</project_group>
   <project_group xml:lang="fi">KDE</project_group>
