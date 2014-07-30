@@ -24,19 +24,20 @@ protected:
     virtual bool drv_connect();
     virtual bool drv_disconnect();
     virtual bool drv_readTableSchema(const QString& originalName,
-                     KexiDB::TableSchema& tableSchema);
+				     KexiDB::TableSchema& tableSchema);
     virtual bool drv_tableNames(QStringList& tablenames);
     virtual bool drv_copyTable(const QString& srcTable,
                                     KexiDB::Connection *destConn, KexiDB::TableSchema* dstTable);
 
 private:
     JNIEnv* create_vm(JavaVM **jvm);
+    KexiDB::Field::Type type(QString type);
     JNIEnv* env;
-    JavaVM* jvm;
-
-
+    jclass clsH;
+    jobject java_class_object;
 };
 }
 
 #endif // ODBMIGRATE_H
+
 

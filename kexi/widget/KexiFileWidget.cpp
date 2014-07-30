@@ -207,6 +207,11 @@ void KexiFileWidget::updateFilters()
         foreach (const QString& supportedFileMimeType, supportedFileMimeTypes) {
             d->addFilterForType(&filter, &allfilters, supportedFileMimeType);
         }
+        mime = KMimeType::mimeType("application/vnd.oasis.opendocument.database");
+        if (mime && !d->excludedMimeTypes.contains(mime->name().toLower())) {
+            filter += KexiUtils::fileDialogFilterString(mime);
+            allfilters += mime->patterns();
+        }
     }
 
     foreach(const QString& mimeName, d->additionalMimeTypes) {
