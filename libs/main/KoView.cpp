@@ -364,7 +364,15 @@ void KoView::changeAuthorProfile(const QString &profileName)
 
 KoMainWindow * KoView::mainWindow() const
 {
-    return dynamic_cast<KoMainWindow *>(window());
+    KoMainWindow* mw = dynamic_cast<KoMainWindow *>(window());
+    QWidget* parent = this->parentWidget();
+    while(!mw) {
+        mw = dynamic_cast<KoMainWindow*>(parent);
+        parent = parent->parentWidget();
+        if(!parent)
+            break;
+    }
+    return mw;
 }
 
 KStatusBar * KoView::statusBar() const
