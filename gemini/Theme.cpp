@@ -395,6 +395,9 @@ bool Theme::eventFilter(QObject* target, QEvent* event)
 
 int Theme::adjustedPixel(const int& pixel) const
 {
+    if(!qApp->activeWindow())
+        return 0;
+
     // If we are in portrait mode, we still assume 1080p for font size purposes
     int height = qApp->activeWindow()->height() < qApp->activeWindow()->width() ? qApp->activeWindow()->height() : qApp->activeWindow()->width();
     // The pixel size is based on a 1080p screen, and it is accepted that the window size
