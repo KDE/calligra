@@ -160,6 +160,8 @@ void KWNavigationWidget::updateData()
 
 void KWNavigationWidget::setCanvas(KWCanvas* canvas)
 {
+    if(!canvas)
+        return;
     m_document = canvas->document();
     if (m_layout) {
         disconnect(m_layout, SIGNAL(finishedLayout()), this, SLOT(updateData()));
