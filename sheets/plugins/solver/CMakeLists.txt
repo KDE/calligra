@@ -1,7 +1,3 @@
-macro_optional_find_package(GSL)
-macro_log_feature(GSL_FOUND "GSL" "GNU Scientific Library" "http://www.gnu.org/software/gsl"
-                  FALSE "1.7" "Required by Sheets' solver plugin")
-
 if(GSL_FOUND)
 
 include_directories( ${CMAKE_SOURCE_DIR}/sheets
