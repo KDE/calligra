@@ -165,10 +165,10 @@ void KWCopyShape::saveOdf(KoShapeSavingContext &context) const
     me->removeAdditionalAttribute("draw:copy-of");
 }
 
-bool KWCopyShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
+bool KWCopyShape::loadOdf(const KoXmlElement&, KoShapeLoadingContext&)
 {
-    Q_UNUSED(element);
-    Q_UNUSED(context);
+//     Q_UNUSED(element);
+//     Q_UNUSED(context);
 #ifdef __GNUC__
     #warning TODO: implement KWCopyShape::loadOdf
 #endif

@@ -52,7 +52,7 @@ public:
     /// reimplemented
     virtual void saveOdf(KoShapeSavingContext &context) const;
     /// reimplemented
-    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
+    virtual bool loadOdf(const KoXmlElement&, KoShapeLoadingContext&);
 
     KoShape *original() const;
 

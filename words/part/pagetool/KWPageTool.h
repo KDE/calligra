@@ -33,7 +33,7 @@ public:
     virtual ~KWPageTool();
 
 public:
-    virtual void paint(QPainter &painter, const KoViewConverter &converter);
+    virtual void paint(QPainter&, const KoViewConverter&);
 
 public slots:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
