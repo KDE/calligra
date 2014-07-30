@@ -38,16 +38,27 @@ Item {
     function scrollToEnd() {
         controllerFlickable.contentY = controllerFlickable.contentHeight - controllerFlickable.height;
     }
-    Calligra.TextDocumentCanvas {
-        id: wordsCanvas;
+    Rectangle {
         anchors.fill: parent;
-        onLoadingBegun: baseLoadingDialog.visible = true;
-        onLoadingFinished: {
-            console.debug("doc and part: " + doc() + " " + part());
-            mainWindow.setDocAndPart(doc(), part());
-            baseLoadingDialog.hideMe();
+        color: "#e8e9ea";
+
+        Calligra.TextDocumentCanvas {
+            id: wordsCanvas;
+            anchors {
+                top: parent.top;
+                bottom: parent.bottom;
+            }
+            width: Math.min(controllerItem.documentSize.width, base.width);
+            x: Math.max((base.width - controllerItem.documentSize.width) / 4, 0);
+
+            onLoadingBegun: baseLoadingDialog.visible = true;
+            onLoadingFinished: {
+                console.debug("doc and part: " + doc() + " " + part());
+                mainWindow.setDocAndPart(doc(), part());
+                baseLoadingDialog.hideMe();
+            }
+            onCurrentPageNumberChanged: navigatorListView.positionViewAtIndex(currentPageNumber - 1, ListView.Contain);
         }
-        onCurrentPageNumberChanged: navigatorListView.positionViewAtIndex(currentPageNumber - 1, ListView.Contain);
     }
     Flickable {
         id: controllerFlickable;
@@ -57,6 +68,9 @@ Item {
             right: parent.right;
             bottom: enabled ? parent.bottom : parent.top;
         }
+
+        boundsBehavior: controllerItem.documentSize.width < base.width ? Flickable.StopAtBounds : Flickable.DragAndOvershootBounds;
+
         Image {
             height: Settings.theme.adjustedPixel(40);
             width: Settings.theme.adjustedPixel(40);
@@ -93,32 +107,45 @@ Item {
                 color: "#009bcd";
             }
         }
-        MouseArea {
+
+        PinchArea {
             x: controllerFlickable.contentX;
             y: controllerFlickable.contentY;
             height: controllerFlickable.height;
             width: controllerFlickable.width;
-            onClicked: {
-                if(mouse.x < width / 6) {
-                    controllerItem.pageChanging = true;
-                    controllerFlickable.contentY = Math.max(0, controllerFlickable.contentY - controllerFlickable.height + (Constants.GridHeight * 1.5));
-                    controllerItem.pageChanging = false;
-                }
-                else if(mouse.x > width * 5 / 6) {
-                    controllerItem.pageChanging = true;
-                    controllerFlickable.contentY = Math.min(controllerFlickable.contentHeight - controllerFlickable.height, controllerFlickable.contentY + controllerFlickable.height - (Constants.GridHeight * 1.5));
-                    controllerItem.pageChanging = false;
-                }
+
+            onPinchStarted: controllerItem.beginZoomGesture();
+            onPinchUpdated: {
+                var newCenter = mapToItem( controllerFlickable, pinch.center.x, pinch.center.y );
+                controllerItem.zoomBy(pinch.scale - pinch.previousScale, Qt.point( newCenter.x, newCenter.y ) );
             }
-            onDoubleClicked: {
-                if(mouse.x < width / 6 || mouse.x > width * 5 / 6) {
-                    // don't accept double-clicks in the navigation zone
-                    return;
+            onPinchFinished: { canvasController.endZoomGesture(); controllerFlickable.returnToBounds(); }
+
+            MouseArea {
+                anchors.fill: parent;
+                onClicked: {
+                    if(mouse.x < width / 6) {
+                        controllerItem.pageChanging = true;
+                        controllerFlickable.contentY = Math.max(0, controllerFlickable.contentY - controllerFlickable.height + (Constants.GridHeight * 1.5));
+                        controllerItem.pageChanging = false;
+                    }
+                    else if(mouse.x > width * 5 / 6) {
+                        controllerItem.pageChanging = true;
+                        controllerFlickable.contentY = Math.min(controllerFlickable.contentHeight - controllerFlickable.height, controllerFlickable.contentY + controllerFlickable.height - (Constants.GridHeight * 1.5));
+                        controllerItem.pageChanging = false;
+                    }
                 }
-                toolManager.requestToolChange("TextToolFactory_ID");
-                base.navigateMode = false;
+                onDoubleClicked: {
+                    if(mouse.x < width / 6 || mouse.x > width * 5 / 6) {
+                        // don't accept double-clicks in the navigation zone
+                        return;
+                    }
+                    toolManager.requestToolChange("TextToolFactory_ID");
+                    base.navigateMode = false;
+                }
             }
         }
+
         Calligra.CanvasControllerItem {
             id: controllerItem;
             canvas: wordsCanvas;
