@@ -83,8 +83,12 @@ Page {
         ScrollDecorator { flickableItem: docList; }
     }
     Label {
-        anchors.centerIn: parent;
-        text: "No %1 - please drop some into your Documents folder (%2)".arg(base.categoryUIName).arg(docList.model.documentsFolder);
+        anchors.fill: parent;
+        text: "No %1\n\nPlease drop some into your Documents folder\n(%2)".arg(base.categoryUIName).arg(docList.model.documentsFolder);
+        horizontalAlignment: Text.AlignHCenter;
+        verticalAlignment: Text.AlignVCenter;
+        font: Settings.theme.font("templateLabel");
+        color: "#5b6573";
         visible: docList.count === 0;
     }
     Component {
@@ -102,6 +106,7 @@ Page {
                 }
                 height: parent.width;
                 fillMode: Image.PreserveAspectFit;
+                asynchronous: true;
             }
             Label {
                 id: lblName;
