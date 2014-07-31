@@ -24,11 +24,12 @@
 #define KOPART_H
 
 #include <QList>
+#include <QPointer>
 
 #include <kservice.h>
 #include <kcomponentdata.h>
 #include <kurl.h>
-#include <kxmlguiclient.h>
+#include <KoXMLGUIClient.h>
 
 #include "komain_export.h"
 
@@ -76,21 +77,42 @@ public:
      */
     virtual ~KoPart();
 
+
+    /**
+     * @return the list of all part objects created in this process
+     */
+    static QList<QPointer<KoPart> > partList();
+
     /**
      * @return The componentData ( KComponentData ) for this GUI client. You set the componentdata
      * in your subclass: setComponentData(AppFactory::componentData()); in the constructor
      */
     KComponentData componentData() const;
 
-    /**
-     * @param document the document this part manages
-     */
-    void setDocument(KoDocument *document);
+    // ----------------- mainwindow management -----------------
 
     /**
-     * @return the document this part loads and saves to and makes views for
+     * create an empty document. The document is not automatically registered with the part.
      */
-    KoDocument *document() const;
+    virtual KoDocument *createDocument() const = 0;
+
+    /**
+     * Add the specified document to the list of documents this KoPart manages.
+     */
+    virtual void addDocument(KoDocument *document);
+
+    /**
+     * @return a list of all documents this part manages
+     */
+    QList<QPointer<KoDocument> > documents() const;
+
+    /**
+     * @return number of documents this part manages.
+     */
+    int documentCount() const;
+
+    void removeDocument(KoDocument *document);
+
 
     // ----------------- mainwindow management -----------------
 
@@ -100,11 +122,7 @@ public:
     virtual KoMainWindow *createMainWindow() = 0;
 
     /**
-     * Appends the mainwindow to the list of mainwindows which show this
-     * document as their root document.
-     *
-     * This method is automatically called from KoMainWindow::setRootDocument,
-     * so you do not need to call it.
+     * Appends the mainwindow to the list of mainwindows which this part manages.
      */
     virtual void addMainWindow(KoMainWindow *mainWindow);
 
@@ -116,7 +134,7 @@ public:
     /**
      * @return the list of main windows.
      */
-    const QList<KoMainWindow*>& mainWindows() const;
+    const QList<QPointer<KoMainWindow> >& mainWindows() const;
 
     /**
      * @return the number of shells for the main window
@@ -145,7 +163,9 @@ protected slots:
 
 private slots:
 
-    void startCustomDocument();
+    void viewDestroyed();
+
+    void startCustomDocument(KoDocument *doc);
 
 
 public:
@@ -153,7 +173,8 @@ public:
     //------------------ view management ------------------
 
     /**
-     *  Create a new view for the document.
+     * Create a new view for the document. The view is added to the list of
+     * views, and if the document wasn't known yet, it's registered as well.
      */
     KoView *createView(KoDocument *document, QWidget *parent = 0);
 
@@ -174,7 +195,7 @@ public:
     /**
      * @return a list of views this document is displayed in
      */
-    QList<KoView*> views() const;
+    QList<QPointer<KoView> > views() const;
 
     /**
      * @return number of views this document is displayed in
@@ -206,11 +227,6 @@ public:
      */
     virtual void showStartUpWidget(KoMainWindow *parent, bool alwaysShow = false);
 
-    /**
-     * Removes the startupWidget shown at application start up.
-     */
-    void deleteOpenPane(bool closing = false);
-
 protected:
 
     /**
@@ -237,21 +253,12 @@ protected:
      * not based on a template).
      * The returned widget should provide its own button (preferably 'Create') and
      * implement the logic to implement the document instance correctly.
-     * After initializing the widget should emit a signal called 'documentSelected()' which
+     * After initializing the widget should emit a signal called 'documentSelected(KoDocument*)' which
      * will remove the startupWidget and show the document.
      * @param parent the parent of the to be created widget.
      * @return a list of KoDocument::CustomDocumentWidgetItem.
      */
     virtual QList<CustomDocumentWidgetItem> createCustomDocumentWidgets(QWidget *parent);
-
-    /**
-     * Creates the open widget showed at application start up.
-     * @param parent the parent widget
-     * @param instance the KComponentData to be used for KConfig data
-     * @param templateType the template-type (group) that should be selected on creation.
-     */
-    KoOpenPane *createOpenPane(QWidget *parent, const KComponentData &instance,
-                               const QString& templateType = QString());
 
     virtual KoView *createViewInstance(KoDocument *document, QWidget *parent) = 0;
 
@@ -273,6 +280,7 @@ private:
     class Private;
     Private *const d;
 
+    static QList<QPointer<KoPart> > s_partList;
 };
 
 class MockPart : public KoPart
@@ -281,7 +289,10 @@ public:
     MockPart()
     : KoPart( 0 )
     {}
+
+    KoDocument *createDocument() const { return 0; }
     KoView *createViewInstance(KoDocument* document, QWidget* parent) { Q_UNUSED(document); Q_UNUSED(parent); return 0; }
+
     virtual KoMainWindow *createMainWindow() { return 0; }
 protected:
     virtual QGraphicsItem *createCanvasItem(KoDocument* document) { Q_UNUSED(document); return 0; }

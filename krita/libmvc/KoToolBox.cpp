@@ -86,6 +86,8 @@ KoToolBox::KoToolBox()
     connect(KoToolManager::instance(),
             SIGNAL(addedTool(const KoToolButton, KoCanvasController*)),
             this, SLOT(toolAdded(const KoToolButton, KoCanvasController*)));
+
+    setEnabled(d->canvas != 0);
 }
 
 KoToolBox::~KoToolBox()
@@ -179,11 +181,13 @@ void KoToolBox::setCurrentLayer(const KoCanvasController *canvas, const KoShapeL
 
 void KoToolBox::setCanvas(KoCanvasBase *canvas)
 {
+    setEnabled(canvas != 0);
     d->canvas = canvas;
 }
 
 void KoToolBox::unsetCanvas()
 {
+    setEnabled(false);
     d->canvas = 0;
 }
 

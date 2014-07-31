@@ -23,7 +23,7 @@
 
 #include "komain_export.h"
 
-#include <kxmlguiwindow.h>
+#include <KoXMLGUIWindow.h>
 #include <kurl.h>
 #include <KoCanvasObserverBase.h>
 #include <KoCanvasSupervisor.h>
@@ -36,6 +36,7 @@ class KoPrintJob;
 class KoDockFactoryBase;
 class KRecentFilesAction;
 class QDockWidget;
+class QLabel;
 
 struct KoPageLayout;
 
@@ -51,7 +52,7 @@ class KoDockerManager;
  *
  * @note This class does NOT need to be subclassed in your application.
  */
-class KOMAIN_EXPORT KoMainWindow : public KXmlGuiWindow, public KoCanvasSupervisor
+class KOMAIN_EXPORT KoMainWindow : public KoXmlGuiWindow, public KoCanvasSupervisor
 {
     Q_OBJECT
 public:
@@ -61,28 +62,12 @@ public:
      *
      *  Initializes a Calligra main window (with its basic GUI etc.).
      */
-    explicit KoMainWindow(const QByteArray nativeMimeType, const KComponentData &instance);
+    explicit KoMainWindow(KoPart *part, const KComponentData &instance);
 
     /**
      *  Destructor.
      */
     virtual ~KoMainWindow();
-
-    // If noCleanup is set, KoMainWindow will not delete the root document
-    // or part manager on destruction.
-    void setNoCleanup(bool noCleanup);
-
-    /**
-     * Called when a document is assigned to this mainwindow.
-     * This creates a view for this document, makes it the active part, etc.
-     */
-    void setRootDocument(KoDocument *doc, KoPart *part = 0, bool deletePrevious = true);
-
-    /**
-     * This is used to handle the document used at start up before it actually
-     * added as root document.
-     */
-    void setPartToOpen(KoPart *part);
 
     /**
      * Update caption from document info - call when document info
@@ -90,11 +75,32 @@ public:
      */
     void updateCaption();
 
+
+    // If noCleanup is set, KoMainWindow will not delete the root document
+    // or part manager on destruction.
+    void setNoCleanup(bool noCleanup);
+
     /**
-     *  Retrieves the document that is displayed in the mainwindow.
+     * Add a the given view to the list of views of this mainwindow.
      */
-    KoDocument *rootDocument() const;
-    KoView *rootView() const;
+    void addView(KoView *view);
+
+    /**
+     * @brief showView shows the given view. Override this if you want to show
+     * the view in a different way than by making it the central widget, for instance
+     * as an QMdiSubWindow
+     */
+    virtual void showView(KoView *view);
+
+    /**
+     * @returns the currently active view
+     */
+    KoView *activeView() const;
+
+    KoPart* part();
+
+
+private:
 
     /**
      * The application should call this to show or hide a toolbar.
@@ -106,6 +112,8 @@ public:
      * @return TRUE if the toolbar @p tbName is visible
      */
     bool toolbarIsVisible(const char *tbName);
+
+public:
 
     /**
      * Sets the maximum number of recent documents entries.
@@ -125,12 +133,17 @@ public:
      */
     bool openDocument(const KUrl & url);
 
+private:
+    friend class KoApplication;
     /**
-     * Load the URL into this document (and make it root doc after loading)
+     * Create a document, open the given url, create a view, set the document
+     * on the view and add the view to the mainwindow.
      *
      * Special method for KoApplication::start, don't use.
      */
-    bool openDocument(KoPart *newPart, const KUrl & url);
+    KoDocument *createDocumentFromUrl(const KUrl & url);
+
+private:
 
     /**
      * Reloads the recent documents list.
@@ -144,6 +157,7 @@ public:
     void updateReloadFileAction(KoDocument *doc);
     void updateVersionsFileAction(KoDocument *doc);
 
+public:
     void setReadWrite(bool readwrite);
 
     /**
@@ -163,21 +177,16 @@ public:
      * @return the KoDockerManager which is assigned
      * WARNING: this could be 0, if no docker have been assigned yet. In that case create one
       * and assign it.
-     * Note This should only be called by KoView
      * @ref setDockerManager to assign it.
      */
     KoDockerManager * dockerManager() const;
 
 signals:
+
     /**
      * This signal is emitted if the document has been saved successfully.
      */
     void documentSaved();
-    /// This signals is emmitted before the save dialog is shown
-    void saveDialogShown();
-
-    /// This signal is emitted right after the docker states have been succefully restored from config
-    void restoringDone();
 
     /// This signal is emitted when this windows has finished loading of a
     /// document. The document may be opened in another window in the end.
@@ -185,11 +194,11 @@ signals:
     /// and the document anymore.
     void loadCompleted();
 
+    /// This signal is emitted right after the docker states have been succefully restored from config
+    void restoringDone();
+
     /// This signal is emitted when the color theme changes
     void themeChanged();
-
-    /// This signal is emitted when the shortcut key configuration has changed
-    void keyBindingsChanged();
 
 public slots:
 
@@ -224,24 +233,27 @@ public slots:
      *  If not a new mainwindow will be opened for showing the opened file.
      */
     void slotFileOpenRecent(const KUrl &);
-
+public slots:
     /**
      *  Saves the current document with the current name.
      */
     void slotFileSave();
-
+private slots:
     /**
      *  Saves the current document with a new name.
      */
     void slotFileSaveAs();
-
+public slots:
     /**
      *  Prints the actual document.
      */
     void slotFilePrint();
-    void slotFilePrintPreview();
 
+private slots:
+    void slotFilePrintPreview();
+public slots:
     KoPrintJob* exportToPdf(const QString &pdfFileName = QString());
+private slots:
     KoPrintJob* exportToPdf(KoPageLayout pageLayout, QString pdfFileName = QString());
 
     /**
@@ -253,6 +265,12 @@ public slots:
      *  Closes the document.
      */
     void slotFileClose();
+
+
+    /**
+     * Closes all open documents.
+     */
+    void slotFileCloseAll();
 
     /**
      *  Closes the mainwindow.
@@ -284,7 +302,7 @@ public slots:
      * Toggle full screen on/off.
      */
     void viewFullscreen(bool fullScreen);
-
+private slots:
     /**
      * Reload file
      */
@@ -313,14 +331,14 @@ public slots:
 
     void slotEncryptDocument();
     void slotUncompressToDir();
-
+public slots:
     void slotProgress(int value);
-
+private slots:
     /**
      * Hide the dockers
      */
     void toggleDockersVisibility(bool visible);
-
+public slots:
     /**
      * Saves the document, asking for a filename if necessary.
      *
@@ -346,24 +364,16 @@ private:
      * - create an empty document with default settings if InitDocEmpty
      */
     enum InitDocFlags { /*InitDocAppStarting, */ InitDocFileNew, InitDocFileClose /*, InitDocEmbedded, InitDocEmpty*/ };
-
-    /// Helper method for slotFileNew and slotFileClose
-    void chooseNewDocument(InitDocFlags initDocFlags);
-
-    /**
-     * Create a new empty document.
-     */
-    KoPart* createPart() const;
-
+protected:
     void closeEvent(QCloseEvent * e);
     void resizeEvent(QResizeEvent * e);
-
+private:
     /**
      * Ask user about saving changes to the document upon exit.
      */
     bool queryClose();
 
-    bool openDocumentInternal(const KUrl &url, KoPart *newpart = 0, KoDocument *newdoc = 0);
+    bool openDocumentInternal(const KUrl &url, KoDocument *newdoc = 0);
 
     /**
      * Returns whether or not the current slotFileSave[As]() or saveDocument()
@@ -400,45 +410,28 @@ private slots:
     void forceDockTabFonts();
 
     /**
-     * Slot to create a new view for the currently activate @ref #koDocument.
+     * Slot to create a new view for the currently activated @ref #koDocument.
      */
-    virtual void newView();
-
+    void newWindow();
 
 // ---------------------  PartManager
-private:
-
-    friend class KoPart;
-    /**
-     * Removes a part from the manager (this does not delete the object) .
-     *
-     * Sets the active part to 0 if @p part is the activePart() .
-     */
-    virtual void removePart( KoPart *part );
+protected:
 
     /**
-     * Sets the active part.
-     *
-     * The active part receives activation events.
-     *
-     * @p widget can be used to specify which widget was responsible for the activation.
-     * This is important if you have multiple views for a document/part , like in KOffice .
+     * Sets the active View.
      */
-    virtual void setActivePart(KoPart *part, QWidget *widget);
-
+    void createMainwindowGUI();
+    void setToolbarList(QList<QAction*> toolbarList);
 private slots:
 
     /**
      * @internal
      */
-    void slotWidgetDestroyed();
     void slotDocumentTitleModified(const QString &caption, bool mod);
 
 // ---------------------  PartManager
 
 private:
-
-    void createMainwindowGUI();
 
     /**
      * Asks the user if they really want to save the document.
@@ -449,9 +442,6 @@ private:
     bool exportConfirmation(const QByteArray &outputFormat);
 
     void saveWindowSettings();
-
-    // retrieve the current KoView
-    KoView* currentView() const;
 
 private:
 

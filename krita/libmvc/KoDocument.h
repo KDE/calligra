@@ -88,7 +88,7 @@ public:
      *        The stack objects will become owned by the document. This is used by Krita's KisDoc2. The default value for this
      *        parameter is a usual Qt's stack.
      */
-    explicit KoDocument(KoPart *parent,
+    explicit KoDocument(const KoPart *parent,
                         KUndo2Stack *undoStack = new KUndo2Stack());
 
     /**
@@ -101,6 +101,13 @@ public:
 
     /// XXX: Temporary!
     KoPart *documentPart() const;
+
+
+    /**
+     * @brief reload Reloads the document from the original url
+     * @return the result of loading the document
+     */
+    virtual bool reload();
 
     /**
      * Reimplemented from KoParts::ReadWritePart for internal reasons
@@ -614,7 +621,7 @@ public slots:
      * Begins recording of a macro command. At the end endMacro needs to be called.
      * @param text command description
      */
-    virtual void beginMacro(const KUndo2MagicString &text);
+    virtual void beginMacro(const QString & text);
 
     /**
      * Ends the recording of a macro command.

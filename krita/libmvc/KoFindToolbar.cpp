@@ -24,6 +24,7 @@
 #include <QToolButton>
 #include <QMenu>
 #include <QTimer>
+#include <QApplication>
 #include <QDebug>
 
 #include <klocalizedstring.h>

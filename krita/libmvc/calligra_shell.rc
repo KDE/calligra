@@ -1,5 +1,11 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="Calligra" version="27">
+<?xml version="1.0" encoding="UTF-8"?>
+<gui name="Calligra"
+     version="27"
+     xmlns="http://www.kde.org/standards/kxmlgui/1.0"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0
+                         http://www.kde.org/standards/kxmlgui/1.0/kxmlgui.xsd" >
+
 <MenuBar>
  <Menu name="file" noMerge="1"><text>&amp;File</text>
   <Action name="file_new" />
@@ -25,10 +31,11 @@
   <Action name="file_documentinfo" />
   <DefineGroup name="file_infos" />
   <Separator />
-  <Action name="file_close" />
   <Action name="file_quit" />
  </Menu>
+
  <Merge />
+
  <Menu name="settings" noMerge="1"><text>&amp;Settings</text>
   <DefineGroup name="settings_top"/>
   <Merge/>
@@ -38,10 +45,19 @@
   <Separator/>
   <Action name="options_configure_keybinding"/>
   <Action name="options_configure_toolbars"/>
-  <Action name="theme_menu" />
   <DefineGroup name="settings_configure"/>
+  <Action name="preferences" group="settings_configure"/>
+  <Action name="theme_menu" />
+ </Menu>
+
+ <Menu name="window" noMerge="1"><text>&amp;Window</text>
+  <Action name="file_close" />
+  <Action name="file_close_all" />
+  <Separator/>
+  <Merge/>
  </Menu>
 </MenuBar>
+
 <ToolBar name="mainToolBar" fullWidth="false" noMerge="1"><Text>File</Text>
   <Action name="file_new" />
   <Action name="file_open" />
@@ -51,4 +67,4 @@
   <Action name="file_print_preview" />
   //-->
 </ToolBar>
-</kpartgui>
+</gui>

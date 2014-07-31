@@ -29,6 +29,7 @@
 #include <QTextLayout>
 #include <QPalette>
 #include <QStyle>
+#include <QApplication>
 #include <QAbstractTextDocumentLayout>
 
 #include <kdebug.h>

@@ -50,7 +50,7 @@ signals:
      * contents of the context menu and show it.
      */
     void contextMenuRequested(const QPoint &globalPos, const QModelIndex &index);
-    void selectionChanged(const QModelIndexList &);
+
 public:
 
     /**
@@ -122,7 +122,6 @@ public:
      */
     void addPropertyActions(QMenu *menu, const QModelIndex &index);
 
-
 protected:
     virtual bool viewportEvent(QEvent *event);
     virtual void contextMenuEvent(QContextMenuEvent *event);
@@ -138,13 +137,11 @@ protected:
 protected slots:
     virtual void currentChanged(const QModelIndex &current, const QModelIndex &previous);
     virtual void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);
-    virtual void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
 
 private slots:
     void slotActionToggled(bool on, const QPersistentModelIndex &index, int property);
 
 private:
-
     /**
      * Permit to know if a slide is dragging
      *

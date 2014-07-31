@@ -28,7 +28,6 @@
 #include <kconfiggroup.h>
 #include <kdebug.h>
 #include <ktoolbar.h>
-#include <kglobalsettings.h>
 
 #include "KoToolDocker_p.h"
 
@@ -71,25 +70,9 @@ KoDockerManager::~KoDockerManager()
     delete d;
 }
 
-void KoDockerManager::newOptionWidgets(const QList<QWidget *> &optionWidgetList)
+void KoDockerManager::newOptionWidgets(const QList<QPointer<QWidget> > &optionWidgetList)
 {
     d->toolOptionsDocker->setOptionWidgets(optionWidgetList);
-
-    KConfigGroup group(KGlobal::config(), "GUI");
-    QFont dockWidgetFont  = KGlobalSettings::generalFont();
-    qreal pointSize = group.readEntry("palettefontsize", dockWidgetFont.pointSize() * 0.75);
-    pointSize = qMax(pointSize, KGlobalSettings::smallestReadableFont().pointSizeF());
-    dockWidgetFont.setPointSizeF(pointSize);
-
-    foreach(QWidget *w, optionWidgetList) {
-#ifdef Q_OS_MAC
-        w->setAttribute(Qt::WA_MacSmallSize, true);
-#endif
-        w->setFont(dockWidgetFont);
-    }
-
-
-
 }
 
 void KoDockerManager::removeToolOptionsDocker()

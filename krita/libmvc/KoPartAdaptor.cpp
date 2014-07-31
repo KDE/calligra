@@ -30,239 +30,46 @@
 #include <kdebug.h>
 
 
-KoPartAdaptor::KoPartAdaptor(KoPart *doc)
-        : QDBusAbstractAdaptor(doc)
+KoPartAdaptor::KoPartAdaptor(KoPart *part)
+    : QDBusAbstractAdaptor(part)
 {
     setAutoRelaySignals(true);
-    m_pDoc = doc;
+    m_part = part;
 }
 
 KoPartAdaptor::~KoPartAdaptor()
 {
 }
 
-void KoPartAdaptor::openUrl(const QString & url)
+int KoPartAdaptor::documentCount()
 {
-    m_pDoc->document()->openUrl(KUrl(url));
+    return m_part->documentCount();
 }
 
-bool KoPartAdaptor::isLoading()
+QString KoPartAdaptor::document(int idx)
 {
-    return m_pDoc->document()->isLoading();
-}
+    QList<QPointer<KoDocument> > documents = m_part->documents();
+    QPointer<KoDocument> doc = documents.at(idx);
+    if (!doc)
+        return QString();
 
-QString KoPartAdaptor::url()
-{
-    return m_pDoc->document()->url().url();
-}
+    return doc->objectName();
 
-bool KoPartAdaptor::isModified()
-{
-    return m_pDoc->document()->isModified();
 }
 
 int KoPartAdaptor::viewCount()
 {
-    return m_pDoc->viewCount();
+    return m_part->viewCount();
 }
 
 QString KoPartAdaptor::view(int idx)
 {
-    QList<KoView*> views = m_pDoc->views();
-    KoView *v = views.at(idx);
+    QList<QPointer<KoView> > views = m_part->views();
+    QPointer<KoView> v = views.at(idx);
     if (!v)
         return QString();
 
     return v->objectName();
-}
-
-void KoPartAdaptor::save()
-{
-    m_pDoc->document()->save();
-}
-
-void KoPartAdaptor::saveAs(const QString & url)
-{
-    m_pDoc->document()->saveAs(KUrl(url));
-    m_pDoc->document()->waitSaveComplete(); // see ReadWritePart
-}
-
-void KoPartAdaptor::setOutputMimeType(const QByteArray& mimetype)
-{
-    m_pDoc->document()->setOutputMimeType(mimetype);
-}
-
-QString KoPartAdaptor::documentInfoAuthorName() const
-{
-    return m_pDoc->document()->documentInfo()->authorInfo("creator");
-}
-
-QString KoPartAdaptor::documentInfoEmail() const
-{
-    return m_pDoc->document()->documentInfo()->authorInfo("email");
-}
-
-QString KoPartAdaptor::documentInfoCompanyName() const
-{
-    return m_pDoc->document()->documentInfo()->authorInfo("company");
-}
-
-QString KoPartAdaptor::documentInfoTelephone() const
-{
-    kDebug(30003) << " Keep compatibility with calligra <= 1.3 : use documentInfoTelephoneWork";
-    return documentInfoTelephoneWork();
-}
-
-QString KoPartAdaptor::documentInfoTelephoneWork() const
-{
-    return m_pDoc->document()->documentInfo()->authorInfo("telephone-work");
-}
-
-QString KoPartAdaptor::documentInfoTelephoneHome() const
-{
-    return m_pDoc->document()->documentInfo()->authorInfo("telephone-home");
-}
-
-
-QString KoPartAdaptor::documentInfoFax() const
-{
-    return m_pDoc->document()->documentInfo()->authorInfo("fax");
-
-}
-QString KoPartAdaptor::documentInfoCountry() const
-{
-    return m_pDoc->document()->documentInfo()->authorInfo("country");
-
-}
-QString KoPartAdaptor::documentInfoPostalCode() const
-{
-    return m_pDoc->document()->documentInfo()->authorInfo("postal-code");
-
-}
-QString KoPartAdaptor::documentInfoCity() const
-{
-    return m_pDoc->document()->documentInfo()->authorInfo("city");
-}
-
-QString KoPartAdaptor::documentInfoInitial() const
-{
-    return m_pDoc->document()->documentInfo()->authorInfo("initial");
-}
-
-QString KoPartAdaptor::documentInfoAuthorPostion() const
-{
-    return m_pDoc->document()->documentInfo()->authorInfo("position");
-}
-
-QString KoPartAdaptor::documentInfoStreet() const
-{
-    return m_pDoc->document()->documentInfo()->authorInfo("street");
-}
-
-QString KoPartAdaptor::documentInfoTitle() const
-{
-    return m_pDoc->document()->documentInfo()->aboutInfo("title");
-}
-
-QString KoPartAdaptor::documentInfoAbstract() const
-{
-    return m_pDoc->document()->documentInfo()->aboutInfo("comments");
-}
-
-QString KoPartAdaptor::documentInfoKeywords() const
-{
-    return m_pDoc->document()->documentInfo()->aboutInfo("keywords");
-}
-
-QString KoPartAdaptor::documentInfoSubject() const
-{
-    return m_pDoc->document()->documentInfo()->aboutInfo("subject");
-}
-void KoPartAdaptor::setDocumentInfoKeywords(const QString & text)
-{
-    m_pDoc->document()->documentInfo()->setAboutInfo("keywords", text);
-}
-
-void KoPartAdaptor::setDocumentInfoSubject(const QString & text)
-{
-    m_pDoc->document()->documentInfo()->setAboutInfo("subject", text);
-}
-
-void KoPartAdaptor::setDocumentInfoAuthorName(const QString & text)
-{
-    m_pDoc->document()->documentInfo()->setAuthorInfo("creator", text);
-}
-
-void KoPartAdaptor::setDocumentInfoEmail(const QString &text)
-{
-    m_pDoc->document()->documentInfo()->setAuthorInfo("email", text);
-}
-
-void KoPartAdaptor::setDocumentInfoCompanyName(const QString &text)
-{
-    m_pDoc->document()->documentInfo()->setAuthorInfo("company", text);
-}
-
-void KoPartAdaptor::setDocumentInfoAuthorPosition(const QString &text)
-{
-    m_pDoc->document()->documentInfo()->setAuthorInfo("position", text);
-}
-
-
-void KoPartAdaptor::setDocumentInfoTelephone(const QString &text)
-{
-    kDebug(30003) << "Keep compatibility with calligra <= 1.3 : use setDocumentInfoTelephoneWork";
-    setDocumentInfoTelephoneWork(text);
-}
-
-void KoPartAdaptor::setDocumentInfoTelephoneWork(const QString &text)
-{
-    m_pDoc->document()->documentInfo()->setAuthorInfo("telephone-work", text);
-}
-
-void KoPartAdaptor::setDocumentInfoTelephoneHome(const QString &text)
-{
-    m_pDoc->document()->documentInfo()->setAuthorInfo("telephone", text);
-}
-
-void KoPartAdaptor::setDocumentInfoFax(const QString &text)
-{
-    m_pDoc->document()->documentInfo()->setAuthorInfo("fax", text);
-}
-
-void KoPartAdaptor::setDocumentInfoCountry(const QString &text)
-{
-    m_pDoc->document()->documentInfo()->setAuthorInfo("country", text);
-}
-
-void KoPartAdaptor::setDocumentInfoTitle(const QString & text)
-{
-    m_pDoc->document()->documentInfo()->setAboutInfo("title", text);
-}
-
-void KoPartAdaptor::setDocumentInfoPostalCode(const QString &text)
-{
-    m_pDoc->document()->documentInfo()->setAuthorInfo("postal-code", text);
-}
-
-void KoPartAdaptor::setDocumentInfoCity(const QString & text)
-{
-    m_pDoc->document()->documentInfo()->setAuthorInfo("city", text);
-}
-
-void KoPartAdaptor::setDocumentInfoInitial(const QString & text)
-{
-    m_pDoc->document()->documentInfo()->setAuthorInfo("initial", text);
-}
-
-void KoPartAdaptor::setDocumentInfoStreet(const QString &text)
-{
-    m_pDoc->document()->documentInfo()->setAuthorInfo("street", text);
-}
-
-void KoPartAdaptor::setDocumentInfoAbstract(const QString &text)
-{
-    m_pDoc->document()->documentInfo()->setAboutInfo("comments", text);
 }
 
 

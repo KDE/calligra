@@ -213,8 +213,8 @@ void KoVersionDialog::slotOpen()
             return;
         }
         KoMainWindow *mainWindow = part->createMainWindow();
-        mainWindow ->openDocument(tmp.fileName());
-        mainWindow ->show();
+        mainWindow->openDocument(tmp.fileName());
+        mainWindow->show();
     } else {
         m_doc->openUrl(tmp.fileName());
     }

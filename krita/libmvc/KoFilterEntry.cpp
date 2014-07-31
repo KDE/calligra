@@ -25,7 +25,7 @@ Boston, MA 02110-1301, USA.
 
 #include <kservicetype.h>
 #include <kdebug.h>
-#include <KoServiceLocator.h>
+#include <kservicetypetrader.h>
 #include <QFile>
 
 #include <limits.h> // UINT_MAX
@@ -34,18 +34,18 @@ Boston, MA 02110-1301, USA.
 KoFilterEntry::KoFilterEntry(const KService::Ptr& service)
         : m_service(service)
 {
-    import = service->property("X-KDE-Import", QVariant::StringList).toStringList();
-    export_ = service->property("X-KDE-Export", QVariant::StringList).toStringList();
-    int w = service->property("X-KDE-Weight", QVariant::Int).toInt();
+    import = service->property("X-KDE-Import").toStringList();
+    export_ = service->property("X-KDE-Export").toStringList();
+    int w = service->property("X-KDE-Weight").toInt();
     weight = w < 0 ? UINT_MAX : static_cast<unsigned int>(w);
-    available = service->property("X-KDE-Available", QVariant::String).toString();
+    available = service->property("X-KDE-Available").toString();
 }
 
 QList<KoFilterEntry::Ptr> KoFilterEntry::query()
 {
     QList<KoFilterEntry::Ptr> lst;
 
-    const KService::List offers = KoServiceLocator::instance()->entries("Calligra/Filter");
+    KService::List offers = KServiceTypeTrader::self()->query("Calligra/Filter");
 
     KService::List::ConstIterator it = offers.constBegin();
     unsigned int max = offers.count();

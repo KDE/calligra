@@ -24,7 +24,7 @@
 #include "komain_export.h"
 
 class KoPart;
-
+class KoMainWindow;
 class KoApplicationPrivate;
 
 class QWidget;
@@ -84,15 +84,17 @@ public:
      */
     void setSplashScreen(QWidget *splash);
 
-
-    QList<KoPart*> partList() const;
+    /**
+     * Remove the splash dialog
+     */
+    void removeSplash();
 
     /**
      * return a list of mimetypes this application supports.
      */
     QStringList mimeFilter(KoFilterManager::Direction direction) const;
 
-    // Overridden to handle exceptions from event handlers.
+    /// Overridden to handle exceptions from event handlers.
     bool notify(QObject *receiver, QEvent *event);
 
     /**
@@ -130,7 +132,12 @@ protected:
     static KoApplication *KoApp;
 
 private:
+    /// @return the number of autosavefiles opened
+    int checkAutosaveFiles(KoMainWindow *mainWindow);
+
+    // Set the Calligra-specific command-line options
     bool initHack();
+
     KoApplicationPrivate * const d;
     class ResetStarting;
     friend class ResetStarting;

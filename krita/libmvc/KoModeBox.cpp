@@ -172,8 +172,8 @@ KoModeBox::KoModeBox(KoCanvasControllerWidget *canvas, const QString &appName)
             SIGNAL(addedTool(const KoToolButton, KoCanvasController*)),
             this, SLOT(toolAdded(const KoToolButton, KoCanvasController*)));
 
-    connect(canvas, SIGNAL(toolOptionWidgetsChanged(const QList<QWidget *> &)),
-         this, SLOT(setOptionWidgets(const QList<QWidget *> &)));
+    connect(canvas, SIGNAL(toolOptionWidgetsChanged(const QList<QPointer<QWidget> > &)),
+         this, SLOT(setOptionWidgets(const QList<QPointer<QWidget> > &)));
 }
 
 KoModeBox::~KoModeBox()
@@ -449,7 +449,7 @@ void KoModeBox::updateShownTools(const QList<QString> &codes)
     d->iconTextFitted = true;
 }
 
-void KoModeBox::setOptionWidgets(const QList<QWidget *> &optionWidgetList)
+void KoModeBox::setOptionWidgets(const QList<QPointer<QWidget> > &optionWidgetList)
 {
     if (! d->addedWidgets.contains(d->activeId)) return;
 
@@ -559,16 +559,16 @@ void KoModeBox::setCanvas(KoCanvasBase *canvas)
 
     if (d->canvas) {
         ccwidget = dynamic_cast<KoCanvasControllerWidget *>(d->canvas->canvasController());
-        disconnect(ccwidget, SIGNAL(toolOptionWidgetsChanged(const QList<QWidget *> &)),
-                    this, SLOT(setOptionWidgets(const QList<QWidget *> &)));
+        disconnect(ccwidget, SIGNAL(toolOptionWidgetsChanged(const QList<QPointer<QWidget> > &)),
+                    this, SLOT(setOptionWidgets(const QList<QPointer<QWidget> > &)));
     }
 
     d->canvas = canvas;
 
     ccwidget = dynamic_cast<KoCanvasControllerWidget *>(d->canvas->canvasController());
     connect(
-        ccwidget, SIGNAL(toolOptionWidgetsChanged(const QList<QWidget *> &)),
-         this, SLOT(setOptionWidgets(const QList<QWidget *> &)));
+        ccwidget, SIGNAL(toolOptionWidgetsChanged(const QList<QPointer<QWidget> > &)),
+         this, SLOT(setOptionWidgets(const QList<QPointer<QWidget> > &)));
 }
 
 void KoModeBox::unsetCanvas()

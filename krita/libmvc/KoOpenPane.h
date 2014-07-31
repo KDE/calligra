@@ -19,6 +19,7 @@
 #ifndef KOOPENPANE_H
 #define KOOPENPANE_H
 
+#include <QDialog>
 #include <QWidget>
 #include <QPixmap>
 #include <QList>
@@ -35,7 +36,7 @@ class QString;
 class QStringList;
 
 /// \internal
-class KoOpenPane : public QWidget
+class KoOpenPane : public QDialog
 {
     Q_OBJECT
 

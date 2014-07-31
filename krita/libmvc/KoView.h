@@ -22,7 +22,7 @@
 #define __koView_h__
 
 #include <QWidget>
-#include <kxmlguiclient.h>
+#include <KoXMLGUIClient.h>
 #include "komain_export.h"
 
 class KoPart;
@@ -35,7 +35,7 @@ struct KoPageLayout;
 
 // KDE classes
 class KStatusBar;
-class KXmlGuiWindow;
+class KoXmlGuiWindow;
 class KAction;
 
 // Qt classes
@@ -49,7 +49,7 @@ class QPrintDialog;
  *
  * Multiple views can be attached to one document at a time.
  */
-class KOMAIN_EXPORT KoView : public QWidget, public KXMLGUIClient
+class KOMAIN_EXPORT KoView : public QWidget, public KoXMLGUIClient
 {
     Q_OBJECT
 
@@ -59,7 +59,7 @@ public:
      * since the Calligra components come with their own view classes which inherit
      * KoView.
      *
-     * The standard way to retrieve a KoView is to call @ref KoPart::createView.
+     * The standard way to create a KoView is to call @ref KoPart::createView.
      *
      * @param document is the document which should be displayed in this view. This pointer
      *                 must not be zero.
@@ -100,7 +100,12 @@ public:
     /**
      *  Retrieves the document object of this view.
      */
-    KoDocument *koDocument() const;
+    KoDocument *document() const;
+
+    /**
+     * Reset the view to show the given document.
+     */
+    virtual void setDocument(KoDocument *document);
 
     /**
      * Tells this view that its document has got deleted (called internally)

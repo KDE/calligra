@@ -108,6 +108,7 @@ QString KoFilterManager::importDocument(const QString& url,
                     m_document->extraNativeMimeTypes()), nativeFormat, u);
             if (chooser.exec()) {
                 QByteArray f = chooser.filterSelected().toLatin1();
+                qDebug() << "User choose format" << f;
                 if (f == nativeFormat) {
                     status = KoFilter::OK;
                     QApplication::restoreOverrideCursor();
@@ -292,8 +293,8 @@ void buildGraph(QHash<QByteArray, Vertex*>& vertices, KoFilterManager::Direction
     QList<KoDocumentEntry>::ConstIterator partEnd(parts.constEnd());
 
     while (partIt != partEnd) {
-        QStringList nativeMimeTypes = (*partIt).service()->property("X-KDE-ExtraNativeMimeTypes", QVariant::StringList).toStringList();
-        nativeMimeTypes += (*partIt).service()->property("X-KDE-NativeMimeType", QVariant::String).toString();
+        QStringList nativeMimeTypes = (*partIt).service()->property("X-KDE-ExtraNativeMimeTypes").toStringList();
+        nativeMimeTypes += (*partIt).service()->property("X-KDE-NativeMimeType").toString();
         QStringList::ConstIterator it = nativeMimeTypes.constBegin();
         const QStringList::ConstIterator end = nativeMimeTypes.constEnd();
         for (; it != end; ++it)
@@ -463,8 +464,8 @@ QStringList KoFilterManager::mimeFilter()
     Vertex *v = new Vertex("supercalifragilistic/x-pialadocious");
     vertices.insert("supercalifragilistic/x-pialadocious", v);
     while (partIt != partEnd) {
-        QStringList nativeMimeTypes = (*partIt).service()->property("X-KDE-ExtraNativeMimeTypes", QVariant::StringList).toStringList();
-        nativeMimeTypes += (*partIt).service()->property("X-KDE-NativeMimeType", QVariant::String).toString();
+        QStringList nativeMimeTypes = (*partIt).service()->property("X-KDE-ExtraNativeMimeTypes").toStringList();
+        nativeMimeTypes += (*partIt).service()->property("X-KDE-NativeMimeType").toString();
         QStringList::ConstIterator it = nativeMimeTypes.constBegin();
         const QStringList::ConstIterator end = nativeMimeTypes.constEnd();
         for (; it != end; ++it)

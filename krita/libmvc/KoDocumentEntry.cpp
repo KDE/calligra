@@ -26,7 +26,7 @@
 
 #include <kservicetype.h>
 #include <kdebug.h>
-#include <KoServiceLocator.h>
+#include <kservicetypetrader.h>
 #include <QFile>
 
 #include <limits.h> // UINT_MAX
@@ -95,13 +95,14 @@ KoPart *KoDocumentEntry::createKoPart(QString* errorMsg) const
 
 KoDocumentEntry KoDocumentEntry::queryByMimeType(const QString & mimetype)
 {
-    QList<KoDocumentEntry> vec = query(mimetype);
+    QString constr = QString::fromLatin1("[X-KDE-NativeMimeType] == '%1' or '%2' in [X-KDE-ExtraNativeMimeTypes]").arg(mimetype).arg(mimetype);
 
+    QList<KoDocumentEntry> vec = query(constr);
     if (vec.isEmpty()) {
-        kWarning(30003) << "Got no results with " << mimetype;
+        kWarning(30003) << "Got no results with " << constr;
         // Fallback to the old way (which was probably wrong, but better be safe)
-        vec = query(mimetype);
-
+        QString constr = QString::fromLatin1("'%1' in ServiceTypes").arg(mimetype);
+        vec = query(constr);
         if (vec.isEmpty()) {
             // Still no match. Either the mimetype itself is unknown, or we have no service for it.
             // Help the user debugging stuff by providing some more diagnostics
@@ -124,45 +125,35 @@ KoDocumentEntry KoDocumentEntry::queryByMimeType(const QString & mimetype)
     return KoDocumentEntry(vec[0]);
 }
 
-QList<KoDocumentEntry> KoDocumentEntry::query(const QString & mimetype)
+QList<KoDocumentEntry> KoDocumentEntry::query(const QString & _constr)
 {
 
     QList<KoDocumentEntry> lst;
+    QString constr;
+    if (!_constr.isEmpty()) {
+        constr = '(' + _constr + ") and ";
+    }
+    constr += " exist Library";
 
     // Query the trader
-    const KService::List offers = KoServiceLocator::instance()->entries("Calligra/Part");
+    const KService::List offers = KServiceTypeTrader::self()->query("Calligra/Part", constr);
 
-    foreach(KService::Ptr offer, offers) {
+    KService::List::ConstIterator it = offers.begin();
+    unsigned int max = offers.count();
+    for (unsigned int i = 0; i < max; i++, ++it) {
+        //kDebug(30003) <<"   desktopEntryPath=" << (*it)->desktopEntryPath()
+        //               << "   library=" << (*it)->library() << endl;
 
-        QStringList nativeMimeTypes = offer->property("X-KDE-NativeMimeType", QVariant::StringList).toStringList();
-        QStringList extraNativeMimeTypes = offer->property("X-KDE-ExtraNativeMimeTypes", QVariant::StringList).toStringList();
-        QStringList serviceTypes = offer->property("ServiceTypes", QVariant::StringList).toStringList();
-
-        if (nativeMimeTypes.contains(mimetype) || extraNativeMimeTypes.contains(mimetype) || serviceTypes.contains(mimetype)) {
-
-            if (offer->noDisplay())
-                continue;
-            KoDocumentEntry d(offer);
-            // Append converted offer
-            lst.append(d);
-
-            // And if it's the part that belongs to the current application it's our own, so break off
-            if (offer->desktopEntryName() == (qAppName().replace("calligra","") + "part")) {
-                lst.clear();
-                lst.append(d);
-                break;
-            }
-
-            // Next service
-        }
+        if ((*it)->noDisplay())
+            continue;
+        KoDocumentEntry d(*it);
+        // Append converted offer
+        lst.append(d);
+        // Next service
     }
 
-    if (lst.count() > 1 && !mimetype.isEmpty()) {
-        kWarning(30003) << "KoDocumentEntry::query " << mimetype << " got " << lst.count() << " offers!";
-        foreach(const KoDocumentEntry &entry, lst) {
-            qDebug() << entry.name();
-        }
-    }
+    if (lst.count() > 1 && !_constr.isEmpty())
+        kWarning(30003) << "KoDocumentEntry::query " << constr << " got " << max << " offers!";
 
     return lst;
 }

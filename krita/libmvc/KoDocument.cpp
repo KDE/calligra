@@ -76,6 +76,7 @@
 #ifndef QT_NO_DBUS
 #include <kio/jobuidelegate.h>
 #include <QDBusConnection>
+#include "KoDocumentAdaptor.h"
 #endif
 #include <QApplication>
 
@@ -147,9 +148,10 @@ QString KoDocument::newObjectName()
 class KoDocument::Private
 {
 public:
-    Private(KoDocument *document, KoPart *part) :
+    Private(KoDocument *document, const KoPart *part) :
         document(document),
-        parentPart(part),
+        // XXX: the part should _not_ be modified from the document
+        parentPart(const_cast<KoPart*>(part)),
         docInfo(0),
         docRdf(0),
         progressUpdater(0),
@@ -447,18 +449,24 @@ public:
 
 };
 
-KoDocument::KoDocument(KoPart *parent, KUndo2Stack *undoStack)
+KoDocument::KoDocument(const KoPart *parent, KUndo2Stack *undoStack)
     : d(new Private(this, parent))
 {
     Q_ASSERT(parent);
 
-    d->isEmpty = true;
-    d->filterManager = new KoFilterManager(this, d->progressUpdater);
 
+    d->isEmpty = true;
     connect(&d->autoSaveTimer, SIGNAL(timeout()), this, SLOT(slotAutoSave()));
     setAutoSave(defaultAutoSave());
 
     setObjectName(newObjectName());
+
+#ifndef QT_NO_DBUS
+    new KoDocumentAdaptor(this);
+    QDBusConnection::sessionBus().registerObject('/' + objectName(), this);
+#endif
+
+
     d->docInfo = new KoDocumentInfo(this);
 
     d->pageLayout.width = 0;
@@ -480,9 +488,10 @@ KoDocument::KoDocument(KoPart *parent, KUndo2Stack *undoStack)
 
 KoDocument::~KoDocument()
 {
+    //qDebug() << "Deleting KoDocument" << this << kBacktrace();
+
     d->autoSaveTimer.disconnect(this);
     d->autoSaveTimer.stop();
-    d->parentPart->deleteLater();
 
     delete d->filterManager;
     delete d;
@@ -492,6 +501,12 @@ KoDocument::~KoDocument()
 KoPart *KoDocument::documentPart() const
 {
     return d->parentPart;
+}
+
+bool KoDocument::reload()
+{
+    // XXX: reimplement!
+    return false;
 }
 
 bool KoDocument::exportDocument(const KUrl & _url)
@@ -586,6 +601,9 @@ bool KoDocument::saveFile()
     if (!isNativeFormat(outputMimeType)) {
         kDebug(30003) << "Saving to format" << outputMimeType << "in" << localFilePath();
         // Not native format : save using export filter
+        if (!d->filterManager)
+            d->filterManager = new KoFilterManager(this, d->progressUpdater);
+
         KoFilter::ConversionStatus status = d->filterManager->exportDocument(localFilePath(), outputMimeType);
         ret = status == KoFilter::OK;
         suppressErrorDialog = (status == KoFilter::UserCancelled || status == KoFilter::BadConversionGraph);
@@ -687,11 +705,17 @@ void KoDocument::setConfirmNonNativeSave(const bool exporting, const bool on)
 
 bool KoDocument::saveInBatchMode() const
 {
-    return d->filterManager->getBatchMode();
+    if (d->filterManager) {
+        return d->filterManager->getBatchMode();
+    }
+    return true;
 }
 
 void KoDocument::setSaveInBatchMode(const bool batchMode)
 {
+    if (!d->filterManager) {
+        d->filterManager = new KoFilterManager(this, d->progressUpdater);
+    }
     d->filterManager->setBatchMode(batchMode);
 }
 
@@ -850,7 +874,7 @@ bool KoDocument::saveNativeFormatODF(KoStore *store, const QByteArray &mimeType)
 {
     kDebug(30003) << "Saving to OASIS format";
     // Tell KoStore not to touch the file names
-
+    store->disallowNameExpansion();
     KoOdfWriteStore odfStore(store);
     KoXmlWriter *manifestWriter = odfStore.manifestWriter(mimeType);
     KoEmbeddedDocumentSaver embeddedSaver;
@@ -1481,6 +1505,8 @@ bool KoDocument::openFile()
     setupOpenFileSubProgress();
 
     if (!isNativeFormat(typeName.toLatin1())) {
+        if (!d->filterManager)
+            d->filterManager = new KoFilterManager(this, d->progressUpdater);
         KoFilter::ConversionStatus status;
         importedFile = d->filterManager->importDocument(localFilePath(), typeName, status);
         if (status != KoFilter::OK) {
@@ -1551,8 +1577,14 @@ bool KoDocument::openFile()
             }
 
             if (d->autoErrorHandlingEnabled && !msg.isEmpty()) {
-                QString errorMsg(i18n("Could not open %2.\nReason: %1.\n%3", msg, prettyPathOrUrl(), errorMessage()));
+#ifndef Q_OS_WIN
+                QString errorMsg(i18n("Could not open\n%2.\nReason: %1", msg, prettyPathOrUrl()));
                 KMessageBox::error(0, errorMsg);
+#else
+                QString errorMsg(i18n("Could not open\n%1.\nThe filter plugins have not been properly registered. Please reboot Windows. Krita Sketch will now close.", prettyPathOrUrl()));
+                KMessageBox::error(0, errorMsg);
+#endif
+
             }
 
             d->isLoading = false;
@@ -1611,7 +1643,7 @@ bool KoDocument::openFile()
         notify->setText(i18n("Document <i>%1</i> loaded", url().url()));
         notify->addContext("url", url().url());
         QTimer::singleShot(0, notify, SLOT(sendEvent()));
-        d->parentPart->deleteOpenPane();
+
     }
 
     if (progressUpdater()) {
@@ -1839,7 +1871,7 @@ bool KoDocument::loadNativeFormatFromStoreInternal(KoStore *store)
 
     // OASIS/OOo file format?
     if (store->hasFile("content.xml")) {
-
+        store->disallowNameExpansion();
 
         // We could check the 'mimetype' file, but let's skip that and be tolerant.
 
@@ -1848,14 +1880,10 @@ bool KoDocument::loadNativeFormatFromStoreInternal(KoStore *store)
             return false;
         }
 
-    } else if (store->hasFile("root") || store->hasFile("maindoc.xml")) {   // Fallback to "old" file format (maindoc.xml)
-
-
-
+    } else if (store->hasFile("root")) {   // Fallback to "old" file format (maindoc.xml)
         oasis = false;
 
         KoXmlDocument doc = KoXmlDocument(true);
-
         bool ok = oldLoadAndParse(store, "root", doc);
         if (ok)
             ok = loadXML(doc, store);
@@ -1986,6 +2014,8 @@ bool KoDocument::addVersion(const QString& comment)
     }
 
     kDebug(30003) << "Saving to OASIS format";
+    // Tell KoStore not to touch the file names
+    store->disallowNameExpansion();
     KoOdfWriteStore odfStore(store);
 
     KoXmlWriter *manifestWriter = odfStore.manifestWriter(mimeType);
@@ -2351,7 +2381,7 @@ void KoDocument::addCommand(KUndo2Command *command)
         d->undoStack->push(command);
 }
 
-void KoDocument::beginMacro(const KUndo2MagicString & text)
+void KoDocument::beginMacro(const QString & text)
 {
     d->undoStack->beginMacro(text);
 }
@@ -2595,7 +2625,7 @@ bool KoDocument::queryClose()
                 if (d->parentPart->mainWindows().count() > 0) {
                     mainWindow = d->parentPart->mainWindows()[0];
                 }
-                KoFileDialog dialog(mainWindow, KoFileDialog::SaveFile, "SaveDocument");
+                KoFileDialog dialog(mainWindow, KoFileDialog::SaveFile);
                 KUrl url = dialog.url();
                 if (url.isEmpty())
                     return false;
