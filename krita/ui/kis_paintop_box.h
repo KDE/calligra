@@ -69,7 +69,7 @@ class KisLockedProperties;
 class KisPaintopBox : public QWidget
 {
     Q_OBJECT
-    
+
     enum {
         ENABLE_PRESETS      = 0x0001,
         DISABLE_PRESETS     = 0x0002,
@@ -101,7 +101,7 @@ public slots:
 private:
 
     KoID currentPaintop();
-    void setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP preset=0);
+    void setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP preset = 0);
     QPixmap paintopPixmap(const KoID& paintop);
     KoID defaultPaintOp();
     KisPaintOpPresetSP defaultPreset(const KoID& paintOp);
@@ -111,7 +111,7 @@ private:
     void setWidgetState(int flags);
     void setSliderValue(const QString& sliderID, qreal value);
     void sliderChanged(int n);
-    
+
 private slots:
 
     void slotSaveActivePreset();
@@ -164,7 +164,7 @@ private:
     KisView2*                            m_view;
     KisPopupButton*                      m_workspaceWidget;
     KisWidgetChooser*                    m_sliderChooser[3];
-    QMap<KoID,KisPaintOpSettingsWidget*> m_paintopOptionWidgets;
+    QMap<KoID, KisPaintOpSettingsWidget*> m_paintopOptionWidgets;
     KisFavoriteResourceManager*          m_favoriteResourceManager;
     QToolButton*                         m_reloadButton;
 
@@ -176,36 +176,34 @@ private:
     QPalette palette;
     QPalette palette_highlight;
 
-    struct TabletToolID
-    {
+    struct TabletToolID {
         TabletToolID(const KoInputDevice& dev) {
             uniqueID = dev.uniqueTabletId();
             pointer  = (dev.pointer() == QTabletEvent::UnknownPointer) ? QTabletEvent::Cursor : dev.pointer();
         }
-        
+
         bool operator == (const TabletToolID& id) const {
             return pointer == id.pointer && uniqueID == id.uniqueID;
         }
-        
+
         bool operator < (const TabletToolID& id) const {
-            if(uniqueID == id.uniqueID)
+            if (uniqueID == id.uniqueID)
                 return pointer < id.pointer;
             return uniqueID < id.uniqueID;
         }
-        
+
         QTabletEvent::PointerType  pointer;
         qint64                     uniqueID;
     };
-    
-    struct TabletToolData
-    {
+
+    struct TabletToolData {
         KoID               paintOpID;
         KisPaintOpPresetSP preset;
     };
 
     typedef QMap<TabletToolID, TabletToolData> TabletToolMap;
     typedef QMap<KoID, KisPaintOpPresetSP>     PaintOpPresetMap;
-    
+
     TabletToolMap    m_tabletToolMap;
     PaintOpPresetMap m_paintOpPresetMap;
     TabletToolID     m_currTabletToolID;

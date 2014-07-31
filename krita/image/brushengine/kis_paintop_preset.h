@@ -67,7 +67,7 @@ public:
     void toXML(QDomDocument& doc, QDomElement& elt) const;
 
     void fromXML(const QDomElement& elt);
-    
+
     bool removable() const {
         return true;
     }

@@ -27,10 +27,9 @@ KisLockedProperties::KisLockedProperties()
 KisLockedProperties::KisLockedProperties(KisPropertiesConfiguration *p)
 {
     m_lockedProperties = new KisPropertiesConfiguration();
-    QMap<QString,QVariant>::Iterator i;
-    for(i = p->getProperties().begin();i!=p->getProperties().end();i++)
-    {
-        m_lockedProperties->setProperty(i.key(),i.value());
+    QMap<QString, QVariant>::Iterator i;
+    for (i = p->getProperties().begin(); i != p->getProperties().end(); i++) {
+        m_lockedProperties->setProperty(i.key(), i.value());
     }
 }
 void KisLockedProperties::addToLockedProperties(KisPropertiesConfiguration *p)
@@ -45,19 +44,16 @@ void KisLockedProperties::removeFromLockedProperties(KisPropertiesConfiguration 
 {
     KisPropertiesConfiguration *temp = new KisPropertiesConfiguration();
     QMapIterator<QString, QVariant> i(m_lockedProperties->getProperties());
-    while(i.hasNext())
-    {
+    while (i.hasNext()) {
         i.next();
-        temp->setProperty(i.key(),QVariant(i.value()));
+        temp->setProperty(i.key(), QVariant(i.value()));
     }
     m_lockedProperties->clearProperties();
     QMapIterator<QString, QVariant> j(temp->getProperties());
-    while(j.hasNext())
-    {
+    while (j.hasNext()) {
         j.next();
-        if(!p->hasProperty(j.key()))
-        {
-            m_lockedProperties->setProperty(j.key(),QVariant(j.value()));
+        if (!p->hasProperty(j.key())) {
+            m_lockedProperties->setProperty(j.key(), QVariant(j.value()));
         }
 
     }

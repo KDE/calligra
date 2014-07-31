@@ -31,7 +31,7 @@ class KisLockedPropertiesProxy: public KisPropertiesConfiguration
 public:
     KisLockedPropertiesProxy() ;
     KisLockedPropertiesProxy(KisLockedProperties* p);
-    KisLockedPropertiesProxy( const KisPropertiesConfiguration *, KisLockedProperties *);
+    KisLockedPropertiesProxy(const KisPropertiesConfiguration *, KisLockedProperties *);
     using KisPropertiesConfiguration::getProperty;
     QVariant getProperty(const QString &name) const;
     using KisPropertiesConfiguration::setProperty;

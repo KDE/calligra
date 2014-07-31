@@ -25,13 +25,13 @@
 
 #ifndef KISUNDO2_EXPORT
 # if defined(KDELIBS_STATIC_LIBS)
-   /* No export/import for static libraries */
+/* No export/import for static libraries */
 #  define KISUNDO2_EXPORT
 # elif defined(MAKE_KISUNDO2_LIB)
-   /* We are building this library */ 
+/* We are building this library */
 #  define KISUNDO2_EXPORT KDE_EXPORT
 # else
-   /* We are using this library */ 
+/* We are using this library */
 #  define KISUNDO2_EXPORT KDE_IMPORT
 # endif
 #endif

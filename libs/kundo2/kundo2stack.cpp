@@ -138,7 +138,7 @@ KUndo2Command::KUndo2Command(const KUndo2MagicString &text, KUndo2Command *paren
         parent->d->child_list.append(this);
     }
     setText(text);
-     setTime();
+    setTime();
 }
 
 /*!
@@ -157,7 +157,7 @@ KUndo2Command::KUndo2Command(KUndo2Command *parent):
     d = new KUndo2CommandPrivate;
     if (parent != 0)
         parent->d->child_list.append(this);
-     setTime();
+    setTime();
 }
 
 /*!
@@ -484,12 +484,9 @@ void KUndo2Action::setPrefixedText(const QString &text)
 void KUndo2QStack::setIndex(int idx, bool clean)
 {
     bool was_clean = m_index == m_clean_index;
-    if(m_lastMergedIndex<=idx)
-    {
+    if (m_lastMergedIndex <= idx) {
         m_lastMergedSetCount = idx - m_lastMergedIndex;
-    }
-    else
-    {
+    } else {
         m_lastMergedSetCount = 0;
         m_lastMergedIndex = idx;
     }
@@ -549,11 +546,11 @@ bool KUndo2QStack::checkUndoLimit()
 */
 
 KUndo2QStack::KUndo2QStack(QObject *parent)
-    : QObject(parent), m_index(0), m_clean_index(0), m_group(0), m_undo_limit(0),m_useCumulativeUndoRedo(false),m_lastMergedSetCount(0),m_lastMergedIndex(0)
+    : QObject(parent), m_index(0), m_clean_index(0), m_group(0), m_undo_limit(0), m_useCumulativeUndoRedo(false), m_lastMergedSetCount(0), m_lastMergedIndex(0)
 {
-   setTimeT1(5);
-   setTimeT2(1);
-   setStrokesN(2);
+    setTimeT1(5);
+    setTimeT2(1);
+    setStrokesN(2);
 #ifndef QT_NO_UNDOGROUP
     if (KUndo2Group *group = qobject_cast<KUndo2Group*>(parent))
         group->addStack(this);
@@ -660,73 +657,65 @@ void KUndo2QStack::push(KUndo2Command *cmd)
     }
 
     bool try_merge = cur != 0
-                        && cur->id() != -1
-                        && cur->id() == cmd->id()
-                        && (macro || m_index != m_clean_index);
+                     && cur->id() != -1
+                     && cur->id() == cmd->id()
+                     && (macro || m_index != m_clean_index);
 
     /**Here we are going to try to merge several commands together using the Qvector field in the commands using
      *3 parameters. N : Number of slots filled. T1 : Time lapsed between current command and previous command -- signal to
      *merge throughout the stack. T2 : Time lapsed between two commands signalling both commands belong to the same set **/
 
-    if(!macro && m_command_list.size()>1 && cmd->timedId() == 1 && m_useCumulativeUndoRedo){
-            KUndo2Command* lastcmd = m_command_list.last();         
-            if(cmd->time().msecsTo(lastcmd->endTime())>-m_timeT2*1000){
-                m_lastMergedSetCount++;
+    if (!macro && m_command_list.size() > 1 && cmd->timedId() == 1 && m_useCumulativeUndoRedo) {
+        KUndo2Command* lastcmd = m_command_list.last();
+        if (cmd->time().msecsTo(lastcmd->endTime()) > -m_timeT2 * 1000) {
+            m_lastMergedSetCount++;
+        } else {
+            m_lastMergedSetCount = 0;
+            m_lastMergedIndex = m_index;
+        }
+
+
+        if (m_lastMergedSetCount > m_strokesN) {
+            KUndo2Command* toMerge = m_command_list.at(m_lastMergedIndex);
+            if (toMerge && m_command_list.at(m_lastMergedIndex + 1)) {
+                toMerge->timedMergeWith(m_command_list.at(m_lastMergedIndex + 1));
+                m_command_list.removeAt(m_lastMergedIndex + 1);
+                m_lastMergedSetCount--;
+                m_lastMergedIndex = m_command_list.indexOf(toMerge);
             }
-            else
-            {
-                m_lastMergedSetCount = 0;
-                m_lastMergedIndex = m_index;
-            }
 
+        }
+        m_index = m_command_list.size();
+        if (cmd->time().msecsTo(m_command_list.last()->endTime()) < -m_timeT1 * 1000) { //T1 time elapsed
+            QListIterator<KUndo2Command*> it(m_command_list);
+            it.toBack();
+            m_lastMergedSetCount = 0;
 
-             if(m_lastMergedSetCount>m_strokesN){
-               KUndo2Command* toMerge = m_command_list.at(m_lastMergedIndex);
-               if(toMerge && m_command_list.at(m_lastMergedIndex+1)){
-                   toMerge->timedMergeWith(m_command_list.at(m_lastMergedIndex+1));
-                   m_command_list.removeAt(m_lastMergedIndex+1);
-                   m_lastMergedSetCount--;
-                   m_lastMergedIndex = m_command_list.indexOf(toMerge);
-               }
-
-            }
-            m_index = m_command_list.size();
-            if(cmd->time().msecsTo(m_command_list.last()->endTime())<-m_timeT1*1000){      //T1 time elapsed
-                QListIterator<KUndo2Command*> it(m_command_list);
-                it.toBack();
-                m_lastMergedSetCount=0;
-
-                while(it.hasPrevious())
-                {
-                    KUndo2Command* curr = it.previous();
-                    if(!lastcmd->mergeCommandsVector().isEmpty()){
-                        if(lastcmd->mergeCommandsVector().last()->time().msecsTo(curr->endTime())>-m_timeT2*1000 && lastcmd!=curr){
-                             lastcmd->timedMergeWith(curr);
-                             if(m_command_list.contains(curr))
-                             {
-                                 m_command_list.removeOne(curr);
-                             }
+            while (it.hasPrevious()) {
+                KUndo2Command* curr = it.previous();
+                if (!lastcmd->mergeCommandsVector().isEmpty()) {
+                    if (lastcmd->mergeCommandsVector().last()->time().msecsTo(curr->endTime()) > -m_timeT2 * 1000 && lastcmd != curr) {
+                        lastcmd->timedMergeWith(curr);
+                        if (m_command_list.contains(curr)) {
+                            m_command_list.removeOne(curr);
                         }
-                        else{
-                            lastcmd = curr; //end of a merge set
-                        }
-
-                    }
-                    else{
-                        if(lastcmd->time().msecsTo(curr->endTime())>-m_timeT2*1000 && lastcmd!=curr){
-                            lastcmd->timedMergeWith(curr);
-                            if(m_command_list.contains(curr))
-                            {
-                               m_command_list.removeOne(curr);
-                            }
-                        }
-                        else{
-                                lastcmd = curr; //end of a merge set
-                            }
-                        }
+                    } else {
+                        lastcmd = curr; //end of a merge set
                     }
 
+                } else {
+                    if (lastcmd->time().msecsTo(curr->endTime()) > -m_timeT2 * 1000 && lastcmd != curr) {
+                        lastcmd->timedMergeWith(curr);
+                        if (m_command_list.contains(curr)) {
+                            m_command_list.removeOne(curr);
+                        }
+                    } else {
+                        lastcmd = curr; //end of a merge set
+                    }
+                }
             }
+
+        }
     }
     m_index = m_command_list.size();
 
@@ -895,12 +884,12 @@ void KUndo2QStack::setIndex(int idx)
         idx = m_command_list.size();
 
     int i = m_index;
-    while (i < idx){
+    while (i < idx) {
         m_command_list.at(i++)->redoMergedCommands();
     }
-    while (i > idx){
+    while (i > idx) {
         m_command_list.at(--i)->undoMergedCommands();
-     }
+    }
 
     setIndex(idx, false);
 }
@@ -1112,7 +1101,7 @@ void KUndo2QStack::endMacro()
 
   This function returns a const pointer, because modifying a command,
   once it has been pushed onto the stack and executed, almost always
-  causes corruption of the state of the document, if the command is 
+  causes corruption of the state of the document, if the command is
   later undone or redone.
 
   \sa KUndo2Command::child()
@@ -1252,7 +1241,7 @@ QAction* KUndo2Stack::createRedoAction(KActionCollection* actionCollection, cons
 {
     QAction* action = KUndo2QStack::createRedoAction(actionCollection);
 
-    if(actionName.isEmpty()) {
+    if (actionName.isEmpty()) {
         action->setObjectName(KStandardAction::name(KStandardAction::Redo));
     } else {
         action->setObjectName(actionName);
@@ -1271,7 +1260,7 @@ QAction* KUndo2Stack::createUndoAction(KActionCollection* actionCollection, cons
 {
     QAction* action = KUndo2QStack::createUndoAction(actionCollection);
 
-    if(actionName.isEmpty()) {
+    if (actionName.isEmpty()) {
         action->setObjectName(KStandardAction::name(KStandardAction::Undo));
     } else {
         action->setObjectName(actionName);
@@ -1343,7 +1332,7 @@ QAction* KUndo2Stack::createUndoAction(KActionCollection* actionCollection, cons
 */
 
 KUndo2Stack::KUndo2Stack(QObject *parent):
-	KUndo2QStack(parent)
+    KUndo2QStack(parent)
 {
 }
 

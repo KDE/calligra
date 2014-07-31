@@ -123,7 +123,7 @@ public:
     /**
     * If this paintop deposit the paint even when not moving, the tool needs to know the rate of it in miliseconds
     */
-    virtual int rate() const{
+    virtual int rate() const {
         return 100;
     }
 
@@ -174,9 +174,9 @@ public:
      */
     virtual QString modelName() const;
 
-     /**
-     * Set filename of 3D brush model. By default no brush is set
-     */
+    /**
+    * Set filename of 3D brush model. By default no brush is set
+    */
     void setModelName(const QString & modelName);
 
     /// Check if the settings are valid, setting might be invalid through missing brushes etc
@@ -206,9 +206,9 @@ public:
 
 
 protected:
-     /**
-     * @return the option widget of the paintop (can be 0 is no option widgets is set)
-     */
+    /**
+    * @return the option widget of the paintop (can be 0 is no option widgets is set)
+    */
     KisPaintOpSettingsWidget* optionsWidget() const;
 
     /**

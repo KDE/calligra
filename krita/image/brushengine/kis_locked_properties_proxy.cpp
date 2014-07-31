@@ -18,7 +18,7 @@
  */
 #include "kis_locked_properties_proxy.h"
 
-KisLockedPropertiesProxy ::KisLockedPropertiesProxy ()
+KisLockedPropertiesProxy ::KisLockedPropertiesProxy()
 {
     m_lockedProperties = NULL;
     m_parent = NULL;
@@ -38,46 +38,39 @@ KisLockedPropertiesProxy::KisLockedPropertiesProxy(const KisPropertiesConfigurat
 QVariant KisLockedPropertiesProxy::getProperty(const QString &name) const
 {
 
-   if(m_lockedProperties->lockedProperties())
-    {
-       if(m_lockedProperties->lockedProperties()->hasProperty(name))
-        {
-           KisLockedPropertiesServer::instance()->setPropertiesFromLocked(true);
-           KisPropertiesConfiguration* temp = const_cast<KisPropertiesConfiguration*>(m_parent);
-           if(!m_parent->hasProperty(name+"_previous")){
-            temp->setProperty(name+"_previous",m_parent->getProperty(name));
-           }
-           temp->setProperty(name,m_lockedProperties->lockedProperties()->getProperty(name));
-           return m_lockedProperties->lockedProperties()->getProperty(name);
+    if (m_lockedProperties->lockedProperties()) {
+        if (m_lockedProperties->lockedProperties()->hasProperty(name)) {
+            KisLockedPropertiesServer::instance()->setPropertiesFromLocked(true);
+            KisPropertiesConfiguration* temp = const_cast<KisPropertiesConfiguration*>(m_parent);
+            if (!m_parent->hasProperty(name + "_previous")) {
+                temp->setProperty(name + "_previous", m_parent->getProperty(name));
+            }
+            temp->setProperty(name, m_lockedProperties->lockedProperties()->getProperty(name));
+            return m_lockedProperties->lockedProperties()->getProperty(name);
+        } else {
+            if (m_parent->hasProperty(name + "_previous")) {
+                KisPropertiesConfiguration* temp = const_cast<KisPropertiesConfiguration*>(m_parent);
+                temp->setProperty(name, m_parent->getProperty(name + "_previous"));
+                temp->removeProperty(name + "_previous");
+            }
         }
-       else
-       {
-           if(m_parent->hasProperty(name+"_previous"))
-           {
-              KisPropertiesConfiguration* temp = const_cast<KisPropertiesConfiguration*>(m_parent);
-              temp->setProperty(name,m_parent->getProperty(name+"_previous"));
-              temp->removeProperty(name+"_previous");
-           }
-       }
     }
     return m_parent->getProperty(name);
 }
 void KisLockedPropertiesProxy::setProperty(const QString & name, const QVariant & value)
 {
     KisPropertiesConfiguration* temp = const_cast<KisPropertiesConfiguration*>(m_parent);
-    if(m_lockedProperties->lockedProperties())
-     {
-        if(m_lockedProperties->lockedProperties()->hasProperty(name))
-         {
-            m_lockedProperties->lockedProperties()->setProperty(name,value);
-            if(!m_parent->hasProperty(name+"_previous")){
-             temp->setProperty(name+"_previous",m_parent->getProperty(name));
+    if (m_lockedProperties->lockedProperties()) {
+        if (m_lockedProperties->lockedProperties()->hasProperty(name)) {
+            m_lockedProperties->lockedProperties()->setProperty(name, value);
+            if (!m_parent->hasProperty(name + "_previous")) {
+                temp->setProperty(name + "_previous", m_parent->getProperty(name));
             }
 
-         }
+        }
 
-     }
-    temp->setProperty(name,value);
+    }
+    temp->setProperty(name, value);
 }
 
 

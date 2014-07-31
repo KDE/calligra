@@ -31,14 +31,14 @@
 
 
 
-KisUndo2Command::KisUndo2Command(const KUndo2MagicString &text, KUndo2Command *parent):KUndo2Command(text,parent)
+KisUndo2Command::KisUndo2Command(const KUndo2MagicString &text, KUndo2Command *parent): KUndo2Command(text, parent)
 {
 
 }
 
 
 
-KisUndo2Command::KisUndo2Command(KUndo2Command *parent):KUndo2Command(parent)
+KisUndo2Command::KisUndo2Command(KUndo2Command *parent): KUndo2Command(parent)
 {
 
 }
@@ -56,12 +56,11 @@ KisUndo2Command::~KisUndo2Command()
 void KisUndo2Command::redoMergedCommands()
 {
 
-    if(!mergeCommandsVector().isEmpty()){
+    if (!mergeCommandsVector().isEmpty()) {
 
         QVectorIterator<KUndo2Command*> it(mergeCommandsVector());
         it.toBack();
-        while(it.hasPrevious())
-        {
+        while (it.hasPrevious()) {
             KisUndo2Command* cmd = dynamic_cast<KisUndo2Command*>(it.previous());
             cmd->redoMergedCommands();
         }
@@ -72,11 +71,10 @@ void KisUndo2Command::redoMergedCommands()
 void KisUndo2Command::undoMergedCommands()
 {
     undo();
-    if(!mergeCommandsVector().isEmpty()){
+    if (!mergeCommandsVector().isEmpty()) {
         QVectorIterator<KUndo2Command*> it(mergeCommandsVector());
         it.toFront();
-        while(it.hasNext())
-        {
+        while (it.hasNext()) {
             KisUndo2Command* cmd =  dynamic_cast<KisUndo2Command*>(it.next());
             cmd->undoMergedCommands();
         }

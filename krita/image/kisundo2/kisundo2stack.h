@@ -39,7 +39,7 @@ class KActionCollection;
 
 #ifndef QT_NO_UNDOCOMMAND
 
-class KisUndo2Command :public KUndo2Command
+class KisUndo2Command : public KUndo2Command
 {
 public:
     explicit KisUndo2Command(KUndo2Command *parent = 0);

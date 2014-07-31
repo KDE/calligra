@@ -40,8 +40,8 @@
 
 struct KisPaintOpPreset::Private {
     Private()
-        : settings(0)
-    {}
+        : settings(0) {
+    }
 
     KisPaintOpSettingsSP settings;
     bool dirtyPreset;
@@ -115,8 +115,7 @@ void KisPaintOpPreset::setSettings(KisPaintOpSettingsSP settings)
     if (settings) {
         m_d->settings = settings->clone();
         m_d->settings->setPreset(KisPaintOpPresetWSP(this));
-    }
-    else {
+    } else {
         m_d->settings = 0;
         m_d->settings->setPreset(0);
     }
@@ -291,9 +290,8 @@ bool KisPaintOpPreset::saveToDevice(QIODevice *dev) const
     QImage img;
 
     if (image().isNull()) {
-        img = QImage(1,1, QImage::Format_RGB32);
-    }
-    else {
+        img = QImage(1, 1, QImage::Format_RGB32);
+    } else {
         img = image();
     }
 

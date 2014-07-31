@@ -78,7 +78,7 @@ KisUndo2View::KisUndo2View(QWidget *parent) : KUndo2View(parent)
     Constructs a new view with parent \a parent and sets the observed stack to \a stack.
 */
 
-KisUndo2View::KisUndo2View(KisUndo2QStack *stack, QWidget *parent) : KUndo2View(stack,parent)
+KisUndo2View::KisUndo2View(KisUndo2QStack *stack, QWidget *parent) : KUndo2View(stack, parent)
 {
 
 }
@@ -91,7 +91,7 @@ KisUndo2View::KisUndo2View(KisUndo2QStack *stack, QWidget *parent) : KUndo2View(
     The view will update itself autmiatically whenever the active stack of the group changes.
 */
 
-KisUndo2View::KisUndo2View(KisUndo2Group *group, QWidget *parent) : KUndo2View(group,parent)
+KisUndo2View::KisUndo2View(KisUndo2Group *group, QWidget *parent) : KUndo2View(group, parent)
 {
 
 }
