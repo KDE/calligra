@@ -119,7 +119,7 @@ KisPaintopBox::KisPaintopBox(KisView2 *view, QWidget *parent, const char *name)
     m_eraseModeButton->setFixedSize(32, 32);
     m_eraseModeButton->setCheckable(true);
 
-    KAction* eraseAction = new KAction(i18n("Set erasers mode"), m_eraseModeButton);
+    KAction* eraseAction = new KAction(i18n("Set eraser mode"), m_eraseModeButton);
     eraseAction->setIcon(koIcon("eraser-toggle"));
     eraseAction->setShortcut(Qt::Key_E);
     eraseAction->setCheckable(true);

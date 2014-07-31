@@ -1144,10 +1144,7 @@ QString KUndo2QStack::text(int idx) const
 
     When the number of commands on a stack exceedes the stack's undoLimit, commands are
     deleted from the bottom of the stack. Macro commands (commands with child commands)
-    are treated as one command. The default value void setTimeT1();
-    double timeT1();
-    void setTimeT2();
-    double timeT2();is 0, which means that there is no
+    are treated as one command. The default value is 0, which means that there is no
     limit.
 
     This property may only be set when the undo stack is empty, since setting it on a
