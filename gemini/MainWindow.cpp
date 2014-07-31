@@ -73,6 +73,7 @@
 #include "KeyboardModel.h"
 #include "ScribbleArea.h"
 #include "RecentImageImageProvider.h"
+#include "RecentFilesModel.h"
 
 #ifdef Q_OS_WIN
 // Slate mode/docked detection stuff
@@ -148,6 +149,7 @@ public:
         DocumentManager::instance()->setSettingsManager( settings );
         touchView->engine()->rootContext()->setContextProperty("Settings", settings);
         touchView->engine()->rootContext()->setContextProperty("Constants", new Constants( q ));
+        touchView->engine()->rootContext()->setContextProperty("RecentFileManager", DocumentManager::instance()->recentFileManager());
         touchView->engine()->rootContext()->setContextProperty("WORDS_MIME_TYPE", QString(WORDS_MIME_TYPE));
         touchView->engine()->rootContext()->setContextProperty("STAGE_MIME_TYPE", QString(STAGE_MIME_TYPE));
 
@@ -255,6 +257,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     qmlRegisterType<ParagraphStylesModel>("org.calligra", 1, 0, "ParagraphStylesModel");
     qmlRegisterType<KeyboardModel>("org.calligra", 1, 0, "KeyboardModel");
     qmlRegisterType<ScribbleArea>("org.calligra", 1, 0, "ScribbleArea");
+    qmlRegisterType<RecentFilesModel>("org.calligra", 1, 0, "RecentFilesModel");
 
     qApp->setActiveWindow( this );
 
