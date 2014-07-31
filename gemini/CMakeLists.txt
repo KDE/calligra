@@ -40,6 +40,7 @@ set(calligragemini_SRCS
     KeyboardModel.cpp
     ScribbleArea.cpp
     RecentImageImageProvider.cpp
+    RecentFilesModel.cpp
 )
 
 
