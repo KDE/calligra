@@ -145,6 +145,9 @@ if (APPLE)
     install(FILES osx.stylesheet DESTINATION ${DATA_INSTALL_DIR}/calligra )
 endif (APPLE)
 
+# For now, don't install the header files because of the conflict with the komvc
+# library.
+if (FALSE)
 install( FILES
     KoApplication.h
     KoDocument.h
@@ -186,3 +189,5 @@ if( QT_QTDBUS_FOUND )
         KoViewAdaptor.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel)
 endif( QT_QTDBUS_FOUND )
+endif(FALSE)
+
