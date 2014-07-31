@@ -36,13 +36,17 @@ Page {
         }
         cellWidth: width / 4 - Constants.DefaultMargin;
         cellHeight: cellWidth + Settings.theme.font("templateLabel").pixelSize + Constants.DefaultMargin * 4;
-        model: allDocumentsModel;
+        model: RecentFilesModel { recentFileManager: RecentFileManager; }
         delegate: documentTile;
         ScrollDecorator { flickableItem: docList; }
     }
     Label {
-        anchors.centerIn: parent;
-        text: "No %1 - please drop some into your Documents folder (%2)".arg(base.categoryUIName).arg(docList.model.documentsFolder);
+        anchors.fill: parent;
+        text: "There are no recent documents to list.\n\nTo see anything here, open some documents and they\nwill show up here in the order in which they were opened.";
+        horizontalAlignment: Text.AlignHCenter;
+        verticalAlignment: Text.AlignVCenter;
+        font: Settings.theme.font("templateLabel");
+        color: "#5b6573";
         visible: docList.count === 0;
     }
     Component {
@@ -51,7 +55,7 @@ Page {
             width: docList.cellWidth;
             height: docList.cellHeight
             Image {
-                source: "image://recentimage/" + model.filePath;
+                source: model.image;
                 anchors {
                     top: parent.top;
                     left: parent.left;
@@ -60,6 +64,7 @@ Page {
                 }
                 height: parent.width;
                 fillMode: Image.PreserveAspectFit;
+                asynchronous: true;
             }
             Label {
                 id: lblName;
@@ -73,7 +78,7 @@ Page {
                 height: font.pixelSize + Constants.DefaultMargin * 2;
                 horizontalAlignment: Text.AlignHCenter;
                 verticalAlignment: Text.AlignVCenter;
-                text: model.fileName ? model.fileName : "";
+                text: model.text ? model.text : "";
                 font: Settings.theme.font("templateLabel");
                 color: "#5b6573";
             }
@@ -81,7 +86,7 @@ Page {
                 anchors.fill: parent;
                 onClicked: {
                     baseLoadingDialog.visible = true;
-                    openFile(model.filePath);
+                    openFile(model.url);
                 }
             }
         }
