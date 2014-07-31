@@ -269,12 +269,12 @@ bool KoDocumentRdf::loadOasis(KoStore *store)
     bool ok = loadRdf(store, parser, "manifest.rdf");
     if (ok) {
         QString sparqlQuery = "prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n"
-          "prefix odf: <http://docs.oasis-open.org/opendocument/meta/package/odf#> \n"
-          "prefix odfcommon: <http://docs.oasis-open.org/opendocument/meta/package/common#> \n"
+          "prefix odf: <http://docs.oasis-open.org/ns/office/1.2/meta/odf#> \n"
+          "prefix pkg: <http://docs.oasis-open.org/ns/office/1.2/meta/pkg#> \n"
           "select ?subj ?fileName \n"
           " where { \n"
           "  ?subj rdf:type odf:MetaDataFile . \n"
-          "  ?subj odfcommon:path ?fileName  \n"
+          "  ?subj pkg:path ?fileName  \n"
           " } \n";
         Soprano::QueryResultIterator it =
             d->model->executeQuery(sparqlQuery,
@@ -380,7 +380,7 @@ void KoDocumentRdf::updateXmlIdReferences(const QMap<QString, QString> &m)
     QList<Soprano::Statement> addList;
     StatementIterator it = model()->listStatements(
                                Node(),
-                               Node(QUrl("http://docs.oasis-open.org/opendocument/meta/package/common#idref")),
+                               Node(QUrl("http://docs.oasis-open.org/ns/office/1.2/meta/pkg#idref")),
                                Node(),
                                Node());
     if (!it.isValid())
@@ -497,7 +497,7 @@ void KoDocumentRdf::addStatements(QSharedPointer<Soprano::Model> model, const QS
     QTextStream queryss(&sparqlQuery);
 
     RDEBUG << "addStatements model.sz:" << d->model->statementCount() << " xmlid:" << xmlid;
-    queryss << "prefix pkg:  <http://docs.oasis-open.org/opendocument/meta/package/common#> \n"
+    queryss << "prefix pkg:  <http://docs.oasis-open.org/ns/office/1.2/meta/pkg#> \n"
             << ""
             << "select ?s ?p ?o ?g \n"
             << "where { \n"
@@ -1067,7 +1067,7 @@ QStringList KoDocumentRdf::idrefList() const
 
     StatementIterator it = model()->listStatements(
                                Node(),
-                               Node(QUrl("http://docs.oasis-open.org/opendocument/meta/package/common#idref")),
+                               Node(QUrl("http://docs.oasis-open.org/ns/office/1.2/meta/pkg#idref")),
                                Node(),
                                Node());
     if (!it.isValid()) {

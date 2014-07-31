@@ -884,7 +884,7 @@ void TestRdf::testRoundtrip()
 
         Soprano::Statement st(
                     location->linkingSubject(), // subject
-                    Soprano::Node::createResourceNode(QUrl("http://docs.oasis-open.org/opendocument/meta/package/common#idref")), // predicate
+                    Soprano::Node::createResourceNode(QUrl("http://docs.oasis-open.org/ns/office/1.2/meta/pkg#idref")), // predicate
                     Soprano::Node::createLiteralNode(newId), // object
                     rdfDoc->manifestRdfNode()); // manifest datastore
 

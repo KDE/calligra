@@ -76,7 +76,7 @@ QStringList KoRdfSemanticItem::xmlIdList() const
     Soprano::Node linksubj = linkingSubject();
     StatementIterator it = documentRdf()->model()->listStatements(
                                linksubj,
-                               Node::createResourceNode(QUrl("http://docs.oasis-open.org/opendocument/meta/package/common#idref")),
+                               Node::createResourceNode(QUrl("http://docs.oasis-open.org/ns/office/1.2/meta/pkg#idref")),
                                Node(),
                                documentRdf()->manifestRdfNode());
     QList<Statement> allStatements = it.allElements();
@@ -259,7 +259,7 @@ void KoRdfSemanticItem::insert(KoCanvasBase *host)
     if (documentRdf()) {
         Soprano::Statement st(
             linkingSubject(),
-            Node::createResourceNode(QUrl("http://docs.oasis-open.org/opendocument/meta/package/common#idref")),
+            Node::createResourceNode(QUrl("http://docs.oasis-open.org/ns/office/1.2/meta/pkg#idref")),
             Node::createLiteralNode(newID),
             documentRdf()->manifestRdfNode());
         documentRdf()->model()->addStatement(st);
@@ -381,7 +381,7 @@ void KoRdfSemanticItem::defaultStylesheet(hKoSemanticStylesheet ss)
     QString uuid = ss->uuid();
     QString name = ss->name();
     QString semanticClass = metaObject()->className();
-    
+
     m->removeAllStatements(
         Statement(Node::createResourceNode(QUrl("http://calligra.org/rdf/document/" + semanticClass)),
                   Node::createResourceNode(QUrl("http://calligra.org/rdf/stylesheet")),
