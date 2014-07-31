@@ -90,7 +90,6 @@ set(KOMVC_INCLUDES ${BASICFLAKES_INCLUDES}
                    ${CMAKE_SOURCE_DIR}/libs/widgets
                    ${CMAKE_SOURCE_DIR}/libs/widgetutils
                    ${CMAKE_SOURCE_DIR}/krita/komvc
-                   ${CMAKE_SOURCE_DIR}/krita/komvc/xmlgui
 )
 
 
