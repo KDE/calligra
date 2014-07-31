@@ -31,6 +31,7 @@ Item {
     function openFile(fileName) {
         mainPageStack.push(mainPage);
         Settings.currentFile = fileName;
+        RecentFileManager.addRecent(fileName);
     }
     PageStack {
         id: mainPageStack;
