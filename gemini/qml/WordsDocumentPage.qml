@@ -124,7 +124,7 @@ Item {
                     var newCenter = mapToItem( controllerFlickable, pinch.center.x, pinch.center.y );
                     controllerItem.zoomBy(pinch.scale - pinch.previousScale, Qt.point( newCenter.x, newCenter.y ) );
                 }
-                onPinchFinished: { controllerItem.endZoomGesture(); controllerFlickable.returnToBounds(); }
+                onPinchFinished: { controllerItem.endZoomGesture(); controllerFlickable.returnToBounds(); controllerItem.returnToBounds(); }
 
                 MouseArea {
                     anchors.fill: parent;
@@ -156,6 +156,7 @@ Item {
                 canvas: wordsCanvas;
                 flickable: controllerFlickable;
                 property bool pageChanging: false;
+                zoom: 1.0;
                 minimumZoom: 0.5;
                 onMovingFastChanged: {
                     if(movingFast === true && !pageChanging) {

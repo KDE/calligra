@@ -153,7 +153,8 @@ void CQCanvasControllerItem::setZoom(qreal newZoom)
     qreal tempZoom = qBound(KoZoomMode::minimumZoom(), newZoom, KoZoomMode::maximumZoom());
     if(!qFuzzyCompare(d->zoom, tempZoom)) {
         d->zoom = tempZoom;
-        d->canvas->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, tempZoom);
+        if(d->canvas && d->canvas->zoomController())
+            d->canvas->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, tempZoom);
         emit zoomChanged();
     }
 }
@@ -271,6 +272,18 @@ void CQCanvasControllerItem::fitToWidth( qreal width )
 
     if( d->documentSize.width() > 0.f && d->documentSize.width() < 2e6 )
         setZoom( width / ( d->documentSize.width() / d->zoom ) );
+}
+
+void CQCanvasControllerItem::returnToBounds()
+{
+    QPointF pos(d->flickable->property("contentX").toReal(), d->flickable->property("contentY").toReal());
+    float xDiff = pos.x() - d->lastX;
+    float yDiff = pos.y() - d->lastY;
+    d->canvasController->blockSignals(true);
+    d->canvasController->pan(QPoint(xDiff, yDiff));
+    d->canvasController->blockSignals(false);
+    d->lastX = pos.x();
+    d->lastY = pos.y();
 }
 
 void CQCanvasControllerItem::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry)

@@ -144,7 +144,7 @@ Item {
                     right: parent.right;
                     bottom: enabled ? parent.bottom : parent.top;
                 }
-
+                
                 boundsBehavior: controllerItem.documentSize.width < base.width ? Flickable.StopAtBounds : Flickable.DragAndOvershootBounds;
 
                 Calligra.CanvasControllerItem {
@@ -152,6 +152,7 @@ Item {
                     canvas: stageCanvas;
                     flickable: controllerFlickable;
                     minimumZoom: 0.5;
+                    zoom: 1.0;
                 }
 
                 PinchArea {
@@ -165,7 +166,7 @@ Item {
                         var newCenter = mapToItem( controllerFlickable, pinch.center.x, pinch.center.y );
                         controllerItem.zoomBy(pinch.scale - pinch.previousScale, Qt.point( newCenter.x, newCenter.y ) );
                     }
-                    onPinchFinished: { controllerItem.endZoomGesture(); controllerFlickable.returnToBounds(); }
+                    onPinchFinished: { controllerItem.endZoomGesture(); controllerFlickable.returnToBounds(); controllerItem.returnToBounds(); }
 
                     MouseArea {
                         anchors.fill: parent;
