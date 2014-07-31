@@ -283,7 +283,7 @@ public:
      * classNames(). Useful for menus and other places that want to
      * allow the user to create new SemanticItem Objects.
      */
-     hKoRdfSemanticItem createSemanticItem(const QString &semanticClass, QObject *parent = 0) const;
+    hKoRdfSemanticItem createSemanticItem(const QString &semanticClass, QObject *parent = 0) const;
 
     /**
      * For Rdf stored in manifest.rdf or another rdf file referenced
@@ -311,6 +311,7 @@ public:
      */
     Soprano::Node inlineRdfContext() const;
 
+    //FIXME: two functions below seems not use class fields at all, maybe STATIC??
     /**
      * If model contains ?s ?p ?o
      * look for and add
@@ -420,6 +421,7 @@ public:
      */
     void applyReflow(const QMap<int, reflowItem> &col);
 
+    //FIXME: this method also seems to be STATIC and why it has such second default param??
     /**
      * For debugging, output the model and a header string for identification
      */

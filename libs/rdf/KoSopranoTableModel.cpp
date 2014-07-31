@@ -180,7 +180,7 @@ bool KoSopranoTableModel::setDataUpdateTriple(const QModelIndex &index, const So
 {
     model()->addStatement(n);
     model()->removeStatement(old);
-    m_statementIndex[ index.row()] = n;
+    m_statementIndex[index.row()] = n;
     emit dataChanged(index, index);
     return true;
 }

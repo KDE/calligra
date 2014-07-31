@@ -118,7 +118,7 @@ bool OdtReader::readContent(OdtReaderBackend *backend, OdfReaderContext *context
     kDebug(30503) << "open content.xml ok";
 
     KoXmlStreamReader reader;
-    prepareForOdfInternal(reader);
+    prepareForOdf(reader);
 
     reader.setDevice(odfStore->device());
     bool  foundContent = false;
@@ -143,7 +143,7 @@ bool OdtReader::readContent(OdtReaderBackend *backend, OdfReaderContext *context
     //          <office:scripts> 3.12.
     while (reader.readNextStartElement()) {
         QString tagName = reader.qualifiedName().toString();
-        
+
         if (tagName == "office:automatic-styles") {
             // We already have the styles in the context.  No need to read them again.
             reader.skipCurrentElement();
@@ -176,7 +176,7 @@ bool OdtReader::readContent(OdtReaderBackend *backend, OdfReaderContext *context
 // This is a template function for the reader library.
 // Copy this one and change the name and fill in the code.
 void OdtReader::readElementNamespaceTagname(KoXmlStreamReader &reader)
-{ 
+{
    DEBUGSTART();
 
     // <namespace:tagname> has the following children in ODF 1.2:
@@ -187,7 +187,7 @@ void OdtReader::readElementNamespaceTagname(KoXmlStreamReader &reader)
     //          <office:scripts> 3.12.
     while (reader.readNextStartElement()) {
         QString tagName = reader.qualifiedName().toString();
-        
+
         if (tagName == "office:automatic-styles") {
             // FIXME: NYI
         }
@@ -223,7 +223,7 @@ void OdtReader::readElementOfficeBody(KoXmlStreamReader &reader)
     // Of those only <office:text> is present in a text document (odt).
     while (reader.readNextStartElement()) {
         QString tagName = reader.qualifiedName().toString();
-        
+
         if (tagName == "office:text") {
             readElementOfficeText(reader);
         }
@@ -267,7 +267,7 @@ void OdtReader::readElementOfficeText(KoXmlStreamReader &reader)
     // FIXME: For now, none of these are handled
     while (reader.readNextStartElement()) {
         DEBUG_READING("loop-start");
-        
+
         QString tagName = reader.qualifiedName().toString();
         if (tagName == "office:forms") {
             // FIXME: NYI
@@ -361,65 +361,4 @@ void OdtReader::readUnknownElement(KoXmlStreamReader &reader)
 #endif
 
     DEBUGEND();
-}
-
-
-// FIXME: Remove this function when it is exported from libs/odf/KoXmlStreamReader.cpp
-//
-static void prepareForOdfInternal(KoXmlStreamReader &reader)
-{
-    // This list of namespaces is taken from KoXmlNs.cpp
-    // Maybe not all of them are expected in an ODF document?
-    reader.addExpectedNamespace("office", "urn:oasis:names:tc:opendocument:xmlns:office:1.0");
-    reader.addExpectedNamespace("meta", "urn:oasis:names:tc:opendocument:xmlns:meta:1.0");
-    reader.addExpectedNamespace("config", "urn:oasis:names:tc:opendocument:xmlns:config:1.0");
-    reader.addExpectedNamespace("text", "urn:oasis:names:tc:opendocument:xmlns:text:1.0");
-    reader.addExpectedNamespace("table", "urn:oasis:names:tc:opendocument:xmlns:table:1.0");
-    reader.addExpectedNamespace("draw", "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0");
-    reader.addExpectedNamespace("presentation", "urn:oasis:names:tc:opendocument:xmlns:presentation:1.0");
-    reader.addExpectedNamespace("dr3d", "urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0");
-    reader.addExpectedNamespace("chart", "urn:oasis:names:tc:opendocument:xmlns:chart:1.0");
-    reader.addExpectedNamespace("form", "urn:oasis:names:tc:opendocument:xmlns:form:1.0");
-    reader.addExpectedNamespace("script", "urn:oasis:names:tc:opendocument:xmlns:script:1.0");
-    reader.addExpectedNamespace("style", "urn:oasis:names:tc:opendocument:xmlns:style:1.0");
-    reader.addExpectedNamespace("number", "urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0");
-    reader.addExpectedNamespace("manifest", "urn:oasis:names:tc:opendocument:xmlns:manifest:1.0");
-    reader.addExpectedNamespace("anim", "urn:oasis:names:tc:opendocument:xmlns:animation:1.0");
-
-    reader.addExpectedNamespace("math", "http://www.w3.org/1998/Math/MathML");
-    reader.addExpectedNamespace("svg", "urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0");
-    reader.addExpectedNamespace("fo", "urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0");
-    reader.addExpectedNamespace("dc", "http://purl.org/dc/elements/1.1/");
-    reader.addExpectedNamespace("xlink", "http://www.w3.org/1999/xlink");
-    reader.addExpectedNamespace("VL", "http://openoffice.org/2001/versions-list");
-    reader.addExpectedNamespace("smil", "urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0");
-    reader.addExpectedNamespace("xhtml", "http://www.w3.org/1999/xhtml");
-    reader.addExpectedNamespace("xml", "http://www.w3.org/XML/1998/namespace");
-
-    reader.addExpectedNamespace("calligra", "http://www.calligra.org/2005/");
-    reader.addExpectedNamespace("officeooo", "http://openoffice.org/2009/office");
-    reader.addExpectedNamespace("ooo", "http://openoffice.org/2004/office");
-
-    reader.addExpectedNamespace("delta", "http://www.deltaxml.com/ns/track-changes/delta-namespace");
-    reader.addExpectedNamespace("split", "http://www.deltaxml.com/ns/track-changes/split-namespace");
-    reader.addExpectedNamespace("ac", "http://www.deltaxml.com/ns/track-changes/attribute-change-namespace");
-
-    // This list of namespaces is taken from KoXmlReader::fixNamespace()
-    // They were generated by old versions of OpenOffice.org.
-    reader.addExtraNamespace("office",    "http://openoffice.org/2000/office");
-    reader.addExtraNamespace("text",      "http://openoffice.org/2000/text");
-    reader.addExtraNamespace("style",     "http://openoffice.org/2000/style");
-    reader.addExtraNamespace("fo",        "http://www.w3.org/1999/XSL/Format");
-    reader.addExtraNamespace("table",     "http://openoffice.org/2000/table");
-    reader.addExtraNamespace("drawing",   "http://openoffice.org/2000/drawing");
-    reader.addExtraNamespace("datastyle", "http://openoffice.org/2000/datastyle");
-    reader.addExtraNamespace("svg",       "http://www.w3.org/2000/svg");
-    reader.addExtraNamespace("chart",     "http://openoffice.org/2000/chart");
-    reader.addExtraNamespace("dr3d",      "http://openoffice.org/2000/dr3d");
-    reader.addExtraNamespace("form",      "http://openoffice.org/2000/form");
-    reader.addExtraNamespace("script",    "http://openoffice.org/2000/script");
-    reader.addExtraNamespace("meta",      "http://openoffice.org/2000/meta");
-    reader.addExtraNamespace("config",    "http://openoffice.org/2001/config");
-    reader.addExtraNamespace("pres",      "http://openoffice.org/2000/presentation");
-    reader.addExtraNamespace("manifest",  "http://openoffice.org/2001/manifest");
 }
