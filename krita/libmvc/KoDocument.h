@@ -621,7 +621,7 @@ public slots:
      * Begins recording of a macro command. At the end endMacro needs to be called.
      * @param text command description
      */
-    virtual void beginMacro(const QString & text);
+    virtual void beginMacro(const KUndo2MagicString &text);
 
     /**
      * Ends the recording of a macro command.

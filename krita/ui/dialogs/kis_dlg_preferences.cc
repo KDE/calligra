@@ -45,7 +45,6 @@
 #include <KoDocument.h>
 #include <KoColorProfile.h>
 #include <KoApplication.h>
-#include <KoConfigAuthorPage.h>
 #include <KoFileDialog.h>
 #include <KoPart.h>
 #include <KoColorSpaceEngine.h>
@@ -669,13 +668,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     m_fullscreenSettings = new FullscreenSettingsTab(vbox);
 
 
-    // author settings
-    vbox = new KVBox();
-    m_authorSettings = new KoConfigAuthorPage();
-    page = addPage(m_authorSettings, i18nc("@title:tab Author page", "Author"));
-    page->setHeader(i18n("Author"));
-    page->setIcon(koIcon("user-identity"));
-
+    // input settings
     m_inputConfiguration = new KisInputConfigurationPage();
     page = addPage(m_inputConfiguration, i18n("Canvas Input Settings"));
     page->setHeader(i18n("Canvas Input"));
@@ -815,7 +808,6 @@ bool KisDlgPreferences::editPreferences()
         cfg.setHideTitlebarFullscreen(dialog->m_fullscreenSettings->chkTitlebar->checkState());
         cfg.setHideToolbarFullscreen(dialog->m_fullscreenSettings->chkToolbar->checkState());
 
-        dialog->m_authorSettings->apply();
     }
     delete dialog;
     return baccept;

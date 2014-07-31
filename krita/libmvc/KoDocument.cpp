@@ -456,6 +456,8 @@ KoDocument::KoDocument(const KoPart *parent, KUndo2Stack *undoStack)
 
 
     d->isEmpty = true;
+    d->filterManager = new KoFilterManager(this, d->progressUpdater);
+
     connect(&d->autoSaveTimer, SIGNAL(timeout()), this, SLOT(slotAutoSave()));
     setAutoSave(defaultAutoSave());
 
@@ -601,9 +603,6 @@ bool KoDocument::saveFile()
     if (!isNativeFormat(outputMimeType)) {
         kDebug(30003) << "Saving to format" << outputMimeType << "in" << localFilePath();
         // Not native format : save using export filter
-        if (!d->filterManager)
-            d->filterManager = new KoFilterManager(this, d->progressUpdater);
-
         KoFilter::ConversionStatus status = d->filterManager->exportDocument(localFilePath(), outputMimeType);
         ret = status == KoFilter::OK;
         suppressErrorDialog = (status == KoFilter::UserCancelled || status == KoFilter::BadConversionGraph);
@@ -705,17 +704,11 @@ void KoDocument::setConfirmNonNativeSave(const bool exporting, const bool on)
 
 bool KoDocument::saveInBatchMode() const
 {
-    if (d->filterManager) {
-        return d->filterManager->getBatchMode();
-    }
-    return true;
+    return d->filterManager->getBatchMode();
 }
 
 void KoDocument::setSaveInBatchMode(const bool batchMode)
 {
-    if (!d->filterManager) {
-        d->filterManager = new KoFilterManager(this, d->progressUpdater);
-    }
     d->filterManager->setBatchMode(batchMode);
 }
 
@@ -828,12 +821,6 @@ bool KoDocument::saveNativeFormat(const QString & file)
         backend = KoStore::Directory;
         kDebug(30003) << "Saving as uncompressed XML, using directory store.";
     }
-#ifdef QCA2
-    else if (d->specialOutputFlag == SaveEncrypted) {
-        backend = KoStore::Encrypted;
-        kDebug(30003) << "Saving using encrypted backend.";
-    }
-#endif
     else if (d->specialOutputFlag == SaveAsFlatXML) {
         kDebug(30003) << "Saving as a flat XML file.";
         QFile f(file);
@@ -874,7 +861,7 @@ bool KoDocument::saveNativeFormatODF(KoStore *store, const QByteArray &mimeType)
 {
     kDebug(30003) << "Saving to OASIS format";
     // Tell KoStore not to touch the file names
-    store->disallowNameExpansion();
+
     KoOdfWriteStore odfStore(store);
     KoXmlWriter *manifestWriter = odfStore.manifestWriter(mimeType);
     KoEmbeddedDocumentSaver embeddedSaver;
@@ -1505,8 +1492,6 @@ bool KoDocument::openFile()
     setupOpenFileSubProgress();
 
     if (!isNativeFormat(typeName.toLatin1())) {
-        if (!d->filterManager)
-            d->filterManager = new KoFilterManager(this, d->progressUpdater);
         KoFilter::ConversionStatus status;
         importedFile = d->filterManager->importDocument(localFilePath(), typeName, status);
         if (status != KoFilter::OK) {
@@ -1577,14 +1562,8 @@ bool KoDocument::openFile()
             }
 
             if (d->autoErrorHandlingEnabled && !msg.isEmpty()) {
-#ifndef Q_OS_WIN
-                QString errorMsg(i18n("Could not open\n%2.\nReason: %1", msg, prettyPathOrUrl()));
+                QString errorMsg(i18n("Could not open %2.\nReason: %1.\n%3", msg, prettyPathOrUrl(), errorMessage()));
                 KMessageBox::error(0, errorMsg);
-#else
-                QString errorMsg(i18n("Could not open\n%1.\nThe filter plugins have not been properly registered. Please reboot Windows. Krita Sketch will now close.", prettyPathOrUrl()));
-                KMessageBox::error(0, errorMsg);
-#endif
-
             }
 
             d->isLoading = false;
@@ -1871,7 +1850,7 @@ bool KoDocument::loadNativeFormatFromStoreInternal(KoStore *store)
 
     // OASIS/OOo file format?
     if (store->hasFile("content.xml")) {
-        store->disallowNameExpansion();
+
 
         // We could check the 'mimetype' file, but let's skip that and be tolerant.
 
@@ -1880,10 +1859,14 @@ bool KoDocument::loadNativeFormatFromStoreInternal(KoStore *store)
             return false;
         }
 
-    } else if (store->hasFile("root")) {   // Fallback to "old" file format (maindoc.xml)
+    } else if (store->hasFile("root") || store->hasFile("maindoc.xml")) {   // Fallback to "old" file format (maindoc.xml)
+
+
+
         oasis = false;
 
         KoXmlDocument doc = KoXmlDocument(true);
+
         bool ok = oldLoadAndParse(store, "root", doc);
         if (ok)
             ok = loadXML(doc, store);
@@ -2014,8 +1997,6 @@ bool KoDocument::addVersion(const QString& comment)
     }
 
     kDebug(30003) << "Saving to OASIS format";
-    // Tell KoStore not to touch the file names
-    store->disallowNameExpansion();
     KoOdfWriteStore odfStore(store);
 
     KoXmlWriter *manifestWriter = odfStore.manifestWriter(mimeType);
@@ -2221,12 +2202,7 @@ int KoDocument::supportedSpecialFormats() const
     // Apps which support special output flags can add reimplement and add to this.
     // E.g. this is how did "saving in the 1.1 format".
     // SaveAsDirectoryStore is a given since it's implemented by KoDocument itself.
-    // SaveEncrypted is implemented in KoDocument as well, if QCA2 was found.
-#ifdef QCA2
-    return SaveAsDirectoryStore | SaveEncrypted;
-#else
     return SaveAsDirectoryStore;
-#endif
 }
 
 void KoDocument::setErrorMessage(const QString& errMsg)
@@ -2381,7 +2357,7 @@ void KoDocument::addCommand(KUndo2Command *command)
         d->undoStack->push(command);
 }
 
-void KoDocument::beginMacro(const QString & text)
+void KoDocument::beginMacro(const KUndo2MagicString & text)
 {
     d->undoStack->beginMacro(text);
 }
@@ -2625,7 +2601,7 @@ bool KoDocument::queryClose()
                 if (d->parentPart->mainWindows().count() > 0) {
                     mainWindow = d->parentPart->mainWindows()[0];
                 }
-                KoFileDialog dialog(mainWindow, KoFileDialog::SaveFile);
+                KoFileDialog dialog(mainWindow, KoFileDialog::SaveFile, "SaveDocument");
                 KUrl url = dialog.url();
                 if (url.isEmpty())
                     return false;

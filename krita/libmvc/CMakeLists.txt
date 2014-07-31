@@ -12,13 +12,10 @@ if (APPLE)
     find_library(FOUNDATION_LIBRARY Foundation)
 endif (APPLE)
 
-include_directories( ${KOMAIN_INCLUDES})
+include_directories( ${KOMVC_INCLUDES}
+)
 
 ########### next target ###############
-
-if( QCA2_FOUND )
-   add_definitions( -DQCA2 )
-endif( QCA2_FOUND )
 
 set(komain_LIB_SRCS
     KoAutoSaveRecoveryDialog.cpp
@@ -78,14 +75,6 @@ set(komain_LIB_SRCS
     KoTemplatesPane.cpp
     KoTemplateTree.cpp
 
-    KoFindBase.cpp
-    KoFindMatch.cpp
-    KoFindText.cpp
-    KoFindToolbar.cpp
-    KoFindOption.cpp
-    KoFindOptionSet.cpp
-    KoFindStyle.cpp
-
     KoPart.cpp
 
     thememanager.cpp
@@ -130,12 +119,6 @@ target_link_libraries(komain ${extra_libs}
     kotextlayout
 )
 
-if( KActivities_FOUND )
-    include_directories(${KACTIVITIES_INCLUDES})
-    target_link_libraries(komain ${KACTIVITIES_LIBRARY})
-    target_link_libraries(komain LINK_INTERFACE_LIBRARIES  ${KACTIVITIES_LIBRARY})
-endif( KActivities_FOUND )
-
 if (APPLE)
     target_link_libraries(komain ${FOUNDATION_LIBRARY})
 endif (APPLE)
@@ -155,41 +138,6 @@ install(FILES calligra_shell.rc DESTINATION ${DATA_INSTALL_DIR}/calligra )
 if (APPLE)
     install(FILES osx.stylesheet DESTINATION ${DATA_INSTALL_DIR}/calligra )
 endif (APPLE)
-
-install( FILES
-    KoApplication.h
-    KoDocument.h
-    KoDocumentEntry.h
-    KoDocumentInfo.h
-    KoDocumentSectionModel.h
-    KoFilter.h
-    KoFilterChain.h
-    KoFilterChainLinkList.h
-    KoFilterEntry.h
-    KoFilterGraph.h
-    KoFilterManager.h
-    KoFilterVertex.h
-    KoFindBase.h
-    KoFindText.h
-    KoFindToolbar.h
-    KoFindMatch.h
-    KoFindOption.h
-    KoFindOptionSet.h
-    KoGlobal.h
-    KoGridData.h
-    KoMainWindow.h
-    KoPageWidgetItem.h
-    MacSupport.h
-    KoModeBoxFactory.h
-    KoPart.h
-    KoPrintJob.h
-    KoVersionDialog.h
-    KoView.h
-    ${CMAKE_CURRENT_BINARY_DIR}/calligraversion.h
-    ${CMAKE_CURRENT_BINARY_DIR}/calligragitversion.h
-    KoStandardAction.h
-    komain_export.h
-DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel)
 
 if( QT_QTDBUS_FOUND )
     install( FILES

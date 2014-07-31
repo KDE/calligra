@@ -37,7 +37,6 @@
 #include "ui_wdgfullscreensettings.h"
 
 class KoID;
-class KoConfigAuthorPage;
 class KisInputConfigurationPage;
 
 /**
@@ -281,7 +280,6 @@ protected:
     GridSettingsTab *m_gridSettings;
     TabletSettingsTab *m_tabletSettings;
     FullscreenSettingsTab *m_fullscreenSettings;
-    KoConfigAuthorPage *m_authorSettings;
     KisInputConfigurationPage *m_inputConfiguration;
 
 protected slots:

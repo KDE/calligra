@@ -135,7 +135,6 @@ void KoPart::addDocument(KoDocument *document)
     if (!d->documents.contains(document)) {
         d->documents.append(document);
     }
-
 }
 
 QList<QPointer<KoDocument> > KoPart::documents() const

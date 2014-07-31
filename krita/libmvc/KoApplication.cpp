@@ -159,6 +159,11 @@ KoApplication::KoApplication(const QByteArray &nativeMimeType)
 #ifdef Q_OS_WIN
     QDir appdir(applicationDirPath());
     appdir.cdUp();
+
+    KGlobal::dirs()->addXdgDataPrefix(appdir.absolutePath() + "/share");
+    KGlobal::dirs()->addPrefix(appdir.absolutePath());
+
+
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
     // If there's no kdehome, set it and restart the process.
     if (!env.contains("KDEHOME")) {
@@ -178,7 +183,8 @@ KoApplication::KoApplication(const QByteArray &nativeMimeType)
     }
     qputenv("PATH", QFile::encodeName(appdir.absolutePath() + "/bin" + ";"
                                       + appdir.absolutePath() + "/lib" + ";"
-                                      + appdir.absolutePath() + "/lib"  +  "/kde4" + ";"
+                                      + appdir.absolutePath() + "/lib/kde4" + ";"
+                                      + appdir.absolutePath() + "/Frameworks" + ";"
                                       + appdir.absolutePath()));
 #endif
 
@@ -282,6 +288,7 @@ bool KoApplication::start()
     if (d->splashScreen) {
         d->splashScreen->show();
         d->splashScreen->repaint();
+        processEvents();
     }
 
     ResetStarting resetStarting(d->splashScreen); // remove the splash when done
@@ -332,13 +339,9 @@ bool KoApplication::start()
     // Figure out _which_ application we actually are
     KoDocumentEntry entry = KoDocumentEntry::queryByMimeType(d->nativeMimeType);
     if (entry.isEmpty()) {
-        kError(30003) << KGlobal::mainComponent().componentName() << "part.desktop not found." << endl;
-        kError(30003) << "Run 'kde4-config --path services' to see which directories were searched, assuming kde startup had the same environment as your current mainWindow." << endl;
-        kError(30003) << "Check your installation (did you install Calligra in a different prefix than KDE, without adding the prefix to /etc/kderc ?)" << endl;
-        kError(30003) << KGlobal::mainComponent().componentName() << "part.desktop not found." << endl;
         QMessageBox::critical(0, applicationName() + i18n(": Critical Error"), i18n("Essential application components could not be found.\n"
                                                                                     "This might be an installation issue.\n"
-                                                                                    "Try restarting, running kbuildsycoca4 or reinstalling."));
+                                                                                    "Try restarting or reinstalling."));
 #ifdef Q_OS_WIN
         QProcess::execute(applicationDirPath() + "/kbuildsycoca4.exe");
 #endif
@@ -509,7 +512,7 @@ QStringList KoApplication::mimeFilter(KoFilterManager::Direction direction) cons
     KService::Ptr service = entry.service();
     return KoFilterManager::mimeFilter(d->nativeMimeType,
                                        direction,
-                                       service->property("X-KDE-ExtraNativeMimeTypes").toStringList());
+                                       service->property("X-KDE-ExtraNativeMimeTypes", QVariant::StringList).toStringList());
 }
 
 

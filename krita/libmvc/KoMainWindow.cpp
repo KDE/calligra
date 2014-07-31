@@ -910,7 +910,7 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent, int specialOutputFlag)
         // don't want to be reminded about overwriting files etc.
         bool justChangingFilterOptions = false;
 
-        KoFileDialog dialog(this, KoFileDialog::SaveFile);
+        KoFileDialog dialog(this, KoFileDialog::SaveFile, "SaveDocument");
         dialog.setCaption(i18n("untitled"));
         dialog.setDefaultDir((isExporting() && !d->lastExportUrl.isEmpty()) ?
                                 d->lastExportUrl.toLocalFile() : suggestedURL.toLocalFile());
@@ -1382,7 +1382,7 @@ KoPrintJob* KoMainWindow::exportToPdf(KoPageLayout pageLayout, QString pdfFileNa
         pageLayout = layoutDlg->pageLayout();
         delete layoutDlg;
 
-        KoFileDialog dialog(this, KoFileDialog::SaveFile);
+        KoFileDialog dialog(this, KoFileDialog::SaveFile, "SaveDocument");
         dialog.setCaption(i18n("Export as PDF"));
         dialog.setDefaultDir(startUrl.toLocalFile());
         dialog.setMimeTypeFilters(QStringList() << "application/pdf");
@@ -1449,6 +1449,8 @@ void KoMainWindow::slotConfigureKeys()
         undoAction->setText(oldUndoText);
         redoAction->setText(oldRedoText);
     }
+
+    emit keyBindingsChanged();
 }
 
 void KoMainWindow::slotConfigureToolbars()
@@ -1535,7 +1537,7 @@ void KoMainWindow::viewFullscreen(bool fullScreen)
 
 void KoMainWindow::slotProgress(int value)
 {
-    QMutexLocker(&d->progressMutex);
+    QMutexLocker locker(&d->progressMutex);
     kDebug(30003) << "KoMainWindow::slotProgress" << value;
     if (value <= -1 || value >= 100) {
         if (d->progress) {
@@ -1887,6 +1889,125 @@ void KoMainWindow::setToolbarList(QList<QAction *> toolbarList)
 {
     qDeleteAll(d->toolbarList);
     d->toolbarList = toolbarList;
+
+    if (d->m_registeredPart.data() != part) {
+        return;
+    }
+    d->m_registeredPart = 0;
+    if ( part == d->m_activePart ) {
+        setActivePart(0, 0);
+    }
+}
+
+void KoMainWindow::setActivePart(KoPart *part, QWidget *widget )
+{
+    if (part && d->m_registeredPart.data() != part) {
+        kWarning(1000) << "trying to activate a non-registered part!" << part->objectName();
+        return; // don't allow someone call setActivePart with a part we don't know about
+    }
+
+    // don't activate twice
+    if ( d->m_activePart && part && d->m_activePart == part &&
+         (!widget || d->m_activeWidget == widget) )
+        return;
+
+    KoPart *oldActivePart = d->m_activePart;
+    QWidget *oldActiveWidget = d->m_activeWidget;
+
+    d->m_activePart = part;
+    d->m_activeWidget = widget;
+
+    if (oldActivePart) {
+        KoPart *savedActivePart = part;
+        QWidget *savedActiveWidget = widget;
+
+        if ( oldActiveWidget ) {
+            disconnect( oldActiveWidget, SIGNAL(destroyed()), this, SLOT(slotWidgetDestroyed()) );
+        }
+
+        d->m_activePart = savedActivePart;
+        d->m_activeWidget = savedActiveWidget;
+    }
+
+    if (d->m_activePart && d->m_activeWidget ) {
+        connect( d->m_activeWidget, SIGNAL(destroyed()), this, SLOT(slotWidgetDestroyed()) );
+    }
+    // Set the new active instance in KGlobal
+    KGlobal::setActiveComponent(d->m_activePart ? d->m_activePart->componentData() : KGlobal::mainComponent());
+
+    // old slot called from part manager
+    KoPart *newPart = static_cast<KoPart*>(d->m_activePart.data());
+
+    if (d->activePart && d->activePart == newPart) {
+        //kDebug(30003) <<"no need to change the GUI";
+        return;
+    }
+
+    KXMLGUIFactory *factory = guiFactory();
+
+    if (d->activeView) {
+
+        factory->removeClient(d->activeView);
+
+        unplugActionList("toolbarlist");
+        qDeleteAll(d->toolbarList);
+        d->toolbarList.clear();
+    }
+
+    if (!d->mainWindowGuiIsBuilt) {
+        createMainwindowGUI();
+    }
+
+    if (newPart && d->m_activeWidget && d->m_activeWidget->inherits("KoView")) {
+        d->activeView = qobject_cast<KoView *>(d->m_activeWidget);
+        d->activeView->actionCollection()->addAction("view_newview", actionCollection()->action("view_newview"));
+        d->activePart = newPart;
+        //kDebug(30003) <<"new active part is" << d->activePart;
+
+        factory->addClient(d->activeView);
+
+        // Position and show toolbars according to user's preference
+        setAutoSaveSettings(newPart->componentData().componentName(), false);
+
+        foreach (QDockWidget *wdg, d->dockWidgets) {
+            if ((wdg->features() & QDockWidget::DockWidgetClosable) == 0) {
+                wdg->setVisible(true);
+            }
+        }
+
+        // Create and plug toolbar list for Settings menu
+        foreach(QWidget* it, factory->containers("ToolBar")) {
+            KToolBar * toolBar = ::qobject_cast<KToolBar *>(it);
+            if (toolBar) {
+                KToggleAction * act = new KToggleAction(i18n("Show %1 Toolbar", toolBar->windowTitle()), this);
+                actionCollection()->addAction(toolBar->objectName().toUtf8(), act);
+                act->setCheckedState(KGuiItem(i18n("Hide %1 Toolbar", toolBar->windowTitle())));
+                connect(act, SIGNAL(toggled(bool)), this, SLOT(slotToolbarToggled(bool)));
+                act->setChecked(!toolBar->isHidden());
+                d->toolbarList.append(act);
+            } else
+                kWarning(30003) << "Toolbar list contains a " << it->metaObject()->className() << " which is not a toolbar!";
+        }
+        plugActionList("toolbarlist", d->toolbarList);
+
+    }
+    else {
+        d->activeView = 0;
+        d->activePart = 0;
+    }
+
+    if (d->activeView) {
+        d->activeView->guiActivateEvent(true);
+    }
+}
+
+void KoMainWindow::slotWidgetDestroyed()
+{
+    kDebug(1000);
+    if ( static_cast<const QWidget *>( sender() ) == d->m_activeWidget )
+        setActivePart(0, 0); //do not remove the part because if the part's widget dies, then the
+    //part will delete itself anyway, invoking removePart() in its destructor
+>>>>>>> origin/master
 }
 
 void KoMainWindow::slotDocumentTitleModified(const QString &caption, bool mod)
