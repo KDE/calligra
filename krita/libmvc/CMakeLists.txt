@@ -56,10 +56,6 @@ set(komain_LIB_SRCS
     KoFilterChainLinkList.cpp
     KoStandardAction.cpp
     KoUndoStackAction.cpp
-    config/KoConfigDocumentPage.cpp
-    config/KoConfigGridPage.cpp
-    config/KoConfigMiscPage.cpp
-    config/KoConfigAuthorPage.cpp
 
     KoDocumentSectionDelegate.cpp
     KoDocumentSectionToolTip.cpp
@@ -107,7 +103,6 @@ endif (APPLE)
 kde4_add_ui_files( komain_LIB_SRCS
    koDocumentInfoAboutWidget.ui
    koDocumentInfoAuthorWidget.ui
-   config/KoConfigAuthorPage.ui
    KoOpenPaneBase.ui
    KoDetailsPaneBase.ui
 )
