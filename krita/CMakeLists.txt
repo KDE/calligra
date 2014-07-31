@@ -89,8 +89,8 @@ set(KOMVC_INCLUDES ${BASICFLAKES_INCLUDES}
                    ${TEXTLAYOUT_INCLUDES}
                    ${CMAKE_SOURCE_DIR}/libs/widgets
                    ${CMAKE_SOURCE_DIR}/libs/widgetutils
-                   ${CMAKE_SOURCE_DIR}/krita/libmvc
-                   ${CMAKE_SOURCE_DIR}/krita/libmvc/xmlgui
+                   ${CMAKE_SOURCE_DIR}/krita/komvc
+                   ${CMAKE_SOURCE_DIR}/krita/komvc/xmlgui
 )
 
 
@@ -138,7 +138,7 @@ endif(HAVE_OPENGL)
 
 add_subdirectory( image )
 add_subdirectory( libbrush )
-add_subdirectory( libmvc )
+add_subdirectory( komvc )
 add_subdirectory( ui )
 add_subdirectory( dtd )
 add_subdirectory( plugins )
