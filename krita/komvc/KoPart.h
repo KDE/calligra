@@ -29,7 +29,7 @@
 #include <kservice.h>
 #include <kcomponentdata.h>
 #include <kurl.h>
-#include <KoXMLGUIClient.h>
+#include <kxmlguiclient.h>
 
 #include "komvc_export.h"
 

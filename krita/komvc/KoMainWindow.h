@@ -23,7 +23,7 @@
 
 #include "komvc_export.h"
 
-#include <KoXMLGUIWindow.h>
+#include <kxmlguiwindow.h>
 #include <kurl.h>
 #include <KoCanvasObserverBase.h>
 #include <KoCanvasSupervisor.h>
@@ -51,7 +51,7 @@ class KoDockerManager;
  *
  * @note This class does NOT need to be subclassed in your application.
  */
-class KOMVC_EXPORT KoMainWindow : public KoXmlGuiWindow, public KoCanvasSupervisor
+class KOMVC_EXPORT KoMainWindow : public KXmlGuiWindow, public KoCanvasSupervisor
 {
     Q_OBJECT
 public:

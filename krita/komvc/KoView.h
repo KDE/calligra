@@ -22,7 +22,7 @@
 #define __koView_h__
 
 #include <QWidget>
-#include <KoXMLGUIClient.h>
+#include <kxmlguiclient.h>
 #include "komvc_export.h"
 
 class KoPart;
@@ -35,7 +35,6 @@ struct KoPageLayout;
 
 // KDE classes
 class KStatusBar;
-class KoXmlGuiWindow;
 class KAction;
 
 // Qt classes
@@ -49,7 +48,7 @@ class QPrintDialog;
  *
  * Multiple views can be attached to one document at a time.
  */
-class KOMVC_EXPORT KoView : public QWidget, public KoXMLGUIClient
+class KOMVC_EXPORT KoView : public QWidget, public KXMLGUIClient
 {
     Q_OBJECT
 
