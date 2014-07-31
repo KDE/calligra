@@ -48,9 +48,8 @@ public slots:
 
 protected slots:
 
-    void apply();
-
-    void close();
+    void slotOnAccept();
+    void slotOnReject();
 
     void createMask();
 

@@ -75,10 +75,12 @@ KisDlgFilter::KisDlgFilter(KisView2 *view, KisNodeSP node, KisFilterManager *fil
     d->uiFilterDialog.pushButtonOk->setGuiItem(KStandardGuiItem::ok());
     d->uiFilterDialog.pushButtonCancel->setGuiItem(KStandardGuiItem::cancel());
 
-    connect(d->uiFilterDialog.pushButtonOk, SIGNAL(pressed()), SLOT(apply()));
     connect(d->uiFilterDialog.pushButtonOk, SIGNAL(pressed()), SLOT(accept()));
     connect(d->uiFilterDialog.pushButtonCancel, SIGNAL(pressed()), SLOT(reject()));
     connect(d->uiFilterDialog.checkBoxPreview, SIGNAL(stateChanged(int)), SLOT(previewCheckBoxChange(int)));
+
+    connect(this, SIGNAL(accepted()), SLOT(slotOnAccept()));
+    connect(this, SIGNAL(rejected()), SLOT(slotOnReject()));
 
     connect(d->uiFilterDialog.filterSelection, SIGNAL(configurationChanged()), SLOT(updatePreview()));
     connect(this, SIGNAL(finished(int)), SLOT(close()));
@@ -124,7 +126,7 @@ void KisDlgFilter::updatePreview()
     d->uiFilterDialog.pushButtonOk->setEnabled(true);
 }
 
-void KisDlgFilter::apply()
+void KisDlgFilter::slotOnAccept()
 {
     if (!d->filterManager->isStrokeRunning()) {
         KisSafeFilterConfigurationSP config(d->uiFilterDialog.filterSelection->configuration());
@@ -133,9 +135,10 @@ void KisDlgFilter::apply()
     d->filterManager->finish();
 
     d->uiFilterDialog.pushButtonOk->setEnabled(false);
+    KisConfig().setShowFilterGallery(d->uiFilterDialog.filterSelection->isFilterGalleryVisible());
 }
 
-void KisDlgFilter::close()
+void KisDlgFilter::slotOnReject()
 {
     if (d->filterManager->isStrokeRunning()) {
         d->filterManager->cancel();
