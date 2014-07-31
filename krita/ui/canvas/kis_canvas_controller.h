@@ -39,7 +39,6 @@ public:
     virtual void keyPressEvent(QKeyEvent *event);
     virtual bool eventFilter(QObject *watched, QEvent *event);
     virtual void updateDocumentSize(const QSize &sz, bool recalculateCenter);
-    virtual void activate();
 
 public:
     using KoCanvasController::documentSize;
