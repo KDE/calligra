@@ -21,7 +21,7 @@
 #define KO_DOCUMENT_SECTION_VIEW_H
 
 #include <QTreeView>
-#include "komain_export.h"
+#include "komvc_export.h"
 
 class QStyleOptionViewItem;
 class KoDocumentSectionModel;
@@ -40,7 +40,7 @@ class KoDocumentSectionModel;
  * Usage: simply use this widget in your designer .ui file. Krita's
  * and karbon's layerboxes are KoDocumentSectionView based.
  */
-class KOMAIN_EXPORT KoDocumentSectionView: public QTreeView
+class KOMVC_EXPORT KoDocumentSectionView: public QTreeView
 {
     Q_OBJECT
 signals:

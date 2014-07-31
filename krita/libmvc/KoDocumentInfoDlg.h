@@ -28,7 +28,7 @@ class KoDocumentRdfBase;
 class KPageWidgetItem;
 class KoPageWidgetItem;
 
-#include "komain_export.h"
+#include "komvc_export.h"
 
 /**
  * @short The dialog that shows information about the document
@@ -48,7 +48,7 @@ class KoPageWidgetItem;
  * KPageDialog and uses the face type Tabbed.
  */
 
-class KOMAIN_EXPORT KoDocumentInfoDlg : public KPageDialog
+class KOMVC_EXPORT KoDocumentInfoDlg : public KPageDialog
 {
     Q_OBJECT
 

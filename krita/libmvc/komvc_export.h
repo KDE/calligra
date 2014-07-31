@@ -18,8 +18,8 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOMAIN_EXPORT_H
-#define KOMAIN_EXPORT_H
+#ifndef KOMVC_EXPORT_H
+#define KOMVC_EXPORT_H
 
 /* needed for KDE_EXPORT and KDE_IMPORT macros */
 #include <kdemacros.h>
@@ -27,19 +27,19 @@
 /* We use _WIN32/_WIN64 instead of Q_OS_WIN so that this header can be used from C files too */
 #if defined _WIN32 || defined _WIN64
 
-#ifndef KOMAIN_EXPORT
+#ifndef KOMVC_EXPORT
 # if defined(MAKE_KOMAIN_LIB)
 /* We are building this library */
-#  define KOMAIN_EXPORT KDE_EXPORT
+#  define KOMVC_EXPORT KDE_EXPORT
 # else
 /* We are using this library */
-#  define KOMAIN_EXPORT KDE_IMPORT
+#  define KOMVC_EXPORT KDE_IMPORT
 # endif
 #endif
 
 #else /* UNIX */
 
-#define KOMAIN_EXPORT KDE_EXPORT
+#define KOMVC_EXPORT KDE_EXPORT
 
 #endif
 

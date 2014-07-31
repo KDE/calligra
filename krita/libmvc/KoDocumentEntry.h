@@ -24,7 +24,7 @@
 #include <kservice.h>
 #include <ksharedptr.h>
 #include <QList>
-#include "komain_export.h"
+#include "komvc_export.h"
 
 class QStringList;
 class KoDocument;
@@ -35,7 +35,7 @@ class KoPart;
  *  Represents an available Calligra component
  *  that supports the document interface.
  */
-class KOMAIN_EXPORT KoDocumentEntry
+class KOMVC_EXPORT KoDocumentEntry
 {
 
 public:

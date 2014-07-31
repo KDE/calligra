@@ -21,14 +21,14 @@
 #ifndef KOPAGEWIDGETITEM_H
 #define KOPAGEWIDGETITEM_H
 
-#include "komain_export.h"
+#include "komvc_export.h"
 
 class QWidget;
 class QString;
 
 // This class can be implemented when we want to extend the
 // dialog with new, specific pages.
-class KOMAIN_EXPORT KoPageWidgetItem
+class KOMVC_EXPORT KoPageWidgetItem
 {
 public:
     virtual ~KoPageWidgetItem() {}

@@ -21,7 +21,7 @@
 
 #include <KoPrintJob.h>
 #include <QList>
-#include "komain_export.h"
+#include "komvc_export.h"
 
 class KoShapeManager;
 class KoShape;
@@ -60,7 +60,7 @@ class KoPrintingDialogPrivate;
  * This typically means that the preparePage() makes sure the shapeManager is updated and the correct cliprect
  * is set on the painter().
  */
-class KOMAIN_EXPORT KoPrintingDialog : public KoPrintJob {
+class KOMVC_EXPORT KoPrintingDialog : public KoPrintJob {
     Q_OBJECT
 public:
     /**

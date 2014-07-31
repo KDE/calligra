@@ -29,7 +29,7 @@ Boston, MA 02110-1301, USA.
 #include "KoFilterChain.h"
 #include "KoFilterGraph.h"
 
-#include "komain_export.h"
+#include "komvc_export.h"
 class KoDocument;
 class KoProgressUpdater;
 
@@ -46,7 +46,7 @@ class KoProgressUpdater;
  *  @author Torben Weis <weis@kde.org>
  *  @author Werner Trobin <trobin@kde.org>
  */
-class KOMAIN_EXPORT KoFilterManager : public QObject
+class KOMVC_EXPORT KoFilterManager : public QObject
 {
     Q_OBJECT
 public:

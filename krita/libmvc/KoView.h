@@ -23,7 +23,7 @@
 
 #include <QWidget>
 #include <KoXMLGUIClient.h>
-#include "komain_export.h"
+#include "komvc_export.h"
 
 class KoPart;
 class KoDocument;
@@ -49,7 +49,7 @@ class QPrintDialog;
  *
  * Multiple views can be attached to one document at a time.
  */
-class KOMAIN_EXPORT KoView : public QWidget, public KoXMLGUIClient
+class KOMVC_EXPORT KoView : public QWidget, public KoXMLGUIClient
 {
     Q_OBJECT
 

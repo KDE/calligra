@@ -21,12 +21,12 @@
 #define _KODOCUMENTINFOPROPSPAGE_H_
 
 #include <kpropertiesdialog.h>
-#include "komain_export.h"
+#include "komvc_export.h"
 
 #include <QString>
 
 class KArchiveEntry;
-class KOMAIN_EXPORT KoDocumentInfoPropsPage : public KPropertiesDialogPlugin
+class KOMVC_EXPORT KoDocumentInfoPropsPage : public KPropertiesDialogPlugin
 {
     Q_OBJECT
 

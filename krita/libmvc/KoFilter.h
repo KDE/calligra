@@ -25,7 +25,7 @@ Boston, MA 02110-1301, USA.
 #include <QMap>
 #include <QPointer>
 
-#include "komain_export.h"
+#include "komvc_export.h"
 class QIODevice;
 class KoFilterChain;
 class KoUpdater;
@@ -52,7 +52,7 @@ class KoUpdater;
  * @author Werner Trobin <trobin@kde.org>
  * @todo the class has no constructor and therefore cannot initialize its private class
  */
-class KOMAIN_EXPORT KoFilter : public QObject
+class KOMVC_EXPORT KoFilter : public QObject
 {
     Q_OBJECT
 

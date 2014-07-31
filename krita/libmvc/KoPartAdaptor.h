@@ -28,7 +28,7 @@
 #include <QObject>
 #include <QDBusAbstractAdaptor>
 #include <QList>
-#include "komain_export.h"
+#include "komvc_export.h"
 class KoPart;
 
 /**
@@ -36,7 +36,7 @@ class KoPart;
  * Use KoApplicationIface to get hold of an existing document's interface,
  * or to create a document.
  */
-class KOMAIN_EXPORT KoPartAdaptor : public QDBusAbstractAdaptor
+class KOMVC_EXPORT KoPartAdaptor : public QDBusAbstractAdaptor
 {
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "org.kde.calligra.part")

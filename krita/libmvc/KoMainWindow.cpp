@@ -32,7 +32,6 @@
 #include "KoDocumentInfo.h"
 #include "KoDocumentInfoDlg.h"
 #include "KoFileDialog.h"
-#include "KoVersionDialog.h"
 #include "KoDockFactoryBase.h"
 #include "KoDockWidgetTitleBar.h"
 #include "KoPrintJob.h"
@@ -121,7 +120,6 @@ public:
         closeFile = 0;
         closeAll = 0;
         reloadFile = 0;
-        showFileVersions = 0;
         importFile = 0;
         exportFile = 0;
         encryptDocument = 0;
@@ -208,7 +206,6 @@ public:
     KAction *closeFile;
     KAction *closeAll;
     KAction *reloadFile;
-    KAction *showFileVersions;
     KAction *importFile;
     KAction *exportFile;
     KAction *encryptDocument;
@@ -306,10 +303,6 @@ KoMainWindow::KoMainWindow(KoPart *part, const KComponentData &componentData)
     actionCollection()->addAction("file_reload_file", d->reloadFile);
     connect(d->reloadFile, SIGNAL(triggered(bool)), this, SLOT(slotReloadFile()));
 
-    d->showFileVersions  = new KAction(i18n("Versions..."), this);
-    actionCollection()->addAction("file_versions_file", d->showFileVersions);
-    connect(d->showFileVersions, SIGNAL(triggered(bool)), this, SLOT(slotVersionsFile()));
-
     d->importFile  = new KAction(koIcon("document-import"), i18n("Open ex&isting Document as Untitled Document..."), this);
     actionCollection()->addAction("file_import_file", d->importFile);
     connect(d->importFile, SIGNAL(triggered(bool)), this, SLOT(slotImportFile()));
@@ -344,7 +337,6 @@ KoMainWindow::KoMainWindow(KoPart *part, const KComponentData &componentData)
     d->showDocumentInfo->setEnabled(false);
     d->saveActionAs->setEnabled(false);
     d->reloadFile->setEnabled(false);
-    d->showFileVersions->setEnabled(false);
     d->importFile->setEnabled(true);    // always enabled like File --> Open
     d->exportFile->setEnabled(false);
     d->saveAction->setEnabled(false);
@@ -547,12 +539,6 @@ void KoMainWindow::updateReloadFileAction(KoDocument *doc)
     d->reloadFile->setEnabled(doc && !doc->url().isEmpty());
 }
 
-void KoMainWindow::updateVersionsFileAction(KoDocument *doc)
-{
-    //TODO activate it just when we save it in oasis file format
-    d->showFileVersions->setEnabled(doc && !doc->url().isEmpty() && (doc->outputMimeType() == doc->nativeOasisMimeType() || doc->outputMimeType() == doc->nativeOasisMimeType() + "-template"));
-}
-
 void KoMainWindow::setReadWrite(bool readwrite)
 {
     d->saveAction->setEnabled(readwrite);
@@ -730,7 +716,6 @@ bool KoMainWindow::openDocumentInternal(const KUrl & url, KoDocument *newdoc)
         return false;
     }
     updateReloadFileAction(newdoc);
-    updateVersionsFileAction(newdoc);
 
     KFileItem file(url, newdoc->mimeType(), KFileItem::Unknown);
     if (!file.isWritable()) {
@@ -1638,15 +1623,6 @@ void KoMainWindow::slotEmailFile()
     }
 }
 
-void KoMainWindow::slotVersionsFile()
-{
-    if (!d->activeView->document())
-        return;
-    KoVersionDialog *dlg = new KoVersionDialog(this, d->activeView->document());
-    dlg->exec();
-    delete dlg;
-}
-
 void KoMainWindow::slotReloadFile()
 {
     KoDocument* document = d->activeView->document();
@@ -1889,133 +1865,12 @@ void KoMainWindow::setToolbarList(QList<QAction *> toolbarList)
 {
     qDeleteAll(d->toolbarList);
     d->toolbarList = toolbarList;
-
-    if (d->m_registeredPart.data() != part) {
-        return;
-    }
-    d->m_registeredPart = 0;
-    if ( part == d->m_activePart ) {
-        setActivePart(0, 0);
-    }
-}
-
-void KoMainWindow::setActivePart(KoPart *part, QWidget *widget )
-{
-    if (part && d->m_registeredPart.data() != part) {
-        kWarning(1000) << "trying to activate a non-registered part!" << part->objectName();
-        return; // don't allow someone call setActivePart with a part we don't know about
-    }
-
-    // don't activate twice
-    if ( d->m_activePart && part && d->m_activePart == part &&
-         (!widget || d->m_activeWidget == widget) )
-        return;
-
-    KoPart *oldActivePart = d->m_activePart;
-    QWidget *oldActiveWidget = d->m_activeWidget;
-
-    d->m_activePart = part;
-    d->m_activeWidget = widget;
-
-    if (oldActivePart) {
-        KoPart *savedActivePart = part;
-        QWidget *savedActiveWidget = widget;
-
-        if ( oldActiveWidget ) {
-            disconnect( oldActiveWidget, SIGNAL(destroyed()), this, SLOT(slotWidgetDestroyed()) );
-        }
-
-        d->m_activePart = savedActivePart;
-        d->m_activeWidget = savedActiveWidget;
-    }
-
-    if (d->m_activePart && d->m_activeWidget ) {
-        connect( d->m_activeWidget, SIGNAL(destroyed()), this, SLOT(slotWidgetDestroyed()) );
-    }
-    // Set the new active instance in KGlobal
-    KGlobal::setActiveComponent(d->m_activePart ? d->m_activePart->componentData() : KGlobal::mainComponent());
-
-    // old slot called from part manager
-    KoPart *newPart = static_cast<KoPart*>(d->m_activePart.data());
-
-    if (d->activePart && d->activePart == newPart) {
-        //kDebug(30003) <<"no need to change the GUI";
-        return;
-    }
-
-    KXMLGUIFactory *factory = guiFactory();
-
-    if (d->activeView) {
-
-        factory->removeClient(d->activeView);
-
-        unplugActionList("toolbarlist");
-        qDeleteAll(d->toolbarList);
-        d->toolbarList.clear();
-    }
-
-    if (!d->mainWindowGuiIsBuilt) {
-        createMainwindowGUI();
-    }
-
-    if (newPart && d->m_activeWidget && d->m_activeWidget->inherits("KoView")) {
-        d->activeView = qobject_cast<KoView *>(d->m_activeWidget);
-        d->activeView->actionCollection()->addAction("view_newview", actionCollection()->action("view_newview"));
-        d->activePart = newPart;
-        //kDebug(30003) <<"new active part is" << d->activePart;
-
-        factory->addClient(d->activeView);
-
-        // Position and show toolbars according to user's preference
-        setAutoSaveSettings(newPart->componentData().componentName(), false);
-
-        foreach (QDockWidget *wdg, d->dockWidgets) {
-            if ((wdg->features() & QDockWidget::DockWidgetClosable) == 0) {
-                wdg->setVisible(true);
-            }
-        }
-
-        // Create and plug toolbar list for Settings menu
-        foreach(QWidget* it, factory->containers("ToolBar")) {
-            KToolBar * toolBar = ::qobject_cast<KToolBar *>(it);
-            if (toolBar) {
-                KToggleAction * act = new KToggleAction(i18n("Show %1 Toolbar", toolBar->windowTitle()), this);
-                actionCollection()->addAction(toolBar->objectName().toUtf8(), act);
-                act->setCheckedState(KGuiItem(i18n("Hide %1 Toolbar", toolBar->windowTitle())));
-                connect(act, SIGNAL(toggled(bool)), this, SLOT(slotToolbarToggled(bool)));
-                act->setChecked(!toolBar->isHidden());
-                d->toolbarList.append(act);
-            } else
-                kWarning(30003) << "Toolbar list contains a " << it->metaObject()->className() << " which is not a toolbar!";
-        }
-        plugActionList("toolbarlist", d->toolbarList);
-
-    }
-    else {
-        d->activeView = 0;
-        d->activePart = 0;
-    }
-
-    if (d->activeView) {
-        d->activeView->guiActivateEvent(true);
-    }
-}
-
-void KoMainWindow::slotWidgetDestroyed()
-{
-    kDebug(1000);
-    if ( static_cast<const QWidget *>( sender() ) == d->m_activeWidget )
-        setActivePart(0, 0); //do not remove the part because if the part's widget dies, then the
-    //part will delete itself anyway, invoking removePart() in its destructor
->>>>>>> origin/master
 }
 
 void KoMainWindow::slotDocumentTitleModified(const QString &caption, bool mod)
 {
     updateCaption(caption, mod);
     updateReloadFileAction(d->activeView->document());
-    updateVersionsFileAction(d->activeView->document());
-
 }
 
 #include <KoMainWindow.moc>

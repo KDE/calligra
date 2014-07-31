@@ -20,7 +20,7 @@
 #ifndef DOCKER_MANAGER_H
 #define DOCKER_MANAGER_H
 
-#include "komain_export.h"
+#include "komvc_export.h"
 
 #include <QObject>
 #include <QPointer>
@@ -30,7 +30,7 @@ class KoMainWindow;
 /**
    The docker manager makes sure that tool option widgets are shown at the right time.
  */
-class KOMAIN_EXPORT KoDockerManager : public QObject
+class KOMVC_EXPORT KoDockerManager : public QObject
 {
     Q_OBJECT
 public:

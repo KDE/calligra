@@ -27,7 +27,7 @@ Boston, MA 02110-1301, USA.
 #include "KoFilter.h"
 #include "KoFilterEntry.h"
 #include <KoStoreDevice.h>
-#include "komain_export.h"
+#include "komvc_export.h"
 #include "KoFilterChainLinkList.h"
 
 class KTemporaryFile;
@@ -52,7 +52,7 @@ namespace CalligraFilter
  * @author Werner Trobin <trobin@kde.org>
  * @todo the class has no constructor and therefore cannot initialize its private class
  */
-class KOMAIN_EXPORT KoFilterChain : public KShared
+class KOMVC_EXPORT KoFilterChain : public KShared
 {
     // Only Calligra::Graph is allowed to construct instances and
     // add chain links.

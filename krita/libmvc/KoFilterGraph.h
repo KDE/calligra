@@ -19,7 +19,7 @@ Boston, MA 02110-1301, USA.
 #ifndef KOFILTERGRAPH_H
 #define KOFILTERGRAPH_H
 
-#include "komain_export.h"
+#include "komvc_export.h"
 #include "KoFilterChain.h"
 #include "KoFilterVertex.h"
 #include <QByteArray>

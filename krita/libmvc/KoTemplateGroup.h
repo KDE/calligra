@@ -25,11 +25,11 @@
 #include <QStringList>
 #include <QPixmap>
 #include <kcomponentdata.h>
-#include "komain_export.h"
+#include "komvc_export.h"
 
 class KoTemplate;
 
-class KOMAIN_EXPORT KoTemplateGroup
+class KOMVC_EXPORT KoTemplateGroup
 {
 
 public:

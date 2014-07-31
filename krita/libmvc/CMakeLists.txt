@@ -1,5 +1,3 @@
-add_subdirectory( tests )
-
 # generate calligraversion.h
 configure_file(calligraversion.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/calligraversion.h)
 
@@ -13,11 +11,12 @@ if (APPLE)
 endif (APPLE)
 
 include_directories( ${KOMVC_INCLUDES}
+    ${CURRENT_SOURCE_DIR}/xmlgui
 )
 
 ########### next target ###############
 
-set(komain_LIB_SRCS
+set(komvc_LIB_SRCS
     KoAutoSaveRecoveryDialog.cpp
     KoApplication.cpp
     KoDockerManager.cpp
@@ -34,14 +33,10 @@ set(komain_LIB_SRCS
     KoPrintJob.cpp
     KoRulerController.cpp
     KoRuler.cpp
-    KoModeBox.cpp
-    KoModeBoxDocker.cpp
-    KoModeBoxFactory.cpp
     KoToolBox.cpp
     KoToolBoxDocker.cpp
     KoToolBoxFactory.cpp
     KoToolDocker_p.cpp
-    KoVersionDialog.cpp
     KoView.cpp
     calligraversion.cpp
     KoFilterManager.cpp
@@ -87,7 +82,7 @@ set(komain_LIB_SRCS
 )
 
 if( QT_QTDBUS_FOUND )
-    set(komain_LIB_SRCS ${komain_LIB_SRCS}
+    set(komvc_LIB_SRCS ${komvc_LIB_SRCS}
         KoApplicationAdaptor.cpp
         KoViewAdaptor.cpp
         KoPartAdaptor.cpp
@@ -95,35 +90,35 @@ if( QT_QTDBUS_FOUND )
 endif( QT_QTDBUS_FOUND )
 
 if (APPLE)
-    set(komain_LIB_SRCS ${komain_LIB_SRCS}
+    set(komvc_LIB_SRCS ${komvc_LIB_SRCS}
         MacSupport.mm
     )
 endif (APPLE)
 
-kde4_add_ui_files( komain_LIB_SRCS
+kde4_add_ui_files( komvc_LIB_SRCS
    koDocumentInfoAboutWidget.ui
    koDocumentInfoAuthorWidget.ui
    KoOpenPaneBase.ui
    KoDetailsPaneBase.ui
 )
-kde4_add_library(komain SHARED ${komain_LIB_SRCS})
+kde4_add_library(komvc SHARED ${komvc_LIB_SRCS})
 
-target_link_libraries(komain ${extra_libs}
+target_link_libraries(komvc ${extra_libs}
     ${KDE4_KFILE_LIBRARY}
     kowidgets
     kotextlayout
 )
 
 if (APPLE)
-    target_link_libraries(komain ${FOUNDATION_LIBRARY})
+    target_link_libraries(komvc ${FOUNDATION_LIBRARY})
 endif (APPLE)
 
-target_link_libraries(komain LINK_INTERFACE_LIBRARIES kotext kowidgets )
+target_link_libraries(komvc LINK_INTERFACE_LIBRARIES kotext kowidgets )
 
-set_target_properties(komain PROPERTIES
+set_target_properties(komvc PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
-install(TARGETS komain ${INSTALL_TARGETS_DEFAULT_ARGS} )
+install(TARGETS komvc ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 ########### install files ###############
 

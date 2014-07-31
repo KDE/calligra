@@ -22,7 +22,7 @@
 #define KOTOOLBOXFACTORY_H
 
 #include <KoDockFactoryBase.h>
-#include "komain_export.h"
+#include "komvc_export.h"
 
 #include <QString>
 #include <QDockWidget>
@@ -33,7 +33,7 @@ class KoCanvasController;
  * Factory class to create a new KoToolBox that contains the buttons
  * to activate tools.
  */
-class KOMAIN_EXPORT KoToolBoxFactory : public KoDockFactoryBase
+class KOMVC_EXPORT KoToolBoxFactory : public KoDockFactoryBase
 {
 public:
     explicit KoToolBoxFactory();

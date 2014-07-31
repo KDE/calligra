@@ -21,7 +21,7 @@
 #ifndef KOMAINWINDOW_H
 #define KOMAINWINDOW_H
 
-#include "komain_export.h"
+#include "komvc_export.h"
 
 #include <KoXMLGUIWindow.h>
 #include <kurl.h>
@@ -51,7 +51,7 @@ class KoDockerManager;
  *
  * @note This class does NOT need to be subclassed in your application.
  */
-class KOMAIN_EXPORT KoMainWindow : public KoXmlGuiWindow, public KoCanvasSupervisor
+class KOMVC_EXPORT KoMainWindow : public KoXmlGuiWindow, public KoCanvasSupervisor
 {
     Q_OBJECT
 public:
@@ -154,7 +154,6 @@ private:
      */
     void updateCaption(const QString & caption, bool mod);
     void updateReloadFileAction(KoDocument *doc);
-    void updateVersionsFileAction(KoDocument *doc);
 
 public:
     void setReadWrite(bool readwrite);
@@ -309,11 +308,6 @@ private slots:
      * Reload file
      */
     void slotReloadFile();
-
-    /**
-     * This will call a dialogbox to add version to list of files
-     */
-    void slotVersionsFile();
 
     /**
      * File --> Import

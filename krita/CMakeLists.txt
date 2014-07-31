@@ -84,9 +84,22 @@ if(WIN32)
     endif(MSVC)
 endif(WIN32)
 
+set(KOMVC_INCLUDES ${BASICFLAKES_INCLUDES}
+                   ${KDE4_INCLUDES}
+                   ${TEXTLAYOUT_INCLUDES}
+                   ${CMAKE_SOURCE_DIR}/libs/widgets
+                   ${CMAKE_SOURCE_DIR}/libs/widgetutils
+                   ${CMAKE_SOURCE_DIR}/krita/libmvc
+                   ${CMAKE_SOURCE_DIR}/krita/libmvc/xmlgui
+)
+
+
 set(KRITA_INCLUDES
     # For config-*.h
     ${CMAKE_CURRENT_BINARY_DIR}
+    
+#    ${KOMVC_INCLUDES}
+    ${KOMAIN_INCLUDES}
 
     ${CMAKE_SOURCE_DIR}/krita/image
     ${CMAKE_SOURCE_DIR}/krita/image/brushengine
@@ -102,8 +115,6 @@ set(KRITA_INCLUDES
     ${CMAKE_BINARY_DIR}/krita/ui
 
     ${PIGMENT_INCLUDES}
-    ${KOTEXT_INCLUDES}
-    ${KOMAIN_INCLUDES}
     ${BASICFLAKES_INCLUDES}
     ${CMAKE_SOURCE_DIR}/libs/widgets/resources
     ${CMAKE_SOURCE_DIR}/libs/widgets/colorwidgets
@@ -127,6 +138,7 @@ endif(HAVE_OPENGL)
 
 add_subdirectory( image )
 add_subdirectory( libbrush )
+add_subdirectory( libmvc )
 add_subdirectory( ui )
 add_subdirectory( dtd )
 add_subdirectory( plugins )

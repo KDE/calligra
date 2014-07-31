@@ -28,7 +28,7 @@
 #include <QStringList>
 
 #include <kconfig.h>
-#include "komain_export.h"
+#include "komvc_export.h"
 #include <KoXmlReader.h>
 
 class QDomDocument;
@@ -49,7 +49,7 @@ class KoPartAdaptor;
  * stored in two QMap and can be accessed through aboutInfo() and authorInfo().
  * The about info can be changed with setAboutInfo() and setAuthorInfo()
  */
-class KOMAIN_EXPORT KoDocumentInfo : public QObject
+class KOMVC_EXPORT KoDocumentInfo : public QObject
 {
     Q_OBJECT
 

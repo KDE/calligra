@@ -31,11 +31,11 @@
 class QString;
 class QStringList;
 
-#include "komain_export.h"
+#include "komvc_export.h"
 
 class KoView;
 
-class KOMAIN_EXPORT KoViewAdaptor : public QDBusAbstractAdaptor
+class KOMVC_EXPORT KoViewAdaptor : public QDBusAbstractAdaptor
 {
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "org.kde.calligra.view")

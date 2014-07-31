@@ -18,7 +18,7 @@
 #ifndef KOSTANDARDACTION_H
 #define KOSTANDARDACTION_H
 
-#include "komain_export.h"
+#include "komvc_export.h"
 
 class QObject;
 class KAction;
@@ -43,17 +43,17 @@ namespace KoStandardAction
    * Creates an action corresponding to the
    * KoStandardAction::StandardAction enum.
    */
-  KOMAIN_EXPORT KAction* create(StandardAction id, const QObject *receiver, const char *slot, QObject *parent);
+  KOMVC_EXPORT KAction* create(StandardAction id, const QObject *receiver, const char *slot, QObject *parent);
 
   /**
    * This will return the internal name of a given standard action.
    */
-  KOMAIN_EXPORT const char* name(StandardAction id);
+  KOMVC_EXPORT const char* name(StandardAction id);
 
   /**
    * Show or hide guide lines
    */
-  KOMAIN_EXPORT KToggleAction *showGuides(const QObject *receiver, const char *slot, QObject *parent);
+  KOMVC_EXPORT KToggleAction *showGuides(const QObject *receiver, const char *slot, QObject *parent);
 }
 
 #endif // KSTDACTION_H

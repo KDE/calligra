@@ -26,11 +26,11 @@
 #include <QFont>
 #include <QMap>
 
-#include "komain_export.h"
+#include "komvc_export.h"
 
 class KConfig;
 
-class KOMAIN_EXPORT KoGlobal
+class KOMVC_EXPORT KoGlobal
 {
 public:
     /// For KoApplication

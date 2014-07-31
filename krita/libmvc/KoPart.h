@@ -31,7 +31,7 @@
 #include <kurl.h>
 #include <KoXMLGUIClient.h>
 
-#include "komain_export.h"
+#include "komvc_export.h"
 
 #include <KoMainWindow.h>
 
@@ -56,7 +56,7 @@ class QGraphicsItem;
  *
  * It hasn't got much to do with kparts anymore.
  */
-class KOMAIN_EXPORT KoPart : public QObject
+class KOMVC_EXPORT KoPart : public QObject
 {
     Q_OBJECT
 

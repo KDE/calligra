@@ -23,7 +23,7 @@
 #define koTemplateCreateDia_h
 
 #include <kdialog.h>
-#include "komain_export.h"
+#include "komvc_export.h"
 
 class QString;
 class QPixmap;
@@ -37,7 +37,7 @@ class KoTemplateCreateDiaPrivate;
  *
  ****************************************************************************/
 
-class KOMAIN_EXPORT KoTemplateCreateDia : public KDialog
+class KOMVC_EXPORT KoTemplateCreateDia : public KDialog
 {
     Q_OBJECT
 

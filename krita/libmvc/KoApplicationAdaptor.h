@@ -25,7 +25,7 @@
 
 #include <QObject>
 #include <QtDBus>
-#include "komain_export.h"
+#include "komvc_export.h"
 template<class T> class QList;
 template<class Key, class Value> class QMap;
 
@@ -36,7 +36,7 @@ class KoApplication;
 /**
  * D-BUS interface for any Calligra application (entry point)
  */
-class KOMAIN_EXPORT KoApplicationAdaptor : public QDBusAbstractAdaptor
+class KOMVC_EXPORT KoApplicationAdaptor : public QDBusAbstractAdaptor
 {
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "org.kde.calligra.application")

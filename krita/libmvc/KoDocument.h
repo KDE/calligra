@@ -31,7 +31,7 @@
 
 #include <KoUnit.h>
 #include <KoPageLayout.h>
-#include "komain_export.h"
+#include "komvc_export.h"
 #include "KoGridData.h"
 #include "KoGuidesData.h"
 #include <KoXmlReader.h>
@@ -72,7 +72,7 @@ public:
  *
  *  @short The %Calligra document class
  */
-class KOMAIN_EXPORT KoDocument : public QObject, public KoOdfDocument
+class KOMVC_EXPORT KoDocument : public QObject, public KoOdfDocument
 {
     Q_OBJECT
     Q_PROPERTY(bool backupFile READ backupFile WRITE setBackupFile)

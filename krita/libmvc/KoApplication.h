@@ -21,7 +21,7 @@
 #define __ko_app_h__
 
 #include <kapplication.h>
-#include "komain_export.h"
+#include "komvc_export.h"
 
 class KoPart;
 class KoMainWindow;
@@ -46,7 +46,7 @@ class QStringList;
  *  If the last mainwindow becomes closed, KoApplication automatically
  *  calls QApplication::quit.
  */
-class KOMAIN_EXPORT KoApplication : public KApplication
+class KOMVC_EXPORT KoApplication : public KApplication
 {
     Q_OBJECT
 

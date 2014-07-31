@@ -25,7 +25,7 @@
 #include <QAbstractPrintDialog>
 #include <QPrinter>
 
-#include "komain_export.h"
+#include "komvc_export.h"
 
 class QWidget;
 
@@ -38,7 +38,7 @@ class QWidget;
  * The printjob can thus see startPrinting() called more than once, and the implementation
  * of that signal should honor the removePolicy passed to it.
  */
-class KOMAIN_EXPORT KoPrintJob : public QObject
+class KOMVC_EXPORT KoPrintJob : public QObject
 {
     Q_OBJECT
 public:

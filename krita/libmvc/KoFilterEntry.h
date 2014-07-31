@@ -24,7 +24,7 @@ Boston, MA 02110-1301, USA.
 #include <kservice.h>
 #include <ksharedptr.h>
 #include <QList>
-#include "komain_export.h"
+#include "komvc_export.h"
 
 class QObject;
 class QStringList;
