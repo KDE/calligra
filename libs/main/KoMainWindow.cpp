@@ -738,6 +738,8 @@ KoView *KoMainWindow::rootView() const
 {
     if (d->rootViews.indexOf(d->activeView) != -1)
         return d->activeView;
+    if (d->rootViews.isEmpty())
+        return 0;
     return d->rootViews.first();
 }
 
