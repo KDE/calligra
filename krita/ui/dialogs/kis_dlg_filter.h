@@ -36,7 +36,7 @@ class KisDlgFilter : public QDialog
 
 public:
 
-    KisDlgFilter(KisView2 *view, KisNodeSP node, KisFilterManager *filterManager);
+    KisDlgFilter(KisView2 *view, KisNodeSP node, KisFilterManager *filterManager, QWidget *parent = 0);
 
     ~KisDlgFilter();
 

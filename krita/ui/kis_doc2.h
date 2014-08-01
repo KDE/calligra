@@ -71,7 +71,6 @@ class KRITAUI_EXPORT KisDoc2 : public KoDocument
     Q_OBJECT
 
 public:
-    KisDoc2();
     explicit KisDoc2(const KisPart2 *part = 0);
     virtual ~KisDoc2();
 

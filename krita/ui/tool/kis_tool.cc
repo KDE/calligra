@@ -71,6 +71,7 @@
 #include <recorder/kis_recorded_paint_action.h>
 #include <kis_selection_mask.h>
 #include "kis_resources_snapshot.h"
+#include <kis_image_view.h>
 
 
 struct KisTool::Private {
@@ -167,11 +168,9 @@ void KisTool::activate(ToolActivation, const QSet<KoShape*> &)
     d->currentGradient = static_cast<KoAbstractGradient *>(canvas()->resourceManager()->
                                                            resource(KisCanvasResourceProvider::CurrentGradient).value<void *>());
 
-
     canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>()->settings()->activate();
 
-    d->currentNode = canvas()->resourceManager()->
-            resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeSP>();
+    d->currentNode = static_cast<KisCanvas2*>(canvas())->imageView()->currentNode();
     d->currentExposure = static_cast<float>(canvas()->resourceManager()->
                                             resource(KisCanvasResourceProvider::HdrExposure).toDouble());
     d->currentGenerator = static_cast<KisFilterConfiguration*>(canvas()->resourceManager()->
@@ -530,7 +529,7 @@ void KisTool::mouseMoveEvent(KoPointerEvent *event)
 void KisTool::deleteSelection()
 {
     KisResourcesSnapshotSP resources =
-        new KisResourcesSnapshot(image(), 0, this->canvas()->resourceManager());
+        new KisResourcesSnapshot(image(), 0, 0, this->canvas()->resourceManager());
 
     KisSelectionSP selection = resources->activeSelection();
     KisNodeSP node = resources->currentNode();

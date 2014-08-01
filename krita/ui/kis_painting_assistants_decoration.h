@@ -27,6 +27,7 @@
 #include <krita_export.h>
 
 class KActionCollection;
+class KisImageView;
 
 /**
  * This class hold a list of painting assistants.
@@ -35,7 +36,7 @@ class KRITAUI_EXPORT KisPaintingAssistantsDecoration : public KisCanvasDecoratio
 {
     Q_OBJECT
 public:
-    KisPaintingAssistantsDecoration(KisView2* parent);
+    KisPaintingAssistantsDecoration(KisImageView* parent);
     ~KisPaintingAssistantsDecoration();
     void addAssistant(KisPaintingAssistant* assistant);
     void removeAssistant(KisPaintingAssistant* assistant);

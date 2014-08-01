@@ -103,10 +103,8 @@ void KisFlipbook::save(const QString &url)
     qint64 written = f.write(ba);
     Q_ASSERT(written == ba.size()); Q_UNUSED(written);
 
-    KoApplication *app = dynamic_cast<KoApplication*>(qApp);
-    if (app) {
-        foreach(KoPart *part, app->partList()) {
-            part->addRecentURLToAllMainWindows(url);
-        }
+    foreach(QPointer<KoPart> part, KoPart::partList()) {
+        if (!part) continue;
+        part->addRecentURLToAllMainWindows(url);
     }
 }

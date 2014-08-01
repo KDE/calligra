@@ -149,8 +149,6 @@ KisDoc2::KisDoc2(const KisPart2 *part)
 
 }
 
-
-
 KisDoc2::~KisDoc2()
 {
     // Despite being QObject they needs to be deleted before the image

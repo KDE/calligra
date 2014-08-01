@@ -18,7 +18,8 @@
 */
 
 #include "kis_part2.h"
-#include "kis_view2.h"
+#include "kis_main_window.h"
+#include "kis_image_view.h"
 #include "kis_doc2.h"
 #include "kis_factory2.h"
 #include "kis_config.h"
@@ -50,7 +51,6 @@ KisPart2::KisPart2(QObject *parent)
     : KoPart(parent)
     , m_flipbook(0)
     , m_dieOnError(false)
-    , m_document(0)
 {
     KisFactory2 factory;
     setComponentData(factory.componentData());
@@ -66,19 +66,19 @@ KisPart2::~KisPart2()
     delete m_flipbook;
 }
 
-void KisPart2::setDocument(KisDoc2 *document)
+KoDocument *KisPart2::createDocument() const
 {
-    KoPart::setDocument(document);
-    m_document = document;
+    KoDocument *doc = new KisDoc2(this);
+    return doc;
 }
 
 KoView *KisPart2::createViewInstance(KoDocument *document, QWidget *parent)
 {
     qApp->setOverrideCursor(Qt::WaitCursor);
-    KisView2 *v = new KisView2(this, qobject_cast<KisDoc2*>(document), parent);
+    KisImageView *v = new KisImageView(this, qobject_cast<KisDoc2*>(document), parent);
 
     //XXX : fix this ugliness
-    dynamic_cast<KisShapeController*>(qobject_cast<KisDoc2*>(document)->shapeController())->setInitialShapeForView(v);
+    dynamic_cast<KisShapeController*>(qobject_cast<KisDoc2*>(document)->shapeController())->setInitialShapeForCanvas(v->canvasBase());
     KoToolManager::instance()->switchToolRequested("KritaShape/KisToolBrush");
 
     // XXX: this prevents a crash when opening a new document after opening a
@@ -99,7 +99,7 @@ QGraphicsItem *KisPart2::createCanvasItem(KoDocument *document)
 
 KoMainWindow *KisPart2::createMainWindow()
 {
-    return new KoMainWindow(KIS_MIME_TYPE, componentData());
+    return new KisMainWindow(this, componentData());
 }
 
 void KisPart2::showStartUpWidget(KoMainWindow *parent, bool alwaysShow)
@@ -126,7 +126,7 @@ QList<KoPart::CustomDocumentWidgetItem> KisPart2::createCustomDocumentWidgets(QW
     {
         KoPart::CustomDocumentWidgetItem item;
         item.widget = new KisCustomImageWidget(parent,
-                                               qobject_cast<KisDoc2*>(document()), w, h, cfg.defImageResolution(), cfg.defColorModel(), cfg.defaultColorDepth(), cfg.defColorProfile(),
+                                               qobject_cast<KisDoc2*>(createDocument()), w, h, cfg.defImageResolution(), cfg.defColorModel(), cfg.defaultColorDepth(), cfg.defColorProfile(),
                                                i18n("unnamed"));
 
         item.icon = "application-x-krita";
@@ -141,8 +141,8 @@ QList<KoPart::CustomDocumentWidgetItem> KisPart2::createCustomDocumentWidgets(QW
 
         KoPart::CustomDocumentWidgetItem item;
         item.widget = new KisImageFromClipboard(parent,
-                                               qobject_cast<KisDoc2*>(document()), w, h, cfg.defImageResolution(), cfg.defColorModel(), cfg.defaultColorDepth(), cfg.defColorProfile(),
-                                               i18n("unnamed"));
+                                                qobject_cast<KisDoc2*>(createDocument()), w, h, cfg.defImageResolution(), cfg.defColorModel(), cfg.defaultColorDepth(), cfg.defColorProfile(),
+                                                i18n("unnamed"));
 
         item.title = i18n("Create from Clipboard");
         item.icon = "klipper";
@@ -154,7 +154,7 @@ QList<KoPart::CustomDocumentWidgetItem> KisPart2::createCustomDocumentWidgets(QW
 #if 0
     {
         KoPart::CustomDocumentWidgetItem item;
-        item.widget = new KisFlipbookSelector(parent, qobject_cast<KisDoc2*>(document()));
+        item.widget = new KisFlipbookSelector(parent, qobject_cast<KisDoc2*>(createDocument()));
         item.title = i18n("Flipbooks");
         item.icon = "folder-video";
         widgetList << item;

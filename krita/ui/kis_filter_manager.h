@@ -27,6 +27,8 @@
 class KisView2;
 class KisDoc2;
 class KActionCollection;
+class KisActionManager;
+class KisImageView;
 
 /**
  * Create all the filter actions for the specified view and implement re-apply filter
@@ -38,10 +40,11 @@ class KRITAUI_EXPORT KisFilterManager : public QObject
 
 public:
 
-    KisFilterManager(KisView2 * parent, KisDoc2 * doc);
+    KisFilterManager(KisView2 * parent);
     ~KisFilterManager();
+    void setView(KisImageView *imageView);
 
-    void setup(KActionCollection * ac);
+    void setup(KActionCollection * ac, KisActionManager *actionManager);
     void updateGUI();
 
     void apply(KisSafeFilterConfigurationSP filterConfig);

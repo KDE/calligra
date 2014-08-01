@@ -34,7 +34,7 @@ struct KisPaintingAssistantsDecoration::Private {
     KToggleAction* toggleAssistant;
 };
 
-KisPaintingAssistantsDecoration::KisPaintingAssistantsDecoration(KisView2* parent) :
+KisPaintingAssistantsDecoration::KisPaintingAssistantsDecoration(KisImageView * parent) :
         KisCanvasDecoration("paintingAssistantsDecoration", parent),
         d(new Private)
 {

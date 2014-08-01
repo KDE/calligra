@@ -22,14 +22,16 @@
 
 #include "kis_canvas_decoration.h"
 
+class KisImageView;
 class KisCanvasResourceProvider;
+
 class KisMirrorAxis : public KisCanvasDecoration
 {
     Q_OBJECT
     Q_PROPERTY(float handleSize READ handleSize WRITE setHandleSize NOTIFY handleSizeChanged)
 
 public:
-    KisMirrorAxis(KisCanvasResourceProvider* provider, KisView2* parent);
+    KisMirrorAxis(KisCanvasResourceProvider* provider, KisImageView* parent);
     ~KisMirrorAxis();
 
     float handleSize() const;

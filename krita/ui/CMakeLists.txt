@@ -95,12 +95,9 @@ set(kritaui_LIB_SRCS
     kis_flipbook_item.cpp
     kis_histogram_view.cc
     kis_image_manager.cc
-    kis_image_view.cpp
     kis_image_view_converter.cpp
     kis_import_catcher.cc
     kis_layer_manager.cc
-    kis_main_window.cpp
-    kis_mainwindow_observer.cpp
     kis_mask_manager.cc
     kis_mimedata.cpp
     kis_node_commands_adapter.cpp
@@ -125,7 +122,6 @@ set(kritaui_LIB_SRCS
     kis_selection_decoration.cc
     kis_selection_manager.cc
     kis_statusbar.cc
-    kis_view2.cpp
     kis_zoom_manager.cc
     kis_favorite_resource_manager.cpp
     kis_workspace_resource.cpp
@@ -269,6 +265,12 @@ set(kritaui_LIB_SRCS
     input/config/kis_key_input_editor.cpp
     processing/fill_processing_visitor.cpp
     kis_mirror_axis.cpp
+
+# build these last for now
+    kis_image_view.cpp
+    kis_view2.cpp
+    kis_main_window.cpp
+    kis_mainwindow_observer.cpp
 )
 
 if(WIN32)

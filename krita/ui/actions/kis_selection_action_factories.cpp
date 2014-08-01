@@ -55,6 +55,7 @@
 #include "kis_transaction_based_command.h"
 #include "kis_selection_filters.h"
 #include "kis_shape_selection.h"
+#include "kis_part2.h"
 
 #include <processing/fill_processing_visitor.h>
 #include <kis_selection_tool_helper.h>
@@ -180,7 +181,7 @@ void KisFillActionFactory::run(const QString &fillSource, KisView2 *view)
                                        kundo2_i18n("Flood Fill Layer"));
 
     KisResourcesSnapshotSP resources =
-        new KisResourcesSnapshot(view->image(), 0, view->resourceProvider()->resourceManager());
+        new KisResourcesSnapshot(view->image(), node, 0, view->resourceProvider()->resourceManager());
     resources->setOpacity(1.0);
 
     KisProcessingVisitorSP visitor =
@@ -327,8 +328,8 @@ void KisPasteNewActionFactory::run(KisView2 *view)
     QRect rect = clip->exactBounds();
     if (rect.isEmpty()) return;
 
-    KisDoc2 *doc = new KisDoc2();
-    if (!doc) return;
+    KisPart2 *part = static_cast<KisPart2*>(view->document()->documentPart());
+    KisDoc2 *doc = qobject_cast<KisDoc2*>(part->createDocument());
 
     KisImageSP image = new KisImage(doc->createUndoStore(),
                                     rect.width(),
@@ -347,9 +348,9 @@ void KisPasteNewActionFactory::run(KisView2 *view)
     image->addNode(layer.data(), image->rootLayer());
     doc->setCurrentImage(image);
 
-    KoMainWindow *win = doc->documentPart()->createMainWindow();
+    KoMainWindow *win = part->createMainWindow();
     win->show();
-    win->setRootDocument(doc);
+    win->addView(part->createView(doc));
 }
 
 void KisInvertSelectionOperaton::runFromXML(KisView2* view, const KisOperationConfiguration& config)

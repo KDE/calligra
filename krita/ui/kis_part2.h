@@ -39,7 +39,7 @@ public:
 
     virtual ~KisPart2();
 
-    void setDocument(KisDoc2 *document);
+    virtual KoDocument *createDocument() const;
 
     /**
      * Creates and shows the start up widget. Reimplemented from KoDocument.
@@ -72,7 +72,6 @@ protected:
     KisFlipbook *m_flipbook;
     QString m_errorMessage;
     bool m_dieOnError;
-    KisDoc2 *m_document;
 };
 
 #endif

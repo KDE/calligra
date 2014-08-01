@@ -38,6 +38,7 @@
 
 #include "kis_canvas_resource_provider.h"
 #include "kis_view2.h"
+#include "kis_image_view.h"
 #include "kis_image.h"
 #include "canvas/kis_canvas_controller.h"
 #include "input/kis_input_manager.h"
@@ -87,8 +88,9 @@ public:
     bool verticalContainsCursor;
 };
 
-KisMirrorAxis::KisMirrorAxis(KisCanvasResourceProvider* provider, KisView2* parent)
-    : KisCanvasDecoration("mirror_axis", parent), d(new Private(this))
+KisMirrorAxis::KisMirrorAxis(KisCanvasResourceProvider* provider, KisImageView *parent)
+    : KisCanvasDecoration("mirror_axis", parent)
+    , d(new Private(this))
 {
     d->resourceProvider = provider;
     connect(d->resourceProvider, SIGNAL(mirrorModeChanged()), SLOT(mirrorModeChanged()));

@@ -27,9 +27,9 @@
 #include <kaction.h>
 #include <ktoggleaction.h>
 #include <ktoolbar.h>
+#include <kxmlguiclient.h>
+#include <kxmlguifactory.h>
 
-#include <KoXMLGUIClient.h>
-#include <KoXMLGUIFactory.h>
 #include <KoZoomController.h>
 #include <KoView.h>
 #include <KoPart.h>

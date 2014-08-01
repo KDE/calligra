@@ -69,9 +69,9 @@ public:
     KisNodeShapesGraph shapesGraph;
 };
 
-KisShapeController::KisShapeController(KisDoc2 * doc, KisNameServer *nameServer)
-        : KisDummiesFacadeBase(doc)
-        , m_d(new Private())
+KisShapeController::KisShapeController(KisDoc2 *doc, KisNameServer *nameServer)
+    : KisDummiesFacadeBase(doc)
+    , m_d(new Private())
 {
     m_d->doc = doc;
     m_d->nameServer = nameServer;
@@ -196,16 +196,16 @@ void KisShapeController::removeShape(KoShape* shape)
     m_d->doc->setModified(true);
 }
 
-void KisShapeController::setInitialShapeForView(KisView2 * view)
+void KisShapeController::setInitialShapeForCanvas(KisCanvas2 *canvas)
 {
     if (!image()) return;
 
     KisNodeSP rootNode = image()->root();
 
     if (m_d->shapesGraph.containsNode(rootNode)) {
-        Q_ASSERT(view->canvasBase());
-        Q_ASSERT(view->canvasBase()->shapeManager());
-        KoSelection *selection = view->canvasBase()->shapeManager()->selection();
+        Q_ASSERT(canvas);
+        Q_ASSERT(canvas->shapeManager());
+        KoSelection *selection = canvas->shapeManager()->selection();
         if (selection) {
             selection->select(m_d->shapesGraph.nodeToShape(rootNode));
             KoToolManager::instance()->switchToolRequested(KoToolManager::instance()->preferredToolForSelection(selection->selectedShapes()));
