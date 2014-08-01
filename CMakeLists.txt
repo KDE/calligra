@@ -707,23 +707,27 @@ set(KOTEXT_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kotext
                    ${CMAKE_SOURCE_DIR}/libs/kotext/opendocument
                    ${SOPRANO_INCLUDE_DIR}
                    ${FLAKE_INCLUDES}
-                   ${KOODF_INCLUDES}
-                   ${CMAKE_SOURCE_DIR}/libs/main)
+                   ${KOODF_INCLUDES})
 
 # TextLayout depends on kotext
 set(TEXTLAYOUT_INCLUDES ${KOTEXT_INCLUDES}
                    ${CMAKE_SOURCE_DIR}/libs/textlayout)
 
+# Widgets depends on flake
+set(KOWIDGETS_INCLUDES ${FLAKE_INCLUDES}
+                   ${CMAKE_SOURCE_DIR}/libs/widgetutils
+                   ${CMAKE_SOURCE_DIR}/libs/widgets)
+
 # BasicFlakes depends on flake, widgets
-set(BASICFLAKES_INCLUDES ${KOWIDGETS_INCLUDES} ${FLAKE_INCLUDES}
+set(BASICFLAKES_INCLUDES
+                   ${KOWIDGETS_INCLUDES} 
                    ${CMAKE_SOURCE_DIR}/libs/basicflakes
                    ${CMAKE_SOURCE_DIR}/libs/basicflakes/tools)
 
 # komain depends on kotext & flake
 set(KOMAIN_INCLUDES ${KDE4_INCLUDES}
                     ${TEXTLAYOUT_INCLUDES}
-                    ${CMAKE_SOURCE_DIR}/libs/widgets
-                    ${CMAKE_SOURCE_DIR}/libs/widgetutils
+                    ${KOWIDGETS_INCLUDES}
                     ${CMAKE_SOURCE_DIR}/libs/main
                     ${CMAKE_BINARY_DIR}/libs/main
                     ${CMAKE_SOURCE_DIR}/libs/main/config)
