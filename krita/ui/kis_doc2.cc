@@ -135,28 +135,10 @@ public:
     QString flipbook;
 };
 
-
-KisDoc2::KisDoc2()
-    : KoDocument(new KisPart2, new UndoStack(this))
-    , m_d(new KisDocPrivate())
-{
-    qobject_cast<KisPart2*>(documentPart())->setDocument(this);
-    // preload the krita resources
-    KisResourceServerProvider::instance();
-
-    init();
-    connect(this, SIGNAL(sigLoadingFinished()), this, SLOT(slotLoadingFinished()));
-    undoStack()->setUndoLimit(KisConfig().undoStackLimit());
-    setBackupFile(KisConfig().backupFile());
-
-}
-
-KisDoc2::KisDoc2(KisPart2 *part)
+KisDoc2::KisDoc2(const KisPart2 *part)
     : KoDocument(part, new UndoStack(this))
     , m_d(new KisDocPrivate())
 {
-    Q_ASSERT(part);
-    qobject_cast<KisPart2*>(documentPart())->setDocument(this);
     // preload the krita resources
     KisResourceServerProvider::instance();
 
@@ -522,13 +504,14 @@ vKisNodeSP KisDoc2::activeNodes() const
 QList<KisPaintingAssistant*> KisDoc2::assistants()
 {
     QList<KisPaintingAssistant*> assistants;
-    foreach(KoView *v, documentPart()->views()) {
-        KisView2 *view = qobject_cast<KisView2*>(v);
-        if (view) {
-            KisPaintingAssistantsDecoration* assistantsDecoration = view->paintingAssistantsDecoration();
-            assistants.append(assistantsDecoration->assistants());
-        }
-    }
+    // KOMVC: TODO
+//    foreach(KoView *v, documentPart()->views()) {
+//        KisView2 *view = qobject_cast<KisView2*>(v);
+//        if (view) {
+//            KisPaintingAssistantsDecoration* assistantsDecoration = view->paintingAssistantsDecoration();
+//            assistants.append(assistantsDecoration->assistants());
+//        }
+//    }
     return assistants;
 }
 

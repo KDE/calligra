@@ -72,7 +72,7 @@ class KRITAUI_EXPORT KisDoc2 : public KoDocument
 
 public:
     KisDoc2();
-    explicit KisDoc2(KisPart2 *part);
+    explicit KisDoc2(const KisPart2 *part = 0);
     virtual ~KisDoc2();
 
 public:
