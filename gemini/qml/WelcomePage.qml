@@ -107,8 +107,8 @@ Page {
 
                 ListElement { header: "COMPOSE NEW"; text: "Document"; icon: "SVG-Icon-NewDocument-1"; selected: false; stackComponent: "welcomePageWords"; }
                 ListElement { text: "Presentation"; icon: "SVG-Icon-NewPresentation-1"; selected: false; stackComponent: "welcomePageStage"; }
-                ListElement { text: "Spreadsheet"; icon: "SVG-Icon-NewSpreadsheet-1"; selected: false; stackComponent: "welcomePageCustom"; }
-                ListElement { text: "Sketch"; icon: "SVG-Icon-NewSketch-1"; selected: false; stackComponent: "welcomePageCustom"; }
+                //ListElement { text: "Spreadsheet"; icon: "SVG-Icon-NewSpreadsheet-1"; selected: false; stackComponent: "welcomePageCustom"; }
+                //ListElement { text: "Sketch"; icon: "SVG-Icon-NewSketch-1"; selected: false; stackComponent: "welcomePageCustom"; }
             }
             Rectangle {
                 anchors.fill: parent;
