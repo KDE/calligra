@@ -35,8 +35,10 @@ set(kritaui_LIB_SRCS
     canvas/kis_canvas_decoration.cc
     canvas/kis_coordinates_converter.cpp
     canvas/kis_grid_manager.cpp
+    canvas/kis_grid_decoration.cpp
     canvas/kis_grid_painter_configuration.cpp
     canvas/kis_perspective_grid_manager.cpp
+    canvas/kis_perspective_grid_decoration.cpp
     canvas/kis_prescaled_projection.cpp
     canvas/kis_qpainter_canvas.cpp
     canvas/kis_projection_backend.cpp
@@ -93,9 +95,12 @@ set(kritaui_LIB_SRCS
     kis_flipbook_item.cpp
     kis_histogram_view.cc
     kis_image_manager.cc
+    kis_image_view.cpp
     kis_image_view_converter.cpp
     kis_import_catcher.cc
     kis_layer_manager.cc
+    kis_main_window.cpp
+    kis_mainwindow_observer.cpp
     kis_mask_manager.cc
     kis_mimedata.cpp
     kis_node_commands_adapter.cpp
@@ -106,6 +111,7 @@ set(kritaui_LIB_SRCS
     kis_model_index_converter_show_all.cpp
     kis_painting_assistant.cc
     kis_painting_assistants_decoration.cpp
+    kis_painting_assistants_manager.cpp
     kis_paintop_box.cc
     kis_paintop_option.cpp
     kis_paintop_options_model.cpp
