@@ -45,6 +45,8 @@ class KisDisplayFilter;
 class KisInputManager;
 class KisDisplayColorConverter;
 struct KisExposureGammaCorrectionInterface;
+class KisPaintingAssistantsDecoration;
+class KisImageView;
 
 enum KisCanvasType {
     QPAINTER,
@@ -73,7 +75,7 @@ public:
      * @param viewConverter the viewconverter for converting between
      *                       window and document coordinates.
      */
-    KisCanvas2(KisCoordinatesConverter* coordConverter, KisView2* view, KoShapeBasedDocumentBase* sc);
+    KisCanvas2(KisCoordinatesConverter* coordConverter, KisImageView* view, KoShapeBasedDocumentBase* sc);
 
     virtual ~KisCanvas2();
 
@@ -141,19 +143,23 @@ public: // KoCanvasBase implementation
     // Temporary! Either get the current layer and image from the
     // resource provider, or use this, which gets them from the
     // current shape selection.
-    KisImageWSP currentImage();
+    KisImageWSP currentImage() const;
 
 
     KisInputManager *inputManager() const;
 
+    KisPaintingAssistantsDecoration* paintingAssistantsDecoration();
+
+
 public: // KisCanvas2 methods
 
-    KisImageWSP image();
-    KisView2* view();
+    KisImageWSP image() const;
+    KisView2* view() const;
+    KisImageView *imageView() const;
 
     /// @return true if the canvas image should be displayed in vertically mirrored mode
     void addDecoration(KisCanvasDecoration* deco);
-    KisCanvasDecoration* decoration(const QString& id);
+    KisCanvasDecoration* decoration(const QString& id) const;
 
     void setDisplayFilter(KisDisplayFilterSP displayFilter);
     KisDisplayColorConverter* displayColorConverter() const;

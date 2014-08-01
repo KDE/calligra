@@ -32,13 +32,14 @@
 #include <kis_doc2.h>
 #include <kis_image.h>
 #include <kis_canvas_controller.h>
+#include <kis_image_view.h>
 
-
-KisInfinityManager::KisInfinityManager(KisView2 *view, KisCanvas2 *canvas)
+KisInfinityManager::KisInfinityManager(KisImageView *view, KisCanvas2 *canvas)
   : KisCanvasDecoration(INFINITY_DECORATION_ID, view, true),
     m_filteringEnabled(false),
     m_cursorSwitched(false),
-    m_sideRects(NSides)
+    m_sideRects(NSides),
+    m_canvas(canvas)
 {
     connect(canvas, SIGNAL(documentOffsetUpdateFinished()), SLOT(imagePositionChanged()));
 }
@@ -56,8 +57,8 @@ inline void KisInfinityManager::addDecoration(const QRect &areaRect, const QPoin
 
 void KisInfinityManager::imagePositionChanged()
 {
-    QRect imageRect = view()->canvasBase()->coordinatesConverter()->imageRectInWidgetPixels().toAlignedRect();
-    QRect widgetRect = view()->canvasBase()->canvasWidget()->rect();
+    QRect imageRect = m_canvas->coordinatesConverter()->imageRectInWidgetPixels().toAlignedRect();
+    QRect widgetRect = m_canvas->canvasBase()->canvasWidget()->rect();
 
     KisConfig cfg;
     qreal vastScrolling = cfg.vastScrolling();
@@ -112,12 +113,12 @@ void KisInfinityManager::imagePositionChanged()
     }
 
     if (visible && !m_filteringEnabled) {
-        view()->canvasBase()->inputManager()->attachPriorityEventFilter(this);
+        m_canvas->inputManager()->attachPriorityEventFilter(this);
         m_filteringEnabled = true;
     }
 
     if (!visible && m_filteringEnabled) {
-        view()->canvasBase()->inputManager()->detachPriorityEventFilter(this);
+        m_canvas->inputManager()->detachPriorityEventFilter(this);
         m_filteringEnabled = false;
     }
 }
@@ -182,10 +183,10 @@ bool KisInfinityManager::eventFilter(QObject *obj, QEvent *event)
                 m_oldCursor = view()->canvas()->cursor();
                 m_cursorSwitched = true;
             }
-            view()->canvas()->setCursor(Qt::PointingHandCursor);
+            m_canvas->canvasWidget()->setCursor(Qt::PointingHandCursor);
             retval = true;
         } else if (m_cursorSwitched) {
-            view()->canvas()->setCursor(m_oldCursor);
+            m_canvas->canvasWidget()->setCursor(m_oldCursor);
             m_cursorSwitched = false;
         }
         break;
@@ -207,8 +208,8 @@ bool KisInfinityManager::eventFilter(QObject *obj, QEvent *event)
         if (retval) {
             QPoint pos = mouseEvent->pos();
 
-            const KisCoordinatesConverter *converter = view()->canvasBase()->coordinatesConverter();
-            QRect widgetRect = converter->widgetToImage(view()->canvas()->rect()).toAlignedRect();
+            const KisCoordinatesConverter *converter = m_canvas->coordinatesConverter();
+            QRect widgetRect = converter->widgetToImage(m_canvas->rect()).toAlignedRect();
             KisImageWSP image = view()->document()->image();
             QRect cropRect = image->bounds();
 

@@ -33,6 +33,7 @@ class KActionCollection;
  */
 class KRITAUI_EXPORT KisPaintingAssistantsDecoration : public KisCanvasDecoration
 {
+    Q_OBJECT
 public:
     KisPaintingAssistantsDecoration(KisView2* parent);
     ~KisPaintingAssistantsDecoration();

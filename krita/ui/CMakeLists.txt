@@ -8,8 +8,8 @@ else (CMAKE_COMPILER_IS_GNUCXX)
     add_definitions(${KDE4_ENABLE_EXCEPTIONS} )
 endif (CMAKE_COMPILER_IS_GNUCXX)
 
-include_directories( ${KOTEXT_INCLUDES}
-    ${TEXTLAYOUT_INCLUDES}
+include_directories( 
+    ${KOMVC_INCLUDES}
     ${CMAKE_SOURCE_DIR}/libs/pigment/colorprofiles
     ${CMAKE_CURRENT_SOURCE_DIR}/flake
     ${CMAKE_CURRENT_SOURCE_DIR}/pigment/resources

@@ -21,12 +21,12 @@
 
 #include "kis_perspective_grid_decoration.h"
 
+#include <QPainter>
+
 #include <klocale.h>
 #include "kis_perspective_grid.h"
 #include "canvas/kis_grid_painter_configuration.h"
 #include "kis_image_view.h"
-
-
 
 /***************************************************************/
 /*                 Auxiliary line structures                   */
