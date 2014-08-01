@@ -102,37 +102,27 @@ Page {
                 opacity: paperSizeList.currentIndex === 0 ? 1 : 0;
                 Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
                 clip: true;
-                Column {
+                PanelTextField {
+                    id: widthInput;
                     anchors {
                         top: parent.top;
                         left: parent.left;
                         right: parent.horizontalCenter;
                     }
-                    height: childrenRect.height;
-                    Label {
-                        width: parent.width;
-                        text: "Width:";
-                    }
-                    PanelTextField {
-                        width: parent.width;
-                        text: "1234";
-                    }
+                    width: parent.width;
+                    placeholder: "Width";
+                    text: "1234";
                 }
-                Column {
+                PanelTextField {
+                    id: heightInput;
                     anchors {
                         top: parent.top;
                         left: parent.horizontalCenter;
                         right: parent.right;
                     }
-                    height: childrenRect.height;
-                    Label {
-                        width: parent.width;
-                        text: "Height:";
-                    }
-                    PanelTextField {
-                        width: parent.width;
-                        text: "1234";
-                    }
+                    width: parent.width;
+                    placeholder: "Height";
+                    text: "1234";
                 }
             }
             Label {
@@ -215,32 +205,94 @@ Page {
                 width: parent.width;
                 text: "Columns:";
             }
-            RangeInput {
-                id: columnCount;
+            Row {
                 width: parent.width;
-                placeholder: "Amount";
-                min: 1; max: 99; decimals: 0;
-                value: 1;
+                RangeInput {
+                    id: columnCount;
+                    width: parent.width / 2;
+                    placeholder: "Amount";
+                    min: 1; max: 99; decimals: 0;
+                    value: 1;
+                }
+                RangeInput {
+                    id: columnSpacing;
+                    width: parent.width / 2;
+                    placeholder: "Spacing";
+                    useExponentialValue: true;
+                    min: 0; max: 999; decimals: 2;
+                    value: 20;
+                }
             }
-            RangeInput {
-                id: columnSpacing;
+            Row {
                 width: parent.width;
-                placeholder: "Spacing";
-                useExponentialValue: true;
-                min: 0; max: 999; decimals: 2;
-                value: 20;
+                height: childrenRect.height;
+                Item {
+                    height: 10;
+                    width: parent.width / 3;
+                }
+                RangeInput {
+                    id: marginTop;
+                    width: parent.width / 3;
+                    placeholder: "Top";
+                    useExponentialValue: true;
+                    min: 1; max: 999; decimals: 2;
+                    value: 10;
+                }
+            }
+            Row {
+                width: parent.width;
+                height: childrenRect.height;
+                RangeInput {
+                    id: marginLeft;
+                    width: parent.width / 3;
+                    placeholder: "Left";
+                    useExponentialValue: true;
+                    min: 1; max: 999; decimals: 2;
+                    value: 10;
+                }
+                Label {
+                    height: marginLeft.height;
+                    width: parent.width / 3;
+                    text: "Margins";
+                    verticalAlignment: Text.AlignVCenter;
+                    horizontalAlignment: Text.AlignHCenter;
+                }
+                RangeInput {
+                    id: marginRight;
+                    width: parent.width / 3;
+                    placeholder: "Right";
+                    useExponentialValue: true;
+                    min: 1; max: 999; decimals: 2;
+                    value: 10;
+                }
+            }
+            Row {
+                width: parent.width;
+                height: childrenRect.height;
+                Item {
+                    height: 10;
+                    width: parent.width / 3;
+                }
+                RangeInput {
+                    id: marginBottom;
+                    width: parent.width / 3;
+                    placeholder: "Bottom";
+                    useExponentialValue: true;
+                    min: 1; max: 999; decimals: 2;
+                    value: 10;
+                }
             }
         }
-        CohereButton {
-            anchors {
-                horizontalCenter: parent.horizontalCenter;
-                bottom: parent.bottom;
-                margins: Constants.DefaultMargin;
-            }
-            text: "Create Document";
-            textColor: "white";
-            textSize: Settings.theme.adjustedPixel(18);
-            color: "#4e5359";
+    }
+    CohereButton {
+        anchors {
+            right: parent.right;
+            bottom: parent.bottom;
+            margins: Constants.DefaultMargin;
         }
+        text: "Create Document";
+        textColor: "white";
+        textSize: Settings.theme.adjustedPixel(18);
+        color: "#4e5359";
     }
 }
