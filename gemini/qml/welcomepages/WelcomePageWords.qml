@@ -23,7 +23,58 @@ import "../components"
 Page {
     id: base;
     Label {
-        anchors.centerIn: parent;
-        text: "Words Templates";
+        id: docTypeSelectorRow;
+        anchors {
+            top: parent.top;
+            left: parent.left;
+            right: parent.right;
+        }
+        height: Constants.GridHeight * 1.5;
+        verticalAlignment: Text.AlignVCenter;
+        horizontalAlignment: Text.AlignHCenter;
+        font: Settings.theme.font("pageHeader");
+        text: "Create a Text Document";
+        color: "#22282f";
+        Row {
+            anchors {
+                right: parent.right;
+                rightMargin: 20;
+                verticalCenter: parent.verticalCenter;
+            }
+            height: parent.height - Constants.DefaultMargin * 2;
+            spacing: 4;
+            CohereButton {
+                anchors.verticalCenter: parent.verticalCenter;
+                text: "Custom Document";
+                textColor: "#5b6573";
+                textSize: Settings.theme.adjustedPixel(18);
+                checkedColor: "#D2D4D5";
+                onClicked: { if(!checked) { wordsDocStack.replace(customDocWords); } }
+                checked: wordsDocStack.currentPage.pageName === "CustomDocWords";
+            }
+            CohereButton {
+                anchors.verticalCenter: parent.verticalCenter;
+                text: "Templates";
+                textColor: "#5b6573";
+                textSize: Settings.theme.adjustedPixel(18);
+                checkedColor: "#D2D4D5";
+                onClicked: { if(!checked) { wordsDocStack.replace(templatesWords); } }
+                checked: wordsDocStack.currentPage.pageName === "TemplatesWords";
+            }
+        }
     }
+    PageStack {
+        id: wordsDocStack;
+        anchors {
+            margins: Constants.DefaultMargin;
+            top: docTypeSelectorRow.bottom;
+            left: parent.left;
+            right: parent.right;
+            bottom: parent.bottom;
+            bottomMargin: 0;
+        }
+        initialPage: customDocWords;
+    }
+    Component { id: customDocWords; CustomDocWords { } }
+    Component { id: templatesWords; TemplatesWords { } }
 }
