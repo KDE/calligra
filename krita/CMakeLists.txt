@@ -90,6 +90,7 @@ set(KOMVC_INCLUDES ${BASICFLAKES_INCLUDES}
                    ${CMAKE_SOURCE_DIR}/libs/widgets
                    ${CMAKE_SOURCE_DIR}/libs/widgetutils
                    ${CMAKE_SOURCE_DIR}/krita/komvc
+                   ${CMAKE_BINARY_DIR}/krita/komvc
 )
 
 
@@ -98,7 +99,7 @@ set(KRITA_INCLUDES
     ${CMAKE_CURRENT_BINARY_DIR}
     
 #    ${KOMVC_INCLUDES}
-    ${KOMAIN_INCLUDES}
+    ${KOMVC_INCLUDES}
 
     ${CMAKE_SOURCE_DIR}/krita/image
     ${CMAKE_SOURCE_DIR}/krita/image/brushengine

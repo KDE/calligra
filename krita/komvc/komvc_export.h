@@ -28,7 +28,7 @@
 #if defined _WIN32 || defined _WIN64
 
 #ifndef KOMVC_EXPORT
-# if defined(MAKE_KOMAIN_LIB)
+# if defined(MAKE_KOMVC_LIB)
 /* We are building this library */
 #  define KOMVC_EXPORT KDE_EXPORT
 # else
@@ -43,20 +43,20 @@
 
 #endif
 
-/* Now the same for KOMAIN_TEST_EXPORT, if compiling with unit tests enabled */
+/* Now the same for KOMVC_TEST_EXPORT, if compiling with unit tests enabled */
 
 #ifdef COMPILING_TESTS
 #if defined _WIN32 || defined _WIN64
-# if defined(MAKE_KOMAIN_LIB)
-#       define KOMAIN_TEST_EXPORT KDE_EXPORT
+# if defined(MAKE_KOMVC_LIB)
+#       define KOMVC_TEST_EXPORT KDE_EXPORT
 #   else
-#       define KOMAIN_TEST_EXPORT KDE_IMPORT
+#       define KOMVC_TEST_EXPORT KDE_IMPORT
 #   endif
 # else /* not windows */
-#   define KOMAIN_TEST_EXPORT KDE_EXPORT
+#   define KOMVC_TEST_EXPORT KDE_EXPORT
 # endif
 #else /* not compiling tests */
-#   define KOMAIN_TEST_EXPORT
+#   define KOMVC_TEST_EXPORT
 #endif
 
 

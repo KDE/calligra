@@ -33,7 +33,7 @@ namespace CalligraFilter {
  * @internal
  * Only exported for unit tests.
  */
-class KOMAIN_TEST_EXPORT Graph
+class KOMVC_TEST_EXPORT Graph
 {
 
 public:

@@ -344,9 +344,9 @@ target_link_libraries(kritaui ${QT_QTDECLARATIVE_LIBRARY}
 target_link_libraries(kritaui ${GLEW_LIBRARIES})
 
 if(GHNS)
-    target_link_libraries(kritaui ${KDE4_KFILE_LIBRARY} kritaimage kritalibbrush komain kowidgets kowidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES} ${KDE4_KNEWSTUFF3_LIBS})
+    target_link_libraries(kritaui ${KDE4_KFILE_LIBRARY} kritaimage kritalibbrush komvc kowidgets kowidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES} ${KDE4_KNEWSTUFF3_LIBS})
 else(GHNS)
-    target_link_libraries(kritaui ${KDE4_KFILE_LIBRARY} kritaimage kritalibbrush komain kowidgets kowidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES})
+    target_link_libraries(kritaui ${KDE4_KFILE_LIBRARY} kritaimage kritalibbrush komvc kowidgets kowidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES})
 endif (GHNS)
 
 if(HAVE_OPENGL)
@@ -364,7 +364,7 @@ if(HAVE_OPENGL)
 
 endif(HAVE_OPENGL)
 
-target_link_libraries(kritaui LINK_INTERFACE_LIBRARIES kritaimage kritalibbrush komain ${GL_INTERFACE_LIBRARIES} )
+target_link_libraries(kritaui LINK_INTERFACE_LIBRARIES kritaimage kritalibbrush komvc ${GL_INTERFACE_LIBRARIES} )
 
 set_target_properties(kritaui
     PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}

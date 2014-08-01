@@ -18,8 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOMAINWINDOW_H
-#define KOMAINWINDOW_H
+#ifndef KOMVCWINDOW_H
+#define KOMVCWINDOW_H
 
 #include "komvc_export.h"
 
