@@ -23,7 +23,6 @@
 #include <QPainterPath>
 #include <QCursor>
 
-
 class KisImageView;
 
 static const QString INFINITY_DECORATION_ID = "infinity-decorations";

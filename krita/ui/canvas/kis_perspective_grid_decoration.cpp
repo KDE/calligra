@@ -120,15 +120,13 @@ struct KisPerspectiveGridDecoration::SubdivisionLinesInfo {
     int numSubdivisions;
 };
 
-KisPerspectiveGridDecoration::KisPerspectiveGridDecoration(KisImageView* parent)
-    : KisCanvasDecoration("perspectiveGrid", i18n("Perspective grid"), parent)
+KisPerspectiveGridDecoration::KisPerspectiveGridDecoration(KisImageView* /*parent*/)
+    : KisCanvasDecoration("perspectiveGrid", 0)
 {
-
 }
 
 KisPerspectiveGridDecoration::~KisPerspectiveGridDecoration()
 {
-
 }
 
 KisPerspectiveGridDecoration::SubdivisionLinesInfo

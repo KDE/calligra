@@ -18,17 +18,21 @@
 
 #include "kis_canvas_decoration.h"
 
-#include "kis_view2.h"
+#include "kis_image_view.h"
+#include "kis_canvas2.h"
+
 
 struct KisCanvasDecoration::Private {
     bool visible;
-    KisView2* view;
+    KisImageView* view;
     QString id;
 };
 
-KisCanvasDecoration::KisCanvasDecoration(const QString& id, KisView2 * parent, bool visible) : QObject(parent), d(new Private)
+KisCanvasDecoration::KisCanvasDecoration(const QString& id, KisImageView *parent)
+    : QObject(parent)
+    , d(new Private)
 {
-    d->visible = visible;
+    d->visible = false;
     d->view = parent;
     d->id = id;
 }
@@ -38,6 +42,12 @@ KisCanvasDecoration::~KisCanvasDecoration()
     delete d;
 }
 
+void KisCanvasDecoration::setView(KisImageView *imageView)
+{
+    d->view = imageView;
+}
+
+
 const QString& KisCanvasDecoration::id() const
 {
     return d->id;
@@ -46,7 +56,10 @@ const QString& KisCanvasDecoration::id() const
 void KisCanvasDecoration::setVisible(bool v)
 {
     d->visible = v;
-    d->view->canvas()->update();
+    if (d->view && d->view->canvasBase()) {
+
+        d->view->canvasBase()->canvasWidget()->update();
+    }
 }
 
 bool KisCanvasDecoration::visible() const
@@ -65,7 +78,14 @@ void KisCanvasDecoration::paint(QPainter& gc, const QRectF& updateArea, const Ki
         drawDecoration(gc, updateArea, converter,canvas);
 }
 
-KisView2* KisCanvasDecoration::view() const
+
+KisImageView *KisCanvasDecoration::imageView()
+{
+    return d->view;
+}
+
+
+KisImageView *KisCanvasDecoration::view() const
 {
     return d->view;
 }

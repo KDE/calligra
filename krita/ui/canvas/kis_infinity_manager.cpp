@@ -35,7 +35,7 @@
 #include <kis_image_view.h>
 
 KisInfinityManager::KisInfinityManager(KisImageView *view, KisCanvas2 *canvas)
-  : KisCanvasDecoration(INFINITY_DECORATION_ID, view, true),
+  : KisCanvasDecoration(INFINITY_DECORATION_ID, view),
     m_filteringEnabled(false),
     m_cursorSwitched(false),
     m_sideRects(NSides),
@@ -58,7 +58,7 @@ inline void KisInfinityManager::addDecoration(const QRect &areaRect, const QPoin
 void KisInfinityManager::imagePositionChanged()
 {
     QRect imageRect = m_canvas->coordinatesConverter()->imageRectInWidgetPixels().toAlignedRect();
-    QRect widgetRect = m_canvas->canvasBase()->canvasWidget()->rect();
+    QRect widgetRect = m_canvas->canvasWidget()->rect();
 
     KisConfig cfg;
     qreal vastScrolling = cfg.vastScrolling();
@@ -180,7 +180,7 @@ bool KisInfinityManager::eventFilter(QObject *obj, QEvent *event)
 
         if (m_decorationPath.contains(mouseEvent->pos())) {
             if (!m_cursorSwitched) {
-                m_oldCursor = view()->canvas()->cursor();
+                m_oldCursor = m_canvas->canvasWidget()->cursor();
                 m_cursorSwitched = true;
             }
             m_canvas->canvasWidget()->setCursor(Qt::PointingHandCursor);
@@ -209,8 +209,9 @@ bool KisInfinityManager::eventFilter(QObject *obj, QEvent *event)
             QPoint pos = mouseEvent->pos();
 
             const KisCoordinatesConverter *converter = m_canvas->coordinatesConverter();
-            QRect widgetRect = converter->widgetToImage(m_canvas->rect()).toAlignedRect();
-            KisImageWSP image = view()->document()->image();
+            QRect widgetRect = converter->widgetToImage(m_canvas->canvasWidget()->rect()).toAlignedRect();
+            KisImageWSP image = view()->image();
+
             QRect cropRect = image->bounds();
 
             const int hLimit = cropRect.width();
