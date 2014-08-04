@@ -157,7 +157,7 @@ public:
      *
      * The list of xmlid values can in turn be used by
      * KoDocumentRdf::findExtent() and findStatements() to inspect or
-     * perform actions at the various places the semanitc item appears
+     * perform actions at the various places the semantic item appears
      * in the document.
      */
     QStringList xmlIdList() const;
@@ -165,7 +165,7 @@ public:
     /**
      * Create a QWidget that can edit the SemanticItem. Note that the
      * widget will show the data and allow editing of it for the
-     * SemanticItem, but to make changes permenant, the
+     * SemanticItem, but to make changes permanent, the
      * updateFromEditorData() method must be used. A typical senario
      * is to add the widget from createEditor to a dialog and when the
      * user affirms the dialog call updateFromEditorData() to update
