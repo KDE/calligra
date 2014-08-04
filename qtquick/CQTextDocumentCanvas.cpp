@@ -52,6 +52,7 @@
 #include <KoShapeContainer.h>
 #include <KoTextEditor.h>
 #include <KoProperties.h>
+#include <KoColumns.h>
 #include <KActionCollection>
 #include <QGraphicsWidget>
 #include <QTextDocument>
@@ -236,7 +237,34 @@ void CQTextDocumentCanvas::openFile(const QString& uri)
     KoDocument* document = d->part->document();
     document->setAutoSave(0);
     document->setCheckAutoSaveFile(false);
-    document->openUrl(KUrl(uri));
+
+    KUrl url(uri);
+    if(url.protocol() == "newfile") {
+        KWDocument* doc = qobject_cast<KWDocument*>(document);
+        doc->initEmpty();
+        KWPageStyle style = doc->pageManager()->defaultPageStyle();
+        Q_ASSERT(style.isValid());
+
+        KoColumns columns;
+        columns.count = url.queryItemValue("columncount").toInt();
+        columns.gapWidth = url.queryItemValue("columngap").toDouble();
+        style.setColumns(columns);
+
+        KoPageLayout layout = style.pageLayout();
+        layout.format = KoPageFormat::formatFromString(url.queryItemValue("pageformat"));
+        layout.orientation = (KoPageFormat::Orientation)url.queryItemValue("pageorientation").toInt();
+        layout.height = MM_TO_POINT(url.queryItemValue("height").toDouble());
+        layout.width = MM_TO_POINT(url.queryItemValue("width").toDouble());
+        layout.topMargin = MM_TO_POINT(url.queryItemValue("topmargin").toDouble());
+        layout.leftMargin = MM_TO_POINT(url.queryItemValue("leftmargin").toDouble());
+        layout.rightMargin = MM_TO_POINT(url.queryItemValue("rightmargin").toDouble());
+        layout.bottomMargin = MM_TO_POINT(url.queryItemValue("bottommargin").toDouble());
+        style.setPageLayout(layout);
+
+        doc->setUnit(KoUnit::fromSymbol(url.queryItemValue("unit")));
+    }
+    else
+        document->openUrl(url);
 
     d->canvas = dynamic_cast<KWCanvasItem*> (d->part->canvasItem(d->part->document()));
     createAndSetCanvasControllerOn(d->canvas);
