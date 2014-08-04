@@ -307,33 +307,27 @@ KoTextInlineRdf *KoTextInlineRdf::tryToGetInlineRdf(const QTextFormat &tf)
         return 0;
     }
     QVariant v = tf.property(KoCharacterStyle::InlineRdf);
-    KoTextInlineRdf *inlineRdf = v.value<KoTextInlineRdf *>();
-    if (inlineRdf) {
-        return inlineRdf;
-    }
-    return 0;
+    return v.value<KoTextInlineRdf *>();
 }
 
 KoTextInlineRdf *KoTextInlineRdf::tryToGetInlineRdf(QTextCursor &cursor)
 {
     QTextCharFormat cf = cursor.charFormat();
-    QVariant v = cf.property(KoCharacterStyle::InlineRdf);
-    KoTextInlineRdf *inlineRdf = v.value<KoTextInlineRdf *>();
-    if (inlineRdf) {
-        return inlineRdf;
+    if (!cf.hasProperty(KoCharacterStyle::InlineRdf)) {
+        return 0;
     }
-    return 0;
+    QVariant v = cf.property(KoCharacterStyle::InlineRdf);
+    return v.value<KoTextInlineRdf *>();
 }
 
 KoTextInlineRdf *KoTextInlineRdf::tryToGetInlineRdf(KoTextEditor *handler)
 {
     QTextCharFormat cf = handler->charFormat();
-    QVariant v = cf.property(KoCharacterStyle::InlineRdf);
-    KoTextInlineRdf *inlineRdf = v.value<KoTextInlineRdf *>();
-    if (inlineRdf) {
-        return inlineRdf;
+    if (!cf.hasProperty(KoCharacterStyle::InlineRdf)) {
+        return 0;
     }
-    return 0;
+    QVariant v = cf.property(KoCharacterStyle::InlineRdf);
+    return v.value<KoTextInlineRdf *>();
 }
 
 void KoTextInlineRdf::attach(KoTextInlineRdf *inlineRdf, QTextCursor &cursor)
