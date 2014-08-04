@@ -35,6 +35,7 @@
 #include "kis_locked_properties_proxy.h"
 #include "kis_locked_properties_server.h"
 #include "kis_locked_properties.h"
+#include "kis_config.h"
 
 class QToolButton;
 class QPushButton;

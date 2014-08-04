@@ -37,15 +37,18 @@ KisLockedPropertiesProxy::KisLockedPropertiesProxy(const KisPropertiesConfigurat
 }
 QVariant KisLockedPropertiesProxy::getProperty(const QString &name) const
 {
-
+    KisPropertiesConfiguration* temp = const_cast<KisPropertiesConfiguration*>(m_parent);
+    KisPaintOpSettings* t = dynamic_cast<KisPaintOpSettings*>(temp);
+    bool saveDirtyState = t->preset()->dirtyPreset();
     if (m_lockedProperties->lockedProperties()) {
         if (m_lockedProperties->lockedProperties()->hasProperty(name)) {
             KisLockedPropertiesServer::instance()->setPropertiesFromLocked(true);
-            KisPropertiesConfiguration* temp = const_cast<KisPropertiesConfiguration*>(m_parent);
+
             if (!m_parent->hasProperty(name + "_previous")) {
                 temp->setProperty(name + "_previous", m_parent->getProperty(name));
             }
             temp->setProperty(name, m_lockedProperties->lockedProperties()->getProperty(name));
+            t->preset()->setDirtyPreset(saveDirtyState);
             return m_lockedProperties->lockedProperties()->getProperty(name);
         } else {
             if (m_parent->hasProperty(name + "_previous")) {
@@ -55,22 +58,30 @@ QVariant KisLockedPropertiesProxy::getProperty(const QString &name) const
             }
         }
     }
+
+    t->preset()->setDirtyPreset(saveDirtyState);
     return m_parent->getProperty(name);
 }
 void KisLockedPropertiesProxy::setProperty(const QString & name, const QVariant & value)
 {
     KisPropertiesConfiguration* temp = const_cast<KisPropertiesConfiguration*>(m_parent);
-    if (m_lockedProperties->lockedProperties()) {
+    KisPaintOpSettings* t = dynamic_cast<KisPaintOpSettings*>(temp);
+    bool saveDirtyState = t->preset()->dirtyPreset();
+    if (m_lockedProperties->lockedProperties()) {      
         if (m_lockedProperties->lockedProperties()->hasProperty(name)) {
             m_lockedProperties->lockedProperties()->setProperty(name, value);
+            t->setProperty(name, value);
             if (!m_parent->hasProperty(name + "_previous")) {
-                temp->setProperty(name + "_previous", m_parent->getProperty(name));
+                t->setProperty(name + "_previous", m_parent->getProperty(name));
             }
-
+            t->preset()->setDirtyPreset(saveDirtyState);
+            return;
         }
 
+
     }
-    temp->setProperty(name, value);
+    t->setProperty(name, value);
+
 }
 
 

@@ -23,6 +23,7 @@
 #include "kis_properties_configuration.h"
 #include "kis_locked_properties_server.h"
 #include "kis_paintop_preset.h"
+#include "kis_paintop_settings.h"
 
 class KisLockedPropertiesServer;
 

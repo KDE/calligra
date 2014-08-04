@@ -98,6 +98,8 @@ KisPaintopBox::KisPaintopBox(KisView2 *view, QWidget *parent, const char *name)
     KGlobal::mainComponent().dirs()->addResourceType("kis_defaultpresets", "data", "krita/defaultpresets/");
 
     setObjectName(name);
+    KisConfig cfg;
+    m_dirtyPresetsEnabled = cfg.useDirtyPresets();
 
     KAcceleratorManager::setNoAccel(this);
 
@@ -163,7 +165,7 @@ KisPaintopBox::KisPaintopBox(KisView2 *view, QWidget *parent, const char *name)
     vMirrorButton->setDefaultAction(vMirrorAction);
     m_view->actionCollection()->addAction("vmirror_action", vMirrorAction);
 
-    KisConfig cfg;
+
     for (int i = 0; i < 3; ++i) {
         m_sliderChooser[i] = new KisWidgetChooser(i + 1);
         KisDoubleSliderSpinBox* slOpacity = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("opacity", i18n("Opacity:"));
@@ -1001,6 +1003,7 @@ void KisPaintopBox::slotSaveLockedOptionToPreset(KisPropertiesConfiguration* p)
         }
 
     }
+    slotConfigurationItemChanged();
 
 }
 
@@ -1032,5 +1035,7 @@ void KisPaintopBox::slotDirtyPresetToggled(bool value)
         m_presetsPopup->updateViewSettings();
     }
     m_dirtyPresetsEnabled = value;
+    KisConfig cfg;
+    cfg.setUseDirtyPresets(m_dirtyPresetsEnabled);
 
 }

@@ -87,7 +87,7 @@ KisPaintOpPreset* KisPaintOpPreset::clone() const
 }
 void KisPaintOpPreset::setDirtyPreset(bool value)
 {
-    m_d->dirtyPreset = value;
+    m_d->dirtyPreset = value;    
 }
 bool KisPaintOpPreset::dirtyPreset() const
 {

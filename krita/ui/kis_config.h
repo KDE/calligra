@@ -369,6 +369,9 @@ public:
     const KoColorSpace* customColorSelectorColorSpace() const;
     void setCustomColorSelectorColorSpace(const KoColorSpace *cs);
 
+    bool useDirtyPresets() const;
+    void setUseDirtyPresets(bool value);
+
 
     template<class T>
     void writeEntry(const QString& name, const T& value) {

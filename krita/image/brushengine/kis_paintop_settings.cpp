@@ -41,7 +41,7 @@
 #include<kis_types.h>
 
 struct KisPaintOpSettings::Private {
-    KisNodeSP node;
+    KisNodeWSP node;
     QPointer<KisPaintOpSettingsWidget> settingsWidget;
     QString modelName;
     KisPaintOpPresetWSP preset;

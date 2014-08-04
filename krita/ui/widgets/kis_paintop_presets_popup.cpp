@@ -151,8 +151,8 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     m_d->uiWdgPaintOpPresetSettings.presetWidget->setVisible(cfg.presetStripVisible());
     m_d->uiWdgPaintOpPresetSettings.scratchpadControls->setVisible(cfg.scratchpadVisible());
     m_d->detachedGeometry = QRect(100, 100, 0, 0);
-    m_d->uiWdgPaintOpPresetSettings.dirtyPresetCheckBox->setChecked(false);
-    slotDirtyPresetToggled(false);
+    m_d->uiWdgPaintOpPresetSettings.dirtyPresetCheckBox->setChecked(cfg.useDirtyPresets());
+    slotDirtyPresetToggled(cfg.useDirtyPresets());
     m_d->uiWdgPaintOpPresetSettings.reload->setEnabled(false);
 }
 
@@ -221,6 +221,7 @@ void KisPaintOpPresetsPopup::changeSavePresetButtonText(bool change)
 
     }
     else {
+        m_d->uiWdgPaintOpPresetSettings.bnSave->setVisible(true);
         m_d->uiWdgPaintOpPresetSettings.bnSave->setText(i18n("Save to Presets"));
 
     }
@@ -307,10 +308,12 @@ void KisPaintOpPresetsPopup::resourceSelected(KoResource* resource)
         palette.setColor(QPalette::Base, QColor(255,200,200));
         palette.setColor(QPalette::Text, Qt::black);
         m_d->uiWdgPaintOpPresetSettings.txtPreset->setPalette(palette);
+        m_d->uiWdgPaintOpPresetSettings.bnSave->setVisible(true);
        }
     else
     {
      m_d->uiWdgPaintOpPresetSettings.txtPreset->setPalette(palette);
+     m_d->uiWdgPaintOpPresetSettings.bnSave->setVisible(false);
     }
     m_d->uiWdgPaintOpPresetSettings.txtPreset->setText(resource->name());
 }
@@ -388,7 +391,7 @@ void KisPaintOpPresetsPopup::updateViewSettings()
 }
 void KisPaintOpPresetsPopup::slotDirtyPresetToggled(bool value)
 {
-    m_d->uiWdgPaintOpPresetSettings.reload->setVisible(value);
+    m_d->uiWdgPaintOpPresetSettings.reload->setVisible(value);    
 }
 
 

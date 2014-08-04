@@ -204,6 +204,14 @@ void KisConfig::setMonitorProfile(const QString & monitorProfile, bool override)
     m_cfg.writeEntry("monitorProfile/OverrideX11", override);
     m_cfg.writeEntry("monitorProfile", monitorProfile);
 }
+bool KisConfig::useDirtyPresets() const
+{
+   return m_cfg.readEntry("useDirtyPresets",false);
+}
+void KisConfig::setUseDirtyPresets(bool value)
+{
+    m_cfg.writeEntry("useDirtyPresets",value);
+}
 
 const KoColorProfile *KisConfig::getScreenProfile(int screen)
 {
