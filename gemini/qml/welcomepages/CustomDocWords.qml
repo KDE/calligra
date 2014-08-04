@@ -37,17 +37,19 @@ Page {
                 text: "Unit:"
             }
             ExpandingListView {
+                id: unitList;
                 width: parent.width;
                 expandedHeight: Constants.GridHeight * 3;
                 currentIndex: 6;
                 model: ListModel {
-                    ListElement { text: "Millimeters (mm)"; }
-                    ListElement { text: "Centimeters (cm)"; }
-                    ListElement { text: "Decimeters (dm)"; }
-                    ListElement { text: "Inches (in)"; }
-                    ListElement { text: "Pica (pi)"; }
-                    ListElement { text: "Cicero (cc)"; }
-                    ListElement { text: "Points (pt)"; }
+                    id: unitModel;
+                    ListElement { text: "Millimeters (mm)"; unit: "mm"; }
+                    ListElement { text: "Centimeters (cm)"; unit: "cm"; }
+                    ListElement { text: "Decimeters (dm)"; unit: "dm"; }
+                    ListElement { text: "Inches (in)"; unit: "in"; }
+                    ListElement { text: "Pica (pi)"; unit: "pi"; }
+                    ListElement { text: "Cicero (cc)"; unit: "cc"; }
+                    ListElement { text: "Points (pt)"; unit: "pt"; }
                 }
             }
             Label {
@@ -59,40 +61,45 @@ Page {
                 width: parent.width;
                 expandedHeight: Constants.GridHeight * 6;
                 currentIndex: 7;
+                onCurrentIndexChanged: {
+                    if(widthInput !== null) {
+                        widthInput.text = paperSizeModel.get(currentIndex).width;
+                        heightInput.text = paperSizeModel.get(currentIndex).height;
+                    }
+                }
                 model: ListModel {
-                    ListElement { text: "Custom"; }
-                    ListElement { text: "Screen"; }
+                    id: paperSizeModel;
+                    ListElement { text: "Custom"; name: "Custom"; width: 210.0; height: 297.0; }
+                    ListElement { text: "Screen"; name: "Screen"; width: 210.0; height: 297.0; }
                     ListElement { isCategory: true; text: "ISO formats"; }
-                    ListElement { text: "ISO A0"; }
-                    ListElement { text: "ISO A1"; }
-                    ListElement { text: "ISO A2"; }
-                    ListElement { text: "ISO A3"; }
-                    ListElement { text: "ISO A4"; }
-                    ListElement { text: "ISO A5"; }
-                    ListElement { text: "ISO A6"; }
-                    ListElement { text: "ISO A7"; }
-                    ListElement { text: "ISO A8"; }
-                    ListElement { text: "ISO A9"; }
-                    ListElement { text: "ISO B0"; }
-                    ListElement { text: "ISO B1"; }
-                    ListElement { text: "ISO B2"; }
-                    ListElement { text: "ISO B3"; }
-                    ListElement { text: "ISO B4"; }
-                    ListElement { text: "ISO B5"; }
-                    ListElement { text: "ISO B6"; }
-                    ListElement { text: "ISO B7"; }
-                    ListElement { text: "ISO B8"; }
-                    ListElement { text: "ISO B9"; }
-                    ListElement { text: "ISO B10"; }
-                    ListElement { text: "ISO C5"; }
-                    ListElement { text: "ISO DL"; }
+                    ListElement { text: "ISO A0"; name: "A0"; width: 841.0; height: 1189.0; }
+                    ListElement { text: "ISO A1"; name: "A1"; width: 594.0; height: 841.0; }
+                    ListElement { text: "ISO A2"; name: "A2"; width: 420.0; height: 594.0; }
+                    ListElement { text: "ISO A3"; name: "A3"; width: 297.0; height: 420.0; }
+                    ListElement { text: "ISO A4"; name: "A4"; width: 210.0; height: 297.0; }
+                    ListElement { text: "ISO A5"; name: "A5"; width: 148.0; height: 210.0; }
+                    ListElement { text: "ISO A6"; name: "A6"; width: 105.0; height: 148.0; }
+                    ListElement { text: "ISO A7"; name: "A7"; width: 74.0; height: 105.0; }
+                    ListElement { text: "ISO A8"; name: "A8"; width: 52.0; height: 74.0; }
+                    ListElement { text: "ISO A9"; name: "A9"; width: 37.0; height: 52.0; }
+                    ListElement { text: "ISO B0"; name: "B0"; width: 1030.0; height: 1456.0; }
+                    ListElement { text: "ISO B1"; name: "B1"; width: 728.0; height: 1030.0; }
+                    ListElement { text: "ISO B2"; name: "B2"; width: 515.0; height: 728.0; }
+                    ListElement { text: "ISO B3"; name: "B3"; width: 364.0; height: 515.0; }
+                    ListElement { text: "ISO B4"; name: "B4"; width: 257.0; height: 364.0; }
+                    ListElement { text: "ISO B5"; name: "B5"; width: 182.0; height: 257.0; }
+                    ListElement { text: "ISO B6"; name: "B6"; width: 128.0; height: 182.0; }
+                    ListElement { text: "ISO B10"; name: "B10"; width: 32.0; height: 45.0; }
+                    ListElement { text: "ISO C5"; name: "C5"; width: 163.0; height: 229.0; }
+                    ListElement { text: "ISO DL"; name: "DL"; width: 110.0; height: 220.0; }
                     ListElement { isCategory: true; text: "US formats"; }
-                    ListElement { text: "US Letter"; }
-                    ListElement { text: "US Legal"; }
-                    ListElement { text: "US Executive"; }
-                    ListElement { text: "US Folio"; }
-                    ListElement { text: "US Ledger"; }
-                    ListElement { text: "US Tabloid"; }
+                    ListElement { text: "US Letter"; name: "Letter"; width: 215.9; height: 279.4; }
+                    ListElement { text: "US Legal"; name: "Legal"; width: 215.9; height: 355.6; }
+                    ListElement { text: "US Executive"; name: "Executive"; width: 191.0; height: 254.0; }
+                    ListElement { text: "US Folio"; name: "Folio"; width: 210.0; height: 330.0; }
+                    ListElement { text: "US Ledger"; name: "Ledger"; width: 432.0; height: 279.0; }
+                    ListElement { text: "US Tabloid"; name: "Tabloid"; width: 279.0; height: 432.0; }
+                    ListElement { test: "US Common 10"; name: "Comm10"; width: 105.0; height: 241.0; }
                 }
             }
             Item {
@@ -236,7 +243,7 @@ Page {
                     placeholder: "Top";
                     useExponentialValue: true;
                     min: 1; max: 999; decimals: 2;
-                    value: 10;
+                    value: 20;
                 }
             }
             Row {
@@ -248,7 +255,7 @@ Page {
                     placeholder: "Left";
                     useExponentialValue: true;
                     min: 1; max: 999; decimals: 2;
-                    value: 10;
+                    value: 20;
                 }
                 Label {
                     height: marginLeft.height;
@@ -263,7 +270,7 @@ Page {
                     placeholder: "Right";
                     useExponentialValue: true;
                     min: 1; max: 999; decimals: 2;
-                    value: 10;
+                    value: 20;
                 }
             }
             Row {
@@ -279,7 +286,7 @@ Page {
                     placeholder: "Bottom";
                     useExponentialValue: true;
                     min: 1; max: 999; decimals: 2;
-                    value: 10;
+                    value: 20;
                 }
             }
         }
@@ -294,5 +301,22 @@ Page {
         textColor: "white";
         textSize: Settings.theme.adjustedPixel(18);
         color: "#4e5359";
+        onClicked: {
+            var queryString = "newfile:///";
+            queryString += "?mimetype=" + WORDS_MIME_TYPE;
+            queryString += "&columncount=" + columnCount.value;
+            queryString += "&columngap=" + columnSpacing.value;
+            queryString += "&unit=" + unitModel.get(unitList.currentIndex).unit;
+            queryString += "&pageformat=" + paperSizeModel.get(paperSizeList.currentIndex).name;
+            queryString += "&pageorientation=" + (portraitCheck.checked ? 0 : 1);
+            queryString += "&height=" + heightInput.text;
+            queryString += "&width=" + widthInput.text;
+            queryString += "&topmargin=" + marginTop.value;
+            queryString += "&leftmargin=" + marginLeft.value;
+            queryString += "&rightmargin=" + marginRight.value;
+            queryString += "&bottommargin=" + marginBottom.value;
+            baseLoadingDialog.visible = true;
+            openFile(queryString);
+        }
     }
 }
