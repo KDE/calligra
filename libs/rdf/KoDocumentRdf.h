@@ -311,7 +311,6 @@ public:
      */
     Soprano::Node inlineRdfContext() const;
 
-    //FIXME: two functions below seems not use class fields at all, maybe STATIC??
     /**
      * If model contains ?s ?p ?o
      * look for and add
