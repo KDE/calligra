@@ -486,9 +486,11 @@ void KUndo2QStack::setIndex(int idx, bool clean)
     bool was_clean = m_index == m_clean_index;
     if (m_lastMergedIndex <= idx) {
         m_lastMergedSetCount = idx - m_lastMergedIndex;
+
     } else {
-        m_lastMergedSetCount = 0;
-        m_lastMergedIndex = idx;
+        m_lastMergedSetCount = 1;
+        m_lastMergedIndex = idx-1;
+
     }
 
 
@@ -689,7 +691,7 @@ void KUndo2QStack::push(KUndo2Command *cmd)
         if (cmd->time().msecsTo(m_command_list.last()->endTime()) < -m_timeT1 * 1000) { //T1 time elapsed
             QListIterator<KUndo2Command*> it(m_command_list);
             it.toBack();
-            m_lastMergedSetCount = 0;
+            m_lastMergedSetCount = 1;
 
             while (it.hasPrevious()) {
                 KUndo2Command* curr = it.previous();
