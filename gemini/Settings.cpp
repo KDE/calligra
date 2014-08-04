@@ -100,16 +100,21 @@ void Settings::setCurrentFile(const QString& fileName)
 {
     qApp->processEvents();
     if (fileName != d->currentFile) {
-        KMimeType::Ptr mimeType = KMimeType::findByUrl(fileName);
-        KoDocumentEntry documentEntry = KoDocumentEntry::queryByMimeType(mimeType->name());
-        if(documentEntry.supportsMimeType(WORDS_MIME_TYPE)) {
-            d->currentFileClass = WORDS_MIME_TYPE;
-        } else if(documentEntry.supportsMimeType(STAGE_MIME_TYPE)) {
-            d->currentFileClass = STAGE_MIME_TYPE;
-        } else {
-            d->currentFileClass = QString("Unsupported document! Reported mimetype is %1").arg(mimeType->name());
+        KUrl url(fileName);
+        if(url.scheme() == "newfile") {
+            d->currentFileClass = url.queryItemValue("mimetype");
         }
-
+        else {
+            KMimeType::Ptr mimeType = KMimeType::findByUrl(fileName);
+            KoDocumentEntry documentEntry = KoDocumentEntry::queryByMimeType(mimeType->name());
+            if(documentEntry.supportsMimeType(WORDS_MIME_TYPE)) {
+                d->currentFileClass = WORDS_MIME_TYPE;
+            } else if(documentEntry.supportsMimeType(STAGE_MIME_TYPE)) {
+                d->currentFileClass = STAGE_MIME_TYPE;
+            } else {
+                d->currentFileClass = QString("Unsupported document! Reported mimetype is %1").arg(mimeType->name());
+            }
+        }
         d->currentFile = fileName;
         emit currentFileChanged();
     }
