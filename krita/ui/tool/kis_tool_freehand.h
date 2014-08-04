@@ -109,6 +109,7 @@ private:
 
 protected:
     friend class KisView2;
+    friend class KisImageView;
     friend class KisSketchView;
     KisSmoothingOptionsSP smoothingOptions() const;
     bool m_assistant;

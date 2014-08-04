@@ -43,8 +43,8 @@ KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisNodeSP node,
                                              KisPaintDeviceSP paintDevice,
                                              const QString &layerName,
                                              const QString &caption,
-                                             KisView2 *view)
-    : KDialog(view)
+                                             KisView2 *view, QWidget *parent)
+    : KDialog(parent)
     , m_node(node)
     , m_nodeFilterInterface(nfi)
     , m_currentFilter(0)

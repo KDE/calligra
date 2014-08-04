@@ -38,6 +38,7 @@ class KisFilterStrategy;
 class KisView2;
 class KisFilterConfiguration;
 class KisActionManager;
+class KisImageView;
 
 /**
  * The node manager passes requests for new layers or masks on to the mask and layer
@@ -50,10 +51,11 @@ class KRITAUI_EXPORT KisNodeManager : public QObject
 
 public:
 
-    KisNodeManager(KisView2 * view,  KisDoc2 * doc);
+    KisNodeManager(KisView2 * view);
     ~KisNodeManager();
-
     
+    void setView(KisImageView *imageView);
+
 signals:
 
     /// emitted whenever a node is selected.

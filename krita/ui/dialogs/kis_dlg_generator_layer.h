@@ -49,7 +49,7 @@ public:
      * @param name the proposed name for this layer
      * @param parent the widget parent of this dialog
      */
-    KisDlgGeneratorLayer(const QString & name, KisView2 *parent);
+    KisDlgGeneratorLayer(const QString & name, KisView2 *view, QWidget *parent);
 
     void setConfiguration(const KisFilterConfiguration * config);
     KisFilterConfiguration * configuration() const;

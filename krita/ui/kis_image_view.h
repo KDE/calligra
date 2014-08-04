@@ -107,7 +107,7 @@ protected:
     // QWidget overrides
     virtual void dragEnterEvent(QDragEnterEvent * event);
     virtual void dropEvent(QDropEvent * event);
-
+    virtual bool event( QEvent* event );
 
 signals:
     // From KisImage

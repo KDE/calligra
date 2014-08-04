@@ -62,6 +62,7 @@
 #include <kmessagebox.h>
 #include <kactioncollection.h>
 
+#include <KoToolRegistry.h>
 #include <KoStore.h>
 #include <KoMainWindow.h>
 #include <KoSelection.h>
@@ -75,7 +76,7 @@
 #include <KoResourceItemChooserSync.h>
 #include <KoCompositeOp.h>
 #include <KoTemplateCreateDia.h>
-#include <KoCanvasControllerWidget.h>
+#include <KoCanvasController.h>
 #include <KoDocumentEntry.h>
 #include <KoProperties.h>
 #include <KoPart.h>
@@ -89,7 +90,6 @@
 #include "canvas/kis_canvas_controller.h"
 #include "canvas/kis_grid_manager.h"
 #include "canvas/kis_perspective_grid_manager.h"
-#include "dialogs/kis_dlg_preferences.h"
 #include "dialogs/kis_dlg_blacklist_cleanup.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_config.h"
@@ -119,20 +119,81 @@
 #include "kis_zoom_manager.h"
 #include "kra/kis_kra_loader.h"
 #include "widgets/kis_floating_message.h"
+#include "kis_image_view.h"
+#include "kis_zoom_manager.h"
 
 #include <QPoint>
 #include <kapplication.h>
 #include "kis_node_commands_adapter.h"
 #include <kis_paintop_preset.h>
-#include "kis_favorite_resource_manager.h"
 #include "kis_action_manager.h"
 #include "input/kis_input_profile_manager.h"
 #include "kis_canvas_controls_manager.h"
+#include "kis_mainwindow_observer.h"
+#include "kis_main_window.h"
+#include "kis_painting_assistants_manager.h"
+#include "kis_part2.h"
 
-#include "krita/gemini/ViewModeSwitchEvent.h"
-#include "kis_mirror_axis.h"
 #include "kis_tooltip_manager.h"
 #include <kis_tool_freehand.h>
+
+
+class StatusBarItem
+{
+public:
+    StatusBarItem() // for QValueList
+        : m_widget(0),
+            m_connected(false),
+            m_hidden(false) {}
+
+    StatusBarItem(QWidget * widget, int stretch, bool permanent)
+        : m_widget(widget),
+            m_stretch(stretch),
+            m_permanent(permanent),
+            m_connected(false),
+            m_hidden(false) {}
+
+    bool operator==(const StatusBarItem& rhs) {
+        return m_widget == rhs.m_widget;
+    }
+
+    bool operator!=(const StatusBarItem& rhs) {
+        return m_widget != rhs.m_widget;
+    }
+
+    QWidget * widget() const {
+        return m_widget;
+    }
+
+    void ensureItemShown(KStatusBar * sb) {
+        Q_ASSERT(m_widget);
+        if (!m_connected) {
+            if (m_permanent)
+                sb->addPermanentWidget(m_widget, m_stretch);
+            else
+                sb->addWidget(m_widget, m_stretch);
+
+            if(!m_hidden)
+                m_widget->show();
+
+            m_connected = true;
+        }
+    }
+    void ensureItemHidden(KStatusBar * sb) {
+        if (m_connected) {
+            m_hidden = m_widget->isHidden();
+            sb->removeWidget(m_widget);
+            m_widget->hide();
+            m_connected = false;
+        }
+    }
+private:
+    QWidget * m_widget;
+    int m_stretch;
+    bool m_permanent;
+    bool m_connected;
+    bool m_hidden;
+};
 
 class BlockingUserInputEventFilter : public QObject
 {
@@ -156,49 +217,37 @@ class KisView2::KisView2Private
 public:
 
     KisView2Private()
-        : canvas(0)
-        , doc(0)
-        , viewConverter(0)
-        , canvasController(0)
-        , resourceProvider(0)
-        , filterManager(0)
+        : filterManager(0)
         , statusBar(0)
         , selectionManager(0)
         , controlFrame(0)
         , nodeManager(0)
-        , zoomManager(0)
         , imageManager(0)
         , gridManager(0)
         , perspectiveGridManager(0)
-        , paintingAssistantsDecoration(0)
+        , paintingAssistantsManager(0)
         , actionManager(0)
         , mainWindow(0)
-        , tooltipManager(0)
         , showFloatingMessage(true)
+        , currentImageView(0)
+        , canvasResourceProvider(0)
+        , canvasResourceManager(0)
     {
     }
 
     ~KisView2Private() {
-        if (canvasController) {
-            KoToolManager::instance()->removeCanvasController(canvasController);
-        }
-
-        delete resourceProvider;
-        delete canvasController;
-        delete canvas;
         delete filterManager;
         delete selectionManager;
         delete nodeManager;
-        delete zoomManager;
         delete imageManager;
         delete gridManager;
         delete perspectiveGridManager;
-        delete paintingAssistantsDecoration;
-        delete viewConverter;
+        delete paintingAssistantsManager;
         delete statusBar;
         delete actionManager;
         delete canvasControlsManager;
-        delete tooltipManager;
+        delete canvasResourceProvider;
+        delete canvasResourceManager;
 
         /**
          * Push a timebomb, which will try to release the memory after
@@ -208,44 +257,45 @@ public:
     }
 
 public:
-    KisCanvas2 *canvas;
-    KisDoc2 *doc;
-    KisCoordinatesConverter *viewConverter;
-    KisCanvasController *canvasController;
-    KisCanvasResourceProvider *resourceProvider;
     KisFilterManager *filterManager;
     KisStatusBar *statusBar;
+    KAction *totalRefresh;
     KAction *mirrorCanvas;
     KAction *createTemplate;
     KAction *saveIncremental;
     KAction *saveIncrementalBackup;
     KAction *openResourcesDirectory;
+    KAction *rotateCanvasRight;
+    KAction *rotateCanvasLeft;
+    KAction *resetCanvasTransformations;
+    KToggleAction *wrapAroundAction;
     KisSelectionManager *selectionManager;
     KisControlFrame *controlFrame;
     KisNodeManager *nodeManager;
-    KisZoomManager *zoomManager;
     KisImageManager *imageManager;
     KisGridManager *gridManager;
     KisCanvasControlsManager *canvasControlsManager;
     KisPerspectiveGridManager * perspectiveGridManager;
-    KisPaintingAssistantsDecoration *paintingAssistantsDecoration;
+    KisPaintingAssistantsDecoration *paintingAssistantsManager;
     BlockingUserInputEventFilter blockingEventFilter;
     KisFlipbook *flipbook;
     KisActionManager* actionManager;
     QMainWindow* mainWindow;
-    KisMirrorAxis* mirrorAxis;
-    KisTooltipManager* tooltipManager;
     QPointer<KisFloatingMessage> savedFloatingMessage;
     bool showFloatingMessage;
+    KisImageView* currentImageView;
+    KisCanvasResourceProvider* canvasResourceProvider;
+    KoCanvasResourceManager* canvasResourceManager;
+    QList<StatusBarItem> statusBarItems;
+
 };
 
 
-KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
-    : KoView(part, doc, parent),
+KisView2::KisView2(QWidget * parent)
+    : KXMLGUIClient(),
       m_d(new KisView2Private())
 {
-    Q_ASSERT(doc);
-    Q_ASSERT(doc->image());
+    m_d->mainWindow = dynamic_cast<QMainWindow*>(parent);
 
     setXMLFile(QString("%1.rc").arg(qAppName()));
     KisConfig cfg;
@@ -509,280 +559,6 @@ KisView2::~KisView2()
         }
     }
     delete m_d;
-}
-
-
-void KisView2::dragEnterEvent(QDragEnterEvent *event)
-{
-    dbgUI << "KisView2::dragEnterEvent";
-    // Only accept drag if we're not busy, particularly as we may
-    // be showing a progress bar and calling qApp->processEvents().
-    if (event->mimeData()->hasImage()
-            || event->mimeData()->hasUrls()
-            || event->mimeData()->hasFormat("application/x-krita-node")) {
-        event->accept();
-    } else {
-        event->ignore();
-    }
-}
-
-void KisView2::dropEvent(QDropEvent *event)
-{
-    KisImageSP kisimage = image();
-    Q_ASSERT(kisimage);
-
-    QPoint cursorPos = canvasBase()->coordinatesConverter()->widgetToImage(event->pos()).toPoint();
-    QRect imageBounds = kisimage->bounds();
-    QPoint pasteCenter;
-    bool forceRecenter;
-
-    if (event->keyboardModifiers() & Qt::ShiftModifier &&
-        imageBounds.contains(cursorPos)) {
-
-        pasteCenter = cursorPos;
-        forceRecenter = true;
-    } else {
-        pasteCenter = imageBounds.center();
-        forceRecenter = false;
-    }
-
-    if (event->mimeData()->hasFormat("application/x-krita-node") ||
-        event->mimeData()->hasImage())
-    {
-        KisShapeController *kritaShapeController =
-            dynamic_cast<KisShapeController*>(m_d->doc->shapeController());
-
-        QList<KisNodeSP> nodes =
-            KisMimeData::loadNodes(event->mimeData(), imageBounds,
-                                  pasteCenter, forceRecenter,
-                                  kisimage, kritaShapeController);
-
-        foreach(KisNodeSP node, nodes) {
-            if (node) {
-                KisNodeCommandsAdapter adapter(this);
-                if (!m_d->nodeManager->activeLayer()) {
-                    adapter.addNode(node, kisimage->rootLayer() , 0);
-                } else {
-                    adapter.addNode(node,
-                                    m_d->nodeManager->activeLayer()->parent(),
-                                    m_d->nodeManager->activeLayer());
-                }
-            }
-        }
-
-    } else if (event->mimeData()->hasUrls()) {
-
-        QList<QUrl> urls = event->mimeData()->urls();
-        if (urls.length() > 0) {
-
-            KMenu popup;
-            popup.setObjectName("drop_popup");
-
-            QAction *insertAsNewLayer = new KAction(i18n("Insert as New Layer"), &popup);
-            QAction *insertManyLayers = new KAction(i18n("Insert Many Layers"), &popup);
-
-            QAction *openInNewDocument = new KAction(i18n("Open in New Document"), &popup);
-            QAction *openManyDocuments = new KAction(i18n("Open Many Documents"), &popup);
-
-            QAction *replaceCurrentDocument = new KAction(i18n("Replace Current Document"), &popup);
-
-            QAction *cancel = new KAction(i18n("Cancel"), &popup);
-
-            popup.addAction(insertAsNewLayer);
-            popup.addAction(openInNewDocument);
-            popup.addAction(replaceCurrentDocument);
-            popup.addAction(insertManyLayers);
-            popup.addAction(openManyDocuments);
-
-            insertAsNewLayer->setEnabled(image() && urls.count() == 1);
-            openInNewDocument->setEnabled(urls.count() == 1);
-            replaceCurrentDocument->setEnabled(image() && urls.count() == 1);
-            insertManyLayers->setEnabled(image() && urls.count() > 1);
-            openManyDocuments->setEnabled(urls.count() > 1);
-
-            popup.addSeparator();
-            popup.addAction(cancel);
-
-            QAction *action = popup.exec(QCursor::pos());
-
-            if (action != 0 && action != cancel) {
-                foreach(const QUrl &url, urls) {
-
-                    if (action == insertAsNewLayer || action == insertManyLayers) {
-                        m_d->imageManager->importImage(KUrl(url));
-                        activateWindow();
-                    }
-                    else if (action == replaceCurrentDocument) {
-                        if (m_d->doc->isModified()) {
-                            m_d->doc->save();
-                        }
-                        if (mainWindow() != 0) {
-                            /**
-                             * NOTE: this is effectively deferred self-destruction
-                             */
-                            connect(mainWindow(), SIGNAL(loadCompleted()),
-                                    mainWindow(), SLOT(close()));
-
-                            mainWindow()->openDocument(url);
-                        }
-                    } else {
-                        Q_ASSERT(action == openInNewDocument || action == openManyDocuments);
-                        if (mainWindow()) {
-                            mainWindow()->openDocument(url);
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-bool KisView2::event( QEvent* event )
-{
-    switch(static_cast<int>(event->type()))
-    {
-        case ViewModeSwitchEvent::AboutToSwitchViewModeEvent: {
-            ViewModeSynchronisationObject* syncObject = static_cast<ViewModeSwitchEvent*>(event)->synchronisationObject();
-
-            canvasControllerWidget()->setFocus();
-            qApp->processEvents();
-
-            KisCanvasResourceProvider* provider = resourceProvider();
-            syncObject->backgroundColor = provider->bgColor();
-            syncObject->foregroundColor = provider->fgColor();
-            syncObject->exposure = provider->HDRExposure();
-            syncObject->gamma = provider->HDRGamma();
-            syncObject->compositeOp = provider->currentCompositeOp();
-            syncObject->pattern = provider->currentPattern();
-            syncObject->gradient = provider->currentGradient();
-            syncObject->node = provider->currentNode();
-            syncObject->paintOp = provider->currentPreset();
-            syncObject->opacity = provider->opacity();
-            syncObject->globalAlphaLock = provider->globalAlphaLock();
-
-            syncObject->documentOffset = canvasControllerWidget()->scrollBarValue() - pos();
-            syncObject->zoomLevel = zoomController()->zoomAction()->effectiveZoom();
-            syncObject->rotationAngle = canvasBase()->rotationAngle();
-
-            syncObject->activeToolId = KoToolManager::instance()->activeToolId();
-
-            syncObject->gridData = &document()->gridData();
-
-            syncObject->mirrorHorizontal = provider->mirrorHorizontal();
-            syncObject->mirrorVertical = provider->mirrorVertical();
-            syncObject->mirrorAxesCenter = provider->resourceManager()->resource(KisCanvasResourceProvider::MirrorAxesCenter).toPointF();
-
-            KisToolFreehand* tool = qobject_cast<KisToolFreehand*>(KoToolManager::instance()->toolById(canvasBase(), syncObject->activeToolId));
-            if(tool) {
-                syncObject->smoothingOptions = tool->smoothingOptions();
-            }
-
-            syncObject->initialized = true;
-
-            QMainWindow* mainWindow = qobject_cast<QMainWindow*>(qApp->activeWindow());
-            if(mainWindow) {
-                QList<QDockWidget*> dockWidgets = mainWindow->findChildren<QDockWidget*>();
-                foreach(QDockWidget* widget, dockWidgets) {
-                    if (widget->isFloating()) {
-                        widget->hide();
-                    }
-                }
-            }
-
-            return true;
-        }
-        case ViewModeSwitchEvent::SwitchedToDesktopModeEvent: {
-            ViewModeSynchronisationObject* syncObject = static_cast<ViewModeSwitchEvent*>(event)->synchronisationObject();
-            canvasControllerWidget()->setFocus();
-            qApp->processEvents();
-
-            if(syncObject->initialized) {
-                KisCanvasResourceProvider* provider = resourceProvider();
-
-                provider->resourceManager()->setResource(KisCanvasResourceProvider::MirrorAxesCenter, syncObject->mirrorAxesCenter);
-                if (provider->mirrorHorizontal() != syncObject->mirrorHorizontal) {
-                    QAction* mirrorAction = actionCollection()->action("hmirror_action");
-                    mirrorAction->setChecked(syncObject->mirrorHorizontal);
-                    provider->setMirrorHorizontal(syncObject->mirrorHorizontal);
-                }
-                if (provider->mirrorVertical() != syncObject->mirrorVertical) {
-                    QAction* mirrorAction = actionCollection()->action("vmirror_action");
-                    mirrorAction->setChecked(syncObject->mirrorVertical);
-                    provider->setMirrorVertical(syncObject->mirrorVertical);
-                }
-
-                provider->setPaintOpPreset(syncObject->paintOp);
-                qApp->processEvents();
-
-                KoToolManager::instance()->switchToolRequested(syncObject->activeToolId);
-                qApp->processEvents();
-
-                KisPaintOpPresetSP preset = canvasBase()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
-                preset->settings()->setProperty("CompositeOp", syncObject->compositeOp);
-                if(preset->settings()->hasProperty("OpacityValue"))
-                    preset->settings()->setProperty("OpacityValue", syncObject->opacity);
-                provider->setPaintOpPreset(preset);
-
-                provider->setBGColor(syncObject->backgroundColor);
-                provider->setFGColor(syncObject->foregroundColor);
-                provider->setHDRExposure(syncObject->exposure);
-                provider->setHDRGamma(syncObject->gamma);
-                provider->slotPatternActivated(syncObject->pattern);
-                provider->slotGradientActivated(syncObject->gradient);
-                provider->slotNodeActivated(syncObject->node);
-                provider->setOpacity(syncObject->opacity);
-                provider->setGlobalAlphaLock(syncObject->globalAlphaLock);
-                provider->setCurrentCompositeOp(syncObject->compositeOp);
-
-                document()->gridData().setGrid(syncObject->gridData->gridX(), syncObject->gridData->gridY());
-                document()->gridData().setGridColor(syncObject->gridData->gridColor());
-                document()->gridData().setPaintGridInBackground(syncObject->gridData->paintGridInBackground());
-                document()->gridData().setShowGrid(syncObject->gridData->showGrid());
-                document()->gridData().setSnapToGrid(syncObject->gridData->snapToGrid());
-
-                actionCollection()->action("zoom_in")->trigger();
-                qApp->processEvents();
-
-
-                QMainWindow* mainWindow = qobject_cast<QMainWindow*>(qApp->activeWindow());
-                if(mainWindow) {
-                    QList<QDockWidget*> dockWidgets = mainWindow->findChildren<QDockWidget*>();
-                    foreach(QDockWidget* widget, dockWidgets) {
-                        if (widget->isFloating()) {
-                            widget->show();
-                        }
-                    }
-                }
-
-                zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, syncObject->zoomLevel);
-                canvasControllerWidget()->rotateCanvas(syncObject->rotationAngle - canvasBase()->rotationAngle());
-
-                QPoint newOffset = syncObject->documentOffset + pos();
-                qApp->processEvents();
-                canvasControllerWidget()->setScrollBarValue(newOffset);
-
-                KisToolFreehand* tool = qobject_cast<KisToolFreehand*>(KoToolManager::instance()->toolById(canvasBase(), syncObject->activeToolId));
-                if(tool && syncObject->smoothingOptions) {
-                    tool->smoothingOptions()->setSmoothingType(syncObject->smoothingOptions->smoothingType());
-                    tool->smoothingOptions()->setSmoothPressure(syncObject->smoothingOptions->smoothPressure());
-                    tool->smoothingOptions()->setTailAggressiveness(syncObject->smoothingOptions->tailAggressiveness());
-                    tool->smoothingOptions()->setUseScalableDistance(syncObject->smoothingOptions->useScalableDistance());
-                    tool->smoothingOptions()->setSmoothnessDistance(syncObject->smoothingOptions->smoothnessDistance());
-                    tool->smoothingOptions()->setUseDelayDistance(syncObject->smoothingOptions->useDelayDistance());
-                    tool->smoothingOptions()->setDelayDistance(syncObject->smoothingOptions->delayDistance());
-                    tool->smoothingOptions()->setFinishStabilizedCurve(syncObject->smoothingOptions->finishStabilizedCurve());
-                    tool->smoothingOptions()->setStabilizeSensors(syncObject->smoothingOptions->stabilizeSensors());
-                    tool->updateSettingsViews();
-                }
-            }
-
-            return true;
-        }
-        default:
-            break;
-    }
-
-    return QWidget::event( event );
 }
 
 KoZoomController *KisView2::zoomController() const
@@ -1235,7 +1011,7 @@ KisPaintingAssistantsDecoration* KisView2::paintingAssistantsDecoration()
     return m_d->paintingAssistantsDecoration;
 }
 
-QMainWindow* KisView2::qtMainWindow()
+QMainWindow* KisView2::qtMainWindow() const
 {
     if(m_d->mainWindow)
         return m_d->mainWindow;
@@ -1317,7 +1093,7 @@ void KisView2::slotSaveIncremental()
 
     // Prepare the base for new version filename
     int intVersion = version.toInt(0);
-    ++intVersion;
++intVersion;
     QString baseNewVersion = QString::number(intVersion);
     while (baseNewVersion.length() < version.length()) {
         baseNewVersion.prepend("0");
@@ -1338,7 +1114,7 @@ void KisView2::slotSaveIncremental()
         if (fileAlreadyExists) {
             if (!letter.isNull()) {
                 char letterCh = letter.at(0).toLatin1();
-                ++letterCh;
+    letterCh;
                 letter = QString(QChar(letterCh));
             } else {
                 letter = 'a';
@@ -1388,7 +1164,7 @@ void KisView2::slotSaveIncrementalBackup()
 
         // Prepare the base for new version filename
         int intVersion = version.toInt(0);
-        ++intVersion;
++intVersion;
         QString baseNewVersion = QString::number(intVersion);
         QString backupFileName = m_d->doc->localFilePath();
         while (baseNewVersion.length() < version.length()) {
@@ -1406,7 +1182,7 @@ void KisView2::slotSaveIncrementalBackup()
             if (fileAlreadyExists) {
                 if (!letter.isNull()) {
                     char letterCh = letter.at(0).toLatin1();
-                    ++letterCh;
+        letterCh;
                     letter = QString(QChar(letterCh));
                 } else {
                     letter = 'a';
@@ -1446,7 +1222,7 @@ void KisView2::slotSaveIncrementalBackup()
             if (fileAlreadyExists) {
                 // Prepare the base for new version filename, increment by 1
                 int intVersion = baseNewVersion.toInt(0);
-                ++intVersion;
+    intVersion;
                 baseNewVersion = QString::number(intVersion);
                 while (baseNewVersion.length() < HARDCODED_DIGIT_COUNT) {
                     baseNewVersion.prepend("0");

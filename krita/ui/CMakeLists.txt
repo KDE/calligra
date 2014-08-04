@@ -268,9 +268,9 @@ set(kritaui_LIB_SRCS
 
 # build these last for now
     kis_image_view.cpp
-    kis_view2.cpp
     kis_main_window.cpp
     kis_mainwindow_observer.cpp
+    kis_view2.cpp
 )
 
 if(WIN32)

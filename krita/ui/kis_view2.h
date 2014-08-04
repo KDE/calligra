@@ -19,9 +19,9 @@
 #ifndef KIS_VIEW_2
 #define KIS_VIEW_2
 
-
 #include <QDockWidget>
 #include <QQueue>
+#include <KoMainWindow.h>
 #include <KoView.h>
 #include <KoProgressUpdater.h>
 #include <KoToolManager.h>
@@ -30,8 +30,6 @@
 #include "kis_floating_message.h"
 
 class KisAction;
-class QDragEnterEvent;
-class QDropEvent;
 class QPoint;
 
 class KisPaintOpPreset;
@@ -57,6 +55,7 @@ class KisPaintopBox;
 class KisCanvasController;
 class KisFlipbook;
 class KisActionManager;
+class KisImageView;
 
 /**
  * Krita view class
@@ -64,7 +63,7 @@ class KisActionManager;
  * Following the broad model-view-controller idea this class shows you one view on the document.
  * There can be multiple views of the same document each in with independent settings for viewMode and zoom etc.
  */
-class KRITAUI_EXPORT KisView2 : public KoView
+class KRITAUI_EXPORT KisView2 : public QObject, public KXMLGUIClient
 {
 
     Q_OBJECT
@@ -75,28 +74,18 @@ public:
      * @param document   the document we show.
      * @param parent   a parent widget we show ourselves in.
      */
-    KisView2(KoPart *part, KisDoc2 *document, QWidget *parent);
+    KisView2(QWidget *parent);
     virtual ~KisView2();
 
-public:
-
-    // QWidget overrides
-    virtual void dragEnterEvent(QDragEnterEvent * event);
-    virtual void dropEvent(QDropEvent * event);
-    virtual bool event(QEvent* event);
-
-    // KoView implementation
-    virtual void updateReadWrite(bool readwrite) {
-        Q_UNUSED(readwrite);
-    }
-
-    // KoView implementation
-    virtual KoZoomController *zoomController() const;
 
 public:  // Krita specific interfaces
 
+    void setCurrentView(KoView *view);
+
     /// Return the image this view is displaying
     KisImageWSP image() const;
+
+    KoZoomController *zoomController() const;
 
     /// The resource provider contains all per-view settings, such as
     /// current color, current paint op etc.
@@ -110,6 +99,24 @@ public:  // Krita specific interfaces
 
     /// Return the wrapper class around the statusbar
     KisStatusBar * statusBar() const;
+
+    /**
+      * This adds a widget to the statusbar for this view.
+      * If you use this method instead of using statusBar() directly,
+      * KoView will take care of removing the items when the view GUI is deactivated
+      * and readding them when it is reactivated.
+      * The parameters are the same as QStatusBar::addWidget().
+      *
+      * Note that you can't use KStatusBar methods (inserting text items by id).
+      * But you can create a KStatusBarLabel with a dummy id instead, and use
+      * it directly, to get the same look and feel.
+      */
+    void addStatusBarItem(QWidget * widget, int stretch = 0, bool permanent = false);
+
+    /**
+      * Remove a widget from the statusbar for this view.
+      */
+    void removeStatusBarItem(QWidget * widget);
 
     KisPaintopBox* paintOpBox() const;
 
@@ -188,10 +195,14 @@ public:
                              KisFloatingMessage::Priority priority = KisFloatingMessage::Medium,
                              int alignment = Qt::AlignCenter | Qt::TextWordWrap);
 
+    /// @return the KoMaindow this view is in, or 0
+    KoMainWindow *mainWindow() const;
+
     /// The QMainWindow associated with this view. This is most likely going to be shell(), but
     /// when running as Gemini or Sketch, this will be set to the applications' own QMainWindow.
     /// This can be checked by qobject_casting to KoMainWindow to check the difference.
-    QMainWindow* qtMainWindow();
+    QMainWindow* qtMainWindow() const;
+
     /// The mainWindow function will return the shell() value, unless this function is called
     /// with a non-null value. To make it return shell() again, simply pass null to this function.
     void setQtMainWindow(QMainWindow* newMainWindow);
@@ -202,6 +213,7 @@ public slots:
     void slotSavingFinished();
     void showJustTheCanvas(bool toggled);
     void setShowFloatingMessage(bool show);
+    void showHideScrollbars();
 
 signals:
 
@@ -221,19 +233,18 @@ private slots:
     void slotSaveIncremental();
     void slotSaveIncrementalBackup();
     void showStatusBar(bool toggled);
-    void showHideScrollbars();
     void toggleTabletLogger();
     void openResourcesDirectory();
     void updateIcons();
+    void makeStatusBarVisible();
+    void newView();
+
 
 private:
     void createActions();
     void createManagers();
     void loadPlugins();
 
-    void resetImageSizeAndScroll(bool changeCentering,
-                                 const QPointF oldImageStillPoint = QPointF(),
-                                 const QPointF newImageStillPoint = QPointF());
 private:
     class KisView2Private;
     KisView2Private * const m_d;

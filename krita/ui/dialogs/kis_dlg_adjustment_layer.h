@@ -58,7 +58,8 @@ public:
                           KisPaintDeviceSP paintDevice,
                           const QString & layerName,
                           const QString & caption,
-                          KisView2 *view);
+                          KisView2 *view,
+                          QWidget *parent = 0);
     ~KisDlgAdjustmentLayer();
     KisFilterConfiguration * filterConfiguration() const;
     QString layerName() const;

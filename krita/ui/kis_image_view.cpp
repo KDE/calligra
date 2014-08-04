@@ -22,6 +22,7 @@
 #include <QDesktopWidget>
 
 #include <kmenu.h>
+#include <kactioncollection.h>
 
 #include <KoToolManager.h>
 #include <KoMainWindow.h>
@@ -45,6 +46,10 @@
 #include "kis_canvas_resource_provider.h"
 #include "kis_canvas_controller.h"
 #include "kis_config.h"
+#include "kis_mirror_axis.h"
+#include "kis_tool_freehand.h"
+
+#include "krita/gemini/ViewModeSwitchEvent.h"
 
 class KisImageView::Private
 {
@@ -57,6 +62,7 @@ public:
         , zoomManager(0)
         , doc(0)
         , parentView(0)
+        , mirrorAxis(0)
     {}
 
     ~Private()
@@ -69,6 +75,7 @@ public:
         delete canvasController;
         delete canvas;
         delete viewConverter;
+        delete mirrorAxis;
     }
 
     KisCoordinatesConverter *viewConverter;
@@ -81,6 +88,8 @@ public:
     KisNodeSP currentNode;
     KisLayerSP currentLayer;
     KisMaskSP currentMask;
+
+    KisMirrorAxis* mirrorAxis;
 };
 
 KisImageView::KisImageView(KoPart *part, KisDoc2 *doc, QWidget *parent)
@@ -227,28 +236,29 @@ void KisImageView::dropEvent(QDropEvent *event)
         pasteCenter = imageBounds.center();
         forceRecenter = false;
     }
-
-    if (event->mimeData()->hasFormat("application/x-krita-node") || event->mimeData()->hasImage()) {
-
+    if (event->mimeData()->hasFormat("application/x-krita-node") ||
+        event->mimeData()->hasImage())
+    {
         KisShapeController *kritaShapeController =
             dynamic_cast<KisShapeController*>(d->doc->shapeController());
 
-        KisNodeSP node =
-            KisMimeData::loadNode(event->mimeData(), imageBounds,
+        QList<KisNodeSP> nodes =
+            KisMimeData::loadNodes(event->mimeData(), imageBounds,
                                   pasteCenter, forceRecenter,
                                   kisimage, kritaShapeController);
 
-        if (node) {
-            KisNodeCommandsAdapter adapter(d->parentView);
-            if (!d->parentView->nodeManager()->activeLayer()) {
-                adapter.addNode(node, kisimage->rootLayer() , 0);
-            } else {
-                adapter.addNode(node,
-                                d->parentView->nodeManager()->activeLayer()->parent(),
-                                d->parentView->nodeManager()->activeLayer());
+        foreach(KisNodeSP node, nodes) {
+            if (node) {
+                KisNodeCommandsAdapter adapter(parentView());
+                if (!parentView()->nodeManager()->activeLayer()) {
+                    adapter.addNode(node, kisimage->rootLayer() , 0);
+                } else {
+                    adapter.addNode(node,
+                                    parentView()->nodeManager()->activeLayer()->parent(),
+                                    parentView()->nodeManager()->activeLayer());
+                }
             }
         }
-
     }
     else if (event->mimeData()->hasUrls()) {
 
@@ -315,6 +325,154 @@ void KisImageView::dropEvent(QDropEvent *event)
             }
         }
     }
+}
+
+bool KisImageView::event(QEvent *event)
+{
+    switch(static_cast<int>(event->type()))
+    {
+        case ViewModeSwitchEvent::AboutToSwitchViewModeEvent: {
+            ViewModeSynchronisationObject* syncObject = static_cast<ViewModeSwitchEvent*>(event)->synchronisationObject();
+
+            parentView()->canvasControllerWidget()->setFocus();
+            qApp->processEvents();
+
+            KisCanvasResourceProvider* provider = resourceProvider();
+            syncObject->backgroundColor = provider->bgColor();
+            syncObject->foregroundColor = provider->fgColor();
+            syncObject->exposure = provider->HDRExposure();
+            syncObject->gamma = provider->HDRGamma();
+            syncObject->compositeOp = provider->currentCompositeOp();
+            syncObject->pattern = provider->currentPattern();
+            syncObject->gradient = provider->currentGradient();
+            syncObject->node = provider->currentNode();
+            syncObject->paintOp = provider->currentPreset();
+            syncObject->opacity = provider->opacity();
+            syncObject->globalAlphaLock = provider->globalAlphaLock();
+
+            syncObject->documentOffset = parentView()->canvasControllerWidget()->scrollBarValue() - pos();
+            syncObject->zoomLevel = zoomController()->zoomAction()->effectiveZoom();
+            syncObject->rotationAngle = canvasBase()->rotationAngle();
+
+            syncObject->activeToolId = KoToolManager::instance()->activeToolId();
+
+            syncObject->gridData = &document()->gridData();
+
+            syncObject->mirrorHorizontal = provider->mirrorHorizontal();
+            syncObject->mirrorVertical = provider->mirrorVertical();
+            syncObject->mirrorAxesCenter = provider->resourceManager()->resource(KisCanvasResourceProvider::MirrorAxesCenter).toPointF();
+
+            KisToolFreehand* tool = qobject_cast<KisToolFreehand*>(KoToolManager::instance()->toolById(canvasBase(), syncObject->activeToolId));
+            if(tool) {
+                syncObject->smoothingOptions = tool->smoothingOptions();
+            }
+
+            syncObject->initialized = true;
+
+            QMainWindow* mainWindow = qobject_cast<QMainWindow*>(qApp->activeWindow());
+            if(mainWindow) {
+                QList<QDockWidget*> dockWidgets = mainWindow->findChildren<QDockWidget*>();
+                foreach(QDockWidget* widget, dockWidgets) {
+                    if (widget->isFloating()) {
+                        widget->hide();
+                    }
+                }
+            }
+
+            return true;
+        }
+        case ViewModeSwitchEvent::SwitchedToDesktopModeEvent: {
+            ViewModeSynchronisationObject* syncObject = static_cast<ViewModeSwitchEvent*>(event)->synchronisationObject();
+            parentView()->canvasControllerWidget()->setFocus();
+            qApp->processEvents();
+
+            if(syncObject->initialized) {
+                KisCanvasResourceProvider* provider = resourceProvider();
+
+                provider->resourceManager()->setResource(KisCanvasResourceProvider::MirrorAxesCenter, syncObject->mirrorAxesCenter);
+                if (provider->mirrorHorizontal() != syncObject->mirrorHorizontal) {
+                    QAction* mirrorAction = actionCollection()->action("hmirror_action");
+                    mirrorAction->setChecked(syncObject->mirrorHorizontal);
+                    provider->setMirrorHorizontal(syncObject->mirrorHorizontal);
+                }
+                if (provider->mirrorVertical() != syncObject->mirrorVertical) {
+                    QAction* mirrorAction = actionCollection()->action("vmirror_action");
+                    mirrorAction->setChecked(syncObject->mirrorVertical);
+                    provider->setMirrorVertical(syncObject->mirrorVertical);
+                }
+
+                provider->setPaintOpPreset(syncObject->paintOp);
+                qApp->processEvents();
+
+                KoToolManager::instance()->switchToolRequested(syncObject->activeToolId);
+                qApp->processEvents();
+
+                KisPaintOpPresetSP preset = canvasBase()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
+                preset->settings()->setProperty("CompositeOp", syncObject->compositeOp);
+                if(preset->settings()->hasProperty("OpacityValue"))
+                    preset->settings()->setProperty("OpacityValue", syncObject->opacity);
+                provider->setPaintOpPreset(preset);
+
+                provider->setBGColor(syncObject->backgroundColor);
+                provider->setFGColor(syncObject->foregroundColor);
+                provider->setHDRExposure(syncObject->exposure);
+                provider->setHDRGamma(syncObject->gamma);
+                provider->slotPatternActivated(syncObject->pattern);
+                provider->slotGradientActivated(syncObject->gradient);
+                provider->slotNodeActivated(syncObject->node);
+                provider->setOpacity(syncObject->opacity);
+                provider->setGlobalAlphaLock(syncObject->globalAlphaLock);
+                provider->setCurrentCompositeOp(syncObject->compositeOp);
+
+                document()->gridData().setGrid(syncObject->gridData->gridX(), syncObject->gridData->gridY());
+                document()->gridData().setGridColor(syncObject->gridData->gridColor());
+                document()->gridData().setPaintGridInBackground(syncObject->gridData->paintGridInBackground());
+                document()->gridData().setShowGrid(syncObject->gridData->showGrid());
+                document()->gridData().setSnapToGrid(syncObject->gridData->snapToGrid());
+
+                actionCollection()->action("zoom_in")->trigger();
+                qApp->processEvents();
+
+
+                QMainWindow* mainWindow = qobject_cast<QMainWindow*>(qApp->activeWindow());
+                if(mainWindow) {
+                    QList<QDockWidget*> dockWidgets = mainWindow->findChildren<QDockWidget*>();
+                    foreach(QDockWidget* widget, dockWidgets) {
+                        if (widget->isFloating()) {
+                            widget->show();
+                        }
+                    }
+                }
+
+                zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, syncObject->zoomLevel);
+                parentView()->canvasControllerWidget()->rotateCanvas(syncObject->rotationAngle - canvasBase()->rotationAngle());
+
+                QPoint newOffset = syncObject->documentOffset + pos();
+                qApp->processEvents();
+                parentView()->canvasControllerWidget()->setScrollBarValue(newOffset);
+
+                KisToolFreehand* tool = qobject_cast<KisToolFreehand*>(KoToolManager::instance()->toolById(canvasBase(), syncObject->activeToolId));
+                if(tool && syncObject->smoothingOptions) {
+                    tool->smoothingOptions()->setSmoothingType(syncObject->smoothingOptions->smoothingType());
+                    tool->smoothingOptions()->setSmoothPressure(syncObject->smoothingOptions->smoothPressure());
+                    tool->smoothingOptions()->setTailAggressiveness(syncObject->smoothingOptions->tailAggressiveness());
+                    tool->smoothingOptions()->setUseScalableDistance(syncObject->smoothingOptions->useScalableDistance());
+                    tool->smoothingOptions()->setSmoothnessDistance(syncObject->smoothingOptions->smoothnessDistance());
+                    tool->smoothingOptions()->setUseDelayDistance(syncObject->smoothingOptions->useDelayDistance());
+                    tool->smoothingOptions()->setDelayDistance(syncObject->smoothingOptions->delayDistance());
+                    tool->smoothingOptions()->setFinishStabilizedCurve(syncObject->smoothingOptions->finishStabilizedCurve());
+                    tool->smoothingOptions()->setStabilizeSensors(syncObject->smoothingOptions->stabilizeSensors());
+                    tool->updateSettingsViews();
+                }
+            }
+
+            return true;
+        }
+        default:
+            break;
+    }
+
+    return QWidget::event( event );
 }
 
 void KisImageView::resetImageSizeAndScroll(bool changeCentering,

@@ -182,7 +182,7 @@ KisPaintopBox::KisPaintopBox(KisView2 *view, QWidget *parent, const char *name)
         m_view->actionCollection()->addAction(a->text(), a);
     }
 
-    m_workspaceWidget = new KisPopupButton(view);
+    m_workspaceWidget = new KisPopupButton(this);
     m_workspaceWidget->setIcon(koIcon("workspace-chooser"));
     m_workspaceWidget->setToolTip(i18n("Choose workspace"));
     m_workspaceWidget->setFixedSize(32, 32);
@@ -271,7 +271,9 @@ KisPaintopBox::KisPaintopBox(KisView2 *view, QWidget *parent, const char *name)
     m_currCompositeOpID = KoCompositeOpRegistry::instance().getDefaultCompositeOp().id();
 
     slotNodeChanged(view->activeNode());
-    updatePaintops(view->image()->colorSpace());
+    if (view->image()) {
+        updatePaintops(view->image()->colorSpace());
+    }
 
     connect(m_presetsPopup       , SIGNAL(paintopActivated(QString))          , SLOT(slotSetPaintop(QString)));
     connect(m_presetsPopup       , SIGNAL(savePresetClicked())                , SLOT(slotSaveActivePreset()));
@@ -297,6 +299,9 @@ KisPaintopBox::KisPaintopBox(KisView2 *view, QWidget *parent, const char *name)
     connect(m_sliderChooser[2]->getWidget<KisDoubleSliderSpinBox>("size")   , SIGNAL(valueChanged(qreal)), SLOT(slotSlider3Changed()));
 
     //Needed to connect canvas to favorite resource manager
+    connect(m_view->resourceProvider(), SIGNAL(sigOpacityChanged(qreal)), SLOT(slotOpacityChanged(qreal)));
+    connect(m_view->resourceProvider(), SIGNAL(sigFGColorChanged(KoColor)), SLOT(slotUnsetEraseMode()));
+
     m_favoriteResourceManager = new KisFavoriteResourceManager(this);
     connect(m_resourceProvider, SIGNAL(sigFGColorUsed(KoColor)), m_favoriteResourceManager, SLOT(slotAddRecentColor(KoColor)));
 
@@ -309,10 +314,6 @@ KisPaintopBox::KisPaintopBox(KisView2 *view, QWidget *parent, const char *name)
     connect(m_favoriteResourceManager, SIGNAL(sigSetFGColor(KoColor)), m_resourceProvider, SLOT(slotSetFGColor(KoColor)));
     connect(m_favoriteResourceManager, SIGNAL(sigSetBGColor(KoColor)), m_resourceProvider, SLOT(slotSetBGColor(KoColor)));
     connect(m_favoriteResourceManager, SIGNAL(sigEnableChangeColor(bool)), m_resourceProvider, SLOT(slotResetEnableFGChange(bool)));
-    m_view->canvasBase()->setFavoriteResourceManager(m_favoriteResourceManager);
-
-    connect(m_resourceProvider, SIGNAL(sigOpacityChanged(qreal)), SLOT(slotOpacityChanged(qreal)));
-    connect(m_resourceProvider, SIGNAL(sigFGColorChanged(KoColor)), SLOT(slotUnsetEraseMode()));
 }
 
 KisPaintopBox::~KisPaintopBox()
@@ -554,7 +555,7 @@ void KisPaintopBox::slotCanvasResourceChanged(int /*key*/, const QVariant& /*v*/
 {
     if (m_view) {
         sender()->blockSignals(true);
-        KisPaintOpPresetSP preset = m_view->canvasBase()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
+        KisPaintOpPresetSP preset = m_view->resourceProvider()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
         if (preset && m_resourceProvider->currentPreset()->name() != preset->name()) {
             QString compositeOp = preset->settings()->getString("CompositeOp");
             updateCompositeOp(compositeOp);
@@ -616,6 +617,8 @@ void KisPaintopBox::slotSaveActivePreset()
 
 void KisPaintopBox::slotUpdatePreset()
 {
+    if (!m_resourceProvider->currentPreset()) return;
+
     // block updates of avoid some over updating of the option widget
     m_blockUpdate = true;
     m_optionWidget->writeConfiguration(const_cast<KisPaintOpSettings*>(m_resourceProvider->currentPreset()->settings().data()));
@@ -785,6 +788,8 @@ void KisPaintopBox::slotToolChanged(KoCanvasController* canvas, int toolId)
 {
     Q_UNUSED(canvas);
     Q_UNUSED(toolId);
+
+    if (!m_view->canvasBase()) return;
     
     QString  id   = KoToolManager::instance()->activeToolId();
     KisTool* tool = dynamic_cast<KisTool*>(KoToolManager::instance()->toolById(m_view->canvasBase(), id));

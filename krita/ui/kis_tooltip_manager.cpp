@@ -87,7 +87,7 @@ void KisTooltipManager::captureToolip()
     }
 
     bool ok;
-    QString tooltip = QInputDialog::getText(m_view, "Add Tooltip",
+    QString tooltip = QInputDialog::getText(m_view->mainWindow(), "Add Tooltip",
                                             "New Tooltip:", QLineEdit::Normal,
                                             oldTooltip, &ok);
     if (ok && !tooltip.isEmpty()) {
