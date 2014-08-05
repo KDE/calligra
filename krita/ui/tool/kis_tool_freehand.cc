@@ -389,10 +389,13 @@ QPainterPath KisToolFreehand::getOutlinePath(const QPointF &documentPos,
 {
     QPointF imagePos = currentImage()->documentToPixel(documentPos);
 
-    return m_helper->paintOpOutline(imagePos,
-                                    event,
-                                    currentPaintOpPreset()->settings(),
-                                    outlineMode);
+    if (currentPaintOpPreset())
+        return m_helper->paintOpOutline(imagePos,
+                                        event,
+                                        currentPaintOpPreset()->settings(),
+                                        outlineMode);
+    else
+        return QPainterPath();
 }
 
 #include "kis_tool_freehand.moc"

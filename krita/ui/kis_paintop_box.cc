@@ -96,7 +96,7 @@ KisPaintopBox::KisPaintopBox(KisView2 *view, QWidget *parent, const char *name)
 
     setWindowTitle(i18n("Painter's Toolchest"));
 
-    palette = parent->palette();
+    if (parent) palette = parent->palette();
 
     m_settingsWidget = new KisPopupButton(this);
     m_settingsWidget->setIcon(koIcon("paintop_settings_02"));

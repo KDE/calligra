@@ -173,8 +173,10 @@ void KisPerspectiveGridDecoration::drawDecoration(QPainter& gc, const QRectF& up
     Q_UNUSED(updateArea);
     Q_UNUSED(canvas);
 
+    if (!view()) return;
+
     KisImageWSP image = view()->image();
-    Q_ASSERT(image);
+    if (!image) return;
 
     KisPerspectiveGrid* pGrid = image->perspectiveGrid();
 

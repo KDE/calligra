@@ -305,7 +305,7 @@ KisView2::KisView2(QWidget * parent)
        createActions();
        createManagers();
 
-       m_d->controlFrame = new KisControlFrame(this);
+       m_d->controlFrame = new KisControlFrame(this, mainWindow());
 
        //Check to draw scrollbars after "Canvas only mode" toggle is created.
        this->showHideScrollbars();
@@ -1427,6 +1427,8 @@ KoMainWindow *KisView2::mainWindow() const
 
 void KisView2::showHideScrollbars()
 {
+    if (!canvasController()) return;
+
     KisConfig cfg;
     bool toggled = actionCollection()->action("view_show_just_the_canvas")->isChecked();
 

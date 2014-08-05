@@ -116,8 +116,10 @@ KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
     addAction("increase_brush_size", dynamic_cast<KAction*>(collection->action("increase_brush_size")));
     addAction("decrease_brush_size", dynamic_cast<KAction*>(collection->action("decrease_brush_size")));
 
-    KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas);
-    connect(this, SIGNAL(sigPaintingFinished()), kiscanvas->view()->resourceProvider(), SLOT(slotPainting()));
+    KisCanvas2 * kiscanvas = dynamic_cast<KisCanvas2*>(canvas);
+    if (kiscanvas && kiscanvas->view()) {
+        connect(this, SIGNAL(sigPaintingFinished()), kiscanvas->view()->resourceProvider(), SLOT(slotPainting()));
+    }
 }
 
 

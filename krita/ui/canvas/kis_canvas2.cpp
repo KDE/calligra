@@ -361,7 +361,7 @@ void KisCanvas2::createCanvas(bool useOpenGL)
 {
     KisConfig cfg;
     QDesktopWidget dw;
-    const KoColorProfile *profile = cfg.displayProfile(dw.screenNumber(canvasWidget()));
+    const KoColorProfile *profile = cfg.displayProfile(dw.screenNumber(imageView()));
     m_d->displayColorConverter->setMonitorProfile(profile);
 
     if (useOpenGL) {

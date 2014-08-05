@@ -91,6 +91,8 @@
 
 KisSelectionManager::KisSelectionManager(KisView2 * view)
         : m_view(view),
+          m_doc(0),
+          m_imageView(0),
         m_adapter(new KisNodeCommandsAdapter(view)),
         m_copy(0),
         m_copyMerged(0),
@@ -109,7 +111,8 @@ KisSelectionManager::KisSelectionManager(KisView2 * view)
         m_fillForegroundColor(0),
         m_fillBackgroundColor(0),
         m_fillPattern(0),
-        m_imageResizeToSelection(0)
+        m_imageResizeToSelection(0),
+        m_selectionDecoration(0)
 {
     m_clipboard = KisClipboard::instance();
 }
@@ -584,7 +587,10 @@ void KisSelectionManager::slotToggleSelectionDecoration()
 
 bool KisSelectionManager::showSelectionAsMask() const
 {
-    return m_selectionDecoration->mode() == KisSelectionDecoration::Mask;
+    if (m_selectionDecoration) {
+        return m_selectionDecoration->mode() == KisSelectionDecoration::Mask;
+    }
+    return false;
 }
 
 #include "kis_selection_manager.moc"
