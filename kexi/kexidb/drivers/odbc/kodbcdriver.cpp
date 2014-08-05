@@ -19,7 +19,7 @@
 
 #include "kodbcdriver.h"
 #include "odbcdriver.h"
-#include "kexidb/connection.h"
+#include <db/connection.h>
 #include <db/field.h>
 #include <db/driver_p.h>
 #include <db/utils.h>
@@ -34,7 +34,7 @@
 
 using namespace KexiDB;
 
-K_EXPORT_KEXIDB_DRIVER(KODBCDriver, "odbc")
+K_EXPORT_KEXIDB_DRIVER(KODBCDriver, odbc)
 
 class KODBCDriver::KODBCDriverPrivate {
 public:

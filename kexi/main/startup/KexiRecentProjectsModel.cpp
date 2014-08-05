@@ -24,6 +24,7 @@
 #include <core/kexiprojectdata.h>
 
 #include <db/utils.h>
+#include <db/drivermanager.h>
 
 #include <KoIcon.h>
 

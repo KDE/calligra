@@ -26,7 +26,8 @@ set(kexicore_LIB_SRCS
    kexipartmanager.cpp 
    kexipartinfo.cpp 
    kexipartitem.cpp 
-   kexipart.cpp 
+   kexipartbase.cpp
+   kexipart.cpp
    kexiprojectdata.cpp 
    KexiRecentProjects.cpp 
    kexiinternalpart.cpp 
@@ -63,5 +64,4 @@ set_target_properties(kexicore PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
 install(TARGETS kexicore  ${INSTALL_TARGETS_DEFAULT_ARGS})
-
-
+install(FILES kexihandler.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})

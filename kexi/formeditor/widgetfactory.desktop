@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=ServiceType
-X-KDE-ServiceType=KFormDesigner/WidgetFactory
+X-KDE-ServiceType=Kexi/WidgetFactory
 Comment=Widget Factory Base
 Comment[bs]=Baza fabrike dodataka
 Comment[ca]=Factoria base d'estris

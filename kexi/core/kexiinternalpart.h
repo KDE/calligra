@@ -21,13 +21,12 @@
 #ifndef KEXIINTERNALPART_H
 #define KEXIINTERNALPART_H
 
-#include <QObject>
 #include <QPointer>
 #include <QVariant>
-#include <QDialog>
 
-#include <kexi_export.h>
+#include "kexipartbase.h"
 
+class QDialog;
 class KexiWindow;
 class KexiView;
 
@@ -47,15 +46,15 @@ class MessageHandler;
  * Parts can have unique flag set for dialogs (true by default)
  * - then a dialog created by createDialogInstance() is unique.
  */
-class KEXICORE_EXPORT KexiInternalPart : public QObject
+class KEXICORE_EXPORT KexiInternalPart : public KexiPart::PartBase
 {
     Q_OBJECT
 
 public:
-    KexiInternalPart(QObject *parent, const QVariantList &);
+    KexiInternalPart(QObject *parent, const QVariantList &list);
     virtual ~KexiInternalPart();
 
-    /*! Creates a new widget instance using part \a partName.
+    /*! Creates a new widget instance using part pointed by \a className.
      \a widgetClass is a pseudo class used in case when the part offers more
      than one widget type.
      \a msgHdr is a message handler for displaying error messages.
@@ -63,12 +62,12 @@ public:
      on widget's creation. Depending on implementation, the created widget can write its
      state (e.g. result or status information) back to this argument.
      Created widget will have assigned \a parent widget and \a objName name. */
-    static QWidget* createWidgetInstance(const char* partName, const char* widgetClass,
+    static QWidget* createWidgetInstance(const QString &className, const char* widgetClass,
                                          KexiDB::MessageHandler *msgHdr,
                                          QWidget *parent, const char *objName = 0, QMap<QString, QString>* args = 0);
 
     /*! For convenience. */
-    static QWidget* createWidgetInstance(const char* partName,
+    static QWidget* createWidgetInstance(const QString &className,
                                          KexiDB::MessageHandler *msgHdr,
                                          QWidget *parent, const char *objName = 0, QMap<QString, QString>* args = 0);
 
@@ -79,7 +78,7 @@ public:
      \a msgHdr is a message handler for displaying error messages.
      The dialog is assigned to the main window,
      and \a objName name is set. */
-    static KexiWindow* createKexiWindowInstance(const char* partName,
+    static KexiWindow* createKexiWindowInstance(const QString &className,
             KexiDB::MessageHandler *msgHdr, const char *objName = 0);
 
     /*! Creates a new modal dialog instance (QDialog or a subclass).
@@ -95,22 +94,22 @@ public:
      so on another call the dialog will be created again.
      The dialog is assigned to the main window,
      and \a objName name is set. */
-    static QDialog* createModalDialogInstance(const char* partName,
+    static QDialog* createModalDialogInstance(const QString &className,
             const char* dialogClass, KexiDB::MessageHandler *msgHdr,
             const char *objName = 0, QMap<QString, QString>* args = 0);
 
     /*! Adeded For convenience. */
-    static QDialog* createModalDialogInstance(const char* partName,
+    static QDialog* createModalDialogInstance(const QString &className,
             KexiDB::MessageHandler *msgHdr, const char *objName = 0,
             QMap<QString, QString>* args = 0);
 
-    /*! Executes a command \a commandName (usually nonvisual) using part called \a partName.
+    /*! Executes a command \a commandName (usually nonvisual) using part pointed by \a className.
      The result can be put into the \a args. \return true on successful calling. */
-    static bool executeCommand(const char* partName,
+    static bool executeCommand(const QString &className,
                                const char* commandName, QMap<QString, QString>* args = 0);
 
-    /*! \return internal part of a name \a partName. Shouldn't be usable. */
-    static const KexiInternalPart* part(KexiDB::MessageHandler *msgHdr, const char* partName);
+    /*! \return internal part pointed by \a className. Shouldn't be usable. */
+    static KexiInternalPart* part(KexiDB::MessageHandler *msgHdr, const QString &className);
 
     /*! \return true if the part can create only one (unique) dialog. */
     bool uniqueWindow() const;
@@ -131,7 +130,8 @@ protected:
     /*! Reimplement this if your internal part has to return widgets
      or QDialog objects. */
     virtual QWidget *createWidget(const char* widgetClass,
-                                  QWidget * parent, const char * objName = 0, QMap<QString, QString>* args = 0);
+                                  QWidget * parent, const char * objName = 0,
+                                  QMap<QString, QString>* args = 0);
 
     /*! Reimplement this if your internal part has to return a view object. */
     virtual KexiView *createView(QWidget * parent, const char *objName = 0);
@@ -142,9 +142,11 @@ protected:
     virtual bool executeCommand(const char* commandName, QMap<QString, QString>* args = 0);
 
 private:
+
+    Q_DISABLE_COPY(KexiInternalPart)
+
     class Private;
     Private* const d;
-
 };
 
 #endif

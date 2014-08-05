@@ -32,4 +32,4 @@ target_link_libraries(kexihandler_autoform
 )
 
 install(TARGETS kexihandler_autoform DESTINATION ${PLUGIN_INSTALL_DIR})
-install(FILES kexiautoformhandler.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra/kexi)
+install(FILES kexiautoformhandler.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
