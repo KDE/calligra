@@ -187,13 +187,6 @@ KoView::KoView(KoPart *part, KoDocument *document, QWidget *parent)
                 this, SLOT(slotClearStatusText()));
     }
 
-    // add all plugins.
-//     foreach(const QString & docker, KoDockRegistry::instance()->keys()) {
-//         KoDockFactoryBase *factory = KoDockRegistry::instance()->value(docker);
-//         if (mainWindow())
-//             mainWindow()->createDockWidget(factory);
-//     }
-
     actionCollection()->addAssociatedWidget(this);
 
     /**
