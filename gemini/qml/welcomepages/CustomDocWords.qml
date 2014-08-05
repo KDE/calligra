@@ -117,8 +117,9 @@ Page {
                         right: parent.horizontalCenter;
                     }
                     width: parent.width;
-                    placeholder: "Width";
-                    text: "1234";
+                    placeholder: landscapeCheck.checked ? "Height" : "Width";
+                    validator: DoubleValidator{ bottom: 1; top: 999999; decimals: 2; }
+                    numeric: true;
                 }
                 PanelTextField {
                     id: heightInput;
@@ -128,8 +129,9 @@ Page {
                         right: parent.right;
                     }
                     width: parent.width;
-                    placeholder: "Height";
-                    text: "1234";
+                    placeholder: landscapeCheck.checked ? "Width" : "Height";
+                    validator: DoubleValidator{ bottom: 1; top: 999999; decimals: 2; }
+                    numeric: true;
                 }
             }
             Label {
@@ -252,7 +254,7 @@ Page {
                 RangeInput {
                     id: marginLeft;
                     width: parent.width / 3;
-                    placeholder: "Left";
+                    placeholder: facingCheck.checked ? "Binding" : "Left";
                     useExponentialValue: true;
                     min: 1; max: 999; decimals: 2;
                     value: 20;
@@ -267,7 +269,7 @@ Page {
                 RangeInput {
                     id: marginRight;
                     width: parent.width / 3;
-                    placeholder: "Right";
+                    placeholder: facingCheck.checked ? "Outside" : "Right";
                     useExponentialValue: true;
                     min: 1; max: 999; decimals: 2;
                     value: 20;
