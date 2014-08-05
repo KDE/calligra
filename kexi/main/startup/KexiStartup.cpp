@@ -46,10 +46,6 @@
 #include <ktextedit.h>
 #include <kuser.h>
 #include <KProgressDialog>
-#include <KBuildSycocaProgressDialog>
-#include <KProcess>
-#include <KStandardDirs>
-#include <KSycoca>
 
 #include <unistd.h>
 
@@ -700,7 +696,9 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
 
     KexiPart::PartInfoList *partInfoList = Kexi::partManager().infoList();
     if (!partInfoList || partInfoList->isEmpty()) {
-        showNoPluginsMessageAndTryToRebuildSyCoCa();
+        KexiGUIMessageHandler msgh;
+        msgh.showErrorMessage(&Kexi::partManager());
+        KexiStartupData::setProjectData(0);
         return false;
     }
 
@@ -1054,17 +1052,6 @@ void KexiStartupHandler::slotSaveShortcutFileChanges()
         KMessageBox::sorry(0, i18n("Failed saving connection data to\n\"%1\" file.",
                            QDir::convertSeparators(fileName)));
     }
-}
-
-void KexiStartupHandler::showNoPluginsMessageAndTryToRebuildSyCoCa()
-{
-    KexiGUIMessageHandler msgh;
-    msgh.showErrorMessage(&Kexi::partManager());
-    KexiStartupData::setProjectData(0);
-    KProcess* proc = new KProcess(&Kexi::partManager());
-    QObject::connect(proc, SIGNAL(finished()), proc, SLOT(deleteLater()));
-    (*proc) << KStandardDirs::findExe(KBUILDSYCOCA_EXENAME);
-    proc->start();
 }
 
 #include "KexiStartup.moc"

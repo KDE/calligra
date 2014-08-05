@@ -25,6 +25,7 @@
 #include <kexiproject.h>
 #include <kexipartinfo.h>
 #include <kexipart.h>
+#include <kexipartmanager.h>
 #include <kexiactioncategories.h>
 #include <KexiMainWindowIface.h>
 #include <KoIcon.h>

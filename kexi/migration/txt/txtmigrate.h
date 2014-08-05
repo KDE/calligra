@@ -21,7 +21,6 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #define KEXIMIGRATIONTXTMIGRATE_H
 
 #include <migration/keximigrate.h>
-#include <migration/keximigrate_p.h>
 
 #include <QFile>
 

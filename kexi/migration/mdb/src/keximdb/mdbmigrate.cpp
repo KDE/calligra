@@ -19,6 +19,7 @@
 */
 
 #include "mdbmigrate.h"
+#include <migration/keximigrate_p.h>
 
 #include <QRegExp>
 #include <QFile>
