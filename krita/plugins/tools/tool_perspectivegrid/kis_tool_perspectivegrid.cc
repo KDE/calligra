@@ -44,6 +44,7 @@
 #include <kis_view2.h>
 
 #include <canvas/kis_canvas2.h>
+#include <kis_perspective_grid_decoration.h>
 
 KisToolPerspectiveGrid::KisToolPerspectiveGrid(KoCanvasBase * canvas)
         : KisTool(canvas, KisCursor::load("tool_perspectivegrid_cursor.png", 6, 6)),
@@ -68,7 +69,8 @@ void KisToolPerspectiveGrid::activate(ToolActivation toolActivation, const QSet<
     } else {
         m_internalMode = MODE_EDITING;
         useCursor(KisCursor::arrowCursor());
-        m_canvas->view()->perspectiveGridManager()->setVisible(true);
+        
+        decoration()->setVisible(true);
         m_canvas->updateCanvas(); // TODO only the correct rect
     }
 }
@@ -106,6 +108,11 @@ KisPerspectiveGridNodeSP KisToolPerspectiveGrid::nodeNearPoint(KisSubPerspective
         return grid->bottomRight();
     }
     return 0;
+}
+
+KisPerspectiveGridDecoration* KisToolPerspectiveGrid::decoration()
+{
+    return qobject_cast<KisPerspectiveGridDecoration*>(m_canvas->decoration("perspectiveGrid"));
 }
 
 void KisToolPerspectiveGrid::beginPrimaryAction(KoPointerEvent *event)
@@ -261,7 +268,7 @@ void KisToolPerspectiveGrid::endPrimaryAction(KoPointerEvent *event)
                         new KisPerspectiveGridNode(convertToPixelCoord(m_points[1])),
                         new KisPerspectiveGridNode(convertToPixelCoord(m_points[2])),
                         new KisPerspectiveGridNode(convertToPixelCoord(m_points[3]))));
-                m_canvas->view()->perspectiveGridManager()->setVisible(true);
+                decoration()->setVisible(true);
                 m_internalMode = MODE_EDITING;
                 useCursor(KisCursor::arrowCursor());
             }

@@ -33,6 +33,7 @@
 #include "kis_doc2.h"
 #include "kis_part2.h"
 #include "kis_view2.h"
+#include "kis_image_view.h"
 #include "kis_canvas2.h"
 #include "kis_canvas_controller.h"
 #include "kis_coordinates_converter.h"
@@ -52,13 +53,13 @@ public:
         m_image->initialRefreshGraph();
         QVERIFY(checkLayersInitial(m_image));
 
-        m_doc = new KisDoc2();
-        m_part = m_doc->documentPart();
+        m_part = new KisPart2;
+        m_doc = qobject_cast<KisDoc2*>(m_part->createDocument());
 
         m_doc->setCurrentImage(m_image);
 
         m_mainWindow = m_doc->documentPart()->createMainWindow();
-        m_view = new KisView2(m_part, m_doc, m_mainWindow);
+        m_view = new KisImageView(m_part, m_doc, m_mainWindow);
 
         m_image->refreshGraph();
 
@@ -81,7 +82,7 @@ public:
         QApplication::removePostedEvents(0);
     }
 
-    KisView2* view() {
+    KisImageView* view() {
         return m_view;
     }
 
@@ -118,7 +119,7 @@ private:
     KisImageSP m_image;
     KoPart *m_part;
     KisDoc2 *m_doc;
-    KisView2 *m_view;
+    KisImageView *m_view;
     KoMainWindow *m_mainWindow;
 };
 

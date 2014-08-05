@@ -32,6 +32,7 @@
 #include "kis_image.h"
 #include "kis_paint_device.h"
 #include "kis_paint_layer.h"
+#include "kis_group_layer.h"
 
 #include "testutil.h"
 
@@ -244,6 +245,7 @@ QImage utils::StrokeTester::doStroke(bool cancelled,
     KisPainter *painter = new KisPainter();
     KisResourcesSnapshotSP resources =
         new KisResourcesSnapshot(image,
+                                 image->rootLayer()->firstChild(),
                                  image->postExecutionUndoAdapter(),
                                  manager);
 

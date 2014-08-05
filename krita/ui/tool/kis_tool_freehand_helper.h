@@ -89,7 +89,8 @@ protected:
 
     void initPaintImpl(const KisPaintInformation &previousPaintInformation,
                        KoCanvasResourceManager *resourceManager,
-                       KisImageWSP image, KisNodeSP node,
+                       KisImageWSP image,
+                       KisNodeSP node,
                        KisStrokesFacade *strokesFacade,
                        KisPostExecutionUndoAdapter *undoAdapter,
                        KisNodeSP overrideNode = 0,

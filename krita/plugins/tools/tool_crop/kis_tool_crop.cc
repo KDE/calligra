@@ -137,7 +137,7 @@ void KisToolCrop::activate(ToolActivation toolActivation, const QSet<KoShape*> &
     KisTool::activate(toolActivation, shapes);
 
     KisResourcesSnapshotSP resources =
-        new KisResourcesSnapshot(image(), 0, this->canvas()->resourceManager());
+        new KisResourcesSnapshot(image(), currentNode(), 0, this->canvas()->resourceManager());
 
     KisSelectionSP sel = resources->activeSelection();
     if (sel) {

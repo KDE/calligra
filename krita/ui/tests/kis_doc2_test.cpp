@@ -30,6 +30,7 @@
 #include <KoMainWindow.h>
 #include <kis_view2.h>
 #include "util.h"
+#include <kis_image_view.h>
 
 
 void KisDoc2Test::testOpenImageTwiceInSameDoc()
@@ -49,9 +50,9 @@ void KisDoc2Test::testOpenImageTwiceInSameDoc()
 
 void KisDoc2Test::testActiveNodes()
 {
-    KisDoc2* doc = createEmptyDocument();
-    KoMainWindow* mainWindow = doc->documentPart()->createMainWindow();
-    KisView2* view = new KisView2(static_cast<KisPart2*>(doc->documentPart()), static_cast<KisDoc2*>(doc), mainWindow);
+    KisDoc2 *doc = createEmptyDocument();
+    KoMainWindow *mainWindow = doc->documentPart()->createMainWindow();
+    KisImageView *view = new KisImageView(static_cast<KisPart2*>(doc->documentPart()), static_cast<KisDoc2*>(doc), mainWindow);
     doc->documentPart()->addView(view, doc);
     vKisNodeSP nodes = doc->activeNodes();
     QVERIFY(nodes.isEmpty());

@@ -136,6 +136,7 @@ public:
 
         KisResourcesSnapshotSP resources =
             new KisResourcesSnapshot(image,
+                                     paint1,
                                      image->postExecutionUndoAdapter(),
                                      manager.data());
 

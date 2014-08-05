@@ -134,8 +134,8 @@ void KisSplashScreen::toggleShowAtStartup(bool toggle)
 
 void KisSplashScreen::linkClicked(const QString &link)
 {
-    if (koApp && koApp->partList().size() > 0) {
-        koApp->partList().first()->openExistingFile(KUrl(link));
+    if (KoPart::partList().size() > 0) {
+        KoPart::partList().first()->openExistingFile(KUrl(link));
     }
     close();
 }

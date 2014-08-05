@@ -128,7 +128,7 @@ void KisToolFill::endPrimaryAction(KoPointerEvent *event)
                                        kundo2_i18n("Flood Fill"));
 
     KisResourcesSnapshotSP resources =
-        new KisResourcesSnapshot(image(), 0, this->canvas()->resourceManager());
+        new KisResourcesSnapshot(image(), currentNode(), 0, this->canvas()->resourceManager());
 
     KisProcessingVisitorSP visitor =
         new FillProcessingVisitor(m_startPos,

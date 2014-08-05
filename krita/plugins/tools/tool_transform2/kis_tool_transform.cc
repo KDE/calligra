@@ -529,7 +529,7 @@ void KisToolTransform::updateSelectionPath()
     m_selectionPath = QPainterPath();
 
     KisResourcesSnapshotSP resources =
-        new KisResourcesSnapshot(image(), 0, this->canvas()->resourceManager());
+        new KisResourcesSnapshot(image(), currentNode(), 0, this->canvas()->resourceManager());
 
     QPainterPath selectionOutline;
     KisSelectionSP selection = resources->activeSelection();
@@ -634,7 +634,7 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode)
     KisPaintDeviceSP dev;
 
     KisResourcesSnapshotSP resources =
-        new KisResourcesSnapshot(image(), 0, this->canvas()->resourceManager());
+            new KisResourcesSnapshot(image(), currentNode(), 0, this->canvas()->resourceManager());
 
     KisNodeSP currentNode = resources->currentNode();
 
