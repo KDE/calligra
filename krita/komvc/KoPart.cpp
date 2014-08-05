@@ -430,6 +430,8 @@ QString KoPart::templateType() const
 
 void KoPart::startCustomDocument(KoDocument* doc)
 {
+    qDebug() << "addCustomDocument";
+
     addDocument(doc);
     KoMainWindow *mw = qobject_cast<KoMainWindow*>(d->startupWidget->parent());
     if (!mw) mw = currentMainwindow();

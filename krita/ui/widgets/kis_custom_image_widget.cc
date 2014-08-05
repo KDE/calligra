@@ -209,7 +209,7 @@ void KisCustomImageWidget::heightChanged(double value)
 void KisCustomImageWidget::createImage()
 {
     if (createNewImage()) {
-        emit documentSelected();
+        emit documentSelected(m_doc);
     }
 }
 

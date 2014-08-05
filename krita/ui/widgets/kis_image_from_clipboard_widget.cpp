@@ -108,7 +108,7 @@ void KisImageFromClipboard::createImage()
 
     }
 
-    emit documentSelected();
+    emit documentSelected(m_doc);
 }
 
 
