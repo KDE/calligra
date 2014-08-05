@@ -26,6 +26,56 @@ Page {
     Item {
         anchors {
             top: parent.top;
+            left: parent.horizontalCenter;
+            right: parent.right;
+            bottom: parent.bottom;
+            margins: Constants.DefaultMargin;
+            bottomMargin: Constants.DefaultMargin * 2 + createDocButton.height;
+        }
+        Rectangle {
+            id: singlePageVisualiser;
+            opacity: facingCheck.checked ? 0 : 0.9;
+            Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+            anchors.centerIn: parent;
+            property double scale: widthInput.text / heightInput.text;
+            property bool landscapeMode: landscapeCheck.checked ? widthInput.text < heightInput.text : heightInput.text < widthInput.text;
+            height: landscapeMode ? (parent.height - Constants.DefaultMargin) * scale : (parent.height - Constants.DefaultMargin);
+            width: landscapeMode ? (parent.width - Constants.DefaultMargin) : (parent.width - Constants.DefaultMargin) * scale;
+            color: "white";
+            border {
+                color: "silver";
+                width: 1;
+            }
+            Item {
+                anchors {
+                    fill: parent;
+                    topMargin: marginTop.value;
+                    leftMargin: marginLeft.value;
+                    rightMargin: marginRight.value;
+                    bottomMargin: marginBottom.value;
+                }
+                Row {
+                    spacing: columnSpacing.value;
+                    Repeater {
+                        model: columnCount.value;
+                        Rectangle {
+                            height: singlePageVisualiser.height - marginTop.value - marginBottom.value;
+                            width: ((singlePageVisualiser.width - marginLeft.value - marginRight.value) / columnCount.value) - (columnSpacing.value * (columnCount.value - 1) / columnCount.value);
+                            color: "transparent";
+                            opacity: 0.5;
+                            border {
+                                width: 1;
+                                color: "silver";
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    Item {
+        anchors {
+            top: parent.top;
             left: parent.left;
             right: parent.horizontalCenter;
             bottom: parent.bottom;
@@ -228,7 +278,7 @@ Page {
                     width: parent.width / 2;
                     placeholder: "Spacing";
                     useExponentialValue: true;
-                    min: 0; max: 999; decimals: 2;
+                    min: 0; max: ((landscapeCheck.checked ? heightInput.text : widthInput.text) - marginLeft.value - marginRight.value) / columnCount.value; decimals: 2;
                     value: 20;
                 }
             }
@@ -294,6 +344,7 @@ Page {
         }
     }
     CohereButton {
+        id: createDocButton;
         anchors {
             right: parent.right;
             bottom: parent.bottom;
