@@ -229,7 +229,7 @@ void KisToolFreehand::endPrimaryAction(KoPointerEvent *event)
     endStroke();
 
     if (m_assistant) {
-        static_cast<KisCanvas2*>(canvas())->view()->paintingAssistantsDecoration()->endStroke();
+        static_cast<KisCanvas2*>(canvas())->paintingAssistantsDecoration()->endStroke();
     }
 
     notifyModified();
@@ -360,7 +360,7 @@ void KisToolFreehand::setAssistant(bool assistant)
 QPointF KisToolFreehand::adjustPosition(const QPointF& point, const QPointF& strokeBegin)
 {
     if (m_assistant) {
-        QPointF ap = static_cast<KisCanvas2*>(canvas())->view()->paintingAssistantsDecoration()->adjustPosition(point, strokeBegin);
+        QPointF ap = static_cast<KisCanvas2*>(canvas())->paintingAssistantsDecoration()->adjustPosition(point, strokeBegin);
         return (1.0 - m_magnetism) * point + m_magnetism * ap;
     }
     return point;

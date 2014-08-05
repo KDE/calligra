@@ -24,7 +24,9 @@
 #include <krita_export.h>
 
 class KisView2;
+class KisActionManager;
 class KActionCollection;
+class KisImageView;
 
 class KRITAUI_EXPORT KisCanvasControlsManager: public QObject
 {
@@ -34,7 +36,8 @@ public:
     KisCanvasControlsManager(KisView2 * view);
     virtual ~KisCanvasControlsManager();
 
-    void setup(KActionCollection * collection);
+    void setup(KActionCollection *actionCollection, KisActionManager *actionManager);
+    void setView(KisImageView *imageView);
 
 private slots:
     void makeColorLighter();

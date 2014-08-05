@@ -39,6 +39,7 @@ public:
     KisGridManager(KisView2 * parent);
     ~KisGridManager();
 public:
+
     void setup(KActionCollection * collection);
 
 public slots:

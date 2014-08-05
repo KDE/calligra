@@ -38,16 +38,23 @@ public:
     QList<KisAction*> actions;
     KoGenericRegistry<KisOperationUIFactory*> uiRegistry;
     KisOperationRegistry operationRegistry;
+    KisImageView* imageView;
 };
 
 KisActionManager::KisActionManager(KisView2* view) : d(new Private)
 {
     d->view = view;
+    d->imageView = 0;
 }
 
 KisActionManager::~KisActionManager()
 {
     delete d;
+}
+
+void KisActionManager::setView(KisImageView* imageView)
+{
+    d->imageView = imageView;
 }
 
 void KisActionManager::addAction(const QString& name, KisAction* action, KActionCollection* actionCollection)
@@ -83,6 +90,13 @@ KisAction *KisActionManager::actionByName(const QString &name) const
 
 void KisActionManager::updateGUI()
 {
+    if (!d->imageView) {
+        foreach(KisAction* action, d->actions) {
+            action->setActionEnabled(false);
+        }
+        return;
+    }
+    
     KisNodeSP node = d->view->activeNode();
     KisLayerSP layer = d->view->activeLayer();
 
@@ -133,7 +147,7 @@ void KisActionManager::updateGUI()
             enable = action->activationFlags() & flags;
         }
         enable = enable && (int)(action->activationConditions() & conditions) == (int)action->activationConditions();
-
+        
         if (node && enable) {
             foreach (const QString &type, action->excludedNodeTypes()) {
                 if (node->inherits(type.toLatin1())) {

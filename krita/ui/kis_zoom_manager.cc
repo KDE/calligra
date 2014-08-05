@@ -116,7 +116,7 @@ void KisZoomManager::setup(KActionCollection * actionCollection)
     m_zoomController->setDocumentSize(QSizeF(image->width() / image->xRes(), image->height() / image->yRes()), true);
 
     m_zoomAction = m_zoomController->zoomAction();
-    m_zoomActionWidget = m_zoomAction->createWidget();
+    m_zoomActionWidget = m_zoomAction->createWidget(0);
 
     m_showRulersAction  = new KToggleAction(i18n("Show Rulers"), this);
     actionCollection->addAction("view_ruler", m_showRulersAction);

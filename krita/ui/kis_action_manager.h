@@ -22,6 +22,7 @@
 
 #include <krita_export.h>
 
+class KisImageView;
 class KActionCollection;
 class KisView2;
 class KisAction;
@@ -36,6 +37,8 @@ public:
     KisActionManager(KisView2* view);
     virtual ~KisActionManager();
 
+    void setView(KisImageView* imageView);
+    
     void addAction(const QString& name, KisAction* action, KActionCollection* actionCollection);
     void takeAction(KisAction* action, KActionCollection *actionCollection);
 

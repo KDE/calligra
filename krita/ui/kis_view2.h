@@ -44,7 +44,7 @@ class KisGridManager;
 class KisImage;
 class KisImageManager;
 class KisNodeManager;
-class KisPaintingAssistantsDecoration;
+class KisPaintingAssistantsManager;
 class KisPaintopBox;
 class KisPerspectiveGridManager;
 class KisSelectionManager;
@@ -134,9 +134,9 @@ public:  // Krita specific interfaces
     KisCanvasController *canvasControllerWidget();
 
     /// The node manager handles everything about nodes
-    KisNodeManager * nodeManager();
+    KisNodeManager * nodeManager() const;
 
-    KisActionManager* actionManager();
+    KisActionManager* actionManager() const;
     
     /**
      * Convenience method to get at the active node, which may be
@@ -181,9 +181,9 @@ public:
 
     virtual KoPrintJob * createPrintJob();
 
-    KisGridManager * gridManager();
-    KisPerspectiveGridManager* perspectiveGridManager();
-    KisPaintingAssistantsDecoration* paintingAssistantsDecoration();
+    KisGridManager * gridManager() const;
+    KisPerspectiveGridManager* perspectiveGridManager() const;
+    KisPaintingAssistantsManager* paintingAssistantsManager() const;
 
     /// disable and enable toolbar controls. used for disabling them during painting.
     void enableControls();
@@ -223,7 +223,6 @@ signals:
 
 private slots:
 
-    void slotPreferences();
     void slotBlacklistCleanup();
     void slotImageSizeChanged(const QPointF &oldStillPoint, const QPointF &newStillPoint);
     void slotImageResolutionChanged();
