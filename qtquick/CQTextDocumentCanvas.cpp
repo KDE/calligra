@@ -255,16 +255,27 @@ void CQTextDocumentCanvas::openFile(const QString& uri)
         layout.orientation = (KoPageFormat::Orientation)url.queryItemValue("pageorientation").toInt();
         layout.height = MM_TO_POINT(url.queryItemValue("height").toDouble());
         layout.width = MM_TO_POINT(url.queryItemValue("width").toDouble());
+        if(url.queryItemValue("facingpages").toInt() == 1) {
+            layout.bindingSide = MM_TO_POINT(url.queryItemValue("leftmargin").toDouble());
+            layout.pageEdge = MM_TO_POINT(url.queryItemValue("rightmargin").toDouble());
+            layout.leftMargin = layout.rightMargin = -1;
+        }
+        else {
+            layout.bindingSide = layout.pageEdge = -1;
+            layout.leftMargin = MM_TO_POINT(url.queryItemValue("leftmargin").toDouble());
+            layout.rightMargin = MM_TO_POINT(url.queryItemValue("rightmargin").toDouble());
+        }
         layout.topMargin = MM_TO_POINT(url.queryItemValue("topmargin").toDouble());
-        layout.leftMargin = MM_TO_POINT(url.queryItemValue("leftmargin").toDouble());
-        layout.rightMargin = MM_TO_POINT(url.queryItemValue("rightmargin").toDouble());
         layout.bottomMargin = MM_TO_POINT(url.queryItemValue("bottommargin").toDouble());
         style.setPageLayout(layout);
 
         doc->setUnit(KoUnit::fromSymbol(url.queryItemValue("unit")));
+        doc->relayout();
     }
     else
         document->openUrl(url);
+
+    document->setModified(false);
 
     d->canvas = dynamic_cast<KWCanvasItem*> (d->part->canvasItem(d->part->document()));
     createAndSetCanvasControllerOn(d->canvas);
