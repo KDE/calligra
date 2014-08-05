@@ -293,13 +293,18 @@ void KoPart::openExistingFile(const KUrl& url)
     document->setModified(false);
     addDocument(document);
 
-    KoMainWindow *mw = qobject_cast<KoMainWindow*>(d->startupWidget->parent());
+    KoMainWindow *mw;
+    if (d->startupWidget) {
+        KoMainWindow *mw = qobject_cast<KoMainWindow*>(d->startupWidget->parent());
+    }
     if (!mw) mw = currentMainwindow();
     KoView *view = createView(document, mw);
     mw->addView(view);
 
-    d->startupWidget->setParent(0);
-    d->startupWidget->hide();
+    if (d->startupWidget) {
+        d->startupWidget->setParent(0);
+        d->startupWidget->hide();
+    }
     qApp->restoreOverrideCursor();
 }
 

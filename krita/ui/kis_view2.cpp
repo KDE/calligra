@@ -267,7 +267,6 @@ public:
     KAction *openResourcesDirectory;
     KAction *rotateCanvasRight;
     KAction *rotateCanvasLeft;
-    KAction *resetCanvasTransformations;
     KToggleAction *wrapAroundAction;
     KisSelectionManager *selectionManager;
     KisControlFrame *controlFrame;
@@ -448,7 +447,6 @@ void KisView2::setCurrentView(KoView *view)
 
         m_d->rotateCanvasRight->disconnect();
         m_d->rotateCanvasLeft->disconnect();
-        m_d->resetCanvasTransformations->disconnect();
         m_d->mirrorCanvas->disconnect();
         m_d->wrapAroundAction->disconnect();
         canvasControllerWidget()->disconnect(SIGNAL(toolOptionWidgetsChanged(QList<QPointer<QWidget> >)), mainWindow()->dockerManager());
@@ -470,7 +468,6 @@ void KisView2::setCurrentView(KoView *view)
         connect(m_d->nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)), doc->image(), SLOT(requestStrokeEnd()));
         connect(m_d->rotateCanvasRight, SIGNAL(triggered()), dynamic_cast<KisCanvasController*>(canvasController()), SLOT(rotateCanvasRight15()));
         connect(m_d->rotateCanvasLeft, SIGNAL(triggered()),dynamic_cast<KisCanvasController*>(canvasController()), SLOT(rotateCanvasLeft15()));
-        connect(m_d->resetCanvasTransformations, SIGNAL(triggered()), dynamic_cast<KisCanvasController*>(canvasController()), SLOT(resetCanvasTransformations()));
         connect(m_d->mirrorCanvas, SIGNAL(toggled(bool)), dynamic_cast<KisCanvasController*>(canvasController()), SLOT(mirrorCanvas(bool)));
         connect(m_d->wrapAroundAction, SIGNAL(toggled(bool)), dynamic_cast<KisCanvasController*>(canvasController()), SLOT(slotToggleWrapAroundMode(bool)));
         connect(canvasControllerWidget(), SIGNAL(toolOptionWidgetsChanged(QList<QPointer<QWidget> >)), mainWindow()->dockerManager(), SLOT(newOptionWidgets(QList<QPointer<QWidget> >)));
@@ -800,10 +797,6 @@ void KisView2::createActions()
     m_d->rotateCanvasLeft = new KAction(i18n("Rotate Canvas Left"), this);
     actionCollection()->addAction("rotate_canvas_left", m_d->rotateCanvasLeft);
     m_d->rotateCanvasLeft->setShortcut(QKeySequence("Ctrl+["));
-
-    m_d->resetCanvasTransformations = new KAction(i18n("Reset Canvas Transformations"), this);
-    actionCollection()->addAction("reset_canvas_transformations", m_d->resetCanvasTransformations);
-    m_d->resetCanvasTransformations->setShortcut(QKeySequence("Ctrl+'"));
 
     m_d->wrapAroundAction = new KToggleAction(i18n("Wrap Around Mode"), this);
     actionCollection()->addAction("wrap_around_mode", m_d->wrapAroundAction);
