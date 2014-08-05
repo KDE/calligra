@@ -50,7 +50,6 @@ public slots:
 protected:
 
     virtual void closeEvent(QCloseEvent *e);
-    virtual bool event(QEvent* event);
 
 private slots:
 

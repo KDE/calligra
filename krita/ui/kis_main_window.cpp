@@ -53,6 +53,8 @@ KisMainWindow::KisMainWindow(KoPart *part, const KComponentData &instance)
     , m_constructing(true)
     , m_mdiArea(new QMdiArea(this))
 {
+    KGlobal::setActiveComponent(part ? part->componentData() : KGlobal::mainComponent());
+
     // 25 px is a distance that works well for Tablet and Mouse events
     qApp->setStartDragDistance(25);
 
@@ -90,7 +92,6 @@ KisMainWindow::KisMainWindow(KoPart *part, const KComponentData &instance)
 
     guiFactory()->addClient(m_guiClient);
 
-    KGlobal::setActiveComponent(part ? part->componentData() : KGlobal::mainComponent());
 
     createMainwindowGUI();
 
@@ -219,111 +220,3 @@ KisImageView *KisMainWindow::activeKisView()
     if (!activeSubWindow) return 0;
     return qobject_cast<KisImageView *>(activeSubWindow->widget());
 }
-
-bool KisMainWindow::event( QEvent* event )
-{
-    if (m_constructing) return false;
-
-    if (!activeKisView()) {
-        event->accept();
-        return true;
-    }
-
-    switch(static_cast<int>(event->type()))
-    {
-        case ViewModeSwitchEvent::AboutToSwitchViewModeEvent: {
-            ViewModeSynchronisationObject* syncObject = static_cast<ViewModeSwitchEvent*>(event)->synchronisationObject();
-
-            KisCanvasResourceProvider* provider = m_guiClient->resourceProvider();
-            syncObject->backgroundColor = provider->bgColor();
-            syncObject->foregroundColor = provider->fgColor();
-            syncObject->exposure = provider->HDRExposure();
-            syncObject->gamma = provider->HDRGamma();
-            syncObject->compositeOp = provider->currentCompositeOp();
-            syncObject->pattern = provider->currentPattern();
-            syncObject->gradient = provider->currentGradient();
-            syncObject->node = provider->currentNode();
-            syncObject->paintOp = provider->currentPreset();
-            syncObject->opacity = provider->opacity();
-            syncObject->globalAlphaLock = provider->globalAlphaLock();
-
-            syncObject->documentOffset = m_guiClient->canvasControllerWidget()->scrollBarValue() - pos();
-            syncObject->zoomLevel = activeKisView()->zoomController()->zoomAction()->effectiveZoom();
-            syncObject->rotationAngle = m_guiClient->canvasBase()->rotationAngle();
-
-            syncObject->activeToolId = KoToolManager::instance()->activeToolId();
-
-            syncObject->initialized = true;
-
-            QMainWindow* mainWindow = qobject_cast<QMainWindow*>(qApp->activeWindow());
-            if(mainWindow) {
-                QList<QDockWidget*> dockWidgets = mainWindow->findChildren<QDockWidget*>();
-                foreach(QDockWidget* widget, dockWidgets) {
-                    if (widget->isFloating()) {
-                        widget->hide();
-                    }
-                }
-            }
-
-            return true;
-        }
-        case ViewModeSwitchEvent::SwitchedToDesktopModeEvent: {
-            ViewModeSynchronisationObject* syncObject = static_cast<ViewModeSwitchEvent*>(event)->synchronisationObject();
-            m_guiClient->canvasControllerWidget()->setFocus();
-            qApp->processEvents();
-
-            if(syncObject->initialized) {
-                KisCanvasResourceProvider* provider = m_guiClient->resourceProvider();
-
-                provider->setPaintOpPreset(syncObject->paintOp);
-                qApp->processEvents();
-
-                KoToolManager::instance()->switchToolRequested(syncObject->activeToolId);
-                qApp->processEvents();
-
-                KisPaintOpPresetSP preset = m_guiClient->resourceProvider()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
-                preset->settings()->setProperty("CompositeOp", syncObject->compositeOp);
-                if (preset->settings()->hasProperty("OpacityValue"))
-                    preset->settings()->setProperty("OpacityValue", syncObject->opacity);
-                provider->setPaintOpPreset(preset);
-
-                provider->setBGColor(syncObject->backgroundColor);
-                provider->setFGColor(syncObject->foregroundColor);
-                provider->setHDRExposure(syncObject->exposure);
-                provider->setHDRGamma(syncObject->gamma);
-                provider->slotPatternActivated(syncObject->pattern);
-                provider->slotGradientActivated(syncObject->gradient);
-                provider->slotNodeActivated(syncObject->node);
-                provider->setOpacity(syncObject->opacity);
-                provider->setGlobalAlphaLock(syncObject->globalAlphaLock);
-                provider->setCurrentCompositeOp(syncObject->compositeOp);
-
-                actionCollection()->action("zoom_in")->trigger();
-                qApp->processEvents();
-
-
-                QList<QDockWidget*> dockWidgets = findChildren<QDockWidget*>();
-                foreach(QDockWidget* widget, dockWidgets) {
-                    if (widget->isFloating()) {
-                        widget->show();
-                    }
-                }
-
-
-                activeKisView()->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, syncObject->zoomLevel);
-                m_guiClient->canvasControllerWidget()->rotateCanvas(syncObject->rotationAngle - activeKisView()->canvasBase()->rotationAngle());
-
-                QPoint newOffset = syncObject->documentOffset + pos();
-                qApp->processEvents();
-                m_guiClient->canvasControllerWidget()->setScrollBarValue(newOffset);
-            }
-
-            return true;
-        }
-        default:
-            break;
-    }
-
-    return QWidget::event( event );
-}
-
