@@ -103,7 +103,7 @@ void RotateImage::slotRotateImage()
 
     if (!image) return;
 
-    DlgRotateImage * dlgRotateImage = new DlgRotateImage(m_view, "RotateImage");
+    DlgRotateImage * dlgRotateImage = new DlgRotateImage(m_view->mainWindow(), "RotateImage");
     Q_CHECK_PTR(dlgRotateImage);
 
     dlgRotateImage->setCaption(i18n("Rotate Image"));
@@ -150,7 +150,7 @@ void RotateImage::slotRotateLayer()
 
     if (!image) return;
 
-    DlgRotateImage * dlgRotateImage = new DlgRotateImage(m_view, "RotateLayer");
+    DlgRotateImage * dlgRotateImage = new DlgRotateImage(m_view->mainWindow(), "RotateLayer");
     Q_CHECK_PTR(dlgRotateImage);
 
     dlgRotateImage->setCaption(i18n("Rotate Layer"));

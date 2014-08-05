@@ -52,7 +52,7 @@ void PresetDockerDock::setCanvas(KoCanvasBase * canvas)
 
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
     Q_ASSERT(m_canvas);
-    if (!m_canvas) return;
+    if (!m_canvas || !m_canvas->view()) return;
 
     connect(m_presetChooser, SIGNAL(resourceSelected(KoResource*)),
             m_canvas->view()->paintOpBox(), SLOT(resourceSelected(KoResource*)));

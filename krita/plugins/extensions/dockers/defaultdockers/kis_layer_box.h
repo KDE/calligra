@@ -33,11 +33,11 @@
 
 #include <KoColorSpace.h>
 #include <KoDockFactoryBase.h>
-#include <KoCanvasObserverBase.h>
 
 #include <kis_types.h>
 
 #include "kis_view2.h"
+#include "kis_mainwindow_observer.h"
 
 class QModelIndex;
 
@@ -55,7 +55,7 @@ class Ui_WdgLayerBox;
  * A widget that visualized the layer structure.
  *
  */
-class KisLayerBox : public QDockWidget, public KoCanvasObserverBase
+class KisLayerBox : public QDockWidget, public KisMainwindowObserver
 {
 
     Q_OBJECT
@@ -65,7 +65,8 @@ public:
     KisLayerBox();
     virtual ~KisLayerBox();
 
-    /// reimplemented from KoCanvasObserverBase
+    /// reimplemented from KisMainwindowObserver
+    virtual void setMainWindow(KisView2* kisview);
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas();
 private slots:

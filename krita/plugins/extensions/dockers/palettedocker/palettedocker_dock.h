@@ -27,19 +27,23 @@
 #include <KoResourceServerObserver.h>
 #include <KoColorSet.h>
 
+#include <kis_mainwindow_observer.h>
+
+class KisView2;
+class KisCanvasResourceProvider;
 class KisWorkspaceResource;
 class ColorSetChooser;
 class PaletteModel;
 class KisCanvas2;
 class Ui_WdgPaletteDock;
 
-class PaletteDockerDock : public QDockWidget, public KoCanvasObserverBase, public KoResourceServerObserver<KoColorSet> {
+class PaletteDockerDock : public QDockWidget, public KisMainwindowObserver, public KoResourceServerObserver<KoColorSet> {
     Q_OBJECT
 public:
     PaletteDockerDock();
     virtual ~PaletteDockerDock();
-    virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas();
+
+    virtual void setMainWindow(KisView2* kisview);
 
 public: // KoResourceServerObserver
 
@@ -64,12 +68,12 @@ private slots:
     virtual bool eventFilter(QObject*, QEvent*);
 
 private:    
-    KisCanvas2 *m_canvas;
     Ui_WdgPaletteDock* m_wdgPaletteDock;
     PaletteModel *m_model;
     QSharedPointer<KoAbstractResourceServerAdapter> m_serverAdapter;
     KoColorSet* m_currentColorSet;
     ColorSetChooser* m_colorSetChooser;
+    KisCanvasResourceProvider* m_resourceProvider;
 };
 
 

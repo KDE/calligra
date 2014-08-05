@@ -238,7 +238,7 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
                 adapter.addNode(l.data(), image->rootLayer(), 0);
             }
             else {
-                KoFileDialog dialog(m_view, KoFileDialog::SaveFile, "OpenDocument");
+                KoFileDialog dialog(m_view->mainWindow(), KoFileDialog::SaveFile, "OpenDocument");
                 dialog.setCaption(i18n("Export Layer") + '(' + ch->name() + ')');
                 dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
                 dialog.setMimeTypeFilters(KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Export));

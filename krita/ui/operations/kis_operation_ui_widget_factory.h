@@ -45,13 +45,13 @@ public:
     }
 
     /**
-    *  Reimplemted. Show a dialog the widget specify as T
+    *  Reimplemented. Show a dialog the widget specify as T
     *  @param view the view
     *  @param configuration the configuration to the operation
     *  @returns true if the configuration could be constructed (not canceled)
     */
     virtual bool fetchConfiguration(KisView2* view, KisOperationConfiguration* configuration) {
-        KDialog * dialog = new KDialog(view);
+        KDialog * dialog = new KDialog(view->mainWindow());
         Q_CHECK_PTR(dialog);
 
         T* configWidget = new T(dialog, view);

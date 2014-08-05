@@ -55,6 +55,7 @@
 #include <KoDocumentSectionView.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOpRegistry.h>
+#include <KoDocument.h>
 
 #include <kis_types.h>
 #include <kis_image.h>
@@ -78,7 +79,7 @@
 #include "kis_shape_controller.h"
 #include "kis_selection_mask.h"
 #include "kis_config.h"
-
+#include "kis_image_view.h"
 
 #include "ui_wdglayerbox.h"
 
@@ -298,9 +299,13 @@ void expandNodesRecursively(KisNodeSP root, QPointer<KisNodeModel> nodeModel, Ko
     sectionView->blockSignals(false);
 }
 
+void KisLayerBox::setMainWindow(KisView2* kisview)
+{
+    m_nodeManager = kisview->nodeManager();
+}
+
 void KisLayerBox::setCanvas(KoCanvasBase *canvas)
 {
-
     if (m_canvas) {
         m_canvas->disconnectCanvasObserver(this);
         m_nodeModel->setDummiesFacade(0, 0, 0);
@@ -314,11 +319,10 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
 
     if (m_canvas) {
-        m_image = m_canvas->view()->image();
+        m_image = m_canvas->image();
 
-        m_nodeManager = m_canvas->view()->nodeManager();
-
-        KisShapeController *kritaShapeController = dynamic_cast<KisShapeController*>(m_canvas->view()->document()->shapeController());
+        KisDoc2* doc = static_cast<KisDoc2*>(m_canvas->imageView()->document());
+        KisShapeController *kritaShapeController = dynamic_cast<KisShapeController*>(doc->shapeController());
         KisDummiesFacadeBase *kritaDummiesFacade = static_cast<KisDummiesFacadeBase*>(kritaShapeController);
         m_nodeModel->setDummiesFacade(kritaDummiesFacade, m_image, kritaShapeController);
 
@@ -326,7 +330,12 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
         connect(m_image, SIGNAL(sigNodeCollapsedChanged()), SLOT(slotNodeCollapsedChanged()));
 
         // cold start
-        setCurrentNode(m_nodeManager->activeNode());
+        if (m_nodeManager) {
+            setCurrentNode(m_nodeManager->activeNode());
+        }
+        else {
+            setCurrentNode(m_canvas->imageView()->currentNode());
+        }
 
         // Connection KisNodeManager -> KisLayerBox
         connect(m_nodeManager, SIGNAL(sigUiNeedChangeActiveNode(KisNodeSP)), this, SLOT(setCurrentNode(KisNodeSP)));
