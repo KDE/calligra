@@ -81,7 +81,7 @@ KisShapeController::KisShapeController(KisDoc2 *doc, KisNameServer *nameServer)
 
 KisShapeController::~KisShapeController()
 {
-    setImage(0);
+    //setImage(0);
     delete m_d;
 }
 
