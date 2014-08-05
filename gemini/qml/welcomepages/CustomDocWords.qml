@@ -72,6 +72,92 @@ Page {
                 }
             }
         }
+        Rectangle {
+            id: leftPageVisualiser;
+            opacity: facingCheck.checked ? 0.9 : 0;
+            Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+            anchors {
+                verticalCenter: parent.verticalCenter;
+                right: parent.horizontalCenter;
+            }
+            property double scale: widthInput.text / heightInput.text;
+            property bool landscapeMode: landscapeCheck.checked ? widthInput.text < heightInput.text : heightInput.text < widthInput.text;
+            height: landscapeMode ? ((parent.height/2) - Constants.DefaultMargin) * scale : ((parent.height/2) - Constants.DefaultMargin);
+            width: landscapeMode ? ((parent.width/2)- Constants.DefaultMargin) : ((parent.width/2) - Constants.DefaultMargin) * scale;
+            color: "white";
+            border {
+                color: "silver";
+                width: 1;
+            }
+            Item {
+                anchors {
+                    fill: parent;
+                    topMargin: marginTop.value;
+                    leftMargin: marginRight.value;
+                    rightMargin: marginLeft.value;
+                    bottomMargin: marginBottom.value;
+                }
+                Row {
+                    spacing: columnSpacing.value;
+                    Repeater {
+                        model: columnCount.value;
+                        Rectangle {
+                            height: leftPageVisualiser.height - marginTop.value - marginBottom.value;
+                            width: ((leftPageVisualiser.width - marginLeft.value - marginRight.value) / columnCount.value) - (columnSpacing.value * (columnCount.value - 1) / columnCount.value);
+                            color: "transparent";
+                            opacity: 0.5;
+                            border {
+                                width: 1;
+                                color: "silver";
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        Rectangle {
+            id: rightPageVisualiser;
+            opacity: facingCheck.checked ? 0.9 : 0;
+            Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+            anchors {
+                verticalCenter: parent.verticalCenter;
+                left: parent.horizontalCenter;
+            }
+            property double scale: widthInput.text / heightInput.text;
+            property bool landscapeMode: landscapeCheck.checked ? widthInput.text < heightInput.text : heightInput.text < widthInput.text;
+            height: landscapeMode ? ((parent.height/2) - Constants.DefaultMargin) * scale : ((parent.height/2) - Constants.DefaultMargin);
+            width: landscapeMode ? ((parent.width/2)- Constants.DefaultMargin) : ((parent.width/2) - Constants.DefaultMargin) * scale;
+            color: "white";
+            border {
+                color: "silver";
+                width: 1;
+            }
+            Item {
+                anchors {
+                    fill: parent;
+                    topMargin: marginTop.value;
+                    leftMargin: marginLeft.value;
+                    rightMargin: marginRight.value;
+                    bottomMargin: marginBottom.value;
+                }
+                Row {
+                    spacing: columnSpacing.value;
+                    Repeater {
+                        model: columnCount.value;
+                        Rectangle {
+                            height: rightPageVisualiser.height - marginTop.value - marginBottom.value;
+                            width: ((rightPageVisualiser.width - marginLeft.value - marginRight.value) / columnCount.value) - (columnSpacing.value * (columnCount.value - 1) / columnCount.value);
+                            color: "transparent";
+                            opacity: 0.5;
+                            border {
+                                width: 1;
+                                color: "silver";
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
     Item {
         anchors {
