@@ -87,10 +87,10 @@ KoShapeController *KoCanvasBase::shapeController() const
 
 void KoCanvasBase::disconnectCanvasObserver(QObject *object)
 {
-    shapeManager()->selection()->disconnect(object);
-    resourceManager()->disconnect(object);
-    shapeManager()->disconnect(object);
-    toolProxy()->disconnect(object);
+    if (shapeManager()) shapeManager()->selection()->disconnect(object);
+    if (resourceManager()) resourceManager()->disconnect(object);
+    if (shapeManager()) shapeManager()->disconnect(object);
+    if (toolProxy()) toolProxy()->disconnect(object);
 }
 
 
