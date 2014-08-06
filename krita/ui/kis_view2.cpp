@@ -463,7 +463,7 @@ void KisView2::setCurrentView(KoView *view)
 //        connect(canvasController()->proxyObject, SIGNAL(documentMousePositionChanged(QPointF)), d->statusBar, SLOT(documentMousePositionChanged(QPointF)));
 
         m_d->currentImageView = imageView;
-        imageView->canvasBase()->setResourceManager(m_d->canvasResourceManager);
+        imageView->canvasBase()->setSharedResourceManager(m_d->canvasResourceManager);
 
         connect(m_d->nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)), doc->image(), SLOT(requestStrokeEnd()));
         connect(m_d->rotateCanvasRight, SIGNAL(triggered()), dynamic_cast<KisCanvasController*>(canvasController()), SLOT(rotateCanvasRight15()));

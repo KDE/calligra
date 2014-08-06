@@ -69,7 +69,7 @@ public:
     virtual ~KoCanvasBase();
 
     /// For apps that want to share a resource manager with other views
-    void setResourceManager(KoCanvasResourceManager *resourceManager);
+    void setSharedResourceManager(KoCanvasResourceManager *resourceManager);
 
 public:
 

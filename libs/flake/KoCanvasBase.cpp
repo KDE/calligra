@@ -38,6 +38,7 @@ class KoCanvasBase::Private
 public:
     Private() : shapeController(0),
         resourceManager(0),
+        sharedResourceManager(false),
         controller(0),
         snapGuide(0)
     {
@@ -45,11 +46,14 @@ public:
 
     ~Private() {
         delete shapeController;
-        delete resourceManager;
+        if (!sharedResourceManager) {
+            delete resourceManager;
+        }
         delete snapGuide;
     }
     KoShapeController *shapeController;
     KoCanvasResourceManager *resourceManager;
+    bool sharedResourceManager;
     KoCanvasController *controller;
     KoSnapGuide *snapGuide;
 };
@@ -67,11 +71,12 @@ KoCanvasBase::~KoCanvasBase()
     delete d;
 }
 
-void KoCanvasBase::setResourceManager(KoCanvasResourceManager *resourceManager)
+void KoCanvasBase::setSharedResourceManager(KoCanvasResourceManager *resourceManager)
 {
     if (d->resourceManager != resourceManager) {
         delete d->resourceManager;
     }
+    d->sharedResourceManager = true;
     d->resourceManager = resourceManager;
 }
 

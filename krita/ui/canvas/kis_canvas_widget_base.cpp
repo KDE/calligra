@@ -97,7 +97,6 @@ void KisCanvasWidgetBase::drawDecorations(QPainter & gc, const QRect &updateWidg
     // Paint the shapes (other than the layers)
     m_d->canvas->globalShapeManager()->paint(gc, *m_d->viewConverter, false);
 
-
     // draw green selection outlines around text shapes that are edited, so the user sees where they end
     gc.save();
     QTransform worldTransform = gc.worldTransform();

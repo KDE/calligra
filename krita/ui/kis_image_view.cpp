@@ -113,7 +113,6 @@ KisImageView::KisImageView(KoPart *part, KisDoc2 *doc, QWidget *parent)
     d->canvasController->setCanvasMode(KoCanvasController::Infinite);
     d->canvasController->setVastScrolling(cfg.vastScrolling());
 
-
     KConfigGroup grp(KGlobal::config(), "krita/crashprevention");
     if (grp.readEntry("CreatingCanvas", false)) {
         cfg.setUseOpenGL(false);
@@ -146,7 +145,7 @@ KisImageView::KisImageView(KoPart *part, KisDoc2 *doc, QWidget *parent)
 
 KisImageView::~KisImageView()
 {
-    qDebug() << "Removing image view" << this;
+    qDebug() << "deleting image view" << this;
     delete d;
 }
 
