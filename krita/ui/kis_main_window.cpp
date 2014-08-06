@@ -22,6 +22,7 @@
 #include <QMdiArea>
 #include <QSignalMapper>
 #include <QCloseEvent>
+#include <QIcon>
 
 #include <kactioncollection.h>
 #include <kaction.h>
@@ -97,7 +98,6 @@ KisMainWindow::KisMainWindow(KoPart *part, const KComponentData &instance)
 
     guiFactory()->addClient(m_guiClient);
 
-
     createMainwindowGUI();
 
     setAutoSaveSettings(part->componentData().componentName(), false);
@@ -141,6 +141,7 @@ void KisMainWindow::showView(KoView *view)
         view->guiActivateEvent(true);
 
         QMdiSubWindow *subwin = m_mdiArea->addSubWindow(view);
+        subwin->setWindowIcon(QIcon(imageView->document()->generatePreview(QSize(64,64))));
         subwin->setWindowTitle(view->document()->url().fileName());
         if (m_mdiArea->subWindowList().size() == 1) {
             view->showMaximized();
