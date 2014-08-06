@@ -295,11 +295,14 @@ void KoPart::openExistingFile(const KUrl& url)
     document->setModified(false);
     addDocument(document);
 
-    KoMainWindow *mw;
+    KoMainWindow *mw = 0;
     if (d->startupWidget) {
         mw = qobject_cast<KoMainWindow*>(d->startupWidget->parent());
     }
-    if (!mw) mw = currentMainwindow();
+    if (!mw) {
+        mw = currentMainwindow();
+    }
+
     KoView *view = createView(document, mw);
     mw->addView(view);
 
