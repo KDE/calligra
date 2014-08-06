@@ -220,7 +220,7 @@ public:
     /**
      * Get an icon from the theme.
      */
-    Q_INVOKABLE QUrl icon(const QString& name);
+    Q_INVOKABLE QUrl icon(const QString& name, bool useSystemFallback = false);
     /**
      * Get a font from the theme.
      */

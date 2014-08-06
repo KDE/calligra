@@ -34,6 +34,7 @@
 #include <kglobal.h>
 #include <kstandarddirs.h>
 #include <kurl.h>
+#include <KIconLoader>
 
 #include "QmlGlobalEngine.h"
 
@@ -302,14 +303,19 @@ void Theme::setIconPath(const QString& newValue)
     }
 }
 
-QUrl Theme::icon(const QString& name)
+QUrl Theme::icon(const QString& name, bool useSystemFallback)
 {
     QString url = QString("%1/%2/%3.svg").arg(d->basePath, d->iconPath, name);
     if(!QFile::exists(url)) {
         if(d->inheritedTheme) {
             return d->inheritedTheme->icon(name);
         } else {
-            qWarning() << "Unable to find icon" << url;
+            if(useSystemFallback) {
+                url = KIconLoader::global()->iconPath(name, -128);
+                qWarning() << "Attempting to use a system fallback icon" << url;
+            } else {
+                qWarning() << "Unable to find icon" << url;
+            }
         }
     }
 
