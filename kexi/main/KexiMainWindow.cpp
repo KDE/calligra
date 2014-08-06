@@ -204,12 +204,6 @@ void KexiMainWindowTabWidget::closeTab()
     dynamic_cast<KexiMainWindow*>(KexiMainWindowIface::global())->closeWindowForTab(m_tabIndex);
 }
 
-void KexiMainWindowTabWidget::tabInserted(int index)
-{
-    KTabWidget::tabInserted(index);
-    m_mainWidget->slotCurrentTabIndexChanged(index);
-}
-
 void KexiMainWindowTabWidget::contextMenu(int index, const QPoint& point)
 {
     QMenu menu;
@@ -357,7 +351,6 @@ KexiMainWindow::KexiMainWindow(QWidget *parent)
 
     invalidateActions();
     d->timer.singleShot(0, this, SLOT(slotLastActions()));
-    connect(d->mainWidget, SIGNAL(currentTabIndexChanged(int)), this, SLOT(showTabIfNeeded()));
     if (Kexi::startupHandler().forcedFullScreen()) {
         toggleFullScreen(true);
     }
@@ -2228,8 +2221,15 @@ void KexiMainWindow::activeWindowChanged(KexiWindow *window, KexiWindow *prevWin
         currentWindow()->selectedView()->propertySetSwitched();
 
     if (windowChanged) {
-        if (currentWindow() && currentWindow()->currentViewMode() != 0 && window) //on opening new dialog it can be 0; we don't want this
+        if (currentWindow() && currentWindow()->currentViewMode() != 0 && window) {
+            //on opening new dialog it can be 0; we don't want this
             d->updatePropEditorVisibility(currentWindow()->currentViewMode());
+
+            restoreDesignTabIfNeeded(window->partItem()->partClass(), window->currentViewMode(),
+                                     prevWindow ? prevWindow->partItem()->identifier() : 0);
+            activateDesignTabIfNeeded(window->partItem()->partClass(),
+                                      window->currentViewMode());
+        }
     }
 
     invalidateActions();
@@ -2736,7 +2736,20 @@ tristate KexiMainWindow::switchToViewMode(KexiWindow& window, Kexi::ViewMode vie
     invalidateProjectWideActions();
     d->updateFindDialogContents();
     d->updatePropEditorVisibility(viewMode);
-    showDesignTabIfNeeded(currentWindow()->partItem()->partClass(), viewMode);
+    QString origTabToActivate;
+    if (viewMode == Kexi::DesignViewMode) {
+        // Save the orig tab: we want to back to design tab
+        // when user moved to data view and then immediately to design view.
+        origTabToActivate = d->tabsToActivateOnShow.value(currentWindow()->partItem()->identifier());
+    }
+    restoreDesignTabIfNeeded(currentWindow()->partItem()->partClass(), viewMode,
+                             currentWindow()->partItem()->identifier());
+    if (viewMode == Kexi::DesignViewMode) {
+        // Restore the saved tab to the orig one. restoreDesignTabIfNeeded() saved tools tab probably.
+        d->tabsToActivateOnShow.insert(currentWindow()->partItem()->identifier(), origTabToActivate);
+        d->tabbedToolBar->setCurrentTab(origTabToActivate);
+    }
+
     return true;
 }
 
@@ -2934,6 +2947,8 @@ tristate KexiMainWindow::closeWindow(KexiWindow *window, bool layoutTaskBar, boo
     if (d->insideCloseWindow)
         return true;
 
+    const int previousItemId = window->partItem()->identifier();
+
 #ifndef KEXI_NO_PENDING_DIALOGS
     d->addItemToPendingWindows(window->partItem(), Private::WindowClosingJob);
 #endif
@@ -3031,6 +3046,8 @@ tristate KexiMainWindow::closeWindow(KexiWindow *window, bool layoutTaskBar, boo
         }
     }
 
+    hideDesignTab(previousItemId, QString());
+
     d->removeWindow(window_id);
     QWidget *windowContainer = window->parentWidget();
     d->mainWidget->tabWidget()->removeTab(
@@ -3102,7 +3119,15 @@ tristate KexiMainWindow::closeWindow(KexiWindow *window, bool layoutTaskBar, boo
         d->executeActionWhenPendingJobsAreFinished();
     }
 #endif
-    showTabIfNeeded();
+    d->mainWidget->slotCurrentTabIndexChanged(d->mainWidget->tabWidget()->currentIndex());
+    showDesignTabIfNeeded(0);
+
+    if (currentWindow()) {
+        restoreDesignTabIfNeeded(currentWindow()->partItem()->partClass(),
+                                 currentWindow()->currentViewMode(),
+                                 0);
+    }
+    d->tabsToActivateOnShow.remove(previousItemId);
     return true;
 }
 
@@ -3172,6 +3197,8 @@ KexiMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool &
     }
     kDebug() << d->prj << item;
 
+    KexiWindow *prevWindow = currentWindow();
+
     KexiUtils::WaitCursor wait;
 #ifndef KEXI_NO_PENDING_DIALOGS
     Private::PendingJobType pendingType;
@@ -3183,11 +3210,13 @@ KexiMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool &
 #else
     KexiWindow *window = openedWindowFor(item);
 #endif
+    int previousItemId = currentWindow() ? currentWindow()->partItem()->identifier() : 0;
     openingCancelled = false;
 
     bool needsUpdateViewGUIClient = true;
     bool alreadyOpened = false;
     KexiWindowContainer *windowContainer = 0;
+
     if (window) {
         //window->activate();
         if (viewMode != window->currentViewMode()) {
@@ -3280,8 +3309,18 @@ KexiMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool &
         currentWindow()->selectedView()->propertySetSwitched();
     }
     invalidateProjectWideActions();
-    showDesignTabIfNeeded(item->partClass(), viewMode);
-    setDesignTabIfNeeded(item->partClass());
+    restoreDesignTabIfNeeded(item->partClass(), viewMode, previousItemId);
+    activateDesignTabIfNeeded(item->partClass(), viewMode);
+    QString origTabToActivate;
+    if (prevWindow) {
+        // Save the orig tab for prevWindow that was stored in the restoreDesignTabIfNeeded() call above
+        origTabToActivate = d->tabsToActivateOnShow.value(prevWindow->partItem()->identifier());
+    }
+    activeWindowChanged(window, prevWindow);
+    if (prevWindow) {
+        // Restore the orig tab
+        d->tabsToActivateOnShow.insert(prevWindow->partItem()->identifier(), origTabToActivate);
+    }
     return window;
 }
 
@@ -4261,37 +4300,77 @@ void KexiMainWindow::addSearchableModel(KexiSearchableModel *model)
     d->tabbedToolBar->addSearchableModel(model);
 }
 
-void KexiMainWindow::showDesignTabIfNeeded(const QString &partClass, const Kexi::ViewMode viewMode)
+void KexiMainWindow::restoreDesignTabAndActivateIfNeeded(const QString &tabName)
 {
-    closeTab("");
-    if (viewMode == Kexi::DesignViewMode) {
-        switch (d->prj->idForClass(partClass)) {
-        case KexiPart::FormObjectType: 
-            d->tabbedToolBar->showTab("form");
-            break;
-        case KexiPart::ReportObjectType: 
-            d->tabbedToolBar->showTab("report");
-            break;
-        default: ;
+    d->tabbedToolBar->showTab(tabName);
+    if (   currentWindow() && currentWindow()->partItem()
+        && currentWindow()->partItem()->identifier() > 0)
+    {
+        const QString tabToActivate = d->tabsToActivateOnShow.value(
+                                          currentWindow()->partItem()->identifier());
+        //kDebug() << "tabToActivate:" << tabToActivate << "tabName:" << tabName;
+        if (tabToActivate == tabName) {
+            d->tabbedToolBar->setCurrentTab(tabToActivate);
         }
     }
 }
 
-void KexiMainWindow::setDesignTabIfNeeded(const QString &partClass)
+void KexiMainWindow::restoreDesignTabIfNeeded(const QString &partClass, Kexi::ViewMode viewMode,
+                                              int previousItemId)
 {
-    switch (d->prj->idForClass(partClass)) {
-    case KexiPart::FormObjectType: 
-        d->tabbedToolBar->setCurrentTab("form"); 
-        break;
-    case KexiPart::ReportObjectType: 
-        d->tabbedToolBar->setCurrentTab("report"); 
-        break;
-    default:;
-    }  
+    //kDebug() << partClass << viewMode << previousItemId;
+    if (viewMode == Kexi::DesignViewMode) {
+        switch (d->prj->idForClass(partClass)) {
+        case KexiPart::FormObjectType: {
+            hideDesignTab(previousItemId, "org.kexi-project.report");
+            restoreDesignTabAndActivateIfNeeded("form");
+            break;
+        }
+        case KexiPart::ReportObjectType: {
+            hideDesignTab(previousItemId, "org.kexi-project.form");
+            restoreDesignTabAndActivateIfNeeded("report");
+            break;
+        }
+        default:
+            hideDesignTab(previousItemId);
+        }
+    }
+    else {
+        hideDesignTab(previousItemId);
+    }
 }
 
-void KexiMainWindow::closeTab(const QString &partClass)
+void KexiMainWindow::activateDesignTabIfNeeded(const QString &partClass, Kexi::ViewMode viewMode)
 {
+    const QString tabToActivate = d->tabsToActivateOnShow.value(currentWindow()->partItem()->identifier());
+    //kDebug() << partClass << viewMode << tabToActivate;
+
+    if (viewMode == Kexi::DesignViewMode && tabToActivate.isEmpty()) {
+        switch (d->prj->idForClass(partClass)) {
+        case KexiPart::FormObjectType:
+            d->tabbedToolBar->setCurrentTab("form");
+            break;
+        case KexiPart::ReportObjectType:
+            d->tabbedToolBar->setCurrentTab("report");
+            break;
+        default:;
+        }
+    }
+    else {
+        d->tabbedToolBar->setCurrentTab(tabToActivate);
+    }
+}
+
+void KexiMainWindow::hideDesignTab(int itemId, const QString &partClass)
+{
+    //kDebug() << itemId << partClass;
+    if (   itemId > 0
+        && d->tabbedToolBar->currentWidget())
+    {
+        const QString currentTab = d->tabbedToolBar->currentWidget()->objectName();
+        //kDebug() << "d->tabsToActivateOnShow.insert" << itemId << currentTab;
+        d->tabsToActivateOnShow.insert(itemId, currentTab);
+    }
     switch (d->prj->idForClass(partClass)) {
     case KexiPart::FormObjectType: 
         d->tabbedToolBar->hideTab("form");
@@ -4305,12 +4384,15 @@ void KexiMainWindow::closeTab(const QString &partClass)
     }
 }
 
-void KexiMainWindow::showTabIfNeeded()
+void KexiMainWindow::showDesignTabIfNeeded(int previousItemId)
 {
+    if (d->insideCloseWindow)
+        return;
     if (currentWindow()) {
-        showDesignTabIfNeeded(currentWindow()->partItem()->partClass(), currentWindow()->currentViewMode());
+        restoreDesignTabIfNeeded(currentWindow()->partItem()->partClass(),
+                                 currentWindow()->currentViewMode(), previousItemId);
     } else {
-        closeTab("");
+        hideDesignTab(previousItemId);
     }
 }
 

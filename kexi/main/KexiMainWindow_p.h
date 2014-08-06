@@ -38,6 +38,7 @@
 #include <QPainter>
 #include <QDesktopWidget>
 #include <QKeyEvent>
+#include <QScopedPointer>
 #include <ktabwidget.h>
 #include <KoIcon.h>
 #include "KexiSearchLineEdit.h"
@@ -93,6 +94,8 @@ public:
     
     void showTab(const QString& name);
     
+    bool isTabVisible(const QString& name) const;
+
     bool isRolledUp();
 
 public slots:
@@ -554,6 +557,7 @@ public:
     void setCurrentTab(const QString& name);
     void hideTab(const QString& name);
     void showTab(const QString& name);
+    bool isTabVisible(const QString& name) const;
 #ifndef NDEBUG
     void debugToolbars() const;
 #endif
@@ -1080,6 +1084,12 @@ void KexiTabbedToolBar::Private::hideTab(const QString& name)
     toolbarsVisibleForIndex[toolbarsIndexForName.value(name)] = false;
 }
 
+bool KexiTabbedToolBar::Private::isTabVisible(const QString& name) const
+{
+    return q->indexOf(toolbarsForName.value(name)) != -1
+           && toolbarsVisibleForIndex[toolbarsIndexForName.value(name)];
+}
+
 #ifndef NDEBUG
 void KexiTabbedToolBar::Private::debugToolbars() const
 {
@@ -1456,6 +1466,7 @@ KToolBar* KexiTabbedToolBar::createToolBar(const char* name, const QString& capt
 
 void KexiTabbedToolBar::setCurrentTab(const QString& name)
 {
+    //kDebug() << name;
     d->setCurrentTab(name);
 }
 
@@ -1466,12 +1477,19 @@ void KexiTabbedToolBar::setCurrentTab(int index)
 
 void KexiTabbedToolBar::hideTab(const QString& name)
 {
+    //kDebug() << name;
     d->hideTab(name);
 }
 
 void KexiTabbedToolBar::showTab(const QString& name)
 {
+    //kDebug() << name;
     d->showTab(name);
+}
+
+bool KexiTabbedToolBar::isTabVisible(const QString& name) const
+{
+    return d->isTabVisible(name);
 }
 
 bool KexiTabbedToolBar::isRolledUp()
@@ -1494,7 +1512,8 @@ public:
     virtual ~KexiMainWidget();
 
     void setParent(KexiMainWindow* mainWindow) {
-        KMainWindow::setParent(mainWindow); m_mainWindow = mainWindow;
+        KMainWindow::setParent(mainWindow);
+        m_mainWindow = mainWindow;
     }
 
     KexiMainWindowTabWidget* tabWidget() const {
@@ -1968,6 +1987,7 @@ public:
 #endif
     KexiProjectNavigator *navigator;
     KexiTabbedToolBar *tabbedToolBar;
+    QMap<int, QString> tabsToActivateOnShow;
     KexiDockWidget *navDockWidget;
     KTabWidget *propEditorTabWidget;
     KexiDockWidget *propEditorDockWidget;
