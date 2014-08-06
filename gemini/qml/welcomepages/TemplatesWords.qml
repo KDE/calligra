@@ -36,16 +36,16 @@ Page {
         id: wordsTemplates;
         ListElement { text: "Blank A4 Document"; thumbnail: "template_a4"; color: "white"; templateFile: "Normal/.source/A4.odt"; variants: [ ] }
         ListElement { text: "Colorful Document"; thumbnail: "template_colorful"; color: "white"; templateFile: ""; variants: [
-            ListElement { paperformat: "A4"; thumbnail: ""; swatch: "ColorPalettes-Red-1"; templateFile: "Normal/.source/ColorfulA4.odt"; color: "red" },
-            ListElement { paperformat: "Letter"; thumbnail: ""; swatch: "ColorPalettes-Red-1"; templateFile: "Normal/.source/ColorfulLetter.odt"; color: "red" }
+            ListElement { paperformat: "A4"; thumbnail: "template_colorful"; swatch: "ColorPalettes-Red-1"; templateFile: "Normal/.source/ColorfulA4.odt"; color: "red" },
+            ListElement { paperformat: "Letter"; thumbnail: "template_colorful"; swatch: "ColorPalettes-Red-1"; templateFile: "Normal/.source/ColorfulLetter.odt"; color: "red" }
         ] }
         ListElement { text: "Fax Template"; thumbnail: "template_fax"; color: "#E8EFF1"; templateFile: ""; variants: [
-            ListElement { paperformat: "A4"; thumbnail: ""; swatch: "ColorPalettes-Magenta-1"; templateFile: "Normal/.source/FaxA4.odt"; color: "black" },
-            ListElement { paperformat: "Letter"; thumbnail: ""; swatch: "ColorPalettes-gold-1"; templateFile: "Normal/.source/FaxLetter.odt"; color: "black" }
+            ListElement { paperformat: "A4"; thumbnail: "template_fax"; swatch: "ColorPalettes-Magenta-1"; templateFile: "Normal/.source/FaxA4.odt"; color: "black" },
+            ListElement { paperformat: "Letter"; thumbnail: "template_fax"; swatch: "ColorPalettes-gold-1"; templateFile: "Normal/.source/FaxLetter.odt"; color: "black" }
         ] }
         ListElement { text: "Professional Letter"; thumbnail: "template_letter"; color: "#A9B3B6"; templateFile: ""; variants: [
-            ListElement { paperformat: "A4"; thumbnail: ""; swatch: "ColorPalettes-Magenta-1"; templateFile: "Normal/.source/ProfessionalA4.odt"; color: "black" },
-            ListElement { paperformat: "Letter"; thumbnail: ""; swatch: "ColorPalettes-gold-1"; templateFile: "Normal/.source/ProfessionalLetter.odt"; color: "black" }
+            ListElement { paperformat: "A4"; thumbnail: "template_letter"; swatch: "ColorPalettes-Magenta-1"; templateFile: "Normal/.source/ProfessionalA4.odt"; color: "black" },
+            ListElement { paperformat: "Letter"; thumbnail: "template_letter"; swatch: "ColorPalettes-gold-1"; templateFile: "Normal/.source/ProfessionalLetter.odt"; color: "black" }
         ] }
     }
     Flickable {
@@ -115,8 +115,8 @@ Page {
                                 }
                                 else {
                                     // then there are variants to choose between, let the user see!
-                                    variantSelector.model = model.variants;
-                                    variantSelector.opacity = 1;
+                                    wordsVariantSelector.model = model.variants;
+                                    wordsVariantSelector.opacity = 1;
                                 }
                             }
                         }
