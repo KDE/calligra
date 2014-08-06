@@ -1285,7 +1285,6 @@ void KoMainWindow::slotFileClose()
 
 void KoMainWindow::slotFileCloseAll()
 {
-
 }
 
 void KoMainWindow::slotFileQuit()

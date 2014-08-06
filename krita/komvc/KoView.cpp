@@ -54,6 +54,7 @@
 #include <kselectaction.h>
 #include <kconfiggroup.h>
 #include <kdeprintdialog.h>
+#include <kxmlguifactory.h>
 
 #include <QDockWidget>
 #include <QToolBar>
@@ -201,6 +202,13 @@ KoView::KoView(KoPart *part, KoDocument *document, QWidget *parent)
 
 KoView::~KoView()
 {
+    foreach(KXMLGUIClient *client, childClients()) {
+        qDebug() << "Removing" << client << "from factory" << factory();
+        factory()->removeClient(client);
+    }
+    qDebug() << "removing" << this << "from factory" << factory();
+    factory()->removeClient(this);
+
     //qDebug() << "Deleting KoView" << this;
     d->part->removeView(this);
     delete d;
