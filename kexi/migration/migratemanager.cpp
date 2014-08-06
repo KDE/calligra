@@ -22,10 +22,12 @@
 #include "migratemanager.h"
 #include "migratemanager_p.h"
 #include "keximigrate.h"
+#include "keximigrate_p.h"
 
 #include <core/KexiMainWindowIface.h>
 
-#include <ktrader.h>
+#include <KoServiceLocator.h>
+
 #include <kdebug.h>
 #include <klocale.h>
 #include <kservice.h>
@@ -104,11 +106,9 @@ bool MigrateManagerInternal::lookupDrivers()
 
     lookupDriversNeeded = false;
     clearError();
-    KService::List tlist = KServiceTypeTrader::self()->query("Kexi/MigrationDriver");
-    KService::List::ConstIterator it(tlist.constBegin());
-    for (; it != tlist.constEnd(); ++it) {
-        KService::Ptr ptr = (*it);
-        QString srv_name = ptr->property("X-Kexi-MigrationDriverName").toString();
+    KService::List tlist = KoServiceLocator::instance()->entries("Kexi/MigrationDriver");
+    foreach(KService::Ptr ptr, tlist) {
+        const QString srv_name = ptr->property("X-Kexi-MigrationDriverName").toString();
         if (srv_name.isEmpty()) {
             KexiDBWarn << "X-Kexi-MigrationDriverName must be set for migration driver"
             << ptr->property("Name").toString() << "service!\n -- skipped!";
@@ -193,28 +193,18 @@ KexiMigrate* MigrateManagerInternal::driver(const QString& name)
     }
 
     KService::Ptr ptr = *(m_services_lcase.find(name.toLower()));
-    QString srv_name = ptr->property("X-Kexi-MigrationDriverName").toString();
-
-    KexiDBDbg << "library:" << ptr->library();
-
-    KPluginLoader loader(ptr->library());
-    const uint foundMajor = (loader.pluginVersion() >> 16) & 0xff;
-    const uint foundMinor = (loader.pluginVersion() >> 8) & 0xff;
-    if (!KexiMigration::version().matches(foundMajor, foundMinor)) {
+    KexiPluginLoader loader(ptr, "X-Kexi-MigrationDriverName");
+    if (!KexiMigration::version().matches(loader.majorVersion(), loader.minorVersion())) {
         setError(ERR_INCOMPAT_DRIVER_VERSION,
                  i18n(
                      "Incompatible migration driver's \"%1\" version: found version %2, expected version %3.",
                      name,
-                     QString("%1.%2").arg(foundMajor).arg(foundMinor),
+                     QString("%1.%2").arg(loader.majorVersion()).arg(loader.minorVersion()),
                      QString("%1.%2").arg(KexiMigration::version().major).arg(KexiMigration::version().minor))
                 );
         return 0;
     }
-
-    KPluginFactory *factory = loader.factory();
-    if (factory)
-        drv = factory->create<KexiMigrate>(this);
-
+    drv = loader.createPlugin<KexiMigrate>(this);
     if (!drv) {
         setError(ERR_DRIVERMANAGER,
                  i18n("Could not load import/export database driver \"%1\".", name));
@@ -223,7 +213,6 @@ KexiMigrate* MigrateManagerInternal::driver(const QString& name)
     KexiDBDbg << "loading succeeded:" << name;
     KexiDBDbg << "drv=" << (long)drv;
 
-    drv->setObjectName(srv_name);
     m_drivers.insert(name.toLatin1().toLower(), drv); //cache it
     return drv;
 }

@@ -37,7 +37,6 @@
 #include <QDateEdit>
 #include <QDateTimeEdit>
 
-#include <kpluginfactory.h>
 #include <kpushbutton.h>
 #include <knuminput.h>
 #include <kcombobox.h>
@@ -975,7 +974,7 @@ StdWidgetFactory::setPropertyOptions(KoProperty::Set& set, const KFormDesigner::
     }
 }
 
-K_EXPORT_KEXI_FORM_WIDGET_FACTORY_PLUGIN(StdWidgetFactory, stdwidgets)
+K_EXPORT_KEXIFORMWIDGETS_PLUGIN(StdWidgetFactory, stdwidgets)
 
 #include "stdwidgetfactory.moc"
 

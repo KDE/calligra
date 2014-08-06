@@ -26,7 +26,6 @@
 #include <kdebug.h>
 #include <kmessagebox.h>
 #include <ktabwidget.h>
-#include <kpluginfactory.h>
 
 #include <KexiMainWindowIface.h>
 #include "kexiproject.h"
@@ -39,6 +38,7 @@
 
 #include <db/connection.h>
 #include <db/cursor.h>
+
 #include <KexiWindow.h>
 
 //! @internal
@@ -255,6 +255,6 @@ KexiTablePart::TempData::TempData(QObject* parent)
 
 //----------------
 
-K_EXPORT_KEXI_PLUGIN( KexiTablePart, table )
+K_EXPORT_KEXIPART_PLUGIN( KexiTablePart, table )
 
 #include "kexitablepart.moc"

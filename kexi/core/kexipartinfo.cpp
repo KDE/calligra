@@ -19,6 +19,7 @@
 */
 
 #include "kexipartinfo_p.h"
+#include "kexipartmanager.h"
 #include "KexiMainWindowIface.h"
 
 #include <db/global.h>
@@ -68,8 +69,9 @@ Info::Private::Private(const KService::Ptr& aPtr)
         supportedUserViewModes |= Kexi::TextViewMode;
     }
     
-    isVisibleInNavigator = true;
+    isVisibleInNavigator = false;
     getBooleanProperty(aPtr, "X-Kexi-NoObject", &isVisibleInNavigator);
+    isVisibleInNavigator = !isVisibleInNavigator;
 
     isPropertyEditorAlwaysVisibleInDesignMode = true;
     getBooleanProperty(aPtr, "X-Kexi-PropertyEditorAlwaysVisibleInDesignMode",
@@ -194,7 +196,8 @@ bool Info::isVisibleInNavigator() const
 
 void Info::setBroken(bool broken, const QString& errorMessage)
 {
-    d->broken = broken; d->errorMessage = errorMessage;
+    d->broken = broken;
+    d->errorMessage = errorMessage;
 }
 
 QString Info::errorMessage() const
@@ -237,7 +240,9 @@ bool Info::isPropertyEditorAlwaysVisibleInDesignMode() const
 
 QAction* Info::newObjectAction()
 {
-    if (!KexiMainWindowIface::global() || !KexiMainWindowIface::global()->actionCollection()) {
+    if (!KexiMainWindowIface::global() || !KexiMainWindowIface::global()->actionCollection()
+        || !isVisibleInNavigator())
+    {
         kWarning();
         return 0;
     }

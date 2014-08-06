@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Service
-X-KDE-ServiceTypes=KFormDesigner/WidgetFactory
+X-KDE-ServiceTypes=Kexi/WidgetFactory
 
 Name=Basic Widgets
 Name[br]=Widgets Diazez
@@ -15,6 +15,7 @@ Name[el]=Βασικά γραφικά συστατικά
 Name[en_GB]=Basic Widgets
 Name[eo]=Bazaj fenestraĵoj
 Name[es]=Elementos básicos
+Name[et]=Standardvidinad
 Name[eu]=Oinarrizko trepetak
 Name[fa]=عناصر پایه‌ای
 Name[fi]=yleiset elementit

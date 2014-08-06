@@ -74,6 +74,7 @@
 #include <core/kexiproject.h>
 #include <core/kexipart.h>
 #include <core/kexipartinfo.h>
+#include <core/kexipartmanager.h>
 #include <core/KexiMainWindowIface.h>
 #include <core/kexiguimsghandler.h>
 #include <core/KexiWindow.h>

@@ -24,7 +24,6 @@
 #include <core/KexiWindow.h>
 #include <core/KexiMainWindowIface.h>
 
-#include <kpluginfactory.h>
 #include <kdebug.h>
 
 KexiRelationPartImpl::KexiRelationPartImpl(QObject *parent, const QVariantList &args)
@@ -78,6 +77,6 @@ KexiRelationPartImpl::createView(QWidget *parent, const char *)
 }
 
 
-K_EXPORT_KEXI_PLUGIN( KexiRelationPartImpl, relation )
+K_EXPORT_KEXIPART_PLUGIN( KexiRelationPartImpl, relation )
 
 #include "kexirelationpartimpl.moc"

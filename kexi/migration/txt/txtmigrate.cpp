@@ -18,6 +18,8 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 */
 
 #include "txtmigrate.h"
+#include <migration/keximigrate_p.h>
+
 #include <kdebug.h>
 #include <QDir>
 
