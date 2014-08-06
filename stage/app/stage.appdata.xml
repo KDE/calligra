@@ -21,6 +21,7 @@
   <summary>Presentation</summary>
   <summary xml:lang="ca">Presentació</summary>
   <summary xml:lang="cs">Prezentace</summary>
+  <summary xml:lang="de">Präsentation</summary>
   <summary xml:lang="en-GB">Presentation</summary>
   <summary xml:lang="ia">Presentation</summary>
   <summary xml:lang="it">Presentazioni</summary>
@@ -68,6 +69,7 @@
     <ul>
       <li>Multiple master slides</li>
       <li xml:lang="ca">Múltiples diapositives mestres</li>
+      <li xml:lang="de">Mehrere Folienmaster</li>
       <li xml:lang="en-GB">Multiple master slides</li>
       <li xml:lang="it">Diapositive master multiple</li>
       <li xml:lang="nl">Meerdere voorbeelddia's</li>
