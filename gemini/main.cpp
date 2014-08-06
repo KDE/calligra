@@ -88,7 +88,9 @@ int main( int argc, char** argv )
     KApplication app;
     app.setApplicationName("calligragemini");
     KIconLoader::global()->addAppDir("calligrawords");
+    KIconLoader::global()->addAppDir("words");
     KIconLoader::global()->addAppDir("calligrastage");
+    KIconLoader::global()->addAppDir("stage");
 
 #ifdef Q_OS_WIN
     QDir appdir(app.applicationDirPath());
