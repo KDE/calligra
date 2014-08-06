@@ -56,6 +56,7 @@ private slots:
     void updateMenus();
     void updateWindowMenu();
     void setActiveSubWindow(QWidget *window);
+    void configChanged();
 
 private:
     KisImageView *activeKisView();

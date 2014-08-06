@@ -47,6 +47,8 @@
 #include "kis_group_layer.h"
 #include "kis_paintop_settings.h"
 #include "kis_paintop_box.h"
+#include "kis_config.h"
+#include "kis_config_notifier.h"
 
 KisMainWindow::KisMainWindow(KoPart *part, const KComponentData &instance)
     : KoMainWindow(part, instance)
@@ -58,9 +60,12 @@ KisMainWindow::KisMainWindow(KoPart *part, const KComponentData &instance)
     // 25 px is a distance that works well for Tablet and Mouse events
     qApp->setStartDragDistance(25);
 
+    KisConfig cfg;
+    QMdiArea::ViewMode viewMode = (QMdiArea::ViewMode)cfg.readEntry<int>("mdi_viewmode", (int)QMdiArea::TabbedView);
+
     m_mdiArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     m_mdiArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-    m_mdiArea->setViewMode(QMdiArea::TabbedView);
+    m_mdiArea->setViewMode(viewMode);
     m_mdiArea->setTabPosition(QTabWidget::North);
 
     setCentralWidget(m_mdiArea);
@@ -123,6 +128,8 @@ KisMainWindow::KisMainWindow(KoPart *part, const KComponentData &instance)
     updateMenus();
 
     m_constructing = false;
+
+    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), this, SLOT(configChanged()));
 }
 
 void KisMainWindow::showView(KoView *view)
@@ -211,6 +218,13 @@ void KisMainWindow::setActiveSubWindow(QWidget *window)
             m_guiClient->setCurrentView(view);
         }
     }
+}
+
+void KisMainWindow::configChanged()
+{
+    KisConfig cfg;
+    QMdiArea::ViewMode viewMode = (QMdiArea::ViewMode)cfg.readEntry<int>("mdi_viewmode", (int)QMdiArea::TabbedView);
+    m_mdiArea->setViewMode(viewMode);
 }
 
 KisImageView *KisMainWindow::activeKisView()

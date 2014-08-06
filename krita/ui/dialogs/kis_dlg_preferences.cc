@@ -111,6 +111,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_backupFileCheckBox->setChecked(cfg.backupFile());
     m_showOutlinePainting->setChecked(cfg.showOutlineWhilePainting());
 
+    m_cmbMDIType->setCurrentIndex(cfg.readEntry<int>("mdi_viewmode", 1));
 }
 
 void GeneralTab::setDefault()
@@ -125,6 +126,7 @@ void GeneralTab::setDefault()
     m_undoStackSize->setValue(30);
     m_backupFileCheckBox->setChecked(true);
     m_showOutlinePainting->setChecked(true);
+    m_cmbMDIType->setCurrentIndex(1);
 }
 
 enumCursorStyle GeneralTab::cursorStyle()
@@ -151,6 +153,11 @@ int GeneralTab::undoStackSize()
 bool GeneralTab::showOutlineWhilePainting()
 {
     return m_showOutlinePainting->isChecked();
+}
+
+int GeneralTab::mdiMode()
+{
+    return m_cmbMDIType->currentIndex();
 }
 
 
@@ -728,6 +735,7 @@ bool KisDlgPreferences::editPreferences()
         cfg.setCursorStyle(dialog->m_general->cursorStyle());
         cfg.setShowRootLayer(dialog->m_general->showRootLayer());
         cfg.setShowOutlineWhilePainting(dialog->m_general->showOutlineWhilePainting());
+        cfg.writeEntry<int>("mdi_viewmode", dialog->m_general->mdiMode());
 
         cfg.setAutoSaveInterval(dialog->m_general->autoSaveInterval());
         cfg.setBackupFile(dialog->m_general->m_backupFileCheckBox->isChecked());

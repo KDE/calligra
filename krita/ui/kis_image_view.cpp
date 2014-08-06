@@ -146,6 +146,7 @@ KisImageView::KisImageView(KoPart *part, KisDoc2 *doc, QWidget *parent)
 
 KisImageView::~KisImageView()
 {
+    qDebug() << "Removing image view" << this;
     delete d;
 }
 

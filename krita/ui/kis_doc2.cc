@@ -151,6 +151,7 @@ KisDoc2::KisDoc2(const KisPart2 *part)
 
 KisDoc2::~KisDoc2()
 {
+    qDebug() << "removing doc" << this;
     // Despite being QObject they needs to be deleted before the image
     delete m_d->shapeController;
 
