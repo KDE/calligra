@@ -44,6 +44,7 @@ class KexiMigrateManagerInterface;
 namespace KexiPart
 {
 class Item;
+class Info;
 }
 
 /**

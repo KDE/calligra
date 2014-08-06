@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Service
-X-KDE-ServiceTypes=KFormDesigner/WidgetFactory
+X-KDE-ServiceTypes=Kexi/WidgetFactory
 
 Name=Basic Widgets
 Name[br]=Widgets Diazez

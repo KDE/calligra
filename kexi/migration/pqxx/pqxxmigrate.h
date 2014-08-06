@@ -22,7 +22,6 @@
 #define PQXXIMPORT_H
 
 #include <migration/keximigrate.h>
-#include <migration/keximigrate_p.h>
 
 //Kexi Includes
 #include <db/field.h>

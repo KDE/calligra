@@ -26,11 +26,12 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kservice.h>
-#include <kservicetypetrader.h>
 #include <kmenu.h>
 #include <kactioncollection.h>
 
+#include <KoServiceLocator.h>
 #include <KoIcon.h>
+
 #include "WidgetInfo.h"
 #include "widgetfactory.h"
 #include "libactionwidget.h"
@@ -174,7 +175,7 @@ WidgetLibrary::loadFactoryWidgets(WidgetFactory *f)
 void
 WidgetLibrary::lookupFactories()
 {
-    KService::List tlist = KServiceTypeTrader::self()->query("KFormDesigner/WidgetFactory");
+    const KService::List tlist = KoServiceLocator::instance()->entries("Kexi/WidgetFactory");
     foreach (KService::Ptr ptr, tlist) {
         KService::Ptr existingService = d->services.value(ptr->library().toLower().toLatin1());
         if (!existingService.isNull()) {
@@ -209,24 +210,18 @@ WidgetLibrary::loadFactories()
         return;
     d->factoriesLoaded = true;
     foreach (KService::Ptr ptr, d->services) {
-        KPluginLoader loader(ptr->library());
-        const uint foundMajor = (loader.pluginVersion() >> 16) & 0xff;
-        const uint foundMinor = (loader.pluginVersion() >> 8) & 0xff;
-        if (KFormDesigner::version() != foundMajor) {
+        KexiPluginLoader loader(ptr, "");
+        if (KFormDesigner::version() != loader.majorVersion()) {
 //! @todo show this error to the user?
             kWarning() << 
                  i18n(
                      "Incompatible database driver's \"%1\" version: found version %2, expected version %3.",
                      ptr->library(),
-                     QString("%1.%2").arg(foundMajor).arg(foundMinor),
-                     QString("%1.%2").arg(KFormDesigner::version()).arg(0));
+                     loader.majorVersion(),
+                     KFormDesigner::version());
             continue;
         }
-        KPluginFactory *factory = loader.factory();
-        WidgetFactory *f = 0;
-        if (factory) {
-            f = factory->create<WidgetFactory>(this);
-        }
+        WidgetFactory *f = loader.createPlugin<WidgetFactory>(this);
         if (!f) {
 //! @todo show this error to the user?
             kWarning() << "Creating factory failed!" << ptr->library();

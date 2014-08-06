@@ -47,7 +47,7 @@ static KAboutData createAboutData()
 {
     KAboutData aboutData(
          "okular_odt",
-         "okular_odt",
+         "okularGenerator_odt",
          ki18n( "ODT/OTT Backend" ),
          "0.1",
          ki18n( "ODT/OTT file renderer" ),
