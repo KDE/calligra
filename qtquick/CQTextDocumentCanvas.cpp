@@ -61,7 +61,9 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QTextDocumentFragment>
 #include <KDebug>
+#include <KMimeType>
 #include <QSvgRenderer>
+#include <QApplication>
 
 class CQTextDocumentCanvas::Private
 {
@@ -271,6 +273,26 @@ void CQTextDocumentCanvas::openFile(const QString& uri)
 
         doc->setUnit(KoUnit::fromSymbol(url.queryItemValue("unit")));
         doc->relayout();
+    }
+    else if(url.protocol() == "template") {
+        qApp->setOverrideCursor(Qt::BusyCursor);
+        url.setProtocol("file");
+        bool ok = document->loadNativeFormat(url.toLocalFile());
+        document->setModified(false);
+        document->undoStack()->clear();
+
+        if (ok) {
+            QString mimeType = KMimeType::findByUrl( url, 0, true )->name();
+            // in case this is a open document template remove the -template from the end
+            mimeType.remove( QRegExp( "-template$" ) );
+            document->setMimeTypeAfterLoading(mimeType);
+            document->resetURL();
+            document->setEmpty();
+        } else {
+            document->showLoadingErrorDialog();
+            document->initEmpty();
+        }
+        qApp->restoreOverrideCursor();
     }
     else
         document->openUrl(url);
