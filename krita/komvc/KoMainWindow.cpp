@@ -673,7 +673,6 @@ bool KoMainWindow::openDocument(const KUrl & url)
 KoDocument *KoMainWindow::createDocumentFromUrl(const KUrl & url)
 {
     KoDocument *newdoc = d->part->createDocument();
-    KoView *view = d->part->createView(newdoc);
     d->part->addDocument(newdoc);
 
     // For remote documents
@@ -691,6 +690,7 @@ KoDocument *KoMainWindow::createDocumentFromUrl(const KUrl & url)
     }
 #endif
     if (openDocumentInternal(url, newdoc)) {
+        KoView *view = d->part->createView(newdoc);
         addView(view);
     }
     return newdoc;
@@ -1521,7 +1521,10 @@ void KoMainWindow::viewFullscreen(bool fullScreen)
 
 void KoMainWindow::slotProgress(int value)
 {
-    QMutexLocker locker(&d->progressMutex);
+    qApp->processEvents();
+
+    if (!d->progressMutex.tryLock()) return;
+
     kDebug(30003) << "KoMainWindow::slotProgress" << value;
     if (value <= -1 || value >= 100) {
         if (d->progress) {
@@ -1530,6 +1533,7 @@ void KoMainWindow::slotProgress(int value)
             d->progress = 0;
         }
         d->firstTime = true;
+        d->progressMutex.unlock();
         return;
     }
     if (d->firstTime || !d->progress) {
@@ -1558,6 +1562,8 @@ void KoMainWindow::slotProgress(int value)
         d->progress->setValue(value);
     }
     qApp->processEvents();
+
+    d->progressMutex.unlock();
 }
 
 void KoMainWindow::setMaxRecentItems(uint _number)
