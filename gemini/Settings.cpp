@@ -75,7 +75,7 @@ QString Settings::stageTemplateLocation(const QString& templateFile) const
 
 QString Settings::wordsTemplateLocation(const QString& templateFile) const
 {
-    QStringList dirs = KWFactory::componentData().dirs()->resourceDirs("wirds_template");
+    QStringList dirs = KWFactory::componentData().dirs()->resourceDirs("words_template");
     QString found;
     foreach(const QString& dir, dirs) {
         if(QFile(dir + templateFile).exists()) {
