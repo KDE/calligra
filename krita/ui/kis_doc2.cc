@@ -139,6 +139,8 @@ KisDoc2::KisDoc2(const KisPart2 *part)
     : KoDocument(part, new UndoStack(this))
     , m_d(new KisDocPrivate())
 {
+    qDebug() << "KisDoc2::KisDoc2" << this << "part" << part << kBacktrace();
+
     // preload the krita resources
     KisResourceServerProvider::instance();
 

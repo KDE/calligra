@@ -34,6 +34,7 @@ class KisView2;
 class KisImageView;
 class KActionMenu;
 
+
 class KisMainWindow : public KoMainWindow
 {
     Q_OBJECT
@@ -60,6 +61,8 @@ private slots:
     void configChanged();
     void closeView();
     void closeAllViews();
+    void newView(QObject *document);
+    void newWindow();
 
 private:
     KisImageView *activeKisView();
@@ -70,7 +73,9 @@ private:
 
     QMdiArea *m_mdiArea;
     QSignalMapper *m_windowMapper;
+    QSignalMapper *m_documentMapper;
 
+    KAction *m_newWindow;
     KAction *m_close;
     KAction *m_closeAll;
     KAction *m_mdiCascade;
@@ -79,6 +84,7 @@ private:
     KAction *m_mdiPreviousWindow;
 
     KActionMenu *m_windowMenu;
+    KActionMenu *m_documentMenu;
 };
 
 #endif // KIS_MAIN_WINDOW_H

@@ -832,10 +832,6 @@ void KisView2::createActions()
     actionCollection()->addAction("edit_blacklist_cleanup", a);
     connect(a, SIGNAL(triggered()), this, SLOT(slotBlacklistCleanup()));
 
-    a = new KAction(i18n("New View"), this);
-    actionCollection()->addAction("view_newview", a);
-    connect(a, SIGNAL(triggered()), this, SLOT(newView()));
-
 }
 
 
@@ -1438,17 +1434,6 @@ void KisView2::setShowFloatingMessage(bool show)
 {
     m_d->showFloatingMessage = show;
 }
-
-void KisView2::newView()
-{
-    if (m_d->currentImageView) {
-        KisMainWindow* mainWindow = static_cast<KisMainWindow*>(m_d->mainWindow);
-        KoPart* part = mainWindow->part();
-        KoView* view = static_cast<KisPart2*>(part)->createViewInstance(m_d->currentImageView->document(), m_d->mainWindow);
-        mainWindow->showView(view);
-    }
-}
-
 
 
 #include "kis_view2.moc"

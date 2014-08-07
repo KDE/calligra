@@ -11,7 +11,7 @@ KisMainwindowObserver::~KisMainwindowObserver()
 
 }
 
-void KisMainwindowObserver::setCanvas(KoCanvasBase* canvas)
+void KisMainwindowObserver::setCanvas(KoCanvasBase*)
 {
 }
 

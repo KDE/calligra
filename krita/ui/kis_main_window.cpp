@@ -34,9 +34,11 @@
 #include <kmenu.h>
 #include <kurl.h>
 
+#include <KoIcon.h>
 #include <KoZoomController.h>
 #include <KoView.h>
 #include <KoPart.h>
+
 
 #include "kis_canvas_controller.h"
 #include "kis_canvas2.h"
@@ -80,12 +82,17 @@ KisMainWindow::KisMainWindow(KoPart *part, const KComponentData &instance)
     m_windowMapper = new QSignalMapper(this);
     connect(m_windowMapper, SIGNAL(mapped(QWidget*)), this, SLOT(setActiveSubWindow(QWidget*)));
 
+    m_documentMapper = new QSignalMapper(this);
+    connect(m_documentMapper, SIGNAL(mapped(QObject*)), this, SLOT(newView(QObject*)));
+
     m_guiClient = new KisView2(this);
 
     m_guiClient->actionCollection()->addAction(KStandardAction::Preferences, "preferences", this, SLOT(slotPreferences()));
 
     m_windowMenu = new KActionMenu(i18n("Window"), this);
     m_guiClient->actionCollection()->addAction("window", m_windowMenu);
+
+    m_documentMenu = new KActionMenu(i18n("New View"), this);
 
     m_mdiCascade = new KAction(i18n("Cascade"), this);
     m_guiClient->actionCollection()->addAction("windows_cascade", m_mdiCascade);
@@ -102,6 +109,10 @@ KisMainWindow::KisMainWindow(KoPart *part, const KComponentData &instance)
     m_mdiPreviousWindow = new KAction(i18n("Previous"), this);
     m_guiClient->actionCollection()->addAction("windows_previous", m_mdiPreviousWindow);
     connect(m_mdiPreviousWindow, SIGNAL(triggered()), m_mdiArea, SLOT(activatePreviousSubWindow()));
+
+    m_newWindow= new KAction(koIcon("window-new"), i18n("&New Window"), this);
+    actionCollection()->addAction("view_newwindow", m_newWindow);
+    connect(m_newWindow, SIGNAL(triggered(bool)), this, SLOT(newWindow()));
 
     m_close = new KAction(i18n("Close"), this);
     connect(m_close, SIGNAL(triggered()), SLOT(closeView()));
@@ -174,23 +185,22 @@ void KisMainWindow::slotPreferences()
         KisConfigNotifier::instance()->notifyConfigChanged();
 
         // XXX: should this be changed for the views in other windows as well?
-        foreach(QPointer<KoPart> part, KoPart::partList()) {
-            foreach(QPointer<KoView> koview, part->views()) {
-                KisView2 *view = qobject_cast<KisView2*>(koview);
-                if (view) {
-                    view->resourceProvider()->resetDisplayProfile(QApplication::desktop()->screenNumber(this));
+        foreach(QPointer<KoView> koview, part()->views()) {
+            KisView2 *view = qobject_cast<KisView2*>(koview);
+            if (view) {
+                view->resourceProvider()->resetDisplayProfile(QApplication::desktop()->screenNumber(this));
 
-                    // Update the settings for all nodes -- they don't query
-                    // KisConfig directly because they need the settings during
-                    // compositing, and they don't connect to the config notifier
-                    // because nodes are not QObjects (because only one base class
-                    // can be a QObject).
-                    KisNode* node = dynamic_cast<KisNode*>(view->image()->rootLayer().data());
-                    node->updateSettings();
-                }
-
+                // Update the settings for all nodes -- they don't query
+                // KisConfig directly because they need the settings during
+                // compositing, and they don't connect to the config notifier
+                // because nodes are not QObjects (because only one base class
+                // can be a QObject).
+                KisNode* node = dynamic_cast<KisNode*>(view->image()->rootLayer().data());
+                node->updateSettings();
             }
+
         }
+
         m_guiClient->showHideScrollbars();
     }
 
@@ -222,6 +232,25 @@ void KisMainWindow::updateWindowMenu()
 {
     KMenu *menu = m_windowMenu->menu();
     menu->clear();
+
+    menu->addAction(m_newWindow);
+    menu->addAction(m_documentMenu);
+
+    KMenu *docMenu = m_documentMenu->menu();
+    docMenu->clear();
+
+    foreach (QPointer<KoDocument> doc, part()->documents()) {
+        KisDoc2* kisdoc = qobject_cast<KisDoc2*>(doc.data());
+        if (kisdoc) {
+            qDebug() << "kisDoc" << kisdoc << kisdoc->url();
+            QAction *action = docMenu->addAction(kisdoc->url().prettyUrl());
+            action->setIcon(QIcon(kisdoc->generatePreview(QSize(64,64))));
+            connect(action, SIGNAL(triggered()), m_documentMapper, SLOT(map()));
+            m_documentMapper->setMapping(action, kisdoc);
+        }
+    }
+
+    menu->addSeparator();
     menu->addAction(m_close);
     menu->addAction(m_closeAll);
     menu->addSeparator();
@@ -247,6 +276,7 @@ void KisMainWindow::updateWindowMenu()
             }
 
             QAction *action  = menu->addAction(text);
+            action->setIcon(QIcon(child->document()->generatePreview(QSize(64,64))));
             action->setCheckable(true);
             action->setChecked(child == activeKisView());
             connect(action, SIGNAL(triggered()), m_windowMapper, SLOT(map()));
@@ -285,6 +315,19 @@ void KisMainWindow::closeView()
 void KisMainWindow::closeAllViews()
 {
 
+}
+
+void KisMainWindow::newView(QObject *document)
+{
+    qDebug() << "newView" << document;
+    KisDoc2 *doc = qobject_cast<KisDoc2*>(document);
+    KoView *view = part()->createView(doc);
+    addView(view);
+}
+
+void KisMainWindow::newWindow()
+{
+    part()->createMainWindow()->show();
 }
 
 KisImageView *KisMainWindow::activeKisView()
