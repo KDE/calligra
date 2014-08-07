@@ -26,7 +26,6 @@
 #include <kdebug.h>
 #include <kactioncollection.h>
 #include <kstandardaction.h>
-#include <kpluginfactory.h>
 
 #include <KoIcon.h>
 
@@ -800,6 +799,6 @@ KexiDBFactory::slotImageBoxIdChanged(KexiBLOBBuffer::Id_t id)
     }
 }
 
-K_EXPORT_KEXI_FORM_WIDGET_FACTORY_PLUGIN(KexiDBFactory, kexidbwidgets)
+K_EXPORT_KEXIFORMWIDGETS_PLUGIN(KexiDBFactory, kexidbwidgets)
 
 #include "kexidbfactory.moc"

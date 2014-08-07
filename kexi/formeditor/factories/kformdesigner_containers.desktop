@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Service
-X-KDE-ServiceTypes=KFormDesigner/WidgetFactory
+X-KDE-ServiceTypes=Kexi/WidgetFactory
 
 Name=Container Widgets
 Name[bs]=Kontejnerski dodaci
@@ -14,6 +14,7 @@ Name[el]=Γραφικά συστατικά υποδοχείς
 Name[en_GB]=Container Widgets
 Name[eo]=Ujaj fenestraĵoj
 Name[es]=Elementos contenedores
+Name[et]=Konteinervidinad
 Name[eu]=Edukitzaile-trepetak
 Name[fa]=عناصر محتوی
 Name[fi]=Säiliön osat

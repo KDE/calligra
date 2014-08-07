@@ -24,10 +24,8 @@
 
 #include <kexi_version.h>
 #include "kexiprojectdata.h"
-#include "kexipartmanager.h"
 #include "kexidbconnectionset.h"
 #include "kexiprojectset.h"
-#include <db/drivermanager.h>
 #include <db/driver.h>
 
 #include <klocale.h>
@@ -36,6 +34,16 @@
 class QLabel;
 class KAboutData;
 class KexiRecentProjects;
+
+namespace KexiPart
+{
+class Manager;
+}
+
+namespace KexiDB
+{
+class DriverManager;
+}
 
 namespace Kexi
 {

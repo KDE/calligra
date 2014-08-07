@@ -23,6 +23,7 @@
 #include <kexiguimsghandler.h>
 #include <db/connection.h>
 #include <db/utils.h>
+#include <db/drivermanager.h>
 #include "kexidbdrivercombobox.h"
 
 #include <KoIcon.h>

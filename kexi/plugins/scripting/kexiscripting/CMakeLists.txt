@@ -30,4 +30,4 @@ install(TARGETS kexihandler_script  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  kexiscripthandler.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra/kexi)
+install( FILES  kexiscripthandler.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)

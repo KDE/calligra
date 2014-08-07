@@ -23,11 +23,13 @@
 
 #include <formeditor/WidgetInfo.h>
 #include <formeditor/formIO.h>
+
 #include <KoIcon.h>
+
 #include <klocalizedstring.h>
 #include <kdebug.h>
 #include <klocale.h>
-#include <kpluginfactory.h>
+
 #include <QVariant>
 #include <QVariantList>
 
@@ -95,7 +97,7 @@ bool MapBrowserFactory::previewWidget(const QByteArray &classname,
     return true;
 }
      
-K_EXPORT_KEXI_FORM_WIDGET_FACTORY_PLUGIN(MapBrowserFactory, mapbrowser)
+K_EXPORT_KEXIFORMWIDGETS_PLUGIN(MapBrowserFactory, mapbrowser)
 
 #include "MapBrowserFactory.moc"
 

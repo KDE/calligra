@@ -23,6 +23,7 @@
 #include <db/driver.h>
 #include <db/connection.h>
 #include <db/msghandler.h>
+#include <db/drivermanager.h>
 
 #include <kdebug.h>
 

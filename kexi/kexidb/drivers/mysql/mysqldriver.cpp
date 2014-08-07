@@ -37,7 +37,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 
 using namespace KexiDB;
 
-K_EXPORT_KEXIDB_DRIVER(MySqlDriver, "mysql")
+K_EXPORT_KEXIDB_DRIVER(MySqlDriver, mysql)
 
 /*! @todo Implement buffered/unbuffered, rather than buffer everything.
           Each MYSQL connection can only handle at most one unbuffered cursor,
