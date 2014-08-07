@@ -28,7 +28,6 @@
 #include <KoPart.h>
 #include <KMimeTypeTrader>
 #include <KMimeType>
-#include <kio/previewjob.h>
 
 RecentImageImageProvider::RecentImageImageProvider()
     : QDeclarativeImageProvider(QDeclarativeImageProvider::Image)
@@ -87,39 +86,31 @@ QImage RecentImageImageProvider::requestImage(const QString &id, QSize *size, co
         }
 
          if(!thumbnailFound) {
-//            qDebug() << "Thumbnail not found embedded in" << id;
-//             // load document and render the thumbnail ourselves
-//             const QString mimetype = KMimeType::findByPath(id)->name();
-//             QString error;
-//             KoDocumentEntry documentEntry = KoDocumentEntry::queryByMimeType(mimetype);
-//             KoPart* part = documentEntry.createKoPart(&error);
-// 
-//             if(part) {
-//                 KoDocument* document = part->document();
-// 
-//                 // prepare the document object
-//                 document->setCheckAutoSaveFile(false);
-//                 document->setAutoErrorHandlingEnabled(false); // don't show message boxes
-// 
-//                 // load the document content
-//                 KUrl url;
-//                 url.setPath(id);
-//                 if (document->openUrl(url)) {
-//                     while(document->isLoading()) {
-//                         qApp->processEvents();
-//                     }
-// 
-//                     // render the page on a bigger pixmap and use smoothScale,
-//                     // looks better than directly scaling with the QPainter (malte)
-//                     const bool usePassedSize = (width > sz.width() && height > sz.height());
-//                     const QSize size = usePassedSize ? QSize(width, height) : sz;
-//                     thumbnail = document->generatePreview(size).toImage();
-// 
-//                     document->closeUrl();
-//                 }
-//                 delete document;
-//             }
-         }
+            // load document and render the thumbnail ourselves
+            QProcess thumbnailer;
+            QString thumbnailerProgram = QString("%1%2calligrageminithumbnailhelper").arg(qApp->applicationDirPath()).arg(QDir::separator());
+            QStringList arguments;
+            arguments << "-in" << id;
+            QString thumbFile = id;
+            thumbFile.replace("/", "-").replace("\\", "-");
+            thumbFile.prepend(QDir::separator()).prepend(QDir::tempPath());
+            thumbFile.append(".png");
+            arguments << "-out" << thumbFile;
+            arguments << "-width" << QString::number(sz.width());
+            arguments << "-height" << QString::number(sz.height());
+            arguments << "--nocrashhandler";
+            bool fileExists = QFile::exists(thumbFile);
+            if(!fileExists)
+                thumbnailer.start(thumbnailerProgram, arguments);
+            if(fileExists || thumbnailer.waitForFinished(3000)) {
+                thumbnail.load(thumbFile);
+                thumbnail = thumbnail.scaled(sz, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            }
+            else {
+                // some error, final failure...
+                qDebug() << "Failed completely to find a preview for" << id;
+            }
+        }
     }
     return thumbnail;
 }
