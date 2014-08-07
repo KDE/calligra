@@ -23,6 +23,9 @@
 #include <kcmdlineargs.h>
 
 #include <QFile>
+#include <QDir>
+#include <QProcessEnvironment>
+#include <QDesktopServices>
 #include <QDebug>
 #include <QTimer>
 
