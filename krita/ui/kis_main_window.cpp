@@ -38,7 +38,7 @@
 #include <KoZoomController.h>
 #include <KoView.h>
 #include <KoPart.h>
-
+#include <KoApplication.h>
 
 #include "kis_canvas_controller.h"
 #include "kis_canvas2.h"
@@ -151,6 +151,9 @@ KisMainWindow::KisMainWindow(KoPart *part, const KComponentData &instance)
 
     updateMenus();
     updateWindowMenu();
+
+    connect(koApp, SIGNAL(documentClosed(QString)), SLOT(updateWindowMenu()));
+    connect(koApp, SIGNAL(documentOpened(QString)), SLOT(updateWindowMenu()));
 
     m_constructing = false;
 
@@ -308,7 +311,6 @@ void KisMainWindow::configChanged()
 
 void KisMainWindow::closeView()
 {
-
 }
 
 void KisMainWindow::closeAllViews()

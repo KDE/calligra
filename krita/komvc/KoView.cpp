@@ -204,13 +204,10 @@ KoView::~KoView()
 {
     if (factory()) {
         foreach(KXMLGUIClient *client, childClients()) {
-            qDebug() << "Removing" << client << "from factory" << factory();
             factory()->removeClient(client);
         }
-        qDebug() << "removing" << this << "from factory" << factory();
         factory()->removeClient(this);
     }
-    //qDebug() << "Deleting KoView" << this;
     d->part->removeView(this);
     delete d;
 }
