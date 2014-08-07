@@ -300,6 +300,7 @@ void KisMainWindow::setActiveSubWindow(QWidget *window)
             m_guiClient->setCurrentView(view);
         }
     }
+    updateWindowMenu();
 }
 
 void KisMainWindow::configChanged()
