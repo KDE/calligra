@@ -108,7 +108,6 @@ QObject* KisFactory2::create( const char* /*iface*/, QWidget* /*parentWidget*/, 
     Q_UNUSED( keyword );
 
     KisPart2 *part = new KisPart2(parent);
-    //part->addDocument(part->createDocument());
     return part;
 
 }

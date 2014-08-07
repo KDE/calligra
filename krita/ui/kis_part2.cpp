@@ -68,9 +68,7 @@ KisPart2::~KisPart2()
 
 KoDocument *KisPart2::createDocument() const
 {
-    qDebug() << "creating document the right way:";
     KoDocument *doc = new KisDoc2(this);
-    qDebug() << "KisPart2::createDocument" << doc;
     return doc;
 }
 

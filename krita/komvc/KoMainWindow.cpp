@@ -669,7 +669,6 @@ bool KoMainWindow::openDocument(const KUrl & url)
 
 KoDocument *KoMainWindow::createDocumentFromUrl(const KUrl & url)
 {
-    qDebug() <<"KoMainWindow::createDocumentFromUrl" << url.url();
     KoDocument *newdoc = d->part->createDocument();
     d->part->addDocument(newdoc);
 
@@ -694,8 +693,6 @@ KoDocument *KoMainWindow::createDocumentFromUrl(const KUrl & url)
 
 bool KoMainWindow::openDocumentInternal(const KUrl & url, KoDocument *newdoc)
 {
-    qDebug() <<"KoMainWindow::openDocument" << url.url();
-
     if (!newdoc) {
         newdoc = d->part->createDocument();
         d->part->addDocument(newdoc);
@@ -724,7 +721,6 @@ bool KoMainWindow::openDocumentInternal(const KUrl & url, KoDocument *newdoc)
 void KoMainWindow::slotLoadCompleted()
 {
     KoDocument *newdoc = qobject_cast<KoDocument*>(sender());
-    qDebug() << "KoMainWindow::slotLoadCompleted" << newdoc->url().url();
 
     KoView *view = newdoc->documentPart()->createView(newdoc);
     addView(view);

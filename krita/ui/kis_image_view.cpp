@@ -99,8 +99,6 @@ KisImageView::KisImageView(KoPart *part, KisDoc2 *doc, QWidget *parent)
     Q_ASSERT(doc);
     Q_ASSERT(doc->image());
 
-    qDebug() << this << "Creating View for doc" << doc;
-
     setFocusPolicy(Qt::NoFocus);
 
     d->doc = doc;
@@ -147,7 +145,6 @@ KisImageView::KisImageView(KoPart *part, KisDoc2 *doc, QWidget *parent)
 
 KisImageView::~KisImageView()
 {
-    qDebug() << "deleting image view" << this;
     delete d;
 }
 

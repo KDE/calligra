@@ -100,8 +100,6 @@ KoPart::KoPart(QObject *parent)
 
 KoPart::~KoPart()
 {
-    //qDebug() << "Deleting KoPart" << this << kBacktrace();
-
     while (!d->documents.isEmpty()) {
         delete d->documents.takeFirst();
     }
@@ -149,7 +147,6 @@ int KoPart::documentCount() const
 
 void KoPart::removeDocument(KoDocument *document)
 {
-    //qDebug() << "KoPart::removeDocument" << document;
     d->documents.removeAll(document);
     document->deleteLater();
 }
@@ -187,7 +184,6 @@ void KoPart::addView(KoView *view, KoDocument *document)
 
 void KoPart::removeView(KoView *view)
 {
-    //qDebug() << "KoPart::removeView" << view;
     if (!view) return;
     QPointer<KoDocument> doc = view->document();
     d->views.removeAll(view);
@@ -435,8 +431,6 @@ QString KoPart::templateType() const
 
 void KoPart::startCustomDocument(KoDocument* doc)
 {
-    //qDebug() << "addCustomDocument";
-
     addDocument(doc);
     KoMainWindow *mw = qobject_cast<KoMainWindow*>(d->startupWidget->parent());
     if (!mw) mw = currentMainwindow();

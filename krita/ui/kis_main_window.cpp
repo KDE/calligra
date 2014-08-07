@@ -318,7 +318,6 @@ void KisMainWindow::closeAllViews()
 
 void KisMainWindow::newView(QObject *document)
 {
-    qDebug() << ">>>>>>>>>>>> newView" << document;
     KisDoc2 *doc = qobject_cast<KisDoc2*>(document);
     KoView *view = part()->createView(doc);
     addView(view);
