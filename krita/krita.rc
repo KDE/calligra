@@ -43,8 +43,6 @@
   <Action name="mirror_canvas"/>
   <Action name="wrap_around_mode"/>
   <Separator/>
-  <Action name="view_newview"/>    
-  <Separator/>      
   <Action name="zoom"/>
   <Action name="zoom_in"/>
   <Action name="zoom_out"/>

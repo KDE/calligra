@@ -405,11 +405,6 @@ private slots:
     void slotSaveCanceled(const QString &);
     void forceDockTabFonts();
 
-    /**
-     * Slot to create a new view for the currently activated @ref #koDocument.
-     */
-    void newWindow();
-
 // ---------------------  PartManager
 protected:
 
