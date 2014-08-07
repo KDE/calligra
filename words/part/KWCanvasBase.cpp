@@ -180,13 +180,14 @@ void KWCanvasBase::setShowAnnotations(bool doShow)
 void KWCanvasBase::paintBackgrounds(QPainter &painter, KWViewMode::ViewMap &viewMap)
 {
     // Paint the page.
-    Q_UNUSED(viewMap);
+    //Q_UNUSED(viewMap);
 
     QColor color = Qt::white;
 #ifdef DEBUG_REPAINT
     color = QColor(random() % 255, random() % 255, random() % 255);
 #endif
-    painter.fillRect(m_viewMode->documentToView(viewMap.page.rect(), m_viewConverter), QBrush(color));
+    //painter.fillRect(m_viewMode->documentToView(viewMap.page.rect(), m_viewConverter), QBrush(color));
+	painter.fillRect(viewMap.clipRect, QBrush(color));
 
     // Paint the annotation area if that is turned on.
     if (m_showAnnotations) {
