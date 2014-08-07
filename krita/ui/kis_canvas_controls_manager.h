@@ -21,6 +21,8 @@
 #define KIS_CANVAS_CONTROLS_MANAGER_H
 
 #include <QObject>
+#include <QPointer>
+
 #include <krita_export.h>
 
 class KisView2;
@@ -37,7 +39,7 @@ public:
     virtual ~KisCanvasControlsManager();
 
     void setup(KActionCollection *actionCollection, KisActionManager *actionManager);
-    void setView(KisImageView *imageView);
+    void setView(QPointer<KisImageView>imageView);
 
 private slots:
     void makeColorLighter();

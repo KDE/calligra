@@ -75,7 +75,7 @@ public:
      * @param viewConverter the viewconverter for converting between
      *                       window and document coordinates.
      */
-    KisCanvas2(KisCoordinatesConverter* coordConverter, KisImageView* view, KoShapeBasedDocumentBase* sc);
+    KisCanvas2(KisCoordinatesConverter* coordConverter, QPointer<KisImageView> view, KoShapeBasedDocumentBase* sc);
 
     virtual ~KisCanvas2();
 
@@ -155,7 +155,7 @@ public: // KisCanvas2 methods
 
     KisImageWSP image() const;
     KisView2* view() const;
-    KisImageView *imageView() const;
+    QPointer<KisImageView>imageView() const;
 
     /// @return true if the canvas image should be displayed in vertically mirrored mode
     void addDecoration(KisCanvasDecoration* deco);

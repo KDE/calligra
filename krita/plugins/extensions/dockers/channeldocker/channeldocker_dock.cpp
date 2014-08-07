@@ -55,7 +55,7 @@ void ChannelDockerDock::setCanvas(KoCanvasBase * canvas)
     }
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
     if (m_canvas && m_canvas->imageView() && m_canvas->imageView()->image()) {
-        KisImageView* view = m_canvas->imageView();
+        QPointer<KisImageView> view = m_canvas->imageView();
         m_model->slotLayerActivated(view->image()->rootLayer());
         KisPaintDeviceSP dev = view->image()->projection();
         connect(dev, SIGNAL(colorSpaceChanged(const KoColorSpace*)), m_model, SLOT(slotColorSpaceChanged(const KoColorSpace*)));

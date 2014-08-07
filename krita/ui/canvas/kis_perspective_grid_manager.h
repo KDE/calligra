@@ -51,7 +51,7 @@ public:
      */
     void stopEdition();
 
-    void setView(KisImageView* imageView);
+    void setView(QPointer<KisImageView> imageView);
 public slots:
     void updateGUI();
     /**
@@ -63,7 +63,7 @@ private:
     KisPerspectiveGridDecoration* decoration();
 
     
-    KisImageView* m_imageView;
+    QPointer<KisImageView> m_imageView;
     KToggleAction* m_toggleGrid;
     KAction* m_gridClear;
 };

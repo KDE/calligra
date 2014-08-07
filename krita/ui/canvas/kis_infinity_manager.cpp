@@ -34,7 +34,7 @@
 #include <kis_canvas_controller.h>
 #include <kis_image_view.h>
 
-KisInfinityManager::KisInfinityManager(KisImageView *view, KisCanvas2 *canvas)
+KisInfinityManager::KisInfinityManager(QPointer<KisImageView>view, KisCanvas2 *canvas)
   : KisCanvasDecoration(INFINITY_DECORATION_ID, view),
     m_filteringEnabled(false),
     m_cursorSwitched(false),

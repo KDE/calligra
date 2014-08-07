@@ -80,7 +80,7 @@ class KisCanvas2::KisCanvas2Private
 
 public:
 
-    KisCanvas2Private(KoCanvasBase *parent, KisCoordinatesConverter* coordConverter, KisImageView * view)
+    KisCanvas2Private(KoCanvasBase *parent, KisCoordinatesConverter* coordConverter, QPointer<KisImageView> view)
         : coordinatesConverter(coordConverter)
         , view(view)
         , canvasWidget(0)
@@ -99,7 +99,7 @@ public:
     }
 
     KisCoordinatesConverter *coordinatesConverter;
-    KisImageView *view;
+    QPointer<KisImageView>view;
     KisAbstractCanvasWidget *canvasWidget;
     KoShapeManager *shapeManager;
     bool currentCanvasIsOpenGL;
@@ -124,7 +124,7 @@ public:
     KisDisplayColorConverter *displayColorConverter;
 };
 
-KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KisImageView *view, KoShapeBasedDocumentBase *sc)
+KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, QPointer<KisImageView>view, KoShapeBasedDocumentBase *sc)
     : KoCanvasBase(sc)
     , m_d(new KisCanvas2Private(this, coordConverter, view))
 {
@@ -708,7 +708,7 @@ KisView2* KisCanvas2::view() const
     return 0;
 }
 
-KisImageView *KisCanvas2::imageView() const
+QPointer<KisImageView>KisCanvas2::imageView() const
 {
     return m_d->view;
 }

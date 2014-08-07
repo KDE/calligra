@@ -60,7 +60,7 @@ public:
 
     void setup(KActionCollection * collection, KisActionManager* actionManager);
 
-    void setView(KisImageView *imageView);
+    void setView(QPointer<KisImageView>imageView);
 
 public:
     /**
@@ -137,7 +137,7 @@ private:
 
     KisView2 * m_view;
     KisDoc2 * m_doc;
-    KisImageView *m_imageView;
+    QPointer<KisImageView>m_imageView;
     KisClipboard * m_clipboard;
 
     KisNodeCommandsAdapter* m_adapter;

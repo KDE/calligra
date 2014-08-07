@@ -159,7 +159,7 @@ KisMainWindow::KisMainWindow(KoPart *part, const KComponentData &instance)
 
 void KisMainWindow::showView(KoView *view)
 {
-    KisImageView *imageView = qobject_cast<KisImageView*>(view);
+    QPointer<KisImageView>imageView = qobject_cast<KisImageView*>(view);
     if (imageView) {
         // XXX: find a better way to initialize this!
         imageView->canvasBase()->setFavoriteResourceManager(m_guiClient->paintOpBox()->favoriteResourcesManager());
@@ -242,7 +242,6 @@ void KisMainWindow::updateWindowMenu()
     foreach (QPointer<KoDocument> doc, part()->documents()) {
         KisDoc2* kisdoc = qobject_cast<KisDoc2*>(doc.data());
         if (kisdoc) {
-            qDebug() << "kisDoc" << kisdoc << kisdoc->url();
             QAction *action = docMenu->addAction(kisdoc->url().prettyUrl());
             action->setIcon(QIcon(kisdoc->generatePreview(QSize(64,64))));
             connect(action, SIGNAL(triggered()), m_documentMapper, SLOT(map()));
@@ -263,7 +262,7 @@ void KisMainWindow::updateWindowMenu()
 
     QList<QMdiSubWindow *> windows = m_mdiArea->subWindowList();
     for (int i = 0; i < windows.size(); ++i) {
-        KisImageView *child = qobject_cast<KisImageView *>(windows.at(i)->widget());
+        QPointer<KisImageView>child = qobject_cast<KisImageView*>(windows.at(i)->widget());
         if (child) {
             QString text;
             if (i < 9) {
@@ -319,7 +318,7 @@ void KisMainWindow::closeAllViews()
 
 void KisMainWindow::newView(QObject *document)
 {
-    qDebug() << "newView" << document;
+    qDebug() << ">>>>>>>>>>>> newView" << document;
     KisDoc2 *doc = qobject_cast<KisDoc2*>(document);
     KoView *view = part()->createView(doc);
     addView(view);
@@ -330,10 +329,10 @@ void KisMainWindow::newWindow()
     part()->createMainWindow()->show();
 }
 
-KisImageView *KisMainWindow::activeKisView()
+QPointer<KisImageView>KisMainWindow::activeKisView()
 {
     if (!m_mdiArea) return 0;
     QMdiSubWindow *activeSubWindow = m_mdiArea->activeSubWindow();
     if (!activeSubWindow) return 0;
-    return qobject_cast<KisImageView *>(activeSubWindow->widget());
+    return qobject_cast<KisImageView*>(activeSubWindow->widget());
 }

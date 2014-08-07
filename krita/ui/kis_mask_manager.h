@@ -19,15 +19,16 @@
 #define KIS_MASK_MANAGER
 
 #include <QObject>
+#include <QPointer>
 
 #include "kis_types.h"
+#include "kis_image_view.h"
 
 class KisView2;
 class KActionCollection;
 class KisAction;
 class KToggleAction;
 class KisNodeCommandsAdapter;
-class KisImageView;
 class KisActionManager;
 
 #include "kis_mask.h"
@@ -45,7 +46,7 @@ public:
 
     KisMaskManager(KisView2 * view);
     ~KisMaskManager() {}
-    void setView(KisImageView *view);
+    void setView(QPointer<KisImageView>view);
 
 private:
     
@@ -126,7 +127,7 @@ private:
     void createTransparencyMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom);
 
     KisView2 * m_view;
-    KisImageView *m_imageView;
+    QPointer<KisImageView>m_imageView;
     KisNodeCommandsAdapter* m_commandsAdapter;
 
 };

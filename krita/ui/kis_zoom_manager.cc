@@ -72,7 +72,7 @@ private:
 };
 
 
-KisZoomManager::KisZoomManager(KisImageView * view, KoZoomHandler * zoomHandler,
+KisZoomManager::KisZoomManager(QPointer<KisImageView> view, KoZoomHandler * zoomHandler,
                                KoCanvasController * canvasController)
         : m_view(view)
         , m_zoomHandler(zoomHandler)

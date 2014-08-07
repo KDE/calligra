@@ -41,7 +41,7 @@ struct KisCanvasController::Private {
     {
     }
 
-    KisImageView *view;
+    QPointer<KisImageView>view;
     KisCoordinatesConverter *coordinatesConverter;
     KisCanvasController *q;
     KisPaintopTransformationConnector *paintOpTransformationConnector;
@@ -86,7 +86,7 @@ void KisCanvasController::Private::updateDocumentSizeAfterTransform()
 }
 
 
-KisCanvasController::KisCanvasController(KisImageView *parent, KActionCollection * actionCollection)
+KisCanvasController::KisCanvasController(QPointer<KisImageView>parent, KActionCollection * actionCollection)
     : KoCanvasControllerWidget(actionCollection, parent),
       m_d(new Private(this))
 {

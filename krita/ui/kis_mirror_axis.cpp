@@ -88,7 +88,7 @@ public:
     bool verticalContainsCursor;
 };
 
-KisMirrorAxis::KisMirrorAxis(KisCanvasResourceProvider* provider, KisImageView *parent)
+KisMirrorAxis::KisMirrorAxis(KisCanvasResourceProvider* provider, QPointer<KisImageView>parent)
     : KisCanvasDecoration("mirror_axis", parent)
     , d(new Private(this))
 {

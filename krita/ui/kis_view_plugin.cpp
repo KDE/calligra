@@ -27,8 +27,6 @@
 KisViewPlugin::KisViewPlugin(QObject* parent, const QString& rcFile)
     : m_view(0)
 {
-    qDebug() << "Creating xmlgui client" << this << "parent" << parent << "rcfile" << rcFile;
-
     if (parent->inherits("KisView2")) {
         setXMLFile(KStandardDirs::locate("data", rcFile), true);
 

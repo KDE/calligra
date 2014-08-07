@@ -105,7 +105,7 @@ KisStatusBar::~KisStatusBar()
     m_view->removeStatusBarItem(m_progress);
 }
 
-void KisStatusBar::setView(KisImageView* imageView)
+void KisStatusBar::setView(QPointer<KisImageView> imageView)
 {
     if (m_imageView == imageView) {
         return;

@@ -42,7 +42,7 @@ public:
 
     KisFilterManager(KisView2 * parent);
     ~KisFilterManager();
-    void setView(KisImageView *imageView);
+    void setView(QPointer<KisImageView>imageView);
 
     void setup(KActionCollection * ac, KisActionManager *actionManager);
     void updateGUI();

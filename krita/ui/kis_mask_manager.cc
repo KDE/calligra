@@ -61,7 +61,7 @@ KisMaskManager::KisMaskManager(KisView2 * view)
 {
 }
 
-void KisMaskManager::setView(KisImageView *imageView)
+void KisMaskManager::setView(QPointer<KisImageView>imageView)
 {
     m_imageView = imageView;
 }

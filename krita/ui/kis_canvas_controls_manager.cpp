@@ -67,7 +67,7 @@ void KisCanvasControlsManager::setup(KActionCollection *actionCollection, KisAct
     connect(decreaseOpacity, SIGNAL(triggered()), SLOT(decreaseOpacity()));
 }
 
-void KisCanvasControlsManager::setView(KisImageView *imageView)
+void KisCanvasControlsManager::setView(QPointer<KisImageView>imageView)
 {
     Q_UNUSED(imageView);
 }

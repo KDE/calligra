@@ -24,11 +24,11 @@
 
 struct KisCanvasDecoration::Private {
     bool visible;
-    KisImageView* view;
+    QPointer<KisImageView> view;
     QString id;
 };
 
-KisCanvasDecoration::KisCanvasDecoration(const QString& id, KisImageView *parent)
+KisCanvasDecoration::KisCanvasDecoration(const QString& id, QPointer<KisImageView>parent)
     : QObject(parent)
     , d(new Private)
 {
@@ -42,7 +42,7 @@ KisCanvasDecoration::~KisCanvasDecoration()
     delete d;
 }
 
-void KisCanvasDecoration::setView(KisImageView *imageView)
+void KisCanvasDecoration::setView(QPointer<KisImageView>imageView)
 {
     d->view = imageView;
 }
@@ -79,13 +79,13 @@ void KisCanvasDecoration::paint(QPainter& gc, const QRectF& updateArea, const Ki
 }
 
 
-KisImageView *KisCanvasDecoration::imageView()
+QPointer<KisImageView>KisCanvasDecoration::imageView()
 {
     return d->view;
 }
 
 
-KisImageView *KisCanvasDecoration::view() const
+QPointer<KisImageView>KisCanvasDecoration::view() const
 {
     return d->view;
 }

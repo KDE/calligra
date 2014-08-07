@@ -120,7 +120,7 @@ struct KisPerspectiveGridDecoration::SubdivisionLinesInfo {
     int numSubdivisions;
 };
 
-KisPerspectiveGridDecoration::KisPerspectiveGridDecoration(KisImageView* /*parent*/)
+KisPerspectiveGridDecoration::KisPerspectiveGridDecoration(QPointer<KisImageView> /*parent*/)
     : KisCanvasDecoration("perspectiveGrid", 0)
 {
 }

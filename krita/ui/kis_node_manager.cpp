@@ -75,7 +75,7 @@ struct KisNodeManager::Private {
     }
 
     KisView2 * view;
-    KisImageView *imageView;
+    QPointer<KisImageView>imageView;
     KisLayerManager * layerManager;
     KisMaskManager * maskManager;
     KisNodeManager* self;
@@ -165,7 +165,7 @@ KisNodeManager::~KisNodeManager()
     delete m_d;
 }
 
-void KisNodeManager::setView(KisImageView *imageView)
+void KisNodeManager::setView(QPointer<KisImageView>imageView)
 {
     m_d->maskManager->setView(imageView);
     m_d->layerManager->setView(imageView);

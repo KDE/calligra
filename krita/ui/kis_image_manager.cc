@@ -48,7 +48,7 @@ KisImageManager::KisImageManager(KisView2 * view)
 {
 }
 
-void KisImageManager::setView(KisImageView *imageView)
+void KisImageManager::setView(QPointer<KisImageView>imageView)
 {
     Q_UNUSED(imageView);
 }

@@ -31,7 +31,7 @@ class KisMirrorAxis : public KisCanvasDecoration
     Q_PROPERTY(float handleSize READ handleSize WRITE setHandleSize NOTIFY handleSizeChanged)
 
 public:
-    KisMirrorAxis(KisCanvasResourceProvider* provider, KisImageView* parent);
+    KisMirrorAxis(KisCanvasResourceProvider* provider, QPointer<KisImageView> parent);
     ~KisMirrorAxis();
 
     float handleSize() const;

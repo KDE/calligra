@@ -82,7 +82,7 @@ public:
         QApplication::removePostedEvents(0);
     }
 
-    KisImageView* view() {
+    QPointer<KisImageView> view() {
         return m_view;
     }
 
@@ -119,7 +119,7 @@ private:
     KisImageSP m_image;
     KoPart *m_part;
     KisDoc2 *m_doc;
-    KisImageView *m_view;
+    QPointer<KisImageView>m_view;
     KoMainWindow *m_mainWindow;
 };
 

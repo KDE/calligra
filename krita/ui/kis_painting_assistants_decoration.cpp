@@ -34,7 +34,7 @@ struct KisPaintingAssistantsDecoration::Private {
     KToggleAction* toggleAssistant;
 };
 
-KisPaintingAssistantsDecoration::KisPaintingAssistantsDecoration(KisImageView * parent) :
+KisPaintingAssistantsDecoration::KisPaintingAssistantsDecoration(QPointer<KisImageView> parent) :
         KisCanvasDecoration("paintingAssistantsDecoration", parent),
         d(new Private)
 {

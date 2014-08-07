@@ -18,8 +18,10 @@
 #ifndef KIS_MAIN_WINDOW_H
 #define KIS_MAIN_WINDOW_H
 
+#include <QPointer>
+
 #include <KoMainWindow.h>
-#include "krita/gemini/ViewModeSwitchEvent.h"
+#include "kis_image_view.h"
 
 class QMdiArea;
 class QSignalMapper;
@@ -65,7 +67,7 @@ private slots:
     void newWindow();
 
 private:
-    KisImageView *activeKisView();
+    QPointer<KisImageView>activeKisView();
 
     bool m_constructing;
 

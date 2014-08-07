@@ -282,7 +282,7 @@ public:
     QMainWindow* mainWindow;
     QPointer<KisFloatingMessage> savedFloatingMessage;
     bool showFloatingMessage;
-    KisImageView* currentImageView;
+    QPointer<KisImageView> currentImageView;
     KisCanvasResourceProvider* canvasResourceProvider;
     KoCanvasResourceManager* canvasResourceManager;
     QList<StatusBarItem> statusBarItems;
@@ -452,7 +452,7 @@ void KisView2::setCurrentView(KoView *view)
         canvasControllerWidget()->disconnect(SIGNAL(toolOptionWidgetsChanged(QList<QPointer<QWidget> >)), mainWindow()->dockerManager());
     }
 
-    KisImageView *imageView = qobject_cast<KisImageView*>(view);
+    QPointer<KisImageView>imageView = qobject_cast<KisImageView*>(view);
 
     if (imageView) {
 
@@ -1372,8 +1372,7 @@ void KisView2::updateIcons()
 
                 QAbstractButton* button = dynamic_cast<QAbstractButton*>(object);
                 if (button && !button->icon().name().isEmpty()) {
-                    QString name = button->icon().name();
-                    name = name.remove("dark_").remove("light_");
+                    QString name = button->icon().name(); name = name.remove("dark_").remove("light_");
 
                     if (!blacklistedIcons.contains(name)) {
                         QString iconName = prefix + name;

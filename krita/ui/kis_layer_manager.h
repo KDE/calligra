@@ -19,9 +19,11 @@
 #define KIS_LAYER_MANAGER
 
 #include <QObject>
+#include <QPointer>
 #include <QList>
 
 #include "kis_types.h"
+#include "kis_image_view.h"
 
 class KAction;
 class QAction;
@@ -33,7 +35,6 @@ class KisView2;
 class KisFilterConfiguration;
 class KisNodeCommandsAdapter;
 class KisAction;
-class KisImageView;
 class KisActionManager;
 
 /**
@@ -50,7 +51,7 @@ public:
 
     KisLayerManager(KisView2 * view);
     ~KisLayerManager();
-    void setView(KisImageView *view);
+    void setView(QPointer<KisImageView>view);
 
 signals:
 
@@ -123,7 +124,7 @@ private:
 private:
 
     KisView2 * m_view;
-    KisImageView *m_imageView;
+    QPointer<KisImageView>m_imageView;
 
     KisAction *m_imageFlatten;
     KisAction *m_imageMergeLayer;

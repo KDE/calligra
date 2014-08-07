@@ -19,6 +19,7 @@
 #define KIS_ZOOM_MANAGER
 
 #include <QObject>
+#include <QPointer>
 
 #include <kstandardaction.h>
 #include <klocale.h>
@@ -28,8 +29,9 @@
 #include <KoZoomHandler.h>
 #include <KoZoomController.h>
 
+#include "kis_image_view.h"
+
 class KoZoomHandler;
-class KisImageView;
 class KAction;
 class KoZoomAction;
 class KoRuler;
@@ -49,7 +51,7 @@ class KisZoomManager : public QObject
 
 public:
 
-    KisZoomManager(KisImageView *view, KoZoomHandler*, KoCanvasController *);
+    KisZoomManager(QPointer<KisImageView> view, KoZoomHandler*, KoCanvasController *);
     ~KisZoomManager();
 
     void setup(KActionCollection * actionCollection);
@@ -74,7 +76,7 @@ private slots:
 
 private:
 
-    KisImageView * m_view;
+    QPointer<KisImageView> m_view;
     KoZoomHandler * m_zoomHandler;
     KoCanvasController *m_canvasController;
     KoZoomController *m_zoomController;

@@ -33,7 +33,7 @@ class KRITAUI_EXPORT KisPerspectiveGridDecoration : public KisCanvasDecoration
     Q_OBJECT
 
 public:
-    KisPerspectiveGridDecoration(KisImageView* parent);
+    KisPerspectiveGridDecoration(QPointer<KisImageView> parent);
     virtual ~KisPerspectiveGridDecoration();
 
 protected:

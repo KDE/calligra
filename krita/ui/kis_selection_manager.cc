@@ -259,7 +259,7 @@ void KisSelectionManager::setup(KActionCollection * collection, KisActionManager
 }
 
 
-void KisSelectionManager::setView(KisImageView *imageView)
+void KisSelectionManager::setView(QPointer<KisImageView>imageView)
 {
     if (m_imageView && m_imageView->canvasBase()) {
         KoSelection *selection = m_imageView->canvasBase()->globalShapeManager()->selection();

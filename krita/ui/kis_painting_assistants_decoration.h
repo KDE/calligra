@@ -36,7 +36,7 @@ class KRITAUI_EXPORT KisPaintingAssistantsDecoration : public KisCanvasDecoratio
 {
     Q_OBJECT
 public:
-    KisPaintingAssistantsDecoration(KisImageView* parent);
+    KisPaintingAssistantsDecoration(QPointer<KisImageView> parent);
     ~KisPaintingAssistantsDecoration();
     void addAssistant(KisPaintingAssistant* assistant);
     void removeAssistant(KisPaintingAssistant* assistant);

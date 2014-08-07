@@ -31,7 +31,7 @@ class KRITAUI_EXPORT KisSelectionDecoration : public KisCanvasDecoration
 {
     Q_OBJECT
 public:
-    KisSelectionDecoration(KisImageView* view);
+    KisSelectionDecoration(QPointer<KisImageView> view);
     ~KisSelectionDecoration();
 
     enum Mode {

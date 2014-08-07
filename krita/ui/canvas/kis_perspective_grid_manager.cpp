@@ -102,7 +102,7 @@ void KisPerspectiveGridManager::stopEdition()
     updateGUI();
 }
 
-void KisPerspectiveGridManager::setView(KisImageView* imageView)
+void KisPerspectiveGridManager::setView(QPointer<KisImageView> imageView)
 {
     m_toggleGrid->disconnect();
 

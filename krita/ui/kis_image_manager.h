@@ -19,6 +19,7 @@
 #define KIS_IMAGE_MANAGER
 
 #include <QObject>
+#include <QPointer>
 
 #include <kurl.h>
 #include <krita_export.h>
@@ -40,7 +41,7 @@ public:
     KisImageManager(KisView2 * view);
     ~KisImageManager() {}
 
-    void setView(KisImageView *imageView);
+    void setView(QPointer<KisImageView>imageView);
     void setup(KActionCollection * actionCollection, KisActionManager *actionManager);
 
 public slots:

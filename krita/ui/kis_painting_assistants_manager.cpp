@@ -47,7 +47,7 @@ void KisPaintingAssistantsManager::setup(KActionCollection * collection)
     updateAction();
 }
 
-void KisPaintingAssistantsManager::setView(KisImageView* imageView)
+void KisPaintingAssistantsManager::setView(QPointer<KisImageView> imageView)
 {
     if (m_imageView) {
         m_toggleAssistant->disconnect();

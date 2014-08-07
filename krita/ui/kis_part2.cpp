@@ -77,7 +77,7 @@ KoDocument *KisPart2::createDocument() const
 KoView *KisPart2::createViewInstance(KoDocument *document, QWidget *parent)
 {
     qApp->setOverrideCursor(Qt::WaitCursor);
-    KisImageView *v = new KisImageView(this, qobject_cast<KisDoc2*>(document), parent);
+    QPointer<KisImageView>v = new KisImageView(this, qobject_cast<KisDoc2*>(document), parent);
 
     //XXX : fix this ugliness
     dynamic_cast<KisShapeController*>(qobject_cast<KisDoc2*>(document)->shapeController())->setInitialShapeForCanvas(v->canvasBase());

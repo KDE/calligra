@@ -245,7 +245,7 @@ KisLayerManager::~KisLayerManager()
     delete m_commandsAdapter;
 }
 
-void KisLayerManager::setView(KisImageView *view)
+void KisLayerManager::setView(QPointer<KisImageView>view)
 {
     m_imageView = view;
 }

@@ -139,8 +139,6 @@ KisDoc2::KisDoc2(const KisPart2 *part)
     : KoDocument(part, new UndoStack(this))
     , m_d(new KisDocPrivate())
 {
-    qDebug() << "KisDoc2::KisDoc2" << this << "part" << part << kBacktrace();
-
     // preload the krita resources
     KisResourceServerProvider::instance();
 
@@ -153,7 +151,6 @@ KisDoc2::KisDoc2(const KisPart2 *part)
 
 KisDoc2::~KisDoc2()
 {
-    qDebug() << "removing doc" << this;
     // Despite being QObject they needs to be deleted before the image
     delete m_d->shapeController;
 

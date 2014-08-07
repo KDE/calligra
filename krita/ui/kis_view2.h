@@ -21,13 +21,18 @@
 
 #include <QDockWidget>
 #include <QQueue>
+#include <QPointer>
+
 #include <KoMainWindow.h>
 #include <KoView.h>
 #include <KoProgressUpdater.h>
 #include <KoToolManager.h>
+
 #include <krita_export.h>
 #include <kis_types.h>
+
 #include "kis_floating_message.h"
+#include "kis_image_view.h"
 
 class KisAction;
 class QPoint;
@@ -55,7 +60,7 @@ class KisPaintopBox;
 class KisCanvasController;
 class KisFlipbook;
 class KisActionManager;
-class KisImageView;
+
 
 /**
  * Krita view class

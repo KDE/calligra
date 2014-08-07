@@ -21,12 +21,15 @@
 #define KIS_PAINTING_ASSISTANTS_MANAGER_H
 
 #include <QObject>
+#include <QPointer>
+
+#include "kis_image_view.h"
 
 class KisView2;
 class KToggleAction;
 class KActionCollection;
 class KisPaintingAssistantsDecoration;
-class KisImageView;
+
 
 class KisPaintingAssistantsManager : public QObject
 {
@@ -38,7 +41,7 @@ public:
 
     void setup(KActionCollection* collection);
 
-    void setView(KisImageView* imageView);
+    void setView(QPointer<KisImageView> imageView);
 
 private slots:
     void updateAction();
@@ -46,7 +49,7 @@ private slots:
 private:
     KisPaintingAssistantsDecoration* decoration();
     
-    KisImageView* m_imageView;
+    QPointer<KisImageView> m_imageView;
     KToggleAction* m_toggleAssistant;
 };
 

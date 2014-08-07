@@ -31,7 +31,7 @@ class KRITAUI_EXPORT KisCanvasController : public KoCanvasControllerWidget
     Q_OBJECT
 
 public:
-    KisCanvasController(KisImageView *parent, KActionCollection * actionCollection);
+    KisCanvasController(QPointer<KisImageView>parent, KActionCollection * actionCollection);
     ~KisCanvasController();
 
     virtual void setCanvas(KoCanvasBase *canvas);

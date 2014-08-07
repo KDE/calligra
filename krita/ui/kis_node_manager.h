@@ -54,7 +54,7 @@ public:
     KisNodeManager(KisView2 * view);
     ~KisNodeManager();
     
-    void setView(KisImageView *imageView);
+    void setView(QPointer<KisImageView>imageView);
 
 signals:
 
