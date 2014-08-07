@@ -43,12 +43,27 @@ set(calligragemini_SRCS
     RecentFilesModel.cpp
 )
 
+set(thumbnailhelper_SRCS
+    thumbnailhelper.cpp
+    ThumbnailHelperImpl.cpp
+)
 
 if (WIN32)
 #    set(calligragemini_SRCS ${calligragemini_SRCS} KritaGeminiWin.rc)
 else (WIN32)
     kde4_add_app_icon(calligragemini_SRCS "${KDE4_ICON_DIR}/oxygen/*/apps/calligragemini.png")
 endif (WIN32)
+
+# Thumbnail helper application
+# =============================================================================
+
+kde4_add_executable(calligrageminithumbnailhelper ${thumbnailhelper_SRCS})
+target_link_libraries(calligrageminithumbnailhelper
+    ${QT_QTGUI_LIBRARIES}
+    ${QT_QTCORE_LIBRARIES}
+    ${QT_LIBRARIES}
+    komain
+)
 
 # Calligra Gemini application
 # =============================================================================
@@ -67,7 +82,7 @@ target_link_libraries(calligragemini
     calligrastageprivate
 )
 
-install(TARGETS   calligragemini ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS   calligragemini calligrageminithumbnailhelper ${INSTALL_TARGETS_DEFAULT_ARGS})
 install(PROGRAMS  calligragemini.desktop               DESTINATION ${XDG_APPS_INSTALL_DIR})
 #install(FILES     calligrageminirc calligrageminipanelsrc DESTINATION ${CONFIG_INSTALL_DIR} )
 install(FILES     calligragemini.qml                   DESTINATION ${DATA_INSTALL_DIR}/calligragemini)
