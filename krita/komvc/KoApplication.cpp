@@ -389,18 +389,6 @@ bool KoApplication::start()
         // Loop through arguments
         short int nPrinted = 0;
         for (int argNumber = 0; argNumber < argsCount; argNumber++) {
-            // For now create an empty document
-            KoDocument *doc = d->part->createDocument();
-            d->part->addDocument(doc);
-
-            if (profileoutput.device()) {
-                doc->setProfileStream(&profileoutput);
-                profileoutput << "KoApplication::start\t"
-                              << appStartTime.msecsTo(QTime::currentTime())
-                              <<"\t0" << endl;
-                doc->setAutoErrorHandlingEnabled(false);
-            }
-            doc->setProfileReferenceTime(appStartTime);
 
             // are we just trying to open a template?
             if (doTemplate) {
@@ -473,22 +461,11 @@ bool KoApplication::start()
                 // delete mainWindow; done by ~KoDocument
             }
 
-            if (profileoutput.device()) {
-                profileoutput << "KoApplication::start\t"
-                              << appStartTime.msecsTo(QTime::currentTime())
-                              <<"\t100" << endl;
-            }
-
         }
         if (print || exportAsPdf) {
             return nPrinted > 0;
         }
     }
-
-//    if (numberOfOpenDocuments == 0 && !batchRun) {
-//        // No argument, no files restored -> show startup dialog or create a default empty document
-//        d->part->showStartUpWidget(mainWindow);
-//    }
 
     args->clear();
     // not calling this before since the program will quit there.
