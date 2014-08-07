@@ -2320,7 +2320,6 @@ void KexiTableView::setHighlightedRecord(int record)
     if (record != -1) {
         record = qMin(rows() - 1 + (isInsertingEnabled() ? 1 : 0), record);
         record = qMax(0, record);
-        ensureCellVisible(record, -1);
     }
     const int previouslyHighlightedRecord = d->highlightedRecord;
     if (previouslyHighlightedRecord == record) {

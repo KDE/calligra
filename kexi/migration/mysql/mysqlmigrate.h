@@ -22,7 +22,6 @@
 #define MYSQLMIGRATE_H
 
 #include <migration/keximigrate.h>
-#include <migration/keximigrate_p.h>
 #include <kexidb/drivers/mysql/mysqlconnection_p.h>
 
 namespace KexiMigration

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -25,8 +25,9 @@
 #include <QMap>
 
 #include <db/tristate.h>
+#include <db/pluginloader.h>
 #include <kexiutils/InternalPropertyMap.h>
-#include "kexi.h"
+#include "kexipartbase.h"
 
 class KActionCollection;
 class KexiWindow;
@@ -34,11 +35,9 @@ class KexiWindowData;
 class KexiView;
 class KAction;
 class KShortcut;
-class KTabWidget;
 
 namespace KexiPart
 {
-class Info;
 class Item;
 class GUIClient;
 class StaticPartInfo;
@@ -73,7 +72,7 @@ enum ObjectType {
   e.g. "New table" vs "New query" can have different forms for some languages.
   So this is a flexible way for customizing translatable strings.
  */
-class KEXICORE_EXPORT Part : public QObject, protected KexiUtils::InternalPropertyMap
+class KEXICORE_EXPORT Part : public PartBase
 {
     Q_OBJECT
 
@@ -160,8 +159,6 @@ public:
     /*! @return i18n'd "what's this" string. Example: "Creates new table." */
     QString whatsThis() const;
 
-    Info *info() const;
-
     /*! \return part's GUI Client, so you can
      create part-wide actions using this client. */
     GUIClient *guiClient() const;
@@ -175,48 +172,10 @@ public:
 
     const Kexi::ObjectStatus& lastOperationStatus() const;
 
-    /*! \return i18n'd message translated from \a englishMessage.
-     This method is useful for messages like:
-     "<p>Table \"%1\" has been modified.</p>",
-     -- such messages can be accurately translated,
-     while this could not: "<p>%1 \"%2\" has been modified.</p>".
-     See implementation of this method in KexiTablePart to see
-     what strings are needed for translation.
-
-     Default implementation returns generic \a englishMessage.
-     In special cases, \a englishMessage can start with ":",
-     to indicate that empty string will be generated if
-     a part does not offer a message for such \a englishMessage.
-     This is used e.g. in KexiMainWindow::closeWindow().
-
-     Note: As number of %n parameters is unspecified,
-     you should add appropriate number of parameters using .subs().
-     to result of results of i18nMessage().
-     In your your implementation, you should use ki18n(I18N_NOOP())
-     or ki18nc(I18N_NOOP2()) instead of i18n() or i18nc().
-     Example:
-     @code
-      QString tableName = "Employees";
-      QString translated
-       = part->i18nMessage("Design of object \"%1\" has been modified.")
-        .subs(tableName).toString();
-     @endcode */
-    virtual KLocalizedString i18nMessage(const QString& englishMessage,
-                                         KexiWindow *window) const;
-
     /*! @internal
      Creates GUIClients for this part, attached to the main window.
      This method is called by KexiMainWindow. */
     void createGUIClients();
-
-    /*! @internal
-     This method can be reimplemented to setup additional tabs
-     in the property editor panel. Default implementation does nothing.
-     This method is called whenever current window (KexiWindow) is switched and
-     type (mime type) of its contents differs from previous one.
-     For example, if a user switched from Table Designer to Form Designer,
-     additional tab containing Form Designer's object tree should be shown. */
-    virtual void setupCustomPropertyPanelTabs(KTabWidget *tab);
 
 signals:
     void newObjectRequest(KexiPart::Info *info);
@@ -225,7 +184,7 @@ protected:
     /*!
      Creates new Plugin
      @param parent parent of this plugin
-     @param instanceName i18n'd  instance name written using only lowercase alphanumeric
+     @param instanceName i18n'd instance name written using only lowercase alphanumeric
             characters (a..z, 0..9).
             Use '_' character instead of spaces. First character should be a..z character.
             If you cannot use latin characters in your language, use english word.
@@ -286,8 +245,6 @@ protected:
 
     void setActionAvailable(const char *action_name, bool avail);
 
-    void setInfo(Info *info);
-
 private:
     //! Calls loadSchemaData() (virtual), updates ownership of schema data for @a window
     //! and assigns the created data to @a window.
@@ -310,11 +267,5 @@ private:
 KEXICORE_EXPORT QString fullCaptionForItem(KexiPart::Item *item, KexiPart::Part *part);
 
 } // namespace KexiPart
-
-//! Implementation of plugin's entry point
-#define K_EXPORT_KEXI_PLUGIN( class_name, internal_name ) \
-    K_PLUGIN_FACTORY(factory, registerPlugin<class_name>();) \
-    K_EXPORT_PLUGIN(factory("kexihandler_" # internal_name)) \
-    K_EXPORT_PLUGIN_VERSION(KDE_MAKE_VERSION(KEXI_PART_VERSION, 0, 0))
 
 #endif

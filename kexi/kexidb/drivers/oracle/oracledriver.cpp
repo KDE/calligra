@@ -21,10 +21,12 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include "oracledriver.h"
 #include "oracleconnection.h"
 #include <db/driver_p.h>
+
 #include <kdebug.h>
+
 using namespace KexiDB;
 
-K_EXPORT_KEXIDB_DRIVER(OracleDriver, "oracle")
+K_EXPORT_KEXIDB_DRIVER(OracleDriver, oracle)
 
 /**
  * Constructor sets database features and maps
