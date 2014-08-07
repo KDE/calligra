@@ -1,5 +1,5 @@
 /*
- * <one line to give the library's name and an idea of what it does.>
+ * Assists in creating thumbnails for Gemini's file views
  * Copyright 2014  Dan Leinir Turthra Jensen <admin@leinir.dk>
  *
  * This program is free software; you can redistribute it and/or

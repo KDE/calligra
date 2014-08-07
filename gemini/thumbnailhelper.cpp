@@ -1,4 +1,5 @@
-/* This file is part of the KDE project
+/*
+ * Assists in creating thumbnails for Gemini's file views
  * Copyright (C) 2014 Dan Leinir Turthra Jensen <admin@leinir.dk>
  *
  * This library is free software; you can redistribute it and/or
