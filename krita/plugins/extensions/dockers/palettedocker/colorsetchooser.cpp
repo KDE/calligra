@@ -30,7 +30,6 @@
 #include <KoResourceItemChooser.h>
 #include <KoResourceServerAdapter.h>
 #include <KoResourceServerProvider.h>
-#include <KoMainWindow.h>
 #include <KoResource.h>
 #include <KoColorSet.h>
 

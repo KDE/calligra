@@ -32,7 +32,6 @@ class QThread;
 class KisCanvas2;
 class FlipbookView;
 class SequenceViewer;
-class KoMainWindow;
 
 class FlipbookDockerDock : public QDockWidget, public KoCanvasObserverBase, public Ui_WdgFlipbookDocker {
     Q_OBJECT
