@@ -32,6 +32,7 @@ class KoPart;
 class KisMainGui;
 class KisView2;
 class KisImageView;
+class KActionMenu;
 
 class KisMainWindow : public KoMainWindow
 {
@@ -57,6 +58,8 @@ private slots:
     void updateWindowMenu();
     void setActiveSubWindow(QWidget *window);
     void configChanged();
+    void closeView();
+    void closeAllViews();
 
 private:
     KisImageView *activeKisView();
@@ -68,12 +71,14 @@ private:
     QMdiArea *m_mdiArea;
     QSignalMapper *m_windowMapper;
 
+    KAction *m_close;
+    KAction *m_closeAll;
     KAction *m_mdiCascade;
     KAction *m_mdiTile;
     KAction *m_mdiNextWindow;
     KAction *m_mdiPreviousWindow;
 
-
+    KActionMenu *m_windowMenu;
 };
 
 #endif // KIS_MAIN_WINDOW_H

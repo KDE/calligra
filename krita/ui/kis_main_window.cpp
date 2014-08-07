@@ -26,10 +26,13 @@
 
 #include <kactioncollection.h>
 #include <kaction.h>
+#include <kactionmenu.h>
 #include <ktoggleaction.h>
 #include <ktoolbar.h>
 #include <kxmlguiclient.h>
 #include <kxmlguifactory.h>
+#include <kmenu.h>
+#include <kurl.h>
 
 #include <KoZoomController.h>
 #include <KoView.h>
@@ -73,12 +76,16 @@ KisMainWindow::KisMainWindow(KoPart *part, const KComponentData &instance)
     m_mdiArea->show();
 
     connect(m_mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(updateMenus()));
+
     m_windowMapper = new QSignalMapper(this);
     connect(m_windowMapper, SIGNAL(mapped(QWidget*)), this, SLOT(setActiveSubWindow(QWidget*)));
 
     m_guiClient = new KisView2(this);
 
     m_guiClient->actionCollection()->addAction(KStandardAction::Preferences, "preferences", this, SLOT(slotPreferences()));
+
+    m_windowMenu = new KActionMenu(i18n("Window"), this);
+    m_guiClient->actionCollection()->addAction("window", m_windowMenu);
 
     m_mdiCascade = new KAction(i18n("Cascade"), this);
     m_guiClient->actionCollection()->addAction("windows_cascade", m_mdiCascade);
@@ -95,6 +102,12 @@ KisMainWindow::KisMainWindow(KoPart *part, const KComponentData &instance)
     m_mdiPreviousWindow = new KAction(i18n("Previous"), this);
     m_guiClient->actionCollection()->addAction("windows_previous", m_mdiPreviousWindow);
     connect(m_mdiPreviousWindow, SIGNAL(triggered()), m_mdiArea, SLOT(activatePreviousSubWindow()));
+
+    m_close = new KAction(i18n("Close"), this);
+    connect(m_close, SIGNAL(triggered()), SLOT(closeView()));
+
+    m_closeAll = new KAction(i18n("Close All"), this);
+    connect(m_closeAll, SIGNAL(triggered()), SLOT(closeAllViews()));
 
     guiFactory()->addClient(m_guiClient);
 
@@ -126,6 +139,7 @@ KisMainWindow::KisMainWindow(KoPart *part, const KComponentData &instance)
     setToolbarList(toolbarList);
 
     updateMenus();
+    updateWindowMenu();
 
     m_constructing = false;
 
@@ -149,10 +163,8 @@ void KisMainWindow::showView(KoView *view)
         else {
             view->show();
         }
-        view->setFocus();
-
-
         m_guiClient->setCurrentView(view);
+        updateWindowMenu();
     }
 }
 
@@ -195,16 +207,53 @@ void KisMainWindow::closeEvent(QCloseEvent *e)
 void KisMainWindow::updateMenus()
 {
     bool enabled = (activeKisView() != 0);
+
     m_mdiCascade->setEnabled(enabled);
     m_mdiNextWindow->setEnabled(enabled);
     m_mdiPreviousWindow->setEnabled(enabled);
     m_mdiTile->setEnabled(enabled);
+    m_close->setEnabled(enabled);
+    m_closeAll->setEnabled(enabled);
 
     setActiveSubWindow(m_mdiArea->activeSubWindow());
 }
 
 void KisMainWindow::updateWindowMenu()
 {
+    KMenu *menu = m_windowMenu->menu();
+    menu->clear();
+    menu->addAction(m_close);
+    menu->addAction(m_closeAll);
+    menu->addSeparator();
+    menu->addAction(m_mdiTile);
+    menu->addAction(m_mdiCascade);
+    menu->addSeparator();
+    menu->addAction(m_mdiNextWindow);
+    menu->addAction(m_mdiPreviousWindow);
+    menu->addSeparator();
+
+    QList<QMdiSubWindow *> windows = m_mdiArea->subWindowList();
+    for (int i = 0; i < windows.size(); ++i) {
+        KisImageView *child = qobject_cast<KisImageView *>(windows.at(i)->widget());
+        if (child) {
+            QString text;
+            if (i < 9) {
+                text = i18n("&%1 %2").arg(i + 1)
+                        .arg(child->document()->url().prettyUrl());
+            }
+            else {
+                text = i18n("%1 %2").arg(i + 1)
+                        .arg(child->document()->url().prettyUrl());
+            }
+
+            QAction *action  = menu->addAction(text);
+            action->setCheckable(true);
+            action->setChecked(child == activeKisView());
+            connect(action, SIGNAL(triggered()), m_windowMapper, SLOT(map()));
+            m_windowMapper->setMapping(action, windows.at(i));
+        }
+    }
+
 }
 
 void KisMainWindow::setActiveSubWindow(QWidget *window)
@@ -226,6 +275,16 @@ void KisMainWindow::configChanged()
     KisConfig cfg;
     QMdiArea::ViewMode viewMode = (QMdiArea::ViewMode)cfg.readEntry<int>("mdi_viewmode", (int)QMdiArea::TabbedView);
     m_mdiArea->setViewMode(viewMode);
+}
+
+void KisMainWindow::closeView()
+{
+
+}
+
+void KisMainWindow::closeAllViews()
+{
+
 }
 
 KisImageView *KisMainWindow::activeKisView()

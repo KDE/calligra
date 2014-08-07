@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gui name="Calligra"
-     version="27"
+     version="28"
      xmlns="http://www.kde.org/standards/kxmlgui/1.0"
      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0
@@ -50,12 +50,6 @@
   <Action name="theme_menu" />
  </Menu>
 
- <Menu name="window" noMerge="1"><text>&amp;Window</text>
-  <Action name="file_close" />
-  <Action name="file_close_all" />
-  <Separator/>
-  <Merge/>
- </Menu>
 </MenuBar>
 
 <ToolBar name="mainToolBar" fullWidth="false" noMerge="1"><Text>File</Text>
