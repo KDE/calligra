@@ -18,10 +18,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifdef Q_OS_WIN
-#include <Windows.h>
-#endif
-
 #include <kapplication.h>
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
@@ -36,6 +32,10 @@
 #include <calligraversion.h>
 #include <calligragitversion.h>
 #include "ThumbnailHelperImpl.h"
+
+#ifdef Q_OS_WIN
+#include <windows.h>
+#endif
 
 int main( int argc, char** argv )
 {
