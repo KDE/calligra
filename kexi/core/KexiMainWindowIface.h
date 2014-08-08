@@ -42,6 +42,7 @@ class KexiUserFeedbackAgent;
 namespace KexiPart
 {
 class Item;
+class Info;
 }
 
 /**

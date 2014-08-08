@@ -24,7 +24,6 @@
 #include <mdbtools.h>
 
 #include <migration/keximigrate.h>
-#include <migration/keximigrate_p.h>
 #include <db/field.h>
 #include <db/connection.h>
 #include <QByteArray>

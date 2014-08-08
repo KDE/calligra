@@ -1073,10 +1073,4 @@ void KexiStartupHandler::slotSaveShortcutFileChanges()
     }
 }
 
-/*void KexiStartupHandler::slotShowConnectionDetails()
-{
-  d->passwordDialog->close();
-  d->showConnectionDetailsExecuted = true;
-}*/
-
 #include "KexiStartup.moc"

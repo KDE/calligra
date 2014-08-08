@@ -19,6 +19,4 @@
 
 #include "KexiAutoFormPart.h"
 
-#include <kpluginfactory.h>
-
-K_EXPORT_KEXI_PLUGIN(KexiAutoFormPart, autoform)
+K_EXPORT_KEXIPART_PLUGIN(KexiAutoFormPart, autoform)

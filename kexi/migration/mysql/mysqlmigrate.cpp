@@ -29,6 +29,7 @@
 #endif
 
 #include "mysqlmigrate.h"
+#include <migration/keximigrate_p.h>
 #include <kexidb/drivers/mysql/mysqldriver_global.h>
 
 #include <QString>

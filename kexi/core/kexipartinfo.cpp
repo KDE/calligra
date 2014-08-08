@@ -19,10 +19,12 @@
 */
 
 #include "kexipartinfo_p.h"
+#include "kexipartmanager.h"
 #include "KexiMainWindowIface.h"
 
 #include <db/global.h>
 #include <kactioncollection.h>
+#include <KDebug>
 
 using namespace KexiPart;
 
@@ -69,8 +71,9 @@ Info::Private::Private(const KService::Ptr& aPtr)
         supportedUserViewModes |= Kexi::TextViewMode;
     }
     
-    isVisibleInNavigator = true;
+    isVisibleInNavigator = false;
     getBooleanProperty(aPtr, "X-Kexi-NoObject", &isVisibleInNavigator);
+    isVisibleInNavigator = !isVisibleInNavigator;
 
     isPropertyEditorAlwaysVisibleInDesignMode = true;
     getBooleanProperty(aPtr, "X-Kexi-PropertyEditorAlwaysVisibleInDesignMode",
@@ -220,7 +223,8 @@ void Info::setProjectPartID(int id)
 
 void Info::setBroken(bool broken, const QString& errorMessage)
 {
-    d->broken = broken; d->errorMessage = errorMessage;
+    d->broken = broken;
+    d->errorMessage = errorMessage;
 }
 
 QString Info::errorMessage() const

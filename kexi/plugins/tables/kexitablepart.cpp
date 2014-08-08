@@ -26,7 +26,6 @@
 #include <kdebug.h>
 #include <kmessagebox.h>
 #include <ktabwidget.h>
-#include <kpluginfactory.h>
 
 #include <KexiMainWindowIface.h>
 #include "kexiproject.h"
@@ -39,6 +38,7 @@
 
 #include <db/connection.h>
 #include <db/cursor.h>
+
 #include <KexiWindow.h>
 
 //! @internal
@@ -297,27 +297,6 @@ KexiTablePart::TempData::TempData(QObject* parent)
 
 //----------------
 
-/**
-TODO
-*/
-/*
-AboutData( const char *programName,
-  const char *version,
-  const char *i18nShortDescription = 0,
-  int licenseType = License_Unknown,
-  const char *i18nCopyrightStatement = 0,
-  const char *i18nText = 0,
-  const char *homePageAddress = 0,
-  const char *bugsEmailAddress = "submit@bugs.kde.org"
-);
-
-#define KEXIPART_EXPORT_FACTORY( libname, partClass, aboutData ) \
-  static KexiPart::AboutData * libname ## updateAD(KexiPart::AboutData *ad) \
-  { ad->setAppName( #libname ); return ad; } \
-   K_PLUGIN_FACTORY( libname ## Factory, registerPlugin<partClass>(); )
-   K_EXPORT_PLUGIN( libname ## Factory )
-*/
-
-K_EXPORT_KEXI_PLUGIN( KexiTablePart, table )
+K_EXPORT_KEXIPART_PLUGIN( KexiTablePart, table )
 
 #include "kexitablepart.moc"

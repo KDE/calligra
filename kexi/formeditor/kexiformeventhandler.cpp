@@ -32,6 +32,7 @@
 #include <kexipart.h>
 #include <kexipartinfo.h>
 #include <kexipartitem.h>
+#include <kexipartmanager.h>
 #include <kexiproject.h>
 
 KexiFormEventAction::ActionData::ActionData()

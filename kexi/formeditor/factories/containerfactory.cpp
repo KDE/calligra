@@ -32,7 +32,6 @@
 #include <QPaintEvent>
 #include <QFileInfo>
 
-#include <kpluginfactory.h>
 #include <ktextedit.h>
 #include <klineedit.h>
 #include <klocale.h>
@@ -1090,6 +1089,6 @@ KFormDesigner::ObjectTreeItem* ContainerFactory::selectableItem(KFormDesigner::O
     return item;
 }
 
-K_EXPORT_KEXI_FORM_WIDGET_FACTORY_PLUGIN(ContainerFactory, containers)
+K_EXPORT_KEXIFORMWIDGETS_PLUGIN(ContainerFactory, containers)
 
 #include "containerfactory.moc"

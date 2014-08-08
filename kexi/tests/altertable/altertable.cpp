@@ -423,7 +423,7 @@ bool AlterTableTester::getTableDataDump(KexiWindow* window, QString& dataString)
     args["textQuote"] = "\"";
     args["itemId"] = QString::number(
                          prj->dbConnection()->tableSchema(window->partItem()->name())->id());
-    if (!KexiInternalPart::executeCommand("csv_importexport", win, "KexiCSVExport", &args)) {
+    if (!KexiInternalPart::executeCommand("org.kexi-project.importexport.csv", win, "KexiCSVExport", &args)) {
         showError("Error exporting table contents.");
         return false;
     }

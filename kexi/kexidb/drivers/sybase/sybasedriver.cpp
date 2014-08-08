@@ -30,7 +30,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 
 using namespace KexiDB;
 
-K_EXPORT_KEXIDB_DRIVER(SybaseDriver, "sybase")
+K_EXPORT_KEXIDB_DRIVER(SybaseDriver, sybase)
 
 SybaseDriver::SybaseDriver(QObject *parent, const QVariantList &args) :
         Driver(parent, args)

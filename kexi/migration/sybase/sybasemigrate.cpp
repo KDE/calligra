@@ -18,6 +18,7 @@
 */
 
 #include "sybasemigrate.h"
+#include <migration/keximigrate_p.h>
 
 #include <QString>
 #include <QRegExp>

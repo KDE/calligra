@@ -21,7 +21,6 @@
 #define SYBASEMIGRATE_H
 
 #include <migration/keximigrate.h>
-#include <migration/keximigrate_p.h>
 #include <kexidb/drivers/sybase/sybaseconnection_p.h>
 
 namespace KexiMigration

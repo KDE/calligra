@@ -22,7 +22,6 @@
 
 #include <kdebug.h>
 #include <ktoggleaction.h>
-#include <kpluginfactory.h>
 
 #include <KexiMainWindowIface.h>
 #include <KexiWindow.h>
@@ -290,31 +289,6 @@ void KexiQueryPart::TempData::setQueryChangedInPreviousView(bool set)
 
 //----------------
 
-#if 0
-KexiQueryDataSource::KexiQueryDataSource(KexiPart::Part *part)
-        : KexiPart::DataSource(part)
-{
-}
-
-KexiQueryDataSource::~KexiQueryDataSource()
-{
-}
-
-KexiDB::FieldList *
-KexiQueryDataSource::fields(KexiProject *, const KexiPart::Item &)
-{
-    return 0;
-}
-
-KexiDB::Cursor *
-KexiQueryDataSource::cursor(KexiProject *, const KexiPart::Item &, bool)
-{
-    return 0;
-}
-#endif
-
-//----------------
-
-K_EXPORT_KEXI_PLUGIN( KexiQueryPart, query )
+K_EXPORT_KEXIPART_PLUGIN( KexiQueryPart, query )
 
 #include "kexiquerypart.moc"

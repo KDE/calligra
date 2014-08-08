@@ -21,6 +21,7 @@
 #include <db/drivermanager.h>
 #include <db/driver_p.h>
 #include <db/utils.h>
+
 #include "pqxxdriver.h"
 #include "pqxxconnection.h"
 #include <string>
@@ -29,7 +30,7 @@
 
 using namespace KexiDB;
 
-K_EXPORT_KEXIDB_DRIVER(pqxxSqlDriver, "pqxxsql")
+K_EXPORT_KEXIDB_DRIVER(pqxxSqlDriver, pqxxsql)
 
 //==================================================================================
 //

@@ -46,7 +46,6 @@
 #include <kexiutils/utils.h>
 #include <kexiproject.h>
 #include <KexiMainWindowIface.h>
-#include <kexiinternalpart.h>
 #include <kexitableview.h>
 #include <kexidragobjects.h>
 #include <kexidatatable.h>
