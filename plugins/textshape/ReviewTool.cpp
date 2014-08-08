@@ -33,7 +33,6 @@
 #include <KoAnnotationManager.h>
 #include <KoShapeUserData.h>
 #include <KoTextShapeData.h>
-#include <KoGlobal.h>
 
 #include <dialogs/SimpleSpellCheckingWidget.h>
 #include <dialogs/SimpleAnnotationWidget.h>

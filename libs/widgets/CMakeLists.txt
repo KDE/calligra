@@ -8,6 +8,7 @@ if (LIBATTICA_FOUND)
 endif (LIBATTICA_FOUND)
 
 set(kowidgets_LIB_SRCS
+    KoGlobal.cpp
     KoTagToolButton.cpp
     KoTagChooserWidget.cpp
     KoTagFilterWidget.cpp
@@ -97,6 +98,7 @@ set_target_properties(kowidgets PROPERTIES
 install(TARGETS kowidgets  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 install( FILES
+    KoGlobal.h
     KoResourceItemChooserContextMenu.h
     KoResourceTaggingManager.h
     KoGenericRegistryModel.h

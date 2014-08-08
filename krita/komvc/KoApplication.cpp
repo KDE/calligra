@@ -21,8 +21,6 @@
 
 #include "KoApplication.h"
 
-#include "KoGlobal.h"
-
 #ifndef QT_NO_DBUS
 #include "KoApplicationAdaptor.h"
 #include <QtDBus>
@@ -35,6 +33,7 @@
 #include "KoAutoSaveRecoveryDialog.h"
 #include <KoDpi.h>
 #include "KoPart.h"
+#include "KoGlobal.h"
 
 #include <kdeversion.h>
 #include <klocale.h>

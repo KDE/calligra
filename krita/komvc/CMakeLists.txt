@@ -26,7 +26,6 @@ set(komvc_LIB_SRCS
     KoDocumentInfo.cpp
     KoDocumentInfoDlg.cpp
     KoDocumentInfoPropsPage.cpp
-    KoGlobal.cpp
     KoGridData.cpp
     KoMainWindow.cpp
     KoPrintingDialog.cpp
