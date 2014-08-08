@@ -303,7 +303,7 @@ private slots:
      * Toggle full screen on/off.
      */
     void viewFullscreen(bool fullScreen);
-private slots:
+
     /**
      * Reload file
      */
@@ -349,7 +349,9 @@ public slots:
      *         but restore the original URL in slotFileSaveAs)
      */
     bool saveDocument(KoDocument *document, bool saveas = false, bool silent = false, int specialOutputFlag = 0);
-
+private slots:
+    void undo();
+    void redo();
 private:
 
     /**

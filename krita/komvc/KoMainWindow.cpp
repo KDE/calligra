@@ -241,6 +241,9 @@ public:
 
     bool noCleanup;
 
+    KAction *undo;
+    KAction *redo;
+
 };
 
 KoMainWindow::KoMainWindow(KoPart *part, const KComponentData &componentData)
@@ -280,11 +283,17 @@ KoMainWindow::KoMainWindow(KoPart *part, const KComponentData &componentData)
     actionCollection()->addAction(KStandardAction::Open, "file_open", this, SLOT(slotFileOpen()));
     d->recent = KStandardAction::openRecent(this, SLOT(slotFileOpenRecent(const KUrl&)), actionCollection());
     connect(d->recent, SIGNAL(recentListCleared()), this, SLOT(saveRecentFiles()));
+
     d->saveAction = actionCollection()->addAction(KStandardAction::Save,  "file_save", this, SLOT(slotFileSave()));
+
     d->saveActionAs = actionCollection()->addAction(KStandardAction::SaveAs,  "file_save_as", this, SLOT(slotFileSaveAs()));
     d->saveActionAs->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_S));
+
     d->printAction = actionCollection()->addAction(KStandardAction::Print,  "file_print", this, SLOT(slotFilePrint()));
     d->printActionPreview = actionCollection()->addAction(KStandardAction::PrintPreview,  "file_print_preview", this, SLOT(slotFilePrintPreview()));
+
+    d->undo = actionCollection()->addAction(KStandardAction::Undo, "edit_undo", this, SLOT(undo()));
+    d->redo = actionCollection()->addAction(KStandardAction::Redo, "edit_redo", this, SLOT(redo()));
 
     d->exportPdf  = new KAction(i18n("Export as PDF..."), this);
     d->exportPdf->setIcon(koIcon("application-pdf"));
@@ -534,10 +543,15 @@ void KoMainWindow::addView(KoView *view)
 void KoMainWindow::showView(KoView *view)
 {
     Q_ASSERT(d->views.contains(view));
+
     d->activeView = view;
+
     setCentralWidget(view);
     view->show();
     view->setFocus();
+
+    actionCollection()->action("edit_undo")->setText(activeView()->undoAction()->text());
+    actionCollection()->action("edit_redo")->setText(activeView()->redoAction()->text());
 }
 
 void KoMainWindow::updateReloadFileAction(KoDocument *doc)
@@ -1046,6 +1060,22 @@ bool KoMainWindow::saveDocument(KoDocument *document, bool saveas, bool silent, 
     return ret;
 }
 
+void KoMainWindow::undo()
+{
+    if (activeView()) {
+        activeView()->undoAction()->trigger();
+        d->undo->setText(activeView()->undoAction()->text());
+    }
+}
+
+void KoMainWindow::redo()
+{
+    if (activeView()) {
+        activeView()->redoAction()->trigger();
+        d->redo->setText(activeView()->redoAction()->text());
+    }
+}
+
 void KoMainWindow::closeEvent(QCloseEvent *e)
 {
     if(d->activeView && d->activeView->document() && d->activeView->document()->isLoading()) {
@@ -1436,26 +1466,19 @@ KoPrintJob* KoMainWindow::exportToPdf(KoPageLayout pageLayout, QString pdfFileNa
 
 void KoMainWindow::slotConfigureKeys()
 {
-    QAction* undoAction=0;
-    QAction* redoAction=0;
     QString oldUndoText;
     QString oldRedoText;
-    if(activeView()) {
-        //The undo/redo action text is "undo" + command, replace by simple text while inside editor
-        undoAction = activeView()->undoAction(); //actionCollection()->action("edit_undo");
-        redoAction = activeView()->redoAction(); //actionCollection()->action("edit_redo");
-        oldUndoText = undoAction->text();
-        oldRedoText = redoAction->text();
-        undoAction->setText(i18n("Undo"));
-        redoAction->setText(i18n("Redo"));
-    }
+
+    //The undo/redo action text is "undo" + command, replace by simple text while inside editor
+    oldUndoText = d->undo->text();
+    oldRedoText = d->redo->text();
+    d->undo->setText(i18n("Undo"));
+    d->redo->setText(i18n("Redo"));
 
     guiFactory()->configureShortcuts();
 
-    if(activeView()) {
-        undoAction->setText(oldUndoText);
-        redoAction->setText(oldRedoText);
-    }
+    d->undo->setText(oldUndoText);
+    d->redo->setText(oldRedoText);
 
     emit keyBindingsChanged();
 }

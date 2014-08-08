@@ -177,6 +177,9 @@ void KisMainWindow::showView(KoView *view)
         else {
             view->show();
         }
+        actionCollection()->action("edit_undo")->setText(activeView()->undoAction()->text());
+        actionCollection()->action("edit_redo")->setText(activeView()->redoAction()->text());
+
         m_guiClient->setCurrentView(view);
         updateWindowMenu();
     }
