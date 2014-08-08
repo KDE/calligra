@@ -377,7 +377,6 @@ KoMainWindow::KoMainWindow(KoPart *part, const KComponentData &componentData)
     KSharedConfigPtr configPtr = componentData.isValid() ? componentData.config() : KGlobal::config();
     d->recent->loadEntries(configPtr->group("RecentFiles"));
 
-
     createMainwindowGUI();
     d->mainWindowGuiIsBuilt = true;
 
@@ -1169,31 +1168,40 @@ void KoMainWindow::slotFileNew()
 
 void KoMainWindow::slotFileOpen()
 {
-    KUrl url;
+    QStringList urls;
     if (!isImporting()) {
-        KoFileDialog dialog(this, KoFileDialog::OpenFile, "OpenDocument");
-        dialog.setCaption(i18n("Open Document"));
+        KoFileDialog dialog(this, KoFileDialog::OpenFiles, "OpenDocument");
+        dialog.setCaption(i18n("Open Images"));
         dialog.setDefaultDir(qApp->applicationName().contains("krita") || qApp->applicationName().contains("karbon")
                                ? QDesktopServices::storageLocation(QDesktopServices::PicturesLocation)
                                : QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
         dialog.setMimeTypeFilters(koApp->mimeFilter(KoFilterManager::Import));
         dialog.setHideNameFilterDetailsOption();
-        url = dialog.url();
-    } else {
-        KoFileDialog dialog(this, KoFileDialog::ImportFile, "OpenDocument");
-        dialog.setCaption(i18n("Import Document"));
+        urls = dialog.urls();
+    }
+    else {
+        KoFileDialog dialog(this, KoFileDialog::ImportFiles, "OpenDocument");
+        dialog.setCaption(i18n("Import Images"));
         dialog.setDefaultDir(qApp->applicationName().contains("krita") || qApp->applicationName().contains("karbon")
                                 ? QDesktopServices::storageLocation(QDesktopServices::PicturesLocation)
                                 : QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
         dialog.setMimeTypeFilters(koApp->mimeFilter(KoFilterManager::Import));
         dialog.setHideNameFilterDetailsOption();
-        url = dialog.url();
+        urls = dialog.urls();
     }
 
-    if (url.isEmpty())
+    if (urls.isEmpty())
         return;
 
-    (void) openDocument(url);
+    foreach(const QString& url, urls) {
+
+        if (!url.isEmpty()) {
+            bool res = openDocument(KUrl::fromLocalFile(url));
+            if (!res) {
+                qWarning() << "Loading" << url << "failed";
+            }
+        }
+    }
 }
 
 void KoMainWindow::slotFileOpenRecent(const KUrl & url)
