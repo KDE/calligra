@@ -124,6 +124,7 @@ Item {
         color: "transparent";
         property int minimumX: 2;
         property int maximumX: base.width - handle.width - 2;
+        onMaximumXChanged: handle.resetHandle(base.useExponentialValue);
         Image {
             anchors.fill: parent;
             source: Settings.theme.icon("SVG-IMGTOOLS-SliderHandle-1");
