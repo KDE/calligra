@@ -231,13 +231,14 @@ void KisZoomManager::slotZoomChanged(KoZoomMode::Mode mode, qreal zoom)
 
     qreal humanZoom = zoom * 100.0;
 
-    if (m_view->parentView()) {
-        m_view->parentView()->
-                showFloatingMessage(
-                    i18nc("floating message about zoom", "Zoom: %1 \%",
-                          KritaUtils::prettyFormatReal(humanZoom)),
-                    QIcon(), 500, KisFloatingMessage::Low, Qt::AlignCenter);
-    }
+// XXX: KOMVC -- this is very irritating in MDI mode
+//    if (m_view->parentView()) {
+//        m_view->parentView()->
+//                showFloatingMessage(
+//                    i18nc("floating message about zoom", "Zoom: %1 \%",
+//                          KritaUtils::prettyFormatReal(humanZoom)),
+//                    QIcon(), 500, KisFloatingMessage::Low, Qt::AlignCenter);
+//    }
     qreal scaleX, scaleY;
     m_view->canvasBase()->coordinatesConverter()->imageScale(&scaleX, &scaleY);
     KIS_ASSERT_RECOVER_NOOP(scaleX == scaleY && "Zoom is not isotropic!");
