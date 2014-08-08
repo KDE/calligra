@@ -1284,7 +1284,9 @@ void KoMainWindow::slotFileClose()
 void KoMainWindow::slotFileCloseAll()
 {
     foreach(QPointer<KoView> view, d->views) {
-        view->close();
+        if (view) {
+            view->close();
+        }
     }
 }
 
