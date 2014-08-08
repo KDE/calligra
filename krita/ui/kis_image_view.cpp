@@ -51,6 +51,7 @@
 #include "kis_mirror_axis.h"
 #include "kis_tool_freehand.h"
 #include "kis_part2.h"
+#include "kis_main_window.h"
 
 #include "krita/gemini/ViewModeSwitchEvent.h"
 
@@ -66,6 +67,7 @@ public:
         , doc(0)
         , parentView(0)
         , mirrorAxis(0)
+        , actionCollection(0)
     {}
 
     ~Private()
@@ -93,9 +95,11 @@ public:
     KisMaskSP currentMask;
 
     KisMirrorAxis* mirrorAxis;
+
+    KActionCollection* actionCollection;
 };
 
-KisImageView::KisImageView(KoPart *part, KisDoc2 *doc, QWidget *parent)
+KisImageView::KisImageView(KoPart *part, KisDoc2 *doc, KoMainWindow *parent)
     : KoView(part, doc, parent)
     , d(new Private())
 {
@@ -104,12 +108,14 @@ KisImageView::KisImageView(KoPart *part, KisDoc2 *doc, QWidget *parent)
 
     setFocusPolicy(Qt::NoFocus);
 
+    d->actionCollection = parent->actionCollection();
+
     d->doc = doc;
     d->viewConverter = new KisCoordinatesConverter();
 
     KisConfig cfg;
 
-    d->canvasController = new KisCanvasController(this, actionCollection());
+    d->canvasController = new KisCanvasController(this, d->actionCollection);
     d->canvasController->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     d->canvasController->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     d->canvasController->setDrawShadow(false);
@@ -135,7 +141,7 @@ KisImageView::KisImageView(KoPart *part, KisDoc2 *doc, QWidget *parent)
     KoToolManager::instance()->addController(d->canvasController);
 
     d->zoomManager = new KisZoomManager(this, d->viewConverter, d->canvasController);
-    d->zoomManager->setup(actionCollection());
+    d->zoomManager->setup(d->actionCollection);
 
     connect(d->canvasController, SIGNAL(documentSizeChanged()), d->zoomManager, SLOT(slotScrollAreaSizeChanged()));
     setAcceptDrops(true);
@@ -393,12 +399,12 @@ bool KisImageView::event(QEvent *event)
 
                 provider->resourceManager()->setResource(KisCanvasResourceProvider::MirrorAxesCenter, syncObject->mirrorAxesCenter);
                 if (provider->mirrorHorizontal() != syncObject->mirrorHorizontal) {
-                    QAction* mirrorAction = actionCollection()->action("hmirror_action");
+                    QAction* mirrorAction = d->actionCollection->action("hmirror_action");
                     mirrorAction->setChecked(syncObject->mirrorHorizontal);
                     provider->setMirrorHorizontal(syncObject->mirrorHorizontal);
                 }
                 if (provider->mirrorVertical() != syncObject->mirrorVertical) {
-                    QAction* mirrorAction = actionCollection()->action("vmirror_action");
+                    QAction* mirrorAction = d->actionCollection->action("vmirror_action");
                     mirrorAction->setChecked(syncObject->mirrorVertical);
                     provider->setMirrorVertical(syncObject->mirrorVertical);
                 }
@@ -432,7 +438,7 @@ bool KisImageView::event(QEvent *event)
                 document()->gridData().setShowGrid(syncObject->gridData->showGrid());
                 document()->gridData().setSnapToGrid(syncObject->gridData->snapToGrid());
 
-                actionCollection()->action("zoom_in")->trigger();
+                d->actionCollection->action("zoom_in")->trigger();
                 qApp->processEvents();
 
 

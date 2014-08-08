@@ -43,11 +43,11 @@ KoViewAdaptor::~KoViewAdaptor()
 QStringList KoViewAdaptor::actions()
 {
     QStringList tmp_actions;
-    QList<QAction*> lst = m_pView->actionCollection()->actions();
-    foreach(QAction* it, lst) {
-        if (it->isEnabled())
-            tmp_actions.append(it->objectName());
-    }
+//    QList<QAction*> lst = m_pView-actionCollection()->actions();
+//    foreach(QAction* it, lst) {
+//        if (it->isEnabled())
+//            tmp_actions.append(it->objectName());
+//    }
     return tmp_actions;
 }
 

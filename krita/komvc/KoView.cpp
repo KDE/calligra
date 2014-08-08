@@ -54,8 +54,6 @@
 #include <kselectaction.h>
 #include <kconfiggroup.h>
 #include <kdeprintdialog.h>
-#include <kxmlguifactory.h>
-
 #include <QDockWidget>
 #include <QToolBar>
 #include <QApplication>
@@ -188,26 +186,20 @@ KoView::KoView(KoPart *part, KoDocument *document, QWidget *parent)
                 this, SLOT(slotClearStatusText()));
     }
 
-    actionCollection()->addAssociatedWidget(this);
+    //actionCollection()->addAssociatedWidget(this);
 
-    /**
-     * WARNING: This code changes the context of global shortcuts
-     *          only. All actions added later will have the default
-     *          context, which is Qt::WindowShortcut!
-     */
-    foreach(QAction* action, actionCollection()->actions()) {
-        action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
-    }
+//    /**
+//     * WARNING: This code changes the context of global shortcuts
+//     *          only. All actions added later will have the default
+//     *          context, which is Qt::WindowShortcut!
+//     */
+//    foreach(QAction* action, actionCollection()->actions()) {
+//        action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+//    }
 }
 
 KoView::~KoView()
 {
-    if (factory()) {
-        foreach(KXMLGUIClient *client, childClients()) {
-            factory()->removeClient(client);
-        }
-        factory()->removeClient(this);
-    }
     d->part->removeView(this);
     delete d;
 }
@@ -348,14 +340,14 @@ QPrintDialog *KoView::createPrintDialog(KoPrintJob *printJob, QWidget *parent)
 
 void KoView::setupGlobalActions()
 {
-    actionCollection()->addAction("edit_undo", new KoUndoStackAction(d->document->undoStack(), KoUndoStackAction::UNDO));
-    actionCollection()->addAction("edit_redo", new KoUndoStackAction(d->document->undoStack(), KoUndoStackAction::RED0));
+////    actionCollection()->addAction("edit_undo", new KoUndoStackAction(d->document->undoStack(), KoUndoStackAction::UNDO));
+////    actionCollection()->addAction("edit_redo", new KoUndoStackAction(d->document->undoStack(), KoUndoStackAction::RED0));
 
-    d->actionAuthor  = new KSelectAction(koIcon("user-identity"), i18n("Active Author Profile"), this);
-    connect(d->actionAuthor, SIGNAL(triggered(const QString &)), this, SLOT(changeAuthorProfile(const QString &)));
-    actionCollection()->addAction("settings_active_author", d->actionAuthor);
+//    d->actionAuthor  = new KSelectAction(koIcon("user-identity"), i18n("Active Author Profile"), this);
+//    connect(d->actionAuthor, SIGNAL(triggered(const QString &)), this, SLOT(changeAuthorProfile(const QString &)));
+//    actionCollection()->addAction("settings_active_author", d->actionAuthor);
 
-    slotUpdateAuthorProfileActions();
+//    slotUpdateAuthorProfileActions();
 }
 
 void KoView::changeAuthorProfile(const QString &profileName)
@@ -432,6 +424,7 @@ QList<QAction*> KoView::createChangeUnitActions(bool addPixelUnit)
 
 void KoView::guiActivateEvent(bool activated)
 {
+    qDebug() << "KoView::guiActivateEvent";
     Q_UNUSED(activated);
 }
 

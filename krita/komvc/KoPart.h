@@ -176,7 +176,7 @@ public:
      * Create a new view for the document. The view is added to the list of
      * views, and if the document wasn't known yet, it's registered as well.
      */
-    KoView *createView(KoDocument *document, QWidget *parent = 0);
+    KoView *createView(KoDocument *document, KoMainWindow *parent);
 
     /**
      * Adds a view to the document. If the part doesn't know yet about
@@ -260,7 +260,7 @@ protected:
      */
     virtual QList<CustomDocumentWidgetItem> createCustomDocumentWidgets(QWidget *parent);
 
-    virtual KoView *createViewInstance(KoDocument *document, QWidget *parent) = 0;
+    virtual KoView *createViewInstance(KoDocument *document, KoMainWindow *parent) = 0;
 
     /**
      * Override this to create a QGraphicsItem that does not rely
@@ -291,7 +291,7 @@ public:
     {}
 
     KoDocument *createDocument() const { return 0; }
-    KoView *createViewInstance(KoDocument* document, QWidget* parent) { Q_UNUSED(document); Q_UNUSED(parent); return 0; }
+    KoView *createViewInstance(KoDocument* document, KoMainWindow* parent) { Q_UNUSED(document); Q_UNUSED(parent); return 0; }
 
     virtual KoMainWindow *createMainWindow() { return 0; }
 protected:

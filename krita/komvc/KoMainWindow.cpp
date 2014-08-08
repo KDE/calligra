@@ -484,9 +484,7 @@ void KoMainWindow::addView(KoView *view)
     d->dockWidgetMenu->setVisible(true);
 
     d->views.append(view);
-    // XXX: This should change -- with multiple views per main window, the view should
-    // no longer be a KXMLGUIClient.
-    guiFactory()->addClient(view);
+
     showView(view);
 
     bool viewHasDocument = d->activeView ? (d->activeView->document() ? true : false) : false;
@@ -722,7 +720,7 @@ void KoMainWindow::slotLoadCompleted()
 {
     KoDocument *newdoc = qobject_cast<KoDocument*>(sender());
 
-    KoView *view = newdoc->documentPart()->createView(newdoc);
+    KoView *view = newdoc->documentPart()->createView(newdoc, this);
     addView(view);
 
     disconnect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
@@ -1425,26 +1423,27 @@ KoPrintJob* KoMainWindow::exportToPdf(KoPageLayout pageLayout, QString pdfFileNa
 
 void KoMainWindow::slotConfigureKeys()
 {
-    QAction* undoAction=0;
-    QAction* redoAction=0;
-    QString oldUndoText;
-    QString oldRedoText;
-    if(activeView()) {
-        //The undo/redo action text is "undo" + command, replace by simple text while inside editor
-        undoAction = activeView()->actionCollection()->action("edit_undo");
-        redoAction = activeView()->actionCollection()->action("edit_redo");
-        oldUndoText = undoAction->text();
-        oldRedoText = redoAction->text();
-        undoAction->setText(i18n("Undo"));
-        redoAction->setText(i18n("Redo"));
-    }
+    // XXX: KOMVC
+//    QAction* undoAction=0;
+//    QAction* redoAction=0;
+//    QString oldUndoText;
+//    QString oldRedoText;
+//    if(activeView()) {
+//        //The undo/redo action text is "undo" + command, replace by simple text while inside editor
+//        undoAction = activeView()->actionCollection()->action("edit_undo");
+//        redoAction = activeView()->actionCollection()->action("edit_redo");
+//        oldUndoText = undoAction->text();
+//        oldRedoText = redoAction->text();
+//        undoAction->setText(i18n("Undo"));
+//        redoAction->setText(i18n("Redo"));
+//    }
 
     guiFactory()->configureShortcuts();
 
-    if(activeView()) {
-        undoAction->setText(oldUndoText);
-        redoAction->setText(oldRedoText);
-    }
+//    if(activeView()) {
+//        undoAction->setText(oldUndoText);
+//        redoAction->setText(oldRedoText);
+//    }
 
     emit keyBindingsChanged();
 }

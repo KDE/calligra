@@ -59,7 +59,7 @@ public:
     void showStartUpWidget(KoMainWindow *parent, bool alwaysShow);
 
     /// reimplemented
-    virtual KoView *createViewInstance(KoDocument *document, QWidget *parent);
+    virtual KoView *createViewInstance(KoDocument *document, KoMainWindow *parent);
 
     /// reimplemented
     virtual QGraphicsItem *createCanvasItem(KoDocument *document);

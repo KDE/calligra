@@ -152,7 +152,7 @@ void KoPart::removeDocument(KoDocument *document)
     document->deleteLater();
 }
 
-KoView *KoPart::createView(KoDocument *document, QWidget *parent)
+KoView *KoPart::createView(KoDocument *document, KoMainWindow *parent)
 {
     KoView *view = createViewInstance(document, parent);
     addView(view, document);
@@ -357,7 +357,6 @@ void KoPart::viewDestroyed()
 {
     KoView *view = qobject_cast<KoView*>(sender());
     if (view) {
-        view->factory()->removeClient(view);
         removeView(view);
     }
 }

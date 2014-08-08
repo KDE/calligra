@@ -47,7 +47,7 @@ class KRITAUI_EXPORT KisImageView : public KoView
 {
     Q_OBJECT
 public:
-    explicit KisImageView(KoPart *part, KisDoc2 * doc, QWidget *parent = 0);
+    explicit KisImageView(KoPart *part, KisDoc2 * doc, KoMainWindow *parent);
     virtual ~KisImageView();
 
     // Temporary while teasing apart view and mainwindow

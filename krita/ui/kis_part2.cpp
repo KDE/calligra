@@ -79,7 +79,7 @@ KoDocument *KisPart2::createDocument() const
     return doc;
 }
 
-KoView *KisPart2::createViewInstance(KoDocument *document, QWidget *parent)
+KoView *KisPart2::createViewInstance(KoDocument *document, KoMainWindow *parent)
 {
     qApp->setOverrideCursor(Qt::WaitCursor);
     QPointer<KisImageView>v = new KisImageView(this, qobject_cast<KisDoc2*>(document), parent);
