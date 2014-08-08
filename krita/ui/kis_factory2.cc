@@ -107,9 +107,7 @@ QObject* KisFactory2::create( const char* /*iface*/, QWidget* /*parentWidget*/, 
     Q_UNUSED( args );
     Q_UNUSED( keyword );
 
-    KisPart2 *part = new KisPart2(parent);
-    return part;
-
+    return KisPart2::instance();
 }
 
 

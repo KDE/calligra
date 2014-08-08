@@ -55,7 +55,7 @@ public:
      * @param parent the parent widget
      * @param doc the document that wants to be altered
      */
-    KisCustomImageWidget(QWidget *parent, KisDoc2 *doc, qint32 defWidth, qint32 defHeight, double resolution, const QString & defColorModel, const QString & defColorDepth, const QString & defColorProfile, const QString & imageName);
+    KisCustomImageWidget(QWidget *parent, qint32 defWidth, qint32 defHeight, double resolution, const QString & defColorModel, const QString & defColorDepth, const QString & defColorProfile, const QString & imageName);
     virtual ~KisCustomImageWidget();
     
 private slots:
@@ -77,9 +77,8 @@ signals:
     void documentSelected(KoDocument*);
 
 protected:
-    KisDoc2 *m_doc;
     
-    bool createNewImage();
+    KisDoc2 *createNewImage();
     
     /// Set the number of layers that will be created
     void setNumberOfLayers(int layers);

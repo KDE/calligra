@@ -474,7 +474,6 @@ bool KoApplication::start()
 
 KoApplication::~KoApplication()
 {
-    delete d->part;
     delete d;
 }
 

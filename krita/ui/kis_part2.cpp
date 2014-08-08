@@ -47,8 +47,14 @@
 
 #include <QApplication>
 
-KisPart2::KisPart2(QObject *parent)
-    : KoPart(parent)
+KisPart2* KisPart2::instance()
+{
+    K_GLOBAL_STATIC(KisPart2, s_instance)
+    return s_instance;
+}
+
+KisPart2::KisPart2()
+    : KoPart(0)
     , m_flipbook(0)
     , m_dieOnError(false)
 {
@@ -69,6 +75,7 @@ KisPart2::~KisPart2()
 KoDocument *KisPart2::createDocument() const
 {
     KoDocument *doc = new KisDoc2(this);
+    qDebug() << "Created document" << doc;
     return doc;
 }
 
@@ -126,7 +133,7 @@ QList<KoPart::CustomDocumentWidgetItem> KisPart2::createCustomDocumentWidgets(QW
     {
         KoPart::CustomDocumentWidgetItem item;
         item.widget = new KisCustomImageWidget(parent,
-                                               qobject_cast<KisDoc2*>(createDocument()), w, h, cfg.defImageResolution(), cfg.defColorModel(), cfg.defaultColorDepth(), cfg.defColorProfile(),
+                                               w, h, cfg.defImageResolution(), cfg.defColorModel(), cfg.defaultColorDepth(), cfg.defColorProfile(),
                                                i18n("unnamed"));
 
         item.icon = "application-x-krita";
@@ -141,7 +148,7 @@ QList<KoPart::CustomDocumentWidgetItem> KisPart2::createCustomDocumentWidgets(QW
 
         KoPart::CustomDocumentWidgetItem item;
         item.widget = new KisImageFromClipboard(parent,
-                                                qobject_cast<KisDoc2*>(createDocument()), w, h, cfg.defImageResolution(), cfg.defColorModel(), cfg.defaultColorDepth(), cfg.defColorProfile(),
+                                                w, h, cfg.defImageResolution(), cfg.defColorModel(), cfg.defaultColorDepth(), cfg.defColorProfile(),
                                                 i18n("unnamed"));
 
         item.title = i18n("Create from Clipboard");

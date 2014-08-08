@@ -59,19 +59,19 @@
 #include <kis_paint_layer.h>
 #include <kis_paint_device.h>
 #include <kis_painter.h>
-#include <kis_config.h>
 
+#include "kis_config.h"
+#include "kis_part2.h"
 #include "kis_clipboard.h"
 #include "kis_doc2.h"
 #include "widgets/kis_cmb_idlist.h"
 #include "widgets/squeezedcombobox.h"
 
 
-KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, KisDoc2* doc, qint32 defWidth, qint32 defHeight, double resolution, const QString& defColorModel, const QString& defColorDepth, const QString& defColorProfile, const QString& imageName)
+KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, qint32 defWidth, qint32 defHeight, double resolution, const QString& defColorModel, const QString& defColorDepth, const QString& defColorProfile, const QString& imageName)
     : WdgNewImage(parent)
 {
     setObjectName("KisCustomImageWidget");
-    m_doc = doc;
 
     txtName->setText(imageName);
     m_widthUnit = KoUnit(KoUnit::Pixel, resolution);
@@ -208,13 +208,15 @@ void KisCustomImageWidget::heightChanged(double value)
 
 void KisCustomImageWidget::createImage()
 {
-    if (createNewImage()) {
-        emit documentSelected(m_doc);
+    KisDoc2 *doc = createNewImage();
+    if (doc) {
+        emit documentSelected(doc);
     }
 }
 
-bool KisCustomImageWidget::createNewImage()
+KisDoc2* KisCustomImageWidget::createNewImage()
 {
+
     const KoColorSpace * cs = colorSpaceSelector->currentColorSpace();
 
     if (cs->colorModelId() == RGBAColorModelID &&
@@ -241,10 +243,11 @@ bool KisCustomImageWidget::createNewImage()
                 qDebug() << ppVar(cs->name());
                 qDebug() << ppVar(cs->profile()->name());
                 qDebug() << ppVar(cs->profile()->info());
-                return false;
+                return 0;
             }
         }
     }
+    KisDoc2 *doc = static_cast<KisDoc2*>(KisPart2::instance()->createDocument());
 
     QColor qc = cmbColor->color();
 
@@ -257,9 +260,9 @@ bool KisCustomImageWidget::createNewImage()
 
     qc.setAlpha(backgroundOpacity());
     KoColor bgColor(qc, cs);
-    m_doc->newImage(txtName->text(), width, height, cs, bgColor, txtDescription->toPlainText(), resolution);
+    doc->newImage(txtName->text(), width, height, cs, bgColor, txtDescription->toPlainText(), resolution);
 
-    KisImageWSP image = m_doc->image();
+    KisImageWSP image = doc->image();
     if (image && image->root() && image->root()->firstChild()) {
         KisLayer * layer = dynamic_cast<KisLayer*>(image->root()->firstChild().data());
         if (layer) {
@@ -284,7 +287,7 @@ bool KisCustomImageWidget::createNewImage()
     KisConfig cfg;
     cfg.setNumDefaultLayers(intNumLayers->value());
 
-    return true;
+    return doc;
 }
 
 void KisCustomImageWidget::setNumberOfLayers(int layers)

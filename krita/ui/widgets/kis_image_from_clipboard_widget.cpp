@@ -65,8 +65,8 @@
 #include "widgets/squeezedcombobox.h"
 
 
-KisImageFromClipboard::KisImageFromClipboard(QWidget* parent, KisDoc2* doc, qint32 defWidth, qint32 defHeight, double resolution, const QString& defColorModel, const QString& defColorDepth, const QString& defColorProfile, const QString& imageName)
-: KisCustomImageWidget(parent, doc, defWidth, defHeight, resolution, defColorModel, defColorDepth, defColorProfile, imageName)
+KisImageFromClipboard::KisImageFromClipboard(QWidget* parent, qint32 defWidth, qint32 defHeight, double resolution, const QString& defColorModel, const QString& defColorDepth, const QString& defColorProfile, const QString& imageName)
+: KisCustomImageWidget(parent, defWidth, defHeight, resolution, defColorModel, defColorDepth, defColorProfile, imageName)
 {
     setObjectName("KisImageFromClipboard");
     
@@ -90,9 +90,9 @@ KisImageFromClipboard::~KisImageFromClipboard()
 
 void KisImageFromClipboard::createImage()
 {
-    createNewImage();
+    KisDoc2 *doc = createNewImage();
     
-    KisImageWSP image = m_doc->image();
+    KisImageWSP image = doc->image();
     if (image && image->root() && image->root()->firstChild()) {
         KisLayer * layer = dynamic_cast<KisLayer*>(image->root()->firstChild().data());
 
@@ -108,7 +108,7 @@ void KisImageFromClipboard::createImage()
 
     }
 
-    emit documentSelected(m_doc);
+    emit documentSelected(doc);
 }
 
 
