@@ -31,7 +31,6 @@
 #include "KoFilterManager.h"
 #include "KoFileDialog.h"
 #include "KoDocumentInfo.h"
-#include "KoMainWindow.h"
 #include "KoView.h"
 
 #include "KoOdfStylesReader.h"
@@ -87,8 +86,6 @@
 #define INTERNAL_PROTOCOL "intern"
 #define INTERNAL_PREFIX "intern:/"
 // Warning, keep it sync in koStore.cc
-#include <kactioncollection.h>
-#include "KoUndoStackAction.h"
 
 #include <unistd.h>
 
