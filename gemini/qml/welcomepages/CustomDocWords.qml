@@ -356,7 +356,7 @@ Page {
                     id: columnCount;
                     width: parent.width / 2;
                     placeholder: "Amount";
-                    min: 1; max: 99; decimals: 0;
+                    min: 1; max: 6; decimals: 0;
                     value: 1;
                 }
                 RangeInput {
