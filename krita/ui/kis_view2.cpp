@@ -143,15 +143,15 @@ class StatusBarItem
 public:
     StatusBarItem() // for QValueList
         : m_widget(0),
-            m_connected(false),
-            m_hidden(false) {}
+          m_connected(false),
+          m_hidden(false) {}
 
     StatusBarItem(QWidget * widget, int stretch, bool permanent)
         : m_widget(widget),
-            m_stretch(stretch),
-            m_permanent(permanent),
-            m_connected(false),
-            m_hidden(false) {}
+          m_stretch(stretch),
+          m_permanent(permanent),
+          m_connected(false),
+          m_hidden(false) {}
 
     bool operator==(const StatusBarItem& rhs) {
         return m_widget == rhs.m_widget;
@@ -294,109 +294,111 @@ KisView2::KisView2(QWidget * parent)
     : KXMLGUIClient(),
       m_d(new KisView2Private())
 {
+    qDebug() << "Constructing KisView2";
     m_d->mainWindow = dynamic_cast<QMainWindow*>(parent);
 
     setXMLFile(QString("%1.rc").arg(qAppName()));
     m_d->canvasResourceProvider = new KisCanvasResourceProvider(this);
-       m_d->canvasResourceManager = new KoCanvasResourceManager();
-       m_d->canvasResourceProvider->setResourceManager(m_d->canvasResourceManager);
+    m_d->canvasResourceManager = new KoCanvasResourceManager();
+    m_d->canvasResourceProvider->setResourceManager(m_d->canvasResourceManager);
 
-       createActions();
-       createManagers();
+    createActions();
+    createManagers();
 
-       m_d->controlFrame = new KisControlFrame(this, mainWindow());
+    m_d->controlFrame = new KisControlFrame(this, mainWindow());
 
-       //Check to draw scrollbars after "Canvas only mode" toggle is created.
-       this->showHideScrollbars();
+    //Check to draw scrollbars after "Canvas only mode" toggle is created.
+    this->showHideScrollbars();
 
 
-       //Workaround, by default has the same shortcut as hide/show dockers
-       if (mainWindow()) {
+    //Workaround, by default has the same shortcut as hide/show dockers
+    if (mainWindow()) {
 
-           mainWindow()->setDockNestingEnabled(true);
-           actionCollection()->addAction(KStandardAction::KeyBindings, "keybindings", mainWindow()->guiFactory(), SLOT(configureShortcuts()));
+        mainWindow()->setDockNestingEnabled(true);
+        actionCollection()->addAction(KStandardAction::KeyBindings, "keybindings", mainWindow()->guiFactory(), SLOT(configureShortcuts()));
 
-           connect(mainWindow(), SIGNAL(documentSaved()), this, SLOT(slotDocumentSaved()));
-           KAction *action = dynamic_cast<KAction*>(mainWindow()->actionCollection()->action("view_toggledockers"));
-           if (action) {
-               action->setShortcut(QKeySequence(), KAction::DefaultShortcut);
-               action->setShortcut(QKeySequence(), KAction::ActiveShortcut);
-           }
+        connect(mainWindow(), SIGNAL(documentSaved()), this, SLOT(slotDocumentSaved()));
+        KAction *action = dynamic_cast<KAction*>(mainWindow()->actionCollection()->action("view_toggledockers"));
+        if (action) {
+            action->setShortcut(QKeySequence(), KAction::DefaultShortcut);
+            action->setShortcut(QKeySequence(), KAction::ActiveShortcut);
+        }
 
-           KoCanvasController *dummy = new KoDummyCanvasController(actionCollection());
-           KoToolManager::instance()->registerTools(actionCollection(), dummy);
+        KoCanvasController *dummy = new KoDummyCanvasController(actionCollection());
+        KoToolManager::instance()->registerTools(actionCollection(), dummy);
 
-           KoToolBoxFactory toolBoxFactory;
-           QDockWidget* toolbox = mainWindow()->createDockWidget(&toolBoxFactory);
-           toolbox->setMinimumWidth(60);
+        KoToolBoxFactory toolBoxFactory;
+        QDockWidget* toolbox = mainWindow()->createDockWidget(&toolBoxFactory);
+        toolbox->setMinimumWidth(60);
 
-           mainWindow()->dockerManager()->setIcons(false);
-       }
+        mainWindow()->dockerManager()->setIcons(false);
+    }
 
-       m_d->statusBar = new KisStatusBar(this);
-       QTimer::singleShot(0, this, SLOT(makeStatusBarVisible()));
+    m_d->statusBar = new KisStatusBar(this);
+    QTimer::singleShot(0, this, SLOT(makeStatusBarVisible()));
 
-       connect(m_d->nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)),
-               m_d->controlFrame->paintopBox(), SLOT(slotCurrentNodeChanged(KisNodeSP)));
+    connect(m_d->nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)),
+            m_d->controlFrame->paintopBox(), SLOT(slotCurrentNodeChanged(KisNodeSP)));
 
-       connect(KoToolManager::instance(), SIGNAL(inputDeviceChanged(KoInputDevice)),
-               m_d->controlFrame->paintopBox(), SLOT(slotInputDeviceChanged(KoInputDevice)));
+    connect(KoToolManager::instance(), SIGNAL(inputDeviceChanged(KoInputDevice)),
+            m_d->controlFrame->paintopBox(), SLOT(slotInputDeviceChanged(KoInputDevice)));
 
-       connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*,int)),
-               m_d->controlFrame->paintopBox(), SLOT(slotToolChanged(KoCanvasController*,int)));
+    connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*,int)),
+            m_d->controlFrame->paintopBox(), SLOT(slotToolChanged(KoCanvasController*,int)));
 
-       connect(m_d->nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)),
-               resourceProvider(), SLOT(slotNodeActivated(KisNodeSP)));
+    connect(m_d->nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)),
+            resourceProvider(), SLOT(slotNodeActivated(KisNodeSP)));
 
-       connect(resourceProvider()->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
-               m_d->controlFrame->paintopBox(), SLOT(slotCanvasResourceChanged(int,QVariant)));
+    connect(resourceProvider()->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
+            m_d->controlFrame->paintopBox(), SLOT(slotCanvasResourceChanged(int,QVariant)));
 
-       loadPlugins();
+    loadPlugins();
 
-       KisInputProfileManager::instance()->loadProfiles();
+    KisInputProfileManager::instance()->loadProfiles();
 
-   #if 0
-       //check for colliding shortcuts
-       QSet<QKeySequence> existingShortcuts;
-       foreach(QAction* action, actionCollection()->actions()) {
-           if(action->shortcut() == QKeySequence(0)) {
-               continue;
-           }
-           dbgUI << "shortcut " << action->text() << " " << action->shortcut();
-           Q_ASSERT(!existingShortcuts.contains(action->shortcut()));
-           existingShortcuts.insert(action->shortcut());
-       }
-   #endif
+#if 0
+    //check for colliding shortcuts
+    QSet<QKeySequence> existingShortcuts;
+    foreach(QAction* action, actionCollection()->actions()) {
+        if(action->shortcut() == QKeySequence(0)) {
+            continue;
+        }
+        dbgUI << "shortcut " << action->text() << " " << action->shortcut();
+        Q_ASSERT(!existingShortcuts.contains(action->shortcut()));
+        existingShortcuts.insert(action->shortcut());
+    }
+#endif
 
-       KoResourceServer<KisPaintOpPreset> * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
-       KisPaintOpPreset *preset = rserver->resourceByName("Basic_tip_default");
-       if (!preset) {
-           if (rserver->resources().isEmpty()) {
-               KMessageBox::error(mainWindow(), i18n("Krita cannot find any brush presets and will close now. Please check your installation.", i18n("Critical Error")));
-               exit(0);
-           }
-           preset = rserver->resources().first();
-       }
-       if (preset) {
-           paintOpBox()->resourceSelected(preset);
-       }
+    KoResourceServer<KisPaintOpPreset> * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
+    KisPaintOpPreset *preset = rserver->resourceByName("Basic_tip_default");
+    if (!preset) {
+        if (rserver->resources().isEmpty()) {
+            KMessageBox::error(mainWindow(), i18n("Krita cannot find any brush presets and will close now. Please check your installation.", i18n("Critical Error")));
+            exit(0);
+        }
+        preset = rserver->resources().first();
+    }
+    if (preset) {
+        paintOpBox()->resourceSelected(preset);
+    }
 
-       foreach(const QString & docker, KoDockRegistry::instance()->keys()) {
-           KoDockFactoryBase *factory = KoDockRegistry::instance()->value(docker);
-           if (mainWindow())
-               mainWindow()->createDockWidget(factory);
-       }
-       foreach(KoCanvasObserverBase* observer, mainWindow()->canvasObservers()) {
-           KisMainwindowObserver* mainwindowObserver = dynamic_cast<KisMainwindowObserver*>(observer);
-           if (mainwindowObserver) {
-               mainwindowObserver->setMainWindow(this);
-           }
-       }
+    foreach(const QString & docker, KoDockRegistry::instance()->keys()) {
+        KoDockFactoryBase *factory = KoDockRegistry::instance()->value(docker);
+        if (mainWindow())
+            mainWindow()->createDockWidget(factory);
+    }
+    foreach(KoCanvasObserverBase* observer, mainWindow()->canvasObservers()) {
+        KisMainwindowObserver* mainwindowObserver = dynamic_cast<KisMainwindowObserver*>(observer);
+        if (mainwindowObserver) {
+            mainwindowObserver->setMainWindow(this);
+        }
+    }
 
-       m_d->actionManager->updateGUI();
+    m_d->actionManager->updateGUI();
 
-       connect(mainWindow(), SIGNAL(themeChanged()), this, SLOT(updateIcons()));
-       updateIcons();
+    connect(mainWindow(), SIGNAL(themeChanged()), this, SLOT(updateIcons()));
+    updateIcons();
+    qDebug() << "KisView2 Constructed";
 }
 
 
@@ -460,7 +462,7 @@ void KisView2::setCurrentView(KoView *view)
 
         // Wait for the async image to have loaded
         KisDoc2* doc = qobject_cast<KisDoc2*>(view->document());
-//        connect(canvasController()->proxyObject, SIGNAL(documentMousePositionChanged(QPointF)), d->statusBar, SLOT(documentMousePositionChanged(QPointF)));
+        //        connect(canvasController()->proxyObject, SIGNAL(documentMousePositionChanged(QPointF)), d->statusBar, SLOT(documentMousePositionChanged(QPointF)));
 
         m_d->currentImageView = imageView;
         imageView->canvasBase()->setSharedResourceManager(m_d->canvasResourceManager);
@@ -719,11 +721,11 @@ void KisView2::slotLoadingFinished()
     }
 
     // get the assistants and push them to the manager
-// XXX: KOMVC: assistants!!!
-//    QList<KisPaintingAssistant*> paintingAssistants = document()->preLoadedAssistants();
-//    foreach (KisPaintingAssistant* assistant, paintingAssistants) {
-//        m_d->paintingAssistantsDecoration->addAssistant(assistant);
-//    }
+    // XXX: KOMVC: assistants!!!
+    //    QList<KisPaintingAssistant*> paintingAssistants = document()->preLoadedAssistants();
+    //    foreach (KisPaintingAssistant* assistant, paintingAssistants) {
+    //        m_d->paintingAssistantsDecoration->addAssistant(assistant);
+    //    }
 
     /**
      * Dirty hack alert
@@ -735,12 +737,12 @@ void KisView2::slotLoadingFinished()
         m_d->currentImageView->viewConverter()->setZoomMode(KoZoomMode::ZOOM_PAGE);
 
 
-//    if (m_d->paintingAssistantsDecoration){
-//        foreach(KisPaintingAssistant* assist, document()->preLoadedAssistants()){
-//            m_d->paintingAssistantsDecoration->addAssistant(assist);
-//        }
-//        m_d->paintingAssistantsDecoration->setVisible(true);
-//    }
+    //    if (m_d->paintingAssistantsDecoration){
+    //        foreach(KisPaintingAssistant* assist, document()->preLoadedAssistants()){
+    //            m_d->paintingAssistantsDecoration->addAssistant(assist);
+    //        }
+    //        m_d->paintingAssistantsDecoration->setVisible(true);
+    //    }
 
     updateGUI();
 
@@ -868,9 +870,9 @@ void KisView2::createManagers()
     m_d->canvasControlsManager = new KisCanvasControlsManager(this);
     m_d->canvasControlsManager->setup(actionCollection(), actionManager());
 
-// XXX: KOMVC: move mirror decoration to KisImageView, create a manager for it???
-//    m_d->mirrorAxis = new KisMirrorAxis(m_d->resourceProvider, this);
-//    m_d->canvas->addDecoration(m_d->mirrorAxis);
+    // XXX: KOMVC: move mirror decoration to KisImageView, create a manager for it???
+    //    m_d->mirrorAxis = new KisMirrorAxis(m_d->resourceProvider, this);
+    //    m_d->canvas->addDecoration(m_d->mirrorAxis);
 }
 
 void KisView2::updateGUI()
@@ -1238,7 +1240,7 @@ void KisView2::showJustTheCanvas(bool toggled)
 {
     KisConfig cfg;
 
-/**
+    /**
  * Workaround for a broken Intel video driver on Windows :(
  * See bug 330040
  */
@@ -1249,24 +1251,24 @@ void KisView2::showJustTheCanvas(bool toggled)
         bool failingDriver = renderer.startsWith("Intel(R) HD Graphics");
 
         if (failingDriver &&
-            cfg.hideStatusbarFullscreen() &&
-            cfg.hideDockersFullscreen() &&
-            cfg.hideTitlebarFullscreen() &&
-            cfg.hideMenuFullscreen() &&
-            cfg.hideToolbarFullscreen() &&
-            cfg.hideScrollbarsFullscreen()) {
+                cfg.hideStatusbarFullscreen() &&
+                cfg.hideDockersFullscreen() &&
+                cfg.hideTitlebarFullscreen() &&
+                cfg.hideMenuFullscreen() &&
+                cfg.hideToolbarFullscreen() &&
+                cfg.hideScrollbarsFullscreen()) {
 
             int result =
-                KMessageBox::warningYesNo(this,
-                                          "Intel(R) HD Graphics video adapters "
-                                          "are known to have problems with running "
-                                          "Krita in pure canvas only mode. At least "
-                                          "one UI control must be shown to "
-                                          "workaround it.\n\nShow the scroll bars?",
-                                          "Failing video adapter",
-                                          KStandardGuiItem::yes(),
-                                          KStandardGuiItem::no(),
-                                          "messagebox_WorkaroundIntelVideoOnWindows");
+                    KMessageBox::warningYesNo(this,
+                                              "Intel(R) HD Graphics video adapters "
+                                              "are known to have problems with running "
+                                              "Krita in pure canvas only mode. At least "
+                                              "one UI control must be shown to "
+                                              "workaround it.\n\nShow the scroll bars?",
+                                              "Failing video adapter",
+                                              KStandardGuiItem::yes(),
+                                              KStandardGuiItem::no(),
+                                              "messagebox_WorkaroundIntelVideoOnWindows");
 
             if (result == KMessageBox::Yes) {
                 cfg.setHideScrollbarsFullscreen(false);

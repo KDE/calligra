@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="Krita" version="55">
+<kpartgui name="Krita" version="57">
 
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
@@ -8,12 +8,9 @@
   <Action name="save_incremental_version"/>
   <Action name="save_incremental_backup"/>
   <Action name="createTemplate"/>
- </Menu>
+ </Menu>k
 
  <Menu name="Edit"><text>&amp;Edit</text>
-  <Action name="edit_undo"/>
-  <Action name="edit_redo"/>
-  <Separator/>
   <Action name="edit_cut"/>
   <Action name="edit_copy"/>
   <Action name="copy_merged"/>

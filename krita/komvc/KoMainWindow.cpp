@@ -250,6 +250,7 @@ KoMainWindow::KoMainWindow(KoPart *part, const KComponentData &componentData)
     : KXmlGuiWindow()
     , d(new KoMainWindowPrivate(part, this))
 {
+    qDebug() << "Constructing KoMainWindow";
 #ifdef Q_OS_MAC
     #if QT_VERSION < 0x050000
     MacSupport::addFullscreen(this);
@@ -388,8 +389,6 @@ KoMainWindow::KoMainWindow(KoPart *part, const KComponentData &componentData)
     KSharedConfigPtr configPtr = componentData.isValid() ? componentData.config() : KGlobal::config();
     d->recent->loadEntries(configPtr->group("RecentFiles"));
 
-    createMainwindowGUI();
-    d->mainWindowGuiIsBuilt = true;
 
     // if the user didn's specify the geometry on the command line (does anyone do that still?),
     // we first figure out some good default size and restore the x,y position. See bug 285804Z.
@@ -442,6 +441,7 @@ KoMainWindow::KoMainWindow(KoPart *part, const KComponentData &componentData)
     foreach(QAction* action, actionCollection()->actions()) {
         action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     }
+    qDebug() << "KoMainWindow constructed";
 }
 
 void KoMainWindow::setNoCleanup(bool noCleanup)
@@ -1898,7 +1898,7 @@ void KoMainWindow::createMainwindowGUI()
     }
 
     guiFactory()->addClient( this );
-
+    d->mainWindowGuiIsBuilt = true;
 }
 
 void KoMainWindow::setToolbarList(QList<QAction *> toolbarList)

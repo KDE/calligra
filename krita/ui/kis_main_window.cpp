@@ -61,6 +61,8 @@ KisMainWindow::KisMainWindow(KoPart *part, const KComponentData &instance)
     , m_constructing(true)
     , m_mdiArea(new QMdiArea(this))
 {
+    qDebug() << "Constructing KisMainWindow";
+
     KGlobal::setActiveComponent(part ? part->componentData() : KGlobal::mainComponent());
 
     // 25 px is a distance that works well for Tablet and Mouse events
@@ -122,8 +124,6 @@ KisMainWindow::KisMainWindow(KoPart *part, const KComponentData &instance)
 
     guiFactory()->addClient(m_guiClient);
 
-    createMainwindowGUI();
-
     setAutoSaveSettings(part->componentData().componentName(), false);
 
     foreach (QDockWidget *wdg, dockWidgets()) {
@@ -158,6 +158,10 @@ KisMainWindow::KisMainWindow(KoPart *part, const KComponentData &instance)
     m_constructing = false;
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), this, SLOT(configChanged()));
+    createMainwindowGUI();
+
+    qDebug() << "KisMainWindow constructed";
+
 }
 
 void KisMainWindow::showView(KoView *view)
