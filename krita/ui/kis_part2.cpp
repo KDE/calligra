@@ -88,11 +88,6 @@ KoView *KisPart2::createViewInstance(KoDocument *document, QWidget *parent)
     dynamic_cast<KisShapeController*>(qobject_cast<KisDoc2*>(document)->shapeController())->setInitialShapeForCanvas(v->canvasBase());
     KoToolManager::instance()->switchToolRequested("KritaShape/KisToolBrush");
 
-    // XXX: this prevents a crash when opening a new document after opening a
-    // a document that has not been touched! I have no clue why, though.
-    // see: https://bugs.kde.org/show_bug.cgi?id=208239.
-    document->setModified(true);
-    document->setModified(false);
     qApp->restoreOverrideCursor();
 
     return v;
