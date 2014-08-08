@@ -131,7 +131,7 @@
 */
 
 KUndo2Command::KUndo2Command(const KUndo2MagicString &text, KUndo2Command *parent):
-    m_hasParent(parent != 0)
+    m_hasParent(parent != 0),m_endOfCommand(QTime::currentTime())
 {
     d = new KUndo2CommandPrivate;
     if (parent != 0) {
@@ -490,7 +490,10 @@ void KUndo2QStack::setIndex(int idx, bool clean)
     } else {
         m_lastMergedSetCount = 1;
         m_lastMergedIndex = idx-1;
-
+    }
+    if(idx == 0){
+        m_lastMergedSetCount = 0;
+        m_lastMergedIndex = 0;
     }
 
 
@@ -673,7 +676,7 @@ void KUndo2QStack::push(KUndo2Command *cmd)
             m_lastMergedSetCount++;
         } else {
             m_lastMergedSetCount = 0;
-            m_lastMergedIndex = m_index;
+            m_lastMergedIndex = m_index-1;
         }
 
 
@@ -688,35 +691,40 @@ void KUndo2QStack::push(KUndo2Command *cmd)
 
         }
         m_index = m_command_list.size();
-        if (cmd->time().msecsTo(m_command_list.last()->endTime()) < -m_timeT1 * 1000) { //T1 time elapsed
-            QListIterator<KUndo2Command*> it(m_command_list);
-            it.toBack();
-            m_lastMergedSetCount = 1;
 
-            while (it.hasPrevious()) {
-                KUndo2Command* curr = it.previous();
-                if (!lastcmd->mergeCommandsVector().isEmpty()) {
-                    if (lastcmd->mergeCommandsVector().last()->time().msecsTo(curr->endTime()) > -m_timeT2 * 1000 && lastcmd != curr) {
-                        lastcmd->timedMergeWith(curr);
-                        if (m_command_list.contains(curr)) {
-                            m_command_list.removeOne(curr);
-                        }
-                    } else {
-                        lastcmd = curr; //end of a merge set
-                    }
+        if(m_command_list.at(m_lastMergedIndex)){
+            if (cmd->time().msecsTo(m_command_list.at(m_lastMergedIndex)->endTime()) < -m_timeT1 * 1000) { //T1 time elapsed
 
-                } else {
-                    if (lastcmd->time().msecsTo(curr->endTime()) > -m_timeT2 * 1000 && lastcmd != curr) {
-                        lastcmd->timedMergeWith(curr);
-                        if (m_command_list.contains(curr)) {
-                            m_command_list.removeOne(curr);
+                QListIterator<KUndo2Command*> it(m_command_list);
+                it.toBack();
+                m_lastMergedSetCount = 1;
+
+                while (it.hasPrevious()) {
+                    KUndo2Command* curr = it.previous();
+                    if (!lastcmd->mergeCommandsVector().isEmpty()) {
+                        if (lastcmd->mergeCommandsVector().last()->time().msecsTo(curr->endTime()) > -m_timeT2 * 1000 && lastcmd != curr) {
+                            lastcmd->timedMergeWith(curr);
+                            if (m_command_list.contains(curr)) {
+                                m_command_list.removeOne(curr);
+                            }
+                        } else {
+                            lastcmd = curr; //end of a merge set
                         }
+
                     } else {
-                        lastcmd = curr; //end of a merge set
+                        if (lastcmd->time().msecsTo(curr->endTime()) > -m_timeT2 * 1000 && lastcmd != curr) {
+                            lastcmd->timedMergeWith(curr);
+                            if (m_command_list.contains(curr)) {
+                                m_command_list.removeOne(curr);
+                            }
+                        } else {
+                            lastcmd = curr; //end of a merge set
+                        }
                     }
                 }
-            }
+                m_lastMergedIndex = m_command_list.size()-1;
 
+            }
         }
     }
     m_index = m_command_list.size();
