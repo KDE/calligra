@@ -364,8 +364,15 @@ Page {
                     width: parent.width / 2;
                     placeholder: "Spacing";
                     useExponentialValue: true;
-                    min: 0; max: ((landscapeCheck.checked ? heightInput.text : widthInput.text) - marginLeft.value - marginRight.value) / columnCount.value; decimals: 2;
-                    value: 20;
+                    min: 0;
+                    max: (heightInput.text > widthInput.text ? heightInput.text : widthInput.text) / columnCount.value;
+                    decimals: 2;
+                    // This looks odd, perhaps. It does, however, ensure that when we start, we are not
+                    // setting the value to zero because of an order-of-initialisation issue meaning the
+                    // column count is zero, which makes the interpreter simply set max to 0, so we end
+                    // up with value reset to 0 as well. So, doing it like this fixes that silly little
+                    // issue
+                    Component.onCompleted: value = 20;
                 }
             }
             Row {
