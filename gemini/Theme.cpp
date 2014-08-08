@@ -405,13 +405,13 @@ int Theme::adjustedPixel(const int& pixel) const
         return 0;
 
     // If we are in portrait mode, we still assume 1080p for font size purposes
-    int height = qApp->activeWindow()->height() < qApp->activeWindow()->width() ? qApp->activeWindow()->height() : qApp->activeWindow()->width();
+    int width = qApp->activeWindow()->height() > qApp->activeWindow()->width() ? qApp->activeWindow()->height() : qApp->activeWindow()->width();
     // The pixel size is based on a 1080p screen, and it is accepted that the window size
-    // will vary on there, depending on whether or not we are full screened (so we accept
-    // up to 100 pixels less height)
+    // will vary slightly on there, depending on whether or not we are full screened (so
+    // we accept up to 10 pixels less width)
     float sizeAdjustment = 1;
-    if(height > 1080 || height < 980)
-        sizeAdjustment = height / 1080.f;
+    if(width > 1920 || width < 1910)
+        sizeAdjustment = width / 1920.f;
     return pixel * sizeAdjustment;
 }
 
@@ -432,13 +432,13 @@ void Theme::Private::rebuildFontCache()
 
         if(map.contains("pixelSize")) {
             // If we are in portrait mode, we still assume 1080p for font size purposes
-            int height = qApp->activeWindow()->height() < qApp->activeWindow()->width() ? qApp->activeWindow()->height() : qApp->activeWindow()->width();
+            int width = qApp->activeWindow()->height() > qApp->activeWindow()->width() ? qApp->activeWindow()->height() : qApp->activeWindow()->width();
             // The pixel size is based on a 1080p screen, and it is accepted that the window size
-            // will vary on there, depending on whether or not we are full screened (so we accept
-            // up to 100 pixels less height)
+            // will vary slightly on there, depending on whether or not we are full screened (so
+            // we accept up to 10 pixels less width)
             float sizeAdjustment = 1;
-            if(height > 1080 || height < 980)
-                sizeAdjustment = height / 1080.f;
+            if(width > 1920 || width < 1910)
+                sizeAdjustment = width / 1920.f;
             font.setPixelSize(map.value("pixelSize").toInt() * sizeAdjustment);
         }
         else {
