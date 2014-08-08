@@ -35,7 +35,6 @@
 
 #include "KoDockFactoryBase.h"
 #include "KoUndoStackAction.h"
-#include "KoGlobal.h"
 #include "KoPageLayout.h"
 #include "KoPrintJob.h"
 #include "KoDocumentInfo.h"
@@ -76,10 +75,12 @@ QString KoView::newObjectName()
 class KoViewPrivate
 {
 public:
-    KoViewPrivate() {
+    KoViewPrivate()
+        : undo(0)
+        , redo(0)
+    {
         tempActiveWidget = 0;
         documentDeleted = false;
-        actionAuthor = 0;
     }
 
     ~KoViewPrivate() {
@@ -150,11 +151,14 @@ public:
         bool m_permanent;
         bool m_connected;
         bool m_hidden;
+
     };
+
+    KoUndoStackAction *undo;
+    KoUndoStackAction *redo;
 
     QList<StatusBarItem> statusBarItems; // Our statusbar items
     bool inOperation; //in the middle of an operation (no screen refreshing)?
-    KSelectAction *actionAuthor; // Select action for author profile.
 };
 
 KoView::KoView(KoPart *part, KoDocument *document, QWidget *parent)
@@ -176,7 +180,9 @@ KoView::KoView(KoPart *part, KoDocument *document, QWidget *parent)
 
     setFocusPolicy(Qt::StrongFocus);
 
-    setupGlobalActions();
+    d->undo = new KoUndoStackAction(d->document->undoStack(), KoUndoStackAction::UNDO);
+    d->redo = new KoUndoStackAction(d->document->undoStack(), KoUndoStackAction::RED0);
+
 
     KStatusBar * sb = statusBar();
     if (sb) { // No statusbar in e.g. konqueror
@@ -186,16 +192,6 @@ KoView::KoView(KoPart *part, KoDocument *document, QWidget *parent)
                 this, SLOT(slotClearStatusText()));
     }
 
-    //actionCollection()->addAssociatedWidget(this);
-
-//    /**
-//     * WARNING: This code changes the context of global shortcuts
-//     *          only. All actions added later will have the default
-//     *          context, which is Qt::WindowShortcut!
-//     */
-//    foreach(QAction* action, actionCollection()->actions()) {
-//        action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
-//    }
 }
 
 KoView::~KoView()
@@ -204,6 +200,15 @@ KoView::~KoView()
     delete d;
 }
 
+KAction *KoView::undoAction() const
+{
+    return d->undo;
+}
+
+KAction *KoView::redoAction() const
+{
+    return d->redo;
+}
 
 void KoView::dragEnterEvent(QDragEnterEvent *event)
 {
@@ -338,31 +343,6 @@ QPrintDialog *KoView::createPrintDialog(KoPrintJob *printJob, QWidget *parent)
     return printDialog;
 }
 
-void KoView::setupGlobalActions()
-{
-////    actionCollection()->addAction("edit_undo", new KoUndoStackAction(d->document->undoStack(), KoUndoStackAction::UNDO));
-////    actionCollection()->addAction("edit_redo", new KoUndoStackAction(d->document->undoStack(), KoUndoStackAction::RED0));
-
-//    d->actionAuthor  = new KSelectAction(koIcon("user-identity"), i18n("Active Author Profile"), this);
-//    connect(d->actionAuthor, SIGNAL(triggered(const QString &)), this, SLOT(changeAuthorProfile(const QString &)));
-//    actionCollection()->addAction("settings_active_author", d->actionAuthor);
-
-//    slotUpdateAuthorProfileActions();
-}
-
-void KoView::changeAuthorProfile(const QString &profileName)
-{
-    KConfigGroup appAuthorGroup(KGlobal::config(), "Author");
-    if (profileName.isEmpty()) {
-        appAuthorGroup.writeEntry("active-profile", "");
-    } else if (profileName == i18nc("choice for author profile", "Anonymous")) {
-        appAuthorGroup.writeEntry("active-profile", "anonymous");
-    } else {
-        appAuthorGroup.writeEntry("active-profile", profileName);
-    }
-    appAuthorGroup.sync();
-    d->document->documentInfo()->updateParameters();
-}
 
 KoMainWindow * KoView::mainWindow() const
 {
@@ -389,33 +369,6 @@ void KoView::slotClearStatusText()
         sb->clearMessage();
 }
 
-void KoView::slotUpdateAuthorProfileActions()
-{
-    Q_ASSERT(d->actionAuthor);
-    if (!d->actionAuthor) {
-        return;
-    }
-    d->actionAuthor->clear();
-    d->actionAuthor->addAction(i18n("Default Author Profile"));
-    d->actionAuthor->addAction(i18nc("choice for author profile", "Anonymous"));
-
-    KConfigGroup authorGroup(KoGlobal::calligraConfig(), "Author");
-    QStringList profiles = authorGroup.readEntry("profile-names", QStringList());
-    foreach (const QString &profile , profiles) {
-        d->actionAuthor->addAction(profile);
-    }
-
-    KConfigGroup appAuthorGroup(KGlobal::config(), "Author");
-    QString profileName = appAuthorGroup.readEntry("active-profile", "");
-    if (profileName == "anonymous") {
-        d->actionAuthor->setCurrentItem(1);
-    } else if (profiles.contains(profileName)) {
-        d->actionAuthor->setCurrentAction(profileName);
-    } else {
-        d->actionAuthor->setCurrentItem(0);
-    }
-}
-
 QList<QAction*> KoView::createChangeUnitActions(bool addPixelUnit)
 {
     UnitActionGroup* unitActions = new UnitActionGroup(d->document, addPixelUnit, this);
@@ -424,7 +377,6 @@ QList<QAction*> KoView::createChangeUnitActions(bool addPixelUnit)
 
 void KoView::guiActivateEvent(bool activated)
 {
-    qDebug() << "KoView::guiActivateEvent";
     Q_UNUSED(activated);
 }
 

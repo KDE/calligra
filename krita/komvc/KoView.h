@@ -70,6 +70,9 @@ public:
      */
     virtual ~KoView();
 
+    KAction *undoAction() const;
+    KAction *redoAction() const;
+
     // QWidget overrides
 protected:
 
@@ -141,7 +144,7 @@ public:
      */
     KoMainWindow * mainWindow() const;
 
-   /**
+    /**
      * @return the statusbar of the KoMainWindow in which this view is currently.
      */
     KStatusBar * statusBar() const;
@@ -197,11 +200,6 @@ public slots:
      */
     void slotClearStatusText();
 
-    /**
-     * Updates the author profile actions from configuration.
-     */
-    void slotUpdateAuthorProfileActions();
-
 protected:
 
     /**
@@ -209,12 +207,7 @@ protected:
      */
     QString newObjectName();
 
-protected slots:
-
-    virtual void changeAuthorProfile(const QString &profileName);
-
 private:
-    virtual void setupGlobalActions(void);
     KoViewPrivate * const d;
 };
 

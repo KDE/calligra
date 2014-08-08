@@ -255,6 +255,7 @@ KoMainWindow::KoMainWindow(KoPart *part, const KComponentData &componentData)
     setUnifiedTitleAndToolBarOnMac(true);
     #endif
 #endif
+
     setStandardToolBarMenuEnabled(true);
     Q_ASSERT(componentData.isValid());
 
@@ -267,6 +268,8 @@ KoMainWindow::KoMainWindow(KoPart *part, const KComponentData &componentData)
         // part's componentData! (Simon)
         KGlobal::setActiveComponent(componentData);
     }
+
+    actionCollection()->addAssociatedWidget(this);
 
     QString doc;
     QStringList allFiles = KGlobal::dirs()->findAllResources("data", "calligra/calligra_shell.rc");
@@ -370,7 +373,6 @@ KoMainWindow::KoMainWindow(KoPart *part, const KComponentData &componentData)
 
     d->dockWidgetMenu  = new KActionMenu(i18n("Dockers"), this);
     actionCollection()->addAction("settings_dockers_menu", d->dockWidgetMenu);
-//     d->dockWidgetMenu->setVisible(false);
     d->dockWidgetMenu->setDelayed(false);
 
     // Load list of recent files
@@ -422,6 +424,15 @@ KoMainWindow::KoMainWindow(KoPart *part, const KComponentData &componentData)
     restoreState(QByteArray::fromBase64(cfg.readEntry("ko_windowstate", QByteArray())));
 
     d->dockerManager = new KoDockerManager(this);
+
+    /**
+     * WARNING: This code changes the context of global shortcuts
+     *          only. All actions added later will have the default
+     *          context, which is Qt::WindowShortcut!
+     */
+    foreach(QAction* action, actionCollection()->actions()) {
+        action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+    }
 }
 
 void KoMainWindow::setNoCleanup(bool noCleanup)
@@ -1425,27 +1436,26 @@ KoPrintJob* KoMainWindow::exportToPdf(KoPageLayout pageLayout, QString pdfFileNa
 
 void KoMainWindow::slotConfigureKeys()
 {
-    // XXX: KOMVC
-//    QAction* undoAction=0;
-//    QAction* redoAction=0;
-//    QString oldUndoText;
-//    QString oldRedoText;
-//    if(activeView()) {
-//        //The undo/redo action text is "undo" + command, replace by simple text while inside editor
-//        undoAction = activeView()->actionCollection()->action("edit_undo");
-//        redoAction = activeView()->actionCollection()->action("edit_redo");
-//        oldUndoText = undoAction->text();
-//        oldRedoText = redoAction->text();
-//        undoAction->setText(i18n("Undo"));
-//        redoAction->setText(i18n("Redo"));
-//    }
+    QAction* undoAction=0;
+    QAction* redoAction=0;
+    QString oldUndoText;
+    QString oldRedoText;
+    if(activeView()) {
+        //The undo/redo action text is "undo" + command, replace by simple text while inside editor
+        undoAction = activeView()->undoAction(); //actionCollection()->action("edit_undo");
+        redoAction = activeView()->redoAction(); //actionCollection()->action("edit_redo");
+        oldUndoText = undoAction->text();
+        oldRedoText = redoAction->text();
+        undoAction->setText(i18n("Undo"));
+        redoAction->setText(i18n("Redo"));
+    }
 
     guiFactory()->configureShortcuts();
 
-//    if(activeView()) {
-//        undoAction->setText(oldUndoText);
-//        redoAction->setText(oldRedoText);
-//    }
+    if(activeView()) {
+        undoAction->setText(oldUndoText);
+        redoAction->setText(oldRedoText);
+    }
 
     emit keyBindingsChanged();
 }
@@ -1454,9 +1464,9 @@ void KoMainWindow::slotConfigureToolbars()
 {
     if (d->activeView->document())
         saveMainWindowSettings(KGlobal::config()->group(d->part->componentData().componentName()));
-    //KEditToolBar edit(factory(), this);
-    //connect(&edit, SIGNAL(newToolBarConfig()), this, SLOT(slotNewToolbarConfig()));
-    //(void) edit.exec();
+    KEditToolBar edit(factory(), this);
+    connect(&edit, SIGNAL(newToolBarConfig()), this, SLOT(slotNewToolbarConfig()));
+    (void) edit.exec();
 }
 
 void KoMainWindow::slotNewToolbarConfig()
