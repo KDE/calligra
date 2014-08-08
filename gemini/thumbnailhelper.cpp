@@ -18,6 +18,10 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#ifdef Q_OS_WIN
+#include <Windows.h>
+#endif
+
 #include <kapplication.h>
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
@@ -35,6 +39,10 @@
 
 int main( int argc, char** argv )
 {
+#ifdef Q_OS_WIN
+    SetErrorMode(SEM_NOGPFAULTERRORBOX); 
+#endif
+
     QString calligraVersion(CALLIGRA_VERSION_STRING);
     QString version;
 
