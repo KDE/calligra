@@ -31,6 +31,7 @@
   <Action name="file_documentinfo" />
   <DefineGroup name="file_infos" />
   <Separator />
+  <Action name="file_close_all" />
   <Action name="file_quit" />
  </Menu>
 

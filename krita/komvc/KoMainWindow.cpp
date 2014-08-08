@@ -291,6 +291,7 @@ KoMainWindow::KoMainWindow(KoPart *part, const KComponentData &componentData)
     d->sendFileAction = actionCollection()->addAction(KStandardAction::Mail,  "file_send_file", this, SLOT(slotEmailFile()));
 
     d->closeFile = actionCollection()->addAction(KStandardAction::Close,  "file_close", this, SLOT(slotFileClose()));
+
     actionCollection()->addAction(KStandardAction::Quit,  "file_quit", this, SLOT(slotFileQuit()));
 
     d->closeAll = new KAction(i18n("Close All"), this);
@@ -809,34 +810,34 @@ bool KoMainWindow::exportConfirmation(const QByteArray &outputFormat)
     return (ret == KMessageBox::Continue);
 }
 
-bool KoMainWindow::saveDocument(bool saveas, bool silent, int specialOutputFlag)
+bool KoMainWindow::saveDocument(KoDocument *document, bool saveas, bool silent, int specialOutputFlag)
 {
-    if (!d->activeView->document() || !d->part) {
+    if (document || !d->part) {
         return true;
     }
 
     bool reset_url;
 
-    if (d->activeView->document()->url().isEmpty()) {
+    if (document->url().isEmpty()) {
         reset_url = true;
         saveas = true;
     } else {
         reset_url = false;
     }
 
-    connect(d->activeView->document(), SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
-    connect(d->activeView->document(), SIGNAL(completed()), this, SLOT(slotSaveCompleted()));
-    connect(d->activeView->document(), SIGNAL(canceled(const QString &)), this, SLOT(slotSaveCanceled(const QString &)));
+    connect(document, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
+    connect(document, SIGNAL(completed()), this, SLOT(slotSaveCompleted()));
+    connect(document, SIGNAL(canceled(const QString &)), this, SLOT(slotSaveCanceled(const QString &)));
 
-    KUrl oldURL = d->activeView->document()->url();
-    QString oldFile = d->activeView->document()->localFilePath();
+    KUrl oldURL = document->url();
+    QString oldFile = document->localFilePath();
 
-    QByteArray _native_format = d->activeView->document()->nativeFormatMimeType();
-    QByteArray oldOutputFormat = d->activeView->document()->outputMimeType();
+    QByteArray _native_format = document->nativeFormatMimeType();
+    QByteArray oldOutputFormat = document->outputMimeType();
 
-    int oldSpecialOutputFlag = d->activeView->document()->specialOutputFlag();
+    int oldSpecialOutputFlag = document->specialOutputFlag();
 
-    KUrl suggestedURL = d->activeView->document()->url();
+    KUrl suggestedURL = document->url();
 
     QStringList mimeFilter;
     KMimeType::Ptr mime = KMimeType::mimeType(_native_format);
@@ -847,7 +848,7 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent, int specialOutputFlag)
     else
         mimeFilter = KoFilterManager::mimeFilter(_native_format,
                                                  KoFilterManager::Export,
-                                                 d->activeView->document()->extraNativeMimeTypes());
+                                                 document->extraNativeMimeTypes());
 
 
     if (!mimeFilter.contains(oldOutputFormat) && !isExporting()) {
@@ -883,7 +884,7 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent, int specialOutputFlag)
 
     bool ret = false;
 
-    if (d->activeView->document()->url().isEmpty() || saveas) {
+    if (document->url().isEmpty() || saveas) {
         // if you're just File/Save As'ing to change filter options you
         // don't want to be reminded about overwriting files etc.
         bool justChangingFilterOptions = false;
@@ -903,8 +904,8 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent, int specialOutputFlag)
         }
 
         if (!isExporting())
-            justChangingFilterOptions = (newURL == d->activeView->document()->url()) &&
-                    (outputFormat == d->activeView->document()->mimeType()) &&
+            justChangingFilterOptions = (newURL == document->url()) &&
+                    (outputFormat == document->mimeType()) &&
                     (specialOutputFlag == oldSpecialOutputFlag);
         else
             justChangingFilterOptions = (newURL == d->lastExportUrl) &&
@@ -941,8 +942,8 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent, int specialOutputFlag)
             bool wantToSave = true;
 
             // don't change this line unless you know what you're doing :)
-            if (!justChangingFilterOptions || d->activeView->document()->confirmNonNativeSave(isExporting())) {
-                if (!d->activeView->document()->isNativeFormat(outputFormat))
+            if (!justChangingFilterOptions || document->confirmNonNativeSave(isExporting())) {
+                if (!document->isNativeFormat(outputFormat))
                     wantToSave = exportConfirmation(outputFormat);
             }
 
@@ -956,7 +957,7 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent, int specialOutputFlag)
                 // 1. A check like "isExporting() && oldURL == newURL"
                 //    doesn't _always_ work on case-insensitive filesystems
                 //    and inconsistent behaviour is bad.
-                // 2. It is probably not a good idea to change d->activeView->document()->mimeType
+                // 2. It is probably not a good idea to change document->mimeType
                 //    and friends because the next time the user File/Save's,
                 //    (not Save As) they won't be expecting that they are
                 //    using their File/Export settings
@@ -970,11 +971,9 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent, int specialOutputFlag)
                 //
                 // - Clarence
                 //
-
-
-                d->activeView->document()->setOutputMimeType(outputFormat, specialOutputFlag);
+                document->setOutputMimeType(outputFormat, specialOutputFlag);
                 if (!isExporting()) {  // Save As
-                    ret = d->activeView->document()->saveAs(newURL);
+                    ret = document->saveAs(newURL);
 
                     if (ret) {
                         kDebug(30003) << "Successful Save As!";
@@ -982,12 +981,12 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent, int specialOutputFlag)
                         setReadWrite(true);
                     } else {
                         kDebug(30003) << "Failed Save As!";
-                        d->activeView->document()->setUrl(oldURL);
-                        d->activeView->document()->setLocalFilePath(oldFile);
-                        d->activeView->document()->setOutputMimeType(oldOutputFormat, oldSpecialOutputFlag);
+                        document->setUrl(oldURL);
+                        document->setLocalFilePath(oldFile);
+                        document->setOutputMimeType(oldOutputFormat, oldSpecialOutputFlag);
                     }
                 } else { // Export
-                    ret = d->activeView->document()->exportDocument(newURL);
+                    ret = document->exportDocument(newURL);
 
                     if (ret) {
                         // a few file dialog convenience things
@@ -997,11 +996,11 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent, int specialOutputFlag)
                     }
 
                     // always restore output format
-                    d->activeView->document()->setOutputMimeType(oldOutputFormat, oldSpecialOutputFlag);
+                    document->setOutputMimeType(oldOutputFormat, oldSpecialOutputFlag);
                 }
 
                 if (silent) // don't let the document change the window caption
-                    d->activeView->document()->setTitleModified();
+                    document->setTitleModified();
             }   // if (wantToSave)  {
             else
                 ret = false;
@@ -1010,20 +1009,20 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent, int specialOutputFlag)
             ret = false;
     } else { // saving
 
-        bool needConfirm = d->activeView->document()->confirmNonNativeSave(false) && !d->activeView->document()->isNativeFormat(oldOutputFormat);
+        bool needConfirm = document->confirmNonNativeSave(false) && !document->isNativeFormat(oldOutputFormat);
 
         if (!needConfirm ||
                 (needConfirm && exportConfirmation(oldOutputFormat /* not so old :) */))
                 ) {
-            // be sure d->activeView->document() has the correct outputMimeType!
-            if (isExporting() || d->activeView->document()->isModified()) {
-                ret = d->activeView->document()->save();
+            // be sure document has the correct outputMimeType!
+            if (isExporting() || document->isModified()) {
+                ret = document->save();
             }
 
             if (!ret) {
                 kDebug(30003) << "Failed Save!";
-                d->activeView->document()->setUrl(oldURL);
-                d->activeView->document()->setLocalFilePath(oldFile);
+                document->setUrl(oldURL);
+                document->setLocalFilePath(oldFile);
             }
         } else
             ret = false;
@@ -1031,9 +1030,9 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent, int specialOutputFlag)
 
 
     if (!ret && reset_url)
-        d->activeView->document()->resetURL(); //clean the suggested filename as the save dialog was rejected
+        document->resetURL(); //clean the suggested filename as the save dialog was rejected
 
-    updateReloadFileAction(d->activeView->document());
+    updateReloadFileAction(document);
     updateCaption();
 
     return ret;
@@ -1147,7 +1146,7 @@ bool KoMainWindow::queryClose()
         switch (res) {
         case KMessageBox::Yes : {
             bool isNative = (d->activeView->document()->outputMimeType() == d->activeView->document()->nativeFormatMimeType());
-            if (!saveDocument(!isNative))
+            if (!saveDocument(d->activeView->document(), !isNative))
                 return false;
             break;
         }
@@ -1206,25 +1205,25 @@ void KoMainWindow::slotFileOpenRecent(const KUrl & url)
 
 void KoMainWindow::slotFileSave()
 {
-    if (saveDocument())
+    if (saveDocument(d->activeView->document()))
         emit documentSaved();
 }
 
 void KoMainWindow::slotFileSaveAs()
 {
-    if (saveDocument(true))
+    if (saveDocument(d->activeView->document(), true))
         emit documentSaved();
 }
 
 void KoMainWindow::slotEncryptDocument()
 {
-    if (saveDocument(false, false, KoDocument::SaveEncrypted))
+    if (saveDocument(d->activeView->document(), false, false, KoDocument::SaveEncrypted))
         emit documentSaved();
 }
 
 void KoMainWindow::slotUncompressToDir()
 {
-    if (saveDocument(true, false, KoDocument::SaveAsDirectoryStore))
+    if (saveDocument(d->activeView->document(), true, false, KoDocument::SaveAsDirectoryStore))
         emit documentSaved();
 }
 
@@ -1278,10 +1277,22 @@ void KoMainWindow::slotFileClose()
 
 void KoMainWindow::slotFileCloseAll()
 {
+    foreach(QPointer<KoView> view, d->views) {
+        view->close();
+    }
 }
 
 void KoMainWindow::slotFileQuit()
 {
+    foreach(QPointer<KoPart> part, KoPart::partList()) {
+        foreach(QPointer<KoMainWindow> mainWin, part->mainWindows()) {
+            if (mainWin != this) {
+                mainWin->slotFileCloseAll();
+                close();
+            }
+        }
+    }
+    slotFileCloseAll();
     close();
 }
 
@@ -1596,7 +1607,7 @@ void KoMainWindow::slotEmailFile()
         d->activeView->document()->setModified(true);
         d->activeView->document()->setOutputMimeType(d->activeView->document()->nativeFormatMimeType());
 
-        saveDocument(false, true);
+        saveDocument(d->activeView->document(), false, true);
 
         fileURL = fileName;
         theSubject = i18n("Document");

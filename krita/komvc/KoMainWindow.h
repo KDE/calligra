@@ -348,7 +348,7 @@ public slots:
      *         (don't display anything in this case, the error dialog box is also implemented here
      *         but restore the original URL in slotFileSaveAs)
      */
-    bool saveDocument(bool saveas = false, bool silent = false, int specialOutputFlag = 0);
+    bool saveDocument(KoDocument *document, bool saveas = false, bool silent = false, int specialOutputFlag = 0);
 
 private:
 

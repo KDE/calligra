@@ -61,8 +61,6 @@ private slots:
     void updateWindowMenu();
     void setActiveSubWindow(QWidget *window);
     void configChanged();
-    void closeView();
-    void closeAllViews();
     void newView(QObject *document);
     void newWindow();
 

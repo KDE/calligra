@@ -23,8 +23,10 @@
 
 #include <kmenu.h>
 #include <kactioncollection.h>
+#include <kmessagebox.h>
 
 #include <KoToolManager.h>
+#include <KoDocumentInfo.h>
 #include <KoMainWindow.h>
 
 #include <kis_image.h>
@@ -48,6 +50,7 @@
 #include "kis_config.h"
 #include "kis_mirror_axis.h"
 #include "kis_tool_freehand.h"
+#include "kis_part2.h"
 
 #include "krita/gemini/ViewModeSwitchEvent.h"
 
@@ -472,6 +475,73 @@ bool KisImageView::event(QEvent *event)
     }
 
     return QWidget::event( event );
+}
+
+void KisImageView::closeEvent(QCloseEvent *event)
+{
+    // No modification, don't ask about save before close
+    if (!document()->isModified()) {
+        event->accept();
+        return;
+    }
+
+    // Check whether we're the last view
+    int viewCount = KisPart2::instance()->viewCount(document());
+    if (viewCount > 1) {
+        // there are others still, so don't bother the user
+        event->accept();
+        return;
+    }
+
+    if (queryClose()) {
+        event->accept();
+        return;
+    }
+
+    event->ignore();
+
+}
+
+bool KisImageView::queryClose()
+{
+    if (!document())
+        return true;
+
+    if (document()->isModified()) {
+        QString name;
+        if (document()->documentInfo()) {
+            name = document()->documentInfo()->aboutInfo("title");
+        }
+        if (name.isEmpty())
+            name = document()->url().fileName();
+
+        if (name.isEmpty())
+            name = i18n("Untitled");
+
+        int res = KMessageBox::warningYesNoCancel(this,
+                                                  i18n("<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?</p>", name),
+                                                  QString(),
+                                                  KStandardGuiItem::save(),
+                                                  KStandardGuiItem::discard());
+
+        switch (res) {
+        case KMessageBox::Yes : {
+            bool isNative = (document()->outputMimeType() == document()->nativeFormatMimeType());
+            if (!parentView()->mainWindow()->saveDocument(document(), !isNative))
+                return false;
+            break;
+        }
+        case KMessageBox::No :
+            document()->removeAutoSaveFiles();
+            document()->setModified(false);   // Now when queryClose() is called by closeEvent it won't do anything.
+            break;
+        default : // case KMessageBox::Cancel :
+            return false;
+        }
+    }
+
+    return true;
+
 }
 
 void KisImageView::resetImageSizeAndScroll(bool changeCentering,

@@ -25,6 +25,8 @@
 
 #include <kis_types.h>
 
+class QCloseEvent;
+
 class KoZoomManager;
 class KoZoomController;
 class KoCanvasController;
@@ -108,6 +110,7 @@ protected:
     virtual void dragEnterEvent(QDragEnterEvent * event);
     virtual void dropEvent(QDropEvent * event);
     virtual bool event( QEvent* event );
+    virtual void closeEvent(QCloseEvent *event);
 
 signals:
     // From KisImage
@@ -121,6 +124,9 @@ private slots:
     void slotLoadingFinished();
 
 private:
+
+    bool queryClose();
+
     class Private;
     Private * const d;
 };

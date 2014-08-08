@@ -200,7 +200,7 @@ public:
     /**
      * @return number of views this document is displayed in
      */
-    int viewCount() const;
+    int viewCount(KoDocument *doc = 0) const;
 
     /**
      * @return a QGraphicsItem canvas displaying this document. There is only one QGraphicsItem canvas that can

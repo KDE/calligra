@@ -115,10 +115,10 @@ KisMainWindow::KisMainWindow(KoPart *part, const KComponentData &instance)
     connect(m_newWindow, SIGNAL(triggered(bool)), this, SLOT(newWindow()));
 
     m_close = new KAction(i18n("Close"), this);
-    connect(m_close, SIGNAL(triggered()), SLOT(closeView()));
+    connect(m_close, SIGNAL(triggered()), SLOT(slotFileClose()));
 
     m_closeAll = new KAction(i18n("Close All"), this);
-    connect(m_closeAll, SIGNAL(triggered()), SLOT(closeAllViews()));
+    connect(m_closeAll, SIGNAL(triggered()), SLOT(slotFileCloseAll()));
 
     guiFactory()->addClient(m_guiClient);
 
@@ -308,15 +308,6 @@ void KisMainWindow::configChanged()
     KisConfig cfg;
     QMdiArea::ViewMode viewMode = (QMdiArea::ViewMode)cfg.readEntry<int>("mdi_viewmode", (int)QMdiArea::TabbedView);
     m_mdiArea->setViewMode(viewMode);
-}
-
-void KisMainWindow::closeView()
-{
-}
-
-void KisMainWindow::closeAllViews()
-{
-
 }
 
 void KisMainWindow::newView(QObject *document)

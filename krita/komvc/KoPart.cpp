@@ -215,9 +215,20 @@ QList<QPointer<KoView> > KoPart::views() const
     return d->views;
 }
 
-int KoPart::viewCount() const
+int KoPart::viewCount(KoDocument *doc) const
 {
-    return d->views.count();
+    if (!doc) {
+        return d->views.count();
+    }
+    else {
+        int count = 0;
+        foreach(QPointer<KoView> view, d->views) {
+            if (view->document() == doc) {
+                count++;
+            }
+        }
+        return count;
+    }
 }
 
 QGraphicsItem *KoPart::canvasItem(KoDocument *document, bool create)
