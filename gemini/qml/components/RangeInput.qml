@@ -34,6 +34,8 @@ Item {
     property alias border: valueSlider.border;
     property alias background: valueSlider.background;
 
+    onDecimalsChanged: d.fixHandle();
+    onUseExponentialValueChanged: d.fixHandle();
     onMinChanged: d.fixHandle();
     onMaxChanged: d.fixHandle();
     onValueChanged: {
@@ -60,8 +62,9 @@ Item {
             textField.text = value.toFixed(decimals);
         }
         if (useExponentialValue) {
-             if (valueSlider.exponentialValue !== value) {
-                 valueSlider.exponentialValue = ( (value - min) / (max - min) ) * 100;
+            var newValue = ( (value - min) / (max - min) ) * 100;
+             if (valueSlider.exponentialValue !== newValue) {
+                 valueSlider.exponentialValue = newValue;
              }
         }
         else {
