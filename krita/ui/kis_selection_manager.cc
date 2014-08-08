@@ -155,8 +155,8 @@ void KisSelectionManager::setup(KActionCollection * collection, KisActionManager
 
     m_clear = new KisAction(koIcon("edit-clear"), i18n("Deselect"), this);
     actionManager->addAction("clear", m_clear, collection);
-
     m_clear->setShortcut(QKeySequence((Qt::Key_Delete)));
+    connect(m_clear, SIGNAL(triggered()), SLOT(clear()));
 
     m_reselect  = new KisAction(i18n("&Reselect"), this);
     actionManager->addAction("select_all", m_reselect, collection);
@@ -457,8 +457,6 @@ void KisSelectionManager::convertToVectorSelection()
 
 void KisSelectionManager::convertShapesToVectorSelection()
 {
-                kDebug() << "foo";
-
     KisShapesToVectorSelectionActionFactory factory;
     factory.run(m_view);
 }
