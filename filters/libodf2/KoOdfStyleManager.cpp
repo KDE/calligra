@@ -79,7 +79,7 @@ void KoOdfStyleManager::setStyle(const QString &name, KoOdfStyle *style)
     d->styles.insert(qMakePair(name, style->family()), style);
 }
 
-KoOdfListStyle *KoOdfStyleManager::listStyle(QString &name) const
+KoOdfListStyle *KoOdfStyleManager::listStyle(const QString &name) const
 {
     return d->listStyles.value(name, 0);
 }
