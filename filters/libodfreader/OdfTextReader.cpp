@@ -253,8 +253,27 @@ void OdfTextReader::readElementTextList(KoXmlStreamReader &reader)
     DEBUGSTART();
     m_backend->elementTextList(reader, m_context);
 
+    // <text:list> has the following children in ODF 1.2:
+    //   [done] <text:list-header> 5.3.3
+    //   [done] <text:list-item> 5.3.4
+
     m_context->setIsInsideParagraph(true);
-    readListContent(reader);
+    while (reader.readNextStartElement()) {
+        DEBUG_READING("loop-start");
+
+        QString tagName = reader.qualifiedName().toString();
+        //kDebug() << "list child:" << tagName;
+        if (tagName == "text:list-item") {
+            readElementTextListItem(reader);
+        }
+        else if (tagName == "text:list-header") {
+            readElementTextListHeader(reader);
+        }
+        else {
+            readUnknownElement(reader);
+        }
+        DEBUG_READING("loop-end");
+    }
     m_context->setIsInsideParagraph(false);
 
     m_backend->elementTextList(reader, m_context);
@@ -801,42 +820,10 @@ void OdfTextReader::readElementTextSpan(KoXmlStreamReader &reader)
     DEBUGEND();
 }
 
+
 // ----------------------------------------------------------------
 //                        List level functions
 
-void OdfTextReader::readListContent(KoXmlStreamReader &reader)
-{
-    DEBUGSTART();
-
-    // This function handles content of text:list that contains two
-    // child element <text:list-header> 5.3.3 and <text:list-item>
-    // 5.3.4 and both of their child elements are same:
-
-    // <text:h> 5.1.2
-    // <text:p> 5.1.3
-    // <text:list> 5.3.1
-    // <text:soft-page-break> 5.6
-    // <text:number> 6.1.10
-
-    while (reader.readNextStartElement()) {
-        DEBUG_READING("loop-start");
-
-        QString tagName = reader.qualifiedName().toString();
-        kDebug() << "list child:" << tagName;
-        if (tagName == "text:list-item") {
-            readElementTextListItem(reader);
-        }
-        else if (tagName == "text:list-header") {
-            readElementTextListHeader(reader);
-        }
-        else {
-            readUnknownElement(reader);
-        }
-        DEBUG_READING("loop-end");
-    }
-
-    DEBUGEND();
-}
 
 void OdfTextReader::readElementTextListHeader(KoXmlStreamReader &reader)
 {
