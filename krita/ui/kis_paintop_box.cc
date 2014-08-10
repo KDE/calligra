@@ -375,6 +375,7 @@ void KisPaintopBox::resourceSelected(KoResource* resource)
             return;
         bool saveDirtyPreset = preset->dirtyPreset();
         setCurrentPaintop(preset->paintOp(), preset);
+        m_optionWidget->writeConfiguration(const_cast<KisPaintOpSettings*>(m_resourceProvider->currentPreset()->settings().data()));
         preset->setDirtyPreset(saveDirtyPreset);
         m_resourceProvider->currentPreset()->setDirtyPreset(saveDirtyPreset);
         m_presetsPopup->setPresetImage(preset->image());

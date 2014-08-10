@@ -56,7 +56,7 @@ KisTransactionData::KisTransactionData(const KUndo2MagicString& name, KisPaintDe
     , m_d(new Private())
 {
     m_d->resetSelectionOutlineCache = resetSelectionOutlineCache;
-
+    setTimedID(-1);
     init(device);
     saveSelectionOutlineCache();
 }

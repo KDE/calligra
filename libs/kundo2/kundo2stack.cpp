@@ -131,7 +131,7 @@
 */
 
 KUndo2Command::KUndo2Command(const KUndo2MagicString &text, KUndo2Command *parent):
-    m_hasParent(parent != 0),m_endOfCommand(QTime::currentTime())
+    m_hasParent(parent != 0),m_endOfCommand(QTime::currentTime()),m_timedID(0)
 {
     d = new KUndo2CommandPrivate;
     if (parent != 0) {
@@ -152,7 +152,7 @@ KUndo2Command::KUndo2Command(const KUndo2MagicString &text, KUndo2Command *paren
 */
 
 KUndo2Command::KUndo2Command(KUndo2Command *parent):
-    m_hasParent(parent != 0)
+    m_hasParent(parent != 0),m_timedID(0)
 {
     d = new KUndo2CommandPrivate;
     if (parent != 0)
@@ -331,8 +331,13 @@ bool KUndo2Command::hasParent()
 }
 int KUndo2Command::timedId()
 {
-    return 0;
+    return m_timedID;
 }
+void KUndo2Command::setTimedID(int value)
+{
+    m_timedID = value;
+}
+
 bool KUndo2Command::timedMergeWith(KUndo2Command *other)
 {
     m_mergeCommandsVector.append(other);
@@ -678,13 +683,19 @@ void KUndo2QStack::push(KUndo2Command *cmd)
             m_lastMergedSetCount = 0;
             m_lastMergedIndex = m_index-1;
         }
+        if(lastcmd->timedId()!=1)
+        {
+            m_lastMergedSetCount = 0;
+            m_lastMergedIndex = m_index;
+        }
 
 
         if (m_lastMergedSetCount > m_strokesN) {
             KUndo2Command* toMerge = m_command_list.at(m_lastMergedIndex);
             if (toMerge && m_command_list.at(m_lastMergedIndex + 1)) {
-                toMerge->timedMergeWith(m_command_list.at(m_lastMergedIndex + 1));
-                m_command_list.removeAt(m_lastMergedIndex + 1);
+                if(toMerge->timedMergeWith(m_command_list.at(m_lastMergedIndex + 1))){
+                    m_command_list.removeAt(m_lastMergedIndex + 1);
+                }
                 m_lastMergedSetCount--;
                 m_lastMergedIndex = m_command_list.indexOf(toMerge);
             }
@@ -692,7 +703,7 @@ void KUndo2QStack::push(KUndo2Command *cmd)
         }
         m_index = m_command_list.size();
 
-        if(m_command_list.at(m_lastMergedIndex)){
+        if(m_lastMergedIndex<m_index){
             if (cmd->time().msecsTo(m_command_list.at(m_lastMergedIndex)->endTime()) < -m_timeT1 * 1000) { //T1 time elapsed
 
                 QListIterator<KUndo2Command*> it(m_command_list);
@@ -703,9 +714,10 @@ void KUndo2QStack::push(KUndo2Command *cmd)
                     KUndo2Command* curr = it.previous();
                     if (!lastcmd->mergeCommandsVector().isEmpty()) {
                         if (lastcmd->mergeCommandsVector().last()->time().msecsTo(curr->endTime()) > -m_timeT2 * 1000 && lastcmd != curr) {
-                            lastcmd->timedMergeWith(curr);
-                            if (m_command_list.contains(curr)) {
-                                m_command_list.removeOne(curr);
+                            if(lastcmd->timedMergeWith(curr)){
+                                if (m_command_list.contains(curr)) {
+                                    m_command_list.removeOne(curr);
+                                }
                             }
                         } else {
                             lastcmd = curr; //end of a merge set
@@ -713,9 +725,10 @@ void KUndo2QStack::push(KUndo2Command *cmd)
 
                     } else {
                         if (lastcmd->time().msecsTo(curr->endTime()) > -m_timeT2 * 1000 && lastcmd != curr) {
-                            lastcmd->timedMergeWith(curr);
-                            if (m_command_list.contains(curr)) {
-                                m_command_list.removeOne(curr);
+                            if(lastcmd->timedMergeWith(curr)){
+                                if (m_command_list.contains(curr)) {
+                                    m_command_list.removeOne(curr);
+                                }
                             }
                         } else {
                             lastcmd = curr; //end of a merge set

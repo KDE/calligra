@@ -221,7 +221,7 @@ void KisPaintOpPresetsPopup::changeSavePresetButtonText(bool change)
 
     }
     else {
-        m_d->uiWdgPaintOpPresetSettings.bnSave->setVisible(true);
+        m_d->uiWdgPaintOpPresetSettings.bnSave->setEnabled(true);
         m_d->uiWdgPaintOpPresetSettings.bnSave->setText(i18n("Save to Presets"));
 
     }
@@ -308,12 +308,12 @@ void KisPaintOpPresetsPopup::resourceSelected(KoResource* resource)
         palette.setColor(QPalette::Base, QColor(255,200,200));
         palette.setColor(QPalette::Text, Qt::black);
         m_d->uiWdgPaintOpPresetSettings.txtPreset->setPalette(palette);
-        m_d->uiWdgPaintOpPresetSettings.bnSave->setVisible(true);
+        m_d->uiWdgPaintOpPresetSettings.bnSave->setEnabled(true);
        }
     else
     {
      m_d->uiWdgPaintOpPresetSettings.txtPreset->setPalette(palette);
-     m_d->uiWdgPaintOpPresetSettings.bnSave->setVisible(false);
+     m_d->uiWdgPaintOpPresetSettings.bnSave->setEnabled(false);
     }
     m_d->uiWdgPaintOpPresetSettings.txtPreset->setText(resource->name());
 }

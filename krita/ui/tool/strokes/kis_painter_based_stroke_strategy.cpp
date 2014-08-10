@@ -139,6 +139,7 @@ void KisPainterBasedStrokeStrategy::initStrokeCallback()
     }
 
     m_transaction = new KisTransaction(name(), targetDevice);
+    m_transaction->undoCommand()->setTimedID(1);
 
     initPainters(targetDevice, selection, hasIndirectPainting, indirectPaintingCompositeOp());
 

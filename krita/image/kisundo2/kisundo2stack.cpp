@@ -33,21 +33,21 @@
 
 KisUndo2Command::KisUndo2Command(const KUndo2MagicString &text, KUndo2Command *parent): KUndo2Command(text, parent)
 {
-
+    setTimedID(1);
 }
 
 
 
 KisUndo2Command::KisUndo2Command(KUndo2Command *parent): KUndo2Command(parent)
 {
-
+    setTimedID(1);
 }
 
 
 
 KisUndo2Command::~KisUndo2Command()
 {
-
+    setTimedID(1);
 }
 
 
@@ -80,14 +80,13 @@ void KisUndo2Command::undoMergedCommands()
         }
     }
 }
-int KisUndo2Command::timedId()
-{
-    return 1;
-}
 
 bool KisUndo2Command::timedMergeWith(KUndo2Command *other)
 {
-    KUndo2Command::timedMergeWith(other);
+    if(other->timedId() == 1 && this->timedId() == 1 )
+        KUndo2Command::timedMergeWith(other);
+    else
+        return false;
     return true;
 }
 

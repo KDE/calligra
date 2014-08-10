@@ -82,6 +82,7 @@ class KActionCollection;
 class KUNDO2_EXPORT KUndo2Command
 {
     KUndo2CommandPrivate *d;
+    int timedID;
 
 public:
     explicit KUndo2Command(KUndo2Command *parent = 0);
@@ -97,6 +98,7 @@ public:
 
     virtual int id() const;
     virtual int timedId();
+    virtual void setTimedID(int timedID);
     virtual bool mergeWith(const KUndo2Command *other);
     virtual bool timedMergeWith(KUndo2Command *other);
 
@@ -120,6 +122,7 @@ private:
     friend class KUndo2QStack;
 
     bool m_hasParent;
+    int m_timedID;
 
     QTime m_timeOfCreation;
     QTime m_endOfCommand;

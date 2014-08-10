@@ -51,7 +51,7 @@ public:
 
 
 
-    virtual int timedId();
+
     virtual bool timedMergeWith(KUndo2Command *other);
 
 private:
