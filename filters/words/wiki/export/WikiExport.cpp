@@ -64,10 +64,6 @@ KoFilter::ConversionStatus WikiExport::convert(const QByteArray& from, const QBy
     // Open the infile and return an error if it fails.
     KoStore *odfStore = KoStore::createStore(m_chain->inputFile(), KoStore::Read,
                                              "", KoStore::Auto);
-    // If we don't call disallowNameExpansion(), then filenames that
-    // begin with numbers will not be opened. Embedded images often
-    // have names like this.
-    odfStore->disallowNameExpansion();
     if (!odfStore->open("mimetype")) {
         kError(30503) << "Unable to open input file!" << endl;
         delete odfStore;
