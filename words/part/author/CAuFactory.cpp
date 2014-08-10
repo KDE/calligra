@@ -41,6 +41,8 @@
 #include <KoSemanticStylesheetsEditor.h>
 #include "dockers/KWRdfDocker.h"
 #include "dockers/KWRdfDockerFactory.h"
+#include "dockers/CAuOutlinerDocker.h"
+#include "dockers/CAuOutlinerDockerFactory.h"
 #endif
 
 #include "dockers/KWStatisticsDocker.h"
@@ -102,6 +104,7 @@ const KComponentData &CAuFactory::componentData()
 #ifdef SHOULD_BUILD_RDF
 // TODO reenable after release
         dockRegistry->add(new KWRdfDockerFactory());
+        dockRegistry->add(new CAuOutlinerDockerFactory());
 #endif
 
     }

@@ -94,6 +94,10 @@ if( SHOULD_BUILD_FEATURE_RDF )
         dockers/KWRdfDocker.cpp
         dockers/KWRdfDockerFactory.cpp
         dockers/KWRdfDockerTree.cpp
+
+        author/dockers/CAuOutlinerDocker.cpp
+        author/dockers/CAuOutlinerDockerFactory.cpp
+        author/dockers/CAuOutlinerWidget.cpp
     )
 endif( SHOULD_BUILD_FEATURE_RDF )
 

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2014 Denis Kupluakov <dener.kup@gmail.com>
+ * Copyright (C) 2014 Denis Kuplyakov <dener.kup@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,49 +17,21 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KWDEBUGWIDGET_H
-#define KWDEBUGWIDGET_H
+#include "CAuOutlinerDockerFactory.h"
+#include <author/dockers/CAuOutlinerDocker.h>
 
-#include <QWidget>
-#include <KWCanvas.h>
-
-#include <QLabel>
-#include <QPushButton>
-
-/** KWDebugWidget shows some debug info.
- */
-
-class KWDebugWidget : public QWidget
+CAuOutlinerDockerFactory::CAuOutlinerDockerFactory()
 {
-    Q_OBJECT
+}
 
-public:
-    explicit KWDebugWidget(QWidget *parent = 0);
-    virtual ~KWDebugWidget();
+QString CAuOutlinerDockerFactory::id() const
+{
+    return QString("Outliner");
+}
 
-    friend class KWDebugDocker;
-
-    void setCanvas(KWCanvas* canvas);
-
-    void unsetCanvas();
-
-private slots:
-    void updateData();
-    void doSetMagic();
-    void doGetMagic();
-
-private:
-    void initUi();
-    void initLayout();
-
-    void updateDataUi();
-
-private:
-    QLabel *m_label;
-    QPushButton *m_buttonSet;
-    QPushButton *m_buttonGet;
-
-    KWCanvas *m_canvas;
-};
-
-#endif // KWDEBUGWIDGET_H
+QDockWidget *CAuOutlinerDockerFactory::createDockWidget()
+{
+    CAuOutlinerDocker *widget = new CAuOutlinerDocker();
+    widget->setObjectName(id());
+    return widget;
+}

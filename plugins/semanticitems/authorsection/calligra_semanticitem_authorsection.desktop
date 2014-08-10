@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Author section RDF plugin
+Comment[en_GB]=A plugin allows to store metadata for sections in Author
+
+Type=Service
+X-KDE-ServiceTypes=Calligra/SemanticItem
+X-KDE-Library=calligra_semanticitem_authorsection
+X-KDE-PluginInfo-Name=calligra_semanticitem_authorsection
+X-Calligra-MinVersion=28
+X-Calligra-PluginVersion=28

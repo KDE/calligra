@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2014 Denis Kupluakov <dener.kup@gmail.com>
+ * Copyright (C) 2014 Denis Kuplyakov <dener.kup@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,49 +17,28 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KWDEBUGWIDGET_H
-#define KWDEBUGWIDGET_H
+#ifndef CAUOUTLINERDOCKER_H
+#define CAUOUTLINERDOCKER_H
 
-#include <QWidget>
-#include <KWCanvas.h>
+// Base classes
+#include <QDockWidget>
+#include <KoCanvasObserverBase.h>
 
-#include <QLabel>
-#include <QPushButton>
+class CAuOutlinerWidget;
+class KoCanvasBase;
 
-/** KWDebugWidget shows some debug info.
- */
-
-class KWDebugWidget : public QWidget
+class CAuOutlinerDocker : public QDockWidget, public KoCanvasObserverBase
 {
     Q_OBJECT
-
 public:
-    explicit KWDebugWidget(QWidget *parent = 0);
-    virtual ~KWDebugWidget();
-
-    friend class KWDebugDocker;
-
-    void setCanvas(KWCanvas* canvas);
-
-    void unsetCanvas();
-
-private slots:
-    void updateData();
-    void doSetMagic();
-    void doGetMagic();
+    explicit CAuOutlinerDocker();
+    ~CAuOutlinerDocker();
+    /// reimplemented from KoCanvasObserver
+    virtual void setCanvas(KoCanvasBase *canvas);
+    virtual void unsetCanvas();
 
 private:
-    void initUi();
-    void initLayout();
-
-    void updateDataUi();
-
-private:
-    QLabel *m_label;
-    QPushButton *m_buttonSet;
-    QPushButton *m_buttonGet;
-
-    KWCanvas *m_canvas;
+    CAuOutlinerWidget *m_outlinerWidget;
 };
 
-#endif // KWDEBUGWIDGET_H
+#endif //CAUOUTLINERDOCKER_H

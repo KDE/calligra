@@ -279,7 +279,8 @@ bool KoDocumentRdf::loadOasis(KoStore *store)
             Soprano::SerializationRdfXml);
     bool ok = loadRdf(store, parser, "manifest.rdf");
     if (ok) {
-        QString sparqlQuery = "prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n"
+        QString sparqlQuery =
+            "prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n"
             "prefix odf: <http://docs.oasis-open.org/ns/office/1.2/meta/odf#> \n"
             "prefix pkg: <http://docs.oasis-open.org/ns/office/1.2/meta/pkg#> \n"
             "select ?subj ?fileName \n"
@@ -523,7 +524,7 @@ void KoDocumentRdf::addStatements(QSharedPointer<Soprano::Model> model, const QS
                   "\n"
                   "select ?s ?p ?o ?g \n"
                   "where { \n"
-                  " graph ?g {  ?s ?p ?o } .  ?s pkg:idref ?xmlid  \n"
+                  " graph ?g { ?s ?p ?o } .  ?s pkg:idref ?xmlid  \n"
                   " filter( str(?xmlid) = \"" + xmlid + "\" ) \n"
                   "}\n";
 

@@ -73,12 +73,12 @@ QStringList KoRdfSemanticItem::xmlIdList() const
 {
     QStringList ret;
 
-    Soprano::Node linksubj = linkingSubject();
     StatementIterator it = documentRdf()->model()->listStatements(
-                               linksubj,
-                               Node::createResourceNode(QUrl("http://docs.oasis-open.org/ns/office/1.2/meta/pkg#idref")),
-                               Node(),
-                               documentRdf()->manifestRdfNode());
+        linkingSubject(),
+        Node::createResourceNode(QUrl("http://docs.oasis-open.org/ns/office/1.2/meta/pkg#idref")),
+        Node(),
+        documentRdf()->manifestRdfNode()
+    );
     QList<Statement> allStatements = it.allElements();
     foreach (const Soprano::Statement &s, allStatements) {
         QString xmlid = s.object().toString();

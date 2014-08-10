@@ -17,49 +17,52 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KWDEBUGWIDGET_H
-#define KWDEBUGWIDGET_H
+#ifndef CAUOUTLINERWIDGET_H
+#define CAUOUTLINERWIDGET_H
+
+#include <KWCanvas.h>
+#include <KoTextDocumentLayout.h>
 
 #include <QWidget>
-#include <KWCanvas.h>
-
-#include <QLabel>
+#include <QTreeView>
 #include <QPushButton>
+#include <QTimer>
 
-/** KWDebugWidget shows some debug info.
+//TODO: add doc
+/** CAuOutlinerWidget
  */
 
-class KWDebugWidget : public QWidget
+class CAuOutlinerWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit KWDebugWidget(QWidget *parent = 0);
-    virtual ~KWDebugWidget();
+    explicit CAuOutlinerWidget(QWidget *parent = 0);
+    virtual ~CAuOutlinerWidget();
 
-    friend class KWDebugDocker;
+    friend class CAuOutlinerDocker;
 
     void setCanvas(KWCanvas* canvas);
-
     void unsetCanvas();
 
 private slots:
     void updateData();
-    void doSetMagic();
-    void doGetMagic();
+    void sectionClicked(QModelIndex idx);
+    void updateSelection();
+    void sectionEditClicked();
 
 private:
+    KWCanvas *m_canvas;
+    KoTextDocumentLayout *m_layout;
+    QTextDocument *m_document;
+
+    QTimer *m_updateTimer;
+
+    QTreeView *m_sectionTree;
+    QPushButton *m_editButton;
+
     void initUi();
     void initLayout();
-
-    void updateDataUi();
-
-private:
-    QLabel *m_label;
-    QPushButton *m_buttonSet;
-    QPushButton *m_buttonGet;
-
-    KWCanvas *m_canvas;
 };
 
-#endif // KWDEBUGWIDGET_H
+#endif //CAUOUTLINERWIDGET_H

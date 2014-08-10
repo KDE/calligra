@@ -32,6 +32,8 @@ class KoXmlElement;
 class KoShapeSavingContext;
 class KoTextSharedLoadingData;
 class KoSectionEnd;
+class KoElementReference;
+class KoTextInlineRdf;
 
 class KoSectionPrivate;
 /**
@@ -68,6 +70,16 @@ public:
      * and new name isn't accepted
      */
     bool setName(QString name);
+
+    /** Returns inlineRdf associated with section
+     * @return pointer to the KoTextInlineRdf for this section
+     */
+    KoTextInlineRdf *inlineRdf() const;
+
+    /** Sets KoTextInlineRdf for this section
+     * @param inlineRdf pointer to KoTextInlineRdf to set
+     */
+    void setInlineRdf(KoTextInlineRdf *inlineRdf);
 
     bool loadOdf(const KoXmlElement &element, KoTextSharedLoadingData *sharedData, bool stylesDotXml);
     void saveOdf(KoShapeSavingContext &context) const;
