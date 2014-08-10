@@ -827,70 +827,73 @@ void OdfTextReader::readElementTextSpan(KoXmlStreamReader &reader)
 
 void OdfTextReader::readElementTextListHeader(KoXmlStreamReader &reader)
 {
-     DEBUGSTART();
-     //List header has child elements:
-     // <text:h> 5.1.2
-     // <text:p> 5.1.3
-     // <text:list> 5.3.1
-     // <text:soft-page-break> 5.6
-     // <text:number> 6.1.10
-     //FIXME: Here we just handle tags p, h and list.
-     while(reader.readNextStartElement()) {
-         DEBUG_READING("loop-start");
+    DEBUGSTART();
+    m_backend->elementTextListHeader(reader, m_context);
 
-         QString tagName = reader.qualifiedName().toString();
-         if (tagName == "text:h") {
-             m_backend->elementTextListItem(reader, m_context);
-             reader.readNext();
-             readParagraphContents(reader);
-             m_backend->elementTextListItem(reader, m_context);
-         }
-         else if (tagName == "text:p") {
-             m_backend->elementTextListItem(reader, m_context);
-             reader.readNext();
-             readParagraphContents(reader);
-             m_backend->elementTextListItem(reader, m_context);
-         }
-         else if (tagName == "text:list") {
-             readElementTextList(reader);
-         }
-         else {
-             readUnknownElement(reader);
-         }
-         DEBUG_READING("loop-end");
-     }
-     DEBUGEND();
+    // <text:list-header> has the following children in ODF 1.2:
+    //   [done] <text:h> 5.1.2
+    //   [done] <text:p> 5.1.3
+    //   [done] <text:list> 5.3.1
+    //   [done] <text:soft-page-break> 5.6
+    //          <text:number> 6.1.10
+    while(reader.readNextStartElement()) {
+	DEBUG_READING("loop-start");
+
+	QString tagName = reader.qualifiedName().toString();
+	if (tagName == "text:h") {
+	    readElementTextH(reader);
+	}
+	else if (tagName == "text:p") {
+	    readElementTextP(reader);
+	}
+	else if (tagName == "text:list") {
+	    readElementTextList(reader);
+	}
+        else if (tagName == "text:soft-page-break") {
+	    readElementTextSoftPageBreak(reader);
+        }
+        else if (tagName == "text:number") {
+            //FIXME
+            reader.skipCurrentElement();
+        }
+	else {
+	    readUnknownElement(reader);
+	}
+
+	DEBUG_READING("loop-end");
+    }
+
+    m_backend->elementTextListHeader(reader, m_context);
+    DEBUGEND();
 }
 
 void OdfTextReader::readElementTextListItem(KoXmlStreamReader &reader)
 {
     DEBUGSTART();
-    //List item has child elements:
-    // <text:h> 5.1.2
-    // <text:p> 5.1.3
-    // <text:list> 5.3.1
-    // <text:soft-page-break> 5.6
-    // <text:number> 6.1.10
-    //FIXME: Here we just handle tags p, h and list.
+    m_backend->elementTextListItem(reader, m_context);
+
+    // <text:list-item> has the following children in ODF 1.2:
+    //   [done] <text:h> 5.1.2
+    //   [done] <text:p> 5.1.3
+    //   [done] <text:list> 5.3.1
+    //   [done] <text:soft-page-break> 5.6
+    //          <text:number> 6.1.10
     while(reader.readNextStartElement()) {
         DEBUG_READING("loop-start");
 
         QString tagName = reader.qualifiedName().toString();
         kDebug() <<tagName;
-        if (tagName == "text:h") {
-            m_backend->elementTextListItem(reader, m_context);
-            reader.readNext();
-            readParagraphContents(reader);
-            m_backend->elementTextListItem(reader, m_context);
-        }
-        else if (tagName == "text:p") {
-            m_backend->elementTextListItem(reader, m_context);
-            reader.readNext();
-            readParagraphContents(reader);
-            m_backend->elementTextListItem(reader, m_context);
-        }
+	if (tagName == "text:h") {
+	    readElementTextH(reader);
+	}
+	else if (tagName == "text:p") {
+	    readElementTextP(reader);
+	}
         else if (tagName == "text:list") {
             readElementTextList(reader);
+        }
+        else if (tagName == "text:soft-page-break") {
+	    readElementTextSoftPageBreak(reader);
         }
         else if (tagName == "text:number") {
             //FIXME
@@ -899,8 +902,11 @@ void OdfTextReader::readElementTextListItem(KoXmlStreamReader &reader)
         else {
             readUnknownElement(reader);
         }
-    DEBUG_READING("loop-end");
+
+	DEBUG_READING("loop-end");
     }
+
+    m_backend->elementTextListItem(reader, m_context);
     DEBUGEND();
 }
 
