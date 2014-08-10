@@ -234,7 +234,7 @@ KisPaintopBox::KisPaintopBox(KisView2 *view, QWidget *parent, const char *name)
 
     action = new KAction(i18n("Previous Favourite Preset"), this);
     view->actionCollection()->addAction("previous_favorite_preset", action);
-    action->setShortcut(KShortcut(Qt::Key_Stop));
+    action->setShortcut(KShortcut(Qt::Key_Period));
     connect(action, SIGNAL(triggered()), this, SLOT(slotPreviousFavoritePreset()));
 
     action = new KAction(i18n("Switch to Previous Preset"), this);
@@ -598,7 +598,7 @@ void KisPaintopBox::slotSaveActivePreset()
     KisPaintOpPreset* resource = rServer->resourceByName(name);
     if (resource) {
         tags = rServer->assignedTagsList(resource);
-        rServer->removeResource(resource);
+        rServer->removeResourceAndBlacklist(resource);
     }
 
     newPreset->setImage(m_presetsPopup->cutOutOverlay());

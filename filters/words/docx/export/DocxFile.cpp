@@ -67,8 +67,6 @@ KoFilter::ConversionStatus DocxFile::writeDocx(const QString &fileName,
         delete docxStore;
         return KoFilter::FileNotFound;
     }
-    docxStore->disallowNameExpansion();
-
     KoFilter::ConversionStatus  status;
 
     // Write top-level rels

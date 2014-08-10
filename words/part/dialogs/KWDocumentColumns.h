@@ -22,6 +22,7 @@
 
 #include <ui_KWDocumentColumns.h>
 #include <KoPageLayout.h>
+#include <KoColumns.h>
 
 #include <QWidget>
 

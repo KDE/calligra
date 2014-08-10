@@ -44,7 +44,7 @@ static KAboutData createAboutData()
 {
     KAboutData aboutData(
          "okular_odp",
-         "okular_odp",
+         "okularGenerator_odp",
          ki18n( "ODP Backend" ),
          "0.1",
          ki18n( "ODP file renderer" ),

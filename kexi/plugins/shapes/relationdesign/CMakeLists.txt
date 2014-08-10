@@ -25,5 +25,5 @@ ${QT_QTGUI_LIBRARY}
 )
 
 install(TARGETS kexirelationdesignshape  DESTINATION ${PLUGIN_INSTALL_DIR})
-install( FILES kexirelationdesignshape.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+install( FILES kexirelationdesignshape.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra )
 

@@ -40,6 +40,7 @@
 #include <QTextCursor>
 #include <QTextBlock>
 
+#include <KoStore.h>
 #include <KoTextDocument.h>
 #include <KoTextRangeManager.h>
 

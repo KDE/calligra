@@ -52,6 +52,7 @@
 #include <kexipart.h>
 #include <kexipartinfo.h>
 #include <kexipartitem.h>
+#include <kexipartmanager.h>
 #include <kexiproject.h>
 #include <KexiMainWindowIface.h>
 #include <kexiutils/identifier.h>

@@ -24,12 +24,13 @@
 #include "KoTextCommandBase.h"
 #include "KoListStyle.h"
 #include "KoTextEditor.h"
-#include "KoList.h"
 #include "KoListLevelProperties.h"
 
 #include <QTextBlock>
 #include <QList>
 #include <QHash>
+
+class KoList;
 
 /**
  * This command is useful to alter the list-association of a single textBlock.
@@ -38,6 +39,7 @@ class ChangeListCommand : public KoTextCommandBase
 {
 public:
 
+    //FIXME: following comments seems to describe another function
     /**
      * Change the list property of 'block'.
      * @param block the paragraph to change the list property of

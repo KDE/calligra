@@ -32,4 +32,4 @@ install(TARGETS karbonxamlimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  karbon_xaml_export.desktop karbon_xaml_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  karbon_xaml_export.desktop karbon_xaml_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)

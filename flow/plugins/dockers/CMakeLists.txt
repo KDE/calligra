@@ -17,9 +17,13 @@ set(flowdockers_SRCS
 
 kde4_add_plugin(flowdockersplugin ${flowdockers_SRCS})
 
-target_link_libraries(flowdockersplugin komain kowidgets ${KDE4_KNEWSTUFF3_LIBS})
+target_link_libraries(flowdockersplugin komain kowidgets)
+
+if(GHNS)
+    target_link_libraries(flowdockersplugin ${KDE4_KNEWSTUFF3_LIBS})
+endif()
 
 install(TARGETS flowdockersplugin DESTINATION ${PLUGIN_INSTALL_DIR})
 
-install(FILES flowdockersplugin.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install(FILES flowdockersplugin.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 install(FILES stencilboxdocker/flow_stencils.knsrc DESTINATION ${CONFIG_INSTALL_DIR})

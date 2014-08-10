@@ -28,9 +28,9 @@
 
 #include <QVariant>
 #include <QVariantList>
+
 #include <kdebug.h>
 #include <klocale.h>
-#include <kpluginfactory.h>
 
 WebBrowserFactory::WebBrowserFactory(QObject* parent, const QVariantList& args)
   : KexiDBFactoryBase(parent, "webbrowser")
@@ -101,6 +101,6 @@ bool WebBrowserFactory::previewWidget(const QByteArray &classname,
     return true;
 }
      
-K_EXPORT_KEXI_FORM_WIDGET_FACTORY_PLUGIN(WebBrowserFactory, webbrowser)
+K_EXPORT_KEXIFORMWIDGETS_PLUGIN(WebBrowserFactory, webbrowser)
 
 #include "WebBrowserFactory.moc"

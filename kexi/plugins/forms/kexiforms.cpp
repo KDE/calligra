@@ -17,8 +17,6 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <kpluginfactory.h>
-
 #include "kexiformpart.h"
 
-K_EXPORT_KEXI_PLUGIN( KexiFormPart, form )
+K_EXPORT_KEXIPART_PLUGIN( KexiFormPart, form )

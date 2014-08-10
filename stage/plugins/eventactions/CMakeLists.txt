@@ -25,4 +25,4 @@ target_link_libraries(
 
 install(TARGETS calligrastageeventactions  DESTINATION ${PLUGIN_INSTALL_DIR})
 
-install(FILES calligrastageeventactions.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+install(FILES calligrastageeventactions.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra )

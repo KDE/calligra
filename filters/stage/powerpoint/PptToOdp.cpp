@@ -925,7 +925,6 @@ PptToOdp::doConversion(KoStore* storeout)
                                 KoOdf::mimeType(KoOdf::Presentation));
 
     // store the images from the 'Pictures' stream
-    storeout->disallowNameExpansion();
     storeout->enterDirectory("Pictures");
     pictureNames = createPictures(storeout, manifest, &p->pictures.anon1.rgfb);
     // read pictures from the PowerPoint Document structures

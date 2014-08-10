@@ -17,6 +17,10 @@
    Boston, MA 02110-1301, USA.
 */
 #include "pictures.h"
+
+#include <KoStore.h>
+#include <KoXmlWriter.h>
+
 #include <zlib.h>
 #include <cstdio>
 #include <iostream>

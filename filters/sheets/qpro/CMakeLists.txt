@@ -23,5 +23,5 @@ install(TARGETS calligra_filter_qpro2sheets  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  calligra_filter_qpro2sheets.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  calligra_filter_qpro2sheets.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 

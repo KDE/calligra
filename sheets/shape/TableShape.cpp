@@ -26,6 +26,7 @@
 
 #include <kdebug.h>
 
+#include <KoGenStyles.h>
 #include <KoOdfLoadingContext.h>
 #include <KoShapeContainer.h>
 #include <KoShapeLoadingContext.h>

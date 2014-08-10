@@ -80,10 +80,6 @@ KoFilter::ConversionStatus ExportEpub2::convert(const QByteArray &from, const QB
     // Open the infile and return an error if it fails.
     KoStore *odfStore = KoStore::createStore(m_chain->inputFile(), KoStore::Read,
                                              "", KoStore::Auto);
-    // If we don't call disallowNameExpansion(), then filenames that
-    // begin with numbers will not be opened. Embedded images often
-    // have names like this.
-    odfStore->disallowNameExpansion();
     if (!odfStore->open("mimetype")) {
         kError(30503) << "Unable to open input file!" << endl;
         delete odfStore;
@@ -118,7 +114,7 @@ KoFilter::ConversionStatus ExportEpub2::convert(const QByteArray &from, const QB
     // Create content files.
 
     // Create html contents.
-    // m_imagesSrcList is an output parameter from the conversion.    
+    // m_imagesSrcList is an output parameter from the conversion.
     OdtHtmlConverter::ConversionOptions options = {
         true,                   // do put styles in css file
         true,                    // do break into chapters

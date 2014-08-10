@@ -21,6 +21,8 @@
 
 #include "kis_tool_freehand.h"
 
+#include <QSignalMapper>
+
 #include "KoToolFactoryBase.h"
 
 #include <flake/kis_node_shape.h>
@@ -47,6 +49,7 @@ class KisToolBrush : public KisToolFreehand
     Q_PROPERTY(qreal delayDistance READ delayDistance WRITE setDelayDistance NOTIFY delayDistanceChanged)
 
     Q_PROPERTY(bool finishStabilizedCurve READ finishStabilizedCurve WRITE setFinishStabilizedCurve NOTIFY finishStabilizedCurveChanged)
+    Q_PROPERTY(bool stabilizeSensors READ stabilizeSensors WRITE setStabilizeSensors NOTIFY stabilizeSensorsChanged)
 
 
 public:
@@ -54,6 +57,9 @@ public:
     virtual ~KisToolBrush();
 
     QWidget * createOptionWidget();
+
+    void activate(ToolActivation activation, const QSet<KoShape*> &shapes);
+    void deactivate();
 
     int smoothnessQuality() const;
     qreal smoothnessFactor() const;
@@ -65,6 +71,7 @@ public:
     qreal delayDistance() const;
 
     bool finishStabilizedCurve() const;
+    bool stabilizeSensors() const;
 
 protected slots:
     virtual void resetCursorStyle();
@@ -80,6 +87,8 @@ public slots:
     void setUseDelayDistance(bool value);
     void setDelayDistance(qreal value);
 
+    void setStabilizeSensors(bool value);
+
     void setFinishStabilizedCurve(bool value);
 
     virtual void updateSettingsViews();
@@ -94,9 +103,12 @@ Q_SIGNALS:
     void useDelayDistanceChanged();
     void delayDistanceChanged();
     void finishStabilizedCurveChanged();
+    void stabilizeSensorsChanged();
 
 private:
-    QGridLayout *m_optionLayout;
+    void addSmoothingAction(int enumId, const QString &id, const QString &name, KActionCollection *globalCollection);
+
+private:
     QComboBox *m_cmbSmoothingType;
 
     QCheckBox *m_chkAssistant;
@@ -106,10 +118,12 @@ private:
     QCheckBox *m_chkSmoothPressure;
     QCheckBox *m_chkUseScalableDistance;
 
+    QCheckBox *m_chkStabilizeSensors;
     QCheckBox *m_chkDelayDistance;
     KisDoubleSliderSpinBox *m_sliderDelayDistance;
 
     QCheckBox *m_chkFinishStabilizedCurve;
+    QSignalMapper m_signalMapper;
 };
 
 

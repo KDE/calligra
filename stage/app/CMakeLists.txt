@@ -25,5 +25,5 @@ install(TARGETS kdeinit_calligrastage ${INSTALL_TARGETS_DEFAULT_ARGS})
 target_link_libraries(calligrastage kdeinit_calligrastage)
 install(TARGETS calligrastage ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-install( PROGRAMS stage.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
+install( PROGRAMS stage.desktop DESTINATION ${XDG_APPS_INSTALL_DIR}/calligra)
 install( FILES stage.appdata.xml DESTINATION ${SHARE_INSTALL_PREFIX}/appdata/)

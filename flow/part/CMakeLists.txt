@@ -47,8 +47,8 @@ target_link_libraries(calligraflow kdeinit_calligraflow)
 install(TARGETS calligraflow ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ### desktop files ###
-install( FILES flowpart.desktop DESTINATION ${SERVICES_INSTALL_DIR})
-install( PROGRAMS flow.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
+install( FILES flowpart.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
+install( PROGRAMS flow.desktop DESTINATION ${XDG_APPS_INSTALL_DIR}/calligra)
 install( FILES flow.appdata.xml DESTINATION ${SHARE_INSTALL_PREFIX}/appdata/)
 
 ### GUI files ###

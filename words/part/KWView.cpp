@@ -61,6 +61,7 @@
 #include <KoShapeContainer.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
+#include <KoPointedAt.h>
 #include <KoToolManager.h>
 #include <KoTextRangeManager.h>
 #include <KoAnnotationManager.h>
@@ -94,6 +95,7 @@
 #include <QTimer>
 #include <QScrollBar>
 #include <QPushButton>
+#include <QClipboard>
 #include <klocale.h>
 #include <kdebug.h>
 #include <ktoggleaction.h>
@@ -329,6 +331,15 @@ void KWView::setupActions()
     action->setChecked(m_document->config().showTableBorders()); // will change resource if true
     action->setToolTip(i18n("Toggle the display of table borders"));
     action->setWhatsThis(i18n("Toggle the display of table borders.<br/><br/>When this is enabled, Words shows you any invisible table borders with a thin gray line."));
+
+    action = new KAction(i18n("Show Section Bounds"), this);
+    action->setCheckable(true);
+    actionCollection()->addAction("view_sectionbounds", action);
+    connect(action, SIGNAL(toggled(bool)), this, SLOT(setShowSectionBounds(bool)));
+    m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowSectionBounds, QVariant(false));
+    action->setChecked(m_document->config().showSectionBounds()); // will change resource if true
+    action->setToolTip(i18n("Toggle the display of section bounds"));
+    action->setWhatsThis(i18n("Toggle the display of section bounds.<br/><br/>When this is enabled, any section bounds will be indicated with a thin gray horizontal brackets."));
 
     action = new KAction(i18n("Show Rulers"), this);
     action->setCheckable(true);
@@ -581,6 +592,13 @@ void KWView::setShowTableBorders(bool on)
     m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowTableBorders, QVariant(on));
     m_canvas->update();
     m_document->config().setShowTableBorders(on);
+}
+
+void KWView::setShowSectionBounds(bool on)
+{
+    m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowSectionBounds, QVariant(on));
+    m_canvas->update();
+//     m_document->config().setShowSectionBounds(on);
 }
 
 void KWView::formatPage()

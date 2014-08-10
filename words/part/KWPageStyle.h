@@ -34,6 +34,7 @@ class KWPageStylePrivate;
 class KoShapeBackground;
 class KoOdfLoadingContext;
 class KoDocumentResourceManager;
+class KoColumns;
 
 /**
  * A page style represents a set of all the properties that change the layout and size

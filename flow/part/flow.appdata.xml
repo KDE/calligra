@@ -6,6 +6,8 @@
   <name>Flow</name>
   <name xml:lang="ca">Flow</name>
   <name xml:lang="cs">Flow</name>
+  <name xml:lang="de">Flow</name>
+  <name xml:lang="en-GB">Flow</name>
   <name xml:lang="ia">Flow (Fluxo)</name>
   <name xml:lang="it">Flow</name>
   <name xml:lang="nl">Flow</name>
@@ -18,6 +20,8 @@
   <name xml:lang="x-test">xxFlowxx</name>
   <summary>Flowchart &amp; Diagram Editing</summary>
   <summary xml:lang="ca">Edició de diagrames de fluxos i diagrames</summary>
+  <summary xml:lang="de">Programm zum Erstellen von Diagrammen</summary>
+  <summary xml:lang="en-GB">Flowchart &amp; Diagram Editing</summary>
   <summary xml:lang="ia">Modifica de diagramma de fluxo &amp; diagramma</summary>
   <summary xml:lang="it">Diagrammi di flusso e modifica di diagrammi</summary>
   <summary xml:lang="nl">Bewerking van stroomdiagrammen &amp; grafieken</summary>
@@ -34,6 +38,7 @@
       It enables you to create network diagrams, organisation charts, flowcharts and more.
     </p>
     <p xml:lang="ca">El Calligra Flow és una aplicació fàcil d'utilitzar per fer diagrames i diagrames de flux amb una estreta integració amb altres aplicacions del Calligra. Permet crear diagrames de xarxa, diagrames d'organització, diagrames de flux i més.</p>
+    <p xml:lang="en-GB">Calligra Flow is an easy to use diagramming and flowcharting application with tight integration to the other Calligra applications. It enables you to create network diagrams, organisation charts, flowcharts and more.</p>
     <p xml:lang="ia">Calligra Flow es un application facile de usar pro facer diagrammas e diagrammas de fluxo con un forte integration con altere applicationes de Calligra. Illo permitte te crear diagrammas de rete, graphicos de organisation, diagrammas de fluxo e alteres.</p>
     <p xml:lang="it">Calligra Flow è un'applicazione di facile utilizzo per creare diagrammi di flusso e altro con una stretta integrazione con le altre applicazioni di Calligra. Ti consente di creare diagrammi di rete, organigrammi, diagrammi di flusso e altro.</p>
     <p xml:lang="nl">Calligra Flow is een gemakkelijk te gebruiken toepassing voor het maken van diagrammen en flowcharts met nauwe integratie met de andere toepassingen van Calligra. Het stelt u in staat om netwerkdiagrammen, organisatiediagrammen, flowcharts en meer te maken.</p>
@@ -47,6 +52,7 @@
     <p>Features:</p>
     <p xml:lang="ca">Característiques:</p>
     <p xml:lang="cs">Vlastnosti:</p>
+    <p xml:lang="en-GB">Features:</p>
     <p xml:lang="ia">Characteristicas</p>
     <p xml:lang="it">Funzionalità:</p>
     <p xml:lang="nl">Mogelijkheden:</p>
@@ -60,6 +66,7 @@
     <ul>
       <li>Create network diagrams, organisation charts, flowcharts and more</li>
       <li xml:lang="ca">Crea diagrames de xarxa, diagrames d'organització, diagrames de flux i més</li>
+      <li xml:lang="en-GB">Create network diagrams, organisation charts, flowcharts and more</li>
       <li xml:lang="ia">Crea diagrammas de rete, graphicos de organisation, diagrammas de fluxo e alteres.</li>
       <li xml:lang="it">Crea diagrammi di rete, organigrammi, diagrammi di flusso e altro</li>
       <li xml:lang="nl">Netwerkdiagrammen, organisatiediagrammen, stroomdiagrammen en meer</li>
@@ -72,6 +79,7 @@
       <li xml:lang="x-test">xxCreate network diagrams, organisation charts, flowcharts and morexx</li>
       <li>Scriptable stencil creation using Python</li>
       <li xml:lang="ca">Creació de patrons amb scripts usant el Python</li>
+      <li xml:lang="en-GB">Scriptable stencil creation using Python</li>
       <li xml:lang="ia">Creation de stencil de script usante Python</li>
       <li xml:lang="it">Creazione forme con script utilizzando Python</li>
       <li xml:lang="nl">Maken van stencils met scripts met Python</li>
@@ -84,6 +92,7 @@
       <li xml:lang="x-test">xxScriptable stencil creation using Pythonxx</li>
       <li>Support for Dia stencils.</li>
       <li xml:lang="ca">Implementació de patrons del Dia</li>
+      <li xml:lang="en-GB">Support for Dia stencils.</li>
       <li xml:lang="ia">Supporto pro stencils de Dia.</li>
       <li xml:lang="it">Supporta le forme di Dia.</li>
       <li xml:lang="nl">Ondersteuning voor Dia-stencils.</li>

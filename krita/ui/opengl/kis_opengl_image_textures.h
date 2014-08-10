@@ -31,7 +31,6 @@
 #include "kis_shared.h"
 
 #include "canvas/kis_update_info.h"
-#include "opengl/kis_texture_tile_update_info.h"
 #include "opengl/kis_texture_tile.h"
 
 class KisOpenGLImageTextures;
@@ -91,6 +90,8 @@ public:
      */
     void generateCheckerTexture(const QImage & checkImage);
     GLuint checkerTexture() const;
+
+    void updateConfig(bool useBuffer, int NumMipmapLevels);
 
 public:
     inline QRect storedImageBounds() {

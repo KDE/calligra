@@ -379,6 +379,9 @@ void PerformanceTab::setDefault()
 
 //---------------------------------------------------------------------------------------------------
 
+#include "KoColor.h"
+#include "KoColorPopupAction.h"
+
 DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
     : WdgDisplaySettings(parent, name)
 {
@@ -415,6 +418,15 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
 #else
     grpOpenGL->setEnabled(false);
 #endif
+
+    KoColor c;
+    c.fromQColor(cfg.selectionOverlayMaskColor());
+    m_selectionOverlayColorAction = new KoColorPopupAction(this);
+    m_selectionOverlayColorAction->setCurrentColor(c);
+    m_selectionOverlayColorAction->setIcon(koIcon("format-stroke-color"));
+    m_selectionOverlayColorAction->setToolTip(i18n("Change the background color of the image"));
+    btnSelectionOverlayColor->setDefaultAction(m_selectionOverlayColorAction);
+
 
     intCheckSize->setValue(cfg.checkSize());
     chkMoving->setChecked(cfg.scrollCheckers());
@@ -729,11 +741,13 @@ bool KisDlgPreferences::editPreferences()
         KoApplication *app = qobject_cast<KoApplication*>(qApp);
         if (app) {
             foreach(KoPart* part, app->partList()) {
-                KoDocument *doc = part->document();
-                if (doc) {
-                    doc->setAutoSave(dialog->m_general->autoSaveInterval());
-                    doc->setBackupFile(dialog->m_general->m_backupFileCheckBox->isChecked());
-                    doc->undoStack()->setUndoLimit(dialog->m_general->undoStackSize());
+                if (part) {
+                    KoDocument *doc = part->document();
+                    if (doc) {
+                        doc->setAutoSave(dialog->m_general->autoSaveInterval());
+                        doc->setBackupFile(dialog->m_general->m_backupFileCheckBox->isChecked());
+                        doc->undoStack()->setUndoLimit(dialog->m_general->undoStackSize());
+                    }
                 }
             }
         }
@@ -775,6 +789,7 @@ bool KisDlgPreferences::editPreferences()
         cfg.setCheckersColor2(dialog->m_displaySettings->colorChecks2->color());
         cfg.setCanvasBorderColor(dialog->m_displaySettings->canvasBorder->color());
         cfg.setHideScrollbars(dialog->m_displaySettings->hideScrollbars->isChecked());
+        cfg.setSelectionOverlayMaskColor(dialog->m_displaySettings->m_selectionOverlayColorAction->currentKoColor().toQColor());
         cfg.setAntialiasCurves(dialog->m_displaySettings->chkCurveAntialiasing->isChecked());
         cfg.setAntialiasSelectionOutline(dialog->m_displaySettings->chkSelectionOutlineAntialiasing->isChecked());
         cfg.setShowSingleChannelAsColor(dialog->m_displaySettings->chkChannelsAsColor->isChecked());

@@ -100,16 +100,14 @@
 class KisSaveGroupVisitor : public KisNodeVisitor
 {
 public:
-    KisSaveGroupVisitor(KisView2 *view,
-                        KisImageWSP image,
+    KisSaveGroupVisitor(KisImageWSP image,
                         bool saveInvisible,
                         bool saveTopLevelOnly,
                         const KUrl &url,
                         const QString &baseName,
                         const QString &extension,
                         const QString &mimeFilter)
-        : m_view(view)
-        , m_image(image)
+        : m_image(image)
         , m_saveInvisible(saveInvisible)
         , m_saveTopLevelOnly(saveTopLevelOnly)
         , m_url(url)
@@ -218,7 +216,6 @@ public:
 
 private:
 
-    KisView2 *m_view;
     KisImageWSP m_image;
     bool m_saveInvisible;
     bool m_saveTopLevelOnly;
@@ -352,8 +349,6 @@ void KisLayerManager::layerProperties()
 
     if (KisAdjustmentLayerSP alayer = KisAdjustmentLayerSP(dynamic_cast<KisAdjustmentLayer*>(layer.data()))) {
         KisPaintDeviceSP dev = alayer->projection();
-        KisLayerSP prev = dynamic_cast<KisLayer*>(alayer->prevSibling().data());
-        if (prev) dev = prev->projection();
 
         KisDlgAdjLayerProps dlg(alayer, alayer.data(), dev, m_view, alayer->filter().data(), alayer->name(), i18n("Filter Layer Properties"), m_view, "dlgadjlayerprops");
         dlg.resize(dlg.minimumSizeHint());
@@ -841,7 +836,7 @@ void KisLayerManager::saveGroupLayers()
     KisImageWSP image = m_view->image();
     if (!image) return;
 
-    KisSaveGroupVisitor v(m_view, image, chkInvisible->isChecked(), chkDepth->isChecked(), url, basename, extension, mimefilter);
+    KisSaveGroupVisitor v(image, chkInvisible->isChecked(), chkDepth->isChecked(), url, basename, extension, mimefilter);
     image->rootLayer()->accept(v);
 
 }
