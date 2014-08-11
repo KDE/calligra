@@ -602,7 +602,7 @@ bool CQTextDocumentCanvas::event( QEvent* event )
             if (d->canvas && syncObject->initialized) {
                 d->canvas->shapeManager()->setShapes(syncObject->shapes);
 
-                KoToolManager::instance()->switchToolRequested(syncObject->activeToolId);
+                KoToolManager::instance()->switchToolRequested("PageToolFactory_ID");
                 qApp->processEvents();
 
                 zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, syncObject->zoomLevel);

@@ -952,13 +952,19 @@ bool KWView::event(QEvent* event)
 
                 m_canvas->shapeManager()->setShapes(syncObject->shapes);
 
-                KoToolManager::instance()->switchToolRequested(syncObject->activeToolId);
-                qApp->processEvents();
-
                 zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, syncObject->zoomLevel);
 
                 qApp->processEvents();
                 m_canvas->canvasController()->setScrollBarValue(syncObject->documentOffset);
+
+                qApp->processEvents();
+                foreach(KoShape* const &shape, m_canvas->shapeManager()->shapesAt(currentPage().rect())) {
+                    if (KoTextShapeDataBase *textData = qobject_cast<KoTextShapeDataBase*>(shape->userData())) {
+                        m_canvas->shapeManager()->selection()->select(shape);
+                        break;
+                    }
+                }
+                KoToolManager::instance()->switchToolRequested("TextToolFactory_ID");
             }
 
             return true;
