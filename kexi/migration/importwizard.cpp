@@ -301,7 +301,7 @@ void ImportWizard::setupDstType()
     vbox->addLayout(hbox);
     KexiUtils::setStandardMarginsAndSpacing(hbox);
     QLabel *lbl = new QLabel(i18n("Destination database type:") /*+ ' '*/, d->dstTypePageWidget);
-    lbl->setAlignment(Qt::AlignAuto | Qt::AlignTop);
+    lbl->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     hbox->addWidget(lbl);
 
     d->dstPrjTypeSelector = new KexiPrjTypeSelector(d->dstTypePageWidget);
