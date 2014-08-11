@@ -427,4 +427,36 @@ Item {
             text: (wordsCanvas.documentModel === null) ? 0 : wordsCanvas.currentPageNumber + " of " + wordsCanvas.documentModel.rowCount();
         }
     }
+    Item {
+        id: zoomLevel;
+        anchors {
+            right: parent.right;
+            bottom: (pageNumber.opacity > 0) ? pageNumber.top : parent.bottom;
+            margins: Constants.DefaultMargin;
+        }
+        opacity: 0;
+        Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+        height: Constants.GridHeight / 2;
+        width: Constants.GridWidth;
+        Rectangle {
+            anchors.fill: parent;
+            radius: Constants.DefaultMargin;
+            color: Settings.theme.color("components/overlay/base");
+            opacity: 0.7;
+        }
+        Timer {
+            id: hideZoomLevelTimer;
+            repeat: false; running: false; interval: 1000;
+            onTriggered: zoomLevel.opacity = 0;
+        }
+        Label {
+            anchors.centerIn: parent;
+            color: Settings.theme.color("components/overlay/text");
+            text: wordsCanvas.zoomAction ? (wordsCanvas.zoomAction.effectiveZoom * 100) + "%" : "";
+            onTextChanged: {
+                zoomLevel.opacity = 1;
+                hideZoomLevelTimer.start();
+            }
+        }
+    }
 }
