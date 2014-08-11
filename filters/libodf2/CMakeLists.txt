@@ -24,10 +24,12 @@ set(koodf2_LIB_SRCS
     KoOdfStyleBase.cpp
     KoOdfStyleManager.cpp
     KoOdfStyle.cpp
+    KoOdfListStyle.cpp
     KoOdfPageLayout.cpp
     KoOdfStyleProperties.cpp
     KoOdfTextProperties.cpp
     KoOdfParagraphProperties.cpp
+    KoOdfListLevelProperties.cpp
     KoOdfGraphicProperties.cpp
     KoOdfPageLayoutProperties.cpp
     KoOdfHeaderFooterProperties.cpp
