@@ -60,7 +60,7 @@ public Q_SLOTS:
     void closeWindow();
 
     void switchToTouch();
-    void switchToDesktop(bool justLoaded = false);
+    void switchToDesktop();
     void documentChanged();
     void resetWindowTitle();
     void resourceChanged(int key, const QVariant& v);
@@ -76,7 +76,6 @@ Q_SIGNALS:
 private Q_SLOTS:
     void switchDesktopForced();
     void switchTouchForced();
-    void adjustZoomOnDocumentChangedAndStuff();
     void touchChange();
 
 private:

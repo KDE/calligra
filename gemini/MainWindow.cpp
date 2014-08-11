@@ -109,10 +109,6 @@ public:
 //         slateMode = (GetSystemMetrics(SM_CONVERTIBLESLATEMODE) == 0);
 //         docked = (GetSystemMetrics(SM_SYSTEMDOCKED) != 0);
 #endif
-        centerer = new QTimer(q);
-        centerer->setInterval(10);
-        centerer->setSingleShot(true);
-        connect(centerer, SIGNAL(timeout()), q, SLOT(adjustZoomOnDocumentChangedAndStuff()));
 }
     MainWindow* q;
     bool allowClose;
@@ -132,7 +128,6 @@ public:
     bool forceTouch;
     bool temporaryFile;
     ViewModeSynchronisationObject* syncObject;
-    QTimer* centerer;
 
     KAction* toDesktop;
     KAction* toTouch;
@@ -375,7 +370,7 @@ void MainWindow::touchChange()
     }
 }
 
-void MainWindow::switchToDesktop(bool justLoaded)
+void MainWindow::switchToDesktop()
 {
     QTime timer;
     timer.start();
@@ -411,39 +406,11 @@ void MainWindow::switchToDesktop(bool justLoaded)
         QApplication::sendEvent(view, &switchedEvent);
     }
 
-//    if (d->toTouch && !justLoaded)
-//    {
-        qApp->processEvents();
-        d->toTouch->setEnabled(true);
-        d->switcher->setEnabled(true);
-//    }
+    qApp->processEvents();
+    d->toTouch->setEnabled(true);
+    d->switcher->setEnabled(true);
 
     //qDebug() << "milliseconds to switch to desktop:" << timer.elapsed();
-}
-
-void MainWindow::adjustZoomOnDocumentChangedAndStuff()
-{
-    if (d->desktopView && centralWidget() == d->desktopView) {
-        KoView* view = d->desktopView->rootView();
-        // We have to set the focus on the view here, otherwise the toolmanager is unaware of which
-        // canvas should be handled.
-        d->desktopView->rootView()->setFocus();
-        QPoint center = view->rect().center();
-        //view->canvasControllerWidget()->zoomRelativeToPoint(center, 0.9);
-        qApp->processEvents();
-        d->toTouch->setEnabled(true);
-        d->switcher->setEnabled(true);
-    }
-    else if (d->touchKoView && centralWidget() == d->touchView) {
-        qApp->processEvents();
-        d->touchKoView->zoomController()->setZoom(KoZoomMode::ZOOM_PAGE, 1.0);
-        qApp->processEvents();
-        QPoint center = d->touchKoView->rect().center();
-        //d->touchKoView->canvasControllerWidget()->zoomRelativeToPoint(center, 0.9);
-        qApp->processEvents();
-        d->toDesktop->setEnabled(true);
-    }
-    KoToolManager::instance()->switchToolRequested("TextToolFactory_ID");
 }
 
 void MainWindow::setDocAndPart(QObject* document, QObject* part)
@@ -470,7 +437,7 @@ void MainWindow::documentChanged()
 //                this, SLOT(resourceChanged(int, const QVariant&)));
 //    }
     if (!d->forceTouch && !d->slateMode)
-        switchToDesktop(true);
+        switchToDesktop();
 }
 
 bool MainWindow::allowClose() const
@@ -524,12 +491,16 @@ void MainWindow::setTemporaryFile(bool newValue)
 
 void MainWindow::resourceChanged(int key, const QVariant& v)
 {
+    Q_UNUSED(key)
+    Q_UNUSED(v)
     if(centralWidget() == d->touchView)
         return;
 }
 
 void MainWindow::resourceChangedTouch(int key, const QVariant& v)
 {
+    Q_UNUSED(key)
+    Q_UNUSED(v)
     if(centralWidget() == d->desktopView)
         return;
 }
