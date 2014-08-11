@@ -590,6 +590,7 @@ bool CQTextDocumentCanvas::event( QEvent* event )
                 syncObject->documentOffset = d->canvas->documentOffset();
                 syncObject->zoomLevel = zoomController()->zoomAction()->effectiveZoom();
                 syncObject->activeToolId = KoToolManager::instance()->activeToolId();
+                syncObject->shapes = d->canvas->shapeManager()->shapes();
                 syncObject->initialized = true;
             }
 
@@ -599,6 +600,8 @@ bool CQTextDocumentCanvas::event( QEvent* event )
             ViewModeSynchronisationObject* syncObject = static_cast<ViewModeSwitchEvent*>(event)->synchronisationObject();
 
             if (d->canvas && syncObject->initialized) {
+                d->canvas->shapeManager()->setShapes(syncObject->shapes);
+
                 KoToolManager::instance()->switchToolRequested(syncObject->activeToolId);
                 qApp->processEvents();
 

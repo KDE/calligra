@@ -28,6 +28,7 @@
 #include <KoPattern.h>
 #include <KoGridData.h>
 
+class KoShape;
 struct ViewModeSynchronisationObject {
     ViewModeSynchronisationObject() : initialized(false), gridData(0) { }
 
@@ -50,6 +51,7 @@ struct ViewModeSynchronisationObject {
     QString activeToolId;
 
     KoGridData* gridData;
+    QList< KoShape* > shapes;
 };
 
 class ViewModeSwitchEvent : public QEvent

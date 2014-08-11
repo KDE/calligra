@@ -938,6 +938,7 @@ bool KWView::event(QEvent* event)
                 syncObject->documentOffset = m_canvas->documentOffset();
                 syncObject->zoomLevel = zoomController()->zoomAction()->effectiveZoom();
                 syncObject->activeToolId = KoToolManager::instance()->activeToolId();
+                syncObject->shapes = m_canvas->shapeManager()->shapes();
                 syncObject->initialized = true;
             }
 
@@ -948,6 +949,8 @@ bool KWView::event(QEvent* event)
             if (m_canvas && syncObject->initialized) {
                 m_canvas->canvasWidget()->setFocus();
                 qApp->processEvents();
+
+                m_canvas->shapeManager()->setShapes(syncObject->shapes);
 
                 KoToolManager::instance()->switchToolRequested(syncObject->activeToolId);
                 qApp->processEvents();
