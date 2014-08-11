@@ -71,6 +71,7 @@
 #include <QDoubleSpinBox>
 #include <QWidgetAction>
 #include <QGridLayout>
+#include <kis_config.h>
 
 
 
@@ -361,18 +362,26 @@ void KisUndoView::mousePressEvent(QMouseEvent *event)
 void KisUndoView::toggleCumulativeUndoRedo()
 {
     stack()->setUseCumulativeUndoRedo(!stack()->useCumulativeUndoRedo() );
+    KisConfig cfg;
+    cfg.setCumulativeUndoRedo(stack()->useCumulativeUndoRedo());
 }
 void KisUndoView::setStackT1(double value)
 {
     stack()->setTimeT1(value);
+    KisConfig cfg;
+    cfg.setStackT1(value);
 }
 void KisUndoView::setStackT2(double value)
 {
     stack()->setTimeT2(value);
+    KisConfig cfg;
+    cfg.setStackT2(value);
 }
 void KisUndoView::setStackN(int value)
 {
     stack()->setStrokesN(value);
+    KisConfig cfg;
+    cfg.setStackN(value);
 }
 
 #include "KisUndoView.moc"

@@ -26,6 +26,12 @@
 
 class KisLockedPropertiesProxy;
 
+/**
+ * The KisLockedPropertiesServer class
+ * This static class stores an object of KisLockedProperties and generates a KisLockedPropertiesProxy used
+ * by other classes/objects to access the LockedProperties object.
+ */
+
 class KRITAIMAGE_EXPORT KisLockedPropertiesServer: public QObject
 {
 public:

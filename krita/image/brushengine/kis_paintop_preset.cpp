@@ -38,6 +38,8 @@
 #include "kis_paint_device.h"
 #include "kis_image.h"
 
+
+
 struct KisPaintOpPreset::Private {
     Private()
         : settings(0) {

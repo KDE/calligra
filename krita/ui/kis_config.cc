@@ -116,6 +116,45 @@ void KisConfig::setUndoStackLimit(int limit) const
 {
     m_cfg.writeEntry("undoStackLimit", limit);
 }
+bool KisConfig::useCumulativeUndoRedo()
+{
+    return m_cfg.readEntry("useCumulativeUndoRedo",false);
+}
+
+void KisConfig::setCumulativeUndoRedo(bool value)
+{
+    m_cfg.writeEntry("useCumulativeUndoRedo", value);
+}
+
+double KisConfig::stackT1()
+{
+     return m_cfg.readEntry("stackT1",5);
+}
+
+void KisConfig::setStackT1(int T1)
+{
+    m_cfg.writeEntry("stackT1", T1);
+}
+
+double KisConfig::stackT2()
+{
+     return m_cfg.readEntry("stackT2",1);
+}
+
+void KisConfig::setStackT2(int T2)
+{
+    m_cfg.writeEntry("stackT2", T2);
+}
+
+int KisConfig::stackN()
+{
+    return m_cfg.readEntry("stackN",5);
+}
+
+void KisConfig::setStackN(int N)
+{
+     m_cfg.writeEntry("stackN", N);
+}
 
 qint32 KisConfig::defImageWidth() const
 {
