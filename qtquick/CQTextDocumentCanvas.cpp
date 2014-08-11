@@ -705,6 +705,7 @@ void CQTextDocumentCanvas::createAndSetZoomController(KoCanvasBase* canvas)
     connect (canvasController()->proxyObject, SIGNAL(moveDocumentOffset(QPoint)), kwCanvasItem, SLOT(setDocumentOffset(QPoint)));
     connect (zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)), SIGNAL(zoomActionChanged()));
     kwCanvasItem->updateSize();
+    emit zoomActionChanged();
 }
 
 void CQTextDocumentCanvas::updateZoomControllerAccordingToDocument(const KoDocument* document)
