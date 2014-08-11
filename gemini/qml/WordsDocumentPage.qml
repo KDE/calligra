@@ -452,7 +452,7 @@ Item {
         Label {
             anchors.centerIn: parent;
             color: Settings.theme.color("components/overlay/text");
-            text: wordsCanvas.zoomAction ? (wordsCanvas.zoomAction.effectiveZoom * 100) + "%" : "";
+            text: wordsCanvas.zoomAction ? (wordsCanvas.zoomAction.effectiveZoom * 100).toFixed(2) + "%" : "";
             onTextChanged: {
                 zoomLevel.opacity = 1;
                 hideZoomLevelTimer.start();
