@@ -36,73 +36,6 @@ Item {
         }
     }
     Item {
-        id: stageNavigator;
-        anchors {
-            top: parent.top;
-            left: parent.left;
-            bottom: parent.bottom;
-        }
-        width: Settings.theme.adjustedPixel(240);
-        Rectangle {
-            anchors.fill: parent;
-            color: "#4e5359";
-        }
-        Rectangle {
-            anchors {
-                top: parent.top;
-                right: parent.right;
-                bottom: parent.bottom;
-            }
-            width: 1;
-            color: "black";
-            opacity: 0.1;
-        }
-        ListView {
-            id: navigatorListView;
-            anchors {
-                fill: parent;
-                topMargin: Settings.theme.adjustedPixel(86);
-            }
-            model: presentationModel;
-            delegate: Item {
-                height: Settings.theme.adjustedPixel(136);
-                width: ListView.view.width;
-                Rectangle {
-                    anchors.fill: parent;
-                    opacity: index === stageCanvas.currentSlide ? 0.6 : 0;
-                    Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
-                    color: "#00adf5";
-                }
-                Label {
-                    anchors {
-                        top: parent.top;
-                        left: parent.left;
-                        bottom: parent.bottom;
-                    }
-                    width: Settings.theme.adjustedPixel(40);
-                    color: index === stageCanvas.currentSlide ? "white" : "#c1cdd1";
-                    text: index + 1;
-                    horizontalAlignment: Text.AlignHCenter;
-                    verticalAlignment: Text.AlignVCenter;
-                }
-                Calligra.Thumbnail {
-                    anchors {
-                        top: parent.top;
-                        right: parent.right;
-                        bottom: parent.bottom;
-                        margins: Settings.theme.adjustedPixel(16);
-                    }
-                    width: parent.width - Settings.theme.adjustedPixel(56);
-                    content: presentationModel.thumbnail(index);
-                }
-                MouseArea {
-                    anchors.fill: parent;
-                    onClicked: stageCanvas.currentSlide = index;
-                }
-            }
-        }
-    }
-    Item {
         anchors {
             top: parent.top;
             left: stageNavigator.right;
@@ -196,6 +129,77 @@ Item {
                             base.navigateMode = false;
                         }
                     }
+                }
+            }
+        }
+    }
+    Item {
+        id: stageNavigator;
+        anchors {
+            top: parent.top;
+            left: parent.left;
+            bottom: parent.bottom;
+        }
+        width: Settings.theme.adjustedPixel(240);
+        Rectangle {
+            anchors.fill: parent;
+            color: "#4e5359";
+        }
+        Rectangle {
+            anchors {
+                top: parent.top;
+                right: parent.right;
+                bottom: parent.bottom;
+            }
+            width: 1;
+            color: "black";
+            opacity: 0.1;
+        }
+        ListView {
+            id: navigatorListView;
+            anchors {
+                fill: parent;
+                topMargin: Settings.theme.adjustedPixel(86);
+            }
+            model: Calligra.PresentationModel {
+                    id: stageNavigatorModel;
+                    canvas: stageCanvas;
+                    thumbnailSize: Qt.size(Settings.theme.adjustedPixel(104) * 2, (navigatorListView.width - Settings.theme.adjustedPixel(56)) * 2);
+                }
+            delegate: Item {
+                height: Settings.theme.adjustedPixel(136);
+                width: ListView.view.width;
+                Rectangle {
+                    anchors.fill: parent;
+                    opacity: index === stageCanvas.currentSlide ? 0.6 : 0;
+                    Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+                    color: "#00adf5";
+                }
+                Label {
+                    anchors {
+                        top: parent.top;
+                        left: parent.left;
+                        bottom: parent.bottom;
+                    }
+                    width: Settings.theme.adjustedPixel(40);
+                    color: index === stageCanvas.currentSlide ? "white" : "#c1cdd1";
+                    text: index + 1;
+                    horizontalAlignment: Text.AlignHCenter;
+                    verticalAlignment: Text.AlignVCenter;
+                }
+                Calligra.Thumbnail {
+                    anchors {
+                        top: parent.top;
+                        right: parent.right;
+                        bottom: parent.bottom;
+                        margins: Settings.theme.adjustedPixel(16);
+                    }
+                    width: parent.width - Settings.theme.adjustedPixel(56);
+                    content: stageNavigatorModel.thumbnail(index);
+                }
+                MouseArea {
+                    anchors.fill: parent;
+                    onClicked: stageCanvas.currentSlide = index;
                 }
             }
         }
