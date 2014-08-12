@@ -92,7 +92,7 @@ public:
     QMap<QString, QWeakPointer<KoTextInlineRdf> > inlineRdfObjects;  ///< Cache of weak pointers to inline Rdf
     KoRdfPrefixMapping *prefixMapping;     ///< prefix -> URI mapping
 
-    QMap<QString, QList<hKoRdfSemanticItem> > semanticItems;
+    QMap<QString, QList<hKoRdfBasicSemanticItem> > semanticItems;
     QMap<QString, QList<hKoSemanticStylesheet> > userStylesheets;
 };
 
@@ -254,8 +254,10 @@ bool KoDocumentRdf::loadRdf(KoStore *store, const Soprano::Parser *parser, const
         d->prefixMapping->load(d->model);
 
         foreach (const QString &semanticClass, KoRdfSemanticItemRegistry::instance()->classNames()) {
-            hKoRdfSemanticItem si = KoRdfSemanticItemRegistry::instance()->createSemanticItem(semanticClass, this, this);
-            si->loadUserStylesheets(d->model);
+            if (!KoRdfSemanticItemRegistry::instance()->isBasic(semanticClass)) {
+                hKoRdfSemanticItem si = KoRdfSemanticItemRegistry::instance()->createSemanticItem(semanticClass, this, this);
+                si->loadUserStylesheets(d->model);
+            }
         }
     }
     store->close();
@@ -346,8 +348,10 @@ bool KoDocumentRdf::saveRdf(KoStore *store, KoXmlWriter *manifestWriter, const S
         d->prefixMapping->save(d->model, context);
 
         foreach (const QString &semanticClass, KoRdfSemanticItemRegistry::instance()->classNames()) {
-            hKoRdfSemanticItem si = KoRdfSemanticItemRegistry::instance()->createSemanticItem(semanticClass, this, const_cast<KoDocumentRdf*>(this));
-            si->saveUserStylesheets(d->model, context);
+            if (!KoRdfSemanticItemRegistry::instance()->isBasic(semanticClass)) {
+                hKoRdfSemanticItem si = KoRdfSemanticItemRegistry::instance()->createSemanticItem(semanticClass, this, const_cast<KoDocumentRdf*>(this));
+                si->saveUserStylesheets(d->model, context);
+            }
         }
     }
     Soprano::StatementIterator triples = model()->listStatements(Soprano::Node(),
@@ -442,14 +446,14 @@ void KoDocumentRdf::updateXmlIdReferences(const QMap<QString, QString> &m)
 
 }
 
-QList<hKoRdfSemanticItem> KoDocumentRdf::semanticItems(const QString &className, QSharedPointer<Soprano::Model> m)
+QList<hKoRdfBasicSemanticItem> KoDocumentRdf::semanticItems(const QString &className, QSharedPointer<Soprano::Model> m)
 {
     if (!m) {
         m = d->model;
         Q_ASSERT(m);
     }
 
-    QList<hKoRdfSemanticItem> items;
+    QList<hKoRdfBasicSemanticItem> items;
     // TODO: improve double lookup
     if (KoRdfSemanticItemRegistry::instance()->classNames().contains(className)) {
         KoRdfSemanticItemRegistry::instance()->updateSemanticItems(d->semanticItems[className], this, className, m);
@@ -459,7 +463,7 @@ QList<hKoRdfSemanticItem> KoDocumentRdf::semanticItems(const QString &className,
     return items;
 }
 
-hKoRdfSemanticItem KoDocumentRdf::createSemanticItem(const QString &semanticClass, QObject *parent) const
+hKoRdfBasicSemanticItem KoDocumentRdf::createSemanticItem(const QString &semanticClass, QObject *parent) const
 {
     return KoRdfSemanticItemRegistry::instance()->createSemanticItem(semanticClass, this, parent);
 }
@@ -646,7 +650,9 @@ QList<KAction*> KoDocumentRdf::createInsertSemanticObjectNewActions(KoCanvasBase
 {
     QList<KAction*> ret;
     foreach (const QString &semanticClass, KoRdfSemanticItemRegistry::instance()->classNames()) {
-        ret.append(new InsertSemanticObjectCreateAction(host, this, semanticClass));
+        if (!KoRdfSemanticItemRegistry::instance()->isBasic(semanticClass)) {
+            ret.append(new InsertSemanticObjectCreateAction(host, this, semanticClass));
+        }
     }
     return ret;
 }
@@ -921,35 +927,41 @@ void KoDocumentRdf::updateInlineRdfStatements(const QTextDocument *qdoc)
     RDEBUG << "done";
 }
 
-void KoDocumentRdf::emitSemanticObjectAdded(hKoRdfSemanticItem item) const
+void KoDocumentRdf::emitSemanticObjectAdded(hKoRdfBasicSemanticItem item) const
 {
     emit semanticObjectAdded(item);
 }
 
-void KoDocumentRdf::emitSemanticObjectAddedConst(hKoRdfSemanticItem const item) const
+void KoDocumentRdf::emitSemanticObjectAddedConst(const hKoRdfBasicSemanticItem item) const
 {
     emit semanticObjectAdded(item);
 }
 
-void KoDocumentRdf::emitSemanticObjectUpdated(hKoRdfSemanticItem item)
+void KoDocumentRdf::emitSemanticObjectUpdated(hKoRdfBasicSemanticItem item)
 {
-    if (item) {
+    if (item && !KoRdfSemanticItemRegistry::instance()->isBasic(item->className())) {
         //
         // reflow the formatting for each view of the semanticItem, in reverse document order
         //
         QMap<int, reflowItem> col;
-        RDEBUG << "xmlids:" << item->xmlIdList() << " reflow item:" << item->name();
+        RDEBUG << "xmlids:" << item->xmlIdList() << " reflow item:" << hKoRdfSemanticItem(item)->name();
         insertReflow(col, item);
         applyReflow(col);
     }
     emit semanticObjectUpdated(item);
 }
 
-void KoDocumentRdf::emitSemanticObjectViewSiteUpdated(hKoRdfSemanticItem item, const QString &xmlid)
+void KoDocumentRdf::emitSemanticObjectViewSiteUpdated(hKoRdfBasicSemanticItem baseItem, const QString &xmlid)
 {
+    if (KoRdfSemanticItemRegistry::instance()->isBasic(baseItem->className())) {
+        return;
+    }
+
+    hKoRdfSemanticItem item = baseItem;
     if (item) {
-        RDEBUG << "xmlid:" << xmlid << " reflow item:" << item->name();
-        emit semanticObjectViewSiteUpdated(item, xmlid);
+        hKoRdfSemanticItem newitem = item;
+        RDEBUG << "xmlid:" << xmlid << " reflow item:" << newitem->name();
+        emit semanticObjectViewSiteUpdated(newitem, xmlid);
     }
 }
 

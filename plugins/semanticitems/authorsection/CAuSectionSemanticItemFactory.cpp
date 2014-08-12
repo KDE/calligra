@@ -42,7 +42,7 @@ QString CAuSectionSemanticItemFactory::classDisplayName() const
     return i18nc("displayname of the semantic item type AuthorSection", "AuthorSection");
 }
 
-void CAuSectionSemanticItemFactory::updateSemanticItems(QList<hKoRdfSemanticItem> &semanticItems, const KoDocumentRdf *rdf, QSharedPointer<Soprano::Model> m)
+void CAuSectionSemanticItemFactory::updateSemanticItems(QList<hKoRdfBasicSemanticItem> &semanticItems, const KoDocumentRdf *rdf, QSharedPointer<Soprano::Model> m)
 {
     const QString sparqlQuery = QLatin1String(
         "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n"
@@ -66,7 +66,7 @@ void CAuSectionSemanticItemFactory::updateSemanticItems(QList<hKoRdfSemanticItem
     // lastKnownObjects is used to perform a sematic set diff
     // at return time d->foafObjects will have any new objects and
     // ones that are no longer available will be removed.
-    QList<hKoRdfSemanticItem> oldSemanticItems = semanticItems;
+    QList<hKoRdfBasicSemanticItem> oldSemanticItems = semanticItems;
 
     // uniqfilter is needed because soprano is not honouring
     // the DISTINCT sparql keyword
@@ -79,10 +79,10 @@ void CAuSectionSemanticItemFactory::updateSemanticItems(QList<hKoRdfSemanticItem
         }
         uniqfilter += magicid;
 
-        hKoRdfSemanticItem newSemanticItem(new CAuSectionRdf(0, rdf, it));
+        hKoRdfBasicSemanticItem newSemanticItem(new CAuSectionRdf(0, rdf, it));
 
         const QString newItemLs = newSemanticItem->linkingSubject().toString();
-        foreach (hKoRdfSemanticItem semItem, oldSemanticItems) {
+        foreach (hKoRdfBasicSemanticItem semItem, oldSemanticItems) {
             if (newItemLs == semItem->linkingSubject().toString()) {
                 oldSemanticItems.removeAll(semItem);
                 newSemanticItem = 0;
@@ -95,14 +95,14 @@ void CAuSectionSemanticItemFactory::updateSemanticItems(QList<hKoRdfSemanticItem
         }
     }
 
-    foreach (hKoRdfSemanticItem semItem, oldSemanticItems) {
+    foreach (hKoRdfBasicSemanticItem semItem, oldSemanticItems) {
         semanticItems.removeAll(semItem);
     }
 }
 
-hKoRdfSemanticItem CAuSectionSemanticItemFactory::createSemanticItem(const KoDocumentRdf* rdf, QObject* parent)
+hKoRdfBasicSemanticItem CAuSectionSemanticItemFactory::createSemanticItem(const KoDocumentRdf* rdf, QObject* parent)
 {
-    return hKoRdfSemanticItem(new CAuSectionRdf(parent, rdf));
+    return hKoRdfBasicSemanticItem(new CAuSectionRdf(parent, rdf));
 
 }
 
@@ -112,7 +112,7 @@ bool CAuSectionSemanticItemFactory::canCreateSemanticItemFromMimeData(const QMim
     return false;
 }
 
-hKoRdfSemanticItem CAuSectionSemanticItemFactory::createSemanticItemFromMimeData(
+hKoRdfBasicSemanticItem CAuSectionSemanticItemFactory::createSemanticItemFromMimeData(
     const QMimeData *mimeData,
     KoCanvasBase *host,
     const KoDocumentRdf *rdf,
@@ -123,5 +123,10 @@ hKoRdfSemanticItem CAuSectionSemanticItemFactory::createSemanticItemFromMimeData
     Q_UNUSED(rdf);
     Q_UNUSED(parent);
 
-    return hKoRdfSemanticItem(0);
+    return hKoRdfBasicSemanticItem(0);
+}
+
+bool CAuSectionSemanticItemFactory::isBasic() const
+{
+    return true;
 }

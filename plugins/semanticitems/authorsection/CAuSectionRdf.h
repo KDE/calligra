@@ -24,7 +24,7 @@
 
 #include "ui_CAuSectionRdfEditWidget.h"
 
-class CAuSectionRdf : public KoRdfSemanticItem
+class CAuSectionRdf : public KoRdfBasicSemanticItem
 {
     Q_OBJECT
 public:
@@ -33,18 +33,13 @@ public:
     CAuSectionRdf(QObject *parent, const KoDocumentRdf *m_rdf, Soprano::QueryResultIterator &it);
 
     // inherited and reimplemented...
-    void exportToFile(const QString& fileName = QString()) const;
-    virtual void importFromData(const QByteArray &ba, const KoDocumentRdf *rdf = 0, KoCanvasBase *host = 0);
     virtual QWidget *createEditor(QWidget *parent);
     virtual void updateFromEditorData();
     virtual Soprano::Node linkingSubject() const;
-    virtual void setupStylesheetReplacementMapping(QMap<QString, QString> &m);
-    virtual QList<hKoSemanticStylesheet> stylesheets() const;
     virtual QString className() const;
     virtual Soprano::Node context() const;
 
     // accessor methods...
-    QString description() const;
     virtual QString name() const;
 
 private:

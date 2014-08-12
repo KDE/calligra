@@ -276,14 +276,14 @@ public:
      * Obtain a list of semantic objects of the given class, if any, for the Rdf
      * in the default model() or the one you optionally pass in.
      */
-    QList<hKoRdfSemanticItem> semanticItems(const QString &className, QSharedPointer<Soprano::Model> m = QSharedPointer<Soprano::Model>(0));
+    QList< hKoRdfBasicSemanticItem > semanticItems(const QString &className, QSharedPointer< Soprano::Model > m = QSharedPointer<Soprano::Model>(0));
 
     /**
      * Create a SemanticItem subclass using its name from
      * classNames(). Useful for menus and other places that want to
      * allow the user to create new SemanticItem Objects.
      */
-    hKoRdfSemanticItem createSemanticItem(const QString &semanticClass, QObject *parent = 0) const;
+    hKoRdfBasicSemanticItem createSemanticItem(const QString &semanticClass, QObject *parent = 0) const;
 
     /**
      * For Rdf stored in manifest.rdf or another rdf file referenced
@@ -359,12 +359,12 @@ public:
     void expandStatements(QSharedPointer<Soprano::Model> model) const;
 
     /**
-     * XXXX? What does this do?
+     * FIXME? What does this do?
      */
     KAction* createInsertSemanticObjectReferenceAction(KoCanvasBase *host);
 
     /**
-     * XXXX? What does this do?
+     * FIXME? What does this do?
      */
     QList<KAction*> createInsertSemanticObjectNewActions(KoCanvasBase *host);
 
@@ -433,15 +433,15 @@ signals:
      * semanticObjectViewSiteUpdated is emitted the view will take care
      * of reflowing the semanitc item using it's stylesheet.
      */
-    void semanticObjectAdded(hKoRdfSemanticItem item) const;
-    void semanticObjectUpdated(hKoRdfSemanticItem item) const;
-    void semanticObjectViewSiteUpdated(hKoRdfSemanticItem item, const QString &xmlid) const;
+    void semanticObjectAdded(hKoRdfBasicSemanticItem item) const;
+    void semanticObjectUpdated(hKoRdfBasicSemanticItem item) const;
+    void semanticObjectViewSiteUpdated(hKoRdfBasicSemanticItem item, const QString &xmlid) const;
 
 public:
-    void emitSemanticObjectAdded(hKoRdfSemanticItem item) const;
-    void emitSemanticObjectUpdated(hKoRdfSemanticItem item);
-    void emitSemanticObjectViewSiteUpdated(hKoRdfSemanticItem item, const QString &xmlid);
-    void emitSemanticObjectAddedConst(hKoRdfSemanticItem const item) const;
+    void emitSemanticObjectAdded(hKoRdfBasicSemanticItem item) const;
+    void emitSemanticObjectUpdated(hKoRdfBasicSemanticItem item);
+    void emitSemanticObjectViewSiteUpdated(hKoRdfBasicSemanticItem item, const QString &xmlid);
+    void emitSemanticObjectAddedConst(hKoRdfBasicSemanticItem const item) const;
 
     /**
      * You should use the KoRdfSemanticItem::userStylesheets() method instead of this one.

@@ -188,11 +188,11 @@ void CAuOutlinerWidget::sectionEditClicked()
     KWDocument *kwdoc = dynamic_cast<KWDocument *>(m_canvas->shapeController()->resourceManager()->odfDocument());
     KoDocumentRdf *rdf = dynamic_cast<KoDocumentRdf *>(kwdoc->documentRdf());
 
-    QList<hKoRdfSemanticItem> lst = rdf->semanticItems("AuthorSection");
+    QList<hKoRdfBasicSemanticItem> lst = rdf->semanticItems("AuthorSection");
 
-    hKoRdfSemanticItem semItem;
+    hKoRdfBasicSemanticItem semItem;
     bool found = false;
-    foreach (const hKoRdfSemanticItem &item, lst) {
+    foreach (const hKoRdfBasicSemanticItem &item, lst) {
         if (item->xmlIdList().contains(sec->inlineRdf()->xmlId())) {
             found = true;
             semItem = item;
@@ -239,14 +239,14 @@ void CAuOutlinerWidget::sectionEditClicked()
 
         if (!cnt) {
             Node authorRdfFileNode = Node::createBlankNode("CAU_META_DATA_FILE");
-            qDebug() << rdf->model()->addStatement(
+            rdf->model()->addStatement(
                 authorRdfFileNode,
                 Node::createResourceNode(rdf->prefixMapping()->PrefexedLocalnameToURI("rdf:type")),
                 Node::createResourceNode(rdf->prefixMapping()->PrefexedLocalnameToURI("odf:MetaDataFile")),
                 rdf->manifestRdfNode()
             );
 
-            qDebug() << rdf->model()->addStatement(
+            rdf->model()->addStatement(
                 authorRdfFileNode,
                 Node::createResourceNode(rdf->prefixMapping()->PrefexedLocalnameToURI("pkg:path")),
                 Node::createLiteralNode("author.rdf"),
@@ -254,7 +254,7 @@ void CAuOutlinerWidget::sectionEditClicked()
             );
         }
 
-        qDebug() << rdf->model()->addStatement(
+        rdf->model()->addStatement(
             semItem->linkingSubject(),
             Node::createResourceNode(QUrl("http://docs.oasis-open.org/ns/office/1.2/meta/pkg#idref")),
             Node::createLiteralNode(sec->inlineRdf()->xmlId()),

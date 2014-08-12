@@ -193,8 +193,8 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
 
 #ifdef SHOULD_BUILD_RDF
     if (KoDocumentRdf *rdf = dynamic_cast<KoDocumentRdf*>(m_document->documentRdf())) {
-        connect(rdf, SIGNAL(semanticObjectViewSiteUpdated(hKoRdfSemanticItem,QString)),
-                this, SLOT(semanticObjectViewSiteUpdated(hKoRdfSemanticItem,QString)));
+        connect(rdf, SIGNAL(semanticObjectViewSiteUpdated(hKoRdfBasicSemanticItem,QString)),
+                this, SLOT(semanticObjectViewSiteUpdated(hKoRdfBasicSemanticItem,QString)));
     }
 #endif
 }
@@ -1002,8 +1002,9 @@ void KWView::offsetInDocumentMoved(int yOffset)
 }
 
 #ifdef SHOULD_BUILD_RDF
-void KWView::semanticObjectViewSiteUpdated(hKoRdfSemanticItem item, const QString &xmlid)
+void KWView::semanticObjectViewSiteUpdated(hKoRdfBasicSemanticItem basicitem, const QString &xmlid)
 {
+    hKoRdfSemanticItem item(basicitem);
     kDebug(30015) << "xmlid:" << xmlid << " reflow item:" << item->name();
     KoTextEditor *editor = KoTextEditor::getTextEditorFromCanvas(canvasBase());
     if (!editor) {

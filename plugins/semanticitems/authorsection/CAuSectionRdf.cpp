@@ -28,14 +28,14 @@
 
 using namespace Soprano;
 
-CAuSectionRdf::CAuSectionRdf(QObject *parent, const KoDocumentRdf *m_rdf)
-    : KoRdfSemanticItem(m_rdf, parent)
+CAuSectionRdf::CAuSectionRdf(QObject *parent, const KoDocumentRdf *rdf)
+    : KoRdfBasicSemanticItem(parent, rdf)
 {
     m_magicId = QUuid::createUuid().toString();
 }
 
-CAuSectionRdf::CAuSectionRdf(QObject *parent, const KoDocumentRdf *m_rdf, Soprano::QueryResultIterator &it)
-    : KoRdfSemanticItem(m_rdf, it, parent)
+CAuSectionRdf::CAuSectionRdf(QObject *parent, const KoDocumentRdf *rdf, Soprano::QueryResultIterator &it)
+    : KoRdfBasicSemanticItem(parent, rdf, it)
 {
     m_uri = it.binding("section").toString();
     m_descr = KoTextRdfCore::optionalBindingAsString(it, "descr");
@@ -82,7 +82,7 @@ void CAuSectionRdf::updateFromEditorData()
     updateTriple(m_descr, m_editWidgetUI.descrRichTextWidget->toHtml(), predBase + "Section#descr");
     updateTriple(m_magicId, m_magicId, predBase + "Section#magicid");
     if (documentRdf()) {
-        const_cast<KoDocumentRdf*>(documentRdf())->emitSemanticObjectUpdated(hKoRdfSemanticItem(this));
+        const_cast<KoDocumentRdf*>(documentRdf())->emitSemanticObjectUpdated(hKoRdfBasicSemanticItem(this));
     }
 }
 
@@ -91,38 +91,9 @@ Soprano::Node CAuSectionRdf::linkingSubject() const
     return Node::createResourceNode(m_uri);
 }
 
-void CAuSectionRdf::setupStylesheetReplacementMapping(QMap<QString, QString> &m)
-{
-}
-
-QList<hKoSemanticStylesheet> CAuSectionRdf::stylesheets() const
-{
-    QList<hKoSemanticStylesheet> stylesheets;
-    stylesheets.append(
-        createSystemStylesheet("143c1aa3-d7bb-420b-8528-7f077264ff5f2",
-                               "name", "REPORT A BUG PLEASE"));
-    return stylesheets;
-}
-
 QString CAuSectionRdf::className() const
 {
     return "AuthorSection";
-}
-
-void CAuSectionRdf::exportToFile(const QString &fileName) const
-{
-    Q_UNUSED(fileName);
-    Q_ASSERT(false); // shouldn't be called
-    return;
-}
-
-void CAuSectionRdf::importFromData(const QByteArray &ba, const KoDocumentRdf *rdf, KoCanvasBase *host)
-{
-    Q_UNUSED(ba);
-    Q_UNUSED(rdf);
-    Q_UNUSED(host);
-    Q_ASSERT(false); // shouldn't be called
-    return;
 }
 
 Node CAuSectionRdf::context() const
