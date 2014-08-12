@@ -64,6 +64,7 @@ Page {
                 }
                 height: parent.width;
                 fillMode: Image.PreserveAspectFit;
+                smooth: true;
                 asynchronous: true;
             }
             Label {
