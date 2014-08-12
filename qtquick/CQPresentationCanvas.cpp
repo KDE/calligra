@@ -333,7 +333,7 @@ bool CQPresentationCanvas::event(QEvent* event)
                 setCurrentSlide(syncObject->currentSlide);
                 qApp->processEvents();
 
-                KoToolManager::instance()->switchToolRequested("PageToolFactory_ID");
+                KoToolManager::instance()->switchToolRequested("InteractionTool");
             }
 
             return true;

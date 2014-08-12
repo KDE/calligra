@@ -22,6 +22,7 @@ import org.calligra.CalligraComponents 0.1 as Calligra
 
 Item {
     id: base;
+    signal canvasInteractionStarted();
     property alias document: wordsCanvas.document;
     property alias textEditor: wordsCanvas.textEditor;
     property QtObject canvas: wordsCanvas;
@@ -119,7 +120,10 @@ Item {
                 height: controllerFlickable.height;
                 width: controllerFlickable.width;
 
-                onPinchStarted: controllerItem.beginZoomGesture();
+                onPinchStarted: {
+                    controllerItem.beginZoomGesture();
+                    base.canvasInteractionStarted();
+                }
                 onPinchUpdated: {
                     var newCenter = mapToItem( controllerFlickable, pinch.center.x, pinch.center.y );
                     controllerItem.zoomBy(pinch.scale - pinch.previousScale, Qt.point( newCenter.x, newCenter.y ) );
@@ -139,6 +143,7 @@ Item {
                             controllerFlickable.contentY = Math.min(controllerFlickable.contentHeight - controllerFlickable.height, controllerFlickable.contentY + controllerFlickable.height - (Constants.GridHeight * 1.5));
                             controllerItem.pageChanging = false;
                         }
+                        base.canvasInteractionStarted();
                     }
                     onDoubleClicked: {
                         if(mouse.x < width / 6 || mouse.x > width * 5 / 6) {
@@ -147,6 +152,7 @@ Item {
                         }
                         toolManager.requestToolChange("TextToolFactory_ID");
                         base.navigateMode = false;
+                        base.canvasInteractionStarted();
                     }
                 }
             }
@@ -283,6 +289,7 @@ Item {
                     else {
                         d.showThings();
                     }
+                    base.canvasInteractionStarted();
                 }
             }
         }
@@ -399,7 +406,10 @@ Item {
                 }
                 MouseArea {
                     anchors.fill: parent;
-                    onClicked: controllerFlickable.contentY = wordsCanvas.pagePosition(index + 1);
+                    onClicked: {
+                        controllerFlickable.contentY = wordsCanvas.pagePosition(index + 1);
+                        base.canvasInteractionStarted();
+                    }
                 }
             }
         }

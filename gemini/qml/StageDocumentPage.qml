@@ -22,6 +22,7 @@ import org.calligra.CalligraComponents 0.1 as Calligra
 
 Item {
     id: base;
+    signal canvasInteractionStarted();
     property alias document: stageCanvas.document;
     property alias textEditor: stageCanvas.textEditor;
     property QtObject canvas: stageCanvas;
@@ -32,7 +33,7 @@ Item {
             // This means we've just changed back from having edited stuff.
             // Consequently we want to deselect all selections. Tell the canvas about that.
             stageCanvas.deselectEverything();
-            toolManager.requestToolChange("PageToolFactory_ID");
+            toolManager.requestToolChange("InteractionTool");
         }
     }
     Item {
@@ -94,7 +95,10 @@ Item {
                     height: controllerFlickable.height;
                     width: controllerFlickable.width;
 
-                    onPinchStarted: controllerItem.beginZoomGesture();
+                    onPinchStarted: {
+                        controllerItem.beginZoomGesture();
+                        base.canvasInteractionStarted();
+                    }
                     onPinchUpdated: {
                         var newCenter = mapToItem( controllerFlickable, pinch.center.x, pinch.center.y );
                         controllerItem.zoomBy(pinch.scale - pinch.previousScale, Qt.point( newCenter.x, newCenter.y ) );
@@ -119,14 +123,16 @@ Item {
                                     stageCanvas.currentSlide = 0;
                                 }
                             }
+                            base.canvasInteractionStarted();
                         }
                         onDoubleClicked: {
                             if(mouse.x < width / 6 || mouse.x > width * 5 / 6) {
                                 // don't accept double-clicks in the navigation zone
                                 return;
                             }
-                            toolManager.requestToolChange("TextToolFactory_ID");
+                            toolManager.requestToolChange("InteractionTool");
                             base.navigateMode = false;
+                            base.canvasInteractionStarted();
                         }
                     }
                 }
@@ -199,7 +205,10 @@ Item {
                 }
                 MouseArea {
                     anchors.fill: parent;
-                    onClicked: stageCanvas.currentSlide = index;
+                    onClicked: {
+                        stageCanvas.currentSlide = index;
+                        base.canvasInteractionStarted();
+                    }
                 }
             }
         }

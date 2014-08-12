@@ -51,6 +51,13 @@ Page {
             bottom: parent.bottom;
         }
     }
+    Connections {
+        target: viewLoader.item;
+        // ok, so this looks weird, but we explicitly want to keep the notes
+        // panel open unless they're interacting with the other gui bits, not
+        // if they're moving through the document
+        onCanvasInteractionStarted: closeToolbarMenus(notesButton);
+    }
     Component { id: stageView; StageDocumentPage {} }
     Component { id: wordsView; WordsDocumentPage {} }
     function closeToolbarMenus(sender) {
@@ -158,7 +165,6 @@ Page {
                 visible: viewLoader.item ? !viewLoader.item.navigateMode : false;
                 onClicked: {
                     closeToolbarMenus();
-                    toolManager.requestToolChange("PageToolFactory_ID");
                     viewLoader.item.navigateMode = true;
                 }
             }
