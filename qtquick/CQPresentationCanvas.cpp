@@ -316,6 +316,7 @@ bool CQPresentationCanvas::event(QEvent* event)
 
             // Simplest of transfer - no zoom transfer for presentations, just current slide
             syncObject->currentSlide = d->currentSlide;
+            syncObject->shapes = d->canvasBase->shapeManager()->shapes();
             syncObject->initialized = true;
 
             return true;
@@ -324,7 +325,15 @@ bool CQPresentationCanvas::event(QEvent* event)
             ViewModeSynchronisationObject* syncObject = static_cast<ViewModeSwitchEvent*>(event)->synchronisationObject();
 
             if (syncObject->initialized) {
+                d->canvasBase->shapeManager()->setShapes(syncObject->shapes);
+
+                zoomController()->setZoom(KoZoomMode::ZOOM_PAGE, 1.0);
+                zoomController()->zoomAction()->zoomOut();
+
                 setCurrentSlide(syncObject->currentSlide);
+                qApp->processEvents();
+
+                KoToolManager::instance()->switchToolRequested("PageToolFactory_ID");
             }
 
             return true;

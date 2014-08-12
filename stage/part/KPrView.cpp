@@ -341,6 +341,7 @@ bool KPrView::event(QEvent* event)
             ViewModeSynchronisationObject* syncObject = static_cast<ViewModeSwitchEvent*>(event)->synchronisationObject();
             if (activePage()) {
                 syncObject->currentSlide = kopaDocument()->pageIndex(activePage());
+                syncObject->shapes = shapeManager()->shapes();
                 syncObject->initialized = true;
             }
 
@@ -349,7 +350,9 @@ bool KPrView::event(QEvent* event)
         case ViewModeSwitchEvent::SwitchedToDesktopModeEvent: {
             ViewModeSynchronisationObject* syncObject = static_cast<ViewModeSwitchEvent*>(event)->synchronisationObject();
             if (syncObject->initialized) {
+                shapeManager()->setShapes(syncObject->shapes);
                 doUpdateActivePage( kopaDocument()->pageByIndex(syncObject->currentSlide, false) );
+                KoToolManager::instance()->switchToolRequested("InteractionTool");
             }
 
             return true;
