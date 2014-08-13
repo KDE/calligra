@@ -90,4 +90,4 @@ install(FILES     calligragemini.qml                   DESTINATION ${DATA_INSTAL
 install(DIRECTORY qml                                       DESTINATION ${DATA_INSTALL_DIR}/calligragemini)
 install(DIRECTORY themes                                    DESTINATION ${DATA_INSTALL_DIR}/calligragemini)
 
-#add_subdirectory(icon)
+add_subdirectory(pics)
