@@ -36,6 +36,18 @@ Page {
         font: Settings.theme.font("pageHeader");
         text: "Open From Your Library";
         color: "#22282f";
+        CohereButton {
+            anchors {
+                left: parent.left;
+                leftMargin: 20;
+                verticalCenter: parent.verticalCenter;
+            }
+            text: "Open Other...";
+            textColor: "#5b6573";
+            textSize: Settings.theme.adjustedPixel(18);
+            color: "#D2D4D5";
+            onClicked: mainWindow.openFile();
+        }
         Row {
             anchors {
                 right: parent.right;
