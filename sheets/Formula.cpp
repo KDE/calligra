@@ -752,6 +752,7 @@ Tokens Formula::scan(const QString &expr, const KLocale* locale) const
             else if (*data == QChar('(', 0)) {
                 token.resize(out - outStart);
                 tokens.append(Token(Token::Identifier, token, tokenStart - start));
+		checkSpelling(tokens); // It sees if the function name entered by the user is correct or not
                 token.resize(length);
                 out = outStart;
                 state = Start;
@@ -1070,6 +1071,40 @@ Tokens Formula::scan(const QString &expr, const KLocale* locale) const
         tokens.setValid(false);
     return tokens;
 }
+
+void Formula::checkSpelling(Tokens tokens)
+{
+    QStringList *lst = FunctionRepository::functionNames();//lst is a pointer storing all the complex function names
+    lst->sort();//sorting the list such that searching becomes easier
+    QStringList result = filterFunctionName(lst, tokens);//a function that will return filtered out function names
+    
+  
+}
+
+
+QStringList Formula::filterFunctionName(QStringList *lst, Tokens tokens)
+{
+    
+     Tokens tempToken = tokens; //storing in a temporary variable such that changes are reflected separately
+     QVectorIterator<QString> i(tokens);
+     QString str = null;//each time a character is taken from the token and appended to this string and ultimately this string is checked
+     while(i.hasNext())
+     {
+       str.append(i);
+     while( lst->length()>=1 ){
+       
+       lst->filter(i, Qt::CaseSensitivity cs = Qt::CaseInsensitive);//each time the list is truncated
+     }
+     }
+     return lst;
+}
+       
+       
+       
+    
+    
+    
+    
 
 // will affect: dirty, valid, codes, constants
 void Formula::compile(const Tokens& tokens) const
