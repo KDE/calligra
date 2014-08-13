@@ -65,6 +65,11 @@ public Q_SLOTS:
     void resetWindowTitle();
     void resourceChanged(int key, const QVariant& v);
     void resourceChangedTouch(int key, const QVariant& v);
+    /**
+     * Used to open an arbitrary file from the welcome screen,
+     * not from the normal UI (desktopproxy does that)
+     */
+    void openFile();
 Q_SIGNALS:
     void closeRequested();
     void switchedToTouch();

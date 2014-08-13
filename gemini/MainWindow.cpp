@@ -33,6 +33,7 @@
 #include <QFile>
 #include <QMessageBox>
 #include <QToolButton>
+#include <QDesktopServices>
 #include <QFileInfo>
 #include <QGLWidget>
 
@@ -53,11 +54,14 @@
 #include <KoDocumentInfo.h>
 #include <KoView.h>
 #include <KoPart.h>
+#include <KoDocumentEntry.h>
+#include <KoFilterManager.h>
 #include <part/KWFactory.h>
 #include <stage/part/KPrDocument.h>
 #include <stage/part/KPrFactory.h>
 #include <KoAbstractGradient.h>
 #include <KoZoomController.h>
+#include <KoFileDialog.h>
 
 #include "TouchDeclarativeView.h"
 #include "RecentFileManager.h"
@@ -475,6 +479,29 @@ void MainWindow::setCurrentTouchPage(QString newPage)
         {
             //QTimer::singleShot(3000, this, SLOT(adjustZoomOnDocumentChangedAndStuff()));
         }
+    }
+}
+
+void MainWindow::openFile()
+{
+    KoDocumentEntry entry = KoDocumentEntry::queryByMimeType(WORDS_MIME_TYPE);
+    KService::Ptr service = entry.service();
+    QStringList mimeFilter = KoFilterManager::mimeFilter(WORDS_MIME_TYPE,
+                                                               KoFilterManager::Import,
+                                                               service->property("X-KDE-ExtraNativeMimeTypes").toStringList());
+    entry = KoDocumentEntry::queryByMimeType(STAGE_MIME_TYPE);
+    service = entry.service();
+    mimeFilter << KoFilterManager::mimeFilter(STAGE_MIME_TYPE,
+                                              KoFilterManager::Import,
+                                              service->property("X-KDE-ExtraNativeMimeTypes").toStringList());
+
+    KoFileDialog dialog(d->desktopView, KoFileDialog::OpenFile, "OpenDocument");
+    dialog.setCaption(i18n("Open Document"));
+    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
+    dialog.setMimeTypeFilters(mimeFilter);
+    QString filename = dialog.url();
+    if(!filename.isEmpty()) {
+        QMetaObject::invokeMethod(d->touchView->rootObject(), "openFile", Q_ARG(QVariant, filename));
     }
 }
 
