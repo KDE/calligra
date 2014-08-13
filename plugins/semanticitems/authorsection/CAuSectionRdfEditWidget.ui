@@ -95,9 +95,6 @@
     <layout class="QVBoxLayout" name="verticalLayout_2">
      <item>
       <widget class="QLabel" name="statusLabel">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
        <property name="text">
         <string>Status:</string>
        </property>
@@ -107,11 +104,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="statusComboBox">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-      </widget>
+      <widget class="QComboBox" name="statusComboBox"/>
      </item>
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_3">

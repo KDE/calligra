@@ -28,6 +28,17 @@
 
 using namespace Soprano;
 
+const QString CAuSectionRdf::STATUS[CAuSectionRdf::STATUS_COUNT] = {
+    i18n("1st Draft"),
+    i18n("2nd Draft"),
+    i18n("3rd Draft"),
+    i18n("1st Edit"),
+    i18n("2nd Edit"),
+    i18n("3rd Edit"),
+    i18n("Proofread"),
+    i18n("Finished")
+};
+
 CAuSectionRdf::CAuSectionRdf(QObject *parent, const KoDocumentRdf *rdf)
     : KoRdfBasicSemanticItem(parent, rdf)
 {
@@ -38,7 +49,8 @@ CAuSectionRdf::CAuSectionRdf(QObject *parent, const KoDocumentRdf *rdf, Soprano:
     : KoRdfBasicSemanticItem(parent, rdf, it)
 {
     m_uri = it.binding("section").toString();
-    m_descr = KoTextRdfCore::optionalBindingAsString(it, "descr");
+    m_status = it.binding("status").toString();
+    m_descr = it.binding("descr").toString();
     m_magicId = it.binding("magicid").toString();
 }
 
@@ -54,6 +66,12 @@ QWidget* CAuSectionRdf::createEditor(QWidget *parent)
     if (m_descr.size()) {
         m_editWidgetUI.descrRichTextWidget->setText(m_descr);
     }
+
+    for (int i = 0; i < STATUS_COUNT; i++) {
+        m_editWidgetUI.statusComboBox->addItem(STATUS[i]);
+    }
+    m_editWidgetUI.statusComboBox->setCurrentIndex(m_status.toInt());
+
     KActionCollection *actions = new KActionCollection(ret);
 
     m_editWidgetUI.descrRichTextWidget->createActions(actions);
@@ -81,6 +99,7 @@ void CAuSectionRdf::updateFromEditorData()
     setRdfType(predBase + "Section");
     updateTriple(m_descr, m_editWidgetUI.descrRichTextWidget->toHtml(), predBase + "Section#descr");
     updateTriple(m_magicId, m_magicId, predBase + "Section#magicid");
+    updateTriple(m_status, QString::number(m_editWidgetUI.statusComboBox->currentIndex()), predBase + "Section#status");
     if (documentRdf()) {
         const_cast<KoDocumentRdf*>(documentRdf())->emitSemanticObjectUpdated(hKoRdfBasicSemanticItem(this));
     }

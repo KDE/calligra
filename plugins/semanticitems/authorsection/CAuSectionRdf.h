@@ -43,6 +43,9 @@ public:
     virtual QString name() const;
 
 private:
+    static const int STATUS_COUNT = 8;
+    static const QString STATUS[STATUS_COUNT];
+
     // Author section rdf template
     // s == m_uri
     // s -> <uri:section>; p -> <http://www.calligra.org/author/descr>; o -> "Some description"
@@ -50,6 +53,7 @@ private:
     QString m_uri;   // This is the subject in Rdf
     QString m_descr;
     QString m_magicId;
+    QString m_status;
 
     Ui::CAuSectionRdfEditWidget m_editWidgetUI;
 };
