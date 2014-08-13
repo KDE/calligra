@@ -222,18 +222,18 @@ void ImportWizard::setupIntro()
     lblIntro->setWordWrap(true);
     QString msg;
     if (d->predefinedConnectionData) { //predefined import: server source
-        msg = i18n("<qt>Database Importing wizard is about to import \"%1\" database "
-                   "<nobr>(connection %2)</nobr> into a Kexi database.</qt>",
-                   d->predefinedDatabaseName, d->predefinedConnectionData->serverInfoString());
+        msg = "<qt>" + i18n("Database Importing wizard is about to import \"%1\" database "
+                            "<nobr>(connection %2)</nobr> into a Kexi database.",
+                   d->predefinedDatabaseName, d->predefinedConnectionData->serverInfoString()) + "</qt>";
     } else if (!d->predefinedDatabaseName.isEmpty()) { //predefined import: file source
 //! @todo this message is currently ok for files only
         KMimeType::Ptr mimeTypePtr = KMimeType::mimeType(d->predefinedMimeType);
         if (mimeTypePtr.isNull())
             KexiDBWarn << QString("'%1' mimetype not installed!").arg(d->predefinedMimeType);
-        msg = i18n(
-                  "<qt>Database Importing wizard is about to import <nobr>\"%1\"</nobr> file "
-                  "of type \"%2\" into a Kexi database.</qt>",
-                  QDir::convertSeparators(d->predefinedDatabaseName), mimeTypePtr ? mimeTypePtr->comment() : "???");
+        msg = "<qt>" + i18n(
+                  "Database Importing wizard is about to import <nobr>\"%1\"</nobr> file "
+                  "of type \"%2\" into a Kexi database.",
+                  QDir::convertSeparators(d->predefinedDatabaseName), mimeTypePtr ? mimeTypePtr->comment() : "???") + "</qt>";
     } else {
         msg = i18n("Database Importing wizard allows you to import an existing database "
                    "into a Kexi database.");
