@@ -151,6 +151,7 @@ void CAuOutlinerWidget::updateSelection()
 
     if (!sec) {
         m_sectionTree->setCurrentIndex(m_sectionTree->rootIndex());
+        m_editButton->setEnabled(false);
     } else {
         QModelIndexList lst = m_sectionTree->model()->match(
             m_sectionTree->model()->index(0,0),
@@ -165,15 +166,12 @@ void CAuOutlinerWidget::updateSelection()
             return;
         }
         m_sectionTree->setCurrentIndex(lst.first());
+        m_editButton->setEnabled(true);
     }
 }
 
 void CAuOutlinerWidget::sectionEditClicked()
 {
-    if (!m_sectionTree->currentIndex().isValid()) { //FIXME: make button inactive in such case
-        return;
-    }
-
     KoSection *sec = static_cast<KoSection *>(
         m_sectionTree->model()->itemData(m_sectionTree->currentIndex())[Qt::UserRole + 1].value<void *>()
     );
