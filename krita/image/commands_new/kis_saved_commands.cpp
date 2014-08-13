@@ -92,6 +92,11 @@ int KisSavedCommand::timedId()
 {
     return m_command->timedId();
 }
+void KisSavedCommand::setTimedID(int timedID)
+{
+    m_command->setTimedID(timedID);
+}
+
 void KisSavedCommand::undoMergedCommands()
 {
   m_command->undoMergedCommands();

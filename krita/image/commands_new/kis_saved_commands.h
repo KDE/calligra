@@ -55,6 +55,7 @@ class KisSavedCommand : public KisSavedCommandBase
 public:
     KisSavedCommand(KUndo2CommandSP command, KisStrokesFacade *strokesFacade);
     virtual int timedId();
+    void setTimedID(int timedID);
     virtual void undoMergedCommands();
     virtual void redoMergedCommands();
 

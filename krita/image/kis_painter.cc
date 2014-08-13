@@ -214,6 +214,7 @@ void KisPainter::beginTransaction(const KUndo2MagicString& transactionName)
 
     d->transaction = new KisTransaction(transactionName, d->device);
     Q_CHECK_PTR(d->transaction);
+    d->transaction->undoCommand()->setTimedID(1);
 }
 
 void KisPainter::revertTransaction()
