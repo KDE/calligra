@@ -48,13 +48,14 @@ void CAuSectionSemanticItemFactory::updateSemanticItems(QList<hKoRdfBasicSemanti
         "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n"
         "PREFIX cau: <http://www.calligra.org/author/> \n"
         "PREFIX causec: <http://www.calligra.org/author/Section#> \n"
-        "SELECT DISTINCT ?graph ?section ?magicid ?descr ?status\n"
+        "SELECT DISTINCT ?graph ?section ?magicid ?synop ?status ?badge\n"
         "WHERE { \n"
         "  GRAPH ?graph { \n"
         "    ?section rdf:type       cau:Section . \n"
         "    ?section causec:magicid ?magicid    . \n"
-        "    ?section causec:descr   ?descr      . \n"
+        "    ?section causec:synop   ?synop      . \n"
         "    ?section causec:status  ?status     . \n"
+        "    ?section causec:badge   ?badge      . \n"
         "    }\n"
         "}\n"
     );
@@ -64,9 +65,6 @@ void CAuSectionSemanticItemFactory::updateSemanticItems(QList<hKoRdfBasicSemanti
         Soprano::Query::QueryLanguageSparql
     );
 
-    // lastKnownObjects is used to perform a sematic set diff
-    // at return time d->foafObjects will have any new objects and
-    // ones that are no longer available will be removed.
     QList<hKoRdfBasicSemanticItem> oldSemanticItems = semanticItems;
 
     // uniqfilter is needed because soprano is not honouring

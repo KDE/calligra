@@ -6,20 +6,74 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>518</width>
-    <height>281</height>
+    <width>678</width>
+    <height>319</height>
    </rect>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="QLabel" name="descrLabel">
+      <layout class="QFormLayout" name="formLayout">
+       <item row="2" column="0">
+        <widget class="QLabel" name="badgeLabel">
+         <property name="text">
+          <string>Badge:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="KLineEdit" name="badgeLineEdit">
+         <property name="clickMessage">
+          <string>Badge is shown in outliner near section title</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="titleLabel">
+         <property name="text">
+          <string>Title:</string>
+         </property>
+         <property name="buddy">
+          <cstring>titleLineEdit</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="KLineEdit" name="titleLineEdit">
+         <property name="contextMenuEnabled">
+          <bool>false</bool>
+         </property>
+         <property name="urlDropsEnabled">
+          <bool>false</bool>
+         </property>
+         <property name="clickMessage">
+          <string>Enter title here</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="statusLabel">
+         <property name="text">
+          <string>Status:</string>
+         </property>
+         <property name="buddy">
+          <cstring>statusComboBox</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QComboBox" name="statusComboBox"/>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="QLabel" name="synopLabel">
        <property name="text">
         <string>Section description:</string>
        </property>
        <property name="buddy">
-        <cstring>descrRichTextWidget</cstring>
+        <cstring>synopRichTextWidget</cstring>
        </property>
       </widget>
      </item>
@@ -91,7 +145,7 @@
        <item>
         <widget class="QToolButton" name="rightAlignToolButton">
          <property name="text">
-          <string>TightAlign</string>
+          <string>RightAlign</string>
          </property>
         </widget>
        </item>
@@ -111,70 +165,9 @@
       </layout>
      </item>
      <item>
-      <widget class="KRichTextWidget" name="descrRichTextWidget">
+      <widget class="KRichTextWidget" name="synopRichTextWidget">
        <property name="clickMessage">
-        <string>Enter here your plans</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item>
-    <layout class="QVBoxLayout" name="verticalLayout_2">
-     <item>
-      <widget class="QLabel" name="statusLabel">
-       <property name="text">
-        <string>Status:</string>
-       </property>
-       <property name="buddy">
-        <cstring>statusComboBox</cstring>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QComboBox" name="statusComboBox"/>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_3">
-       <item>
-        <widget class="QLabel" name="actorsLabel">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-         <property name="text">
-          <string>Actors:</string>
-         </property>
-         <property name="buddy">
-          <cstring>actorsListWidget</cstring>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QToolButton" name="toolButton_2">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-         <property name="text">
-          <string>Add</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QToolButton" name="toolButton">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-         <property name="text">
-          <string>Delete</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <widget class="QListWidget" name="actorsListWidget">
-       <property name="enabled">
-        <bool>false</bool>
+        <string>Enter synopsis here</string>
        </property>
       </widget>
      </item>
@@ -187,6 +180,11 @@
    <class>KRichTextEdit</class>
    <extends>KTextEdit</extends>
    <header>krichtextedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>klineedit.h</header>
   </customwidget>
   <customwidget>
    <class>KTextEdit</class>

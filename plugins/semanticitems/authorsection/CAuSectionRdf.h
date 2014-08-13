@@ -51,9 +51,12 @@ private:
     // s -> <uri:section>; p -> <http://www.calligra.org/author/descr>; o -> "Some description"
     // s -> <uri:section>; p -> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type>; o -> <http://www.calligra.org/author/Section>
     QString m_uri;   // This is the subject in Rdf
-    QString m_descr;
+    QString m_synop;
     QString m_magicId;
     QString m_status;
+    QString m_badge;
+
+    bool isTypeSet;
 
     Ui::CAuSectionRdfEditWidget m_editWidgetUI;
 };

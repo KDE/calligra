@@ -214,7 +214,11 @@ void CAuOutlinerWidget::sectionEditClicked()
     dialog.addPage(widget, QString());
     if (dialog.exec() == KPageDialog::Accepted) {
         semItem->updateFromEditorData();
+    }
 
+    kwdoc->setModified(true);
+
+    if (!found) { // we have created new item, need to save it properly
         const QString sparqlQuery = QLatin1String(
             "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n"
             "PREFIX odf: <http://docs.oasis-open.org/ns/office/1.2/meta/odf#> \n"

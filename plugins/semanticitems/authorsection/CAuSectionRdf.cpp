@@ -41,17 +41,20 @@ const QString CAuSectionRdf::STATUS[CAuSectionRdf::STATUS_COUNT] = {
 
 CAuSectionRdf::CAuSectionRdf(QObject *parent, const KoDocumentRdf *rdf)
     : KoRdfBasicSemanticItem(parent, rdf)
+    , isTypeSet(false)
 {
     m_magicId = QUuid::createUuid().toString();
 }
 
 CAuSectionRdf::CAuSectionRdf(QObject *parent, const KoDocumentRdf *rdf, Soprano::QueryResultIterator &it)
     : KoRdfBasicSemanticItem(parent, rdf, it)
+    , isTypeSet(true) //true here, cuz query garant existance of rdf:type
 {
     m_uri = it.binding("section").toString();
     m_status = it.binding("status").toString();
-    m_descr = it.binding("descr").toString();
+    m_synop = it.binding("synop").toString();
     m_magicId = it.binding("magicid").toString();
+    m_badge = it.binding("badge").toString();
 }
 
 QString CAuSectionRdf::name() const
@@ -63,18 +66,13 @@ QWidget* CAuSectionRdf::createEditor(QWidget *parent)
 {
     QWidget *ret = new QWidget(parent);
     m_editWidgetUI.setupUi(ret);
-    if (m_descr.size()) {
-        m_editWidgetUI.descrRichTextWidget->setText(m_descr);
-    }
 
-    for (int i = 0; i < STATUS_COUNT; i++) {
-        m_editWidgetUI.statusComboBox->addItem(STATUS[i]);
-    }
-    m_editWidgetUI.statusComboBox->setCurrentIndex(m_status.toInt());
+    // Synopsis
+    m_editWidgetUI.synopRichTextWidget->setText(m_synop);
 
     KActionCollection *actions = new KActionCollection(ret);
 
-    m_editWidgetUI.descrRichTextWidget->createActions(actions);
+    m_editWidgetUI.synopRichTextWidget->createActions(actions);
     m_editWidgetUI.boldToolButton->setDefaultAction(actions->action("format_text_bold"));
     m_editWidgetUI.italicToolButton->setDefaultAction(actions->action("format_text_italic"));
     m_editWidgetUI.underlineToolButton->setDefaultAction(actions->action("format_text_underline"));
@@ -83,12 +81,21 @@ QWidget* CAuSectionRdf::createEditor(QWidget *parent)
     m_editWidgetUI.centerAlignToolButton->setDefaultAction(actions->action("format_align_center"));
     m_editWidgetUI.rightAlignToolButton->setDefaultAction(actions->action("format_align_right"));
 
-    actions->addAction("text_undo", m_editWidgetUI.descrRichTextWidget, SLOT(undo()));
-    actions->addAction("text_redo", m_editWidgetUI.descrRichTextWidget, SLOT(redo()));
+    actions->addAction("text_undo", m_editWidgetUI.synopRichTextWidget, SLOT(undo()));
+    actions->addAction("text_redo", m_editWidgetUI.synopRichTextWidget, SLOT(redo()));
     actions->action("text_undo")->setIcon(KIcon("edit-undo"));
     actions->action("text_redo")->setIcon(KIcon("edit-redo"));
     m_editWidgetUI.undoToolButton->setDefaultAction(actions->action("text_undo"));
     m_editWidgetUI.redoToolButton->setDefaultAction(actions->action("text_redo"));
+
+    // Badge
+    m_editWidgetUI.badgeLineEdit->setText(m_badge);
+
+    // Status
+    for (int i = 0; i < STATUS_COUNT; i++) {
+        m_editWidgetUI.statusComboBox->addItem(STATUS[i]);
+    }
+    m_editWidgetUI.statusComboBox->setCurrentIndex(m_status.toInt());
 
     return ret;
 }
@@ -99,11 +106,18 @@ void CAuSectionRdf::updateFromEditorData()
         QUuid u = QUuid::createUuid();
         m_uri = u.toString();
     }
+
     QString predBase = "http://www.calligra.org/author/"; //FIXME: this thing should be global
-    setRdfType(predBase + "Section");
-    updateTriple(m_descr, m_editWidgetUI.descrRichTextWidget->toHtml(), predBase + "Section#descr");
+
+    if (!isTypeSet) {
+        setRdfType(predBase + "Section");
+        isTypeSet = true;
+    }
+
+    updateTriple(m_synop, m_editWidgetUI.synopRichTextWidget->toHtml(), predBase + "Section#synop");
     updateTriple(m_magicId, m_magicId, predBase + "Section#magicid");
     updateTriple(m_status, QString::number(m_editWidgetUI.statusComboBox->currentIndex()), predBase + "Section#status");
+    updateTriple(m_badge, m_editWidgetUI.badgeLineEdit->text(), predBase + "Section#badge");
     if (documentRdf()) {
         const_cast<KoDocumentRdf*>(documentRdf())->emitSemanticObjectUpdated(hKoRdfBasicSemanticItem(this));
     }
