@@ -79,6 +79,10 @@ QWidget* CAuSectionRdf::createEditor(QWidget *parent)
     m_editWidgetUI.italicToolButton->setDefaultAction(actions->action("format_text_italic"));
     m_editWidgetUI.underlineToolButton->setDefaultAction(actions->action("format_text_underline"));
 
+    m_editWidgetUI.leftAlignToolButton->setDefaultAction(actions->action("format_align_left"));
+    m_editWidgetUI.centerAlignToolButton->setDefaultAction(actions->action("format_align_center"));
+    m_editWidgetUI.rightAlignToolButton->setDefaultAction(actions->action("format_align_right"));
+
     actions->addAction("text_undo", m_editWidgetUI.descrRichTextWidget, SLOT(undo()));
     actions->addAction("text_redo", m_editWidgetUI.descrRichTextWidget, SLOT(redo()));
     actions->action("text_undo")->setIcon(KIcon("edit-undo"));
