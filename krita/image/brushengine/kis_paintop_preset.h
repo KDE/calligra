@@ -31,6 +31,9 @@ class QImage;
 /**
  * A KisPaintOpPreset contains a particular set of settings
  * associated with a paintop, like brush, paintopsettings.
+ * A new property in this class is to make it dirty. That means the
+ * user can now temporarily save any tweaks in the Preset throughout
+ * the session. The Dirty Preset setting/unsetting is handled by KisPaintOpPresetSettings
  */
 class KRITAIMAGE_EXPORT KisPaintOpPreset : public KoResource, public KisShared
 {

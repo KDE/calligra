@@ -309,11 +309,13 @@ void KisPaintOpPresetsPopup::resourceSelected(KoResource* resource)
         palette.setColor(QPalette::Text, Qt::black);
         m_d->uiWdgPaintOpPresetSettings.txtPreset->setPalette(palette);
         m_d->uiWdgPaintOpPresetSettings.bnSave->setEnabled(true);
+        m_d->uiWdgPaintOpPresetSettings.reload->setEnabled(true);
        }
     else
     {
      m_d->uiWdgPaintOpPresetSettings.txtPreset->setPalette(palette);
      m_d->uiWdgPaintOpPresetSettings.bnSave->setEnabled(false);
+     m_d->uiWdgPaintOpPresetSettings.reload->setEnabled(false);
     }
     m_d->uiWdgPaintOpPresetSettings.txtPreset->setText(resource->name());
 }

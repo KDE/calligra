@@ -39,6 +39,12 @@ class KActionCollection;
 
 #ifndef QT_NO_UNDOCOMMAND
 
+/**
+ * KisUndo2Command is a type of KUndo2Command that supports the merging of commands. All commands of KisUndo2Command
+ * consist of a MergeVector in which all the commands to be merged into this command are stored in a certain order.
+ * This merging is primarily used in KUndo2Stack which is initialized in the History Docker.
+ */
+
 class KisUndo2Command : public KUndo2Command
 {
 public:

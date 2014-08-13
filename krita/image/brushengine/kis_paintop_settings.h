@@ -42,6 +42,10 @@ class KisPaintOpSettingsWidget;
  * The settings may be stored in a preset or a recorded brush stroke. Note that if your
  * paintop's settings subclass has data that is not stored as a property, that data is not
  * saved and restored.
+ *
+ * The object also contains a pointer to its parent KisPaintOpPreset object.This is to control the DirtyPreset
+ * property of KisPaintOpPreset. Whenever the settings are changed/modified from the original -- the preset is
+ * set to dirty.
  */
 class KRITAIMAGE_EXPORT KisPaintOpSettings : public KisPropertiesConfiguration, public KisShared
 {
