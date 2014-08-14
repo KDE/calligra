@@ -44,8 +44,7 @@ public:
           zooming(false),
           minimumZoom( -1.f ),
           maximumZoom( 2.f ),
-          placeholder(0),
-          movingFast(false)
+          placeholder(0)
           { }
 
     CQCanvasBase *canvas;
@@ -67,7 +66,6 @@ public:
     QPointF zoomCenter;
 
     QPixmap *placeholder;
-    bool movingFast;
 };
 
 CQCanvasControllerItem::CQCanvasControllerItem(QDeclarativeItem* parent)
@@ -188,11 +186,6 @@ void CQCanvasControllerItem::setMaximumZoom(qreal newZoom)
     }
 }
 
-bool CQCanvasControllerItem::movingFast() const
-{
-    return d->movingFast;
-}
-
 void CQCanvasControllerItem::beginZoomGesture()
 {
     if(d->zooming) {
@@ -304,8 +297,6 @@ QVariant CQCanvasControllerItem::itemChange(QGraphicsItem::GraphicsItemChange ch
         d->canvasController->blockSignals(false);
         d->lastX = pos.x();
         d->lastY = pos.y();
-        d->movingFast = QPoint(xDiff, yDiff).manhattanLength() > 25;
-        emit movingFastChanged();
     }
 
     return value;
