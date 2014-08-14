@@ -56,12 +56,13 @@ Item {
         Calligra.TextDocumentCanvas {
             id: wordsCanvas;
             anchors.fill: parent;
-        
+
             onLoadingBegun: baseLoadingDialog.visible = true;
             onLoadingFinished: {
                 console.debug("doc and part: " + doc() + " " + part());
                 mainWindow.setDocAndPart(doc(), part());
                 baseLoadingDialog.hideMe();
+                thumbnailSize = Qt.size(Settings.theme.adjustedPixel(280), Settings.theme.adjustedPixel(360));
             }
             onCurrentPageNumberChanged: navigatorListView.positionViewAtIndex(currentPageNumber - 1, ListView.Contain);
         }
@@ -387,6 +388,7 @@ Item {
                     width: Settings.theme.adjustedPixel(140);
                     fillMode: Image.PreserveAspectFit;
                     source: model.decoration;
+                    smooth: true;
                     Rectangle {
                         anchors.fill: parent;
                         color: "transparent";
