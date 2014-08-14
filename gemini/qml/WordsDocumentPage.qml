@@ -180,7 +180,7 @@ Item {
     QtObject {
         id: d;
         function showThings() {
-            navigatorSidebar.x = 0;
+            base.state = "sidebarShown";
             pageNumber.opacity = 1;
             hideTimer.stop();
             hidePageNumTimer.stop();
@@ -208,18 +208,27 @@ Item {
         repeat: false;
         interval: 2000;
         onTriggered: {
-            navigatorSidebar.x = -navigatorSidebar.width;
+            base.state = "";
         }
+    }
+    states: State {
+        name: "sidebarShown"
+        AnchorChanges { target: navigatorSidebar; anchors.left: parent.left; anchors.right: undefined; }
+    }
+    transitions: Transition {
+        AnchorAnimation { duration: Constants.AnimationDuration; }
     }
     Item {
         id: navigatorSidebar;
         property alias containsMouse: listViewMouseArea.containsMouse;
         anchors {
             top: parent.top;
+            right: parent.left;
             bottom: parent.bottom;
             topMargin: Settings.theme.adjustedPixel(40) + Constants.ToolbarHeight;
             bottomMargin: Settings.theme.adjustedPixel(40);
         }
+        width: Settings.theme.adjustedPixel(190);
         BorderImage {
             anchors {
                 fill: parent;
@@ -232,7 +241,7 @@ Item {
             horizontalTileMode: BorderImage.Stretch;
             verticalTileMode: BorderImage.Stretch;
             source: Settings.theme.image("drop-shadows.png");
-            opacity: (parent.x > -parent.width) ? 1 : 0;
+            opacity: (base.state === "sidebarShown") ? 1 : 0;
             Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
             BorderImage {
                 anchors {
@@ -248,9 +257,6 @@ Item {
                 source: Settings.theme.image("drop-corners.png");
             }
         }
-        x: -width;
-        Behavior on x { PropertyAnimation { duration: Constants.AnimationDuration; } }
-        width: Settings.theme.adjustedPixel(190);
         Item {
             anchors {
                 left: parent.right;
@@ -283,8 +289,8 @@ Item {
             MouseArea {
                 anchors.fill: parent;
                 onClicked: {
-                    if(navigatorSidebar.x === 0) {
-                        navigatorSidebar.x = -navigatorSidebar.width;
+                    if(base.state === "sidebarShown") {
+                        base.state = "";
                         pageNumber.opacity = 0;
                     }
                     else {
