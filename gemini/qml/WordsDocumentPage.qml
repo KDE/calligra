@@ -43,8 +43,30 @@ Item {
         anchors.fill: parent;
         color: "#e8e9ea";
     }
-        
+
+    Flickable {
+        id: bgScrollArea;
+        anchors.fill: parent;
+        contentHeight: controllerItem.documentSize.height;
+        Item {
+            width: parent.width;
+            height: controllerItem.documentSize.height;
+        }
+    }
+    Binding {
+        target: controllerFlickable;
+        property: "contentY";
+        value: bgScrollArea.contentY;
+        when: bgScrollArea.verticalVelocity !== 0;
+    }
+    Binding {
+        target: bgScrollArea;
+        property: "contentY";
+        value: controllerFlickable.contentY;
+        when: controllerFlickable.verticalVelocity !== 0;
+    }
     Item {
+        id: wordsContentItem;
         anchors {
             top: parent.top;
             bottom: parent.bottom;
