@@ -74,6 +74,15 @@ Item {
                 right: parent.right;
                 bottom: enabled ? parent.bottom : parent.top;
             }
+            property int fastVelocity: Settings.theme.adjustedPixel(1000);
+            onVerticalVelocityChanged: {
+                if(Math.abs(verticalVelocity) > fastVelocity && !controllerItem.pageChanging) {
+                    d.showThings();
+                }
+                else {
+                    d.hideThings();
+                }
+            }
 
             boundsBehavior: controllerItem.documentSize.width < base.width ? Flickable.StopAtBounds : Flickable.DragAndOvershootBounds;
 
@@ -164,14 +173,6 @@ Item {
                 property bool pageChanging: false;
                 zoom: 1.0;
                 minimumZoom: 0.5;
-                onMovingFastChanged: {
-                    if(movingFast === true && !pageChanging) {
-                        d.showThings();
-                    }
-                    else {
-                        d.hideThings();
-                    }
-                }
             }
         }
     }
