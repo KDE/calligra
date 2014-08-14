@@ -33,17 +33,22 @@ class CQDocumentController;
 class CQTextDocumentModel : public QAbstractListModel
 {
     Q_OBJECT
+    Q_PROPERTY(QSize thumbnailSize READ thumbnailSize WRITE setThumbnailSize NOTIFY thumbnailSizeChanged)
 public:
     CQTextDocumentModel(QObject* parent, KWDocument* document, KoShapeManager *shapemanager);
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
     Q_INVOKABLE virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
 
+    QSize thumbnailSize() const;
+    void setThumbnailSize(const QSize& newSize);
 signals:
     void documentControllerChanged();
+    void thumbnailSizeChanged();
 
 private:
     KWDocument *kw_document;
     KoShapeManager *kw_shapemanager;
+    QSize m_thumbnailSize;
 };
 
 #endif // CQTEXTDOCUMENTMODEL_H

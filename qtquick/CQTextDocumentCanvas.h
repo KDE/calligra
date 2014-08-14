@@ -54,6 +54,8 @@ class CQTextDocumentCanvas : public CQCanvasBase
     Q_PROPERTY(QRectF selectionStartPos READ selectionStartPos NOTIFY selectionChanged)
     Q_PROPERTY(QRectF selectionEndPos READ selectionEndPos NOTIFY selectionChanged)
     Q_PROPERTY(QObject* zoomAction READ zoomAction NOTIFY zoomActionChanged)
+
+    Q_PROPERTY(QSize thumbnailSize READ thumbnailSize WRITE setThumbnailSize NOTIFY thumbnailSizeChanged)
 public:
     CQTextDocumentCanvas(QDeclarativeItem* parent = 0);
     ~CQTextDocumentCanvas();
@@ -100,6 +102,9 @@ public:
     QRectF selectionEndPos() const;
 
     QObject* zoomAction() const;
+
+    QSize thumbnailSize() const;
+    void setThumbnailSize(const QSize& newSize);
 signals:
     void searchTermChanged();
     void documentModelChanged();
@@ -111,6 +116,7 @@ signals:
     void notesChanged();
     void selectionChanged();
     void zoomActionChanged();
+    void thumbnailSizeChanged();
 
 protected:
     virtual bool event( QEvent* event );

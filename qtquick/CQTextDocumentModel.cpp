@@ -30,7 +30,7 @@
 #include <KDebug>
 
 CQTextDocumentModel::CQTextDocumentModel(QObject* parent, KWDocument* document, KoShapeManager *shapemanager)
-    : kw_document(document), kw_shapemanager(shapemanager)
+    : kw_document(document), kw_shapemanager(shapemanager), m_thumbnailSize(QSize(512, 512))
 {
 }
 
@@ -51,8 +51,7 @@ QVariant CQTextDocumentModel::data(const QModelIndex& index, int role) const
             const QString id = kw_document->caption() + "textData" + QString::number(index.row());
             if (!CQImageProvider::s_imageProvider->containsId(id)) {
                 KWPage pagePreview = kw_document->pageManager()->page(index.row()+1);
-                QSize size = QSize(512,512);
-                QImage image = pagePreview.thumbnail(size, kw_shapemanager);
+                QImage image = pagePreview.thumbnail(m_thumbnailSize, kw_shapemanager);
                 if(image.isNull() == true) {
                     return QVariant();
                 }
@@ -62,4 +61,15 @@ QVariant CQTextDocumentModel::data(const QModelIndex& index, int role) const
         }
     }
     return QVariant();
+}
+
+QSize CQTextDocumentModel::thumbnailSize() const
+{
+    return m_thumbnailSize;
+}
+
+void CQTextDocumentModel::setThumbnailSize(const QSize& newSize)
+{
+    m_thumbnailSize = newSize;
+    emit thumbnailSizeChanged();
 }

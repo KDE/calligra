@@ -321,6 +321,8 @@ void CQTextDocumentCanvas::openFile(const QString& uri)
     d->document = qobject_cast<KWDocument*>(document);
     d->documentModel = new CQTextDocumentModel(this, d->document, d->canvas->shapeManager());
     emit documentModelChanged();
+    emit thumbnailSizeChanged();
+    connect(d->documentModel, SIGNAL(thumbnailSizeChanged()), SIGNAL(thumbnailSizeChanged()));
 
     d->updateLinkTargets();
     emit linkTargetsChanged();
@@ -428,6 +430,20 @@ QObject* CQTextDocumentCanvas::zoomAction() const
     if(zoomController() && zoomController()->zoomAction())
         return zoomController()->zoomAction();
     return 0;
+}
+
+QSize CQTextDocumentCanvas::thumbnailSize() const
+{
+    if(d->documentModel)
+        return d->documentModel->thumbnailSize();
+    return QSize();
+}
+
+void CQTextDocumentCanvas::setThumbnailSize(const QSize& newSize)
+{
+    if(d->documentModel)
+        d->documentModel->setThumbnailSize(newSize);
+    emit thumbnailSizeChanged();
 }
 
 void CQTextDocumentCanvas::deselectEverything()
