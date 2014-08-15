@@ -23,7 +23,10 @@ public class OdbReader
         ZipFile file = new ZipFile(path);
         fileUnzip(file, tempDir);
         file.close();
-        con = DriverManager.getConnection( "jdbc:hsqldb:file:"+ tempDir+f,"SA","" );
+        con = DriverManager.getConnection( "jdbc:hsqldb:file:"+ tempDir+f+";shutdown=true;ifexists=true","SA","" );
+        Statement stmt = con.createStatement();
+        stmt.execute("SET DATABASE SQL SYNTAX ORA TRUE");
+        stmt.close();
     }
 
     /*Method to open a zipfile from Odb
@@ -66,13 +69,27 @@ public class OdbReader
             }
     }
 
+
+
+    public void shutdown() throws SQLException {
+
+        Statement st = con.createStatement();
+
+        // db writes out to files and performs clean shuts down
+        // otherwise there will be an unclean shutdown
+        // when program ends
+        st.execute("SHUTDOWN");
+        st.close();
+        con.close();    // if there are no other open connection
+    }
+
     public String getTableNames() throws Exception
     {
         String result="";
     	String TABLE_NAME = "TABLE_NAME";
 	    String TABLE_SCHEMA = "TABLE_SCHEM";
 	    String[] TABLE_TYPES = {"TABLE"};
-	    DatabaseMetaData dbmd = con.getMetaData();
+        DatabaseMetaData dbmd = con.getMetaData();
 
 	    ResultSet tables = dbmd.getTables(null, null, null, TABLE_TYPES);
 	    while (tables.next())
@@ -105,6 +122,49 @@ public class OdbReader
         if(!result.isEmpty()) result=result.substring(0,result.length()-1);
         return result;
     }
- 
 
+    public String getTableSize(String tablename) throws Exception
+    {
+        DatabaseMetaData dbmd = con.getMetaData();
+        ResultSet columns = dbmd.getColumns(null, null, tablename, null);
+        int i = 0;
+        int j=0;
+        while (columns.next())
+          i++;
+        Statement stmt=con.createStatement();
+        ResultSet rs=stmt.executeQuery("select count(*) from \""+tablename+"\"");
+        while(rs.next())
+            j=rs.getInt(1);
+        stmt.close();
+        return ""+i+","+j;
+    }
+
+    public String getCellValue(int columnnum, int rownum, String tablename) throws Exception
+    {
+        Statement stmt=con.createStatement();
+        ResultSet rs=stmt.executeQuery("select * from \""+tablename+"\";");
+        String result="";
+        int temp=0;
+        while(rs.next())
+        {
+            temp++;
+            if(temp==rownum)
+            {
+                result=rs.getString(columnnum);
+                break;
+            }
+        }
+        stmt.close();
+        return result;
+    }
+ 
+//    public static void main(String[] args){
+//        try{
+//        OdbReader oo=new OdbReader("/home/dhruv/Downloads/databaseOne.odb");
+//        System.out.println(oo.getTableNames());
+//        } catch(Exception e)
+//        {
+//            e.printStackTrace();
+//        }
+//    }
 }   

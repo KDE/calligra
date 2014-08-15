@@ -84,7 +84,7 @@ bool OdbMigrate::drv_readTableSchema(
 
     for(int i=0;i<list.size();i+=2)
     {
-        QString fldID(KexiUtils::stringToIdentifier(list.at(i+1)));
+        QString fldID(KexiUtils::stringToIdentifier(list.at(i)));
         KexiDB::Field *fld =
             new KexiDB::Field(fldID, type(list.at(i+1)));
         fld->setCaption(list.at(i));
@@ -114,12 +114,6 @@ bool OdbMigrate::drv_tableNames(QStringList& tableNames)
             kDebug() << s;
         }
     }
-    return false;
-}
-
-bool OdbMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *destConn,
-                                 KexiDB::TableSchema* dstTable)
-{
     return false;
 }
 
@@ -159,4 +153,80 @@ KexiDB::Field::Type OdbMigrate::type(QString type)
         return KexiDB::Field::LongText;
     }
     return kexiType;
+}
+
+
+bool OdbMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *destConn,
+                                 KexiDB::TableSchema* dstTable)
+{
+    bool ok = true;
+    char* tableName=srcTable.toAscii().data();
+
+    jmethodID getTableNames = env->GetMethodID(clsH,"getTableSchema","(Ljava/lang/String;)Ljava/lang/String;");
+    jstring returnString = (jstring) env->CallObjectMethod(java_class_object,getTableNames,tableName);
+    const char* tablesstring = env->GetStringUTFChars(returnString, NULL);
+    QString jsonString(tablesstring);
+    QStringList list = jsonString.split(",");
+
+    jmethodID getTableSize = env->GetMethodID(clsH,"getTableSize","(Ljava/lang/String;)Ljava/lang/String;");
+    jmethodID getCellValue = env->GetMethodID(clsH,"getCellValue","((II)Ljava/lang/String;Ljava/lang/String;");
+    returnString = (jstring) env->CallObjectMethod(java_class_object,getTableSize,tableName);
+    tablesstring = env->GetStringUTFChars(returnString, NULL);
+    QString jsonString2(tablesstring);
+    list = jsonString2.split(",");
+    int columns=list.at(0).toInt();
+    int rows=list.at(1).toInt();
+    int i=0;
+    for(i=0;i<rows;i++)
+    {
+        QList<QVariant> vals;
+        int j=0;
+        for(j=0;j<columns;j++)
+        {
+            returnString = (jstring) env->CallObjectMethod(java_class_object,getCellValue,j+1,i+1,tableName);
+            tablesstring = env->GetStringUTFChars(returnString, NULL);
+            QVariant var = toQVariant(tablesstring,QString(tablesstring).length(), list.at(2*j + 1));
+            vals << var;
+        }
+        if (!destConn->insertRecord(*dstTable, vals)) {
+            ok = false;
+            break;
+        }
+    }
+    return ok;
+}
+
+
+QVariant OdbMigrate::toQVariant(const char* data, unsigned int len, QString type)
+{
+    if(len==0)
+        return QVariant();
+
+    if(type.compare("BOOLEAN")==0 || type.compare("BIT")==0)
+        return QString::fromUtf8(data, len).toShort();
+    else if(type.compare("CHARACTER")==0||type.compare("CHAR")==0)
+        return QString::fromUtf8(data, len).toShort();
+    else if(type.compare("TINYINT")==0||type.compare("SHORTINT")==0)
+        return QString::fromUtf8(data, len).toLongLong();
+    else if(type.compare("INTEGER")==0||type.compare("INT")==0)
+        return QString::fromUtf8(data, len).toLongLong();
+    else if(type.compare("BIGINT")==0)
+        return QString::fromUtf8(data, len).toLongLong();
+    else if(type.compare("DECIMAL")==0||type.compare("NUMERIC")==0||type.compare("REAL")==0||type.compare("DOUBLE")==0)
+        return QString::fromUtf8(data, len).toDouble();
+    else if(type.compare("FLOAT")==0)
+        return QString::fromUtf8(data, len).toFloat();
+    else if(type.compare("DATE")==0)
+        return QDate::fromString(data, Qt::ISODate);
+    else if(type.compare("TIME")==0)
+        return QTime::fromString(data, Qt::ISODate);
+    else if(type.compare("DATETIME")==0||type.compare("TIMESTAMP")==0)
+        return QDateTime::fromString(data, Qt::ISODate);
+    else if(type.compare("VARCHAR")==0||type.compare("VARCHAR_IGNORECASE")==0||type.compare("LONGVARCHAR")==0||type.compare("CLOB")==0)
+        return QVariant(QString::fromUtf8(data, len));
+    else if(type.compare("BINARY")==0||type.compare("VARBINARY")==0||type.compare("LONGVARBINARY")==0||type.compare("OTHER")==0||type.compare("OBJECT")==0)
+        return QVariant(QString::fromUtf8(data, len));
+    else
+        return QVariant(QString::fromUtf8(data, len));
+
 }
