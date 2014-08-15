@@ -137,7 +137,7 @@ QString KoDocumentRdf::rdfInternalMetadataWithoutSubjectURI() const
     return "http://www.calligra.org/Rdf/internal/content.xml";
 }
 
-QString KoDocumentRdf::rdfPathContextPrefix() const
+QString KoDocumentRdf::rdfPathContextPrefix()
 {
     return "http://www.calligra.org/Rdf/path/";
 }

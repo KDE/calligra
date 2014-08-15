@@ -79,6 +79,7 @@ set(wordsprivate_LIB_SRCS
     author/CAuPart.cpp
     author/CoverImage.cpp
     author/CoverSelectionDialog.cpp
+    author/CAuDocument.cpp
 )
 
 if( CMAKE_BUILD_TYPE MATCHES "^[d,D][e,E][b,B][u,U][g,G]" )
@@ -98,6 +99,10 @@ if( SHOULD_BUILD_FEATURE_RDF )
         author/dockers/CAuOutlinerDocker.cpp
         author/dockers/CAuOutlinerDockerFactory.cpp
         author/dockers/CAuOutlinerWidget.cpp
+
+        author/metadata/CAuMetaDataManager.cpp
+        author/metadata/CAuSectionRdf.cpp
+        author/metadata/CAuSectionSemanticItemFactory.cpp
     )
 endif( SHOULD_BUILD_FEATURE_RDF )
 
@@ -119,6 +124,7 @@ kde4_add_ui_files(wordsprivate_LIB_SRCS
 if( SHOULD_BUILD_FEATURE_RDF )
     kde4_add_ui_files(wordsprivate_LIB_SRCS
         dockers/KWRdfDocker.ui
+        author/metadata/CAuSectionRdfEditWidget.ui
     )
 endif( SHOULD_BUILD_FEATURE_RDF )
 

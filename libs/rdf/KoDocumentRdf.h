@@ -291,7 +291,7 @@ public:
      * context. The filename.rdf is appended so that the Rdf can be
      * put back into the right file again during save.
      */
-    QString rdfPathContextPrefix() const;
+    static QString rdfPathContextPrefix();
 
     /**
      * This is used for triples that do not specify their xhtml:about

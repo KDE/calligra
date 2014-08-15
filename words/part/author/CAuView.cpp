@@ -23,7 +23,7 @@
 #include "CoverImage.h"
 #include "CoverSelectionDialog.h"
 
-#include "KWDocument.h"
+#include <author/CAuDocument.h>
 
 #include <KoPart.h>
 #include <KoDockRegistry.h>
@@ -66,10 +66,11 @@ QPair<QString, QByteArray> CAuView::getCurrentCoverImage()
         qDebug() << "AUTHOR : get problem";
     else
         qDebug() << "AUTHOR : get ok";*/
-    return (kwdocument()->coverImage());
+    return dynamic_cast<CAuDocument *>(kwdocument())->coverImage();
 }
 
 void CAuView::setCurrentCoverImage(QPair<QString, QByteArray> img)
 {
-    kwdocument()->setCoverImage(img);
+
+    dynamic_cast<CAuDocument *>(kwdocument())->setCoverImage(img);
 }

@@ -21,7 +21,7 @@
 #include "CAuSectionSemanticItemFactory.h"
 
 // plugin
-#include <CAuSectionRdf.h>
+#include <author/metadata/CAuSectionRdf.h>
 // KDE
 #include <KLocale>
 // Qt

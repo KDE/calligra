@@ -219,43 +219,6 @@ void CAuOutlinerWidget::sectionEditClicked()
     kwdoc->setModified(true);
 
     if (!found) { // we have created new item, need to save it properly
-        const QString sparqlQuery = QLatin1String(
-            "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n"
-            "PREFIX odf: <http://docs.oasis-open.org/ns/office/1.2/meta/odf#> \n"
-            "PREFIX pkg: <http://docs.oasis-open.org/ns/office/1.2/meta/pkg#> \n"
-            "SELECT ?metafile ?metafilename \n"
-            "WHERE { \n"
-            "    ?metafile rdf:type odf:MetaDataFile . \n"
-            "    ?metafile pkg:path ?metafilename    . \n"
-            "    FILTER( str(?metafilename) = \"author.rdf\" ) \n"
-            "} \n"
-        );
-
-        QueryResultIterator it = rdf->model()->executeQuery(
-            sparqlQuery,
-            Query::QueryLanguageSparql
-        );
-
-        int cnt = it.bindingCount();
-        it.close();
-
-        if (!cnt) {
-            Node authorRdfFileNode = Node::createBlankNode("CAU_META_DATA_FILE");
-            rdf->model()->addStatement(
-                authorRdfFileNode,
-                Node::createResourceNode(rdf->prefixMapping()->PrefexedLocalnameToURI("rdf:type")),
-                Node::createResourceNode(rdf->prefixMapping()->PrefexedLocalnameToURI("odf:MetaDataFile")),
-                rdf->manifestRdfNode()
-            );
-
-            rdf->model()->addStatement(
-                authorRdfFileNode,
-                Node::createResourceNode(rdf->prefixMapping()->PrefexedLocalnameToURI("pkg:path")),
-                Node::createLiteralNode("author.rdf"),
-                rdf->manifestRdfNode()
-            );
-        }
-
         rdf->model()->addStatement(
             semItem->linkingSubject(),
             Node::createResourceNode(QUrl("http://docs.oasis-open.org/ns/office/1.2/meta/pkg#idref")),

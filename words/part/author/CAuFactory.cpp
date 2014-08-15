@@ -25,7 +25,7 @@
 #include "CAuAboutData.h"
 
 #include <kdebug.h>
-#include "KWDocument.h"
+#include <author/CAuDocument.h>
 #include <kcomponentdata.h>
 #include <kstandarddirs.h>
 
@@ -73,7 +73,7 @@ QObject* CAuFactory::create(const char* /*iface*/, QWidget* /*parentWidget*/, QO
     Q_UNUSED(keyword);
 
     CAuPart *part = new CAuPart(parent);
-    KWDocument *doc = new KWDocument(part);
+    CAuDocument *doc = new CAuDocument(part);
     part->setDocument(doc);
     KoToolRegistry::instance()->add(new KWPageToolFactory());
     return part;

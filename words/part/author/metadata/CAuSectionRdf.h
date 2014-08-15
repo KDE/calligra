@@ -46,6 +46,8 @@ private:
     static const int STATUS_COUNT = 8;
     static const QString STATUS[STATUS_COUNT];
 
+    static QString authorSectionPrefix();
+
     // Author section rdf template
     // s == m_uri
     // s -> <uri:section>; p -> <http://www.calligra.org/author/descr>; o -> "Some description"

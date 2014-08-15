@@ -19,6 +19,8 @@
 
 #include "CAuSectionRdf.h"
 
+#include <author/metadata/CAuMetaDataManager.h>
+
 #include <KoDocumentRdf.h>
 #include <KoTextRdfCore.h>
 
@@ -59,7 +61,7 @@ CAuSectionRdf::CAuSectionRdf(QObject *parent, const KoDocumentRdf *rdf, Soprano:
 
 QString CAuSectionRdf::name() const
 {
-    return i18n("AuthorSection");
+    return i18n("Author's section");
 }
 
 QWidget* CAuSectionRdf::createEditor(QWidget *parent)
@@ -107,17 +109,15 @@ void CAuSectionRdf::updateFromEditorData()
         m_uri = u.toString();
     }
 
-    QString predBase = "http://www.calligra.org/author/"; //FIXME: this thing should be global
-
     if (!isTypeSet) {
-        setRdfType(predBase + "Section");
+        setRdfType(authorSectionPrefix());
         isTypeSet = true;
     }
 
-    updateTriple(m_synop, m_editWidgetUI.synopRichTextWidget->toHtml(), predBase + "Section#synop");
-    updateTriple(m_magicId, m_magicId, predBase + "Section#magicid");
-    updateTriple(m_status, QString::number(m_editWidgetUI.statusComboBox->currentIndex()), predBase + "Section#status");
-    updateTriple(m_badge, m_editWidgetUI.badgeLineEdit->text(), predBase + "Section#badge");
+    updateTriple(m_synop, m_editWidgetUI.synopRichTextWidget->toHtml(), authorSectionPrefix() + "#synop");
+    updateTriple(m_magicId, m_magicId, authorSectionPrefix() + "#magicid");
+    updateTriple(m_status, QString::number(m_editWidgetUI.statusComboBox->currentIndex()), authorSectionPrefix() + "#status");
+    updateTriple(m_badge, m_editWidgetUI.badgeLineEdit->text(), authorSectionPrefix() + "#badge");
     if (documentRdf()) {
         const_cast<KoDocumentRdf*>(documentRdf())->emitSemanticObjectUpdated(hKoRdfBasicSemanticItem(this));
     }
@@ -139,5 +139,10 @@ Node CAuSectionRdf::context() const
         return m_context;
     }
 
-    return Node::createResourceNode(QUrl(documentRdf()->rdfPathContextPrefix() + "author.rdf")); //FIXME: this should be global
+    return CAuMetaDataManager::authorContext();
+}
+
+QString CAuSectionRdf::authorSectionPrefix()
+{
+    return CAuMetaDataManager::AUTHOR_PREFIX + "Section";
 }
