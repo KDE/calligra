@@ -1072,20 +1072,48 @@ Tokens Formula::scan(const QString &expr, const KLocale* locale) const
     return tokens;
 }
 
-void Formula::checkSpelling(Tokens tokens)
+Token Formula::checkSpelling(Token tokens)
 {
     QStringList *lst = FunctionRepository::functionNames();//lst is a pointer storing all the complex function names
     lst->sort();//sorting the list such that searching becomes easier
-    QStringList result = filterFunctionName(lst, tokens);//a function that will return filtered out function names
+    QStringList *result = filterFunctionName(lst, tokens);//a function that will return filtered out function names
+    highlightTokens(result, tokens);
+    QString *requiredText = result.first();//the closest possible function name
+    Token st = new Token();
     
+    QString::iterator i; //for iterating each character of requiredText
+    
+   for(i=requiredText->begin();i!=requiredText->end();i++)
+   {
+     st.append(*i);
+   }
+    
+    return st;//returns a Tokens datatype
   
 }
 
+void Formula::highlightTokens(QStringList *result, Token tokens)
+{
+   QString textToBeHighlighted = null;
+   QString::iterator i; //for iterating each character of result
+   QVector::iterator j; //for iterating each cell of tokens
+   for(i=result->begin(),j=tokens.begin();i!=result->end(),j=tokens.end();i++,j++)
+   {
+     if(*i != *j)
+     {
+       textToBeHighlighted.append(i);// will highlight only the portion which is dissimilar
+   }
+   }
+   FunctionNameSpellingHighlighter *highlighter = new FunctionNameSpellingHighlighter(&textToBeHighLighted);//highlightBlock() will be called automaticallu
+}
+    
+     
 
-QStringList Formula::filterFunctionName(QStringList *lst, Tokens tokens)
+
+QStringList Formula::filterFunctionName(QStringList *lst, Token tokens)
 {
     
-     Tokens tempToken = tokens; //storing in a temporary variable such that changes are reflected separately
+     Token tempToken = tokens; //storing in a temporary variable such that changes are reflected separately
      QVectorIterator<QString> i(tokens);
      QString str = null;//each time a character is taken from the token and appended to this string and ultimately this string is checked
      while(i.hasNext())
@@ -1134,7 +1162,7 @@ void Formula::compile(const Tokens& tokens) const
         // if stack already has: id (
         if (syntaxStack.itemCount() >= 2) {
             Token par = syntaxStack.top();
-            Token id = syntaxStack.top(1);
+            Token id = Formula::checkSpelling(syntaxStack.top(1));// spelling for the function name is being checked
             if (par.asOperator() == Token::LeftPar)
                 if (id.isIdentifier()) {
                     argStack.push(argCount);
