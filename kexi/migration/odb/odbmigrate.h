@@ -32,6 +32,7 @@ protected:
 private:
     JNIEnv* create_vm(JavaVM **jvm);
     KexiDB::Field::Type type(QString type);
+    QVariant toQVariant(const char*, unsigned int, QString);
     JNIEnv* env;
     jclass clsH;
     jobject java_class_object;
