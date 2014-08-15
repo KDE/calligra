@@ -52,3 +52,8 @@ bool CAuDocument::saveOdf(SavingContext &documentContext)
     }
     return true;
 }
+
+CAuMetaDataManager *CAuDocument::metaManager() const
+{
+    return m_metaManager;
+}

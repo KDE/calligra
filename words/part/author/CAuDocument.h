@@ -39,6 +39,8 @@ public:
     /// reimplemented to save cover
     virtual bool saveOdf(SavingContext &documentContext);
 
+    CAuMetaDataManager *metaManager() const;
+
 private:
     QPair<QString, QByteArray> m_coverImage;
     CAuMetaDataManager *m_metaManager;

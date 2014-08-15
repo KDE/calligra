@@ -18,21 +18,18 @@
  */
 
 #include "CAuOutlinerWidget.h"
+#include <author/CAuDocument.h>
 
 #include <frames/KWTextFrameSet.h>
 #include <KoTextDocument.h>
 #include <KoSectionManager.h>
 #include <KoSection.h>
 #include <KoTextEditor.h>
-#include <KoTextInlineRdf.h>
 #include <KWView.h>
 #include <KoTextLayoutRootArea.h>
-#include <KoDocumentRdf.h>
 #include <KoShapeController.h>
 #include <KoDocumentResourceManager.h>
-#include <KoRdfPrefixMapping.h>
 
-#include <KPageDialog>
 #include <QModelIndexList>
 #include <QVBoxLayout>
 
@@ -176,56 +173,6 @@ void CAuOutlinerWidget::sectionEditClicked()
         m_sectionTree->model()->itemData(m_sectionTree->currentIndex())[Qt::UserRole + 1].value<void *>()
     );
 
-    KoTextInlineRdf *inlineRdf = sec->inlineRdf();
-    if (!inlineRdf) {
-        inlineRdf = new KoTextInlineRdf(m_document, sec);
-        inlineRdf->setXmlId(inlineRdf->createXmlId());
-        sec->setInlineRdf(inlineRdf);
-    }
-
-    KWDocument *kwdoc = dynamic_cast<KWDocument *>(m_canvas->shapeController()->resourceManager()->odfDocument());
-    KoDocumentRdf *rdf = dynamic_cast<KoDocumentRdf *>(kwdoc->documentRdf());
-
-    QList<hKoRdfBasicSemanticItem> lst = rdf->semanticItems("AuthorSection");
-
-    hKoRdfBasicSemanticItem semItem;
-    bool found = false;
-    foreach (const hKoRdfBasicSemanticItem &item, lst) {
-        if (item->xmlIdList().contains(sec->inlineRdf()->xmlId())) {
-            found = true;
-            semItem = item;
-            break;
-        }
-    }
-
-    if (!found) {
-        semItem = rdf->createSemanticItem("AuthorSection", rdf);
-    }
-
-    QWidget *widget = new QWidget();
-    QVBoxLayout *lay = new QVBoxLayout(widget);
-    widget->setLayout(lay);
-    lay->setMargin(0);
-    QWidget *w = semItem->createEditor(widget);
-    lay->addWidget(w);
-
-    KPageDialog dialog(m_canvas->canvasWidget());
-    dialog.setCaption(i18n("Section options"));
-    dialog.addPage(widget, QString());
-    if (dialog.exec() == KPageDialog::Accepted) {
-        semItem->updateFromEditorData();
-    }
-
-    kwdoc->setModified(true);
-
-    if (!found) { // we have created new item, need to save it properly
-        rdf->model()->addStatement(
-            semItem->linkingSubject(),
-            Node::createResourceNode(QUrl("http://docs.oasis-open.org/ns/office/1.2/meta/pkg#idref")),
-            Node::createLiteralNode(sec->inlineRdf()->xmlId()),
-            rdf->manifestRdfNode()
-        );
-
-        rdf->rememberNewInlineRdfObject(inlineRdf);
-    }
+    CAuDocument *caudoc = dynamic_cast<CAuDocument *>(m_canvas->shapeController()->resourceManager()->odfDocument());
+    caudoc->metaManager()->callEditor(sec);
 }

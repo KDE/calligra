@@ -25,6 +25,7 @@
 
 #include <RdfForward.h>
 
+class KoSection;
 class CAuDocument;
 
 class CAuMetaDataManager : public QObject
@@ -38,6 +39,7 @@ public:
     CAuMetaDataManager(CAuDocument *caudoc);
 
     static Soprano::Node authorContext();
+    void callEditor(KoSection *sec) const;
 
 private:
     CAuDocument *m_doc;

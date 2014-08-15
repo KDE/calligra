@@ -22,9 +22,16 @@
 #include <KoDocumentRdf.h>
 #include <KoRdfPrefixMapping.h>
 #include <KoRdfSemanticItemRegistry.h>
+#include <KoTextInlineRdf.h>
+#include <KoSection.h>
 
 #include <author/metadata/CAuSectionSemanticItemFactory.h>
 #include <author/CAuDocument.h>
+#include <frames/KWTextFrameSet.h>
+
+#include <QVBoxLayout>
+
+#include <KPageDialog>
 
 using namespace Soprano;
 
@@ -96,4 +103,59 @@ void CAuMetaDataManager::registerAuthorSemanticItems()
 Soprano::Node CAuMetaDataManager::authorContext()
 {
     return Node(QUrl(KoDocumentRdf::rdfPathContextPrefix() + AUTHOR_RDF_FILE_NAME));
+}
+
+void CAuMetaDataManager::callEditor(KoSection *sec) const
+{
+    KoTextInlineRdf *inlineRdf = sec->inlineRdf();
+    if (!inlineRdf) {
+        inlineRdf = new KoTextInlineRdf(m_doc->mainFrameSet()->document(), sec);
+        inlineRdf->setXmlId(inlineRdf->createXmlId());
+        sec->setInlineRdf(inlineRdf);
+    }
+
+    KoDocumentRdf *rdf = dynamic_cast<KoDocumentRdf *>(m_doc->documentRdf());
+
+    QList<hKoRdfBasicSemanticItem> lst = rdf->semanticItems("AuthorSection");
+
+    hKoRdfBasicSemanticItem semItem;
+    bool found = false;
+    foreach (const hKoRdfBasicSemanticItem &item, lst) {
+        if (item->xmlIdList().contains(sec->inlineRdf()->xmlId())) {
+            found = true;
+            semItem = item;
+            break;
+        }
+    }
+
+    if (!found) {
+        semItem = rdf->createSemanticItem("AuthorSection", rdf);
+    }
+
+    QWidget *widget = new QWidget();
+    QVBoxLayout *lay = new QVBoxLayout(widget);
+    widget->setLayout(lay);
+    lay->setMargin(0);
+    QWidget *w = semItem->createEditor(widget);
+    lay->addWidget(w);
+
+    KPageDialog dialog(m_doc->documentPart()->currentMainwindow());
+    dialog.setCaption(i18n("Section's options"));
+    dialog.addPage(widget, QString());
+    if (dialog.exec() == KPageDialog::Accepted) {
+        semItem->updateFromEditorData();
+    }
+
+    m_doc->setModified(true);
+
+    if (!found) { // we have created new item, need to save it properly
+        rdf->model()->addStatement(
+            semItem->linkingSubject(),
+            Node::createResourceNode(QUrl("http://docs.oasis-open.org/ns/office/1.2/meta/pkg#idref")),
+            Node::createLiteralNode(sec->inlineRdf()->xmlId()),
+            rdf->manifestRdfNode()
+        );
+
+        rdf->rememberNewInlineRdfObject(inlineRdf);
+    }
 }
