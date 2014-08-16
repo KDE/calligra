@@ -76,8 +76,9 @@ bool OdbMigrate::drv_readTableSchema(
     const QString& originalName, KexiDB::TableSchema& tableSchema)
 {
     char* tableName=originalName.toAscii().data();
+	jstring arguement=env->NewStringUTF(tableName);
     jmethodID getTableNames = env->GetMethodID(clsH,"getTableSchema","(Ljava/lang/String;)Ljava/lang/String;");
-    jstring returnString = (jstring) env->CallObjectMethod(java_class_object,getTableNames,tableName);
+    jstring returnString = (jstring) env->CallObjectMethod(java_class_object,getTableNames,arguement);
     const char* tablesstring = env->GetStringUTFChars(returnString, NULL);
     QString jsonString(tablesstring);
     QStringList list = jsonString.split(",");
@@ -161,16 +162,16 @@ bool OdbMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *dest
 {
     bool ok = true;
     char* tableName=srcTable.toAscii().data();
-
+	jstring arguement=env->NewStringUTF(tablename);
     jmethodID getTableNames = env->GetMethodID(clsH,"getTableSchema","(Ljava/lang/String;)Ljava/lang/String;");
-    jstring returnString = (jstring) env->CallObjectMethod(java_class_object,getTableNames,tableName);
+    jstring returnString = (jstring) env->CallObjectMethod(java_class_object,getTableNames,arguement);
     const char* tablesstring = env->GetStringUTFChars(returnString, NULL);
     QString jsonString(tablesstring);
     QStringList list = jsonString.split(",");
 
     jmethodID getTableSize = env->GetMethodID(clsH,"getTableSize","(Ljava/lang/String;)Ljava/lang/String;");
-    jmethodID getCellValue = env->GetMethodID(clsH,"getCellValue","((II)Ljava/lang/String;Ljava/lang/String;");
-    returnString = (jstring) env->CallObjectMethod(java_class_object,getTableSize,tableName);
+    jmethodID getCellValue = env->GetMethodID(clsH,"getCellValue","(IILjava/lang/String;)Ljava/lang/String;");
+    returnString = (jstring) env->CallObjectMethod(java_class_object,getTableSize,arguement);
     tablesstring = env->GetStringUTFChars(returnString, NULL);
     QString jsonString2(tablesstring);
     list = jsonString2.split(",");
@@ -183,7 +184,7 @@ bool OdbMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *dest
         int j=0;
         for(j=0;j<columns;j++)
         {
-            returnString = (jstring) env->CallObjectMethod(java_class_object,getCellValue,j+1,i+1,tableName);
+            returnString = (jstring) env->CallObjectMethod(java_class_object,getCellValue,j+1,i+1,arguement);
             tablesstring = env->GetStringUTFChars(returnString, NULL);
             QVariant var = toQVariant(tablesstring,QString(tablesstring).length(), list.at(2*j + 1));
             vals << var;
