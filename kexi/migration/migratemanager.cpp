@@ -129,7 +129,6 @@ bool MigrateManagerInternal::lookupDrivers()
             major_ver = lst[0].toUInt(&ok);
         if (ok)
             minor_ver = lst[1].toUInt(&ok);
-#if 0 //temp. disable
         if (!ok) {
             KexiDBWarn << "problem with detecting" << srv_name.toLower() << "driver's version -- skipping it!";
             possibleProblems += QString("\"%1\" migration driver has unrecognized version; "
@@ -149,7 +148,6 @@ bool MigrateManagerInternal::lookupDrivers()
                                 .arg(KexiMigration::version().major).arg(KexiMigration::version().minor);
             continue;
         }
-#endif
 //</COPIED>
 
         QString mime = ptr->property("X-Kexi-FileDBDriverMime").toString().toLower();
