@@ -92,7 +92,7 @@ bool OdbMigrate::drv_connect()
 bool OdbMigrate::drv_readTableSchema(
     const QString& originalName, KexiDB::TableSchema& tableSchema)
 {
-    char* tableName=originalName.toAscii().data();
+    jstring tableName = env->NewStringUTF(originalName.toAscii().data());
     jmethodID getTableSchema = env->GetMethodID(clsH,"getTableSchema","(Ljava/lang/String;)Ljava/lang/String;");
     if (!getTableSchema) {
         kWarning() << "!getTableSchema";
@@ -182,8 +182,7 @@ bool OdbMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *dest
                                  KexiDB::TableSchema* dstTable)
 {
     bool ok = true;
-    char* tableName=srcTable.toAscii().data();
-
+    jstring tableName = env->NewStringUTF(srcTable.toAscii().data());
     jmethodID getTableNames = env->GetMethodID(clsH,"getTableSchema","(Ljava/lang/String;)Ljava/lang/String;");
     jstring returnString = (jstring) env->CallObjectMethod(java_class_object,getTableNames,tableName);
     QString jsonString = javaStringToQString(env, returnString);
@@ -194,13 +193,14 @@ bool OdbMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *dest
         kWarning() << "!getTableSize";
         return false;
     }
-    jmethodID getCellValue = env->GetMethodID(clsH,"getCellValue","((II)Ljava/lang/String;Ljava/lang/String;");
+    jmethodID getCellValue = env->GetMethodID(clsH,"getCellValue","(IILjava/lang/String;)Ljava/lang/String;");
     if (!getCellValue) {
         kWarning() << "!getCellValue";
         return false;
     }
     returnString = (jstring) env->CallObjectMethod(java_class_object,getTableSize,tableName);
     QString jsonString2 = javaStringToQString(env, returnString);
+
     list = jsonString2.split(",");
     int columns=list.at(0).toInt();
     int rows=list.at(1).toInt();
