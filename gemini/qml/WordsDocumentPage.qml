@@ -180,6 +180,7 @@ Item {
 
                 MouseArea {
                     anchors.fill: parent;
+                    onClicked: base.canvasInteractionStarted();
                     onDoubleClicked: {
                         toolManager.requestToolChange("TextToolFactory_ID");
                         base.navigateMode = false;
