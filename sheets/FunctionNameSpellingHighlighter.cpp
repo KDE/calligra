@@ -2,14 +2,7 @@
 
  class FunctionNameSpellingHighlighter : public QSyntaxHighlighter //used for highlighting the letters that were wrongly typed in a function name
  {
-     Q_OBJECT
-
- public:
-     FunctionNameSpellingHighlighter(QTextDocument *parent = 0);
-
- protected:
-     void highlightBlock(const QString &text);
-
+     
 
      
     void FunctionNameSpellingHighlighter::highlightBlock(const QString &text) //reimplementing QSyntaxHighlighter's highLightBlock() method
