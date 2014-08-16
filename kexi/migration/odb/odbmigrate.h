@@ -24,15 +24,16 @@ protected:
     virtual bool drv_connect();
     virtual bool drv_disconnect();
     virtual bool drv_readTableSchema(const QString& originalName,
-				     KexiDB::TableSchema& tableSchema);
+                                     KexiDB::TableSchema& tableSchema);
     virtual bool drv_tableNames(QStringList& tablenames);
     virtual bool drv_copyTable(const QString& srcTable,
                                     KexiDB::Connection *destConn, KexiDB::TableSchema* dstTable);
 
 private:
-    JNIEnv* create_vm(JavaVM **jvm);
+    bool create_vm();
     KexiDB::Field::Type type(QString type);
     QVariant toQVariant(const char*, unsigned int, QString);
+    JavaVM* m_jvm;
     JNIEnv* env;
     jclass clsH;
     jobject java_class_object;

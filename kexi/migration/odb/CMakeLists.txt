@@ -1,26 +1,10 @@
-# if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
-#     add_definitions(-Wno-unused-but-set-variable)
-#     add_definitions(-Wno-missing-format-attribute)
-#     add_definitions(-Wno-sign-compare)
-#     add_definitions(-Wno-unused-parameter)
-# endif (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
-
-
 include_directories(  ${GLIB2_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/kexi ${KDE4_INCLUDES} ${CMAKE_SOURCE_DIR}/kexi/migration/odb ${JAVA_INCLUDE} ${JNI_INCLUDE_DIRS} )
 
-include(UseJava)
+add_definitions(-DHSQLDB_LIBRARY="${HSQLDB_LIBRARY}")
 
-    message (STATUS "JNI_INCLUDE_DIRS=${JNI_INCLUDE_DIRS}")
-    message (STATUS "JNI_LIBRARIES=${JNI_LIBRARIES}")
+add_subdirectory(reader)
 
-if (JNI_FOUND)
-    message (STATUS "JNI_INCLUDE_DIRS=${JNI_INCLUDE_DIRS}")
-    message (STATUS "JNI_LIBRARIES=${JNI_LIBRARIES}")
-endif()
-
-
-set(keximigrate_odbmigrate_PART_SRCS odbmigrate.cpp
-)
+set(keximigrate_odbmigrate_PART_SRCS odbmigrate.cpp)
 
 kde4_add_plugin(keximigrate_odb ${keximigrate_odbmigrate_PART_SRCS})
 
@@ -33,10 +17,8 @@ kexiutils
 ${CALLIGRADB_LIBS}
 ${JAVA_LIBRARIES}
 ${JNI_LIBRARIES}
+/usr/lib64/jvm/java-1.7.0-openjdk-1.7.0/jre/lib/amd64/xawt/libmawt.so #hardcoded!
 )
 
 install(TARGETS keximigrate_odb  DESTINATION ${PLUGIN_INSTALL_DIR})
-
-
-
-install( FILES  keximigrate_odb.desktop  DESTINATION ${SERVICES_INSTALL_DIR}) 
+install(FILES  keximigrate_odb.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra) 
