@@ -61,7 +61,7 @@ KexiAboutData::KexiAboutData()
     addAuthor(
         ki18n("Adam Pigg"), ki18n("PostgreSQL database driver, Migration and Reporting modules"), "adam@piggz.co.uk");
     addAuthor(
-        ki18n("Dimitrios T. Tanis"), ki18n("Users Manual for Kexi 2, main window improvements, numerous bug repors"),  "dimitrios.tanis@kdemail.net");
+        ki18n("Dimitrios T. Tanis"), ki18n("Users Manual for Kexi 2, main window improvements, numerous bug reports"),  "dimitrios.tanis@kdemail.net");
     addAuthor(
         ki18n("Oleg Kukharchuk"), ki18n("Several form widgets, porting to Qt 4, stabilization"), "oleg.kuh@gmail.com");
     addAuthor(

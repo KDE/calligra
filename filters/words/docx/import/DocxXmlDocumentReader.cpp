@@ -2327,6 +2327,22 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
         }
     }
 
+    // take outline level from style's default-outline-level,
+    // there is no text:outline-level equivalent in OOXML
+    QString outlineLevelAttribute;
+    const KoGenStyle* pstyle = &m_currentParagraphStyle;
+    do {
+        outlineLevelAttribute = pstyle->attribute("style:default-outline-level");
+        // use isNull, empty string value is valid here
+        if (! outlineLevelAttribute.isNull()) {
+            break;
+        }
+        // next in hierarchy
+        pstyle = mainStyles->style(pstyle->parentName(), "paragraph");
+    } while (pstyle);
+
+    const uint outlineLevel = outlineLevelAttribute.toUInt();
+
     //NOTE: Workaround until text:display="none" support.
     bool isHidden = (m_currentParagraphStyle.property("text:display", KoGenStyle::TextType) == "none");
 
@@ -2487,7 +2503,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
                     m_currentParagraphStyle.addAttribute("style:list-style-name", listStyleName);
                 }
 
-                body->startElement("text:p", false);
+                body->startElement((outlineLevel > 0) ? "text:h" : "text:p", false);
+                if (outlineLevel > 0) {
+                    body->addAttribute("text:outline-level", outlineLevel);
+                }
                 if (m_currentStyleName.isEmpty()) {
                     QString currentParagraphStyleName;
                     currentParagraphStyleName = (mainStyles->insert(m_currentParagraphStyle));
@@ -2515,7 +2534,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
                 }
 
                 (void)textPBuf.releaseWriter();
-                body->endElement(); //text:p
+                body->endElement(); //text:p or text:h
 
                 if (m_listFound) {
                     for (int i = 0; i <= m_currentListLevel; ++i) {
@@ -3022,7 +3041,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_rPr()
  - kinsoku (Use East Asian Typography Rules for First and Last Character per Line) §17.3.1.16
  - mirrorIndents (Use Left/Right Indents as Inside/Outside Indents) §17.3.1.18
  - [done] numPr (Numbering Definition Instance Reference) §17.3.1.19
- - outlineLvl (Associated Outline Level) §17.3.1.20
+ - [done] outlineLvl (Associated Outline Level) §17.3.1.20
  - overflowPunct (Allow Punctuation to Extend Past Text Extents) §17.3.1.21
  - pageBreakBefore (Start Paragraph on Next Page) §17.3.1.23
  - [done] pBdr (Paragraph Borders) §17.3.1.24
@@ -3071,6 +3090,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pPr()
             ELSE_TRY_READ_IF(ind)
             ELSE_TRY_READ_IF(suppressLineNumbers)
             ELSE_TRY_READ_IF(sectPr)
+            ELSE_TRY_READ_IF(outlineLvl)
             SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
@@ -3749,6 +3769,36 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_ind()
     readNext();
     READ_EPILOGUE
 }
+
+#undef CURRENT_EL
+#define CURRENT_EL outlineLvl
+//! ind handler
+//! CASE
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_outlineLvl()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR(val)
+    if (!val.isEmpty()) {
+        bool ok = false;
+        const uint outlineLevelValue = val.toUInt(&ok);
+        if (ok && outlineLevelValue <= 9) {
+            // ooxml's levels starts at 0, odf's at 1, ooxml 9 means: no level
+            // Set non-null QString for no level, to allow seeing the difference
+            // between non-set and set-but-empty value with KoGenStyle::attribute
+            // ODF §19.470 style:default-outline-level says:
+            // The style:default-outline-level attribute value can be empty.
+            // If empty, this attribute does not inherit a list style value from a parent style.
+            const QString odfOutlineLevelValue = (outlineLevelValue == 9) ?
+                 QString("") : QString::number(outlineLevelValue + 1);
+            m_currentParagraphStyle.addAttribute("style:default-outline-level", odfOutlineLevelValue);
+        }
+    }
+
+    readNext();
+    READ_EPILOGUE
+}
+
 
 #undef CURRENT_EL
 #define CURRENT_EL b

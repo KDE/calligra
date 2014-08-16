@@ -342,7 +342,7 @@ void KexiStartupDialog::setupPageTemplates()
     QLabel *lbl_import = new QLabel(
         i18n("Kexi will import the structure and data of an existing database "
              "as a new database project.") + clickMsg, templPageWidget);
-    lbl_import->setAlignment(Qt::AlignAuto | Qt::AlignTop);
+    lbl_import->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     lbl_import->setWordWrap(true);
     lbl_import->setMargin(0);
     tmplyr->addWidget(lbl_import);

@@ -37,6 +37,7 @@
 #include <KoXmlWriter.h>
 
 #include "KoOdfStyle.h"
+#include "KoOdfListStyle.h"
 
 
 // ================================================================
@@ -50,6 +51,7 @@ public:
 
     QHash<QPair<QString, QString>, KoOdfStyle*> styles;         // <name, family>, style
     QHash<QString, KoOdfStyle*> defaultStyles;  // family, style
+    QHash<QString, KoOdfListStyle*> listStyles; // list-style styles
 };
 
 
@@ -68,6 +70,7 @@ KoOdfStyleManager::~KoOdfStyleManager()
 
 KoOdfStyle *KoOdfStyleManager::style(const QString &name, const QString &family) const
 {
+    kDebug() << d->styles.value(qMakePair(name, family), 0);
     return d->styles.value(qMakePair(name, family), 0);
 }
 
@@ -75,6 +78,17 @@ void KoOdfStyleManager::setStyle(const QString &name, KoOdfStyle *style)
 {
     d->styles.insert(qMakePair(name, style->family()), style);
 }
+
+KoOdfListStyle *KoOdfStyleManager::listStyle(const QString &name) const
+{
+    return d->listStyles.value(name, 0);
+}
+
+void KoOdfStyleManager::setListStyle(const QString &name, KoOdfListStyle *style)
+{
+    d->listStyles.insert(name, style);
+}
+
 
 KoOdfStyle *KoOdfStyleManager::defaultStyle(const QString &family) const
 {
@@ -167,64 +181,75 @@ void KoOdfStyleManager::collectStyleSet(KoXmlStreamReader &reader, bool fromStyl
 {
     kDebug() << "incoming element:" << reader.qualifiedName().toString();
 
-    while (!reader.atEnd()) {
+    while (!reader.atEnd() && !reader.isEndDocument ()) {
         reader.readNext();
         if (!reader.isStartElement()) {
             continue;
         }
         kDebug() << "---------------- style element:" << reader.qualifiedName().toString();
-
         QString tagName = reader.qualifiedName().toString();
-        if (tagName == "office:styles" || tagName == "office:automatic-styles" ||
-            tagName == "office:document-content" || tagName == "office:document-styles") {
-            continue;
-        }
 
-        // For now: handle style:style and style:default-style
-        // and only the text, paragraph and graphic families.
-        if (tagName != "style:style" && tagName != "style:default-style") {
-            reader.skipCurrentElement();
-            continue;
-        }
+            if (tagName == "office:styles"
+                || tagName == "office:automatic-styles"
+                || tagName == "office:document-content"
+                || tagName == "office:document-styles")
+            {
+                continue;
+            }
 
-        KoXmlStreamAttributes  attrs = reader.attributes();
-#if 1  // debug
-        kDebug() << "Attributes:";
-        for (int i = 0; i < attrs.size(); ++i) {
-            kDebug() << "  " << attrs[i].qualifiedName().toString()
-                     << attrs[i].value().toString();
-        }
+            // For now: handle style:style and style:default-style and text:list-style
+            // and only the text, paragraph and graphic families.
+            if (tagName != "style:style" && tagName != "style:default-style" && tagName != "text:list-style") {
+                reader.skipCurrentElement();
+                continue;
+            }
+
+            KoXmlStreamAttributes  attrs = reader.attributes();
+#if 0  // debug
+            kDebug() << "Attributes:";
+            for (int i = 0; i < attrs.size(); ++i) {
+                kDebug() << "  " << attrs[i].qualifiedName().toString()
+                         << attrs[i].value().toString();
+            }
 #endif
 
-        QString family = attrs.value("style:family").toString();
-        if (family == "text" || family == "paragraph" || family == "graphic") {
-            // FIXME: In the future, create style per type (family).
-            KoOdfStyle *style = new KoOdfStyle;
-            style->setIsFromStylesXml(fromStylesXml);
+            if ( tagName == "style:style" || tagName == "style:default-style") {
+                QString family = attrs.value("style:family").toString();
+                if (family == "text" || family == "paragraph" || family == "graphic") {
+                    // FIXME: In the future, create style per type (family).
+                    KoOdfStyle *style = new KoOdfStyle;
 
-            kDebug() << "This style should be loaded:" << family;
+                    style->setIsFromStylesXml(fromStylesXml);
+                    //kDebug() << "This style should be loaded:" << tagName << "Family:" <<family;
 
-            style->setIsDefaultStyle(tagName == "style:default-style");
-            style->readOdf(reader);
+                    style->setIsDefaultStyle(tagName == "style:default-style");
+                    style->readOdf(reader);
 #if 0 // debug
-            kDebug(30503) << "==" << styleName << ":\t"
-                          << style->family()
-                          << style->parent()
-                          << style->isDefaultStyle;
+                    kDebug(30503) << "==" << styleName << ":\t"
+                                  << style->family()
+                                  << style->parent()
+                                  << style->isDefaultStyle;
 #endif
-            if (style->isDefaultStyle()) {
-                QString family = style->family();
-                setDefaultStyle(family, style);
+                    if (style->isDefaultStyle()) {
+                        QString family = style->family();
+                        setDefaultStyle(family, style);
+                    }
+                    else {
+                        QString styleName = style->name();
+                        setStyle(styleName, style);
+                    }
+                }
+            }
+            else if (tagName == "text:list-style"){
+                KoOdfListStyle *listStyle = new KoOdfListStyle;
+                listStyle->readOdf(reader);
+                QString styleName = listStyle->name();
+                setListStyle(styleName, listStyle);
             }
             else {
-                QString styleName = style->name();
-                setStyle(styleName, style);
+                reader.skipCurrentElement();
+                continue;
             }
-        }
-        else {
-            reader.skipCurrentElement();
-            continue;
-        }
     }
 }
 
@@ -243,6 +268,5 @@ bool KoOdfStyleManager::saveNamedStyles(KoXmlWriter *writer)
             style->saveOdf(writer);
         }
     }
-
     return true;
 }
