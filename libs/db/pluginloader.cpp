@@ -46,7 +46,9 @@ KexiPluginLoader::KexiPluginLoader(KService::Ptr ptr, const QString &pluginNameP
     QLibrary lib(loader.fileName());
     kexi_plugin_version_t plugin_version_function = (kexi_plugin_version_t)lib.resolve("plugin_version");
     if (!plugin_version_function) {
-        kWarning() << "Plugin version not found for" << ptr->name();
+        kWarning() << "Plugin version not found for" << ptr->name()
+                   << "error:" << lib.errorString();
+//! @todo provide the error string in the API
         return;
     }
     d->foundVersion = plugin_version_function();
