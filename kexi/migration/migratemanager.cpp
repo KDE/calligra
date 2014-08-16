@@ -31,6 +31,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kservice.h>
+#include <KMimeType>
 
 #include <assert.h>
 
@@ -231,6 +232,44 @@ void MigrateManagerInternal::decRefCount()
     KexiDBDbg << m_refCount;
 }
 
+KService::Ptr MigrateManagerInternal::detectSupportedService(const QString &mimeType, const QString &fileName)
+{
+    clearError();
+    if (!lookupDrivers()) {
+        kWarning() << "lookupDrivers failed";
+        setError(this);
+        return KService::Ptr();
+    }
+
+    KService::Ptr ptr;
+    if (!mimeType.isEmpty()) {
+        ptr = m_services_by_mimetype[mimeType.toLower()];
+        if (ptr) {
+            return ptr;
+        }
+    }
+    if (fileName.isEmpty()) {
+        return KService::Ptr();
+    }
+    KMimeType::Ptr mimePtr = KMimeType::findByFileContent(fileName);
+    kDebug() << mimePtr.data()->name() << fileName;
+    if (mimePtr) {
+        ptr = detectSupportedService(mimePtr.data()->name(), QString());
+    }
+    if (!ptr
+            || mimePtr.data()->name() == "application/octet-stream"
+            || mimePtr.data()->name() == "text/plain"
+            || mimePtr.data()->name() == "application/zip")
+    {
+        //try by URL:
+        mimePtr = KMimeType::findByUrl(fileName);
+    }
+    if (mimePtr) {
+        ptr = detectSupportedService(mimePtr.data()->name(), QString());
+    }
+    return ptr;
+}
+
 // ---------------------------
 // --- DriverManager impl. ---
 // ---------------------------
@@ -263,7 +302,7 @@ const QStringList MigrateManager::driverNames()
         return QStringList();
     }
     if (d_int->m_services.isEmpty()) {
-        kWarning() << "MigrateManager::ServicesMap is empty";
+        kWarning() << "MigrateManagerInternal::ServicesMap is empty";
         return QStringList();
     }
     if (d_int->error()) {
@@ -273,22 +312,25 @@ const QStringList MigrateManager::driverNames()
     return d_int->m_services.keys();
 }
 
-QString MigrateManager::driverForMimeType(const QString &mimeType)
+QString MigrateManager::findDriverByFileContentOrName(const QString &fileName)
 {
     clearError();
-    if (!d_int->lookupDrivers()) {
-        kWarning() << "lookupDrivers failed";
-        setError(d_int);
-        return 0;
-    }
+    KService::Ptr ptr = d_int->detectSupportedService(QString(), fileName);
+    return ptr ? ptr->property("X-Kexi-MigrationDriverName").toString() : QString();
+}
 
-    KService::Ptr ptr = d_int->m_services_by_mimetype[mimeType.toLower()];
-    if (!ptr) {
-        kWarning() << "No such mimetype" << mimeType;
-        return QString();
-    }
+QString MigrateManager::findDriverByMimeType(const QString &mimeType)
+{
+    clearError();
+    KService::Ptr ptr = d_int->detectSupportedService(mimeType, QString());
+    return ptr ? ptr->property("X-Kexi-MigrationDriverName").toString() : QString();
+}
 
-    return ptr->property("X-Kexi-MigrationDriverName").toString();
+QString MigrateManager::findSupportedMimeType(const QString &knownMimeType, const QString &fileName)
+{
+    clearError();
+    KService::Ptr ptr = d_int->detectSupportedService(knownMimeType, fileName);
+    return ptr ? ptr->property("X-Kexi-FileDBDriverMime").toString().toLower() : QString();
 }
 
 KexiMigrate* MigrateManager::driver(const QString& name)
@@ -339,7 +381,7 @@ QString MigrateManager::possibleProblemsInfoMsg() const
     return str;
 }
 
-QList<QString> MigrateManager::supportedFileMimeTypes()
+QStringList MigrateManager::supportedFileMimeTypes()
 {
     clearError();
     if (!d_int->lookupDrivers()) {

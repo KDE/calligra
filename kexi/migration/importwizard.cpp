@@ -634,17 +634,7 @@ void ImportWizard::progressUpdated(int percent)
 QString ImportWizard::driverNameForSelectedSource()
 {
     if (fileBasedSrcSelected()) {
-        KMimeType::Ptr ptr = KMimeType::findByFileContent(selectedSourceFileName());
-        if (!ptr
-                || ptr.data()->name() == "application/zip"
-                || ptr.data()->name() == "application/octet-stream"
-                || ptr.data()->name() == "text/plain"
-                || ptr.data()->name() == "application/zip")
-        {
-            //try by URL:
-            ptr = KMimeType::findByUrl(selectedSourceFileName());
-        }
-        return ptr ? d->migrateManager.driverForMimeType(ptr.data()->name()) : QString();
+        return d->migrateManager.findDriverByFileContentOrName(selectedSourceFileName());
     }
 
     //server-based

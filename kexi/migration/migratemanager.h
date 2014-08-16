@@ -39,8 +39,6 @@ class KEXIMIGR_EXPORT MigrateManager : public QObject, public KexiDB::Object,
                                        public KexiMigrateManagerInterface
 {
 public:
-    typedef QMap<QString, KService::Ptr> ServicesMap;
-
     MigrateManager();
     virtual ~MigrateManager();
 
@@ -53,12 +51,30 @@ public:
       That drivers can be loaded by first use of driver() method. */
     const QStringList driverNames();
 
-    /*! Looks up a drivers list by MIME type of database file.
+    /*! Looks up a drivers list based on @a fileName.
+     Only file-based database drivers are checked.
+     First it finds by file content (using KMimeType::findByFileContent()).
+     If no matching driver is found, it attempts to find driver by mimetype for URL (using KMimeType::findByUrl()).
+     @return matching driver name or empty string if no driver has been found. */
+    QString findDriverByFileContentOrName(const QString &fileName);
+
+    /*! Looks up a drivers list based on MIME type.
      Only file-based database drivers are checked.
      The lookup is case insensitive.
-     \return driver name or null string if no driver found.
+     @return driver name for matching mimetype or empty string if no driver has been found. */
+    QString findDriverByMimeType(const QString &mimeType);
+
+    /*! Looks up a drivers list by MIME type @a knownMimeType of database file @a fileName.
+     Only file-based database drivers are checked.
+     The mimetype lookup is case insensitive.
+     If the @a mimeType is not supported by any driver, attempts to find mimetype by file content
+     (using KMimeType::findByFileContent()).
+     If no matching mimetype is found or the mime type is generic "application/octet-stream",
+     "text/plain" or "application/zip", attempts to find mimetype by URL
+     (using KMimeType::findByUrl()).
+     @return matching mimetype name or empty string if no mimetype has been found.
     */
-    QString driverForMimeType(const QString &mimeType);
+    virtual QString findSupportedMimeType(const QString &knownMimeType, const QString &fileName);
 
     //! server error is set if there is error at KService level (useful for debugging)
     virtual QString serverErrorMsg();
@@ -73,7 +89,7 @@ public:
 
     //! @return the list of file MIME types that are supported by migration drivers.
     //! Implements MigrateManagerInterface
-    virtual QList<QString> supportedFileMimeTypes();
+    virtual QStringList supportedFileMimeTypes();
 
 protected:
     virtual void drv_clearServerResult();

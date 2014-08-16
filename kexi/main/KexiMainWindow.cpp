@@ -1242,12 +1242,32 @@ tristate KexiMainWindow::startup()
     case KexiStartupHandler::OpenProject:
         result = openProject(*Kexi::startupHandler().projectData());
         break;
-    case KexiStartupHandler::ImportProject:
-        result = showProjectMigrationWizard(
-                   Kexi::startupHandler().importActionData().mimeType,
-                   Kexi::startupHandler().importActionData().fileName
-               );
+    case KexiStartupHandler::ImportProject: {
+        QString realMimeType = Kexi::startupHandler().importActionData().mimeType;
+        result = false;
+        if (!Kexi::startupHandler().importActionData().mimeType.isEmpty()) {
+            QString realMimeType = migrateManager()->findSupportedMimeType(
+                        Kexi::startupHandler().importActionData().mimeType,
+                        Kexi::startupHandler().importActionData().fileName);
+            KMimeType::Ptr ptr = KMimeType::mimeType(realMimeType);
+            if (ptr) {
+                if (KMessageBox::Yes != KMessageBox::questionYesNo(
+                    parentWidget(), i18n("\"%1\" is an external file of type:\n\"%2\".\n"
+                                 "Do you want to import the file as a Kexi project?",
+                                 QDir::convertSeparators(Kexi::startupHandler().importActionData().fileName),
+                                 ptr.data()->comment()),
+                    i18n("Open External File"), KGuiItem(i18n("Import...")),
+                    KStandardGuiItem::cancel()))
+                {
+                    return cancelled;
+                }
+                result = showProjectMigrationWizard(
+                           realMimeType,
+                           Kexi::startupHandler().importActionData().fileName);
+            }
+        }
         break;
+    }
     case KexiStartupHandler::ShowWelcomeScreen:
         //! @todo show welcome screen as soon as is available
         QTimer::singleShot(1, this, SLOT(slotProjectWelcome()));

@@ -30,6 +30,8 @@
 #include <db/driver.h>
 #include <db/drivermanager.h>
 #include <core/kexipartmanager.h>
+#include <core/KexiMainWindowIface.h>
+#include <core/KexiMigrateManagerInterface.h>
 #include <widget/KexiConnectionSelectorWidget.h>
 #include <widget/KexiProjectSelectorWidget.h>
 #include <kexidbconnectionwidget.h>
@@ -861,7 +863,7 @@ tristate KexiStartupHandler::detectActionForFile(
         ptr = KMimeType::findByFileContent(dbFileName);
         mimename = ptr.data() ? ptr.data()->name() : QString();
         kDebug() << "found mime is:" << mimename;
-        if (mimename.isEmpty() || mimename == "application/octet-stream" || mimename == "text/plain") {
+        if (mimename.isEmpty() || mimename == "application/octet-stream" || mimename == "text/plain" || mimename == "application/zip") {
             //try by URL:
             ptr = KMimeType::findByUrl(KUrl::fromPath(dbFileName));
             mimename = ptr.data()->name();
@@ -889,23 +891,6 @@ tristate KexiStartupHandler::detectActionForFile(
     if ((options & ThisIsAShortcutToAConnectionData) || mimename == "application/x-kexi-connectiondata") {
         *detectedDriverName = "connection";
         return true;
-    }
-
-    //! @todo rather check this using migration drivers'
-    //! X-KexiSupportedMimeTypes [strlist] property
-    if (ptr.data()) {
-        if (mimename == "application/vnd.ms-access") {
-            if ((options & SkipMessages) || KMessageBox::Yes != KMessageBox::questionYesNo(
-                        parent, i18n("\"%1\" is an external file of type:\n\"%2\".\n"
-                                     "Do you want to import the file as a Kexi project?",
-                                     QDir::convertSeparators(dbFileName), ptr.data()->comment()),
-                        i18n("Open External File"), KGuiItem(i18n("Import...")), KStandardGuiItem::cancel())) {
-                return cancelled;
-            }
-            detectedImportAction->mimeType = mimename;
-            detectedImportAction->fileName = dbFileName;
-            return true;
-        }
     }
 
     if (!finfo.isWritable()) {
@@ -936,10 +921,11 @@ tristate KexiStartupHandler::detectActionForFile(
         *detectedDriverName = suggestedDriverName;
     }
 // kDebug() << "driver name:" << detectedDriverName;
-//hardcoded for convenience:
-    const QString newFileFormat = "SQLite3";
 
 #ifdef KEXI_SQLITE_MIGRATION
+    //hardcoded for convenience:
+    const QString newFileFormat = "SQLite3";
+
     if (!(options & DontConvert || options & SkipMessages)
             && detectedDriverName.toLower() == "sqlite2" && detectedDriverName.toLower() != suggestedDriverName.toLower()
             && KMessageBox::Yes == KMessageBox::questionYesNo(parent, i18n(
@@ -960,7 +946,19 @@ tristate KexiStartupHandler::detectActionForFile(
             detectedDriverName = newFileFormat;
     }
 #endif
+
     if (detectedDriverName->isEmpty()) {
+        // Check in migration drivers based on mimetype and try to import
+        if (ptr) {
+            if ((options & SkipMessages)) {
+                return cancelled;
+            }
+            detectedImportAction->mimeType = mimename;
+            detectedImportAction->fileName = dbFileName;
+            return true;
+        }
+
+        // Still no success
         QString possibleProblemsInfoMsg(Kexi::driverManager().possibleProblemsInfoMsg());
         if (!possibleProblemsInfoMsg.isEmpty()) {
             possibleProblemsInfoMsg.prepend(QString::fromLatin1("<p>") + i18n("Possible problems:"));
