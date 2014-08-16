@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -32,6 +32,8 @@ class MigrateManagerInternal : public QObject, public KexiDB::Object
 {
     Q_OBJECT
 public:
+    typedef QMap<QString, KService::Ptr> ServicesMap;
+
     ~MigrateManagerInternal();
 
     /*! Tries to load db driver \a name.
@@ -46,6 +48,10 @@ public:
     /*! decrements the refcount for the manager
       if the refcount reaches a value less than 1 the manager is freed */
     void decRefCount();
+
+    //! Used by MigrateManager::findDriverByFileContentOrName(),
+    //! MigrateManager::findDriverByMimeType() and MigrateManager::findSupportedMimeType().
+    KService::Ptr detectSupportedService(const QString &mimeType, const QString &fileName);
 
 protected slots:
     /*! Used to destroy all drivers on QApplication quit, so even if there are
@@ -62,9 +68,9 @@ protected:
 
     static MigrateManagerInternal* s_self;
 
-    MigrateManager::ServicesMap m_services; //! services map
-    MigrateManager::ServicesMap m_services_lcase; //! as above but service names in lowercase
-    MigrateManager::ServicesMap m_services_by_mimetype;
+    MigrateManagerInternal::ServicesMap m_services; //! services map
+    MigrateManagerInternal::ServicesMap m_services_lcase; //! as above but service names in lowercase
+    MigrateManagerInternal::ServicesMap m_services_by_mimetype;
 
     QMap<QByteArray, KexiMigrate*> m_drivers;
     ulong m_refCount;

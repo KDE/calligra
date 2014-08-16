@@ -32,7 +32,10 @@ public:
     virtual ~KexiMigrateManagerInterface() {}
 
     //! Implement to return the list offile MIME types that are supported by migration drivers
-    virtual QList<QString> supportedFileMimeTypes() = 0;
+    virtual QStringList supportedFileMimeTypes() = 0;
+
+    //! Implement to looks up a drivers list by MIME type @a knownMimeType of database file @a fileName.
+    virtual QString findSupportedMimeType(const QString &knownMimeType, const QString &fileName) = 0;
 };
 
 #endif

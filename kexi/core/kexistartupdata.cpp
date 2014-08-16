@@ -134,7 +134,7 @@ KexiStartupData::Import KexiStartupData::importActionData() const
     return d->importActionData;
 }
 
-void KexiStartupData::setImportActionData(KexiStartupData::Import import)
+void KexiStartupData::setImportActionData(const KexiStartupData::Import &import)
 {
     d->importActionData = import;
 }

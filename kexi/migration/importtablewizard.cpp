@@ -531,16 +531,8 @@ KexiMigrate* ImportTableWizard::prepareImport(Kexi::ObjectStatus& result)
 QString ImportTableWizard::driverNameForSelectedSource()
 {
     if (fileBasedSrcSelected()) {
-        KMimeType::Ptr ptr = KMimeType::findByFileContent(m_srcConnSel->selectedFileName());
-        if (!ptr
-            || ptr.data()->name() == "application/octet-stream"
-            || ptr.data()->name() == "text/plain") {
-            //try by URL:
-            ptr = KMimeType::findByUrl(m_srcConnSel->selectedFileName());
-        }
-    return ptr ? m_migrateManager->driverForMimeType(ptr.data()->name()) : QString();
+        return m_migrateManager->findDriverByFileContentOrName(m_srcConnSel->selectedFileName());
     }
-
     return m_srcConnSel->selectedConnectionData() ? m_srcConnSel->selectedConnectionData()->driverName : QString();
 }
 

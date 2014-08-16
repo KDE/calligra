@@ -93,7 +93,7 @@ protected:
     //! The ownership is passed.
     void setProjectData(KexiProjectData *data);
 
-    void setImportActionData(KexiStartupData::Import import);
+    void setImportActionData(const KexiStartupData::Import &import);
 
     void setForcedDesignMode(bool set);
 
