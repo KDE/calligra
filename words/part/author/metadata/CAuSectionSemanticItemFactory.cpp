@@ -28,37 +28,23 @@
 #include <QMimeData>
 
 CAuSectionSemanticItemFactory::CAuSectionSemanticItemFactory()
-    : KoRdfSemanticItemFactoryBase("AuthorSection")
+    : KoRdfSemanticItemFactoryBase("Section")
 {
 }
 
 QString CAuSectionSemanticItemFactory::className() const
 {
-    return QLatin1String("AuthorSection");
+    return QLatin1String("Section");
 }
 
 QString CAuSectionSemanticItemFactory::classDisplayName() const
 {
-    return i18nc("displayname of the semantic item type AuthorSection", "AuthorSection");
+    return i18nc("displayname of the semantic item type AuthorSection", "Section");
 }
 
 void CAuSectionSemanticItemFactory::updateSemanticItems(QList<hKoRdfBasicSemanticItem> &semanticItems, const KoDocumentRdf *rdf, QSharedPointer<Soprano::Model> m)
 {
-    const QString sparqlQuery = QLatin1String(
-        "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n"
-        "PREFIX cau: <http://www.calligra.org/author/> \n"
-        "PREFIX causec: <http://www.calligra.org/author/Section#> \n"
-        "SELECT DISTINCT ?graph ?section ?magicid ?synop ?status ?badge\n"
-        "WHERE { \n"
-        "  GRAPH ?graph { \n"
-        "    ?section rdf:type       cau:Section . \n"
-        "    ?section causec:magicid ?magicid    . \n"
-        "    ?section causec:synop   ?synop      . \n"
-        "    ?section causec:status  ?status     . \n"
-        "    ?section causec:badge   ?badge      . \n"
-        "    }\n"
-        "}\n"
-    );
+    const QString sparqlQuery = CAuSectionRdf::QUERY;
 
     Soprano::QueryResultIterator it = m->executeQuery(
         sparqlQuery,

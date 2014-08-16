@@ -96,6 +96,7 @@ public:
     QMap<QString, QList<hKoSemanticStylesheet> > userStylesheets;
 };
 
+const QString KoDocumentRdf::RDF_PATH_CONTEXT_PREFIX = "http://www.calligra.org/Rdf/path/";
 
 KoDocumentRdf::KoDocumentRdf(QObject *parent)
     : KoDocumentRdfBase(parent)
@@ -137,14 +138,9 @@ QString KoDocumentRdf::rdfInternalMetadataWithoutSubjectURI() const
     return "http://www.calligra.org/Rdf/internal/content.xml";
 }
 
-QString KoDocumentRdf::rdfPathContextPrefix()
-{
-    return "http://www.calligra.org/Rdf/path/";
-}
-
 Soprano::Node KoDocumentRdf::manifestRdfNode() const
 {
-    return Node(QUrl(rdfPathContextPrefix() + "manifest.rdf"));
+    return Node(QUrl(RDF_PATH_CONTEXT_PREFIX + "manifest.rdf"));
 }
 
 void KoDocumentRdf::freshenBNodes(QSharedPointer<Soprano::Model> m)
@@ -220,7 +216,7 @@ bool KoDocumentRdf::loadRdf(KoStore *store, const Soprano::Parser *parser, const
 
     RDEBUG << "Loading external Rdf/XML from:" << fileName;
 
-    Soprano::Node context(QUrl(rdfPathContextPrefix() + fileName));
+    Soprano::Node context(QUrl(RDF_PATH_CONTEXT_PREFIX + fileName));
     QUrl BaseURI = QUrl(QString());
     QString rdfxmlData(store->device()->readAll());
     Soprano::StatementIterator it = parser->parseString(rdfxmlData, BaseURI, Soprano::SerializationRdfXml);
@@ -333,8 +329,8 @@ bool KoDocumentRdf::saveRdf(KoStore *store, KoXmlWriter *manifestWriter, const S
     //
     // The context contains the filename to save into
     //
-    if (context.toString().startsWith(rdfPathContextPrefix())) {
-        fileName = context.toString().mid(rdfPathContextPrefix().size());
+    if (context.toString().startsWith(RDF_PATH_CONTEXT_PREFIX)) {
+        fileName = context.toString().mid(RDF_PATH_CONTEXT_PREFIX.size());
     }
 
     RDEBUG << "saving external file:" << fileName;

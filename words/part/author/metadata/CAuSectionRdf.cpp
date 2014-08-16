@@ -21,14 +21,12 @@
 
 #include <author/metadata/CAuMetaDataManager.h>
 
-#include <KoDocumentRdf.h>
-#include <KoTextRdfCore.h>
-
-#include <QUuid>
 #include <QTextEdit>
 #include <KActionCollection>
 
 using namespace Soprano;
+
+QString CAuSectionRdf::QUERY;
 
 const QString CAuSectionRdf::STATUS[CAuSectionRdf::STATUS_COUNT] = {
     i18n("1st Draft"),
@@ -42,21 +40,18 @@ const QString CAuSectionRdf::STATUS[CAuSectionRdf::STATUS_COUNT] = {
 };
 
 CAuSectionRdf::CAuSectionRdf(QObject *parent, const KoDocumentRdf *rdf)
-    : KoRdfBasicSemanticItem(parent, rdf)
-    , isTypeSet(false)
+    : CAuSemanticItemBase(parent, rdf)
 {
-    m_magicId = QUuid::createUuid().toString();
+    setupProps();
+    QUERY = formQuery();
 }
 
 CAuSectionRdf::CAuSectionRdf(QObject *parent, const KoDocumentRdf *rdf, Soprano::QueryResultIterator &it)
-    : KoRdfBasicSemanticItem(parent, rdf, it)
-    , isTypeSet(true) //true here, cuz query garant existance of rdf:type
+    : CAuSemanticItemBase(parent, rdf)
 {
-    m_uri = it.binding("section").toString();
-    m_status = it.binding("status").toString();
-    m_synop = it.binding("synop").toString();
-    m_magicId = it.binding("magicid").toString();
-    m_badge = it.binding("badge").toString();
+    setupProps();
+    QUERY = formQuery();
+    init(it);
 }
 
 QString CAuSectionRdf::name() const
@@ -70,7 +65,7 @@ QWidget* CAuSectionRdf::createEditor(QWidget *parent)
     m_editWidgetUI.setupUi(ret);
 
     // Synopsis
-    m_editWidgetUI.synopRichTextWidget->setText(m_synop);
+    m_editWidgetUI.synopRichTextWidget->setText(stringProp("synop"));
 
     KActionCollection *actions = new KActionCollection(ret);
 
@@ -91,58 +86,39 @@ QWidget* CAuSectionRdf::createEditor(QWidget *parent)
     m_editWidgetUI.redoToolButton->setDefaultAction(actions->action("text_redo"));
 
     // Badge
-    m_editWidgetUI.badgeLineEdit->setText(m_badge);
+    m_editWidgetUI.badgeLineEdit->setText(stringProp("badge"));
 
     // Status
     for (int i = 0; i < STATUS_COUNT; i++) {
         m_editWidgetUI.statusComboBox->addItem(STATUS[i]);
     }
-    m_editWidgetUI.statusComboBox->setCurrentIndex(m_status.toInt());
+    m_editWidgetUI.statusComboBox->setCurrentIndex(intProp("status"));
 
     return ret;
 }
 
 void CAuSectionRdf::updateFromEditorData()
 {
-    if (m_uri.size() <= 0) {
-        QUuid u = QUuid::createUuid();
-        m_uri = u.toString();
-    }
+    CAuSemanticItemBase::updateFromEditorData();
 
-    if (!isTypeSet) {
-        setRdfType(authorSectionPrefix());
-        isTypeSet = true;
-    }
+    setStringProp("synop", m_editWidgetUI.synopRichTextWidget->toHtml());
+    setStringProp("badge", m_editWidgetUI.badgeLineEdit->text());
+    setIntProp("status", m_editWidgetUI.statusComboBox->currentIndex());
 
-    updateTriple(m_synop, m_editWidgetUI.synopRichTextWidget->toHtml(), authorSectionPrefix() + "#synop");
-    updateTriple(m_magicId, m_magicId, authorSectionPrefix() + "#magicid");
-    updateTriple(m_status, QString::number(m_editWidgetUI.statusComboBox->currentIndex()), authorSectionPrefix() + "#status");
-    updateTriple(m_badge, m_editWidgetUI.badgeLineEdit->text(), authorSectionPrefix() + "#badge");
-    if (documentRdf()) {
-        const_cast<KoDocumentRdf*>(documentRdf())->emitSemanticObjectUpdated(hKoRdfBasicSemanticItem(this));
-    }
-}
-
-Soprano::Node CAuSectionRdf::linkingSubject() const
-{
-    return Node::createResourceNode(m_uri);
+    finishUpdateFromEditorData();
 }
 
 QString CAuSectionRdf::className() const
 {
-    return "AuthorSection";
+    return "Section";
 }
 
-Node CAuSectionRdf::context() const
+QList< QString > CAuSectionRdf::intProps()
 {
-    if (m_context.isValid()) {
-        return m_context;
-    }
-
-    return CAuMetaDataManager::authorContext();
+    return QList<QString>() << "status";
 }
 
-QString CAuSectionRdf::authorSectionPrefix()
+QList< QString > CAuSectionRdf::stringProps()
 {
-    return CAuMetaDataManager::AUTHOR_PREFIX + "Section";
+    return QList<QString>() << "synop" << "badge";
 }

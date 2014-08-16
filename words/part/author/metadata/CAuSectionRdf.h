@@ -20,24 +20,24 @@
 #ifndef CAUSECTIONRDF_H
 #define CAUSECTIONRDF_H
 
-#include <KoRdfSemanticItem.h>
+#include <author/metadata/CAuSemanticItemBase.h>
 
 #include "ui_CAuSectionRdfEditWidget.h"
 
-class CAuSectionRdf : public KoRdfBasicSemanticItem
+class CAuSectionRdf : public CAuSemanticItemBase
 {
     Q_OBJECT
-public:
 
-    explicit CAuSectionRdf(QObject *parent, const KoDocumentRdf *m_rdf = 0);
-    CAuSectionRdf(QObject *parent, const KoDocumentRdf *m_rdf, Soprano::QueryResultIterator &it);
+public:
+    static QString QUERY;
+
+    explicit CAuSectionRdf(QObject *parent, const KoDocumentRdf *rdf = 0);
+    CAuSectionRdf(QObject *parent, const KoDocumentRdf *rdf, Soprano::QueryResultIterator &it);
 
     // inherited and reimplemented...
     virtual QWidget *createEditor(QWidget *parent);
     virtual void updateFromEditorData();
-    virtual Soprano::Node linkingSubject() const;
     virtual QString className() const;
-    virtual Soprano::Node context() const;
 
     // accessor methods...
     virtual QString name() const;
@@ -46,23 +46,10 @@ private:
     static const int STATUS_COUNT = 8;
     static const QString STATUS[STATUS_COUNT];
 
-    static QString authorSectionPrefix();
-
-    // Author section rdf template
-    // s == m_uri
-    // s -> <uri:section>; p -> <http://www.calligra.org/author/descr>; o -> "Some description"
-    // s -> <uri:section>; p -> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type>; o -> <http://www.calligra.org/author/Section>
-    QString m_uri;   // This is the subject in Rdf
-    QString m_synop;
-    QString m_magicId;
-    QString m_status;
-    QString m_badge;
-
-    bool isTypeSet;
+    virtual QList<QString> intProps();
+    virtual QList<QString> stringProps();
 
     Ui::CAuSectionRdfEditWidget m_editWidgetUI;
 };
-
-typedef QExplicitlySharedDataPointer<CAuSectionRdf> hCAuSectionRdf;
 
 #endif //CAUSECTIONRDF_H

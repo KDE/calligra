@@ -26,6 +26,7 @@
 #include <KoSection.h>
 
 #include <author/metadata/CAuSectionSemanticItemFactory.h>
+#include <author/metadata/CAuActorSemanticItemFactory.h>
 #include <author/CAuDocument.h>
 #include <frames/KWTextFrameSet.h>
 
@@ -98,11 +99,12 @@ void CAuMetaDataManager::registerAuthorRdfPrefix()
 void CAuMetaDataManager::registerAuthorSemanticItems()
 {
     KoRdfSemanticItemRegistry::instance()->add(new CAuSectionSemanticItemFactory());
+    KoRdfSemanticItemRegistry::instance()->add(new CAuActorSemanticItemFactory());
 }
 
 Soprano::Node CAuMetaDataManager::authorContext()
 {
-    return Node(QUrl(KoDocumentRdf::rdfPathContextPrefix() + AUTHOR_RDF_FILE_NAME));
+    return Node(QUrl(KoDocumentRdf::RDF_PATH_CONTEXT_PREFIX + AUTHOR_RDF_FILE_NAME));
 }
 
 void CAuMetaDataManager::callEditor(KoSection *sec) const

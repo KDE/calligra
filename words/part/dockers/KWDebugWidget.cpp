@@ -176,7 +176,7 @@ void KWDebugWidget::doSetMagic()
 //         Soprano::Node::createLiteralNode(inlineRdf->xmlId()),
 //         rdf->manifestRdfNode());
 
-    Soprano::Node authorContext = Soprano::Node::createResourceNode(QUrl(rdf->rdfPathContextPrefix() + "author.rdf"));
+    Soprano::Node authorContext = Soprano::Node::createResourceNode(QUrl(rdf->RDF_PATH_CONTEXT_PREFIX + "author.rdf"));
 
     qDebug() << rdf->model()->addStatement(
         sectionNode,
@@ -228,7 +228,7 @@ void KWDebugWidget::doGetMagic()
 
 //     KoTextInlineRdf *inlineRdf = sec->inlineRdf();
 
-    Soprano::Node authorContext = Soprano::Node::createResourceNode(QUrl(rdf->rdfPathContextPrefix() + "author.rdf"));
+    Soprano::Node authorContext = Soprano::Node::createResourceNode(QUrl(rdf->RDF_PATH_CONTEXT_PREFIX + "author.rdf"));
 
     Soprano::StatementIterator it = rdf->model()->listStatements(
         Soprano::Node::createResourceNode(QUrl("http://www.caligra.org/author/sections/UID_HERE")),

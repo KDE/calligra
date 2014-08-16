@@ -143,6 +143,13 @@ class KORDF_EXPORT KoDocumentRdf : public KoDocumentRdfBase
 {
     Q_OBJECT
 public:
+    /**
+     * For Rdf stored in manifest.rdf or another rdf file referenced
+     * by the manifest, this prefix is used as the start of the graph
+     * context. The filename.rdf is appended so that the Rdf can be
+     * put back into the right file again during save.
+     */
+    const static QString RDF_PATH_CONTEXT_PREFIX;
 
     /**
      * The constructor
@@ -284,14 +291,6 @@ public:
      * allow the user to create new SemanticItem Objects.
      */
     hKoRdfBasicSemanticItem createSemanticItem(const QString &semanticClass, QObject *parent = 0) const;
-
-    /**
-     * For Rdf stored in manifest.rdf or another rdf file referenced
-     * by the manifest, this prefix is used as the start of the graph
-     * context. The filename.rdf is appended so that the Rdf can be
-     * put back into the right file again during save.
-     */
-    static QString rdfPathContextPrefix();
 
     /**
      * This is used for triples that do not specify their xhtml:about

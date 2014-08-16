@@ -101,8 +101,14 @@ if( SHOULD_BUILD_FEATURE_RDF )
         author/dockers/CAuOutlinerWidget.cpp
 
         author/metadata/CAuMetaDataManager.cpp
+
         author/metadata/CAuSectionRdf.cpp
         author/metadata/CAuSectionSemanticItemFactory.cpp
+
+        author/metadata/CAuActorRdf.cpp
+        author/metadata/CAuActorSemanticItemFactory.cpp
+
+        author/metadata/CAuSemanticItemBase.cpp
     )
 endif( SHOULD_BUILD_FEATURE_RDF )
 
@@ -125,6 +131,7 @@ if( SHOULD_BUILD_FEATURE_RDF )
     kde4_add_ui_files(wordsprivate_LIB_SRCS
         dockers/KWRdfDocker.ui
         author/metadata/CAuSectionRdfEditWidget.ui
+        author/metadata/CAuActorRdfEditWidget.ui
     )
 endif( SHOULD_BUILD_FEATURE_RDF )
 
