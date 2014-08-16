@@ -49,12 +49,12 @@ public:
     KisPainterBasedStrokeStrategy(const QString &id,
                                   const KUndo2MagicString &name,
                                   KisResourcesSnapshotSP resources,
-                                  QVector<PainterInfo*> painterInfos);
+                                  QVector<PainterInfo*> painterInfos,bool useMergeID = false);
 
     KisPainterBasedStrokeStrategy(const QString &id,
                                   const KUndo2MagicString &name,
                                   KisResourcesSnapshotSP resources,
-                                  PainterInfo *painterInfo);
+                                  PainterInfo *painterInfo,bool useMergeID = false);
 
     void initStrokeCallback();
     void finishStrokeCallback();
@@ -79,6 +79,7 @@ private:
 
     KisPaintDeviceSP m_targetDevice;
     KisSelectionSP m_activeSelection;
+    bool m_useMergeID;
 };
 
 #endif /* __KIS_PAINTER_BASED_STROKE_STRATEGY_H */

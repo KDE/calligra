@@ -62,6 +62,17 @@ class KisLockedProperties;
  * Paintops represent real-world tools or the well-known Shoup
  * computer equivalents that do nothing but change color.
  *
+ * To incorporate the dirty preset functionality and locked settings
+ * the following slots are added
+ *  void slotReloadPreset();
+    void slotConfigurationItemChanged();
+    void slotSaveLockedOptionToPreset(KisPropertiesConfiguration* p);
+    void slotDropLockedOption(KisPropertiesConfiguration* p);
+    void slotDirtyPresetToggled(bool);
+    Everytime a value is changed in a preset, the preset is made dirty through the onChange() function.
+    For Locked Settings however, a changed Locked Setting will not cause a preset to become dirty. That is
+    becuase it borrows its values from the KisLockedPropertiesServer.
+    Hence the dirty state of the Preset is kept consistent before and after a writeConfiguration operation in  most cases.
  * XXX: When we have a lot of paintops, replace the listbox
  * with a table, and for every category a combobox.
  *

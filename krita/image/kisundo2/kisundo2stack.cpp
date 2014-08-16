@@ -83,7 +83,7 @@ void KisUndo2Command::undoMergedCommands()
 
 bool KisUndo2Command::timedMergeWith(KUndo2Command *other)
 {
-    if(other->timedId() == 1 && this->timedId() == 1 )
+    if(other->timedId() == this->timedId() && other->timedId()!=-1 )
         KUndo2Command::timedMergeWith(other);
     else
         return false;

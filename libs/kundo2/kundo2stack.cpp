@@ -65,6 +65,7 @@
 #include "kundo2stack_p.h"
 #include "kundo2group.h"
 #include <KoIcon.h>
+#include<QtGlobal>
 
 
 #ifndef QT_NO_UNDOCOMMAND
@@ -668,18 +669,26 @@ void KUndo2QStack::push(KUndo2Command *cmd)
                      && cur->id() == cmd->id()
                      && (macro || m_index != m_clean_index);
 
-    /**Here we are going to try to merge several commands together using the Qvector field in the commands using
-     *3 parameters. N : Number of slots filled. T1 : Time lapsed between current command and previously merged command -- signal to
-     *merge throughout the stack. T2 : Time lapsed between two commands signalling both commands belong to the same set **/
-    if (!macro && m_command_list.size() > 1 && cmd->timedId() == 1 && m_useCumulativeUndoRedo) {
+    /*!
+     *Here we are going to try to merge several commands together using the QVector field in the commands using
+     *3 parameters. N : Number of commands that should remain individual at the top of the stack. T1 : Time lapsed between current command and previously merged command -- signal to
+     *merge throughout the stack. T2 : Time lapsed between two commands signalling both commands belong to the same set
+     *Whenever a KUndo2Command is initialized -- it consists of a start-time and when it is pushed --an end time.
+     *Every time a command is pushed -- it checks whether the command pushed was pushed after T1 seconds of the last merged command
+     *Then the merging begins with each group depending on the time in between each command (T2).
+     *
+     *@TODO : Currently it is not able to merge two merged commands together.
+    */
+    if (!macro && m_command_list.size() > 1 && cmd->timedId() != -1 && m_useCumulativeUndoRedo) {
         KUndo2Command* lastcmd = m_command_list.last();
-        if (cmd->time().msecsTo(lastcmd->endTime()) > -m_timeT2 * 1000) {
+        if (qAbs(cmd->time().msecsTo(lastcmd->endTime())) < m_timeT2 * 1000) {
             m_lastMergedSetCount++;
         } else {
             m_lastMergedSetCount = 0;
             m_lastMergedIndex = m_index-1;
         }
-        if(lastcmd->timedId()!=1)
+
+        if(lastcmd->timedId()==-1)
         {
             m_lastMergedSetCount = 0;
             m_lastMergedIndex = m_index;
@@ -706,19 +715,23 @@ void KUndo2QStack::push(KUndo2Command *cmd)
 
                 while (it.hasPrevious()) {
                     KUndo2Command* curr = it.previous();
+                    KUndo2Command* lastCmdInCurrent = curr;
+
                     if (!lastcmd->mergeCommandsVector().isEmpty()) {
-                        if (lastcmd->mergeCommandsVector().last()->time().msecsTo(curr->endTime()) > -m_timeT2 * 1000 && lastcmd != curr) {
+                        if (qAbs(lastcmd->mergeCommandsVector().last()->time().msecsTo(lastCmdInCurrent->endTime())) < int(m_timeT2 * 1000) && lastcmd != lastCmdInCurrent && lastcmd != curr) {
                             if(lastcmd->timedMergeWith(curr)){
                                 if (m_command_list.contains(curr)) {
                                     m_command_list.removeOne(curr);
                                 }
-                            }
+                             }
+
                         } else {
                             lastcmd = curr; //end of a merge set
                         }
 
                     } else {
-                        if (lastcmd->time().msecsTo(curr->endTime()) > -m_timeT2 * 1000 && lastcmd != curr) {
+
+                        if (qAbs(lastcmd->time().msecsTo(lastCmdInCurrent->endTime())) < int(m_timeT2 * 1000) && lastcmd != lastCmdInCurrent &&lastcmd!=curr) {
                             if(lastcmd->timedMergeWith(curr)){
                                 if (m_command_list.contains(curr)) {
                                     m_command_list.removeOne(curr);
@@ -732,7 +745,7 @@ void KUndo2QStack::push(KUndo2Command *cmd)
                 m_lastMergedIndex = m_command_list.size()-1;
             }
         }
-    }
+    }   
     m_index = m_command_list.size();
 
     if (try_merge && cur->mergeWith(cmd)) {
