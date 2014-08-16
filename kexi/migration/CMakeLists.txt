@@ -24,7 +24,27 @@ IF(XBASE_FOUND)
 ENDIF(XBASE_FOUND)
 
 IF(JAVA_FOUND AND JNI_FOUND)
-  add_subdirectory(odb)
+  # TODO move to FindHSQLDB.cmake
+  find_package(Java REQUIRED)
+  include(UseJava)
+
+  message (STATUS "JNI_INCLUDE_DIRS=${JNI_INCLUDE_DIRS}")
+  message (STATUS "JNI_LIBRARIES=${JNI_LIBRARIES}")
+  message (STATUS "JAVA_LIBRARIES=${JAVA_LIBRARIES}")
+
+  # HSQLDB is a dependency of the ODB Migration
+  find_jar(HSQLDB_LIBRARY hsqldb
+          PATHS /usr/share/java /usr/share/hsqldb/lib /var/lib/hsqldb/lib # TODO: more possible paths
+          DOC "HyperSQL Database Engine (HSQLDB) library"
+  )
+  macro_log_feature(HSQLDB_LIBRARY "HSQLDB"
+                    "HyperSQL Database Engine library"
+                    "http://hsqldb.org" FALSE ""
+                    "Required by the Kexi ODB file import plugin"
+  )
+  IF(HSQLDB_LIBRARY)
+    add_subdirectory(odb)
+  ENDIF(HSQLDB_LIBRARY)
 ENDIF(JAVA_FOUND AND JNI_FOUND)
 
 macro_optional_find_package(GLIB2)

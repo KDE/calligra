@@ -1,7 +1,7 @@
 #include "odbmigrate.h"
 #include <jni.h>
 #include <QRegExp>
-#include <QFile>
+#include <QFileInfo>
 #include <QVariant>
 #include <QDateTime>
 #include <QList>
@@ -15,60 +15,77 @@
 #include <kexiutils/identifier.h>
 
 using namespace KexiMigration;
-K_EXPORT_KEXIMIGRATE_DRIVER(OdbMigrate, "odb")
+K_EXPORT_KEXIMIGRATE_DRIVER(OdbMigrate, odb)
 
+static QString javaStringToQString(JNIEnv *env, jstring s)
+{
+    const char* cstr = env->GetStringUTFChars(s, 0);
+    QString qs(QString::fromUtf8(cstr));
+    env->ReleaseStringUTFChars(s, cstr);
+    return qs;
+}
 
 OdbMigrate::OdbMigrate(QObject *parent, const QVariantList &args)
-        : KexiMigrate(parent, args)
+        : KexiMigrate(parent, args), m_jvm(0), env(0)
 {
-    JavaVM** jvm;
-    create_vm(jvm);
-    drv_connect();
 }
 
 OdbMigrate::~OdbMigrate()
 {
-
-
 }
 
-
-JNIEnv* OdbMigrate::create_vm(JavaVM ** jvm) {
-
+bool OdbMigrate::create_vm()
+{
     JavaVMInitArgs vm_args;
-    JavaVMOption options;
+    JavaVMOption options[2];
 
-    QString odbreader_path=KStandardDirs::locate("lib","OdbReader.jar");
-    QString hsqldb_path=KStandardDirs::locate("lib","hsqldb.jar");
+    QString odbreader_path = KStandardDirs::locate("lib","OdbReader.jar");
     kDebug() << odbreader_path;
-    kDebug() << hsqldb_path;
 
-    options.optionString = QString("-Djava.class.path="+odbreader_path+":"+hsqldb_path).toAscii().data();
+    vm_args.nOptions = 0;
+    QByteArray option0 = "-Djava.class.path=" + odbreader_path.toUtf8() + ":" + HSQLDB_LIBRARY;
+    options[vm_args.nOptions++].optionString = option0.data();
+    QByteArray option1 = "-verbose:jni"; //"-Xcheck:jni:all"
+    options[vm_args.nOptions++].optionString = option1.data();
     vm_args.version = JNI_VERSION_1_6; //JDK version. This indicates version 1.6
-    vm_args.nOptions = 1;
-    vm_args.options = &options;
-    vm_args.ignoreUnrecognized = 0;
+    vm_args.options = options;
+    vm_args.ignoreUnrecognized = false;
+    kDebug() << vm_args.options[0].optionString << vm_args.options[1].optionString;
 
-    int ret = JNI_CreateJavaVM(jvm, (void**)&env, &vm_args);
-    if(ret != JNI_OK)
-        kDebug() << "Unable to Launch JVM";
-    return env;
+    int ret = JNI_CreateJavaVM(&m_jvm, (void**)&env, &vm_args);
+    kDebug() << "JNI_CreateJavaVM():" << ret;
+    if(ret != JNI_OK) {
+        kWarning() << "Unable to Launch JVM";
+        return false;
+    }
+    return true;
 }
-
 
 bool OdbMigrate::drv_connect()
 {
+    if (!create_vm()) {
+        return false;
+    }
     clsH = env->FindClass("OdbReader");
     if(clsH) 
         kDebug() << "found class";
     else 
-        return 0;
-    java_class_object = env->NewObject(clsH, NULL);
+        return false;
 
+    jmethodID OdbReaderCtorId = env->GetMethodID(clsH, "<init>", "(Ljava/lang/String;)V");
+    if (!OdbReaderCtorId) {
+        kWarning() << "!OdbReaderCtorId";
+        return false;
+    }
+
+    jstring filePath = env->NewStringUTF(data()->source->fileName().toUtf8().constData());
+    java_class_object = env->NewObject(clsH, OdbReaderCtorId, filePath);
+    kDebug() << filePath;
+    if (!java_class_object) {
+        kWarning() << "!java_class_object";
+        return false;
+    }
     kDebug() << "object constructed";
-
-    QString filePath = this->data()->source->fileName();
-
     return true;
 }
 
@@ -76,10 +93,13 @@ bool OdbMigrate::drv_readTableSchema(
     const QString& originalName, KexiDB::TableSchema& tableSchema)
 {
     char* tableName=originalName.toAscii().data();
-    jmethodID getTableNames = env->GetMethodID(clsH,"getTableSchema","(Ljava/lang/String;)Ljava/lang/String;");
-    jstring returnString = (jstring) env->CallObjectMethod(java_class_object,getTableNames,tableName);
-    const char* tablesstring = env->GetStringUTFChars(returnString, NULL);
-    QString jsonString(tablesstring);
+    jmethodID getTableSchema = env->GetMethodID(clsH,"getTableSchema","(Ljava/lang/String;)Ljava/lang/String;");
+    if (!getTableSchema) {
+        kWarning() << "!getTableSchema";
+        return false;
+    }
+    jstring returnString = (jstring) env->CallObjectMethod(java_class_object,getTableSchema,tableName);
+    QString jsonString = javaStringToQString(env, returnString);
     QStringList list = jsonString.split(",");
 
     for(int i=0;i<list.size();i+=2)
@@ -90,21 +110,23 @@ bool OdbMigrate::drv_readTableSchema(
         fld->setCaption(list.at(i));
         tableSchema.addField(fld);
     }
-
-    return false;
+    return true;
 }
 
 bool OdbMigrate::drv_disconnect()
 {
-    return false;
+    return true;
 }
 
 bool OdbMigrate::drv_tableNames(QStringList& tableNames)
 {
     jmethodID getTableNames = env->GetMethodID(clsH,"getTableNames","()Ljava/lang/String;");
+    if (!getTableNames) {
+        kWarning() << "!getTableNames";
+        return false;
+    }
     jstring returnString = (jstring) env->CallObjectMethod(java_class_object,getTableNames,NULL);
-    const char* tablesstring = env->GetStringUTFChars(returnString, NULL);
-    QString temp(tablesstring);
+    QString temp = javaStringToQString(env, returnString);
     QStringList list = temp.split(",");
     for(int i=0;i<list.length();i++){
         QString s=list.at(i);
@@ -164,15 +186,21 @@ bool OdbMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *dest
 
     jmethodID getTableNames = env->GetMethodID(clsH,"getTableSchema","(Ljava/lang/String;)Ljava/lang/String;");
     jstring returnString = (jstring) env->CallObjectMethod(java_class_object,getTableNames,tableName);
-    const char* tablesstring = env->GetStringUTFChars(returnString, NULL);
-    QString jsonString(tablesstring);
+    QString jsonString = javaStringToQString(env, returnString);
     QStringList list = jsonString.split(",");
 
     jmethodID getTableSize = env->GetMethodID(clsH,"getTableSize","(Ljava/lang/String;)Ljava/lang/String;");
+    if (!getTableSize) {
+        kWarning() << "!getTableSize";
+        return false;
+    }
     jmethodID getCellValue = env->GetMethodID(clsH,"getCellValue","((II)Ljava/lang/String;Ljava/lang/String;");
+    if (!getCellValue) {
+        kWarning() << "!getCellValue";
+        return false;
+    }
     returnString = (jstring) env->CallObjectMethod(java_class_object,getTableSize,tableName);
-    tablesstring = env->GetStringUTFChars(returnString, NULL);
-    QString jsonString2(tablesstring);
+    QString jsonString2 = javaStringToQString(env, returnString);
     list = jsonString2.split(",");
     int columns=list.at(0).toInt();
     int rows=list.at(1).toInt();
@@ -184,7 +212,7 @@ bool OdbMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *dest
         for(j=0;j<columns;j++)
         {
             returnString = (jstring) env->CallObjectMethod(java_class_object,getCellValue,j+1,i+1,tableName);
-            tablesstring = env->GetStringUTFChars(returnString, NULL);
+            const char* tablesstring = env->GetStringUTFChars(returnString, NULL);
             QVariant var = toQVariant(tablesstring,QString(tablesstring).length(), list.at(2*j + 1));
             vals << var;
         }
