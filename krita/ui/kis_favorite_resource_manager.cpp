@@ -178,13 +178,13 @@ KisFavoriteResourceManager::KisFavoriteResourceManager(KisPaintopBox *paintopBox
 
     m_colorList = new ColorDataList();
 
-    KoResourceServer<KisPaintOpPreset>* rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
+    KisPaintOpPresetResourceServer * rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
     rServer->addObserver(this);
 }
 
 KisFavoriteResourceManager::~KisFavoriteResourceManager()
 {
-    KoResourceServer<KisPaintOpPreset>* rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
+    KisPaintOpPresetResourceServer * rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
     rServer->removeObserver(this);
     delete m_favoriteBrushManager;
     delete m_colorList;
@@ -203,9 +203,9 @@ QStringList KisFavoriteResourceManager::favoritePresetList()
 QList<QImage> KisFavoriteResourceManager::favoritePresetImages()
 {
     QList<QImage> images;
-    KoResourceServer<KisPaintOpPreset>* rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
+    KisPaintOpPresetResourceServer * rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
     foreach(const QString & name, m_favoritePresetsList) {
-        KoResource* resource = rServer->resourceByName(name);
+        KisPaintOpPresetSP resource = rServer->resourceByName(name);
         if (!resource) {
             removeFavoritePreset(name);
         } else {
@@ -219,9 +219,9 @@ void KisFavoriteResourceManager::slotChangeActivePaintop(int pos)
 {
     if (pos < 0 || pos >= m_favoritePresetsList.size()) return;
 
-    KoResourceServer<KisPaintOpPreset>* rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
-    KoResource* resource = rServer->resourceByName(m_favoritePresetsList.at(pos));
-    m_paintopBox->resourceSelected(resource);
+    KisPaintOpPresetResourceServer * rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
+    KisPaintOpPresetSP resource = rServer->resourceByName(m_favoritePresetsList.at(pos));
+    m_paintopBox->resourceSelected(resource.data());
     emit hidePalettes();
 }
 
@@ -325,7 +325,7 @@ void KisFavoriteResourceManager::slotChangeFGColorSelector(KoColor c)
     emit sigChangeFGColorSelector(c);
 }
 
-void KisFavoriteResourceManager::removingResource(KisPaintOpPreset* resource)
+void KisFavoriteResourceManager::removingResource(PointerType resource)
 {
     if (m_blockUpdates) {
         return;
@@ -333,11 +333,11 @@ void KisFavoriteResourceManager::removingResource(KisPaintOpPreset* resource)
     removeFavoritePreset(resource->name());
 }
 
-void KisFavoriteResourceManager::resourceAdded(KisPaintOpPreset* /*resource*/)
+void KisFavoriteResourceManager::resourceAdded(PointerType /*resource*/)
 {
 }
 
-void KisFavoriteResourceManager::resourceChanged(KisPaintOpPreset* /*resource*/)
+void KisFavoriteResourceManager::resourceChanged(PointerType /*resource*/)
 {
 }
 

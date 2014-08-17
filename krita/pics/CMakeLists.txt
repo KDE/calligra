@@ -19,6 +19,7 @@ hi16-palette_library.png
 icon-kritasketch-256.png
 landscape.png
 linked.png
+linked2.png
 local_selection_active.png
 local_selection_inactive.png
 locked.png
@@ -34,6 +35,7 @@ portrait.png
 properties.png
 ratio_icon.png
 removefromfolder.png
+reload_preset.png
 selection_add.png
 selection_exclude.png
 selection_intersect.png

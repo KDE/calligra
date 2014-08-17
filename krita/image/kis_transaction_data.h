@@ -20,9 +20,12 @@
 #define KIS_TRANSACTION_DATA_H_
 
 #include <kundo2command.h>
+#include <kisundo2command.h>
+
 
 #include "kis_types.h"
 #include <krita_export.h>
+
 
 /**
  * A tile based undo command.
@@ -33,7 +36,7 @@
  * again with the new tiles without actually executing the command that changed
  * the image data again.
  */
-class KRITAIMAGE_EXPORT KisTransactionData : public KUndo2Command
+class KRITAIMAGE_EXPORT KisTransactionData : public KisUndo2Command
 {
 public:
     KisTransactionData(const KUndo2MagicString& name, KisPaintDeviceSP device, bool resetSelectionOutlineCache, KUndo2Command* parent);
