@@ -115,7 +115,7 @@ KexiComboBoxPopup::KexiComboBoxPopup(QWidget* parent, KexiDB::TableViewColumn &c
 }
 
 KexiComboBoxPopup::KexiComboBoxPopup(QWidget* parent, KexiDB::Field &field)
-        : QFrame(parent, Qt::WType_Popup)
+        : QFrame(parent, Qt::Popup)
         , d( new KexiComboBoxPopupPrivate )
 {
     init();

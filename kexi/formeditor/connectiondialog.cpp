@@ -251,7 +251,7 @@ void
 ConnectionDialog::setStatusOk(KexiDB::RecordData *record)
 {
     d->pixmapLabel->setPixmap(koDesktopIcon("dialog-ok"));
-    d->textLabel->setText(i18n("<qt><h2>The connection is OK.</h2></qt>"));
+    d->textLabel->setText(QString("<qt><h2>%1</h2></qt>").arg(i18n("The connection is OK.")));
 
     if (!record)
         record = d->table->selectedItem();
@@ -270,7 +270,7 @@ void
 ConnectionDialog::setStatusError(const QString &msg, KexiDB::RecordData *record)
 {
     d->pixmapLabel->setPixmap(koDesktopIcon("dialog-cancel"));
-    d->textLabel->setText(i18n("<qt><h2>The connection is invalid.</h2></qt>") + msg);
+    d->textLabel->setText(QString("<qt><h2>%1</h2></qt>").arg(i18n("The connection is invalid.")) + msg);
 
     if (!record)
         record = d->table->selectedItem();
@@ -361,8 +361,8 @@ ConnectionDialog::checkConnection(KexiDB::RecordData *record)
     // First we check if one column is empty
     for (int i = 1; i < 5; i++) {
         if (!record || (*record)[i].toString().isEmpty()) {
-            setStatusError(i18n("<qt>You have not selected item: <b>%1</b>.</qt>",
-                                d->data->column(i)->captionAliasOrName()), record);
+            setStatusError("<qt>" + i18n("You have not selected item: <b>%1</b>.",
+                                d->data->column(i)->captionAliasOrName()) + "</qt>", record);
             return;
         }
     }

@@ -260,7 +260,7 @@ bool KexiComboBoxTableEdit::handleKeyPress(QKeyEvent *ke, bool editorActive)
     //kDebug() << ke;
     const int k = ke->key();
     if ((ke->modifiers() == Qt::NoButton && k == Qt::Key_F4)
-            || (ke->modifiers() == Qt::AltButton && k == Qt::Key_Down)) {
+            || (ke->modifiers() == Qt::AltModifier && k == Qt::Key_Down)) {
         //show popup
         slotButtonClicked();
         return true;
