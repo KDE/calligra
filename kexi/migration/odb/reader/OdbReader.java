@@ -5,8 +5,8 @@ import java.util.zip.*;
 import java.io.*;
 import org.hsqldb.jdbcDriver;
 import java.util.*;
-import java.nio.file.Path;
-import java.nio.file.Files;
+import java.nio.file.*;
+
 public class OdbReader
 {
     Connection con ;
@@ -19,14 +19,40 @@ public class OdbReader
     */
     public OdbReader(String path) throws Exception
     {
+        Class.forName("org.hsqldb.jdbcDriver");
         Path tempDir = Files.createTempDirectory("odbDatabase");
+        System.out.println("tempDir:" + tempDir.toString());
+        deleteDirOnExit(tempDir.toFile());
         ZipFile file = new ZipFile(path);
         fileUnzip(file, tempDir);
         file.close();
-        con = DriverManager.getConnection( "jdbc:hsqldb:file:"+ tempDir+f+";shutdown=true;ifexists=true","SA","" );
+        String connString = "jdbc:hsqldb:file:"+ tempDir+f.getName()+";shutdown=true;ifexists=true";
+        con = DriverManager.getConnection(connString, "SA", "");
+        System.out.println("Connection is made");
         Statement stmt = con.createStatement();
         stmt.execute("SET DATABASE SQL SYNTAX ORA TRUE");
+        System.out.println("first query is executed");
         stmt.close();
+    }
+
+    private static void deleteDirOnExit(File dir)
+    {
+        dir.deleteOnExit(); // deleteOnExit for the folder first - it will get deleted last
+        File[] files = dir.listFiles();
+        if (files != null)
+        {
+            for (File f: files)
+            {
+                if (f.isDirectory())
+                {
+                    deleteDirOnExit(f);
+                }
+                else
+                {
+                    f.deleteOnExit();
+                }
+            }
+        }
     }
 
     /*Method to open a zipfile from Odb
@@ -34,7 +60,6 @@ public class OdbReader
     *@param tempDir
     *@throws IOException
     */
-
     public void fileUnzip(ZipFile file , Path tempDir) throws IOException
     {
         ZipEntry zpEnt;

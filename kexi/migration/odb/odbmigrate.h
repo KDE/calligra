@@ -1,3 +1,6 @@
+/*
+ *This is a header file of the odbmigrate.cpp program
+*/
 #ifndef ODBMIGRATE_H
 #define ODBMIGRATE_H
 #include <jni.h>
@@ -21,11 +24,15 @@ public:
 
 
 protected:
+    //! Driver specific connection implementation
     virtual bool drv_connect();
     virtual bool drv_disconnect();
+    //! Driver specific function to read a table schema
     virtual bool drv_readTableSchema(const QString& originalName,
 				     KexiDB::TableSchema& tableSchema);
+    //! Driver specific function to return table names
     virtual bool drv_tableNames(QStringList& tablenames);
+    /*! Copy ODB table to KexiDB database */
     virtual bool drv_copyTable(const QString& srcTable,
                                     KexiDB::Connection *destConn, KexiDB::TableSchema* dstTable);
 
