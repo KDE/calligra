@@ -195,18 +195,16 @@ bool OdbMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *dest
         kWarning() << "!getTableSize";
         return false;
     }
-    kWarning() << "getTableSize reached and found";
     jmethodID getCellValue = env->GetMethodID(clsH,"getCellValue","(IILjava/lang/String;)Ljava/lang/String;");
     if (!getCellValue) {
         kWarning() << "!getCellValue";
         return false;
     }
-    kWarning() << "getCellValue reached and found";
     returnString = (jstring) env->CallObjectMethod(java_class_object,getTableSize,argument);
     QString jsonString2 = javaStringToQString(env, returnString);
-    list = jsonString2.split(",");
-    int columns=list.at(0).toInt();
-    int rows=list.at(1).toInt();
+    QStringList  list2 = jsonString2.split(",");
+    int columns=list2.at(0).toInt();
+    int rows=list2.at(1).toInt();
     int i=0;
     for(i=0;i<rows;i++)
     {
