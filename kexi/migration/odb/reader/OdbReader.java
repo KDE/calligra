@@ -183,13 +183,4 @@ public class OdbReader
         return result;
     }
  
-//    public static void main(String[] args){
-//        try{
-//        OdbReader oo=new OdbReader("/home/dhruv/Downloads/databaseOne.odb");
-//        System.out.println(oo.getTableNames());
-//        } catch(Exception e)
-//        {
-//            e.printStackTrace();
-//        }
-//    }
 }   
