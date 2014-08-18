@@ -214,7 +214,13 @@ bool OdbMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *dest
         for(j=0;j<columns;j++)
         {
             returnString = (jstring) env->CallObjectMethod(java_class_object,getCellValue,j+1,i+1,argument);
-            const char* tablesstring = env->GetStringUTFChars(returnString, NULL);
+            if(returnString==NULL)
+			{
+				QVariant var = toQVariant("",0, list.at(2*j + 1));
+            	vals << var;
+				continue;
+			}
+			const char* tablesstring = env->GetStringUTFChars(returnString, NULL);
             QVariant var = toQVariant(tablesstring,QString(tablesstring).length(), list.at(2*j + 1));
             vals << var;
         }
@@ -232,7 +238,6 @@ QVariant OdbMigrate::toQVariant(const char* data, unsigned int len, QString type
     if(len==0)
         return QVariant();
    
-    kWarning() << "in qvariant";
     if(type.compare("BOOLEAN")==0 || type.compare("BIT")==0)
         return QString::fromUtf8(data, len).toShort();
     else if(type.compare("CHARACTER")==0||type.compare("CHAR")==0)
