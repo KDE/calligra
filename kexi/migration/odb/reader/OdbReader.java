@@ -19,16 +19,19 @@ public class OdbReader
     */
     public OdbReader(String path) throws Exception
     {
+        Class.forName("org.hsqldb.jdbcDriver");
         Path tempDir = Files.createTempDirectory("odbDatabase");
         System.out.println("tempDir:" + tempDir.toString());
         deleteDirOnExit(tempDir.toFile());
         ZipFile file = new ZipFile(path);
         fileUnzip(file, tempDir);
         file.close();
-        String connString = "jdbc:hsqldb:file:"+ tempDir+f+";shutdown=true;ifexists=true";
+        String connString = "jdbc:hsqldb:file:"+ tempDir+f.getName()+";shutdown=true;ifexists=true";
         con = DriverManager.getConnection(connString, "SA", "");
+        System.out.println("Connection is made");
         Statement stmt = con.createStatement();
         stmt.execute("SET DATABASE SQL SYNTAX ORA TRUE");
+        System.out.println("first query is executed");
         stmt.close();
     }
 
@@ -154,7 +157,7 @@ public class OdbReader
         while (columns.next())
           i++;
         Statement stmt=con.createStatement();
-        ResultSet rs=stmt.executeQuery("select count(*) from \""+tablename+"\"");
+        ResultSet rs=stmt.executeQuery("SELECT COUNT(*) FROM \""+tablename+"\"");
         while(rs.next())
             j=rs.getInt(1);
         stmt.close();
@@ -180,13 +183,4 @@ public class OdbReader
         return result;
     }
  
-//    public static void main(String[] args){
-//        try{
-//        OdbReader oo=new OdbReader("/home/dhruv/Downloads/databaseOne.odb");
-//        System.out.println(oo.getTableNames());
-//        } catch(Exception e)
-//        {
-//            e.printStackTrace();
-//        }
-//    }
 }   

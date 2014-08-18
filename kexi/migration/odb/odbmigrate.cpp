@@ -93,13 +93,15 @@ bool OdbMigrate::drv_readTableSchema(
     const QString& originalName, KexiDB::TableSchema& tableSchema)
 {
     char* tableName=originalName.toAscii().data();
+    jstring argument=env->NewStringUTF(tableName);
     jmethodID getTableSchema = env->GetMethodID(clsH,"getTableSchema","(Ljava/lang/String;)Ljava/lang/String;");
     if (!getTableSchema) {
         kWarning() << "!getTableSchema";
         return false;
     }
-    jstring returnString = (jstring) env->CallObjectMethod(java_class_object,getTableSchema,tableName);
+    jstring returnString = (jstring) env->CallObjectMethod(java_class_object,getTableSchema,argument);
     QString jsonString = javaStringToQString(env, returnString);
+    kWarning() << jsonString;
     QStringList list = jsonString.split(",");
 
     for(int i=0;i<list.size();i+=2)
@@ -136,7 +138,7 @@ bool OdbMigrate::drv_tableNames(QStringList& tableNames)
             kDebug() << s;
         }
     }
-    return false;
+    return true;
 }
 
 KexiDB::Field::Type OdbMigrate::type(QString type)
@@ -183,9 +185,9 @@ bool OdbMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *dest
 {
     bool ok = true;
     char* tableName=srcTable.toAscii().data();
-
+    jstring argument=env->NewStringUTF(tableName);
     jmethodID getTableNames = env->GetMethodID(clsH,"getTableSchema","(Ljava/lang/String;)Ljava/lang/String;");
-    jstring returnString = (jstring) env->CallObjectMethod(java_class_object,getTableNames,tableName);
+    jstring returnString = (jstring) env->CallObjectMethod(java_class_object,getTableNames,argument);
     QString jsonString = javaStringToQString(env, returnString);
     QStringList list = jsonString.split(",");
 
@@ -194,16 +196,16 @@ bool OdbMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *dest
         kWarning() << "!getTableSize";
         return false;
     }
-    jmethodID getCellValue = env->GetMethodID(clsH,"getCellValue","((II)Ljava/lang/String;Ljava/lang/String;");
+    jmethodID getCellValue = env->GetMethodID(clsH,"getCellValue","(IILjava/lang/String;)Ljava/lang/String;");
     if (!getCellValue) {
         kWarning() << "!getCellValue";
         return false;
     }
-    returnString = (jstring) env->CallObjectMethod(java_class_object,getTableSize,tableName);
+    returnString = (jstring) env->CallObjectMethod(java_class_object,getTableSize,argument);
     QString jsonString2 = javaStringToQString(env, returnString);
-    list = jsonString2.split(",");
-    int columns=list.at(0).toInt();
-    int rows=list.at(1).toInt();
+    QStringList list2 = jsonString2.split(",");
+    int columns=list2.at(0).toInt();
+    int rows=list2.at(1).toInt();
     int i=0;
     for(i=0;i<rows;i++)
     {
@@ -211,7 +213,7 @@ bool OdbMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *dest
         int j=0;
         for(j=0;j<columns;j++)
         {
-            returnString = (jstring) env->CallObjectMethod(java_class_object,getCellValue,j+1,i+1,tableName);
+            returnString = (jstring) env->CallObjectMethod(java_class_object,getCellValue,j+1,i+1,argument);
             const char* tablesstring = env->GetStringUTFChars(returnString, NULL);
             QVariant var = toQVariant(tablesstring,QString(tablesstring).length(), list.at(2*j + 1));
             vals << var;
@@ -229,15 +231,16 @@ QVariant OdbMigrate::toQVariant(const char* data, unsigned int len, QString type
 {
     if(len==0)
         return QVariant();
-
+   
+    kWarning() << "in qvariant";
     if(type.compare("BOOLEAN")==0 || type.compare("BIT")==0)
         return QString::fromUtf8(data, len).toShort();
     else if(type.compare("CHARACTER")==0||type.compare("CHAR")==0)
         return QString::fromUtf8(data, len).toShort();
     else if(type.compare("TINYINT")==0||type.compare("SHORTINT")==0)
-        return QString::fromUtf8(data, len).toLongLong();
+        return QString::fromUtf8(data, len).toInt();
     else if(type.compare("INTEGER")==0||type.compare("INT")==0)
-        return QString::fromUtf8(data, len).toLongLong();
+        return QString::fromUtf8(data, len).toInt();
     else if(type.compare("BIGINT")==0)
         return QString::fromUtf8(data, len).toLongLong();
     else if(type.compare("DECIMAL")==0||type.compare("NUMERIC")==0||type.compare("REAL")==0||type.compare("DOUBLE")==0)
