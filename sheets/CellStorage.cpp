@@ -369,11 +369,12 @@ bool CellStorage::changedData(int column, int row) const
   return d->ChangedDataStorage->lookup(column, row);
 }
 
-bool CellStorage::setChangedData(int column, int row, const bool changedData )
+bool CellStorage::setChangedData( )
 {
 #ifdef CALLIGRA_SHEETS_MT
   QWriteLocker(&d->bigUglyLock);
 #endif
+  bool changedData = false;
  if(!d->sheet->map()->isLoading()){
    CellDamage::Changes = CellDamage::Binding|CellDamage::Formula|CellDamage::Value;// if there is a change then Changes will contain something
    if(changedData == null)
@@ -388,8 +389,11 @@ bool CellStorage::setChangedData(int column, int row, const bool changedData )
        changedData = false;
    }
  }
- return changedData;
+ return changedData;// return true or false depending on the previous condition
 }
+
+//for each changed cell, the color needs to be changed
+QColor CellStorage::
 
 
 Conditions CellStorage::conditions(int column, int row) const

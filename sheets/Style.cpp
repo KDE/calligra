@@ -45,6 +45,7 @@
 #include "Global.h"
 #include "StyleManager.h"
 #include "Util.h"
+#include "CellStorage.h"
 
 using namespace Calligra::Sheets;
 
@@ -404,7 +405,13 @@ void Style::loadOdfTableCellProperties(KoOdfStylesReader& stylesReader, const Ko
     }
     if (styleStack.hasProperty(KoXmlNS::fo, "background-color")) {
         str = styleStack.property(KoXmlNS::fo, "background-color");
-        if (str == "transparent") {
+	if ( CellStorage::setChangedData() == true)
+	{
+	  str == "lightBlue";
+	  QColor color(str);
+	  setBackgroundColor(color);// Changed cell will be highlighted
+	}
+        else if (str == "transparent") {
             kDebug(36003) << "\t\t fo:background-color: transparent";
             setBackgroundColor(QColor());
         } else {

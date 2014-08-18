@@ -49,6 +49,7 @@ class StyleManager;
 class StyleManipulator;
 class SubStyle;
 class ValueParser;
+class CellStorage;
 
 // used for preloading OASIS auto styles
 typedef QHash<QString, Style>       Styles;
