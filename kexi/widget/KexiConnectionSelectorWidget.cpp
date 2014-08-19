@@ -46,11 +46,11 @@
 #include <QPushButton>
 #include <QLayout>
 #include <QCheckBox>
-
 #include <QVBoxLayout>
 #include <QPixmap>
 #include <QFrame>
 #include <QStackedWidget>
+#include <QKeyEvent>
 
 class KexiConnectionSelector : public QWidget, public Ui_KexiConnectionSelector
 {

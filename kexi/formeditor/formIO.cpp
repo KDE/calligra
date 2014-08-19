@@ -523,7 +523,7 @@ FormIO::writeVariant(QDomDocument &parent, QDomElement &parentNode, const QVaria
         type.appendChild(valueE);
         break;
     }
-    case QVariant::CString: {
+    case QVariant::ByteArray: {
         type = parent.createElement("cstring");
         valueE = parent.createTextNode(value.toString());
         type.appendChild(valueE);
@@ -858,8 +858,8 @@ QVariant FormIO::readPropertyValue(Form *form, QDomNode node, QObject *obj, cons
         QDomElement vs = node.firstChildElement("verstretch");
 
         QSizePolicy s;
-        s.setHorizontalPolicy((QSizePolicy::SizeType)h.text().toInt());
-        s.setVerticalPolicy((QSizePolicy::SizeType)v.text().toInt());
+        s.setHorizontalPolicy((QSizePolicy::Policy)h.text().toInt());
+        s.setVerticalPolicy((QSizePolicy::Policy)v.text().toInt());
         s.setHorizontalStretch(hs.text().toInt());
         s.setVerticalStretch(vs.text().toInt());
         return s;
