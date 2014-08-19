@@ -71,5 +71,9 @@ QSize CQTextDocumentModel::thumbnailSize() const
 void CQTextDocumentModel::setThumbnailSize(const QSize& newSize)
 {
     m_thumbnailSize = newSize;
+    if(CQImageProvider::s_imageProvider) {
+        CQImageProvider::s_imageProvider->clearCache();
+        dataChanged(index(0), index(kw_document->pageCount() - 1));
+    }
     emit thumbnailSizeChanged();
 }
