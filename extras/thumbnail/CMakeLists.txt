@@ -27,6 +27,7 @@ endif( SHOULD_BUILD_APP_FLOW OR SHOULD_BUILD_APP_KARBON )
 
 if( SHOULD_BUILD_APP_KRITA )
     list( APPEND THUMBNAIL_SERVICES krita_kra_thumbnail.desktop )
+    list( APPEND THUMBNAIL_SERVICES kritaanimation_kranim_thumbnail.desktop)
 endif( SHOULD_BUILD_APP_KRITA )
 
 if( SHOULD_BUILD_PART_SHEETS )
