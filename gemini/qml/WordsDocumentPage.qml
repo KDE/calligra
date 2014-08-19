@@ -36,6 +36,25 @@ Item {
             toolManager.requestToolChange("PageToolFactory_ID");
         }
     }
+    Connections {
+        target: Constants;
+        onGridSizeChanged: {
+            var newState = (Constants.IsLandscape ? "" : "readermode");
+            if(base.state !== newState) {
+                base.state = newState;
+            }
+        }
+    }
+    onWidthChanged: {
+        if(base.state === "readermode") {
+            d.zoomToFit();
+        }
+    }
+    onHeightChanged: {
+        if(base.state === "readermode") {
+            d.zoomToFit();
+        }
+    }
     function scrollToEnd() {
         controllerFlickable.contentY = controllerFlickable.contentHeight - controllerFlickable.height;
     }
@@ -54,16 +73,25 @@ Item {
             MouseArea {
                 anchors.fill: parent;
                 onClicked: {
-                    if(mouse.x < width / 2) {
-                        controllerItem.pageChanging = true;
-                        controllerFlickable.contentY = Math.max(0, controllerFlickable.contentY - controllerFlickable.height + (Constants.GridHeight * 1.5));
-                        controllerItem.pageChanging = false;
+                    controllerItem.pageChanging = true;
+                    if(base.state === "readermode") {
+                        // for reader mode we'll accept clicks here, to simulate an e-reader style navigation mode
+                        if(mouse.x < width / 2) {
+                            controllerFlickable.contentY = wordsCanvas.pagePosition(wordsCanvas.currentPageNumber - 1) + 1;
+                        }
+                        else if(mouse.x > width / 2) {
+                            controllerFlickable.contentY = wordsCanvas.pagePosition(wordsCanvas.currentPageNumber + 1) + 1;
+                        }
                     }
-                    else if(mouse.x > width / 2) {
-                        controllerItem.pageChanging = true;
-                        controllerFlickable.contentY = Math.min(controllerFlickable.contentHeight - controllerFlickable.height, controllerFlickable.contentY + controllerFlickable.height - (Constants.GridHeight * 1.5));
-                        controllerItem.pageChanging = false;
+                    else {
+                        if(mouse.x < width / 2) {
+                            controllerFlickable.contentY = Math.max(0, controllerFlickable.contentY - controllerFlickable.height + (Constants.GridHeight * 1.5));
+                        }
+                        else if(mouse.x > width / 2) {
+                            controllerFlickable.contentY = Math.min(controllerFlickable.contentHeight - controllerFlickable.height, controllerFlickable.contentY + controllerFlickable.height - (Constants.GridHeight * 1.5));
+                        }
                     }
+                    controllerItem.pageChanging = false;
                     base.canvasInteractionStarted();
                 }
             }
@@ -109,9 +137,10 @@ Item {
             id: controllerFlickable;
             anchors {
                 top: parent.top;
+                topMargin: Settings.theme.adjustedPixel(86);
                 left: parent.left;
                 right: parent.right;
-                bottom: enabled ? parent.bottom : parent.top;
+                bottom: enabled ? parent.bottom : top;
             }
             property int fastVelocity: Settings.theme.adjustedPixel(1000);
             onVerticalVelocityChanged: {
@@ -180,8 +209,26 @@ Item {
 
                 MouseArea {
                     anchors.fill: parent;
-                    onClicked: base.canvasInteractionStarted();
+                    onClicked: {
+                        controllerItem.pageChanging = true;
+                        if(base.state === "readermode") {
+                            // for reader mode we'll accept clicks here, to simulate an e-reader style navigation mode
+                            if(mouse.x < width / 4) {
+                                controllerFlickable.contentY = wordsCanvas.pagePosition(wordsCanvas.currentPageNumber - 1) + 1;
+                            }
+                            else if(mouse.x > width * 3 / 4) {
+                                controllerFlickable.contentY = wordsCanvas.pagePosition(wordsCanvas.currentPageNumber + 1) + 1;
+                            }
+                        }
+                        controllerItem.pageChanging = false;
+                        base.canvasInteractionStarted();
+                    }
                     onDoubleClicked: {
+                        if(base.state === "readermode") {
+                            // for reader mode, we don't accept editing input
+                            base.canvasInteractionStarted();
+                            return;
+                        }
                         toolManager.requestToolChange("TextToolFactory_ID");
                         base.navigateMode = false;
                         base.canvasInteractionStarted();
@@ -202,7 +249,21 @@ Item {
 
     QtObject {
         id: d;
+        property double previouszoom: 0;
+        function restoreZoom() {
+            controllerItem.zoom = previouszoom;
+            previouszoom = 0;
+        }
+        function zoomToFit() {
+            if(previouszoom === 0) {
+                previouszoom = controllerItem.zoom;
+            }
+            controllerItem.zoomToPage();
+        }
         function showThings() {
+            if(base.state === "readermode") {
+                return;
+            }
             base.state = "sidebarShown";
             pageNumber.opacity = 1;
             hideTimer.stop();
@@ -231,16 +292,34 @@ Item {
         repeat: false;
         interval: 2000;
         onTriggered: {
+            if(base.state === "readermode") {
+                return;
+            }
             base.state = "";
         }
     }
-    states: State {
-        name: "sidebarShown"
-        AnchorChanges { target: navigatorSidebar; anchors.left: parent.left; anchors.right: undefined; }
-    }
-    transitions: Transition {
-        AnchorAnimation { duration: Constants.AnimationDuration; }
-    }
+    states: [
+        State {
+            name: "sidebarShown"
+            AnchorChanges { target: navigatorSidebar; anchors.left: parent.left; anchors.right: undefined; }
+        },
+        State {
+            name: "readermode"
+            PropertyChanges { target: navigatorSidebar; opacity: 0; }
+        }
+        ]
+    transitions: [ Transition {
+            AnchorAnimation { duration: Constants.AnimationDuration; }
+        },
+        Transition {
+            to: "readermode";
+            ScriptAction { script: d.zoomToFit(); }
+        },
+        Transition {
+            from: "readermode";
+            ScriptAction { script: d.restoreZoom(); }
+        }
+        ]
     Item {
         id: navigatorSidebar;
         property alias containsMouse: listViewMouseArea.containsMouse;
@@ -312,7 +391,7 @@ Item {
             MouseArea {
                 anchors.fill: parent;
                 onClicked: {
-                    if(base.state === "sidebarShown") {
+                    if(base.state === "sidebarShown" && base.state !== "readermode") {
                         base.state = "";
                         pageNumber.opacity = 0;
                     }
@@ -438,7 +517,7 @@ Item {
                 MouseArea {
                     anchors.fill: parent;
                     onClicked: {
-                        controllerFlickable.contentY = wordsCanvas.pagePosition(index + 1);
+                        controllerFlickable.contentY = wordsCanvas.pagePosition(index + 1) + 1;
                         base.canvasInteractionStarted();
                     }
                 }
