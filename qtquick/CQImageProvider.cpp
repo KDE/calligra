@@ -60,3 +60,8 @@ bool CQImageProvider::containsId(const QString& id)
 {
     return m_images.contains(id);
 }
+
+void CQImageProvider::clearCache()
+{
+    m_images.clear();
+}

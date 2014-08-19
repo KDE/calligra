@@ -35,10 +35,11 @@ public:
 
     CQImageProvider();
     virtual ~CQImageProvider();
-        virtual QImage requestImage(const QString& id, QSize* size, const QSize& requestedSize);
+    virtual QImage requestImage(const QString& id, QSize* size, const QSize& requestedSize);
 
     void addImage(const QString& id, const QImage &image);
     bool containsId(const QString &id);
+    void clearCache();
 private:
 
     QHash<QString, QImage> m_images;
