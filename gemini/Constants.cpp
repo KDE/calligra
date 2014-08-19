@@ -75,8 +75,8 @@ qreal Constants::toolbarHeight() const
 int Constants::gridRows() const
 {
     if (isLandscape())
-        return 18;
-    return 12;
+        return 12;
+    return 18;
 }
 
 int Constants::gridColumns() const
@@ -113,7 +113,7 @@ bool Constants::isLandscape() const
 {
 	// If user switches certain settings in windows, activeWindow can become null.
 	if(qApp->activeWindow())
-	    return qApp->activeWindow()->height() > qApp->activeWindow()->width();
+	    return qApp->activeWindow()->height() < qApp->activeWindow()->width();
 	return true;
 }
 
