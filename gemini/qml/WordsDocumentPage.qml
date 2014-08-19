@@ -72,29 +72,6 @@ Item {
             height: controllerItem.documentSize.height;
             MouseArea {
                 anchors.fill: parent;
-                onClicked: {
-                    controllerItem.pageChanging = true;
-                    if(base.state === "readermode") {
-                        // for reader mode we'll accept clicks here, to simulate an e-reader style navigation mode
-                        if(mouse.x < width / 2) {
-                            controllerFlickable.contentY = wordsCanvas.pagePosition(wordsCanvas.currentPageNumber - 1) + 1;
-                        }
-                        else if(mouse.x > width / 2) {
-                            controllerFlickable.contentY = wordsCanvas.pagePosition(wordsCanvas.currentPageNumber + 1) + 1;
-                        }
-                    }
-                    else {
-                        if(mouse.x < width / 2) {
-                            controllerFlickable.contentY = Math.max(0, controllerFlickable.contentY - controllerFlickable.height + (Constants.GridHeight * 1.5));
-                        }
-                        else if(mouse.x > width / 2) {
-                            controllerFlickable.contentY = Math.min(controllerFlickable.contentHeight - controllerFlickable.height, controllerFlickable.contentY + controllerFlickable.height - (Constants.GridHeight * 1.5));
-                        }
-                    }
-                    controllerItem.pageChanging = false;
-                    base.canvasInteractionStarted();
-                }
-
                 property int oldX: 0
                 property int oldY: 0
                 property int swipeDistance: Settings.theme.adjustedPixel(10);
@@ -103,27 +80,54 @@ Item {
                     oldY = mouseY;
                 }
                 onReleased: {
-                    if(base.state !== "readermode") {
-                        return;
-                    }
+                    base.canvasInteractionStarted();
+                    controllerItem.pageChanging = true;
                     var xDiff = oldX - mouseX;
                     var yDiff = oldY - mouseY;
                     // Don't react if the swipe distance is too small
                     if(Math.abs(xDiff) < swipeDistance && Math.abs(yDiff) < swipeDistance) {
-                        return;
-                    }
-                    if( Math.abs(xDiff) > Math.abs(yDiff) ) {
-                        if( oldX > mouseX) {
-                            // left
-                            controllerFlickable.contentY = wordsCanvas.pagePosition(wordsCanvas.currentPageNumber + 1) + 1;
-                        } else {
-                            // right
-                            controllerFlickable.contentY = wordsCanvas.pagePosition(wordsCanvas.currentPageNumber - 1) + 1;
+                        if(Math.abs(xDiff) > Settings.theme.adjustedPixel(2) || Math.abs(yDiff) > Settings.theme.adjustedPixel(2)) {
+                            // If the swipe distance is sort of big (2 pixels on a 1080p screen)
+                            // we can assume the finger has moved some distance and should be ignored
+                            // as not-a-tap.
+                            controllerItem.pageChanging = false;
+                            return;
                         }
-                    } else {
-                        if( oldY > mouseY) {/*up*/ }
-                        else {/*down*/ }
+                        // This might be done in onClick, but that then eats the events, which is not useful
+                        // for reader mode we'll accept clicks here, to simulate an e-reader style navigation mode
+                        if(base.state === "readermode") {
+                            // for reader mode we'll accept clicks here, to simulate an e-reader style navigation mode
+                            if(mouse.x < width / 2) {
+                                controllerFlickable.contentY = wordsCanvas.pagePosition(wordsCanvas.currentPageNumber - 1) + 1;
+                            }
+                            else if(mouse.x > width / 2) {
+                                controllerFlickable.contentY = wordsCanvas.pagePosition(wordsCanvas.currentPageNumber + 1) + 1;
+                            }
+                        }
+                        else {
+                            if(mouse.x < width / 2) {
+                                controllerFlickable.contentY = Math.max(0, controllerFlickable.contentY - controllerFlickable.height + (Constants.GridHeight * 1.5));
+                            }
+                            else if(mouse.x > width / 2) {
+                                controllerFlickable.contentY = Math.min(controllerFlickable.contentHeight - controllerFlickable.height, controllerFlickable.contentY + controllerFlickable.height - (Constants.GridHeight * 1.5));
+                            }
+                        }
                     }
+                    else if(base.state === "readermode") {
+                        if ( Math.abs(xDiff) > Math.abs(yDiff) ) {
+                            if( oldX > mouseX) {
+                                // left
+                                controllerFlickable.contentY = wordsCanvas.pagePosition(wordsCanvas.currentPageNumber + 1) + 1;
+                            } else {
+                                // right
+                                controllerFlickable.contentY = wordsCanvas.pagePosition(wordsCanvas.currentPageNumber - 1) + 1;
+                            }
+                        } else {
+                            if( oldY > mouseY) {/*up*/ }
+                            else {/*down*/ }
+                        }
+                    }
+                    controllerItem.pageChanging = false;
                 }
             }
         }
@@ -242,20 +246,6 @@ Item {
 
                 MouseArea {
                     anchors.fill: parent;
-                    onClicked: {
-                        controllerItem.pageChanging = true;
-                        if(base.state === "readermode") {
-                            // for reader mode we'll accept clicks here, to simulate an e-reader style navigation mode
-                            if(mouse.x < width / 4) {
-                                controllerFlickable.contentY = wordsCanvas.pagePosition(wordsCanvas.currentPageNumber - 1) + 1;
-                            }
-                            else if(mouse.x > width * 3 / 4) {
-                                controllerFlickable.contentY = wordsCanvas.pagePosition(wordsCanvas.currentPageNumber + 1) + 1;
-                            }
-                        }
-                        controllerItem.pageChanging = false;
-                        base.canvasInteractionStarted();
-                    }
                     onDoubleClicked: {
                         if(base.state === "readermode") {
                             // for reader mode, we don't accept editing input
@@ -275,16 +265,32 @@ Item {
                         oldY = mouseY;
                     }
                     onReleased: {
+                        base.canvasInteractionStarted();
                         if(base.state !== "readermode") {
                             return;
                         }
                         var xDiff = oldX - mouseX;
                         var yDiff = oldY - mouseY;
+                        controllerItem.pageChanging = true;
                         // Don't react if the swipe distance is too small
                         if(Math.abs(xDiff) < swipeDistance && Math.abs(yDiff) < swipeDistance) {
-                            return;
+                            if(Math.abs(xDiff) > Settings.theme.adjustedPixel(2) || Math.abs(yDiff) > Settings.theme.adjustedPixel(2)) {
+                                // If the swipe distance is sort of big (2 pixels on a 1080p screen)
+                                // we can assume the finger has moved some distance and should be ignored
+                                // as not-a-tap.
+                                controllerItem.pageChanging = false;
+                                return;
+                            }
+                            // This might be done in onClick, but that then eats the events, which is not useful
+                            // for reader mode we'll accept clicks here, to simulate an e-reader style navigation mode
+                            if(mouse.x < width / 4) {
+                                controllerFlickable.contentY = wordsCanvas.pagePosition(wordsCanvas.currentPageNumber - 1) + 1;
+                            }
+                            else if(mouse.x > width * 3 / 4) {
+                                controllerFlickable.contentY = wordsCanvas.pagePosition(wordsCanvas.currentPageNumber + 1) + 1;
+                            }
                         }
-                        if( Math.abs(xDiff) > Math.abs(yDiff) ) {
+                        else if( Math.abs(xDiff) > Math.abs(yDiff) ) {
                             if( oldX > mouseX) {
                                 // left
                                 controllerFlickable.contentY = wordsCanvas.pagePosition(wordsCanvas.currentPageNumber + 1) + 1;
@@ -296,6 +302,7 @@ Item {
                             if( oldY > mouseY) {/*up*/ }
                             else {/*down*/ }
                         }
+                        controllerItem.pageChanging = false;
                     }
                 }
             }
