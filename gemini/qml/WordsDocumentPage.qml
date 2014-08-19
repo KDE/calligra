@@ -94,6 +94,37 @@ Item {
                     controllerItem.pageChanging = false;
                     base.canvasInteractionStarted();
                 }
+
+                property int oldX: 0
+                property int oldY: 0
+                property int swipeDistance: Settings.theme.adjustedPixel(10);
+                onPressed: {
+                    oldX = mouseX;
+                    oldY = mouseY;
+                }
+                onReleased: {
+                    if(base.state !== "readermode") {
+                        return;
+                    }
+                    var xDiff = oldX - mouseX;
+                    var yDiff = oldY - mouseY;
+                    // Don't react if the swipe distance is too small
+                    if(Math.abs(xDiff) < swipeDistance && Math.abs(yDiff) < swipeDistance) {
+                        return;
+                    }
+                    if( Math.abs(xDiff) > Math.abs(yDiff) ) {
+                        if( oldX > mouseX) {
+                            // left
+                            controllerFlickable.contentY = wordsCanvas.pagePosition(wordsCanvas.currentPageNumber + 1) + 1;
+                        } else {
+                            // right
+                            controllerFlickable.contentY = wordsCanvas.pagePosition(wordsCanvas.currentPageNumber - 1) + 1;
+                        }
+                    } else {
+                        if( oldY > mouseY) {/*up*/ }
+                        else {/*down*/ }
+                    }
+                }
             }
         }
     }
@@ -140,8 +171,10 @@ Item {
                 topMargin: Settings.theme.adjustedPixel(86);
                 left: parent.left;
                 right: parent.right;
-                bottom: enabled ? parent.bottom : top;
+                bottom: enabled ? parent.bottom : parent.top;
+                bottomMargin: enabled ? 0 : -Settings.theme.adjustedPixel(86);
             }
+            interactive: base.state !== "readermode";
             property int fastVelocity: Settings.theme.adjustedPixel(1000);
             onVerticalVelocityChanged: {
                 if(Math.abs(verticalVelocity) > fastVelocity && !controllerItem.pageChanging) {
@@ -232,6 +265,37 @@ Item {
                         toolManager.requestToolChange("TextToolFactory_ID");
                         base.navigateMode = false;
                         base.canvasInteractionStarted();
+                    }
+
+                    property int oldX: 0
+                    property int oldY: 0
+                    property int swipeDistance: Settings.theme.adjustedPixel(10);
+                    onPressed: {
+                        oldX = mouseX;
+                        oldY = mouseY;
+                    }
+                    onReleased: {
+                        if(base.state !== "readermode") {
+                            return;
+                        }
+                        var xDiff = oldX - mouseX;
+                        var yDiff = oldY - mouseY;
+                        // Don't react if the swipe distance is too small
+                        if(Math.abs(xDiff) < swipeDistance && Math.abs(yDiff) < swipeDistance) {
+                            return;
+                        }
+                        if( Math.abs(xDiff) > Math.abs(yDiff) ) {
+                            if( oldX > mouseX) {
+                                // left
+                                controllerFlickable.contentY = wordsCanvas.pagePosition(wordsCanvas.currentPageNumber + 1) + 1;
+                            } else {
+                                // right
+                                controllerFlickable.contentY = wordsCanvas.pagePosition(wordsCanvas.currentPageNumber - 1) + 1;
+                            }
+                        } else {
+                            if( oldY > mouseY) {/*up*/ }
+                            else {/*down*/ }
+                        }
                     }
                 }
             }
