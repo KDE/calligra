@@ -28,6 +28,7 @@ Item {
     property QtObject canvas: wordsCanvas;
     property alias source: wordsCanvas.source;
     property alias navigateMode: controllerFlickable.enabled;
+    property double toolbarOpacity: base.state === "readermode" ? 0.3 : 1;
     onNavigateModeChanged: {
         if(navigateMode === true) {
             // This means we've just changed back from having edited stuff.
@@ -98,7 +99,12 @@ Item {
                         if(base.state === "readermode") {
                             // for reader mode we'll accept clicks here, to simulate an e-reader style navigation mode
                             if(mouse.x < width / 2) {
-                                controllerFlickable.contentY = wordsCanvas.pagePosition(wordsCanvas.currentPageNumber - 1) + 1;
+                                if(wordsCanvas.currentPageNumber === 1) {
+                                    controllerFlickable.contentY = wordsCanvas.pagePosition(wordsCanvas.documentModel.rowCount()) + 1;
+                                }
+                                else {
+                                    controllerFlickable.contentY = wordsCanvas.pagePosition(wordsCanvas.currentPageNumber - 1) + 1;
+                                }
                             }
                             else if(mouse.x > width / 2) {
                                 controllerFlickable.contentY = wordsCanvas.pagePosition(wordsCanvas.currentPageNumber + 1) + 1;
@@ -120,7 +126,12 @@ Item {
                                 controllerFlickable.contentY = wordsCanvas.pagePosition(wordsCanvas.currentPageNumber + 1) + 1;
                             } else {
                                 // right
-                                controllerFlickable.contentY = wordsCanvas.pagePosition(wordsCanvas.currentPageNumber - 1) + 1;
+                                if(wordsCanvas.currentPageNumber === 1) {
+                                    controllerFlickable.contentY = wordsCanvas.pagePosition(wordsCanvas.documentModel.rowCount()) + 1;
+                                }
+                                else {
+                                    controllerFlickable.contentY = wordsCanvas.pagePosition(wordsCanvas.currentPageNumber - 1) + 1;
+                                }
                             }
                         } else {
                             if( oldY > mouseY) {/*up*/ }
@@ -284,7 +295,12 @@ Item {
                             // This might be done in onClick, but that then eats the events, which is not useful
                             // for reader mode we'll accept clicks here, to simulate an e-reader style navigation mode
                             if(mouse.x < width / 4) {
-                                controllerFlickable.contentY = wordsCanvas.pagePosition(wordsCanvas.currentPageNumber - 1) + 1;
+                                if(wordsCanvas.currentPageNumber === 1) {
+                                    controllerFlickable.contentY = wordsCanvas.pagePosition(wordsCanvas.documentModel.rowCount()) + 1;
+                                }
+                                else {
+                                    controllerFlickable.contentY = wordsCanvas.pagePosition(wordsCanvas.currentPageNumber - 1) + 1;
+                                }
                             }
                             else if(mouse.x > width * 3 / 4) {
                                 controllerFlickable.contentY = wordsCanvas.pagePosition(wordsCanvas.currentPageNumber + 1) + 1;
@@ -296,7 +312,12 @@ Item {
                                 controllerFlickable.contentY = wordsCanvas.pagePosition(wordsCanvas.currentPageNumber + 1) + 1;
                             } else {
                                 // right
-                                controllerFlickable.contentY = wordsCanvas.pagePosition(wordsCanvas.currentPageNumber - 1) + 1;
+                                if(wordsCanvas.currentPageNumber === 1) {
+                                    controllerFlickable.contentY = wordsCanvas.pagePosition(wordsCanvas.documentModel.rowCount()) + 1;
+                                }
+                                else {
+                                    controllerFlickable.contentY = wordsCanvas.pagePosition(wordsCanvas.currentPageNumber - 1) + 1;
+                                }
                             }
                         } else {
                             if( oldY > mouseY) {/*up*/ }
