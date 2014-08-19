@@ -75,6 +75,11 @@ Page {
             right: parent.right;
         }
         height: Settings.theme.adjustedPixel(86);
+        MouseArea {
+            anchors.fill: parent;
+            // same logic as on canvas interaction - close menus, leave notes menu open
+            onClicked: closeToolbarMenus(notesButton);
+        }
         Rectangle {
             anchors.fill: parent;
             color: Settings.theme.color("components/toolbar/base");
