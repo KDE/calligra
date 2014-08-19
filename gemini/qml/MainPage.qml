@@ -74,6 +74,8 @@ Page {
             left: parent.left;
             right: parent.right;
         }
+        opacity: viewLoader.item ? viewLoader.item.toolbarOpacity : 1;
+        Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
         height: Settings.theme.adjustedPixel(86);
         MouseArea {
             anchors.fill: parent;

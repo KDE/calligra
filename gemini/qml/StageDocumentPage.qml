@@ -28,6 +28,7 @@ Item {
     property QtObject canvas: stageCanvas;
     property alias source: stageCanvas.source;
     property alias navigateMode: controllerFlickable.enabled;
+    property double toolbarOpacity: 1;
     onNavigateModeChanged: {
         if(navigateMode === true) {
             // This means we've just changed back from having edited stuff.
