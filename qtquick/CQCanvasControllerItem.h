@@ -48,6 +48,11 @@ public:
 
     qreal zoom() const;
     void setZoom(qreal newZoom);
+    /**
+     * Zoom to fit page, but without changing the mode. This is used for
+     * reader mode in Calligra Gemini.
+     */
+    Q_INVOKABLE void zoomToPage();
 
     qreal minimumZoom() const;
     void setMinimumZoom(qreal newZoom);

@@ -157,6 +157,24 @@ void CQCanvasControllerItem::setZoom(qreal newZoom)
     }
 }
 
+void CQCanvasControllerItem::zoomToPage()
+{
+    if(d->canvas && d->canvas->zoomController()) {
+        // This may seem odd, but it ensures that we scale up as well as down
+        // when zooming to fit page - without this, it will only scale down,
+        // not up. To avoid changing the zooming logic in desktop, we just do
+        // it this way. It's non-invasive anyway, and reasonably cheap, and
+        // at any rate just covers a corner-case (normally this would only
+        // happen when in full-screen mode anyway, but scaling down can be
+        // triggered if in touch mode as a window and that is resized)
+        d->canvas->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, 10);
+        d->canvas->zoomController()->setZoom(KoZoomMode::ZOOM_PAGE, 1.0);
+        d->canvas->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, d->canvas->zoomController()->zoomAction()->effectiveZoom());
+        d->zoom = d->canvas->zoomController()->zoomAction()->effectiveZoom();
+        emit zoomChanged();
+    }
+}
+
 qreal CQCanvasControllerItem::minimumZoom() const
 {
     return d->minimumZoom;
