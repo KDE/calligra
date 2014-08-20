@@ -420,7 +420,11 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
     setPropertyDescription("openExternalLinks", i18nc("property: Can open external links in label", "Open Ext. Links"));
 
     //KLineEdit
+#if QT_VERSION  >= 0x040700
+    setPropertyDescription("placeholderText", i18nc("Property: line edit's placeholder text", "Placeholder Text"));
+#else
     setPropertyDescription("clickMessage", i18nc("Property: \"Click Me\",message for line edit", "Click Message"));
+#endif
     setPropertyDescription("showClearButton", i18nc("Property: Show Clear Button", "Clear Button"));
     //for EchoMode
     setPropertyDescription("passwordMode", i18nc("Password Mode for line edit", "Password Mode"));

@@ -688,6 +688,9 @@ KexiDBFactory::isPropertyVisibleInternal(const QByteArray& classname, QWidget *w
         ok = property != "urlDropsEnabled"
              && property != "vAlign"
              && property != "echoMode"
+#if QT_VERSION  >= 0x040700
+             && property != "clickMessage" // replaced by placeholderText in 2.9
+#endif
 #ifndef KEXI_SHOW_UNFINISHED
              && property != "inputMask"
              && property != "maxLength" //!< we may want to integrate this with db schema
