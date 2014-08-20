@@ -448,3 +448,4 @@ ConnectionDialog::removeItem()
 }
 
 #include "connectiondialog.moc"
+#warning noi18n # added to disable message extraction in Messages.sh
