@@ -68,6 +68,7 @@ Item {
         id: bgScrollArea;
         anchors.fill: parent;
         contentHeight: controllerItem.documentSize.height;
+        interactive: base.state !== "readermode";
         Item {
             width: parent.width;
             height: controllerItem.documentSize.height;
@@ -96,46 +97,31 @@ Item {
                         }
                         // This might be done in onClick, but that then eats the events, which is not useful
                         // for reader mode we'll accept clicks here, to simulate an e-reader style navigation mode
-                        if(base.state === "readermode") {
-                            // for reader mode we'll accept clicks here, to simulate an e-reader style navigation mode
-                            if(mouse.x < width / 2) {
-                                if(wordsCanvas.currentPageNumber === 1) {
-                                    controllerFlickable.contentY = wordsCanvas.pagePosition(wordsCanvas.documentModel.rowCount()) + 1;
-                                }
-                                else {
-                                    controllerFlickable.contentY = wordsCanvas.pagePosition(wordsCanvas.currentPageNumber - 1) + 1;
-                                }
-                            }
-                            else if(mouse.x > width / 2) {
-                                controllerFlickable.contentY = wordsCanvas.pagePosition(wordsCanvas.currentPageNumber + 1) + 1;
-                            }
+                        if(mouse.x < width / 2) {
+                            controllerFlickable.pageUp();
                         }
-                        else {
-                            if(mouse.x < width / 2) {
-                                controllerFlickable.contentY = Math.max(0, controllerFlickable.contentY - controllerFlickable.height + (Constants.GridHeight * 1.5));
-                            }
-                            else if(mouse.x > width / 2) {
-                                controllerFlickable.contentY = Math.min(controllerFlickable.contentHeight - controllerFlickable.height, controllerFlickable.contentY + controllerFlickable.height - (Constants.GridHeight * 1.5));
-                            }
+                        else if(mouse.x > width / 2) {
+                            controllerFlickable.pageDown();
                         }
                     }
                     else if(base.state === "readermode") {
                         if ( Math.abs(xDiff) > Math.abs(yDiff) ) {
                             if( oldX > mouseX) {
                                 // left
-                                controllerFlickable.contentY = wordsCanvas.pagePosition(wordsCanvas.currentPageNumber + 1) + 1;
+                                controllerFlickable.pageDown();
                             } else {
                                 // right
-                                if(wordsCanvas.currentPageNumber === 1) {
-                                    controllerFlickable.contentY = wordsCanvas.pagePosition(wordsCanvas.documentModel.rowCount()) + 1;
-                                }
-                                else {
-                                    controllerFlickable.contentY = wordsCanvas.pagePosition(wordsCanvas.currentPageNumber - 1) + 1;
-                                }
+                                controllerFlickable.pageUp()
                             }
                         } else {
-                            if( oldY > mouseY) {/*up*/ }
-                            else {/*down*/ }
+                            if( oldY > mouseY) {
+                                // up
+                                controllerFlickable.pageDown();
+                            }
+                            else {
+                                // down
+                                controllerFlickable.pageUp();
+                            }
                         }
                     }
                     controllerItem.pageChanging = false;
@@ -147,13 +133,13 @@ Item {
         target: controllerFlickable;
         property: "contentY";
         value: bgScrollArea.contentY;
-        when: bgScrollArea.verticalVelocity !== 0;
+        when: controllerFlickable.verticalVelocity === 0;
     }
     Binding {
         target: bgScrollArea;
         property: "contentY";
         value: controllerFlickable.contentY;
-        when: controllerFlickable.verticalVelocity !== 0;
+        when: bgScrollArea.verticalVelocity === 0;
     }
     Item {
         id: wordsContentItem;
@@ -202,6 +188,28 @@ Item {
 
             boundsBehavior: controllerItem.documentSize.width < base.width ? Flickable.StopAtBounds : Flickable.DragAndOvershootBounds;
 
+            function pageUp() {
+                if(base.state === "readermode") {
+                    if(wordsCanvas.currentPageNumber === 1) {
+                        controllerFlickable.contentY = wordsCanvas.pagePosition(wordsCanvas.documentModel.rowCount()) + 1;
+                    }
+                    else {
+                        controllerFlickable.contentY = wordsCanvas.pagePosition(wordsCanvas.currentPageNumber - 1) + 1;
+                    }
+                }
+                else {
+                    controllerFlickable.contentY = Math.max(0, controllerFlickable.contentY - controllerFlickable.height + (Constants.GridHeight * 1.5));
+                }
+            }
+            function pageDown() {
+                if(base.state === "readermode") {
+                    controllerFlickable.contentY = wordsCanvas.pagePosition(wordsCanvas.currentPageNumber + 1) + 1;
+                }
+                else {
+                    controllerFlickable.contentY = Math.min(controllerFlickable.contentHeight - controllerFlickable.height, controllerFlickable.contentY + controllerFlickable.height - (Constants.GridHeight * 1.5));
+                }
+            }
+
             Image {
                 height: Settings.theme.adjustedPixel(40);
                 width: Settings.theme.adjustedPixel(40);
@@ -246,14 +254,21 @@ Item {
                 width: controllerFlickable.width;
 
                 onPinchStarted: {
+                    if(base.state === "readermode") { return; }
                     controllerItem.beginZoomGesture();
                     base.canvasInteractionStarted();
                 }
                 onPinchUpdated: {
+                    if(base.state === "readermode") { return; }
                     var newCenter = mapToItem( controllerFlickable, pinch.center.x, pinch.center.y );
                     controllerItem.zoomBy(pinch.scale - pinch.previousScale, Qt.point( newCenter.x, newCenter.y ) );
                 }
-                onPinchFinished: { controllerItem.endZoomGesture(); controllerFlickable.returnToBounds(); controllerItem.returnToBounds(); }
+                onPinchFinished: {
+                    if(base.state === "readermode") { return; }
+                    controllerItem.endZoomGesture();
+                    controllerFlickable.returnToBounds();
+                    controllerItem.returnToBounds();
+                }
 
                 MouseArea {
                     anchors.fill: parent;
@@ -295,33 +310,29 @@ Item {
                             // This might be done in onClick, but that then eats the events, which is not useful
                             // for reader mode we'll accept clicks here, to simulate an e-reader style navigation mode
                             if(mouse.x < width / 4) {
-                                if(wordsCanvas.currentPageNumber === 1) {
-                                    controllerFlickable.contentY = wordsCanvas.pagePosition(wordsCanvas.documentModel.rowCount()) + 1;
-                                }
-                                else {
-                                    controllerFlickable.contentY = wordsCanvas.pagePosition(wordsCanvas.currentPageNumber - 1) + 1;
-                                }
+                                controllerFlickable.pageUp();
                             }
                             else if(mouse.x > width * 3 / 4) {
-                                controllerFlickable.contentY = wordsCanvas.pagePosition(wordsCanvas.currentPageNumber + 1) + 1;
+                                controllerFlickable.pageDown();
                             }
                         }
                         else if( Math.abs(xDiff) > Math.abs(yDiff) ) {
                             if( oldX > mouseX) {
                                 // left
-                                controllerFlickable.contentY = wordsCanvas.pagePosition(wordsCanvas.currentPageNumber + 1) + 1;
+                                controllerFlickable.pageDown();
                             } else {
                                 // right
-                                if(wordsCanvas.currentPageNumber === 1) {
-                                    controllerFlickable.contentY = wordsCanvas.pagePosition(wordsCanvas.documentModel.rowCount()) + 1;
-                                }
-                                else {
-                                    controllerFlickable.contentY = wordsCanvas.pagePosition(wordsCanvas.currentPageNumber - 1) + 1;
-                                }
+                                controllerFlickable.pageUp();
                             }
                         } else {
-                            if( oldY > mouseY) {/*up*/ }
-                            else {/*down*/ }
+                            if( oldY > mouseY) {
+                                // up
+                                controllerFlickable.pageDown();
+                            }
+                            else {
+                                // down
+                                controllerFlickable.pageUp();
+                            }
                         }
                         controllerItem.pageChanging = false;
                     }
@@ -405,7 +416,12 @@ Item {
         },
         Transition {
             to: "readermode";
-            ScriptAction { script: d.zoomToFit(); }
+            ScriptAction {
+                script: {
+                    d.zoomToFit();
+                    controllerFlickable.contentY = wordsCanvas.pagePosition(wordsCanvas.currentPageNumber) + 1;
+                }
+            }
         },
         Transition {
             from: "readermode";
