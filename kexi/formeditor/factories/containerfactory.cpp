@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2006-2010 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2006-2014 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -25,7 +25,6 @@
 #include <QFrame>
 #include <QDomDocument>
 #include <QTabBar>
-#include <QSplitter>
 #include <QLayout>
 #include <QPainter>
 #include <QPaintEvent>
@@ -512,72 +511,6 @@ ContainerFactory::ContainerFactory(QObject *parent, const QVariantList &)
     wFrame->setDescription(i18n("A simple frame container"));
     addClass(wFrame);
 
-    KFormDesigner::WidgetInfo *wWidgetStack = new KFormDesigner::WidgetInfo(this);
-    wWidgetStack->setIconName(koIconName("widgetstack"));
-    wWidgetStack->setClassName("QStackedWidget");
-    wWidgetStack->addAlternateClassName("QWidgetStack");
-    wWidgetStack->setName(i18n("Widget Stack"));
-    wWidgetStack->setNamePrefix(
-        i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "widgetStack"));
-    wWidgetStack->setDescription(i18n("A container with multiple pages"));
-    addClass(wWidgetStack);
-
-    KFormDesigner::WidgetInfo *wHBox = new KFormDesigner::WidgetInfo(this);
-    wHBox->setIconName(koIconName("frame"));
-    wHBox->setClassName("HBox");
-    wHBox->setName(i18n("Horizontal Box"));
-    wHBox->setNamePrefix(
-        i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "horizontalBox"));
-    wHBox->setDescription(i18n("A simple container to group widgets horizontally"));
-    addClass(wHBox);
-
-    KFormDesigner::WidgetInfo *wVBox = new KFormDesigner::WidgetInfo(this);
-    wVBox->setIconName(koIconName("frame"));
-    wVBox->setClassName("VBox");
-    wVBox->setName(i18n("Vertical Box"));
-    wVBox->setNamePrefix(
-        i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "verticalBox"));
-    wVBox->setDescription(i18n("A simple container to group widgets vertically"));
-    addClass(wVBox);
-
-    KFormDesigner::WidgetInfo *wGrid = new KFormDesigner::WidgetInfo(this);
-    wGrid->setIconName(koIconName("frame"));
-    wGrid->setClassName("Grid");
-    wGrid->setName(i18n("Grid Box"));
-    wGrid->setNamePrefix(
-        i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "gridBox"));
-    wGrid->setDescription(i18n("A simple container to group widgets in a grid"));
-    addClass(wGrid);
-
-    KFormDesigner::WidgetInfo *wSplitter = new KFormDesigner::WidgetInfo(this);
-    wSplitter->setIconName(koIconNameNeededWithSubs("an icon for a container to allow user to resize its children",
-                                                    "splitter","frame"));
-    wSplitter->setClassName("Splitter");
-    wSplitter->addAlternateClassName("QSplitter");
-    wSplitter->setName(i18n("Splitter"));
-    wSplitter->setNamePrefix(
-        i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "splitter"));
-    wSplitter->setDescription(i18n("A container that enables user to resize its children"));
-    wSplitter->setAutoSaveProperties(QList<QByteArray>() << "orientation");
-    addClass(wSplitter);
-
-    KFormDesigner::WidgetInfo *wHFlow = new KFormDesigner::WidgetInfo(this);
-    wHFlow->setIconName(koIconNameNeededWithSubs("icon for a container to group widgets by rows","hflow","frame"));
-    wHFlow->setClassName("HFlow");
-    wHFlow->setName(i18n("Row Layout"));
-    wHFlow->setNamePrefix(
-        i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "rowLayout"));
-    wHFlow->setDescription(i18n("A simple container to group widgets by rows"));
-    addClass(wHFlow);
-
-    KFormDesigner::WidgetInfo *wVFlow = new KFormDesigner::WidgetInfo(this);
-    wVFlow->setIconName(koIconNameNeededWithSubs("icon for a container to group widgets by columns","vflow","frame"));
-    wVFlow->setClassName("VFlow");
-    wVFlow->setName(i18n("Column Layout"));
-    wVFlow->setNamePrefix(
-        i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "columnLayout"));
-    wVFlow->setDescription(i18n("A simple container to group widgets by columns"));
-    addClass(wVFlow);
 //! @todo
 #if 0
     KFormDesigner::WidgetInfo *wSubForm = new KFormDesigner::WidgetInfo(this);
@@ -621,6 +554,7 @@ ContainerFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
                                   KFormDesigner::Container *container,
                                   CreateWidgetOptions options)
 {
+    Q_UNUSED(options);
     kDebug() << c;
     QWidget *w = 0;
     bool createContainer = false;
@@ -683,14 +617,6 @@ ContainerFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
     } else if (c == "SubForm") {
         w = new SubForm(container->form(), p);
 #endif
-    } else if (c == "QSplitter") {
-        QSplitter *split = new QSplitter(p);
-        w = split;
-        if (0 == (options & WidgetFactory::AnyOrientation)) {
-            split->setOrientation(
-                (options & WidgetFactory::VerticalOrientation) ? Qt::Vertical : Qt::Horizontal);
-        }
-        createContainer = true;
     }
 
     if (w) {

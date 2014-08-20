@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 by Lucijan Busch <lucijan@kde.org>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2009 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2009-2014 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -53,9 +53,6 @@
 #include <koproperty/Property.h>
 #include <koproperty/Set.h>
 
-#ifndef KEXI_NO_FORM_SPRING_ELEMENT
-# include "spring.h"
-#endif
 #include "formIO.h"
 #include "form.h"
 #include "widgetlibrary.h"
@@ -231,22 +228,6 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
     wLineEdit->setDescription(i18n("A widget to input text"));
     addClass(wLineEdit);
 
-#ifndef KEXI_NO_FORM_SPRING_ELEMENT
-    KFormDesigner::WidgetInfo *wSpring = new KFormDesigner::WidgetInfo(this);
-    wSpring->setIconName(koIconName("spring"));
-    wSpring->setClassName("Spring");
-    wSpring->setName(i18n("Spring"));
-    wSpring->setNamePrefix(
-        i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "spring"));
-    wSpring->setDescription(i18n("A spring to place between widgets"));
-    wSpring->setAutoSaveProperties(QList<QByteArray>() << "orientation");
-    wSpring->setInternalProperty("orientationSelectionPopup", true);
-    wSpring->setInternalProperty("orientationSelectionPopup:horizontalIcon", "spring");
-    wSpring->setInternalProperty("orientationSelectionPopup:verticalIcon", "spring_vertical");
-    wSpring->setInternalProperty("orientationSelectionPopup:horizontalText", i18n("Insert &Horizontal Spring"));
-    wSpring->setInternalProperty("orientationSelectionPopup:verticalText", i18n("Insert &Vertical Spring"));
-    addClass(wSpring);
-#endif
 
     KFormDesigner::WidgetInfo *wPushButton = new KFormDesigner::WidgetInfo(this);
     wPushButton->setIconName(koIconName("button"));
@@ -511,7 +492,7 @@ StdWidgetFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
         if (container->form()->interactiveMode()) {
             tw->setColumnCount(1);
             tw->setHeaderItem(new QTreeWidetItem(tw));
-            tw->headerItem()->setText(1, i18n("Column 1"));
+            tw->headerItem()->setText(1, futureI18n("Column 1"));
         }
         lw->setRootIsDecorated(true);
     }
@@ -534,16 +515,6 @@ StdWidgetFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
     else if (c == "Line")
         w = new Line(options & WidgetFactory::VerticalOrientation
                      ? Qt::Vertical : Qt::Horizontal, p);
-
-#ifndef KEXI_NO_FORM_SPRING_ELEMENT
-    else if (c == "Spring") {
-        w = new Spring(p);
-        if (0 == (options & WidgetFactory::AnyOrientation))
-            static_cast<Spring*>(w)->setOrientation(
-                (options & WidgetFactory::VerticalOrientation)
-                ? Qt::Vertical : Qt::Horizontal);
-    }
-#endif
 
     if (w) {
         w->setObjectName(n);
@@ -909,11 +880,6 @@ StdWidgetFactory::isPropertyVisibleInternal(const QByteArray &classname,
     }
     else if (classname == "CustomWidget") {
     }
-#ifndef KEXI_NO_FORM_SPRING_ELEMENT
-    else if (classname == "Spring") {
-        return Spring::isPropertyVisible(property);
-    }
-#endif
     else if (classname == "KexiPictureLabel") {
         if (   property == "text" || property == "indent"
             || property == "textFormat" || property == "font"

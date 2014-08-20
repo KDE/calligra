@@ -1287,10 +1287,6 @@ void Form::slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& p)
         saveAlignProperty(property);
         return;
     }
-    else if (property == "layout" || property == "layoutMargin" || property == "layoutSpacing") {
-        saveLayoutProperty(property, value);
-        return;
-    }
 
     // make sure we are not already undoing -> avoid recursion
     if (d->isUndoing && !d->isRedoing) {
@@ -1636,9 +1632,6 @@ void Form::createPropertiesForWidget(QWidget *w)
     d->propertySet.addProperty(newProp = new KoProperty::Property("this:className",
             w->metaObject()->className()));
     newProp->setVisible(false);
-    if (tree->container()) { // we are a container -> layout property
-        createLayoutProperty(tree);
-    }
 }
 
 void Form::updatePropertyValue(ObjectTreeItem *tree, const char *property, const QMetaProperty &meta)
@@ -2173,95 +2166,6 @@ void Form::clearWidgetContent()
     }
 }
 
-void Form::layoutHBox()
-{
-    createLayout(HBox);
-}
-
-void Form::layoutVBox()
-{
-    createLayout(VBox);
-}
-
-void Form::layoutGrid()
-{
-    createLayout(Grid);
-}
-
-void Form::layoutHSplitter()
-{
-    createLayout(HSplitter);
-}
-
-void Form::layoutVSplitter()
-{
-    createLayout(VSplitter);
-}
-
-void Form::layoutHFlow()
-{
-    createLayout(HFlow);
-}
-
-void Form::layoutVFlow()
-{
-    createLayout(VFlow);
-}
-
-void Form::createLayout(Form::LayoutType layoutType)
-{
-    QWidgetList *list = selectedWidgets();
-    // if only one widget is selected (a container), we modify its layout
-    if (list->isEmpty()) {//sanity check
-        kWarning() << "list is empty!";
-        return;
-    }
-    if (list->count() == 1) {
-        ObjectTreeItem *item = objectTree()->lookup(list->first()->objectName());
-        if (!item || !item->container() || !d->propertySet.contains("layout")) {
-            return;
-        }
-        d->propertySet.changeProperty("layout", Container::layoutTypeToString(layoutType));
-        return;
-    }
-
-    QWidget *parent = list->first()->parentWidget();
-    foreach (QWidget *w, *list) {
-        //kDebug() << "comparing widget" << w->objectName()
-        //         << "whose parent is" << w->parentWidget()->objectName()
-        //         << "insteaed of" << parent->objectName();
-        if (w->parentWidget() != parent) {
-            KMessageBox::sorry(widget()->topLevelWidget(), 
-                i18n("<b>Cannot create the layout.</b>\n"
-                     "All selected widgets must have the same parent."));
-            //kDebug() << "widgets don't have the same parent widget";
-            return;
-        }
-    }
-    Command *com = new CreateLayoutCommand(*this, layoutType, *list);
-    addCommand(com);
-}
-
-void Form::breakLayout()
-{
-    if (!objectTree()) {
-        return;
-    }
-    Container *container = activeContainer();
-    QByteArray c(container->widget()->metaObject()->className());
-
-    if ((c == "Grid") || (c == "VBox") || (c == "HBox") || (c == "HFlow") || (c == "VFlow")) {
-        Command *com = new BreakLayoutCommand(*container);
-        addCommand(com);
-    }
-    else { // normal container
-        if (selectedWidgets()->count() == 1)
-            d->propertySet.changeProperty("layout", "NoLayout");
-        else
-            container->setLayoutType(NoLayout);
-    }
-}
-
 // Alignment-related functions /////////////////////////////
 
 void Form::createAlignProperty(const QMetaProperty& meta, QWidget *widget, QWidget *subwidget)
@@ -2379,114 +2283,6 @@ void Form::saveAlignProperty(const QString &property)
     else {
         d->lastCommand = new PropertyCommand(*this, d->selected.first()->objectName().toLatin1(),
                                  subwidget->property("alignment"), valueForKeys, "alignment");
-        if (!addCommand(d->lastCommand, DontExecuteCommand)) {
-            d->lastCommand = 0;
-        }
-    }
-}
-
-// Layout-related functions  //////////////////////////
-
-void Form::createLayoutProperty(ObjectTreeItem *item)
-{
-    Container *container = item->container();
-    if (!container || !objectTree() || !container->widget()) {
-        return;
-    }
-    // special containers have no 'layout' property, as it should not be changed
-    QByteArray className = container->widget()->metaObject()->className();
-    if ((className == "HBox") || (className == "VBox") || (className == "Grid"))
-        return;
-
-    QStringList list;
-    QString value = Container::layoutTypeToString(container->layoutType());
-
-    list << "NoLayout" << "HBox" << "VBox" << "Grid" << "HFlow" << "VFlow";
-
-    KoProperty::Property *p = new KoProperty::Property("layout", d->createValueList(0, list), value,
-            i18n("Container's Layout"), i18n("Container's Layout"));
-    p->setVisible(container->form()->library()->advancedPropertiesVisible());
-    d->propertySet.addProperty(p);
-
-    updatePropertyValue(item, "layout");
-
-    p = new KoProperty::Property("layoutMargin", container->layoutMargin(),
-                                 i18n("Layout Margin"), i18n("Layout Margin"));
-    d->propertySet.addProperty(p);
-    updatePropertyValue(item, "layoutMargin");
-    if (container->layoutType() == NoLayout)
-        p->setVisible(false);
-
-    p = new KoProperty::Property("layoutSpacing", container->layoutSpacing(),
-                                 i18n("Layout Spacing"), i18n("Layout Spacing"));
-    d->propertySet.addProperty(p);
-    updatePropertyValue(item, "layoutSpacing");
-    if (container->layoutType() == NoLayout)
-        p->setVisible(false);
-}
-
-void Form::saveLayoutProperty(const QString &prop, const QVariant &value)
-{
-    Container *container = 0;
-    if (!objectTree()) {
-        return;
-    }
-    ObjectTreeItem *item = objectTree()->lookup( d->selected.first()->objectName() );
-    if (!item)
-        return;
-    container = item->container();
-
-    if (prop == "layout") {
-        LayoutType type = Container::stringToLayoutType(value.toString());
-
-        if (d->lastCommand && d->lastCommand->propertyName() == "layout" && !d->isUndoing) {
-            d->lastCommand->setValue(value);
-        }
-        else if (!d->isUndoing)  {
-            d->lastCommand = new LayoutPropertyCommand(*this, 
-                d->selected.first()->objectName().toLatin1(),
-                d->propertySet["layout"].oldValue(), value);
-            if (!addCommand(d->lastCommand, DontExecuteCommand)) {
-                d->lastCommand = 0;
-            }
-        }
-
-        container->setLayoutType(type);
-        bool show = (type != NoLayout);
-        if (show != d->propertySet["layoutMargin"].isVisible())  {
-            d->propertySet["layoutMargin"].setVisible(show);
-            d->propertySet["layoutSpacing"].setVisible(show);
-#if 0
-//! @todo
-            showPropertySet(this, true/*force*/);
-#endif
-        }
-        return;
-    }
-
-    if (prop == "layoutMargin" && container->layout()) {
-        container->setLayoutMargin(value.toInt());
-        container->layout()->setMargin(value.toInt());
-    } else if (prop == "layoutSpacing" && container->layout())  {
-        container->setLayoutSpacing(value.toInt());
-        container->layout()->setSpacing(value.toInt());
-    }
-
-    ObjectTreeItem *tree = objectTree()->lookup( d->selected.first()->objectName() );
-    if (tree && d->propertySet[ prop.toLatin1()].isModified())
-        tree->addModifiedProperty(prop.toLatin1(), d->propertySet[prop.toLatin1()].oldValue());
-
-    if (d->isUndoing)
-        return;
-
-    if (d->lastCommand && (QString(d->lastCommand->propertyName()) == prop)) {
-        d->lastCommand->setValue(value);
-    }
-    else  {
-        d->lastCommand = new PropertyCommand(*this, 
-            d->selected.first()->objectName().toLatin1(),
-            d->propertySet[ prop.toLatin1()].oldValue(), value, prop.toLatin1()
-        );
         if (!addCommand(d->lastCommand, DontExecuteCommand)) {
             d->lastCommand = 0;
         }

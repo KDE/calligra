@@ -236,15 +236,8 @@ void KexiFormManager::createActions(KActionCollection* collection)
             << "library_widget_KexiFrame"
             << "library_widget_QGroupBox"
             << "library_widget_KFDTabWidget"
-            << QString() //sep
             << "library_widget_Line"
-#ifndef KEXI_NO_FORM_LAYOUTS
-            << "library_widget_Spacer"
-#endif
-#ifndef KEXI_NO_FORM_SPRING_ELEMENT
-            << "library_widget_Spring"
             << QString() //sep
-#endif
 #ifdef CAN_USE_QTWEBKIT
             << "library_widget_WebBrowserWidget"
 #endif
