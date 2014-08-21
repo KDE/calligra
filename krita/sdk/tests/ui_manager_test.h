@@ -49,8 +49,8 @@ public:
         undoStore = new KisSurrogateUndoStore();
         image = createImage(undoStore);
 
-        part = new KisPart2();
-        doc = new KisDoc2(part);
+        part = KisPart2::instance();
+        doc = qobject_cast<KisDoc2*>(part->createDocument());
         doc->setCurrentImage(image);
 
 
