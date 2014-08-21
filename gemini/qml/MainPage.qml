@@ -132,7 +132,12 @@ Page {
                 anchors.fill: parent;
                 onClicked: {
                     closeToolbarMenus();
-                    mainPageStack.pop();
+                    if(viewLoader.item.canvas.document.isModified()) {
+                        saveBeforeExitDialog.show();
+                    }
+                    else {
+                        mainPageStack.pop();
+                    }
                 }
             }
         }
@@ -464,6 +469,21 @@ Page {
                     opacity: parent.checked ? 0.96 : 0;
                     Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
                 }
+            }
+        }
+    }
+    Dialog {
+        id: saveBeforeExitDialog;
+        title: "Save?";
+        message: "The document was modified. Would you like to save it before closing it?";
+        buttons: [ "Save", "Discard", "Cancel" ]
+        onButtonClicked: {
+            if(button === 0) {
+                viewLoader.item.canvas.document.save();
+            }
+            else if(button === 1) {
+                viewLoader.item.canvas.document.setModified(false);
+                mainPageStack.pop();
             }
         }
     }
