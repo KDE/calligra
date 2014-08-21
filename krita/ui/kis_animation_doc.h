@@ -21,7 +21,7 @@
 #define KIS_ANIMATION_DOC_H
 
 #include "kis_doc2.h"
-#include "kis_animation_part.h"
+#include "kis_part2.h"
 #include "kranimstore/kis_animation_store.h"
 #include "kis_animation.h"
 
@@ -33,7 +33,7 @@ class KisKranimLoader;
 #define KIS_ANIM_MIME_TYPE "application/x-krita-animation"
 
 /**
- * This class represents te animation document.
+ * This class represents the animation document.
  *
  * It handles all the frame and layer events from
  * coming from the timeline and onion skin dockers.
@@ -45,7 +45,7 @@ class KRITAUI_EXPORT KisAnimationDoc : public KisDoc2
 {
     Q_OBJECT
 public:
-    KisAnimationDoc();
+    KisAnimationDoc(const KisPart2 *part);
     virtual ~KisAnimationDoc();
     void frameSelectionChanged(QRect frame, bool savePreviousFrame=true);
 

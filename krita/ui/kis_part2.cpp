@@ -30,6 +30,8 @@
 #include "KisFlipbookSelector.h"
 #include "kis_flipbook.h"
 #include "kis_resource_server_provider.h"
+#include "kis_animation_selector.h"
+#include "kis_animation_doc.h"
 
 #include <KoColorSpaceEngine.h>
 #include <KoCanvasBase.h>
@@ -75,8 +77,12 @@ KisPart2::~KisPart2()
 KoDocument *KisPart2::createDocument() const
 {
     KoDocument *doc = new KisDoc2(this);
-    qDebug() << "Created document" << doc;
     return doc;
+}
+
+KisAnimationDoc *KisPart2::createAnimationDoc() const
+{
+    return new KisAnimationDoc(this);
 }
 
 KoView *KisPart2::createViewInstance(KoDocument *document, KoMainWindow *parent)
@@ -162,6 +168,16 @@ QList<KoPart::CustomDocumentWidgetItem> KisPart2::createCustomDocumentWidgets(QW
         widgetList << item;
     }
 #endif
+    {
+        KoPart::CustomDocumentWidgetItem item;
+        item.widget = new KisAnimationSelector(parent, w, h, cfg.defImageResolution(), cfg.defColorModel(), cfg.defaultColorDepth(), cfg.defColorProfile(),
+                                               i18n("untitled-animation"));
+
+        item.title = i18n("Animation");
+        item.icon = "tool-animator";
+        widgetList << item;
+    }
+
     return widgetList;
 }
 

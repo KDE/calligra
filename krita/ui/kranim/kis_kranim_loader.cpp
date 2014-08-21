@@ -39,12 +39,12 @@ KisKranimLoader::~KisKranimLoader()
     delete m_d;
 }
 
-void KisKranimLoader::loadBinaryData(KoStore *store, KisImageWSP image, const QString &uri, bool external)
+void KisKranimLoader::loadBinaryData(KoStore */*store*/, KisImageWSP /*image*/, const QString &/*uri*/, bool /*external*/)
 {
 
 }
 
-KisImageWSP KisKranimLoader::loadXML(const KoXmlElement &elem)
+KisImageWSP KisKranimLoader::loadXML(const KoXmlElement &/*elem*/)
 {
     KisImageWSP image = 0;
     return image;

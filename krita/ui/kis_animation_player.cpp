@@ -21,7 +21,7 @@
 #include "kis_image.h"
 #include "kis_paint_layer.h"
 #include "kis_group_layer.h"
-#include "kis_animation_part.h"
+#include "kis_part2.h"
 #include "kranim/kis_kranim_loader.h"
 #include "kranimstore/kis_animation_store.h"
 

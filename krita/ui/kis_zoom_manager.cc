@@ -228,7 +228,7 @@ void KisZoomManager::slotZoomChanged(KoZoomMode::Mode mode, qreal zoom)
     Q_UNUSED(zoom);
     m_view->canvasBase()->notifyZoomChanged();
 
-    qreal humanZoom = zoom * 100.0;
+//    qreal humanZoom = zoom * 100.0;
 
 // XXX: KOMVC -- this is very irritating in MDI mode
 //    if (m_view->parentView()) {

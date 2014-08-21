@@ -76,7 +76,7 @@ void KisAnimationStore::closeFile()
     m_currentFile->close();
 }
 
-QIODevice* KisAnimationStore::getDevice(QString location)
+QIODevice* KisAnimationStore::getDevice(QString /*location*/)
 {
     return m_currentFile;
 }

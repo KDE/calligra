@@ -238,12 +238,12 @@ QColor KisAnimation::nextOnionSkinColor()
     return m_nextOnionSkinColor;
 }
 
-void KisAnimation::load(const QString &url)
+void KisAnimation::load(const QString &/*url*/)
 {
 
 }
 
-void KisAnimation::save(const QString &url)
+void KisAnimation::save(const QString &/*url*/)
 {
 
 }

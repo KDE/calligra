@@ -17,7 +17,7 @@
  */
 
 #include "kis_animation_doc.h"
-#include "kis_animation_part.h"
+#include "kis_part2.h"
 #include "kis_animation.h"
 #include "kis_paint_layer.h"
 #include "kis_image.h"
@@ -77,8 +77,8 @@ public:
     QHash<int, bool> visibilityStates;
 };
 
-KisAnimationDoc::KisAnimationDoc()
-    : KisDoc2(new KisAnimationPart)
+KisAnimationDoc::KisAnimationDoc(const KisPart2 *part)
+    : KisDoc2(part)
     , d(new KisAnimationDocPrivate())
 {
     setMimeType(APP_MIMETYPE);
@@ -936,7 +936,10 @@ KisKranimLoader* KisAnimationDoc::kranimLoader()
 void KisAnimationDoc::updateActiveFrame()
 {
     this->setPreActivatedNode(d->currentFrame);
-    dynamic_cast<KisView2*>(this->documentPart()->views().at(0))->nodeManager()->slotNonUiActivatedNode(d->currentFrame);
+    QPointer<KoView> view = this->documentPart()->views().first();
+    if (view) {
+        dynamic_cast<KisView2*>(view.data())->nodeManager()->slotNonUiActivatedNode(d->currentFrame);
+    }
 }
 
 KisAnimationStore* KisAnimationDoc::getStore()
@@ -946,7 +949,7 @@ KisAnimationStore* KisAnimationDoc::getStore()
 
 KisAnimation* KisAnimationDoc::getAnimation()
 {
-    return dynamic_cast<KisAnimationPart*>(this->documentPart())->animation();
+    return KisPart2::instance()->animation();
 }
 
 void KisAnimationDoc::play()

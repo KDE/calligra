@@ -132,7 +132,6 @@ set(kritaui_LIB_SRCS
     kis_view_plugin.cpp
     kis_animation_factory.cpp
     kis_animation_doc.cpp
-    kis_animation_part.cpp
     kis_animation_player.cpp
     kis_onion_skin_loader.cpp
     kis_canvas_controls_manager.cpp

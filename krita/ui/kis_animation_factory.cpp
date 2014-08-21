@@ -45,7 +45,7 @@
 
 #include <flake/kis_shape_selection.h>
 #include "kis_animation_doc.h"
-#include "kis_animation_part.h"
+#include "kis_part2.h"
 #include "kis_animator_aboutdata.h"
 
 #include <kisexiv2/kis_exiv2.h>
@@ -104,9 +104,7 @@ QObject* KisAnimationFactory::create(const char* /*iface*/, QWidget* /*parentWid
     Q_UNUSED( args );
     Q_UNUSED( keyword);
 
-    KisAnimationDoc* doc = new KisAnimationDoc();
-
-    return doc->documentPart();
+    return KisPart2::instance();
 }
 
 KAboutData* KisAnimationFactory::aboutData()
