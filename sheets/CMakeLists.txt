@@ -235,6 +235,7 @@ set (calligrasheetsodf_LIB_SRCS
     DocBase.cpp
     Format.cpp
     Formula.cpp
+    FunctionNameSpellingHighlighter.cpp
     GenValidationStyle.cpp
     HeaderFooter.cpp
     Localization.cpp
