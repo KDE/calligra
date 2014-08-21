@@ -154,7 +154,10 @@ Page {
                 text: "SAVE";
                 textColor: Settings.theme.color("components/toolbar/text");
                 font: Settings.theme.font("toolbar");
-                onClicked: closeToolbarMenus();
+                onClicked: {
+                    closeToolbarMenus();
+                    viewLoader.item.canvas.document.save();
+                }
             }
             CohereButton {
                 anchors.verticalCenter: parent.verticalCenter;
