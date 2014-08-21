@@ -479,7 +479,7 @@ public:
     /**
      * Returns true if this document or any of its internal child documents are modified.
      */
-    bool isModified() const;
+    Q_INVOKABLE bool isModified() const;
 
     /**
      * Returns true during loading (openUrl can be asynchronous)
@@ -579,7 +579,7 @@ public:
      *  Sets the modified flag on the document. This means that it has
      *  to be saved or not before deleting it.
      */
-    virtual void setModified(bool _mod);
+    Q_INVOKABLE virtual void setModified(bool _mod);
 
     /**
      * Initialize an empty document using default values
