@@ -2222,10 +2222,20 @@ void View::slotAutoScroll()
         emit autoScroll(scrollDistance);
     }
 }
-void View::splitViewSheet()
+void View::splitViewSheet()// new functionality added for splitting the view
 {
-  QSplitter *splitter = new QSplitter;
-  Canvas *obj = new Canvas;
+  QSplitter *splitter = new QSplitter; // a new QSplitter pointer which will take two canvas objects
+   Canvas *obj = new Canvas(this);
+  CanvasBase *obj1 = new CanvasBase(CanvasBase::Doc());
+ register Sheet * const sheet = obj1->activeSheet();
+  const QRect visibleRect = obj1->visibleCells();
+  const QPointF topLeft(sheet->columnPosition(visibleRect.left()), sheet->rowPosition(visibleRect.top()));
+  sheetView(sheet)->setPaintCellRange(visibleRect);
+  sheetView(sheet)->paintCells(*painter, paintRect, topLeft, this);// specifying the two vertical portions
+
+  splitter.addWidget(obj);// widgets added to the splitter
+  splitter.addWidget(obj);
+  splitter->show();
 }
 
 

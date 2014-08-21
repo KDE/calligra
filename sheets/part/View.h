@@ -228,6 +228,7 @@ public Q_SLOTS:
      * Shows the sheet properties dialog.
      */
     void sheetProperties();
+    void splitViewSheet(); //declaration for the split view function
     //END Actions
 
     /**
