@@ -11,6 +11,8 @@
  </Menu>k
 
  <Menu name="edit"><text>&amp;Edit</text>
+     <Merge/>
+     <Separator/>
   <Action name="edit_cut"/>
   <Action name="edit_copy"/>
   <Action name="copy_merged"/>

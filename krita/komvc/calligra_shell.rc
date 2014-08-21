@@ -38,11 +38,9 @@
  <Menu name="edit" noMerge="1"><text>&amp;Edit</text>
   <Action name="edit_undo"/>
   <Action name="edit_redo"/>
-  <Separator/>
-  <Merge/>
 </Menu>
 
- <Merge />
+ <Merge/>
 
  <Menu name="settings" noMerge="1"><text>&amp;Settings</text>
   <DefineGroup name="settings_top"/>
