@@ -715,7 +715,7 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
             //create startup dialog for reuse because it can be used again after conn err.
             d->startupDialog = new KexiStartupDialog(
                 KexiStartupDialog::Everything, KexiStartupDialog::CheckBoxDoNotShowAgain,
-                Kexi::connset(), /*fake:*/ *(new KexiProjectSet), 0);
+                Kexi::connset(), 0);
         }
         if (d->startupDialog->exec() != QDialog::Accepted)
             return true;
@@ -780,15 +780,6 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
                 delete d->startupDialog;
                 d->startupDialog = 0;
             }
-        } else if (r == KexiStartupDialog::OpenRecentResult) {
-//   kDebug() << "Recent project --------";
-            const KexiProjectData *data = d->startupDialog->selectedProjectData();
-            if (data) {
-//    kDebug() << "Selected project: database=" << data->databaseName()
-//     << " connection=" << data->constConnectionData()->serverInfoString();
-            }
-            //! @todo
-            return data != 0;
         }
 
         if (!KexiStartupData::projectData())

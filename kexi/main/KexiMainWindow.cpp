@@ -3653,10 +3653,8 @@ void KexiMainWindow::slotToolsCompactDatabase()
     const bool projectWasOpened = d->prj;
 
     if (!d->prj) {
-        KexiProjectSet fake;
         KexiStartupDialog dlg(
-            KexiStartupDialog::OpenExisting, 0, Kexi::connset(), fake,
-            this);
+            KexiStartupDialog::OpenExisting, 0, Kexi::connset(), this);
 
         if (dlg.exec() != QDialog::Accepted)
             return;
