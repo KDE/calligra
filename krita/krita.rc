@@ -10,7 +10,7 @@
   <Action name="createTemplate"/>
  </Menu>k
 
- <Menu name="Edit"><text>&amp;Edit</text>
+ <Menu name="edit"><text>&amp;Edit</text>
   <Action name="edit_cut"/>
   <Action name="edit_copy"/>
   <Action name="copy_merged"/>
@@ -34,7 +34,7 @@
   </Menu>
  </Menu>
 
- <Menu name="View"><text>&amp;View</text>
+ <Menu name="view"><text>&amp;View</text>
   <Action name="view_show_just_the_canvas"/>
   <Action name="view_fullscreen"/>
   <Action name="mirror_canvas"/>
@@ -151,7 +151,7 @@
 	<Action name="other_filters"/>
 </Menu>
 
-<Menu name="Tools"><text>&amp;Tools</text>
+<Menu name="tools"><text>&amp;Tools</text>
 </Menu>
 
 <Menu name="settings"><text>Settings</text>
