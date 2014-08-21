@@ -842,7 +842,7 @@ void KexiMainWindow::setupActions()
     //! @todo d->action_data_execute->setToolTip(i18n(""));
     //! @todo d->action_data_execute->setWhatsThis(i18n(""));
 
-#ifndef KEXI_SHOW_UNIMPLEMENTED
+#ifdef KEXI_SHOW_UNIMPLEMENTED
     action = createSharedAction(i18n("&Filter"), koIconName("view-filter"), KShortcut(), "data_filter");
     setActionVolatile(action, true);
 #endif
