@@ -50,7 +50,7 @@ Item {
 
     property string tooltip: "";
 
-    width: label.width + 40;
+    width: label.width + Settings.theme.adjustedPixel(40);
     height: label.height + Constants.DefaultMargin * 4;
 
     Rectangle {
