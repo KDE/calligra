@@ -2,6 +2,14 @@
 [Desktop Entry]
 Type=Service
 Name=Krita Animation Documents
+Name[cs]=Dokumenty animace Krita
+Name[en_GB]=Krita Animation Documents
+Name[nl]=Animatiedocumenten van Krita
+Name[pt]=Documentos do Krita Animação
+Name[sk]=Dokumenty animácií Krita
+Name[sv]=Krita-animeringsdokument
+Name[uk]=Документи анімації Krita
+Name[x-test]=xxKrita Animation Documentsxx
 
 
 X-KDE-ServiceTypes=ThumbCreator
