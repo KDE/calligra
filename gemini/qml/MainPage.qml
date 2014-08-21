@@ -164,14 +164,28 @@ Page {
                 text: "UNDO";
                 textColor: Settings.theme.color("components/toolbar/text");
                 font: Settings.theme.font("toolbar");
-                onClicked: closeToolbarMenus();
+                enabled: typeof(undoaction) !== "undefined" ? undoaction.enabled : false;
+                onClicked: {
+                    closeToolbarMenus();
+                    undoaction.trigger();
+                }
             }
-//             Button {
-//                 height: parent.height;
-//                 width: height * 2;
-//                 text: "Redo";
-//                 textColor: Settings.theme.color("components/toolbar/text");
-//             }
+            Button {
+                height: parent.height;
+                width: height * 2;
+                text: "REDO";
+                textColor: Settings.theme.color("components/toolbar/text");
+                font: Settings.theme.font("toolbar");
+                enabled: typeof(redoaction) !== "undefined" ? redoaction.enabled : false;
+                onClicked: {
+                    closeToolbarMenus();
+                    redoaction.trigger();
+                }
+            }
+            Item {
+                height: parent.height;
+                width: Settings.theme.adjustedPixel(8);
+            }
             CohereButton {
                 anchors.verticalCenter: parent.verticalCenter;
                 text: "DONE"

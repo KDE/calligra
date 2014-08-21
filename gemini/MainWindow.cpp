@@ -420,6 +420,10 @@ void MainWindow::switchToDesktop()
 void MainWindow::setDocAndPart(QObject* document, QObject* part)
 {
     DocumentManager::instance()->setDocAndPart(qobject_cast<KoDocument*>(document), qobject_cast<KoPart*>(part));
+    QAction* undo = qobject_cast<KoPart*>(part)->views().at(0)->action("edit_undo");
+    d->touchView->rootContext()->setContextProperty("undoaction", undo);
+    QAction* redo = qobject_cast<KoPart*>(part)->views().at(0)->action("edit_redo");
+    d->touchView->rootContext()->setContextProperty("redoaction", redo);
 }
 
 void MainWindow::documentChanged()
