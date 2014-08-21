@@ -1818,7 +1818,7 @@ void Form::createContextMenu(QWidget *w, Container *container, const QPoint& men
         separatorNeeded = true;
     }
 
-#ifdef KEXI_DEBUG_GUI
+#ifdef KFD_SIGSLOTS
     if (!multiple && (d->features & EnableEvents)) {
         if (separatorNeeded)
             menu.addSeparator();
