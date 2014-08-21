@@ -40,11 +40,11 @@ void KisActionManagerTest::testUpdateGUI()
 
     KisAction* action = new KisAction("dummy", this);
     action->setActivationFlags(KisAction::ACTIVE_DEVICE);
-    view->parentView()->actionManager()->addAction("dummy", action, view->actionCollection());
+    view->parentView()->actionManager()->addAction("dummy", action, mainWindow->actionCollection());
 
     KisAction* action2 = new KisAction("dummy", this);
     action2->setActivationFlags(KisAction::ACTIVE_SHAPE_LAYER);
-    view->parentView()->actionManager()->addAction("dummy", action2, view->actionCollection());
+    view->parentView()->actionManager()->addAction("dummy", action2, mainWindow->actionCollection());
     
     view->parentView()->actionManager()->updateGUI();
     QVERIFY(!action->isEnabled());
@@ -68,7 +68,7 @@ void KisActionManagerTest::testCondition()
     KisAction* action = new KisAction("dummy", this);
     action->setActivationFlags(KisAction::ACTIVE_DEVICE);
     action->setActivationConditions(KisAction::ACTIVE_NODE_EDITABLE);
-    view->parentView()->actionManager()->addAction("dummy", action, view->actionCollection());
+    view->parentView()->actionManager()->addAction("dummy", action, mainWindow->actionCollection());
 
     KisPaintLayerSP paintLayer1 = new KisPaintLayer(doc->image(), "paintlayer1", OPACITY_OPAQUE_U8);
     doc->image()->addNode(paintLayer1);
@@ -103,10 +103,10 @@ void KisActionManagerTest::testTakeAction()
     doc->documentPart()->addView(view, doc);
 
     KisAction* action = new KisAction("dummy", this);
-    view->parentView()->actionManager()->addAction("dummy", action, view->actionCollection());
+    view->parentView()->actionManager()->addAction("dummy", action, mainWindow->actionCollection());
     QVERIFY(view->parentView()->actionManager()->actionByName("dummy") != 0);
 
-    view->parentView()->actionManager()->takeAction(action, view->actionCollection());
+    view->parentView()->actionManager()->takeAction(action, mainWindow->actionCollection());
     QVERIFY(view->parentView()->actionManager()->actionByName("dummy") == 0);
 }
 
