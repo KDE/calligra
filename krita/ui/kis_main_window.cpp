@@ -55,6 +55,7 @@
 #include "kis_paintop_box.h"
 #include "kis_config.h"
 #include "kis_config_notifier.h"
+#include "dialogs/kis_about_application.h"
 
 KisMainWindow::KisMainWindow(KoPart *part, const KComponentData &instance)
     : KoMainWindow(part, instance)
@@ -326,7 +327,8 @@ void KisMainWindow::newWindow()
 
 void KisMainWindow::showAboutApplication()
 {
-    QMessageBox::about(this, "Krita", i18n("Krita!!!!"));
+    KisAboutApplication dlg;
+    dlg.show();
 }
 
 QPointer<KisImageView>KisMainWindow::activeKisView()

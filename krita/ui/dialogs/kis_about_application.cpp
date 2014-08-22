@@ -1,6 +1,5 @@
 /*
- *  Copyright (c) 1999-2000 Matthias Elter  <me@kde.org>
- *  Copyright (c) 2003-2014 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2014 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,11 +15,9 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_ABOUT_DATA_H_
-#define KIS_ABOUT_DATA_H_
+#include "kis_about_application.h"
 
-#include <kaboutdata.h>
-
-KAboutData *newKritaAboutData();
-
-#endif // KIS_ABOUT_DATA_H_
+KisAboutApplication::KisAboutApplication(QWidget *parent) :
+    QDialog(parent)
+{
+}

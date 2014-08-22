@@ -48,6 +48,7 @@ set(kritaui_LIB_SRCS
     canvas/kis_image_pyramid.cpp
     canvas/kis_qpainter_canvas_widget_factory.cpp
     canvas/kis_infinity_manager.cpp
+    dialogs/kis_about_application.cpp
     dialogs/kis_dlg_adj_layer_props.cc
     dialogs/kis_dlg_adjustment_layer.cc
     dialogs/kis_dlg_filter.cpp
@@ -69,6 +70,7 @@ set(kritaui_LIB_SRCS
     flake/kis_shape_selection_canvas.cpp
     flake/kis_shape_selection_model.cpp
     flake/kis_take_all_shapes_command.cpp
+    kis_aboutdata.cpp
     kis_autogradient.cc
     kis_bookmarked_configurations_editor.cc
     kis_bookmarked_configurations_model.cc
