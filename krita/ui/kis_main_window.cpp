@@ -327,8 +327,8 @@ void KisMainWindow::newWindow()
 
 void KisMainWindow::showAboutApplication()
 {
-    KisAboutApplication dlg;
-    dlg.show();
+    KisAboutApplication dlg(componentData().aboutData(), this);
+    dlg.exec();
 }
 
 QPointer<KisImageView>KisMainWindow::activeKisView()

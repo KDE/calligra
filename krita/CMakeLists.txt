@@ -159,10 +159,7 @@ kde4_add_plugin(kritapart ${kritapart_PART_SRCS})
 target_link_libraries(kritapart kritaui)
 install(TARGETS kritapart DESTINATION ${PLUGIN_INSTALL_DIR})
 
-set(krita_KDEINIT_SRCS main.cc kis_splash_screen.cpp)
-kde4_add_ui_files(krita_KDEINIT_SRCS
-    wdgsplash.ui
-)
+set(krita_KDEINIT_SRCS main.cc)
 
 if(WIN32 AND USE_BREAKPAD)
     set(krita_KDEINIT_SRCS ${krita_KDEINIT_SRCS} kis_crash_handler.cpp)
@@ -179,7 +176,7 @@ if (Q_WS_MAC)
 endif (Q_WS_MAC)
 
 target_link_libraries(kdeinit_krita kritaui ${BREAKPAD_LIBS})
-target_link_libraries(krita kdeinit_krita)
+target_link_libraries(krita kdeinit_krita kritaui)
 
 install(TARGETS krita ${INSTALL_TARGETS_DEFAULT_ARGS})
 install(TARGETS kdeinit_krita ${INSTALL_TARGETS_DEFAULT_ARGS})

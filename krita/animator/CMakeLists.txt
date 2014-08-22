@@ -5,10 +5,7 @@ kde4_add_plugin(kritaanimationpart ${kritaanimationpart_PART_SRCS})
 target_link_libraries(kritaanimationpart kritaui)
 install(TARGETS kritaanimationpart DESTINATION ${PLUGIN_INSTALL_DIR})
 
-set(kritaanimation_KDEINIT_SRCS main.cpp "${CMAKE_CURRENT_SOURCE_DIR}/../kis_splash_screen.cpp")
-kde4_add_ui_files(kritaanimation_KDEINIT_SRCS
-    "${CMAKE_CURRENT_SOURCE_DIR}/../wdgsplash.ui"
-)
+set(kritaanimation_KDEINIT_SRCS main.cpp )
 
 kde4_add_app_icon(kritaanimation_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../pics/app/hi*-app-calligrakrita.png")
 kde4_add_kdeinit_executable(kritaanimation ${kritaanimation_KDEINIT_SRCS})

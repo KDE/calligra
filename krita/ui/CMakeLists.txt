@@ -92,6 +92,7 @@ set(kritaui_LIB_SRCS
     kis_factory2.cc
     kis_file_layer.cpp
     kis_safe_document_loader.cpp
+    kis_splash_screen.cpp
     kis_filter_manager.cc
     kis_filters_model.cc
     kis_flipbook.cpp
@@ -355,6 +356,7 @@ kde4_add_ui_files(kritaui_LIB_SRCS
     input/config/kis_mouse_input_editor.ui
     input/config/kis_wheel_input_editor.ui
     input/config/kis_key_input_editor.ui
+    wdgsplash.ui
 )
 
 kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS} )

@@ -25,7 +25,9 @@
 class QPixmap;
 class KUrl;
 
-class KisSplashScreen : public QWidget, public Ui::WdgSplash
+#include "krita_export.h"
+
+class KRITAUI_EXPORT KisSplashScreen : public QWidget, public Ui::WdgSplash
 {
     Q_OBJECT
 public:

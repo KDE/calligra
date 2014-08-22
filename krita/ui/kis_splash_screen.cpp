@@ -137,5 +137,7 @@ void KisSplashScreen::linkClicked(const QString &link)
     if (KoPart::partList().size() > 0) {
         KoPart::partList().first()->openExistingFile(KUrl(link));
     }
-    close();
+    if (isTopLevel()) {
+        close();
+    }
 }

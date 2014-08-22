@@ -20,11 +20,13 @@
 
 #include <QDialog>
 
+class KAboutData;
+
 class KisAboutApplication : public QDialog
 {
     Q_OBJECT
 public:
-    explicit KisAboutApplication(QWidget *parent = 0);
+    explicit KisAboutApplication(const KAboutData *aboutData, QWidget *parent = 0);
 
 signals:
 

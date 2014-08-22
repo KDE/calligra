@@ -329,6 +329,9 @@
      <property name="pixmap">
       <pixmap>../../2.8/krita/data/splash/splash_screen.xpm</pixmap>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
      <property name="indent">
       <number>0</number>
      </property>
