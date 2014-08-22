@@ -44,6 +44,7 @@ KisAboutApplication::KisAboutApplication(const KAboutData *aboutData, QWidget *p
     vlayout->addWidget(wdg);
 
     KisSplashScreen *splash = new KisSplashScreen(aboutData->version(), splash_screen_xpm);
+    splash->setWindowFlags(Qt::Widget);
     splash->setFixedSize(splash->sizeHint());
     wdg->addTab(splash, i18n("About"));
     setMinimumSize(wdg->sizeHint());
