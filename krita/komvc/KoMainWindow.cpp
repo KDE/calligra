@@ -142,6 +142,9 @@ public:
         m_activeWidget = 0;
 
         noCleanup = false;
+
+        undo = 0;
+        redo = 0;
     }
 
     ~KoMainWindowPrivate() {
@@ -250,7 +253,7 @@ KoMainWindow::KoMainWindow(KoPart *part, const KComponentData &componentData)
     : KXmlGuiWindow()
     , d(new KoMainWindowPrivate(part, this))
 {
-    qDebug() << "Constructing KoMainWindow";
+
 #ifdef Q_OS_MAC
     #if QT_VERSION < 0x050000
     MacSupport::addFullscreen(this);
@@ -441,7 +444,6 @@ KoMainWindow::KoMainWindow(KoPart *part, const KComponentData &componentData)
     foreach(QAction* action, actionCollection()->actions()) {
         action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     }
-    qDebug() << "KoMainWindow constructed";
 }
 
 void KoMainWindow::setNoCleanup(bool noCleanup)
@@ -1884,8 +1886,10 @@ void KoMainWindow::createMainwindowGUI()
 {
     if (d->mainWindowGuiIsBuilt) return;
 
-    if ( isHelpMenuEnabled() && !d->m_helpMenu )
+    if ( isHelpMenuEnabled() && !d->m_helpMenu ) {
         d->m_helpMenu = new KHelpMenu( this, componentData().aboutData(), false, actionCollection() );
+        connect(d->m_helpMenu, SIGNAL(showAboutApplication()), SLOT(showAboutApplication()));
+    }
 
     QString f = xmlFile();
     setXMLFile( KStandardDirs::locate( "config", "ui/ui_standards.rc", componentData() ) );

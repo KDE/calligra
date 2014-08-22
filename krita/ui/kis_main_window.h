@@ -64,6 +64,10 @@ private slots:
     void newView(QObject *document);
     void newWindow();
 
+protected slots:
+
+    virtual void showAboutApplication();
+
 private:
     QPointer<KisImageView>activeKisView();
 
