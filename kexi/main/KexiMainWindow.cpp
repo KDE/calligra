@@ -122,6 +122,7 @@
 # define KexiVDebug if (0) kDebug()
 #endif
 
+#undef HAVE_KNEWSTUFF
 #ifdef HAVE_KNEWSTUFF
 #include <knewstuff/downloaddialog.h>
 #include "kexinewstuff.h"
