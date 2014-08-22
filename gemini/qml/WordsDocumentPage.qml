@@ -69,6 +69,7 @@ Item {
         anchors.fill: parent;
         contentHeight: controllerItem.documentSize.height;
         interactive: base.state !== "readermode";
+        boundsBehavior: controllerFlickable.boundsBehavior;
         Item {
             width: parent.width;
             height: controllerItem.documentSize.height;
