@@ -26,7 +26,7 @@
 
 
 KisImageCommand::KisImageCommand(const KUndo2MagicString& name, KisImageWSP image, KUndo2Command *parent)
-    : KisUndo2Command(name, parent)
+    : KUndo2Command(name, parent)
     , m_image(image)
 {
 }

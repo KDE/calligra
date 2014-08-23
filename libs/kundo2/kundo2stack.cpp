@@ -265,7 +265,10 @@ void KUndo2Command::undo()
 
 QString KUndo2Command::actionText() const
 {
-    return d->actionText;
+    if(d->actionText!=NULL)
+        return d->actionText;
+    else
+        return QString();
 }
 
 /*!
@@ -745,8 +748,9 @@ void KUndo2QStack::push(KUndo2Command *cmd)
                 m_lastMergedIndex = m_command_list.size()-1;
             }
         }
+        m_index = m_command_list.size();
     }   
-    m_index = m_command_list.size();
+
 
     if (try_merge && cur->mergeWith(cmd)) {
         delete cmd;
@@ -972,7 +976,8 @@ QString KUndo2QStack::undoText() const
 {
     if (!m_macro_stack.isEmpty())
         return QString();
-    if (m_index > 0)
+    if (m_index > 0 && m_command_list.at(m_index-1)!=NULL)
+
         return m_command_list.at(m_index - 1)->actionText();
     return QString();
 }
