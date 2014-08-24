@@ -373,11 +373,11 @@ void KisPaintopBox::resourceSelected(KoResource* resource)
     if (preset) {
         if (!preset->settings()->isLoadable())
             return;
-        bool saveDirtyPreset = preset->dirtyPreset();
+        bool saveDirtyPreset = preset->isPresetDirty();
         setCurrentPaintop(preset->paintOp(), preset);
         m_optionWidget->writeConfiguration(const_cast<KisPaintOpSettings*>(m_resourceProvider->currentPreset()->settings().data()));
-        preset->setDirtyPreset(saveDirtyPreset);
-        m_resourceProvider->currentPreset()->setDirtyPreset(saveDirtyPreset);
+        preset->setPresetDirty(saveDirtyPreset);
+        m_resourceProvider->currentPreset()->setPresetDirty(saveDirtyPreset);
         m_presetsPopup->setPresetImage(preset->image());
         m_presetsPopup->resourceSelected(resource);
     }
@@ -604,7 +604,7 @@ void KisPaintopBox::slotCanvasResourceChanged(int /*key*/, const QVariant& /*v*/
         }
         m_presetsChooserPopup->canvasResourceChanged(preset.data(), preset);
         if (preset) {
-            m_presetsPopup->setReloadEnabled(preset->dirtyPreset());
+            m_presetsPopup->setReloadEnabled(preset->isPresetDirty());
         }
         if (m_resourceProvider->currentCompositeOp() != m_currCompositeOpID) {
             QString compositeOp = m_resourceProvider->currentCompositeOp();
@@ -652,7 +652,7 @@ void KisPaintopBox::slotSaveActivePreset()
     newPreset->setName(name);
 
     m_presetsPopup->changeSavePresetButtonText(true);
-    newPreset->setDirtyPreset(false);
+    newPreset->setPresetDirty(false);
     m_presetsPopup->resourceSelected(newPreset.data());
     rServer->addResource(newPreset);
     foreach(const QString & tag, tags) {
@@ -820,7 +820,7 @@ void KisPaintopBox::sliderChanged(int n)
         p->setProperty("OpacityValue", opacity);
     }
     if (!m_dirtyPresetsEnabled) {
-        m_resourceProvider->currentPreset()->setDirtyPreset(false);
+        m_resourceProvider->currentPreset()->setPresetDirty(false);
     }
     m_presetsPopup->resourceSelected(m_resourceProvider->currentPreset().data());
 
@@ -976,7 +976,7 @@ void KisPaintopBox::slotReloadPreset()
         m_optionWidget->setConfiguration(preset->settings());
         m_presetsPopup->setPaintOpSettingsWidget(m_optionWidget);
         m_optionWidget->writeConfiguration(const_cast<KisPaintOpSettings*>(m_resourceProvider->currentPreset()->settings().data()));
-        m_resourceProvider->currentPreset()->setDirtyPreset(false);
+        m_resourceProvider->currentPreset()->setPresetDirty(false);
         m_presetsPopup->resourceSelected(preset.data());
 
     }
@@ -987,7 +987,7 @@ void KisPaintopBox::slotConfigurationItemChanged() // Called only when UI is cha
 {
     m_optionWidget->writeConfiguration(const_cast<KisPaintOpSettings*>(m_resourceProvider->currentPreset()->settings().data()));
     if (!m_dirtyPresetsEnabled) {
-        m_resourceProvider->currentPreset()->setDirtyPreset(false);
+        m_resourceProvider->currentPreset()->setPresetDirty(false);
     }
     m_presetsPopup->resourceSelected(m_resourceProvider->currentPreset().data());
     m_presetsPopup->updateViewSettings();
@@ -1012,7 +1012,7 @@ void KisPaintopBox::slotDropLockedOption(KisPropertiesConfiguration* p)
 {
 
     m_optionWidget->blockSignals(true);
-    bool saveDirtyPreset = m_resourceProvider->currentPreset()->dirtyPreset();
+    bool saveDirtyPreset = m_resourceProvider->currentPreset()->isPresetDirty();
     QMapIterator<QString, QVariant> i(p->getProperties());
     while (i.hasNext()) {
         i.next();
@@ -1023,7 +1023,7 @@ void KisPaintopBox::slotDropLockedOption(KisPropertiesConfiguration* p)
 
     }
     m_optionWidget->setConfiguration(m_resourceProvider->currentPreset()->settings());
-    m_resourceProvider->currentPreset()->setDirtyPreset(saveDirtyPreset);
+    m_resourceProvider->currentPreset()->setPresetDirty(saveDirtyPreset);
     slotUpdatePreset();
     m_optionWidget->blockSignals(false);
 

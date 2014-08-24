@@ -76,7 +76,7 @@ KisPaintOpPreset* KisPaintOpPreset::clone() const
     if (settings()) {
         preset->setSettings(settings()->clone());
     }
-    preset->setDirtyPreset(dirtyPreset());
+    preset->setPresetDirty(isPresetDirty());
     // only valid if we could clone the settings
     preset->setValid(settings());
 
@@ -87,11 +87,11 @@ KisPaintOpPreset* KisPaintOpPreset::clone() const
 
     return preset;
 }
-void KisPaintOpPreset::setDirtyPreset(bool value)
+void KisPaintOpPreset::setPresetDirty(bool value)
 {
     m_d->dirtyPreset = value;    
 }
-bool KisPaintOpPreset::dirtyPreset() const
+bool KisPaintOpPreset::isPresetDirty() const
 {
     return m_d->dirtyPreset;
 }
@@ -113,7 +113,7 @@ void KisPaintOpPreset::setSettings(KisPaintOpSettingsSP settings)
     Q_ASSERT(settings);
     Q_ASSERT(!settings->getString("paintop", "").isEmpty());
 
-    bool saveDirtyPreset = dirtyPreset();
+    bool saveDirtyPreset = isPresetDirty();
     if (settings) {
         m_d->settings = settings->clone();
         m_d->settings->setPreset(KisPaintOpPresetWSP(this));
@@ -121,7 +121,7 @@ void KisPaintOpPreset::setSettings(KisPaintOpSettingsSP settings)
         m_d->settings = 0;
         m_d->settings->setPreset(0);
     }
-    setDirtyPreset(saveDirtyPreset);
+    setPresetDirty(saveDirtyPreset);
 
     setValid(m_d->settings);
 }
@@ -154,7 +154,7 @@ bool KisPaintOpPreset::load()
     bool res = loadFromDevice(&file);
 
 
-    this->setDirtyPreset(false);
+    this->setPresetDirty(false);
     return res;
 
 }

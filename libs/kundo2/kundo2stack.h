@@ -110,16 +110,18 @@ public:
     virtual QTime time();
     virtual void setEndTime();
     virtual QTime endTime();
-    virtual void undoMergedCommands();
-    virtual void redoMergedCommands();
+
     virtual QVector<KUndo2Command*> mergeCommandsVector();
     virtual bool isMerged();
+    virtual void undoMergedCommands();
+    virtual void redoMergedCommands();
 
 
 
 private:
     Q_DISABLE_COPY(KUndo2Command)
     friend class KUndo2QStack;
+
 
     bool m_hasParent;
     int m_timedID;

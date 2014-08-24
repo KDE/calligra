@@ -26,7 +26,7 @@
 
 KisSavedCommandBase::KisSavedCommandBase(const KUndo2MagicString &name,
                                          KisStrokesFacade *strokesFacade)
-    : KisUndo2Command(name),
+    : KUndo2Command(name),
       m_strokesFacade(strokesFacade),
       m_skipOneRedo(true)
 {

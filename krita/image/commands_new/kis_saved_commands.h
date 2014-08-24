@@ -20,7 +20,6 @@
 #define __KIS_SAVED_COMMANDS_H
 
 #include <kundo2command.h>
-#include <kisundo2command.h>
 #include "kis_types.h"
 #include "krita_export.h"
 #include "kis_stroke_job_strategy.h"
@@ -28,7 +27,7 @@
 class KisStrokesFacade;
 
 
-class KisSavedCommandBase : public KisUndo2Command
+class KisSavedCommandBase : public KUndo2Command
 {
 public:
     KisSavedCommandBase(const KUndo2MagicString &name, KisStrokesFacade *strokesFacade);
@@ -58,8 +57,6 @@ public:
     void setTimedID(int timedID);
     virtual void undoMergedCommands();
     virtual void redoMergedCommands();
-
-
 
     virtual bool timedMergeWith(KUndo2Command *other);
     virtual QVector<KUndo2Command*> mergeCommandsVector();

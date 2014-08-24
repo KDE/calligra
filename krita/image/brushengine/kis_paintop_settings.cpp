@@ -214,7 +214,7 @@ void KisPaintOpSettings::setCanvasRotation(qreal angle)
     setProperty("runtimeCanvasRotation", angle);
     setPropertyNotSaved("runtimeCanvasRotation");
     if (this->preset()) {
-        this->preset()->setDirtyPreset(false);
+        this->preset()->setPresetDirty(false);
     }
 }
 
@@ -227,7 +227,7 @@ void KisPaintOpSettings::setCanvasMirroring(bool xAxisMirrored, bool yAxisMirror
     setPropertyNotSaved("runtimeCanvasMirroredY");
 
     if (this->preset()) {
-        this->preset()->setDirtyPreset(false);
+        this->preset()->setPresetDirty(false);
     }
 }
 
@@ -235,7 +235,7 @@ void KisPaintOpSettings::setProperty(const QString & name, const QVariant & valu
 {
     if (value != KisPropertiesConfiguration::getProperty(name)) {
         if (this->preset()) {
-            this->preset()->setDirtyPreset(true);
+            this->preset()->setPresetDirty(true);
         }
     }
 

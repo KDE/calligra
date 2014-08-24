@@ -344,7 +344,10 @@ void KUndo2Command::setTimedID(int value)
 
 bool KUndo2Command::timedMergeWith(KUndo2Command *other)
 {
-    m_mergeCommandsVector.append(other);
+    if(other->timedId() == this->timedId() && other->timedId()!=-1 )
+        m_mergeCommandsVector.append(other);
+    else
+        return false;
     return true;
 }
 void KUndo2Command::setTime()
@@ -368,10 +371,27 @@ void KUndo2Command::undoMergedCommands()
 {
 
     undo();
+    if (!mergeCommandsVector().isEmpty()) {
+        QVectorIterator<KUndo2Command*> it(mergeCommandsVector());
+        it.toFront();
+        while (it.hasNext()) {
+            KUndo2Command* cmd =  dynamic_cast<KUndo2Command*>(it.next());
+            cmd->undoMergedCommands();
+        }
+    }
 }
 
 void KUndo2Command::redoMergedCommands()
 {
+    if (!mergeCommandsVector().isEmpty()) {
+
+        QVectorIterator<KUndo2Command*> it(mergeCommandsVector());
+        it.toBack();
+        while (it.hasPrevious()) {
+            KUndo2Command* cmd = dynamic_cast<KUndo2Command*>(it.previous());
+            cmd->redoMergedCommands();
+        }
+    }
     redo();
 }
 QVector<KUndo2Command*> KUndo2Command::mergeCommandsVector()

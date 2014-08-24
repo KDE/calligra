@@ -51,7 +51,7 @@ public:
 
 
 KisTransactionData::KisTransactionData(const KUndo2MagicString& name, KisPaintDeviceSP device, bool resetSelectionOutlineCache, KUndo2Command* parent)
-    : KisUndo2Command(name, parent)
+    : KUndo2Command(name, parent)
 
     , m_d(new Private())
 {

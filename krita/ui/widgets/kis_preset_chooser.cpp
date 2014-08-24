@@ -96,7 +96,7 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
 
         painter->drawText(pixSize.width() + 10, option.rect.y() + option.rect.height() - 10, preset->name());
     }
-    if(preset->dirtyPreset())
+    if(preset->isPresetDirty())
     {
         KIcon *i = new KIcon("addlayer");
         QPixmap pixmap = i->pixmap(QSize(15,15));

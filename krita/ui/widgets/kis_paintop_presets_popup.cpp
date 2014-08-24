@@ -303,7 +303,7 @@ void KisPaintOpPresetsPopup::resourceSelected(KoResource* resource)
 {
     KisPaintOpPreset* preset = dynamic_cast<KisPaintOpPreset*>(resource);
     QPalette palette;
-    if(preset->dirtyPreset())
+    if(preset->isPresetDirty())
        {
         palette.setColor(QPalette::Base, QColor(255,200,200));
         palette.setColor(QPalette::Text, Qt::black);
