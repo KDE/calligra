@@ -107,9 +107,9 @@ KexiFindDialog::KexiFindDialog(QWidget* parent)
     connect(m_btnClose, SIGNAL(clicked()), this, SLOT(slotCloseClicked()));
     connect(m_btnReplace, SIGNAL(clicked()), this, SIGNAL(replaceNext()));
     connect(m_btnReplaceAll, SIGNAL(clicked()), this, SIGNAL(replaceAll()));
-    connect(m_textToFind, SIGNAL(activated(const QString&)), this, SLOT(addToFindHistory()));
+    connect(m_textToFind, SIGNAL(activated()), this, SLOT(addToFindHistory()));
     connect(m_btnFind, SIGNAL(clicked()), this, SLOT(addToFindHistory()));
-    connect(m_textToReplace, SIGNAL(activated(const QString&)), this, SLOT(addToReplaceHistory()));
+    connect(m_textToReplace, SIGNAL(activated()), this, SLOT(addToReplaceHistory()));
     connect(m_btnReplace, SIGNAL(clicked()), this, SLOT(addToReplaceHistory()));
     connect(m_btnReplaceAll, SIGNAL(clicked()), this, SLOT(addToReplaceHistory()));
     // clear message after the text is changed
