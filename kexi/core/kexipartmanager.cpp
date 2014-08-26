@@ -95,17 +95,19 @@ PartClass* Manager::Private::part(Info *i, QHash<QString, PartClass*> &partDict)
         KexiPluginLoader loader(i->ptr(), "X-Kexi-Class");
         if (loader.majorVersion() != KEXI_PART_VERSION) {
             i->setBroken(true,
-                i18n("Incompatible plugin \"%1\" version: found version %2, expected version %3.",
-                    i->objectName(),
-                    QString::number(loader.majorVersion()),
-                    QString::number(KEXI_PART_VERSION)));
+                i18nc("@info", "Incompatible plugin <resource>%1</resource> version: "
+                      "found version %2, expected version %3.",
+                      i->objectName(),
+                      loader.majorVersion(),
+                      KEXI_PART_VERSION));
             manager->setError(i->errorMessage());
             return 0;
         }
         p = loader.createPlugin<PartClass>(manager);
         if (!p) {
             kWarning() << "failed";
-            i->setBroken(true, i18n("Error while loading plugin \"%1\"", i->objectName()));
+            i->setBroken(true, i18nc("@info", "Error while loading plugin <resource>%1</resource>",
+                                     i->objectName()));
             manager->setError(i->errorMessage());
             return 0;
         }
@@ -253,7 +255,7 @@ Info* Manager::infoForClass(const QString &className)
     Info *i = realClass.isEmpty() ? 0 : d->partsByClass.value(realClass);
     if (i)
         return i;
-    setError(i18n("No plugin for class \"%1\"", realClass));
+    setError(i18nc("@info", "No plugin for class <resource>%1</resource>", realClass));
     return 0;
 }
 

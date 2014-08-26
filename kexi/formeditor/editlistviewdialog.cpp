@@ -47,7 +47,7 @@ EditListViewDialog::EditListViewDialog(QWidget *parent)
     setObjectName("editlistview_dialog");
     setModal(true);
     setFaceType(Tabbed);
-    setWindowTitle(i18n("Edit Listview Contents"));
+    setWindowTitle(i18nc("@title:window", "Edit Listview Contents"));
 
     ///////// Setup the "Contents" page /////////////////////////////
     m_columnsPageItem = addPage(new QWidget(this), i18n("Columns"));

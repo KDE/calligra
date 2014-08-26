@@ -367,7 +367,7 @@ QString KexiTimeFormatter::toString(const QTime& time) const
     if (d->secpos >= 0)
         s.replace("%S", QString::fromLatin1(time.second() < 10 ? "0" : "") + QString::number(time.second()));
     if (d->ampmpos >= 0)
-        s.replace("%p", ki18n( time.hour() >= 12 ? "pm" : "am" ).toString( KGlobal::locale() ));
+        s.replace("%p", time.hour() >= 12 ? i18nc("afternoon", "pm") : i18nc("before noon", "am"));
     return s;
 }
 

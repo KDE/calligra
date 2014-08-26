@@ -241,8 +241,14 @@ void KexiFormView::initForm()
         d->scrollView->setMainAreaWidget(d->dbform);
     }
     d->dbform->setObjectName(
-        i18nc("Widget name. This string will be used to name widgets of this class. "
-              "It must _not_ contain white spaces and non latin1 characters.", "form"));
+        i18nc("A prefix for identifiers of forms. Based on that, identifiers such as "
+            "form1, form2 are generated. "
+            "This string can be used to refer the widget object as variables in programming "
+            "languages or macros so it must _not_ contain white spaces and non latin1 characters, "
+            "should start with lower case letter and if there are subsequent words, these should "
+            "start with upper case letter. Example: smallCamelCase. "
+            "Moreover, try to make this prefix as short as possible.",
+            "form"));
     QPalette pal(d->dbform->palette());
     pal.setBrush(QPalette::Window, palette().brush(QPalette::Window));
     d->dbform->setPalette(pal); // avoid inheriting QPalette::Window role
@@ -1107,7 +1113,7 @@ KexiFormView::insertAutoFields(const QString& sourcePartClass, const QString& so
     QWidgetList widgetsToSelect;
     KFormDesigner::PropertyCommandGroup *group = new KFormDesigner::PropertyCommandGroup(
         fields.count() == 1
-        ? i18n("Insert AutoField widget") : i18n("Insert %1 AutoField widgets", fields.count())
+        ? futureI18n("Insert AutoField widget") : futureI18n("Insert %1 AutoField widgets", fields.count())
     );
 
     foreach(const QString& field, fields) {

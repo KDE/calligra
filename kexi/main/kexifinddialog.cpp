@@ -230,14 +230,14 @@ void KexiFindDialog::setObjectNameForCaption(const QString& name)
     d->objectName = name;
     if (d->replaceMode) {
         if (name.isEmpty())
-            setWindowTitle(i18n("Replace"));
+            setWindowTitle(i18nc("@title:window", "Replace"));
         else
-            setWindowTitle(i18n("Replace in \"%1\"", name));
+            setWindowTitle(i18nc("@title:window", "Replace in <resource>%1</resource>", name));
     } else {
         if (name.isEmpty())
-            setWindowTitle(i18n("Find"));
+            setWindowTitle(i18nc("@title:window", "Find"));
         else
-            setWindowTitle(i18n("Find in \"%1\"", name));
+            setWindowTitle(i18nc("@title:window", "Find in <resource>%1</resource>", name));
     }
 }
 

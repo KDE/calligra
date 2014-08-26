@@ -1329,7 +1329,7 @@ bool Form::isNameValid(const QString &name) const
     if (!KexiDB::isIdentifier(name)) {
         KMessageBox::sorry(widget(),
                            i18n("Could not rename widget \"%1\" to \"%2\" because "
-                                "\"%3\" is not a valid name (identifier) for a widget.\n",
+                                "\"%3\" is not a valid name (identifier) for a widget.",
                                 w->objectName(), name, name));
         d->slotPropertyChangedEnabled = false;
         d->propertySet["objectName"].resetValue();
@@ -1340,7 +1340,7 @@ bool Form::isNameValid(const QString &name) const
     if (objectTree()->lookup(name)) {
         KMessageBox::sorry(widget(),
                            i18n("Could not rename widget \"%1\" to \"%2\" "
-                                "because a widget with the name \"%3\" already exists.\n",
+                                "because a widget with the name \"%3\" already exists.",
                                 w->objectName(), name, name));
         d->slotPropertyChangedEnabled = false;
         d->propertySet["objectName"].resetValue();
@@ -1798,7 +1798,7 @@ void Form::createContextMenu(QWidget *w, Container *container, const QPoint& men
             sigMenu->addAction(m.signature());
         }
         QAction *eventsSubMenuAction = menu.addMenu(sigMenu);
-        eventsSubMenuAction->setText(i18n("Events"));
+        eventsSubMenuAction->setText(futureI18n("Events"));
         if (list.isEmpty())
             eventsSubMenuAction->setEnabled(false);
         connect(sigMenu, SIGNAL(triggered(QAction*)),

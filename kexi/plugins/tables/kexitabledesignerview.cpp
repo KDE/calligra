@@ -440,7 +440,7 @@ KexiTableDesignerView::createPropertySet(int row, const KexiDB::Field& field, bo
 
     set->addProperty(prop = new KoProperty::Property("rowSourceType",
             lookupFieldSchema ? lookupFieldSchema->rowSource().typeName() : QString(),
-            i18n("Record Source\nType")));
+            i18nc("Record source type (in two rows)", "Record Source\nType")));
     prop->setVisible(false);
 
     set->addProperty(prop = new KoProperty::Property("boundColumn",
@@ -897,13 +897,12 @@ void KexiTableDesignerView::slotPropertyChanged(KoProperty::Set& set, KoProperty
     Command *toplevelCommand = 0;
     if (pname == "autoIncrement" && property.value().toBool() == true) {
         if (set["primaryKey"].value().toBool() == false) {//we need PKEY here!
-            QString msg = QLatin1String("<p>")
-              + i18n("Setting autonumber requires primary key to be set for current field.") + "</p>";
+            QString msg =
+              i18n("<para>Setting autonumber requires primary key to be set for current field.</para>");
             if (d->primaryKeyExists)
-                msg += (QLatin1String("<p>") + i18n("Previous primary key will be removed.") + "</p>");
-            msg += (QLatin1String("<p>")
-                    + i18n("Do you want to create primary key for current field? "
-                           "Click \"Cancel\" to cancel setting autonumber.") + "</p>");
+                msg += i18n("<para>Previous primary key will be removed.</para>");
+            msg += i18n("<para>Do you want to create primary key for current field? "
+                        "Click <interface>Cancel</interface> to cancel setting autonumber.</para>");
 
             if (KMessageBox::Yes == KMessageBox::questionYesNo(this, msg,
                 i18n("Setting Autonumber Field"),
@@ -914,12 +913,12 @@ void KexiTableDesignerView::slotPropertyChanged(KoProperty::Set& set, KoProperty
                 //switchPrimaryKey(set, true);
                 // this will be toplevel command
                 setAutonumberCommand = new Command(
-                    kundo2_i18n("Assign autonumber for field \"%1\"", set["name"].value().toString()), 0, this);
+                    kundo2_i18n("Set autonumber for field <resource>%1</resource>", set["name"].value().toString()), 0, this);
                 toplevelCommand = setAutonumberCommand;
                 d->setPropertyValueIfNeeded(set, "autoIncrement", QVariant(true), setAutonumberCommand);
             } else {
                 setAutonumberCommand = new Command(
-                    kundo2_i18n("Remove autonumber from field \"%1\"", set["name"].value().toString()),
+                    kundo2_i18n("Remove autonumber from field <resource>%1</resource>", set["name"].value().toString()),
                     0, this);
                 d->setPropertyValueIfNeeded(set, "autoIncrement", QVariant(false), setAutonumberCommand,
                                             true /*forceAddCommand*/, false/*rememberOldValue*/);
@@ -937,7 +936,7 @@ void KexiTableDesignerView::slotPropertyChanged(KoProperty::Set& set, KoProperty
         setPrimaryKey = false;
         // this will be toplevel command
         Command *unsetIndexedOrUniquOrNotNullCommand = new Command(
-            kundo2_i18n("Set \"%1\" property for field \"%2\"",
+            kundo2_i18n("Set <resource>%1</resource> property for field <resource>%2</resource>",
                  property.caption(), set["name"].value().toString()), 0, this);
         toplevelCommand = unsetIndexedOrUniquOrNotNullCommand;
         d->setPropertyValueIfNeeded(set, pname, QVariant(false), unsetIndexedOrUniquOrNotNullCommand);
@@ -978,7 +977,7 @@ void KexiTableDesignerView::slotPropertyChanged(KoProperty::Set& set, KoProperty
         typeName = KexiDB::Field::typeName(KexiDB::Field::typeForString(property.value().toString()));
         Command* changeFieldTypeCommand = new Command(
             kundo2_i18n(
-                "Change type for field \"%1\" to \"%2\"",
+                "Change type for field <resource>%1</resource> to <resource>%2</resource>",
                 set["name"].value().toString(), typeName), 0, this);
         d->setPropertyValueIfNeeded(set, "subType", property.value(), property.oldValue(),
                                     changeFieldTypeCommand);
@@ -1018,7 +1017,7 @@ void KexiTableDesignerView::slotPropertyChanged(KoProperty::Set& set, KoProperty
             //primary key implies some rules
             //this action contains subactions
             Command * setPrimaryKeyCommand = new Command(
-                kundo2_i18n("Set primary key for field \"%1\"",
+                kundo2_i18n("Set primary key for field <resource>%1</resource>",
                      set["name"].value().toString()), toplevelCommand, this);
             if (!toplevelCommand) {
                  toplevelCommand = setPrimaryKeyCommand;
@@ -1042,7 +1041,7 @@ void KexiTableDesignerView::slotPropertyChanged(KoProperty::Set& set, KoProperty
         else { // set PK to false
             //remember this action containing 2 subactions
             Command *setPrimaryKeyCommand = new Command(
-                kundo2_i18n("Unset primary key for field \"%1\"",
+                kundo2_i18n("Unset primary key for field <resource>%1</resource>",
                      set["name"].value().toString()), toplevelCommand, this);
             if (!toplevelCommand) {
                 toplevelCommand = setPrimaryKeyCommand;
@@ -1134,12 +1133,12 @@ tristate KexiTableDesignerView::buildSchema(KexiDB::TableSchema &schema, bool be
             kDebug() << "no primay key defined...";
         } else {
             const int questionRes = KMessageBox::questionYesNoCancel(this,
-                i18n("<p>Table \"%1\" has no <b>primary key</b> defined.</p>"
-                     "<p>Although a primary key is not required, it is needed "
+                i18n("<para>Table <resource>%1</resource> has no <b>primary key</b> defined.</para>"
+                     "<para>Although a primary key is not required, it is needed "
                      "for creating relations between database tables. "
-                     "Do you want to add primary key automatically now?</p>"
-                     "<p>If you want to add a primary key by hand, press \"Cancel\" "
-                     "to cancel saving table design.</p>", schema.name()),
+                     "Do you want a primary key to be automatically added now?</para>"
+                     "<para>If you want to add a primary key by hand, press <interface>Cancel</interface> "
+                     "to cancel saving table design.</para>", schema.name()),
                 QString(),
                 KGuiItem(i18n("&Add Primary Key"), koIconName("key")), KStandardGuiItem::no(),
                 KStandardGuiItem::cancel(),

@@ -448,9 +448,9 @@ tristate KexiWindow::switchToViewMode(
             cancelItem.setText(i18n("Do Not Switch"));
             const int res = KMessageBox::questionYesNoCancel(
                 selectedView(),
-                i18n("There are unsaved changes in object \"%1\". "
-                     "Do you want to save these changes before switching to other view?")
-                    .arg(partItem()->captionOrName()),
+                i18n("<para>There are unsaved changes in object <resource>%1</resource>.</para>"
+                     "<para>Do you want to save these changes before switching to other view?</para>",
+                     partItem()->captionOrName()),
                     i18n("Confirm Saving Changes"),
                     saveItem, dontSaveItem, cancelItem
             );

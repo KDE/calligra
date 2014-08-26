@@ -117,7 +117,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Replace All</string>
+        <string comment="Replace All Occurences">Replace All</string>
        </property>
       </widget>
      </item>
@@ -148,7 +148,7 @@
       </sizepolicy>
      </property>
      <property name="text">
-      <string>Re&amp;place with:</string>
+      <string comment="Replace all occurences with">Re&amp;place with:</string>
      </property>
      <property name="wordWrap">
       <bool>false</bool>
@@ -174,7 +174,7 @@
    <item row="2" column="0">
     <widget class="QLabel" name="textLabel2_2">
      <property name="text">
-      <string>&amp;Look in:</string>
+      <string comment="Look in field:">&amp;Look in:</string>
      </property>
      <property name="wordWrap">
       <bool>false</bool>
@@ -211,17 +211,17 @@
      </property>
      <item>
       <property name="text">
-       <string>Up</string>
+       <string comment="Search Up">Up</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>Down</string>
+       <string comment="Search Down">Down</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>All Rows</string>
+       <string comment="Look In All Rows">All Rows</string>
       </property>
      </item>
     </widget>
@@ -246,17 +246,17 @@
      </property>
      <item>
       <property name="text">
-       <string>Any Part of Field</string>
+       <string comment="Match: Any Part of Field">Any Part of Field</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>Whole Field</string>
+       <string comment="Match: Whole Field">Whole Field</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>Start of Field</string>
+       <string comment="Match: Start of Field">Start of Field</string>
       </property>
      </item>
     </widget>
@@ -267,7 +267,7 @@
       <enum>Qt::WheelFocus</enum>
      </property>
      <property name="text">
-      <string>C&amp;ase sensitive</string>
+      <string comment="Match: Case sensitive">C&amp;ase sensitive</string>
      </property>
     </widget>
    </item>
@@ -277,7 +277,7 @@
       <enum>Qt::WheelFocus</enum>
      </property>
      <property name="text">
-      <string>&amp;Whole words only</string>
+      <string comment="Match: Whole words only">&amp;Whole words only</string>
      </property>
     </widget>
    </item>

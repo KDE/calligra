@@ -107,7 +107,10 @@ void ImportTableWizard::next() {
         }
     } else if (currentPage() == m_alterTablePageItem) {
       if (m_currentDatabase->objectNames().contains(m_alterSchemaWidget->newSchema()->name(),Qt::CaseInsensitive)) {
-            KMessageBox::information(this, i18n("An object with this name already exists, please change the table name to continue.", i18n("Object Name Exists")));
+            KMessageBox::information(this,
+                i18n("<resource>%1</resource> name is already used by and existing object. "
+                     "Enter different table name to continue.", m_alterSchemaWidget->newSchema()->name()),
+                i18n("Name Already Used"));
             return;
       }
     }  
@@ -137,15 +140,15 @@ void ImportTableWizard::setupIntroPage()
     QLabel *lblIntro = new QLabel(m_introPageWidget);
     lblIntro->setAlignment(Qt::AlignTop | Qt::AlignLeft);
     lblIntro->setWordWrap(true);
-    QString msg;
-
-    msg = i18n("Table importing wizard allows you to import a table from an existing database into the current Kexi database.");
- 
-    lblIntro->setText(msg + "\n\n"
-                      + i18n("Click \"Next\" button to continue or \"Cancel\" button to exit this wizard."));
+    lblIntro->setText(
+        i18n("<para>Table Importing Assistant allows you to import a table from an existing "
+             "database into the current Kexi project.</para>"
+             "<para>Click <interface>Next</interface> button to continue or "
+             "<interface>Cancel</interface> button to exit this assistant.</para>"));
     vbox->addWidget(lblIntro);
     
-    m_introPageItem = new KPageWidgetItem(m_introPageWidget, i18n("Welcome to the Table Importing Wizard"));
+    m_introPageItem = new KPageWidgetItem(m_introPageWidget,
+                                          i18n("Welcome to the Table Importing Assistant"));
     addPage(m_introPageItem);
 }
 
@@ -256,7 +259,7 @@ void ImportTableWizard::setupAlterTablePage()
     vbox->addWidget(m_alterSchemaWidget);
     m_alterTablePageWidget->show();
     
-    m_alterTablePageItem = new KPageWidgetItem(m_alterTablePageWidget, i18n("Alter the Detected Design"));
+    m_alterTablePageItem = new KPageWidgetItem(m_alterTablePageWidget, i18n("Alter the Detected Table Design"));
     addPage(m_alterTablePageItem);
 }
 
@@ -411,10 +414,10 @@ void ImportTableWizard::arriveImportingPage()
 
     QString txt;
 
-    txt = i18n("All required information has now "
-               "been gathered. Click \"Next\" button to start importing.\n\n"
-               "Depending on size of the tables this may take some time.\n\n"
-               "You have chosen to import the following table:\n\n");
+    txt = i18n("<para>All required information has now "
+               "been gathered. Click <interface>Next</interface> button to start importing.</para>"
+               "<para>Depending on size of the tables this may take some time.</para>"
+               "<para>You have chosen to import the following table:</para>");
 
     txt += m_importTableName;
     
@@ -571,7 +574,8 @@ bool ImportTableWizard::doImport()
 
     //Create the table
     if (!m_currentDatabase->createTable(m_alterSchemaWidget->newSchema(), true)) {
-        msg.showErrorMessage(i18n("Unable to create table [%1]").arg(m_alterSchemaWidget->newSchema()->name()));
+        msg.showErrorMessage(i18n("Unable to create table <resource>%1</resource>.",
+                                  m_alterSchemaWidget->newSchema()->name()));
         return false;
     }
 

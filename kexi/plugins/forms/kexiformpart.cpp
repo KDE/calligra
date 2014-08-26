@@ -121,13 +121,13 @@ void KexiFormPart::initInstanceActions()
                        KShortcut(), "formpart_format_lower");
 
 #ifdef KEXI_SHOW_UNFINISHED
-    action = createSharedAction(Kexi::DesignViewMode, i18n("Other Widgets"), QString(),
+    action = createSharedAction(Kexi::DesignViewMode, futureI18n("Other Widgets"), QString(),
                                 KShortcut(), "other_widgets_menu", "KActionMenu");
 #endif
 
-    action = createSharedAction(Kexi::DesignViewMode, i18n("Align Widgets Position"),
+    KAction *action = createSharedAction(Kexi::DesignViewMode, i18n("Align Widgets Position"),
                                 koIconName("aoleft"), KShortcut(), "formpart_align_menu", "KActionMenu");
-    menu = static_cast<KActionMenu*>(action);
+    KActionMenu *menu = static_cast<KActionMenu*>(action);
     menu->addAction(createSharedAction(Kexi::DesignViewMode, i18n("To Left"), koIconName("aoleft"),
                                        KShortcut(), "formpart_align_to_left"));
     menu->addAction(createSharedAction(Kexi::DesignViewMode, i18n("To Right"), koIconName("aoright"),

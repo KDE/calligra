@@ -155,7 +155,7 @@ void KexiFormManager::createActions(KActionCollection* collection)
     }
     else {
         d->dragConnectionAction = new KToggleAction(
-            koIcon("signalslot"), i18n("Connect Signals/Slots"), d->collection);
+            koIcon("signalslot"), futureI18n("Connect Signals/Slots"), d->collection);
         d->dragConnectionAction->setObjectName("drag_connection");
         connect(d->dragConnectionAction, SIGNAL(triggered()),
                 this, SLOT(startCreatingConnection()));
@@ -469,7 +469,7 @@ void KexiFormManager::showFormUICode()
     KPageDialog uiCodeDialog;
     uiCodeDialog.setFaceType(KPageDialog::Tabbed);
     uiCodeDialog.setModal(true);
-    uiCodeDialog.setWindowTitle(i18n("Form's UI Code"));
+    uiCodeDialog.setWindowTitle(i18nc("@title:window", "Form's UI Code"));
     uiCodeDialog.setButtons(KDialog::Close);
     uiCodeDialog.resize(700, 600);
     KTextEdit *currentUICodeDialogEditor = new KTextEdit(&uiCodeDialog);

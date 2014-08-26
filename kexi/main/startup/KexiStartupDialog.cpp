@@ -291,7 +291,7 @@ void KexiStartupDialog::setupPageTemplates()
     QVBoxLayout *tmplyr;
 
     //- page "blank db"
-    QString clickMsg("\n\n" + i18n("Click \"OK\" button to proceed."));
+    QString clickMsg("\n\n" + i18n("Click <interface>OK</interface> button to proceed."));
     templPageWidget = new QFrame(d->templatesWidget);
     d->templPageWidgetItem_BlankDatabase = d->templatesWidget->addPage(templPageWidget,
                                            i18n("Blank Database"));

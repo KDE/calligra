@@ -86,9 +86,10 @@ KexiServerDBNamePage::KexiServerDBNamePage(QWidget* parent)
 // ----
 
 KexiTemplateSelectionPage::KexiTemplateSelectionPage(QWidget* parent)
- : KexiAssistantPage(i18n("New Project"),
-                  i18n("Kexi will create a new database project. Select blank database or template."),
-                  parent)
+ : KexiAssistantPage(i18nc("@title:window", "New Project"),
+        i18nc("@info", "Kexi will create a new database project. Select blank database."),
+        //! @todo Change to this when templates work: "Kexi will create a new database project. Select blank database or template.",
+        parent)
 {
     m_templatesList = new KexiCategorizedView;
     setFocusWidget(m_templatesList);
@@ -117,19 +118,19 @@ KexiTemplateSelectionPage::KexiTemplateSelectionPage(QWidget* parent)
 #ifdef KEXI_SHOW_UNIMPLEMENTED
     templateCategory = KexiTemplateCategoryInfo();
     templateCategory.name = "office";
-    templateCategory.caption = i18n("Office Templates");
+    templateCategory.caption = futureI18n("Office Templates");
     
     info = KexiTemplateInfo();
     info.name = "contacts";
     info.caption = i18n("Contacts");
-    info.description = i18n("Database for collecting and managing contacts");
+    info.description = futureI18n("Database for collecting and managing contacts");
     info.icon = koIcon("view-pim-contacts");
     templateCategory.addTemplate(info);
     
     info = KexiTemplateInfo();
     info.name = "movie";
     info.caption = i18n("Movie catalog");
-    info.description = i18n("Database for collecting movies");
+    info.description = futureI18n("Database for collecting movies");
     info.icon = koIcon("video-x-generic");
     templateCategory.addTemplate(info);
     templateCategories.append(templateCategory);
@@ -163,8 +164,8 @@ void KexiTemplateSelectionPage::slotItemClicked(const QModelIndex& index)
 // ----
 
 KexiProjectStorageTypeSelectionPage::KexiProjectStorageTypeSelectionPage(QWidget* parent)
- : KexiAssistantPage(i18n("Storage Method"),
-                  i18n("Select a storage method which will be used to store the new project."),
+ : KexiAssistantPage(i18nc("@title:window", "Storage Method"),
+                  i18nc("@info", "Select a storage method which will be used to store the new project."),
                   parent)
  , m_fileTypeSelected(true)
 {
@@ -201,8 +202,8 @@ static QString defaultDatabaseName()
 }
 
 KexiProjectTitleSelectionPage::KexiProjectTitleSelectionPage(QWidget* parent)
- : KexiAssistantPage(i18n("Project Caption & Filename"),
-                  i18n("Enter caption for the new project. "
+ : KexiAssistantPage(i18nc("@title:window", "Project Caption & Filename"),
+                  i18nc("@info", "Enter caption for the new project. "
                        "Filename will be created automatically based on the caption. "
                        "You can change the filename too."),
                   parent)
@@ -286,8 +287,8 @@ bool KexiProjectTitleSelectionPage::isAcceptable()
 // ----
 
 KexiProjectCreationPage::KexiProjectCreationPage(QWidget* parent)
- : KexiAssistantPage(i18n("Creating Project"),
-                  i18n("Please wait while the project is created."),
+ : KexiAssistantPage(i18nc("@title:window", "Creating Project"),
+                  i18nc("@info", "Please wait while the project is created."),
                   parent)
 {
     QVBoxLayout *vlyr = new QVBoxLayout;
@@ -309,11 +310,12 @@ KexiProjectCreationPage::~KexiProjectCreationPage()
 // ----
 
 KexiProjectConnectionSelectionPage::KexiProjectConnectionSelectionPage(QWidget* parent)
- : KexiAssistantPage(i18n("Database Connection"),
-                  i18n("Select database server's connection you wish to use to "
-                       "create a new Kexi project. "
-                       "<p>Here you may also add, edit or remove connections "
-                       "from the list."),
+ : KexiAssistantPage(i18nc("@title:window", "Database Connection"),
+                  i18nc("@info", 
+                        "<para>Select database server's connection you wish to use to "
+                        "create a new Kexi project.</para>"
+                        "<para>Here you may also add, edit or remove connections "
+                        "from the list.</para>"),
                   parent)
 {
     setBackButtonVisible(true);
@@ -353,8 +355,8 @@ KexiProjectConnectionSelectionPage::~KexiProjectConnectionSelectionPage()
 
 KexiProjectDatabaseNameSelectionPage::KexiProjectDatabaseNameSelectionPage(
     KexiNewProjectAssistant* parent)
- : KexiAssistantPage(i18n("Project Caption & Database Name"),
-                  i18n("Enter caption for the new project. "
+ : KexiAssistantPage(i18nc("@title:window", "Project Caption & Database Name"),
+                  i18nc("@info", "Enter caption for the new project. "
                        "Database name will be created automatically based on the caption. "
                        "You can change the database name too."),
                   parent)
@@ -423,9 +425,9 @@ bool KexiProjectDatabaseNameSelectionPage::setConnection(KexiDB::ConnectionData*
         m_projectSelector->setProjectSet(m_projectSetToShow);
     }
     if (conndataToShow) {
-        QString selectorLabel = i18n("Existing project databases on <b>%1 (%2)</b> database server:")
-                .arg(conndataToShow->caption)
-                .arg(conndataToShow->serverInfoString(true));
+        QString selectorLabel = i18nc("@info", 
+                                      "Existing project databases on <resource>%1 (%2)</resource> database server:",
+                                      conndataToShow->caption, conndataToShow->serverInfoString(true));
         m_projectSelector->label()->setText(selectorLabel);
     }
     return true;

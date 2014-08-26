@@ -478,7 +478,14 @@ ContainerFactory::ContainerFactory(QObject *parent, const QVariantList &)
     wTabWidget->setIncludeFileName("ktabwidget.h");
     wTabWidget->setName(i18n("Tab Widget"));
     wTabWidget->setNamePrefix(
-        i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "tabWidget"));
+        i18nc("A prefix for identifiers of tab widgets. Based on that, identifiers such as "
+              "tab1, tab2 are generated. "
+              "This string can be used to refer the widget object as variables in programming "
+              "languages or macros so it must _not_ contain white spaces and non latin1 characters, "
+              "should start with lower case letter and if there are subsequent words, these should "
+              "start with upper case letter. Example: smallCamelCase. "
+              "Moreover, try to make this prefix as short as possible.",
+              "tabWidget"));
     wTabWidget->setDescription(i18n("A widget to display multiple pages using tabs"));
     addClass(wTabWidget);
 
@@ -486,10 +493,9 @@ ContainerFactory::ContainerFactory(QObject *parent, const QVariantList &)
     wWidget->setIconName(koIconName("frame"));
     wWidget->setClassName("QWidget");
     wWidget->addAlternateClassName("ContainerWidget");
-    wWidget->setName(i18n("Basic container"));
-    wWidget->setNamePrefix(
-        i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "container"));
-    wWidget->setDescription(i18n("An empty container with no frame"));
+    wWidget->setName(/* no i18n needed */ "Basic container");
+    wWidget->setNamePrefix(/* no i18n needed */ "container");
+    wWidget->setDescription(/* no i18n needed */ "An empty container with no frame");
     addClass(wWidget);
 
     KFormDesigner::WidgetInfo *wGroupBox = new KFormDesigner::WidgetInfo(this);
@@ -498,51 +504,56 @@ ContainerFactory::ContainerFactory(QObject *parent, const QVariantList &)
     wGroupBox->addAlternateClassName("GroupBox");
     wGroupBox->setName(i18n("Group Box"));
     wGroupBox->setNamePrefix(
-        i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "groupBox"));
+        i18nc("A prefix for identifiers of group box widgets. Based on that, identifiers such as "
+              "groupBox1, groupBox2 are generated. "
+              "This string can be used to refer the widget object as variables in programming "
+              "languages or macros so it must _not_ contain white spaces and non latin1 characters, "
+              "should start with lower case letter and if there are subsequent words, these should "
+              "start with upper case letter. Example: smallCamelCase. "
+              "Moreover, try to make this prefix as short as possible.",
+              "groupBox"));
     wGroupBox->setDescription(i18n("A container to group some widgets"));
     addClass(wGroupBox);
 
     KFormDesigner::WidgetInfo *wFrame = new KFormDesigner::WidgetInfo(this);
     wFrame->setIconName(koIconName("frame"));
     wFrame->setClassName("QFrame");
-    wFrame->setName(i18n("Frame"));
-    wFrame->setNamePrefix(
-        i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "frame"));
-    wFrame->setDescription(i18n("A simple frame container"));
+    wFrame->setName(/* no i18n needed */ "Frame");
+    wFrame->setNamePrefix(/* no i18n needed */ "frame");
+    wFrame->setDescription(/* no i18n needed */ "A simple frame container");
     addClass(wFrame);
 
 //! @todo
 #if 0
-    KFormDesigner::WidgetInfo *wSubForm = new KFormDesigner::WidgetInfo(this);
-    wSubForm->setIconName(koIconName("form"));
-    wSubForm->setClassName("SubForm");
-    wSubForm->setName(i18n("Sub Form"));
-    wSubForm->setNamePrefix(
-        i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "subForm"));
-    wSubForm->setDescription(i18n("A form widget included in another Form"));
-    wSubForm->setAutoSyncForProperty("formName", false);
-    addClass(wSubForm);
+// Unused, commented-out in Kexi 2.9 to avoid unnecessary translations:
+//     KFormDesigner::WidgetInfo *wSubForm = new KFormDesigner::WidgetInfo(this);
+//     wSubForm->setIconName(koIconName("form"));
+//     wSubForm->setClassName("SubForm");
+//     wSubForm->setName(i18n("Sub Form"));
+//     wSubForm->setNamePrefix(
+//         i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "subForm"));
+//     wSubForm->setDescription(i18n("A form widget included in another Form"));
+//     wSubForm->setAutoSyncForProperty("formName", false);
+//     addClass(wSubForm);
 #endif
 
     //groupbox
-    setPropertyDescription("title", i18n("Title"));
-    setPropertyDescription("flat", i18n("Flat"));
+    setPropertyDescription("title", i18nc("'Title' property for group box", "Title"));
+    setPropertyDescription("flat", i18nc("'Flat' property for group box", "Flat"));
 
     //tab widget
     setPropertyDescription("tabPosition", i18n("Tab Position"));
-    setPropertyDescription("currentIndex", i18n("Current Page"));
+    setPropertyDescription("currentIndex", i18nc("'Current page' property for tab widget", "Current Page"));
     setPropertyDescription("tabShape", i18n("Tab Shape"));
-    setPropertyDescription("elideMode", i18nc("Tab Widget's Elide Mode", "Elide Mode"));
-    setPropertyDescription("usesScrollButtons", i18nc("Tab Widget uses scroll buttons", "Scroll Buttons"));
+    setPropertyDescription("elideMode", i18nc("Tab Widget's Elide Mode property", "Elide Mode"));
+    setPropertyDescription("usesScrollButtons", i18nc("Tab Widget's property: true if can use scroll buttons", "Scroll Buttons"));
 
-    setPropertyDescription("tabPosition", i18n("Tab Position"));
-    setPropertyDescription("tabPosition", i18n("Tab Position"));
     setPropertyDescription("tabsClosable", i18n("Closable Tabs"));
     setPropertyDescription("movable", i18n("Movable Tabs"));
     setPropertyDescription("documentMode", i18n("Document Mode"));
 
-    setValueDescription("Rounded", i18nc("for Tab Shape", "Rounded"));
-    setValueDescription("Triangular", i18nc("for Tab Shape", "Triangular"));
+    setValueDescription("Rounded", i18nc("Property value for Tab Shape", "Rounded"));
+    setValueDescription("Triangular", i18nc("Property value for Tab Shape", "Triangular"));
 }
 
 ContainerFactory::~ContainerFactory()

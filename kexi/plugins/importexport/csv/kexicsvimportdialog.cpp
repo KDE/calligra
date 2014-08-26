@@ -237,7 +237,8 @@ KexiCSVImportDialog::KexiCSVImportDialog(Mode mode, QWidget * parent)
         d(new Private)
 {
     setWindowTitle( mode == File
-        ? i18n("Import CSV Data From File"): i18n("Paste CSV Data From Clipboard") );
+        ? i18nc("@title:window", "Import CSV Data From File")
+        : i18nc("@title:window", "Paste CSV Data From Clipboard") );
     setWindowIcon(_IMPORT_ICON);
 //! @todo use "Paste CSV Data From Clipboard" caption for mode==Clipboard
     setObjectName("KexiCSVImportDialog");

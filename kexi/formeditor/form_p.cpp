@@ -255,7 +255,7 @@ void FormPrivate::initPropertiesDescription()
     propCaption["windowTitle"] = i18n("Window title");
     propCaption["text"] = i18n("Text");
     propCaption["paletteBackgroundPixmap"] = i18n("Background Pixmap");
-    propCaption["enabled"] = i18n("Enabled");
+    propCaption["enabled"] = i18nc("Propery: enabled widget", "Enabled");
     propCaption["geometry"] = i18n("Geometry");
     propCaption["sizePolicy"] = i18n("Size Policy");
     propCaption["minimumSize"] = i18n("Minimum Size");
@@ -319,7 +319,7 @@ void FormPrivate::initPropertiesDescription()
     propValCaption["TabFocus"] = i18nc("Tab (HINT: for Focus)", "Tab");
     propValCaption["ClickFocus"] = i18nc("Click (HINT: for Focus)", "Click");
     propValCaption["StrongFocus"] = i18nc("Tab/Click (HINT: for Focus)", "Tab/Click");
-    propValCaption["WheelFocus"] = i18nc("Tab/Click/MouseWheel (HINT: for Focus)", "Tab/Click/MouseWheel");
+    propValCaption["WheelFocus"] = i18nc("Tab/Click/MouseWheel (HINT: for Focus)", "Tab/Click/Mouse Wheel");
 
     propValCaption["Auto"] = i18n("Auto");
     propValCaption["AlwaysOff"] = i18n("Always Off");

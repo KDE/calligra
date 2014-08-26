@@ -78,6 +78,7 @@
 #include <db/drivermanager.h>
 #include <kexidb/dbobjectnamevalidator.h>
 #include <kexiutils/utils.h>
+#include <kexi_version.h>
 
 #include <core/KexiWindow.h>
 #include <core/KexiRecentProjects.h>
@@ -497,9 +498,9 @@ void KexiMainWindow::setupActions()
 
 #ifdef HAVE_KNEWSTUFF
     action = addAction("project_download_examples", koIcon("go-down"),
-                       i18n("&Download Example Databases..."));
-    action->setToolTip(i18n("Download example databases from the Internet"));
-    action->setWhatsThis(i18n("Downloads example databases from the Internet."));
+                       futureI18n("&Download Example Databases..."));
+    action->setToolTip(futureI18n("Download example databases from the Internet"));
+    action->setWhatsThis(futureI18n("Downloads example databases from the Internet."));
     connect(action, SIGNAL(triggered()), this, SLOT(slotGetNewStuff()));
 #endif
 
@@ -525,14 +526,13 @@ void KexiMainWindow::setupActions()
                                   i18n("Save &As..."));
     d->action_save_as->setToolTip(i18n("Save object as"));
     d->action_save_as->setWhatsThis(
-        i18n("Saves object changes from currently selected window under a new name "
-             "(within the same project)."));
+        i18n("Saves object from currently selected window under a new name (within the same project)."));
     connect(d->action_save_as, SIGNAL(triggered()), this, SLOT(slotProjectSaveAs()));
 
 #ifdef KEXI_SHOW_UNIMPLEMENTED
     ac->addAction("project_properties",
         action = d->action_project_properties = new KexiMenuWidgetAction(
-            koIcon("document-properties"), i18n("Project Properties"), this));
+            koIcon("document-properties"), futureI18n("Project Properties"), this));
     connect(action, SIGNAL(triggered()), this, SLOT(slotProjectProperties()));
     setupMainMenuActionShortcut(action);
 #else
@@ -565,9 +565,9 @@ void KexiMainWindow::setupActions()
 
 #ifdef KEXI_SHOW_UNIMPLEMENTED
     d->action_project_relations = addAction("project_relations", koIcon("relation"),
-                                            i18n("&Relationships..."), "Ctrl+R");
-    d->action_project_relations->setToolTip(i18n("Project relationships"));
-    d->action_project_relations->setWhatsThis(i18n("Shows project relationships."));
+                                            futureI18n("&Relationships..."), "Ctrl+R");
+    d->action_project_relations->setToolTip(futureI18n("Project relationships"));
+    d->action_project_relations->setWhatsThis(futureI18n("Shows project relationships."));
     connect(d->action_project_relations, SIGNAL(triggered()),
             this, SLOT(slotProjectRelations()));
 
@@ -584,8 +584,8 @@ void KexiMainWindow::setupActions()
 
     d->action_tools_data_import = addAction("tools_import_tables", koIcon("document-import"),
                                             i18n("Import Tables"));
-    d->action_tools_data_import->setToolTip(i18n("Import data from an external source into this database"));
-    d->action_tools_data_import->setWhatsThis(i18n("Import data from an external source into this database"));
+    d->action_tools_data_import->setToolTip(i18n("Import data from an external source into this project"));
+    d->action_tools_data_import->setWhatsThis(i18n("Imports data from an external source into this project."));
     connect(d->action_tools_data_import, SIGNAL(triggered()), this, SLOT(slotToolsImportTables()));
 
     d->action_tools_compact_database = addAction("tools_compact_database",
@@ -630,23 +630,23 @@ void KexiMainWindow::setupActions()
 #ifndef KEXI_NO_QUICK_PRINTING
     ac->addAction("project_print",
                   d->action_project_print = KStandardAction::print(this, SLOT(slotProjectPrint()), this));
-    d->action_project_print->setToolTip(i18n("Print data from the active table or query"));
-    d->action_project_print->setWhatsThis(i18n("Prints data from the active table or query."));
+    d->action_project_print->setToolTip(futureI18n("Print data from the active table or query"));
+    d->action_project_print->setWhatsThis(futureI18n("Prints data from the active table or query."));
 
     ac->addAction("project_print_preview",
                   d->action_project_print_preview = KStandardAction::printPreview(
                                                         this, SLOT(slotProjectPrintPreview()), this));
     d->action_project_print_preview->setToolTip(
-        i18n("Show print preview for the active table or query"));
+        futureI18n("Show print preview for the active table or query"));
     d->action_project_print_preview->setWhatsThis(
-        i18n("Shows print preview for the active table or query."));
+        futureI18n("Shows print preview for the active table or query."));
 
     d->action_project_print_setup = addAction("project_print_setup",
-        koIcon("document-page-setup"), i18n("Page Set&up..."));
+        koIcon("document-page-setup"), futureI18n("Print Set&up..."));
     d->action_project_print_setup->setToolTip(
-        i18n("Show page setup for printing the active table or query"));
+        futureI18n("Show print setup for the active table or query"));
     d->action_project_print_setup->setWhatsThis(
-        i18n("Shows page setup for printing the active table or query."));
+        futureI18n("Shows print setup for the active table or query."));
     connect(d->action_project_print_setup, SIGNAL(triggered()),
             this, SLOT(slotProjectPageSetup()));
 #endif
@@ -665,7 +665,7 @@ void KexiMainWindow::setupActions()
         d->action_edit_paste_special_data_table->setToolTip(
             i18n("Paste clipboard data as a table"));
         d->action_edit_paste_special_data_table->setWhatsThis(
-            i18n("Pastes clipboard data to a table."));
+            i18n("Pastes clipboard data as a table."));
         connect(d->action_edit_paste_special_data_table, SIGNAL(triggered()),
                 this, SLOT(slotEditPasteSpecialDataTable()));
     }
@@ -713,8 +713,8 @@ void KexiMainWindow::setupActions()
 
     d->action_edit_delete_row = createSharedAction(i18n("Delete Record"), koIconName("delete_table_row"),
                                 KShortcut(Qt::CTRL + Qt::Key_Delete), "edit_delete_row");
-    d->action_edit_delete_row->setToolTip(i18n("Delete currently selected record"));
-    d->action_edit_delete_row->setWhatsThis(i18n("Deletes currently selected record."));
+    d->action_edit_delete_row->setToolTip(i18n("Delete the current record"));
+    d->action_edit_delete_row->setWhatsThis(i18n("Deletes the current record."));
 
     d->action_edit_clear_table = createSharedAction(i18n("Clear Table Contents"),
                                  koIconName("clear_table_contents"), KShortcut(), "edit_clear_table");
@@ -844,7 +844,7 @@ void KexiMainWindow::setupActions()
     //! @todo d->action_data_execute->setWhatsThis(i18n(""));
 
 #ifdef KEXI_SHOW_UNIMPLEMENTED
-    action = createSharedAction(i18n("&Filter"), koIconName("view-filter"), KShortcut(), "data_filter");
+    action = createSharedAction(futureI18n("&Filter"), koIconName("view-filter"), KShortcut(), "data_filter");
     setActionVolatile(action, true);
 #endif
 //! @todo action->setToolTip(i18n(""));
@@ -929,9 +929,9 @@ void KexiMainWindow::setupActions()
                   action = d->action_settings = new KexiMenuWidgetAction(
                     KStandardAction::Preferences, this));
     action->setObjectName("settings");
-    action->setText(i18n("Settings..."));
-    action->setToolTip(i18n("Kexi settings"));
-    action->setWhatsThis(i18n("Lets you to view and change Kexi settings."));
+    action->setText(futureI18n("Settings..."));
+    action->setToolTip(futureI18n("Show Kexi settings"));
+    action->setWhatsThis(futureI18n("Shows Kexi settings."));
     connect(action, SIGNAL(triggered()), this, SLOT(slotSettings()));
     setupMainMenuActionShortcut(action);
 #else
@@ -947,14 +947,14 @@ void KexiMainWindow::setupActions()
 #ifndef KEXI_NO_FEEDBACK_AGENT
 #ifdef FEEDBACK_CLASS
     action = addAction("help_start_feedback_agent", koIcon("dialog-information"),
-                       i18n("Give Feedback..."));
+                       futureI18n("Give Feedback..."));
     connect(action, SIGNAL(triggered()),
             this, SLOT(slotStartFeedbackAgent()));
 #endif
 #endif
 
     // GLOBAL
-    d->action_show_help_menu = addAction("help_show_menu", i18n("Show Help Menu"), "Alt+H");
+    d->action_show_help_menu = addAction("help_show_menu", i18nc("Help Menu", "Help"), "Alt+H");
     d->action_show_help_menu->setToolTip(i18n("Show Help menu"));
     d->action_show_help_menu->setWhatsThis(i18n("Shows Help menu."));
     // (connection is added elsewhere)
@@ -1295,8 +1295,9 @@ tristate KexiMainWindow::openProject(const KexiProjectData& projectData)
         d->prj = 0;
         if (incompatibleWithKexi) {
             if (KMessageBox::Yes == KMessageBox::questionYesNo(this,
-                    i18n("Database project %1 does not appear to have been created using Kexi."
-                         "<p>Do you want to import it as a new Kexi project?",
+                    i18nc("@info",
+                         "Database project <resource>%1</resource> does not appear to have been created using Kexi.<nl/>"
+                         "Do you want to import it as a new Kexi project?",
                          projectData.infoString()),
                     QString(), KGuiItem(i18nc("Import Database", "&Import..."), koIconName("database_import")),
                     KStandardGuiItem::cancel()))
@@ -1451,9 +1452,9 @@ void KexiMainWindow::slotAutoOpenObjectsLater()
                     taskName = i18nc("\"executing object\" action", "executing");
 #ifndef KEXI_NO_QUICK_PRINTING
                 else if (info->value("action") == "print-preview")
-                    taskName = i18n("making print preview for");
+                    taskName = futureI18n("making print preview for");
                 else if (info->value("action") == "print")
-                    taskName = i18n("printing");
+                    taskName = futureI18n("printing");
 #endif
                 else
                     taskName = i18n("opening");
@@ -1485,7 +1486,7 @@ void KexiMainWindow::slotAutoOpenObjectsLater()
             else if (info->value("action") == "print") {
                 tristate res = printItem(item);
                 if (false == res) {
-                    not_found_msg += (QString("<li>\"") + info->value("name") + "\" - " + i18n("cannot print object") +
+                    not_found_msg += (QString("<li>\"") + info->value("name") + "\" - " + futureI18n("cannot print object") +
                                       internalReason(d->prj) + "<br></li>");
                 }
                 continue;
@@ -1493,7 +1494,7 @@ void KexiMainWindow::slotAutoOpenObjectsLater()
             else if (info->value("action") == "print-preview") {
                 tristate res = printPreviewForItem(item);
                 if (false == res) {
-                    not_found_msg += (QString("<li>\"") + info->value("name") + "\" - " + i18n("cannot make print preview of object") +
+                    not_found_msg += (QString("<li>\"") + info->value("name") + "\" - " + futureI18n("cannot make print preview of object") +
                                       internalReason(d->prj) + "<br></li>");
                 }
                 continue;
@@ -2704,7 +2705,7 @@ tristate KexiMainWindow::getNewObjectInfo(
     }
     d->nameDialog->widget()->setCaptionText(partItem->caption());
     d->nameDialog->widget()->setNameText(partItem->name());
-    d->nameDialog->setWindowTitle(i18n("Save Object As"));
+    d->nameDialog->setWindowTitle(i18nc("@title:window", "Save Object As"));
     d->nameDialog->setDialogIcon(info->itemIconName());
     d->nameDialog->setAllowOverwriting(allowOverwriting);
     if (!originalName.isEmpty()) {
@@ -2864,11 +2865,11 @@ tristate KexiMainWindow::closeWindow(KexiWindow *window, bool layoutTaskBar, boo
         KGuiItem saveChanges(KStandardGuiItem::save());
         saveChanges.setToolTip(i18n("Save changes"));
         saveChanges.setWhatsThis(
-            i18n("Pressing this button will save all recent changes made in \"%1\" object.",
+            i18n("Saves all recent changes made in \"%1\" object",
                  window->partItem()->name()));
         KGuiItem discardChanges(KStandardGuiItem::discard());
         discardChanges.setWhatsThis(
-            i18n("Pressing this button will discard all recent changes made in \"%1\" object.",
+            i18n("Discards all recent changes made in \"%1\" object.",
                  window->partItem()->name()));
 
         //dialog's data is dirty:
@@ -3393,11 +3394,12 @@ void KexiMainWindow::renameObject(KexiPart::Item *item, const QString& _newName,
 
     KexiWindow *window = openedWindowFor(item);
     if (window) {
-        QString msg = i18n("<para>Before renaming object <resource>%1</resource> it should be closed.</para>"
-                           "<para>Do you want to close it?</para>")
-                      .arg(item->name());
+        QString msg = i18nc("@info",
+                            "<para>Before renaming object <resource>%1</resource> it should be closed.</para>"
+                            "<para>Do you want to close it?</para>",
+                            item->name());
         int r = KMessageBox::questionYesNo(this, msg, QString(),
-                                           KGuiItem(i18n("Close window"), koIconName("window-close")),
+                                           KGuiItem(i18n("Close Window"), koIconName("window-close")),
                                            KStandardGuiItem::cancel());
         if (r != KMessageBox::Yes) {
             success = false;
@@ -3603,7 +3605,7 @@ KexiMainWindow::setupUserMode(KexiProjectData *projectData)
     KexiPart::Info *i = Kexi::partManager().infoForClass(startupPart);
     if (!i) {
         hide();
-        showErrorMessage(err_msg, i18n("Specified plugin does not exist."));
+        showErrorMessage(err_msg, futureI18n("Specified plugin does not exist."));
         return false;
     }
 
@@ -3612,7 +3614,7 @@ KexiMainWindow::setupUserMode(KexiProjectData *projectData)
     bool openingCancelled;
     if (!openObject(item, Kexi::DataViewMode, openingCancelled) && !openingCancelled) {
         hide();
-        showErrorMessage(err_msg, i18n("Specified object could not be opened."));
+        showErrorMessage(err_msg, futureI18n("Specified object could not be opened."));
         return false;
     }
 
@@ -3921,22 +3923,22 @@ tristate KexiMainWindow::printActionForItem(KexiPart::Item* item, PrintActionTyp
             return false;
         if (window->isDirty()) {
             KGuiItem saveChanges(KStandardGuiItem::save());
-            saveChanges.setToolTip(i18n("Save changes"));
+            saveChanges.setToolTip(futureI18n("Save changes"));
             saveChanges.setWhatsThis(
-                i18n("Pressing this button will save all recent changes made in \"%1\" object.",
+                futureI18n("Pressing this button will save all recent changes made in \"%1\" object.",
                      item->name()));
             KGuiItem doNotSave(KStandardGuiItem::no());
             doNotSave.setWhatsThis(
-                i18n("Pressing this button will ignore all unsaved changes made in \"%1\" object.",
+                futureI18n("Pressing this button will ignore all unsaved changes made in \"%1\" object.",
                      window->partItem()->name()));
 
             QString question;
             if (action == PrintItem)
-                question = i18n("Do you want to save changes before printing?");
+                question = futureI18n("Do you want to save changes before printing?");
             else if (action == PreviewItem)
-                question = i18n("Do you want to save changes before making print preview?");
+                question = futureI18n("Do you want to save changes before making print preview?");
             else if (action == PageSetupForItem)
-                question = i18n("Do you want to save changes before showing page setup?");
+                question = futureI18n("Do you want to save changes before showing page setup?");
             else
                 return false;
 
