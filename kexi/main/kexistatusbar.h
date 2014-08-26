@@ -24,14 +24,14 @@
 #define KEXISTATUSBAR_H
 
 //temporary
-#define KexiStatusBar_KTEXTEDITOR_USED 0
+//#define KexiStatusBar_KTEXTEDITOR_USED
 
 #include <kstatusbar.h>
 
 class KMenu;
 class QCheckBox;
 
-#if KexiStatusBar_KTEXTEDITOR_USED
+#ifdef KexiStatusBar_KTEXTEDITOR_USED
 namespace KTextEditor
 {
     class ViewStatusMsgInterface;
@@ -58,12 +58,14 @@ signals:
 
 protected slots:
     void cursorPositionChanged();
+#if 0
     void setCursorPosition(int line, int col);
+#endif
 
 protected:
     int m_msgID, m_readOnlyID;
 
-#if KexiStatusBar_KTEXTEDITOR_USED
+#ifdef KexiStatusBar_KTEXTEDITOR_USED
     KTextEditor::ViewCursorInterface * m_cursorIface;
     KTextEditor::ViewStatusMsgInterface * m_viewmsgIface;
 #endif
