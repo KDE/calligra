@@ -102,12 +102,14 @@ public:
     //! Used in setFocusInternal()
     QPointer<QWidget> setFocusInternalOnce;
 
+#ifndef KEXI_NO_AUTOFIELD_WIDGET
     /*! Stores geometry of widget recently inserted using insertAutoFields() method.
      having this information, we'r eable to compute position for a newly
      inserted widget in insertAutoFields() is such position has not been specified.
      (the position is specified when a widget is inserted with mouse drag & dropping
      but not with clicking of 'Insert fields' button from Data Source pane) */
     QRect widgetGeometryForRecentInsertAutoFields;
+#endif
 
     //! Cached form pointer
     QPointer<KFormDesigner::Form> form;
@@ -1066,6 +1068,7 @@ KexiFormView::slotHandleDragMoveEvent(QDragMoveEvent* e)
 void
 KexiFormView::slotHandleDropEvent(QDropEvent* e)
 {
+#ifndef KEXI_NO_AUTOFIELD_WIDGET
     const QWidget *targetContainerWidget = dynamic_cast<const QWidget*>(sender());
     KFormDesigner::ObjectTreeItem *targetContainerWidgetItem = targetContainerWidget
             ? form()->objectTree()->lookup(targetContainerWidget->objectName()) : 0;
@@ -1079,6 +1082,7 @@ KexiFormView::slotHandleDropEvent(QDropEvent* e)
         insertAutoFields(sourcePartClass, sourceName, fields,
                          targetContainerWidgetItem->container(), e->pos());
     }
+#endif
 }
 
 void
@@ -1086,6 +1090,7 @@ KexiFormView::insertAutoFields(const QString& sourcePartClass, const QString& so
                                const QStringList& fields, KFormDesigner::Container* targetContainer,
                                const QPoint& _pos)
 {
+#ifndef KEXI_NO_AUTOFIELD_WIDGET
     if (fields.isEmpty())
         return;
 
@@ -1113,7 +1118,7 @@ KexiFormView::insertAutoFields(const QString& sourcePartClass, const QString& so
     QWidgetList widgetsToSelect;
     KFormDesigner::PropertyCommandGroup *group = new KFormDesigner::PropertyCommandGroup(
         fields.count() == 1
-        ? futureI18n("Insert AutoField widget") : futureI18n("Insert %1 AutoField widgets", fields.count())
+        ? futureI18n("Insert AutoField widget") : futureI18n2("Insert %1 AutoField widgets", fields.count())
     );
 
     foreach(const QString& field, fields) {
@@ -1200,6 +1205,7 @@ KexiFormView::insertAutoFields(const QString& sourcePartClass, const QString& so
         }
     }
     //! @todo eventually, update property pane
+#endif
 }
 
 void

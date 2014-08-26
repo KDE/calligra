@@ -421,11 +421,13 @@ void KexiFormManager::setDataSourceFieldOrExpression(
 void KexiFormManager::insertAutoFields(const QString& sourcePartClass, const QString& sourceName,
                                        const QStringList& fields)
 {
+#ifndef KEXI_NO_AUTOFIELD_WIDGET
     KexiFormView* formViewWidget = activeFormViewWidget();
     if (!formViewWidget || !formViewWidget->form() || !formViewWidget->form()->activeContainer())
         return;
     formViewWidget->insertAutoFields(sourcePartClass, sourceName, fields,
                                      formViewWidget->form()->activeContainer());
+#endif
 }
 
 void KexiFormManager::slotHistoryCommandExecuted(KFormDesigner::Command *command)

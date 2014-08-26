@@ -363,10 +363,12 @@ void KexiFormPart::setupCustomPropertyPanelTabs(KTabWidget *tab)
                 SIGNAL(dataSourceFieldOrExpressionChanged(QString,QString,KexiDB::Field::Type)),
                 KexiFormManager::self(),
                 SLOT(setDataSourceFieldOrExpression(QString,QString,KexiDB::Field::Type)));
+#ifndef KEXI_NO_AUTOFIELD_WIDGET
         connect(d->dataSourcePage,
                 SIGNAL(insertAutoFields(QString,QString,QStringList)),
                 KexiFormManager::self(),
                 SLOT(insertAutoFields(QString,QString,QStringList)));
+#endif
     }
 
     KexiProject *prj = KexiMainWindowIface::global()->project();
