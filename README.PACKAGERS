@@ -25,7 +25,7 @@ Table Of Contents
 4. Calligra plugins
 5. Calligra libraries
 5.1. Calligra default database driver: SQLite
-6. WARNING against qt 4.8.0 and 4.8.1
+6. WARNING against Qt 4.8.0 and 4.8.1
 7. IMPORTANT On using CPU vector capabilities in Calligra Libs and Krita
 8. Plan
 8.1. Runtime dependency of Plan's import filters
@@ -246,7 +246,7 @@ the things that KDEPIM/Akonadi pulls in.
 
 
 5. Calligra libraries
-====================
+=====================
 
 Calligra share common functionality within libraries, placed in libs/
 subdirectory. Calligra libraries should be placed in a single package,
@@ -291,13 +291,17 @@ be obtained by executing this command in calligra/ directory:
 Without SQLite in at least this version Calligra will not compile.
 
 
-6. WARNING against qt 4.8.0 and 4.8.1
-====================
-Using Qt 4.8.0 and 4.8.1 causes crashes. As a result Words and Stage will not be built. Please upgrade to 4.8.2. You can also patch Qt and when building Calligra set IHAVEPATCHEDQT. Patch against Qt can be found in qt48setx.patch in this directory
+
+6. WARNING against Qt 4.8.0 and 4.8.1
+=====================================
+
+Using Qt 4.8.0 and 4.8.1 causes crashes. As a result Words and Stage will not be built.
+Please upgrade to 4.8.2. You can also patch Qt and when building Calligra set IHAVEPATCHEDQT.
+Patch against Qt can be found in qt48setx.patch in this directory
 
 
 7. IMPORTANT On using CPU vector capabilities in Calligra Libs and Krita
-====================
+========================================================================
 
 IN BRIEF: 1) Intall Vc library [1] and don't forget to activate
              PACKAGERS_BUILD=ON option when building a package.
