@@ -328,12 +328,12 @@ void ImportWizard::setupDstType()
 //
 void ImportWizard::setupDstTitle()
 {
-    d->dstTitlePageWidget = new KexiDBTitlePage(i18n("Destination project's title:"), this);
+    d->dstTitlePageWidget = new KexiDBTitlePage(i18n("Destination project's caption:"), this);
     d->dstTitlePageWidget->layout()->setMargin(KDialog::marginHint());
     d->dstTitlePageWidget->updateGeometry();
     d->dstNewDBNameLineEdit = d->dstTitlePageWidget->le_title;
 
-    d->dstTitlePageItem = new KPageWidgetItem(d->dstTitlePageWidget, i18n("Select Destination Database Project's Title"));
+    d->dstTitlePageItem = new KPageWidgetItem(d->dstTitlePageWidget, i18n("Enter Destination Database Project's Caption"));
     addPage(d->dstTitlePageItem);
 }
 

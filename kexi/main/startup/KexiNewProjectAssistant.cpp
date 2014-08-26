@@ -201,9 +201,9 @@ static QString defaultDatabaseName()
 }
 
 KexiProjectTitleSelectionPage::KexiProjectTitleSelectionPage(QWidget* parent)
- : KexiAssistantPage(i18n("Project Title & Filename"),
-                  i18n("Enter title for the new project. "
-                       "Filename will be created automatically based on the title. "
+ : KexiAssistantPage(i18n("Project Caption & Filename"),
+                  i18n("Enter caption for the new project. "
+                       "Filename will be created automatically based on the caption. "
                        "You can change the filename too."),
                   parent)
 {
@@ -265,7 +265,7 @@ bool KexiProjectTitleSelectionPage::isAcceptable()
     if (contents->le_title->text().trimmed().isEmpty()) {
         messageWidget = new KexiContextMessageWidget(contents->formLayout,
                                                      contents->le_title,
-                                                     i18n("Enter project title."));
+                                                     i18n("Enter project caption."));
         contents->le_title->setText(QString());
         return false;
     }
@@ -353,9 +353,9 @@ KexiProjectConnectionSelectionPage::~KexiProjectConnectionSelectionPage()
 
 KexiProjectDatabaseNameSelectionPage::KexiProjectDatabaseNameSelectionPage(
     KexiNewProjectAssistant* parent)
- : KexiAssistantPage(i18n("Project Title & Database Name"),
-                  i18n("Enter title for the new project. "
-                       "Database name will be created automatically based on the title. "
+ : KexiAssistantPage(i18n("Project Caption & Database Name"),
+                  i18n("Enter caption for the new project. "
+                       "Database name will be created automatically based on the caption. "
                        "You can change the database name too."),
                   parent)
  , m_assistant(parent)
@@ -463,7 +463,7 @@ bool KexiProjectDatabaseNameSelectionPage::isAcceptable()
     if (contents->le_title->text().trimmed().isEmpty()) {
         messageWidget = new KexiContextMessageWidget(contents->formLayout,
                                                      contents->le_title,
-                                                     i18n("Enter project title."));
+                                                     i18n("Enter project caption."));
         contents->le_title->setText(QString());
         return false;
     }
