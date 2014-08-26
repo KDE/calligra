@@ -152,16 +152,6 @@ KexiFormView::KexiFormView(QWidget *parent, bool dbAware)
         plugSharedAction("edit_undo", form(), SLOT(undo()));
         plugSharedAction("edit_redo", form(), SLOT(redo()));
 
-//! @todo add formpart_layout_menu action
-        plugSharedAction("formpart_layout_hbox", form(), SLOT(layoutHBox()));
-        plugSharedAction("formpart_layout_vbox", form(), SLOT(layoutVBox()));
-        plugSharedAction("formpart_layout_grid", form(), SLOT(layoutGrid()));
-#ifdef KEXI_SHOW_SPLITTER_WIDGET
-        plugSharedAction("formpart_layout_hsplitter", form(), SLOT(layoutHSplitter()));
-        plugSharedAction("formpart_layout_vsplitter", form(), SLOT(layoutVSplitter()));
-#endif
-        plugSharedAction("formpart_break_layout", form(), SLOT(breakLayout()));
-
         plugSharedAction("formpart_format_raise", form(), SLOT(bringWidgetToFront()));
         plugSharedAction("formpart_format_lower", form(), SLOT(sendWidgetToBack()));
 
@@ -891,14 +881,6 @@ KexiFormView::slotWidgetSelected(KFormDesigner::Form *f, bool multiple)
         if (item && item->container())
             multiple = true;
     }
-    // Layout actions
-    setAvailable("formpart_layout_hbox", multiple);
-    setAvailable("formpart_layout_vbox", multiple);
-    setAvailable("formpart_layout_grid", multiple);
-
-    KFormDesigner::Container *container = f->activeContainer();
-    setAvailable("formpart_break_layout", container ?
-                 (container->layoutType() != KFormDesigner::Container::NoLayout) : false);
 }
 
 void
@@ -909,12 +891,6 @@ KexiFormView::slotFormWidgetSelected(KFormDesigner::Form *f)
 
     disableWidgetActions();
     enableFormActions();
-
-    // Layout actions
-    setAvailable("formpart_layout_hbox", true);
-    setAvailable("formpart_layout_vbox", true);
-    setAvailable("formpart_layout_grid", true);
-    setAvailable("formpart_break_layout", (f->toplevelContainer()->layoutType() != KFormDesigner::Container::NoLayout));
 }
 
 void
@@ -973,11 +949,6 @@ KexiFormView::disableWidgetActions()
 
     setAvailable("formpart_format_raise", false);
     setAvailable("formpart_format_lower", false);
-
-    setAvailable("formpart_layout_hbox", false);
-    setAvailable("formpart_layout_vbox", false);
-    setAvailable("formpart_layout_grid", false);
-    setAvailable("formpart_break_layout", false);
 }
 
 void

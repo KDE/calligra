@@ -643,20 +643,6 @@ void Form::emitWidgetSelected(bool multiple)
             containerSelected = true;
         }
     }
-    const bool twoSelected = wlist->count() == 2;
-    // Layout actions
-    d->enableAction("layout_menu", multiple || containerSelected);
-    d->enableAction("layout_hbox", multiple || containerSelected);
-    d->enableAction("layout_vbox", multiple || containerSelected);
-    d->enableAction("layout_grid", multiple || containerSelected);
-    d->enableAction("layout_hsplitter", twoSelected);
-    d->enableAction("layout_vsplitter", twoSelected);
-
-    Container *container = activeContainer();
-    if (container) {
-        d->enableAction("break_layout", 
-            (container->layoutType() != NoLayout));
-    }
     emit widgetSelected(true);
 }
 
@@ -683,15 +669,6 @@ void Form::emitFormWidgetSelected()
 
     const bool twoSelected = selectedWidgets()->count() == 2;
     const bool hasChildren = !objectTree()->children()->isEmpty();
-
-    // Layout actions
-    d->enableAction("layout_menu", hasChildren);
-    d->enableAction("layout_hbox", hasChildren);
-    d->enableAction("layout_vbox", hasChildren);
-    d->enableAction("layout_grid", hasChildren);
-    d->enableAction("layout_hsplitter", twoSelected);
-    d->enableAction("layout_vsplitter", twoSelected);
-    d->enableAction("break_layout", (toplevelContainer()->layoutType() != NoLayout));
 
     emit formWidgetSelected();
 }
@@ -760,14 +737,6 @@ void Form::disableWidgetActions()
     d->enableAction("adjust_size_menu", false);
     d->enableAction("format_raise", false);
     d->enableAction("format_lower", false);
-
-    d->enableAction("layout_menu", false);
-    d->enableAction("layout_hbox", false);
-    d->enableAction("layout_vbox", false);
-    d->enableAction("layout_grid", false);
-    d->enableAction("layout_hsplitter", false);
-    d->enableAction("layout_vsplitter", false);
-    d->enableAction("break_layout", false);
 }
 
 ///////////////////////////  Various slots and signals /////////////////////
@@ -1763,9 +1732,6 @@ void Form::createContextMenu(QWidget *w, Container *container, const QPoint& men
     PLUG_ACTION("edit_copy", !toplevelWidgetSelected);
     PLUG_ACTION("edit_paste", true);
     PLUG_ACTION("edit_delete", !toplevelWidgetSelected);
-    separatorNeeded = true;
-    PLUG_ACTION("layout_menu", enableLayout);
-    PLUG_ACTION("break_layout", enableLayout);
     separatorNeeded = true;
     PLUG_ACTION("align_menu", !toplevelWidgetSelected);
     PLUG_ACTION("adjust_size_menu", !toplevelWidgetSelected);
