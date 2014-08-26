@@ -67,6 +67,7 @@ public:
         advancedProperties.insert("dragEnabled");
         advancedProperties.insert("enableSqueezedText");
         advancedProperties.insert("layout");// too large risk to break things
+        advancedProperties.insert("layoutDirection");
         advancedProperties.insert("locale");
         advancedProperties.insert("mouseTracking");
 /*! @todo: reenable */ advancedProperties.insert("palette");
