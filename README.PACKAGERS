@@ -59,6 +59,8 @@ The following matrix lists the packages and dependencies.
                            Migration driver files:
                                keximigrate_mysql.so
                                keximigrate_mysql.desktop
+                           Translation File:
+                               keximysqldriver.mo
                            Dependencies:
                                libmysqlclient
  ------------------------------------------------------------------------
@@ -69,6 +71,8 @@ The following matrix lists the packages and dependencies.
                            Migration driver files:
                                keximigrate_pqxx.so
                                keximigrate_pqxx.desktop
+                           Translation File:
+                               kexipostgresqldriver.mo
                            Dependencies:
                                libpq
                                libpqxx
@@ -80,6 +84,8 @@ The following matrix lists the packages and dependencies.
                            Migration driver files:
                                keximigrate_sybase.so
                                keximigrate_sybase.desktop
+                           Translation File:
+                               kexisybasedriver.mo
                            Dependencies:
                                libsybdb (FreeTDS)
  ------------------------------------------------------------------------
@@ -90,6 +96,8 @@ The following matrix lists the packages and dependencies.
                            Migration driver files:
                                keximigrate_xbase.so
                                keximigrate_xbase.desktop
+                           Translation File:
+                               kexixbasedriver.mo
                            Dependencies:
                                libxbase
  ------------------------------------------------------------------------
@@ -290,6 +298,14 @@ be obtained by executing this command in calligra/ directory:
 
 Without SQLite in at least this version Calligra will not compile.
 
+Database driver files:
+    kexidb_sqlite3driver.so
+    kexidb_sqlite3driver.desktop
+Translation File:
+    kexisqlite3driver.mo
+Dependencies:
+    libsqlite3
+    libicu libicudata libicuuc libicui18n
 
 
 6. WARNING against Qt 4.8.0 and 4.8.1
