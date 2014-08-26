@@ -29,11 +29,13 @@
 
 #ifndef futureI18n
 # ifdef USE_FUTURE_I18N
-#  define futureI18n(a) QObject::tr(a)
-#  define futureI18n2(a,b) QObject::tr(b)
+#  define futureI18n(a) i18n(a)
+#  define futureI18nc(a, b) i18nc(b)
+#  define futureI18nc2(a, b, c) i18nc(a, b, c)
 # else
 #  define futureI18n(a) QString(a)
-#  define futureI18n2(a,b) QString(b)
+#  define futureI18nc(a, b) QString(b)
+#  define futureI18nc2(a, b, c) QString(b)
 # endif
 #endif
 
