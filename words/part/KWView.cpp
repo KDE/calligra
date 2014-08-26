@@ -701,6 +701,17 @@ void KWView::setDistractionFreeMode(bool status)
         // FIXME: Return back cursor to canvas if cursor is blank cursor.
         m_hideCursorTimer->stop();
     }
+
+    // From time to time you can end up in a situation where the shape manager suddenly
+    // looses track of the current shape selection. So, we trick it here. Logically,
+    // it also makes sense to just make sure the text tool is active anyway when
+    // switching to/from distraction free (since that's explicitly for typing things
+    // out, not layouting)
+    const QList<KoShape*> selection = m_canvas->shapeManager()->selection()->selectedShapes();
+    m_canvas->shapeManager()->selection()->deselectAll();
+    if(selection.count() > 0)
+        m_canvas->shapeManager()->selection()->select(selection.at(0));
+    KoToolManager::instance()->switchToolRequested("TextToolFactory_ID");
 }
 
 void KWView::hideUI()
