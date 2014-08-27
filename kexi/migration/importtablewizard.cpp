@@ -108,7 +108,7 @@ void ImportTableWizard::next() {
     } else if (currentPage() == m_alterTablePageItem) {
       if (m_currentDatabase->objectNames().contains(m_alterSchemaWidget->newSchema()->name(),Qt::CaseInsensitive)) {
             KMessageBox::information(this,
-                i18n("<resource>%1</resource> name is already used by and existing object. "
+                i18n("<resource>%1</resource> name is already used by an existing object. "
                      "Enter different table name to continue.", m_alterSchemaWidget->newSchema()->name()),
                 i18n("Name Already Used"));
             return;
