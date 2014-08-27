@@ -281,6 +281,8 @@ void KWStatisticsWidget::updateData()
         QTextDocument *doc = tfs->document();
         QTextBlock block = doc->begin();
         while (block.isValid()) {
+            // Don't be so heavy on large documents...   
+            qApp->processEvents();
             m_paragraphs += 1;
             m_charsWithSpace += block.text().length();
             m_charsWithoutSpace += block.text().length() - block.text().count(QRegExp("\\s"));
