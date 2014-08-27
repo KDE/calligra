@@ -32,6 +32,7 @@
 #include <KoSelection.h>
 #include <KoShape.h>
 #include <KoIcon.h>
+#include <KoTextDocumentLayout.h>
 
 #include <QTextLayout>
 #include <QTextDocument>
@@ -56,6 +57,11 @@ KWStatisticsWidget::KWStatisticsWidget(QWidget *parent, bool shortVersion)
 {
     this->shortVersion = shortVersion;
     m_timer = new QTimer(this);
+    // Three seconds being the Human Moment, we're going to be slightly quicker than that
+    // This means we're waiting long enough to let people start typing again, but not long
+    // enough that they think something is wrong (which would happen if we waited longer)
+    m_timer->setInterval(2500);
+    m_timer->setSingleShot(true);
     initUi();
     initLayout();
     //All kind of stuff related to the option menu, unnecessary stuff in short version
@@ -376,7 +382,7 @@ void KWStatisticsWidget::setCanvas(KWCanvas* canvas)
     m_resourceManager = canvas->resourceManager();
     m_selection = canvas->shapeManager()->selection();
     m_document = canvas->document();
-    m_timer->start(2500);
+    connect(static_cast<KoTextDocumentLayout*>(m_document->mainFrameSet()->document()->documentLayout()), SIGNAL(finishedLayout()), m_timer, SLOT(start()));
 }
 
 void KWStatisticsWidget::unsetCanvas()
