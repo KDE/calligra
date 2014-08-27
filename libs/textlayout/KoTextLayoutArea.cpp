@@ -1198,6 +1198,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     int numBaselineShifts = 0;
 
     while (line.isValid()) {
+        qApp->processEvents();
         runAroundHelper.setLine(this, line);
         runAroundHelper.setObstructions(documentLayout()->currentObstructions());
         QRectF anchoringRect = d->blockRects.last();
