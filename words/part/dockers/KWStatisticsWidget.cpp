@@ -249,7 +249,11 @@ void KWStatisticsWidget::initLayout()
 void KWStatisticsWidget::updateData()
 {
     if (!isVisible()) {
-        return;
+        // rather than returning, schedule another update - this means we don't have to capture
+        // the visible change signal and update then. This does mean we will have up to 2500 ms
+        // before the update is done after showing the bar, but it's better than not updating
+        // at all, and results in less code
+        m_timer->start();
     }
     m_charsWithSpace = 0;
     m_charsWithoutSpace = 0;
