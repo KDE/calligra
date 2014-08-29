@@ -53,7 +53,8 @@ KWStatisticsWidget::KWStatisticsWidget(QWidget *parent, bool shortVersion)
           m_charsWithSpace(0),
           m_charsWithoutSpace(0),
           m_lines(0),
-          m_paragraphs(0)
+          m_paragraphs(0),
+          m_running(false)
 {
     this->shortVersion = shortVersion;
     m_timer = new QTimer(this);
@@ -254,7 +255,12 @@ void KWStatisticsWidget::updateData()
         // before the update is done after showing the bar, but it's better than not updating
         // at all, and results in less code
         m_timer->start();
+        return;
     }
+    if (m_running) {
+        return;
+    }
+    m_running = true;
     m_charsWithSpace = 0;
     m_charsWithoutSpace = 0;
     m_words = 0;
@@ -370,6 +376,7 @@ void KWStatisticsWidget::updateData()
         }
     }
     updateDataUi();
+    m_running = false;
 }
 
 void KWStatisticsWidget::setLayoutDirection(KWStatisticsWidget::LayoutDirection direction)
@@ -389,6 +396,7 @@ void KWStatisticsWidget::setCanvas(KWCanvas* canvas)
     m_selection = canvas->shapeManager()->selection();
     m_document = canvas->document();
     connect(static_cast<KoTextDocumentLayout*>(m_document->mainFrameSet()->document()->documentLayout()), SIGNAL(finishedLayout()), m_timer, SLOT(start()));
+    m_timer->start();  
 }
 
 void KWStatisticsWidget::unsetCanvas()
