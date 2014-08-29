@@ -2865,7 +2865,7 @@ tristate KexiMainWindow::closeWindow(KexiWindow *window, bool layoutTaskBar, boo
         KGuiItem saveChanges(KStandardGuiItem::save());
         saveChanges.setToolTip(i18n("Save changes"));
         saveChanges.setWhatsThis(
-            i18n("Saves all recent changes made in \"%1\" object",
+            i18n("Saves all recent changes made in \"%1\" object.",
                  window->partItem()->name()));
         KGuiItem discardChanges(KStandardGuiItem::discard());
         discardChanges.setWhatsThis(
