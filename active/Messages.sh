@@ -2,5 +2,5 @@
 source ../calligra_xgettext.sh
 
 $EXTRACTRC `find . -name \*.rc -o -name \*.ui -o -name \*.kcfg` >> rc.cpp
-calligra_xgettext `find . -name \*.qml -o -name \*.cpp -o -name \*.h` > $podir/calligraactive.pot
+calligra_xgettext calligraactive.pot `find . -name \*.qml -o -name \*.cpp -o -name \*.h`
 rm -f rc.cpp
