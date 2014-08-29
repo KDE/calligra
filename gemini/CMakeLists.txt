@@ -49,7 +49,7 @@ set(thumbnailhelper_SRCS
 )
 
 if (WIN32)
-#    set(calligragemini_SRCS ${calligragemini_SRCS} KritaGeminiWin.rc)
+    set(calligragemini_SRCS ${calligragemini_SRCS} calligrageminiwin.rc)
 else (WIN32)
     kde4_add_app_icon(calligragemini_SRCS "${KDE4_ICON_DIR}/oxygen/*/apps/calligragemini.png")
 endif (WIN32)
