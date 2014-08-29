@@ -373,16 +373,16 @@ Page {
             height: Settings.theme.adjustedPixel(66);
             spacing: Settings.theme.adjustedPixel(10);
             visible: notesPanel.canvas ? false : true;
-            Button {
-                height: parent.height; width: height;
-                image: Settings.theme.icon("SVG-Icon-AddShape-1");
-                onClicked: closeToolbarMenus();
-            }
-            Button {
-                height: parent.height; width: height;
-                image: Settings.theme.icon("SVG-Icon-Animations-1");
-                onClicked: closeToolbarMenus();
-            }
+//             Button {
+//                 height: parent.height; width: height;
+//                 image: Settings.theme.icon("SVG-Icon-AddShape-1");
+//                 onClicked: closeToolbarMenus();
+//             }
+//             Button {
+//                 height: parent.height; width: height;
+//                 image: Settings.theme.icon("SVG-Icon-Animations-1");
+//                 onClicked: closeToolbarMenus();
+//             }
             Button {
                 height: parent.height; width: height;
                 image: Settings.theme.icon("SVG-Icon-PlayPresentation-1");
@@ -429,11 +429,11 @@ Page {
             height: Settings.theme.adjustedPixel(66);
             spacing: Settings.theme.adjustedPixel(10);
             visible: notesPanel.canvas ? true : false;
-            Button {
-                height: parent.height; width: height;
-                image: Settings.theme.icon("SVG-Icon-AddShape-1");
-                onClicked: closeToolbarMenus();
-            }
+//             Button {
+//                 height: parent.height; width: height;
+//                 image: Settings.theme.icon("SVG-Icon-AddShape-1");
+//                 onClicked: closeToolbarMenus();
+//             }
             Button {
                 id: notesButton;
                 height: parent.height; width: height;
