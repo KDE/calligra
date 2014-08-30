@@ -633,14 +633,10 @@ void Form::emitWidgetSelected(bool multiple)
     d->enableAction("format_font", fontEnabled);
 
     // If the widgets selected is a container, we enable layout actions
-    bool containerSelected = false;
     if (!multiple) {
         KFormDesigner::ObjectTreeItem *item = 0;
         if (!wlist->isEmpty()) {
             objectTree()->lookup(wlist->first()->objectName());
-        }
-        if (item && item->container()) {
-            containerSelected = true;
         }
     }
     emit widgetSelected(true);
@@ -666,10 +662,6 @@ void Form::emitFormWidgetSelected()
     d->enableAction("format_font", false);
 
     enableFormActions();
-
-    const bool twoSelected = selectedWidgets()->count() == 2;
-    const bool hasChildren = !objectTree()->children()->isEmpty();
-
     emit formWidgetSelected();
 }
 
@@ -1689,8 +1681,6 @@ void Form::createContextMenu(QWidget *w, Container *container, const QPoint& men
     const bool toplevelWidgetSelected = widget() == w;
     const uint widgetsCount = container->form()->selectedWidgets()->count();
     const bool multiple = widgetsCount > 1;
-    // We only enablelayout creation if more than one widget with the same parent are selected
-    const bool enableLayout = multiple || w == container->widget();
 
     //set title
     QString n( container->form()->library()->displayName(w->metaObject()->className()) );
