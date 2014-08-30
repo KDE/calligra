@@ -95,6 +95,11 @@ void KoToolBase::mouseTripleClickEvent(KoPointerEvent *event)
     event->ignore();
 }
 
+void KoToolBase::shortcutOverrideEvent(QKeyEvent *e)
+{
+    e->ignore();
+}
+
 void KoToolBase::keyPressEvent(QKeyEvent *e)
 {
     e->ignore();

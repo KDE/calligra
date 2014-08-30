@@ -58,6 +58,7 @@ public:
     virtual void mouseDoubleClickEvent( QMouseEvent *event, const QPointF &point ) = 0;
     virtual void mouseMoveEvent( QMouseEvent *event, const QPointF &point ) = 0;
     virtual void mouseReleaseEvent( QMouseEvent *event, const QPointF &point ) = 0;
+    virtual void shortcutOverrideEvent( QKeyEvent *event ) = 0;
     virtual void keyPressEvent( QKeyEvent *event ) = 0;
     virtual void keyReleaseEvent( QKeyEvent *event ) = 0;
     virtual void wheelEvent( QWheelEvent * event, const QPointF &point ) = 0;

@@ -442,6 +442,14 @@ void KoToolProxy::mouseReleaseEvent(KoPointerEvent* event)
     }
 }
 
+void KoToolProxy::shortcutOverrideEvent(QKeyEvent *event)
+{
+    if (d->activeTool)
+        d->activeTool->shortcutOverrideEvent(event);
+    else
+        event->ignore();
+}
+
 void KoToolProxy::keyPressEvent(QKeyEvent *event)
 {
     if (d->activeTool)
@@ -650,14 +658,17 @@ void KoToolProxy::deleteSelection()
         return d->activeTool->deleteSelection();
 }
 
-void KoToolProxy::processEvent(QEvent *e) const
+void KoToolProxy::processEvent(QEvent *e)
 {
-    if(e->type()==QEvent::ShortcutOverride
-       && d->activeTool
-       && d->activeTool->isInTextMode()
-       && (static_cast<QKeyEvent*>(e)->modifiers()==Qt::NoModifier ||
-           static_cast<QKeyEvent*>(e)->modifiers()==Qt::ShiftModifier)) {
-        e->accept();
+    if (e->type()==QEvent::ShortcutOverride) {
+        QKeyEvent *kev = static_cast<QKeyEvent *>(e);
+        if (d->activeTool
+                && d->activeTool->isInTextMode()
+                && (kev->modifiers()==Qt::NoModifier ||
+                    kev->modifiers()==Qt::ShiftModifier)) {
+            e->accept();
+        }
+        shortcutOverrideEvent(kev);
     }
 }
 
