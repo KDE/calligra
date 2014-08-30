@@ -278,10 +278,10 @@ QPixmap KoPAPageBase::thumbnail( const QSize& size )
     if ( !KoPAPixmapCache::instance()->find( key, size, pm ) ) {
         pm = generateThumbnail( size );
         KoPAPixmapCache::instance()->insert( key, pm );
-        kDebug(30010) << "create thumbnail" << this;
+        //kDebug(30010) << "create thumbnail" << this;
     }
     else {
-        kDebug(30010) << "thumbnail in cache " << this;
+        //kDebug(30010) << "thumbnail in cache " << this;
     }
     return pm;
 #else
