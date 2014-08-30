@@ -44,6 +44,7 @@
 #include <KoShapeController.h>
 #include <KoCanvasController.h>
 #include <KoSelection.h>
+#include <KoInteractionTool.h>
 #include <KoShapeManager.h>
 #include <KoPointerEvent.h>
 #include <KoColorBackground.h>
@@ -1653,6 +1654,8 @@ void TextTool::keyPressEvent(QKeyEvent *event)
             startingSimpleEdit(); //signal editing plugins that this is a simple edit
             textEditor->insertText(event->text());
             editingPluginEvents();
+        } else if (event->key() == Qt::Key_Escape) {
+            activateTool(KoInteractionTool_ID);
         }
     }
     if (moveOperation != QTextCursor::NoMove || destinationPosition != -1) {
