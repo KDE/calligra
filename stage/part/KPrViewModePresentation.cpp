@@ -119,6 +119,11 @@ void KPrViewModePresentation::mouseReleaseEvent( QMouseEvent *event, const QPoin
     m_tool->mouseReleaseEvent( &ev );
 }
 
+void KPrViewModePresentation::shortcutOverrideEvent( QKeyEvent *event )
+{
+    m_tool->shortcutOverrideEvent( event );
+}
+
 void KPrViewModePresentation::keyPressEvent( QKeyEvent *event )
 {
     m_tool->keyPressEvent( event );

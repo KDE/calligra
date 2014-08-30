@@ -164,6 +164,15 @@ public:
     virtual void mouseReleaseEvent(KoPointerEvent *event) = 0;
 
     /**
+     * Called when a key is pressed, before shortcuts are triggered.
+     * Implementors should call event->accept() if they do want this shortcut to
+     * be handled by keyPressEvent rather than by a more global shortcut.
+     * Default implementation ignores this event.
+     * @param event state and reason of this key press
+     */
+    virtual void shortcutOverrideEvent(QKeyEvent *event);
+
+    /**
      * Called when a key is pressed.
      * Implementors should call event->ignore() if they do not actually use the event.
      * Default implementation ignores this event.

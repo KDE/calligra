@@ -1593,6 +1593,15 @@ void TextTool::mouseReleaseEvent(KoPointerEvent *event)
     }
 }
 
+void TextTool::shortcutOverrideEvent(QKeyEvent *event)
+{
+    QKeySequence item(event->key() | ((Qt::ControlModifier | Qt::AltModifier) & event->modifiers()));
+    if (hit(item, KStandardShortcut::Begin) ||
+        hit(item, KStandardShortcut::End)) {
+        event->accept();
+    }
+}
+
 void TextTool::keyPressEvent(QKeyEvent *event)
 {
     int destinationPosition = -1; // for those cases where the moveOperation is not relevant;
@@ -1653,10 +1662,10 @@ void TextTool::keyPressEvent(QKeyEvent *event)
     } else {
         // check for shortcuts.
         QKeySequence item(event->key() | ((Qt::ControlModifier | Qt::AltModifier) & event->modifiers()));
-        if (hit(item, KStandardShortcut::Begin))
+        if (hit(item, KStandardShortcut::Begin)) {
             // Goto beginning of the document. Default: Ctrl-Home
             destinationPosition = 0;
-        else if (hit(item, KStandardShortcut::End)) {
+        } else if (hit(item, KStandardShortcut::End)) {
             // Goto end of the document. Default: Ctrl-End
             if (m_textShapeData) {
                 QTextBlock last = m_textShapeData->document()->lastBlock();
@@ -1757,7 +1766,7 @@ void TextTool::keyPressEvent(QKeyEvent *event)
         ensureCursorVisible();
     else
         m_delayedEnsureVisible = true;
-updateActions();
+    updateActions();
     updateSelectionHandler();
 }
 

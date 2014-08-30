@@ -99,6 +99,11 @@ void KPrViewModeNotes::mouseReleaseEvent(QMouseEvent *event, const QPointF &poin
     m_toolProxy->mouseReleaseEvent(event, point);
 }
 
+void KPrViewModeNotes::shortcutOverrideEvent(QKeyEvent *event)
+{
+    m_toolProxy->shortcutOverrideEvent(event);
+}
+
 void KPrViewModeNotes::keyPressEvent(QKeyEvent *event)
 {
     m_toolProxy->keyPressEvent(event);

@@ -247,6 +247,11 @@ void KPrViewModeSlidesSorter::mouseReleaseEvent(QMouseEvent *event, const QPoint
     Q_UNUSED(point);
 }
 
+void KPrViewModeSlidesSorter::shortcutOverrideEvent(QKeyEvent *event)
+{
+    Q_UNUSED(event);
+}
+
 void KPrViewModeSlidesSorter::keyPressEvent(QKeyEvent *event)
 {
     Q_UNUSED(event);

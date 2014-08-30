@@ -80,6 +80,14 @@ void KoPACanvasItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
     KoPACanvasBase::paint(*painter, option->exposedRect);
 }
 
+bool KoPACanvasItem::event( QEvent *ev )
+{
+    if (ev->type() == QEvent::ShortcutOverride) {
+        QKeyEvent *kev = static_cast<QKeyEvent *>(ev);
+        koPAView()->viewMode()->shortcutOverrideEvent(kev);
+    }
+    return QGraphicsWidget::event( ev );
+}
 
 void KoPACanvasItem::mousePressEvent( QGraphicsSceneMouseEvent *e )
 {

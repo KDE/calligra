@@ -103,6 +103,10 @@ void KPrViewModePreviewPageEffect::mouseReleaseEvent( QMouseEvent *event, const 
     Q_UNUSED(point);
 }
 
+void KPrViewModePreviewPageEffect::shortcutOverrideEvent( QKeyEvent *event )
+{
+    Q_UNUSED(event);
+}
 
 void KPrViewModePreviewPageEffect::keyPressEvent( QKeyEvent *event )
 {

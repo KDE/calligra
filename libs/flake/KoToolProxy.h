@@ -100,6 +100,9 @@ public:
     void mouseReleaseEvent(KoPointerEvent *event);
 
     /// Forwarded to the current KoToolBase
+    void shortcutOverrideEvent(QKeyEvent *event);
+
+    /// Forwarded to the current KoToolBase
     void keyPressEvent(QKeyEvent *event);
 
     /// Forwarded to the current KoToolBase
@@ -123,7 +126,7 @@ public:
 
     /// This method gives the proxy a chance to do things. for example it is need to have working singlekey
     /// shortcuts. call it from the canvas' event function and forward it to QWidget::event() later.
-    void processEvent(QEvent *) const;
+    void processEvent(QEvent *);
 
     /**
      * Retrieves the entire collection of actions for the active tool
