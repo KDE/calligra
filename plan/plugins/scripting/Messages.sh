@@ -12,4 +12,4 @@ cd "${old}"
 calligra_xgettext "${POT_CPP}" *.cpp
 CXG_EXTRA_ARGS="--language=Python" calligra_xgettext "${POT_PY}" scripts/*.py
 ${MSGCAT} -F "$podir/${POT_CPP}" "$podir/${POT_PY}" --use-first > $podir/krossmoduleplan.pot
-rm -f "${POT_CPP}" "${POT_PY}" rc.cpp
+rm -f "$podir/${POT_CPP}" "$podir/${POT_PY}" rc.cpp
