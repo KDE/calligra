@@ -246,12 +246,8 @@ KexiCSVImportDialog::KexiCSVImportDialog(Mode mode, QWidget * parent)
     adjustSize();
     KDialog::centerOnScreen(this);
 
-    setButtons(KDialog::Help | KDialog::User1 | KDialog::User2 | KDialog::User3 | KDialog::Apply | KDialog::Cancel);
     setButtonGuiItem(KDialog::Apply, KGuiItem(i18n("&Import..."), _IMPORT_ICON));
     setButtonGuiItem(KDialog::User1, KStandardGuiItem::open());
-    setButtonText( KDialog::User2, i18nc("Opposite to Back", "Next") );
-    setButtonIcon( KDialog::User2, KStandardGuiItem::forward(KStandardGuiItem::UseRTL).icon() );
-    setButtonGuiItem(KDialog::User3, KStandardGuiItem::back(KStandardGuiItem::UseRTL));
     setButtonGuiItem(KDialog::Help, KStandardGuiItem::configure());
 
     showButton(KDialog::Apply, false);
