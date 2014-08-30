@@ -102,6 +102,11 @@ void KPrViewModePreviewShapeAnimations::mouseReleaseEvent(QMouseEvent *event, co
     Q_UNUSED(point);
 }
 
+void KPrViewModePreviewShapeAnimations::shortcutOverrideEvent(QKeyEvent *event)
+{
+    Q_UNUSED(event);
+}
+
 void KPrViewModePreviewShapeAnimations::keyPressEvent(QKeyEvent *event)
 {
     Q_UNUSED(event);

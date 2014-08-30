@@ -120,6 +120,11 @@ void KoPAViewModeNormal::mouseReleaseEvent( QMouseEvent *event, const QPointF &p
     m_toolProxy->mouseReleaseEvent( event, point );
 }
 
+void KoPAViewModeNormal::shortcutOverrideEvent( QKeyEvent *event )
+{
+    m_toolProxy->shortcutOverrideEvent( event );
+}
+
 void KoPAViewModeNormal::keyPressEvent( QKeyEvent *event )
 {
     m_toolProxy->keyPressEvent( event );
