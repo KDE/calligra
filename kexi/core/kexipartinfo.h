@@ -188,6 +188,7 @@ private:
 };
 
 /*! \return "create" KAction's name for part defined by \a info.
+ Empty string is returned if info.isVisibleInNavigator() is false.
  The result is like "tablepart_create". Used in Part::createGUIClients()
  and KexiBrowser. */
 KEXICORE_EXPORT QString nameForCreateAction(const Info& info);

@@ -269,7 +269,7 @@ bool Info::isPropertyEditorAlwaysVisibleInDesignMode() const
 
 QString KexiPart::nameForCreateAction(const Info& info)
 {
-    return info.objectName() + "part_create";
+    return info.isVisibleInNavigator() ? (info.objectName() + "part_create") : QString();
 }
 
 #include "kexipartinfo_p.moc"
