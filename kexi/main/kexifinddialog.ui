@@ -19,6 +19,9 @@
      <property name="text">
       <string>Fi&amp;nd:</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
      <property name="wordWrap">
       <bool>false</bool>
      </property>
@@ -38,26 +41,17 @@
      <property name="maxCount">
       <number>10</number>
      </property>
-     <property name="autoCompletion">
-      <bool>true</bool>
-     </property>
      <property name="duplicatesEnabled">
       <bool>false</bool>
+     </property>
+     <property name="autoCompletion">
+      <bool>true</bool>
      </property>
     </widget>
    </item>
    <item row="0" column="3" rowspan="8">
     <layout class="QVBoxLayout">
-     <property name="leftMargin">
-      <number>0</number>
-     </property>
-     <property name="topMargin">
-      <number>0</number>
-     </property>
-     <property name="rightMargin">
-      <number>0</number>
-     </property>
-     <property name="bottomMargin">
+     <property name="margin">
       <number>0</number>
      </property>
      <item>
@@ -150,6 +144,9 @@
      <property name="text">
       <string comment="Replace all occurences with">Re&amp;place with:</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
      <property name="wordWrap">
       <bool>false</bool>
      </property>
@@ -163,11 +160,11 @@
      <property name="maxCount">
       <number>10</number>
      </property>
-     <property name="autoCompletion">
-      <bool>true</bool>
-     </property>
      <property name="duplicatesEnabled">
       <bool>false</bool>
+     </property>
+     <property name="autoCompletion">
+      <bool>true</bool>
      </property>
     </widget>
    </item>
@@ -175,6 +172,9 @@
     <widget class="QLabel" name="textLabel2_2">
      <property name="text">
       <string comment="Look in field:">&amp;Look in:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
      <property name="wordWrap">
       <bool>false</bool>
@@ -195,6 +195,9 @@
     <widget class="QLabel" name="textLabel2_2_2">
      <property name="text">
       <string>&amp;Search:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
      <property name="wordWrap">
       <bool>false</bool>
@@ -230,6 +233,9 @@
     <widget class="QLabel" name="textLabel2_2_3">
      <property name="text">
       <string>&amp;Match:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
      <property name="wordWrap">
       <bool>false</bool>
@@ -330,14 +336,14 @@
    <header>kcombobox.h</header>
   </customwidget>
   <customwidget>
-   <class>KHistoryComboBox</class>
-   <extends>KComboBox</extends>
-   <header>khistorycombobox.h</header>
-  </customwidget>
-  <customwidget>
    <class>KPushButton</class>
    <extends>QPushButton</extends>
    <header>kpushbutton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KHistoryComboBox</class>
+   <extends>KComboBox</extends>
+   <header>khistorycombobox.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>
