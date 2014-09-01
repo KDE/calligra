@@ -147,7 +147,10 @@ static bool shouldSaveRow(int row, bool firstRowForFieldNames)
 class KexiCSVImportDialog::Private
 {
 public:
-    Private() {}
+    Private()
+        : imported(false)
+    {
+    }
     ~Private() {
         qDeleteAll(m_uniquenessTest);
     }
@@ -196,6 +199,8 @@ public:
             m_uniquenessTest[col] = test;
         }
     }
+
+    bool imported;
 private:
     //! vector of detected types
     //! @todo more types
@@ -207,6 +212,11 @@ private:
 };
 
 // --
+
+const KDialog::ButtonCode FinishButton = KDialog::User1;
+const KDialog::ButtonCode NextButton = KDialog::User2;
+const KDialog::ButtonCode BackButton = KDialog::User3;
+const KDialog::ButtonCode ConfigureButton = KDialog::Help;
 
 KexiCSVImportDialog::KexiCSVImportDialog(Mode mode, QWidget * parent)
         : KAssistantDialog(parent),
@@ -246,13 +256,10 @@ KexiCSVImportDialog::KexiCSVImportDialog(Mode mode, QWidget * parent)
     adjustSize();
     KDialog::centerOnScreen(this);
 
-    setButtonGuiItem(KDialog::Apply, KGuiItem(i18n("&Import..."), _IMPORT_ICON));
-    setButtonGuiItem(KDialog::User1, KStandardGuiItem::open());
-    setButtonGuiItem(KDialog::Help, KStandardGuiItem::configure());
+    setButtonGuiItem(ConfigureButton, KStandardGuiItem::configure());
 
-    showButton(KDialog::Apply, false);
-    showButton(KDialog::User1, false);
-    showButton(KDialog::User3, false);
+    showButton(FinishButton, false);
+    showButton(BackButton, false);
 
     KConfigGroup importExportGroup(KGlobal::config()->group("ImportExport"));
     m_maximumRowsForPreview = importExportGroup.readEntry(
@@ -265,7 +272,7 @@ KexiCSVImportDialog::KexiCSVImportDialog(Mode mode, QWidget * parent)
     m_pkIcon = koSmallIcon("key");
 
     if (m_mode == File) {
-        showButton(KDialog::Help, false);
+        showButton(ConfigureButton, false);
         createFileOpenPage();
     } else if (m_mode == Clipboard) {
         QString subtype("plain");
@@ -343,7 +350,6 @@ KexiCSVImportDialog::KexiCSVImportDialog(Mode mode, QWidget * parent)
             this, SLOT(slot1stRowForFieldNamesChanged(int)));
 
     connect(this, SIGNAL(helpClicked()), this, SLOT(optionsButtonClicked()));
-    connect(this, SIGNAL(applyClicked()), this, SLOT(import()));
 
     connect(this, SIGNAL(currentPageChanged(KPageWidgetItem*,KPageWidgetItem*)),
             this, SLOT(slotCurrentPageChanged(KPageWidgetItem*,KPageWidgetItem*)));
@@ -428,7 +434,7 @@ void KexiCSVImportDialog::slotShowSchema(KexiPart::Item *item)
         return;
     }
 
-    enableButton(KDialog::User2, true);
+    enableButton(NextButton, true);
     KexiDB::TableOrQuerySchema *tableOrQuery = new KexiDB::TableOrQuerySchema(
             KexiMainWindowIface::global()->project()->dbConnection(),
             item->identifier()
@@ -446,11 +452,14 @@ void KexiCSVImportDialog::slotShowSchema(KexiPart::Item *item)
 
 void KexiCSVImportDialog::slotCurrentPageChanged(KPageWidgetItem *page, KPageWidgetItem *prev)
 {
-    enableButton(KDialog::User2, (page == m_saveMethodPage ? false : true));
-    showButton(KDialog::Apply, (page == m_importPage ? true : false));
-    showButton(KDialog::Help, (page == m_optionsPage ? true : false));
-    showButton(KDialog::User2, (page == m_importPage ? false : true));
-    showButton(KDialog::User3, (page == m_openFilePage ? false : true));
+    enableButton(NextButton, (page == m_saveMethodPage ? false : true));
+    showButton(FinishButton, (page == m_importPage ? true : false));
+    if (page == m_importPage) {
+        setButtonGuiItem(FinishButton, KGuiItem(i18n("&Import..."), _IMPORT_ICON));
+    }
+    showButton(ConfigureButton, (page == m_optionsPage ? true : false));
+    showButton(NextButton, (page == m_importPage ? false : true));
+    showButton(BackButton, (page == m_openFilePage ? false : true));
 
     if (page == m_saveMethodPage && prev == m_tableNamePage && m_partItemForSavedTable) {
         if (m_newTable) {
@@ -522,7 +531,7 @@ void KexiCSVImportDialog::slotCurrentPageChanged(KPageWidgetItem *page, KPageWid
         } else if (!m_newTable) {
             KexiPart::Item *i = m_tablesList->selectedPartItem();
             if (!i) {
-                enableButton(KDialog::User2, false);
+                enableButton(NextButton, false);
             }
             slotShowSchema(i);
         }
@@ -1697,27 +1706,33 @@ void KexiCSVImportDialog::dropDestinationTable(KexiProject* project, KexiPart::I
 //! Used in emergency by accept()
 void KexiCSVImportDialog::raiseErrorInAccept(KexiProject* project, KexiPart::Item* partItemForSavedTable)
 {
-    enableButton(KDialog::Apply, true);
+    enableButton(FinishButton, true);
+    setButtonGuiItem(FinishButton, KGuiItem(i18n("&Import..."), _IMPORT_ICON));
     project->deleteUnstoredItem(partItemForSavedTable);
     delete m_destinationTableSchema;
     m_destinationTableSchema = 0;
     m_conn = 0;
-    enableButton(KDialog::User3, true);
+    enableButton(BackButton, true);
     m_importInProgress = false;
     m_importingProgressBar->hide();
 }
 
 void KexiCSVImportDialog::accept()
 {
-    parentWidget()->raise();
-    bool openingCancelled;
-    KexiWindow *win = KexiMainWindowIface::global()->openedWindowFor(m_partItemForSavedTable);
-    if (win) {
-        KexiMainWindowIface::global()->closeObject(m_partItemForSavedTable);
+    if (d->imported) {
+        parentWidget()->raise();
+        bool openingCancelled;
+        KexiWindow *win = KexiMainWindowIface::global()->openedWindowFor(m_partItemForSavedTable);
+        if (win) {
+            KexiMainWindowIface::global()->closeObject(m_partItemForSavedTable);
+        }
+        KexiMainWindowIface::global()->openObject(m_partItemForSavedTable,
+                                                  Kexi::DataViewMode, openingCancelled);
+        KAssistantDialog::accept();
     }
-    KexiMainWindowIface::global()->openObject(m_partItemForSavedTable,
-                                              Kexi::DataViewMode, openingCancelled);
-    KAssistantDialog::accept();
+    else {
+        import();
+    }
 }
 
 void KexiCSVImportDialog::import()
@@ -1844,8 +1859,8 @@ void KexiCSVImportDialog::import()
     }
 
     m_importInProgress = true;
-    enableButton(KDialog::User3, false);
-    enableButton(KDialog::Apply, false);
+    enableButton(BackButton, false);
+    enableButton(FinishButton, false);
     KexiPart::Part *part = Kexi::partManager().partForClass("org.kexi-project.table");
     if (!part) {
         msg.showErrorMessage(&Kexi::partManager());
@@ -1933,12 +1948,13 @@ void KexiCSVImportDialog::import()
                             m_destinationTableSchema->name()));
     m_importInProgress = false;
     //kDebug()<<"IMPORT DONE";
-    showButton(KDialog::User1, true);
-    showButton(KDialog::Apply, false);
+    setButtonGuiItem(FinishButton, KStandardGuiItem::open());
+    showButton(FinishButton, true);
     setButtonGuiItem(KDialog::Cancel, KStandardGuiItem::close());
-    showButton(KDialog::User2, false);
-    showButton(KDialog::User3, false);
+    showButton(NextButton, false);
+    showButton(BackButton, false);
     m_conn = 0;
+    d->imported = true;
 }
 
 void KexiCSVImportDialog::reject()
