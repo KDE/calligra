@@ -285,9 +285,9 @@ void KisCurveWidget::paintEvent(QPaintEvent *)
             d->m_pixmapDirty = false;
         }
         p.drawPixmap(0, 0, *d->m_pixmapCache);
-    } else
-        p.fillRect(rect(), palette().background());
+    }
 
+    p.fillRect(rect(), palette().base()); // fill with color to show widget bounds
 
     d->drawGrid(p, wWidth, wHeight);
 
