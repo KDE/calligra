@@ -271,16 +271,6 @@ tristate KexiMobileMainWindow::getNewObjectInfo(KexiPart::Item* partItem, KexiPa
     return false;
 }
 
-KXMLGUIClient* KexiMobileMainWindow::guiClient() const
-{
-    return 0;
-}
-
-KXMLGUIFactory* KexiMobileMainWindow::guiFactory()
-{
-    return 0;
-}
-
 void KexiMobileMainWindow::highlightObject(const QString& mime, const QString& name)
 {
 
@@ -294,11 +284,6 @@ bool KexiMobileMainWindow::newObject(KexiPart::Info* info, bool& openingCancelle
 KexiWindow* KexiMobileMainWindow::openObject(const QString& mime, const QString& name, Kexi::ViewMode viewMode, bool& openingCancelled, QMap< QString, QVariant >* staticObjectArgs)
 {
     return 0;
-}
-
-void KexiMobileMainWindow::plugActionList(const QString& name, const QList< KAction* >& actionList)
-{
-
 }
 
 tristate KexiMobileMainWindow::printItem(KexiPart::Item* item)
@@ -359,11 +344,6 @@ tristate KexiMobileMainWindow::switchToViewMode(KexiWindow& window, Kexi::ViewMo
 KToolBar* KexiMobileMainWindow::toolBar(const QString& name) const
 {
     return 0;
-}
-
-void KexiMobileMainWindow::unplugActionList(const QString& name)
-{
-
 }
 
 void KexiMobileMainWindow::updatePropertyEditorInfoLabel(const QString& textToDisplayForNullSet)

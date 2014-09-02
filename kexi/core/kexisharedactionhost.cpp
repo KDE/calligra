@@ -182,13 +182,10 @@ void KexiSharedActionHost::invalidateSharedActions(QObject *o)
                 actions_list.append(a);
                 if (!va->plugged) {
                     va->plugged = true;
-                    //d->mainWin->unplugActionList( a->objectName() );
-                    d->mainWin->plugActionList(a->objectName(), actions_list);
                 }
             } else {
                 if (va->plugged) {
                     va->plugged = false;
-                    d->mainWin->unplugActionList(a->objectName());
                 }
             }
         }

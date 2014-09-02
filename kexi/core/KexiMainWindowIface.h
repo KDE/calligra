@@ -35,8 +35,6 @@
 class KexiWindow;
 class KexiProject;
 class KActionCollection;
-class KXMLGUIClient;
-class KXMLGUIFactory;
 class KexiSearchableModel;
 class KexiUserFeedbackAgent;
 namespace KexiPart
@@ -92,46 +90,6 @@ public:
 #endif
 #endif
     virtual QWidget* focusWidget() const = 0;
-
-    //! Implemented by KXMLGUIClient
-#ifdef KEXI_IMPL_WARNINGS
-#ifdef __GNUC__
-#warning TODO virtual void plugActionList(const QString& name, const QList<KAction *>& actionList) = 0;
-#else
-#pragma WARNING( TODO virtual void plugActionList(const QString& name, const QList<KAction *>& actionList) = 0; )
-#endif
-#endif
-    virtual void plugActionList(const QString& name,
-                                const QList<KAction *>& actionList) = 0;
-
-#ifdef KEXI_IMPL_WARNINGS
-#ifdef __GNUC__
-#warning TODO KXMLGUIClient* guiClient() const = 0;
-#else
-#pragma WARNING( TODO KXMLGUIClient* guiClient() const = 0; )
-#endif
-#endif
-    virtual KXMLGUIClient* guiClient() const = 0;
-
-    //! Implemented by KXMLGUIClient
-#ifdef KEXI_IMPL_WARNINGS
-#ifdef __GNUC__
-#warning TODO virtual void unplugActionList (const QString &name) = 0;
-#else
-#pragma WARNING( TODO virtual void unplugActionList (const QString &name) = 0; )
-#endif
-#endif
-    virtual void unplugActionList(const QString &name) = 0;
-
-    //! Implemented by KMainWindow
-#ifdef KEXI_IMPL_WARNINGS
-#ifdef __GNUC__
-#warning TODO virtual KXMLGUIFactory * KMainWindow::guiFactory() = 0;
-#else
-#pragma WARNING( TODO virtual KXMLGUIFactory * KMainWindow::guiFactory() = 0; )
-#endif
-#endif
-    virtual KXMLGUIFactory * guiFactory() = 0;
 
     /*! Registers window \a window for watching and adds it to the main window's stack. */
     virtual void registerChild(KexiWindow *window) = 0;

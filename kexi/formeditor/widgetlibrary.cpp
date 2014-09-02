@@ -29,7 +29,6 @@
 #include <kservice.h>
 #include <kmenu.h>
 #include <kactioncollection.h>
-//2.0 #include <kxmlguiclient.h>
 
 #include <db/KoServiceLocator.h>
 #include <KoIcon.h>

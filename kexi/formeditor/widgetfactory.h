@@ -35,7 +35,6 @@ class QDomElement;
 class QDomDocument;
 class QVariant;
 class KActionCollection;
-//2.0 class KXMLGUIClient;
 
 namespace KoProperty
 {

@@ -45,8 +45,6 @@ class Info;
 class Part;
 }
 
-class KXMLGUIClient;
-class KXMLGUIFactory;
 class KexiMainWidget;
 class KexiUserFeedbackAgent;
 
@@ -105,50 +103,6 @@ public:
     virtual QWidget* focusWidget() const {
         return KexiMainWindowSuper::focusWidget();
     }
-
-#ifdef KEXI_IMPL_WARNINGS
-#ifdef __GNUC__
-#warning TODO  virtual void plugActionList(const QString& name,
-#else
-#pragma WARNING( TODO  virtual void plugActionList(const QString& name, )
-#endif
-#endif
-    virtual void plugActionList(const QString& name,
-                                const QList<KAction *>& actionList) {
-        Q_UNUSED(name)
-        Q_UNUSED(actionList)
-    }
-
-#ifdef KEXI_IMPL_WARNINGS
-#ifdef __GNUC__
-#warning TODO KXMLGUIClient* guiClient() const;
-#else
-#pragma WARNING( TODO KXMLGUIClient* guiClient() const; )
-#endif
-#endif
-    virtual KXMLGUIClient* guiClient() const;
-
-#ifdef KEXI_IMPL_WARNINGS
-#ifdef __GNUC__
-#warning TODO virtual void unplugActionList (const QString &name);
-#else
-#pragma WARNING( TODO virtual void unplugActionList (const QString &name); )
-#endif
-#endif
-    virtual void unplugActionList(const QString &name) {
-        Q_UNUSED(name)
-    }
-
-    //! Implemented by KMainWindow
-#ifdef KEXI_IMPL_WARNINGS
-#ifdef __GNUC__
-#warning TODO virtual KXMLGUIFactory * KMainWindow::guiFactory();
-#else
-#pragma WARNING( TODO virtual KXMLGUIFactory * KMainWindow::guiFactory(); )
-#endif
-#endif
-    virtual KXMLGUIFactory* guiFactory();
-
 
     /*! Used by the main kexi routine. Creates a new Kexi main window and a new KApplication object.
      kdemain() has to destroy the latter on exit.
@@ -487,11 +441,6 @@ protected:
     /*! Implemented for KexiMainWindowIface.
      Switches \a window to view \a mode. Activates the window if it is not the current window. */
     virtual tristate switchToViewMode(KexiWindow& window, Kexi::ViewMode viewMode);
-
-    /*! Helper. Removes and/or adds GUI client for current window's view;
-     on switching to other window (activeWindowChanged())
-     or on switching to other view within the same window (switchToViewMode()). */
-    void updateWindowViewGUIClient(KXMLGUIClient *viewClient);
 
     /*! Helper. Updates setup of property panel's tabs. Used when switching
      from \a prevWindow window to a current window. */

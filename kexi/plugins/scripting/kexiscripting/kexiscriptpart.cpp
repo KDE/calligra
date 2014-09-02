@@ -35,7 +35,6 @@
 #include <kexipart.h>
 #include <kexipartitem.h>
 #include <KoIcon.h>
-#include <kxmlguiclient.h>
 //#include <kexidialogbase.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>

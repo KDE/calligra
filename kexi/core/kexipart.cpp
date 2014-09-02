@@ -37,7 +37,6 @@
 #include <kactioncollection.h>
 #include <kdebug.h>
 #include <kmessagebox.h>
-#include <kxmlguifactory.h>
 #include <kstandarddirs.h>
 
 namespace KexiPart
@@ -154,11 +153,6 @@ void Part::createGUIClients()//KexiMainWindow *win)
         if (!what.isEmpty()) {
             act->setWhatsThis(what);
         }
-#ifdef __GNUC__
-#warning TODO  KexiMainWindowIface::global()->guiFactory()->addClient(d->guiClient); //this client is added permanently
-#else
-#pragma WARNING( TODO  KexiMainWindowIface::global()->guiFactory()->addClient(d->guiClient); )
-#endif
 
         //default actions for part instance's gui client:
         //NONE
@@ -182,7 +176,7 @@ void Part::createGUIClients()//KexiMainWindow *win)
 
 KActionCollection* Part::actionCollectionForMode(Kexi::ViewMode viewMode) const
 {
-    KXMLGUIClient *cli = d->instanceGuiClients.value((int)viewMode);
+    GUIClient *cli = d->instanceGuiClients.value((int)viewMode);
     return cli ? cli->actionCollection() : 0;
 }
 
@@ -458,38 +452,33 @@ KEXICORE_EXPORT QString KexiPart::fullCaptionForItem(KexiPart::Item& item, KexiP
 
 //-------------------------------------------------------------------------
 
+class GUIClient::Private
+{
+public:
+    Private() : actionCollection(static_cast<QObject*>(0)) {}
+    KActionCollection actionCollection;
+};
+
+
+
 GUIClient::GUIClient(Part* part, bool partInstanceClient, const char* nameSuffix)
         : QObject(part)
-#ifdef __GNUC__
-#warning TODO , KXMLGUIClient(*KexiMainWindowIface::global()->guiClient())
-#else
-#pragma WARNING( TODO: KXMLGUIClient(*KexiMainWindowIface::global()->guiClient()) )
-#endif
+        , d(new Private)
 {
+    Q_UNUSED(partInstanceClient);
     setObjectName(
         part->info()->objectName()
         + (nameSuffix ? QString(":%1").arg(nameSuffix) : QString()));
+}
 
-    if (!KexiMainWindowIface::global()->project()->data()->userMode()) {
-        const QString file( QString::fromLatin1("kexi") + part->info()->objectName()
-                     + "part" + (partInstanceClient ? "inst" : "") + "ui.rc" );
-        const QString filter = componentData().componentName() + '/' + file;
-        const QStringList allFiles = componentData().dirs()->findAllResources("data", filter) +
-                                     componentData().dirs()->findAllResources("data", file);
-        if (!allFiles.isEmpty()) {
-            QString doc;
-            if (!findMostRecentXMLFile(allFiles, doc).isEmpty())
-              setXMLFile(file);
-        }
-    }
+GUIClient::~GUIClient()
+{
+    delete d;
+}
 
-// new KAction(part->d->names["new"], part->info()->itemIconName(), 0, this,
-//  SLOT(create()), actionCollection(), (part->info()->objectName()+"part_create").toLatin1());
-
-// new KAction(i18nInstanceName+"...", part->info()->itemIconName(), 0, this,
-//  SLOT(create()), actionCollection(), (part->info()->objectName()+"part_create").toLatin1());
-
-// win->guiFactory()->addClient(this);
+KActionCollection* GUIClient::actionCollection() const
+{
+    return &d->actionCollection;
 }
 
 #include "kexipart.moc"
