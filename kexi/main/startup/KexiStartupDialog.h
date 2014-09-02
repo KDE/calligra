@@ -33,7 +33,7 @@ class QEvent;
 
 //! @short Kexi startup dialog
 /*!
- This class is used to show the template/open-existing/open-recent tabbed dialog
+ This class is used to show the template/open-existing tabbed dialog
  on Kexi startup. If only one page is shown, tab is not displayed, so the dialog
  becomes a normal "plain" type dialog.
 */
@@ -48,8 +48,7 @@ public:
         CreateBlankResult,        //!< The user has selected a template
         CreateFromTemplateResult, //!< The user has selected a template to be used for creating a new db
         ImportResult,             //!< The user has chosen to import db
-        OpenExistingResult,       //!< The user has chosen an existing connection or db file
-        OpenRecentResult          //!< The user has selected one of recently used databases
+        OpenExistingResult        //!< The user has chosen an existing connection or db file
     };
 
     /*!
@@ -57,10 +56,9 @@ public:
       (any !=0 or'ed value is ok)
       - Templates Show "Templates" tab
       - OpenExisting Show "Open existing" tab
-      - OpenRecent Show "Recent" tab
       - Everything Show everything above
     */
-    enum DialogType { Templates = 1, OpenExisting = 2, OpenRecent = 4, Everything = (1 + 2 + 4) };
+    enum DialogType { Templates = 1, OpenExisting = 2, Everything = (1 + 2 + 4) };
 
     /*! Options for a dialog
       (any or'ed value or 0 is ok)
@@ -71,7 +69,6 @@ public:
     /*! Creates a dialog.
     @param dialogType see DialogType description
     @param dialogOptions see dialogOptions description
-    @param recentProjects a set of recent projects' info, used for "Open recent" tab
     @param connSet conenction set used to present available conenctions
       in "Open Existing" tab. Pass an empty object is this tab is not used.
     @param parent parent widget, if any.
@@ -81,7 +78,6 @@ public:
         int dialogType,
         int dialogOptions,
         KexiDBConnectionSet& connSet,
-        KexiProjectSet& recentProjects,
         QWidget *parent = 0);
 
     ~KexiStartupDialog();
@@ -94,7 +90,7 @@ public:
     \return one of Result values. Use this after dialog is closed. */
     int result() const;
 
-    /*! \return data of selected Kexi project (if "Open Recent" tab was selected).
+    /*! \return data of selected Kexi project.
       Returns NULL if no selection has been made or other tab was selected.
     */
     KexiProjectData* selectedProjectData() const;
@@ -137,7 +133,6 @@ protected slots:
     void templateSelected(const QString& fileName);
 
     //! helper
-    void recentProjectItemExecuted(KexiProjectData *data);
     void existingFileHighlighted();
     void showSimpleConnForOpenExisting();
     void showAdvancedConnForOpenExisting();
@@ -154,7 +149,6 @@ protected:
 private:
     void setupPageTemplates();
     void setupPageOpenExisting();
-    void setupPageOpenRecent();
 
     class Private;
     Private * const d;

@@ -29,6 +29,8 @@ if (GLIB2_FOUND)
     add_subdirectory( mdb )
 ENDIF(GLIB2_FOUND)
 
+add_subdirectory(tests)
+
 ########### next target ###############
 
 set(keximigrate_LIB_SRCS AlterSchemaTableModel.cpp 
@@ -56,16 +58,6 @@ target_link_libraries(
 
 set_target_properties(keximigrate PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 install(TARGETS keximigrate  ${INSTALL_TARGETS_DEFAULT_ARGS})
-
-
-########### next target ###############
-
-set(keximigratetest_SRCS keximigratetest.cpp )
-
-
-kde4_add_executable(keximigratetest ${keximigratetest_SRCS})
-
-target_link_libraries(keximigratetest  ${KDE4_KDECORE_LIBS} keximigrate kexicore kexidb kexiextendedwidgets keximain )
 
 ########### install files ###############
 

@@ -34,6 +34,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include "mysqlcursor.h"
 #include "mysqlpreparedstatement.h"
 #include <db/error.h>
+#include <db/utils.h>
 
 
 using namespace KexiDB;
@@ -135,7 +136,7 @@ bool MySqlConnection::drv_databaseExists(const QString &dbName, bool ignoreError
           .arg(driver()->escapeString(storedDbName)), success);
     if (!exists || !success) {
         if (!ignoreErrors)
-            setError(ERR_OBJECT_NOT_FOUND, i18n("The database \"%1\" does not exist.", storedDbName));
+            setError(ERR_OBJECT_NOT_FOUND, kexidb_i18n("The database \"%1\" does not exist.", storedDbName));
         return false;
     }
     return true;

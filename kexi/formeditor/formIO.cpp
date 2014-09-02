@@ -47,23 +47,10 @@
 #include "container.h"
 #include "objecttree.h"
 #include "widgetlibrary.h"
-#ifndef KEXI_NO_FORM_SPRING_ELEMENT
-# include "spring.h"
-#endif
 #include "events.h"
 #include "utils.h"
 #include "widgetwithsubpropertiesinterface.h"
 #include "formIO.h"
-
-#define KEXI_NO_FLOWLAYOUT
-#ifdef __GNUC__
-#warning Port Kexi flow layout!
-#else
-#pragma WARNING( Port Kexi flow layout! )
-#endif
-#ifndef KEXI_NO_FLOWLAYOUT
-#include <kexiutils/FlowLayout.h>
-#endif
 
 #ifdef __GNUC__
 #warning pixmapcollection
@@ -137,7 +124,7 @@ FormIO::saveFormToFile(Form *form, const QString &filename)
 
     if (filename.isEmpty()) {
         KoFileDialog dlg(0, KoFileDialog::SaveFile, "SaveForm");
-        dlg.setNameFilter(i18n("*.ui|Qt Designer UI Files"));
+        dlg.setNameFilter("*.ui|" + i18n("Qt Designer UI Files"));
         _filename = dlg.url();
         if (_filename.isEmpty()) {
             return false;
@@ -317,7 +304,7 @@ FormIO::loadFormFromFile(Form *form, QWidget *container, const QString &filename
 
     if (filename.isEmpty()) {
         KoFileDialog dlg(0, KoFileDialog::OpenFile, "LoadForm");
-        dlg.setNameFilter(i18n("*.ui|Qt Designer UI Files"));
+        dlg.setNameFilter("*.ui|" + i18n("Qt Designer UI Files"));
         _filename = dlg.url();
         if (_filename.isEmpty()) {
             return false;
@@ -911,13 +898,6 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
     if (!item)
         return;
     kDebug() << item->className() << item->widget()->objectName();
-#ifndef KEXI_NO_FORM_SPRING_ELEMENT
-    // we let Spring class handle saving itself
-    if (item->className() == "Spring") {
-        Spring::saveSpring(item, parent, domDoc, insideGridLayout);
-        return;
-    }
-#endif
     Form *form = item->container() ? item->container()->form() : item->parent()->container()->form();
     WidgetLibrary *lib = form->library();
 
@@ -1071,36 +1051,6 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
     }
     case Form::HFlow:
     case Form::VFlow: {
-#ifdef KEXI_NO_FLOWLAYOUT
-#ifdef __GNUC__
-#warning Port Kexi flow layout!
-#else
-#pragma WARNING( Port Kexi flow layout! )
-#endif
-#else
-        layout.setTagName("grid");
-        KexiFlowLayout *flow = static_cast<KexiFlowLayout*>(item->container()->layout());
-        if (!flow)
-            break;
-        QWidgetList *list = (QWidgetList*)flow->widgetList();
-
-        // save some special properties
-        savePropertyElement(layout, domDoc, "property", "customLayout",
-            Container::layoutTypeToString(item->container()->layoutType()));
-        savePropertyElement(layout, domDoc, "property", "justify",
-            static_cast<KexiFlowLayout*>(item->container()->layout())->isJustified());
-
-        // fill the widget's grid info, ie just simulate grid layout
-        item->container()->createGridLayout(true);
-        foreach (QWidget *w, *list) {
-            ObjectTreeItem *titem = item->container()->form()->objectTree()->lookup(
-                w->name()
-            );
-            if (item)
-                saveWidget(titem, layout, domDoc, true); // save grid info for compatibility with QtDesigner
-        }
-        delete list;
-#endif
         break;
     }
     default: {
@@ -1149,39 +1099,9 @@ void FormIO::loadWidget(Container *container, const QDomElement &el, QWidget *pa
     }
 
     QByteArray classname, alternate;
-    // We translate some name (for compatibility)
-    if (el.tagName() == "spacer")
-        classname = "Spring";
-    else if (el.attribute("class") == "QLayoutWidget") {
-        for (QDomNode n = el.firstChild(); !n.isNull(); n = n.nextSibling())
-        {
-            QString tagName = n.toElement().tagName();
-            if (tagName == "property")
-                continue;
-            if (tagName == "hbox")
-                classname = "HBox";
-            else if (tagName == "vbox")
-                classname = "VBox";
-            else if (tagName == "grid") {
-                // first, see if it is flow layout
-                for (QDomNode child = n.firstChild(); !child.isNull(); child = child.nextSibling())  {
-                    if (    child.toElement().tagName() == "property"
-                         && nameAttribute(child.toElement()) == "customLayout")
-                    {
-                        classname = child.toElement().text().toLatin1();
-                        break;
-                    }
-                }
-
-                if (classname.isEmpty()) // normal grid
-                    classname = "Grid";
-            }
-        }
-    }
-    else { // check if this classname is an alternate one, and replace it if necessary
-        classname = el.attribute("class").toLatin1();
-        alternate = container->form()->library()->classNameForAlternate(classname);
-    }
+    // check if this classname is an alternate one, and replace it if necessary
+    classname = el.attribute("class").toLatin1();
+    alternate = container->form()->library()->classNameForAlternate(classname);
 
     QWidget *w;
     if (alternate == "CustomWidget") {
@@ -1382,13 +1302,6 @@ void FormIO::readChildNodes(ObjectTreeItem *item, Container *container, const QD
                     int spacing = readPropertyValue(container->form(), node.firstChild(), w, name).toInt();
                     item->container()->setLayoutSpacing(spacing);
                     item->container()->layout()->setSpacing(spacing);
-                } else if ((name == "justify")) {
-#ifndef KEXI_NO_FLOWLAYOUT
-                    bool justify = readPropertyValue(node.firstChild(), w, name).toBool();
-                    KexiFlowLayout *flow = static_cast<KexiFlowLayout*>(item->container()->layout());
-                    if (flow)
-                        flow->setJustified(justify);
-#endif
                 }
             }
             else if (name == "paletteBackgroundColor" || name == "paletteForegroundColor") {
@@ -1465,29 +1378,7 @@ void FormIO::readChildNodes(ObjectTreeItem *item, Container *container, const QD
             }
 
             if (layoutName == "HFlow") {
-#ifdef KEXI_NO_FLOWLAYOUT
-#ifdef __GNUC__
-#warning Port Kexi flow layout!
-#else
-#pragma WARNING( Port Kexi flow layout! )
-#endif
-#else
-                item->container()->m_layType = Form::HFlow;
-                KexiFlowLayout *layout = new KexiFlowLayout(item->widget());
-                layout->setOrientation(Qt::Horizontal);
-                item->container()->m_layout = (QLayout*)layout;
-#endif
             } else if (layoutName == "VFlow") {
-#ifdef KEXI_NO_FLOWLAYOUT
-#ifdef __GNUC__
-#warning "Port Kexi flow layout!"
-#endif
-#else
-                item->container()->m_layType = Form::VFlow;
-                KexiFlowLayout *layout = new KexiFlowLayout(item->widget());
-                layout->setOrientation(Qt::Vertical);
-                item->container()->m_layout = (QLayout*)layout;
-#endif
             } else { // grid layout
                 item->container()->setLayoutType(Form::Grid);
                 QGridLayout *layout = new QGridLayout(item->widget());

@@ -72,7 +72,7 @@ QVariant KexiCSVImportDialogModel::data(const QModelIndex &index, int role) cons
             if (!d->columnNames[index.column()].isEmpty() && d->firstRowForFieldNames) {
                 return d->columnNames[index.column()];
             } else {
-                return i18n("Column %1", index.column() + 1);
+                return i18nc("@title:column Column 1, Column 2, etc.", "Column %1", index.column() + 1);
             }
         }
     }
@@ -85,7 +85,7 @@ QVariant KexiCSVImportDialogModel::headerData(int section, Qt::Orientation orien
     QVariant value = QStandardItemModel::headerData(section, orientation, role);
     if (orientation == Qt::Vertical && role == Qt::DisplayRole) {
         if (section == 0) {
-            return QString(i18nc("@title:row", "Column name") + "  ");
+            return i18nc("@title:row (with two spaces at the end)", "Column name  ");
         } else {
             return QString::number(section);
         }

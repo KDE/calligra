@@ -503,30 +503,6 @@ public slots:
     /*! Creates a dialog to edit the Connection of \ref activeForm(). */
     void editConnections();
 
-    //! Lay out selected widgets using HBox layout (calls \ref CreateLayoutCommand).
-    void layoutHBox();
-    
-    //! Lay out selected widgets using VBox layout.
-    void layoutVBox();
-    
-    //! Lay out selected widgets using Grid layout.
-    void layoutGrid();
-    
-    //! Lay out selected widgets in an horizontal splitter
-    void  layoutHSplitter();
-    
-    //! Lay out selected widgets in a verticak splitter
-    void  layoutVSplitter();
-    
-    //! Lay out selected widgets using HFlow layout
-    void layoutHFlow();
-    
-    //! Lay out selected widgets using VFlow layout.
-    void layoutVFlow();
-
-    //! Breaks selected layout(calls \ref BreakLayoutCommand).
-    void breakLayout();
-
     void alignWidgetsToLeft();
     
     void alignWidgetsToRight();
@@ -722,18 +698,6 @@ protected:
     /*! Saves the properties related to alignment (ie hAlign, vAlign and WordBreak)
      and modifies the "alignment" property of  the widget.*/
     void saveAlignProperty(const QString &property);
-
-    /*! Creates the "layout" property, for the Container representing \a item. */
-    void createLayoutProperty(ObjectTreeItem *item);
-
-    /*! Saves the "layout" property and changes the Container 's layout,
-        using Container::setLayoutType().*/
-    void saveLayoutProperty(const QString &property, const QVariant &value);
-
-    /*! Function called by the "Lay out in..." menu items. It creates a layout from the
-      currently selected widgets (that must have the same parent).
-      Calls \ref CreateLayoutCommand. */
-    void createLayout(LayoutType layoutType);
 
     KActionCollection  *actionCollection() const;
 

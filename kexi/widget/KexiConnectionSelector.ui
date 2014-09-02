@@ -45,8 +45,8 @@
       </sizepolicy>
      </property>
      <property name="text">
-      <string>&lt;b&gt;Select Existing Database Server's Connection From the List Below&lt;/b&gt;
-&lt;p&gt;You will see existing Kexi projects available for the selected connection. Here you may also add, edit or remove connections from the list.
+      <string>&lt;title&gt;Select Existing Database Server's Connection From the List Below&lt;/title&gt;
+&lt;para&gt;You will see existing Kexi projects available for the selected connection. Here you may also add, edit or remove connections from the list.&lt;/para&gt;
 </string>
      </property>
      <property name="alignment">
@@ -178,7 +178,7 @@
       </sizepolicy>
      </property>
      <property name="text">
-      <string>&amp;Remove</string>
+      <string>&amp;Remove...</string>
      </property>
     </widget>
    </item>

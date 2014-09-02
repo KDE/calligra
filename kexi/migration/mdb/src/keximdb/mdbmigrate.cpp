@@ -47,9 +47,9 @@ MDBMigrate::MDBMigrate(QObject *parent, const QVariantList &args)
 {
     /*! @todo invert the sense of values, then remove "Non-" from these strings */
     setPropertyValue(isNonUnicodePropId, true);
-    setPropertyCaption(isNonUnicodePropId, i18n("Source Database Has Non-Unicode Encoding"));
+    setPropertyCaption(isNonUnicodePropId, i18n("Character Encoding of Source Database Is Not of Unicode Standard"));
     setPropertyValue(nonUnicodePropId, QString());
-    setPropertyCaption(nonUnicodePropId, i18n("Source Database Non-Unicode Encoding"));
+    setPropertyCaption(nonUnicodePropId, i18n("Source Database Non-Unicode Character Encoding"));
 
     initBackend();
 }

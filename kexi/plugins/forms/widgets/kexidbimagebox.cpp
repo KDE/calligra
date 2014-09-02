@@ -515,7 +515,7 @@ void KexiDBImageBox::updateActionStrings()
                 beautifiedImageBoxName = beautifiedImageBoxName[0].toUpper() + beautifiedImageBoxName.mid(1);
             }
             m_chooser->setToolTip(
-                i18n("Click to show actions for \"%1\" image box", beautifiedImageBoxName));
+                i18n("Click to show actions for <interface>%1</interface> image box", beautifiedImageBoxName));
         }
     }
 }
