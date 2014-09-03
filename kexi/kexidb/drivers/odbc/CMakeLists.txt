@@ -28,4 +28,4 @@ install(TARGETS kexidb_odbcdriver  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  kexidb_odbcdriver.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  kexidb_odbcdriver.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)

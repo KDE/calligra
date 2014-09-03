@@ -26,4 +26,4 @@ install(TARGETS keximigrate_pqxx  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  keximigrate_pqxx.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  keximigrate_pqxx.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
