@@ -285,21 +285,17 @@ bool KisPropertiesConfiguration::removeProperty(const QString & name)
     if(hasProperty(name)){
         KisPropertiesConfiguration *temp = new KisPropertiesConfiguration();
         QMapIterator<QString, QVariant> i(getProperties());
-        while(i.hasNext())
-        {
+        while(i.hasNext()){
             i.next();
             temp->setProperty(i.key(),QVariant(i.value()));
         }
         clearProperties();
         QMapIterator<QString, QVariant> j(temp->getProperties());
-        while(j.hasNext())
-        {
+        while(j.hasNext()){
             j.next();
-            if(j.key()!=name)
-            {
+            if(j.key()!=name){
                 setProperty(j.key(),QVariant(j.value()));
             }
-
         }
     return true;
     }

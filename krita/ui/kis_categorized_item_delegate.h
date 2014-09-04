@@ -37,9 +37,6 @@ public:
     void paintTriangle(QPainter* painter, qint32 x, qint32 y, qint32 size, bool rotate) const;
 
 private:
-
-    
-private:
     bool           m_indicateError;
     mutable qint32 m_minimumItemHeight;
 };

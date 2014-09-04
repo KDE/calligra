@@ -592,7 +592,7 @@ KUndo2QStack::KUndo2QStack(QObject *parent)
     Destroys the undo stack, deleting any commands that are on it. If the
     stack is in a KUndo2Group, the stack is automatically removed from the group.
 
-    \sa KUndo2QStack()
+    \sa KUndo2QStack()The number of last strokes which Krita should store separately
 */
 
 KUndo2QStack::~KUndo2QStack()
@@ -710,14 +710,11 @@ void KUndo2QStack::push(KUndo2Command *cmd)
             m_lastMergedSetCount = 0;
             m_lastMergedIndex = m_index-1;
         }
-
         if(lastcmd->timedId()==-1)
         {
             m_lastMergedSetCount = 0;
             m_lastMergedIndex = m_index;
         }
-
-
         if (m_lastMergedSetCount > m_strokesN) { 
             KUndo2Command* toMerge = m_command_list.at(m_lastMergedIndex);
             if (toMerge && m_command_list.at(m_lastMergedIndex + 1)) {
@@ -747,16 +744,13 @@ void KUndo2QStack::push(KUndo2Command *cmd)
                                     m_command_list.removeOne(curr);
                                 }
                              }
-
                         } else {
                             lastcmd = curr; //end of a merge set
                         }
-
                     } else {
-
                         if (qAbs(lastcmd->time().msecsTo(lastCmdInCurrent->endTime())) < int(m_timeT2 * 1000) && lastcmd != lastCmdInCurrent &&lastcmd!=curr) {
                             if(lastcmd->timedMergeWith(curr)){
-                                if (m_command_list.contains(curr)) {
+                                if (m_command_list.contains(curr)){
                                     m_command_list.removeOne(curr);
                                 }
                             }
@@ -770,8 +764,6 @@ void KUndo2QStack::push(KUndo2Command *cmd)
         }
         m_index = m_command_list.size();
     }   
-
-
     if (try_merge && cur->mergeWith(cmd)) {
         delete cmd;
         if (!macro) {

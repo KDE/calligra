@@ -183,18 +183,20 @@ int KisUndoModel::columnCount(const QModelIndex&) const
 
 QVariant KisUndoModel::data(const QModelIndex &index, int role) const
 {
-    if (m_stack == 0)
+    if (m_stack == 0){
         return QVariant();
-
-    if (index.column() != 0)
+    }
+    if (index.column() != 0){
         return QVariant();
-
-    if (index.row() < 0 || index.row() > m_stack->count())
+    }
+    if (index.row() < 0 || index.row() > m_stack->count()){
         return QVariant();
+    }
 
     if (role == Qt::DisplayRole) {
-        if (index.row() == 0)
+        if (index.row() == 0){
             return m_empty_label;
+        }
         KUndo2Command* currentCommand = const_cast<KUndo2Command*>(m_stack->command(index.row() - 1));
         return currentCommand->isMerged()?m_stack->text(index.row() - 1)+"(Merged)":m_stack->text(index.row() - 1);
     } else if (role == Qt::DecorationRole) {
@@ -203,7 +205,6 @@ QVariant KisUndoModel::data(const QModelIndex &index, int role) const
             return imageMap[currentCommand];
         }
     }
-
     return QVariant();
 }
 
@@ -264,4 +265,5 @@ void KisUndoModel::addImage(int idx) {
 }
 bool KisUndoModel::checkMergedCommand(int index)
 {
-    return false;}
+    return false;
+}

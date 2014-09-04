@@ -67,9 +67,6 @@ void KisCategorizedItemDelegate::paint(QPainter* painter, const QStyleOptionView
             }
         }
         painter->setOpacity(1);
-
-
-
     }
     else {
         QPalette palette = QApplication::palette();
@@ -89,7 +86,6 @@ void KisCategorizedItemDelegate::paint(QPainter* painter, const QStyleOptionView
             !index.data(__CategorizedListModelBase::ExpandCategoryRole).toBool()
         );
     }
-
     painter->resetTransform();
 }
 
@@ -102,9 +98,7 @@ QSize KisCategorizedItemDelegate::sizeHint(const QStyleOptionViewItem& option, c
             m_minimumItemHeight = qMax(m_minimumItemHeight, indexSize.height());
         }
     }
-
     return QSize(QStyledItemDelegate::sizeHint(option, index).width(), m_minimumItemHeight);
-
 }
 
 void KisCategorizedItemDelegate::paintTriangle(QPainter* painter, qint32 x, qint32 y, qint32 size, bool rotate) const
