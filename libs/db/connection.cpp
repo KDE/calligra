@@ -2595,7 +2595,7 @@ tristate Connection::querySingleString(const QString& sql, QString &value, uint 
     }
     if (!cursor->moveFirst() || cursor->eof()) {
         const tristate result = cursor->error() ? tristate(false) : tristate(cancelled);
-        KexiDBWarn << "Connection::querySingleRecord(): !cursor->moveFirst() || cursor->eof() " << m_sql;
+        //KexiDBDbg << "Connection::querySingleRecord(): !cursor->moveFirst() || cursor->eof() " << m_sql;
         deleteCursor(cursor);
         return result;
     }
