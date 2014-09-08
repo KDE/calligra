@@ -138,6 +138,7 @@ public:
      * @param controller the controller that is removed
      */
     void removeCanvasController(KoCanvasController *controller);
+    Q_SLOT void attemptCanvasControllerRemoval(QObject *controller);
 
     /// @return the active canvas controller
     KoCanvasController *activeCanvasController() const;
