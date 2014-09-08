@@ -117,7 +117,7 @@ public:
     MainWindow* q;
     bool allowClose;
     TouchDeclarativeView* touchView;
-    KoMainWindow* desktopView;
+    QPointer<KoMainWindow> desktopView;
     QObject* currentView;
     Settings *settings;
 
@@ -431,6 +431,7 @@ void MainWindow::documentChanged()
     if (d->desktopView) {
         d->desktopView->deleteLater();
         d->desktopView = 0;
+        qApp->processEvents();
     }
     d->initDesktopView();
     d->desktopView->setRootDocument(DocumentManager::instance()->document(), DocumentManager::instance()->part(), false);
