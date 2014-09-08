@@ -408,7 +408,6 @@ void KoTextLayoutArea::backtrackKeepWithNext(FrameIterator *cursor)
 
 bool KoTextLayoutArea::layout(FrameIterator *cursor)
 {
-    qApp->processEvents();
     qDeleteAll(d->tableAreas);
     d->tableAreas.clear();
     qDeleteAll(d->footNoteAreas);
@@ -1199,7 +1198,6 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     int numBaselineShifts = 0;
 
     while (line.isValid()) {
-        //qApp->processEvents();
         runAroundHelper.setLine(this, line);
         runAroundHelper.setObstructions(documentLayout()->currentObstructions());
         QRectF anchoringRect = d->blockRects.last();
