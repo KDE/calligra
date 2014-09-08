@@ -248,6 +248,8 @@ void CQPresentationCanvas::openFile(const QString& uri)
     else
         d->document->openUrl (KUrl (uri));
 
+    d->document->setModified(false);
+    qApp->processEvents();
 
     KoPACanvasItem *paCanvasItem = static_cast<KoPACanvasItem*>(d->part->canvasItem(d->part->document()));
     d->canvasBase = paCanvasItem;
