@@ -67,6 +67,8 @@ void KoPADocumentModel::update()
 {
     emit layoutAboutToBeChanged();
     emit layoutChanged();
+    if(m_document)
+        dataChanged(createIndex(0, 0), createIndex(m_document->pageCount() - 1, columnCount() - 1));
 }
 
 int KoPADocumentModel::rowCount( const QModelIndex &parent ) const
