@@ -155,7 +155,7 @@ void KexiFormManager::createActions(KActionCollection* collection)
     }
     else {
         d->dragConnectionAction = new KToggleAction(
-            koIcon("signalslot"), i18n("Connect Signals/Slots"), d->collection);
+            koIcon("signalslot"), futureI18n("Connect Signals/Slots"), d->collection);
         d->dragConnectionAction->setObjectName("drag_connection");
         connect(d->dragConnectionAction, SIGNAL(triggered()),
                 this, SLOT(startCreatingConnection()));
@@ -236,15 +236,8 @@ void KexiFormManager::createActions(KActionCollection* collection)
             << "library_widget_KexiFrame"
             << "library_widget_QGroupBox"
             << "library_widget_KFDTabWidget"
-            << QString() //sep
             << "library_widget_Line"
-#ifndef KEXI_NO_FORM_LAYOUTS
-            << "library_widget_Spacer"
-#endif
-#ifndef KEXI_NO_FORM_SPRING_ELEMENT
-            << "library_widget_Spring"
             << QString() //sep
-#endif
 #ifdef CAN_USE_QTWEBKIT
             << "library_widget_WebBrowserWidget"
 #endif
@@ -428,11 +421,13 @@ void KexiFormManager::setDataSourceFieldOrExpression(
 void KexiFormManager::insertAutoFields(const QString& sourcePartClass, const QString& sourceName,
                                        const QStringList& fields)
 {
+#ifndef KEXI_NO_AUTOFIELD_WIDGET
     KexiFormView* formViewWidget = activeFormViewWidget();
     if (!formViewWidget || !formViewWidget->form() || !formViewWidget->form()->activeContainer())
         return;
     formViewWidget->insertAutoFields(sourcePartClass, sourceName, fields,
                                      formViewWidget->form()->activeContainer());
+#endif
 }
 
 void KexiFormManager::slotHistoryCommandExecuted(KFormDesigner::Command *command)
@@ -476,7 +471,7 @@ void KexiFormManager::showFormUICode()
     KPageDialog uiCodeDialog;
     uiCodeDialog.setFaceType(KPageDialog::Tabbed);
     uiCodeDialog.setModal(true);
-    uiCodeDialog.setWindowTitle(i18n("Form's UI Code"));
+    uiCodeDialog.setWindowTitle(i18nc("@title:window", "Form's UI Code"));
     uiCodeDialog.setButtons(KDialog::Close);
     uiCodeDialog.resize(700, 600);
     KTextEdit *currentUICodeDialogEditor = new KTextEdit(&uiCodeDialog);
@@ -554,8 +549,8 @@ QString KexiFormManager::translateName(const char* name) const
 {
     QString n(QString::fromLatin1(name));
     // translate to our name space:
-    if (n.startsWith("align_") || n.startsWith("adjust_") || n.startsWith("layout_")
-            || n == "format_raise" || n == "format_raise" || n == "taborder" || n == "break_layout")
+    if (n.startsWith("align_") || n.startsWith("adjust_")
+            || n == "format_raise" || n == "format_raise" || n == "taborder")
     {
         n.prepend("formpart_");
     }

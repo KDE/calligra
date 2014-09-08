@@ -243,14 +243,14 @@ KexiQueryDesignerGuiEditor::initTableColumns()
     d->data->addColumn(col3);
 
 #ifndef KEXI_NO_QUERY_TOTALS
-    KexiDB::TableViewColumn *col4 = new KexiDB::TableViewColumn("totals", KexiDB::Field::Enum, i18n("Totals"),
-            i18n("Describes a way of computing totals for a given field or expression."));
+    KexiDB::TableViewColumn *col4 = new KexiDB::TableViewColumn("totals", KexiDB::Field::Enum, futureI18n("Totals"),
+            futureI18n("Describes a way of computing totals for a given field or expression."));
     QVector<QString> totalsTypes;
-    totalsTypes.append(i18n("Group by"));
-    totalsTypes.append(i18n("Sum"));
-    totalsTypes.append(i18n("Average"));
-    totalsTypes.append(i18n("Min"));
-    totalsTypes.append(i18n("Max"));
+    totalsTypes.append(futureI18n("Group by"));
+    totalsTypes.append(futureI18n("Sum"));
+    totalsTypes.append(futureI18n("Average"));
+    totalsTypes.append(futureI18n("Min"));
+    totalsTypes.append(futureI18n("Max"));
     //! @todo more like this
     col4->field()->setEnumHints(totalsTypes);
     d->data->addColumn(col4);

@@ -37,7 +37,7 @@
 #include <KoZoomController.h>
 #include <KoCanvasControllerWidget.h>
 #include <KoGlobal.h>
-#include <KoRulerController.h>
+#include <KoRulerController.h><<
 #include <KoUnit.h>
 #include <KoDpi.h>
 
@@ -240,9 +240,13 @@ void KisZoomManager::slotZoomChanged(KoZoomMode::Mode mode, qreal zoom)
 
     qreal scaleX, scaleY;
     m_view->canvasBase()->coordinatesConverter()->imageScale(&scaleX, &scaleY);
-    // Remove assert as may cause issue with Gemini
-    // KIS_ASSERT_RECOVER_NOOP(scaleX == scaleY && "Zoom is not isotropic!");
-    m_view->canvasBase()->resourceManager()->setResource(KisCanvasResourceProvider::EffectiveZoom, scaleX);
+
+    if (scaleX != scaleY) {
+        qWarning() << "WARNING: Zoom is not isotropic!"  << ppVar(scaleX) << ppVar(scaleY) << ppVar(qFuzzyCompare(scaleX, scaleY));
+    }
+
+    qreal effectiveZoom = 0.5 * (scaleX, scaleY);
+    m_view->canvasBase()->resourceManager()->setResource(KisCanvasResourceProvider::EffectiveZoom, effectiveZoom);
 }
 
 void KisZoomManager::slotScrollAreaSizeChanged()

@@ -19,7 +19,7 @@ KexiMainWindow.cpp
 KexiMenuWidget.cpp
 kexifinddialog.cpp
 kexistatusbar.cpp 
-kexinewstuff.cpp
+#TODO: kexinewstuff.cpp
 KexiSearchLineEdit.cpp
 KexiUserFeedbackAgent.cpp
 
@@ -62,7 +62,7 @@ target_link_libraries(
     kexiextendedwidgets
     kexiguiutils
     keximigrate
-    ${KDE4_KNEWSTUFF_LIBS}
+#TODO:    ${KDE4_KNEWSTUFF_LIBS}
     ${KDE4_KIO_LIBS}
     ${KDE4_KFILE_LIBS}
     ${QT_QTUITOOLS_LIBRARY}

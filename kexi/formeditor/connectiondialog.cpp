@@ -77,7 +77,7 @@ ConnectionDialog::ConnectionDialog(Form *form, QWidget *parent)
 {
     setObjectName("connections_dialog");
     setModal(true);
-    setWindowTitle(i18n("Edit Form Connections"));
+    setWindowTitle(i18nc("@title:window", "Edit Form Connections"));
     setButtons(KDialog::Ok | KDialog::Cancel | KDialog::Details);
     setDefaultButton(KDialog::Ok);
 
@@ -448,3 +448,4 @@ ConnectionDialog::removeItem()
 }
 
 #include "connectiondialog.moc"
+#warning noi18n # added to disable message extraction in Messages.sh

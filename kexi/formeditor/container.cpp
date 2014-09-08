@@ -45,9 +45,6 @@
 #include "FormWidget.h"
 #include <kexiutils/utils.h>
 
-//! @todo Port Kexi flow layout!
-#define KEXI_NO_FLOWLAYOUT
-
 using namespace KFormDesigner;
 
 EventEater::EventEater(QWidget *widget, QObject *container)
@@ -867,26 +864,6 @@ void Container::setLayoutType(Form::LayoutType type)
         createGridLayout();
         break;
     }
-    case  Form::HFlow: {
-#ifndef KEXI_NO_FLOWLAYOUT
-        KexiFlowLayout *flow = new KexiFlowLayout(widget());
-        flow->setContentsMargins(d->margin, d->margin, d->margin, d->margin);
-        flow->setSpacing(d->spacing);
-        flow->setOrientation(Qt::Horizontal);
-        d->layout = (QLayout*)flow;
-        createFlowLayout();
-#endif
-        break;
-    }
-    case Form::VFlow: {
-#ifndef KEXI_NO_FLOWLAYOUT
-        KexiFlowLayout *flow = new KexiFlowLayout(widget(), d->margin, d->spacing);
-        flow->setOrientation(Qt::Vertical);
-        d->setLayout((QLayout*)flow);
-        createFlowLayout();
-#endif
-        break;
-    }
     default: {
         d->layType = Form::NoLayout;
         return;
@@ -933,77 +910,6 @@ Container::createBoxLayout(CustomSortableWidgetList* list)
         layout->addWidget(w);
     }
     delete list;
-}
-
-void
-Container::createFlowLayout()
-{
-#ifndef KEXI_NO_FLOWLAYOUT
-    KexiFlowLayout *flow = dynamic_cast<KexiFlowLayout*>(d->layout);
-    if (!flow || d->tree->children()->isEmpty())
-        return;
-
-    const int offset = 15;
-    QWidgetList *list = 0, *list2 = 0;
-    if (flow->orientation() == Qt::Horizontal) {
-        list = new VerticalWidgetList(d->form->toplevelContainer()->widget());
-        list2 = new HorizontalWidgetList(d->form->toplevelContainer()->widget());
-    }
-    else {
-        list = new HorizontalWidgetList(d->form->toplevelContainer()->widget());
-        list2 = new VerticalWidgetList(d->form->toplevelContainer()->widget());
-    }
-
-    // fill the list
-    foreach (ObjectTreeItem *titem, *d->tree()->children()) {
-        list->append(titem->widget());
-    }
-    list->sort();
-
-    if (flow->orientation() == Qt::Horizontal) {
-        int y = list->first()->y();
-        foreach (QWidget *w, *list) {
-            if ((w->y() > y + offset)) {
-                // start a new line
-                list2->sort();
-                foreach (QWidget *w2, *list2) {
-                    flow->add(w2);
-                }
-                list2->clear();
-                y = w->y();
-            }
-            list2->append(w);
-        }
-
-        list2->sort(); // don't forget the last line
-        foreach (QWidget *w, *list2) {
-            flow->add(w);
-        }
-    }
-    else {
-        int x = list->first()->x();
-        foreach (QWidget *w, *list) {
-            if ((w->x() > x + offset)) {
-                // start a new column
-                list2->sort();
-                foreach (QWidget *w2, *list2) {
-                    flow->add(w2);
-                }
-                list2->clear();
-                x = w->x();
-            }
-            list2->append(w);
-        }
-
-        list2->sort(); // don't forget the last column
-        foreach (QWidget *w, *list2) {
-            flow->add(w);
-        }
-    }
-
-    delete list;
-    delete list2;
-#endif
 }
 
 void

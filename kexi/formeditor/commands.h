@@ -301,62 +301,6 @@ protected:
 //! kDebug() stream operator. Writes command @a c to the debug output in a nicely formatted way.
 KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const InsertWidgetCommand &c);
 
-//! Command used when creating a layout from some widgets using "Lay out in...".
-/*! It remembers the old pos of every widget, and takes care of updating ObjectTree too. You need
- to supply a QWidgetList of the selected widgets. */
-class KFORMEDITOR_EXPORT CreateLayoutCommand : public Command
-{
-public:
-    CreateLayoutCommand(Form &form, Form::LayoutType layoutType, const QWidgetList &list,
-                        Command *parent = 0);
-
-    virtual ~CreateLayoutCommand();
-
-    virtual int id() const;
-
-    virtual void execute();
-
-    virtual void undo();
-    
-    virtual void debug() const;
-
-    friend KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const CreateLayoutCommand &c); 
-protected:
-    //! Used in BreakLayoutCommand ctor.
-    explicit CreateLayoutCommand(Command *parent = 0);
-
-    void init();
-
-    class Private;
-    Private * const d;
-};
-
-//! kDebug() stream operator. Writes command @a c to the debug output in a nicely formatted way.
-KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const CreateLayoutCommand &c);
-
-//! Command used when the 'Break Layout' menu item is selected. 
-/*! It does exactly the opposite of the CreateLayoutCommand. */
-class KFORMEDITOR_EXPORT BreakLayoutCommand : public CreateLayoutCommand
-{
-public:
-    explicit BreakLayoutCommand(const Container &container, Command *parent = 0);
-
-    virtual ~BreakLayoutCommand();
-
-    virtual int id() const;
-
-    virtual void execute();
-
-    virtual void undo();
-
-    virtual void debug() const;
-
-    friend KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const BreakLayoutCommand &c); 
-};
-
-//! kDebug() stream operator. Writes command @a c to the debug output in a nicely formatted way.
-KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const BreakLayoutCommand &c);
-
 //! @todo add CopyWidgetCommand
 
 //! Command used when pasting widgets. 

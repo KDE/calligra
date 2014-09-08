@@ -31,18 +31,11 @@ static const char description[] =
     I18N_NOOP("Database creation for everyone\n\n"
               "This application is a part of the Calligra Suite.");
 
-static const char *FULL_VERSION
-#ifdef CALLIGRA_GIT_SHA1_STRING
-    = KEXI_VERSION_STRING " (git " CALLIGRA_GIT_SHA1_STRING " " CALLIGRA_GIT_BRANCH_STRING ")";
-#else
-    = KEXI_VERSION_STRING;
-#endif
-
 KexiAboutData::KexiAboutData()
  : KAboutData(
         "kexi", 0,
         ki18n(KEXI_APP_NAME),
-        FULL_VERSION,
+        Kexi::fullVersionString(),
         ki18n(description),
         KAboutData::License_LGPL_V2,
         ki18n("© 2002-%1, The Kexi Team").subs(CALLIGRA_YEAR),
