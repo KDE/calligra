@@ -276,8 +276,8 @@ void CQTextDocumentCanvas::openFile(const QString& uri)
     }
     else if(url.protocol() == "template") {
         qApp->setOverrideCursor(Qt::BusyCursor);
-        url.setProtocol("file");
-        bool ok = document->loadNativeFormat(url.toLocalFile());
+        // Nip away the manually added template:// bit of the uri passed from the caller
+        bool ok = document->loadNativeFormat(uri.mid(11));
         document->setModified(false);
         document->undoStack()->clear();
 
