@@ -139,7 +139,7 @@ public:
      * Return the currently set canvas
      * @return the currently set canvas
      */
-    virtual KoCanvasBase *canvas() const = 0;
+    virtual KoCanvasBase *canvas() const { return 0; }
 
     /**
      * return the amount of pixels vertically visible of the child canvas.

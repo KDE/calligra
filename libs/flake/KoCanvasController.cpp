@@ -19,6 +19,7 @@
  */
 
 #include "KoCanvasController.h"
+#include "KoToolManager.h"
 
 #include <QSize>
 #include <QPoint>
@@ -52,6 +53,7 @@ KoCanvasController::KoCanvasController(KActionCollection* actionCollection)
 
 KoCanvasController::~KoCanvasController()
 {
+    KoToolManager::instance()->removeCanvasController(this);
     delete d;
     delete proxyObject;
 }

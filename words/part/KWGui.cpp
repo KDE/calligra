@@ -115,7 +115,7 @@ KWGui::KWGui(const QString &viewMode, KWView *parent)
 
 KWGui::~KWGui()
 {
-    KoToolManager::instance()->removeCanvasController(m_canvasController);
+//    KoToolManager::instance()->removeCanvasController(m_canvasController);
 }
 
 int KWGui::visibleWidth() const
