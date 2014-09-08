@@ -82,11 +82,11 @@ void KoServiceLocator::init()
     QSet<QString> servicesDirs = KGlobal::dirs()->findDirs("services", "").toSet();
     QList<QString> services;
 
-    QDir servicesDir(qApp->applicationDirPath() + "/../share/kde4/services");
+    QDir servicesDir(qApp->applicationDirPath() + "/../share/kde4/services/");
     servicesDirs << servicesDir.absolutePath();
 
     foreach(const QString &dir, servicesDirs) {
-        QDir servicesDir = QDir(dir + "/calligra");
+        QDir servicesDir = QDir(dir + "calligra");
         servicesDir.setNameFilters(QStringList() << "*.desktop");
         if (servicesDir.exists()) {
             foreach(const QString &entry, servicesDir.entryList(QDir::Files)) {
