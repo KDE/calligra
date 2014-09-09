@@ -262,7 +262,7 @@ void OkularOdtGenerator::generatePixmap( Okular::PixmapRequest *request )
 }
 
 #if OKULAR_IS_VERSION(0, 20, 60)
-Okular::DocumentInfo OkularOdtGenerator::generateDocumentInfo( const QSet<DocumentInfo::Key> &keys ) const
+Okular::DocumentInfo OkularOdtGenerator::generateDocumentInfo( const QSet<Okular::DocumentInfo::Key> &keys ) const
 {
     Q_UNUSED(keys);
 
