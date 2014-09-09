@@ -22,6 +22,7 @@
 
 #include <okular/core/generator.h>
 #include <okular/core/document.h>
+#include <okular/core/version.h>
 
 class KoPADocument;
 
@@ -36,7 +37,11 @@ public:
     bool canGeneratePixmap() const;
     void generatePixmap( Okular::PixmapRequest *request );
 
+#if OKULAR_IS_VERSION(0, 20, 60)
+    Okular::DocumentInfo generateDocumentInfo( const QSet<DocumentInfo::Key> &keys ) const;
+#else
     const Okular::DocumentInfo* generateDocumentInfo();
+#endif
 
 protected:
     bool doCloseDocument();
