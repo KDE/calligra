@@ -163,7 +163,7 @@ Item {
                 baseLoadingDialog.hideMe();
                 thumbnailSize = Qt.size(Settings.theme.adjustedPixel(280), Settings.theme.adjustedPixel(360));
             }
-            onCurrentPageNumberChanged: navigatorListView.positionViewAtIndex(currentPageNumber - 1, ListView.Contain);
+            onCurrentPageNumberChanged: navigatorListView.positionViewAtIndex(currentPageNumber - 1, ListView.Center);
         }
 
         Flickable {
@@ -607,12 +607,6 @@ Item {
                         opacity: 0.1;
                     }
                 }
-                Rectangle {
-                    anchors.fill: parent;
-                    color: "#00adf5"
-                    opacity: (wordsCanvas.currentPageNumber === index + 1) ? 0.4 : 0;
-                    Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
-                }
                 Label {
                     anchors {
                         left: parent.left;
@@ -629,6 +623,26 @@ Item {
                         controllerFlickable.contentY = wordsCanvas.pagePosition(index + 1) + 1;
                         base.canvasInteractionStarted();
                     }
+                }
+            }
+        }
+        Item {
+            anchors.fill: navigatorListView;
+            clip: true;
+            Item {
+                id: visualiserContainer;
+                property double scale: height / controllerFlickable.contentHeight;
+                width: parent.width;
+                height: (wordsCanvas.documentModel === null) ? 0 : wordsCanvas.documentModel.rowCount() * Settings.theme.adjustedPixel(190);
+                x: 0;
+                y: -navigatorListView.contentY;
+                Rectangle {
+                    x: 0;
+                    y: controllerFlickable.contentY * visualiserContainer.scale;
+                    width: Settings.theme.adjustedPixel(190);
+                    height: visualiserContainer.scale * controllerFlickable.height;
+                    color: "#00adf5"
+                    opacity: 0.4;
                 }
             }
         }
