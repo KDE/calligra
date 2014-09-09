@@ -30,6 +30,7 @@ Item {
     property QtObject window: mainWindow;
     function openFile(fileName) {
         mainPageStack.push(mainPage);
+        Settings.currentFile = "";
         Settings.currentFile = fileName;
         RecentFileManager.addRecent(fileName);
     }
