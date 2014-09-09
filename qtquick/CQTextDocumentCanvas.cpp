@@ -433,17 +433,17 @@ QObject* CQTextDocumentCanvas::zoomAction() const
     return 0;
 }
 
-QSize CQTextDocumentCanvas::thumbnailSize() const
+QSizeF CQTextDocumentCanvas::thumbnailSize() const
 {
     if(d->documentModel)
         return d->documentModel->thumbnailSize();
-    return QSize();
+    return QSizeF();
 }
 
-void CQTextDocumentCanvas::setThumbnailSize(const QSize& newSize)
+void CQTextDocumentCanvas::setThumbnailSize(const QSizeF& newSize)
 {
     if(d->documentModel)
-        d->documentModel->setThumbnailSize(newSize);
+        d->documentModel->setThumbnailSize(newSize.toSize());
     emit thumbnailSizeChanged();
 }
 
