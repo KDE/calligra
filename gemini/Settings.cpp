@@ -99,7 +99,12 @@ QString Settings::currentFileClass() const
 void Settings::setCurrentFile(const QString& fileName)
 {
     qApp->processEvents();
-    if (fileName != d->currentFile) {
+    if(fileName.isEmpty()) {
+        d->currentFile = fileName;
+        d->currentFileClass = "No document set, consequently no class. This is expected behaviour, do not report.";
+        emit currentFileChanged();
+    }
+    else if (fileName != d->currentFile) {
         KUrl url(fileName);
         if(url.scheme() == "newfile") {
             d->currentFileClass = url.queryItemValue("mimetype");
