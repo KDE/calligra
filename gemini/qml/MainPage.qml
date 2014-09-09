@@ -33,7 +33,9 @@ Page {
             } else if(Settings.currentFileClass === STAGE_MIME_TYPE) {
                 viewLoader.sourceComponent = stageView;
             } else {
-                console.debug("BANG!");
+                if(Settings.currentFile !== "") {
+                    console.debug("BANG!");
+                }
             }
             viewLoader.item.source = Settings.currentFile;
         }
