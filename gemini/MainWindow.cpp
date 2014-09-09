@@ -196,6 +196,9 @@ public:
 
     void initDesktopView()
     {
+        if(settings->currentFile().isEmpty()) {
+            return;
+        }
         // Tell the iconloader about share/apps/calligra/icons
         KIconLoader::global()->addAppDir("calligra");
         // Initialize all Calligra directories etc.
@@ -420,10 +423,12 @@ void MainWindow::switchToDesktop()
 void MainWindow::setDocAndPart(QObject* document, QObject* part)
 {
     DocumentManager::instance()->setDocAndPart(qobject_cast<KoDocument*>(document), qobject_cast<KoPart*>(part));
-    QAction* undo = qobject_cast<KoPart*>(part)->views().at(0)->action("edit_undo");
-    d->touchView->rootContext()->setContextProperty("undoaction", undo);
-    QAction* redo = qobject_cast<KoPart*>(part)->views().at(0)->action("edit_redo");
-    d->touchView->rootContext()->setContextProperty("redoaction", redo);
+    if(document && part && !d->settings->currentFile().isEmpty()) {
+        QAction* undo = qobject_cast<KoPart*>(part)->views().at(0)->action("edit_undo");
+        d->touchView->rootContext()->setContextProperty("undoaction", undo);
+        QAction* redo = qobject_cast<KoPart*>(part)->views().at(0)->action("edit_redo");
+        d->touchView->rootContext()->setContextProperty("redoaction", redo);
+    }
 }
 
 void MainWindow::documentChanged()
@@ -434,19 +439,21 @@ void MainWindow::documentChanged()
         qApp->processEvents();
     }
     d->initDesktopView();
-    d->desktopView->setRootDocument(DocumentManager::instance()->document(), DocumentManager::instance()->part(), false);
-    qApp->processEvents();
-    d->desktopKoView = d->desktopView->rootView();
-//    d->desktopKoView->setQtMainWindow(d->desktopView);
-//    connect(d->desktopKoView, SIGNAL(sigLoadingFinished()), d->centerer, SLOT(start()));
-//    connect(d->desktopKoView, SIGNAL(sigSavingFinished()), this, SLOT(resetWindowTitle()));
-//    KWView* wordsview = qobject_cast<KWView*>(d->desktopView->rootView());
-//    if(wordsview) {
-//        connect(wordsview->canvasBase()->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
-//                this, SLOT(resourceChanged(int, const QVariant&)));
-//    }
-    if (!d->forceTouch && !d->slateMode)
-        switchToDesktop();
+    if(d->desktopView) {
+        d->desktopView->setRootDocument(DocumentManager::instance()->document(), DocumentManager::instance()->part(), false);
+        qApp->processEvents();
+        d->desktopKoView = d->desktopView->rootView();
+    //    d->desktopKoView->setQtMainWindow(d->desktopView);
+    //    connect(d->desktopKoView, SIGNAL(sigLoadingFinished()), d->centerer, SLOT(start()));
+    //    connect(d->desktopKoView, SIGNAL(sigSavingFinished()), this, SLOT(resetWindowTitle()));
+    //    KWView* wordsview = qobject_cast<KWView*>(d->desktopView->rootView());
+    //    if(wordsview) {
+    //        connect(wordsview->canvasBase()->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
+    //                this, SLOT(resourceChanged(int, const QVariant&)));
+    //    }
+        if (!d->forceTouch && !d->slateMode)
+            switchToDesktop();
+    }
 }
 
 bool MainWindow::allowClose() const
@@ -609,10 +616,11 @@ void MainWindow::closeEvent(QCloseEvent* event)
 
     if (d->allowClose)
     {
+        d->settings->setCurrentFile("");
+        qApp->processEvents();
         if (d->desktopView)
         {
             d->desktopView->setNoCleanup(true);
-            d->desktopView->close();
         }
         event->accept();
     }
