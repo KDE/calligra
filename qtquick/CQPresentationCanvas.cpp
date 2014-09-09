@@ -268,12 +268,14 @@ void CQPresentationCanvas::openFile(const QString& uri)
     graphicsWidget->setVisible(true);
     graphicsWidget->setGeometry(x(), y(), width(), height());
 
-    d->view->doUpdateActivePage(d->document->pageByIndex(0, false));
-    d->pageSize = d->view->activePage()->size();
-    emit currentSlideChanged();
+    if(d->document->pageCount() > 0) {
+        d->view->doUpdateActivePage(d->document->pageByIndex(0, false));
+        d->pageSize = d->view->activePage()->size();
+        emit currentSlideChanged();
 
-    d->updateLinkTargets();
-    emit linkTargetsChanged();
+        d->updateLinkTargets();
+        emit linkTargetsChanged();
+    }
 
     emit documentChanged();
     emit loadingFinished();
