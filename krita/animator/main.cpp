@@ -66,7 +66,11 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 #endif
 #ifdef USE_BREAKPAD
     qputenv("KDE_DEBUG", "1");
-    KisCrashHandler crashHandler;
+#ifdef HAVE_STEAMWORKS
+    KisCrashHandler crashHandler("kritaanimationsteam");
+#else
+    KisCrashHandler crashHandler("kritaanimation");
+#endif
     Q_UNUSED(crashHandler);
 #endif
 

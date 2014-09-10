@@ -484,6 +484,8 @@ QString MainWindow::getApplicationExeFromId(const QString &applicationId)
 
     if (applicationId == "") {
         applicationExecutable = "";
+    } else if (applicationId == "kritaanimationsteam") {
+        applicationExecutable = "kritaanimation";
     } else if (applicationId == "kritageministeam") {
         applicationExecutable = "kritagemini";
     } else if (applicationId == "kritasketchsteam") {
