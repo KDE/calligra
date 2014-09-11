@@ -1334,3 +1334,8 @@ qreal KoReportDesigner::getSelectionPressY() const
 {
     return m_pressY;
 }
+
+QPointF KoReportDesigner::getPressPoint() const
+{
+    return QPointF(m_pressX, m_pressY);
+}
