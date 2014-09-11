@@ -96,14 +96,15 @@ public:
     KisToolMultiBrushFactory(const QStringList&)
             : KoToolFactoryBase("KritaShape/KisToolMultiBrush") {
 
-        setToolTip(i18n("Multibrush Tool"));
-
         // Temporarily
         setToolType(TOOL_TYPE_SHAPE);
         setIconName(koIconNameCStr("krita_tool_multihand"));
         setShortcut(KShortcut(Qt::Key_Q));
         setPriority(11);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
+
+        setToolTip(i18n("Multibrush Tool") + " (" + shortcut().toString() + ")");
+
     }
 
     virtual ~KisToolMultiBrushFactory() {}

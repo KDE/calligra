@@ -50,12 +50,15 @@ class KisToolSelectEllipticalFactory : public KoToolFactoryBase
 public:
     KisToolSelectEllipticalFactory(const QStringList&)
             : KoToolFactoryBase("KisToolSelectElliptical") {
-        setToolTip(i18n("Elliptical Selection Tool"));
+
         setToolType(TOOL_TYPE_SELECTED);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setIconName(koIconNameCStr("tool_elliptical_selection"));
         setShortcut(KShortcut(Qt::Key_J));
         setPriority(53);
+
+        setToolTip(i18n("Elliptical Selection Tool") + " (" + shortcut().toString() + ")");
+
     }
 
     virtual ~KisToolSelectEllipticalFactory() {}

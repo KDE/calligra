@@ -106,12 +106,15 @@ class KisToolGradientFactory : public KoToolFactoryBase
 public:
     KisToolGradientFactory(const QStringList&)
             : KoToolFactoryBase("KritaFill/KisToolGradient") {
-        setToolTip(i18n("Draw a gradient."));
+
         setToolType(TOOL_TYPE_FILL);
         setIconName(koIconNameCStr("krita_tool_gradient"));
         setShortcut(KShortcut(Qt::Key_G));
         setPriority(15);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
+
+        setToolTip(i18n("Draw a gradient.") + " (" + shortcut().toString() + ")");
+
     }
 
     virtual ~KisToolGradientFactory() {}
