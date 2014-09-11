@@ -119,12 +119,14 @@ class KisToolColorPickerFactory : public KoToolFactoryBase
 public:
     KisToolColorPickerFactory(const QStringList&)
             : KoToolFactoryBase("KritaSelected/KisToolColorPicker") {
-        setToolTip(i18n("Select a color from the image or current layer"));
+
         setToolType(TOOL_TYPE_FILL);
         setPriority(15);
         setIconName(koIconNameCStr("krita_tool_color_picker"));
         setShortcut(KShortcut(Qt::Key_P));
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
+
+        setToolTip(i18n("Select a color from the image or current layer") + " (" + shortcut().toString() + ")" );
     }
 
     virtual ~KisToolColorPickerFactory() {}
