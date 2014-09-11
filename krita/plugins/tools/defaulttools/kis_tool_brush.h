@@ -134,7 +134,6 @@ public:
     KisToolBrushFactory(const QStringList&)
             : KoToolFactoryBase("KritaShape/KisToolBrush") {
 
-        setToolTip(i18n("Freehand Brush Tool"));
 
         // Temporarily
         setToolType(TOOL_TYPE_SHAPE);
@@ -142,6 +141,9 @@ public:
         setShortcut(KShortcut(Qt::Key_B));
         setPriority(0);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
+
+        setToolTip(i18n("Freehand Brush Tool ") + "(" + shortcut().toString()+ ")");
+
     }
 
     virtual ~KisToolBrushFactory() {}
