@@ -31,9 +31,7 @@
 #include <qtquick/CQTextDocumentCanvas.h>
 #include <KoDocumentEntry.h>
 #include <part/KWDocument.h>
-#include <KWFactory.h>
 #include <stage/part/KPrDocument.h>
-#include <part/KPrFactory.h>
 
 class Settings::Private
 {
@@ -58,32 +56,6 @@ Settings::Settings( QObject* parent )
 Settings::~Settings()
 {
     delete d;
-}
-
-QString Settings::stageTemplateLocation(const QString& templateFile) const
-{
-    QStringList dirs = KPrFactory::componentData().dirs()->resourceDirs("stage_template");
-    QString found;
-    foreach(const QString& dir, dirs) {
-        if(QFile(dir + templateFile).exists()) {
-            found = dir + templateFile;
-            break;
-        }
-    }
-    return found;
-}
-
-QString Settings::wordsTemplateLocation(const QString& templateFile) const
-{
-    QStringList dirs = KWFactory::componentData().dirs()->resourceDirs("words_template");
-    QString found;
-    foreach(const QString& dir, dirs) {
-        if(QFile(dir + templateFile).exists()) {
-            found = dir + templateFile;
-            break;
-        }
-    }
-    return found;
 }
 
 QString Settings::currentFile() const
