@@ -37,7 +37,9 @@ Page {
                     console.debug("BANG!");
                 }
             }
-            viewLoader.item.source = Settings.currentFile;
+            if(viewLoader.item) {
+                viewLoader.item.source = Settings.currentFile;
+            }
         }
     }
     ToolManager {
