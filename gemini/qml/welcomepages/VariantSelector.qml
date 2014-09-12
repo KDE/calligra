@@ -149,7 +149,7 @@ Item {
                                 margins: Settings.theme.adjustedPixel(16);
                             }
                             height: Settings.theme.adjustedPixel(192);
-                            source: Settings.theme.icon(model.thumbnail, true);
+                            source: model.thumbnail;
                             fillMode: Image.PreserveAspectFit
                             smooth: true;
                         }
@@ -161,9 +161,22 @@ Item {
                             }
                             height: Settings.theme.adjustedPixel(64);
                             width: Settings.theme.adjustedPixel(190);
-                            source: Settings.theme.icon(model.swatch);
+                            source: model.swatch !== "" ? Settings.theme.icon(model.swatch) : "";
                             fillMode: Image.PreserveAspectFit
                             smooth: true;
+                        }
+                        Label {
+                            anchors {
+                                horizontalCenter: parent.horizontalCenter;
+                                bottom: parent.bottom;
+                                margins: Settings.theme.adjustedPixel(16);
+                            }
+                            height: Settings.theme.adjustedPixel(64);
+                            width: Settings.theme.adjustedPixel(190);
+                            horizontalAlignment: Text.AlignHCenter;
+                            text: model.text;
+                            font: Settings.theme.font("templateLabel");
+                            color: "white";
                         }
                     }
                 }

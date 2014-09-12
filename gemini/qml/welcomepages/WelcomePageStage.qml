@@ -31,42 +31,28 @@ Page {
         baseLoadingDialog.visible = true;
         openFile(file);
     }
-    ListModel {
-        id: stageTemplatesClassic
-        ListElement { text: "Standard"; thumbnail: ""; color: "white"; templateFile: "Screen/.source/emptyLandscape.otp"; variants: [ ] }
-    }
-    ListModel {
+    TemplatesModel {
         id: stageTemplates;
-        ListElement { text: "Standard"; thumbnail: ""; color: "white"; templateFile: "Screen/.source/emptyLandscapeWide.otp"; variants: [ ] }
-        ListElement { text: "White"; thumbnail: ""; color: "white"; templateFile: ""; variants: [
-            ListElement { thumbnail: ""; swatch: "ColorPalettes-Blue-1"; templateFile: "Screen/.source/emptyLandscapeWide.otp"; color: "darkblue" },
-            ListElement { thumbnail: ""; swatch: "ColorPalettes-Blue-1"; templateFile: "Screen/.source/emptyLandscapeWide.otp"; color: "lightblue" },
-            ListElement { thumbnail: ""; swatch: "ColorPalettes-1-04"; templateFile: "Screen/.source/emptyLandscapeWide.otp"; color: "crimson" }
-        ] }
-        ListElement { text: "Black"; thumbnail: "Presentaton-Magenta"; color: "white"; templateFile: ""; variants: [
-            ListElement { thumbnail: "Presentaton-Magenta"; swatch: "ColorPalettes-Magenta-1"; templateFile: "odf/.source/cohere-magenta.otp"; color: "magenta" },
-            ListElement { thumbnail: "Presentaton-Blue"; swatch: "ColorPalettes-Blue-1"; templateFile: "odf/.source/cohere-blue.otp"; color: "blue" },
-            ListElement { thumbnail: "Presentaton-Gold"; swatch: "ColorPalettes-gold-1"; templateFile: "odf/.source/cohere-gold.otp"; color: "gold" },
-            ListElement { thumbnail: "Presentaton-Red"; swatch: "ColorPalettes-Red-1"; templateFile: "odf/.source/cohere-red.otp"; color: "red" }
-            ] }
-        ListElement { text: "Metropolitan"; thumbnail: ""; color: "#E8EFF1"; templateFile: ""; variants: [ ] }
-        ListElement { text: "Elegant"; thumbnail: ""; color: "#A9B3B6"; templateFile: ""; variants: [ ] }
-        ListElement { text: "Vintage"; thumbnail: ""; color: "#828C8F"; templateFile: ""; variants: [ ] }
-        ListElement { text: "Modernist"; thumbnail: ""; color: "#A9B3B6"; templateFile: ""; variants: [ ] }
-        ListElement { text: "Distraught"; thumbnail: ""; color: "#828C8F"; templateFile: ""; variants: [ ] }
-        ListElement { text: "Fabric"; thumbnail: ""; color: "#E8EFF1"; templateFile: ""; variants: [ ] }
-        ListElement { text: "Metallic"; thumbnail: ""; color: "#A9B3B6"; templateFile: ""; variants: [ ] }
-        ListElement { text: "Luna Rising"; thumbnail: ""; color: "#828C8F"; templateFile: ""; variants: [ ] }
-        ListElement { text: "Galactic Voyage"; thumbnail: ""; color: "#E8EFF1"; templateFile: ""; variants: [ ] }
-        ListElement { text: "Blue Orange Vector"; thumbnail: ""; color: "#E8EFF1"; templateFile: "odf/.source/blue_orange_vector.otp"; variants: [ ] }
-        ListElement { text: "Burning Desire"; thumbnail: ""; color: "#828C8F"; templateFile: "odf/.source/burning_desire.otp"; variants: [ ] }
-        ListElement { text: "Business"; thumbnail: ""; color: "#828C8F"; templateFile: "odf/.source/business.otp"; variants: [ ] }
-        ListElement { text: "Flood Light"; thumbnail: ""; color: "#E8EFF1"; templateFile: "odf/.source/flood_light.otp"; variants: [ ] }
-        ListElement { text: "Rounded Square"; thumbnail: ""; color: "#A9B3B6"; templateFile: "odf/.source/rounded_square.otp"; variants: [ ] }
-        ListElement { text: "Simple Waves"; thumbnail: ""; color: "white"; templateFile: "odf/.source/simple_waves.otp"; variants: [ ] }
-        ListElement { text: "Skyline Monotone"; thumbnail: ""; color: "#A9B3B6"; templateFile: "odf/.source/skyline_monotone.otp"; variants: [ ] }
-        ListElement { text: "Strange Far Hills"; thumbnail: ""; color: "#E8EFF1"; templateFile: "odf/.source/strange_far_hills.otp"; variants: [ ] }
+        templateType: STAGE_MIME_TYPE;
+        showWide: true;
     }
+    TemplatesModel {
+        id: stageTemplatesClassic;
+        templateType: STAGE_MIME_TYPE;
+        showWide: false;
+    }
+
+// templates to make:
+//         ListElement { text: "Metropolitan"; thumbnail: ""; color: "#E8EFF1"; templateFile: ""; variants: [ ] }
+//         ListElement { text: "Elegant"; thumbnail: ""; color: "#A9B3B6"; templateFile: ""; variants: [ ] }
+//         ListElement { text: "Vintage"; thumbnail: ""; color: "#828C8F"; templateFile: ""; variants: [ ] }
+//         ListElement { text: "Modernist"; thumbnail: ""; color: "#A9B3B6"; templateFile: ""; variants: [ ] }
+//         ListElement { text: "Distraught"; thumbnail: ""; color: "#828C8F"; templateFile: ""; variants: [ ] }
+//         ListElement { text: "Fabric"; thumbnail: ""; color: "#E8EFF1"; templateFile: ""; variants: [ ] }
+//         ListElement { text: "Metallic"; thumbnail: ""; color: "#A9B3B6"; templateFile: ""; variants: [ ] }
+//         ListElement { text: "Luna Rising"; thumbnail: ""; color: "#828C8F"; templateFile: ""; variants: [ ] }
+//         ListElement { text: "Galactic Voyage"; thumbnail: ""; color: "#E8EFF1"; templateFile: ""; variants: [] }
+
     Label {
         anchors {
             top: parent.top;
@@ -130,9 +116,10 @@ Page {
                     height: width * 0.7;
                     spacing: Constants.DefaultMargin;
                     Image {
-                        source: model.thumbnail ? Settings.theme.icon(model.thumbnail) : "";
+                        source: model.thumbnail ? model.thumbnail : "";
                         width: parent.width;
                         height: parent.height - templateName.height - Constants.DefaultMargin;
+                        fillMode: Image.PreserveAspectFit;
                         smooth: true;
                         Rectangle {
                             anchors.fill: parent;
@@ -151,7 +138,7 @@ Page {
                             }
                             height: Constants.DefaultMargin * 2;
                             spacing: Constants.DefaultMargin;
-                            property ListModel colorModel: model.variants;
+                            property QtObject colorModel: model.variants;
                             Repeater {
                                 model: parent.colorModel;
                                 Rectangle {
