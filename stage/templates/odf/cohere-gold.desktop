@@ -1,0 +1,10 @@
+[Desktop Entry]
+Icon=cohere-gold
+Name=Cohere
+Comment=Cohere designed presentation template
+X-KDE-Color=gold
+X-KDE-Swatch=ColorPalettes-gold-1
+X-KDE-TemplateIsWideFormat=true
+Type=Link
+URL=.source/cohere-gold.otp
+X-KDE-Hidden=false

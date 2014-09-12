@@ -17,6 +17,10 @@ set(desktop_FILES
     skyline_night.desktop
     skyline_night_wide.desktop
     strange_far_hills.desktop
+    cohere-blue.desktop
+    cohere-gold.desktop
+    cohere-magenta.desktop
+    cohere-red.desktop
    )
 
 set(otp_FILES
@@ -47,4 +51,4 @@ install( FILES ${desktop_FILES} DESTINATION ${DATA_INSTALL_DIR}/stage/templates/
 install( FILES ${otp_FILES} DESTINATION ${DATA_INSTALL_DIR}/stage/templates/odf/.source)
 install( FILES .directory DESTINATION ${DATA_INSTALL_DIR}/stage/templates/odf/)
 
-kde4_install_icons( ${DATA_INSTALL_DIR}/stage/icons  )
+kde4_install_icons( ${DATA_INSTALL_DIR}/stage/icons )

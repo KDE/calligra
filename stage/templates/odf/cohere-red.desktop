@@ -1,0 +1,10 @@
+[Desktop Entry]
+Icon=cohere-red
+Name=Cohere
+Comment=Cohere designed presentation template
+X-KDE-Color=red
+X-KDE-Swatch=ColorPalettes-Red-1
+X-KDE-TemplateIsWideFormat=true
+Type=Link
+URL=.source/cohere-red.otp
+X-KDE-Hidden=false
