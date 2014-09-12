@@ -106,7 +106,6 @@ void TemplateVariantsModel::addVariant(QString name, QString color, QString swat
     TemplateVariant* entry = new TemplateVariant();
     d->entries.append(entry);
 
-    qDebug() << file << name;
     entry->name = name;
     entry->color = QColor(color);
     entry->swatch = swatch;
