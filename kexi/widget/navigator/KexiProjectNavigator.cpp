@@ -117,7 +117,7 @@ KexiProjectNavigator::KexiProjectNavigator(QWidget* parent, Features features)
     d->actions = new KActionCollection(this);
 
     setObjectName("KexiProjectNavigator");
-    setWindowTitle(i18n("Project Navigator"));
+    setWindowTitle(i18nc("@title:window", "Project Navigator"));
     setWindowIcon(KexiMainWindowIface::global()->thisWidget()->windowIcon());
 
     QVBoxLayout *lyr = new QVBoxLayout(this);
@@ -231,15 +231,15 @@ KexiProjectNavigator::KexiProjectNavigator(QWidget* parent, Features features)
     d->exportActionMenu->addAction(d->dataExportToFileAction);
 
 #ifndef KEXI_NO_QUICK_PRINTING
-    d->printAction = addAction("print_object", koIcon("document-print"), i18n("&Print..."),
-                              i18n("Print data"),
-                              i18n("Prints data from the currently selected table or query."),
+    d->printAction = addAction("print_object", koIcon("document-print"), futureI18n("&Print..."),
+                              futureI18n("Print data"),
+                              futureI18n("Prints data from the currently selected table or query."),
                               SLOT(slotPrintObject()));
 
     d->pageSetupAction = addAction("pageSetupForObject", koIconWanted("not yet in Oxygen 4.3", "document-page-setup"),
-                                  i18n("Page Setup..."),
-                                  i18n("Page setup for data"),
-                                  i18n("Shows page setup for printing the active table or query."),
+                                  futureI18n("Page Setup..."),
+                                  futureI18n("Page setup for data"),
+                                  futureI18n("Shows page setup for printing the active table or query."),
                                   SLOT(slotPageSetupForObject()));
 #endif
 
@@ -479,7 +479,7 @@ void KexiProjectNavigator::slotRename()
         return;
     }
     KexiNameDialog dialog(
-        i18nc("@info Rename object %1:", "Rename <resource>%1</resource>:").arg(partItem->name()),
+        i18nc("@info Rename object %1:", "Rename <resource>%1</resource>:", partItem->name()),
         this);
     if (!d->model->project()) {
         kWarning() << "No KexiProject assigned!";
@@ -490,7 +490,7 @@ void KexiProjectNavigator::slotRename()
     dialog.widget()->setCaptionText(partItem->caption());
     dialog.widget()->setNameText(partItem->name());
     dialog.setWindowTitle(
-        i18nc("@title:window Rename Object %1.", "Rename <resource>%1</resource>").arg(partItem->name()));
+        i18nc("@title:window Rename Object %1.", "Rename <resource>%1</resource>", partItem->name()));
     dialog.setDialogIcon(info->itemIconName());
     dialog.setAllowOverwriting(true);
 

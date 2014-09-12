@@ -46,11 +46,11 @@
 #include <QPushButton>
 #include <QLayout>
 #include <QCheckBox>
-
 #include <QVBoxLayout>
 #include <QPixmap>
 #include <QFrame>
 #include <QStackedWidget>
+#include <QKeyEvent>
 
 class KexiConnectionSelector : public QWidget, public Ui_KexiConnectionSelector
 {
@@ -374,7 +374,7 @@ void KexiConnectionSelectorWidget::slotRemoteAddBtnClicked()
     KexiDB::ConnectionData data;
     KexiDBConnectionDialog dlg(this, data, QString(),
                                KGuiItem(i18n("&Add"), koIconName("dialog-ok"), i18n("Add database connection")));
-    dlg.setWindowTitle(i18n("Add New Database Connection"));
+    dlg.setWindowTitle(i18nc("@title:window", "Add a New Database Connection"));
     if (QDialog::Accepted != dlg.exec())
         return;
 
@@ -404,7 +404,7 @@ void KexiConnectionSelectorWidget::slotRemoteEditBtnClicked()
     KexiDBConnectionDialog dlg(this, *item->data(), QString(),
                                KGuiItem(i18n("&Save"), koIconName("document-save"),
                                         i18n("Save changes made to this database connection")));
-    dlg.setWindowTitle(i18n("Edit Database Connection"));
+    dlg.setWindowTitle(i18nc("@title:window", "Edit Database Connection"));
     if (QDialog::Accepted != dlg.exec())
         return;
 

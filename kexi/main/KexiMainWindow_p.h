@@ -38,6 +38,7 @@
 #include <QPainter>
 #include <QDesktopWidget>
 #include <QKeyEvent>
+#include <QScopedPointer>
 #include <ktabwidget.h>
 #include <KoIcon.h>
 #include "KexiSearchLineEdit.h"
@@ -92,6 +93,8 @@ public:
     
     void showTab(const QString& name);
     
+    bool isTabVisible(const QString& name) const;
+
     bool isRolledUp();
 
 public slots:
@@ -544,6 +547,7 @@ public:
     void setCurrentTab(const QString& name);
     void hideTab(const QString& name);
     void showTab(const QString& name);
+    bool isTabVisible(const QString& name) const;
 #ifndef NDEBUG
     void debugToolbars() const;
 #endif
@@ -864,7 +868,7 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
     connect(tabBar(), SIGNAL(tabCloseRequested( int )), SLOT(closeRequest( int )));
 
     setMouseTracking(true); // for mouseMoveEvent()
-    setWhatsThis(i18n("Task-based tabbed toolbar groups commands for application using tabs."));
+    setWhatsThis(i18n("Task-oriented toolbar. Groups commands using tabs."));
 #ifdef KEXI_AUTORISE_TABBED_TOOLBAR
     connect(&d->tabRaiseTimer, SIGNAL(timeout()), this, SLOT(slotDelayedTabRaise()));
 #endif
@@ -890,16 +894,16 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
                                 true/*showWhatsThis*/, d->ac);
     QAction* help_report_bug_action = d->ac->action("help_report_bug");
     help_report_bug_action->setIcon(koIcon("tools-report-bug")); // good icon for toolbar
-    help_report_bug_action->setWhatsThis(i18n("Shows bug reporting tool for Kexi application."));
+    help_report_bug_action->setWhatsThis(i18n("Files a bug or wish for Kexi application."));
     QAction* help_whats_this_action =  d->ac->action("help_whats_this");
-    help_whats_this_action->setWhatsThis(i18n("Activates \"What's This\" tool."));
+    help_whats_this_action->setWhatsThis(i18n("Activates a \"What's This?\" tool."));
     QAction* help_contents_action = d->ac->action("help_contents");
     help_contents_action->setText(i18n("Help"));
     help_contents_action->setWhatsThis(i18n("Shows Kexi Handbook."));
     QAction* help_about_app_action = d->ac->action("help_about_app");
     help_about_app_action->setWhatsThis(i18n("Shows information about Kexi application."));
     QAction* help_about_kde_action = d->ac->action("help_about_kde");
-    help_about_kde_action->setWhatsThis(i18n("Shows information about K Desktop Environment."));
+    help_about_kde_action->setWhatsThis(i18n("Shows information about KDE."));
 
     QAction *action_show_help_menu = d->ac->action("help_show_menu");
     KexiSmallToolButton *btn = new KexiSmallToolButton(KIcon(help_contents_action->icon()), QString(), helpWidget);
@@ -977,6 +981,12 @@ void KexiTabbedToolBar::Private::hideTab(const QString& name)
 {
     q->removeTab(q->indexOf(toolbarsForName.value(name)));
     toolbarsVisibleForIndex[toolbarsIndexForName.value(name)] = false;
+}
+
+bool KexiTabbedToolBar::Private::isTabVisible(const QString& name) const
+{
+    return q->indexOf(toolbarsForName.value(name)) != -1
+           && toolbarsVisibleForIndex[toolbarsIndexForName.value(name)];
 }
 
 #ifndef NDEBUG
@@ -1346,6 +1356,7 @@ KToolBar* KexiTabbedToolBar::createToolBar(const char* name, const QString& capt
 
 void KexiTabbedToolBar::setCurrentTab(const QString& name)
 {
+    //kDebug() << name;
     d->setCurrentTab(name);
 }
 
@@ -1356,12 +1367,19 @@ void KexiTabbedToolBar::setCurrentTab(int index)
 
 void KexiTabbedToolBar::hideTab(const QString& name)
 {
+    //kDebug() << name;
     d->hideTab(name);
 }
 
 void KexiTabbedToolBar::showTab(const QString& name)
 {
+    //kDebug() << name;
     d->showTab(name);
+}
+
+bool KexiTabbedToolBar::isTabVisible(const QString& name) const
+{
+    return d->isTabVisible(name);
 }
 
 bool KexiTabbedToolBar::isRolledUp()
@@ -1384,7 +1402,8 @@ public:
     virtual ~KexiMainWidget();
 
     void setParent(KexiMainWindow* mainWindow) {
-        KMainWindow::setParent(mainWindow); m_mainWindow = mainWindow;
+        KMainWindow::setParent(mainWindow);
+        m_mainWindow = mainWindow;
     }
 
     KexiMainWindowTabWidget* tabWidget() const {
@@ -1797,6 +1816,7 @@ public:
 #endif
     KexiProjectNavigator *navigator;
     KexiTabbedToolBar *tabbedToolBar;
+    QMap<int, QString> tabsToActivateOnShow;
     KexiDockWidget *navDockWidget;
     KTabWidget *propEditorTabWidget;
     KexiDockWidget *propEditorDockWidget;

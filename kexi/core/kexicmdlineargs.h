@@ -176,10 +176,9 @@ static KCmdLineOptions kexi_options()
              "opening .kexic or .kexis shortcut files."))
     .add("f")
     .add("fullscreen", ki18n(
-             "Start fullscreen\n"
              "Start Kexi in full screen mode to occupy the\n"
              "whole screen area by hiding window decorations,\n"
-             "such as a title bar."))
+             "such as title bars."))
     .add("+[project-name]", ki18n(
              "Kexi database project filename,\n"
              "Kexi shortcut filename,\n"

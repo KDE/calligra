@@ -41,8 +41,15 @@ MapBrowserFactory::MapBrowserFactory(QObject* parent, const QVariantList& args)
     mapBrowser->setIconName(koIconName("map_browser"));
     mapBrowser->setClassName("MapBrowserWidget");
     mapBrowser->setName(i18n("Map Browser"));
-    mapBrowser->setNamePrefix(i18nc("This string will be used to name widgets of this class. It must _not_ contain white "
-                                     "spaces and non latin1 characters.", "mapBrowser"));
+    mapBrowser->setNamePrefix(
+        i18nc("A prefix for identifiers of map browser widgets. Based on that, identifiers such as "
+            "mapBrowser1, mapBrowser2 are generated. "
+            "This string can be used to refer the widget object as variables in programming "
+            "languages or macros so it must _not_ contain white spaces and non latin1 characters, "
+            "should start with lower case letter and if there are subsequent words, these should "
+            "start with upper case letter. Example: smallCamelCase. "
+            "Moreover, try to make this prefix as short as possible.",
+            "mapBrowser"));
     mapBrowser->setDescription(i18n("Displays an interactive map."));
     addClass(mapBrowser);
 }

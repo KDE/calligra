@@ -107,9 +107,9 @@ KexiFindDialog::KexiFindDialog(QWidget* parent)
     connect(m_btnClose, SIGNAL(clicked()), this, SLOT(slotCloseClicked()));
     connect(m_btnReplace, SIGNAL(clicked()), this, SIGNAL(replaceNext()));
     connect(m_btnReplaceAll, SIGNAL(clicked()), this, SIGNAL(replaceAll()));
-    connect(m_textToFind, SIGNAL(activated(const QString&)), this, SLOT(addToFindHistory()));
+    connect(m_textToFind, SIGNAL(activated()), this, SLOT(addToFindHistory()));
     connect(m_btnFind, SIGNAL(clicked()), this, SLOT(addToFindHistory()));
-    connect(m_textToReplace, SIGNAL(activated(const QString&)), this, SLOT(addToReplaceHistory()));
+    connect(m_textToReplace, SIGNAL(activated()), this, SLOT(addToReplaceHistory()));
     connect(m_btnReplace, SIGNAL(clicked()), this, SLOT(addToReplaceHistory()));
     connect(m_btnReplaceAll, SIGNAL(clicked()), this, SLOT(addToReplaceHistory()));
     // clear message after the text is changed
@@ -230,14 +230,14 @@ void KexiFindDialog::setObjectNameForCaption(const QString& name)
     d->objectName = name;
     if (d->replaceMode) {
         if (name.isEmpty())
-            setWindowTitle(i18n("Replace"));
+            setWindowTitle(i18nc("@title:window", "Replace"));
         else
-            setWindowTitle(i18n("Replace in \"%1\"", name));
+            setWindowTitle(i18nc("@title:window", "Replace in <resource>%1</resource>", name));
     } else {
         if (name.isEmpty())
-            setWindowTitle(i18n("Find"));
+            setWindowTitle(i18nc("@title:window", "Find"));
         else
-            setWindowTitle(i18n("Find in \"%1\"", name));
+            setWindowTitle(i18nc("@title:window", "Find in <resource>%1</resource>", name));
     }
 }
 

@@ -156,7 +156,7 @@ bool WidgetFactory::editList(QWidget *w, QStringList &list) const
     KDialog dialog(w->topLevelWidget());
     dialog.setObjectName("stringlist_dialog");
     dialog.setModal(true);
-    dialog.setWindowTitle(i18n("Edit Contents of %1", w->objectName()));
+    dialog.setWindowTitle(i18nc("@title:window", "Edit Contents of %1", w->objectName()));
     dialog.setButtons(KDialog::Ok | KDialog::Cancel);
 
     KEditListWidget *edit = new KEditListWidget(&dialog);

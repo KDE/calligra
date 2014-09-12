@@ -260,7 +260,6 @@ bool xBaseExport::performExport(Kexi::ObjectStatus* result) {
 
   if (!m_migrateData) {
     kDebug()<<"Migration Data not set yet !!";
-    result->setStatus(&drvManager, i18n("Data not set for migration"));
     return false;
   }
 
@@ -268,7 +267,7 @@ bool xBaseExport::performExport(Kexi::ObjectStatus* result) {
     m_migrateData->source->driverName);
   if (!sourceDriver) {
     result->setStatus(&drvManager,
-      i18n("Could not export back to destination database"));
+      i18n("Could not export back to destination database."));
     return false;
   }
 
@@ -321,7 +320,8 @@ bool xBaseExport::performExport(Kexi::ObjectStatus* result) {
 
     if (!dest_createTable(tableCaption, tableSchema)) {
       if (result)
-        result->setStatus(i18n("Could not create table in destination \"%1\". Error reading table \"%2\".",	m_migrateData->destination->connectionData()->serverInfoString(), tableCaption), "");
+        result->setStatus(i18n("Could not create table in destination database \"%1\". Error reading table \"%2\".",
+                               m_migrateData->destination->connectionData()->serverInfoString(), tableCaption), "");
       return false;
     }
 

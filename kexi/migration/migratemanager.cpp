@@ -210,6 +210,8 @@ KexiMigrate* MigrateManagerInternal::driver(const QString& name)
                  i18n("Could not load import/export database driver \"%1\".", name));
         return 0;
     }
+    KGlobal::locale()->insertCatalog("kexi" + name.toLower() + "driver");
+
     KexiDBDbg << "loading succeeded:" << name;
     KexiDBDbg << "drv=" << (long)drv;
 

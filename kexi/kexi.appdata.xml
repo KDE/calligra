@@ -8,6 +8,8 @@
   <name xml:lang="cs">Kexi</name>
   <name xml:lang="de">Kexi</name>
   <name xml:lang="en-GB">Kexi</name>
+  <name xml:lang="es">Kexi</name>
+  <name xml:lang="fr">Kexi</name>
   <name xml:lang="ia">Kexi</name>
   <name xml:lang="it">Kexi</name>
   <name xml:lang="nl">Kexi</name>
@@ -23,6 +25,8 @@
   <summary xml:lang="cs">Tvůrce databází</summary>
   <summary xml:lang="de">Datenbank-Erstellung</summary>
   <summary xml:lang="en-GB">Database Creator</summary>
+  <summary xml:lang="es">Creador de bases de datos</summary>
+  <summary xml:lang="fr">Créateur de base de données</summary>
   <summary xml:lang="ia">Creator de base de datos</summary>
   <summary xml:lang="it">Creazione di basi di dati</summary>
   <summary xml:lang="nl">Database aanmaken</summary>
@@ -42,6 +46,8 @@
     </p>
     <p xml:lang="ca">El Kexi és un generador visual de base de dades, part del paquet ofimàtic Calligra. Es pot utilitzar per dissenyar aplicacions de bases de dades, inserció i edició de dades, execució de consultes, i procés de dades. Es poden generar formularis per proporcionar una interfície personalitzada a les dades. Tots els objecte de les bases de dades -taules, consultes, formularis, informes- s'emmagatzemen en la base de dades, facilitant compartir les dades i el disseny.</p>
     <p xml:lang="en-GB">Kexi is a visual database creator, part of the Calligra Suite. It can be used for designing database applications, inserting and editing data, performing queries, and processing data. Forms can be created to provide a custom interface to your data. All database objects - tables, queries, forms, reports - are stored in the database, making it easy to share data and design.</p>
+    <p xml:lang="es">Kexi es un creador visual de bases de datos, que forma parte de la suite Calligra. Se puede utilizar para diseñar aplicaciones de bases de datos, insertar y editar datos, realizar consultas y procesar datos. Se pueden crear formularios para proporcionar una interfaz personalizada para sus datos. Todos los objetos de la base de datos - tablas, consultas, formularios, informes - se almacenan en la base de datos, facilitando el intercambio de datos y diseños.</p>
+    <p xml:lang="fr">Kexi est un créateur de base de données visuel, faisant partie de la suite Calligra. Il peut être utilisé pour concevoir des applications de base de données, insérer et éditer des données, effectuer des requêtes, et traiter des données. Des formulaires peuvent être créés pour fournir une interface personnalisée pour vos données. Tous les objets de bases de données (tables, requêtes, formulaires, rapports) sont stockés dans la base de données, rendant facile le partage de données et de design.</p>
     <p xml:lang="it">Kexi è uno strumento visuale per la creaazione di basi di dati, parte di Calligra Suite. Può essere utilizzato per progettare applicazioni che usano basi di dati, inserire e modificare dati, eseguire query ed elaborare dati. Puoi creare moduli per fornire un'interfaccia personalizzata ai tuoi dati. Tutti gli oggetti di una base di dati - tabelle, query, moduli, report - sono memorizzati nella base di dati stessa, semplificando la condivisione dei dati e la progettazione.</p>
     <p xml:lang="nl">Kexi is een maakprogramma van een database op een visuele manier, onderdeel van de Calligra Suite. Het kan gebruikt worden voor het ontwerpen van toepassingen met een database, gegevens invoeren en bewerken, zoekopdrachten uitvoeren en gegevens verwerken. Formulieren kunnen gemaakt worden om een aangepast interface naar uw gegevens te bieden. Alle database-objecten - tabellen, zoekopdrachten, formulieren, rapporten - worden opgeslagen in de database, waarmee het gemakkelijk wordt gegevens en ontwerp te delen.</p>
     <p xml:lang="pl">Kexi, część pakietu Calligra, to aplikacja do wizualnego tworzenia bazdanych. Można jej używać do opracowywania programów bazodanowych,wstawiania, edycji i przetwarzania danych, a także do wykonywania zapytań.Dostęp do danych można zapewniać przy pomocy formularzy. Wszystkie obiektybazy danych, tabele, zapytania, formularze i raporty, są przechowywane wbazie danych, co czyni je łatwymi do współdzielenia i opracowywania.</p>
@@ -56,6 +62,8 @@
     <p xml:lang="cs">Vlastnosti:</p>
     <p xml:lang="de">Funktionen:</p>
     <p xml:lang="en-GB">Features:</p>
+    <p xml:lang="es">Características:</p>
+    <p xml:lang="fr">Fonctionnalités :</p>
     <p xml:lang="ia">Characteristicas</p>
     <p xml:lang="it">Funzionalità:</p>
     <p xml:lang="nl">Mogelijkheden:</p>
@@ -70,6 +78,8 @@
       <li>Full visual designers for tables, queries, forms and reports</li>
       <li xml:lang="ca">Dissenyadors visuals complets per taules, consultes, formularis i informes</li>
       <li xml:lang="en-GB">Full visual designers for tables, queries, forms and reports</li>
+      <li xml:lang="es">Herramientas de diseño completamente visuales para las tablas, consultas, formularios e informes.</li>
+      <li xml:lang="fr">Conception complètement visuelle pour les tables, requêtes, formulaires et rapports</li>
       <li xml:lang="it">Progettazione completamente visuale di tabelle, query e report</li>
       <li xml:lang="nl">Volledige visueel ontwerpen van tabellen, zoekopdrachten, formulieren en rapporten</li>
       <li xml:lang="pl">W pełni wizualna możliwość tworzenia tabel, zapytań, formularzy i sprawozdań</li>
@@ -82,6 +92,8 @@
       <li>Running queries, support for parametrized queries</li>
       <li xml:lang="ca">Execució de consultes, implementació de consultes paramètriques</li>
       <li xml:lang="en-GB">Running queries, support for parametrised queries</li>
+      <li xml:lang="es">Ejecución de consultas, soporte de consultas parametrizadas</li>
+      <li xml:lang="fr">Exécution de requêtes, prise en charge des requêtes paramétrées</li>
       <li xml:lang="it">Esecuzione di query, supporto per le query parametriche</li>
       <li xml:lang="nl">Zoekopdrachten uitvoeren, ondersteuning voor zoekopdrachten met parameters</li>
       <li xml:lang="pl">Wykonywanie zapytań, obsługa dla zapytań parametrycznych</li>
@@ -94,6 +106,8 @@
       <li>Supports SQLite, MySQL, PostgreSQL and MS SQL Server databases</li>
       <li xml:lang="ca">Permet bases de dades SQLite, MySQL, PostgreSQL i MS SQL Server</li>
       <li xml:lang="en-GB">Supports SQLite, MySQL, PostgreSQL and MS SQL Server databases</li>
+      <li xml:lang="es">Soporte de bases de datos SQLite, MySQL, PostgreSQL y MS SQL Server</li>
+      <li xml:lang="fr">Prend en charge les bases de données SQLite, MySQL, PostgreSQL et MS SQL Server</li>
       <li xml:lang="it">Supporta le basi di dati SQLite, MySQL, PostgreSQL e MS SQL Server</li>
       <li xml:lang="nl">Ondersteunt databases SQLite, MySQL, PostgreSQL en MS SQL Server</li>
       <li xml:lang="pl">Obsługa SQLite, MySQL, PostgreSQL oraz baz danych MS SQL Server</li>
@@ -106,6 +120,8 @@
       <li>The only multiplatform graphical tool importing data from MS Access databases</li>
       <li xml:lang="ca">L'única eina gràfica multiplataforma d'importació de dades des de les bases de dades MS Access</li>
       <li xml:lang="en-GB">The only multiplatform graphical tool importing data from MS Access databases</li>
+      <li xml:lang="es">La única herramienta gráfica multiplataforma que importa datos de bases de datos MS Access</li>
+      <li xml:lang="fr">Le seul outil graphique multi plate-formes pouvant importer les bases de données de MS Access</li>
       <li xml:lang="it">Il solo strumento grafico multipiattaforma in grado di importare basi di dati MS Access</li>
       <li xml:lang="nl">Het enige multiplatform grafische hulpmiddel die gegevens importeert uit MS Access databases</li>
       <li xml:lang="pl">Jedyne graficzne narzędzie wieloplatformowe importujące dane z baz danych MS Access</li>
@@ -118,6 +134,8 @@
       <li>Supports query design in dedicated SQL view</li>
       <li xml:lang="ca">Permet el disseny de consultes en vistes SQL dedicades</li>
       <li xml:lang="en-GB">Supports query design in dedicated SQL view</li>
+      <li xml:lang="es">Soporta el diseño de consultas en una vista SQL dedicada</li>
+      <li xml:lang="fr">Prend en charge la conception de requêtes dans une vue SQL dédiée</li>
       <li xml:lang="it">Supporta la progettazione di query in una vista SQL dedicata</li>
       <li xml:lang="nl">Ondersteunt ontwerp van zoekopdrachten in een gerichte SQL-weergave</li>
       <li xml:lang="pl">Obsługuje zapytania w widoku przeznaczonym dla SQL</li>
@@ -130,6 +148,8 @@
       <li>Designing and displaying relational data using combo boxes (lookup columns)</li>
       <li xml:lang="ca">Disseny i visualització de dades relacionals usant quadres combinats (columnes de cerca)</li>
       <li xml:lang="en-GB">Designing and displaying relational data using combo boxes (lookup columns)</li>
+      <li xml:lang="es">Diseño y presentación de datos relacionales utilizando listas desplegables (columnas de búsqueda)</li>
+      <li xml:lang="fr">Conception et affichage de données relationnelles à l'aide de listes déroulantes (colonnes de consultation)</li>
       <li xml:lang="it">Progettazione e visualizzazione dei dati relazionali utilizzando caselle combinate (colonne di ricerca)</li>
       <li xml:lang="nl">Ontwerpen en tonen van relationele gegevens met gebruik van keuzelijsten (kolommen voor opzoeken)</li>
       <li xml:lang="pl">Opracowywanie i wyświetlanie danych relacyjnych przy użyciu pól rozwijanych (kolumn wyszukiwania)</li>
@@ -142,6 +162,8 @@
       <li>Direct data entry or import using CSV format</li>
       <li xml:lang="ca">Entrada directa de dades o importació usant el format CSV</li>
       <li xml:lang="en-GB">Direct data entry or import using CSV format</li>
+      <li xml:lang="es">Entrada directa de datos o importación utilizando el formato CSV</li>
+      <li xml:lang="fr">Saisie directe de données ou import utilisant le format CSV</li>
       <li xml:lang="it">Inserimento diretto dei dati o importazione utilizzando il formato CSV</li>
       <li xml:lang="nl">Directe invoer van gegevens of importeren met het CSV-format</li>
       <li xml:lang="pl">Bezpośrednie wprowadzanie danych lub importowanie ich z postaci CSV</li>
@@ -154,6 +176,8 @@
       <li>Locked down User Mode, allowing you to switch off all commands related to editing your project's design</li>
       <li xml:lang="ca">Mode reduït d'usuari, que permet deshabilitar totes les ordres relacionades amb l'edició del disseny del projecte</li>
       <li xml:lang="en-GB">Locked down User Mode, allowing you to switch off all commands related to editing your project's design</li>
+      <li xml:lang="es">Modo de usuario limitado, que permite desactivar todas las ordenes relacionadas con la edición del diseño de su proyecto</li>
+      <li xml:lang="fr">Mode utilisateur verrouillé, vous permettant de désactiver toutes les commandes liées à la modification de la conception de votre projet</li>
       <li xml:lang="it">Modalità utente bloccata, che ti consente di disattivare tutti i comandi in grado di modificare la struttura del tuo progetto.</li>
       <li xml:lang="nl">Vergrendelde gebruikersodus, waarmee u alle commando's uitschakelt die zijn gerelateerd aan bewerken en ontwerpen van uw project</li>
       <li xml:lang="pl">Zamknięty tryb użytkownika, umożliwiający wyłączenie wszystkich poleceń związanych z edytowaniem twojego projektu</li>
@@ -166,6 +190,8 @@
       <li>Scripting using JavaScript, Python or Ruby programming languages (experimental)</li>
       <li xml:lang="ca">Crear scripts usant els llenguatges de programació JavaScript, Python o Ruby (experimental)</li>
       <li xml:lang="en-GB">Scripting using JavaScript, Python or Ruby programming languages (experimental)</li>
+      <li xml:lang="es">Programación de scripts escritos en los lenguajes de programación JavaScript, Python o Ruby (experimental)</li>
+      <li xml:lang="fr">Pilotage par scripts utilisant les les langages JavaScript, Python ou Ruby (expérimental)</li>
       <li xml:lang="it">Creazione script utilizzando i linguaggi di programmazione JavaScript, Python o Ruby (sperimentale)</li>
       <li xml:lang="nl">Scripting met de programmeertalen JavaScript, Python of Ruby (experimenteel)</li>
       <li xml:lang="pl">Skrypty wykorzystujące języki programowania JavaScript, Python lub Ruby (eksperymentalnie)</li>
@@ -188,6 +214,8 @@
       <caption>Table View storing images</caption>
       <caption xml:lang="ca">Vista de taula emmagatzemant imatges</caption>
       <caption xml:lang="en-GB">Table View storing images</caption>
+      <caption xml:lang="es">Una vista de tabla para almacenar imágenes</caption>
+      <caption xml:lang="fr">Affichage de tables stockant des images</caption>
       <caption xml:lang="it">Vista tabella per archiviare immagini</caption>
       <caption xml:lang="nl">Tabelweergave bij opslaan van afbeeldingen</caption>
       <caption xml:lang="pl">Przechowywanie obrazów w widoku tabeli</caption>
@@ -203,6 +231,8 @@
       <caption>Form Designer</caption>
       <caption xml:lang="ca">Dissenyador de formularis</caption>
       <caption xml:lang="en-GB">Form Designer</caption>
+      <caption xml:lang="es">Diseñador de formularios</caption>
+      <caption xml:lang="fr">Concepteur de formulaires</caption>
       <caption xml:lang="it">Progettazione moduli</caption>
       <caption xml:lang="nl">Ontwerper van formulieren</caption>
       <caption xml:lang="pl">Opracowywanie formularzy</caption>

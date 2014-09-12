@@ -70,18 +70,18 @@ KexiCSVExportWizard::KexiCSVExportWizard(const KexiCSVExport::Options& options,
         KexiMainWindowIface::global()->project()->dbConnection(), m_options.itemId);
     if (m_tableOrQuery->table()) {
         if (m_options.mode == KexiCSVExport::Clipboard) {
-            setWindowTitle(i18n("Copy Data From Table to Clipboard"));
+            setWindowTitle(i18nc("@title:window", "Copy Data From Table to Clipboard"));
             infoLblFromText = i18n("Copying data from table:");
         } else {
-            setWindowTitle(i18n("Export Data From Table to CSV File"));
+            setWindowTitle(i18nc("@title:window", "Export Data From Table to CSV File"));
             infoLblFromText = i18n("Exporting data from table:");
         }
     } else if (m_tableOrQuery->query()) {
         if (m_options.mode == KexiCSVExport::Clipboard) {
-            setWindowTitle(i18n("Copy Data From Query to Clipboard"));
+            setWindowTitle(i18nc("@title:window", "Copy Data From Query to Clipboard"));
             infoLblFromText = i18n("Copying data from table:");
         } else {
-            setWindowTitle(i18n("Export Data From Query to CSV File"));
+            setWindowTitle(i18nc("@title:window", "Export Data From Query to CSV File"));
             infoLblFromText = i18n("Exporting data from query:");
         }
     } else {
@@ -156,7 +156,7 @@ KexiCSVExportWizard::KexiCSVExportWizard(const KexiCSVExport::Options& options,
     m_infoLblTo->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     exportOptionsLyr->addWidget(m_infoLblTo, 1, 0, 1, 2);
     exportOptionsLyr->setRowStretch(2, 1);
-    m_showOptionsButton = new KPushButton(KGuiItem(i18n("Show Options >>"), koIconName("configure")));
+    m_showOptionsButton = new KPushButton(i18n("Show Options &gt;&gt;"));
     m_showOptionsButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     connect(m_showOptionsButton, SIGNAL(clicked()), this, SLOT(slotShowOptionsButtonClicked()));
     exportOptionsLyr->addWidget(m_showOptionsButton, 3, 1, Qt::AlignRight);
@@ -344,12 +344,12 @@ void KexiCSVExportWizard::done(int result)
 void KexiCSVExportWizard::slotShowOptionsButtonClicked()
 {
     if (m_exportOptionsSection->isVisible()) {
-        m_showOptionsButton->setText(i18n("Show Options >>"));
+        m_showOptionsButton->setText(i18n("Show Options &gt;&gt;"));
         m_exportOptionsSection->hide();
         m_alwaysUseCheckBox->hide();
         m_defaultsBtn->hide();
     } else {
-        m_showOptionsButton->setText(i18n("Hide Options <<"));
+        m_showOptionsButton->setText(i18n("Hide Options &lt;&lt;"));
         m_exportOptionsSection->show();
         m_alwaysUseCheckBox->show();
         m_defaultsBtn->show();

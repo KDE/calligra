@@ -114,7 +114,7 @@ KexiDBConnectionWidget::KexiDBConnectionWidget(QWidget* parent)
         KGuiItem(i18n("&Test Connection"), QString(),
                  i18n("Test database connection"),
                  i18n("Tests database connection. "
-                      "You can ensure that valid connection information is provided.")),
+                      "You can check validity of connection information.")),
         frmBottom);
     d->btnTestConnection->setObjectName("testConnection");
     hbox->addWidget(d->btnTestConnection);
@@ -368,7 +368,7 @@ KexiDBConnectionDialog::KexiDBConnectionDialog(QWidget* parent, const KexiProjec
         : KDialog(parent)
         , d(new Private)
 {
-    setWindowTitle(i18n("Open Database"));
+    setWindowTitle(i18nc("@title:window", "Open Database"));
     d->tabWidget = new KexiDBConnectionTabWidget(this);
     d->tabWidget->setData(data, shortcutFileName);
     init(acceptButtonGuiItem);
@@ -380,7 +380,7 @@ KexiDBConnectionDialog::KexiDBConnectionDialog(QWidget* parent,
         : KDialog(parent)
         , d(new Private)
 {
-    setWindowTitle(i18n("Connect to a Database Server"));
+    setWindowTitle(i18nc("@title:window", "Connect to a Database Server"));
     d->tabWidget = new KexiDBConnectionTabWidget(this);
     d->tabWidget->setData(data, shortcutFileName);
     init(acceptButtonGuiItem);

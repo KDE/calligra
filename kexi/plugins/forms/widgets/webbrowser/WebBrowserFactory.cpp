@@ -40,8 +40,15 @@ WebBrowserFactory::WebBrowserFactory(QObject* parent, const QVariantList& args)
     webBrowser->setIconName(koIconName("web_browser"));
     webBrowser->setClassName("WebBrowserWidget");
     webBrowser->setName(i18n("Web Browser"));
-    webBrowser->setNamePrefix(i18nc("This string will be used to name widgets of this class. It must _not_ contain white "
-                                    "spaces and non latin1 characters.", "webBrowser"));
+    webBrowser->setNamePrefix(
+        i18nc("A prefix for identifiers of web browser widgets. Based on that, identifiers such as "
+            "webBrowser1, webBrowser2 are generated. "
+            "This string can be used to refer the widget object as variables in programming "
+            "languages or macros so it must _not_ contain white spaces and non latin1 characters, "
+            "should start with lower case letter and if there are subsequent words, these should "
+            "start with upper case letter. Example: smallCamelCase. "
+            "Moreover, try to make this prefix as short as possible.",
+            "webBrowser"));
     webBrowser->setDescription(i18n("Web widget with browsing features."));
     webBrowser->setInlineEditingEnabledWhenDataSourceSet(false);
     addClass(webBrowser);
