@@ -123,9 +123,9 @@ Item {
                                 base.opacity = 0;
                                 var file = "";
                                 if(base.selectorType === "stage") {
-                                    file = Settings.stageTemplateLocation(model.templateFile);
+                                    file = model.url;
                                 } else if(base.selectorType === "words") {
-                                    file = Settings.wordsTemplateLocation(model.templateFile);
+                                    file = "template://" + model.url;
                                 }
                                 if(file.slice(-1) === "/" || file === "") {
                                     return;

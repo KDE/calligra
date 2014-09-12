@@ -24,13 +24,12 @@ Page {
     id: base;
     property string pageName: "TemplatesWords";
     function activateTemplate(templateFile) {
-        var file = Settings.wordsTemplateLocation(templateFile);
-        console.debug(file);
-        if(file.slice(-1) === "/" || file === "") {
+        console.debug(templateFile);
+        if(templateFile.slice(-1) === "/" || templateFile === "") {
             return;
         }
         baseLoadingDialog.visible = true;
-        openFile("template://" + file);
+        openFile("template://" + templateFile);
     }
     TemplatesModel {
         id: wordsTemplates;
@@ -98,8 +97,8 @@ Page {
                         MouseArea {
                             anchors.fill: parent;
                             onClicked: {
-                                if(model.variants.count === 0) {
-                                    activateTemplate(model.templateFile);
+                                if(model.variantCount === 0) {
+                                    activateTemplate(model.url);
                                 }
                                 else {
                                     // then there are variants to choose between, let the user see!

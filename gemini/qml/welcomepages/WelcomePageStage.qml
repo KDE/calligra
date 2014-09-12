@@ -23,13 +23,12 @@ import "../components"
 Page {
     id: base;
     function activateTemplate(templateFile) {
-        var file = Settings.stageTemplateLocation(templateFile);
-        console.debug(file);
-        if(file.slice(-1) === "/" || file === "") {
+        console.debug(templateFile);
+        if(templateFile.slice(-1) === "/" || templateFile === "") {
             return;
         }
         baseLoadingDialog.visible = true;
-        openFile(file);
+        openFile(templateFile);
     }
     TemplatesModel {
         id: stageTemplates;
@@ -152,8 +151,8 @@ Page {
                         MouseArea {
                             anchors.fill: parent;
                             onClicked: {
-                                if(model.variants.count === 0) {
-                                    activateTemplate(model.templateFile);
+                                if(model.variantCount === 0) {
+                                    activateTemplate(model.url);
                                 }
                                 else {
                                     // then there are variants to choose between, let the user see!
