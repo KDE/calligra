@@ -41,6 +41,8 @@ set(calligragemini_SRCS
     ScribbleArea.cpp
     RecentImageImageProvider.cpp
     RecentFilesModel.cpp
+    TemplatesModel.cpp
+    TemplateVariantsModel.cpp
 )
 
 set(thumbnailhelper_SRCS
