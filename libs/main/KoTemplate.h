@@ -35,6 +35,10 @@ public:
                         const QString &picture = QString(),
                         const QString &fileName = QString(),
                         const QString &_measureSystem = QString(),
+                        const QString &color = QString(),
+                        const QString &swatch = QString(),
+                        const QString &variantName = QString(),
+                        bool wide = false,
                         bool hidden = false, bool touched = false);
     ~KoTemplate() {}
 
@@ -73,8 +77,36 @@ public:
         m_measureSystem = system;
     }
 
+    QString color() const {
+        return m_color;
+    }
+    void setColor(const QString& color) {
+        m_color = color;
+    }
+
+    QString swatch() const {
+        return m_swatch;
+    }
+    void setSwatch(const QString& swatch) {
+        m_swatch = swatch;
+    }
+
+    QString variantName() const {
+        return m_variantName;
+    }
+    void setVariantName(const QString& variantName) {
+        m_variantName = variantName;
+    }
+
+    bool wide() const {
+        return m_wide;
+    }
+    void setWide(bool wide) {
+        m_wide = wide;
+    }
 private:
-    QString m_name, m_descr, m_file, m_picture, m_fileName;
+    QString m_name, m_descr, m_file, m_picture, m_fileName, m_color, m_swatch, m_variantName;
+    bool m_wide;
     bool m_hidden;
     mutable bool m_touched;
     bool m_cached;
