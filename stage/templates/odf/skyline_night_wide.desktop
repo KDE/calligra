@@ -63,3 +63,4 @@ Comment[zh_TW]=Skyline Night Wide
 Type=Link
 URL=.source/skyline_night_wide.otp
 X-KDE-Hidden=false
+X-KDE-TemplateIsWideFormat=true

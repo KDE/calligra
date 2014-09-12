@@ -63,3 +63,4 @@ Comment[zh_TW]=Skyline Morning Wide
 Type=Link
 URL=.source/skyline_morning_wide.otp
 X-KDE-Hidden=false
+X-KDE-TemplateIsWideFormat=true
