@@ -1475,11 +1475,7 @@ class KexiMainWindow::Private
 {
 public:
     Private(KexiMainWindow* w)
-      : wnd(w)
-    {
-        dummy_KXMLGUIClient = new KXMLGUIClient();
-        dummy_KXMLGUIFactory = new KXMLGUIFactory(0);
-
+            : wnd(w) {
         actionCollection = new KActionCollection(w);
         propEditor = 0;
         propEditorDockWidget = 0;
@@ -1494,10 +1490,6 @@ public:
         navigator = 0;
         prj = 0;
         config = KGlobal::config();
-        curWindowGUIClient = 0;
-        curWindowViewGUIClient = 0;
-        closedWindowGUIClient = 0;
-        closedWindowViewGUIClient = 0;
         nameDialog = 0;
         m_findDialog = 0;
         focus_before_popup = 0;
@@ -1531,8 +1523,6 @@ public:
     }
     ~Private() {
         qDeleteAll(m_openedCustomObjectsForItem);
-        delete dummy_KXMLGUIClient;
-        delete dummy_KXMLGUIFactory;
     }
 
 #ifndef KEXI_NO_PENDING_DIALOGS
@@ -1801,9 +1791,6 @@ public:
         return dynamic_cast<KexiSearchAndReplaceViewInterface*>(view);
     }
 
-    KXMLGUIClient* dummy_KXMLGUIClient;
-    KXMLGUIFactory* dummy_KXMLGUIFactory;
-
     KexiMainWindow *wnd;
     KexiMainWidget *mainWidget;
     KActionCollection *actionCollection;
@@ -1828,8 +1815,6 @@ public:
     QPointer<KexiPropertyEditorView> propEditor;
     QPointer<KoProperty::Set> propertySet;
 
-    KXMLGUIClient *curWindowGUIClient, *curWindowViewGUIClient,
-                  *closedWindowGUIClient, *closedWindowViewGUIClient;
     KexiNameDialog *nameDialog;
     QTimer timer; //!< helper timer
     QString appCaptionPrefix; //<! application's caption prefix - prj name (if opened), else: null
