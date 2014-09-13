@@ -64,6 +64,7 @@ ELSE (KEXI_MOBILE)
     KexiNameWidget.cpp
     KexiNameDialog.cpp
     KexiPasswordWidget.cpp
+    KexiDBPasswordDialog.cpp
   )
   kde4_add_ui_files(kexiextendedwidgets_LIB_SRCS
     KexiConnectionSelector.ui
