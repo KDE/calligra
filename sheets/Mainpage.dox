@@ -1,19 +1,19 @@
 /**
- * \mainpage KSpread
- * KSpread is a scriptable spreadsheet program which provides both
+ * \mainpage Sheets
+ * Sheets is a scriptable spreadsheet program which provides both
  * table-oriented sheets and support for complex mathematical formulas
  * and statistics.
  *
  * \section majorclasses Major classes
  * \li KSpread::Canvas The scrollable area showing the cells.
  * \li KSpread::Cell Represents a cell in the spreadsheet.
- * \li KSpread::Doc The KPart used in KSpread itself and when embedded in non-Calligra applications.
+ * \li KSpread::Doc The KPart used in Sheets itself and when embedded in non-Calligra applications.
  * \li KSpread::Map The actual spreadsheet document consisting of at least one sheet.
  * \li KSpread::Sheet A sheet consists of several cells.
  * \li KSpread::View This class displays the KPart document.
  *
  * \section plugins Plugins
- * \li \ref KSpreadScripting KSpread Scripting Plugin that offers flexible access
+ * \li \ref KSpreadScripting Sheets Scripting Plugin that offers flexible access
  *      to the Kross scripting framework.
  * \li \ref CalendarTool Plugin for inserting a calendar into a spreadsheet.
  */
@@ -42,7 +42,7 @@
 
 /**
  * \defgroup NativeFormat Old native file format
- * Classes and methods related to the KSpread's old native file format loading/saving.
+ * Classes and methods related to the Sheets's old native file format loading/saving.
  */
 
 /**
@@ -103,3 +103,5 @@
 
 #EXAMPLE_PATH=. doc
 #EXAMPLE_RECURSIVE=NO
+
+// DOXYGEN_SET_PROJECT_NAME = Sheets

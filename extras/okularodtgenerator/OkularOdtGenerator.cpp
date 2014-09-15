@@ -41,7 +41,6 @@
 #include <kmimetype.h>
 
 #include <okular/core/page.h>
-#include <okular/core/version.h>
 
 static KAboutData createAboutData()
 {
@@ -262,10 +261,19 @@ void OkularOdtGenerator::generatePixmap( Okular::PixmapRequest *request )
     signalPixmapRequestDone( request );
 }
 
+#if OKULAR_IS_VERSION(0, 20, 60)
+Okular::DocumentInfo OkularOdtGenerator::generateDocumentInfo( const QSet<Okular::DocumentInfo::Key> &keys ) const
+{
+    Q_UNUSED(keys);
+
+    return m_documentInfo;
+}
+#else
 const Okular::DocumentInfo* OkularOdtGenerator::generateDocumentInfo()
 {
     return &m_documentInfo;
 }
+#endif
 
 const Okular::DocumentSynopsis* OkularOdtGenerator::generateDocumentSynopsis()
 {
