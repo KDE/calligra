@@ -194,6 +194,7 @@ KAboutData *newKritaAboutData()
     aboutData->addAuthor(ki18n("Raphael Langerhorst"));
     aboutData->addAuthor(ki18n("Rex Dieter"));
     aboutData->addAuthor(ki18n("Rob Buis"));
+    aboutData->addAuthor(ki18n("Robert Wloch Professional Consulting");
     aboutData->addAuthor(ki18n("Roopesh Chander"));
     aboutData->addAuthor(ki18n("Sahil Nagpal"));
     aboutData->addAuthor(ki18n("Salil Kapur"));
