@@ -56,7 +56,9 @@ TouchDeclarativeView::TouchDeclarativeView(const QUrl &url, QWidget *parent)
     setCacheMode(QGraphicsView::CacheNone);
     setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
 
-    setViewport(new QGLWidget(this));
+    QGLFormat format;
+    format.setSampleBuffers(true);
+    setViewport(new QGLWidget(format, this));
 
     setAttribute(Qt::WA_AcceptTouchEvents);
     setAttribute(Qt::WA_OpaquePaintEvent);
