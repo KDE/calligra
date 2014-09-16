@@ -253,19 +253,18 @@ Item {
                 y: controllerFlickable.contentY;
                 height: controllerFlickable.height;
                 width: controllerFlickable.width;
+                
+                enabled: base.state !== "readermode";
 
                 onPinchStarted: {
-                    if(base.state === "readermode") { return; }
-                    controllerItem.beginZoomGesture();
                     base.canvasInteractionStarted();
+                    controllerItem.beginZoomGesture();
                 }
                 onPinchUpdated: {
-                    if(base.state === "readermode") { return; }
                     var newCenter = mapToItem( controllerFlickable, pinch.center.x, pinch.center.y );
                     controllerItem.zoomBy(pinch.scale - pinch.previousScale, Qt.point( newCenter.x, newCenter.y ) );
                 }
                 onPinchFinished: {
-                    if(base.state === "readermode") { return; }
                     controllerItem.endZoomGesture();
                     controllerFlickable.returnToBounds();
                     controllerItem.returnToBounds();
