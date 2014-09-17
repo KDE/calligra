@@ -1,6 +1,6 @@
 [Desktop Entry]
 Icon=skyline_monotone
-Name=Skyline Monotone
+Name=Skyline
 Name[bs]=Monotono nebo
 Name[ca]=Horitzó monòton
 Name[ca@valencia]=Horitzó monòton
@@ -64,3 +64,5 @@ Type=Link
 URL=.source/skyline_monotone.otp
 X-KDE-Hidden=false
 X-KDE-Thumbnail=.thumbnail/skyline_monotone.png
+X-KDE-VariantName=Monotone
+X-KDE-Color=black
