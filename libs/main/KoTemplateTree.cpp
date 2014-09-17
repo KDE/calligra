@@ -196,6 +196,7 @@ void KoTemplateTree::readTemplates()
                 QString color;
                 QString swatch;
                 QString variantName;
+                QString thumbnail;
                 bool wide = false;
                 bool hidden = false;
                 bool defaultTemplate = false;
@@ -220,6 +221,7 @@ void KoTemplateTree::readTemplates()
                         swatch = config.readEntry("X-KDE-Swatch");
                         wide = config.readEntry("X-KDE-TemplateIsWideFormat", false);
                         variantName = config.readEntry("X-KDE-VariantName");
+                        thumbnail = config.readEntry("X-KDE-Thumbnail");
                         hidden = config.readEntry("X-KDE-Hidden", false);
                         defaultTemplate = config.readEntry("X-KDE-DefaultTemplate", false);
                         measureSystem = config.readEntry("X-KDE-MeasureSystem").toLower();
@@ -256,6 +258,8 @@ void KoTemplateTree::readTemplates()
                 }
                 KoTemplate *t = new KoTemplate(text, description, templatePath, icon, fileName,
                                                measureSystem, color, swatch, variantName, wide, hidden);
+                if(!thumbnail.isEmpty())
+                    t->setThumbnail(*it + thumbnail);
                 group->add(t, false, false); // false -> we aren't a "user", false -> don't
                 // "touch" the group to avoid useless
                 // creation of dirs in .kde/blah/...

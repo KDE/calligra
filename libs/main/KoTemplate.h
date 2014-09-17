@@ -98,6 +98,13 @@ public:
         m_variantName = variantName;
     }
 
+    QString thumbnail() const {
+        return m_thumbnail;
+    }
+    void setThumbnail(const QString& thumbnail) {
+        m_thumbnail = thumbnail;
+    }
+
     bool wide() const {
         return m_wide;
     }
@@ -105,7 +112,7 @@ public:
         m_wide = wide;
     }
 private:
-    QString m_name, m_descr, m_file, m_picture, m_fileName, m_color, m_swatch, m_variantName;
+    QString m_name, m_descr, m_file, m_picture, m_fileName, m_color, m_swatch, m_variantName, m_thumbnail;
     bool m_wide;
     bool m_hidden;
     mutable bool m_touched;
