@@ -72,3 +72,4 @@ Comment[zh_TW]=KDE 事件
 Type=Link
 URL=.source/kde_events.otp
 X-KDE-Hidden=false
+X-KDE-Thumbnail=.thumbnail/kde_events.png
