@@ -91,7 +91,7 @@ public:
                 entry->variants->addVariant(tmplate->variantName(),
                                             tmplate->color(),
                                             tmplate->swatch(),
-                                            tmplate->picture(),
+                                            tmplate->thumbnail().isEmpty() ? tmplate->picture() : tmplate->thumbnail(),
                                             tmplate->file());
             }
         }
