@@ -407,9 +407,9 @@ void KoTextLayoutArea::backtrackKeepWithNext(FrameIterator *cursor)
             //setBottom(d->blockRects.last()->bottom() + d->footNotesHeight);
         }
         if (!keepWithNext) {
+            cursor->it = ++it;
             break;
         }
-        --(cursor->it);
     }
 }
 
