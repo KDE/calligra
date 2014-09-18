@@ -63,7 +63,7 @@ void OverviewDockerDock::setCanvas(KoCanvasBase * canvas)
     KIS_ASSERT_RECOVER_RETURN(m_canvas);
 
     m_overviewWidget->setCanvas(canvas);
-    m_zoomSlider = m_canvas->view()->zoomController()->zoomAction()->createWidget(m_canvas->view()->KoView::statusBar());
+    m_zoomSlider = m_canvas->view()->zoomController()->zoomAction()->createWidget(m_canvas->imageView()->KoView::statusBar());
     m_layout->addWidget(m_zoomSlider);
 }
 
