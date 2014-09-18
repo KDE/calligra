@@ -95,6 +95,8 @@
 #include "kexiactioncategories.h"
 #include "kexifinddialog.h"
 #include "kexisearchandreplaceiface.h"
+#include "KexiBugReportDialog.h"
+
 #include <kexi_global.h>
 
 #include <widget/properties/KexiPropertyEditorView.h>
@@ -3444,6 +3446,12 @@ void KexiMainWindow::slotDirtyFlagChanged(KexiWindow* window)
 void KexiMainWindow::slotTipOfTheDay()
 {
     //! @todo
+}
+
+void KexiMainWindow::slotReportBug()
+{
+    KexiBugReportDialog bugReport(this);
+    bugReport.exec();
 }
 
 void KexiMainWindow::slotImportantInfo()

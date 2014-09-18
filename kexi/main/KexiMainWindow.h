@@ -541,7 +541,7 @@ protected slots:
 
     /// TMP: Display a dialog to download db examples from Internet
     void slotGetNewStuff();
-
+    void slotReportBug();
     void slotTipOfTheDay();
 
     //! Shows 'important info' dialog, is \a onStartup is false, it's always shown
