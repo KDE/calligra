@@ -328,10 +328,12 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
         if (!connectionShortcut.loadConnectionData(cdata)) {
 //! @todo Show error message from KexiDBConnShortcutFile when there's one implemented.
 //!       For we're displaying generic error msg.
-            KMessageBox::sorry(0, "<qt>"
-                               + i18n("Could not read connection information from connection shortcut "
-                                      "file <nobr>\"%1\"</nobr>.<br><br>Check whether the file has valid contents.",
-                                      QDir::convertSeparators(connectionShortcut.fileName())));
+            KMessageBox::sorry(0,
+                               i18nc("@info",
+                                     "Could not read connection information from connection shortcut "
+                                     "file <filename>%1</filename>."
+                                     "<note>Check whether the file has valid contents.</note>",
+                                     QDir::convertSeparators(connectionShortcut.fileName())));
             return false;
         }
     }
@@ -348,7 +350,8 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
     QString fileType(args->getOption("type").toLower());
     if (args->count() > 0 && (!fileType.isEmpty() && fileType != "project" && fileType != "shortcut" && fileType != "connection")) {
         KMessageBox::sorry(0,
-                           i18n("You have specified invalid argument (\"%1\") for \"type\" command-line option.",
+                           i18nc("Please don't translate the \"type\" word, it's constant.",
+                                 "Invalid argument <icode>%1</icode> specified for <icode>type</icode> command-line option.",
                                 fileType));
         return false;
     }
@@ -391,7 +394,7 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
         }
         else {
             KMessageBox::sorry(0,
-                               i18n("You have specified invalid port number \"%1\".", portStr));
+                               i18n("Invalid port number <icode>%1</icode> specified.", portStr));
             return false;
         }
     }
@@ -416,8 +419,8 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
                                 + i18n("Could not start Kexi application this way.");
 
     if (createDB && dropDB) {
-        KMessageBox::sorry(0, i18n(
-                               "You have used both \"createdb\" and \"dropdb\" startup options.") + couldnotMsg);
+        KMessageBox::sorry(0, i18nc("Please don't translate the \"createdb\" and \"dropdb\" words, these are constants.",
+                                    "Both <icode>createdb</icode> and <icode>dropdb</icode> used in startup options.") + couldnotMsg);
         return false;
     };
 
@@ -461,8 +464,8 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
       }*/
 
     if (KexiStartupData::forcedUserMode() && KexiStartupData::forcedDesignMode()) {
-        KMessageBox::sorry(0, i18n(
-                               "You have used both \"user-mode\" and \"design-mode\" startup options.") + couldnotMsg);
+        KMessageBox::sorry(0, i18nc("Please don't translate the <icode>user-mode</icode> and <icode>design-mode</icode> words, these are constants.",
+                                    "Both <icode>user-mode</icode> and <icode>design-mode</icode> used in startup options.") + couldnotMsg);
         return false;
     }
 
@@ -715,7 +718,7 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
             //create startup dialog for reuse because it can be used again after conn err.
             d->startupDialog = new KexiStartupDialog(
                 KexiStartupDialog::Everything, KexiStartupDialog::CheckBoxDoNotShowAgain,
-                Kexi::connset(), /*fake:*/ *(new KexiProjectSet), 0);
+                Kexi::connset(), 0);
         }
         if (d->startupDialog->exec() != QDialog::Accepted)
             return true;
@@ -780,15 +783,6 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
                 delete d->startupDialog;
                 d->startupDialog = 0;
             }
-        } else if (r == KexiStartupDialog::OpenRecentResult) {
-//   kDebug() << "Recent project --------";
-            const KexiProjectData *data = d->startupDialog->selectedProjectData();
-            if (data) {
-//    kDebug() << "Selected project: database=" << data->databaseName()
-//     << " connection=" << data->constConnectionData()->serverInfoString();
-            }
-            //! @todo
-            return data != 0;
         }
 
         if (!KexiStartupData::projectData())
@@ -971,7 +965,7 @@ tristate KexiStartupHandler::detectActionForFile(
                                        i18n("The file \"%1\" is not recognized as being supported by Kexi.",
                                             QDir::convertSeparators(dbFileName)),
                                        QString::fromLatin1("<p>")
-                                       + i18n("Database driver for this file type not found.\nDetected MIME type: %1",
+                                       + i18n("Database driver for this file type not found.\nDetected MIME type is %1.",
                                               mimename)
                                        + (ptr.data()->comment().isEmpty()
                                           ? QString::fromLatin1(".") : QString::fromLatin1(" (%1).").arg(ptr.data()->comment()))
@@ -1006,15 +1000,13 @@ KexiStartupHandler::selectProject(KexiDB::ConnectionData *cdata, bool& cancelled
     KexiProjectSelectorDialog prjdlg(parent, *cdata, true, false);
     if (!prjdlg.projectSet() || prjdlg.projectSet()->error()) {
         KexiGUIMessageHandler msgh;
+        QString msg(i18n("Could not load list of available projects for <resource>%1</resource> database server.",
+                         cdata->serverInfoString(true)));
         if (prjdlg.projectSet()) {
-            msgh.showErrorMessage(prjdlg.projectSet(),
-                                  i18n("Could not load list of available projects for <b>%1</b> database server.",
-                                       cdata->serverInfoString(true)));
+            msgh.showErrorMessage(prjdlg.projectSet(), msg);
         }
         else {
-            msgh.showErrorMessage(
-                i18n("Could not load list of available projects for <b>%1</b> database server.",
-                     cdata->serverInfoString(true)));
+            msgh.showErrorMessage(msg);
         }
         return 0;
     }
@@ -1049,7 +1041,7 @@ void KexiStartupHandler::slotSaveShortcutFileChanges()
     }
 
     if (!ok) {
-        KMessageBox::sorry(0, i18n("Failed saving connection data to\n\"%1\" file.",
+        KMessageBox::sorry(0, i18n("Failed saving connection data to <filename>%1</filename> file.",
                            QDir::convertSeparators(fileName)));
     }
 }

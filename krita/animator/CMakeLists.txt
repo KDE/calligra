@@ -11,7 +11,7 @@ kde4_add_app_icon(kritaanimation_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../pi
 kde4_add_kdeinit_executable(kritaanimation ${kritaanimation_KDEINIT_SRCS})
 
 target_link_libraries(kdeinit_kritaanimation kritaui)
-target_link_libraries(kritaanimation kdeinit_kritaanimation)
+target_link_libraries(kritaanimation ${BREAKPAD_LIBS} kdeinit_kritaanimation)
 
 install(TARGETS kritaanimation ${INSTALL_TARGETS_DEFAULT_ARGS})
 install(TARGETS kdeinit_kritaanimation ${INSTALL_TARGETS_DEFAULT_ARGS})

@@ -23,6 +23,7 @@
   <summary>Word Processor</summary>
   <summary xml:lang="ca">Processador de textos</summary>
   <summary xml:lang="cs">Textový procesor</summary>
+  <summary xml:lang="de">Textverarbeitung</summary>
   <summary xml:lang="en-GB">Word Processor</summary>
   <summary xml:lang="es">Procesador de texto</summary>
   <summary xml:lang="ia">Processator de parolas</summary>
@@ -130,6 +131,7 @@
       <li xml:lang="x-test">xxIncludes all features expected from a modern word processorxx</li>
       <li>ODT (Open Document Text) support</li>
       <li xml:lang="ca">Implementa ODT (Open Document Text)</li>
+      <li xml:lang="de">Unterstützung für ODT (Open Document Text)</li>
       <li xml:lang="en-GB">ODT (Open Document Text) support</li>
       <li xml:lang="es">Admite el formato ODT («Open Document Text»)</li>
       <li xml:lang="it">Supporto ODT (Open Document Text)</li>

@@ -70,6 +70,7 @@ public:
     int undoStackSize();
     bool showOutlineWhilePainting();
     int mdiMode();
+    int favoritePresets();
 
 };
 

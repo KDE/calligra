@@ -41,7 +41,7 @@ KexiPasswordPage::KexiPasswordPage(const QString &title, QWidget* parent)
 }
 
 KexiPasswordPage::KexiPasswordPage(QWidget* parent)
-    : KexiAssistantPage(i18n("Database Password"), QString(), parent), d(new Private)
+    : KexiAssistantPage(i18nc("@title:window", "Database Password"), QString(), parent), d(new Private)
 {
     init();
 }

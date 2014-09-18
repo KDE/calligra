@@ -633,29 +633,11 @@ void Form::emitWidgetSelected(bool multiple)
     d->enableAction("format_font", fontEnabled);
 
     // If the widgets selected is a container, we enable layout actions
-    bool containerSelected = false;
     if (!multiple) {
         KFormDesigner::ObjectTreeItem *item = 0;
         if (!wlist->isEmpty()) {
             objectTree()->lookup(wlist->first()->objectName());
         }
-        if (item && item->container()) {
-            containerSelected = true;
-        }
-    }
-    const bool twoSelected = wlist->count() == 2;
-    // Layout actions
-    d->enableAction("layout_menu", multiple || containerSelected);
-    d->enableAction("layout_hbox", multiple || containerSelected);
-    d->enableAction("layout_vbox", multiple || containerSelected);
-    d->enableAction("layout_grid", multiple || containerSelected);
-    d->enableAction("layout_hsplitter", twoSelected);
-    d->enableAction("layout_vsplitter", twoSelected);
-
-    Container *container = activeContainer();
-    if (container) {
-        d->enableAction("break_layout", 
-            (container->layoutType() != NoLayout));
     }
     emit widgetSelected(true);
 }
@@ -680,19 +662,6 @@ void Form::emitFormWidgetSelected()
     d->enableAction("format_font", false);
 
     enableFormActions();
-
-    const bool twoSelected = selectedWidgets()->count() == 2;
-    const bool hasChildren = !objectTree()->children()->isEmpty();
-
-    // Layout actions
-    d->enableAction("layout_menu", hasChildren);
-    d->enableAction("layout_hbox", hasChildren);
-    d->enableAction("layout_vbox", hasChildren);
-    d->enableAction("layout_grid", hasChildren);
-    d->enableAction("layout_hsplitter", twoSelected);
-    d->enableAction("layout_vsplitter", twoSelected);
-    d->enableAction("break_layout", (toplevelContainer()->layoutType() != NoLayout));
-
     emit formWidgetSelected();
 }
 
@@ -760,14 +729,6 @@ void Form::disableWidgetActions()
     d->enableAction("adjust_size_menu", false);
     d->enableAction("format_raise", false);
     d->enableAction("format_lower", false);
-
-    d->enableAction("layout_menu", false);
-    d->enableAction("layout_hbox", false);
-    d->enableAction("layout_vbox", false);
-    d->enableAction("layout_grid", false);
-    d->enableAction("layout_hsplitter", false);
-    d->enableAction("layout_vsplitter", false);
-    d->enableAction("break_layout", false);
 }
 
 ///////////////////////////  Various slots and signals /////////////////////
@@ -1287,10 +1248,6 @@ void Form::slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& p)
         saveAlignProperty(property);
         return;
     }
-    else if (property == "layout" || property == "layoutMargin" || property == "layoutSpacing") {
-        saveLayoutProperty(property, value);
-        return;
-    }
 
     // make sure we are not already undoing -> avoid recursion
     if (d->isUndoing && !d->isRedoing) {
@@ -1364,7 +1321,7 @@ bool Form::isNameValid(const QString &name) const
     if (!KexiDB::isIdentifier(name)) {
         KMessageBox::sorry(widget(),
                            i18n("Could not rename widget \"%1\" to \"%2\" because "
-                                "\"%3\" is not a valid name (identifier) for a widget.\n",
+                                "\"%3\" is not a valid name (identifier) for a widget.",
                                 w->objectName(), name, name));
         d->slotPropertyChangedEnabled = false;
         d->propertySet["objectName"].resetValue();
@@ -1375,7 +1332,7 @@ bool Form::isNameValid(const QString &name) const
     if (objectTree()->lookup(name)) {
         KMessageBox::sorry(widget(),
                            i18n("Could not rename widget \"%1\" to \"%2\" "
-                                "because a widget with the name \"%3\" already exists.\n",
+                                "because a widget with the name \"%3\" already exists.",
                                 w->objectName(), name, name));
         d->slotPropertyChangedEnabled = false;
         d->propertySet["objectName"].resetValue();
@@ -1636,9 +1593,6 @@ void Form::createPropertiesForWidget(QWidget *w)
     d->propertySet.addProperty(newProp = new KoProperty::Property("this:className",
             w->metaObject()->className()));
     newProp->setVisible(false);
-    if (tree->container()) { // we are a container -> layout property
-        createLayoutProperty(tree);
-    }
 }
 
 void Form::updatePropertyValue(ObjectTreeItem *tree, const char *property, const QMetaProperty &meta)
@@ -1727,8 +1681,6 @@ void Form::createContextMenu(QWidget *w, Container *container, const QPoint& men
     const bool toplevelWidgetSelected = widget() == w;
     const uint widgetsCount = container->form()->selectedWidgets()->count();
     const bool multiple = widgetsCount > 1;
-    // We only enablelayout creation if more than one widget with the same parent are selected
-    const bool enableLayout = multiple || w == container->widget();
 
     //set title
     QString n( container->form()->library()->displayName(w->metaObject()->className()) );
@@ -1770,9 +1722,6 @@ void Form::createContextMenu(QWidget *w, Container *container, const QPoint& men
     PLUG_ACTION("edit_copy", !toplevelWidgetSelected);
     PLUG_ACTION("edit_paste", true);
     PLUG_ACTION("edit_delete", !toplevelWidgetSelected);
-    separatorNeeded = true;
-    PLUG_ACTION("layout_menu", enableLayout);
-    PLUG_ACTION("break_layout", enableLayout);
     separatorNeeded = true;
     PLUG_ACTION("align_menu", !toplevelWidgetSelected);
     PLUG_ACTION("adjust_size_menu", !toplevelWidgetSelected);
@@ -1825,7 +1774,7 @@ void Form::createContextMenu(QWidget *w, Container *container, const QPoint& men
         separatorNeeded = true;
     }
 
-#ifdef KEXI_DEBUG_GUI
+#ifdef KFD_SIGSLOTS
     if (!multiple && (d->features & EnableEvents)) {
         if (separatorNeeded)
             menu.addSeparator();
@@ -1839,7 +1788,7 @@ void Form::createContextMenu(QWidget *w, Container *container, const QPoint& men
             sigMenu->addAction(m.signature());
         }
         QAction *eventsSubMenuAction = menu.addMenu(sigMenu);
-        eventsSubMenuAction->setText(i18n("Events"));
+        eventsSubMenuAction->setText(futureI18n("Events"));
         if (list.isEmpty())
             eventsSubMenuAction->setEnabled(false);
         connect(sigMenu, SIGNAL(triggered(QAction*)),
@@ -2173,95 +2122,6 @@ void Form::clearWidgetContent()
     }
 }
 
-void Form::layoutHBox()
-{
-    createLayout(HBox);
-}
-
-void Form::layoutVBox()
-{
-    createLayout(VBox);
-}
-
-void Form::layoutGrid()
-{
-    createLayout(Grid);
-}
-
-void Form::layoutHSplitter()
-{
-    createLayout(HSplitter);
-}
-
-void Form::layoutVSplitter()
-{
-    createLayout(VSplitter);
-}
-
-void Form::layoutHFlow()
-{
-    createLayout(HFlow);
-}
-
-void Form::layoutVFlow()
-{
-    createLayout(VFlow);
-}
-
-void Form::createLayout(Form::LayoutType layoutType)
-{
-    QWidgetList *list = selectedWidgets();
-    // if only one widget is selected (a container), we modify its layout
-    if (list->isEmpty()) {//sanity check
-        kWarning() << "list is empty!";
-        return;
-    }
-    if (list->count() == 1) {
-        ObjectTreeItem *item = objectTree()->lookup(list->first()->objectName());
-        if (!item || !item->container() || !d->propertySet.contains("layout")) {
-            return;
-        }
-        d->propertySet.changeProperty("layout", Container::layoutTypeToString(layoutType));
-        return;
-    }
-
-    QWidget *parent = list->first()->parentWidget();
-    foreach (QWidget *w, *list) {
-        //kDebug() << "comparing widget" << w->objectName()
-        //         << "whose parent is" << w->parentWidget()->objectName()
-        //         << "insteaed of" << parent->objectName();
-        if (w->parentWidget() != parent) {
-            KMessageBox::sorry(widget()->topLevelWidget(), 
-                i18n("<b>Cannot create the layout.</b>\n"
-                     "All selected widgets must have the same parent."));
-            //kDebug() << "widgets don't have the same parent widget";
-            return;
-        }
-    }
-    Command *com = new CreateLayoutCommand(*this, layoutType, *list);
-    addCommand(com);
-}
-
-void Form::breakLayout()
-{
-    if (!objectTree()) {
-        return;
-    }
-    Container *container = activeContainer();
-    QByteArray c(container->widget()->metaObject()->className());
-
-    if ((c == "Grid") || (c == "VBox") || (c == "HBox") || (c == "HFlow") || (c == "VFlow")) {
-        Command *com = new BreakLayoutCommand(*container);
-        addCommand(com);
-    }
-    else { // normal container
-        if (selectedWidgets()->count() == 1)
-            d->propertySet.changeProperty("layout", "NoLayout");
-        else
-            container->setLayoutType(NoLayout);
-    }
-}
-
 // Alignment-related functions /////////////////////////////
 
 void Form::createAlignProperty(const QMetaProperty& meta, QWidget *widget, QWidget *subwidget)
@@ -2379,114 +2239,6 @@ void Form::saveAlignProperty(const QString &property)
     else {
         d->lastCommand = new PropertyCommand(*this, d->selected.first()->objectName().toLatin1(),
                                  subwidget->property("alignment"), valueForKeys, "alignment");
-        if (!addCommand(d->lastCommand, DontExecuteCommand)) {
-            d->lastCommand = 0;
-        }
-    }
-}
-
-// Layout-related functions  //////////////////////////
-
-void Form::createLayoutProperty(ObjectTreeItem *item)
-{
-    Container *container = item->container();
-    if (!container || !objectTree() || !container->widget()) {
-        return;
-    }
-    // special containers have no 'layout' property, as it should not be changed
-    QByteArray className = container->widget()->metaObject()->className();
-    if ((className == "HBox") || (className == "VBox") || (className == "Grid"))
-        return;
-
-    QStringList list;
-    QString value = Container::layoutTypeToString(container->layoutType());
-
-    list << "NoLayout" << "HBox" << "VBox" << "Grid" << "HFlow" << "VFlow";
-
-    KoProperty::Property *p = new KoProperty::Property("layout", d->createValueList(0, list), value,
-            i18n("Container's Layout"), i18n("Container's Layout"));
-    p->setVisible(container->form()->library()->advancedPropertiesVisible());
-    d->propertySet.addProperty(p);
-
-    updatePropertyValue(item, "layout");
-
-    p = new KoProperty::Property("layoutMargin", container->layoutMargin(),
-                                 i18n("Layout Margin"), i18n("Layout Margin"));
-    d->propertySet.addProperty(p);
-    updatePropertyValue(item, "layoutMargin");
-    if (container->layoutType() == NoLayout)
-        p->setVisible(false);
-
-    p = new KoProperty::Property("layoutSpacing", container->layoutSpacing(),
-                                 i18n("Layout Spacing"), i18n("Layout Spacing"));
-    d->propertySet.addProperty(p);
-    updatePropertyValue(item, "layoutSpacing");
-    if (container->layoutType() == NoLayout)
-        p->setVisible(false);
-}
-
-void Form::saveLayoutProperty(const QString &prop, const QVariant &value)
-{
-    Container *container = 0;
-    if (!objectTree()) {
-        return;
-    }
-    ObjectTreeItem *item = objectTree()->lookup( d->selected.first()->objectName() );
-    if (!item)
-        return;
-    container = item->container();
-
-    if (prop == "layout") {
-        LayoutType type = Container::stringToLayoutType(value.toString());
-
-        if (d->lastCommand && d->lastCommand->propertyName() == "layout" && !d->isUndoing) {
-            d->lastCommand->setValue(value);
-        }
-        else if (!d->isUndoing)  {
-            d->lastCommand = new LayoutPropertyCommand(*this, 
-                d->selected.first()->objectName().toLatin1(),
-                d->propertySet["layout"].oldValue(), value);
-            if (!addCommand(d->lastCommand, DontExecuteCommand)) {
-                d->lastCommand = 0;
-            }
-        }
-
-        container->setLayoutType(type);
-        bool show = (type != NoLayout);
-        if (show != d->propertySet["layoutMargin"].isVisible())  {
-            d->propertySet["layoutMargin"].setVisible(show);
-            d->propertySet["layoutSpacing"].setVisible(show);
-#if 0
-//! @todo
-            showPropertySet(this, true/*force*/);
-#endif
-        }
-        return;
-    }
-
-    if (prop == "layoutMargin" && container->layout()) {
-        container->setLayoutMargin(value.toInt());
-        container->layout()->setMargin(value.toInt());
-    } else if (prop == "layoutSpacing" && container->layout())  {
-        container->setLayoutSpacing(value.toInt());
-        container->layout()->setSpacing(value.toInt());
-    }
-
-    ObjectTreeItem *tree = objectTree()->lookup( d->selected.first()->objectName() );
-    if (tree && d->propertySet[ prop.toLatin1()].isModified())
-        tree->addModifiedProperty(prop.toLatin1(), d->propertySet[prop.toLatin1()].oldValue());
-
-    if (d->isUndoing)
-        return;
-
-    if (d->lastCommand && (QString(d->lastCommand->propertyName()) == prop)) {
-        d->lastCommand->setValue(value);
-    }
-    else  {
-        d->lastCommand = new PropertyCommand(*this, 
-            d->selected.first()->objectName().toLatin1(),
-            d->propertySet[ prop.toLatin1()].oldValue(), value, prop.toLatin1()
-        );
         if (!addCommand(d->lastCommand, DontExecuteCommand)) {
             d->lastCommand = 0;
         }

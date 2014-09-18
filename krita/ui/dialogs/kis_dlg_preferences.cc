@@ -110,8 +110,8 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_undoStackSize->setValue(cfg.undoStackLimit());
     m_backupFileCheckBox->setChecked(cfg.backupFile());
     m_showOutlinePainting->setChecked(cfg.showOutlineWhilePainting());
-
     m_cmbMDIType->setCurrentIndex(cfg.readEntry<int>("mdi_viewmode", 1));
+    m_favoritePresetsSpinBox->setValue(cfg.favoritePresets());
 }
 
 void GeneralTab::setDefault()
@@ -127,6 +127,7 @@ void GeneralTab::setDefault()
     m_backupFileCheckBox->setChecked(true);
     m_showOutlinePainting->setChecked(true);
     m_cmbMDIType->setCurrentIndex(1);
+    m_favoritePresetsSpinBox->setValue(10);
 }
 
 enumCursorStyle GeneralTab::cursorStyle()
@@ -155,9 +156,15 @@ bool GeneralTab::showOutlineWhilePainting()
     return m_showOutlinePainting->isChecked();
 }
 
+
 int GeneralTab::mdiMode()
 {
     return m_cmbMDIType->currentIndex();
+}
+
+int GeneralTab::favoritePresets()
+{
+    return m_favoritePresetsSpinBox->value();
 }
 
 
@@ -750,6 +757,7 @@ bool KisDlgPreferences::editPreferences()
             }
         }
         cfg.setUndoStackLimit(dialog->m_general->undoStackSize());
+        cfg.setFavoritePresets(dialog->m_general->favoritePresets());
 
         // Color settings
         cfg.setUseSystemMonitorProfile(dialog->m_colorSettings->m_page->chkUseSystemMonitorProfile->isChecked());
@@ -774,6 +782,8 @@ bool KisDlgPreferences::editPreferences()
 #endif
 
 #ifdef HAVE_OPENGL
+        if (!cfg.useOpenGL() && dialog->m_displaySettings->cbUseOpenGL->isChecked())
+            cfg.setCanvasState("TRY_OPENGL");
         cfg.setUseOpenGL(dialog->m_displaySettings->cbUseOpenGL->isChecked());
         cfg.setUseOpenGLTextureBuffer(dialog->m_displaySettings->chkUseTextureBuffer->isChecked());
         cfg.setOpenGLFilteringMode(dialog->m_displaySettings->cmbFilterMode->currentIndex());

@@ -31,7 +31,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#if KexiStatusBar_KTEXTEDITOR_USED
+#ifdef KexiStatusBar_KTEXTEDITOR_USED
 #include <ktexteditor/viewcursorinterface.h>
 #include <ktexteditor/viewstatusmsginterface.h>
 #endif
@@ -55,7 +55,7 @@ void Menu::mouseReleaseEvent(QMouseEvent* e)
 
 KexiStatusBar::KexiStatusBar(QWidget *parent)
         : KStatusBar(parent)
-#if KexiStatusBar_KTEXTEDITOR_USED
+#ifdef KexiStatusBar_KTEXTEDITOR_USED
         , m_cursorIface(0)
 #endif
 {
@@ -100,7 +100,7 @@ KexiStatusBar::~KexiStatusBar()
 
 void KexiStatusBar::cursorPositionChanged()
 {
-#if KexiStatusBar_KTEXTEDITOR_USED
+#ifdef KexiStatusBar_KTEXTEDITOR_USED
     if (m_cursorIface) {
         uint line, col;
         m_cursorIface->cursorPosition(&line, &col);
@@ -115,10 +115,12 @@ void KexiStatusBar::setStatus(const QString &str)
     changeItem(str, m_msgID);
 }
 
+#if 0
 void KexiStatusBar::setCursorPosition(int line, int col)
 {
-    changeItem(i18n(" Line: %1 Col: %2 ", line + 1, col), m_msgID);
+    changeItem(futureI18n(" Line: %1 Col: %2 ", line + 1, col), m_msgID);
 }
+#endif
 
 void KexiStatusBar::setReadOnlyFlag(bool readOnly)
 {

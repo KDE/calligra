@@ -164,7 +164,7 @@
       <item row="1" column="0">
        <widget class="QLabel" name="titleLabel">
         <property name="text">
-         <string>&amp;Title (optional):</string>
+         <string>&amp;Caption (optional):</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

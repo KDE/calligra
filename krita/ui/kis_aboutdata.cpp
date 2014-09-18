@@ -194,7 +194,6 @@ KAboutData *newKritaAboutData()
     aboutData->addAuthor(ki18n("Raphael Langerhorst"));
     aboutData->addAuthor(ki18n("Rex Dieter"));
     aboutData->addAuthor(ki18n("Rob Buis"));
-    aboutData->addAuthor(ki18n("Robert Wloch Professional Consulting");
     aboutData->addAuthor(ki18n("Roopesh Chander"));
     aboutData->addAuthor(ki18n("Sahil Nagpal"));
     aboutData->addAuthor(ki18n("Salil Kapur"));
@@ -571,6 +570,7 @@ KAboutData *newKritaAboutData()
     aboutData->addCredit(ki18n("Richard Jarvis"), ki18n("Krita 2.9 Kickstarter Backer"));
     aboutData->addCredit(ki18n("Rick Stirling"), ki18n("Krita 2.9 Kickstarter Backer"));
     aboutData->addCredit(ki18n("ridli"), ki18n("Krita 2.9 Kickstarter Backer"));
+    aboutData->addCredit(ki18n("Robert Wloch Professional Consulting"), ki18n("Krita 2.9 Kickstarter Backer"));
     aboutData->addCredit(ki18n("Robin Princeley"), ki18n("Krita 2.9 Kickstarter Backer"));
     aboutData->addCredit(ki18n("Rodrigo"), ki18n("Krita 2.9 Kickstarter Backer"));
     aboutData->addCredit(ki18n("Hobart García"), ki18n("Krita 2.9 Kickstarter Backer"));

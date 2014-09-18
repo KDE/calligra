@@ -868,7 +868,7 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
     connect(tabBar(), SIGNAL(tabCloseRequested( int )), SLOT(closeRequest( int )));
 
     setMouseTracking(true); // for mouseMoveEvent()
-    setWhatsThis(i18n("Task-based tabbed toolbar groups commands for application using tabs."));
+    setWhatsThis(i18n("Task-oriented toolbar. Groups commands using tabs."));
 #ifdef KEXI_AUTORISE_TABBED_TOOLBAR
     connect(&d->tabRaiseTimer, SIGNAL(timeout()), this, SLOT(slotDelayedTabRaise()));
 #endif
@@ -894,16 +894,16 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
                                 true/*showWhatsThis*/, d->ac);
     QAction* help_report_bug_action = d->ac->action("help_report_bug");
     help_report_bug_action->setIcon(koIcon("tools-report-bug")); // good icon for toolbar
-    help_report_bug_action->setWhatsThis(i18n("Shows bug reporting tool for Kexi application."));
+    help_report_bug_action->setWhatsThis(i18n("Files a bug or wish for Kexi application."));
     QAction* help_whats_this_action =  d->ac->action("help_whats_this");
-    help_whats_this_action->setWhatsThis(i18n("Activates \"What's This\" tool."));
+    help_whats_this_action->setWhatsThis(i18n("Activates a \"What's This?\" tool."));
     QAction* help_contents_action = d->ac->action("help_contents");
     help_contents_action->setText(i18n("Help"));
     help_contents_action->setWhatsThis(i18n("Shows Kexi Handbook."));
     QAction* help_about_app_action = d->ac->action("help_about_app");
     help_about_app_action->setWhatsThis(i18n("Shows information about Kexi application."));
     QAction* help_about_kde_action = d->ac->action("help_about_kde");
-    help_about_kde_action->setWhatsThis(i18n("Shows information about K Desktop Environment."));
+    help_about_kde_action->setWhatsThis(i18n("Shows information about KDE."));
 
     QAction *action_show_help_menu = d->ac->action("help_show_menu");
     KexiSmallToolButton *btn = new KexiSmallToolButton(KIcon(help_contents_action->icon()), QString(), helpWidget);
@@ -1475,11 +1475,7 @@ class KexiMainWindow::Private
 {
 public:
     Private(KexiMainWindow* w)
-      : wnd(w)
-    {
-        dummy_KXMLGUIClient = new KXMLGUIClient();
-        dummy_KXMLGUIFactory = new KXMLGUIFactory(0);
-
+            : wnd(w) {
         actionCollection = new KActionCollection(w);
         propEditor = 0;
         propEditorDockWidget = 0;
@@ -1494,10 +1490,6 @@ public:
         navigator = 0;
         prj = 0;
         config = KGlobal::config();
-        curWindowGUIClient = 0;
-        curWindowViewGUIClient = 0;
-        closedWindowGUIClient = 0;
-        closedWindowViewGUIClient = 0;
         nameDialog = 0;
         m_findDialog = 0;
         focus_before_popup = 0;
@@ -1531,8 +1523,6 @@ public:
     }
     ~Private() {
         qDeleteAll(m_openedCustomObjectsForItem);
-        delete dummy_KXMLGUIClient;
-        delete dummy_KXMLGUIFactory;
     }
 
 #ifndef KEXI_NO_PENDING_DIALOGS
@@ -1801,9 +1791,6 @@ public:
         return dynamic_cast<KexiSearchAndReplaceViewInterface*>(view);
     }
 
-    KXMLGUIClient* dummy_KXMLGUIClient;
-    KXMLGUIFactory* dummy_KXMLGUIFactory;
-
     KexiMainWindow *wnd;
     KexiMainWidget *mainWidget;
     KActionCollection *actionCollection;
@@ -1828,8 +1815,6 @@ public:
     QPointer<KexiPropertyEditorView> propEditor;
     QPointer<KoProperty::Set> propertySet;
 
-    KXMLGUIClient *curWindowGUIClient, *curWindowViewGUIClient,
-                  *closedWindowGUIClient, *closedWindowViewGUIClient;
     KexiNameDialog *nameDialog;
     QTimer timer; //!< helper timer
     QString appCaptionPrefix; //<! application's caption prefix - prj name (if opened), else: null

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2005 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2014 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -452,6 +452,24 @@ void KexiDBLineEdit::setDataSourcePartClass(const QString &partClass)
 {
     KexiFormDataItemInterface::setDataSourcePartClass(partClass);
     updateTextForDataSource();
+}
+
+QString KexiDBLineEdit::clickMessage() const
+{
+#if QT_VERSION  >= 0x040700
+    return placeholderText();
+#else
+    return KLineEdit::clickMessage();
+#endif
+}
+
+void KexiDBLineEdit::setClickMessage(const QString &msg)
+{
+#if QT_VERSION  >= 0x040700
+    setPlaceholderText(msg);
+#else
+    KLineEdit::setClickMessage(msg);
+#endif
 }
 
 #include "kexidblineedit.moc"

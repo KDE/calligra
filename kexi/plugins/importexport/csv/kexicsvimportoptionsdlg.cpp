@@ -99,7 +99,7 @@ KexiCSVImportOptionsDialog::KexiCSVImportOptionsDialog(
     const KexiCSVImportOptions& options, QWidget* parent)
         : KDialog(parent)
 {
-    setWindowTitle(i18n("CSV Import Options"));
+    setWindowTitle(i18nc("@title:window", "CSV Import Options"));
     setButtons(Ok | Cancel);
     setDefaultButton(Ok);
     setObjectName("KexiCSVImportOptionsDialog");
@@ -130,13 +130,15 @@ KexiCSVImportOptionsDialog::KexiCSVImportOptionsDialog(
     m_comboDateFormat->setObjectName("m_comboDateFormat");
     m_comboDateFormat->addItem(i18nc("Date format: Auto", "Auto"));
     QString year(i18n("year")), month(i18n("month")), day(i18n("day"));
-    QString mask(i18nc("do not reorder placeholders, just translate e.g. and - to the separator used by dates in your language", "%1, %2, %3 (e.g. %4-%5-%6)"));
+    KLocalizedString mask = ki18nc("do not reorder placeholders, just translate e.g. and - to the "
+                                   "separator used by dates in your language",
+                                   "%1, %2, %3 (e.g. %4-%5-%6)");
     m_comboDateFormat->addItem(
-        mask.arg(day).arg(month).arg(year).arg(30).arg(12).arg(2008));
+        mask.subs(day).subs(month).subs(year).subs(30).subs(12).subs(2008).toString());
     m_comboDateFormat->addItem(
-        mask.arg(year).arg(month).arg(day).arg(2008).arg(12).arg(30));
+        mask.subs(year).subs(month).subs(day).subs(2008).subs(12).subs(30).toString());
     m_comboDateFormat->addItem(
-        mask.arg(month).arg(day).arg(year).arg(12).arg(30).arg(2008));
+        mask.subs(month).subs(day).subs(year).subs(12).subs(30).subs(2008).toString());
     lyr->addWidget(m_comboDateFormat, 1, 1);
 
     QLabel* lblDateFormat = new QLabel(i18n("Date format:"), plainPage);

@@ -99,7 +99,7 @@ void KoReportItemField::createProperties()
     m_backgroundColor = new KoProperty::Property("background-color", Qt::white, i18n("Background Color"));
     m_foregroundColor = new KoProperty::Property("foregroud-color", Qt::black, i18n("Foreground Color"));
 
-    m_backgroundOpacity = new KoProperty::Property("background-opacity", 100, i18n("Opacity"));
+    m_backgroundOpacity = new KoProperty::Property("background-opacity", 100, i18n("Background Opacity"));
     m_backgroundOpacity->setOption("max", 100);
     m_backgroundOpacity->setOption("min", 0);
     m_backgroundOpacity->setOption("unit", "%");
@@ -113,10 +113,10 @@ void KoReportItemField::createProperties()
     
 #if 0 //Field Totals
     //TODO I do not think we need these
-    m_trackTotal = new KoProperty::Property("TrackTotal", QVariant(false), i18n("Track Total"));
-    m_trackBuiltinFormat = new KoProperty::Property("TrackBuiltinFormat", QVariant(false), i18n("Track Builtin Format"));
-    _useSubTotal = new KoProperty::Property("UseSubTotal", QVariant(false), i18n("Use Sub Total"_);
-    _trackTotalFormat = new KoProperty::Property("TrackTotalFormat", QString(), i18n("Track Total Format"));
+    m_trackTotal = new KoProperty::Property("TrackTotal", QVariant(false), futureI18n("Track Total"));
+    m_trackBuiltinFormat = new KoProperty::Property("TrackBuiltinFormat", QVariant(false), futureI18n("Track Builtin Format"));
+    _useSubTotal = new KoProperty::Property("UseSubTotal", QVariant(false), futureI18n("Use Sub Total"_);
+    _trackTotalFormat = new KoProperty::Property("TrackTotalFormat", QString(), futureI18n("Track Total Format"));
 #endif
 
     addDefaultProperties();

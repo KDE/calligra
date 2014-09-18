@@ -9,6 +9,7 @@ endif (LIBATTICA_FOUND)
 
 set(kowidgets_LIB_SRCS
     KoGlobal.cpp
+    KoZoomWidget.cpp
     KoTagToolButton.cpp
     KoTagChooserWidget.cpp
     KoTagFilterWidget.cpp

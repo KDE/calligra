@@ -137,6 +137,46 @@
      </item>
     </widget>
    </item>
+   <item row="5" column="0" colspan="3">
+    <widget class="QCheckBox" name="m_backupFileCheckBox">
+     <property name="text">
+      <string>Create backup file </string>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="1">
+    <spacer name="spacer2">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Expanding</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>41</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="6" column="0" colspan="2">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Favorite presets:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="2">
+    <widget class="QSpinBox" name="m_favoritePresetsSpinBox">
+     <property name="minimum">
+      <number>10</number>
+     </property>
+     <property name="maximum">
+      <number>30</number>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <resources/>

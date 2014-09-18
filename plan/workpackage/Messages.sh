@@ -2,4 +2,5 @@
 source ../../calligra_xgettext.sh
 
 $EXTRACTRC `find . -name \*.ui` `find . -name \*.rc` >> rc.cpp
-calligra_xgettext *.cpp aboutdata.h > $podir/planwork.pot
+calligra_xgettext planwork.pot *.cpp aboutdata.h
+rm -f rc.cpp
