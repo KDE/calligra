@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>189</width>
-    <height>421</height>
+    <width>263</width>
+    <height>561</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -147,6 +147,50 @@
     </widget>
    </item>
    <item>
+    <widget class="QWidget" name="donate" native="true">
+     <layout class="QHBoxLayout" name="lyr_donate">
+      <item>
+       <widget class="QLabel" name="icon_donate">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="font">
+         <font>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string notr="true"/>
+        </property>
+        <property name="pixmap">
+         <pixmap resource="status.qrc">:/icons/heart.png</pixmap>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="link_donate">
+        <property name="focusPolicy">
+         <enum>Qt::StrongFocus</enum>
+        </property>
+        <property name="text">
+         <string comment="dd" extracomment="https://www.bountysource.com/teams/kexi">&lt;b&gt;&lt;a href=&quot;link&quot;&gt;Donate&lt;/a&gt;&lt;/b&gt;&lt;br/&gt;&lt;span style=&quot;color:gray;&quot;&gt;&lt;b&gt;Boost development, support new features&lt;/b&gt; (+%1%)&lt;/span&gt;</string>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
     <widget class="QWidget" name="share_usage_info" native="true">
      <layout class="QHBoxLayout" name="lyr_share_usage_info">
       <item>
@@ -169,6 +213,9 @@
         <property name="pixmap">
          <pixmap resource="status.qrc">:/icons/add.png</pixmap>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+        </property>
        </widget>
       </item>
       <item>
@@ -177,7 +224,7 @@
          <enum>Qt::StrongFocus</enum>
         </property>
         <property name="text">
-         <string>&lt;a href=&quot;link&quot;&gt;Share Usage Info&lt;/a&gt; &lt;span style=&quot;color:gray;&quot;&gt;(+%1%)&lt;/span&gt;</string>
+         <string>&lt;a href=&quot;link&quot;&gt;Share Usage Info&lt;/a&gt;&lt;br/&gt;&lt;span style=&quot;color:gray;&quot;&gt;Let us adapt to your needs (+%1%)&lt;/span&gt;</string>
         </property>
         <property name="wordWrap">
          <bool>true</bool>
@@ -210,6 +257,9 @@
         <property name="pixmap">
          <pixmap resource="status.qrc">:/icons/add.png</pixmap>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+        </property>
        </widget>
       </item>
       <item>
@@ -218,7 +268,7 @@
          <enum>Qt::StrongFocus</enum>
         </property>
         <property name="text">
-         <string>&lt;a href=&quot;link&quot;&gt;Share More Usage Info&lt;/a&gt; &lt;span style=&quot;color:gray;&quot;&gt;(+%1%)&lt;/span&gt;</string>
+         <string>&lt;a href=&quot;link&quot;&gt;Share More Usage Info&lt;/a&gt;&lt;br/&gt;&lt;span style=&quot;color:gray;&quot;&gt;Let us adapt to your needs (+%1%)&lt;/span&gt;</string>
         </property>
         <property name="wordWrap">
          <bool>true</bool>
@@ -259,7 +309,7 @@
          <enum>Qt::StrongFocus</enum>
         </property>
         <property name="text">
-         <string>&lt;span style=&quot;color:gray;&quot;&gt;Thank you for participating! Each version throws in new challenges.&lt;/span&gt;</string>
+         <string>&lt;span style=&quot;color:gray;&quot;&gt;Thank you for being part of Kexi!&lt;/span&gt;</string>
         </property>
         <property name="wordWrap">
          <bool>true</bool>
@@ -395,7 +445,7 @@
       <string>Visit http://kexi-project.org/forum</string>
      </property>
      <property name="text">
-      <string>&lt;a href=&quot;http://kexi-project.org/forum/&quot;&gt;&lt;b&gt;Forum&lt;/b&gt; for help and discussions &amp;raquo;&lt;/a&gt;</string>
+      <string>&lt;a href=&quot;http://kexi-project.org/forum/&quot;&gt;&lt;b&gt;Forum&lt;/b&gt; for help and &lt;nobr&gt;discussions &amp;raquo;&lt;/nobr&gt;&lt;/a&gt;</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -411,6 +461,13 @@
      </property>
      <property name="openExternalLinks">
       <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="donation_url">
+     <property name="text">
+      <string>https://www.bountysource.com/teams/kexi</string>
      </property>
     </widget>
    </item>
