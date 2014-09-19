@@ -342,7 +342,7 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
 
         if (cdata.password.isEmpty()) {
             delete d->passwordDialog;
-            d->passwordDialog = new KexiDBPasswordDialog(0, cdata, true);
+            d->passwordDialog = new KexiDBPasswordDialog(0, cdata, KexiDBPasswordDialog::ShowDetailsButton);
             if (connDataOptionsSpecified) {
                 if (cdata.userName.isEmpty()) {
                     d->passwordDialog->setUsername(QString());
@@ -891,7 +891,7 @@ KexiStartupHandler::selectProject(KexiDB::ConnectionData *cdata, bool& cancelled
         return 0;
     if (!cdata->savePassword && cdata->password.isEmpty()) {
         if (!d->passwordDialog)
-            d->passwordDialog = new KexiDBPasswordDialog(0, *cdata, false);
+            d->passwordDialog = new KexiDBPasswordDialog(0, *cdata);
         const int ret = d->passwordDialog->exec();
         if (d->passwordDialog->showConnectionDetailsRequested() || ret == QDialog::Accepted) {
 
