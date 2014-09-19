@@ -375,7 +375,7 @@ bool KexiDBForm::eventFilter(QObject * watched, QEvent * e)
                 bool wasAtFirstWidget = false; //used to protect against infinite loop
                 while (true) {
                     if (tab) {
-                        if (d->orderedFocusWidgets.first() && realWidget == d->orderedFocusWidgets.last()) {
+                        if (!d->orderedFocusWidgets.isEmpty() && realWidget == d->orderedFocusWidgets.last()) {
                             if (wasAtFirstWidget)
                                 break;
                             d->orderedFocusWidgetsIterator = d->orderedFocusWidgets.begin();
@@ -386,7 +386,7 @@ bool KexiDBForm::eventFilter(QObject * watched, QEvent * e)
                             return true; //ignore
                         }
                     } else {//backtab
-                        if (d->orderedFocusWidgets.last() && realWidget == d->orderedFocusWidgets.first()) {
+                        if (!d->orderedFocusWidgets.isEmpty() && realWidget == d->orderedFocusWidgets.first()) {
                             d->orderedFocusWidgetsIterator
                                 = d->orderedFocusWidgets.begin() + (d->orderedFocusWidgets.count() - 1);
                         } else if (realWidget == *d->orderedFocusWidgetsIterator) {

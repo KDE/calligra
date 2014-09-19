@@ -47,9 +47,10 @@
  Changelog:
  1.0: initial version
  1.1: added JSON-compatible character escaping; added uid
- 1.2: added JSON-compatible character escaping; added os_release, os_machine, screen_count
+ 1.2: added os_release, os_machine, screen_count
+ 1.3: added running_desktop, running_desktop_version
 */
-static const char KexiUserFeedbackAgent_VERSION[] = "1.2";
+static const char KexiUserFeedbackAgent_VERSION[] = "1.3";
 
 class KexiUserFeedbackAgent::Private
 {
@@ -102,10 +103,90 @@ void KexiUserFeedbackAgent::Private::updateData()
 #ifdef Q_OS_LINUX
     {
         ADD("os", "linux", SystemInfoArea);
+        const QByteArray desktop = qgetenv("XDG_CURRENT_DESKTOP").trimmed().toLower();
+        const QByteArray gdm = qgetenv("GDMSESSION").trimmed().toLower();
+        const bool kdeSession = qgetenv("KDE_FULL_SESSION").trimmed().toLower() == "true";
+        // detect running desktop
+        // http://standards.freedesktop.org/menu-spec/latest/apb.html
+        QString runningDesktop;
+        QString runningDesktopVersion;
+        //! @todo set runningDesktopVersion for other desktops
+        if (desktop.contains("kde") || kdeSession || gdm.contains("kde")) {
+            runningDesktop = "KDE Plasma";
+            //! @todo run kde{4|5}-config --kde-version to know full version and save in runningDesktopVersion
+            runningDesktopVersion = qgetenv("KDE_SESSION_VERSION").trimmed();
+        }
+        else if (desktop.contains("unity")) {
+            runningDesktop = "Unity";
+        }
+        else if (desktop.contains("razor")) {
+            runningDesktop = "Razor-qt";
+        }
+        else if (desktop.contains("rox")) {
+            runningDesktop = "ROX";
+        }
+        else if (desktop.contains("tde")) {
+            runningDesktop = "Trinity";
+        }
+        else if (desktop.contains("mate")) {
+            runningDesktop = "MATE";
+        }
+        else if (desktop.contains("lxde") || gdm.contains("lubuntu")) {
+            runningDesktop = "LXDE";
+        }
+        else if (desktop.contains("xfce") || gdm.contains("xfce")) {
+            runningDesktop = "Xfce";
+        }
+        else if (desktop.contains("ede")) {
+            runningDesktop = "EDE";
+        }
+        else if (desktop.contains("cinnamon")) {
+            runningDesktop = "Cinnamon";
+        }
+        else if (desktop.contains("gnome") || gdm.contains("gnome")) {
+            if (gdm.contains("cinnamon")) {
+                runningDesktop = "Cinnamon";
+            }
+            else if (gdm.contains("classic")) {
+                runningDesktop = "GNOME Classic";
+            }
+            else {
+                runningDesktop = "GNOME";
+            }
+        }
+        else {
+            if (!desktop.isEmpty()) {
+                runningDesktop = "Other: " + desktop;
+            }
+            else if (!gdm.isEmpty()) {
+                runningDesktop = "Other: " + gdm;
+            }
+        }
+        if (!runningDesktop.isEmpty()) {
+            ADD("running_desktop", runningDesktop, SystemInfoArea);
+        }
+        if (!runningDesktopVersion.isEmpty()) {
+            ADD("running_desktop_version", runningDesktopVersion, SystemInfoArea);
+        }
+        // retrieve distribution name and release
         QProcess p;
         p.start("lsb_release", QStringList() << "-i" << "-r" << "-d");
         if (p.waitForFinished()) {
             QString info = p.readLine().replace("Distributor ID:", "").trimmed();
+            if (info.toLower() == "ubuntu") { // Ubuntu derivatives (http://askubuntu.com/a/227669/226642)
+                if (runningDesktop == "KDE Plasma") {
+                    info = "Kubuntu";
+                }
+                else if (runningDesktop ==  "LXDE") {
+                    info = "Lubuntu";
+                }
+                else if (runningDesktop == "Xfce") {
+                    info = "Xubuntu";
+                }
+                else if (runningDesktop.toLower().contains("gnome")) {
+                    info = "Ubuntu GNOME";
+                }
+            }
             if (!info.isEmpty()) {
                 ADD("linux_id", info, SystemInfoArea);
             }

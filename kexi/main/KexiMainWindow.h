@@ -63,9 +63,6 @@ protected:
     //! Implemented to add context menu
     void contextMenu(int index, const QPoint& point);
 
-    //! Implemented to update main window on creation of the first tab
-    virtual void tabInserted(int index);
-
     //! Reimplemented to hide frame when no tabs are displayed
     virtual void paintEvent(QPaintEvent * event);
 
@@ -100,25 +97,6 @@ public:
     virtual QWidget* focusWidget() const {
         return KexiMainWindowSuper::focusWidget();
     }
-
-//! @todo virtual void plugActionList(const QString& name,
-    virtual void plugActionList(const QString& name,
-                                const QList<KAction *>& actionList) {
-        Q_UNUSED(name)
-        Q_UNUSED(actionList)
-    }
-
-//! @todo KXMLGUIClient* guiClient() const;
-    virtual KXMLGUIClient* guiClient() const;
-
-//! @todo virtual void unplugActionList (const QString &name);
-    virtual void unplugActionList(const QString &name) {
-        Q_UNUSED(name)
-    }
-
-    //! Implemented by KMainWindow
-//! @todo virtual KXMLGUIFactory * KMainWindow::guiFactory();
-    virtual KXMLGUIFactory* guiFactory();
 
     /*! Used by the main kexi routine. Creates a new Kexi main window and a new KApplication object.
      kdemain() has to destroy the latter on exit.
@@ -175,14 +153,19 @@ public:
     // see KexiMainWindowIface
     virtual KToolBar *toolBar(const QString& name) const;
 
-    //! Shows design tab when switching between objects or views.
-    void showDesignTabIfNeeded(const QString &partClass, const Kexi::ViewMode viewMode);
+    //! Shows design tab @a tabName again and activates it as current if it was hidden
+    //! before for the same object.
+    void restoreDesignTabAndActivateIfNeeded(const QString &tabName);
 
-    //! Sets currently visible tab when switching to design view, according to object type opened.
-    virtual void setDesignTabIfNeeded(const QString &partClass);
+    //! Shows design tab again when switching between objects or views.
+    void restoreDesignTabIfNeeded(const QString &partClass, Kexi::ViewMode viewMode, int previousItemId);
 
-    //! Hides tabs when they are closed (depending on class)
-    virtual void closeTab(const QString &partClass);
+    //! Sets currently visible design tab when switching to design view, according to object type opened.
+    virtual void activateDesignTabIfNeeded(const QString &partClass, Kexi::ViewMode viewMode);
+
+    //! Hides design tabs when they are closed (depending on class @a partClass).
+    //! If @a partClass is empty, all tabs get hidden.
+    virtual void hideDesignTab(int itemId, const QString &partClass = QString());
 
     /*! Implemented for KexiMainWindow */
     virtual KexiUserFeedbackAgent* userFeedbackAgent() const;
@@ -322,10 +305,11 @@ public slots:
      One example is Project Navigator. @see KexiMainWindowIface */
     virtual void addSearchableModel(KexiSearchableModel *model);
 
-    //! Shows Context sensitive ToolTab when changing current Object Tab
-    void showTabIfNeeded();
+    //! Shows design tab when switching between objects or views. Depends on current window and view mode.
+    void showDesignTabIfNeeded(int previousItemId);
 
     void toggleFullScreen(bool isFullScreen);
+
 signals:
     //! Emitted to make sure the project can be close.
     //! Connect a slot here and set \a cancel to true to cancel the closing.
@@ -419,11 +403,6 @@ protected:
     /*! Implemented for KexiMainWindowIface.
      Switches \a window to view \a mode. Activates the window if it is not the current window. */
     virtual tristate switchToViewMode(KexiWindow& window, Kexi::ViewMode viewMode);
-
-    /*! Helper. Removes and/or adds GUI client for current window's view;
-     on switching to other window (activeWindowChanged())
-     or on switching to other view within the same window (switchToViewMode()). */
-    void updateWindowViewGUIClient(KXMLGUIClient *viewClient);
 
     /*! Helper. Updates setup of property panel's tabs. Used when switching
      from \a prevWindow window to a current window. */
@@ -562,7 +541,7 @@ protected slots:
 
     /// TMP: Display a dialog to download db examples from Internet
     void slotGetNewStuff();
-
+    void slotReportBug();
     void slotTipOfTheDay();
 
     //! Shows 'important info' dialog, is \a onStartup is false, it's always shown

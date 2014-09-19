@@ -8,6 +8,7 @@
   <name xml:lang="cs">Words</name>
   <name xml:lang="de">Words</name>
   <name xml:lang="en-GB">Words</name>
+  <name xml:lang="es">Words</name>
   <name xml:lang="ia">Words</name>
   <name xml:lang="it">Words</name>
   <name xml:lang="ja">Words</name>
@@ -22,7 +23,9 @@
   <summary>Word Processor</summary>
   <summary xml:lang="ca">Processador de textos</summary>
   <summary xml:lang="cs">Textový procesor</summary>
+  <summary xml:lang="de">Textverarbeitung</summary>
   <summary xml:lang="en-GB">Word Processor</summary>
+  <summary xml:lang="es">Procesador de texto</summary>
   <summary xml:lang="ia">Processator de parolas</summary>
   <summary xml:lang="it">Elaboratore di testi</summary>
   <summary xml:lang="ja">ワードプロセッサ</summary>
@@ -41,6 +44,7 @@
     </p>
     <p xml:lang="ca">El Words és una aplicació intuïtiva de procés de textos i de publicació d'escriptori. Amb ella es poden crear documents informatius i atractius amb satisfacció i facilitat.</p>
     <p xml:lang="en-GB">Words is an intuitive word processor and desktop publisher application. With it, you can create informative and attractive documents with pleasure and ease.</p>
+    <p xml:lang="es">Words es un procesador de texto intuitivo y un editor para el escritorio. Con él, podrá crear documentos informativos y atractivos con gusto y facilidad.</p>
     <p xml:lang="it">Words è un elaboratore di testi intuitivo e un'applicazione di pubblicazione per desktop. Con esso, puoi creare documenti informativi e accattivanti con soddisfazione e facilità.</p>
     <p xml:lang="ja">Words はワードプロセッサおよびデスクトップ出版のためのアプリケーションです。直感的な操作で有益かつ魅力的な文書が簡単に作成できます</p>
     <p xml:lang="nl">Words is een intuïtieve toepassing voor tekstverwerken en weergeven op het bureaublad. Hiermee kunt u informatieve en attractieve documenten met plezier en gemak maken.</p>
@@ -56,6 +60,7 @@
     <p xml:lang="cs">Vlastnosti:</p>
     <p xml:lang="de">Funktionen:</p>
     <p xml:lang="en-GB">Features:</p>
+    <p xml:lang="es">Características:</p>
     <p xml:lang="ia">Characteristicas:</p>
     <p xml:lang="it">Funzionalità:</p>
     <p xml:lang="ja">機能:</p>
@@ -71,6 +76,7 @@
       <li>Frame-based editing</li>
       <li xml:lang="ca">Edició basada en marcs</li>
       <li xml:lang="en-GB">Frame-based editing</li>
+      <li xml:lang="es">Edición basada en marcos</li>
       <li xml:lang="it">Modifica basata su riquadri</li>
       <li xml:lang="ja">フレームベースの編集</li>
       <li xml:lang="nl">Bewerken op basis van frames</li>
@@ -84,6 +90,7 @@
       <li>Allows embedding of Documents</li>
       <li xml:lang="ca">Permet incrustar documents</li>
       <li xml:lang="en-GB">Allows embedding of Documents</li>
+      <li xml:lang="es">Permite incrustar documentos</li>
       <li xml:lang="it">Consente l'integrazione di documenti</li>
       <li xml:lang="ja">文書への埋め込みを許可</li>
       <li xml:lang="nl">Staat inbedden van documenten toe</li>
@@ -97,6 +104,7 @@
       <li>Customization of user interface</li>
       <li xml:lang="ca">Personalització de la interfície d'usuari</li>
       <li xml:lang="en-GB">Customisation of user interface</li>
+      <li xml:lang="es">Personalización de la interfaz de usuario</li>
       <li xml:lang="it">Personalizzazion e dell'interfaccia utente</li>
       <li xml:lang="ja">ユーザインターフェースのカスタマイズ</li>
       <li xml:lang="nl">Aanpassen naar behoefte van het gebruikersinterface</li>
@@ -110,6 +118,7 @@
       <li>Includes all features expected from a modern word processor</li>
       <li xml:lang="ca">Inclou totes les funcionalitats esperades d'un processador de textos modern</li>
       <li xml:lang="en-GB">Includes all features expected from a modern word processor</li>
+      <li xml:lang="es">Incluye todas las características que se esperan de un procesador de texto moderno</li>
       <li xml:lang="it">Include tutte le funzionalità attese da un elaboratore di testi moderno</li>
       <li xml:lang="ja">現在のワードプロセッサに求められるすべての機能を含む</li>
       <li xml:lang="nl">Bevat alle functies die verwacht worden van een moderne tekstverwerker</li>
@@ -122,7 +131,9 @@
       <li xml:lang="x-test">xxIncludes all features expected from a modern word processorxx</li>
       <li>ODT (Open Document Text) support</li>
       <li xml:lang="ca">Implementa ODT (Open Document Text)</li>
+      <li xml:lang="de">Unterstützung für ODT (Open Document Text)</li>
       <li xml:lang="en-GB">ODT (Open Document Text) support</li>
+      <li xml:lang="es">Admite el formato ODT («Open Document Text»)</li>
       <li xml:lang="it">Supporto ODT (Open Document Text)</li>
       <li xml:lang="ja">ODT (Open Document Text) サポート</li>
       <li xml:lang="nl">Ondersteuning van ODT (Open Document Text)</li>

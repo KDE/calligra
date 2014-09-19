@@ -202,7 +202,7 @@ bool pqxxSqlConnection::drv_useDatabase(const QString &dbName, bool *cancelled,
         d->errmsg = QString::fromUtf8(e.what());
 
     } catch (...) {
-        d->errmsg = i18n("Unknown error.");
+        d->errmsg = kexidb_i18n("Unknown error.");
     }
     return false;
 }
@@ -267,7 +267,7 @@ bool pqxxSqlConnection::drv_executeSQL(const QString& statement)
         d->errmsg = QString::fromUtf8(e.what());
         KexiDBDrvDbg << "pqxxSqlConnection::drv_executeSQL:exception - " << e.what();
     } catch (...) {
-        d->errmsg = i18n("Unknown error.");
+        d->errmsg = kexidb_i18n("Unknown error.");
     }
     //KexiDBDrvDbg << "EXECUTE SQL OK: OID was " << (d->res ? d->res->inserted_oid() : 0);
     return ok;
@@ -364,7 +364,7 @@ bool pqxxSqlConnection::drv_rollbackTransaction(TransactionData *tdata)
 
         result = false;
     } catch (...) {
-        d->errmsg = i18n("Unknown error.");
+        d->errmsg = kexidb_i18n("Unknown error.");
         result = false;
     }
     if (m_trans == tdata)
