@@ -1,2 +1,4 @@
 #! /bin/sh
-$XGETTEXT *.cpp -o $podir/thesaurus_tool.pot
+source ../../../calligra_xgettext.sh
+
+calligra_xgettext thesaurus_tool.pot *.cpp

@@ -18,7 +18,7 @@
 
 import QtQuick 1.1
 import org.krita.sketch 1.0
-import "../../components"
+import org.krita.sketch.components 1.0
 
 Item {
     id: base
@@ -66,7 +66,7 @@ Item {
                 text: "-"
                 onClicked: parent.deleteSelectedPoint();
                 opacity: parent.pointSelected ? 1 : 0;
-                Behavior on opacity { PropertyAnimation { duration: 150; } }
+                Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
             }
         }
     }

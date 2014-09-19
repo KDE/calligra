@@ -29,7 +29,7 @@
 
 using namespace KexiDB;
 
-K_EXPORT_KEXIDB_DRIVER(xBaseDriver, "xbase")
+K_EXPORT_KEXIDB_DRIVER(xBaseDriver, xbase)
 
 class KexiDB::xBaseDriverPrivate {
 

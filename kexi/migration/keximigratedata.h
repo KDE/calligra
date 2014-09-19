@@ -47,12 +47,6 @@ public:
     //! Destination project data
     KexiProjectData* destination;
 
-//   //! Actual connection to the new database
-//   KexiDB::Connection* dest;
-
-//   //! New database name
-//   QString destName;
-
     //! Flag to determine structure copy, or structure + data
     bool keepData;
 };

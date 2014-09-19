@@ -353,7 +353,7 @@ QSize KexiView::preferredSizeHint(const QSize& otherSize)
 void KexiView::closeEvent(QCloseEvent * e)
 {
     bool cancel = false;
-    emit closing(cancel);
+    emit closing(&cancel);
     if (cancel) {
         e->ignore();
         return;
@@ -395,6 +395,11 @@ void KexiView::setDirty(bool set)
         if (changed && d->window)
             d->window->dirtyChanged(this);
     }
+}
+
+void KexiView::setDirty()
+{
+    setDirty(true);
 }
 
 KexiDB::SchemaData* KexiView::storeNewData(const KexiDB::SchemaData& sdata,
@@ -491,8 +496,7 @@ bool KexiView::removeDataBlock(const QString& dataID)
 
 bool KexiView::eventFilter(QObject *o, QEvent *e)
 {
-    if (e->type() == QEvent::FocusIn || e->type() == QEvent::FocusOut) {// && o->inherits("QWidget")) {
-//  //hp==true if currently focused widget is a child of this table view
+    if (e->type() == QEvent::FocusIn || e->type() == QEvent::FocusOut) {
 //        kDebug() << "this=[" << o->metaObject()->className()
 //            << objectName() << "] o=[" << o->metaObject()->className() << o->objectName()
 //            << "] focusWidget=[" << (qApp->focusWidget() ? qApp->focusWidget()->metaObject()->className() : QString())

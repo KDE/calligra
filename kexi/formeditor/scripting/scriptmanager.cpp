@@ -31,7 +31,6 @@ ScriptManager::ScriptManager(QObject *parent, const char *name)
         : QObject(parent, name)
 {
     m_manager = Kross::Api::Manager::scriptManager();
-//Qt4    m_hash.setAutoDelete(true);
 }
 
 ScriptManager::~ScriptManager()

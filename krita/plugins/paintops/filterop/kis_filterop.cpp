@@ -45,10 +45,10 @@
 #include <kis_filterop_settings.h>
 #include <kis_iterator_ng.h>
 #include <kis_fixed_paint_device.h>
+#include <kis_transaction.h>
 
 KisFilterOp::KisFilterOp(const KisFilterOpSettings *settings, KisPainter *painter, KisImageWSP image)
     : KisBrushBasedPaintOp(settings, painter)
-    , settings(settings)
     , m_filterConfiguration(0)
 {
     Q_UNUSED(image);
@@ -123,7 +123,10 @@ KisSpacingInformation KisFilterOp::paintAt(const KisPaintInformation& info)
         p.setCompositeOp(COMPOSITE_COPY);
     }
     p.bitBltOldData(neededRect.topLeft() - dstRect.topLeft(), source(), neededRect);
+
+    KisTransaction transaction(m_tmpDevice);
     m_filter->process(m_tmpDevice, dabRect, m_filterConfiguration, 0);
+    transaction.end();
 
 
     painter()->
@@ -136,5 +139,5 @@ KisSpacingInformation KisFilterOp::paintAt(const KisPaintInformation& info)
     painter()->renderMirrorMaskSafe(dstRect, m_tmpDevice, 0, 0, dab,
                                     !m_dabCache->needSeparateOriginal());
 
-    return effectiveSpacing(dabRect.width(), dabRect.height());
+    return effectiveSpacing(scale, rotation);
 }

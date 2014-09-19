@@ -18,7 +18,7 @@
 
 import QtQuick 1.1
 import org.krita.sketch 1.0
-import "../components"
+import org.krita.sketch.components 1.0
 
 Panel {
     id: base;
@@ -51,8 +51,8 @@ Panel {
                 reversible: true;
 
                 ParallelAnimation {
-                    NumberAnimation { target: addButton; properties: "width"; duration: 250; }
-                    ColorAnimation { target: addButton; properties: "color"; duration: 250; }
+                    NumberAnimation { target: addButton; properties: "width"; duration: Constants.AnimationDuration; }
+                    ColorAnimation { target: addButton; properties: "color"; duration: Constants.AnimationDuration; }
                 }
             }
         },
@@ -82,8 +82,8 @@ Panel {
                 reversible: true;
 
                 ParallelAnimation {
-                    NumberAnimation { target: editButton; properties: "width"; duration: 250; }
-                    ColorAnimation { target: editButton; properties: "color"; duration: 250; }
+                    NumberAnimation { target: editButton; properties: "width"; duration: Constants.AnimationDuration; }
+                    ColorAnimation { target: editButton; properties: "color"; duration: Constants.AnimationDuration; }
                 }
             }
         }
@@ -103,7 +103,7 @@ Panel {
 //            if (window.applicationName === undefined) {
                 if(toolManager.currentTool === null)
                     toolManager.requestToolChange("KritaShape/KisToolBrush");
-                presetsModel.currentPreset = "Basic circle";
+                presetsModel.currentPreset = Settings.lastPreset;
 //            }
         }
     }
@@ -134,6 +134,7 @@ Panel {
                 }
                 source: model.image
                 fillMode: Image.PreserveAspectFit;
+                asynchronous: true;
             }
             Label {
                     id: peekLabel
@@ -197,6 +198,7 @@ Panel {
                         width: parent.width * 0.8;
                         height: parent.height * 0.8;
                         fillMode: Image.PreserveAspectFit;
+                        asynchronous: true;
                     }
                 }
                 Label {

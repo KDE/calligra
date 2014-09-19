@@ -84,14 +84,6 @@ public:
     //! Excludes filters list
     void setExcludedFilters(const QSet<QString>& mimeTypes);
 
-    // KUrl currentURL();
-    //virtual QString highlightedFile() const;
-
-    //#ifndef Q_WS_WIN
-    // KUrlComboBox *locationWidget() const;
-    //#endif
-//    //! just sets locationWidget()->setCurrentText(fn)
-//    //! (and something similar on win32)
     void setLocationText(const QString& fn);
 
     //! Sets default extension which will be added after accepting
@@ -109,27 +101,11 @@ public:
     This is true by default. */
     void setConfirmOverwrites(bool set);
 
-    //virtual bool eventFilter ( QObject * watched, QEvent * e );
-
-public slots:
-//    virtual void showEvent(QShowEvent * event);
-//    virtual void focusInEvent(QFocusEvent *);
-
-    // Typing a file that doesn't exist closes the file dialog, we have to
-    // handle this case better here.
-    //virtual void accept();
-
 signals:
     void askForOverwriting(const KexiContextMessage& message);
-    //entered file name is accepted
-//alread avail. in KFileWidget  void accepted();
-    //void fileHighlighted();
-    //void rejected();
 
 protected slots:
     void slotAccepted();
-    //virtual void reject();
-    //void slotExistingFileHighlighted(const QString& fileName);
     void saveRecentDir();
     
     void messageWidgetActionYesTriggered();

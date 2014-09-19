@@ -9,6 +9,12 @@ add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44010)
 # todo: re-add QTreeWidget?
 add_definitions(-DKEXI_FORMS_NO_LIST_WIDGET)
 
+# Disable pixmap collections
+add_definitions(-DKEXI_NO_PIXMAPCOLLECTION)
+
+# enable to add signal/slot connections
+# set(KFD_SIGSLOTS true)
+
 ########### next target ###############
 
 set(kformdesigner_LIB_SRCS 
@@ -19,12 +25,12 @@ set(kformdesigner_LIB_SRCS
    WidgetInfo.cpp
    libactionwidget.cpp
    form.cpp
+   form_p.cpp
    objecttree.cpp
    formIO.cpp
    FormWidget.cpp
    FormWidgetInterface.cpp
    WidgetTreeWidget.cpp
-#todo   spring.cpp
    commands.cpp
    events.cpp
    richtextdialog.cpp
@@ -43,11 +49,7 @@ set(kformdesigner_LIBS
   kexicore
   kexiextendedwidgets
   ${CALLIGRADB_LIBS}
-  ${KDE4_KDE3SUPPORT_LIBS}
 )
-
-# enable to add signal/slot connections
-# set(KFD_SIGSLOTS true)
 
 if(KFD_SIGSLOTS)
   ADD_DEFINITIONS( 

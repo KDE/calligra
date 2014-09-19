@@ -97,9 +97,7 @@ public:
 
     KexiProjectData& operator=(const KexiProjectData& pdata);
 
-    QString name() const {
-        return KexiDB::SchemaData::name();
-    }
+    QString name() const;
 
     /*! \return true if there is the User Mode set in internal
      project settings. */

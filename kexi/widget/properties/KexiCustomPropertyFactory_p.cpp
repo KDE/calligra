@@ -24,6 +24,7 @@
 #include <koproperty/Property.h>
 #include <kexiutils/identifier.h>
 
+//! @todo
 #if 0 //TODO
 KexiImagePropertyEdit::KexiImagePropertyEdit(
     KoProperty::Property *property, QWidget *parent)
@@ -68,7 +69,7 @@ void KexiImagePropertyEdit::setValue(const QVariant &value, bool emitChange)
     PixmapEdit::setValue(KexiBLOBBuffer::self()->objectForId(m_id).pixmap(), emitChange);
 }
 
-void KexiImagePropertyEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r,
+void KexiImagePropertyEdit::drawViewer(QPainter *p, cg, const QRect &r,
                                        const QVariant &value)
 {
     KexiBLOBBuffer::Handle h(KexiBLOBBuffer::self()->objectForId(value.toInt()));

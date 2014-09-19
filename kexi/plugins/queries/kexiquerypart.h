@@ -108,12 +108,8 @@ protected:
                                  KexiPart::Item &item, Kexi::ViewMode viewMode = Kexi::DataViewMode,
                                  QMap<QString, QVariant>* staticObjectArgs = 0);
 
-//  virtual void initPartActions( KActionCollection *col );
-//  virtual void initInstanceActions( int mode, KActionCollection *col );
-
     virtual void initPartActions();
     virtual void initInstanceActions();
-//  virtual QList<KAction*> createViewActions(Kexi::ViewMode mode);
 
     virtual KexiDB::SchemaData* loadSchemaData(KexiWindow *window,
             const KexiDB::SchemaData& sdata, Kexi::ViewMode viewMode, bool *ownedByWindow);

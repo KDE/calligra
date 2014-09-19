@@ -20,17 +20,9 @@
 #define BIBLIOGRAPHYGENERATOR_H
 
 #include <KoBibliographyInfo.h>
-#include <KoOdfBibliographyConfiguration.h>
 #include "kotext_export.h"
 
-#include <QAbstractTextDocumentLayout>
 #include <QTextBlock>
-
-class KoInlineTextObjectManager;
-class KoTextDocumentLayout;
-class QTextFrame;
-class KoInlineCite;
-class KoOdfBibliographyConfiguration;
 
 class KOTEXT_EXPORT BibliographyGenerator : public QObject, public BibliographyGeneratorInterface
 {

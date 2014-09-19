@@ -82,8 +82,7 @@ public slots:
     QObject* querySchema();
 
 private Q_SLOTS:
-
-    // Wraps a KexiDB::Connection into a KexiDBConnection
+    //! Wraps a KexiDB::Connection into a KexiDBConnection
     QObject* connectionWrapper(QObject* connection);
 
 private:

@@ -43,7 +43,7 @@ OptionsDialog::OptionsDialog(const QString& databaseFile, const QString& selecte
 {
     setModal(true);
     setObjectName("KexiMigration::OptionsDialog");
-    setWindowTitle(i18n("Advanced Import Options"));
+    setWindowTitle(i18nc("@title:window", "Advanced Import Options"));
     setButtons(Ok | Cancel);
     setDefaultButton(Ok);
     setWindowIcon(koIcon("configure"));
@@ -81,7 +81,7 @@ OptionsDialog::OptionsDialog(const QString& databaseFile, const QString& selecte
     //read config
     KConfigGroup importExportGroup(KGlobal::config()->group("ImportExport"));
     QString defaultEncodingForMSAccessFiles
-    = importExportGroup.readEntry("DefaultEncodingForMSAccessFiles");
+        = importExportGroup.readEntry("DefaultEncodingForMSAccessFiles");
     if (!defaultEncodingForMSAccessFiles.isEmpty()) {
         m_encodingComboBox->setSelectedEncoding(defaultEncodingForMSAccessFiles);
         m_chkAlwaysUseThisEncoding->setChecked(true);

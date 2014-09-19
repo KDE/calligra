@@ -96,6 +96,8 @@ KisPaintopBox::KisPaintopBox(KisView2 *view, QWidget *parent, const char *name)
 
     setWindowTitle(i18n("Painter's Toolchest"));
 
+    palette = parent->palette();
+
     m_settingsWidget = new KisPopupButton(this);
     m_settingsWidget->setIcon(koIcon("paintop_settings_02"));
     m_settingsWidget->setToolTip(i18n("Edit brush settings"));
@@ -126,7 +128,7 @@ KisPaintopBox::KisPaintopBox(KisView2 *view, QWidget *parent, const char *name)
     m_alphaLockButton->setDefaultAction(alphaLockAction);
     m_view->actionCollection()->addAction("preserve_alpha", alphaLockAction);
 
-    QToolButton* hMirrorButton = new QToolButton(this);
+    hMirrorButton = new QToolButton(this);
     hMirrorButton->setFixedSize(32, 32);
     hMirrorButton->setCheckable(true);
     KAction* hMirrorAction = new KAction(i18n("Set horizontal mirror mode"), hMirrorButton);
@@ -135,7 +137,7 @@ KisPaintopBox::KisPaintopBox(KisView2 *view, QWidget *parent, const char *name)
     hMirrorButton->setDefaultAction(hMirrorAction);
     m_view->actionCollection()->addAction("hmirror_action", hMirrorAction);
 
-    QToolButton* vMirrorButton = new QToolButton(this);
+    vMirrorButton = new QToolButton(this);
     vMirrorButton->setFixedSize(32, 32);
     vMirrorButton->setCheckable(true);
     KAction* vMirrorAction = new KAction(i18n("Set vertical mirror mode"), vMirrorButton);
@@ -176,6 +178,9 @@ KisPaintopBox::KisPaintopBox(KisView2 *view, QWidget *parent, const char *name)
 
     m_cmbCompositeOp = new KisCompositeOpComboBox();
     m_cmbCompositeOp->setFixedHeight(30);
+    foreach(KAction *a, m_cmbCompositeOp->blendmodeActions()) {
+        m_view->actionCollection()->addAction(a->text(), a);
+    }
 
     m_workspaceWidget = new KisPopupButton(view);
     m_workspaceWidget->setIcon(koIcon("workspace-chooser"));
@@ -199,7 +204,7 @@ KisPaintopBox::KisPaintopBox(KisView2 *view, QWidget *parent, const char *name)
     compositeLayout->addWidget(m_cmbCompositeOp);
     compositeLayout->addWidget(m_eraseModeButton);
     compositeLayout->addWidget(m_alphaLockButton);
-    compositeLayout->setContentsMargins(0, 0, 0, 0);
+    compositeLayout->setContentsMargins(8, 0, 0, 0);
 
     KAction* action;
 
@@ -229,17 +234,13 @@ KisPaintopBox::KisPaintopBox(KisView2 *view, QWidget *parent, const char *name)
 
     action = new KAction(i18n("Previous Favourite Preset"), this);
     view->actionCollection()->addAction("previous_favorite_preset", action);
-    action->setShortcut(KShortcut(Qt::Key_Stop));
+    action->setShortcut(KShortcut(Qt::Key_Period));
     connect(action, SIGNAL(triggered()), this, SLOT(slotPreviousFavoritePreset()));
 
     action = new KAction(i18n("Switch to Previous Preset"), this);
     view->actionCollection()->addAction("previous_preset", action);
     action->setShortcut(KShortcut(Qt::Key_Slash));
     connect(action, SIGNAL(triggered()), this, SLOT(slotSwitchToPreviousPreset()));
-
-    action = new KAction(i18n("Select Favorite Presets..."), this);
-    view->actionCollection()->addAction("palette_manager", action);
-    connect(action, SIGNAL(triggered()), this, SLOT(slotSaveToFavouriteBrushes()));
 
     QWidget* mirrorActions = new QWidget(this);
     QHBoxLayout* mirrorLayout = new QHBoxLayout(mirrorActions);
@@ -275,7 +276,7 @@ KisPaintopBox::KisPaintopBox(KisView2 *view, QWidget *parent, const char *name)
     connect(m_presetsPopup       , SIGNAL(signalResourceSelected(KoResource*)), SLOT(resourceSelected(KoResource*)));
     connect(m_presetsChooserPopup, SIGNAL(resourceSelected(KoResource*))      , SLOT(resourceSelected(KoResource*)));
     connect(m_resourceProvider   , SIGNAL(sigNodeChanged(const KisNodeSP))    , SLOT(slotNodeChanged(const KisNodeSP)));
-    connect(m_cmbCompositeOp     , SIGNAL(activated(int))                     , SLOT(slotSetCompositeMode(int)));
+    connect(m_cmbCompositeOp     , SIGNAL(currentIndexChanged(int))           , SLOT(slotSetCompositeMode(int)));
     connect(eraseAction          , SIGNAL(triggered(bool))                    , SLOT(slotToggleEraseMode(bool)));
     connect(alphaLockAction      , SIGNAL(triggered(bool))                    , SLOT(slotToggleAlphaLockMode(bool)));
     connect(hMirrorAction        , SIGNAL(triggered(bool))                    , SLOT(slotHorizontalMirrorChanged(bool)));
@@ -294,8 +295,15 @@ KisPaintopBox::KisPaintopBox(KisView2 *view, QWidget *parent, const char *name)
     //Needed to connect canvas to favorite resource manager
     m_favoriteResourceManager = new KisFavoriteResourceManager(this);
     connect(m_resourceProvider, SIGNAL(sigFGColorUsed(KoColor)), m_favoriteResourceManager, SLOT(slotAddRecentColor(KoColor)));
+
     connect(m_resourceProvider, SIGNAL(sigFGColorChanged(KoColor)), m_favoriteResourceManager, SLOT(slotChangeFGColorSelector(KoColor)));
+    connect(m_resourceProvider, SIGNAL(sigBGColorChanged(KoColor)), m_favoriteResourceManager, SLOT(slotSetBGColor(KoColor)));
+    // cold initialization
+    m_favoriteResourceManager->slotChangeFGColorSelector(m_resourceProvider->fgColor());
+    m_favoriteResourceManager->slotSetBGColor(m_resourceProvider->bgColor());
+
     connect(m_favoriteResourceManager, SIGNAL(sigSetFGColor(KoColor)), m_resourceProvider, SLOT(slotSetFGColor(KoColor)));
+    connect(m_favoriteResourceManager, SIGNAL(sigSetBGColor(KoColor)), m_resourceProvider, SLOT(slotSetBGColor(KoColor)));
     connect(m_favoriteResourceManager, SIGNAL(sigEnableChangeColor(bool)), m_resourceProvider, SLOT(slotResetEnableFGChange(bool)));
     m_view->canvasBase()->setFavoriteResourceManager(m_favoriteResourceManager);
 
@@ -428,7 +436,7 @@ KisPaintOpPresetSP KisPaintopBox::defaultPreset(const KoID& paintOp)
     KisPaintOpPresetSP preset = new KisPaintOpPreset(path);
 
     if (!preset->load()) {
-        preset = KisPaintOpRegistry::instance()->defaultPreset(paintOp, m_view->image());
+        preset = KisPaintOpRegistry::instance()->defaultPreset(paintOp);
     }
 
     Q_ASSERT(preset);
@@ -586,7 +594,7 @@ void KisPaintopBox::slotSaveActivePreset()
     KisPaintOpPreset* resource = rServer->resourceByName(name);
     if (resource) {
         tags = rServer->assignedTagsList(resource);
-        rServer->removeResource(resource);
+        rServer->removeResourceAndBlacklist(resource);
     }
 
     newPreset->setImage(m_presetsPopup->cutOutOverlay());
@@ -653,7 +661,6 @@ void KisPaintopBox::slotSetupDefaultPreset()
 
 void KisPaintopBox::slotNodeChanged(const KisNodeSP node)
 {
-    // Deconnect colorspace change of previous node
     if (m_previousNode && m_previousNode->paintDevice())
         disconnect(m_previousNode->paintDevice().data(), SIGNAL(colorSpaceChanged(const KoColorSpace*)), this, SLOT(slotColorSpaceChanged(const KoColorSpace*)));
 
@@ -666,9 +673,15 @@ void KisPaintopBox::slotNodeChanged(const KisNodeSP node)
         slotColorSpaceChanged(node->colorSpace());
     }
 
-    for(TabletToolMap::iterator itr=m_tabletToolMap.begin(); itr!=m_tabletToolMap.end(); ++itr) {
-        if(itr->preset && itr->preset->settings())
+    for (TabletToolMap::iterator itr = m_tabletToolMap.begin(); itr != m_tabletToolMap.end(); ++itr) {
+
+        if(itr->preset && itr->preset->settings()) {
             itr->preset->settings()->setNode(node);
+        }
+    }
+
+    if (m_resourceProvider->currentPreset() && m_resourceProvider->currentPreset()->settings()) {
+        m_resourceProvider->currentPreset()->settings()->setNode(node);
     }
 }
 
@@ -683,6 +696,8 @@ void KisPaintopBox::slotToggleEraseMode(bool checked)
         updateCompositeOp(COMPOSITE_ERASE);
     else
         updateCompositeOp(m_prevCompositeOpID);
+
+    toggleHighlightedButton(m_eraseModeButton);
 }
 
 void KisPaintopBox::slotSetCompositeMode(int index)
@@ -695,13 +710,6 @@ void KisPaintopBox::slotSetCompositeMode(int index)
     }
 }
 
-void KisPaintopBox::slotSaveToFavouriteBrushes()
-{
-    if (m_favoriteResourceManager) {
-        m_favoriteResourceManager->showPaletteManager();
-    }
-}
-
 void KisPaintopBox::slotWatchPresetNameLineEdit(const QString& text)
 {
     KoResourceServer<KisPaintOpPreset>* rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
@@ -711,11 +719,13 @@ void KisPaintopBox::slotWatchPresetNameLineEdit(const QString& text)
 void KisPaintopBox::slotHorizontalMirrorChanged(bool value)
 {
     m_resourceProvider->setMirrorHorizontal(value);
+    toggleHighlightedButton(hMirrorButton);
 }
 
 void KisPaintopBox::slotVerticalMirrorChanged(bool value)
 {
     m_resourceProvider->setMirrorVertical(value);
+    toggleHighlightedButton(vMirrorButton);
 }
 
 void KisPaintopBox::sliderChanged(int n)
@@ -813,8 +823,8 @@ void KisPaintopBox::slotPreviousFavoritePreset()
     if (!m_favoriteResourceManager) return;
 
     int i = 0;
-    foreach (const QString &preset, m_favoriteResourceManager->favoritePresetList()) {
-        if (m_resourceProvider->currentPreset()->name() == preset) {
+    foreach (KisPaintOpPreset* preset, m_favoriteResourceManager->favoritePresetList()) {
+        if (m_resourceProvider->currentPreset()->name() == preset->name()) {
             if (i > 0) {
                 m_favoriteResourceManager->slotChangeActivePaintop(i - 1);
             }
@@ -833,8 +843,8 @@ void KisPaintopBox::slotNextFavoritePreset()
     if (!m_favoriteResourceManager) return;
 
     int i = 0;
-    foreach (const QString &preset, m_favoriteResourceManager->favoritePresetList()) {
-        if (m_resourceProvider->currentPreset()->name() == preset) {
+    foreach (KisPaintOpPreset* preset, m_favoriteResourceManager->favoritePresetList()) {
+        if (m_resourceProvider->currentPreset()->name() == preset->name()) {
             if (i < m_favoriteResourceManager->numFavoritePresets() - 1) {
                 m_favoriteResourceManager->slotChangeActivePaintop(i + 1);
             }
@@ -869,5 +879,16 @@ void KisPaintopBox::slotToggleAlphaLockMode(bool checked)
     else {
         m_alphaLockButton->actions()[0]->setIcon(koIcon("transparency-unlocked"));
     }
+    toggleHighlightedButton(m_alphaLockButton);
     m_resourceProvider->setGlobalAlphaLock(checked);
+}
+
+void KisPaintopBox::toggleHighlightedButton(QToolButton* m_tool)
+{
+    palette_highlight.setColor(QPalette::Button, palette.color(QPalette::Highlight) );
+
+    if (m_tool->isChecked() )
+        m_tool->setPalette(this->palette_highlight);
+    else
+        m_tool->setPalette(this->palette);
 }

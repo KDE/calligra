@@ -16,21 +16,22 @@ include_directories( ${KOTEXT_INCLUDES}
     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/resources
     ${CMAKE_CURRENT_SOURCE_DIR}/ora
     ${CMAKE_SOURCE_DIR}/krita/image/metadata
-    ${EXIV2_INCLUDE_DIR} )
+    ${EXIV2_INCLUDE_DIR}
+    ${OCIO_INCLUDE_DIR})
 
 add_subdirectory( tests )
 
 
 configure_file(config-processor.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-processor.h )
 
-include(kdefx.cmake)
-
 set(kritaui_LIB_SRCS
     canvas/kis_canvas_widget_base.cpp
     canvas/kis_canvas2.cpp
     canvas/kis_canvas_controller.cpp
     canvas/kis_paintop_transformation_connector.cpp
+    canvas/kis_display_color_converter.cpp
     canvas/kis_display_filter.cpp
+    canvas/kis_exposure_gamma_correction_interface.cpp
     canvas/kis_tool_proxy.cpp
     canvas/kis_canvas_decoration.cc
     canvas/kis_coordinates_converter.cpp
@@ -67,7 +68,6 @@ set(kritaui_LIB_SRCS
     flake/kis_shape_selection_model.cpp
     flake/kis_take_all_shapes_command.cpp
     kis_autogradient.cc
-    kis_autogradient_resource.cc
     kis_bookmarked_configurations_editor.cc
     kis_bookmarked_configurations_model.cc
     kis_bookmarked_filter_configurations_model.cc
@@ -92,6 +92,7 @@ set(kritaui_LIB_SRCS
     kis_filters_model.cc
     kis_flipbook.cpp
     kis_flipbook_item.cpp
+    kis_animation.cpp
     kis_histogram_view.cc
     kis_image_manager.cc
     kis_image_view_converter.cpp
@@ -111,7 +112,6 @@ set(kritaui_LIB_SRCS
     kis_paintop_option.cpp
     kis_paintop_options_model.cpp
     kis_paintop_options_widget.cpp
-    kis_palette_manager.cpp
     kis_popup_palette.cpp
     kis_png_converter.cpp
     kis_preference_set_registry.cpp
@@ -127,7 +127,13 @@ set(kritaui_LIB_SRCS
     kis_action.cpp
     kis_action_manager.cpp
     kis_view_plugin.cpp
+    kis_animation_factory.cpp
+    kis_animation_doc.cpp
+    kis_animation_part.cpp
+    kis_animation_player.cpp
+    kis_onion_skin_loader.cpp
     kis_canvas_controls_manager.cpp
+    kis_tooltip_manager.cpp
     kisexiv2/kis_exif_io.cpp
     kisexiv2/kis_exiv2.cpp
     kisexiv2/kis_iptc_io.cpp
@@ -138,10 +144,14 @@ set(kritaui_LIB_SRCS
     kra/kis_kra_save_visitor.cpp
     kra/kis_kra_saver.cpp
     kra/kis_kra_savexml_visitor.cpp
+    kranim/kis_kranim_saver.cpp
+    kranim/kis_kranim_loader.cpp
+    kranimstore/kis_animation_store.cpp
     opengl/kis_opengl.cpp
     opengl/kis_opengl_canvas2.cpp
     opengl/kis_opengl_image_textures.cpp
     opengl/kis_texture_tile.cpp
+    opengl/kis_texture_tile_update_info.cpp
     ora/kis_open_raster_stack_load_visitor.cpp
     ora/kis_open_raster_stack_save_visitor.cpp
     ora/ora_load_context.cc
@@ -178,6 +188,7 @@ set(kritaui_LIB_SRCS
     tool/strokes/kis_painter_based_stroke_strategy.cpp
     tool/strokes/kis_filter_stroke_strategy.cpp
     widgets/KisFlipbookSelector.cpp
+    widgets/kis_animation_selector.cpp
     widgets/kis_channelflags_widget.cpp
     widgets/kis_cmb_composite.cc
     widgets/kis_paintop_list_widget.cpp
@@ -225,6 +236,7 @@ set(kritaui_LIB_SRCS
     input/kis_alternate_invocation_action.cpp
     input/kis_rotate_canvas_action.cpp
     input/kis_zoom_action.cpp
+    input/kis_gamma_exposure_action.cpp
     input/kis_show_palette_action.cpp
     input/kis_change_primary_setting_action.cpp
     input/kis_abstract_shortcut.cpp
@@ -244,6 +256,7 @@ set(kritaui_LIB_SRCS
     kis_transaction_based_command.cpp
     kis_gui_context_command.cpp
     kis_gui_context_command_p.cpp
+    input/kis_tablet_debugger.cpp
     input/kis_input_profile_manager.cpp
     input/kis_input_profile.cpp
     input/kis_shortcut_configuration.cpp
@@ -260,6 +273,7 @@ set(kritaui_LIB_SRCS
     input/config/kis_wheel_input_editor.cpp
     input/config/kis_key_input_editor.cpp
     processing/fill_processing_visitor.cpp
+    kis_mirror_axis.cpp
 )
 
 if(WIN32)
@@ -305,7 +319,7 @@ kde4_add_ui_files(kritaui_LIB_SRCS
     forms/kis_previewwidgetbase.ui
     forms/kis_matrix_widget.ui
     forms/wdgselectionoptions.ui
-    forms/wdgshapeoptions.ui
+    forms/wdggeometryoptions.ui
     forms/wdgnewimage.ui
     forms/wdgimageproperties.ui
     forms/wdgmaskfromselection.ui
@@ -324,6 +338,7 @@ kde4_add_ui_files(kritaui_LIB_SRCS
     forms/wdgpresetselectorstrip.ui
     forms/wdgdlgblacklistcleanup.ui
     forms/wdgflipbookselector.ui
+    forms/wdganimationselector.ui
     input/config/kis_input_configuration_page.ui
     input/config/kis_edit_profiles_dialog.ui
     input/config/kis_input_configuration_page_item.ui
@@ -341,9 +356,9 @@ target_link_libraries(kritaui ${QT_QTDECLARATIVE_LIBRARY}
 target_link_libraries(kritaui ${GLEW_LIBRARIES})
 
 if(GHNS)
-    target_link_libraries(kritaui ${KDE4_KFILE_LIBRARY} kritaimage komain kowidgets kowidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES} ${KDE4_KNEWSTUFF3_LIBS})
+    target_link_libraries(kritaui ${KDE4_KFILE_LIBRARY} kritaimage kritalibbrush komain kowidgets kowidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES} ${KDE4_KNEWSTUFF3_LIBS})
 else(GHNS)
-    target_link_libraries(kritaui ${KDE4_KFILE_LIBRARY} kritaimage komain kowidgets kowidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES})
+    target_link_libraries(kritaui ${KDE4_KFILE_LIBRARY} kritaimage kritalibbrush komain kowidgets kowidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES})
 endif (GHNS)
 
 if(HAVE_OPENGL)
@@ -361,7 +376,7 @@ if(HAVE_OPENGL)
 
 endif(HAVE_OPENGL)
 
-target_link_libraries(kritaui LINK_INTERFACE_LIBRARIES kritaimage komain ${GL_INTERFACE_LIBRARIES} )
+target_link_libraries(kritaui LINK_INTERFACE_LIBRARIES kritaimage kritalibbrush komain ${GL_INTERFACE_LIBRARIES} )
 
 set_target_properties(kritaui
     PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}

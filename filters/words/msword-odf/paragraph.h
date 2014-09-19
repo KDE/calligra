@@ -24,6 +24,7 @@
 
 #include <QBuffer>
 #include <QList>
+#include <QStack>
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
 #include <KoXmlWriter.h>

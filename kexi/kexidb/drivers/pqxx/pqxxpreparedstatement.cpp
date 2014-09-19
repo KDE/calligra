@@ -27,7 +27,7 @@ pqxxPreparedStatement::pqxxPreparedStatement(
         : KexiDB::PreparedStatement(type, conn, fields)
         , m_conn(conn.connection)
 {
-// KexiDBDrvDbg << "pqxxPreparedStatement: Construction";
+// KexiDBDrvDbg;
 }
 
 
@@ -37,7 +37,7 @@ pqxxPreparedStatement::~pqxxPreparedStatement()
 
 bool pqxxPreparedStatement::execute()
 {
-// KexiDBDrvDbg << "pqxxPreparedStatement::execute()";
+// KexiDBDrvDbg;
     m_resetRequired = true;
     const int missingValues = m_fields->fieldCount() - m_args.count();
     if (missingValues > 0) {
@@ -51,5 +51,3 @@ bool pqxxPreparedStatement::execute()
     }
     return false;
 }
-
-

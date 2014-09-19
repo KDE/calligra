@@ -32,7 +32,6 @@
 #include <QBuffer>
 #include <QFileInfo>
 #include <QFile>
-#include <QDir>
 
 #include <kurl.h>
 #include <kdebug.h>
@@ -55,7 +54,7 @@ static KoStore::Backend determineBackend(QIODevice *dev)
     return DefaultFormat; // fallback
 }
 
-KoStore* KoStore::createStore(const QString& fileName, Mode mode, const QByteArray & appIdentification, Backend backend)
+KoStore* KoStore::createStore(const QString& fileName, Mode mode, const QByteArray & appIdentification, Backend backend, bool writeMimetype)
 {
     bool automatic = false;
     if (backend == Auto) {
@@ -77,20 +76,20 @@ KoStore* KoStore::createStore(const QString& fileName, Mode mode, const QByteArr
     }
     switch (backend) {
     case Tar:
-        return new KoTarStore(fileName, mode, appIdentification);
+        return new KoTarStore(fileName, mode, appIdentification, writeMimetype);
     case Zip:
 #ifdef QCA2
         if (automatic && mode == Read) {
             // When automatically detecting, this might as well be an encrypted file. We'll need to check anyway, so we'll just use the encrypted store.
-            return new KoEncryptedStore(fileName, Read, appIdentification);
+            return new KoEncryptedStore(fileName, Read, appIdentification, writeMimetype);
         }
 #endif
-        return new KoZipStore(fileName, mode, appIdentification);
+        return new KoZipStore(fileName, mode, appIdentification, writeMimetype);
     case Directory:
-        return new KoDirectoryStore(fileName /* should be a dir name.... */, mode);
+        return new KoDirectoryStore(fileName /* should be a dir name.... */, mode, writeMimetype);
 #ifdef QCA2
     case Encrypted:
-        return new KoEncryptedStore(fileName, mode, appIdentification);
+        return new KoEncryptedStore(fileName, mode, appIdentification, writeMimetype);
 #endif
     default:
         kWarning(30002) << "Unsupported backend requested for KoStore : " << backend;
@@ -98,7 +97,7 @@ KoStore* KoStore::createStore(const QString& fileName, Mode mode, const QByteArr
     }
 }
 
-KoStore* KoStore::createStore(QIODevice *device, Mode mode, const QByteArray & appIdentification, Backend backend)
+KoStore* KoStore::createStore(QIODevice *device, Mode mode, const QByteArray & appIdentification, Backend backend, bool writeMimetype)
 {
     bool automatic = false;
     if (backend == Auto) {
@@ -114,7 +113,7 @@ KoStore* KoStore::createStore(QIODevice *device, Mode mode, const QByteArray & a
     }
     switch (backend) {
     case Tar:
-        return new KoTarStore(device, mode, appIdentification);
+        return new KoTarStore(device, mode, appIdentification, writeMimetype);
     case Directory:
         kError(30002) << "Can't create a Directory store for a memory buffer!" << endl;
         // fallback
@@ -122,13 +121,13 @@ KoStore* KoStore::createStore(QIODevice *device, Mode mode, const QByteArray & a
 #ifdef QCA2
         if (automatic && mode == Read) {
             // When automatically detecting, this might as well be an encrypted file. We'll need to check anyway, so we'll just use the encrypted store.
-            return new KoEncryptedStore(device, Read, appIdentification);
+            return new KoEncryptedStore(device, Read, appIdentification, writeMimetype);
         }
 #endif
-        return new KoZipStore(device, mode, appIdentification);
+        return new KoZipStore(device, mode, appIdentification, writeMimetype);
 #ifdef QCA2
     case Encrypted:
-        return new KoEncryptedStore(device, mode, appIdentification);
+        return new KoEncryptedStore(device, mode, appIdentification, writeMimetype);
 #endif
     default:
         kWarning(30002) << "Unsupported backend requested for KoStore : " << backend;
@@ -136,11 +135,11 @@ KoStore* KoStore::createStore(QIODevice *device, Mode mode, const QByteArray & a
     }
 }
 
-KoStore* KoStore::createStore(QWidget* window, const KUrl& url, Mode mode, const QByteArray & appIdentification, Backend backend)
+KoStore* KoStore::createStore(QWidget* window, const KUrl& url, Mode mode, const QByteArray & appIdentification, Backend backend, bool writeMimetype)
 {
     const bool automatic = (backend == Auto);
     if (url.isLocalFile())
-        return createStore(url.toLocalFile(), mode,  appIdentification, backend);
+        return createStore(url.toLocalFile(), mode,  appIdentification, backend, writeMimetype);
 
     QString tmpFile;
     if (mode == KoStore::Write) {
@@ -168,13 +167,13 @@ KoStore* KoStore::createStore(QWidget* window, const KUrl& url, Mode mode, const
 #ifdef QCA2
         if (automatic && mode == Read) {
             // When automatically detecting, this might as well be an encrypted file. We'll need to check anyway, so we'll just use the encrypted store.
-            return new KoEncryptedStore(window, url, tmpFile, Read, appIdentification);
+            return new KoEncryptedStore(window, url, tmpFile, Read, appIdentification, writeMimetype);
         }
 #endif
-        return new KoZipStore(window, url, tmpFile, mode, appIdentification);
+        return new KoZipStore(window, url, tmpFile, mode, appIdentification, writeMimetype);
 #ifdef QCA2
     case Encrypted:
-        return new KoEncryptedStore(window, url, tmpFile, mode, appIdentification);
+        return new KoEncryptedStore(window, url, tmpFile, mode, appIdentification, writeMimetype);
 #endif
     default:
         kWarning(30002) << "Unsupported backend requested for KoStore (KUrl) : " << backend;
@@ -191,9 +190,10 @@ const char* const ROOTPART = "root";
 const char* const MAINNAME = "maindoc.xml";
 }
 
-KoStore::KoStore()
+KoStore::KoStore(bool writeMimetype)
     : d_ptr(new KoStorePrivate(this))
 {
+    d_ptr->writeMimetype = writeMimetype;
 }
 
 bool KoStore::init(Mode mode)
@@ -203,9 +203,6 @@ bool KoStore::init(Mode mode)
     d->mode = mode;
     d->stream = 0;
     d->finalized = false;
-
-    // Assume new style names.
-    d->namingVersion = KoStorePrivate::NamingVersion22;
     return true;
 }
 
@@ -401,13 +398,7 @@ bool KoStore::leaveDirectory()
 
     d->currentPath.pop_back();
 
-    return enterAbsoluteDirectory(d->expandEncodedDirectory(currentPath()));
-}
-
-QString KoStore::currentDirectory() const
-{
-    Q_D(const KoStore);
-    return d->expandEncodedDirectory(currentPath());
+    return enterAbsoluteDirectory(currentPath());
 }
 
 QString KoStore::currentPath() const
@@ -564,7 +555,7 @@ bool KoStore::atEnd() const
 QString KoStorePrivate::toExternalNaming(const QString & _internalNaming) const
 {
     if (_internalNaming == ROOTPART)
-        return expandEncodedDirectory(q->currentPath()) + MAINNAME;
+        return q->currentPath() + MAINNAME;
 
     QString intern;
     if (_internalNaming.startsWith("tar:/"))     // absolute reference
@@ -572,78 +563,17 @@ QString KoStorePrivate::toExternalNaming(const QString & _internalNaming) const
     else
         intern = q->currentPath() + _internalNaming;
 
-    return expandEncodedPath(intern);
+    return intern;
 }
 
-QString KoStorePrivate::expandEncodedPath(const QString& _intern) const
-{
-    QString intern = _intern;
-
-    if (namingVersion == KoStorePrivate::NamingVersionRaw)
-        return intern;
-
-    QString result;
-    int pos;
-
-    if ((pos = intern.lastIndexOf('/', -1)) != -1) {
-        result = expandEncodedDirectory(intern.left(pos)) + '/';
-        intern = intern.mid(pos + 1);
-    }
-
-    // Now process the filename. If the first character is numeric, we have
-    // a main document.
-    if (QChar(intern.at(0)).isDigit()) {
-        // If this is the first part name, check if we have a store with
-        // old-style names.
-        if (namingVersion == KoStorePrivate::NamingVersion22
-                && mode == KoStore::Read && q->fileExists(result + "part" + intern + ".xml"))
-            namingVersion = KoStorePrivate::NamingVersion21;
-
-        if (namingVersion == KoStorePrivate::NamingVersion21)
-            result = result + "part" + intern + ".xml";
-        else
-            result = result + "part" + intern + '/' + MAINNAME;
-    } else {
-        result += intern;
-    }
-    return result;
-}
-
-QString KoStorePrivate::expandEncodedDirectory(const QString& _intern) const
-{
-    QString intern = _intern;
-
-    if (namingVersion == KoStorePrivate::NamingVersionRaw)
-        return intern;
-
-    QString result;
-    int pos;
-    while ((pos = intern.indexOf('/')) != -1) {
-        if (QChar(intern.at(0)).isDigit())
-            result += "part";
-        result += intern.left(pos + 1);   // copy numbers (or "pictures") + "/"
-        intern = intern.mid(pos + 1);   // remove the dir we just processed
-    }
-
-    if (!intern.isEmpty() && QChar(intern.at(0)).isDigit())
-        result += "part";
-    result += intern;
-    return result;
-}
 
 bool KoStorePrivate::enterDirectoryInternal(const QString &directory)
 {
-    if (q->enterRelativeDirectory(expandEncodedDirectory(directory))) {
+    if (q->enterRelativeDirectory(directory)) {
         currentPath.append(directory);
         return true;
     }
     return false;
-}
-
-void KoStore::disallowNameExpansion()
-{
-    Q_D(KoStore);
-    d->namingVersion = KoStorePrivate::NamingVersionRaw;
 }
 
 bool KoStore::hasFile(const QString& fileName) const

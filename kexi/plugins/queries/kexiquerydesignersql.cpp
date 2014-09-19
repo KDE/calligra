@@ -51,7 +51,7 @@
 
 static bool compareSQL(const QString& sql1, const QString& sql2)
 {
-    //TODO: use reformatting functions here
+    //! @todo use reformatting functions here
     return sql1.trimmed() == sql2.trimmed();
 }
 
@@ -86,9 +86,9 @@ public:
     //! needed to remember height for both modes, between switching
     int heightForStatusMode;
     //! helper for beforeSwitchTo()
-    bool justSwitchedFromNoViewMode : 1;
+    bool justSwitchedFromNoViewMode;
     //! helper for slotTextChanged()
-    bool slotTextChangedEnabled : 1;
+    bool slotTextChangedEnabled;
 };
 
 //===================
@@ -202,7 +202,7 @@ void KexiQueryDesignerSQLView::setStatusText(const QString& text)
 
 tristate KexiQueryDesignerSQLView::beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore)
 {
-//TODO
+//! @todo
     dontStore = true;
     if (mode == Kexi::DesignViewMode || mode == Kexi::DataViewMode) {
         QString sqlText = d->editor->text().trimmed();
@@ -212,10 +212,9 @@ tristate KexiQueryDesignerSQLView::beforeSwitchTo(Kexi::ViewMode mode, bool &don
             if (temp->query()) {
                 temp->setQueryChangedInPreviousView(true); //query changed
                 temp->setQuery(0);
-//    delete temp->query; //safe?
-//    temp->query = 0;
             }
-        } else {
+        }
+        else {
             const bool designViewWasVisible = window()->viewForMode(mode) != 0;
             //should we check SQL text?
             if (designViewWasVisible
@@ -242,8 +241,6 @@ tristate KexiQueryDesignerSQLView::beforeSwitchTo(Kexi::ViewMode mode, bool &don
                 d->justSwitchedFromNoViewMode = false;
                 //replace old query schema with new one
                 temp->setQuery(d->parsedQuery);   //this will also delete temp->query()
-//    delete temp->query; //safe?
-//    temp->query = d->parsedQuery;
                 d->parsedQuery = 0;
                 temp->setQueryChangedInPreviousView(true);
             }
@@ -258,8 +255,7 @@ tristate KexiQueryDesignerSQLView::beforeSwitchTo(Kexi::ViewMode mode, bool &don
 tristate
 KexiQueryDesignerSQLView::afterSwitchFrom(Kexi::ViewMode mode)
 {
-    kDebug() << "KexiQueryDesignerSQLView::afterSwitchFrom()";
-// if (mode==Kexi::DesignViewMode || mode==Kexi::DataViewMode) {
+    kDebug();
     if (mode == Kexi::NoViewMode) {
         //User opened text view _directly_.
         //This flag is set to indicate for beforeSwitchTo() that even if text has not been changed,
@@ -273,7 +269,7 @@ KexiQueryDesignerSQLView::afterSwitchFrom(Kexi::ViewMode mode)
     }
 
     if (mode != 0/*failure only if it is switching from prev. view*/ && !query) {
-        //TODO msg
+        //! @todo msg
         return false;
     }
 
@@ -303,8 +299,7 @@ KexiQueryDesignerSQLView::afterSwitchFrom(Kexi::ViewMode mode)
     return true;
 }
 
-QString
-KexiQueryDesignerSQLView::sqlText() const
+QString KexiQueryDesignerSQLView::sqlText() const
 {
     return d->editor->text();
 }
@@ -359,8 +354,7 @@ void KexiQueryDesignerSQLView::updateActions(bool activated)
     KexiView::updateActions(activated);
 }
 
-KexiQueryPart::TempData *
-KexiQueryDesignerSQLView::tempData() const
+KexiQueryPart::TempData* KexiQueryDesignerSQLView::tempData() const
 {
     return dynamic_cast<KexiQueryPart::TempData*>(window()->data());
 }
@@ -430,8 +424,8 @@ tristate KexiQueryDesignerSQLView::storeData(bool dontAsk)
             res = storeDataBlock(d->editor->text(), "sql");
         } else {
             //query is not ok
-            //TODO: allow saving invalid queries
-            //TODO: just ask this question:
+            //! @todo allow saving invalid queries
+            //! @todo just ask this question:
             res = false;
         }
 #endif

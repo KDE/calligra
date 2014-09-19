@@ -119,15 +119,15 @@ int main(int argc, char** argv)
     options.add("query-params <params>", ki18n("Query parameters separated\n"
                 "by '|' character that will be passed to query\n"
                 "statement to replace [...] placeholders."));
-    options.add("", ki18n(" Notes:\n"
-                          "1. 'dr_prop' requires <db_name> argument.\n"
-                          "2. 'parser' test requires <db_name>,\n"
-                          " <driver_name> and <sql_statement> arguments\n"
-                          "3. All other tests require <db_name>\n"
-                          " and <driver_name> arguments.\n"
-                          "4. 'tables' test automatically runs 'dbcreation'\n"
-                          " test. (<new_db_name> is removed if already exists).\n"
-                          "5. <db_name> must be a valid kexi database\n"
+    options.add("", ki18n(" Notes:<nl/>"
+                          "1. 'dr_prop' requires <placeholder>db_name</placeholder> argument.<nl/>"
+                          "2. 'parser' test requires <placeholder>db_name</placeholder>,<nl/>"
+                          " <placeholder>driver_name</placeholder> and <placeholder>sql_statement</placeholder> arguments<nl/>"
+                          "3. All other tests require <placeholder>db_name</placeholder><nl/>"
+                          " and <placeholder>driver_name</placeholder> arguments.\n"
+                          "4. 'tables' test automatically runs 'dbcreation'<nl/>"
+                          " test. (<placeholder>new_db_name</placeholder> is removed if already exists).<nl/>"
+                          "5. <placeholder>db_name</placeholder> must be a valid kexi database<nl/>"
                           " e.g. created with 'tables' test."));
     options.add("+driver_name", ki18n("Driver name"));
     options.add("+[db_name]", ki18n("Database name"));
@@ -137,7 +137,7 @@ int main(int argc, char** argv)
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
     QStringList tests;
     tests << "cursors" << "schema" << "dbcreation" << "tables"
-    << "tableview" << "parser" << "dr_prop";
+          << "tableview" << "parser" << "dr_prop";
     if (!args->isSet("test")) {
         kDebug() << "No test specified. Use --help.";
         RETURN(1);
@@ -216,7 +216,7 @@ int main(int argc, char** argv)
         if (test_name == "dbcreation" || test_name == "tables")
             res = project->create(true /*force overwrite*/);
         else
-            res = project->open(incompatibleWithKexi);
+            res = project->open(&incompatibleWithKexi);
         if (res != true) {
             if (incompatibleWithKexi)
                 kDebug() << "incompatibleWithKexi";

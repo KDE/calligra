@@ -75,8 +75,8 @@ ReportSection::ReportSection(KoReportDesigner * rptdes)
         : QWidget(rptdes)
 {
     m_sectionData = new KRSectionData(this);
-    connect(m_sectionData->propertySet(), SIGNAL(propertyChanged(KoProperty::Set&, KoProperty::Property&)),
-            this, SLOT(slotPropertyChanged(KoProperty::Set&, KoProperty::Property&)));
+    connect(m_sectionData->propertySet(), SIGNAL(propertyChanged(KoProperty::Set&,KoProperty::Property&)),
+            this, SLOT(slotPropertyChanged(KoProperty::Set&,KoProperty::Property&)));
     int dpiY = KoDpi::dpiY();
 
     m_reportDesigner = rptdes;
@@ -170,7 +170,7 @@ void ReportSection::initFromXML(QDomNode & section)
     m_sectionData->m_height->setValue(h);
     
     h  = POINT_TO_INCH(h) * KoDpi::dpiY();
-    kDebug() << "Section Height: " << h;
+    //kDebug() << "Section Height: " << h;
     m_scene->setSceneRect(0, 0, m_scene->width(), h);
     slotResizeBarDragged(0);
 
@@ -179,15 +179,16 @@ void ReportSection::initFromXML(QDomNode & section)
     for (int i = 0; i < nl.count(); ++i) {
         node = nl.item(i);
         n = node.nodeName();
-
-        //Load objects
-        //report:line is a special case as it is not a plugin
-        if (n == "report:line") {
-            (new KoReportDesignerItemLine(node, m_sceneView->designer(), m_scene))->setVisible(true);
-        }
-        else {
+        if (n.startsWith("report:")) {
+            //Load objects
+            //report:line is a special case as it is not a plugin
+            QString reportItemName = n.mid(qstrlen("report:"));
+            if (reportItemName == "line") {
+                (new KoReportDesignerItemLine(node, m_sceneView->designer(), m_scene))->setVisible(true);
+                continue;
+            }
             KoReportPluginManager* manager = KoReportPluginManager::self();
-            KoReportPluginInterface *plugin = manager->plugin(n);
+            KoReportPluginInterface *plugin = manager->plugin(reportItemName);
             if (plugin) {
                 QObject *obj = plugin->createDesignerInstance(node, m_reportDesigner, m_scene);
                 if (obj) {
@@ -195,12 +196,11 @@ void ReportSection::initFromXML(QDomNode & section)
                     if (entity) {
                         entity->setVisible(true);
                     }
+                    continue;
                 }
             }
-            else {
-                kDebug() << "Encountered unknown node while parsing section: " << n;
-            }
         }
+        kWarning() << "Encountered unknown node while parsing section: " << n;
     }
 }
 
@@ -248,8 +248,7 @@ void ReportSection::slotSceneClicked()
 void ReportSection::slotPropertyChanged(KoProperty::Set &s, KoProperty::Property &p)
 {
     Q_UNUSED(s)
-
-    kDebug() << p.name();
+    //kDebug() << p.name();
     
     //Handle Background Color
     if (p.name() == "background-color") {

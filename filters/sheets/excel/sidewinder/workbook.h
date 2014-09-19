@@ -147,6 +147,9 @@ public:
     FormatFont font(unsigned index) const;
     void setFont(unsigned index, const FormatFont &font);
 
+    QDateTime baseDate() const;
+    void setBaseDate(const QDateTime& baseDate);
+
     enum Version {
         Excel95,
         Excel97,

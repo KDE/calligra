@@ -171,7 +171,7 @@ protected:
 class PackageRemoveCmd : public NamedCommand
 {
 public:
-    PackageRemoveCmd( Part *part, WorkPackage *value, const QString& name = QString() );
+    PackageRemoveCmd( Part *part, WorkPackage *value, const KUndo2MagicString &name = KUndo2MagicString() );
     ~PackageRemoveCmd();
     void execute();
     void unexecute();
@@ -186,7 +186,7 @@ private:
 class ModifyPackageSettingsCmd : public NamedCommand
 {
 public:
-    ModifyPackageSettingsCmd( WorkPackage *wp, WorkPackageSettings &value, const QString& name = QString() );
+    ModifyPackageSettingsCmd( WorkPackage *wp, WorkPackageSettings &value, const KUndo2MagicString &name = KUndo2MagicString() );
 
     void execute();
     void unexecute();
@@ -200,7 +200,7 @@ private:
 class CopySchedulesCmd : public NamedCommand
 {
 public:
-    CopySchedulesCmd( const Project &fromProject, Project &toProject,  const QString &name = QString() );
+    CopySchedulesCmd( const Project &fromProject, Project &toProject,  const KUndo2MagicString &name = KUndo2MagicString() );
 
     void execute();
     void unexecute();

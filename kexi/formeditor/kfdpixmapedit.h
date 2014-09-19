@@ -37,9 +37,6 @@ public:
 
 public slots:
     virtual void selectPixmap();
-
-private:
-//  FormManager  *m_manager;
 };
 
 }

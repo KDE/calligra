@@ -54,6 +54,7 @@
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
+#include <KoStyleStack.h>
 
 #include <QAbstractTextDocumentLayout>
 #include <QApplication>
@@ -162,6 +163,7 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
     pc.imageCollection = m_imageCollection;
     pc.showFormattingCharacters = paintContext.showFormattingCharacters;
     pc.showTableBorders = paintContext.showTableBorders;
+    pc.showSectionBounds = paintContext.showSectionBounds;
     pc.showSpellChecking = paintContext.showSpellChecking;
     pc.showSelections = paintContext.showSelections;
 
@@ -345,7 +347,7 @@ bool TextShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &cont
     m_textShapeData->document()->setUndoRedoEnabled(false);
     loadOdfAttributes(element, context, OdfAllAttributes);
 
-    // this cannot be done in loadStyle as that fill the style stack wrongly and therefor it results 
+    // this cannot be done in loadStyle as that fill the style stack wrongly and therefor it results
     // in wrong data to be loaded.
     m_textShapeData->loadStyle(element, context);
 

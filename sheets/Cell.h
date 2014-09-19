@@ -664,7 +664,7 @@ Q_DECLARE_TYPEINFO(Calligra::Sheets::Cell, Q_MOVABLE_TYPE);
 
 inline QDebug operator<<(QDebug str, const Calligra::Sheets::Cell& cell)
 {
-    return str << qPrintable(Calligra::Sheets::Cell::columnName(cell.column()) + QString::number(cell.row()));
+    return str << qPrintable(QString("%1%2").arg(Calligra::Sheets::Cell::columnName(cell.column())).arg(QString::number(cell.row())));
 }
 
 #endif  // CALLIGRA_SHEETS_CELL

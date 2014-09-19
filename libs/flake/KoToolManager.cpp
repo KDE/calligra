@@ -49,11 +49,8 @@
 #include <QPaintEvent>
 #include <QTabletEvent>
 #include <QKeyEvent>
-#include <QGridLayout>
-#include <QDockWidget>
-#include <QGraphicsObject>
+#include <QVBoxLayout>
 #include <QStringList>
-#include <QAbstractButton>
 #include <QApplication>
 #include <kactioncollection.h>
 #include <kdebug.h>
@@ -454,8 +451,6 @@ void KoToolManager::Private::detachCanvas(KoCanvasController *controller)
             }
             // as a last resort just set a blank one
             canvasData = 0;
-            // and stop the event filter
-            QApplication::instance()->removeEventFilter(q);
         }
     }
 
@@ -485,9 +480,6 @@ void KoToolManager::Private::attachCanvas(KoCanvasController *controller)
     Q_ASSERT(controller);
     CanvasData *cd = createCanvasData(controller, KoInputDevice::mouse());
     // switch to new canvas as the active one.
-    if (canvasData == 0) {
-        QApplication::instance()->installEventFilter(q);
-    }
     canvasData = cd;
     inputDevice = cd->inputDevice;
     QList<CanvasData*> canvasses_;
@@ -907,32 +899,6 @@ QString KoToolManager::preferredToolForSelection(const QList<KoShape*> &shapes)
     return toolType;
 }
 
-bool KoToolManager::eventFilter(QObject *object, QEvent *event)
-{
-    switch (event->type()) {
-    case QEvent::TabletMove:
-    case QEvent::TabletPress:
-    case QEvent::TabletRelease:
-    case QEvent::TabletEnterProximity:
-    case QEvent::TabletLeaveProximity: {
-        QTabletEvent *tabletEvent = static_cast<QTabletEvent *>(event);
-
-        KoInputDevice id(tabletEvent->device(), tabletEvent->pointerType(), tabletEvent->uniqueId());
-        d->switchInputDevice(id);
-        break;
-    }
-    case QEvent::MouseButtonPress:
-    case QEvent::MouseMove:
-    case QEvent::MouseButtonRelease:
-        d->switchInputDevice(KoInputDevice::mouse());
-        break;
-    default:
-        break;
-    }
-
-    return QObject::eventFilter(object, event);
-}
-
 void KoToolManager::injectDeviceEvent(KoInputDeviceHandlerEvent * event)
 {
     if (d->canvasData && d->canvasData->canvas->canvas()) {
@@ -1005,13 +971,15 @@ QPair<QString, KoToolBase*> KoToolManager::createTools(KoCanvasController *contr
     kDebug(30006) << "Creating tool" << tool->id() << ". Activated on:" << tool->activationShapeId() << ", prio:" << tool->priority();
 
     KoToolBase *tl = tool->createTool(controller->canvas());
-    Q_ASSERT(tl);
-    d->uniqueToolIds.insert(tl, tool->uniqueId());
+    if (tl) {
+        d->uniqueToolIds.insert(tl, tool->uniqueId());
 
-    tl->setObjectName(tool->id());
+        tl->setObjectName(tool->id());
 
-    foreach(KAction *action, tl->actions()) {
-        action->setEnabled(false);
+        foreach(KAction *action, tl->actions()) {
+            action->setEnabled(false);
+        }
+
     }
 
     KoZoomTool *zoomTool = dynamic_cast<KoZoomTool*>(tl);

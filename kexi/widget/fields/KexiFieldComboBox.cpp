@@ -146,7 +146,7 @@ void KexiFieldComboBox::setFieldOrExpression(const QString& string)
             setCurrentIndex(0);
             lineEdit()->setText(name);
 //! @todo show error
-            kWarning() << "KexiFieldComboBox::setField(): invalid table/query name in '" << name << "'";
+            kWarning() << "invalid table/query name in" << name;
             return;
         }
         d->fieldOrExpression = name.mid(pos + 1);
@@ -172,8 +172,7 @@ void KexiFieldComboBox::setFieldOrExpression(int index)
         index++; //skip 1st empty item
     }
     if (index >= count()) {
-        kWarning() << QString("KexiFieldComboBox::setFieldOrExpression(int index): index %1 "
-                            "out of range (0..%2)").arg(index).arg(count() - 1);
+        kWarning() << "index" << index << "out of range 0.." << (count() - 1);
         index = -1;
     }
     if (index <= 0) {

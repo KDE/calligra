@@ -62,9 +62,6 @@ protected:
 KexiInputTableEdit::KexiInputTableEdit(KexiDB::TableViewColumn &column, QWidget *parent)
         : KexiTableEdit(column, parent)
 {
-// m_type = f.type(); //copied because the rest of code uses m_type
-// m_field = &f;
-// m_origValue = value;//original value
     init();
 }
 
@@ -74,9 +71,9 @@ KexiInputTableEdit::~KexiInputTableEdit()
 
 void KexiInputTableEdit::init()
 {
-// kDebug() << "KexiInputTableEdit: m_origValue.typeName()==" << m_origValue.typeName();
-// kDebug() << "KexiInputTableEdit: type== " << field()->typeName();
-// kDebug() << "KexiInputTableEdit: displayed type== " << displayedField()->typeName();
+// kDebug() << "m_origValue.typeName()==" << m_origValue.typeName();
+// kDebug() << "type== " << field()->typeName();
+// kDebug() << "displayed type== " << displayedField()->typeName();
 
     m_textFormatter.setField( field() );
 
@@ -104,7 +101,8 @@ void KexiInputTableEdit::init()
     setViewWidget(m_lineedit);
     m_calculatedCell = false;
 
-#if 0 //js TODO
+//! @todo
+#if 0
     connect(m_cview->completionBox(), SIGNAL(activated(QString)),
             this, SLOT(completed(QString)));
     connect(m_cview->completionBox(), SIGNAL(highlighted(QString)),
@@ -127,14 +125,12 @@ void KexiInputTableEdit::setValueInternal(const QVariant& add, bool removeOld)
         m_lineedit->setText(text);
     }
 
+//! @todo by default we're moving to the end of editor, ADD OPTION allowing "select all chars"
 #if 0
-//move to end is better by default
     m_cview->selectAll();
 #else
-//js TODO: by default we're moving to the end of editor, ADD OPTION allowing "select all chars"
     m_lineedit->end(false);
 #endif
-
     if (!m_lineedit->validator()) {
         QValidator *validator = new KexiDB::FieldValidator(*field(), m_lineedit);
         validator->setObjectName("KexiInputTableEdit-validator");
@@ -153,14 +149,13 @@ void KexiInputTableEdit::paintEvent(QPaintEvent * /*e*/)
 void
 KexiInputTableEdit::setRestrictedCompletion()
 {
-#if 0 //js TODO
+//! @todo
+#if 0
     kDebug();
-// KLineEdit *content = static_cast<KLineEdit*>(m_view);
     if (m_cview->text().isEmpty())
         return;
 
     kDebug() << "something to do";
-
     m_cview->useGlobalKeyBindings();
 
     QStringList newC;
@@ -182,8 +177,6 @@ KexiInputTableEdit::completed(const QString &s)
 
 bool KexiInputTableEdit::valueChanged()
 {
-    //not needed? if (m_lineedit->text()!=m_origValue.toString())
-    //not needed?  return true;
     return KexiTableEdit::valueChanged();
 }
 

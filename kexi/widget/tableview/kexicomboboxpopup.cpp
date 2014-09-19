@@ -96,7 +96,7 @@ public:
     }
 
     KexiComboBoxPopup_KexiTableView *tv;
-    KexiDB::Field *int_f; //TODO: remove this -temporary
+    KexiDB::Field *int_f; //!< @todo remove this -temporary
     KexiDB::QuerySchema* privateQuery;
     int max_rows;
 };
@@ -115,7 +115,7 @@ KexiComboBoxPopup::KexiComboBoxPopup(QWidget* parent, KexiDB::TableViewColumn &c
 }
 
 KexiComboBoxPopup::KexiComboBoxPopup(QWidget* parent, KexiDB::Field &field)
-        : QFrame(parent, Qt::WType_Popup)
+        : QFrame(parent, Qt::Popup)
         , d( new KexiComboBoxPopupPrivate )
 {
     init();
@@ -134,7 +134,6 @@ void KexiComboBoxPopup::init()
     setAttribute(Qt::WA_WindowPropagation);
     setAttribute(Qt::WA_X11NetWmWindowTypeCombo);
 
-//    setPaletteBackgroundColor(palette().color(QPalette::Active, QColorGroup::Base));
     QPalette pal(palette());
     pal.setBrush(backgroundRole(), pal.brush(QPalette::Base));
     setPalette(pal);
@@ -254,7 +253,7 @@ void KexiComboBoxPopup::setData(KexiDB::TableViewColumn *column, KexiDB::Field *
                 d->privateQuery->setColumnVisible(i, false);
 // </remove later>
 #endif
-//todo...
+//! @todo ...
             kDebug() << "--- Private query: ";
             d->privateQuery->debug();
             cursor = field->table()->connection()->prepareQuery(*d->privateQuery);

@@ -75,7 +75,7 @@ extern "C" {
 #define MAX_DATA_BYTES_IN_MARKER  (MAX_BYTES_IN_MARKER - ICC_OVERHEAD_LEN)
 
 const char photoshopMarker[] = "Photoshop 3.0\0";
-const char photoshopBimId_[] = "8BIM";
+//const char photoshopBimId_[] = "8BIM";
 const uint16_t photoshopIptc = 0x0404;
 const char xmpMarker[] = "http://ns.adobe.com/xap/1.0/\0";
 const QByteArray photoshopIptc_((char*)&photoshopIptc, 2);
@@ -85,7 +85,7 @@ namespace
 
 J_COLOR_SPACE getColorTypeforColorSpace(const KoColorSpace * cs)
 {
-    if (KoID(cs->id()) == KoID("GRAYA") || KoID(cs->id()) == KoID("GRAYA16")) {
+    if (KoID(cs->id()) == KoID("GRAYA") || cs->id() == "GRAYAU16" || cs->id() == "GRAYA16") {
         return JCS_GRAYSCALE;
     }
     if (KoID(cs->id()) == KoID("RGBA") || KoID(cs->id()) == KoID("RGBA16")) {
@@ -244,7 +244,6 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
 
     // Create layer
     KisPaintLayerSP layer = KisPaintLayerSP(new KisPaintLayer(m_image.data(), m_image -> nextLayerName(), quint8_MAX));
-    KisTransaction("", layer->paintDevice());
 
     // Read data
     JSAMPROW row_pointer = new JSAMPLE[cinfo.image_width*cinfo.num_components];

@@ -399,9 +399,6 @@ void KexiPasswordWidget::setKnownLogins( const QMap<QString, QString>& knownLogi
         delete d->ui.userEdit;
         d->userEditCombo = new KComboBox(true, this);
         d->ui.userEdit = qobject_cast<KLineEdit*>(d->userEditCombo->lineEdit());
-//        QSize s = d->userEditCombo->sizeHint();
-//        d->ui.userEditCombo->setFixedHeight( s.height() );
-//        d->ui.userEditCombo->setMinimumWidth( s.width() );
         d->ui.userNameLabel->setBuddy( d->userEditCombo );
         d->ui.formLayout->setWidget( d->commentRow, QFormLayout::FieldRole, d->userEditCombo );
         setTabOrder( d->ui.userEdit, d->ui.anonymousCheckBox );

@@ -48,7 +48,7 @@ KoReportItemImage::KoReportItemImage(QDomNode & element)
 
             setInlineImageData(node.firstChild().nodeValue().toLatin1());
         } else {
-            kDebug() << "while parsing image element encountered unknow element: " << n;
+            kWarning() << "while parsing image element encountered unknow element: " << n;
         }
     }
 
@@ -119,7 +119,7 @@ void KoReportItemImage::createProperties()
     strings << i18n("Clip") << i18n("Stretch");
     m_resizeMode = new KoProperty::Property("resize-mode", keys, strings, "clip", i18n("Resize Mode"));
 
-    m_staticImage = new KoProperty::Property("static-image", QPixmap(), i18n("Static Image"));
+    m_staticImage = new KoProperty::Property("static-image", QPixmap(), i18nc("Static Image", "Static"));
 
     addDefaultProperties();
     m_set->addProperty(m_controlSource);
@@ -140,7 +140,7 @@ QString KoReportItemImage::itemDataSource() const
 
 QString KoReportItemImage::typeName() const
 {
-    return "report:image";
+    return "image";
 }
 
 int KoReportItemImage::renderSimpleData(OROPage *page, OROSection *section, const QPointF &offset,

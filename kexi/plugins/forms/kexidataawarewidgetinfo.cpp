@@ -33,14 +33,6 @@ KexiDataAwareWidgetInfo::KexiDataAwareWidgetInfo(KFormDesigner::WidgetFactory *f
     init();
 }
 
-/* 2.0
-KexiDataAwareWidgetInfo::KexiDataAwareWidgetInfo(KFormDesigner::WidgetFactory *f,
-        const char* parentFactoryName, const char* inheritedClassName)
-        : KFormDesigner::WidgetInfo(f, parentFactoryName, inheritedClassName)
-{
-    init();
-}*/
-
 KexiDataAwareWidgetInfo::~KexiDataAwareWidgetInfo()
 {
     delete d;
@@ -57,7 +49,6 @@ void KexiDataAwareWidgetInfo::setInlineEditingEnabledWhenDataSourceSet(bool set)
     d->inlineEditingEnabledWhenDataSourceSet = set;
 }
 
-//! @return flag controlling inline editing when data source is set
 bool KexiDataAwareWidgetInfo::inlineEditingEnabledWhenDataSourceSet() const
 {
     return d->inlineEditingEnabledWhenDataSourceSet;

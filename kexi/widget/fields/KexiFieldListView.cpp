@@ -71,19 +71,6 @@ KexiFieldListView::KexiFieldListView(QWidget *parent, KexiFieldListOptions optio
     setDragEnabled(true);
     setDropIndicatorShown(true);
     setAlternatingRowColors(true);
-
-/*    setDropVisualizer(false);
-    setDropHighlighter(true);
-    setAllColumnsShowFocus(true);
-    addColumn(i18n("Field Name"));
-    if (d->options & ShowDataTypes)
-        addColumn(i18n("Data Type"));
-    if (d->options & AllowMultiSelection)
-        setSelectionMode(Q3ListView::Extended);
-    setResizeMode(Q3ListView::LastColumn);
-// header()->hide();
-    setSorting(-1, true); // disable sorting
-*/
     connect(this, SIGNAL(doubleClicked(QModelIndex)),
             this, SLOT(slotDoubleClicked(QModelIndex)));
 }

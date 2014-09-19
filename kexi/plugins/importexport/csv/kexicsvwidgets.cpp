@@ -87,7 +87,6 @@ KexiCSVDelimiterWidget::KexiCSVDelimiterWidget(bool lineEditOnBottom, QWidget * 
 
     d->delimiterEdit = new KLineEdit(this);
     d->delimiterEdit->setObjectName("d->delimiterEdit");
-//  d->delimiterEdit->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)0, (QSizePolicy::SizeType)0, 0, 0, d->delimiterEdit->sizePolicy().hasHeightForWidth() ) );
     d->delimiterEdit->setMaximumSize(QSize(30, 32767));
     d->delimiterEdit->setMaxLength(1);
     lyr->addWidget(d->delimiterEdit);
@@ -218,7 +217,6 @@ KexiCSVInfoLabel::KexiCSVInfoLabel(const QString& labelText, QWidget* parent, bo
     fnameLblSizePolicy.setHorizontalStretch(1);
     d->leftLabel->setSizePolicy(fnameLblSizePolicy);
     d->leftLabel->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
-//    d->leftLabel->setWordWrap(true);
     topbox->addWidget(d->leftLabel, 0, 2, showFnameLine ? 1 : 2, 1);
 
     if (showFnameLine) {
@@ -230,8 +228,6 @@ KexiCSVInfoLabel::KexiCSVInfoLabel(const QString& labelText, QWidget* parent, bo
         QSizePolicy fnameLblSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
         fnameLblSizePolicy.setHorizontalStretch(1);
         d->fnameLbl->setSizePolicy(fnameLblSizePolicy);
-    //    d->fnameLbl->setLineWidth(1);
-    //    d->fnameLbl->setFrameStyle(QFrame::Box);
         d->fnameLbl->setAlignment(Qt::AlignTop | Qt::AlignLeft);
         d->fnameLbl->setWordWrap(true);
         topbox->addWidget(d->fnameLbl, 1, 2); //Qt::AlignVCenter | Qt::AlignLeft);
@@ -246,11 +242,9 @@ KexiCSVInfoLabel::KexiCSVInfoLabel(const QString& labelText, QWidget* parent, bo
     d->commentLbl->setFocusPolicy(Qt::NoFocus);
     d->commentLbl->setTextFormat(Qt::PlainText);
     d->commentLbl->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
-//    d->commentLbl->setLineWidth(1);
-//    d->commentLbl->setFrameStyle(QFrame::Box);
     d->commentLbl->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
     d->commentLbl->setWordWrap(true);
-    topbox->addWidget(d->commentLbl, 0, 3, 2, 1); //, Qt::AlignVCenter | Qt::AlignRight);
+    topbox->addWidget(d->commentLbl, 0, 3, 2, 1);
 
     d->separator = new QFrame(this);
     d->separator->setFrameShape(QFrame::HLine);
@@ -277,9 +271,6 @@ void KexiCSVInfoLabel::setFileName(const QString& fileName)
 void KexiCSVInfoLabel::setLabelText(const QString& text)
 {
     d->leftLabel->setText(text);
-// int lines = d->fnameLbl->lines();
-// d->fnameLbl->setFixedHeight(
-//  QFontMetrics(d->fnameLbl->currentFont()).height() * lines );
 }
 
 void KexiCSVInfoLabel::setIcon(const QString& iconName)
@@ -318,7 +309,8 @@ void KexiCSVInfoLabel::setCommentText(const QString& text)
 QStringList csvMimeTypes()
 {
     QStringList mimetypes;
-    mimetypes << "text/csv" << "text/plain" /*<< "all/allfiles"*/; // use application/octet-stream if you want all files, but then the others are not necessary
+    mimetypes << "text/csv" << "text/plain"; // use application/octet-stream if you want
+                                             // all files, but then the others are not necessary
     return mimetypes;
 }
 

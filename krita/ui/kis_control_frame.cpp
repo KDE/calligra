@@ -59,6 +59,7 @@
 #include "kis_custom_pattern.h"
 #include "widgets/kis_pattern_chooser.h"
 #include "kis_favorite_resource_manager.h"
+#include "kis_display_color_converter.h"
 #include <kis_canvas2.h>
 
 
@@ -95,7 +96,9 @@ KisControlFrame::KisControlFrame(KisView2 * view, const char* name)
     QSharedPointer<KoAbstractResourceServerAdapter> adapter (new KoResourceServerAdapter<KoAbstractGradient>(rserver));
     m_gradientWidget->setResourceAdapter(adapter);
 
-    KoDualColorButton * dual = new KoDualColorButton(view->resourceProvider()->fgColor(), view->resourceProvider()->bgColor(), view, view);
+
+    const KoColorDisplayRendererInterface *displayRenderer = view->canvasBase()->displayColorConverter()->displayRendererInterface();
+    KoDualColorButton * dual = new KoDualColorButton(view->resourceProvider()->fgColor(), view->resourceProvider()->bgColor(), displayRenderer, view, view);
     dual->setPopDialog(true);
     action  = new KAction(i18n("&Color"), this);
     view->actionCollection()->addAction("dual", action);
@@ -183,7 +186,7 @@ void KisControlFrame::createGradientsChooser(KisView2 * view)
     m_gradientTab->setFont(m_font);
     l2->addWidget(m_gradientTab);
 
-    m_gradientChooser = new KisGradientChooser(m_view, m_gradientChooserPopup);
+    m_gradientChooser = new KisGradientChooser(m_gradientChooserPopup);
     m_gradientChooser->setFont(m_font);
     m_gradientTab->addTab(m_gradientChooser, i18n("Gradients"));
 

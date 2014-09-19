@@ -15,7 +15,7 @@ install(TARGETS calligra_filter_eps2svgai  DESTINATION ${PLUGIN_INSTALL_DIR})
 install(FILES
     calligra_filter_eps2svgai.desktop
     #karbon_ps_import.desktop
-    DESTINATION ${SERVICES_INSTALL_DIR}
+    DESTINATION ${SERVICES_INSTALL_DIR}/calligra
 )
 
 endif (PSTOEDIT_SVG_PLUGIN_FOUND)

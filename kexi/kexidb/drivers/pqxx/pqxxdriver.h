@@ -21,8 +21,6 @@
 #define KEXIDB_DRIVER_PQXX_H
 
 #include <db/driver.h>
-//#include <pqxx/connection>
-//#include <pqxx/nontransaction>
 
 namespace KexiDB
 {
@@ -36,7 +34,7 @@ class pqxxSqlDriver : public Driver
     KEXIDB_DRIVER
 
 public:
-    pqxxSqlDriver(QObject *parent, const QVariantList &args = QVariantList());
+    explicit pqxxSqlDriver(QObject *parent, const QVariantList &args = QVariantList());
     ~pqxxSqlDriver();
 
     virtual bool isSystemObjectName(const QString& n)const;
@@ -63,9 +61,6 @@ protected:
 
 private:
     static const char *keywords[];
-    //pqxx::nullconnection _internalConn;
-    //pqxx::nontransaction *_internalWork;
-    
 };
 
 }

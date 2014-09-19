@@ -103,6 +103,10 @@ void ImageItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option,
     
     if(isSelected())
     {
+        painter->setCompositionMode(QPainter::CompositionMode_HardLight);
+        painter->setOpacity(0.50);
+        painter->fillRect(boundingRect().toRect(), palette().color(QPalette::Active, QPalette::Highlight));
+        painter->setCompositionMode(QPainter::CompositionMode_SourceOver);
         QPen pen(palette().color(QPalette::Active, QPalette::Highlight), 3);
         painter->setPen(pen);
     }
@@ -120,7 +124,15 @@ QSizeF ImageItem::sizeHint(Qt::SizeHint /*which*/, const QSizeF& /*constraint*/)
 // ------------- ImageStripScene ------------------------------------------------------ //
 
 ImageStripScene::ImageStripScene():
-    m_imgSize(80), m_loader(0) { }
+    m_imgSize(80)
+  , m_loader(0)
+{
+}
+
+ImageStripScene::~ImageStripScene()
+{
+    delete m_loader;
+}
 
 bool ImageStripScene::setCurrentDirectory(const QString& path)
 {

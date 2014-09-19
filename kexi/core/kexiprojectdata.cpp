@@ -131,10 +131,6 @@ KexiProjectData::KexiProjectData(const KexiProjectData& pdata)
     setObjectName("KexiProjectData");
     *this = pdata;
     autoopenObjects = pdata.autoopenObjects;
-    /*
-      d->connData = *pdata.connectionData();
-      setDatabaseName(pdata.databaseName());
-      setCaption(pdata.caption());*/
 }
 
 KexiProjectData::~KexiProjectData()
@@ -144,16 +140,11 @@ KexiProjectData::~KexiProjectData()
 
 KexiProjectData& KexiProjectData::operator=(const KexiProjectData & pdata)
 {
-//    delete d; //this is old
     static_cast<KexiDB::SchemaData&>(*this) = static_cast<const KexiDB::SchemaData&>(pdata);
     //deep copy
     autoopenObjects = pdata.autoopenObjects;
     formatVersion = pdata.formatVersion;
     *d = *pdata.d;
-// d->connData = *pdata.constConnectionData();
-// setDatabaseName(pdata.databaseName());
-// setCaption(pdata.caption());
-// setDescription(pdata.description());
     return *this;
 }
 
@@ -229,11 +220,7 @@ bool KexiProjectData::isReadOnly() const
 
 bool KexiProjectData::load(const QString& fileName, QString* _groupKey)
 {
-#ifdef __GNUC__
-#warning KexiProjectData::load: how about readOnly arg?
-#else
-#pragma WARNING( KexiProjectData::load: how about readOnly arg? )
-#endif
+    //! @todo how about readOnly arg?
     KConfig config(fileName, KConfig::SimpleConfig);
     KConfigGroup cg = config.group("File Information");
     uint _formatVersion = cg.readEntry("version", KEXIPROJECTDATA_FORMAT);
@@ -248,7 +235,7 @@ bool KexiProjectData::load(const QString& fileName, QString* _groupKey)
             }
         }
         if (groupKey.isEmpty()) {
-            //ERR: "File %1 contains no connection information"
+            //! @todo ERR: "File %1 contains no connection information"
             return false;
         }
         if (_groupKey)
@@ -268,13 +255,13 @@ bool KexiProjectData::load(const QString& fileName, QString* _groupKey)
     } else if (type == "connection") {
         isDatabaseShortcut = false;
     } else {
-        //ERR: i18n("No valid "type" field specified for section \"%1\": unknown value \"%2\".").arg(group).arg(type)
+        //! @todo ERR: i18n("No valid "type" field specified for section \"%1\": unknown value \"%2\".").arg(group).arg(type)
         return false;
     }
 
     QString driverName = cg.readEntry("engine").toLower();
     if (driverName.isEmpty()) {
-        //ERR: "No valid "engine" field specified for %1 section" group
+        //! @todo ERR: "No valid "engine" field specified for %1 section" group
         return false;
     }
     
@@ -286,7 +273,7 @@ bool KexiProjectData::load(const QString& fileName, QString* _groupKey)
         KexiDB::DriverManager driverManager;
         const KexiDB::Driver::Info dinfo = driverManager.driverInfo(d->connData.driverName);
         if (dinfo.name.isEmpty()) {
-            //ERR: "No valid driver for "engine" found
+            //! @todo ERR: "No valid driver for "engine" found
             return false;
         }
         const bool fileBased = dinfo.fileBased
@@ -334,7 +321,6 @@ bool KexiProjectData::load(const QString& fileName, QString* _groupKey)
         //UNSAFE
         d->connData.password = cg.readEntry("password");
     }
-// data.connectionData()->savePassword = !data.connectionData()->password.isEmpty();
     d->connData.userName = cg.readEntry("user");
     QString lastOpenedStr(cg.readEntry("lastOpened"));
     if (!lastOpenedStr.isEmpty()) {
@@ -343,18 +329,14 @@ bool KexiProjectData::load(const QString& fileName, QString* _groupKey)
             setLastOpened(lastOpened);
         }
     }
-    /* @todo add "options=", eg. as string list? */
+    /*! @todo add "options=", eg. as string list? */
     return true;
 }
 
 bool KexiProjectData::save(const QString& fileName, bool savePassword,
                            QString* _groupKey, bool overwriteFirstGroup)
 {
-#ifdef __GNUC__
-#warning KexiProjectData::save: how about readOnly arg?
-#else
-#pragma WARNING( KexiProjectData::save: how about readOnly arg? )
-#endif
+    //! @todo how about readOnly arg?
     KConfig config(fileName, KConfig::SimpleConfig);
     KConfigGroup cg = config.group("File Information");
 
@@ -373,7 +355,6 @@ bool KexiProjectData::save(const QString& fileName, bool savePassword,
         QString groupPrefix;
         const QStringList groups(config.groupList());
         if (overwriteFirstGroup && !groups.isEmpty()) {
-//   groupKey = groups.first(); //found
             foreach(const QString &s, groups) {
                 if (s.toLower() != "file information") {
                     groupKey = s;
@@ -458,9 +439,14 @@ bool KexiProjectData::save(const QString& fileName, bool savePassword,
         cg.writeEntry("lastOpened", lastOpened().toString(Qt::ISODate));
     }
 
-    /* @todo add "options=", eg. as string list? */
+    /*! @todo add "options=", eg. as string list? */
     cg.sync();
     return true;
+}
+
+QString KexiProjectData::name() const
+{
+    return KexiDB::SchemaData::name();
 }
 
 KEXICORE_EXPORT QDebug operator<<(QDebug dbg, const KexiProjectData& d)

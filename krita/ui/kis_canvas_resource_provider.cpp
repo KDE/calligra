@@ -79,6 +79,7 @@ void KisCanvasResourceProvider::setResourceManager(KoCanvasResourceManager *reso
 
     m_resourceManager->setResource(HdrExposure, 0.0);
     m_resourceManager->setResource(HdrGamma, 1.0);
+    m_resourceManager->setResource(EffectiveZoom, 1.0);
 
     connect(m_resourceManager, SIGNAL(canvasResourceChanged(int,QVariant)),
             this, SLOT(slotCanvasResourceChanged(int,QVariant)));
@@ -233,7 +234,6 @@ void KisCanvasResourceProvider::slotGradientActivated(KoResource *res)
 
 void KisCanvasResourceProvider::setBGColor(const KoColor& c)
 {
-
     QVariant v;
     v.setValue(c);
     m_resourceManager->setResource(KoCanvasResourceManager::BackgroundColor, v);
@@ -397,6 +397,7 @@ void KisCanvasResourceProvider::clearPerspectiveGrids()
 void KisCanvasResourceProvider::setMirrorHorizontal(bool mirrorHorizontal)
 {
     m_resourceManager->setResource(MirrorHorizontal, mirrorHorizontal);
+    emit mirrorModeChanged();
 }
 
 bool KisCanvasResourceProvider::mirrorHorizontal() const
@@ -407,6 +408,7 @@ bool KisCanvasResourceProvider::mirrorHorizontal() const
 void KisCanvasResourceProvider::setMirrorVertical(bool mirrorVertical)
 {
     m_resourceManager->setResource(MirrorVertical, mirrorVertical);
+    emit mirrorModeChanged();
 }
 
 bool KisCanvasResourceProvider::mirrorVertical() const

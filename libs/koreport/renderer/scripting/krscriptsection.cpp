@@ -44,7 +44,7 @@ QColor Section::backgroundColor()
 
 void   Section::setBackgroundColor(const QColor &c)
 {
-    kDebug() << c.name();
+    //kDebug() << c.name();
     m_section->m_backgroundColor->setValue(c);
 }
 
@@ -65,7 +65,7 @@ QString Section::name()
 
 QObject* Section::objectByNumber(int i)
 {
-    if (m_section->m_objects[i]->typeName() == "report:line") {
+    if (m_section->m_objects[i]->typeName() == "line") {
                 return new Scripting::Line(dynamic_cast<KoReportItemLine*>(m_section->m_objects[i]));
     }
     else {
@@ -78,7 +78,7 @@ QObject* Section::objectByNumber(int i)
             }
         }
         else {
-            kDebug() << "Encountered unknown node while parsing section: " << m_section->m_objects[i]->typeName();
+            kWarning() << "Encountered unknown node while parsing section: " << m_section->m_objects[i]->typeName();
         }
     }
 

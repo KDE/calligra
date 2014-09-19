@@ -27,8 +27,8 @@ class TestIdentifier : public QObject
     Q_OBJECT
 private Q_SLOTS:
     void initTestCase();
-    //TODO void testStringToIdentifier_data();
-    //TODO void testStringToIdentifier();
+    //! @todo void testStringToIdentifier_data();
+    //! @todo void testStringToIdentifier();
     void cleanupTestCase();
 };
 

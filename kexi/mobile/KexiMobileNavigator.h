@@ -25,7 +25,7 @@
 
 #include <QWidget>
 #include <QHBoxLayout>
-#include <KexiProjectNavigator.h>
+#include <widget/navigator/KexiProjectNavigator.h>
 
 class KexiProjectModel;
 class KexiProject;

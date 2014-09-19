@@ -31,7 +31,6 @@
 #include "kis_shared.h"
 
 #include "canvas/kis_update_info.h"
-#include "opengl/kis_texture_tile_update_info.h"
 #include "opengl/kis_texture_tile.h"
 
 class KisOpenGLImageTextures;
@@ -53,7 +52,7 @@ public:
      * @param monitorProfile The profile of the display device
      */
     static KisOpenGLImageTexturesSP getImageTextures(KisImageWSP image,
-                                                     KoColorProfile *monitorProfile, KoColorConversionTransformation::Intent renderingIntent,
+                                                     const KoColorProfile *monitorProfile, KoColorConversionTransformation::Intent renderingIntent,
                                                      KoColorConversionTransformation::ConversionFlags conversionFlags);
 
     /**
@@ -76,6 +75,9 @@ public:
 
     void setChannelFlags(const QBitArray &channelFlags);
 
+    bool internalColorManagementActive() const;
+    bool setInternalColorManagementActive(bool value);
+
     /**
      * The background checkers texture.
      */
@@ -88,6 +90,8 @@ public:
      */
     void generateCheckerTexture(const QImage & checkImage);
     GLuint checkerTexture() const;
+
+    void updateConfig(bool useBuffer, int NumMipmapLevels);
 
 public:
     inline QRect storedImageBounds() {
@@ -128,7 +132,7 @@ public slots:
 
 protected:
 
-    KisOpenGLImageTextures(KisImageWSP image, KoColorProfile *monitorProfile,
+    KisOpenGLImageTextures(KisImageWSP image, const KoColorProfile *monitorProfile,
                            KoColorConversionTransformation::Intent renderingIntent,
                            KoColorConversionTransformation::ConversionFlags conversionFlags);
 
@@ -145,7 +149,6 @@ private:
     static void getTextureSize(KisGLTexturesInfo *texturesInfo);
 
     void updateTextureFormat();
-    const KoColorSpace* tilesColorSpace() const;
 
 private:
     KisImageWSP m_image;
@@ -153,6 +156,22 @@ private:
     const KoColorProfile *m_monitorProfile;
     KoColorConversionTransformation::Intent m_renderingIntent;
     KoColorConversionTransformation::ConversionFlags m_conversionFlags;
+
+    /**
+     * If the destination color space coincides with the one of the image,
+     * then effectively, there is no conversion happens. That is used
+     * for working with OCIO.
+     */
+    const KoColorSpace* m_tilesDestinationColorSpace;
+
+    /**
+     * Shows whether the internal color management should be enabled or not.
+     * Please note that if you disable color management, *but* your image color
+     * space will not be supported (non-RGB), then it will be enabled anyway.
+     * And this valiable will hold the real state of affairs!
+     */
+    bool m_internalColorManagementActive;
+
     GLuint m_checkerTexture;
 
     KisGLTexturesInfo m_texturesInfo;

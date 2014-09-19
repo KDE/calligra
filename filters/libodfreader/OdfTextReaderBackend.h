@@ -63,8 +63,14 @@ class KOODFREADER_EXPORT OdfTextReaderBackend
     // ----------------------------------------------------------------
     // Text level functions: paragraphs, headings, sections, frames, objects, etc
 
+    virtual void elementOfficeAnnotation(KoXmlStreamReader &reader, OdfReaderContext *context);
+    virtual void elementOfficeAnnotationEnd(KoXmlStreamReader &reader, OdfReaderContext *context);
+    virtual void elementDcCreator(KoXmlStreamReader &reader, OdfReaderContext *context);
+    virtual void elementDcDate(KoXmlStreamReader &reader, OdfReaderContext *context);
+
     virtual void elementTextH(KoXmlStreamReader &reader, OdfReaderContext *context);
     virtual void elementTextP(KoXmlStreamReader &reader, OdfReaderContext *context);
+    virtual void elementTextList(KoXmlStreamReader &reader, OdfReaderContext *context);
 
     virtual void elementTableTable(KoXmlStreamReader &reader, OdfReaderContext *context);
     virtual void elementTableTableColumn(KoXmlStreamReader &reader, OdfReaderContext *context);
@@ -78,9 +84,15 @@ class KOODFREADER_EXPORT OdfTextReaderBackend
     // This includes text content itself.
 
     virtual void elementTextA(KoXmlStreamReader &reader, OdfReaderContext *context);
+    virtual void elementTextLineBreak(KoXmlStreamReader &reader, OdfReaderContext *context);
     virtual void elementTextSpan(KoXmlStreamReader &reader, OdfReaderContext *context);
     virtual void elementTextS(KoXmlStreamReader &reader, OdfReaderContext *context);
 
+    // ----------------------------------------------------------------
+    // List level functions: list-header and list-item.
+
+    virtual void elementTextListHeader(KoXmlStreamReader &reader, OdfReaderContext *context);
+    virtual void elementTextListItem(KoXmlStreamReader &reader, OdfReaderContext *context);
     virtual void elementTextSoftPageBreak(KoXmlStreamReader &reader, OdfReaderContext *context);
 
     virtual void characterData(KoXmlStreamReader &reader, OdfReaderContext *context);

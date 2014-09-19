@@ -510,8 +510,9 @@ void GlobalsSubStreamHandler::handleRecord(Record* record)
         handleWindow1(static_cast<Window1Record*>(record));
     else if (type == PasswordRecord::id)
         handlePassword(static_cast<PasswordRecord*>(record));
+    else if (type == DateModeRecord::id)
+        handleDateMode(static_cast<DateModeRecord*>(record));
     else if (type == 0x40) {} //BackupRecord
-    else if (type == 0x22) {} //Date1904Record
     else if (type == 0xA) {} //EofRecord
     //else if (type == 0xEC) Q_ASSERT(false); // MsoDrawing
     else {
@@ -562,9 +563,10 @@ void GlobalsSubStreamHandler::handleDateMode(DateModeRecord* record)
 {
     if (!record) return;
 
-    // FIXME FIXME what to do ??
     if (record->isBase1904())
-        std::cerr << "WARNING: Workbook uses unsupported 1904 Date System " << std::endl;
+        d->workbook->setBaseDate(QDateTime(QDate(1904, 1, 1)));
+    else
+        d->workbook->setBaseDate(QDateTime(QDate(1899, 12, 30)));
 }
 
 void GlobalsSubStreamHandler::handleExternBook(ExternBookRecord* record)

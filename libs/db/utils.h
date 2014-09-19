@@ -540,7 +540,10 @@ public:
     ~StaticSetOfStrings();
     void setStrings(const char* array[]);
     bool isEmpty() const;
+
+    //! @return true if @a string can be found within set, comparison is case sensitive
     bool contains(const QByteArray& string) const;
+
 private:
     class Private;
     Private * const d;
@@ -617,5 +620,11 @@ T iifNotEmpty(const T& string, const QByteArray& stringIfEmpty)
 }
 
 } // namespace KexiDB
+
+//! Macros to use in drivers to avoid redundant translations.
+#define kexidb_i18n i18n
+#define kexidb_i18nc i18nc
+#define kexidb_i18np i18np
+#define kexidb_i18ncp i18ncp
 
 #endif

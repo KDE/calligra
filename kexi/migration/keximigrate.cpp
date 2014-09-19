@@ -56,9 +56,6 @@ public:
     //! Migrate Options
     KexiMigration::Data* migrateData;
 
-//   // Temporary values used during import (set by driver specific methods)
-//   KexiDB::Field* f;
-
     /*! Driver properties dictionary (indexed by name),
      useful for presenting properties to the user.
      Set available properties here in driver implementation. */
@@ -144,7 +141,7 @@ bool KexiMigrate::checkIfDestinationDatabaseOverwritingNeedsAccepting(Kexi::Obje
     if (destDriver->isFileDriver())
         return true; //nothing to check
     KexiDB::Connection *tmpConn
-    = destDriver->createConnection(*d->migrateData->destination->connectionData());
+        = destDriver->createConnection(*d->migrateData->destination->connectionData());
     if (!tmpConn || destDriver->error() || !tmpConn->connect()) {
         delete tmpConn;
         return true;
@@ -192,7 +189,7 @@ bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
     QStringList tables;
 
     // Step 1 - connect
-    kDebug() << "KexiMigrate::performImport() CONNECTING...";
+    kDebug() << "CONNECTING...";
     if (!drv_connect()) {
         kDebug() << "Couldnt connect to database server";
         if (result)
@@ -507,8 +504,7 @@ bool KexiMigrate::progressInitialise()
     int tableNumber = 1;
     foreach(const QString& tableName, tables) {
         if (drv_getTableSize(tableName, size)) {
-            kDebug() << "KexiMigrate::progressInitialise() - table: " << tableName
-            << "size: " << (ulong)size;
+            kDebug() << "table:" << tableName << "size: " << (ulong)size;
             sum += size;
             emit progressPercent(tableNumber * 5 /* 5% */ / tables.count());
             tableNumber++;
@@ -517,7 +513,7 @@ bool KexiMigrate::progressInitialise()
         }
     }
 
-    kDebug() << "KexiMigrate::progressInitialise() - job size: " << (ulong)sum;
+    kDebug() << "job size:" << (ulong)sum;
     d->progressTotal = sum;
     d->progressTotal += tables.count() * NUM_OF_ROWS_PER_CREATE_TABLE;
     d->progressTotal = d->progressTotal * 105 / 100; //add 5 percent for above task 1)
@@ -533,9 +529,9 @@ void KexiMigrate::updateProgress(qulonglong step)
     if (d->progressDone >= d->progressNextReport) {
         int percent = (d->progressDone + 1) * 100 / d->progressTotal;
         d->progressNextReport = ((percent + 1) * d->progressTotal) / 100;
-        kDebug() << "KexiMigrate::updateProgress(): " << (ulong)d->progressDone << "/"
-        << (ulong)d->progressTotal << " (" << percent << "%) next report at "
-        << (ulong)d->progressNextReport;
+        kDebug() << (ulong)d->progressDone << "/"
+            << (ulong)d->progressTotal << " (" << percent << "%) next report at"
+            << (ulong)d->progressNextReport;
         emit progressPercent(percent);
     }
 }
@@ -547,9 +543,9 @@ KexiDB::Field::Type KexiMigrate::userType(const QString& fname)
     const QStringList typeNames(KexiDB::Field::typeNames());
     bool ok;
     const QString res(KInputDialog::getItem(i18n("Field Type"),
-                                            i18n("The data type for %1 could not be determined. "
-                                                 "Please select one of the following data types", fname),
-                                            typeNames, 0, false/*!editable*/, &ok));
+        i18n("The data type for field <resource>%1</resource> could not be determined. "
+             "Please select one of the following data types.", fname),
+        typeNames, 0, false/*!editable*/, &ok));
 
     if (!ok || res.isEmpty())
 //! @todo OK?

@@ -1,4 +1,6 @@
 #! /bin/sh
+source ../../../calligra_xgettext.sh
+
 $EXTRACTRC *.rc *.ui >> rc.cpp
-$XGETTEXT `find . -name \*.cpp ` -o $podir/keximigrate_spreadsheet.pot
+calligra_xgettext keximigrate_spreadsheet.pot `find . -name \*.cpp`
 rm -f rc.cpp

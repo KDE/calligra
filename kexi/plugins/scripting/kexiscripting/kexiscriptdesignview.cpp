@@ -34,7 +34,6 @@
 #include <QTimer>
 #include <QDateTime>
 #include <QDomDocument>
-#include <q3stylesheet.h>
 #include <ktextbrowser.h>
 #include <kfiledialog.h>
 #include <kmenu.h>
@@ -42,7 +41,6 @@
 #include <kdebug.h>
 
 #include <KexiMainWindowIface.h>
-//#include <kexidialogbase.h>
 #include <db/connection.h>
 #include <QTextDocument>
 
@@ -106,9 +104,6 @@ KexiScriptDesignView::KexiScriptDesignView(
     d->splitter->setStretchFactor(d->splitter->indexOf(d->statusbrowser), 1);
     d->statusbrowser->setObjectName("ScriptStatusBrowser");
     d->statusbrowser->setReadOnly(true);
-#if 0
-    d->statusbrowser->setTextFormat(Q3TextBrowser::RichText);
-#endif
     //d->browser->setWordWrap(QTextEdit::WidgetWidth);
     d->statusbrowser->installEventFilter(this);
 
@@ -479,7 +474,7 @@ tristate KexiScriptDesignView::storeData(bool /*dontAsk*/)
 
     QString language = d->scriptaction->interpreter();
     scriptelem.setAttribute("language", language);
-    //TODO move different types to their own part??
+    //! @todo move different types to their own part??
     scriptelem.setAttribute("scripttype", d->scriptType);
 
     Kross::InterpreterInfo* info = Kross::Manager::self().interpreterInfo(language);

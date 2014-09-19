@@ -114,8 +114,6 @@ void KexiReportPart::initPartActions()
 
 QString KexiReportPart::loadReport(const QString& name)
 {
-    //_internal->_reportName = pReportName;
-
     KexiMainWindowIface *win = KexiMainWindowIface::global();
     KexiDB::Connection *conn;
     if (!win || !win->project() || !((conn = win->project()->dbConnection()))) {

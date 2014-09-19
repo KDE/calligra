@@ -72,8 +72,10 @@ void KoOdfGraphicProperties::clear()
 
 bool KoOdfGraphicProperties::readOdf(KoXmlStreamReader &reader)
 {
-    // The element graphic-properties has no children.
     bool retval = readAttributes(reader);
+    if (!retval) {
+        return false;
+    }
 
     // Load child elements.  For graphic-properties, these are:
     //  - style:background-image

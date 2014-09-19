@@ -35,7 +35,6 @@ public:
 
 FormWidget::Private::Private() : form(0)
 {
-
 }
 
 FormWidget::Private::~Private()

@@ -30,7 +30,7 @@ class KEXIEXTWIDGETS_EXPORT KexiDBTitlePage : public QWidget, public Ui_KexiDBTi
 public:
     //! Constructs title page. \a labelText can be provided to change default
     //! "Project caption:" label.
-    KexiDBTitlePage(const QString& labelText, QWidget* parent = 0);
+    explicit KexiDBTitlePage(const QString& labelText, QWidget* parent = 0);
     ~KexiDBTitlePage();
 };
 

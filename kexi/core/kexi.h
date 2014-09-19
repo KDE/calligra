@@ -24,10 +24,8 @@
 
 #include <kexi_version.h>
 #include "kexiprojectdata.h"
-#include "kexipartmanager.h"
 #include "kexidbconnectionset.h"
 #include "kexiprojectset.h"
-#include <db/drivermanager.h>
 #include <db/driver.h>
 
 #include <klocale.h>
@@ -37,6 +35,16 @@ class QLabel;
 class KAboutData;
 class KexiRecentProjects;
 
+namespace KexiPart
+{
+class Manager;
+}
+
+namespace KexiDB
+{
+class DriverManager;
+}
+
 namespace Kexi
 {
 KEXICORE_EXPORT void initCmdLineArgs(int argc, char *argv[], const KAboutData& aboutData);
@@ -44,11 +52,11 @@ KEXICORE_EXPORT void initCmdLineArgs(int argc, char *argv[], const KAboutData& a
 /*! Modes of view for the dialogs. Used mostly for parts and KexiWindow. */
 enum ViewMode {
     AllViewModes = 0, //!< Usable primarily in KexiPart::initInstanceActions()
-    NoViewMode = 0, //!< In KexiView::afterSwitchFrom() and KexiView::beforeSwitchTo()
-    //!< means that parent dialog of the view has not yet view defined.
+    NoViewMode = 0,   //!< In KexiView::afterSwitchFrom() and KexiView::beforeSwitchTo()
+                      //!< means that parent dialog of the view has not been defined yet.
     DataViewMode = 1,
     DesignViewMode = 2,
-    TextViewMode = 4 //!< Also known as SQL View Mode
+    TextViewMode = 4  //!< Also known as SQL View Mode
 };
 Q_DECLARE_FLAGS(ViewModes, ViewMode)
 

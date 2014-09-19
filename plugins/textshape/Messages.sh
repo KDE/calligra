@@ -1,4 +1,6 @@
 #! /bin/sh
+source ../../calligra_xgettext.sh
+
 $EXTRACTRC `find . -name \*.ui` >> rc.cpp || exit 11
-$XGETTEXT `find . -name \*.cpp ` -o $podir/TextShape.pot
+calligra_xgettext TextShape.pot `find . -name \*.cpp`
 rm -f rc.cpp

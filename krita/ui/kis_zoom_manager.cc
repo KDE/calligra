@@ -48,6 +48,9 @@
 #include "kis_image.h"
 #include "kis_statusbar.h"
 #include "kis_config.h"
+#include "krita_utils.h"
+#include "kis_canvas_resource_provider.h"
+
 
 class KisZoomController : public KoZoomController
 {
@@ -180,6 +183,9 @@ void KisZoomManager::setup(KActionCollection * actionCollection)
 
     connect(m_zoomController, SIGNAL(aspectModeChanged(bool)),
             this, SLOT(changeAspectMode(bool)));
+
+    applyRulersUnit(m_view->document()->unit());
+
 }
 
 void KisZoomManager::mousePositionChanged(const QPoint &viewPos)
@@ -220,6 +226,24 @@ void KisZoomManager::slotZoomChanged(KoZoomMode::Mode mode, qreal zoom)
     Q_UNUSED(zoom);
 
     m_view->canvasBase()->notifyZoomChanged();
+
+    qreal humanZoom = zoom * 100.0;
+
+    m_view->
+        showFloatingMessage(
+            i18nc("floating message about zoom", "Zoom: %1 \%",
+                  KritaUtils::prettyFormatReal(humanZoom)),
+            QIcon(), 500, KisFloatingMessage::Low, Qt::AlignCenter);
+
+    qreal scaleX, scaleY;
+    m_view->canvasBase()->coordinatesConverter()->imageScale(&scaleX, &scaleY);
+
+    if (scaleX != scaleY) {
+        qWarning() << "WARNING: Zoom is not isotropic!"  << ppVar(scaleX) << ppVar(scaleY) << ppVar(qFuzzyCompare(scaleX, scaleY));
+    }
+
+    qreal effectiveZoom = 0.5 * (scaleX, scaleY);
+    m_view->canvasBase()->resourceManager()->setResource(KisCanvasResourceProvider::EffectiveZoom, effectiveZoom);
 }
 
 void KisZoomManager::slotScrollAreaSizeChanged()

@@ -62,8 +62,14 @@ OdtReaderAsciiBackend::~OdtReaderAsciiBackend()
 void OdtReaderAsciiBackend::elementTextH(KoXmlStreamReader &reader, OdfReaderContext *context)
 {
     DEBUG_BACKEND();
-    Q_UNUSED(reader);
-    Q_UNUSED(context);
+    if (!reader.isEndElement())
+        return;
+
+    OdfReaderAsciiContext *asciiContext = dynamic_cast<OdfReaderAsciiContext*>(context);
+    Q_ASSERT(asciiContext);
+
+    // At the end of a paragraph (headers also), output two newlines.
+    asciiContext->outStream << "\n\n";
 }
 
 void OdtReaderAsciiBackend::elementTextP(KoXmlStreamReader &reader, OdfReaderContext *context)
@@ -73,9 +79,7 @@ void OdtReaderAsciiBackend::elementTextP(KoXmlStreamReader &reader, OdfReaderCon
         return;
 
     OdfReaderAsciiContext *asciiContext = dynamic_cast<OdfReaderAsciiContext*>(context);
-    if (!asciiContext) {
-        return;
-    }
+    Q_ASSERT(asciiContext);
 
     // At the end of a paragraph, output two newlines.
     asciiContext->outStream << "\n\n";
@@ -85,11 +89,17 @@ void OdtReaderAsciiBackend::elementTextP(KoXmlStreamReader &reader, OdfReaderCon
 // ----------------------------------------------------------------
 // Paragraph level functions: spans, annotations, notes, text content itself, etc.
 
-void OdtReaderAsciiBackend::elementTextSpan(KoXmlStreamReader &reader, OdfReaderContext *context)
+
+void OdtReaderAsciiBackend::elementTextLineBreak(KoXmlStreamReader &reader, OdfReaderContext *context)
 {
     DEBUG_BACKEND();
-    Q_UNUSED(reader);
-    Q_UNUSED(context);
+    if (!reader.isStartElement())
+        return;
+
+    OdfReaderAsciiContext *asciiContext = dynamic_cast<OdfReaderAsciiContext*>(context);
+    Q_ASSERT(asciiContext);
+
+    asciiContext->outStream << '\n';
 }
 
 void OdtReaderAsciiBackend::elementTextS(KoXmlStreamReader &reader, OdfReaderContext *context)
@@ -99,20 +109,25 @@ void OdtReaderAsciiBackend::elementTextS(KoXmlStreamReader &reader, OdfReaderCon
         return;
 
     OdfReaderAsciiContext *asciiContext = dynamic_cast<OdfReaderAsciiContext*>(context);
-    if (!asciiContext) {
-        return;
-    }
+    Q_ASSERT(asciiContext);
 
-#if 0
-    QString dummy = element.attribute("text:c", "1");
+    QString dummy = reader.attributes().value("text:c").toString();
     bool ok;
-    int  numSpaces = dummy.toUInt(&ok);
+    quint32  numSpaces = dummy.toUInt(&ok);
     if (!ok) 
         numSpaces = 1;
 
-    // At the end of a paragraph, output two newlines.
-    asciiContext->outStream << "\n\n";
-#endif
+    // Output the required number of spaces.
+    for (quint32 i = 0; i < numSpaces; ++i) {
+        asciiContext->outStream << ' ';
+    }
+}
+
+void OdtReaderAsciiBackend::elementTextSpan(KoXmlStreamReader &reader, OdfReaderContext *context)
+{
+    DEBUG_BACKEND();
+    Q_UNUSED(reader);
+    Q_UNUSED(context);
 }
 
 
@@ -120,10 +135,7 @@ void OdtReaderAsciiBackend::characterData(KoXmlStreamReader &reader, OdfReaderCo
 {
     DEBUG_BACKEND();
     OdfReaderAsciiContext *asciiContext = dynamic_cast<OdfReaderAsciiContext*>(context);
-    if (!asciiContext) {
-        return;
-    }
-    //kDebug(30503) << reader.text().toString();
+    Q_ASSERT(asciiContext);
 
     asciiContext->outStream << reader.text().toString();
 }

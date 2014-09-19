@@ -41,7 +41,7 @@ class KexiComboBoxTableEdit : public KexiInputTableEdit, virtual public KexiComb
     Q_OBJECT
 
 public:
-    KexiComboBoxTableEdit(KexiDB::TableViewColumn &column, QWidget *parent = 0);
+    explicit KexiComboBoxTableEdit(KexiDB::TableViewColumn &column, QWidget *parent = 0);
     virtual ~KexiComboBoxTableEdit();
 
     //! Implemented for KexiComboBoxBase

@@ -87,12 +87,13 @@ KisDlgLayerProperties::KisDlgLayerProperties(KisLayerSP layer, KisView2 *view, K
     d->compositeOp = layer->compositeOp();
     d->channelFlags = layer->channelFlags();
     d->opacity = layer->opacity();
-    
+
     quint8 sliderOpacity = int((d->opacity * 100.0) / 255 + 0.5);
 
     setMainWidget(m_page);
 
     m_page->editName->setText(d->deviceName);
+    m_page->editName->setFocus();
     connect(m_page->editName, SIGNAL(textChanged(const QString &)), this, SLOT(slotNameChanged(const QString &)));
 
     m_page->lblColorSpace->setText(d->colorSpace->name());
@@ -136,6 +137,8 @@ KisDlgLayerProperties::~KisDlgLayerProperties()
         m_doc->setModified(true);
         m_layer->setDirty();
     }
+
+    delete d;
 }
 
 bool KisDlgLayerProperties::haveChanges() const
@@ -168,9 +171,9 @@ void KisDlgLayerProperties::updatePreview()
 void KisDlgLayerProperties::applyNewProperties()
 {
     if (!m_layer) return;
-    
+
     cleanPreviewChanges();
-    
+
     if (haveChanges()) {
         QApplication::setOverrideCursor(KisCursor::waitCursor());
         KUndo2Command *change = new KisLayerPropsCommand(m_layer,

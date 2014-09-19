@@ -41,7 +41,6 @@
 // KDE
 #include <krun.h>
 #include <kimageio.h>
-#include <kfiledialog.h>
 #include <kglobal.h>
 #include <kmimetype.h>
 #include <klocale.h>
@@ -156,6 +155,7 @@ KisDoc2::KisDoc2(KisPart2 *part)
     : KoDocument(part, new UndoStack(this))
     , m_d(new KisDocPrivate())
 {
+    Q_ASSERT(part);
     qobject_cast<KisPart2*>(documentPart())->setDocument(this);
     // preload the krita resources
     KisResourceServerProvider::instance();
@@ -251,7 +251,7 @@ QDomDocument KisDoc2::saveXML()
 
     root.appendChild(m_d->kraSaver->saveXML(doc, m_d->image));
     if (!m_d->kraSaver->errorMessages().isEmpty()) {
-        setErrorMessage(m_d->kraLoader->errorMessages().join(".\n"));
+        setErrorMessage(m_d->kraSaver->errorMessages().join(".\n"));
     }
 
     return doc;
@@ -272,7 +272,7 @@ bool KisDoc2::saveOdf(SavingContext &documentContext)
     return false;
 }
 
-bool KisDoc2::loadXML(const KoXmlDocument& doc, KoStore *store)
+bool KisDoc2::loadXML(const KoXmlDocument& doc, KoStore */*store*/)
 {
     if (m_d->image) {
         m_d->shapeController->setImage(0);
@@ -342,9 +342,10 @@ bool KisDoc2::completeSaving(KoStore *store)
 {
     QString uri = url().url();
 
-    m_d->kraSaver->saveBinaryData(store, m_d->image, url().url(), isStoredExtern());
+    m_d->kraSaver->saveBinaryData(store, m_d->image, url().url(), isStoredExtern(), isAutosaving());
+
     if (!m_d->kraSaver->errorMessages().isEmpty()) {
-        setErrorMessage(m_d->kraLoader->errorMessages().join(".\n"));
+        setErrorMessage(m_d->kraSaver->errorMessages().join(".\n"));
         return false;
     }
 

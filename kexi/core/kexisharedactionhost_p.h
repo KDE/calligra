@@ -23,8 +23,6 @@
 #include <QObject>
 #include <QSignalMapper>
 
-//#include <kxmlguiwindow.h>
-
 #include "kexiactionproxy.h"
 
 class KexiSharedActionHost;

@@ -60,19 +60,18 @@ class KFORMEDITOR_EXPORT ConnectionBuffer : public ConnectionList
 {
 public:
     ConnectionBuffer();
-    ~ConnectionBuffer() {
-    }
+    ~ConnectionBuffer();
 
     void save(QDomNode &parentNode);
-    void load(QDomNode parentNode);
+    void load(const QDomNode &parentNode);
 
     /*! This function is called when a widget is renamed from \a oldname
     to \a newname. All the Connections for this widget are updated. */
-    void    fixName(const QString &oldname, const QString &newName);
+    void fixName(const QString &oldname, const QString &newName);
 
-    ConnectionBuffer*     allConnectionsForWidget(const QString &widget);
-    void     saveAllConnectionsForWidget(const QString &widget, QDomNode parentNode);
-    void     removeAllConnectionsForWidget(const QString &widget);
+    ConnectionBuffer* allConnectionsForWidget(const QString &widget);
+    void saveAllConnectionsForWidget(const QString &widget, QDomNode &parentNode);
+    void removeAllConnectionsForWidget(const QString &widget);
 };
 
 }

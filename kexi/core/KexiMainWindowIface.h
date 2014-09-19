@@ -29,19 +29,20 @@
 #include <kmainwindow.h>
 #include <db/tristate.h>
 
+#include "KexiMigrateManagerInterface.h"
 #include "kexisharedactionhost.h"
 #include "kexi.h"
 
 class KexiWindow;
 class KexiProject;
 class KActionCollection;
-class KXMLGUIClient;
-class KXMLGUIFactory;
 class KexiSearchableModel;
 class KexiUserFeedbackAgent;
+class KexiMigrateManagerInterface;
 namespace KexiPart
 {
 class Item;
+class Info;
 }
 
 /**
@@ -52,7 +53,6 @@ class Item;
  */
 class KEXICORE_EXPORT KexiMainWindowIface : public KexiSharedActionHost
 {
-// Q_OBJECT
 public:
     //! Used by printActionForItem()
     enum PrintActionType {
@@ -67,9 +67,7 @@ public:
     //! \return KexiMainWindowImpl global singleton (if it is instantiated)
     static KexiMainWindowIface* global();
 
-    QWidget* thisWidget() {
-        return dynamic_cast<QWidget*>(this);
-    }
+    QWidget* thisWidget();
 
     //! Project data of currently opened project or NULL if no project here yet.
     virtual KexiProject *project() = 0;
@@ -92,57 +90,8 @@ public:
 #endif
     virtual QWidget* focusWidget() const = 0;
 
-    //! Implemented by KXMLGUIClient
-#ifdef KEXI_IMPL_WARNINGS
-#ifdef __GNUC__
-#warning TODO virtual void plugActionList(const QString& name, const QList<KAction *>& actionList) = 0;
-#else
-#pragma WARNING( TODO virtual void plugActionList(const QString& name, const QList<KAction *>& actionList) = 0; )
-#endif
-#endif
-    virtual void plugActionList(const QString& name,
-                                const QList<KAction *>& actionList) = 0;
-
-#ifdef KEXI_IMPL_WARNINGS
-#ifdef __GNUC__
-#warning TODO KXMLGUIClient* guiClient() const = 0;
-#else
-#pragma WARNING( TODO KXMLGUIClient* guiClient() const = 0; )
-#endif
-#endif
-    virtual KXMLGUIClient* guiClient() const = 0;
-
-    //! Implemented by KXMLGUIClient
-#ifdef KEXI_IMPL_WARNINGS
-#ifdef __GNUC__
-#warning TODO virtual void unplugActionList (const QString &name) = 0;
-#else
-#pragma WARNING( TODO virtual void unplugActionList (const QString &name) = 0; )
-#endif
-#endif
-    virtual void unplugActionList(const QString &name) = 0;
-
-    //! Implemented by KMainWindow
-#ifdef KEXI_IMPL_WARNINGS
-#ifdef __GNUC__
-#warning TODO virtual KXMLGUIFactory * KMainWindow::guiFactory() = 0;
-#else
-#pragma WARNING( TODO virtual KXMLGUIFactory * KMainWindow::guiFactory() = 0; )
-#endif
-#endif
-    virtual KXMLGUIFactory * guiFactory() = 0;
-
     /*! Registers window \a window for watching and adds it to the main window's stack. */
     virtual void registerChild(KexiWindow *window) = 0;
-
-//2.0 disabled  virtual QMenu* findPopupMenu(const char *popupName) = 0;
-
-    /*! Generates ID for private "document" like Relations window.
-     Private IDs are negative numbers (while ID regular part instance's IDs are >0)
-     Private means that the object is not stored as-is in the project but is somewhat
-     generated and in most cases there is at most one unique instance document of such type (part).
-     To generate this ID, just app-wide internal counter is used. */
-//moved to KexiProject  virtual int generatePrivateID() = 0;
 
     /*! \return a list of all actions defined by application.
      Not all of them are shared. Don't use plug these actions
@@ -170,7 +119,6 @@ public:
 
     //! Emitted after closing the project.
     virtual void projectClosed() = 0;
-//#endif
 
 // public slots:
     /*! Creates new object of type defined by \a info part info.
@@ -185,7 +133,8 @@ public:
 
     //! For convenience
     virtual KexiWindow* openObject(const QString& mime, const QString& name,
-                                   Kexi::ViewMode viewMode, bool &openingCancelled, QMap<QString, QVariant>* staticObjectArgs = 0) = 0;
+                                   Kexi::ViewMode viewMode, bool &openingCancelled,
+                                   QMap<QString, QVariant>* staticObjectArgs = 0) = 0;
 
     /*! Closes the object for \a item.
      \return true on success (closing can be dealyed though), false on failure and cancelled
@@ -311,6 +260,9 @@ public:
     virtual void addSearchableModel(KexiSearchableModel *model) = 0;
     
     virtual KexiUserFeedbackAgent* userFeedbackAgent() const = 0;
+
+    //! Interface to the migrate manager
+    virtual KexiMigrateManagerInterface* migrateManager() = 0;
 
 protected: // slots:
     virtual void slotObjectRenamed(const KexiPart::Item &item, const QString& oldName) = 0;

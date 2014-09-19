@@ -24,9 +24,13 @@
 #include <QX11Info>
 
 #include "kis_debug.h"
+#include "kis_config.h"
 #include <input/kis_tablet_event.h>
 #include "kis_tablet_support.h"
-#include "wacomcfg.h"
+#include "wacom-properties.h"
+
+#include <input/kis_tablet_debugger.h>
+
 
 /**
  * This is an analog of a Qt's variable qt_tabletChokeMouse.  It is
@@ -42,23 +46,6 @@ bool kis_tabletChokeMouse = false;
  * the server manually
  */
 bool kis_haveEvdevTablets = false;
-
-// from include/Xwacom.h
-#  define XWACOM_PARAM_TOOLID 322
-#  define XWACOM_PARAM_TOOLSERIAL 323
-
-typedef WACOMCONFIG * (*PtrWacomConfigInit) (Display*, WACOMERRORFUNC);
-typedef WACOMDEVICE * (*PtrWacomConfigOpenDevice) (WACOMCONFIG*, const char*);
-typedef int *(*PtrWacomConfigGetRawParam) (WACOMDEVICE*, int, int*, int, unsigned*);
-typedef int (*PtrWacomConfigCloseDevice) (WACOMDEVICE *);
-typedef void (*PtrWacomConfigTerm) (WACOMCONFIG *);
-
-static PtrWacomConfigInit ptrWacomConfigInit = 0;
-static PtrWacomConfigOpenDevice ptrWacomConfigOpenDevice = 0;
-static PtrWacomConfigGetRawParam ptrWacomConfigGetRawParam = 0;
-static PtrWacomConfigCloseDevice ptrWacomConfigCloseDevice = 0;
-static PtrWacomConfigTerm ptrWacomConfigTerm = 0;
-Q_GLOBAL_STATIC(QByteArray, wacomDeviceName)
 
 // link Xinput statically
 #define XINPUT_LOAD(symbol) symbol
@@ -106,6 +93,8 @@ struct KisX11Data
         AbsTiltX,
         AbsTiltY,
 
+        WacomTouch,
+
         NPredefinedAtoms,
         NAtoms = NPredefinedAtoms
     };
@@ -139,6 +128,9 @@ static const char * kis_x11_atomnames = {
     "Abs Pressure\0"
     "Abs Tilt X\0"
     "Abs Tilt Y\0"
+
+    // Touch capabilities reported by Wacom Intuos tablets
+    "TOUCH\0"
 
 };
 
@@ -190,7 +182,12 @@ void QTabletDeviceData::SavedAxesData::tryFetchAxesMapping(XDevice *dev)
                                     &prop);
 
     if (result == Success && propertyType > 0) {
-        QVector<AxesIndexes> axesMap(NAxes, Unused);
+
+        if (KisTabletDebugger::instance()->initializationDebugEnabled()) {
+            qDebug() << "# Building tablet axes remapping table:";
+        }
+
+        QVector<AxesIndexes> axesMap(nitems, Unused);
 
         for (unsigned int axisIndex = 0; axisIndex < nitems; axisIndex++) {
             Atom currentAxisName = ((Atom*)prop)[axisIndex];
@@ -211,8 +208,11 @@ void QTabletDeviceData::SavedAxesData::tryFetchAxesMapping(XDevice *dev)
             }
 
             axesMap[axisIndex] = mappedIndex;
-            qDebug() << XGetAtomName(KIS_X11->display, currentAxisName)
-                     << axisIndex << "->" << mappedIndex;
+
+            if (KisTabletDebugger::instance()->initializationDebugEnabled()) {
+                qDebug() << XGetAtomName(KIS_X11->display, currentAxisName)
+                         << axisIndex << "->" << mappedIndex;
+            }
         }
 
         this->setAxesMap(axesMap);
@@ -221,6 +221,9 @@ void QTabletDeviceData::SavedAxesData::tryFetchAxesMapping(XDevice *dev)
 
 void kis_x11_init_tablet()
 {
+    KisConfig cfg;
+    bool disableTouchOnCanvas = cfg.disableTouchOnCanvas();
+
     // TODO: free this structure on exit
     KIS_X11 = new KisX11Data;
     KIS_X11->display = QX11Info::display();
@@ -263,6 +266,7 @@ void kis_x11_init_tablet()
         XDevice *dev = 0;
 
         bool needCheckIfItIsReallyATablet;
+        bool touchWacomTabletWorkaround;
 
         if (KIS_X11->ptrXListInputDevices) {
             devices = KIS_X11->ptrXListInputDevices(KIS_X11->display, &ndev);
@@ -279,6 +283,7 @@ void kis_x11_init_tablet()
             gotStylus = false;
             gotEraser = false;
             needCheckIfItIsReallyATablet = false;
+            touchWacomTabletWorkaround = false;
 
 #if defined(Q_OS_IRIX)
 #else
@@ -289,8 +294,6 @@ void kis_x11_init_tablet()
                         kis_haveEvdevTablets = true;
                     }
                     deviceType = QTabletEvent::Stylus;
-                    if (wacomDeviceName()->isEmpty())
-                        wacomDeviceName()->append(devs->name);
                     gotStylus = true;
                 } else if (devs->type == KIS_ATOM(XWacomEraser) || devs->type == KIS_ATOM(XTabletEraser)) {
                     deviceType = QTabletEvent::XFreeEraser;
@@ -308,6 +311,14 @@ void kis_x11_init_tablet()
                     deviceType = QTabletEvent::Stylus;
                     gotStylus = true;
                     needCheckIfItIsReallyATablet = true;
+                } else if (disableTouchOnCanvas &&
+                           devs->type == KIS_ATOM(WacomTouch) &&
+                           QString(devs->name).contains("Wacom")) {
+
+                    kis_haveEvdevTablets = true;
+                    deviceType = QTabletEvent::Stylus;
+                    gotStylus = true;
+                    touchWacomTabletWorkaround = true;
                 }
 
 #endif
@@ -332,6 +343,7 @@ void kis_x11_init_tablet()
                 device_data.xinput_button_release = -1;
                 device_data.xinput_proximity_in = -1;
                 device_data.xinput_proximity_out = -1;
+                device_data.isTouchWacomTablet = touchWacomTabletWorkaround;
                 //device_data.widgetToGetPress = 0;
 
                 if (dev->num_classes > 0) {
@@ -384,6 +396,12 @@ void kis_x11_init_tablet()
                     continue;
                 }
 
+                if (KisTabletDebugger::instance()->initializationDebugEnabled()) {
+                    qDebug() << "###################################";
+                    qDebug() << "# Adding a tablet device:" << devs->name;
+                    qDebug() << "Device Type:" << KisTabletDebugger::tabletDeviceToString(deviceType);
+                }
+
                 device_data.savedAxesData.tryFetchAxesMapping(dev);
 
                 // get the min/max value for pressure!
@@ -405,6 +423,19 @@ void kis_x11_init_tablet()
                         device_data.maxTanPressure = 0;
                         device_data.minZ = 0;
                         device_data.maxZ = 0;
+                        device_data.minRotation = a[5].min_value;
+                        device_data.maxRotation = a[5].max_value;
+
+                        if (KisTabletDebugger::instance()->initializationDebugEnabled()) {
+                            qDebug() << "# Axes limits data";
+                            qDebug() << "X:       " << device_data.minX << device_data.maxX;
+                            qDebug() << "Y:       " << device_data.minY << device_data.maxY;
+                            qDebug() << "Z:       " << device_data.minZ << device_data.maxZ;
+                            qDebug() << "Pressure:" << device_data.minPressure << device_data.maxPressure;
+                            qDebug() << "Rotation:" << device_data.minRotation << device_data.maxRotation;
+                            qDebug() << "T. Pres: " << device_data.minTanPressure << device_data.maxTanPressure;
+                        }
+
 #endif
 
                         // got the max pressure no need to go further...
@@ -413,7 +444,6 @@ void kis_x11_init_tablet()
                     any = (XAnyClassPtr) ((char *) any + any->length);
                 } // end of for loop
 
-                qDebug() << "Recognized a tablet device:" << devs->name;
                 qt_tablet_devices()->append(device_data);
             } // if (gotStylus || gotEraser)
         }
@@ -422,68 +452,31 @@ void kis_x11_init_tablet()
     }
 }
 
-void fetchWacomToolId(int &deviceType, qint64 &serialId)
+void fetchWacomToolId(qint64 &serialId, QTabletDeviceData *tablet)
 {
-    if (ptrWacomConfigInit == 0) // we actually have the lib
+    XDevice *dev = static_cast<XDevice*>(tablet->device);
+    Atom prop = None, type;
+    int format;
+    unsigned char* data;
+    unsigned long nitems, bytes_after;
+
+    prop = XInternAtom(KIS_X11->display, WACOM_PROP_SERIALIDS, True);
+
+    if (!prop) {
+        // property doesn't exist
         return;
-    WACOMCONFIG *config = ptrWacomConfigInit(KIS_X11->display, 0);
-    if (config == 0)
-        return;
-    WACOMDEVICE *device = ptrWacomConfigOpenDevice (config, wacomDeviceName()->constData());
-    if (device == 0)
-        return;
-    unsigned keys[1];
-    int serialInt;
-    ptrWacomConfigGetRawParam (device, XWACOM_PARAM_TOOLSERIAL, &serialInt, 1, keys);
-    serialId = serialInt;
-    int toolId;
-    ptrWacomConfigGetRawParam (device, XWACOM_PARAM_TOOLID, &toolId, 1, keys);
-    switch(toolId) {
-    case 0x007: /* Mouse 4D and 2D */
-    case 0x017: /* Intuos3 2D Mouse */
-    case 0x094:
-    case 0x09c:
-        deviceType = QTabletEvent::FourDMouse;
-        break;
-    case 0x096: /* Lens cursor */
-    case 0x097: /* Intuos3 Lens cursor */
-        deviceType = QTabletEvent::Puck;
-        break;
-    case 0x0fa:
-    case 0x81b: /* Intuos3 Classic Pen Eraser */
-    case 0x82a: /* Eraser */
-    case 0x82b: /* Intuos3 Grip Pen Eraser */
-    case 0x85a:
-    case 0x91a:
-    case 0x91b: /* Intuos3 Airbrush Eraser */
-    case 0xd1a:
-        deviceType = QTabletEvent::XFreeEraser;
-        break;
-    case 0x112:
-    case 0x912:
-    case 0x913: /* Intuos3 Airbrush */
-    case 0xd12:
-        deviceType = QTabletEvent::Airbrush;
-        break;
-    case 0x012:
-    case 0x022:
-    case 0x032:
-    case 0x801: /* Intuos3 Inking pen */
-    case 0x812: /* Inking pen */
-    case 0x813: /* Intuos3 Classic Pen */
-    case 0x822: /* Pen */
-    case 0x823: /* Intuos3 Grip Pen */
-    case 0x832: /* Stroke pen */
-    case 0x842:
-    case 0x852:
-    case 0x885: /* Intuos3 Marker Pen */
-    default: /* Unknown tool */
-        deviceType = QTabletEvent::Stylus;
     }
 
-    /* Close device and return */
-    ptrWacomConfigCloseDevice (device);
-    ptrWacomConfigTerm(config);
+    XGetDeviceProperty(KIS_X11->display, dev, prop, 0, 1000, False, AnyPropertyType,
+                       &type, &format, &nitems, &bytes_after, &data);
+
+    if (nitems < 5 || format != 32) {
+        // property offset doesn't exist
+        return;
+    }
+
+    long *l = (long*)data;
+    serialId = l[3];
 }
 
 static Qt::MouseButtons translateMouseButtons(int s)
@@ -591,42 +584,45 @@ bool translateXinputEvent(const XEvent *ev, QTabletDeviceData *tablet, QWidget *
         }
     }
 
-    fetchWacomToolId(deviceType, uid);
+    /**
+     * Touch events from Wacom tablets should not be sent as real
+     * tablet events
+     */
+    if (tablet->isTouchWacomTablet) return false;
+
+    fetchWacomToolId(uid, tablet);
 
     QRect screenArea = qApp->desktop()->rect();
+
+    /**
+     * Some 'nice' tablet drivers (evdev) do not return the value
+     * of all the axes each time. Instead they tell about the
+     * recenty changed axes only, so we have to keep the state of
+     * all the axes internally and update the relevant part only.
+     */
+    bool hasSaneData = false;
     if (motion) {
-        /**
-         * Some 'nice' tablet drivers (evdev) do not return the value
-         * of all the axes each time. Instead they tell about the
-         * recenty changed axes only, so we have to keep the state of
-         * all the axes internally and update the relevant part only.
-         */
-        bool hasSaneData =
+        hasSaneData =
             tablet->savedAxesData.updateAxesData(motion->first_axis,
                                                  motion->axes_count,
                                                  motion->axis_data);
-        if (!hasSaneData) return false;
-
-        hiRes = tablet->savedAxesData.position(tablet, screenArea);
-        pressure = tablet->savedAxesData.pressure();
-        xTilt = tablet->savedAxesData.xTilt();
-        yTilt = tablet->savedAxesData.yTilt();
-        rotation = tablet->savedAxesData.rotation();
-
     } else if (button) {
-        // see the comment in 'motion' branch
-        bool hasSaneData =
+        hasSaneData =
             tablet->savedAxesData.updateAxesData(button->first_axis,
                                                  button->axes_count,
                                                  button->axis_data);
-        if (!hasSaneData) return false;
-
-        hiRes = tablet->savedAxesData.position(tablet, screenArea);
-        pressure = tablet->savedAxesData.pressure();
-        xTilt = tablet->savedAxesData.xTilt();
-        yTilt = tablet->savedAxesData.yTilt();
-        rotation = tablet->savedAxesData.rotation();
     }
+
+    if (!hasSaneData) return false;
+
+    hiRes = tablet->savedAxesData.position(tablet, screenArea);
+    pressure = tablet->savedAxesData.pressure();
+    xTilt = tablet->savedAxesData.xTilt();
+    yTilt = tablet->savedAxesData.yTilt();
+
+    rotation = std::fmod(qreal(tablet->savedAxesData.rotation() - tablet->minRotation) /
+                         (tablet->maxRotation - tablet->minRotation) + 0.5, 1.0) * 360.0;
+
     if (deviceType == QTabletEvent::Airbrush) {
         tangentialPressure = rotation;
         rotation = 0.;
@@ -665,7 +661,6 @@ bool translateXinputEvent(const XEvent *ev, QTabletDeviceData *tablet, QWidget *
                      qreal(pressure / qreal(tablet->maxPressure - tablet->minPressure)),
                      xTilt, yTilt, tangentialPressure, rotation, z, modifiers, uid,
                      qtbutton, qtbuttons);
-
 
     e.ignore();
     QApplication::sendEvent(w, &e);
@@ -750,6 +745,50 @@ bool KisTabletSupportX11::eventFilter(void *ev, long * /*unused_on_X11*/)
             }
 
             return retval;
+        } else if (event->type == tab.xinput_proximity_in ||
+                   event->type == tab.xinput_proximity_out) {
+
+            const XProximityNotifyEvent *proximity =
+                reinterpret_cast<const XProximityNotifyEvent*>(event);
+            XID device_id = proximity->deviceid;
+
+            QTabletDeviceDataList *tablet_list = qt_tablet_devices();
+            for (int i = 0; i < tablet_list->size(); ++i) {
+                QTabletDeviceData &tab = tablet_list->operator[](i);
+                if (device_id == static_cast<XDevice *>(tab.device)->device_id &&
+                    tab.isTouchWacomTablet) {
+
+                    QWidget *widget = QApplication::activePopupWidget();
+
+                    if (!widget) {
+                        widget = QApplication::activeModalWidget();
+                    }
+
+                    if (!widget) {
+                        widget = QWidget::find((WId)event->xany.window);
+                    }
+
+                    if (widget) {
+                        QPoint curr(proximity->x, proximity->y);
+                        QWidget *child = widget->childAt(curr);
+
+                        if (child) {
+                            widget = child;
+                        }
+
+                        QEvent::Type type = (QEvent::Type)
+                            (event->type == tab.xinput_proximity_in ?
+                             KisTabletEvent::TouchProximityInEx :
+                             KisTabletEvent::TouchProximityOutEx);
+
+                        QEvent e(type);
+                        e.ignore();
+                        QApplication::sendEvent(widget, &e);
+                    }
+
+                    return true;
+                }
+            }
         }
     }
 

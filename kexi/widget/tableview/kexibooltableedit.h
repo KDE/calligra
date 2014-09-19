@@ -32,7 +32,7 @@ class KexiBoolTableEdit : public KexiTableEdit
     Q_OBJECT
 
 public:
-    KexiBoolTableEdit(KexiDB::TableViewColumn &column, QWidget *parent = 0);
+    explicit KexiBoolTableEdit(KexiDB::TableViewColumn &column, QWidget *parent = 0);
 
     virtual ~KexiBoolTableEdit();
 

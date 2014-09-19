@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 by Lucijan Busch <lucijan@kde.org>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2009 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2009-2014 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -37,7 +37,6 @@
 #include <QDateEdit>
 #include <QDateTimeEdit>
 
-#include <kpluginfactory.h>
 #include <kpushbutton.h>
 #include <knuminput.h>
 #include <kcombobox.h>
@@ -54,13 +53,11 @@
 #include <koproperty/Property.h>
 #include <koproperty/Set.h>
 
-#ifndef KEXI_NO_FORM_SPRING_ELEMENT
-# include "spring.h"
-#endif
 #include "formIO.h"
 #include "form.h"
 #include "widgetlibrary.h"
 #include "stdwidgetfactory.h"
+#include "objecttree.h"
 
 // Some widgets subclass to allow event filtering and some other things
 KexiPictureLabel::KexiPictureLabel(const QPixmap &pix, QWidget *parent)
@@ -184,40 +181,43 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
     wFormWidget->setIconName(koIconName("form"));
     wFormWidget->setClassName("FormWidgetBase");
     wFormWidget->setName(i18n("Form"));
-    wFormWidget->setNamePrefix(i18nc("This string will be used to name widgets of this class. It must _not_ contain white "
-                                     "spaces and non latin1 characters.", "form"));
+    wFormWidget->setNamePrefix(
+        i18nc("A prefix for identifiers of form widgets. Based on that, identifiers such as "
+            "form1, form2 are generated. "
+            "This string can be used to refer the widget object as variables in programming "
+            "languages or macros so it must _not_ contain white spaces and non latin1 characters, "
+            "should start with lower case letter and if there are subsequent words, these should "
+            "start with upper case letter. Example: smallCamelCase. "
+            "Moreover, try to make this prefix as short as possible.",
+            "form"));
     wFormWidget->setDescription(i18n("A simple form widget"));
     addClass(wFormWidget);
 
     KFormDesigner::WidgetInfo *wCustomWidget = new KFormDesigner::WidgetInfo(this);
     wCustomWidget->setIconName(koIconName("unknown_widget"));
     wCustomWidget->setClassName("CustomWidget");
-    wCustomWidget->setName(i18n("Custom Widget"));
-    wCustomWidget->setNamePrefix(i18nc("This string will be used to name widgets of this class. It must _not_ contain white "
-                                       "spaces and non latin1 characters.", "customWidget"));
-    wCustomWidget->setDescription(i18n("A custom or non-supported widget"));
+    wCustomWidget->setName(/* no i18n needed */ "Custom Widget");
+    wCustomWidget->setNamePrefix(/* no i18n needed */ "customWidget");
+    wCustomWidget->setDescription(/* no i18n needed */ "A custom or non-supported widget");
     addClass(wCustomWidget);
 
     KFormDesigner::WidgetInfo *wLabel = new KFormDesigner::WidgetInfo(this);
     wLabel->setIconName(koIconName("label"));
     wLabel->setClassName("QLabel");
-    wLabel->setName(i18n("Text Label"));
-    wLabel->setNamePrefix(
-        i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "label"));
-    wLabel->setDescription(i18n("A widget to display text"));
+    wLabel->setName(/* no i18n needed */ "Text Label");
+    wLabel->setNamePrefix(/* no i18n needed */ "label");
+    wLabel->setDescription(/* no i18n needed */ "A widget to display text");
     wLabel->setAutoSaveProperties(QList<QByteArray>() << "text");
     addClass(wLabel);
 
     KFormDesigner::WidgetInfo *wPixLabel = new KFormDesigner::WidgetInfo(this);
     wPixLabel->setIconName(koIconName("pixmaplabel"));
     wPixLabel->setClassName("KexiPictureLabel");
-    wPixLabel->setName(i18n("Picture Label"));
+    wPixLabel->setName(/* no i18n needed */ "Picture Label");
 //! @todo Qt designer compatibility: maybe use this class when QLabel has a pixmap set...?
-    //wPixLabel->addAlternateClassName("QLabel");
     wPixLabel->setSavingName("KexiPictureLabel");
-    wPixLabel->setNamePrefix(
-        i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "picture"));
-    wPixLabel->setDescription(i18n("A widget to display pictures"));
+    wPixLabel->setNamePrefix(/* no i18n needed */ "picture");
+    wPixLabel->setDescription(/* no i18n needed */ "A widget to display pictures");
     wPixLabel->setAutoSaveProperties(QList<QByteArray>() << "pixmap");
     addClass(wPixLabel);
 
@@ -226,57 +226,36 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
     wLineEdit->setClassName("KLineEdit");
     wLineEdit->addAlternateClassName("QLineEdit");
     wLineEdit->setIncludeFileName("klineedit.h");
-    wLineEdit->setName(i18n("Line Edit"));
-    wLineEdit->setNamePrefix(
-        i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "lineEdit"));
-    wLineEdit->setDescription(i18n("A widget to input text"));
+    wLineEdit->setName(/* no i18n needed */ "Line Edit");
+    wLineEdit->setNamePrefix(/* no i18n needed */ "lineEdit");
+    wLineEdit->setDescription(/* no i18n needed */ "A widget to input text");
     addClass(wLineEdit);
-
-#ifndef KEXI_NO_FORM_SPRING_ELEMENT
-    KFormDesigner::WidgetInfo *wSpring = new KFormDesigner::WidgetInfo(this);
-    wSpring->setIconName(koIconName("spring"));
-    wSpring->setClassName("Spring");
-    wSpring->setName(i18n("Spring"));
-    wSpring->setNamePrefix(
-        i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "spring"));
-    wSpring->setDescription(i18n("A spring to place between widgets"));
-    wSpring->setAutoSaveProperties(QList<QByteArray>() << "orientation");
-    wSpring->setInternalProperty("orientationSelectionPopup", true);
-    wSpring->setInternalProperty("orientationSelectionPopup:horizontalIcon", "spring");
-    wSpring->setInternalProperty("orientationSelectionPopup:verticalIcon", "spring_vertical");
-    wSpring->setInternalProperty("orientationSelectionPopup:horizontalText", i18n("Insert &Horizontal Spring"));
-    wSpring->setInternalProperty("orientationSelectionPopup:verticalText", i18n("Insert &Vertical Spring"));
-    addClass(wSpring);
-#endif
 
     KFormDesigner::WidgetInfo *wPushButton = new KFormDesigner::WidgetInfo(this);
     wPushButton->setIconName(koIconName("button"));
     wPushButton->setClassName("KPushButton");
     wPushButton->addAlternateClassName("QPushButton");
     wPushButton->setIncludeFileName("kpushbutton.h");
-    wPushButton->setName(i18n("Push Button"));
-    wPushButton->setNamePrefix(
-        i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "button"));
-    wPushButton->setDescription(i18n("A simple push button to execute actions"));
+    wPushButton->setName(/* no i18n needed */ "Push Button");
+    wPushButton->setNamePrefix(/* no i18n needed */ "button");
+    wPushButton->setDescription(/* no i18n needed */ "A simple push button to execute actions");
     wPushButton->setAutoSaveProperties(QList<QByteArray>() << "text");
     addClass(wPushButton);
 
     KFormDesigner::WidgetInfo *wRadioButton = new KFormDesigner::WidgetInfo(this);
     wRadioButton->setIconName(koIconName("radio"));
     wRadioButton->setClassName("QRadioButton");
-    wRadioButton->setName(i18n("Option Button"));
-    wRadioButton->setNamePrefix(
-        i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "optionButton"));
-    wRadioButton->setDescription(i18n("An option button with text or pixmap label"));
+    wRadioButton->setName(/* no i18n needed */ "Option Button");
+    wRadioButton->setNamePrefix(/* no i18n needed */ "option");
+    wRadioButton->setDescription(/* no i18n needed */ "An option button with text or pixmap label");
     addClass(wRadioButton);
 
     KFormDesigner::WidgetInfo *wCheckBox = new KFormDesigner::WidgetInfo(this);
     wCheckBox->setIconName(koIconName("check"));
     wCheckBox->setClassName("QCheckBox");
-    wCheckBox->setName(i18n("Check Box"));
-    wCheckBox->setNamePrefix(
-        i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "checkBox"));
-    wCheckBox->setDescription(i18n("A check box with text or pixmap label"));
+    wCheckBox->setName(/* no i18n needed */ "Check Box");
+    wCheckBox->setNamePrefix(/* no i18n needed */ "checkBox");
+    wCheckBox->setDescription(/* no i18n needed */ "A check box with text or pixmap label");
     addClass(wCheckBox);
 
     KFormDesigner::WidgetInfo *wSpinBox = new KFormDesigner::WidgetInfo(this);
@@ -284,10 +263,9 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
     wSpinBox->setClassName("KIntSpinBox");
     wSpinBox->addAlternateClassName("QSpinBox");
     wSpinBox->setIncludeFileName("knuminput.h");
-    wSpinBox->setName(i18n("Spin Box"));
-    wSpinBox->setNamePrefix(
-        i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "spinBox"));
-    wSpinBox->setDescription(i18n("A spin box widget"));
+    wSpinBox->setName(/* no i18n needed */ "Spin Box");
+    wSpinBox->setNamePrefix(/* no i18n needed */ "spinBox");
+    wSpinBox->setDescription(/* no i18n needed */ "A spin box widget");
     addClass(wSpinBox);
 
     KFormDesigner::WidgetInfo *wComboBox = new KFormDesigner::WidgetInfo(this);
@@ -295,39 +273,40 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
     wComboBox->setClassName("KComboBox");
     wComboBox->addAlternateClassName("QComboBox");
     wComboBox->setIncludeFileName("kcombobox.h");
-    wComboBox->setName(i18n("Combo Box"));
-    wComboBox->setNamePrefix(
-        i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "comboBox"));
-    wComboBox->setDescription(i18n("A combo box widget"));
+    wComboBox->setName(/* no i18n needed */ "Combo Box");
+    wComboBox->setNamePrefix(/* no i18n needed */ "comboBox");
+    wComboBox->setDescription(/* no i18n needed */ "A combo box widget");
     wComboBox->setAutoSaveProperties(QList<QByteArray>() << "list_items");
     addClass(wComboBox);
 
 #ifndef KEXI_FORMS_NO_LIST_WIDGET
-    KFormDesigner::WidgetInfo *wListBox = new KFormDesigner::WidgetInfo(this);
-    wListBox->setIconName(koIconName("listbox"));
-    wListBox->setClassName("KListBox");
-    wListBox->addAlternateClassName("QListBox");
-    wListBox->addAlternateClassName("KListBox");
-    wListBox->setIncludeFileName("qlistbox.h");
-    wListBox->setName(i18n("List Box"));
-    wListBox->setNamePrefix(
-        i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "listBox"));
-    wListBox->setDescription(i18n("A simple list widget"));
-    wListBox->setAutoSaveProperties(QList<QByteArray>() << "list_items");
-    addClass(wListBox);
+// Unused, commented-out in Kexi 2.9 to avoid unnecessary translations:
+//     KFormDesigner::WidgetInfo *wListBox = new KFormDesigner::WidgetInfo(this);
+//     wListBox->setIconName(koIconName("listbox"));
+//     wListBox->setClassName("KListBox");
+//     wListBox->addAlternateClassName("QListBox");
+//     wListBox->addAlternateClassName("KListBox");
+//     wListBox->setIncludeFileName("qlistbox.h");
+//     wListBox->setName(i18n("List Box"));
+//     wListBox->setNamePrefix(
+//         i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "listBox"));
+//     wListBox->setDescription(i18n("A simple list widget"));
+//     wListBox->setAutoSaveProperties(QList<QByteArray>() << "list_items");
+//     addClass(wListBox);
 
-    KFormDesigner::WidgetInfo *wTreeWidget = new KFormDesigner::WidgetInfo(this);
-    wTreeWidget->setIconName(koIconName("listwidget"));
-    wTreeWidget->setClassName("QTreetWidget");
-//?    wTreeWidget->addAlternateClassName("QListView");
-//?    wTreeWidget->addAlternateClassName("KListView");
-    wTreeWidget->setIncludeFileName("qtreewidget.h");
-    wTreeWidget->setName(i18n("List Widget"));
-    wTreeWidget->setNamePrefix(
-        i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "listWidget"));
-    wTreeWidget->setDescription(i18n("A list (or tree) widget"));
-    wTreeWidget->setAutoSaveProperties(QList<QByteArray>() << "list_contents");
-    addClass(wTreeWidget);
+// Unused, commented-out in Kexi 2.9 to avoid unnecessary translations:
+//     KFormDesigner::WidgetInfo *wTreeWidget = new KFormDesigner::WidgetInfo(this);
+//     wTreeWidget->setIconName(koIconName("listwidget"));
+//     wTreeWidget->setClassName("QTreetWidget");
+// //?    wTreeWidget->addAlternateClassName("QListView");
+// //?    wTreeWidget->addAlternateClassName("KListView");
+//     wTreeWidget->setIncludeFileName("qtreewidget.h");
+//     wTreeWidget->setName(i18n("List Widget"));
+//     wTreeWidget->setNamePrefix(
+//         i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "listWidget"));
+//     wTreeWidget->setDescription(i18n("A list (or tree) widget"));
+//     wTreeWidget->setAutoSaveProperties(QList<QByteArray>() << "list_contents");
+//     addClass(wTreeWidget);
 #endif
 
     KFormDesigner::WidgetInfo *wTextEdit = new KFormDesigner::WidgetInfo(this);
@@ -335,29 +314,26 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
     wTextEdit->setClassName("KTextEdit");
     wTextEdit->addAlternateClassName("QTextEdit");
     wTextEdit->setIncludeFileName("ktextedit.h");
-    wTextEdit->setName(i18n("Text Editor"));
-    wTextEdit->setNamePrefix(
-        i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "textEditor"));
-    wTextEdit->setDescription(i18n("A simple single-page rich text editor"));
+    wTextEdit->setName(/* no i18n needed */ "Text Editor");
+    wTextEdit->setNamePrefix(/* no i18n needed */ "textEditor");
+    wTextEdit->setDescription(/* no i18n needed */ "A simple single-page rich text editor");
     wTextEdit->setAutoSaveProperties(QList<QByteArray>() << "text");
     addClass(wTextEdit);
 
     KFormDesigner::WidgetInfo *wSlider = new KFormDesigner::WidgetInfo(this);
     wSlider->setIconName(koIconName("slider"));
     wSlider->setClassName("QSlider");
-    wSlider->setName(i18n("Slider"));
-    wSlider->setNamePrefix(
-        i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "slider"));
-    wSlider->setDescription(i18n("A horizontal slider"));
+    wSlider->setName(/* no i18n needed */ "Slider");
+    wSlider->setNamePrefix(/* no i18n needed */ "slider");
+    wSlider->setDescription(/* no i18n needed */ "A Slider widget");
     addClass(wSlider);
 
     KFormDesigner::WidgetInfo *wProgressBar = new KFormDesigner::WidgetInfo(this);
     wProgressBar->setIconName(koIconName("progress"));
     wProgressBar->setClassName("QProgressBar");
-    wProgressBar->setName(i18n("Progress Bar"));
-    wProgressBar->setNamePrefix(
-        i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "progressBar"));
-    wProgressBar->setDescription(i18n("A progress indicator widget"));
+    wProgressBar->setName(/* no i18n needed */ "Progress Bar");
+    wProgressBar->setNamePrefix(/* no i18n needed */ "progressBar");
+    wProgressBar->setDescription(/* no i18n needed */ "A progress indicator widget");
     addClass(wProgressBar);
 
     KFormDesigner::WidgetInfo *wLine = new KFormDesigner::WidgetInfo(this);
@@ -365,7 +341,14 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
     wLine->setClassName("Line");
     wLine->setName(i18n("Line"));
     wLine->setNamePrefix(
-        i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "line"));
+        i18nc("A prefix for identifiers of line widgets. Based on that, identifiers such as "
+            "line1, line2 are generated. "
+            "This string can be used to refer the widget object as variables in programming "
+            "languages or macros so it must _not_ contain white spaces and non latin1 characters, "
+            "should start with lower case letter and if there are subsequent words, these should "
+            "start with upper case letter. Example: smallCamelCase. "
+            "Moreover, try to make this prefix as short as possible.",
+            "line"));
     wLine->setDescription(i18n("A line to be used as a separator"));
     wLine->setAutoSaveProperties(QList<QByteArray>() << "orientation");
     wLine->setInternalProperty("orientationSelectionPopup", true);
@@ -380,10 +363,9 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
     wDate->setClassName("QDateEdit");
     wDate->addAlternateClassName("KDateWidget");
     wDate->setIncludeFileName("qdateedit.h");
-    wDate->setName(i18n("Date Widget"));
-    wDate->setNamePrefix(
-        i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "dateWidget"));
-    wDate->setDescription(i18n("A widget to input and display a date"));
+    wDate->setName(/* no i18n needed */ "Date Widget");
+    wDate->setNamePrefix(/* no i18n needed */ "dateWidget");
+    wDate->setDescription(/* no i18n needed */ "A widget to input and display a date");
     wDate->setAutoSaveProperties(QList<QByteArray>() << "date");
     addClass(wDate);
 
@@ -392,10 +374,9 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
     wTime->setClassName("QTimeEdit");
     wTime->addAlternateClassName("KTimeWidget");
     wTime->setIncludeFileName("qtimewidget.h");
-    wTime->setName(i18n("Time Widget"));
-    wTime->setNamePrefix(
-        i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "timeWidget"));
-    wTime->setDescription(i18n("A widget to input and display a time"));
+    wTime->setName(/* no i18n needed */ "Time Widget");
+    wTime->setNamePrefix(/* no i18n needed */ "timeWidget");
+    wTime->setDescription(/* no i18n needed */ "A widget to input and display a time");
     wTime->setAutoSaveProperties(QList<QByteArray>() << "time");
     addClass(wTime);
 
@@ -404,32 +385,27 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
     wDateTime->setClassName("QDateTimeEdit");
     wDateTime->addAlternateClassName("KDateTimeWidget");
     wDateTime->setIncludeFileName("qdatetimewidget.h");
-    wDateTime->setName(i18n("Date/Time Widget"));
-    wDateTime->setNamePrefix(
-        i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "dateTimeWidget"));
-    wDateTime->setDescription(i18n("A widget to input and display a time and a date"));
+    wDateTime->setName(/* no i18n needed */ "Date/Time Widget");
+    wDateTime->setNamePrefix(/* no i18n needed */ "dateTimeWidget");
+    wDateTime->setDescription(/* no i18n needed */ "A widget to input and display a time and a date");
     wDateTime->setAutoSaveProperties(QList<QByteArray>() << "dateTime");
     addClass(wDateTime);
 
-    setPropertyDescription("toggleButton", i18n("Toggle"));
-    setPropertyDescription("checkable", i18nc("Button is checkable", "Checkable"));
-    setPropertyDescription("autoRepeat", i18n("Auto Repeat"));
-    setPropertyDescription("autoRepeatDelay", i18nc("Auto Repeat Button's Delay", "Auto Rep. Delay"));
-    setPropertyDescription("autoRepeatInterval", i18nc("Auto Repeat Button's Interval", "Auto Rep. Interval"));
-    setPropertyDescription("autoDefault", i18n("Auto Default"));
-    setPropertyDescription("default", i18n("Default"));
-    setPropertyDescription("flat", i18n("Flat"));
+    setPropertyDescription("checkable", i18nc("Property: Button is checkable", "On/Off"));
+    setPropertyDescription("autoRepeat", i18nc("Property: Button", "Auto Repeat"));
+    setPropertyDescription("autoRepeatDelay", i18nc("Property: Auto Repeat Button's Delay", "Auto Rep. Delay"));
+    setPropertyDescription("autoRepeatInterval", i18nc("Property: Auto Repeat Button's Interval", "Auto Rep. Interval"));
+    // unused (too advanced) setPropertyDescription("autoDefault", i18n("Auto Default"));
+    // unused (too advanced) setPropertyDescription("default", i18nc("Property: Button is default", "Default"));
+    setPropertyDescription("flat", i18nc("Property: Button is flat", "Flat"));
     setPropertyDescription("echoMode",
-        i18nc("Echo mode for Line Edit widget eg. Normal, NoEcho, Password", "Echo Mode"));
+        i18nc("Property: Echo mode for Line Edit widget eg. Normal, NoEcho, Password", "Echo Mode"));
     setPropertyDescription("indent", i18n("Indent"));
     //line
     setPropertyDescription("orientation", i18n("Orientation"));
     //checkbox
-    setPropertyDescription("checked", i18nc("Checked checkbox", "Checked"));
-    setPropertyDescription("tristate", i18nc("Tristate checkbox", "Tristate"));
-
-    //for spring
-    setPropertyDescription("sizeType", i18n("Size Type"));
+    setPropertyDescription("checked", i18nc("Property: Checked checkbox", "Checked"));
+    setPropertyDescription("tristate", i18nc("Property: Tristate checkbox", "Tristate"));
 
     //for labels
     setPropertyDescription("textFormat", i18n("Text Format"));
@@ -440,36 +416,36 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
     setPropertyDescription("openExternalLinks", i18nc("property: Can open external links in label", "Open Ext. Links"));
 
     //KLineEdit
+#if QT_VERSION  >= 0x040700
+    setPropertyDescription("placeholderText", i18nc("Property: line edit's placeholder text", "Placeholder Text"));
+#else
     setPropertyDescription("clickMessage", i18nc("Property: \"Click Me\",message for line edit", "Click Message"));
+#endif
     setPropertyDescription("showClearButton", i18nc("Property: Show Clear Button", "Clear Button"));
     //for EchoMode
-/* obsolete
-    setValueDescription("Normal", i18nc("For Echo Mode", "Normal"));
-    setValueDescription("NoEcho", i18nc("For Echo Mode", "No Echo"));
-    setValueDescription("Password", i18nc("For Echo Mode", "Password")); */
-    setPropertyDescription("passwordMode", i18nc("Password Mode for line edit", "Password Mode"));
-    setPropertyDescription("squeezedTextEnabled", i18nc("Squeezed Text Mode for line edit", "Squeezed Text"));
+    setPropertyDescription("passwordMode", i18nc("Property: Password Mode for line edit", "Password Mode"));
+    setPropertyDescription("squeezedTextEnabled", i18nc("Property: Squeezed Text Mode for line edit", "Squeezed Text"));
     
     //KTextEdit
     setPropertyDescription("tabStopWidth", i18n("Tab Stop Width"));
     setPropertyDescription("tabChangesFocus", i18n("Tab Changes Focus"));
     setPropertyDescription("wrapPolicy", i18n("Word Wrap Policy"));
-    setValueDescription("AtWordBoundary", i18nc("For Word Wrap Policy", "At Word Boundary"));
-    setValueDescription("Anywhere", i18nc("For Word Wrap Policy", "Anywhere"));
-    setValueDescription("AtWordOrDocumentBoundary", i18nc("For Word Wrap Policy", "At Word Boundary If Possible"));
+    setValueDescription("AtWordBoundary", i18nc("Property: For Word Wrap Policy", "At Word Boundary"));
+    setValueDescription("Anywhere", i18nc("Property: For Word Wrap Policy", "Anywhere"));
+    setValueDescription("AtWordOrDocumentBoundary", i18nc("Property: For Word Wrap Policy", "At Word Boundary If Possible"));
     setPropertyDescription("wordWrap", i18n("Word Wrapping"));
     setPropertyDescription("wrapColumnOrWidth", i18n("Word Wrap Position"));
-    setValueDescription("NoWrap", i18nc("For Word Wrap Position", "None"));
-    setValueDescription("WidgetWidth", i18nc("For Word Wrap Position", "Widget's Width"));
-    setValueDescription("FixedPixelWidth", i18nc("For Word Wrap Position", "In Pixels"));
-    setValueDescription("FixedColumnWidth", i18nc("For Word Wrap Position", "In Columns"));
+    setValueDescription("NoWrap", i18nc("Property: For Word Wrap Position", "None"));
+    setValueDescription("WidgetWidth", i18nc("Property: For Word Wrap Position", "Widget's Width"));
+    setValueDescription("FixedPixelWidth", i18nc("Property: For Word Wrap Position", "In Pixels"));
+    setValueDescription("FixedColumnWidth", i18nc("Property: For Word Wrap Position", "In Columns"));
     setPropertyDescription("linkUnderline", i18n("Links Underlined"));
     setPropertyDescription("horizontalScrollBarPolicy", i18n("Horizontal Scroll Bar"));
     setPropertyDescription("verticalScrollBarPolicy", i18n("Vertical Scroll Bar"));
     //ScrollBarPolicy
-    setValueDescription("ScrollBarAsNeeded", i18nc("Show Scroll Bar As Needed", "As Needed"));
-    setValueDescription("ScrollBarAlwaysOff", i18nc("Scroll Bar Always Off", "Always Off"));
-    setValueDescription("ScrollBarAlwaysOn", i18nc("Scroll Bar Always On", "Always On"));
+    setValueDescription("ScrollBarAsNeeded", i18nc("Property: Show Scroll Bar As Needed", "As Needed"));
+    setValueDescription("ScrollBarAlwaysOff", i18nc("Property: Scroll Bar Always Off", "Always Off"));
+    setValueDescription("ScrollBarAlwaysOn", i18nc("Property: Scroll Bar Always On", "Always On"));
     setPropertyDescription("acceptRichText", i18nc("Property: Text Edit accepts rich text", "Rich Text"));
     setPropertyDescription("HTML", i18nc("Property: HTML value of text edit", "HTML"));
 }
@@ -485,24 +461,20 @@ StdWidgetFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
 {
     QWidget *w = 0;
     QString text(container->form()->library()->textForWidgetName(n, c));
-//2.0    const bool designMode = options & KFormDesigner::WidgetFactory::DesignViewMode;
-
     if (c == "QLabel")
         w = new QLabel(text, p);
     else if (c == "KexiPictureLabel")
         w = new KexiPictureLabel(koDesktopIcon("image-x-generic"), p);
     else if (c == "KLineEdit") {
         w = new KLineEdit(p);
-//2.0        if (designMode)
-//2.0            w->setCursor(QCursor(Qt::ArrowCursor));
     } else if (c == "KPushButton")
-        w = new KPushButton(/*i18n("Button")*/text, p);
+        w = new KPushButton(text, p);
 
     else if (c == "QRadioButton")
-        w = new QRadioButton(/*i18n("Radio Button")*/text, p);
+        w = new QRadioButton(text, p);
 
     else if (c == "QCheckBox")
-        w = new QCheckBox(/*i18n("Check Box")*/text, p);
+        w = new QCheckBox(text, p);
 
     else if (c == "KIntSpinBox")
         w = new KIntSpinBox(p);
@@ -511,7 +483,7 @@ StdWidgetFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
         w = new KComboBox(p);
 
     else if (c == "KTextEdit")
-        w = new KTextEdit(/*i18n("Enter your text here")*/text, p);
+        w = new KTextEdit(text, p);
 
 #ifndef KEXI_FORMS_NO_LIST_WIDGET
     else if (c == "QTreeWidget") {
@@ -520,7 +492,7 @@ StdWidgetFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
         if (container->form()->interactiveMode()) {
             tw->setColumnCount(1);
             tw->setHeaderItem(new QTreeWidetItem(tw));
-            tw->headerItem()->setText(1, i18n("Column 1"));
+            tw->headerItem()->setText(1, futureI18n("Column 1"));
         }
         lw->setRootIsDecorated(true);
     }
@@ -544,16 +516,6 @@ StdWidgetFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
         w = new Line(options & WidgetFactory::VerticalOrientation
                      ? Qt::Vertical : Qt::Horizontal, p);
 
-#ifndef KEXI_NO_FORM_SPRING_ELEMENT
-    else if (c == "Spring") {
-        w = new Spring(p);
-        if (0 == (options & WidgetFactory::AnyOrientation))
-            static_cast<Spring*>(w)->setOrientation(
-                (options & WidgetFactory::VerticalOrientation)
-                ? Qt::Vertical : Qt::Horizontal);
-    }
-#endif
-
     if (w) {
         w->setObjectName(n);
         kDebug() << w << w->objectName() << "created";
@@ -569,11 +531,6 @@ StdWidgetFactory::previewWidget(const QByteArray &classname,
 {
     Q_UNUSED(classname);
     Q_UNUSED(widget);
-/* moved to FormWidgetInterface
-    if (classname == "Spring") {
-        dynamic_cast<Spring*>(widget)->setPreviewMode();
-        return true;
-    }*/
     return true;
 }
 
@@ -599,8 +556,6 @@ StdWidgetFactory::createMenuActions(const QByteArray &classname, QWidget *w,
 bool
 StdWidgetFactory::startInlineEditing(InlineEditorCreationArguments& args)
 {
-//2.0    setWidget(w, container);
-// m_container = container;
     if (args.classname == "KLineEdit") {
         KLineEdit *lineedit = static_cast<KLineEdit*>(args.widget);
         args.text = lineedit->text();
@@ -611,14 +566,10 @@ StdWidgetFactory::startInlineEditing(InlineEditorCreationArguments& args)
     else if (args.widget->inherits("QLabel")) {
         QLabel *label = static_cast<QLabel*>(args.widget);
         if (label->textFormat() == Qt::RichText) {
-            //m_widget = w;
-//   setWidget(w, container);
             args.execute = false;
-            EditRichTextAction(args.container, label, 0, this).trigger(); // editText();
-//2.0            editText();
+            EditRichTextAction(args.container, label, 0, this).trigger();
 //! @todo
         } else {
-//            createEditor(classname, label->text(), label, container, label->geometry(), label->alignment());
             args.text = label->text();
             args.alignment = label->alignment();
         }
@@ -634,13 +585,7 @@ StdWidgetFactory::startInlineEditing(InlineEditorCreationArguments& args)
         args.geometry = QRect(push->x() + r.x(), push->y() + r.y(), r.width(), r.height());
 //! @todo this is typical alignment, can we get actual from the style?
         args.alignment = Qt::AlignCenter;
-//        args.backgroundMode = Qt::PaletteButton;
         args.transparentBackground = true;
-        //r.setX(r.x() + 5);
-        //r.setY(r.y() + 5);
-        //r.setWidth(r.width()-10);
-        //r.setHeight(r.height() - 10);
-//        createEditor(classname, push->text(), push, container, editorRect, Qt::AlignCenter, false, false, Qt::PaletteButton);
         return true;
     }
     else if (args.classname == "QRadioButton") {
@@ -652,20 +597,16 @@ StdWidgetFactory::startInlineEditing(InlineEditorCreationArguments& args)
                           QStyle::SE_RadioButtonContents, &option, radio));
         args.geometry = QRect(
             radio->x() + r.x(), radio->y() + r.y(), r.width(), r.height());
-//        createEditor(classname, radio->text(), radio, container, editorRect, Qt::AlignLeft);
         return true;
     }
     else if (args.classname == "QCheckBox") {
         QCheckBox *check = static_cast<QCheckBox*>(args.widget);
-        //QRect r(check->geometry());
-        //r.setX(r.x() + 20);
         QStyleOption option;
         option.initFrom(check);
         const QRect r(args.widget->style()->subElementRect(
                           QStyle::SE_CheckBoxContents, &option, check));
         args.geometry = QRect(
             check->x() + r.x(), check->y() + r.y(), r.width(), r.height());
-//        createEditor(classname, check->text(), check, container, editorRect, Qt::AlignLeft);
         return true;
     } else if (args.classname == "KComboBox") {
         QStringList list;
@@ -713,9 +654,7 @@ bool
 StdWidgetFactory::changeInlineText(KFormDesigner::Form *form, QWidget *widget, 
                                    const QString &text, QString &oldText)
 {
-//2.0    QByteArray n = WidgetFactory::widget()->metaObject()->className();
     const QByteArray n(widget->metaObject()->className());
-//2.0    QWidget *w = WidgetFactory::widget();
     if (n == "KIntSpinBox") {
         oldText = QString::number(dynamic_cast<KIntSpinBox*>(widget)->value());
         dynamic_cast<KIntSpinBox*>(widget)->setValue(text.toInt());
@@ -724,34 +663,6 @@ StdWidgetFactory::changeInlineText(KFormDesigner::Form *form, QWidget *widget,
         oldText = widget->property("text").toString();
         changeProperty(form, widget, "text", text);
     }
-
-    /* By-hand method not needed as sizeHint() can do that for us
-    QFontMetrics fm = w->fontMetrics();
-    QSize s(fm.width( text ), fm.height());
-    int width;
-    if(n == "QLabel") // labels are resized to fit the text
-    {
-      w->resize(w->sizeHint());
-      WidgetFactory::m_editor->resize(w->size());
-      return;
-    }
-    // and other widgets are just enlarged if needed
-    else if(n == "KPushButton")
-      width = w->style().sizeFromContents( QStyle::CT_PushButton, w, s).width();
-    else if(n == "QCheckBox")
-      width = w->style().sizeFromContents( QStyle::CT_CheckBox, w, s).width();
-    else if(n == "QRadioButton")
-      width = w->style().sizeFromContents( QStyle::CT_RadioButton, w, s).width();
-    else
-      return;
-    int width = w->sizeHint().width();*/
-
-#if 0 //not needed here, size hint is used on creation in InsertWidgetCommand::execute()
-    if (w->width() < width) {
-        w->resize(width, w->height());
-        //WidgetFactory::m_editor->resize(w->size());
-    }
-#endif
     return true;
 }
 
@@ -863,14 +774,16 @@ StdWidgetFactory::saveListItem(QListWidgetItem *item,
 bool
 StdWidgetFactory::readSpecialProperty(const QByteArray &classname, 
                                       QDomElement &node, QWidget *w, 
-                                      KFormDesigner::ObjectTreeItem *)
+                                      KFormDesigner::ObjectTreeItem *item)
 {
     const QString tag( node.tagName() );
     const QString name( node.attribute("name") );
+    KFormDesigner::Form *form = item->container() ? item->container()->form() : item->parent()->container()->form();
 
     if ((tag == "item") && (classname == "KComboBox")) {
         KComboBox *combo = dynamic_cast<KComboBox*>(w);
-        QVariant val = KFormDesigner::FormIO::readPropertyValue(node.firstChild().firstChild(), w, name);
+        QVariant val = KFormDesigner::FormIO::readPropertyValue(
+                    form, node.firstChild().firstChild(), w, name);
         if (val.canConvert(QVariant::Pixmap))
             combo->addItem(val.value<QPixmap>(), QString());
         else
@@ -906,7 +819,6 @@ StdWidgetFactory::readSpecialProperty(const QByteArray &classname,
         return true;
     }
 #endif
-
     return false;
 }
 
@@ -962,14 +874,12 @@ StdWidgetFactory::isPropertyVisibleInternal(const QByteArray &classname,
     if (classname == "FormWidgetBase") {
         if (property == "windowIconText"
                 || property == "geometry" /*nonsense for toplevel widget*/)
+        {
             return false;
-    } else if (classname == "CustomWidget") {
+        }
     }
-#ifndef KEXI_NO_FORM_SPRING_ELEMENT
-    else if (classname == "Spring") {
-        return Spring::isPropertyVisible(property);
+    else if (classname == "CustomWidget") {
     }
-#endif
     else if (classname == "KexiPictureLabel") {
         if (   property == "text" || property == "indent"
             || property == "textFormat" || property == "font"
@@ -1009,31 +919,6 @@ StdWidgetFactory::isPropertyVisibleInternal(const QByteArray &classname,
     return ok && WidgetFactory::isPropertyVisibleInternal(classname, w, property, isTopLevel);
 }
 
-#if 0 // moved to EditRichTextAction
-void
-StdWidgetFactory::editText()
-{
-    QByteArray classname = widget()->metaObject()->className();
-    QString text;
-    if (classname == "KTextEdit") {
-        KTextEdit* te = dynamic_cast<KTextEdit*>(widget());
-        if (te->textFormat() == Qt::RichText || te->textFormat() == Qt::LogText)
-            text = te->toHtml();
-        else
-            text = te->toPlainText();
-    } else if (classname == "QLabel")
-        text = dynamic_cast<QLabel*>(widget())->text();
-
-    if (editRichText(widget(), text)) {
-        changeProperty("textFormat", "RichText", m_container->form());
-        changeProperty("text", text, m_container->form());
-    }
-
-    if (classname == "QLabel")
-        widget()->resize(widget()->sizeHint());
-}
-#endif
-
 #ifndef KEXI_FORMS_NO_LIST_WIDGET
 void
 StdWidgetFactory::editListContents()
@@ -1055,7 +940,7 @@ StdWidgetFactory::setPropertyOptions(KoProperty::Set& set, const KFormDesigner::
     }
 }
 
-K_EXPORT_KEXI_FORM_WIDGET_FACTORY_PLUGIN(StdWidgetFactory, stdwidgets)
+K_EXPORT_KEXIFORMWIDGETS_PLUGIN(StdWidgetFactory, stdwidgets)
 
 #include "stdwidgetfactory.moc"
 

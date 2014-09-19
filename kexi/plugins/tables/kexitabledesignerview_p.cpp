@@ -72,8 +72,8 @@ KexiTableDesignerViewPrivate::KexiTableDesignerViewPrivate(
     historyActionCollection->addAction("edit_redo", history->createRedoAction(historyActionCollection, "edit_redo"));
     
     internalPropertyNames
-    << "subType" << "uid" << "newrecord" << "rowSource" << "rowSourceType"
-    << "boundColumn" << "visibleColumn";
+        << "subType" << "uid" << "newrecord" << "rowSource" << "rowSourceType"
+        << "boundColumn" << "visibleColumn";
 }
 
 KexiTableDesignerViewPrivate::~KexiTableDesignerViewPrivate()
@@ -113,7 +113,7 @@ void KexiTableDesignerViewPrivate::setPropertyValueIfNeeded(
     }
 
     const bool prev_addHistoryCommand_in_slotPropertyChanged_enabled
-    = addHistoryCommand_in_slotPropertyChanged_enabled; //remember
+        = addHistoryCommand_in_slotPropertyChanged_enabled; //remember
     addHistoryCommand_in_slotPropertyChanged_enabled = false;
     if (property.value() != newValue)
         property.setValue(newValue, rememberOldValue);
@@ -123,7 +123,7 @@ void KexiTableDesignerViewPrivate::setPropertyValueIfNeeded(
     }
     delete oldListData;
     addHistoryCommand_in_slotPropertyChanged_enabled
-    = prev_addHistoryCommand_in_slotPropertyChanged_enabled; //restore
+        = prev_addHistoryCommand_in_slotPropertyChanged_enabled; //restore
 }
 
 void KexiTableDesignerViewPrivate::setPropertyValueIfNeeded(
@@ -169,7 +169,7 @@ bool KexiTableDesignerViewPrivate::updatePropertiesVisibility(KexiDB::Field::Typ
 
     prop = &set["objectType"];
     const bool isObjectTypeGroup
-    = set["type"].value().toInt() == (int)KexiDB::Field::BLOB; // used only for BLOBs
+        = set["type"].value().toInt() == (int)KexiDB::Field::BLOB; // used only for BLOBs
     visible = isObjectTypeGroup;
     setVisibilityIfNeeded(set, prop,  visible, changed, commandGroup);
 

@@ -1,4 +1,6 @@
 #! /bin/sh
+source ../../../calligra_xgettext.sh
+
 $EXTRACTRC *.rc *.ui >> rc.cpp
-$XGETTEXT *.cpp -o $podir/googledocs_plugin.pot
+calligra_xgettext googledocs_plugin.pot *.cpp
 rm -f rc.cpp

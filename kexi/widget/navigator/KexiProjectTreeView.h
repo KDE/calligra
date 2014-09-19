@@ -40,7 +40,7 @@ class KexiProjectTreeView : public QTreeView
 {
     Q_OBJECT
 public:
-    KexiProjectTreeView(QWidget *parent);
+    explicit KexiProjectTreeView(QWidget *parent);
     virtual ~KexiProjectTreeView();
 
     using QTreeView::setModel;

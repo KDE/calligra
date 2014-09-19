@@ -17,7 +17,7 @@
  */
 
 import QtQuick 1.1
-import "../components"
+import org.krita.sketch.components 1.0
 import org.krita.sketch 1.0
 
 Panel {
@@ -123,6 +123,7 @@ Panel {
                         anchors.centerIn: parent;
                         cache: false;
                         source: model.icon;
+                        asynchronous: true;
                         smooth: true;
                         width: parent.width * 0.8;
                         height: parent.height * 0.8;
@@ -174,8 +175,8 @@ Panel {
                     PropertyChanges { target: addLayerButtons; height: Constants.GridHeight; opacity: 1; }
                 }
             ]
-            Behavior on height { PropertyAnimation { duration: 150;  } }
-            Behavior on opacity { PropertyAnimation { duration: 150;  } }
+            Behavior on height { PropertyAnimation { duration: Constants.AnimationDuration;  } }
+            Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration;  } }
             clip: true;
             height: 0;
             opacity: 0;
@@ -186,6 +187,15 @@ Panel {
                 anchors.centerIn: parent;
                 height: childrenRect.height;
                 width: childrenRect.width;
+                Button {
+                    width: height; height: Constants.ToolbarButtonSize * 0.9
+                    image: Settings.theme.icon("fileclip-black")
+                    visible: KisClipBoard.clip;
+                    onClicked: {
+                        sketchView.selectionManager.paste();
+                        addLayerButtons.state = "";
+                    }
+                }
                 Button {
                     width: height; height: Constants.ToolbarButtonSize * 0.9
                     image: Settings.theme.icon("layer_paint-black")
@@ -239,15 +249,22 @@ Panel {
                             top: topSpacer.bottom;
                             left: parent.left;
                             right: parent.right;
-                            leftMargin: 8 * model.depth;
+                            leftMargin: Constants.DefaultMargin * model.depth;
                         }
-                        height: Constants.GridHeight;
+                        height: model.activeLayer ? Constants.GridHeight + layerControls.height : Constants.GridHeight;
+                        Behavior on height { NumberAnimation { duration: 100; } }
                         radius: 8
-                        color: model.activeLayer ? Settings.theme.color("panels/layers/layer/active") : Settings.theme.color("panels/layers/layer/inactive");
+                        color: Settings.theme.color("panels/layers/layer/background");
                     }
                     Rectangle {
-                        anchors.fill: layerBgRect
-                        color: "transparent";
+                        anchors {
+                            top: layerBgRect.top;
+                            left: layerBgRect.left;
+                            right: layerBgRect.right;
+                        }
+                        height: Constants.GridHeight;
+                        color: model.activeLayer ? Settings.theme.color("panels/layers/layer/active") : Settings.theme.color("panels/layers/layer/inactive");
+                        radius: 8
                         Rectangle {
                             id: layerThumbContainer;
                             anchors {
@@ -262,6 +279,7 @@ Panel {
                                 cache: false;
                                 source: model.icon;
                                 smooth: true;
+                                asynchronous: true;
                                 width: parent.width * 0.8;
                                 height: parent.height * 0.8;
                                 fillMode: Image.PreserveAspectFit;
@@ -298,6 +316,7 @@ Panel {
                                 checkedColor: Settings.theme.color("panels/layers/layer/visible");
                                 image: checked ? Settings.theme.icon("visible_on-small") : Settings.theme.icon("visible_off-small");
                                 onCheckedChanged: layerModel.setVisible(model.index, checked);
+                                tooltip: checked ? "Hide Layer" : "Show Layer";
                             }
                             Button {
                                 width: height;
@@ -307,6 +326,7 @@ Panel {
                                 checkedColor: Settings.theme.color("panels/layers/layer/locked");
                                 image: checked ? Settings.theme.icon("locked_on-small") : Settings.theme.icon("locked_off-small");
                                 onCheckedChanged: layerModel.setLocked(model.index, checked);
+                                tooltip: checked ? "Unlock Layer" : "Lock Layer";
                             }
                         }
                         Label {
@@ -333,74 +353,78 @@ Panel {
                             horizontalAlignment: Text.AlignRight;
                         }
                     }
-                    Image {
-                        id: moveUpButton;
-                        anchors {
-                            horizontalCenter: layerBgRect.left;
-                            top: layerBgRect.top;
-                        }
-                        height: Constants.GridHeight / 3;
-                        width: height;
-                        visible: model.canMoveUp;
-                        fillMode: Image.PreserveAspectFit;
-                        smooth: true;
-                        source: Settings.theme.icon("up");
-                        MouseArea {
-                            anchors.fill: parent;
-                            onClicked: layerModel.moveUp();
-                        }
-                    }
-                    Image {
-                        id: moveDownButton;
-                        anchors {
-                            horizontalCenter: layerBgRect.left;
-                            bottom: layerBgRect.bottom;
-                        }
-                        height: Constants.GridHeight / 3;
-                        width: height;
-                        visible: model.canMoveDown;
-                        fillMode: Image.PreserveAspectFit;
-                        smooth: true;
-                        source: Settings.theme.icon("down");
-                        MouseArea {
-                            anchors.fill: parent;
-                            onClicked: layerModel.moveDown();
-                        }
-                    }
-                    Image {
-                        id: moveLeftButton;
-                        anchors {
-                            right: layerBgRect.left;
-                            verticalCenter: layerBgRect.verticalCenter;
-                        }
-                        height: Constants.GridHeight / 3;
-                        width: height;
-                        visible: model.canMoveLeft;
-                        fillMode: Image.PreserveAspectFit;
-                        smooth: true;
-                        source: Settings.theme.icon("back");
-                        MouseArea {
-                            anchors.fill: parent;
-                            onClicked: layerModel.moveLeft();
-                        }
-                    }
-                    Image {
-                        id: moveRightButton;
+                    Row {
+                        id: layerControls;
+
                         anchors {
                             left: layerBgRect.left;
-                            verticalCenter: layerBgRect.verticalCenter;
+                            right: layerBgRect.right;
+                            bottom: layerBgRect.bottom;
                         }
-                        height: Constants.GridHeight / 3;
-                        width: height;
-                        visible: model.canMoveRight;
-                        fillMode: Image.PreserveAspectFit;
-                        smooth: true;
-                        source: Settings.theme.icon("forward");
-                        MouseArea {
-                            anchors.fill: parent;
+
+                        height: childrenRect.height;
+                        opacity: model.activeLayer ? 1.0 : 0.0;
+                        Behavior on opacity { NumberAnimation { duration: 100; } }
+                        spacing: 0;
+                        
+                        Button {
+                            id: moveUpButton;
+                            width: parent.width / 6;
+                            height: width;
+                            enabled: model.canMoveUp;
+                            opacity: enabled ? 1.0 : 0.2;
+                            image: Settings.theme.icon("layer_move_up");
+                            onClicked: layerModel.moveUp();
+                            tooltip: "Move Layer Up";
+                        }
+                        Button {
+                            id: moveDownButton;
+                            width: parent.width / 6;
+                            height: width;
+                            enabled: model.canMoveDown;
+                            opacity: enabled ? 1.0 : 0.2;
+                            image: Settings.theme.icon("layer_move_down");
+                            onClicked: layerModel.moveDown();
+                            tooltip: "Move Layer Down";
+                        }
+                        Button {
+                            id: moveLeftButton;
+                            width: parent.width / 6;
+                            height: width;
+                            enabled: model.canMoveLeft;
+                            opacity: enabled ? 1.0 : 0.2;
+                            image: Settings.theme.icon("layer_move_left");
+                            onClicked: layerModel.moveLeft();
+                            tooltip: "Move Layer out of Group";
+                        }
+                        Button {
+                            id: moveRightButton;
+                            width: parent.width / 6;
+                            height: width;
+                            enabled: model.canMoveRight;
+                            opacity: enabled ? 1.0 : 0.2;
+                            image: Settings.theme.icon("layer_move_right");
                             onClicked: layerModel.moveRight();
+                            tooltip: "Move Layer into Group";
+                        }
+                        Button {
+                            id: duplicateLayerButton;
+                            width: parent.width / 6;
+                            height: width;
+                            image: Settings.theme.icon("layer_duplicate");
+                            onClicked: layerModel.clone();
+                            tooltip: "Duplicate Layer";
+                        }
+                        Button {
+                            id: clearLayerButton;
+                            width: parent.width / 6;
+                            height: width;
+                            image: Settings.theme.icon("layer_clear");
+                            onClicked: layerModel.clear();
+                            tooltip: "Clear Layer";
                         }
                     }
+                    
                     Rectangle {
                         id: bottomSpacer;
                         anchors.top: layerBgRect.bottom;

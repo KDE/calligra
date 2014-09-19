@@ -90,7 +90,8 @@ public:
      If \a listData is not NULL and not empty, a deep copy of it is passed to Property::setListData().
      If \a listData \a nlist if not NULL but empty, Property::setListData(0) is called. */
     virtual void changeFieldPropertyForRow(int fieldUID, const QByteArray& propertyName,
-                                           const QVariant& newValue, KoProperty::Property::ListData* const listData = 0,
+                                           const QVariant& newValue,
+                                           KoProperty::Property::ListData* const listData = 0,
                                            bool addCommand = false) = 0;
 
     /*! Creates temporary table for the current design and returns debug string for it. */

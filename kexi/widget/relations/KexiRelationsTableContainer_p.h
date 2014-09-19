@@ -75,7 +75,7 @@ class KexiRelationViewTableContainerHeader : public QLabel
 {
     Q_OBJECT
 public:
-    KexiRelationViewTableContainerHeader(const QString& text, QWidget *parent = 0);
+    explicit KexiRelationViewTableContainerHeader(const QString& text, QWidget *parent = 0);
     virtual ~KexiRelationViewTableContainerHeader();
 
     virtual void setFocus();

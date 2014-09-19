@@ -47,6 +47,7 @@
 
 #include "kis_canvas_resource_provider.h"
 #include "kis_global.h"
+#include "kis_config_notifier.h"
 
 #include <config-ocio.h>
 
@@ -75,6 +76,16 @@ KisConfig::~KisConfig()
     s_synchLocker.unlock();
 }
 
+
+bool KisConfig::disableTouchOnCanvas() const
+{
+    return m_cfg.readEntry("disableTouchOnCanvas", false);
+}
+
+void KisConfig::setDisableTouchOnCanvas(bool value) const
+{
+    m_cfg.writeEntry("disableTouchOnCanvas", value);
+}
 
 bool KisConfig::useProjections() const
 {
@@ -166,6 +177,56 @@ void KisConfig::defImageResolution(double res) const
     m_cfg.writeEntry("imageResolutionDef", res*72.0);
 }
 
+bool KisConfig::defAutoFrameBreakEnabled() const
+{
+    return m_cfg.readEntry("autoFrameBreakEnabled", false);
+}
+
+void KisConfig::defAutoFrameBreakEnabled(bool state) const
+{
+    m_cfg.writeEntry("autoFrameBreakEnabled", state);
+}
+
+bool KisConfig::defOnionSkinningEnabled() const
+{
+    return m_cfg.readEntry("onionSkinningEnabled", false);
+}
+
+void KisConfig::defOnionSkinningEnabled(bool state) const
+{
+    m_cfg.writeEntry("onionSkinningEnabled", state);
+}
+
+int KisConfig::defFps() const
+{
+    return m_cfg.readEntry("fps", 12);
+}
+
+void KisConfig::defFps(int value) const
+{
+    m_cfg.writeEntry("fps", value);
+}
+
+int KisConfig::defLocalPlaybackRange() const
+{
+    return m_cfg.readEntry("localPlaybackRange", 15);
+}
+
+void KisConfig::defLocalPlaybackRange(int value) const
+{
+    m_cfg.writeEntry("localPlaybackRange", value);
+}
+
+bool KisConfig::defLoopingEnabled() const
+{
+    return m_cfg.readEntry("loopingEnabled", true);
+}
+
+void KisConfig::defLoopingEnabled(bool state) const
+{
+    m_cfg.writeEntry("loopingEnabled", state);
+}
+
 enumCursorStyle KisConfig::cursorStyle() const
 {
     return (enumCursorStyle) m_cfg.readEntry("cursorStyleDef", int(DEFAULT_CURSOR_STYLE));
@@ -230,6 +291,7 @@ const KoColorProfile *KisConfig::getScreenProfile(int screen)
         return 0;
     }
 #else
+    Q_UNUSED(screen)
     return 0;
 
 #endif
@@ -366,14 +428,14 @@ void KisConfig::setRenderIntent(qint32 renderIntent) const
 
 bool KisConfig::useOpenGL() const
 {
-    if (qApp->applicationName() == "krita" ) {
-        QString canvasState = m_cfg.readEntry("canvasState");
-        return (m_cfg.readEntry("useOpenGL", false) && (canvasState == "OPENGL_SUCCESS" || canvasState == "TRY_OPENGL"));
+    if (qApp->applicationName() == "krita" || qApp->applicationName() == "kritaanimation") {
+        qDebug() << "use opengl" << m_cfg.readEntry("useOpenGL", true) << "success" << m_cfg.readEntry("canvasState", "OPENGL_SUCCESS");
+        QString canvasState = m_cfg.readEntry("canvasState", "OPENGL_SUCCESS");
+        return (m_cfg.readEntry("useOpenGL", true) && (canvasState == "OPENGL_SUCCESS" || canvasState == "TRY_OPENGL"));
     }
     else if (qApp->applicationName() == "kritasketch" || qApp->applicationName() == "kritagemini") {
         return true; // for sketch and gemini
-    }
-    else {
+    } else {
         return false;
     }
 }
@@ -385,7 +447,7 @@ void KisConfig::setUseOpenGL(bool useOpenGL) const
 
 int KisConfig::openGLFilteringMode() const
 {
-    return m_cfg.readEntry("OpenGLFilterMode", 1);
+    return m_cfg.readEntry("OpenGLFilterMode", 3);
 }
 
 void KisConfig::setOpenGLFilteringMode(int filteringMode)
@@ -395,7 +457,7 @@ void KisConfig::setOpenGLFilteringMode(int filteringMode)
 
 bool KisConfig::useOpenGLTextureBuffer() const
 {
-    return m_cfg.readEntry("useOpenGLTextureBuffer", false);
+    return m_cfg.readEntry("useOpenGLTextureBuffer", true);
 }
 
 void KisConfig::setUseOpenGLTextureBuffer(bool useBuffer)
@@ -661,6 +723,17 @@ void KisConfig::setAntialiasCurves(bool v) const
     m_cfg.writeEntry("antialiascurves", v);
 }
 
+QColor KisConfig::selectionOverlayMaskColor() const
+{
+    QColor def(255, 0, 0, 220);
+    return m_cfg.readEntry("selectionOverlayMaskColor", def);
+}
+
+void KisConfig::setSelectionOverlayMaskColor(const QColor &color)
+{
+    m_cfg.writeEntry("selectionOverlayMaskColor", color);
+}
+
 bool KisConfig::antialiasSelectionOutline() const
 {
     return m_cfg.readEntry("AntialiasSelectionOutline", false);
@@ -679,6 +752,16 @@ bool KisConfig::showRootLayer() const
 void KisConfig::setShowRootLayer(bool showRootLayer) const
 {
     m_cfg.writeEntry("ShowRootLayer", showRootLayer);
+}
+
+bool KisConfig::showGlobalSelection() const
+{
+    return m_cfg.readEntry("ShowGlobalSelection", false);
+}
+
+void KisConfig::setShowGlobalSelection(bool showGlobalSelection) const
+{
+    m_cfg.writeEntry("ShowGlobalSelection", showGlobalSelection);
 }
 
 bool KisConfig::showOutlineWhilePainting() const
@@ -954,14 +1037,26 @@ void KisConfig::setUseOcio(bool useOCIO) const
     m_cfg.writeEntry("Krita/Ocio/UseOcio", useOCIO);
 }
 
-bool KisConfig::useOcioEnvironmentVariable() const
+int KisConfig::favoritePresets() const
 {
-    return m_cfg.readEntry("Krita/Ocio/UseEnvironment", false);
+    return m_cfg.readEntry("favoritePresets", 10);
 }
 
-void KisConfig::setUseOcioEnvironmentVariable(bool useOCIO) const
+void KisConfig::setFavoritePresets(const int value)
 {
-    m_cfg.writeEntry("Krita/Ocio/UseEnvironment", useOCIO);
+    m_cfg.writeEntry("favoritePresets", value);
+}
+
+
+KisConfig::OcioColorManagementMode
+KisConfig::ocioColorManagementMode() const
+{
+    return (OcioColorManagementMode) m_cfg.readEntry("Krita/Ocio/OcioColorManagementMode", (int) INTERNAL);
+}
+
+void KisConfig::setOcioColorManagementMode(OcioColorManagementMode mode) const
+{
+    m_cfg.writeEntry("Krita/Ocio/OcioColorManagementMode", (int) mode);
 }
 
 QString KisConfig::ocioConfigurationPath() const
@@ -982,6 +1077,26 @@ QString KisConfig::ocioLutPath() const
 void KisConfig::setOcioLutPath(const QString &path) const
 {
     m_cfg.writeEntry("Krita/Ocio/OcioLutPath", path);
+}
+
+int KisConfig::ocioLutEdgeSize() const
+{
+    return m_cfg.readEntry("Krita/Ocio/LutEdgeSize", 64);
+}
+
+void KisConfig::setOcioLutEdgeSize(int value)
+{
+    m_cfg.writeEntry("Krita/Ocio/LutEdgeSize", value);
+}
+
+bool KisConfig::ocioLockColorVisualRepresentation() const
+{
+    return m_cfg.readEntry("Krita/Ocio/OcioLockColorVisualRepresentation", false);
+}
+
+void KisConfig::setOcioLockColorVisualRepresentation(bool value)
+{
+    m_cfg.writeEntry("Krita/Ocio/OcioLockColorVisualRepresentation", value);
 }
 
 QString KisConfig::defaultPalette() const
@@ -1112,6 +1227,56 @@ void KisConfig::setLineSmoothingSmoothPressure(bool value)
     m_cfg.writeEntry("LineSmoothingSmoothPressure", value);
 }
 
+bool KisConfig::lineSmoothingScalableDistance() const
+{
+    return m_cfg.readEntry("LineSmoothingScalableDistance", true);
+}
+
+void KisConfig::setLineSmoothingScalableDistance(bool value)
+{
+    m_cfg.writeEntry("LineSmoothingScalableDistance", value);
+}
+
+qreal KisConfig::lineSmoothingDelayDistance() const
+{
+    return m_cfg.readEntry("LineSmoothingDelayDistance", 50.0);
+}
+
+void KisConfig::setLineSmoothingDelayDistance(qreal value)
+{
+    m_cfg.writeEntry("LineSmoothingDelayDistance", value);
+}
+
+bool KisConfig::lineSmoothingUseDelayDistance() const
+{
+    return m_cfg.readEntry("LineSmoothingUseDelayDistance", true);
+}
+
+void KisConfig::setLineSmoothingUseDelayDistance(bool value)
+{
+    m_cfg.writeEntry("LineSmoothingUseDelayDistance", value);
+}
+
+bool KisConfig::lineSmoothingFinishStabilizedCurve() const
+{
+    return m_cfg.readEntry("LineSmoothingFinishStabilizedCurve", true);
+}
+
+void KisConfig::setLineSmoothingFinishStabilizedCurve(bool value)
+{
+    m_cfg.writeEntry("LineSmoothingFinishStabilizedCurve", value);
+}
+
+bool KisConfig::lineSmoothingStabilizeSensors() const
+{
+    return m_cfg.readEntry("LineSmoothingStabilizeSensors", true);
+}
+
+void KisConfig::setLineSmoothingStabilizeSensors(bool value)
+{
+    m_cfg.writeEntry("LineSmoothingStabilizeSensors", value);
+}
+
 int KisConfig::paletteDockerPaletteViewSectionSize() const
 {
     return m_cfg.readEntry("paletteDockerPaletteViewSectionSize", 12);
@@ -1120,4 +1285,32 @@ int KisConfig::paletteDockerPaletteViewSectionSize() const
 void KisConfig::setPaletteDockerPaletteViewSectionSize(int value) const
 {
     m_cfg.writeEntry("paletteDockerPaletteViewSectionSize", value);
+}
+
+const KoColorSpace* KisConfig::customColorSelectorColorSpace() const
+{
+    const KoColorSpace *cs = 0;
+
+    KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
+    if(cfg.readEntry("useCustomColorSpace", true)) {
+        KoColorSpaceRegistry* csr = KoColorSpaceRegistry::instance();
+        cs = csr->colorSpace(cfg.readEntry("customColorSpaceModel", "RGBA"),
+                             cfg.readEntry("customColorSpaceDepthID", "U8"),
+                             cfg.readEntry("customColorSpaceProfile", "sRGB built-in - (lcms internal)"));
+    }
+
+    return cs;
+}
+
+void KisConfig::setCustomColorSelectorColorSpace(const KoColorSpace *cs)
+{
+    KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
+    cfg.writeEntry("useCustomColorSpace", bool(cs));
+    if(cs) {
+        cfg.writeEntry("customColorSpaceModel", cs->colorModelId().id());
+        cfg.writeEntry("customColorSpaceDepthID", cs->colorDepthId().id());
+        cfg.writeEntry("customColorSpaceProfile", cs->profile()->name());
+    }
+
+    KisConfigNotifier::instance()->notifyConfigChanged();
 }

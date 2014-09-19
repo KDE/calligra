@@ -37,7 +37,7 @@ class KEXIFORMUTILS_EXPORT KexiDBCheckBox : public QCheckBox,
     Q_ENUMS(Tristate)
 
 public:
-    KexiDBCheckBox(const QString &text, QWidget *parent);
+    explicit KexiDBCheckBox(const QString &text, QWidget *parent = 0);
     virtual ~KexiDBCheckBox();
 
     inline QString dataSource() const {
@@ -102,8 +102,8 @@ protected:
     void updateTristate();
 
 private:
-    bool m_invalidState : 1;
-    bool m_tristateChanged : 1; //!< used in setTristate()
+    bool m_invalidState;
+    bool m_tristateChanged; //!< used in setTristate()
     Tristate m_tristate; //!< used in isTristate() and setTristate()
 };
 

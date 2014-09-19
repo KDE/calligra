@@ -22,24 +22,22 @@
 
 #include "kexipart.h"
 
-#include <QObject>
-
-#include <kxmlguiclient.h>
-
 namespace KexiPart
 {
 
 /** @internal A GUI Client used by KexiPart::Part objects within KexiMainWindow
 */
-class GUIClient : public QObject, public KXMLGUIClient
+class GUIClient : public QObject
 {
     Q_OBJECT
 public:
-    virtual ~GUIClient() {}
+    virtual ~GUIClient();
 
     inline Part *part() {
         return static_cast<Part*>(QObject::parent());
     }
+
+    KActionCollection* actionCollection() const;
 
 protected:
     /*! Creates a new GUI Client. If \a partInstanceClient is true, the part will be
@@ -47,10 +45,13 @@ protected:
      \a nameSuffix is used in constructing client's name (only useful for debugging purposes). */
     GUIClient(Part* part, bool partInstanceClient, const char* nameSuffix);
 
+private:
+    class Private;
+    Private * const d;
+
     friend class Part;
 };
 
 }
 
 #endif
-

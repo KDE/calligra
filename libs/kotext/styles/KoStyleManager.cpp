@@ -22,6 +22,7 @@
  */
 
 #include "KoStyleManager.h"
+
 #include "KoParagraphStyle.h"
 #include "KoCharacterStyle.h"
 #include "KoListStyle.h"
@@ -36,20 +37,17 @@
 #include "KoTextDocument.h"
 #include "KoTextTableTemplate.h"
 
+#include <KoOdfBibliographyConfiguration.h>
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
 #include <KoShapeSavingContext.h>
 #include <KoTextSharedSavingData.h>
+#include <KoXmlWriter.h>
+#include <KoOdfNumberDefinition.h>
 
 #include <kundo2stack.h>
 
-#include <QTimer>
 #include <QUrl>
-#include <QTextLayout>
-#include <QTextBlock>
-#include <QTextCursor>
-#include <QPixmap>
-#include <QMap>
 #include <QBuffer>
 #include <kdebug.h>
 #include <klocale.h>
@@ -57,12 +55,21 @@
 class KoStyleManager::Private
 {
 public:
-    Private() : defaultCharacterStyle(0), defaultParagraphStyle(0), defaultListStyle(0), defaultOutlineStyle(0), outlineStyle(0), undoStack(0), changeCommand(0)
+    Private()
+        : defaultCharacterStyle(0)
+        , defaultParagraphStyle(0)
+        , defaultListStyle(0)
+        , defaultOutlineStyle(0)
+        , outlineStyle(0)
+        , undoStack(0)
+        , changeCommand(0)
     {
     }
+
     ~Private() {
         qDeleteAll(automaticListStyles);
     }
+
     static int s_stylesNumber; // For giving out unique numbers to the styles for referencing
 
     QHash<int, KoCharacterStyle*> charStyles;
@@ -76,7 +83,7 @@ public:
     QHash<int, KoSectionStyle *> sectionStyles;
     QHash<int, KoParagraphStyle *> unusedParagraphStyles;
     QHash<int, KoTextTableTemplate *> tableTemplates;
-    QList<ChangeFollower*> documentUpdaterProxies;
+    QList<ChangeFollower *> documentUpdaterProxies;
 
 
     KoCharacterStyle *defaultCharacterStyle;

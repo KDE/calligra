@@ -55,4 +55,4 @@ install(TARGETS keximigrate_mdb  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  keximdb/keximigrate_mdb.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  keximdb/keximigrate_mdb.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)

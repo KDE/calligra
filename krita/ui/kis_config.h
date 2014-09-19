@@ -31,12 +31,16 @@
 #include "krita_export.h"
 
 class KoColorProfile;
+class KoColorSpace;
 
 class KRITAUI_EXPORT KisConfig
 {
 public:
     KisConfig();
     ~KisConfig();
+
+    bool disableTouchOnCanvas() const;
+    void setDisableTouchOnCanvas(bool value) const;
 
     bool useProjections() const;
     void setUseProjections(bool useProj) const;
@@ -55,6 +59,21 @@ public:
 
     double defImageResolution() const;
     void defImageResolution(double res) const;
+
+    bool defAutoFrameBreakEnabled() const;
+    void defAutoFrameBreakEnabled(bool state) const;
+
+    bool defOnionSkinningEnabled() const;
+    void defOnionSkinningEnabled(bool state) const;
+
+    int defFps() const;
+    void defFps(int value) const;
+
+    int defLocalPlaybackRange() const;
+    void defLocalPlaybackRange(int value) const;
+
+    bool defLoopingEnabled() const;
+    void defLoopingEnabled(bool state) const;
 
     /**
      * @return the id of the default color model used for creating new images.
@@ -201,11 +220,17 @@ public:
     bool antialiasCurves() const;
     void setAntialiasCurves(bool v) const;
 
+    QColor selectionOverlayMaskColor() const;
+    void setSelectionOverlayMaskColor(const QColor &color);
+
     bool antialiasSelectionOutline() const;
     void setAntialiasSelectionOutline(bool v) const;
 
     bool showRootLayer() const;
     void setShowRootLayer(bool showRootLayer) const;
+
+    bool showGlobalSelection() const;
+    void setShowGlobalSelection(bool showGlobalSelection) const;
 
     bool showOutlineWhilePainting() const;
     void setShowOutlineWhilePainting(bool showOutlineWhilePainting) const;
@@ -286,14 +311,30 @@ public:
     bool useOcio() const;
     void setUseOcio(bool useOCIO) const;
 
-    bool useOcioEnvironmentVariable() const;
-    void setUseOcioEnvironmentVariable(bool useOCIO) const;
+    int favoritePresets() const;
+    void setFavoritePresets(const int value);
+
+
+    enum OcioColorManagementMode {
+        INTERNAL = 0,
+        OCIO_CONFIG,
+        OCIO_ENVIRONMENT
+    };
+
+    OcioColorManagementMode ocioColorManagementMode() const;
+    void setOcioColorManagementMode(OcioColorManagementMode mode) const;
 
     QString ocioConfigurationPath() const;
     void setOcioConfigurationPath(const QString &path) const;
 
     QString ocioLutPath() const;
     void setOcioLutPath(const QString &path) const;
+
+    int ocioLutEdgeSize() const;
+    void setOcioLutEdgeSize(int value);
+
+    bool ocioLockColorVisualRepresentation() const;
+    void setOcioLockColorVisualRepresentation(bool value);
 
     bool useSystemMonitorProfile() const;
     void setUseSystemMonitorProfile(bool _useSystemMonitorProfile) const;
@@ -331,8 +372,27 @@ public:
     bool lineSmoothingSmoothPressure() const;
     void setLineSmoothingSmoothPressure(bool value);
 
+    bool lineSmoothingScalableDistance() const;
+    void setLineSmoothingScalableDistance(bool value);
+
+    qreal lineSmoothingDelayDistance() const;
+    void setLineSmoothingDelayDistance(qreal value);
+
+    bool lineSmoothingUseDelayDistance() const;
+    void setLineSmoothingUseDelayDistance(bool value);
+
+    bool lineSmoothingFinishStabilizedCurve() const;
+    void setLineSmoothingFinishStabilizedCurve(bool value);
+
+    bool lineSmoothingStabilizeSensors() const;
+    void setLineSmoothingStabilizeSensors(bool value);
+
     int paletteDockerPaletteViewSectionSize() const;
     void setPaletteDockerPaletteViewSectionSize(int value) const;
+
+    const KoColorSpace* customColorSelectorColorSpace() const;
+    void setCustomColorSelectorColorSpace(const KoColorSpace *cs);
+
 
     template<class T>
     void writeEntry(const QString& name, const T& value) {

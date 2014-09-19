@@ -8,7 +8,7 @@ set(kritagridpaintop_PART_SRCS
     random_gauss.cpp
     )
 
-kde4_add_ui_files(kritagridpaintop_PART_SRCS wdggridoptions.ui wdgshapeoptions.ui )
+kde4_add_ui_files(kritagridpaintop_PART_SRCS wdggridoptions.ui wdggridbrushshapeoptions.ui )
 
 kde4_add_plugin(kritagridpaintop ${kritagridpaintop_PART_SRCS})
 
@@ -20,7 +20,7 @@ install(TARGETS kritagridpaintop  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  kritagridpaintop.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  kritagridpaintop.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
  install( FILES
     krita-grid.png DESTINATION ${DATA_INSTALL_DIR}/krita/images)
 

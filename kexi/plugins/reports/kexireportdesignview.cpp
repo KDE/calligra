@@ -56,8 +56,6 @@ KexiReportDesignView::KexiReportDesignView(QWidget *parent, KexiSourceSelector *
     m_itemRaiseAction->setObjectName("itemraise");
     m_itemLowerAction = new KAction(koIcon("arrow-down"), i18n("Lower"), this);
     m_itemLowerAction->setObjectName("itemlower");
-    //parameterEdit = new KAction ( i18n ( "Parameter Editor" ), this );
-    //parameterEdit->setObjectName("parameteredit");
     QList<QAction*> al;
     KAction *sep = new KAction(QString(), this);
     sep->setSeparator(true);

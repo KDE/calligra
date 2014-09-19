@@ -17,7 +17,7 @@
  */
 
 import QtQuick 1.1
-import "components"
+import org.krita.sketch.components 1.0
 
 Page {
     id:base;
@@ -88,6 +88,12 @@ Page {
 
             placeholder: "Name"
             nextFocus: widthField;
+
+            // Focus handling
+            focus: true;
+            KeyNavigation.tab: widthField.textInput;
+            KeyNavigation.backtab: backgroundOpacity;
+            KeyNavigation.priority: KeyNavigation.BeforeItem;
         }
 
         Rectangle {
@@ -120,7 +126,7 @@ Page {
                         height: parent.height;
 
                         placeholder: "Width";
-                        validator: IntValidator{bottom: 0; top: 10000;}
+                        validator: IntValidator{bottom: 0; top: 100000000;}
                         numeric: true;
                         nextFocus: heightField;
 
@@ -128,7 +134,12 @@ Page {
                         border.color: Settings.theme.color("pages/customImagePage/controls/border");
                         border.width: 1;
 
-                        Component.onCompleted: text = Krita.Window.width;
+                        // Focus handling
+                        KeyNavigation.tab: heightField.textInput;
+                        KeyNavigation.backtab: nameField.textInput;
+                        KeyNavigation.priority: KeyNavigation.BeforeItem;
+
+                        Component.onCompleted: text = Settings.customImageSettings.readProperty("Width"); //Krita.Window.width;
                     }
                     TextField {
                         id: heightField;
@@ -137,7 +148,7 @@ Page {
                         height: parent.height;
 
                         placeholder: "Height"
-                        validator: IntValidator{bottom: 0; top: 10000;}
+                        validator: IntValidator{bottom: 0; top: 100000000;}
                         numeric: true;
                         nextFocus: resolutionField;
 
@@ -145,7 +156,12 @@ Page {
                         border.color: Settings.theme.color("pages/customImagePage/controls/border");
                         border.width: 1;
 
-                        Component.onCompleted: text = Krita.Window.height;
+                        // Focus handling
+                        KeyNavigation.tab: resolutionField.textInput;
+                        KeyNavigation.backtab: widthField.textInput;
+                        KeyNavigation.priority: KeyNavigation.BeforeItem;
+
+                        Component.onCompleted: text = Settings.customImageSettings.readProperty("Height"); //Krita.Window.height;
                     }
                 }
                 TextField {
@@ -161,6 +177,13 @@ Page {
                     text: "72";
                     validator: IntValidator{bottom: 0; top: 600;}
                     numeric: true;
+
+                    // Focus handling
+                    KeyNavigation.tab: colorModel;
+                    KeyNavigation.backtab: heightField.textInput;
+                    KeyNavigation.priority: KeyNavigation.BeforeItem;
+
+                    Component.onCompleted: text = Settings.customImageSettings.readProperty("Resolution");
                 }
             }
         }
@@ -189,6 +212,12 @@ Page {
                     expandedHeight: Constants.GridHeight * 3;
 
                     model: ColorModelModel { id: colorModelModel; }
+                    Component.onCompleted: currentIndex = colorModelModel.indexOf(Settings.customImageSettings.readProperty("ColorModel"));
+
+                    // Focus handling
+                    KeyNavigation.tab: colorDepth;
+                    KeyNavigation.backtab: resolutionField.textInput;
+                    KeyNavigation.priority: KeyNavigation.BeforeItem;
                 }
 
                 ExpandingListView {
@@ -200,6 +229,12 @@ Page {
                     expandedHeight: Constants.GridHeight * 3;
 
                     model: ColorDepthModel { id: colorDepthModel; colorModelId: colorModelModel.id(colorModel.currentIndex); }
+                    Component.onCompleted: currentIndex = colorDepthModel.indexOf(Settings.customImageSettings.readProperty("ColorDepth"));
+
+                    // Focus handling
+                    KeyNavigation.tab: colorProfile;
+                    KeyNavigation.backtab: colorModel;
+                    KeyNavigation.priority: KeyNavigation.BeforeItem;
                 }
 
                 ExpandingListView {
@@ -217,6 +252,11 @@ Page {
                         colorModelId: colorModelModel.id(colorModel.currentIndex);
                         colorDepthId: colorDepthModel.id(colorDepth.currentIndex);
                     }
+
+                    // Focus handling
+                    KeyNavigation.tab: backgroundColor;
+                    KeyNavigation.backtab: colorDepth;
+                    KeyNavigation.priority: KeyNavigation.BeforeItem;
                 }
             }
         }
@@ -263,6 +303,11 @@ Page {
                         var item = model.get(currentIndex);
                         value = Qt.rgba(item.r, item.g, item.b, 1.0);
                     }
+
+                    // Focus handling
+                    KeyNavigation.tab: backgroundOpacity;
+                    KeyNavigation.backtab: colorProfile;
+                    KeyNavigation.priority: KeyNavigation.BeforeItem;
                 }
 
                 RangeInput {
@@ -278,9 +323,14 @@ Page {
 
                     min: 0;
                     max: 100;
-                    value: 100;
                     decimals: 0;
+                    value: 100;
                     placeholder: "Opacity";
+
+                    // Focus handling
+                    KeyNavigation.tab: nameField.textInput;
+                    KeyNavigation.backtab: backgroundColor;
+                    KeyNavigation.priority: KeyNavigation.BeforeItem;
                 }
             }
         }

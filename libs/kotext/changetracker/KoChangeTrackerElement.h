@@ -19,22 +19,21 @@
 #ifndef KOCHANGETRACKERELEMENT_H
 #define KOCHANGETRACKERELEMENT_H
 
-#include <QObject>
-#include <QMetaType>
-#include <QTextFormat>
-#include <QString>
-#include <QTextDocumentFragment>
-
 #include <KoGenChange.h>
 
 #include "kotext_export.h"
+
+class KUndo2MagicString;
+class QString;
+class QTextFormat;
+class QTextDocumentFragment;
 
 
 class KOTEXT_EXPORT KoChangeTrackerElement
 {
 public:
 
-    KoChangeTrackerElement(const QString& title, KoGenChange::Type type);
+    KoChangeTrackerElement(const KUndo2MagicString& title, KoGenChange::Type type);
 
     KoChangeTrackerElement();
 
@@ -55,8 +54,8 @@ public:
     void setChangeType(KoGenChange::Type type);
     KoGenChange::Type getChangeType() const;
 
-    void setChangeTitle(const QString& title);
-    QString getChangeTitle() const;
+    void setChangeTitle(const KUndo2MagicString& title);
+    KUndo2MagicString getChangeTitle() const;
 
     void setChangeFormat(const QTextFormat &format);
     QTextFormat getChangeFormat() const;

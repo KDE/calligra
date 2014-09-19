@@ -28,7 +28,6 @@
 #include <KoColor.h>
 
 class QString;
-class QColor;
 class QStringList;
 class QToolButton;
 class QPoint;
@@ -36,6 +35,7 @@ class KoID;
 class KisPaintopBox;
 class KisPaletteManager;
 class KisView2;
+class KisPaintOpPreset;
 
 class KisFavoriteResourceManager : public QObject, public KoResourceServerObserver<KisPaintOpPreset>
 {
@@ -50,25 +50,13 @@ public:
 
     virtual void unsetResourceServer();
 
-    static const int MAX_FAVORITE_PRESETS = 10;
-
-    void showPaletteManager();
     QList<QImage> favoritePresetImages();
 
-    /**
-     * Checks if newBrush is saved as a favorite brush.
-     * @returns -1 if the newBrush is not yet saved, then newBrush will be appended
-     *         or the position of the brush on the list otherwise
-     */
-    int addFavoritePreset(const QString& name);
-    void removeFavoritePreset(int);
-    void removeFavoritePreset(const QString& name);
+    void setCurrentTag(const QString& tagName);
 
-    /// @return -1 if paintop is not in the list, returns the paintop position otherwise
-    int isFavoriteBrushSaved(const QString& name);
     int numFavoritePresets();
 
-    QStringList favoritePresetList();
+    QVector<KisPaintOpPreset*> favoritePresetList();
 
     int recentColorsTotal();
     const KoColor& recentColorAt(int pos);
@@ -81,6 +69,9 @@ public:
     virtual void syncTagAddition(const QString& tag);
     virtual void syncTagRemoval(const QString& tag);
 
+    //BgColor;
+    KoColor bgColor() const;
+
     /**
      * Set palette to block updates, paintops won't be deleted when they are deleted from server
      * Used when overwriting a resource
@@ -90,6 +81,7 @@ public:
 signals:
 
     void sigSetFGColor(const KoColor& c);
+    void sigSetBGColor(const KoColor& c);
 
     // This is a flag to handle a bug:
     // If pop up palette is visible and a new colour is selected, the new colour
@@ -98,7 +90,7 @@ signals:
     // is not visible
     void sigEnableChangeColor(bool b);
 
-    void sigChangeFGColorSelector(const QColor&);
+    void sigChangeFGColorSelector(const KoColor&);
 
     void setSelectedColor(int);
 
@@ -118,12 +110,15 @@ public slots:
 
     void slotChangeFGColorSelector(KoColor c);
 
-private:
+    void slotSetBGColor(const KoColor c);
 
-    KisPaletteManager *m_favoriteBrushManager;
+private slots:
+    void updateFavoritePresets();
+
+private:
     KisPaintopBox *m_paintopBox;
 
-    QStringList m_favoritePresetsList;
+    QVector<KisPaintOpPreset*> m_favoritePresetsList;
 
     class ColorDataList;
     ColorDataList *m_colorList;
@@ -132,6 +127,8 @@ private:
 
     void saveFavoritePresets();
 
+    KoColor m_bgColor;
+    QString m_currentTag;
 };
 
 #endif

@@ -27,7 +27,6 @@
 #include <QMouseEvent>
 #include <QEvent>
 #include <QDropEvent>
-#include <k3listview.h>
 
 #include <widget/fields/KexiFieldListView.h>
 
@@ -81,7 +80,7 @@ public slots:
 
 protected slots:
     void moved();
-    void slotContextMenu(K3ListView *lv, Q3ListViewItem *i, const QPoint& p);
+    void slotContextMenu(const QPoint& p);
     void slotFieldsDoubleClicked(const QModelIndex &idx);
 
     friend class KexiRelationViewTableContainerHeader;

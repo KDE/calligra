@@ -113,5 +113,5 @@ void KexiImportExportAssistant::nextPageRequested(KexiAssistantPage* page)
 void KexiImportExportAssistant::cancelRequested(KexiAssistantPage* page)
 {
     Q_UNUSED(page);
-    //TODO?
+    //! @todo
 }

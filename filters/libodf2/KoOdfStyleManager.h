@@ -24,13 +24,14 @@
 
 #include "koodf2_export.h"
 
+#include <QList>
 
 class QString;
 class KoStore;
 class KoOdfStyle;
+class KoOdfListStyle;
 class KoXmlStreamReader;
 class KoXmlWriter;
-
 
 class KOODF2_EXPORT KoOdfStyleManager
 {
@@ -38,20 +39,26 @@ class KOODF2_EXPORT KoOdfStyleManager
     KoOdfStyleManager();
     ~KoOdfStyleManager();
 
-    KoOdfStyle *style(QString &name) const;
-    void setStyle(QString &name, KoOdfStyle *style);
+    KoOdfStyle *style(const QString &name, const QString &family) const;
+    void setStyle(const QString &name, KoOdfStyle *style);
 
-    KoOdfStyle *defaultStyle(QString &family) const;
-    void setDefaultStyle(QString &family, KoOdfStyle *style);
+    KoOdfListStyle *listStyle(const QString &name) const;
+    void setListStyle(const QString &name, KoOdfListStyle *listStyle);
+
+    KoOdfStyle *defaultStyle(const QString &family) const;
+    void setDefaultStyle(const QString &family, KoOdfStyle *style);
 
     void clear();
 
     bool loadStyles(KoStore *odfStore);
     bool saveNamedStyles(KoXmlWriter *writer);
 
+    QList<KoOdfStyle*> styles() const;
+    QList<KoOdfStyle*> defaultStyles() const;
+
  private:
     // FIXME: Move to private class.
-    void collectStyleSet(KoXmlStreamReader &reader);
+    void collectStyleSet(KoXmlStreamReader &reader, bool fromStylesXml);
 
  private:
     class Private;

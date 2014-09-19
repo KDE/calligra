@@ -38,7 +38,6 @@ class KEXIEXTWIDGETS_EXPORT KexiFieldListView : public QListView
     Q_OBJECT
 
 public:
-
     KexiFieldListView(QWidget *parent, KexiFieldListOptions options);
     virtual ~KexiFieldListView();
 

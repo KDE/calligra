@@ -39,7 +39,7 @@ class AlterSchemaWidget : public QWidget
 {
     Q_OBJECT
     public:
-        AlterSchemaWidget( QWidget* parent = 0 );
+        explicit AlterSchemaWidget(QWidget* parent = 0);
         ~AlterSchemaWidget();
 
         void setTableSchema(KexiDB::TableSchema *schema);
@@ -70,7 +70,7 @@ class AlterSchemaWidget : public QWidget
 
         int m_selectedColumn;
 
-        //!TODO Something like this could go in kexi utils/project?
+        //! @todo Something like this could go in kexi utils/project?
         QString suggestedItemName(const QString& baseName);
         
         bool nameExists(const QString& tableName);
@@ -80,7 +80,6 @@ class AlterSchemaWidget : public QWidget
         void typeActivated(int typ);
         void pkeyClicked(bool pkey);
         void nameChanged(const QString& tableName);
-        
 };
 }
 #endif // ALTERSCHEMAWIDGET_H

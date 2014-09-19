@@ -39,7 +39,7 @@ class KexiLookupColumnPage : public KexiPropertyPaneViewBase
     Q_OBJECT
 
 public:
-    KexiLookupColumnPage(QWidget *parent);
+    explicit KexiLookupColumnPage(QWidget *parent);
     virtual ~KexiLookupColumnPage();
 
 public slots:
@@ -54,10 +54,6 @@ public slots:
 signals:
     //! Signal emitted when helper button 'Go to selected record sourcesource' is clicked.
     void jumpToObjectRequested(const QString& mime, const QString& name);
-
-//  /*! Signal emitted when current bound column has been changed. */
-//  void boundColumnChanged(const QString& string, const QString& caption,
-    //  KexiDB::Field::Type type);
 
 protected slots:
     void slotRowSourceTextChanged(const QString & string);

@@ -20,6 +20,7 @@
  */
 
 #include "KoTextBlockData.h"
+
 #include "KoTextBlockBorderData.h"
 #include "KoTextBlockPaintStrategyBase.h"
 
@@ -60,19 +61,21 @@ public:
 };
 
 KoTextBlockData::KoTextBlockData(QTextBlock &block)
- : d(block.userData() ? dynamic_cast<KoTextBlockData::Private *>(block.userData()) : new Private())
+    : d(block.userData() ? dynamic_cast<KoTextBlockData::Private *>(block.userData())
+                         : new Private())
 {
     block.setUserData(d);
 }
 
 KoTextBlockData::KoTextBlockData(QTextBlockUserData *userData)
- : d(dynamic_cast<KoTextBlockData::Private *>(userData))
+    : d(dynamic_cast<KoTextBlockData::Private *>(userData))
 {
     Q_ASSERT(d);
 }
 
 KoTextBlockData::~KoTextBlockData()
 {
+    // explicitly do not delete the d-pointer here
 }
 
 

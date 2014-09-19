@@ -30,8 +30,7 @@ class TableSchema;
 class AlterSchemaTableModel : public QAbstractTableModel
 {
     public:
-
-        AlterSchemaTableModel( QObject* parent = 0 );
+        explicit AlterSchemaTableModel( QObject* parent = 0 );
         ~AlterSchemaTableModel();
 
         virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;

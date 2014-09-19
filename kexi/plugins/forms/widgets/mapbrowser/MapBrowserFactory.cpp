@@ -23,11 +23,13 @@
 
 #include <formeditor/WidgetInfo.h>
 #include <formeditor/formIO.h>
+
 #include <KoIcon.h>
+
 #include <klocalizedstring.h>
 #include <kdebug.h>
 #include <klocale.h>
-#include <kpluginfactory.h>
+
 #include <QVariant>
 #include <QVariantList>
 
@@ -39,15 +41,21 @@ MapBrowserFactory::MapBrowserFactory(QObject* parent, const QVariantList& args)
     mapBrowser->setIconName(koIconName("map_browser"));
     mapBrowser->setClassName("MapBrowserWidget");
     mapBrowser->setName(i18n("Map Browser"));
-    mapBrowser->setNamePrefix(i18nc("This string will be used to name widgets of this class. It must _not_ contain white "
-                                     "spaces and non latin1 characters.", "mapBrowser"));
+    mapBrowser->setNamePrefix(
+        i18nc("A prefix for identifiers of map browser widgets. Based on that, identifiers such as "
+            "mapBrowser1, mapBrowser2 are generated. "
+            "This string can be used to refer the widget object as variables in programming "
+            "languages or macros so it must _not_ contain white spaces and non latin1 characters, "
+            "should start with lower case letter and if there are subsequent words, these should "
+            "start with upper case letter. Example: smallCamelCase. "
+            "Moreover, try to make this prefix as short as possible.",
+            "mapBrowser"));
     mapBrowser->setDescription(i18n("Displays an interactive map."));
     addClass(mapBrowser);
 }
 
 MapBrowserFactory::~MapBrowserFactory()
 {
-
 }
 
 QWidget* MapBrowserFactory::createWidget(const QByteArray& classname,
@@ -59,7 +67,6 @@ QWidget* MapBrowserFactory::createWidget(const QByteArray& classname,
     Q_UNUSED(options);
     QWidget *w = 0;
     QString text(container->form()->library()->textForWidgetName(name, classname));
-//2.0    const bool designMode = options & KFormDesigner::WidgetFactory::DesignViewMode;
 
     if (classname == "MapBrowserWidget")
         w = new MapBrowserWidget(parent);
@@ -97,7 +104,7 @@ bool MapBrowserFactory::previewWidget(const QByteArray &classname,
     return true;
 }
      
-K_EXPORT_KEXI_FORM_WIDGET_FACTORY_PLUGIN(MapBrowserFactory, mapbrowser)
+K_EXPORT_KEXIFORMWIDGETS_PLUGIN(MapBrowserFactory, mapbrowser)
 
 #include "MapBrowserFactory.moc"
 

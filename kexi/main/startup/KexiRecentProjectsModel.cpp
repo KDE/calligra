@@ -24,6 +24,7 @@
 #include <core/kexiprojectdata.h>
 
 #include <db/utils.h>
+#include <db/drivermanager.h>
 
 #include <KoIcon.h>
 
@@ -54,6 +55,7 @@ QModelIndex KexiRecentProjectsModel::index(int row, int column,
 //! @return "opened x minutes ago" string or similar
 static QString openedString(const QDateTime& _opened)
 {
+    //kDebug() << _opened;
     const KDateTime cur(KDateTime::currentUtcDateTime());
     const KDateTime opened = KDateTime(_opened);
     if (!opened.isValid() || opened >= cur)
@@ -124,7 +126,7 @@ QVariant KexiRecentProjectsModel::data(const QModelIndex& index, int role) const
         }
         else {
             KexiDB::DriverManager manager;
-            return i18nc("<type> database", "%1 database",
+            return i18nc("<type> database, e.g. PostgreSQL database, MySQL database", "%1 database",
                   manager.driverInfo(pdata->constConnectionData()->driverName).caption);
             return pdata->objectName();
         }
@@ -168,8 +170,6 @@ Qt::ItemFlags KexiRecentProjectsModel::flags(const QModelIndex& index) const
 {
     Qt::ItemFlags f;
     if (index.isValid()) {
-//        KexiProjectData *pdata = static_cast<KexiProjectData*>(index.internalPointer());
-//        if (pdata->enabled)
         f |= (Qt::ItemIsEnabled | Qt::ItemIsSelectable);
     }
     return f;
@@ -180,7 +180,6 @@ Qt::ItemFlags KexiRecentProjectsModel::flags(const QModelIndex& index) const
 KexiRecentProjectsProxyModel::KexiRecentProjectsProxyModel(QObject *parent)
  : KCategorizedSortFilterProxyModel(parent)
 {
-    // disable since by default we are globally sorting by date: setCategorizedModel(true);
 }
 
 bool KexiRecentProjectsProxyModel::subSortLessThan(

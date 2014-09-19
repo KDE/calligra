@@ -46,8 +46,6 @@ inline double drand48()
 #include <cmath>
 #include <ctime>
 
-const float radToDeg = 57.29578f;
-
 HairyBrush::HairyBrush()
 {
     srand48(time(0));
@@ -280,7 +278,11 @@ void HairyBrush::saturationDepletion(Bristle * bristle, KoColor &bristleColor, q
                          (1.0 - inkDeplation)) - 1.0;
 
     }
+	m_transfo->setParameter(m_transfo->parameterId("h"), 0.0);
+	m_transfo->setParameter(m_transfo->parameterId("v"), 0.0);
     m_transfo->setParameter(m_saturationId, saturation);
+	m_transfo->setParameter(3, 1);//sets the type to 
+	m_transfo->setParameter(4, false);//sets the colorize to none.
     m_transfo->transform(bristleColor.data(), bristleColor.data() , 1);
 }
 

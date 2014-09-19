@@ -28,7 +28,7 @@
 #include <kis_composite_ops_model.h>
 
 KisCompositeOpOption::KisCompositeOpOption(bool createConfigWidget):
-    KisPaintOpOption(i18n("Blending Mode"), KisPaintOpOption::brushCategory(), true),
+    KisPaintOpOption(i18n("Blending Mode"), KisPaintOpOption::generalCategory(), true),
     m_createConfigWidget(createConfigWidget)
 {
     m_checkable         = false;
@@ -48,7 +48,7 @@ KisCompositeOpOption::KisCompositeOpOption(bool createConfigWidget):
 
         setConfigurationPage(widget);
 
-        connect(ui.list    , SIGNAL(activated(const QModelIndex&)), this, SLOT(slotCompositeOpChanged(const QModelIndex&)));
+        connect(ui.list    , SIGNAL(clicked(const QModelIndex&)), this, SLOT(slotCompositeOpChanged(const QModelIndex&)));
         connect(ui.bnEraser, SIGNAL(toggled(bool))                , this, SLOT(slotEraserToggled(bool)));
     }
 }

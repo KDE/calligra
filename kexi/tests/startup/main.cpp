@@ -103,7 +103,7 @@ int main(int argc, char* argv[])
             else if (startup.selectedExistingConnection()) {
                 kDebug() << "Existing connection: " << startup.selectedExistingConnection()->serverInfoString();
                 //ok, now we are trying to show daabases for this conenction to this user
-                //todo
+                //! @todo
             }
         } else if (r == KexiStartupDialog::OpenRecentResult) {
             kDebug() << "Recent project --------";

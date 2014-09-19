@@ -42,6 +42,9 @@
 #include "kis_brush_server.h"
 #include "widgets/kis_slider_spin_box.h"
 #include "widgets/kis_multipliers_double_slider_spinbox.h"
+#include "kis_spacing_selection_widget.h"
+#include "kis_signals_blocker.h"
+
 
 #include "kis_global.h"
 #include "kis_gbr_brush.h"
@@ -83,6 +86,9 @@ void KisBrushDelegate::paint(QPainter * painter, const QStyleOptionViewItem & op
     if (option.state & QStyle::State_Selected) {
         painter->setPen(QPen(option.palette.highlight(), 2.0));
         painter->drawRect(option.rect);
+        painter->setCompositionMode(QPainter::CompositionMode_HardLight);
+        painter->setOpacity(0.65);
+        painter->fillRect(option.rect, option.palette.highlight());
     }
 
     painter->restore();
@@ -110,19 +116,17 @@ KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
     QObject::connect(m_slRotation, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetItemRotation(qreal)));
 
     m_lbSpacing = new QLabel(i18n("Spacing:"), this);
-    m_slSpacing = new KisDoubleSliderSpinBox(this);
-    m_slSpacing->setRange(0.02, 10, 2);
-    m_slSpacing->setValue(0.1);
-    m_slSpacing->setExponentRatio(3.0);
-    QObject::connect(m_slSpacing, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetItemSpacing(qreal)));
+    m_slSpacing = new KisSpacingSelectionWidget(this);
+    m_slSpacing->setSpacing(true, 1.0);
+    connect(m_slSpacing, SIGNAL(sigSpacingChanged()), SLOT(slotSpacingChanged()));
 
     m_chkColorMask = new QCheckBox(i18n("Use color as mask"), this);
     QObject::connect(m_chkColorMask, SIGNAL(toggled(bool)), this, SLOT(slotSetItemUseColorAsMask(bool)));
 
     m_lbName = new QLabel(this);
 
-    KoResourceServer<KisBrush>* rServer = KisBrushServer::instance()->brushServer();
-    QSharedPointer<KoResourceServerAdapter<KisBrush> > adapter(new KoResourceServerAdapter<KisBrush>(rServer));
+    KisBrushResourceServer* rServer = KisBrushServer::instance()->brushServer();
+    QSharedPointer<KisBrushResourceServerAdapter> adapter(new KisBrushResourceServerAdapter(rServer));
     m_itemChooser = new KoResourceItemChooser(adapter, this);
     QString knsrcFile = "kritabrushes.knsrc";
     m_itemChooser->setKnsrcFile(knsrcFile);
@@ -153,7 +157,7 @@ KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
     spacingLayout->addWidget(m_slSpacing, 3, 1);
     spacingLayout->setColumnStretch(1, 3);
 
-    QPushButton *resetBrushButton = new QPushButton(i18n("Reset Brush"), this);
+    QPushButton *resetBrushButton = new QPushButton(i18n("Reset Predefined Tip"), this);
     resetBrushButton->setToolTip(i18n("Reloads Spacing from file\nSets Scale to 1.0\nSets Rotation to 0.0"));
     connect(resetBrushButton, SIGNAL(clicked()), SLOT(slotResetBrush()));
 
@@ -214,11 +218,12 @@ void KisBrushChooser::slotSetItemRotation(qreal rotationValue)
     }
 }
 
-void KisBrushChooser::slotSetItemSpacing(qreal spacingValue)
+void KisBrushChooser::slotSpacingChanged()
 {
     KisBrush *brush = dynamic_cast<KisBrush *>(m_itemChooser->currentResource());
     if (brush) {
-        brush->setSpacing(spacingValue);
+        brush->setSpacing(m_slSpacing->spacing());
+        brush->setAutoSpacing(m_slSpacing->autoSpacingActive(), m_slSpacing->autoSpacingCoeff());
         slotActivatedBrush(brush);
 
         emit sigBrushChanged();
@@ -248,9 +253,13 @@ void KisBrushChooser::update(KoResource * resource)
                        .arg(brush->height());
 
         m_lbName->setText(text);
-        m_slSpacing->blockSignals(true);
-        m_slSpacing->setValue(brush->spacing());
-        m_slSpacing->blockSignals(false);
+
+        {
+            KisSignalsBlocker b(m_slSpacing);
+            m_slSpacing->setSpacing(brush->autoSpacingActive(),
+                                    brush->autoSpacingActive() ?
+                                    brush->autoSpacingCoeff() : brush->spacing());
+        }
 
         m_slRotation->blockSignals(true);
         m_slRotation->setValue(brush->angle() * 180 / M_PI);

@@ -50,20 +50,15 @@ QVariant MapBrowserWidget::value()
     return serializeData(centerLatitude(), centerLongitude(), zoom());
 }
 
-void MapBrowserWidget::setValueInternal(const QVariant& add, bool removeOld )
+void MapBrowserWidget::setValueInternal(const QVariant& add, bool removeOld)
 {
+    Q_UNUSED(add);
     Q_UNUSED(removeOld);
-    //if(isReadOnly())
-    //    return;
     m_slotMapChanged_enabled = false;
-    //disable change editing
-    //if(removeOld);
-    kDebug() << "add:" << add;
-    kDebug() << "originalValue():" << originalValue();
-    //deserializeData((removeOld ? QVariant() : originalValue()));
+    //kDebug() << "add:" << add;
+    //kDebug() << "originalValue():" << originalValue();
     deserializeData(originalValue());
     m_slotMapChanged_enabled = true;
-    
 }
 
 bool MapBrowserWidget::valueIsNull()
@@ -79,15 +74,12 @@ bool MapBrowserWidget::valueIsEmpty()
 void MapBrowserWidget::setReadOnly(bool readOnly)
 {
     m_internalReadOnly = readOnly;
-    //setDisabled(readOnly);
-    //setInputEnabled(!readOnly);
 }
 
 bool MapBrowserWidget::isReadOnly() const
 {
     return m_internalReadOnly;
 }
-
 
 void MapBrowserWidget::clear()
 {
@@ -118,11 +110,11 @@ QVariant MapBrowserWidget::serializeData(qreal lat, qreal lon, int zoomLevel)
 
 void MapBrowserWidget::deserializeData(const QVariant& serialized)
 {
-    kDebug() << "seting new data";
+    //kDebug() << "seting new data";
     QString serializedData = serialized.toString();
-    kDebug() << "serializedData:" << serializedData << ";" << serialized;
+    //kDebug() << "serializedData:" << serializedData << ";" << serialized;
     QStringList dataList = serializedData.split(';');
-    kDebug() << "splited:" << dataList;
+    //kDebug() << "splited:" << dataList;
     if (dataList.length()>=3) {
         setCenterLatitude(dataList[0].toDouble());
         setCenterLongitude(dataList[1].toDouble());
@@ -136,9 +128,5 @@ void MapBrowserWidget::slotMapChanged()
         return;
     signalValueChanged();
 }
-
-
-
-
 
 #include "MapBrowserWidget.moc"

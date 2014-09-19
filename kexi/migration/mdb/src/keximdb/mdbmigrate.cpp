@@ -19,6 +19,7 @@
 */
 
 #include "mdbmigrate.h"
+#include <migration/keximigrate_p.h>
 
 #include <QRegExp>
 #include <QFile>
@@ -34,7 +35,7 @@
 using namespace KexiMigration;
 
 /* This is the implementation for the MDB file import routines. */
-K_EXPORT_KEXIMIGRATE_DRIVER(MDBMigrate, "mdb")
+K_EXPORT_KEXIMIGRATE_DRIVER(MDBMigrate, mdb)
 
 static QByteArray isNonUnicodePropId("source_database_has_nonunicode_encoding");
 static QByteArray nonUnicodePropId("source_database_nonunicode_encoding");
@@ -46,9 +47,9 @@ MDBMigrate::MDBMigrate(QObject *parent, const QVariantList &args)
 {
     /*! @todo invert the sense of values, then remove "Non-" from these strings */
     setPropertyValue(isNonUnicodePropId, true);
-    setPropertyCaption(isNonUnicodePropId, i18n("Source Database Has Non-Unicode Encoding"));
+    setPropertyCaption(isNonUnicodePropId, i18n("Character Encoding of Source Database Is Not of Unicode Standard"));
     setPropertyValue(nonUnicodePropId, QString());
-    setPropertyCaption(nonUnicodePropId, i18n("Source Database Non-Unicode Encoding"));
+    setPropertyCaption(nonUnicodePropId, i18n("Source Database Non-Unicode Character Encoding"));
 
     initBackend();
 }
@@ -89,7 +90,7 @@ QVariant MDBMigrate::propertyValue(const QByteArray& propName)
 
 bool MDBMigrate::drv_connect()
 {
-    kDebug() << "mdb_open:";
+    //kDebug() << "mdb_open:";
     KexiDB::ConnectionData *data = this->data()->source;
 
     // mdb_open takes a char*, not const char*, hence this nonsense.
@@ -107,12 +108,11 @@ bool MDBMigrate::drv_connect()
         const QByteArray encoding(propertyValue(nonUnicodePropId).toByteArray());
 
         mdb_set_encoding(m_mdb, encoding.constData());
-        kDebug() << "non-unicode encoding set to" << encoding;
+        //kDebug() << "non-unicode encoding set to" << encoding;
     }
 
     // Supports setting source encoding
     setPropertyValue(isNonUnicodePropId, bool(IS_JET3(m_mdb)));
-
     return true;
 }
 
@@ -142,7 +142,6 @@ MdbTableDef* MDBMigrate::getTableDef(const QString& tableName)
             }
         }
     }
-
     return tableDef;
 }
 
@@ -157,7 +156,7 @@ bool MDBMigrate::drv_readTableSchema(const QString& originalName,
         return false;
     }
     mdb_read_columns(tableDef);
-    kDebug() << "#cols = " << tableDef->num_cols;
+    //kDebug() << "#cols = " << tableDef->num_cols;
 
     /*! Convert column data to Kexi TableSchema
         Nice mix of terminology here, MDBTools has columns, Kexi has fields. */
@@ -167,7 +166,7 @@ bool MDBMigrate::drv_readTableSchema(const QString& originalName,
 
         // Field name
         QString fldName = QString::fromUtf8(col->name);
-        kDebug() << "got column" << fldName << col->name;
+        //kDebug() << "got column" << fldName << col->name;
 
         QString fldID(KexiUtils::stringToIdentifier(fldName));
 
@@ -175,7 +174,7 @@ bool MDBMigrate::drv_readTableSchema(const QString& originalName,
         KexiDB::Field *fld =
             new KexiDB::Field(fldID, type(col->col_type));
 
-        kDebug() << "size" << col->col_size << "type" << type(col->col_type);
+        //kDebug() << "size" << col->col_size << "type" << type(col->col_type);
         fld->setCaption(fldName);
         tableSchema.addField(fld);
     }
@@ -205,7 +204,7 @@ bool MDBMigrate::drv_tableNames(QStringList& tableNames)
             QString dbObjectName = QString::fromUtf8(dbObject->object_name);
 
             if (!dbObjectName.startsWith("MSys")) {
-                kDebug() << dbObjectName;
+                //kDebug() << dbObjectName;
                 tableNames << dbObjectName;
             }
         }
@@ -276,7 +275,7 @@ bool MDBMigrate::drv_copyTable(const QString& srcTable,
 
     //! Copy each row into vals
     mdb_rewind_table(tableDef);
-    kDebug() << "Fetching" << tableDef->num_rows << "records";
+    //kDebug() << "Fetching" << tableDef->num_rows << "records";
 
 #ifdef KEXI_MIGRATION_MAX_ROWS_TO_IMPORT
     qulonglong rows = 0;
@@ -285,7 +284,6 @@ bool MDBMigrate::drv_copyTable(const QString& srcTable,
     bool ok = true;
     while (mdb_fetch_row(tableDef)) {
         QList<QVariant> vals;
-
 //    kDebug() << kdLoc << "Copying " << tableDef->num_cols << " cols";
         for (unsigned int i = 0; i < tableDef->num_cols; i++) {
             MdbColumn *col = (MdbColumn*) g_ptr_array_index(tableDef->columns, i);
@@ -295,8 +293,7 @@ bool MDBMigrate::drv_copyTable(const QString& srcTable,
             }
 
             //! @todo: How to import binary data?
-            QVariant var
-            = toQVariant(columnData[i], columnDataLength[i], col->col_type);
+            QVariant var = toQVariant(columnData[i], columnDataLength[i], col->col_type);
             vals << var;
         }
 
@@ -382,8 +379,6 @@ KexiDB::Field::Type MDBMigrate::type(int type)
 
 bool MDBMigrate::getPrimaryKey(KexiDB::TableSchema* table, MdbTableDef* tableDef)
 {
-    MdbIndex *idx;
-
     if (!tableDef) {
         return false;
     }
@@ -392,10 +387,9 @@ bool MDBMigrate::getPrimaryKey(KexiDB::TableSchema* table, MdbTableDef* tableDef
 
     // Find the PK index in the MDB file
     bool foundIdx = false;
+    MdbIndex *idx = 0;
     for (unsigned int i = 0; i < tableDef->num_idxs; i++) {
         idx = (MdbIndex*) g_ptr_array_index(tableDef->indices, i);
-//  QString fldName = QString::fromUtf8(idx->name);
-
         if (!strcmp(idx->name, "PrimaryKey")) {
             idx = (MdbIndex*) g_ptr_array_index(tableDef->indices, i);
             foundIdx = true;
@@ -421,12 +415,11 @@ bool MDBMigrate::getPrimaryKey(KexiDB::TableSchema* table, MdbTableDef* tableDef
     for (unsigned int i = 0; i < idx->num_keys; i++) {
         key_col_num[i] = idx->key_col_num[i];
         kDebug() << "key" << i + 1 << " col " << key_col_num[i]
-                 << table->field(idx->key_col_num[i] - 1)->name()
-;
+                 << table->field(idx->key_col_num[i] - 1)->name();
         p_idx->addField(table->field(idx->key_col_num[i] - 1));
     }
 
-    kDebug() << p_idx->debugString();
+    //kDebug() << p_idx->debugString();
 
     // ... and add it to the table definition
     // but only if the PK has only one field, so far :o(
@@ -436,7 +429,6 @@ bool MDBMigrate::getPrimaryKey(KexiDB::TableSchema* table, MdbTableDef* tableDef
         f->setPrimaryKey(true);
     } else {
         //! @todo: How to add a composite PK to a TableSchema?
-        //m_table->setPrimaryKey(p_idx);
     }
 
     mdb_free_indices(tableDef->indices);

@@ -1,2 +1,4 @@
 #! /bin/sh
-$XGETTEXT `find . -name \*.cpp -o -name \*.h`  -o $podir/kocolorspaces.pot
+source ../../calligra_xgettext.sh
+
+calligra_xgettext kocolorspaces.pot `find . -name \*.cpp -o -name \*.h`

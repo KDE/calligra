@@ -32,6 +32,7 @@
 #include <kexipart.h>
 #include <kexipartinfo.h>
 #include <kexipartitem.h>
+#include <kexipartmanager.h>
 #include <kexiproject.h>
 
 KexiFormEventAction::ActionData::ActionData()
@@ -212,7 +213,7 @@ void KexiFormEventHandler::setMainWidgetForEventHandling(QWidget* mainWidget)
         KexiPart::Info* partInfo = data.decodeString(actionType, actionArg, ok);
         if (!ok)
             continue;
-kDebug() << "actionType:" << actionType << "actionArg:" << actionArg;
+        kDebug() << "actionType:" << actionType << "actionArg:" << actionArg;
         if (actionType == "kaction" || actionType == "currentForm") {
             QAction *action = KexiMainWindowIface::global()->actionCollection()->action(
                                   actionArg);

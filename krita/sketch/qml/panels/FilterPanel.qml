@@ -18,7 +18,7 @@
 
 import QtQuick 1.1
 import org.krita.sketch 1.0
-import "../components"
+import org.krita.sketch.components 1.0
 
 Panel {
     id: base;
@@ -111,7 +111,7 @@ Panel {
             onCurrentIndexChanged: {
                 if (model.filterRequiresConfiguration(currentIndex)) {
                     configLoader.source = "filterconfigpages/" + model.filterID(currentIndex) + ".qml";
-                    if (typeof(configLoader.item.configuration) !== 'undefined') {
+                    if (configLoader.item && typeof(configLoader.item.configuration) !== 'undefined') {
                         configLoader.item.configuration = model.configuration(currentIndex);
                     }
                 }

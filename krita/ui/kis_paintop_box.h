@@ -38,7 +38,6 @@ class QString;
 class QHBoxLayout;
 
 class KoColorSpace;
-class KoResourceSelector;
 class KoResource;
 class KoCanvasController;
 
@@ -52,6 +51,7 @@ class KisPaintOpListWidget;
 class KisCompositeOpComboBox;
 class KisWidgetChooser;
 class KisFavoriteResourceManager;
+
 /**
  * This widget presents all paintops that a user can paint with.
  * Paintops represent real-world tools or the well-known Shoup
@@ -117,7 +117,6 @@ private slots:
     void slotToggleEraseMode(bool checked);
     void slotSetCompositeMode(int index);
     void slotSetPaintop(const QString& paintOpId);
-    void slotSaveToFavouriteBrushes();
     void slotWatchPresetNameLineEdit(const QString& text);
     void slotHorizontalMirrorChanged(bool value);
     void slotVerticalMirrorChanged(bool value);
@@ -131,6 +130,7 @@ private slots:
     void slotSwitchToPreviousPreset();
     void slotUnsetEraseMode();
     void slotToggleAlphaLockMode(bool);
+    void toggleHighlightedButton(QToolButton* m_tool);
 
 private:
     KisCanvasResourceProvider*           m_resourceProvider;
@@ -143,6 +143,8 @@ private:
     KisCompositeOpComboBox*              m_cmbCompositeOp;
     QToolButton*                         m_eraseModeButton;
     QToolButton*                         m_alphaLockButton;
+    QToolButton*                         hMirrorButton;
+    QToolButton*                         vMirrorButton;
     KisPaintOpPresetsPopup*              m_presetsPopup;
     KisPaintOpPresetsChooserPopup*       m_presetsChooserPopup;
     KisView2*                            m_view;
@@ -151,11 +153,12 @@ private:
     QMap<KoID,KisPaintOpSettingsWidget*> m_paintopOptionWidgets;
     KisFavoriteResourceManager*          m_favoriteResourceManager;
 
-//    KisPaintOpPresetSP  m_activePreset;
-//    KisPaintOpPresetSP  m_previousPreset;
     QString             m_prevCompositeOpID;
     QString             m_currCompositeOpID;
     KisNodeSP           m_previousNode;
+
+    QPalette palette;
+    QPalette palette_highlight;
 
     struct TabletToolID
     {

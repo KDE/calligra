@@ -24,29 +24,11 @@
 #include <kdebug.h>
 #include <kaction.h>
 #include <kshortcut.h>
-#include <kxmlguiclient.h>
 #include <kactioncollection.h>
 
 #include <QWidget>
 #include <QIcon>
 #include <kexi_global.h>
-
-KAction_setEnabled_Helper::KAction_setEnabled_Helper(KexiActionProxy* proxy)
-        : QObject()
-        , m_proxy(proxy)
-{
-    setObjectName("KAction_setEnabled_Helper");
-}
-
-void KAction_setEnabled_Helper::slotSetEnabled(bool enabled)
-{
-    if (sender()->inherits("KAction")) {
-        const KAction *a = static_cast<const KAction*>(sender());
-        m_proxy->setAvailable(a->objectName(), enabled);
-    }
-}
-
-//=======================
 
 KexiSharedActionConnector::KexiSharedActionConnector(KexiActionProxy* proxy, QObject *obj)
         : m_proxy(proxy)
@@ -61,18 +43,6 @@ KexiSharedActionConnector::~KexiSharedActionConnector()
 void KexiSharedActionConnector::plugSharedAction(const QString& action_name, const char *slot)
 {
     m_proxy->plugSharedAction(action_name, m_object, slot);
-}
-
-void KexiSharedActionConnector::plugSharedActionToExternalGUI(
-    const QString& action_name, KXMLGUIClient *client)
-{
-    m_proxy->plugSharedActionToExternalGUI(action_name, client);
-}
-
-void KexiSharedActionConnector::plugSharedActionsToExternalGUI(
-    QList<QString> action_names, KXMLGUIClient *client)
-{
-    m_proxy->plugSharedActionsToExternalGUI(action_names, client);
 }
 
 //=======================
@@ -90,13 +60,12 @@ KexiActionProxy::KexiActionProxy(QObject *receiver, KexiSharedActionHost *host)
         , m_receiver(receiver)
         , m_actionProxyParent(0)
         , m_signal_parent(0)
-        , m_KAction_setEnabled_helper(new KAction_setEnabled_Helper(this))
         , m_focusedChild(0)
         , d(new Private)
 {
     m_signal_parent.setObjectName("signal_parent");
-    //m_sharedActionChildren.setAutoDelete(false); //TODO port logic to KDE4
-    //m_alternativeActions.setAutoDelete(true); //TODO port logic to KDE4
+    //m_sharedActionChildren.setAutoDelete(false); //!< @todo port logic to KDE4
+    //m_alternativeActions.setAutoDelete(true); //!< @todo port logic to KDE4
     m_host->plugActionProxy(this);
 }
 
@@ -114,7 +83,6 @@ KexiActionProxy::~KexiActionProxy()
 
     m_host->takeActionProxyFor(m_receiver);
 
-    delete m_KAction_setEnabled_helper;
     delete d;
 }
 
@@ -144,7 +112,7 @@ void KexiActionProxy::plugSharedAction(const QString& action_name, QWidget* w)
 {
     QAction *a = sharedAction(action_name);
     if (!a) {
-        kWarning() << "KexiActionProxy::plugSharedAction(): NO SUCH ACTION: " << action_name;
+        kWarning() << "NO SUCH ACTION:" << action_name;
         return;
     }
     w->addAction(a);
@@ -154,7 +122,7 @@ void KexiActionProxy::unplugSharedAction(const QString& action_name, QWidget* w)
 {
     QAction *a = sharedAction(action_name);
     if (!a) {
-        kWarning() << "KexiActionProxy::unplugSharedAction(): NO SUCH ACTION: " << action_name;
+        kWarning() << "NO SUCH ACTION:" << action_name;
         return;
     }
     w->removeAction(a);
@@ -164,7 +132,7 @@ KAction* KexiActionProxy::plugSharedAction(const QString& action_name, const QSt
 {
     QAction *a = sharedAction(action_name);
     if (!a) {
-        kWarning() << "KexiActionProxy::plugSharedAction(): NO SUCH ACTION: " << action_name;
+        kWarning() << "NO SUCH ACTION:" << action_name;
         return 0;
     }
     QString altName = a->objectName() + "_alt";
@@ -185,26 +153,6 @@ KAction* KexiActionProxy::plugSharedAction(const QString& action_name, const QSt
     m_host->updateActionAvailable(action_name, true, m_receiver);
 
     return alt_act;
-}
-
-void KexiActionProxy::plugSharedActionToExternalGUI(const QString& action_name, KXMLGUIClient *client)
-{
-    QAction *a = client->action(action_name.toLatin1().constData());
-    if (!a)
-        return;
-    plugSharedAction(a->objectName(), a, SLOT(trigger()));
-
-    //update availability
-    setAvailable(a->objectName(), a->isEnabled());
-    //changes will be signaled
-    QObject::connect(a, SIGNAL(enabled(bool)), m_KAction_setEnabled_helper, SLOT(slotSetEnabled(bool)));
-}
-
-void KexiActionProxy::plugSharedActionsToExternalGUI(QList<QString> action_names, KXMLGUIClient *client)
-{
-    foreach(const QString &n, action_names) {
-        plugSharedActionToExternalGUI(n, client);
-    }
 }
 
 bool KexiActionProxy::activateSharedAction(const QString& action_name, bool alsoCheckInChildren)

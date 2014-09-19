@@ -28,8 +28,8 @@
 
 //! @short A db-aware DatePicker 
 class KEXIFORMUTILS_EXPORT KexiDBDatePicker : public KDatePicker,
-                                          public KexiFormDataItemInterface,
-                                          public KFormDesigner::FormWidgetInterface
+                                              public KexiFormDataItemInterface,
+                                              public KFormDesigner::FormWidgetInterface
 {
     Q_OBJECT
     Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource)
@@ -37,7 +37,7 @@ class KEXIFORMUTILS_EXPORT KexiDBDatePicker : public KDatePicker,
     Q_PROPERTY(bool readOnly READ isReadOnly WRITE setReadOnly)
 
 public:
-    explicit KexiDBDatePicker(QWidget *parent);
+    explicit KexiDBDatePicker(QWidget *parent = 0);
     virtual ~KexiDBDatePicker();
 
     inline QString dataSource() const {
@@ -69,7 +69,7 @@ public:
     virtual bool cursorAtEnd();
     virtual void clear();
 
-    virtual void  setEnabled(bool enabled);
+    virtual void setEnabled(bool enabled);
 
 public slots:
     inline void setDataSource(const QString &ds) {

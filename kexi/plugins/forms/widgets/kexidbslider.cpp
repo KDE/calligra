@@ -89,8 +89,7 @@ void KexiDBSlider::setReadOnly(bool set)
     setEnabled( !set );
 }
 
-QWidget*
-KexiDBSlider::widget()
+QWidget* KexiDBSlider::widget()
 {
     return this;
 }

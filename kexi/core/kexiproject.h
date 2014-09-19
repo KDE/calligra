@@ -84,8 +84,6 @@ public:
     KexiProject(const KexiProjectData& pdata, KexiDB::MessageHandler* handler,
                 KexiDB::Connection* conn);
 
-//  KexiProject(KexiDB::ConnectionData *cdata);
-
     ~KexiProject();
 
     /*! \return major version of KexiProject object.
@@ -110,7 +108,7 @@ public:
      If so, Kexi application can propose importing the database
      or linking it to parent project (the latter isn't yet implemented).
      For other types of errors the variable is set to true. */
-    tristate open(bool &incompatibleWithKexi);
+    tristate open(bool *incompatibleWithKexi);
 
     /*! Creates new, empty project using project data.
      If \a forceOverwrite is true, existing database project is silently overwritten.
@@ -202,7 +200,8 @@ public:
      (only works when part for this item is of type KexiPart::StaticPart).
      The new widget will be a child of \a parent. */
     KexiWindow* openObject(QWidget* parent, KexiPart::Item& item,
-                           Kexi::ViewMode viewMode = Kexi::DataViewMode, QMap<QString, QVariant>* staticObjectArgs = 0);
+                           Kexi::ViewMode viewMode = Kexi::DataViewMode,
+                           QMap<QString, QVariant>* staticObjectArgs = 0);
 
     //! For convenience
     KexiWindow* openObject(QWidget* parent, const QString &partClass,
@@ -257,17 +256,6 @@ public:
      */
     KexiPart::MissingPartsList missingParts() const;
 
-#if 0 //remove?
-    /*! Creates object using data provided by \a dlg dialog.
-     Dialog's \a item (KexiDialog::partItem()) must not be stored
-     (KexiPart::Item::neverStored()==false) and created
-     by KexiProject::createPartItem().
-     Identifier of the item will be updated to a final value
-     (stored in the backend), because previously there was temporary one set.
-     \return true for successfully created object or false on any error. */
-    bool createObject(KexiWindow *window);
-#endif
-
     KexiDB::Parser* sqlParser();
 
     /*! Shows dialog for creating new blank project,
@@ -287,13 +275,6 @@ public:
     //! Helper method to ask user "Could not  open file for reading and writing. Do you want to
     //! open the file as read only?". @return true if user agrees, false if user cancels opening.
     static bool askForOpeningNonWritableFileAsReadOnly(QWidget *parent, const QFileInfo &finfo);
-
-    /*! @see KexiDB::Connection::setQuerySchemaObsolete( const QString& queryName ) */
-//  void setQuerySchemaObsolete( const QString& queryName );
-
-//  /** used to emit objectCreated() signal */
-//  void emitObjectCreated(const QCString &mime, const QCString& name) { emit objectCreated(mime, name); }
-//  void emitTableCreated(KexiDB::TableSchema& schema) { emit tableCreated(schema); }
 
     /*! Generates ID for private "document" like Relations window.
      Private IDs are negative numbers (while ID regular part instance's IDs are >0)
@@ -367,7 +348,7 @@ protected:
     bool createInternalStructures(bool insideTransaction);
 
     /*! \return Kexi part for \a item. */
-    KexiPart::Part *findPartFor(KexiPart::Item& item);
+    KexiPart::Part *findPartFor(const KexiPart::Item& item);
 
 signals:
     /** signal emitted on error */
@@ -387,11 +368,6 @@ signals:
 
     /** caption for instance pointed by \a item is changed */
     void itemCaptionChanged(const KexiPart::Item &item, const QString& oldCaption);
-
-//  /** new table \a schema created */
-//  void tableCreated(KexiDB::TableSchema& schema);
-//  /** New object of mimetype \a mime and \a name has been created. */
-//  void objectCreated(const QCString &mime, const QCString& name);
 
 protected:
     bool createIdForPart(const KexiPart::Info& info);
@@ -422,6 +398,5 @@ private:
     friend class KexiMainWindow;
     friend class KexiWindow;
 };
-
 
 #endif

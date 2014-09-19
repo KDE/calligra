@@ -27,7 +27,6 @@ AlterSchemaTableModel::AlterSchemaTableModel ( QObject* parent ) : QAbstractTabl
     m_schema = 0;
 }
 
-
 AlterSchemaTableModel::~AlterSchemaTableModel()
 {
     kDebug();

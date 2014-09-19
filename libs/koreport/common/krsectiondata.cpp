@@ -59,27 +59,27 @@ KRSectionData::KRSectionData(const QDomElement & elemSource, KoReportReportData*
     QDomNodeList section = elemSource.childNodes();
     for (int nodeCounter = 0; nodeCounter < section.count(); nodeCounter++) {
         QDomElement elemThis = section.item(nodeCounter).toElement();
-
-        if (elemThis.tagName() == "report:line") {
-            KoReportItemLine * line = new KoReportItemLine(elemThis);
-            m_objects.append(line);
-        } else {
-            
-            KoReportPluginInterface *plugin = manager->plugin(elemThis.tagName());
+        QString n = elemThis.tagName();
+        if (n.startsWith("report:")) {
+            QString reportItemName = n.mid(qstrlen("report:"));
+            if (reportItemName == "line") {
+                KoReportItemLine * line = new KoReportItemLine(elemThis);
+                m_objects.append(line);
+                continue;
+            }
+            KoReportPluginInterface *plugin = manager->plugin(reportItemName);
             if (plugin) {
                 QObject *obj = plugin->createRendererInstance(elemThis);
-                
                 if (obj) {
                     KoReportItemBase *krobj = dynamic_cast<KoReportItemBase*>(obj);
                     if (krobj) {
                         m_objects.append(krobj);
                     }
+                    continue;
                 }
             }
-            else {
-                kDebug() << "While parsing section encountered an unknown element: " << elemThis.tagName();
-            }
         }
+        kWarning() << "While parsing section encountered an unknown element: " << n;
     }
     qSort(m_objects.begin(), m_objects.end(), zLessThan);
     m_valid = true;
@@ -122,11 +122,7 @@ QString KRSectionData::name() const
 
 QString KRSectionData::sectionTypeString(KRSectionData::Section s)
 {
-#ifdef __GNUC__
-#warning use QMap
-#else
-#pragma WARNING( use QMap )
-#endif
+//! @todo use QMap
     QString sectiontype;
     switch (s) {
     case KRSectionData::PageHeaderAny:
@@ -183,14 +179,9 @@ QString KRSectionData::sectionTypeString(KRSectionData::Section s)
 
 KRSectionData::Section KRSectionData::sectionTypeFromString(const QString& s)
 {
-#ifdef __GNUC__
-#warning use QMap
-#else
-#pragma WARNING( use QMap )
-#endif
+//! @todo use QMap
     KRSectionData::Section sec;
-    kDebug() << "Determining section type for " << s;
-
+    //kDebug() << "Determining section type for " << s;
     if (s == "header-page-any")
         sec = KRSectionData::PageHeaderAny;
     else if (s == "header-page-even")

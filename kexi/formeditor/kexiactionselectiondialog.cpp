@@ -25,6 +25,7 @@
 #include <kexiproject.h>
 #include <kexipartinfo.h>
 #include <kexipart.h>
+#include <kexipartmanager.h>
 #include <kexiactioncategories.h>
 #include <KexiMainWindowIface.h>
 #include <KoIcon.h>
@@ -69,10 +70,12 @@ public:
               
   }
   
+  using QTreeWidgetItem::data;
   QVariant data(ActionRole role) {
       return QTreeWidgetItem::data(0, role);
   };
   
+  using QTreeWidgetItem::setData;
   void setData(ActionRole role, QVariant value) {
       QTreeWidgetItem::setData(0, role, value);
   }
@@ -117,7 +120,7 @@ QTreeWidgetItem *ActionsListViewBase::itemForAction(const QString& actionName, Q
 
 void ActionsListViewBase::selectAction(const QString& actionName)
 {
-  kDebug() << "Selecting action:" << actionName;
+  //kDebug() << "Selecting action:" << actionName;
   QTreeWidgetItem *itm = itemForAction(actionName);
   if (itm) {
     setCurrentItem(itm);
@@ -283,7 +286,7 @@ public:
 #ifndef KEXI_NO_QUICK_PRINTING
         if (part->info()->isPrintingSupported()) {
             ActionSelectorDialogListItem *printItem = new ActionSelectorDialogListItem(
-                "print", this, i18n("Print"));
+                "print", this, futureI18n("Print"));
             printItem->setPixmap(0, koIcon("document-print"));
             KAction *a = KStandardAction::printPreview(0, 0, 0);
             item = new ActionSelectorDialogListItem("printPreview", printItem,
@@ -291,7 +294,7 @@ public:
             item->setPixmap(0, a->icon().pixmap(16));
             delete a;
             item = new ActionSelectorDialogListItem(
-                "pageSetup", printItem, i18n("Show Page Setup"));
+                "pageSetup", printItem, futureI18n("Show Page Setup"));
             item->setPixmap(0, noIcon);
             setOpen(printItem, true);
             printItem->setExpandable(false);
@@ -362,14 +365,14 @@ public:
         // hardcoded, but it's not that bad
         else if (actionType == "macro")
             msg = i18n(
-                      "&Select macro to be executed after clicking \"%1\" button:", actionWidgetName);
+                      "&Select macro to be executed after clicking <interface>%1</interface> button:", actionWidgetName);
         else if (actionType == "script")
             msg = i18n(
-                      "&Select script to be executed after clicking \"%1\" button:", actionWidgetName);
+                      "&Select script to be executed after clicking <interface>%1</interface> button:", actionWidgetName);
         //default: table/query/form/report...
         else
             msg = i18n(
-                      "&Select object to be opened after clicking \"%1\" button:", actionWidgetName);
+                      "&Select object to be opened after clicking <interface>%1</interface> button:", actionWidgetName);
         selectActionToBeExecutedLbl->setText(msg);
     }
 
@@ -407,7 +410,7 @@ KexiActionSelectionDialog::KexiActionSelectionDialog(
 {
     setModal(true);
     setObjectName("actionSelectorDialog");
-    setWindowTitle(i18n("Assigning Action to Button"));
+    setWindowTitle(i18nc("@title:window", "Assigning Action to Button"));
     setButtons(KDialog::Ok | KDialog::Cancel);
     d->actionWidgetName = actionWidgetName;
     setButtonGuiItem(KDialog::Ok,
@@ -433,7 +436,6 @@ KexiActionSelectionDialog::KexiActionSelectionDialog(
           QGridLayout *secondAnd3rdColumnGrLyr
        - kactionPageWidget contains only a QVBoxLayout and label+kactionListView
     */
-//    d->glyr = new QGridLayout(mainWidget, 2, 2, KDialog::marginHint(), KDialog::spacingHint());
     d->glyr = new QGridLayout(mainWidget); // 2x2
     KexiUtils::setStandardMarginsAndSpacing(d->glyr);
     d->glyr->setRowStretch(1, 1);
@@ -457,13 +459,10 @@ KexiActionSelectionDialog::KexiActionSelectionDialog(
     // widget stack for 2nd and 3rd column
     d->secondAnd3rdColumnStack = new QStackedWidget(mainWidget);
     d->secondAnd3rdColumnStack->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-//    d->glyr->addMultiCellWidget(d->secondAnd3rdColumnStack, 0, 1, 1, 1);
     d->glyr->addWidget(d->secondAnd3rdColumnStack, 0, 1, 2, 1);
 
     d->secondAnd3rdColumnMainWidget = new QWidget(d->secondAnd3rdColumnStack);
     d->secondAnd3rdColumnMainWidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-//    d->secondAnd3rdColumnGrLyr = new QGridLayout(
-//        d->secondAnd3rdColumnMainWidget, 2, 2, 0, KDialog::spacingHint());
     d->secondAnd3rdColumnGrLyr = new QGridLayout(d->secondAnd3rdColumnMainWidget);
     KDialog::resizeLayout(d->secondAnd3rdColumnGrLyr, 0, KDialog::spacingHint());
     d->secondAnd3rdColumnGrLyr->setRowStretch(1, 2);
@@ -593,7 +592,7 @@ void KexiActionSelectionDialog::slotActionToExecuteItemExecuted(QTreeWidgetItem*
 
 void KexiActionSelectionDialog::slotActionToExecuteItemSelected(QTreeWidgetItem*)
 {
-  kDebug();
+  //kDebug();
   updateOKButtonStatus();
 }
 
@@ -604,7 +603,7 @@ void KexiActionSelectionDialog::slotActionCategorySelected(QTreeWidgetItem* item
     if (categoryItm) {
         d->updateSelectActionToBeExecutedMessage(categoryItm->data(ActionSelectorDialogTreeItem::ActionDataRole).toString());
         QString selectActionToBeExecutedMsg(
-            I18N_NOOP("&Select action to be executed after clicking \"%1\" button:")); // msg for a label
+            I18N_NOOP("&Select action to be executed after clicking <interface>%1</interface> button:")); // msg for a label
         if (categoryItm->data(ActionSelectorDialogTreeItem::ActionCategoryRole).toString() == "kaction") {
             if (!d->kactionPageWidget) {
                 //create lbl+list view with a vlayout
@@ -731,7 +730,7 @@ KexiFormEventAction::ActionData KexiActionSelectionDialog::currentAction() const
                 }
             }
         } else {
-            kDebug() << "No current category item";
+            kWarning() << "No current category item";
         }
     }
     
@@ -743,7 +742,7 @@ void KexiActionSelectionDialog::updateOKButtonStatus()
     KPushButton *btn = button(Ok);
     ActionSelectorDialogTreeItem *itm = dynamic_cast<ActionSelectorDialogTreeItem*>(d->actionCategoriesListView->currentItem());
     
-    kDebug() << "Current Action:" << currentAction().string << ":" << currentAction().option;
+    //kDebug() << "Current Action:" << currentAction().string << ":" << currentAction().option;
     btn->setEnabled((itm && itm->data(ActionSelectorDialogTreeItem::ActionCategoryRole).toString() == "noaction") || !currentAction().isEmpty());
 }
 

@@ -90,7 +90,7 @@
       </widget>
      </item>
      <item>
-      <widget class="KisDoubleSliderSpinBox" name="spacingSlider" native="true"/>
+      <widget class="KisSpacingSelectionWidget" name="spacingWidget" native="true"/>
      </item>
     </layout>
    </item>
@@ -99,7 +99,7 @@
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Save brush:</string>
+        <string>Save Tip:</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -128,9 +128,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KisDoubleSliderSpinBox</class>
+   <class>KisSpacingSelectionWidget</class>
    <extends>QWidget</extends>
-   <header>kis_slider_spin_box.h</header>
+   <header>kis_spacing_selection_widget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

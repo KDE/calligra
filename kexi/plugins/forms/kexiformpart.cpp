@@ -20,6 +20,7 @@
 */
 
 #include <QVBoxLayout>
+#include <QDomDocument>
 
 #include <kdebug.h>
 #include <kdialog.h>
@@ -47,13 +48,11 @@
 #include <kexi_global.h>
 #include <formeditor/form.h>
 #include <formeditor/formIO.h>
-//2.0 #include <formeditor/widgetpropertyset.h>
 #include <formeditor/WidgetTreeWidget.h>
 
 #include <koproperty/Property.h>
 #include <koproperty/Set.h>
 
-#include "kexiformview.h"
 #include "widgets/kexidbform.h"
 #include "kexiformscrollview.h"
 #include "kexiformmanager.h"
@@ -94,58 +93,13 @@ KexiFormPart::KexiFormPart(QObject *parent, const QVariantList &l)
     // Only create form manager if it's not yet created.
     // KexiReportPart could have created it already.
 
-/* 2.0 removed
-    KFormDesigner::FormManager *formManager = KFormDesigner::FormManager::self();
-    if (!formManager) {*/
     KexiFormManager::self()->init(this, d->widgetTree); // this should create KexiFormManager singleton
-//    }
-
-/* 2.0 slotPropertyChanged() code moved to Form so this connection can be removed
-    connect(KFormDesigner::FormManager::self()->propertySet(),
-            SIGNAL(widgetPropertyChanged(QWidget*,QByteArray,QVariant)),
-            this, SLOT(slotPropertyChanged(QWidget*,QByteArray,QVariant)));*/
-//2.0 not needed, the code from slot receiving this signal is moved to Form itself
-//    connect(KFormDesigner::FormManager::self(), SIGNAL(autoTabStopsSet(KFormDesigner::Form*,bool)),
-//            this, SLOT(slotAutoTabStopsSet(KFormDesigner::Form*,bool)));
 }
 
 KexiFormPart::~KexiFormPart()
 {
-//2.0    static_formsLibrary = 0;
     delete d;
 }
-
-/* moved to KexiFormManager
-KFormDesigner::WidgetLibrary* KexiFormPart::library()
-{
-    return static_formsLibrary;
-}
-*/
-
-
-#if 0
-void KexiFormPart::initPartActions(KActionCollection *collection)
-{
-//this is automatic? -no
-//create child guicilent: guiClient()->setXMLFile("kexidatatableui.rc");
-
-    kDebug() << "FormPart INIT ACTIONS***********************************************************************";
-    //TODO
-
-    //guiClient()->setXMLFile("kexiformui.rc");
-//js m_manager->createActions(collection, 0);
-}
-
-void KexiFormPart::initInstanceActions(int mode, KActionCollection *col)
-{
-    if (mode == Kexi::DesignViewMode) {
-        KFormDesigner::FormManager::self()->createActions(col, 0);
-        new KAction(i18n("Edit Tab Order..."), "tab_order", KShortcut(0), KFormDesigner::FormManager::self(), SLOT(editTabOrder()), col, "taborder");
-        new KAction(i18n("Adjust Size"), "zoom-fit-best", KShortcut(0), KFormDesigner::FormManager::self(), SLOT(adjustWidgetSize()), col, "adjust");
-    }
-    //TODO
-}
-#endif
 
 void KexiFormPart::initPartActions()
 {
@@ -153,62 +107,27 @@ void KexiFormPart::initPartActions()
 
 void KexiFormPart::initInstanceActions()
 {
-//    KActionCollection *col = actionCollectionForMode(Kexi::DesignViewMode);
-
-//moved to KexiFormManager::init()
-//KexiFormManager::self()->createActions(library(), col,
-//            (KXMLGUIClient*)col->parentGUIClient());
-
     //connect actions provided by widget factories
-//2.0 moved   connect(col->action("widget_assign_action"), SIGNAL(activated()),
-//2.0 moved            this, SLOT(slotAssignAction()));
-
     createSharedAction(Kexi::DesignViewMode, i18n("Clear Widget Contents"),
                        koIconName("edit-clear"), KShortcut(), "formpart_clear_contents");
     createSharedAction(Kexi::DesignViewMode, i18n("Edit Tab Order..."),
                        koIconName("tab_order"), KShortcut(), "formpart_taborder");
-//TODO createSharedAction(Kexi::DesignViewMode, i18n("Edit Pixmap Collection"), koIconName("icons"), 0, "formpart_pixmap_collection");
-//TODO createSharedAction(Kexi::DesignViewMode, i18n("Edit Form Connections"), koIconName("connections"), 0, "formpart_connections");
+//! @todo createSharedAction(Kexi::DesignViewMode, i18n("Edit Pixmap Collection"), koIconName("icons"), 0, "formpart_pixmap_collection");
+//! @todo createSharedAction(Kexi::DesignViewMode, i18n("Edit Form Connections"), koIconName("connections"), 0, "formpart_connections");
 
-// KFormDesigner::CreateLayoutCommand
-
-    KAction *action = createSharedAction(Kexi::DesignViewMode, i18n("Layout Widgets"),
-                                         QString(), KShortcut(), "formpart_layout_menu", "KActionMenu");
-    KActionMenu *menu = static_cast<KActionMenu*>(action);
-
-    menu->addAction(createSharedAction(Kexi::DesignViewMode, i18n("&Horizontally"),
-                                       QString(), KShortcut(), "formpart_layout_hbox"));
-    menu->addAction(createSharedAction(Kexi::DesignViewMode, i18n("&Vertically"),
-                                       QString(), KShortcut(), "formpart_layout_vbox"));
-    menu->addAction(createSharedAction(Kexi::DesignViewMode, i18n("In &Grid"),
-                                       QString(), KShortcut(), "formpart_layout_grid"));
-#ifdef KEXI_SHOW_SPLITTER_WIDGET
-    menu->addAction(createSharedAction(Kexi::DesignViewMode, i18n("Horizontally in &Splitter"),
-                                       QString(), KShortcut(), "formpart_layout_hsplitter"));
-    menu->addAction(createSharedAction(Kexi::DesignViewMode, i18n("Verti&cally in Splitter"),
-                                       QString(), KShortcut(), "formpart_layout_vsplitter"));
-#endif
-
-    createSharedAction(Kexi::DesignViewMode, i18n("&Break Layout"), QString(),
-                       KShortcut(), "formpart_break_layout");
-    /*
-      createSharedAction(Kexi::DesignViewMode, i18n("Lay Out Widgets &Horizontally"), QString(), 0, "formpart_layout_hbox");
-      createSharedAction(Kexi::DesignViewMode, i18n("Lay Out Widgets &Vertically"), QString(), 0, "formpart_layout_vbox");
-      createSharedAction(Kexi::DesignViewMode, i18n("Lay Out Widgets in &Grid"), QString(), 0, "formpart_layout_grid");
-    */
     createSharedAction(Kexi::DesignViewMode, i18n("Bring Widget to Front"), koIconName("raise"),
                        KShortcut(), "formpart_format_raise");
     createSharedAction(Kexi::DesignViewMode, i18n("Send Widget to Back"), koIconName("lower"),
                        KShortcut(), "formpart_format_lower");
 
 #ifdef KEXI_SHOW_UNFINISHED
-    action = createSharedAction(Kexi::DesignViewMode, i18n("Other Widgets"), QString(),
+    action = createSharedAction(Kexi::DesignViewMode, futureI18n("Other Widgets"), QString(),
                                 KShortcut(), "other_widgets_menu", "KActionMenu");
 #endif
 
-    action = createSharedAction(Kexi::DesignViewMode, i18n("Align Widgets Position"),
+    KAction *action = createSharedAction(Kexi::DesignViewMode, i18n("Align Widgets Position"),
                                 koIconName("aoleft"), KShortcut(), "formpart_align_menu", "KActionMenu");
-    menu = static_cast<KActionMenu*>(action);
+    KActionMenu *menu = static_cast<KActionMenu*>(action);
     menu->addAction(createSharedAction(Kexi::DesignViewMode, i18n("To Left"), koIconName("aoleft"),
                                        KShortcut(), "formpart_align_to_left"));
     menu->addAction(createSharedAction(Kexi::DesignViewMode, i18n("To Right"), koIconName("aoright"),
@@ -240,7 +159,7 @@ void KexiFormPart::initInstanceActions()
 KexiWindowData*
 KexiFormPart::createWindowData(KexiWindow* window)
 {
-    return new KexiFormPart::TempData(window);
+    return new KexiFormPartTempData(window);
 }
 
 KexiView* KexiFormPart::createView(QWidget *parent, KexiWindow* window,
@@ -259,6 +178,7 @@ KexiView* KexiFormPart::createView(QWidget *parent, KexiWindow* window,
     return view;
 }
 
+#ifndef NO_DSWIZARD
 void
 KexiFormPart::generateForm(KexiDB::FieldList *list, QDomDocument &domDoc)
 {
@@ -402,14 +322,7 @@ KexiFormPart::generateForm(KexiDB::FieldList *list, QDomDocument &domDoc)
 
     uiElement.appendChild(baseWidget);
 }
-
-//2.0 not needed, the code from slot receiving this signal is moved to Form itself
-/*void KexiFormPart::slotAutoTabStopsSet(KFormDesigner::Form *form, bool set)
-{
-    if (form->propertySet().contains("autoTabStops")) {
-        form->propertySet().changeProperty("autoTabStops", set);
-    }
-}*/
+#endif
 
 KLocalizedString KexiFormPart::i18nMessage(
     const QString& englishMessage, KexiWindow* window) const
@@ -422,33 +335,6 @@ KLocalizedString KexiFormPart::i18nMessage(
 
     return Part::i18nMessage(englishMessage, window);
 }
-
-/*moved to Form 
-void
-KexiFormPart::slotPropertyChanged(QWidget *w, const QByteArray &name, const QVariant &value)
-{
-    Q_UNUSED(w);
-
-    if (!KFormDesigner::FormManager::self()->activeForm())
-        return;
-    if (name == "autoTabStops") {
-        //QWidget *w = KFormDesigner::FormManager::self()->activeForm()->selectedWidget();
-        //update autoTabStops setting at KFD::Form level
-        KFormDesigner::FormManager::self()->activeForm()->setAutoTabStops(value.toBool());
-    }
-    if (KFormDesigner::FormManager::self()->activeForm()->widget() && name == "geometry") {
-        //fall back to sizeInternal property....
-        if (KFormDesigner::FormManager::self()->propertySet()->contains("sizeInternal"))
-            KFormDesigner::FormManager::self()->propertySet()->property("sizeInternal").setValue(
-                value.toRect().size());
-    }
-}*/
-
-/*KFormDesigner::FormManager*
-KexiFormPart::manager() const
-{
-  return d->manager;
-}*/
 
 KexiDataSourcePage* KexiFormPart::dataSourcePage() const
 {
@@ -477,10 +363,12 @@ void KexiFormPart::setupCustomPropertyPanelTabs(KTabWidget *tab)
                 SIGNAL(dataSourceFieldOrExpressionChanged(QString,QString,KexiDB::Field::Type)),
                 KexiFormManager::self(),
                 SLOT(setDataSourceFieldOrExpression(QString,QString,KexiDB::Field::Type)));
+#ifndef KEXI_NO_AUTOFIELD_WIDGET
         connect(d->dataSourcePage,
                 SIGNAL(insertAutoFields(QString,QString,QStringList)),
                 KexiFormManager::self(),
                 SLOT(insertAutoFields(QString,QString,QStringList)));
+#endif
     }
 
     KexiProject *prj = KexiMainWindowIface::global()->project();
@@ -503,12 +391,12 @@ void KexiFormPart::setupCustomPropertyPanelTabs(KTabWidget *tab)
 
 //----------------
 
-KexiFormPart::TempData::TempData(QObject* parent)
+KexiFormPartTempData::KexiFormPartTempData(QObject* parent)
         : KexiWindowData(parent)
 {
 }
 
-KexiFormPart::TempData::~TempData()
+KexiFormPartTempData::~KexiFormPartTempData()
 {
 }
 

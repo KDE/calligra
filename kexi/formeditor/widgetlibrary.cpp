@@ -25,14 +25,13 @@
 
 #include <kdebug.h>
 #include <klocale.h>
-//#include <klibloader.h>
 #include <kservice.h>
-#include <kservicetypetrader.h>
 #include <kmenu.h>
 #include <kactioncollection.h>
-//2.0 #include <kxmlguiclient.h>
 
+#include <KoServiceLocator.h>
 #include <KoIcon.h>
+
 #include "WidgetInfo.h"
 #include "widgetfactory.h"
 #include "libactionwidget.h"
@@ -42,7 +41,7 @@
 #include "FormWidgetInterface.h"
 #include "objecttree.h"
 
-#include "../kexi_global.h"
+#include <kexi_global.h>
 
 namespace KFormDesigner
 {
@@ -59,7 +58,6 @@ public:
         advancedProperties.insert("accessibleDescription");
         advancedProperties.insert("accessibleName");
         advancedProperties.insert("autoMask");
-        advancedProperties.insert("autoFillBackground");
         advancedProperties.insert("backgroundOrigin");
         advancedProperties.insert("backgroundMode");//this is rather useless
         advancedProperties.insert("baseSize");
@@ -69,6 +67,7 @@ public:
         advancedProperties.insert("dragEnabled");
         advancedProperties.insert("enableSqueezedText");
         advancedProperties.insert("layout");// too large risk to break things
+        advancedProperties.insert("layoutDirection");
         advancedProperties.insert("locale");
         advancedProperties.insert("mouseTracking");
 /*! @todo: reenable */ advancedProperties.insert("palette");
@@ -91,14 +90,14 @@ public:
 #endif
     }
     // dict which associates a class name with a Widget class
-    WidgetInfoHash widgets;//, alternateWidgets;
+    WidgetInfoHash widgets;
     QHash<QByteArray, KService::Ptr> services;
     QSet<QByteArray> supportedFactoryGroups;
     QHash<QByteArray, WidgetFactory*> factories;
     QSet<QByteArray> advancedProperties;
     QSet<QByteArray> hiddenClasses;
-    bool showAdvancedProperties : 1;
-    bool factoriesLoaded : 1;
+    bool showAdvancedProperties;
+    bool factoriesLoaded;
 };
 }
 
@@ -177,7 +176,7 @@ WidgetLibrary::loadFactoryWidgets(WidgetFactory *f)
 void
 WidgetLibrary::lookupFactories()
 {
-    KService::List tlist = KServiceTypeTrader::self()->query("KFormDesigner/WidgetFactory");
+    const KService::List tlist = KoServiceLocator::instance()->entries("Kexi/WidgetFactory");
     foreach (KService::Ptr ptr, tlist) {
         KService::Ptr existingService = d->services.value(ptr->library().toLower().toLatin1());
         if (!existingService.isNull()) {
@@ -185,7 +184,7 @@ WidgetLibrary::lookupFactories()
                 << ")! skipping this one: library=" << ptr->library();
             continue;
         }
-        kDebug() << "found factory:" << ptr->name();
+        //kDebug() << "found factory:" << ptr->name();
 
         QByteArray groupName = ptr->property("X-KFormDesigner-FactoryGroup").toByteArray();
         if (!groupName.isEmpty() && !d->supportedFactoryGroups.contains(groupName.toLower())) {
@@ -212,24 +211,18 @@ WidgetLibrary::loadFactories()
         return;
     d->factoriesLoaded = true;
     foreach (KService::Ptr ptr, d->services) {
-        KPluginLoader loader(ptr->library());
-        const uint foundMajor = (loader.pluginVersion() >> 16) & 0xff;
-        const uint foundMinor = (loader.pluginVersion() >> 8) & 0xff;
-        if (KFormDesigner::version() != foundMajor) {
+        KexiPluginLoader loader(ptr, "");
+        if (KFormDesigner::version() != loader.majorVersion()) {
 //! @todo show this error to the user?
             kWarning() << 
                  i18n(
                      "Incompatible database driver's \"%1\" version: found version %2, expected version %3.",
                      ptr->library(),
-                     QString("%1.%2").arg(foundMajor).arg(foundMinor),
-                     QString("%1.%2").arg(KFormDesigner::version()).arg(0));
+                     loader.majorVersion(),
+                     KFormDesigner::version());
             continue;
         }
-        KPluginFactory *factory = loader.factory();
-        WidgetFactory *f = 0;
-        if (factory) {
-            f = factory->create<WidgetFactory>(this);
-        }
+        WidgetFactory *f = loader.createPlugin<WidgetFactory>(this);
         if (!f) {
 //! @todo show this error to the user?
             kWarning() << "Creating factory failed!" << ptr->library();
@@ -322,8 +315,6 @@ WidgetLibrary::createMenuActions(const QByteArray &c, QWidget *w, QMenu *menu,
     if (!wclass)
         return false;
 
-//2.0    wclass->factory()->m_widget = w;
-//2.0    wclass->factory()->m_container = container;
     if (wclass->factory()->createMenuActions(c, w, menu, container)) {
         return true;
     }

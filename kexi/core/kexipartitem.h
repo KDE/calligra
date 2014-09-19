@@ -50,12 +50,6 @@ public:
         m_id = id;
     }
 
-/*    QString mimeType() const {
-        return m_mime;
-    }
-    void setMimeType(const QString &mime) {
-        m_mime = mime;
-    }*/
     QString partClass() const {
         return m_class;
     }
@@ -128,7 +122,6 @@ public:
     ~ItemDict();
 };
 
-//typedef QHash<int, KexiPart::Item*>::iterator ItemDictIterator;
 typedef QList<KexiPart::Item*>::iterator ItemListIterator;
 
 /*!

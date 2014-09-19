@@ -27,9 +27,12 @@ Boston, MA 02110-1301, USA
 #include <kmessagebox.h>
 
 //QT includes
-#include <QFileDialog>
 #include <QPushButton>
 #include <QDebug>
+#include <QDesktopServices>
+
+// Calligra includes
+#include <KoFileDialog.h>
 
 CoverSelectionDialog::CoverSelectionDialog(CAuView *au, QWidget *parent) :
     QDialog(parent),
@@ -66,9 +69,13 @@ void CoverSelectionDialog::createActions()
 void CoverSelectionDialog::open()
 {
     //Here filter could be change if new extension(s) have to be added
-    QString fileName = QFileDialog::getOpenFileName(0, i18n("Open File"),
-                                                    "~",
-                                                    i18n("Images (*.png *.xpm *.jpg *.jpeg)"));
+    KoFileDialog dialog(this, KoFileDialog::OpenFile, "OpenDocument");
+    dialog.setCaption(i18n("Open Cover"));
+    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+    dialog.setImageFilters();
+
+    QString fileName = dialog.url();
+
     if (!fileName.isEmpty()) {
         CoverImage cover;
         QPair<QString, QByteArray> tmp_img = cover.readCoverImage(fileName);

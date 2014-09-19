@@ -34,7 +34,7 @@ class KEXICORE_EXPORT StaticPartInfo : public Info
 {
 public:
     StaticPartInfo(const QString& partClass, const QString& itemIcon,
-               const QString& objectName);
+                   const QString& objectName);
     ~StaticPartInfo();
 
 protected:
@@ -53,7 +53,8 @@ public:
     /*! Creates a new view for mode \a viewMode, \a item and \a parent. The view will be
      used inside \a window. \a args arguments can be passed. */
     virtual KexiView* createView(QWidget *parent, KexiWindow* window,
-                                 KexiPart::Item &item, Kexi::ViewMode viewMode, QMap<QString, QVariant>* args) = 0;
+                                 KexiPart::Item &item, Kexi::ViewMode viewMode,
+                                 QMap<QString, QVariant>* args) = 0;
 
 protected:
     //! unused by static parts

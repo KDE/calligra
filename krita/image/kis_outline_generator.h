@@ -45,7 +45,7 @@ public:
      * @param defaultOpacity opacity of pixels that shouldn't be included in the outline
      **/
     KisOutlineGenerator(const KoColorSpace* cs, quint8 defaultOpacity);
-    
+
     /**
      * Generates the outline.
      * @param buffer buffer with the data for the outline
@@ -68,28 +68,35 @@ public:
 
 private:
 
+
+private:
+
     enum EdgeType {
         TopEdge = 1, LeftEdge = 2, BottomEdge = 3, RightEdge = 0, NoEdge = 4
     };
 
-    bool isOutlineEdge(EdgeType edge, qint32 x, qint32 y, quint8* buffer, qint32 bufWidth, qint32 bufHeight);
-    bool isOutlineEdge(EdgeType edge, qint32 x, qint32 y, const KisPaintDevice *buffer, qint32 bufWidth, qint32 bufHeight);
+    template <class StorageStrategy>
+    QVector<QPolygon> outlineImpl(typename StorageStrategy::StorageType buffer,
+                                  qint32 xOffset, qint32 yOffset,
+                                  qint32 width, qint32 height);
+
+    template <class StorageStrategy>
+    bool isOutlineEdge(StorageStrategy &storage, EdgeType edge, qint32 x, qint32 y, qint32 bufWidth, qint32 bufHeight);
+
+    template <class StorageStrategy>
+    void nextOutlineEdge(StorageStrategy &storage, EdgeType *edge, qint32 *row, qint32 *col, qint32 width, qint32 height);
 
     EdgeType nextEdge(EdgeType edge) {
         return edge == NoEdge ? edge : static_cast<EdgeType>((edge + 1) % 4);
     }
 
-    void nextOutlineEdge(EdgeType *edge, qint32 *row, qint32 *col, quint8* buffer, qint32 bufWidth, qint32 bufHeight);
-    void nextOutlineEdge(EdgeType *edge, qint32 *row, qint32 *col, const KisPaintDevice *buffer, qint32 bufWidth, qint32 bufHeight);
-
     void appendCoordinate(QPolygon * path, int x, int y, EdgeType edge);
+
+private:
 
     const KoColorSpace* m_cs;
     quint8 m_defaultOpacity;
     bool m_simple;
-
-    qint32 m_xOffset;
-    qint32 m_yOffset;
 
     KisRandomConstAccessorSP m_accessor;
 };

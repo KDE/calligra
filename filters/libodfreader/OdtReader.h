@@ -72,6 +72,8 @@ class KOODFREADER_EXPORT OdtReader
 
     void setTextReader(OdfTextReader *textReader);
 
+    bool analyzeContent(OdfReaderContext *context);
+
     bool readContent(OdtReaderBackend *backend, OdfReaderContext *context);
 
  protected:

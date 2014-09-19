@@ -96,7 +96,7 @@ bool xBaseConnection::drv_useDatabase(const QString &dbName, bool *cancelled, Me
 {
   Q_UNUSED(cancelled);
   Q_UNUSED(msgHandler);
-//TODO is here escaping needed?
+//! @todo escaping needed?
   return d->useDatabase(dbName);
 }
 
@@ -109,7 +109,7 @@ bool xBaseConnection::drv_closeDatabase() {
 
 bool xBaseConnection::drv_dropDatabase( const QString &dbName) {
   Q_UNUSED(dbName);
-//TODO is here escaping needed
+//! @todo escaping needed?
   // Delete the directory ?
   return true;
 }

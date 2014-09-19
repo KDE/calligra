@@ -18,4 +18,4 @@ target_link_libraries(
 
 install(TARGETS kprvariables  DESTINATION ${PLUGIN_INSTALL_DIR})
 
-install( FILES kprvariables.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES kprvariables.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)

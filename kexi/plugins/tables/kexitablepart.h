@@ -44,16 +44,14 @@ public:
     virtual tristate rename(KexiPart::Item &item,
                             const QString& newName);
 
-//  virtual KexiPart::DataSource *dataSource();
-
     class TempData : public KexiWindowData
     {
     public:
-        TempData(QObject* parent);
+        explicit TempData(QObject* parent);
         KexiDB::TableSchema *table;
         /*! true, if \a table member has changed in previous view. Used on view switching.
          We're checking this flag to see if we should refresh data for DataViewMode. */
-    bool tableSchemaChangedInPreviousView : 1;
+    bool tableSchemaChangedInPreviousView;
     };
 
     static tristate askForClosingObjectsUsingTableSchema(
@@ -84,17 +82,4 @@ private:
     Private* const d;
 };
 
-#if 0
-class KexiTableDataSource : public KexiPart::DataSource
-{
-public:
-    KexiTableDataSource(KexiPart::Part *part);
-    ~KexiTableDataSource();
-
-    virtual KexiDB::FieldList *fields(KexiProject *project, const KexiPart::Item &item);
-    virtual KexiDB::Cursor *cursor(KexiProject *project, const KexiPart::Item &item, bool buffer);
-};
 #endif
-
-#endif
-

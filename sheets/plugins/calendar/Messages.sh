@@ -1,3 +1,6 @@
 #! /bin/sh
+source ../../../calligra_xgettext.sh
+
 $EXTRACTRC *.ui >> rc.cpp
-$XGETTEXT rc.cpp *.cpp -o $podir/CalendarTool.pot
+calligra_xgettext CalendarTool.pot rc.cpp *.cpp
+rm -f rc.cpp

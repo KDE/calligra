@@ -216,8 +216,6 @@ private:
         ~Item();
         QPixmap pixmap() const;
         QByteArray data() const;
-//    KexiBLOBBuffer* buf;
-//    KUrl url;
         QString name;
         QString caption; //!< @todo for future use within image gallery
         QString mimeType;

@@ -71,6 +71,35 @@ OdfTextReaderBackend::~OdfTextReaderBackend()
 // ----------------------------------------------------------------
 // Text level functions: paragraphs, headings, sections, frames, objects, etc
 
+
+void OdfTextReaderBackend::elementOfficeAnnotation(KoXmlStreamReader &reader,
+                                                   OdfReaderContext *context)
+{
+    Q_UNUSED(reader);
+    Q_UNUSED(context);
+}
+
+void OdfTextReaderBackend::elementOfficeAnnotationEnd(KoXmlStreamReader &reader,
+                                                      OdfReaderContext *context)
+{
+    Q_UNUSED(reader);
+    Q_UNUSED(context);
+}
+
+void OdfTextReaderBackend::elementDcCreator(KoXmlStreamReader &reader,
+                                            OdfReaderContext *context)
+{
+    Q_UNUSED(reader);
+    Q_UNUSED(context);
+}
+
+void OdfTextReaderBackend::elementDcDate(KoXmlStreamReader &reader,
+                                         OdfReaderContext *context)
+{
+    Q_UNUSED(reader);
+    Q_UNUSED(context);
+}
+
 void OdfTextReaderBackend::elementTextH(KoXmlStreamReader &reader, OdfReaderContext *context)
 {
     Q_UNUSED(reader);
@@ -83,6 +112,11 @@ void OdfTextReaderBackend::elementTextP(KoXmlStreamReader &reader, OdfReaderCont
     Q_UNUSED(context);
 }
 
+void OdfTextReaderBackend::elementTextList(KoXmlStreamReader &reader, OdfReaderContext *context)
+{
+    Q_UNUSED(reader);
+    Q_UNUSED(context);
+}
 
 void OdfTextReaderBackend::elementTableTable(KoXmlStreamReader &reader, OdfReaderContext *context)
 {
@@ -136,6 +170,12 @@ void OdfTextReaderBackend::elementTextA(KoXmlStreamReader &reader, OdfReaderCont
     Q_UNUSED(context);
 }
 
+void OdfTextReaderBackend::elementTextLineBreak(KoXmlStreamReader &reader, OdfReaderContext *context)
+{
+    Q_UNUSED(reader);
+    Q_UNUSED(context);
+}
+
 void OdfTextReaderBackend::elementTextSpan(KoXmlStreamReader &reader, OdfReaderContext *context)
 {
     Q_UNUSED(reader);
@@ -158,6 +198,21 @@ void OdfTextReaderBackend::elementTextSoftPageBreak(KoXmlStreamReader &reader,
 
 
 void OdfTextReaderBackend::characterData(KoXmlStreamReader &reader, OdfReaderContext *context)
+{
+    Q_UNUSED(reader);
+    Q_UNUSED(context);
+}
+
+// ----------------------------------------------------------------
+// List level functions: lit-header and list-item.
+
+void OdfTextReaderBackend::elementTextListHeader(KoXmlStreamReader &reader, OdfReaderContext *context)
+{
+    Q_UNUSED(reader);
+    Q_UNUSED(context);
+}
+
+void OdfTextReaderBackend::elementTextListItem(KoXmlStreamReader &reader, OdfReaderContext *context)
 {
     Q_UNUSED(reader);
     Q_UNUSED(context);

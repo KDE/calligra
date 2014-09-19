@@ -21,6 +21,7 @@
 #include <QDebug>
 #include <QFileDialog>
 #include <QApplication>
+#include <QImageReader>
 #include <QClipboard>
 
 #include <kconfiggroup.h>
@@ -34,40 +35,78 @@ public:
             KoFileDialog::DialogType dialogType_,
             const QString caption_,
             const QString defaultDir_,
-            const QString uniqueName_)
+            const QString dialogName_)
         : parent(parent_)
         , type(dialogType_)
-        , uniqueName(uniqueName_)
+        , dialogName(dialogName_)
         , caption(caption_)
-        , directory(defaultDir_)
-        , filterType(KoFileDialog::NameFilter)
+        , defaultDirectory(defaultDir_)
         , filterList(QStringList())
         , defaultFilter(QString())
-        , ptr(0)
+        , fileDialog(0)
+        , mimeType(0)
+        , useStaticForNative(false)
+        , hideDetails(false)
     {
+        // Force the native file dialogs on Windows. Except for KDE, the native file dialogs are only possible
+        // using the static methods. The Qt documentation is wrong here, if it means what it says " By default,
+        // the native file dialog is used unless you use a subclass of QFileDialog that contains the Q_OBJECT
+        // macro."
+#ifdef Q_OS_WIN
+        useStaticForNative = true;
+#endif
+        // Non-static KDE file is broken when called with QFileDialog::AcceptSave:
+        // then the directory above defaultdir is opened, and defaultdir is given as the default file name...
+        //
+        // So: in X11, use static methods inside KDE, which give working native dialogs, but non-static outside
+        // KDE, which gives working Qt dialogs.
+        //
+        // Only show the GTK dialog in Gnome, where people deserve it
+#ifdef Q_WS_X11
+        if (qgetenv("KDE_FULL_SESSION").size() > 0) {
+            useStaticForNative = true;
+        }
+        if (qgetenv("XDG_CURRENT_DESKTOP") == "GNOME") {
+            useStaticForNative = true;
+            QClipboard *cb = QApplication::clipboard();
+            cb->blockSignals(true);
+        }
+
+#endif
+    }
+
+    ~Private()
+    {
+        if (qgetenv("XDG_CURRENT_DESKTOP") == "GNOME") {
+            useStaticForNative = true;
+            QClipboard *cb = QApplication::clipboard();
+            cb->blockSignals(false);
+        }
     }
 
     QWidget *parent;
     KoFileDialog::DialogType type;
-    QString uniqueName;
+    QString dialogName;
     QString caption;
-    QString directory;
-    KoFileDialog::FilterType filterType;
+    QString defaultDirectory;
     QStringList filterList;
     QString defaultFilter;
-    QFileDialog *ptr;
+    QFileDialog *fileDialog;
+    KMimeType::Ptr mimeType;
+    bool useStaticForNative;
+    bool hideDetails;
 };
 
 KoFileDialog::KoFileDialog(QWidget *parent,
                            KoFileDialog::DialogType type,
-                           const QString uniqueName)
-    : d(new Private(parent, type, "", getUsedDir(uniqueName), uniqueName))
+                           const QString &dialogName)
+    : d(new Private(parent, type, "", getUsedDir(dialogName), dialogName))
 {
 }
 
 KoFileDialog::~KoFileDialog()
 {
-    delete d->ptr;
+    delete d->fileDialog;
     delete d;
 }
 
@@ -78,129 +117,310 @@ void KoFileDialog::setCaption(const QString &caption)
 
 void KoFileDialog::setDefaultDir(const QString &defaultDir)
 {
-    if (d->directory.isEmpty() || d->directory.isNull())
-        d->directory = defaultDir;
+    if (d->defaultDirectory.isEmpty() || !QDir(d->defaultDirectory).exists()) {
+        d->defaultDirectory = defaultDir;
+    }
+}
+
+void KoFileDialog::setOverrideDir(const QString &overrideDir)
+{
+    d->defaultDirectory = overrideDir;
+}
+
+void KoFileDialog::setImageFilters()
+{
+    QStringList imageFilters;
+    // add filters for all formats supported by QImage
+    foreach(const QByteArray &format, QImageReader::supportedImageFormats()) {
+        imageFilters << "image/" + format;
+    }
+    setMimeTypeFilters(imageFilters);
 }
 
 void KoFileDialog::setNameFilter(const QString &filter)
 {
-    d->filterType = KoFileDialog::NameFilter;
     d->filterList.clear();
-    d->filterList << filter;
-    d->defaultFilter.clear();
+    if (d->type == KoFileDialog::SaveFile) {
+        d->filterList << splitNameFilter(filter);
+        d->defaultFilter = d->filterList.first();
+    }
+    else {
+        d->filterList << filter;
+    }
 }
 
 void KoFileDialog::setNameFilters(const QStringList &filterList,
-                                  const QString &defaultFilter)
+                                  QString defaultFilter)
 {
-    d->filterType = KoFileDialog::NameFilter;
-    d->filterList = filterList;
+    d->filterList.clear();
+
+    if (d->type == KoFileDialog::SaveFile) {
+        foreach(const QString &filter, filterList) {
+            d->filterList << splitNameFilter(filter);
+        }
+
+        if (!defaultFilter.isEmpty()) {
+            QStringList defaultFilters = splitNameFilter(defaultFilter);
+            if (defaultFilters.size() > 0) {
+                defaultFilter = defaultFilters.first();
+            }
+        }
+    }
+    else {
+        d->filterList = filterList;
+    }
     d->defaultFilter = defaultFilter;
+
 }
 
 void KoFileDialog::setMimeTypeFilters(const QStringList &filterList,
-                                      const QString &defaultFilter)
+                                      QString defaultFilter)
 {
-    d->filterType = KoFileDialog::MimeFilter;
-    d->filterList = filterList;
+    d->filterList = getFilterStringListFromMime(filterList, true);
+
+    if (!defaultFilter.isEmpty()) {
+        QStringList defaultFilters = getFilterStringListFromMime(QStringList() << defaultFilter, false);
+        if (defaultFilters.size() > 0) {
+            defaultFilter = defaultFilters.first();
+        }
+    }
     d->defaultFilter = defaultFilter;
 }
 
-QFileDialog* KoFileDialog::ptr()
+void KoFileDialog::setHideNameFilterDetailsOption()
 {
-    if (d->ptr) {
-        return d->ptr;
+    d->hideDetails = true;
+}
+
+QString KoFileDialog::selectedNameFilter() const
+{
+    if (!d->useStaticForNative) {
+        return d->fileDialog->selectedNameFilter();
+    }
+    else {
+        return d->defaultFilter;
+    }
+}
+
+QString KoFileDialog::selectedMimeType() const
+{
+    if (d->mimeType) {
+        return d->mimeType->name();
+    }
+    else {
+        return "";
+    }
+}
+
+void KoFileDialog::createFileDialog()
+{
+    if (d->fileDialog) {
+        delete d->fileDialog;
     }
 
-    d->ptr = new QFileDialog(d->parent, d->caption, d->directory);
+    d->fileDialog = new QFileDialog(d->parent, d->caption, d->defaultDirectory);
 
-    if (d->type == SaveFile || d->type == SaveFiles) {
-        d->ptr->setAcceptMode(QFileDialog::AcceptSave);
-        d->ptr->setFileMode(QFileDialog::AnyFile);
-    } else { // open / import
-        d->ptr->setAcceptMode(QFileDialog::AcceptOpen);
-        if (d->type == ImportDirectory || d->type == ImportDirectories ||
-            d->type == OpenDirectory || d->type == OpenDirectories) {
-            d->ptr->setFileMode(QFileDialog::Directory);
-            d->ptr->setOption(QFileDialog::ShowDirsOnly, true);
-        } else { // open / import file(s)
-            if (d->type == OpenFile || d->type == ImportFile) {
-                d->ptr->setFileMode(QFileDialog::ExistingFile);
-            } else { // files
-                d->ptr->setFileMode(QFileDialog::ExistingFiles);
+    if (d->type == SaveFile) {
+        d->fileDialog->setAcceptMode(QFileDialog::AcceptSave);
+        d->fileDialog->setFileMode(QFileDialog::AnyFile);
+    }
+    else { // open / import
+
+        d->fileDialog->setAcceptMode(QFileDialog::AcceptOpen);
+
+        if (d->type == ImportDirectory
+                || d->type == OpenDirectory)
+        {
+            d->fileDialog->setFileMode(QFileDialog::Directory);
+            d->fileDialog->setOption(QFileDialog::ShowDirsOnly, true);
+        }
+        else { // open / import file(s)
+            if (d->type == OpenFile
+                    || d->type == ImportFile)
+            {
+                d->fileDialog->setFileMode(QFileDialog::ExistingFile);
+            }
+            else { // files
+                d->fileDialog->setFileMode(QFileDialog::ExistingFiles);
             }
         }
     }
 
-    // add "All Supported Formats" filter
-    if (d->type == OpenFile || d->type == OpenFiles ||
-        d->type == ImportFile || d->type == ImportFiles) {
-        if (d->filterType == MimeFilter) {
-            d->filterType = NameFilter;
-            d->filterList = getFilterString(d->filterList, true);
-            d->defaultFilter = getFilterString(d->defaultFilter);
-        }
+    d->fileDialog->setNameFilters(d->filterList);
+    if (!d->defaultFilter.isEmpty()) {
+        d->fileDialog->selectNameFilter(d->defaultFilter);
     }
 
-    if (d->filterType == MimeFilter) {
-#if QT_VERSION >= 0x050200
-        d->ptr->setMimeTypeFilters(d->filterList);
-        if (!d->defaultFilter.isEmpty())
-            d->ptr->selectMimeTypeFilter(d->defaultFilter);
-#else
-        d->ptr->setNameFilters(getFilterString(d->filterList));
-        if (!d->defaultFilter.isEmpty())
-            d->ptr->selectNameFilter(getFilterString(d->defaultFilter));
-#endif
-    } else {
-        d->ptr->setNameFilters(d->filterList);
-        if (!d->defaultFilter.isEmpty())
-            d->ptr->selectNameFilter(d->defaultFilter);
+    if (d->type == ImportDirectory ||
+            d->type == ImportFile || d->type == ImportFiles ||
+            d->type == SaveFile) {
+        d->fileDialog->setWindowModality(Qt::WindowModal);
     }
 
-    if (d->type == ImportDirectory || d->type == ImportDirectories ||
-        d->type == ImportFile || d->type == ImportFiles ||
-        d->type == SaveFile || d->type == SaveFiles) {
-        d->ptr->setWindowModality(Qt::WindowModal);
+    if (d->hideDetails) {
+        d->fileDialog->setOption(QFileDialog::HideNameFilterDetails);
     }
 
-#ifdef Q_WS_X11
-    if (qgetenv("KDE_FULL_SESSION").size() == 0) {
-        d->ptr->setOption(QFileDialog::DontUseNativeDialog);
-    }
-#endif
-
-    return d->ptr;
+    connect(d->fileDialog, SIGNAL(filterSelected(QString)), this, SLOT(filterSelected(QString)));
 }
 
 QString KoFileDialog::url()
 {
-    if (!d->ptr) {
-        ptr();
-    }
     QString url;
-    if (d->ptr->exec() == QDialog::Accepted) {
-        url = d->ptr->selectedFiles().first();
-        saveUsedDir(url, d->uniqueName);
+    if (!d->useStaticForNative) {
+
+        if (!d->fileDialog) {
+            createFileDialog();
+        }
+
+        if (d->fileDialog->exec() == QDialog::Accepted) {
+            url = d->fileDialog->selectedFiles().first();
+        }
+    }
+    else {
+        switch (d->type) {
+        case OpenFile:
+        {
+            url = QFileDialog::getOpenFileName(d->parent,
+                                               d->caption,
+                                               d->defaultDirectory,
+                                               d->filterList.join(";;"),
+                                               &d->defaultFilter);
+            break;
+        }
+        case OpenDirectory:
+        {
+            url = QFileDialog::getExistingDirectory(d->parent,
+                                                    d->caption,
+                                                    d->defaultDirectory,
+                                                    QFileDialog::ShowDirsOnly);
+            break;
+        }
+        case ImportFile:
+        {
+            url = QFileDialog::getOpenFileName(d->parent,
+                                               d->caption,
+                                               d->defaultDirectory,
+                                               d->filterList.join(";;"),
+                                               &d->defaultFilter);
+            break;
+        }
+        case ImportDirectory:
+        {
+            url = QFileDialog::getExistingDirectory(d->parent,
+                                                    d->caption,
+                                                    d->defaultDirectory,
+                                                    QFileDialog::ShowDirsOnly);
+            break;
+        }
+        case SaveFile:
+        {
+            url = QFileDialog::getSaveFileName(d->parent,
+                                               d->caption,
+                                               d->defaultDirectory,
+                                               d->filterList.join(";;"),
+                                               &d->defaultFilter);
+            break;
+        }
+        default:
+            ;
+        }
+    }
+
+    if (!url.isEmpty()) {
+
+        if (d->type == SaveFile && QFileInfo(url).suffix().isEmpty()) {
+            int start = d->defaultFilter.lastIndexOf("*.") + 1;
+            int end = d->defaultFilter.lastIndexOf(" )");
+            int n = end - start;
+            QString extension = d->defaultFilter.mid(start, n);
+            url.append(extension);
+        }
+
+        d->mimeType = KMimeType::findByUrl(KUrl(url), 0, true, true);
+        saveUsedDir(url, d->dialogName);
+
     }
     return url;
 }
 
 QStringList KoFileDialog::urls()
 {
-    if (!d->ptr) {
-        ptr();
-    }
     QStringList urls;
-    if (d->ptr->exec() == QDialog::Accepted) {
-        urls = d->ptr->selectedFiles();
-        saveUsedDir(urls.first(), d->uniqueName);
+
+    if (!d->useStaticForNative) {
+        if (!d->fileDialog) {
+            createFileDialog();
+        }
+        if (d->fileDialog->exec() == QDialog::Accepted) {
+            urls = d->fileDialog->selectedFiles();
+        }
+    }
+    else {
+        switch (d->type) {
+        case OpenFiles:
+        case ImportFiles:
+        {
+            urls = QFileDialog::getOpenFileNames(d->parent,
+                                                 d->caption,
+                                                 d->defaultDirectory,
+                                                 d->filterList.join(";;"),
+                                                 &d->defaultFilter);
+            break;
+        }
+        default:
+            ;
+        }
+    }
+    if (urls.size() > 0) {
+        saveUsedDir(urls.first(), d->dialogName);
     }
     return urls;
 }
 
-const QStringList KoFileDialog::getFilterString(const QStringList &mimeList,
-                                                  bool withAllSupportedEntry)
+void KoFileDialog::filterSelected(const QString &filter)
+{
+    // "Windows BMP image ( *.bmp )";
+    int start = filter.lastIndexOf("*.") + 2;
+    int end = filter.lastIndexOf(" )");
+    int n = end - start;
+    QString extension = filter.mid(start, n);
+    d->defaultFilter = filter;
+    d->fileDialog->setDefaultSuffix(extension);
+}
+
+QStringList KoFileDialog::splitNameFilter(const QString &nameFilter)
+{
+    QStringList filters;
+    QString description;
+
+    if (nameFilter.contains("(")) {
+        description = nameFilter.left(nameFilter.indexOf("(") -1).trimmed();
+    }
+
+
+    QStringList entries = nameFilter.mid(nameFilter.indexOf("(") + 1).split(" ",QString::SkipEmptyParts );
+
+
+    foreach(QString entry, entries) {
+
+        entry = entry.remove("*");
+        entry = entry.remove(")");
+
+        KMimeType::Ptr mime = KMimeType::findByUrl(KUrl("bla" + entry), 0, true, true);
+        if (mime->name() != "application/octet-stream") {
+            filters.append(mime->comment() + "( *" + entry + " )");
+        }
+        else {
+            filters.append(entry.remove(".").toUpper() + " " + description + " ( " + entry + " )");
+        }
+    }
+
+    return filters;
+}
+
+const QStringList KoFileDialog::getFilterStringListFromMime(const QStringList &mimeList,
+                                                            bool withAllSupportedEntry)
 {
     QStringList ret;
     if (withAllSupportedEntry) {
@@ -228,37 +448,23 @@ const QStringList KoFileDialog::getFilterString(const QStringList &mimeList,
     if (withAllSupportedEntry) {
         ret[0].append(")");
     }
-    //qDebug() << ret;
     return ret;
 }
 
-const QString KoFileDialog::getFilterString(const QString &defaultMime)
-{
-    QString filter;
-    KMimeType::Ptr type = KMimeType::mimeType(defaultMime);
-    if(type) {
-        filter.append(type->comment() + " (");
-        QStringList patterns = type->patterns();
-        QStringList::ConstIterator jt;
-        for (jt = patterns.begin(); jt != patterns.end(); ++jt)
-            filter.append(*jt + " ");
-        filter.append(")");
-    }
-    return filter;
-}
-
-const QString KoFileDialog::getUsedDir(const QString &dialogName)
+QString KoFileDialog::getUsedDir(const QString &dialogName)
 {
     if (dialogName.isEmpty()) return "";
 
     KConfigGroup group = KGlobal::config()->group("File Dialogs");
     QString dir = group.readEntry(dialogName);
+
     return dir;
 }
 
 void KoFileDialog::saveUsedDir(const QString &fileName,
                                const QString &dialogName)
 {
+
     if (dialogName.isEmpty()) return;
 
     QFileInfo fileInfo(fileName);
@@ -266,3 +472,4 @@ void KoFileDialog::saveUsedDir(const QString &fileName,
     group.writeEntry(dialogName, fileInfo.absolutePath());
 
 }
+

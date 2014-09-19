@@ -43,7 +43,7 @@ class KFORMEDITOR_EXPORT TabStopDialog : public KDialog
     Q_OBJECT
 
 public:
-    TabStopDialog(QWidget *parent);
+    explicit TabStopDialog(QWidget *parent);
     virtual ~TabStopDialog();
 
     bool autoTabStops() const;

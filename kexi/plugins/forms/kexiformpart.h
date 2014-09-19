@@ -22,12 +22,13 @@
 #ifndef KEXIFORMPART_H
 #define KEXIFORMPART_H
 
-#include <QDomDocument>
-
 #include <kexi.h>
 #include <kexipart.h>
 #include <kexiblobbuffer.h>
 #include <KexiWindowData.h>
+#include <kexiformview.h>
+
+class QDomDocument;
 
 namespace KFormDesigner
 {
@@ -43,6 +44,24 @@ class FieldList;
 
 class KexiDataSourcePage;
 
+class KexiFormPartTempData : public KexiWindowData
+{
+public:
+    explicit KexiFormPartTempData(QObject* parent);
+    ~KexiFormPartTempData();
+    QPointer<KFormDesigner::Form> form;
+    QPointer<KFormDesigner::Form> previewForm;
+    QString tempForm;
+    QPoint scrollViewContentsPos; //!< to preserve contents pos after switching
+    //!< to other view
+    int resizeMode; //!< form's window's resize mode -one of KexiFormView::ResizeMode items
+    //! Used in KexiFormView::setUnsavedLocalBLOBs()
+    QHash<QWidget*, KexiBLOBBuffer::Id_t> unsavedLocalBLOBs;
+    //! Used when loading a form from (temporary) XML in Data View
+    //! to get unsaved blobs collected at design mode.
+    QHash<QByteArray, KexiBLOBBuffer::Id_t> unsavedLocalBLOBsByName;
+};
+
 //! Kexi Form Plugin
 /*! It just creates a \ref KexiFormView. See there for most of code. */
 class KEXIFORMUTILS_EXPORT KexiFormPart : public KexiPart::Part
@@ -57,25 +76,9 @@ public:
 
     KFormDesigner::WidgetTreeWidget* widgetTreePage() const;
 
+#ifndef NO_DSWIZARD
     void generateForm(KexiDB::FieldList *list, QDomDocument &domDoc);
-
-    class TempData : public KexiWindowData
-    {
-    public:
-        explicit TempData(QObject* parent);
-        ~TempData();
-        QPointer<KFormDesigner::Form> form;
-        QPointer<KFormDesigner::Form> previewForm;
-        QString tempForm;
-        QPoint scrollViewContentsPos; //!< to preserve contents pos after switching
-        //!< to other view
-        int resizeMode; //!< form's window's resize mode -one of KexiFormView::ResizeMode items
-        //! Used in KexiFormView::setUnsavedLocalBLOBs()
-        QHash<QWidget*, KexiBLOBBuffer::Id_t> unsavedLocalBLOBs;
-        //! Used when loading a form from (temporary) XML in Data View
-        //! to get unsaved blobs collected at design mode.
-        QHash<QByteArray, KexiBLOBBuffer::Id_t> unsavedLocalBLOBsByName;
-    };
+#endif
 
     virtual KLocalizedString i18nMessage(const QString& englishMessage,
                                          KexiWindow* window) const;
@@ -90,13 +93,6 @@ protected:
     virtual void initPartActions();
     virtual void initInstanceActions();
     virtual void setupCustomPropertyPanelTabs(KTabWidget *tab);
-
-protected slots:
-//2.0 not needed, the code from slot receiving this signal is moved to Form itself
-//    void slotAutoTabStopsSet(KFormDesigner::Form *form, bool set);
-//2.0 moved to KexiFormManager    void slotAssignAction();
-//2.0 moved to Form    void slotPropertyChanged(QWidget *widget, const QByteArray &name, const QVariant &value);
-//2.0 moved to KexiFormManager    void slotWidgetCreatedByFormsLibrary(QWidget* widget);
 
 private:
     class Private;

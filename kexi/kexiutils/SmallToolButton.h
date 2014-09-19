@@ -31,13 +31,13 @@ class KEXIUTILS_EXPORT KexiSmallToolButton : public QToolButton
 {
     Q_OBJECT
 public:
-    KexiSmallToolButton(QWidget* parent = 0);
+    explicit KexiSmallToolButton(QWidget* parent = 0);
 
-    KexiSmallToolButton(const QString& text, QWidget* parent = 0);
+    explicit KexiSmallToolButton(const QString& text, QWidget* parent = 0);
 
     KexiSmallToolButton(const KIcon& icon, const QString& text, QWidget* parent = 0);
 
-    KexiSmallToolButton(QAction *action, QWidget* parent = 0);
+    explicit KexiSmallToolButton(QAction *action, QWidget* parent = 0);
 
     virtual ~KexiSmallToolButton();
 
@@ -58,7 +58,6 @@ protected slots:
 protected:
     void update(const QString& text, const QIcon& icon, bool tipToo = false);
     void init();
-//  virtual void paintEvent(QPaintEvent *pe);
 
     class Private;
     Private * const d;
@@ -71,7 +70,7 @@ class KEXIUTILS_EXPORT KexiToolBarSeparator : public QWidget
 {
     Q_OBJECT
 public:
-    KexiToolBarSeparator(QWidget *parent);
+    explicit KexiToolBarSeparator(QWidget *parent);
     virtual ~KexiToolBarSeparator();
 
     QSize sizeHint() const;

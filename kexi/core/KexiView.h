@@ -165,13 +165,11 @@ public slots:
     void setDirty(bool set);
 
     /*! Equal to setDirty(true). */
-    void setDirty() {
-        setDirty(true);
-    }
+    void setDirty();
 
 signals:
     //! emitted when the view is about to close
-    void closing(bool& cancel);
+    void closing(bool *cancel);
 
     void focus(bool in);
 

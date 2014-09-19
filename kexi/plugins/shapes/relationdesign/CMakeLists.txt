@@ -22,9 +22,8 @@ ${KDE4_KDECORE_LIBS}
 ${KDE4_KDEUI_LIBS}
 ${QT_QTCORE_LIBRARY}
 ${QT_QTGUI_LIBRARY}
-${QT_QT3SUPPORT_LIBRARY}
 )
 
 install(TARGETS kexirelationdesignshape  DESTINATION ${PLUGIN_INSTALL_DIR})
-install( FILES kexirelationdesignshape.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+install( FILES kexirelationdesignshape.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra )
 

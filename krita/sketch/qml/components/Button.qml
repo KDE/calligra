@@ -45,6 +45,8 @@ Item {
 
     property bool hasFocus: false;
 
+    property string tooltip: "";
+
     width: Constants.GridWidth;
     height: Constants.GridHeight;
 
@@ -72,7 +74,7 @@ Item {
         Rectangle {
             id: checkedVisualiser;
             opacity: base.checked ? 1 : 0;
-            Behavior on opacity { NumberAnimation { duration: 150; } }
+            Behavior on opacity { NumberAnimation { duration: Constants.AnimationDuration; } }
             anchors.fill: parent;
             anchors.margins: 2;
             color: base.checkedColor;
@@ -85,8 +87,9 @@ Item {
             anchors.margins: 8;
             fillMode: Image.PreserveAspectFit;
             smooth: true;
+            asynchronous: true;
             opacity: base.enabled ? 1 : 0.7;
-            Behavior on opacity { NumberAnimation { duration: 150; } }
+            Behavior on opacity { NumberAnimation { duration: Constants.AnimationDuration; } }
 
             sourceSize.width: width > height ? height : width;
             sourceSize.height: width > height ? height : width;
@@ -124,14 +127,42 @@ Item {
     MouseArea {
         id: mouse;
         anchors.fill: parent;
+        hoverEnabled: true;
+        acceptedButtons: Qt.LeftButton | Qt.RightButton;
+        
         onClicked: {
-            if (base.enabled) {
+            if(mouse.button == Qt.LeftButton && base.enabled) {
                 base.clicked();
                 if ( base.checkable ) {
                     base.checked = !base.checked;
                 }
+            } else if(mouse.button == Qt.RightButton && base.tooltip != "") {
+                tooltip.show(base.width / 2, 0);
             }
         }
+        onEntered: {
+            hoverDelayTimer.start();
+        }
+        onPositionChanged: {
+            if(hoverDelayTimer.running) {
+                hoverDelayTimer.restart();
+            }
+        }
+        onExited: {
+            hoverDelayTimer.stop();
+            tooltip.hide();
+        }
+    }
+
+    Timer {
+        id: hoverDelayTimer;
+        interval: 1000;
+        onTriggered: { if(base.tooltip != "") tooltip.show(base.width / 2, 0) }
+    }
+
+    Tooltip {
+        id: tooltip;
+        text: base.tooltip;
     }
 
     states: State {

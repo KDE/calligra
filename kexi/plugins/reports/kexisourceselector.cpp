@@ -70,7 +70,6 @@ KexiSourceSelector::KexiSourceSelector(QWidget* parent, KexiDB::Connection *conn
         : QWidget(parent)
         , d(new Private)
 {
-
     d->conn = conn;
     d->kexiDBData = 0;
 

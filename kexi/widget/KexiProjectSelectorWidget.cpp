@@ -84,7 +84,7 @@ public:
         if (selector->d->showConnectionColumns) {
             QString drvname = info.caption.isEmpty() ? cdata->driverName : info.caption;
             if (info.fileBased) {
-                setText(colnum++, i18n("File (%1)").arg(drvname));
+                setText(colnum++, i18n("File (%1)", drvname));
             } else {
                 setText(colnum++, drvname + "  ");
             }
@@ -94,8 +94,8 @@ public:
                 conn = cdata->serverInfoString();
             }
             else {
-                conn = i18nc("caption: server_info", "%1: %2")
-                        .arg(cdata->caption).arg(cdata->serverInfoString());
+                conn = i18nc("caption: server_info", "%1: %2",
+                             cdata->caption, cdata->serverInfoString());
             }
             setText(3, conn + "  ");
         }
@@ -125,7 +125,6 @@ KexiProjectSelectorWidget::KexiProjectSelectorWidget(QWidget* parent,
     d->fileicon = KIcon(KexiDB::defaultFileBasedDriverIconName());
     setWindowIcon(d->fileicon);
     d->dbicon = koIcon("server-database");
-// list->setHScrollBarMode( QScrollView::AlwaysOn );
 
     QTreeWidgetItem *headerItem = list()->headerItem();
     QTreeWidgetItem *newHeaderItem = new QTreeWidgetItem;
@@ -145,8 +144,6 @@ KexiProjectSelectorWidget::KexiProjectSelectorWidget(QWidget* parent,
     setProjectSet(d->prj_set);
     connect(list(), SIGNAL(itemDoubleClicked(QTreeWidgetItem*,int)),
             this, SLOT(slotItemExecuted(QTreeWidgetItem*)));
-    //connect(list(), SIGNAL(returnPressed(QTreeWidgetItem*)),
-    //        this, SLOT(slotItemExecuted(QTreeWidgetItem*)));
     connect(list(), SIGNAL(itemSelectionChanged()),
             this, SLOT(slotItemSelected()));
 }
@@ -208,9 +205,9 @@ void KexiProjectSelectorWidget::setProjectSet(KexiProjectSet* prj_set)
     d->prj_set = prj_set;
     if (!d->prj_set)
         return;
-//TODO: what with project set's ownership?
+//! @todo what with project set's ownership?
     if (d->prj_set->error()) {
-        kDebug() << "KexiProjectSelectorWidget::setProjectSet() : d->prj_set->error() !";
+        kDebug() << "d->prj_set->error() !";
         return;
     }
     KexiDB::DriverManager manager;
@@ -230,8 +227,7 @@ void KexiProjectSelectorWidget::setProjectSet(KexiProjectSet* prj_set)
                 item->setIcon(0, d->dbicon);
         }
         else {
-            kWarning() << "KexiProjectSelector::KexiProjectSelector(): no driver found for '"
-            << data->constConnectionData()->driverName << "'!";
+            kWarning() << "no driver found for" << data->constConnectionData()->driverName;
         }
     }
     list()->setSortingEnabled(true);
@@ -277,16 +273,6 @@ QTreeWidget* KexiProjectSelectorWidget::list() const
     return Ui_KexiProjectSelector::list;
 }
 
-// void KexiProjectSelectorWidget::keyPressEvent(QKeyEvent* event)
-// {
-//     if (event->key() == Qt::Key_Enter && event->modifiers() == Qt::NoModifier) {
-//         event->accept();
-//         slotItemExecuted();
-//         return;
-//     }
-//     QWidget::keyPressEvent(event);
-// }
-
 bool KexiProjectSelectorWidget::eventFilter(QObject* watched, QEvent* event)
 {
     if (event->type() == QEvent::KeyPress) {
@@ -304,23 +290,14 @@ bool KexiProjectSelectorWidget::eventFilter(QObject* watched, QEvent* event)
 /*================================================================*/
 
 KexiProjectSelectorDialog::KexiProjectSelectorDialog(QWidget *parent,
-        KexiProjectSet* prj_set, bool showProjectNameColumn, bool showConnectionColumns)
-        : KPageDialog(parent)
-        , d(new Private)
-{
-    setWindowTitle(i18n("Open Recent Project"));
-    init(prj_set, showProjectNameColumn, showConnectionColumns);
-}
-
-KexiProjectSelectorDialog::KexiProjectSelectorDialog(QWidget *parent,
         const KexiDB::ConnectionData& cdata,
         bool showProjectNameColumn, bool showConnectionColumns)
         : KPageDialog(parent)
         , d(new Private)
 {
-    setWindowTitle(i18n("Open Project"));
+    setWindowTitle(i18nc("@title:window", "Open Project"));
     KexiDB::ConnectionData _cdata(cdata);
-    KexiProjectSet *prj_set = new KexiProjectSet(_cdata);
+    KexiProjectSet *prj_set = new KexiProjectSet(&_cdata);
     init(prj_set, showProjectNameColumn, showConnectionColumns);
     setButtonGuiItem(Ok, KGuiItem(i18n("&Open"), koIconName("document-open"),
                                   i18n("Open Database Connection")));

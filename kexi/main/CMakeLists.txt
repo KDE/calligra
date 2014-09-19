@@ -4,7 +4,7 @@ include_directories(  ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/core
 ${CMAKE_SOURCE_DIR}/kexi/kexiutils
 ${CMAKE_SOURCE_DIR}/kexi/main ${CMAKE_SOURCE_DIR}/kexi/main/startup
 ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_BINARY_DIR}/kexi/widget
-${CMAKE_SOURCE_DIR}/kexi/migration ${CMAKE_SOURCE_DIR}/libs ${KOMAIN_INCLUDES} ${KDE4_INCLUDES}  )
+${CMAKE_SOURCE_DIR}/libs ${KOMAIN_INCLUDES} ${KDE4_INCLUDES}  )
 
 ADD_DEFINITIONS(
 -DKEXI_NO_CTXT_HELP=1
@@ -19,9 +19,10 @@ KexiMainWindow.cpp
 KexiMenuWidget.cpp
 kexifinddialog.cpp
 kexistatusbar.cpp 
-kexinewstuff.cpp
+#TODO: kexinewstuff.cpp
 KexiSearchLineEdit.cpp
 KexiUserFeedbackAgent.cpp
+KexiBugReportDialog.cpp
 
 startup/KexiNewProjectAssistant.cpp
 startup/KexiOpenProjectAssistant.cpp
@@ -31,7 +32,6 @@ startup/KexiImportExportAssistant.cpp
 startup/KexiStartupFileHandler.cpp
 startup/KexiStartupDialog.cpp
 startup/KexiStartup.cpp
-# TODO startup/KexiStartupDialogTemplatesPage.cpp
 startup/KexiTemplatesModel.cpp
 startup/KexiRecentProjectsModel.cpp
 startup/KexiAssistantMessageHandler.cpp
@@ -47,7 +47,6 @@ startup/KexiPasswordPage.cpp
 kde4_add_ui_files(keximain_LIB_SRCS
   kexifinddialog.ui
   startup/KexiProjectStorageTypeSelectionPage.ui
-  startup/KexiOpenExistingFile.ui
   startup/KexiServerDBNamePage.ui
   startup/KexiMainImportExportPage.ui
 )
@@ -63,11 +62,10 @@ target_link_libraries(
     ${CALLIGRADB_LIBS}
     kexiextendedwidgets
     kexiguiutils
-    ${KDE4_KNEWSTUFF_LIBS}
+    keximigrate
+#TODO:    ${KDE4_KNEWSTUFF_LIBS}
     ${KDE4_KIO_LIBS}
     ${KDE4_KFILE_LIBS}
-    ${KDE4_KDE3SUPPORT_LIBS}
-    ${QT_QT3SUPPORT_LIBRARY}
     ${QT_QTUITOOLS_LIBRARY}
 )
 

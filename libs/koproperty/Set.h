@@ -29,7 +29,6 @@
 namespace KoProperty
 {
 
-class Property;
 class SetPrivate;
 
 /*! \brief Set of properties
@@ -298,7 +297,7 @@ signals:
     void aboutToDeleteProperty(KoProperty::Set& set, KoProperty::Property& property);
 
     /*! Emitted when property set object is about to be cleared (using clear()).
-     This signal is also emmited from destructor before emitting aboutToBeDeleted(). */
+     This signal is also emitted from destructor before emitting aboutToBeDeleted(). */
     void aboutToBeCleared();
 
     /*! Emitted when property set object is about to be deleted.*/

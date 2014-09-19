@@ -97,37 +97,3 @@ bool KexiDBConnShortcutFile::saveConnectionData(const KexiDB::ConnectionData& da
     KexiProjectData pdata(data);
     return pdata.save(fileName(), savePassword, groupKey, overwriteFirstGroup);
 }
-
-//---------------------------------------------
-
-#if 0
-/*! Loads connection data into \a data. */
-bool KexiDBConnSetShortcutFiles::loadConnectionDataSet(KexiDBConnectionSet& set)
-{
-    set.clear();
-// QStringList dirs( KGlobal::dirs()->findDirs("data", "kexi/connections") );
-// kDebug() << dirs;
-    QStringList files(KGlobal::dirs()->findAllResources("data", "kexi/connections/*.kexic"));
-// //also try for capital file extension
-// files += KGlobal::dirs()->findAllResources("data", "kexi/connections/*.KEXIC");
-    kDebug() << files;
-
-    foreach(QStringList::ConstIterator, it, files) {
-        KexiDB::ConnectionData *data = new KexiDB::ConnectionData();
-        KexiDBConnShortcutFile shortcutFile(*it);
-        if (!shortcutFile.loadConnectionData(*data)) {
-            delete data;
-            continue;
-        }
-        set.addConnectionData(data);
-    }
-}
-
-
-/*! Saves a set of connection data \a set to a shortcut files.
- Existing files are overwritten with a new data. */
-bool KexiDBConnSetShortcutFiles::saveConnectionDataSet(const KexiDBConnectionSet& set)
-{
-}
-
-#endif

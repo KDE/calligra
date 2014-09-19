@@ -29,10 +29,8 @@ pqxxSqlConnectionInternal::pqxxSqlConnectionInternal(Connection *conn)
 {
 }
 
-
 pqxxSqlConnectionInternal::~pqxxSqlConnectionInternal()
 {
-
 }
 
 void pqxxSqlConnectionInternal::storeResult()

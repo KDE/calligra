@@ -32,7 +32,6 @@
 #include <kexi_export.h>
 
 #include "container.h"
-//#include "eventeater.h"
 
 class QWidget;
 class QDomElement;

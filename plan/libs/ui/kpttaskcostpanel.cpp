@@ -91,7 +91,7 @@ void TaskCostPanel::setCurrentItem(QComboBox *box, const QString& name) {
 }
 
 MacroCommand *TaskCostPanel::buildCommand() {
-    MacroCommand *cmd = new MacroCommand(i18nc("(qtundo-format)", "Modify Task Cost"));
+    MacroCommand *cmd = new MacroCommand(kundo2_i18n("Modify Task Cost"));
     bool modified = false;
     
     if ((m_oldrunning == 0 && runningAccount->currentIndex() != 0) ||

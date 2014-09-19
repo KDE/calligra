@@ -30,7 +30,7 @@
 class KexiMigrateReportData : public KoReportData
 {
 public:
-    KexiMigrateReportData(const QString &);
+    explicit KexiMigrateReportData(const QString &);
 
     virtual ~KexiMigrateReportData();
 

@@ -33,7 +33,7 @@ public:
     bool saveCoverImage(KoStore *store, KoXmlWriter *manifestWriter, QPair<QString, QByteArray> coverData); // save cover to store.
 
     /**
-     * Give the image @par path and read and save its data.
+     * Give the image @p path and read and save its data.
      */
     QPair<QString, QByteArray> readCoverImage(QString path);
 };

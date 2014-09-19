@@ -39,14 +39,12 @@ class KexiQueryView::Private
 public:
     Private()
             : cursor(0)
-//   , queryHasBeenChangedInViewMode( Kexi::NoViewMode )
     {}
     ~Private() {}
     KexiDB::Cursor *cursor;
     /*! Used in storeNewData(), storeData() to decide whether
      we should ask other view to save changes.
      Stores information about view mode. */
-//  int queryHasBeenChangedInViewMode;
 };
 
 //---------------------------------------------------------------------------------
@@ -116,13 +114,6 @@ tristate KexiQueryView::afterSwitchFrom(Kexi::ViewMode mode)
             return result;
     } else if (mode == Kexi::DesignViewMode || Kexi::TextViewMode) {
         KexiQueryPart::TempData * temp = static_cast<KexiQueryPart::TempData*>(window()->data());
-
-        //remember what view we should use to store data changes, if needed
-//  if (temp->queryChangedInPreviousView())
-//   d->queryHasBeenChangedInViewMode = mode;
-//  else
-//   d->queryHasBeenChangedInViewMode = Kexi::NoViewMode;
-
         const tristate result = executeQuery(temp->query());
         if (true != result)
             return result;
@@ -151,6 +142,5 @@ tristate KexiQueryView::storeData(bool dontAsk)
         return dynamic_cast<KexiQueryDesignerSQLView*>(view)->storeData(dontAsk);
     return false;
 }
-
 
 #include "kexiqueryview.moc"

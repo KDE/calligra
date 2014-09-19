@@ -1,3 +1,6 @@
 #! /bin/sh
+source ../../calligra_xgettext.sh
+
 $EXTRACTRC *.ui >> rc.cpp
-$XGETTEXT *.cpp *.ui -o $podir/VariablesPlugin.pot
+calligra_xgettext VariablesPlugin.pot *.cpp *.ui
+rm -f rc.cpp

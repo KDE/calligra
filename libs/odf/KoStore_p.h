@@ -23,7 +23,8 @@
 
 #include "KoStore.h"
 
-#include <QString>
+#include <QStringList>
+#include <QStack>
 
 #include <kurl.h>
 
@@ -40,7 +41,8 @@ public:
         stream(0),
         isOpen(false),
         good(false),
-        finalized(false)
+        finalized(false),
+        writeMimetype(true)
     {
     }
 
@@ -60,17 +62,6 @@ public:
      * see specification (calligra/lib/store/SPEC) for details.
      */
     QString toExternalNaming(const QString &internalNaming) const;
-
-    /**
-     *  Expands a full path name for a stream (directories+filename)
-     */
-    QString expandEncodedPath(const QString &intern) const;
-
-    /**
-     * Expands only directory names(!)
-     * Needed for the path handling code, as we only operate on internal names
-     */
-    QString expandEncodedDirectory(const QString &intern) const;
 
     /**
      * Enter *one* single directory. Nothing like foo/bar/bleh allowed.
@@ -113,11 +104,7 @@ public:
 
     QStack<QString> directoryStack;
 
-    mutable enum {
-        NamingVersion21,
-        NamingVersion22,
-        NamingVersionRaw  ///< Never expand file and directory names
-    } namingVersion;
+    bool writeMimetype; ///< true if the backend is allowed to create "mimetype" automatically.
 };
 
 #endif

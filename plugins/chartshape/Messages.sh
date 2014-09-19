@@ -1,3 +1,6 @@
 #! /bin/sh
-$EXTRACTRC *.ui dialogs/*.ui  >> rc.cpp
-$XGETTEXT *.cpp dialogs/*.cpp -o $podir/ChartShape.pot
+source ../../calligra_xgettext.sh
+
+$EXTRACTRC `find . -name \*.ui` >> rc.cpp
+calligra_xgettext ChartShape.pot `find . -name \*.cpp`
+rm -f rc.cpp

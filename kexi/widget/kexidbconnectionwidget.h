@@ -38,7 +38,7 @@ class KEXIEXTWIDGETS_EXPORT KexiDBConnectionWidget
     Q_OBJECT
 
 public:
-    KexiDBConnectionWidget(QWidget* parent = 0);
+    explicit KexiDBConnectionWidget(QWidget* parent = 0);
     virtual ~KexiDBConnectionWidget();
 
     /*! Sets project data \a data.
@@ -72,7 +72,7 @@ signals:
     void loadDBList();
 
 protected slots:
-    void slotLocationBGrpClicked(int id);
+    void slotLocationRadioClicked();
     void slotCBToggled(bool on);
 
 protected:
@@ -100,7 +100,7 @@ class KEXIEXTWIDGETS_EXPORT KexiDBConnectionTabWidget : public KTabWidget
     Q_OBJECT
 
 public:
-    KexiDBConnectionTabWidget(QWidget* parent = 0);
+    explicit KexiDBConnectionTabWidget(QWidget* parent = 0);
     virtual ~KexiDBConnectionTabWidget();
 
     /*! Sets connection data \a data.

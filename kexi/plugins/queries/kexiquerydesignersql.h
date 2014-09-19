@@ -37,7 +37,7 @@ class KexiQueryDesignerSQLView : public KexiView
     Q_OBJECT
 
 public:
-    KexiQueryDesignerSQLView(QWidget *parent);
+    explicit KexiQueryDesignerSQLView(QWidget *parent);
     virtual ~KexiQueryDesignerSQLView();
 
     QString sqlText() const;

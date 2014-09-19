@@ -22,7 +22,6 @@ target_link_libraries(
     ${KOPROPERTY_LIBS}
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KDEUI_LIBS}
-    ${KDE4_KDE3SUPPORT_LIBS}
     ${QT_QTCORE_LIBRARY}
     ${QT_QTGUI_LIBRARY}
     ${QT_QTWEBKIT_LIBRARY}
@@ -35,6 +34,6 @@ install(TARGETS kformdesigner_webbrowser  DESTINATION ${PLUGIN_INSTALL_DIR})
 ########### install files ###############
 
 install( FILES  kformdesigner_webbrowser.desktop DESTINATION
-        ${SERVICES_INSTALL_DIR}/kformdesigner)
+        ${SERVICES_INSTALL_DIR}/calligra)
 
 kde4_install_icons(${DATA_INSTALL_DIR}/kexi/icons)

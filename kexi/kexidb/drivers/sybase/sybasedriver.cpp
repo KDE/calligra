@@ -30,7 +30,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 
 using namespace KexiDB;
 
-K_EXPORT_KEXIDB_DRIVER(SybaseDriver, "sybase")
+K_EXPORT_KEXIDB_DRIVER(SybaseDriver, sybase)
 
 SybaseDriver::SybaseDriver(QObject *parent, const QVariantList &args) :
         Driver(parent, args)
@@ -62,8 +62,8 @@ SybaseDriver::SybaseDriver(QObject *parent, const QVariantList &args) :
 
 
     //predefined properties
-    d->properties["client_library_version"] = "";//TODO
-    d->properties["default_server_encoding"] = ""; //TODO
+    d->properties["client_library_version"] = ""; //!< @todo
+    d->properties["default_server_encoding"] = ""; //!< @todo
 
     // datatypes
     // integers

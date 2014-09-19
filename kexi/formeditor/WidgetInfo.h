@@ -39,7 +39,7 @@ class WidgetLibrary;
 class KFORMEDITOR_EXPORT WidgetInfo
 {
 public:
-    WidgetInfo(WidgetFactory *f);
+    explicit WidgetInfo(WidgetFactory *f);
 
     virtual ~WidgetInfo();
 

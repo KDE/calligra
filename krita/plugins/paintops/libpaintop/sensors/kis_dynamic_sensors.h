@@ -43,7 +43,7 @@ public:
     KisDynamicSensorRotation();
     virtual ~KisDynamicSensorRotation() { }
     virtual qreal value(const KisPaintInformation& info) {
-        return info.rotation() / 28 + 0.5; // it appears that rotation is between -14 and +14
+        return info.rotation() / 360.0;
     }
 };
 
@@ -77,23 +77,23 @@ public:
     }
 };
 
-class KisDynamicSensorAscension : public KisDynamicSensor
+class KisDynamicSensorTiltDirection : public KisDynamicSensor
 {
 public:
-    KisDynamicSensorAscension();
-    virtual ~KisDynamicSensorAscension() {}
+    KisDynamicSensorTiltDirection();
+    virtual ~KisDynamicSensorTiltDirection() {}
     virtual qreal value(const KisPaintInformation& info) {
-        return KisPaintInformation::ascension(info, true);
+        return KisPaintInformation::tiltDirection(info, true);
     }
 };
 
-class KisDynamicSensorDeclination : public KisDynamicSensor
+class KisDynamicSensorTiltElevation : public KisDynamicSensor
 {
 public:
-    KisDynamicSensorDeclination();
-    virtual ~KisDynamicSensorDeclination() {}
+    KisDynamicSensorTiltElevation();
+    virtual ~KisDynamicSensorTiltElevation() {}
     virtual qreal value(const KisPaintInformation& info) {
-        return KisPaintInformation::declination(info, 60.0, 60.0, true);
+        return KisPaintInformation::tiltElevation(info, 60.0, 60.0, true);
     }
 };
 

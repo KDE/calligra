@@ -23,7 +23,10 @@
 #include <db/driver.h>
 #include <db/utils.h>
 #include <core/kexi.h>
+#include <core/KexiMainWindowIface.h>
+#include <core/KexiMigrateManagerInterface.h>
 #include <kexiutils/utils.h>
+#include <migration/migratemanager.h>
 
 #include <QLayout>
 #include <QObject>
@@ -60,6 +63,19 @@ public:
             , filtersUpdated(false) {
     }
 
+    /*! Adds file dialog-compatible filter to @a filter and patterns to @allfilters based on
+        @a mimeName mime type name. Does nothing is excludedMimeTypes contains this mime name. */
+    bool addFilterForType(QString *filter, QStringList *allfilters, const QString &mimeName) const
+    {
+        const KMimeType::Ptr mime = KMimeType::mimeType(mimeName);
+        if (mime && !excludedMimeTypes.contains(mime->name().toLower())) {
+            *filter += KexiUtils::fileDialogFilterString(mime);
+            *allfilters += mime->patterns();
+            return true;
+        }
+        return false;
+    }
+
     QString lastFileName;
     KexiFileWidget::Mode mode;
     QSet<QString> additionalMimeTypes, excludedMimeTypes;
@@ -86,29 +102,7 @@ KexiFileWidget::KexiFileWidget(
     QAction *previewAction = actionCollection()->action("preview");
     if (previewAction)
         previewAction->setChecked(false);
-
-    //setMinimumHeight(100);
-    //setSizeGripEnabled ( false );
-
-    //dirty hack to customize filedialog view:
-    /* {
-        QList<QPushButton*> l = findChildren<QPushButton*>();
-        foreach (QPushButton* btn, l)
-          btn->hide();
-        QList<QWidget*> wl = findChildren<QWidget*>();
-        foreach (QWidget* w, wl)
-          w->installEventFilter(this);
-      } */
-
-    /* Qt4
-    #ifdef Q_WS_WIN
-      if (startDirOrVariable.startsWith(':'))
-        m_lastVisitedPathsVariable = startDirOrVariable; //store for later use
-    #else*/
-// toggleSpeedbar(false);
     setFocusProxy(locationEdit());
-//#endif
-
     connect(this, SIGNAL(fileHighlighted(QString)),
             this, SLOT(slotExistingFileHighlighted(QString)));
 }
@@ -133,16 +127,12 @@ KexiFileWidget::~KexiFileWidget()
             KRecentDirs::add(d->recentDirClass, dir.url());
     }
     delete d;
-//Qt4 #ifdef Q_WS_WIN
-// saveLastVisitedPath(currentFileName());
-//#endif
 }
 
 void KexiFileWidget::slotExistingFileHighlighted(const QString& fileName)
 {
     kDebug() << fileName;
     d->highlightedUrl = KUrl(fileName);
-    //updateDialogOKButton(0);
     emit fileHighlighted();
 }
 
@@ -191,10 +181,7 @@ void KexiFileWidget::updateFilters()
     if (d->filtersUpdated)
         return;
     d->filtersUpdated = true;
-
     d->lastFileName.clear();
-// m_lastUrl = KUrl();
-
     clearFilter();
 
     QString filter;
@@ -205,44 +192,27 @@ void KexiFileWidget::updateFilters()
     const bool normalSavingMode = d->mode & SavingFileBasedDB && !(d->mode & Custom);
 
     if (normalOpeningMode || normalSavingMode) {
-        mime = KMimeType::mimeType(KexiDB::defaultFileBasedDriverMimeType());
-        if (mime && !d->excludedMimeTypes.contains(mime->name().toLower())) {
-            filter += KexiUtils::fileDialogFilterString(mime);
-            allfilters += mime->patterns();
-        }
+        d->addFilterForType(&filter, &allfilters, KexiDB::defaultFileBasedDriverMimeType());
     }
     if (normalOpeningMode || d->mode & SavingServerBasedDB) {
-        mime = KMimeType::mimeType("application/x-kexiproject-shortcut");
-        if (mime && !d->excludedMimeTypes.contains(mime->name().toLower())) {
-            filter += KexiUtils::fileDialogFilterString(mime);
-            allfilters += mime->patterns();
-        }
+        d->addFilterForType(&filter, &allfilters, "application/x-kexiproject-shortcut");
     }
     if (normalOpeningMode || d->mode & SavingServerBasedDB) {
-        mime = KMimeType::mimeType("application/x-kexi-connectiondata");
-        if (mime && !d->excludedMimeTypes.contains(mime->name().toLower())) {
-            filter += KexiUtils::fileDialogFilterString(mime);
-            allfilters += mime->patterns();
-        }
+        d->addFilterForType(&filter, &allfilters, "application/x-kexi-connectiondata");
     }
 
-//! @todo hardcoded for MSA:
     if (normalOpeningMode) {
-        mime = KMimeType::mimeType("application/vnd.ms-access");
-        if (mime && !d->excludedMimeTypes.contains(mime->name().toLower())) {
-            filter += KexiUtils::fileDialogFilterString(mime);
-            allfilters += mime->patterns();
+        const QList<QString> supportedFileMimeTypes = KexiMainWindowIface::global()->migrateManager()->supportedFileMimeTypes();
+        kDebug() << supportedFileMimeTypes;
+        foreach (const QString& supportedFileMimeType, supportedFileMimeTypes) {
+            d->addFilterForType(&filter, &allfilters, supportedFileMimeType);
         }
     }
 
     foreach(const QString& mimeName, d->additionalMimeTypes) {
         if (mimeName == "all/allfiles")
             continue;
-        if (d->excludedMimeTypes.contains(mimeName.toLower()))
-            continue;
-        filter += KexiUtils::fileDialogFilterString(mimeName);
-        mime = KMimeType::mimeType(mimeName);
-        allfilters += mime->patterns();
+        d->addFilterForType(&filter, &allfilters, mimeName);
     }
 
     if (!d->excludedMimeTypes.contains("all/allfiles")) {
@@ -339,14 +309,9 @@ QString KexiFileWidget::selectedFile() const
 
 bool KexiFileWidget::checkSelectedFile()
 {
-    //accept();
-
-// KUrl url = currentURL();
-// QString path = url.path().trimmed();
-// QString path = selectedFile().trimmed();
     kDebug() << "d->highlightedUrl: " << d->highlightedUrl;
 
-    if (/*d->highlightedUrl.isEmpty() &&*/ !locationEdit()->lineEdit()->text().isEmpty()) {
+    if (!locationEdit()->lineEdit()->text().isEmpty()) {
         kDebug() << locationEdit()->lineEdit()->text();
         //kDebug() << locationEdit()->urls();
         kDebug() << baseUrl();
@@ -360,7 +325,6 @@ bool KexiFileWidget::checkSelectedFile()
     }
 
     kDebug() << "d->highlightedUrl: " << d->highlightedUrl;
-// if (url.fileName().trimmed().isEmpty()) {
     if (d->highlightedUrl.isEmpty()) {
         KMessageBox::error(this, i18n("Enter a filename."));
         return false;
@@ -395,7 +359,7 @@ bool KexiFileWidget::checkSelectedFile()
 
     kDebug() << "KexiFileWidget::checkURL() path: " << d->highlightedUrl;
 // kDebug() << "KexiFileWidget::checkURL() fname: " << url.fileName();
-//todo if ( url.isLocalFile() ) {
+//! @todo if ( url.isLocalFile() ) {
     QFileInfo fi(d->highlightedUrl.toLocalFile());
     if (mode() & KFile::ExistingOnly) {
         if (!fi.exists()) {
@@ -415,7 +379,6 @@ bool KexiFileWidget::checkSelectedFile()
     } else if (d->confirmOverwrites && !askForOverwriting(d->highlightedUrl.path(), this)) {
         return false;
     }
-// }
     return true;
 }
 
@@ -473,14 +436,6 @@ void KexiFileWidget::reject()
     kDebug() << "KexiFileWidget: reject!";
     emit rejected();
 }
-
-/*#ifndef Q_WS_WIN
-KUrlComboBox *KexiFileWidget::locationWidget() const
-{
-  return locationEdit;
-}
-#endif
-*/
 
 void KexiFileWidget::setLocationText(const QString& fn)
 {

@@ -194,8 +194,6 @@ void CompositeOpModel::setView(QObject* newView)
         connect(d->view->nodeManager(), SIGNAL(sigLayerActivated(KisLayerSP)),
                 this, SLOT(currentNodeChanged(KisLayerSP)));
         slotToolChanged(0, 0);
-        connect(this, SIGNAL(changeMirrorCenter()),
-                d->view->canvasBase()->inputManager(), SLOT(setMirrorAxis()));
     }
     emit viewChanged();
 }
@@ -338,11 +336,6 @@ void CompositeOpModel::setMirrorVertically(bool newMirrorVertically)
     }
 }
 
-void CompositeOpModel::setMirrorCenter()
-{
-    emit changeMirrorCenter();
-}
-
 void CompositeOpModel::slotToolChanged(KoCanvasController* canvas, int toolId)
 {
     Q_UNUSED(canvas);
@@ -393,10 +386,19 @@ void CompositeOpModel::slotToolChanged(KoCanvasController* canvas, int toolId)
     emit sizeEnabledChanged();
 }
 
-void CompositeOpModel::resourceChanged(int /*key*/, const QVariant& /*v*/)
+void CompositeOpModel::resourceChanged(int key, const QVariant& /*v*/)
 {
     if (d->view)
     {
+        if(key == KisCanvasResourceProvider::MirrorHorizontal) {
+            emit mirrorHorizontallyChanged();
+            return;
+        }
+        else if(key == KisCanvasResourceProvider::MirrorVertical) {
+            emit mirrorVerticallyChanged();
+            return;
+        }
+
         KisPaintOpPresetSP preset = d->view->canvasBase()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
         if (preset && d->currentPreset.data() != preset.data())
         {

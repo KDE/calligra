@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2005 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004-2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2014 Wojciech Kosowicz <pcellix@gmail.com>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -96,7 +97,6 @@ public slots:
     void setDataSourcePartClass(const QString &partClass);
 
     virtual void setReadOnly(bool readOnly);
-//Qt4  virtual void setText( const QString & text, const QString & context );
 
     //! Reimplemented, so "undo" means the same as "cancelEditor" action
 //! @todo enable "real" undo internally so user can use ctrl+z while editing
@@ -119,6 +119,7 @@ protected:
     virtual void contextMenuEvent(QContextMenuEvent *e);
     virtual void changeEvent(QEvent *e);
     virtual void setValueInternal(const QVariant& add, bool removeOld);
+    virtual void focusOutEvent(QFocusEvent *e);
     QMenu * createPopupMenu(const QPoint & pos);
     void updateTextForDataSource();
     void createDataSourceLabel();

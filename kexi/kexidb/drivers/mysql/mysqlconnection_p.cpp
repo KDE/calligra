@@ -68,14 +68,12 @@ void MySqlConnectionInternal::storeResult()
     none is specified).  If the server is on a remote machine, then a port is
     the port that the remote server is listening on.
  */
-//bool MySqlConnectionInternal::db_connect(QCString host, QCString user,
-//  QCString password, unsigned short int port, QString socket)
 bool MySqlConnectionInternal::db_connect(const KexiDB::ConnectionData& data)
 {
     if (!(mysql = mysql_init(mysql)))
         return false;
 
-    KexiDBDrvDbg << "MySqlConnectionInternal::connect()";
+    KexiDBDrvDbg;
     QByteArray localSocket;
     QString hostName = data.hostName;
     if (hostName.isEmpty() || hostName.toLower() == "localhost") {
@@ -113,7 +111,6 @@ bool MySqlConnectionInternal::db_connect(const KexiDB::ConnectionData& data)
 
     storeResult(); //store error msg, if any - can be destroyed after disconnect()
     db_disconnect();
-// setError(ERR_DB_SPECIFIC,err);
     return false;
 }
 
@@ -123,7 +120,7 @@ bool MySqlConnectionInternal::db_disconnect()
 {
     mysql_close(mysql);
     mysql = 0;
-    KexiDBDrvDbg << "MySqlConnection::disconnect()";
+    KexiDBDrvDbg;
     return true;
 }
 
@@ -132,7 +129,7 @@ bool MySqlConnectionInternal::db_disconnect()
  */
 bool MySqlConnectionInternal::useDatabase(const QString &dbName)
 {
-//TODO is here escaping needed?
+//! @todo is here escaping needed?
     if (!executeSQL(QLatin1String("USE ") + escapeIdentifier(dbName))) {
         return false;
     }
@@ -147,15 +144,13 @@ bool MySqlConnectionInternal::useDatabase(const QString &dbName)
  */
 bool MySqlConnectionInternal::executeSQL(const QString& statement)
 {
-// KexiDBDrvDbg << "MySqlConnectionInternal::executeSQL: "
-//              << statement;
+// KexiDBDrvDbg << statement;
     QByteArray queryStr(statement.toUtf8());
     const char *query = queryStr.constData();
     if (mysql_real_query(mysql, query, qstrlen(query)) == 0)
         return true;
 
     storeResult();
-// setError(ERR_DB_SPECIFIC,mysql_error(m_mysql));
     return false;
 }
 

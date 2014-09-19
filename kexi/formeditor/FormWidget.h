@@ -32,7 +32,6 @@ namespace KFormDesigner
 
 class Container;
 class WidgetLibrary;
-class FormManager;
 class FormPrivate;
 class Form;
 
@@ -44,24 +43,6 @@ class KFORMEDITOR_EXPORT FormWidget
 public:
     FormWidget();
     virtual ~FormWidget();
-
-    /*! This function draws the rects in the \a list  in the Form, above of all widgets,
-     using double-buffering. \a type can be 1 (selection rect)
-     or 2 (insert rect, dotted). */
-
-    virtual void drawRects(const QList<QRect> &list, int type) = 0;
-
-    virtual void drawRect(const QRect &r, int type) = 0;
-
-    /*! This function inits the buffer used for double-buffering. Called before drawing rect. */
-    virtual void initBuffer() = 0;
-
-    /*! Clears the form, ie pastes the whole buffer to repaint the Form. */
-    virtual void clearForm() = 0;
-
-    /*! This function highlights two widgets (to is optional), which are
-    sender and receiver, and draws a link between them. */
-    virtual void highlightWidgets(QWidget *from, QWidget *to) = 0;
 
     Form *form() const;
     void setForm(Form* f);

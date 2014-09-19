@@ -94,16 +94,16 @@ class KEXIEXTWIDGETS_EXPORT KexiProjectNavigator : public QWidget
 public:
     enum Feature {
         NoFeatures = 0,
-        Writable = 1, //!< the browser supports actions that modify the project (e.g. delete, rename)
+        Writable = 1,     //!< the browser supports actions that modify the project (e.g. delete, rename)
         ContextMenus = 2, //!< the browser supports context menu
-        Toolbar = 4, //!< the browser displays
+        Toolbar = 4,      //!< the browser displays
         SingleClickOpensItemOptionEnabled = 8, //!< enables "SingleClickOpensItem" option
         DefaultFeatures = Writable | ContextMenus | Toolbar
-        | SingleClickOpensItemOptionEnabled //!< the default
+        | SingleClickOpensItemOptionEnabled    //!< the default
     };
     Q_DECLARE_FLAGS(Features, Feature)
 
-    KexiProjectNavigator(QWidget* parent, Features features = DefaultFeatures);
+    explicit KexiProjectNavigator(QWidget* parent, Features features = DefaultFeatures);
     virtual ~KexiProjectNavigator();
 
     /*! Sets project \a prj for this browser. If \a partManagerErrorMessages is not NULL
@@ -127,7 +127,6 @@ public:
     KexiProjectModel* model() const;
 
 public slots:
-
     virtual void setFocus();
     void updateItemName(KexiPart::Item& item, bool dirty);
     void selectItem(KexiPart::Item& item);
@@ -166,7 +165,6 @@ signals:
     void pageSetupForItem(KexiPart::Item*);
 
 protected slots:
-    //void slotContextMenu(QTreeView*, const QModelIndex &i, const QPoint &point);
     void slotExecuteItem(const QModelIndex &item);
     void slotSelectionChanged(const QModelIndex& i);
     void slotSettingsChanged(int);
@@ -201,6 +199,5 @@ private:
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KexiProjectNavigator::Features)
-
 
 #endif

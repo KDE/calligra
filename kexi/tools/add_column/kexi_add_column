@@ -50,7 +50,7 @@ function check {
 	[ -n "$*" ] && exit_with_error "$*"
 }
 
-ksqlite="ksqlite -noheader"
+ksqlite="sqlite3 -noheader"
 
 if [ $# -lt 4 ] ; then
 	usage
@@ -86,7 +86,7 @@ msg=`echo "DROP TABLE '$table_name';" | $ksqlite "$temp_db"`
 check "$msg"
 
 # 1. Recreate table with new field appended
-msg=`echo ".schema '$table_name';" | $ksqlite "$database_name" | grep "^CREATE TABLE $table_name " | \
+msg=`echo ".schema '$table_name'" | $ksqlite "$database_name" | grep "^CREATE TABLE $table_name " | \
  sed -e "s/);/, $new_column_name $new_column_type);/g" | $ksqlite "$temp_db"`
 check "$msg"
 
@@ -105,7 +105,7 @@ msg=`echo "INSERT INTO kexi__fields (t_id, f_type, f_name, f_length, f_precision
 check "$msg"
 
 # 3. Copy the old data
-msg=`echo ".dump '$table_name';" | $ksqlite "$database_name" | grep -v "^CREATE TABLE " | \
+msg=`echo ".dump '$table_name'" | $ksqlite "$database_name" | grep -v "^CREATE TABLE " | \
  sed -e "s/\(^INSERT.*\));$/\\1, NULL);/g" | $ksqlite "$temp_db"`
 check "$msg"
 

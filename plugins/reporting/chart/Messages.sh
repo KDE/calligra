@@ -1,2 +1,4 @@
 #! /bin/sh
-$XGETTEXT `find . -name \*.cpp ` -o $podir/koreport_chartplugin.pot
+source ../../../calligra_xgettext.sh
+
+calligra_xgettext koreport_chartplugin.pot `find . -name \*.cpp`

@@ -47,17 +47,17 @@ static QString stateName(int index, const Property* prop)
     if (index == 0) {
         stateNameString = prop->option("yesName", QString()).toString();
         if (stateNameString.isEmpty())
-            return i18n("Yes");
+            return i18nc("Property value: Boolean state Yes", "Yes");
     }
     else if (index == 1) {
         stateNameString = prop->option("noName", QString()).toString();
         if (stateNameString.isEmpty())
-            return i18n("No");
+            return i18nc("Property value: Boolean state No", "No");
     }
     else {
         stateNameString = prop->option("3rdStateName", QString()).toString();
         if (stateNameString.isEmpty())
-            return i18n("None");
+            return i18nc("Property value: Boolean (3rd) undefined state None", "None");
     }
     return stateNameString;
 }
@@ -205,29 +205,6 @@ void BoolEdit::paintEvent( QPaintEvent * event )
     BoolEdit::draw(&p, rect(), v,
         v.toBool() ? m_yesText : m_noText, false /*2state*/);
 }
-
-/*void
-BoolEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value)
-{
-    drawViewerInternal(p, r, value, m_yesIcon, m_noIcon, "");
-}*/
-
-/*
-void BoolEdit::setState(bool state)
-{
-    if (state) {
-        setIcon(koIcon("dialog-ok")); //QIcon(g_boolEdit->yesIcon));
-        setText(i18n("Yes"));
-    } else {
-        setIcon(koIcon("button_no")); //QIcon(g_boolEdit->noIcon));
-        setText(i18n("No"));
-    }
-}
-*/
-/*void BoolEdit::resizeEvent(QResizeEvent *ev)
-{
-    m_toggle->resize(ev->size());
-}*/
 
 bool BoolEdit::eventFilter(QObject* watched, QEvent* e)
 {

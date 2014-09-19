@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2005 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2014 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -59,7 +59,8 @@ public:
 class KexiDBLineEditStyle : public KexiUtils::StyleProxy
 {
 public:
-    KexiDBLineEditStyle(QStyle* parentStyle) : KexiUtils::StyleProxy(parentStyle), indent(0)
+    explicit KexiDBLineEditStyle(QStyle* parentStyle, QObject *parent = 0)
+        : KexiUtils::StyleProxy(parentStyle, parent), indent(0)
     {
     }
     virtual ~KexiDBLineEditStyle() {
@@ -113,8 +114,7 @@ KexiDBLineEdit::KexiDBLineEdit(QWidget *parent)
     connect(this, SIGNAL(cursorPositionChanged(int,int)),
             this, SLOT(slotCursorPositionChanged(int,int)));
 
-    m_internalStyle = new KexiDBLineEditStyle(style());
-    m_internalStyle->setParent(this);
+    m_internalStyle = new KexiDBLineEditStyle(style(), this);
     m_internalStyle->setIndent(KexiFormUtils::dataSourceTagIcon().width());
     m_inStyleChangeEvent = true; // do not allow KLineEdit::event() to touch the style
     setStyle(m_internalStyle);
@@ -125,13 +125,6 @@ KexiDBLineEdit::KexiDBLineEdit(QWidget *parent)
 KexiDBLineEdit::~KexiDBLineEdit()
 {
 }
-
-/*
-void FormWidgetInterface::setDesignMode(bool design)
-{
-    FormWidgetInterface::setDesignMode(design);
-    setCursor(design ? QCursor(Qt::ArrowCursor) : QCursor());
-}*/
 
 void KexiDBLineEdit::setInvalidState(const QString& displayText)
 {
@@ -318,12 +311,6 @@ void KexiDBLineEdit::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
     KexiDBTextWidgetInterface::setColumnInfo(cinfo, this);
 }
 
-/*todo
-void KexiDBLineEdit::paint( QPainter *p )
-{
-  KexiDBTextWidgetInterface::paint( this, &p, text().isEmpty(), alignment(), hasFocus() );
-}*/
-
 void KexiDBLineEdit::paintEvent(QPaintEvent *pe)
 {
     KLineEdit::paintEvent(pe);
@@ -418,7 +405,7 @@ void KexiDBLineEdit::setDisplayDefaultValue(QWidget *widget, bool displayDefault
         ? m_displayParametersForDefaultValue : m_displayParametersForEnteredValue;
     setFont(params->font);
     QPalette pal(palette());
-    pal.setColor(QPalette::Active, QColorGroup::Text, params->textColor);
+    pal.setColor(QPalette::Active, QPalette::Text, params->textColor);
     setPalette(pal);
 }
 
@@ -465,6 +452,24 @@ void KexiDBLineEdit::setDataSourcePartClass(const QString &partClass)
 {
     KexiFormDataItemInterface::setDataSourcePartClass(partClass);
     updateTextForDataSource();
+}
+
+QString KexiDBLineEdit::clickMessage() const
+{
+#if QT_VERSION  >= 0x040700
+    return placeholderText();
+#else
+    return KLineEdit::clickMessage();
+#endif
+}
+
+void KexiDBLineEdit::setClickMessage(const QString &msg)
+{
+#if QT_VERSION  >= 0x040700
+    setPlaceholderText(msg);
+#else
+    KLineEdit::setClickMessage(msg);
+#endif
 }
 
 #include "kexidblineedit.moc"

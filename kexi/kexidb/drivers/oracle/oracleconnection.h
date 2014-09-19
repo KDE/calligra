@@ -73,9 +73,9 @@ class OracleConnection : public Connection
 		virtual bool drv_dropTable( const QString& name );
 		virtual bool drv_alterTableName(TableSchema& tableSchema, const QString& newName);
 
-//TODO: move this somewhere to low level class (MIGRATION?)
+//! @todo move this somewhere to low level class (MIGRATION?)
 		virtual bool drv_getTablesList( QStringList &list );
-//TODO: move this somewhere to low level class (MIGRATION?)
+//! @todo move this somewhere to low level class (MIGRATION?)
 		virtual bool drv_containsTable( const QString &tableName );
 
 		OracleConnectionInternal *d;

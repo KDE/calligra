@@ -1,3 +1,6 @@
 #! /bin/sh
+source ../../calligra_xgettext.sh
+
 $EXTRACTRC `find . -name \*.ui` >> rc.cpp || exit 11
-$XGETTEXT `find . -name \*.cpp -o -name \*.cc` -o $podir/MusicShape.pot
+calligra_xgettext MusicShape.pot `find . -name \*.cpp -o -name \*.cc`
+rm -f rc.cpp

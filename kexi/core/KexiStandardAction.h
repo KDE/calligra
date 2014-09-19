@@ -22,7 +22,6 @@
 
 #include <kexi_export.h>
 #include <QObject>
-#include <QString>
 
 class KAction;
 

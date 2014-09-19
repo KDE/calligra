@@ -44,16 +44,6 @@ bool KexiDBDriver::isValid()
     return m_driver->isValid();
 }
 
-/*2.0
-int KexiDBDriver::versionMajor()
-{
-    return m_driver->version().major;
-}
-int KexiDBDriver::versionMinor()
-{
-    return m_driver->version().minor;
-}*/
-
 QString KexiDBDriver::escapeString(const QString& s)
 {
     return m_driver->escapeString(s);
@@ -94,8 +84,8 @@ uint KexiDBDriver::connectionCount()
     return m_driver->connections().count();
 }
 
-/* TODO
-QObject* KexiDBDriver::connection(uint index) {
+//! @todo
+/*QObject* KexiDBDriver::connection(uint index) {
     QSet<KexiDB::Connection*> list = m_driver->connectionsList();
     return (index < list.count()) ? list.at(index) : 0;
 }*/

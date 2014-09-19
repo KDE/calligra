@@ -45,10 +45,10 @@ KoColorTransformation* KisHSVAdjustmentFilter::createTransformation(const KoColo
     QHash<QString, QVariant> params;
     if (config) {
         if (config->getBool("colorize")) {
-               params["h"] = config->getInt("h", 0.5) / 360.0;
+               params["h"] = config->getDouble("h", 0.5) / 360.0;
         }
         else {
-            params["h"] = config->getInt("h", 0) / 180.0;
+            params["h"] = config->getDouble("h", 0) / 180.0;
 
         }
         params["s"] = config->getInt("s", 0) * 0.01;
@@ -115,11 +115,11 @@ void KisHSVConfigWidget::switchType(int index)
     emit sigConfigurationItemChanged();
     switch(index) {
     case 0:
-        m_page->label_3->setText(i18n("Value"));
+        m_page->label_3->setText(i18n("Value:"));
         return;
     case 1:
     default:
-        m_page->label_3->setText(i18n("Lightness"));
+        m_page->label_3->setText(i18n("Lightness:"));
     }
 
 }

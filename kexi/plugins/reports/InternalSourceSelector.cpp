@@ -28,16 +28,17 @@ InternalSourceSelector::InternalSourceSelector(QWidget *parent, KexiDB::Connecti
 
 InternalSourceSelector::~InternalSourceSelector()
 {
-    
-}   
+}
 
-void InternalSourceSelector::mousePressEvent(QMouseEvent *e) {
+void InternalSourceSelector::mousePressEvent(QMouseEvent *e)
+{
     clear();
     addItems(queryList());
     QComboBox::mousePressEvent(e);
 }
     
-QStringList InternalSourceSelector::queryList(){
+QStringList InternalSourceSelector::queryList()
+{
     //Get the list of queries in the database
     QStringList qs;
     if (m_conn && m_conn->isConnected()) {

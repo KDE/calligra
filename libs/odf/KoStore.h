@@ -21,16 +21,12 @@
 #ifndef __koStore_h_
 #define __koStore_h_
 
-#include <QString>
-#include <QStringList>
-#include <QIODevice>
-#include <QStack>
 #include <QByteArray>
+#include <QIODevice>
 #include "koodf_export.h"
 
-#include <kurl.h>
-
 class QWidget;
+class KUrl;
 class KoStorePrivate;
 
 /**
@@ -59,9 +55,15 @@ public:
      * @param appIdentification the application's mimetype,
      * to be written in the file for "mime-magic" identification.
      * Only meaningful if mode is Write, and if backend!=Directory.
+     *
+     * @param writeMimetype If true, some backends (notably the Zip
+     * store) will write a file called 'mimetype' automatically and
+     * fill it with data from the appIdentification. This is only
+     * applicable if Mode is set to Write.
      */
     static KoStore *createStore(const QString &fileName, Mode mode,
-                                const QByteArray &appIdentification = QByteArray(), Backend backend = Auto);
+                                const QByteArray &appIdentification = QByteArray(),
+                                Backend backend = Auto, bool writeMimetype = true);
 
     /**
      * Create a store for any kind of QIODevice: file, memory buffer...
@@ -69,7 +71,8 @@ public:
      * This method doesn't support the Directory store!
      */
     static KoStore *createStore(QIODevice *device, Mode mode,
-                                const QByteArray &appIdentification = QByteArray(), Backend backend = Auto);
+                                const QByteArray &appIdentification = QByteArray(),
+                                Backend backend = Auto, bool writeMimetype = true);
 
     /**
      * Open a store (i.e. the representation on disk of a Calligra document).
@@ -88,10 +91,15 @@ public:
      *
      * If the file is remote, the backend Directory cannot be used!
      *
+     * @param writeMimetype If true, some backends (notably the Zip
+     * store) will write a file called 'mimetype' automatically and
+     * fill it with data from the appIdentification. This is only
+     * applicable if Mode is set to Write.
+     *
      * @bug saving not completely implemented (fixed temporary file)
      */
     static KoStore *createStore(QWidget *window, const KUrl &url, Mode mode,
-                                const QByteArray &appIdentification = QByteArray(), Backend backend = Auto);
+                                const QByteArray &appIdentification = QByteArray(), Backend backend = Auto, bool writeMimetype = true);
 
     /**
      * Destroys the store (i.e. closes the file on the hard disk)
@@ -199,12 +207,6 @@ public:
     QString currentPath() const;
 
     /**
-     * Returns the current directory.
-     * Note: Returns a path in "internal name" style
-     */
-    QString currentDirectory() const;
-
-    /**
      * Stacks the current directory. Restore the current path using
      * @ref popDirectory .
      */
@@ -258,13 +260,6 @@ public:
     //@}
 
     /**
-     * Do not expand file and directory names
-     * Useful when using KoStore on non-Calligra files.
-     * (This method should be called just after the constructor)
-     */
-    void disallowNameExpansion();
-
-    /**
      * Call this before destroying the store, to be able to catch errors
      * (e.g. from ksavefile)
      */
@@ -311,7 +306,7 @@ public:
     virtual void setCompressionEnabled(bool e);
 protected:
 
-    KoStore();
+    KoStore(bool writeMimetype = true);
 
     /**
      * Init store - called by constructor.

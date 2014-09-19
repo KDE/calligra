@@ -24,6 +24,8 @@
 
 #include <klocale.h>
 
+class KUndo2MagicString;
+
 namespace KPlato
 {
 
@@ -161,7 +163,7 @@ struct KPLATOMODELS_EXPORT WhatsThis
 
 struct KPLATOMODELS_EXPORT UndoText
 {
-    static QString removeDocument();
+    static KUndo2MagicString removeDocument();
 }; //namespace Undo
 
 } //namespace KPlato

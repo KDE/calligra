@@ -160,7 +160,9 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
      */
     updateMask(info, scale, rotation, scatteredPos);
 
-    QRect srcDabRect = m_dstDabRect.translated((m_lastPaintPos - scatteredPos).toPoint());
+    QPointF newCenterPos = QRectF(m_dstDabRect).center();
+    QRect srcDabRect = m_dstDabRect.translated((m_lastPaintPos - newCenterPos).toPoint());
+
 
     /**
      * Save the center of the current dab to know where to read the
@@ -172,7 +174,7 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
     m_lastPaintPos = QRectF(m_dstDabRect).center();
 
     KisSpacingInformation spacingInfo =
-        effectiveSpacing(m_dstDabRect.width(), m_dstDabRect.height(),
+        effectiveSpacing(scale, rotation,
                          m_spacingOption, info);
 
     if (m_firstRun) {

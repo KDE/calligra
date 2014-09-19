@@ -24,16 +24,9 @@
  */
 
 #include "KoStyleThumbnailer.h"
+
 #include "KoParagraphStyle.h"
 #include "KoCharacterStyle.h"
-#include "KoListStyle.h"
-#include "KoListLevelProperties.h"
-#include "KoTableStyle.h"
-#include "KoTableColumnStyle.h"
-#include "KoTableRowStyle.h"
-#include "KoTableCellStyle.h"
-#include "KoSectionStyle.h"
-#include "KoTextDocument.h"
 #include "KoTextDocumentLayout.h"
 #include "KoTextLayoutRootArea.h"
 #include "FrameIterator.h"
@@ -45,11 +38,8 @@
 #include <QImage>
 #include <QPainter>
 #include <QRect>
-#include <QTextTable>
-#include <QTextTableFormat>
 #include <QTextBlock>
 #include <QTextCursor>
-#include <QTextLayout>
 #include <QTextLength>
 
 #include <kdebug.h>
@@ -137,10 +127,13 @@ QImage KoStyleThumbnailer::thumbnail(KoParagraphStyle *style, QSize size, bool r
         cursor.insertText(d->thumbnailText, format);
     }
     layoutThumbnail(size, im, flags);
-
+    // Make a copy of the image before inserting in the cache
+    QImage res = QImage(*im);
+    // Because on inserting, QCache can decide to delete the object immediately
     d->thumbnailCache.insert(imageKey, im);
+
     delete clone;
-    return QImage(*im);
+    return res;
 }
 
 QImage KoStyleThumbnailer::thumbnail(KoCharacterStyle *characterStyle, KoParagraphStyle *paragraphStyle, QSize size, bool recreateThumbnail, KoStyleThumbnailerFlags flags)
@@ -197,10 +190,10 @@ QImage KoStyleThumbnailer::thumbnail(KoCharacterStyle *characterStyle, KoParagra
     }
 
     layoutThumbnail(size, im, flags);
-
+    QImage res = QImage(*im);
     d->thumbnailCache.insert(imageKey, im);
     delete characterStyleClone;
-    return QImage(*im);
+    return res;
 }
 
 void KoStyleThumbnailer::setThumbnailSize(QSize size)

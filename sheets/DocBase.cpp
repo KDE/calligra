@@ -41,6 +41,7 @@
 #include <KoShapeRegistry.h>
 #include <KoShapeSavingContext.h>
 #include <KoStoreDevice.h>
+#include <KoGenStyles.h>
 #include <KoUpdater.h>
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
@@ -67,6 +68,7 @@ DocBase::DocBase(KoPart *part)
     : KoDocument(part)
     , d(new Private)
 {
+    Q_ASSERT(part);
     d->resourceManager = new KoDocumentResourceManager();
     d->map = new Map(this, CURRENT_SYNTAX_VERSION);
 

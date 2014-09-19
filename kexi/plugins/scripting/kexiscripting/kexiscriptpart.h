@@ -26,7 +26,6 @@
 
 #include <kexi.h>
 #include <kexipart.h>
-//#include <kexidialogbase.h>
 
 /**
  * Kexi Scripting Plugin.
@@ -73,26 +72,18 @@ protected:
      * \param item The \a KexiPart::Item this view is for.
      * \param viewMode The viewmode we like to have a view for.
      * \param staticObjectArgs Optional list of arguments.
+     *
+     * @todo Port It!!!
      */
     virtual KexiView* createView(QWidget *parent,
                                  KexiWindow *window,
                                  KexiPart::Item &item,
                                  Kexi::ViewMode viewMode = Kexi::DataViewMode,
                                  QMap<QString, QVariant>* staticObjectArgs = 0);
-    /*
-             * \param parent The parent QWidget the new view is displayed in.
-             * \param dialog The \a KexiDialogBase the view is child of.
-             * \param item The \a KexiPart::Item this view is for.
-             * \param viewMode The viewmode we like to have a view for.
-                                             QWidget *parent,
-                                             KexiDialogBase* dialog,
-                                             KexiPart::Item& item,
-                                             Kexi::ViewMode viewMode = Kexi::DesignViewMode,
-                                             QMap<QString,QVariant>* staticObjectArgs = 0);
-    */
 
     /**
      * Initialize the part's actions.
+     * @todo Port It!!!
      */
     virtual void initPartActions();
 

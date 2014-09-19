@@ -24,7 +24,7 @@
 #include <kdebug.h>
 
 KWNewPageStyleCommand::KWNewPageStyleCommand(KWDocument *document, const KWPageStyle &newStyle, KUndo2Command *parent)
-    : KUndo2Command(i18nc("(qtundo-format)", "Insert Page Style"), parent),
+    : KUndo2Command(kundo2_i18n("Insert Page Style"), parent),
     m_newStyle(newStyle),
     m_document(document)
 {

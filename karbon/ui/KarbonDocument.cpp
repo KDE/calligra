@@ -62,6 +62,7 @@
 #include <KoPageLayout.h>
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
+#include <KoGenStyles.h>
 #include <KoOasisSettings.h>
 #include <KoMainWindow.h>
 #include <KoCanvasController.h>
@@ -148,6 +149,7 @@ KarbonDocument::KarbonDocument(KarbonPart* part)
         : KoDocument(part)
         , d(new Private())
 {
+    Q_ASSERT(part);
     resourceManager()->setUndoStack(undoStack());
 
     initConfig();

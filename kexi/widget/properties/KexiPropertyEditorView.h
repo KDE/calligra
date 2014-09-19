@@ -42,7 +42,7 @@ class KEXIEXTWIDGETS_EXPORT KexiPropertyEditorView : public KexiPropertyPaneView
     Q_OBJECT
 
 public:
-    KexiPropertyEditorView(QWidget* parent);
+    explicit KexiPropertyEditorView(QWidget* parent);
     virtual ~KexiPropertyEditorView();
 
     virtual QSize sizeHint() const;

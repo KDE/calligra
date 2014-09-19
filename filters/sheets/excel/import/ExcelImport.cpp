@@ -175,6 +175,8 @@ public:
     KoXmlWriter* beginMemoryXmlWriter(const char* docElement);
     KoXmlDocument endMemoryXmlWriter(KoXmlWriter* writer);
 
+    QDateTime convertDate(double timestamp) const;
+
     ExcelImport *q;
 
 };
@@ -223,7 +225,6 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
     QBuffer storeBuffer; // TODO: use temporary file instead
     delete d->storeout;
     d->storeout = KoStore::createStore(&storeBuffer, KoStore::Write);
-    d->storeout->disallowNameExpansion();
 
     // open inputFile
     d->workbook = new Swinder::Workbook(d->storeout);
@@ -315,7 +316,7 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
     storeBuffer.close();
 
     KoStore *store = KoStore::createStore(&storeBuffer, KoStore::Read);
-    store->disallowNameExpansion();
+    
 
     // Debug odf for shapes
 #if 0
@@ -863,9 +864,9 @@ static QString cellFormulaNamespace(const QString& formula)
     return QString();
 }
 
-static QDateTime convertDate(double timestamp)
+QDateTime ExcelImport::Private::convertDate(double timestamp) const
 {
-    QDateTime dt(QDate(1899, 12, 30));
+    QDateTime dt(workbook->baseDate());
     dt = dt.addMSecs((qint64)(timestamp * 86400 * 1000));
     return dt;
 }

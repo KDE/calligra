@@ -23,4 +23,5 @@ install(TARGETS kdeinit_calligrawords  ${INSTALL_TARGETS_DEFAULT_ARGS})
 target_link_libraries( calligrawords kdeinit_calligrawords )
 install(TARGETS calligrawords  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-install( PROGRAMS words.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
+install( PROGRAMS words.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR}/calligra)
+install( FILES words.appdata.xml DESTINATION ${SHARE_INSTALL_PREFIX}/appdata/)

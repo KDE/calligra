@@ -478,12 +478,6 @@ QString ODBCDriver::getQueryForOID()
     return QString();
 }
 
-
-#if 0 // replaced by KPluginLoader::pluginVersion()
-// to make the compiler shut up :).
-DatabaseVersionInfo ODBCDriver::version() const { return KEXIDB_VERSION; }
-#endif
-
 #include "odbcdriver.moc"
 
 

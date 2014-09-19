@@ -66,7 +66,6 @@ protected:
 
     class Private;
     Private * const d;
-
 };
 
 class KexiDBAutoField;

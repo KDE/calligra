@@ -44,8 +44,8 @@ public:
     void mouseEvent(int x, int y);
 
     /// return the color, that was selected by calling mouseEvent
-    /// the color must not have a color space conversion
-    virtual QColor currentColor();
+    KoColor currentColor();
+
     int width() const;
     int height() const;
 
@@ -53,31 +53,30 @@ public:
     void setConfiguration(Parameter param, Type type);
 
     /// set the color, blibs etc
-    virtual void setColor(const QColor& color) = 0;
+    virtual void setColor(const KoColor& color) = 0;
+
+    /// force subsequent redraw of the component
+    void setDirty();
 
     /// returns true, if this component wants to grab the mouse (normaly true, if containsPoint returns true)
-    virtual bool wantsGrab(int x, int y) {return containsPointInComponentCoords(x-m_x, y-m_y);}
-
-    /// returns true, if the component contains the given point
-    bool containsPoint(int x, int y) const {return containsPointInComponentCoords(x-m_x, y-m_y);}
-    bool containsPoint(const QPoint &point) const {return containsPointInComponentCoords(point.x()-m_x, point.y()-m_y);}
+    bool wantsGrab(int x, int y) {return containsPointInComponentCoords(x-m_x, y-m_y);}
 
 public slots:
     /// set hue, saturation, value or/and lightness
     /// unused parameters should be set to -1
-    void setParam(qreal hue, qreal hsvSaturation, qreal value, qreal hslSaturation, qreal lightness);
+    void setParam(qreal hue, qreal hsvSaturation, qreal value, qreal hslSaturation, qreal lightness, qreal hsiSaturation, qreal intensity, qreal hsySaturation, qreal luma);
 signals:
     /// request for repaint, for instance, if the hue changes.
     void update();
     /// -1, if unaffected
-    void paramChanged(qreal hue, qreal hsvSaturation, qreal value, qreal hslSaturation, qreal lightness);
+    void paramChanged(qreal hue, qreal hsvSaturation, qreal value, qreal hslSaturation, qreal lightness, qreal hsiSaturation, qreal intensity, qreal hsySaturation, qreal luma);
 protected:
     const KoColorSpace* colorSpace() const;
     /// returns true, if ether the colour space, the size or the parameters have changed since the last paint event
     bool isDirty() const;
 
     /// this method must be overloaded to return the colour at position x/y and draw a marker on that position
-    virtual QColor selectColor(int x, int y) = 0;
+    virtual KoColor selectColor(int x, int y) = 0;
 
     /// paint component using given painter
     /// the component should respect width() and height() (eg. scale to width and height), but doesn't
@@ -96,6 +95,10 @@ protected:
     qreal m_value;
     qreal m_hslSaturation;
     qreal m_lightness;
+    qreal m_hsiSaturation;
+    qreal m_intensity;
+    qreal m_hsySaturation;
+    qreal m_luma;
     Parameter m_parameter;
     Type m_type;
     KisColorSelector* m_parent;

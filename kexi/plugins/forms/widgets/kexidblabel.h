@@ -36,8 +36,7 @@
 class QPainter;
 
 //! @short An extended, data-aware, read-only text label.
-/*! It's text may have a drop-shadow.
-
+/*!
  @author Christian Nitschkowski, Jarosław Staniek
 */
 class KEXIFORMUTILS_EXPORT KexiDBLabel : public QLabel,
@@ -48,14 +47,13 @@ class KEXIFORMUTILS_EXPORT KexiDBLabel : public QLabel,
     Q_OBJECT
     Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource)
     Q_PROPERTY(QString dataSourcePartClass READ dataSourcePartClass WRITE setDataSourcePartClass)
-    Q_PROPERTY(bool shadowEnabled READ shadowEnabled WRITE setShadowEnabled)
     Q_PROPERTY(QPixmap pixmap READ pixmap WRITE setPixmap DESIGNABLE false)
     Q_PROPERTY(bool scaledContents READ hasScaledContents WRITE setScaledContents DESIGNABLE false)
     Q_PROPERTY(QColor frameColor READ frameColor WRITE setFrameColor)
 
 public:
-    explicit KexiDBLabel(QWidget *parent, Qt::WFlags f = 0);
-    KexiDBLabel(const QString& text, QWidget *parent, Qt::WFlags f = 0);
+    explicit KexiDBLabel(QWidget *parent = 0, Qt::WFlags f = 0);
+    explicit KexiDBLabel(const QString& text, QWidget *parent = 0, Qt::WFlags f = 0);
     virtual ~KexiDBLabel();
 
     inline QString dataSource() const {
@@ -66,8 +64,6 @@ public:
     }
 
     virtual QVariant value();
-
-    bool shadowEnabled() const;
 
     virtual void setInvalidState(const QString& displayText);
 
@@ -93,9 +89,8 @@ public:
 
     virtual QColor frameColor() const;
 
-//  const QColor & paletteForegroundColor() const;
+    const QPixmap *pixmap() const;
 
-    const QPixmap *pixmap() const { return QLabel::pixmap(); }
 public slots:
     //! Sets the datasource to \a ds
     inline void setDataSource(const QString &ds) {
@@ -108,20 +103,13 @@ public slots:
 
     virtual void setText(const QString& text);
 
-    /*! Enable/Disable the shadow effect.
-     KexiDBLabel acts just like a normal QLabel when shadow is disabled. */
-    void setShadowEnabled(bool state);
-
     virtual void setPalette(const QPalette &pal);
 
     virtual void setFrameColor(const QColor& color);
 
-//  void setPaletteForegroundColor( const QColor& color );
-
 protected slots:
     //! empty
     virtual void setReadOnly(bool readOnly);
-//2.0    void updatePixmap();
 
 protected:
     void init();
@@ -137,11 +125,6 @@ protected:
     virtual void enabledChange(bool enabled);
 
     virtual void paletteChange(const QPalette& oldPal);
-#ifdef __GNUC__
-#warning TODO virtual void frameChanged();
-#else
-#pragma WARNING( TODO virtual void frameChanged(); )
-#endif
     virtual void showEvent(QShowEvent* e);
 
     //! Reimplemented to paint using real frame color instead of froeground.

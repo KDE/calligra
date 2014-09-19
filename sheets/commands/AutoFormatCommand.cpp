@@ -32,7 +32,7 @@ using namespace Calligra::Sheets;
 
 AutoFormatCommand::AutoFormatCommand()
 {
-    setText(i18nc("(qtundo-format)", "Auto-Format"));
+    setText(kundo2_i18n("Auto-Format"));
 }
 
 AutoFormatCommand::~AutoFormatCommand()

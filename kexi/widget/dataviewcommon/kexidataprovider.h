@@ -57,8 +57,6 @@ public:
         return m_usedDataSources;
     }
 
-    //unused Q3PtrList<KexiFormDataItemInterface>& dataItems() { return m_dataItems; }
-
     /*! Fills data items with appropriate data fetched from \a cursor.
      \a newRowEditing == true means that we are at new (not yet inserted) database row. */
     void fillDataItems(KexiDB::RecordData& record, bool cursorAtNewRow);
@@ -92,7 +90,7 @@ protected:
     QList<KexiFormDataItemInterface*> m_dataItems;
     QStringList m_usedDataSources;
     KexiFormDataItemInterfaceToIntMap m_fieldNumbersForDataItems;
-    bool m_disableFillDuplicatedDataItems : 1;
+    bool m_disableFillDuplicatedDataItems;
 };
 
 #endif

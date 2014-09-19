@@ -213,36 +213,6 @@ bool KexiDBConnection::setAutoCommit(bool enabled)
     return m_connection->setAutoCommit(enabled);
 }
 
-#if 0
-KexiDBTransaction* KexiDBConnection::beginTransaction()
-{
-    ::KexiDB::Transaction t = m_connection->beginTransaction();
-    return new KexiDBTransaction(t);
-}
-
-bool KexiDBConnection::commitTransaction(KexiDBTransaction* transaction)
-{
-    return m_connection->commitTransaction(transaction->transaction());
-}
-bool KexiDBConnection::rollbackTransaction(KexiDBTransaction* transaction)
-{
-    return m_connection->rollbackTransaction(transaction->transaction());
-}
-KexiDBTransaction* KexiDBConnection::defaultTransaction()
-{
-    return new KexiDBTransaction(m_connection->defaultTransaction());
-}
-void KexiDBConnection::setDefaultTransaction(KexiDBTransaction* transaction)
-{
-    m_connection->setDefaultTransaction(transaction->transaction());
-}
-
-Kross::Api::List* KexiDBConnection::transactions()
-{
-    return new Kross::Api::ListT<KexiDBTransaction>(m_connection->transactions());
-}
-#endif
-
 QObject* KexiDBConnection::parser()
 {
     return new KexiDBParser(this, new ::KexiDB::Parser(m_connection), true);

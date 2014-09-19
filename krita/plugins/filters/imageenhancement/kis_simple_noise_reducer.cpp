@@ -93,14 +93,14 @@ void KisSimpleNoiseReducer::processImpl(KisPaintDeviceSP device,
     const KoColorSpace* cs = device->colorSpace();
 
     // Compute the blur mask
-    KisCircleMaskGenerator* kas = new KisCircleMaskGenerator(2*windowsize + 1, 1, windowsize, windowsize, 2);
+    KisCircleMaskGenerator* kas = new KisCircleMaskGenerator(2*windowsize + 1, 1, windowsize, windowsize, 2, true);
 
     KisConvolutionKernelSP kernel = KisConvolutionKernel::fromMaskGenerator(kas);
     delete kas;
 
     KisPaintDeviceSP interm = new KisPaintDevice(*device); // TODO no need for a full copy and then a transaction
     KisConvolutionPainter painter(interm);
-    painter.beginTransaction("bouuh");
+    painter.beginTransaction();
     painter.applyMatrix(kernel, interm, srcTopLeft, srcTopLeft, applyRect.size(), BORDER_REPEAT);
     painter.deleteTransaction();
 

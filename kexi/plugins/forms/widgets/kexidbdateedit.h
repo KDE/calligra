@@ -141,9 +141,9 @@ private:
     Q3DateEdit *m_edit;
     KMenu *m_datePickerPopupMenu;
     QDateTimeEditor *m_dte_date;
-    bool m_invalidState : 1;
-    bool m_cleared : 1;
-    bool m_readOnly : 1;
+    bool m_invalidState;
+    bool m_cleared;
+    bool m_readOnly;
 };
 
 #endif

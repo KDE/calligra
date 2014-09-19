@@ -1,4 +1,5 @@
 #! /usr/bin/env bash
-$EXTRACTRC `find . -name \*.rc -o -name \*.ui -o -name \*.kcfg` >> rc.cpp
-$XGETTEXT `find . -name "*.qml" -o -name "*.cpp" -o -name "*.h"` -o $podir/calligraactive.pot
+source ../calligra_xgettext.sh
+
+calligra_xgettext calligraactive.pot `find . -name \*.qml -o -name \*.cpp -o -name \*.h`
 rm -f rc.cpp

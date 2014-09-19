@@ -36,17 +36,15 @@ class KexiTableViewHeaderStyle : public KexiUtils::StyleProxy
 {
 public:
     KexiTableViewHeaderStyle(QStyle *parentStyle, QWidget *widget)
-            : KexiUtils::StyleProxy(parentStyle) {
+            : KexiUtils::StyleProxy(parentStyle, widget)
+    {
         setBackgroundColor(widget->palette().color(widget->backgroundRole()));
     }
     virtual ~KexiTableViewHeaderStyle() {}
 
     virtual void drawControl(ControlElement ce,
-                             const QStyleOption * option, QPainter * painter, const QWidget * widget = 0) const
-    //drawPrimitive
-    //PrimitiveElement pe,
-    //QPainter *p, const QRect &r, const QColorGroup &cg, SFlags flags = Style_Default,
-    //const QStyleOption& option = QStyleOption::Default ) const
+                             const QStyleOption * option, QPainter * painter,
+                             const QWidget * widget = 0) const
     {
         if (ce == CE_Header/*CE_HeaderSection*/ && option) {
             QStyleOptionHeader newOption(*qstyleoption_cast<const QStyleOptionHeader*>(option));
@@ -83,8 +81,6 @@ KexiTableViewHeader::KexiTableViewHeader(QWidget * parent)
 KexiTableViewHeader::~KexiTableViewHeader()
 {
     if (m_privateStyle) {
-        // moved to ~KexiTableView:
-        // setStyle(0);
         delete static_cast<QStyle*>(m_privateStyle);
     }
 }
@@ -148,7 +144,6 @@ bool KexiTableViewHeader::eventFilter(QObject * watched, QEvent * e)
     if (e->type() == QEvent::MouseMove) {
         const int section = sectionAt(static_cast<QMouseEvent*>(e)->x());
         if (section != m_lastToolTipSection && section >= 0 && section < (int)m_toolTips.count()) {
-            //QToolTip::remove(this, m_toolTipRect);
 #ifdef __GNUC__
 #warning TODO KexiTableViewHeader::eventFilter
 #else
@@ -179,16 +174,13 @@ bool KexiTableViewHeader::eventFilter(QObject * watched, QEvent * e)
             }
         }
     } else if (e->type() == QEvent::ToolTip) {
-//        QHelpEvent *helpEvent = static_cast<QHelpEvent *>(e);
 #ifdef __GNUC__
 #warning TODO
 #else
 #pragma WARNING( TODO )
 #endif
     }
-//   if (e->type()==QEvent::MouseButtonPress) {
-// todo
-//   }
+//! @todo   if (e->type()==QEvent::MouseButtonPress) {
     return Q3Header::eventFilter(watched, e);
 }
 
@@ -201,7 +193,6 @@ void KexiTableViewHeader::slotSizeChange(int /*section*/, int /*oldSize*/, int /
 #else
 #pragma WARNING( TODO OK? )
 #endif
-//  QToolTip::remove(this, m_toolTipRect);
     m_lastToolTipSection = -1; //tooltip's rect is now invalid
 }
 

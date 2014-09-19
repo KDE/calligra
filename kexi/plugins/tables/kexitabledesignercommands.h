@@ -38,7 +38,7 @@ namespace KexiTableDesignerCommands
 class Command : public KUndo2Command
 {
 public:
-    Command(const QString &text, Command *parent, KexiTableDesignerView* view);
+    Command(const KUndo2MagicString &text, Command *parent, KexiTableDesignerView* view);
     Command(Command* parent, KexiTableDesignerView* view);
     virtual ~Command();
 
@@ -49,7 +49,7 @@ public:
     }
 
     virtual QString debugString() const {
-        return text();
+        return text().toString();
     }
 
     virtual void redo();
@@ -92,7 +92,6 @@ public:
 protected:
     KexiDB::AlterTableHandler::ChangeFieldPropertyAction m_alterTableAction;
     QVariant m_oldValue;
-//  int m_fieldUID;
     KoProperty::Property::ListData* m_oldListData, *m_listData;
 };
 
@@ -162,7 +161,6 @@ public:
 
 protected:
     KexiDB::AlterTableHandler::ChangeFieldPropertyAction m_alterTableAction;
-//  int m_fieldUID;
     bool m_oldVisibility;
 };
 

@@ -29,10 +29,10 @@ class KEXIFORMUTILS_EXPORT KexiFrame : public QFrame,
                                        public KFormDesigner::FormWidgetInterface
 {
     Q_OBJECT
-//todo Q_ENUMS( Shape Shadow )
+//! @todo Q_ENUMS( Shape Shadow )
     Q_PROPERTY(QColor frameColor READ frameColor WRITE setFrameColor)
-//todo Q_PROPERTY( Shape frameShape READ frameShape WRITE setFrameShape )
-//todo Q_PROPERTY( Shadow frameShadow READ frameShadow WRITE setFrameShadow )
+//! @todo Q_PROPERTY( Shape frameShape READ frameShape WRITE setFrameShape )
+//! @todo Q_PROPERTY( Shadow frameShadow READ frameShadow WRITE setFrameShadow )
 
 public:
     explicit KexiFrame(QWidget * parent, Qt::WindowFlags f = 0);

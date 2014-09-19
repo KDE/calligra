@@ -37,8 +37,7 @@ MySqlPreparedStatement::MySqlPreparedStatement(StatementType type, ConnectionInt
 #endif
         , m_resetRequired(false)
 {
-// KexiDBDrvDbg << "MySqlPreparedStatement: Construction";
-
+// KexiDBDrvDbg;
     mysql_owned = false;
     mysql = dynamic_cast<KexiDB::MySqlConnectionInternal&>(conn).mysql; //copy
     m_tempStatementString = generateStatementString();
@@ -280,7 +279,6 @@ bool MySqlPreparedStatement::execute()
     }
     if (m_type == SelectStatement) {
         //fetch result
-
 //! @todo
     }
 #else

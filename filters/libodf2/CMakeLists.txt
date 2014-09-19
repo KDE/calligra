@@ -21,12 +21,18 @@ set(koodf2_LIB_SRCS
     KoColumnStyle.cpp
     KoCellStyle.cpp
 
+    KoOdfStyleBase.cpp
+    KoOdfStyleManager.cpp
     KoOdfStyle.cpp
+    KoOdfListStyle.cpp
+    KoOdfPageLayout.cpp
     KoOdfStyleProperties.cpp
     KoOdfTextProperties.cpp
     KoOdfParagraphProperties.cpp
+    KoOdfListLevelProperties.cpp
     KoOdfGraphicProperties.cpp
-    KoOdfStyleManager.cpp
+    KoOdfPageLayoutProperties.cpp
+    KoOdfHeaderFooterProperties.cpp
 )
 
 kde4_add_library(koodf2 SHARED ${koodf2_LIB_SRCS})
@@ -42,21 +48,26 @@ install(TARGETS koodf2 ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 install( FILES
     koodf2_export.h
-    KoCell.h
-    KoCellStyle.h
-    KoColumn.h
-    KoColumnStyle.h
-    KoOdfGraphicProperties.h
-    KoOdfParagraphProperties.h
-    KoOdfStyle.h
-    KoOdfStyleManager.h
-    KoOdfStyleProperties.h
-    KoOdfTextProperties.h
-    KoRawCellChild.h
-    KoRow.h
-    KoRowStyle.h
+
     KoStyle.h
     KoTable.h
     KoTblStyle.h
+    KoColumn.h
+    KoColumnStyle.h
+    KoRawCellChild.h
+    KoRow.h
+    KoRowStyle.h
+    KoCell.h
+    KoCellStyle.h
+
+    KoOdfStyleBase.h
+    KoOdfStyleManager.h
+    KoOdfStyle.h
+    KoOdfStyleProperties.h
+    KoOdfTextProperties.h
+    KoOdfParagraphProperties.h
+    KoOdfGraphicProperties.h
+    KoOdfPageLayoutProperties.h
+    KoOdfHeaderFooterProperties.h
 DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel)
 

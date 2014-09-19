@@ -37,6 +37,9 @@ namespace Kexi
 class ObjectStatus;
 }
 
+//! Empty for now
+#define KEXIMIGRATION_DRIVER
+
 /*! KexiMigration implementation version.
  It is altered after every change:
  - major number is increased after every major Kexi release,
@@ -56,14 +59,6 @@ class ObjectStatus;
  */
 namespace KexiMigration
 {
-
-#if 0 // replaced by KPluginLoader::pluginVersion()
-//! \return KexiMigration version info (most significant part)
-KEXIMIGR_EXPORT int versionMajor();
-
-//! \return KexiMigration version info (least significant part)
-KEXIMIGR_EXPORT int versionMinor();
-#endif
 
 //! \return KexiMigration version info
 KEXIMIGR_EXPORT KexiDB::DatabaseVersionInfo version();
@@ -123,11 +118,6 @@ public:
         return drv_progressSupported();
     }
 
-#if 0 // replaced by KPluginLoader::pluginVersion()
-    virtual int versionMajor() const = 0;
-    virtual int versionMinor() const = 0;
-#endif
-
 //! @todo This is copied from KexiDB::Driver. One day it will be merged with KexiDB.
     //! \return property value for \a propertyName available for this driver.
     //! If there's no such property defined for driver, Null QVariant value is returned.
@@ -149,14 +139,8 @@ public:
     //! \return a list of property names available for this driver.
     QList<QByteArray> propertyNames() const;
 
-// moved to MigrateManagerInternal::driver():
-//    /*! \return true is driver is valid. Checks if KexiMigrate::versionMajor()
-//     and KexiMigrate::versionMinor() are matching.
-//     You can reimplement this but always call KexiMigrate::isValid() implementation. */
-//    virtual bool isValid();
-
     //Extension of existing api to provide generic row access to external data.
-    //!Connect to the source data
+    //! Connect to the source data
     bool connectSource();
 
     //! Get table names in source database (driver specific)
@@ -293,7 +277,6 @@ protected:
 
     virtual QString drv_escapeIdentifier(const QString& str) const;
 
-
     //Extended API
     //! Position the source dataset at the start of a table
     virtual bool drv_readFromTable(const QString & tableName) {
@@ -323,9 +306,6 @@ protected:
     void setDriver(KexiDB::Driver *driver);
 
 private:
-    //! Create the target database project
-    //  KexiProject* createProject(Kexi::ObjectStatus* result);
-
     /*! Estimate size of migration job
      Calls drv_getTableSize for each table to be copied.
      \return sum of the size of all tables to be copied.

@@ -219,7 +219,7 @@ void IntervalEditDialog::slotChanged()
 
 MacroCommand *IntervalEditDialog::buildCommand()
 {
-    MacroCommand *cmd = new MacroCommand( i18nc( "(qtundo-format)", "Modify Work Interval" ) );
+    MacroCommand *cmd = new MacroCommand( kundo2_i18n( "Modify Work Interval" ) );
     foreach ( const QDate &d, m_dates ) {
         // these are dates, weekdays don't have date
         CalendarDay *day = m_calendar->findDay( d );
@@ -259,22 +259,22 @@ MacroCommand *IntervalEditDialog::buildCommand( Calendar *calendar, CalendarDay 
     MacroCommand *cmd = 0;
     // Set to Undefined. This will also clear any intervals
     CalendarModifyStateCmd *c = new CalendarModifyStateCmd( calendar, day, CalendarDay::Undefined );
-    if (cmd == 0) cmd = new MacroCommand("");
+    if (cmd == 0) cmd = new MacroCommand(KUndo2MagicString());
     cmd->addCommand(c);
     //kDebug(planDbg())<<"Set Undefined";
 
     foreach ( TimeInterval *i, lst ) {
         CalendarAddTimeIntervalCmd *c = new CalendarAddTimeIntervalCmd( calendar, day, i );
-        if (cmd == 0) cmd = new MacroCommand("");
+        if (cmd == 0) cmd = new MacroCommand(KUndo2MagicString());
         cmd->addCommand(c);
     }
     if ( ! lst.isEmpty() ) {
         CalendarModifyStateCmd *c = new CalendarModifyStateCmd( calendar, day, CalendarDay::Working );
-        if (cmd == 0) cmd = new MacroCommand("");
+        if (cmd == 0) cmd = new MacroCommand(KUndo2MagicString());
         cmd->addCommand(c);
     }
     if (cmd) {
-        cmd->setText( i18nc( "(qtundo-format)", "Modify Work Interval" ) );
+        cmd->setText( kundo2_i18n( "Modify Work Interval" ) );
     }
     return cmd;
 }

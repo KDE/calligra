@@ -18,6 +18,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "kexipartmanager.h"
 #include "kexistaticpart.h"
 #include "kexipartinfo_p.h"
 #include "kexipartitem.h"
@@ -28,7 +29,7 @@ using namespace KexiPart;
 //------------------------------
 
 StaticPartInfo::StaticPartInfo(const QString& partClass, const QString& itemIcon,
-                       const QString& objectName)
+                               const QString& objectName)
         : Info(partClass, itemIcon, objectName)
 {
 }

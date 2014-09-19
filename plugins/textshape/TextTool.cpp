@@ -5,6 +5,7 @@
  * Copyright (C) 2008, 2012 Pierre Stirnweiss <pstirnweiss@googlemail.org>
  * Copyright (C) 2009 KO GmbH <cbo@kogmbh.com>
  * Copyright (C) 2011 Mojtaba Shahi Senobari <mojtaba.shahi3000@gmail.com>
+ * Copyright (C) 2014 Denis Kuplyakov <dener.kup@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,6 +24,7 @@
  */
 
 #include "TextTool.h"
+
 #include "TextEditingPluginContainer.h"
 #include "dialogs/SimpleCharacterWidget.h"
 #include "dialogs/SimpleParagraphWidget.h"
@@ -33,15 +35,18 @@
 #include "dialogs/InsertCharacter.h"
 #include "dialogs/FontDia.h"
 #include "dialogs/TableDialog.h"
+#include "dialogs/SectionFormatDialog.h"
 #include "dialogs/SimpleTableWidget.h"
 #include "commands/AutoResizeCommand.h"
 #include "commands/ChangeListLevelCommand.h"
 #include "FontSizeAction.h"
+#include "FontFamilyAction.h"
 
 #include <KoOdf.h>
 #include <KoCanvasBase.h>
 #include <KoShapeController.h>
 #include <KoCanvasController.h>
+#include <KoCanvasResourceManager.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
 #include <KoPointerEvent.h>
@@ -49,6 +54,7 @@
 #include <KoColorPopupAction.h>
 #include <KoTextDocumentLayout.h>
 #include <KoParagraphStyle.h>
+#include <KoToolSelection.h>
 #include <KoTextEditingPlugin.h>
 #include <KoTextEditingRegistry.h>
 #include <KoInlineTextObjectManager.h>
@@ -72,7 +78,6 @@
 #include <krun.h>
 #include <kstandardshortcut.h>
 #include <kfontchooser.h>
-#include <kfontaction.h>
 #include <kaction.h>
 #include <kactionmenu.h>
 #include <kmenu.h>
@@ -80,6 +85,8 @@
 #include <kstandardaction.h>
 #include <kmimetype.h>
 #include <kmessagebox.h>
+#include <QTextTable>
+#include <QTextList>
 #include <QTabWidget>
 #include <QTextDocumentFragment>
 #include <QToolTip>
@@ -214,6 +221,14 @@ void TextTool::createActions()
     bool useAdvancedText = !(canvas()->resourceManager()->intResource(KoCanvasResourceManager::ApplicationSpeciality)
                              & KoCanvasResourceManager::NoAdvancedText);
 
+    m_actionConfigureSection = new KAction(koIcon("configure"), i18n("Configure current section"), this); //FIXME: Find another icon for this.
+    addAction("configure_section", m_actionConfigureSection);
+    connect(m_actionConfigureSection, SIGNAL(triggered(bool)), this, SLOT(configureSection()));
+
+    m_actionInsertSection = new KAction(koIcon("insert-text"), i18n("Insert new section"), this); //FIXME: Find another icon for this.
+    addAction("insert_section", m_actionInsertSection);
+    connect(m_actionInsertSection, SIGNAL(triggered(bool)), this, SLOT(insertNewSection()));
+
     m_actionPasteAsText  = new KAction(koIcon("edit-paste"), i18n("Paste As Text"), this);
     addAction("edit_paste_text", m_actionPasteAsText);
     m_actionPasteAsText->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_V);
@@ -322,7 +337,7 @@ void TextTool::createActions()
     addAction("fontsizedown", action);
     connect(action, SIGNAL(triggered()), this, SLOT(decreaseFontSize()));
 
-    m_actionFormatFontFamily = new KFontAction(KFontChooser::SmoothScalableFonts, this);
+    m_actionFormatFontFamily = new KoFontFamilyAction(this);
     m_actionFormatFontFamily->setText(i18n("Font Family"));
     addAction("format_fontfamily", m_actionFormatFontFamily);
     connect(m_actionFormatFontFamily, SIGNAL(triggered(const QString &)),
@@ -502,6 +517,7 @@ void TextTool::createActions()
 #ifndef NDEBUG
 #include "tests/MockShapes.h"
 #include <kundo2stack.h>
+#include <braindump/src/Section.h>
 
 TextTool::TextTool(MockCanvas *canvas)  // constructor for our unit tests;
     : KoToolBase(canvas),
@@ -922,7 +938,7 @@ void TextTool::mousePressEvent(KoPointerEvent *event)
 
             event->ignore();
         } else if (m_tablePenMode) {
-            m_textEditor.data()->beginEditBlock(i18nc("(qtundo-format)", "Change Border Formatting"));
+            m_textEditor.data()->beginEditBlock(kundo2_i18n("Change Border Formatting"));
             if (pointedAt.tableHit == KoPointedAt::ColumnDivider) {
                 if (pointedAt.tableColumnDivider < pointedAt.table->columns()) {
                     m_textEditor.data()->setTableBorderData(pointedAt.table,
@@ -1115,7 +1131,7 @@ void TextTool::cut()
 {
     if (m_textEditor.data()->hasSelection()) {
         copy();
-        KUndo2Command *topCmd = m_textEditor.data()->beginEditBlock(i18nc("(qtundo-format)", "Cut"));
+        KUndo2Command *topCmd = m_textEditor.data()->beginEditBlock(kundo2_i18n("Cut"));
         m_textEditor.data()->deleteChar(false, topCmd);
         m_textEditor.data()->endEditBlock();
     }
@@ -1375,7 +1391,7 @@ void TextTool::mouseMoveEvent(KoPointerEvent *event)
             if(m_tableDraggedOnce) {
                 canvas()->shapeController()->resourceManager()->undoStack()->undo();
             }
-            KUndo2Command *topCmd = m_textEditor.data()->beginEditBlock(i18nc("(qtundo-format)", "Adjust Column Width"));
+            KUndo2Command *topCmd = m_textEditor.data()->beginEditBlock(kundo2_i18n("Adjust Column Width"));
             m_dx = m_draggingOrigin.x() - event->point.x();
             if (m_tableDragInfo.tableColumnDivider < m_tableDragInfo.table->columns()
                     && m_tableDragInfo.tableTrailSize + m_dx < 0) {
@@ -1418,7 +1434,7 @@ void TextTool::mouseMoveEvent(KoPointerEvent *event)
                 canvas()->shapeController()->resourceManager()->undoStack()->undo();
             }
             if (m_tableDragInfo.tableRowDivider > 0) {
-                KUndo2Command *topCmd = m_textEditor.data()->beginEditBlock(i18nc("(qtundo-format)", "Adjust Row Height"));
+                KUndo2Command *topCmd = m_textEditor.data()->beginEditBlock(kundo2_i18n("Adjust Row Height"));
                 m_dy = m_draggingOrigin.y() - event->point.y();
 
                 if (m_tableDragInfo.tableLeadSize - m_dy < 0) {
@@ -2190,6 +2206,27 @@ void TextTool::stopEditing()
     m_currentCommandHasChildren = false;
 }
 
+void TextTool::insertNewSection()
+{
+    KoTextEditor *textEditor = m_textEditor.data();
+    if (!textEditor) return;
+
+    textEditor->newSection();
+}
+
+void TextTool::configureSection()
+{
+    KoTextEditor *textEditor = m_textEditor.data();
+    if (!textEditor) return;
+
+    SectionFormatDialog *dia = new SectionFormatDialog(0, m_textEditor.data());
+    dia->exec();
+    delete dia;
+
+    returnFocusToCanvas();
+    updateActions();
+}
+
 void TextTool::pasteAsText()
 {
     KoTextEditor *textEditor = m_textEditor.data();
@@ -2505,7 +2542,7 @@ void TextTool::startMacro(const QString &title)
     class MacroCommand : public KUndo2Command
     {
     public:
-        MacroCommand(const QString &title) : KUndo2Command(title), m_first(true) {}
+        MacroCommand(const KUndo2MagicString &title) : KUndo2Command(title), m_first(true) {}
         virtual void redo() {
             if (! m_first)
                 KUndo2Command::redo();
@@ -2517,7 +2554,16 @@ void TextTool::startMacro(const QString &title)
         bool m_first;
     };
 
-    m_currentCommand = new MacroCommand(title);
+    /**
+     * FIXME: The messages genearted by the Text Tool might not be
+     *        properly translated, since we don't control it in
+     *        type-safe way.
+     *
+     *        The title is already translated string, we just don't
+     *        have any type control over it.
+     */
+    KUndo2MagicString title_workaround = kundo2_noi18n(title);
+    m_currentCommand = new MacroCommand(title_workaround);
     m_currentCommandHasChildren = false;
 }
 

@@ -53,13 +53,13 @@ using namespace Scripting;
 KexiDBModule::KexiDBModule(QObject* parent)
         : QObject(parent)
 {
-    kDebug() << "Kross::KexiDB::KexiDBModule Ctor";
+    kDebug();
     setObjectName("KexiDB");
 }
 
 KexiDBModule::~KexiDBModule()
 {
-    kDebug() << "Kross::KexiDB::KexiDBModule Dtor";
+    kDebug();
 }
 
 int KexiDBModule::version()
@@ -76,11 +76,11 @@ QObject* KexiDBModule::driver(const QString& drivername)
 {
     QPointer< ::KexiDB::Driver > driver = m_drivermanager.driver(drivername); // caching is done by the DriverManager
     if (! driver) {
-        kDebug() << QString("KexiDB::Driver No such driver '%1'").arg(drivername);
+        kWarning() << "No such driver '%1'" << drivername;
         return 0;
     }
     if (driver->error()) {
-        kDebug() << QString("KexiDB::Driver error for drivername '%1': %2").arg(drivername).arg(driver->errorMsg());
+        kWarning() << "Error for drivername" << drivername << driver->errorMsg();
         return 0;
     }
     return new KexiDBDriver(this, driver);
@@ -123,14 +123,11 @@ QObject* KexiDBModule::createConnectionDataByFile(const QString& filename)
             }
         }
         if (groupkey.isNull()) {
-            kDebug() << "No groupkey in KexiDBModule::createConnectionDataByFile filename=" << filename;
+            kDebug() << "No groupkey, filename=" << filename;
             return 0;
         }
 
         KConfigGroup config(&_config, groupkey);
-        //QString type( config.readEntry("type", "database").toLower() );
-        //bool isDatabaseShortcut = (type == "database");
-
         ::KexiDB::ConnectionData* data = new ::KexiDB::ConnectionData();
         int version = config.readEntry("version", 2); //KexiDBShortcutFile_version
         data->setFileName(QString());
@@ -162,7 +159,7 @@ QObject* KexiDBModule::createConnectionDataByFile(const QString& filename)
 
     QString const drivername = m_drivermanager.lookupByMime(mimename);
     if (drivername.isEmpty()) {
-        kDebug() << "No driver in KexiDBModule::createConnectionDataByFile filename=" << filename << " mimename=" << mimename;
+        kDebug() << "No driver, filename=" << filename << "mimename=" << mimename;
         return 0;
     }
 

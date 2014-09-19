@@ -104,10 +104,9 @@ bool KexiDBDatePicker::cursorAtStart()
 
 bool KexiDBDatePicker::cursorAtEnd()
 {
-    const KLineEdit *lineEdit=findChild<KLineEdit*>();
+    const KLineEdit *lineEdit = findChild<KLineEdit*>();
     return lineEdit && lineEdit->hasFocus() && lineEdit->cursorPosition() == lineEdit->text().length();
 }
-
 
 void KexiDBDatePicker::clear()
 {

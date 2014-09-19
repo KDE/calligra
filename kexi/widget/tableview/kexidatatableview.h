@@ -52,8 +52,6 @@ public:
 
     ~KexiDataTableView();
 
-//  virtual void initActions(KActionCollection *col);
-
     using KexiTableView::setData;
 
     /*! Fills table view with data using \a cursor. \return true on success.
@@ -81,17 +79,9 @@ public:
 protected:
     void init();
 
-    /*! Reimplemented: called by deleteItem() - we are deleting data associated with \a item. */
-//  virtual bool beforeDeleteItem(KexiDB::RecordData *record);
-
-protected slots:
-//  void slotClearData();
-
 private:
     //db stuff
     KexiDB::Cursor *m_cursor;
-
-//  QMap<KexiDBUpdateRecord*,KexiDB::RecordData*> m_insertMapping;
 };
 
 #endif

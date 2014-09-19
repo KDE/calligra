@@ -49,7 +49,6 @@ public slots:
     void changeFont(const QString &);
     void changeColor(const QColor&);
     void slotActionTriggered(QAction* action);
-    //void cursorPositionChanged();
     void slotCurrentCharFormatChanged(const QTextCharFormat& f);
 
 private:    

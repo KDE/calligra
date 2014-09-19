@@ -31,7 +31,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#if KexiStatusBar_KTEXTEDITOR_USED
+#ifdef KexiStatusBar_KTEXTEDITOR_USED
 #include <ktexteditor/viewcursorinterface.h>
 #include <ktexteditor/viewstatusmsginterface.h>
 #endif
@@ -55,7 +55,7 @@ void Menu::mouseReleaseEvent(QMouseEvent* e)
 
 KexiStatusBar::KexiStatusBar(QWidget *parent)
         : KStatusBar(parent)
-#if KexiStatusBar_KTEXTEDITOR_USED
+#ifdef KexiStatusBar_KTEXTEDITOR_USED
         , m_cursorIface(0)
 #endif
 {
@@ -94,14 +94,13 @@ KexiStatusBar::KexiStatusBar(QWidget *parent)
     /// @todo remove parts from the map on PartRemoved() ?
 }
 
-
 KexiStatusBar::~KexiStatusBar()
 {
 }
 
 void KexiStatusBar::cursorPositionChanged()
 {
-#if KexiStatusBar_KTEXTEDITOR_USED
+#ifdef KexiStatusBar_KTEXTEDITOR_USED
     if (m_cursorIface) {
         uint line, col;
         m_cursorIface->cursorPosition(&line, &col);
@@ -112,24 +111,16 @@ void KexiStatusBar::cursorPositionChanged()
 
 void KexiStatusBar::setStatus(const QString &str)
 {
-    kDebug() << "KexiStatusBar::setStatus(" << str << ")";
-// m_status->setText(str);
+    //kDebug() << str;
     changeItem(str, m_msgID);
 }
 
+#if 0
 void KexiStatusBar::setCursorPosition(int line, int col)
 {
-// m_status->setText(i18n(" Line: %1 Col: %2 ").arg(line+1).arg(col));
-    changeItem(i18n(" Line: %1 Col: %2 ", line + 1, col), m_msgID);
+    changeItem(futureI18n(" Line: %1 Col: %2 ", line + 1, col), m_msgID);
 }
-
-/*void KexiStatusBar::addWidget ( QWidget *widget, int stretch, bool permanent)
-{
-  KStatusBar::addWidget(widget,stretch,permanent);
-
-  if(widget->sizeHint().height() + 4 > height())
-    setFixedHeight(widget->sizeHint().height() + 4);
-}*/
+#endif
 
 void KexiStatusBar::setReadOnlyFlag(bool readOnly)
 {

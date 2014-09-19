@@ -154,7 +154,7 @@ void KexiComboBoxBase::setValueInternal(const QVariant& add_, bool removeOld)
             }
         }
     } else {
-        //todo: autocompl.?
+        //! @todo autocompl.?
         if (popup())
             popup()->tableView()->clearSelection();
         /*impl.*/setValueInInternalEditor(add); //not setLineEditText(), because 'add' is entered by user!
@@ -171,7 +171,7 @@ KexiDB::RecordData* KexiComboBoxBase::selectItemForEnteredValueInLookupTable(con
 //-not effective for large sets: please cache it!
 //.trimmed() is not generic!
 
-    const bool valueIsText = v.type() == QVariant::String || v.type() == QVariant::CString; //most common case
+    const bool valueIsText = v.type() == QVariant::String || v.type() == QVariant::ByteArray; //most common case
     const QString txt(valueIsText ? v.toString().trimmed() : QString());
     KexiDB::TableViewData *lookupData = popup()->tableView()->data();
     const int visibleColumn = lookupFieldSchema->visibleColumn(lookupData->columnsCount());
@@ -238,7 +238,7 @@ QVariant KexiComboBoxBase::value()
     if (relData) {
         if (m_internalEditorValueChanged) {
             //we've user-entered text: look for id
-//TODO: make error if matching text not found?
+//! @todo make error if matching text not found?
             int rowToHighlight;
             return valueForString(m_userEnteredValue.toString(), &rowToHighlight, 1, 0, true/*allowNulls*/);
         } else {

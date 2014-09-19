@@ -1,4 +1,6 @@
 /**
  * \mainpage
- * Here goes text about KPlato, with possible references to important classes; like KPlato::Duration
+ * Here goes text about Calligra Plan, with possible references to important classes; like KPlato::Duration
  */
+
+// DOXYGEN_SET_PROJECT_NAME = Plan

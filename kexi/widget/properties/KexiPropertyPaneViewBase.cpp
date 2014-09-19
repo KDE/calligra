@@ -42,7 +42,7 @@ KexiPropertyPaneViewBase::KexiPropertyPaneViewBase(QWidget* parent)
         : QWidget(parent)
         , d(new Private())
 {
-    //TODO: set a nice icon
+    //! @todo set a nice icon
 //    setWindowIcon(KexiMainWindowIface::global()->thisWidget()->windowIcon());
 
     QVBoxLayout *lyr = new QVBoxLayout(this);
@@ -123,7 +123,6 @@ QWidget* KexiPropertyPaneViewBase::addWidgetSpacer()
     sp->setFixedHeight(spacing());
     sp->setContentsMargins(0, 0, 0, 0);
     mainLayout()->addWidget(sp);
-
     return sp;
 }
 

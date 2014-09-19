@@ -58,6 +58,8 @@ add_subdirectory( works )
 
 add_subdirectory( ascii )
 
+add_subdirectory( wiki )
+
 add_subdirectory( rtf )
 
 add_subdirectory( epub )

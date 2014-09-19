@@ -275,14 +275,14 @@ void KexiRecordMarker::setCellHeight(int cellHeight)
 void KexiRecordMarker::setEditRow(int row)
 {
     d->editRow = row;
-//TODO: update only needed area!
+//! @todo update only needed area
     update();
 }
 
 void KexiRecordMarker::showInsertRow(bool show)
 {
     d->showInsertRow = show;
-//TODO: update only needed area!
+//! @todo update only needed area
     update();
 }
 
@@ -298,8 +298,8 @@ QBrush KexiRecordMarker::selectionBackgroundBrush() const
 
 void KexiRecordMarker::mouseMoveEvent(QMouseEvent *e)
 {
-    const int y = e->y();
-//    kDebug() << "y:" << y << "d->rowHeight:" << d->rowHeight;
+    const int y = e->y() + d->offset;
+//    kDebug() << "y:" << e->y() << "d->rowHeight:" << d->rowHeight << "d->offset:" << d->offset;
 //    kDebug() << "y / d->rowHeight:" << (y / d->rowHeight);
     const uint row = y / d->rowHeight;
     if ((int)row < rows()) {
@@ -315,7 +315,7 @@ void KexiRecordMarker::mouseMoveEvent(QMouseEvent *e)
 
 void KexiRecordMarker::mousePressEvent(QMouseEvent *e)
 {
-    const int y = e->y();
+    const int y = e->y() + d->offset;
     const uint row = y / d->rowHeight;
     if ((int)row < rows()) {
         emit rowPressed(row);

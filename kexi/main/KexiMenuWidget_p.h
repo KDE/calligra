@@ -146,7 +146,7 @@ public:
     KexiMenuWidget *q;
 
     //item calculations
-    mutable uint itemsDirty : 1;
+    mutable uint itemsDirty;
     mutable uint maxIconWidth, tabWidth;
     QRect actionRect(QAction *) const;
 
@@ -156,15 +156,15 @@ public:
     QRect popupGeometry(const QWidget *widget) const;
     QRect popupGeometry(int screen = -1) const;
     mutable uint ncols : 4; //4 bits is probably plenty
-    uint collapsibleSeparators : 1;
+    uint collapsibleSeparators;
 
     bool activationRecursionGuard;
 
     //selection
     static KexiMenuWidget *mouseDown;
     QPoint mousePopupPos;
-    uint hasHadMouse : 1;
-    uint aboutToHide : 1;
+    uint hasHadMouse;
+    uint aboutToHide;
     int motions;
     QAction *currentAction;
     QBasicTimer menuDelayTimer;

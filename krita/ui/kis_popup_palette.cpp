@@ -21,26 +21,29 @@
 #include "kis_popup_palette.h"
 #include "kis_paintop_box.h"
 #include "kis_favorite_resource_manager.h"
+#include "kis_icon.h"
+#include "kis_resource_server_provider.h"
 #include "KoColorSpaceRegistry.h"
 #include "KoResource.h"
+#include <KoResourceServer.h>
 #include <kis_types.h>
 #include <QtGui>
 #include <QDebug>
 #include <QQueue>
+#include <QMenu>
 #include <math.h>
 
-#define maxPresetCount 10
-#define brushInnerRadius 100.0
-#define brushOuterRadius 140.0
-#define colorInnerRadius 75.0
-#define colorOuterRadius 95.0
+#define brushInnerRadius 94.0
+#define brushOuterRadius 145.0
+#define colorInnerRadius 72.0
+#define colorOuterRadius 92.0
 #define brushRadius (brushInnerRadius+brushOuterRadius)/2
 
 class PopupColorTriangle : public KoTriangleColorSelector
 {
 public:
-    PopupColorTriangle(QWidget* parent)
-        : KoTriangleColorSelector(parent)
+    PopupColorTriangle(const KoColorDisplayRendererInterface *displayRenderer, QWidget* parent)
+        : KoTriangleColorSelector(displayRenderer, parent)
         , m_dragging(false) {
     }
 
@@ -79,26 +82,27 @@ private:
     bool m_dragging;
 };
 
-KisPopupPalette::KisPopupPalette(KisFavoriteResourceManager* manager, QWidget *parent)
+KisPopupPalette::KisPopupPalette(KisFavoriteResourceManager* manager, const KoColorDisplayRendererInterface *displayRenderer, QWidget *parent)
     : QWidget(parent, Qt::FramelessWindowHint)
     , m_resourceManager(manager)
     , m_triangleColorSelector(0)
     , m_timer(0)
+    , m_displayRenderer(displayRenderer)
 {
-    m_triangleColorSelector  = new PopupColorTriangle(this);
-    m_triangleColorSelector->move(70, 70);
-    m_triangleColorSelector->resize(140, 140);
+    m_triangleColorSelector  = new PopupColorTriangle(displayRenderer, this);
+    m_triangleColorSelector->move(77, 77);
+    m_triangleColorSelector->resize(136, 136);
     m_triangleColorSelector->setVisible(true);
 
     setAutoFillBackground(true);
     setAttribute(Qt::WA_ContentsPropagated, true);
-    //    setAttribute(Qt::WA_TranslucentBackground, true);
+    //setAttribute(Qt::WA_TranslucentBackground, true);
 
-    connect(m_triangleColorSelector, SIGNAL(colorChanged(QColor)), SLOT(slotChangefGColor(QColor)));
+    connect(m_triangleColorSelector, SIGNAL(realColorChanged(KoColor)), SLOT(slotChangefGColor(KoColor)));
     connect(this, SIGNAL(sigChangeActivePaintop(int)), m_resourceManager, SLOT(slotChangeActivePaintop(int)));
     connect(this, SIGNAL(sigUpdateRecentColor(int)), m_resourceManager, SLOT(slotUpdateRecentColor(int)));
     connect(this, SIGNAL(sigChangefGColor(KoColor)), m_resourceManager, SIGNAL(sigSetFGColor(KoColor)));
-    connect(m_resourceManager, SIGNAL(sigChangeFGColorSelector(QColor)), m_triangleColorSelector, SLOT(setQColor(QColor)));
+    connect(m_resourceManager, SIGNAL(sigChangeFGColorSelector(KoColor)), m_triangleColorSelector, SLOT(setRealColor(KoColor)));
     connect(m_resourceManager, SIGNAL(setSelectedColor(int)), SLOT(slotSetSelectedColor(int)));
     connect(m_resourceManager, SIGNAL(updatePalettes()), SLOT(slotUpdate()));
     connect(m_resourceManager, SIGNAL(hidePalettes()), SLOT(slotHide()));
@@ -159,7 +163,7 @@ void KisPopupPalette::setSelectedColor(int x)
     m_selectedColor = x;
 }
 
-void KisPopupPalette::slotChangefGColor(const QColor& /*newColor*/)
+void KisPopupPalette::slotChangefGColor(const KoColor& /*newColor*/)
 {
     m_colorChangeTimer->start();
     update();
@@ -167,8 +171,7 @@ void KisPopupPalette::slotChangefGColor(const QColor& /*newColor*/)
 
 void KisPopupPalette::slotColorChangeTimeout()
 {
-    KoColor color(m_triangleColorSelector->color(), KoColorSpaceRegistry::instance()->rgb16(0));
-    emit sigChangefGColor(color);
+    emit sigChangefGColor(m_triangleColorSelector->realColor());
 }
 
 void KisPopupPalette::slotTriggerTimer()
@@ -225,16 +228,19 @@ void KisPopupPalette::setVisible(bool b)
 
 QSize KisPopupPalette::sizeHint() const
 {
-    return QSize(280, 280);
+    return QSize(290, 290);
 }
 
 void KisPopupPalette::resizeEvent(QResizeEvent*)
 {
     int side = qMin(width(), height());
-    int side2 = 66;
+    int fgball = 66;
+    int sball = 40;
     QRegion maskedRegion(width() / 2 - side / 2, height() / 2 - side / 2, side, side, QRegion::Ellipse);
-    QRegion maskedRegion2(33 - side2 / 2, 33 - side2 / 2 , side2, side2, QRegion::Ellipse);
-    setMask(maskedRegion + maskedRegion2);
+    maskedRegion = maskedRegion.united( QRegion(50 - fgball / 2, 32 - fgball / 2 , fgball, fgball, QRegion::Ellipse) );
+    maskedRegion = maskedRegion.united( QRegion(24 - (fgball - 20 ) / 2, 60 - (fgball - 20 ) / 2 , (fgball - 20 ), (fgball - 20 ), QRegion::Ellipse) );
+    maskedRegion = maskedRegion.united( QRegion(width() / 2 + side / 2 - sball, height() / 2 + side / 2 - sball, sball , sball, QRegion::Ellipse) );
+    setMask(maskedRegion);
 }
 
 void KisPopupPalette::paintEvent(QPaintEvent* e)
@@ -246,11 +252,18 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
     painter.fillRect(e->rect(), palette().brush(QPalette::Window));
     painter.translate(width() / 2, height() / 2);
 
+    //painting background color
+    QPainterPath bgColor;
+    bgColor.addEllipse(QPoint(-width() / 2 + 24, -height() / 2 + 60), 20, 20);
+    painter.fillPath(bgColor, m_displayRenderer->toQColor(m_resourceManager->bgColor()));
+    painter.drawPath(bgColor);
+
     //painting foreground color
-    QPainterPath path2;
-    path2.addEllipse(QPoint(-width() / 2 + 33, -height() / 2 + 33), 30, 30);
-    painter.fillPath(path2, m_triangleColorSelector->color());
-    painter.drawPath(path2);
+    QPainterPath fgColor;
+    fgColor.addEllipse(QPoint(-width() / 2 + 50, -height() / 2 + 32), 30, 30);
+    painter.fillPath(fgColor, m_displayRenderer->toQColor(m_triangleColorSelector->realColor()));
+    painter.drawPath(fgColor);
+
 
     //painting favorite brushes
     QList<QImage> images(m_resourceManager->favoritePresetImages());
@@ -279,16 +292,14 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
     painter.setPen(Qt::NoPen);
     rotationAngle = -360.0 / m_resourceManager->recentColorsTotal();
 
-    QColor qcolor;
-    KoColor kcolor;
+    KoColor kocolor;
 
     for (int pos = 0; pos < m_resourceManager->recentColorsTotal(); pos++) {
         QPainterPath path(drawDonutPathAngle(colorInnerRadius, colorOuterRadius, m_resourceManager->recentColorsTotal()));
 
         //accessing recent color of index pos
-        kcolor = m_resourceManager->recentColorAt(pos);
-        kcolor.toQColor(&qcolor);
-        painter.fillPath(path, qcolor);
+        kocolor = m_resourceManager->recentColorAt(pos);
+        painter.fillPath(path, m_displayRenderer->toQColor(kocolor));
 
         painter.drawPath(path);
         painter.rotate(rotationAngle);
@@ -331,6 +342,11 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
             painter.rotate(selectedColor() * -1 * rotationAngle);
         }
     }
+
+    int side = qMin(width(), height());
+    QPixmap settingIcon = koIcon("configure").pixmap(QSize(22,22));
+    painter.drawPixmap(side / 2 - 40 + 9, side / 2 - 40 + 9, settingIcon);
+    
 }
 
 QPainterPath KisPopupPalette::drawDonutPathFull(int x, int y, int inner_radius, int outer_radius)
@@ -371,7 +387,7 @@ void KisPopupPalette::mouseMoveEvent(QMouseEvent* event)
         //in favorite brushes area
         int pos = calculatePresetIndex(point, m_resourceManager->numFavoritePresets());
 
-        if (pos >= 0) {
+        if (pos >= 0 && pos < m_resourceManager->numFavoritePresets()) {
             setHoveredPreset(pos);
         }
     } else if (pathColor.contains(point)) {
@@ -399,6 +415,29 @@ void KisPopupPalette::mousePressEvent(QMouseEvent* event)
                     && isPointInPixmap(point, pos)) {
                 //setSelectedBrush(pos);
                 update();
+            }
+        } else {
+            int side = qMin(width(), height());
+            QPainterPath settingCircle;
+            settingCircle.addEllipse(width() / 2 + side / 2 - 40, height() / 2 + side / 2 - 40, 40, 40);
+            if (settingCircle.contains(point)) {                
+                KoResourceServer<KisPaintOpPreset>* rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
+                QStringList tags = rServer->tagNamesList();
+                qSort(tags);
+
+                if (!tags.isEmpty()) {
+                    QMenu menu;
+                    foreach(const QString& tag, tags) {
+                        menu.addAction(tag);
+                    }
+                    QAction* action = menu.exec(event->globalPos());
+                    if (action) {
+                        m_resourceManager->setCurrentTag(action->text());
+                    }
+                } else {
+                    QWhatsThis::showText(event->globalPos(), 
+                                         i18n("There are no tags available to show in this popup. To add presets, you need to tag them and then select the tag here."));
+                }
             }
         }
     }
@@ -461,17 +500,16 @@ bool KisPopupPalette::isPointInPixmap(QPointF& point, int pos)
 
 KisPopupPalette::~KisPopupPalette()
 {
-    delete m_triangleColorSelector;
 }
 
 QPainterPath KisPopupPalette::pathFromPresetIndex(int index)
 {
     QRect outerRect(-width() / 2, -height() / 2, width(), height());
     outerRect.adjust(3, 3, -3, -3);
-    int ringSize = brushOuterRadius - colorOuterRadius - 8;
+    int ringSize = brushOuterRadius - colorOuterRadius - 6;
     QRect innerRect = outerRect.adjusted(ringSize, ringSize, -ringSize, -ringSize);
 
-    qreal angleLength = 360 / 10;
+    qreal angleLength = 360 / numSlots();
     qreal angle = index * angleLength;
 
     QPainterPath path;
@@ -496,8 +534,13 @@ int KisPopupPalette::calculatePresetIndex(QPointF point, int /*n*/)
     } else {
         angle = 2 * M_PI - acos(x / radius);
     }
-    int pos = floor(angle / (2 * M_PI / 10));
+    int pos = floor(angle / (2 * M_PI / numSlots()));
     return pos;
+}
+
+int KisPopupPalette::numSlots()
+{
+    return qMax(m_resourceManager->numFavoritePresets(), 10);
 }
 
 #include "kis_popup_palette.moc"

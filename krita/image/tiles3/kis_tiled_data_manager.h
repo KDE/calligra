@@ -68,7 +68,7 @@ protected:
     /*FIXME:*/
 public:
     KisTiledDataManager(quint32 pixelSize, const quint8 *defPixel);
-    ~KisTiledDataManager();
+    virtual ~KisTiledDataManager();
     KisTiledDataManager(const KisTiledDataManager &dm);
     KisTiledDataManager & operator=(const KisTiledDataManager &dm);
 
@@ -165,6 +165,8 @@ public:
         QWriteLocker locker(&m_lock);
         m_mementoManager->purgeHistory(oldestMemento);
     }
+
+    static void releaseInternalPools();
 
 protected:
     /**

@@ -7,6 +7,7 @@ set(kritadefaulttools_PART_SRCS
     kis_tool_colorpicker.cc
     kis_tool_brush.cc
     kis_tool_line.cc
+    kis_tool_line_helper.cpp
     kis_tool_fill.cc
     kis_tool_rectangle.cc
     kis_tool_ellipse.cc
@@ -40,7 +41,6 @@ install( FILES
     krita_tool_line.png
     krita_tool_rectangle.png
     krita_tool_ellipse.png
-    krita_tool_freehand.png
     krita_tool_freehandvector.png
     krita_tool_multihand.png
     krita_tool_measure.png
@@ -80,5 +80,5 @@ install( FILES
     tool_gradient_cursor.png
     DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
 
-install( FILES  kritadefaulttools.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  kritadefaulttools.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 

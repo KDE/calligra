@@ -75,4 +75,3 @@ private:
 };
 
 #endif // KEXIDBCONNSET_H
-

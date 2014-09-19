@@ -27,11 +27,13 @@
 #include <KoZoomMode.h>
 #include <kis_node.h>
 #include <KoPattern.h>
+#include <KoGridData.h>
 #include <kis_paintop_preset.h>
+#include <kis_smoothing_options.h>
 
 class KisView2;
 struct ViewModeSynchronisationObject {
-    ViewModeSynchronisationObject() : initialized(false) { }
+    ViewModeSynchronisationObject() : initialized(false), gridData(0) { }
 
     bool initialized;
 
@@ -51,6 +53,15 @@ struct ViewModeSynchronisationObject {
     float opacity;
     bool globalAlphaLock;
     QString activeToolId;
+
+    KoGridData* gridData;
+
+    // Mirror-axes
+    QPointF mirrorAxesCenter;
+    bool mirrorHorizontal;
+    bool mirrorVertical;
+
+    KisSmoothingOptionsSP smoothingOptions;
 };
 
 class ViewModeSwitchEvent : public QEvent

@@ -1,3 +1,4 @@
 #! /bin/sh
-$XGETTEXT *.cpp editors/*.cpp -o $podir/koproperty.pot
+source $srcdir/../../calligra_xgettext.sh
 
+calligra_xgettext koproperty.pot *.cpp editors/*.cpp

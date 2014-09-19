@@ -46,21 +46,13 @@ public:
     Private();
     ~Private();
 
-    QString name;
     QString family;
     QString parent;
-    QString displayName;
-    bool    isDefaultStyle;
 
-    bool    inUse;
-
-    // 
-    QHash<QString, KoOdfStyleProperties*> properties;  // e.g. "text-properties", 
+    QHash<QString, KoOdfStyleProperties*> properties;  // e.g. "text-properties",
 };
 
 KoOdfStyle::Private::Private()
-    : isDefaultStyle(false)
-    , inUse(false)
 {
 }
 
@@ -74,7 +66,8 @@ KoOdfStyle::Private::~Private()
 
 
 KoOdfStyle::KoOdfStyle()
-    : d(new KoOdfStyle::Private())
+    : KoOdfStyleBase(StyleStyle)
+    , d(new KoOdfStyle::Private())
 {
 }
 
@@ -84,22 +77,12 @@ KoOdfStyle::~KoOdfStyle()
 }
 
 
-QString KoOdfStyle::name() const
-{
-    return d->name;
-}
-
-void KoOdfStyle::setName(QString &name)
-{
-    d->name = name;
-}
-
 QString KoOdfStyle::family() const
 {
     return d->family;
 }
 
-void KoOdfStyle::setFamily(QString &family)
+void KoOdfStyle::setFamily(const QString &family)
 {
     d->family = family;
 }
@@ -109,56 +92,23 @@ QString KoOdfStyle::parent() const
     return d->parent;
 }
 
-void KoOdfStyle::setParent(QString &parent)
+void KoOdfStyle::setParent(const QString &parent)
 {
     d->parent = parent;
 }
 
-QString KoOdfStyle::displayName() const
-{
-    return d->displayName;
-}
 
-void KoOdfStyle::setDisplayName(QString &name)
-{
-    d->displayName = name;
-}
-
-
-bool KoOdfStyle::isDefaultStyle() const
-{
-    return d->isDefaultStyle;
-}
-
-void KoOdfStyle::setIsDefaultStyle(bool isDefaultStyle)
-{
-    d->isDefaultStyle = isDefaultStyle;
-}
-
-
-
-bool KoOdfStyle::inUse() const
-{
-    return d->inUse;
-}
-
-void KoOdfStyle::setInUse(bool inUse)
-{
-    d->inUse = inUse;
-}
-
-
-QHash<QString, KoOdfStyleProperties*> KoOdfStyle::properties()
+QHash<QString, KoOdfStyleProperties*> KoOdfStyle::properties() const
 {
     return d->properties;
 }
 
-KoOdfStyleProperties *KoOdfStyle::properties(QString &name) const
+KoOdfStyleProperties *KoOdfStyle::properties(const QString& name) const
 {
     return d->properties.value(name, 0);
 }
 
-QString KoOdfStyle::property(QString &propertySet, QString &property) const
+QString KoOdfStyle::property(const QString &propertySet, const QString &property) const
 {
     KoOdfStyleProperties *props = d->properties.value(propertySet, 0);
     if (props)
@@ -167,7 +117,7 @@ QString KoOdfStyle::property(QString &propertySet, QString &property) const
         return QString();
 }
 
-void KoOdfStyle::setProperty(QString &propertySet, QString &property, QString &value)
+void KoOdfStyle::setProperty(const QString &propertySet, const QString &property, const QString &value)
 {
     KoOdfStyleProperties *props = d->properties.value(propertySet);
     if (!props)
@@ -180,16 +130,11 @@ bool KoOdfStyle::readOdf(KoXmlStreamReader &reader)
 {
     // Load style attributes.
     KoXmlStreamAttributes  attrs = reader.attributes();
-    QString dummy;              // Because the set*() methods take a QString &,
 
-    dummy = attrs.value("style:family").toString();
-    setFamily(dummy);
-    dummy = attrs.value("style:name").toString();
-    setName(dummy);
-    dummy = attrs.value("style:parent-style-name").toString();
-    setParent(dummy);
-    dummy = attrs.value("style:display-name").toString();
-    setDisplayName(dummy);
+    setName(attrs.value("style:name").toString());
+    setDisplayName(attrs.value("style:display-name").toString());
+    setFamily(attrs.value("style:family").toString());
+    setParent(attrs.value("style:parent-style-name").toString());
 
     kDebug() << "Style:" << name() << family() << parent() << displayName();
 
@@ -222,21 +167,21 @@ bool KoOdfStyle::readOdf(KoXmlStreamReader &reader)
 
 bool KoOdfStyle::saveOdf(KoXmlWriter *writer)
 {
-    if (d->isDefaultStyle) {
+    if (isDefaultStyle()) {
         writer->startElement("style:default-style");
-        writer->addAttribute("style:name", d->name);
     }
     else {
         writer->startElement("style:style");
+        writer->addAttribute("style:name", name());
     }
 
     // Write style attributes
-    writer->addAttribute("style:family", d->family);
+    writer->addAttribute("style:family", family());
     if (!d->parent.isEmpty()) {
         writer->addAttribute("style:parent-style-name", d->parent);
     }
-    if (!d->displayName.isEmpty()) {
-        writer->addAttribute("style:display-name", d->displayName);
+    if (!displayName().isEmpty()) {
+        writer->addAttribute("style:display-name", displayName());
     }
 
     // Write properties
@@ -247,6 +192,3 @@ bool KoOdfStyle::saveOdf(KoXmlWriter *writer)
     writer->endElement();  // style:{default-,}style
     return true;
 }
-
-
-

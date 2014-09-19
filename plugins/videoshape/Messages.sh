@@ -1,2 +1,6 @@
 #! /bin/sh
-$XGETTEXT *.cpp -o $podir/VideoShape.pot
+source ../../calligra_xgettext.sh
+
+$EXTRACTRC `find . -name \*.ui` >> rc.cpp || exit 11
+calligra_xgettext VideoShape.pot `find . -name \*.cpp`
+rm -f rc.cpp

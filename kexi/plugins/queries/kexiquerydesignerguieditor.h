@@ -57,10 +57,8 @@ class KexiQueryDesignerGuiEditor : public KexiView
     Q_OBJECT
 
 public:
-    KexiQueryDesignerGuiEditor(QWidget *parent);
+    explicit KexiQueryDesignerGuiEditor(QWidget *parent);
     virtual ~KexiQueryDesignerGuiEditor();
-
-//  KexiDB::QuerySchema *schema();
 
     KexiRelationsView *relationsView() const;
 
@@ -72,8 +70,6 @@ public slots:
 protected:
     void initTableColumns(); //!< Called just once.
     void initTableRows(); //!< Called to have all rows empty.
-//unused  void addRow(const QString &tbl, const QString &field);
-//  void   restore();
     virtual tristate beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore);
     virtual tristate afterSwitchFrom(Kexi::ViewMode mode);
 
@@ -102,7 +98,7 @@ protected:
     KexiQueryPart::TempData * tempData() const;
 
     /*! Helper: allocates and initializes new table view's row. Doesn't insert it, just returns.
-     \a tableName and \a fieldName shoudl be provided.
+     \a tableName and \a fieldName should be provided.
      \a visible flag sets value for "Visible" column. */
     KexiDB::RecordData* createNewRow(const QString& tableName, const QString& fieldName,
                                      bool visible) const;
@@ -154,7 +150,6 @@ protected slots:
 
     void slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& property);
 
-//  void slotObjectCreated(const QString &mime, const QString& name);
     void slotNewItemStored(KexiPart::Item&);
     void slotItemRemoved(const KexiPart::Item& item);
     void slotItemRenamed(const KexiPart::Item& item, const QString& oldName);

@@ -23,8 +23,8 @@
 #include <db/preparedstatement.h>
 #include "mysqlconnection_p.h"
 
-//todo 1.1 - unfinished: #define KEXI_USE_MYSQL_STMT
-// for 1.0 we're using unoptimized version
+//! @todo 1.1 - unfinished: #define KEXI_USE_MYSQL_STMT
+//!       for 1.0 we're using unoptimized version
 
 namespace KexiDB
 {
@@ -46,7 +46,7 @@ public:
     MYSQL_STMT *m_statement;
     MYSQL_BIND *m_mysqlBind;
 #endif
-    bool m_resetRequired : 1;
+    bool m_resetRequired;
 
 protected:
     bool init();

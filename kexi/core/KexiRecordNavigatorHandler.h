@@ -39,8 +39,8 @@ public:
     virtual void addNewRecordRequested() = 0;
     
     //! Allow the handler to tell the navigator about the records
-    virtual int recordCount() const { return 0; }
-    virtual int currentRecord() const { return 0; }
+    virtual int recordCount() const;
+    virtual int currentRecord() const;
 };
 
 #endif

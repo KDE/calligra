@@ -205,56 +205,12 @@ void KexiFormDataProvider::invalidateDataSources(const QSet<QString>& invalidSou
                 << dynamic_cast<QObject*>(item)->objectName() << ")";
             if (index != -1 && !m_fieldNumbersForDataItems[ item ])
                 m_fieldNumbersForDataItems.insert(item, index);
-            //todo
+            //! @todo
             //WRONG: not only used data sources can be fetched!
             //   m_fieldNumbersForDataItems.insert( item,
             //    m_usedDataSources.findIndex(item->dataSource().toLower()) );
         }
-    } else {//!query
-//  dataFieldsCount = m_dataItems.count();
     }
-
-#if 0 //moved down
-    //in 'newIndices' let's collect new indices for every data source
-    foreach(Q3ValueList<uint>::ConstIterator, it, invalidSources) {
-        //all previous indices have corresponding data source
-//  for (; i < (*it); i++) {
-//   newIndices[i] = number++;
-        //kDebug() << "invalidateDataSources(): " << i << " -> " << number-1;
-//  }
-        //this index have no corresponding data source
-//  newIndices[i]=-1;
-        KexiFormDataItemInterface *item = m_dataItems.at(*it);
-        if (item)
-            item->setInvalidState(QString::fromLatin1("#") + i18n("NAME") + QString::fromLatin1("?"));
-        m_dataItems.remove(*it);
-        kDebug() << "invalidateDataSources(): " << (*it) << " -> " << -1;
-//  i++;
-    }
-#endif
-    //fill remaining part of the vector
-// for (; i < dataFieldsCount; i++) { //m_dataItems.count(); i++) {
-    //newIndices[i] = number++;
-    //kDebug() << "invalidateDataSources(): " << i << " -> " << number-1;
-    //}
-
-#if 0
-    //recreate m_fieldNumbersForDataItems and mark widgets with invalid data sources
-    KexiFormDataItemInterfaceToIntMap newFieldNumbersForDataItems;
-    foreach(KexiFormDataItemInterfaceToIntMap::ConstIterator, it, m_fieldNumbersForDataItems) {
-        bool ok;
-        const int newIndex = newIndices.at(it.data(), &ok);
-        if (ok && newIndex != -1) {
-            kDebug() << it.key()->dataSource() << ": " << it.data() << " -> " << newIndex;
-            newFieldNumbersForDataItems.replace(it.key(), newIndex);
-        } else {
-            kDebug() << "removing " << it.key()->dataSource();
-            m_dataItems.remove(it.key());
-            it.key()->setInvalidState(QString::fromLatin1("#") + i18n("NAME") + QString::fromLatin1("?"));
-        }
-    }
-#endif
-// m_fieldNumbersForDataItems = newFieldNumbersForDataItems;
 
     //update data sources set (some of them may be removed)
     QSet<QString> tmpUsedDataSources;
@@ -262,13 +218,8 @@ void KexiFormDataProvider::invalidateDataSources(const QSet<QString>& invalidSou
     if (query)
         query->debug();
 
-    //if (query && m_dataItems.count()!=query->fieldCount()) {
-    // kWarning() << "m_dataItems.count()!=query->fieldCount() ("
-    //  << m_dataItems.count() << "," << query->fieldCount() << ")";
-    //}
-    //i = 0;
     m_disableFillDuplicatedDataItems = true; // temporary disable fillDuplicatedDataItems()
-    // because setColumnInfo() can activate it
+                                             // because setColumnInfo() can activate it
     for (QList<KexiFormDataItemInterface*>::iterator it(m_dataItems.begin());
             it != m_dataItems.end();) {
         KexiFormDataItemInterface *item = *it;

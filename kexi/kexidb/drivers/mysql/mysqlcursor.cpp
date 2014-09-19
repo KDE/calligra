@@ -38,7 +38,7 @@ MySqlCursor::MySqlCursor(KexiDB::Connection* conn, const QString& statement, uin
 {
     m_options |= Buffered;
     d->mysql = static_cast<MySqlConnection*>(conn)->d->mysql;
-// KexiDBDrvDbg << "MySqlCursor: constructor for query statement";
+// KexiDBDrvDbg << "Constructor for query statement";
 }
 
 MySqlCursor::MySqlCursor(Connection* conn, QuerySchema& query, uint options)
@@ -47,7 +47,7 @@ MySqlCursor::MySqlCursor(Connection* conn, QuerySchema& query, uint options)
 {
     m_options |= Buffered;
     d->mysql = static_cast<MySqlConnection*>(conn)->d->mysql;
-// KexiDBDrvDbg << "MySqlCursor: constructor for query statement";
+// KexiDBDrvDbg << "Constructor for query statement";
 }
 
 MySqlCursor::~MySqlCursor()
@@ -57,7 +57,7 @@ MySqlCursor::~MySqlCursor()
 
 bool MySqlCursor::drv_open()
 {
-// KexiDBDrvDbg << "MySqlCursor::drv_open:" << m_sql;
+// KexiDBDrvDbg << m_sql;
     // This can't be right?  mysql_real_query takes a length in order that
     // queries can have binary data - but strlen does not allow binary data.
     if (mysql_real_query(d->mysql, m_sql.toUtf8(), strlen(m_sql.toUtf8())) == 0) {
@@ -85,20 +85,15 @@ bool MySqlCursor::drv_close()
     mysql_free_result(d->mysqlres);
     d->mysqlres = 0;
     d->mysqlrow = 0;
-//js: done in superclass: m_numFields=0;
     d->lengths = 0;
     m_opened = false;
     d->numRows = 0;
     return true;
 }
 
-/*bool MySqlCursor::drv_moveFirst() {
-  return true; //TODO
-}*/
-
 void MySqlCursor::drv_getNextRecord()
 {
-// KexiDBDrvDbg << "MySqlCursor::drv_getNextRecord";
+// KexiDBDrvDbg;
     if (at() < qint64(d->numRows) && at() >= 0) {
         d->lengths = mysql_fetch_lengths(d->mysqlres);
         m_result = FetchOK;
@@ -131,7 +126,7 @@ QVariant MySqlCursor::value(uint pos)
  */
 bool MySqlCursor::drv_storeCurrentRow(RecordData& data) const
 {
-// KexiDBDrvDbg << "MySqlCursor::storeCurrentRow: Position is " << (long)m_at;
+    // KexiDBDrvDbg << "Position is" << (long)m_at;
     if (d->numRows <= 0)
         return false;
 
@@ -145,16 +140,6 @@ bool MySqlCursor::drv_storeCurrentRow(RecordData& data) const
         if (m_fieldsExpanded && !f)
             continue;
         data[i] = KexiDB::cstringToVariant(d->mysqlrow[i], f, d->lengths[i]);
-        /* moved to cstringToVariant()
-            if (f && f->type()==Field::BLOB) {
-              data[i] = QByteArray(d->mysqlrow[i], d->mysqlres->lengths[i]);
-              KexiDBDbg << data[i].toByteArray().size();
-            }
-        //! @todo more types!
-        //! @todo look at what type mysql declares!
-            else {
-              data[i] = QVariant(QString::fromUtf8((const char*)d->mysqlrow[i], d->lengths[i]));
-            }*/
     }
     return true;
 }
@@ -172,7 +157,6 @@ void MySqlCursor::drv_bufferMovePointerNext()
 
 void MySqlCursor::drv_bufferMovePointerPrev()
 {
-    //MYSQL_ROW_OFFSET ro=mysql_row_tell(d->mysqlres);
     mysql_data_seek(d->mysqlres, m_at - 1);
     d->mysqlrow = mysql_fetch_row(d->mysqlres);
     d->lengths = mysql_fetch_lengths(d->mysqlres);
@@ -181,7 +165,6 @@ void MySqlCursor::drv_bufferMovePointerPrev()
 
 void MySqlCursor::drv_bufferMovePointerTo(qint64 to)
 {
-    //MYSQL_ROW_OFFSET ro=mysql_row_tell(d->mysqlres);
     mysql_data_seek(d->mysqlres, to);
     d->mysqlrow = mysql_fetch_row(d->mysqlres);
     d->lengths = mysql_fetch_lengths(d->mysqlres);

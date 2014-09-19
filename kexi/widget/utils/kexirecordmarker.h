@@ -35,7 +35,7 @@ class KEXIGUIUTILS_EXPORT KexiRecordMarker : public QWidget
     Q_OBJECT
 
 public:
-    KexiRecordMarker(QWidget *parent = 0);
+    explicit KexiRecordMarker(QWidget *parent = 0);
     virtual ~KexiRecordMarker();
 
     int rows() const;

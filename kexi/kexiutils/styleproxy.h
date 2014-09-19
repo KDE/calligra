@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006-2010 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2006-2014 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -41,21 +41,19 @@ namespace KexiUtils
    //reimplement method(s) here...
   };
   QWidget *w = .....
-  MyStyle *s = new MyStyle( w->style() );
-  s->setParent( w ); // the style will be owned by w
+  // The style will be a proxy for w's style and will be owned by w:
+  MyStyle *s = new MyStyle(w->style(), w);
   w->setStyle( s ); // this will alter w's style a bit
-
  \endcode
 
- More info at http://doc.trolltech.com/qq/qq09-q-and-a.html#style
+ More info at http://doc.qt.digia.com/qq/qq09-q-and-a.html#style
 */
 class KEXIUTILS_EXPORT StyleProxy : public QStyle
 {
 public:
-    /*! Creates a new style proxy object.
-     No owner is set for this object, so use QObject::setParent(QObject*)
-     to control the ownership. */
-    StyleProxy(QStyle* parentStyle);
+    /*! Creates a new style proxy object with @a parentStyle parent style
+     and @a parent owner. */
+    explicit StyleProxy(QStyle* parentStyle, QObject *parent = 0);
 
     virtual ~StyleProxy();
 

@@ -89,6 +89,15 @@ inline qreal normalizeAngle(qreal a) {
     return a > 2 * M_PI ? fmod(a, 2 * M_PI) : a;
 }
 
+// converts \p a to [0, 360.0) range
+inline qreal normalizeAngleDegrees(qreal a) {
+    if (a < 0.0) {
+        a = 360.0 + fmod(a, 360.0);
+    }
+
+    return a > 360.0 ? fmod(a, 360.0) : a;
+}
+
 inline qreal shortestAngularDistance(qreal a, qreal b) {
     qreal dist = fmod(qAbs(a - b), 2 * M_PI);
     if (dist > M_PI) dist = 2 * M_PI - dist;
@@ -107,7 +116,7 @@ inline qreal incrementInDirection(qreal a, qreal inc, qreal direction) {
 }
 
 template<typename T>
-inline T pow2(T x) {
+inline T pow2(const T& x) {
     return x * x;
 }
 
@@ -124,6 +133,70 @@ inline T kisRadiansToDegrees(T radians) {
 template<class T, typename U>
 inline T kisGrowRect(const T &rect, U offset) {
     return rect.adjusted(-offset, -offset, offset, offset);
+}
+
+inline qreal kisDistance(const QPointF &pt1, const QPointF &pt2) {
+    return std::sqrt(pow2(pt1.x() - pt2.x()) + pow2(pt1.y() - pt2.y()));
+}
+
+inline qreal kisSquareDistance(const QPointF &pt1, const QPointF &pt2) {
+    return pow2(pt1.x() - pt2.x()) + pow2(pt1.y() - pt2.y());
+}
+
+#include <QLineF>
+
+inline qreal kisDistanceToLine(const QPointF &m, const QLineF &line)
+{
+    const QPointF &p1 = line.p1();
+    const QPointF &p2 = line.p2();
+
+    qreal distance = 0;
+
+    if (qFuzzyCompare(p1.x(), p2.x())) {
+        distance = qAbs(p1.y() - p2.y());
+    } else if (qFuzzyCompare(p1.y(), p2.y())) {
+        distance = qAbs(p1.x() - p2.x());
+    } else {
+        qreal A = 1;
+        qreal B = - (p1.x() - p2.x()) / (p1.y() - p2.y());
+        qreal C = - p1.x() - B * p1.y();
+
+        distance = qAbs(A * m.x() + B * m.y() + C) / std::sqrt(pow2(A) + pow2(B));
+    }
+
+    return distance;
+}
+
+inline QPointF kisProjectOnVector(const QPointF &base, const QPointF &v)
+{
+    const qreal prod = base.x() * v.x() + base.y() * v.y();
+    const qreal lengthSq = pow2(base.x()) + pow2(base.y());
+    qreal coeff = prod / lengthSq;
+
+    return coeff * base;
+}
+
+#include <QRect>
+
+inline QRect kisEnsureInRect(QRect rc, const QRect &bounds)
+{
+    if(rc.right() > bounds.right()) {
+        rc.translate(bounds.right() - rc.right(), 0);
+    }
+
+    if(rc.left() < bounds.left()) {
+        rc.translate(bounds.left() - rc.left(), 0);
+    }
+
+    if(rc.bottom() > bounds.bottom()) {
+        rc.translate(0, bounds.bottom() - rc.bottom());
+    }
+
+    if(rc.top() < bounds.top()) {
+        rc.translate(0, bounds.top() - rc.top());
+    }
+
+    return rc;
 }
 
 #endif // KISGLOBAL_H_

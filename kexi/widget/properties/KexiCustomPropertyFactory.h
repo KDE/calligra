@@ -28,7 +28,7 @@ class KEXIEXTWIDGETS_EXPORT KexiCustomPropertyFactory : public KoProperty::Facto
 {
 public:
     enum PropertyType {
-        PixmapId = KoProperty::UserDefined + 0, //!< Shared Kexi pixmap
+        PixmapId = KoProperty::UserDefined + 0,  //!< Shared Kexi pixmap
         Identifier = KoProperty::UserDefined + 1 //!< string allowing nonempty identifiers
     };
 
@@ -36,9 +36,6 @@ public:
     static void init();
 
     KexiCustomPropertyFactory();
-  
-//    virtual KoProperty::CustomProperty* createCustomProperty(KoProperty::Property *parent);
-//    virtual KoProperty::Widget* createCustomWidget(KoProperty::Property *prop);
 };
 
 #endif

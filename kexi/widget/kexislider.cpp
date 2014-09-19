@@ -323,6 +323,4 @@ void KexiSlider::updateLayout()
                                    tickPosition() == QSlider::TicksLeft ? Qt::AlignRight : Qt::AlignLeft);
         }
     }
-
 }
-

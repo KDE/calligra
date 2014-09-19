@@ -20,7 +20,6 @@
 #define KOCOLORSET
 
 #include <QObject>
-#include <QImage>
 #include <QColor>
 #include <QVector>
 #include <QPixmap>
@@ -47,6 +46,17 @@ class PIGMENTCMS_EXPORT KoColorSet : public QObject, public KoResource
 {
     Q_OBJECT
 public:
+
+    enum PaletteType {
+        UNKNOWN = 0,
+        GPL,                // GIMP
+        RIFF_PAL,           // RIFF
+        ACT,                // Photoshop binary
+        PSP_PAL,            // PaintShop Pro
+        ACO                 // Photoshop Swatches
+    };
+
+
     /**
      * Load a color set from a file. This can be a Gimp
      * palette, a RIFF palette or a Photoshop palette.
@@ -62,10 +72,13 @@ public:
     virtual ~KoColorSet();
 
     virtual bool load();
+    virtual bool loadFromDevice(QIODevice *dev);
     virtual bool save();
+    virtual bool saveToDevice(QIODevice* dev) const;
 
     virtual QString defaultFileExtension() const;
 
+    void setColumnCount(int columns);
     int columnCount();
 
 public:
@@ -75,10 +88,20 @@ public:
     KoColorSetEntry getColor(quint32 index);
     qint32 nColors();
 
-private:
-    bool init();
+protected:
+
+    virtual QByteArray generateMD5() const;
 
 private:
+
+
+    bool init();
+
+    bool loadGpl();
+    bool loadAct();
+    bool loadRiff();
+    bool loadPsp();
+    bool loadAco();
 
     QByteArray m_data;
     bool m_ownData;

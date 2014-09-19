@@ -46,7 +46,7 @@ class KexiPictureLabel : public QLabel, public KFormDesigner::FormWidgetInterfac
     Q_OBJECT
 
 public:
-    KexiPictureLabel(const QPixmap &pix, QWidget *parent);
+    explicit KexiPictureLabel(const QPixmap &pix, QWidget *parent = 0);
     virtual ~KexiPictureLabel();
 
     virtual bool setProperty(const char *name, const QVariant &value);
@@ -59,7 +59,7 @@ class Line : public QFrame, public KFormDesigner::FormWidgetInterface
     Q_PROPERTY(Qt::Orientation orientation READ orientation WRITE setOrientation)
 
 public:
-    Line(Qt::Orientation orient, QWidget *parent);
+    explicit Line(Qt::Orientation orient, QWidget *parent = 0);
     virtual ~Line();
 
     void setOrientation(Qt::Orientation orient);
@@ -102,8 +102,6 @@ public:
         const QVariant &value) { KFormDesigner::WidgetFactory::changeProperty(form, widget, name, value); }
 
 public slots:
-// moved to EditRichTextAction
-//    void  editText();
 #ifndef KEXI_FORMS_NO_LIST_WIDGET
     void  editListContents();
 #endif
@@ -118,10 +116,6 @@ protected:
     void saveTreeItem(QTreeWidgetItem *item, QDomNode &parentNode, QDomDocument &domDoc);
     void readTreeItem(QDomElement &node, QTreeWidgetItem *parent, QTreeWidget *treewidget);
 #endif
-
-private:
-//  KFormDesigner::Container *m_container;
-//  QWidget *m_widget;
 };
 
 #endif

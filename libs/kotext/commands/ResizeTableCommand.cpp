@@ -23,7 +23,6 @@
 #include "KoTableColumnStyle.h"
 #include "KoTableRowStyle.h"
 
-#include <QTextTableCell>
 #include <QTextTable>
 #include <QTextCursor>
 #include <QTextDocument>
@@ -43,9 +42,9 @@ ResizeTableCommand::ResizeTableCommand(QTextTable *t, bool horizontal, int band,
     , m_oldRowStyle(0)
 {
     if (horizontal) {
-        setText(i18nc("(qtundo-format)", "Adjust Column Width"));
+        setText(kundo2_i18n("Adjust Column Width"));
     } else {
-        setText(i18nc("(qtundo-format)", "Adjust Row Height"));
+        setText(kundo2_i18n("Adjust Row Height"));
     }
 }
 

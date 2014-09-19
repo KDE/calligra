@@ -29,7 +29,7 @@ class KEXIEXTWIDGETS_EXPORT KexiServerDriverNotFoundMessage: public KexiContextM
 {
     Q_OBJECT
 public:
-    KexiServerDriverNotFoundMessage(QWidget *parent);
+    explicit KexiServerDriverNotFoundMessage(QWidget *parent);
     
     virtual ~KexiServerDriverNotFoundMessage();
     

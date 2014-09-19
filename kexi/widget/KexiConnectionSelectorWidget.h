@@ -139,7 +139,7 @@ protected slots:
     void slotRemoteEditBtnClicked();
     void slotRemoteRemoveBtnClicked();
     void slotConnectionSelectionChanged();
-    void slotPrjTypeSelected(int id);
+    void slotPrjTypeSelected(QAbstractButton *btn);
     void slotConnectionSelected();
 
 protected:

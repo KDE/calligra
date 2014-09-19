@@ -103,9 +103,9 @@ public:
 
     QLabel *lblImportingTxt, *lblImportingErrTxt, *finishLbl;
     QCheckBox *openImportedProjectCheckBox;
-    bool fileBasedDstWasPresented : 1;
-    bool setupFileBasedSrcNeeded : 1;
-    bool importExecuted  :1; //!< used in import()
+    bool fileBasedDstWasPresented;
+    bool setupFileBasedSrcNeeded;
+    bool importExecuted; //!< used in import()
     KexiProjectSet* prjSet;
     QProgressBar *progressBar;
     KPushButton* importOptionsButton;
@@ -127,7 +127,7 @@ ImportWizard::ImportWizard(QWidget *parent, QMap<QString, QString>* args)
 	, d(new Private(args))
 {
     setModal(true);
-    setWindowTitle(i18n("Import Database"));
+    setWindowTitle(i18nc("@title:window", "Import Database"));
     setWindowIcon(koIcon("document_import_database"));
 
     setMinimumSize(400, 400);
@@ -154,11 +154,6 @@ ImportWizard::ImportWizard(QWidget *parent, QMap<QString, QString>* args)
     } else if (!d->predefinedDatabaseName.isEmpty()) {
         // setup wizard for predefined source
         // (used when external project type was opened in Kexi, e.g. mdb file)
-//  MigrateManager manager;
-//  QString driverName = manager.driverForMimeType( d->predefinedMimeType );
-//  d->srcTypeCombo->setCurrentText( driverName );
-
-//  showPage( d->srcConnPage );
         setAppropriate(d->srcConnPageItem, false);
         setAppropriate(d->srcDBPageItem, false);
         d->srcConn->showSimpleConn();
@@ -227,27 +222,30 @@ void ImportWizard::setupIntro()
     lblIntro->setWordWrap(true);
     QString msg;
     if (d->predefinedConnectionData) { //predefined import: server source
-        msg = i18n("<qt>Database Importing wizard is about to import \"%1\" database "
-                   "<nobr>(connection %2)</nobr> into a Kexi database.</qt>",
+        msg = i18nc("@info",
+                    "Database Importing Assistant is about to import <resource>%1</resource> database "
+                    "(connection <resource>%2</resource>) into a Kexi project.",
                    d->predefinedDatabaseName, d->predefinedConnectionData->serverInfoString());
     } else if (!d->predefinedDatabaseName.isEmpty()) { //predefined import: file source
 //! @todo this message is currently ok for files only
         KMimeType::Ptr mimeTypePtr = KMimeType::mimeType(d->predefinedMimeType);
         if (mimeTypePtr.isNull())
             KexiDBWarn << QString("'%1' mimetype not installed!").arg(d->predefinedMimeType);
-        msg = i18n(
-                  "<qt>Database Importing wizard is about to import <nobr>\"%1\"</nobr> file "
-                  "of type \"%2\" into a Kexi database.</qt>",
-                  QDir::convertSeparators(d->predefinedDatabaseName), mimeTypePtr ? mimeTypePtr->comment() : "???");
+        msg = i18nc("@info",
+                    "Database Importing Assistant is about to import <filename>%1</filename> file "
+                    "of type <resource>%2</resource> into a Kexi project.",
+                    QDir::convertSeparators(d->predefinedDatabaseName), mimeTypePtr ? mimeTypePtr->comment() : "???");
     } else {
-        msg = i18n("Database Importing wizard allows you to import an existing database "
-                   "into a Kexi database.");
+        msg = i18n("Database Importing Assistant allows you to import an existing database "
+                   "into a Kexi project.");
     }
     lblIntro->setText(msg + "\n\n"
-                      + i18n("Click \"Next\" button to continue or \"Cancel\" button to exit this wizard."));
+                      + i18n("Click <interface>Next</interface> button to continue or "
+                             "<interface>Cancel</interface> button to exit this assistant."));
     vbox->addWidget(lblIntro);
 
-    d->introPageItem = new KPageWidgetItem(d->introPageWidget, i18n("Welcome to the Database Importing Wizard"));
+    d->introPageItem = new KPageWidgetItem(d->introPageWidget,
+                                           i18n("Welcome to the Database Importing Assistant"));
     addPage(d->introPageItem);
 }
 
@@ -272,8 +270,6 @@ void ImportWizard::setupSrcConn()
     excludedFilters += "application/x-kexiproject-shortcut";
     excludedFilters += "application/x-kexi-connectiondata";
     d->srcConn->fileWidget->setExcludedFilters(excludedFilters);
-
-// d->srcConn->hideHelpers();
     vbox->addWidget(d->srcConn);
 
     d->srcConnPageItem = new KPageWidgetItem(d->srcConnPageWidget, i18n("Select Location for Source Database"));
@@ -308,7 +304,7 @@ void ImportWizard::setupDstType()
     vbox->addLayout(hbox);
     KexiUtils::setStandardMarginsAndSpacing(hbox);
     QLabel *lbl = new QLabel(i18n("Destination database type:") /*+ ' '*/, d->dstTypePageWidget);
-    lbl->setAlignment(Qt::AlignAuto | Qt::AlignTop);
+    lbl->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     hbox->addWidget(lbl);
 
     d->dstPrjTypeSelector = new KexiPrjTypeSelector(d->dstTypePageWidget);
@@ -326,7 +322,6 @@ void ImportWizard::setupDstType()
     lbl->setBuddy(d->dstServerTypeCombo);
 
 //! @todo hardcoded: find a way to preselect default engine item
-    //d->dstTypeCombo->setCurrentText("SQLite3");
 
     d->dstTypePageItem = new KPageWidgetItem(d->dstTypePageWidget, i18n("Select Destination Database Type"));
     addPage(d->dstTypePageItem);
@@ -336,12 +331,12 @@ void ImportWizard::setupDstType()
 //
 void ImportWizard::setupDstTitle()
 {
-    d->dstTitlePageWidget = new KexiDBTitlePage(i18n("Destination project's title:"), this);
+    d->dstTitlePageWidget = new KexiDBTitlePage(i18n("Destination project's caption:"), this);
     d->dstTitlePageWidget->layout()->setMargin(KDialog::marginHint());
     d->dstTitlePageWidget->updateGeometry();
     d->dstNewDBNameLineEdit = d->dstTitlePageWidget->le_title;
 
-    d->dstTitlePageItem = new KPageWidgetItem(d->dstTitlePageWidget, i18n("Select Destination Database Project's Title"));
+    d->dstTitlePageItem = new KPageWidgetItem(d->dstTitlePageWidget, i18n("Enter Destination Database Project's Caption"));
     addPage(d->dstTitlePageItem);
 }
 
@@ -362,21 +357,10 @@ void ImportWizard::setupDst()
     connect(d->dstConn, SIGNAL(connectionItemExecuted(ConnectionDataLVItem*)),
             this, SLOT(next()));
 
-// d->dstConn->hideHelpers();
     d->dstConn->showSimpleConn();
     //anyway, db files will be _saved_
     d->dstConn->fileWidget->setMode(KexiFileWidget::SavingFileBasedDB);
-// d->dstConn->hideHelpers();
-// d->dstConn->d->file->btn_advanced->hide();
-// d->dstConn->d->file->label->hide();
-// d->dstConn->d->file->lbl->hide();
-    //d->dstConn->d->file->spacer7->hide();
-
-
-    //js dstNewDBName = new KLineEdit(dstControls);
-    //   dstNewDBName->setText(i18n("Enter new database name here"));
-
-    d->dstPageItem = new KPageWidgetItem(d->dstPageWidget, i18n("Select Location for Destination Database"));
+    d->dstPageItem = new KPageWidgetItem(d->dstPageWidget, i18n("Select Location for Destination Database Project"));
     addPage(d->dstPageItem);
 }
 
@@ -393,16 +377,19 @@ void ImportWizard::setupImportType()
     QVBoxLayout *importTypeGroupBoxLyr = new QVBoxLayout;
 
     importTypeGroupBoxLyr->addWidget(
-        d->importTypeStructureAndDataCheckBox = new QRadioButton(i18n("Structure and data"), d->importTypeGroupBox));
+        d->importTypeStructureAndDataCheckBox = new QRadioButton(
+            i18nc("Scope of import", "Structure and data"), d->importTypeGroupBox));
     d->importTypeStructureAndDataCheckBox->setChecked(true);
 
     importTypeGroupBoxLyr->addWidget(
-        d->importTypeStructureOnlyCheckBox = new QRadioButton(i18n("Structure only"), d->importTypeGroupBox));
+        d->importTypeStructureOnlyCheckBox = new QRadioButton(
+            i18nc("Scope of import", "Structure only"), d->importTypeGroupBox));
 
     importTypeGroupBoxLyr->addStretch(1);
     d->importTypeGroupBox->setLayout(importTypeGroupBoxLyr);
 
-    d->importTypePageItem = new KPageWidgetItem(d->importTypePageWidget, i18n("Select Type of Import"));
+    d->importTypePageItem = new KPageWidgetItem(d->importTypePageWidget,
+                                                i18n("Select Scope of Import"));
     addPage(d->importTypePageItem);
 }
 
@@ -437,7 +424,7 @@ void ImportWizard::setupImporting()
     QHBoxLayout *importOptionsButtonLyr = new QHBoxLayout;
     options_vbox->addLayout(importOptionsButtonLyr);
     d->importOptionsButton = new KPushButton(koIcon("configure"),
-                                            i18n("Advanced Options"), options_widget);
+                                             i18n("Advanced Options"), options_widget);
     connect(d->importOptionsButton, SIGNAL(clicked()),
             this, SLOT(slotOptionsButtonClicked()));
     importOptionsButtonLyr->addStretch(1);
@@ -494,9 +481,9 @@ bool ImportWizard::checkUserInput()
     }
 
     if (! finishtxt.isNull()) {
-        finishtxt = "<qt>" + i18n("Following problems were found with the data you entered:") +
+        finishtxt = "<qt>" + i18n("Following issues were found with the data you entered:") +
                     "<br>" + finishtxt + "<br><br>" +
-                    i18n("Please click 'Back' button and correct these errors.");
+                    i18n("Please click <interface>Back</interface> button and correct these issues.");
         d->lblImportingErrTxt->setText(finishtxt);
     }
 
@@ -507,19 +494,11 @@ void ImportWizard::arriveSrcConnPage()
 {
     d->srcConnPageWidget->hide();
 
-// checkIfSrcTypeFileBased(d->srcTypeCombo->currentText());
-// if (fileBasedSrcSelected()) {
-//moved  d->srcConn->showSimpleConn();
     /*! @todo KexiFileWidget needs "open file" and "open server" modes
     in addition to just "open" */
     if (d->setupFileBasedSrcNeeded) {
         d->setupFileBasedSrcNeeded = false;
         QSet<QString> additionalMimeTypes;
-        /* moved
-            if (d->srcTypeCombo->currentText().contains("Access")) {
-        //! @todo tmp: hardcoded!
-              additionalMimeTypes << "application/vnd.ms-access";
-            }*/
         d->srcConn->fileWidget->setMode(KexiFileWidget::Opening);
         d->srcConn->fileWidget->setAdditionalFilters(additionalMimeTypes);
 
@@ -533,14 +512,13 @@ void ImportWizard::arriveSrcDBPage()
 {
     if (fileBasedSrcSelected()) {
         //! @todo Back button doesn't work after selecting a file to import
-        //moved showPage(d->dstTypePage);
     } else if (!d->srcDBName) {
         d->srcDBPageWidget->hide();
-        kDebug() << "Looks like we need a project selector widget!";
+        //kDebug() << "Looks like we need a project selector widget!";
 
         KexiDB::ConnectionData* condata = d->srcConn->selectedConnectionData();
         if (condata) {
-            d->prjSet = new KexiProjectSet(*condata);
+            d->prjSet = new KexiProjectSet(condata);
             QVBoxLayout *vbox = new QVBoxLayout(d->srcDBPageWidget);
             KexiUtils::setStandardMarginsAndSpacing(vbox);
             d->srcDBName = new KexiProjectSelectorWidget(d->srcDBPageWidget, d->prjSet);
@@ -567,7 +545,7 @@ void ImportWizard::arriveDstTitlePage()
             d->dstNewDBNameLineEdit->setText(d->predefinedDatabaseName);
         } else {
             if (!d->srcDBName || !d->srcDBName->selectedProjectData()) {
-                back(); //todo!
+                back(); //!< @todo
                 return;
             }
             d->dstNewDBNameLineEdit->setText(d->srcDBName->selectedProjectData()->databaseName());
@@ -578,8 +556,6 @@ void ImportWizard::arriveDstTitlePage()
 void ImportWizard::arriveDstPage()
 {
     d->dstPageWidget->hide();
-
-// checkIfDstTypeFileBased(d->dstTypeCombo->currentText());
     if (fileBasedDstSelected()) {
         d->dstConn->showSimpleConn();
         d->dstConn->fileWidget->setMode(KexiFileWidget::SavingFileBasedDB);
@@ -598,27 +574,23 @@ void ImportWizard::arriveImportingPage()
 {
     d->importingPageWidget->hide();
     if (checkUserInput()) {
-        //setNextEnabled(d->importingPageWidget, true);
         enableButton(KDialog::User2, true);
     } else {
-        //setNextEnabled(d->importingPageWidget, false);
         enableButton(KDialog::User2, false);
     }
 
     d->lblImportingTxt->setText(i18n(
-                                   "All required information has now "
-                                   "been gathered. Click \"Next\" button to start importing.\n\n"
-                                   "Depending on size of the database this may take some time."
+                                   "<para>All required information has now "
+                                   "been gathered. Click <interface>Next</interface> button to start importing.</para>"
+                                   "<note>Depending on size of the database this may take some time.</note>"
                                    /*"Note: You may be asked for extra "
                                    "information such as field types if "
                                    "the wizard could not automatically "
                                    "determine this for you."*/));
 
-//todo
-
     //temp. hack for MS Access driver only
 //! @todo for other databases we will need KexiMigration::Conenction
-//! and KexiMigration::Driver classes
+//!       and KexiMigration::Driver classes
     bool showOptions = false;
     if (fileBasedSrcSelected()) {
         Kexi::ObjectStatus result;
@@ -641,9 +613,6 @@ void ImportWizard::arriveImportingPage()
 
 void ImportWizard::arriveFinishPage()
 {
-// backButton()->hide();
-// cancelButton()->setEnabled(false);
-// d->finishLbl->setText( d->successText.arg(d->dstNewDBNameLineEdit->text()) );
 }
 
 bool ImportWizard::fileBasedSrcSelected() const
@@ -657,9 +626,7 @@ bool ImportWizard::fileBasedSrcSelected() const
 
 bool ImportWizard::fileBasedDstSelected() const
 {
-
-    return d->dstPrjTypeSelector->buttonGroup->selectedId() == 1;
-
+    return d->dstPrjTypeSelector->option_file->isChecked();
 }
 
 void ImportWizard::progressUpdated(int percent)
@@ -676,7 +643,9 @@ QString ImportWizard::driverNameForSelectedSource()
         KMimeType::Ptr ptr = KMimeType::findByFileContent(selectedSourceFileName());
         if (!ptr
                 || ptr.data()->name() == "application/octet-stream"
-                || ptr.data()->name() == "text/plain") {
+                || ptr.data()->name() == "text/plain"
+                || ptr.data()->name() == "application/zip")
+        {
             //try by URL:
             ptr = KMimeType::findByUrl(selectedSourceFileName());
         }
@@ -714,7 +683,7 @@ KexiMigrate* ImportWizard::prepareImport(Kexi::ObjectStatus& result)
     // Start with a driver manager
     KexiDB::DriverManager manager;
 
-    kDebug() << "Creating destination driver...";
+    //kDebug() << "Creating destination driver...";
 
     // Get a driver to the destination database
     KexiDB::Driver *destDriver = manager.driver(
@@ -724,9 +693,8 @@ KexiMigrate* ImportWizard::prepareImport(Kexi::ObjectStatus& result)
                                  );
     if (!destDriver || manager.error()) {
         result.setStatus(&manager);
-        kDebug() << "Manager error...";
+        kWarning() << "Manager error...";
         manager.debugError();
-//  result.setStatus(&manager);
     }
 
     // Set up destination connection data
@@ -738,7 +706,8 @@ KexiMigrate* ImportWizard::prepareImport(Kexi::ObjectStatus& result)
             kDebug() << "Server destination...";
             cdata = d->dstConn->selectedConnectionData();
             dbname = d->dstNewDBNameLineEdit->text();
-        } else { // if (d->dstTypeCombo->currentText().toLower() == KexiDB::defaultFileBasedDriverName())
+        }
+        else {
             //file-based project
             kDebug() << "File Destination...";
             cdata = new KexiDB::ConnectionData();
@@ -748,13 +717,6 @@ KexiMigrate* ImportWizard::prepareImport(Kexi::ObjectStatus& result)
             cdata->setFileName(dbname);
             kDebug() << "Current file name: " << dbname;
         }
-        /*  else
-            {
-              //TODO This needs a better message
-              //KMessageBox::error(this,
-              result.setStatus(i18n("No connection data is available. You did not select a destination filename."),"");
-              //return false;
-            } */
     }
 
     // Find a source (migration) driver name
@@ -803,7 +765,6 @@ KexiMigrate* ImportWizard::prepareImport(Kexi::ObjectStatus& result)
         }
 
         KexiMigration::Data* md = new KexiMigration::Data();
-        // delete md->destination;
         md->destination = new KexiProjectData(*cdata, dbname);
         if (fileBasedSrcSelected()) {
             KexiDB::ConnectionData* conn_data = new KexiDB::ConnectionData();
@@ -832,10 +793,8 @@ KexiMigrate* ImportWizard::prepareImport(Kexi::ObjectStatus& result)
 tristate ImportWizard::import()
 {
     d->importExecuted = true;
-
     Kexi::ObjectStatus result;
     KexiMigrate* sourceDriver = prepareImport(result);
-
     bool acceptingNeeded = false;
 
     // Perform import
@@ -845,22 +804,21 @@ tristate ImportWizard::import()
                                            QVariant(d->sourceDBEncoding.toUpper().remove(' ')) // "CP1250", not "cp 1250"
                                           );
         }
-
         if (!sourceDriver->checkIfDestinationDatabaseOverwritingNeedsAccepting(&result, acceptingNeeded)) {
             kDebug() << "Abort import cause checkIfDestinationDatabaseOverwritingNeedsAccepting "
             "returned false.";
             return false;
         }
 
-        kDebug() << sourceDriver->data()->destination->databaseName();
-        kDebug() << "Performing import...";
+        //kDebug() << sourceDriver->data()->destination->databaseName();
+        //kDebug() << "Performing import...";
     }
 
     if (sourceDriver && !result.error() && acceptingNeeded) {
         // ok, the destination-db already exists...
         if (KMessageBox::Yes != KMessageBox::warningYesNo(this,
-                "<qt>" + i18n("Database %1 already exists."
-                              "<p>Do you want to replace it with a new one?",
+                "<qt>" + i18n("<p>Database %1 already exists.</p>"
+                              "<p>Do you want to replace it with a new one?</p>",
                               sourceDriver->data()->destination->infoString()),
                 0, KGuiItem(i18n("&Replace")), KGuiItem(i18n("No")))) {
             return cancelled;
@@ -873,10 +831,8 @@ tristate ImportWizard::import()
 
     if (sourceDriver && !result.error() && sourceDriver->performImport(&result)) {
         if (d->args) {
-//    if (fileBasedDstSelected()) {
             d->args->insert("destinationDatabaseName",
-                           sourceDriver->data()->destination->databaseName());
-//    }
+                            sourceDriver->data()->destination->databaseName());
             QString destinationConnectionShortcut(
                 Kexi::connset().fileNameForConnectionData(d->dstConn->selectedConnectionData()));
             if (!destinationConnectionShortcut.isEmpty()) {
@@ -900,11 +856,10 @@ tristate ImportWizard::import()
         d->finishPageItem->setHeader(i18n("Failure"));
         d->finishLbl->setText(
             i18n(
-                "<p>Import failed.</p>%1<p>%2</p><p>You can click \"Back\" button and try again.</p>",
+                "<para>Import failed.</para><para>%1</para><para>%2</para><para>You can click <interface>Back</interface> button and try again.</para>",
                 msg, details));
         return false;
     }
-// delete kexi_conn;
     return true;
 }
 
@@ -959,7 +914,7 @@ void ImportWizard::next()
             tristate res = import();
             if (true == res) {
                 d->finishLbl->setText(
-                    i18n("Database has been imported into Kexi database project \"%1\".",
+                    i18n("Database has been imported into Kexi project \"%1\".",
                          d->dstNewDBNameLineEdit->text()));
                 enableButtonCancel(false);
                 enableButton(KDialog::User3, false);
@@ -980,20 +935,19 @@ void ImportWizard::next()
                 next();
             else if (~res) {
                 arriveImportingPage();
-                //   back();
             }
             d->importExecuted = false;
             return;
         }
     }
 
-    setAppropriate(d->srcDBPageItem, !fileBasedSrcSelected() && !d->predefinedConnectionData);   //skip d->srcDBPage
+    setAppropriate(d->srcDBPageItem, !fileBasedSrcSelected() && !d->predefinedConnectionData);
     KAssistantDialog::next();
 }
 
 void ImportWizard::back()
 {
-    setAppropriate(d->srcDBPageItem, !fileBasedSrcSelected() && !d->predefinedConnectionData);   //skip d->srcDBPage
+    setAppropriate(d->srcDBPageItem, !fileBasedSrcSelected() && !d->predefinedConnectionData);
     KAssistantDialog::back();
 }
 
@@ -1023,10 +977,6 @@ void ImportWizard::helpClicked()
     if (currentPage() == d->introPageItem) {
         KMessageBox::information(this, i18n("No help is available for this page."), i18n("Help"));
     }
-    /* else if (currentPage() == d->srcTypePage)
-      {
-        KMessageBox::information(this, i18n("Here you can choose the type of data to import data from."), i18n("Help"));
-      }*/
     else if (currentPage() == d->srcConnPageItem) {
         KMessageBox::information(this, i18n("Here you can choose the location to import data from."), i18n("Help"));
     } else if (currentPage() == d->srcDBPageItem) {

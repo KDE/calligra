@@ -20,23 +20,11 @@
 #ifndef KEXI_MIGRATE_P_H
 #define KEXI_MIGRATE_P_H
 
-#include <kpluginfactory.h>
+#include <db/pluginloader.h>
 
 //! Implementation of driver's static version information and plugin entry point.
 #define K_EXPORT_KEXIMIGRATE_DRIVER( class_name, internal_name ) \
-    K_PLUGIN_FACTORY(factory, registerPlugin<class_name>();) \
-    K_EXPORT_PLUGIN(factory("keximigrate_" # internal_name)) \
-    K_EXPORT_PLUGIN_VERSION(KDE_MAKE_VERSION(KEXI_MIGRATION_VERSION_MAJOR, KEXI_MIGRATION_VERSION_MINOR, 0))
-
-/*! Driver's static version information, automatically implemented for KexiDB drivers.
- Put this into migration driver class declaration just like Q_OBJECT macro. */
-#if 0 // replaced by KPluginLoader::pluginVersion()
-#define KEXIMIGRATION_DRIVER \
-    public: \
-    virtual int versionMajor() const; \
-    virtual int versionMinor() const;
-#else
-#define KEXIMIGRATION_DRIVER
-#endif
+    KEXI_EXPORT_PLUGIN("keximigrate", class_name, internal_name, \
+                       KEXI_MIGRATION_VERSION_MAJOR, KEXI_MIGRATION_VERSION_MINOR, 0)
 
 #endif

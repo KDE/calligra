@@ -1,2 +1,4 @@
 #! /bin/sh
-$XGETTEXT *.cpp *.h -o $podir/KexiRelationDesignShapePlugin.pot
+source ../../../../calligra_xgettext.sh
+
+calligra_xgettext KexiRelationDesignShapePlugin.pot *.cpp *.h

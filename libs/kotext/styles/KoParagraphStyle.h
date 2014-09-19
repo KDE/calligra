@@ -29,22 +29,15 @@
 
 #include <KoXmlReaderForward.h>
 #include <KoBorder.h>
-#include <KoShadowStyle.h>
 
-#include <QObject>
-#include <QVector>
-#include <QString>
 #include <QVariant>
 #include <QTextFormat>
 
 extern QVariant val;
-struct Property;
-class KoCharacterStyle;
+class KoShadowStyle;
 class KoListStyle;
 class QTextBlock;
-class KoStyleStack;
 class KoGenStyle;
-class KoGenStyles;
 class KoShapeLoadingContext;
 class KoShapeSavingContext;
 class KoList;
@@ -62,7 +55,7 @@ class KOTEXT_EXPORT KoParagraphStyle : public KoCharacterStyle
     Q_OBJECT
 public:
     enum Property {
-        // Every 10 properties, the decimal number shown indicates the decimal offstet over the QTextFormat::UserProperty enum value
+        // Every 10 properties, the decimal number shown indicates the decimal offset over the QTextFormat::UserProperty enum value
         StyleId = QTextFormat::UserProperty + 1,
         // Linespacing properties
         PercentLineHeight,  ///< this propery is used for a percentage of the highest character on that line

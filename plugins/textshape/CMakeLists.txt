@@ -16,8 +16,7 @@ include_directories(
     ${KOTEXT_INCLUDES}
     ${TEXTLAYOUT_INCLUDES}
     ${FLAKE_INCLUDES}
-    ${KOMAIN_INCLUDES}
-    ${KDE4_INCLUDE_DIR}/threadweaver/)
+    ${KOMAIN_INCLUDES})
 
 ########### Flake Plugin library ###############
 
@@ -39,6 +38,7 @@ SET ( textshape_SRCS
     TextChanges.cpp
     TextChange.cpp
     FontSizeAction.cpp
+    FontFamilyAction.cpp
 
     ReferencesTool.cpp
     ReferencesToolFactory.cpp
@@ -108,6 +108,7 @@ SET ( textshape_SRCS
     dialogs/ListLevelChooser.cpp
     dialogs/SimpleAnnotationWidget.cpp
     dialogs/ManageBookmarkDialog.cpp
+    dialogs/SectionFormatDialog.cpp
 
     commands/ChangeListLevelCommand.cpp
     commands/ShowChangesCommand.cpp
@@ -165,27 +166,28 @@ kde4_add_ui_files(textshape_SRCS
     dialogs/TrackedChangeManager.ui
     dialogs/LinkInsertionDialog.ui
     dialogs/ManageBookmark.ui
+    dialogs/SectionFormatDialog.ui
 
 )
 
 kde4_add_plugin(calligra_shape_text ${textshape_SRCS})
 
 target_link_libraries(calligra_shape_text kotext kotextlayout komain ${EXTRA_LIBS})
-if( SHOULD_BUILD_RDF )
+if( SHOULD_BUILD_FEATURE_RDF )
     target_link_libraries(calligra_shape_text ${SOPRANO_LIBRARIES})
-endif( SHOULD_BUILD_RDF )
+endif( SHOULD_BUILD_FEATURE_RDF )
 
 
 install(TARGETS calligra_shape_text DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES calligra_shape_text.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES calligra_shape_text.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 #kde4_install_icons( ${DATA_INSTALL_DIR}/calligra/icons )
 
 if(BUILD_TEXTDOCUMENT_INSPECTOR)
     # workaround: to avoid translations the real desktop file is only generated
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/calligra_docker_textdocumentinspection.desktop.in ${CMAKE_CURRENT_BINARY_DIR}/calligra_docker_textdocumentinspection.desktop)
 
-    install( FILES ${CMAKE_CURRENT_BINARY_DIR}/calligra_docker_textdocumentinspection.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+    install( FILES ${CMAKE_CURRENT_BINARY_DIR}/calligra_docker_textdocumentinspection.desktop DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
 endif(BUILD_TEXTDOCUMENT_INSPECTOR)

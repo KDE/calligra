@@ -18,7 +18,7 @@
 
 import QtQuick 1.1
 import org.krita.sketch 1.0
-import "components"
+import org.krita.sketch.components 1.0
 import "panels"
 
 Page {
@@ -28,7 +28,7 @@ Page {
         width: parent.width;
         height: parent.height;
 
-        file: parent.initialFile;
+        file: Settings.currentFile;
 
         onInteractionStarted: { panelBar.collapse(); Krita.VirtualKeyboardController.requestHideKeyboard(); }
         onLoadingFinished: {
@@ -168,7 +168,15 @@ Page {
         }
         Connections {
             target: sketchView;
-            onFloatingMessageRequested: messageStack.showMessage(message, iconName);
+            onFloatingMessageRequested: {
+                if(message == undefined || message.startsWith == undefined)
+                    return;
+
+                if(message.startsWith("Zoom") || message.startsWith("Rotation"))
+                    return;
+                
+                messageStack.showMessage(message, iconName);
+            }
         }
     }
 
@@ -341,7 +349,10 @@ Page {
 
             if(newFileOptions !== undefined) {
                 loadingDialog.show("Creating new image...");
-                if(newFileOptions.source === undefined) {
+                if(newFileOptions.template !== undefined) {
+                    Settings.currentFile = Krita.ImageBuilder.createImageFromTemplate(newFileOptions);
+                    settings.temporaryFile = true;
+                } else if(newFileOptions.source === undefined) {
                     Settings.currentFile = Krita.ImageBuilder.createBlankImage(newFileOptions);
                     Settings.temporaryFile = true;
                 } else if(newFileOptions.source == "clipboard") {

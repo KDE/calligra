@@ -1,2 +1,4 @@
 #! /bin/sh
-$XGETTEXT `find . -name \*.cpp ` -o $podir/koreport_barcodeplugin.pot
+source ../../../calligra_xgettext.sh
+
+calligra_xgettext koreport_barcodeplugin.pot `find . -name \*.cpp`

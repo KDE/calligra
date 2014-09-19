@@ -41,8 +41,10 @@
 #include <QDeclarativeEngine>
 #include <QSettings>
 #include <QTimer>
-#include <QFileDialog>
 #include <QDesktopServices>
+
+#include <KoFilterManager.h>
+#include <KoFileDialog.h>
 
 MainWindow::MainWindow (QWidget* parent)
 : QMainWindow(parent)
@@ -122,7 +124,16 @@ void MainWindow::adjustWindowSize (QSize size)
 
 void MainWindow::openFileDialog()
 {
-    const QString path = QFileDialog::getOpenFileName (this, i18n("Open File"), QDesktopServices::storageLocation (QDesktopServices::DocumentsLocation));
+
+    KoFileDialog dialog(m_view, KoFileDialog::OpenFiles, "OpenDocument");
+    dialog.setCaption(i18n("Open File"));
+    dialog.setDefaultDir(QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
+    dialog.setMimeTypeFilters(KoFilterManager::mimeFilter("application/vnd.oasis.opendocument.text", KoFilterManager::Import)
+                              + KoFilterManager::mimeFilter("application/vnd.oasis.opendocument.presentation", KoFilterManager::Import)
+                              + KoFilterManager::mimeFilter("application/vnd.oasis.opendocument.spreadsheet", KoFilterManager::Import));
+
+    const QString path = dialog.url();
+
     if (!path.isEmpty()) {
         QObject* object = m_view->rootObject();
         Q_ASSERT (object);

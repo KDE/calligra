@@ -122,6 +122,7 @@ void FilterEffectEditWidget::editShape(KoShape *shape, KoCanvasBase * canvas)
 {
     if (!m_shape) {
         delete m_effects;
+        m_effects = 0;
     }
 
     m_shape = shape;
@@ -396,7 +397,7 @@ void FilterEffectEditWidget::removeFromPresets()
         return;
     }
 
-    server->removeResource(resource);
+    server->removeResourceAndBlacklist(resource);
 }
 
 void FilterEffectEditWidget::presetSelected(KoResource *resource)

@@ -31,7 +31,7 @@ namespace KexiDB
 class pqxxSqlConnectionInternal : public ConnectionInternal
 {
 public:
-    pqxxSqlConnectionInternal(Connection *conn);
+    explicit pqxxSqlConnectionInternal(Connection *conn);
 
     virtual ~pqxxSqlConnectionInternal();
 
