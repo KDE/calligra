@@ -108,3 +108,4 @@ Comment[zh_TW]=一個樣本，以便快速建立傳真聯繫
 Icon=template_fax
 X-KDE-MeasureSystem=imperial
 X-KDE-VariantName=Letter
+X-KDE-Thumbnail=.thumbnail/fax.png

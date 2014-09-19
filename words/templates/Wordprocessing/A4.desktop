@@ -103,3 +103,4 @@ Comment[zh_CN]=创建带有小页边距的空 A4 文档。
 Comment[zh_TW]=建立一個每頁兩欄的 A4 文件。
 Icon=template_a4
 X-KDE-MeasureSystem=metric
+X-KDE-Thumbnail=.thumbnail/a4.png
