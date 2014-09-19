@@ -63,7 +63,8 @@ Page {
                             anchors.centerIn: parent;
                             height: parent.height - Constants.DefaultMargin * 2;
                             width: height;
-                            source: model.thumbnail ? Settings.theme.icon(model.thumbnail, true) : "";
+                            source: model.thumbnail ? model.thumbnail : "";
+                            fillMode: Image.PreserveAspectFit;
                             smooth: true;
                         }
                         Rectangle {
