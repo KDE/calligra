@@ -4106,6 +4106,12 @@ void KexiMainWindow::addSearchableModel(KexiSearchableModel *model)
     d->tabbedToolBar->addSearchableModel(model);
 }
 
+void KexiMainWindow::setReasonableDialogSize(QDialog *dialog)
+{
+    dialog->setMinimumSize(600, 400);
+    dialog->resize(size() * 0.8);
+}
+
 void KexiMainWindow::restoreDesignTabAndActivateIfNeeded(const QString &tabName)
 {
     d->tabbedToolBar->showTab(tabName);

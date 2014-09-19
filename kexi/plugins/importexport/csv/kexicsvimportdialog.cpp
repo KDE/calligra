@@ -253,7 +253,7 @@ KexiCSVImportDialog::KexiCSVImportDialog(Mode mode, QWidget * parent)
 //! @todo use "Paste CSV Data From Clipboard" caption for mode==Clipboard
     setObjectName("KexiCSVImportDialog");
     setSizeGripEnabled(true);
-    adjustSize();
+    KexiMainWindowIface::global()->setReasonableDialogSize(this);
     KDialog::centerOnScreen(this);
 
     setButtonGuiItem(ConfigureButton, KStandardGuiItem::configure());
@@ -793,8 +793,6 @@ void KexiCSVImportDialog::initLater()
     }
 
     currentCellChanged(m_table->index(0,0), QModelIndex());
-    adjustSize();
-    KDialog::centerOnScreen(this);
 
     if (m_loadingProgressDlg)
         m_loadingProgressDlg->hide();
