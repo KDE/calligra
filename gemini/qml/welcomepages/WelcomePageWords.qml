@@ -73,7 +73,7 @@ Page {
             bottom: parent.bottom;
             bottomMargin: 0;
         }
-        initialPage: customDocWords;
+        initialPage: templatesWords;
     }
     Component { id: customDocWords; CustomDocWords { } }
     Component { id: templatesWords; TemplatesWords { } }
