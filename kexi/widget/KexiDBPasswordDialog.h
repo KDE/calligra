@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2013 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -37,7 +37,18 @@ class KEXIEXTWIDGETS_EXPORT KexiDBPasswordDialog : public KPasswordDialog
 {
     Q_OBJECT
 public:
-    KexiDBPasswordDialog(QWidget *parent, KexiDB::ConnectionData& cdata, bool showDetailsButton = false);
+    enum Flag
+    {
+        NoFlags = 0x00,
+        ShowDetailsButton = 0x01, //!< If set, the details button will be displayed
+        ServerReadOnly = 0x02     //!< If set, the server line edit will be read-only
+    };
+    Q_DECLARE_FLAGS(Flags, Flag)
+
+    //! Constructs a new password dialog.
+    //! cdata.password is modified only when user provided the password.
+    //! If @a showDetailsButton is true, the dialog displays connection details.
+    KexiDBPasswordDialog(QWidget *parent, KexiDB::ConnectionData& cdata, Flags flags = NoFlags);
     virtual ~KexiDBPasswordDialog();
 
     bool showConnectionDetailsRequested() const;
@@ -45,6 +56,7 @@ public:
     //! Asks the user for password if needed and sets it to data.
     //! @return true if password is needed and user provided the password, cancelled is password
     //! is needed but user pressed Cancel and false if password is not needed.
+    //! data->password is modified only when user provided the password.
     static tristate getPasswordIfNeeded(KexiDB::ConnectionData *data, QWidget *parent = 0);
 
 protected slots:
@@ -55,5 +67,7 @@ protected:
     class Private;
     Private* const d;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(KexiDBPasswordDialog::Flags)
 
 #endif

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2013 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -27,6 +27,8 @@
 
 #include <db/connectiondata.h>
 
+#include <kexiutils/utils.h>
+
 class KexiDBPasswordDialog::Private
 {
  public:
@@ -45,13 +47,13 @@ KexiDBPasswordDialog::Private::Private(KexiDB::ConnectionData* data)
 
 KexiDBPasswordDialog::Private::~Private()
 {
-
 }
-#include <kexiutils/utils.h>
 
-KexiDBPasswordDialog::KexiDBPasswordDialog(QWidget *parent, KexiDB::ConnectionData& cdata, bool showDetailsButton)
-        : KPasswordDialog(parent, ShowUsernameLine | ShowDomainLine,
-                          showDetailsButton ? KDialog::User1 : KDialog::None)
+KexiDBPasswordDialog::KexiDBPasswordDialog(QWidget *parent, KexiDB::ConnectionData& cdata,
+                                           Flags flags)
+        : KPasswordDialog(parent,
+            ShowUsernameLine | ShowDomainLine | ((flags & ServerReadOnly) ? DomainReadOnly : KPasswordDialog::NoFlags),
+            (flags & ShowDetailsButton) ? KDialog::User1 : KDialog::None)
         , d(new Private(&cdata))
 {
     setCaption(i18nc("@title:window", "Opening Database"));
@@ -78,7 +80,7 @@ KexiDBPasswordDialog::KexiDBPasswordDialog(QWidget *parent, KexiDB::ConnectionDa
     setUsernameReadOnly(true);
     setUsername(usr);
 
-    if (showDetailsButton) {
+    if ((flags & ShowDetailsButton)) {
         connect(this, SIGNAL(user1Clicked()),
                 this, SLOT(slotShowConnectionDetails()));
         setButtonText(KDialog::User1, i18n("&Details") + " >>");
@@ -123,7 +125,7 @@ tristate KexiDBPasswordDialog::getPasswordIfNeeded(KexiDB::ConnectionData *data,
 {
     if (data->passwordNeeded() && data->password.isNull() /* null means missing password */) {
         //ask for password
-        KexiDBPasswordDialog pwdDlg(parent, *data, false /*!showDetailsButton*/);
+        KexiDBPasswordDialog pwdDlg(parent, *data, KexiDBPasswordDialog::ServerReadOnly);
         return QDialog::Accepted == pwdDlg.exec() ? tristate(true): cancelled;
     }
     return false;
