@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -270,6 +270,9 @@ public:
     virtual void addSearchableModel(KexiSearchableModel *model) = 0;
     
     virtual KexiUserFeedbackAgent* userFeedbackAgent() const = 0;
+
+    //! Sets reasonable dialog size based on main window size, that is 80% of its size.
+    virtual void setReasonableDialogSize(QDialog *dialog) = 0;
 
 protected: // slots:
     virtual void slotObjectRenamed(const KexiPart::Item &item, const QString& oldName) = 0;

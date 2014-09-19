@@ -345,7 +345,7 @@ KexiCSVImportDialog::KexiCSVImportDialog(Mode mode, QWidget * parent)
     //setDefaultButton(Ok);
     setObjectName("KexiCSVImportDialog");
     setSizeGripEnabled(true);
-    adjustSize();
+    KexiMainWindowIface::global()->setReasonableDialogSize(this);
     KDialog::centerOnScreen(this);
 
     setButtonGuiItem(ConfigureButton, KStandardGuiItem::configure());
@@ -906,10 +906,6 @@ void KexiCSVImportDialog::initLater()
     }
 
     currentCellChanged(m_table->index(0,0), QModelIndex());
-
-// updateGeometry();
-    adjustSize();
-    KDialog::centerOnScreen(this);
 
     if (m_loadingProgressDlg)
         m_loadingProgressDlg->hide();
