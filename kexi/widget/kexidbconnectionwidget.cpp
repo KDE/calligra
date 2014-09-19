@@ -330,7 +330,10 @@ KexiProjectData KexiDBConnectionTabWidget::currentProjectData()
     data.connectionData()->useLocalSocketFile = detailsWidget->chkUseSocket->isChecked();
 //UNSAFE!!!!
     data.connectionData()->userName = mainWidget->userEdit->text();
-    data.connectionData()->password = mainWidget->passwordEdit->text();
+    if (mainWidget->chkSavePassword->isChecked()) {
+        // avoid keeping potentially wrong password that then will be re-used
+        data.connectionData()->password = mainWidget->passwordEdit->text();
+    }
     data.connectionData()->savePassword = mainWidget->chkSavePassword->isChecked();
     /*! @todo add "options=", eg. as string list? */
     return data;
