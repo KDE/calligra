@@ -115,44 +115,19 @@ void KexiFormPart::initInstanceActions()
 //! @todo createSharedAction(Kexi::DesignViewMode, i18n("Edit Pixmap Collection"), koIconName("icons"), 0, "formpart_pixmap_collection");
 //! @todo createSharedAction(Kexi::DesignViewMode, i18n("Edit Form Connections"), koIconName("connections"), 0, "formpart_connections");
 
-// KFormDesigner::CreateLayoutCommand
-    KAction *action = createSharedAction(Kexi::DesignViewMode, i18n("Layout Widgets"),
-                                         QString(), KShortcut(), "formpart_layout_menu", "KActionMenu");
-    KActionMenu *menu = static_cast<KActionMenu*>(action);
-
-    menu->addAction(createSharedAction(Kexi::DesignViewMode, i18n("&Horizontally"),
-                                       QString(), KShortcut(), "formpart_layout_hbox"));
-    menu->addAction(createSharedAction(Kexi::DesignViewMode, i18n("&Vertically"),
-                                       QString(), KShortcut(), "formpart_layout_vbox"));
-    menu->addAction(createSharedAction(Kexi::DesignViewMode, i18n("In &Grid"),
-                                       QString(), KShortcut(), "formpart_layout_grid"));
-#ifdef KEXI_SHOW_SPLITTER_WIDGET
-    menu->addAction(createSharedAction(Kexi::DesignViewMode, i18n("Horizontally in &Splitter"),
-                                       QString(), KShortcut(), "formpart_layout_hsplitter"));
-    menu->addAction(createSharedAction(Kexi::DesignViewMode, i18n("Verti&cally in Splitter"),
-                                       QString(), KShortcut(), "formpart_layout_vsplitter"));
-#endif
-
-    createSharedAction(Kexi::DesignViewMode, i18n("&Break Layout"), QString(),
-                       KShortcut(), "formpart_break_layout");
-    /*
-      createSharedAction(Kexi::DesignViewMode, i18n("Lay Out Widgets &Horizontally"), QString(), 0, "formpart_layout_hbox");
-      createSharedAction(Kexi::DesignViewMode, i18n("Lay Out Widgets &Vertically"), QString(), 0, "formpart_layout_vbox");
-      createSharedAction(Kexi::DesignViewMode, i18n("Lay Out Widgets in &Grid"), QString(), 0, "formpart_layout_grid");
-    */
     createSharedAction(Kexi::DesignViewMode, i18n("Bring Widget to Front"), koIconName("raise"),
                        KShortcut(), "formpart_format_raise");
     createSharedAction(Kexi::DesignViewMode, i18n("Send Widget to Back"), koIconName("lower"),
                        KShortcut(), "formpart_format_lower");
 
 #ifdef KEXI_SHOW_UNFINISHED
-    action = createSharedAction(Kexi::DesignViewMode, i18n("Other Widgets"), QString(),
+    action = createSharedAction(Kexi::DesignViewMode, futureI18n("Other Widgets"), QString(),
                                 KShortcut(), "other_widgets_menu", "KActionMenu");
 #endif
 
-    action = createSharedAction(Kexi::DesignViewMode, i18n("Align Widgets Position"),
+    KAction *action = createSharedAction(Kexi::DesignViewMode, i18n("Align Widgets Position"),
                                 koIconName("aoleft"), KShortcut(), "formpart_align_menu", "KActionMenu");
-    menu = static_cast<KActionMenu*>(action);
+    KActionMenu *menu = static_cast<KActionMenu*>(action);
     menu->addAction(createSharedAction(Kexi::DesignViewMode, i18n("To Left"), koIconName("aoleft"),
                                        KShortcut(), "formpart_align_to_left"));
     menu->addAction(createSharedAction(Kexi::DesignViewMode, i18n("To Right"), koIconName("aoright"),
@@ -388,10 +363,12 @@ void KexiFormPart::setupCustomPropertyPanelTabs(KTabWidget *tab)
                 SIGNAL(dataSourceFieldOrExpressionChanged(QString,QString,KexiDB::Field::Type)),
                 KexiFormManager::self(),
                 SLOT(setDataSourceFieldOrExpression(QString,QString,KexiDB::Field::Type)));
+#ifndef KEXI_NO_AUTOFIELD_WIDGET
         connect(d->dataSourcePage,
                 SIGNAL(insertAutoFields(QString,QString,QStringList)),
                 KexiFormManager::self(),
                 SLOT(insertAutoFields(QString,QString,QStringList)));
+#endif
     }
 
     KexiProject *prj = KexiMainWindowIface::global()->project();

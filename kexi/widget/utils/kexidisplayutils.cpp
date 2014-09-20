@@ -99,7 +99,7 @@ void KexiDisplayUtils::initDisplayForAutonumberSign(DisplayParameters& par, QWid
     par.font = widget->font();
     par.font.setItalic(true);
     QFontMetrics fm(par.font);
-    par.textWidth = fm.width(i18n("(autonumber)"));
+    par.textWidth = fm.width(i18nc("Autonumber, make it as short as possible", "(autonumber)"));
     par.textHeight = fm.height();
 }
 
@@ -152,7 +152,7 @@ void KexiDisplayUtils::paintAutonumberSign(const DisplayParameters& par, QPainte
             painter->drawPixmap(x + (width - par.textWidth) / 2 - KexiDisplayUtils_autonum->width() - 4,
                                 y_pixmap_pos, *KexiDisplayUtils_autonum);
     }
-    painter->drawText(x, y, width, height, alignment, i18n("(autonumber)"));
+    painter->drawText(x, y, width, height, alignment, i18nc("Autonumber, make it as short as possible", "(autonumber)"));
     painter->restore();
 }
 

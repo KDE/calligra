@@ -63,15 +63,15 @@ void KexiScriptEditor::initialize(Kross::Action* scriptaction)
         // If there is no code we just add some information.
 ///@todo remove after release
 #if 0
-        code = "# " + QStringList::split("\n", i18n(
+        code = "# " + QStringList::split("\n", futureI18n(
                                              "This note will appear for a user in the script's source code "
                                              "as a comment. Keep every row not longer than 60 characters and use '\n.'",
 
                                              "This is Technology Preview (BETA) version of scripting\n"
                                              "support in Kexi. The scripting API may change in details\n"
                                              "in the next Kexi version.\n"
-                                             "For more information and documentation see\n%1"
-                                         ).arg("http://www.kexi-project.org/scripting/"), true).join("\n# ") + "\n";
+                                             "For more information and documentation see\n%1",
+                                             "http://www.kexi-project.org/scripting/"), true).join("\n# ") + "\n";
 #endif
     }
     KexiEditor::setText(code);

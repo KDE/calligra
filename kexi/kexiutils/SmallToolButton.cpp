@@ -27,7 +27,6 @@
 #include <QAction>
 
 #include <kicon.h>
-#include <kiconloader.h>
 #include <kglobalsettings.h>
 #include <kdebug.h>
 

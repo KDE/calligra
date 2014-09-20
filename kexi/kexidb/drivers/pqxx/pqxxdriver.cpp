@@ -119,7 +119,9 @@ bool pqxxSqlDriver::drv_isSystemFieldName(const QString&) const
 //
 bool pqxxSqlDriver::isSystemDatabaseName(const QString& n) const
 {
-    return n.toLower() == "template1" || n.toLower() == "template0";
+    return     n.compare("template1", Qt::CaseInsensitive) == 0
+            || n.compare("postgres", Qt::CaseInsensitive) == 0
+            || n.compare("template0", Qt::CaseInsensitive) == 0;
 }
 
 //==================================================================================

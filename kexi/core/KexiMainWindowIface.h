@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2014 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -36,8 +36,6 @@
 class KexiWindow;
 class KexiProject;
 class KActionCollection;
-class KXMLGUIClient;
-class KXMLGUIFactory;
 class KexiSearchableModel;
 class KexiUserFeedbackAgent;
 class KexiMigrateManagerInterface;
@@ -91,46 +89,6 @@ public:
 #endif
 #endif
     virtual QWidget* focusWidget() const = 0;
-
-    //! Implemented by KXMLGUIClient
-#ifdef KEXI_IMPL_WARNINGS
-#ifdef __GNUC__
-#warning TODO virtual void plugActionList(const QString& name, const QList<KAction *>& actionList) = 0;
-#else
-#pragma WARNING( TODO virtual void plugActionList(const QString& name, const QList<KAction *>& actionList) = 0; )
-#endif
-#endif
-    virtual void plugActionList(const QString& name,
-                                const QList<KAction *>& actionList) = 0;
-
-#ifdef KEXI_IMPL_WARNINGS
-#ifdef __GNUC__
-#warning TODO KXMLGUIClient* guiClient() const = 0;
-#else
-#pragma WARNING( TODO KXMLGUIClient* guiClient() const = 0; )
-#endif
-#endif
-    virtual KXMLGUIClient* guiClient() const = 0;
-
-    //! Implemented by KXMLGUIClient
-#ifdef KEXI_IMPL_WARNINGS
-#ifdef __GNUC__
-#warning TODO virtual void unplugActionList (const QString &name) = 0;
-#else
-#pragma WARNING( TODO virtual void unplugActionList (const QString &name) = 0; )
-#endif
-#endif
-    virtual void unplugActionList(const QString &name) = 0;
-
-    //! Implemented by KMainWindow
-#ifdef KEXI_IMPL_WARNINGS
-#ifdef __GNUC__
-#warning TODO virtual KXMLGUIFactory * KMainWindow::guiFactory() = 0;
-#else
-#pragma WARNING( TODO virtual KXMLGUIFactory * KMainWindow::guiFactory() = 0; )
-#endif
-#endif
-    virtual KXMLGUIFactory * guiFactory() = 0;
 
     /*! Registers window \a window for watching and adds it to the main window's stack. */
     virtual void registerChild(KexiWindow *window) = 0;
@@ -305,6 +263,9 @@ public:
 
     //! Interface to the migrate manager
     virtual KexiMigrateManagerInterface* migrateManager() = 0;
+
+    //! Sets reasonable dialog size based on main window size, that is 80% of its size.
+    virtual void setReasonableDialogSize(QDialog *dialog) = 0;
 
 protected: // slots:
     virtual void slotObjectRenamed(const KexiPart::Item &item, const QString& oldName) = 0;

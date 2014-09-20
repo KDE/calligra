@@ -181,6 +181,8 @@ QToolButton* KexiRecordNavigator::createAction(const KGuiItem& item)
 {
     QToolButton *toolButton;
     d->lyr->addWidget(toolButton = new KexiSmallToolButton(item.icon(), QString(), this), 0, Qt::AlignVCenter);
+    toolButton->setToolButtonStyle(Qt::ToolButtonIconOnly);
+    toolButton->setMinimumWidth(toolButton->sizeHint().width() + 2*3);
     toolButton->setFocusPolicy(Qt::NoFocus);
     toolButton->setToolTip(item.toolTip());
     toolButton->setWhatsThis(item.whatsThis());

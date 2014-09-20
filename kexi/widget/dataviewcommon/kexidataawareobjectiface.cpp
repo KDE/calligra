@@ -842,7 +842,7 @@ bool KexiDataAwareObjectInterface::acceptEditor()
                 res = KexiDB::Validator::Error;
                 msg = KexiDB::Validator::msgColumnNotEmpty().arg(m_editor->field()->captionOrName())
                       + "\n\n" + KexiDB::msgYouCanImproveData();
-                desc = i18n("The column's constraint is declared as NOT NULL.");
+                desc = i18n("The column's constraint is declared as NOT NULL (required).");
             } else {
                 kDebug() << "NULL VALUE WILL BE SET";
                 //ok, just leave newval as NULL
@@ -855,7 +855,7 @@ bool KexiDataAwareObjectInterface::acceptEditor()
                     res = KexiDB::Validator::Error;
                     msg = KexiDB::Validator::msgColumnNotEmpty().arg(m_editor->field()->captionOrName())
                           + "\n\n" + KexiDB::msgYouCanImproveData();
-                    desc = i18n("The column's constraint is declared as NOT EMPTY.");
+                    desc = i18n("The column's constraint is declared as NOT EMPTY (text should be filled).");
                 } else {
                     kDebug() << "EMPTY VALUE WILL BE SET";
                 }

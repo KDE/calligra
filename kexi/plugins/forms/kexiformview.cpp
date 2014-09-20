@@ -102,12 +102,14 @@ public:
     //! Used in setFocusInternal()
     QPointer<QWidget> setFocusInternalOnce;
 
+#ifndef KEXI_NO_AUTOFIELD_WIDGET
     /*! Stores geometry of widget recently inserted using insertAutoFields() method.
      having this information, we'r eable to compute position for a newly
      inserted widget in insertAutoFields() is such position has not been specified.
      (the position is specified when a widget is inserted with mouse drag & dropping
      but not with clicking of 'Insert fields' button from Data Source pane) */
     QRect widgetGeometryForRecentInsertAutoFields;
+#endif
 
     //! Cached form pointer
     QPointer<KFormDesigner::Form> form;
@@ -151,16 +153,6 @@ KexiFormView::KexiFormView(QWidget *parent, bool dbAware)
         plugSharedAction("formpart_clear_contents", form(), SLOT(clearWidgetContent()));
         plugSharedAction("edit_undo", form(), SLOT(undo()));
         plugSharedAction("edit_redo", form(), SLOT(redo()));
-
-//! @todo add formpart_layout_menu action
-        plugSharedAction("formpart_layout_hbox", form(), SLOT(layoutHBox()));
-        plugSharedAction("formpart_layout_vbox", form(), SLOT(layoutVBox()));
-        plugSharedAction("formpart_layout_grid", form(), SLOT(layoutGrid()));
-#ifdef KEXI_SHOW_SPLITTER_WIDGET
-        plugSharedAction("formpart_layout_hsplitter", form(), SLOT(layoutHSplitter()));
-        plugSharedAction("formpart_layout_vsplitter", form(), SLOT(layoutVSplitter()));
-#endif
-        plugSharedAction("formpart_break_layout", form(), SLOT(breakLayout()));
 
         plugSharedAction("formpart_format_raise", form(), SLOT(bringWidgetToFront()));
         plugSharedAction("formpart_format_lower", form(), SLOT(sendWidgetToBack()));
@@ -251,8 +243,14 @@ void KexiFormView::initForm()
         d->scrollView->setMainAreaWidget(d->dbform);
     }
     d->dbform->setObjectName(
-        i18nc("Widget name. This string will be used to name widgets of this class. "
-              "It must _not_ contain white spaces and non latin1 characters.", "form"));
+        i18nc("A prefix for identifiers of forms. Based on that, identifiers such as "
+            "form1, form2 are generated. "
+            "This string can be used to refer the widget object as variables in programming "
+            "languages or macros so it must _not_ contain white spaces and non latin1 characters, "
+            "should start with lower case letter and if there are subsequent words, these should "
+            "start with upper case letter. Example: smallCamelCase. "
+            "Moreover, try to make this prefix as short as possible.",
+            "form"));
     QPalette pal(d->dbform->palette());
     pal.setBrush(QPalette::Window, palette().brush(QPalette::Window));
     d->dbform->setPalette(pal); // avoid inheriting QPalette::Window role
@@ -891,14 +889,6 @@ KexiFormView::slotWidgetSelected(KFormDesigner::Form *f, bool multiple)
         if (item && item->container())
             multiple = true;
     }
-    // Layout actions
-    setAvailable("formpart_layout_hbox", multiple);
-    setAvailable("formpart_layout_vbox", multiple);
-    setAvailable("formpart_layout_grid", multiple);
-
-    KFormDesigner::Container *container = f->activeContainer();
-    setAvailable("formpart_break_layout", container ?
-                 (container->layoutType() != KFormDesigner::Container::NoLayout) : false);
 }
 
 void
@@ -909,12 +899,6 @@ KexiFormView::slotFormWidgetSelected(KFormDesigner::Form *f)
 
     disableWidgetActions();
     enableFormActions();
-
-    // Layout actions
-    setAvailable("formpart_layout_hbox", true);
-    setAvailable("formpart_layout_vbox", true);
-    setAvailable("formpart_layout_grid", true);
-    setAvailable("formpart_break_layout", (f->toplevelContainer()->layoutType() != KFormDesigner::Container::NoLayout));
 }
 
 void
@@ -973,11 +957,6 @@ KexiFormView::disableWidgetActions()
 
     setAvailable("formpart_format_raise", false);
     setAvailable("formpart_format_lower", false);
-
-    setAvailable("formpart_layout_hbox", false);
-    setAvailable("formpart_layout_vbox", false);
-    setAvailable("formpart_layout_grid", false);
-    setAvailable("formpart_break_layout", false);
 }
 
 void
@@ -1089,6 +1068,7 @@ KexiFormView::slotHandleDragMoveEvent(QDragMoveEvent* e)
 void
 KexiFormView::slotHandleDropEvent(QDropEvent* e)
 {
+#ifndef KEXI_NO_AUTOFIELD_WIDGET
     const QWidget *targetContainerWidget = dynamic_cast<const QWidget*>(sender());
     KFormDesigner::ObjectTreeItem *targetContainerWidgetItem = targetContainerWidget
             ? form()->objectTree()->lookup(targetContainerWidget->objectName()) : 0;
@@ -1102,6 +1082,7 @@ KexiFormView::slotHandleDropEvent(QDropEvent* e)
         insertAutoFields(sourcePartClass, sourceName, fields,
                          targetContainerWidgetItem->container(), e->pos());
     }
+#endif
 }
 
 void
@@ -1109,6 +1090,7 @@ KexiFormView::insertAutoFields(const QString& sourcePartClass, const QString& so
                                const QStringList& fields, KFormDesigner::Container* targetContainer,
                                const QPoint& _pos)
 {
+#ifndef KEXI_NO_AUTOFIELD_WIDGET
     if (fields.isEmpty())
         return;
 
@@ -1136,7 +1118,7 @@ KexiFormView::insertAutoFields(const QString& sourcePartClass, const QString& so
     QWidgetList widgetsToSelect;
     KFormDesigner::PropertyCommandGroup *group = new KFormDesigner::PropertyCommandGroup(
         fields.count() == 1
-        ? i18n("Insert AutoField widget") : i18n("Insert %1 AutoField widgets", fields.count())
+        ? futureI18n("Insert AutoField widget") : futureI18n2("Insert %1 AutoField widgets", fields.count())
     );
 
     foreach(const QString& field, fields) {
@@ -1223,6 +1205,7 @@ KexiFormView::insertAutoFields(const QString& sourcePartClass, const QString& so
         }
     }
     //! @todo eventually, update property pane
+#endif
 }
 
 void
