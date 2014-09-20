@@ -28,8 +28,10 @@
 #include <db/utils.h>
 #include <db/driver.h>
 #include <db/drivermanager.h>
+#include <kexiutils/utils.h>
 #include <widget/KexiConnectionSelectorWidget.h>
 #include <widget/KexiProjectSelectorWidget.h>
+#include <widget/KexiDBPasswordDialog.h>
 #include <kexidbconnectionwidget.h>
 #include <kexidbshortcutfile.h>
 
@@ -135,112 +137,6 @@ void updateProgressBar(KProgressDialog *pd, char *buffer, int buflen)
             }
         }
     }
-}
-
-//---------------------------------
-
-class KexiDBPasswordDialog::Private
-{
- public:
-    Private(KexiDB::ConnectionData* data);
-    ~Private();
-
-    KexiDB::ConnectionData *cdata;
-    bool showConnectionDetailsRequested;
-};
-
-KexiDBPasswordDialog::Private::Private(KexiDB::ConnectionData* data)
-    : cdata(data)
-    , showConnectionDetailsRequested(false)
-{
-}
-
-KexiDBPasswordDialog::Private::~Private()
-{
-
-}
-#include <kexiutils/utils.h>
-
-KexiDBPasswordDialog::KexiDBPasswordDialog(QWidget *parent, KexiDB::ConnectionData& cdata, bool showDetailsButton)
-        : KPasswordDialog(parent, ShowUsernameLine | ShowDomainLine,
-                          showDetailsButton ? KDialog::User1 : KDialog::None)
-        , d(new Private(&cdata))
-{
-    setCaption(i18nc("@title:window", "Opening Database"));
-    setPrompt(i18nc("@info", "Supply a password below."));
-    /*  msg += cdata.userName.isEmpty() ?
-          "<p>"+i18n("Please enter the password.")
-          : "<p>"+i18n("Please enter the password for user.").arg("<b>"+cdata.userName+"</b>");*/
-
-    QString srv = cdata.serverInfoString(false);
-//    if (srv.isEmpty() || srv.toLower() == "localhost")
-//        srv = i18n("local database server");
-
-    QLabel *domainLabel = KexiUtils::findFirstChild<QLabel*>(this, "QLabel", "domainLabel");
-    if (domainLabel) {
-        domainLabel->setText(i18n("Database server:"));
-    }
-    setDomain(srv);
-
-    QString usr;
-    if (cdata.userName.isEmpty())
-        usr = i18nc("unspecified user", "(unspecified)");
-    else
-        usr = cdata.userName;
-    setUsernameReadOnly(true);
-    setUsername(usr);
-
-    if (showDetailsButton) {
-        connect(this, SIGNAL(user1Clicked()),
-                this, SLOT(slotShowConnectionDetails()));
-        setButtonText(KDialog::User1, i18n("&Details") + " >>");
-    }
-    setButtonText(KDialog::Ok, i18n("&Open"));
-    setButtonIcon(KDialog::Ok, koIcon("document-open"));
-}
-
-KexiDBPasswordDialog::~KexiDBPasswordDialog()
-{
-    delete d;
-}
-
-bool KexiDBPasswordDialog::showConnectionDetailsRequested() const
-{
-    return d->showConnectionDetailsRequested;
-}
-
-void KexiDBPasswordDialog::slotButtonClicked(int button)
-{
-    if (button == KDialog::Ok || button == KDialog::User1) {
-        d->cdata->password = password();
-        QLineEdit *userEdit = KexiUtils::findFirstChild<QLineEdit*>(this, "QLineEdit", "userEdit");
-        if (!userEdit->isReadOnly()) {
-            d->cdata->userName = userEdit->text();
-        }
-    }
-    else {
-        //d->cdata->password.clear();
-    }
-    KPasswordDialog::slotButtonClicked(button);
-}
-
-void KexiDBPasswordDialog::slotShowConnectionDetails()
-{
-    d->showConnectionDetailsRequested = true;
-    close();
-}
-
-//static
-bool KexiDBPasswordDialog::getPasswordIfNeeded(KexiDB::ConnectionData *data, QWidget *parent)
-{
-    if (data->passwordNeeded() && data->password.isNull() /* null means missing password */) {
-        //ask for password
-        KexiDBPasswordDialog pwdDlg(parent, *data, false /*!showDetailsButton*/);
-        if (QDialog::Accepted != pwdDlg.exec()) {
-            return false;
-        }
-    }
-    return true;
 }
 
 

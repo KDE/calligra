@@ -105,6 +105,7 @@
 #include <widget/KexiFileWidget.h>
 #include <widget/KexiNameDialog.h>
 #include <widget/KexiNameWidget.h>
+#include <widget/KexiDBPasswordDialog.h>
 #include <koproperty/EditorView.h>
 #include <koproperty/Set.h>
 
@@ -1307,7 +1308,7 @@ tristate KexiMainWindow::openProject(const KexiProjectData& projectData)
 {
     kDebug() << projectData;
     createKexiProject(projectData);
-    if (!KexiDBPasswordDialog::getPasswordIfNeeded(d->prj->data()->connectionData(), this)) {
+    if (~KexiDBPasswordDialog::getPasswordIfNeeded(d->prj->data()->connectionData(), this)) {
         delete d->prj;
         d->prj = 0;
         return cancelled;
