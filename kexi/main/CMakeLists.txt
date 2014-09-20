@@ -22,6 +22,7 @@ kexistatusbar.cpp
 #TODO: kexinewstuff.cpp
 KexiSearchLineEdit.cpp
 KexiUserFeedbackAgent.cpp
+KexiBugReportDialog.cpp
 
 startup/KexiNewProjectAssistant.cpp
 startup/KexiOpenProjectAssistant.cpp

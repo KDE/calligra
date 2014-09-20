@@ -310,6 +310,10 @@ public slots:
 
     void toggleFullScreen(bool isFullScreen);
 
+    /*! Implemented for KexiMainWindowIface.
+     Sets reasonable dialog size based on main window size, that is 80% of its size. */
+    virtual void setReasonableDialogSize(QDialog *dialog);
+
 signals:
     //! Emitted to make sure the project can be close.
     //! Connect a slot here and set \a cancel to true to cancel the closing.
@@ -541,7 +545,7 @@ protected slots:
 
     /// TMP: Display a dialog to download db examples from Internet
     void slotGetNewStuff();
-
+    void slotReportBug();
     void slotTipOfTheDay();
 
     //! Shows 'important info' dialog, is \a onStartup is false, it's always shown

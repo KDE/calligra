@@ -1,7 +1,11 @@
 [Desktop Entry]
 Name=ColorSlider
+Name[de]=Farbschieber
 Name[en_GB]=ColourSlider
+Name[nl]=KleurSchuifknop
+Name[pl]=Suwa koloru
 Name[pt]=Barras de Cores
+Name[sk]=Posuvník farieb
 Name[sv]=Färgskjutreglage
 Name[uk]=ПовзунокКольору
 Name[x-test]=xxColorSliderxx

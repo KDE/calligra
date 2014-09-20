@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
+   Copyright (C) 2014 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -14,43 +14,34 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+ * Boston, MA 02110-1301, USA.
 */
 
-#ifndef CALLIGRA_SHEETS_FACTORY_H
-#define CALLIGRA_SHEETS_FACTORY_H
+#ifndef KEXIBUGREPORTDIALOG_H
+#define KEXIBUGREPORTDIALOG_H
 
-#include <kpluginfactory.h>
+#include <KBugReport>
 
-#include "calligra_sheets_export.h"
-
-class KAboutData;
-
-namespace Calligra
-{
-namespace Sheets
-{
-
-class CALLIGRA_SHEETS_COMMON_EXPORT Factory : public KPluginFactory
+//! A bug report dialog dedicated for Kexi.
+//! It reports proper app version, platform and OS, hides unnecessary information.
+class KexiBugReportDialog : public KBugReport
 {
     Q_OBJECT
+
 public:
-    explicit Factory(QObject* parent = 0);
-    ~Factory();
+    explicit KexiBugReportDialog(QWidget *parent = 0);
 
-    virtual QObject* create(const char* iface, QWidget* parentWidget, QObject *parent, const QVariantList& args, const QString& keyword);
-
-    static const KComponentData &global();
-
-    // _Creates_ a KAboutData but doesn't keep ownership
-    static KAboutData* aboutData();
+public Q_SLOTS:
+    virtual void accept();
 
 private:
-    static KComponentData* s_global;
-    static KAboutData* s_aboutData;
-};
+    KAboutData *copyAboutData();
+    void collectData();
 
-} // namespace Sheets
-} // namespace Calligra
+    KAboutData *m_aboutData;
+    QString m_op_sys;
+    QString m_rep_platform;
+    Q_DISABLE_COPY(KexiBugReportDialog)
+};
 
 #endif

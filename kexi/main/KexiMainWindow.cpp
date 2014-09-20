@@ -95,6 +95,8 @@
 #include "kexiactioncategories.h"
 #include "kexifinddialog.h"
 #include "kexisearchandreplaceiface.h"
+#include "KexiBugReportDialog.h"
+
 #include <kexi_global.h>
 
 #include <widget/properties/KexiPropertyEditorView.h>
@@ -106,6 +108,7 @@
 #include <widget/KexiNameDialog.h>
 #include <widget/KexiNameWidget.h>
 #include <migration/migratemanager.h>
+#include <widget/KexiDBPasswordDialog.h>
 #include <koproperty/EditorView.h>
 #include <koproperty/Set.h>
 
@@ -1260,7 +1263,7 @@ tristate KexiMainWindow::openProject(const KexiProjectData& projectData)
 {
     kDebug() << projectData;
     createKexiProject(projectData);
-    if (!KexiDBPasswordDialog::getPasswordIfNeeded(d->prj->data()->connectionData(), this)) {
+    if (~KexiDBPasswordDialog::getPasswordIfNeeded(d->prj->data()->connectionData(), this)) {
         delete d->prj;
         d->prj = 0;
         return cancelled;
@@ -3446,6 +3449,12 @@ void KexiMainWindow::slotTipOfTheDay()
     //! @todo
 }
 
+void KexiMainWindow::slotReportBug()
+{
+    KexiBugReportDialog bugReport(this);
+    bugReport.exec();
+}
+
 void KexiMainWindow::slotImportantInfo()
 {
     importantInfo(false);
@@ -4095,6 +4104,12 @@ void KexiMainWindow::updatePropertyEditorInfoLabel(const QString& textToDisplayF
 void KexiMainWindow::addSearchableModel(KexiSearchableModel *model)
 {
     d->tabbedToolBar->addSearchableModel(model);
+}
+
+void KexiMainWindow::setReasonableDialogSize(QDialog *dialog)
+{
+    dialog->setMinimumSize(600, 400);
+    dialog->resize(size() * 0.8);
 }
 
 void KexiMainWindow::restoreDesignTabAndActivateIfNeeded(const QString &tabName)
