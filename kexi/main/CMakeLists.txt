@@ -29,7 +29,6 @@ startup/KexiOpenProjectAssistant.cpp
 startup/KexiWelcomeAssistant.cpp
 startup/KexiWelcomeStatusBar.cpp
 startup/KexiImportExportAssistant.cpp
-startup/KexiStartupFileHandler.cpp
 startup/KexiStartupDialog.cpp
 startup/KexiStartup.cpp
 startup/KexiTemplatesModel.cpp

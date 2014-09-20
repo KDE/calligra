@@ -72,7 +72,7 @@ public:
      \a args contains arguments that can be parsed by parseArguments().
      \a *arg will be also set to imported project's filename on success
      and to null value on failure or cancellation. */
-    ImportWizard(QWidget *parent = 0, QMap<QString, QString>* args = 0);
+    explicit ImportWizard(QWidget *parent = 0, QMap<QString, QString>* args = 0);
     virtual ~ImportWizard();
 
 public slots:
@@ -86,6 +86,7 @@ protected slots:
     virtual void reject();
     void helpClicked();
     void slotOptionsButtonClicked();
+    void destinationTitleTextChanged(const QString & text);
 
 private:
     void parseArguments();
@@ -121,6 +122,8 @@ private:
 
     //! @return source filename selected by user or preselected one (if present)
     QString selectedSourceFileName() const;
+
+    void updateDestinationDBFileName();
 
     class Private;
     Private * const d;

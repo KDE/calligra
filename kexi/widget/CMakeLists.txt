@@ -46,6 +46,7 @@ set(kexiextendedwidgets_LIB_SRCS
     KexiServerDriverNotFoundMessage.cpp
     KexiNameWidget.cpp
     KexiNameDialog.cpp
+    KexiStartupFileHandler.cpp
   )
 
 IF (KEXI_MOBILE)
