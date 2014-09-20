@@ -480,6 +480,16 @@ void KexiStartupFileHandler::messageWidgetActionNoTriggered()
     d->messageWidgetLoop->exit(0);
 }
 
+void KexiStartupFileHandler::updateUrl(const QString &name)
+{
+    KUrl url = d->requester->url();
+    QString fn = KexiUtils::stringToFileName(name);
+    if (!fn.isEmpty() && !fn.endsWith(".kexi"))
+        fn += ".kexi";
+    url.setFileName(fn);
+    d->requester->setUrl(url);
+}
+
 bool KexiStartupFileHandler::askForOverwriting(const QString& filePath)
 {
     QFileInfo fi(filePath);

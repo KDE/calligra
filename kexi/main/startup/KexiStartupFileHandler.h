@@ -22,6 +22,7 @@
 
 #include <QSet>
 #include <QObject>
+#include <kexi_export.h>
 
 class QEvent;
 class KUrl;
@@ -33,7 +34,7 @@ class KexiContextMessage;
 /*! Make sure this object is destroyed before the handled file dialog
     or URL requester, otherwise recent dirs information will not be updated.
     Alternativelly you can call saveRecentDir(). */
-class KexiStartupFileHandler : public QObject
+class KEXIMAIN_EXPORT KexiStartupFileHandler : public QObject
 {
     Q_OBJECT
 
@@ -118,6 +119,9 @@ public slots:
     // Typing a file that doesn't exist closes the file dialog, we have to
     // handle this case better here.
     //virtual void accept();
+
+    //! Updates the requested URL based on specified name. Performs any necessary character conversions.
+    void updateUrl(const QString &name);
 
 signals:
     void askForOverwriting(const KexiContextMessage& message);
