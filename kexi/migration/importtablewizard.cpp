@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2009 Adam Pigg <adam@piggz.co.uk>
+   Copyright (C) 2014 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -66,7 +67,9 @@ ImportTableWizard::ImportTableWizard ( KexiDB::Connection* curDB, QWidget* paren
     m_prjSet = 0;
     m_migrateManager = new MigrateManager();
     m_importComplete = false;
-    
+
+    KexiMainWindowIface::global()->setReasonableDialogSize(this);
+
     setupIntroPage();
     setupSrcConn();
     setupSrcDB();

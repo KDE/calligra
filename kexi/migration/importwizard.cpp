@@ -44,6 +44,7 @@
 #include <db/driver.h>
 #include <db/connectiondata.h>
 #include <db/utils.h>
+#include <core/KexiMainWindowIface.h>
 #include <core/kexidbconnectionset.h>
 #include <core/kexi.h>
 #include <kexiutils/utils.h>
@@ -130,7 +131,8 @@ ImportWizard::ImportWizard(QWidget *parent, QMap<QString, QString>* args)
     setWindowTitle(i18nc("@title:window", "Import Database"));
     setWindowIcon(koIcon("document_import_database"));
 
-    setMinimumSize(400, 400);
+    KexiMainWindowIface::global()->setReasonableDialogSize(this);
+
     parseArguments();
 
     setupIntro();
