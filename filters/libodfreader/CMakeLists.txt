@@ -7,15 +7,21 @@ include_directories(
 ########### libodfreader ###############
 
 set(odfreader_LIB_SRCS
+    OdfReader.cpp
     OdfReaderContext.cpp
+    OdfReaderBackend.cpp
     OdfParser.cpp
     OdtReader.cpp
     OdtReaderBackend.cpp
     #OdsReader.cpp
     #OdsReaderBackend.cpp
+    #OdpReader.cpp
+    #OdpReaderBackend.cpp
 
     OdfTextReader.cpp
     OdfTextReaderBackend.cpp
+    #OdfDrawReader.cpp
+    #OdfDrawReaderBackend.cpp
 )
 
 kde4_add_library(koodfreader SHARED ${odfreader_LIB_SRCS})

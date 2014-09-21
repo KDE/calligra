@@ -18,8 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef ODTREADERBACKEND_H
-#define ODTREADERBACKEND_H
+#ifndef ODFREADERBACKEND_H
+#define ODFREADERBACKEND_H
 
 // Calligra
 #include <KoXmlStreamReader.h>
@@ -27,8 +27,7 @@
 
 // this library
 #include "koodfreader_export.h"
-#include "OdtReader.h"
-#include "OdfReaderBackend.h"
+#include "OdfReader.h"
 
 
 class QByteArray;
@@ -38,10 +37,10 @@ class KoStore;
 class OdfReaderContext;
 
 
-/** @brief A default backend for the OdtReader class.
+/** @brief A default backend for the OdfReader class.
  *
  * This class defines an interface and the default behaviour for the
- * backend to the ODT reader (@see OdtReader). When the
+ * backend to the ODF reader (@see OdfReader). When the
  * reader is called upon to traverse a certain XML tree, there will
  * be two parameters to the root traverse function: a pointer to a
  * backend object and a pointer to a context object.
@@ -68,16 +67,18 @@ class OdfReaderContext;
  * inherit this class and only reimplement those functions that are
  * actually needed.
  */
-class KOODFREADER_EXPORT OdtReaderBackend : public OdfReaderBackend
+class KOODFREADER_EXPORT OdfReaderBackend
 {
  public:
-    explicit OdtReaderBackend();
-    virtual ~OdtReaderBackend();
+    explicit OdfReaderBackend();
+    virtual ~OdfReaderBackend();
 
     // ----------------------------------------------------------------
-    // ODT document level functions
+    // ODF document level functions
 
-    virtual void elementOfficeText(KoXmlStreamReader &reader, OdfReaderContext *context);
+    virtual void elementOfficeDocumentcontent(KoXmlStreamReader &reader, OdfReaderContext *context);
+    virtual void elementOfficeBody(KoXmlStreamReader &reader, OdfReaderContext *context);
+    //virtual void elementOfficeText(KoXmlStreamReader &reader, OdfReaderContext *context);
 
  private:
     class Private;
@@ -85,4 +86,4 @@ class KOODFREADER_EXPORT OdtReaderBackend : public OdfReaderBackend
 };
 
 
-#endif // ODTREADERBACKEND_H
+#endif // ODFREADERBACKEND_H

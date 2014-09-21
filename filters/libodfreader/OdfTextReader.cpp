@@ -523,7 +523,7 @@ void OdfTextReader::readParagraphContents(KoXmlStreamReader &reader)
         //          <draw:control> 10.3.13
         //          <draw:custom-shape> 10.6.1
         //          <draw:ellipse> 10.3.9
-        //          <draw:frame> 10.4.2
+        //   [done] <draw:frame> 10.4.2
         //          <draw:g> 10.3.15
         //          <draw:line> 10.3.3
         //          <draw:measure> 10.3.12
@@ -647,7 +647,18 @@ void OdfTextReader::readParagraphContents(KoXmlStreamReader &reader)
         // FIXME: Only very few tags are handled right now.
 
         QString tagName = reader.qualifiedName().toString();
-        if (reader.prefix() == "office") {
+        if (reader.prefix() == "draw") {
+#if 0
+            if (tagName == "draw:frame") {
+                readElementDrawFrame(reader);
+            }
+            else {
+                // Unknown draw: element
+                readUnknownElement(reader);
+            }
+#endif
+        } // draw namespace
+        else if (reader.prefix() == "office") {
             if (tagName == "office:annotation") {
                 readElementOfficeAnnotation(reader);
             }
