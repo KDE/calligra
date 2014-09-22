@@ -202,8 +202,7 @@ KisPaintopBox::KisPaintopBox(KisView2 *view, QWidget *parent, const char *name)
     QHBoxLayout* compositeLayout = new QHBoxLayout(compositeActions);
     compositeLayout->addWidget(labelMode);
     compositeLayout->addWidget(m_cmbCompositeOp);
-    compositeLayout->addWidget(m_eraseModeButton);
-    compositeLayout->addWidget(m_alphaLockButton);
+    compositeLayout->addWidget(m_eraseModeButton);   
     compositeLayout->setContentsMargins(8, 0, 0, 0);
 
     KAction* action;
