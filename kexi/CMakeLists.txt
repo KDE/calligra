@@ -45,33 +45,6 @@ ELSE(KEXI_MOBILE)
   add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
 ENDIF(KEXI_MOBILE)
 
-if(FALSE) #TODO ENABLE WEBFORMS
-if(WITH_WEBFORMS)
-  macro_optional_find_package(PionNet)
-  macro_log_feature(PionNet_FOUND "Pion Network Library" "C++ development library for implementing lightweight HTTP interfaces" "http://www.pion.org/projects/pion-network-library" FALSE "" "Required by Kexi Web Forms")
-
-  macro_optional_find_package(GoogleCtemplate)
-  macro_log_feature(GOOGLE_CTEMPLATE_FOUND "Google Ctemplate" "Simple but powerful template language for C++" "http://code.google.com/p/google-ctemplate/" FALSE "" "Required by Kexi Web Forms")
-
-  macro_log_feature(Boost_FOUND "Boost" "Boost C++ Libraries" "http://www.boost.org" FALSE "" "Required by Kexi Web Forms")
-
-  if(GOOGLE_CTEMPLATE_FOUND AND Boost_FOUND AND PionNet_FOUND)
-    set(WITH_WEBFORMS TRUE CACHE STRING "Build with Kexi Web Forms support")
-    add_definitions(-DKEXIWEBFORMS_SUPPORTED)
-    message(STATUS "Kexi Web Forms support enabled.")
-    add_subdirectory(webforms)
-  else(GOOGLE_CTEMPLATE_FOUND AND Boost_FOUND AND PionNet_FOUND)
-    set(WITH_WEBFORMS FALSE CACHE STRING "Build with Kexi Web Forms support")
-    message(STATUS "Kexi Web Forms support DISABLED, one of the following libraries is missing:")
-    message(STATUS "- Google CTemplate")
-    message(STATUS "- Boost")
-    message(STATUS "- Pion Network Library")
-  endif(GOOGLE_CTEMPLATE_FOUND AND Boost_FOUND AND PionNet_FOUND)
-else(WITH_WEBFORMS)
-  set(WITH_WEBFORMS FALSE CACHE STRING "Build with Kexi Web Forms support")
-endif(WITH_WEBFORMS)
-endif(FALSE)
-
 add_subdirectory( kexiutils )
 
 macro_optional_find_package(MySQL)
