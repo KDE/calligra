@@ -318,12 +318,12 @@ void OdfTextReader::readElementTableTable(KoXmlStreamReader &reader)
     //          <table:shapes> 9.2.8
     //   [done] <table:table-column> 9.1.6
     //          <table:table-column-group> 9.1.10
-    //          <table:table-columns> 9.1.12
-    //          <table:table-header-columns> 9.1.11
+    //   [done] <table:table-columns> 9.1.12
+    //   [done] <table:table-header-columns> 9.1.11
     //   [done] <table:table-header-rows> 9.1.7
     //   [done] <table:table-row> 9.1.3
     //          <table:table-row-group> 9.1.9
-    //          <table:table-rows> 9.1.8
+    //   [done] <table:table-rows> 9.1.8
     //          <table:table-source> 9.2.6
     //          <table:title> 9.1.13
     //   [done] <text:soft-page-break> 5.6
@@ -333,11 +333,20 @@ void OdfTextReader::readElementTableTable(KoXmlStreamReader &reader)
         if (tagName == "table:table-column") {
             readElementTableTableColumn(reader);
         }
+        else if (tagName == "table:table-columns") {
+            readElementTableTableColumns(reader);
+        }
+        else if (tagName == "table:table-header-columns") {
+            readElementTableTableHeaderColumns(reader);
+        }
         else if (tagName == "table:table-header-rows") {
             readElementTableTableHeaderRows(reader);
         }
         else if (tagName == "table:table-row") {
             readElementTableTableRow(reader);
+        }
+        else if (tagName == "table:table-rows") {
+            readElementTableTableRows(reader);
         }
         else if (tagName == "text:soft-page-break") {
             readElementTextSoftPageBreak(reader);
@@ -348,6 +357,50 @@ void OdfTextReader::readElementTableTable(KoXmlStreamReader &reader)
     }
 
     m_backend->elementTableTable(reader, m_context);
+    DEBUGEND();
+}
+
+void OdfTextReader::readElementTableTableColumns(KoXmlStreamReader &reader)
+{
+    DEBUGSTART();
+    m_backend->elementTableTableColumns(reader, m_context);
+
+    // <table:table-columns> has the following children in ODF 1.2:
+    //   [done] <table:table-column> 9.1.6
+    while (reader.readNextStartElement()) {
+        QString tagName = reader.qualifiedName().toString();
+        
+        if (tagName == "table:table-column") {
+            readElementTableTableColumn(reader);
+        }
+        else {
+            reader.skipCurrentElement();
+        }
+    }
+
+    m_backend->elementTableTableColumns(reader, m_context);
+    DEBUGEND();
+}
+
+void OdfTextReader::readElementTableTableHeaderColumns(KoXmlStreamReader &reader)
+{
+    DEBUGSTART();
+    m_backend->elementTableTableHeaderColumns(reader, m_context);
+
+    // <table:table-header-columns> has the following children in ODF 1.2:
+    //   [done] <table:table-column> 9.1.6
+    while (reader.readNextStartElement()) {
+        QString tagName = reader.qualifiedName().toString();
+        
+        if (tagName == "table:table-column") {
+            readElementTableTableColumn(reader);
+        }
+        else {
+            reader.skipCurrentElement();
+        }
+    }
+
+    m_backend->elementTableTableHeaderColumns(reader, m_context);
     DEBUGEND();
 }
 
@@ -412,6 +465,32 @@ void OdfTextReader::readElementTableTableRow(KoXmlStreamReader &reader)
     }
 
     m_backend->elementTableTableRow(reader, m_context);
+    DEBUGEND();
+}
+
+void OdfTextReader::readElementTableTableRows(KoXmlStreamReader &reader)
+{
+    DEBUGSTART();
+    m_backend->elementTableTableRows(reader, m_context);
+
+    // <table:table-header-rows> has the following children in ODF 1.2:
+    //   [done] <table:table-row> 9.1.3
+    //   [done] <text:soft-page-break> 5.6.
+    while (reader.readNextStartElement()) {
+        QString tagName = reader.qualifiedName().toString();
+        
+        if (tagName == "table:table-row") {
+            readElementTableTableRow(reader);
+        }
+        else if (tagName == "text:soft-page-break") {
+            readElementTextSoftPageBreak(reader);
+        }
+        else {
+            reader.skipCurrentElement();
+        }
+    }
+
+    m_backend->elementTableTableRows(reader, m_context);
     DEBUGEND();
 }
 
