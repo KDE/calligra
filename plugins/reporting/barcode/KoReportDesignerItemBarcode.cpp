@@ -45,16 +45,18 @@ void KoReportDesignerItemBarcode::init(QGraphicsScene *scene, KoReportDesigner *
     connect(m_set, SIGNAL(propertyChanged(KoProperty::Set&,KoProperty::Property&)),
             this, SLOT(slotPropertyChanged(KoProperty::Set&,KoProperty::Property&)));
 
-    setMaxLength(5);
     KoReportDesignerItemRectBase::init(&m_pos, &m_size, m_set, d);
+    setMaxLength(5);
     setZValue(Z);
-    m_name->setValue(d->suggestEntityName("barcode"));
 }
 // methods (constructors)
 KoReportDesignerItemBarcode::KoReportDesignerItemBarcode(KoReportDesigner * rw, QGraphicsScene* scene, const QPointF &pos)
         : KoReportDesignerItemRectBase(rw)
 {
+    Q_UNUSED(pos);
     init(scene, rw);
+    setSceneRect(rw->getPressPoint(), minimumSize(*rw));
+    m_name->setValue(m_reportDesigner->suggestEntityName(typeName()));
 }
 
 KoReportDesignerItemBarcode::KoReportDesignerItemBarcode(QDomNode & element, KoReportDesigner * rw, QGraphicsScene* scene)

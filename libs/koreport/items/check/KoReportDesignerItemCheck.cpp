@@ -43,23 +43,24 @@ void KoReportDesignerItemCheck::init(QGraphicsScene *scene, KoReportDesigner *d)
             this, SLOT(slotPropertyChanged(KoProperty::Set&,KoProperty::Property&)));
 
     setZValue(Z);
-    m_name->setValue(d->suggestEntityName("check"));
 }
 
 // methods (constructors)
 KoReportDesignerItemCheck::KoReportDesignerItemCheck(KoReportDesigner* d, QGraphicsScene * scene, const QPointF &pos)
         : KoReportDesignerItemRectBase(d)
 {
+    Q_UNUSED(pos);
     init(scene, d);
+    setSceneRect(d->getPressPoint(), minimumSize(*d));
+    m_name->setValue(m_reportDesigner->suggestEntityName(typeName()));
 }
 
 QSizeF KoReportDesignerItemCheck::minimumSize(const KoReportDesigner &designer) const
 {
-    designer.getSelectionPressX() + 15;
-    if (designer.countSelectionWidth() < 15 || designer.countSelectionHeight() < 15) {
-        return QSizeF(15, 15);
-    }
-    return QSizeF(designer.countSelectionWidth(), designer.countSelectionHeight());
+    const qreal width = qMax(designer.countSelectionWidth(), qreal(15));
+    const qreal height = qMax(designer.countSelectionHeight(), qreal(15));
+
+    return QSizeF(width, height);
 }
 
 KoReportDesignerItemCheck::KoReportDesignerItemCheck(QDomNode & element, KoReportDesigner * d, QGraphicsScene * s)

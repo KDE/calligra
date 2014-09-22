@@ -49,13 +49,15 @@ void KoReportDesignerItemText::init(QGraphicsScene *scene, KoReportDesigner *d)
 
     m_controlSource->setListData(m_reportDesigner->fieldKeys(), m_reportDesigner->fieldNames());
     setZValue(Z);
-    m_name->setValue(d->suggestEntityName("text"));
 }
 
 KoReportDesignerItemText::KoReportDesignerItemText(KoReportDesigner * rw, QGraphicsScene * scene, const QPointF &pos)
         : KoReportDesignerItemRectBase(rw)
 {
+    Q_UNUSED(pos);
     init(scene, rw);
+    setSceneRect(rw->getPressPoint(), minimumSize(*rw));
+    m_name->setValue(m_reportDesigner->suggestEntityName(typeName()));
 }
 
 KoReportDesignerItemText::KoReportDesignerItemText(QDomNode & element, KoReportDesigner * d, QGraphicsScene * s)
@@ -103,14 +105,14 @@ void KoReportDesignerItemText::paint(QPainter* painter, const QStyleOptionGraphi
     QPen  p = painter->pen();
 
     painter->setFont(font());
+    painter->setBackgroundMode(Qt::TransparentMode);
 
     QColor bg = m_backgroundColor->value().value<QColor>();
-    bg.setAlpha((m_backgroundOpacity->value().toInt() / 100) * 255);
+    bg.setAlphaF(m_backgroundOpacity->value().toReal()*0.01);
 
-    painter->setBackground(bg);
     painter->setPen(m_foregroundColor->value().value<QColor>());
 
-    painter->fillRect(rect(),  m_backgroundColor->value().value<QColor>());
+    painter->fillRect(rect(),  bg);
     painter->drawText(rect(), textFlags(), dataSourceAndObjectTypeName(itemDataSource(), "textarea"));
 
     if ((Qt::PenStyle)m_lineStyle->value().toInt() == Qt::NoPen || m_lineWeight->value().toInt() <= 0) {
@@ -120,7 +122,6 @@ void KoReportDesignerItemText::paint(QPainter* painter, const QStyleOptionGraphi
     }
     painter->drawRect(rect());
 
-    painter->setBackgroundMode(Qt::TransparentMode);
     painter->setPen(m_foregroundColor->value().value<QColor>());
 
     drawHandles(painter);

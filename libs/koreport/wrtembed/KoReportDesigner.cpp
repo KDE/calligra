@@ -854,6 +854,7 @@ void KoReportDesigner::sectionContextMenuEvent(ReportScene * s, QGraphicsSceneCo
 
 void KoReportDesigner::sectionMousePressEvent(ReportSceneView * v, QMouseEvent * e)
 {
+    Q_UNUSED(v);
     m_pressX = e->pos().x();
     m_pressY = e->pos().y();
 }
@@ -1025,8 +1026,14 @@ void KoReportDesigner::slotEditPaste()
 
 void KoReportDesigner::slotEditPaste(QGraphicsScene * canvas)
 {
+
     // paste a new item of the copy we have in the specified location
     if (!m_sectionData->copy_list.isEmpty()) {
+        QList<QGraphicsItem*> activeItems = canvas->selectedItems();
+        QGraphicsItem *activeItem = 0;
+        if (activeItems.count() == 1) {
+            activeItem = activeItems.first();
+        }
         QGraphicsItem * pasted_ent = 0;
         canvas->clearSelection();
         m_sectionData->mouseAction = ReportWriterSectionData::MA_None;
@@ -1035,20 +1042,22 @@ void KoReportDesigner::slotEditPaste(QGraphicsScene * canvas)
         //!The setPos calls only work AFTER the name has been set ?!?!?
         
         for (int i = 0; i < m_sectionData->copy_list.count(); i++) {
-            pasted_ent = 0;
-            QString type;
-
             KoReportItemBase *obj = dynamic_cast<KoReportItemBase*>(m_sectionData->copy_list[i]);
-            if (obj) {
-                type = obj->typeName();
-            }
+            const QString type = obj ? obj->typeName() : "object";
             //kDebug() << type;
             KoReportDesignerItemBase *ent = (m_sectionData->copy_list[i])->clone();
             KoReportItemBase *new_obj = dynamic_cast<KoReportItemBase*>(ent);
             new_obj->setEntityName(suggestEntityName(type));    
+            if (activeItem) {
+                new_obj->position().setScenePos(QPointF(activeItem->x() + 10, activeItem->y() + 10));
+            } else {
+                new_obj->position().setScenePos(QPointF(0, 0));
+            }
+            changeSet(new_obj->propertySet());
             pasted_ent = dynamic_cast<QGraphicsItem*>(ent);
 
             if (pasted_ent) {
+                pasted_ent->setSelected(true);
                 canvas->addItem(pasted_ent);
                 pasted_ent->show();
                 m_sectionData->mouseAction = ReportWriterSectionData::MA_Grab;
@@ -1100,21 +1109,21 @@ QString KoReportDesigner::suggestEntityName(const QString &n) const
         }
     }
 
-    //Count items in the group headers/footers
-    for (int i = 0; i < m_detail->groupSectionCount(); i++) {
-        sec = m_detail->groupSection(i)->groupHeader();
-        if (sec) {
-            const QGraphicsItemList l = sec->items();
-            itemCount += l.count();
-        }
-        sec = m_detail->groupSection(i)->groupFooter();
-        if (sec) {
-            const QGraphicsItemList l = sec->items();
-            itemCount += l.count();
-        }
-    }
-
     if (m_detail) {
+        //Count items in the group headers/footers
+        for (int i = 0; i < m_detail->groupSectionCount(); i++) {
+            sec = m_detail->groupSection(i)->groupHeader();
+            if (sec) {
+                const QGraphicsItemList l = sec->items();
+                itemCount += l.count();
+            }
+            sec = m_detail->groupSection(i)->groupFooter();
+            if (sec) {
+                const QGraphicsItemList l = sec->items();
+                itemCount += l.count();
+            }
+        }
+
         sec = m_detail->detailSection();
         if (sec) {
             const QGraphicsItemList l = sec->items();
@@ -1150,7 +1159,7 @@ bool KoReportDesigner::isEntityNameUnique(const QString &n, KoReportItemBase* ig
     }
 
     //Count items in the group headers/footers
-    if (unique) {
+    if (unique && m_detail) {
         for (int i = 0; i < m_detail->groupSectionCount(); ++i) {
             sec = m_detail->groupSection(i)->groupHeader();
             if (sec) {
@@ -1316,4 +1325,9 @@ qreal KoReportDesigner::getSelectionPressX() const
 qreal KoReportDesigner::getSelectionPressY() const
 {
     return m_pressY;
+}
+
+QPointF KoReportDesigner::getPressPoint() const
+{
+    return QPointF(m_pressX, m_pressY);
 }

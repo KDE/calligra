@@ -13206,6 +13206,7 @@ template gmic::gmic(const char *const commands_line,
                     gmic_list<float>& images, gmic_list<char>& images_names,
                     const char *const custom_commands,
                     const bool include_default_commands,
-                    float *const p_progress, int *const p_cancel);
+                    float *const p_progress,
+                    int *const p_cancel);
 #endif // #ifdef gmic_main
 #endif // #ifdef cimg_plugin

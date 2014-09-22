@@ -55,15 +55,16 @@ void KoReportDesignerItemMaps::init(QGraphicsScene *scene, KoReportDesigner *d)
 	    
     m_controlSource->setListData(m_reportDesigner->fieldKeys(), m_reportDesigner->fieldNames());
     setZValue(Z);
-    m_name->setValue(d->suggestEntityName("mapbrowser"));
 }
 
 KoReportDesignerItemMaps::KoReportDesignerItemMaps(KoReportDesigner * rw, QGraphicsScene* scene, const QPointF &pos)
         : KoReportDesignerItemRectBase(rw)
 {
+    Q_UNUSED(pos);
     myDebug() << "\e[35m======KoReportDesigner\e[0m";
     init(scene, rw);
-    //initMarble();
+    setSceneRect(rw->getPressPoint(), minimumSize(*rw));
+    m_name->setValue(m_reportDesigner->suggestEntityName(typeName()));
 }
 
 KoReportDesignerItemMaps::KoReportDesignerItemMaps(QDomNode & element, KoReportDesigner * rw, QGraphicsScene* scene)
