@@ -202,7 +202,16 @@ void OdfTextReader::readTextLevelElement(KoXmlStreamReader &reader)
 
     QString tagName = reader.qualifiedName().toString();
         
-    if (tagName == "text:h") {
+    if (reader.prefix() == "draw" || reader.prefix() == "dr3d") {
+	OdfDrawReader *drawReader = m_parent->drawReader();
+	if (drawReader) {
+	    drawReader->readCommonGraphicsElements(reader);
+	}
+	else {
+	    reader.skipCurrentElement();
+	}
+    } // draw | dr3d namespace
+    else if (tagName == "text:h") {
         readElementTextH(reader);
     }
     else if (tagName == "text:p") {
@@ -544,6 +553,8 @@ void OdfTextReader::readParagraphContents(KoXmlStreamReader &reader)
         //          <draw:polyline> 10.3.4
         //          <draw:rect> 10.3.2
         //          <draw:regular-polygon> 10.3.6
+	// All of the above are sent to the draw reader.
+	//
         //   [done] <office:annotation> 14.1
         //   [done] <office:annotation-end> 14.2
         //          <presentation:date-time> 10.9.3.5
@@ -658,16 +669,8 @@ void OdfTextReader::readParagraphContents(KoXmlStreamReader &reader)
         // FIXME: Only very few tags are handled right now.
 
         QString tagName = reader.qualifiedName().toString();
-	if (tagName == "dr3d:scene") {
-	    OdfDrawReader *drawReader = m_parent->drawReader();
-	    if (drawReader) {
-		drawReader->readElementDr3dScene(reader);
-	    }
-	    else {
-		reader.skipCurrentElement();
-	    }
-	} // dr3d:scene (only one element in that namespace)
-        else if (reader.prefix() == "draw") {
+
+	if (reader.prefix() == "draw" || reader.prefix() == "dr3d") {
 	    OdfDrawReader *drawReader = m_parent->drawReader();
 	    if (drawReader) {
 		drawReader->readCommonGraphicsElements(reader);
@@ -675,7 +678,7 @@ void OdfTextReader::readParagraphContents(KoXmlStreamReader &reader)
 	    else {
 		reader.skipCurrentElement();
 	    }
-        } // draw namespace
+        } // draw | dr3d namespace
         else if (reader.prefix() == "office") {
             if (tagName == "office:annotation") {
                 readElementOfficeAnnotation(reader);
