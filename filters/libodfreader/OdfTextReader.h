@@ -60,6 +60,7 @@ class KOODFREADER_EXPORT OdfTextReader
     // Read all common text level elements like text:p, text:h, draw:frame, etc.
     // This is the main entry point for text reading.
     void readTextLevelElement(KoXmlStreamReader &reader);
+    void readElementTableTable(KoXmlStreamReader &reader);
 
     void setBackend(OdfTextReaderBackend *backend);
     void setContext(OdfReaderContext *context);
@@ -82,7 +83,6 @@ class KOODFREADER_EXPORT OdfTextReader
     void readElementTextList(KoXmlStreamReader &reader);
     void readElementTextA(KoXmlStreamReader &reader);
 
-    void readElementTableTable(KoXmlStreamReader &reader);
     void readElementTableTableColumn(KoXmlStreamReader &reader);
     void readElementTableTableHeaderRows(KoXmlStreamReader &reader);
     void readElementTableTableRow(KoXmlStreamReader &reader);

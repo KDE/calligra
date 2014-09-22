@@ -13,8 +13,8 @@ set(odfreader_LIB_SRCS
     OdfParser.cpp
     OdtReader.cpp
     OdtReaderBackend.cpp
-    #OdsReader.cpp
-    #OdsReaderBackend.cpp
+    OdsReader.cpp
+    OdsReaderBackend.cpp
     #OdpReader.cpp
     #OdpReaderBackend.cpp
 
