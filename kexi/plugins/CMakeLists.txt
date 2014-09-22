@@ -17,6 +17,3 @@ else (KEXI_MOBILE)
   endif(SHOULD_BUILD_FEATURE_SCRIPTING AND KEXI_SCRIPTS_SUPPORT)
   add_subdirectory( shapes )
 endif (KEXI_MOBILE)
-
-#TODO add_subdirectory( relations )
-#TODO add_subdirectory(macros)
