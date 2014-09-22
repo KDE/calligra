@@ -61,45 +61,17 @@ class KOODFREADER_EXPORT OdfDrawReaderBackend
     virtual ~OdfDrawReaderBackend();
 
     // ----------------------------------------------------------------
-    // Draw level functions: paragraphs, headings, sections, frames, objects, etc
+    // Dr3d functions
 
     virtual void elementDr3dScene(KoXmlStreamReader &reader, OdfReaderContext *context);
 
-#if 0
-    virtual void elementOfficeAnnotation(KoXmlStreamReader &reader, OdfReaderContext *context);
-    virtual void elementOfficeAnnotationEnd(KoXmlStreamReader &reader, OdfReaderContext *context);
-    virtual void elementDcCreator(KoXmlStreamReader &reader, OdfReaderContext *context);
-    virtual void elementDcDate(KoXmlStreamReader &reader, OdfReaderContext *context);
-
-    virtual void elementDrawH(KoXmlStreamReader &reader, OdfReaderContext *context);
-    virtual void elementDrawP(KoXmlStreamReader &reader, OdfReaderContext *context);
-    virtual void elementDrawList(KoXmlStreamReader &reader, OdfReaderContext *context);
-
-    virtual void elementTableTable(KoXmlStreamReader &reader, OdfReaderContext *context);
-    virtual void elementTableTableColumn(KoXmlStreamReader &reader, OdfReaderContext *context);
-    virtual void elementTableTableHeaderRows(KoXmlStreamReader &reader, OdfReaderContext *context);
-    virtual void elementTableTableRow(KoXmlStreamReader &reader, OdfReaderContext *context);
-    virtual void elementTableTableCell(KoXmlStreamReader &reader, OdfReaderContext *context);
-    virtual void elementTableCoveredTableCell(KoXmlStreamReader &reader, OdfReaderContext *context);
 
     // ----------------------------------------------------------------
-    // Paragraph level functions: spans, annotations, notes, etc.
-    // This includes draw content itself.
+    // Draw functions
 
     virtual void elementDrawA(KoXmlStreamReader &reader, OdfReaderContext *context);
-    virtual void elementDrawLineBreak(KoXmlStreamReader &reader, OdfReaderContext *context);
-    virtual void elementDrawSpan(KoXmlStreamReader &reader, OdfReaderContext *context);
-    virtual void elementDrawS(KoXmlStreamReader &reader, OdfReaderContext *context);
+    virtual void elementDrawCircle(KoXmlStreamReader &reader, OdfReaderContext *context);
 
-    // ----------------------------------------------------------------
-    // List level functions: list-header and list-item.
-
-    virtual void elementDrawListHeader(KoXmlStreamReader &reader, OdfReaderContext *context);
-    virtual void elementDrawListItem(KoXmlStreamReader &reader, OdfReaderContext *context);
-    virtual void elementDrawSoftPageBreak(KoXmlStreamReader &reader, OdfReaderContext *context);
-
-    virtual void characterData(KoXmlStreamReader &reader, OdfReaderContext *context);
-#endif
  private:
     class Private;
     Private * const d;

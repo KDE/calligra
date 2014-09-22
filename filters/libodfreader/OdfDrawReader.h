@@ -71,34 +71,21 @@ class KOODFREADER_EXPORT OdfDrawReader
 
     // Read all common draw level elements like draw:p, draw:h, draw:frame, etc.
     // This is the main entry point for draw reading.
-    void readDrawElement(KoXmlStreamReader &reader);
-
+    void readCommonGraphicsElements(KoXmlStreamReader &reader);
 
  protected:
-    // All readElement*() are named after the full qualifiedName of
-    // the element in ODF that they handle.
+    // ----------------------------------------------------------------
+    // Dr3d elements
+
 
     // ----------------------------------------------------------------
     // Draw functions: circle, rectangle, etc
 
-#if 0
-    void readElementOfficeAnnotation(KoXmlStreamReader &reader);
-    void readElementOfficeAnnotationEnd(KoXmlStreamReader &reader);
-
-    void readElementDcCreator(KoXmlStreamReader &reader);
-    void readElementDcDate(KoXmlStreamReader &reader);
-
-    void readElementDrawH(KoXmlStreamReader &reader);
-    void readElementDrawP(KoXmlStreamReader &reader);
-    void readElementDrawList(KoXmlStreamReader &reader);
     void readElementDrawA(KoXmlStreamReader &reader);
+    void readElementDrawCircle(KoXmlStreamReader &reader);
 
-    void readElementTableTableColumn(KoXmlStreamReader &reader);
-    void readElementTableTableHeaderRows(KoXmlStreamReader &reader);
-    void readElementTableTableRow(KoXmlStreamReader &reader);
-    void readElementTableTableCell(KoXmlStreamReader &reader);
-    void readElementTableCoveredTableCell(KoXmlStreamReader &reader);
-#endif
+    void readGraphicsObjectChildren(KoXmlStreamReader &reader);
+
 
     // ----------------------------------------------------------------
     // Other functions

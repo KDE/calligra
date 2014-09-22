@@ -69,7 +69,7 @@ OdfDrawReaderBackend::~OdfDrawReaderBackend()
 
 
 // ----------------------------------------------------------------
-// Draw functions: circles, rectangles, etc
+//                         Dr3d functions
 
 
 void OdfDrawReaderBackend::elementDr3dScene(KoXmlStreamReader &reader,
@@ -79,97 +79,10 @@ void OdfDrawReaderBackend::elementDr3dScene(KoXmlStreamReader &reader,
     Q_UNUSED(context);
 }
 
-#if 0
-void OdfDrawReaderBackend::elementOfficeAnnotation(KoXmlStreamReader &reader,
-                                                   OdfReaderContext *context)
-{
-    Q_UNUSED(reader);
-    Q_UNUSED(context);
-}
-
-void OdfDrawReaderBackend::elementOfficeAnnotationEnd(KoXmlStreamReader &reader,
-                                                      OdfReaderContext *context)
-{
-    Q_UNUSED(reader);
-    Q_UNUSED(context);
-}
-
-void OdfDrawReaderBackend::elementDcCreator(KoXmlStreamReader &reader,
-                                            OdfReaderContext *context)
-{
-    Q_UNUSED(reader);
-    Q_UNUSED(context);
-}
-
-void OdfDrawReaderBackend::elementDcDate(KoXmlStreamReader &reader,
-                                         OdfReaderContext *context)
-{
-    Q_UNUSED(reader);
-    Q_UNUSED(context);
-}
-
-void OdfDrawReaderBackend::elementDrawH(KoXmlStreamReader &reader, OdfReaderContext *context)
-{
-    Q_UNUSED(reader);
-    Q_UNUSED(context);
-}
-
-void OdfDrawReaderBackend::elementDrawP(KoXmlStreamReader &reader, OdfReaderContext *context)
-{
-    Q_UNUSED(reader);
-    Q_UNUSED(context);
-}
-
-void OdfDrawReaderBackend::elementDrawList(KoXmlStreamReader &reader, OdfReaderContext *context)
-{
-    Q_UNUSED(reader);
-    Q_UNUSED(context);
-}
-
-void OdfDrawReaderBackend::elementTableTable(KoXmlStreamReader &reader, OdfReaderContext *context)
-{
-    Q_UNUSED(reader);
-    Q_UNUSED(context);
-}
-
-void OdfDrawReaderBackend::elementTableTableColumn(KoXmlStreamReader &reader,
-                                                   OdfReaderContext *context)
-{
-    Q_UNUSED(reader);
-    Q_UNUSED(context);
-}
-
-void OdfDrawReaderBackend::elementTableTableRow(KoXmlStreamReader &reader,
-                                                OdfReaderContext *context)
-{
-    Q_UNUSED(reader);
-    Q_UNUSED(context);
-}
-
-void OdfDrawReaderBackend::elementTableTableHeaderRows(KoXmlStreamReader &reader,
-                                                       OdfReaderContext *context)
-{
-    Q_UNUSED(reader);
-    Q_UNUSED(context);
-}
-
-void OdfDrawReaderBackend::elementTableTableCell(KoXmlStreamReader &reader,
-                                                 OdfReaderContext *context)
-{
-    Q_UNUSED(reader);
-    Q_UNUSED(context);
-}
-
-void OdfDrawReaderBackend::elementTableCoveredTableCell(KoXmlStreamReader &reader,
-                                                        OdfReaderContext *context)
-{
-    Q_UNUSED(reader);
-    Q_UNUSED(context);
-}
 
 
 // ----------------------------------------------------------------
-// Paragraph level functions: spans, annotations, notes, draw content itself, etc.
+//                         Draw functions
 
 
 void OdfDrawReaderBackend::elementDrawA(KoXmlStreamReader &reader, OdfReaderContext *context)
@@ -178,51 +91,8 @@ void OdfDrawReaderBackend::elementDrawA(KoXmlStreamReader &reader, OdfReaderCont
     Q_UNUSED(context);
 }
 
-void OdfDrawReaderBackend::elementDrawLineBreak(KoXmlStreamReader &reader, OdfReaderContext *context)
+void OdfDrawReaderBackend::elementDrawCircle(KoXmlStreamReader &reader, OdfReaderContext *context)
 {
     Q_UNUSED(reader);
     Q_UNUSED(context);
 }
-
-void OdfDrawReaderBackend::elementDrawSpan(KoXmlStreamReader &reader, OdfReaderContext *context)
-{
-    Q_UNUSED(reader);
-    Q_UNUSED(context);
-}
-
-void OdfDrawReaderBackend::elementDrawS(KoXmlStreamReader &reader, OdfReaderContext *context)
-{
-    Q_UNUSED(reader);
-    Q_UNUSED(context);
-}
-
-
-void OdfDrawReaderBackend::elementDrawSoftPageBreak(KoXmlStreamReader &reader,
-                                                    OdfReaderContext *context)
-{
-    Q_UNUSED(reader);
-    Q_UNUSED(context);
-}
-
-
-void OdfDrawReaderBackend::characterData(KoXmlStreamReader &reader, OdfReaderContext *context)
-{
-    Q_UNUSED(reader);
-    Q_UNUSED(context);
-}
-
-// ----------------------------------------------------------------
-// List level functions: lit-header and list-item.
-
-void OdfDrawReaderBackend::elementDrawListHeader(KoXmlStreamReader &reader, OdfReaderContext *context)
-{
-    Q_UNUSED(reader);
-    Q_UNUSED(context);
-}
-
-void OdfDrawReaderBackend::elementDrawListItem(KoXmlStreamReader &reader, OdfReaderContext *context)
-{
-    Q_UNUSED(reader);
-    Q_UNUSED(context);
-}
-#endif

@@ -180,6 +180,8 @@ void OdfTextReader::readTextLevelElement(KoXmlStreamReader &reader)
     //          <draw:polyline> 10.3.4
     //          <draw:rect> 10.3.2
     //          <draw:regular-polygon> 10.3.6
+    // All of the above are sent to the draw reader.
+    //
     //   [done] <table:table> 9.1.2
     //          <text:alphabetical-index> 8.8
     //          <text:bibliography> 8.9
@@ -668,7 +670,7 @@ void OdfTextReader::readParagraphContents(KoXmlStreamReader &reader)
         else if (reader.prefix() == "draw") {
 	    OdfDrawReader *drawReader = m_parent->drawReader();
 	    if (drawReader) {
-		drawReader->readDrawElement(reader);
+		drawReader->readCommonGraphicsElements(reader);
 	    }
 	    else {
 		reader.skipCurrentElement();

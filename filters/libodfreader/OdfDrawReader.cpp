@@ -183,17 +183,18 @@ void OdfDrawReader::readElementDr3dScene(KoXmlStreamReader &reader)
 //                         namespace draw
 
 
-void OdfDrawReader::readDrawElement(KoXmlStreamReader &reader)
+void OdfDrawReader::readCommonGraphicsElements(KoXmlStreamReader &reader)
 {
     DEBUGSTART();
 
     // This is a function common to all draw elements so no backend function
     // should be called here.
 
-    // The common draw elements are:
-    //          <draw:a> 10.4.12
+    // The common graphics elements are:
+    //   [done] <dr3d:scene> 10.4.12
+    //   [done] <draw:a> 10.4.12
     //          <draw:caption> 10.3.11
-    //          <draw:circle> 10.3.8
+    //   [done] <draw:circle> 10.3.8
     //          <draw:connector> 10.3.10
     //          <draw:control> 10.3.13
     //          <draw:custom-shape> 10.6.1
@@ -211,10 +212,14 @@ void OdfDrawReader::readDrawElement(KoXmlStreamReader &reader)
 
     QString tagName = reader.qualifiedName().toString();
     //kDebug() << "list child:" << tagName;
-    if (tagName == "draw:a") {
-	//readElementDrawA(reader);
-	reader.skipCurrentElement();
-
+    if (tagName == "dr3d:scene") {
+	readElementDr3dScene(reader);
+    }
+    else if (tagName == "draw:a") {
+	readElementDrawA(reader);
+    }
+    else if (tagName == "draw:circle") {
+	readElementDrawCircle(reader);
     }
     else if (tagName == "draw:frame") {
 	//readElementDrawFrame(reader);
@@ -227,6 +232,64 @@ void OdfDrawReader::readDrawElement(KoXmlStreamReader &reader)
 
     DEBUGEND();
 }
+
+void OdfDrawReader::readElementDrawA(KoXmlStreamReader &reader)
+{
+    DEBUGSTART();
+    m_backend->elementDrawA(reader, m_context);
+
+    // <draw:a> has all the normal drawing children.
+    readCommonGraphicsElements(reader);
+
+    m_backend->elementDrawA(reader, m_context);
+    DEBUGEND();
+}
+
+
+void OdfDrawReader::readElementDrawCircle(KoXmlStreamReader &reader)
+{
+   DEBUGSTART();
+    m_backend->elementDrawCircle(reader, m_context);
+
+    readGraphicsObjectChildren(reader);
+
+    m_backend->elementDrawCircle(reader, m_context);
+    DEBUGEND();
+}
+
+void OdfDrawReader::readGraphicsObjectChildren(KoXmlStreamReader &reader)
+{
+   DEBUGSTART();
+   // No backend calls in this function
+
+    // <draw:circle>, <draw:rect>, etc have the following children in ODF 1.2:
+    //          <draw:glue-point> 10.3.16
+    //          <office:event-listeners> 10.3.19
+    //          <svg:desc> 10.3.18
+    //          <svg:title> 10.3.17
+    //          <text:list> 5.3.1
+    //          <text:p> 5.1.3.
+    while (reader.readNextStartElement()) {
+        QString tagName = reader.qualifiedName().toString();
+        
+        if (tagName == "draw:glue-point") {
+            // FIXME: NYI
+            reader.skipCurrentElement();
+        }
+        else if (tagName == "office:event-listeners") {
+            // FIXME: NYI
+            reader.skipCurrentElement();
+            //readElementOfficeEventListeners(reader);
+        }
+        //...  MORE else if () HERE
+        else {
+            reader.skipCurrentElement();
+        }
+    }
+
+    DEBUGEND();
+}
+
 
 // ----------------------------------------------------------------
 //                             Other functions
