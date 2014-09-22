@@ -41,6 +41,7 @@
 #include "OdfReaderBackend.h"
 #include "OdfReaderContext.h"
 #include "OdfTextReader.h"
+#include "OdfDrawReader.h"
 
 
 static void prepareForOdfInternal(KoXmlStreamReader &reader);
@@ -72,6 +73,7 @@ OdfReader::OdfReader()
     : m_backend(0)
     , m_context(0)
     , m_textReader(0)
+    , m_drawReader(0)
 {
 }
 
@@ -88,6 +90,22 @@ OdfTextReader *OdfReader::textReader() const
 void OdfReader::setTextReader(OdfTextReader *textReader)
 {
     m_textReader = textReader;
+    if (textReader) {
+        textReader->setParent(this);
+    }
+}
+
+OdfDrawReader *OdfReader::drawReader() const
+{
+    return m_drawReader;
+}
+
+void OdfReader::setDrawReader(OdfDrawReader *drawReader)
+{
+    m_drawReader = drawReader;
+    if (drawReader) {
+        drawReader->setParent(this);
+    }
 }
 
 bool OdfReader::analyzeContent(OdfReaderContext *context)
@@ -195,6 +213,7 @@ void OdfReader::readElementNamespaceTagname(KoXmlStreamReader &reader)
         
         if (tagName == "office:automatic-styles") {
             // FIXME: NYI
+            reader.skipCurrentElement();
         }
         else if (tagName == "office:body") {
             readElementOfficeBody(reader);

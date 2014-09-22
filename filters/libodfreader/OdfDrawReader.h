@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
 
-   Copyright (C) 2012-2013 Inge Wallin            <inge@lysator.liu.se>
+   Copyright (C) 2012-2014 Inge Wallin            <inge@lysator.liu.se>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,8 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef ODFTEXTREADER_H
-#define ODFTEXTREADER_H
+#ifndef ODFDRAWREADER_H
+#define ODFDRAWREADER_H
 
 // Qt
 #include <QHash>
@@ -38,86 +38,80 @@ class KoXmlWriter;
 class KoStore;
 
 class OdfReader;
-class OdfTextReaderBackend;
+class OdfDrawReaderBackend;
 class OdfReaderContext;
 
 
 /** @brief Read the XML tree of the content of an ODT file.
  *
- * The OdfTextReader is used to traverse (read) the text contents of
+ * The OdfDrawReader is used to traverse (read) the draw contents of
  * an ODF file using an XML stream reader.  For every XML element that
  * the reading process comes across it will call a specific function
- * in a backend class: @see OdfTextReaderBackend.  The OdfTextReader
- * is used as a common way to reat text content and is called from all
+ * in a backend class: @see OdfDrawReaderBackend.  The OdfDrawReader
+ * is used as a common way to reat draw content and is called from all
  * readers for different ODF formats.  @see OdtReader, @see OdsReader,
  * @see OdpReader.
  */
-class KOODFREADER_EXPORT OdfTextReader
+class KOODFREADER_EXPORT OdfDrawReader
 {
  public:
-    OdfTextReader();
-    ~OdfTextReader();
-
-    // Read all common text level elements like text:p, text:h, draw:frame, etc.
-    // This is the main entry point for text reading.
-    void readTextLevelElement(KoXmlStreamReader &reader);
-    void readElementTableTable(KoXmlStreamReader &reader);
+    OdfDrawReader();
+    ~OdfDrawReader();
 
     void setParent(OdfReader *parent);
-    void setBackend(OdfTextReaderBackend *backend);
+    void setBackend(OdfDrawReaderBackend *backend);
     void setContext(OdfReaderContext *context);
+
+    // ----------------------------------------------------------------
+    // Dr3d elements
+    void readElementDr3dScene(KoXmlStreamReader &reader);
+
+    // ----------------------------------------------------------------
+    // Draw elements
+
+    // Read all common draw level elements like draw:p, draw:h, draw:frame, etc.
+    // This is the main entry point for draw reading.
+    void readDrawElement(KoXmlStreamReader &reader);
+
 
  protected:
     // All readElement*() are named after the full qualifiedName of
     // the element in ODF that they handle.
 
     // ----------------------------------------------------------------
-    // Text level functions: paragraphs, headings, sections, frames, objects, etc
+    // Draw functions: circle, rectangle, etc
 
+#if 0
     void readElementOfficeAnnotation(KoXmlStreamReader &reader);
     void readElementOfficeAnnotationEnd(KoXmlStreamReader &reader);
 
     void readElementDcCreator(KoXmlStreamReader &reader);
     void readElementDcDate(KoXmlStreamReader &reader);
 
-    void readElementTextH(KoXmlStreamReader &reader);
-    void readElementTextP(KoXmlStreamReader &reader);
-    void readElementTextList(KoXmlStreamReader &reader);
-    void readElementTextA(KoXmlStreamReader &reader);
+    void readElementDrawH(KoXmlStreamReader &reader);
+    void readElementDrawP(KoXmlStreamReader &reader);
+    void readElementDrawList(KoXmlStreamReader &reader);
+    void readElementDrawA(KoXmlStreamReader &reader);
 
     void readElementTableTableColumn(KoXmlStreamReader &reader);
     void readElementTableTableHeaderRows(KoXmlStreamReader &reader);
     void readElementTableTableRow(KoXmlStreamReader &reader);
     void readElementTableTableCell(KoXmlStreamReader &reader);
     void readElementTableCoveredTableCell(KoXmlStreamReader &reader);
-
-    // ----------------------------------------------------------------
-    // Paragraph level functions: spans, annotations, notes, text content itself, etc.
-
-    void readParagraphContents(KoXmlStreamReader &reader);
-
-    void readElementTextLineBreak(KoXmlStreamReader &reader);
-    void readElementTextS(KoXmlStreamReader &reader);
-    void readElementTextSpan(KoXmlStreamReader &reader);
-
-    // ----------------------------------------------------------------
-    // List level functions: list-item and list header.
-
-    void readElementTextListItem(KoXmlStreamReader &reader);
-    void readElementTextListHeader(KoXmlStreamReader &reader);
+#endif
 
     // ----------------------------------------------------------------
     // Other functions
 
-    void readElementTextSoftPageBreak(KoXmlStreamReader &reader);
+    // FIXME: Move this to a common file (OdfReaderUtils?)
     void readUnknownElement(KoXmlStreamReader &reader);
 
 
  private:
     OdfReader             *m_parent;  // The OdfReader controlling this one.
 
-    OdfTextReaderBackend  *m_backend;
+    OdfDrawReaderBackend  *m_backend;
     OdfReaderContext      *m_context;
 };
 
-#endif // ODFTEXTREADER_H
+#endif // ODFDRAWREADER_H

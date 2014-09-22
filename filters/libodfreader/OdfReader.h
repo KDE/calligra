@@ -41,6 +41,7 @@ class OdfReaderBackend;
 class OdfReaderContext;
 
 class OdfTextReader;
+class OdfDrawReader;
 
 
 /** @brief Read the XML tree of the content of an ODF file.
@@ -76,6 +77,9 @@ class KOODFREADER_EXPORT OdfReader
     OdfTextReader *textReader() const;
     void setTextReader(OdfTextReader *textReader);
 
+    OdfDrawReader *drawReader() const;
+    void setDrawReader(OdfDrawReader *drawReader);
+
     bool analyzeContent(OdfReaderContext *context);
 
     bool readContent(OdfReaderBackend *backend, OdfReaderContext *context);
@@ -104,6 +108,7 @@ class KOODFREADER_EXPORT OdfReader
 
     // Helper readers
     OdfTextReader     *m_textReader;
+    OdfDrawReader     *m_drawReader;
 };
 
 #endif // ODFREADER_H

@@ -38,8 +38,10 @@
 #include <KoOdfReadStore.h>
 
 // Reader library
+#include "OdfReader.h"
 #include "OdfTextReaderBackend.h"
 #include "OdfReaderContext.h"
+#include "OdfDrawReader.h"
 
 
 #if 1
@@ -65,7 +67,8 @@ static int debugIndent = 0;
 
 
 OdfTextReader::OdfTextReader()
-    : m_backend(0)
+    : m_parent(0)
+    , m_backend(0)
     , m_context(0)
 {
 }
@@ -77,6 +80,11 @@ OdfTextReader::~OdfTextReader()
 
 // ----------------------------------------------------------------
 
+
+void OdfTextReader::setParent(OdfReader *parent)
+{
+    m_parent = parent;
+}
 
 void OdfTextReader::setBackend(OdfTextReaderBackend *backend)
 {
@@ -111,6 +119,7 @@ void OdfTextReader::readElementNamespaceTagname(KoXmlStreamReader &reader)
         
         if (tagName == "office:automatic-styles") {
             // FIXME: NYI
+            reader.skipCurrentElement();
         }
         else if (tagName == "office:body") {
             readElementOfficeBody(reader);
@@ -647,16 +656,23 @@ void OdfTextReader::readParagraphContents(KoXmlStreamReader &reader)
         // FIXME: Only very few tags are handled right now.
 
         QString tagName = reader.qualifiedName().toString();
-        if (reader.prefix() == "draw") {
-#if 0
-            if (tagName == "draw:frame") {
-                readElementDrawFrame(reader);
-            }
-            else {
-                // Unknown draw: element
-                readUnknownElement(reader);
-            }
-#endif
+	if (tagName == "dr3d:scene") {
+	    OdfDrawReader *drawReader = m_parent->drawReader();
+	    if (drawReader) {
+		drawReader->readElementDr3dScene(reader);
+	    }
+	    else {
+		reader.skipCurrentElement();
+	    }
+	} // dr3d:scene (only one element in that namespace)
+        else if (reader.prefix() == "draw") {
+	    OdfDrawReader *drawReader = m_parent->drawReader();
+	    if (drawReader) {
+		drawReader->readDrawElement(reader);
+	    }
+	    else {
+		reader.skipCurrentElement();
+	    }
         } // draw namespace
         else if (reader.prefix() == "office") {
             if (tagName == "office:annotation") {
