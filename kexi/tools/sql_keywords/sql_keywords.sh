@@ -292,7 +292,7 @@ checkArchives () {
 
   if [ "$tmpDir/$appVer.all" -nt "$tmpDir/$appVer.new" ] ; then
     getDriverKeywords "$tmpDir/kexi.all" "$tmpDir/$appVer.all" "$tmpDir/$appVer.new"
-    header "const char* ${appName}Driver::keywords" "${filePrefix}driver.h" "$tmp/$appVer/$pathInArchive" "$tmpDir/${filePrefix}keywords.cpp"
+    header "const char* const ${appName}Driver::keywords" "${filePrefix}driver.h" "$tmp/$appVer/$pathInArchive" "$tmpDir/${filePrefix}keywords.cpp"
     body   "$tmpDir/$appVer.new" "$tmpDir/${filePrefix}keywords.cpp"
     footer "$tmpDir/${filePrefix}keywords.cpp"
   fi
@@ -307,7 +307,7 @@ checkArchives () {
 
   if [ "$tmpDir/$appVer.all" -nt "$tmpDir/$appVer.new" ] ; then
     getDriverKeywords "$tmpDir/kexi.all" "$tmpDir/$appVer.all" "$tmpDir/$appVer.new"
-    header "const char* ${appName}Driver::keywords" "${filePrefix}driver.h" "$tmp/$appVer/$pathInArchive" "$tmpDir/${filePrefix}keywords.cpp"
+    header "const char* const ${appName}Driver::keywords" "${filePrefix}driver.h" "$tmp/$appVer/$pathInArchive" "$tmpDir/${filePrefix}keywords.cpp"
     body   "$tmpDir/$appVer.new" "$tmpDir/${filePrefix}keywords.cpp"
     footer "$tmpDir/${filePrefix}keywords.cpp"
   fi

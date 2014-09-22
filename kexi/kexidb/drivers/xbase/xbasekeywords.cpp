@@ -30,7 +30,7 @@
 #include <xbasedriver.h>
 
 namespace KexiDB {
-  const char* xBaseDriver::keywords[] = {
+  const char* const xBaseDriver::keywords[] = {
     "ABORT",
     "ATTACH",
     "CLUSTER",
