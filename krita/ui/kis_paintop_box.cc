@@ -161,13 +161,14 @@ KisPaintopBox::KisPaintopBox(KisView2 *view, QWidget *parent, const char *name)
         slFlow->setRange(0.0, 1.0, 2);
         slFlow->setValue(1.0);
         slFlow->setSingleStep(0.05);
-        slFlow->setMinimumWidth(120);
-        
-        slSize->setRange(0.0, 1000.0, 2);
-        slSize->setValue(100.0);
+        slFlow->setMinimumWidth(120);        
+
+        slSize->setRange(0, 1000, 0);
+        slSize->setValue(100);
         slSize->setSingleStep(1);
         slSize->setExponentRatio(3.0);
         slSize->setMinimumWidth(120);
+        slSize->setSuffix(" px");
 
         m_sliderChooser[i]->chooseWidget(cfg.toolbarSlider(i + 1));
     }
