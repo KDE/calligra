@@ -22,7 +22,7 @@
 
 namespace {
     QString prefix = "cell";
-    const char* familyName = "table-cell";
+    const char familyName[] = "table-cell";
 }
 
 KOSTYLE_DECLARE_SHARED_POINTER_IMPL(KoCellStyle)

@@ -64,7 +64,7 @@
 #include <QUrl>
 
 const int logoBottomMargin = 84 - 12;
-const char* calligraUrl = "http://www.calligra.org";
+const char * const calligraUrl = "http://www.calligra.org";
 
 // from oxygenhelper.cpp:
 OxygenHelper::OxygenHelper()

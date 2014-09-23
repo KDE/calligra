@@ -57,7 +57,7 @@ protected:
     virtual QString addLimitTo1(const QString& sql, bool add);
 
 private:
-    static const char *keywords[];
+    static const char * const keywords[];
 };
 }
 
