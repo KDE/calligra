@@ -292,6 +292,220 @@ void OdfDrawReader::readGraphicsObjectChildren(KoXmlStreamReader &reader)
 
 
 // ----------------------------------------------------------------
+//                                 Frames
+
+
+void OdfDrawReader::readElementDrawFrame(KoXmlStreamReader &reader)
+{
+    DEBUGSTART();
+    m_backend->elementDrawFrame(reader, m_context);
+
+    // <draw:frame> has the following children in ODF 1.2:
+    //          <draw:applet> 10.4.7
+    //          <draw:contour-path> 10.4.11.3
+    //          <draw:contour-polygon> 10.4.11.2
+    //          <draw:floating-frame> 10.4.10
+    //          <draw:glue-point> 10.3.16
+    //          <draw:image> 10.4.4
+    //          <draw:image-map> 10.4.13.2
+    //          <draw:object> 10.4.6.2
+    //          <draw:object-ole> 10.4.6.3
+    //          <draw:plugin> 10.4.8
+    //          <draw:text-box> 10.4.3
+    //          <office:event-listeners> 10.3.19
+    //          <svg:desc> 10.3.18
+    //          <svg:title> 10.3.17
+    //          <table:table> 9.1.2
+    while (reader.readNextStartElement()) {
+        QString tagName = reader.qualifiedName().toString();
+        
+        if (tagName == "draw:image") {
+            // FIXME: NYI
+            reader.skipCurrentElement();
+        }
+        else if (tagName == "draw:object") {
+            // FIXME: NYI
+            reader.skipCurrentElement();
+        }
+        //...  MORE else if () HERE
+        else {
+            reader.skipCurrentElement();
+        }
+    }
+
+    m_backend->elementDrawFrame(reader, m_context);
+    DEBUGEND();
+}
+#if 0
+{
+    QString styleName = cssClassName(nodeElement.attribute("style-name"));
+    StyleInfo *styleInfo = m_styles.value(styleName);
+
+    // Find height and width
+    QString height = nodeElement.attribute("height");
+    QString width  = nodeElement.attribute("width");
+
+    // Remove characters "in" or "pt" from their end.
+    //
+    // FIXME: This is WRONG!  
+    //        First, there is no way to tell if the unit is 2 chars
+    //        Second, it is not sure that there *is* a unit.
+    //        Instead, use some function in KoUnit that converts the size.  /IW
+    height = height.left(height.length()-2);
+    width  = width.left(width.length()-2);
+
+    // Convert them to real.
+    qreal qHeight = height.toFloat();
+    qreal qWidth = width.toFloat();
+    QSizeF size(qWidth, qHeight);
+
+    // Go through the frame's content and see what we can handle.
+    KoXmlElement framePartElement;
+    forEachElement (framePartElement, nodeElement) {
+
+        // Handle at least a few types of objects (hopefully more in the future).
+        if (framePartElement.localName() == "object"
+            && framePartElement.namespaceURI() == KoXmlNS::draw)
+        {
+            QString href = framePartElement.attribute("href");
+            if (href.isEmpty()) {
+                // Check for inline stuff.
+                // So far only math:math is supported.
+                if (!framePartElement.hasChildNodes())
+                    continue;
+
+                // Handle inline math:math
+                KoXmlElement childElement = framePartElement.firstChildElement();
+                if (childElement.localName() == "math"
+                    && childElement.namespaceURI() == KoXmlNS::math)
+                {
+                    QHash<QString, QString> unknownNamespaces;
+                    copyXmlElement(childElement, *htmlWriter, unknownNamespaces);
+
+                    // We are done with the whole frame.
+                    break;
+                }
+
+                // We couldn't handle this inline object. Check for
+                // object replacements (pictures).
+                continue;
+            }
+
+            // If we get here, this frame part was not an inline object.
+            // We already have an object reference.
+
+            // Normalize the object reference
+            if (href.startsWith("./"))
+                href.remove(0, 2);
+            QString type = m_manifest->value(href);
+
+            // So far we can only an handle embedded object (formula).
+            // In the future we will probably be able to handle more types.
+            if (type == "application/vnd.oasis.opendocument.formula") {
+
+                handleEmbeddedFormula(href, htmlWriter);
+                break; // Only one object per frame.
+            }
+            // ...more types here in the future, e.g. video.
+
+            // Ok, so we couldn't handle this one.
+            continue;
+        }
+        else if (framePartElement.localName() == "image"
+                 && framePartElement.namespaceURI() == KoXmlNS::draw)
+        {
+            // Handle image
+            htmlWriter->startElement("img", m_doIndent);
+            if (styleInfo) {
+                styleInfo->inUse = true;
+                htmlWriter->addAttribute("class", styleName);
+            }
+            htmlWriter->addAttribute("alt", "(No Description)");
+
+            QString href = framePartElement.attribute("href");
+            QString imgSrc = href.section('/', -1);
+            //kDebug(30503) << "image source:" << href << imgSrc;
+
+            if (m_options->useMobiConventions) {
+                // Mobi
+                // First check for repeated images.
+                if (m_imagesIndex.contains(imgSrc)) {
+                    htmlWriter->addAttribute("recindex", QString::number(m_imagesIndex.value(imgSrc)));
+                }
+                else {
+                    htmlWriter->addAttribute("recindex", QString::number(m_imgIndex));
+                    m_imagesIndex.insert(imgSrc, m_imgIndex);
+                    m_imgIndex++;
+                }
+            }
+            else {
+                htmlWriter->addAttribute("src", imgSrc);
+            }
+
+            m_images.insert(framePartElement.attribute("href"), size);
+
+            htmlWriter->endElement(); // end img
+            break; // Only one image per frame.
+        }
+        // Handle video
+        else if (framePartElement.localName() == "plugin"
+                 && framePartElement.namespaceURI() == KoXmlNS::draw) {
+            QString videoSource = framePartElement.attribute("href");
+            QString videoId = "media_id_" + QString::number(m_mediaId);
+            m_mediaId++;
+
+            htmlWriter->addAttribute("id", videoId);
+            QString id = "chapter" + QString::number(m_currentChapter) +
+                    m_collector->fileSuffix() + "#" + videoId;
+            m_mediaFilesList.insert(id, videoSource);
+        }
+    } // foreach
+}
+
+void OdfDrawReader::readEmbeddedFormula(const QString &href, KoXmlWriter *htmlWriter)
+{
+    // FIXME: Track down why we need to close() the store here and
+    //        whip that code with a wet noodle.
+    m_odfStore->close();
+
+    // Open the formula content file if possible.
+    if (!m_odfStore->open(href + "/content.xml")) {
+        kDebug(30503) << "Can not open" << href << "/content.xml .";
+        return;
+    }
+
+    // Copy the math:math xml tree.
+    KoXmlDocument doc;
+    QString errorMsg;
+    int errorLine;
+    int errorColumn;
+    if (!doc.setContent(m_odfStore->device(), true, &errorMsg, &errorLine, &errorColumn)) {
+        kDebug(30503) << "Error occurred while parsing content.xml "
+                      << errorMsg << " in Line: " << errorLine
+                      << " Column: " << errorColumn;
+        m_odfStore->close();
+        return;
+    }
+
+    KoXmlNode n = doc.documentElement();
+    for (; !n.isNull(); n = n.nextSibling()) {
+        if (n.isElement()) {
+            KoXmlElement el = n.toElement();
+            if (el.tagName() == "math") {
+                QHash<QString, QString> unknownNamespaces;
+                copyXmlElement(el, *htmlWriter, unknownNamespaces);
+
+                // No need to continue once we have the math:math node.
+                break;
+            }
+        }
+    }
+
+    m_odfStore->close();
+}
+#endif
+
+// ----------------------------------------------------------------
 //                             Other functions
 
 

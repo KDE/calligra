@@ -96,3 +96,15 @@ void OdfDrawReaderBackend::elementDrawCircle(KoXmlStreamReader &reader, OdfReade
     Q_UNUSED(reader);
     Q_UNUSED(context);
 }
+
+
+// ----------------------------------------------------------------
+//                             Frames
+
+
+void OdfDrawReaderBackend::elementDrawFrame(KoXmlStreamReader &reader,
+					    OdfReaderContext *context)
+{
+    Q_UNUSED(reader);
+    Q_UNUSED(context);
+}
