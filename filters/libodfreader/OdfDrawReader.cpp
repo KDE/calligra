@@ -308,14 +308,15 @@ void OdfDrawReader::readElementDrawFrame(KoXmlStreamReader &reader)
     //          <draw:glue-point> 10.3.16
     //          <draw:image> 10.4.4
     //          <draw:image-map> 10.4.13.2
-    //          <draw:object> 10.4.6.2
+    //   [done] <draw:object> 10.4.6.2
     //          <draw:object-ole> 10.4.6.3
     //          <draw:plugin> 10.4.8
     //          <draw:text-box> 10.4.3
     //          <office:event-listeners> 10.3.19
     //          <svg:desc> 10.3.18
     //          <svg:title> 10.3.17
-    //          <table:table> 9.1.2
+    //   [done] <table:table> 9.1.2
+    //
     while (reader.readNextStartElement()) {
         QString tagName = reader.qualifiedName().toString();
         
@@ -324,10 +325,18 @@ void OdfDrawReader::readElementDrawFrame(KoXmlStreamReader &reader)
             reader.skipCurrentElement();
         }
         else if (tagName == "draw:object") {
-            // FIXME: NYI
-            reader.skipCurrentElement();
+	    readElementDrawObject(reader);
         }
         //...  MORE else if () HERE
+        else if (tagName == "table:table") {
+	    OdfTextReader *textReader = m_parent->textReader();
+	    if (textReader) {
+		textReader->readElementTableTable(reader);
+	    }
+	    else {
+		reader.skipCurrentElement();
+	    }
+        }
         else {
             reader.skipCurrentElement();
         }
@@ -336,82 +345,48 @@ void OdfDrawReader::readElementDrawFrame(KoXmlStreamReader &reader)
     m_backend->elementDrawFrame(reader, m_context);
     DEBUGEND();
 }
+
+void OdfDrawReader::readElementDrawObject(KoXmlStreamReader &reader)
+{
+   DEBUGSTART();
+    m_backend->elementDrawObject(reader, m_context);
+
+    // <draw:object> has the following children in ODF 1.2:
+    //          <math:math> 14.5
+    //          <office:document> 3.1.2
+    while (reader.readNextStartElement()) {
+        QString tagName = reader.qualifiedName().toString();
+        
+        if (tagName == "math:math") {
+            // FIXME: NYI
+            reader.skipCurrentElement();
+        }
+        else if (tagName == "office:document") {
+            // FIXME: NYI
+            reader.skipCurrentElement();
+        }
+        else {
+	    // Shouldn't happen.
+            reader.skipCurrentElement();
+        }
+    }
+
+    m_backend->elementDrawObject(reader, m_context);
+    DEBUGEND();
+}
+
 #if 0
 {
     QString styleName = cssClassName(nodeElement.attribute("style-name"));
     StyleInfo *styleInfo = m_styles.value(styleName);
 
-    // Find height and width
-    QString height = nodeElement.attribute("height");
-    QString width  = nodeElement.attribute("width");
-
-    // Remove characters "in" or "pt" from their end.
-    //
-    // FIXME: This is WRONG!  
-    //        First, there is no way to tell if the unit is 2 chars
-    //        Second, it is not sure that there *is* a unit.
-    //        Instead, use some function in KoUnit that converts the size.  /IW
-    height = height.left(height.length()-2);
-    width  = width.left(width.length()-2);
-
-    // Convert them to real.
-    qreal qHeight = height.toFloat();
-    qreal qWidth = width.toFloat();
-    QSizeF size(qWidth, qHeight);
 
     // Go through the frame's content and see what we can handle.
     KoXmlElement framePartElement;
     forEachElement (framePartElement, nodeElement) {
 
         // Handle at least a few types of objects (hopefully more in the future).
-        if (framePartElement.localName() == "object"
-            && framePartElement.namespaceURI() == KoXmlNS::draw)
-        {
-            QString href = framePartElement.attribute("href");
-            if (href.isEmpty()) {
-                // Check for inline stuff.
-                // So far only math:math is supported.
-                if (!framePartElement.hasChildNodes())
-                    continue;
-
-                // Handle inline math:math
-                KoXmlElement childElement = framePartElement.firstChildElement();
-                if (childElement.localName() == "math"
-                    && childElement.namespaceURI() == KoXmlNS::math)
-                {
-                    QHash<QString, QString> unknownNamespaces;
-                    copyXmlElement(childElement, *htmlWriter, unknownNamespaces);
-
-                    // We are done with the whole frame.
-                    break;
-                }
-
-                // We couldn't handle this inline object. Check for
-                // object replacements (pictures).
-                continue;
-            }
-
-            // If we get here, this frame part was not an inline object.
-            // We already have an object reference.
-
-            // Normalize the object reference
-            if (href.startsWith("./"))
-                href.remove(0, 2);
-            QString type = m_manifest->value(href);
-
-            // So far we can only an handle embedded object (formula).
-            // In the future we will probably be able to handle more types.
-            if (type == "application/vnd.oasis.opendocument.formula") {
-
-                handleEmbeddedFormula(href, htmlWriter);
-                break; // Only one object per frame.
-            }
-            // ...more types here in the future, e.g. video.
-
-            // Ok, so we couldn't handle this one.
-            continue;
-        }
-        else if (framePartElement.localName() == "image"
+	if (framePartElement.localName() == "image"
                  && framePartElement.namespaceURI() == KoXmlNS::draw)
         {
             // Handle image
@@ -462,47 +437,6 @@ void OdfDrawReader::readElementDrawFrame(KoXmlStreamReader &reader)
     } // foreach
 }
 
-void OdfDrawReader::readEmbeddedFormula(const QString &href, KoXmlWriter *htmlWriter)
-{
-    // FIXME: Track down why we need to close() the store here and
-    //        whip that code with a wet noodle.
-    m_odfStore->close();
-
-    // Open the formula content file if possible.
-    if (!m_odfStore->open(href + "/content.xml")) {
-        kDebug(30503) << "Can not open" << href << "/content.xml .";
-        return;
-    }
-
-    // Copy the math:math xml tree.
-    KoXmlDocument doc;
-    QString errorMsg;
-    int errorLine;
-    int errorColumn;
-    if (!doc.setContent(m_odfStore->device(), true, &errorMsg, &errorLine, &errorColumn)) {
-        kDebug(30503) << "Error occurred while parsing content.xml "
-                      << errorMsg << " in Line: " << errorLine
-                      << " Column: " << errorColumn;
-        m_odfStore->close();
-        return;
-    }
-
-    KoXmlNode n = doc.documentElement();
-    for (; !n.isNull(); n = n.nextSibling()) {
-        if (n.isElement()) {
-            KoXmlElement el = n.toElement();
-            if (el.tagName() == "math") {
-                QHash<QString, QString> unknownNamespaces;
-                copyXmlElement(el, *htmlWriter, unknownNamespaces);
-
-                // No need to continue once we have the math:math node.
-                break;
-            }
-        }
-    }
-
-    m_odfStore->close();
-}
 #endif
 
 // ----------------------------------------------------------------
