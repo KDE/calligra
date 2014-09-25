@@ -22,7 +22,6 @@
 #define KIS_HSVSLIDER_H
 
 #include <kselector.h>
-#include "kowidgets_export.h"
 #include "KoColorDisplayRendererInterface.h"
 #include "kis_canvas2.h"
 
@@ -30,7 +29,7 @@
 class KoColor;
 class KisDisplayColorConverter;
 
-class KOWIDGETS_EXPORT KisHSVSlider : public KSelector
+class KisHSVSlider : public KSelector
 {
     Q_OBJECT
 public:
@@ -48,14 +47,12 @@ public:
     KisDisplayColorConverter* converter() const;
 protected:
     virtual void drawContents( QPainter* );
-    KoColorDisplayRendererInterface *m_displayRenderer;
-    KisCanvas2* m_canvas;
-
-protected:
     struct Private;
     Private* const d;
 private:
     qreal R, G, B;
+    KoColorDisplayRendererInterface *m_displayRenderer;
+    KisCanvas2* m_canvas;
 };
 
 #endif

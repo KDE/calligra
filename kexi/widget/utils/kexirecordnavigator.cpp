@@ -26,6 +26,7 @@
 #include <QPixmap>
 #include <QFocusEvent>
 #include <QKeyEvent>
+#include <QWheelEvent>
 #include <QEvent>
 #include <QHBoxLayout>
 #include <QPainter>
@@ -186,6 +187,7 @@ QToolButton* KexiRecordNavigator::createAction(const KGuiItem& item)
     toolButton->setFocusPolicy(Qt::NoFocus);
     toolButton->setToolTip(item.toolTip());
     toolButton->setWhatsThis(item.whatsThis());
+    toolButton->installEventFilter(this);
     return toolButton;
 }
 
@@ -207,7 +209,10 @@ void KexiRecordNavigator::setEnabled(bool set)
 
 bool KexiRecordNavigator::eventFilter(QObject *o, QEvent *e)
 {
-    if (o == d->navRecordNumber) {
+    if (e->type() == QEvent::Wheel) {
+        wheelEvent(static_cast<QWheelEvent*>(e));
+        return true;
+    } else if (o == d->navRecordNumber) {
         bool recordEntered = false;
         bool ret;
         if (e->type() == QEvent::KeyPress) {
@@ -256,6 +261,31 @@ bool KexiRecordNavigator::eventFilter(QObject *o, QEvent *e)
     }
     return false;
 }
+
+void KexiRecordNavigator::wheelEvent(QWheelEvent* wheelEvent)
+{
+    const int delta = wheelEvent->delta();
+
+    // trigger the respective button slots
+    if (delta > 0) {
+        if (d->navBtnPrev->isEnabled()) {
+            slotPrevButtonClicked();
+        }
+    } else if (delta < 0) {
+        if (d->navBtnNext->isEnabled()) {
+            slotNextButtonClicked();
+        }
+    }
+
+    // scroll wheel events also cancel the editing,
+    // so move focus out of the navRecordNumber
+    if (d->navRecordNumber->hasFocus()) {
+        if (d->view) {
+            d->view->setFocus();
+        }
+    }
+}
+
 
 void KexiRecordNavigator::setCurrentRecordNumber(uint r)
 {

@@ -425,7 +425,7 @@ void TestRdf::addAndSave()
                     explicitContext);
     QCOMPARE (236, m->statementCount());
 
-    const char* mimeType = "application/zip";
+    const char mimeType[] = "application/zip";
     QTemporaryFile file;
     QVERIFY(file.open());
     QString todt = file.fileName();
