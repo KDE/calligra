@@ -317,12 +317,12 @@ void OdfTextReader::readElementTableTable(KoXmlStreamReader &reader)
     //          <table:scenario> 9.2.7
     //          <table:shapes> 9.2.8
     //   [done] <table:table-column> 9.1.6
-    //          <table:table-column-group> 9.1.10
+    //   [done] <table:table-column-group> 9.1.10
     //   [done] <table:table-columns> 9.1.12
     //   [done] <table:table-header-columns> 9.1.11
     //   [done] <table:table-header-rows> 9.1.7
     //   [done] <table:table-row> 9.1.3
-    //          <table:table-row-group> 9.1.9
+    //   [done] <table:table-row-group> 9.1.9
     //   [done] <table:table-rows> 9.1.8
     //          <table:table-source> 9.2.6
     //          <table:title> 9.1.13
@@ -332,6 +332,9 @@ void OdfTextReader::readElementTableTable(KoXmlStreamReader &reader)
         
         if (tagName == "table:table-column") {
             readElementTableTableColumn(reader);
+        }
+        else if (tagName == "table:table-column-group") {
+            readElementTableTableColumnGroup(reader);
         }
         else if (tagName == "table:table-columns") {
             readElementTableTableColumns(reader);
@@ -345,6 +348,9 @@ void OdfTextReader::readElementTableTable(KoXmlStreamReader &reader)
         else if (tagName == "table:table-row") {
             readElementTableTableRow(reader);
         }
+        else if (tagName == "table:table-row-group") {
+            readElementTableTableRowGroup(reader);
+        }
         else if (tagName == "table:table-rows") {
             readElementTableTableRows(reader);
         }
@@ -357,6 +363,41 @@ void OdfTextReader::readElementTableTable(KoXmlStreamReader &reader)
     }
 
     m_backend->elementTableTable(reader, m_context);
+    DEBUGEND();
+}
+
+void OdfTextReader::readElementTableTableColumnGroup(KoXmlStreamReader &reader)
+{
+   DEBUGSTART();
+    m_backend->elementTableTableColumnGroup(reader, m_context);
+
+    // <table:table-column-group> has the following children in ODF 1.2:
+    //          <table:table-header-columns> 9.1.11
+    //          <table:table-column> 9.1.6
+    //          <table:table-column-group> 9.1.10
+    //          <table:table-columns> 9.1.12
+    //
+    while (reader.readNextStartElement()) {
+        QString tagName = reader.qualifiedName().toString();
+        
+	if (tagName == "table:table-header-columns") {
+            readElementTableTableHeaderColumns(reader);
+        }
+        else if (tagName == "table:table-column") {
+            readElementTableTableColumn(reader);
+        }
+        else if (tagName == "table:table-column-group") {
+            readElementTableTableColumnGroup(reader);
+        }
+        else if (tagName == "table:table-columns") {
+            readElementTableTableColumns(reader);
+        }
+        else {
+            reader.skipCurrentElement();
+        }
+    }
+
+    m_backend->elementTableTableColumnGroup(reader, m_context);
     DEBUGEND();
 }
 
@@ -439,6 +480,45 @@ void OdfTextReader::readElementTableTableColumn(KoXmlStreamReader &reader)
     reader.skipCurrentElement();
 
     m_backend->elementTableTableColumn(reader, m_context);
+    DEBUGEND();
+}
+
+void OdfTextReader::readElementTableTableRowGroup(KoXmlStreamReader &reader)
+{
+   DEBUGSTART();
+    m_backend->elementTableTableRowGroup(reader, m_context);
+
+    // <table:table-row-group> has the following children in ODF 1.2:
+    //          <table:table-header-rows> 9.1.7
+    //          <table:table-row> 9.1.3
+    //          <table:table-row-group> 9.1.9
+    //          <table:table-rows> 9.1.8
+    //          <text:soft-page-break> 5.6
+   //
+    while (reader.readNextStartElement()) {
+        QString tagName = reader.qualifiedName().toString();
+        
+	if (tagName == "table:table-header-rows") {
+            readElementTableTableHeaderRows(reader);
+        }
+        else if (tagName == "table:table-row") {
+            readElementTableTableRow(reader);
+        }
+        else if (tagName == "table:table-row-group") {
+            readElementTableTableRowGroup(reader);
+        }
+        else if (tagName == "table:table-rows") {
+            readElementTableTableRows(reader);
+        }
+        else if (tagName == "text:soft-page-break") {
+            readElementTextSoftPageBreak(reader);
+        }
+        else {
+            reader.skipCurrentElement();
+        }
+    }
+
+    m_backend->elementTableTableRowGroup(reader, m_context);
     DEBUGEND();
 }
 

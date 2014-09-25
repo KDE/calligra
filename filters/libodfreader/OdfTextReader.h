@@ -85,10 +85,12 @@ class KOODFREADER_EXPORT OdfTextReader
     void readElementTextList(KoXmlStreamReader &reader);
     void readElementTextA(KoXmlStreamReader &reader);
 
+    void readElementTableTableColumnGroup(KoXmlStreamReader &reader);
     void readElementTableTableColumn(KoXmlStreamReader &reader);
     void readElementTableTableColumns(KoXmlStreamReader &reader);
     void readElementTableTableHeaderColumns(KoXmlStreamReader &reader);
     void readElementTableTableHeaderRows(KoXmlStreamReader &reader);
+    void readElementTableTableRowGroup(KoXmlStreamReader &reader);
     void readElementTableTableRow(KoXmlStreamReader &reader);
     void readElementTableTableRows(KoXmlStreamReader &reader);
     void readElementTableTableCell(KoXmlStreamReader &reader);

@@ -124,8 +124,22 @@ void OdfTextReaderBackend::elementTableTable(KoXmlStreamReader &reader, OdfReade
     Q_UNUSED(context);
 }
 
+void OdfTextReaderBackend::elementTableTableColumnGroup(KoXmlStreamReader &reader,
+							OdfReaderContext *context)
+{
+    Q_UNUSED(reader);
+    Q_UNUSED(context);
+}
+
 void OdfTextReaderBackend::elementTableTableColumn(KoXmlStreamReader &reader,
                                                    OdfReaderContext *context)
+{
+    Q_UNUSED(reader);
+    Q_UNUSED(context);
+}
+
+void OdfTextReaderBackend::elementTableTableRowGroup(KoXmlStreamReader &reader,
+						     OdfReaderContext *context)
 {
     Q_UNUSED(reader);
     Q_UNUSED(context);
