@@ -18,6 +18,7 @@
  */
 
 #include "Settings.h"
+#include "DocumentListModel.h"
 #include <QApplication>
 
 #include <kglobal.h>
@@ -149,6 +150,45 @@ void Settings::setThemeID(const QString& id)
 
         emit themeChanged();
     }
+}
+
+int Settings::mimeTypeToDocumentClass(QString mimeType) const
+{
+    DocumentListModel::DocumentType documentClass = DocumentListModel::UnknownType;
+    if(mimeType == QLatin1String("application/vnd.oasis.opendocument.text") ||
+       mimeType == QLatin1String("application/msword") ||
+       mimeType == QLatin1String("application/rtf") ||
+       mimeType == QLatin1String("application/vnd.openxmlformats-officedocument.wordprocessingml.document") ||
+       mimeType == QLatin1String("application/vnd.openxmlformats-officedocument.wordprocessingml.template") ||
+       mimeType == QLatin1String("application/vnd.ms-word.document.macroEnabled.12") ||
+       mimeType == QLatin1String("application/vnd.ms-word.template.macroEnabled.12"))
+    {
+        documentClass = DocumentListModel::TextDocumentType;
+    }
+    else
+    if(mimeType == QLatin1String("application/vnd.oasis.opendocument.presentation") ||
+       mimeType == QLatin1String("application/vnd.ms-powerpoint") ||
+       mimeType == QLatin1String("application/vnd.openxmlformats-officedocument.presentationml.presentation") ||
+       mimeType == QLatin1String("application/vnd.openxmlformats-officedocument.presentationml.template") ||
+       mimeType == QLatin1String("application/vnd.openxmlformats-officedocument.presentationml.slideshow") ||
+       mimeType == QLatin1String("application/vnd.ms-powerpoint.presentation.macroEnabled.12") ||
+       mimeType == QLatin1String("application/vnd.ms-powerpoint.template.macroEnabled.12") ||
+       mimeType == QLatin1String("application/vnd.ms-powerpoint.slideshow.macroEnabled.12") )
+    {
+        documentClass = DocumentListModel::PresentationType;
+    }
+//     else
+//     if(mimeType == QLatin1String("application/vnd.oasis.opendocument.spreadsheet") ||
+//        mimeType == QLatin1String("application/vnd.ms-excel") ||
+//        mimeType == QLatin1String("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") ||
+//        mimeType == QLatin1String("application/vnd.openxmlformats-officedocument.spreadsheetml.template") ||
+//        mimeType == QLatin1String("application/vnd.ms-excel.sheet.macroEnabled") ||
+//        mimeType == QLatin1String("application/vnd.ms-excel.sheet.macroEnabled.12") ||
+//        mimeType == QLatin1String("application/vnd.ms-excel.template.macroEnabled.12") )
+//     {
+//         documentClass = DocumentListModel::SpreadSheetType;
+//     }
+    return documentClass;
 }
 
 #include "Settings.moc"

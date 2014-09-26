@@ -55,6 +55,8 @@ public Q_SLOTS:
     QString themeID() const;
     void setThemeID(const QString& id);
 
+    int mimeTypeToDocumentClass(QString mimeType) const;
+
 Q_SIGNALS:
     void canvasChanged();
     void currentFileChanged();
