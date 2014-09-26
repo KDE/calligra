@@ -103,7 +103,7 @@ Page {
                 id: sidebarList;
                 ListElement { header: "OPEN"; text: "Recent Documents"; icon: "SVG-Icon-RecentDocuments-1"; selected: false; stackComponent: "welcomePageRecent"; }
                 ListElement { text: "Library"; icon: "SVG-Icon-MyDocuments-1"; selected: true; stackComponent: "welcomePageFilebrowser"; }
-                ListElement { text: "Cloud"; icon: "SVG-Icon-Cloud-1"; selected: false; stackComponent: "welcomePageFilebrowser"; }
+                ListElement { text: "Cloud"; icon: "SVG-Icon-Cloud-1"; selected: false; stackComponent: "welcomePageCloud"; }
 
                 ListElement { header: "COMPOSE NEW"; text: "Document"; icon: "SVG-Icon-NewDocument-1"; selected: false; stackComponent: "welcomePageWords"; }
                 ListElement { text: "Presentation"; icon: "SVG-Icon-NewPresentation-1"; selected: false; stackComponent: "welcomePageStage"; }
@@ -176,7 +176,8 @@ Page {
                                     "welcomePageRecent": welcomePageRecent,
                                     "welcomePageStage": welcomePageStage,
                                     "welcomePageWords": welcomePageWords,
-                                    "welcomePageCustom": welcomePageCustom
+                                    "welcomePageCustom": welcomePageCustom,
+                                    "welcomePageCloud": welcomePageCloud
                                 };
                                 return elements[name];
                             }
@@ -231,6 +232,7 @@ Page {
         Component { id: welcomePageStage; WelcomePageStage { } }
         Component { id: welcomePageWords; WelcomePageWords { } }
         Component { id: welcomePageCustom; WelcomePageCustom { } }
+        Component { id: welcomePageCloud; WelcomePageCloud { } }
 
         Component { id: mainPage; MainPage { } }
     }
