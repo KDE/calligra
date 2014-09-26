@@ -31,6 +31,11 @@ var values = {
         style: "Semibold",
         pixelSize: 18,
     },
+    applicationLight: {
+        family: "Source Sans Pro",
+        style: "Light",
+        pixelSize: 18,
+    },
     optionsMenu: {
         family: "Source Sans Pro",
         style: "Semibold",
