@@ -21,7 +21,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include <oracledriver.h>
 
 namespace KexiDB {
-  const char* OracleDriver::keywords[] = {
+  const char* const OracleDriver::keywords[] = {
 		"ADMIN",
 		"CURSOR",
 		"DATE",

@@ -108,6 +108,7 @@
 #include <widget/KexiNameDialog.h>
 #include <widget/KexiNameWidget.h>
 #include <migration/migratemanager.h>
+#include <widget/KexiDBPasswordDialog.h>
 #include <koproperty/EditorView.h>
 #include <koproperty/Set.h>
 
@@ -1262,7 +1263,7 @@ tristate KexiMainWindow::openProject(const KexiProjectData& projectData)
 {
     kDebug() << projectData;
     createKexiProject(projectData);
-    if (!KexiDBPasswordDialog::getPasswordIfNeeded(d->prj->data()->connectionData(), this)) {
+    if (~KexiDBPasswordDialog::getPasswordIfNeeded(d->prj->data()->connectionData(), this)) {
         delete d->prj;
         d->prj = 0;
         return cancelled;
@@ -4103,6 +4104,12 @@ void KexiMainWindow::updatePropertyEditorInfoLabel(const QString& textToDisplayF
 void KexiMainWindow::addSearchableModel(KexiSearchableModel *model)
 {
     d->tabbedToolBar->addSearchableModel(model);
+}
+
+void KexiMainWindow::setReasonableDialogSize(QDialog *dialog)
+{
+    dialog->setMinimumSize(600, 400);
+    dialog->resize(size() * 0.8);
 }
 
 void KexiMainWindow::restoreDesignTabAndActivateIfNeeded(const QString &tabName)

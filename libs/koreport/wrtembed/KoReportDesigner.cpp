@@ -57,7 +57,7 @@
 #include <kross/core/manager.h>
 
 //! Also add public method for runtime?
-const char* ns = "http://kexi-project.org/report/2.0";
+const char ns[] = "http://kexi-project.org/report/2.0";
 
 static QDomElement propertyToElement(QDomDocument* d, KoProperty::Property* p)
 {
@@ -1026,8 +1026,15 @@ void KoReportDesigner::slotEditPaste()
 
 void KoReportDesigner::slotEditPaste(QGraphicsScene * canvas)
 {
+
     // paste a new item of the copy we have in the specified location
     if (!m_sectionData->copy_list.isEmpty()) {
+        QList<QGraphicsItem*> activeItems = canvas->selectedItems();
+        QGraphicsItem *activeItem = 0;
+        if (activeItems.count() == 1) {
+            activeItem = activeItems.first();
+        }
+        QGraphicsItem * pasted_ent = 0;
         canvas->clearSelection();
         m_sectionData->mouseAction = ReportWriterSectionData::MA_None;
 
@@ -1041,8 +1048,16 @@ void KoReportDesigner::slotEditPaste(QGraphicsScene * canvas)
             KoReportDesignerItemBase *ent = (m_sectionData->copy_list[i])->clone();
             KoReportItemBase *new_obj = dynamic_cast<KoReportItemBase*>(ent);
             new_obj->setEntityName(suggestEntityName(type));    
-            QGraphicsItem *pasted_ent = dynamic_cast<QGraphicsItem*>(ent);
+            if (activeItem) {
+                new_obj->position().setScenePos(QPointF(activeItem->x() + 10, activeItem->y() + 10));
+            } else {
+                new_obj->position().setScenePos(QPointF(0, 0));
+            }
+            changeSet(new_obj->propertySet());
+            pasted_ent = dynamic_cast<QGraphicsItem*>(ent);
+
             if (pasted_ent) {
+                pasted_ent->setSelected(true);
                 canvas->addItem(pasted_ent);
                 pasted_ent->show();
                 m_sectionData->mouseAction = ReportWriterSectionData::MA_Grab;
