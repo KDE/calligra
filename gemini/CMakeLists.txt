@@ -93,3 +93,4 @@ install(DIRECTORY qml                                       DESTINATION ${DATA_I
 install(DIRECTORY themes                                    DESTINATION ${DATA_INSTALL_DIR}/calligragemini)
 
 add_subdirectory(pics)
+add_subdirectory(cloud)
