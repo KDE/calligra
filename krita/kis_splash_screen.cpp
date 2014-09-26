@@ -68,7 +68,7 @@ KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, 
                            "<p><a href=\"https://projects.kde.org/projects/calligra\"><span style=\" text-decoration: underline; color:#FFFFFF;\">Source Code</span></a></p>"
 
                            "<p><a href=\"http://kritastudio.com\"><span style=\" text-decoration: underline; color:#FFFFFF;\">Commercial Support</span></a></p>"
-                           "<p><a href=\"http://store.steampowered.com/app/280680/\"><span style=\" text-decoration: underline; color:#FFFFFF;\">Krita on Steam</span></a></p>
+                           "<p><a href=\"http://store.steampowered.com/app/280680/\"><span style=\" text-decoration: underline; color:#FFFFFF;\">Krita on Steam</span></a></p>"
                            "</body>"
                            "</html>"));
 
