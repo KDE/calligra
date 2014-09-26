@@ -61,7 +61,7 @@ class OracleDriver : public KexiDB::Driver{
 		}
 
 	private:
-		static const char *keywords[];
+		static const char * const keywords[];
 
 }; // class OracleDriver
 

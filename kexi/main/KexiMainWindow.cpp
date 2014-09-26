@@ -68,7 +68,6 @@
 #include <khelpmenu.h>
 #include <kfiledialog.h>
 #include <kmenu.h>
-#include <kxmlguifactory.h>
 #include <kmultitabbar.h>
 
 #include <db/connection.h>
@@ -96,6 +95,8 @@
 #include "kexiactioncategories.h"
 #include "kexifinddialog.h"
 #include "kexisearchandreplaceiface.h"
+#include "KexiBugReportDialog.h"
+
 #include <kexi_global.h>
 
 #include <widget/properties/KexiPropertyEditorView.h>
@@ -107,6 +108,7 @@
 #include <widget/KexiNameDialog.h>
 #include <widget/KexiNameWidget.h>
 #include <migration/migratemanager.h>
+#include <widget/KexiDBPasswordDialog.h>
 #include <koproperty/EditorView.h>
 #include <koproperty/Set.h>
 
@@ -398,16 +400,6 @@ KexiMainWindow::~KexiMainWindow()
 KexiProject *KexiMainWindow::project()
 {
     return d->prj;
-}
-
-KXMLGUIClient* KexiMainWindow::guiClient() const
-{
-    return d->dummy_KXMLGUIClient;
-}
-
-KXMLGUIFactory* KexiMainWindow::guiFactory()
-{
-    return d->dummy_KXMLGUIFactory;
 }
 
 QList<QAction*> KexiMainWindow::allActions() const
@@ -1271,7 +1263,7 @@ tristate KexiMainWindow::openProject(const KexiProjectData& projectData)
 {
     kDebug() << projectData;
     createKexiProject(projectData);
-    if (!KexiDBPasswordDialog::getPasswordIfNeeded(d->prj->data()->connectionData(), this)) {
+    if (~KexiDBPasswordDialog::getPasswordIfNeeded(d->prj->data()->connectionData(), this)) {
         delete d->prj;
         d->prj = 0;
         return cancelled;
@@ -2050,12 +2042,6 @@ KexiMainWindow::registerChild(KexiWindow *window)
     //kDebug() << "ID=" << window->id();
 }
 
-void
-KexiMainWindow::updateWindowViewGUIClient(KXMLGUIClient *viewClient)
-{
-    Q_UNUSED(viewClient);
-}
-
 void KexiMainWindow::updateCustomPropertyPanelTabs(KexiWindow *prevWindow,
         Kexi::ViewMode prevViewMode)
 {
@@ -2621,12 +2607,6 @@ tristate KexiMainWindow::switchToViewMode(KexiWindow& window, Kexi::ViewMode vie
     }
 
     activateWindow(window);
-    //view changed: switch to this view's gui client
-    KXMLGUIClient *viewClient = currentWindow()->guiClient();
-    updateWindowViewGUIClient(viewClient);
-    if (d->curWindowViewGUIClient && !viewClient)
-        guiFactory()->removeClient(d->curWindowViewGUIClient);
-    d->curWindowViewGUIClient = viewClient; //remember
 
     invalidateSharedActions();
     invalidateProjectWideActions();
@@ -2956,39 +2936,6 @@ tristate KexiMainWindow::closeWindow(KexiWindow *window, bool layoutTaskBar, boo
     d->pageSetupWindows.remove(printedObjectID);
 #endif
 
-    KXMLGUIClient *client = window->commonGUIClient();
-    KXMLGUIClient *viewClient = window->guiClient();
-    if (d->curWindowGUIClient == client) {
-        d->curWindowGUIClient = 0;
-    }
-    if (d->curWindowViewGUIClient == viewClient) {
-        d->curWindowViewGUIClient = 0;
-    }
-    if (client) {
-        //sanity: ouch, it is not removed yet? - do it now
-        if (d->closedWindowGUIClient && d->closedWindowGUIClient != client)
-            guiFactory()->removeClient(d->closedWindowGUIClient);
-        if (d->openedWindowsCount() == 0) {//now there is no dialogs - remove client RIGHT NOW!
-            d->closedWindowGUIClient = 0;
-            guiFactory()->removeClient(client);
-        } else {
-            //remember this - and MAYBE remove later, if needed
-            d->closedWindowGUIClient = client;
-        }
-    }
-    if (viewClient) {
-        //sanity: ouch, it is not removed yet? - do it now
-        if (d->closedWindowViewGUIClient && d->closedWindowViewGUIClient != viewClient)
-            guiFactory()->removeClient(d->closedWindowViewGUIClient);
-        if (d->openedWindowsCount() == 0) {//now there is no dialogs - remove client RIGHT NOW!
-            d->closedWindowViewGUIClient = 0;
-            guiFactory()->removeClient(viewClient);
-        } else {
-            //remember this - and MAYBE remove later, if needed
-            d->closedWindowViewGUIClient = viewClient;
-        }
-    }
-
     delete windowContainer;
 
     //focus navigator if nothing else available
@@ -3108,7 +3055,6 @@ KexiMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool &
     int previousItemId = currentWindow() ? currentWindow()->partItem()->identifier() : 0;
     openingCancelled = false;
 
-    bool needsUpdateViewGUIClient = true;
     bool alreadyOpened = false;
     KexiWindowContainer *windowContainer = 0;
 
@@ -3118,7 +3064,6 @@ KexiMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool &
                 return 0;
         } else
             activateWindow(*window);
-        needsUpdateViewGUIClient = false;
         alreadyOpened = true;
     } else {
         KexiPart::Part *part = Kexi::partManager().partForClass(item->partClass());
@@ -3172,15 +3117,6 @@ KexiMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool &
         updateCustomPropertyPanelTabs(0, Kexi::NoViewMode); //revert
         //! @todo add error msg...
         return 0;
-    }
-
-    if (needsUpdateViewGUIClient) {
-        //view changed: switch to this view's gui client
-        KXMLGUIClient *viewClient = window->guiClient();
-        updateWindowViewGUIClient(viewClient);
-        if (d->curWindowViewGUIClient && !viewClient)
-            guiFactory()->removeClient(d->curWindowViewGUIClient);
-        d->curWindowViewGUIClient = viewClient; //remember
     }
 
     if (viewMode != window->currentViewMode())
@@ -3511,6 +3447,12 @@ void KexiMainWindow::slotDirtyFlagChanged(KexiWindow* window)
 void KexiMainWindow::slotTipOfTheDay()
 {
     //! @todo
+}
+
+void KexiMainWindow::slotReportBug()
+{
+    KexiBugReportDialog bugReport(this);
+    bugReport.exec();
 }
 
 void KexiMainWindow::slotImportantInfo()
@@ -4162,6 +4104,12 @@ void KexiMainWindow::updatePropertyEditorInfoLabel(const QString& textToDisplayF
 void KexiMainWindow::addSearchableModel(KexiSearchableModel *model)
 {
     d->tabbedToolBar->addSearchableModel(model);
+}
+
+void KexiMainWindow::setReasonableDialogSize(QDialog *dialog)
+{
+    dialog->setMinimumSize(600, 400);
+    dialog->resize(size() * 0.8);
 }
 
 void KexiMainWindow::restoreDesignTabAndActivateIfNeeded(const QString &tabName)

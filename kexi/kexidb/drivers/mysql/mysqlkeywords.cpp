@@ -27,7 +27,7 @@
 #include <mysqldriver.h>
 
 namespace KexiDB {
-  const char* MySqlDriver::keywords[] = {
+  const char* const MySqlDriver::keywords[] = {
 		"ACCESSIBLE",
 		"ACTION",
 		"ADD",

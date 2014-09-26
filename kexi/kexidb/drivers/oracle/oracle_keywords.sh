@@ -41,7 +41,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include <oracledriver.h>
 
 namespace KexiDB {
-  const char* OracleDriver::keywords[] = {" > oraclekeywords.cpp
+  const char* const OracleDriver::keywords[] = {" > oraclekeywords.cpp
 
 # 2, The list of keywords
 while read line
