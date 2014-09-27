@@ -43,6 +43,7 @@
 #include <QEvent>
 #include <QDockWidget>
 #include <QTimer>
+#include <QPointer>
 
 #include <KoConfig.h>
 

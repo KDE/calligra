@@ -72,9 +72,9 @@
 #include <kmenubar.h>
 #include <kmimetype.h>
 
-#ifdef HAVE_KACTIVITIES
-#include <KActivities/ResourceInstance>
-#endif
+//#ifdef HAVE_KACTIVITIES
+//#include <KActivities/ResourceInstance>
+//#endif
 
 //   // qt includes
 #include <QDockWidget>
@@ -134,9 +134,9 @@ public:
         dockWidgetMenu = 0;
         dockerManager = 0;
         deferredClosingEvent = 0;
-#ifdef HAVE_KACTIVITIES
-        activityResource = 0;
-#endif
+//#ifdef HAVE_KACTIVITIES
+//        activityResource = 0;
+//#endif
         themeManager = 0;
         m_helpMenu = 0;
         m_activeWidget = 0;
@@ -234,9 +234,9 @@ public:
 
     QCloseEvent *deferredClosingEvent;
 
-#ifdef HAVE_KACTIVITIES
-    KActivities::ResourceInstance *activityResource;
-#endif
+//#ifdef HAVE_KACTIVITIES
+//    KActivities::ResourceInstance *activityResource;
+//#endif
 
     Digikam::ThemeManager *themeManager;
 
@@ -596,12 +596,12 @@ void KoMainWindow::addRecentURL(const KUrl& url)
         }
         saveRecentFiles();
 
-#ifdef HAVE_KACTIVITIES
-        if (!d->activityResource) {
-            d->activityResource = new KActivities::ResourceInstance(winId(), this);
-        }
-        d->activityResource->setUri(url);
-#endif
+//#ifdef HAVE_KACTIVITIES
+//        if (!d->activityResource) {
+//            d->activityResource = new KActivities::ResourceInstance(winId(), this);
+//        }
+//        d->activityResource->setUri(url);
+//#endif
     }
 }
 

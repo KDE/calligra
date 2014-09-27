@@ -21,7 +21,7 @@
 #define KOTOOLBASE_H
 
 #include <QObject>
-
+#include <QPointer>
 #include <QSet>
 #include <QList>
 #include <QHash>

@@ -27,7 +27,7 @@
 #include "flake_export.h"
 
 #include <QAbstractScrollArea>
-
+#include <QPointer>
 #include "KoCanvasController.h"
 
 class KoShape;
