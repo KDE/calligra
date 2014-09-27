@@ -29,6 +29,7 @@
 #include <KoCanvasBase.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
+#include <KoViewConverter.h>
 
 using namespace Calligra::Sheets;
 

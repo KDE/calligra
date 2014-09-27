@@ -24,6 +24,7 @@
 #include <KoXmlReader.h>
 #include <klocale.h>
 #include <QRect>
+#include <QImage>
 #include <math.h>
 
 const int MatrixSize = 20;

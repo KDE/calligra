@@ -26,6 +26,7 @@
 #include <QMap>
 
 class KoPathShape;
+class KoShapeManager;
 class KoSelection;
 class KPrAnimateMotion;
 class KPrShapeAnimationDocker;
