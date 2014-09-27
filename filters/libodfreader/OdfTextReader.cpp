@@ -592,7 +592,7 @@ void OdfTextReader::readElementTableTableCell(KoXmlStreamReader &reader)
     // be found in any textbox, table cell or similar, it has the
     // following text document children:
     //
-    //          <office:annotation> 14.1
+    //   [done] <office:annotation> 14.1
     //          <table:cell-range-source> 9.3.1
     //          <table:detective> 9.3.2
 
@@ -601,8 +601,7 @@ void OdfTextReader::readElementTableTableCell(KoXmlStreamReader &reader)
         
         QString tagName = reader.qualifiedName().toString();
         if (tagName == "office:annotation") {
-            // FIXME: NYI
-            reader.skipCurrentElement();
+	    readElementOfficeAnnotation(reader);
         }
         else if (tagName == "table:cell-range-source") {
             // FIXME: NYI
@@ -633,7 +632,7 @@ void OdfTextReader::readElementTableCoveredTableCell(KoXmlStreamReader &reader)
     // be found in any textbox, table cell or similar, it has the
     // following text document children:
     //
-    //          <office:annotation> 14.1
+    //   [done] <office:annotation> 14.1
     //          <table:cell-range-source> 9.3.1
     //          <table:detective> 9.3.2
 
@@ -642,9 +641,8 @@ void OdfTextReader::readElementTableCoveredTableCell(KoXmlStreamReader &reader)
         
         QString tagName = reader.qualifiedName().toString();
         if (tagName == "office:annotation") {
-            // FIXME: NYI
-            reader.skipCurrentElement();
-        }
+	    readElementOfficeAnnotation(reader);
+	}
         else if (tagName == "table:cell-range-source") {
             // FIXME: NYI
             reader.skipCurrentElement();
@@ -900,7 +898,7 @@ void OdfTextReader::readElementOfficeAnnotation(KoXmlStreamReader &reader)
     // <office:annotation> has the following children in ODF 1.2:
     //   [done] <dc:creator> 4.3.2.7
     //   [done] <dc:date> 4.3.2.10
-    //          <meta:date-string> 14.3
+    //   [done] <meta:date-string> 14.3
     //   [done] <text:list> 5.3.1
     //   [done] <text:p> 5.1.3
     while (reader.readNextStartElement()) {
@@ -913,8 +911,9 @@ void OdfTextReader::readElementOfficeAnnotation(KoXmlStreamReader &reader)
             readElementDcDate(reader);
         }
         else if (tagName == "meta:date-string") {
-            // FIXME: NYI
-            reader.skipCurrentElement();
+	    QString value;
+	    readCharacterData(reader, value);
+	    m_backend->textVariable(tagName, value);
         }
         else if (tagName == "text:list") {
             readElementTextList(reader);
