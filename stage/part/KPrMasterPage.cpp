@@ -25,6 +25,7 @@
 #include "KPresenter.h"
 #include <KoPALoadingContext.h>
 #include <KoOdfWorkaround.h>
+#include <KoXmlReader.h>
 #include <kdebug.h>
 
 KPrMasterPage::KPrMasterPage(KPrDocument *document)
