@@ -3,4 +3,4 @@
  */
 
 // DOXYGEN_SET_PROJECT_NAME = Karbon
-IGNORE_PREFIX = Karbon Ko K
+// DOXYGEN_SET_IGNORE_PREFIX = Karbon Ko K

@@ -6,7 +6,7 @@
 	to your data. All database objects - tables, queries and forms - are stored in
 	the database, making it easy to share data and design.
  */
-IGNORE_PREFIX=Kexi Ko K
+// DOXYGEN_SET_IGNORE_PREFIX=Kexi Ko K
 EXCLUDE=kexi/3rdparty tests tools kexidb/parser/sqlparser.h kexidb/drivers/odbc plugins/relations
 
 // DOXYGEN_SET_PROJECT_NAME = Kexi
