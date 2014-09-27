@@ -232,14 +232,9 @@ void OdfTextReaderBackend::elementTextSoftPageBreak(KoXmlStreamReader &reader,
 }
 
 
-void OdfTextReaderBackend::characterData(KoXmlStreamReader &reader, OdfReaderContext *context)
-{
-    Q_UNUSED(reader);
-    Q_UNUSED(context);
-}
-
 // ----------------------------------------------------------------
 // List level functions: lit-header and list-item.
+
 
 void OdfTextReaderBackend::elementTextListHeader(KoXmlStreamReader &reader, OdfReaderContext *context)
 {
@@ -251,4 +246,21 @@ void OdfTextReaderBackend::elementTextListItem(KoXmlStreamReader &reader, OdfRea
 {
     Q_UNUSED(reader);
     Q_UNUSED(context);
+}
+
+
+// ----------------------------------------------------------------
+// Some special functions
+
+
+void OdfTextReaderBackend::characterData(KoXmlStreamReader &reader, OdfReaderContext *context)
+{
+    Q_UNUSED(reader);
+    Q_UNUSED(context);
+}
+
+void OdfTextReaderBackend::textVariable(const QString &name, const QString &value)
+{
+    Q_UNUSED(name);
+    Q_UNUSED(value);
 }

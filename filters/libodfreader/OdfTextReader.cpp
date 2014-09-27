@@ -30,12 +30,9 @@
 #include <kdebug.h>
 #include <klocalizedstring.h>
 
-// Calligra
-#include <KoStore.h>
+// Calligra, libodf2
 #include <KoXmlStreamReader.h>
-#include <KoXmlNS.h>
-#include <KoXmlWriter.h>  // For copyXmlElement
-#include <KoOdfReadStore.h>
+#include <KoXmlUtils.h>
 
 // Reader library
 #include "OdfReader.h"
@@ -312,7 +309,7 @@ void OdfTextReader::readElementTableTable(KoXmlStreamReader &reader)
     // <table:table> has the following children in ODF 1.2:
     //          <office:dde-source> 14.6.5
     //          <office:forms> 13.2
-    //          <table:desc> 9.1.14
+    //   [done] <table:desc> 9.1.14
     //          <table:named-expressions> 9.4.11
     //          <table:scenario> 9.2.7
     //          <table:shapes> 9.2.8
@@ -325,7 +322,7 @@ void OdfTextReader::readElementTableTable(KoXmlStreamReader &reader)
     //   [done] <table:table-row-group> 9.1.9
     //   [done] <table:table-rows> 9.1.8
     //          <table:table-source> 9.2.6
-    //          <table:title> 9.1.13
+    //   [done] <table:title> 9.1.13
     //   [done] <text:soft-page-break> 5.6
     while (reader.readNextStartElement()) {
         QString tagName = reader.qualifiedName().toString();
@@ -353,6 +350,16 @@ void OdfTextReader::readElementTableTable(KoXmlStreamReader &reader)
         }
         else if (tagName == "table:table-rows") {
             readElementTableTableRows(reader);
+        }
+        else if (tagName == "table:title") {
+	    QString value;
+	    readCharacterData(reader, value);
+	    m_backend->textVariable(tagName, value);
+        }
+        else if (tagName == "table:desc") {
+	    QString value;
+	    readCharacterData(reader, value);
+	    m_backend->textVariable(tagName, value);
         }
         else if (tagName == "text:soft-page-break") {
             readElementTextSoftPageBreak(reader);

@@ -100,7 +100,10 @@ class KOODFREADER_EXPORT OdfTextReaderBackend
     virtual void elementTextListItem(KoXmlStreamReader &reader, OdfReaderContext *context);
     virtual void elementTextSoftPageBreak(KoXmlStreamReader &reader, OdfReaderContext *context);
 
+    // ----------------------------------------------------------------
+    // Some special functions
     virtual void characterData(KoXmlStreamReader &reader, OdfReaderContext *context);
+    virtual void textVariable(const QString &name, const QString &value);
 
  private:
     class Private;
