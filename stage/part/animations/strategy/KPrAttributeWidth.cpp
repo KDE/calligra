@@ -23,6 +23,7 @@
 #include "KPrShapeAnimations.h"
 #include "KoTextShapeData.h"
 #include <QTextDocument>
+#include <QTextBlock>
 #include <QTextLayout>
 
 KPrAttributeWidth::KPrAttributeWidth() : KPrAnimationAttribute("width")

@@ -26,6 +26,7 @@ class KoShape;
 class KoTextBlockData;
 class KPrAnimationCache;
 class KPrShapeAnimation;
+class QTextBlockUserData;
 
 class KPrAnimationValue
 {
