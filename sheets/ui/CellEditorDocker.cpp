@@ -32,6 +32,7 @@
 
 // Calligra
 #include <KoToolProxy.h>
+#include <KoToolManager.h>
 
 // Calligra Sheets
 #include "CellToolBase.h"

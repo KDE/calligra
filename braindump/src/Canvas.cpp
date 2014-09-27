@@ -22,6 +22,7 @@
 
 #include <QMenu>
 #include <QMouseEvent>
+#include <QPainter>
 
 #include <kxmlguifactory.h>
 #include <kaction.h>

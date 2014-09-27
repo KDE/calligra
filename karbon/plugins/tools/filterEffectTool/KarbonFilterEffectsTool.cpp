@@ -28,6 +28,7 @@
 #include "KoCanvasBase.h"
 #include "KoDocumentResourceManager.h"
 #include "KoShapeManager.h"
+#include "KoViewConverter.h"
 #include "KoSelection.h"
 #include "FilterEffectEditWidget.h"
 #include "FilterEffectResource.h"
