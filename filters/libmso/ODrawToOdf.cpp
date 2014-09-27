@@ -492,7 +492,7 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
 
 namespace
 {
-    const char* markerStyles[6] = {
+    const char* const markerStyles[6] = {
         "", "msArrowEnd_20_5", "msArrowStealthEnd_20_5", "msArrowDiamondEnd_20_5",
         "msArrowOvalEnd_20_5", "msArrowOpenEnd_20_5"
     };

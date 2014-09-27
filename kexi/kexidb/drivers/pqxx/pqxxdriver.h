@@ -60,7 +60,7 @@ protected:
     virtual bool drv_isSystemFieldName(const QString& n)const;
 
 private:
-    static const char *keywords[];
+    static const char * const keywords[];
 };
 
 }

@@ -47,7 +47,6 @@
 //KDE Headers
 #include <KoIcon.h>
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kaction.h>
 #include <kdebug.h>
 

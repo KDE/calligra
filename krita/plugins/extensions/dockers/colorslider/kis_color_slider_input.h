@@ -68,15 +68,22 @@ public slots:
     void setValue(double);
     void update();
     void hueUpdate(int h);
+    void satUpdate(int s, int type);
     void sliderChanged(int i);
+    void sliderIn();
+    void sliderOut();
 signals:
     void hueUpdated(int);
+    void satUpdated(int, int);
 private:
     QDoubleSpinBox* m_NumInput;
     qreal m_hue;
     qreal m_sat;
     qreal m_val;
+    qreal R, G, B;
     bool m_hueupdating;
+    bool m_satupdating;
+    bool m_sliderisupdating;
 };
 
 #endif

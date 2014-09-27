@@ -38,7 +38,6 @@ class QRectF;
 
 class KoShape;
 class KoCanvasBase;
-class KoView;
 class KoCanvasControllerProxyObject;
 
 /**

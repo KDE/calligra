@@ -23,6 +23,7 @@
 #include "KoPathShape.h"
 #include "KoPathShape_p.h"
 
+#include "KoPathSegment.h"
 #include "KoOdfWorkaround.h"
 #include "KoPathPoint.h"
 #include "KoShapeStrokeModel.h"
@@ -37,6 +38,7 @@
 #include "KoMarker.h"
 #include "KoMarkerSharedLoadingData.h"
 #include "KoShapeStroke.h"
+#include "KoInsets.h"
 
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>

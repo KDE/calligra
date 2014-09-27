@@ -17,16 +17,14 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef KOTOOL_H
-#define KOTOOL_H
+#ifndef KOTOOLBASE_H
+#define KOTOOLBASE_H
 
-#include <QString>
-#include <QList>
 #include <QObject>
-#include <QCursor>
-#include <QStringList>
-#include <QRectF>
-#include <QPointer>
+
+#include <QSet>
+#include <QList>
+#include <QHash>
 
 #include "flake_export.h"
 
@@ -42,7 +40,12 @@ class KAction;
 class QAction;
 class QKeyEvent;
 class QWidget;
+class QCursor;
 class QPainter;
+class QString;
+class QStringList;
+class QRectF;
+class QPointF;
 class QInputMethodEvent;
 class QDragMoveEvent;
 class QDragLeaveEvent;

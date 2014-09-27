@@ -58,7 +58,7 @@ class xBaseDriver : public Driver
   
   private:
     xBaseDriverPrivate* dp;
-    static const char *keywords[];
+    static const char * const keywords[];
 
 };
 

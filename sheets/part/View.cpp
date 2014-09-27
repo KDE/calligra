@@ -81,6 +81,7 @@
 
 // Calligra includes
 #include <KoGlobal.h>
+#include <KoColor.h>
 #include <KoDpi.h>
 #include <KoCanvasControllerWidget.h>
 #include <KoMainWindow.h>

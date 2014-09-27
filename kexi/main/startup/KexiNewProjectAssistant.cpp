@@ -252,12 +252,7 @@ void KexiProjectTitleSelectionPage::titleTextChanged(const QString & text)
 
 void KexiProjectTitleSelectionPage::updateUrl()
 {
-    KUrl url = contents->file_requester->url();
-    QString fn = KexiUtils::stringToFileName(contents->le_title->text());
-    if (!fn.isEmpty() && !fn.endsWith(".kexi"))
-        fn += ".kexi";
-    url.setFileName(fn);
-    contents->file_requester->setUrl(url);
+    fileHandler->updateUrl(contents->le_title->text());
 }
 
 bool KexiProjectTitleSelectionPage::isAcceptable()

@@ -18,3 +18,4 @@ text export filter in filters/words/ascii/AsciiExport.cpp.
  */
 
 // DOXYGEN_SET_PROJECT_NAME = KoOdfReader
+// DOXYGEN_SET_IGNORE_PREFIX = Ko K

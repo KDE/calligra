@@ -27,17 +27,11 @@
 #include "flake_export.h"
 
 #include <QAbstractScrollArea>
-#include <QMap>
-#include <QString>
-#include <QPointer>
 
 #include "KoCanvasController.h"
 
 class KoShape;
 class KoCanvasBase;
-class KoView;
-
-class ZoomAndPanTester;
 
 /**
  * KoCanvasController implementation for QWidget based canvases

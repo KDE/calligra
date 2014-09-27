@@ -112,12 +112,12 @@ void KisInfinityManager::imagePositionChanged()
         visible = true;
     }
 
-    if (visible && !m_filteringEnabled) {
+    if (visible && !m_filteringEnabled && this->visible()) {
         m_canvas->inputManager()->attachPriorityEventFilter(this);
         m_filteringEnabled = true;
     }
 
-    if (!visible && m_filteringEnabled) {
+    if (!visible && m_filteringEnabled && this->visible()) {
         m_canvas->inputManager()->detachPriorityEventFilter(this);
         m_filteringEnabled = false;
     }

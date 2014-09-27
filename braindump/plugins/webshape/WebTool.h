@@ -21,6 +21,7 @@
 #define _WEB_TOOL_H_
 
 #include <KoToolBase.h>
+#include <QPointF>
 
 class WebShape;
 class KoShape;

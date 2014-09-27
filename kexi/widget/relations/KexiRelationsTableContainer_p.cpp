@@ -33,7 +33,6 @@
 #include <QScrollBar>
 
 #include <kdebug.h>
-#include <kiconloader.h>
 
 #include <kconfig.h>
 #include <kglobalsettings.h>
