@@ -1810,7 +1810,7 @@ QStringList KexiCompleter::splitPath(const QString& path) const
         return QStringList(pathCopy);
     QString doubleSlash(QLatin1String("\\\\"));
     if (pathCopy.startsWith(doubleSlash))
-        pathCopy = pathCopy.mid(2);
+        pathCopy.remove(0, 2);
     else
         doubleSlash.clear();
 #endif

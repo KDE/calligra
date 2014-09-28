@@ -857,7 +857,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_conditionalFormatting()
     QList<QString> areas;
     while (sqref.indexOf(' ') > 0) {
         QString conditionArea = sqref.left(sqref.indexOf(' '));
-        sqref = sqref.mid(conditionArea.length() + 1);
+        sqref.remove(0, conditionArea.length() + 1);
         areas.push_back(conditionArea);
     }
     areas.push_back(sqref);
@@ -1837,7 +1837,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_hyperlink()
             QString link = m_context->relationships->target(m_context->path, m_context->file, r_id);
             // it follows a hack to get right of the prepended m_context->path...
             if (link.startsWith(m_context->path))
-                link = link.mid(m_context->path.length()+1);
+                link.remove(0, m_context->path.length()+1);
 
             // append location
             if (!location.isEmpty()) link += '#' + location;

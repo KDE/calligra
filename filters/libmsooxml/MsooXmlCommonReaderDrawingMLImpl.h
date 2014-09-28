@@ -4926,7 +4926,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gd()
     // In theory we should interpret all possible values here, not just "val"
     // in practice it does not happen
     if (fmla.startsWith("val ")) {
-        fmla = fmla.mid(4);
+        fmla.remove(0, 4);
     }
 
     m_avModifiers[name] = fmla;
