@@ -48,7 +48,7 @@ TestRun::convert(QBuffer& buffer, KoStore::Backend backend) {
     KoStore* output = KoStore::createStore(&buffer, KoStore::Write,
                                            KoOdf::mimeType(KoOdf::Presentation),
                                            backend);
-    POLE::Storage storage(inputFilePath.toAscii());
+    POLE::Storage storage(inputFilePath.toLatin1());
     QVERIFY(storage.open());
     PptToOdp ppttoodp(0, 0);
     KoFilter::ConversionStatus status = ppttoodp.convert(storage, output);
