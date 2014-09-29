@@ -4595,7 +4595,7 @@ bool DocxXmlDocumentReader::handleSpecialField()
     while (instr.indexOf(' ') > 0) {
         int place = instr.indexOf(' ');
         instructions.push_back(instr.left(place));
-        instr = instr.mid(place + 1);
+        instr.remove(0, place + 1);
     }
     instructions.push_back(instr);
     QString command = instructions.at(0);

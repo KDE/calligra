@@ -159,7 +159,7 @@ KoFilter::ConversionStatus MsooXmlRelationshipsReader::read_Relationship()
     QString fixedPath(m_context->path);
     while (Target.startsWith("../")) {
         //kDebug() << "- Target:" << Target << "fixedPath:" << fixedPath;
-        Target = Target.mid(3);
+        Target.remove(0, 3);
         fixedPath.truncate(fixedPath.lastIndexOf('/'));
         //kDebug() << "= Target:" << Target << "fixedPath:" << fixedPath;
     }

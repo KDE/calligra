@@ -1394,7 +1394,7 @@ bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext,
         QString namespacePrefix;
         foreach(const QString &prefix, formulaNSPrefixes) {
             if (oasisFormula.startsWith(prefix)) {
-                oasisFormula = oasisFormula.mid(prefix.length());
+                oasisFormula.remove(0, prefix.length());
                 namespacePrefix = prefix;
                 break;
             }

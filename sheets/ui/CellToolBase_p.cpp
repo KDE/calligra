@@ -67,6 +67,7 @@
 #include <KoCanvasController.h>
 #include <KoCanvasResourceManager.h>
 #include <KoViewConverter.h>
+#include <KoColor.h>
 #include <KoIcon.h>
 
 // KDE

@@ -42,6 +42,8 @@ public:
 
 public:
 
+    virtual bool acceptsClicks() const;
+
     virtual void setTransformFunction(const QPointF &mousePos, bool perspectiveModifierActive) = 0;
     virtual void paint(QPainter &gc) = 0;
     virtual QCursor getCurrentCursor() const = 0;

@@ -32,6 +32,8 @@
 #include <kactioncollection.h>
 #include <klocale.h>
 
+#include <math.h>
+
 class KarbonZoomController::Private
 {
 public:

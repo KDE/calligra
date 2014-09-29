@@ -25,6 +25,7 @@
 #include "KoPAPageBase.h"
 #include "KoPAUtil.h"
 #include "KoPAPageProvider.h"
+#include <KoZoomHandler.h>
 #include <QPainter>
 KPrPdfPrintJob::KPrPdfPrintJob(KPrView *view)
 : KoPAPrintJob(view)

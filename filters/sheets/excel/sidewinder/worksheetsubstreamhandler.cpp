@@ -398,7 +398,7 @@ void WorksheetSubStreamHandler::handleFooter(FooterRecord* record)
         len = footer.indexOf("&C") - pos;
         if (len > 0) {
             left = footer.mid(pos, len);
-            footer = footer.mid(pos + len, footer.length());
+            footer.remove(0, pos + len);
         } else {
             left = footer.mid(pos);
         }
@@ -411,7 +411,7 @@ void WorksheetSubStreamHandler::handleFooter(FooterRecord* record)
         len = footer.indexOf("&R") - pos;
         if (len > 0) {
             center = footer.mid(pos, len);
-            footer = footer.mid(pos + len, footer.length());
+            footer.remove(0, pos + len);
         } else {
             center = footer.mid(pos);
         }

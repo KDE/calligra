@@ -22,6 +22,7 @@
 
 #include "KoFilterEffect.h"
 #include <QPointF>
+#include <QVector>
 
 #define ConvolveMatrixEffectId "feConvolveMatrix"
 

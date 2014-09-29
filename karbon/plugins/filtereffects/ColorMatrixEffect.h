@@ -21,6 +21,7 @@
 #define COLORMATRIXEFFECT_H
 
 #include "KoFilterEffect.h"
+#include <QVector>
 
 #define ColorMatrixEffectId "feColorMatrix"
 

@@ -52,9 +52,33 @@ public:
     void continuePrimaryAction(const QPointF &pt, bool specialModifierActve);
     bool endPrimaryAction();
 
+    bool acceptsClicks() const;
+
 signals:
     void requestCanvasUpdate();
 
+protected:
+    // default is true
+    void setClipOriginalPointsPosition(bool value);
+
+    // default is false
+    void setCloseOnStartPointClick(bool value);
+
+    void overrideDrawingItems(bool drawConnectionLines,
+                              bool drawOrigPoints,
+                              bool drawTransfPoints);
+
+    virtual void drawConnectionLines(QPainter &gc,
+                                     const QVector<QPointF> &origPoints,
+                                     const QVector<QPointF> &transfPoints,
+                                     bool isEditingPoints);
+
+    virtual QImage calculateTransformedImage(ToolTransformArgs &currentArgs,
+                                             const QImage &srcImage,
+                                             const QVector<QPointF> &origPoints,
+                                             const QVector<QPointF> &transfPoints,
+                                             const QPointF &srcOffset,
+                                             QPointF *dstOffset);
 private:
     class Private;
     const QScopedPointer<Private> m_d;

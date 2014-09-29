@@ -23,6 +23,7 @@
 #include "KPrShapeAnimations.h"
 #include "KoTextShapeData.h"
 #include <QTextDocument>
+#include <QTextBlock>
 #include <QTextLayout>
 #include "kdebug.h"
 KPrAttributeHeight::KPrAttributeHeight() : KPrAnimationAttribute("height")

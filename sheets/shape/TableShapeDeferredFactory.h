@@ -23,6 +23,8 @@
 #include <KoDeferredShapeFactoryBase.h>
 #include <QVariantList>
 
+class KoShapeFactoryBase;
+
 class TableDeferredShapeFactory : public KoDeferredShapeFactoryBase
 {
     Q_OBJECT
