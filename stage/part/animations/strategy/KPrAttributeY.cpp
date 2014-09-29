@@ -21,6 +21,7 @@
 #include "../KPrAnimationCache.h"
 #include "KoShape.h"
 #include "../KPrShapeAnimation.h"
+#include <QTransform>
 
 #include "kdebug.h"
 

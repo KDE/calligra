@@ -24,7 +24,7 @@
 #include <KoShapeLayer.h>
 #include <KoImageData.h>
 #include <KoImageCollection.h>
-#include <KoPAPageBase.h>
+#include <KoPAPage.h>
 #include <KoPAMasterPage.h>
 #include <KoPAPageInsertCommand.h>
 #include <KoPAViewMode.h>

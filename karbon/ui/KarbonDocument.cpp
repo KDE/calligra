@@ -51,6 +51,7 @@
 #include <KoImageCollection.h>
 #include <KoDataCenterBase.h>
 #include <KoText.h>
+#include <KoSelection.h>
 #include <KoStyleManager.h>
 #include <KoTextSharedLoadingData.h>
 #include <KoOdfStylesReader.h>

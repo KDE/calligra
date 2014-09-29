@@ -396,6 +396,11 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
     setPropertyDescription("onClickAction", i18n("On Click"));
     setPropertyDescription("onClickActionOption", i18n("On Click Option"));
     setPropertyDescription("autoTabStops", i18n("Auto Tab Order"));
+    setPropertyDescription("checkSpellingEnabled", i18n("Spell Checking"));
+    setPropertyDescription("html", i18nc("Widget Property", "HTML"));
+    setPropertyDescription("lineWrapColumnOrWidth", i18n("Line Wrap At"));
+    setPropertyDescription("lineWrapMode", i18n("Line Wrap Mode"));
+    setPropertyDescription("spellCheckingLanguage", i18n("Spell Checking Language"));
 
     setPropertyDescription("widgetType", i18n("Editor Type"));
 #ifndef KEXI_NO_AUTOFIELD_WIDGET

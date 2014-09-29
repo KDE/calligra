@@ -667,10 +667,10 @@ void KexiFormView::initDataSource()
             QString fieldName((*it).toLower());
             //remove "tablename." if it was prepended
             if (tableSchema && fieldName.startsWith(tableSchema->name().toLower() + "."))
-                fieldName = fieldName.mid(tableSchema->name().length() + 1);
+                fieldName.remove(0, tableSchema->name().length() + 1);
             //remove "queryname." if it was prepended
             if (!tableSchema && fieldName.startsWith(d->query->name().toLower() + "."))
-                fieldName = fieldName.mid(d->query->name().length() + 1);
+                fieldName.remove(0, d->query->name().length() + 1);
             KexiDB::Field *f = tableSchema ? tableSchema->field(fieldName) : d->query->field(fieldName);
             if (!f) {
                 /*! @todo show error */

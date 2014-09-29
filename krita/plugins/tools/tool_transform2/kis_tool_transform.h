@@ -32,6 +32,7 @@
 #include <QButtonGroup>
 
 #include <kstandarddirs.h>
+#include <kshortcut.h>
 
 #include <KoInteractionTool.h>
 #include <KoToolFactoryBase.h>
@@ -57,6 +58,7 @@ class KisCanvas2;
 class QTouchEvent;
 class KisTransformStrategyBase;
 class KisWarpTransformStrategy;
+class KisCageTransformStrategy;
 class KisFreeTransformStrategy;
 class KisPerspectiveTransformStrategy;
 
@@ -107,6 +109,7 @@ public:
     enum TransformToolMode {
         FreeTransformMode,
         WarpTransformMode,
+        CageTransformMode,
         PerspectiveTransformMode
     };
     Q_ENUMS(TransformToolMode)
@@ -263,6 +266,7 @@ private:
     QRectF m_refRect;
 
     QScopedPointer<KisWarpTransformStrategy> m_warpStrategy;
+    QScopedPointer<KisCageTransformStrategy> m_cageStrategy;
     QScopedPointer<KisFreeTransformStrategy> m_freeStrategy;
     QScopedPointer<KisPerspectiveTransformStrategy> m_perspectiveStrategy;
     KisTransformStrategyBase* currentStrategy() const;

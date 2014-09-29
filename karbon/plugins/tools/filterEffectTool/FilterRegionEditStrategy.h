@@ -23,6 +23,8 @@
 #include <KoInteractionStrategy.h>
 #include "KarbonFilterEffectsTool.h"
 
+#include <QRectF>
+
 class KoShape;
 class KoFilterEffect;
 

@@ -54,7 +54,6 @@
 #include <kmimetype.h>
 #include <ktextbrowser.h>
 #include <kconfig.h>
-#include <kiconloader.h>
 #include <kurl.h>
 
 //! @internal

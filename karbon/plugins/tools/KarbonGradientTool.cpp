@@ -29,6 +29,7 @@
 #include <KoDocumentResourceManager.h>
 #include <KoCanvasResourceManager.h>
 #include <KoShapeManager.h>
+#include <KoViewConverter.h>
 #include <KoSelection.h>
 #include <KoPointerEvent.h>
 #include <KoShapeBackgroundCommand.h>

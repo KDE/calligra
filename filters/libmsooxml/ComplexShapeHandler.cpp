@@ -70,7 +70,7 @@ QString ComplexShapeHandler::getArgument(QString& function, bool equation)
     int separatorIndex = function.indexOf(' ');
     if (separatorIndex > 0) {
         argument = function.left(separatorIndex);
-        function = function.mid(separatorIndex + 1);
+        function.remove(0, separatorIndex + 1);
     }
     else {
         argument = function;
@@ -125,7 +125,7 @@ QString ComplexShapeHandler::createEquation(QString& function)
 {
     int separatorIndex = function.indexOf(' ');
     QString operation = function.left(separatorIndex);
-    function = function.mid(separatorIndex + 1);
+    function.remove(0, separatorIndex + 1);
     QString first, second, third;
 
     if (operation == "val") {

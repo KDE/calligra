@@ -191,8 +191,10 @@ bool KexiStartupHandler::getAutoopenObjects(KCmdLineArgs *args, const QByteArray
                 type_name = item.left(idx).toLower();
                 obj_name = item.mid(idx + 1);
                 //optional: remove ""
-                if (obj_name.left(1) == "\"" && obj_name.right(1) == "\"")
-                    obj_name = obj_name.mid(1, obj_name.length() - 2);
+                if (obj_name.startsWith(QLatin1Char('\"')) && obj_name.endsWith(QLatin1Char('\"'))) {
+                    obj_name.chop(1);
+                    obj_name.remove(0, 1);
+                }
             } else {
                 //just obj. name: set default type name
                 obj_name = item;
