@@ -20,6 +20,7 @@
 #include "ToolManager.h"
 #include <KoToolRegistry.h>
 #include <KoToolManager.h>
+#include <KoToolBase.h>
 #include <KoCanvasController.h>
 #include <QPointer>
 

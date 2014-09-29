@@ -23,6 +23,8 @@
 
 #include "CQTextDocumentNotesModel.h"
 
+#include <QColor>
+
 struct Entry {
     Entry() : colorCount(1), shape(0), expanded(false) {};
     QString text;
