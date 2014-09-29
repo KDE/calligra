@@ -16,7 +16,6 @@ set(dropbox_plugin_SRCS
 automoc4_add_library(calligrageminidropboxplugin MODULE ${dropbox_plugin_SRCS} ${dropbox_lib_SRCS})
 
 target_link_libraries(calligrageminidropboxplugin
-    stdc++
     ${QT_QTDECLARATIVE_LIBRARY}
     ${QT_QTGUI_LIBRARIES}
     ${QT_QTCORE_LIBRARIES}
