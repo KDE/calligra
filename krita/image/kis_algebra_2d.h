@@ -25,6 +25,7 @@
 #include <QPolygonF>
 #include <cmath>
 #include <kis_global.h>
+#include <krita_export.h>
 
 namespace KisAlgebra2D {
 
@@ -127,9 +128,9 @@ void KRITAIMAGE_EXPORT adjustIfOnPolygonBoundary(const QPolygonF &poly, int poly
  * R. The function applies the same transformation to \pt and returns
  * the result.
  **/
-QPointF transformAsBase(const QPointF &pt, const QPointF &base1, const QPointF &base2);
+QPointF KRITAIMAGE_EXPORT transformAsBase(const QPointF &pt, const QPointF &base1, const QPointF &base2);
 
-qreal angleBetweenVectors(const QPointF &v1, const QPointF &v2);
+qreal KRITAIMAGE_EXPORT angleBetweenVectors(const QPointF &v1, const QPointF &v2);
 
 namespace Private {
     inline void resetEmptyRectangle(const QPoint &pt, QRect *rc) {

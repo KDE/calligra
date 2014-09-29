@@ -1573,12 +1573,19 @@ void Form::createPropertiesForWidget(QWidget *w)
         // update the Property.oldValue() and isModified() using the value stored in the ObjectTreeItem
         updatePropertyValue(tree, propertyName, meta);
     }
-    
+
+    const QString paletteBackgroundColorDesc(d->propCaption.value("paletteBackgroundColor"));
     newProp = new KoProperty::Property("paletteBackgroundColor",
-                                       w->palette().color(w->backgroundRole()));
+                                       w->palette().color(w->backgroundRole()),
+                                       paletteBackgroundColorDesc,
+                                       paletteBackgroundColorDesc);
+
+    const QString paletteForegroundColorDesc(d->propCaption.value("paletteForegroundColor"));
     d->propertySet.addProperty(newProp);
     newProp = new KoProperty::Property("paletteForegroundColor",
-                                       w->palette().color(w->foregroundRole()));
+                                       w->palette().color(w->foregroundRole()),
+                                       paletteForegroundColorDesc,
+                                       paletteForegroundColorDesc);
     d->propertySet.addProperty(newProp);
 
     d->propertySet["objectName"].setAutoSync(false); // name should be updated only when pressing Enter

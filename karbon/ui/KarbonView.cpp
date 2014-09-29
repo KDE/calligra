@@ -91,6 +91,7 @@
 #include <KoZoomAction.h>
 #include <KoZoomHandler.h>
 #include <KoPathShape.h>
+#include <KoPathPoint.h>
 #include <KoPathPointData.h>
 #include <KoPathCombineCommand.h>
 #include <KoPathReverseCommand.h>

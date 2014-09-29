@@ -106,7 +106,7 @@ QStringList Command::breakIntoTokens(const QString &line, bool &lastTokenEnclose
         QString typeName = line.mid(index, helperIndex - index);
         if (typeName.startsWith(underscore))
         {
-            typeName = typeName.mid(1);
+            typeName.remove(1);
         }
 
         const QList<QString> &typeDefs = PARAMETER_NAMES_STRINGS;
@@ -124,7 +124,7 @@ QStringList Command::breakIntoTokens(const QString &line, bool &lastTokenEnclose
         // Type separators '()' can be replaced by '[]' or '{}' if necessary ...
         QChar delimiter = line.at(index);
         QChar closingdelimiter;
-        switch (delimiter.toAscii())
+        switch (delimiter.toLatin1())
         {
             case '(':
             {
