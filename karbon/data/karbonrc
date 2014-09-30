@@ -1,6 +1,6 @@
 [calligra]
 TextInlinePluginsDisabled=kprvariables
-ToolPluginsDisabled=calligrastagetoolanimation,kopabackgroundtool,treeshape
+ToolPluginsDisabled=treeshape
 FlakePluginsDisabled=treeshape
 ShapePluginsDisabled=treeshape
 

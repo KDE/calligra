@@ -5,7 +5,6 @@ FlakePluginsDisabled=kexirelationdesignshape
 TextEditingPluginsDisabled=thesaurustool
 ShapePluginsDisabled=kritashape
 TextInlinePluginsDisabled=kprvariables
-ToolPluginsDisabled=calligrastagetoolanimation,kopabackgroundtool
 
 [KoShapeCollection]
 QuickShapes=TextShapeID,PictureShape,ArtisticText
