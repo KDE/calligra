@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Service
+Name=WordPerfect Documents
+Comment=WPD for Okular
+ServiceTypes=okular/Generator
+MimeType=application/vnd.wordperfect;
+X-KDE-Library=okularGenerator_odt
+X-KDE-Priority=1
+X-KDE-okularAPIVersion=1
+X-KDE-okularHasInternalSettings=false
