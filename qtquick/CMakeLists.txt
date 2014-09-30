@@ -36,6 +36,7 @@ automoc4_add_library(calligraqtquickcomponentsplugin MODULE ${calligraqtquickcom
 
 target_link_libraries(calligraqtquickcomponentsplugin
     ${QT_QTDECLARATIVE_LIBRARY}
+    ${QT_QTOPENGL_LIBRARY}
     ${QT_LIBRARIES}
     komain
     kotextlayout

@@ -21,6 +21,9 @@
 
 #include <QPainter>
 #include <QDebug>
+#include <QGraphicsScene>
+#include <QGraphicsView>
+#include <QGLWidget>
 
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
@@ -43,8 +46,7 @@ public:
           zoomChange(0.f),
           zooming(false),
           minimumZoom( -1.f ),
-          maximumZoom( 2.f ),
-          placeholder(0)
+          maximumZoom( 2.f )
           { }
 
     CQCanvasBase *canvas;
@@ -65,7 +67,7 @@ public:
     qreal maximumZoom;
     QPointF zoomCenter;
 
-    QPixmap *placeholder;
+    QImage placeholder;
 };
 
 CQCanvasControllerItem::CQCanvasControllerItem(QDeclarativeItem* parent)
@@ -82,14 +84,14 @@ CQCanvasControllerItem::~CQCanvasControllerItem()
 
 void CQCanvasControllerItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* , QWidget* )
 {
-    if(!d->zooming || !d->placeholder || d->placeholder->isNull()) {
+    if(!d->zooming || d->placeholder.isNull()) {
         return;
     }
 
     QPointF offset(d->flickable->property("contentX").toReal(), d->flickable->property("contentY").toReal());
 
 
-    painter->drawPixmap(QRectF(offset - d->placeholderTarget.topLeft(), d->placeholderTarget.size()) , *d->placeholder, QRectF(QPointF(0, 0), d->placeholder->size()));
+    painter->drawImage(QRectF(offset - d->placeholderTarget.topLeft(), d->placeholderTarget.size()) , d->placeholder, QRectF(QPointF(0, 0), d->placeholder.size()));
 }
 
 QDeclarativeItem* CQCanvasControllerItem::canvas() const
@@ -210,17 +212,17 @@ void CQCanvasControllerItem::beginZoomGesture()
         return;
     }
 
-    d->placeholder = new QPixmap(d->flickable->width(), d->flickable->height());
-
     d->placeholderTarget.setLeft(0);
     d->placeholderTarget.setTop(0);
     d->placeholderTarget.setWidth(d->flickable->width());
     d->placeholderTarget.setHeight(d->flickable->height());
 
-    QPainter painter;
-    painter.begin(d->placeholder);
-    d->canvas->render(&painter, QRectF(QPoint(0, 0), d->placeholder->size()));
-    painter.end();
+    QGLWidget* gl = qobject_cast<QGLWidget*>(scene()->views().at(0)->viewport());
+    if(!gl)
+       return;
+
+    QRectF scene = d->flickable->mapToScene(QRectF(d->flickable->x(), 0, d->flickable->width(), d->flickable->height())).boundingRect();
+    d->placeholder = gl->grabFrameBuffer(true).copy(scene.toRect());
 
     d->canvas->setVisible(false);
     d->zooming = true;
@@ -244,8 +246,7 @@ void CQCanvasControllerItem::endZoomGesture()
 
     setZoom(d->zoom + d->zoomChange);
 
-    delete d->placeholder;
-    d->placeholder = 0;
+    d->placeholder = QImage();
     d->zoomChange = 0.0;
     d->zooming = false;
 

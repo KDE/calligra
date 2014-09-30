@@ -171,11 +171,11 @@ Item {
             anchors {
                 top: parent.top;
                 topMargin: Settings.theme.adjustedPixel(86);
-                left: parent.left;
                 right: parent.right;
                 bottom: enabled ? parent.bottom : parent.top;
                 bottomMargin: enabled ? 0 : -Settings.theme.adjustedPixel(86);
             }
+            width: Math.min(parent.width, base.width - navigatorHandle.width);
             interactive: base.state !== "readermode";
             property int fastVelocity: Settings.theme.adjustedPixel(1000);
             onVerticalVelocityChanged: {
@@ -468,6 +468,7 @@ Item {
             }
         }
         Item {
+            id: navigatorHandle;
             anchors {
                 left: parent.right;
                 verticalCenter: parent.verticalCenter;
