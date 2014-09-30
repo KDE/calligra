@@ -42,7 +42,6 @@ public:
         , caption(caption_)
         , defaultDirectory(defaultDir_)
         , filterList(QStringList())
-        , defaultExtensions(QStringList())
         , defaultFilter(QString())
         , fileDialog(0)
         , mimeType(0)
@@ -91,7 +90,6 @@ public:
     QString caption;
     QString defaultDirectory;
     QStringList filterList;
-    QStringList defaultExtensions;
     QString defaultFilter;
     QFileDialog *fileDialog;
     KMimeType::Ptr mimeType;
@@ -142,8 +140,6 @@ void KoFileDialog::setImageFilters()
 void KoFileDialog::setNameFilter(const QString &filter)
 {
     d->filterList.clear();
-    d->defaultExtensions.clear();
-
     if (d->type == KoFileDialog::SaveFile) {
         QStringList *mimeList = new QStringList();
         d->filterList << splitNameFilter(filter, mimeList);
@@ -159,7 +155,6 @@ void KoFileDialog::setNameFilters(const QStringList &filterList,
                                   QString defaultFilter)
 {
     d->filterList.clear();
-    d->defaultExtensions.clear();
 
     if (d->type == KoFileDialog::SaveFile) {
         QStringList *mimeList = new QStringList();
@@ -187,11 +182,10 @@ void KoFileDialog::setNameFilters(const QStringList &filterList,
 void KoFileDialog::setMimeTypeFilters(const QStringList &filterList,
                                       QString defaultFilter)
 {
-    getFilterStringListFromMime(filterList, d->filterList, d->defaultExtensions, true);
+    d->filterList = getFilterStringListFromMime(filterList, true);
 
     if (!defaultFilter.isEmpty()) {
-        QStringList defaultFilters;
-        getFilterStringListFromMime(QStringList() << defaultFilter, defaultFilters, QStringList(), false);
+        QStringList defaultFilters = getFilterStringListFromMime(QStringList() << defaultFilter, false);
         if (defaultFilters.size() > 0) {
             defaultFilter = defaultFilters.first();
         }
@@ -340,8 +334,13 @@ QString KoFileDialog::url()
     }
 
     if (!url.isEmpty()) {
+
         if (d->type == SaveFile && QFileInfo(url).suffix().isEmpty()) {
-            url.append(defaultSuffix(d->defaultFilter));
+            int start = d->defaultFilter.lastIndexOf("*.") + 1;
+            int end = d->defaultFilter.lastIndexOf(" )");
+            int n = end - start;
+            QString extension = d->defaultFilter.mid(start, n);
+            url.append(extension);
         }
 
         d->mimeType = KMimeType::findByUrl(KUrl(url), 0, true, true);
@@ -387,8 +386,13 @@ QStringList KoFileDialog::urls()
 
 void KoFileDialog::filterSelected(const QString &filter)
 {
+    // "Windows BMP image ( *.bmp )";
+    int start = filter.lastIndexOf("*.") + 2;
+    int end = filter.lastIndexOf(" )");
+    int n = end - start;
+    QString extension = filter.mid(start, n);
     d->defaultFilter = filter;
-    d->fileDialog->setDefaultSuffix(defaultSuffix(filter));
+    d->fileDialog->setDefaultSuffix(extension);
 }
 
 QStringList KoFileDialog::splitNameFilter(const QString &nameFilter, QStringList *mimeList)
@@ -424,18 +428,14 @@ QStringList KoFileDialog::splitNameFilter(const QString &nameFilter, QStringList
     return filters;
 }
 
-void KoFileDialog::getFilterStringListFromMime(const QStringList &mimeList
-                                               , QStringList &filterList
-                                               , QStringList &defaultExtensions
-                                               , bool withAllSupportedEntry
-                                              )
+const QStringList KoFileDialog::getFilterStringListFromMime(const QStringList &mimeList,
+                                                            bool withAllSupportedEntry)
 {
     QStringList mimeSeen;
 
     QStringList ret;
     if (withAllSupportedEntry) {
-        filterList << QString(i18n("All supported formats") + " ( ");
-        defaultExtensions << QString(".kra");
+        ret << QString(i18n("All supported formats") + " ( ");
     }
 
     for (QStringList::ConstIterator
@@ -460,8 +460,9 @@ void KoFileDialog::getFilterStringListFromMime(const QStringList &mimeList
     }
 
     if (withAllSupportedEntry) {
-        filterList[0].append(")");
+        ret[0].append(")");
     }
+    return ret;
 }
 
 QString KoFileDialog::getUsedDir(const QString &dialogName)
@@ -486,16 +487,3 @@ void KoFileDialog::saveUsedDir(const QString &fileName,
 
 }
 
-QString KoFileDialog::defaultSuffix(const QString &filter)
-{
-    int index = d->filterList.indexOf(filter);
-    if(index >= 0 && index < d->defaultExtensions.count()) {
-        return d->defaultExtensions.at(index);
-    }
-
-    //Apparently, KMimeType had no default extension for the filter, so fall
-    //back to parsing the filter and using the extension from that.
-    int start = filter.lastIndexOf("*.") + 2;
-    int end = filter.lastIndexOf(" )");
-    return filter.mid(start, end - start);
-}
