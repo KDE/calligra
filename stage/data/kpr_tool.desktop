@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=ServiceType
+X-KDE-ServiceType=CalligraStage/Tool
+Comment=Tool for Calligra Stage
+[PropertyDef::X-KPresenter-Version]
+Type=int
+[PropertyDef::X-KDE-PluginInfo-Name]
+Type=QString

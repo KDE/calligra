@@ -94,6 +94,7 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
         dbgFile << "failed reading resource section: " << resourceSection.error;
         return KisImageBuilder_RESULT_FAILURE;
     }
+    // XXX: add all the image resource blocks as annotations to the image
 
     dbgFile << "Read resource section. pos:" << f.pos();
 
@@ -102,14 +103,15 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
         dbgFile << "failed reading layer section: " << layerSection.error;
         return KisImageBuilder_RESULT_FAILURE;
     }
-    // XXX: add all the image resource blocks as annotations to the image
-
     dbgFile << "Read layer section. " << layerSection.nLayers << "layers. pos:" << f.pos();
 
     // Get the right colorspace
     QPair<QString, QString> colorSpaceId = psd_colormode_to_colormodelid(header.colormode,
                                                                          header.channelDepth);
-    if (colorSpaceId.first.isNull()) return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
+    if (colorSpaceId.first.isNull()) {
+        dbgFile << "Unsupported colorspace" << header.colormode << header.channelDepth;
+        return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
+    }
 
     // Get the icc profile!
     const KoColorProfile* profile = 0;
@@ -120,8 +122,8 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
                                                                        colorSpaceId.second,
                                                                        iccProfileData->icc);
             dbgFile  << "Loaded ICC profile" << profile->name();
+            delete resourceSection.resources.take(PSDResourceSection::ICC_PROFILE);
         }
-
     }
 
     // Create the colorspace
@@ -141,8 +143,15 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
         if (resInfo) {
             m_image->setResolution(POINT_TO_INCH(resInfo->hRes), POINT_TO_INCH(resInfo->vRes));
             // let's skip the unit for now; we can only set that on the KoDocument, and krita doesn't use it.
+            delete resourceSection.resources.take(PSDResourceSection::RESN_INFO);
         }
     }
+
+    // Preserve all the annotations
+    foreach(PSDResourceBlock *resourceBlock, resourceSection.resources.values()) {
+        m_image->addAnnotation(resourceBlock);
+    }
+
     // Preserve the duotone colormode block for saving back to psd
     if (header.colormode == DuoTone) {
         KisAnnotationSP annotation = new KisAnnotation("DuotoneColormodeBlock",
@@ -150,6 +159,7 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
                                                        colorModeBlock.data);
         m_image->addAnnotation(annotation);
     }
+
 
     // read the projection into our single layer
     if (layerSection.nLayers == 0) {
