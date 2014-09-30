@@ -222,8 +222,7 @@ void OdfDrawReader::readCommonGraphicsElements(KoXmlStreamReader &reader)
 	readElementDrawCircle(reader);
     }
     else if (tagName == "draw:frame") {
-	//readElementDrawFrame(reader);
-	reader.skipCurrentElement();
+	readElementDrawFrame(reader);
     }
     else {
 	// FIXME: Should this perhaps be skipCurrentElement()?
@@ -309,7 +308,7 @@ void OdfDrawReader::readElementDrawFrame(KoXmlStreamReader &reader)
     //          <draw:image> 10.4.4
     //          <draw:image-map> 10.4.13.2
     //   [done] <draw:object> 10.4.6.2
-    //          <draw:object-ole> 10.4.6.3
+    //   [done] <draw:object-ole> 10.4.6.3
     //          <draw:plugin> 10.4.8
     //          <draw:text-box> 10.4.3
     //          <office:event-listeners> 10.3.19
@@ -326,6 +325,9 @@ void OdfDrawReader::readElementDrawFrame(KoXmlStreamReader &reader)
         }
         else if (tagName == "draw:object") {
 	    readElementDrawObject(reader);
+        }
+        else if (tagName == "draw:object-ole") {
+	    readElementDrawObjectOle(reader);
         }
         //...  MORE else if () HERE
         else if (tagName == "table:table") {
@@ -375,69 +377,30 @@ void OdfDrawReader::readElementDrawObject(KoXmlStreamReader &reader)
     DEBUGEND();
 }
 
-#if 0
+void OdfDrawReader::readElementDrawObjectOle(KoXmlStreamReader &reader)
 {
-    QString styleName = cssClassName(nodeElement.attribute("style-name"));
-    StyleInfo *styleInfo = m_styles.value(styleName);
+   DEBUGSTART();
+    m_backend->elementDrawObjectOle(reader, m_context);
 
-
-    // Go through the frame's content and see what we can handle.
-    KoXmlElement framePartElement;
-    forEachElement (framePartElement, nodeElement) {
-
-        // Handle at least a few types of objects (hopefully more in the future).
-	if (framePartElement.localName() == "image"
-                 && framePartElement.namespaceURI() == KoXmlNS::draw)
-        {
-            // Handle image
-            htmlWriter->startElement("img", m_doIndent);
-            if (styleInfo) {
-                styleInfo->inUse = true;
-                htmlWriter->addAttribute("class", styleName);
-            }
-            htmlWriter->addAttribute("alt", "(No Description)");
-
-            QString href = framePartElement.attribute("href");
-            QString imgSrc = href.section('/', -1);
-            //kDebug(30503) << "image source:" << href << imgSrc;
-
-            if (m_options->useMobiConventions) {
-                // Mobi
-                // First check for repeated images.
-                if (m_imagesIndex.contains(imgSrc)) {
-                    htmlWriter->addAttribute("recindex", QString::number(m_imagesIndex.value(imgSrc)));
-                }
-                else {
-                    htmlWriter->addAttribute("recindex", QString::number(m_imgIndex));
-                    m_imagesIndex.insert(imgSrc, m_imgIndex);
-                    m_imgIndex++;
-                }
-            }
-            else {
-                htmlWriter->addAttribute("src", imgSrc);
-            }
-
-            m_images.insert(framePartElement.attribute("href"), size);
-
-            htmlWriter->endElement(); // end img
-            break; // Only one image per frame.
+    // <draw:object-ole> has the following children in ODF 1.2:
+    //          <office:binary-data> 10.4.5
+    while (reader.readNextStartElement()) {
+        QString tagName = reader.qualifiedName().toString();
+        
+	if (tagName == "office:binary-data") {
+            // FIXME: NYI
+            reader.skipCurrentElement();
         }
-        // Handle video
-        else if (framePartElement.localName() == "plugin"
-                 && framePartElement.namespaceURI() == KoXmlNS::draw) {
-            QString videoSource = framePartElement.attribute("href");
-            QString videoId = "media_id_" + QString::number(m_mediaId);
-            m_mediaId++;
-
-            htmlWriter->addAttribute("id", videoId);
-            QString id = "chapter" + QString::number(m_currentChapter) +
-                    m_collector->fileSuffix() + "#" + videoId;
-            m_mediaFilesList.insert(id, videoSource);
+        else {
+	    // Shouldn't happen.
+            reader.skipCurrentElement();
         }
-    } // foreach
+    }
+
+    m_backend->elementDrawObjectOle(reader, m_context);
+    DEBUGEND();
 }
 
-#endif
 
 // ----------------------------------------------------------------
 //                             Other functions

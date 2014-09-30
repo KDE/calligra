@@ -115,3 +115,10 @@ void OdfDrawReaderBackend::elementDrawObject(KoXmlStreamReader &reader,
     Q_UNUSED(reader);
     Q_UNUSED(context);
 }
+
+void OdfDrawReaderBackend::elementDrawObjectOle(KoXmlStreamReader &reader,
+						OdfReaderContext *context)
+{
+    Q_UNUSED(reader);
+    Q_UNUSED(context);
+}

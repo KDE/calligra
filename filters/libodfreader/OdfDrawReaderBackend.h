@@ -77,6 +77,7 @@ class KOODFREADER_EXPORT OdfDrawReaderBackend
 
     virtual void elementDrawFrame(KoXmlStreamReader &reader, OdfReaderContext *context);
     virtual void elementDrawObject(KoXmlStreamReader &reader, OdfReaderContext *context);
+    virtual void elementDrawObjectOle(KoXmlStreamReader &reader, OdfReaderContext *context);
 
  private:
     class Private;

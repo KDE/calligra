@@ -91,6 +91,7 @@ class KOODFREADER_EXPORT OdfDrawReader
 
     void readElementDrawFrame(KoXmlStreamReader &reader);
     void readElementDrawObject(KoXmlStreamReader &reader);
+    void readElementDrawObjectOle(KoXmlStreamReader &reader);
 
     // ----------------------------------------------------------------
     // Other functions
