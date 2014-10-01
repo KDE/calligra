@@ -115,7 +115,10 @@ public:
 //         slateMode = (GetSystemMetrics(SM_CONVERTIBLESLATEMODE) == 0);
 //         docked = (GetSystemMetrics(SM_SYSTEMDOCKED) != 0);
 #endif
-}
+        fullScreenThrottle = new QTimer(qq);
+        fullScreenThrottle->setInterval(500);
+        fullScreenThrottle->setSingleShot(true);
+    }
     MainWindow* q;
     bool allowClose;
     TouchDeclarativeView* touchView;
@@ -139,6 +142,7 @@ public:
     KAction* toTouch;
     QToolButton* switcher;
     QAction* alternativeSaveAction;
+    QTimer* fullScreenThrottle;
 
     void initTouchView(QObject* parent)
     {
@@ -343,7 +347,6 @@ void MainWindow::switchToTouch()
     emit switchedToTouch();
 
     if (d->slateMode) {
-        setWindowState(windowState() | Qt::WindowFullScreen);
         if (d->syncObject->initialized)
             QTimer::singleShot(50, this, SLOT(touchChange()));
     }
@@ -407,8 +410,6 @@ void MainWindow::switchToDesktop()
         d->touchView->setParent(0);
         setCentralWidget(d->desktopView);
     }
-
-    setWindowState(windowState() & ~Qt::WindowFullScreen);
 
     if (view) {
         //Notify the new view that we just switched to it, passing our synchronisation object
@@ -548,6 +549,32 @@ void MainWindow::setTemporaryFile(bool newValue)
 {
     d->temporaryFile = newValue;
     emit temporaryFileChanged();
+}
+
+bool MainWindow::fullScreen() const
+{
+    return Qt::WindowFullScreen == (windowState() & Qt::WindowFullScreen);
+}
+
+void MainWindow::setFullScreen(bool newValue)
+{
+    if(newValue) {
+        if(d->fullScreenThrottle->isActive()) {
+            // not a good thing... you need to avoid this happening. This exists to avoid a death-loop,
+            // such as what might happen if readermode is enabled when the window is not maximised
+            // as this causes a resize loop which makes readermode switch between enabled and disabled,
+            // which in turn makes fullScreen be set and reset all the time... very bad, so let's try
+            // and avoid that.
+        }
+        else {
+            setWindowState(windowState() | Qt::WindowFullScreen);
+        }
+    }
+    else {
+        setWindowState(windowState() & ~Qt::WindowFullScreen);
+    }
+    d->fullScreenThrottle->start();
+    emit fullScreenChanged();
 }
 
 void MainWindow::resourceChanged(int key, const QVariant& v)
