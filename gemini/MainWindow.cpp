@@ -109,6 +109,7 @@ public:
         , toDesktop(0)
         , toTouch(0)
         , switcher(0)
+        , alternativeSaveAction(0)
     {
 #ifdef Q_OS_WIN
 //         slateMode = (GetSystemMetrics(SM_CONVERTIBLESLATEMODE) == 0);
@@ -137,6 +138,7 @@ public:
     KAction* toDesktop;
     KAction* toTouch;
     QToolButton* switcher;
+    QAction* alternativeSaveAction;
 
     void initTouchView(QObject* parent)
     {
@@ -492,6 +494,24 @@ void MainWindow::setCurrentTouchPage(QString newPage)
         else
         {
             //QTimer::singleShot(3000, this, SLOT(adjustZoomOnDocumentChangedAndStuff()));
+        }
+    }
+}
+
+void MainWindow::setAlternativeSaveAction(QAction* altAction)
+{
+    // if mainwindow exists, and alt action exists, remove alt action from current mainwindow
+    if(d->desktopView && d->alternativeSaveAction) {
+        d->desktopView->actionCollection()->removeAction(d->alternativeSaveAction);
+    }
+    d->alternativeSaveAction = altAction;
+    // if mainwindow exists, set alt action into current mainwindow
+    if(d->desktopView && d->alternativeSaveAction) {
+        QAction* cloudSave = d->desktopView->actionCollection()->addAction("cloud_save", d->alternativeSaveAction);
+        KToolBar* tb = d->desktopView->toolBar("mainToolBar");
+        if(tb) {
+            tb->removeAction(cloudSave);
+            tb->addAction(cloudSave);
         }
     }
 }

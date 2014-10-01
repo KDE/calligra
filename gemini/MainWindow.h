@@ -51,6 +51,8 @@ public:
     bool temporaryFile() const;
     void setTemporaryFile(bool newValue);
 
+    Q_INVOKABLE void setAlternativeSaveAction(QAction* altAction);
+
     virtual void closeEvent(QCloseEvent* event);
 
     Q_INVOKABLE void setDocAndPart(QObject* document, QObject* part);
