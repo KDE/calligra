@@ -28,11 +28,12 @@ Item {
     onWidthChanged: Constants.setGridWidth( width / Constants.GridColumns );
     onHeightChanged: Constants.setGridHeight( height / Constants.GridRows );
     property QtObject window: mainWindow;
-    function openFile(fileName) {
+    function openFile(fileName, alternativeSaveAction) {
         mainPageStack.push(mainPage);
         Settings.currentFile = "";
         Settings.currentFile = fileName;
         RecentFileManager.addRecent(fileName);
+        mainWindow.setAlternativeSaveAction(alternativeSaveAction);
     }
     PageStack {
         id: mainPageStack;

@@ -220,7 +220,6 @@ Item {
                             if (sent_received || speed){
                                 lb_updown_total.text = (is_download?"Received: ":"Sent: ")+__sent_received_calculate(sent_received) + " | Speed: " +__speed_calculate(speed)
                             }else {
-                                lb_updown_total.text = "huh..." + is_download + sent_received + speed;
                                 console.debug(lb_updown_total.text);
                             }
                         }
@@ -392,7 +391,7 @@ Item {
             var filePath = controllerMIT.dropboxFolder() + "/" + page.fileName;
             var docClass = Settings.mimeTypeToDocumentClass(page.fileMimetype);
             if(docClass !== DocumentListModel.UnknownType) {
-                openFile(filePath);
+                openFile(filePath, controllerMIT.uploadMostRecentAction());
             }
             else {
                 console.log("Unknown file format " + docClass + " for file " + filePath + " with stated mimetype " + page.fileMimetype);
