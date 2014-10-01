@@ -420,12 +420,20 @@ Item {
                 script: {
                     d.zoomToFit();
                     controllerFlickable.contentY = wordsCanvas.pagePosition(wordsCanvas.currentPageNumber) + 1;
+                    if(mainWindow.maximized) {
+                        mainWindow.fullScreen = true;
+                    }
                 }
             }
         },
         Transition {
             from: "readermode";
-            ScriptAction { script: d.restoreZoom(); }
+            ScriptAction {
+                script: {
+                    d.restoreZoom();
+                    mainWindow.fullScreen = false;
+                }
+            }
         }
         ]
     Item {
