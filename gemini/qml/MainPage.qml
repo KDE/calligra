@@ -393,6 +393,7 @@ Page {
                 onClicked: {
                     mainPageStack.push(presentationDJMode);
                     closeToolbarMenus();
+                    mainWindow.fullScreen = true;
                 }
                 Calligra.PresentationModel {
                     id: presentationModel

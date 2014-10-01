@@ -157,7 +157,10 @@ Rectangle {
         fillMode: Image.PreserveAspectFit
         MouseArea {
             anchors.fill: parent;
-            onClicked: mainPageStack.pop();
+            onClicked: {
+                mainPageStack.pop();
+                mainWindow.fullScreen = false;
+            }
         }
     }
     Label {
