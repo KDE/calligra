@@ -29,6 +29,8 @@
 #include "libs/filetransferitem.h"
 #include "libs/options.h"
 
+class QAction;
+
 class Controller : public QObject
 {
     Q_OBJECT
@@ -61,6 +63,8 @@ private:
     void folderlist_have_item_checked();
     void start_delete_items();
     void start_move_items();
+
+    QAction* m_uploadMostRecentAction;
 
 signals:
     void needAuthenticateChanged();
@@ -142,8 +146,9 @@ public slots:
     void oauth_v1_access_token();
 
     QString dropboxFolder() { return NetworkController::Dropbox_Folder(); };
-private:
-
+    QAction* uploadMostRecentAction();
+    void uploadMostRecent();
 };
 
 #endif // CONTROLLER_H
+

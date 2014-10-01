@@ -15,6 +15,7 @@
 #include <QThread>
 #include <QDateTime>
 #include <QTimer>
+#include <QAction>
 
 //#include <MNotification>
 
@@ -22,7 +23,8 @@ Controller::Controller(QObject *parent) :
     QObject(parent),
     m_networkcontroller(new NetworkController(parent)),
     m_multi_selection(false),
-    m_current_filetransferitem(0)
+    m_current_filetransferitem(0),
+    m_uploadMostRecentAction(0)
 {
     folder_model = new ListModel(new FolderItem, parent);
     filestransfer_model = new ListModel(new FileTransferItem, parent);
@@ -538,4 +540,32 @@ void Controller::oauth_v1_request_token() {
 
 void Controller::oauth_v1_access_token() {
     m_networkcontroller->request_access_token();
+}
+
+QAction* Controller::uploadMostRecentAction()
+{
+    if(!m_uploadMostRecentAction)
+    {
+        m_uploadMostRecentAction = new QAction(QIcon::fromTheme("folder-remote"), "Update DropBox Copy", this);
+        connect(m_uploadMostRecentAction, SIGNAL(triggered(bool)), SLOT(uploadMostRecent()));
+    }
+    return m_uploadMostRecentAction;
+}
+
+void Controller::uploadMostRecent()
+{
+    FileTransferItem* fti = qobject_cast<FileTransferItem*>(filestransfer_model->getRow(m_current_filetransferitem - 1));
+    if(fti) {
+        // upload, needs FULL local path, operates on current dir remotely
+        QString filename = QString("%1%2%3").arg(dropboxFolder()).arg(QDir::separator()).arg(fti->filename());
+        QString sizestr=get_file_size("file://"+filename);
+        FileTransferItem* newFti = new FileTransferItem(
+                                           filename,
+                                           sizestr,
+                                           m_networkcontroller->m_currentDir,
+                                           false
+                                           );
+        filestransfer_model->appendRow(newFti);
+        m_networkcontroller->upload(newFti);
+    }
 }
