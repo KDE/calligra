@@ -420,6 +420,7 @@ Item {
                 script: {
                     d.zoomToFit();
                     controllerFlickable.contentY = wordsCanvas.pagePosition(wordsCanvas.currentPageNumber) + 1;
+					base.canvasInteractionStarted();
                     if(mainWindow.maximized) {
                         mainWindow.fullScreen = true;
                     }
@@ -431,6 +432,7 @@ Item {
             ScriptAction {
                 script: {
                     d.restoreZoom();
+					base.canvasInteractionStarted();
                     mainWindow.fullScreen = false;
                 }
             }
