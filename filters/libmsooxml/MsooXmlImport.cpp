@@ -45,7 +45,6 @@
 #include <kdeversion.h>
 #include <kdebug.h>
 #include <kzip.h>
-#include <kmessagebox.h>
 #include <ktemporaryfile.h>
 
 #include <KoEmbeddedDocumentSaver.h>

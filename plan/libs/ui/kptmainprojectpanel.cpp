@@ -26,7 +26,6 @@
 #include <ktextedit.h>
 #include <kdatewidget.h>
 #include <klocale.h>
-#include <kmessagebox.h>
 #include "kptdebug.h"
 
 #include <kdeversion.h>

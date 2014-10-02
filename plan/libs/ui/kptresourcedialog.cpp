@@ -39,7 +39,6 @@
 #endif
 
 #include <kdatetimewidget.h>
-#include <kmessagebox.h>
 #include <klocale.h>
 #include <kglobal.h>
 

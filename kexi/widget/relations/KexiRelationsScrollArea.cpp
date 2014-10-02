@@ -35,7 +35,6 @@
 #include <klocale.h>
 #include <kaction.h>
 #include <kmenu.h>
-#include <kmessagebox.h>
 
 #include <db/tableschema.h>
 #include <db/indexschema.h>

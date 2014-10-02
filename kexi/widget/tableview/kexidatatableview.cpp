@@ -22,7 +22,6 @@
 #include <QTimer>
 #include <QApplication>
 
-#include <kmessagebox.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <kaction.h>

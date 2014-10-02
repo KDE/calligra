@@ -49,7 +49,6 @@
 #include <kdebug.h>
 #include <kzip.h>
 #include <kpluginfactory.h>
-#include <kmessagebox.h>
 
 #include <KoEmbeddedDocumentSaver.h>
 #include <KoDocumentInfo.h>
