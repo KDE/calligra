@@ -58,7 +58,6 @@
 #include <KoOasisSettings.h>
 #include <KoOdfLoadingContext.h>
 #include <KoOdfStylesReader.h>
-#include <KoOdfReadStore.h>
 #include <KoDocumentResourceManager.h>
 #include <KoShapeConfigFactoryBase.h>
 #include <KoShapeFactoryBase.h>
