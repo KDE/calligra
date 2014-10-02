@@ -365,6 +365,9 @@ private:
 protected:
     void closeEvent(QCloseEvent * e);
     void resizeEvent(QResizeEvent * e);
+
+    /// Set the active view, this will update the undo/redo actions
+    virtual void setActiveView(KoView *view);
 private:
     /**
      * Ask user about saving changes to the document upon exit.

@@ -177,9 +177,8 @@ void KisMainWindow::showView(KoView *view)
         else {
             view->show();
         }
-        actionCollection()->action("edit_undo")->setText(activeView()->undoAction()->text());
-        actionCollection()->action("edit_redo")->setText(activeView()->redoAction()->text());
 
+        setActiveView(view);
         m_guiClient->setCurrentView(view);
         updateWindowMenu();
     }
@@ -301,6 +300,7 @@ void KisMainWindow::setActiveSubWindow(QWidget *window)
         if (view) {
             view->guiActivateEvent(true);
             m_guiClient->setCurrentView(view);
+            setActiveView(view);
         }
     }
     updateWindowMenu();

@@ -546,14 +546,11 @@ void KoMainWindow::showView(KoView *view)
 {
     Q_ASSERT(d->views.contains(view));
 
-    d->activeView = view;
+    setActiveView(view);
 
     setCentralWidget(view);
     view->show();
     view->setFocus();
-
-    actionCollection()->action("edit_undo")->setText(activeView()->undoAction()->text());
-    actionCollection()->action("edit_redo")->setText(activeView()->redoAction()->text());
 }
 
 void KoMainWindow::updateReloadFileAction(KoDocument *doc)
@@ -1162,6 +1159,14 @@ void KoMainWindow::resizeEvent(QResizeEvent * e)
 {
     d->windowSizeDirty = true;
     KXmlGuiWindow::resizeEvent(e);
+}
+
+void KoMainWindow::setActiveView(KoView* view)
+{
+    d->activeView = view;
+
+    actionCollection()->action("edit_undo")->setText(activeView()->undoAction()->text());
+    actionCollection()->action("edit_redo")->setText(activeView()->redoAction()->text());
 }
 
 bool KoMainWindow::queryClose()
