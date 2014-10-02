@@ -48,7 +48,6 @@
 #include <KoXmlWriter.h>
 #include <KoGenStyles.h>
 
-class KoStoreDevice;
 class KoStore;
 
 namespace wvWare

@@ -34,7 +34,6 @@
 // Calligra
 #include <KoXmlWriter.h>
 #include <KoStore.h>
-#include <KoStoreDevice.h>
 
 
 // ================================================================

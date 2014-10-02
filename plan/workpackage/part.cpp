@@ -39,7 +39,6 @@
 #include <KoZoomHandler.h>
 #include <KoXmlReader.h>
 #include <KoStore.h>
-#include <KoStoreDevice.h>
 #include <KoOdfReadStore.h>
 #include <KoDocumentInfo.h>
 

@@ -37,7 +37,6 @@
 #include <KoOdfWriteStore.h>
 #include <KoGenStyles.h>
 #include <KoXmlWriter.h>
-#include <KoStoreDevice.h>
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
 
