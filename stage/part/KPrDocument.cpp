@@ -44,7 +44,6 @@
 #include <KoShapeRegistry.h>
 #include <KoToolRegistry.h>
 #include <KoXmlNS.h>
-#include <KoXmlWriter.h>
 
 #include <kconfig.h>
 #include <kconfiggroup.h>

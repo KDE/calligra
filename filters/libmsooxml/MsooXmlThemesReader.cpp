@@ -25,7 +25,6 @@
 #include "MsooXmlSchemas.h"
 #include "MsooXmlUtils.h"
 #include "MsooXmlUnits.h"
-#include "KoXmlWriter.h"
 
 #include <KoOdfGraphicStyles.h>
 #include <MsooXmlRelationships.h>

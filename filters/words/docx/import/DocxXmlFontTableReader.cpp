@@ -24,7 +24,6 @@
 #include "DocxXmlFontTableReader.h"
 #include <MsooXmlSchemas.h>
 #include <MsooXmlUtils.h>
-#include <KoXmlWriter.h>
 #include <KoGenStyles.h>
 
 #define MSOOXML_CURRENT_NS "w"

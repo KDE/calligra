@@ -53,7 +53,6 @@
 #include <KoFilterChain.h>
 #include <KoUnit.h>
 #include <KoPageLayout.h>
-#include <KoXmlWriter.h>
 
 #include <memory>
 

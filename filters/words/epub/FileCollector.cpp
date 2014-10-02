@@ -32,7 +32,6 @@
 #include <kdebug.h>
 
 // Calligra
-#include <KoXmlWriter.h>
 #include <KoStore.h>
 
 

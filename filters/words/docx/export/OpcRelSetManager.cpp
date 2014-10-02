@@ -33,7 +33,6 @@
 #include <KoOdfReadStore.h>
 #include <KoXmlStreamReader.h>
 #include <KoXmlNS.h>
-#include <KoXmlWriter.h>
 
 // Filter libraries
 #include "KoOdfStyle.h"

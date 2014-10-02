@@ -24,7 +24,6 @@
 #include <kpluginfactory.h>
 #include <KoOdfWriteStore.h>
 #include <KoGenStyles.h>
-#include <KoXmlWriter.h>
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
 

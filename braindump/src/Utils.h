@@ -23,7 +23,6 @@ class QRectF;
 
 class KoShape;
 class KoShapeLayer;
-class KoXmlWriter;
 
 class Section;
 class SectionGroup;

@@ -89,7 +89,6 @@
 #include <KoShapeManager.h>
 #include <KoToolManager.h>
 #include <KoToolProxy.h>
-#include <KoXmlWriter.h>
 #include <KoZoomHandler.h>
 #include <KoPointerEvent.h>
 
