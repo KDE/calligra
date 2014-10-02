@@ -173,6 +173,7 @@ public:
         // for now, the app in bin/ and we still use the env.bat script
         appdir.cdUp();
 
+        touchView->engine()->addImportPath(appdir.canonicalPath() + "/imports");
         touchView->engine()->addImportPath(appdir.canonicalPath() + "/lib/calligra/imports");
         touchView->engine()->addImportPath(appdir.canonicalPath() + "/lib64/calligra/imports");
         QString mainqml = appdir.canonicalPath() + "/share/apps/calligragemini/calligragemini.qml";
@@ -571,7 +572,12 @@ void MainWindow::setFullScreen(bool newValue)
         }
     }
     else {
-        setWindowState(windowState() & ~Qt::WindowFullScreen);
+        // this is really unpleasant... however, fullscreen is very twitchy, and exiting it as below
+        // will cause an inconsistent state, so we simply assume exiting fullscreen leaves you maximised.
+        // It isn't optimal, but it is the best state for now, this has taken too long to work out.
+        // setWindowState(windowState() & ~Qt::WindowFullScreen);
+        // should really do it, but... it doesn't. So, we end up with what we have next:
+        showMaximized();
     }
     d->fullScreenThrottle->start();
     emit fullScreenChanged();
