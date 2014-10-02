@@ -46,7 +46,6 @@
 #include <kpluginfactory.h>
 #include <kmessagebox.h>
 
-#include <KoOdfWriteStore.h>
 #include <KoEmbeddedDocumentSaver.h>
 #include <KoDocumentInfo.h>
 #include <KoDocument.h>

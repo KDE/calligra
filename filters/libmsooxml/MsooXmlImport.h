@@ -41,7 +41,6 @@
 class QSize;
 class KZip;
 class KTemporaryFile;
-class KoOdfWriteStore;
 class KoStore;
 
 namespace MSOOXML

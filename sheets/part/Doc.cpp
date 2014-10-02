@@ -59,7 +59,6 @@
 #include <KoOdfLoadingContext.h>
 #include <KoOdfStylesReader.h>
 #include <KoOdfReadStore.h>
-#include <KoOdfWriteStore.h>
 #include <KoDocumentResourceManager.h>
 #include <KoShapeConfigFactoryBase.h>
 #include <KoShapeFactoryBase.h>
