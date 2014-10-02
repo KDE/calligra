@@ -2,6 +2,11 @@
 Type=ServiceType
 X-KDE-ServiceType=CalligraStage/Tool
 Comment=Tool for Calligra Stage
+Comment[nl]=Hulpmiddele voor Calligra Stage
+Comment[pt]=Ferramenta para o Calligra Stage
+Comment[sv]=Verktyg för Calligra Stage
+Comment[uk]=Інструмент для Calligra Stage
+Comment[x-test]=xxTool for Calligra Stagexx
 [PropertyDef::X-KPresenter-Version]
 Type=int
 [PropertyDef::X-KDE-PluginInfo-Name]
