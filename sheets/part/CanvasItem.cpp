@@ -87,7 +87,6 @@
 // Calligra
 #include <KoCanvasController.h>
 #include <KoShapeManager.h>
-#include <KoStore.h>
 #include <KoToolManager.h>
 #include <KoToolProxy.h>
 #include <KoXmlWriter.h>
