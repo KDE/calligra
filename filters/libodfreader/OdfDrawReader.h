@@ -34,9 +34,6 @@
 
 class QSizeF;
 
-class KoXmlWriter;
-class KoStore;
-
 class OdfReader;
 class OdfDrawReaderBackend;
 class OdfReaderContext;
@@ -48,7 +45,7 @@ class OdfReaderContext;
  * an ODF file using an XML stream reader.  For every XML element that
  * the reading process comes across it will call a specific function
  * in a backend class: @see OdfDrawReaderBackend.  The OdfDrawReader
- * is used as a common way to reat draw content and is called from all
+ * is used as a common way to read draw content and is called from all
  * readers for different ODF formats.  @see OdtReader, @see OdsReader,
  * @see OdpReader.
  */
