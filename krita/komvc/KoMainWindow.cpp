@@ -833,7 +833,7 @@ bool KoMainWindow::exportConfirmation(const QByteArray &outputFormat)
 
 bool KoMainWindow::saveDocument(KoDocument *document, bool saveas, bool silent, int specialOutputFlag)
 {
-    if (document || !d->part) {
+    if (!document || !d->part) {
         return true;
     }
 
