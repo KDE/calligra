@@ -36,7 +36,6 @@ class QRadioButton;
 class QHBoxLayout;
 class QVBoxLayout;
 class QGroupBox;
-class KLineEdit;
 class KexiConnectionSelectorWidget;
 class KexiProjectSelectorWidget;
 class KexiProjectSet;

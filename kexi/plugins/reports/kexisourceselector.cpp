@@ -19,6 +19,7 @@
 #include "kexisourceselector.h"
 
 #include <kpushbutton.h>
+#include <klineedit.h>
 
 #include <QLabel>
 #include <klocale.h>

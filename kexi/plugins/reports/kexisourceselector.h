@@ -22,7 +22,6 @@
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QComboBox>
-#include <klineedit.h>
 
 #include <db/connection.h>
 #include <KoReportData.h>

@@ -33,6 +33,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kcolorscheme.h>
+#include <klineedit.h>
 #include <kcompletionbox.h>
 #include <knumvalidator.h>
 #include <kexiutils/longlongvalidator.h>

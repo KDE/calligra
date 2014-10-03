@@ -41,7 +41,6 @@
 #include <QHash>
 #include <QRubberBand>
 
-#include <klineedit.h>
 #include <kmenu.h>
 
 class KexiTableEdit;

@@ -24,7 +24,6 @@
 #include "kptcommand.h"
 #include "kptproject.h"
 
-#include <klineedit.h>
 #include <klocale.h>
 
 #include <kdebug.h>

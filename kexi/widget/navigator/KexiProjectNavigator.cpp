@@ -38,7 +38,6 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kmenu.h>
-#include <klineedit.h>
 #include <kconfig.h>
 #include <kglobal.h>
 #include <kactioncollection.h>

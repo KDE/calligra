@@ -30,7 +30,6 @@
 #include <QGroupBox>
 #include <QLabel>
 
-#include <klineedit.h>
 #include <kpagedialog.h>
 #include <kvbox.h>
 

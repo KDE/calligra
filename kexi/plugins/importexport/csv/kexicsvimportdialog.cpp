@@ -63,6 +63,7 @@
 #include <kmessagebox.h>
 #include <kcharsets.h>
 #include <knuminput.h>
+#include <klineedit.h>
 #include <KProgressDialog>
 
 #include <KoIcon.h>

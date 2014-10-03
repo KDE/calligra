@@ -21,13 +21,14 @@
 #ifndef KEXIINPUTTABLEEDIT_H
 #define KEXIINPUTTABLEEDIT_H
 
-#include <klineedit.h>
 #include <QVariant>
 #include <QPaintEvent>
 
 #include "kexitableedit.h"
 #include "kexicelleditorfactory.h"
 #include "kexitextformatter.h"
+
+class KLineEdit;
 
 /*! @short General purpose cell editor using line edit widget.
 */

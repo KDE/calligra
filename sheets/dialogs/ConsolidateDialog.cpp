@@ -40,7 +40,6 @@
 //KDE Includes
 #include <kdebug.h>
 #include <kdialog.h>
-#include <klineedit.h>
 #include <kmessagebox.h>
 
 #include <KoIcon.h>

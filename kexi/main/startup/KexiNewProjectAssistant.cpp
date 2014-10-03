@@ -49,7 +49,6 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kurlcombobox.h>
-#include <klineedit.h>
 #include <ktitlewidget.h>
 #include <kcategorydrawer.h>
 #include <kacceleratormanager.h>

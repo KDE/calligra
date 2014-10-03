@@ -27,8 +27,6 @@
 
 #include <ktextedit.h>
 
-#include <klineedit.h>
-
 #include <kdialog.h>
 # include <keditlistwidget.h>
 
