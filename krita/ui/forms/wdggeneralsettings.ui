@@ -6,44 +6,11 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>339</width>
-    <height>189</height>
+    <width>340</width>
+    <height>290</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="1" column="0" colspan="3">
-    <widget class="QCheckBox" name="m_showOutlinePainting">
-     <property name="text">
-      <string>Show outline while painting</string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="2">
-    <widget class="QSpinBox" name="m_undoStackSize">
-     <property name="minimum">
-      <number>0</number>
-     </property>
-     <property name="maximum">
-      <number>1000</number>
-     </property>
-     <property name="singleStep">
-      <number>5</number>
-     </property>
-     <property name="value">
-      <number>30</number>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="2">
-    <widget class="QComboBox" name="m_cmbCursorShape"/>
-   </item>
-   <item row="2" column="0" colspan="2">
-    <widget class="QCheckBox" name="chkShowRootLayer">
-     <property name="text">
-      <string>Show root layer</string>
-     </property>
-    </widget>
-   </item>
    <item row="0" column="0">
     <widget class="QLabel" name="textLabel1">
      <property name="text">
@@ -54,53 +21,30 @@
      </property>
     </widget>
    </item>
-   <item row="6" column="0">
-    <widget class="QLabel" name="label_2">
+   <item row="0" column="2">
+    <widget class="QComboBox" name="m_cmbCursorShape"/>
+   </item>
+   <item row="1" column="0" colspan="3">
+    <widget class="QCheckBox" name="m_showOutlinePainting">
      <property name="text">
-      <string>Multiple Document Mode:</string>
+      <string>Show outline while painting</string>
      </property>
     </widget>
    </item>
-   <item row="7" column="1">
-    <spacer name="spacer2">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Expanding</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>41</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="4" column="0">
-    <widget class="QLabel" name="label">
+   <item row="2" column="0">
+    <widget class="QCheckBox" name="chkShowRootLayer">
      <property name="text">
-      <string>Undo stack size:</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      <string>Show root layer</string>
      </property>
     </widget>
    </item>
-   <item row="3" column="0" colspan="2">
+   <item row="3" column="0">
     <widget class="QCheckBox" name="m_autosaveCheckBox">
      <property name="text">
       <string>Autosave every:</string>
      </property>
      <property name="checked">
       <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="0" colspan="3">
-    <widget class="QCheckBox" name="m_backupFileCheckBox">
-     <property name="text">
-      <string>Create backup file </string>
      </property>
     </widget>
    </item>
@@ -123,7 +67,57 @@
      </property>
     </widget>
    </item>
-   <item row="6" column="2" colspan="2">
+   <item row="4" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Undo stack size:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="2">
+    <widget class="QSpinBox" name="m_undoStackSize">
+     <property name="minimum">
+      <number>0</number>
+     </property>
+     <property name="maximum">
+      <number>1000</number>
+     </property>
+     <property name="singleStep">
+      <number>5</number>
+     </property>
+     <property name="value">
+      <number>30</number>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0" colspan="3">
+    <widget class="QCheckBox" name="m_backupFileCheckBox">
+     <property name="text">
+      <string>Create backup file </string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="0">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>Favorite presets:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="2">
+    <widget class="QSpinBox" name="m_favoritePresetsSpinBox">
+     <property name="minimum">
+      <number>10</number>
+     </property>
+     <property name="maximum">
+      <number>30</number>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="2">
     <widget class="QComboBox" name="m_cmbMDIType">
      <item>
       <property name="text">
@@ -137,14 +131,7 @@
      </item>
     </widget>
    </item>
-   <item row="5" column="0" colspan="3">
-    <widget class="QCheckBox" name="m_backupFileCheckBox">
-     <property name="text">
-      <string>Create backup file </string>
-     </property>
-    </widget>
-   </item>
-   <item row="7" column="1">
+   <item row="8" column="1">
     <spacer name="spacer2">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -160,20 +147,10 @@
      </property>
     </spacer>
    </item>
-   <item row="6" column="0" colspan="2">
+   <item row="7" column="0">
     <widget class="QLabel" name="label_2">
      <property name="text">
-      <string>Favorite presets:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="2">
-    <widget class="QSpinBox" name="m_favoritePresetsSpinBox">
-     <property name="minimum">
-      <number>10</number>
-     </property>
-     <property name="maximum">
-      <number>30</number>
+      <string>Multiple Document Mode:</string>
      </property>
     </widget>
    </item>
