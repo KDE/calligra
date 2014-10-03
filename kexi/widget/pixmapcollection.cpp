@@ -27,7 +27,6 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 
-#include <kapplication.h>
 #include <kiconloader.h>
 #include <kfiledialog.h>
 #include <kcombobox.h>

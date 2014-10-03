@@ -40,7 +40,6 @@
 
 #include <kdebug.h>
 #include <kcursor.h>
-#include <kapplication.h>
 #include <kiconeffect.h>
 #include <kglobalsettings.h>
 #include <kaction.h>

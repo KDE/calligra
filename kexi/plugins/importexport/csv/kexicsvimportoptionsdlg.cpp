@@ -28,7 +28,6 @@
 #include <QGroupBox>
 #include <QGridLayout>
 
-#include <kapplication.h>
 #include <kconfig.h>
 #include <kcombobox.h>
 #include <klocale.h>

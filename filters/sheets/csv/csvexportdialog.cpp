@@ -23,10 +23,10 @@
 #include "sheets/Map.h"
 #include "sheets/Sheet.h"
 
-#include <kapplication.h>
 #include <kcharsets.h>
 #include <kmessagebox.h>
 
+#include <QApplication>
 #include <QTextCodec>
 #include <QValidator>
 
@@ -40,7 +40,7 @@ CSVExportDialog::CSVExportDialog(QWidget * parent)
 {
     setButtons(KDialog::Ok | KDialog::Cancel);
     setDefaultButton(KDialog::Ok);
-    kapp->restoreOverrideCursor();
+    qApp->restoreOverrideCursor();
 
     QStringList encodings;
     encodings << i18nc("Descriptive encoding name", "Recommended ( %1 )" , "UTF-8");
@@ -82,7 +82,7 @@ CSVExportDialog::CSVExportDialog(QWidget * parent)
 CSVExportDialog::~CSVExportDialog()
 {
     saveSettings();
-    kapp->setOverrideCursor(Qt::WaitCursor);
+    qApp->setOverrideCursor(Qt::WaitCursor);
     delete m_delimiterValidator;
 }
 

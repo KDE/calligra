@@ -54,8 +54,8 @@
 #include <QStackedWidget>
 #include <QSplitter>
 #include <QTreeView>
+#include <QApplication>
 
-#include <kapplication.h>
 #include <kdebug.h>
 #include <kdialog.h>
 #include <kfiledialog.h>

@@ -38,7 +38,6 @@
 
 #include <kdebug.h>
 #include <kcursor.h>
-#include <kapplication.h>
 #include <ksharedptr.h>
 #include <kmessagebox.h>
 

@@ -42,7 +42,6 @@
 #include <kconfiggroup.h>
 #include <kmessagebox.h>
 #include <klineedit.h>
-#include <kapplication.h>
 #include <kcmdlineargs.h>
 
 #ifdef GHNS

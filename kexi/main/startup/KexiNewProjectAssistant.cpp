@@ -44,7 +44,6 @@
 
 #include <KoIcon.h>
 
-#include <kapplication.h>
 #include <kiconloader.h>
 #include <kmimetype.h>
 #include <klocale.h>

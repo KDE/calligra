@@ -48,7 +48,6 @@
 #include <kdebug.h>
 #include <kpushbutton.h>
 #include <ktextedit.h>
-#include <kapplication.h>
 #include <kmimetype.h>
 #include <ktextbrowser.h>
 #include <kconfig.h>

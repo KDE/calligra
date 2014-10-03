@@ -33,7 +33,6 @@
 
 #include <KoIcon.h>
 
-#include <kapplication.h>
 #include <kmimetype.h>
 #include <klocale.h>
 #include <kdebug.h>

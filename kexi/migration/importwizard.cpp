@@ -31,6 +31,7 @@
 #include <QHBoxLayout>
 #include <QButtonGroup>
 #include <QDir>
+#include <QApplication>
 
 #include <kcombobox.h>
 #include <kmessagebox.h>
@@ -662,7 +663,7 @@ bool ImportWizard::fileBasedDstSelected() const
 void ImportWizard::progressUpdated(int percent)
 {
     d->progressBar->setValue(percent);
-    KApplication::kApplication()->processEvents();
+    qApp->processEvents();
 }
 
 //===========================================================
