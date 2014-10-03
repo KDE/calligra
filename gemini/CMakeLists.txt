@@ -43,6 +43,7 @@ set(calligragemini_SRCS
     RecentFilesModel.cpp
     TemplatesModel.cpp
     TemplateVariantsModel.cpp
+    CloudAccountsModel.cpp
 )
 
 set(thumbnailhelper_SRCS
