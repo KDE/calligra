@@ -49,7 +49,6 @@
 #include <kpushbutton.h>
 #include <kglobalsettings.h>
 #include <ktextedit.h>
-#include <kmessagebox.h>
 #include <kapplication.h>
 #include <kmimetype.h>
 #include <ktextbrowser.h>

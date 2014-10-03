@@ -33,8 +33,6 @@
 #include <MsooXmlImport.h>
 #include <MsooXmlUnits.h>
 
-#include <KoXmlWriter.h>
-
 #include <QString>
 
 using namespace MSOOXML;

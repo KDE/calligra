@@ -24,7 +24,6 @@
 #include "DocxXmlNumberingReader.h"
 #include <MsooXmlSchemas.h>
 #include <MsooXmlUtils.h>
-#include <KoXmlWriter.h>
 #include <MsooXmlUnits.h>
 
 #define MSOOXML_CURRENT_NS "w"

@@ -22,7 +22,6 @@
 #include "kptdatetime.h"
 #include "kptfactory.h"
 
-#include <kmessagebox.h>
 #include <klineedit.h>
 #include <ktextedit.h>
 #include <kcombobox.h>

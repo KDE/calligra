@@ -31,7 +31,6 @@
 #include <kio/netaccess.h>
 #include <kurl.h>
 #include <klocale.h>
-#include <kmessagebox.h>
 
 #include <db/connectiondata.h>
 #include <db/drivermanager.h>

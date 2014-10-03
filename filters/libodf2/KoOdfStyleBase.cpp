@@ -30,7 +30,6 @@
 
 // Odflib
 #include "KoXmlStreamReader.h"
-#include "KoXmlWriter.h"
 //#include "KoOdfStyleProperties.h"
 //#include "KoOdfTextProperties.h"
 //#include "KoOdfParagraphProperties.h"

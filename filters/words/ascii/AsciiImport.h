@@ -28,7 +28,6 @@ class QByteArray;
 class QTextStream;
 
 class KoGenStyles;
-class KoOdfWriteStore;
 class KoXmlWriter;
 
 class AsciiImport : public KoFilter

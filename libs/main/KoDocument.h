@@ -45,8 +45,6 @@ class KisSketchPart;
 class KUndo2Command;
 class KoPart;
 class KoStore;
-class KoOdfReadStore;
-class KoOdfWriteStore;
 class KoDocumentInfo;
 class KoDocumentRdf;
 class KoDocumentRdfBase;

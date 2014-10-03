@@ -44,7 +44,6 @@
 #include <kglobal.h>
 #include <kmimetype.h>
 #include <klocale.h>
-#include <kmessagebox.h>
 #include <kactioncollection.h>
 #include <kundo2stack.h>
 #include <kstandarddirs.h>
@@ -59,16 +58,13 @@
 #include <KoColorSpaceEngine.h>
 #include <KoID.h>
 #include <KoOdfReadStore.h>
-#include <KoOdfWriteStore.h>
 #include <KoStore.h>
-#include <KoStoreDevice.h>
 #include <KoXmlWriter.h>
 #include <KoSelection.h>
 #include <KoDocumentInfo.h>
 #include <KoShape.h>
 #include <KoToolManager.h>
 #include <KoPart.h>
-#include <KoStore.h>
 
 // Krita Image
 #include <kis_config.h>
@@ -133,6 +129,7 @@ public:
     QList<KisPaintingAssistant*> assistants;
 
     QString flipbook;
+    QString animation;
 };
 
 KisDoc2::KisDoc2(const KisPart2 *part)

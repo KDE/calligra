@@ -48,7 +48,6 @@
 #include <KoOdfReadStore.h>
 #include <KoXmlNS.h>
 #include <KoOdfStylesReader.h>
-#include <KoStore.h>
 #include <KoPathShape.h>
 #include <KoPathShapeLoader.h>
 

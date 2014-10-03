@@ -55,7 +55,6 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kapplication.h>
-#include <kmessagebox.h>
 #include <kaction.h>
 
 #ifndef KEXI_NO_PRINT

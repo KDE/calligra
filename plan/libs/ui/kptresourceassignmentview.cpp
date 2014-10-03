@@ -36,7 +36,6 @@
 
 #include <klocale.h>
 #include <kglobal.h>
-#include <kmessagebox.h>
 
 namespace KPlato
 {

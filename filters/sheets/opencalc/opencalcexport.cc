@@ -32,7 +32,6 @@
 #include <QByteArray>
 
 #include <kdebug.h>
-#include <kmessagebox.h>
 #include <kcodecs.h>
 #include <kpluginfactory.h>
 #include <klocale.h>

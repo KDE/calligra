@@ -41,7 +41,6 @@
 #include <kdebug.h>
 #include <kconfig.h>
 #include <kurlcombobox.h>
-#include <kmessagebox.h>
 #include <klineedit.h>
 #include <kcategorizedview.h>
 #include <ktitlewidget.h>

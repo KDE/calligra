@@ -41,7 +41,6 @@
 #include <kconfig.h>
 #include <kstatusbar.h>
 #include <knuminput.h>
-#include <kmessagebox.h>
 
 #include <ksharedconfig.h>
 #include <kstandarddirs.h>

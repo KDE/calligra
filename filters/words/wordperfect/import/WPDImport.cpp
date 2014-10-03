@@ -191,7 +191,7 @@ KoFilter::ConversionStatus WPDImport::convert(const QByteArray& from, const QByt
     if (!helper.isSupportedFormat(input, password))
         return KoFilter::ParsingError;
 
-    if (!helper.convertDocument(input, password, outputFile.constData()))
+    if (!helper.convertDocument(input, password, false))
     {
         fprintf(stderr, "ERROR : Couldn't convert the document\n");
         return KoFilter::ParsingError;

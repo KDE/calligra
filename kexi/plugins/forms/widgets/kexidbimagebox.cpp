@@ -39,7 +39,6 @@
 #include <kimageio.h>
 #include <kstandarddirs.h>
 #include <kstdaccel.h>
-#include <kmessagebox.h>
 #include <kguiitem.h>
 #include <kiconeffect.h>
 

@@ -21,9 +21,6 @@
 #include <WPGImport.moc>
 
 #include <KoFilterChain.h>
-#include <KoGlobal.h>
-#include <KoUnit.h>
-#include <KoXmlWriter.h>
 
 #include <kpluginfactory.h>
 #include <kdebug.h>
