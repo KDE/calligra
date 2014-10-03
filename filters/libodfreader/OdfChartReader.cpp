@@ -194,8 +194,7 @@ void OdfChartReader::readElementChartChart(KoXmlStreamReader &reader)
         QString tagName = reader.qualifiedName().toString();
         
         if (tagName == "chart:footer") {
-            // FIXME: NYI
-            reader.skipCurrentElement();
+	    readElementChartFooter(reader);
         }
         else if (tagName == "chart:legend") {
             // FIXME: NYI
@@ -206,12 +205,10 @@ void OdfChartReader::readElementChartChart(KoXmlStreamReader &reader)
             reader.skipCurrentElement();
         }
         else if (tagName == "chart:subtitle") {
-            // FIXME: NYI
-            reader.skipCurrentElement();
+	    readElementChartSubtitle(reader);
         }
         else if (tagName == "chart:title") {
-            // FIXME: NYI
-            reader.skipCurrentElement();
+	    readElementChartTitle(reader);
         }
         else if (tagName == "table:table") {
 	    OdfTextReader *textReader = m_parent->textReader();
