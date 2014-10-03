@@ -44,7 +44,6 @@ class QSpinBox;
 class QComboBox;
 class KComboBox;
 class QPushButton;
-class KColorButton;
 
 namespace Sonnet
 {

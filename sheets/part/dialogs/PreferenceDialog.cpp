@@ -44,7 +44,6 @@
 
 #include <KoConfigAuthorPage.h>
 
-#include <kcolorbutton.h>
 #include <kplugininfo.h>
 #include <kpluginselector.h>
 #include <kservicetypetrader.h>
