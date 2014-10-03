@@ -40,6 +40,21 @@ Item {
                     signOutNow();
                 }
             }
+            Text {
+                anchors {
+                    top: parent.bottom;
+                    topMargin: Settings.theme.adjustedPixel(16);
+                    horizontalCenter: parent.horizontalCenter;
+                }
+                visible: !controllerMIT.needAuthenticate;
+                font: Settings.theme.font("application");
+                width: parent.parent.width / 2;
+                height: font.pixelSize * 6;
+                horizontalAlignment: Text.AlignHCenter;
+                verticalAlignment: Text.AlignTop;
+                wrapMode: Text.Wrap;
+                text: "You are already signed into DropBox, and we only support one DropBox account. To sign in as another user, please click on the button above to sign out of your current account first.";
+            }
         }
     }
     Component {
