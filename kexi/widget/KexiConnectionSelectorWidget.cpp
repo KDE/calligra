@@ -36,7 +36,6 @@
 #include <kmimetype.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include <kconfig.h>
 #include <kurlcombobox.h>
 #include <ktoolbar.h>
 #include <kmenu.h>

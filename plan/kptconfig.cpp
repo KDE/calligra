@@ -25,8 +25,6 @@
 #include "kptfactory.h"
 #include "kptdebug.h"
 
-#include <kconfig.h>
-#include <kconfiggroup.h>
 #include <kdebug.h>
 #include <kcomponentdata.h>
 

@@ -55,7 +55,6 @@
 #include <QStandardItemModel>
 
 #include <kdebug.h>
-#include <kconfig.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kmimetype.h>

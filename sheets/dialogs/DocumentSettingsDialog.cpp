@@ -38,11 +38,9 @@
 #include <QSpinBox>
 
 #include <kcombobox.h>
-#include <kconfig.h>
 #include <kstatusbar.h>
 #include <knuminput.h>
 
-#include <ksharedconfig.h>
 #include <sonnet/configwidget.h>
 
 #include <KoIcon.h>

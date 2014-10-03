@@ -34,7 +34,6 @@
 
 class QTextDocument;
 class QToolButton;
-class KConfigGroup;
 class KoCanvasResourceManager;
 class KoSelection;
 class KWDocument;

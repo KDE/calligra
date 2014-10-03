@@ -74,7 +74,6 @@
 #include <kservice.h>
 #include <kurl.h>
 #include <kcomponentdata.h>
-#include <kconfiggroup.h>
 
 using namespace Soprano;
 #define RDEBUG if (0) qDebug()

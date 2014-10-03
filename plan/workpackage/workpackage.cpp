@@ -40,7 +40,6 @@
 
 #include <kdebug.h>
 #include <kcomponentdata.h>
-#include <kconfig.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
