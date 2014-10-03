@@ -32,7 +32,6 @@
 #include <kcombobox.h>
 #include <klocale.h>
 #include <kglobal.h>
-#include <kcharsets.h>
 
 KexiCSVImportOptions::DateFormat dateFormatFromString(const QString& s)
 {
