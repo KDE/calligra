@@ -64,7 +64,6 @@ class KOODFREADER_EXPORT OdfTextReader
     void setBackend(OdfTextReaderBackend *backend);
     void setContext(OdfReaderContext *context);
 
- protected:
     // All readElement*() are named after the full qualifiedName of
     // the element in ODF that they handle.
 

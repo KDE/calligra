@@ -65,6 +65,11 @@ class KOODFREADER_EXPORT OdfChartReader
     void readElementOfficeChart(KoXmlStreamReader &reader);
     void readElementChartChart(KoXmlStreamReader &reader);
 
+    void readElementChartFooter(KoXmlStreamReader &reader);
+
+    void readElementChartSubtitle(KoXmlStreamReader &reader);
+    void readElementChartTitle(KoXmlStreamReader &reader);
+
  protected:
 
 

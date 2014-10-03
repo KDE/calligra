@@ -84,3 +84,24 @@ void OdfChartReaderBackend::elementChartChart(KoXmlStreamReader &reader,
     Q_UNUSED(reader);
     Q_UNUSED(context);
 }
+
+void OdfChartReaderBackend::elementChartFooter(KoXmlStreamReader &reader,
+					       OdfReaderContext *context)
+{
+    Q_UNUSED(reader);
+    Q_UNUSED(context);
+}
+
+void OdfChartReaderBackend::elementChartSubtitle(KoXmlStreamReader &reader,
+						 OdfReaderContext *context)
+{
+    Q_UNUSED(reader);
+    Q_UNUSED(context);
+}
+
+void OdfChartReaderBackend::elementChartTitle(KoXmlStreamReader &reader,
+					      OdfReaderContext *context)
+{
+    Q_UNUSED(reader);
+    Q_UNUSED(context);
+}

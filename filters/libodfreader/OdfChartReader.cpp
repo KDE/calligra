@@ -184,12 +184,12 @@ void OdfChartReader::readElementChartChart(KoXmlStreamReader &reader)
     m_backend->elementChartChart(reader, m_context);
 
     // <chart:chart> has the following children in ODF 1.2:
-    //          <chart:footer> 11.2.3
+    //   [done] <chart:footer> 11.2.3
     //          <chart:legend> 11.3
     //          <chart:plot-area> 11.4
-    //          <chart:subtitle> 11.2.2
-    //          <chart:title> 11.2.1
-    //          <table:table> 9.1.2
+    //   [done] <chart:subtitle> 11.2.2
+    //   [done] <chart:title> 11.2.1
+    //   [done] <table:table> 9.1.2
     while (reader.readNextStartElement()) {
         QString tagName = reader.qualifiedName().toString();
         
@@ -201,7 +201,27 @@ void OdfChartReader::readElementChartChart(KoXmlStreamReader &reader)
             // FIXME: NYI
             reader.skipCurrentElement();
         }
-        // ...  MORE else if () HERE
+        else if (tagName == "chart:plot-area") {
+            // FIXME: NYI
+            reader.skipCurrentElement();
+        }
+        else if (tagName == "chart:subtitle") {
+            // FIXME: NYI
+            reader.skipCurrentElement();
+        }
+        else if (tagName == "chart:title") {
+            // FIXME: NYI
+            reader.skipCurrentElement();
+        }
+        else if (tagName == "table:table") {
+	    OdfTextReader *textReader = m_parent->textReader();
+	    if (textReader) {
+		textReader->readElementTableTable(reader);
+	    }
+	    else {
+		reader.skipCurrentElement();
+	    }
+        }
         else {
             reader.skipCurrentElement();
         }
@@ -211,6 +231,89 @@ void OdfChartReader::readElementChartChart(KoXmlStreamReader &reader)
     DEBUGEND();
 }
 
+void OdfChartReader::readElementChartFooter(KoXmlStreamReader &reader)
+{
+   DEBUGSTART();
+    m_backend->elementChartFooter(reader, m_context);
+
+    // <chart:footer> has the following children in ODF 1.2:
+    //   [done] <text:p> 5.1.3
+    while (reader.readNextStartElement()) {
+        QString tagName = reader.qualifiedName().toString();
+        
+        if (tagName == "text:p") {
+	    OdfTextReader *textReader = m_parent->textReader();
+	    if (textReader) {
+		textReader->readElementTextP(reader);
+	    }
+	    else {
+		reader.skipCurrentElement();
+	    }
+        }
+        else {
+            reader.skipCurrentElement();
+        }
+    }
+
+    m_backend->elementChartFooter(reader, m_context);
+    DEBUGEND();
+}
+
+void OdfChartReader::readElementChartSubtitle(KoXmlStreamReader &reader)
+{
+   DEBUGSTART();
+    m_backend->elementChartSubtitle(reader, m_context);
+
+    // <chart:subtitle> has the following children in ODF 1.2:
+    //   [done] <text:p> 5.1.3
+    while (reader.readNextStartElement()) {
+        QString tagName = reader.qualifiedName().toString();
+        
+        if (tagName == "text:p") {
+	    OdfTextReader *textReader = m_parent->textReader();
+	    if (textReader) {
+		textReader->readElementTextP(reader);
+	    }
+	    else {
+		reader.skipCurrentElement();
+	    }
+        }
+        else {
+            reader.skipCurrentElement();
+        }
+    }
+
+    m_backend->elementChartSubtitle(reader, m_context);
+    DEBUGEND();
+}
+
+void OdfChartReader::readElementChartTitle(KoXmlStreamReader &reader)
+{
+   DEBUGSTART();
+    m_backend->elementChartTitle(reader, m_context);
+
+    // <chart:title> has the following children in ODF 1.2:
+    //   [done] <text:p> 5.1.3
+    while (reader.readNextStartElement()) {
+        QString tagName = reader.qualifiedName().toString();
+        
+        if (tagName == "text:p") {
+	    OdfTextReader *textReader = m_parent->textReader();
+	    if (textReader) {
+		textReader->readElementTextP(reader);
+	    }
+	    else {
+		reader.skipCurrentElement();
+	    }
+        }
+        else {
+            reader.skipCurrentElement();
+        }
+    }
+
+    m_backend->elementChartTitle(reader, m_context);
+    DEBUGEND();
+}
 
 // ----------------------------------------------------------------
 //                             Other functions
