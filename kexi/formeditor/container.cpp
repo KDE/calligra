@@ -33,7 +33,6 @@
 
 #include <kdebug.h>
 #include <klocale.h>
-#include <kglobalsettings.h>
 
 #include "utils.h"
 #include "container.h"

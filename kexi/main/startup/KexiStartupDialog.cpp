@@ -47,7 +47,6 @@
 #include <kcomponentdata.h>
 #include <kdebug.h>
 #include <kpushbutton.h>
-#include <kglobalsettings.h>
 #include <ktextedit.h>
 #include <kapplication.h>
 #include <kmimetype.h>

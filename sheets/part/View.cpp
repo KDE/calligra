@@ -62,6 +62,7 @@
 // KDE includes
 #include <kactioncollection.h>
 #include <kconfig.h>
+#include <kglobalsettings.h>
 #include <kcomponentdata.h>
 #include <kdebug.h>
 

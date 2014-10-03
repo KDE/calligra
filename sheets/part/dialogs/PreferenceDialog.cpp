@@ -38,6 +38,7 @@
 
 #include <kcombobox.h>
 #include <kconfig.h>
+#include <kglobalsettings.h>
 #include <kstatusbar.h>
 #include <knuminput.h>
 

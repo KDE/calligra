@@ -57,7 +57,6 @@
 #include <kedittoolbar.h>
 #include <ktogglefullscreenaction.h>
 
-#include <kglobalsettings.h>
 #include <ktip.h>
 #include <kpushbutton.h>
 #include <ktextbrowser.h>

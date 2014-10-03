@@ -41,6 +41,7 @@
 #include <QScopedPointer>
 #include <ktabwidget.h>
 #include <kstandarddirs.h>
+#include <kglobalsettings.h>
 
 #include <KoIcon.h>
 

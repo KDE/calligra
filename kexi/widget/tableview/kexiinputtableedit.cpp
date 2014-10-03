@@ -32,7 +32,6 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include <kglobalsettings.h>
 #include <kcolorscheme.h>
 #include <kcompletionbox.h>
 #include <knumvalidator.h>

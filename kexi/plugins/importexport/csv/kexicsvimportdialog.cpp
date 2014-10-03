@@ -61,7 +61,6 @@
 #include <kfiledialog.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <kglobalsettings.h>
 #include <kcharsets.h>
 #include <knuminput.h>
 #include <KProgressDialog>
