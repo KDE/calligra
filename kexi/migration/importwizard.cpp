@@ -33,7 +33,6 @@
 #include <QDir>
 #include <QApplication>
 
-#include <kcombobox.h>
 #include <kmessagebox.h>
 #include <kpushbutton.h>
 #include <kdebug.h>

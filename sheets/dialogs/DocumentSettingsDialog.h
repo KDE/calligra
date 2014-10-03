@@ -42,7 +42,6 @@ class KSpellConfig;
 class QCheckBox;
 class QSpinBox;
 class QComboBox;
-class KComboBox;
 class QPushButton;
 
 namespace Sonnet

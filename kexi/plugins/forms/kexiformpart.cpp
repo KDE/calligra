@@ -24,7 +24,6 @@
 
 #include <kdebug.h>
 #include <ktabwidget.h>
-#include <kcombobox.h>
 #include <kaction.h>
 #include <kactionmenu.h>
 #include <kactioncollection.h>

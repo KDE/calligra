@@ -36,7 +36,6 @@ class QRadioButton;
 class QHBoxLayout;
 class QVBoxLayout;
 class QGroupBox;
-class KComboBox;
 class KLineEdit;
 class KPushButton;
 class KexiConnectionSelectorWidget;

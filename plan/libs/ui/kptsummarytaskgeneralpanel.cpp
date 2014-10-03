@@ -25,7 +25,6 @@
 
 #include <klineedit.h>
 #include <ktextedit.h>
-#include <kcombobox.h>
 #include <kdatetimewidget.h>
 #include <klocale.h>
 

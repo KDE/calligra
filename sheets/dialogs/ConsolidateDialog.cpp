@@ -38,7 +38,6 @@
 #include <QListWidget>
 
 //KDE Includes
-#include <kcombobox.h>
 #include <kdebug.h>
 #include <kdialog.h>
 #include <klineedit.h>

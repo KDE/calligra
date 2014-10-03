@@ -25,7 +25,6 @@
 #include "kptproject.h"
 
 #include <klineedit.h>
-#include <kcombobox.h>
 #include <klocale.h>
 
 #include <kdebug.h>

@@ -37,7 +37,6 @@
 #include <QComboBox>
 #include <QSpinBox>
 
-#include <kcombobox.h>
 #include <kstatusbar.h>
 #include <knuminput.h>
 

@@ -29,7 +29,6 @@
 #include <QGridLayout>
 
 #include <kconfig.h>
-#include <kcombobox.h>
 #include <klocale.h>
 #include <kglobal.h>
 

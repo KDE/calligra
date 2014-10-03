@@ -24,7 +24,6 @@
 #include <KexiView.h>
 #include "KexiRelationsScrollArea.h"
 
-class KComboBox;
 class KPushButton;
 class KMenu;
 class KAction;
