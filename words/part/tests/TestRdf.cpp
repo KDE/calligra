@@ -72,7 +72,6 @@
 #include <kmimetype.h>
 #include <kparts/part.h>
 #include <kservice.h>
-#include <ktemporaryfile.h>
 #include <kurl.h>
 #include <kcomponentdata.h>
 #include <kconfiggroup.h>

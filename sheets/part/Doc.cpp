@@ -49,7 +49,6 @@
 #include <kdebug.h>
 #include <kconfig.h>
 #include <kmessagebox.h>
-#include <ktemporaryfile.h>
 
 #include <KoApplication.h>
 #include <KoDocumentInfo.h>

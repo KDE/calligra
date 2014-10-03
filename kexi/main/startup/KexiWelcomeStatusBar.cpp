@@ -39,7 +39,6 @@
 #include <KIO/Job>
 #include <KIO/CopyJob>
 #include <kcodecs.h>
-#include <ktemporaryfile.h>
 #include <ktempdir.h>
 #include <kde_file.h>
 

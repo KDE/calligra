@@ -43,7 +43,6 @@
 #include <kapplication.h>
 #include <kcmdlineargs.h>
 #include <kdesktopfile.h>
-#include <ktemporaryfile.h>
 #include <kfiledialog.h>
 #include <kfileitem.h>
 #include <klocale.h>
