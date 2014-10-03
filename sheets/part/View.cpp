@@ -76,7 +76,6 @@
 #include <kstandardaction.h>
 #include <ktoggleaction.h>
 #include <ktoolinvocation.h>
-#include <kpushbutton.h>
 #include <kxmlguifactory.h>
 #include <kservicetypetrader.h>
 

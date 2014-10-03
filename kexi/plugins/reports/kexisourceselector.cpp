@@ -18,6 +18,8 @@
 
 #include "kexisourceselector.h"
 
+#include <kpushbutton.h>
+
 #include <QLabel>
 #include <klocale.h>
 #include <kdebug.h>

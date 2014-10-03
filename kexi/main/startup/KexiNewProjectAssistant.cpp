@@ -52,7 +52,6 @@
 #include <klineedit.h>
 #include <ktitlewidget.h>
 #include <kcategorydrawer.h>
-#include <kpushbutton.h>
 #include <kacceleratormanager.h>
 #include <kfiledialog.h>
 

@@ -42,7 +42,6 @@
 #include <kdialog.h>
 #include <klineedit.h>
 #include <kmessagebox.h>
-#include <kpushbutton.h>
 
 #include <KoIcon.h>
 

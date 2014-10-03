@@ -21,7 +21,6 @@
 
 #include <kstandardguiitem.h>
 #include <kstdaction.h>
-#include <kpushbutton.h>
 #include <kcombobox.h>
 #include <klocale.h>
 #include <kdebug.h>

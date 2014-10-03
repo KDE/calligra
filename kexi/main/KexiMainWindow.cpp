@@ -58,7 +58,6 @@
 #include <ktogglefullscreenaction.h>
 
 #include <ktip.h>
-#include <kpushbutton.h>
 #include <ktextbrowser.h>
 #include <kiconloader.h>
 #include <ktabwidget.h>
