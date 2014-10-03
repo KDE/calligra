@@ -40,6 +40,7 @@
 #include <kurlcombobox.h>
 #include <ktoolbar.h>
 #include <kmenu.h>
+#include <kdialog.h>
 
 #include <QLabel>
 #include <QPushButton>

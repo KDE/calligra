@@ -23,7 +23,6 @@
 #include <QDomDocument>
 
 #include <kdebug.h>
-#include <kdialog.h>
 #include <ktabwidget.h>
 #include <kcombobox.h>
 #include <kconfig.h>
