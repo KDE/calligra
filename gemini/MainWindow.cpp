@@ -79,6 +79,7 @@
 #include "RecentImageImageProvider.h"
 #include "RecentFilesModel.h"
 #include "TemplatesModel.h"
+#include "CloudAccountsModel.h"
 
 #ifdef Q_OS_WIN
 // Slate mode/docked detection stuff
@@ -269,6 +270,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     qmlRegisterType<ScribbleArea>("org.calligra", 1, 0, "ScribbleArea");
     qmlRegisterType<RecentFilesModel>("org.calligra", 1, 0, "RecentFilesModel");
     qmlRegisterType<TemplatesModel>("org.calligra", 1, 0, "TemplatesModel");
+    qmlRegisterType<CloudAccountsModel>("org.calligra", 1, 0, "CloudAccountsModel");
 
     qApp->setActiveWindow( this );
 

@@ -23,12 +23,15 @@ import "cloud"
 
 Page {
     id: base;
-    ListModel {
+/*    ListModel {
         id: cloudAccounts;
         ListElement { text: "Dropbox"; selected: false; accountType: "DropBox"; stackComponent: "accountsPageDropbox"; accountDetails: [ ListElement { userkey: "asfdoijfdshaloiuhs" } ] }
         ListElement { text: "ownCloud"; selected: false; accountType: "WebDav"; stackComponent: "accountsPageWebdav"; accountDetails: [ ListElement { username: "lala" } ] }
         ListElement { text: "bitbucket"; selected: false; accountType: "Git"; stackComponent: "accountsPageGit"; accountDetails: [ ListElement { localrepo: "C:\\Users\\danjensen\\Documents\\nohnas" } ] }
         ListElement { text: "github"; selected: false; accountType: "Git"; stackComponent: "accountsPageGit"; accountDetails: [ ListElement { localrepo: "C:\\dev\\documentation" } ] }
+    }*/
+    CloudAccountsModel {
+        id: cloudAccounts;
     }
     Label {
         id: docTypeSelectorRow;
@@ -55,9 +58,7 @@ Page {
             textSize: Settings.theme.adjustedPixel(18);
             checkedColor: "#D2D4D5";
             onClicked: {
-                for(var i = 0; i < cloudAccounts.count; i++) {
-                    cloudAccounts.setProperty(i, "selected", false);
-                }
+                cloudAccounts.selectIndex(-1);
                 cloudStack.replace(accountsPage);
             }
             checked: cloudStack.currentPage.pageName === "accountsPage";
@@ -90,12 +91,9 @@ Page {
                         if(model.selected) {
                             return;
                         }
-                        for(var i = 0; i < cloudAccounts.count; i++) {
-                            cloudAccounts.setProperty(i, "selected", false);
-                        }
-                        cloudAccounts.setProperty(index, "selected", true);
+                        cloudAccounts.selectIndex(index);
                         cloudStack.replace(accountsRow.elementFromName(model.stackComponent));
-                        cloudStack.currentPage.accountDetails = model.accountDetails.get(0);
+                        cloudStack.currentPage.accountDetails = model.accountDetails;
                     }
                     checked: model.selected;
                 }
