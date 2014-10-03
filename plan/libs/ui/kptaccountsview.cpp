@@ -42,7 +42,6 @@
 #include <QMenu>
 
 #include <kcalendarsystem.h>
-#include <kglobal.h>
 #include <klocale.h>
 #include <kaction.h>
 

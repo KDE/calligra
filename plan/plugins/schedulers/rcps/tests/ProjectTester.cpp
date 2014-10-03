@@ -28,7 +28,6 @@
 #include "kpttask.h"
 #include "kptschedule.h"
 
-#include <kglobal.h>
 #include <klocale.h>
 #include <kcalendarsystem.h>
 #include <ksystemtimezone.h>

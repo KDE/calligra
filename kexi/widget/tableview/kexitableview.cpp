@@ -51,7 +51,6 @@
 #include <QDesktopWidget>
 #include <QScrollArea>
 
-#include <kglobal.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <kapplication.h>

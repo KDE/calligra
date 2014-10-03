@@ -40,7 +40,6 @@
 
 #include <kdatetimewidget.h>
 #include <klocale.h>
-#include <kglobal.h>
 
 
 namespace KPlato

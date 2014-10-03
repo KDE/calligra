@@ -26,8 +26,6 @@
 #include <QTreeView>
 #include <QTimer>
 
-#include <kglobal.h>
-
 // FIXME: Don't cross include
 //#include "KWNavigationDocker.h"
 #include "StatisticsPreferencesPopup.h"

@@ -31,7 +31,6 @@
 
 #include <cstdlib>
 #include <QDir>
-#include <kglobal.h>
 #include <klocale.h>
 #include <kcalendarsystem.h>
 #include <ksystemtimezone.h>

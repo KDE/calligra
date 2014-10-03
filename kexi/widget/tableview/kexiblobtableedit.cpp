@@ -41,7 +41,6 @@
 #include <kservice.h>
 #include <klocale.h>
 #include <kio/job.h>
-#include <kglobal.h>
 #include <kiconloader.h>
 #include <kmenu.h>
 #include <kstdaccel.h>

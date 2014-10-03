@@ -31,7 +31,6 @@
 #include <QListIterator>
 #include <QDomDocument>
 
-#include <kglobal.h>
 #include <klocale.h>
 
 

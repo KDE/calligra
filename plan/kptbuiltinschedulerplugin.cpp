@@ -23,6 +23,8 @@
 #include "kptschedule.h"
 #include "kptxmlloaderobject.h"
 
+#include <kglobal.h>
+
 #include <QApplication>
 #include <QDomDocument>
 #include <QDomElement>
