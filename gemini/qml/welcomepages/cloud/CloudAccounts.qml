@@ -24,7 +24,7 @@ import "dropbox" as Dropbox
 Page {
     id: base;
     property string pageName: "accountsPage";
-    property ListModel accountsList;
+    property QtObject accountsList;
     ListView {
         id: accountsView;
         anchors {
@@ -78,10 +78,6 @@ Page {
             }
         }
     }
-    PageStack {
-        id: dlgStack;
-        anchors.fill: accountsView;
-    }
     Label {
         anchors.fill: accountsView;
         text: "You have no cloud accounts defined. Please add one by clicking on your service of choice below.";
@@ -120,10 +116,10 @@ Page {
                 model: ListModel {
                     ListElement { text: "Dropbox"; accountType: "DropBox"; serviceName: "dropbox"; }
                     ListElement { text: "WebDav"; accountType: "WebDav"; serviceName: ""; }
-                    ListElement { text: "ownCloud"; accountType: "WebDav"; serviceName: "ownCloud"; }
+                    //ListElement { text: "ownCloud"; accountType: "WebDav"; serviceName: "ownCloud"; }
                     ListElement { text: "Git"; accountType: "Git"; serviceName: ""; }
-                    ListElement { text: "GitHub"; accountType: "Git"; serviceName: "github"; }
-                    ListElement { text: "bitbucket (git)"; accountType: "Git"; serviceName: "bitbucket"; }
+                    //ListElement { text: "GitHub"; accountType: "Git"; serviceName: "github"; }
+                    //ListElement { text: "bitbucket (git)"; accountType: "Git"; serviceName: "bitbucket"; }
                 }
                 CohereButton {
                     text: model.text
@@ -131,12 +127,17 @@ Page {
                     textSize: Settings.theme.adjustedPixel(18);
                     color: "#D2D4D5";
                     onClicked: {
-                        dlgStack.push(base.addComponentFromName(model.accountType));
+                        dlgStack.replace(base.addComponentFromName(model.accountType));
                         dlgStack.currentPage.serviceName = model.serviceName;
                     }
                 }
             }
         }
+    }
+    PageStack {
+        id: dlgStack;
+        anchors.fill: base;
+        initialPage: addEmpty;
     }
     function addComponentFromName(name) {
         var elements = {
@@ -147,26 +148,117 @@ Page {
         return elements[name];
     }
     Component {
+        id: addEmpty;
+        Item {}
+    }
+    Component {
         id: addDropBox;
-        Dropbox.SetupPage {
+        Rectangle {
             anchors.fill: parent;
+            anchors.margins: Settings.theme.adjustedPixel(16);
             property string serviceName: "";
+            radius: Settings.theme.adjustedPixel(8);
+            color: "white";
+            Rectangle {
+                anchors {
+                    fill: parent;
+                    margins: -Settings.theme.adjustedPixel(16);
+                }
+                opacity: 0.3;
+                color: "white";
+                MouseArea { anchors.fill: parent; onClicked: { /*nothing */ } }
+                SimpleTouchArea { anchors.fill: parent; onTouched: { /*nothing */ } }
+            }
+            Dropbox.SetupPage {
+                anchors.fill: parent;
+                anchors.margins: Settings.theme.adjustedPixel(8);
+            }
+            CohereButton {
+                anchors {
+                    bottom: parent.bottom;
+                    right: parent.right;
+                    margins: Settings.theme.adjustedPixel(8);
+                }
+                text: "Close";
+                textColor: "#5b6573";
+                textSize: Settings.theme.adjustedPixel(18);
+                color: "#D2D4D5";
+                onClicked: dlgStack.replace(addEmpty);
+            }
         }
     }
     Component {
         id: addWebDav;
-        Label {
+        Rectangle {
             anchors.fill: parent;
+            anchors.margins: Settings.theme.adjustedPixel(16);
             property string serviceName: "";
-            text: "webdav";
+            radius: Settings.theme.adjustedPixel(8);
+            color: "white";
+            Rectangle {
+                anchors {
+                    fill: parent;
+                    margins: -Settings.theme.adjustedPixel(16);
+                }
+                opacity: 0.3;
+                color: "white";
+                MouseArea { anchors.fill: parent; onClicked: { /*nothing */ } }
+                SimpleTouchArea { anchors.fill: parent; onTouched: { /*nothing */ } }
+            }
+            Label {
+                anchors.fill: parent;
+                horizontalAlignment: Text.AlignHCenter;
+                text: "Sorry, support for WebDav is not yet implemented.";
+            }
+            CohereButton {
+                anchors {
+                    bottom: parent.bottom;
+                    right: parent.right;
+                    margins: Settings.theme.adjustedPixel(8);
+                }
+                text: "Close";
+                textColor: "#5b6573";
+                textSize: Settings.theme.adjustedPixel(18);
+                color: "#D2D4D5";
+                onClicked: dlgStack.replace(addEmpty);
+            }
         }
     }
     Component {
         id: addGit;
-        Label {
+        Rectangle {
             anchors.fill: parent;
+            anchors.margins: Settings.theme.adjustedPixel(16);
             property string serviceName: "";
-            text: "git";
+            radius: Settings.theme.adjustedPixel(8);
+            color: "white";
+            Rectangle {
+                anchors {
+                    fill: parent;
+                    margins: -Settings.theme.adjustedPixel(16);
+                }
+                opacity: 0.3;
+                color: "white";
+                MouseArea { anchors.fill: parent; onClicked: { /*nothing */ } }
+                SimpleTouchArea { anchors.fill: parent; onTouched: { /*nothing */ } }
+            }
+            Label {
+                anchors.fill: parent;
+                horizontalAlignment: Text.AlignHCenter;
+                text: "Sorry, support for Git is not yet implemented.";
+            }
+            CohereButton {
+                anchors {
+                    bottom: parent.bottom;
+                    right: parent.right;
+                    margins: Settings.theme.adjustedPixel(8);
+                }
+                text: "Close";
+                textColor: "#5b6573";
+                textSize: Settings.theme.adjustedPixel(18);
+                color: "#D2D4D5";
+                onClicked: dlgStack.replace(addEmpty);
+            }
         }
     }
     function editComponentFromName(name) {
