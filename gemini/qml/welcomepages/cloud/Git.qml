@@ -22,7 +22,7 @@ import "../../components"
 
 Page {
     id: base;
-    property string pageName: "accountsPageDropbox";
+    property string pageName: "accountsPageGit";
     property QtObject accountDetails;
     Label {
         anchors.fill: parent;
