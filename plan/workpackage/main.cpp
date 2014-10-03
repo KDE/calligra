@@ -25,7 +25,6 @@
 #include <kuniqueapplication.h>
 #include <kdemacros.h>
 #include <kcmdlineargs.h>
-#include <kmessagebox.h>
 #include <kdesktopfile.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>

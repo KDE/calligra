@@ -86,12 +86,10 @@
 #include <KoCanvasControllerWidget.h>
 #include <KoMainWindow.h>
 #include <KoOdfLoadingContext.h>
-#include <KoOdfReadStore.h>
 #include <KoOdfStylesReader.h>
 #include <KoShapeController.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
-#include <KoStore.h>
 #include <KoDockerManager.h>
 #include <KoToolManager.h>
 #include <KoToolRegistry.h>

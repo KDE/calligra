@@ -34,12 +34,9 @@
 
 class QSizeF;
 
-class KoXmlWriter;
-class KoStore;
-
 class OdfReader;
-class OdfTextReaderBackend;
 class OdfReaderContext;
+class OdfTextReaderBackend;
 
 
 /** @brief Read the XML tree of the content of an ODT file.

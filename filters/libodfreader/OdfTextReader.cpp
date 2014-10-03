@@ -30,7 +30,8 @@
 #include <kdebug.h>
 #include <klocalizedstring.h>
 
-// Calligra, libodf2
+// Calligra, libodf{,2}
+#include <KoXmlNS.h>
 #include <KoXmlStreamReader.h>
 #include <KoXmlUtils.h>
 

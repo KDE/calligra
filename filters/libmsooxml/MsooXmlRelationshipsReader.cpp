@@ -24,7 +24,6 @@
 #include "MsooXmlRelationshipsReader.h"
 #include <MsooXmlSchemas.h>
 #include <MsooXmlUtils.h>
-#include <KoXmlWriter.h>
 
 //#define MSOOXML_CURRENT_NS
 #define MSOOXML_CURRENT_CLASS MsooXmlRelationshipsReader

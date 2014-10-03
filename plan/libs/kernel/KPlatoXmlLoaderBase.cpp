@@ -32,7 +32,6 @@
 
 #include "KoXmlReader.h"
 
-#include <kmessagebox.h>
 #include <ktimezone.h>
 #include <ksystemtimezone.h>
 #include <kdebug.h>

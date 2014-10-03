@@ -21,7 +21,6 @@
 #include <krun.h>
 #include <kmimetype.h>
 #include <ktoolinvocation.h>
-#include <kmessagebox.h>
 #include <klocalizedstring.h>
 
 #include <QDir>

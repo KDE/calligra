@@ -29,7 +29,6 @@
 #include <db/driver.h>
 
 #include <klocale.h>
-#include <kmessagebox.h>
 
 class QLabel;
 class KAboutData;

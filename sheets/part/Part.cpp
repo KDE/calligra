@@ -36,7 +36,6 @@
 #include <KoShapeManager.h>
 
 #include <kglobal.h>
-#include <kmessagebox.h>
 
 using namespace Calligra::Sheets;
 

@@ -58,14 +58,11 @@
 #include <KoOasisSettings.h>
 #include <KoOdfLoadingContext.h>
 #include <KoOdfStylesReader.h>
-#include <KoOdfReadStore.h>
-#include <KoOdfWriteStore.h>
 #include <KoDocumentResourceManager.h>
 #include <KoShapeConfigFactoryBase.h>
 #include <KoShapeFactoryBase.h>
 #include <KoShapeManager.h>
 #include <KoShapeRegistry.h>
-#include <KoStoreDevice.h>
 #include <KoStyleStack.h>
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>

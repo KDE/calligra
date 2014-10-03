@@ -20,7 +20,6 @@
 */
 
 #include "ooutils.h"
-#include <KoOdfReadStore.h>
 #include <KoStyleStack.h>
 #include <KoXmlReader.h>
 #include <QDomDocument>

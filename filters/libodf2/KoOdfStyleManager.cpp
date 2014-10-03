@@ -31,7 +31,6 @@
 
 // odf lib
 #include "KoStore.h"
-#include <KoOdfReadStore.h>
 #include <KoXmlStreamReader.h>
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>

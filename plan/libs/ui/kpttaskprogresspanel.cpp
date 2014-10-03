@@ -32,7 +32,6 @@
 #include <kdatetimewidget.h>
 #include <knuminput.h>
 #include <klocale.h>
-#include <kmessagebox.h>
 
 #include "kpttask.h"
 #include "kptcommand.h"

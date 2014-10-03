@@ -30,7 +30,6 @@
 #include <QPen>
 #include <QDomDocument>
 
-#include <kmessagebox.h>
 #include <kfilterdev.h>
 #include <kdebug.h>
 #include <kpluginfactory.h>
