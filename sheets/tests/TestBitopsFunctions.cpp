@@ -20,8 +20,6 @@
 
 #include "TestKspreadCommon.h"
 
-#include <kstandarddirs.h>
-
 void TestBitopsFunctions::initTestCase()
 {
     FunctionModuleRegistry::instance()->loadFunctionModules();

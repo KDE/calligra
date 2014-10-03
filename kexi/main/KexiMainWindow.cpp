@@ -59,7 +59,6 @@
 
 #include <kglobalsettings.h>
 #include <ktip.h>
-#include <kstandarddirs.h>
 #include <kpushbutton.h>
 #include <ktextbrowser.h>
 #include <kiconloader.h>

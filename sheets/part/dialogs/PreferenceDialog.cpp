@@ -48,7 +48,6 @@
 #include <kpluginselector.h>
 #include <kservicetypetrader.h>
 #include <ksharedconfig.h>
-#include <kstandarddirs.h>
 #include <sonnet/configwidget.h>
 
 #include "ApplicationSettings.h"

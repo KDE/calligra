@@ -56,7 +56,6 @@
 #include <kstatusbar.h>
 #include <kxmlguifactory.h>
 #include <kxmlguiclient.h>
-#include <kstandarddirs.h>
 #include <kdesktopfile.h>
 #include <ktoolinvocation.h>
 #include <ktoggleaction.h>

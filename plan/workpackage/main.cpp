@@ -26,7 +26,6 @@
 #include <kdemacros.h>
 #include <kcmdlineargs.h>
 #include <kdesktopfile.h>
-#include <kstandarddirs.h>
 #include <kdebug.h>
 
 #include <QtDBus>

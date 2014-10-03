@@ -46,7 +46,6 @@
 #include <QPainter>
 #include <QGraphicsItem>
 
-#include <kstandarddirs.h>
 #include <kdebug.h>
 #include <kconfig.h>
 #include <kmessagebox.h>

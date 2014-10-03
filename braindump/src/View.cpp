@@ -58,7 +58,6 @@
 #include <ktoggleaction.h>
 #include <kactionmenu.h>
 #include <kactioncollection.h>
-#include <kstandarddirs.h>
 #include <kstatusbar.h>
 #include <KoServiceLocator.h>
 

@@ -57,7 +57,6 @@
 #include <krecentdocument.h>
 #include <kservice.h>
 #include <kshortcutsdialog.h>
-#include <kstandarddirs.h>
 #include <ktemporaryfile.h>
 #include <ktoolinvocation.h>
 

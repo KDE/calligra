@@ -33,7 +33,6 @@
 
 #include <kaboutdata.h>
 #include <kpluginfactory.h>
-#include <kstandarddirs.h>
 #include <kmimetype.h>
 #include <kmimetypetrader.h>
 

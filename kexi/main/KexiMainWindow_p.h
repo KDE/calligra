@@ -40,6 +40,7 @@
 #include <QKeyEvent>
 #include <QScopedPointer>
 #include <ktabwidget.h>
+#include <kstandarddirs.h>
 
 #include <KoIcon.h>
 

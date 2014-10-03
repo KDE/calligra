@@ -28,7 +28,6 @@
 #include <kdatetimewidget.h>
 #include <klocale.h>
 #include <kconfig.h>
-#include <kstandarddirs.h>
 #include <kdebug.h>
 
 #include <QDateTime> 
