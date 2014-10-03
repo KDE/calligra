@@ -74,6 +74,7 @@ KisMainWindow::KisMainWindow(KoPart *part, const KComponentData &instance)
     m_mdiArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     m_mdiArea->setViewMode(viewMode);
     m_mdiArea->setTabPosition(QTabWidget::North);
+    m_mdiArea->setTabsClosable(true);
 
     setCentralWidget(m_mdiArea);
     m_mdiArea->show();
