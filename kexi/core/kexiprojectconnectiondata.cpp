@@ -26,7 +26,6 @@
 #include <QRegExp>
 
 #include <kdebug.h>
-#include <kio/netaccess.h>
 #include <kurl.h>
 #include <klocale.h>
 

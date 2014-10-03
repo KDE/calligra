@@ -64,7 +64,6 @@
 #include <kstandardguiitem.h>
 #include <kguiitem.h>
 #include <kmessagebox.h>
-#include <kio/netaccess.h>
 #include <kdebug.h>
 #include <ktoolbar.h>
 #include <kfiledialog.h>

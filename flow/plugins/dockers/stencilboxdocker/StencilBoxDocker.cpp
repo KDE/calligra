@@ -47,7 +47,6 @@
 
 #ifdef GHNS
 #include <knewstuff3/downloaddialog.h>
-#include <KIO/NetAccess>
 #endif
 
 #include <kstandarddirs.h>

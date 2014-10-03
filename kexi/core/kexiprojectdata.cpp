@@ -30,7 +30,6 @@
 #include <QStringList>
 
 #include <kdebug.h>
-#include <kio/netaccess.h>
 #include <kurl.h>
 #include <klocale.h>
 #include <kconfig.h>
