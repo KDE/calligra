@@ -46,7 +46,6 @@
 #include <QImage>
 
 #include <kdebug.h>
-#include <kzip.h>
 #include <kpluginfactory.h>
 
 #include <KoEmbeddedDocumentSaver.h>

@@ -34,7 +34,6 @@ class QColor;
 class QDomElement;
 class KoStyleStack;
 class QDomDocument;
-class KZip;
 
 namespace MSOOXML
 {
