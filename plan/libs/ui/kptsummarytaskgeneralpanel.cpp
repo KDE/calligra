@@ -24,7 +24,6 @@
 #include "kpttaskdescriptiondialog.h"
 
 #include <ktextedit.h>
-#include <kdatetimewidget.h>
 #include <klocale.h>
 
 #include <kdeversion.h>

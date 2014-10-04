@@ -23,7 +23,6 @@
 #include "kptfactory.h"
 
 #include <ktextedit.h>
-#include <kdatetimewidget.h>
 #include <klocale.h>
 #include <kdebug.h>
 

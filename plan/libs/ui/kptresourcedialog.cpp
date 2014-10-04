@@ -38,7 +38,6 @@
 #include <akonadi/contact/emailaddressselection.h>
 #endif
 
-#include <kdatetimewidget.h>
 #include <klocale.h>
 
 
