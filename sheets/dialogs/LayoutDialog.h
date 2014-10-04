@@ -38,7 +38,6 @@
 #include <QPaintEvent>
 #include <QPushButton>
 
-#include <kcompletion.h>
 #include <knuminput.h>
 #include <kpagedialog.h>
 
