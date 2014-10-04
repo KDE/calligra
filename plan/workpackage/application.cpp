@@ -40,7 +40,6 @@
 #include <KoView.h>
 
 #include <kaboutdata.h>
-#include <kaction.h>
 #include <kcmdlineargs.h>
 #include <kcomponentdata.h>
 #include <kdebug.h>

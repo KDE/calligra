@@ -43,7 +43,6 @@
 
 #include <kcalendarsystem.h>
 #include <klocale.h>
-#include <kaction.h>
 
 
 namespace KPlato

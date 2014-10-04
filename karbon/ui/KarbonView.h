@@ -50,7 +50,6 @@ class QResizeEvent;
 class QRectF;
 class QPrinter;
 
-class KAction;
 class KarbonDocument;
 
 class KoCanvasController;

@@ -27,7 +27,6 @@
 
 class View;
 class RootSection;
-class KAction;
 class Section;
 
 /// Widget that shows a KoPAPage

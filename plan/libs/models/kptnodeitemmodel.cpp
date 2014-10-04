@@ -39,7 +39,6 @@
 #include <QPair>
 #include <QByteArray>
 
-#include <kaction.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <krichtextwidget.h>

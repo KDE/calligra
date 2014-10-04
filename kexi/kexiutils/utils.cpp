@@ -42,7 +42,6 @@
 #include <kcursor.h>
 #include <kiconeffect.h>
 #include <kglobalsettings.h>
-#include <kaction.h>
 #include <kdialog.h>
 #include <kcolorscheme.h>
 

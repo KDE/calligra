@@ -27,7 +27,6 @@
 #include <QVBoxLayout>
 
 
-#include <kaction.h>
 #include <klocale.h>
 #include <khtmlview.h>
 #include <kurl.h>

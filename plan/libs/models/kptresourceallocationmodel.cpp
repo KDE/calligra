@@ -35,7 +35,6 @@
 #include <QObject>
 #include <QStringList>
 
-#include <kaction.h>
 #include <klocale.h>
 
 namespace KPlato
