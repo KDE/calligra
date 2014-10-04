@@ -59,7 +59,6 @@
 
 #include <kiconloader.h>
 #include <ktabwidget.h>
-#include <kimageio.h>
 #include <khelpmenu.h>
 #include <kfiledialog.h>
 #include <kmultitabbar.h>
