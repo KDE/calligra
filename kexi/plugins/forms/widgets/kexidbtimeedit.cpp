@@ -24,7 +24,6 @@
 #include <QLayout>
 #include <QPainter>
 
-#include <kdatepicker.h>
 #include <kdatetable.h>
 #include <kexiutils/utils.h>
 

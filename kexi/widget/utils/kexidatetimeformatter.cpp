@@ -22,7 +22,6 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kglobal.h>
-#include <kdatepicker.h>
 #include <kdatetable.h>
 #include <klineedit.h>
 #include <kdatewidget.h>

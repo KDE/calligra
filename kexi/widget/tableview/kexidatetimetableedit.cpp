@@ -37,7 +37,6 @@
 
 #include <kdebug.h>
 #include <klocale.h>
-#include <kdatepicker.h>
 #include <kdatetable.h>
 #include <klineedit.h>
 #include <kdatewidget.h>
