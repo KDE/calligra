@@ -41,7 +41,6 @@
 #include <kconfiggroup.h>
 #include <kmessagebox.h>
 #include <klineedit.h>
-#include <kcmdlineargs.h>
 
 #ifdef GHNS
 #include <knewstuff3/downloaddialog.h>

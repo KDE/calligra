@@ -21,7 +21,6 @@
 #include <QPointer>
 
 #include <kdebug.h>
-#include <kcmdlineargs.h>
 #include <kcomponentdata.h>
 #include <kaboutdata.h>
 

@@ -41,7 +41,6 @@
 #include <KoGlobal.h>
 
 #include <kapplication.h>
-#include <kcmdlineargs.h>
 #include <kdesktopfile.h>
 #include <kfiledialog.h>
 #include <kfileitem.h>
