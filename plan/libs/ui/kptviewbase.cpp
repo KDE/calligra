@@ -25,7 +25,6 @@
 #include <kaction.h>
 #include <kparts/event.h>
 #include <kmessagebox.h>
-#include <knotification.h>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
 
