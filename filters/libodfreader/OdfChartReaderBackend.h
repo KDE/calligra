@@ -64,9 +64,9 @@ class KOODFREADER_EXPORT OdfChartReaderBackend
     virtual void elementChartChart(KoXmlStreamReader &reader, OdfReaderContext *context);
 
     virtual void elementChartFooter(KoXmlStreamReader &reader, OdfReaderContext *context);
-
     virtual void elementChartSubtitle(KoXmlStreamReader &reader, OdfReaderContext *context);
     virtual void elementChartTitle(KoXmlStreamReader &reader, OdfReaderContext *context);
+    virtual void elementChartLegend(KoXmlStreamReader &reader, OdfReaderContext *context);
 
  private:
     class Private;

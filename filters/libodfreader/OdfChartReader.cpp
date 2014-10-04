@@ -196,19 +196,18 @@ void OdfChartReader::readElementChartChart(KoXmlStreamReader &reader)
         if (tagName == "chart:footer") {
 	    readElementChartFooter(reader);
         }
-        else if (tagName == "chart:legend") {
-            // FIXME: NYI
-            reader.skipCurrentElement();
-        }
-        else if (tagName == "chart:plot-area") {
-            // FIXME: NYI
-            reader.skipCurrentElement();
-        }
         else if (tagName == "chart:subtitle") {
 	    readElementChartSubtitle(reader);
         }
         else if (tagName == "chart:title") {
 	    readElementChartTitle(reader);
+        }
+        else if (tagName == "chart:legend") {
+	    readElementChartLegend(reader);
+        }
+        else if (tagName == "chart:plot-area") {
+            // FIXME: NYI
+            reader.skipCurrentElement();
         }
         else if (tagName == "table:table") {
 	    OdfTextReader *textReader = m_parent->textReader();
@@ -311,6 +310,35 @@ void OdfChartReader::readElementChartTitle(KoXmlStreamReader &reader)
     m_backend->elementChartTitle(reader, m_context);
     DEBUGEND();
 }
+
+void OdfChartReader::readElementChartLegend(KoXmlStreamReader &reader)
+{
+   DEBUGSTART();
+    m_backend->elementChartLegend(reader, m_context);
+
+    // <chart:legend> has the following children in ODF 1.2:
+    //   [done] text:p 5.1.3
+    while (reader.readNextStartElement()) {
+        QString tagName = reader.qualifiedName().toString();
+        
+        if (tagName == "text:p") {
+	    OdfTextReader *textReader = m_parent->textReader();
+	    if (textReader) {
+		textReader->readElementTextP(reader);
+	    }
+	    else {
+		reader.skipCurrentElement();
+	    }
+        }
+        else {
+            reader.skipCurrentElement();
+        }
+    }
+
+    m_backend->elementChartLegend(reader, m_context);
+    DEBUGEND();
+}
+
 
 // ----------------------------------------------------------------
 //                             Other functions
