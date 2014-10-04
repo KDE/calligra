@@ -49,7 +49,6 @@
 #include <klibloader.h>
 #include <kservice.h>
 #include <kmessagebox.h>
-#include <krecentdocument.h>
 #include <kparts/partmanager.h>
 #include <kparts/event.h>
 #include <kactioncollection.h>
