@@ -55,7 +55,6 @@
 
 #include <kdebug.h>
 #include <klocale.h>
-#include <kactionmenu.h>
 #include <kactioncollection.h>
 #include <kstatusbar.h>
 #include <KoServiceLocator.h>

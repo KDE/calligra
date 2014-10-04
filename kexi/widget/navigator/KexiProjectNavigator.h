@@ -31,7 +31,6 @@
 
 class KIcon;
 class KAction;
-class KActionMenu;
 class KActionCollection;
 class KexiProjectModelItem;
 class KexiSmallToolButton;
