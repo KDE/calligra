@@ -185,7 +185,7 @@ void OdfChartReader::readElementChartChart(KoXmlStreamReader &reader)
 
     // <chart:chart> has the following children in ODF 1.2:
     //   [done] <chart:footer> 11.2.3
-    //          <chart:legend> 11.3
+    //   [done] <chart:legend> 11.3
     //          <chart:plot-area> 11.4
     //   [done] <chart:subtitle> 11.2.2
     //   [done] <chart:title> 11.2.1
