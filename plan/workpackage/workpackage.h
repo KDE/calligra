@@ -34,8 +34,6 @@
 class KoView;
 class KoStore;
 
-class KProcess;
-
 class QDomDocument;
 
 namespace KPlato

@@ -25,8 +25,6 @@
 
 #include <QStackedWidget>
 
-#include <kprocess.h>
-
 class QProgressBar;
 class QTabWidget;
 class QPrinter;

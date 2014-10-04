@@ -60,7 +60,6 @@
 #include <ktemporaryfile.h>
 
 #include <kmessagebox.h>
-#include <kprocess.h>
 
 #include <KoIcon.h>
 
