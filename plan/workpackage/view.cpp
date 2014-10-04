@@ -48,7 +48,6 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <ktoolbar.h>
-#include <kaccelgen.h>
 
 #include <kstatusbar.h>
 #include <kxmlguifactory.h>

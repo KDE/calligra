@@ -49,7 +49,6 @@
 #include <kaction.h>
 #include <kglobal.h>
 #include <klocale.h>
-#include <kaccelgen.h>
 #include <kactioncollection.h>
 
 #include "debugarea.h"

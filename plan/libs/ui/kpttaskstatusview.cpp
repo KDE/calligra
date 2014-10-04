@@ -55,7 +55,6 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kcalendarsystem.h>
-#include <kaccelgen.h>
 #include <kactioncollection.h>
 
 #include "KDChartChart"

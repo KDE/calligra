@@ -48,7 +48,6 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kactionmenu.h>
-#include <kaccelgen.h>
 #include <kactioncollection.h>
 #include <kdeversion.h>
 

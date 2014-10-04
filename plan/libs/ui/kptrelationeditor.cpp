@@ -37,7 +37,6 @@
 
 #include <kaction.h>
 #include <klocale.h>
-#include <kaccelgen.h>
 #include <kactioncollection.h>
 
 
