@@ -41,7 +41,6 @@
 #include <QHeaderView>
 #include <QMenu>
 
-#include <kcalendarsystem.h>
 #include <klocale.h>
 
 

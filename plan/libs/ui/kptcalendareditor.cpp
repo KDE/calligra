@@ -43,7 +43,6 @@
 
 #include <kaction.h>
 #include <klocale.h>
-#include <kcalendarsystem.h>
 #include <kactioncollection.h>
 #include <ksystemtimezone.h>
 #include <ktimezone.h>
