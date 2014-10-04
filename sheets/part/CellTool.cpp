@@ -48,7 +48,6 @@
 #include <kaction.h>
 #include <kdebug.h>
 #include <klocale.h>
-#include <kmimetype.h>
 
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>

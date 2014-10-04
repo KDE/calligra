@@ -33,7 +33,6 @@
 
 #include <KoIcon.h>
 
-#include <kmimetype.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <kurlcombobox.h>

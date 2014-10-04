@@ -63,7 +63,6 @@
 
 #include <kmessagebox.h>
 #include <kvbox.h>
-#include <kmimetype.h>
 #include <kprocess.h>
 
 #include <KoIcon.h>

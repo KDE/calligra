@@ -29,7 +29,6 @@
 #include <QFileInfo>
 #include <QProcess>
 
-#include <kmimetype.h>
 #include <kservice.h>
 
 class KoView;

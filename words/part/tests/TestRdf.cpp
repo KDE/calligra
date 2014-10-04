@@ -69,7 +69,6 @@
 #include <kfileitem.h>
 #include <kio/job.h>
 #include <kio/jobclasses.h>
-#include <kmimetype.h>
 #include <kparts/part.h>
 #include <kservice.h>
 #include <kurl.h>

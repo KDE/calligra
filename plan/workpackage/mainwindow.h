@@ -35,7 +35,6 @@
 #include <QToolButton>
 #include <QLabel>
 
-#include <kmimetype.h>
 #include <kvbox.h>
 #include <kservice.h>
 #include <KoDocumentEntry.h>

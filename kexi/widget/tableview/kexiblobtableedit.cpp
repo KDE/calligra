@@ -37,7 +37,6 @@
 
 #include <kdebug.h>
 #include <ktemporaryfile.h>
-#include <kmimetype.h>
 #include <kservice.h>
 #include <klocale.h>
 #include <kio/job.h>

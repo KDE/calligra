@@ -77,7 +77,6 @@
 // KDE
 #include <kcursor.h>
 #include <kdebug.h>
-#include <kmimetype.h>
 #include <ksharedptr.h>
 #include <kwordwrap.h>
 

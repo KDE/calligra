@@ -57,7 +57,6 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <kmimetype.h>
 #include <ktemporaryfile.h>
 #include <KoGlobal.h>
 #include <kio/global.h>
