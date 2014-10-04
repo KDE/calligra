@@ -29,7 +29,6 @@
 
 #include <kglobal.h>
 #include <klocale.h>
-#include <kurlrequester.h>
 
 ExportDialog::ExportDialog(QWidget *parent)
         : KDialog(parent), m_mainwidget(new ExportWidget(this))

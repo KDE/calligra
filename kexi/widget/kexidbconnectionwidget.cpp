@@ -31,7 +31,6 @@
 #include <kdebug.h>
 #include <klineedit.h>
 #include <knuminput.h>
-#include <kurlrequester.h>
 
 #include <QLabel>
 #include <QCheckBox>
