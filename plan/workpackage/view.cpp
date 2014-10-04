@@ -57,7 +57,6 @@
 #include <kxmlguifactory.h>
 #include <kxmlguiclient.h>
 #include <ktoolinvocation.h>
-#include <ktoggleaction.h>
 #include <kparts/event.h>
 #include <kparts/partmanager.h>
 #include <kparts/componentfactory.h>

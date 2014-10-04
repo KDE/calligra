@@ -37,7 +37,6 @@
 
 #include <kaction.h>
 #include <klocale.h>
-#include <ktoggleaction.h>
 #include <kactionmenu.h>
 #include <kstandardaction.h>
 #include <kstandardshortcut.h>

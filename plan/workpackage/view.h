@@ -36,7 +36,6 @@ class QMenu;
 class QActionGroup;
 
 class KAction;
-class KToggleAction;
 class KActionCollection;
 
 class KoStore;
