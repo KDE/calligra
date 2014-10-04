@@ -54,12 +54,9 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <ktoolbar.h>
-#include <kstandardshortcut.h>
-#include <kaccelgen.h>
 #include <kconfigdialogmanager.h>
 #include <kstatusbar.h>
 #include <kxmlguifactory.h>
-#include <kdesktopfile.h>
 #include <ktoggleaction.h>
 #include <ktemporaryfile.h>
 #include <kfiledialog.h>

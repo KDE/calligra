@@ -52,8 +52,6 @@ namespace KoProperty
     class Set;
 }
 
-class KTabWidget;
-
 class QGraphicsView;
 class QGraphicsScene;
 class QDomElement;

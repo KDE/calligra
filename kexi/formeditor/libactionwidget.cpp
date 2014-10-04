@@ -26,7 +26,6 @@
 #include <KoIcon.h>
 
 #include <kdebug.h>
-#include <kactioncollection.h>
 
 using namespace KFormDesigner;
 

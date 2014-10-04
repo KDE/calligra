@@ -32,6 +32,7 @@
 
 // KDE
 #include <kdebug.h>
+#include <kglobalsettings.h>
 
 // Qt
 #include <QKeyEvent>

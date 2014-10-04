@@ -75,12 +75,8 @@
 #include <QToolTip>
 
 // KDE
-#include <kcursor.h>
 #include <kdebug.h>
-#include <krun.h>
-#include <kmimetype.h>
 #include <ksharedptr.h>
-#include <kwordwrap.h>
 
 // Calligra
 #include <KoCanvasController.h>

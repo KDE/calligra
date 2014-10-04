@@ -26,10 +26,7 @@
 #include <QDate>
 #include <QTableWidget>
 
-#include <klineedit.h>
-#include <ktextedit.h>
 #include <kdatetime.h>
-#include <kdatetimewidget.h>
 #include <knuminput.h>
 #include <klocale.h>
 

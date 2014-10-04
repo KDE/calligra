@@ -39,7 +39,6 @@
 #include <kiconloader.h>
 #include <KoIcon.h>
 #include <kstandarddirs.h>
-#include <kconfiggroup.h>
 #include <kdebug.h>
 
 //Calligra Headers

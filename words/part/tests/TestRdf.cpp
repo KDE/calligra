@@ -66,16 +66,12 @@
 #include <KoInlineTextObjectManager.h>
 #include <KoTextRangeManager.h>
 
-#include <kfileitem.h>
 #include <kio/job.h>
 #include <kio/jobclasses.h>
-#include <kmimetype.h>
 #include <kparts/part.h>
 #include <kservice.h>
-#include <ktemporaryfile.h>
 #include <kurl.h>
 #include <kcomponentdata.h>
-#include <kconfiggroup.h>
 
 using namespace Soprano;
 #define RDEBUG if (0) qDebug()

@@ -35,7 +35,6 @@
 #include <QCursor>
 
 #include <klocale.h>
-#include <kglobal.h>
 
 namespace KPlato
 {

@@ -27,9 +27,7 @@
 // KDE
 #include <kpluginfactory.h>
 #include <kstandarddirs.h>
-#include <kactioncollection.h>
 #include <kcmdlineargs.h>
-#include <kurl.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 // KSpread

@@ -23,7 +23,6 @@
 
 #include <kdebug.h>
 #include <kinputdialog.h>
-#include <kapplication.h>
 
 #include <kexiutils/identifier.h>
 #include <core/kexi.h>

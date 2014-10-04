@@ -19,7 +19,6 @@
 
 #include "kexisharedactionclient.h"
 
-#include <kaction.h>
 
 KexiSharedActionClient::KexiSharedActionClient()
 {

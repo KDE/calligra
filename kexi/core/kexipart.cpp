@@ -37,7 +37,6 @@
 #include <kactioncollection.h>
 #include <kdebug.h>
 #include <kmessagebox.h>
-#include <kstandarddirs.h>
 
 namespace KexiPart
 {

@@ -21,12 +21,11 @@
 #include "latexexportdialog.h"
 
 #include <QDir>
+#include <QApplication>
 
-#include <kapplication.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kconfig.h>
-#include <kstandarddirs.h>
 #include <krecentdocument.h>
 #include <kurlrequester.h>
 #include <kdebug.h>
@@ -57,7 +56,7 @@ LatexExportDialog::LatexExportDialog(KoStore* inputStore, QWidget* parent)
 
     int i = 0;
 
-    kapp->restoreOverrideCursor();
+    qApp->restoreOverrideCursor();
 
     /* Recent files */
     m_config = new KConfig("kspreadlatexexportdialog");

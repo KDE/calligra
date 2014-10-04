@@ -45,9 +45,7 @@
 
 #include "kptnode.h"
 
-#include <kglobal.h>
 #include <klocale.h>
-#include <kactioncollection.h>
 
 #include <kdebug.h>
 

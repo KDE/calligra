@@ -26,9 +26,10 @@
 #include <klocale.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
+#include <kcomponentdata.h>
 #include <kdebug.h>
-#include <kapplication.h>
 
+#include <QApplication>
 #include <QDir>
 
 KexiTemplateCategoryInfo::KexiTemplateCategoryInfo()

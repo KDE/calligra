@@ -27,7 +27,6 @@
 
 class KWDocument;
 class KoPart;
-class KToggleAction;
 class QWidget;
 
 class WORDS_EXPORT CAuView : public KWView

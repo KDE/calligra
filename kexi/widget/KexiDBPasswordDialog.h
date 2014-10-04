@@ -26,7 +26,6 @@
 
 class KexiProjectData;
 class KexiProjectData;
-class KCmdLineArgs;
 namespace KexiDB
 {
 class ConnectionData;

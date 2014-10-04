@@ -29,8 +29,9 @@
 #include <QVBoxLayout>
 #include <QUrl>
 #include<QWebView>
-#include <kpushbutton.h>
-  
+
+class KPushButton;
+
 class QWebView;
 class QVBoxLayout;
 class QWebHistory;

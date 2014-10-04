@@ -29,11 +29,7 @@
 #include <QRegExp>
 #include <QStringList>
 
-#include <kglobal.h>
-#include <kstandarddirs.h>
 #include <kdebug.h>
-#include <kio/netaccess.h>
-#include <kurl.h>
 #include <klocale.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>

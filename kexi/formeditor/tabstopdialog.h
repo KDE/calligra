@@ -27,7 +27,6 @@
 
 class QTreeWidgetItem;
 class QCheckBox;
-class KPushButton;
 
 namespace KFormDesigner
 {

@@ -142,9 +142,6 @@
    <header>klineedit.h</header>
   </customwidget>
  </customwidgets>
- <includes>
-  <include location="local">klineedit.h</include>
- </includes>
  <resources/>
  <connections/>
 </ui>

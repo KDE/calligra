@@ -28,16 +28,10 @@
 #include <kservice.h>
 #include <kcomponentdata.h>
 #include <kurl.h>
-#include <kxmlguiclient.h>
 
 #include "komain_export.h"
 
 #include <KoMainWindow.h>
-
-class KJob;
-namespace KIO {
-  class Job;
-}
 
 class KoDocument;
 class KoView;

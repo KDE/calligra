@@ -21,8 +21,9 @@
 #ifndef KPRSOUNDDATA_H
 #define KPRSOUNDDATA_H
 
-#include <kurl.h>
 #include "stage_export.h"
+
+#include <QString>
 
 class KPrSoundCollection;
 class QIODevice;

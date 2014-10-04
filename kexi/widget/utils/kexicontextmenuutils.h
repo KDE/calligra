@@ -23,9 +23,9 @@
 #include <kexi_global.h>
 #include <db/queryschema.h>
 #include <kmenu.h>
-#include <kurl.h>
 
 class KActionCollection;
+class KUrl;
 
 //! @short A set of helpers for updating popup menu titles
 /*! The functions set meaningful titles like "Emploee : Image".

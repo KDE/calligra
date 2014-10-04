@@ -43,23 +43,15 @@
 #include <QPrintDialog>
 #include <QDomDocument>
 #include <QPointer>
+#include <QMenu>
 
-#include <kactionmenu.h>
-#include <kmenu.h>
-#include <kstandardaction.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <ktoolbar.h>
-#include <kstandardshortcut.h>
-#include <kaccelgen.h>
 
 #include <kstatusbar.h>
 #include <kxmlguifactory.h>
-#include <kxmlguiclient.h>
-#include <kstandarddirs.h>
-#include <kdesktopfile.h>
 #include <ktoolinvocation.h>
-#include <ktoggleaction.h>
 #include <kparts/event.h>
 #include <kparts/partmanager.h>
 #include <kparts/componentfactory.h>
@@ -67,10 +59,6 @@
 #include <ktemporaryfile.h>
 
 #include <kmessagebox.h>
-#include <kvbox.h>
-#include <kmimetype.h>
-#include <kprocess.h>
-#include <kurl.h>
 
 #include <KoIcon.h>
 

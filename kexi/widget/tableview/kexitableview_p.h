@@ -41,10 +41,6 @@
 #include <QHash>
 #include <QRubberBand>
 
-#include <kpushbutton.h>
-#include <klineedit.h>
-#include <kmenu.h>
-
 class KexiTableEdit;
 class QLabel;
 

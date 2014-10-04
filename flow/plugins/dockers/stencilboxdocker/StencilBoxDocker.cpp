@@ -35,19 +35,15 @@
 #include <KoIcon.h>
 
 #include <klocale.h>
-#include <kcombobox.h>
 #include <kdebug.h>
 #include <kcomponentdata.h>
 #include <kdesktopfile.h>
 #include <kconfiggroup.h>
 #include <kmessagebox.h>
 #include <klineedit.h>
-#include <kapplication.h>
-#include <kcmdlineargs.h>
 
 #ifdef GHNS
 #include <knewstuff3/downloaddialog.h>
-#include <KIO/NetAccess>
 #endif
 
 #include <kstandarddirs.h>

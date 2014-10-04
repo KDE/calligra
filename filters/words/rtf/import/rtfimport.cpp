@@ -15,7 +15,6 @@
 
 #include <kdebug.h>
 #include <kpluginfactory.h>
-#include <kurl.h>
 #include <kmessagebox.h>
 
 #include <KoFilterChain.h>

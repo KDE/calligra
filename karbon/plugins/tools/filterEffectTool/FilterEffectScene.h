@@ -33,7 +33,6 @@ class EffectItemBase;
 class EffectItem;
 class DefaultInputItem;
 class ConnectionItem;
-class KComboBox;
 
 class ConnectionSource
 {

@@ -30,7 +30,6 @@
 #include <QDateTime>
 #include <QString>
 
-#include <kdatewidget.h>
 #include <klocale.h>
 
 

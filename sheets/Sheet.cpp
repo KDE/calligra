@@ -39,7 +39,6 @@
 #include <kfinddialog.h>
 #include <kreplace.h>
 #include <kreplacedialog.h>
-#include <kurl.h>
 
 #include <KoDocumentInfo.h>
 #include <KoOdfLoadingContext.h>

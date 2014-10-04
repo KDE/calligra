@@ -35,8 +35,6 @@
 #include <KoShapeRegistry.h>
 #include <KoShapeManager.h>
 
-#include <kglobal.h>
-
 using namespace Calligra::Sheets;
 
 Part::Part(QObject *parent)

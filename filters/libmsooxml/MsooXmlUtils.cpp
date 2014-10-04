@@ -62,7 +62,6 @@
 #include <QRegExp>
 #include <QtXml>
 
-#include <kglobal.h>
 #include <kdebug.h>
 #include <kzip.h>
 
