@@ -39,7 +39,6 @@
 #include <KLocalizedString>
 
 #include <kdebug.h>
-#include <kcursor.h>
 #include <kiconeffect.h>
 #include <kglobalsettings.h>
 #include <kdialog.h>

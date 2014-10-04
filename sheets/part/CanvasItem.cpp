@@ -76,7 +76,6 @@
 #include <QGraphicsSceneDragDropEvent>
 
 // KDE
-#include <kcursor.h>
 #include <kdebug.h>
 #include <ksharedptr.h>
 #include <kwordwrap.h>
