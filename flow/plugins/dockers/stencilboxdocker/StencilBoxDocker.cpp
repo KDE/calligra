@@ -47,7 +47,6 @@
 #endif
 
 #include <kstandarddirs.h>
-#include <ktar.h>
 
 #include <QVBoxLayout>
 #include <QListView>
