@@ -30,6 +30,7 @@
 
 // this library
 #include "koodfreader_export.h"
+#include "OdfReaderInternals.h"
 
 
 class QSizeF;
@@ -61,7 +62,7 @@ class KOODFREADER_EXPORT OdfDrawReader
 
     // ----------------------------------------------------------------
     // Dr3d elements
-    void readElementDr3dScene(KoXmlStreamReader &reader);
+    DECLARE_READER_FUNCTION(Dr3dScene);
 
     // ----------------------------------------------------------------
     // Draw elements
@@ -78,17 +79,17 @@ class KOODFREADER_EXPORT OdfDrawReader
     // ----------------------------------------------------------------
     // Draw functions: circle, rectangle, etc
 
-    void readElementDrawA(KoXmlStreamReader &reader);
-    void readElementDrawCircle(KoXmlStreamReader &reader);
+    DECLARE_READER_FUNCTION(DrawA);
+    DECLARE_READER_FUNCTION(DrawCircle);
 
     void readGraphicsObjectChildren(KoXmlStreamReader &reader);
 
     // ----------------------------------------------------------------
     // Frames
 
-    void readElementDrawFrame(KoXmlStreamReader &reader);
-    void readElementDrawObject(KoXmlStreamReader &reader);
-    void readElementDrawObjectOle(KoXmlStreamReader &reader);
+    DECLARE_READER_FUNCTION(DrawFrame);
+    DECLARE_READER_FUNCTION(DrawObject);
+    DECLARE_READER_FUNCTION(DrawObjectOle);
 
     // ----------------------------------------------------------------
     // Other functions

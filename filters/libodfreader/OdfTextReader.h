@@ -30,6 +30,7 @@
 
 // this library
 #include "koodfreader_export.h"
+#include "OdfReaderInternals.h"
 
 
 class QSizeF;
@@ -70,47 +71,48 @@ class KOODFREADER_EXPORT OdfTextReader
     // ----------------------------------------------------------------
     // Text level functions: paragraphs, headings, sections, frames, objects, etc
 
-    void readElementOfficeAnnotation(KoXmlStreamReader &reader);
-    void readElementOfficeAnnotationEnd(KoXmlStreamReader &reader);
+    DECLARE_READER_FUNCTION(OfficeAnnotation);
+    DECLARE_READER_FUNCTION(OfficeAnnotationEnd);
 
-    void readElementDcCreator(KoXmlStreamReader &reader);
-    void readElementDcDate(KoXmlStreamReader &reader);
+    DECLARE_READER_FUNCTION(DcCreator);
+    DECLARE_READER_FUNCTION(DcDate);
 
-    void readElementTextH(KoXmlStreamReader &reader);
-    void readElementTextP(KoXmlStreamReader &reader);
-    void readElementTextList(KoXmlStreamReader &reader);
-    void readElementTextA(KoXmlStreamReader &reader);
+    DECLARE_READER_FUNCTION(TextH);
+    DECLARE_READER_FUNCTION(TextP);
+    DECLARE_READER_FUNCTION(TextList);
+    DECLARE_READER_FUNCTION(TextA);
 
-    void readElementTableTableColumnGroup(KoXmlStreamReader &reader);
-    void readElementTableTableColumn(KoXmlStreamReader &reader);
-    void readElementTableTableColumns(KoXmlStreamReader &reader);
-    void readElementTableTableHeaderColumns(KoXmlStreamReader &reader);
-    void readElementTableTableHeaderRows(KoXmlStreamReader &reader);
-    void readElementTableTableRowGroup(KoXmlStreamReader &reader);
-    void readElementTableTableRow(KoXmlStreamReader &reader);
-    void readElementTableTableRows(KoXmlStreamReader &reader);
-    void readElementTableTableCell(KoXmlStreamReader &reader);
-    void readElementTableCoveredTableCell(KoXmlStreamReader &reader);
+    DECLARE_READER_FUNCTION(TableTableColumnGroup);
+    DECLARE_READER_FUNCTION(TableTableColumn);
+    DECLARE_READER_FUNCTION(TableTableColumns);
+    DECLARE_READER_FUNCTION(TableTableHeaderColumns);
+    DECLARE_READER_FUNCTION(TableTableHeaderRows);
+    DECLARE_READER_FUNCTION(TableTableRowGroup);
+    DECLARE_READER_FUNCTION(TableTableRow);
+    DECLARE_READER_FUNCTION(TableTableRows);
+    DECLARE_READER_FUNCTION(TableTableCell);
+    DECLARE_READER_FUNCTION(TableCoveredTableCell);
 
     // ----------------------------------------------------------------
     // Paragraph level functions: spans, annotations, notes, text content itself, etc.
 
     void readParagraphContents(KoXmlStreamReader &reader);
 
-    void readElementTextLineBreak(KoXmlStreamReader &reader);
-    void readElementTextS(KoXmlStreamReader &reader);
-    void readElementTextSpan(KoXmlStreamReader &reader);
+    DECLARE_READER_FUNCTION(TextLineBreak);
+    DECLARE_READER_FUNCTION(TextS);
+    DECLARE_READER_FUNCTION(TextSpan);
 
     // ----------------------------------------------------------------
     // List level functions: list-item and list header.
 
-    void readElementTextListItem(KoXmlStreamReader &reader);
-    void readElementTextListHeader(KoXmlStreamReader &reader);
+    DECLARE_READER_FUNCTION(TextListItem);
+    DECLARE_READER_FUNCTION(TextListHeader);
 
     // ----------------------------------------------------------------
     // Other functions
 
-    void readElementTextSoftPageBreak(KoXmlStreamReader &reader);
+    DECLARE_READER_FUNCTION(TextSoftPageBreak);
+
     void readUnknownElement(KoXmlStreamReader &reader);
 
 

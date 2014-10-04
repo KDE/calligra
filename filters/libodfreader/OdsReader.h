@@ -31,6 +31,7 @@
 // this library
 #include "koodfreader_export.h"
 #include "OdfReader.h"
+#include "OdfReaderInternals.h"
 
 
 class QSizeF;
@@ -76,8 +77,7 @@ class KOODFREADER_EXPORT OdsReader : public OdfReader
     // the element in ODF that they handle.
 
     // ODS document level functions
-    void readElementOfficeSpreadsheet(KoXmlStreamReader &reader);
-
+    DECLARE_READER_FUNCTION(OfficeSpreadsheet);
 
  private:
     // Not much here. Most are already in OdfReader.

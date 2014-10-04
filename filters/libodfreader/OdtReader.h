@@ -31,6 +31,7 @@
 // this library
 #include "koodfreader_export.h"
 #include "OdfReader.h"
+#include "OdfReaderInternals.h"
 
 
 class QSizeF;
@@ -69,12 +70,8 @@ class KOODFREADER_EXPORT OdtReader : public OdfReader
     ~OdtReader();
 
  protected:
-    // All readElement*() are named after the full qualifiedName of
-    // the element in ODF that they handle.
-
     // ODT document level functions
-    void readElementOfficeText(KoXmlStreamReader &reader);
-
+    DECLARE_READER_FUNCTION(OfficeText);
 
  private:
     // Not much here. Most are already in OdfReader.
