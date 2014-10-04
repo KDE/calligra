@@ -30,7 +30,6 @@
 
 #include <kcombobox.h>
 #include <klocale.h>
-#include <kurl.h>
 #include <knuminput.h>
 
 #include <QFileInfo>

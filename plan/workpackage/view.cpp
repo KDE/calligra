@@ -69,7 +69,6 @@
 #include <kvbox.h>
 #include <kmimetype.h>
 #include <kprocess.h>
-#include <kurl.h>
 
 #include <KoIcon.h>
 

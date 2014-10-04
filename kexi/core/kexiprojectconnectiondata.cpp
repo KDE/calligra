@@ -26,7 +26,6 @@
 #include <QRegExp>
 
 #include <kdebug.h>
-#include <kurl.h>
 #include <klocale.h>
 
 #include <db/connectiondata.h>

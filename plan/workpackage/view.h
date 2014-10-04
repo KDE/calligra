@@ -39,8 +39,6 @@ class KAction;
 class KToggleAction;
 class KActionCollection;
 
-class KUrl;
-
 class KoStore;
 class KoView;
 

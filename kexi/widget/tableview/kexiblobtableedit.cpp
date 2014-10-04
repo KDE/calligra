@@ -43,6 +43,7 @@
 #include <kio/job.h>
 #include <kiconloader.h>
 #include <kstdaccel.h>
+#include <kurl.h>
 
 #include <kexiutils/utils.h>
 #include <widget/utils/kexidropdownbutton.h>

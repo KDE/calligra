@@ -31,6 +31,7 @@
 #include <klocale.h>
 #include <kactioncollection.h>
 #include <khtmlview.h>
+#include <kurl.h>
 
 #include "kptdebug.h"
 

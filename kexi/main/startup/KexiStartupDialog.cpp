@@ -50,7 +50,6 @@
 #include <kmimetype.h>
 #include <ktextbrowser.h>
 #include <kconfig.h>
-#include <kurl.h>
 
 //! @internal
 class KexiStartupDialog::Private

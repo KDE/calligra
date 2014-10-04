@@ -30,7 +30,6 @@
 #include <QStringList>
 
 #include <kdebug.h>
-#include <kurl.h>
 #include <klocale.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
