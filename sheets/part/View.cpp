@@ -75,7 +75,6 @@
 #include <kstatusbar.h>
 #include <kstandardaction.h>
 #include <ktoggleaction.h>
-#include <ktoolinvocation.h>
 #include <kxmlguifactory.h>
 #include <kservicetypetrader.h>
 

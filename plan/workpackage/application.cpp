@@ -54,7 +54,6 @@
 #include <krecentdocument.h>
 #include <kservice.h>
 #include <kshortcutsdialog.h>
-#include <ktoolinvocation.h>
 
 #include "debugarea.h"
 
