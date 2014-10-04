@@ -38,7 +38,6 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kcategorizedview.h>
-#include <ktitlewidget.h>
 #include <kacceleratormanager.h>
 #include <kfileitemdelegate.h>
 #include <kdialog.h>
