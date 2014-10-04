@@ -25,7 +25,6 @@
 #include <kuniqueapplication.h>
 #include <kdemacros.h>
 #include <kcmdlineargs.h>
-#include <kdesktopfile.h>
 #include <kdebug.h>
 
 #include <QtDBus>

@@ -45,7 +45,6 @@
 #include <kcmdlineargs.h>
 #include <kcomponentdata.h>
 #include <kdebug.h>
-#include <kdesktopfile.h>
 
 #include <kiconloader.h>
 #include <klibloader.h>

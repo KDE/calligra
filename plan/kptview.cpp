@@ -59,7 +59,6 @@
 #include <kconfigdialogmanager.h>
 #include <kstatusbar.h>
 #include <kxmlguifactory.h>
-#include <kdesktopfile.h>
 #include <ktoggleaction.h>
 #include <ktemporaryfile.h>
 #include <kfiledialog.h>
