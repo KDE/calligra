@@ -25,7 +25,6 @@
 #include <kexi_export.h>
 
 class KFontRequester;
-class KColorCombo;
 class QTextCharFormat;
 class QActionGroup;
 
