@@ -117,8 +117,8 @@ calligra_define_product(RNG2CPP "rng2cpp")
 # Calligra-independent utility libs
 calligra_define_product(LIB_KOVECTORIMAGE "libkovectorimage")
 calligra_define_product(LIB_KOPROPERTY "libkoproperty")
-calligra_define_product(LIB_KOREPORT "libkoreport" NEEDS LIB_KOPROPERTY)
 calligra_define_product(LIB_CALLIGRADB "libcalligradb")
+calligra_define_product(LIB_KOREPORT "libkoreport" NEEDS LIB_KOPROPERTY LIB_CALLIGRADB)
 # calligra libs
 calligra_define_product(CALLIGRA_LIBS "Calligra core libs"  NEEDS RNG2CPP)
 calligra_define_product(LIB_KOPAGEAPP "Lib for paged documents"  NEEDS CALLIGRA_LIBS)
