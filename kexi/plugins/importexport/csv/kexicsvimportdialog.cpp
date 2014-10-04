@@ -58,7 +58,6 @@
 
 #include <kdebug.h>
 #include <kdialog.h>
-#include <kfiledialog.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kcharsets.h>
