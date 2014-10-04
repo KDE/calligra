@@ -49,7 +49,6 @@
 #include <kmessagebox.h>
 #include <kparts/partmanager.h>
 #include <kservice.h>
-#include <kshortcutsdialog.h>
 
 #include "debugarea.h"
 

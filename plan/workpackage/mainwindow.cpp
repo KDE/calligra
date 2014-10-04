@@ -44,7 +44,6 @@
 #include <kfiledialog.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include <kshortcutsdialog.h>
 #include <kstandarddirs.h>
 #include <klibloader.h>
 #include <kservice.h>
