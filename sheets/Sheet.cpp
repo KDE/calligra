@@ -35,8 +35,6 @@
 
 #include <kdebug.h>
 #include <kcodecs.h>
-#include <kreplace.h>
-#include <kreplacedialog.h>
 
 #include <KoDocumentInfo.h>
 #include <KoOdfLoadingContext.h>
