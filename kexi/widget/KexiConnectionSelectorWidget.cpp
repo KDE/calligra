@@ -37,7 +37,6 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kurlcombobox.h>
-#include <ktoolbar.h>
 #include <kmenu.h>
 #include <kdialog.h>
 

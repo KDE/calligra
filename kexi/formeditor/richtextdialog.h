@@ -25,7 +25,6 @@
 
 #include <kexi_export.h>
 
-class KToolBar;
 class KFontRequester;
 class KColorCombo;
 class QActionGroup;

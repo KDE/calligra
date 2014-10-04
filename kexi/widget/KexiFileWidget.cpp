@@ -43,7 +43,6 @@
 #include <kmimetype.h>
 #include <kfile.h>
 #include <kurlcombobox.h>
-#include <ktoolbar.h>
 #include <kactioncollection.h>
 #include <kfiledialog.h>
 #include <KFileFilterCombo>
