@@ -22,7 +22,6 @@
 
 #include <kdebug.h>
 #include <kcomponentdata.h>
-#include <kaboutdata.h>
 
 #include <db/drivermanager.h>
 #include <db/driver.h>

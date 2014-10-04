@@ -39,7 +39,6 @@
 #include <KoGlobal.h>
 #include <KoView.h>
 
-#include <kaboutdata.h>
 #include <kcmdlineargs.h>
 #include <kcomponentdata.h>
 #include <kdebug.h>

@@ -54,7 +54,6 @@
 #include <kparts/event.h>
 #include <kactioncollection.h>
 
-#include <kaboutdata.h>
 #include <kcomponentdata.h>
 #include <ktoolinvocation.h>
 #include <kio/netaccess.h>
