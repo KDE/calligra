@@ -20,7 +20,6 @@
 #include <KoPADocument.h>
 #include <KoPAPageBase.h>
 #include <kpluginfactory.h>
-#include <KParts/ComponentFactory>
 #include <QDebug>
 
 KPresenterSlideLoader::KPresenterSlideLoader(QObject* parent) :SlideLoader(parent) {

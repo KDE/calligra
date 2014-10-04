@@ -34,11 +34,6 @@ class KarbonLayerSortingModel;
 class KarbonDocument;
 class QModelIndex;
 
-namespace KParts
-{
-class Part;
-}
-
 class KarbonLayerDockerFactory : public KoDockFactoryBase
 {
 public:

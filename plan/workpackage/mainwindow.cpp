@@ -47,8 +47,6 @@
 #include <kstandarddirs.h>
 #include <klibloader.h>
 #include <kmessagebox.h>
-#include <kparts/partmanager.h>
-#include <kparts/event.h>
 #include <kactioncollection.h>
 
 #include <kcomponentdata.h>

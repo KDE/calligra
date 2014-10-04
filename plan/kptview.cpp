@@ -60,8 +60,6 @@
 #include <ktoggleaction.h>
 #include <ktemporaryfile.h>
 #include <kfiledialog.h>
-#include <kparts/event.h>
-#include <kparts/partmanager.h>
 #include <kconfigdialog.h>
 #include <ktoolinvocation.h>
 #include <krun.h>

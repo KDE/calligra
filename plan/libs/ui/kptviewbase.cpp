@@ -23,7 +23,6 @@
 #include "kptdebug.h"
 
 #include <kaction.h>
-#include <kparts/event.h>
 #include <kmessagebox.h>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
@@ -49,6 +48,13 @@
 #include <QStyleOption>
 #include <QPainter>
 #include <QMenu>
+#include <QFocusEvent>
+#include <QKeyEvent>
+#include <QMouseEvent>
+#include <QContextMenuEvent>
+#include <QDragMoveEvent>
+
+
 
 namespace KPlato
 {

@@ -68,7 +68,6 @@
 
 #include <kio/job.h>
 #include <kio/jobclasses.h>
-#include <kparts/part.h>
 #include <kurl.h>
 #include <kcomponentdata.h>
 

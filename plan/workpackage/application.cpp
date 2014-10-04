@@ -47,7 +47,6 @@
 #include <klibloader.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <kparts/partmanager.h>
 
 #include "debugarea.h"
 
