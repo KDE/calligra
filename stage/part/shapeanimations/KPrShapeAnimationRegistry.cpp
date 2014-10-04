@@ -20,7 +20,6 @@
 #include "KPrShapeAnimationRegistry.h"
 #include "KPrShapeAnimationFactory.h"
 
-#include <kglobal.h>
 #include <KoPluginLoader.h>
 #include <KoXmlReader.h>
 

@@ -22,13 +22,7 @@
 #include "kptdatetime.h"
 #include "kptfactory.h"
 
-#include <klineedit.h>
-#include <ktextedit.h>
-#include <kcombobox.h>
-#include <kdatetimewidget.h>
 #include <klocale.h>
-#include <kconfig.h>
-#include <kstandarddirs.h>
 #include <kdebug.h>
 
 #include <QDateTime> 

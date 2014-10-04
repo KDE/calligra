@@ -54,7 +54,6 @@
 #include <KoShapeRegistry.h>
 #include <KoShapeManager.h>
 
-#include <kglobal.h>
 #include <kconfiggroup.h>
 
 KarbonPart::KarbonPart(QObject *parent)

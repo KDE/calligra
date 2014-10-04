@@ -23,14 +23,9 @@
 #include <QDomDocument>
 
 #include <kdebug.h>
-#include <kdialog.h>
 #include <ktabwidget.h>
-#include <kcombobox.h>
-#include <kapplication.h>
-#include <kconfig.h>
 #include <kaction.h>
 #include <kactionmenu.h>
-#include <kactioncollection.h>
 
 #include <KoIcon.h>
 

@@ -32,8 +32,6 @@ class KoDocument;
 class QModelIndex;
 class QItemDelegate;
 
-class KAction;
-
 namespace KPlato
 {
 

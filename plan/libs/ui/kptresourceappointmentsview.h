@@ -38,8 +38,6 @@ class QDropEvent;
 class QDragMoveEvent;
 class QDragEnterEvent;
 
-class KToggleAction;
-
 namespace KPlato
 {
 

@@ -23,7 +23,7 @@
 #include <QLabel>
 
 #include <KAboutData>
-#include <KApplication>
+#include <KComponentData>
 #include <KLocale>
 #include <KTitleWidget>
 #include <KToolInvocation>

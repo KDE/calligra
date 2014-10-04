@@ -30,8 +30,6 @@
 #include "kexitableview.h"
 #include "kexi.h"
 
-#include <klineedit.h>
-
 KexiComboBoxBase::KexiComboBoxBase()
 {
     m_internalEditorValueChanged = false; //user has text or other value inside editor

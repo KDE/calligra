@@ -20,8 +20,6 @@
 
 #include <QFile>
 #include <QDir>
-#include <kcmdlineargs.h>
-#include <kapplication.h>
 
 #include <KoStore.h>
 #include <KoEncryptionChecker.h>

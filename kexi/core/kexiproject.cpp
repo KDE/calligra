@@ -24,7 +24,6 @@
 #include <QFileInfo>
 #include <QDir>
 
-#include <kmimetype.h>
 #include <kdebug.h>
 #include <klocale.h>
 

@@ -25,8 +25,6 @@
 #include "kptitemmodelbase.h"
 #include "kptnodeitemmodel.h"
 
-class KAction;
-
 namespace KPlato
 {
 

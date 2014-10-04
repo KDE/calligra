@@ -32,7 +32,6 @@
 
 class KexiProjectData;
 class KexiProjectSelectorWidget;
-class KCategorizedView;
 class KexiWelcomeAssistant;
 class KexiRecentProjectsProxyModel;
 class KexiWelcomeStatusBar;

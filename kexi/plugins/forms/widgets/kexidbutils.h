@@ -20,8 +20,10 @@
 #ifndef KDBWIDGETS_UTILS_H
 #define KDBWIDGETS_UTILS_H
 
-#include <kmenu.h>
 #include <core/kexidataiteminterface.h>
+
+class KMenu;
+class QMenu;
 
 //! Form-related utilities
 class KexiFormUtils

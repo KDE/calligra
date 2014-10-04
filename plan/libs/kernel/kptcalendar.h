@@ -30,7 +30,6 @@
 #include <QMap>
 #include <QStringList>
 
-#include <kglobal.h>
 #include <klocale.h>
 #include <ktimezone.h>
 #include <kdebug.h>

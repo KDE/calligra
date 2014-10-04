@@ -21,13 +21,11 @@
 #define RICHTEXTEDIT_DIALOG_H
 
 #include <kdialog.h>
-#include <ktextedit.h>
 
 #include <kexi_export.h>
 
-class KToolBar;
 class KFontRequester;
-class KColorCombo;
+class QTextCharFormat;
 class QActionGroup;
 
 namespace KFormDesigner

@@ -34,7 +34,6 @@
 
 #include <KoGenStyle.h>
 #include <kdebug.h>
-#include <kmimetype.h>
 #include <QColor>
 #include <QByteArray>
 

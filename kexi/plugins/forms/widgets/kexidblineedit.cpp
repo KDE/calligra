@@ -23,7 +23,6 @@
 
 #include <kdebug.h>
 #include <knuminput.h>
-#include <kdatetable.h>
 
 #include <QMenu>
 #include <QPainter>

@@ -25,13 +25,11 @@
 #include <klocale.h>
 #include <kpluginfactory.h>
 #include <kstandarddirs.h>
-#include <kactioncollection.h>
 #include <kparts/partmanager.h>
 // kross
 #include <kross/core/manager.h>
 #include <kross/core/interpreter.h>
 #include <kross/core/action.h>
-#include <kross/core/actioncollection.h>
 #include <kross/ui/model.h>
 // calligra
 #include <KoDockRegistry.h>

@@ -27,7 +27,6 @@
 
 class KAction;
 class QAction;
-class KToggleAction;
 class KActionCollection;
 
 class KisFilterStrategy;

@@ -30,23 +30,18 @@
 #include <QGroupBox>
 #include <QLabel>
 
-#include <kconfig.h>
-#include <klineedit.h>
 #include <kpagedialog.h>
-#include <ksharedconfig.h>
-#include <kvbox.h>
 
 #include <KoUnit.h>
 
 class KIntNumInput;
 class KDoubleNumInput;
 class KSpellConfig;
+class KVBox;
 class QCheckBox;
 class QSpinBox;
 class QComboBox;
-class KComboBox;
 class QPushButton;
-class KColorButton;
 
 namespace Sonnet
 {

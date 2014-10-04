@@ -34,6 +34,8 @@
 
 #include <KoXmlReader.h>
 
+#include <kglobal.h>
+
 #include <QDomDocument>
 #include <QBrush>
 #include <QList>

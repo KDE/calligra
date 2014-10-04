@@ -42,12 +42,8 @@
 #include <QVector>
 
 #include <kis_debug.h>
-#include <kglobal.h>
 #include <kmenu.h>
-#include <kpushbutton.h>
 #include <klocale.h>
-#include <khbox.h>
-#include <kaction.h>
 #include <kactioncollection.h>
 
 #include <kis_icon.h>

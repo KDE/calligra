@@ -51,10 +51,6 @@
 #include <KoIcon.h>
 #include <KoConfig.h>
 
-#include <kapplication.h>
-#include <kcolorbutton.h>
-#include <kcombobox.h>
-#include <klineedit.h>
 #include <klocale.h>
 #include <kurlrequester.h>
 #include <kpagewidgetmodel.h>

@@ -62,6 +62,7 @@
 // KDE includes
 #include <kactioncollection.h>
 #include <kconfig.h>
+#include <kglobalsettings.h>
 #include <kcomponentdata.h>
 #include <kdebug.h>
 
@@ -74,8 +75,6 @@
 #include <kstatusbar.h>
 #include <kstandardaction.h>
 #include <ktoggleaction.h>
-#include <ktoolinvocation.h>
-#include <kpushbutton.h>
 #include <kxmlguifactory.h>
 #include <kservicetypetrader.h>
 

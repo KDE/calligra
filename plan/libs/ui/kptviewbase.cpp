@@ -28,7 +28,6 @@
 #include <knotification.h>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
-#include <kmenu.h>
 
 #include <KoIcon.h>
 #include "calligraversion.h"

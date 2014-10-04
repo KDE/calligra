@@ -25,8 +25,8 @@
 #include <QRadioButton>
 #include <QSpinBox>
 #include <QTextCodec>
+#include <QApplication>
 
-#include <kapplication.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kurlrequester.h>
@@ -37,7 +37,7 @@ ExportDialog::ExportDialog(QWidget *parent)
     setCaption(i18n("Export Sheet to HTML"));
     setButtons(Ok | Cancel);
     setDefaultButton(KDialog::Cancel);
-    kapp->restoreOverrideCursor();
+    qApp->restoreOverrideCursor();
 
     connect(m_mainwidget->mCustomButton, SIGNAL(toggled(bool)),
             m_mainwidget->mCustomURL, SLOT(setEnabled(bool)));
@@ -66,7 +66,7 @@ void ExportDialog::selectAll()
 
 ExportDialog::~ExportDialog()
 {
-    kapp->setOverrideCursor(Qt::WaitCursor);
+    qApp->setOverrideCursor(Qt::WaitCursor);
 }
 
 QTextCodec *ExportDialog::encoding() const

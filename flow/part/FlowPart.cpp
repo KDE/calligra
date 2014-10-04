@@ -30,7 +30,6 @@
 #include <KoShapeRegistry.h>
 #include <KoShapeManager.h>
 
-#include <kglobal.h>
 #include <kmessagebox.h>
 
 FlowPart::FlowPart(QObject *parent)

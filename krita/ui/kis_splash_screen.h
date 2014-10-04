@@ -23,7 +23,6 @@
 #include "ui_wdgsplash.h"
 
 class QPixmap;
-class KUrl;
 
 #include "krita_export.h"
 

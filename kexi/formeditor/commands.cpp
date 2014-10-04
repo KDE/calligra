@@ -27,7 +27,6 @@
 
 #include <kdebug.h>
 #include <klocale.h>
-#include <kmenu.h>
 #include <kmessagebox.h>
 #include <kacceleratormanager.h>
 

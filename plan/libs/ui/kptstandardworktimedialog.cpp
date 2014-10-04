@@ -27,7 +27,6 @@
 #include <QPushButton>
 #include <QTreeWidgetItem>
 
-#include <kcalendarsystem.h>
 #include <klocale.h>
 #include <knuminput.h>
 

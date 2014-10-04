@@ -40,11 +40,9 @@
 #include <QLabel>
 #include <QHBoxLayout>
 #include <QDesktopWidget>
-#include <kapplication.h>
 #include <klocale.h>
 #include <kpushbutton.h>
 #include <kdebug.h>
-#include <ksavefile.h>
 #include <kglobal.h>
 #include <kdialog.h>
 

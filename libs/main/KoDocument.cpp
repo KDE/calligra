@@ -54,15 +54,8 @@
 #include <klocale.h>
 #include <ksavefile.h>
 #include <kdebug.h>
-#include <kstandarddirs.h>
-#include <kdesktopfile.h>
 #include <kconfiggroup.h>
 #include <kio/job.h>
-#include <kfileitem.h>
-#include <kio/netaccess.h>
-#include <kio/job.h>
-#include <kfileitem.h>
-#include <kio/netaccess.h>
 #include <kdirnotify.h>
 #include <ktemporaryfile.h>
 

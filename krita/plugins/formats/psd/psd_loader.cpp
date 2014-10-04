@@ -17,10 +17,9 @@
  */
 #include "psd_loader.h"
 
-#include <kapplication.h>
+#include <QApplication>
 
 #include <kio/netaccess.h>
-#include <kio/deletejob.h>
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>

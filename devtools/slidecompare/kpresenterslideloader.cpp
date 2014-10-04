@@ -20,8 +20,6 @@
 #include <KoPADocument.h>
 #include <KoPAPageBase.h>
 #include <kpluginfactory.h>
-#include <kstandarddirs.h>
-#include <kmimetype.h>
 #include <KParts/ComponentFactory>
 #include <QDebug>
 

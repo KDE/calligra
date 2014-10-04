@@ -31,8 +31,6 @@
 
 #include <klocale.h>
 #include <kdebug.h>
-#include <kconfiggroup.h>
-#include <kglobal.h>
 
 #include <QPointer>
 #include <QGridLayout>

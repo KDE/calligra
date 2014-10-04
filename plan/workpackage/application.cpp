@@ -40,26 +40,18 @@
 #include <KoView.h>
 
 #include <kaboutdata.h>
-#include <kaction.h>
-#include <kactioncollection.h>
-#include <kapplication.h>
 #include <kcmdlineargs.h>
 #include <kcomponentdata.h>
 #include <kdebug.h>
-#include <kdesktopfile.h>
 
 #include <kiconloader.h>
 #include <klibloader.h>
 #include <klocale.h>
-#include <kmenu.h>
 #include <kmessagebox.h>
 #include <kparts/partmanager.h>
 #include <krecentdocument.h>
 #include <kservice.h>
 #include <kshortcutsdialog.h>
-#include <kstandarddirs.h>
-#include <ktemporaryfile.h>
-#include <ktoolinvocation.h>
 
 #include "debugarea.h"
 
