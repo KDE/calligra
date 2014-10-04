@@ -28,6 +28,7 @@
 class KJob;
 #endif
 
+#include <KDateTime>
 #include <ui_KoRdfCalendarEventEditWidget.h>
 
 /**
