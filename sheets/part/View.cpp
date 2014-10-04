@@ -68,7 +68,6 @@
 
 #include <kinputdialog.h>
 #include <kmessagebox.h>
-#include <kpassivepopup.h>
 #include <kreplace.h>
 #include <kreplacedialog.h>
 #include <kstatusbar.h>
