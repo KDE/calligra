@@ -47,7 +47,6 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include <kacceleratormanager.h>
 #include <kfiledialog.h>
 
 #include <QLayout>
