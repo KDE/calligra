@@ -21,7 +21,6 @@
 
 #include "widgetfactory.h"
 
-#include <kdeversion.h>
 #include <kdebug.h>
 #include <klocale.h>
 

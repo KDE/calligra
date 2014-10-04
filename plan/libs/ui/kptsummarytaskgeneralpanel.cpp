@@ -25,7 +25,6 @@
 
 #include <klocale.h>
 
-#include <kdeversion.h>
 #ifdef PLAN_KDEPIMLIBS_FOUND
 #include <akonadi/contact/emailaddressselectiondialog.h>
 #include <akonadi/contact/emailaddressselectionwidget.h>

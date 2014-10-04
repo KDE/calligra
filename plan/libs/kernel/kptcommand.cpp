@@ -30,7 +30,6 @@
 #include <kptdebug.h>
 
 #include <klocale.h>
-#include <kdeversion.h>
 
 #include <QHash>
 #include <QMap>

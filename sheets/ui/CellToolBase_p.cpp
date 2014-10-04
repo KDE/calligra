@@ -74,7 +74,6 @@
 #include <kfontaction.h>
 #include <kfontchooser.h>
 #include <kfontsizeaction.h>
-#include <kdeversion.h>
 
 // Qt
 #include <QApplication>
