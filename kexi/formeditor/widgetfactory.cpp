@@ -25,8 +25,6 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <ktextedit.h>
-
 #include <kdialog.h>
 # include <keditlistwidget.h>
 

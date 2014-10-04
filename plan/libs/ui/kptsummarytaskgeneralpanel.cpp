@@ -23,7 +23,6 @@
 #include "kptcommand.h"
 #include "kpttaskdescriptiondialog.h"
 
-#include <ktextedit.h>
 #include <klocale.h>
 
 #include <kdeversion.h>

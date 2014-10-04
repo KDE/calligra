@@ -22,7 +22,6 @@
 #include "kptdatetime.h"
 #include "kptfactory.h"
 
-#include <ktextedit.h>
 #include <klocale.h>
 #include <kdebug.h>
 

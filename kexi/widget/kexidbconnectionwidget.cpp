@@ -33,7 +33,6 @@
 #include <knuminput.h>
 #include <kpassworddialog.h>
 #include <kurlrequester.h>
-#include <ktextedit.h>
 
 #include <QLabel>
 #include <QCheckBox>

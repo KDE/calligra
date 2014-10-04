@@ -45,7 +45,6 @@
 #include <kmessagebox.h>
 #include <kcmdlineargs.h>
 
-#include <ktextedit.h>
 #include <kuser.h>
 #include <KProgressDialog>
 

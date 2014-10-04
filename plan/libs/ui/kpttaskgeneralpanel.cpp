@@ -27,7 +27,6 @@
 #include "kptdatetime.h"
 #include "kptproject.h"
 
-#include <ktextedit.h>
 #include <kdatetimewidget.h>
 #include <klocale.h>
 #include <kdatewidget.h>
