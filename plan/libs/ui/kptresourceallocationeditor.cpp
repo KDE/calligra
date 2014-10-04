@@ -42,7 +42,6 @@
 
 #include <kaction.h>
 #include <klocale.h>
-#include <kactioncollection.h>
 
 namespace KPlato
 {

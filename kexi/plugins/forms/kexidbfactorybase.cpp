@@ -24,7 +24,6 @@
 
 #include <klocale.h>
 #include <kdebug.h>
-#include <kactioncollection.h>
 #include <kpluginfactory.h>
 
 #include <formeditor/container.h>

@@ -45,7 +45,6 @@
 #include <QTabWidget>
 
 #include <klocale.h>
-#include <kactioncollection.h>
 
 namespace KPlato
 {

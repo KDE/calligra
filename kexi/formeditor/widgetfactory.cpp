@@ -28,8 +28,6 @@
 #include <kdialog.h>
 # include <keditlistwidget.h>
 
-#include <kactioncollection.h>
-
 #include "richtextdialog.h"
 #ifndef KEXI_FORMS_NO_LIST_WIDGET
 # include "editlistviewdialog.h"

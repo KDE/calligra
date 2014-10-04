@@ -26,7 +26,6 @@
 #include <ktabwidget.h>
 #include <kaction.h>
 #include <kactionmenu.h>
-#include <kactioncollection.h>
 
 #include <KoIcon.h>
 

@@ -41,7 +41,6 @@
 
 #include <kaboutdata.h>
 #include <kaction.h>
-#include <kactioncollection.h>
 #include <kcmdlineargs.h>
 #include <kcomponentdata.h>
 #include <kdebug.h>

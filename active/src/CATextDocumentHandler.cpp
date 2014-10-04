@@ -40,7 +40,6 @@
 #include <kmimetype.h>
 #include <kmimetypetrader.h>
 #include <kdebug.h>
-#include <kactioncollection.h>
 #include <KoSelection.h>
 
 #include <QTextDocument>

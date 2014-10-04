@@ -42,7 +42,6 @@
 #include <ksqueezedtextlabel.h>
 #include <kstatusbar.h>
 #include <klocale.h>
-#include <kactioncollection.h>
 #include <kdebug.h>
 
 const KLocalizedString i18nModified = ki18n("Modified");

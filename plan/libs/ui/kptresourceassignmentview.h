@@ -51,7 +51,6 @@
 #include "kptcommand.h"
 
 #include <klocale.h>
-#include <kactioncollection.h>
 
 #include <kdebug.h>
 

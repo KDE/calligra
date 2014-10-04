@@ -41,7 +41,6 @@
 #include <QCloseEvent>
 
 #include <kdebug.h>
-#include <kactioncollection.h>
 #include <kdialog.h>
 
 //----------------------------------------------------------
