@@ -23,7 +23,6 @@
 #include <klocale.h>
 #include <kglobal.h>
 #include <klineedit.h>
-#include <kdatewidget.h>
 
 
 class KexiDateFormatter::Private

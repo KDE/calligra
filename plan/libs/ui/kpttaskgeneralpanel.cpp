@@ -29,7 +29,6 @@
 
 #include <kdatetimewidget.h>
 #include <klocale.h>
-#include <kdatewidget.h>
 
 #include <kdeversion.h>
 #ifdef PLAN_KDEPIMLIBS_FOUND

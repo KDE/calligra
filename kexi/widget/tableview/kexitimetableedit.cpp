@@ -36,7 +36,6 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <klineedit.h>
-#include <kdatewidget.h>
 
 #include <kexiutils/utils.h>
 

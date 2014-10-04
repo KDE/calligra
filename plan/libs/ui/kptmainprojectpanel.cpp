@@ -22,7 +22,6 @@
 #include <QCheckBox>
 #include <QPushButton>
 
-#include <kdatewidget.h>
 #include <klocale.h>
 #include "kptdebug.h"
 
