@@ -58,7 +58,6 @@
 
 // KDE
 #include <klocale.h>
-#include <kwordwrap.h>
 
 // Calligra
 #include <KoCanvasController.h>
