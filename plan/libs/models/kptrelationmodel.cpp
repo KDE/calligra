@@ -36,7 +36,6 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kactionmenu.h>
-#include <kstandardshortcut.h>
 #include <kaccelgen.h>
 #include <kactioncollection.h>
 

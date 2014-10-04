@@ -54,7 +54,6 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <ktoolbar.h>
-#include <kstandardshortcut.h>
 #include <kaccelgen.h>
 #include <kconfigdialogmanager.h>
 #include <kstatusbar.h>
