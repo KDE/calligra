@@ -24,7 +24,6 @@
 #include <QLayout>
 #include <QPainter>
 
-#include <kdatetable.h>
 #include <kexiutils/utils.h>
 
 KexiDBTimeEdit::KexiDBTimeEdit(const QTime &time, QWidget *parent)
