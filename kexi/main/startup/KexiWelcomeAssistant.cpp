@@ -37,7 +37,6 @@
 
 #include <klocale.h>
 #include <kdebug.h>
-#include <kfileitemdelegate.h>
 #include <kdialog.h>
 
 #include <QLayout>
