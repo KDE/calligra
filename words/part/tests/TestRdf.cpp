@@ -66,7 +66,6 @@
 #include <KoInlineTextObjectManager.h>
 #include <KoTextRangeManager.h>
 
-#include <kfileitem.h>
 #include <kio/job.h>
 #include <kio/jobclasses.h>
 #include <kparts/part.h>

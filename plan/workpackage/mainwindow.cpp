@@ -42,7 +42,6 @@
 
 #include <kapplication.h>
 #include <kfiledialog.h>
-#include <kfileitem.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <kshortcutsdialog.h>
