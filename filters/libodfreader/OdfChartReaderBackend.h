@@ -61,17 +61,17 @@ class KOODFREADER_EXPORT OdfChartReaderBackend
     explicit OdfChartReaderBackend();
     virtual ~OdfChartReaderBackend();
 
-    virtual void elementOfficeChart(KoXmlStreamReader &reader, OdfReaderContext *context);
-    virtual void elementChartChart(KoXmlStreamReader &reader, OdfReaderContext *context);
+    DECLARE_BACKEND_FUNCTION(OfficeChart);
+    DECLARE_BACKEND_FUNCTION(ChartChart);
 
-    virtual void elementChartFooter(KoXmlStreamReader &reader, OdfReaderContext *context);
-    virtual void elementChartSubtitle(KoXmlStreamReader &reader, OdfReaderContext *context);
-    virtual void elementChartTitle(KoXmlStreamReader &reader, OdfReaderContext *context);
-    virtual void elementChartLegend(KoXmlStreamReader &reader, OdfReaderContext *context);
-    virtual void elementChartPlotArea(KoXmlStreamReader &reader, OdfReaderContext *context);
-    virtual void elementChartWall(KoXmlStreamReader &reader, OdfReaderContext *context);
-    virtual void elementChartFloor(KoXmlStreamReader &reader, OdfReaderContext *context);
-
+    DECLARE_BACKEND_FUNCTION(ChartFooter);
+    DECLARE_BACKEND_FUNCTION(ChartSubtitle);
+    DECLARE_BACKEND_FUNCTION(ChartTitle);
+    DECLARE_BACKEND_FUNCTION(ChartLegend);
+    DECLARE_BACKEND_FUNCTION(ChartPlotArea);
+    DECLARE_BACKEND_FUNCTION(ChartWall);
+    DECLARE_BACKEND_FUNCTION(ChartFloor);
+    // qwe
     DECLARE_BACKEND_FUNCTION(ChartEquation);
     DECLARE_BACKEND_FUNCTION(ChartStockGainMarker);
     DECLARE_BACKEND_FUNCTION(ChartStockLossMarker);

@@ -72,53 +72,21 @@ OdfDrawReaderBackend::~OdfDrawReaderBackend()
 //                         Dr3d functions
 
 
-void OdfDrawReaderBackend::elementDr3dScene(KoXmlStreamReader &reader,
-					    OdfReaderContext *context)
-{
-    Q_UNUSED(reader);
-    Q_UNUSED(context);
-}
-
+IMPLEMENT_BACKEND_FUNCTION(OdfDrawReader, Dr3dScene)
 
 
 // ----------------------------------------------------------------
 //                         Draw functions
 
 
-void OdfDrawReaderBackend::elementDrawA(KoXmlStreamReader &reader, OdfReaderContext *context)
-{
-    Q_UNUSED(reader);
-    Q_UNUSED(context);
-}
-
-void OdfDrawReaderBackend::elementDrawCircle(KoXmlStreamReader &reader, OdfReaderContext *context)
-{
-    Q_UNUSED(reader);
-    Q_UNUSED(context);
-}
+IMPLEMENT_BACKEND_FUNCTION(OdfDrawReader, DrawA)
+IMPLEMENT_BACKEND_FUNCTION(OdfDrawReader, DrawCircle)
 
 
 // ----------------------------------------------------------------
 //                             Frames
 
 
-void OdfDrawReaderBackend::elementDrawFrame(KoXmlStreamReader &reader,
-					    OdfReaderContext *context)
-{
-    Q_UNUSED(reader);
-    Q_UNUSED(context);
-}
-
-void OdfDrawReaderBackend::elementDrawObject(KoXmlStreamReader &reader,
-					     OdfReaderContext *context)
-{
-    Q_UNUSED(reader);
-    Q_UNUSED(context);
-}
-
-void OdfDrawReaderBackend::elementDrawObjectOle(KoXmlStreamReader &reader,
-						OdfReaderContext *context)
-{
-    Q_UNUSED(reader);
-    Q_UNUSED(context);
-}
+IMPLEMENT_BACKEND_FUNCTION(OdfDrawReader, DrawFrame)
+IMPLEMENT_BACKEND_FUNCTION(OdfDrawReader, DrawObject)
+IMPLEMENT_BACKEND_FUNCTION(OdfDrawReader, DrawObjectOle)

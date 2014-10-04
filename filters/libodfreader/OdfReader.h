@@ -30,6 +30,7 @@
 
 // this library
 #include "koodfreader_export.h"
+#include "OdfReaderInternals.h"
 
 
 class QSizeF;
@@ -89,12 +90,12 @@ class KOODFREADER_EXPORT OdfReader
     // the element in ODF that they handle.
 
     // ODF document level functions
-    void readElementOfficeBody(KoXmlStreamReader &reader);
+    DECLARE_READER_FUNCTION(OfficeBody);
 
     // ONE of these should be reimplemented by each subclass, respectively.
-    virtual void readElementOfficeText(KoXmlStreamReader &reader);
-    virtual void readElementOfficeSpreadsheet(KoXmlStreamReader &reader);
-    virtual void readElementOfficePresentation(KoXmlStreamReader &reader);
+    DECLARE_READER_FUNCTION(OfficeText);
+    DECLARE_READER_FUNCTION(OfficeSpreadsheet);
+    DECLARE_READER_FUNCTION(OfficePresentation);
 
     // ----------------------------------------------------------------
     // Other functions

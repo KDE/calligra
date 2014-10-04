@@ -72,15 +72,5 @@ OdfReaderBackend::~OdfReaderBackend()
 //                 ODF document level functions
 
 
-void OdfReaderBackend::elementOfficeDocumentcontent(KoXmlStreamReader &reader,
-                                                    OdfReaderContext *context)
-{
-    Q_UNUSED(reader);
-    Q_UNUSED(context);
-}
-
-void OdfReaderBackend::elementOfficeBody(KoXmlStreamReader &reader, OdfReaderContext *context)
-{
-    Q_UNUSED(reader);
-    Q_UNUSED(context);
-}
+IMPLEMENT_BACKEND_FUNCTION(OdfReader, OfficeDocumentcontent);
+IMPLEMENT_BACKEND_FUNCTION(OdfReader, OfficeBody);

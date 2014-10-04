@@ -29,6 +29,7 @@
 #include "koodfreader_export.h"
 #include "OdsReader.h"
 #include "OdfReaderBackend.h"
+#include "OdfReaderInternals.h"
 
 
 class QByteArray;
@@ -77,7 +78,7 @@ class KOODFREADER_EXPORT OdsReaderBackend : public OdfReaderBackend
     // ----------------------------------------------------------------
     // ODS document level functions
 
-    virtual void elementOfficeSpreadsheet(KoXmlStreamReader &reader, OdfReaderContext *context);
+    DECLARE_BACKEND_FUNCTION(OfficeSpreadsheet);
 
  private:
     class Private;

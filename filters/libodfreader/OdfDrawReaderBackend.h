@@ -63,21 +63,21 @@ class KOODFREADER_EXPORT OdfDrawReaderBackend
     // ----------------------------------------------------------------
     // Dr3d functions
 
-    virtual void elementDr3dScene(KoXmlStreamReader &reader, OdfReaderContext *context);
+    DECLARE_BACKEND_FUNCTION(Dr3dScene);
 
 
     // ----------------------------------------------------------------
     // Draw functions
 
-    virtual void elementDrawA(KoXmlStreamReader &reader, OdfReaderContext *context);
-    virtual void elementDrawCircle(KoXmlStreamReader &reader, OdfReaderContext *context);
+    DECLARE_BACKEND_FUNCTION(DrawA);
+    DECLARE_BACKEND_FUNCTION(DrawCircle);
 
     // ----------------------------------------------------------------
     // Frames
 
-    virtual void elementDrawFrame(KoXmlStreamReader &reader, OdfReaderContext *context);
-    virtual void elementDrawObject(KoXmlStreamReader &reader, OdfReaderContext *context);
-    virtual void elementDrawObjectOle(KoXmlStreamReader &reader, OdfReaderContext *context);
+    DECLARE_BACKEND_FUNCTION(DrawFrame);
+    DECLARE_BACKEND_FUNCTION(DrawObject);
+    DECLARE_BACKEND_FUNCTION(DrawObjectOle);
 
  private:
     class Private;

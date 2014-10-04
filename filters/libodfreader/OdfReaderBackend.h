@@ -76,9 +76,8 @@ class KOODFREADER_EXPORT OdfReaderBackend
     // ----------------------------------------------------------------
     // ODF document level functions
 
-    virtual void elementOfficeDocumentcontent(KoXmlStreamReader &reader, OdfReaderContext *context);
-    virtual void elementOfficeBody(KoXmlStreamReader &reader, OdfReaderContext *context);
-    //virtual void elementOfficeText(KoXmlStreamReader &reader, OdfReaderContext *context);
+    DECLARE_BACKEND_FUNCTION(OfficeDocumentcontent);
+    DECLARE_BACKEND_FUNCTION(OfficeBody);
 
  private:
     class Private;
