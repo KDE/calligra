@@ -30,7 +30,6 @@
 #include <KoApplication.h>
 
 #include <kuniqueapplication.h>
-#include <kvbox.h>
 
 #include <QMap>
 #include <QToolButton>
@@ -46,7 +45,6 @@ namespace KPlato {
 }
 
 class KComponentData;
-class KVBox;
 class QSplitter;
 class KoDocumentEntry;
 class KoView;

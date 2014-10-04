@@ -31,13 +31,13 @@
 #include <QLabel>
 
 #include <kpagedialog.h>
-#include <kvbox.h>
 
 #include <KoUnit.h>
 
 class KIntNumInput;
 class KDoubleNumInput;
 class KSpellConfig;
+class KVBox;
 class QCheckBox;
 class QSpinBox;
 class QComboBox;

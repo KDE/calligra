@@ -39,6 +39,7 @@
 
 #include <kstatusbar.h>
 #include <knuminput.h>
+#include <kvbox.h>
 
 #include <sonnet/configwidget.h>
 

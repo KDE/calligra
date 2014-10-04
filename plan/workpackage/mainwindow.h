@@ -33,7 +33,6 @@
 #include <QToolButton>
 #include <QLabel>
 
-#include <kvbox.h>
 #include <kservice.h>
 #include <KoDocumentEntry.h>
 #include <kparts/mainwindow.h>
@@ -50,7 +49,6 @@ namespace KPlato {
 }
 
 class KComponentData;
-class KVBox;
 class QSplitter;
 class KoDocumentEntry;
 class KoView;
