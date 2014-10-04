@@ -38,7 +38,6 @@
 #include <cstdlib>
 #include <QDir>
 #include <klocale.h>
-#include <ksystemtimezone.h>
 #include <kconfiggroup.h>
 #include <QtDBus>
 

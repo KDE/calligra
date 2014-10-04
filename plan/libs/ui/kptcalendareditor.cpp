@@ -44,7 +44,6 @@
 #include <kaction.h>
 #include <klocale.h>
 #include <kactioncollection.h>
-#include <ksystemtimezone.h>
 #include <ktimezone.h>
 #include <kmenu.h>
 

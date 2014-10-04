@@ -29,7 +29,6 @@
 #include "kptschedule.h"
 
 #include <klocale.h>
-#include <ksystemtimezone.h>
 #include <kconfiggroup.h>
 
 #include <QDir>
