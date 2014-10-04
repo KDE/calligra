@@ -72,7 +72,6 @@
 
 // KDE
 #include <kfontaction.h>
-#include <kfontchooser.h>
 #include <kfontsizeaction.h>
 
 // Qt

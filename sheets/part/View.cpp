@@ -66,7 +66,6 @@
 #include <kcomponentdata.h>
 #include <kdebug.h>
 
-#include <kfontchooser.h>
 #include <kinputdialog.h>
 #include <kmessagebox.h>
 #include <kpassivepopup.h>
