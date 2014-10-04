@@ -27,7 +27,6 @@
 #include "KexiUserFeedbackAgent.h"
 
 #include <kglobalsettings.h>
-#include <kcolorutils.h>
 #include <kcolorscheme.h>
 #include <kstandarddirs.h>
 #include <klocale.h>
