@@ -49,7 +49,6 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kmimetype.h>
-#include <krun.h>
 
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
