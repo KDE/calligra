@@ -48,7 +48,6 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kparts/partmanager.h>
-#include <kservice.h>
 
 #include "debugarea.h"
 

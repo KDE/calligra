@@ -46,7 +46,6 @@
 #include <kdebug.h>
 #include <kstandarddirs.h>
 #include <klibloader.h>
-#include <kservice.h>
 #include <kmessagebox.h>
 #include <kparts/partmanager.h>
 #include <kparts/event.h>
