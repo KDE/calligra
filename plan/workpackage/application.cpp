@@ -50,7 +50,6 @@
 #include <kiconloader.h>
 #include <klibloader.h>
 #include <klocale.h>
-#include <kmenu.h>
 #include <kmessagebox.h>
 #include <kparts/partmanager.h>
 #include <krecentdocument.h>

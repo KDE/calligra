@@ -64,7 +64,6 @@
 #include <kimageio.h>
 #include <khelpmenu.h>
 #include <kfiledialog.h>
-#include <kmenu.h>
 #include <kmultitabbar.h>
 
 #include <db/connection.h>

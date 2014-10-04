@@ -55,6 +55,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kaction.h>
+#include <kmenu.h>
 
 #ifndef KEXI_NO_PRINT
 #include <QPrinter>

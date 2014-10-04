@@ -42,7 +42,6 @@
 #include <klocale.h>
 #include <kio/job.h>
 #include <kiconloader.h>
-#include <kmenu.h>
 #include <kstdaccel.h>
 
 #include <kexiutils/utils.h>

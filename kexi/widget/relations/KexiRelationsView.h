@@ -24,7 +24,6 @@
 #include <KexiView.h>
 #include "KexiRelationsScrollArea.h"
 
-class KMenu;
 class KAction;
 
 namespace KexiDB

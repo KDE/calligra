@@ -40,7 +40,6 @@
 #include <kdatepicker.h>
 #include <kdatetable.h>
 #include <klineedit.h>
-#include <kmenu.h>
 #include <kdatewidget.h>
 
 #include <kexiutils/utils.h>

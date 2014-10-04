@@ -43,9 +43,9 @@
 #include <QPrintDialog>
 #include <QDomDocument>
 #include <QPointer>
+#include <QMenu>
 
 #include <kactionmenu.h>
-#include <kmenu.h>
 #include <kstandardaction.h>
 #include <klocale.h>
 #include <kdebug.h>

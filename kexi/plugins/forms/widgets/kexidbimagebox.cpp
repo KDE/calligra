@@ -33,7 +33,6 @@
 #include <QPainter>
 
 #include <kdebug.h>
-#include <kmenu.h>
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kimageio.h>

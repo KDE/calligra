@@ -24,7 +24,6 @@
 #include <QPointer>
 #include <QTreeView>
 #include <QModelIndex>
-#include <kmenu.h>
 #include <kactioncollection.h>
 
 namespace KexiPart
