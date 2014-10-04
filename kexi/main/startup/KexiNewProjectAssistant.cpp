@@ -48,7 +48,6 @@
 #include <kmimetype.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include <kurlcombobox.h>
 #include <ktitlewidget.h>
 #include <kcategorydrawer.h>
 #include <kacceleratormanager.h>
