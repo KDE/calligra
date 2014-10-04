@@ -57,7 +57,6 @@
 #include <kedittoolbar.h>
 #include <ktogglefullscreenaction.h>
 
-#include <ktip.h>
 #include <kiconloader.h>
 #include <ktabwidget.h>
 #include <kimageio.h>
