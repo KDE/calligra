@@ -37,7 +37,6 @@
 #include <kiconloader.h>
 #include <kimageio.h>
 #include <kstandarddirs.h>
-#include <kstdaccel.h>
 #include <kguiitem.h>
 #include <kiconeffect.h>
 

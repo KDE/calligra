@@ -25,12 +25,13 @@
 #include <kexiutils/utils.h>
 
 #include <kapplication.h>
-#include <kstdaccel.h>
+#include <kstandardshortcut.h>
 #include <kdebug.h>
 
 #include <QPaintEvent>
 #include <QPainter>
 #include <QLabel>
+#include <QMenu>
 
 class DataSourceLabel : public QLabel
 {

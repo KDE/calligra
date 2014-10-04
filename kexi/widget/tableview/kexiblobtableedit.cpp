@@ -40,7 +40,6 @@
 #include <kservice.h>
 #include <klocale.h>
 #include <kiconloader.h>
-#include <kstdaccel.h>
 #include <kurl.h>
 
 #include <kexiutils/utils.h>
