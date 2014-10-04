@@ -47,7 +47,6 @@
 #include <kcomponentdata.h>
 #include <kdebug.h>
 #include <kmimetype.h>
-#include <ktextbrowser.h>
 #include <kconfig.h>
 
 //! @internal
