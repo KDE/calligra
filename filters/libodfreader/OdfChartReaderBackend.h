@@ -28,6 +28,7 @@
 // this library
 #include "koodfreader_export.h"
 #include "OdfChartReader.h"
+#include "OdfReaderInternals.h"
 
 
 class QByteArray;
@@ -67,6 +68,14 @@ class KOODFREADER_EXPORT OdfChartReaderBackend
     virtual void elementChartSubtitle(KoXmlStreamReader &reader, OdfReaderContext *context);
     virtual void elementChartTitle(KoXmlStreamReader &reader, OdfReaderContext *context);
     virtual void elementChartLegend(KoXmlStreamReader &reader, OdfReaderContext *context);
+    virtual void elementChartPlotArea(KoXmlStreamReader &reader, OdfReaderContext *context);
+    virtual void elementChartWall(KoXmlStreamReader &reader, OdfReaderContext *context);
+    virtual void elementChartFloor(KoXmlStreamReader &reader, OdfReaderContext *context);
+
+    DECLARE_BACKEND_FUNCTION(ChartEquation);
+    DECLARE_BACKEND_FUNCTION(ChartStockGainMarker);
+    DECLARE_BACKEND_FUNCTION(ChartStockLossMarker);
+    DECLARE_BACKEND_FUNCTION(ChartStockRangeLine);
 
  private:
     class Private;

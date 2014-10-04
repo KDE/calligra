@@ -71,44 +71,20 @@ OdfChartReaderBackend::~OdfChartReaderBackend()
 // ----------------------------------------------------------------
 
 
-void OdfChartReaderBackend::elementOfficeChart(KoXmlStreamReader &reader,
-					       OdfReaderContext *context)
-{
-    Q_UNUSED(reader);
-    Q_UNUSED(context);
-}
+IMPLEMENT_BACKEND_FUNCTION(OdfChartReader, OfficeChart)
 
-void OdfChartReaderBackend::elementChartChart(KoXmlStreamReader &reader,
-					      OdfReaderContext *context)
-{
-    Q_UNUSED(reader);
-    Q_UNUSED(context);
-}
+IMPLEMENT_BACKEND_FUNCTION(OdfChartReader, ChartChart)
+IMPLEMENT_BACKEND_FUNCTION(OdfChartReader, ChartFooter)
+IMPLEMENT_BACKEND_FUNCTION(OdfChartReader, ChartSubtitle)
+IMPLEMENT_BACKEND_FUNCTION(OdfChartReader, ChartTitle)
+IMPLEMENT_BACKEND_FUNCTION(OdfChartReader, ChartLegend)
+IMPLEMENT_BACKEND_FUNCTION(OdfChartReader, ChartPlotArea)
+IMPLEMENT_BACKEND_FUNCTION(OdfChartReader, ChartWall)
+IMPLEMENT_BACKEND_FUNCTION(OdfChartReader, ChartFloor)
 
-void OdfChartReaderBackend::elementChartFooter(KoXmlStreamReader &reader,
-					       OdfReaderContext *context)
-{
-    Q_UNUSED(reader);
-    Q_UNUSED(context);
-}
+// qwe
 
-void OdfChartReaderBackend::elementChartSubtitle(KoXmlStreamReader &reader,
-						 OdfReaderContext *context)
-{
-    Q_UNUSED(reader);
-    Q_UNUSED(context);
-}
-
-void OdfChartReaderBackend::elementChartTitle(KoXmlStreamReader &reader,
-					      OdfReaderContext *context)
-{
-    Q_UNUSED(reader);
-    Q_UNUSED(context);
-}
-
-void OdfChartReaderBackend::elementChartLegend(KoXmlStreamReader &reader,
-					       OdfReaderContext *context)
-{
-    Q_UNUSED(reader);
-    Q_UNUSED(context);
-}
+IMPLEMENT_BACKEND_FUNCTION(OdfChartReader, ChartEquation)
+IMPLEMENT_BACKEND_FUNCTION(OdfChartReader, ChartStockGainMarker)
+IMPLEMENT_BACKEND_FUNCTION(OdfChartReader, ChartStockLossMarker)
+IMPLEMENT_BACKEND_FUNCTION(OdfChartReader, ChartStockRangeLine)

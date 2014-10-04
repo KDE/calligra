@@ -30,6 +30,7 @@
 
 // this library
 #include "koodfreader_export.h"
+#include "OdfReaderInternals.h"
 
 
 class QSizeF;
@@ -62,13 +63,21 @@ class KOODFREADER_EXPORT OdfChartReader
     // ----------------------------------------------------------------
     // element reader functions
 
-    void readElementOfficeChart(KoXmlStreamReader &reader);
-    void readElementChartChart(KoXmlStreamReader &reader);
+    DECLARE_READER_FUNCTION(OfficeChart);
+    DECLARE_READER_FUNCTION(ChartChart);
 
-    void readElementChartFooter(KoXmlStreamReader &reader);
-    void readElementChartSubtitle(KoXmlStreamReader &reader);
-    void readElementChartTitle(KoXmlStreamReader &reader);
-    void readElementChartLegend(KoXmlStreamReader &reader);
+    DECLARE_READER_FUNCTION(ChartFooter);
+    DECLARE_READER_FUNCTION(ChartSubtitle);
+    DECLARE_READER_FUNCTION(ChartTitle);
+    DECLARE_READER_FUNCTION(ChartLegend);
+    DECLARE_READER_FUNCTION(ChartPlotArea);
+    DECLARE_READER_FUNCTION(ChartWall);
+    DECLARE_READER_FUNCTION(ChartFloor);
+
+    DECLARE_READER_FUNCTION(ChartEquation);
+    DECLARE_READER_FUNCTION(ChartStockGainMarker);
+    DECLARE_READER_FUNCTION(ChartStockLossMarker);
+    DECLARE_READER_FUNCTION(ChartStockRangeLine);
 
  protected:
 
