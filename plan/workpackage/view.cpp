@@ -51,7 +51,6 @@
 
 #include <kstatusbar.h>
 #include <kxmlguifactory.h>
-#include <kxmlguiclient.h>
 #include <ktoolinvocation.h>
 #include <kparts/event.h>
 #include <kparts/partmanager.h>
