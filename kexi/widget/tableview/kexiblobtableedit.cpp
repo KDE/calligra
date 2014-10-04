@@ -39,7 +39,6 @@
 #include <ktemporaryfile.h>
 #include <kservice.h>
 #include <klocale.h>
-#include <kio/job.h>
 #include <kiconloader.h>
 #include <kstdaccel.h>
 #include <kurl.h>

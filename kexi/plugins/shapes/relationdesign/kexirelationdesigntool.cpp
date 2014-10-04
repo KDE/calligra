@@ -35,7 +35,6 @@
 #include <QToolButton>
 #include <QLabel>
 #include <QPainter>
-#include <KIO/Job>
 #include <kdebug.h>
 #include <kcombobox.h>
 
