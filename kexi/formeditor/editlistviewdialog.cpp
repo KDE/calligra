@@ -22,7 +22,6 @@
 #include <QHBoxLayout>
 
 #include <klistview.h>
-#include <ktabwidget.h>
 #include <Klistbox.h>
 #include <kdebug.h>
 #include <klocale.h>

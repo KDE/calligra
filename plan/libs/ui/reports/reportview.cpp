@@ -57,7 +57,6 @@
 #include "KoDocument.h"
 #include "KoIcon.h"
 
-#include <ktabwidget.h>
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <kstandardaction.h>

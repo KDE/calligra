@@ -29,8 +29,6 @@
 
 #include <KoApplication.h>
 
-#include <ktabwidget.h>
-
 #include <QMap>
 #include <QToolButton>
 #include <QLabel>

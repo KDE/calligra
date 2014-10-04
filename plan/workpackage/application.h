@@ -29,7 +29,6 @@
 
 #include <KoApplication.h>
 
-#include <ktabwidget.h>
 #include <kuniqueapplication.h>
 #include <kvbox.h>
 
