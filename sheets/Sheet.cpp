@@ -35,8 +35,6 @@
 
 #include <kdebug.h>
 #include <kcodecs.h>
-#include <kfind.h>
-#include <kfinddialog.h>
 #include <kreplace.h>
 #include <kreplacedialog.h>
 
