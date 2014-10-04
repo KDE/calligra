@@ -52,7 +52,6 @@ class QPrinter;
 
 class KAction;
 class KarbonDocument;
-class KSelectAction;
 
 class KoCanvasController;
 class KoRuler;

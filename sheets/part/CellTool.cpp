@@ -50,7 +50,6 @@
 #include <klocale.h>
 #include <kmimetype.h>
 #include <krun.h>
-#include <kselectaction.h>
 
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
