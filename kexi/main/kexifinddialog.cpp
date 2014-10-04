@@ -26,7 +26,6 @@
 #include <kdebug.h>
 #include <kdialog.h>
 #include <kaction.h>
-#include <kshortcut.h>
 
 #include <QCheckBox>
 #include <QLabel>
