@@ -25,8 +25,6 @@
 
 #include "kplatowork_export.h"
 
-#include <kxmlguiwindow.h>
-
 #include <KoApplication.h>
 
 #include <QMap>
