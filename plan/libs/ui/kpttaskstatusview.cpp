@@ -56,7 +56,6 @@
 #include <klocale.h>
 #include <kcalendarsystem.h>
 #include <kactionmenu.h>
-#include <kstandardaction.h>
 #include <kstandardshortcut.h>
 #include <kaccelgen.h>
 #include <kactioncollection.h>

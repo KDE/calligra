@@ -46,7 +46,6 @@
 #include <QMenu>
 
 #include <kactionmenu.h>
-#include <kstandardaction.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <ktoolbar.h>

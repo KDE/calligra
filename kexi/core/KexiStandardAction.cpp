@@ -24,7 +24,6 @@
 #include <QHash>
 #include <kglobal.h>
 #include <kshortcut.h>
-#include <kstandardaction.h>
 #include <kstandardshortcut.h>
 #include <kaction.h>
 #include <kactioncollection.h>
