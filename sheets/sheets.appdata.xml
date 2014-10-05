@@ -9,6 +9,7 @@
   <name xml:lang="de">Sheets</name>
   <name xml:lang="en-GB">Sheets</name>
   <name xml:lang="es">Sheets</name>
+  <name xml:lang="fr">Sheets</name>
   <name xml:lang="ia">Sheets</name>
   <name xml:lang="it">Sheets</name>
   <name xml:lang="nl">Werkbladen</name>
@@ -25,6 +26,7 @@
   <summary xml:lang="de">Tabellenkalkulation</summary>
   <summary xml:lang="en-GB">Spreadsheet</summary>
   <summary xml:lang="es">Hoja de cálculo</summary>
+  <summary xml:lang="fr">Tableur</summary>
   <summary xml:lang="ia">Folio de calculo electronic</summary>
   <summary xml:lang="it">Foglio elettronico</summary>
   <summary xml:lang="nl">Rekenblad</summary>
@@ -43,6 +45,7 @@
     <p xml:lang="ca">El Sheets del Calligra és una eina de full de càlcul plenament funcional. S'usa per a crear i calcular ràpidament diversos full de càlcul relacionats amb els negocis, com els ingressos i despeses, les hores de treball dels empleats, etc.</p>
     <p xml:lang="en-GB">Calligra Sheets is a fully-featured calculation and spreadsheet tool. Use it to quickly create and calculate various business-related spreadsheets, such as income and expenditure, employee working hours, etc.</p>
     <p xml:lang="es">Calligra Sheets es una herramienta de hojas de cálculo completa. Puede utilizarla para crear y calcular rápidamente varias hojas de cálculo relacionadas con la empresa, como por ejemplo ingresos y gastos, horas de trabajo de los empleados, etc.</p>
+    <p xml:lang="fr">Calligra Sheets est un tableur complet. Utilisez-le pour créer rapidement différents tableaux et calculs, comme les revenus, les dépenses, les heures de travail de vos employés, etc.</p>
     <p xml:lang="it">Calligra Sheets è uno strumento di calcolo e un foglio elettronico completo. Usalo per calcolate e creare rapidamente vari fogli elettronici per i tuoi affari, come entrate e spese, ore lavorate dai dipendenti, ecc.</p>
     <p xml:lang="nl">Calligra Sheets is een hulpmiddel voor rekenen en rekenblad rijk aan functies. Gebruik het om snel verschillende zakelijke rekenbladen te maken, zoals inkomsten en uitgaven, werkuren van werknemers, etc.</p>
     <p xml:lang="pl">Arkusze Calligra jest pełnowartościowym narzędziem arkusza kalkulacyjnego i obliczeń. Użyj go do szybkiego tworzenia i obliczania rozmaitych biznesowych arkuszy kalkulacyjnych, takich jak przychód i rozchód, godziny pracy pracowników, itp.</p>
@@ -58,6 +61,7 @@
     <p xml:lang="de">Funktionen:</p>
     <p xml:lang="en-GB">Features:</p>
     <p xml:lang="es">Características:</p>
+    <p xml:lang="fr">Fonctionnalités :</p>
     <p xml:lang="ia">Characteristicas:</p>
     <p xml:lang="it">Funzionalità:</p>
     <p xml:lang="nl">Mogelijkheden:</p>
@@ -73,6 +77,7 @@
       <li xml:lang="ca">Usa formes per prendre notes o mapes mentals</li>
       <li xml:lang="en-GB">Use shapes to take notes or mind maps</li>
       <li xml:lang="es">Usa formas para tomar notas o crear mapas mentales</li>
+      <li xml:lang="fr">Utilisez des formes pour prendre des notes ou des cartes heuristiques</li>
       <li xml:lang="it">Usa le forme per creare note o mappe mentali</li>
       <li xml:lang="nl">Gebruik vormen om notities of bedenksels vast te leggen</li>
       <li xml:lang="pl">Używa kształtów do robienia notatek i map umysłu</li>
@@ -86,6 +91,7 @@
       <li xml:lang="ca">Àmplia gamma de plantilles predefinides</li>
       <li xml:lang="en-GB">Large range of pre-defined templates</li>
       <li xml:lang="es">Dispone de una amplia gama de plantillas predefinidas</li>
+      <li xml:lang="fr">Large éventail de modèles prédéfinis</li>
       <li xml:lang="it">Ampia gamma di modelli predefiniti</li>
       <li xml:lang="nl">Grote reeks van voorgedefinieerde sjablonen</li>
       <li xml:lang="pl">Szeroki wybór uprzednio stworzonych szablonów</li>
@@ -99,6 +105,7 @@
       <li xml:lang="ca">Llista de fórmules potent i extensa</li>
       <li xml:lang="en-GB">Powerful and comprehensive formula list</li>
       <li xml:lang="es">Dispone de una lista de fórmulas potente y completa</li>
+      <li xml:lang="fr">Liste de formules complète et variée</li>
       <li xml:lang="it">Elenco completo e potente di formule</li>
       <li xml:lang="nl">Krachtige en uitgebreide lijst met formules</li>
       <li xml:lang="pl">Przydatny i wyczerpujący spis równań</li>
@@ -112,6 +119,7 @@
       <li xml:lang="ca">Treball en un entorn familiar</li>
       <li xml:lang="en-GB">Work in a familiar environment</li>
       <li xml:lang="es">Funciona en un entorno familiar</li>
+      <li xml:lang="fr">Travaillez dans un environnement familier</li>
       <li xml:lang="it">Opera in un ambiente familiare</li>
       <li xml:lang="nl">Werk in een bekende omgeving</li>
       <li xml:lang="pl">Praca w znajomym środowisku</li>
