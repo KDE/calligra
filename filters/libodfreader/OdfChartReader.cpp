@@ -104,7 +104,7 @@ void OdfChartReader::setContext(OdfReaderContext *context)
 // Copy this one and change the name and fill in the code.
 void OdfChartReader::readElementNamespaceTagname(KoXmlStreamReader &reader)
 {
-   DEBUGSTART();
+    DEBUGSTART();
     m_backend->elementNamespaceTagname(reader, m_context);
 
     // <namespace:tagname> has the following children in ODF 1.2:
@@ -140,7 +140,7 @@ void OdfChartReader::readElementNamespaceTagname(KoXmlStreamReader &reader)
 
 void OdfChartReader::readElementOfficeChart(KoXmlStreamReader &reader)
 {
-   DEBUGSTART();
+    DEBUGSTART();
     m_backend->elementOfficeChart(reader, m_context);
 
     // <office:chart> has the following children in ODF 1.2:
@@ -226,121 +226,36 @@ void OdfChartReader::readElementChartChart(KoXmlStreamReader &reader)
     DEBUGEND();
 }
 
-void OdfChartReader::readElementChartFooter(KoXmlStreamReader &reader)
-{
-   DEBUGSTART();
-    m_backend->elementChartFooter(reader, m_context);
+#define IMPLEMENT_READER_FUNCTION_TEXTP_ONLY(readername, name)      \
+IMPLEMENT_READER_FUNCTION_START(readername, name)                   \
+    while (reader.readNextStartElement()) {                         \
+        QString tagName = reader.qualifiedName().toString();        \
+                                                                    \
+        if (tagName == "text:p") {                                  \
+	    OdfTextReader *textReader = m_parent->textReader();     \
+	    if (textReader) {                                       \
+		textReader->readElementTextP(reader);               \
+	    }                                                       \
+	    else {                                                  \
+		reader.skipCurrentElement();                        \
+	    }                                                       \
+        }                                                           \
+        else {                                                      \
+            reader.skipCurrentElement();                            \
+        }                                                           \
+    }                                                               \
+IMPLEMENT_READER_FUNCTION_END(name)
 
-    // <chart:footer> has the following children in ODF 1.2:
-    //   [done] <text:p> 5.1.3
-    while (reader.readNextStartElement()) {
-        QString tagName = reader.qualifiedName().toString();
-        
-        if (tagName == "text:p") {
-	    OdfTextReader *textReader = m_parent->textReader();
-	    if (textReader) {
-		textReader->readElementTextP(reader);
-	    }
-	    else {
-		reader.skipCurrentElement();
-	    }
-        }
-        else {
-            reader.skipCurrentElement();
-        }
-    }
 
-    m_backend->elementChartFooter(reader, m_context);
-    DEBUGEND();
-}
+IMPLEMENT_READER_FUNCTION_TEXTP_ONLY(OdfChartReader, ChartFooter)
+IMPLEMENT_READER_FUNCTION_TEXTP_ONLY(OdfChartReader, ChartSubtitle)
+IMPLEMENT_READER_FUNCTION_TEXTP_ONLY(OdfChartReader, ChartTitle)
+IMPLEMENT_READER_FUNCTION_TEXTP_ONLY(OdfChartReader, ChartLegend)
 
-void OdfChartReader::readElementChartSubtitle(KoXmlStreamReader &reader)
-{
-   DEBUGSTART();
-    m_backend->elementChartSubtitle(reader, m_context);
-
-    // <chart:subtitle> has the following children in ODF 1.2:
-    //   [done] <text:p> 5.1.3
-    while (reader.readNextStartElement()) {
-        QString tagName = reader.qualifiedName().toString();
-        
-        if (tagName == "text:p") {
-	    OdfTextReader *textReader = m_parent->textReader();
-	    if (textReader) {
-		textReader->readElementTextP(reader);
-	    }
-	    else {
-		reader.skipCurrentElement();
-	    }
-        }
-        else {
-            reader.skipCurrentElement();
-        }
-    }
-
-    m_backend->elementChartSubtitle(reader, m_context);
-    DEBUGEND();
-}
-
-void OdfChartReader::readElementChartTitle(KoXmlStreamReader &reader)
-{
-   DEBUGSTART();
-    m_backend->elementChartTitle(reader, m_context);
-
-    // <chart:title> has the following children in ODF 1.2:
-    //   [done] <text:p> 5.1.3
-    while (reader.readNextStartElement()) {
-        QString tagName = reader.qualifiedName().toString();
-        
-        if (tagName == "text:p") {
-	    OdfTextReader *textReader = m_parent->textReader();
-	    if (textReader) {
-		textReader->readElementTextP(reader);
-	    }
-	    else {
-		reader.skipCurrentElement();
-	    }
-        }
-        else {
-            reader.skipCurrentElement();
-        }
-    }
-
-    m_backend->elementChartTitle(reader, m_context);
-    DEBUGEND();
-}
-
-void OdfChartReader::readElementChartLegend(KoXmlStreamReader &reader)
-{
-   DEBUGSTART();
-    m_backend->elementChartLegend(reader, m_context);
-
-    // <chart:legend> has the following children in ODF 1.2:
-    //   [done] text:p 5.1.3
-    while (reader.readNextStartElement()) {
-        QString tagName = reader.qualifiedName().toString();
-        
-        if (tagName == "text:p") {
-	    OdfTextReader *textReader = m_parent->textReader();
-	    if (textReader) {
-		textReader->readElementTextP(reader);
-	    }
-	    else {
-		reader.skipCurrentElement();
-	    }
-        }
-        else {
-            reader.skipCurrentElement();
-        }
-    }
-
-    m_backend->elementChartLegend(reader, m_context);
-    DEBUGEND();
-}
 
 void OdfChartReader::readElementChartPlotArea(KoXmlStreamReader &reader)
 {
-   DEBUGSTART();
+    DEBUGSTART();
     m_backend->elementChartPlotArea(reader, m_context);
 
     // <chart:plot-area> has the following children in ODF 1.2:
@@ -391,37 +306,15 @@ void OdfChartReader::readElementChartPlotArea(KoXmlStreamReader &reader)
     DEBUGEND();
 }
 
-void OdfChartReader::readElementChartWall(KoXmlStreamReader &reader)
-{
-    DEBUGSTART();
-    m_backend->elementChartWall(reader, m_context);
-
-    // <chart:wall> has no children in ODF 1.2:
-    reader.skipCurrentElement();
-
-    m_backend->elementChartWall(reader, m_context);
-    DEBUGEND();
-}
-
-void OdfChartReader::readElementChartFloor(KoXmlStreamReader &reader)
-{
-    DEBUGSTART();
-    m_backend->elementChartFloor(reader, m_context);
-
-    // <chart:floor> has no children in ODF 1.2:
-    reader.skipCurrentElement();
-
-    m_backend->elementChartFloor(reader, m_context);
-    DEBUGEND();
-}
-
+IMPLEMENT_READER_FUNCTION_NO_CHILDREN(OdfChartReader, ChartWall)
+IMPLEMENT_READER_FUNCTION_NO_CHILDREN(OdfChartReader, ChartFloor)
 
 //----------------------------------------------------------------
 
 #if 0
 void OdfChartReader::readElementChart...(KoXmlStreamReader &reader)
 {
-   DEBUGSTART();
+    DEBUGSTART();
     m_backend->elementChart...(reader, m_context);
 
     // <chart:...> has the following children in ODF 1.2:
@@ -449,69 +342,10 @@ void OdfChartReader::readElementChart...(KoXmlStreamReader &reader)
 #endif
 // qwe
 
-void OdfChartReader::readElementChartEquation(KoXmlStreamReader &reader)
-{
-    DEBUGSTART();
-    m_backend->elementChartEquation(reader, m_context);
-
-    // <chart:equation> has the following children in ODF 1.2:
-    //   [done] <text:p> 5.1.3
-    while (reader.readNextStartElement()) {
-        QString tagName = reader.qualifiedName().toString();
-        
-        if (tagName == "text:p") {
-	    OdfTextReader *textReader = m_parent->textReader();
-	    if (textReader) {
-		textReader->readElementTextP(reader);
-	    }
-	    else {
-		reader.skipCurrentElement();
-	    }
-        }
-        else {
-            reader.skipCurrentElement();
-        }
-    }
-
-    m_backend->elementChartEquation(reader, m_context);
-    DEBUGEND();
-}
-
-void OdfChartReader::readElementChartStockGainMarker(KoXmlStreamReader &reader)
-{
-    DEBUGSTART();
-    m_backend->elementChartStockGainMarker(reader, m_context);
-
-    // <chart:stock-gain-marker> has no children in ODF 1.2:
-    reader.skipCurrentElement();
-
-    m_backend->elementChartStockGainMarker(reader, m_context);
-    DEBUGEND();
-}
-
-void OdfChartReader::readElementChartStockLossMarker(KoXmlStreamReader &reader)
-{
-    DEBUGSTART();
-    m_backend->elementChartStockLossMarker(reader, m_context);
-
-    // <chart:stock-loss-marker> has no children in ODF 1.2:
-    reader.skipCurrentElement();
-
-    m_backend->elementChartStockLossMarker(reader, m_context);
-    DEBUGEND();
-}
-
-void OdfChartReader::readElementChartStockRangeLine(KoXmlStreamReader &reader)
-{
-    DEBUGSTART();
-    m_backend->elementChartStockRangeLine(reader, m_context);
-
-    // <chart:stock-range-line> has no children in ODF 1.2:
-    reader.skipCurrentElement();
-
-    m_backend->elementChartStockRangeLine(reader, m_context);
-    DEBUGEND();
-}
+IMPLEMENT_READER_FUNCTION_TEXTP_ONLY(OdfChartReader, ChartEquation)
+IMPLEMENT_READER_FUNCTION_NO_CHILDREN(OdfChartReader, ChartStockGainMarker)
+IMPLEMENT_READER_FUNCTION_NO_CHILDREN(OdfChartReader, ChartStockLossMarker)
+IMPLEMENT_READER_FUNCTION_NO_CHILDREN(OdfChartReader, ChartStockRangeLine)
 
 
 
