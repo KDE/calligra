@@ -21,6 +21,11 @@
 #ifndef ODFREADERINTERNALS_H
 #define ODFREADERINTERNALS_H
 
+
+// ----------------------------------------------------------------
+//                     Reader functions
+
+
 #define DECLARE_READER_FUNCTION(name) \
     void readElement##name(KoXmlStreamReader &reader)
 
@@ -42,7 +47,7 @@ IMPLEMENT_READER_FUNCTION_END(name)
 
 
 // ----------------------------------------------------------------
-// Backend functions
+//                     Backend functions
 
 
 #define DECLARE_BACKEND_FUNCTION(name)                               \
