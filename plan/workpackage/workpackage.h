@@ -29,8 +29,6 @@
 #include <QFileInfo>
 #include <QProcess>
 
-#include <kservice.h>
-
 class KoView;
 class KoStore;
 

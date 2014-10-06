@@ -58,7 +58,6 @@
 #include <ktogglefullscreenaction.h>
 
 #include <kiconloader.h>
-#include <ktabwidget.h>
 #include <khelpmenu.h>
 #include <kfiledialog.h>
 #include <kmultitabbar.h>

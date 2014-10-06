@@ -53,8 +53,6 @@
 #include <KoConfig.h>
 
 #include <klocale.h>
-#include <kurlrequester.h>
-#include <kpagewidgetmodel.h>
 #include <kvbox.h>
 #include <kundo2stack.h>
 #include <kstandarddirs.h>

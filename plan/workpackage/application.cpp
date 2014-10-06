@@ -39,7 +39,6 @@
 #include <KoGlobal.h>
 #include <KoView.h>
 
-#include <kaboutdata.h>
 #include <kcmdlineargs.h>
 #include <kcomponentdata.h>
 #include <kdebug.h>
@@ -48,10 +47,6 @@
 #include <klibloader.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <kparts/partmanager.h>
-#include <krecentdocument.h>
-#include <kservice.h>
-#include <kshortcutsdialog.h>
 
 #include "debugarea.h"
 

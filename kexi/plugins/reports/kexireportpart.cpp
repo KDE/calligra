@@ -22,7 +22,6 @@
 
 #include <QLabel>
 
-#include <kmainwindow.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <KoIcon.h>

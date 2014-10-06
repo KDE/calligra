@@ -43,8 +43,6 @@
 
 #include <kptitemmodelbase.h>
 
-#include <kactionselector.h>
-
 #include "kpttask.h"
 #include "kpttaskeditor.h"
 

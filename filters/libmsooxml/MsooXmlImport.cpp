@@ -42,7 +42,6 @@
 #include <QImageReader>
 #include <QFileInfo>
 
-#include <kdeversion.h>
 #include <kdebug.h>
 #include <kzip.h>
 #include <ktemporaryfile.h>

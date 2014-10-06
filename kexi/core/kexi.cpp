@@ -37,7 +37,6 @@
 #include <QLabel>
 
 #include <kdebug.h>
-#include <ksharedptr.h>
 #include <kmessagebox.h>
 
 using namespace Kexi;

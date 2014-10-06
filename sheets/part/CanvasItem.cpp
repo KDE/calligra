@@ -77,7 +77,6 @@
 
 // KDE
 #include <kdebug.h>
-#include <ksharedptr.h>
 
 // Calligra
 #include <KoCanvasController.h>

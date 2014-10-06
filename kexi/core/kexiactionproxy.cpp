@@ -23,7 +23,6 @@
 
 #include <kdebug.h>
 #include <kaction.h>
-#include <kshortcut.h>
 #include <kactioncollection.h>
 
 #include <QWidget>

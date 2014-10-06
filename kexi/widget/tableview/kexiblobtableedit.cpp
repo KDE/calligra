@@ -37,7 +37,6 @@
 
 #include <kdebug.h>
 #include <ktemporaryfile.h>
-#include <kservice.h>
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kurl.h>

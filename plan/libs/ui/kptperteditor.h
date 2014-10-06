@@ -36,8 +36,6 @@
 
 #include <QWidget>
 
-#include <kactionselector.h>
-
 #include "kpttaskeditor.h"
 #include <ui_kptperteditor.h>
 

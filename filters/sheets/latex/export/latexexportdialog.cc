@@ -26,8 +26,6 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kconfig.h>
-#include <krecentdocument.h>
-#include <kurlrequester.h>
 #include <kdebug.h>
 #include <KoFilterManager.h>
 #include <knuminput.h>

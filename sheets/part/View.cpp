@@ -66,12 +66,8 @@
 #include <kcomponentdata.h>
 #include <kdebug.h>
 
-#include <kfontchooser.h>
 #include <kinputdialog.h>
 #include <kmessagebox.h>
-#include <kpassivepopup.h>
-#include <kreplace.h>
-#include <kreplacedialog.h>
 #include <kstatusbar.h>
 #include <kstandardaction.h>
 #include <ktoggleaction.h>

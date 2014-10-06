@@ -26,7 +26,6 @@
 #include <QMap>
 
 #include <kexi_global.h>
-#include <kmainwindow.h>
 #include <db/tristate.h>
 
 #include "KexiMigrateManagerInterface.h"
@@ -44,6 +43,7 @@ namespace KexiPart
 class Item;
 class Info;
 }
+class KToolBar;
 
 /**
  * @short Kexi's main window interface

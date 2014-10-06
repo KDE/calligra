@@ -52,9 +52,6 @@
 #include <kstatusbar.h>
 #include <kxmlguifactory.h>
 #include <ktoolinvocation.h>
-#include <kparts/event.h>
-#include <kparts/partmanager.h>
-#include <kparts/componentfactory.h>
 #include <kactioncollection.h>
 #include <ktemporaryfile.h>
 
