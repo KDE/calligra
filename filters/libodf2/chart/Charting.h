@@ -28,7 +28,7 @@
 #include <QDebug>
 #include <MsooXmlGlobal.h>
 
-namespace Charting
+namespace KoChart
 {
   
     class Value
@@ -133,7 +133,7 @@ namespace Charting
         void setType( FillType type ){ this->type = type; valid = true; }
         QColor solidColor;
         QString pixmapFile;
-        Charting::Gradient gradient;
+        KoChart::Gradient gradient;
         FillType type;
         bool valid;
     };
@@ -246,7 +246,7 @@ namespace Charting
     {
     public:
         unsigned int m_mdTopLt, m_mdBotRt, m_x1, m_y1, m_x2, m_y2;
-        Charting::AreaFormat *m_areaFormat;
+        KoChart::AreaFormat *m_areaFormat;
         explicit Obj() : m_mdTopLt(0), m_mdBotRt(0), m_x1(0), m_y1(0), m_x2(0), m_y2(0), m_areaFormat(0) {}
         virtual ~Obj() { delete m_areaFormat; }
     };

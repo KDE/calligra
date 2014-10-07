@@ -1832,7 +1832,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_chart()
     if (!r_id.isEmpty() && m_context->relationships) {
         const QString filepath = m_context->relationships->target(m_context->path, m_context->file, r_id);
 
-        Charting::Chart* chart = new Charting::Chart;
+        KoChart::Chart* chart = new KoChart::Chart;
         ChartExport* chartexport = new ChartExport(chart, m_context->themes);
         bool hasStart = false, hasEnd = false;
 #if defined(XLSXXMLDRAWINGREADER_CPP)

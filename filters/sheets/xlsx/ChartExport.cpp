@@ -36,9 +36,9 @@
 // Print the content of generated content.xml to the console for debugging purpose
 //#define CONTENTXML_DEBUG
 
-using namespace Charting;
+using namespace KoChart;
 
-ChartExport::ChartExport(Charting::Chart* chart, const MSOOXML::DrawingMLTheme* const theme)
+ChartExport::ChartExport(KoChart::Chart* chart, const MSOOXML::DrawingMLTheme* const theme)
     : m_x(0), m_y(0), m_width(0), m_height(0), m_end_x(0), m_end_y(0), m_chart(chart), m_theme(theme), sheetReplacement(true), paletteSet( false )
 {
     Q_ASSERT(m_chart);
@@ -133,7 +133,7 @@ QColor tintColor( const QColor & color, qreal tintfactor )
     return retColor;
 }
 
-QColor ChartExport::calculateColorFromGradientStop ( const Charting::Gradient::GradientStop& grad )
+QColor ChartExport::calculateColorFromGradientStop ( const KoChart::Gradient::GradientStop& grad )
 {
     QColor color = grad.knownColorValue;
     if ( !grad.referenceColor.isEmpty() )
@@ -146,7 +146,7 @@ QColor ChartExport::calculateColorFromGradientStop ( const Charting::Gradient::G
     return color;
 }
 
-QString ChartExport::generateGradientStyle ( KoGenStyles& mainStyles, const Charting::Gradient* grad )
+QString ChartExport::generateGradientStyle ( KoGenStyles& mainStyles, const KoChart::Gradient* grad )
 {
     KoGenStyle gradStyle( KoGenStyle::GradientStyle );
     gradStyle.addAttribute( "draw:style", "linear" );
@@ -254,7 +254,7 @@ QString ChartExport::genChartAreaStyle( KoGenStyles& styles, KoGenStyles& mainSt
 
 QString ChartExport::genPlotAreaStyle( KoGenStyle& style, KoGenStyles& styles, KoGenStyles& mainStyles )
 {
-    Charting::AreaFormat *areaFormat = ( chart()->m_plotArea && chart()->m_plotArea->m_areaFormat && chart()->m_plotArea->m_areaFormat->m_fill ) ? chart()->m_plotArea->m_areaFormat : chart()->m_areaFormat;
+    KoChart::AreaFormat *areaFormat = ( chart()->m_plotArea && chart()->m_plotArea->m_areaFormat && chart()->m_plotArea->m_areaFormat->m_fill ) ? chart()->m_plotArea->m_areaFormat : chart()->m_areaFormat;
     if ( chart()->m_plotAreaFillGradient ) {
         style.addProperty( "draw:fill", "gradient", KoGenStyle::GraphicType );
         style.addProperty( "draw:fill-gradient-name", generateGradientStyle( mainStyles, chart()->m_plotAreaFillGradient ), KoGenStyle::GraphicType );
@@ -307,21 +307,21 @@ QString ChartExport::genPlotAreaStyle( KoGenStyle& style, KoGenStyles& styles, K
 }
 
 
-void ChartExport::addShapePropertyStyle( /*const*/ Charting::Series* series, KoGenStyle& style, KoGenStyles& /*mainStyles*/ )
+void ChartExport::addShapePropertyStyle( /*const*/ KoChart::Series* series, KoGenStyle& style, KoGenStyles& /*mainStyles*/ )
 {
     Q_ASSERT( series );
     bool marker = false;
-    Charting::ScatterImpl* impl = dynamic_cast< Charting::ScatterImpl* >( m_chart->m_impl );
+    KoChart::ScatterImpl* impl = dynamic_cast< KoChart::ScatterImpl* >( m_chart->m_impl );
     if ( impl )
-        marker = impl->style == Charting::ScatterImpl::Marker || impl->style == Charting::ScatterImpl::LineMarker;
+        marker = impl->style == KoChart::ScatterImpl::Marker || impl->style == KoChart::ScatterImpl::LineMarker;
     if ( series->spPr->lineFill.valid )
     {
-        if ( series->spPr->lineFill.type == Charting::Fill::Solid )
+        if ( series->spPr->lineFill.type == KoChart::Fill::Solid )
         {
             style.addProperty( "draw:stroke", "solid", KoGenStyle::GraphicType );
             style.addProperty( "svg:stroke-color", series->spPr->lineFill.solidColor.name(), KoGenStyle::GraphicType );
         }
-        else if ( series->spPr->lineFill.type == Charting::Fill::None )
+        else if ( series->spPr->lineFill.type == KoChart::Fill::None )
             style.addProperty( "draw:stroke", "none", KoGenStyle::GraphicType );
     }
     else if (   (paletteSet && m_chart->m_impl->name() != "scatter")
@@ -335,15 +335,15 @@ void ChartExport::addShapePropertyStyle( /*const*/ Charting::Series* series, KoG
         style.addProperty( "draw:stroke", "none", KoGenStyle::GraphicType );
     if ( series->spPr->areaFill.valid )
     {
-        if ( series->spPr->areaFill.type == Charting::Fill::Solid )
+        if ( series->spPr->areaFill.type == KoChart::Fill::Solid )
         {
             style.addProperty( "draw:fill", "solid", KoGenStyle::GraphicType );
             style.addProperty( "draw:fill-color", series->spPr->areaFill.solidColor.name(), KoGenStyle::GraphicType );
         }
-        else if ( series->spPr->areaFill.type == Charting::Fill::None )
+        else if ( series->spPr->areaFill.type == KoChart::Fill::None )
             style.addProperty( "draw:fill", "none", KoGenStyle::GraphicType );
     }
-    else if ( paletteSet && !( m_chart->m_markerType != Charting::NoMarker || marker ) && series->m_markerType == Charting::NoMarker )
+    else if ( paletteSet && !( m_chart->m_markerType != KoChart::NoMarker || marker ) && series->m_markerType == KoChart::NoMarker )
     {
         const int curSerNum = m_chart->m_series.indexOf( series ) % 8;
         style.addProperty( "draw:fill", "solid", KoGenStyle::GraphicType );
@@ -370,7 +370,7 @@ void ChartExport::set2003ColorPalette( QList < QColor > palette )
     paletteSet = true;
 }
 
-QString markerType(Charting::MarkerType type, int currentSeriesNumber)
+QString markerType(KoChart::MarkerType type, int currentSeriesNumber)
 {
     QString markerName;
     switch(type) {
@@ -556,9 +556,9 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
     const bool definesCategories = chart()->m_impl->name() != "scatter"; // scatter charts are using domains
     int countXAxis = 0;
     int countYAxis = 0;
-    foreach(Charting::Axis* axis, chart()->m_axes) {
+    foreach(KoChart::Axis* axis, chart()->m_axes) {
         //TODO handle series-axis
-        if(axis->m_type == Charting::Axis::SeriesAxis) continue;
+        if(axis->m_type == KoChart::Axis::SeriesAxis) continue;
 
         bodyWriter->startElement("chart:axis");
 
@@ -590,11 +590,11 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
         bodyWriter->addAttribute( "chart:style-name", styles.insert( axisstyle, "ch" ) );
 
         switch(axis->m_type) {
-            case Charting::Axis::VerticalValueAxis:
+            case KoChart::Axis::VerticalValueAxis:
                 bodyWriter->addAttribute("chart:dimension", "y");
                 bodyWriter->addAttribute("chart:name", QString("y%1").arg(++countYAxis));
                 break;
-            case Charting::Axis::HorizontalValueAxis:
+            case KoChart::Axis::HorizontalValueAxis:
                 bodyWriter->addAttribute("chart:dimension", "x");
                 bodyWriter->addAttribute("chart:name", QString("x%1").arg(++countXAxis));
                 if(countXAxis == 1 && definesCategories && !verticalCellRangeAddress.isEmpty()) {
@@ -609,12 +609,12 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
                 break;
             default: break;
         }
-        if(axis->m_majorGridlines.m_format.m_style != Charting::LineFormat::None) {
+        if(axis->m_majorGridlines.m_format.m_style != KoChart::LineFormat::None) {
             bodyWriter->startElement("chart:grid");
             bodyWriter->addAttribute("chart:class", "major");
             bodyWriter->endElement(); // chart:grid
         }
-        if(axis->m_minorGridlines.m_format.m_style != Charting::LineFormat::None) {
+        if(axis->m_minorGridlines.m_format.m_style != KoChart::LineFormat::None) {
             bodyWriter->startElement("chart:grid");
             bodyWriter->addAttribute("chart:class", "minor");
             bodyWriter->endElement(); // chart:grid
@@ -650,9 +650,9 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
     //we should find the biggest and make it 100, then scale all the other factors accordingly
     //see 2.4.195 PieFormat
     int maxExplode = 100;
-    foreach(Charting::Series* series, chart()->m_series) {
-        foreach(Charting::Format* f, series->m_datasetFormat) {
-            if(Charting::PieFormat* pieformat = dynamic_cast<Charting::PieFormat*>(f)) {
+    foreach(KoChart::Series* series, chart()->m_series) {
+        foreach(KoChart::Format* f, series->m_datasetFormat) {
+            if(KoChart::PieFormat* pieformat = dynamic_cast<KoChart::PieFormat*>(f)) {
                 if(pieformat->m_pcExplode > 0) {
                     maxExplode = qMax(maxExplode, pieformat->m_pcExplode);
                 }
@@ -672,15 +672,15 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
     bool lines = true;
     bool marker = false;
     
-    Q_FOREACH(Charting::Series* series, chart()->m_series) {
+    Q_FOREACH(KoChart::Series* series, chart()->m_series) {
         lines = true;
         if ( chart()->m_impl->name() == "scatter" && !paletteSet )
         {            
-            Charting::ScatterImpl* impl = static_cast< Charting::ScatterImpl* >( chart()->m_impl );
-            lines = impl->style == Charting::ScatterImpl::Line || impl->style == Charting::ScatterImpl::LineMarker;
-            marker = impl->style == Charting::ScatterImpl::Marker || impl->style == Charting::ScatterImpl::LineMarker;
+            KoChart::ScatterImpl* impl = static_cast< KoChart::ScatterImpl* >( chart()->m_impl );
+            lines = impl->style == KoChart::ScatterImpl::Line || impl->style == KoChart::ScatterImpl::LineMarker;
+            marker = impl->style == KoChart::ScatterImpl::Marker || impl->style == KoChart::ScatterImpl::LineMarker;
         }
-        const bool noLineFill = ( series->spPr != 0 ) && series->spPr->lineFill.type == Charting::Fill::None;
+        const bool noLineFill = ( series->spPr != 0 ) && series->spPr->lineFill.type == KoChart::Fill::None;
         lines = lines && !noLineFill;
         lines = lines || m_chart->m_showLines;
         
@@ -696,13 +696,13 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
         }
         if ( paletteSet && m_chart->m_impl->name() != "ring" && m_chart->m_impl->name() != "circle" )
         {
-            if ( series->m_markerType == Charting::NoMarker && m_chart->m_markerType == Charting::NoMarker && !marker )
+            if ( series->m_markerType == KoChart::NoMarker && m_chart->m_markerType == KoChart::NoMarker && !marker )
             {
               seriesstyle.addProperty( "draw:fill", "solid", KoGenStyle::GraphicType );
               seriesstyle.addProperty( "draw:fill-color", m_palette.at( 16 + curSerNum ).name(), KoGenStyle::GraphicType );
             }
         }
-        if ( series->m_markerType != Charting::NoMarker )
+        if ( series->m_markerType != KoChart::NoMarker )
         {
             QString markerName = markerType(series->m_markerType, curSerNum);
             if (!markerName.isEmpty()) {
@@ -710,9 +710,9 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
                 seriesstyle.addProperty( "chart:symbol-name", markerName, KoGenStyle::ChartType );
             }
         }
-        else if ( m_chart->m_markerType != Charting::NoMarker || marker )
+        else if ( m_chart->m_markerType != KoChart::NoMarker || marker )
         {
-            QString markerName = markerType(m_chart->m_markerType == Charting::NoMarker ? Charting::AutoMarker : m_chart->m_markerType, curSerNum);
+            QString markerName = markerType(m_chart->m_markerType == KoChart::NoMarker ? KoChart::AutoMarker : m_chart->m_markerType, curSerNum);
             if (!markerName.isEmpty()) {
                 seriesstyle.addProperty( "chart:symbol-type", "named-symbol", KoGenStyle::ChartType );
                 seriesstyle.addProperty( "chart:symbol-name", markerName, KoGenStyle::ChartType );
@@ -724,8 +724,8 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
         //seriesstyle.addProperty("draw:stroke", "solid");
         //seriesstyle.addProperty("draw:fill-color", "#ff0000");
 
-        foreach(Charting::Format* f, series->m_datasetFormat) {
-            if(Charting::PieFormat* pieformat = dynamic_cast<Charting::PieFormat*>(f)) {
+        foreach(KoChart::Format* f, series->m_datasetFormat) {
+            if(KoChart::PieFormat* pieformat = dynamic_cast<KoChart::PieFormat*>(f)) {
                 if(pieformat->m_pcExplode > 0) {
                     //Note that 100.0/maxExplode will yield 1.0 most of the time, that's why do that division first
                     const int pcExplode = (int)((float)pieformat->m_pcExplode * (100.0 / (float)maxExplode));
@@ -755,10 +755,10 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
 
         // ODF does not support custom labels so we depend on the SeriesLegendOrTrendlineName being defined
         // and to point to a valid cell to be able to display custom labels.
-        if(series->m_datasetValue.contains(Charting::Value::SeriesLegendOrTrendlineName)) {
-            Charting::Value* v = series->m_datasetValue[Charting::Value::SeriesLegendOrTrendlineName];
+        if(series->m_datasetValue.contains(KoChart::Value::SeriesLegendOrTrendlineName)) {
+            KoChart::Value* v = series->m_datasetValue[KoChart::Value::SeriesLegendOrTrendlineName];
             if(!v->m_formula.isEmpty()) {
-                bodyWriter->addAttribute("chart:label-cell-address", v->m_type == Charting::Value::CellRange ? normalizeCellRange(v->m_formula) : v->m_formula);
+                bodyWriter->addAttribute("chart:label-cell-address", v->m_type == KoChart::Value::CellRange ? normalizeCellRange(v->m_formula) : v->m_formula);
             }
         }
         if (!series->m_labelCell.isEmpty()) {
@@ -822,7 +822,7 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
             if ( chart()->m_impl->name() == "circle" || chart()->m_impl->name() == "ring" ) {
                 QColor fillColor;
                 if ( j < series->m_dataPoints.count() ) {
-                    Charting::DataPoint *dataPoint = series->m_dataPoints[j];
+                    KoChart::DataPoint *dataPoint = series->m_dataPoints[j];
                     if ( dataPoint->m_areaFormat ) {
                         fillColor = dataPoint->m_areaFormat->m_foreground;
                     }
@@ -831,7 +831,7 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
                     gs.addProperty( "draw:fill", "solid", KoGenStyle::GraphicType );
                     gs.addProperty( "draw:fill-color", fillColor.name(), KoGenStyle::GraphicType );
                 }
-                else if ( series->m_markerType == Charting::NoMarker && m_chart->m_markerType == Charting::NoMarker && !marker ) {
+                else if ( series->m_markerType == KoChart::NoMarker && m_chart->m_markerType == KoChart::NoMarker && !marker ) {
                     if ( paletteSet ) {
                         gs.addProperty( "draw:fill", "solid", KoGenStyle::GraphicType );
                         gs.addProperty( "draw:fill-color", m_palette.at( 16 + j ).name(), KoGenStyle::GraphicType );
@@ -850,7 +850,7 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
             //gs.addProperty("draw:fill-color",j==0?"#004586":j==1?"#ff420e":"#ffd320", KoGenStyle::GraphicType);
             bodyWriter->addAttribute("chart:style-name", styles.insert(gs, "ch"));
 
-            Q_FOREACH(Charting::Text* t, series->m_texts) {
+            Q_FOREACH(KoChart::Text* t, series->m_texts) {
                 bodyWriter->startElement("chart:data-label");
                 bodyWriter->startElement("text:p");
                 bodyWriter->addTextNode(t->m_text);
