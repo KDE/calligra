@@ -30,7 +30,6 @@
 
 #include <kdebug.h>
 #include <klineedit.h>
-#include <knuminput.h>
 
 #include <QLabel>
 #include <QCheckBox>

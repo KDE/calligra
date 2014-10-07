@@ -23,7 +23,6 @@
 #include "KoFilterEffect.h"
 #include <KoFileDialog.h>
 
-#include <knuminput.h>
 #include <klocale.h>
 
 #include <QGridLayout>

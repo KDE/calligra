@@ -28,7 +28,6 @@
 #include <kconfig.h>
 #include <kdebug.h>
 #include <KoFilterManager.h>
-#include <knuminput.h>
 
 #include "latexexportAdaptor.h"
 

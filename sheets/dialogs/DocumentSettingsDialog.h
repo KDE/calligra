@@ -34,8 +34,6 @@
 
 #include <KoUnit.h>
 
-class KIntNumInput;
-class KDoubleNumInput;
 class KSpellConfig;
 class KVBox;
 class QCheckBox;
