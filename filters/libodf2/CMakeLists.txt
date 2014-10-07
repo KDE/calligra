@@ -69,5 +69,8 @@ install( FILES
     KoOdfGraphicProperties.h
     KoOdfPageLayoutProperties.h
     KoOdfHeaderFooterProperties.h
+
+    chart/Charting.h
+
 DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel)
 
