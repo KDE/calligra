@@ -161,6 +161,7 @@
       <li xml:lang="x-test">xxDesigning and displaying relational data using combo boxes (lookup columns)xx</li>
       <li>Direct data entry or import using CSV format</li>
       <li xml:lang="ca">Entrada directa de dades o importació usant el format CSV</li>
+      <li xml:lang="de">Direkte Dateneingabe oder Import aus dem CSV-Format</li>
       <li xml:lang="en-GB">Direct data entry or import using CSV format</li>
       <li xml:lang="es">Entrada directa de datos o importación utilizando el formato CSV</li>
       <li xml:lang="fr">Saisie directe de données ou import utilisant le format CSV</li>
@@ -230,6 +231,7 @@
     <screenshot>
       <caption>Form Designer</caption>
       <caption xml:lang="ca">Dissenyador de formularis</caption>
+      <caption xml:lang="de">Formular-Designer</caption>
       <caption xml:lang="en-GB">Form Designer</caption>
       <caption xml:lang="es">Diseñador de formularios</caption>
       <caption xml:lang="fr">Concepteur de formulaires</caption>
