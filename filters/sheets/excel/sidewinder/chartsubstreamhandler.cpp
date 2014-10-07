@@ -703,7 +703,7 @@ void ChartSubStreamHandler::handleLineFormat(LineFormatRecord *record)
     if (!record) return;
     DEBUG << "lns=" << record->lns() << " we=" << record->we() << " fAxisOn=" << record->isFAxisOn() << std::endl;
     if (Charting::Axis* axis = dynamic_cast<Charting::Axis*>(m_currentObj)) {
-        Charting::LineFormat format(Charting::LineFormat::Style(record->lns()), Charting::LineFormat::Tickness(record->we()));
+        Charting::LineFormat format(Charting::LineFormat::Style(record->lns()), Charting::LineFormat::Thickness(record->we()));
         switch(m_axisId) {
             case 0x0000: // The axis line itself
                 axis->m_format = format;
