@@ -44,9 +44,12 @@ class ChartExport
 public:
     explicit ChartExport(KoChart::Chart* chart, const MSOOXML::DrawingMLTheme* const contextWithThemeInformation = NULL);
     ~ChartExport();
+
     KoChart::Chart* chart() const { return m_chart; }
-    void setSheetReplacement( bool val );
-    void set2003ColorPalette( QList< QColor > palette );
+
+    void setSheetReplacement(bool val);
+
+    void set2003ColorPalette(QList< QColor > palette);
 
     bool m_drawLayer;
     QString m_href;
@@ -66,28 +69,31 @@ public:
     bool saveContent(KoStore* store, KoXmlWriter* manifestWriter);
 
 private:
-    QString toPtString( int number );
+    KoChart::Chart* m_chart;
+
+    QString toPtString(int number);
     enum Orientation {
         vertical,
         horizontal
     };
-    float sprcToPt( int sprc, Orientation orientation );
-    KoChart::Chart* m_chart;
-    const MSOOXML::DrawingMLTheme* m_theme;
+    float sprcToPt(int sprc, Orientation orientation);
     bool sheetReplacement;
-    QString genChartAreaStyle( KoGenStyles& styles, KoGenStyles& mainStyles );
-    QString genChartAreaStyle( KoGenStyle& style, KoGenStyles& styles, KoGenStyles& mainStyles );
-    QString genPlotAreaStyle( KoGenStyles& styles, KoGenStyles& mainStyles );
-    QString genPlotAreaStyle( KoGenStyle& style, KoGenStyles& styles, KoGenStyles& mainStyles );
-    void addShapePropertyStyle( /*const*/ KoChart::Series* series, KoGenStyle& style, KoGenStyles& mainStyles );
-    void addDataThemeToStyle( KoGenStyle& style, int dataNumber, int maxNumData = 1, bool strokes = true );
-    QString generateGradientStyle( KoGenStyles& mainStyles, const KoChart::Gradient* grad );
-    QColor calculateColorFromGradientStop( const KoChart::Gradient::GradientStop& grad );
+    QString genChartAreaStyle(KoGenStyles& styles, KoGenStyles& mainStyles);
+    QString genChartAreaStyle(KoGenStyle& style, KoGenStyles& styles, KoGenStyles& mainStyles);
+    QString genPlotAreaStyle(KoGenStyles& styles, KoGenStyles& mainStyles);
+    QString genPlotAreaStyle(KoGenStyle& style, KoGenStyles& styles, KoGenStyles& mainStyles);
+    void addShapePropertyStyle(/*const*/ KoChart::Series* series, KoGenStyle& style, KoGenStyles& mainStyles);
+    void addDataThemeToStyle(KoGenStyle& style, int dataNumber, int maxNumData = 1, bool strokes = true);
+    QString generateGradientStyle(KoGenStyles& mainStyles, const KoChart::Gradient* grad);
+    QColor calculateColorFromGradientStop(const KoChart::Gradient::GradientStop& grad);
     QColor labelFontColor() const;
-    void writeInternalTable ( KoXmlWriter* bodyWriter );
-    QList< QColor > m_palette;
+    void writeInternalTable(KoXmlWriter* bodyWriter);
+
+    // MS Office related stuff
+    QList<QColor> m_palette;
     // tells if a 2003 color palette has been set
     bool paletteSet;
+    const MSOOXML::DrawingMLTheme* m_theme;
 };
 
 #endif
