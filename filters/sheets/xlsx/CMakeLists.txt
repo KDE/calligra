@@ -15,7 +15,7 @@ set(xlsx2ods_PART_SRCS
     XlsxXmlChartReader.cpp
     XlsxXmlCommentsReader.cpp
     XlsxXmlTableReader.cpp
-    NumberFormatParser.cpp
+
     ChartExport.cpp
     FormulaParser.cpp
 )
@@ -25,6 +25,7 @@ kde4_add_plugin(calligra_filter_xlsx2ods ${xlsx2ods_PART_SRCS})
 target_link_libraries(
     calligra_filter_xlsx2ods
     komsooxml
+    mso
     koodf
     komain
     calligrasheetscommon

@@ -25,7 +25,7 @@
 #include <KoGenStyles.h>
 #include <KoXmlWriter.h>
 
-#include <MsooXmlUtils.h>
+#include <MsoUtils.h>
 
 #include <QBuffer>
 #include <QLocale>
@@ -40,7 +40,7 @@ QColor NumberFormatParser::color(const QString& name)
     if (name.toUpper().startsWith(QLatin1String("COLOR"))) {
         bool ok = false;
         const int index = name.mid(5).toInt(&ok) + 7;
-        return MSOOXML::Utils::defaultIndexedColor(index);
+        return MSO::defaultIndexedColor(index);
     } else {
         return QColor(name);
     }
@@ -48,7 +48,7 @@ QColor NumberFormatParser::color(const QString& name)
 
 QLocale NumberFormatParser::locale(int langid)
 {
-    return MSOOXML::Utils::localeForLangId(langid);
+    return MSO::localeForLangId(langid);
 }
 
 #define SET_TYPE_OR_RETURN( TYPE ) { \

@@ -3,6 +3,7 @@ add_definitions(-DKDE_DEFAULT_DEBUG_AREA=30528)
 include_directories(
     ${KOODF2_INCLUDES}
     ${CMAKE_SOURCE_DIR}/filters/libmsooxml
+    ${CMAKE_SOURCE_DIR}/filters/libmso
     ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx
     ${KOMAIN_INCLUDES}
 )
@@ -17,7 +18,6 @@ set(pptx2odp_PART_SRCS
     PptxXmlCommentAuthorsReader.cpp
     ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx/ChartExport.cpp
     ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx/XlsxXmlChartReader.cpp
-    ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx/NumberFormatParser.cpp
 )
 
 kde4_add_plugin(calligra_filter_pptx2odp ${pptx2odp_PART_SRCS})
@@ -25,6 +25,7 @@ kde4_add_plugin(calligra_filter_pptx2odp ${pptx2odp_PART_SRCS})
 target_link_libraries(
     calligra_filter_pptx2odp
     komsooxml
+    mso
     koodf2
     koodf
     komain

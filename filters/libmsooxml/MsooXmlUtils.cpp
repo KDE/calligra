@@ -577,6 +577,7 @@ QBrush Utils::ST_HighlightColor_to_QColor(const QString& colorName)
     return QBrush(); // for "none" or anything unsupported
 }
 
+// FIXME: Copied to MsoUtils.  Remove it here and use that instead.
 class DefaultIndexedColors : public QList< QColor >
 {
 public:
@@ -659,6 +660,7 @@ QColor Utils::defaultIndexedColor( int index )
     return s_defaultIndexedColors->at( index );
 }
 
+// FIXME: Copied to MsoUtils.  Remove it here and use that instead.
 class LangIdToLocaleMapping : public QMap< int, QString >
 {
 public:
