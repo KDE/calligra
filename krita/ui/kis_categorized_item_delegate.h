@@ -34,9 +34,9 @@ public:
     KisCategorizedItemDelegate(bool indicateError, QObject *parent);
     virtual void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
     virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;
-    void paintTriangle(QPainter* painter, qint32 x, qint32 y, qint32 size, bool rotate) const;
 
 private:
+    void paintTriangle(QPainter* painter, qint32 x, qint32 y, qint32 size, bool rotate) const;
     bool           m_indicateError;
     mutable qint32 m_minimumItemHeight;
 };

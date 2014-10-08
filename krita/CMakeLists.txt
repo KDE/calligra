@@ -90,7 +90,6 @@ set(KRITA_INCLUDES
 
     ${CMAKE_SOURCE_DIR}/krita/image
     ${CMAKE_SOURCE_DIR}/krita/image/brushengine
-    ${CMAKE_SOURCE_DIR}/krita/image/kisundo2
     ${CMAKE_SOURCE_DIR}/krita/image/tiles
     ${CMAKE_SOURCE_DIR}/krita/libbrush
     ${CMAKE_SOURCE_DIR}/krita/ui

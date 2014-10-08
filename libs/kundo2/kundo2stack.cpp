@@ -710,8 +710,7 @@ void KUndo2QStack::push(KUndo2Command *cmd)
             m_lastMergedSetCount = 0;
             m_lastMergedIndex = m_index-1;
         }
-        if(lastcmd->timedId()==-1)
-        {
+        if(lastcmd->timedId()==-1){
             m_lastMergedSetCount = 0;
             m_lastMergedIndex = m_index;
         }

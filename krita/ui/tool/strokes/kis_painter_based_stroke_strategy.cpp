@@ -140,7 +140,7 @@ void KisPainterBasedStrokeStrategy::initStrokeCallback()
         }
     }
     if(m_useMergeID){
-        m_transaction = new KisTransaction(name(), targetDevice,0,int(qHash(this->id())));
+        m_transaction = new KisTransaction(name(), targetDevice,0,timedID(this->id()));
     }
     else{
         m_transaction = new KisTransaction(name(), targetDevice);
@@ -175,7 +175,7 @@ void KisPainterBasedStrokeStrategy::finishStrokeCallback()
         if(m_useMergeID){
             indirect->mergeToLayer(layer,
                                    m_resources->postExecutionUndoAdapter(),
-                                   transactionText,qHash(this->id()));
+                                   transactionText,timedID(this->id()));
         }
         else{
             indirect->mergeToLayer(layer,

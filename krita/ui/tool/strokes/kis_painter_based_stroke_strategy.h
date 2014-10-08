@@ -60,6 +60,7 @@ public:
     void finishStrokeCallback();
     void cancelStrokeCallback();
 
+
 protected:
     KisPaintDeviceSP targetDevice();
     KisSelectionSP activeSelection();
@@ -71,6 +72,9 @@ private:
                       bool hasIndirectPainting,
                       const QString &indirectPaintingCompositeOp);
     void deletePainters();
+    inline int timedID(const QString &id){
+        return int(qHash(id));
+    }
 
 private:
     KisResourcesSnapshotSP m_resources;

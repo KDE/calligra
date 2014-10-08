@@ -81,7 +81,6 @@ KisPaintOpOptionsWidget::KisPaintOpOptionsWidget(QWidget * parent)
     connect(m_d->optionsList, SIGNAL(doubleClicked(QModelIndex))         , this, SLOT(lockProperties(const QModelIndex&)));
     connect(m_d->optionsList, SIGNAL(rightClickedMenuDropSettingsTriggered())         , this, SLOT(slotLockPropertiesDrop()));
     connect(m_d->optionsList, SIGNAL(rightClickedMenuSaveSettingsTriggered())         , this, SLOT(slotLockPropertiesSave()));
-    //connect(m_d->optionsList, SIGNAL(sigEntryChecked(QModelIndex))                    , this, SLOT(slotEntryChecked(QModelIndex)));
 }
 
 
@@ -166,14 +165,13 @@ void KisPaintOpOptionsWidget::lockProperties(const QModelIndex& index)
         KisPropertiesConfiguration* p = new KisPropertiesConfiguration();
         info.option->writeOptionSetting(p);
 
-        if(!info.option->isLocked())
-        {
+        if(!info.option->isLocked()){
             KisLockedPropertiesServer::instance()->addToLockedProperties(p);
             info.option->setLocked(true);
             m_d->model->categoriesMapper()->itemFromRow(index.row())->setLocked(true);
         }
-        else
-        {
+        else{
+
             KisLockedPropertiesServer::instance()->removeFromLockedProperties(p);
             info.option->setLocked(false);
             m_d->model->categoriesMapper()->itemFromRow(index.row())->setLocked(false);
@@ -186,7 +184,7 @@ void KisPaintOpOptionsWidget::lockProperties(const QModelIndex& index)
             m_saveLockedOption = false;
         }
         m_d->model->signalDataChanged(index);
-       }
+    }
 
 }
 void KisPaintOpOptionsWidget::slotLockPropertiesDrop()
@@ -202,7 +200,6 @@ void KisPaintOpOptionsWidget::slotLockPropertiesSave()
 void KisPaintOpOptionsWidget::slotEntryChecked(const QModelIndex &index)
 {
     Q_UNUSED(index);
-    qDebug("Entry Checked");
     emit sigConfigurationItemChanged();
 }
 
