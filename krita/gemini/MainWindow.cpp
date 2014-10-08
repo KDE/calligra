@@ -42,7 +42,6 @@
 #include <kurl.h>
 #include <kstandarddirs.h>
 #include <kactioncollection.h>
-#include <kaboutdata.h>
 #include <kmessagebox.h>
 #include <kmenubar.h>
 #include <kxmlguifactory.h>
@@ -552,6 +551,8 @@ QString MainWindow::openImage()
 
 void MainWindow::resourceChanged(int key, const QVariant& v)
 {
+    Q_UNUSED(key);
+
     if(centralWidget() == d->sketchView)
         return;
     KisPaintOpPresetSP preset = v.value<KisPaintOpPresetSP>();
@@ -564,6 +565,8 @@ void MainWindow::resourceChanged(int key, const QVariant& v)
 
 void MainWindow::resourceChangedSketch(int key, const QVariant& v)
 {
+    Q_UNUSED(key);
+
     if(centralWidget() == d->desktopView)
         return;
     KisPaintOpPresetSP preset = v.value<KisPaintOpPresetSP>();

@@ -48,6 +48,7 @@
 #include <QGridLayout>
 #include <QPixmap>
 
+#include <knuminput.h>
 #include <kcolorbutton.h>
 #include <kcombobox.h>
 #include <kdebug.h>

@@ -22,7 +22,6 @@
 #include "kexidbautofield.h"
 
 #include <kdebug.h>
-#include <knuminput.h>
 
 #include <QMenu>
 #include <QPainter>

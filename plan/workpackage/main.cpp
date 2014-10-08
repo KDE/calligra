@@ -22,7 +22,6 @@
 #include "aboutdata.h"
 #include "application.h"
 
-#include <kuniqueapplication.h>
 #include <kdemacros.h>
 #include <kcmdlineargs.h>
 #include <kdebug.h>

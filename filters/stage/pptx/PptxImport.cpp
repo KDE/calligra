@@ -39,10 +39,7 @@
 #include <QRegExp>
 #include <QImage>
 
-#include <kde_file.h> // for WARNING
-#include <kdeversion.h>
 #include <kdebug.h>
-#include <kzip.h>
 #include <kpluginfactory.h>
 
 #include <KoEmbeddedDocumentSaver.h>

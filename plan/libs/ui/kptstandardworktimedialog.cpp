@@ -28,7 +28,6 @@
 #include <QTreeWidgetItem>
 
 #include <klocale.h>
-#include <knuminput.h>
 
 
 namespace KPlato

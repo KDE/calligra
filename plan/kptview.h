@@ -36,7 +36,6 @@
 #include <QPrintDialog>
 
 #include <kconfigdialog.h>
-#include <kparts/event.h>
 
 class QStackedWidget;
 class QSplitter;

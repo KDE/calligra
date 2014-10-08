@@ -49,7 +49,6 @@
 #include <klocale.h>
 #include <kactionmenu.h>
 #include <kactioncollection.h>
-#include <kdeversion.h>
 
 
 #if QT_VERSION >= 0x040700

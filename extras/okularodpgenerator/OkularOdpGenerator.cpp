@@ -34,7 +34,6 @@
 #include <kaboutdata.h>
 #include <kpluginfactory.h>
 #include <kmimetype.h>
-#include <kmimetypetrader.h>
 
 #include <okular/core/page.h>
 

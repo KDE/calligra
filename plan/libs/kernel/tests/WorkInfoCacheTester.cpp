@@ -29,7 +29,6 @@
 
 #include <klocale.h>
 #include <ksystemtimezone.h>
-#include <kdatetime.h>
 #include <kconfiggroup.h>
 
 

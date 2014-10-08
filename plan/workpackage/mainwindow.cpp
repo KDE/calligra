@@ -44,17 +44,11 @@
 #include <kfiledialog.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include <kshortcutsdialog.h>
 #include <kstandarddirs.h>
 #include <klibloader.h>
-#include <kservice.h>
 #include <kmessagebox.h>
-#include <krecentdocument.h>
-#include <kparts/partmanager.h>
-#include <kparts/event.h>
 #include <kactioncollection.h>
 
-#include <kaboutdata.h>
 #include <kcomponentdata.h>
 #include <ktoolinvocation.h>
 #include <kio/netaccess.h>

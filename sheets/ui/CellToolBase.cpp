@@ -137,7 +137,6 @@
 #include <kstandardaction.h>
 #include <kstandarddirs.h>
 #include <ktoggleaction.h>
-#include <kdeversion.h>
 
 // Qt
 #include <QBuffer>

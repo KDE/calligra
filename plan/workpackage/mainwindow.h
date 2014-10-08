@@ -31,7 +31,6 @@
 #include <QToolButton>
 #include <QLabel>
 
-#include <kservice.h>
 #include <KoDocumentEntry.h>
 #include <kparts/mainwindow.h>
 

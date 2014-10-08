@@ -25,7 +25,6 @@
 #include <klocale.h>
 #include <kpluginfactory.h>
 #include <kstandarddirs.h>
-#include <kparts/partmanager.h>
 // kross
 #include <kross/core/manager.h>
 #include <kross/core/interpreter.h>

@@ -42,7 +42,6 @@
 #include <kcalendarsystem.h>
 #include <ksystemtimezone.h>
 #include <ktimezone.h>
-#include <kdeversion.h>
 
 
 namespace KPlato
