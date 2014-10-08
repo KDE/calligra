@@ -32,6 +32,7 @@
 
 #include "CQCanvasController.h"
 #include "CQCanvasBase.h"
+#include "CQTextDocumentCanvas.h"
 
 class CQCanvasControllerItem::Private
 {
@@ -46,7 +47,8 @@ public:
           zoomChange(0.f),
           zooming(false),
           minimumZoom( -1.f ),
-          maximumZoom( 2.f )
+          maximumZoom( 2.f ),
+          useViewport(false)
           { }
 
     CQCanvasBase *canvas;
@@ -67,6 +69,7 @@ public:
     qreal maximumZoom;
     QPointF zoomCenter;
 
+    bool useViewport;
     QImage placeholder;
 };
 
@@ -113,6 +116,13 @@ void CQCanvasControllerItem::setCanvas(QDeclarativeItem* canvas)
         connect(d->canvas, SIGNAL(positionShouldChange(QPoint)), this, SLOT(updateDocumentPosition(QPoint)));
         connect(d->canvas, SIGNAL(canvasControllerChanged()), SLOT(canvasControllerChanged()));
         canvasControllerChanged();
+        
+        
+        if(qobject_cast<CQTextDocumentCanvas*>(d->canvas) != 0) {
+            d->useViewport = true;
+        } else {
+            d->useViewport = false;
+        }
 
         emit canvasChanged();
     }
@@ -217,12 +227,20 @@ void CQCanvasControllerItem::beginZoomGesture()
     d->placeholderTarget.setWidth(d->flickable->width());
     d->placeholderTarget.setHeight(d->flickable->height());
 
-    QGLWidget* gl = qobject_cast<QGLWidget*>(scene()->views().at(0)->viewport());
-    if(!gl)
-       return;
+    if(d->useViewport) {
+        QGLWidget* gl = qobject_cast<QGLWidget*>(scene()->views().at(0)->viewport());
+        if(!gl)
+        return;
 
-    QRectF scene = d->flickable->mapToScene(QRectF(d->flickable->x(), 0, d->flickable->width(), d->flickable->height())).boundingRect();
-    d->placeholder = gl->grabFrameBuffer(true).copy(scene.toRect());
+        QRectF scene = d->flickable->mapToScene(QRectF(d->flickable->x(), 0, d->flickable->width(), d->flickable->height())).boundingRect();
+        d->placeholder = gl->grabFrameBuffer(true).copy(scene.toRect());
+    } else {
+        d->placeholder = QImage(d->flickable->width(), d->flickable->height(), QImage::Format_ARGB32_Premultiplied);
+        QPainter painter;
+        painter.begin(&d->placeholder);
+        d->canvas->render(&painter, QRectF(0, 0, d->flickable->width(), d->flickable->height()));
+        painter.end();
+    }
 
     d->canvas->setVisible(false);
     d->zooming = true;
