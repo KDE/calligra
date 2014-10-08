@@ -24,7 +24,7 @@
 #ifndef XLSXXMLSTYLESREADER_H
 #define XLSXXMLSTYLESREADER_H
 
-#include <MsooXmlThemesReader.h>
+#include <MsooXmlTheme.h>
 #include <QFlags>
 #include <QColor>
 

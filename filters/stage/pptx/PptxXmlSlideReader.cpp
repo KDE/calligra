@@ -35,7 +35,7 @@
 #include <MsooXmlUnits.h>
 #include <MsooXmlDrawingTableStyle.h>
 #include <MsooXmlDrawingTableStyleReader.h>
-#include <MsooXmlThemesReader.h>
+#include <MsooXmlTheme.h>
 
 #include <KoXmlWriter.h>
 #include <KoGenStyles.h>

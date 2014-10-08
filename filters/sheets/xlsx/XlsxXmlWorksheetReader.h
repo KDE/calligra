@@ -25,7 +25,8 @@
 #ifndef XLSXXMLWORKSHEETREADER_H
 #define XLSXXMLWORKSHEETREADER_H
 
-#include <MsooXmlThemesReader.h>
+//#include <MsooXmlThemesReader.h>
+#include <MsooXmlTheme.h>
 #include <MsooXmlCommonReader.h>
 
 #include <KoGenStyle.h>

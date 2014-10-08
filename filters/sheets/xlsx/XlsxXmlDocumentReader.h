@@ -24,7 +24,7 @@
 #ifndef XLSXXMLDOCREADER_H
 #define XLSXXMLDOCREADER_H
 
-#include <MsooXmlThemesReader.h>
+#include <MsooXmlTheme.h>
 
 #include <QMap>
 
