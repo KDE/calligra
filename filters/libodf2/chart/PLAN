@@ -1,0 +1,41 @@
+Overall goal: Unify handling of charts in Calligra: filters and shape
+
+
+Part I: Move the charts to libodf2
+
+Preparations
+ * Move to better places and do some cleanups				----
+    + NumberFormatParser --> libmso					....
+    + Charting -> KoChart,  --> libodf2					done
+    + ChartExport -> ChartOdfWriter  --> libodf2 (see refactor below)	....
+ * Change the namespace into KoChart					Done
+
+Refactoring
+ * Separate the definition of DrawingMLTheme from the ThemesReader.	----
+    + Move the data definitions into its own .h file. 			....
+ * Make ChartExport into a base class and make inherited classes in:	----
+    + Move baseclass to libmsooxml    	       		 	 	....
+    + subclass in sheets/xlsx	   	  - using the DrawingMLTheme	....
+    + subclass in sheets/excel/sidewinder - using the 2003palette	....
+
+
+Milestone 1: separating useful parts into a library
+----------------------------------------------------------------
+
+II Goal: Enhance this chart storage and use it in the chart shape
+
+Enhancements of KoChart::Chart and the subclasses
+ * Separate into separate files						----
+ * Also read ODF (get from the ChartShape)				----
+ * ...
+
+Start using KoChart in ChartShape
+ * Create a backend API and move KDChart into a backend subdirectory	----
+ * Use the storage classes  	 	      				----
+
+
+Milestone 2: Share common definitions and some data classes between all usages
+	     of charts.
+----------------------------------------------------------------
+
+
