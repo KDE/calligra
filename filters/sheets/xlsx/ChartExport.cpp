@@ -961,7 +961,8 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
                 else if (series->m_markerType == KoChart::NoMarker && m_chart->m_markerType == KoChart::NoMarker && !marker) {
                     if (paletteSet) {
                         gs.addProperty("draw:fill", "solid", KoGenStyle::GraphicType);
-                        gs.addProperty("draw:fill-color", m_palette.at(16 + j).name(), KoGenStyle::GraphicType);
+                        gs.addProperty("draw:fill-color", m_palette.at(16 + j).name(),
+				       KoGenStyle::GraphicType);
                     }
                     else {
                         addDataThemeToStyle(gs, j, series->m_countYValues, lines);
@@ -974,7 +975,8 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
             }*/
 
             //gs.addProperty("chart:solid-type", "cuboid", KoGenStyle::ChartType);
-            //gs.addProperty("draw:fill-color",j==0?"#004586":j==1?"#ff420e":"#ffd320", KoGenStyle::GraphicType);
+            //gs.addProperty("draw:fill-color",j==0?"#004586":j==1?"#ff420e":"#ffd320",
+	    //               KoGenStyle::GraphicType);
             bodyWriter->addAttribute("chart:style-name", styles.insert(gs, "ch"));
 
             Q_FOREACH (KoChart::Text* t, series->m_texts) {
