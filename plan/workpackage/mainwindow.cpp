@@ -41,26 +41,14 @@
 #include <KoGlobal.h>
 
 #include <kapplication.h>
-#include <kcmdlineargs.h>
-#include <kdesktopfile.h>
-#include <ktemporaryfile.h>
 #include <kfiledialog.h>
-#include <kfileitem.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include <kshortcutsdialog.h>
 #include <kstandarddirs.h>
 #include <klibloader.h>
-#include <kmenu.h>
-#include <kservice.h>
 #include <kmessagebox.h>
-#include <krecentdocument.h>
-#include <kparts/partmanager.h>
-#include <kparts/event.h>
-#include <kaction.h>
 #include <kactioncollection.h>
 
-#include <kaboutdata.h>
 #include <kcomponentdata.h>
 #include <ktoolinvocation.h>
 #include <kio/netaccess.h>

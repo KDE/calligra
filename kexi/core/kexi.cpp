@@ -37,10 +37,7 @@
 #include <QLabel>
 
 #include <kdebug.h>
-#include <kcursor.h>
-#include <kapplication.h>
-#include <ksharedptr.h>
-#include <kglobalsettings.h>
+#include <kmessagebox.h>
 
 using namespace Kexi;
 

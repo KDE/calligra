@@ -27,11 +27,9 @@
 #include <QVBoxLayout>
 
 
-#include <kaction.h>
-#include <kglobal.h>
 #include <klocale.h>
-#include <kactioncollection.h>
 #include <khtmlview.h>
+#include <kurl.h>
 
 #include "kptdebug.h"
 

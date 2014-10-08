@@ -34,6 +34,7 @@
 #include <QGridLayout>
 #include <QRect>
 #include <QWidget>
+#include <QToolBar>
 #include <QDropEvent>
 #include <QDragEnterEvent>
 #include <QApplication>
@@ -46,23 +47,20 @@
 
 #include <kio/netaccess.h>
 #include <kmenubar.h>
-#include <ktoolbar.h>
 #include <kstatusbar.h>
 #include <ktoggleaction.h>
 #include <kaction.h>
-#include <kactionmenu.h>
 #include <klocale.h>
 #include <kmenu.h>
 #include <kservice.h>
 #include <KoServiceLocator.h>
+#include <kstandarddirs.h>
 #include <kstandardaction.h>
 #include <kurl.h>
-#include <kxmlguiwindow.h>
 #include <kxmlguifactory.h>
 #include <kmessagebox.h>
 #include <kactioncollection.h>
 
-#include <KoStore.h>
 #include <KoMainWindow.h>
 #include <KoSelection.h>
 #include <KoToolBoxFactory.h>
@@ -121,7 +119,6 @@
 #include "widgets/kis_floating_message.h"
 
 #include <QPoint>
-#include <kapplication.h>
 #include "kis_node_commands_adapter.h"
 #include <kis_paintop_preset.h>
 #include "kis_favorite_resource_manager.h"

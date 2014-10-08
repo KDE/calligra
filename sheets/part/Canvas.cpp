@@ -75,22 +75,14 @@
 #include <QWidget>
 
 // KDE
-#include <kcursor.h>
 #include <kdebug.h>
-#include <kmessagebox.h>
-#include <krun.h>
-#include <kmimetype.h>
-#include <ksharedptr.h>
-#include <kwordwrap.h>
 #include <kxmlguifactory.h>
 
 // Calligra
 #include <KoCanvasController.h>
 #include <KoShapeManager.h>
-#include <KoStore.h>
 #include <KoToolManager.h>
 #include <KoToolProxy.h>
-#include <KoXmlWriter.h>
 #include <KoZoomHandler.h>
 #include <KoPointerEvent.h>
 

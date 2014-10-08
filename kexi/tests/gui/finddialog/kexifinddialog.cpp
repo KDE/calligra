@@ -20,7 +20,6 @@
 #include "kexifinddialog.h"
 
 #include <kstandardguiitem.h>
-#include <kpushbutton.h>
 #include <kcombobox.h>
 #include <klocale.h>
 

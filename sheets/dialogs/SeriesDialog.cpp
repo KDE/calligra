@@ -37,7 +37,6 @@
 #include <klocale.h>
 #include <QLabel>
 
-#include <klineedit.h>
 #include <kmessagebox.h>
 #include <knumvalidator.h>
 

@@ -26,7 +26,6 @@
 
 #include <QVariantList>
 
-class KJob;
 class PlanTJScheduler;
 
 namespace KPlato

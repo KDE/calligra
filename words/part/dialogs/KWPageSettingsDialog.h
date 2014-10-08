@@ -23,8 +23,6 @@
 #include <KWPageStyle.h>
 #include <KoPageLayoutDialog.h>
 
-#include <kdialog.h>
-
 class QPushButton;
 class QListWidget;
 class KWDocument;

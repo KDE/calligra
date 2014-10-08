@@ -35,8 +35,6 @@
 #include <QScrollBar>
 
 #include <kdebug.h>
-#include <kconfig.h>
-#include <kglobalsettings.h>
 
 #include <kexiutils/utils.h>
 #include <db/tableschema.h>

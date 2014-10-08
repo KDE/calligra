@@ -57,17 +57,9 @@
 #include <kedittoolbar.h>
 #include <ktogglefullscreenaction.h>
 
-#include <kglobalsettings.h>
-#include <ktip.h>
-#include <kstandarddirs.h>
-#include <kpushbutton.h>
-#include <ktextbrowser.h>
 #include <kiconloader.h>
-#include <ktabwidget.h>
-#include <kimageio.h>
 #include <khelpmenu.h>
 #include <kfiledialog.h>
-#include <kmenu.h>
 #include <kmultitabbar.h>
 
 #include <db/connection.h>

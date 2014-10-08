@@ -24,7 +24,6 @@
 
 #include <widget/dataviewcommon/kexiformdataiteminterface.h>
 #include <formeditor/FormWidgetInterface.h>
-#include <knuminput.h>
 #include <widget/kexislider.h>
 
 //! @short A db-aware slider 

@@ -39,7 +39,6 @@
 #include <QDockWidget>
 
 class KAction;
-class KToggleAction;
 
 class QWidget;
 class QMetaEnum;

@@ -32,10 +32,8 @@
 #include "document.h"
 #include "msdoc.h"
 
-#include <KoStoreDevice.h>
 #include <KoGenStyle.h>
 #include <kdebug.h>
-#include <kmimetype.h>
 #include <QColor>
 #include <QByteArray>
 

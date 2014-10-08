@@ -34,12 +34,11 @@
 
 #include <QBuffer>
 #include <QFile>
+#include <QApplication>
 
-#include <kapplication.h>
 #include <kmessagebox.h>
 #include <klocale.h>
 #include <kio/netaccess.h>
-#include <kio/deletejob.h>
 
 #include <KoColorSpace.h>
 #include <KoDocumentInfo.h>

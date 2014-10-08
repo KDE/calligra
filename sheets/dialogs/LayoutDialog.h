@@ -38,8 +38,6 @@
 #include <QPaintEvent>
 #include <QPushButton>
 
-#include <kcompletion.h>
-#include <knuminput.h>
 #include <kpagedialog.h>
 
 #include "RowColumnFormat.h"
@@ -51,6 +49,7 @@
 #include "ui_ProtectionWidget.h"
 
 class KoUnitDoubleSpinBox;
+class KIntNumInput;
 class QPixmap;
 class QRadioButton;
 class QPushButton;
@@ -61,7 +60,6 @@ class QFrame;
 class QListWidget;
 class QCheckBox;
 class KColorButton;
-class KComboBox;
 class KComboBox;
 class KoUnitDoubleSpinBox;
 

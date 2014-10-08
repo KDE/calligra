@@ -24,8 +24,6 @@
 #include <QLabel>
 
 #include <klocale.h>
-#include <kaction.h>
-#include <kmenu.h>
 
 #include <db/cursor.h>
 #include <db/utils.h>

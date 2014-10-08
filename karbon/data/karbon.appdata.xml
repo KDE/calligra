@@ -77,6 +77,7 @@
         Loading support for ODG, SVG, WPG, WMF, EPS/PS
       </li>
       <li xml:lang="ca">Permet llegir ODG, SVG, WPG, WMF, EPS/PS</li>
+      <li xml:lang="de">Unterstützung für das Laden von ODG, SVG, WPG, WMF, EPS/PS</li>
       <li xml:lang="en-GB">Loading support for ODG, SVG, WPG, WMF, EPS/PS</li>
       <li xml:lang="es">Admite la carga de ODG, SVG, WPG, WMF, EPS/PS</li>
       <li xml:lang="ia">Cargante supporto pro ODG, SVG, WPG, WMF, EPS/PS</li>
@@ -94,6 +95,7 @@
         Writing support for ODG, SVG, PNG, PDF, WMF
       </li>
       <li xml:lang="ca">Permet gravar ODG, SVG, PNG, PDF, WMF</li>
+      <li xml:lang="de">Unterstützung für das Schreiben von ODG, SVG, PNG, PDF, WMF</li>
       <li xml:lang="en-GB">Writing support for ODG, SVG, PNG, PDF, WMF</li>
       <li xml:lang="es">Admite la escritura de ODG, SVG, PNG, PDF, WMF</li>
       <li xml:lang="ia">Supporto de scriber pro ODG, SVG, PNG, PDF, WMF</li>

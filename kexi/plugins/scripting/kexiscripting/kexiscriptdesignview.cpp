@@ -36,13 +36,13 @@
 #include <QDomDocument>
 #include <ktextbrowser.h>
 #include <kfiledialog.h>
-#include <kmenu.h>
 #include <kactionmenu.h>
 #include <kdebug.h>
 
 #include <KexiMainWindowIface.h>
 #include <db/connection.h>
 #include <QTextDocument>
+#include <QMenu>
 
 /// @internal
 class KexiScriptDesignViewPrivate

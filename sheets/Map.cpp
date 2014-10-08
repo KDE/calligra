@@ -28,7 +28,6 @@
 
 #include <kcodecs.h>
 #include <kcompletion.h>
-#include <ktemporaryfile.h>
 
 #include <KoGenStyles.h>
 #include <KoStyleStack.h>

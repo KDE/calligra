@@ -30,8 +30,6 @@
 #include <QPaintEvent>
 #include <QFileInfo>
 
-#include <ktextedit.h>
-#include <klineedit.h>
 #include <klocale.h>
 #include <kdebug.h>
 

@@ -36,9 +36,7 @@
 
 // KDE
 #include <kdebug.h>
-#include <kapplication.h>
 #include <kmessagebox.h>
-#include <kmimetype.h>
 #include <kurl.h>
 
 // KDChart
@@ -80,7 +78,6 @@
 #include <KoToolRegistry.h>
 #include <KoTextShapeData.h>
 #include <KoTextDocumentLayout.h>
-#include <KoOdfReadStore.h>
 #include <KoDocumentEntry.h>
 #include <KoOdfStylesReader.h>
 #include <KoCanvasBase.h>

@@ -35,8 +35,6 @@ class QItemSelection;
 
 class KoDocument;
 
-class KAction;
-
 namespace KPlato
 {
 

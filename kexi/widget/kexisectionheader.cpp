@@ -29,8 +29,6 @@
 #include <QEvent>
 #include <QApplication>
 
-#include <kpushbutton.h>
-
 //! @internal
 class KexiSectionHeader::Private
 {

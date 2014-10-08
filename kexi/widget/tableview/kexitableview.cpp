@@ -50,13 +50,12 @@
 #include <QPixmap>
 #include <QDesktopWidget>
 #include <QScrollArea>
+#include <QApplication>
 
-#include <kglobal.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include <kapplication.h>
-#include <kmessagebox.h>
 #include <kaction.h>
+#include <kmenu.h>
 
 #ifndef KEXI_NO_PRINT
 #include <QPrinter>

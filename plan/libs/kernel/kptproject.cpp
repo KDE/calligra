@@ -39,11 +39,11 @@
 #include <QBrush>
 #include <QList>
 
+#include <kglobal.h>
 #include <kdatetime.h>
 #include <ksystemtimezone.h>
 #include <ktimezone.h>
 #include <krandom.h>
-#include <kdeversion.h>
 
 
 namespace KPlato

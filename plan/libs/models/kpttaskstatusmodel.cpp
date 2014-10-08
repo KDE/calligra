@@ -34,7 +34,6 @@
 #include <QMimeData>
 #include <QModelIndex>
 
-#include <kglobal.h>
 #include <klocale.h>
 
 

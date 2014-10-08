@@ -43,16 +43,12 @@
 
 #include <kptitemmodelbase.h>
 
-#include <kactionselector.h>
-
 #include "kpttask.h"
 #include "kpttaskeditor.h"
 
 #include "kptcommand.h"
 
-#include <kglobal.h>
 #include <klocale.h>
-#include <kactioncollection.h>
 
 #include <kdebug.h>
 

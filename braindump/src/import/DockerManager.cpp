@@ -22,12 +22,8 @@
 #include "DockerManager_p.h"
 #include "KoDockFactoryBase.h"
 
-#include <kglobal.h>
 #include <klocale.h>
-#include <kconfig.h>
-#include <kconfiggroup.h>
 #include <kdebug.h>
-#include <ktoolbar.h>
 
 #include "ToolDocker.h"
 

@@ -23,7 +23,6 @@
 #define KEXIMIGRATIONIMPORTWIZARD_H
 
 #include <kassistantdialog.h>
-#include <kapplication.h>
 
 #include <db/tristate.h>
 #include "migratemanager.h"
@@ -37,9 +36,6 @@ class QRadioButton;
 class QHBoxLayout;
 class QVBoxLayout;
 class QGroupBox;
-class KComboBox;
-class KLineEdit;
-class KPushButton;
 class KexiConnectionSelectorWidget;
 class KexiProjectSelectorWidget;
 class KexiProjectSet;

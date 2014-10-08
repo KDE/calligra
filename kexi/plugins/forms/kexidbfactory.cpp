@@ -25,7 +25,6 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kactioncollection.h>
-#include <kstandardaction.h>
 
 #include <KoIcon.h>
 

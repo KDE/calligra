@@ -42,8 +42,6 @@
 #include <KoOdfGraphicStyles.h>
 #include <KoUnit.h>
 
-#include <kde_file.h> // for WARNING
-
 #include <QBrush>
 
 #define MSOOXML_CURRENT_NS "p"
