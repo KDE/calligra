@@ -89,6 +89,7 @@
       <li xml:lang="x-test">xxFrame-based editingxx</li>
       <li>Allows embedding of Documents</li>
       <li xml:lang="ca">Permet incrustar documents</li>
+      <li xml:lang="de">Ermöglicht das Einbetten von Dokumenten</li>
       <li xml:lang="en-GB">Allows embedding of Documents</li>
       <li xml:lang="es">Permite incrustar documentos</li>
       <li xml:lang="it">Consente l'integrazione di documenti</li>
@@ -103,6 +104,7 @@
       <li xml:lang="x-test">xxAllows embedding of Documentsxx</li>
       <li>Customization of user interface</li>
       <li xml:lang="ca">Personalització de la interfície d'usuari</li>
+      <li xml:lang="de">Anpassung der Benutzeroberfläche</li>
       <li xml:lang="en-GB">Customisation of user interface</li>
       <li xml:lang="es">Personalización de la interfaz de usuario</li>
       <li xml:lang="it">Personalizzazion e dell'interfaccia utente</li>
@@ -117,6 +119,7 @@
       <li xml:lang="x-test">xxCustomization of user interfacexx</li>
       <li>Includes all features expected from a modern word processor</li>
       <li xml:lang="ca">Inclou totes les funcionalitats esperades d'un processador de textos modern</li>
+      <li xml:lang="de">Enthält alle Funktionen einer modernen Textverarbeitung</li>
       <li xml:lang="en-GB">Includes all features expected from a modern word processor</li>
       <li xml:lang="es">Incluye todas las características que se esperan de un procesador de texto moderno</li>
       <li xml:lang="it">Include tutte le funzionalità attese da un elaboratore di testi moderno</li>
