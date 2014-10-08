@@ -29,7 +29,7 @@
 //#include <KoOdfNumberStyles.h>
 #include <kdebug.h>
 #include "MsooXmlThemesReader.h"
-#include "Charting.h"
+#include <Charting.h>
 
 #include <algorithm>
 

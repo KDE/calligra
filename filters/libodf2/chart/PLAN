@@ -1,4 +1,5 @@
-Overall goal: Unify handling of charts in Calligra: filters and shape
+Primary goal: Unify handling of charts in Calligra: filters and shape
+Later goal:   Simplify the move to the new KdCharts and perhaps other backends
 
 
 Part I: Move the charts to libodf2
@@ -23,7 +24,7 @@ Refactoring
 Milestone 1: separating useful parts into a library
 ----------------------------------------------------------------
 
-II Goal: Enhance this chart storage and use it in the chart shape
+Part II: Enhance the chart storage and use it in the chart shape
 
 Enhancements of KoChart::Chart and the subclasses
  * Separate into separate files						----

@@ -62,6 +62,7 @@ install( FILES
     MsooXmlCommonReaderMethods.h
     MsooXmlSchemas.h
     MsooXmlThemesReader.h
+    MsooXmlTheme.h
     MsooXmlUtils.h
     MsooXmlRelationships.h
     MsooXmlImport.h

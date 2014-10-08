@@ -23,6 +23,7 @@
 
 #include "MsooXmlThemesReader.h"
 #include "MsooXmlSchemas.h"
+#include "MsooXmlTheme.h"
 #include "MsooXmlUtils.h"
 #include "MsooXmlUnits.h"
 
