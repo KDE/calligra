@@ -31,7 +31,7 @@
 #include "XlsxXmlTableReader.h"
 #include "XlsxImport.h"
 #include "Charting.h"
-#include "ChartExport.h"
+#include "XlsxChartExport.h"
 #include "FormulaParser.h"
 
 #include <MsooXmlRelationships.h>

@@ -16,6 +16,7 @@ set(pptx2odp_PART_SRCS
     PptxXmlSlideReader.cpp
     PptxXmlCommentsReader.cpp
     PptxXmlCommentAuthorsReader.cpp
+    ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx/XlsxChartExport.cpp
     ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx/ChartExport.cpp
     ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx/XlsxXmlChartReader.cpp
 )

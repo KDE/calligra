@@ -55,7 +55,7 @@
 #include <KoXmlWriter.h>
 #include <MsooXmlUnits.h>
 #include "Charting.h"
-#include "ChartExport.h"
+#include "XlsxChartExport.h"
 #include "XlsxXmlChartReader.h"
 #include "ComplexShapeHandler.h"
 
@@ -1833,7 +1833,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_chart()
         const QString filepath = m_context->relationships->target(m_context->path, m_context->file, r_id);
 
         KoChart::Chart* chart = new KoChart::Chart;
-        ChartExport* chartexport = new ChartExport(chart, m_context->themes);
+        XlsxChartExport* chartexport = new XlsxChartExport(chart, m_context->themes);
         bool hasStart = false, hasEnd = false;
 #if defined(XLSXXMLDRAWINGREADER_CPP)
         chart->m_sheetName = m_context->worksheetReaderContext->worksheetName;

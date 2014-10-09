@@ -17,28 +17,33 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+// Own
 #include "ChartExport.h"
-#include "NumberFormatParser.h"
 
+// KDE
+#include <kdebug.h>
+
+// Calligra
 #include <KoStore.h>
 #include <KoXmlWriter.h>
 #include <KoOdfWriteStore.h>
 #include <KoStoreDevice.h>
 #include <KoGenStyles.h>
 #include <KoGenStyle.h>
-//#include <KoOdfNumberStyles.h>
-#include <kdebug.h>
-#include <MsooXmlTheme.h>
-#include <Charting.h>
 
-#include <algorithm>
+
+#include <Charting.h>
+#include "NumberFormatParser.h"
+#include <MsooXmlTheme.h>
+
+#include <algorithm> // For std:find()
 
 // Print the content of generated content.xml to the console for debugging purpose
 //#define CONTENTXML_DEBUG
 
 using namespace KoChart;
 
-ChartExport::ChartExport(KoChart::Chart* chart, const MSOOXML::DrawingMLTheme* const theme)
+ChartExport::ChartExport(KoChart::Chart* chart)
     : m_x(0)
     , m_y(0)
     , m_width(0)
@@ -48,7 +53,6 @@ ChartExport::ChartExport(KoChart::Chart* chart, const MSOOXML::DrawingMLTheme* c
     , m_chart(chart)
     , sheetReplacement(true)
     , paletteSet( false )
-    , m_theme(theme)
 {
     Q_ASSERT(m_chart);
     m_drawLayer = false;
@@ -60,7 +64,7 @@ ChartExport::~ChartExport()
 
 
 // Takes a Excel cellrange and translates it into a ODF cellrange
-QString normalizeCellRange(QString range)
+QString ChartExport::normalizeCellRange(QString range)
 {
     if (range.startsWith('[') && range.endsWith(']')) {
         range.remove(0, 1).chop(1);
@@ -129,7 +133,7 @@ bool ChartExport::saveIndex(KoXmlWriter* xmlWriter)
     return true;
 }
 
-QColor tintColor(const QColor & color, qreal tintfactor)
+QColor ChartExport::tintColor(const QColor & color, qreal tintfactor)
 {
     QColor retColor;
     const qreal  nonTindedPart = 1.0 - tintfactor;
@@ -151,9 +155,10 @@ QColor ChartExport::calculateColorFromGradientStop(const KoChart::Gradient::Grad
 {
     QColor color = grad.knownColorValue;
 
+#if 0
     if (!grad.referenceColor.isEmpty())
         color = m_theme->colorScheme.value(grad.referenceColor)->value();
-
+#endif
     const int tintedColor = 255 * grad.tintVal / 100.0;
     const qreal  nonTindedPart = 1.0 - grad.tintVal / 100.0;
     color.setRed(tintedColor + nonTindedPart * color.red());
@@ -180,6 +185,7 @@ QString ChartExport::generateGradientStyle(KoGenStyles& mainStyles, const KoChar
 
 QColor ChartExport::labelFontColor() const
 {
+#if 0
     bool useTheme = !chart()->m_areaFormat && m_theme;
     if (useTheme) {
         // The following assumes that we just need to invert the in
@@ -214,7 +220,7 @@ QColor ChartExport::labelFontColor() const
                 break;
         }
     }
-
+#endif
     return QColor();
 }
 
@@ -227,58 +233,24 @@ QString ChartExport::genChartAreaStyle(KoGenStyle& style, KoGenStyles& styles,
 			  generateGradientStyle(mainStyles, chart()->m_fillGradient),
 			  KoGenStyle::GraphicType);
     } else {
-        style.addProperty("draw:fill", "solid", KoGenStyle::GraphicType);
-        bool useTheme = !chart()->m_areaFormat && m_theme;
-        if (useTheme) {
-            const MSOOXML::DrawingMLColorScheme& colorScheme = m_theme->colorScheme;
-            switch(chart()->m_style) {
-                case(33):
-                case(34):
-                case(35):
-                case(36):
-                case(37):
-                case(38):
-                case(39):
-                case(40): {
-                    style.addProperty("draw:fill-color", colorScheme.value("lt1")->value().name(),
-				      KoGenStyle::GraphicType);
-                } break;
-                case(41):
-                case(42):
-                case(43):
-                case(44):
-                case(45):
-                case(46):
-                case(47):
-                case(48): {
-                    style.addProperty("draw:fill-color", colorScheme.value("dk1")->value().name(),
-				      KoGenStyle::GraphicType);
-                } break;
+	style.addProperty("draw:fill", "solid", KoGenStyle::GraphicType);
 
-                default: {
-                    useTheme = false;
-                } break;
-            }
-        }
+	QColor color;
+	if (chart()->m_areaFormat
+	    && chart()->m_areaFormat->m_fill
+	    && chart()->m_areaFormat->m_foreground.isValid())
+	{
+	    color = chart()->m_areaFormat->m_foreground;
+	}
+	else
+	    color = QColor("#FFFFFF");
+	style.addProperty("draw:fill-color", color.name(), KoGenStyle::GraphicType);
 
-        if (!useTheme) {
-            QColor color;
-            if (chart()->m_areaFormat
-		&& chart()->m_areaFormat->m_fill
-		&& chart()->m_areaFormat->m_foreground.isValid())
-	    {
-                color = chart()->m_areaFormat->m_foreground;
-	    }
-            else
-                color = QColor("#FFFFFF");
-            style.addProperty("draw:fill-color", color.name(), KoGenStyle::GraphicType);
-
-            if (color.alpha() < 255)
-                style.addProperty("draw:opacity",
-				  QString("%1%").arg(chart()->m_areaFormat->m_foreground.alphaF()
-						     * 100.0),
-				  KoGenStyle::GraphicType);
-        }
+	if (color.alpha() < 255)
+	    style.addProperty("draw:opacity",
+			      QString("%1%").arg(chart()->m_areaFormat->m_foreground.alphaF()
+						 * 100.0),
+			      KoGenStyle::GraphicType);
     }
 
     return styles.insert(style, "ch");
@@ -308,58 +280,18 @@ QString ChartExport::genPlotAreaStyle(KoGenStyle& style, KoGenStyles& styles,
 			  KoGenStyle::GraphicType);
     } else {
         style.addProperty("draw:fill", "solid", KoGenStyle::GraphicType);
-        bool useTheme = !areaFormat && m_theme;
-        if (useTheme) {
-            const MSOOXML::DrawingMLColorScheme& colorScheme = m_theme->colorScheme;
-            switch(chart()->m_style) {
-                case(33):
-                case(34): {
-                    style.addProperty("draw:fill-color",
-				      tintColor(colorScheme.value("dk1")->value(), 0.2).name(),
-				      KoGenStyle::GraphicType);
-                } break;
-                case(35):
-                case(36):
-                case(37):
-                case(38):
-                case(39):
-                case(40): {
-                    QString prop = QString::fromLatin1("accent%1").arg(chart()->m_style - 34);
-                    style.addProperty("draw:fill-color",
-				      colorScheme.value("dk1")->value().name(),
-				      KoGenStyle::GraphicType);
-                } break;
-                case(41):
-                case(42):
-                case(43):
-                case(44):
-                case(45):
-                case(46):
-                case(47):
-                case(48): {
-                    style.addProperty("draw:fill-color",
-				      tintColor(colorScheme.value("dk1")->value(), 0.95).name(),
-				      KoGenStyle::GraphicType);
-                } break;
 
-                default: {
-                    useTheme = false;
-                } break;
-            }
-        }
-        if (!useTheme) {
-            QColor color;
-            if (areaFormat && areaFormat->m_foreground.isValid())
-                color = areaFormat->m_foreground;
-            else
-                color = QColor(paletteSet ? "#C0C0C0" : "#FFFFFF");
-            style.addProperty("draw:fill-color", color.name(), KoGenStyle::GraphicType);
+	QColor color;
+	if (areaFormat && areaFormat->m_foreground.isValid())
+	    color = areaFormat->m_foreground;
+	else
+	    color = QColor(paletteSet ? "#C0C0C0" : "#FFFFFF");
+	style.addProperty("draw:fill-color", color.name(), KoGenStyle::GraphicType);
 
-            if (color.alpha() < 255)
-                style.addProperty("draw:opacity",
-				  QString("%1%").arg(areaFormat->m_foreground.alphaF() * 100.0),
-				  KoGenStyle::GraphicType);
-        }
+	if (color.alpha() < 255)
+	    style.addProperty("draw:opacity",
+			      QString("%1%").arg(areaFormat->m_foreground.alphaF() * 100.0),
+			      KoGenStyle::GraphicType);
     }
 
     return styles.insert(style, "ch");
@@ -423,7 +355,7 @@ QString ChartExport::genPlotAreaStyle(KoGenStyles& styles, KoGenStyles& mainStyl
     return genPlotAreaStyle(style, styles, mainStyles);
 }
 
-QString replaceSheet(const QString &originalString, const QString &replacementSheet)
+QString ChartExport::replaceSheet(const QString &originalString, const QString &replacementSheet)
 {
     QStringList split = originalString.split(QLatin1Char('!'));
     split[0] = replacementSheet;
@@ -436,7 +368,7 @@ void ChartExport::set2003ColorPalette(QList < QColor > palette)
     paletteSet = true;
 }
 
-QString markerType(KoChart::MarkerType type, int currentSeriesNumber)
+QString ChartExport::markerType(KoChart::MarkerType type, int currentSeriesNumber)
 {
     QString markerName;
     switch(type) {
@@ -502,8 +434,8 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
     bodyWriter->startElement("office:body");
     bodyWriter->startElement("office:chart");
 
-    //<chart:chart svg:width="8cm" svg:height="7cm"
-    //             chart:class="chart:circle"
+    //<chart:chart chart:class="chart:circle"
+    //             svg:width="8cm" svg:height="7cm"
     //             chart:style-name="ch1">
     bodyWriter->startElement("chart:chart");
 
@@ -1056,12 +988,12 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
 }
 
 // Calculate fade factor as suggested in msoo xml reference page 4161
-inline qreal calculateFade(int index, int maxIndex)
+qreal ChartExport::calculateFade(int index, int maxIndex)
 {
     return -70.0 + 140.0 * ((double) index / ((double) maxIndex + 1.0));
 }
 
-inline QColor shadeColor(const QColor& col, qreal factor)
+QColor ChartExport::shadeColor(const QColor& col, qreal factor)
 {
     QColor result = col;
     qreal luminance = 0.0;
@@ -1076,96 +1008,12 @@ inline QColor shadeColor(const QColor& col, qreal factor)
 void ChartExport::addDataThemeToStyle(KoGenStyle& style, int dataNumber, int maxNumData,
 				      bool strokes)
 {
-    if (!m_theme) return;
-
-    const int patternOneIndexes[] = { 1, 9, 17, 25, 33 };
-    const int patternTwoIndexes[] = { 42, 34, 26, 18, 10, 2 };
-    const int patternFourIndexes[] = { 41 };
-    
-    const int fadepatternOne[] = { 3, 11, 19, 27, 35, 43 };
-    const int fadepatternTwo[] = { 4, 12, 20, 28, 36, 44 };
-    const int fadepatternThree[] = { 5, 13, 21, 29, 37, 45 };
-    const int fadepatternFour[] = { 6, 14, 22, 30, 38, 46 };
-    const int fadepatternFive[] = { 7, 15, 23, 31, 39, 47 };
-    const int fadepatternSix[] = { 8, 16, 24, 32, 40, 48 };
-    QVector< const int* > fadePatterns; fadePatterns << fadepatternOne << fadepatternTwo
-						     << fadepatternThree << fadepatternFour
-						     << fadepatternFive << fadepatternSix;
-
-    const MSOOXML::DrawingMLColorScheme& colorScheme = m_theme->colorScheme;
-    const int rounds = dataNumber / 6;
-    const int maxRounds = maxNumData / 6 + 1;
-    QColor seriesColor;
-    if (std::find(patternTwoIndexes, patternTwoIndexes + 6, chart()->m_style)
-	!= patternTwoIndexes + 6)
-    {
-        const QString themeColorString = QString::fromLatin1("accent%1").arg((dataNumber % 6) + 1);
-        const qreal tintFactor = 1.0 - (rounds / maxRounds * 2);
-        MSOOXML::DrawingMLColorSchemeItemBase *colorSchemeItem = colorScheme.value(themeColorString);
-        if (colorSchemeItem) {
-            seriesColor = colorSchemeItem->value();
-            if (rounds > 1)
-                seriesColor = tintColor(seriesColor, tintFactor);
-        }
-    }
-    else if (std::find(patternOneIndexes, patternOneIndexes + 5, chart()->m_style)
-	     != patternOneIndexes + 5)
-    {
-        const QString themeColorString = QString::fromLatin1("dk1");
-        MSOOXML::DrawingMLColorSchemeItemBase *colorSchemeItem = colorScheme.value(themeColorString);
-        if (colorSchemeItem) {
-            seriesColor = colorSchemeItem->value();
-            const qreal tintVals[] = { 0.885, 0.55, 0.78, 0.925, 0.7, 0.3 };
-            seriesColor = tintColor(seriesColor, tintVals[ dataNumber % 6 ]);
-            const qreal tintFactor = 1.0 - (rounds / maxRounds * 2);
-            if (rounds > 1)
-                seriesColor = tintColor(seriesColor, tintFactor);
-        }
-    }
-    else if (std::find(patternFourIndexes, patternFourIndexes + 1, chart()->m_style)
-	     != patternFourIndexes + 1)
-    {
-        const QString themeColorString = QString::fromLatin1("dk1");
-        MSOOXML::DrawingMLColorSchemeItemBase *colorSchemeItem = colorScheme.value(themeColorString);
-        if (colorSchemeItem) {
-            seriesColor = colorSchemeItem->value();
-            const qreal tintVals[] = { 0.885, 0.55, 0.78, 0.925, 0.7, 0.3 };
-            seriesColor = tintColor(seriesColor, tintVals[ dataNumber % 6 ]);
-            const qreal tintFactor = 1.0 - (rounds / maxRounds * 2);
-            if (rounds > 1)
-                seriesColor = tintColor(seriesColor, tintFactor);
-        }
-    }
-    else {
-        for (int i = 0; i < fadePatterns.count(); ++i) {
-            if (std::find(fadePatterns[ i ], fadePatterns[ i ] + 6, chart()->m_style)
-		!= fadePatterns[ i ] + 6)
-	    {
-                const QString themeColorString = QString::fromLatin1("accent%1").arg(i + 1);
-                MSOOXML::DrawingMLColorSchemeItemBase *colorSchemeItem = colorScheme.value(themeColorString);
-                if (colorSchemeItem) {
-                    seriesColor = colorSchemeItem->value();
-                    qreal fadeValue = calculateFade(dataNumber, maxNumData) / 100.0;
-                    if (fadeValue > 0.0)
-                        seriesColor = tintColor(seriesColor, 1 - fadeValue);
-                    else
-                        seriesColor = shadeColor(seriesColor, 1 + fadeValue);
-                }
-            }
-        }
-    }
-
-    if (seriesColor.isValid()) {
-        style.addProperty("draw:fill", "solid", KoGenStyle::GraphicType);
-        style.addProperty("draw:fill-color", seriesColor.name(), KoGenStyle::GraphicType);
-
-        if (strokes) {
-            style.addProperty("draw:stroke", "solid", KoGenStyle::GraphicType);
-            style.addProperty("svg:stroke-color", seriesColor.name(), KoGenStyle::GraphicType);
-        } else {
-            style.addProperty("draw:stroke", "none", KoGenStyle::GraphicType);
-        }
-    }
+    // FIXME: This is only relevant to themes, so remove this function after
+    //        we are done with saveContent().
+    Q_UNUSED(style);
+    Q_UNUSED(dataNumber);
+    Q_UNUSED(maxNumData);
+    Q_UNUSED(strokes);
 }
 
 

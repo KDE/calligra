@@ -26,7 +26,7 @@
 #include "XlsxXmlChartReader.h"
 
 #include "Charting.h"
-#include "ChartExport.h"
+#include "XlsxChartExport.h"
 #include "XlsxUtils.h"
 #include "NumberFormatParser.h"
 
@@ -369,7 +369,8 @@ QString columnName(uint column)
 
 
 
-XlsxXmlChartReaderContext::XlsxXmlChartReaderContext(KoStore* _storeout, ChartExport* _chartExport)
+XlsxXmlChartReaderContext::XlsxXmlChartReaderContext(KoStore* _storeout,
+						     XlsxChartExport* _chartExport)
     : MSOOXML::MsooXmlReaderContext()
     , m_storeout(_storeout)
     , m_chart(_chartExport->chart())

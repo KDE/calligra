@@ -22,6 +22,7 @@ set(docx2odt_PART_SRCS
     DocxXmlEndnoteReader.cpp
     DocxXmlSettingsReader.cpp
     DocxImport.cpp
+    ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx/XlsxChartExport.cpp
     ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx/ChartExport.cpp
     ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx/XlsxXmlChartReader.cpp
     #${CMAKE_SOURCE_DIR}/filters/sheets/xlsx/NumberFormatParser.cpp

@@ -10,6 +10,7 @@ include_directories(
     ${KOODF2_INCLUDES} # For charts
     ${CMAKE_CURRENT_SOURCE_DIRECTORY}
     ${CMAKE_SOURCE_DIR}/filters/libmso # For NumberFormatParser
+    ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx # For ChartExport  FIXME: Remove when moved to libodf2
 )
 
 ########### next target ###############
@@ -33,6 +34,7 @@ set(msooxml_LIB_SRCS
     VmlDrawingReader.cpp
     PredefinedShapeHelper.cpp
     ComplexShapeHandler.cpp
+    ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx/XlsxChartExport.cpp
     ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx/ChartExport.cpp
     # TODO: move back to kolibs
     KoOdfExporter.cpp

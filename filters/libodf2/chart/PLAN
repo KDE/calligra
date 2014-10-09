@@ -5,11 +5,10 @@ Later goal:   Simplify the move to the new KdCharts and perhaps other backends
 Part I: Move the charts to libodf2
 
 Preparations
- * Move to better places and do some cleanups				----
+ * Move to better places and do some cleanups				Done
     + NumberFormatParser --> libmso					done
     + Charting -> KoChart,  --> libodf2					done
-    + Move the chart reader to libmsooxml? (it's used in docx and pptx)	....
- * Change the namespace into KoChart					Done
+ * Change the namespace to KoChart					Done
 
 Refactoring
  * Separate the definition of DrawingMLTheme from the ThemesReader.	Done
@@ -17,7 +16,7 @@ Refactoring
     + Only include the Theme definitions where the reader is not needed done
  * Make ChartExport into a base class and make inherited classes in:	----
     + Move baseclass to libodf2    	       		 	 	....
-    + subclass in sheets/xlsx	   	  - using the DrawingMLTheme	....
+    + subclass in sheets/xlsx	   	  - using the DrawingMLTheme	done
     + subclass in sheets/excel/sidewinder - using the 2003palette	....
 
 
@@ -41,3 +40,6 @@ Milestone 2: Share common definitions and some data classes between all usages
 ----------------------------------------------------------------
 
 
+Other stuff to do, but not part of this plan:
+
+ * Move the chart reader to libmsooxml? (it's used in docx and pptx)

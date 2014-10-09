@@ -16,6 +16,7 @@ set(xlsx2ods_PART_SRCS
     XlsxXmlCommentsReader.cpp
     XlsxXmlTableReader.cpp
 
+    XlsxChartExport.cpp
     ChartExport.cpp
     FormulaParser.cpp
 )

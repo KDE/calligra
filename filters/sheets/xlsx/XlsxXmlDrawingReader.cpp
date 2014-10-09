@@ -28,7 +28,7 @@
 #include "XlsxXmlChartReader.h"
 #include "XlsxImport.h"
 #include "Charting.h"
-#include "ChartExport.h"
+#include "XlsxChartExport.h"
 
 #include <MsooXmlSchemas.h>
 #include <MsooXmlUtils.h>
