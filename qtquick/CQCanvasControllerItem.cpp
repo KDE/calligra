@@ -93,8 +93,7 @@ void CQCanvasControllerItem::paint(QPainter* painter, const QStyleOptionGraphics
 
     QPointF offset(d->flickable->property("contentX").toReal(), d->flickable->property("contentY").toReal());
 
-
-    painter->drawImage(QRectF(offset - d->placeholderTarget.topLeft(), d->placeholderTarget.size()) , d->placeholder, QRectF(QPointF(0, 0), d->placeholder.size()));
+    painter->drawImage(QRectF(offset - d->placeholderTarget.topLeft(), d->placeholderTarget.size()), d->placeholder, QRectF(QPointF(0, 0), d->placeholder.size()));
 }
 
 QDeclarativeItem* CQCanvasControllerItem::canvas() const
@@ -222,8 +221,8 @@ void CQCanvasControllerItem::beginZoomGesture()
         return;
     }
 
-    d->placeholderTarget.setLeft(0);
-    d->placeholderTarget.setTop(0);
+    d->placeholderTarget.setLeft(0.f);
+    d->placeholderTarget.setTop(0.f);
     d->placeholderTarget.setWidth(d->flickable->width());
     d->placeholderTarget.setHeight(d->flickable->height());
 
@@ -277,14 +276,14 @@ void CQCanvasControllerItem::zoomBy(qreal amount, const QPointF& center)
     if(d->zooming && newZoom >= KoZoomMode::minimumZoom() && newZoom <= KoZoomMode::maximumZoom() ) {
         qreal oldWidth = d->placeholderTarget.width();
         qreal oldHeight = d->placeholderTarget.height();
+        qreal oldZoom = d->zoom + d->zoomChange;
 
         d->zoomChange += amount;
 
-        d->placeholderTarget.setWidth(d->flickable->width() * (1.0 + d->zoomChange));
-        d->placeholderTarget.setHeight(d->flickable->height() * (1.0 + d->zoomChange));
-
-        d->placeholderTarget.moveLeft(d->placeholderTarget.x() + (center.x() * d->placeholderTarget.width() / oldWidth) - center.x());
-        d->placeholderTarget.moveTop(d->placeholderTarget.y() + (center.y() * d->placeholderTarget.height() / oldHeight) - center.y());
+        d->placeholderTarget.setWidth((d->placeholderTarget.width() / oldZoom) * newZoom);
+        d->placeholderTarget.setHeight((d->placeholderTarget.height() / oldZoom) * newZoom);
+        d->placeholderTarget.moveLeft((center.x() * newZoom / d->zoom) - center.x());
+        d->placeholderTarget.moveTop((center.y() * newZoom / d->zoom) - center.y());
 
         d->zoomCenter = center;
 
