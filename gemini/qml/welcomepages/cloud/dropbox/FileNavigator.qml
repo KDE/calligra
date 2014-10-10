@@ -11,6 +11,7 @@ Item {
     property bool have_checked: false;
     property string currentDir: "/";
 
+    property bool downloadWasRequested: false;
     property string fileMimetype;
     property string fileName;
 
@@ -115,6 +116,7 @@ Item {
                     controllerMIT.setCheck(index, true);
                     controllerMIT.downloadSelectedFiles();
                     var nameof = model.path.split("/");
+                    page.downloadWasRequested = true;
                     page.fileName = nameof[nameof.length - 1];
                     page.fileMimetype = model.mime_type;
                     pageStack.push(downloadStatus);
@@ -387,15 +389,20 @@ Item {
                 i_infobanner.text = "Files transfer completed"
                 i_infobanner.visible = true
             }
-            refreshDir()
-            var filePath = controllerMIT.dropboxFolder() + "/" + page.fileName;
-            var docClass = Settings.mimeTypeToDocumentClass(page.fileMimetype);
-            if(docClass !== DocumentListModel.UnknownType) {
-                openFile(filePath, controllerMIT.uploadMostRecentAction());
+
+            if(page.downloadWasRequested) {
+                page.downloadWasRequested = false;
+                var filePath = controllerMIT.dropboxFolder() + "/" + page.fileName;
+                var docClass = Settings.mimeTypeToDocumentClass(page.fileMimetype);
+                if(docClass !== DocumentListModel.UnknownType) {
+                    openFile(filePath, controllerMIT.uploadMostRecentAction());
+                }
+                else {
+                    console.log("Unknown file format " + docClass + " for file " + filePath + " with stated mimetype " + page.fileMimetype);
+                }
             }
-            else {
-                console.log("Unknown file format " + docClass + " for file " + filePath + " with stated mimetype " + page.fileMimetype);
-            }
+
+            refreshDir();
 //             switch(docClass) {
 //                 case DocumentListModel.TextDocument:
 //                     pageStack.push(pages.textDocument, { title: page.fileName, path: filePath, mimeType: page.fileMimetype });
