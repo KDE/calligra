@@ -507,16 +507,24 @@ void MainWindow::setAlternativeSaveAction(QAction* altAction)
     // if mainwindow exists, and alt action exists, remove alt action from current mainwindow
     if(d->desktopView && d->alternativeSaveAction) {
         d->desktopView->actionCollection()->removeAction(d->alternativeSaveAction);
+        d->desktopView->actionCollection()->action("file_save")->disconnect(d->alternativeSaveAction);
     }
     d->alternativeSaveAction = altAction;
     // if mainwindow exists, set alt action into current mainwindow
     if(d->desktopView && d->alternativeSaveAction) {
         QAction* cloudSave = d->desktopView->actionCollection()->addAction("cloud_save", d->alternativeSaveAction);
+        // Heuristics based silliness here - save action is not checkable, so the triggered checked bool is always false, so to enable
+        // the alternative action, we un-disable it
+        connect(d->desktopView->actionCollection()->action("file_save"), SIGNAL(triggered(bool)), d->alternativeSaveAction, SLOT(setDisabled(bool)));
         KToolBar* tb = d->desktopView->toolBar("mainToolBar");
         if(tb) {
             tb->removeAction(cloudSave);
             tb->addAction(cloudSave);
         }
+    }
+    if(d->alternativeSaveAction) {
+        // disabled for a start - this is called on load completion, so let's just assume we're not ready to reupload yet
+        d->alternativeSaveAction->setEnabled(false);
     }
 }
 
