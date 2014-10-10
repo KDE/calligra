@@ -42,4 +42,5 @@ Milestone 2: Share common definitions and some data classes between all usages
 
 Other stuff to do, but not part of this plan:
 
- * Move the chart reader to libmsooxml? (it's used in docx and pptx)
+ * Move XlsxChartReader to libmsooxml. (it's used in docx and pptx)
+ * Move XlsxChartExport to libmsooxml. (it's used in docx and pptx)

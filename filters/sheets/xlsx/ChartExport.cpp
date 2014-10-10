@@ -704,7 +704,7 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
     
     Q_FOREACH (KoChart::Series* series, chart()->m_series) {
         lines = true;
-        if (chart()->m_impl->name() == "scatter" && !paletteSet) {            
+        if (chart()->m_impl->name() == "scatter" && !paletteSet) {
             KoChart::ScatterImpl* impl = static_cast< KoChart::ScatterImpl* >(chart()->m_impl);
             lines = (impl->style == KoChart::ScatterImpl::Line
 		     || impl->style == KoChart::ScatterImpl::LineMarker);
@@ -890,7 +890,10 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
                     gs.addProperty("draw:fill", "solid", KoGenStyle::GraphicType);
                     gs.addProperty("draw:fill-color", fillColor.name(), KoGenStyle::GraphicType);
                 }
-                else if (series->m_markerType == KoChart::NoMarker && m_chart->m_markerType == KoChart::NoMarker && !marker) {
+                else if (series->m_markerType == KoChart::NoMarker
+			 && m_chart->m_markerType == KoChart::NoMarker
+			 && !marker)
+		{
                     if (paletteSet) {
                         gs.addProperty("draw:fill", "solid", KoGenStyle::GraphicType);
                         gs.addProperty("draw:fill-color", m_palette.at(16 + j).name(),
