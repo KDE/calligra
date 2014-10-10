@@ -68,6 +68,8 @@ public:
 
     bool saveIndex(KoXmlWriter* xmlWriter);
     bool saveContent(KoStore* store, KoXmlWriter* manifestWriter);
+    bool saveSeries(KoGenStyles &styles, KoGenStyles &mainStyles, KoXmlWriter* bodyWriter,
+		    int maxExplode);
 
     // helper functions
     qreal calculateFade(int index, int maxIndex);

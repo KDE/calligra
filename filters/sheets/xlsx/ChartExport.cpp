@@ -415,6 +415,9 @@ QString ChartExport::markerType(KoChart::MarkerType type, int currentSeriesNumbe
     return markerName;
 }
 
+// ----------------------------------------------------------------
+//                 The actual saving code
+
 bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
 {
     if (!chart() || !chart()->m_impl || m_href.isEmpty())
@@ -698,10 +701,78 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
         }
     }
 
+    if (!saveSeries(styles, mainStyles, bodyWriter, maxExplode))
+	return false;
+
+    bodyWriter->startElement("chart:wall");
+    bodyWriter->endElement(); // chart:wall
+
+    bodyWriter->startElement("chart:floor");
+    bodyWriter->endElement(); // chart:floor
+
+    bodyWriter->endElement(); // chart:plot-area
+
+    writeInternalTable(bodyWriter);
+
+    bodyWriter->endElement(); // chart:chart
+    bodyWriter->endElement(); // office:chart
+    bodyWriter->endElement(); // office:body
+
+#ifdef CONTENTXML_DEBUG
+    qDebug() << bodyWriter->toString();
+#endif
+
+    styles.saveOdfStyles(KoGenStyles::DocumentAutomaticStyles, contentWriter);
+    s.closeContentWriter();
+
+    if (store->open("styles.xml")) {
+        KoStoreDevice dev(store);
+        KoXmlWriter* stylesWriter = new KoXmlWriter(&dev);
+
+        stylesWriter->startDocument("office:document-styles");
+        stylesWriter->startElement("office:document-styles");
+        stylesWriter->addAttribute("xmlns:office", "urn:oasis:names:tc:opendocument:xmlns:office:1.0");
+        stylesWriter->addAttribute("xmlns:style", "urn:oasis:names:tc:opendocument:xmlns:style:1.0");
+        stylesWriter->addAttribute("xmlns:text", "urn:oasis:names:tc:opendocument:xmlns:text:1.0");
+        stylesWriter->addAttribute("xmlns:table", "urn:oasis:names:tc:opendocument:xmlns:table:1.0");
+        stylesWriter->addAttribute("xmlns:draw", "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0");
+        stylesWriter->addAttribute("xmlns:fo", "urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0");
+        stylesWriter->addAttribute("xmlns:svg", "urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0");
+        stylesWriter->addAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
+        stylesWriter->addAttribute("xmlns:chart", "urn:oasis:names:tc:opendocument:xmlns:chart:1.0");
+        stylesWriter->addAttribute("xmlns:dc", "http://purl.org/dc/elements/1.1/");
+        stylesWriter->addAttribute("xmlns:meta", "urn:oasis:names:tc:opendocument:xmlns:meta:1.0");
+        stylesWriter->addAttribute("xmlns:number", "urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0");
+        stylesWriter->addAttribute("xmlns:dr3d", "urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0");
+        stylesWriter->addAttribute("xmlns:math", "http://www.w3.org/1998/Math/MathML");
+        stylesWriter->addAttribute("xmlns:of", "urn:oasis:names:tc:opendocument:xmlns:of:1.2");
+        stylesWriter->addAttribute("office:version", "1.2");
+        mainStyles.saveOdfStyles(KoGenStyles::MasterStyles, stylesWriter);
+        mainStyles.saveOdfStyles(KoGenStyles::DocumentStyles, stylesWriter); // office:style
+        mainStyles.saveOdfStyles(KoGenStyles::DocumentAutomaticStyles, stylesWriter); // office:automatic-styles
+        stylesWriter->endElement();  // office:document-styles
+        stylesWriter->endDocument();
+
+        delete stylesWriter;
+        store->close();
+    }
+
+    manifestWriter->addManifestEntry(m_href + "/", "application/vnd.oasis.opendocument.chart");
+    manifestWriter->addManifestEntry(QString("%1/styles.xml").arg(m_href), "text/xml");
+    manifestWriter->addManifestEntry(QString("%1/content.xml").arg(m_href), "text/xml");
+
+    store->popDirectory();
+    return true;
+}
+
+// FIXME: We should probably create a ChartExportContext out of these
+//        parameters when we add more similar saving functions later.
+bool ChartExport::saveSeries(KoGenStyles &styles, KoGenStyles &mainStyles,
+			     KoXmlWriter* bodyWriter, int maxExplode)
+{
     int curSerNum = 0;
     bool lines = true;
     bool marker = false;
-    
     Q_FOREACH (KoChart::Series* series, chart()->m_series) {
         lines = true;
         if (chart()->m_impl->name() == "scatter" && !paletteSet) {
@@ -929,66 +1000,13 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
         bodyWriter->endElement(); // chart:series
     }
 
-    bodyWriter->startElement("chart:wall");
-    bodyWriter->endElement(); // chart:wall
-
-    bodyWriter->startElement("chart:floor");
-    bodyWriter->endElement(); // chart:floor
-
-    bodyWriter->endElement(); // chart:plot-area
-
-    writeInternalTable(bodyWriter);
-
-    bodyWriter->endElement(); // chart:chart
-    bodyWriter->endElement(); // office:chart
-    bodyWriter->endElement(); // office:body
-
-#ifdef CONTENTXML_DEBUG
-    qDebug() << bodyWriter->toString();
-#endif
-
-    styles.saveOdfStyles(KoGenStyles::DocumentAutomaticStyles, contentWriter);
-    s.closeContentWriter();
-
-    if (store->open("styles.xml")) {
-        KoStoreDevice dev(store);
-        KoXmlWriter* stylesWriter = new KoXmlWriter(&dev);
-
-        stylesWriter->startDocument("office:document-styles");
-        stylesWriter->startElement("office:document-styles");
-        stylesWriter->addAttribute("xmlns:office", "urn:oasis:names:tc:opendocument:xmlns:office:1.0");
-        stylesWriter->addAttribute("xmlns:style", "urn:oasis:names:tc:opendocument:xmlns:style:1.0");
-        stylesWriter->addAttribute("xmlns:text", "urn:oasis:names:tc:opendocument:xmlns:text:1.0");
-        stylesWriter->addAttribute("xmlns:table", "urn:oasis:names:tc:opendocument:xmlns:table:1.0");
-        stylesWriter->addAttribute("xmlns:draw", "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0");
-        stylesWriter->addAttribute("xmlns:fo", "urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0");
-        stylesWriter->addAttribute("xmlns:svg", "urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0");
-        stylesWriter->addAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
-        stylesWriter->addAttribute("xmlns:chart", "urn:oasis:names:tc:opendocument:xmlns:chart:1.0");
-        stylesWriter->addAttribute("xmlns:dc", "http://purl.org/dc/elements/1.1/");
-        stylesWriter->addAttribute("xmlns:meta", "urn:oasis:names:tc:opendocument:xmlns:meta:1.0");
-        stylesWriter->addAttribute("xmlns:number", "urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0");
-        stylesWriter->addAttribute("xmlns:dr3d", "urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0");
-        stylesWriter->addAttribute("xmlns:math", "http://www.w3.org/1998/Math/MathML");
-        stylesWriter->addAttribute("xmlns:of", "urn:oasis:names:tc:opendocument:xmlns:of:1.2");
-        stylesWriter->addAttribute("office:version", "1.2");
-        mainStyles.saveOdfStyles(KoGenStyles::MasterStyles, stylesWriter);
-        mainStyles.saveOdfStyles(KoGenStyles::DocumentStyles, stylesWriter); // office:style
-        mainStyles.saveOdfStyles(KoGenStyles::DocumentAutomaticStyles, stylesWriter); // office:automatic-styles
-        stylesWriter->endElement();  // office:document-styles
-        stylesWriter->endDocument();
-
-        delete stylesWriter;
-        store->close();
-    }
-
-    manifestWriter->addManifestEntry(m_href + "/", "application/vnd.oasis.opendocument.chart");
-    manifestWriter->addManifestEntry(QString("%1/styles.xml").arg(m_href), "text/xml");
-    manifestWriter->addManifestEntry(QString("%1/content.xml").arg(m_href), "text/xml");
-
-    store->popDirectory();
     return true;
 }
+
+
+// ----------------------------------------------------------------
+//                   Some helper functions
+
 
 // Calculate fade factor as suggested in msoo xml reference page 4161
 qreal ChartExport::calculateFade(int index, int maxIndex)
