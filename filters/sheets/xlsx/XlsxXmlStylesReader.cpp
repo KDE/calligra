@@ -454,7 +454,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::readInternal()
 //! @todo find out whether the namespace returned by namespaceUri()
 //!       is exactly the same ref as the element of namespaceDeclarations()
     if (!namespaces.contains(QXmlStreamNamespaceDeclaration(QString(), MSOOXML::Schemas::spreadsheetml))) {
-        raiseError(i18n("Namespace \"%1\" not found", MSOOXML::Schemas::spreadsheetml));
+        raiseError(i18n("Namespace \"%1\" not found", QLatin1String(MSOOXML::Schemas::spreadsheetml)));
         return KoFilter::WrongFormat;
     }
 //! @todo expect other namespaces too...

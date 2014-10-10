@@ -31,19 +31,19 @@
 #include <kzip.h>
 #include <QtXml>
 
-const char* const ooNS::office = "http://openoffice.org/2000/office";
-const char* const ooNS::style = "http://openoffice.org/2000/style";
-const char* const ooNS::text = "http://openoffice.org/2000/text";
-const char* const ooNS::table = "http://openoffice.org/2000/table";
-const char* const ooNS::draw = "http://openoffice.org/2000/drawing";
-const char* const ooNS::presentation = "http://openoffice.org/2000/presentation";
-const char* const ooNS::fo = "http://www.w3.org/1999/XSL/Format";
-const char* const ooNS::xlink = "http://www.w3.org/1999/xlink";
-const char* const ooNS::number = "http://openoffice.org/2000/datastyle";
-const char* const ooNS::svg = "http://www.w3.org/2000/svg";
-const char* const ooNS::dc = "http://purl.org/dc/elements/1.1/";
-const char* const ooNS::meta = "http://openoffice.org/2000/meta";
-const char* const ooNS::config = "http://openoffice.org/2001/config";
+const char ooNS::office[] = "http://openoffice.org/2000/office";
+const char ooNS::style[] = "http://openoffice.org/2000/style";
+const char ooNS::text[] = "http://openoffice.org/2000/text";
+const char ooNS::table[] = "http://openoffice.org/2000/table";
+const char ooNS::draw[] = "http://openoffice.org/2000/drawing";
+const char ooNS::presentation[] = "http://openoffice.org/2000/presentation";
+const char ooNS::fo[] = "http://www.w3.org/1999/XSL/Format";
+const char ooNS::xlink[] = "http://www.w3.org/1999/xlink";
+const char ooNS::number[] = "http://openoffice.org/2000/datastyle";
+const char ooNS::svg[] = "http://www.w3.org/2000/svg";
+const char ooNS::dc[] = "http://purl.org/dc/elements/1.1/";
+const char ooNS::meta[] = "http://openoffice.org/2000/meta";
+const char ooNS::config[] = "http://openoffice.org/2001/config";
 
 QString OoUtils::expandWhitespace(const KoXmlElement& tag)
 {
