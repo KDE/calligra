@@ -554,6 +554,9 @@ QAction* Controller::uploadMostRecentAction()
 
 void Controller::uploadMostRecent()
 {
+    // We don't want to do the uploading too often, so we disable the action and expect the
+    // application using the action to enable it again when appropriate
+    m_uploadMostRecentAction->setEnabled(false);
     FileTransferItem* fti = qobject_cast<FileTransferItem*>(filestransfer_model->getRow(m_current_filetransferitem - 1));
     if(fti) {
         // upload, needs FULL local path, operates on current dir remotely
