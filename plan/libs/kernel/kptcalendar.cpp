@@ -359,10 +359,7 @@ Duration CalendarDay::duration() const {
 
 void CalendarDay::removeInterval( TimeInterval *ti )
 {
-    int i = m_timeIntervals.indexOf( ti );
-    if ( i != -1 ) {
-        m_timeIntervals.removeAt( i );
-    }
+    m_timeIntervals.removeOne(ti);
 }
 
 int CalendarDay::numIntervals() const 
