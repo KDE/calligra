@@ -40,7 +40,7 @@ CSVExportDialog::CSVExportDialog(QWidget * parent)
 {
     setButtons(KDialog::Ok | KDialog::Cancel);
     setDefaultButton(KDialog::Ok);
-    qApp->restoreOverrideCursor();
+    QApplication::restoreOverrideCursor();
 
     QStringList encodings;
     encodings << i18nc("Descriptive encoding name", "Recommended ( %1 )" , "UTF-8");
@@ -82,7 +82,7 @@ CSVExportDialog::CSVExportDialog(QWidget * parent)
 CSVExportDialog::~CSVExportDialog()
 {
     saveSettings();
-    qApp->setOverrideCursor(Qt::WaitCursor);
+    QApplication::setOverrideCursor(Qt::WaitCursor);
     delete m_delimiterValidator;
 }
 
