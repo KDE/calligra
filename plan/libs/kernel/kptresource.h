@@ -32,14 +32,11 @@
 
 #include <KoXmlReader.h>
 
-#include <QDomDocument>
 #include <QHash>
 #include <QString>
 #include <QList>
 
 #include <kdebug.h>
-
-class QTime;
 
 
 /// The main namespace.
@@ -121,13 +118,6 @@ public:
     
     Risk* getRisk( int );
 
-    /** Get the "num" resources which is available in the time frame
-     * defined by "start" and "duration".
-     * @param start todo 
-     * @param duration todo
-     * @param num todo
-     */
-    QList<Resource> availableResources( const DateTime start, const Duration duration, int num );
     /** Manage the dependent resources.  This is a list of the resource
      * groups that must have available resources for this resource to
      * perform the work

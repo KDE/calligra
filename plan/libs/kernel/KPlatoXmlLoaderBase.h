@@ -24,7 +24,6 @@
 #include "kpttask.h"
 
 #include <QObject>
-#include <QString>
 
 #define KPLATO_MAX_FILE_SYNTAX_VERSION "0.6.5"
 #define KPLATOWORK_MAX_FILE_SYNTAX_VERSION "0.6.5"

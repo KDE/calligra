@@ -32,7 +32,6 @@
 #include <QThread>
 #include <QTimer>
 
-class QDomDocument;
 class KLocale;
 
 namespace KPlato

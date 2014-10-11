@@ -36,11 +36,6 @@
 
 #include <KoXmlReader.h>
 
-class QDomElement;
-class QTime;
-class QDate;
-class QString;
-
 /// The main namespace.
 namespace KPlato
 {
