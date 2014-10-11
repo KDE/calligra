@@ -161,13 +161,28 @@ void CalendarDay::save(QDomElement &element) const {
         me.setAttribute("length", i->second);
         me.setAttribute("start", i->first.toString());
     }
-} 
-
-void CalendarDay::addInterval(TimeInterval *interval) {
-    m_timeIntervals.append(interval);
 }
 
-    
+void CalendarDay::addInterval(TimeInterval *interval) {
+    if (!interval) {
+        return;
+    }
+
+    // TODO: check for overlapping intervals and handle them for what makes sense
+    QList <TimeInterval*>::Iterator it;
+    const QList <TimeInterval*>::Iterator end = m_timeIntervals.end();
+    QList <TimeInterval*>::Iterator position = end;
+    for (it = m_timeIntervals.begin(); it != end; ++it) {
+        // first found that is later?
+        if ((*it)->startTime() > interval->startTime()) {
+            // insert before
+            position = it;
+            break;
+        }
+    }
+    m_timeIntervals.insert(position, interval);
+}
+
 bool CalendarDay::operator==(const CalendarDay *day) const {
     return operator==(*day);
 }
