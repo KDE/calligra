@@ -178,6 +178,9 @@ public:
 
     QList<TimeInterval*> timeIntervals() const { return m_timeIntervals; }
     void addInterval( const QTime &t1, int length ) { addInterval( new TimeInterval( t1, length ) ); }
+    /**
+     * Caller needs to ensure that intervals are not overlapping.
+     */
     void addInterval(TimeInterval *interval);
     void addInterval(TimeInterval interval) { addInterval(new TimeInterval(interval)); }
     void clearIntervals() { m_timeIntervals.clear(); }
