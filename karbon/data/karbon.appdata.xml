@@ -59,6 +59,7 @@
     <p>Features:</p>
     <p xml:lang="ca">Característiques:</p>
     <p xml:lang="cs">Vlastnosti:</p>
+    <p xml:lang="de">Funktionen:</p>
     <p xml:lang="en-GB">Features:</p>
     <p xml:lang="es">Características:</p>
     <p xml:lang="ia">Characteristicas</p>
@@ -112,19 +113,6 @@
       <li>
         Customizable user interface with freely placeable toolbars and dockers
       </li>
-      <li xml:lang="ca">Interfície d'usuari que es pot personalitzar que permet situar lliurement barres d'eines i acobladors</li>
-      <li xml:lang="en-GB">Customisable user interface with freely placeable toolbars and dockers2</li>
-      <li xml:lang="es">Interfaz de usuario personalizable con barras de herramientas y acoplables que se pueden ubicar en cualquier lugar.</li>
-      <li xml:lang="ia">Personalisa le interfacie de usator con barra de instrumentos e stivatores (dockers) liberemente positionabile</li>
-      <li xml:lang="it">Interfaccia utente personalizzabile con barre degli strumenti posizionabili liberamente e aree di aggancio</li>
-      <li xml:lang="nl">Aan te passen gebruikersinterface met vrij te plaatsen werkbalken en dockers2</li>
-      <li xml:lang="pl">Układ sterowania z dowolnie umieszczanymi paskami narzędzi i dokowaniami</li>
-      <li xml:lang="pt">Interface de utilizador configurável com barras e áreas acopláveis livres</li>
-      <li xml:lang="pt-BR">Interface de usuário configurável com barras e áreas acopláveis livres</li>
-      <li xml:lang="sk">Nastaviteľné používateľské rozhranie s voľne umiestniteľnými panelmi nástrojov a dockermi</li>
-      <li xml:lang="sv">Anpassningsbart användargränssnitt med verktygsrader och paneler som kan placeras fritt</li>
-      <li xml:lang="uk">Придатний до налаштовування інтерфейс користувача з довільним розташуванням панелей інструментів та бічних панелей.</li>
-      <li xml:lang="x-test">xxCustomizable user interface with freely placeable toolbars and dockers2xx</li>
       <li>
         Layer docker for easy handling of complex documents including preview thumbnails, support for grouping shapes via
         drag and drop, controlling visibility of shapes or locking
