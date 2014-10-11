@@ -66,10 +66,11 @@ public:
     qreal m_x, m_y, m_width, m_height; //in pt
     qreal m_end_x, m_end_y; //in pt
 
-    bool saveIndex(KoXmlWriter* xmlWriter);
-    bool saveContent(KoStore* store, KoXmlWriter* manifestWriter);
-    bool saveSeries(KoGenStyles &styles, KoGenStyles &mainStyles, KoXmlWriter* bodyWriter,
-		    int maxExplode);
+    // Saving of content
+            bool saveIndex(KoXmlWriter* xmlWriter);
+    virtual bool saveContent(KoStore* store, KoXmlWriter* manifestWriter);
+    virtual bool saveSeries(KoGenStyles &styles, KoGenStyles &mainStyles, KoXmlWriter* bodyWriter,
+			    int maxExplode);
 
     // helper functions
     qreal calculateFade(int index, int maxIndex);
@@ -88,18 +89,23 @@ protected:
     QColor tintColor(const QColor & color, qreal tintfactor);
     QString replaceSheet(const QString &originalString, const QString &replacementSheet);
     bool sheetReplacement;
+
+    // Style generation
             QString genChartAreaStyle(KoGenStyles& styles, KoGenStyles& mainStyles);
     virtual QString genChartAreaStyle(KoGenStyle& style, KoGenStyles& styles,
 				      KoGenStyles& mainStyles);
-    QString genPlotAreaStyle(KoGenStyles& styles, KoGenStyles& mainStyles);
-    QString genPlotAreaStyle(KoGenStyle& style, KoGenStyles& styles, KoGenStyles& mainStyles);
-    void addShapePropertyStyle(/*const*/ KoChart::Series* series,
-			       KoGenStyle& style, KoGenStyles& mainStyles);
-    void addDataThemeToStyle(KoGenStyle& style,
-			     int dataNumber, int maxNumData = 1, bool strokes = true);
+            QString genPlotAreaStyle(KoGenStyles& styles, KoGenStyles& mainStyles);
+    virtual QString genPlotAreaStyle(KoGenStyle& style, KoGenStyles& styles,
+				     KoGenStyles& mainStyles);
+            void addShapePropertyStyle(/*const*/ KoChart::Series* series,
+				       KoGenStyle& style, KoGenStyles& mainStyles);
+    virtual void addDataThemeToStyle(KoGenStyle& style,
+				     int dataNumber, int maxNumData = 1, bool strokes = true);
 
     QString generateGradientStyle(KoGenStyles& mainStyles, const KoChart::Gradient* grad);
-    QColor calculateColorFromGradientStop(const KoChart::Gradient::GradientStop& grad);
+
+    // Color functions
+    virtual QColor calculateColorFromGradientStop(const KoChart::Gradient::GradientStop& grad);
     virtual QColor labelFontColor() const;
     void writeInternalTable(KoXmlWriter* bodyWriter);
 

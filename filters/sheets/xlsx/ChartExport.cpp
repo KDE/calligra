@@ -89,50 +89,6 @@ QString ChartExport::normalizeCellRange(QString range)
     return range;
 }
 
-bool ChartExport::saveIndex(KoXmlWriter* xmlWriter)
-{
-    if (!chart() || m_href.isEmpty())
-        return false;
-
-    // This because for presesentations the frame is done in read_graphicFrame
-    if (!m_drawLayer) {
-        xmlWriter->startElement("draw:frame");
-        // used in opendocumentpresentation for layers
-        //if (m_drawLayer)
-        //    xmlWriter->addAttribute("draw:layer", "layout");
-
-        // used in opendocumentspreadsheet to reference cells
-        if (!m_endCellAddress.isEmpty()) {
-            xmlWriter->addAttribute("table:end-cell-address", m_endCellAddress);
-            xmlWriter->addAttributePt("table:end-x", m_end_x);
-            xmlWriter->addAttributePt("table:end-y", m_end_y);
-        }
-
-        xmlWriter->addAttributePt("svg:x", m_x);
-        xmlWriter->addAttributePt("svg:y", m_y);
-        if (m_width > 0)
-            xmlWriter->addAttributePt("svg:width", m_width);
-        if (m_height > 0)
-            xmlWriter->addAttributePt("svg:height", m_height);
-    }
-    //xmlWriter->addAttribute("draw:z-index", "0");
-    xmlWriter->startElement("draw:object");
-    //TODO don't show on e.g. presenter
-    if (!m_notifyOnUpdateOfRanges.isEmpty())
-        xmlWriter->addAttribute("draw:notify-on-update-of-ranges", m_notifyOnUpdateOfRanges);
-
-    xmlWriter->addAttribute("xlink:href", "./" + m_href);
-    xmlWriter->addAttribute("xlink:type", "simple");
-    xmlWriter->addAttribute("xlink:show", "embed");
-    xmlWriter->addAttribute("xlink:actuate", "onLoad");
-
-    xmlWriter->endElement(); // draw:object
-    if (!m_drawLayer) {
-        xmlWriter->endElement(); // draw:frame
-    }
-    return true;
-}
-
 QColor ChartExport::tintColor(const QColor & color, qreal tintfactor)
 {
     QColor retColor;
@@ -155,10 +111,6 @@ QColor ChartExport::calculateColorFromGradientStop(const KoChart::Gradient::Grad
 {
     QColor color = grad.knownColorValue;
 
-#if 0
-    if (!grad.referenceColor.isEmpty())
-        color = m_theme->colorScheme.value(grad.referenceColor)->value();
-#endif
     const int tintedColor = 255 * grad.tintVal / 100.0;
     const qreal  nonTindedPart = 1.0 - grad.tintVal / 100.0;
     color.setRed(tintedColor + nonTindedPart * color.red());
@@ -185,42 +137,6 @@ QString ChartExport::generateGradientStyle(KoGenStyles& mainStyles, const KoChar
 
 QColor ChartExport::labelFontColor() const
 {
-#if 0
-    bool useTheme = !chart()->m_areaFormat && m_theme;
-    if (useTheme) {
-        // The following assumes that we just need to invert the in
-        // genChartAreaStyle used font-color for the axis. It's not clear yet
-        // (means any documentation in the specs is missing) if that is really
-        // the correct thing to do.
-        const MSOOXML::DrawingMLColorScheme& colorScheme = m_theme->colorScheme;
-        switch(chart()->m_style) {
-            case(33):
-            case(34):
-            case(35):
-            case(36):
-            case(37):
-            case(38):
-            case(39):
-            case(40): {
-                return colorScheme.value("dk1")->value();
-            } break;
-
-            case(41):
-            case(42):
-            case(43):
-            case(44):
-            case(45):
-            case(46):
-            case(47):
-            case(48): {
-                return colorScheme.value("lt1")->value();
-            } break;
-
-            default:
-                break;
-        }
-    }
-#endif
     return QColor();
 }
 
@@ -415,8 +331,54 @@ QString ChartExport::markerType(KoChart::MarkerType type, int currentSeriesNumbe
     return markerName;
 }
 
+
 // ----------------------------------------------------------------
 //                 The actual saving code
+
+
+bool ChartExport::saveIndex(KoXmlWriter* xmlWriter)
+{
+    if (!chart() || m_href.isEmpty())
+        return false;
+
+    // This because for presesentations the frame is done in read_graphicFrame
+    if (!m_drawLayer) {
+        xmlWriter->startElement("draw:frame");
+        // used in opendocumentpresentation for layers
+        //if (m_drawLayer)
+        //    xmlWriter->addAttribute("draw:layer", "layout");
+
+        // used in opendocumentspreadsheet to reference cells
+        if (!m_endCellAddress.isEmpty()) {
+            xmlWriter->addAttribute("table:end-cell-address", m_endCellAddress);
+            xmlWriter->addAttributePt("table:end-x", m_end_x);
+            xmlWriter->addAttributePt("table:end-y", m_end_y);
+        }
+
+        xmlWriter->addAttributePt("svg:x", m_x);
+        xmlWriter->addAttributePt("svg:y", m_y);
+        if (m_width > 0)
+            xmlWriter->addAttributePt("svg:width", m_width);
+        if (m_height > 0)
+            xmlWriter->addAttributePt("svg:height", m_height);
+    }
+    //xmlWriter->addAttribute("draw:z-index", "0");
+    xmlWriter->startElement("draw:object");
+    //TODO don't show on e.g. presenter
+    if (!m_notifyOnUpdateOfRanges.isEmpty())
+        xmlWriter->addAttribute("draw:notify-on-update-of-ranges", m_notifyOnUpdateOfRanges);
+
+    xmlWriter->addAttribute("xlink:href", "./" + m_href);
+    xmlWriter->addAttribute("xlink:type", "simple");
+    xmlWriter->addAttribute("xlink:show", "embed");
+    xmlWriter->addAttribute("xlink:actuate", "onLoad");
+
+    xmlWriter->endElement(); // draw:object
+    if (!m_drawLayer) {
+        xmlWriter->endElement(); // draw:frame
+    }
+    return true;
+}
 
 bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
 {
@@ -701,6 +663,7 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
         }
     }
 
+    // Save the series.
     if (!saveSeries(styles, mainStyles, bodyWriter, maxExplode))
 	return false;
 
