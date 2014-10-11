@@ -90,7 +90,7 @@ public:
     bool load( ResourceGroupRequest *gr, const KoXmlElement &element, XMLLoaderObject &status );
     bool load( ResourceRequest *rr, const KoXmlElement &element, XMLLoaderObject &status );
     bool load( WorkPackage& wp, const KoXmlElement& element, XMLLoaderObject& status );
-    bool loadWpLog( WorkPackage* wp, KoXmlElement &element, XMLLoaderObject status);
+    bool loadWpLog( WorkPackage* wp, KoXmlElement &element, XMLLoaderObject &status);
     bool load( Completion& completion, const KoXmlElement& element, XMLLoaderObject& status );
     bool load( Completion::UsedEffort *ue, const KoXmlElement& element, XMLLoaderObject& status );
     bool load( Appointment *appointment, const KoXmlElement& element, XMLLoaderObject& status, Schedule &sch );

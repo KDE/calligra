@@ -102,7 +102,7 @@ Duration AppointmentInterval::effort() const
     return ( d->end - d->start ) * d->load / 100;
 }
 
-Duration AppointmentInterval::effort(const DateTime &start, const DateTime end) const {
+Duration AppointmentInterval::effort(const DateTime &start, const DateTime &end) const {
     if (start >= d->end || end <= d->start) {
         return Duration::zeroDuration;
     }
@@ -571,7 +571,7 @@ Appointment::Appointment()
     m_repeatCount=0;
 }
 
-Appointment::Appointment(Schedule *resource, Schedule *node, DateTime start, DateTime end, double load)
+Appointment::Appointment(Schedule *resource, Schedule *node, const DateTime &start, const DateTime &end, double load)
     : m_extraRepeats(),
       m_skipRepeats() {
     //kDebug(planDbg())<<"("<<this<<")";
@@ -584,7 +584,7 @@ Appointment::Appointment(Schedule *resource, Schedule *node, DateTime start, Dat
     addInterval(start, end, load);
 }
 
-Appointment::Appointment(Schedule *resource, Schedule *node, DateTime start, Duration duration, double load)
+Appointment::Appointment(Schedule *resource, Schedule *node, const DateTime &start, Duration duration, double load)
     : m_extraRepeats(),
       m_skipRepeats() {
     //kDebug(planDbg())<<"("<<this<<")";

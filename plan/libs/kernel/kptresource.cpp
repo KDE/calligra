@@ -1186,15 +1186,15 @@ Duration Resource::effort( Schedule *sch, const DateTime &start, const Duration 
     return e;
 }
 
-DateTime Resource::availableAfter(const DateTime &time, const DateTime limit ) const {
+DateTime Resource::availableAfter(const DateTime &time, const DateTime &limit ) const {
     return availableAfter( time, limit, m_currentSchedule );
 }
 
-DateTime Resource::availableBefore(const DateTime &time, const DateTime limit) const {
+DateTime Resource::availableBefore(const DateTime &time, const DateTime &limit) const {
     return availableBefore( time, limit, m_currentSchedule );
 }
 
-DateTime Resource::availableAfter(const DateTime &time, const DateTime limit, Schedule *sch) const {
+DateTime Resource::availableAfter(const DateTime &time, const DateTime &limit, Schedule *sch) const {
     DateTime t;
     if (m_units == 0) {
         return t;
@@ -1223,7 +1223,7 @@ DateTime Resource::availableAfter(const DateTime &time, const DateTime limit, Sc
     return t;
 }
 
-DateTime Resource::availableBefore(const DateTime &time, const DateTime limit, Schedule *sch) const {
+DateTime Resource::availableBefore(const DateTime &time, const DateTime &limit, Schedule *sch) const {
     DateTime t;
     if (m_units == 0) {
         return t;
@@ -1397,7 +1397,7 @@ void Resource::clearExternalAppointments()
     }
 }
 
-void Resource::clearExternalAppointments( const QString projectId )
+void Resource::clearExternalAppointments( const QString &projectId )
 {
     while ( m_externalAppointments.contains( projectId ) ) {
         int row = m_externalAppointments.keys().indexOf( projectId );

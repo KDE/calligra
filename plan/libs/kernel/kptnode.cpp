@@ -680,7 +680,7 @@ void Node::setConstraint(Node::ConstraintType type)
     changed( this );
 }
 
-void Node::setConstraint(QString &type) {
+void Node::setConstraint(const QString &type) {
     // Do not i18n these, they are used in load()
     if (type == "ASAP")
         setConstraint(ASAP);
@@ -926,14 +926,14 @@ void Node::setId(const QString& id) {
     m_id = id;
 }
 
-void Node::setStartTime(DateTime startTime, long id )
+void Node::setStartTime(const DateTime &startTime, long id )
 { 
     Schedule *s = schedule( id );
     if ( s )
         s->startTime = startTime;
 }
 
-void Node::setEndTime(DateTime endTime, long id )
+void Node::setEndTime(const DateTime &endTime, long id )
 {
     Schedule *s = schedule( id );
     if ( s )
@@ -991,7 +991,7 @@ bool Node::addAppointment(Appointment *appointment, Schedule &main) {
     return s->add(appointment);
 }
 
-void Node::addAppointment(ResourceSchedule *resource, DateTime &start, DateTime &end, double load) {
+void Node::addAppointment(ResourceSchedule *resource, const DateTime &start, const DateTime &end, double load) {
     Schedule *node = findSchedule(resource->id());
     if (node == 0) {
         node = createSchedule(resource->parent());
@@ -1068,7 +1068,7 @@ Schedule *Node::findSchedule( long id ) const
     return m_schedules.value( id );
 }
 
-Schedule *Node::findSchedule(const QString name, const Schedule::Type type) {
+Schedule *Node::findSchedule(const QString &name, const Schedule::Type type) {
     QHash<long, Schedule*> it;
     foreach (Schedule *sch, it) {
         if (!sch->isDeleted() && 
@@ -1078,7 +1078,7 @@ Schedule *Node::findSchedule(const QString name, const Schedule::Type type) {
     return 0;
 }
 
-Schedule *Node::findSchedule(const QString name) {
+Schedule *Node::findSchedule(const QString &name) {
     foreach (Schedule *sch, m_schedules) {
         if (!sch->isDeleted() && sch->name() == name)
             return sch;

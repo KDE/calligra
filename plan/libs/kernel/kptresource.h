@@ -390,26 +390,26 @@ public:
      * Returns invalid DateTime if not available.
      * Uses the current schedule to check for appointments.
      */
-    DateTime availableAfter( const DateTime &time, const DateTime limit = DateTime() ) const;
+    DateTime availableAfter( const DateTime &time, const DateTime &limit = DateTime() ) const;
     /**
      * Find the first available time before @p time, within @p limit.
      * Returns invalid DateTime if not available.
      * Uses the current schedule to check for appointments.
      */
-    DateTime availableBefore( const DateTime &time, const DateTime limit = DateTime()) const;
+    DateTime availableBefore( const DateTime &time, const DateTime &limit = DateTime()) const;
 
     /**
      * Find the first available time after @p time, within @p limit.
      * Returns invalid DateTime if not available.
      * If @p sch == 0, Appointments are not checked.
      */
-    DateTime availableAfter( const DateTime &time, const DateTime limit, Schedule *sch ) const;
+    DateTime availableAfter( const DateTime &time, const DateTime &limit, Schedule *sch ) const;
     /**
      * Find the first available time before @p time, within @p limit.
      * Returns invalid DateTime if not available.
      * If @p sch == 0, Appointments are not checked.
      */
-    DateTime availableBefore( const DateTime &time, const DateTime limit, Schedule *sch ) const;
+    DateTime availableBefore( const DateTime &time, const DateTime &limit, Schedule *sch ) const;
 
     Resource *findId() const { return findId( m_id ); }
     Resource *findId( const QString &id ) const;
@@ -464,7 +464,7 @@ public:
     void subtractExternalAppointment( const QString &id, const DateTime &from, const DateTime &end, double load );
 
     void clearExternalAppointments();
-    void clearExternalAppointments( const QString id );
+    void clearExternalAppointments( const QString &id );
     /// Take the external appointments with identity @p id from the list of external appointments
     Appointment *takeExternalAppointment( const QString &id );
     /// Return external appointments with identity @p id

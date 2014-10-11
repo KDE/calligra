@@ -517,7 +517,7 @@ QList<TimeInterval*> CalendarWeekdays::intervals(int weekday) const {
     return day->timeIntervals();
 }
 
-void CalendarWeekdays::setIntervals(int weekday, QList<TimeInterval*>intervals) {
+void CalendarWeekdays::setIntervals(int weekday, const QList<TimeInterval*> &intervals) {
     CalendarDay *day = m_weekdays.value( weekday );
     if (day) {
         day->setIntervals( intervals );

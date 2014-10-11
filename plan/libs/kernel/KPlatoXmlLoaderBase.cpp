@@ -1220,7 +1220,7 @@ bool KPlatoXmlLoaderBase::load( WorkPackage &wp, const KoXmlElement& element, XM
     return true;
 }
 
-bool KPlatoXmlLoaderBase::loadWpLog( WorkPackage *wp, KoXmlElement& element, XMLLoaderObject status )
+bool KPlatoXmlLoaderBase::loadWpLog( WorkPackage *wp, KoXmlElement& element, XMLLoaderObject& status )
 {
     kDebug(kplatoXmlDebugArea())<<"wplog";
     wp->setOwnerName( element.attribute( "owner" ) );

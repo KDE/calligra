@@ -186,7 +186,7 @@ public:
     void addInterval(TimeInterval *interval);
     void addInterval(TimeInterval interval) { addInterval(new TimeInterval(interval)); }
     void clearIntervals() { m_timeIntervals.clear(); }
-    void setIntervals(QList<TimeInterval*> intervals) { 
+    void setIntervals(const QList<TimeInterval*> &intervals) {
         m_timeIntervals.clear();
         m_timeIntervals = intervals;
     }
@@ -315,7 +315,7 @@ public:
     void setState(int weekday, int state);
     
     QList<TimeInterval*> intervals(int weekday) const;
-    void setIntervals(int weekday, QList<TimeInterval*>intervals);
+    void setIntervals(int weekday, const QList<TimeInterval*> &intervals);
     void clearIntervals(int weekday);
     
     bool operator==(const CalendarWeekdays *weekdays) const;

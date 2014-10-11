@@ -73,7 +73,7 @@ public:
     ~AppointmentInterval();
     
     Duration effort() const;
-    Duration effort(const DateTime &start, const DateTime end) const;
+    Duration effort(const DateTime &start, const DateTime &end) const;
     Duration effort(const QDate &time, bool upto) const;
     
     bool loadXML(KoXmlElement &element, XMLLoaderObject &status);
@@ -163,8 +163,8 @@ KPLATOKERNEL_EXPORT QDebug operator<<( QDebug dbg, const KPlato::AppointmentInte
 class KPLATOKERNEL_EXPORT Appointment {
 public:
     explicit Appointment();
-    Appointment(Schedule *resource, Schedule *node, DateTime start, DateTime end, double load);
-    Appointment(Schedule *resource, Schedule *node, DateTime start, Duration duration, double load);
+    Appointment(Schedule *resource, Schedule *node, const DateTime &start, const DateTime &end, double load);
+    Appointment(Schedule *resource, Schedule *node, const DateTime &start, Duration duration, double load);
     Appointment( const Appointment &app );
     ~Appointment();
 

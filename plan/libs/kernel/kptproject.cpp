@@ -544,7 +544,7 @@ DateTime Project::checkEndConstraints( const DateTime &dt ) const
 }
 
 #ifndef PLAN_NLOGDEBUG
-bool Project::checkParent( Node *n, QList<Node*> list, QList<Relation*> &checked )
+bool Project::checkParent( Node *n, const QList<Node*> &list, QList<Relation*> &checked )
 {
     if ( n->isStartNode() ) {
         kDebug(planDbg())<<n<<"start node"<<list;
@@ -582,7 +582,7 @@ bool Project::checkParent( Node *n, QList<Node*> list, QList<Relation*> &checked
     return true;
 }
 
-bool Project::checkChildren( Node *n, QList<Node*> list, QList<Relation*> &checked )
+bool Project::checkChildren( Node *n, const QList<Node*> &list, QList<Relation*> &checked )
 {
     if ( n->isEndNode() ) {
         kDebug(planDbg())<<n<<"end node"<<list;
