@@ -141,7 +141,7 @@ public:
     void save( QDomElement &element ) const;
     
     /// Save workpackage document. Include only resources listed in @p lst
-    void saveWorkPackageXML( QDomElement &element, const QList<Resource*> lst ) const;
+    void saveWorkPackageXML( QDomElement &element, const QList<Resource*> &lst ) const;
 
     void initiateCalculation( Schedule &sch );
 

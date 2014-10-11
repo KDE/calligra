@@ -235,7 +235,7 @@ void ResourceGroup::save(QDomElement &element)  const {
     }
 }
 
-void ResourceGroup::saveWorkPackageXML( QDomElement &element, const QList<Resource*> lst ) const
+void ResourceGroup::saveWorkPackageXML( QDomElement &element, const QList<Resource*> &lst ) const
 {
     QDomElement me = element.ownerDocument().createElement( "resource-group" );
     element.appendChild( me );
