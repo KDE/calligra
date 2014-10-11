@@ -367,14 +367,9 @@ int CalendarDay::numIntervals() const
     return m_state == Working ? m_timeIntervals.count() : 0;
 }
 
-int CalendarDay::indexOf( const TimeInterval *ti ) const
+bool CalendarDay::hasInterval(const TimeInterval* interval) const
 {
-    return m_timeIntervals.indexOf( const_cast<TimeInterval*>( ti ) );
-}
-
-TimeInterval *CalendarDay::intervalAt( int index ) const
-{
-    return m_timeIntervals.value( index );
+    return m_timeIntervals.contains(const_cast<TimeInterval*>(interval));
 }
 
 DateTime CalendarDay::start() const
@@ -929,8 +924,7 @@ void Calendar::addWorkInterval( CalendarDay *day, TimeInterval *ti )
 
 void Calendar::takeWorkInterval( CalendarDay *day, TimeInterval *ti )
 {
-    int ix = day->indexOf( ti );
-    if ( ix == -1 ) {
+    if ( !day->hasInterval(ti) ) {
         return;
     }
     workIntervalToBeRemoved( day, ti );

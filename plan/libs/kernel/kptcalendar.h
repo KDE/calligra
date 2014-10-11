@@ -186,8 +186,7 @@ public:
         m_timeIntervals = intervals;
     }
     void removeInterval( TimeInterval *interval );
-    TimeInterval *intervalAt( int index ) const;
-    int indexOf( const TimeInterval *ti ) const;
+    bool hasInterval( const TimeInterval *interval ) const;
     int numIntervals() const;
 
     DateTime start() const;

@@ -314,7 +314,7 @@ void CalendarTester::workIntervalsFullDays()
     t.addDay(day);
 
     QCOMPARE( day->numIntervals(), 1 );
-    QVERIFY( day->intervalAt( 0 )->endsMidnight() );
+    QVERIFY( day->timeIntervals().first()->endsMidnight() );
 
     DateTime start = day->start();
     DateTime end = day->end();
