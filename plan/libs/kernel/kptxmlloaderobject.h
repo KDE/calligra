@@ -25,7 +25,7 @@
 #include "kptproject.h"
 #include "kptdatetime.h"
 
-#include "KoUpdater.h"
+#include <KoUpdater.h>
 
 #include <QDateTime>
 #include <QString>

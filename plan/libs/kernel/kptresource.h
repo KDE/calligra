@@ -30,14 +30,14 @@
 #include "kptappointment.h"
 #include "kptcalendar.h"
 
+#include <KoXmlReader.h>
+
 #include <QDomDocument>
 #include <QHash>
 #include <QString>
 #include <QList>
 
 #include <kdebug.h>
-
-#include <KoXmlReader.h>
 
 class QTime;
 

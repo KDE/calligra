@@ -21,7 +21,7 @@
 #ifndef KPTCALENDAR_H
 #define KPTCALENDAR_H
 
-#include <kptdatetime.h>
+#include "kptdatetime.h"
 #include "kptduration.h"
 #include "kplatokernel_export.h"
 

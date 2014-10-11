@@ -30,7 +30,7 @@
 #include "kptaccount.h"
 #include "kptappointment.h"
 
-#include "KoXmlReader.h"
+#include <KoXmlReader.h>
 
 #include <ktimezone.h>
 #include <ksystemtimezone.h>

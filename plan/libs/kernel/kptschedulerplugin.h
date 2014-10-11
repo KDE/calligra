@@ -24,7 +24,7 @@
 
 #include "kptschedule.h"
 
-#include "KoXmlReader.h"
+#include <KoXmlReader.h>
 
 #include <QObject>
 #include <QString>

@@ -32,8 +32,6 @@
 #include <QDateTime>
 #include <QMutableMapIterator>
 
-#include <cassert>
-
 
 namespace KPlato
 {
@@ -152,7 +150,7 @@ bool AppointmentInterval::loadXML(KoXmlElement &element, XMLLoaderObject &status
 
 void AppointmentInterval::saveXML(QDomElement &element) const
 {
-    assert( isValid() );
+    Q_ASSERT( isValid() );
     QDomElement me = element.ownerDocument().createElement("interval");
     element.appendChild(me);
 
