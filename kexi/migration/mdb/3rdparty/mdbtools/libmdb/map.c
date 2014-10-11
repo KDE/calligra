@@ -12,9 +12,8 @@
  * Library General Public License for more details.
  *
  * You should have received a copy of the GNU Library General Public
- * License along with this library; if not, write to the
- * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 #include "mdbtools.h"
@@ -23,7 +22,7 @@
 #include "dmalloc.h"
 #endif
 
-static guint32 
+static gint32
 mdb_map_find_next0(MdbHandle *mdb, unsigned char *map, unsigned int map_sz, guint32 start_pg)
 {
 	guint32 pgnum, i, usage_bitlen;
@@ -42,7 +41,7 @@ mdb_map_find_next0(MdbHandle *mdb, unsigned char *map, unsigned int map_sz, guin
 	/* didn't find anything */
 	return 0;
 }
-static int 
+static gint32
 mdb_map_find_next1(MdbHandle *mdb, unsigned char *map, unsigned int map_sz, guint32 start_pg)
 {
 	guint32 map_ind, max_map_pgs, offset, usage_bitlen;
@@ -83,7 +82,10 @@ mdb_map_find_next1(MdbHandle *mdb, unsigned char *map, unsigned int map_sz, guin
 	/* didn't find anything */
 	return 0;
 }
-guint32 
+
+/* returns 0 on EOF */
+/* returns -1 on error (unsupported map type) */
+gint32
 mdb_map_find_next(MdbHandle *mdb, unsigned char *map, unsigned int map_sz, guint32 start_pg)
 {
 	if (map[0] == 0) {
@@ -114,11 +116,14 @@ mdb_map_find_next_freepage(MdbTableDef *table, int row_size)
 		pgnum = mdb_map_find_next(mdb, 
 				table->free_usage_map, 
 				table->freemap_sz, cur_pg);
-		
+		//printf("looking at page %d\n", pgnum);
 		if (!pgnum) {
 			/* allocate new page */
 			pgnum = mdb_alloc_page(table);
 			return pgnum;
+		} else if (pgnum==-1) {
+			fprintf(stderr, "Error: mdb_map_find_next_freepage error while reading maps.\n");
+			exit(1);
 		}
 		cur_pg = pgnum;
 
@@ -127,7 +132,7 @@ mdb_map_find_next_freepage(MdbTableDef *table, int row_size)
 		
 	} while (free_space < row_size);
 
-	
+	//printf("page %d has %d bytes left\n", pgnum, free_space);
 
 	return pgnum;
 }

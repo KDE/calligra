@@ -12,13 +12,12 @@
  * Library General Public License for more details.
  *
  * You should have received a copy of the GNU Library General Public
- * License along with this library; if not, write to the
- * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#include <errno.h>
 #include "mdbtools.h"
-#include "errno.h"
 
 #ifdef DMALLOC
 #include "dmalloc.h"
@@ -43,7 +42,7 @@ mdb_unicode2ascii(MdbHandle *mdb, char *src, size_t slen, char *dest, size_t dle
 		return 0;
 
 	/* Uncompress 'Unicode Compressed' string into tmp */
-	if (IS_JET4(mdb) && (slen>=2)
+	if (!IS_JET3(mdb) && (slen>=2)
 	 && ((src[0]&0xff)==0xff) && ((src[1]&0xff)==0xfe)) {
 		unsigned int compress=1;
 		src += 2;
@@ -72,22 +71,25 @@ mdb_unicode2ascii(MdbHandle *mdb, char *src, size_t slen, char *dest, size_t dle
 	len_out = dlen;
 
 #if HAVE_ICONV
-	
+	//printf("1 len_in %d len_out %d\n",len_in, len_out);
 	while (1) {
 		iconv(mdb->iconv_in, &in_ptr, &len_in, &out_ptr, &len_out);
 		if ((!len_in) || (errno == E2BIG)) break;
 		/* Don't bail if impossible conversion is encountered */
-		in_ptr += (IS_JET4(mdb)) ? 2 : 1;
-		len_in -= (IS_JET4(mdb)) ? 2 : 1;
+		in_ptr += (IS_JET3(mdb)) ? 1 : 2;
+		len_in -= (IS_JET3(mdb)) ? 1 : 2;
 		*out_ptr++ = '?';
 		len_out--;
 	}
-	
+	//printf("2 len_in %d len_out %d\n",len_in, len_out);
 	dlen -= len_out;
 #else
 	if (IS_JET3(mdb)) {
-		strncpy(out_ptr, in_ptr, len_in);
-		dlen = len_in;
+               size_t copy_len = len_in;
+               if (copy_len > dlen)
+                       copy_len = dlen;
+               strncpy(out_ptr, in_ptr, copy_len);
+               dlen = copy_len;
 	} else {
 		/* rough UCS-2LE to ISO-8859-1 conversion */
 		unsigned int i;
@@ -99,7 +101,7 @@ mdb_unicode2ascii(MdbHandle *mdb, char *src, size_t slen, char *dest, size_t dle
 
 	if (tmp) g_free(tmp);
 	dest[dlen]='\0';
-	
+	//printf("dest %s\n",dest);
 	return dlen;
 }
 
@@ -123,7 +125,7 @@ mdb_ascii2unicode(MdbHandle *mdb, char *src, size_t slen, char *dest, size_t dle
 
 #ifdef HAVE_ICONV
 	iconv(mdb->iconv_out, &in_ptr, &len_in, &out_ptr, &len_out);
-	
+	//printf("len_in %d len_out %d\n", len_in, len_out);
 	dlen -= len_out;
 #else
 	if (IS_JET3(mdb)) {
@@ -141,7 +143,7 @@ mdb_ascii2unicode(MdbHandle *mdb, char *src, size_t slen, char *dest, size_t dle
 #endif
 
 	/* Unicode Compression */
-	if(IS_JET4(mdb) && (dlen>4)) {
+	if(!IS_JET3(mdb) && (dlen>4)) {
 		unsigned char *tmp = g_malloc(dlen);
 		unsigned int tptr = 0, dptr = 0;
 		int comp = 1;
@@ -182,6 +184,21 @@ mdb_ascii2unicode(MdbHandle *mdb, char *src, size_t slen, char *dest, size_t dle
 	return dlen;
 }
 
+const char*
+mdb_target_charset(MdbHandle *mdb)
+{
+#ifdef HAVE_ICONV
+	const char *iconv_code = getenv("MDBICONV");
+	if (!iconv_code)
+		iconv_code = "UTF-8";
+	return iconv_code;
+#else
+	if (!IS_JET3(mdb))
+		return "ISO-8859-1";
+	return NULL; // same as input: unknown
+#endif
+}
+
 void mdb_iconv_init(MdbHandle *mdb)
 {
 	const char *iconv_code;
@@ -192,10 +209,10 @@ void mdb_iconv_init(MdbHandle *mdb)
 	}
 
 #ifdef HAVE_ICONV
-        if (IS_JET4(mdb)) {
-                mdb->iconv_out = iconv_open("UCS-2LE", iconv_code);
-                mdb->iconv_in = iconv_open(iconv_code, "UCS-2LE");
-        } else {
+	if (!IS_JET3(mdb)) {
+		mdb->iconv_out = iconv_open("UCS-2LE", iconv_code);
+		mdb->iconv_in = iconv_open(iconv_code, "UCS-2LE");
+	} else {
 		/* According to Microsoft Knowledge Base pages 289525 and */
 		/* 202427, code page info is not contained in the database */
 
@@ -207,9 +224,10 @@ void mdb_iconv_init(MdbHandle *mdb)
 #ifdef _WIN32
 			// get the default from OS
 			char default_encoding[] = "CP       ";
-			if (GetLocaleInfoA( MAKELCID(MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), SORT_DEFAULT), 
-			 LOCALE_IDEFAULTANSICODEPAGE, default_encoding+2, sizeof(default_encoding)-2-1 ))
+			if (GetLocaleInfoA( MAKELCID(MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), SORT_DEFAULT),
+			        LOCALE_IDEFAULTANSICODEPAGE, default_encoding+2, sizeof(default_encoding)-2-1 )) {
 				mdb->jet3_iconv_code = g_strdup(default_encoding);
+			}
 			else
 #endif
 				mdb->jet3_iconv_code = g_strdup("CP1252");
@@ -223,7 +241,9 @@ void mdb_iconv_init(MdbHandle *mdb)
 void mdb_iconv_close(MdbHandle *mdb)
 {
 #ifdef HAVE_ICONV
-        if (mdb->iconv_out != (iconv_t)-1) iconv_close(mdb->iconv_out);
-        if (mdb->iconv_in != (iconv_t)-1) iconv_close(mdb->iconv_in);
+    if (mdb->iconv_out != (iconv_t)-1) iconv_close(mdb->iconv_out);
+    if (mdb->iconv_in != (iconv_t)-1) iconv_close(mdb->iconv_in);
 #endif
 }
+
+

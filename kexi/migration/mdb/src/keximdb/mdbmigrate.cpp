@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2005,2006 Martin Ellis <martin.ellis@kdemail.net>
-   Copyright (C) 2005 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2014 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -51,18 +51,6 @@ MDBMigrate::MDBMigrate(QObject *parent, const QVariantList &args)
     setPropertyValue(nonUnicodePropId, QString());
     setPropertyCaption(nonUnicodePropId, i18n("Source Database Non-Unicode Character Encoding"));
 
-    initBackend();
-}
-
-MDBMigrate::~MDBMigrate()
-{
-    releaseBackend();
-}
-
-void MDBMigrate::initBackend()
-{
-    mdb_init();
-
     // Date format associated with Qt::ISODate: YYYY-MM-DDTHH:MM:SS
     // (where T is a literal).  The following is equivalent to %FT%T, but
     // backards compatible with old/Windows C libraries.
@@ -70,9 +58,8 @@ void MDBMigrate::initBackend()
     mdb_set_date_fmt("%Y-%m-%dT%H:%M:%S");
 }
 
-void MDBMigrate::releaseBackend()
+MDBMigrate::~MDBMigrate()
 {
-    mdb_exit();
 }
 
 QVariant MDBMigrate::propertyValue(const QByteArray& propName)
@@ -224,7 +211,7 @@ QVariant MDBMigrate::toQVariant(const char* data, unsigned int len, int type)
     case MDB_BOOL:    //! @todo use &bool!
     case MDB_BYTE:
         return QString::fromUtf8(data, len).toShort();
-    case MDB_SDATETIME:
+    case MDB_DATETIME:
         return QDateTime::fromString(data, Qt::ISODate);
     case MDB_INT:
     case MDB_LONGINT:
@@ -347,7 +334,7 @@ KexiDB::Field::Type MDBMigrate::type(int type)
     case MDB_DOUBLE:
         kexiType = KexiDB::Field::Double;
         break;
-    case MDB_SDATETIME:
+    case MDB_DATETIME:
         kexiType = KexiDB::Field::DateTime;
         break;
     case MDB_TEXT:
@@ -446,6 +433,3 @@ bool MDBMigrate::drv_getTableSize(const QString& table, qulonglong& size)
     mdb_free_tabledef(tableDef);
     return true;
 }
-
-
-#include "mdbmigrate.moc"

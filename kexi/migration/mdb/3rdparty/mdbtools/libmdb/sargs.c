@@ -12,9 +12,8 @@
  * Library General Public License for more details.
  *
  * You should have received a copy of the GNU Library General Public
- * License along with this library; if not, write to the
- * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 /*
@@ -27,8 +26,9 @@
  * datatype support is a bit weak at this point.  To add more types create
  * a mdb_test_[type]() function and invoke it from mdb_test_sarg()
  */
-#include "mdbtools.h"
 
+#include <time.h>
+#include "mdbtools.h"
 #ifdef DMALLOC
 #include "dmalloc.h"
 #endif
@@ -76,7 +76,7 @@ int mdb_test_int(MdbSargNode *node, gint32 i)
 {
 	switch (node->op) {
 		case MDB_EQUAL:
-			
+			//fprintf(stderr, "comparing %ld and %ld\n", i, node->value.i);
 			if (node->value.i == i) return 1;
 			break;
 		case MDB_GT:
@@ -97,8 +97,51 @@ int mdb_test_int(MdbSargNode *node, gint32 i)
 	}
 	return 0;
 }
-#if 0
-#endif
+
+int
+mdb_test_date(MdbSargNode *node, double td)
+{
+	struct tm found;
+	/* TODO: you should figure out a way to pull mdb_date_to_string in here
+	 * char date_tmp[MDB_BIND_SIZE];
+	 */
+
+	time_t found_t;
+	time_t asked_t;
+
+	double diff;
+
+	mdb_date_to_tm(td, &found);
+
+	asked_t = node->value.i;
+	found_t = mktime(&found);
+
+	diff = difftime(asked_t, found_t);
+
+	switch (node->op) {
+	case MDB_EQUAL:
+		if (diff==0) return 1;
+		break;
+	case MDB_GT:
+		if (diff<0) return 1;
+		break;
+	case MDB_LT:
+		if (diff>0) return 1;
+		break;
+	case MDB_GTEQ:
+		if (diff<=0) return 1;
+		break;
+	case MDB_LTEQ:
+		if (diff>=0) return 1;
+		break;
+	default:
+		fprintf(stderr, "Calling mdb_test_sarg on unknown operator. Add code to mdb_test_date() for operator %d\n", node->op);
+		break;
+	}
+	return 0;
+}
+
+
 int
 mdb_find_indexable_sargs(MdbSargNode *node, gpointer data)
 {
@@ -120,7 +163,7 @@ mdb_find_indexable_sargs(MdbSargNode *node, gpointer data)
 	 * probably better off table scanning.
 	 */
 	if (mdb_is_relational_op(node->op) && node->col) {
-		
+		//printf("op = %d value = %s\n", node->op, node->value.s);
 		sarg.op = node->op;
 		sarg.value = node->value;
 		mdb_add_sarg(node->col, &sarg);
@@ -155,6 +198,8 @@ mdb_test_sarg(MdbHandle *mdb, MdbColumn *col, MdbSargNode *node, MdbField *field
 		case MDB_TEXT:
 			mdb_unicode2ascii(mdb, field->value, field->siz, tmpbuf, 256);
 			return mdb_test_string(node, tmpbuf);
+		case MDB_DATETIME:
+			return mdb_test_date(node, mdb_get_double(field->value, 0));
 		default:
 			fprintf(stderr, "Calling mdb_test_sarg on unknown type.  Add code to mdb_test_sarg() for type %d\n",col->col_type);
 			break;

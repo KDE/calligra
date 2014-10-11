@@ -12,9 +12,8 @@
  * Library General Public License for more details.
  *
  * You should have received a copy of the GNU Library General Public
- * License along with this library; if not, write to the
- * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 #include "mdbtools.h"
@@ -69,71 +68,95 @@ mdb_read_indices(MdbTableDef *table)
 	MdbHandle *mdb = entry->mdb;
 	MdbFormatConstants *fmt = mdb->fmt;
 	MdbIndex *pidx;
-	unsigned int i, j;
-	int idx_num, key_num, col_num;
+	unsigned int i, j, k;
+	int key_num, col_num, cleaned_col_num;
 	int cur_pos, name_sz, idx2_sz, type_offset;
 	int index_start_pg = mdb->cur_pg;
 	gchar *tmpbuf;
 
-        table->indices = g_ptr_array_new();
+	table->indices = g_ptr_array_new();
 
-        if (IS_JET4(mdb)) {
-		cur_pos = table->index_start + 52 * table->num_real_idxs;
-		idx2_sz = 28;
-		type_offset = 23;
-	} else {
+	if (IS_JET3(mdb)) {
 		cur_pos = table->index_start + 39 * table->num_real_idxs;
 		idx2_sz = 20;
 		type_offset = 19;
+	} else {
+		cur_pos = table->index_start + 52 * table->num_real_idxs;
+		idx2_sz = 28;
+		type_offset = 23;
 	}
 
+	//fprintf(stderr, "num_idxs:%d num_real_idxs:%d\n", table->num_idxs, table->num_real_idxs);
+	/* num_real_idxs should be the number of indexes of type 2.
+	 * It's not always the case. Happens on Northwind Orders table.
+	 */
+	table->num_real_idxs = 0;
 	tmpbuf = (gchar *) g_malloc(idx2_sz);
 	for (i=0;i<table->num_idxs;i++) {
 		read_pg_if_n(mdb, tmpbuf, &cur_pos, idx2_sz);
 		pidx = (MdbIndex *) g_malloc0(sizeof(MdbIndex));
 		pidx->table = table;
 		pidx->index_num = mdb_get_int16(tmpbuf, 4);
-		pidx->index_type = tmpbuf[type_offset]; 
+		pidx->index_type = tmpbuf[type_offset];
 		g_ptr_array_add(table->indices, pidx);
+		/*
+		{
+			gint32 dumy0 = mdb_get_int32(tmpbuf, 0);
+			gint8 dumy1 = tmpbuf[8];
+			gint32 dumy2 = mdb_get_int32(tmpbuf, 9);
+			gint32 dumy3 = mdb_get_int32(tmpbuf, 13);
+			gint16 dumy4 = mdb_get_int16(tmpbuf, 17);
+			fprintf(stderr, "idx #%d: num2:%d type:%d\n", i, pidx->index_num, pidx->index_type);
+			fprintf(stderr, "idx #%d: %d %d %d %d %d\n", i, dumy0, dumy1, dumy2, dumy3, dumy4);
+		}*/
+		if (pidx->index_type!=2)
+			table->num_real_idxs++;
 	}
+	//fprintf(stderr, "num_idxs:%d num_real_idxs:%d\n", table->num_idxs, table->num_real_idxs);
 	g_free(tmpbuf);
 
 	for (i=0;i<table->num_idxs;i++) {
 		pidx = g_ptr_array_index (table->indices, i);
-		if (IS_JET4(mdb)) {
-			name_sz=read_pg_if_16(mdb, &cur_pos);
-		} else {
+		if (IS_JET3(mdb)) {
 			name_sz=read_pg_if_8(mdb, &cur_pos);
+		} else {
+			name_sz=read_pg_if_16(mdb, &cur_pos);
 		}
 		tmpbuf = g_malloc(name_sz);
 		read_pg_if_n(mdb, tmpbuf, &cur_pos, name_sz);
 		mdb_unicode2ascii(mdb, tmpbuf, name_sz, pidx->name, MDB_MAX_OBJ_NAME); 
 		g_free(tmpbuf);
-		
+		//fprintf(stderr, "index %d type %d name %s\n", pidx->index_num, pidx->index_type, pidx->name);
 	}
 
 	mdb_read_alt_pg(mdb, entry->table_pg);
 	mdb_read_pg(mdb, index_start_pg);
 	cur_pos = table->index_start;
-	idx_num=0;
 	for (i=0;i<table->num_real_idxs;i++) {
-		if (IS_JET4(mdb)) cur_pos += 4;
-		do {
-			pidx = g_ptr_array_index (table->indices, idx_num++);
-        } while (idx_num < table->num_real_idxs && pidx /*&& pidx != 0x736e6f6300616d65 && pidx!=(MdbIndex*)0xbaadf00d*/ /*(js) temp? hack*/&& pidx->index_type==2);
-
-		/* if there are more real indexes than index entries left after
-		   removing type 2's decrement real indexes and continue.  Happens
-		   on Northwind Orders table.
-		*/
-		if (idx_num == table->num_real_idxs || !pidx /*|| pidx==(MdbIndex*)0xbaadf00d*/ /*(js) temp? hack*/ /*|| pidx != 0x736e6f6300616d65*/) {
-			table->num_real_idxs--;
+		if (!IS_JET3(mdb)) cur_pos += 4;
+		/* look for index number i */
+		for (j=0; j<table->num_idxs; ++j) {
+			pidx = g_ptr_array_index (table->indices, j);
+			if (pidx->index_type!=2 && pidx->index_num==i)
+				break;
+		}
+		if (j==table->num_idxs) {
+			fprintf(stderr, "ERROR: can't find index #%d.\n", i);
 			continue;
 		}
+		//fprintf(stderr, "index %d #%d (%s) index_type:%d\n", i, pidx->index_num, pidx->name, pidx->index_type);
 
 		pidx->num_rows = mdb_get_int32(mdb->alt_pg_buf, 
 				fmt->tab_cols_start_offset +
-				(i*fmt->tab_ridx_entry_size));
+				(pidx->index_num*fmt->tab_ridx_entry_size));
+		/*
+		fprintf(stderr, "ridx block1 i:%d data1:0x%08x data2:0x%08x\n",
+			i,
+			mdb_get_int32(mdb->pg_buf,
+				fmt->tab_cols_start_offset + pidx->index_num * fmt->tab_ridx_entry_size),
+			mdb_get_int32(mdb->pg_buf,
+				fmt->tab_cols_start_offset + pidx->index_num * fmt->tab_ridx_entry_size +4));
+		fprintf(stderr, "pidx->num_rows:%d\n", pidx->num_rows);*/
 
 		key_num=0;
 		for (j=0;j<MDB_MAX_IDX_COLS;j++) {
@@ -142,18 +165,37 @@ mdb_read_indices(MdbTableDef *table)
 				cur_pos++;
 				continue;
 			}
+			/* here we have the internal column number that does not
+			 * always match the table columns because of deletions */
+			cleaned_col_num = -1;
+			for (k=0; k<table->num_cols; k++) {
+				MdbColumn *col = g_ptr_array_index(table->columns,k);
+				if (col->col_num == col_num) {
+					cleaned_col_num = k;
+					break;
+				}
+			}
+			if (cleaned_col_num==-1) {
+				fprintf(stderr, "CRITICAL: can't find column with internal id %d in index %s\n",
+					col_num, pidx->name);
+				cur_pos++;
+				continue;
+			}
 			/* set column number to a 1 based column number and store */
-			pidx->key_col_num[key_num] = col_num + 1;
+			pidx->key_col_num[key_num] = cleaned_col_num + 1;
 			pidx->key_col_order[key_num] =
 				(read_pg_if_8(mdb, &cur_pos)) ? MDB_ASC : MDB_DESC;
+			//fprintf(stderr, "component %d using column #%d (internally %d)\n", j, cleaned_col_num,  col_num);
 			key_num++;
 		}
 		pidx->num_keys = key_num;
 
 		cur_pos += 4;
+		//fprintf(stderr, "pidx->unknown_pre_first_pg:0x%08x\n", read_pg_if_32(mdb, &cur_pos));
 		pidx->first_pg = read_pg_if_32(mdb, &cur_pos);
 		pidx->flags = read_pg_if_8(mdb, &cur_pos);
-		if (IS_JET4(mdb)) cur_pos += 9;
+		//fprintf(stderr, "pidx->first_pg:%d pidx->flags:0x%02x\n",	pidx->first_pg, pidx->flags);
+		if (!IS_JET3(mdb)) cur_pos += 9;
 	}
 	return NULL;
 }
@@ -185,7 +227,7 @@ mdb_index_swap_n(unsigned char *src, int sz, unsigned char *dest)
 void 
 mdb_index_cache_sarg(MdbColumn *col, MdbSarg *sarg, MdbSarg *idx_sarg)
 {
-	
+	//guint32 cache_int;
 	unsigned char *c;
 
 	switch (col->col_type) {
@@ -195,10 +237,10 @@ mdb_index_cache_sarg(MdbColumn *col, MdbSarg *sarg, MdbSarg *idx_sarg)
 
 		case MDB_LONGINT:
 		idx_sarg->value.i = GUINT32_SWAP_LE_BE(sarg->value.i);
-		
+		//cache_int = sarg->value.i * -1;
 		c = (unsigned char *) &(idx_sarg->value.i);
 		c[0] |= 0x80;
-		
+		//printf("int %08x %02x %02x %02x %02x\n", sarg->value.i, c[0], c[1], c[2], c[3]);
 		break;	
 
 		case MDB_INT:
@@ -247,25 +289,25 @@ mdb_index_test_sargs(MdbHandle *mdb, MdbIndex *idx, char *buf, int len)
 	MdbSarg *sarg;
 	MdbField field;
 	MdbSargNode node;
-	
+	//int c_offset = 0,
 	int c_len;
 
-	
-	
-		
-	
+	//fprintf(stderr,"mdb_index_test_sargs called on ");
+	//for (i=0;i<len;i++)
+		//fprintf(stderr,"%02x ",buf[i]); //mdb->pg_buf[offset+i]);
+	//fprintf(stderr,"\n");
 	for (i=0;i<idx->num_keys;i++) {
-		
+		//c_offset++; /* the per column null indicator/flags */
 		col=g_ptr_array_index(table->columns,idx->key_col_num[i]-1);
 		/*
 		 * This will go away eventually
 		 */
 		if (col->col_type==MDB_TEXT) {
-			
+			//c_len = strlen(&mdb->pg_buf[offset + c_offset]);
 			c_len = strlen(buf);
 		} else {
 			c_len = col->col_size;
-			
+			//fprintf(stderr,"Only text types currently supported.  How did we get here?\n");
 		}
 		/*
 		 * If we have no cached index values for this column, 
@@ -276,7 +318,7 @@ mdb_index_test_sargs(MdbHandle *mdb, MdbIndex *idx, char *buf, int len)
 			for (j=0;j<col->num_sargs;j++) {
 				sarg = g_ptr_array_index (col->sargs, j);
 				idx_sarg = g_memdup(sarg,sizeof(MdbSarg));
-				
+				//printf("calling mdb_index_cache_sarg\n");
 				mdb_index_cache_sarg(col, sarg, idx_sarg);
 				g_ptr_array_add(col->idx_sarg_cache, idx_sarg);
 			}
@@ -287,7 +329,7 @@ mdb_index_test_sargs(MdbHandle *mdb, MdbIndex *idx, char *buf, int len)
 			/* XXX - kludge */
 			node.op = sarg->op;
 			node.value = sarg->value;
-			
+			//field.value = &mdb->pg_buf[offset + c_offset];
 			field.value = buf;
 		       	field.siz = c_len;
 		       	field.is_null = FALSE;
@@ -314,9 +356,9 @@ mdb_index_pack_bitmap(MdbHandle *mdb, MdbIndexPage *ipg)
 	start = ipg->idx_starts[elem++];
 
 	while (start) {
-		
+		//fprintf(stdout, "elem %d is %d\n", elem, ipg->idx_starts[elem]);
 		len = ipg->idx_starts[elem] - start;
-		
+		//fprintf(stdout, "len is %d\n", len);
 		for (i=0; i < len; i++) {
 			mask_bit++;
 			if (mask_bit==8) {
@@ -327,7 +369,7 @@ mdb_index_pack_bitmap(MdbHandle *mdb, MdbIndexPage *ipg)
 			/* upon reaching the len, set the bit */
 		}
 		mask_byte = (1 << mask_bit) | mask_byte;
-		
+		//fprintf(stdout, "mask byte is %02x at %d\n", mask_byte, mask_pos);
 		start = ipg->idx_starts[elem++];
 	}
 	/* flush the last byte if any */
@@ -353,7 +395,7 @@ mdb_index_unpack_bitmap(MdbHandle *mdb, MdbIndexPage *ipg)
 
 	ipg->idx_starts[elem++]=start;
 
-	
+	//fprintf(stdout, "Unpacking index page %lu\n", ipg->pg);
 	do {
 		len = 0;
 		do {
@@ -365,7 +407,7 @@ mdb_index_unpack_bitmap(MdbHandle *mdb, MdbIndexPage *ipg)
 			mask_byte = mdb->pg_buf[mask_pos];
 			len++;
 		} while (mask_pos <= 0xf8 && !((1 << mask_bit) & mask_byte));
-		
+		//fprintf(stdout, "%d %d %d %d\n", mask_pos, mask_bit, mask_byte, len);
 
 		start += len;
 		if (mask_pos < 0xf8) ipg->idx_starts[elem++]=start;
@@ -388,7 +430,7 @@ mdb_index_find_next_on_page(MdbHandle *mdb, MdbIndexPage *ipg)
 
 	/* if this page has not been unpacked to it */
 	if (!ipg->idx_starts[0]){
-		
+		//fprintf(stdout, "Unpacking page %d\n", ipg->pg);
 		mdb_index_unpack_bitmap(mdb, ipg);
 	}
 
@@ -396,7 +438,7 @@ mdb_index_find_next_on_page(MdbHandle *mdb, MdbIndexPage *ipg)
 	if (ipg->idx_starts[ipg->start_pos + 1]==0) return 0; 
 	ipg->len = ipg->idx_starts[ipg->start_pos+1] - ipg->idx_starts[ipg->start_pos];
 	ipg->start_pos++;
-	
+	//fprintf(stdout, "Start pos %d\n", ipg->start_pos);
 
 	return ipg->len;
 }
@@ -443,13 +485,13 @@ mdb_find_next_leaf(MdbHandle *mdb, MdbIndex *idx, MdbIndexChain *chain)
 	 */
 	do {
 		ipg->len = 0;
-		
+		//printf("finding next on pg %lu\n", ipg->pg);
 		if (!mdb_index_find_next_on_page(mdb, ipg)) {
-			
+			//printf("find_next_on_page returned 0\n");
 			return 0;
 		}
 		pg = mdb_get_int32_msb(mdb->pg_buf, ipg->offset + ipg->len - 3) >> 8;
-		
+		//printf("Looking at pg %lu at %lu %d\n", pg, ipg->offset, ipg->len);
 		ipg->offset += ipg->len;
 
 		/*
@@ -458,7 +500,7 @@ mdb_find_next_leaf(MdbHandle *mdb, MdbIndex *idx, MdbIndexChain *chain)
 		 */
 		newipg = mdb_chain_add_page(mdb, chain, pg);
 		newipg = mdb_find_next_leaf(mdb, idx, chain);
-		
+		//printf("returning pg %lu\n",newipg->pg);
 		return newipg;
 	} while (!passed);
 	/* no more pages */
@@ -517,9 +559,9 @@ mdb_index_unwind(MdbHandle *mdb, MdbIndex *idx, MdbIndexChain *chain)
 {
 	MdbIndexPage *ipg;
 
-	
+	//printf("page %lu finished\n",ipg->pg);
 	if (chain->cur_depth==1) {
-		
+		//printf("cur_depth == 1 we're out\n");
 		return NULL;
 	}
 	/* 
@@ -528,13 +570,13 @@ mdb_index_unwind(MdbHandle *mdb, MdbIndex *idx, MdbIndexChain *chain)
 	*/
 	ipg = NULL;
 	while (chain->cur_depth>1 && ipg==NULL) {
-		
+		//printf("chain depth %d\n", chain->cur_depth);
 		chain->cur_depth--;
 		ipg = mdb_find_next_leaf(mdb, idx, chain);
 		if (ipg) mdb_index_find_next_on_page(mdb, ipg);
 	}
 	if (chain->cur_depth==1) {
-		
+		//printf("last leaf %lu\n", chain->last_leaf_found);
 		return NULL;
 	}
 	return ipg;
@@ -577,20 +619,20 @@ mdb_index_find_next(MdbHandle *mdb, MdbIndex *idx, MdbIndexChain *chain, guint32
 					chain->clean_up_mode = 1;
 			}
 			if (chain->clean_up_mode) {
-				
+				//fprintf(stdout,"in cleanup mode\n");
 
 				if (!chain->last_leaf_found) return 0;
 				mdb_read_pg(mdb, chain->last_leaf_found);
 				chain->last_leaf_found = mdb_get_int32(
 					mdb->pg_buf, 0x0c);
-				
+				//printf("next leaf %lu\n", chain->last_leaf_found);
 				mdb_read_pg(mdb, chain->last_leaf_found);
 				/* reuse the chain for cleanup mode */
 				chain->cur_depth = 1;
 				ipg = &chain->pages[0];
 				mdb_index_page_init(ipg);
 				ipg->pg = chain->last_leaf_found;
-				
+				//printf("next on page %d\n",
 				if (!mdb_index_find_next_on_page(mdb, ipg))
 					return 0;
 			}
@@ -598,28 +640,28 @@ mdb_index_find_next(MdbHandle *mdb, MdbIndex *idx, MdbIndexChain *chain, guint32
 		pg_row = mdb_get_int32_msb(mdb->pg_buf, ipg->offset + ipg->len - 4);
 		*row = pg_row & 0xff;
 		*pg = pg_row >> 8;
-		
+		//printf("row = %d pg = %lu ipg->pg = %lu offset = %lu len = %d\n", *row, *pg, ipg->pg, ipg->offset, ipg->len);
 		col=g_ptr_array_index(idx->table->columns,idx->key_col_num[0]-1);
 		idx_sz = mdb_col_fixed_size(col);
 		/* handle compressed indexes, single key indexes only? */
 		if (idx->num_keys==1 && idx_sz>0 && ipg->len - 4 < idx_sz) {
-			
-			
+			//printf("short index found\n");
+			//mdb_buffer_dump(ipg->cache_value, 0, idx_sz);
 			memcpy(&ipg->cache_value[idx_sz - (ipg->len - 4)], &mdb->pg_buf[ipg->offset], ipg->len);
-			
+			//mdb_buffer_dump(ipg->cache_value, 0, idx_sz);
 		} else {
 			idx_start = ipg->offset + (ipg->len - 4 - idx_sz);
 			memcpy(ipg->cache_value, &mdb->pg_buf[idx_start], idx_sz);
 		}
 
-		
+		//idx_start = ipg->offset + (ipg->len - 4 - idx_sz);
 		passed = mdb_index_test_sargs(mdb, idx, (char *)(ipg->cache_value), idx_sz);
 
 		ipg->offset += ipg->len;
 	} while (!passed);
 
-	
-	
+	//fprintf(stdout,"len = %d pos %d\n", ipg->len, ipg->mask_pos);
+	//mdb_buffer_dump(mdb->pg_buf, ipg->offset, ipg->len);
 
 	return ipg->len;
 }
@@ -677,11 +719,12 @@ mdb_index_find_row(MdbHandle *mdb, MdbIndex *idx, MdbIndexChain *chain, guint32 
 
 void mdb_index_walk(MdbTableDef *table, MdbIndex *idx)
 {
-MdbHandle *mdb = table->entry->mdb;
-int cur_pos = 0;
-unsigned char marker;
-MdbColumn *col;
-unsigned int i;
+/*
+	MdbHandle *mdb = table->entry->mdb;
+	int cur_pos = 0;
+	unsigned char marker;
+	MdbColumn *col;
+	unsigned int i;
 
 	if (idx->num_keys!=1) return;
 
@@ -691,8 +734,9 @@ unsigned int i;
 	for (i=0;i<idx->num_keys;i++) {
 		marker = mdb->pg_buf[cur_pos++];
 		col=g_ptr_array_index(table->columns,idx->key_col_num[i]-1);
-		
+		//printf("column %d coltype %d col_size %d (%d)\n",i,col->col_type, mdb_col_fixed_size(col), col->col_size);
 	}
+*/
 }
 void 
 mdb_index_dump(MdbTableDef *table, MdbIndex *idx)
@@ -759,7 +803,7 @@ int mdb_index_compute_cost(MdbTableDef *table, MdbIndex *idx)
 	 */
 	if (idx->flags & MDB_IDX_UNIQUE) {
 		if (idx->num_keys == 1) {
-			
+			//printf("op is %d\n", sarg->op);
 			switch (sarg->op) {
 				case MDB_EQUAL:
 					return 1; break;
@@ -831,7 +875,7 @@ mdb_choose_index(MdbTableDef *table, int *choice)
 	for (i=0;i<table->num_idxs;i++) {
 		idx = g_ptr_array_index (table->indices, i);
 		cost = mdb_index_compute_cost(table, idx);
-		
+		//printf("cost for %s is %d\n", idx->name, cost);
 		if (cost && cost < least) {
 			least = cost;
 			*choice = i;
@@ -852,9 +896,9 @@ mdb_index_scan_init(MdbHandle *mdb, MdbTableDef *table)
 		table->chain = g_malloc0(sizeof(MdbIndexChain));
 		table->mdbidx = mdb_clone_handle(mdb);
 		mdb_read_pg(table->mdbidx, table->scan_idx->first_pg);
-		
+		//printf("best index is %s\n",table->scan_idx->name);
 	}
-	
+	//printf("TABLE SCAN? %d\n", table->strategy);
 }
 void 
 mdb_index_scan_free(MdbTableDef *table)

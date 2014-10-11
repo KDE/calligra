@@ -12,9 +12,8 @@
  * Library General Public License for more details.
  *
  * You should have received a copy of the GNU Library General Public
- * License along with this library; if not, write to the
- * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 #include "mdbtools.h"
@@ -74,6 +73,7 @@ mdb_create_temp_table(MdbHandle *mdb, char *name)
 void
 mdb_temp_table_add_col(MdbTableDef *table, MdbColumn *col)
 {
+	col->table = table,
 	col->col_num = table->num_cols;
 	if (!col->is_fixed)
 		col->var_col_num = table->num_var_cols++;
