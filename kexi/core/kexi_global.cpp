@@ -23,7 +23,7 @@
 
 #include <QString>
 
-static const char *FULL_VERSION
+static const char FULL_VERSION[]
 #ifdef CALLIGRA_GIT_SHA1_STRING
     = KEXI_VERSION_STRING " (git " CALLIGRA_GIT_SHA1_STRING " " CALLIGRA_GIT_BRANCH_STRING ")";
 #else

@@ -1159,7 +1159,7 @@ void Utils::setupUnderLineStyle(const QString& msooxmlName, KoCharacterStyle* te
 
 namespace
 {
-    const char* markerStyles[6] = {
+    static const char* const markerStyles[6] = {
         "", "msArrowEnd_20_5", "msArrowStealthEnd_20_5", "msArrowDiamondEnd_20_5",
         "msArrowOvalEnd_20_5", "msArrowOpenEnd_20_5"
     };
