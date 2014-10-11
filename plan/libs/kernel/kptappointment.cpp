@@ -676,12 +676,6 @@ DateTime Appointment::endTime() const {
     return m_intervals.map().values().last().endTime();
 }
 
-void Appointment::deleteAppointmentFromRepeatList(DateTime) {
-}
-
-void Appointment::addAppointmentToRepeatList(DateTime) {
-}
-
 bool Appointment::isBusy(const DateTime &/*start*/, const DateTime &/*end*/) {
     return false;
 }

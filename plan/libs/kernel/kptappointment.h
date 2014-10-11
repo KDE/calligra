@@ -188,9 +188,6 @@ public:
     int repeatCount() const { return m_repeatCount; }
     void setRepeatCount(int rc) { m_repeatCount=rc; }
 
-    void deleteAppointmentFromRepeatList(DateTime time);
-    void addAppointmentToRepeatList(DateTime time);
-
     bool isBusy(const DateTime &start, const DateTime &end);
 
     /// attach appointment to resource and node
