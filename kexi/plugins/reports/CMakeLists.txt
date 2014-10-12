@@ -45,6 +45,7 @@ target_link_libraries(kexihandler_report
     ${KOPROPERTY_LIBS}
     kexiguiutils
     ${KDE4_KROSSCORE_LIBS}
+    kformdesigner
 )
 
 if (KEXI_MOBILE)

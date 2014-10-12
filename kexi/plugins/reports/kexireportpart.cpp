@@ -22,6 +22,7 @@
 
 #include <QLabel>
 
+#include <formeditor/WidgetTreeWidget.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <KoIcon.h>
@@ -33,6 +34,7 @@
 
 #include "kexisourceselector.h"
 
+
 //! @internal
 class KexiReportPart::Private
 {
@@ -42,10 +44,14 @@ public:
         ksrc = 0;
     }
     ~Private() {
+        delete static_cast<QWidget*>(widgetTreeWidget);
     }
     KexiSourceSelector *ksrc;
     QActionGroup toolboxActionGroup;
     QMap<QString, QAction*> toolboxActionsByName;
+
+    QPointer<KFormDesigner::WidgetTreeWidget> widgetTree;
+    QPointer<QWidget> widgetTreeWidget;
 };
 
 KexiReportPart::KexiReportPart(QObject *parent, const QVariantList &l)
@@ -175,6 +181,17 @@ void KexiReportPart::setupCustomPropertyPanelTabs(KTabWidget *tab)
         d->ksrc = new KexiSourceSelector(tab, KexiMainWindowIface::global()->project()->dbConnection());
     tab->addTab(d->ksrc, koIcon("server-database"), QString());
     tab->setTabToolTip(tab->indexOf(d->ksrc), i18n("Data Source"));
+
+    if (!d->widgetTreeWidget) {
+        d->widgetTreeWidget = new QWidget;
+        QVBoxLayout *lyr = new QVBoxLayout(d->widgetTreeWidget);
+        lyr->setContentsMargins(2, 2, 2, 2);
+        d->widgetTree = new KFormDesigner::WidgetTreeWidget;
+        d->widgetTree->setObjectName("KexiReportPart:WidgetTreeWidget");
+        lyr->addWidget(d->widgetTree);
+    }
+    tab->addTab(d->widgetTreeWidget, koIcon("widgets"), QString());
+    tab->setTabToolTip(tab->indexOf(d->widgetTreeWidget), i18n("Elements"));
 }
 
 void KexiReportPart::slotToolboxActionTriggered(bool checked)
