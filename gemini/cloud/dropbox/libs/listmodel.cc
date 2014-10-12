@@ -52,7 +52,7 @@ QVariant ListModel::data(const QModelIndex &index, int role) const
 
 ListModel::~ListModel() {
   delete m_prototype;
-  //clear();
+  qDeleteAll(m_list);
 }
 
 void ListModel::appendRow(ListItem *item)
