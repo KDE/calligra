@@ -16,6 +16,7 @@
 #include <QDateTime>
 #include <QTimer>
 #include <QAction>
+#include <QApplication>
 
 //#include <MNotification>
 
@@ -554,9 +555,9 @@ QAction* Controller::uploadMostRecentAction()
 
 void Controller::uploadMostRecent()
 {
-    // We don't want to do the uploading too often, so we disable the action and expect the
-    // application using the action to enable it again when appropriate
-    m_uploadMostRecentAction->setEnabled(false);
+    // don't trigger any new work until the current activities are done
+    if(m_networkcontroller->is_transfer())
+        return;
     FileTransferItem* fti = qobject_cast<FileTransferItem*>(filestransfer_model->getRow(m_current_filetransferitem - 1));
     if(fti) {
         // upload, needs FULL local path, operates on current dir remotely
@@ -570,5 +571,11 @@ void Controller::uploadMostRecent()
                                            );
         filestransfer_model->appendRow(newFti);
         m_networkcontroller->upload(newFti);
+        while(m_networkcontroller->is_transfer()) {
+            qApp->processEvents();
+        }
     }
+    // We don't want to do the uploading too often, so we disable the action and expect the
+    // application using the action to enable it again when appropriate
+    m_uploadMostRecentAction->setEnabled(false);
 }
