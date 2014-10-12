@@ -30,7 +30,6 @@
 #include <kconfiggroup.h>
 
 #include <QDir>
-#include <QtDBus>
 
 #include <qtest_kde.h>
 
@@ -122,19 +121,19 @@ void CalendarTester::testSingleDay() {
     day->addInterval(TimeInterval(t1, length));
     t.addDay(day);
     QVERIFY(t.findDay(wdate) == day);
-    
+
     QVERIFY(t.hasInterval(after, DateTime( after.addDays(1))) == false);
     QVERIFY(t.hasInterval(before, DateTime(before.addDays(-1))) == false);
-    
+
     QVERIFY(t.hasInterval(after, before) == false);
     QVERIFY(t.hasInterval(before, after));
-    
+
     QVERIFY((t.firstAvailableAfter(after, DateTime(after.addDays(10)))).isValid() == false);
     QVERIFY((t.firstAvailableBefore(before, DateTime(before.addDays(-10)))).isValid() == false);
-    
+
     QCOMPARE(t.firstAvailableAfter(before,after), wdt1);
     QCOMPARE(t.firstAvailableBefore(after, before), wdt2);
-    
+
     Duration e(0, 2, 0);
     QCOMPARE((t.effort(before, after)).toString(), e.toString());
 }
@@ -150,13 +149,13 @@ void CalendarTester::testWeekdays() {
 
     CalendarDay *wd1 = t.weekday(Qt::Wednesday);
     QVERIFY(wd1 != 0);
-    
+
     wd1->setState(CalendarDay::Working);
     wd1->addInterval(TimeInterval(t1, length));
 
     QCOMPARE(t.firstAvailableAfter(before, after), DateTime(QDate(2006, 1, 4), QTime(8,0,0)));
     QCOMPARE((t.firstAvailableBefore(after, before)), DateTime(QDate(2006, 1, 4), QTime(10,0,0)));
-    
+
     QCOMPARE(t.firstAvailableAfter(after, DateTime(QDate(QDate(2006,1,14)), QTime())), DateTime(QDate(2006, 1, 11), QTime(8,0,0)));
     QCOMPARE(t.firstAvailableBefore(before, DateTime(QDate(2005,12,25), QTime())), DateTime(QDate(2005, 12, 28), QTime(10,0,0)));
 }
@@ -173,31 +172,30 @@ void CalendarTester::testCalendarWithParent() {
     int length = t1.msecsTo( t2 );
     DateTime wdt1(wdate, t1);
     DateTime wdt2(wdate, t2);
-    
+
     CalendarDay *day = new CalendarDay(wdate, CalendarDay::Working);
     day->addInterval(TimeInterval(t1, length));
     p.addDay(day);
     QVERIFY(p.findDay(wdate) == day);
-    
+
     //same tests as in testSingleDay()
     QVERIFY(t.hasInterval(after, DateTime(after.addDays(1))) == false);
     QVERIFY(t.hasInterval(before, DateTime(before.addDays(-1))) == false);
-    
+
     QVERIFY(t.hasInterval(after, before) == false);
     QVERIFY(t.hasInterval(before, after));
-    
+
     QVERIFY((t.firstAvailableAfter(after, DateTime(after.addDays(10)))).isValid() == false);
     QVERIFY((t.firstAvailableBefore(before, DateTime(before.addDays(-10)))).isValid() == false);
-    
+
     QVERIFY(t.firstAvailableAfter(before, after).isValid());
     QVERIFY(t.firstAvailableBefore(after, before).isValid());
-    
+
     QCOMPARE(t.firstAvailableAfter(before,after), wdt1);
     QCOMPARE(t.firstAvailableBefore(after, before), wdt2);
-    
+
     Duration e(0, 2, 0);
     QCOMPARE((t.effort(before, after)).toString(), e.toString());
-    
 }
 
 void CalendarTester::testTimezone()
@@ -274,7 +272,7 @@ void CalendarTester::workIntervals()
     day->addInterval( TimeInterval( t1, length ) );
     t.addDay(day);
     QVERIFY(t.findDay(wdate) == day);
-    
+
     AppointmentIntervalList lst = t.workIntervals( before, after, 100. );
     QCOMPARE( lst.map().count(), 1 );
     QCOMPARE( wdate, lst.map().values().first().startTime().date() );
@@ -282,10 +280,10 @@ void CalendarTester::workIntervals()
     QCOMPARE( wdate, lst.map().values().first().endTime().date() );
     QCOMPARE( t2, lst.map().values().first().endTime().time() );
     QCOMPARE( 100., lst.map().values().first().load() );
-    
+
     QTime t3( 12, 0, 0 );
     day->addInterval( TimeInterval( t3, length ) );
-    
+
     lst = t.workIntervals( before, after, 100. );
     Debug::print( lst );
     QCOMPARE( lst.map().count(), 2 );
@@ -294,12 +292,37 @@ void CalendarTester::workIntervals()
     QCOMPARE( wdate, lst.map().values().first().endTime().date() );
     QCOMPARE( t2, lst.map().values().first().endTime().time() );
     QCOMPARE( 100., lst.map().values().first().load() );
-    
+
     QCOMPARE( wdate, lst.map().values().at( 1 ).startTime().date() );
     QCOMPARE( t3, lst.map().values().at( 1 ).startTime().time() );
     QCOMPARE( wdate, lst.map().values().at( 1 ).endTime().date() );
     QCOMPARE( t3.addMSecs( length ), lst.map().values().at( 1 ).endTime().time() );
     QCOMPARE( 100., lst.map().values().at( 1 ).load() );
+
+    // add interval before the existing
+    QTime t4( 5, 30, 0 );
+    day->addInterval( TimeInterval( t4, length ) );
+
+    lst = t.workIntervals( before, after, 100. );
+    Debug::print( lst );
+    QCOMPARE( lst.map().count(), 3 );
+    QCOMPARE( wdate, lst.map().values().first().startTime().date() );
+    QCOMPARE( t4, lst.map().values().first().startTime().time() );
+    QCOMPARE( wdate, lst.map().values().first().endTime().date() );
+    QCOMPARE( t4.addMSecs( length ), lst.map().values().first().endTime().time() );
+    QCOMPARE( 100., lst.map().values().first().load() );
+
+    QCOMPARE( wdate, lst.map().values().at( 1 ).startTime().date() );
+    QCOMPARE( t1, lst.map().values().at( 1 ).startTime().time() );
+    QCOMPARE( wdate, lst.map().values().at( 1 ).endTime().date() );
+    QCOMPARE( t2, lst.map().values().at( 1 ).endTime().time() );
+    QCOMPARE( 100., lst.map().values().at( 1 ).load() );
+
+    QCOMPARE( wdate, lst.map().values().at( 2 ).startTime().date() );
+    QCOMPARE( t3, lst.map().values().at( 2 ).startTime().time() );
+    QCOMPARE( wdate, lst.map().values().at( 2 ).endTime().date() );
+    QCOMPARE( t3.addMSecs( length ), lst.map().values().at( 2 ).endTime().time() );
+    QCOMPARE( 100., lst.map().values().at( 2 ).load() );
 }
 
 void CalendarTester::workIntervalsFullDays()
@@ -314,7 +337,7 @@ void CalendarTester::workIntervalsFullDays()
     t.addDay(day);
 
     QCOMPARE( day->numIntervals(), 1 );
-    QVERIFY( day->intervalAt( 0 )->endsMidnight() );
+    QVERIFY( day->timeIntervals().first()->endsMidnight() );
 
     DateTime start = day->start();
     DateTime end = day->end();

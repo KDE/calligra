@@ -36,7 +36,7 @@ ExportDialog::ExportDialog(QWidget *parent)
     setCaption(i18n("Export Sheet to HTML"));
     setButtons(Ok | Cancel);
     setDefaultButton(KDialog::Cancel);
-    qApp->restoreOverrideCursor();
+    QApplication::restoreOverrideCursor();
 
     connect(m_mainwidget->mCustomButton, SIGNAL(toggled(bool)),
             m_mainwidget->mCustomURL, SLOT(setEnabled(bool)));
@@ -65,7 +65,7 @@ void ExportDialog::selectAll()
 
 ExportDialog::~ExportDialog()
 {
-    qApp->setOverrideCursor(Qt::WaitCursor);
+    QApplication::setOverrideCursor(Qt::WaitCursor);
 }
 
 QTextCodec *ExportDialog::encoding() const

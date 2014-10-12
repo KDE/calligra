@@ -27,7 +27,7 @@
 #include "kptrelation.h"
 #include "kptresource.h"
 #include "kptdocuments.h"
-#include <kptdebug.h>
+#include "kptdebug.h"
 
 #include <klocale.h>
 

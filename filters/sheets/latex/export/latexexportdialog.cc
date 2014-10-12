@@ -53,7 +53,7 @@ LatexExportDialog::LatexExportDialog(KoStore* inputStore, QWidget* parent)
 
     int i = 0;
 
-    qApp->restoreOverrideCursor();
+    QApplication::restoreOverrideCursor();
 
     /* Recent files */
     m_config = new KConfig("kspreadlatexexportdialog");

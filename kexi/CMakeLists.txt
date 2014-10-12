@@ -50,12 +50,10 @@ add_subdirectory( kexiutils )
 macro_optional_find_package(MySQL)
 macro_log_feature(MYSQL_FOUND "libmysqlclient" "MySQL Client Library" "http://www.mysql.com" FALSE "" "Required by Kexi MySQL driver")
 
-INCLUDE (FindPostgreSQL)
-
 set (PQXX_MIN_VERSION "3.0.0")
 set (PQXX_MAX_VERSION "5.0.0")
 
-macro_optional_find_package(PostgreSQL)
+macro_optional_find_package(CalligraPostgreSQL)
 macro_log_feature(POSTGRESQL_FOUND "libpq" "C application programmer's interface to PostgreSQL" "http://www.postgresql.org" FALSE "" "Required by Kexi PostgreSQL driver")
 
 pkg_check_modules (PQXX libpqxx)

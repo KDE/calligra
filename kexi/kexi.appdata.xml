@@ -105,6 +105,7 @@
       <li xml:lang="x-test">xxRunning queries, support for parametrized queriesxx</li>
       <li>Supports SQLite, MySQL, PostgreSQL and MS SQL Server databases</li>
       <li xml:lang="ca">Permet bases de dades SQLite, MySQL, PostgreSQL i MS SQL Server</li>
+      <li xml:lang="de">Unterstützt Datenbanken wie SQLite, MySQL, PostgreSQL und MS SQL Server</li>
       <li xml:lang="en-GB">Supports SQLite, MySQL, PostgreSQL and MS SQL Server databases</li>
       <li xml:lang="es">Soporte de bases de datos SQLite, MySQL, PostgreSQL y MS SQL Server</li>
       <li xml:lang="fr">Prend en charge les bases de données SQLite, MySQL, PostgreSQL et MS SQL Server</li>

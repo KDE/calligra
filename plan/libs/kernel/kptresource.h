@@ -30,16 +30,13 @@
 #include "kptappointment.h"
 #include "kptcalendar.h"
 
-#include <QDomDocument>
+#include <KoXmlReader.h>
+
 #include <QHash>
 #include <QString>
 #include <QList>
 
 #include <kdebug.h>
-
-#include <KoXmlReader.h>
-
-class QTime;
 
 
 /// The main namespace.
@@ -121,13 +118,6 @@ public:
     
     Risk* getRisk( int );
 
-    /** Get the "num" resources which is available in the time frame
-     * defined by "start" and "duration".
-     * @param start todo 
-     * @param duration todo
-     * @param num todo
-     */
-    QList<Resource> availableResources( const DateTime start, const Duration duration, int num );
     /** Manage the dependent resources.  This is a list of the resource
      * groups that must have available resources for this resource to
      * perform the work
@@ -151,7 +141,7 @@ public:
     void save( QDomElement &element ) const;
     
     /// Save workpackage document. Include only resources listed in @p lst
-    void saveWorkPackageXML( QDomElement &element, const QList<Resource*> lst ) const;
+    void saveWorkPackageXML( QDomElement &element, const QList<Resource*> &lst ) const;
 
     void initiateCalculation( Schedule &sch );
 
@@ -390,26 +380,26 @@ public:
      * Returns invalid DateTime if not available.
      * Uses the current schedule to check for appointments.
      */
-    DateTime availableAfter( const DateTime &time, const DateTime limit = DateTime() ) const;
+    DateTime availableAfter( const DateTime &time, const DateTime &limit = DateTime() ) const;
     /**
      * Find the first available time before @p time, within @p limit.
      * Returns invalid DateTime if not available.
      * Uses the current schedule to check for appointments.
      */
-    DateTime availableBefore( const DateTime &time, const DateTime limit = DateTime()) const;
+    DateTime availableBefore( const DateTime &time, const DateTime &limit = DateTime()) const;
 
     /**
      * Find the first available time after @p time, within @p limit.
      * Returns invalid DateTime if not available.
      * If @p sch == 0, Appointments are not checked.
      */
-    DateTime availableAfter( const DateTime &time, const DateTime limit, Schedule *sch ) const;
+    DateTime availableAfter( const DateTime &time, const DateTime &limit, Schedule *sch ) const;
     /**
      * Find the first available time before @p time, within @p limit.
      * Returns invalid DateTime if not available.
      * If @p sch == 0, Appointments are not checked.
      */
-    DateTime availableBefore( const DateTime &time, const DateTime limit, Schedule *sch ) const;
+    DateTime availableBefore( const DateTime &time, const DateTime &limit, Schedule *sch ) const;
 
     Resource *findId() const { return findId( m_id ); }
     Resource *findId( const QString &id ) const;
@@ -464,7 +454,7 @@ public:
     void subtractExternalAppointment( const QString &id, const DateTime &from, const DateTime &end, double load );
 
     void clearExternalAppointments();
-    void clearExternalAppointments( const QString id );
+    void clearExternalAppointments( const QString &id );
     /// Take the external appointments with identity @p id from the list of external appointments
     Appointment *takeExternalAppointment( const QString &id );
     /// Return external appointments with identity @p id

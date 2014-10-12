@@ -57,6 +57,8 @@ KoFilter::ConversionStatus DocxFile::writeDocx(const QString &fileName,
                                                const OdfReaderDocxContext &context,
                                                bool  commentsExist)
 {
+    Q_UNUSED(context);
+
     m_commentsExist = commentsExist;
     // Create the store and check if everything went well.
     // FIXME: Should docxStore be deleted from a finalizer?

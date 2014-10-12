@@ -24,9 +24,10 @@
 #include "kplatokernel_export.h"
 
 #include <QtGlobal>
-#include <QString>
 
 class KLocale;
+class QString;
+class QStringList;
 
 /// The main namespace.
 namespace KPlato
