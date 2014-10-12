@@ -240,7 +240,7 @@ QString XlsxChartExport::genPlotAreaStyle(KoGenStyle& style, KoGenStyles& styles
             if (areaFormat && areaFormat->m_foreground.isValid())
                 color = areaFormat->m_foreground;
             else
-                color = QColor(paletteSet ? "#C0C0C0" : "#FFFFFF");
+                color = QColor(paletteIsSet ? "#C0C0C0" : "#FFFFFF");
             style.addProperty("draw:fill-color", color.name(), KoGenStyle::GraphicType);
 
             if (color.alpha() < 255)

@@ -22,21 +22,10 @@
 
 #include <Charting.h>
 
-//#include <QString>
-//#include <QStringList>
-//#include <QRect>
-//#include <QMap>
-//#include <QColor>
-
 class KoStore;
 class KoXmlWriter;
 class KoGenStyles;
 class KoGenStyle;
-
-namespace MSOOXML
-{
-    class DrawingMLTheme;
-}
 
 
 class ChartExport
@@ -112,10 +101,7 @@ protected:
     // MS Office related stuff
     QList<QColor> m_palette;
     // tells if a 2003 color palette has been set
-    bool paletteSet;
-#if 0
-    const MSOOXML::DrawingMLTheme* m_theme;
-#endif
+    bool paletteIsSet;
 };
 
 #endif

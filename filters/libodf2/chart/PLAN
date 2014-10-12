@@ -15,9 +15,15 @@ Refactoring
     + Move the data definitions into its own .h file. 			done
     + Only include the Theme definitions where the reader is not needed done
  * Make ChartExport into a base class and make inherited classes in:	----
-    + Move baseclass to libodf2    	       		 	 	....
+    + Move baseclass to libodf2    	       		 	 	----
     + subclass in sheets/xlsx	   	  - using the DrawingMLTheme	done
-    + subclass in sheets/excel/sidewinder - using the 2003palette	....
+    + subclass in sheets/excel/sidewinder - using the 2003palette	LATER(*)
+
+
+(*) The palette is far too deeply ingrained in all of the chart writer to be
+    easily separated.  And perhaps this is something we could use in the chart
+    shape itself? We have wanted to provide support for chart themes for some
+    time now.
 
 
 Milestone 1: separating useful parts into a library

@@ -20,6 +20,9 @@
 // Own
 #include "ChartExport.h"
 
+// libstdc++
+#include <algorithm> // For std:find()
+
 // KDE
 #include <kdebug.h>
 
@@ -34,9 +37,7 @@
 
 #include <Charting.h>
 #include "NumberFormatParser.h"
-#include <MsooXmlTheme.h>
 
-#include <algorithm> // For std:find()
 
 // Print the content of generated content.xml to the console for debugging purpose
 //#define CONTENTXML_DEBUG
@@ -52,7 +53,7 @@ ChartExport::ChartExport(KoChart::Chart* chart)
     , m_end_y(0)
     , m_chart(chart)
     , sheetReplacement(true)
-    , paletteSet( false )
+    , paletteIsSet(false)
 {
     Q_ASSERT(m_chart);
     m_drawLayer = false;
@@ -201,7 +202,7 @@ QString ChartExport::genPlotAreaStyle(KoGenStyle& style, KoGenStyles& styles,
 	if (areaFormat && areaFormat->m_foreground.isValid())
 	    color = areaFormat->m_foreground;
 	else
-	    color = QColor(paletteSet ? "#C0C0C0" : "#FFFFFF");
+	    color = QColor(paletteIsSet ? "#C0C0C0" : "#FFFFFF");
 	style.addProperty("draw:fill-color", color.name(), KoGenStyle::GraphicType);
 
 	if (color.alpha() < 255)
@@ -235,7 +236,7 @@ void ChartExport::addShapePropertyStyle(/*const*/ KoChart::Series* series, KoGen
             style.addProperty("draw:stroke", "none", KoGenStyle::GraphicType);
 	}
     }
-    else if (  (paletteSet && m_chart->m_impl->name() != "scatter")
+    else if (  (paletteIsSet && m_chart->m_impl->name() != "scatter")
              || m_chart->m_showLines)
     {
         const int curSerNum = m_chart->m_series.indexOf(series);
@@ -243,7 +244,7 @@ void ChartExport::addShapePropertyStyle(/*const*/ KoChart::Series* series, KoGen
         style.addProperty("svg:stroke-color", m_palette.at(24 + curSerNum).name(),
 			  KoGenStyle::GraphicType);
     }
-    else if (paletteSet && m_chart->m_impl->name() == "scatter")
+    else if (paletteIsSet && m_chart->m_impl->name() == "scatter")
         style.addProperty("draw:stroke", "none", KoGenStyle::GraphicType);
     if (series->spPr->areaFill.valid) {
         if (series->spPr->areaFill.type == KoChart::Fill::Solid) {
@@ -254,7 +255,7 @@ void ChartExport::addShapePropertyStyle(/*const*/ KoChart::Series* series, KoGen
         else if (series->spPr->areaFill.type == KoChart::Fill::None)
             style.addProperty("draw:fill", "none", KoGenStyle::GraphicType);
     }
-    else if (paletteSet
+    else if (paletteIsSet
 	     && !(m_chart->m_markerType != KoChart::NoMarker || marker)
 	     && series->m_markerType == KoChart::NoMarker)
     {
@@ -281,7 +282,7 @@ QString ChartExport::replaceSheet(const QString &originalString, const QString &
 void ChartExport::set2003ColorPalette(QList < QColor > palette)
 {
     m_palette = palette;
-    paletteSet = true;
+    paletteIsSet = true;
 }
 
 QString ChartExport::markerType(KoChart::MarkerType type, int currentSeriesNumber)
@@ -738,7 +739,7 @@ bool ChartExport::saveSeries(KoGenStyles &styles, KoGenStyles &mainStyles,
     bool marker = false;
     Q_FOREACH (KoChart::Series* series, chart()->m_series) {
         lines = true;
-        if (chart()->m_impl->name() == "scatter" && !paletteSet) {
+        if (chart()->m_impl->name() == "scatter" && !paletteIsSet) {
             KoChart::ScatterImpl* impl = static_cast< KoChart::ScatterImpl* >(chart()->m_impl);
             lines = (impl->style == KoChart::ScatterImpl::Line
 		     || impl->style == KoChart::ScatterImpl::LineMarker);
@@ -757,14 +758,14 @@ bool ChartExport::saveSeries(KoGenStyles &styles, KoGenStyles &mainStyles,
         KoGenStyle seriesstyle(KoGenStyle::GraphicAutoStyle, "chart");
         if (series->spPr)
             addShapePropertyStyle(series, seriesstyle, mainStyles);
-        else if (lines && paletteSet) {
+        else if (lines && paletteIsSet) {
             lines = false;
             seriesstyle.addProperty("draw:stroke", "solid", KoGenStyle::GraphicType);      
             seriesstyle.addProperty("svg:stroke-color", m_palette.at(24 + curSerNum).name(),
 				    KoGenStyle::GraphicType);
         }
 
-        if (paletteSet
+        if (paletteIsSet
 	    && m_chart->m_impl->name() != "ring"
 	    && m_chart->m_impl->name() != "circle")
 	{
@@ -928,7 +929,7 @@ bool ChartExport::saveSeries(KoGenStyles &styles, KoGenStyles &mainStyles,
 			 && m_chart->m_markerType == KoChart::NoMarker
 			 && !marker)
 		{
-                    if (paletteSet) {
+                    if (paletteIsSet) {
                         gs.addProperty("draw:fill", "solid", KoGenStyle::GraphicType);
                         gs.addProperty("draw:fill-color", m_palette.at(16 + j).name(),
 				       KoGenStyle::GraphicType);
