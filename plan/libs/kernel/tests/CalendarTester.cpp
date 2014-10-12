@@ -298,6 +298,31 @@ void CalendarTester::workIntervals()
     QCOMPARE( wdate, lst.map().values().at( 1 ).endTime().date() );
     QCOMPARE( t3.addMSecs( length ), lst.map().values().at( 1 ).endTime().time() );
     QCOMPARE( 100., lst.map().values().at( 1 ).load() );
+
+    // add interval before the existing
+    QTime t4( 5, 30, 0 );
+    day->addInterval( TimeInterval( t4, length ) );
+
+    lst = t.workIntervals( before, after, 100. );
+    Debug::print( lst );
+    QCOMPARE( lst.map().count(), 3 );
+    QCOMPARE( wdate, lst.map().values().first().startTime().date() );
+    QCOMPARE( t4, lst.map().values().first().startTime().time() );
+    QCOMPARE( wdate, lst.map().values().first().endTime().date() );
+    QCOMPARE( t4.addMSecs( length ), lst.map().values().first().endTime().time() );
+    QCOMPARE( 100., lst.map().values().first().load() );
+
+    QCOMPARE( wdate, lst.map().values().at( 1 ).startTime().date() );
+    QCOMPARE( t1, lst.map().values().at( 1 ).startTime().time() );
+    QCOMPARE( wdate, lst.map().values().at( 1 ).endTime().date() );
+    QCOMPARE( t2, lst.map().values().at( 1 ).endTime().time() );
+    QCOMPARE( 100., lst.map().values().at( 1 ).load() );
+
+    QCOMPARE( wdate, lst.map().values().at( 2 ).startTime().date() );
+    QCOMPARE( t3, lst.map().values().at( 2 ).startTime().time() );
+    QCOMPARE( wdate, lst.map().values().at( 2 ).endTime().date() );
+    QCOMPARE( t3.addMSecs( length ), lst.map().values().at( 2 ).endTime().time() );
+    QCOMPARE( 100., lst.map().values().at( 2 ).load() );
 }
 
 void CalendarTester::workIntervalsFullDays()
