@@ -17,8 +17,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef CHARTEXPORT_H
-#define CHARTEXPORT_H
+#ifndef KOODFCHARTWRITER_H
+#define KOODFCHARTWRITER_H
 
 #include <Charting.h>
 
@@ -28,11 +28,11 @@ class KoGenStyles;
 class KoGenStyle;
 
 
-class ChartExport
+class KoOdfChartWriter
 {
 public:
-    explicit ChartExport(KoChart::Chart* chart);
-    virtual ~ChartExport();
+    explicit KoOdfChartWriter(KoChart::Chart* chart);
+    virtual ~KoOdfChartWriter();
 
     KoChart::Chart* chart() const { return m_chart; }
 
@@ -104,4 +104,4 @@ protected:
     bool paletteIsSet;
 };
 
-#endif
+#endif  // KOODFCHARTWRITER_H

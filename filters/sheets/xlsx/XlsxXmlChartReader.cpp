@@ -26,7 +26,7 @@
 #include "XlsxXmlChartReader.h"
 
 #include "Charting.h"
-#include "XlsxChartExport.h"
+#include "XlsxChartOdfWriter.h"
 #include "XlsxUtils.h"
 #include "NumberFormatParser.h"
 
@@ -370,18 +370,18 @@ QString columnName(uint column)
 
 
 XlsxXmlChartReaderContext::XlsxXmlChartReaderContext(KoStore* _storeout,
-						     XlsxChartExport* _chartExport)
+						     XlsxChartOdfWriter* _chartWriter)
     : MSOOXML::MsooXmlReaderContext()
     , m_storeout(_storeout)
-    , m_chart(_chartExport->chart())
-    , m_chartExport(_chartExport)
+    , m_chart(_chartWriter->chart())
+    , m_chartWriter(_chartWriter)
 {
 }
 
 XlsxXmlChartReaderContext::~XlsxXmlChartReaderContext()
 {
     delete m_chart;
-    delete m_chartExport;
+    delete m_chartWriter;
 }
 
 XlsxXmlChartReader::XlsxXmlChartReader(KoOdfWriters *writers)
@@ -467,26 +467,26 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read(MSOOXML::MsooXmlReaderContex
     // static is fine here cause we only need to take care that that number is unique in the
     // exported ODS file and do not take if the number is continuous or whatever.
     static int chartNumber = 0;
-    m_context->m_chartExport->m_href = QString("Chart%1").arg(++chartNumber);
+    m_context->m_chartWriter->m_href = QString("Chart%1").arg(++chartNumber);
 
     KoChart::Chart* c = m_context->m_chart;
     if (!c->m_cellRangeAddress.isNull() ) {
-        m_context->m_chartExport->m_cellRangeAddress.clear();
+        m_context->m_chartWriter->m_cellRangeAddress.clear();
         if (!c->m_sheetName.isEmpty())
-            m_context->m_chartExport->m_cellRangeAddress += c->m_sheetName + '.';
-        m_context->m_chartExport->m_cellRangeAddress += columnName(c->m_cellRangeAddress.left()) + QString::number(c->m_cellRangeAddress.top()) + ":" +
+            m_context->m_chartWriter->m_cellRangeAddress += c->m_sheetName + '.';
+        m_context->m_chartWriter->m_cellRangeAddress += columnName(c->m_cellRangeAddress.left()) + QString::number(c->m_cellRangeAddress.top()) + ":" +
                                                         columnName(c->m_cellRangeAddress.right()) + QString::number(c->m_cellRangeAddress.bottom());
     }
 
     if (m_currentSeries) {
-        m_context->m_chartExport->m_notifyOnUpdateOfRanges = m_currentSeries->m_valuesCellRangeAddress; //m_cellRangeAddress
+        m_context->m_chartWriter->m_notifyOnUpdateOfRanges = m_currentSeries->m_valuesCellRangeAddress; //m_cellRangeAddress
     }
 
     // the index will by written by the XlsxXmlWorksheetReader
-    //m_context->m_chartExport->saveIndex(body);
+    //m_context->m_chartWriter->saveIndex(body);
 
     // write the embedded object file
-    m_context->m_chartExport->saveContent(m_context->m_storeout, manifest);
+    m_context->m_chartWriter->saveContent(m_context->m_storeout, manifest);
 
     m_context = 0;
     return KoFilter::OK;

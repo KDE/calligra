@@ -55,7 +55,7 @@
 #include <KoXmlWriter.h>
 #include <MsooXmlUnits.h>
 #include "Charting.h"
-#include "XlsxChartExport.h"
+#include "XlsxChartOdfWriter.h"
 #include "XlsxXmlChartReader.h"
 #include "ComplexShapeHandler.h"
 
@@ -1833,11 +1833,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_chart()
         const QString filepath = m_context->relationships->target(m_context->path, m_context->file, r_id);
 
         KoChart::Chart* chart = new KoChart::Chart;
-        XlsxChartExport* chartexport = new XlsxChartExport(chart, m_context->themes);
+        XlsxChartOdfWriter* chartWriter = new XlsxChartOdfWriter(chart, m_context->themes);
         bool hasStart = false, hasEnd = false;
 #if defined(XLSXXMLDRAWINGREADER_CPP)
         chart->m_sheetName = m_context->worksheetReaderContext->worksheetName;
-        chartexport->setSheetReplacement(false);
+        chartWriter->setSheetReplacement(false);
         if (m_currentDrawingObject->m_positions.contains(XlsxDrawingObject::FromAnchor)) {
             XlsxDrawingObject::Position f = m_currentDrawingObject->m_positions[XlsxDrawingObject::FromAnchor];
             //chartexport->m_x = columnWidth(f.m_col-1, 0 /*f.m_colOff*/);
@@ -1856,19 +1856,19 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_chart()
             }
         }
 #else
-        chartexport->m_drawLayer = true;
+        chartWriter->m_drawLayer = true;
 #endif
         if (!hasStart) {
-            chartexport->m_x = EMU_TO_POINT(qMax((qint64)0, m_svgX));
-            chartexport->m_y = EMU_TO_POINT(qMax((qint64)0, m_svgY));
+            chartWriter->m_x = EMU_TO_POINT(qMax((qint64)0, m_svgX));
+            chartWriter->m_y = EMU_TO_POINT(qMax((qint64)0, m_svgY));
         }
         if (!hasEnd) {
-            chartexport->m_width = m_svgWidth > 0 ? EMU_TO_POINT(m_svgWidth) : 100;
-            chartexport->m_height = m_svgHeight > 0 ? EMU_TO_POINT(m_svgHeight) : 100;
+            chartWriter->m_width = m_svgWidth > 0 ? EMU_TO_POINT(m_svgWidth) : 100;
+            chartWriter->m_height = m_svgHeight > 0 ? EMU_TO_POINT(m_svgHeight) : 100;
         }
 
         KoStore* storeout = m_context->import->outputStore();
-        QScopedPointer<XlsxXmlChartReaderContext> context(new XlsxXmlChartReaderContext(storeout, chartexport));
+        QScopedPointer<XlsxXmlChartReaderContext> context(new XlsxXmlChartReaderContext(storeout, chartWriter));
         XlsxXmlChartReader reader(this);
         const KoFilter::ConversionStatus result = m_context->import->loadAndParseDocument(&reader, filepath, context.data());
         if (result != KoFilter::OK) {
@@ -1879,7 +1879,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_chart()
 #if defined(XLSXXMLDRAWINGREADER_CPP)
         m_currentDrawingObject->setChart(context.take());
 #else
-        chartexport->saveIndex(body);
+        chartWriter->saveIndex(body);
 #endif
     }
 

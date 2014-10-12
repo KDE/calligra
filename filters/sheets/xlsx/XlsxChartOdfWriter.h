@@ -17,14 +17,12 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef XLSXCHARTEXPORT_H
-#define XLSXCHARTEXPORT_H
+#ifndef XLSXCHARTODFWRITER_H
+#define XLSXCHARTODfWRITER_H
 
-#include <ChartExport.h>
+#include <KoOdfChartWriter.h>
 
 
-class KoStore;
-class KoXmlWriter;
 class KoGenStyles;
 class KoGenStyle;
 
@@ -34,12 +32,12 @@ namespace MSOOXML
 }
 
 
-class XlsxChartExport : public ChartExport
+class XlsxChartOdfWriter : public KoOdfChartWriter
 {
 public:
-    explicit XlsxChartExport(KoChart::Chart* chart,
-			     const MSOOXML::DrawingMLTheme* const contextWithThemeInfo = NULL);
-    ~XlsxChartExport();
+    explicit XlsxChartOdfWriter(KoChart::Chart* chart,
+				const MSOOXML::DrawingMLTheme* const contextWithThemeInfo = NULL);
+    ~XlsxChartOdfWriter();
 
 
 private:
@@ -59,4 +57,4 @@ private:
     const MSOOXML::DrawingMLTheme* m_theme;
 };
 
-#endif  // XLSXCHARTEXPORT_H
+#endif  // XLSXCHARTODFWRITER_H

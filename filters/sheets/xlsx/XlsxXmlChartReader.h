@@ -33,15 +33,15 @@ namespace KoChart {
     class ShapeProperties;
 }
 
-class XlsxChartExport;
+class XlsxChartOdfWriter;
 
 class XlsxXmlChartReaderContext : public MSOOXML::MsooXmlReaderContext
 {
 public:
     KoStore* m_storeout;
     KoChart::Chart* m_chart;
-    XlsxChartExport* m_chartExport;
-    explicit XlsxXmlChartReaderContext(KoStore* _storeout, XlsxChartExport* _chartExport);
+    XlsxChartOdfWriter* m_chartWriter;
+    explicit XlsxXmlChartReaderContext(KoStore* _storeout, XlsxChartOdfWriter* _chartWriter);
     virtual ~XlsxXmlChartReaderContext();
 };
 

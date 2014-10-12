@@ -4,7 +4,7 @@ include_directories(
     ${KOODF2_INCLUDES}
     ${CMAKE_SOURCE_DIR}/filters/libmsooxml
     ${CMAKE_SOURCE_DIR}/filters/libmso # For NumberFormatParser
-    ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx # for Charting
+    ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx # for the XlsxChartReader
     ${KOMAIN_INCLUDES}
 )
 
@@ -22,8 +22,8 @@ set(docx2odt_PART_SRCS
     DocxXmlEndnoteReader.cpp
     DocxXmlSettingsReader.cpp
     DocxImport.cpp
-    ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx/XlsxChartExport.cpp
-    ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx/ChartExport.cpp
+    ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx/XlsxChartOdfWriter.cpp
+    ${CMAKE_SOURCE_DIR}/filters/libodf2/chart/KoOdfChartWriter.cpp
     ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx/XlsxXmlChartReader.cpp
     #${CMAKE_SOURCE_DIR}/filters/sheets/xlsx/NumberFormatParser.cpp
 )

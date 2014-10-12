@@ -34,8 +34,8 @@ set(msooxml_LIB_SRCS
     VmlDrawingReader.cpp
     PredefinedShapeHelper.cpp
     ComplexShapeHandler.cpp
-    ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx/XlsxChartExport.cpp
-    ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx/ChartExport.cpp
+    ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx/XlsxChartOdfWriter.cpp
+    ${CMAKE_SOURCE_DIR}/filters/libodf2/chart/KoOdfChartWriter.cpp
     # TODO: move back to kolibs
     KoOdfExporter.cpp
 )

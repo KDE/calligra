@@ -25,7 +25,7 @@
 #include "PptxImport.h"
 
 #include "Charting.h"
-#include "ChartExport.h"
+#include "KoOdfChartWriter.h"
 #include "XlsxXmlChartReader.h"
 #include "PptxXmlCommentsReader.h"
 

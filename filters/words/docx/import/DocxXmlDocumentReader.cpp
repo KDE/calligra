@@ -36,7 +36,7 @@
 #include <KoGenStyles.h>
 #include <KoOdfGraphicStyles.h>
 #include <Charting.h>
-#include <ChartExport.h>
+#include <KoOdfChartWriter.h>
 #include <XlsxXmlChartReader.h>
 
 #include <MsooXmlTableStyle.h>

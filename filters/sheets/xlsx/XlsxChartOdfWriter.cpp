@@ -19,7 +19,7 @@
  */
 
 // Own
-#include "XlsxChartExport.h"
+#include "XlsxChartOdfWriter.h"
 
 // KDE
 #include <kdebug.h>
@@ -44,20 +44,20 @@
 
 using namespace KoChart;
 
-XlsxChartExport::XlsxChartExport(KoChart::Chart* chart, const MSOOXML::DrawingMLTheme* const theme)
-    : ChartExport(chart)
+XlsxChartOdfWriter::XlsxChartOdfWriter(KoChart::Chart* chart, const MSOOXML::DrawingMLTheme* const theme)
+    : KoOdfChartWriter(chart)
     , m_theme(theme)
 {
     Q_ASSERT(m_chart);
     m_drawLayer = false;
 }
 
-XlsxChartExport::~XlsxChartExport()
+XlsxChartOdfWriter::~XlsxChartOdfWriter()
 {
 }
 
 
-QColor XlsxChartExport::calculateColorFromGradientStop(const KoChart::Gradient::GradientStop& grad)
+QColor XlsxChartOdfWriter::calculateColorFromGradientStop(const KoChart::Gradient::GradientStop& grad)
 {
     QColor color = grad.knownColorValue;
 
@@ -73,7 +73,7 @@ QColor XlsxChartExport::calculateColorFromGradientStop(const KoChart::Gradient::
     return color;
 }
 
-QColor XlsxChartExport::labelFontColor() const
+QColor XlsxChartOdfWriter::labelFontColor() const
 {
     bool useTheme = !chart()->m_areaFormat && m_theme;
     if (useTheme) {
@@ -113,8 +113,8 @@ QColor XlsxChartExport::labelFontColor() const
     return QColor();
 }
 
-QString XlsxChartExport::genChartAreaStyle(KoGenStyle& style, KoGenStyles& styles,
-					   KoGenStyles& mainStyles)
+QString XlsxChartOdfWriter::genChartAreaStyle(KoGenStyle& style, KoGenStyles& styles,
+					      KoGenStyles& mainStyles)
 {
     if (chart()->m_fillGradient) {
         style.addProperty("draw:fill", "gradient", KoGenStyle::GraphicType);
@@ -180,8 +180,8 @@ QString XlsxChartExport::genChartAreaStyle(KoGenStyle& style, KoGenStyles& style
 }
 
 
-QString XlsxChartExport::genPlotAreaStyle(KoGenStyle& style, KoGenStyles& styles,
-					  KoGenStyles& mainStyles)
+QString XlsxChartOdfWriter::genPlotAreaStyle(KoGenStyle& style, KoGenStyles& styles,
+					     KoGenStyles& mainStyles)
 {
     KoChart::AreaFormat *areaFormat = ((chart()->m_plotArea
 					&& chart()->m_plotArea->m_areaFormat
@@ -202,7 +202,7 @@ QString XlsxChartExport::genPlotAreaStyle(KoGenStyle& style, KoGenStyles& styles
                 case(33):
                 case(34): {
                     style.addProperty("draw:fill-color",
-				      ChartExport::tintColor(colorScheme.value("dk1")->value(), 0.2).name(),
+				      tintColor(colorScheme.value("dk1")->value(), 0.2).name(),
 				      KoGenStyle::GraphicType);
                 } break;
                 case(35):
@@ -265,8 +265,8 @@ QString XlsxChartExport::genPlotAreaStyle(KoGenStyle& style, KoGenStyles& styles
 //                   Some helper functions
 
 
-void XlsxChartExport::addDataThemeToStyle(KoGenStyle& style, int dataNumber, int maxNumData,
-					  bool strokes)
+void XlsxChartOdfWriter::addDataThemeToStyle(KoGenStyle& style, int dataNumber, int maxNumData,
+					     bool strokes)
 {
     if (!m_theme) return;
 

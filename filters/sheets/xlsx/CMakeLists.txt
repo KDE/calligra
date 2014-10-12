@@ -1,6 +1,9 @@
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=30527)
 
-include_directories( ${KOMAIN_INCLUDES} ${CMAKE_SOURCE_DIR}/filters/libmsooxml )
+include_directories(${KOMAIN_INCLUDES}
+                    ${KOODF2_INCLUDES} // For KoOdfChartWriter
+                    ${CMAKE_SOURCE_DIR}/filters/libmsooxml
+)
 
 ########### next target ###############
 
@@ -16,8 +19,7 @@ set(xlsx2ods_PART_SRCS
     XlsxXmlCommentsReader.cpp
     XlsxXmlTableReader.cpp
 
-    XlsxChartExport.cpp
-    ChartExport.cpp
+    XlsxChartOdfWriter.cpp
     FormulaParser.cpp
 )
 

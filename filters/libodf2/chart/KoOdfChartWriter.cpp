@@ -1,6 +1,7 @@
 /*
  *  Copyright (c) 2010 Sebastian Sauer <sebsauer@kdab.com>
  *  Copyright (c) 2010 Carlos Licea <carlos@kdab.com>
+ *  Copyright (c) 2014 Inge Wallin <inge@lysator.liu.se>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published
@@ -18,7 +19,7 @@
  */
 
 // Own
-#include "ChartExport.h"
+#include "KoOdfChartWriter.h"
 
 // libstdc++
 #include <algorithm> // For std:find()
@@ -44,7 +45,7 @@
 
 using namespace KoChart;
 
-ChartExport::ChartExport(KoChart::Chart* chart)
+KoOdfChartWriter::KoOdfChartWriter(KoChart::Chart* chart)
     : m_x(0)
     , m_y(0)
     , m_width(0)
@@ -59,13 +60,13 @@ ChartExport::ChartExport(KoChart::Chart* chart)
     m_drawLayer = false;
 }
 
-ChartExport::~ChartExport()
+KoOdfChartWriter::~KoOdfChartWriter()
 {
 }
 
 
 // Takes a Excel cellrange and translates it into a ODF cellrange
-QString ChartExport::normalizeCellRange(QString range)
+QString KoOdfChartWriter::normalizeCellRange(QString range)
 {
     if (range.startsWith('[') && range.endsWith(']')) {
         range.remove(0, 1).chop(1);
@@ -90,7 +91,7 @@ QString ChartExport::normalizeCellRange(QString range)
     return range;
 }
 
-QColor ChartExport::tintColor(const QColor & color, qreal tintfactor)
+QColor KoOdfChartWriter::tintColor(const QColor & color, qreal tintfactor)
 {
     QColor retColor;
     const qreal  nonTindedPart = 1.0 - tintfactor;
@@ -108,7 +109,7 @@ QColor ChartExport::tintColor(const QColor & color, qreal tintfactor)
     return retColor;
 }
 
-QColor ChartExport::calculateColorFromGradientStop(const KoChart::Gradient::GradientStop& grad)
+QColor KoOdfChartWriter::calculateColorFromGradientStop(const KoChart::Gradient::GradientStop& grad)
 {
     QColor color = grad.knownColorValue;
 
@@ -121,7 +122,8 @@ QColor ChartExport::calculateColorFromGradientStop(const KoChart::Gradient::Grad
     return color;
 }
 
-QString ChartExport::generateGradientStyle(KoGenStyles& mainStyles, const KoChart::Gradient* grad)
+QString KoOdfChartWriter::generateGradientStyle(KoGenStyles& mainStyles,
+						const KoChart::Gradient* grad)
 {
     KoGenStyle gradStyle(KoGenStyle::GradientStyle);
     gradStyle.addAttribute("draw:style", "linear");
@@ -136,13 +138,13 @@ QString ChartExport::generateGradientStyle(KoGenStyles& mainStyles, const KoChar
     return mainStyles.insert(gradStyle, "ms_chart_gradient");
 }
 
-QColor ChartExport::labelFontColor() const
+QColor KoOdfChartWriter::labelFontColor() const
 {
     return QColor();
 }
 
-QString ChartExport::genChartAreaStyle(KoGenStyle& style, KoGenStyles& styles,
-				       KoGenStyles& mainStyles)
+QString KoOdfChartWriter::genChartAreaStyle(KoGenStyle& style, KoGenStyles& styles,
+					    KoGenStyles& mainStyles)
 {
     if (chart()->m_fillGradient) {
         style.addProperty("draw:fill", "gradient", KoGenStyle::GraphicType);
@@ -174,7 +176,7 @@ QString ChartExport::genChartAreaStyle(KoGenStyle& style, KoGenStyles& styles,
 }
 
 
-QString ChartExport::genChartAreaStyle(KoGenStyles& styles, KoGenStyles& mainStyles)
+QString KoOdfChartWriter::genChartAreaStyle(KoGenStyles& styles, KoGenStyles& mainStyles)
 {
     KoGenStyle style(KoGenStyle::GraphicAutoStyle, "chart");
 
@@ -182,8 +184,8 @@ QString ChartExport::genChartAreaStyle(KoGenStyles& styles, KoGenStyles& mainSty
 }
 
 
-QString ChartExport::genPlotAreaStyle(KoGenStyle& style, KoGenStyles& styles,
-				      KoGenStyles& mainStyles)
+QString KoOdfChartWriter::genPlotAreaStyle(KoGenStyle& style, KoGenStyles& styles,
+					   KoGenStyles& mainStyles)
 {
     KoChart::AreaFormat *areaFormat = ((chart()->m_plotArea
 					&& chart()->m_plotArea->m_areaFormat
@@ -215,8 +217,8 @@ QString ChartExport::genPlotAreaStyle(KoGenStyle& style, KoGenStyles& styles,
 }
 
 
-void ChartExport::addShapePropertyStyle(/*const*/ KoChart::Series* series, KoGenStyle& style,
-					KoGenStyles& /*mainStyles*/)
+void KoOdfChartWriter::addShapePropertyStyle(/*const*/ KoChart::Series* series, KoGenStyle& style,
+					     KoGenStyles& /*mainStyles*/)
 {
     Q_ASSERT(series);
     bool marker = false;
@@ -266,26 +268,27 @@ void ChartExport::addShapePropertyStyle(/*const*/ KoChart::Series* series, KoGen
     }
 }
 
-QString ChartExport::genPlotAreaStyle(KoGenStyles& styles, KoGenStyles& mainStyles)
+QString KoOdfChartWriter::genPlotAreaStyle(KoGenStyles& styles, KoGenStyles& mainStyles)
 {
     KoGenStyle style(KoGenStyle::ChartAutoStyle/*, "chart"*/);
     return genPlotAreaStyle(style, styles, mainStyles);
 }
 
-QString ChartExport::replaceSheet(const QString &originalString, const QString &replacementSheet)
+QString KoOdfChartWriter::replaceSheet(const QString &originalString,
+				       const QString &replacementSheet)
 {
     QStringList split = originalString.split(QLatin1Char('!'));
     split[0] = replacementSheet;
     return split.join(QString::fromLatin1("!"));
 }
 
-void ChartExport::set2003ColorPalette(QList < QColor > palette)
+void KoOdfChartWriter::set2003ColorPalette(QList < QColor > palette)
 {
     m_palette = palette;
     paletteIsSet = true;
 }
 
-QString ChartExport::markerType(KoChart::MarkerType type, int currentSeriesNumber)
+QString KoOdfChartWriter::markerType(KoChart::MarkerType type, int currentSeriesNumber)
 {
     QString markerName;
     switch(type) {
@@ -337,7 +340,7 @@ QString ChartExport::markerType(KoChart::MarkerType type, int currentSeriesNumbe
 //                 The actual saving code
 
 
-bool ChartExport::saveIndex(KoXmlWriter* xmlWriter)
+bool KoOdfChartWriter::saveIndex(KoXmlWriter* xmlWriter)
 {
     if (!chart() || m_href.isEmpty())
         return false;
@@ -381,7 +384,7 @@ bool ChartExport::saveIndex(KoXmlWriter* xmlWriter)
     return true;
 }
 
-bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
+bool KoOdfChartWriter::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
 {
     if (!chart() || !chart()->m_impl || m_href.isEmpty())
         return false;
@@ -729,10 +732,10 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
     return true;
 }
 
-// FIXME: We should probably create a ChartExportContext out of these
+// FIXME: We should probably create a KoOdfChartWriterContext out of these
 //        parameters when we add more similar saving functions later.
-bool ChartExport::saveSeries(KoGenStyles &styles, KoGenStyles &mainStyles,
-			     KoXmlWriter* bodyWriter, int maxExplode)
+bool KoOdfChartWriter::saveSeries(KoGenStyles &styles, KoGenStyles &mainStyles,
+				  KoXmlWriter* bodyWriter, int maxExplode)
 {
     int curSerNum = 0;
     bool lines = true;
@@ -973,12 +976,12 @@ bool ChartExport::saveSeries(KoGenStyles &styles, KoGenStyles &mainStyles,
 
 
 // Calculate fade factor as suggested in msoo xml reference page 4161
-qreal ChartExport::calculateFade(int index, int maxIndex)
+qreal KoOdfChartWriter::calculateFade(int index, int maxIndex)
 {
     return -70.0 + 140.0 * ((double) index / ((double) maxIndex + 1.0));
 }
 
-QColor ChartExport::shadeColor(const QColor& col, qreal factor)
+QColor KoOdfChartWriter::shadeColor(const QColor& col, qreal factor)
 {
     QColor result = col;
     qreal luminance = 0.0;
@@ -990,8 +993,8 @@ QColor ChartExport::shadeColor(const QColor& col, qreal factor)
     return result;
 }
 
-void ChartExport::addDataThemeToStyle(KoGenStyle& style, int dataNumber, int maxNumData,
-				      bool strokes)
+void KoOdfChartWriter::addDataThemeToStyle(KoGenStyle& style, int dataNumber, int maxNumData,
+					   bool strokes)
 {
     // FIXME: This is only relevant to themes, so remove this function after
     //        we are done with saveContent().
@@ -1002,7 +1005,7 @@ void ChartExport::addDataThemeToStyle(KoGenStyle& style, int dataNumber, int max
 }
 
 
-float ChartExport::sprcToPt(int sprc, Orientation orientation )
+float KoOdfChartWriter::sprcToPt(int sprc, Orientation orientation )
 {
     if (orientation & vertical)
         return (float)sprc * ( (float)m_width / 4000.0);
@@ -1010,7 +1013,7 @@ float ChartExport::sprcToPt(int sprc, Orientation orientation )
     return (float)sprc * ( (float)m_height / 4000.0);
 }
 
-void ChartExport::writeInternalTable(KoXmlWriter* bodyWriter)
+void KoOdfChartWriter::writeInternalTable(KoXmlWriter* bodyWriter)
 {
     Q_ASSERT( bodyWriter );
     bodyWriter->startElement("table:table");
@@ -1065,7 +1068,7 @@ void ChartExport::writeInternalTable(KoXmlWriter* bodyWriter)
     bodyWriter->endElement(); // table:table
 }
 
-void ChartExport::setSheetReplacement( bool val )
+void KoOdfChartWriter::setSheetReplacement( bool val )
 {
     sheetReplacement = val;
 }

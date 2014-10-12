@@ -33,6 +33,8 @@
 //#include "MsooXmlCommonReader.h"
 //#include "MsooXmlImport.h"
 
+#include "komsooxml_export.h"
+
 namespace MSOOXML
 {
 
