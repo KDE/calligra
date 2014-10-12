@@ -113,6 +113,12 @@
       <li>
         Customizable user interface with freely placeable toolbars and dockers
       </li>
+      <li xml:lang="pt">Interface de utilizador configurável com barras e áreas acopláveis livres</li>
+      <li xml:lang="pt-BR">Interface de usuário configurável com barras e áreas acopláveis livres</li>
+      <li xml:lang="sk">Nastaviteľné používateľské rozhranie s voľne umiestniteľnými panelmi nástrojov a dockermi</li>
+      <li xml:lang="sv">Anpassningsbart användargränssnitt med verktygsrader och paneler som kan placeras fritt</li>
+      <li xml:lang="uk">Придатний до налаштовування інтерфейс користувача з довільним розташуванням панелей інструментів та бічних панелей.</li>
+      <li xml:lang="x-test">xxCustomizable user interface with freely placeable toolbars and dockersxx</li>
       <li>
         Layer docker for easy handling of complex documents including preview thumbnails, support for grouping shapes via
         drag and drop, controlling visibility of shapes or locking
