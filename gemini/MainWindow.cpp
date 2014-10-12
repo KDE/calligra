@@ -251,11 +251,13 @@ public:
         desktopViewProxy = new DesktopViewProxy(q, desktopView);
         connect(desktopViewProxy, SIGNAL(documentSaved()), q, SIGNAL(documentSaved()));
         connect(desktopViewProxy, SIGNAL(documentSaved()), q, SLOT(resetWindowTitle()));
+        connect(desktopViewProxy, SIGNAL(documentSaved()), q, SLOT(enableAltSaveAction()));
     }
 
     void notifySlateModeChange();
     void notifyDockingModeChange();
     bool queryClose();
+    void altSaveQuery();
 };
 
 MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags flags )
@@ -284,6 +286,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     connect(DocumentManager::instance(), SIGNAL(documentChanged()), SLOT(documentChanged()));
     connect(DocumentManager::instance(), SIGNAL(documentChanged()), SLOT(resetWindowTitle()));
     connect(DocumentManager::instance(), SIGNAL(documentSaved()), SLOT(resetWindowTitle()));
+    connect(DocumentManager::instance(), SIGNAL(documentSaved()), SLOT(enableAltSaveAction()));
 
     d->initTouchView(this);
 
@@ -513,9 +516,6 @@ void MainWindow::setAlternativeSaveAction(QAction* altAction)
     // if mainwindow exists, set alt action into current mainwindow
     if(d->desktopView && d->alternativeSaveAction) {
         QAction* cloudSave = d->desktopView->actionCollection()->addAction("cloud_save", d->alternativeSaveAction);
-        // Heuristics based silliness here - save action is not checkable, so the triggered checked bool is always false, so to enable
-        // the alternative action, we un-disable it
-        connect(d->desktopView->actionCollection()->action("file_save"), SIGNAL(triggered(bool)), d->alternativeSaveAction, SLOT(setDisabled(bool)));
         KToolBar* tb = d->desktopView->toolBar("mainToolBar");
         if(tb) {
             tb->removeAction(cloudSave);
@@ -525,6 +525,13 @@ void MainWindow::setAlternativeSaveAction(QAction* altAction)
     if(d->alternativeSaveAction) {
         // disabled for a start - this is called on load completion, so let's just assume we're not ready to reupload yet
         d->alternativeSaveAction->setEnabled(false);
+    }
+}
+
+void MainWindow::enableAltSaveAction()
+{
+    if(d->alternativeSaveAction) {
+        d->alternativeSaveAction->setEnabled(true);
     }
 }
 
@@ -668,6 +675,27 @@ bool MainWindow::Private::queryClose()
     return true;
 }
 
+void MainWindow::Private::altSaveQuery()
+{
+    qApp->processEvents();
+    if(alternativeSaveAction && alternativeSaveAction->isEnabled())
+    {
+        int res = KMessageBox::warningYesNo(q, i18n("<p>The cloud copy of the document is out of date. Do you want to upload a new copy?</p>"));
+        switch (res) {
+        case KMessageBox::Yes : {
+            alternativeSaveAction->trigger();
+            while(alternativeSaveAction->isEnabled()) {
+                qApp->processEvents();
+            }
+            break;
+        }
+        case KMessageBox::No :
+        default:
+            break;
+        }
+    }
+}
+
 void MainWindow::closeEvent(QCloseEvent* event)
 {
     if (centralWidget() == d->desktopView)
@@ -681,6 +709,7 @@ void MainWindow::closeEvent(QCloseEvent* event)
 
     if (d->allowClose)
     {
+        d->altSaveQuery();
         d->settings->setCurrentFile("");
         qApp->processEvents();
         if (d->desktopView)

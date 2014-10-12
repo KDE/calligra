@@ -89,6 +89,7 @@ private Q_SLOTS:
     void switchDesktopForced();
     void switchTouchForced();
     void touchChange();
+    void enableAltSaveAction();
 
 private:
     class Private;
