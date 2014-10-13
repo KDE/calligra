@@ -25,6 +25,7 @@
 #define MSOOXMLTHEME_H
 
 #include <QHash>
+#include <QVector>
 #include <QColor>
 #include <QMap>
 

@@ -1,11 +1,11 @@
 include_directories(
     ${CMAKE_BINARY_DIR}/filters/
-    ${CMAKE_SOURCE_DIR}/filters/libmso
     ${CMAKE_SOURCE_DIR}/filters/libmsooxml  # for MsooXmlGlobal.h
-    ${CMAKE_SOURCE_DIR}/sheets # for PointStorage.h
-    ${KOTEXT_INCLUDES} # for KoTextRangeManager.h, IMHO could be removed again
+    ${CMAKE_SOURCE_DIR}/filters/libmso
+    ${KOODF2_INCLUDES}                      # For the chart stuff
+    ${CMAKE_SOURCE_DIR}/sheets              # for PointStorage.h
+    ${KOTEXT_INCLUDES}                      # for KoTextRangeManager.h, IMHO could be removed again
     ${KOODF_INCLUDES}
-    ${KOODF2_INCLUDES} # For the chart stuff
 )
 
 kde4_add_executable(recordsxml2cpp recordsxml2cpp.cpp)

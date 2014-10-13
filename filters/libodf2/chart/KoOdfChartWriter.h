@@ -22,13 +22,15 @@
 
 #include <Charting.h>
 
+#include "koodf2_export.h"
+
 class KoStore;
 class KoXmlWriter;
 class KoGenStyles;
 class KoGenStyle;
 
 
-class KoOdfChartWriter
+class KOODF2_EXPORT KoOdfChartWriter
 {
 public:
     explicit KoOdfChartWriter(KoChart::Chart* chart);

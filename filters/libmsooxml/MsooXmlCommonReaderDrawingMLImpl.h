@@ -1840,18 +1840,18 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_chart()
         chartWriter->setSheetReplacement(false);
         if (m_currentDrawingObject->m_positions.contains(XlsxDrawingObject::FromAnchor)) {
             XlsxDrawingObject::Position f = m_currentDrawingObject->m_positions[XlsxDrawingObject::FromAnchor];
-            //chartexport->m_x = columnWidth(f.m_col-1, 0 /*f.m_colOff*/);
-            //chartexport->m_y = rowHeight(f.m_row-1, 0 /*f.m_rowOff*/);
-            chartexport->m_x = EMU_TO_POINT(f.m_colOff);
-            chartexport->m_y = EMU_TO_POINT(f.m_rowOff);
+            //chartWriter->m_x = columnWidth(f.m_col-1, 0 /*f.m_colOff*/);
+            //chartWriter->m_y = rowHeight(f.m_row-1, 0 /*f.m_rowOff*/);
+            chartWriter->m_x = EMU_TO_POINT(f.m_colOff);
+            chartWriter->m_y = EMU_TO_POINT(f.m_rowOff);
             hasStart = true;
             if (m_currentDrawingObject->m_positions.contains(XlsxDrawingObject::ToAnchor)) {
                 f = m_currentDrawingObject->m_positions[XlsxDrawingObject::ToAnchor];
-                chartexport->m_endCellAddress = m_currentDrawingObject->toCellAddress();
-                //chartexport->m_end_x = f.m_colOff;
-                //chartexport->m_end_y = f.m_rowOff;
-                chartexport->m_end_x = EMU_TO_POINT(f.m_colOff);
-                chartexport->m_end_y = EMU_TO_POINT(f.m_rowOff);
+                chartWriter->m_endCellAddress = m_currentDrawingObject->toCellAddress();
+                //chartWriter->m_end_x = f.m_colOff;
+                //chartWriter->m_end_y = f.m_rowOff;
+                chartWriter->m_end_x = EMU_TO_POINT(f.m_colOff);
+                chartWriter->m_end_y = EMU_TO_POINT(f.m_rowOff);
                 hasEnd = true;
             }
         }

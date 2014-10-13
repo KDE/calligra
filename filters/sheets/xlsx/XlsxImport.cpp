@@ -33,6 +33,7 @@
 #include <MsooXmlSchemas.h>
 #include <MsooXmlContentTypes.h>
 #include <MsooXmlRelationships.h>
+#include "MsooXmlThemesReader.h"
 
 #include <memory>
 

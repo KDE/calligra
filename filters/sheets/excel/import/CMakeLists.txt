@@ -3,7 +3,7 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder
     ${CMAKE_BINARY_DIR}/filters/
     ${KOMAIN_INCLUDES}
-    ${KOODF_INCLUDES}
+    ${KOODF2_INCLUDES}
     ${CMAKE_SOURCE_DIR}/filters/sheets/xlsx
     ${CMAKE_SOURCE_DIR}/filters/libmso
     ${CMAKE_SOURCE_DIR}/filters/libmsooxml
@@ -36,8 +36,8 @@ set(sidewinder_SRCS
   ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/worksheetsubstreamhandler.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/chartsubstreamhandler.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/XlsRecordOutputStream.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/../../xlsx/NumberFormatParser.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/../../xlsx/ChartExport.cpp
+  #${CMAKE_CURRENT_SOURCE_DIR}/../../xlsx/NumberFormatParser.cpp
+  ${CMAKE_SOURCE_DIR}/filters/libodf2/chart/KoOdfChartWriter.cpp
   ${CMAKE_CURRENT_BINARY_DIR}/records.cpp
 )
 
@@ -54,7 +54,11 @@ target_link_libraries(excelimport calligrasheetsodf komsooxml komain mso koodf $
 
 set(xls2ods_SRCS ExcelImport.cpp ImportUtils.cpp ODrawClient.cpp ${sidewinder_SRCS})
 kde4_add_plugin(calligra_filter_xls2ods ${xls2ods_SRCS})
-target_link_libraries(calligra_filter_xls2ods calligrasheetsodf komsooxml komain mso koodf ${ZLIB_LIBRARIES})
+target_link_libraries(calligra_filter_xls2ods
+                      calligrasheetsodf
+                      komsooxml mso
+                      komain koodf
+                      ${ZLIB_LIBRARIES})
 
 install(TARGETS calligra_filter_xls2ods DESTINATION ${PLUGIN_INSTALL_DIR})
 

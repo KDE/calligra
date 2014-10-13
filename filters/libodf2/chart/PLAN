@@ -14,10 +14,17 @@ Refactoring
  * Separate the definition of DrawingMLTheme from the ThemesReader.	Done
     + Move the data definitions into its own .h file. 			done
     + Only include the Theme definitions where the reader is not needed done
- * Make ChartExport into a base class and make inherited classes in:	----
-    + Move baseclass to libodf2    	       		 	 	----
+ * Make ChartExport into a base class and make inherited classes in:	Done
+    + Move baseclass to libodf2    	       		 	 	done
     + subclass in sheets/xlsx	   	  - using the DrawingMLTheme	done
     + subclass in sheets/excel/sidewinder - using the 2003palette	LATER(*)
+
+Test
+ * Convert all the test documents and check that the output is the same ----
+   as before.
+    + Download the test documents (checkout the repo)			....
+    + Create a script that does the conversion				....
+    + Create a script that does the comparison				....
 
 
 (*) The palette is far too deeply ingrained in all of the chart writer to be

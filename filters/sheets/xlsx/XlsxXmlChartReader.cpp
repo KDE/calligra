@@ -23,12 +23,19 @@
  *
  */
 
+// Own
 #include "XlsxXmlChartReader.h"
 
+// libodf2
 #include "Charting.h"
-#include "XlsxChartOdfWriter.h"
-#include "XlsxUtils.h"
+
+// libmso
+#include "XlsUtils.h"
 #include "NumberFormatParser.h"
+
+// The Xlsx import filter
+#include "XlsxChartOdfWriter.h"
+
 
 #define MSOOXML_CURRENT_NS "c"
 #define MSOOXML_CURRENT_CLASS XlsxXmlChartReader

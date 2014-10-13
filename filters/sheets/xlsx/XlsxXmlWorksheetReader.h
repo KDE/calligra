@@ -25,6 +25,8 @@
 #ifndef XLSXXMLWORKSHEETREADER_H
 #define XLSXXMLWORKSHEETREADER_H
 
+#include <KoBorder.h>   // needed by DrawingMLMethods
+
 //#include <MsooXmlThemesReader.h>
 #include <MsooXmlTheme.h>
 #include <MsooXmlCommonReader.h>

@@ -42,7 +42,7 @@
 #include <KoOdfNumberStyles.h>
 
 #include <Charting.h>
-#include <ChartExport.h>
+#include <KoOdfChartWriter.h>
 #include <NumberFormatParser.h>
 
 #include "swinder.h"
@@ -119,7 +119,7 @@ public:
     QString subScriptStyle, superScriptStyle;
     QHash<QString, KoGenStyle> valueFormatCache;
     QHash<CellFormatKey, QString> cellFormatCache;
-    QList<ChartExport*> charts;
+    QList<KoOdfChartWriter*> charts;
     QHash<Cell*, QByteArray> cellShapes;
     QHash<Sheet*, QByteArray> sheetShapes;
 
@@ -1326,7 +1326,7 @@ void ExcelImport::Private::processCellContentForBody(Cell* cell,
             continue;
         }
 
-        ChartExport *c = new ChartExport(chart->m_chart);
+        KoOdfChartWriter *c = new KoOdfChartWriter(chart->m_chart);
         c->m_href = QString("Chart%1").arg(this->charts.count()+1);
         c->m_endCellAddress = encodeAddress(sheet->name(), chart->m_colR, chart->m_rwB);
         c->m_notifyOnUpdateOfRanges = "Sheet1.D2:Sheet1.F2";
@@ -1360,7 +1360,7 @@ void ExcelImport::Private::processCellContentForBody(Cell* cell,
 
 void ExcelImport::Private::processCharts(KoXmlWriter* manifestWriter)
 {
-    foreach(ChartExport *c, this->charts) {
+    foreach(KoOdfChartWriter *c, this->charts) {
         c->saveContent(this->storeout, manifestWriter);
     }
 }

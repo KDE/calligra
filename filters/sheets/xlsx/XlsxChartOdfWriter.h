@@ -18,7 +18,7 @@
  */
 
 #ifndef XLSXCHARTODFWRITER_H
-#define XLSXCHARTODfWRITER_H
+#define XLSXCHARTODFWRITER_H
 
 #include <KoOdfChartWriter.h>
 
