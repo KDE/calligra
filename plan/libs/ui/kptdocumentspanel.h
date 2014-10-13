@@ -28,7 +28,8 @@
 
 #include <QWidget>
 #include <kundo2qstack.h>
-#include <QModelIndex>
+
+class QModelIndex;
 
 namespace KPlato
 {

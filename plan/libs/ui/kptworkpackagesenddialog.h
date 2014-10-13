@@ -29,8 +29,6 @@ namespace KPlato
 {
 
 class WorkPackageSendPanel;
-class Project;
-class Task;
 class Node;
 class ScheduleManager;
 
