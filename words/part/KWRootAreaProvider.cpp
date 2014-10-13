@@ -30,7 +30,6 @@
 #include <KoShape.h>
 #include <KoShapeContainer.h>
 #include <KoShapeFactoryBase.h>
-#include <KoShapeRegistry.h>
 #include <KoTextShapeData.h>
 #include <KoTextDocumentLayout.h>
 #include <KoTextLayoutObstruction.h>
