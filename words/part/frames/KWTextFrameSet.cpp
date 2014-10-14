@@ -34,7 +34,6 @@
 #include <KoTextDocument.h>
 #include <KoTextEditor.h>
 #include <KoTextDocumentLayout.h>
-#include <KoShapeRegistry.h>
 #include <KoShapeFactoryBase.h>
 #include <KoAnnotationLayoutManager.h>
 

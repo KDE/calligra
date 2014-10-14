@@ -20,8 +20,6 @@
 #include "KarbonFilterEffectsToolFactory.h"
 #include "KarbonFilterEffectsTool.h"
 
-#include <KoToolRegistry.h>
-
 #include <KoIcon.h>
 #include <klocale.h>
 

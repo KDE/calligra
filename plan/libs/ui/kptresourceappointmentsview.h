@@ -29,21 +29,16 @@
 
 #include <kpagedialog.h>
 
+class KoPageLayoutWidget;
 class KoDocument;
 
 class QPoint;
-class QTreeWidgetItem;
-class QSplitter;
-class QDropEvent;
-class QDragMoveEvent;
-class QDragEnterEvent;
 
 namespace KPlato
 {
 
 class View;
 class Project;
-class Appointment;
 class Resource;
 class ResourceGroup;
 class ScheduleManager;
@@ -180,3 +175,4 @@ private:
 }  //KPlato namespace
 
 #endif // KPTRESOURCEAPPOINTMENTSVIEW_H
+class KoPageLayoutWidget;

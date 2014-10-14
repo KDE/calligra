@@ -54,7 +54,6 @@
 #include <KoTextDocument.h>
 #include <KoApplication.h>
 #include <KoXmlWriter.h>
-#include <KoShapeRegistry.h>
 #include <KoXmlReader.h>
 #include <KoOdfReadStore.h>
 #include <KoOdfWriteStore.h>
