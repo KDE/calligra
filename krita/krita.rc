@@ -8,7 +8,7 @@
   <Action name="save_incremental_version"/>
   <Action name="save_incremental_backup"/>
   <Action name="createTemplate"/>
- </Menu>k
+ </Menu>
 
  <Menu name="edit"><text>&amp;Edit</text>
      <Merge/>
