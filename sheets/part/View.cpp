@@ -87,7 +87,6 @@
 #include <KoSelection.h>
 #include <KoDockerManager.h>
 #include <KoToolManager.h>
-#include <KoToolRegistry.h>
 #include <KoTemplateCreateDia.h>
 #include <KoXmlNS.h>
 #include <KoZoomAction.h>

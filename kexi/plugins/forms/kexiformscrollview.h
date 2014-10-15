@@ -148,7 +148,7 @@ public slots:
     virtual int rowsPerPage() const;
 
     //! Implementation for KexiDataAwareObjectInterface
-    virtual void ensureCellVisible(int row, int col/*=-1*/);
+    virtual void ensureCellVisible(int row, int col);
 
     virtual void moveToRecordRequested(uint r);
     virtual void moveToLastRecordRequested();

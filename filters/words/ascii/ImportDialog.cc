@@ -44,7 +44,7 @@ AsciiImportDialog::AsciiImportDialog(const QString &encoding, QWidget* parent)
 
     setButtons(Ok | Cancel);
     setCaption(i18n("Words's Plain Text Import Filter"));
-    qApp->restoreOverrideCursor();
+    QApplication::restoreOverrideCursor();
 
     QStringList encodings;
     encodings << i18nc("Descriptive encoding name", "Recommended ( %1 )", "UTF-8");
@@ -82,7 +82,7 @@ AsciiImportDialog::AsciiImportDialog(const QString &encoding, QWidget* parent)
 
 AsciiImportDialog::~AsciiImportDialog()
 {
-    qApp->setOverrideCursor(Qt::WaitCursor);
+    QApplication::setOverrideCursor(Qt::WaitCursor);
 }
 
 QTextCodec* AsciiImportDialog::getCodec() const

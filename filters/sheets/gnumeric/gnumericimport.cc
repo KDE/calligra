@@ -66,7 +66,7 @@ static const int g_dateSerial_19000228 = 59;
 static int g_dateOrigin = 0;
 
 // copied from gnumeric: src/formats.c:
-static char const * cell_date_format [] = {
+static char const * const cell_date_format [] = {
     "m/d/yy",  /* 0 Cell::Format::Date5*/
     "m/d/yyyy",  /* 1 Cell::Format::Date6*/
     "d-mmm-yy",  /* 2 Cell::Format::Date1 18-Feb-99 */
@@ -103,7 +103,7 @@ static char const * cell_date_format [] = {
 };
 
 // copied from gnumeric: src/formats.c:
-static char const * cell_time_format [] = {
+static char const * const cell_time_format [] = {
     "h:mm AM/PM",    // Cell::Format::Time1 9 : 01 AM
     "h:mm:ss AM/PM", // Cell::Format::Time2 9:01:05 AM
     "h:mm",          // Cell::Format::Time4 9:01

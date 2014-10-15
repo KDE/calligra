@@ -28,11 +28,7 @@
 
 #include <klocale.h>
 
-#include "KoView.h"
-
 class KoDocument;
-
-class QModelIndex;
 
 class KAction;
 class KActionMenu;
@@ -43,7 +39,6 @@ namespace KPlato
 class Project;
 class Node;
 class NodeItemModel;
-class GeneralNodeItemModel;
 class MacroCommand;
 
 class KPLATOUI_EXPORT TaskEditorItemModel : public NodeItemModel

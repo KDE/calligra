@@ -37,7 +37,6 @@
 #include <KoCanvasBase.h>
 #include <KoToolManager.h>
 #include <KoInteractionTool.h>
-#include <KoShapeRegistry.h>
 #include <KoShapeManager.h>
 #include <KoDocument.h>
 #include <KoShapeBasedDocumentBase.h>
@@ -85,14 +84,19 @@ KisAnimationDoc *KisPart2::createAnimationDoc() const
 
 KoView *KisPart2::createViewInstance(KoDocument *document, KoMainWindow *parent)
 {
-    qApp->setOverrideCursor(Qt::WaitCursor);
+    QApplication::setOverrideCursor(Qt::WaitCursor);
     QPointer<KisImageView>v = new KisImageView(this, qobject_cast<KisDoc2*>(document), parent);
 
     //XXX : fix this ugliness
     dynamic_cast<KisShapeController*>(qobject_cast<KisDoc2*>(document)->shapeController())->setInitialShapeForCanvas(v->canvasBase());
     KoToolManager::instance()->switchToolRequested("KritaShape/KisToolBrush");
 
-    qApp->restoreOverrideCursor();
+    // XXX: this prevents a crash when opening a new document after opening a
+    // a document that has not been touched! I have no clue why, though.
+    // see: https://bugs.kde.org/show_bug.cgi?id=208239.
+    document->setModified(true);
+    document->setModified(false);
+    QApplication::restoreOverrideCursor();
 
     return v;
 }
