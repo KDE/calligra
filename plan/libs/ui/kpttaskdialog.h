@@ -38,9 +38,7 @@ class TaskDescriptionPanel;
 class Node;
 class Task;
 class Project;
-class StandardWorktime;
 class MacroCommand;
-class RequestResourcesPanel;
 
 /**
  * The dialog that shows and allows you to alter any task.

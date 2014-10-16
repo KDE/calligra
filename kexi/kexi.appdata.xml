@@ -91,6 +91,7 @@
       <li xml:lang="x-test">xxFull visual designers for tables, queries, forms and reportsxx</li>
       <li>Running queries, support for parametrized queries</li>
       <li xml:lang="ca">Execució de consultes, implementació de consultes paramètriques</li>
+      <li xml:lang="de">Ausführung von Abfragen, Unterstützung für parametrisierte Abfragen</li>
       <li xml:lang="en-GB">Running queries, support for parametrised queries</li>
       <li xml:lang="es">Ejecución de consultas, soporte de consultas parametrizadas</li>
       <li xml:lang="fr">Exécution de requêtes, prise en charge des requêtes paramétrées</li>
@@ -105,6 +106,7 @@
       <li xml:lang="x-test">xxRunning queries, support for parametrized queriesxx</li>
       <li>Supports SQLite, MySQL, PostgreSQL and MS SQL Server databases</li>
       <li xml:lang="ca">Permet bases de dades SQLite, MySQL, PostgreSQL i MS SQL Server</li>
+      <li xml:lang="de">Unterstützt Datenbanken wie SQLite, MySQL, PostgreSQL und MS SQL Server</li>
       <li xml:lang="en-GB">Supports SQLite, MySQL, PostgreSQL and MS SQL Server databases</li>
       <li xml:lang="es">Soporte de bases de datos SQLite, MySQL, PostgreSQL y MS SQL Server</li>
       <li xml:lang="fr">Prend en charge les bases de données SQLite, MySQL, PostgreSQL et MS SQL Server</li>
@@ -161,6 +163,7 @@
       <li xml:lang="x-test">xxDesigning and displaying relational data using combo boxes (lookup columns)xx</li>
       <li>Direct data entry or import using CSV format</li>
       <li xml:lang="ca">Entrada directa de dades o importació usant el format CSV</li>
+      <li xml:lang="de">Direkte Dateneingabe oder Import aus dem CSV-Format</li>
       <li xml:lang="en-GB">Direct data entry or import using CSV format</li>
       <li xml:lang="es">Entrada directa de datos o importación utilizando el formato CSV</li>
       <li xml:lang="fr">Saisie directe de données ou import utilisant le format CSV</li>
@@ -230,6 +233,7 @@
     <screenshot>
       <caption>Form Designer</caption>
       <caption xml:lang="ca">Dissenyador de formularis</caption>
+      <caption xml:lang="de">Formular-Designer</caption>
       <caption xml:lang="en-GB">Form Designer</caption>
       <caption xml:lang="es">Diseñador de formularios</caption>
       <caption xml:lang="fr">Concepteur de formulaires</caption>

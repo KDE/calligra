@@ -34,19 +34,19 @@ class KZip;
 class ooNS
 {
 public:
-    static const char* const office;
-    static const char* const style;
-    static const char* const text;
-    static const char* const table;
-    static const char* const draw;
-    static const char* const presentation;
-    static const char* const fo;
-    static const char* const xlink;
-    static const char* const number;
-    static const char* const svg;
-    static const char* const dc;
-    static const char* const meta;
-    static const char* const config;
+    static const char office[];
+    static const char style[];
+    static const char text[];
+    static const char table[];
+    static const char draw[];
+    static const char presentation[];
+    static const char fo[];
+    static const char xlink[];
+    static const char number[];
+    static const char svg[];
+    static const char dc[];
+    static const char meta[];
+    static const char config[];
 };
 
 namespace OoUtils

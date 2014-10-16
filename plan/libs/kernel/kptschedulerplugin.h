@@ -24,7 +24,7 @@
 
 #include "kptschedule.h"
 
-#include "KoXmlReader.h"
+#include <KoXmlReader.h>
 
 #include <QObject>
 #include <QString>
@@ -32,7 +32,6 @@
 #include <QThread>
 #include <QTimer>
 
-class QDomDocument;
 class KLocale;
 
 namespace KPlato

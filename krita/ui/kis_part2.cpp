@@ -34,7 +34,6 @@
 #include <KoCanvasBase.h>
 #include <KoToolManager.h>
 #include <KoInteractionTool.h>
-#include <KoShapeRegistry.h>
 #include <KoShapeManager.h>
 #include <KoDocument.h>
 #include <KoShapeBasedDocumentBase.h>
@@ -72,7 +71,7 @@ void KisPart2::setDocument(KisDoc2 *document)
 
 KoView *KisPart2::createViewInstance(KoDocument *document, QWidget *parent)
 {
-    qApp->setOverrideCursor(Qt::WaitCursor);
+    QApplication::setOverrideCursor(Qt::WaitCursor);
     KisView2 *v = new KisView2(this, qobject_cast<KisDoc2*>(document), parent);
 
     //XXX : fix this ugliness
@@ -84,7 +83,7 @@ KoView *KisPart2::createViewInstance(KoDocument *document, QWidget *parent)
     // see: https://bugs.kde.org/show_bug.cgi?id=208239.
     document->setModified(true);
     document->setModified(false);
-    qApp->restoreOverrideCursor();
+    QApplication::restoreOverrideCursor();
 
     return v;
 }

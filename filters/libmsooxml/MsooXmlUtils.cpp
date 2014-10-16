@@ -68,95 +68,95 @@
 #include <memory>
 
 // common officedocument content types
-const char* const MSOOXML::ContentTypes::coreProps =            "application/vnd.openxmlformats-package.core-properties+xml";
-const char* const MSOOXML::ContentTypes::extProps =             "application/vnd.openxmlformats-officedocument.extended-properties+xml";
-const char* const MSOOXML::ContentTypes::theme =                "application/vnd.openxmlformats-officedocument.theme+xml";
+const char MSOOXML::ContentTypes::coreProps[] =            "application/vnd.openxmlformats-package.core-properties+xml";
+const char MSOOXML::ContentTypes::extProps[] =             "application/vnd.openxmlformats-officedocument.extended-properties+xml";
+const char MSOOXML::ContentTypes::theme[] =                "application/vnd.openxmlformats-officedocument.theme+xml";
 
 // wordprocessingml-specific content types
-const char* const MSOOXML::ContentTypes::wordDocument =         "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml";
-const char* const MSOOXML::ContentTypes::wordSettings =         "application/vnd.openxmlformats-officedocument.wordprocessingml.settings+xml";
-const char* const MSOOXML::ContentTypes::wordStyles =           "application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml";
-const char* const MSOOXML::ContentTypes::wordHeader =           "application/vnd.openxmlformats-officedocument.wordprocessingml.header+xml";
-const char* const MSOOXML::ContentTypes::wordFooter =           "application/vnd.openxmlformats-officedocument.wordprocessingml.footer+xml";
-const char* const MSOOXML::ContentTypes::wordFootnotes =        "application/vnd.openxmlformats-officedocument.wordprocessingml.footnotes+xml";
-const char* const MSOOXML::ContentTypes::wordEndnotes =         "application/vnd.openxmlformats-officedocument.wordprocessingml.endnotes+xml";
-const char* const MSOOXML::ContentTypes::wordFontTable =        "application/vnd.openxmlformats-officedocument.wordprocessingml.fontTable+xml";
-const char* const MSOOXML::ContentTypes::wordWebSettings =      "application/vnd.openxmlformats-officedocument.wordprocessingml.webSettings+xml";
-const char* const MSOOXML::ContentTypes::wordTemplate =         "application/vnd.openxmlformats-officedocument.wordprocessingml.template.main+xml";
-const char* const MSOOXML::ContentTypes::wordComments =         "application/vnd.openxmlformats-officedocument.wordprocessingml.comments+xml";
+const char MSOOXML::ContentTypes::wordDocument[] =         "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml";
+const char MSOOXML::ContentTypes::wordSettings[] =         "application/vnd.openxmlformats-officedocument.wordprocessingml.settings+xml";
+const char MSOOXML::ContentTypes::wordStyles[] =           "application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml";
+const char MSOOXML::ContentTypes::wordHeader[] =           "application/vnd.openxmlformats-officedocument.wordprocessingml.header+xml";
+const char MSOOXML::ContentTypes::wordFooter[] =           "application/vnd.openxmlformats-officedocument.wordprocessingml.footer+xml";
+const char MSOOXML::ContentTypes::wordFootnotes[] =        "application/vnd.openxmlformats-officedocument.wordprocessingml.footnotes+xml";
+const char MSOOXML::ContentTypes::wordEndnotes[] =         "application/vnd.openxmlformats-officedocument.wordprocessingml.endnotes+xml";
+const char MSOOXML::ContentTypes::wordFontTable[] =        "application/vnd.openxmlformats-officedocument.wordprocessingml.fontTable+xml";
+const char MSOOXML::ContentTypes::wordWebSettings[] =      "application/vnd.openxmlformats-officedocument.wordprocessingml.webSettings+xml";
+const char MSOOXML::ContentTypes::wordTemplate[] =         "application/vnd.openxmlformats-officedocument.wordprocessingml.template.main+xml";
+const char MSOOXML::ContentTypes::wordComments[] =         "application/vnd.openxmlformats-officedocument.wordprocessingml.comments+xml";
 
 // presentationml-specific content types
-const char* const MSOOXML::ContentTypes::presentationDocument =      "application/vnd.openxmlformats-officedocument.presentationml.presentation.main+xml";
-const char* const MSOOXML::ContentTypes::presentationSlide =         "application/vnd.openxmlformats-officedocument.presentationml.slide+xml";
-const char* const MSOOXML::ContentTypes::presentationSlideLayout =   "application/vnd.openxmlformats-officedocument.presentationml.slideLayout+xml";
-const char* const MSOOXML::ContentTypes::presentationSlideShow =     "application/vnd.openxmlformats-officedocument.presentationml.slideshow.main+xml";
-const char* const MSOOXML::ContentTypes::presentationTemplate =      "application/vnd.openxmlformats-officedocument.presentationml.template.main+xml";
-const char* const MSOOXML::ContentTypes::presentationNotes =         "application/vnd.openxmlformats-officedocument.presentationml.notesMaster+xml";
-const char* const MSOOXML::ContentTypes::presentationTableStyles =   "application/vnd.openxmlformats-officedocument.presentationml.tableStyles+xml";
-const char* const MSOOXML::ContentTypes::presentationProps =         "application/vnd.openxmlformats-officedocument.presentationml.presProps+xml";
-const char* const MSOOXML::ContentTypes::presentationViewProps =     "application/vnd.openxmlformats-officedocument.presentationml.viewProps+xml";
-const char* const MSOOXML::ContentTypes::presentationComments =      "application/vnd.openxmlformats-officedocument.presentationml.comments+xml";
+const char MSOOXML::ContentTypes::presentationDocument[] =      "application/vnd.openxmlformats-officedocument.presentationml.presentation.main+xml";
+const char MSOOXML::ContentTypes::presentationSlide[] =         "application/vnd.openxmlformats-officedocument.presentationml.slide+xml";
+const char MSOOXML::ContentTypes::presentationSlideLayout[] =   "application/vnd.openxmlformats-officedocument.presentationml.slideLayout+xml";
+const char MSOOXML::ContentTypes::presentationSlideShow[] =     "application/vnd.openxmlformats-officedocument.presentationml.slideshow.main+xml";
+const char MSOOXML::ContentTypes::presentationTemplate[] =      "application/vnd.openxmlformats-officedocument.presentationml.template.main+xml";
+const char MSOOXML::ContentTypes::presentationNotes[] =         "application/vnd.openxmlformats-officedocument.presentationml.notesMaster+xml";
+const char MSOOXML::ContentTypes::presentationTableStyles[] =   "application/vnd.openxmlformats-officedocument.presentationml.tableStyles+xml";
+const char MSOOXML::ContentTypes::presentationProps[] =         "application/vnd.openxmlformats-officedocument.presentationml.presProps+xml";
+const char MSOOXML::ContentTypes::presentationViewProps[] =     "application/vnd.openxmlformats-officedocument.presentationml.viewProps+xml";
+const char MSOOXML::ContentTypes::presentationComments[] =      "application/vnd.openxmlformats-officedocument.presentationml.comments+xml";
 
 // spreadsheetml-specific content types
-const char* const MSOOXML::ContentTypes::spreadsheetDocument =        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml";
-const char* const MSOOXML::ContentTypes::spreadsheetMacroDocument =   "application/vnd.ms-excel.sheet.macroEnabled.main+xml";
-const char* const MSOOXML::ContentTypes::spreadsheetPrinterSettings = "application/vnd.openxmlformats-officedocument.spreadsheetml.printerSettings";
-const char* const MSOOXML::ContentTypes::spreadsheetStyles =          "application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml";
-const char* const MSOOXML::ContentTypes::spreadsheetWorksheet =       "application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml";
-const char* const MSOOXML::ContentTypes::spreadsheetCalcChain =       "application/vnd.openxmlformats-officedocument.spreadsheetml.calcChain+xml";
-const char* const MSOOXML::ContentTypes::spreadsheetSharedStrings =   "application/vnd.openxmlformats-officedocument.spreadsheetml.sharedStrings+xml";
-const char* const MSOOXML::ContentTypes::spreadsheetTemplate =        "application/vnd.openxmlformats-officedocument.spreadsheetml.template.main+xml";
-const char* const MSOOXML::ContentTypes::spreadsheetComments =        "application/vnd.openxmlformats-officedocument.spreadsheetml.comments+xml";
+const char MSOOXML::ContentTypes::spreadsheetDocument[] =        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml";
+const char MSOOXML::ContentTypes::spreadsheetMacroDocument[] =   "application/vnd.ms-excel.sheet.macroEnabled.main+xml";
+const char MSOOXML::ContentTypes::spreadsheetPrinterSettings[] = "application/vnd.openxmlformats-officedocument.spreadsheetml.printerSettings";
+const char MSOOXML::ContentTypes::spreadsheetStyles[] =          "application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml";
+const char MSOOXML::ContentTypes::spreadsheetWorksheet[] =       "application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml";
+const char MSOOXML::ContentTypes::spreadsheetCalcChain[] =       "application/vnd.openxmlformats-officedocument.spreadsheetml.calcChain+xml";
+const char MSOOXML::ContentTypes::spreadsheetSharedStrings[] =   "application/vnd.openxmlformats-officedocument.spreadsheetml.sharedStrings+xml";
+const char MSOOXML::ContentTypes::spreadsheetTemplate[] =        "application/vnd.openxmlformats-officedocument.spreadsheetml.template.main+xml";
+const char MSOOXML::ContentTypes::spreadsheetComments[] =        "application/vnd.openxmlformats-officedocument.spreadsheetml.comments+xml";
 
 //generic namespaces
-const char* const MSOOXML::Schemas::dublin_core =                                "http://purl.org/dc/elements/1.1/";
+const char MSOOXML::Schemas::dublin_core[] =                                "http://purl.org/dc/elements/1.1/";
 
 // common namespaces
-const char* const MSOOXML::Schemas::contentTypes =                               "http://schemas.openxmlformats.org/package/2006/content-types";
+const char MSOOXML::Schemas::contentTypes[] =                               "http://schemas.openxmlformats.org/package/2006/content-types";
 
-const char* const MSOOXML::Schemas::relationships =                              "http://schemas.openxmlformats.org/package/2006/relationships";
-const char* const MSOOXML::Schemas::core_properties =                            "http://schemas.openxmlformats.org/package/2006/metadata/core-properties";
+const char MSOOXML::Schemas::relationships[] =                              "http://schemas.openxmlformats.org/package/2006/relationships";
+const char MSOOXML::Schemas::core_properties[] =                            "http://schemas.openxmlformats.org/package/2006/metadata/core-properties";
 
 // ISO/IEC 29500-1:2008(E), Annex A. (normative), p. 4355
 // See also: specs/all.xsd
 // A.1 WordprocessingML
-const char* const MSOOXML::Schemas::wordprocessingml =                           "http://schemas.openxmlformats.org/wordprocessingml/2006/main";
+const char MSOOXML::Schemas::wordprocessingml[] =                           "http://schemas.openxmlformats.org/wordprocessingml/2006/main";
 
 // A.2 SpreadsheetML
-const char* const MSOOXML::Schemas::spreadsheetml =                              "http://schemas.openxmlformats.org/spreadsheetml/2006/main";
+const char MSOOXML::Schemas::spreadsheetml[] =                              "http://schemas.openxmlformats.org/spreadsheetml/2006/main";
 
 // A.3 PresentationML
-const char* const MSOOXML::Schemas::presentationml =                             "http://schemas.openxmlformats.org/presentationml/2006/main";
+const char MSOOXML::Schemas::presentationml[] =                             "http://schemas.openxmlformats.org/presentationml/2006/main";
 
 // A.4 DrawingML - Framework
-const char* const MSOOXML::Schemas::drawingml::main =                            "http://schemas.openxmlformats.org/drawingml/2006/main";
-const char* const MSOOXML::Schemas::drawingml::wordprocessingDrawing =           "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing";
-const char* const MSOOXML::Schemas::drawingml::spreadsheetDrawing =              "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing";
-const char* const MSOOXML::Schemas::drawingml::compatibility =                   "http://schemas.openxmlformats.org/drawingml/2006/compatibility";
-const char* const MSOOXML::Schemas::drawingml::lockedCanvas =                    "http://schemas.openxmlformats.org/drawingml/2006/lockedCanvas";
-const char* const MSOOXML::Schemas::drawingml::picture =                         "http://schemas.openxmlformats.org/drawingml/2006/picture";
+const char MSOOXML::Schemas::drawingml::main[] =                            "http://schemas.openxmlformats.org/drawingml/2006/main";
+const char MSOOXML::Schemas::drawingml::wordprocessingDrawing[] =           "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing";
+const char MSOOXML::Schemas::drawingml::spreadsheetDrawing[] =              "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing";
+const char MSOOXML::Schemas::drawingml::compatibility[] =                   "http://schemas.openxmlformats.org/drawingml/2006/compatibility";
+const char MSOOXML::Schemas::drawingml::lockedCanvas[] =                    "http://schemas.openxmlformats.org/drawingml/2006/lockedCanvas";
+const char MSOOXML::Schemas::drawingml::picture[] =                         "http://schemas.openxmlformats.org/drawingml/2006/picture";
 
 // A.5 DrawingML - Components
-const char* const MSOOXML::Schemas::drawingml::chart =                           "http://schemas.openxmlformats.org/drawingml/2006/chart";
-const char* const MSOOXML::Schemas::drawingml::chartDrawing =                    "http://schemas.openxmlformats.org/drawingml/2006/chartDrawing";
-const char* const MSOOXML::Schemas::drawingml::diagram =                         "http://schemas.openxmlformats.org/drawingml/2006/diagram";
+const char MSOOXML::Schemas::drawingml::chart[] =                           "http://schemas.openxmlformats.org/drawingml/2006/chart";
+const char MSOOXML::Schemas::drawingml::chartDrawing[] =                    "http://schemas.openxmlformats.org/drawingml/2006/chartDrawing";
+const char MSOOXML::Schemas::drawingml::diagram[] =                         "http://schemas.openxmlformats.org/drawingml/2006/diagram";
 
 // A.6 Shared MLs
-const char* const MSOOXML::Schemas::officeDocument::math =                       "http://schemas.openxmlformats.org/officeDocument/2006/math";
-const char* const MSOOXML::Schemas::officeDocument::bibliography =               "http://schemas.openxmlformats.org/officeDocument/2006/bibliography";
-const char* const MSOOXML::Schemas::officeDocument::characteristics =            "http://schemas.openxmlformats.org/officeDocument/2006/characteristics";
-const char* const MSOOXML::Schemas::officeDocument::customXml =                  "http://schemas.openxmlformats.org/officeDocument/2006/customXml";
-const char* const MSOOXML::Schemas::officeDocument::custom_properties =          "http://schemas.openxmlformats.org/officeDocument/2006/custom-properties";
-const char* const MSOOXML::Schemas::officeDocument::docPropsVTypes =             "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes";
-const char* const MSOOXML::Schemas::officeDocument::extended_properties =        "http://schemas.openxmlformats.org/officeDocument/2006/extended-properties";
-const char* const MSOOXML::Schemas::officeDocument::relationships =              "http://schemas.openxmlformats.org/officeDocument/2006/relationships";
-const char* const MSOOXML::Schemas::officeDocument::sharedTypes =                "http://schemas.openxmlformats.org/officeDocument/2006/sharedTypes";
+const char MSOOXML::Schemas::officeDocument::math[] =                       "http://schemas.openxmlformats.org/officeDocument/2006/math";
+const char MSOOXML::Schemas::officeDocument::bibliography[] =               "http://schemas.openxmlformats.org/officeDocument/2006/bibliography";
+const char MSOOXML::Schemas::officeDocument::characteristics[] =            "http://schemas.openxmlformats.org/officeDocument/2006/characteristics";
+const char MSOOXML::Schemas::officeDocument::customXml[] =                  "http://schemas.openxmlformats.org/officeDocument/2006/customXml";
+const char MSOOXML::Schemas::officeDocument::custom_properties[] =          "http://schemas.openxmlformats.org/officeDocument/2006/custom-properties";
+const char MSOOXML::Schemas::officeDocument::docPropsVTypes[] =             "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes";
+const char MSOOXML::Schemas::officeDocument::extended_properties[] =        "http://schemas.openxmlformats.org/officeDocument/2006/extended-properties";
+const char MSOOXML::Schemas::officeDocument::relationships[] =              "http://schemas.openxmlformats.org/officeDocument/2006/relationships";
+const char MSOOXML::Schemas::officeDocument::sharedTypes[] =                "http://schemas.openxmlformats.org/officeDocument/2006/sharedTypes";
 
 // A.7 Custom XML Schema References
-const char* const MSOOXML::Schemas::schemaLibrary =                              "http://schemas.openxmlformats.org/schemaLibrary/2006/main";
+const char MSOOXML::Schemas::schemaLibrary[] =                              "http://schemas.openxmlformats.org/schemaLibrary/2006/main";
 
 // Marks that the value has not been modified;
-const char* UNUSED = "UNUSED";
+static const char UNUSED[] = "UNUSED";
 
 using namespace MSOOXML;
 
@@ -1159,7 +1159,7 @@ void Utils::setupUnderLineStyle(const QString& msooxmlName, KoCharacterStyle* te
 
 namespace
 {
-    const char* markerStyles[6] = {
+    static const char* const markerStyles[6] = {
         "", "msArrowEnd_20_5", "msArrowStealthEnd_20_5", "msArrowDiamondEnd_20_5",
         "msArrowOvalEnd_20_5", "msArrowOpenEnd_20_5"
     };

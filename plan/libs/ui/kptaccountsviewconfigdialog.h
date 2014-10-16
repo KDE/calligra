@@ -24,10 +24,6 @@
 #include <kpagedialog.h>
 #include "ui_kptaccountsviewconfigurepanelbase.h"
 
-class QDate;
-class QString;
-class QWidget;
-
 class KoPageLayoutWidget;
 
 namespace KPlato

@@ -64,7 +64,7 @@
 #include <QUrl>
 
 const int logoBottomMargin = 84 - 12;
-const char * const calligraUrl = "http://www.calligra.org";
+const char calligraUrl[] = "http://www.calligra.org";
 
 // from oxygenhelper.cpp:
 OxygenHelper::OxygenHelper()
@@ -2106,7 +2106,7 @@ void KexiMenuWidgetPrivate::updateLogo()
         updateLogoPixmap();
         clickableLogoArea = new ClickableLogoArea(q);
         clickableLogoArea->setCursor(Qt::PointingHandCursor);
-        clickableLogoArea->setToolTip(i18n("Visit Calligra home page at %1", calligraUrl));
+        clickableLogoArea->setToolTip(i18n("Visit Calligra home page at %1", QLatin1String(calligraUrl)));
     }
     clickableLogoArea->setGeometry(logoRect);
 }

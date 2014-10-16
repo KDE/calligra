@@ -71,6 +71,7 @@
 #include <KoDockRegistry.h>
 #include <KoResourceServerProvider.h>
 #include <KoResourceItemChooserSync.h>
+#include <KoDockWidgetTitleBar.h>
 #include <KoCompositeOp.h>
 #include <KoTemplateCreateDia.h>
 #include <KoCanvasControllerWidget.h>
@@ -121,6 +122,7 @@
 #include <QPoint>
 #include "kis_node_commands_adapter.h"
 #include <kis_paintop_preset.h>
+#include <kis_signal_compressor.h>
 #include "kis_favorite_resource_manager.h"
 #include "kis_action_manager.h"
 #include "input/kis_input_profile_manager.h"
@@ -172,6 +174,7 @@ public:
         , mainWindow(0)
         , tooltipManager(0)
         , showFloatingMessage(true)
+        , guiUpdateCompressor(0)
     {
     }
 
@@ -234,6 +237,7 @@ public:
     KisTooltipManager* tooltipManager;
     QPointer<KisFloatingMessage> savedFloatingMessage;
     bool showFloatingMessage;
+    KisSignalCompressor* guiUpdateCompressor;
 };
 
 
@@ -273,6 +277,9 @@ KisView2::KisView2(KoPart *part, KisDoc2 * doc, QWidget * parent)
     m_d->canvasController->setCanvas(m_d->canvas);
 
     m_d->resourceProvider->setResourceManager(m_d->canvas->resourceManager());
+
+    m_d->guiUpdateCompressor = new KisSignalCompressor(30, KisSignalCompressor::POSTPONE, this);
+    connect(m_d->guiUpdateCompressor, SIGNAL(timeout()), this, SLOT(guiUpdateTimeout()));
 
     createActions();
     createManagers();
@@ -1072,13 +1079,7 @@ void KisView2::createManagers()
 
 void KisView2::updateGUI()
 {
-    m_d->nodeManager->updateGUI();
-    m_d->selectionManager->updateGUI();
-    m_d->filterManager->updateGUI();
-    m_d->zoomManager->updateGUI();
-    m_d->gridManager->updateGUI();
-    m_d->perspectiveGridManager->updateGUI();
-    m_d->actionManager->updateGUI();
+    m_d->guiUpdateCompressor->start();
 }
 
 void KisView2::slotPreferences()
@@ -1617,6 +1618,10 @@ void KisView2::updateIcons()
         QList<QDockWidget*> dockers = mainWindow()->dockWidgets();
         foreach(QDockWidget* dock, dockers) {
             kDebug() << "name " << dock->objectName();
+            KoDockWidgetTitleBar* titlebar = dynamic_cast<KoDockWidgetTitleBar*>(dock->titleBarWidget());
+            if (titlebar) {
+                titlebar->updateIcons();
+            }
             if (!whitelist.contains(dock->objectName())) {
                 continue;
             }
@@ -1642,6 +1647,17 @@ void KisView2::updateIcons()
         }
     }
 #endif
+}
+
+void KisView2::guiUpdateTimeout()
+{
+    m_d->nodeManager->updateGUI();
+    m_d->selectionManager->updateGUI();
+    m_d->filterManager->updateGUI();
+    m_d->zoomManager->updateGUI();
+    m_d->gridManager->updateGUI();
+    m_d->perspectiveGridManager->updateGUI();
+    m_d->actionManager->updateGUI();
 }
 
 void KisView2::showFloatingMessage(const QString message, const QIcon& icon, int timeout, KisFloatingMessage::Priority priority, int alignment)

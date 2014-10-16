@@ -28,7 +28,6 @@
 #include <kconfig.h>
 #include <kdebug.h>
 #include <KoFilterManager.h>
-#include <knuminput.h>
 
 #include "latexexportAdaptor.h"
 
@@ -54,7 +53,7 @@ LatexExportDialog::LatexExportDialog(KoStore* inputStore, QWidget* parent)
 
     int i = 0;
 
-    qApp->restoreOverrideCursor();
+    QApplication::restoreOverrideCursor();
 
     /* Recent files */
     m_config = new KConfig("kspreadlatexexportdialog");

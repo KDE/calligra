@@ -22,6 +22,7 @@
 
 #include "KoRdfSemanticItem.h"
 
+#include <kdatetime.h>
 // calendars
 #ifdef KDEPIMLIBS_FOUND
 #include <kcalcore/event.h>
@@ -29,6 +30,7 @@ class KJob;
 #endif
 
 #include <KDateTime>
+
 #include <ui_KoRdfCalendarEventEditWidget.h>
 
 /**

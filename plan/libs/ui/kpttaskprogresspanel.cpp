@@ -27,7 +27,6 @@
 #include <QTableWidget>
 
 #include <kdatetime.h>
-#include <knuminput.h>
 #include <klocale.h>
 
 #include "kpttask.h"

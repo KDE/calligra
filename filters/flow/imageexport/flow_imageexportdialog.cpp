@@ -34,7 +34,7 @@ namespace Flow
 ImageExportDialog::ImageExportDialog(QWidget* parent, const char* name)
         : KDialogBase(parent, name, false, i18n("Export to Image"), Ok | Cancel)
 {
-    qApp->restoreOverrideCursor();
+    QApplication::restoreOverrideCursor();
     m_mainWidget = new ImageExportWidget(this);
     setMainWidget(m_mainWidget);
 }

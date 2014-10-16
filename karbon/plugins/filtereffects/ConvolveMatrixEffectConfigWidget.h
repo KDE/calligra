@@ -25,7 +25,6 @@
 class QDoubleSpinBox;
 class KoFilterEffect;
 class ConvolveMatrixEffect;
-class KIntNumInput;
 class KComboBox;
 class QSpinBox;
 class QCheckBox;

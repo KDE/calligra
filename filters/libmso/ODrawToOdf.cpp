@@ -777,7 +777,7 @@ QString ODrawToOdf::defineDashStyle(KoGenStyles& styles, const quint32 lineDashi
 
 QColor ODrawToOdf::processOfficeArtCOLORREF(const MSO::OfficeArtCOLORREF& c, const DrawStyle& ds)
 {
-    static QRgb systemColors[25] = {
+    static const QRgb systemColors[25] = {
         0xc0c0c0, 0x008080, 0x000080, 0x808080, 0xc0c0c0, 0xffffff, 0x000000,
         0x000000, 0x000000, 0xffffff, 0xc0c0c0, 0xc0c0c0, 0x808080, 0x000080,
         0xffffff, 0xc0c0c0, 0x808080, 0x808080, 0x000000, 0xc0c0c0, 0xffffff,
