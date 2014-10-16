@@ -1400,7 +1400,10 @@ void KisView2::guiUpdateTimeout()
     m_d->nodeManager->updateGUI();
     m_d->selectionManager->updateGUI();
     m_d->filterManager->updateGUI();
-    zoomManager()->updateGUI();
+    KisZoomManager* zoomManager = zoomManager();
+    if (zoomManager) {
+        zoomManager->updateGUI();
+    }
     m_d->gridManager->updateGUI();
     m_d->perspectiveGridManager->updateGUI();
     m_d->actionManager->updateGUI();
