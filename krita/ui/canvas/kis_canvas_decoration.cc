@@ -20,7 +20,7 @@
 
 #include "kis_image_view.h"
 #include "kis_canvas2.h"
-
+#include "kis_debug.h"
 
 struct KisCanvasDecoration::Private {
     bool visible;
@@ -74,6 +74,9 @@ void KisCanvasDecoration::toggleVisibility()
 
 void KisCanvasDecoration::paint(QPainter& gc, const QRectF& updateArea, const KisCoordinatesConverter *converter, KisCanvas2 *canvas = 0)
 {
+    if (!canvas) {
+        dbgFile<<"canvas does not exist:"<<canvas;
+        }
     if (visible())
         drawDecoration(gc, updateArea, converter,canvas);
 }

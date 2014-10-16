@@ -241,6 +241,7 @@ private slots:
     void openResourcesDirectory();
     void updateIcons();
     void makeStatusBarVisible();
+    void guiUpdateTimeout();
 
 private:
     void createActions();

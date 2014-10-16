@@ -125,6 +125,8 @@
 #include <QPoint>
 #include "kis_node_commands_adapter.h"
 #include <kis_paintop_preset.h>
+#include <kis_signal_compressor.h>
+#include "kis_favorite_resource_manager.h"
 #include "kis_action_manager.h"
 #include "input/kis_input_profile_manager.h"
 #include "kis_canvas_controls_manager.h"
@@ -231,6 +233,7 @@ public:
         , currentImageView(0)
         , canvasResourceProvider(0)
         , canvasResourceManager(0)
+        , guiUpdateCompressor(0)
     {
     }
 
@@ -285,7 +288,7 @@ public:
     KisCanvasResourceProvider* canvasResourceProvider;
     KoCanvasResourceManager* canvasResourceManager;
     QList<StatusBarItem> statusBarItems;
-
+    KisSignalCompressor* guiUpdateCompressor;
 };
 
 
@@ -300,6 +303,9 @@ KisView2::KisView2(QWidget * parent)
     m_d->canvasResourceProvider = new KisCanvasResourceProvider(this);
     m_d->canvasResourceManager = new KoCanvasResourceManager();
     m_d->canvasResourceProvider->setResourceManager(m_d->canvasResourceManager);
+
+    m_d->guiUpdateCompressor = new KisSignalCompressor(30, KisSignalCompressor::POSTPONE, this);
+    connect(m_d->guiUpdateCompressor, SIGNAL(timeout()), this, SLOT(guiUpdateTimeout()));
 
     createActions();
     createManagers();
@@ -876,13 +882,7 @@ void KisView2::createManagers()
 
 void KisView2::updateGUI()
 {
-    m_d->nodeManager->updateGUI();
-    m_d->selectionManager->updateGUI();
-    m_d->filterManager->updateGUI();
-    zoomManager()->updateGUI();
-    m_d->gridManager->updateGUI();
-    m_d->perspectiveGridManager->updateGUI();
-    m_d->actionManager->updateGUI();
+    m_d->guiUpdateCompressor->start();
 }
 
 void KisView2::slotBlacklistCleanup()
@@ -1393,6 +1393,17 @@ void KisView2::updateIcons()
 void KisView2::makeStatusBarVisible()
 {
     m_d->mainWindow->statusBar()->setVisible(true);
+}
+
+void KisView2::guiUpdateTimeout()
+{
+    m_d->nodeManager->updateGUI();
+    m_d->selectionManager->updateGUI();
+    m_d->filterManager->updateGUI();
+    zoomManager()->updateGUI();
+    m_d->gridManager->updateGUI();
+    m_d->perspectiveGridManager->updateGUI();
+    m_d->actionManager->updateGUI();
 }
 
 void KisView2::showFloatingMessage(const QString message, const QIcon& icon, int timeout, KisFloatingMessage::Priority priority, int alignment)
