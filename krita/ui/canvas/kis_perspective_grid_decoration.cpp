@@ -158,6 +158,7 @@ KisPerspectiveGridDecoration::getSubdivisionsInfo(const LineWrapper &l0,
 
 void KisPerspectiveGridDecoration::drawSubdivisions(QPainter& gc, const SubdivisionLinesInfo &info)
 {
+    kDebug() << " subdivs " << info.numSubdivisions;
     for(int i = info.numSubdivisions - 1; i > 0; i--) {
         QPointF start = info.startPoint + i*info.shift;
         QPointF end =
