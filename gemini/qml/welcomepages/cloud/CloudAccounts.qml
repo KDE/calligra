@@ -18,13 +18,32 @@
 
 import QtQuick 1.1
 import org.calligra 1.0
+import Calligra.Gemini.Dropbox 1.0
 import "../../components"
 import "dropbox" as Dropbox
+import "git" as Git
 
 Page {
     id: base;
     property string pageName: "accountsPage";
     property QtObject accountsList;
+
+    Connections {
+        target: controllerMIT;
+        onNeedAuthenticateChanged: {
+            if(controllerMIT.needAuthenticate) {
+                cloudAccounts.removeAccountByName("Dropbox");
+            }
+            else {
+                cloudAccounts.addAccount("Dropbox", "DropBox", "accountsPageDropbox", 0, true);
+            }
+        }
+    }
+    Component.onCompleted: {
+        if(!controllerMIT.needAuthenticate) {
+            cloudAccounts.addAccount("Dropbox", "DropBox", "accountsPageDropbox", 0, true);
+        }
+    }
     ListView {
         id: accountsView;
         anchors {
@@ -51,6 +70,7 @@ Page {
                     verticalCenter: parent.verticalCenter;
                     right: parent.right;
                 }
+                width: childrenRect.width;
                 spacing: Settings.theme.adjustedPixel(8);
                 Text {
                     text: model.accountType;
@@ -60,13 +80,21 @@ Page {
                     verticalAlignment: Text.AlignVCenter;
                     font: Settings.theme.font("templateLabel");
                     color: "#5b6573";
+                    visible: model.accountType !== "DropBox";
                 }
                 CohereButton {
                     anchors.verticalCenter: parent.verticalCenter;
-                    text: "Edit Account Details";
+                    text: (model.accountType === "DropBox") ? "Sign Out" : "Edit Account";
                     textColor: "#5b6573";
                     textSize: Settings.theme.adjustedPixel(18);
                     color: "#D2D4D5";
+                    onClicked: {
+                        dlgStack.replace(base.editComponentFromName(model.accountType));
+                        if(dlgStack.currentPage.accountIndex !== undefined) {
+                            dlgStack.currentPage.accountIndex = index;
+                            dlgStack.currentPage.text = model.text;
+                        }
+                    }
                 }
                 CohereButton {
                     anchors.verticalCenter: parent.verticalCenter;
@@ -74,6 +102,14 @@ Page {
                     textColor: "#5b6573";
                     textSize: Settings.theme.adjustedPixel(18);
                     color: "#D2D4D5";
+                    visible: model.accountType !== "DropBox";
+                    onClicked: {
+                        dlgStack.replace(removeAccountDlg);
+                        if(dlgStack.currentPage.accountIndex !== undefined) {
+                            dlgStack.currentPage.accountIndex = index;
+                            dlgStack.currentPage.text = model.text;
+                        }
+                    }
                 }
             }
         }
@@ -137,7 +173,7 @@ Page {
     PageStack {
         id: dlgStack;
         anchors.fill: base;
-        initialPage: addEmpty;
+        initialPage: addEmptyComp;
     }
     function addComponentFromName(name) {
         var elements = {
@@ -148,118 +184,20 @@ Page {
         return elements[name];
     }
     Component {
-        id: addEmpty;
+        id: addEmptyComp;
         Item {}
     }
     Component {
         id: addDropBox;
-        Rectangle {
-            anchors.fill: parent;
-            anchors.margins: Settings.theme.adjustedPixel(16);
-            property string serviceName: "";
-            radius: Settings.theme.adjustedPixel(8);
-            color: "white";
-            Rectangle {
-                anchors {
-                    fill: parent;
-                    margins: -Settings.theme.adjustedPixel(16);
-                }
-                opacity: 0.3;
-                color: "white";
-                MouseArea { anchors.fill: parent; onClicked: { /*nothing */ } }
-                SimpleTouchArea { anchors.fill: parent; onTouched: { /*nothing */ } }
-            }
-            Dropbox.SetupPage {
-                anchors.fill: parent;
-                anchors.margins: Settings.theme.adjustedPixel(8);
-            }
-            CohereButton {
-                anchors {
-                    bottom: parent.bottom;
-                    right: parent.right;
-                    margins: Settings.theme.adjustedPixel(8);
-                }
-                text: "Close";
-                textColor: "#5b6573";
-                textSize: Settings.theme.adjustedPixel(18);
-                color: "#D2D4D5";
-                onClicked: dlgStack.replace(addEmpty);
-            }
-        }
+        AddDropbox { addEmpty: addEmptyComp; }
     }
     Component {
         id: addWebDav;
-        Rectangle {
-            anchors.fill: parent;
-            anchors.margins: Settings.theme.adjustedPixel(16);
-            property string serviceName: "";
-            radius: Settings.theme.adjustedPixel(8);
-            color: "white";
-            Rectangle {
-                anchors {
-                    fill: parent;
-                    margins: -Settings.theme.adjustedPixel(16);
-                }
-                opacity: 0.3;
-                color: "white";
-                MouseArea { anchors.fill: parent; onClicked: { /*nothing */ } }
-                SimpleTouchArea { anchors.fill: parent; onTouched: { /*nothing */ } }
-            }
-            Label {
-                anchors.fill: parent;
-                horizontalAlignment: Text.AlignHCenter;
-                text: "Sorry, support for WebDav is not yet implemented.";
-            }
-            CohereButton {
-                anchors {
-                    bottom: parent.bottom;
-                    right: parent.right;
-                    margins: Settings.theme.adjustedPixel(8);
-                }
-                text: "Close";
-                textColor: "#5b6573";
-                textSize: Settings.theme.adjustedPixel(18);
-                color: "#D2D4D5";
-                onClicked: dlgStack.replace(addEmpty);
-            }
-        }
+        AddWebdav { addEmpty: addEmptyComp; }
     }
     Component {
         id: addGit;
-        Rectangle {
-            anchors.fill: parent;
-            anchors.margins: Settings.theme.adjustedPixel(16);
-            property string serviceName: "";
-            radius: Settings.theme.adjustedPixel(8);
-            color: "white";
-            Rectangle {
-                anchors {
-                    fill: parent;
-                    margins: -Settings.theme.adjustedPixel(16);
-                }
-                opacity: 0.3;
-                color: "white";
-                MouseArea { anchors.fill: parent; onClicked: { /*nothing */ } }
-                SimpleTouchArea { anchors.fill: parent; onTouched: { /*nothing */ } }
-            }
-            Label {
-                anchors.fill: parent;
-                horizontalAlignment: Text.AlignHCenter;
-                text: "Sorry, support for Git is not yet implemented.";
-            }
-            CohereButton {
-                anchors {
-                    bottom: parent.bottom;
-                    right: parent.right;
-                    margins: Settings.theme.adjustedPixel(8);
-                }
-                text: "Close";
-                textColor: "#5b6573";
-                textSize: Settings.theme.adjustedPixel(18);
-                color: "#D2D4D5";
-                onClicked: dlgStack.replace(addEmpty);
-            }
-        }
+        AddGit { addEmpty: addEmptyComp; }
     }
     function editComponentFromName(name) {
         var elements = {
@@ -271,17 +209,19 @@ Page {
     }
     Component {
         id: editDropBox;
-        Item {
-        }
+        AddDropbox { addEmpty: addEmptyComp; }
     }
     Component {
         id: editWebDav;
-        Item {
-        }
+        EditDetailsBase { addEmpty: addEmptyComp; }
     }
     Component {
         id: editGit;
-        Item {
-        }
+        EditDetailsBase { addEmpty: addEmptyComp; }
+    }
+
+    Component {
+        id: removeAccountDlg;
+        RemoveAccountDlg { addEmpty: addEmptyComp; }
     }
 }
