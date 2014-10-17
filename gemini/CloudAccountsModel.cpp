@@ -20,34 +20,119 @@
  */
 
 #include "CloudAccountsModel.h"
+#include "PropertyContainer.h"
+
+#include <KGlobal>
+#include <KStandardDirs>
+
+#include <QDebug>
+#include <QByteArray>
+#include <QDataStream>
+#include <QVariant>
+#include <QMetaObject>
+#include <QMetaProperty>
+#include <QFile>
 
 struct AccountEntry {
 public:
     AccountEntry(QObject* parent)
         : selected(false)
-        , accountDetails(new QObject(parent))
+        , accountDetails(new PropertyContainer("", parent))
     {}
     QString text;
     bool selected;
     QString accountType;
     QString stackComponent;
     QObject* accountDetails;
+
+    QByteArray serialize() {
+        // selected is not serialised, because that would be silly
+        QByteArray ba;
+        QDataStream stream(&ba, QIODevice::WriteOnly);
+        stream << text;
+        stream << accountType;
+        stream << stackComponent;
+        Q_FOREACH(QByteArray name, accountDetails->dynamicPropertyNames()) {
+            stream << name << accountDetails->property(name);
+        }
+        for(int i = accountDetails->metaObject()->propertyOffset(); i < accountDetails->metaObject()->propertyCount(); ++i) {
+            stream << accountDetails->metaObject()->property(i).name() << accountDetails->metaObject()->property(i).read(accountDetails);
+        }
+        return ba;
+    }
+
+    static AccountEntry* fromByteArray(QByteArray& ba, QObject* parent) {
+        AccountEntry* entry = new AccountEntry(parent);
+        QDataStream stream(&ba, QIODevice::ReadOnly);
+        stream >> entry->text;
+        stream >> entry->accountType;
+        stream >> entry->stackComponent;
+        while(!stream.atEnd()) {
+            QByteArray propertyName;
+            QVariant data;
+            stream >> propertyName;
+            stream >> data;
+            entry->accountDetails->setProperty(propertyName, data);
+        }
+        return entry;
+    }
 };
 
 class CloudAccountsModel::Private {
 public:
-    Private()
-    {}
+    Private(CloudAccountsModel* qq)
+        : q(qq)
+    {
+        dataFile = KGlobal::dirs()->locateLocal("config", "calligrageminicloudaccounts");
+        loadList();
+    }
     ~Private()
     {
         qDeleteAll(entries);
     }
+    CloudAccountsModel* q;
     QList<AccountEntry*> entries;
+    QString dataFile;
+
+    void saveList()
+    {
+        QByteArray ba;
+        QDataStream stream(&ba, QIODevice::WriteOnly);
+        Q_FOREACH(AccountEntry* entry, entries) {
+            stream << entry->serialize();
+        }
+        QFile data(dataFile);
+        data.open(QIODevice::WriteOnly);
+        data.write(ba);
+        data.close();
+    }
+
+    void loadList()
+    {
+        QByteArray ba;
+        QFile data(dataFile);
+        data.open(QIODevice::ReadOnly);
+        ba = data.readAll();
+        data.close();
+
+        q->beginResetModel();
+        qDeleteAll(entries);
+        entries.clear();
+
+        QDataStream stream(&ba, QIODevice::ReadOnly);
+        QByteArray entryBA;
+        while(!stream.atEnd()) {
+            stream >> entryBA;
+            entries.append(AccountEntry::fromByteArray(entryBA, q));
+        }
+
+        q->endResetModel();
+    }
 };
 
 CloudAccountsModel::CloudAccountsModel(QObject* parent)
     : QAbstractListModel(parent)
-    , d(new Private)
+    , d(new Private(this))
 {
     QHash<int, QByteArray> roles;
     roles[TextRole] = "text";
@@ -56,14 +141,6 @@ CloudAccountsModel::CloudAccountsModel(QObject* parent)
     roles[StackComponentRole] = "stackComponent";
     roles[AccountDetailsRole] = "accountDetails";
     setRoleNames(roles);
-
-    // the dropbox entry is static, because well, it's sort of always there...
-    AccountEntry* dropbox = new AccountEntry(this);
-    dropbox->text = "Dropbox";
-    dropbox->selected = false;
-    dropbox->accountType = "DropBox";
-    dropbox->stackComponent = "accountsPageDropbox";
-    d->entries.append(dropbox);
 }
 
 CloudAccountsModel::~CloudAccountsModel()
@@ -117,6 +194,62 @@ void CloudAccountsModel::selectIndex(int newSelection)
         d->entries.at(newSelection)->selected = true;
     }
     dataChanged(index(0), index(d->entries.count() - 1));
+}
+
+void CloudAccountsModel::addAccount(QString text, QString accountType, QString stackComponent, QObject* accountDetails, bool removeExisting)
+{
+    if(removeExisting) {
+        removeAccountByName(text);
+    }
+    AccountEntry* entry = new AccountEntry(this);
+    entry->text = text;
+    entry->accountType = accountType;
+    entry->stackComponent = stackComponent;
+    if(accountDetails) {
+        Q_FOREACH(QByteArray name, accountDetails->dynamicPropertyNames()) {
+            entry->accountDetails->setProperty(name, accountDetails->property(name));
+        }
+        for(int i = accountDetails->metaObject()->propertyOffset(); i < accountDetails->metaObject()->propertyCount(); ++i) {
+            entry->accountDetails->setProperty(accountDetails->metaObject()->property(i).name(), accountDetails->metaObject()->property(i).read(accountDetails));
+        }
+    }
+    int count = d->entries.count();
+    beginInsertRows(QModelIndex(), count, count);
+    d->entries.append(entry);
+    endInsertRows();
+    d->saveList();
+}
+
+void CloudAccountsModel::renameAccount(int index, QString newText)
+{
+    if(index > -1 && index < d->entries.count() - 1)
+    {
+        d->entries.at(index)->text = newText;
+        dataChanged(this->index(index), this->index(index));
+        d->saveList();
+    }
+}
+
+void CloudAccountsModel::removeAccountByName(QString text)
+{
+    beginResetModel();
+    for(int i = d->entries.count() - 1; i > -1; --i) {
+        if(d->entries.at(i)->text == text) {
+            d->entries.removeAt(i);
+        }
+    }
+    endResetModel();
+}
+
+void CloudAccountsModel::removeAccount(int index)
+{
+    if(index > -1 && index < d->entries.count() - 1)
+    {
+        beginRemoveRows(QModelIndex(), index, index);
+        delete(d->entries.takeAt(index));
+        endRemoveRows();
+        d->saveList();
+    }
 }
 
 #include "CloudAccountsModel.moc"

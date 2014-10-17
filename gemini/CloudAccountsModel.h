@@ -41,6 +41,25 @@ public:
     virtual int rowCount(const QModelIndex& parent) const;
     Q_INVOKABLE void selectIndex(int newSelection);
 
+    /**
+     * Add an account to the list. If removeExisting is true, the call will first remove any existing
+     * accounts with the same text.
+     *
+     * @param text           The user visible name of the account shown in the UI
+     * @param accountType    The type of account, either DropBox, Git or WebDav
+     * @param stackComponent The name of the component instantiated to show the files available through
+     *                       the account
+     * @param accountDetails A pure QObject with a set of dynamic properties containing information used
+     *                       by the service. For example, the local repository location for Git
+     * @param removeExisting Whether or not to remove any existing accounts with the given text before
+     *                       adding this one. Currently used by DropBox to ensure there is only one
+     *                       account at a given moment
+     */
+    Q_INVOKABLE void addAccount(QString text, QString accountType, QString stackComponent, QObject* accountDetails, bool removeExisting = false);
+    Q_INVOKABLE void renameAccount(int index, QString newText);
+    Q_INVOKABLE void removeAccountByName(QString text);
+    Q_INVOKABLE void removeAccount(int index);
+
 private:
     class Private;
     Private* d;
