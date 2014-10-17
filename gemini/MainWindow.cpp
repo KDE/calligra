@@ -63,6 +63,7 @@
 #include <KoZoomController.h>
 #include <KoFileDialog.h>
 
+#include "PropertyContainer.h"
 #include "TouchDeclarativeView.h"
 #include "RecentFileManager.h"
 #include "DocumentManager.h"
@@ -263,6 +264,7 @@ public:
 MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags flags )
     : QMainWindow( parent, flags ), d( new Private(this) )
 {
+    qmlRegisterUncreatableType<PropertyContainer>("org.calligra", 1, 0, "PropertyContainer", "Contains properties and naively extends QML to support dynamic properties");
     qmlRegisterType<Theme>("org.calligra", 1, 0, "Theme");
     qmlRegisterType<DocumentListModel>("org.calligra", 1, 0, "DocumentListModel");
     qmlRegisterType<SimpleTouchArea>("org.calligra", 1, 0, "SimpleTouchArea");
