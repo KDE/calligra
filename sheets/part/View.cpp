@@ -62,20 +62,15 @@
 // KDE includes
 #include <kactioncollection.h>
 #include <kconfig.h>
+#include <kglobalsettings.h>
 #include <kcomponentdata.h>
 #include <kdebug.h>
 
-#include <kfontchooser.h>
 #include <kinputdialog.h>
 #include <kmessagebox.h>
-#include <kpassivepopup.h>
-#include <kreplace.h>
-#include <kreplacedialog.h>
 #include <kstatusbar.h>
 #include <kstandardaction.h>
 #include <ktoggleaction.h>
-#include <ktoolinvocation.h>
-#include <kpushbutton.h>
 #include <kxmlguifactory.h>
 #include <kservicetypetrader.h>
 
@@ -86,15 +81,12 @@
 #include <KoCanvasControllerWidget.h>
 #include <KoMainWindow.h>
 #include <KoOdfLoadingContext.h>
-#include <KoOdfReadStore.h>
 #include <KoOdfStylesReader.h>
 #include <KoShapeController.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
-#include <KoStore.h>
 #include <KoDockerManager.h>
 #include <KoToolManager.h>
-#include <KoToolRegistry.h>
 #include <KoTemplateCreateDia.h>
 #include <KoXmlNS.h>
 #include <KoZoomAction.h>

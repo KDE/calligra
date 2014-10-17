@@ -35,8 +35,6 @@
 #include <QRect>
 #include <QString>
 
-#include <kglobalsettings.h>
-
 #include <KoDocument.h>
 #include <KoXmlReader.h>
 #include <KoGenStyle.h>

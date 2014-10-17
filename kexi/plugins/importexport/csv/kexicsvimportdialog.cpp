@@ -54,16 +54,15 @@
 #include <QStackedWidget>
 #include <QSplitter>
 #include <QTreeView>
+#include <QApplication>
 
-#include <kapplication.h>
 #include <kdebug.h>
 #include <kdialog.h>
-#include <kfiledialog.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <kglobalsettings.h>
 #include <kcharsets.h>
 #include <knuminput.h>
+#include <klineedit.h>
 #include <KProgressDialog>
 
 #include <KoIcon.h>

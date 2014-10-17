@@ -23,7 +23,6 @@
 #include "KPrSoundCollection.h"
 
 #include <KoUnit.h>
-#include <KoStore.h>
 
 #include <ktemporaryfile.h>
 #include <kdebug.h>

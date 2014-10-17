@@ -21,7 +21,6 @@
 
 #include <KoIcon.h>
 #include <QLabel>
-#include <kmimetype.h>
 #include <db/driver.h>
 #include <db/utils.h>
 #include <core/kexi.h>

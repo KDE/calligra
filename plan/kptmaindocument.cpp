@@ -55,11 +55,8 @@
 #include <QStandardItemModel>
 
 #include <kdebug.h>
-#include <kconfig.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <kstandarddirs.h>
-#include <kmimetype.h>
 #include <ktemporaryfile.h>
 #include <KoGlobal.h>
 #include <kio/global.h>

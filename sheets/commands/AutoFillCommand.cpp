@@ -36,6 +36,7 @@
 #include "Value.h"
 #include "ValueConverter.h"
 
+#include <kglobal.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kdebug.h>

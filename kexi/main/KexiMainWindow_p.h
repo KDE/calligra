@@ -31,7 +31,6 @@
 #define PROPERTY_EDITOR_TABBAR_ID 1
 
 #include <ktoolbar.h>
-#include <kcolorutils.h>
 #include <khelpmenu.h>
 #include <QGroupBox>
 #include <QHBoxLayout>
@@ -40,6 +39,8 @@
 #include <QKeyEvent>
 #include <QScopedPointer>
 #include <ktabwidget.h>
+#include <kstandarddirs.h>
+#include <kglobalsettings.h>
 
 #include <KoIcon.h>
 

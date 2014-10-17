@@ -24,6 +24,8 @@
 #ifndef MSOOXMLCOMMONREADER_IMPL_H
 #define MSOOXMLCOMMONREADER_IMPL_H
 
+#include <KoXmlWriter.h>
+
 void MSOOXML_CURRENT_CLASS::initInternal()
 {
     m_insideHdr = false;

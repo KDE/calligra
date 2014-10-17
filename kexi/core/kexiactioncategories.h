@@ -20,7 +20,6 @@
 #ifndef KEXI_ACTION_CATEGORIES_H
 #define KEXI_ACTION_CATEGORIES_H
 
-#include <ksharedptr.h>
 #include "kexipart.h"
 
 namespace Kexi

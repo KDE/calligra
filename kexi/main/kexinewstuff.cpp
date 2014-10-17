@@ -22,8 +22,6 @@
 #include <kdebug.h>
 #include <ktar.h>
 #include <QDir>
-#include <kaction.h>
-#include <kapplication.h>
 #include <kfiledialog.h>
 #include <klocale.h>
 

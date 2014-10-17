@@ -26,13 +26,7 @@
 #include "kptviewbase.h"
 #include "kptrelationmodel.h"
 
-
 class KoDocument;
-
-class QModelIndex;
-class QItemDelegate;
-
-class KAction;
 
 namespace KPlato
 {

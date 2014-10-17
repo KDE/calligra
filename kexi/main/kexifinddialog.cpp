@@ -20,14 +20,12 @@
 #include "kexifinddialog.h"
 
 #include <kstandardguiitem.h>
-#include <kstdaction.h>
-#include <kpushbutton.h>
+#include <kstandardaction.h>
 #include <kcombobox.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <kdialog.h>
 #include <kaction.h>
-#include <kshortcut.h>
 
 #include <QCheckBox>
 #include <QLabel>

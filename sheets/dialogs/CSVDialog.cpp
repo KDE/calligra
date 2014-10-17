@@ -37,7 +37,6 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <kpushbutton.h>
 
 #include "Cell.h"
 #include "CellStorage.h"

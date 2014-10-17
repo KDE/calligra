@@ -24,7 +24,6 @@
 #include <kexiutils/utils.h>
 
 #include <kmessagebox.h>
-#include <kdialog.h>
 
 KexiGUIMessageHandler::KexiGUIMessageHandler(QWidget *parent)
         : KexiDB::MessageHandler(parent)

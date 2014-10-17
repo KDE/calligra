@@ -1068,7 +1068,9 @@ KexiFormView::slotHandleDragMoveEvent(QDragMoveEvent* e)
 void
 KexiFormView::slotHandleDropEvent(QDropEvent* e)
 {
-#ifndef KEXI_NO_AUTOFIELD_WIDGET
+#ifdef KEXI_NO_AUTOFIELD_WIDGET
+    Q_UNUSED(e);
+#else
     const QWidget *targetContainerWidget = dynamic_cast<const QWidget*>(sender());
     KFormDesigner::ObjectTreeItem *targetContainerWidgetItem = targetContainerWidget
             ? form()->objectTree()->lookup(targetContainerWidget->objectName()) : 0;
@@ -1090,7 +1092,13 @@ KexiFormView::insertAutoFields(const QString& sourcePartClass, const QString& so
                                const QStringList& fields, KFormDesigner::Container* targetContainer,
                                const QPoint& _pos)
 {
-#ifndef KEXI_NO_AUTOFIELD_WIDGET
+#ifdef KEXI_NO_AUTOFIELD_WIDGET
+    Q_UNUSED(sourcePartClass);
+    Q_UNUSED(sourceName);
+    Q_UNUSED(fields);
+    Q_UNUSED(targetContainer);
+    Q_UNUSED(_pos);
+#else
     if (fields.isEmpty())
         return;
 

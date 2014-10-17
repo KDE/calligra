@@ -40,7 +40,6 @@
 
 #include <KoGenStyles.h>
 
-#include <KoXmlWriter.h>
 #include <KoXmlNS.h>
 #include <kdebug.h>
 #include <QDomDocument>

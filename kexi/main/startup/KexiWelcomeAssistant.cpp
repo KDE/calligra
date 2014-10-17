@@ -35,19 +35,8 @@
 #include <kexiutils/KexiAssistantPage.h>
 #include <kexiutils/KexiLinkWidget.h>
 
-#include <kapplication.h>
-#include <kmimetype.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include <kconfig.h>
-#include <kurlcombobox.h>
-#include <kmessagebox.h>
-#include <klineedit.h>
-#include <kcategorizedview.h>
-#include <ktitlewidget.h>
-#include <kpushbutton.h>
-#include <kacceleratormanager.h>
-#include <kfileitemdelegate.h>
 #include <kdialog.h>
 
 #include <QLayout>

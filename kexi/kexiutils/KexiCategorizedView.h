@@ -24,7 +24,6 @@
 
 #include <kcategorydrawer.h>
 #include <kcategorizedview.h>
-#include <kdeversion.h>
 
 class QModelIndex;
 class QAbstractItemModel;

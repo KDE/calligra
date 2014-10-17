@@ -31,8 +31,6 @@
 
 #include <kdebug.h>
 
-#include <kconfig.h>
-#include <kglobalsettings.h>
 #include <klocale.h>
 
 #include <db/tableschema.h>

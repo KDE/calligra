@@ -30,7 +30,6 @@
 #include <KoTextShapeData.h>
 #include <KoTextDocumentLayout.h>
 #include <KoTextLayoutRootArea.h>
-#include <KoXmlWriter.h>
 #include <kdebug.h>
 
 KWFrame::KWFrame(KoShape *shape, KWFrameSet *parent)

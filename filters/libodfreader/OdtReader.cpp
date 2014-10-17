@@ -34,8 +34,6 @@
 #include <KoStore.h>
 #include <KoXmlStreamReader.h>
 #include <KoXmlNS.h>
-#include <KoXmlWriter.h>  // For copyXmlElement
-#include <KoOdfReadStore.h>
 
 // Reader library
 #include "OdtReaderBackend.h"

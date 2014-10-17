@@ -39,7 +39,6 @@
 #include <kiconloader.h>
 #include <KoIcon.h>
 #include <kstandarddirs.h>
-#include <kconfiggroup.h>
 #include <kdebug.h>
 
 //Calligra Headers
@@ -48,7 +47,6 @@
 #include <KoOdfReadStore.h>
 #include <KoXmlNS.h>
 #include <KoOdfStylesReader.h>
-#include <KoStore.h>
 #include <KoPathShape.h>
 #include <KoPathShapeLoader.h>
 

@@ -176,7 +176,7 @@ void KexiFormScrollView::selectCellInternal()
     }
 }
 
-void KexiFormScrollView::ensureCellVisible(int row, int col/*=-1*/)
+void KexiFormScrollView::ensureCellVisible(int row, int col)
 {
     Q_UNUSED(row);
     Q_UNUSED(col);

@@ -17,7 +17,6 @@
  */
 #include "ODrawToOdf.h"
 
-#include <KoXmlWriter.h>
 #include "drawstyle.h"
 #include "writeodf/writeodfdraw.h"
 

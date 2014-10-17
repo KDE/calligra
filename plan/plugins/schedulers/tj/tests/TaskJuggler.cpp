@@ -37,11 +37,7 @@
 
 #include <cstdlib>
 #include <QDir>
-#include <kglobal.h>
 #include <klocale.h>
-#include <kcalendarsystem.h>
-#include <ksystemtimezone.h>
-#include <kdatetime.h>
 #include <kconfiggroup.h>
 #include <QtDBus>
 

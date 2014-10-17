@@ -35,8 +35,6 @@
 
 #include <QFileInfo>
 
-#include <kdialog.h>
-
 class KoView;
 
 #define PLAN_MIME_TYPE "application/x-vnd.kde.plan"

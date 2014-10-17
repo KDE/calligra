@@ -325,7 +325,7 @@ public:
     /*! Ensures that cell at \a row and \a col is visible.
      If \a col is -1, current column number is used. \a row and \a col (if not -1) must
      be between 0 and rows() (or cols() accordingly). */
-    virtual void ensureCellVisible(int row, int col/*=-1*/) = 0;
+    virtual void ensureCellVisible(int row, int col) = 0;
 
     /*! Specifies, if this object automatically accepts
      row editing (using acceptRowEdit()) on accepting any cell's edit

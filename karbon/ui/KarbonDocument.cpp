@@ -81,7 +81,6 @@
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <ktemporaryfile.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kundo2stack.h>

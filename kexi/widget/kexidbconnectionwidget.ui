@@ -438,13 +438,6 @@
   <tabstop>btnLoadDBList</tabstop>
   <tabstop>titleEdit</tabstop>
  </tabstops>
- <includes>
-  <include location="local">knuminput.h</include>
-  <include location="local">klineedit.h</include>
-  <include location="local">kpushbutton.h</include>
-  <include location="local">kcombobox.h</include>
-  <include location="local">klineedit.h</include>
- </includes>
  <resources/>
  <connections/>
 </ui>

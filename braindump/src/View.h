@@ -29,7 +29,6 @@ class KoCanvasControllerWidget;
 class Canvas;
 class MainWindow;
 class KAction;
-class KToggleAction;
 class KoZoomAction;
 class KoViewConverter;
 class KoZoomController;

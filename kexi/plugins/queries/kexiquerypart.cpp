@@ -21,7 +21,6 @@
 #include "kexiquerypart.h"
 
 #include <kdebug.h>
-#include <ktoggleaction.h>
 
 #include <KexiMainWindowIface.h>
 #include <KexiWindow.h>
