@@ -18,18 +18,15 @@
 
 import QtQuick 1.1
 import org.calligra 1.0
+import "git" as Git
 import "../../components"
 
 Page {
     id: base;
     property string pageName: "accountsPageGit";
-    property QtObject accountDetails;
-    Label {
+    property QtObject accountDetails: null;
+    Git.RepositoryContent {
         anchors.fill: parent;
-        text: accountDetails ? "git stuffs for " + accountDetails.localrepo : "gite wow such version";
-        horizontalAlignment: Text.AlignHCenter;
-        verticalAlignment: Text.AlignVCenter;
-        font: Settings.theme.font("templateLabel");
-        color: "#5b6573";
+        localrepo: (accountDetails !== null) ? accountDetails.readProperty("localrepo") : "";
     }
 }
