@@ -74,7 +74,13 @@ class KOODFREADER_EXPORT OdfChartReaderBackend
     DECLARE_BACKEND_FUNCTION(ChartAxis);            // ODF 1.2  11.8
     DECLARE_BACKEND_FUNCTION(ChartCategories);      // ODF 1.2  11.9
     DECLARE_BACKEND_FUNCTION(ChartGrid);	    // ODF 1.2  11.10
-    // qwe
+    DECLARE_BACKEND_FUNCTION(ChartSeries);	    // ODF 1.2  11.11
+    DECLARE_BACKEND_FUNCTION(ChartDomain);	    // ODF 1.2  11.12
+    DECLARE_BACKEND_FUNCTION(ChartDataPoint);	    // ODF 1.2  11.13
+    DECLARE_BACKEND_FUNCTION(ChartDataLabel);	    // ODF 1.2  11.14
+    DECLARE_BACKEND_FUNCTION(ChartMeanValue);	    // ODF 1.2  11.15
+    DECLARE_BACKEND_FUNCTION(ChartErrorIndicator);  // ODF 1.2  11.16
+    DECLARE_BACKEND_FUNCTION(ChartRegressionCurve); // ODF 1.2  11.17
     DECLARE_BACKEND_FUNCTION(ChartEquation);        // ODF 1.2  11.18
     DECLARE_BACKEND_FUNCTION(ChartStockGainMarker); // ODF 1.2  11.19
     DECLARE_BACKEND_FUNCTION(ChartStockLossMarker); // ODF 1.2  11.20

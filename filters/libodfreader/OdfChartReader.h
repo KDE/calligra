@@ -76,7 +76,13 @@ class KOODFREADER_EXPORT OdfChartReader
     DECLARE_READER_FUNCTION(ChartAxis);            // ODF 1.2  11.8
     DECLARE_READER_FUNCTION(ChartCategories);      // ODF 1.2  11.9
     DECLARE_READER_FUNCTION(ChartGrid);		   // ODF 1.2  11.10
-
+    DECLARE_READER_FUNCTION(ChartSeries);	   // ODF 1.2  11.11
+    DECLARE_READER_FUNCTION(ChartDomain);	   // ODF 1.2  11.12
+    DECLARE_READER_FUNCTION(ChartDataPoint);	   // ODF 1.2  11.13
+    DECLARE_READER_FUNCTION(ChartDataLabel);	   // ODF 1.2  11.14
+    DECLARE_READER_FUNCTION(ChartMeanValue);	   // ODF 1.2  11.15
+    DECLARE_READER_FUNCTION(ChartErrorIndicator);  // ODF 1.2  11.16
+    DECLARE_READER_FUNCTION(ChartRegressionCurve); // ODF 1.2  11.17
     DECLARE_READER_FUNCTION(ChartEquation);        // ODF 1.2  11.18
     DECLARE_READER_FUNCTION(ChartStockGainMarker); // ODF 1.2  11.19
     DECLARE_READER_FUNCTION(ChartStockLossMarker); // ODF 1.2  11.20

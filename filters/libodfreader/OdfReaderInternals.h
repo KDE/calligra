@@ -45,6 +45,20 @@ IMPLEMENT_READER_FUNCTION_START(readername, name)                    \
     reader.skipCurrentElement();                                     \
 IMPLEMENT_READER_FUNCTION_END(name)
 
+#define IMPLEMENT_READER_FUNCTION_ONE_CHILD(readername, name, element, childfunction)	\
+IMPLEMENT_READER_FUNCTION_START(readername, name)                    \
+    while (reader.readNextStartElement()) {                          \
+        QString tagName = reader.qualifiedName().toString();         \
+                                                                     \
+        if (tagName == element) {                                    \
+	    readElement##childfunction(reader);                      \
+        }                                                            \
+        else {                                                       \
+            reader.skipCurrentElement();                             \
+        }                                                            \
+    }                                                                \
+IMPLEMENT_READER_FUNCTION_END(name)
+
 
 // ----------------------------------------------------------------
 //                     Backend functions

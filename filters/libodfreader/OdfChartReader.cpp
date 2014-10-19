@@ -223,7 +223,7 @@ void OdfChartReader::readElementChartPlotArea(KoXmlStreamReader &reader)
     //   [done] <chart:wall> 11.6
     //   [done] <chart:floor> 11.7
     //   [done] <chart:axis> 11.8
-    //          <chart:series> 11.11
+    //   [done] <chart:series> 11.11
     //   [done] <chart:stock-gain-marker> 11.19
     //   [done] <chart:stock-loss-marker> 11.20
     //   [done] <chart:stock-range-line> 11.21
@@ -241,8 +241,7 @@ void OdfChartReader::readElementChartPlotArea(KoXmlStreamReader &reader)
 	    readElementChartAxis(reader);
         }
         else if (tagName == "chart:series") {
-            // FIXME: NYI
-            reader.skipCurrentElement();
+	    readElementChartSeries(reader);
         }
         else if (tagName == "chart:stock-gain-marker") {
 	    readElementChartStockGainMarker(reader);
@@ -303,43 +302,62 @@ void OdfChartReader::readElementChartAxis(KoXmlStreamReader &reader)
 IMPLEMENT_READER_FUNCTION_NO_CHILDREN(OdfChartReader, ChartCategories)
 IMPLEMENT_READER_FUNCTION_NO_CHILDREN(OdfChartReader, ChartGrid)
 
-//----------------------------------------------------------------
-
-#if 0
-void OdfChartReader::readElementChart...(KoXmlStreamReader &reader)
+// ODF 1.2  11.11: <chart:series>
+void OdfChartReader::readElementChartSeries(KoXmlStreamReader &reader)
 {
     DEBUGSTART();
-    m_backend->elementChart...(reader, m_context);
+    m_backend->elementChartSeries(reader, m_context);
 
-    // <chart:...> has the following children in ODF 1.2:
-    //          <text:p> 5.1.3
+    // <chart:series> has the following children in ODF 1.2:
+    //   [done] <chart:data-label> 11.14
+    //   [done] <chart:data-point> 11.13
+    //   [done] <chart:domain> 11.12
+    //   [done] <chart:error-indicator> 11.16
+    //   [done] <chart:mean-value> 11.15
+    //   [done] <chart:regression-curve> 11.17
+
     while (reader.readNextStartElement()) {
         QString tagName = reader.qualifiedName().toString();
         
-        if (tagName == "text:p") {
-	    OdfTextReader *textReader = m_parent->textReader();
-	    if (textReader) {
-		textReader->readElementTextP(reader);
-	    }
-	    else {
-		reader.skipCurrentElement();
-	    }
+        if (tagName == "chart:data-label") {
+	    readElementChartDataLabel(reader);
+        }
+        else if (tagName == "chart:data-point") {
+	    readElementChartDataPoint(reader);
+        }
+        else if (tagName == "chart:domain") {
+	    readElementChartDomain(reader);
+        }
+        else if (tagName == "chart:error-indicator") {
+	    readElementChartErrorIndicator(reader);
+        }
+        else if (tagName == "chart:mean-value") {
+	    readElementChartMeanValue(reader);
+        }
+        else if (tagName == "chart:regression-curve") {
+	    readElementChartRegressionCurve(reader);
         }
         else {
             reader.skipCurrentElement();
         }
     }
 
-    m_backend->elementChart...(reader, m_context);
+    m_backend->elementChartSeries(reader, m_context);
     DEBUGEND();
 }
-#endif
-// qwe
 
-IMPLEMENT_READER_FUNCTION_TEXTP_ONLY(OdfChartReader, ChartEquation)
-IMPLEMENT_READER_FUNCTION_NO_CHILDREN(OdfChartReader, ChartStockGainMarker)
-IMPLEMENT_READER_FUNCTION_NO_CHILDREN(OdfChartReader, ChartStockLossMarker)
-IMPLEMENT_READER_FUNCTION_NO_CHILDREN(OdfChartReader, ChartStockRangeLine)
+IMPLEMENT_READER_FUNCTION_NO_CHILDREN(OdfChartReader, ChartDomain)          // ODF 1.2  11.12
+IMPLEMENT_READER_FUNCTION_ONE_CHILD(OdfChartReader, ChartDataPoint,
+				    "chart:data-label", ChartDataLabel)     // ODF 1.2  11.13
+IMPLEMENT_READER_FUNCTION_TEXTP_ONLY(OdfChartReader, ChartDataLabel)        // ODF 1.2  11.14
+IMPLEMENT_READER_FUNCTION_NO_CHILDREN(OdfChartReader, ChartMeanValue)       // ODF 1.2  11.15
+IMPLEMENT_READER_FUNCTION_NO_CHILDREN(OdfChartReader, ChartErrorIndicator)  // ODF 1.2  11.16
+IMPLEMENT_READER_FUNCTION_ONE_CHILD(OdfChartReader, ChartRegressionCurve,
+				    "chart:equation", ChartEquation)        // ODF 1.2  11.17
+IMPLEMENT_READER_FUNCTION_TEXTP_ONLY(OdfChartReader, ChartEquation)         // ODF 1.2  11.18
+IMPLEMENT_READER_FUNCTION_NO_CHILDREN(OdfChartReader, ChartStockGainMarker) // ODF 1.2  11.19
+IMPLEMENT_READER_FUNCTION_NO_CHILDREN(OdfChartReader, ChartStockLossMarker) // ODF 1.2  11.20
+IMPLEMENT_READER_FUNCTION_NO_CHILDREN(OdfChartReader, ChartStockRangeLine)  // ODF 1.2  11.21
 
 
 
