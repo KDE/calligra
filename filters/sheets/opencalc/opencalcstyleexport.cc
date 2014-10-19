@@ -19,8 +19,6 @@
 
 #include <opencalcstyleexport.h>
 
-#include <KoGlobal.h>
-
 #include <sheets/Cell.h>
 #include <sheets/part/Doc.h>
 #include <sheets/Map.h>

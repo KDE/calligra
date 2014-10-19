@@ -37,7 +37,6 @@
 #include <kmessagebox.h>
 #include <kcodecs.h>
 #include <KoFilterChain.h>
-#include <KoGlobal.h>
 #include <KoUnit.h>
 #include <KoStyleStack.h>
 #include <ooutils.h>
