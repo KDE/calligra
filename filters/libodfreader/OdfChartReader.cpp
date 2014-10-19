@@ -99,45 +99,6 @@ void OdfChartReader::setContext(OdfReaderContext *context)
 // ----------------------------------------------------------------
 
 
-#if 0
-// This is a template function for the reader library.
-// Copy this one and change the name and fill in the code.
-void OdfChartReader::readElementNamespaceTagname(KoXmlStreamReader &reader)
-{
-    DEBUGSTART();
-    m_backend->elementNamespaceTagname(reader, m_context);
-
-    // <namespace:tagname> has the following children in ODF 1.2:
-    //   FILL IN THE CHILDREN LIKE THIS EXAMPLE (taken from office:document-content):
-    //          <office:automatic-styles> 3.15.3
-    //          <office:body> 3.3
-    //          <office:font-face-decls> 3.14
-    //          <office:scripts> 3.12.
-    while (reader.readNextStartElement()) {
-        QString tagName = reader.qualifiedName().toString();
-        
-        if (tagName == "office:automatic-styles") {
-            // FIXME: NYI
-            reader.skipCurrentElement();
-        }
-        else if (tagName == "office:body") {
-            readElementOfficeBody(reader);
-        }
-        ...  MORE else if () HERE
-        else {
-            reader.skipCurrentElement();
-        }
-    }
-
-    m_backend->elementNamespaceTagname(reader, m_context);
-    DEBUGEND();
-}
-#endif
-
-
-// ----------------------------------------------------------------
-
-
 void OdfChartReader::readElementOfficeChart(KoXmlStreamReader &reader)
 {
     DEBUGSTART();
@@ -261,7 +222,7 @@ void OdfChartReader::readElementChartPlotArea(KoXmlStreamReader &reader)
     // <chart:plot-area> has the following children in ODF 1.2:
     //   [done] <chart:wall> 11.6
     //   [done] <chart:floor> 11.7
-    //          <chart:axis> 11.8
+    //   [done] <chart:axis> 11.8
     //          <chart:series> 11.11
     //   [done] <chart:stock-gain-marker> 11.19
     //   [done] <chart:stock-loss-marker> 11.20
@@ -277,8 +238,7 @@ void OdfChartReader::readElementChartPlotArea(KoXmlStreamReader &reader)
 	    readElementChartFloor(reader);
         }
         else if (tagName == "chart:axis") {
-            // FIXME: NYI
-            reader.skipCurrentElement();
+	    readElementChartAxis(reader);
         }
         else if (tagName == "chart:series") {
             // FIXME: NYI
@@ -308,6 +268,40 @@ void OdfChartReader::readElementChartPlotArea(KoXmlStreamReader &reader)
 
 IMPLEMENT_READER_FUNCTION_NO_CHILDREN(OdfChartReader, ChartWall)
 IMPLEMENT_READER_FUNCTION_NO_CHILDREN(OdfChartReader, ChartFloor)
+
+void OdfChartReader::readElementChartAxis(KoXmlStreamReader &reader)
+{
+    DEBUGSTART();
+    m_backend->elementChartAxis(reader, m_context);
+
+    // <chart:axis> has the following children in ODF 1.2:
+    //   [done] <chart:categories> 11.9
+    //   [done] <chart:grid> 11.10
+    //   [done] <chart:title> 11.2.1
+
+    while (reader.readNextStartElement()) {
+        QString tagName = reader.qualifiedName().toString();
+        
+        if (tagName == "chart:categories") {
+	    readElementChartCategories(reader);
+        }
+        else if (tagName == "chart:grid") {
+	    readElementChartGrid(reader);
+        }
+        else if (tagName == "chart:title") {
+	    readElementChartTitle(reader);
+        }
+        else {
+            reader.skipCurrentElement();
+        }
+    }
+
+    m_backend->elementChartAxis(reader, m_context);
+    DEBUGEND();
+}
+
+IMPLEMENT_READER_FUNCTION_NO_CHILDREN(OdfChartReader, ChartCategories)
+IMPLEMENT_READER_FUNCTION_NO_CHILDREN(OdfChartReader, ChartGrid)
 
 //----------------------------------------------------------------
 

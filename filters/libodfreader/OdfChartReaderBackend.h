@@ -62,20 +62,23 @@ class KOODFREADER_EXPORT OdfChartReaderBackend
     virtual ~OdfChartReaderBackend();
 
     DECLARE_BACKEND_FUNCTION(OfficeChart);
-    DECLARE_BACKEND_FUNCTION(ChartChart);
+    DECLARE_BACKEND_FUNCTION(ChartChart);           // ODF 1.2  11.1
 
-    DECLARE_BACKEND_FUNCTION(ChartFooter);
-    DECLARE_BACKEND_FUNCTION(ChartSubtitle);
-    DECLARE_BACKEND_FUNCTION(ChartTitle);
-    DECLARE_BACKEND_FUNCTION(ChartLegend);
-    DECLARE_BACKEND_FUNCTION(ChartPlotArea);
-    DECLARE_BACKEND_FUNCTION(ChartWall);
-    DECLARE_BACKEND_FUNCTION(ChartFloor);
+    DECLARE_BACKEND_FUNCTION(ChartFooter);	    // ODF 1.2  11.2.3
+    DECLARE_BACKEND_FUNCTION(ChartSubtitle);	    // ODF 1.2  11.2.2
+    DECLARE_BACKEND_FUNCTION(ChartTitle); 	    // ODF 1.2  11.2.1
+    DECLARE_BACKEND_FUNCTION(ChartLegend);	    // ODF 1.2  11.3
+    DECLARE_BACKEND_FUNCTION(ChartPlotArea);	    // ODF 1.2  11.4
+    DECLARE_BACKEND_FUNCTION(ChartWall);	    // ODF 1.2  11.6
+    DECLARE_BACKEND_FUNCTION(ChartFloor);           // ODF 1.2  11.7
+    DECLARE_BACKEND_FUNCTION(ChartAxis);            // ODF 1.2  11.8
+    DECLARE_BACKEND_FUNCTION(ChartCategories);      // ODF 1.2  11.9
+    DECLARE_BACKEND_FUNCTION(ChartGrid);	    // ODF 1.2  11.10
     // qwe
-    DECLARE_BACKEND_FUNCTION(ChartEquation);
-    DECLARE_BACKEND_FUNCTION(ChartStockGainMarker);
-    DECLARE_BACKEND_FUNCTION(ChartStockLossMarker);
-    DECLARE_BACKEND_FUNCTION(ChartStockRangeLine);
+    DECLARE_BACKEND_FUNCTION(ChartEquation);        // ODF 1.2  11.18
+    DECLARE_BACKEND_FUNCTION(ChartStockGainMarker); // ODF 1.2  11.19
+    DECLARE_BACKEND_FUNCTION(ChartStockLossMarker); // ODF 1.2  11.20
+    DECLARE_BACKEND_FUNCTION(ChartStockRangeLine);  // ODF 1.2  11.21
 
  private:
     class Private;

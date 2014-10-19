@@ -81,9 +81,10 @@ IMPLEMENT_BACKEND_FUNCTION(OdfChartReader, ChartLegend)
 IMPLEMENT_BACKEND_FUNCTION(OdfChartReader, ChartPlotArea)
 IMPLEMENT_BACKEND_FUNCTION(OdfChartReader, ChartWall)
 IMPLEMENT_BACKEND_FUNCTION(OdfChartReader, ChartFloor)
-
+IMPLEMENT_BACKEND_FUNCTION(OdfChartReader, ChartAxis)
+IMPLEMENT_BACKEND_FUNCTION(OdfChartReader, ChartCategories)
+IMPLEMENT_BACKEND_FUNCTION(OdfChartReader, ChartGrid)
 // qwe
-
 IMPLEMENT_BACKEND_FUNCTION(OdfChartReader, ChartEquation)
 IMPLEMENT_BACKEND_FUNCTION(OdfChartReader, ChartStockGainMarker)
 IMPLEMENT_BACKEND_FUNCTION(OdfChartReader, ChartStockLossMarker)

@@ -64,20 +64,23 @@ class KOODFREADER_EXPORT OdfChartReader
     // element reader functions
 
     DECLARE_READER_FUNCTION(OfficeChart);
-    DECLARE_READER_FUNCTION(ChartChart);
+    DECLARE_READER_FUNCTION(ChartChart);           // ODF 1.2  11.1
 
-    DECLARE_READER_FUNCTION(ChartFooter);
-    DECLARE_READER_FUNCTION(ChartSubtitle);
-    DECLARE_READER_FUNCTION(ChartTitle);
-    DECLARE_READER_FUNCTION(ChartLegend);
-    DECLARE_READER_FUNCTION(ChartPlotArea);
-    DECLARE_READER_FUNCTION(ChartWall);
-    DECLARE_READER_FUNCTION(ChartFloor);
+    DECLARE_READER_FUNCTION(ChartFooter);	   // ODF 1.2  11.2.3
+    DECLARE_READER_FUNCTION(ChartSubtitle);	   // ODF 1.2  11.2.2
+    DECLARE_READER_FUNCTION(ChartTitle);	   // ODF 1.2  11.2.1
+    DECLARE_READER_FUNCTION(ChartLegend);	   // ODF 1.2  11.3
+    DECLARE_READER_FUNCTION(ChartPlotArea);	   // ODF 1.2  11.4
+    DECLARE_READER_FUNCTION(ChartWall);		   // ODF 1.2  11.6
+    DECLARE_READER_FUNCTION(ChartFloor);	   // ODF 1.2  11.7
+    DECLARE_READER_FUNCTION(ChartAxis);            // ODF 1.2  11.8
+    DECLARE_READER_FUNCTION(ChartCategories);      // ODF 1.2  11.9
+    DECLARE_READER_FUNCTION(ChartGrid);		   // ODF 1.2  11.10
 
-    DECLARE_READER_FUNCTION(ChartEquation);
-    DECLARE_READER_FUNCTION(ChartStockGainMarker);
-    DECLARE_READER_FUNCTION(ChartStockLossMarker);
-    DECLARE_READER_FUNCTION(ChartStockRangeLine);
+    DECLARE_READER_FUNCTION(ChartEquation);        // ODF 1.2  11.18
+    DECLARE_READER_FUNCTION(ChartStockGainMarker); // ODF 1.2  11.19
+    DECLARE_READER_FUNCTION(ChartStockLossMarker); // ODF 1.2  11.20
+    DECLARE_READER_FUNCTION(ChartStockRangeLine);  // ODF 1.2  11.21
 
  protected:
 
