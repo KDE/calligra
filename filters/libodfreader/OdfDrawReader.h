@@ -62,7 +62,13 @@ class KOODFREADER_EXPORT OdfDrawReader
 
     // ----------------------------------------------------------------
     // Dr3d elements
-    DECLARE_READER_FUNCTION(Dr3dScene);
+
+    DECLARE_READER_FUNCTION(Dr3dScene);   // ODF 1.2  10.5.2
+    DECLARE_READER_FUNCTION(Dr3dLight);   // ODF 1.2  10.5.3
+    DECLARE_READER_FUNCTION(Dr3dCube);    // ODF 1.2  10.5.4
+    DECLARE_READER_FUNCTION(Dr3dSphere);  // ODF 1.2  10.5.5
+    DECLARE_READER_FUNCTION(Dr3dExtrude); // ODF 1.2  10.5.6
+    DECLARE_READER_FUNCTION(Dr3dRotate);  // ODF 1.2  10.5.7
 
     // ----------------------------------------------------------------
     // Draw elements
@@ -80,7 +86,18 @@ class KOODFREADER_EXPORT OdfDrawReader
     // Draw functions: circle, rectangle, etc
 
     DECLARE_READER_FUNCTION(DrawA);
-    DECLARE_READER_FUNCTION(DrawCircle);
+
+    DECLARE_READER_FUNCTION(DrawRect);            // ODF 1.2  10.3.2
+    DECLARE_READER_FUNCTION(DrawLine);            // ODF 1.2  10.3.3
+    DECLARE_READER_FUNCTION(DrawPolyline);        // ODF 1.2  10.3.4
+    DECLARE_READER_FUNCTION(DrawPolygon);         // ODF 1.2  10.3.5
+    DECLARE_READER_FUNCTION(DrawRegularPolygon);  // ODF 1.2  10.3.6
+    DECLARE_READER_FUNCTION(DrawPath);            // ODF 1.2  10.3.7
+    DECLARE_READER_FUNCTION(DrawCircle);          // ODF 1.2  10.3.8
+    DECLARE_READER_FUNCTION(DrawEllipse);         // ODF 1.2  10.3.9
+    DECLARE_READER_FUNCTION(DrawConnector);       // ODF 1.2  10.3.10
+    DECLARE_READER_FUNCTION(DrawCaption);         // ODF 1.2  10.3.11
+    DECLARE_READER_FUNCTION(DrawMeasure);         // ODF 1.2  10.3.12
 
     void readGraphicsObjectChildren(KoXmlStreamReader &reader);
 
