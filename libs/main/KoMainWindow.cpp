@@ -139,7 +139,6 @@ public:
 #ifdef HAVE_KACTIVITIES
         activityResource = 0;
 #endif
-        themeManager = 0;
 
         m_helpMenu = 0;
 
@@ -244,7 +243,6 @@ public:
     KActivities::ResourceInstance *activityResource;
 #endif
 
-    Digikam::ThemeManager *themeManager;
 
     KHelpMenu *m_helpMenu;
 
