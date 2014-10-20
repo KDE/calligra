@@ -735,14 +735,25 @@ QSize KexiTabbedToolBarTabBar::originalTabSizeHint(int index) const
 
 QSize KexiTabbedToolBarTabBar::tabSizeHint(int index) const
 {
+    QSize s = KTabBar::tabSizeHint(index);
     if (index == 0) {
-        QSize s = KTabBar::tabSizeHint(index);
+        // tune width of the Kexi tab
         s.setWidth(customStyle->kexiBlackPixmap.width()
                    + 10/*left*/ + 8/*right*/);
         s.setHeight(qMax(s.height(), customStyle->kexiBlackPixmap.height() + 3));
         return s;
     }
-    return KTabBar::tabSizeHint(index);
+    else if (index == KEXITABBEDTOOLBAR_SPACER_TAB_INDEX) {
+        // fix width of the spacer tab
+        QStyleOptionTab ot;
+        ot.initFrom(this);
+        int w = customStyle->pixelMetric(QStyle::PM_TabBarTabHSpace, &ot, this);
+        if (w <= 0) { // needed e.g. for oxygen
+            w = fontMetrics().width("   ");
+        }
+        s.setWidth(w);
+    }
+    return s;
 }
 
 void KexiTabbedToolBarTabBar::changeEvent(QEvent *e)
