@@ -138,7 +138,13 @@ class KexiDockWidget : public QDockWidget
 {
 public:
     KexiDockWidget(const QString & title, QWidget *parent)
-            : QDockWidget(title, parent) {
+            : QDockWidget(title, parent)
+    {
+        // No floatable dockers, Dolphin had problems, we don't want the same...
+        // https://bugs.kde.org/show_bug.cgi?id=288629
+        // https://bugs.kde.org/show_bug.cgi?id=322299
+        setFeatures(QDockWidget::DockWidgetClosable);
+        setAllowedAreas(Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea);
     }
     void setSizeHint(const QSize& hint) {
         m_hint = hint;
