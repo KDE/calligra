@@ -923,7 +923,7 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
     help_about_kde_action->setWhatsThis(i18n("Shows information about KDE."));
 
     QAction *action_show_help_menu = d->ac->action("help_show_menu");
-    KexiSmallToolButton *btn = new KexiSmallToolButton(KIcon(help_contents_action->icon()), QString(), helpWidget);
+    KexiSmallToolButton *btn = new KexiSmallToolButton(koIcon("help-contextual"), QString(), helpWidget);
     btn->setToolButtonStyle(Qt::ToolButtonIconOnly);
     btn->setPopupMode(QToolButton::InstantPopup);
     btn->setToolTip(action_show_help_menu->toolTip());
