@@ -54,8 +54,6 @@
 
 class KexiProjectNavigator;
 
-static const int KEXITABBEDTOOLBAR_FIRSTTAB_SPACING = 20;
-
 static const int KEXITABBEDTOOLBAR_SPACER_TAB_INDEX = 1;
 
 //! @short Main application's tabbed toolbar
