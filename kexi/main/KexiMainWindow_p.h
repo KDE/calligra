@@ -964,9 +964,7 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
     addAction(tbar, "edit_paste");
     if (!userMode)
         addAction(tbar, "edit_paste_special_data_table");
-    tbar->addSeparator();
 //! @todo move undo/redo to quickbar:
-    addAction(tbar, "edit_find");
 
     tbar = d->createToolBar("external", i18n("External Data"));
     if (!userMode) {
