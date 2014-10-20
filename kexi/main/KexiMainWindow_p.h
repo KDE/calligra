@@ -1706,7 +1706,16 @@ public:
     void setTabBarVisible(KMultiTabBar::KMultiTabBarPosition position, int id,
                           KexiDockWidget *dockWidget, bool visible) 
     {
-        KMultiTabBar *mtbar = multiTabBars.value(position);
+        KMultiTabBar::KMultiTabBarPosition realPosition = position;
+        if (QApplication::isRightToLeft()) {
+            if (position == KMultiTabBar::Left) {
+                realPosition = KMultiTabBar::Right;
+            }
+            else if (position == KMultiTabBar::Right) {
+                realPosition = KMultiTabBar::Left;
+            }
+        }
+        KMultiTabBar *mtbar = multiTabBars.value(realPosition);
         if (!visible) {
             mtbar->removeTab(id);
         }
