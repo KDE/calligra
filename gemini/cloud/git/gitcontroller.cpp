@@ -213,7 +213,7 @@ void GitController::commitAndPushCurrentFile()
                 git_repository_index(&index, repo);
 
                 // refresh it, and add the file
-                git_index_read(index);
+                git_index_read(index, true);
                 git_index_add_bypath(index, relative.toLocal8Bit());
                 git_index_write(index);
 
