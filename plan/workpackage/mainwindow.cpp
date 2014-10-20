@@ -38,7 +38,6 @@
 
 #include <KoApplicationAdaptor.h>
 #include <KoDocument.h>
-#include <KoGlobal.h>
 
 #include <kapplication.h>
 #include <kfiledialog.h>

@@ -15,8 +15,8 @@ add_subdirectory( pics )
 include_directories(
     ${KOTEXT_INCLUDES}
     ${TEXTLAYOUT_INCLUDES}
+    ${CMAKE_SOURCE_DIR}/libs/widgets
     ${FLAKE_INCLUDES}
-#    ${KOMAIN_INCLUDES})
 )
 
 ########### Flake Plugin library ###############
