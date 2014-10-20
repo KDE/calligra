@@ -2672,6 +2672,7 @@ tristate KexiMainWindow::getNewObjectInfo(
         //check if that name is allowed
         d->nameDialog->widget()->addNameSubvalidator(
             new KexiDB::ObjectNameValidator(project()->dbConnection()->driver()));
+        d->nameDialog->setButtonText(KexiNameDialog::Ok, i18nc("@action:button Save object", "Save"));
     } else {
         d->nameDialog->widget()->setMessageText(messageWhenAskingForName);
     }
