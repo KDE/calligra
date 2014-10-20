@@ -20,9 +20,10 @@
 #ifndef KIS_LOCKED_PROPERTIES_SERVER_H
 #define KIS_LOCKED_PROPERTIES_SERVER_H
 
-#include"kis_locked_properties.h"
-#include"kis_locked_properties_proxy.h"
-#include"kis_properties_configuration.h"
+#include "kis_locked_properties.h"
+#include "kis_locked_properties_proxy.h"
+#include "kis_properties_configuration.h"
+#include "kglobal.h"
 
 class KisLockedPropertiesProxy;
 

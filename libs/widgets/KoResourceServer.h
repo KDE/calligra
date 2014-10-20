@@ -136,7 +136,6 @@ class KoResourceServer : public KoResourceServerBase
 public:
     typedef typename Policy::PointerType PointerType;
     typedef KoResourceServerObserver<T, Policy> ObserverType;
-public:
     KoResourceServer(const QString& type, const QString& extensions)
         : KoResourceServerBase(type, extensions)
     {
