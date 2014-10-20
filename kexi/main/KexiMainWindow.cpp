@@ -979,6 +979,10 @@ void KexiMainWindow::setupActions()
     acat->addWindowAction("edit_copy_special_data_table",
                           KexiPart::TableObjectType, KexiPart::QueryObjectType);
 
+    //! @todo support this in FormObjectType as well
+    acat->addWindowAction("project_export_data_table",
+                          KexiPart::TableObjectType, KexiPart::QueryObjectType);
+
     // GlobalActions, etc.
     acat->addAction("edit_copy", Kexi::GlobalActionCategory | Kexi::PartItemActionCategory);
 
@@ -1022,10 +1026,6 @@ void KexiMainWindow::setupActions()
     acat->addAction("options_configure_keybinding", Kexi::GlobalActionCategory);
 
     acat->addAction("project_close", Kexi::GlobalActionCategory);
-
-    //! @todo support this in FormObjectType as well
-    acat->addAction("project_export_data_table", Kexi::GlobalActionCategory | Kexi::WindowActionCategory,
-                    KexiPart::TableObjectType, KexiPart::QueryObjectType);
 
     acat->addAction("project_import_data_table", Kexi::GlobalActionCategory);
 

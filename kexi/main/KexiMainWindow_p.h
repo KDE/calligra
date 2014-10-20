@@ -973,7 +973,6 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
         addAction(tbar, "project_import_data_table");
         addAction(tbar, "tools_import_tables");
     }
-    addSeparatorAndAction(tbar, "project_export_data_table");
 
     tbar = d->createToolBar("tools", i18n("Tools"));
     addAction(tbar, "tools_compact_database");
