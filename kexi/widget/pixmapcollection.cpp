@@ -27,7 +27,6 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 
-#include <kapplication.h>
 #include <kiconloader.h>
 #include <kfiledialog.h>
 #include <kcombobox.h>
@@ -37,6 +36,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <kurl.h>
 
 #include <KoIcon.h>
 
@@ -430,3 +430,4 @@ PixmapCollectionChooser::slotUser1()
 }
 
 #include "pixmapcollection.moc"
+#warning noi18n # added to disable message extraction in Messages.sh

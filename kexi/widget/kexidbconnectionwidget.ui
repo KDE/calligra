@@ -164,7 +164,7 @@
       <item row="1" column="0">
        <widget class="QLabel" name="titleLabel">
         <property name="text">
-         <string>&amp;Title (optional):</string>
+         <string>&amp;Caption (optional):</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -438,13 +438,6 @@
   <tabstop>btnLoadDBList</tabstop>
   <tabstop>titleEdit</tabstop>
  </tabstops>
- <includes>
-  <include location="local">knuminput.h</include>
-  <include location="local">klineedit.h</include>
-  <include location="local">kpushbutton.h</include>
-  <include location="local">kcombobox.h</include>
-  <include location="local">klineedit.h</include>
- </includes>
  <resources/>
  <connections/>
 </ui>

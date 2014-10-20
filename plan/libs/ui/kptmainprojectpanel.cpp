@@ -22,14 +22,9 @@
 #include <QCheckBox>
 #include <QPushButton>
 
-#include <klineedit.h>
-#include <ktextedit.h>
-#include <kdatewidget.h>
 #include <klocale.h>
-#include <kmessagebox.h>
 #include "kptdebug.h"
 
-#include <kdeversion.h>
 #ifdef PLAN_KDEPIMLIBS_FOUND
 #include <akonadi/contact/emailaddressselectiondialog.h>
 #include <akonadi/contact/emailaddressselectionwidget.h>

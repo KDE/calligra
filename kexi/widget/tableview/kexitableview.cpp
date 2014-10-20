@@ -50,13 +50,12 @@
 #include <QPixmap>
 #include <QDesktopWidget>
 #include <QScrollArea>
+#include <QApplication>
 
-#include <kglobal.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include <kapplication.h>
-#include <kmessagebox.h>
 #include <kaction.h>
+#include <kmenu.h>
 
 #ifndef KEXI_NO_PRINT
 #include <QPrinter>
@@ -2411,18 +2410,18 @@ QString KexiTableView::whatsThisText(const QPoint &pos) const
     const int leftMargin = verticalHeaderVisible() ? verticalHeader()->width() : 0;
     QString text;
     if (KexiUtils::hasParent(verticalHeader(), childAt(pos))) {
-        return i18n("Contains a pointer to the currently selected record.");
+        return i18nc("@info:whatsthis", "Contains a pointer to the currently selected record.");
     }
     else if (KexiUtils::hasParent(navPanelWidget(), childAt(pos))) {
-        return i18n("Record navigator.");
+        return i18nc("@info:whatsthis", "Record navigator.");
     }
     const int col = columnAt(pos.x() - leftMargin);
     KexiDB::Field *f = col == -1 ? 0 : field(col);
     if (!f) {
         return QString();
     }
-    return i18nc("@info:whatsthis", "Column <resource>%1</resource>.")
-               .arg(f->description().isEmpty() ? f->captionOrName() : f->description());
+    return i18nc("@info:whatsthis", "Column <resource>%1</resource>.",
+                 f->description().isEmpty() ? f->captionOrName() : f->description());
 }
 
 #include "kexitableview.moc"

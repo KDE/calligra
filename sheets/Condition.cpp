@@ -40,7 +40,6 @@
 
 #include <KoGenStyles.h>
 
-#include <KoXmlWriter.h>
 #include <KoXmlNS.h>
 #include <kdebug.h>
 #include <QDomDocument>
@@ -468,7 +467,7 @@ void Conditions::loadOdfConditionValue(const QString &styleCondition, Conditiona
         loadOdfValidationValue(listVal, newCondition, parser);
         newCondition.cond = Conditional::Different;
     } else if (val.startsWith(QLatin1String("is-true-formula("))) {
-        val = val.mid(16);
+        val.remove(0, 16);
         if (val.endsWith(QLatin1Char(')'))) val.chop(1);
         newCondition.cond = Conditional::IsTrueFormula;
         newCondition.value1 = Value(Odf::decodeFormula(val));

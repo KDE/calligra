@@ -37,14 +37,9 @@
 #include <QComboBox>
 #include <QSpinBox>
 
-#include <kcombobox.h>
-#include <kconfig.h>
 #include <kstatusbar.h>
-#include <knuminput.h>
-#include <kmessagebox.h>
+#include <kvbox.h>
 
-#include <ksharedconfig.h>
-#include <kstandarddirs.h>
 #include <sonnet/configwidget.h>
 
 #include <KoIcon.h>

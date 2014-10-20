@@ -21,7 +21,6 @@
 #include <koproperty/Set.h>
 #include <kdebug.h>
 #include <klocalizedstring.h>
-#include <kglobalsettings.h>
 #include <QBuffer>
 #include <kcodecs.h>
 #include <renderobjects.h>
@@ -119,7 +118,7 @@ void KoReportItemImage::createProperties()
     strings << i18n("Clip") << i18n("Stretch");
     m_resizeMode = new KoProperty::Property("resize-mode", keys, strings, "clip", i18n("Resize Mode"));
 
-    m_staticImage = new KoProperty::Property("static-image", QPixmap(), i18n("Static Image"));
+    m_staticImage = new KoProperty::Property("static-image", QPixmap(), i18nc("Static Image", "Static"));
 
     addDefaultProperties();
     m_set->addProperty(m_controlSource);

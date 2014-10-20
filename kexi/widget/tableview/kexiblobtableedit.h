@@ -21,12 +21,11 @@
 #ifndef _KEXIBLOBTABLEEDIT_H_
 #define _KEXIBLOBTABLEEDIT_H_
 
-#include <kurl.h>
-
 #include "kexitableedit.h"
 #include "kexicelleditorfactory.h"
 
 class KTemporaryFile;
+class KUrl;
 
 class KexiBlobTableEdit : public KexiTableEdit
 {

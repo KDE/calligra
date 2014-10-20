@@ -55,15 +55,10 @@ public slots:
     virtual tristate executeCustomActionForObject(KexiPart::Item* item, const QString& actionName);
     virtual QWidget* focusWidget() const;
     virtual tristate getNewObjectInfo(KexiPart::Item* partItem, KexiPart::Part* part, bool& allowOverwriting, const QString& messageWhenAskingForName = QString());
-    virtual tristate getNewObjectInfo(KexiPart::Item*, const QString&, KexiPart::Part*, bool, bool*, const QString&);
-    virtual KXMLGUIClient* guiClient() const;
-    virtual KXMLGUIFactory* guiFactory();
     virtual void highlightObject(const QString& mime, const QString& name);
     virtual bool newObject(KexiPart::Info* info, bool& openingCancelled);
     virtual KexiWindow* openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool& openingCancelled, QMap< QString, QVariant >* staticObjectArgs = 0, QString* errorMessage = 0);
     virtual KexiWindow* openObject(const QString& mime, const QString& name, Kexi::ViewMode viewMode, bool& openingCancelled, QMap< QString, QVariant >* staticObjectArgs = 0);
-    virtual KexiWindow* openedWindowFor(const KexiPart::Item*);
-    virtual void plugActionList(const QString& name, const QList< KAction* >& actionList);
     virtual tristate printItem(KexiPart::Item* item);
     virtual tristate printPreviewForItem(KexiPart::Item* item);
     virtual KexiProject* project();
@@ -77,7 +72,6 @@ public slots:
     virtual void slotObjectRenamed(const KexiPart::Item& item, const QString& oldName);
     virtual tristate switchToViewMode(KexiWindow& window, Kexi::ViewMode viewMode);
     virtual KToolBar* toolBar(const QString& name) const;
-    virtual void unplugActionList(const QString& name);
     virtual void updatePropertyEditorInfoLabel(const QString& textToDisplayForNullSet = QString());
     virtual KexiUserFeedbackAgent* userFeedbackAgent() const;
     virtual bool userMode() const;

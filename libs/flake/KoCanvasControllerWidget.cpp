@@ -34,9 +34,7 @@
 #include "KoCanvasSupervisor.h"
 #include "KoToolManager_p.h"
 
-#include <ksharedconfig.h>
 #include <kdebug.h>
-#include <kconfiggroup.h>
 #include <QMouseEvent>
 #include <QPainter>
 #include <QScrollBar>
@@ -50,6 +48,7 @@
 #include <QGLWidget>
 #endif
 
+#include <math.h>
 
 void KoCanvasControllerWidget::Private::setDocumentOffset()
 {

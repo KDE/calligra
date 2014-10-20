@@ -42,6 +42,7 @@ ToolTransformArgs::ToolTransformArgs()
     m_keepAspectRatio = false;
 
     setFilterId("Bicubic");
+    m_editTransformPoints = false;
 }
 
 void ToolTransformArgs::init(const ToolTransformArgs& args)
@@ -67,6 +68,7 @@ void ToolTransformArgs::init(const ToolTransformArgs& args)
     m_keepAspectRatio = args.keepAspectRatio();
     m_filter = args.m_filter;
     m_flattenedPerspectiveTransform = args.m_flattenedPerspectiveTransform;
+    m_editTransformPoints = args.m_editTransformPoints;
 }
 
 void ToolTransformArgs::clear()
@@ -121,6 +123,7 @@ ToolTransformArgs::ToolTransformArgs(TransformMode mode,
     m_defaultPoints = defaultPoints;
     m_keepAspectRatio = false;
     setFilterId(filterId);
+    m_editTransformPoints = false;
 }
 
 
@@ -139,7 +142,7 @@ bool ToolTransformArgs::isIdentity() const
             return (m_transformedCenter == m_originalCenter && m_scaleX == 1
                     && m_scaleY == 1 && m_shearX == 0 && m_shearY == 0
                     && m_flattenedPerspectiveTransform.isIdentity());
-    } else if(m_mode == WARP) {
+    } else if(m_mode == WARP || m_mode == CAGE) {
         for (int i = 0; i < m_origPoints.size(); ++i)
             if (m_origPoints[i] != m_transfPoints[i])
                 return false;

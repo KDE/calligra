@@ -45,7 +45,7 @@ namespace {
 
 
     const QString prefix = "row";
-    const char* familyName = "table-row";
+    const char familyName[] = "table-row";
 }
 
 KOSTYLE_DECLARE_SHARED_POINTER_IMPL(KoRowStyle)

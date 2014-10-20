@@ -22,12 +22,8 @@
 #include "aboutdata.h"
 #include "application.h"
 
-#include <kuniqueapplication.h>
 #include <kdemacros.h>
 #include <kcmdlineargs.h>
-#include <kmessagebox.h>
-#include <kdesktopfile.h>
-#include <kstandarddirs.h>
 #include <kdebug.h>
 
 #include <QtDBus>

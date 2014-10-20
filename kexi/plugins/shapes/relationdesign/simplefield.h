@@ -21,7 +21,8 @@
 
 #include <QString>
 #include <db/queryschema.h>
-#include <KoXmlWriter.h>
+
+class KoXmlWriter;
 
 class SimpleField
 {

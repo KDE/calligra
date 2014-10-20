@@ -26,34 +26,22 @@
 
 #include "kptviewbase.h"
 #include "kptitemmodelbase.h"
-
-#include <QList>
-#include <QTreeWidget>
-#include <QTableWidget>
-#include <QFont>
-
-#include <QVariant>
-
-#include <QWidget>
-
-#include <kactionselector.h>
-
 #include "kpttaskeditor.h"
 #include <ui_kptperteditor.h>
 
 #include "kptcommand.h"
-
 #include "kptnode.h"
 
-#include <kglobal.h>
 #include <klocale.h>
-#include <kactioncollection.h>
-
 #include <kdebug.h>
+
+#include <QList>
+
 
 class KoDocument;
 
 class QTreeWidgetItem;
+class QTableWidgetItem;
 class QModelIndex;
 class KUndo2Command;
 

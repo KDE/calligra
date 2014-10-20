@@ -31,7 +31,6 @@ class QScrollBar;
 class QLabel;
 class QEvent;
 class QPaintEvent;
-class KLineEdit;
 class KGuiItem;
 
 #include <core/KexiRecordNavigatorIface.h>
@@ -171,6 +170,8 @@ protected slots:
 protected:
     //! @internal used for keyboard handling.
     virtual bool eventFilter(QObject *o, QEvent *e);
+
+    virtual void wheelEvent(QWheelEvent *e);
 
     QToolButton* createAction(const KGuiItem& item);
     virtual void paintEvent(QPaintEvent* pe);

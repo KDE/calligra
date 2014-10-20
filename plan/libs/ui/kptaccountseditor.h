@@ -27,6 +27,7 @@
 
 #include <kpagedialog.h>
 
+class KoPageLayoutWidget;
 class KoDocument;
 
 class QPoint;

@@ -28,7 +28,6 @@
 
 #include <kcodecs.h>
 #include <kcompletion.h>
-#include <ktemporaryfile.h>
 
 #include <KoGenStyles.h>
 #include <KoStyleStack.h>
@@ -44,7 +43,6 @@
 #include <KoShapeLoadingContext.h>
 #include <KoTextSharedLoadingData.h>
 #include <KoParagraphStyle.h>
-#include <KoShapeRegistry.h>
 #include <KoUpdater.h>
 #include <KoProgressUpdater.h>
 

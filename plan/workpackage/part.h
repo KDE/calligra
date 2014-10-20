@@ -43,7 +43,6 @@ class KoView;
 class KoStore;
 
 class KProcess;
-class KAction;
 
 class QAction;
 class QFileSystemWatcher;

@@ -198,7 +198,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read(MSOOXML::MsooXmlReaderCon
 //! @todo find out whether the namespace returned by namespaceUri()
 //!       is exactly the same ref as the element of namespaceDeclarations()
     if (!namespaces.contains(QXmlStreamNamespaceDeclaration("w", MSOOXML::Schemas::wordprocessingml))) {
-        raiseError(i18n("Namespace \"%1\" not found", MSOOXML::Schemas::wordprocessingml));
+        raiseError(i18n("Namespace \"%1\" not found", QLatin1String(MSOOXML::Schemas::wordprocessingml)));
         return KoFilter::WrongFormat;
     }
 //! @todo expect other namespaces too...
@@ -4595,7 +4595,7 @@ bool DocxXmlDocumentReader::handleSpecialField()
     while (instr.indexOf(' ') > 0) {
         int place = instr.indexOf(' ');
         instructions.push_back(instr.left(place));
-        instr = instr.mid(place + 1);
+        instr.remove(0, place + 1);
     }
     instructions.push_back(instr);
     QString command = instructions.at(0);

@@ -27,7 +27,6 @@
 #include "TextDocument.h"
 #include "Frame.h"
 
-#include <KoShapeRegistry.h>
 #include <KoStyleManager.h>
 
 #include <KWTextFrame.h>

@@ -50,6 +50,7 @@
 #include <KoSelection.h>
 #include <KoShapeManager.h>
 #include <KoPointerEvent.h>
+#include <KoColor.h>
 #include <KoColorBackground.h>
 #include <KoColorPopupAction.h>
 #include <KoTextDocumentLayout.h>
@@ -77,7 +78,6 @@
 #include <kdebug.h>
 #include <krun.h>
 #include <kstandardshortcut.h>
-#include <kfontchooser.h>
 #include <kaction.h>
 #include <kactionmenu.h>
 #include <kmenu.h>
@@ -470,13 +470,13 @@ void TextTool::createActions()
     addAction("format_paragraph", action);
     action->setShortcut(Qt::ALT + Qt::CTRL + Qt::Key_P);
     action->setToolTip(i18n("Change paragraph margins, text flow, borders, bullets, numbering etc."));
-    action->setWhatsThis(i18n("Change paragraph margins, text flow, borders, bullets, numbering etc.<p>Select text in multiple paragraphs to change the formatting of all selected paragraphs.<p>If no text is selected, the paragraph where the cursor is located will be changed.</p>"));
+    action->setWhatsThis(i18n("<p>Change paragraph margins, text flow, borders, bullets, numbering etc.</p><p>Select text in multiple paragraphs to change the formatting of all selected paragraphs.</p><p>If no text is selected, the paragraph where the cursor is located will be changed.</p>"));
     connect(action, SIGNAL(triggered()), this, SLOT(formatParagraph()));
 
     action = new KAction(i18n("Style Manager..."), this);
     action->setShortcut(Qt::ALT + Qt::CTRL + Qt::Key_S);
     action->setToolTip(i18n("Change attributes of styles"));
-    action->setWhatsThis(i18n("Change font and paragraph attributes of styles.<p>Multiple styles can be changed using the dialog box."));
+    action->setWhatsThis(i18n("<p>Change font and paragraph attributes of styles.</p><p>Multiple styles can be changed using the dialog box.</p>"));
     addAction("format_stylist", action);
     connect(action, SIGNAL(triggered()), this, SLOT(showStyleManager()));
 
@@ -2471,7 +2471,7 @@ void TextTool::splitTableCells()
 
 void TextTool::useTableBorderCursor()
 {
-    static unsigned char data[] = {
+    static const unsigned char data[] = {
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x30, 0x00, 0x00, 0x00, 0x68, 0x00,
         0x00, 0x00, 0xf4, 0x00, 0x00, 0x00, 0xfa, 0x00, 0x00, 0x00, 0xfd, 0x00,
         0x00, 0x80, 0x7e, 0x00, 0x00, 0x40, 0x3f, 0x00, 0x00, 0xa0, 0x1f, 0x00,

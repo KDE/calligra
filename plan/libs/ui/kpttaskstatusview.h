@@ -32,23 +32,18 @@
 #include "kptnodechartmodel.h"
 
 #include <QSplitter>
-#include <QTableWidget>
 
 #include "KDChartBarDiagram"
 
 
-class QTextBrowser;
 class QItemSelection;
 
 class KoDocument;
 class KoPageLayoutWidget;
 class PrintingHeaderFooter;
 
-class KAction;
-
 namespace KDChart
 {
-    class Chart;
     class CartesianCoordinatePlane;
     class CartesianAxis;
     class Legend;
@@ -59,11 +54,9 @@ namespace KPlato
 
 class Project;
 class Node;
-class Task;
 class ScheduleManager;
 class TaskStatusItemModel;
 class NodeItemModel;
-class PerformanceStatusViewSettingsPanel;
 class PerformanceStatusBase;
 
 typedef QList<Node*> NodeList;

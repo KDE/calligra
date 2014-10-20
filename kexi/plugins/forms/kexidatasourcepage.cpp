@@ -68,7 +68,7 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent)
     mainLayout()->addLayout(hlyr);
 #if 0
 //! @todo unhide this when expression work
-// m_widgetDSLabel = new QLabel(i18nc("Table Field, Query Field or Expression", "Source field or expression"), this);
+// m_widgetDSLabel = new QLabel(futureI18nc("Table Field, Query Field or Expression", "Source field or expression"), this);
 #else
     m_widgetDSLabel = new QLabel(
         i18nc("Table Field or Query Field", "Widget's data source"), this);
@@ -82,7 +82,7 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent)
         koIcon("edit-clear-locationbar-rtl"), QString(), this);
     m_clearWidgetDSButton->setObjectName("clearWidgetDSButton");
     m_clearWidgetDSButton->setMinimumHeight(m_widgetDSLabel->minimumHeight());
-    m_clearWidgetDSButton->setToolTip(i18n("Clear widget's data source"));
+    m_clearWidgetDSButton->setToolTip(futureI18n("Clear widget's data source"));
     hlyr->addWidget(m_clearWidgetDSButton);
     connect(m_clearWidgetDSButton, SIGNAL(clicked()),
             this, SLOT(clearWidgetDataSourceSelection()));
@@ -120,7 +120,7 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent)
         koIcon("edit-clear-locationbar-rtl"), QString(), this);
     m_clearDSButton->setObjectName("clearDSButton");
     m_clearDSButton->setMinimumHeight(m_dataSourceLabel->minimumHeight());
-    m_clearDSButton->setToolTip(i18n("Clear form's data source"));
+    m_clearDSButton->setToolTip(futureI18n("Clear form's data source"));
     hlyr->addWidget(m_clearDSButton);
     connect(m_clearDSButton, SIGNAL(clicked()), this, SLOT(clearFormDataSourceSelection()));
 #endif
@@ -153,8 +153,8 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent)
     m_mousePointerLabel->setFixedWidth(m_mousePointerLabel->pixmap()
                                        ? m_mousePointerLabel->pixmap()->width() : 0);
     m_availableFieldsDescriptionLabel = new QLabel(
-        i18n("Select fields from the list below and drag them onto"
-             " a form or click the \"Insert\" button"), this);
+        futureI18n("Select fields from the list below and drag them onto"
+             " a form or click the <interface>Insert</interface> button"), this);
     m_availableFieldsDescriptionLabel->setAlignment(Qt::AlignLeft);
     m_availableFieldsDescriptionLabel->setWordWrap(true);
     hlyr->addWidget(m_availableFieldsDescriptionLabel);
@@ -163,16 +163,16 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent)
     hlyr = new QHBoxLayout();
     hlyr->setContentsMargins(0, 0, 0, 0);
     mainLayout()->addLayout(hlyr);
-    m_availableFieldsLabel = new QLabel(i18n("Available fields"), this);
+    m_availableFieldsLabel = new QLabel(futureI18n("Available fields"), this);
     m_availableFieldsLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
     hlyr->addWidget(m_availableFieldsLabel);
 
     m_addField = new KexiSmallToolButton(
-        koIcon("add_field"), i18nc("Insert selected field into form", "Insert"), this);
+        koIcon("add_field"), futureI18nc("Insert selected field into form", "Insert"), this);
     m_addField->setObjectName("addFieldButton");
     m_addField->setFocusPolicy(Qt::StrongFocus);
-    m_addField->setToolTip(i18n("Insert selected fields into form"));
-    m_addField->setWhatsThis(i18n("Inserts selected fields into form"));
+    m_addField->setToolTip(futureI18n("Insert selected fields into form"));
+    m_addField->setWhatsThis(futureI18n("Inserts selected fields into form"));
     hlyr->addWidget(m_addField);
     connect(m_addField, SIGNAL(clicked()), this, SLOT(slotInsertSelectedFields()));
 

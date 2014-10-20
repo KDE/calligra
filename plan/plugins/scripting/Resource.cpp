@@ -26,8 +26,6 @@
 #include "kptdatetime.h"
 #include "kptcommand.h"
 
-#include <kglobal.h>
-
 Scripting::Resource::Resource( Scripting::Project *project, KPlato::Resource *resource, QObject *parent )
     : QObject( parent ), m_project( project ), m_resource( resource )
 {

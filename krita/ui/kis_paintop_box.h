@@ -57,6 +57,7 @@ class KisCompositeOpComboBox;
 class KisWidgetChooser;
 class KisFavoriteResourceManager;
 class KisLockedProperties;
+
 /**
  * This widget presents all paintops that a user can paint with.
  * Paintops represent real-world tools or the well-known Shoup
@@ -133,7 +134,6 @@ private slots:
     void slotToggleEraseMode(bool checked);
     void slotSetCompositeMode(int index);
     void slotSetPaintop(const QString& paintOpId);
-    void slotSaveToFavouriteBrushes();
     void slotWatchPresetNameLineEdit(const QString& text);
     void slotHorizontalMirrorChanged(bool value);
     void slotVerticalMirrorChanged(bool value);

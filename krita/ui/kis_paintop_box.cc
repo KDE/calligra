@@ -36,7 +36,6 @@
 #include <kactioncollection.h>
 #include <kaction.h>
 #include <kacceleratormanager.h>
-#include <kseparator.h>
 
 #include <KoIcon.h>
 #include <KoColorSpace.h>
@@ -181,12 +180,14 @@ KisPaintopBox::KisPaintopBox(KisView2 *view, QWidget *parent, const char *name)
         slFlow->setValue(1.0);
         slFlow->setSingleStep(0.05);
         slFlow->setMinimumWidth(120);
+        
+        slSize->setRange(0, 1000, 0);
+        slSize->setValue(100);
 
-        slSize->setRange(0.0, 1000.0, 2);
-        slSize->setValue(100.0);
         slSize->setSingleStep(1);
         slSize->setExponentRatio(3.0);
         slSize->setMinimumWidth(120);
+        slSize->setSuffix(" px");
 
         m_sliderChooser[i]->chooseWidget(cfg.toolbarSlider(i + 1));
     }
@@ -265,10 +266,6 @@ KisPaintopBox::KisPaintopBox(KisView2 *view, QWidget *parent, const char *name)
     view->actionCollection()->addAction("previous_preset", action);
     action->setShortcut(KShortcut(Qt::Key_Slash));
     connect(action, SIGNAL(triggered()), this, SLOT(slotSwitchToPreviousPreset()));
-
-    action = new KAction(i18n("Select Favorite Presets..."), this);
-    view->actionCollection()->addAction("palette_manager", action);
-    connect(action, SIGNAL(triggered()), this, SLOT(slotSaveToFavouriteBrushes()));
 
     QWidget* mirrorActions = new QWidget(this);
     QHBoxLayout* mirrorLayout = new QHBoxLayout(mirrorActions);
@@ -757,13 +754,6 @@ void KisPaintopBox::slotSetCompositeMode(int index)
     }
 }
 
-void KisPaintopBox::slotSaveToFavouriteBrushes()
-{
-    if (m_favoriteResourceManager) {
-        m_favoriteResourceManager->showPaletteManager();
-    }
-}
-
 void KisPaintopBox::slotWatchPresetNameLineEdit(const QString& text)
 {
     KisPaintOpPresetResourceServer * rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
@@ -895,8 +885,8 @@ void KisPaintopBox::slotPreviousFavoritePreset()
     if (!m_favoriteResourceManager) return;
 
     int i = 0;
-    foreach(const QString & preset, m_favoriteResourceManager->favoritePresetList()) {
-        if (m_resourceProvider->currentPreset()->name() == preset) {
+    foreach (KisPaintOpPreset* preset, m_favoriteResourceManager->favoritePresetList()) {
+        if (m_resourceProvider->currentPreset()->name() == preset->name()) {
             if (i > 0) {
                 m_favoriteResourceManager->slotChangeActivePaintop(i - 1);
             } else {
@@ -914,8 +904,8 @@ void KisPaintopBox::slotNextFavoritePreset()
     if (!m_favoriteResourceManager) return;
 
     int i = 0;
-    foreach(const QString & preset, m_favoriteResourceManager->favoritePresetList()) {
-        if (m_resourceProvider->currentPreset()->name() == preset) {
+    foreach (KisPaintOpPreset* preset, m_favoriteResourceManager->favoritePresetList()) {
+        if (m_resourceProvider->currentPreset()->name() == preset->name()) {
             if (i < m_favoriteResourceManager->numFavoritePresets() - 1) {
                 m_favoriteResourceManager->slotChangeActivePaintop(i + 1);
             } else {

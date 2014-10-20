@@ -33,12 +33,9 @@
 
 #include <kaboutdata.h>
 #include <kpluginfactory.h>
-#include <kstandarddirs.h>
 #include <kmimetype.h>
-#include <kmimetypetrader.h>
 
 #include <okular/core/page.h>
-#include <okular/core/version.h>
 
 static KAboutData createAboutData()
 {
@@ -173,7 +170,16 @@ void OkularOdpGenerator::generatePixmap( Okular::PixmapRequest *request )
     signalPixmapRequestDone( request );
 }
 
+#if OKULAR_IS_VERSION(0, 20, 60)
+Okular::DocumentInfo OkularOdpGenerator::generateDocumentInfo( const QSet<Okular::DocumentInfo::Key> &keys ) const
+{
+    Q_UNUSED(keys);
+
+    return m_documentInfo;
+}
+#else
 const Okular::DocumentInfo* OkularOdpGenerator::generateDocumentInfo()
 {
     return &m_documentInfo;
 }
+#endif

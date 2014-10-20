@@ -29,13 +29,10 @@
 #include <QPalette>
 
 #include <kcombobox.h>
-#include <kconfig.h>
 #include <kiconloader.h>
 #include <klineedit.h>
 #include <klocale.h>
-#include <khbox.h>
 #include <kdebug.h>
-#include <kconfiggroup.h>
 #include <ktitlewidget.h>
 
 #include "ui_KexiPasswordWidget.h"

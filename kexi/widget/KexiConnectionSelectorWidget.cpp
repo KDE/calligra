@@ -33,14 +33,10 @@
 
 #include <KoIcon.h>
 
-#include <kapplication.h>
-#include <kmimetype.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include <kconfig.h>
 #include <kurlcombobox.h>
-#include <ktoolbar.h>
-#include <kmenu.h>
+#include <kdialog.h>
 
 #include <QLabel>
 #include <QPushButton>
@@ -374,7 +370,7 @@ void KexiConnectionSelectorWidget::slotRemoteAddBtnClicked()
     KexiDB::ConnectionData data;
     KexiDBConnectionDialog dlg(this, data, QString(),
                                KGuiItem(i18n("&Add"), koIconName("dialog-ok"), i18n("Add database connection")));
-    dlg.setWindowTitle(i18n("Add New Database Connection"));
+    dlg.setWindowTitle(i18nc("@title:window", "Add a New Database Connection"));
     if (QDialog::Accepted != dlg.exec())
         return;
 
@@ -404,7 +400,7 @@ void KexiConnectionSelectorWidget::slotRemoteEditBtnClicked()
     KexiDBConnectionDialog dlg(this, *item->data(), QString(),
                                KGuiItem(i18n("&Save"), koIconName("document-save"),
                                         i18n("Save changes made to this database connection")));
-    dlg.setWindowTitle(i18n("Edit Database Connection"));
+    dlg.setWindowTitle(i18nc("@title:window", "Edit Database Connection"));
     if (QDialog::Accepted != dlg.exec())
         return;
 

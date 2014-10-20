@@ -24,7 +24,6 @@
 #include <QFileInfo>
 #include <QDir>
 
-#include <kmimetype.h>
 #include <kdebug.h>
 #include <klocale.h>
 
@@ -1036,7 +1035,7 @@ KexiDB::Parser* KexiProject::sqlParser()
     return d->sqlParser;
 }
 
-const char* warningNoUndo = I18N_NOOP("Warning: entire project's data will be removed.");
+const char warningNoUndo[] = I18N_NOOP("Warning: entire project's data will be removed.");
 
 /*static*/
 KexiProject*

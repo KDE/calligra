@@ -27,6 +27,10 @@
 
 #include <flake/kis_node_shape.h>
 #include <KoIcon.h>
+#include <kshortcut.h>
+
+#include <KConfig>
+#include <KConfigGroup>
 
 class QCheckBox;
 class QComboBox;
@@ -124,6 +128,8 @@ private:
 
     QCheckBox *m_chkFinishStabilizedCurve;
     QSignalMapper m_signalMapper;
+
+    KConfigGroup configGroup;
 };
 
 
@@ -154,4 +160,3 @@ public:
 
 
 #endif // KIS_TOOL_BRUSH_H_
-

@@ -21,8 +21,6 @@
 
 #include "CAImageProvider.h"
 
-#include <kglobal.h>
-
 const char *CAImageProvider::identificationString = "caimage";
 CAImageProvider *CAImageProvider::s_imageProvider = 0;
 

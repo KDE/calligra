@@ -32,7 +32,6 @@ paintop_settings_01.png
 paintop_settings_02.png
 paintop_settings_disabled.png
 portrait.png
-properties.png
 ratio_icon.png
 removefromfolder.png
 reload_preset.png
@@ -67,6 +66,8 @@ white64-krita.png
 width_icon.png
 width.png
 workspace-chooser.png
+onionA.png
+onionB.png
 
 dark_select.png
 dark_pattern.png

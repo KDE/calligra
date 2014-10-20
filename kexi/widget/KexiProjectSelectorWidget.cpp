@@ -25,8 +25,6 @@
 #include <core/kexi.h>
 #include <KoIcon.h>
 
-#include <kapplication.h>
-#include <kmimetype.h>
 #include <klocale.h>
 #include <kdebug.h>
 
@@ -84,7 +82,7 @@ public:
         if (selector->d->showConnectionColumns) {
             QString drvname = info.caption.isEmpty() ? cdata->driverName : info.caption;
             if (info.fileBased) {
-                setText(colnum++, i18n("File (%1)").arg(drvname));
+                setText(colnum++, i18n("File (%1)", drvname));
             } else {
                 setText(colnum++, drvname + "  ");
             }
@@ -94,8 +92,8 @@ public:
                 conn = cdata->serverInfoString();
             }
             else {
-                conn = i18nc("caption: server_info", "%1: %2")
-                        .arg(cdata->caption).arg(cdata->serverInfoString());
+                conn = i18nc("caption: server_info", "%1: %2",
+                             cdata->caption, cdata->serverInfoString());
             }
             setText(3, conn + "  ");
         }
@@ -290,21 +288,12 @@ bool KexiProjectSelectorWidget::eventFilter(QObject* watched, QEvent* event)
 /*================================================================*/
 
 KexiProjectSelectorDialog::KexiProjectSelectorDialog(QWidget *parent,
-        KexiProjectSet* prj_set, bool showProjectNameColumn, bool showConnectionColumns)
-        : KPageDialog(parent)
-        , d(new Private)
-{
-    setWindowTitle(i18n("Open Recent Project"));
-    init(prj_set, showProjectNameColumn, showConnectionColumns);
-}
-
-KexiProjectSelectorDialog::KexiProjectSelectorDialog(QWidget *parent,
         const KexiDB::ConnectionData& cdata,
         bool showProjectNameColumn, bool showConnectionColumns)
         : KPageDialog(parent)
         , d(new Private)
 {
-    setWindowTitle(i18n("Open Project"));
+    setWindowTitle(i18nc("@title:window", "Open Project"));
     KexiDB::ConnectionData _cdata(cdata);
     KexiProjectSet *prj_set = new KexiProjectSet(&_cdata);
     init(prj_set, showProjectNameColumn, showConnectionColumns);

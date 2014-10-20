@@ -29,8 +29,6 @@
 
 #include <QLabel>
 
-#include <kglobalsettings.h>
-
 
 KexiTableViewPrivate::KexiTableViewPrivate(KexiTableView* t)
         : appearance(t)

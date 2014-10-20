@@ -35,8 +35,6 @@
 #include <QToolButton>
 #include <QLabel>
 #include <QPainter>
-#include <kurl.h>
-#include <KIO/Job>
 #include <kdebug.h>
 #include <kcombobox.h>
 
@@ -116,11 +114,10 @@ void KexiRelationDesignTool::changeUrlPressed()
     if (m_relationDesign == 0)
         return;
 
-    KexiProjectSet kps;
     KexiDBConnectionSet kcs;
 
     if (!m_dbDialog) {
-        m_dbDialog = new KexiStartupDialog(KexiStartupDialog::OpenExisting, 0, kcs, kps);
+        m_dbDialog = new KexiStartupDialog(KexiStartupDialog::OpenExisting, 0, kcs);
     }
 
     int res = m_dbDialog->exec();

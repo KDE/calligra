@@ -22,7 +22,7 @@
 
 #include "kplatokernel_export.h"
 
-#include "KoXmlReaderForward.h"
+#include <KoXmlReaderForward.h>
 
 #include <QList>
 

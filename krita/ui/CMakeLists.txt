@@ -92,6 +92,7 @@ set(kritaui_LIB_SRCS
     kis_filters_model.cc
     kis_flipbook.cpp
     kis_flipbook_item.cpp
+    kis_animation.cpp
     kis_histogram_view.cc
     kis_image_manager.cc
     kis_image_view_converter.cpp
@@ -111,7 +112,6 @@ set(kritaui_LIB_SRCS
     kis_paintop_option.cpp
     kis_paintop_options_model.cpp
     kis_paintop_options_widget.cpp
-    kis_palette_manager.cpp
     kis_popup_palette.cpp
     kis_png_converter.cpp
     kis_preference_set_registry.cpp
@@ -127,6 +127,11 @@ set(kritaui_LIB_SRCS
     kis_action.cpp
     kis_action_manager.cpp
     kis_view_plugin.cpp
+    kis_animation_factory.cpp
+    kis_animation_doc.cpp
+    kis_animation_part.cpp
+    kis_animation_player.cpp
+    kis_onion_skin_loader.cpp
     kis_canvas_controls_manager.cpp
     kis_tooltip_manager.cpp
     kisexiv2/kis_exif_io.cpp
@@ -139,6 +144,9 @@ set(kritaui_LIB_SRCS
     kra/kis_kra_save_visitor.cpp
     kra/kis_kra_saver.cpp
     kra/kis_kra_savexml_visitor.cpp
+    kranim/kis_kranim_saver.cpp
+    kranim/kis_kranim_loader.cpp
+    kranimstore/kis_animation_store.cpp
     opengl/kis_opengl.cpp
     opengl/kis_opengl_canvas2.cpp
     opengl/kis_opengl_image_textures.cpp
@@ -180,6 +188,7 @@ set(kritaui_LIB_SRCS
     tool/strokes/kis_painter_based_stroke_strategy.cpp
     tool/strokes/kis_filter_stroke_strategy.cpp
     widgets/KisFlipbookSelector.cpp
+    widgets/kis_animation_selector.cpp
     widgets/kis_channelflags_widget.cpp
     widgets/kis_cmb_composite.cc
     widgets/kis_paintop_list_widget.cpp
@@ -330,6 +339,7 @@ kde4_add_ui_files(kritaui_LIB_SRCS
     forms/wdgpresetselectorstrip.ui
     forms/wdgdlgblacklistcleanup.ui
     forms/wdgflipbookselector.ui
+    forms/wdganimationselector.ui
     input/config/kis_input_configuration_page.ui
     input/config/kis_edit_profiles_dialog.ui
     input/config/kis_input_configuration_page_item.ui
@@ -343,8 +353,6 @@ kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS} )
 target_link_libraries(kritaui ${QT_QTDECLARATIVE_LIBRARY}
                               ${X11_X11_LIB}
                               ${X11_Xinput_LIB})
-
-target_link_libraries(kritaui ${GLEW_LIBRARIES})
 
 if(GHNS)
     target_link_libraries(kritaui ${KDE4_KFILE_LIBRARY} kritaimage kritalibbrush komain kowidgets kowidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES} ${KDE4_KNEWSTUFF3_LIBS})

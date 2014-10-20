@@ -26,14 +26,29 @@
 #include <kcomponentdata.h>
 #include <kstandarddirs.h>
 
+#include <KoPluginLoader.h>
 
 KComponentData* KPrFactory::s_instance = 0;
 KAboutData* KPrFactory::s_aboutData = 0;
+
+static int factoryCount = 0;
 
 KPrFactory::KPrFactory( QObject* parent, const char* /*name*/ )
     : KPluginFactory( *aboutData(), parent )
 {
     (void)componentData();
+
+    if (factoryCount == 0) {
+
+        // Load the KoPA-specific tools
+        KoPluginLoader::instance()->load(QLatin1String("CalligraPageApp/Tool"),
+                                         QLatin1String("[X-KoPageApp-Version] == 28"));
+
+        // Load the Stage-specific tools
+        KoPluginLoader::instance()->load(QLatin1String("CalligraStage/Tool"),
+                                         QLatin1String("[X-KPresenter-Version] == 28"));
+    }
+    factoryCount++;
 }
 
 KPrFactory::~KPrFactory()

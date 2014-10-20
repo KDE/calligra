@@ -27,8 +27,6 @@
 #include <QVBoxLayout>
 #include <QPen>
 
-#include <kpagedialog.h>
-
 // KSpread
 #include "Cell.h"
 #include "DependencyManager.h"

@@ -4,7 +4,7 @@ add_subdirectory( tests )
 
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})
 
-# Chose a tiles backend 
+# Chose a tiles backend
 # 1 - image/tiles
 # 3 - image/tiles3
 
@@ -201,7 +201,13 @@ set(kritaimage_LIB_SRCS
    kis_transaction_data.cpp
    kis_transform_worker.cc
    kis_perspectivetransform_worker.cpp
+#   bsplines/kis_bspline_1d.cpp
+#   bsplines/kis_bspline_2d.cpp
+#   bsplines/kis_nu_bspline_2d.cpp
    kis_warptransform_worker.cc
+   kis_cage_transform_worker.cpp
+   kis_green_coordinates_math.cpp
+   kis_algebra_2d.cpp
    kis_transparency_mask.cc
    kis_undo_store.cpp
    kis_undo_stores.cpp
@@ -248,8 +254,18 @@ set(kritaimage_LIB_SRCS
    recorder/kis_recorded_shape_paint_action.cpp
 )
 
+set(einspline_SRCS
+#   bsplines/einspline/bspline_create.c
+#   bsplines/einspline/bspline_data.c
+#   bsplines/einspline/multi_bspline_create.c
+#   bsplines/einspline/nubasis.c
+#   bsplines/einspline/nubspline_create.c
+#   bsplines/einspline/nugrid.c
+)
 
-kde4_add_library(kritaimage SHARED ${kritaimage_LIB_SRCS})
+#SET_SOURCE_FILES_PROPERTIES(${einspline_SRCS} PROPERTIES COMPILE_FLAGS -std=c99)
+
+kde4_add_library(kritaimage SHARED ${kritaimage_LIB_SRCS} ${einspline_SRCS})
 
 target_link_libraries(kritaimage ${KDE4_KDEUI_LIBS} pigmentcms kundo2 kowidgetutils)
 target_link_libraries(kritaimage LINK_INTERFACE_LIBRARIES pigmentcms kundo2 kowidgetutils)
@@ -285,12 +301,12 @@ install( FILES
     metadata/schemas/xmp.schema
     metadata/schemas/xmpmm.schema
     metadata/schemas/xmprights.schema
-    
+
     DESTINATION ${DATA_INSTALL_DIR}/krita/metadata/schemas)
 
 ########### install files ###############
 
-install( FILES 
+install( FILES
     kis_base_node.h
     kis_base_processor.h
     kis_config_widget.h
@@ -321,7 +337,6 @@ install( FILES
     kis_selection.h
     kis_shared.h
     kis_shared_ptr.h
-    kis_shared_ptr_vector.h
     kis_transaction.h
     kis_types.h
     krita_export.h

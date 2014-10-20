@@ -19,7 +19,6 @@
 #include "Plugin.h"
 #include "KPrAnimationToolFactory.h"
 
-#include <KoShapeRegistry.h>
 #include <KoToolRegistry.h>
 
 #include <kpluginfactory.h>

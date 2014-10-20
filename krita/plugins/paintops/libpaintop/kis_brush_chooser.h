@@ -28,6 +28,7 @@ class QCheckBox;
 
 class KisMultipliersDoubleSliderSpinBox;
 class KisDoubleSliderSpinBox;
+class KisSpacingSelectionWidget;
 class KoResourceItemChooser;
 class KoResource;
 
@@ -52,7 +53,7 @@ private slots:
     void slotResetBrush();
     void slotSetItemSize(qreal);
     void slotSetItemRotation(qreal);
-    void slotSetItemSpacing(qreal);
+    void slotSpacingChanged();
     void slotSetItemUseColorAsMask(bool);
     void slotActivatedBrush(KoResource *);
     void update(KoResource *);
@@ -67,8 +68,8 @@ private:
     QLabel* m_lbSize;
     QLabel* m_lbSpacing;
     KisDoubleSliderSpinBox* m_slRotation;
-    KisMultipliersDoubleSliderSpinBox* m_slSize;
-    KisDoubleSliderSpinBox* m_slSpacing;
+    KisDoubleSliderSpinBox* m_slSize;
+    KisSpacingSelectionWidget* m_slSpacing;
     QCheckBox* m_chkColorMask;
     KisBrushSP m_brush;
     KoResourceItemChooser* m_itemChooser;

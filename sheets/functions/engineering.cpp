@@ -34,7 +34,6 @@
 #include <QMap>
 
 // these are needed for complex functions, while we handle them in the old way
-#include <kglobal.h>
 #include <math.h>
 
 #ifndef M_LN2l

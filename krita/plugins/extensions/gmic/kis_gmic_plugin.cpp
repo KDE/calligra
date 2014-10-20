@@ -23,7 +23,6 @@
 #include <QApplication>
 
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kcomponentdata.h>
 #include <kglobal.h>
 
@@ -31,7 +30,6 @@
 #include <kstandarddirs.h>
 #include <kis_debug.h>
 #include <kpluginfactory.h>
-#include <kactioncollection.h>
 #include <QTime>
 
 #include <kis_view2.h>
@@ -177,13 +175,13 @@ void KisGmicPlugin::slotApplyGmicCommand(KisGmicFilterSetting* setting)
 
     QTime myTimer;
     myTimer.start();
-    qApp->setOverrideCursor(Qt::WaitCursor);
+    QApplication::setOverrideCursor(Qt::WaitCursor);
 
     m_gmicApplicator->setProperties(m_view->image(), node, actionName, kritaNodes, setting->gmicCommand(), m_gmicCustomCommands);
     m_gmicApplicator->start();
     m_gmicApplicator->wait();
     m_view->image()->waitForDone();
-    qApp->restoreOverrideCursor();
+    QApplication::restoreOverrideCursor();
 
     double seconds = myTimer.elapsed() * 0.001;
     // temporary feedback

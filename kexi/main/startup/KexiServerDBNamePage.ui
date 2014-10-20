@@ -19,7 +19,7 @@
      <item row="0" column="0">
       <widget class="QLabel" name="textLabel1">
        <property name="text">
-        <string>Project title:</string>
+        <string>Project caption:</string>
        </property>
       </widget>
      </item>

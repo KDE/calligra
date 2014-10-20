@@ -36,7 +36,6 @@
 #include "KarbonAboutData.h"
 
 #include <kaboutdata.h>
-#include <kglobal.h>
 #include <kiconloader.h>
 #include <kcomponentdata.h>
 #include <klocale.h>

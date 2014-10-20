@@ -39,7 +39,7 @@ struct PrecisionValues {
 };
 
 const qreal eps = 1e-6;
-static PrecisionValues precisionLevels[] = {
+static const PrecisionValues precisionLevels[] = {
     {M_PI / 180, 0.05,   1, 0.01},
     {M_PI / 180, 0.01,   1, 0.01},
     {M_PI / 180,    0,   1, 0.01},
@@ -59,7 +59,7 @@ struct KisDabCache::SavedDabParameters {
     MirrorProperties mirrorProperties;
 
     bool compare(const SavedDabParameters &rhs, int precisionLevel) const {
-        PrecisionValues &prec = precisionLevels[precisionLevel];
+        const PrecisionValues &prec = precisionLevels[precisionLevel];
 
         return color == rhs.color &&
                qAbs(angle - rhs.angle) <= prec.angle &&
@@ -251,6 +251,14 @@ KisFixedPaintDeviceSP KisDabCache::tryFetchFromCache(const SavedDabParameters &p
     return m_d->dab;
 }
 
+qreal positiveFraction(qreal x) {
+    int unused;
+    qreal fraction;
+    KisPaintOp::splitCoordinate(x, &unused, &fraction);
+
+    return fraction;
+}
+
 inline
 KisDabCache::DabPosition
 KisDabCache::calculateDabRect(const QPointF &cursorPoint,
@@ -286,13 +294,13 @@ KisDabCache::calculateDabRect(const QPointF &cursorPoint,
     int height = m_d->brush->maskHeight(scaleY, angle, subPixelX, subPixelY, info);
 
     if (mirrorProperties.horizontalMirror) {
-        subPixelX = 1.0 - subPixelX;
+        subPixelX = positiveFraction(-(cursorPoint.x() + hotSpot.x()));
         width = m_d->brush->maskWidth(scaleX, angle, subPixelX, subPixelY, info);
         x = cursorPoint.x() + subPixelX + hotSpot.x() - width;
     }
 
     if (mirrorProperties.verticalMirror) {
-        subPixelY = 1.0 - subPixelY;
+        subPixelY = positiveFraction(-(cursorPoint.y() + hotSpot.y()));
         height = m_d->brush->maskHeight(scaleY, angle, subPixelX, subPixelY, info);
         y = cursorPoint.y() + subPixelY + hotSpot.y() - height;
     }

@@ -67,13 +67,12 @@
 #include <KoCanvasController.h>
 #include <KoCanvasResourceManager.h>
 #include <KoViewConverter.h>
+#include <KoColor.h>
 #include <KoIcon.h>
 
 // KDE
 #include <kfontaction.h>
-#include <kfontchooser.h>
 #include <kfontsizeaction.h>
-#include <kdeversion.h>
 
 // Qt
 #include <QApplication>

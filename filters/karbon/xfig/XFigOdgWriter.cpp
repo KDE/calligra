@@ -27,7 +27,6 @@
 #include <KoXmlNS.h>
 #include <KoOdf.h>
 #include <KoStore.h>
-#include <KoStoreDevice.h>
 #include <KoDocumentInfo.h>
 
 // keep in sync with XFigPageSizeType

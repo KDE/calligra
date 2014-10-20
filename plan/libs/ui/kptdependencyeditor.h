@@ -37,8 +37,6 @@
 
 #include <klocale.h>
 
-#include "KoView.h"
-
 #include <kpagedialog.h>
 
 class KoPageLayoutWidget;

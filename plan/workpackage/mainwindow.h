@@ -25,19 +25,12 @@
 
 #include "kplatowork_export.h"
 
-#include <kxmlguiwindow.h>
-
 #include <KoApplication.h>
-
-#include <ktabwidget.h>
 
 #include <QMap>
 #include <QToolButton>
 #include <QLabel>
 
-#include <kmimetype.h>
-#include <kvbox.h>
-#include <kservice.h>
 #include <KoDocumentEntry.h>
 #include <kparts/mainwindow.h>
 
@@ -53,7 +46,6 @@ namespace KPlato {
 }
 
 class KComponentData;
-class KVBox;
 class QSplitter;
 class KoDocumentEntry;
 class KoView;

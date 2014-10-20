@@ -24,6 +24,7 @@
 #include "KarbonSimplifyPath.h"
 #include <KoCurveFit.h>
 #include <KoColorBackground.h>
+#include <QColor>
 
 #include <kdebug.h>
 

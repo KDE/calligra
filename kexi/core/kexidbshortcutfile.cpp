@@ -23,8 +23,6 @@
 #include <kexiutils/utils.h>
 #include <kexi_global.h>
 
-#include <kconfig.h>
-#include <kconfiggroup.h>
 #include <kdebug.h>
 
 #include <QStringList>

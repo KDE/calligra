@@ -20,8 +20,6 @@
 #ifndef KEXI_STARTUPHANDLER_H
 #define KEXI_STARTUPHANDLER_H
 
-#include <kpassworddialog.h>
-
 #include <core/kexistartupdata.h>
 #include <core/kexi.h>
 #include <db/tristate.h>
@@ -33,29 +31,6 @@ namespace KexiDB
 {
 class ConnectionData;
 }
-
-/*! Database password dialog. */
-class KexiDBPasswordDialog : public KPasswordDialog
-{
-    Q_OBJECT
-public:
-    KexiDBPasswordDialog(QWidget *parent, KexiDB::ConnectionData& cdata, bool showDetailsButton = false);
-    virtual ~KexiDBPasswordDialog();
-
-    bool showConnectionDetailsRequested() const;
-
-    //! Asks the user for password and sets it to data.
-    //! @return true is user provided the password.
-    static bool getPasswordIfNeeded(KexiDB::ConnectionData *data, QWidget *parent = 0);
-
-protected slots:
-    virtual void slotButtonClicked(int button);
-    void slotShowConnectionDetails();
-
-protected:
-    class Private;
-    Private* const d;
-};
 
 /*! Handles startup actions for Kexi application.
 */

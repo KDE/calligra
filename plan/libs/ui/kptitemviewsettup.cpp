@@ -28,7 +28,6 @@
 #include <QCheckBox>
 #include <QHeaderView>
 
-#include <kactionselector.h>
 #include <kpushbutton.h>
 
 namespace KPlato

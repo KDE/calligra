@@ -23,10 +23,10 @@
 #include <QLabel>
 #include <QLayout>
 #include <QGridLayout>
-#include <klineedit.h>
 
 #include <kexi_export.h>
 
+class KLineEdit;
 
 namespace KexiDB
 {

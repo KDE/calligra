@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2005 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2014 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -50,6 +50,8 @@ class KEXIFORMUTILS_EXPORT KexiDBLineEdit : public KLineEdit,
     Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource)
     Q_PROPERTY(QString dataSourcePartClass READ dataSourcePartClass WRITE setDataSourcePartClass)
     Q_PROPERTY(bool readOnly READ isReadOnly WRITE setReadOnly)
+    Q_PROPERTY(QString clickMessage READ clickMessage WRITE setClickMessage) // internal, only for compatibility with Kexi 2
+                                                                             // (equivalent of placeholderText)
 
 public:
     explicit KexiDBLineEdit(QWidget *parent);
@@ -109,6 +111,9 @@ public:
     //! Used when read only flag is true
     int originalCursorPosition() const;
 
+    //! @return the message set with setClickMessage (equivalent of placeholderText)
+    QString clickMessage() const;
+
 public slots:
     void setDataSource(const QString &ds);
 
@@ -130,6 +135,10 @@ public slots:
 
     //! Implemented for KexiDataItemInterface
     virtual bool fixup();
+
+    //! This makes the line edit display a grayed-out hinting text as long as
+    //! the user didn't enter any text. Equivalent of placeholderText. Calls QLineEdit::placeholderText().
+    void setClickMessage(const QString &msg);
 
 protected slots:
     void slotTextChanged(const QString&);

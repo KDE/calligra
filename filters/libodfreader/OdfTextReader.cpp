@@ -31,11 +31,8 @@
 #include <klocalizedstring.h>
 
 // Calligra
-#include <KoStore.h>
 #include <KoXmlStreamReader.h>
 #include <KoXmlNS.h>
-#include <KoXmlWriter.h>  // For copyXmlElement
-#include <KoOdfReadStore.h>
 
 // Reader library
 #include "OdfTextReaderBackend.h"
@@ -703,7 +700,7 @@ void OdfTextReader::readElementOfficeAnnotation(KoXmlStreamReader &reader)
     //   [done] <dc:creator> 4.3.2.7
     //   [done] <dc:date> 4.3.2.10
     //          <meta:date-string> 14.3
-    //          <text:list> 5.3.1
+    //   [done] <text:list> 5.3.1
     //   [done] <text:p> 5.1.3
     while (reader.readNextStartElement()) {
         QString tagName = reader.qualifiedName().toString();
@@ -716,9 +713,10 @@ void OdfTextReader::readElementOfficeAnnotation(KoXmlStreamReader &reader)
         }
         else if (tagName == "meta:date-string") {
             // FIXME: NYI
+            reader.skipCurrentElement();
         }
         else if (tagName == "text:list") {
-            // FIXME: NYI
+            readElementTextList(reader);
         }
         else if (tagName == "text:p") {
             readElementTextP(reader);
@@ -853,7 +851,7 @@ void OdfTextReader::readElementTextListHeader(KoXmlStreamReader &reader)
 	    readElementTextSoftPageBreak(reader);
         }
         else if (tagName == "text:number") {
-            //FIXME
+            // FIXME: NYI
             reader.skipCurrentElement();
         }
 	else {

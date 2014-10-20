@@ -19,8 +19,6 @@
 
 #include "kptdebug.h"
 
-#include <kdeversion.h>
-
 int planDbg() {
     static int s_area = KDebug::registerArea( "plan" );
     return s_area;

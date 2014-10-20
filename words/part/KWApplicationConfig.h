@@ -21,7 +21,6 @@
 
 #include <KoZoomMode.h>
 
-class KConfigGroup;
 class KWDocument;
 class KoUnit;
 

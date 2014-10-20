@@ -30,10 +30,6 @@
 
 #include <kdebug.h>
 #include <klineedit.h>
-#include <knuminput.h>
-#include <kpassworddialog.h>
-#include <kurlrequester.h>
-#include <ktextedit.h>
 
 #include <QLabel>
 #include <QCheckBox>
@@ -114,7 +110,7 @@ KexiDBConnectionWidget::KexiDBConnectionWidget(QWidget* parent)
         KGuiItem(i18n("&Test Connection"), QString(),
                  i18n("Test database connection"),
                  i18n("Tests database connection. "
-                      "You can ensure that valid connection information is provided.")),
+                      "You can check validity of connection information.")),
         frmBottom);
     d->btnTestConnection->setObjectName("testConnection");
     hbox->addWidget(d->btnTestConnection);
@@ -330,7 +326,10 @@ KexiProjectData KexiDBConnectionTabWidget::currentProjectData()
     data.connectionData()->useLocalSocketFile = detailsWidget->chkUseSocket->isChecked();
 //UNSAFE!!!!
     data.connectionData()->userName = mainWidget->userEdit->text();
-    data.connectionData()->password = mainWidget->passwordEdit->text();
+    if (mainWidget->chkSavePassword->isChecked()) {
+        // avoid keeping potentially wrong password that then will be re-used
+        data.connectionData()->password = mainWidget->passwordEdit->text();
+    }
     data.connectionData()->savePassword = mainWidget->chkSavePassword->isChecked();
     /*! @todo add "options=", eg. as string list? */
     return data;
@@ -368,7 +367,7 @@ KexiDBConnectionDialog::KexiDBConnectionDialog(QWidget* parent, const KexiProjec
         : KDialog(parent)
         , d(new Private)
 {
-    setWindowTitle(i18n("Open Database"));
+    setWindowTitle(i18nc("@title:window", "Open Database"));
     d->tabWidget = new KexiDBConnectionTabWidget(this);
     d->tabWidget->setData(data, shortcutFileName);
     init(acceptButtonGuiItem);
@@ -380,7 +379,7 @@ KexiDBConnectionDialog::KexiDBConnectionDialog(QWidget* parent,
         : KDialog(parent)
         , d(new Private)
 {
-    setWindowTitle(i18n("Connect to a Database Server"));
+    setWindowTitle(i18nc("@title:window", "Connect to a Database Server"));
     d->tabWidget = new KexiDBConnectionTabWidget(this);
     d->tabWidget->setData(data, shortcutFileName);
     init(acceptButtonGuiItem);

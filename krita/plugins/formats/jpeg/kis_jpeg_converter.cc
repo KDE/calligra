@@ -36,11 +36,10 @@ extern "C" {
 
 #include <QFile>
 #include <QBuffer>
+#include <QApplication>
 
-#include <kapplication.h>
 #include <kmessagebox.h>
 #include <klocale.h>
-#include <kde_file.h>
 
 #include <kio/netaccess.h>
 #include <kio/deletejob.h>
@@ -85,7 +84,7 @@ namespace
 
 J_COLOR_SPACE getColorTypeforColorSpace(const KoColorSpace * cs)
 {
-    if (KoID(cs->id()) == KoID("GRAYA") || KoID(cs->id()) == KoID("GRAYA16")) {
+    if (KoID(cs->id()) == KoID("GRAYA") || cs->id() == "GRAYAU16" || cs->id() == "GRAYA16") {
         return JCS_GRAYSCALE;
     }
     if (KoID(cs->id()) == KoID("RGBA") || KoID(cs->id()) == KoID("RGBA16")) {
