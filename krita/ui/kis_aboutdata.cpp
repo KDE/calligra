@@ -466,6 +466,7 @@ KAboutData *newKritaAboutData()
     aboutData->addCredit(ki18n("Laurent Espitallier"), ki18n("Krita 2.9 Kickstarter Backer"));
     aboutData->addCredit(ki18n("LcLk"), ki18n("Krita 2.9 Kickstarter Backer"));
     aboutData->addCredit(ki18n("Leecifer"), ki18n("Krita 2.9 Kickstarter Backer"));
+    aboutData->addCredit(ki18n("Lee Kenning"), ki18n("Krita 2.9 Kickstarter Backer"));
     aboutData->addCredit(ki18n("Lee Symes"), ki18n("Krita 2.9 Kickstarter Backer"));
     aboutData->addCredit(ki18n("Leonhard Landrock"), ki18n("Krita 2.9 Kickstarter Backer"));
     aboutData->addCredit(ki18n("Level¹Imp"), ki18n("Krita 2.9 Kickstarter Backer"));
