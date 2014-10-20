@@ -86,7 +86,6 @@ set(komain_LIB_SRCS
 
     KoPart.cpp
 
-    thememanager.cpp
 )
 
 if( QT_QTDBUS_FOUND )
