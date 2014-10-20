@@ -2861,7 +2861,7 @@ tristate KexiMainWindow::closeWindow(KexiWindow *window, bool layoutTaskBar, boo
 
         const int questionRes = KMessageBox::warningYesNoCancel(this,
                                 "<p>"
-                                + window->part()->i18nMessage("Design of object \"%1\" has been modified.", window)
+                                + window->part()->i18nMessage("Design of object <resource>%1</resource> has been modified.", window)
                                 .subs(window->partItem()->name()).toString()
                                 + "</p><p>" + i18n("Do you want to save changes?") + "</p>"
                                 + additionalMessageString /*may be empty*/,
@@ -3246,11 +3246,17 @@ tristate KexiMainWindow::removeObject(KexiPart::Item *item, bool dontAsk)
 
     if (!dontAsk) {
         if (KMessageBox::No == KMessageBox::warningYesNo(this,
-                "<p>" + i18n("Do you want to permanently delete:\n"
-                             "%1\n"
-                             "If you click \"Delete\", you will not be able to undo the deletion.",
-                             "</p><p>" + part->info()->instanceCaption() + " \"" + item->name() + "\"?</p>"),
-                QString(), KGuiItem(i18n("Delete"), koIconName("edit-delete")), KStandardGuiItem::no())) {
+                i18nc("@info Remove <objecttype> <objectname>?",
+                      "Do you want to permanently delete the following object?<nl/>"
+                      "<nl/>%1 <resource>%2</resource><nl/>"
+                      "<nl/><note>If you click <interface>Delete</interface>, "
+                      "you will not be able to undo the deletion.</note>",
+                      part->info()->instanceCaption(), item->name()),
+                i18nc("@title:window Delete Object %1.",
+                      "Delete <resource>%1</resource>?", item->name()),
+                KGuiItem(i18n("Delete"), koIconName("edit-delete")),
+                KStandardGuiItem::no()))
+        {
             return cancelled;
         }
     }
@@ -3878,7 +3884,7 @@ tristate KexiMainWindow::printActionForItem(KexiPart::Item* item, PrintActionTyp
 
             const int questionRes = KMessageBox::warningYesNoCancel(this,
                                     "<p>"
-                                    + window->part()->i18nMessage("Design of object \"%1\" has been modified.", window)
+                                    + window->part()->i18nMessage("Design of object <resource>%1</resource> has been modified.", window)
                                     .subs(item->name())
                                     + "</p><p>" + question + "</p>",
                                     QString(),
