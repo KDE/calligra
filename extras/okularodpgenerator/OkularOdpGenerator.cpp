@@ -24,6 +24,8 @@
 #include <QImage>
 #include <QPainter>
 
+#include <calligraversion.h>
+
 #include <KoDocumentEntry.h>
 #include <KoPart.h>
 #include <KoPADocument.h>
@@ -43,7 +45,7 @@ static KAboutData createAboutData()
          "okular_odp",
          "okularGenerator_odp",
          ki18n( "ODP Backend" ),
-         "0.1",
+         CALLIGRA_VERSION_STRING,
          ki18n( "ODP file renderer" ),
          KAboutData::License_GPL,
          ki18n( "© 2010 Sven Langkamp" )
