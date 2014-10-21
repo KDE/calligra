@@ -1633,7 +1633,7 @@ void KoMainWindow::setMaxRecentItems(uint _number)
 
 void KoMainWindow::slotEmailFile()
 {
-    if (!d->activeView->document())
+    if (!d->activeView || !d->activeView->document())
         return;
 
     // Subject = Document file name
