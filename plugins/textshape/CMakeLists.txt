@@ -17,7 +17,6 @@ include_directories(
     ${TEXTLAYOUT_INCLUDES}
     ${CMAKE_SOURCE_DIR}/libs/widgets
     ${FLAKE_INCLUDES}
-    ${KOWIDGETS_INCLUDES}
 )
 
 ########### Flake Plugin library ###############
