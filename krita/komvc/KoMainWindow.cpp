@@ -1502,8 +1502,7 @@ void KoMainWindow::slotConfigureKeys()
 
 void KoMainWindow::slotConfigureToolbars()
 {
-    if (d->activeView->document())
-        saveMainWindowSettings(KGlobal::config()->group(d->part->componentData().componentName()));
+    saveMainWindowSettings(KGlobal::config()->group(d->part->componentData().componentName()));
     KEditToolBar edit(factory(), this);
     connect(&edit, SIGNAL(newToolBarConfig()), this, SLOT(slotNewToolbarConfig()));
     (void) edit.exec();
@@ -1511,9 +1510,7 @@ void KoMainWindow::slotConfigureToolbars()
 
 void KoMainWindow::slotNewToolbarConfig()
 {
-    if (d->activeView->document()) {
-        applyMainWindowSettings(KGlobal::config()->group(d->part->componentData().componentName()));
-    }
+    applyMainWindowSettings(KGlobal::config()->group(d->part->componentData().componentName()));
 
     KXMLGUIFactory *factory = guiFactory();
     Q_UNUSED(factory);
