@@ -82,9 +82,9 @@ set(wordsprivate_LIB_SRCS
 )
 
 set(wordsprivate_LIB_SRCS ${wordsprivate_LIB_SRCS}
-     dockers/KWDebugDocker.cpp
-     dockers/KWDebugDockerFactory.cpp
-     dockers/KWDebugWidget.cpp
+    dockers/KWDebugDocker.cpp
+    dockers/KWDebugDockerFactory.cpp
+    dockers/KWDebugWidget.cpp
 )
 
 if( SHOULD_BUILD_FEATURE_RDF )
