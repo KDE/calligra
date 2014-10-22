@@ -24,7 +24,6 @@
 #include "CAuFactory.h"
 
 #include <KoShapeRegistry.h>
-#include <KoShapeManager.h>
 
 #include <kmessagebox.h>
 

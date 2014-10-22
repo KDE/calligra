@@ -39,7 +39,6 @@
 #include <KoPAViewModeNormal.h>
 #include <KoPASavingContext.h>
 #include <KoPALoadingContext.h>
-#include <KoShapeManager.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapeRegistry.h>
 #include <KoToolRegistry.h>

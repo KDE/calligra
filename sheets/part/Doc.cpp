@@ -59,7 +59,6 @@
 #include <KoDocumentResourceManager.h>
 #include <KoShapeConfigFactoryBase.h>
 #include <KoShapeFactoryBase.h>
-#include <KoShapeManager.h>
 #include <KoShapeRegistry.h>
 #include <KoStyleStack.h>
 #include <KoXmlNS.h>

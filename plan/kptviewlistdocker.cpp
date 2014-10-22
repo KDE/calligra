@@ -25,7 +25,6 @@
 #include "kptdebug.h"
 
 #include <KoToolManager.h>
-#include <KoShapeManager.h>
 
 #include <klocale.h>
 

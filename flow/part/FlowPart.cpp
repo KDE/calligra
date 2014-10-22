@@ -28,7 +28,6 @@
 #include <KoToolManager.h>
 #include <KoInteractionTool.h>
 #include <KoShapeRegistry.h>
-#include <KoShapeManager.h>
 
 #include <kmessagebox.h>
 

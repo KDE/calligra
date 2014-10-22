@@ -41,7 +41,6 @@
 #include <KoCanvasBase.h>
 #include <KoPointerEvent.h>
 #include <KoSelection.h>
-#include <KoShapeManager.h>
 
 #include "AutoFillStrategy.h"
 #include "Cell.h"
