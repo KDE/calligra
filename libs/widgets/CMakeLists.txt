@@ -55,6 +55,8 @@ set(kowidgets_LIB_SRCS
     KoResourceItemDelegate.cpp
     KoResourceItemView.cpp
     KoResourceTagStore.cpp
+    KoRuler.cpp
+    KoRulerController.cpp
     KoItemToolTip.cpp
     KoCheckerBoardPainter.cpp
     KoResourceServerAdapter.cpp
