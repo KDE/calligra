@@ -80,7 +80,6 @@
 
 // Calligra
 #include <KoCanvasController.h>
-#include <KoToolManager.h>
 #include <KoToolProxy.h>
 #include <KoZoomHandler.h>
 #include <KoPointerEvent.h>

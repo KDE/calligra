@@ -22,8 +22,6 @@
 #include "kptschedule.h"
 #include <kptdebug.h>
 
-#include <KoToolManager.h>
-
 #include <klocale.h>
 
 #include <QAbstractItemView>

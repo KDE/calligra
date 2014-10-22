@@ -67,7 +67,6 @@
 #include <KoShapeSavingContext.h>
 #include <KoUpdater.h>
 #include <KoProgressUpdater.h>
-#include <KoToolManager.h>
 #include <KoInteractionTool.h>
 #include <KoView.h>
 

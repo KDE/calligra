@@ -51,7 +51,6 @@
 #include <kdebug.h>
 
 //Calligra Headers
-#include <KoToolManager.h>
 #include <KoSelection.h>
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>

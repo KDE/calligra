@@ -28,7 +28,6 @@
 
 // calligra libs includes
 #include <KoPointerEvent.h>
-#include <KoToolManager.h>
 #include <KoCanvasController.h>
 #include <KoToolProxy.h>
 #include <KoGridData.h>

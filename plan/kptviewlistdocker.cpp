@@ -24,8 +24,6 @@
 #include "kptview.h"
 #include "kptdebug.h"
 
-#include <KoToolManager.h>
-
 #include <klocale.h>
 
 namespace KPlato
