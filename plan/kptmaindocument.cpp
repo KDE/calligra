@@ -58,7 +58,6 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <ktemporaryfile.h>
-#include <KoGlobal.h>
 #include <kio/global.h>
 #include <kio/jobclasses.h>
 #include <kio/netaccess.h>
