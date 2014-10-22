@@ -286,7 +286,7 @@ KWPage KWDocument::insertPage(int afterPageNum, const QString &masterPageName)
     // Set the y-offset of the new page.
     KWPage prevPage = page.previous();
     if (prevPage.isValid()) {
-        KoInsets padding = pageManager()->padding();
+        KoInsets padding = pageManager()->padding();    //TODO Shouldn't this be style dependent ?
         page.setOffsetInDocument(prevPage.offsetInDocument() + prevPage.height() + padding.top + padding.bottom);
     } else {
         page.setOffsetInDocument(0.0);
