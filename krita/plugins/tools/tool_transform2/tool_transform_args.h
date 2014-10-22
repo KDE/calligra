@@ -25,6 +25,11 @@
 #include <QVector3D>
 #include <kis_warptransform_worker.h>
 #include <kis_filter_strategy.h>
+#include "kis_liquify_properties.h"
+
+
+#include <QScopedPointer>
+class KisLiquifyTransformWorker;
 
 /**
  * Class used to store the parameters of a transformation.
@@ -39,6 +44,7 @@ public:
     enum TransformMode {FREE_TRANSFORM = 0,
                         WARP,
                         CAGE,
+                        LIQUIFY,
                         PERSPECTIVE_4POINT};
 
     /**
@@ -239,6 +245,21 @@ public:
         m_editTransformPoints = value;
     }
 
+    const KisLiquifyProperties* liquifyProperties() const {
+        return &m_liquifyProperties;
+    }
+
+    KisLiquifyProperties* liquifyProperties() {
+        return &m_liquifyProperties;
+    }
+
+    void initLiquifyTransformMode(const QRect &srcRect);
+    void saveLiquifyTransformMode() const;
+
+    KisLiquifyTransformWorker* liquifyWorker() const {
+        return m_liquifyWorker.data();
+    }
+
 private:
     void clear();
     void init(const ToolTransformArgs& args);
@@ -276,6 +297,8 @@ private:
 
     KisFilterStrategy *m_filter;
     bool m_editTransformPoints;
+    KisLiquifyProperties m_liquifyProperties;
+    QScopedPointer<KisLiquifyTransformWorker> m_liquifyWorker;
 };
 
 #endif // TOOL_TRANSFORM_ARGS_H_

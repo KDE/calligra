@@ -21,6 +21,8 @@
 #include <KoIcon.h>
 #include "rotation_icons.h"
 #include "kis_canvas2.h"
+#include <QSignalMapper>
+#include "kis_liquify_properties.h"
 
 
 template<typename T> inline T sign(T x) {
@@ -129,6 +131,66 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     // Init Cage Transform Values
     connect(chkEditCage, SIGNAL(clicked(bool)), this, SLOT(slotEditCagePoints(bool)));
 
+    // Init Liquify Transform Values
+    liquifySizeSlider->setRange(KisLiquifyProperties::minSize(),
+                                KisLiquifyProperties::maxSize(), 2);
+    liquifySizeSlider->setExponentRatio(4);
+    liquifySizeSlider->setValue(50.0);
+    connect(liquifySizeSlider, SIGNAL(valueChanged(qreal)), this, SLOT(liquifySizeChanged(qreal)));
+    liquifySizeSlider->setToolTip(i18nc("@info:tooltip", "Size of the deformation brush"));
+
+    liquifyAmountSlider->setRange(0.0, 1.0, 2);
+    liquifyAmountSlider->setValue(1.0);
+    connect(liquifyAmountSlider, SIGNAL(valueChanged(qreal)), this, SLOT(liquifyAmountChanged(qreal)));
+    liquifyAmountSlider->setToolTip(i18nc("@info:tooltip", "Amount of the deformation you get"));
+
+    liquifyFlowSlider->setRange(0.0, 1.0, 2);
+    liquifyFlowSlider->setValue(1.0);
+    connect(liquifyFlowSlider, SIGNAL(valueChanged(qreal)), this, SLOT(liquifyFlowChanged(qreal)));
+    liquifyFlowSlider->setToolTip(i18nc("@info:tooltip", "When in non-buildup mode, shows how fast the deformation limit is reached."));
+
+    liquifyBuildUpBox->setChecked(true);
+    connect(liquifyBuildUpBox, SIGNAL(toggled(bool)), this, SLOT(liquifyBuildUpChanged(bool)));
+    liquifyBuildUpBox->setToolTip(i18nc("@info:tooltip", "Switch between Build Up and Wash mode of painting. Build Up mode adds deformations one on top of the other without any limits. Wash mode gradually deforms the piece to the selected deformation level."));
+
+    liquifySpacingSlider->setRange(0.0, 3.0, 2);
+    liquifySizeSlider->setExponentRatio(3);
+    liquifySpacingSlider->setSingleStep(0.01);
+    liquifySpacingSlider->setValue(0.2);
+    connect(liquifySpacingSlider, SIGNAL(valueChanged(qreal)), this, SLOT(liquifySpacingChanged(qreal)));
+    liquifySpacingSlider->setToolTip(i18nc("@info:tooltip", "Space between two sequential applications of the deformation"));
+
+    liquifySizePressureBox->setChecked(true);
+    connect(liquifySizePressureBox, SIGNAL(toggled(bool)), this, SLOT(liquifySizePressureChanged(bool)));
+    liquifySizePressureBox->setToolTip(i18nc("@info:tooltip", "Scale <interface>Size</interface> value according to current stylus pressure"));
+
+    liquifyAmountPressureBox->setChecked(true);
+    connect(liquifyAmountPressureBox, SIGNAL(toggled(bool)), this, SLOT(liquifyAmountPressureChanged(bool)));
+    liquifyAmountPressureBox->setToolTip(i18nc("@info:tooltip", "Scale <interface>Amount</interface> value according to current stylus pressure"));
+
+    liquifyReverseDirectionChk->setChecked(false);
+    connect(liquifyReverseDirectionChk, SIGNAL(toggled(bool)), this, SLOT(liquifyReverseDirectionChanged(bool)));
+    liquifyReverseDirectionChk->setToolTip(i18nc("@info:tooltip", "Reverse diration of the current deformation tool"));
+
+    QSignalMapper *liquifyModeMapper = new QSignalMapper(this);
+    connect(liquifyMove, SIGNAL(toggled(bool)), liquifyModeMapper, SLOT(map()));
+    connect(liquifyScale, SIGNAL(toggled(bool)), liquifyModeMapper, SLOT(map()));
+    connect(liquifyRotate, SIGNAL(toggled(bool)), liquifyModeMapper, SLOT(map()));
+    connect(liquifyOffset, SIGNAL(toggled(bool)), liquifyModeMapper, SLOT(map()));
+    connect(liquifyUndo, SIGNAL(toggled(bool)), liquifyModeMapper, SLOT(map()));
+    liquifyModeMapper->setMapping(liquifyMove, (int)KisLiquifyProperties::MOVE);
+    liquifyModeMapper->setMapping(liquifyScale, (int)KisLiquifyProperties::SCALE);
+    liquifyModeMapper->setMapping(liquifyRotate, (int)KisLiquifyProperties::ROTATE);
+    liquifyModeMapper->setMapping(liquifyOffset, (int)KisLiquifyProperties::OFFSET);
+    liquifyModeMapper->setMapping(liquifyUndo, (int)KisLiquifyProperties::UNDO);
+    connect(liquifyModeMapper, SIGNAL(mapped(int)), SLOT(slotLiquifyModeChanged(int)));
+
+    liquifyMove->setToolTip(i18nc("@info:tooltip", "Drag the image along the brush stroke"));
+    liquifyScale->setToolTip(i18nc("@info:tooltip", "Grow/shrink image under cursor"));
+    liquifyRotate->setToolTip(i18nc("@info:tooltip", "Rotate image under cursor"));
+    liquifyOffset->setToolTip(i18nc("@info:tooltip", "Offset the image to the right of the stroke direction"));
+    liquifyUndo->setToolTip(i18nc("@info:tooltip", "Undo actions of other tools"));
+
     // Connect all edit boxes to the Editing Finished signal
     connect(scaleXBox, SIGNAL(editingFinished()), this, SLOT(notifyEditingFinished()));
     connect(scaleYBox, SIGNAL(editingFinished()), this, SLOT(notifyEditingFinished()));
@@ -155,6 +217,13 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     connect(resetPointsButton, SIGNAL(clicked()), this, SLOT(notifyEditingFinished()));
     connect(chkEditCage, SIGNAL(clicked(bool)), this, SLOT(notifyEditingFinished()));
 
+    connect(liquifySizeSlider, SIGNAL(valueChanged(qreal)), this, SLOT(notifyEditingFinished()));
+    connect(liquifyAmountSlider, SIGNAL(valueChanged(qreal)), this, SLOT(notifyEditingFinished()));
+    connect(liquifySpacingSlider, SIGNAL(valueChanged(qreal)), this, SLOT(notifyEditingFinished()));
+    connect(liquifySizePressureBox, SIGNAL(toggled(bool)), this, SLOT(notifyEditingFinished()));
+    connect(liquifyAmountPressureBox, SIGNAL(toggled(bool)), this, SLOT(notifyEditingFinished()));
+    connect(liquifyReverseDirectionChk, SIGNAL(toggled(bool)), this, SLOT(notifyEditingFinished()));
+    connect(liquifyModeMapper, SIGNAL(mapped(int)), SLOT(notifyEditingFinished()));
 
     // Connect Apply/Reset buttons
     connect(buttonBox, SIGNAL(clicked(QAbstractButton *)), this, SLOT(slotButtonBoxClicked(QAbstractButton *)));
@@ -164,6 +233,7 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     connect(warpButton, SIGNAL(clicked(bool)), this, SLOT(slotSetWarpModeButtonClicked(bool)));
     connect(cageButton, SIGNAL(clicked(bool)), this, SLOT(slotSetCageModeButtonClicked(bool)));
     connect(perspectiveTransformButton, SIGNAL(clicked(bool)), this, SLOT(slotSetPerspectiveModeButtonClicked(bool)));
+    connect(liquifyButton, SIGNAL(clicked(bool)), this, SLOT(slotSetLiquifyModeButtonClicked(bool)));
 
     // Connect Decorations switcher
     connect(showDecorationsBox, SIGNAL(toggled(bool)), canvas, SLOT(updateCanvas()));
@@ -194,6 +264,165 @@ double KisToolTransformConfigWidget::degreeToRadian(double degree)
     }
 
     return (degree * M_PI / 180.);
+}
+
+void KisToolTransformConfigWidget::updateLiquifyControls()
+{
+    blockUiSlots();
+
+    ToolTransformArgs *config = m_transaction->currentConfig();
+    KisLiquifyProperties *props =
+        config->liquifyProperties();
+
+    const bool useWashMode = props->useWashMode();
+
+    liquifySizeSlider->setValue(props->size());
+    liquifyAmountSlider->setValue(props->amount());
+    liquifyFlowSlider->setValue(props->flow());
+    liquifyBuildUpBox->setChecked(!useWashMode);
+    liquifySpacingSlider->setValue(props->spacing());
+    liquifySizePressureBox->setChecked(props->sizeHasPressure());
+    liquifyAmountPressureBox->setChecked(props->amountHasPressure());
+    liquifyReverseDirectionChk->setChecked(props->reverseDirection());
+
+
+    KisLiquifyProperties::LiquifyMode mode =
+        static_cast<KisLiquifyProperties::LiquifyMode>(props->mode());
+
+    bool canInverseDirection =
+        mode != KisLiquifyProperties::UNDO;
+
+    bool canUseWashMode = mode != KisLiquifyProperties::UNDO;
+
+    liquifyReverseDirectionChk->setEnabled(canInverseDirection);
+    liquifyFlowSlider->setEnabled(canUseWashMode && useWashMode);
+    liquifyBuildUpBox->setEnabled(canUseWashMode);
+
+    const qreal maxAmount = canUseWashMode ? 5.0 : 1.0;
+    liquifyAmountSlider->setRange(0.0, maxAmount, 2);
+
+    unblockUiSlots();
+}
+
+void KisToolTransformConfigWidget::slotLiquifyModeChanged(int value)
+{
+    if (m_uiSlotsBlocked) return;
+
+    ToolTransformArgs *config = m_transaction->currentConfig();
+
+    KisLiquifyProperties *props =
+        config->liquifyProperties();
+
+    KisLiquifyProperties::LiquifyMode mode =
+        static_cast<KisLiquifyProperties::LiquifyMode>(value);
+
+    if (mode == props->mode()) return;
+
+    props->setMode(mode);
+    props->loadMode();
+
+    updateLiquifyControls();
+
+    notifyConfigChanged();
+}
+
+void KisToolTransformConfigWidget::liquifySizeChanged(qreal value)
+{
+    if (m_uiSlotsBlocked) return;
+
+    ToolTransformArgs *config = m_transaction->currentConfig();
+    KisLiquifyProperties *props =
+        config->liquifyProperties();
+
+    props->setSize(value);
+    notifyConfigChanged();
+}
+
+void KisToolTransformConfigWidget::liquifyAmountChanged(qreal value)
+{
+    if (m_uiSlotsBlocked) return;
+
+    ToolTransformArgs *config = m_transaction->currentConfig();
+    KisLiquifyProperties *props =
+        config->liquifyProperties();
+
+    props->setAmount(value);
+    notifyConfigChanged();
+}
+
+void KisToolTransformConfigWidget::liquifyFlowChanged(qreal value)
+{
+    if (m_uiSlotsBlocked) return;
+
+    ToolTransformArgs *config = m_transaction->currentConfig();
+    KisLiquifyProperties *props =
+        config->liquifyProperties();
+
+    props->setFlow(value);
+    notifyConfigChanged();
+}
+
+void KisToolTransformConfigWidget::liquifyBuildUpChanged(bool value)
+{
+    if (m_uiSlotsBlocked) return;
+
+    ToolTransformArgs *config = m_transaction->currentConfig();
+    KisLiquifyProperties *props =
+        config->liquifyProperties();
+
+    props->setUseWashMode(!value);
+    notifyConfigChanged();
+
+    // we need to enable/disable flow slider
+    updateLiquifyControls();
+}
+
+void KisToolTransformConfigWidget::liquifySpacingChanged(qreal value)
+{
+    if (m_uiSlotsBlocked) return;
+
+    ToolTransformArgs *config = m_transaction->currentConfig();
+    KisLiquifyProperties *props =
+        config->liquifyProperties();
+
+    props->setSpacing(value);
+    notifyConfigChanged();
+}
+
+void KisToolTransformConfigWidget::liquifySizePressureChanged(bool value)
+{
+    if (m_uiSlotsBlocked) return;
+
+    ToolTransformArgs *config = m_transaction->currentConfig();
+    KisLiquifyProperties *props =
+        config->liquifyProperties();
+
+    props->setSizeHasPressure(value);
+    notifyConfigChanged();
+}
+
+void KisToolTransformConfigWidget::liquifyAmountPressureChanged(bool value)
+{
+    if (m_uiSlotsBlocked) return;
+
+    ToolTransformArgs *config = m_transaction->currentConfig();
+    KisLiquifyProperties *props =
+        config->liquifyProperties();
+
+    props->setAmountHasPressure(value);
+    notifyConfigChanged();
+}
+
+void KisToolTransformConfigWidget::liquifyReverseDirectionChanged(bool value)
+{
+    if (m_uiSlotsBlocked) return;
+
+    ToolTransformArgs *config = m_transaction->currentConfig();
+    KisLiquifyProperties *props =
+        config->liquifyProperties();
+
+    props->setReverseDirection(value);
+    notifyConfigChanged();
 }
 
 void KisToolTransformConfigWidget::updateConfig(const ToolTransformArgs &config)
@@ -268,6 +497,33 @@ void KisToolTransformConfigWidget::updateConfig(const ToolTransformArgs &config)
 
         chkEditCage->setChecked(config.isEditingTransformPoints());
         chkEditCage->setEnabled(config.origPoints().size() >= 3);
+    } else if (config.mode() == ToolTransformArgs::LIQUIFY) {
+
+        stackedWidget->setCurrentIndex(3);
+        liquifyButton->setChecked(true);
+
+        const KisLiquifyProperties *props =
+            config.liquifyProperties();
+
+        switch (props->mode()) {
+        case KisLiquifyProperties::MOVE:
+            liquifyMove->setChecked(true);
+            break;
+        case KisLiquifyProperties::SCALE:
+            liquifyScale->setChecked(true);
+            break;
+        case KisLiquifyProperties::ROTATE:
+            liquifyRotate->setChecked(true);
+            break;
+        case KisLiquifyProperties::OFFSET:
+            liquifyOffset->setChecked(true);
+            break;
+        case KisLiquifyProperties::UNDO:
+            liquifyUndo->setChecked(true);
+            break;
+        }
+
+        updateLiquifyControls();
     }
 
     unblockUiSlots();
@@ -370,29 +626,46 @@ void KisToolTransformConfigWidget::slotButtonBoxClicked(QAbstractButton *button)
     }
 }
 
-void KisToolTransformConfigWidget::slotSetFreeTransformModeButtonClicked(bool)
+void KisToolTransformConfigWidget::slotSetFreeTransformModeButtonClicked(bool value)
 {
+    if (!value) return;
+
     ToolTransformArgs *config = m_transaction->currentConfig();
     config->setMode(ToolTransformArgs::FREE_TRANSFORM);
     emit sigResetTransform();
 }
 
-void KisToolTransformConfigWidget::slotSetWarpModeButtonClicked(bool)
+void KisToolTransformConfigWidget::slotSetWarpModeButtonClicked(bool value)
 {
+    if (!value) return;
+
     ToolTransformArgs *config = m_transaction->currentConfig();
     config->setMode(ToolTransformArgs::WARP);
     emit sigResetTransform();
 }
 
-void KisToolTransformConfigWidget::slotSetCageModeButtonClicked(bool)
+void KisToolTransformConfigWidget::slotSetCageModeButtonClicked(bool value)
 {
+    if (!value) return;
+
     ToolTransformArgs *config = m_transaction->currentConfig();
     config->setMode(ToolTransformArgs::CAGE);
     emit sigResetTransform();
 }
 
-void KisToolTransformConfigWidget::slotSetPerspectiveModeButtonClicked(bool)
+void KisToolTransformConfigWidget::slotSetLiquifyModeButtonClicked(bool value)
 {
+    if (!value) return;
+
+    ToolTransformArgs *config = m_transaction->currentConfig();
+    config->setMode(ToolTransformArgs::LIQUIFY);
+    emit sigResetTransform();
+}
+
+void KisToolTransformConfigWidget::slotSetPerspectiveModeButtonClicked(bool value)
+{
+    if (!value) return;
+
     ToolTransformArgs *config = m_transaction->currentConfig();
     config->setMode(ToolTransformArgs::PERSPECTIVE_4POINT);
     emit sigResetTransform();

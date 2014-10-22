@@ -41,7 +41,7 @@ class KoCanvasBase;
 class KisRecordedPolyLinePaintAction;
 class QCheckBox;
 class QPushButton;
-class KisToolPaintingInformationBuilder;
+class KisPaintingInformationBuilder;
 class KisToolLineHelper;
 
 
@@ -84,7 +84,7 @@ private:
     QCheckBox *m_chkUseSensors;
     QCheckBox *m_chkShowOutline;
 
-    QScopedPointer<KisToolPaintingInformationBuilder> m_infoBuilder;
+    QScopedPointer<KisPaintingInformationBuilder> m_infoBuilder;
     QScopedPointer<KisToolLineHelper> m_helper;
     KisSignalCompressor m_strokeUpdateCompressor;
     KisSignalCompressor m_longStrokeUpdateCompressor;

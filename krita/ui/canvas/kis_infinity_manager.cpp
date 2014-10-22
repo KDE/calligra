@@ -1,4 +1,4 @@
-/*
+f===/*
  *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -33,6 +33,7 @@
 #include <kis_image.h>
 #include <kis_canvas_controller.h>
 #include <kis_image_view.h>
+#include <kis_algebra_2d.h>
 
 KisInfinityManager::KisInfinityManager(QPointer<KisImageView>view, KisCanvas2 *canvas)
   : KisCanvasDecoration(INFINITY_DECORATION_ID, view),
@@ -112,6 +113,7 @@ void KisInfinityManager::imagePositionChanged()
         visible = true;
     }
 
+<<<<<<< HEAD
     if (visible && !m_filteringEnabled && this->visible()) {
         m_canvas->inputManager()->attachPriorityEventFilter(this);
         m_filteringEnabled = true;
@@ -119,6 +121,15 @@ void KisInfinityManager::imagePositionChanged()
 
     if (!visible && m_filteringEnabled && this->visible()) {
         m_canvas->inputManager()->detachPriorityEventFilter(this);
+=======
+    if (!m_filteringEnabled && visible && this->visible()) {
+        view()->canvasBase()->inputManager()->attachPriorityEventFilter(this);
+        m_filteringEnabled = true;
+    }
+
+    if (m_filteringEnabled && (!visible || !this->visible())) {
+        view()->canvasBase()->inputManager()->detachPriorityEventFilter(this);
+>>>>>>> master
         m_filteringEnabled = false;
     }
 }
@@ -138,16 +149,7 @@ void KisInfinityManager::drawDecoration(QPainter& gc, const QRectF& updateArea, 
     QColor color = cfg.canvasBorderColor();
     gc.fillPath(m_decorationPath, color.darker(115));
 
-    QPainterPath p;
-
-    p.moveTo(5, 2);
-    p.lineTo(-3, 8);
-    p.lineTo(-5, 5);
-    p.lineTo( 2, 0);
-    p.lineTo(-5,-5);
-    p.lineTo(-3,-8);
-    p.lineTo( 5,-2);
-    p.arcTo(QRectF(3, -2, 4, 4), 90, -180);
+    QPainterPath p = KisAlgebra2D::smallArrow();
 
     foreach (const QTransform &t, m_handleTransform) {
         gc.fillPath(t.map(p), color);

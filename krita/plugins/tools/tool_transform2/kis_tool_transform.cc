@@ -78,6 +78,7 @@
 #include "kis_transform_utils.h"
 #include "kis_warp_transform_strategy.h"
 #include "kis_cage_transform_strategy.h"
+#include "kis_liquify_transform_strategy.h"
 #include "kis_free_transform_strategy.h"
 #include "kis_perspective_transform_strategy.h"
 
@@ -94,6 +95,10 @@ KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
             m_currentArgs, m_transaction))
     , m_cageStrategy(
         new KisCageTransformStrategy(
+            dynamic_cast<KisCanvas2*>(canvas)->coordinatesConverter(),
+            m_currentArgs, m_transaction))
+    , m_liquifyStrategy(
+        new KisLiquifyTransformStrategy(
             dynamic_cast<KisCanvas2*>(canvas)->coordinatesConverter(),
             m_currentArgs, m_transaction))
     , m_freeStrategy(
@@ -114,6 +119,9 @@ KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
 
     connect(m_warpStrategy.data(), SIGNAL(requestCanvasUpdate()), SLOT(canvasUpdateRequested()));
     connect(m_cageStrategy.data(), SIGNAL(requestCanvasUpdate()), SLOT(canvasUpdateRequested()));
+    connect(m_liquifyStrategy.data(), SIGNAL(requestCanvasUpdate()), SLOT(canvasUpdateRequested()));
+    connect(m_liquifyStrategy.data(), SIGNAL(requestCursorOutlineUpdate(const QPointF&)), SLOT(cursorOutlineUpdateRequested(const QPointF&)));
+    connect(m_liquifyStrategy.data(), SIGNAL(requestUpdateOptionWidget()), SLOT(updateOptionWidget()));
     connect(m_freeStrategy.data(), SIGNAL(requestCanvasUpdate()), SLOT(canvasUpdateRequested()));
     connect(m_freeStrategy.data(), SIGNAL(requestResetRotationCenterButtons()), SLOT(resetRotationCenterButtonsRequested()));
     connect(m_freeStrategy.data(), SIGNAL(requestShowImageTooBig(bool)), SLOT(imageTooBigRequested(bool)));
@@ -160,6 +168,8 @@ KisTransformStrategyBase* KisToolTransform::currentStrategy() const
         return m_warpStrategy.data();
     } else if (m_currentArgs.mode() == ToolTransformArgs::CAGE) {
         return m_cageStrategy.data();
+    } else if (m_currentArgs.mode() == ToolTransformArgs::LIQUIFY) {
+        return m_liquifyStrategy.data();
     } else /* if (m_currentArgs.mode() == ToolTransformArgs::PERSPECTIVE_4POINT) */ {
         return m_perspectiveStrategy.data();
     }
@@ -185,6 +195,14 @@ void KisToolTransform::paint(QPainter& gc, const KoViewConverter &converter)
     gc.restore();
 
     currentStrategy()->paint(gc);
+
+
+    if (!m_cursorOutline.isEmpty()) {
+        QPainterPath mappedOutline =
+            KisTransformUtils::imageToFlakeTransform(
+                m_canvas->coordinatesConverter()).map(m_cursorOutline);
+        paintToolOutline(&gc, mappedOutline);
+    }
 }
 
 void KisToolTransform::setFunctionalCursor()
@@ -196,35 +214,165 @@ void KisToolTransform::setFunctionalCursor()
     }
 }
 
-void KisToolTransform::mousePressEvent(KoPointerEvent *event)
+void KisToolTransform::cursorOutlineUpdateRequested(const QPointF &imagePos)
 {
-    if (!PRESS_CONDITION_OM(event, KisTool::HOVER_MODE, Qt::LeftButton, Qt::ControlModifier | Qt::ShiftModifier)) {
+    QRect canvasUpdateRect;
 
-        KisTool::mousePressEvent(event);
+    if (!m_cursorOutline.isEmpty()) {
+        canvasUpdateRect = m_canvas->coordinatesConverter()->
+            imageToDocument(m_cursorOutline.boundingRect()).toAlignedRect();
+    }
+
+    m_cursorOutline = currentStrategy()->
+        getCursorOutline().translated(imagePos);
+
+    if (!m_cursorOutline.isEmpty()) {
+        canvasUpdateRect |=
+            m_canvas->coordinatesConverter()->
+            imageToDocument(m_cursorOutline.boundingRect()).toAlignedRect();
+    }
+
+    if (!canvasUpdateRect.isEmpty()) {
+        // grow rect a bit to follow interpolation fuzziness
+        canvasUpdateRect = kisGrowRect(canvasUpdateRect, 2);
+        m_canvas->updateCanvas(canvasUpdateRect);
+    }
+}
+
+void KisToolTransform::beginActionImpl(KoPointerEvent *event, bool usePrimaryAction, KisTool::AlternateAction action)
+{
+    if (!nodeEditable()) {
+        event->ignore();
         return;
     }
 
-    KisImageWSP kisimage = image();
+    if (!m_strokeData.strokeId()) {
+        startStroke(m_currentArgs.mode());
+    } else {
+        bool result = false;
 
-    if (!currentNode())
-        return;
-
-    setMode(KisTool::PAINT_MODE);
-    if (kisimage && event->button() == Qt::LeftButton) {
-        QPointF mousePos = m_canvas->coordinatesConverter()->documentToImage(event->point);
-        if (!m_strokeData.strokeId()) {
-            startStroke(m_currentArgs.mode());
-            setMode(KisTool::HOVER_MODE);
+        if (usePrimaryAction) {
+            result = currentStrategy()->beginPrimaryAction(event);
         } else {
-            if (!currentStrategy()->beginPrimaryAction(mousePos)) {
-                setMode(KisTool::HOVER_MODE);
-            }
+            result = currentStrategy()->beginAlternateAction(event, action);
         }
 
-        m_actuallyMoveWhileSelected = false;
+        if (result) {
+            setMode(KisTool::PAINT_MODE);
+        }
     }
 
+    m_actuallyMoveWhileSelected = false;
+
     outlineChanged();
+}
+
+void KisToolTransform::continueActionImpl(KoPointerEvent *event, bool usePrimaryAction, KisTool::AlternateAction action)
+{
+    if (mode() != KisTool::PAINT_MODE) return;
+
+    m_actuallyMoveWhileSelected = true;
+
+    if (usePrimaryAction) {
+        currentStrategy()->continuePrimaryAction(event);
+    } else {
+        currentStrategy()->continueAlternateAction(event, action);
+    }
+
+    updateOptionWidget();
+    outlineChanged();
+}
+
+void KisToolTransform::endActionImpl(KoPointerEvent *event, bool usePrimaryAction, KisTool::AlternateAction action)
+{
+    if (mode() != KisTool::PAINT_MODE) return;
+
+    setMode(KisTool::HOVER_MODE);
+
+    if (m_actuallyMoveWhileSelected ||
+        currentStrategy()->acceptsClicks()) {
+
+        bool result = false;
+
+        if (usePrimaryAction) {
+            result = currentStrategy()->endPrimaryAction(event);
+        } else {
+            result = currentStrategy()->endAlternateAction(event, action);
+        }
+
+        if (result) {
+            commitChanges();
+        }
+
+        outlineChanged();
+    }
+
+    updateOptionWidget();
+    updateApplyResetAvailability();
+}
+
+void KisToolTransform::beginPrimaryAction(KoPointerEvent *event)
+{
+    beginActionImpl(event, true, KisTool::NONE);
+}
+
+void KisToolTransform::continuePrimaryAction(KoPointerEvent *event)
+{
+    continueActionImpl(event, true, KisTool::NONE);
+}
+
+void KisToolTransform::endPrimaryAction(KoPointerEvent *event)
+{
+    endActionImpl(event, true, KisTool::NONE);
+}
+
+void KisToolTransform::activateAlternateAction(AlternateAction action)
+{
+    currentStrategy()->activateAlternateAction(action);
+}
+
+void KisToolTransform::deactivateAlternateAction(AlternateAction action)
+{
+    currentStrategy()->deactivateAlternateAction(action);
+}
+
+void KisToolTransform::beginAlternateAction(KoPointerEvent *event, AlternateAction action)
+{
+    beginActionImpl(event, false, action);
+}
+
+void KisToolTransform::continueAlternateAction(KoPointerEvent *event, AlternateAction action)
+{
+    continueActionImpl(event, false, action);
+}
+
+void KisToolTransform::endAlternateAction(KoPointerEvent *event, AlternateAction action)
+{
+    endActionImpl(event, false, action);
+}
+
+void KisToolTransform::mousePressEvent(KoPointerEvent *event)
+{
+    KisTool::mousePressEvent(event);
+}
+
+void KisToolTransform::mouseMoveEvent(KoPointerEvent *event)
+{
+    QPointF mousePos = m_canvas->coordinatesConverter()->documentToImage(event->point);
+
+    cursorOutlineUpdateRequested(mousePos);
+
+    if (!MOVE_CONDITION(event, KisTool::PAINT_MODE)) {
+        currentStrategy()->hoverActionCommon(event);
+        setFunctionalCursor();
+        KisTool::mouseMoveEvent(event);
+        return;
+    }
+}
+
+void KisToolTransform::mouseReleaseEvent(KoPointerEvent *event)
+{
+    KisTool::mouseReleaseEvent(event);
 }
 
 void KisToolTransform::touchEvent( QTouchEvent* event )
@@ -317,6 +465,9 @@ KisToolTransform::TransformToolMode KisToolTransform::transformMode() const
         break;
     case ToolTransformArgs::CAGE:
         mode = CageTransformMode;
+        break;
+    case ToolTransformArgs::LIQUIFY:
+        mode = LiquifyTransformMode;
         break;
     case ToolTransformArgs::PERSPECTIVE_4POINT:
         mode = PerspectiveTransformMode;
@@ -411,6 +562,9 @@ void KisToolTransform::setTransformMode(KisToolTransform::TransformToolMode newM
     case CageTransformMode:
         mode = ToolTransformArgs::CAGE;
         break;
+    case LiquifyTransformMode:
+        mode = ToolTransformArgs::LIQUIFY;
+        break;
     case PerspectiveTransformMode:
         mode = ToolTransformArgs::PERSPECTIVE_4POINT;
         break;
@@ -425,6 +579,8 @@ void KisToolTransform::setTransformMode(KisToolTransform::TransformToolMode newM
             m_optionsWidget->slotSetWarpModeButtonClicked( true );
         } else if( newMode == CageTransformMode ) {
             m_optionsWidget->slotSetCageModeButtonClicked( true );
+        } else if( newMode == LiquifyTransformMode ) {
+            m_optionsWidget->slotSetLiquifyModeButtonClicked( true );
         } else if( newMode == PerspectiveTransformMode ) {
             m_optionsWidget->slotSetPerspectiveModeButtonClicked( true );
         }
@@ -474,47 +630,6 @@ void KisToolTransform::setWarpPointDensity( int density )
     m_optionsWidget->slotSetWarpDensity(density);
 }
 
-void KisToolTransform::mouseMoveEvent(KoPointerEvent *event)
-{
-    QPointF mousePos = m_canvas->coordinatesConverter()->documentToImage(event->point);
-
-    if (!MOVE_CONDITION(event, KisTool::PAINT_MODE)) {
-        currentStrategy()->setTransformFunction(mousePos, event->modifiers() & Qt::ControlModifier);
-        setFunctionalCursor();
-        KisTool::mouseMoveEvent(event);
-        return;
-    }
-
-    m_actuallyMoveWhileSelected = true;
-
-    currentStrategy()->continuePrimaryAction(mousePos, event->modifiers() & Qt::ShiftModifier);
-    updateOptionWidget();
-    outlineChanged();
-}
-
-void KisToolTransform::mouseReleaseEvent(KoPointerEvent *event)
-{
-    if (!RELEASE_CONDITION(event, KisTool::PAINT_MODE, Qt::LeftButton)) {
-        KisTool::mouseReleaseEvent(event);
-        return;
-    }
-
-    setMode(KisTool::HOVER_MODE);
-
-    if (m_actuallyMoveWhileSelected ||
-        currentStrategy()->acceptsClicks()) {
-
-        if (currentStrategy()->endPrimaryAction()) {
-            commitChanges();
-        }
-
-        outlineChanged();
-    }
-
-    updateOptionWidget();
-    updateApplyResetAvailability();
-}
-
 void KisToolTransform::initTransformMode(ToolTransformArgs::TransformMode mode)
 {
     // NOTE: we are requesting an old value of m_currentArgs variable
@@ -535,6 +650,9 @@ void KisToolTransform::initTransformMode(ToolTransformArgs::TransformMode mode)
     } else if (mode == ToolTransformArgs::CAGE) {
         m_currentArgs.setMode(ToolTransformArgs::CAGE);
         m_currentArgs.setEditingTransformPoints(true);
+    } else if (mode == ToolTransformArgs::LIQUIFY) {
+        m_currentArgs.setMode(ToolTransformArgs::LIQUIFY);
+        m_currentArgs.initLiquifyTransformMode(m_transaction.originalRect().toAlignedRect());
     } else if (mode == ToolTransformArgs::PERSPECTIVE_4POINT) {
         m_currentArgs.setMode(ToolTransformArgs::PERSPECTIVE_4POINT);
     }
@@ -607,6 +725,7 @@ void KisToolTransform::initThumbnailImage(KisPaintDeviceSP previewDevice)
     m_perspectiveStrategy->setThumbnailImage(origImg, thumbToImageTransform);
     m_warpStrategy->setThumbnailImage(origImg, thumbToImageTransform);
     m_cageStrategy->setThumbnailImage(origImg, thumbToImageTransform);
+    m_liquifyStrategy->setThumbnailImage(origImg, thumbToImageTransform);
 }
 
 void KisToolTransform::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
@@ -849,6 +968,10 @@ void KisToolTransform::slotUiChangedConfig()
     if (mode() == KisTool::PAINT_MODE) return;
 
     currentStrategy()->externalConfigChanged();
+
+    if (m_currentArgs.mode() == ToolTransformArgs::LIQUIFY) {
+        m_currentArgs.saveLiquifyTransformMode();
+    }
 
     outlineChanged();
     updateApplyResetAvailability();

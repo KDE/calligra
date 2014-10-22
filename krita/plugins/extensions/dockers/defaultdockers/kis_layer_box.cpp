@@ -451,7 +451,7 @@ void KisLayerBox::setCurrentNode(KisNodeSP node)
 {
     QModelIndex index = node ? m_nodeModel->indexFromNode(node) : QModelIndex();
 
-    m_wdgLayerBox->listLayers->setCurrentIndex(index);
+    m_wdgLayerBox->listLayers->selectionModel()->setCurrentIndex(index, QItemSelectionModel::ClearAndSelect);
     updateUI();
 }
 
@@ -743,7 +743,10 @@ void KisLayerBox::selectionChanged(const QModelIndexList selection)
     if (!m_nodeManager) return;
 
     if (selection.isEmpty() && m_nodeManager->activeNode()) {
-        m_wdgLayerBox->listLayers->setCurrentIndex(m_nodeModel->indexFromNode(m_nodeManager->activeNode()));
+        m_wdgLayerBox->listLayers->selectionModel()->
+            setCurrentIndex(
+                m_nodeModel->indexFromNode(m_nodeManager->activeNode()),
+                QItemSelectionModel::ClearAndSelect);
         return;
     }
 

@@ -58,6 +58,7 @@ class QTouchEvent;
 class KisTransformStrategyBase;
 class KisWarpTransformStrategy;
 class KisCageTransformStrategy;
+class KisLiquifyTransformStrategy;
 class KisFreeTransformStrategy;
 class KisPerspectiveTransformStrategy;
 
@@ -109,6 +110,7 @@ public:
         FreeTransformMode,
         WarpTransformMode,
         CageTransformMode,
+        LiquifyTransformMode,
         PerspectiveTransformMode
     };
     Q_ENUMS(TransformToolMode)
@@ -129,6 +131,20 @@ public:
     virtual void mouseMoveEvent(KoPointerEvent *e);
     virtual void mouseReleaseEvent(KoPointerEvent *e);
     virtual void touchEvent(QTouchEvent *event);
+
+    void beginActionImpl(KoPointerEvent *event, bool usePrimaryAction, KisTool::AlternateAction action);
+    void continueActionImpl(KoPointerEvent *event, bool usePrimaryAction, KisTool::AlternateAction action);
+    void endActionImpl(KoPointerEvent *event, bool usePrimaryAction, KisTool::AlternateAction action);
+
+    void beginPrimaryAction(KoPointerEvent *event);
+    void continuePrimaryAction(KoPointerEvent *event);
+    void endPrimaryAction(KoPointerEvent *event);
+
+    void activateAlternateAction(AlternateAction action);
+    void deactivateAlternateAction(AlternateAction action);
+    void beginAlternateAction(KoPointerEvent *event, AlternateAction action);
+    void continueAlternateAction(KoPointerEvent *event, AlternateAction action);
+    void endAlternateAction(KoPointerEvent *event, AlternateAction action);
 
     void paint(QPainter& gc, const KoViewConverter &converter);
 
@@ -190,6 +206,11 @@ public Q_SLOTS:
     void requestStrokeEnd();
     void requestStrokeCancellation();
     void canvasUpdateRequested();
+    void cursorOutlineUpdateRequested(const QPointF &imagePos);
+
+    // Update the widget according to m_currentArgs
+    void updateOptionWidget();
+
     void resetRotationCenterButtonsRequested();
     void imageTooBigRequested(bool value);
 
@@ -210,8 +231,6 @@ private:
 
     void commitChanges();
 
-    // Updated the widget according to m_currentArgs
-    void updateOptionWidget();
 
     void initTransformMode(ToolTransformArgs::TransformMode mode);
 
@@ -266,9 +285,12 @@ private:
 
     QScopedPointer<KisWarpTransformStrategy> m_warpStrategy;
     QScopedPointer<KisCageTransformStrategy> m_cageStrategy;
+    QScopedPointer<KisLiquifyTransformStrategy> m_liquifyStrategy;
     QScopedPointer<KisFreeTransformStrategy> m_freeStrategy;
     QScopedPointer<KisPerspectiveTransformStrategy> m_perspectiveStrategy;
     KisTransformStrategyBase* currentStrategy() const;
+
+    QPainterPath m_cursorOutline;
 
 private slots:
     void slotTrackerChangedConfig();
