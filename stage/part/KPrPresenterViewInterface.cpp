@@ -32,7 +32,6 @@
 
 #include <KoPACanvas.h>
 #include <KoPAPageBase.h>
-#include <KoPAViewMode.h>
 #include <KoShape.h>
 #include <KoTextShapeData.h>
 
