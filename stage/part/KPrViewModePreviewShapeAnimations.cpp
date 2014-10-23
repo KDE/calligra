@@ -30,7 +30,6 @@
 #include <KoPAViewBase.h>
 #include <KoPAPageBase.h>
 #include <KoPageLayout.h>
-#include <KoPAUtil.h>
 #include <KoCanvasController.h>
 #include <KoZoomController.h>
 #include <KoShapePaintingContext.h>
