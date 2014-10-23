@@ -34,7 +34,6 @@
 #include <KoShapeManager.h>
 #include <KoMainWindow.h>
 #include <KoPACanvasBase.h>
-#include <KoPADocumentStructureDocker.h>
 #include <KoPAPageInsertCommand.h>
 #include <KoDocumentInfo.h>
 #include <KoShapeLayer.h>
