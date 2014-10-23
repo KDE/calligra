@@ -52,10 +52,8 @@
 
 //Calligra Headers
 #include <KoSelection.h>
-#include <KoCanvasBase.h>
 #include <KoCanvasController.h>
 #include <KoPAViewBase.h>
-#include <KoPACanvasBase.h>
 
 KPrEditAnimationsWidget::KPrEditAnimationsWidget(KPrShapeAnimationDocker *docker, QWidget *parent)
     : QWidget(parent)
