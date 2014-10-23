@@ -21,7 +21,6 @@
 
 #include <KoXmlNS.h>
 #include <KoShapeLoadingContext.h>
-#include <KoPALoadingContext.h>
 #include <KoTextBlockData.h>
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
