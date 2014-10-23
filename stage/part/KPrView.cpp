@@ -33,7 +33,7 @@
 #include <KoSelection.h>
 #include <KoShapeManager.h>
 #include <KoMainWindow.h>
-#include <KoPACanvas.h>
+#include <KoPACanvasBase.h>
 #include <KoPADocumentStructureDocker.h>
 #include <KoPAPageInsertCommand.h>
 #include <KoDocumentInfo.h>

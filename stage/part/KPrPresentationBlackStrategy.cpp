@@ -22,7 +22,7 @@
 #include <QApplication>
 
 
-#include <KoPACanvas.h>
+#include <KoPACanvasBase.h>
 
 #include "KPrPresentationTool.h"
 #include "KPrPresentationBlackWidget.h"

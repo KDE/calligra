@@ -36,7 +36,7 @@
 #include <KoToolProxy.h>
 #include <KoInteractionTool.h>
 
-#include <KoPACanvas.h>
+#include <KoPACanvasBase.h>
 #include <KoPADocument.h>
 #include <KoPAPageBase.h>
 #include <KoPAMasterPage.h>
