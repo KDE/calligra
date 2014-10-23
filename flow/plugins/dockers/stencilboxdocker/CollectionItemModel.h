@@ -19,7 +19,6 @@
 #ifndef COLLECTIONITEMMODEL_H
 #define COLLECTIONITEMMODEL_H
 
-#include <KoProperties.h>
 #include <KoShape.h>
 
 #include <QAbstractItemModel>
@@ -27,6 +26,8 @@
 #include <QListView>
 #include <QString>
 #include <QIcon>
+
+class KoProperties;
 
 /**
  * Struct containing the information stored in CollectionItemModel item
