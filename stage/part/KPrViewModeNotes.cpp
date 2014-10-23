@@ -39,7 +39,6 @@
 #include <KoPACanvasBase.h>
 #include <KoPADocument.h>
 #include <KoPAPageBase.h>
-#include <KoPAMasterPage.h>
 #include <KoPAView.h>
 
 #include "KPrNotes.h"
