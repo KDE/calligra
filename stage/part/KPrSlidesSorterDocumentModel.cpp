@@ -31,7 +31,6 @@
 #include <KoDrag.h>
 #include <KoPAPageMoveCommand.h>
 #include <KoShapeRenameCommand.h>
-#include <KoPAPageDeleteCommand.h>
 #include "commands/KPrDeleteSlidesCommand.h"
 #include <KoIcon.h>
 
