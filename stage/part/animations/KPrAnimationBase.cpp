@@ -19,6 +19,7 @@
 
 #include "KPrAnimationBase.h"
 
+#include <KoPASavingContext.h>
 #include <KoXmlNS.h>
 #include <KoShapeLoadingContext.h>
 #include <KoTextBlockData.h>

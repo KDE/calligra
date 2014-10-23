@@ -23,7 +23,6 @@
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
 #include <KoUnit.h>
-#include <KoPASavingContext.h>
 #include <kdebug.h>
 
 #include "KPrPlaceholderStrategy.h"

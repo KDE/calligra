@@ -20,6 +20,7 @@
 
 #include "KPrAnimationSubStep.h"
 #include "KPrShapeAnimation.h"
+#include <KoPASavingContext.h>
 #include <KoXmlWriter.h>
 
 
