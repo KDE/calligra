@@ -26,7 +26,6 @@
 #include <KoZoomMode.h>
 
 class KoCanvasController;
-class KoZoomMode;
 class KPrDocument;
 class KoPACanvasBase;
 
