@@ -33,7 +33,6 @@
 #include <KoPointerEvent.h>
 #include <KoPACanvas.h>
 #include <KoPAViewBase.h>
-#include <KoPADocument.h>
 #include <KoViewConverter.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>

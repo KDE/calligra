@@ -26,7 +26,7 @@
 #include "CAPAView.h"
 #include "CACanvasController.h"
 #include <KoZoomController.h>
-#include <libs/kopageapp/KoPADocument.h>
+#include <KoPADocument.h>
 #include <KoPACanvasBase.h>
 #include <libs/kopageapp/KoPAPageBase.h>
 #include <libs/kopageapp/KoPAViewModeNormal.h>
