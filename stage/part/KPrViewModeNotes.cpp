@@ -34,7 +34,6 @@
 #include <KoText.h>
 #include <KoToolManager.h>
 #include <KoToolProxy.h>
-#include <KoZoomController.h>
 #include <KoInteractionTool.h>
 
 #include <KoPACanvas.h>
