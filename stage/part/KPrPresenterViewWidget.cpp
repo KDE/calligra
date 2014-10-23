@@ -28,7 +28,7 @@
 
 #include <KoPACanvas.h>
 #include <KoPAPageBase.h>
-#include <KoPAView.h>
+#include <KoPAViewBase.h>
 #include <KoPAViewMode.h>
 #include <KoShape.h>
 #include <KoTextShapeData.h>

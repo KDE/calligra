@@ -21,7 +21,6 @@
 #define KPRPAGESELECTSTRATEGYACTIVE_H
 
 #include "KPrPageSelectStrategyBase.h"
-#include <KoPAView.h>
 
 class KoPACanvasBase;
 

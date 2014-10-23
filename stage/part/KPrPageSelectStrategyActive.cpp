@@ -20,6 +20,7 @@
 #include "KPrPageSelectStrategyActive.h"
 
 #include <KoPACanvasBase.h>
+#include <KoPAViewBase.h>
 
 
 KPrPageSelectStrategyActive::KPrPageSelectStrategyActive(KoPACanvasBase *canvas)

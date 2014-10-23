@@ -31,7 +31,7 @@
 #include <KoPointerEvent.h>
 #include <KoPageApp.h>
 #include <KoPACanvasBase.h>
-#include <KoPAView.h>
+#include <KoPAViewBase.h>
 #include <KoZoomHandler.h>
 
 #include "KPrDocument.h"
