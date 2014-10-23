@@ -37,7 +37,7 @@
 #include <KoShapeManager.h>
 #include <KoSelection.h>
 #include <KoPathShape.h>
-#include <KoPAPage.h>
+#include <KoPAPageBase.h>
 #include <KoZoomHandler.h>
 #include <KoShapePaintingContext.h>
 #include <KoShapeStroke.h>
