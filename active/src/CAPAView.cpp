@@ -28,7 +28,7 @@
 #include <KoZoomController.h>
 #include <KoPADocument.h>
 #include <KoPACanvasBase.h>
-#include <libs/kopageapp/KoPAPageBase.h>
+#include <KoPAPageBase.h>
 #include <libs/kopageapp/KoPAViewModeNormal.h>
 #include <stage/part/KPrDocument.h>
 #include <KoShapeManager.h>
