@@ -22,7 +22,7 @@
 #ifndef CAPAVIEW_H
 #define CAPAVIEW_H
 
-#include <libs/kopageapp/KoPAViewBase.h>
+#include <KoPAViewBase.h>
 #include <KoZoomMode.h>
 
 class KoCanvasController;
