@@ -35,7 +35,6 @@
 #include <KoTextLayoutObstruction.h>
 #include <KoSelection.h>
 #include <KoCanvasBase.h>
-#include <KoShapeManager.h>
 #include <KoParagraphStyle.h>
 #include <KoTableStyle.h>
 #include <KoShapeAnchor.h>

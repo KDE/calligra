@@ -31,11 +31,7 @@
 #include <klocale.h>
 
 #include <KoPACanvas.h>
-#include <KoPADocument.h>
 #include <KoPAPageBase.h>
-#include <KoPAPageThumbnailModel.h>
-#include <KoPAView.h>
-#include <KoPAViewMode.h>
 #include <KoShape.h>
 #include <KoTextShapeData.h>
 

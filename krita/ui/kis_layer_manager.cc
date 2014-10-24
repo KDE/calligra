@@ -43,8 +43,6 @@
 #include <KoPointerEvent.h>
 #include <KoColorProfile.h>
 #include <KoSelection.h>
-#include <KoShapeManager.h>
-#include <KoProgressUpdater.h>
 #include <KoPart.h>
 #include <KoMainWindow.h>
 

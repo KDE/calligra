@@ -22,7 +22,6 @@
 #include "ToolDocker.h"
 #include "ToolDocker_p.h"
 
-#include <KoDockWidgetTitleBarButton.h>
 #include <KoDockWidgetTitleBar.h>
 
 #include <KoIcon.h>

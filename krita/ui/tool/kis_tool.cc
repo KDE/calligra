@@ -38,7 +38,6 @@
 #include <KoColor.h>
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
-#include <KoShapeManager.h>
 #include <KoToolBase.h>
 #include <KoID.h>
 #include <KoPointerEvent.h>
@@ -157,8 +156,11 @@ KisTool::~KisTool()
     delete d;
 }
 
-void KisTool::activate(ToolActivation, const QSet<KoShape*> &)
+void KisTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
+    Q_UNUSED(toolActivation);
+    Q_UNUSED(shapes);
+
     resetCursorStyle();
 
     d->currentFgColor = canvas()->resourceManager()->resource(KoCanvasResourceManager::ForegroundColor).value<KoColor>();

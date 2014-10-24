@@ -18,9 +18,9 @@
 
 #include "kis_mask_manager.h"
 
-
 #include <kactioncollection.h>
 
+#include <KoProperties.h>
 
 #include <kis_transaction.h>
 #include <filter/kis_filter_configuration.h>

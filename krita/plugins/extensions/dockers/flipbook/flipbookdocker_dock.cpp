@@ -35,7 +35,6 @@
 #include <KoZoomMode.h>
 #include <KoFilterManager.h>
 #include <KoView.h>
-#include <KoToolManager.h>
 #include <KoApplication.h>
 
 #include <kis_image.h>

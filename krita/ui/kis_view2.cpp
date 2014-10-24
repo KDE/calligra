@@ -67,6 +67,7 @@
 #include <KoSelection.h>
 #include <KoToolBoxFactory.h>
 #include <KoZoomHandler.h>
+#include <KoToolManager.h>
 #include <KoViewConverter.h>
 #include <KoView.h>
 #include <KoDockerManager.h>

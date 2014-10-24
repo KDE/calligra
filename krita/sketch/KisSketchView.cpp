@@ -33,7 +33,6 @@
 
 #include <KoZoomHandler.h>
 #include <KoZoomController.h>
-#include <KoProgressUpdater.h>
 #include <KoToolProxy.h>
 #include <KoCanvasController.h>
 #include <KoFilterManager.h>
@@ -41,7 +40,7 @@
 #include <KoShapeController.h>
 #include <KoDocumentResourceManager.h>
 #include <KoCanvasResourceManager.h>
-#include <KoShapeManager.h>
+#include <KoToolManager.h>
 #include <KoGridData.h>
 
 #include <kundo2stack.h>

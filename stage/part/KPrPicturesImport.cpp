@@ -27,7 +27,6 @@
 #include <KoPAPage.h>
 #include <KoPAMasterPage.h>
 #include <KoPAPageInsertCommand.h>
-#include <KoPAViewMode.h>
 #include "KPrDocument.h"
 #include "KPrView.h"
 #include <kdebug.h>

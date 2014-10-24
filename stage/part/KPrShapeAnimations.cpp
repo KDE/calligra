@@ -40,8 +40,6 @@
 
 //Calligra Headers
 #include <KoShape.h>
-#include <KoShapeManager.h>
-#include <KoPADocument.h>
 #include <KoShapePainter.h>
 #include <KoShapeContainer.h>
 #include <KoPathShape.h>

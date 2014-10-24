@@ -22,7 +22,6 @@
 #include "FlowDocument.h"
 #include "FlowPart.h"
 
-#include <KoShapeManager.h>
 #include <KoSelection.h>
 
 #include <klocale.h>

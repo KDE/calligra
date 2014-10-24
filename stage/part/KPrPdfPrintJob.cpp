@@ -21,10 +21,10 @@
 #include "KPrPdfPrintJob.h"
 
 #include "KPrView.h"
-#include "KoPADocument.h"
 #include "KoPAPageBase.h"
 #include "KoPAUtil.h"
 #include "KoPAPageProvider.h"
+#include <KoPageLayout.h>
 #include <KoZoomHandler.h>
 #include <QPainter>
 KPrPdfPrintJob::KPrPdfPrintJob(KPrView *view)

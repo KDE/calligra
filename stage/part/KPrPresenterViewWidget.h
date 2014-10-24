@@ -26,7 +26,6 @@ class QStackedLayout;
 
 class KoPACanvas;
 class KoPAPageBase;
-class KoPAPageThumbnailModel;
 
 class KPrViewModePresentation;
 

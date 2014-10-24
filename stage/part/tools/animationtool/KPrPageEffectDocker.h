@@ -32,7 +32,6 @@ class KPrPageEffect;
 class KPrPageEffectRunner;
 class KPrPageEffectFactory;
 class KoPAViewBase;
-class KoPAPageBase;
 class KPrViewModePreviewPageEffect;
 class KUndo2Command;
 

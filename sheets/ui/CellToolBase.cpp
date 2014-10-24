@@ -117,7 +117,6 @@
 #include <KoPointerEvent.h>
 #include <KoSelection.h>
 #include <KoShape.h>
-#include <KoShapeManager.h>
 #include <KoStore.h>
 #include <KoViewConverter.h>
 #include <KoXmlReader.h>
