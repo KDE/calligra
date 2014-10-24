@@ -113,23 +113,14 @@ void KisInfinityManager::imagePositionChanged()
         visible = true;
     }
 
-<<<<<<< HEAD
-    if (visible && !m_filteringEnabled && this->visible()) {
-        m_canvas->inputManager()->attachPriorityEventFilter(this);
-        m_filteringEnabled = true;
-    }
-
-    if (!visible && m_filteringEnabled && this->visible()) {
-        m_canvas->inputManager()->detachPriorityEventFilter(this);
-=======
     if (!m_filteringEnabled && visible && this->visible()) {
-        view()->canvasBase()->inputManager()->attachPriorityEventFilter(this);
+        m_canvas->inputManager()->attachPriorityEventFilter(this);
         m_filteringEnabled = true;
     }
 
     if (m_filteringEnabled && (!visible || !this->visible())) {
         view()->canvasBase()->inputManager()->detachPriorityEventFilter(this);
->>>>>>> master
+        m_canvas->inputManager()->detachPriorityEventFilter(this);
         m_filteringEnabled = false;
     }
 }
