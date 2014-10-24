@@ -1,4 +1,4 @@
-f===/*
+/*
  *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
