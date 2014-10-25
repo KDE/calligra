@@ -27,7 +27,6 @@
 
 #include <QHash>
 
-class KisOnionSkinLoader;
 class KisKranimLoader;
 
 #define KIS_ANIM_MIME_TYPE "application/x-krita-animation"
@@ -87,6 +86,7 @@ public:
     void stop();
 
     void onionSkinStateChanged();
+    void refreshOnionSkins();
 
     void addCurrentLoadedLayer(KisLayerSP layer);
 
@@ -125,6 +125,11 @@ private:
     void loadOnionSkins();
 
     void applyLayerStates(int layerNumber, KisLayerSP layer);
+
+    void loadOnionSkins(QHash<int, bool> states);
+
+    QBitArray prevFramesChannelFlags();
+    QBitArray nextFramesChannelFlags();
 
 private:
     class KisAnimationDocPrivate;

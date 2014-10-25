@@ -160,7 +160,7 @@ QList<KoPart::CustomDocumentWidgetItem> KisPart2::createCustomDocumentWidgets(QW
 
 
     }
-#if 0
+
     {
         KoPart::CustomDocumentWidgetItem item;
         item.widget = new KisFlipbookSelector(parent, qobject_cast<KisDoc2*>(createDocument()));
@@ -168,7 +168,7 @@ QList<KoPart::CustomDocumentWidgetItem> KisPart2::createCustomDocumentWidgets(QW
         item.icon = "folder-video";
         widgetList << item;
     }
-#endif
+
     {
         KoPart::CustomDocumentWidgetItem item;
         item.widget = new KisAnimationSelector(parent, w, h, cfg.defImageResolution(), cfg.defColorModel(), cfg.defaultColorDepth(), cfg.defColorProfile(),
