@@ -1,5 +1,9 @@
 find_package(Libgit2 REQUIRED)
-include_directories(${LIBGIT2_INCLUDE_DIR})
+find_package(Libqgit2 REQUIRED)
+include_directories(${LIBGIT2_INCLUDE_DIR} ${LIBQGIT2_INCLUDE_DIR})
+
+# LibQGit2 requires exception support to be turned on
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions")
 
 set(git_plugin_SRCS
     gitplugin.cpp
@@ -16,6 +20,7 @@ target_link_libraries(calligrageminigitplugin
     ${QT_QTCORE_LIBRARIES}
     kfile
     ${LIBGIT2_LIBRARIES}
+    ${LIBQGIT2_LIBRARIES}
     komain
 )
 
