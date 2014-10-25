@@ -22,6 +22,7 @@
 #include "gitcontroller.h"
 #include "documentlistmodel.h"
 
+#include <kpassworddialog.h>
 #include <kmessagebox.h>
 #include <kinputdialog.h>
 #include <kuser.h>
@@ -31,20 +32,42 @@
 #include <QTimer>
 #include <QTextCodec>
 
+#include <qgit2.h>
+#include <qgit2/qgitglobal.h>
+
 #include <git2.h>
+#include <git2/branch.h>
+#include <git2/refs.h>
+#include <git2/merge.h>
+#include <git2/cred_helpers.h>
 
 class GitController::Private {
 public:
     Private(GitController* q)
         : documents(new DocumentListModel(q))
         , commitAndPushAction(0)
-    {}
+        , signature(0)
+    {
+        privateKey = "/home/leinir/.ssh/id_rsa";
+        publicKey = "/home/leinir/.ssh/id_rsa.pub";
+        userForRemote = "git";
+    }
+    ~Private()
+    {
+        git_signature_free(signature);
+    }
+    QString privateKey;
+    QString publicKey;
+    QString userForRemote;
+    QString privKeyPassPhrase;
+
     QString cloneDir;
     DocumentListModel* documents;
     QAction* commitAndPushAction;
     QString currentFile;
     QString userName;
     QString userEmail;
+    git_signature* signature;
 
     bool checkUserDetails()
     {
@@ -92,26 +115,32 @@ public:
         if(userName.isEmpty() || userEmail.isEmpty()) {
             return false;
         }
+        git_signature_now(&signature, userName.toLocal8Bit(), userEmail.toLocal8Bit());
         return true;
     }
 
-    void check_error(int errorCode, const char* description)
+    // returns true if errorCode is 0 (in which case there was no error!)
+    bool check_error(int errorCode, const char* description)
     {
         if(errorCode) {
-            qDebug() << "Operation failed:"<< description;
+            qDebug() << "Operation failed:"<< description << errorCode;
+            return false;
         }
+        return true;
     }
 };
 
 GitController::GitController(QObject* parent)
     : QObject(parent)
-    , d(new Private(this))
 {
+    LibQGit2::initLibQGit2();
+    d = new Private(this);
 }
 
 GitController::~GitController()
 {
     delete d;
+    LibQGit2::shutdownLibQGit2();
 }
 
 QString GitController::cloneDir() const
@@ -153,24 +182,6 @@ QAction* GitController::commitAndPushCurrentFileAction()
     return d->commitAndPushAction;
 }
 
-// /* Credential callback */
-// int credential_cb(git_cred **out,
-//                   const char *url,
-//                   const char *username_from_url,
-//                   unsigned int allowed_types,
-//                   void *payload)
-// {
-//     git_cred_userpass_payload *payloadActual = (git_cred_userpass_payload*)payload;
-// 
-//     KPasswordDialog dlg(0, KPasswordDialog::ShowUsernameLine);
-//     dlg.setPrompt("Enter the username and password for your remote git repository to allow us to push. Cancelling aborts the push.");
-//     if( !dlg.exec() )
-//         return; //the user canceled
-//     //use( dlg.username() , dlg.password() );
-//     payloadActual.username = dlg.username().toLocal8Bit();
-//     payloadActual.password = dlg.password().toLocal8Bit();
-// }
-
 void GitController::commitAndPushCurrentFile()
 {
     qDebug() << "commit and push" << d->currentFile;
@@ -178,120 +189,210 @@ void GitController::commitAndPushCurrentFile()
     // Don't allow committing unless the user details are sensible
     if(!d->checkUserDetails()) {
         KMessageBox::sorry(0, "I'm sorry, we cannot create commits without a username and email set.");
+        git_threads_shutdown();
         return;
     }
 
     // ensure file is in current repository
-    git_repository* repo;
-    int error = git_repository_open(&repo, d->cloneDir.toLocal8Bit());
-    if(error == 0)
+    LibQGit2::Repository repo;
+    connect(&repo, SIGNAL(cloneProgress(int)), SLOT(transferProgress(int)));
+    try
     {
         if(d->currentFile.startsWith(d->cloneDir))
         {
-            QString relative = d->currentFile.mid(d->cloneDir.length() + 1);
-            bool shouldPush = false;
-            int status = 0;
-            unsigned int statusFlags = 0;
-            status = git_status_file(&statusFlags, repo, relative.toLocal8Bit());
-            // ensure file is added already
-            if(status == 0)
-            {
-                // if so, ask commit message and checkbox for push (default on, remember?)
-                bool ok = false;
-                QString message = KInputDialog::getMultiLineText("Describe changes",
-                                                                 "Please enter a description of your changes (also known as a commit message).",
-                                                                 "Commit message",
-                                                                 &ok, 0);
-                // if user pressed cancel, cancel out now...
-                // we explicitly leave the action enabled here because we want the user to be able to
-                // regret their cancellation and commit anyway
-                if(!ok)
-                    return;
-
+            repo.open(QString("%1/.git").arg(d->cloneDir));
+            // ask commit message and checkbox for push (default on, remember?)
+            bool ok = false;
+            QString message = KInputDialog::getMultiLineText("Describe changes",
+                                                                "Please enter a description of your changes (also known as a commit message).",
+                                                                "Commit message",
+                                                                &ok, 0);
+            // if user pressed cancel, cancel out now...
+            // we explicitly leave the action enabled here because we want the user to be able to
+            // regret their cancellation and commit anyway
+            if(ok) {
                 // Get the current index
-                git_index* index;
-                git_repository_index(&index, repo);
-
+                LibQGit2::Index index = repo.index();
                 // refresh it, and add the file
-                git_index_read(index, true);
-                git_index_add_bypath(index, relative.toLocal8Bit());
-                git_index_write(index);
-
+                index.read(true);
+                QString relative = d->currentFile.mid(d->cloneDir.length() + 1);
+                index.addByPath(relative);
+                index.write();
                 // convert the index to a tree, so we can use that to create the commit
-                git_oid newTree;
-                git_index_write_tree(&newTree, index);
-                git_index_free(index);
-                git_tree* tree;
-                git_tree_lookup(&tree, repo, &newTree);
-
+                LibQGit2::Tree newTree = repo.lookupTree(index.createTree());
                 // create the commit
-                git_signature *me = NULL;
-                int error = git_signature_now(&me, d->userName.toLocal8Bit(), d->userEmail.toLocal8Bit());
+                LibQGit2::Commit headCommit = repo.lookupCommit(repo.head().target());
+                QList<LibQGit2::Commit> parents;
+                parents << headCommit;
+                repo.createCommit(newTree, parents, LibQGit2::Signature(d->signature), LibQGit2::Signature(d->signature), message, "HEAD");
 
-                git_oid head;
-                git_reference_name_to_id(&head, repo, "HEAD");
-                git_commit* headCommit;
-                git_commit_lookup(&headCommit, repo, &head);
+                // Find the current branch's upstream remote
+                git_reference *current_branch;
+                git_repository_head(&current_branch, repo.data());
+                LibQGit2::Reference currentBranch(current_branch);
 
-                const git_commit *parents[] = {headCommit};
+                git_reference *upstream;
+                git_branch_upstream(&upstream, currentBranch.data());
+                LibQGit2::Reference upstreamRef(upstream);
 
-                QTextCodec* codec = QTextCodec::codecForLocale();
-                git_oid new_commit_id;
-                error = git_commit_create(&new_commit_id,
-                                          repo,
-                                          "HEAD",                      /* name of ref to update */
-                                          me,                          /* author */
-                                          me,                          /* committer */
-                                          codec->name(),               /* message encoding */
-                                          message.toLocal8Bit(),       /* message */
-                                          tree,                        /* root tree */
-                                          1,                           /* parent count */
-                                          parents);                    /* parents */
+                // Now find the name of the remote
+                git_buf remote_name = {0,0,0};
+                git_branch_remote_name(&remote_name, repo.data(), git_reference_name(upstreamRef.data()));
+                QString remoteName = QString::fromUtf8(remote_name.ptr);
+                git_buf_free(&remote_name);
 
-                git_tree_free(tree);
-                git_signature_free(me);
-                git_commit_free(headCommit);
-                if(error) {
-                    qDebug() << "something went wrong, nuh! :O" << error;
-                }
-                shouldPush = true;
-            }
-            else if(status == GIT_ENOTFOUND)
-            {
-                KMessageBox::sorry(0, "Sorry, this file is not yet added to the Git repository. Please add it and try again! (yes, this will be done for you later, but right now you'll have to do it yourself)");
-                // if not, ask if it should be added
-            }
-            else
-            {
-                // Oh dear, some weirdness...
-            }
-            if(shouldPush) {
-                git_remote* remote;
-                git_push* push;
-//                 bool cred_acquire_called;
+                // And the upstream and local branch names...
+                const char *branch_name;
+                git_branch_name(&branch_name, upstreamRef.data());
+                QString upstreamBranchName = QString::fromUtf8(branch_name);
+                upstreamBranchName.remove(0, remoteName.length() + 1);
+                git_branch_name(&branch_name, currentBranch.data());
+                QString branchName = QString::fromUtf8(branch_name);
 
-                d->check_error(git_remote_load(&remote,repo,"origin"),"load a remote");
-//                 git_remote_set_cred_acquire_cb(remote, (git_cred_acquire_cb)credential_cb, &cred_acquire_called);
-                d->check_error(git_remote_connect(remote, GIT_DIRECTION_PUSH),"connect remote");
-                d->check_error(git_push_new(&push, remote),"new push object");
-                d->check_error(git_push_add_refspec(push,"refs/heads/master:refs/heads/master"),"add push refspec");
-
-                d->check_error(git_push_finish(push),"finish pushing");
-                d->check_error(git_push_unpack_ok(push),"unpacked OK? ");
-
-
-                git_push_free(push);
-                git_remote_free(remote);
+                repo.setRemoteCredentials(remoteName, LibQGit2::Credentials::ssh(d->privateKey, d->publicKey, d->userForRemote.toUtf8(), d->privKeyPassPhrase.toUtf8()));
+                connect(repo.remote(remoteName), SIGNAL(transferProgress(int)), SLOT(transferProgress(int)));
+                LibQGit2::Push push = repo.push(remoteName);
+                push.addRefSpec(QString("refs/heads/%1:refs/heads/%2").arg(branchName).arg(upstreamBranchName));
+                qDebug() << QString("refs/heads/%1:refs/heads/%2").arg(branchName).arg(upstreamBranchName);
+                push.execute();
+                d->commitAndPushAction->setEnabled(false);
             }
         }
-        // if not, nothing we can do, derp - it can be fixed later, but for now, nopenopenope
-        d->commitAndPushAction->setEnabled(false);
     }
-    else {
-        // kapow! error thing
+    catch (const LibQGit2::Exception& ex) {
+        qDebug() << ex.what() << ex.category();
     }
-    git_repository_free(repo);
 }
 
+void GitController::transferProgress(int progress)
+{
+    qDebug() << Q_FUNC_INFO << sender() << progress;
+}
+
+void GitController::pull() const
+{
+    // Don't allow committing unless the user details are sensible
+    if(!d->checkUserDetails()) {
+        KMessageBox::sorry(0, "I'm sorry, we cannot create commits without a username and email set, and we might need to do a merge later, so .");
+        return;
+    }
+
+    LibQGit2::Repository qrepo;
+    connect(&qrepo, SIGNAL(cloneProgress(int)), SLOT(transferProgress(int)));
+    try {
+        qrepo.open(QString("%1/.git").arg(d->cloneDir));
+
+        // Find the current branch's upstream remote
+        git_reference *current_branch;
+        git_repository_head(&current_branch, qrepo.data());
+        LibQGit2::Reference currentBranch(current_branch);
+
+        git_reference *upstream;
+        git_branch_upstream(&upstream, currentBranch.data());
+        LibQGit2::Reference upstreamRef(upstream);
+
+        // Now find the name of the remote
+        git_buf remote_name = {0,0,0};
+        git_branch_remote_name(&remote_name, qrepo.data(), git_reference_name(upstreamRef.data()));
+        QString remoteName = QString::fromUtf8(remote_name.ptr);
+        git_buf_free(&remote_name);
+
+        // Finally set the credentials on it that we're given, and fetch it
+        qrepo.setRemoteCredentials(remoteName, LibQGit2::Credentials::ssh(d->privateKey, d->publicKey, d->userForRemote.toUtf8(), d->privKeyPassPhrase.toUtf8()));
+        connect(qrepo.remote(remoteName), SIGNAL(transferProgress(int)), SLOT(transferProgress(int)));
+        qrepo.fetch(remoteName);
+
+        git_branch_upstream(&upstream, currentBranch.data());
+        upstreamRef = LibQGit2::Reference(upstream);
+
+        // Let's check and see what sort of merge we should be doing...
+        git_merge_analysis_t analysis;
+        git_merge_preference_t preference;
+        git_merge_head *merge_heads[1];
+
+        git_merge_head_from_ref(&merge_heads[0], qrepo.data(), upstreamRef.data());
+        int error = git_merge_analysis(&analysis, &preference, qrepo.data(), (const git_merge_head **)&merge_heads, 1);
+        if(error == 0)
+        {
+            if(GIT_MERGE_ANALYSIS_UP_TO_DATE == (analysis & GIT_MERGE_ANALYSIS_UP_TO_DATE)) {
+                // If we're already up to date, yay, no need to do anything!
+                qDebug() << "all up to date, yeah!";
+                git_merge_head_free(merge_heads[0]);
+            }
+            else if(GIT_MERGE_ANALYSIS_UNBORN == (analysis & GIT_MERGE_ANALYSIS_UNBORN)) {
+                // this is silly, don't give me an unborn repository you silly person
+                qDebug() << "huh, we have an unborn repo here...";
+                git_merge_head_free(merge_heads[0]);
+            }
+            // This is terribly silly - fastforward is described as "check out head commit in
+            // remote branch, set local head to that commit, done". Turns out it's not that simple
+            // oh well, more sensible magic can be added later, for now the merge works
+//             else if(GIT_MERGE_ANALYSIS_FASTFORWARD == (analysis & GIT_MERGE_ANALYSIS_FASTFORWARD) && (GIT_MERGE_PREFERENCE_NO_FASTFORWARD != (preference & GIT_MERGE_PREFERENCE_NO_FASTFORWARD))) {
+//                 // If the analysis says we can fast forward, then let's fast forward!
+//                 // ...unless preferences say to never fast forward, of course
+//                 qDebug() << "fast forwarding all up in that thang";
+//                 const git_oid* id = git_merge_head_id(merge_heads[0]);
+//                 LibQGit2::OId mergeId(id);
+//                 LibQGit2::Commit headCommit = qrepo.lookupCommit(mergeId);
+//                 qrepo.checkoutTree(headCommit.tree());
+//                 qrepo.head().setTarget(headCommit.oid());
+//             }
+//             else if(GIT_MERGE_ANALYSIS_NORMAL == (analysis & GIT_MERGE_ANALYSIS_NORMAL)) {
+            else {
+                // If the analysis says we are able to do a normal merge, let's attempt one of those...
+                if(GIT_MERGE_PREFERENCE_FASTFORWARD_ONLY == (preference & GIT_MERGE_PREFERENCE_FASTFORWARD_ONLY)) {
+                    // but only if we're not told to not try and not do fast forwards!
+                    KMessageBox::sorry(0, "Fast Forward Only", "We're attempting to merge, but the repository is set to only do fast forwarding - sorry, we don't support this scenario and you'll need to handle things yourself...");
+                }
+                else {
+                    git_merge(qrepo.data(), (const git_merge_head **) merge_heads, 1, NULL, NULL);
+                    git_merge_head_free(merge_heads[0]);
+                    if (qrepo.index().hasConflicts()) {
+                        qDebug() << "There were conflicts merging. Please resolve them and commit";
+                    }
+                    else {
+                        git_oid commit_id;
+                        git_buf message = {0,0,0};
+                        git_commit *parents[2];
+                        LibQGit2::Index index = qrepo.index();
+                        LibQGit2::OId tree_id = index.createTree();
+                        LibQGit2::Tree tree = qrepo.lookupTree(tree_id);
+
+                        git_repository_message(&message, qrepo.data());
+                        const char *branch_name;
+                        git_branch_name(&branch_name, upstreamRef.data());
+                        QString upstreamBranchName = QString::fromUtf8(branch_name);
+                        git_branch_name(&branch_name, currentBranch.data());
+                        QString branchName = QString::fromUtf8(branch_name);
+
+                        git_reference *upstream;
+                        git_branch_upstream(&upstream, currentBranch.data());
+                        LibQGit2::Reference upstreamRef(upstream);
+
+                        error = git_commit_lookup(&parents[0], qrepo.data(), qrepo.head().target().data());
+                        d->check_error(error, "looking up current branch");
+                        error = git_commit_lookup(&parents[1], qrepo.data(), upstreamRef.target().data());
+                        d->check_error(error, "looking up remote branch");
+
+                        git_commit_create(&commit_id, qrepo.data(), "HEAD", d->signature, d->signature,
+                                        NULL, message,
+                                        tree.data(), 2, (const git_commit **) parents);
+
+                        // this causes a rescan of the documents folder, just to make sure...
+                        d->documents->setDocumentsFolder(d->documents->documentsFolder());
+                    }
+                }
+            }
+//             }
+//             else {
+//                 // how did i get here, i am not good with undefined entries in enums
+//                 qDebug() << "wait, what?";
+//             }
+        }
+    }
+    catch (const LibQGit2::Exception& ex) {
+        qDebug() << ex.what() << ex.category();
+    }
+}
 
 #include "gitcontroller.moc"

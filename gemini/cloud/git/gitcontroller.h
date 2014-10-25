@@ -47,10 +47,14 @@ public:
 
     QAbstractListModel* documents() const;
 
+    // Update the local copy of the git repository in cloneDir() from the remote
+    Q_INVOKABLE void pull() const;
+
 public Q_SLOTS:
     QAction* commitAndPushCurrentFileAction();
     void commitAndPushCurrentFile();
 
+    void transferProgress(int progress);
 Q_SIGNALS:
     void cloneDirChanged();
     void currentFileChanged();
