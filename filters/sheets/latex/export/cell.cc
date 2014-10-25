@@ -19,9 +19,10 @@
 **
 */
 
+#include "cell.h"
+
 #include <kdebug.h>  /* for kDebug stream */
 
-#include "cell.h"
 #include "table.h"
 #include "column.h"
 #include <QTextStream>

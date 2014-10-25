@@ -18,6 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "opencalcimport.h"
+
 #include <float.h>
 #include <math.h>
 
@@ -28,8 +30,6 @@
 #include <QtXml>
 #include <QList>
 #include <QByteArray>
-
-#include "opencalcimport.h"
 
 #include <kdebug.h>
 #include <KoDocumentInfo.h>

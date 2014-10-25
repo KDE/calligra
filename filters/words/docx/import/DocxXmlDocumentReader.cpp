@@ -22,9 +22,8 @@
  *
  */
 
-#include <QTime>
-
 #include "DocxXmlDocumentReader.h"
+
 #include "DocxXmlHeaderReader.h"
 #include "DocxXmlFooterReader.h"
 #include "DocxImport.h"
@@ -55,6 +54,8 @@
 #include <KoRow.h>
 #include <KoColumn.h>
 #include <KoRawCellChild.h>
+
+#include <QTime>
 
 namespace {
 
