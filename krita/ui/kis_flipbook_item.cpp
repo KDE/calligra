@@ -69,7 +69,7 @@ KisFlipbookItem::~KisFlipbookItem()
 KisDoc2 *KisFlipbookItem::document()
 {
     if (!m_document) {
-        m_document = new KisDoc2();
+        m_document = new KisDoc2(KisPart2::instance());
         m_document->openUrl(KUrl(m_filename));
 
         if (!m_document->image().isValid()) {
