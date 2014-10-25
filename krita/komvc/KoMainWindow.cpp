@@ -435,15 +435,6 @@ KoMainWindow::KoMainWindow(KoPart *part, const KComponentData &componentData)
     restoreState(QByteArray::fromBase64(cfg.readEntry("ko_windowstate", QByteArray())));
 
     d->dockerManager = new KoDockerManager(this);
-
-    /**
-     * WARNING: This code changes the context of global shortcuts
-     *          only. All actions added later will have the default
-     *          context, which is Qt::WindowShortcut!
-     */
-    foreach(QAction* action, actionCollection()->actions()) {
-        action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
-    }
 }
 
 void KoMainWindow::setNoCleanup(bool noCleanup)
