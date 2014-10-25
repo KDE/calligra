@@ -936,7 +936,7 @@ void KisAnimationDoc::updateActiveFrame()
     setPreActivatedNode(d->currentFrame);
     QPointer<KoView> view = documentPart()->views().first();
     if (view) {
-        dynamic_cast<KisView2*>(view.data())->nodeManager()->slotNonUiActivatedNode(d->currentFrame);
+        //dynamic_cast<KisView2*>(view.data())->nodeManager()->slotNonUiActivatedNode(d->currentFrame);
     }
 }
 
