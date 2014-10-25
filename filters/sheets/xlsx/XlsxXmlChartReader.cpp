@@ -360,7 +360,7 @@ QString columnName(uint column)
     column = column - 1;
     unsigned digits = 1;
     unsigned offset = 0;
-    for (unsigned limit = 26; column >= limit + offset; limit *= 26, digits++)
+    for (unsigned limit = 26; column >= limit + offset; limit *= 26, ++digits)
         offset += limit;
     for (unsigned col = column - offset; digits; --digits, col /= 26)
         s.prepend(QChar('A' + (col % 26)));

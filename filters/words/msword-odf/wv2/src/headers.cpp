@@ -94,12 +94,12 @@ Headers::Headers( U32 ccpHdd, U32 fcPlcfhdd, U32 lcbPlcfhdd, U32 fcPlcfsed, U32 
         for (uint i = 0, l = 0; i < plcfsed.count(); i++) {
             wvlog << "Section" << i + 1;
             wvlog << "-------------------------------";
-            for (uint j = 0; j < headerTypes; j++, l++) {
+            for (uint j = 0; j < headerTypes; ++j, ++l) {
                 wvlog << strsCPs[l];
             }
         }
     } else {
-        for (int i = 0; i < strsCPs.size() - 2; i++) {
+        for (int i = 0; i < strsCPs.size() - 2; ++i) {
             wvlog << strsCPs[i];
         }
     }
@@ -177,7 +177,7 @@ QList<bool> Headers::headersMask( void )
     QList<bool> mask;
 
 #ifdef WV2_DEBUG_HEADERS
-    for (U32 i = 0; i < (U32) m_headers.size(); i++) {
+    for (U32 i = 0; i < (U32) m_headers.size(); ++i) {
         if (!(i % 6)) {
             wvlog << "----";
         }
@@ -187,7 +187,7 @@ QList<bool> Headers::headersMask( void )
     //second-to-last CP ends the last story, last CP must be ignored
     for (U32 i = 0; i < (U32) (m_headers.size() - 2); i += 6) {
         nempty = false;
-        for (U32 j = 0; j < 6; j++) {
+        for (U32 j = 0; j < 6; ++j) {
             if (m_headers[i + j] != m_headers[i + j + 1]) {
                 nempty = true;
                 break;
@@ -197,7 +197,7 @@ QList<bool> Headers::headersMask( void )
     }
 
 #ifdef WV2_DEBUG_HEADERS
-    for (U32 i = 0; i < (U32) mask.size(); i++) {
+    for (U32 i = 0; i < (U32) mask.size(); ++i) {
         wvlog << "Section" << i << ": new header/footer content: " << mask[i];
     }
 #endif
