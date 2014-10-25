@@ -51,6 +51,18 @@ Item {
         color: "#5b6573";
         visible: docList.count === 0;
     }
+    CohereButton {
+        anchors {
+            top: parent.top;
+            right: parent.right;
+            margins: Settings.theme.adjustedPixel(8);
+        }
+        textColor: "#5b6573";
+        textSize: Settings.theme.adjustedPixel(18);
+        color: "#D2D4D5";
+        text: "Pull from upstream";
+        onClicked: gitController.pull();
+    }
     Component {
         id: documentTile;
         Item {
