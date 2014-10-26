@@ -312,7 +312,7 @@ void GitController::pull() const
 
         git_merge_head_from_ref(&merge_heads[0], qrepo.data(), upstreamRef.data());
         int error = git_merge_analysis(&analysis, &preference, qrepo.data(), (const git_merge_head **)&merge_heads, 1);
-        if(error == 0)
+        if(error == GIT_OK)
         {
             if(GIT_MERGE_ANALYSIS_UP_TO_DATE == (analysis & GIT_MERGE_ANALYSIS_UP_TO_DATE)) {
                 // If we're already up to date, yay, no need to do anything!
@@ -327,18 +327,87 @@ void GitController::pull() const
             // This is terribly silly - fastforward is described as "check out head commit in
             // remote branch, set local head to that commit, done". Turns out it's not that simple
             // oh well, more sensible magic can be added later, for now the merge works
-//             else if(GIT_MERGE_ANALYSIS_FASTFORWARD == (analysis & GIT_MERGE_ANALYSIS_FASTFORWARD) && (GIT_MERGE_PREFERENCE_NO_FASTFORWARD != (preference & GIT_MERGE_PREFERENCE_NO_FASTFORWARD))) {
-//                 // If the analysis says we can fast forward, then let's fast forward!
-//                 // ...unless preferences say to never fast forward, of course
-//                 qDebug() << "fast forwarding all up in that thang";
-//                 const git_oid* id = git_merge_head_id(merge_heads[0]);
-//                 LibQGit2::OId mergeId(id);
-//                 LibQGit2::Commit headCommit = qrepo.lookupCommit(mergeId);
-//                 qrepo.checkoutTree(headCommit.tree());
-//                 qrepo.head().setTarget(headCommit.oid());
-//             }
-//             else if(GIT_MERGE_ANALYSIS_NORMAL == (analysis & GIT_MERGE_ANALYSIS_NORMAL)) {
-            else {
+            else if(GIT_MERGE_ANALYSIS_FASTFORWARD == (analysis & GIT_MERGE_ANALYSIS_FASTFORWARD) && (GIT_MERGE_PREFERENCE_NO_FASTFORWARD != (preference & GIT_MERGE_PREFERENCE_NO_FASTFORWARD))) {
+                // If the analysis says we can fast forward, then let's fast forward!
+                // ...unless preferences say to never fast forward, of course
+                qDebug() << "fast forwarding all up in that thang";
+
+                // the code below was modified from an original (GPL2) version by the git2r community
+                const git_oid *oid;
+                git_buf log_message = {0,0,0};
+                git_commit *commit = NULL;
+                git_tree *tree = NULL;
+                git_reference *reference = NULL;
+                git_checkout_options opts = GIT_CHECKOUT_OPTIONS_INIT;
+
+                git_repository_message(&log_message, qrepo.data());
+
+                oid = git_merge_head_id(merge_heads[0]);
+                error = git_commit_lookup(&commit, qrepo.data(), oid);
+                if (error == GIT_OK)
+                {
+                    error = git_commit_tree(&tree, commit);
+                    if (error == GIT_OK)
+                    {
+                        opts.checkout_strategy = GIT_CHECKOUT_SAFE;
+                        error = git_checkout_tree(qrepo.data(), (git_object*)tree, &opts);
+                        if (error == GIT_OK)
+                        {
+                            error = git_repository_head(&reference, qrepo.data());
+                            if (error == GIT_OK && error != GIT_ENOTFOUND)
+                            {
+                                if (error == GIT_OK)
+                                {
+                                    if (error == GIT_ENOTFOUND) {
+                                        error = git_reference_create(
+                                            &reference,
+                                            qrepo.data(),
+                                            "HEAD",
+                                            git_commit_id(commit),
+                                            0, /* force */
+                                            d->signature,
+                                            log_message.ptr);
+                                    } else {
+                                        git_reference *target_ref = NULL;
+
+                                        error = git_reference_set_target(
+                                            &target_ref,
+                                            reference,
+                                            git_commit_id(commit),
+                                            d->signature,
+                                            log_message.ptr);
+
+                                        if (target_ref)
+                                            git_reference_free(target_ref);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                if (commit)
+                    git_commit_free(commit);
+
+                if (reference)
+                    git_reference_free(reference);
+
+                if (tree)
+                    git_tree_free(tree);
+
+                // Leaving this code in for now - this /should/ as far as i can tell do the same
+                // as the code above. However, it looks as though it doesn't. If anybody can work
+                // out why, i would appreciate learning what went wrong :P
+                //const git_oid* id = git_merge_head_id(merge_heads[0]);
+                //LibQGit2::OId mergeId(id);
+                //LibQGit2::Commit headCommit = qrepo.lookupCommit(mergeId);
+
+                //qrepo.checkoutTree(headCommit.tree());
+                //qrepo.head().setTarget(headCommit.oid());
+                //qrepo.reset(headCommit);
+                git_merge_head_free(merge_heads[0]);
+                git_repository_state_cleanup(qrepo.data());
+            }
+            else if(GIT_MERGE_ANALYSIS_NORMAL == (analysis & GIT_MERGE_ANALYSIS_NORMAL)) {
                 // If the analysis says we are able to do a normal merge, let's attempt one of those...
                 if(GIT_MERGE_PREFERENCE_FASTFORWARD_ONLY == (preference & GIT_MERGE_PREFERENCE_FASTFORWARD_ONLY)) {
                     // but only if we're not told to not try and not do fast forwards!
@@ -375,20 +444,20 @@ void GitController::pull() const
                         d->check_error(error, "looking up remote branch");
 
                         git_commit_create(&commit_id, qrepo.data(), "HEAD", d->signature, d->signature,
-                                        NULL, message,
+                                        NULL, message.ptr,
                                         tree.data(), 2, (const git_commit **) parents);
-
-                        // this causes a rescan of the documents folder, just to make sure...
-                        d->documents->setDocumentsFolder(d->documents->documentsFolder());
                     }
                 }
             }
-//             }
-//             else {
-//                 // how did i get here, i am not good with undefined entries in enums
-//                 qDebug() << "wait, what?";
-//             }
+            else {
+                // how did i get here, i am not good with undefined entries in enums
+                qDebug() << "wait, what?";
+                git_merge_head_free(merge_heads[0]);
+            }
         }
+        git_repository_state_cleanup(qrepo.data());
+        // this causes a rescan of the documents folder, just to make sure...
+        d->documents->setDocumentsFolder(d->documents->documentsFolder());
     }
     catch (const LibQGit2::Exception& ex) {
         qDebug() << ex.what() << ex.category();
