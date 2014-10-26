@@ -19,6 +19,7 @@
 #include "CollectionItemModel.h"
 
 #include <KoShapeFactoryBase.h>
+#include <KoProperties.h>
 
 #include <kdebug.h>
 

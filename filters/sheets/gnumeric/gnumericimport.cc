@@ -35,7 +35,6 @@
 #include <kpluginfactory.h>
 
 #include <KoFilterChain.h>
-#include <KoGlobal.h>
 #include <KoDocumentInfo.h>
 
 // Calligra Sheets

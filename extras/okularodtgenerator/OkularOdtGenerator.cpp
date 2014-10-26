@@ -25,6 +25,8 @@
 #include <QPainter>
 #include <QTextDocument>
 
+#include <calligraversion.h>
+
 #include <KoDocumentEntry.h>
 #include <KoPart.h>
 #include <KWDocument.h>
@@ -48,7 +50,7 @@ static KAboutData createAboutData()
          "okular_odt",
          "okularGenerator_odt",
          ki18n( "ODT/OTT Backend" ),
-         "0.1",
+         CALLIGRA_VERSION_STRING,
          ki18n( "ODT/OTT file renderer" ),
          KAboutData::License_GPL,
          ki18n( "© 2012 Sven Langkamp" )

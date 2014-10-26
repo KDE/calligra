@@ -21,8 +21,8 @@
  *
  */
 
-#ifndef MSOOXMLCT_H
-#define MSOOXMLCT_H
+#ifndef MSOOXMLCONTENTTYPES_H
+#define MSOOXMLCONTENTTYPES_H
 
 #include "komsooxml_export.h"
 
@@ -86,4 +86,4 @@ public:
 
 } // MSOOXML namespace
 
-#endif /* MSOOXMLCT_H */
+#endif /* MSOOXMLCONTENTTYPES_H */

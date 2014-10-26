@@ -71,10 +71,10 @@ KLocalizedString KexiReportPart::i18nMessage(
     const QString& englishMessage, KexiWindow* window) const
 {
     Q_UNUSED(window);
-    if (englishMessage == "Design of object \"%1\" has been modified.")
-        return ki18n(I18N_NOOP("Design of report \"%1\" has been modified."));
-    if (englishMessage == "Object \"%1\" already exists.")
-        return ki18n(I18N_NOOP("Report \"%1\" already exists."));
+    if (englishMessage == "Design of object <resource>%1</resource> has been modified.")
+        return ki18n(I18N_NOOP("Design of report <resource>%1</resource> has been modified."));
+    if (englishMessage == "Object <resource>%1</resource> already exists.")
+        return ki18n(I18N_NOOP("Report <resource>%1</resource> already exists."));
 
     return Part::i18nMessage(englishMessage, window);
 }

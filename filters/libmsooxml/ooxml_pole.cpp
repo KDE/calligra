@@ -26,13 +26,13 @@
    THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+#include "ooxml_pole.h"
+
 #include <fstream>
 #include <iostream>
 #include <list>
 #include <string>
 #include <vector>
-
-#include "ooxml_pole.h"
 
 #include <QByteArray>
 #include <QIODevice>

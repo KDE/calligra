@@ -40,7 +40,6 @@
 
 // KDE
 #include <klocale.h>
-#include <kundo2stack.h>
 
 // Calligra
 #include <KoApplication.h>
@@ -57,7 +56,6 @@
 #include <KoSelection.h>
 #include <KoDocumentInfo.h>
 #include <KoShape.h>
-#include <KoToolManager.h>
 #include <KoPart.h>
 
 // Krita Image

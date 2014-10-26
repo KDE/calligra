@@ -86,7 +86,7 @@ QString Cell::columnLabel(unsigned column)
     unsigned digits = 1;
     unsigned offset = 0;
 
-    for (unsigned limit = 26; column >= limit + offset; limit *= 26, digits++)
+    for (unsigned limit = 26; column >= limit + offset; limit *= 26, ++digits)
         offset += limit;
 
     for (unsigned c = column - offset; digits; --digits, c /= 26)

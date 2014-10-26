@@ -31,7 +31,6 @@
 #include <KoTextEditor.h>
 #include <KoShapeController.h>
 #include <KoToolProxy.h>
-#include <KoShapeManager.h>
 #include <KoSelection.h>
 
 #include <KoIcon.h>

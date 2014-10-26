@@ -21,8 +21,8 @@
  *
  */
 
-#ifndef DOCXXMLDOCREADER_H
-#define DOCXXMLDOCREADER_H
+#ifndef DOCXXMLDOCUMENTREADER_H
+#define DOCXXMLDOCUMENTREADER_H
 
 #include <QBuffer>
 #include <QString>
@@ -450,4 +450,4 @@ public:
 private:
 };
 
-#endif //DOCXXMLDOCREADER_H
+#endif //DOCXXMLDOCUMENTREADER_H

@@ -37,7 +37,7 @@
 #include <KoShapeManager.h>
 #include <KoPointerEvent.h>
 #include <KoEventAction.h>
-#include <KoPACanvas.h>
+#include <KoPACanvasBase.h>
 #include <KoTextShapeData.h>
 #include <KoTextLayoutRootArea.h>
 #include <KoPointedAt.h>

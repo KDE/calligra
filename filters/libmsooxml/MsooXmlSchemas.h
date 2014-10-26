@@ -21,8 +21,8 @@
  *
  */
 
-#ifndef MSOOXMLNS_H
-#define MSOOXMLNS_H
+#ifndef MSOOXMLSCHEMAS_H
+#define MSOOXMLSCHEMAS_H
 
 #include "komsooxml_export.h"
 
@@ -95,4 +95,4 @@ public:
 
 } // MSOOXML namespace
 
-#endif /* MSOOXMLNS_H */
+#endif /* MSOOXMLSCHEMAS_H */

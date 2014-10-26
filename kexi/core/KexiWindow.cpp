@@ -89,7 +89,7 @@ public:
         if (existingItem && !(options & KexiView::OverwriteExistingData)) {
             KMessageBox::information(win,
                                      i18n("Could not create new object.")
-                                     + win->part()->i18nMessage("Object \"%1\" already exists.", win)
+                                     + win->part()->i18nMessage("Object <resource>%1</resource> already exists.", win)
                                        .subs(sdata->name()).toString());
             return false;
         }

@@ -30,7 +30,6 @@ class KPrPresentationTool;
 class KPrPresenterViewWidget;
 class KPrViewModePresenterView;
 class KPrEndOfSlideShowPage;
-class KoPAViewMode;
 class KPrView;
 
 class KPrViewModePresentation : public KoPAViewMode

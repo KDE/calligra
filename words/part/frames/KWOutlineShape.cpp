@@ -22,7 +22,6 @@
 #include <KoCanvasBase.h>
 #include <KoSelection.h>
 #include <KoShapeGroup.h>
-#include <KoShapeManager.h>
 #include <KoViewConverter.h>
 
 #include <kdebug.h>

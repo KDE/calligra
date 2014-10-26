@@ -19,13 +19,14 @@
 **
 */
 
+#include "table.h"
+
 #include <kdebug.h>  /* for kDebug stream */
 #include <QBitArray>
 #include <QTextStream>
 #include "cell.h"
 #include "column.h"
 #include "row.h"
-#include "table.h"
 
 /*******************************************/
 /* Constructor                             */

@@ -19,11 +19,12 @@
 **
 */
 
+#include "xmlparser.h"
+
 #include <kdebug.h>
 #include <KoStore.h>
 
-#include "xmlparser.h"
-#include "QFile"
+#include <QFile>
 
 /* Init static data */
 FileHeader* XmlParser::_fileHeader = 0;

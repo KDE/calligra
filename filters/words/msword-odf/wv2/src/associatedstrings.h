@@ -18,8 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef ASSOCSTRINGS_H
-#define ASSOCSTRINGS_H
+#ifndef ASSOCIATEDSTRINGS_H
+#define ASSOCIATEDSTRINGS_H
 
 #include "global.h"
 #include "wv2_export.h"
@@ -91,4 +91,4 @@ namespace wvWare
 
 } // namespace wvWare
 
-#endif // ASSOCSTRINGS_H
+#endif // ASSOCIATEDSTRINGS_H

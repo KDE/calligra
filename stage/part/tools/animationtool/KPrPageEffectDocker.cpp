@@ -33,8 +33,7 @@
 
 #include <KoPACanvas.h>
 #include <KoPADocument.h>
-#include <KoShapeManager.h>
-#include "KoPAView.h"
+#include <KoPAViewBase.h>
 #include "KPrPage.h"
 #include "KPrPageApplicationData.h"
 #include "KPrViewModePreviewPageEffect.h"
