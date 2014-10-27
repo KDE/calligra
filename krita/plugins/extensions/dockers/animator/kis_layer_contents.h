@@ -30,12 +30,12 @@ class KisAnimationFrameWidget;
  * This is a widget class representing
  * the contents of an animation layer.
  */
-class KisLayerContents : public QWidget
+class KisLayerContentsWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    KisLayerContents(KisFrameBox* parent = 0);
+    KisLayerContentsWidget(KisFrameBox* parent = 0);
 
     void mapFrame(int frameNumber, KisAnimationFrameWidget* frame);
     void unmapFrame(int frameNumber);

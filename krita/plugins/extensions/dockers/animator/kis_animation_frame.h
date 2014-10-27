@@ -32,12 +32,12 @@ class KisAnimationFrameWidget : public QWidget
     Q_OBJECT
 
 public:
-    KisAnimationFrameWidget(KisLayerContents* parent = 0, int type = 0, int width = 10);
+    KisAnimationFrameWidget(KisLayerContentsWidget* parent = 0, int type = 0, int width = 10);
 
     void setWidth(int width);
     int getWidth();
 
-    KisLayerContents* getParent();
+    KisLayerContentsWidget* getParent();
 
     QRect convertSelectionToFrame();
 
@@ -60,7 +60,7 @@ public:
 private:
     int m_type;
     int m_width;
-    KisLayerContents* m_parent;
+    KisLayerContentsWidget* m_parent;
 };
 
 #endif // KIS_ANIMATION_FRAME_H

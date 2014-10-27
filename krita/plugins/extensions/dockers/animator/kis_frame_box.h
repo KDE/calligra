@@ -25,7 +25,7 @@
 #include "kis_timeline.h"
 #include "kis_animation_layer.h"
 
-class KisLayerContents;
+class KisLayerContentsWidget;
 class KisAnimationFrameWidget;
 class KisTimelineHeader;
 
@@ -39,11 +39,11 @@ class KisFrameBox : public QListWidget
 public:
     KisFrameBox(KisTimelineWidget* parent = 0);
 
-    void setSelectedFrame(int x=-1, KisLayerContents* parent=0, int width=10);
+    void setSelectedFrame(int x=-1, KisLayerContentsWidget* parent=0, int width=10);
 
     KisAnimationFrameWidget* getSelectedFrame();
-    KisLayerContents* getFirstLayer();
-    QList<KisLayerContents*> getLayerContents();
+    KisLayerContentsWidget* getFirstLayer();
+    QList<KisLayerContentsWidget*> getLayerContents();
 
     void addLayerUiUpdate();
     void removeLayerUiUpdate(int layer);
@@ -56,7 +56,7 @@ public:
 private:
     KisTimelineWidget* m_dock;
     QList<KisAnimationLayerWidget*> m_layers;
-    QList<KisLayerContents*> m_layerContents;
+    QList<KisLayerContentsWidget*> m_layerContents;
     KisTimelineHeader* m_timelineHeader;
 
 signals:

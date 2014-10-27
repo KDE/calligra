@@ -21,7 +21,7 @@
 
 #include <QPainter>
 
-KisAnimationFrameWidget::KisAnimationFrameWidget(KisLayerContents *parent, int type, int width)
+KisAnimationFrameWidget::KisAnimationFrameWidget(KisLayerContentsWidget *parent, int type, int width)
 {
     this->m_type = type;
     this->m_width = width;
@@ -65,7 +65,7 @@ void KisAnimationFrameWidget::setWidth(int width)
     this->repaint();
 }
 
-KisLayerContents* KisAnimationFrameWidget::getParent()
+KisLayerContentsWidget* KisAnimationFrameWidget::getParent()
 {
     return this->m_parent;
 }
