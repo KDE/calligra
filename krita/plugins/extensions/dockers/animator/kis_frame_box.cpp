@@ -27,7 +27,7 @@
 
 #include <QPainter>
 
-KisFrameBox::KisFrameBox(KisTimeline *parent)
+KisFrameBox::KisFrameBox(KisTimelineWidget *parent)
     : m_selectedFrame(0)
 {
     this->m_dock = parent;
@@ -60,10 +60,10 @@ void KisFrameBox::addLayerUiUpdate()
     newContents->setGeometry(QRect(0, 20, 100000, 20));
     newContents->show();
 
-    KisAnimationFrame* currSelection = this->getSelectedFrame();
+    KisAnimationFrameWidget* currSelection = this->getSelectedFrame();
     currSelection->hide();
 
-    KisAnimationFrame* newSelection = new KisAnimationFrame(newContents, KisAnimationFrame::SELECTION, 10);
+    KisAnimationFrameWidget* newSelection = new KisAnimationFrameWidget(newContents, KisAnimationFrameWidget::SELECTION, 10);
     newSelection->setGeometry(0, 0, 10, 20);
 
     // Don't call setSelectedFrame here because it will emit frameSelectionChanged
@@ -122,7 +122,7 @@ void KisFrameBox::setSelectedFrame(int x, KisLayerContents* parent, int width)
         m_selectedFrame = 0;
     }
 
-    this->m_selectedFrame = new KisAnimationFrame(parent, KisAnimationFrame::SELECTION, width);
+    this->m_selectedFrame = new KisAnimationFrameWidget(parent, KisAnimationFrameWidget::SELECTION, width);
     this->m_selectedFrame->setGeometry(x, 0, width, 20);
     this->m_selectedFrame->show();
 
@@ -134,7 +134,7 @@ void KisFrameBox::setSelectedFrame(int x, KisLayerContents* parent, int width)
     emit frameSelectionChanged(globalPosition);
 }
 
-KisAnimationFrame* KisFrameBox::getSelectedFrame()
+KisAnimationFrameWidget* KisFrameBox::getSelectedFrame()
 {
     return m_selectedFrame;
 }

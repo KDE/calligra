@@ -31,12 +31,12 @@
  * This class represents the animation layer
  * widget element in the timeline
  */
-class KisAnimationLayer : public QWidget
+class KisAnimationLayerWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    KisAnimationLayer(KisAnimationLayerBox* parent = 0, int index = 1);
+    KisAnimationLayerWidget(KisAnimationLayerBox* parent = 0, int index = 1);
 
 protected:
     void paintEvent(QPaintEvent *event);

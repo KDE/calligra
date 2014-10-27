@@ -30,7 +30,7 @@
 AnimatorDock::AnimatorDock() : QDockWidget(i18n("Animator")), m_canvas(0), m_animation(0)
 {
     this->setMinimumHeight(120);
-    m_mainWidget = new KisTimeline(this);
+    m_mainWidget = new KisTimelineWidget(this);
     this->setWidget(m_mainWidget);
 }
 

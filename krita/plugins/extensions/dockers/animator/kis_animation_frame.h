@@ -27,12 +27,12 @@
  * This class represents the animation frame
  * widget element in the timeline.
  */
-class KisAnimationFrame : public QWidget
+class KisAnimationFrameWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    KisAnimationFrame(KisLayerContents* parent = 0, int type = 0, int width = 10);
+    KisAnimationFrameWidget(KisLayerContents* parent = 0, int type = 0, int width = 10);
 
     void setWidth(int width);
     int getWidth();

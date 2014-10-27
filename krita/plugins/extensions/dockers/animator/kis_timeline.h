@@ -36,11 +36,11 @@ class KisAnimation;
  * This class represents the timeline widget
  * contained in the animator docker.
  */
-class KisTimeline : public QWidget
+class KisTimelineWidget : public QWidget
 {
     Q_OBJECT
 public:
-    KisTimeline(QWidget* parent = 0);
+    KisTimelineWidget(QWidget* parent = 0);
 
     void setCanvas(KisCanvas2* canvas);
     KisCanvas2* getCanvas();

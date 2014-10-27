@@ -31,7 +31,7 @@
 #include <QPushButton>
 #include <QButtonGroup>
 
-KisAnimationLayer::KisAnimationLayer(KisAnimationLayerBox *parent, int index)
+KisAnimationLayerWidget::KisAnimationLayerWidget(KisAnimationLayerBox *parent, int index)
 {
     this->setParent(parent);
     this->m_layerBox = parent;
@@ -64,7 +64,7 @@ KisAnimationLayer::KisAnimationLayer(KisAnimationLayerBox *parent, int index)
     connect(m_inputLayerName, SIGNAL(returnPressed()), this, SLOT(onLayerNameEdited()));
 }
 
-void KisAnimationLayer::paintEvent(QPaintEvent *event)
+void KisAnimationLayerWidget::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);
 
@@ -74,7 +74,7 @@ void KisAnimationLayer::paintEvent(QPaintEvent *event)
     painter.drawRect(QRect(0,0, 200, height()));
 }
 
-void KisAnimationLayer::mouseDoubleClickEvent(QMouseEvent *event)
+void KisAnimationLayerWidget::mouseDoubleClickEvent(QMouseEvent *event)
 {
     Q_UNUSED(event);
 
@@ -83,14 +83,14 @@ void KisAnimationLayer::mouseDoubleClickEvent(QMouseEvent *event)
     m_inputLayerName->show();
 }
 
-void KisAnimationLayer::onLayerNameEdited()
+void KisAnimationLayerWidget::onLayerNameEdited()
 {
     m_inputLayerName->hide();
     m_lblLayerName->setText(m_inputLayerName->text());
     m_lblLayerName->show();
 }
 
-void KisAnimationLayer::onionSkinToggleClicked()
+void KisAnimationLayerWidget::onionSkinToggleClicked()
 {
     int layer = m_layerBox->indexOf(this);
     bool onionSkinState = m_layerBox->onionSkinstate(layer);
@@ -108,7 +108,7 @@ void KisAnimationLayer::onionSkinToggleClicked()
     dynamic_cast<KisAnimationDoc*>(m_layerBox->getCanvas()->view()->document())->onionSkinStateToggled(m_layerBox->onionSkinStates());
 }
 
-void KisAnimationLayer::lockToggleClicked()
+void KisAnimationLayerWidget::lockToggleClicked()
 {
     int layer = m_layerBox->indexOf(this);
     bool lockState = m_layerBox->lockState(layer);
@@ -126,7 +126,7 @@ void KisAnimationLayer::lockToggleClicked()
     dynamic_cast<KisAnimationDoc*>(m_layerBox->getCanvas()->view()->document())->lockStateToggled(m_layerBox->lockStates());
 }
 
-void KisAnimationLayer::visibilityToggleClicked()
+void KisAnimationLayerWidget::visibilityToggleClicked()
 {
     int layer = m_layerBox->indexOf(this);
     bool visibilityState = m_layerBox->visibilityState(layer);

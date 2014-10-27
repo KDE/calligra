@@ -21,7 +21,7 @@
 
 #include <QPainter>
 
-KisAnimationFrame::KisAnimationFrame(KisLayerContents *parent, int type, int width)
+KisAnimationFrameWidget::KisAnimationFrameWidget(KisLayerContents *parent, int type, int width)
 {
     this->m_type = type;
     this->m_width = width;
@@ -29,13 +29,13 @@ KisAnimationFrame::KisAnimationFrame(KisLayerContents *parent, int type, int wid
     this->m_parent = parent;
 }
 
-void KisAnimationFrame::paintEvent(QPaintEvent *event)
+void KisAnimationFrameWidget::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);
 
     QPainter painter(this);
 
-    if(this->m_type == KisAnimationFrame::FRAME) {
+    if(this->m_type == KisAnimationFrameWidget::FRAME) {
         painter.setPen(Qt::black);
         painter.setBrush(Qt::white);
         painter.drawRect(0, 0, this->m_width, 20);
@@ -46,7 +46,7 @@ void KisAnimationFrame::paintEvent(QPaintEvent *event)
         }
     }
 
-    if(this->m_type == KisAnimationFrame::SELECTION) {
+    if(this->m_type == KisAnimationFrameWidget::SELECTION) {
         painter.setPen(Qt::blue);
         painter.setBrush(Qt::blue);
         painter.setOpacity(0.5);
@@ -54,48 +54,48 @@ void KisAnimationFrame::paintEvent(QPaintEvent *event)
     }
 }
 
-int KisAnimationFrame::getWidth()
+int KisAnimationFrameWidget::getWidth()
 {
     return m_width;
 }
 
-void KisAnimationFrame::setWidth(int width)
+void KisAnimationFrameWidget::setWidth(int width)
 {
     this->m_width = width;
     this->repaint();
 }
 
-KisLayerContents* KisAnimationFrame::getParent()
+KisLayerContents* KisAnimationFrameWidget::getParent()
 {
     return this->m_parent;
 }
 
-int KisAnimationFrame::getType()
+int KisAnimationFrameWidget::getType()
 {
     return this->m_type;
 }
 
-void KisAnimationFrame::setType(int type)
+void KisAnimationFrameWidget::setType(int type)
 {
     this->m_type = type;
     this->repaint();
 }
 
-int KisAnimationFrame::getIndex()
+int KisAnimationFrameWidget::getIndex()
 {
     int index = (int)this->geometry().x() / 10;
     return index;
 }
 
-QRect KisAnimationFrame::convertSelectionToFrame()
+QRect KisAnimationFrameWidget::convertSelectionToFrame()
 {
     QRect globalGeometry;
 
-    if(this->getType() == KisAnimationFrame::SELECTION) {
+    if(this->getType() == KisAnimationFrameWidget::SELECTION) {
 
         this->getParent()->mapFrame(this->geometry().x() / 10, this);
 
-        KisAnimationFrame* oldPrevFrame = this->getParent()->getPreviousFrameFrom(this);
+        KisAnimationFrameWidget* oldPrevFrame = this->getParent()->getPreviousFrameFrom(this);
 
         if(!oldPrevFrame) {
             return QRect();
@@ -106,7 +106,7 @@ QRect KisAnimationFrame::convertSelectionToFrame()
         int oldPrevFrameWidth = oldPrevFrame->getWidth();
         int previousFrameWidth = this->geometry().x()-this->getParent()->getPreviousFrameFrom(this)->geometry().x();
 
-        KisAnimationFrame* newPreviousFrame = new KisAnimationFrame(this->getParent(), KisAnimationFrame::FRAME, previousFrameWidth);
+        KisAnimationFrameWidget* newPreviousFrame = new KisAnimationFrameWidget(this->getParent(), KisAnimationFrameWidget::FRAME, previousFrameWidth);
         newPreviousFrame->setGeometry(this->getParent()->getPreviousFrameFrom(this)->geometry().x(), 0, previousFrameWidth, 20);
         newPreviousFrame->show();
 
@@ -128,7 +128,7 @@ QRect KisAnimationFrame::convertSelectionToFrame()
             }
         }
 
-        KisAnimationFrame* newFrame = new KisAnimationFrame(this->getParent(), KisAnimationFrame::FRAME, newFrameWidth);
+        KisAnimationFrameWidget* newFrame = new KisAnimationFrameWidget(this->getParent(), KisAnimationFrameWidget::FRAME, newFrameWidth);
         newFrame->setGeometry(this->geometry().x(), 0, newFrameWidth, 20);
         newFrame->show();
 
@@ -141,15 +141,15 @@ QRect KisAnimationFrame::convertSelectionToFrame()
     return globalGeometry;
 }
 
-void KisAnimationFrame::expandWidth()
+void KisAnimationFrameWidget::expandWidth()
 {
     this->getParent()->mapFrame(this->geometry().x() / 10, this);
 
-    KisAnimationFrame* previousFrame = this->getParent()->getPreviousFrameFrom(this);
+    KisAnimationFrameWidget* previousFrame = this->getParent()->getPreviousFrameFrom(this);
 
     if(previousFrame->geometry().x() + previousFrame->getWidth() - 10 < this->geometry().x()) {
         int newWidth = this->geometry().x() - previousFrame->geometry().x() + 10;
-        KisAnimationFrame* newPreviousFrame = new KisAnimationFrame(previousFrame->getParent(), previousFrame->getType(), newWidth);
+        KisAnimationFrameWidget* newPreviousFrame = new KisAnimationFrameWidget(previousFrame->getParent(), previousFrame->getType(), newWidth);
         newPreviousFrame->setGeometry(previousFrame->x(), 0, newWidth, 20);
         newPreviousFrame->show();
         this->getParent()->mapFrame(previousFrame->x() / 10, newPreviousFrame);
@@ -160,11 +160,11 @@ void KisAnimationFrame::expandWidth()
     this->getParent()->getParent()->setSelectedFrame();
 }
 
-QRect KisAnimationFrame::removeFrame()
+QRect KisAnimationFrameWidget::removeFrame()
 {
     QRect deletedFrame;
 
-    KisAnimationFrame* previousFrame = this->getParent()->getFrameAt(this->geometry().x() / 10);
+    KisAnimationFrameWidget* previousFrame = this->getParent()->getFrameAt(this->geometry().x() / 10);
 
     if(previousFrame) {
         this->getParent()->unmapFrame(previousFrame->geometry().x() / 10);

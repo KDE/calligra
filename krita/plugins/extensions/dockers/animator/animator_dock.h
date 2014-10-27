@@ -26,7 +26,7 @@
 class QLabel;
 class KisCanvas2;
 class KisAnimation;
-class KisTimeline;
+class KisTimelineWidget;
 
 /**
  * The animator docker class
@@ -41,7 +41,7 @@ public:
 private:
     KisCanvas2 *m_canvas;
     KisAnimation *m_animation;
-    KisTimeline* m_mainWidget;
+    KisTimelineWidget* m_mainWidget;
 };
 
 

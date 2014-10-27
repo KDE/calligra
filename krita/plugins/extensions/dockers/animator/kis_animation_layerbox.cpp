@@ -34,7 +34,7 @@
 #include "kis_debug.h"
 #include "kis_animation_doc.h"
 
-KisAnimationLayerBox::KisAnimationLayerBox(KisTimeline *parent)
+KisAnimationLayerBox::KisAnimationLayerBox(KisTimelineWidget *parent)
 {
     this->m_dock = parent;
 
@@ -57,7 +57,7 @@ KisAnimationLayerBox::KisAnimationLayerBox(KisTimeline *parent)
     lblOnionSkin->setText("O");
     lblOnionSkin->setGeometry(QRect(160, 0, 20, 20));
 
-    KisAnimationLayer* firstLayer = new KisAnimationLayer(this, m_layerIndex);
+    KisAnimationLayerWidget* firstLayer = new KisAnimationLayerWidget(this, m_layerIndex);
     m_layers << firstLayer;
     firstLayer->setGeometry(QRect(0,this->m_layers.length() * 20, 200, 20));
 }
@@ -68,7 +68,7 @@ void KisAnimationLayerBox::addLayerUiUpdate()
 
     this->setFixedHeight(this->height()+20);
 
-    KisAnimationLayer* newLayer = new KisAnimationLayer(this, m_layerIndex);
+    KisAnimationLayerWidget* newLayer = new KisAnimationLayerWidget(this, m_layerIndex);
     m_layers << newLayer;
     int y;
     int noLayers = m_layers.length();
@@ -87,7 +87,7 @@ void KisAnimationLayerBox::removeLayerUiUpdate(int layer)
     m_layers.at(layer)->hide();
 
     for(int i = 0 ; i < layer ; i++) {
-        KisAnimationLayer* l = m_layers.at(i);
+        KisAnimationLayerWidget* l = m_layers.at(i);
         l->setGeometry(QRect(0, l->y() - 20, 200, 20));
     }
 
@@ -96,8 +96,8 @@ void KisAnimationLayerBox::removeLayerUiUpdate(int layer)
 
 void KisAnimationLayerBox::moveLayerDownUiUpdate(int layer)
 {
-    KisAnimationLayer* l = m_layers.at(layer);
-    KisAnimationLayer* l_below = m_layers.at(layer - 1);
+    KisAnimationLayerWidget* l = m_layers.at(layer);
+    KisAnimationLayerWidget* l_below = m_layers.at(layer - 1);
 
     l->setGeometry(QRect(0, l->y() + 20, 200, 20));
     l_below->setGeometry(QRect(0, l->y() - 20, 200, 20));
@@ -107,8 +107,8 @@ void KisAnimationLayerBox::moveLayerDownUiUpdate(int layer)
 
 void KisAnimationLayerBox::moveLayerUpUiUpdate(int layer)
 {
-    KisAnimationLayer* l = m_layers.at(layer);
-    KisAnimationLayer* l_above = m_layers.at(layer + 1);
+    KisAnimationLayerWidget* l = m_layers.at(layer);
+    KisAnimationLayerWidget* l_above = m_layers.at(layer + 1);
 
     l->setGeometry(QRect(0, l->y() - 20, 200, 20));
     l_above->setGeometry(QRect(0, l->y() + 20, 200, 20));
@@ -125,7 +125,7 @@ void KisAnimationLayerBox::resizeEvent(QResizeEvent *event)
     }
 }
 
-QList<KisAnimationLayer*> KisAnimationLayerBox::getLayers()
+QList<KisAnimationLayerWidget*> KisAnimationLayerBox::getLayers()
 {
     return this->m_layers;
 }
@@ -180,7 +180,7 @@ QHash<int, bool> KisAnimationLayerBox::visibilityStates()
     return m_visibilityStates;
 }
 
-int KisAnimationLayerBox::indexOf(KisAnimationLayer *layer)
+int KisAnimationLayerBox::indexOf(KisAnimationLayerWidget *layer)
 {
     return m_layers.indexOf(layer);
 }

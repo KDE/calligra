@@ -49,13 +49,13 @@
 #include <QScrollBar>
 #include <KoIcon.h>
 
-KisTimeline::KisTimeline(QWidget *parent) : QWidget(parent)
+KisTimelineWidget::KisTimelineWidget(QWidget *parent) : QWidget(parent)
 {
     m_initialized = false;
     m_parent = parent;
 }
 
-void KisTimeline::init()
+void KisTimelineWidget::init()
 {
     m_list = new KisAnimationLayerBox(this);
     m_cells = new KisFrameBox(this);
@@ -267,17 +267,17 @@ void KisTimeline::init()
     m_imported = false;
 }
 
-void KisTimeline::frameSelectionChanged(QRect frame)
+void KisTimelineWidget::frameSelectionChanged(QRect frame)
 {
     dynamic_cast<KisAnimationDoc*>(this->m_canvas->view()->document())->frameSelectionChanged(frame);
 }
 
-void KisTimeline::resizeEvent(QResizeEvent *event)
+void KisTimelineWidget::resizeEvent(QResizeEvent *event)
 {
     Q_UNUSED(event);
 }
 
-void KisTimeline::setCanvas(KisCanvas2 *canvas)
+void KisTimelineWidget::setCanvas(KisCanvas2 *canvas)
 {
     m_canvas = canvas;
 
@@ -290,65 +290,65 @@ void KisTimeline::setCanvas(KisCanvas2 *canvas)
     connect(dynamic_cast<KisAnimationDoc*>(m_canvas->view()->document()), SIGNAL(sigImportFinished(QHash<int, QList<QRect> >)), this, SLOT(importUI(QHash<int, QList<QRect> >)));
 }
 
-void KisTimeline::setModel(KisAnimation *animation)
+void KisTimelineWidget::setModel(KisAnimation *animation)
 {
     this->m_animation = animation;
     this->m_settingsDialog->setModel(animation);
     this->m_playbackDialog->setModel(animation);
 }
 
-KisCanvas2* KisTimeline::getCanvas()
+KisCanvas2* KisTimelineWidget::getCanvas()
 {
     return m_canvas;
 }
 
-KisAnimationLayerBox* KisTimeline::getLayerBox()
+KisAnimationLayerBox* KisTimelineWidget::getLayerBox()
 {
     return m_list;
 }
 
-KisFrameBox* KisTimeline::getFrameBox()
+KisFrameBox* KisTimelineWidget::getFrameBox()
 {
     return m_cells;
 }
 
-void KisTimeline::addLayerUiUpdate()
+void KisTimelineWidget::addLayerUiUpdate()
 {
     m_list->addLayerUiUpdate();
     m_cells->addLayerUiUpdate();
 }
 
-void KisTimeline::removeLayerUiUpdate(int layer)
+void KisTimelineWidget::removeLayerUiUpdate(int layer)
 {
     m_list->removeLayerUiUpdate(layer);
     m_cells->removeLayerUiUpdate(layer);
 }
 
-void KisTimeline::moveLayerDownUiUpdate(int layer)
+void KisTimelineWidget::moveLayerDownUiUpdate(int layer)
 {
     m_list->moveLayerDownUiUpdate(layer);
     m_cells->moveLayerDownUiUpdate(layer);
 }
 
-void KisTimeline::moveLayerUpUiUpdate(int layer)
+void KisTimelineWidget::moveLayerUpUiUpdate(int layer)
 {
     m_list->moveLayerUpUiUpdate(layer);
     m_cells->moveLayerUpUiUpdate(layer);
 }
 
-void KisTimeline::paintLayerPressed()
+void KisTimelineWidget::paintLayerPressed()
 {
     this->addLayerUiUpdate();
     dynamic_cast<KisAnimationDoc*>(this->getCanvas()->view()->document())->addPaintLayer();
 }
 
-void KisTimeline::vectorLayerPressed()
+void KisTimelineWidget::vectorLayerPressed()
 {
     this->addLayerUiUpdate();
     dynamic_cast<KisAnimationDoc*>(this->getCanvas()->view()->document())->addVectorLayer();
 }
 
-void KisTimeline::removeLayerPressed()
+void KisTimelineWidget::removeLayerPressed()
 {
     if(m_list->numberOfLayers() == 1) {
         return;
@@ -364,7 +364,7 @@ void KisTimeline::removeLayerPressed()
     }
 }
 
-void KisTimeline::layerDownPressed()
+void KisTimelineWidget::layerDownPressed()
 {
     if(m_cells->getSelectedFrame()) {
         int layer = m_cells->getSelectedFrame()->getParent()->getLayerIndex();
@@ -381,7 +381,7 @@ void KisTimeline::layerDownPressed()
     }
 }
 
-void KisTimeline::layerUpPressed()
+void KisTimelineWidget::layerUpPressed()
 {
     if(m_cells->getSelectedFrame()) {
         int layer = m_cells->getSelectedFrame()->getParent()->getLayerIndex();
@@ -398,7 +398,7 @@ void KisTimeline::layerUpPressed()
     }
 }
 
-void KisTimeline::blankFramePressed()
+void KisTimelineWidget::blankFramePressed()
 {
     if(m_cells->getSelectedFrame()) {
         QRect globalGeometry = this->m_cells->getSelectedFrame()->convertSelectionToFrame();
@@ -412,7 +412,7 @@ void KisTimeline::blankFramePressed()
     }
 }
 
-void KisTimeline::keyFramePressed()
+void KisTimelineWidget::keyFramePressed()
 {
     if(m_cells->getSelectedFrame()) {
         QRect globalGeometry = this->m_cells->getSelectedFrame()->convertSelectionToFrame();
@@ -436,7 +436,7 @@ void KisTimeline::addframePressed()
 }
 */
 
-void KisTimeline::removeFramePressed()
+void KisTimelineWidget::removeFramePressed()
 {
     if(m_cells->getSelectedFrame()) {
         QRect globalGeometry = this->m_cells->getSelectedFrame()->removeFrame();
@@ -445,12 +445,12 @@ void KisTimeline::removeFramePressed()
     }
 }
 
-void KisTimeline::frameBreakStateChanged(bool state)
+void KisTimelineWidget::frameBreakStateChanged(bool state)
 {
     this->m_frameBreakState = state;
 }
 
-void KisTimeline::breakFrame(QRect position)
+void KisTimelineWidget::breakFrame(QRect position)
 {
     if(m_lastBrokenFrame.x() == position.x() && m_lastBrokenFrame.y() == position.y()) {
         return;
@@ -463,28 +463,28 @@ void KisTimeline::breakFrame(QRect position)
     dynamic_cast<KisAnimationDoc*>(this->getCanvas()->view()->document())->breakFrame(globalGeometry, this->m_frameBreakState);
 }
 
-void KisTimeline::nextFramePressed()
+void KisTimelineWidget::nextFramePressed()
 {
     this->m_cells->setSelectedFrame(m_cells->getSelectedFrame()->geometry().x() + 10);
 }
 
-void KisTimeline::prevFramePressed()
+void KisTimelineWidget::prevFramePressed()
 {
     this->m_cells->setSelectedFrame(m_cells->getSelectedFrame()->geometry().x() - 10);
 }
 
-void KisTimeline::nextKeyFramePressed()
+void KisTimelineWidget::nextKeyFramePressed()
 {
-    KisAnimationFrame* currSelection = this->m_cells->getSelectedFrame();
+    KisAnimationFrameWidget* currSelection = this->m_cells->getSelectedFrame();
 
     QRect nextKeyFrame = dynamic_cast<KisAnimationDoc*>(m_canvas->view()->document())->getNextKeyFramePosition(currSelection->x(),
                                                                                                                currSelection->getParent()->getLayerIndex() * 20);
     this->m_cells->setSelectedFrame(nextKeyFrame.x());
 }
 
-void KisTimeline::prevKeyFramePressed()
+void KisTimelineWidget::prevKeyFramePressed()
 {
-    KisAnimationFrame* currSelection = this->m_cells->getSelectedFrame();
+    KisAnimationFrameWidget* currSelection = this->m_cells->getSelectedFrame();
 
     QRect prevKeyFrame = dynamic_cast<KisAnimationDoc*>(m_canvas->view()->document())->getPreviousKeyFramePosition(currSelection->x(),
                                                                                                                    currSelection->getParent()->getLayerIndex() * 20);
@@ -492,40 +492,40 @@ void KisTimeline::prevKeyFramePressed()
     this->m_cells->setSelectedFrame(prevKeyFrame.x());
 }
 
-void KisTimeline::settingsButtonPressed()
+void KisTimelineWidget::settingsButtonPressed()
 {
     m_settingsDialog->setVisible(true);
 }
 
-void KisTimeline::playbackOptionsPressed()
+void KisTimelineWidget::playbackOptionsPressed()
 {
     m_playbackDialog->setVisible(true);
 }
 
-void KisTimeline::playAnimation()
+void KisTimelineWidget::playAnimation()
 {
     dynamic_cast<KisAnimationDoc*>(this->m_canvas->view()->document())->play();
 }
 
-void KisTimeline::pauseAnimation()
+void KisTimelineWidget::pauseAnimation()
 {
     dynamic_cast<KisAnimationDoc*>(this->m_canvas->view()->document())->pause();
 }
 
-void KisTimeline::stopAnimation()
+void KisTimelineWidget::stopAnimation()
 {
     dynamic_cast<KisAnimationDoc*>(this->m_canvas->view()->document())->stop();
 }
 
-void KisTimeline::timelineWidthChanged(int width)
+void KisTimelineWidget::timelineWidthChanged(int width)
 {
     m_cells->setFixedWidth(width * 10);
 }
 
-void KisTimeline::documentModified()
+void KisTimelineWidget::documentModified()
 {
     emit canvasModified();
-    KisAnimationFrame* selectedFrame = this->m_cells->getSelectedFrame();
+    KisAnimationFrameWidget* selectedFrame = this->m_cells->getSelectedFrame();
     if(selectedFrame) {
         if(m_animation->frameBreakingEnabled()) {
             this->breakFrame(QRect(selectedFrame->x(), selectedFrame->y(), 10, 20));
@@ -533,7 +533,7 @@ void KisTimeline::documentModified()
     }
 }
 
-void KisTimeline::importUI(QHash<int, QList<QRect> > timelineMap)
+void KisTimelineWidget::importUI(QHash<int, QList<QRect> > timelineMap)
 {
     if(m_imported) {
         return;
@@ -543,7 +543,7 @@ void KisTimeline::importUI(QHash<int, QList<QRect> > timelineMap)
 
     qSort(layers);
 
-    KisAnimationFrame* oldSelection;
+    KisAnimationFrameWidget* oldSelection;
 
     for(int i = 0 ; i < layers.size() ; i++) {
         int layer = layers.at(i);
@@ -561,7 +561,7 @@ void KisTimeline::importUI(QHash<int, QList<QRect> > timelineMap)
         for(int j = 0 ; j < frames.size() ; j++) {
             m_cells->m_selectedFrame->hide();
 
-            m_cells->m_selectedFrame = new KisAnimationFrame(oldSelection->getParent(), KisAnimationFrame::SELECTION, 10);
+            m_cells->m_selectedFrame = new KisAnimationFrameWidget(oldSelection->getParent(), KisAnimationFrameWidget::SELECTION, 10);
             m_cells->m_selectedFrame->setGeometry(frames.at(j).x(), 0, 10, 20);
 
             this->m_cells->getSelectedFrame()->show();
@@ -573,7 +573,7 @@ void KisTimeline::importUI(QHash<int, QList<QRect> > timelineMap)
     m_imported = true;
 }
 
-int KisTimeline::numberOfLayers()
+int KisTimelineWidget::numberOfLayers()
 {
     return m_list->numberOfLayers();
 }
