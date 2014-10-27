@@ -35,6 +35,12 @@ class KisAnimationLayer;
 /**
  * This class represents the animation document.
  *
+ * An animation is a sparse two dimensional matrix with frames on the X axis
+ * and layers on the Y axis. Where x,y is not empty, we find an image (that
+ * is, a Krita layer).
+ *
+ * In theory, every 'frame' is a Krita image reproducing the entire layer stack.
+ *
  * It handles all the frame and layer events from
  * coming from the timeline and onion skin dockers.
  *
@@ -47,6 +53,19 @@ class KRITAUI_EXPORT KisAnimationDoc : public KisDoc2
 public:
     KisAnimationDoc(const KisPart2 *part);
     virtual ~KisAnimationDoc();
+
+    /// @return the total number of layers and masks excluding the root layer
+    int numberOfLayers();
+
+    /// @return the layer at the given index, or 0 if the index is out of range
+    KisAnimationLayer *layer(int index);
+
+    /// @return the number of frames
+    int numderOfFrames() const;
+
+
+public:
+
     void frameSelectionChanged(QRect frame, bool savePreviousFrame=true);
 
     void addKeyFrame(QRect frame);
@@ -71,13 +90,6 @@ public:
 
     QString getFrameFile(int frame, int layer);
 
-    int numberOfLayers();
-
-    /// @return the layer at the given index, or 0 if the index is out of range
-    KisAnimationLayer *layer(int index);
-
-    /// @return the number of frames
-    int numderOfFrames() const;
 
     void play();
     void pause();
@@ -102,7 +114,6 @@ public:
 
 private:
     KisKranimLoader* kranimLoader();
-
 
     QString getNextKeyFrameFile(int frame, int layer);
 
