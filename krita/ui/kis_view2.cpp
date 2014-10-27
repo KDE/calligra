@@ -297,7 +297,6 @@ KisView2::KisView2(QWidget * parent)
     : KXMLGUIClient(),
       m_d(new KisView2Private())
 {
-    qDebug() << "Constructing KisView2";
     m_d->mainWindow = dynamic_cast<QMainWindow*>(parent);
 
     setXMLFile(QString("%1.rc").arg(qAppName()));
