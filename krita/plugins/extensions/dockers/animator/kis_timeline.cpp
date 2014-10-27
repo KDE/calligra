@@ -290,7 +290,7 @@ void KisTimelineWidget::setCanvas(KisCanvas2 *canvas)
     connect(dynamic_cast<KisAnimationDoc*>(m_canvas->view()->document()), SIGNAL(sigImportFinished(QHash<int, QList<QRect> >)), this, SLOT(importUI(QHash<int, QList<QRect> >)));
 }
 
-void KisTimelineWidget::setModel(KisAnimation *animation)
+void KisTimelineWidget::setAnimation(KisAnimation *animation)
 {
     this->m_animation = animation;
     this->m_settingsDialog->setModel(animation);

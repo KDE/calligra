@@ -41,7 +41,7 @@ public:
 private:
     KisCanvas2 *m_canvas;
     KisAnimation *m_animation;
-    KisTimelineWidget* m_mainWidget;
+    KisTimelineWidget* m_timelineWidget;
 };
 
 

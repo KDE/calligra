@@ -48,7 +48,7 @@ public:
     KisAnimationLayerBox* getLayerBox();
     KisFrameBox* getFrameBox();
 
-    void setModel(KisAnimation* animation);
+    void setAnimation(KisAnimation* animation);
 
     int numberOfLayers();
 

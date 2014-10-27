@@ -30,8 +30,8 @@
 AnimatorDock::AnimatorDock() : QDockWidget(i18n("Animator")), m_canvas(0), m_animation(0)
 {
     this->setMinimumHeight(120);
-    m_mainWidget = new KisTimelineWidget(this);
-    this->setWidget(m_mainWidget);
+    m_timelineWidget = new KisTimelineWidget(this);
+    this->setWidget(m_timelineWidget);
 }
 
 void AnimatorDock::setCanvas(KoCanvasBase *canvas)
@@ -42,8 +42,8 @@ void AnimatorDock::setCanvas(KoCanvasBase *canvas)
         if (doc) {
             m_animation = doc->getAnimation();
             if(m_animation) {
-                m_mainWidget->setCanvas(m_canvas);
-                m_mainWidget->setModel(m_animation);
+                m_timelineWidget->setCanvas(m_canvas);
+                m_timelineWidget->setAnimation(m_animation);
             }
         }
     }
