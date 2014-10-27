@@ -57,6 +57,8 @@ public:
     QDomElement root;
     QDomElement frameElement;
 
+    KisAnimation *animation;
+
     KisKranimSaver *kranimSaver;
     KisKranimLoader *kranimLoader;
 
@@ -92,6 +94,7 @@ KisAnimationDoc::KisAnimationDoc(const KisPart2 *part)
     d->saved = false;
     d->noLayers = 1;
 
+    d->animation = new KisAnimation(this);
 }
 
 KisAnimationDoc::~KisAnimationDoc()
@@ -954,7 +957,7 @@ KisAnimationStore* KisAnimationDoc::getStore()
 
 KisAnimation* KisAnimationDoc::getAnimation()
 {
-    return KisPart2::instance()->animation();
+    return d->animation;
 }
 
 void KisAnimationDoc::play()
@@ -1109,7 +1112,7 @@ void KisAnimationDoc::loadOnionSkins(QHash<int, bool> states)
 
 void KisAnimationDoc::playbackStateChanged()
 {
-    if(isPlaying()) {
+    if (isPlaying()) {
         refresh();
     }
 }

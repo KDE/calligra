@@ -39,7 +39,7 @@ KisKranimSaver::KisKranimSaver(KisAnimationDoc *document)
     : m_d(new Private)
 {
     m_d->doc = document;
-    m_d->animation = KisPart2::instance()->animation();
+    m_d->animation = document->getAnimation();
 }
 
 KisKranimSaver::~KisKranimSaver()

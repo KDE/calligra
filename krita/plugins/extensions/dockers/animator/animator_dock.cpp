@@ -37,11 +37,14 @@ AnimatorDock::AnimatorDock() : QDockWidget(i18n("Animator")), m_canvas(0), m_ani
 void AnimatorDock::setCanvas(KoCanvasBase *canvas)
 {
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
-    if(m_canvas && m_canvas->view() && m_canvas->view()->document() && m_canvas->view()->document()->documentPart()) {
-        m_animation = KisPart2::instance()->animation();
-        if(m_animation) {
-            m_mainWidget->setCanvas(m_canvas);
-            m_mainWidget->setModel(m_animation);
+    if(m_canvas && m_canvas->view() && m_canvas->view()->document()) {
+        KisAnimationDoc *doc = qobject_cast<KisAnimationDoc*>(m_canvas->view()->document());
+        if (doc) {
+            m_animation = doc->getAnimation();
+            if(m_animation) {
+                m_mainWidget->setCanvas(m_canvas);
+                m_mainWidget->setModel(m_animation);
+            }
         }
     }
 }

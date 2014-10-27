@@ -175,7 +175,6 @@ void KisAnimationSelector::openAnimation()
     animation->setLocation(txtOpenFile->text());
     animation->setBgColor(KoColor(inputBackground->color(), colorSpaceSelector->currentColorSpace()));
 
-    KisPart2::instance()->setAnimation(animation);
     KisAnimationDoc *document = KisPart2::instance()->createAnimationDoc();
     //Load a temporary image before opening the animation file
     document->newImage(animation->name(), animation->width(), animation->height(), animation->colorSpace(),
@@ -238,7 +237,6 @@ void KisAnimationSelector::createAnimation()
 
     animation->setLocation(animationLocation);
 
-    KisPart2::instance()->setAnimation(animation);
     KisAnimationDoc *document = KisPart2::instance()->createAnimationDoc();
     document->newImage(txtAnimationName->text(), width, height, cs, bgColor, txtDescription->text(), resolution);
 
