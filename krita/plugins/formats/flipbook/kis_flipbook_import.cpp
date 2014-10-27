@@ -71,7 +71,7 @@ KoFilter::ConversionStatus KisFlipbookImport::convert(const QByteArray& from, co
 
     KisFlipbook *flipbook = new KisFlipbook();
     flipbook->loadFlipbook(filename);
-    if (flipbook->rowCount() > 0) {
+    if (flipbook->model()->rowCount() > 0) {
         // XXX: load the last loaded current file
     }
 
@@ -82,7 +82,7 @@ KoFilter::ConversionStatus KisFlipbookImport::convert(const QByteArray& from, co
 
     //part->setFlipbook(flipbook);
 
-    KisFlipbookItem *item = static_cast<KisFlipbookItem*>(flipbook->item(0));
+    KisFlipbookItem *item = static_cast<KisFlipbookItem*>(flipbook->model()->item(0));
     if (!QFile::exists(item->filename()))
         return KoFilter::FileNotFound;
 
