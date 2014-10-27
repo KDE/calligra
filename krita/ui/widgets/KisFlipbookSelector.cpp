@@ -31,16 +31,15 @@
 #include <QListWidget>
 #include <QListWidgetItem>
 
-KisFlipbookSelector::KisFlipbookSelector(QWidget *parent, KisDoc2 *document)
+KisFlipbookSelector::KisFlipbookSelector(QWidget *parent)
     : QWidget(parent)
-    , m_document(document)
 {
     setupUi(this);
 
-    connect(bnCreateNewFlipbook, SIGNAL(clicked()), SLOT(createImage()));
+    connect(bnCreateNewFlipbook, SIGNAL(clicked()), SLOT(createFlipbook()));
 }
 
-void KisFlipbookSelector::createImage()
+void KisFlipbookSelector::createFlipbook()
 {
     KoFileDialog dialog(this, KoFileDialog::OpenFiles, "OpenDocument");
     dialog.setCaption(i18n("Select files to add to flipbook"));
@@ -50,7 +49,7 @@ void KisFlipbookSelector::createImage()
 
     if (urls.size() < 1) return;
     QApplication::setOverrideCursor(Qt::WaitCursor);
-    KisFlipbook *flipbook = new KisFlipbook();
+    KisFlipbook *flipbook = KisPart2::instance()->createFlipbook();
     foreach(QString url, urls) {
         if (QFile::exists(url)) {
             flipbook->addItem(url);
@@ -59,10 +58,6 @@ void KisFlipbookSelector::createImage()
 
     flipbook->setName(txtFlipbookName->text());
 
-    m_document->setUrl(urls[0]);
-    m_document->setCurrentImage(static_cast<KisFlipbookItem*>(flipbook->item(0))->document()->image());
-
-    static_cast<KisPart2*>(m_document->documentPart())->setFlipbook(flipbook);
     QApplication::restoreOverrideCursor();
-    emit documentSelected();
+    emit documentSelected(flipbook);
 }

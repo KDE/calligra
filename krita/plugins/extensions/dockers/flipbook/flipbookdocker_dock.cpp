@@ -116,14 +116,14 @@ void FlipbookDockerDock::setCanvas(KoCanvasBase * canvas)
         }
     }
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
-    if (m_canvas && m_canvas->view() && m_canvas->view()->document() && m_canvas->view()->document()->documentPart()) {
-        m_flipbook = dynamic_cast<KisPart2*>(m_canvas->view()->document()->documentPart())->flipbook();
+    if (m_canvas && m_canvas->view() && m_canvas->view()->document()) {
+        m_flipbook = dynamic_cast<KisFlipbook*>(m_canvas->view()->document());
         if (!m_flipbook) {
             listFlipbook->setModel(0);
             txtName->clear();
         }
         else {
-            listFlipbook->setModel(m_flipbook);
+            listFlipbook->setModel(m_flipbook->model());
             txtName->setText(m_flipbook->name());
             goFirst();
         }
@@ -163,7 +163,7 @@ void FlipbookDockerDock::saveFlipbook()
     QString filename = dialog.url();
     if (!filename.isEmpty()) {
         m_flipbook->setName(txtName->text());
-        m_flipbook->save(filename);
+        m_flipbook->saveFlipbook(filename);
     }
     m_canvas->view()->document()->documentPart()->addRecentURLToAllMainWindows(filename);
 }
@@ -174,7 +174,6 @@ void FlipbookDockerDock::newFlipbook()
     if (!m_canvas) return;
     if (!m_canvas->view()) return;
     if (!m_canvas->view()->document()) return;
-    if (!m_canvas->view()->document()->documentPart()) return;
 
     KisImageSP oldImage = m_canvas->view()->image();
     if (m_canvas->view()->document()->isModified()) {
@@ -203,11 +202,9 @@ void FlipbookDockerDock::newFlipbook()
     txtName->setText("");
     KisFlipbook *old = m_flipbook;
 
-    static_cast<KisPart2*>(m_canvas->view()->document()->documentPart())->setFlipbook(flipbook);
-
     m_flipbook = flipbook;
 
-    listFlipbook->setModel(m_flipbook);
+    listFlipbook->setModel(m_flipbook->model());
     goFirst();
 
     delete old;
@@ -219,7 +216,6 @@ void FlipbookDockerDock::openFlipbook()
     if (!m_canvas) return;
     if (!m_canvas->view()) return;
     if (!m_canvas->view()->document()) return;
-    if (!m_canvas->view()->document()->documentPart()) return;
 
     KisImageSP oldImage = m_canvas->view()->image();
 
@@ -232,17 +228,15 @@ void FlipbookDockerDock::openFlipbook()
     if (!QFile::exists(filename)) return;
 
     KisFlipbook *flipbook = new KisFlipbook();
-    flipbook->load(filename);
+    flipbook->loadFlipbook(filename);
     txtName->setText(flipbook->name());
 
     KisFlipbook *old = m_flipbook;
 
-    static_cast<KisPart2*>(m_canvas->view()->document()->documentPart())->setFlipbook(flipbook);
-
     m_flipbook = flipbook;
 
-    listFlipbook->setModel(m_flipbook);
-    selectImage(m_flipbook->index(0, 0));
+    listFlipbook->setModel(m_flipbook->model());
+    selectImage(m_flipbook->model()->index(0, 0));
     delete old;
 
     Q_UNUSED(oldImage); // We keep a shared reference until the whole gui is rebuilt around the new image, otherwise it gets deleted
@@ -273,11 +267,11 @@ void FlipbookDockerDock::addImage()
 void FlipbookDockerDock::removeImage()
 {
     QModelIndex idx = listFlipbook->currentIndex();
-    QStandardItem *item = m_flipbook->itemFromIndex(idx);
-    for (int i = 0; i < m_flipbook->rowCount(); ++i) {
-        if (m_flipbook->item(i) == item) {
+    QStandardItem *item = m_flipbook->model()->itemFromIndex(idx);
+    for (int i = 0; i < m_flipbook->model()->rowCount(); ++i) {
+        if (m_flipbook->model()->item(i) == item) {
             // workaround as takeItem(i) doesn't change the rowCount
-            delete m_flipbook->takeRow(i).first();
+            delete m_flipbook->model()->takeRow(i).first();
         }
     }
 
@@ -287,18 +281,18 @@ void FlipbookDockerDock::removeImage()
 void FlipbookDockerDock::goFirst()
 {
     listFlipbook->scrollToTop();
-    listFlipbook->setCurrentIndex(m_flipbook->index(0, 0));
+    listFlipbook->setCurrentIndex(m_flipbook->model()->index(0, 0));
 
 }
 
 void FlipbookDockerDock::goPrevious()
 {
-    KisFlipbookItem *item = dynamic_cast<KisFlipbookItem*>(m_flipbook->itemFromIndex(listFlipbook->currentIndex()));
+    KisFlipbookItem *item = dynamic_cast<KisFlipbookItem*>(m_flipbook->model()->itemFromIndex(listFlipbook->currentIndex()));
     if (!item) return;
     int currentRow = item->row();
 
     if (currentRow > 0) {
-        listFlipbook->setCurrentIndex(m_flipbook->index(currentRow - 1, 0));
+        listFlipbook->setCurrentIndex(m_flipbook->model()->index(currentRow - 1, 0));
         listFlipbook->scrollTo(listFlipbook->currentIndex());
     }
     else {
@@ -308,12 +302,12 @@ void FlipbookDockerDock::goPrevious()
 
 void FlipbookDockerDock::goNext()
 {
-    KisFlipbookItem *item = dynamic_cast<KisFlipbookItem*>(m_flipbook->itemFromIndex(listFlipbook->currentIndex()));
+    KisFlipbookItem *item = dynamic_cast<KisFlipbookItem*>(m_flipbook->model()->itemFromIndex(listFlipbook->currentIndex()));
     if (!item) return;
     int currentRow = item->row();
 
     if (currentRow < listFlipbook->model()->rowCount() -1) {
-        listFlipbook->setCurrentIndex(m_flipbook->index(currentRow + 1, 0));
+        listFlipbook->setCurrentIndex(m_flipbook->model()->index(currentRow + 1, 0));
         listFlipbook->scrollTo(listFlipbook->currentIndex());
     }
     else {
@@ -324,7 +318,7 @@ void FlipbookDockerDock::goNext()
 void FlipbookDockerDock::goLast()
 {
     listFlipbook->scrollToBottom();
-    listFlipbook->setCurrentIndex(m_flipbook->index(m_flipbook->rowCount() -1, 0));
+    listFlipbook->setCurrentIndex(m_flipbook->model()->index(m_flipbook->model()->rowCount() -1, 0));
 }
 
 void FlipbookDockerDock::selectImage(const QModelIndex &index)
@@ -334,7 +328,7 @@ void FlipbookDockerDock::selectImage(const QModelIndex &index)
 
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
-    KisFlipbookItem *item = dynamic_cast<KisFlipbookItem*>(m_flipbook->itemFromIndex(index));
+    KisFlipbookItem *item = dynamic_cast<KisFlipbookItem*>(m_flipbook->model()->itemFromIndex(index));
 
     if (item && item->document() && item->document()->image()) {
         if (m_canvas->view()->document()->isModified()) {

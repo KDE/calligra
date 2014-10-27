@@ -70,7 +70,7 @@ KoFilter::ConversionStatus KisFlipbookImport::convert(const QByteArray& from, co
         return KoFilter::FileNotFound;
 
     KisFlipbook *flipbook = new KisFlipbook();
-    flipbook->load(filename);
+    flipbook->loadFlipbook(filename);
     if (flipbook->rowCount() > 0) {
         // XXX: load the last loaded current file
     }

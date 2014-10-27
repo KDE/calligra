@@ -27,8 +27,13 @@
 
 #include "kis_flipbook_item.h"
 
-KisFlipbook::KisFlipbook(QObject *parent) :
-    QStandardItemModel(parent)
+KisFlipbook::KisFlipbook(const KoPart *part) :
+    KoDocument(part)
+{
+    m_model = new QStandardItemModel(this);
+}
+
+KisFlipbook::~KisFlipbook()
 {
 }
 
@@ -46,11 +51,11 @@ QString KisFlipbook::name() const
 KisFlipbookItem *KisFlipbook::addItem(const QString &url)
 {
     KisFlipbookItem *item = new KisFlipbookItem(url);
-    appendRow(item);
+    m_model->appendRow(item);
     return item;
 }
 
-void KisFlipbook::load(const QString &url)
+void KisFlipbook::loadFlipbook(const QString &url)
 {
     QFile f(url);
     if (f.exists()) {
@@ -69,7 +74,7 @@ void KisFlipbook::load(const QString &url)
                     }
                     else if (e.tagName() == "flipbook-file") {
                         KisFlipbookItem *item = new KisFlipbookItem(e.text());
-                        appendRow(item);
+                        m_model->appendRow(item);
                     }
                 }
                 n = n.nextSibling();
@@ -79,7 +84,7 @@ void KisFlipbook::load(const QString &url)
 }
 
 
-void KisFlipbook::save(const QString &url)
+void KisFlipbook::saveFlipbook(const QString &url)
 {
     QDomDocument doc = QDomDocument("krita-flipbook");
     QDomElement root = doc.createElement("krita-flipbook");
@@ -89,8 +94,8 @@ void KisFlipbook::save(const QString &url)
     e.appendChild(text);
     root.appendChild(e);
 
-    for (int i = 0; i < rowCount(); ++i) {
-        KisFlipbookItem *flipbookItem = static_cast<KisFlipbookItem*>(item(i));
+    for (int i = 0; i < m_model->rowCount(); ++i) {
+        KisFlipbookItem *flipbookItem = static_cast<KisFlipbookItem*>(m_model->item(i));
         e = doc.createElement("flipbook-file");
         text = doc.createTextNode(flipbookItem->filename());
         e.appendChild(text);
@@ -107,4 +112,9 @@ void KisFlipbook::save(const QString &url)
         if (!part) continue;
         part->addRecentURLToAllMainWindows(url);
     }
+}
+
+QStandardItemModel *KisFlipbook::model() const
+{
+    return m_model;
 }

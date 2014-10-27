@@ -30,12 +30,12 @@ void KisFlipbookTest::testRoundtrip()
     flipbook.addItem("item1");
     flipbook.addItem("item2");
 
-    flipbook.save("flipbooktest.flipbook");
+    flipbook.saveFlipbook("flipbooktest.flipbook");
 
     KisFlipbook flipbook2;
-    flipbook2.load("flipbooktest.flipbook");
+    flipbook2.loadFlipbook("flipbooktest.flipbook");
     QVERIFY(flipbook2.name() == flipbook.name());
-    QVERIFY(flipbook2.rowCount() == flipbook.rowCount());
+    QVERIFY(flipbook2.model()->rowCount() == flipbook.model()->rowCount());
 }
 
 QTEST_KDEMAIN(KisFlipbookTest, GUI)

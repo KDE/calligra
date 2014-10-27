@@ -29,7 +29,6 @@ class QGraphicsItem;
 class KoView;
 class KisFlipbook;
 class KisDocument2;
-class KisAnimation;
 class KisAnimationDoc;
 
 class KRITAUI_EXPORT KisPart2 : public KoPart
@@ -51,11 +50,8 @@ public:
     virtual ~KisPart2();
 
     virtual KoDocument *createDocument() const;
-
     virtual KisAnimationDoc *createAnimationDoc() const;
-
-    KisAnimation* animation() const { return m_animation; }
-    void setAnimation(KisAnimation *animation) { m_animation = animation; }
+    virtual KisFlipbook *createFlipbook() const;
 
     /**
      * Creates and shows the start up widget. Reimplemented from KoDocument.
@@ -76,17 +72,12 @@ public:
 
     QList<KoPart::CustomDocumentWidgetItem> createCustomDocumentWidgets(QWidget *parent);
 
-    KisFlipbook *flipbook() const { return m_flipbook; }
-    void setFlipbook(KisFlipbook *flipbook);
-
 protected slots:
 
     /// Quits Krita with error message from m_errorMessage.
     void showErrorAndDie();
 
 protected:
-    KisAnimation *m_animation;
-    KisFlipbook *m_flipbook;
     QString m_errorMessage;
     bool m_dieOnError;
 };

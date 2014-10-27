@@ -20,24 +20,21 @@
 #include <QWidget>
 #include "ui_wdgflipbookselector.h"
 
-class KisDoc2;
+class KoDocument;
 
 class KisFlipbookSelector : public QWidget, public Ui::WdgFlipbookSelector
 {
     Q_OBJECT
 public:
-    KisFlipbookSelector(QWidget *parent, KisDoc2 *document);
+    KisFlipbookSelector(QWidget *parent);
     
 signals:
     
-    void documentSelected();
+    void documentSelected(KoDocument *);
 
 private slots:
 
-    void createImage();
-
-private:
-    KisDoc2 *m_document;
+    void createFlipbook();
 };
 
 #endif // KISFLIPBOOKSELECTOR_H

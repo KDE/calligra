@@ -53,7 +53,6 @@ KisPart2* KisPart2::instance()
 
 KisPart2::KisPart2()
     : KoPart(0)
-    , m_flipbook(0)
     , m_dieOnError(false)
 {
     KisFactory2 factory;
@@ -67,7 +66,6 @@ KisPart2::KisPart2()
 
 KisPart2::~KisPart2()
 {
-    delete m_flipbook;
 }
 
 KoDocument *KisPart2::createDocument() const
@@ -79,6 +77,11 @@ KoDocument *KisPart2::createDocument() const
 KisAnimationDoc *KisPart2::createAnimationDoc() const
 {
     return new KisAnimationDoc(this);
+}
+
+KisFlipbook *KisPart2::createFlipbook() const
+{
+    return new KisFlipbook(this);
 }
 
 KoView *KisPart2::createViewInstance(KoDocument *document, KoMainWindow *parent)
@@ -141,6 +144,7 @@ QList<KoPart::CustomDocumentWidgetItem> KisPart2::createCustomDocumentWidgets(QW
         item.icon = "application-x-krita";
         widgetList << item;
     }
+
     {
         QSize sz = KisClipboard::instance()->clipSize();
         if (sz.isValid() && sz.width() != 0 && sz.height() != 0) {
@@ -163,7 +167,7 @@ QList<KoPart::CustomDocumentWidgetItem> KisPart2::createCustomDocumentWidgets(QW
 
     {
         KoPart::CustomDocumentWidgetItem item;
-        item.widget = new KisFlipbookSelector(parent, qobject_cast<KisDoc2*>(createDocument()));
+        item.widget = new KisFlipbookSelector(parent);
         item.title = i18n("Flipbooks");
         item.icon = "folder-video";
         widgetList << item;
@@ -180,11 +184,6 @@ QList<KoPart::CustomDocumentWidgetItem> KisPart2::createCustomDocumentWidgets(QW
     }
 
     return widgetList;
-}
-
-void KisPart2::setFlipbook(KisFlipbook *flipbook)
-{
-    m_flipbook = flipbook;
 }
 
 void KisPart2::showErrorAndDie()

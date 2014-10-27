@@ -20,26 +20,42 @@
 #include <QStandardItemModel>
 #include <krita_export.h>
 
+#include <KoDocument.h>
+
 class KisFlipbookItem;
 class QString;
 
-class KRITAUI_EXPORT KisFlipbook : public QStandardItemModel
+class KRITAUI_EXPORT KisFlipbook : public KoDocument
 {
     Q_OBJECT
 public:
-    explicit KisFlipbook(QObject *parent = 0);
+    explicit KisFlipbook(const KoPart *part= 0);
+    virtual ~KisFlipbook();
 
     void setName(const QString &name);
     QString name() const;
 
     KisFlipbookItem *addItem(const QString &url);
 
-    void load(const QString &url);
-    void save(const QString &url);
+    void loadFlipbook(const QString &url);
+    void saveFlipbook(const QString &url);
+
+    QStandardItemModel *model() const;
+
+public: // KoDocument
+
+    virtual QByteArray nativeFormatMimeType() const { return "application/x-krita-flipbook"; }
+    virtual QByteArray nativeOasisMimeType() const { return ""; }
+    virtual QStringList extraNativeMimeTypes() const { return QStringList(); }
+    virtual void paintContent(QPainter &/*painter*/, const QRect &/*rect*/) {}
+    virtual bool loadXML(const KoXmlDocument & /*doc*/, KoStore */*store*/) { return false; }
+    virtual bool loadOdf(KoOdfReadStore &/*odfStore*/) { return false; }
+    virtual bool saveOdf(SavingContext &/*documentContext*/) { return false; }
 
 private:
 
     QString m_name;
+    QStandardItemModel *m_model;
 
 };
 
