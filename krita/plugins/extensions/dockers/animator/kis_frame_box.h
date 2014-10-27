@@ -23,7 +23,7 @@
 #include <QList>
 
 #include "kis_timeline.h"
-#include "kis_animation_layer.h"
+#include "kis_animation_layer_widget.h"
 
 class KisLayerContentsWidget;
 class KisAnimationFrameWidget;

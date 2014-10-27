@@ -30,7 +30,7 @@
 #include "kis_view2.h"
 #include "kis_action_manager.h"
 #include "kis_action.h"
-#include "kis_animation_layer.h"
+#include "kis_animation_layer_widget.h"
 #include "kis_debug.h"
 #include "kis_animation_doc.h"
 

@@ -17,7 +17,7 @@
  */
 
 #include "kis_layer_contents.h"
-#include "kis_animation_frame.h"
+#include "kis_animation_frame_widget.h"
 #include "kis_debug.h"
 
 #include <QMenu>

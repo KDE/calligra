@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_animation_layer.h"
+#include "kis_animation_layer_widget.h"
 #include "kis_canvas2.h"
 #include "kis_animation_doc.h"
 #include "kis_part2.h"

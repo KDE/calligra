@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_animation_frame.h"
+#include "kis_animation_frame_widget.h"
 #include "kis_debug.h"
 
 #include <QPainter>

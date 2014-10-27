@@ -19,7 +19,7 @@
 #include "kis_timeline.h"
 #include "kis_frame_box.h"
 #include "kis_animation_layerbox.h"
-#include "kis_animation_frame.h"
+#include "kis_animation_frame_widget.h"
 #include "kis_canvas2.h"
 #include "kis_view2.h"
 #include "kis_doc2.h"

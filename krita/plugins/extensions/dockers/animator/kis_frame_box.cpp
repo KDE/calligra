@@ -21,7 +21,7 @@
 #include "kis_layer_contents.h"
 #include "kis_debug.h"
 #include "kis_timeline_header.h"
-#include "kis_animation_frame.h"
+#include "kis_animation_frame_widget.h"
 #include "kis_animation_doc.h"
 #include "kis_view2.h"
 
