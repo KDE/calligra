@@ -21,7 +21,7 @@
 #include "kmessagewidget.h"
 #include "kmessagewidget_p.h"
 
-#include <KexiLinkButton.h>
+#include <KexiCloseButton.h>
 #include <KoIcon.h>
 
 #include <kaction.h>
@@ -217,7 +217,7 @@ public:
     KMessageWidgetFrame* content;
     ClickableLabel* iconLabel;
     ClickableLabel* textLabel;
-    KexiLinkButton* closeButton;
+    KexiCloseButton* closeButton;
     QTimeLine* timeLine;
 
     KMessageWidget::MessageType messageType;
@@ -286,13 +286,7 @@ void KMessageWidgetPrivate::init(KMessageWidget *q_ptr)
     textLabel->setBackgroundRole(QPalette::Mid);
 #endif
     }
-/*    KAction* closeAction = KStandardAction::close(q, SLOT(animatedHide()), q);
-    closeButton = new QToolButton(content);
-    closeButton->setAutoRaise(true);
-    closeButton->setDefaultAction(closeAction);*/
-    closeButton = new KexiLinkButton(koIcon("close"), content);
-    closeButton->setToolTip(KStandardGuiItem::close().plainText());
-    closeButton->setUsesForegroundColor(true);
+    closeButton = new KexiCloseButton(content);
     QObject::connect(closeButton, SIGNAL(clicked()), q, SLOT(animatedHide()));
 
     defaultAction = 0;
@@ -579,6 +573,7 @@ void KMessageWidgetPrivate::updateStyleSheet()
         .arg(content->borderBrush.color().name())
         .arg(fg.color().name())
     );
+    closeButton->setStyle(QApplication::style()); // clear stylesheets style from this button
 #endif
 }
 

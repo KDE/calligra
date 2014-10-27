@@ -1417,6 +1417,34 @@ void KexiMainWidget::slotCurrentTabIndexChanged(int index)
 
 //------------------------------------------
 
+//! @internal Dock widget with floating disabled but still collapsible
+class KexiDockWidget : public QDockWidget
+{
+    Q_OBJECT
+public:
+    KexiDockWidget(const QString &title, QWidget *parent);
+
+    virtual ~KexiDockWidget();
+
+    virtual void setSizeHint(const QSize& hint);
+
+    virtual QSize sizeHint() const;
+
+    QToolButton* closeButton() const;
+
+protected:
+    virtual void paintEvent(QPaintEvent *pe);
+
+protected slots:
+    void slotCloseClicked();
+
+private:
+    class Private;
+    Private * const d;
+};
+
+//------------------------------------------
+
 //! @internal safer dictionary
 typedef QMap< int, KexiWindow* > KexiWindowDict;
 
@@ -1641,16 +1669,7 @@ public:
     void setTabBarVisible(KMultiTabBar::KMultiTabBarPosition position, int id,
                           KexiDockWidget *dockWidget, bool visible) 
     {
-        KMultiTabBar::KMultiTabBarPosition realPosition = position;
-        if (QApplication::isRightToLeft()) {
-            if (position == KMultiTabBar::Left) {
-                realPosition = KMultiTabBar::Right;
-            }
-            else if (position == KMultiTabBar::Right) {
-                realPosition = KMultiTabBar::Left;
-            }
-        }
-        KMultiTabBar *mtbar = multiTabBars.value(realPosition);
+        KMultiTabBar *mtbar = multiTabBars.value(position);
         if (!visible) {
             mtbar->removeTab(id);
         }

@@ -22,6 +22,7 @@ set(kexiutils_LIB_SRCS
   KexiTitleLabel.cpp
   KexiLinkWidget.cpp
   KexiLinkButton.cpp
+  KexiCloseButton.cpp
   KexiAssistantPage.cpp
   KexiAssistantWidget.cpp
   KexiAnimatedLayout.cpp

@@ -41,6 +41,7 @@
 #include <QDockWidget>
 #include <QMenuBar>
 #include <QShortcut>
+#include <QStylePainter>
 
 #include <kapplication.h>
 #include <kcmdlineargs.h>
@@ -69,6 +70,8 @@
 #include <db/drivermanager.h>
 #include <kexidb/dbobjectnamevalidator.h>
 #include <kexiutils/utils.h>
+#include <kexiutils/styleproxy.h>
+#include <kexiutils/KexiCloseButton.h>
 #include <kexi_version.h>
 
 #include <core/KexiWindow.h>
@@ -125,32 +128,93 @@
 
 //-------------------------------------------------
 
-//! @internal
-class KexiDockWidget : public QDockWidget
-{
-public:
-    KexiDockWidget(const QString & title, QWidget *parent)
-            : QDockWidget(title, parent)
-    {
-        // No floatable dockers, Dolphin had problems, we don't want the same...
-        // https://bugs.kde.org/show_bug.cgi?id=288629
-        // https://bugs.kde.org/show_bug.cgi?id=322299
-        setFeatures(QDockWidget::DockWidgetClosable);
-        setAllowedAreas(Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea);
-    }
-    void setSizeHint(const QSize& hint) {
-        m_hint = hint;
-    }
-    QSize sizeHint() const {
-        return m_hint.isValid() ? m_hint : QDockWidget::sizeHint();
-    }
-private:
-    QSize m_hint;
-};
+#include "KexiMainWindow_p.h"
 
 //-------------------------------------------------
 
-#include "KexiMainWindow_p.h"
+class KexiDockWidget::Private
+{
+public:
+    Private() {}
+    QSize hint;
+    KexiCloseButton *closeButton;
+};
+
+KexiDockWidget::KexiDockWidget(const QString & title, QWidget *parent)
+        : QDockWidget(title, parent), d(new Private)
+{
+    // No floatable dockers, Dolphin had problems, we don't want the same...
+    // https://bugs.kde.org/show_bug.cgi?id=288629
+    // https://bugs.kde.org/show_bug.cgi?id=322299
+    setFeatures(QDockWidget::NoDockWidgetFeatures);//DockWidgetClosable);
+    setAllowedAreas(Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea);
+    setFocusPolicy(Qt::NoFocus);
+
+    QStyleOptionDockWidgetV2 dockOpt;
+    dockOpt.init(this);
+    const int addSpacing = style()->pixelMetric(QStyle::PM_DockWidgetTitleBarButtonMargin, &dockOpt, this);
+
+    QWidget *titleBar = new QWidget;
+    titleBar->setFocusPolicy(Qt::NoFocus);
+    QHBoxLayout *titleLyr = new QHBoxLayout(titleBar);
+    titleLyr->setContentsMargins(addSpacing, addSpacing, addSpacing, addSpacing);
+    titleLyr->setSpacing(0);
+    titleLyr->addStretch(1);
+
+    d->closeButton = new KexiCloseButton;
+    d->closeButton->setMarginEnabled(false);
+    connect(d->closeButton, SIGNAL(clicked()), this, SLOT(slotCloseClicked()));
+    titleLyr->addWidget(d->closeButton);
+
+    setTitleBarWidget(titleBar);
+}
+
+KexiDockWidget::~KexiDockWidget()
+{
+    delete d;
+}
+
+void KexiDockWidget::paintEvent(QPaintEvent *pe)
+{
+    Q_UNUSED(pe);
+    QStylePainter p(this);
+    if (isFloating()) {
+        QStyleOptionFrame framOpt;
+        framOpt.init(this);
+        p.drawPrimitive(QStyle::PE_FrameDockWidget, framOpt);
+    }
+
+    // Title must be painted after the frame, since the areas overlap, and
+    // the title may wish to extend out to all sides (eg. XP style)
+    QStyleOptionDockWidgetV2 titleOpt;
+    initStyleOption(&titleOpt);
+    p.drawControl(QStyle::CE_DockWidgetTitle, titleOpt);
+}
+
+void KexiDockWidget::setSizeHint(const QSize& hint)
+{
+    d->hint = hint;
+}
+
+QSize KexiDockWidget::sizeHint() const
+{
+    return d->hint.isValid() ? d->hint : QDockWidget::sizeHint();
+}
+
+void KexiDockWidget::slotCloseClicked()
+{
+    if (isVisible()) {
+        close();
+    }
+    else {
+        show();
+    }
+}
+
+QToolButton* KexiDockWidget::closeButton() const
+{
+    return d->closeButton;
+}
 
 //-------------------------------------------------
 
@@ -1681,7 +1745,6 @@ void KexiMainWindow::setupMainWidget()
     d->mainWidget = new KexiMainWidget();
     d->mainWidget->setParent(this);
     
-    KConfigGroup mainWindowGroup(d->config->group("MainWindow"));
     d->mainWidget->tabWidget()->setTabsClosable(true);
     connect(d->mainWidget->tabWidget(), SIGNAL(tabCloseRequested(int)),
             this, SLOT(closeWindowForTab(int)));
@@ -1736,34 +1799,17 @@ void KexiMainWindow::slotMultiTabBarTabClicked(int id)
     }
 }
 
-static Qt::DockWidgetArea loadDockAreaSetting(KConfigGroup& group, const char* configEntry, Qt::DockWidgetArea defaultArea)
+static Qt::DockWidgetArea applyRightToLeftToDockArea(Qt::DockWidgetArea area)
 {
-        const QString areaName = group.readEntry(configEntry).toLower();
-        if (areaName == "left")
-            return Qt::LeftDockWidgetArea;
-        else if (areaName == "right")
+    if (QApplication::layoutDirection() == Qt::RightToLeft) {
+        if (area == Qt::LeftDockWidgetArea) {
             return Qt::RightDockWidgetArea;
-        else if (areaName == "top")
-            return Qt::TopDockWidgetArea;
-        else if (areaName == "bottom")
-            return Qt::BottomDockWidgetArea;
-        return defaultArea;
-}
-
-static void saveDockAreaSetting(KConfigGroup& group, const char* configEntry, Qt::DockWidgetArea area)
-{
-    QString areaName;
-    switch (area) {
-    case Qt::LeftDockWidgetArea: areaName = "left"; break;
-    case Qt::RightDockWidgetArea: areaName = "right"; break;
-    case Qt::TopDockWidgetArea: areaName = "top"; break;
-    case Qt::BottomDockWidgetArea: areaName = "bottom"; break;
-    default: areaName = "left"; break;
+        }
+        else if (area == Qt::RightDockWidgetArea) {
+            return Qt::LeftDockWidgetArea;
+        }
     }
-    if (areaName.isEmpty())
-        group.deleteEntry(configEntry);
-    else
-        group.writeEntry(configEntry, areaName);
+    return area;
 }
 
 void KexiMainWindow::setupProjectNavigator()
@@ -1775,23 +1821,22 @@ void KexiMainWindow::setupProjectNavigator()
         d->navDockWidget->show();
     }
     else {
-        d->navDockWidget = new KexiDockWidget(QString(), d->mainWidget);
-        d->navDockWidget->setObjectName("ProjectNavigatorDockWidget");
-        KConfigGroup mainWindowGroup(d->config->group("MainWindow"));
-        d->mainWidget->addDockWidget(
-            loadDockAreaSetting(mainWindowGroup, "ProjectNavigatorArea", Qt::LeftDockWidgetArea),
-            d->navDockWidget
-        );
-
-        KexiDockableWidget* navDockableWidget = new KexiDockableWidget(d->navDockWidget);
+        KexiDockableWidget* navDockableWidget = new KexiDockableWidget;
         d->navigator = new KexiProjectNavigator(navDockableWidget);
         kexiTester() << KexiTestObject(d->navigator, "KexiProjectNavigator");
 
         navDockableWidget->setWidget(d->navigator);
 
-        d->navDockWidget->setWindowTitle(d->navigator->windowTitle());
+        d->navDockWidget = new KexiDockWidget(d->navigator->windowTitle(), d->mainWidget);
+        d->navDockWidget->setObjectName("ProjectNavigatorDockWidget");
+        d->navDockWidget->closeButton()->setToolTip(i18n("Hide project navigator"));
+        d->mainWidget->addDockWidget(
+            applyRightToLeftToDockArea(Qt::LeftDockWidgetArea), d->navDockWidget,
+            Qt::Vertical);
+        navDockableWidget->setParent(d->navDockWidget);
         d->navDockWidget->setWidget(navDockableWidget);
 
+        KConfigGroup mainWindowGroup(d->config->group("MainWindow"));
         const QSize projectNavigatorSize = mainWindowGroup.readEntry<QSize>("ProjectNavigatorSize", QSize());
         if (!projectNavigatorSize.isNull()) {
             navDockableWidget->setSizeHint(projectNavigatorSize);
@@ -1868,9 +1913,9 @@ void KexiMainWindow::setupPropertyEditor()
 //! @todo FIX LAYOUT PROBLEMS
         d->propEditorDockWidget = new KexiDockWidget(i18n("Property Editor"), d->mainWidget);
         d->propEditorDockWidget->setObjectName("PropertyEditorDockWidget");
+        d->propEditorDockWidget->closeButton()->setToolTip(i18n("Hide property editor"));
         d->mainWidget->addDockWidget(
-            loadDockAreaSetting(mainWindowGroup, "PropertyEditorArea", Qt::RightDockWidgetArea),
-            d->propEditorDockWidget,
+            applyRightToLeftToDockArea(Qt::RightDockWidgetArea), d->propEditorDockWidget,
             Qt::Vertical
         );
         connect(d->propEditorDockWidget, SIGNAL(visibilityChanged(bool)),
@@ -1996,9 +2041,6 @@ KexiMainWindow::storeSettings()
         mainWindowGroup.deleteEntry("Maximized");
         mainWindowGroup.writeEntry("Geometry", geometry());
     }
-
-    saveDockAreaSetting(mainWindowGroup, "ProjectNavigatorArea", d->mainWidget->dockWidgetArea(d->navDockWidget));
-    saveDockAreaSetting(mainWindowGroup, "PropertyEditorArea", d->mainWidget->dockWidgetArea(d->propEditorDockWidget));
 
     if (d->navigator)
         mainWindowGroup.writeEntry("ProjectNavigatorSize", d->navigator->parentWidget()->size());
