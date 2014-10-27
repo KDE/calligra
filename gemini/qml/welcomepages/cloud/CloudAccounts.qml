@@ -217,7 +217,7 @@ Page {
     }
     Component {
         id: editGit;
-        EditDetailsBase { addEmpty: addEmptyComp; }
+        EditGit { addEmpty: addEmptyComp; }
     }
 
     Component {
